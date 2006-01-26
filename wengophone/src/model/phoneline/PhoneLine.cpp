@@ -119,7 +119,10 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 
 		//Replaces + by 00
 		sipUri.replace("+", "00");
+	}
 
+	if (!sipUri.contains("@")) {
+		//Not a SIP URI
 		sipUri = "sip:" + sipUri + "@" + getSipAccount().getRealm();
 	}
 
