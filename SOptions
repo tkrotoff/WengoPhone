@@ -1,0 +1,19 @@
+#Options file for WengoSCons
+#Set your own global options here
+
+args = {
+	'enable-video' : 1,
+	'enable-http-tunnel' : 1,
+	'enable-netlib' : 1,
+	'enable-phapi-embed' : 0,
+	'enable-phapi-video-hack' : 0,
+	'enable-shared-phapi' : 1,
+	'build-vcproj' : 0,
+	'sipxwrapper' : 0,
+	'phapiwrapper' : 1,
+	'nullsipwrapper' : 0,
+	'enable-samplerate' : 0,
+}
+
+WengoAddConsoleArguments(args)
+WengoShowWindowsConsole(True)
