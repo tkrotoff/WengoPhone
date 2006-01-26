@@ -1,0 +1,11 @@
+Import('*')
+
+libs = ["cppunit", "phapi", "eXosip", "ortp", "osip2", "video"]
+
+myenv = env.Copy()
+registerLibraries(myenv, libs)
+
+sources = ["test_phx.cpp"]
+pkg = myenv.Program('test_phx', sources)
+
+Return('pkg')

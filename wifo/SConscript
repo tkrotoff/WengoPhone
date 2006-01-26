@@ -1,0 +1,34 @@
+if WengoCCMSVC():
+	phapi_optimization_flags = [
+		'/Ox',
+		'/Ob2',
+		'/Oi',
+		'/Ot',
+		'/Oy',
+		'/G7',
+		'/GX-',
+		'/GR-' ,
+		'/arch:SSE'
+	]
+else:
+	phapi_optimization_flags = []
+
+WengoSetVariable('phapi_optimization_flags', phapi_optimization_flags)
+
+projects = [
+	'httptunnel',
+	'netlib',
+	'ortp',
+	'libosip2',
+	'eXosip',
+	'phapi/amrwb',
+	'phapi/amrnb',
+	'phapi/stun',
+	'phapi/gsm',
+	'phapi/ilbc',
+	'phapi/speex',
+	'phapi',
+	'miniua'
+]
+
+SConscript(dirs = projects)

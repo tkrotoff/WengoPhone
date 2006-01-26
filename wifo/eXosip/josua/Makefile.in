@@ -1,0 +1,602 @@
+# Makefile.in generated automatically by automake 1.4-p6 from Makefile.am
+
+# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+
+SHELL = @SHELL@
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+
+DESTDIR =
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+top_builddir = ..
+
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
+AS = @AS@
+CC = @CC@
+CFLAGS = @CFLAGS@
+CPP = @CPP@
+CXX = @CXX@
+DLLTOOL = @DLLTOOL@
+ECHO = @ECHO@
+EXEEXT = @EXEEXT@
+EXOSIP_FLAGS = @EXOSIP_FLAGS@
+EXOSIP_LIB = @EXOSIP_LIB@
+EXOSIP_VERSION = @EXOSIP_VERSION@
+HAVE_LIB = @HAVE_LIB@
+JOSUA_FLAGS = @JOSUA_FLAGS@
+JOSUA_LIB = @JOSUA_LIB@
+LIB = @LIB@
+LIBEXOSIP_SO_VERSION = @LIBEXOSIP_SO_VERSION@
+LIBTOOL = @LIBTOOL@
+LN_S = @LN_S@
+LTLIB = @LTLIB@
+MAKEINFO = @MAKEINFO@
+OBJDUMP = @OBJDUMP@
+OBJEXT = @OBJEXT@
+PACKAGE = @PACKAGE@
+PTHREAD_CC = @PTHREAD_CC@
+PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
+PTHREAD_LIBS = @PTHREAD_LIBS@
+RANLIB = @RANLIB@
+STRIP = @STRIP@
+VERSION = @VERSION@
+ac_aux_dir = @ac_aux_dir@
+
+lib_LTLIBRARIES = libjosua.la
+
+@COMPILE_JOSUA_TRUE@bin_PROGRAMS = josua
+@GLIB_SUPPORT_TRUE@MORE_CFLAGS = @CFLAGS@ @PTHREAD_CFLAGS@ @JOSUA_FLAGS@ @EXOSIP_FLAGS@ `pkg-config --cflags glib-2.0`
+@GLIB_SUPPORT_FALSE@MORE_CFLAGS = @CFLAGS@ @PTHREAD_CFLAGS@ @JOSUA_FLAGS@ @EXOSIP_FLAGS@
+@UCL_SUPPORT_TRUE@AM_CFLAGS = $(MORE_CFLAGS) -DUCL_SUPPORT
+@UCL_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@AM_CFLAGS = $(MORE_CFLAGS) -DORTP_SUPPORT
+@UCL_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@AM_CFLAGS = $(MORE_CFLAGS) -DMEDIASTREAMER_SUPPORT
+
+josua_SOURCES =  gui_new_identity.c       gui.c                       gui_online.c             gui_address_book_browse.c   gui_registrations_list.c main_ncurses.c         gui_address_book_newentry.c gui_sessions_list.c                 gui_icon.c                  gui_setup.c              gui_insubscriptions_list.c  gui_subscriptions_list.c gui_loglines.c              gui_topline.c            gui_menu.c                  gui_new_call.c              gui_menu.h               gui_subscriptions_list.h gui.h                       gui_new_call.h           gui_topline.h          gui_address_book_browse.h   gui_new_identity.h       gui_address_book_newentry.h gui_online.h             gui_icon.h                  gui_registrations_list.h gui_insubscriptions_list.h  gui_sessions_list.h      gui_loglines.h              gui_setup.h 
+
+
+libjosua_la_SOURCES = commands.c	jinsubscriptions.c jsubscriptions.c         jcalls.c                               jconfig.c commands.h      jcalls.h                 jconfig.h  jinsubscriptions.h        jsubscriptions.h ppl_getopt.h pplgetopt.c         sound-mediastreamer.c sound-ortp.c            sound-ucl.c        sound-win32.c  sound_conv.c  sound-mac.c
+
+
+libjosua_la_includedir = $(includedir)/josua
+libjosua_la_include_HEADERS = jmainconfig.h
+@GLIB_SUPPORT_TRUE@josua_LDFLAGS = -O @EXOSIP_LIB@ @PTHREAD_LIBS@ @JOSUA_LIB@  `pkg-config --libs glib-2.0`
+@GLIB_SUPPORT_FALSE@josua_LDFLAGS = -O @EXOSIP_LIB@ @PTHREAD_LIBS@ @JOSUA_LIB@ 
+@UCL_SUPPORT_TRUE@MORE_MYADD = /usr/local/lib/libuclmmbase.a
+@UCL_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@MORE_MYADD = -L$(libdir) -lortp -lm
+@UCL_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@MORE_MYADD = -lortp -lm -lmediastreamer -lmsspeex
+
+@UCL_SUPPORT_TRUE@MORE_INCLUDES = -I/ucl
+@UCL_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@MORE_INCLUDES = -I$(includedir)/ortp
+@UCL_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@MORE_INCLUDES = -I$(includedir)/mediastreamer -I$(includedir)/ortp
+
+josua_LDADD = $(top_builddir)/src/libeXosip.la libjosua.la $(libdir)/libosip2.la $(libdir)/libosipparser2.la -lrt $(MORE_MYADD)
+
+INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include -I$(includedir) $(MORE_INCLUDES)
+
+libjosua_la_LIBADD = $(top_builddir)/src/libeXosip.la $(libdir)/libosip2.la $(libdir)/libosipparser2.la  $(MORE_MYADD)
+mkinstalldirs = $(SHELL) $(top_srcdir)/scripts/mkinstalldirs
+CONFIG_HEADER = ../config.h
+CONFIG_CLEAN_FILES = 
+LTLIBRARIES =  $(lib_LTLIBRARIES)
+
+
+DEFS = @DEFS@ -I. -I$(srcdir) -I..
+CPPFLAGS = @CPPFLAGS@
+LDFLAGS = @LDFLAGS@
+LIBS = @LIBS@
+libjosua_la_LDFLAGS = 
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@libjosua_la_DEPENDENCIES =  \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(libdir)/libosipparser2.la
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@libjosua_la_DEPENDENCIES =  \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(libdir)/libosipparser2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@/usr/local/lib/libuclmmbase.a
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@libjosua_la_DEPENDENCIES =  \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(libdir)/libosipparser2.la
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@libjosua_la_DEPENDENCIES =  \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(libdir)/libosipparser2.la
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@libjosua_la_DEPENDENCIES =  \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(libdir)/libosipparser2.la
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@libjosua_la_DEPENDENCIES =  \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(libdir)/libosipparser2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@/usr/local/lib/libuclmmbase.a
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@libjosua_la_DEPENDENCIES =  \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(libdir)/libosipparser2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@/usr/local/lib/libuclmmbase.a
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@libjosua_la_DEPENDENCIES =  \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(libdir)/libosipparser2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@/usr/local/lib/libuclmmbase.a
+libjosua_la_OBJECTS =  commands.lo jinsubscriptions.lo jsubscriptions.lo \
+jcalls.lo jconfig.lo pplgetopt.lo sound-mediastreamer.lo sound-ortp.lo \
+sound-ucl.lo sound-win32.lo sound_conv.lo sound-mac.lo
+@COMPILE_JOSUA_TRUE@bin_PROGRAMS =  josua$(EXEEXT)
+PROGRAMS =  $(bin_PROGRAMS)
+
+josua_OBJECTS =  gui_new_identity.$(OBJEXT) gui.$(OBJEXT) \
+gui_online.$(OBJEXT) gui_address_book_browse.$(OBJEXT) \
+gui_registrations_list.$(OBJEXT) main_ncurses.$(OBJEXT) \
+gui_address_book_newentry.$(OBJEXT) gui_sessions_list.$(OBJEXT) \
+gui_icon.$(OBJEXT) gui_setup.$(OBJEXT) \
+gui_insubscriptions_list.$(OBJEXT) gui_subscriptions_list.$(OBJEXT) \
+gui_loglines.$(OBJEXT) gui_topline.$(OBJEXT) gui_menu.$(OBJEXT) \
+gui_new_call.$(OBJEXT)
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@josua_DEPENDENCIES =  \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@libjosua.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(libdir)/libosipparser2.la
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@josua_DEPENDENCIES =  \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@libjosua.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(libdir)/libosipparser2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@/usr/local/lib/libuclmmbase.a
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@josua_DEPENDENCIES =  \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@libjosua.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_TRUE@$(libdir)/libosipparser2.la
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@josua_DEPENDENCIES =  \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@libjosua.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(libdir)/libosipparser2.la
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@josua_DEPENDENCIES =  \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@libjosua.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_FALSE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(libdir)/libosipparser2.la
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@josua_DEPENDENCIES =  \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@libjosua.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@$(libdir)/libosipparser2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_FALSE@/usr/local/lib/libuclmmbase.a
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@josua_DEPENDENCIES =  \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@libjosua.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@$(libdir)/libosipparser2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_FALSE@@ORTP_SUPPORT_TRUE@/usr/local/lib/libuclmmbase.a
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@josua_DEPENDENCIES =  \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(top_builddir)/src/libeXosip.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@libjosua.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(libdir)/libosip2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@$(libdir)/libosipparser2.la \
+@UCL_SUPPORT_TRUE@@MEDIASTREAMER_SUPPORT_TRUE@@ORTP_SUPPORT_FALSE@/usr/local/lib/libuclmmbase.a
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+HEADERS =  $(libjosua_la_include_HEADERS)
+
+DIST_COMMON =  README Makefile.am Makefile.in
+
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
+TAR = gtar
+GZIP_ENV = --best
+SOURCES = $(libjosua_la_SOURCES) $(josua_SOURCES)
+OBJECTS = $(libjosua_la_OBJECTS) $(josua_OBJECTS)
+
+all: all-redirect
+.SUFFIXES:
+.SUFFIXES: .S .c .lo .o .obj .s
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps josua/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+mostlyclean-libLTLIBRARIES:
+
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+
+distclean-libLTLIBRARIES:
+
+maintainer-clean-libLTLIBRARIES:
+
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo "$(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p; \
+	  else :; fi; \
+	done
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  $(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p; \
+	done
+
+.c.o:
+	$(COMPILE) -c $<
+
+# FIXME: We should only use cygpath when building on Windows,
+# and only if it is available.
+.c.obj:
+	$(COMPILE) -c `cygpath -w $<`
+
+.s.o:
+	$(COMPILE) -c $<
+
+.S.o:
+	$(COMPILE) -c $<
+
+mostlyclean-compile:
+	-rm -f *.o core *.core
+	-rm -f *.$(OBJEXT)
+
+clean-compile:
+
+distclean-compile:
+	-rm -f *.tab.c
+
+maintainer-clean-compile:
+
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.s.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.S.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
+
+distclean-libtool:
+
+maintainer-clean-libtool:
+
+libjosua.la: $(libjosua_la_OBJECTS) $(libjosua_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(libjosua_la_LDFLAGS) $(libjosua_la_OBJECTS) $(libjosua_la_LIBADD) $(LIBS)
+
+mostlyclean-binPROGRAMS:
+
+clean-binPROGRAMS:
+	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+
+distclean-binPROGRAMS:
+
+maintainer-clean-binPROGRAMS:
+
+install-binPROGRAMS: $(bin_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+	  else :; fi; \
+	done
+
+uninstall-binPROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+	done
+
+josua$(EXEEXT): $(josua_OBJECTS) $(josua_DEPENDENCIES)
+	@rm -f josua$(EXEEXT)
+	$(LINK) $(josua_LDFLAGS) $(josua_OBJECTS) $(josua_LDADD) $(LIBS)
+
+install-libjosua_la_includeHEADERS: $(libjosua_la_include_HEADERS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libjosua_la_includedir)
+	@list='$(libjosua_la_include_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(libjosua_la_includedir)/$$p"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(libjosua_la_includedir)/$$p; \
+	done
+
+uninstall-libjosua_la_includeHEADERS:
+	@$(NORMAL_UNINSTALL)
+	list='$(libjosua_la_include_HEADERS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(libjosua_la_includedir)/$$p; \
+	done
+
+tags: TAGS
+
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
+
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+
+mostlyclean-tags:
+
+clean-tags:
+
+distclean-tags:
+	-rm -f TAGS ID
+
+maintainer-clean-tags:
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = josua
+
+distdir: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+commands.lo commands.o : commands.c commands.h \
+	../include/eXosip/eXosip.h ../config.h jcalls.h jmainconfig.h \
+	../include/eXosip/eXosip_cfg.h
+gui.o: gui.c jcalls.h ../include/eXosip/eXosip.h ../config.h gui.h \
+	../include/eXosip/eXosip_cfg.h jsubscriptions.h \
+	jinsubscriptions.h commands.h jmainconfig.h ppl_getopt.h \
+	gui_topline.h gui_icon.h gui_menu.h gui_new_call.h \
+	gui_sessions_list.h gui_subscriptions_list.h \
+	gui_insubscriptions_list.h gui_loglines.h gui_online.h
+gui_address_book_browse.o: gui_address_book_browse.c \
+	gui_address_book_browse.h gui.h ../config.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h \
+	jcalls.h jsubscriptions.h jinsubscriptions.h commands.h \
+	jmainconfig.h ppl_getopt.h gui_address_book_newentry.h \
+	gui_menu.h gui_new_call.h
+gui_address_book_newentry.o: gui_address_book_newentry.c \
+	gui_address_book_newentry.h gui.h ../config.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h \
+	jcalls.h jsubscriptions.h jinsubscriptions.h commands.h \
+	jmainconfig.h ppl_getopt.h
+gui_icon.o: gui_icon.c gui_icon.h gui.h ../config.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h \
+	jcalls.h jsubscriptions.h jinsubscriptions.h commands.h \
+	jmainconfig.h ppl_getopt.h
+gui_insubscriptions_list.o: gui_insubscriptions_list.c \
+	jinsubscriptions.h ../include/eXosip/eXosip.h ../config.h \
+	gui_menu.h gui.h ../include/eXosip/eXosip_cfg.h jcalls.h \
+	jsubscriptions.h commands.h jmainconfig.h ppl_getopt.h \
+	gui_insubscriptions_list.h gui_online.h
+gui_loglines.o: gui_loglines.c gui_loglines.h gui.h ../config.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h \
+	jcalls.h jsubscriptions.h jinsubscriptions.h commands.h \
+	jmainconfig.h ppl_getopt.h
+gui_menu.o: gui_menu.c gui_menu.h gui.h ../config.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h \
+	jcalls.h jsubscriptions.h jinsubscriptions.h commands.h \
+	jmainconfig.h ppl_getopt.h gui_new_call.h \
+	gui_address_book_browse.h gui_sessions_list.h \
+	gui_registrations_list.h gui_subscriptions_list.h gui_online.h \
+	gui_setup.h
+gui_new_call.o: gui_new_call.c gui_new_call.h gui.h ../config.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h \
+	jcalls.h jsubscriptions.h jinsubscriptions.h commands.h \
+	jmainconfig.h ppl_getopt.h gui_menu.h
+gui_new_identity.o: gui_new_identity.c gui_new_identity.h gui.h \
+	../config.h ../include/eXosip/eXosip.h \
+	../include/eXosip/eXosip_cfg.h jcalls.h jsubscriptions.h \
+	jinsubscriptions.h commands.h jmainconfig.h ppl_getopt.h
+gui_online.o: gui_online.c gui_online.h gui.h ../config.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h \
+	jcalls.h jsubscriptions.h jinsubscriptions.h commands.h \
+	jmainconfig.h ppl_getopt.h
+gui_registrations_list.o: gui_registrations_list.c \
+	gui_registrations_list.h gui.h ../config.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h \
+	jcalls.h jsubscriptions.h jinsubscriptions.h commands.h \
+	jmainconfig.h ppl_getopt.h gui_new_identity.h
+gui_sessions_list.o: gui_sessions_list.c jcalls.h \
+	../include/eXosip/eXosip.h ../config.h gui_sessions_list.h \
+	gui.h ../include/eXosip/eXosip_cfg.h jsubscriptions.h \
+	jinsubscriptions.h commands.h jmainconfig.h ppl_getopt.h
+gui_setup.o: gui_setup.c gui_setup.h gui.h ../config.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h \
+	jcalls.h jsubscriptions.h jinsubscriptions.h commands.h \
+	jmainconfig.h ppl_getopt.h
+gui_subscriptions_list.o: gui_subscriptions_list.c jsubscriptions.h \
+	../include/eXosip/eXosip.h ../config.h gui_subscriptions_list.h \
+	gui.h ../include/eXosip/eXosip_cfg.h jcalls.h \
+	jinsubscriptions.h commands.h jmainconfig.h ppl_getopt.h \
+	gui_insubscriptions_list.h
+gui_topline.o: gui_topline.c gui_topline.h gui.h ../config.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h \
+	jcalls.h jsubscriptions.h jinsubscriptions.h commands.h \
+	jmainconfig.h ppl_getopt.h
+jcalls.lo jcalls.o : jcalls.c jcalls.h ../include/eXosip/eXosip.h \
+	../config.h ../src/eXosip2.h ../include/eXosip/eXosip_cfg.h \
+	../src/jpipe.h
+jconfig.lo jconfig.o : jconfig.c ../config.h jconfig.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h
+jinsubscriptions.lo jinsubscriptions.o : jinsubscriptions.c \
+	jinsubscriptions.h ../include/eXosip/eXosip.h ../config.h
+jsubscriptions.lo jsubscriptions.o : jsubscriptions.c jsubscriptions.h \
+	../include/eXosip/eXosip.h ../config.h
+main_ncurses.o: main_ncurses.c gui.h ../config.h \
+	../include/eXosip/eXosip.h ../include/eXosip/eXosip_cfg.h \
+	jcalls.h jsubscriptions.h jinsubscriptions.h commands.h \
+	jmainconfig.h ppl_getopt.h gui_online.h
+pplgetopt.lo pplgetopt.o : pplgetopt.c ppl_getopt.h ../config.h
+sound-mac.lo sound-mac.o : sound-mac.c jcalls.h \
+	../include/eXosip/eXosip.h ../config.h
+sound-mediastreamer.lo sound-mediastreamer.o : sound-mediastreamer.c \
+	jcalls.h ../include/eXosip/eXosip.h ../config.h
+sound-ortp.lo sound-ortp.o : sound-ortp.c jcalls.h \
+	../include/eXosip/eXosip.h ../config.h
+sound-ucl.lo sound-ucl.o : sound-ucl.c jcalls.h \
+	../include/eXosip/eXosip.h ../config.h
+sound-win32.lo sound-win32.o : sound-win32.c jcalls.h \
+	../include/eXosip/eXosip.h ../config.h
+sound_conv.lo sound_conv.o : sound_conv.c
+
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am: install-libLTLIBRARIES install-binPROGRAMS
+install-exec: install-exec-am
+
+install-data-am: install-libjosua_la_includeHEADERS
+install-data: install-data-am
+
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am: uninstall-libLTLIBRARIES uninstall-binPROGRAMS \
+		uninstall-libjosua_la_includeHEADERS
+uninstall: uninstall-am
+all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(HEADERS)
+all-redirect: all-am
+install-strip:
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+installdirs:
+	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(bindir) \
+		$(DESTDIR)$(libjosua_la_includedir)
+
+
+mostlyclean-generic:
+
+clean-generic:
+
+distclean-generic:
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+
+maintainer-clean-generic:
+mostlyclean-am:  mostlyclean-libLTLIBRARIES mostlyclean-compile \
+		mostlyclean-libtool mostlyclean-binPROGRAMS \
+		mostlyclean-tags mostlyclean-generic
+
+mostlyclean: mostlyclean-am
+
+clean-am:  clean-libLTLIBRARIES clean-compile clean-libtool \
+		clean-binPROGRAMS clean-tags clean-generic \
+		mostlyclean-am
+
+clean: clean-am
+
+distclean-am:  distclean-libLTLIBRARIES distclean-compile \
+		distclean-libtool distclean-binPROGRAMS distclean-tags \
+		distclean-generic clean-am
+	-rm -f libtool
+
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-libLTLIBRARIES \
+		maintainer-clean-compile maintainer-clean-libtool \
+		maintainer-clean-binPROGRAMS maintainer-clean-tags \
+		maintainer-clean-generic distclean-am
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+maintainer-clean: maintainer-clean-am
+
+.PHONY: mostlyclean-libLTLIBRARIES distclean-libLTLIBRARIES \
+clean-libLTLIBRARIES maintainer-clean-libLTLIBRARIES \
+uninstall-libLTLIBRARIES install-libLTLIBRARIES mostlyclean-compile \
+distclean-compile clean-compile maintainer-clean-compile \
+mostlyclean-libtool distclean-libtool clean-libtool \
+maintainer-clean-libtool mostlyclean-binPROGRAMS distclean-binPROGRAMS \
+clean-binPROGRAMS maintainer-clean-binPROGRAMS uninstall-binPROGRAMS \
+install-binPROGRAMS uninstall-libjosua_la_includeHEADERS \
+install-libjosua_la_includeHEADERS tags mostlyclean-tags distclean-tags \
+clean-tags maintainer-clean-tags distdir info-am info dvi-am dvi check \
+check-am installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
+
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

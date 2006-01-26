@@ -1,0 +1,190 @@
+amr_env = WengoGetEnvironment()
+amr_libs = [
+	'amrwb',
+	'amrnb',
+]
+amr_env.WengoUseLibraries(amr_libs)
+amr_env.WengoAddCCFlags(WengoGetVariable('phapi_optimization_flags'))
+amr = amr_env.WengoPlugin('phamrplugin', ['phcodec-amr-wrapper.c'])
+
+
+speex_env = WengoGetEnvironment()
+speex_libs = [
+	'speex',
+]
+speex_env.WengoUseLibraries(speex_libs)
+speex_env.WengoAddCCFlags(WengoGetVariable('phapi_optimization_flags'))
+speex = speex_env.WengoPlugin('phspeexplugin', ['phcodec-speex.c'])
+
+env = WengoGetEnvironment()
+
+link_flags = []
+
+libs = [
+	'eXosip',
+	'ortp',
+	'osip',
+	'ilbc',
+	'stun',
+	'gsm',
+	'global',
+	'wtimer'
+]
+
+lib_path = []
+include_path = ['.']
+defines = {
+	'USE_PCM' : 1,
+	'NEED_ECMUX' : 1,
+	'MINIMIZE_COPYING' : 1,
+	'SCHEDULING_MODE' : 0,
+	'BLOCKING_MODE' : 0,
+	'DO_ECHO_CAN' : 1,
+	'ENABLE_AMR_WB' : 1,
+	'ENABLE_AMR' : 1,
+	'MY_DLLEXPORTS' : 1,
+	'USE_WAVEIN_CBK' : 1,
+	'PSEUDO_AEC' : 0,
+	'NO_ECHO__SUPPRESSOR' : 1,
+	'ENABLE_ILBC' : 1,
+	'OSIP_MT' : 1,
+	'ENABLE_TRACE' : 0,
+	'VIDEO_IOTHREAD_TIMERS' : 1,
+	'USE_SPXEC' : 1,
+}
+headers = []
+sources = [
+	'phcodec.c',
+	'phmbuf.c',
+	'tonegen.c',
+#	'phx.c',
+	'phmedia-audio-null.c',
+	'phapi.c',
+	'phaudiodriver.c',
+	'phmedia.c',
+	'phmedia-audio.c',
+	'aec2.cpp',
+	'fidlib.c',
+	'spxec.c',
+	'spxecfft.c'
+]
+
+if WengoOSLinux() or WengoOSBSD():
+	sources += ['phmedia-oss.c']
+
+	if WengoGetConsoleArgument('enable-phapi-audio-arts'):
+		defines['ENABLE_ARTS'] = 1
+		sources += ['phmedia-audio-arts.c']
+		env.ParseConfig('artsc-config --cflags --libs')
+
+	if WengoGetConsoleArgument('enable-phapi-audio-esd'):
+		defines['ENABLE_ESD'] =  1
+		sources += ['phmedia-audio-esd.c']
+		env.ParseConfig('esd-config --cflags --libs')
+
+if WengoGetConsoleArgument('enable-phapi-embed'):
+	defines['SCHEDULING_MODE'] =  1
+
+shphapi =  WengoGetConsoleArgument('enable-shared-phapi')
+
+if shphapi:
+    defines['BUILD_PHAPI_DLL'] = 1    
+
+
+
+if WengoGetConsoleArgument('enable-qos-debug'):
+	defines['PHAPI_QOS_DEBUG'] =  1
+
+if WengoOSLinux():
+	libs += ['pthread', 'rt']
+
+if WengoGetConsoleArgument('enable-video'):
+	libs += [
+		'avcodec',
+		'webcam',
+		'pixertool',
+	]
+	defines['PHAPI_VIDEO_SUPPORT'] = 1
+
+	sources += [
+		'phcodec-h263.c',
+		'phcodec-h264.c',
+		'phcodec-mpeg4.c',
+		'phmedia-video.c',
+		'phmedia-video-control.c',
+		'phmedia-video-bwcontrol.c',
+		'phcodec-avcodec-wrapper.c',
+	]
+
+if WengoGetConsoleArgument('enable-http-tunnel'):
+	libs += [
+		'wengocurl',
+		'httptunnel'
+	]
+	defines['USE_HTTP_TUNNEL'] = 1
+
+if WengoGetConsoleArgument('enable-samplerate'):
+	libs += ['samplerate']
+	defines['PH_USE_RESAMPLE'] = 1
+
+if WengoGetConsoleArgument('enable-phapi-video-hack'):
+	defines['PHAPI_VIDEO_LOCAL_HACK'] = 1
+
+if WengoGetConsoleArgument('enable-netlib'):
+	libs += ['netlib']
+
+if True:
+	libs += ['portaudio']
+	defines['ENABLE_PORTAUDIO'] = 1
+	sources += ['phmedia-portaudio.c']
+
+if WengoOSLinux() or WengoOSBSD():
+	env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
+
+if WengoOSLinux():
+	if not WengoGetConsoleArgument('disable-alsa'):
+		defines['ENABLE_ALSA'] = 1
+		libs += ['asound']
+		sources += ['phmedia-alsa.c']
+
+if WengoOSWindows():
+	defines['T_MSVC'] = 1
+	defines['USE_WIN_TIMERS'] = 1
+
+	sources += [
+		'phmedia-winmm.c',
+		'msdirent.c'
+	]
+
+	libs += [
+		'winmm',
+		'ws2_32',
+		'user32',
+		'shell32',
+		'advapi32',
+		'wininet',
+		'iphlpapi'
+	]
+
+if WengoOSMacOSX():
+	sources += ['phmedia-coreaudio.c']
+
+
+env.WengoAddIncludePath(include_path)
+env.WengoAddDefines(defines)
+env.WengoAddLinkFlags(link_flags)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+
+if shphapi:
+    phapi = env.WengoSharedLibrary('phapi', sources)
+else:
+    phapi = env.WengoStaticLibrary('phapi', sources)
+
+#Depends(phapi, [amr[0], speex[0]])
+Depends(phapi, [amr, speex])
+
+phapi_py_env = WengoGetEnvironment()
+phapi_py_lib = phapi_py_env.WengoSharedLibrary("pyphapi", "pyphapi.c")
+phapi_py_env.WengoUseLibraries(["phapi", "python", "python24"])
+phapi_py_env.WengoSharedLibrary("phapi-python-wrapper", phapi_py_lib)

@@ -1,0 +1,23 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'wengocurl'
+]
+lib_path = []
+include_path = ['.']
+defines = {}
+headers = []
+sources = [
+	'httptunnel.c'
+]
+
+if WengoOSWindows():
+	libs += ['ws2_32']
+	defines['WIN32'] = 1
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDefines(defines)
+env.WengoAddDoxyfile()
+
+env.WengoStaticLibrary('httptunnel', sources)

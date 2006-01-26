@@ -1,0 +1,36 @@
+env = WengoGetEnvironment()
+
+defines = { 'PHAPI_DLL' : 1 }
+
+libs = [
+	'phapi'
+]
+
+lib_path = []
+include_path = ['../phapi']
+headers = []
+sources = [
+	'miniua.c'
+]
+
+lib_flags = []
+
+if WengoOSMacOSX():
+   lib_flags = [
+	'-framework CoreAudio',
+	'-framework AudioToolbox'
+]
+
+if WengoOSLinux():
+   libs += ["z"]
+
+
+
+if WengoOSWindows():
+	defines['WIN32'] = 1
+
+env.WengoAddLinkFlags(lib_flags)
+env.WengoAddDefines(defines)
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoProgram('miniua', sources)

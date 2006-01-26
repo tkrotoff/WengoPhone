@@ -1,0 +1,30 @@
+env = WengoGetEnvironment()
+
+libs = []
+lib_path = []
+include_path = [
+	'include',
+	'.'
+]
+defines = {}
+headers = []
+sources = [
+	'src/netlib.cpp',
+	'get_net_conf.cpp',
+	'stun_func.cpp',
+	'udp_func.cpp',
+	'bugfix.cpp'
+]
+
+if WengoOSWindows():
+	libs += ['user32', 'shell32', 'ws2_32', 'advapi32', 'wininet', 'urlmon']
+	defines['WIN32'] = 1
+
+env.WengoAddIncludePath(include_path)
+env['CPPPATH'] += ['../netlib']
+env.WengoAddDefines(defines)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+
+if env.getConsoleArgument('enable-netlib') == 1:
+	env.WengoStaticLibrary('netlib', sources)
