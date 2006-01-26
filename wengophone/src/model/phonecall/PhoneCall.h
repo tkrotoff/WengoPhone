@@ -1,0 +1,169 @@
+/*
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2005  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+#ifndef PHONECALL_H
+#define PHONECALL_H
+
+#include "SipAddress.h"
+
+#include <Event.h>
+#include <List.h>
+
+#include <string>
+
+class LocalWebcam;
+class VideoFrame;
+class PhoneCallState;
+class IPhoneLine;
+class WenboxPlugin;
+
+/**
+ * Class that holds informations about a current phone call.
+ *
+ * A phone call is associated with a PhoneLine.
+ *
+ * @ingroup model
+ * @author Tanguy Krotoff
+ */
+class PhoneCall {
+public:
+
+	/**
+	 * The state of the PhoneCall has changed.
+	 *
+	 * @param sender this class
+	 * @param status new status
+	 */
+	Event<void (PhoneCall & sender, int status)> stateChangedEvent;
+
+	/**
+	 * A video frame has been received from the network.
+	 *
+	 * @param sender this class
+	 * @param frame remote video frame
+	 * @param localWebcam local video frame from the webcam
+	 */
+	Event<void (PhoneCall & sender, const VideoFrame & frame, const LocalWebcam & localWebcam)> videoFrameReceivedEvent;
+
+	/**
+	 * Creates a new PhoneCall given a PhoneLine.
+	 *
+	 * @param phoneLine PhoneLine associated with this PhoneCall
+	 * @param sipAddress caller/callee/peer SIP address
+	 */
+	PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress);
+
+	~PhoneCall();
+
+	/** Accepts the incoming PhoneCall. */
+	void accept();
+
+	/** Resumes the PhoneCall. */
+	void resume();
+
+	/** Holds the PhoneCall. */
+	void hold();
+
+	/** Closes the PhoneCall. */
+	void close();
+
+	/**
+	 * Video frame received.
+	 *
+	 * @param frame received
+	 * @param localWebcam local webcam
+	 */
+	void videoFrameReceived(const VideoFrame & frame, const LocalWebcam & localWebcam);
+
+	/**
+	 * Changes the state of this PhoneCall.
+	 *
+	 * @param status status code corresponding to the new PhoneCall state
+	 */
+	void setState(int status);
+
+	/**
+	 * Gets the current state of this PhoneCall.
+	 *
+	 * @return state of this PhoneCall
+	 */
+	const PhoneCallState & getState() const {
+		return *_state;
+	}
+
+	/**
+	 * Sets the call id associated with this PhoneCall.
+	 *
+	 * @param callId call id of this PhoneCall
+	 */
+	void setCallId(int callId) {
+		_callId = callId;
+	}
+
+	/**
+	 * Gets the call id of this PhoneCall.
+	 *
+	 * @return call id of this PhoneCall
+	 */
+	int getCallId() const {
+		return _callId;
+	}
+
+	/**
+	 * Gets the caller/callee/peer SIP address associated with this PhoneCall.
+	 *
+	 * @return caller/callee/peer SIP address
+	 */
+	const SipAddress & getPeerSipAddress() const {
+		return _sipAddress;
+	}
+
+	/**
+	 * Gets the PhoneLine associated with this PhoneCall.
+	 *
+	 * @return phone line
+	 */
+	IPhoneLine & getPhoneLine() const {
+		return _phoneLine;
+	}
+
+	WenboxPlugin & getWenboxPlugin() const;
+
+private:
+
+	/** PhoneLine associated with this PhoneCall. */
+	IPhoneLine & _phoneLine;
+
+	/** Call id of this PhoneCall. */
+	int _callId;
+
+	/** Caller/callee/peer SIP address. */
+	SipAddress _sipAddress;
+
+	/** Current state of this PhoneCall. */
+	PhoneCallState * _state;
+
+	/** Defines the vector of PhoneCallState. */
+	typedef List < PhoneCallState * > PhoneCallStates;
+
+	/** List of PhoneCallState. */
+	PhoneCallStates _phoneCallStateList;
+};
+
+#endif	//PHONECALL_H

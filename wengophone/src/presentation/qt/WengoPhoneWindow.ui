@@ -1,0 +1,203 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>mainWindow</class>
+ <widget class="QMainWindow" name="mainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>279</width>
+    <height>396</height>
+   </rect>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QGridLayout" >
+    <property name="margin" >
+     <number>4</number>
+    </property>
+    <property name="spacing" >
+     <number>4</number>
+    </property>
+    <item row="1" column="0" >
+     <widget class="QComboBox" name="phoneComboBox" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>0</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="editable" >
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" >
+     <widget class="QPushButton" name="callButton" >
+      <property name="text" >
+       <string>Call</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="wengophone.qrc" >:/pics/call_button_small.png</iconset>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="2" >
+     <widget class="QStackedWidget" name="phoneLineStackedWidget" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>5</hsizetype>
+        <vsizetype>0</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentIndex" >
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="page" />
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2" >
+     <widget class="QTabWidget" name="tabWidget" >
+      <widget class="QWidget" name="tabHome" >
+       <attribute name="title" >
+        <string/>
+       </attribute>
+       <attribute name="icon" >
+        <iconset resource="wengophone.qrc" >:/pics/home.png</iconset>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabLogger" >
+       <attribute name="title" >
+        <string/>
+       </attribute>
+       <attribute name="icon" >
+        <iconset resource="wengophone.qrc" >:/pics/config_expert.png</iconset>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabContactList" >
+       <attribute name="title" >
+        <string/>
+       </attribute>
+       <attribute name="icon" >
+        <iconset resource="wengophone.qrc" >:/pics/contact_list.png</iconset>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabDialpad" >
+       <attribute name="title" >
+        <string/>
+       </attribute>
+       <attribute name="icon" >
+        <iconset resource="wengophone.qrc" >:/pics/dialpad.png</iconset>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabCallHistory" >
+       <attribute name="title" >
+        <string/>
+       </attribute>
+       <attribute name="icon" >
+        <iconset resource="wengophone.qrc" >:/pics/call_history.png</iconset>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>279</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
+     <string>Help</string>
+    </property>
+    <addaction name="actionShowForum" />
+    <addaction name="actionShowHelp" />
+    <addaction name="actionShowAbout" />
+   </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>File</string>
+    </property>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionOpenWengoAccount" />
+    <addaction name="separator" />
+    <addaction name="actionExit" />
+   </widget>
+   <widget class="QMenu" name="menuTools" >
+    <property name="title" >
+     <string>Tools</string>
+    </property>
+    <addaction name="actionAddContact" />
+    <addaction name="actionConfiguration" />
+   </widget>
+   <addaction name="menuFile" />
+   <addaction name="menuTools" />
+   <addaction name="menuHelp" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>377</y>
+     <width>279</width>
+     <height>19</height>
+    </rect>
+   </property>
+  </widget>
+  <action name="actionShowWengoAccount" >
+   <property name="text" >
+    <string>View My Wengo Account</string>
+   </property>
+  </action>
+  <action name="actionOpenWengoAccount" >
+   <property name="text" >
+    <string>Open Another Wengo Account</string>
+   </property>
+  </action>
+  <action name="actionExit" >
+   <property name="text" >
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionShowForum" >
+   <property name="text" >
+    <string>Forum Access</string>
+   </property>
+  </action>
+  <action name="actionShowHelp" >
+   <property name="text" >
+    <string>Help</string>
+   </property>
+  </action>
+  <action name="actionShowAbout" >
+   <property name="text" >
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionAddContact" >
+   <property name="text" >
+    <string>Add Contact</string>
+   </property>
+  </action>
+  <action name="actionConfiguration" >
+   <property name="text" >
+    <string>Configuration</string>
+   </property>
+  </action>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources>
+  <include location="wengophone.qrc" />
+ </resources>
+ <connections/>
+</ui>

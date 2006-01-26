@@ -1,0 +1,85 @@
+env = WengoGetQt4Environment()
+
+libs = [
+	'wengophone',
+	'qtutil',
+	'webcam',
+	'qt4',
+	'boost',
+]
+lib_path = []
+include_path = []
+defines = {}
+link_flags = []
+headers = [
+	'QtWengoPhone.h',
+	'QtWengoPhoneLogger.h',
+	'QtDialpad.h',
+	'QtAbout.h',
+	'phoneline/QtPhoneLine.h',
+	'phonecall/QtPhoneCall.h',
+	'phonecall/QtVideo.h',
+	'login/QtLogin.h',
+	'contactlist/TreeModel.h',
+	'contactlist/QtContactWidget.h',
+	'contactlist/QtContactList.h',
+	'contactlist/QtAddContact.h',
+	'contactlist/ContactListDelegate.h',
+	'contactlist/MetaContactGroup.h',
+	'contactlist/MetaContact.h',
+	'contactlist/ContactPopupMenu.h',
+	'contactlist/ContactGroupPopupMenu.h',
+	'presence/QtPresenceHandler.h',
+]
+sources = [
+	'../main.cpp',
+	'QtWengoPhone.cpp',
+	'QtDialpad.cpp',
+	'QtAbout.cpp',
+	'QtWengoPhoneLogger.cpp',
+	'phoneline/QtPhoneLine.cpp',
+	'phonecall/QtPhoneCall.cpp',
+	'phonecall/QtVideo.cpp',
+	'login/QtLogin.cpp',
+	'wenbox/QtWenboxPlugin.cpp',
+	'contactlist/TreeModel.cpp',
+	'contactlist/TreeItem.cpp',
+	'contactlist/QtContact.cpp',
+	'contactlist/QtContactWidget.cpp',
+	'contactlist/QtContactList.cpp',
+	'contactlist/QtContactGroup.cpp',
+	'contactlist/QtAddContact.cpp',
+	'contactlist/ContactPopupMenu.cpp',
+	'contactlist/ContactGroupPopupMenu.cpp',
+	'contactlist/ContactListDelegate.cpp',
+	'contactlist/MetaContactGroup.cpp',
+	'contactlist/MetaContact.cpp',
+	'presence/QtPresenceHandler.cpp',
+	env.WengoCompileQt4Resource('wengophone.qrc')
+]
+
+if WengoGetConsoleArgument('sipxwrapper'):
+	defines['SIPXWRAPPER'] = 1
+	libs += ['sipxwrapper']
+elif WengoGetConsoleArgument('phapiwrapper'):
+	defines['PHAPIWRAPPER'] = 1
+	libs += ['phapiwrapper']
+else:
+	libs += ['nullsipwrapper']
+
+#if WengoOSWindows():
+#	sources += env.WengoCompileWindowsResource('win32/wengophone.rc')
+
+if WengoOSMacOSX():
+	link_flags += [	
+		'-framework CoreAudio',
+		'-framework AudioToolbox',
+		'-framework AudioUnit'
+	]
+
+	env.WengoDeclareMacOSXAppTemplate('./macosx/template.app')
+
+env.WengoAddDefines(defines)
+env.WengoAddLinkFlags(link_flags)
+env.WengoUseLibraries(libs)
+env.WengoProgram('qtwengophone', sources, headers)

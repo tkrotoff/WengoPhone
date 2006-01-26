@@ -1,0 +1,18 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'wengophone',
+	'wengoutil'
+]
+lib_path = []
+include_path = []
+defines = {}
+headers = []
+sources = [
+	'NullIMChat.cpp',
+	'NullIMConnect.cpp',
+	'NullIMPresence.cpp',
+]
+
+env.WengoUseLibraries(libs)
+env.WengoStaticLibrary('nullimwrapper', sources)

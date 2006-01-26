@@ -1,0 +1,39 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>PhoneLineWidget</class>
+ <widget class="QWidget" name="PhoneLineWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>172</width>
+    <height>93</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>PhoneLineWidget</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="stateLabel" >
+     <property name="text" >
+      <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources>
+  <include location="..\wengophone.qrc" />
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,44 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'wengoutil',
+	'wengophone',
+]
+lib_path = []
+include_path = [
+	'include'
+]
+export_defines = {}
+defines = {
+	'XPCOM_DLL' : 1,
+	'BUILD_XPCOM_DLL' : 1
+}
+link_flags = []
+headers = []
+sources = [
+	'src/Command.cpp',
+	'src/XPCOMContact.cpp',
+	'src/XPCOMContactGroup.cpp',
+	'src/XPCOMContactList.cpp',
+	'src/XPCOMPhoneCall.cpp',
+	'src/XPCOMPhoneLine.cpp',
+	'src/XPCOMWengoPhone.cpp',
+	'src/XPCOMWengoPhoneLogger.cpp',
+	'src/XPCOMIMHandler.cpp',
+]
+
+if WengoGetConsoleArgument('sipxwrapper'):
+	defines['SIPXWRAPPER'] = 1
+	libs += ['sipxwrapper']
+elif WengoGetConsoleArgument('phapiwrapper'):
+	defines['PHAPIWRAPPER'] = 1
+	libs += ['phapiwrapper']
+else:
+	libs += ['nullsipwrapper']
+
+#env.WengoExportDefines(export_defines)
+env.WengoAddDefines(defines)
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoSharedLibrary('xpcomwengophone', sources, headers)

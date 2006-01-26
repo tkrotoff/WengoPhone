@@ -1,0 +1,23 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'wengophone',
+	'boost-unit-test',
+]
+
+include_path = [
+	'.'
+]
+
+headers = [
+	'ContactListTest.h'
+]
+
+sources = [
+	'main.cpp'
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+
+env.WengoProgram('wengophone-test', sources, headers)

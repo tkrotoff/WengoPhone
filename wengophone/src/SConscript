@@ -1,0 +1,99 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'wengoutil',
+	'wenbox',
+	'tinyxml',
+	'sound',
+	'qt4',
+	'boost',
+]
+lib_path = []
+include_path = ['.']
+defines = {}
+headers = []
+
+WengoPhoneBuildIdTemplate = """
+#include "WengoPhoneBuildId.h"
+const unsigned long long WengoPhoneBuildId::BUILDID = %(buildId)uULL;
+const char * WengoPhoneBuildId::VERSION = "%(version)s";
+const unsigned long long WengoPhoneBuildId::REVISION = %(revision)uULL;
+const char * WengoPhoneBuildId::SOFTPHONE_NAME = "%(sofphoneName)s";
+"""
+
+WengoPhoneBuildId = {
+	'buildId': WengoGetCurrentDateTime(),
+	'version': '2.0',
+	'revision': WengoGetSubversionRevision(),
+	'sofphoneName': 'WengoPhone'
+}
+
+sources = [
+	env.WengoCreateFile('WengoPhoneBuildId.cpp', WengoPhoneBuildIdTemplate, WengoPhoneBuildId),
+	'model/WengoPhone.cpp',
+	'model/WengoPhoneLogger.cpp',
+	'model/Connect.cpp',
+	'model/ConnectHandler.cpp',
+	'model/Chat.cpp',
+	'model/ChatHandler.cpp',
+	'model/sipwrapper/SipWrapperFactory.cpp',
+	'model/sipwrapper/SipCallbacks.cpp',
+	'model/imwrapper/IMWrapperFactory.cpp',
+	'model/wenbox/WenboxPlugin.cpp',
+	'model/phonecall/SipAddress.cpp',
+	'model/phonecall/PhoneCall.cpp',
+	'model/phonecall/PhoneCallState.cpp',
+	'model/phonecall/PhoneCallStateClosed.cpp',
+	'model/phonecall/PhoneCallStateDefault.cpp',
+	'model/phonecall/PhoneCallStateDialing.cpp',
+	'model/phonecall/PhoneCallStateError.cpp',
+	'model/phonecall/PhoneCallStateHoldOk.cpp',
+	'model/phonecall/PhoneCallStateIncoming.cpp',
+	'model/phonecall/PhoneCallStateTalking.cpp',
+	'model/phonecall/PhoneCallStateResumeOk.cpp',
+	'model/phonecall/PhoneCallStateRinging.cpp',
+	'model/phoneline/PhoneLine.cpp',
+	'model/account/wengo/WengoAccount.cpp',
+	'model/account/wengo/WengoAccountRPCLayer.cpp',
+	'model/account/wengo/WengoAccountXMLLayer.cpp',
+	'model/account/wengo/WengoAccountParser.cpp',
+	'model/account/LocalNetworkAccount.cpp',
+	'model/phoneline/PhoneLineStateDefault.cpp',
+	'model/phoneline/PhoneLineStateOk.cpp',
+	'model/phoneline/PhoneLineStateTimeout.cpp',
+	'model/phoneline/PhoneLineStateProxyError.cpp',
+	'model/phoneline/PhoneLineStateServerError.cpp',
+	'model/presence/Presence.cpp',
+	'model/presence/PresenceHandler.cpp',
+	'model/presence/MyPresenceStateOnline.cpp',
+	'model/presence/MyPresenceStateOffline.cpp',
+	'model/presence/MyPresenceStateAway.cpp',
+	'model/presence/MyPresenceStateDoNotDisturb.cpp',
+	'model/presence/MyPresenceStateUserDefined.cpp',
+	'model/contactlist/IMContact.cpp',
+	'model/contactlist/Contact.cpp',
+	'model/contactlist/ContactList.cpp',
+	'model/contactlist/ContactListParser.cpp',
+	'model/contactlist/ContactGroup.cpp',
+	'model/contactlist/ContactGroupParser.cpp',
+	'model/contactlist/ContactParser.cpp',
+	'model/contactlist/ContactListXMLLayer.cpp',
+	'model/contactlist/ContactListRPCLayer.cpp',
+	'control/wenbox/CWenboxPlugin.cpp',
+	'control/CWengoPhone.cpp',
+	'control/CWengoPhoneLogger.cpp',
+	'control/CConnectHandler.cpp',
+	'control/CChatHandler.cpp',
+	'control/presence/CPresenceHandler.cpp',
+	'control/phoneline/CPhoneLine.cpp',
+	'control/phonecall/CPhoneCall.cpp',
+	'control/contactlist/CContact.cpp',
+	'control/contactlist/CContactList.cpp',
+	'control/contactlist/CContactGroup.cpp',
+	'presentation/PFactory.cpp'
+]
+
+env.WengoCopyToBuildDir('../sounds', 'sounds')
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoStaticLibrary('wengophone', sources)

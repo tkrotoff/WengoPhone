@@ -1,0 +1,28 @@
+package id38b7weckelpx6eckelz6i;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:cpp#Class#QtLogin:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}
+}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:cpp#Class#QtLogin:oiref>=460,80,200,222,1:oigroup> 
+*/
+class __positions {
+}
