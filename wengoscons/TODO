@@ -1,0 +1,11 @@
+** .pro generation
+
+** Test all functions and methods
+
+** Improve speed
+
+** Install target for nsis, RPM, DEB, tar.gz source code
+
+** Why __createVCproj() does not work anymore? it was before
+
+** Generate version number for shared libraries + symlinks

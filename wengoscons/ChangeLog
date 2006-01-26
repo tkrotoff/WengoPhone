@@ -1,0 +1,14 @@
+2005-11-08  Philippe Bernery <philippe.bernery@wengo.fr>
+* WengoPrepareMacOSXApp() implementation
+
+2005-11-08  Philippe Bernery <philippe.bernery@wengo.fr>
+* WengoAutoconf() implementation
+
+2005-10-26  Tanguy Krotoff <tanguy.krotoff@wengo.fr>
+* Epydoc documentation uploaded
+
+2005-10-18  Tanguy Krotoff <tanguy.krotoff@wengo.fr>
+* MacOSX support
+
+2005-10-07  Tanguy Krotoff <tanguy.krotoff@wengo.fr>
+* Documentation using epydoc

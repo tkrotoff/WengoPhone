@@ -1,0 +1,163 @@
+import os
+
+env = WengoGetEnvironment()
+
+if not os.environ.has_key('QTDIR'):
+	print 'Error: QTDIR environment variable not set'
+	print "Please, set QTDIR environment variable to the "\
+			"location of your Qt 4 installation, then restart the "\
+			"build process."
+	env.Exit(1)
+
+if not os.environ.has_key('QTLIBDIR'):
+	print 'Warning: QTLIBDIR environment variable not set, using' + str(os.environ['QTDIR'])
+	print "Please, set QTLIBDIR environment variable to the "\
+			"location of your Qt 4 libraries if you "\
+			"encounter any issue regarding linking to"\
+			" Qt libraries, then restart the build process."
+	qt_lib_dir = os.path.join(os.environ['QTDIR'], 'lib')
+else:
+	qt_lib_dir = os.environ['QTLIBDIR']
+
+if not os.environ.has_key('QTINCLUDEDIR'):
+	print 'Warning: QTINCLUDEDIR environment variable not set.'
+	print "Please, set QTINCLUDEDIR environment variable to the "\
+		"location of your Qt 4 header files, then restart the "\
+		"build process."
+	qtincludedir = os.path.join(os.environ['QTDIR'], 'include')
+else:
+	qtincludedir = os.environ['QTINCLUDEDIR']
+
+qtdir = os.environ['QTDIR']
+
+libs = []
+link_flags = []
+lib_path = [qt_lib_dir]
+include_path = []
+if WengoOSMacOSX():
+	include_path += [os.path.join(qtdir, 'lib', 'QtCore.framework', 'Headers')]
+	include_path += [os.path.join(qtdir, 'lib', 'QtGui.framework', 'Headers')]
+	include_path += [os.path.join(qtdir, 'lib', 'QtNetwork.framework', 'Headers')]
+	include_path += [os.path.join(qtdir, 'lib', 'QtDesigner.framework', 'Headers')]
+	include_path += [os.path.join(qtdir, 'lib', 'QtXml.framework', 'Headers')]
+elif WengoOSLinux():
+	include_path += [qtincludedir]
+	include_path += [os.path.join(qtincludedir, 'Qt')]
+	include_path += [os.path.join(qtincludedir, 'QtCore')]
+	include_path += [os.path.join(qtincludedir, 'QtGui')]
+	include_path += [os.path.join(qtincludedir, 'QtNetwork')]
+	include_path += [os.path.join(qtincludedir, 'QtDesigner')]
+	include_path += [os.path.join(qtincludedir, 'QtXml')]
+else:
+	include_path += [os.path.join(qtdir, 'include')]
+	include_path += [os.path.join(qtdir, 'include', 'Qt')]
+	include_path += [os.path.join(qtdir, 'include', 'QtCore')]
+	include_path += [os.path.join(qtdir, 'include', 'QtGui')]
+	include_path += [os.path.join(qtdir, 'include', 'QtNetwork')]
+	include_path += [os.path.join(qtdir, 'include', 'QtDesigner')]
+	include_path += [os.path.join(qtdir, 'include', 'QtXml')]
+	include_path += [os.path.join(qtdir, 'include', 'ActiveQt')]
+defines = {
+	'UNICODE' : 1,
+	'QT_DLL' : 1,
+	'QT_PLUGIN' : 1,
+	'QT_CORE_LIB' : 1,
+	'QT_GUI_LIB' : 1,
+	'QT_THREAD_SUPPORT' : 1,
+	'QT_CORE_LIB' : 1,
+	'QT_NO_KEYWORDS' : 1,
+}
+cc_flags = []
+headers = []
+sources = []
+
+if WengoCCGCC():
+	cc_flags += [
+		'-frtti',
+		'-fexceptions'
+	]
+
+if WengoCCMinGW():
+	link_flags += [
+		'-mthreads',
+		'-Wl,-enable-stdcall-fixup',
+		'-Wl,-enable-auto-import',
+		'-Wl,-enable-runtime-pseudo-reloc'
+	]
+elif WengoCCGCC():
+	link_flags += [
+		'-mthreads'
+	]
+
+if WengoOSWindows():
+	if WengoDebugMode():
+		libs += [
+			'QtCored4',
+			'QtGuid4',
+			'QtNetworkd4',
+			'QtDesignerd4',
+			'QtXmld4'
+		]
+	else:
+		libs += [
+			'QtCore4',
+			'QtGui4',
+			'QtNetwork4',
+			'QtDesigner4',
+			'QtXml4'
+		]
+	if WengoCCMinGW():
+		include_path += [os.path.join(qtdir, 'mkspecs', 'win32-g++')]
+	defines['QT_LARGEFILE_SUPPORT'] = 1
+	defines['WIN32'] = 1
+
+elif WengoOSLinux():
+	if WengoDebugMode():
+		libs += [
+			'QtCore_debug',
+			'QtGui_debug',
+			'QtNetwork_debug',
+			'QtDesigner_debug',
+			'QtXml_debug'
+		]
+	else:
+		libs += [
+			'QtCore',
+			'QtGui',
+			'QtNetwork',
+			'QtDesigner',
+			'QtXml'
+		]
+	include_path += [os.path.join(qtdir, 'mkspecs', 'linux-g++')]
+
+elif WengoOSMacOSX():
+	cc_flags += [
+		'-F' + os.path.join(qtdir, 'lib'),
+	]
+
+	link_flags += [
+		'-framework Carbon',
+		'-framework QuickTime',
+		'-framework ApplicationServices',
+		'-framework QtCore',
+		'-framework QtGui',
+		'-framework QtNetwork',
+		'-framework QtXml',
+		'-F' + os.path.join(qtdir, 'lib'),
+		'-headerpad_max_install_names'
+	]
+	libs += [
+		'z',
+		'QtDesigner_debug'
+	]
+	include_path += [os.path.join(qtdir, 'mkspecs', 'macx-g++')]
+
+
+env.WengoAddLibPath(lib_path)
+env.WengoAddCCFlags(cc_flags)
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoAddDefines(defines)
+env.WengoUseLibraries(libs)
+
+env.WengoDeclareSystemLibrary('qt4')
