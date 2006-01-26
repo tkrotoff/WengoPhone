@@ -36,9 +36,6 @@
 #include "control/contactlist/CContactGroup.h"
 #include "wenbox/QtWenboxPlugin.h"
 #include "control/wenbox/CWenboxPlugin.h"
-#include "control/CIMHandler.h"
-#include "control/chat/CChat.h"
-#include "control/presence/CPresence.h"
 #include "presence/QtPresenceHandler.h"
 
 #include <QApplication>
@@ -102,18 +99,6 @@ public:
 	PWenboxPlugin * createPresentationWenboxPlugin(CWenboxPlugin & cWenboxPlugin) {
 		QtWenboxPlugin * qtWenboxPlugin = new QtWenboxPlugin(cWenboxPlugin);
 		return qtWenboxPlugin;
-	}
-
-	PIMHandler * createPresentationIMHandler(CIMHandler & cIMHandler) {
-		return NULL;
-	}
-
-	PChat * createPresentationChat(CChat & cChat) {
-		return NULL;
-	}
-
-	PPresence * createPresentationPresence(CPresence & cPresence) {
-		return NULL;
 	}
 
 	PConnectHandler * createPresentationConnectHandler(CConnectHandler & cConnectHandler) {

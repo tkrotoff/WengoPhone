@@ -19,20 +19,86 @@
 
 #include "ChatHandler.h"
 
+#include <model/Chat.h>
+#include <model/imwrapper/IMAccount.h>
+
+#include <Logger.h>
+
+using namespace std;
+
 ChatHandler::ChatHandler() {
 
 }
 
 ChatHandler::~ChatHandler() {
-
+	for (ChatMap::iterator i = _chatMap.begin() ; i != _chatMap.end() ; i++) {
+		delete (*i).second;
+	}
 }
 
-void ChatHandler::sendMessage(EnumIMProtocol::IMProtocol protocol, const std::string & to, const std::string & message) {
+int ChatHandler::createSession(EnumIMProtocol::IMProtocol protocol, const std::string & login) {
+	ChatMap::iterator it = findChat(_chatMap, protocol);
 
+	if (it != _chatMap.end()) {
+		int newSession = (*it).second->createSession();
+		LOG_DEBUG("new session created: #" + String::fromNumber(newSession) + " for protocol: " + String::fromNumber(protocol) + " and login: " + login);
+		_sessionChatMap[newSession] = (*it).second;
+		return newSession;
+	} else {
+		return -1;
+	}
+}
+
+void ChatHandler::closeSession(int session) {
+	Chat * chat = _sessionChatMap[session];
+
+	if (chat) {
+		LOG_DEBUG("closing session #" + String::fromNumber(session));
+		chat->closeSession(session);
+	}
+}
+
+void ChatHandler::sendMessage(int session, const std::string & message) {
+	Chat * chat = _sessionChatMap[session];
+
+	if (chat) {
+		LOG_DEBUG("sending message: session #" + String::fromNumber(session)
+			+ ", message: " + message);
+		chat->sendMessage(session, message);
+	}
+}
+
+void ChatHandler::addContact(int session, const std::string & contactId) {
+	Chat * chat = _sessionChatMap[session];
+
+	if (chat) {
+		LOG_DEBUG("adding a contact to session #" + String::fromNumber(session));
+		chat->addContact(session, contactId);
+	}
+}
+
+void ChatHandler::removeContact(int session, const std::string & contactId) {
+	Chat * chat = _sessionChatMap[session];
+
+	if (chat) {
+		LOG_DEBUG("removing a contact to session #" + String::fromNumber(session));
+		chat->addContact(session, contactId);
+	}
 }
 
 void ChatHandler::connected(IMAccount & account) {
+	ChatMap::iterator i = _chatMap.find(&account);
+	
+	LOG_DEBUG("an account is connected: login: " + account.getLogin() 
+		+ "protocol: " + String::fromNumber(account.getProtocol()));
+	//Chat for this IMAccount has not been created yet
+	if (i == _chatMap.end()) {
+		Chat * chat = new Chat(account);
+		_chatMap[&account] = chat;
 
+		chat->messageReceivedEvent += messageReceivedEvent;
+		chat->statusMessageEvent += statusMessageEvent;
+	}
 }
 
 void ChatHandler::disconnected(IMAccount & account) {

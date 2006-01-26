@@ -36,12 +36,6 @@ class CContact;
 class PContact;
 class CWenboxPlugin;
 class PWenboxPlugin;
-class CIMHandler;
-class PIMHandler;
-class CChat;
-class PChat;
-class CPresence;
-class PPresence;
 class CConnectHandler;
 class PConnectHandler;
 class CPresenceHandler;
@@ -93,12 +87,6 @@ public:
 	virtual PContact * createPresentationContact(CContact & cContact) = 0;
 
 	virtual PWenboxPlugin * createPresentationWenboxPlugin(CWenboxPlugin & cWenboxPlugin) = 0;
-
-	virtual PIMHandler * createPresentationIMHandler(CIMHandler & cIMHandler) = 0;
-
-	virtual PChat * createPresentationChat(CChat & cChat) = 0;
-
-	virtual PPresence * createPresentationPresence(CPresence & cPresence) = 0;
 
 	virtual PConnectHandler * createPresentationConnectHandler(CConnectHandler & cConnectHandler) = 0;
 

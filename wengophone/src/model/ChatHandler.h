@@ -26,7 +26,10 @@
 #include <NonCopyable.h>
 #include <Event.h>
 
+#include <map>
+
 class IMAccount;
+class Chat;
 
 /**
  *
@@ -40,24 +43,78 @@ public:
 	/**
 	 * @see IMChat::messageReceivedEvent
 	 */
-	Event<void (IMChat & sender, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (IMChat & sender, int session, const std::string & from, const std::string & message)> messageReceivedEvent;
 
 	/**
 	 * @see IMChat::messageStatusEvent
 	 */
-	Event<void (IMChat & sender, IMChat::MessageStatus status, int messageId)> messageStatusEvent;
+	Event<void (IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
 
 	ChatHandler();
 
 	~ChatHandler();
 
-	void sendMessage(EnumIMProtocol::IMProtocol protocol, const std::string & to, const std::string & message);
+	/**
+	 * Create a new session.
+	 *
+	 * @param login 
+	 * @param protocol
+	 * @return id of the new session
+	 */
+	int createSession(EnumIMProtocol::IMProtocol protocol, const std::string & login);
+
+	/**
+	 * Close a session.
+	 *
+	 * @param session the SessionChat id to delete
+	 */
+	void closeSession(int session);
+
+	/**
+	 * Send a message to all Contact linked to the session.
+	 *
+	 * @param session the session to send the message to
+	 * @param message the message to send
+	 */
+	void sendMessage(int session, const std::string & message);
+
+	/**
+	 * Add a contact to the session.
+	 *
+	 * @param session the session id
+	 * @param contactId the identifier of the contact
+	 */
+	void addContact(int session, const std::string & contactId);
+
+	/**
+	 * Remove a contact from the session.
+	 *
+	 * @param session the session id
+	 * @param contactId the identifier of the contact
+	 */
+	void removeContact(int session, const std::string & contactId);
 
 	void connected(IMAccount & account);
 
 	void disconnected(IMAccount & account);
 
 private:
+
+	typedef std::map<IMAccount *, Chat *> ChatMap;
+	typedef std::map<int, Chat *> SessionChatMap;
+
+	/**
+	 * Find the Chat related to the given protocol.
+	 *
+	 * @param chatMap the ChatMap to search in
+	 * @param protocol the protocol
+	 * @return an iterator to the desired Chat or 'end' of the given ChatMap
+	 */
+	static ChatMap::iterator findChat(ChatMap & ChatMap, EnumIMProtocol::IMProtocol protocol);
+
+	ChatMap _chatMap;
+
+	SessionChatMap _sessionChatMap;
 
 };
 

@@ -42,23 +42,43 @@ public:
 	/**
 	 * @see IMChat::messageReceivedEvent
 	 */
-	Event<void (IMChat & sender, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (IMChat & sender, int session, const std::string & from, const std::string & message)> messageReceivedEvent;
 
 	/**
-	 * @see IMChat::messageStatusEvent
+	 * @see IMChat::statusMessageEvent
 	 */
-	Event<void (IMChat & sender, IMChat::MessageStatus status, int messageId)> messageStatusEvent;
+	Event<void (IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
+
+	Chat(IMAccount & account);
 
 	virtual ~Chat() { }
 
 	/**
+	 * @see IMChat::createSession
+	 */
+	int createSession();
+
+	/**
+	 * @see IMChat::closeSession
+	 */
+	void closeSession(int session);
+
+	/**
 	 * @see IMChat::sendMessage
 	 */
-	int sendMessage(const std::string & to, const std::string & message);
+	void sendMessage(int session, const std::string & message);
+
+	/**
+	 * @see IMChat::addContact
+	 */
+	void addContact(int session, const std::string & contactId);
+
+	/**
+	 * @see IMChat::reomveContact
+	 */
+	void removeContact(int session, const std::string & contactId);
 
 protected:
-
-	Chat(IMAccount & account);
 
 	IMAccount & _imAccount;
 	

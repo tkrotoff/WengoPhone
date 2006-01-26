@@ -39,38 +39,74 @@ public:
 	/**
 	 * Chat message received callback.
 	 *
+	 * @param session the session id
 	 * @param sender this class
 	 * @param from message sender
 	 * @param message message received
 	 */
-	Event<void (IMChat & sender, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (IMChat & sender, int session, const std::string & from, const std::string & message)> messageReceivedEvent;
 
-	enum MessageStatus {
+	enum StatusMessage {
 		/** Chat message has been received. */
-		MessageStatusReceived,
+		StatusMessageReceived,
 
-		/** Chat message sending error. */
-		MessageStatusError
+		/** Chat message sending error. 'message' contains the one that produces the error */
+		StatusMessageError,
+		
+		/** Information message (e.g "toto has left the chat room"). 'message' contains the information message */
+		StatusMessageInfo
 	};
 
 	/**
-	 * Status changed.
+	 * Message status event.
 	 *
 	 * @param sender this class
 	 * @param status new status
+	 * @param message @see StatusMessage
 	 */
-	Event<void (IMChat & sender, MessageStatus status, int messageId)> messageStatusEvent;
+	Event<void (IMChat & sender, int session, StatusMessage status, const std::string & message)> statusMessageEvent;
 
 	virtual ~IMChat() { }
 
 	/**
-	 * Sends a chat message.
+	 * Create a new session.
 	 *
-	 * @param contactId message receiver, something like "toto@hotmail.com"
-	 * @param message message to send
-	 * @return message id
+	 * @return id of the new session
 	 */
-	virtual int sendMessage(const std::string & contactId, const std::string & message) = 0;
+	virtual int createSession() = 0;
+
+	/**
+	 * Close a session.
+	 *
+	 * @param session the session id to delete
+	 */
+	virtual void closeSession(int session) = 0;
+
+	/**
+	 * Send a message to all Contact linked to the session session.
+	 *
+	 * @param session the session to send the message to
+	 * @param message the message to send
+	 */
+	virtual void sendMessage(int session, const std::string & message) = 0;
+
+	/**
+	 * Add a contact to the session.
+	 *
+	 * @param session the session id
+	 * @param protocol the protocol of the contact to add
+	 * @param contactId the identifier of the contact
+	 */
+	virtual void addContact(int session, const std::string & contactId) = 0;
+
+	/**
+	 * Remove a contact from the session.
+	 *
+	 * @param session the session id
+	 * @param protocol the protocol of the contact to add
+	 * @param contactId the identifier of the contact
+	 */
+	virtual void removeContact(int session, const std::string & contactId) = 0;
 
 protected:
 

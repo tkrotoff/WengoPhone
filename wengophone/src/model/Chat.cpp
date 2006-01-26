@@ -27,9 +27,25 @@ Chat::Chat(IMAccount & account)
 	_imChat = IMWrapperFactory::getFactory().createIMChat(account);
 	
 	_imChat->messageReceivedEvent += messageReceivedEvent;
-	_imChat->messageStatusEvent += messageStatusEvent;
+	_imChat->statusMessageEvent += statusMessageEvent;
 }
 
-int Chat::sendMessage(const std::string & to, const std::string & message) {
-	return _imChat->sendMessage(to, message);
+int Chat::createSession() {
+	return _imChat->createSession();
+}
+
+void Chat::closeSession(int session) {
+	_imChat->closeSession(session);
+}
+
+void Chat::sendMessage(int session, const std::string & message) {
+	_imChat->sendMessage(session, message);
+}
+
+void Chat::addContact(int session, const std::string & contactId) {
+	_imChat->addContact(session, contactId);
+}
+
+void Chat::removeContact(int session, const std::string & contactId) {
+	_imChat->removeContact(session, contactId);
 }

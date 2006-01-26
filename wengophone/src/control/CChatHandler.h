@@ -41,21 +41,41 @@ public:
 	/**
 	 * @see IMChat::messageReceivedEvent
 	 */
-	Event<void (IMChat & sender, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (IMChat & sender, int session, const std::string & from, const std::string & message)> messageReceivedEvent;
 
 	/**
 	 * @see IMChat::messageStatusEvent
 	 */
-	Event<void (IMChat & sender, IMChat::MessageStatus status, int messageId)> messageStatusEvent;
+	Event<void (IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
 
-	CChatHandler(ChatHandler & chatHandler);
+	/**
+	 * @see ChatHandler::createSession
+	 */
+	int createSession(EnumIMProtocol::IMProtocol protocol, const std::string & login);
 
-	~CChatHandler();
+	/**
+	 * @see ChatHandler::closeSession
+	 */
+	void closeSession(int session);
 
 	/**
 	 * @see ChatHandler::sendMessage
 	 */
-	void sendMessage(EnumIMProtocol::IMProtocol protocol, const std::string & to, const std::string & message);
+	void sendMessage(int session, const std::string & message);
+
+	/**
+	 * @see ChatHandler::addContact
+	 */
+	void addContact(int session, const std::string & contactId);
+
+	/**
+	 * @see ChatHandler::removeContact
+	 */
+	void removeContact(int session, const std::string & contactId);
+
+	CChatHandler(ChatHandler & chatHandler);
+
+	~CChatHandler();
 
 private:
 
