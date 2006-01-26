@@ -1,0 +1,31 @@
+ylusbtel = WengoGetEnvironment()
+files = [
+	'YLUSBTEL.lib',
+	'YLTELBOX.dll'
+]
+ylusbtel.WengoDeclareLibrary('ylusbtel', files)
+
+
+env = WengoGetEnvironment()
+
+libs = [
+	'wenbox',
+	'ylusbtel'
+]
+lib_path = []
+include_path = []
+defines = {
+	'WENBOX_DLL' : 1,
+	'BUILDING_DLL' : 1
+}
+headers = []
+sources = [
+	'YealinkWenbox.cpp',
+]
+
+#env.WengoExportDefines(export_defines)
+env.WengoAddDefines(defines)
+env.WengoAddLibPath(lib_path)
+env.WengoUseLibraries(libs)
+
+env.WengoSharedLibrary('yealinkwenbox', sources)

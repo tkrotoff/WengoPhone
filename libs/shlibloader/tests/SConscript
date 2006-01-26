@@ -1,0 +1,41 @@
+dlltest = WengoGetEnvironment()
+libs = [
+	'wengoutil'
+]
+headers = []
+sources = [
+	'dlltest.cpp'
+]
+defines = {
+	'DLLTEST_DLL' : 1,
+	'BUILDING_DLL' : 1
+}
+link_flags = []
+dlltest.WengoUseLibraries(libs)
+dlltest.WengoAddDefines(defines)
+dlltest.WengoSharedLibrary('dlltest', sources, headers)
+
+
+env = WengoGetEnvironment()
+
+libs = [
+	'boost-unit-test',
+	'boost',
+	'shlibloader'
+]
+headers = []
+sources = [
+	'main.cpp'
+]
+link_flags = []
+
+if WengoOSMacOSX():
+	link_flags += ['-framework Quicktime']
+	headers += ['QuicktimeWebcamDriverTest.h']
+elif WengoOSLinux():
+	headers += ['V4LWebcamDriverTest.h']
+
+env.WengoAddLinkFlags(link_flags)
+env.WengoUseLibraries(libs)
+
+env.WengoProgram('shlibloader-tests', sources, headers)

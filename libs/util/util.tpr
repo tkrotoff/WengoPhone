@@ -1,0 +1,40 @@
+[Project]
+Language=cpp
+Root.0=$PROJECT_DIR$/include
+Root.0.access=writable
+Root.0.file_types=cpp_header
+Root.0.package_prefix=
+Root.1=$PROJECT_DIR$/src
+Root.1.access=writable
+Root.1.file_types=cpp_source
+Root.1.package_prefix=
+Root.2=$PROJECT_DIR$/together
+Root.2.access=writable
+Root.2.file_types=diagram
+Root.2.package_prefix=
+Version=3.0
+projectfile.encoding=Cp1252
+Root.3=$TGH$/jdk/jre/lib/rt.jar
+Root.3.access=import
+Root.3.non_removable=
+[workspace]
+Developer.CodingWorkspace={{0,2,-1,0,0,0,0,0,0,1,0,50,75,25,-1,-1,-1,-1}${0,1,-1,0,0,0,0,1,0,1,0,50,75,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,1,0,1,0,66,50,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,1,0,1,0,66,50,25,-1,-1,-1,-1}${0,-1,-1,0,0,0,0,0,0,1,0,5,5,5,-1,-1,-1,-1}${0,5,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,4,-1,0,0,0,0,1,0,1,1,66,50,25,-1,-1,-1,-1}${0,7,-1,0,0,0,0,0,0,1,0,50,50,75,-1,-1,-1,-1}}
+Developer.DebugWorkspace={{0,2,-1,0,0,0,0,0,0,1,0,50,75,25,-1,-1,-1,-1}${0,1,-1,0,0,0,0,1,0,1,1,50,75,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,-1,-1,0,0,0,0,0,0,1,0,5,5,5,-1,-1,-1,-1}${0,4,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,0,-1,0,0,0,0,1,0,1,0,75,5,5,-1,-1,-1,-1}${0,7,-1,0,0,0,0,0,0,1,0,50,50,75,-1,-1,-1,-1}}
+Developer.DesignWorkspace={{0,2,-1,0,0,0,0,1,0,1,0,50,75,22,-1,-1,-1,-1}${0,1,-1,0,0,0,0,0,0,1,0,50,75,22,-1,-1,-1,-1}${0,3,-1,0,0,0,0,1,0,1,0,50,50,22,-1,-1,-1,-1}${0,3,-1,0,0,0,0,1,0,1,0,50,50,22,-1,-1,-1,-1}${0,-1,-1,0,0,0,0,0,0,1,0,5,5,5,-1,-1,-1,-1}${0,4,-1,0,0,0,0,1,0,1,1,50,50,22,-1,-1,-1,-1}${0,0,-1,0,0,0,0,0,0,1,0,75,5,5,-1,-1,-1,-1}${0,7,-1,0,0,0,0,0,0,1,0,50,50,75,-1,-1,-1,-1}}
+Developer.util={{0,2,-1,0,0,0,0,0,0,1,0,71,75,25,-1,-1,-1,-1}${0,1,-1,0,0,0,0,1,0,1,1,71,75,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,-1,-1,0,0,0,0,0,0,1,0,5,5,5,-1,-1,-1,-1}${0,4,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${1,-1,0,14,742,1208,214,1,0,1,0,5,5,5,-1,-1,-1,-1}${0,7,-1,0,0,0,0,0,0,1,0,50,50,75,-1,-1,-1,-1}}
+names.Developer={util,DesignWorkspace,CodingWorkspace,DebugWorkspace}
+[editor]
+recent.file.0=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo\\softphone-ng\\util\\src\\http\\CurlHttpRequest.cpp
+recent.file.1=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo\\softphone-ng\\util\\include\\http\\CurlHttpRequest.h
+recent.file.2=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo\\softphone-ng\\util\\include\\http\\CurlHttpRequestFactory.h
+recent.file.3=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo\\softphone-ng\\util\\include\\exception\\FileNotFoundException.h
+recent.file.4=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo\\softphone-ng\\util\\include\\exception\\Exception.h
+recent.file.5=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo\\softphone-ng\\util\\include\\Toto.h
+recent.file.6=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo\\softphone-ng\\util\\src\\Toto.cpp
+recent.file.7=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo\\softphone-ng\\util\\include\\Class1.h
+recent.file.8=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo\\softphone-ng\\util\\include\\http\\HttpRequest.h
+recent.file.9=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo\\softphone-ng\\util\\include\\http\\HttpRequestFactory.h
+[lastOpenProjectName]
+Developer=util
+[vcs]
+provider.class=CVS LAN

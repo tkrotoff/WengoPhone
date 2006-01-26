@@ -1,0 +1,2 @@
+This library provides functionnalities to convert image data
+from a palette to another. e.g: from RGB to YUV420P

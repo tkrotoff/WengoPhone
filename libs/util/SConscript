@@ -1,0 +1,39 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'boost',
+	'wengocurl',
+	'global'
+]
+lib_path = []
+include_path = ['include']
+headers = []
+sources = [
+	'src/Startup.cpp',
+	'src/WebBrowser.cpp',
+	'src/StringList.cpp',
+	'src/File.cpp',
+	'src/Settings.cpp',
+	'src/Base64.cpp',
+	'src/Timer.cpp',
+	'src/Logger.cpp',
+	'src/Settings.cpp',
+	'src/http/HttpRequest.cpp',
+	'src/http/NullHttpRequest.cpp',
+	'src/http/CurlHttpRequest.cpp',
+]
+
+if WengoOSWindows():
+	libs += ['advapi32', 'shell32']
+
+if WengoCCMSVC():
+	sources += ['src/win32/MemoryDump.cpp']
+	libs += ['shlwapi']
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+
+env.WengoStaticLibrary('wengoutil', sources)
+
+env.SConscript('tests/SConscript')

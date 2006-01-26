@@ -1,0 +1,36 @@
+package ide4l44eb12h9gjeb12hkje;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:cpp#Class#FileNotFoundException:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}
+/**
+@__ref <oiref:cpp#Class#Exception:oiref><oihard>
+@__modelType reference 
+*/
+class reference24 {
+}
+}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:cpp#Class#Exception:oiref>=50,10,135,158,1:oigroup>
+<oigroup:<oiref:cpp#Extends#FileNotFoundException#Exception:oiref>=120,228,120,168:oigroup>
+<oigroup:<oiref:cpp#Class#FileNotFoundException:oiref>=10,228,210,101,0:oigroup>
+*/
+class __positions {
+}

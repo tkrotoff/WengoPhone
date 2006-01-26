@@ -1,0 +1,48 @@
+env = WengoGetQt4Environment()
+
+libs = [
+	'qt4',
+	'wengoutil'
+]
+lib_path = []
+include_path = ['include']
+headers = [
+	'include/EventFilter.h',
+	'include/KeyEventFilter.h',
+	'include/MouseEventFilter.h',
+	'include/PaintEventFilter.h',
+	'include/EnabledChangeEventFilter.h',
+	'include/PostEvent.h',
+	'include/WidgetFactory.h',
+	'include/Object.h',
+	'include/QObjectThreadSafe.h',
+	'include/ResizeEventFilter.h',
+	'include/NonResizeableWidget.h',
+	'include/StringListConvert.h'
+]
+sources = [
+	'src/EventFilter.cpp',
+	'src/KeyEventFilter.cpp',
+	'src/MouseEventFilter.cpp',
+	'src/PaintEventFilter.cpp',
+	'src/EnabledChangeEventFilter.cpp',
+	'src/WidgetFactory.cpp',
+	'src/Object.cpp',
+	'src/QObjectThreadSafe.cpp',
+	'src/ResizeEventFilter.cpp',
+	'src/NonResizeableWidget.cpp',
+	'src/StringListConvert.cpp'
+]
+
+def moc(env, headers):
+	moced = []
+	for header in headers:
+		moced += [ env.Moc(header) ]
+	return moced
+moced = moc(env, headers)
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+
+env.WengoStaticLibrary('qtutil', sources + moced, headers)

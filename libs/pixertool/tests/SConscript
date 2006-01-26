@@ -1,0 +1,21 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'global',
+	'boost-unit-test',
+	'sdl_image',
+	'pixertool'
+]
+
+headers = [
+	'PixerToolTest.h'
+]
+
+sources = [
+	'PixerToolTest.cpp'
+]
+
+env.WengoUseLibraries(libs)
+res = env.WengoProgram('pixertool-test', sources, headers)
+env.Depends(res, 'test.bmp')
+

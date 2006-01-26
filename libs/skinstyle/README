@@ -1,0 +1,6 @@
+Skin plugin for the Qt library version 4
+
+SkinStyle works as a Qt style plugin (like Plastik, Keramik...)
+that uses pixmaps mapped on Qt widgets.
+It permits Qt applications to have skins like Winamp.
+It works a bit like SkinCrafter for Windows

@@ -1,0 +1,36 @@
+import os, shutil
+
+env = WengoGetQt4Environment()
+
+libs = [
+	'qtutil',
+]
+lib_path = []
+include_path = []
+headers = [
+	'src/SkinStyle.h',
+	'src/SkinInfoReader.h',
+	'src/SkinWidget.h',
+	'src/SkinWindow.h',
+	'src/SkinButton.h'
+]
+sources = [
+	'src/SkinStyle.cpp',
+	'src/SkinInfoReader.cpp',
+	'src/SkinWidget.cpp',
+	'src/SkinWindow.cpp',
+	'src/SkinButton.cpp'
+]
+
+def moc(env, headers):
+	moced = []
+	for header in headers:
+		moced += [ env.Moc(header) ]
+	return moced
+moced = moc(env, headers)
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+
+env.WengoSharedLibrary('skinstyle', sources)

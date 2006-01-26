@@ -1,0 +1,17 @@
+env = WengoGetQt4Environment()
+
+libs = [
+	'qt4',
+	'wengoutil',
+	'boost-unit-test',
+]
+lib_path = []
+include_path = []
+headers = []
+sources = [
+	'main.cpp',
+]
+
+env.WengoUseLibraries(libs)
+
+env.WengoProgram('util-tests', sources)

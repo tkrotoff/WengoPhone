@@ -1,0 +1,18 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'avutil'
+]
+
+includes = [
+	'libavcodec'
+]
+
+env.WengoAddIncludePath(includes)
+env.WengoUseLibraries(libs)
+
+env.WengoAutoconf('avcodec', ['libavcodec/libavcodec.a'],
+	'./configure', 'cd libavcodec && make',
+	['configure'], ['config.mak'])
+
+

@@ -1,0 +1,2 @@
+libutil depends on the Boost libraries + libcurl for HTTP request.
+Please compile these two packages first.

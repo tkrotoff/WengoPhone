@@ -1,0 +1,11 @@
+env = WengoGetEnvironment()
+
+includes = [
+	'libavutil'
+]
+env.WengoAddIncludePath(includes)
+
+env.WengoAutoconf('avutil', ['libavutil/libavutil.a'],
+	'./configure', 'cd libavutil && make',
+	['configure'], ['config.mak'])
+
