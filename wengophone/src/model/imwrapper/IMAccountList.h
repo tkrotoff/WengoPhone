@@ -17,56 +17,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNT_H
-#define IMACCOUNT_H
+#ifndef IMACCOUNTLIST_H
+#define IMACCOUNTLIST_H
 
 #include <model/imwrapper/EnumIMProtocol.h>
 
-#include <NonCopyable.h>
+#include <List.h>
 
-#include <string>
+class IMAccount;
 
 /**
- * Instant Messaging account.
+ * Instant Messaging account list.
  *
  * @ingroup model
- * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
-class IMAccount : NonCopyable {
+class IMAccountList : public List<IMAccount *> {
 public:
 
-	IMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol) {
-		_login = login;
-		_password = password;
-		_protocol = protocol;
+	static IMAccountList & getInstance() {
+		static IMAccountList imAccountList;
+		return imAccountList;
 	}
 
-	const std::string & getLogin() const {
-		return _login;
-	}
-
-	const std::string & getPassword() const {
-		return _password;
-	}
-
-	EnumIMProtocol::IMProtocol getProtocol() const {
-		return _protocol;
-	}
-
-	bool operator == (const IMAccount & imAccount) const {
-		//TODO: should we check the password too?
-		return ((_login == imAccount._login)
-			&& (_protocol == imAccount._protocol));
-	}
-
-private:
-
-	std::string _login;
-
-	std::string _password;
-
-	EnumIMProtocol::IMProtocol _protocol;
-
+	/**
+	 * @param protocol the desired protocol
+	 * @return IMAccount with protocol 'protocol'
+	 */
+	List<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
 };
 
-#endif	//IMACCOUNT_H
+#endif	//IMACCOUNTLIST_H

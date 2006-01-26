@@ -22,19 +22,17 @@
 
 #include <model/imwrapper/IMConnect.h>
 #include <model/account/wengo/WengoAccount.h>
-#include <model/ChatHandler.h>
+#include <model/chat/ChatHandler.h>
 
 #include <NonCopyable.h>
 #include <List.h>
 #include <Event.h>
 
-class IMAccount;
 class Connect;
 class Chat;
 class PresenceHandler;
 class WengoPhone;
 class PresenceHandler;
-class ChatHandler;
 
 /**
  *
@@ -77,14 +75,12 @@ private:
 
 	void loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status);
 
-	List<IMAccount *> _accountList;
-
 	List<Connect *> _connectList;
 
 	WengoPhone & _wengoPhone;
-	
+
 	PresenceHandler  & _presenceHandler;
-	
+
 	ChatHandler _chatHandler;
 	
 };

@@ -19,7 +19,7 @@
 
 #include "CChatHandler.h"
 
-#include <model/ChatHandler.h>
+#include <model/chat/ChatHandler.h>
 #include <presentation/PFactory.h>
 
 CChatHandler::CChatHandler(ChatHandler & chatHandler)
@@ -36,8 +36,8 @@ CChatHandler::~CChatHandler() {
 
 }
 
-int CChatHandler::createSession(EnumIMProtocol::IMProtocol protocol, const std::string & login) {
-	return _chatHandler.createSession(protocol, login);
+int CChatHandler::createSession(const IMAccount & imAccount) {
+	return _chatHandler.createSession(imAccount);
 }
 
 void CChatHandler::closeSession(int session) {

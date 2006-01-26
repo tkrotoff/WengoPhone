@@ -19,8 +19,8 @@
 
 #include "CConnectHandler.h"
 
-#include <model/ConnectHandler.h>
-#include <control/CChatHandler.h>
+#include <model/connect/ConnectHandler.h>
+#include <control/chat/CChatHandler.h>
 #include <control/presence/CPresenceHandler.h>
 #include <presentation/PFactory.h>
 

@@ -21,6 +21,7 @@
 
 #include <model/contactlist/IMContact.h>
 #include <model/presence/PresenceHandler.h>
+#include <model/imwrapper/IMAccountList.h>
 
 #include <WidgetFactory.h>
 #include <Object.h>
@@ -124,9 +125,12 @@ QString QtContactWidget::createContact(Contact * contact) {
 	contact->setNotes(getNotes().toStdString());
 
 	if (!getWengoPhone().isEmpty()) {
-		contact->addIMContact(IMContact(EnumIMProtocol::IMProtocolSIPSIMPLE,
-			getWengoPhone().toStdString(),
-			PresenceHandler::getInstance()));
+		List<IMAccount *> list = IMAccountList::getInstance().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		if (list.size() > 0) {
+			contact->addIMContact(IMContact(*list[0],
+				getWengoPhone().toStdString(),
+				PresenceHandler::getInstance()));
+		}
 	}
 
 	return _contactGroupComboBox->currentText();

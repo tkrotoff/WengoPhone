@@ -33,13 +33,13 @@ public:
 	QtPresenceHandler(CPresenceHandler & cPresenceHandler);
 
 	void changeMyPresence(EnumPresenceState::PresenceState state,	
-		const std::string & note, EnumIMProtocol::IMProtocol protocol = EnumIMProtocol::IMProtocolAll);
+		const std::string & note, IMAccount * imAccount = NULL);
 
-	void subscribeToPresenceOf(EnumIMProtocol::IMProtocol protocol, const std::string & contactId);
+	void subscribeToPresenceOf(const IMAccount & imAccount,  const std::string & contactId);
 
-	void blockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId);
+	void blockContact(const IMAccount & imAccount,  const std::string & contactId);
 
-	void unblockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId);
+	void unblockContact(const IMAccount & imAccount,  const std::string & contactId);
 
 	void updatePresentation();
 
@@ -47,12 +47,12 @@ private:
 
 	QtPresenceHandler();
 
-	void presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state, 
-		const std::string & note, const std::string & from);
+	void presenceStateChangedEventHandler(PresenceHandler & sender, EnumPresenceState::PresenceState state, 
+		const std::string & note, const IMAccount & imAccount, const std::string & from);
 
-	void myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status);
+	void myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount, EnumPresenceState::MyPresenceStatus status);
 
-	void subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status);
+	void subscribeStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount, const std::string & contactId, IMPresence::SubscribeStatus status);
 
 	void updatePresentationThreadSafe();
 

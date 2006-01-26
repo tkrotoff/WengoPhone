@@ -17,27 +17,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CHATHANDLER_H
-#define CHATHANDLER_H
+#ifndef CCHATHANDLER_H
+#define CCHATHANDLER_H
 
-#include <model/imwrapper/EnumIMProtocol.h>
 #include <model/imwrapper/IMChat.h>
+#include <model/imwrapper/EnumIMProtocol.h>
 
 #include <NonCopyable.h>
 #include <Event.h>
 
-#include <map>
-
-class IMAccount;
-class Chat;
+class ChatHandler;
+class PChatHandler;
 
 /**
  *
- * @ingroup model
+ * @ingroup control
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class ChatHandler : NonCopyable {
+class CChatHandler : NonCopyable {
 public:
 
 	/**
@@ -50,72 +48,41 @@ public:
 	 */
 	Event<void (IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
 
-	ChatHandler();
-
-	~ChatHandler();
-
 	/**
-	 * Create a new session.
-	 *
-	 * @param login 
-	 * @param protocol
-	 * @return id of the new session
+	 * @see ChatHandler::createSession
 	 */
-	int createSession(EnumIMProtocol::IMProtocol protocol, const std::string & login);
+	int createSession(const IMAccount & imAccount);
 
 	/**
-	 * Close a session.
-	 *
-	 * @param session the SessionChat id to delete
+	 * @see ChatHandler::closeSession
 	 */
 	void closeSession(int session);
 
 	/**
-	 * Send a message to all Contact linked to the session.
-	 *
-	 * @param session the session to send the message to
-	 * @param message the message to send
+	 * @see ChatHandler::sendMessage
 	 */
 	void sendMessage(int session, const std::string & message);
 
 	/**
-	 * Add a contact to the session.
-	 *
-	 * @param session the session id
-	 * @param contactId the identifier of the contact
+	 * @see ChatHandler::addContact
 	 */
 	void addContact(int session, const std::string & contactId);
 
 	/**
-	 * Remove a contact from the session.
-	 *
-	 * @param session the session id
-	 * @param contactId the identifier of the contact
+	 * @see ChatHandler::removeContact
 	 */
 	void removeContact(int session, const std::string & contactId);
 
-	void connected(IMAccount & account);
+	CChatHandler(ChatHandler & chatHandler);
 
-	void disconnected(IMAccount & account);
+	~CChatHandler();
 
 private:
 
-	typedef std::map<IMAccount *, Chat *> ChatMap;
-	typedef std::map<int, Chat *> SessionChatMap;
+	ChatHandler & _chatHandler;
 
-	/**
-	 * Find the Chat related to the given protocol.
-	 *
-	 * @param chatMap the ChatMap to search in
-	 * @param protocol the protocol
-	 * @return an iterator to the desired Chat or 'end' of the given ChatMap
-	 */
-	static ChatMap::iterator findChat(ChatMap & ChatMap, EnumIMProtocol::IMProtocol protocol);
-
-	ChatMap _chatMap;
-
-	SessionChatMap _sessionChatMap;
+	PChatHandler * _pChatHandler;
 
 };
 
-#endif	//CHATHANDLER_H
+#endif	//CCHATHANDLER_H

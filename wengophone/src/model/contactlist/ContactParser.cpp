@@ -23,6 +23,7 @@
 #include "IMContact.h"
 #include <model/WengoPhoneLogger.h>
 #include <model/presence/PresenceHandler.h>
+#include <model/imwrapper/IMAccountList.h>
 
 #include <tinyxml.h>
 
@@ -52,7 +53,10 @@ ContactParser::ContactParser(Contact & contact, const std::string & data) {
 
 	text = vCard.FirstChild("WENGOID").FirstChild().Text();
 	if (text) {
-		IMContact imContact(EnumIMProtocol::IMProtocolSIPSIMPLE, text->Value(), PresenceHandler::getInstance());
+		//FIXME: crashes when IMAccountList is populated after initializing the ContactList
+		List<IMAccount *> list = IMAccountList::getInstance().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		
+		IMContact imContact(*list[0], text->Value(), PresenceHandler::getInstance());
 		contact.addIMContact(imContact);
 		contact.setWengoPhone(text->Value());
 	}
@@ -65,8 +69,9 @@ void ContactParser::parseIMAccount(Contact & contact, const TiXmlHandle & handle
 	while (node) {
 		TiXmlText * text = node->FirstChild()->ToText();
 		if (text) {
-			IMContact imContact(protocol, text->Value(), PresenceHandler::getInstance());
-			contact.addIMContact(imContact);
+			//TODO: find a way to load/save data
+			//IMContact imContact(protocol, text->Value(), PresenceHandler::getInstance());
+			//contact.addIMContact(imContact);
 		}
 		node = parentNode->IterateChildren(protocolId, node);
 	}

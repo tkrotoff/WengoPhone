@@ -19,7 +19,7 @@
 
 #include "WengoPhone.h"
 
-#include "ConnectHandler.h"
+#include "connect/ConnectHandler.h"
 #include "WengoPhoneLogger.h"
 #include "wenbox/WenboxPlugin.h"
 #include "phoneline/PhoneLine.h"

@@ -27,6 +27,7 @@
 #include <model/imwrapper/IMPresence.h>
 
 class CPresenceHandler;
+class PresenceHandler;
 
 /**
  *
@@ -40,40 +41,42 @@ public:
 	 * @see PresenceHandler::changeMyPresence
 	 */
 	virtual void changeMyPresence(EnumPresenceState::PresenceState state,	
-		const std::string & note, EnumIMProtocol::IMProtocol protocol = EnumIMProtocol::IMProtocolAll) = 0;
+		const std::string & note, IMAccount * imAccount = NULL) = 0;
 
 	/**
 	 * @see PresenceHandler::subscribeToPresenceOf
 	 */
-	virtual void subscribeToPresenceOf(EnumIMProtocol::IMProtocol protocol, const std::string & contactId) = 0;
+	virtual void subscribeToPresenceOf(const IMAccount & imAccount, const std::string & contactId) = 0;
 
 	/**
 	 * @see PresenceHandler::blockContact
 	 */
-	virtual void blockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId) = 0;
+	virtual void blockContact(const IMAccount & imAccount, const std::string & contactId) = 0;
 
 	/**
 	 * @see PresenceHandler::unblockContact
 	 */
-	virtual void unblockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId) = 0;
+	virtual void unblockContact(const IMAccount & imAccount, const std::string & contactId) = 0;
 	
 private:
 
 	/**
 	 * @see IMPresence::presenceStateChangedEvent
 	 */
-	virtual void presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state, 
-		const std::string & note, const std::string & from) = 0;
+	virtual void presenceStateChangedEventHandler(PresenceHandler & sender, EnumPresenceState::PresenceState state, 
+		const std::string & note, const IMAccount & imAccount, const std::string & from) = 0;
 
 	/**
 	 * @see IMPresence::presenceStatusEvent
 	 */
-	virtual void myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status) = 0;
+	virtual void myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount, 
+		EnumPresenceState::MyPresenceStatus status) = 0;
 
 	/**
 	 * @see IMPresence::subscribeStatusEvent
 	 */
-	virtual void subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status) = 0;
+	virtual void subscribeStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount, 
+		const std::string & contactId, IMPresence::SubscribeStatus status) = 0;
 
 };
 

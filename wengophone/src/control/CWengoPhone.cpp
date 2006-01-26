@@ -31,7 +31,7 @@
 #include "CWengoPhoneLogger.h"
 #include "wenbox/CWenboxPlugin.h"
 #include "WengoPhoneBuildId.h"
-#include "CConnectHandler.h"
+#include "connect/CConnectHandler.h"
 
 #include <WebBrowser.h>
 #include <StringList.h>

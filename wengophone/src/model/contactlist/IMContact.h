@@ -21,11 +21,11 @@
 #define IMCONTACT_H
 
 #include <model/imwrapper/IMAccount.h>
-#include <model/imwrapper/EnumIMProtocol.h>
 
 #include <string>
 
 class PresenceHandler;
+class IMAccount;
 
 /**
  * An Instant Message Contact.
@@ -37,11 +37,11 @@ public:
 	/**
 	 * Construct a new IMContact.
 	 * 
-	 * @param protocol protocol of the contact id
-	 * @param contactId the contact id
+	 * @param imAccount the imAccount that the IMContact is associated with
+	 * @param contactId id of the IMContact to create
 	 * @param presenceHandler the PresenceHandler that will receive presence message
 	 */
-	IMContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId, PresenceHandler & presenceHandler);
+	IMContact(const IMAccount & imAccount, const std::string & contactId, PresenceHandler & presenceHandler);
 
 	IMContact(const IMContact & imContact);
 
@@ -71,8 +71,8 @@ public:
 
 	std::string serialize();
 
-	const EnumIMProtocol::IMProtocol & getIMProtocol() const {
-		return _protocol;
+	const IMAccount & getIMAccount() const {
+		return _imAccount;
 	}
 
 	const std::string & getContactId() const {
@@ -82,8 +82,8 @@ public:
 private:
 
 	PresenceHandler & _presenceHandler;
-	
-	EnumIMProtocol::IMProtocol _protocol;
+
+	const IMAccount & _imAccount;
 
 	std::string _contactId;
 

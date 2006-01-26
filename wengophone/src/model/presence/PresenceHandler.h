@@ -20,7 +20,7 @@
 #ifndef PRESENCEHANDLER_H
 #define PRESENCEHANDLER_H
 
-#include <model/ChatHandler.h>
+#include <model/chat/ChatHandler.h>
 #include <model/imwrapper/IMConnect.h>
 #include <model/imwrapper/EnumIMProtocol.h>
 #include <model/imwrapper/EnumPresenceState.h>
@@ -53,62 +53,71 @@ public:
 
 	/**
 	 * @see IMPresence::presenceStateChangedEvent
-	 * @param protocol protocol of the contact
+	 * @param imAccount the IMAccount that posses
 	 */
-	Event<void (IMPresence & sender, EnumPresenceState::PresenceState state, 
-		const std::string & note, const std::string & from)> presenceStateChangedEvent;
+	Event<void (PresenceHandler & sender, EnumPresenceState::PresenceState state, 
+		const std::string & note, const IMAccount & imAccount, const std::string & from)> presenceStateChangedEvent;
 
 	/**
 	 * @see IMPresence::presenceStatusEvent
 	 */
-	Event<void (IMPresence & sender, EnumPresenceState::MyPresenceStatus status)> myPresenceStatusEvent;
+	Event<void (PresenceHandler & sender, const IMAccount & imAccount, 
+		EnumPresenceState::MyPresenceStatus status)> myPresenceStatusEvent;
 
 	/**
 	 * @see IMPresence::subscribeStatusEvent
 	 * @param protocol protocol of the contact
 	 */
-	Event<void (IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status)> subscribeStatusEvent;
+	Event<void (PresenceHandler & sender, const IMAccount & imAccount, 
+		const std::string & contactId, IMPresence::SubscribeStatus status)> subscribeStatusEvent;
 
 	/**
 	 * Change my presence on desired protocol.
 	 *
 	 * @param state my state
 	 * @param note used by PresenceStateUserDefined
-	 * @param protocol desired protocol. All by default
+	 * @param imAccount the IMAccount that we want the presence changed
 	 */
 	void changeMyPresence(EnumPresenceState::PresenceState state,	
-		const std::string & note, EnumIMProtocol::IMProtocol protocol = EnumIMProtocol::IMProtocolAll);
+		const std::string & note, IMAccount * imAccount = NULL);
 
 	/**
 	 * Subscribe to presence of a IMContact.
 	 *
 	 * @param imContact the IMContact
 	 */
-	void subscribeToPresenceOf(EnumIMProtocol::IMProtocol protocol, const std::string & contactId);
+	void subscribeToPresenceOf(const IMAccount & imAccount, const std::string & contactId);
 
 	/**
 	 * @see IMPresence::blockContact
 	 */
-	void blockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId);
+	void blockContact(const IMAccount & imAccount, const std::string & contactId);
 
 	/**
 	 * @see IMPresence::unblockContact
 	 */
-	void unblockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId);
+	void unblockContact(const IMAccount & imAccount, const std::string & contactId);
 
-	void connected(IMAccount & account);
+	void connected(IMAccount & imAccount);
 
-	void disconnected(IMAccount & account);
+	void disconnected(IMAccount & imAccount);
 
 private:
 
 	typedef std::map<IMAccount *, Presence *> PresenceMap;
 
-	typedef	std::multimap<EnumIMProtocol::IMProtocol, const std::string> ContactIDMultiMap;
+	typedef	std::multimap<IMAccount *, const std::string> ContactIDMultiMap;
 
 	PresenceHandler();
 
 	~PresenceHandler();
+
+	void presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
+		const std::string & note, const std::string & from);
+
+	void myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status);
+
+	void subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status);
 
 	/**
 	 * Find the Presence related to the given protocol.
@@ -117,7 +126,7 @@ private:
 	 * @param protocol the protocol
 	 * @return an iterator to the desired Presence or 'end' of the given PresenceMap
 	 */
-	static PresenceMap::iterator findPresence(PresenceMap & presenceMap, EnumIMProtocol::IMProtocol protocol);
+	static PresenceMap::iterator findPresence(PresenceMap & presenceMap, IMAccount & imAccount);
 
 	PresenceMap _presenceMap;
 

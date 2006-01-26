@@ -19,7 +19,7 @@
 
 #include "ChatHandler.h"
 
-#include <model/Chat.h>
+#include <model/chat/Chat.h>
 #include <model/imwrapper/IMAccount.h>
 
 #include <Logger.h>
@@ -36,12 +36,14 @@ ChatHandler::~ChatHandler() {
 	}
 }
 
-int ChatHandler::createSession(EnumIMProtocol::IMProtocol protocol, const std::string & login) {
-	ChatMap::iterator it = findChat(_chatMap, protocol);
+int ChatHandler::createSession(const IMAccount & imAccount) {
+	ChatMap::iterator it = findChat(_chatMap, (IMAccount &)imAccount);
 
 	if (it != _chatMap.end()) {
 		int newSession = (*it).second->createSession();
-		LOG_DEBUG("new session created: #" + String::fromNumber(newSession) + " for protocol: " + String::fromNumber(protocol) + " and login: " + login);
+		LOG_DEBUG("new session created: #" + String::fromNumber(newSession) 
+			+ " for protocol: " + String::fromNumber(imAccount.getProtocol()) 
+			+ " and login: " + imAccount.getLogin());
 		_sessionChatMap[newSession] = (*it).second;
 		return newSession;
 	} else {
@@ -103,4 +105,14 @@ void ChatHandler::connected(IMAccount & account) {
 
 void ChatHandler::disconnected(IMAccount & account) {
 
+}
+
+ChatHandler::ChatMap::iterator ChatHandler::findChat(ChatMap & chatMap, IMAccount & imAccount) {
+	ChatMap::iterator i;
+	for (i = chatMap.begin() ; i != chatMap.end() ; i++) {
+		if ((*((*i).first)) == imAccount) {
+			break;
+		} 
+	}
+	return i;
 }

@@ -19,10 +19,11 @@
 
 #include "ConnectHandler.h"
 
-#include <model/Connect.h>
-#include <model/Chat.h>
+#include <model/connect/Connect.h>
+#include <model/chat/Chat.h>
 #include <model/WengoPhone.h>
 #include <model/imwrapper/IMAccount.h>
+#include <model/imwrapper/IMAccountList.h>
 #include <model/imwrapper/EnumIMProtocol.h>
 #include <model/presence/Presence.h>
 #include <model/presence/PresenceHandler.h>
@@ -35,8 +36,8 @@ ConnectHandler::ConnectHandler(WengoPhone & wengoPhone, WengoAccount & wengoAcco
 
 	wengoAccount.loginEvent += boost::bind(&ConnectHandler::wengoLoginEventHandler, this, _1, _2, _3, _4);
 
-	//Read the configuration file
-	/*
+	//Read the configuration file.
+	/* Should be in IMAccountList
 	for () {
 		IMAccount * imAccount = new IMAccount(login, password, IMAccount::IMProtocolSIPSIMPLE);
 		_accountList += imAccount;
@@ -62,7 +63,7 @@ void ConnectHandler::wengoLoginEventHandler(WengoAccount & sender, WengoAccount:
 
 		//Creates the connection to the IM service
 		IMAccount * imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolSIPSIMPLE);
-		_accountList += imAccount;
+		IMAccountList::getInstance().add(imAccount);
 
 		Connect * connect = new Connect(*imAccount);
 		_connectList += connect;

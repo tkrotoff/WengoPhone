@@ -35,91 +35,100 @@ PresenceHandler::~PresenceHandler() {
 	}
 }
 
-void PresenceHandler::subscribeToPresenceOf(EnumIMProtocol::IMProtocol protocol, const std::string & contactId) {
-	PresenceMap::iterator it = findPresence(_presenceMap, protocol);
+void PresenceHandler::subscribeToPresenceOf(const IMAccount & imAccount, const std::string & contactId) {
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imAccount);
 
 	if (it != _presenceMap.end()) {
 		LOG_DEBUG("subscribing to Presence of: " + contactId);
 		(*it).second->subscribeToPresenceOf(contactId);
 	} else {
 		//Presence for 'protocol' has not yet been created. The contactId is pushed in the pending subscription list
-		_pendingSubscriptions.insert(pair<EnumIMProtocol::IMProtocol, const std::string>(protocol, contactId));
+		_pendingSubscriptions.insert(pair<IMAccount *, const std::string>(&(IMAccount &)imAccount, contactId));
 	}
 }
 
-void PresenceHandler::blockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId) {
-	PresenceMap::iterator it = findPresence(_presenceMap, protocol);
+void PresenceHandler::blockContact(const IMAccount & imAccount, const std::string & contactId) {
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imAccount);
 
 	if (it != _presenceMap.end()) {
-		LOG_DEBUG("blocking Contact: " + contactId + " of Protocol: " + String::fromNumber(protocol));
+		LOG_DEBUG("blocking Contact: " + contactId 
+			+ " of IMAccount: " + imAccount.getLogin() 
+				+ " of protocol " + String::fromNumber(imAccount.getProtocol()));
+
 		(*it).second->blockContact(contactId);
 	}
 }
 
-void PresenceHandler::unblockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId) {
-	PresenceMap::iterator it = findPresence(_presenceMap, protocol);
+void PresenceHandler::unblockContact(const IMAccount & imAccount, const std::string & contactId) {
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imAccount);
 
 	if (it != _presenceMap.end()) {
-		LOG_DEBUG("unblocking Contact: " + contactId + " of Protocol: " + String::fromNumber(protocol));
+		LOG_DEBUG("unblocking Contact: " + contactId 
+			+ " of IMAccount: " + imAccount.getLogin() 
+				+ " of protocol " + String::fromNumber(imAccount.getProtocol()));
+
 		(*it).second->unblockContact(contactId);
 	}
 }
 
-void PresenceHandler::connected(IMAccount & account) {
-	PresenceMap::iterator i = _presenceMap.find(&account);
+void PresenceHandler::connected(IMAccount & imAccount) {
+	PresenceMap::const_iterator i = _presenceMap.find(&imAccount);
 	
-	LOG_DEBUG("an account is connected: login: " + account.getLogin() 
-		+ "protocol: " + String::fromNumber(account.getProtocol()));
+	LOG_DEBUG("an account is connected: login: " + imAccount.getLogin() 
+		+ "protocol: " + String::fromNumber(imAccount.getProtocol()));
 	//Presence for this IMAccount has not been created yet
 	if (i == _presenceMap.end()) {
-		Presence * presence = new Presence(account);
-		_presenceMap[&account] = presence;
+		Presence * presence = new Presence(imAccount);
+		_presenceMap[&imAccount] = presence;
 
-		presence->presenceStateChangedEvent += presenceStateChangedEvent;
-		presence->myPresenceStatusEvent += myPresenceStatusEvent;
-		presence->subscribeStatusEvent += subscribeStatusEvent;
+		presence->presenceStateChangedEvent += 
+			boost::bind(&PresenceHandler::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
+		presence->myPresenceStatusEvent += 
+			boost::bind(&PresenceHandler::myPresenceStatusEventHandler, this, _1, _2);
+		presence->subscribeStatusEvent += 
+			boost::bind(&PresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3);
 
 		//Launch all pending subscriptions
-		ContactIDMultiMap::iterator it = _pendingSubscriptions.find(account.getProtocol());
+		ContactIDMultiMap::iterator it = _pendingSubscriptions.find(&imAccount);
 		while (it != _pendingSubscriptions.end()) {
 			LOG_DEBUG("subscribing to Presence of: " + (*it).second);
 			presence->subscribeToPresenceOf((*it).second);
 			//TODO: should we keep the list in case of disconnection?
 			_pendingSubscriptions.erase(it);
-			it = _pendingSubscriptions.find(account.getProtocol());
+			it = _pendingSubscriptions.find(&imAccount);
 		}
 
-		i = _presenceMap.find(&account);
+		i = _presenceMap.find(&imAccount);
 	}
 
 	//TODO: Presence must be change to Presence set before disconnection
 	(*i).second->changeMyPresence(EnumPresenceState::PresenceStateOnline, "");
 }
 
-void PresenceHandler::disconnected(IMAccount & account) {
-	PresenceMap::iterator i = _presenceMap.find(&account);
+void PresenceHandler::disconnected(IMAccount & imAccount) {
+	PresenceMap::iterator i = _presenceMap.find(&imAccount);
 	
-	LOG_DEBUG("an account is disconnected: login: " + account.getLogin() 
-		+ ", protocol: " + String::fromNumber(account.getProtocol()));
+	LOG_DEBUG("an account is disconnected: login: " + imAccount.getLogin() 
+		+ ", protocol: " + String::fromNumber(imAccount.getProtocol()));
 	if (i != _presenceMap.end()) {
 		(*i).second->changeMyPresence(EnumPresenceState::PresenceStateOffline, "");
 	}
 }
 
 void PresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,	
-	const std::string & note, EnumIMProtocol::IMProtocol protocol) {
+	const std::string & note, IMAccount * imAccount) {
 
 	LOG_DEBUG("changing MyPresenceState for "
-		+ ((protocol == EnumIMProtocol::IMProtocolAll) ? "all" : String::fromNumber(protocol))
-		+ " protocol(s) with state " + String::fromNumber(state) + " and note " + note);
+		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol " + String::fromNumber(imAccount->getProtocol()))
+		+ " with state " + String::fromNumber(state) + " and note " + note);
 
-	if (protocol == EnumIMProtocol::IMProtocolAll) {
+	if (!imAccount) {
 		for (PresenceMap::const_iterator i = _presenceMap.begin() ; i != _presenceMap.end() ; i++) {
 			(*i).second->changeMyPresence(state, note);
 		}
 	} else {
 		//Find the desired Protocol
-		PresenceMap::iterator it = findPresence(_presenceMap, protocol);
+		PresenceMap::iterator it = findPresence(_presenceMap, *imAccount);
 		
 		if (it != _presenceMap.end()) {
 			(*it).second->changeMyPresence(state, note);
@@ -127,10 +136,24 @@ void PresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,
 	}
 }
 
-PresenceHandler::PresenceMap::iterator PresenceHandler::findPresence(PresenceMap & presenceMap, EnumIMProtocol::IMProtocol protocol) {
+void PresenceHandler::presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
+	const std::string & note, const std::string & from) {
+	
+	presenceStateChangedEvent(*this, state, note, sender.getIMAccount(), from);
+}
+
+void PresenceHandler::myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status) {
+	myPresenceStatusEvent(*this, sender.getIMAccount(), status);
+}
+
+void PresenceHandler::subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status) {
+	subscribeStatusEvent(*this, sender.getIMAccount(), contactId, status);
+}
+
+PresenceHandler::PresenceMap::iterator PresenceHandler::findPresence(PresenceMap & presenceMap, IMAccount & imAccount) {
 	PresenceMap::iterator i;
 	for (i = presenceMap.begin() ; i != presenceMap.end() ; i++) {
-		if ((*i).first->getProtocol() == protocol) {
+		if ((*((*i).first)) == imAccount) {
 			break;
 		} 
 	}

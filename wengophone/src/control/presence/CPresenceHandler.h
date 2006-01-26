@@ -42,40 +42,50 @@ public:
 
 	/**
 	 * @see IMPresence::presenceStateChangedEvent
+	 * @param imAccount the IMAccount that posses
 	 */
-	Event<void (IMPresence & sender, EnumPresenceState::PresenceState state, 
-		const std::string & note, const std::string & from)> presenceStateChangedEvent;
+	Event<void (PresenceHandler & sender, EnumPresenceState::PresenceState state, 
+		const std::string & note, const IMAccount & imAccount, const std::string & from)> presenceStateChangedEvent;
 
 	/**
 	 * @see IMPresence::presenceStatusEvent
 	 */
-	Event<void (IMPresence & sender, EnumPresenceState::MyPresenceStatus status)> myPresenceStatusEvent;
+	Event<void (PresenceHandler & sender, const IMAccount & imAccount, 
+		EnumPresenceState::MyPresenceStatus status)> myPresenceStatusEvent;
 
 	/**
 	 * @see IMPresence::subscribeStatusEvent
+	 * @param protocol protocol of the contact
 	 */
-	Event<void (IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status)> subscribeStatusEvent;
+	Event<void (PresenceHandler & sender, const IMAccount & imAccount, 
+		const std::string & contactId, IMPresence::SubscribeStatus status)> subscribeStatusEvent;
 
 	/**
-	 * @see PresenceHandler::changeMyPresence
+	 * Change my presence on desired protocol.
+	 *
+	 * @param state my state
+	 * @param note used by PresenceStateUserDefined
+	 * @param imAccount the IMAccount that we want the presence changed
 	 */
 	void changeMyPresence(EnumPresenceState::PresenceState state,	
-		const std::string & note, EnumIMProtocol::IMProtocol protocol = EnumIMProtocol::IMProtocolAll);
+		const std::string & note, IMAccount * imAccount = NULL);
 
 	/**
-	 * @see PresenceHandler::subscribeToPresenceOf
+	 * Subscribe to presence of a IMContact.
+	 *
+	 * @param imContact the IMContact
 	 */
-	void subscribeToPresenceOf(EnumIMProtocol::IMProtocol protocol, const std::string & contactId);
+	void subscribeToPresenceOf(const IMAccount & imAccount, const std::string & contactId);
 
 	/**
-	 * @see PresenceHandler::blockContact
+	 * @see IMPresence::blockContact
 	 */
-	void blockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId);
+	void blockContact(const IMAccount & imAccount, const std::string & contactId);
 
 	/**
-	 * @see PresenceHandler::unblockContact
+	 * @see IMPresence::unblockContact
 	 */
-	void unblockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId);
+	void unblockContact(const IMAccount & imAccount, const std::string & contactId);
 
 private:
 

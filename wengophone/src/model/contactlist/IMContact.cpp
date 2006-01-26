@@ -20,20 +20,22 @@
 #include "IMContact.h"
 
 #include <model/presence/PresenceHandler.h>
+#include <model/imwrapper/IMAccount.h>
+#include <model/imwrapper/EnumIMProtocol.h>
 
 #include <Logger.h>
 
 using namespace std;
 
-IMContact::IMContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId, PresenceHandler & presenceHandler)
-	: _presenceHandler(presenceHandler) {
-	_protocol = protocol;
+IMContact::IMContact(const IMAccount & imAccount, const std::string & contactId, PresenceHandler & presenceHandler)
+	: _presenceHandler(presenceHandler),
+	_imAccount(imAccount) {
 	_contactId = contactId;
 }
 
 IMContact::IMContact(const IMContact & imContact)
-	: _presenceHandler(imContact._presenceHandler) {
-	_protocol = imContact._protocol;
+	: _presenceHandler(imContact._presenceHandler),
+	_imAccount(imContact._imAccount) {
 	_contactId = imContact._contactId;
 }
 
@@ -42,27 +44,27 @@ IMContact::~IMContact() {
 }
 
 bool IMContact::operator == (const IMContact & imContact) const {
-	return ((_protocol == imContact._protocol)
+	return ((_imAccount == imContact._imAccount)
 		&& (_contactId == imContact._contactId));
 }
 
 void IMContact::subscribeToPresence() {
-	_presenceHandler.subscribeToPresenceOf(_protocol, _contactId);
+	_presenceHandler.subscribeToPresenceOf(_imAccount, _contactId);
 }
 
 void IMContact::block() {
-	_presenceHandler.blockContact(_protocol, _contactId);
+	_presenceHandler.blockContact(_imAccount, _contactId);
 }
 
 void IMContact::unblock() {
-	_presenceHandler.unblockContact(_protocol, _contactId);
+	_presenceHandler.unblockContact(_imAccount, _contactId);
 }
 
 std::string IMContact::serialize() {
 	string result;
 	string protocolId;
 
-	switch (_protocol) {
+	switch (_imAccount.getProtocol()) {
 	case EnumIMProtocol::IMProtocolMSN:
 		protocolId = "MSNID";
 		break;

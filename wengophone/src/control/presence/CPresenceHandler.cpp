@@ -33,18 +33,18 @@ CPresenceHandler::CPresenceHandler(PresenceHandler & presenceHandler)
 }
 
 void CPresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,	
-	const std::string & note, EnumIMProtocol::IMProtocol protocol) {
-	_presenceHandler.changeMyPresence(state, note, protocol);
+	const std::string & note, IMAccount * imAccount) {
+	_presenceHandler.changeMyPresence(state, note, imAccount);
 }
 
-void CPresenceHandler::subscribeToPresenceOf(EnumIMProtocol::IMProtocol protocol, const std::string & contactId) {
-	_presenceHandler.subscribeToPresenceOf(protocol, contactId);
+void CPresenceHandler::subscribeToPresenceOf(const IMAccount & imAccount, const std::string & contactId) {
+	_presenceHandler.subscribeToPresenceOf(imAccount, contactId);
 }
 
-void CPresenceHandler::blockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId) {
-	_presenceHandler.blockContact(protocol, contactId);
+void CPresenceHandler::blockContact(const IMAccount & imAccount, const std::string & contactId) {
+	_presenceHandler.blockContact(imAccount, contactId);
 }
 
-void CPresenceHandler::unblockContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId) {
-	_presenceHandler.unblockContact(protocol, contactId);
+void CPresenceHandler::unblockContact(const IMAccount & imAccount, const std::string & contactId) {
+	_presenceHandler.unblockContact(imAccount, contactId);
 }
