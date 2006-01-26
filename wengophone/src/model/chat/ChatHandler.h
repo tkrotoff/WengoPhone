@@ -20,7 +20,6 @@
 #ifndef CHATHANDLER_H
 #define CHATHANDLER_H
 
-#include <model/imwrapper/EnumIMProtocol.h>
 #include <model/imwrapper/IMChat.h>
 
 #include <NonCopyable.h>

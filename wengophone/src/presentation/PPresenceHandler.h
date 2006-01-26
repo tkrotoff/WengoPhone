@@ -26,7 +26,6 @@
 #include <model/imwrapper/EnumPresenceState.h>
 #include <model/imwrapper/IMPresence.h>
 
-class CPresenceHandler;
 class PresenceHandler;
 
 /**

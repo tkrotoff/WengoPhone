@@ -22,6 +22,8 @@
 
 #include <presentation/PPresenceHandler.h>
 
+class CPresenceHandler;
+
 /**
  *
  * @ingroup presentation

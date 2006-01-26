@@ -17,35 +17,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CCHATHANDLER_H
-#define CCHATHANDLER_H
+#ifndef QTCHATHANDLER_H
+#define QTCHATHANDLER_H
 
-#include <model/imwrapper/IMChat.h>
+#include <presentation/PChatHandler.h>
 
-#include <NonCopyable.h>
-#include <Event.h>
-
-class ChatHandler;
-class PChatHandler;
+class CChatHandler;
 
 /**
  *
- * @ingroup control
+ * @ingroup presentation
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class CChatHandler : NonCopyable {
+class QtChatHandler : public PChatHandler {
 public:
 
-	/**
-	 * @see IMChat::messageReceivedEvent
-	 */
-	Event<void (IMChat & sender, int session, const std::string & from, const std::string & message)> messageReceivedEvent;
+	QtChatHandler(CChatHandler & cChatHandler);
 
-	/**
-	 * @see IMChat::messageStatusEvent
-	 */
-	Event<void (IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
+	~QtChatHandler();
 
 	/**
 	 * @see ChatHandler::createSession
@@ -72,16 +62,20 @@ public:
 	 */
 	void removeContact(int session, const std::string & contactId);
 
-	CChatHandler(ChatHandler & chatHandler);
-
-	~CChatHandler();
-
 private:
 
-	ChatHandler & _chatHandler;
+	/**
+	 * @see ChatHandler::messageReceivedEvent
+	 */
+	void messageReceivedEventHandler(IMChat & sender, int session, const std::string & from, const std::string & message);
 
-	PChatHandler * _pChatHandler;
+	/**
+	 * @see ChatHandler::statusMessageEvent
+	 */
+	void statusMessageEventHandler(IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message);
+
+	CChatHandler & _cChatHandler;
 
 };
 
-#endif	//CCHATHANDLER_H
+#endif	//QTCHATHANDLER_H

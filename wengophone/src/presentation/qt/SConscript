@@ -30,6 +30,7 @@ headers = [
 	'contactlist/ContactPopupMenu.h',
 	'contactlist/ContactGroupPopupMenu.h',
 	'presence/QtPresenceHandler.h',
+	'chat/QtChatHandler.h',
 ]
 sources = [
 	'../main.cpp',
@@ -55,6 +56,7 @@ sources = [
 	'contactlist/MetaContactGroup.cpp',
 	'contactlist/MetaContact.cpp',
 	'presence/QtPresenceHandler.cpp',
+	'chat/QtChatHandler.cpp',
 	env.WengoCompileQt4Resource('wengophone.qrc')
 ]
 

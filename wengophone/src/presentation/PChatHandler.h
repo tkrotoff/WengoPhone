@@ -17,71 +17,61 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CCHATHANDLER_H
-#define CCHATHANDLER_H
+#ifndef PCHATHANDLER_H
+#define PCHATHANDLER_H
 
 #include <model/imwrapper/IMChat.h>
+#include <presentation/Presentation.h>
 
 #include <NonCopyable.h>
 #include <Event.h>
 
-class ChatHandler;
-class PChatHandler;
-
 /**
  *
- * @ingroup control
+ * @ingroup presentation
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class CChatHandler : NonCopyable {
+class PChatHandler : public Presentation {
 public:
-
-	/**
-	 * @see IMChat::messageReceivedEvent
-	 */
-	Event<void (IMChat & sender, int session, const std::string & from, const std::string & message)> messageReceivedEvent;
-
-	/**
-	 * @see IMChat::messageStatusEvent
-	 */
-	Event<void (IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
 
 	/**
 	 * @see ChatHandler::createSession
 	 */
-	int createSession(const IMAccount & imAccount);
+	virtual int createSession(const IMAccount & imAccount) = 0;
 
 	/**
 	 * @see ChatHandler::closeSession
 	 */
-	void closeSession(int session);
+	virtual void closeSession(int session) = 0;
 
 	/**
 	 * @see ChatHandler::sendMessage
 	 */
-	void sendMessage(int session, const std::string & message);
+	virtual void sendMessage(int session, const std::string & message) = 0;
 
 	/**
 	 * @see ChatHandler::addContact
 	 */
-	void addContact(int session, const std::string & contactId);
+	virtual void addContact(int session, const std::string & contactId) = 0;
 
 	/**
 	 * @see ChatHandler::removeContact
 	 */
-	void removeContact(int session, const std::string & contactId);
-
-	CChatHandler(ChatHandler & chatHandler);
-
-	~CChatHandler();
+	virtual void removeContact(int session, const std::string & contactId) = 0;
 
 private:
 
-	ChatHandler & _chatHandler;
+	/**
+	 * @see ChatHandler::messageReceivedEvent
+	 */
+	virtual void messageReceivedEventHandler(IMChat & sender, int session, const std::string & from, const std::string & message) = 0;
 
-	PChatHandler * _pChatHandler;
+	/**
+	 * @see ChatHandler::statusMessageEvent
+	 */
+	virtual void statusMessageEventHandler(IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message) = 0;
 
 };
 
-#endif	//CCHATHANDLER_H
+#endif	//PCHATHANDLER_H
