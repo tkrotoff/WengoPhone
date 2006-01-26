@@ -110,7 +110,9 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 	strncpy(phcfg.plugin_path, pluginPath.c_str(), 256);
 
 	//Codec list
-	strncpy(phcfg.audio_codecs, "PCMU,PCMA,GSM,ILBC,SPEEX,SPEEX,AMR,AMR-WB", 128);
+	//strncpy(phcfg.audio_codecs, "PCMU,PCMA,GSM,ILBC,SPEEX,SPEEX,AMR,AMR-WB", 128);
+	strncpy(phcfg.audio_codecs, "ILBC/8000,AMR-WB/16000,SPEEX/16000,SPEEX/8000,PCMU/8000,PCMA/8000,GSM/8000", 128);
+
 	strncpy(phcfg.video_codecs, "H263,H264,MPEG4", 128);
 
 	int ret = phInit(&phApiCallbacks, (char *) phApiServer.c_str(), asynchronousMode);
