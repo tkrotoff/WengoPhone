@@ -23,11 +23,13 @@
 
 #include <win32/MemoryDump.h>
 
+#include <Logger.h>
+#include <StringList.h>
+
 #include <shlwapi.h>
 
 #include <cstring>
 #include <ctime>
-#include <cassert>
 #include <cstdio>
 #include <iostream>
 using namespace std;
@@ -41,17 +43,23 @@ static const char * DBGHELP_DLL = "dbghelp.dll";
 MemoryDump::MemoryDump(const char * applicationName) {
 	//If this assert fires then you have two instances of MemoryDump
 	//which is not allowed
-	assert(_applicationName == NULL && "Two instances of MemoryDump are not allowed");
+	if (_applicationName) {
+		LOG_FATAL("two instances of MemoryDump are not allowed");
+	}
 
-	_applicationName = applicationName ? strdup(applicationName) : "Application";
+	_applicationName = strdup(applicationName);
 
 	::SetUnhandledExceptionFilter(topLevelFilter);
 }
 
 MemoryDump::~MemoryDump() {
-	delete _applicationName;
-	delete _styleName;
-	delete _languageFilename;
+	//FIXME why this crashes under Visual C++ 2003
+	/*free(_applicationName);
+	free(_styleName);
+	free(_languageFilename);*/
+	_applicationName = NULL;
+	_styleName = NULL;
+	_languageFilename = NULL;
 }
 
 HMODULE MemoryDump::loadDebugHelpLibrary() {
@@ -75,7 +83,7 @@ HMODULE MemoryDump::loadDebugHelpLibrary() {
 	}
 
 	if (!hDll) {
-		cerr << "MemoryDump: " << DBGHELP_DLL << " not found" << endl;
+		LOG_ERROR_C(String(DBGHELP_DLL) + " not found");
 	}
 
 	return hDll;
@@ -87,7 +95,7 @@ MINIDUMPWRITEDUMP MemoryDump::loadMiniDumpWriteDumpFunction() {
 	if (hDll) {
 		pDump = (MINIDUMPWRITEDUMP)::GetProcAddress(hDll, "MiniDumpWriteDump");
 		if (!pDump) {
-			cerr << "MemoryDump: " << DBGHELP_DLL << " too old" << endl;
+			LOG_ERROR_C(String(DBGHELP_DLL) + " too old");
 		}
 	}
 
@@ -139,14 +147,14 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 			//Write the dump
 			BOOL ok = pDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, MiniDumpNormal, &ExInfo, NULL, NULL);
 			if (ok) {
-				cerr << "MemoryDump: dump file saved to " << memoryDumpName << endl;
+				LOG_DEBUG_C("dump file saved to: " + String(memoryDumpName));
 				ret = EXCEPTION_EXECUTE_HANDLER;
 			} else {
-				cerr << "MemoryDump: failed to save dump file to " << memoryDumpName << " " << GetLastError() << endl;
+				LOG_ERROR_C("failed to save dump file to: " + String(memoryDumpName) + " " + String::fromNumber(GetLastError()));
 			}
 			::CloseHandle(hFile);
 		} else {
-			cerr << "MemoryDump: failed to create dump file " << memoryDumpName << " " << GetLastError() << endl;
+			LOG_ERROR_C("failed to create dump file: " + String(memoryDumpName) + " " + String::fromNumber(GetLastError()));
 		}
 
 		//Launch memorydump.exe
