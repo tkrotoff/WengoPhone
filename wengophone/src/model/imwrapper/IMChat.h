@@ -26,7 +26,7 @@
 #include <string>
 
 class IMAccount;
-class ChatSession;
+class IMChatSession;
 
 /**
  * Wrapper for Instant Messaging chat.
@@ -35,17 +35,19 @@ class ChatSession;
  * @author Tanguy Krotoff
  */
 class IMChat : Interface {
+	friend class IMChatSession;
+
 public:
 
 	/**
 	 * Chat message received callback.
 	 *
-	 * @param session the associated ChatSession
+	 * @param session the associated IMChatSession
 	 * @param sender this class
 	 * @param from message sender
 	 * @param message message received
 	 */
-	Event<void (IMChat & sender, ChatSession & chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
 
 	enum StatusMessage {
 		/** Chat message has been received. */
@@ -62,27 +64,29 @@ public:
 	 * Message status event.
 	 *
 	 * @param sender this class
-	 * @param chatSession the associated ChatSession
+	 * @param chatSession the associated IMChatSession
 	 * @param status new status
 	 * @param message @see StatusMessage
 	 */
-	Event<void (IMChat & sender, ChatSession & chatSession, StatusMessage status, const std::string & message)> statusMessageEvent;
+	Event<void (IMChat & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message)> statusMessageEvent;
 
 	virtual ~IMChat() { }
 
-	/**
-	 * Says IMChat to create a new session given a ChatSession
-	 *
-	 * @param chatSession the ChatSession
-	 */
-	virtual void createSession(ChatSession & chatSession) = 0;
+protected:
 
 	/**
-	 * Says IMChat to close a new session given a ChatSession
+	 * Says IMChat to create a new session given a IMChatSession
 	 *
-	 * @param chatSession the ChatSession to close
+	 * @param chatSession the IMChatSession
 	 */
-	virtual void closeSession(ChatSession & chatSession) = 0;
+	virtual void createSession(IMChatSession & chatSession) = 0;
+
+	/**
+	 * Says IMChat to close a new session given a IMChatSession
+	 *
+	 * @param chatSession the IMChatSession to close
+	 */
+	virtual void closeSession(IMChatSession & chatSession) = 0;
 
 	/**
 	 * Send a message to all Contact linked to the session session.
@@ -90,7 +94,7 @@ public:
 	 * @param chatSession the session to send the message to
 	 * @param message the message to send
 	 */
-	virtual void sendMessage(ChatSession & chatSession, const std::string & message) = 0;
+	virtual void sendMessage(IMChatSession & chatSession, const std::string & message) = 0;
 
 	/**
 	 * Add a contact to the session.
@@ -99,7 +103,7 @@ public:
 	 * @param protocol the protocol of the contact to add
 	 * @param contactId the identifier of the contact
 	 */
-	virtual void addContact(ChatSession & chatSession, const std::string & contactId) = 0;
+	virtual void addContact(IMChatSession & chatSession, const std::string & contactId) = 0;
 
 	/**
 	 * Remove a contact from the session.
@@ -108,9 +112,7 @@ public:
 	 * @param protocol the protocol of the contact to add
 	 * @param contactId the identifier of the contact
 	 */
-	virtual void removeContact(ChatSession & chatSession, const std::string & contactId) = 0;
-
-protected:
+	virtual void removeContact(IMChatSession & chatSession, const std::string & contactId) = 0;
 
 	IMChat(IMAccount & account) : _account(account) {}
 
