@@ -27,6 +27,7 @@
 class WengoPhone;
 class CWengoPhone;
 class SoundMixer;
+class MemoryDump;
 
 #ifdef XPCOM_DLL
 	#ifdef BUILD_XPCOM_DLL
@@ -248,6 +249,8 @@ private:
 	CWengoPhone * _cWengoPhone;
 
 	SoundMixer * _soundMixer;
+
+	MemoryDump * _memoryDump;
 };
 
 #endif	//COMMAND_H

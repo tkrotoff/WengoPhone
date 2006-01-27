@@ -51,8 +51,8 @@
 
 Command::Command(const std::string & configFilesPath) {
 
-#if defined(CC_MSVC)
-	new MemoryDump("WengoPhoneNG");
+#ifdef CC_MSVC
+	_memoryDump = new MemoryDump("WengoPhoneNG");
 #endif
 
 	//Graphical interface implementation
@@ -95,6 +95,9 @@ Command::~Command() {
 	delete _wengoPhone;
 	delete _cWengoPhone;
 	delete _soundMixer;
+#ifdef CC_MSVC
+	delete _memoryDump;
+#endif
 }
 
 void Command::start() {

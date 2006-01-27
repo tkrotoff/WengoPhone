@@ -54,6 +54,10 @@ private Q_SLOTS:
 
 	void sendChatMessageButtonClicked();
 
+	void commandStartButtonClicked();
+
+	void commandTerminateButtonClicked();
+
 private:
 
 	void initThreadSafe() { }
@@ -75,6 +79,10 @@ private:
 	QPushButton * _sendChatMessageButton;
 
 	QLineEdit * _chatMessage;
+
+	QPushButton * _commandStartButton;
+
+	QPushButton * _commandTerminateButton;
 
 	Command * _command;
 

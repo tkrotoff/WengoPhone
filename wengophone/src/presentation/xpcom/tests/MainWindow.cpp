@@ -233,14 +233,14 @@ MainWindow::MainWindow() {
 	_chatMessage = Object::findChild<QLineEdit *>(_mainWindow, "chatMessage");
 	connect(_chatMessage, SIGNAL(returnPressed()), SLOT(sendChatMessageButtonClicked()));
 
-	QtListener * listener = new QtListener(*this);
+	_commandStartButton = Object::findChild<QPushButton *>(_mainWindow, "commandStartButton");
+	connect(_commandStartButton, SIGNAL(clicked()), SLOT(commandStartButtonClicked()));
 
-	//QString configDir = QDir::homePath() + QDir::separator() + QString("Jérôme") + QDir::separator();
-	QString configDir;
+	_commandTerminateButton = Object::findChild<QPushButton *>(_mainWindow, "commandTerminateButton");
+	connect(_commandTerminateButton, SIGNAL(clicked()), SLOT(commandTerminateButtonClicked()));
 
-	_command = new Command(configDir.toStdString());
-	_command->addListener(listener);
-	_command->start();
+	_command = NULL;
+	commandStartButtonClicked();
 }
 
 void MainWindow::addLogMessage(const std::string & message) {
@@ -277,4 +277,25 @@ void MainWindow::sendChatMessageButtonClicked() {
 	if (!number.empty()) {
 		_command->sendChatMessage(number, message);
 	}
+}
+
+void MainWindow::commandStartButtonClicked() {
+	static QtListener * listener = new QtListener(*this);
+
+	//QString configDir = QDir::homePath() + QDir::separator() + QString("Jérôme") + QDir::separator();
+	QString configDir;
+
+	_command = new Command(configDir.toStdString());
+	_command->start();
+	_command->addListener(listener);
+	addLogMessage("Command::start()");
+}
+
+void MainWindow::commandTerminateButtonClicked() {
+	if (_command) {
+		_command->terminate();
+	}
+	delete _command;
+	_command = NULL;
+	addLogMessage("Command::terminate()");
 }
