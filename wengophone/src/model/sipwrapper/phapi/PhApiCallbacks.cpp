@@ -204,24 +204,29 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 	}
 }
 
+#include <stdio.h>
+
 void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * info) {
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 	std::string from;
 	std::string content;
-
+	
+	std::map<int, IMChatSession *> messageIdChatSessionMap = p->getMessageIdChatSessionMap();
+	IMChatSession * imChatSession = messageIdChatSessionMap[messageId];
+	
 	switch(info->event) {
 	case phMsgNew:
 		from = info->from;
 		content = info->content;
-		//p->messageReceivedEvent(*p, from, content);
+		p->messageReceivedEvent(*p, *imChatSession, from, content);
 		break;
 
 	case phMsgOk:
-		//p->messageStatusEvent(*p, IMChat::MessageStatusReceived, messageId);
+		p->statusMessageEvent(*p, *imChatSession, IMChat::StatusMessageReceived, "");
 		break;
 
 	case phMsgError:
-		//p->messageStatusEvent(*p, IMChat::MessageStatusError, messageId);
+		p->statusMessageEvent(*p, *imChatSession, IMChat::StatusMessageError, "");
 		break;
 
 	default:

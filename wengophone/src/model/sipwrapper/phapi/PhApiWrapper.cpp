@@ -315,7 +315,8 @@ void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & 
 	IMChatSession::IMContactList::const_iterator it;
 	for(it = buddies.begin(); it != buddies.end(); it++) {
 		std::string sipAddress = "sip:" + (*it)->getContactId() + "@" + _realm;
-		phLineSendMessage(_wengoVline, sipAddress.c_str(), message.c_str());
+		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message.c_str());
+		_messageIdChatSessionMap[messageId] =  &chatSession;
 	}
 }
 

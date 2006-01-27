@@ -149,6 +149,10 @@ public:
 
 	void allowWatcher(const std::string & watcher);
 
+	std::map<int, IMChatSession *> getMessageIdChatSessionMap() {
+		return _messageIdChatSessionMap;
+	}
+
 	static PhApiWrapper * PhApiWrapperHack;
 
 	static const std::string PresenceStateOnline;
@@ -175,6 +179,7 @@ private:
 
 	std::string _realm;
 
+	std::map<int, IMChatSession *> _messageIdChatSessionMap;
 };
 
 #endif	//PHAPIWRAPPER_H

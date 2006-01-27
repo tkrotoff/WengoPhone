@@ -32,11 +32,11 @@ PhApiIMChat::PhApiIMChat(IMAccount & account, PhApiWrapper & phApiWrapper)
 }
 
 void PhApiIMChat::messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message) {
-	//messageReceivedEvent(*this, from, message);
+	messageReceivedEvent(*this, chatSession, from, message);
 }
 
 void PhApiIMChat::messageStatusEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message) {
-	//messageStatusEvent(*this, status, messageId);
+	statusMessageEvent(*this, chatSession, status, message);
 }
 
 void PhApiIMChat::sendMessage(IMChatSession & chatSession, const std::string & message) {
