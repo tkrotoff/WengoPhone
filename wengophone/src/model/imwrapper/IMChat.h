@@ -26,6 +26,7 @@
 #include <string>
 
 class IMAccount;
+class ChatSession;
 
 /**
  * Wrapper for Instant Messaging chat.
@@ -39,12 +40,12 @@ public:
 	/**
 	 * Chat message received callback.
 	 *
-	 * @param session the session id
+	 * @param session the associated ChatSession
 	 * @param sender this class
 	 * @param from message sender
 	 * @param message message received
 	 */
-	Event<void (IMChat & sender, int session, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (IMChat & sender, ChatSession & chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
 
 	enum StatusMessage {
 		/** Chat message has been received. */
@@ -61,52 +62,53 @@ public:
 	 * Message status event.
 	 *
 	 * @param sender this class
+	 * @param chatSession the associated ChatSession
 	 * @param status new status
 	 * @param message @see StatusMessage
 	 */
-	Event<void (IMChat & sender, int session, StatusMessage status, const std::string & message)> statusMessageEvent;
+	Event<void (IMChat & sender, ChatSession & chatSession, StatusMessage status, const std::string & message)> statusMessageEvent;
 
 	virtual ~IMChat() { }
 
 	/**
-	 * Create a new session.
+	 * Says IMChat to create a new session given a ChatSession
 	 *
-	 * @return id of the new session
+	 * @param chatSession the ChatSession
 	 */
-	virtual int createSession() = 0;
+	virtual void createSession(ChatSession & chatSession) = 0;
 
 	/**
-	 * Close a session.
+	 * Says IMChat to close a new session given a ChatSession
 	 *
-	 * @param session the session id to delete
+	 * @param chatSession the ChatSession to close
 	 */
-	virtual void closeSession(int session) = 0;
+	virtual void closeSession(ChatSession & chatSession) = 0;
 
 	/**
 	 * Send a message to all Contact linked to the session session.
 	 *
-	 * @param session the session to send the message to
+	 * @param chatSession the session to send the message to
 	 * @param message the message to send
 	 */
-	virtual void sendMessage(int session, const std::string & message) = 0;
+	virtual void sendMessage(ChatSession & chatSession, const std::string & message) = 0;
 
 	/**
 	 * Add a contact to the session.
 	 *
-	 * @param session the session id
+	 * @param chatSession the session id
 	 * @param protocol the protocol of the contact to add
 	 * @param contactId the identifier of the contact
 	 */
-	virtual void addContact(int session, const std::string & contactId) = 0;
+	virtual void addContact(ChatSession & chatSession, const std::string & contactId) = 0;
 
 	/**
 	 * Remove a contact from the session.
 	 *
-	 * @param session the session id
+	 * @param chatSession the session id
 	 * @param protocol the protocol of the contact to add
 	 * @param contactId the identifier of the contact
 	 */
-	virtual void removeContact(int session, const std::string & contactId) = 0;
+	virtual void removeContact(ChatSession & chatSession, const std::string & contactId) = 0;
 
 protected:
 
