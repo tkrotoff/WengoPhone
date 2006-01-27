@@ -25,6 +25,7 @@
 #include <model/imwrapper/IMChat.h>
 
 class IMAccount;
+class IMChatSession;
 
 /**
  * PhApi IM chat.
@@ -35,16 +36,20 @@ class IMAccount;
 class PhApiIMChat : public IMChat {
 	friend class PhApiFactory;
 public:
-
-	int sendMessage(const std::string & contactId, const std::string & message);
-
+	
+	void sendMessage(IMChatSession & chatSession, const std::string & message);
+	void createSession(IMChatSession & chatSession);
+	void closeSession(IMChatSession & chatSession);
+	void addContact(IMChatSession & chatSession, const std::string & contactId);
+	void removeContact(IMChatSession & chatSession, const std::string & contactId);
+	
 private:
 
 	PhApiIMChat(IMAccount & account, PhApiWrapper & phApiWrapper);
 
-	void messageReceivedEventHandler(PhApiWrapper & sender, const std::string & from, const std::string & message);
+	void messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message);
 
-	void messageStatusEventHandler(PhApiWrapper & sender, IMChat::MessageStatus status, int messageId);
+	void messageStatusEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message);
 
 	PhApiWrapper & _phApiWrapper;
 };

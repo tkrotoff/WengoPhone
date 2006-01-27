@@ -18,6 +18,8 @@
  */
 
 #include "PhApiWrapper.h"
+#include <model/imwrapper/IMChatSession.h>
+#include <model/imwrapper/IMContact.h>
 
 //FIXME include to remove
 #include <model/WengoPhone.h>
@@ -308,10 +310,25 @@ void PhApiWrapper::disconnect() {
 	loginStatusEvent(*this, IMConnect::LoginStatusDisconnected);
 }
 
-int PhApiWrapper::sendMessage(const std::string & contactId, const std::string & message) {
-	std::string sipAddress = "sip:" + contactId + "@" + _realm;
+void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & message) {
+	const IMChatSession::IMContactList & buddies = chatSession.getIMContactList();
+	IMChatSession::IMContactList::const_iterator it;
+	for(it = buddies.begin(); it != buddies.end(); it++) {
+		std::string sipAddress = "sip:" + (*it)->getContactId() + "@" + _realm;
+		phLineSendMessage(_wengoVline, sipAddress.c_str(), message.c_str());
+	}
+}
 
-	return phLineSendMessage(_wengoVline, sipAddress.c_str(), message.c_str());
+void PhApiWrapper::createSession(IMChatSession & chatSession) {
+}
+
+void PhApiWrapper::closeSession(IMChatSession & chatSession) {
+}
+
+void PhApiWrapper::addContact(IMChatSession & chatSession, const std::string & contactId) {
+}
+
+void PhApiWrapper::removeContact(IMChatSession & chatSession, const std::string & contactId) {
 }
 
 void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {
@@ -443,3 +460,5 @@ void PhApiWrapper::blockContact(const std::string & /*contactId*/) {
 
 void PhApiWrapper::unblockContact(const std::string & /*contactId*/) {
 }
+
+

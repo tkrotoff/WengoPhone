@@ -213,15 +213,15 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	case phMsgNew:
 		from = info->from;
 		content = info->content;
-		p->messageReceivedEvent(*p, from, content);
+		//p->messageReceivedEvent(*p, from, content);
 		break;
 
 	case phMsgOk:
-		p->messageStatusEvent(*p, IMChat::MessageStatusReceived, messageId);
+		//p->messageStatusEvent(*p, IMChat::MessageStatusReceived, messageId);
 		break;
 
 	case phMsgError:
-		p->messageStatusEvent(*p, IMChat::MessageStatusError, messageId);
+		//p->messageStatusEvent(*p, IMChat::MessageStatusError, messageId);
 		break;
 
 	default:

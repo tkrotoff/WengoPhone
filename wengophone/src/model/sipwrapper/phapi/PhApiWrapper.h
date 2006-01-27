@@ -33,6 +33,8 @@
 
 #include <phapi.h>
 
+class IMChatSession;
+
 /**
  * SIP wrapper for PhApi.
  *
@@ -46,9 +48,9 @@
 class PhApiWrapper : public SipWrapper {
 public:
 
-	Event<void (PhApiWrapper & sender, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
 
-	Event<void (PhApiWrapper & sender, IMChat::MessageStatus status, int messageId)> messageStatusEvent;
+	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
 
 	Event<void (PhApiWrapper & sender, IMConnect::LoginStatus status)> loginStatusEvent;
 
@@ -125,7 +127,13 @@ public:
 	 * IMChat implementation
 	 */
 
-	int sendMessage(const std::string & contactId, const std::string & message);
+	//int sendMessage(const std::string & contactId, const std::string & message);
+	void sendMessage(IMChatSession & chatSession, const std::string & message);
+	void createSession(IMChatSession & chatSession);
+	void closeSession(IMChatSession & chatSession);
+	void addContact(IMChatSession & chatSession, const std::string & contactId);
+	void removeContact(IMChatSession & chatSession, const std::string & contactId);
+
 
 	/*
 	 * IMPresence implementation
@@ -166,6 +174,7 @@ private:
 	std::string _wengoSipAddress;
 
 	std::string _realm;
+
 };
 
 #endif	//PHAPIWRAPPER_H
