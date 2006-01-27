@@ -25,41 +25,12 @@
 
 QtChatHandler::QtChatHandler(CChatHandler & cChatHandler) 
 	: _cChatHandler(cChatHandler) {
-
-	_cChatHandler.messageReceivedEvent +=
-		boost::bind(&QtChatHandler::messageReceivedEventHandler, this, _1, _2, _3, _4);
-	_cChatHandler.statusMessageEvent +=
-		boost::bind(&QtChatHandler::statusMessageEventHandler, this, _1, _2, _3, _4);
 }
 
 QtChatHandler::~QtChatHandler() {
 
 }
 
-int QtChatHandler::createSession(const IMAccount & imAccount) {
+IMChatSession * QtChatHandler::createSession(const IMAccount & imAccount) {
 	return _cChatHandler.createSession(imAccount);
-}
-
-void QtChatHandler::closeSession(int session) {
-	_cChatHandler.closeSession(session);
-}
-
-void QtChatHandler::sendMessage(int session, const std::string & message) {
-	_cChatHandler.sendMessage(session, message);
-}
-
-void QtChatHandler::addContact(int session, const std::string & contactId) {
-	_cChatHandler.addContact(session, contactId);
-}
-
-void QtChatHandler::removeContact(int session, const std::string & contactId) {
-	_cChatHandler.removeContact(session, contactId);
-}
-
-void QtChatHandler::messageReceivedEventHandler(IMChat & sender, int session, const std::string & from, const std::string & message) {
-	LOG_DEBUG("message received from " + from + ": " + message);
-}
-
-void QtChatHandler::statusMessageEventHandler(IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message) {
-	LOG_DEBUG("status message #" + String::fromNumber(status) + " received: " + message);
 }

@@ -17,43 +17,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMCHATSESSION_H
-#define IMCHATSESSION_H
+#include "IMChatSession.h"
 
-#include "IMChat.h"
+IMChatSession::IMChatSession(IMChat & imChat) 
+	: _imChat(imChat) {
+	
+	_imChat.createSesssion(*this);
+}
 
-#include <List.h>
+IMChatSession::~IMChatSession() {
 
-#include <string>
+}
 
-class IMAccount;
-class IMContact;
+void IMChatSession::addIMContact(const IMContact & imContact) {
+	_imContactsList.add(&imContact);
+}
 
-class IMChatSession {
-public:
+void IMChatSession::removeIMContact(const IMContact & imContact) {
+	_imContactsList.remove(&imContact);
+}
 
-	Event<void (IMChatSession & sender, const IMContact & from, const std::string & message)> messageReceivedEvent;
+void IMChatSession::sendMessage(const std::string & message) {
+	
+}
 
-	Event<void (IMChatSession & sender, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
-
-	IMChatSession(IMChat & imChat);
-
-	~IMChatSession();
-
-	void addIMContact(const IMContact & imContact);
-
-	void removeIMContact(const IMContact & imContact);
-
-	void sendMessage(const std::string & message);
-
-	const List<const IMContact *> & getIMContacts() const;
-
-private:
-
-	List<const IMContact *> _imContactsList;
-
-	IMChat & _imChat;
-
-};
-
-#endif //IMCHATSESSION_H
+const List<const IMContact *> & IMChatSession::getIMContacts() const {
+	return _imContactsList;
+}

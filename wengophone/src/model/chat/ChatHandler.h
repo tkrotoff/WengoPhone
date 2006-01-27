@@ -28,6 +28,7 @@
 #include <map>
 
 class IMAccount;
+class IMChatSession;
 class Chat;
 
 /**
@@ -39,16 +40,6 @@ class Chat;
 class ChatHandler : NonCopyable {
 public:
 
-	/**
-	 * @see IMChat::messageReceivedEvent
-	 */
-	Event<void (IMChat & sender, int session, const std::string & from, const std::string & message)> messageReceivedEvent;
-
-	/**
-	 * @see IMChat::messageStatusEvent
-	 */
-	Event<void (IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
-
 	ChatHandler();
 
 	~ChatHandler();
@@ -57,40 +48,9 @@ public:
 	 * Create a new session.
 	 *
 	 * @param imAccount IMAccount that will be associated with the new session
-	 * @return id of the new session
+	 * @return a new IMChatSession or NULL if IMAccount does not exist
 	 */
-	int createSession(const IMAccount & imAccount);
-
-	/**
-	 * Close a session.
-	 *
-	 * @param session the SessionChat id to delete
-	 */
-	void closeSession(int session);
-
-	/**
-	 * Send a message to all Contact linked to the session.
-	 *
-	 * @param session the session to send the message to
-	 * @param message the message to send
-	 */
-	void sendMessage(int session, const std::string & message);
-
-	/**
-	 * Add a contact to the session.
-	 *
-	 * @param session the session id
-	 * @param contactId the identifier of the contact
-	 */
-	void addContact(int session, const std::string & contactId);
-
-	/**
-	 * Remove a contact from the session.
-	 *
-	 * @param session the session id
-	 * @param contactId the identifier of the contact
-	 */
-	void removeContact(int session, const std::string & contactId);
+	IMChatSession * createSession(const IMAccount & imAccount);
 
 	void connected(IMAccount & account);
 
@@ -99,7 +59,6 @@ public:
 private:
 
 	typedef std::map<IMAccount *, Chat *> ChatMap;
-	typedef std::map<int, Chat *> SessionChatMap;
 
 	/**
 	 * Find the Chat related to the given protocol.
@@ -111,8 +70,6 @@ private:
 	static ChatMap::iterator findChat(ChatMap & chatMap, IMAccount & imAccount);
 
 	ChatMap _chatMap;
-
-	SessionChatMap _sessionChatMap;
 
 };
 

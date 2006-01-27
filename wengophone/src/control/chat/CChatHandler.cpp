@@ -26,32 +26,12 @@ CChatHandler::CChatHandler(ChatHandler & chatHandler)
 	: _chatHandler(chatHandler) {
 
 	_pChatHandler = PFactory::getFactory().createPresentationChatHandler(*this);
-
-	_chatHandler.messageReceivedEvent += messageReceivedEvent;
-	_chatHandler.statusMessageEvent += statusMessageEvent;
-
 }
 
 CChatHandler::~CChatHandler() {
 
 }
 
-int CChatHandler::createSession(const IMAccount & imAccount) {
+IMChatSession * CChatHandler::createSession(const IMAccount & imAccount) {
 	return _chatHandler.createSession(imAccount);
-}
-
-void CChatHandler::closeSession(int session) {
-	_chatHandler.closeSession(session);
-}
-
-void CChatHandler::sendMessage(int session, const std::string & message) {
-	_chatHandler.sendMessage(session, message);
-}
-
-void CChatHandler::addContact(int session, const std::string & contactId) {
-	_chatHandler.addContact(session, contactId);
-}
-
-void CChatHandler::removeContact(int session, const std::string & contactId) {
-	_chatHandler.removeContact(session, contactId);
 }

@@ -24,10 +24,12 @@
 
 #include <Interface.h>
 #include <Event.h>
+#include <List.h>
 
 #include <string>
 
 class IMAccount;
+class IMChatSession;
 
 /**
  * Wrapper for Instant Messaging chat.
@@ -39,50 +41,24 @@ class IMAccount;
 class Chat : Interface {
 public:
 
-	/**
-	 * @see IMChat::messageReceivedEvent
-	 */
-	Event<void (IMChat & sender, int session, const std::string & from, const std::string & message)> messageReceivedEvent;
-
-	/**
-	 * @see IMChat::statusMessageEvent
-	 */
-	Event<void (IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
-
 	Chat(IMAccount & account);
 
 	virtual ~Chat() { }
 
-	/**
-	 * @see IMChat::createSession
-	 */
-	int createSession();
-
-	/**
-	 * @see IMChat::closeSession
-	 */
-	void closeSession(int session);
-
-	/**
-	 * @see IMChat::sendMessage
-	 */
-	void sendMessage(int session, const std::string & message);
-
-	/**
-	 * @see IMChat::addContact
-	 */
-	void addContact(int session, const std::string & contactId);
-
-	/**
-	 * @see IMChat::reomveContact
-	 */
-	void removeContact(int session, const std::string & contactId);
+	IMChatSession & createSession();
 
 protected:
 
+	void messageReceivedEventHandler(IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message);
+
+	void statusMessageEventHandler(IMChat & sender, IMChatSession & chatSession, IMChat::StatusMessage status, const std::string & message);
+
+	List<IMChatSession *> _imChatSessionList;
+
 	IMAccount & _imAccount;
-	
+
 	IMChat * _imChat;
+
 };
 
 #endif	//CHAT_H

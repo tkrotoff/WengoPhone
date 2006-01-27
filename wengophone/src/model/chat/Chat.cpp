@@ -19,6 +19,7 @@
 
 #include "Chat.h"
 
+#include <model/imwrapper/IMChatSession.h>
 #include <model/imwrapper/IMWrapperFactory.h>
 
 Chat::Chat(IMAccount & account)
@@ -26,26 +27,24 @@ Chat::Chat(IMAccount & account)
 	
 	_imChat = IMWrapperFactory::getFactory().createIMChat(account);
 	
-	_imChat->messageReceivedEvent += messageReceivedEvent;
-	_imChat->statusMessageEvent += statusMessageEvent;
+	_imChat->messageReceivedEvent += 
+		boost::bind(&Chat::messageReceivedEventHandler, this, _1, _2, _3, _4);
+	_imChat->statusMessageEvent += 
+		boost::bind(&Chat::statusMessageEventHandler, this, _1, _2, _3, _4);
 }
 
-int Chat::createSession() {
-	return _imChat->createSession();
+IMChatSession & Chat::createSession() {
+	IMChatSession * imChatSession = new IMChatSession(*_imChat);
+
+	_imChatSessionList.add(imChatSession);
+
+	return *imChatSession;
 }
 
-void Chat::closeSession(int session) {
-	_imChat->closeSession(session);
+void Chat::messageReceivedEventHandler(IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message) {
+
 }
 
-void Chat::sendMessage(int session, const std::string & message) {
-	_imChat->sendMessage(session, message);
-}
+void Chat::statusMessageEventHandler(IMChat & sender, IMChatSession & chatSession, IMChat::StatusMessage status, const std::string & message){
 
-void Chat::addContact(int session, const std::string & contactId) {
-	_imChat->addContact(session, contactId);
-}
-
-void Chat::removeContact(int session, const std::string & contactId) {
-	_imChat->removeContact(session, contactId);
 }

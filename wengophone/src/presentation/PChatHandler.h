@@ -38,39 +38,7 @@ public:
 	/**
 	 * @see ChatHandler::createSession
 	 */
-	virtual int createSession(const IMAccount & imAccount) = 0;
-
-	/**
-	 * @see ChatHandler::closeSession
-	 */
-	virtual void closeSession(int session) = 0;
-
-	/**
-	 * @see ChatHandler::sendMessage
-	 */
-	virtual void sendMessage(int session, const std::string & message) = 0;
-
-	/**
-	 * @see ChatHandler::addContact
-	 */
-	virtual void addContact(int session, const std::string & contactId) = 0;
-
-	/**
-	 * @see ChatHandler::removeContact
-	 */
-	virtual void removeContact(int session, const std::string & contactId) = 0;
-
-private:
-
-	/**
-	 * @see ChatHandler::messageReceivedEvent
-	 */
-	virtual void messageReceivedEventHandler(IMChat & sender, int session, const std::string & from, const std::string & message) = 0;
-
-	/**
-	 * @see ChatHandler::statusMessageEvent
-	 */
-	virtual void statusMessageEventHandler(IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message) = 0;
+	virtual IMChatSession * createSession(const IMAccount & imAccount) = 0;
 
 };
 

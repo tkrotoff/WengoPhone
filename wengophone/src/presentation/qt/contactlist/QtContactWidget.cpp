@@ -19,9 +19,9 @@
 
 #include "QtContactWidget.h"
 
-#include <model/contactlist/IMContact.h>
 #include <model/presence/PresenceHandler.h>
 #include <model/imwrapper/IMAccountList.h>
+#include <model/imwrapper/IMContact.h>
 
 #include <WidgetFactory.h>
 #include <Object.h>

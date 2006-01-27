@@ -21,6 +21,7 @@
 
 #include <model/chat/Chat.h>
 #include <model/imwrapper/IMAccount.h>
+#include <model/imwrapper/IMChatSession.h>
 
 #include <Logger.h>
 
@@ -36,55 +37,16 @@ ChatHandler::~ChatHandler() {
 	}
 }
 
-int ChatHandler::createSession(const IMAccount & imAccount) {
+IMChatSession * ChatHandler::createSession(const IMAccount & imAccount) {
 	ChatMap::iterator it = findChat(_chatMap, (IMAccount &)imAccount);
 
 	if (it != _chatMap.end()) {
-		int newSession = (*it).second->createSession();
-		LOG_DEBUG("new session created: #" + String::fromNumber(newSession) 
-			+ " for protocol: " + String::fromNumber(imAccount.getProtocol()) 
+		IMChatSession & newSession = (*it).second->createSession();
+		LOG_DEBUG("new session created for protocol: " + String::fromNumber(imAccount.getProtocol()) 
 			+ " and login: " + imAccount.getLogin());
-		_sessionChatMap[newSession] = (*it).second;
-		return newSession;
+		return &newSession;
 	} else {
-		return -1;
-	}
-}
-
-void ChatHandler::closeSession(int session) {
-	Chat * chat = _sessionChatMap[session];
-
-	if (chat) {
-		LOG_DEBUG("closing session #" + String::fromNumber(session));
-		chat->closeSession(session);
-	}
-}
-
-void ChatHandler::sendMessage(int session, const std::string & message) {
-	Chat * chat = _sessionChatMap[session];
-
-	if (chat) {
-		LOG_DEBUG("sending message: session #" + String::fromNumber(session)
-			+ ", message: " + message);
-		chat->sendMessage(session, message);
-	}
-}
-
-void ChatHandler::addContact(int session, const std::string & contactId) {
-	Chat * chat = _sessionChatMap[session];
-
-	if (chat) {
-		LOG_DEBUG("adding a contact to session #" + String::fromNumber(session));
-		chat->addContact(session, contactId);
-	}
-}
-
-void ChatHandler::removeContact(int session, const std::string & contactId) {
-	Chat * chat = _sessionChatMap[session];
-
-	if (chat) {
-		LOG_DEBUG("removing a contact to session #" + String::fromNumber(session));
-		chat->addContact(session, contactId);
+		return NULL;
 	}
 }
 
@@ -97,9 +59,6 @@ void ChatHandler::connected(IMAccount & account) {
 	if (i == _chatMap.end()) {
 		Chat * chat = new Chat(account);
 		_chatMap[&account] = chat;
-
-		chat->messageReceivedEvent += messageReceivedEvent;
-		chat->statusMessageEvent += statusMessageEvent;
 	}
 }
 

@@ -20,10 +20,10 @@
 #include "ContactParser.h"
 
 #include "Contact.h"
-#include "IMContact.h"
 #include <model/WengoPhoneLogger.h>
 #include <model/presence/PresenceHandler.h>
 #include <model/imwrapper/IMAccountList.h>
+#include <model/imwrapper/IMContact.h>
 
 #include <tinyxml.h>
 

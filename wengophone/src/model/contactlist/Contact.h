@@ -21,10 +21,10 @@
 #define CONTACT_H
 
 #include "StreetAddress.h"
-#include "IMContact.h"
 
 #include <model/imwrapper/EnumPresenceState.h>
 #include <model/imwrapper/IMAccount.h>
+#include <model/imwrapper/IMContact.h>
 
 #include <Event.h>
 #include <Serializable.h>

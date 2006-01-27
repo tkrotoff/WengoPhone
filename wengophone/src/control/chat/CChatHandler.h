@@ -38,39 +38,9 @@ class CChatHandler : NonCopyable {
 public:
 
 	/**
-	 * @see IMChat::messageReceivedEvent
-	 */
-	Event<void (IMChat & sender, int session, const std::string & from, const std::string & message)> messageReceivedEvent;
-
-	/**
-	 * @see IMChat::messageStatusEvent
-	 */
-	Event<void (IMChat & sender, int session, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
-
-	/**
 	 * @see ChatHandler::createSession
 	 */
-	int createSession(const IMAccount & imAccount);
-
-	/**
-	 * @see ChatHandler::closeSession
-	 */
-	void closeSession(int session);
-
-	/**
-	 * @see ChatHandler::sendMessage
-	 */
-	void sendMessage(int session, const std::string & message);
-
-	/**
-	 * @see ChatHandler::addContact
-	 */
-	void addContact(int session, const std::string & contactId);
-
-	/**
-	 * @see ChatHandler::removeContact
-	 */
-	void removeContact(int session, const std::string & contactId);
+	IMChatSession * createSession(const IMAccount & imAccount);
 
 	CChatHandler(ChatHandler & chatHandler);
 
