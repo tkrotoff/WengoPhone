@@ -23,6 +23,7 @@
 #include <presentation/PPresenceHandler.h>
 
 class CPresenceHandler;
+class IMContact;
 
 /**
  *
@@ -37,11 +38,11 @@ public:
 	void changeMyPresence(EnumPresenceState::PresenceState state,	
 		const std::string & note, IMAccount * imAccount = NULL);
 
-	void subscribeToPresenceOf(const IMAccount & imAccount,  const std::string & contactId);
+	void subscribeToPresenceOf(const IMContact & imContact);
 
-	void blockContact(const IMAccount & imAccount,  const std::string & contactId);
+	void blockContact(const IMContact & imContact);
 
-	void unblockContact(const IMAccount & imAccount,  const std::string & contactId);
+	void unblockContact(const IMContact & imContact);
 
 	void updatePresentation();
 

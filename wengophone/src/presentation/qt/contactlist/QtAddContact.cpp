@@ -19,10 +19,12 @@
 
 #include "QtAddContact.h"
 
-#include "model/WengoPhoneLogger.h"
-#include "control/CWengoPhone.h"
-#include "model/contactlist/Contact.h"
 #include "QtContactWidget.h"
+
+#include <model/WengoPhoneLogger.h>
+#include <model/contactlist/Contact.h>
+#include <model/presence/PresenceHandler.h>
+#include <control/CWengoPhone.h>
 
 #include <WidgetFactory.h>
 #include <Object.h>
@@ -56,7 +58,7 @@ void QtAddContact::showContactGroups() {
 }
 
 void QtAddContact::addContact() {
-	Contact * contact = new Contact();
+	Contact * contact = new Contact(PresenceHandler::getInstance());
 
 	QString contactGroupName = _qtContactWidget->createContact(contact);
 

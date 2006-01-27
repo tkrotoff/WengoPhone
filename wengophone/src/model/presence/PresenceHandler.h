@@ -36,6 +36,7 @@ class ContactList;
 class Connect;
 class Presence;
 class IMAccount;
+class IMContact;
 
 /**
  *
@@ -86,17 +87,17 @@ public:
 	 *
 	 * @param imContact the IMContact
 	 */
-	void subscribeToPresenceOf(const IMAccount & imAccount, const std::string & contactId);
+	void subscribeToPresenceOf(const IMContact & imContact);
 
 	/**
 	 * @see IMPresence::blockContact
 	 */
-	void blockContact(const IMAccount & imAccount, const std::string & contactId);
+	void blockContact(const IMContact & imContact);
 
 	/**
 	 * @see IMPresence::unblockContact
 	 */
-	void unblockContact(const IMAccount & imAccount, const std::string & contactId);
+	void unblockContact(const IMContact & imContact);
 
 	void connected(IMAccount & imAccount);
 
@@ -106,7 +107,7 @@ private:
 
 	typedef std::map<IMAccount *, Presence *> PresenceMap;
 
-	typedef	std::multimap<IMAccount *, const std::string> ContactIDMultiMap;
+	typedef	std::multimap<const IMAccount *, const IMContact *> IMContactMultiMap;
 
 	PresenceHandler();
 
@@ -130,7 +131,7 @@ private:
 
 	PresenceMap _presenceMap;
 
-	ContactIDMultiMap _pendingSubscriptions;
+	IMContactMultiMap _pendingSubscriptions;
 
 };
 

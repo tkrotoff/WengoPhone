@@ -27,6 +27,7 @@
 #include <model/imwrapper/IMPresence.h>
 
 class PresenceHandler;
+class IMContact;
 
 /**
  *
@@ -45,17 +46,17 @@ public:
 	/**
 	 * @see PresenceHandler::subscribeToPresenceOf
 	 */
-	virtual void subscribeToPresenceOf(const IMAccount & imAccount, const std::string & contactId) = 0;
+	virtual void subscribeToPresenceOf(const IMContact & imContact) = 0;
 
 	/**
 	 * @see PresenceHandler::blockContact
 	 */
-	virtual void blockContact(const IMAccount & imAccount, const std::string & contactId) = 0;
+	virtual void blockContact(const IMContact & imContact) = 0;
 
 	/**
 	 * @see PresenceHandler::unblockContact
 	 */
-	virtual void unblockContact(const IMAccount & imAccount, const std::string & contactId) = 0;
+	virtual void unblockContact(const IMContact & imContact) = 0;
 	
 private:
 

@@ -24,13 +24,16 @@
 
 #include <model/imwrapper/EnumPresenceState.h>
 #include <model/imwrapper/IMAccount.h>
-#include <model/imwrapper/IMContact.h>
 
 #include <Event.h>
 #include <Serializable.h>
 #include <Date.h>
 
 #include <string>
+
+class PresenceHandler;
+class IMAccount;
+class IMContact;
 
 /**
  * Contact inside an address book.
@@ -55,13 +58,15 @@ public:
 	 */
 	Event<void (Contact & sender)> contactModifiedEvent;
 
-	Contact() {
+	Contact(PresenceHandler & presenceHandler)
+		: _presenceHandler(presenceHandler) {
 		_sex = SexUnknown;
 		_state = EnumPresenceState::PresenceStateOffline;
 		_blocked = false;
 	}
 
-	Contact(const Contact & contact) {
+	Contact(const Contact & contact)
+		: _presenceHandler(contact._presenceHandler) {
 		initialize(contact);
 	}
 
@@ -192,8 +197,11 @@ private:
 	/** Factorizes code between contructor and copy contructor. */
 	void initialize(const Contact & contact);
 
-	/** Return all IMContact in a a vCard string format. */
+	/** Return all IMContact in a vCard string format. */
 	std::string imContactsToString();
+
+	/** Subscribe to presence of an IMContact */
+	void subscribeToPresenceOf(const IMContact & imContact);
 
 	std::string _firstName;
 	std::string _lastName;
@@ -216,7 +224,7 @@ private:
 	EnumPresenceState::PresenceState _state;
 	bool _blocked;
 	IMContactList _imContactList;
-
+	PresenceHandler & _presenceHandler;
 };
 
 #endif	//CONTACT_H

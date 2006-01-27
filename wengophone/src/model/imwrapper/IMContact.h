@@ -41,7 +41,7 @@ public:
 	 * @param contactId id of the IMContact to create
 	 * @param presenceHandler the PresenceHandler that will receive presence message
 	 */
-	IMContact(const IMAccount & imAccount, const std::string & contactId, PresenceHandler & presenceHandler);
+	IMContact(const IMAccount & imAccount, const std::string & contactId);
 
 	IMContact(const IMContact & imContact);
 
@@ -54,21 +54,6 @@ public:
 	 */
 	bool operator == (const IMContact & imContact) const;
 
-	/**
-	 * Subscribe to Presence of this IMContact.
-	 */
-	void subscribeToPresence();
-
-	/**
-	 * Avoid this IMContact to see MyPresenceState.
-	 */
-	void block();
-
-	/**
-	 * Authorize this IMContact to see MyPresenceState.
-	 */
-	void unblock();
-
 	std::string serialize();
 
 	const IMAccount & getIMAccount() const {
@@ -80,8 +65,6 @@ public:
 	}
 
 private:
-
-	PresenceHandler & _presenceHandler;
 
 	const IMAccount & _imAccount;
 

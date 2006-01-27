@@ -128,8 +128,7 @@ QString QtContactWidget::createContact(Contact * contact) {
 		List<IMAccount *> list = IMAccountList::getInstance().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
 		if (list.size() > 0) {
 			contact->addIMContact(IMContact(*list[0],
-				getWengoPhone().toStdString(),
-				PresenceHandler::getInstance()));
+				getWengoPhone().toStdString()));
 		}
 	}
 

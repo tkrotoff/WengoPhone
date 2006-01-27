@@ -21,7 +21,9 @@
 
 #include "ContactGroup.h"
 #include "Contact.h"
-#include "model/WengoPhoneLogger.h"
+
+#include <model/WengoPhoneLogger.h>
+#include <model/presence/PresenceHandler.h>
 
 #include <tinyxml.h>
 
@@ -42,7 +44,7 @@ ContactGroupParser::ContactGroupParser(ContactGroup & contactGroup, const std::s
 	for (TiXmlNode * node = list->FirstChild("vCard"); node; node = node->NextSibling("vCard")) {
 		TiXmlElement * elem = node->ToElement();
 		if (elem) {
-			Contact * contact = new Contact();
+			Contact * contact = new Contact(PresenceHandler::getInstance());
 			std::string tmp;
 			tmp << *elem;
 			contact->unserialize(tmp);

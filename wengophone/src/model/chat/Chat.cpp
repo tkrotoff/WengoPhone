@@ -25,12 +25,7 @@
 Chat::Chat(IMAccount & account)
 	: _imAccount(account) {
 	
-	_imChat = IMWrapperFactory::getFactory().createIMChat(account);
-	
-	_imChat->messageReceivedEvent += 
-		boost::bind(&Chat::messageReceivedEventHandler, this, _1, _2, _3, _4);
-	_imChat->statusMessageEvent += 
-		boost::bind(&Chat::statusMessageEventHandler, this, _1, _2, _3, _4);
+	_imChat = IMWrapperFactory::getFactory().createIMChat(account);	
 }
 
 IMChatSession & Chat::createSession() {
@@ -39,12 +34,4 @@ IMChatSession & Chat::createSession() {
 	_imChatSessionList.add(imChatSession);
 
 	return *imChatSession;
-}
-
-void Chat::messageReceivedEventHandler(IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message) {
-
-}
-
-void Chat::statusMessageEventHandler(IMChat & sender, IMChatSession & chatSession, IMChat::StatusMessage status, const std::string & message){
-
 }

@@ -27,15 +27,13 @@
 
 using namespace std;
 
-IMContact::IMContact(const IMAccount & imAccount, const std::string & contactId, PresenceHandler & presenceHandler)
-	: _presenceHandler(presenceHandler),
-	_imAccount(imAccount) {
+IMContact::IMContact(const IMAccount & imAccount, const std::string & contactId)
+	: _imAccount(imAccount) {
 	_contactId = contactId;
 }
 
 IMContact::IMContact(const IMContact & imContact)
-	: _presenceHandler(imContact._presenceHandler),
-	_imAccount(imContact._imAccount) {
+	: _imAccount(imContact._imAccount) {
 	_contactId = imContact._contactId;
 }
 
@@ -46,18 +44,6 @@ IMContact::~IMContact() {
 bool IMContact::operator == (const IMContact & imContact) const {
 	return ((_imAccount == imContact._imAccount)
 		&& (_contactId == imContact._contactId));
-}
-
-void IMContact::subscribeToPresence() {
-	_presenceHandler.subscribeToPresenceOf(_imAccount, _contactId);
-}
-
-void IMContact::block() {
-	_presenceHandler.blockContact(_imAccount, _contactId);
-}
-
-void IMContact::unblock() {
-	_presenceHandler.unblockContact(_imAccount, _contactId);
 }
 
 std::string IMContact::serialize() {

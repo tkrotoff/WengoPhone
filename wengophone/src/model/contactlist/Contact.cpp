@@ -23,6 +23,7 @@
 
 #include <model/presence/PresenceHandler.h>
 #include <model/imwrapper/IMAccount.h>
+#include <model/imwrapper/IMContact.h>
 
 #include <StringList.h>
 
@@ -84,7 +85,7 @@ void Contact::addIMContact(const IMContact & imContact) {
 
 	//Check if IMContact already exists
 	if (findIMContact(_imContactList, *newContact) == _imContactList.end()) {
-		newContact->subscribeToPresence();
+		subscribeToPresenceOf(*newContact);
 		_imContactList.push_back(newContact);
 	} else {
 		delete newContact;
@@ -112,7 +113,7 @@ Contact::IMContactList::iterator Contact::findIMContact(IMContactList & imContac
 
 void Contact::block() {
 	for (IMContactList::const_iterator it = _imContactList.begin() ; it != _imContactList.end() ; it++) {
-		(*it)->block();
+		_presenceHandler.blockContact(*(*it));
 	}
 	
 	_blocked = true;
@@ -120,7 +121,7 @@ void Contact::block() {
 
 void Contact::unblock() {
 	for (IMContactList::const_iterator it = _imContactList.begin() ; it != _imContactList.end() ; it++) {
-		(*it)->unblock();
+		_presenceHandler.unblockContact(*(*it));
 	}
 	
 	_blocked = false;
@@ -134,4 +135,8 @@ string Contact::imContactsToString() {
 	}
 
 	return result;
+}
+
+void Contact::subscribeToPresenceOf(const IMContact & imContact) {
+	_presenceHandler.subscribeToPresenceOf(imContact);
 }

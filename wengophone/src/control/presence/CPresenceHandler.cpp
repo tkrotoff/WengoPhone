@@ -37,14 +37,14 @@ void CPresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,
 	_presenceHandler.changeMyPresence(state, note, imAccount);
 }
 
-void CPresenceHandler::subscribeToPresenceOf(const IMAccount & imAccount, const std::string & contactId) {
-	_presenceHandler.subscribeToPresenceOf(imAccount, contactId);
+void CPresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {
+	_presenceHandler.subscribeToPresenceOf(imContact);
 }
 
-void CPresenceHandler::blockContact(const IMAccount & imAccount, const std::string & contactId) {
-	_presenceHandler.blockContact(imAccount, contactId);
+void CPresenceHandler::blockContact(const IMContact & imContact) {
+	_presenceHandler.blockContact(imContact);
 }
 
-void CPresenceHandler::unblockContact(const IMAccount & imAccount, const std::string & contactId) {
-	_presenceHandler.unblockContact(imAccount, contactId);
+void CPresenceHandler::unblockContact(const IMContact & imContact) {
+	_presenceHandler.unblockContact(imContact);
 }

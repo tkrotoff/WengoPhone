@@ -39,16 +39,15 @@ void QtPresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,
 	
 }
 
-void QtPresenceHandler::subscribeToPresenceOf(const IMAccount & imAccount,
-	const std::string & contactId) {
+void QtPresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {
 
 }
 
-void QtPresenceHandler::blockContact(const IMAccount & imAccount, const std::string & contactId) {
+void QtPresenceHandler::blockContact(const IMContact & imContact) {
 
 }
 
-void QtPresenceHandler::unblockContact(const IMAccount & imAccount, const std::string & contactId) {
+void QtPresenceHandler::unblockContact(const IMContact & imContact) {
 
 }
 	

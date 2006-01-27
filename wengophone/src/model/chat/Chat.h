@@ -49,10 +49,6 @@ public:
 
 protected:
 
-	void messageReceivedEventHandler(IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message);
-
-	void statusMessageEventHandler(IMChat & sender, IMChatSession & chatSession, IMChat::StatusMessage status, const std::string & message);
-
 	List<IMChatSession *> _imChatSessionList;
 
 	IMAccount & _imAccount;

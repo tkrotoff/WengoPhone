@@ -39,6 +39,7 @@ sources = [
 	'model/imwrapper/IMAccountList.cpp',
 	'model/imwrapper/IMContact.cpp',
 	'model/imwrapper/IMWrapperFactory.cpp',
+	'model/imwrapper/IMChatSession.cpp',
 	'model/sipwrapper/SipWrapperFactory.cpp',
 	'model/sipwrapper/SipCallbacks.cpp',
 	'model/wenbox/WenboxPlugin.cpp',

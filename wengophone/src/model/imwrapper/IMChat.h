@@ -72,6 +72,10 @@ public:
 
 	virtual ~IMChat() { }
 
+	IMAccount & getIMAccount() const {
+		return _imAccount;
+	}
+
 protected:
 
 	/**
@@ -114,9 +118,9 @@ protected:
 	 */
 	virtual void removeContact(IMChatSession & chatSession, const std::string & contactId) = 0;
 
-	IMChat(IMAccount & account) : _account(account) {}
+	IMChat(IMAccount & imAccount) : _imAccount(imAccount) {}
 
-	IMAccount & _account;
+	IMAccount & _imAccount;
 };
 
 #endif	//IMCHAT_H

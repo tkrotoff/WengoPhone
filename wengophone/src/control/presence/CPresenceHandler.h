@@ -29,6 +29,7 @@
 
 class PresenceHandler;
 class PPresenceHandler;
+class IMContact;
 
 /**
  *
@@ -75,17 +76,17 @@ public:
 	 *
 	 * @param imContact the IMContact
 	 */
-	void subscribeToPresenceOf(const IMAccount & imAccount, const std::string & contactId);
+	void subscribeToPresenceOf(const IMContact & imContact);
 
 	/**
 	 * @see IMPresence::blockContact
 	 */
-	void blockContact(const IMAccount & imAccount, const std::string & contactId);
+	void blockContact(const IMContact & imContact);
 
 	/**
 	 * @see IMPresence::unblockContact
 	 */
-	void unblockContact(const IMAccount & imAccount, const std::string & contactId);
+	void unblockContact(const IMContact & imContact);
 
 private:
 

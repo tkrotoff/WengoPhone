@@ -22,15 +22,16 @@
 
 #include "IMChat.h"
 
-#include <List.h>
-
 #include <string>
+#include <set>
 
 class IMAccount;
 class IMContact;
 
 class IMChatSession {
 public:
+
+	typedef std::set<const IMContact *> IMContactList;
 
 	Event<void (IMChatSession & sender, const IMContact & from, const std::string & message)> messageReceivedEvent;
 
@@ -46,11 +47,21 @@ public:
 
 	void sendMessage(const std::string & message);
 
-	const List<const IMContact *> & getIMContacts() const;
+	const IMContactList & getIMContactList() const;
+
+	bool operator == (const IMChatSession & imChatSession) const;
+
+	int getId() const;
 
 private:
 
-	List<const IMContact *> _imContactsList;
+	void messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & from, const std::string & message);
+
+	void statusMessageEventHandler(IMChat & sender, IMChatSession & imChatSession, IMChat::StatusMessage status, const std::string & message);
+
+	const IMContact * getIMContact(const IMAccount & imAccount, const std::string & contactId) const;
+
+	IMContactList _imContactList;
 
 	IMChat & _imChat;
 

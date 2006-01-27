@@ -21,6 +21,7 @@
 
 #include <model/presence/Presence.h>
 #include <model/contactlist/ContactList.h>
+#include <model/imwrapper/IMContact.h>
 
 #include <Logger.h>
 
@@ -35,39 +36,39 @@ PresenceHandler::~PresenceHandler() {
 	}
 }
 
-void PresenceHandler::subscribeToPresenceOf(const IMAccount & imAccount, const std::string & contactId) {
-	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imAccount);
+void PresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
-		LOG_DEBUG("subscribing to Presence of: " + contactId);
-		(*it).second->subscribeToPresenceOf(contactId);
+		LOG_DEBUG("subscribing to Presence of: " + imContact.getContactId());
+		(*it).second->subscribeToPresenceOf(imContact.getContactId());
 	} else {
 		//Presence for 'protocol' has not yet been created. The contactId is pushed in the pending subscription list
-		_pendingSubscriptions.insert(pair<IMAccount *, const std::string>(&(IMAccount &)imAccount, contactId));
+		_pendingSubscriptions.insert(pair<const IMAccount *, const IMContact *>(&imContact.getIMAccount(), &imContact));
 	}
 }
 
-void PresenceHandler::blockContact(const IMAccount & imAccount, const std::string & contactId) {
-	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imAccount);
+void PresenceHandler::blockContact(const IMContact & imContact) {
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
-		LOG_DEBUG("blocking Contact: " + contactId 
-			+ " of IMAccount: " + imAccount.getLogin() 
-				+ " of protocol " + String::fromNumber(imAccount.getProtocol()));
+		LOG_DEBUG("blocking Contact: " + imContact.getContactId() 
+			+ " of IMAccount: " + imContact.getIMAccount().getLogin() 
+				+ " of protocol " + String::fromNumber(imContact.getIMAccount().getProtocol()));
 
-		(*it).second->blockContact(contactId);
+		(*it).second->blockContact(imContact.getContactId());
 	}
 }
 
-void PresenceHandler::unblockContact(const IMAccount & imAccount, const std::string & contactId) {
-	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imAccount);
+void PresenceHandler::unblockContact(const IMContact & imContact) {
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
-		LOG_DEBUG("unblocking Contact: " + contactId 
-			+ " of IMAccount: " + imAccount.getLogin() 
-				+ " of protocol " + String::fromNumber(imAccount.getProtocol()));
+		LOG_DEBUG("unblocking Contact: " + imContact.getContactId() 
+			+ " of IMAccount: " + imContact.getIMAccount().getLogin() 
+				+ " of protocol " + String::fromNumber(imContact.getIMAccount().getProtocol()));
 
-		(*it).second->unblockContact(contactId);
+		(*it).second->unblockContact(imContact.getContactId());
 	}
 }
 
@@ -89,10 +90,10 @@ void PresenceHandler::connected(IMAccount & imAccount) {
 			boost::bind(&PresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3);
 
 		//Launch all pending subscriptions
-		ContactIDMultiMap::iterator it = _pendingSubscriptions.find(&imAccount);
+		IMContactMultiMap::iterator it = _pendingSubscriptions.find(&imAccount);
 		while (it != _pendingSubscriptions.end()) {
-			LOG_DEBUG("subscribing to Presence of: " + (*it).second);
-			presence->subscribeToPresenceOf((*it).second);
+			LOG_DEBUG("subscribing to Presence of: " + (*it).second->getContactId());
+			presence->subscribeToPresenceOf((*it).second->getContactId());
 			//TODO: should we keep the list in case of disconnection?
 			_pendingSubscriptions.erase(it);
 			it = _pendingSubscriptions.find(&imAccount);
