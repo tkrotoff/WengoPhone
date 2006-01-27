@@ -104,9 +104,11 @@ if WengoOSLinux() or WengoOSBSD():
 	defines['PA_LITTLE_ENDIAN'] = 1
 	sources += sources_linux
 	headers += headers_linux
-	sources += sources_alsa
-	headers += headers_alsa
-	#sources += sources_oss
+	if WengoGetConsoleArgument('portaudio-oss') == 0:
+		sources += sources_alsa
+		headers += headers_alsa
+	else:
+		sources += sources_oss
 
 elif WengoOSMacOSX():
 	defines['PA_BIG_ENDIAN'] = 1

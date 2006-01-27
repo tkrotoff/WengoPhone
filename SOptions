@@ -13,6 +13,8 @@ args = {
 	'phapiwrapper' : 1,
 	'nullsipwrapper' : 0,
 	'enable-samplerate' : 0,
+	'enable-phapi-audio-arts' : 1,
+	'portaudio-oss' : 1,
 }
 
 WengoAddConsoleArguments(args)
