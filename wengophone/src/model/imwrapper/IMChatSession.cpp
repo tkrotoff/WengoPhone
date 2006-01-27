@@ -58,6 +58,8 @@ const IMChatSession::IMContactList & IMChatSession::getIMContactList() const {
 }
 
 void IMChatSession::messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & from, const std::string & message) {
+	LOG_DEBUG("message received: " + message);
+
 	if (imChatSession == *this) {
 		const IMContact * imContact = getIMContact(_imChat.getIMAccount(), from);
 		if (imContact) {
@@ -69,6 +71,8 @@ void IMChatSession::messageReceivedEventHandler(IMChat & sender, IMChatSession &
 }
 
 void IMChatSession::statusMessageEventHandler(IMChat & sender, IMChatSession & imChatSession, IMChat::StatusMessage status, const std::string & message) {
+	LOG_DEBUG("status message received: " + message);
+
 	if (imChatSession == *this) {
 		statusMessageEvent(*this, status, message);
 	}
