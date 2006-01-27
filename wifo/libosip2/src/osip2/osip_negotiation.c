@@ -514,7 +514,10 @@ mimecmp(const char *m1, const char *m2, int rate, int chans)
   l1 = mimeparse(m1, &r1, &c1);
   l2 = mimeparse(m2, &r2, &c2);
  
-  return (l1 == l2) && (r1 == r2) && (c1 == c2) && !strncmp(m1, m2, l1);
+  if ((l1 == l2) && (r1 == r2) && (c1 == c2))
+    return osip_strncasecmp(m1, m2, l1);
+
+  return 1;
 }
   
 
@@ -533,7 +536,7 @@ _osip_negotiation_find_payload_by_mime (osip_list_t *codecs, char *mime,  int de
 	  char *mymime;
 
 	  mymime = strchr(my->a_rtpmap, ' ');
-	  mymime += strspn(mime, " ");
+	  mymime += strspn(mymime, " ");
 
 	  if (*mymime)
 	    {
