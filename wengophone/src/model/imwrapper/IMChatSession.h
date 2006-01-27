@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CHATSESSION_H
-#define CHATSESSION_H
+#ifndef IMCHATSESSION_H
+#define IMCHATSESSION_H
 
 #include <List.h>
 
@@ -28,14 +28,14 @@ class IMChat;
 class IMAccount;
 class IMContact;
 
-class ChatSession {
+class IMChatSession {
 public:
 
-	Event<void (ChatSession & sender, const IMContact & from, const std::string & message)> messageReceivedEvent;
+	Event<void (IMChatSession & sender, const IMContact & from, const std::string & message)> messageReceivedEvent;
 
-	ChatSession(IMChat & imChat);
+	IMChatSession(IMChat & imChat);
 
-	~ChatSession();
+	~IMChatSession();
 
 	void addIMContact(const IMContact & imContact);
 
@@ -47,4 +47,4 @@ public:
 
 };
 
-#endif //CHATSESSION_H
+#endif //IMCHATSESSION_H
