@@ -52,6 +52,7 @@ ContactParser::ContactParser(Contact & contact, const std::string & data) {
 	parseIMAccount(contact, vCard, "JABBERID", EnumIMProtocol::IMProtocolJabber);
 
 	text = vCard.FirstChild("WENGOID").FirstChild().Text();
+	/*
 	if (text) {
 		//FIXME: crashes when IMAccountList is populated after initializing the ContactList
 		List<IMAccount *> list = IMAccountList::getInstance().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
@@ -60,6 +61,7 @@ ContactParser::ContactParser(Contact & contact, const std::string & data) {
 		contact.addIMContact(imContact);
 		contact.setWengoPhone(text->Value());
 	}
+	*/
 }
 
 void ContactParser::parseIMAccount(Contact & contact, const TiXmlHandle & handle, const std::string & protocolId, EnumIMProtocol::IMProtocol protocol) {
