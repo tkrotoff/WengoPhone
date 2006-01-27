@@ -20,18 +20,20 @@
 #ifndef CHATSESSION_H
 #define CHATSESSION_H
 
+#include <List.h>
+
+#include <string>
+
 class IMChat;
 class IMAccount;
 class IMContact;
-
-#include <string>
 
 class ChatSession {
 public:
 
 	Event<void (ChatSession & sender, const IMContact & from, const std::string & message)> messageReceivedEvent;
 
-	ChatSession(const IMAccount & imAccount, IMChat & imChat);
+	ChatSession(IMChat & imChat);
 
 	~ChatSession();
 
