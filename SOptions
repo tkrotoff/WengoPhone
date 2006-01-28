@@ -13,7 +13,7 @@ args = {
 	'phapiwrapper' : 1,
 	'nullsipwrapper' : 0,
 	'enable-samplerate' : 0,
-	'enable-phapi-audio-arts' : 1,
+	'enable-phapi-audio-arts' : 0,
 	'portaudio-oss' : 1,
 }
 
