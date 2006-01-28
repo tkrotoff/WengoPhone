@@ -263,7 +263,7 @@ ph_media_init(int useTunnel, const char *pluginpath)
   profile = get_av_profile();
 
 
-   
+  /* initialize audio payloads */
   rtp_profile_set_payload(profile,PH_MEDIA_DTMF_PAYLOAD,
 			  get_telephone_event());
   rtp_profile_set_payload(profile,PH_MEDIA_ILBC_PAYLOAD, &ilbc);
@@ -272,10 +272,8 @@ ph_media_init(int useTunnel, const char *pluginpath)
   rtp_profile_set_payload(profile,PH_MEDIA_CN_PAYLOAD, &cng_8);
   rtp_profile_set_payload(profile,PH_MEDIA_SPEEXNB_PAYLOAD, &mspeex_nb);
   rtp_profile_set_payload(profile,PH_MEDIA_SPEEXWB_PAYLOAD, &mspeex_wb);
-
-#ifdef SPEEX_OVER_G729_HACK
   rtp_profile_set_payload(profile,PH_MEDIA_G729_PAYLOAD, &g729);
-#endif
+
 
 
 #ifdef PHAPI_VIDEO_SUPPORT
