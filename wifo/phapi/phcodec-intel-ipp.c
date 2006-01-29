@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-
-#include "phcodec.h"
+#include <fcntl.h>
 /* */
 
 #define G729_FRAME_SAMPLES 160
@@ -116,6 +115,10 @@ int ph_g729_decode(void *ctx, const void *src, int srcsize, void *dst, int dstsi
 void ph_g729_enc_cleanup(void *ctx);
 void ph_g729_dec_cleanup(void *ctx);
 
+
+#ifndef TEST
+#include "phcodec.h"
+
 static phcodec_t g729_codec =
 {
   "G729", 8000, G729_ENCODED_FRAME_SIZE, G729_FRAME_SAMPLES*2, 
@@ -123,6 +126,7 @@ static phcodec_t g729_codec =
   ph_g729_enc_cleanup, ph_g729_dec_cleanup,  
   ph_g729_encode, ph_g729_decode
 };
+#endif
 
 
 void *ph_g729_enc_init(void *dummy)
@@ -232,7 +236,7 @@ int ph_g729_encode(void *ctx, const void *src, int srcsize, void *dst, int dstsi
         in.pcmType = codec->pInfo.pcmType;
 
         /* Set output buffer */
-        out.pBuffer = dst;
+        out.pBuffer = out_buf;
 
         /* Encode a frame  */
 	err = fns->Encode (codec->handle, &in, &out);
@@ -327,11 +331,13 @@ void ph_g729_dec_cleanup(void *ctx)
   stream_destroy(codec);
 }
 
+#ifndef TEST
 #ifdef WIN32
 #define DLLEXPORT __declspec(dllexport)
 #else
 #define DLLEXPORT
 #endif
+
 
 
 DLLEXPORT int ph_codec_plugin_init(void (*codec_register)(phcodec_t *))
@@ -340,3 +346,62 @@ DLLEXPORT int ph_codec_plugin_init(void (*codec_register)(phcodec_t *))
 
   return 0;
 }
+
+#endif
+
+#ifdef TEST
+int main(int argc, char *argv[])
+{
+	int ifile, ofile;
+	void *codec;
+	char ibuf[1024];
+	char obuf[1024];
+	int rn, cn, wn;
+	
+	ifile = open(argv[2], O_RDONLY|O_BINARY);
+	ofile = open(argv[3], O_WRONLY|O_CREAT|O_BINARY, 0666);
+	
+	if (!strcmp(argv[1], "-d"))
+	{
+		codec = ph_g729_dec_init(0);
+		while(1)
+		{
+
+
+			rn = read(ifile, ibuf, G729_ENCODED_FRAME_SIZE);
+			if (!rn)
+				break;
+			cn = ph_g729_decode(codec, ibuf, rn, obuf, sizeof(obuf));
+			wn = write(ofile, obuf, cn);
+		}
+		ph_g729_dec_cleanup(codec);
+	}
+	else if (!strcmp(argv[1], "-e"))
+	{
+		codec = ph_g729_enc_init(0);
+		while(1)
+		{
+
+
+			rn = read(ifile, ibuf, G729_FRAME_SAMPLES*2);
+			if (!rn)
+				break;
+			cn = ph_g729_encode(codec, ibuf, rn, obuf, sizeof(obuf));
+			wn = write(ofile, obuf, cn);
+
+		}
+		ph_g729_enc_cleanup(codec);
+	}
+
+	close(ifile);
+	close(ofile);
+
+	exit(0);
+}
+
+
+#endif
+	
+
+			
+			

@@ -1,3 +1,4 @@
+import os
 amr_env = WengoGetEnvironment()
 amr_libs = [
 	'amrwb',
@@ -18,28 +19,32 @@ speex = speex_env.WengoPlugin('phspeexplugin', ['phcodec-speex.c'])
 
 
 
-
-
-if WengoGetConsoleArgument('enable-ipp') and WengoOSLinux():
-	IPPROOT="/opt/intel/ipp/5.0/ia32"
-	IPPSAMPLEROOT="/home/vadim/ipp5/ipp_sample/speech-coding"
-
-	ipp_env = WengoGetEnvironment()
-	ipp_libs = [
-		'ippsc', 'ipps',  'ippsr',  'ippcore',  'guide', 'usc'	
-		]
-	ipp_includes = [
-		IPPROOT + "/include", IPPSAMPLEROOT + "/codec/include"
-		]
+print "=======enable-ipp=",WengoGetConsoleArgument('enable-ipp')
+if WengoGetConsoleArgument('enable-ipp'):
 	
-	ipp_libpath = [
-		IPPROOT + "/sharedlib", IPPROOT + "/sharedlib/linux32",
-		IPPSAMPLEROOT + "/bin/ia32/lib"
-		]	    
+ 	IPPROOT=os.environ.get('IPPROOT', None)
+	IPPSAMPLEROOT=os.environ.get('IPPSAMPLEROOT', None)
 
-	ipp_env.Append( LIBS = ipp_libs,  LIBPATH = ipp_libpath) 
-	ipp_env.WengoAddIncludePath(ipp_includes)
-	ipp = ipp_env.WengoPlugin('phippplugin', ['phcodec-intel-ipp.c'])
+	print "IPPROOT=" + IPPROOT
+	print "IPPSAMPLEROOT=" + IPPSAMPLEROOT
+	if IPPROOT and IPPSAMPLEROOT:
+		ipp_env = WengoGetEnvironment()
+		ipp_libs = [
+			'ippsc', 'ipps',  'ippsr',  'ippcore', 'usc'	
+			]
+		ipp_includes = [
+			IPPROOT + "/include", IPPSAMPLEROOT + "/codec/include"
+			]
+	
+		ipp_libpath = [
+			IPPROOT + "/sharedlib", IPPROOT + "/sharedlib/linux32",
+			IPPROOT + "/stublib",
+			IPPSAMPLEROOT + "/bin/ia32/lib"
+			]	    
+
+		ipp_env.Append( LIBS = ipp_libs,  LIBPATH = ipp_libpath) 
+		ipp_env.WengoAddIncludePath(ipp_includes)
+		ipp = ipp_env.WengoPlugin('phippplugin', ['phcodec-intel-ipp.c'])
 
 
 env = WengoGetEnvironment()
