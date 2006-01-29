@@ -15,6 +15,7 @@ args = {
 	'enable-samplerate' : 0,
 	'enable-phapi-audio-arts' : 0,
 	'portaudio-oss' : 1,
+	'enable-ipp' : 0,
 }
 
 WengoAddConsoleArguments(args)
