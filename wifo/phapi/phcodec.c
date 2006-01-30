@@ -607,8 +607,11 @@ void ph_media_plugin_codec_init(const char *dirpath)
   char   modulename[512];
   ph_codec_plugin_init_type  plugin_init;
   HLIB lib;
-
-
+  char *fpath = getenv("PH_FORCE_CODEC_PATH");
+  
+  if (fpath)
+      dirpath = fpath;
+  
   if (!dirpath || !dirpath[0])
     dirpath = getenv("PH_CODEC_PATH");
 
