@@ -881,9 +881,17 @@ phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int 
 #ifdef STUN_ENABLE
   char  public_voice_port[16];
   char  public_video_port[16];
+
+   public_video_port[0] = 0;
+   public_voice_port[0] = 0;
 #endif
    
    ph_printf("phLinePlaceCall_withCa: a new call has been placed\n");
+
+
+   local_video_port[0] = 0;
+   local_voice_port[0] = 0;
+
 
   if (!nonempty(uri))
     return -PH_BADARG;

@@ -39,6 +39,7 @@
 #include "phmstream.h"
 #include "phastream.h"
 #include "phaudiodriver.h"
+#include "phglobal.h"
 
 #include <portaudio.h>
 
@@ -327,7 +328,7 @@ int pa_stream_open(phastream_t *as, char *name, int rate, int framesize, ph_audi
 
   pd->bufsize = (rate * ph_pa_latency * 2) / 1000;
 
-#ifdef WIN32
+#ifdef OS_WIN32
   
   pd->istream  = pa_dev_open(as, PH_PA_INPUT, name, rate, framesize, 80);
 
