@@ -7,6 +7,7 @@ lib_path = [
 ]
 
 lib_flags = []
+libs = []
 
 include_path = [
 	'pa_common'
@@ -102,10 +103,13 @@ headers = headers_common
 
 if WengoOSLinux() or WengoOSBSD():
 	defines['PA_LITTLE_ENDIAN'] = 1
+	defines['HAVE_LIBPTHREAD'] = 1
+	libs += ['pthread', 'm']	
 	sources += sources_linux
 	headers += headers_linux
 	if WengoGetConsoleArgument('portaudio-oss') == 0:
 		defines['PA_USE_ALSA'] = 1
+		libs += ['libasound']
 		sources += sources_alsa
 		headers += headers_alsa
 	else:
@@ -133,6 +137,7 @@ else:
 
 env.WengoAddLinkFlags(lib_flags)
 env.WengoAddLibPath(lib_path)
+env.WengoUseLibraries(libs)
 env.WengoAddDefines(defines)
 env.WengoAddIncludePath(include_path)
 env.WengoStaticLibrary('portaudio', sources, headers)
