@@ -116,6 +116,7 @@ unsigned int tab_rx_cng[CNG_TBL_SIZE];
 static short sil_pkt[MAX_FRAME_SIZE];
 
 static int ph_speex_hook_pt = -1;  /* payload code to be replaced by SPEEX WB */ 
+static int ph_trace_mic = 0;       /* when nonzero show mean MIC signal level each sec */ 
 
 static int ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize);
 static int ph_generate_comfort_noice(phastream_t *stream, void *buf);
@@ -568,7 +569,8 @@ ph_vad_update(phastream_t *as, char *data, int len)
   unsigned int power;
   short *p = (short *)data; 
   struct vadcng_info *s = &as->cngi;
-
+  static int tracecnt = 0;
+  
   /* calc mean power */
   for(i = 0; i<len/2; i++)
     {
@@ -614,6 +616,12 @@ ph_vad_update(phastream_t *as, char *data, int len)
 #ifdef TRACE_POWER
   if(s->sil_cnt > max_sil)
     max_sil = s->sil_cnt;
+  
+  if (ph_trace_mic && (tracecnt++ == 50))
+  {
+      ph_printf("ph_media_audiuo: mean MIC signal: %d\n", power);
+      tracecnt = 0;
+  }
 #endif
   
   if(s->sil_cnt > s->sil_max)
@@ -1440,7 +1448,7 @@ void *ph_ec_init(int framesize, int clock_rate)
   const char *len = getenv("PH_ECHO_LENGTH");
 
   if (!len)
-    len = "240";
+    len = "120";
 
 
 #ifdef USE_SPXEC
@@ -1780,8 +1788,14 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
       if (stream->ec)
 	{
 	  const char *lat = getenv("PH_ECHO_LATENCY");
-
+    
+ 
+      if (!lat)
+        lat = "120";          
+        
 	  stream->audio_loop_latency = 0;
+        
+      
 	  if (lat)
 	    stream->audio_loop_latency = atoi(lat) * 2 * stream->clock_rate/1000;
 
@@ -2477,9 +2491,14 @@ ph_media_audio_init()
   /* retrieve payload code to be replaced by SPEEX WB */ 
   {
     char *speexhook = getenv("PH_SPEEX_HOOK");
-
+    char *mictrace = getenv("PH_TRACE_MIC");
+      
     if (speexhook)
       ph_speex_hook_pt = atoi(speexhook);
+    
+    /* enbale MIC signal level tracing */
+    if (mictrace)
+      ph_trace_mic = atoi(mictrace);
   }
 
 
