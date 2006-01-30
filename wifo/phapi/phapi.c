@@ -2962,13 +2962,16 @@ ph_call_retrieve_payloads(phcall_t *ca, eXosip_event_t *je, int flags)
    int  i = 0;
 
    if (_is_audio_enabled(flags))
-     i = eXosip_retrieve_negotiated_audio_payload(ca->did, &ca->audio_payload, ca->audio_payload_name, sizeof(ca->audio_payload_name));
+     {
+       i = eXosip_retrieve_negotiated_audio_payload(ca->did, &ca->audio_payload, ca->audio_payload_name, sizeof(ca->audio_payload_name));
+       ph_printf("ph_call_retrieve_payloads: remote_audio=%s payload=%s(%d)\n", ca->remote_sdp_audio_ip, ca->audio_payload_name, ca->audio_payload); 
+     }
 
    ca->video_payload = 0;
    if (ca->remote_sdp_video_ip[0] && (_is_video_enabled(flags)))
     {
      i = eXosip_retrieve_negotiated_video_payload(ca->did, &ca->video_payload, ca->video_payload_name, sizeof(ca->video_payload_name));
-     ph_printf("video_ip: %s payload=%d\n", ca->remote_sdp_video_ip, ca->video_payload); 
+     ph_printf("ph_call_retrieve_payloads: remote_video=%s payload=%s(%d)\n", ca->remote_sdp_video_ip, ca->video_payload_name, ca->video_payload); 
     }
 
   if(!i && phcfg.cng && (flags & PH_STREAM_CNG))
@@ -3091,6 +3094,9 @@ static int ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags)
 
       if (je)
 	strncpy(msp->remoteaddr, je->remote_sdp_video_ip, sizeof(msp->remoteaddr));
+      else
+	strncpy(msp->remoteaddr, ca->remote_sdp_video_ip, sizeof(msp->remoteaddr));
+
 
       msp->localport = port_video;
       msp->remoteport = ca->remote_sdp_video_port;
@@ -3141,6 +3147,8 @@ static int ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags)
 
 	if (je)
 	  strncpy(msp->remoteaddr, je->remote_sdp_audio_ip, sizeof(msp->remoteaddr));
+	else
+	  strncpy(msp->remoteaddr, ca->remote_sdp_audio_ip, sizeof(msp->remoteaddr));
 
 	if (phcfg.hdxmode)
 	  {

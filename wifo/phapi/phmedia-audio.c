@@ -1788,13 +1788,11 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
       if (stream->ec)
 	{
 	  const char *lat = getenv("PH_ECHO_LATENCY");
-    
- 
-      if (!lat)
-        lat = "120";          
+
+	  if (!lat)
+	    lat = "120"; 
         
 	  stream->audio_loop_latency = 0;
-        
       
 	  if (lat)
 	    stream->audio_loop_latency = atoi(lat) * 2 * stream->clock_rate/1000;
