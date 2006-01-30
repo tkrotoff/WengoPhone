@@ -147,17 +147,19 @@ public:
 
 	void unblockContact(const std::string & contactId);
 
-	void allowWatcher(const std::string & watcher);
-
 	std::map<int, IMChatSession *> getMessageIdChatSessionMap() {
 		return _messageIdChatSessionMap;
 	}
 
-	static PhApiWrapper * PhApiWrapperHack;
+	void allowWatcher(const std::string & watcher);
+
+	void forbidWatcher(const std::string & watcher);
 
 	static const std::string PresenceStateOnline;
 	static const std::string PresenceStateAway;
 	static const std::string PresenceStateDoNotDisturb;
+
+	static PhApiWrapper * PhApiWrapperHack;
 
 private:
 

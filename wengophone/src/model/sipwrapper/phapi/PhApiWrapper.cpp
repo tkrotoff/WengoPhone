@@ -456,10 +456,30 @@ void PhApiWrapper::allowWatcher(const std::string & watcher) {
 	phLinePublish(_wengoVline, _wengoSipAddress.c_str(), winfo, contentType.c_str(), winfoAllow.c_str());
 }
 
-void PhApiWrapper::blockContact(const std::string & /*contactId*/) {
+void PhApiWrapper::forbidWatcher(const std::string & watcher) {
+	static const int winfo = 1;	//Publish with event = presence.winfo
+	static const std::string contentType = "application/watcherinfo+xml";
+	
+	std::string winfoForbid = "<?xml version=\"1.0\"?>\n";
+	winfoForbid += "<watcherinfo>\n";
+	winfoForbid += "<watcher-list>\n";
+	winfoForbid += "<watcher status=\"pending\">";
+	winfoForbid += watcher;
+	winfoForbid += "</watcher>\n";
+	winfoForbid += "</watcher-list>\n";
+	winfoForbid += "</watcherinfo>\n";
+
+	phLinePublish(_wengoVline, _wengoSipAddress.c_str(), winfo, contentType.c_str(), winfoForbid.c_str());
 }
 
-void PhApiWrapper::unblockContact(const std::string & /*contactId*/) {
+void PhApiWrapper::blockContact(const std::string & contactId) {
+	std::string sipAddress = "sip:" + contactId + "@" + _realm;
+	allowWatcher(sipAddress);
+}
+
+void PhApiWrapper::unblockContact(const std::string & contactId) {
+	std::string sipAddress = "sip:" + contactId + "@" + _realm;
+	allowWatcher(sipAddress);
 }
 
 
