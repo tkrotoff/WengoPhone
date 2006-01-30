@@ -121,6 +121,8 @@ static PyObject * PyPhInit(PyObject * self, PyObject * params) {
     cfg->nat_refresh_time = 30;
     cfg->use_tunnel = 0;
 
+    strncpy(cfg->audio_codecs, "ILBC/8000,AMR-WB/16000,SPEEX/16000,SPEEX/8000,PCMU/8000,PCMA/8000,GSM/8000", 128);
+	
     if (PyArg_ParseTuple(params, "si", &server, &asyncmode)) {
         ret = phInit(&pyphapi_callbacks, server, asyncmode);
     }
@@ -609,23 +611,7 @@ static PyObject * PyPhHoldCall(PyObject *self, PyObject *params) {
     return Py_BuildValue("i", ret);
 }
 
-/*
- * @brief Wraps phPing
- *
- */
 
-static PyObject * PyPhPing(PyObject *self, PyObject *params) {
-    char * host;
-    int port;
-    int ttl;
-    int ret;
-
-    if (PyArg_ParseTuple(params, "sii", host, &port, &ttl)) {
-        ret = phPing(host, port, ttl);
-    }
-
-    return Py_BuildValue("i", ret);
-}
 
 
 
@@ -805,6 +791,60 @@ static void pyphapi_callback_registerProgress(int cid, int regStatus) {
 static void pyphapi_callback_frameDisplay(int cid, phVideoFrameReceivedEvent_t *ev) {
 }
 
+
+
+static PyObject * PyPhCfgSet(PyObject *self, PyObject *params) {
+	char * field;
+	int value_int;
+	char * value_string;
+	phConfig_t *cfg;
+	
+	cfg = phGetConfig();
+	
+	if (PyArg_ParseTuple(params, "si", &field, &value_int)) {
+		
+		if( strcmp(field, "asyncmode" ) == 0) {cfg->asyncmode=value_int;}
+		if( strcmp(field, "nomedia" ) == 0) {cfg->nomedia=value_int;}
+		if( strcmp(field, "noaec" ) == 0) {cfg->noaec=value_int;}
+		if( strcmp(field, "vad" ) == 0) {cfg->vad=value_int;}
+		if( strcmp(field, "cng" ) == 0) {cfg->cng=value_int;}
+		if( strcmp(field, "hdxmode" ) == 0) {cfg->hdxmode=value_int;}
+		if( strcmp(field, "nat_refresh_time" ) == 0) {cfg->nat_refresh_time=value_int;}
+		if( strcmp(field, "jitterdepth" ) == 0) {cfg->jitterdepth=value_int;}
+		if( strcmp(field, "autoredir" ) == 0) {cfg->autoredir=value_int;}
+		if( strcmp(field, "use_tunnel" ) == 0) {cfg->use_tunnel=value_int;}
+		if( strcmp(field, "httpt_server_port" ) == 0) {cfg->httpt_server_port=value_int;}
+		if( strcmp(field, "http_proxy_port" ) == 0) {cfg->http_proxy_port=value_int;}
+	}
+
+	else if (PyArg_ParseTuple(params, "ss", &field, &value_string)) {
+
+		if( strcmp(field, "audio_dev" )==0) {strncpy(cfg->audio_dev, value_string,64);}
+		if( strcmp(field, "local_rtp_port" )==0) {strncpy(cfg->local_rtp_port, value_string,16);}
+		if( strcmp(field, "local_audio_rtcp_port" )==0) {strncpy(cfg->local_audio_rtcp_port, value_string,16);}
+		if( strcmp(field, "local_video_rtp_port" )==0) {strncpy(cfg->local_video_rtp_port, value_string,16);}
+		if( strcmp(field, "local_video_rtcp_port" )==0) {strncpy(cfg->local_video_rtcp_port, value_string,16);}
+		if( strcmp(field, "sipport" )==0) {strncpy(cfg->sipport, value_string,16);}
+		if( strcmp(field, "nattype" )==0) {strncpy(cfg->nattype, value_string,16);}
+		if( strcmp(field, "audio_codecs" )==0) {strncpy(cfg->audio_codecs, value_string,128);}
+		if( strcmp(field, "video_codecs" )==0) {strncpy(cfg->video_codecs, value_string,128);}
+		if( strcmp(field, "audio_dev" )==0) {strncpy(cfg->audio_dev, value_string,64);}
+		if( strcmp(field, "stunserver" )==0) {strncpy(cfg->stunserver, value_string,128);}
+		if( strcmp(field, "httpt_server" )==0) {strncpy(cfg->httpt_server, value_string,128);}
+		if( strcmp(field, "http_proxy" )==0) {strncpy(cfg->http_proxy, value_string,128);}
+		if( strcmp(field, "http_proxy_user" )==0) {strncpy(cfg->http_proxy_user, value_string,128);}
+		if( strcmp(field, "http_proxy_passwd" )==0) {strncpy(cfg->http_proxy_passwd, value_string,128);}
+		if( strcmp(field, "plugin_path" )==0) {strncpy(cfg->plugin_path, value_string,256);}
+		
+	} else {
+		printf("Fatal error: PyPhCfgSet(), bad argument type\n");
+		exit(1);
+	}
+	
+	return Py_None;
+}
+
+
 /*
  * Convenient define to declare a function with variable arguments in
  * the module's API table
@@ -824,35 +864,35 @@ static void pyphapi_callback_frameDisplay(int cid, phVideoFrameReceivedEvent_t *
 
 static PyMethodDef pyphapi_funcs[] = {
     { "pyphapi",(PyCFunction) pyphapi, METH_NOARGS,  "Python Module of phApi"},
-    PY_PHAPI_FUNCTION_DECL("phInit",              PyPhInit),
-    PY_PHAPI_FUNCTION_DECL("phAddAuthInfo",       PyPhAddAuthInfo),
-    PY_PHAPI_FUNCTION_DECL("phAddVline",          PyPhAddVline),
-    PY_PHAPI_FUNCTION_DECL("phAddVline2",         PyPhAddVline2),
-    PY_PHAPI_FUNCTION_DECL("phSetCallbacks",      PyPhSetCallbacks),
-    PY_PHAPI_FUNCTION_DECL("phPoll",              PyPhPoll),
-    PY_PHAPI_FUNCTION_DECL("phRefresh",           PyPhRefresh),
-    PY_PHAPI_FUNCTION_DECL("phTerminate",         PyPhTerminate),
-    PY_PHAPI_FUNCTION_DECL("phTunnelConfig",      PyPhTunnelConfig),
-    PY_PHAPI_FUNCTION_DECL("phLinePlaceCall2",    PyPhLinePlaceCall2),
-    PY_PHAPI_FUNCTION_DECL("phLineSendOptions",   PyPhLineSendOptions),
-    PY_PHAPI_FUNCTION_DECL("phLineSendMessage",   PyPhLineSendMessage),
-    PY_PHAPI_FUNCTION_DECL("phLineSubscribe",     PyPhLineSubscribe),
-    PY_PHAPI_FUNCTION_DECL("phLineSetFollowMe",   PyPhLineSetFollowMe),
-    PY_PHAPI_FUNCTION_DECL("phLineSetBusy",       PyPhLineSetBusy),
-    PY_PHAPI_FUNCTION_DECL("phLinePublish",       PyPhLinePublish),
-    PY_PHAPI_FUNCTION_DECL("phAcceptCall2",       PyPhAcceptCall2),
-    PY_PHAPI_FUNCTION_DECL("phRejectCall",        PyPhRejectCall),
-    PY_PHAPI_FUNCTION_DECL("phCloseCall",         PyPhCloseCall),
-    PY_PHAPI_FUNCTION_DECL("phRingingCall",       PyPhRingingCall),
-    PY_PHAPI_FUNCTION_DECL("phSendMessage",       PyPhSendMessage),
-    PY_PHAPI_FUNCTION_DECL("phSubscribe",         PyPhSubscribe),
-    PY_PHAPI_FUNCTION_DECL("phPublish",           PyPhPublish),
-    PY_PHAPI_FUNCTION_DECL("phDelVline",          PyPhDelVline),
-    PY_PHAPI_FUNCTION_DECL("phTransferCall",      PyPhTransferCall),
-    PY_PHAPI_FUNCTION_DECL("phBlindTransferCall", PyPhBlindTransferCall),
-    PY_PHAPI_FUNCTION_DECL("phResumeCall",        PyPhResumeCall),
-    PY_PHAPI_FUNCTION_DECL("phHoldCall",        PyPhHoldCall),
-    PY_PHAPI_FUNCTION_DECL("phPing",        PyPhPing),
+    PY_PHAPI_FUNCTION_DECL("phInit",			PyPhInit),
+    PY_PHAPI_FUNCTION_DECL("phAddAuthInfo",		PyPhAddAuthInfo),
+    PY_PHAPI_FUNCTION_DECL("phAddVline",		PyPhAddVline),
+    PY_PHAPI_FUNCTION_DECL("phAddVline2",		PyPhAddVline2),
+    PY_PHAPI_FUNCTION_DECL("phSetCallbacks",		PyPhSetCallbacks),
+    PY_PHAPI_FUNCTION_DECL("phPoll",			PyPhPoll),
+    PY_PHAPI_FUNCTION_DECL("phRefresh",			PyPhRefresh),
+    PY_PHAPI_FUNCTION_DECL("phTerminate",		PyPhTerminate),
+    PY_PHAPI_FUNCTION_DECL("phTunnelConfig",		PyPhTunnelConfig),
+    PY_PHAPI_FUNCTION_DECL("phLinePlaceCall2",		PyPhLinePlaceCall2),
+    PY_PHAPI_FUNCTION_DECL("phLineSendOptions",		PyPhLineSendOptions),
+    PY_PHAPI_FUNCTION_DECL("phLineSendMessage",		PyPhLineSendMessage),
+    PY_PHAPI_FUNCTION_DECL("phLineSubscribe",		PyPhLineSubscribe),
+    PY_PHAPI_FUNCTION_DECL("phLineSetFollowMe",		PyPhLineSetFollowMe),
+    PY_PHAPI_FUNCTION_DECL("phLineSetBusy",		PyPhLineSetBusy),
+    PY_PHAPI_FUNCTION_DECL("phLinePublish",		PyPhLinePublish),
+    PY_PHAPI_FUNCTION_DECL("phAcceptCall2",		PyPhAcceptCall2),
+    PY_PHAPI_FUNCTION_DECL("phRejectCall",		PyPhRejectCall),
+    PY_PHAPI_FUNCTION_DECL("phCloseCall",		PyPhCloseCall),
+    PY_PHAPI_FUNCTION_DECL("phRingingCall",		PyPhRingingCall),
+    PY_PHAPI_FUNCTION_DECL("phSendMessage",		PyPhSendMessage),
+    PY_PHAPI_FUNCTION_DECL("phSubscribe",		PyPhSubscribe),
+    PY_PHAPI_FUNCTION_DECL("phPublish",			PyPhPublish),
+    PY_PHAPI_FUNCTION_DECL("phDelVline",		PyPhDelVline),
+    PY_PHAPI_FUNCTION_DECL("phTransferCall",		PyPhTransferCall),
+    PY_PHAPI_FUNCTION_DECL("phBlindTransferCall",	PyPhBlindTransferCall),
+    PY_PHAPI_FUNCTION_DECL("phResumeCall",		PyPhResumeCall),
+    PY_PHAPI_FUNCTION_DECL("phHoldCall",		PyPhHoldCall),
+    PY_PHAPI_FUNCTION_DECL("phCfgSet",			PyPhCfgSet),
     PY_PHAPI_FUNCTION_DECL_NULL,
 };
 
@@ -864,3 +904,4 @@ static PyMethodDef pyphapi_funcs[] = {
 PyMODINIT_FUNC initpyphapi(void) {
     Py_InitModule3("pyphapi", pyphapi_funcs, "");
 }
+
