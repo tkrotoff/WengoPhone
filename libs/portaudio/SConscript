@@ -105,9 +105,11 @@ if WengoOSLinux() or WengoOSBSD():
 	sources += sources_linux
 	headers += headers_linux
 	if WengoGetConsoleArgument('portaudio-oss') == 0:
+		defines['PA_USE_ALSA'] = 1
 		sources += sources_alsa
 		headers += headers_alsa
 	else:
+		defines['PA_USE_OSS'] = 1
 		sources += sources_oss
 
 elif WengoOSMacOSX():
