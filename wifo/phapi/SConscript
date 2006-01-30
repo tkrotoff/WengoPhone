@@ -15,6 +15,7 @@ speex_libs = [
 ]
 speex_env.WengoUseLibraries(speex_libs)
 speex_env.WengoAddCCFlags(WengoGetVariable('phapi_optimization_flags'))
+speex_env.Append(LIBS = speex_libs)
 speex = speex_env.WengoPlugin('phspeexplugin', ['phcodec-speex.c'])
 
 

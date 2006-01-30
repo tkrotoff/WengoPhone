@@ -101,7 +101,8 @@ PayloadType *payload_type_new()
 PayloadType *payload_type_clone(PayloadType *payload)
 {
 	PayloadType *newpayload=g_new0(PayloadType,1);
-	memcpy(newpayload,payload,sizeof(PayloadType));
+	
+	*newpayload = *payload;
 	newpayload->mime_type=g_strdup(payload->mime_type);
 	newpayload->flags|=PAYLOAD_TYPE_ALLOCATED;
 	return newpayload;
