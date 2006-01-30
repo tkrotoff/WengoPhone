@@ -38,7 +38,7 @@ struct _PayloadType
 	gint pattern_length;
 	/* other usefull information */
 	gint normal_bitrate;	/*in bit/s */
-	char *mime_type;
+        char mime_type[32];
 	PayloadTypeFlags flags;
 	void *user_data;
 };

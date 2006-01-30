@@ -103,14 +103,14 @@ PayloadType *payload_type_clone(PayloadType *payload)
 	PayloadType *newpayload=g_new0(PayloadType,1);
 	
 	*newpayload = *payload;
-	newpayload->mime_type=g_strdup(payload->mime_type);
+	//	newpayload->mime_type=g_strdup(payload->mime_type);
 	newpayload->flags|=PAYLOAD_TYPE_ALLOCATED;
 	return newpayload;
 }
 
 void payload_type_destroy(PayloadType *pt)
 {
-	g_free(pt->mime_type);
+  //	g_free(pt->mime_type);
 	g_free(pt);
 }
 
