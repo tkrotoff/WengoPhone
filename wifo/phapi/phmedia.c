@@ -253,12 +253,12 @@ ph_media_init(int useTunnel, const char *pluginpath)
   if (!first_time)
     return 0;
 
+  ortp_init();
   ph_media_audio_init();
   ph_media_codecs_init(pluginpath);
 
 
 
-  ortp_init();
 
   profile = get_av_profile();
 
