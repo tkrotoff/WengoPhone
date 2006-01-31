@@ -342,7 +342,7 @@ int pa_stream_open(phastream_t *as, char *name, int rate, int framesize, ph_audi
 
 #ifdef OS_WIN32
   
-  pd->istream  = pa_dev_open(as, PH_PA_INPUT, name, rate, framesize, 80);
+  pd->istream  = pa_dev_open(as, PH_PA_INPUT, name, rate, framesize, ph_pa_latency);
 
   if (!pd->istream)
     {
@@ -351,7 +351,7 @@ int pa_stream_open(phastream_t *as, char *name, int rate, int framesize, ph_audi
     }
 
 
-  pd->ostream  = pa_dev_open(as, PH_PA_OUTPUT, name, rate, framesize, 80);
+  pd->ostream  = pa_dev_open(as, PH_PA_OUTPUT, name, rate, framesize, ph_pa_latency);
   if (!pd->ostream)
     {
       Pa_CloseStream(pd->istream);
@@ -359,7 +359,7 @@ int pa_stream_open(phastream_t *as, char *name, int rate, int framesize, ph_audi
       return -PH_NORESOURCES;
     }
 #else
-  pd->istream  = pa_dev_open(as, PH_PA_INOUT, name, rate, framesize, 80);
+  pd->istream  = pa_dev_open(as, PH_PA_INOUT, name, rate, framesize, ph_pa_latency);
 
   if (!pd->istream)
     {
