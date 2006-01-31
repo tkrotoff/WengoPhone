@@ -66,7 +66,10 @@ public:
 		LineTimeout,
 
 		/** Successfull connection to the SIP platform. */
-		LineOk
+		LineOk,
+
+		/** Line unregistered. */
+		LineClosed
 	};
 
 	/**
@@ -170,6 +173,21 @@ public:
 	 * @param message message from the WengoPhone logging system
 	 */
 	virtual void loggerMessageAddedEvent(const std::string & message) = 0;
+
+	enum SmsStatus {
+		/** The SMS was not sent. */
+		SmsStatusError,
+
+		/** The SMS was sent. */
+		SmsStatusOk
+	};
+
+	/**
+	 * Callback to check if the SMS was received or not.
+	 *
+	 * @param status SMS status (ok or error)
+	 */
+	virtual void smsStatusEvent(SmsStatus status) = 0;
 };
 
 #endif	//LISTENER_H

@@ -242,6 +242,15 @@ public:
 
 	/** @} */
 
+	/** 
+	 * @name SMS Methods
+	 * @{
+	 */
+
+	void sendSMS(const std::string & phoneNumber, const std::string & message) { }
+
+	/** @} */
+
 private:
 
 	WengoPhone * _wengoPhone;
