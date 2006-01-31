@@ -102,7 +102,6 @@ headers_mac = [
 ]
 
 defines = {
-	'PA_NO_DS' : 1,
 	'PA_NO_ASIO' : 1,
 	'PA_NO_WDMKS' : 1,
 	'SIZEOF_SHORT' : 2,
