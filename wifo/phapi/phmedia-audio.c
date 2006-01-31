@@ -1620,7 +1620,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 					stream->ms.remote_ip,
 					stream->ms.remote_port);
 	  
-	  pg_printf("ph_msessio_audio_start: audio stream reset done\n");
+	  ph_printf("ph_msession_audio_start: audio stream reset done\n");
 	  PH_MSESSION_AUDIO_UNLOCK();
 	  return 0;
 	}
