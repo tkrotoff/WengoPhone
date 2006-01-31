@@ -14,7 +14,8 @@ args = {
 	'nullsipwrapper' : 0,
 	'enable-samplerate' : 0,
 	'enable-phapi-audio-arts' : 0,
-	'portaudio-oss' : 1,
+	'portaudio-oss' : 1,			#if 0 alsa support
+	'portaudio-dsound' :1,			#if 0 wmme support
 	'enable-ipp' : 0,
 }
 

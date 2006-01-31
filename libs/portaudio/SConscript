@@ -64,16 +64,31 @@ sources_oss = [
 sources_win = [
 	'pa_win/pa_win_util.c',
 	'pa_win/pa_win_hostapis.c',
-	'pa_win_wmme/pa_win_wmme.c'
+]
+
+headers_win = [
+	'pa_win/pa_x86_plain_converters.h',
 ]
 
 source_msvc = [
 	'pa_win/pa_x86_plain_converters.c',
 ]
 
-headers_win = [
-	'pa_win/pa_x86_plain_converters.h'
+sources_wmme = [
+	'pa_win_wmme/pa_win_wmme.c'
+]
+
+headers_wmme = [
 	'pa_win_wmme/pa_win_wmme.h'
+]
+
+source_dsound = [
+    'pa_win_ds/dsound_wrapper.c',
+    'pa_win_ds/pa_win_ds.c'
+]
+
+headers_dsound = [
+    'pa_win_ds/dsound_wrapper.h'
 ]
 
 sources_mac = [
@@ -104,7 +119,7 @@ headers = headers_common
 if WengoOSLinux() or WengoOSBSD():
 	defines['PA_LITTLE_ENDIAN'] = 1
 	defines['HAVE_LIBPTHREAD'] = 1
-	libs += ['pthread', 'm']	
+	libs += ['pthread', 'm']
 	sources += sources_linux
 	headers += headers_linux
 	if WengoGetConsoleArgument('portaudio-oss') == 0:
@@ -126,8 +141,19 @@ elif WengoOSMacOSX():
 
 elif WengoOSWindows():
 	defines['PA_LITTLE_ENDIAN'] = 1
+	defines['PA_NO_ASIO'] = 1
+	defines['PA_NO_WDMKS'] = 1
 	sources += sources_win
 	headers += headers_win
+	
+	if WengoGetConsoleArgument('portaudio-dsound') == 1:
+		sources += source_dsound
+		headers += headers_dsound
+		defines['PA_NO_WMME'] = 1
+	else:
+		sources += sources_wmme
+		headers += headers_wmme
+		defines['PA_NO_DS'] = 1
 	if not WengoCCGCC():
 		sources += source_msvc
 
