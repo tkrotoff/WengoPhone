@@ -111,7 +111,7 @@ struct vadcng_info
 
 #define MAX_FRAME_SIZE 160
 #define PCM_TRACE_LEN (50*MAX_FRAME_SIZE)   /* data are stored for 50 frames of 10ms */ 
-#define MAX_OUTPUT_LATENCY 500  /* (milliseconds) */
+#define MAX_OUTPUT_LATENCY 125  /* (milliseconds) */
 
 enum EC_PHASE { EC_PRETRAINING=1, EC_TRAINING };
 

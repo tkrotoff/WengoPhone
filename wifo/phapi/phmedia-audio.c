@@ -121,6 +121,7 @@ static int ph_trace_mic = 0;       /* when nonzero show mean MIC signal level ea
 static int ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize);
 static int ph_generate_comfort_noice(phastream_t *stream, void *buf);
 
+int ph_ortp_session_object_size = sizeof(RtpSession);
 
 static void cb_put(struct circbuf *cb, char *data, int len);
 static void cb_get(struct circbuf *cb, char **chunk1, int *chunk1len,  char **chunk2, int *chhunk2len, int len);
@@ -1789,9 +1790,11 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	{
 	  const char *lat = getenv("PH_ECHO_LATENCY");
 
+#if 0
 	  if (!lat)
 	    lat = "120"; 
-        
+#endif
+      
 	  stream->audio_loop_latency = 0;
       
 	  if (lat)

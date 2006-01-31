@@ -46,9 +46,16 @@ void *ph_speexwb_enc_init(void *dummy);
 void *ph_speexwb_dec_init(void *dummy);
 int ph_speexwb_decode(void *ctx, const void *src, int srcsize, void *dst, int dstsize);
 
+#ifndef PH_SPEEXWB_REPLACES_AMRWB    
+#define SPEEX_PAYLOAD_STRING "SPEEX"
+#else
+#define SPEEX_PAYLOAD_STRING "AMR-WB"
+#endif
+
+
 static phcodec_t speexwb_codec =
 {
-  "SPEEX", 16000, SPEEX_WB_ENCODED_FRAME_SIZE, SPEEX_WB_FRAME_SAMPLES*2, 
+  SPEEX_PAYLOAD_STRING, 16000, SPEEX_WB_ENCODED_FRAME_SIZE, SPEEX_WB_FRAME_SAMPLES*2, 
   ph_speexwb_enc_init, ph_speexwb_dec_init, 
   ph_speex_enc_cleanup, ph_speex_dec_cleanup,  
   ph_speex_encode, ph_speexwb_decode

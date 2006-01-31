@@ -72,6 +72,7 @@
 
 
 static int rtp_ses_count;
+int ortp_session_opbject_size = sizeof(RtpSession);
 
 void
 rtp_session_set_cng_pts (RtpSession * session, int spt, int rpt)

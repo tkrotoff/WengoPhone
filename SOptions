@@ -16,6 +16,7 @@ args = {
 	'enable-phapi-audio-arts' : 0,
 	'portaudio-oss' : 1,			#if 0 alsa support
 	'portaudio-dsound' :1,			#if 0 wmme support
+    'speexwb-replaces-amrwb' : 1,
 	'enable-ipp' : 0,
 }
 

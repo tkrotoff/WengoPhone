@@ -9,12 +9,20 @@ amr_env.WengoAddCCFlags(WengoGetVariable('phapi_optimization_flags'))
 amr = amr_env.WengoPlugin('phamrplugin', ['phcodec-amr-wrapper.c'])
 
 
+
 speex_env = WengoGetEnvironment()
 speex_libs = [
 	'speex',
 ]
+speex_defines = {}
 speex_env.WengoUseLibraries(speex_libs)
 speex_env.WengoAddCCFlags(WengoGetVariable('phapi_optimization_flags'))
+
+if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
+    speex_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
+
+speex_env.WengoAddDefines(speex_defines)
+
 speex_env.Append(LIBS = speex_libs)
 speex = speex_env.WengoPlugin('phspeexplugin', ['phcodec-speex.c'])
 
@@ -201,6 +209,9 @@ if WengoOSWindows():
 if WengoOSMacOSX():
 	sources += ['phmedia-coreaudio.c']
 
+
+if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
+    defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
 
 env.WengoAddIncludePath(include_path)
 env.WengoAddDefines(defines)

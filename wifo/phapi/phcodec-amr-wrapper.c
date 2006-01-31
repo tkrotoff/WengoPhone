@@ -444,7 +444,9 @@ static phcodec_t amr_wb_codec =
 
 DLLEXPORT int ph_codec_plugin_init(void (*codec_register)(phcodec_t *))
 {
+#ifndef PH_SPEEXWB_REPLACES_AMRWB    
   codec_register(&amr_wb_codec);
+#endif
   codec_register(&amr_codec);
 
   return 0;
