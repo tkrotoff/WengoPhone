@@ -218,6 +218,8 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
   inputParameters.sampleFormat = paInt16;
 
   inputParameters.suggestedLatency = Pa_GetDeviceInfo( inputParameters.device )->defaultLowInputLatency; // latencymsecs / 1000.0;
+  if (inputParameters.suggestedLatency == 0.0)
+    inputParameters.suggestedLatency = latencymsecs / 1000.0;
 
 
   inputParameters.hostApiSpecificStreamInfo = 0;
@@ -225,11 +227,14 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
 
   outputParameters.channelCount = 1;   
   outputParameters.sampleFormat = paInt16;
-  outputParameters.suggestedLatency = Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency; // latencymsecs / 1000.0;
+  outputParameters.suggestedLatency = Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency; 
+  if (outputParameters.suggestedLatency == 0.0)
+    outputParameters.suggestedLatency = latencymsecs / 1000.0;
+
   outputParameters.hostApiSpecificStreamInfo = 0;
 
 
-  ph_printf("pa_dev_open:  suggested latencies  in = %d ms, out = %d ms\n",  (int) (inputParameters.suggestedLatency * 1000.0),
+  ph_printf("pa_dev_open: using latencies  in = %d ms, out = %d ms\n",  (int) (inputParameters.suggestedLatency * 1000.0),
 	    (int) (outputParameters.suggestedLatency * 1000.0));
 
 
