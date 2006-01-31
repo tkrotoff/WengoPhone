@@ -22,9 +22,19 @@
 #include <windows.h>
 
 /**
- * Key registry for the default playback audio device.
+ * Registry path for the default audio device.
  */
 static const char * DEFAULT_PLAYBACK_DEVICE_REGISTRY_KEY = "Software\\Microsoft\\Multimedia\\Sound Mapper\\";
+
+/**
+ * Registry key for the default playback audio device.
+ */
+static const char * PLAYBACK_DEVICE_REGISTRY_KEY = "Playback";
+
+/**
+ * Registry key for the default record audio device.
+ */
+static const char * RECORD_DEVICE_REGISTRY_KEY = "Record";
 
 /**
  * Sets the SetupPreferredAudioDevicesCount registry key.
@@ -79,10 +89,10 @@ bool setSetupPreferredAudioDevicesCount() {
  * This is an ugly trick but it seems to work...
  *
  * @param deviceName name of the default audio device
- * @param deviceType can be "playback" or "record"
+ * @param registryKeyDeviceType registry key name, should be "Playback" or "Record"
  * @return true if the default audio device was changed, false if an error occured
  */
-bool setDefaultDevice(const std::string & deviceName, const std::string & deviceType) {
+bool setDefaultDeviceToRegistry(const std::string & deviceName, const std::string & registryKeyDeviceType) {
 	HKEY hKey;
 	DWORD dwDisposition;
 	bool ret = false;	//Return value, false by default
@@ -93,7 +103,7 @@ bool setDefaultDevice(const std::string & deviceName, const std::string & device
 			0, 0, REG_OPTION_NON_VOLATILE,
 			KEY_WRITE, 0, &hKey, &dwDisposition);
 
-	if (ERROR_SUCCESS == ::RegSetValueExA(hKey, deviceType.c_str(), 0, REG_SZ,
+	if (ERROR_SUCCESS == ::RegSetValueExA(hKey, registryKeyDeviceType.c_str(), 0, REG_SZ,
 				(const BYTE *) deviceName.c_str(), deviceName.length())) {
 		ret = ret && true;
 	}
@@ -119,45 +129,80 @@ bool setDefaultDevice(const std::string & deviceName, const std::string & device
 	return ret;
 }
 
-std::string AudioDevice::getDefaultPlaybackDevice() {
+/**
+ * Gets the default audio device given its registry key.
+ *
+ * Uses the Windows registry.
+ *
+ * Reads the registry keys:
+ * HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Sound Mapper\Playback
+ * HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Sound Mapper\Record
+ *
+ * @param registryKeyDeviceType registry key name, should be "Playback" or "Record"
+ * @return the default device from the registry key or null
+ */
+std::string getDefaultDeviceFromRegistry(const std::string & registryKeyDeviceType) {
 	HKEY hKey;
 
-	//Try to find the default playback audio device using the registry
+	//Try to find the default audio device using the registry
 	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_CURRENT_USER, DEFAULT_PLAYBACK_DEVICE_REGISTRY_KEY,
 					0, KEY_QUERY_VALUE, &hKey)) {
 
 		DWORD dwDataType = REG_SZ;
 		DWORD dwSize = 255;
-		char * playbackKeyValue = (char *) malloc(dwSize * sizeof(char));
+		char * defaultDeviceKeyValue = (char *) malloc(dwSize * sizeof(char));
 
-		if (ERROR_SUCCESS == ::RegQueryValueExA(hKey, "Playback", 0, &dwDataType,
-					(BYTE *) playbackKeyValue, &dwSize)) {
+		if (ERROR_SUCCESS == ::RegQueryValueExA(hKey, registryKeyDeviceType.c_str(), 0, &dwDataType,
+					(BYTE *) defaultDeviceKeyValue, &dwSize)) {
 
 			::RegCloseKey(hKey);
-			return playbackKeyValue;
+			return defaultDeviceKeyValue;
 		}
-		free(playbackKeyValue);
+		free(defaultDeviceKeyValue);
 	}
 
-	WAVEOUTCAPSA outcaps;
+	//Cannot determine the default audio device
+	return String::null;
+}
 
-	//We didn't find the default playback audio device using the registry
-	//Try using the device id = 0 => should be the default playback audio device
-	if (MMSYSERR_NOERROR == ::waveOutGetDevCapsA(0, &outcaps, sizeof(WAVEOUTCAPSA))) {
-		char * deviceName = strdup(outcaps.szPname);
-		return deviceName;
+std::string AudioDevice::getDefaultPlaybackDevice() {
+	if (getDefaultDeviceFromRegistry(PLAYBACK_DEVICE_REGISTRY_KEY) == String::null) {
+		WAVEOUTCAPSA outcaps;
+
+		//We didn't find the default playback audio device using the registry
+		//Try using the device id = 0 => should be the default playback audio device
+		if (MMSYSERR_NOERROR == ::waveOutGetDevCapsA(0, &outcaps, sizeof(WAVEOUTCAPSA))) {
+			char * deviceName = strdup(outcaps.szPname);
+			return deviceName;
+		}
 	}
 
 	//Cannot determine the default playback audio device
-	return "";
+	return String::null;
+}
+
+std::string AudioDevice::getDefaultRecordDevice() {
+	if (getDefaultDeviceFromRegistry(RECORD_DEVICE_REGISTRY_KEY) == String::null) {
+		WAVEINCAPSA incaps;
+
+		//We didn't find the default record audio device using the registry
+		//Try using the device id = 0 => should be the default record audio device
+		if (MMSYSERR_NOERROR == ::waveInGetDevCapsA(0, &incaps, sizeof(WAVEINCAPSA))) {
+			char * deviceName = strdup(incaps.szPname);
+			return deviceName;
+		}
+	}
+
+	//Cannot determine the default playback audio device
+	return String::null;
 }
 
 bool AudioDevice::setDefaultPlaybackDevice(const std::string & deviceName) {
-	return setDefaultDevice(deviceName, "Playback");
+	return setDefaultDeviceToRegistry(deviceName, PLAYBACK_DEVICE_REGISTRY_KEY);
 }
 
 bool AudioDevice::setDefaultRecordDevice(const std::string & deviceName) {
-	return setDefaultDevice(deviceName, "Record");
+	return setDefaultDeviceToRegistry(deviceName, RECORD_DEVICE_REGISTRY_KEY);
 }
 
 StringList getMixerDeviceList(DWORD targetType) {
@@ -272,8 +317,3 @@ int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
 	//Default deviceId is 0
 	return 0;
 }
-
-std::string AudioDevice::getDefaultRecordDevice() {
-	return "";
-}
-

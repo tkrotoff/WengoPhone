@@ -51,7 +51,7 @@ public:
 	 * Plays a wave sound file given its name.
 	 *
 	 * @param filename name of the wave file to play
-	 * @return true if the file was played correctly, false otherwise
+	 * @return true if the sound file was played correctly; false otherwise
 	 */
 	bool play(const std::string & filename);
 

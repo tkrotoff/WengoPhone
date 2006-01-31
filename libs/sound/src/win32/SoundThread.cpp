@@ -51,7 +51,10 @@ void SoundThread::run() {
 
 	int i = 0;
 	while ((i < _loops || _loops == -1) && !_stop) {
-		soundFile.play(_filename);
+		if (!soundFile.play(_filename)) {
+			//If the file cannot be played, stop the thread
+			_stop = true;
+		}
 		i++;
 	}
 	_stop = false;
