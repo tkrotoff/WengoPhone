@@ -132,6 +132,7 @@ usage:\n\
 \t [-vad force VAD\n\
 \t [-cng force CNG\n\
 \t [-hdx level\n\
+\t [-noaec\n\
 \t [-h]\n\
 \t [-v]\n");
 
@@ -345,6 +346,10 @@ int main(int argc, const char *const *argv)
       else if (!strcmp(arg, "-cng"))
 	{
 	  phcfg.cng = 1;
+	}
+      else if (!strcmp(arg, "-noaec"))
+	{
+	  phcfg.noaec = 1;
 	}
       else if (!strcmp(arg, "-hdx"))
 	{
