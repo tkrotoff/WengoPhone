@@ -76,7 +76,7 @@ void pa_stream_close(phastream_t *as);
 #define PH_PA_OUTPUT 1
 #define PH_PA_INOUT 2
 
-static int ph_pa_latency = 80;
+static int ph_pa_latency = 60;
 
 struct ph_audio_driver ph_pa_driver = {
   "pa",
@@ -218,7 +218,7 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
   inputParameters.sampleFormat = paInt16;
 
   inputParameters.suggestedLatency = Pa_GetDeviceInfo( inputParameters.device )->defaultLowInputLatency; // latencymsecs / 1000.0;
-  if (inputParameters.suggestedLatency == 0.0)
+  //  if (inputParameters.suggestedLatency == 0.0)
     inputParameters.suggestedLatency = latencymsecs / 1000.0;
 
 
@@ -228,7 +228,7 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
   outputParameters.channelCount = 1;   
   outputParameters.sampleFormat = paInt16;
   outputParameters.suggestedLatency = Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency; 
-  if (outputParameters.suggestedLatency == 0.0)
+  //  if (outputParameters.suggestedLatency == 0.0)
     outputParameters.suggestedLatency = latencymsecs / 1000.0;
 
   outputParameters.hostApiSpecificStreamInfo = 0;
