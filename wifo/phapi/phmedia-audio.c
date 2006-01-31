@@ -1661,7 +1661,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
     }
 
   stream->ms.mses = s;
-  stream->clock_rate = stream->actual_rate = ph_media_get_clock_rate(sp->ipayloads[0].number);
+  stream->clock_rate = stream->actual_rate = codec->clockrate;
   stream->cngi.vad = (sp->flags & PH_MSTREAM_FLAG_VAD)?1:0;
   stream->cngi.pwr_threshold = sp->vadthreshold;
   stream->cngi.cng = (sp->flags & PH_MSTREAM_FLAG_CNG)?1:0;

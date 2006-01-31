@@ -1,8 +1,19 @@
 import os
 
+
+if WengoGetConsoleArgument('speexwb-replaces-amrwb') and  WengoGetConsoleArgument('speexwb-replaces-amrnb'):
+   print "******* Please Select ONLY ONE of: [ speexwb-replaces-amrwb  speexwb-replaces-amrnb]"
+   Exit(1)
+
+   
+
 amr_defines = { }
 if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
     amr_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
+
+if WengoGetConsoleArgument('speexwb-replaces-amrnb'):
+    amr_defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1    
+
 
 amr_env = WengoGetEnvironment()
 amr_libs = [
@@ -10,8 +21,6 @@ amr_libs = [
 	'amrnb',
 ]
 
-if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
-    amr_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
 
 amr_env.WengoAddDefines(amr_defines)
 amr_env.WengoUseLibraries(amr_libs)
@@ -30,6 +39,10 @@ speex_env.WengoAddCCFlags(WengoGetVariable('phapi_optimization_flags'))
 
 if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
     speex_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
+
+if WengoGetConsoleArgument('speexwb-replaces-amrnb'):
+    speex_defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1
+
 
 speex_env.WengoAddDefines(speex_defines)
 
@@ -222,6 +235,9 @@ if WengoOSMacOSX():
 
 if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
     defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
+
+if WengoGetConsoleArgument('speexwb-replaces-amrnb'):
+    defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1
 
 env.WengoAddIncludePath(include_path)
 env.WengoAddDefines(defines)

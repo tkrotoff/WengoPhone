@@ -46,10 +46,12 @@ void *ph_speexwb_enc_init(void *dummy);
 void *ph_speexwb_dec_init(void *dummy);
 int ph_speexwb_decode(void *ctx, const void *src, int srcsize, void *dst, int dstsize);
 
-#ifndef PH_SPEEXWB_REPLACES_AMRWB    
-#define SPEEX_PAYLOAD_STRING "SPEEX"
-#else
+#ifdef PH_SPEEXWB_REPLACES_AMRWB    
 #define SPEEX_PAYLOAD_STRING "AMR-WB"
+#elif defined(PH_SPEEXWB_REPLACES_AMRNB)    
+#define SPEEX_PAYLOAD_STRING "AMR"
+#else
+#define SPEEX_PAYLOAD_STRING "SPEEX"
 #endif
 
 
