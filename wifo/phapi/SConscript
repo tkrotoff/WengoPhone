@@ -226,7 +226,10 @@ if WengoOSWindows():
 		'shell32',
 		'advapi32',
 		'wininet',
-		'iphlpapi'
+		'iphlpapi',
+        'strmiids',
+        'comsupp',
+        'ole32',
 	]
 
 if WengoOSMacOSX():
