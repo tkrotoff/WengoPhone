@@ -1,9 +1,19 @@
 import os
+
+amr_defines = { }
+if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
+    amr_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
+
 amr_env = WengoGetEnvironment()
 amr_libs = [
 	'amrwb',
 	'amrnb',
 ]
+
+if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
+    amr_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
+
+amr_env.WengoAddDefines(amr_defines)
 amr_env.WengoUseLibraries(amr_libs)
 amr_env.WengoAddCCFlags(WengoGetVariable('phapi_optimization_flags'))
 amr = amr_env.WengoPlugin('phamrplugin', ['phcodec-amr-wrapper.c'])
