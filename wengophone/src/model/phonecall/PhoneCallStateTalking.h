@@ -39,7 +39,7 @@ public:
 	}
 
 	std::string toString() const {
-		return "PhoneCallStateOk";
+		return "PhoneCallStateTalking";
 	}
 
 	void execute(PhoneCall & phoneCall);
