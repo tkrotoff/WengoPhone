@@ -23,6 +23,7 @@
 #include <List.h>
 
 #include <string>
+#include <list>
 
 /**
  * std::string wrapper/helper.
@@ -56,7 +57,7 @@ public:
 	String(const std::string & str) : std::string(str) { }
 
 	/**
-	 * Converts a String to std::string.
+	 * Converts this String to std::string.
 	 *
 	 * @return the converted String to std::string
 	 */
@@ -189,11 +190,13 @@ public:
  */
 class StringList : public List<std::string> {
 public:
-	//Sorting order
-	typedef enum {
-		Ascendant,
-		Descendant
-	} SortingOrder;
+
+	/**
+	 * Converts this StringList to std::list<std::string>.
+	 *
+	 * @return the converted StringList to std::list<std::string>
+	 */
+	operator std::list<std::string>();
 
 	/**
 	 * Permits to use StringList as an array.
@@ -241,8 +244,13 @@ public:
 	 */
 	static StringList split(const std::string & str, const std::string & separator = " ");
 
+	enum SortingOrder {
+		Ascendant,
+		Descendant
+	};
+
 	/**
-	 * Sort the string list alphabatically
+	 * Sort the string list alphabetically
 	 *
 	 * @param order sorting order
 	 */

@@ -146,7 +146,13 @@ std::string String::encodeUrl(const std::string & str) {
 	return out;
 }
 
-
+StringList::operator std::list<std::string>() {
+	std::list<std::string> stringList;
+	for (unsigned i = 0; i < size(); i++) {
+		stringList.push_back((*this)[i]);
+	}
+	return stringList;
+}
 
 StringList StringList::split(const std::string & str, const std::string & separator) {
 	//Skip separator at beginning.
