@@ -89,6 +89,12 @@ void kill_AEC(void *ec);
 #endif
 
 
+GMutex *ph_audio_mux;
+
+#define PH_MSESSION_AUDIO_LOCK() g_mutex_lock(ph_audio_mux)
+#define PH_MSESSION_AUDIO_UNLOCK() g_mutex_unlock(ph_audio_mux)
+
+
 #define CNG_TBL_SIZE 128
 /* table for CNG generation */
 
@@ -1485,16 +1491,25 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   RtpProfile *rprofile = &av_profile;
   RtpProfile *sprofile = &av_profile;
   ph_mstream_params_t *sp = &s->streams[PH_MSTREAM_AUDIO1];
+  int newstreams;
 
-
+  PH_MSESSION_AUDIO_LOCK();
   ph_printf("ph_msession_audio_start: deviceId:%s\n", deviceId);
 
-  if (!(s->newstreams & (1 << PH_MSTREAM_AUDIO1)))
-    return 0;
+  newstreams = s->newstreams;
+  s->newstreams = 0;
+
+  if (!(newstreams & (1 << PH_MSTREAM_AUDIO1)))
+    {
+      PH_MSESSION_AUDIO_UNLOCK();
+      return 0;
+    }
 
   if (!sp->localport || !sp->remoteport)
-    return 0;
-
+    {
+      PH_MSESSION_AUDIO_UNLOCK();
+      return 0;
+    }
 
   /* 
 	Audio device selection:
@@ -1516,6 +1531,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
   if (ph_activate_audio_driver(deviceId))
     {
+      PH_MSESSION_AUDIO_UNLOCK();
       return -PH_NORESOURCES;
     }
 
@@ -1552,6 +1568,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	  if ((stream->ms.payload ==  sp->ipayloads[0].number) &&  !strcmp(stream->ms.remote_ip, sp->remoteaddr))
 	    {
 	      ph_printf("ph_msession_audio_start: reusing current stream\n");
+	      PH_MSESSION_AUDIO_UNLOCK();
 	      return 0;
 	    }
 	}
@@ -1570,13 +1587,14 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	      RtpTunnel *newTun, *old;
 	      RtpTunnel *newTun2, *old2;
 	      
-	      ph_printf("ph_msessio_audio_start: Replacing audio tunnel\n");
+	      ph_printf("ph_msessio_audio_start Replacing audio tunnel\n");
 	      newTun = rtptun_connect(stream->ms.remote_ip, stream->ms.remote_port);
 	      
 	      if (!newTun)
 		{
 		  ph_printf("ph_msession_audio_start: Audio tunnel replacement failed\n");
 		  sp->flags |= ~PH_MSTREAM_FLAG_RUNNING;
+		  PH_MSESSION_AUDIO_UNLOCK();
 		  return -PH_NORESOURCES;
 		}
 	      
@@ -1602,7 +1620,8 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 					stream->ms.remote_ip,
 					stream->ms.remote_port);
 	  
-	  DBG("audio stream reset done\n");
+	  pg_printf("ph_msessio_audio_start: audio stream reset done\n");
+	  PH_MSESSION_AUDIO_UNLOCK();
 	  return 0;
 	}
       
@@ -1617,6 +1636,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   if (!codec)
     {
       ph_printf("ph_media_audio_start: found NO codec\n");
+      PH_MSESSION_AUDIO_UNLOCK();
       return -1;
     }
 
@@ -1681,6 +1701,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 //	  phcb->errorNotify(PH_NOMEDIA);
       ph_printf("ph_msession_audio_start: can't open  AUDIO device\n");
       free(stream);
+      PH_MSESSION_AUDIO_UNLOCK();
       return -PH_NORESOURCES;
     }
 
@@ -1703,7 +1724,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   session = rtp_session_new(RTP_SESSION_SENDRECV);
 #ifdef USE_HTTP_TUNNEL
   if (sp->flags & PH_MSTREAM_FLAG_TUNNEL)
-{
+    {
 	RtpTunnel *tun, *tun2;
 
 	ph_printf("ph_mession_audio_start: Creating audio tunnel\n");
@@ -1713,7 +1734,8 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
 	if (!tun)
 	{
-		return -PH_NORESOURCES;
+	  PH_MSESSION_AUDIO_UNLOCK();
+	  return -PH_NORESOURCES;
 	}
 
 	tun2 = rtptun_connect(sp->remoteaddr, sp->remoteport+1);
@@ -1723,7 +1745,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	stream->ms.tunRtp = tun;
 	stream->ms.tunRtcp = tun2;
 
-	}
+    }
 #endif  
 
 
@@ -1840,6 +1862,9 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
 
   ph_printf("ph_msession_audio_start: audio stream init OK\n");
+
+  PH_MSESSION_AUDIO_UNLOCK();
+
   return 0;
   // end branch 2
 
@@ -2413,7 +2438,6 @@ void ph_media_audio_stop(phcall_t *ca)
 
 
 
-
 void 
 ph_media_audio_init()
 {
@@ -2448,6 +2472,7 @@ ph_media_audio_init()
   if (!first_time)
     return;
 
+  ph_audio_mux = g_mutex_new();
 #ifdef OS_WINDOWS
   ph_winmm_driver_init();
 #endif
