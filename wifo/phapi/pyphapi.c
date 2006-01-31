@@ -1,4 +1,3 @@
-
 /*
  * C/Python wrapper for phapi
  *
@@ -24,7 +23,6 @@
 /*
  * @æuthor David Ferlier <david.ferlier@wengo.fr>
  * @author Mathieu Stute <mathieu.stute@wengo.fr>
- *
  */
 
 /*
@@ -34,9 +32,7 @@
  *  - sendDTMF
  *  - play/stop soundfile
  *  - rec/speaker set volume
- *  - changeAudioDevice
  *  - getNatInfo
- *  - phGetConfig
  *  - conference functions
  *
  *  - phCallStateEvent
@@ -89,6 +85,7 @@ static PyObject *pyphapi_onNotify = NULL;
 static PyObject *pyphapi_transferProgress = NULL;
 static PyObject *pyphapi_msgProgress = NULL;
 static PyObject *pyphapi_errorNotify = NULL;
+
 
 /*
  * @brief Initializes the module
@@ -420,6 +417,26 @@ static PyObject * PyPhAcceptCall2(PyObject *self, PyObject *params) {
     return Py_BuildValue("i", ret);
 }
 
+
+/*
+ * @brief Wraps phAcceptCall3()
+ *
+ */
+
+static PyObject * PyPhAcceptCall3(PyObject *self, PyObject *params) {
+    int cid;
+    int ret;
+    void *userdata;
+    int stream;
+
+    if (PyArg_ParseTuple(params, "iO&i", &cid, &userdata, &stream)) {
+        ret = phAcceptCall3(cid, userdata, stream);
+    }
+
+    return Py_BuildValue("i", ret);
+}
+
+
 /*
  * @brief Wraps phRejectCall()
  *
@@ -599,20 +616,48 @@ static PyObject * PyPhResumeCall(PyObject *self, PyObject *params) {
  * @brief Wraps phHoldCall
  *
  */
-
 static PyObject * PyPhHoldCall(PyObject *self, PyObject *params) {
-    int cid;
-    int ret;
-
-    if (PyArg_ParseTuple(params, "i", &cid)) {
-        ret = phHoldCall(cid);
-    }
-
-    return Py_BuildValue("i", ret);
+	int cid;
+	int ret;
+	
+	if (PyArg_ParseTuple(params, "i", &cid)) {
+		ret = phHoldCall(cid);
+	}
+	
+	return Py_BuildValue("i", ret);
 }
 
+/*
+ * @brief Wraps phSendDtmf
+ *
+ */
+static PyObject * PyPhSendDtmf(PyObject *self, PyObject *params) {
+	int cid;
+	int dtmfChar;
+	int mode;
+	int ret;
+	
+	if (PyArg_ParseTuple(params, "iii", &cid, &dtmfChar, &mode)) {
+		ret = phSendDtmf(cid, dtmfChar, mode);
+	}
+	
+	return Py_BuildValue("i", ret);
+}
 
-
+/*
+ * @brief Wraps phChangeAudioDevices
+ *
+ */
+static PyObject * PyPhChangeAudioDevices(PyObject *self, PyObject *params) {
+	char * devstr;
+	int ret;
+	
+	if (PyArg_ParseTuple(params, "s", &devstr)) {
+		ret = phChangeAudioDevices(devstr);
+	}
+	
+	return Py_BuildValue("i", ret);
+}
 
 
 /*
@@ -792,7 +837,6 @@ static void pyphapi_callback_frameDisplay(int cid, phVideoFrameReceivedEvent_t *
 }
 
 
-
 static PyObject * PyPhCfgSet(PyObject *self, PyObject *params) {
 	char * field;
 	int value_int;
@@ -816,9 +860,9 @@ static PyObject * PyPhCfgSet(PyObject *self, PyObject *params) {
 		if( strcmp(field, "httpt_server_port" ) == 0) {cfg->httpt_server_port=value_int;}
 		if( strcmp(field, "http_proxy_port" ) == 0) {cfg->http_proxy_port=value_int;}
 	}
-
-	else if (PyArg_ParseTuple(params, "ss", &field, &value_string)) {
-
+	
+	if (PyArg_ParseTuple(params, "ss", &field, &value_string)) {
+		
 		if( strcmp(field, "audio_dev" )==0) {strncpy(cfg->audio_dev, value_string,64);}
 		if( strcmp(field, "local_rtp_port" )==0) {strncpy(cfg->local_rtp_port, value_string,16);}
 		if( strcmp(field, "local_audio_rtcp_port" )==0) {strncpy(cfg->local_audio_rtcp_port, value_string,16);}
@@ -835,10 +879,6 @@ static PyObject * PyPhCfgSet(PyObject *self, PyObject *params) {
 		if( strcmp(field, "http_proxy_user" )==0) {strncpy(cfg->http_proxy_user, value_string,128);}
 		if( strcmp(field, "http_proxy_passwd" )==0) {strncpy(cfg->http_proxy_passwd, value_string,128);}
 		if( strcmp(field, "plugin_path" )==0) {strncpy(cfg->plugin_path, value_string,256);}
-		
-	} else {
-		printf("Fatal error: PyPhCfgSet(), bad argument type\n");
-		exit(1);
 	}
 	
 	return Py_None;
@@ -864,35 +904,38 @@ static PyObject * PyPhCfgSet(PyObject *self, PyObject *params) {
 
 static PyMethodDef pyphapi_funcs[] = {
     { "pyphapi",(PyCFunction) pyphapi, METH_NOARGS,  "Python Module of phApi"},
-    PY_PHAPI_FUNCTION_DECL("phInit",			PyPhInit),
-    PY_PHAPI_FUNCTION_DECL("phAddAuthInfo",		PyPhAddAuthInfo),
-    PY_PHAPI_FUNCTION_DECL("phAddVline",		PyPhAddVline),
-    PY_PHAPI_FUNCTION_DECL("phAddVline2",		PyPhAddVline2),
-    PY_PHAPI_FUNCTION_DECL("phSetCallbacks",		PyPhSetCallbacks),
-    PY_PHAPI_FUNCTION_DECL("phPoll",			PyPhPoll),
-    PY_PHAPI_FUNCTION_DECL("phRefresh",			PyPhRefresh),
-    PY_PHAPI_FUNCTION_DECL("phTerminate",		PyPhTerminate),
-    PY_PHAPI_FUNCTION_DECL("phTunnelConfig",		PyPhTunnelConfig),
-    PY_PHAPI_FUNCTION_DECL("phLinePlaceCall2",		PyPhLinePlaceCall2),
-    PY_PHAPI_FUNCTION_DECL("phLineSendOptions",		PyPhLineSendOptions),
-    PY_PHAPI_FUNCTION_DECL("phLineSendMessage",		PyPhLineSendMessage),
-    PY_PHAPI_FUNCTION_DECL("phLineSubscribe",		PyPhLineSubscribe),
-    PY_PHAPI_FUNCTION_DECL("phLineSetFollowMe",		PyPhLineSetFollowMe),
-    PY_PHAPI_FUNCTION_DECL("phLineSetBusy",		PyPhLineSetBusy),
-    PY_PHAPI_FUNCTION_DECL("phLinePublish",		PyPhLinePublish),
-    PY_PHAPI_FUNCTION_DECL("phAcceptCall2",		PyPhAcceptCall2),
-    PY_PHAPI_FUNCTION_DECL("phRejectCall",		PyPhRejectCall),
-    PY_PHAPI_FUNCTION_DECL("phCloseCall",		PyPhCloseCall),
-    PY_PHAPI_FUNCTION_DECL("phRingingCall",		PyPhRingingCall),
-    PY_PHAPI_FUNCTION_DECL("phSendMessage",		PyPhSendMessage),
-    PY_PHAPI_FUNCTION_DECL("phSubscribe",		PyPhSubscribe),
-    PY_PHAPI_FUNCTION_DECL("phPublish",			PyPhPublish),
-    PY_PHAPI_FUNCTION_DECL("phDelVline",		PyPhDelVline),
-    PY_PHAPI_FUNCTION_DECL("phTransferCall",		PyPhTransferCall),
-    PY_PHAPI_FUNCTION_DECL("phBlindTransferCall",	PyPhBlindTransferCall),
-    PY_PHAPI_FUNCTION_DECL("phResumeCall",		PyPhResumeCall),
-    PY_PHAPI_FUNCTION_DECL("phHoldCall",		PyPhHoldCall),
-    PY_PHAPI_FUNCTION_DECL("phCfgSet",			PyPhCfgSet),
+    PY_PHAPI_FUNCTION_DECL("phInit",                PyPhInit),
+    PY_PHAPI_FUNCTION_DECL("phAddAuthInfo",         PyPhAddAuthInfo),
+    PY_PHAPI_FUNCTION_DECL("phAddVline",            PyPhAddVline),
+    PY_PHAPI_FUNCTION_DECL("phAddVline2",           PyPhAddVline2),
+    PY_PHAPI_FUNCTION_DECL("phSetCallbacks",        PyPhSetCallbacks),
+    PY_PHAPI_FUNCTION_DECL("phPoll",                PyPhPoll),
+    PY_PHAPI_FUNCTION_DECL("phRefresh",             PyPhRefresh),
+    PY_PHAPI_FUNCTION_DECL("phTerminate",           PyPhTerminate),
+    PY_PHAPI_FUNCTION_DECL("phTunnelConfig",        PyPhTunnelConfig),
+    PY_PHAPI_FUNCTION_DECL("phLinePlaceCall2",      PyPhLinePlaceCall2),
+    PY_PHAPI_FUNCTION_DECL("phLineSendOptions",     PyPhLineSendOptions),
+    PY_PHAPI_FUNCTION_DECL("phLineSendMessage",     PyPhLineSendMessage),
+    PY_PHAPI_FUNCTION_DECL("phLineSubscribe",       PyPhLineSubscribe),
+    PY_PHAPI_FUNCTION_DECL("phLineSetFollowMe",     PyPhLineSetFollowMe),
+    PY_PHAPI_FUNCTION_DECL("phLineSetBusy",         PyPhLineSetBusy),
+    PY_PHAPI_FUNCTION_DECL("phLinePublish",         PyPhLinePublish),
+    PY_PHAPI_FUNCTION_DECL("phAcceptCall2",         PyPhAcceptCall2),
+    PY_PHAPI_FUNCTION_DECL("phAcceptCall3",         PyPhAcceptCall3),
+    PY_PHAPI_FUNCTION_DECL("phRejectCall",          PyPhRejectCall),
+    PY_PHAPI_FUNCTION_DECL("phCloseCall",           PyPhCloseCall),
+    PY_PHAPI_FUNCTION_DECL("phRingingCall",         PyPhRingingCall),
+    PY_PHAPI_FUNCTION_DECL("phSendMessage",         PyPhSendMessage),
+    PY_PHAPI_FUNCTION_DECL("phSubscribe",           PyPhSubscribe),
+    PY_PHAPI_FUNCTION_DECL("phPublish",             PyPhPublish),
+    PY_PHAPI_FUNCTION_DECL("phDelVline",            PyPhDelVline),
+    PY_PHAPI_FUNCTION_DECL("phTransferCall",        PyPhTransferCall),
+    PY_PHAPI_FUNCTION_DECL("phBlindTransferCall",   PyPhBlindTransferCall),
+    PY_PHAPI_FUNCTION_DECL("phResumeCall",          PyPhResumeCall),
+    PY_PHAPI_FUNCTION_DECL("phHoldCall",            PyPhHoldCall),
+    PY_PHAPI_FUNCTION_DECL("phCfgSet",              PyPhCfgSet),
+    PY_PHAPI_FUNCTION_DECL("phSendDtmf",            PyPhSendDtmf),
+    PY_PHAPI_FUNCTION_DECL("phChangeAudioDevices",  PyPhChangeAudioDevices),
     PY_PHAPI_FUNCTION_DECL_NULL,
 };
 
@@ -904,4 +947,3 @@ static PyMethodDef pyphapi_funcs[] = {
 PyMODINIT_FUNC initpyphapi(void) {
     Py_InitModule3("pyphapi", pyphapi_funcs, "");
 }
-

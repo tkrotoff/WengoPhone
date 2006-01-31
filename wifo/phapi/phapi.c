@@ -2744,19 +2744,22 @@ phInit(phCallbacks_t *cbk, char * server, int asyncmode)
   ph_avcodec_init();
   ph_calls_init();
 
-  i = ph_tunnel_init();
-  if (i)
-    return i;
+  if (phcfg.use_tunnel) 
+    {
+      i = ph_tunnel_init();
+      if (i)
+        return i;
+    }
 
   if (phcfg.proxy[0])
     {
       char tmp[256];
       
       if (!strchr(phcfg.proxy, '<'))
-	{
-	snprintf(tmp, sizeof(tmp), "<sip:%s;lr>", phcfg.proxy); 
-	strncpy(phcfg.proxy, tmp, sizeof(phcfg.proxy));
-	}
+        {
+          snprintf(tmp, sizeof(tmp), "<sip:%s;lr>", phcfg.proxy); 
+          strncpy(phcfg.proxy, tmp, sizeof(phcfg.proxy));
+        }
     }
 
 #ifdef FORCE_VAD
