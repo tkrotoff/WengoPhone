@@ -25,9 +25,9 @@
 
 #include <NonCopyable.h>
 
-class Volume;
-
 #include <string>
+
+class Volume;
 
 /**
  * Sound mixer managing: gets and sets the volume of

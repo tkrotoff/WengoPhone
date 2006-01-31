@@ -20,6 +20,8 @@
 #include <SoundMixer.h>
 
 #include <AudioDevice.h>
+#include <Logger.h>
+
 #include "Volume.h"
 
 #include <string>
@@ -34,8 +36,8 @@ SoundMixer::SoundMixer(const std::string & inputDeviceName, const std::string & 
 	int outputDeviceId = AudioDevice::getMixerDeviceId(outputDeviceName);
 
 	if (!inputDeviceName.empty() && !outputDeviceName.empty()) {
-		cerr << "SoundMixer: audio devices: in= " << inputDeviceName << inputDeviceId <<
-						" out= " << outputDeviceName << outputDeviceId << endl;
+		LOG_DEBUG("SoundMixer: audio devices: in= " + inputDeviceName + String::fromNumber(inputDeviceId)
+						+ " out= " + outputDeviceName + String::fromNumber(outputDeviceId));
 	}
 
 	if (inputDeviceId == -1 || outputDeviceId == -1) {

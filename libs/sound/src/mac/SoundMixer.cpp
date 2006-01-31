@@ -29,7 +29,7 @@ SoundMixer::SoundMixer(const std::string & /*inputDeviceName*/, const std::strin
 void SoundMixer::closeMixers() {
 }
 
-int SoundMixer::getOutputVolume() {	
+int SoundMixer::getOutputVolume() {
 }
 
 int SoundMixer::getInputVolume() {

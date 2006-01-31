@@ -27,10 +27,9 @@
  *
  * @author Mathieu Stute
  */
-
 class Volume {
 public:
-  Volume();
+	Volume();
 };
 
 #endif	//VOLUME_H

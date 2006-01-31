@@ -32,127 +32,127 @@
 #include <iostream>
 using namespace std;
 
-const char *sound_device_names[] = SOUND_DEVICE_NAMES;
+const char * sound_device_names[] = SOUND_DEVICE_NAMES;
 
 SoundMixer::SoundMixer(const std::string & /*inputDeviceName*/, const std::string & /*outputDeviceName*/)
-	throw (NoSoundCardException, SoundMixerException) {
+	throw(NoSoundCardException, SoundMixerException) {
 }
 
 void SoundMixer::closeMixers() {
 }
 
 int SoundMixer::getOutputVolume() {
-	int fd,devmask,i,level;
-	
-	fd = open("/dev/mixer",O_RDONLY);
-	ioctl(fd,SOUND_MIXER_READ_DEVMASK,&devmask);
-	
+	int fd, devmask, i, level;
+
+	fd = open("/dev/mixer", O_RDONLY);
+	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
+
 	// Find device
-	for( i=0; i < SOUND_MIXER_NRDEVICES; i++ ) {
-		if(  ((1<<i)&devmask) &&!strcmp("pcm",sound_device_names[i])) {
+	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
+		if (((1 << i) & devmask) && !strcmp("pcm", sound_device_names[i])) {
 			break;
 		}
 	}
-	
-	ioctl(fd, MIXER_READ(i), &level);
+
+	ioctl(fd, MIXER_READ(i), & level);
 	level = level >> 8;
 	close(fd);
 	return level;
 }
 
 int SoundMixer::getInputVolume() {
-	int fd,devmask,i,level;
-	
-	fd = open("/dev/mixer",O_RDONLY);
-	ioctl(fd,SOUND_MIXER_READ_DEVMASK,&devmask);
-	
+	int fd, devmask, i, level;
+
+	fd = open("/dev/mixer", O_RDONLY);
+	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
+
 	// Find device
-	for( i=0; i < SOUND_MIXER_NRDEVICES; i++ ) {
-		if(  ((1<<i)&devmask) &&!strcmp("igain",sound_device_names[i])) {
+	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
+		if (((1 << i) & devmask) && !strcmp("igain", sound_device_names[i])) {
 			break;
 		}
 	}
-	
-	ioctl(fd, MIXER_READ(i), &level);
+
+	ioctl(fd, MIXER_READ(i), & level);
 	level = level >> 8;
 	close(fd);
 	return level;
 }
 
 void SoundMixer::setOutputVolume(int volume) {
-	int fd,devmask,i,level;
-	
-	fd = open("/dev/mixer",O_RDONLY);
-	ioctl(fd,SOUND_MIXER_READ_DEVMASK,&devmask);
-	
+	int fd, devmask, i, level;
+
+	fd = open("/dev/mixer", O_RDONLY);
+	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
+
 	// Find device
-	for( i=0; i < SOUND_MIXER_NRDEVICES; i++ ) {
-		if(  ((1<<i)&devmask) &&!strcmp("pcm",sound_device_names[i])) {
+	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
+		if (((1 << i) & devmask) && !strcmp("pcm", sound_device_names[i])) {
 			break;
 		}
 	}
-	
-	level = (volume<<8)+volume;
-	ioctl(fd, MIXER_WRITE(i), &level);
+
+	level = (volume << 8) + volume;
+	ioctl(fd, MIXER_WRITE(i), & level);
 	close(fd);
 }
 
 void SoundMixer::setInputVolume(int volume) {
-	int fd,devmask,i,level;
-	
-	fd = open("/dev/mixer",O_RDONLY);
-	ioctl(fd,SOUND_MIXER_READ_DEVMASK,&devmask);
-	
+	int fd, devmask, i, level;
+
+	fd = open("/dev/mixer", O_RDONLY);
+	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
+
 	// Find device
-	for( i=0; i < SOUND_MIXER_NRDEVICES; i++ ) {
-		if(  ((1<<i)&devmask) &&!strcmp("igain",sound_device_names[i])) {
-				break;
+	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
+		if (((1 << i) & devmask) && !strcmp("igain", sound_device_names[i])) {
+			break;
 		}
 	}
-	
-	level = (volume<<8)+volume;
-	ioctl(fd, MIXER_WRITE(i), &level);
+
+	level = (volume << 8) + volume;
+	ioctl(fd, MIXER_WRITE(i), & level);
 	close(fd);
 }
 
 void SoundMixer::setMicPlayBack(bool mute) {
-	int fd,devmask,i,level;
-  
-	fd = open("/dev/mixer",O_RDONLY);
-	ioctl(fd,SOUND_MIXER_READ_DEVMASK,&devmask);
-	
+	int fd, devmask, i, level;
+
+	fd = open("/dev/mixer", O_RDONLY);
+	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
+
 	// Find device
-	for( i=0; i < SOUND_MIXER_NRDEVICES; i++ ) {
-		if(  ((1<<i)&devmask) &&!strcmp("mic",sound_device_names[i])) {
+	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
+		if (((1 << i) & devmask) && !strcmp("mic", sound_device_names[i])) {
 			break;
 		}
 	}
 
 	if (mute) {
-		level = (0<<8)+0;
-		ioctl(fd, MIXER_WRITE(i), &level);
+		level = (0 << 8) + 0;
+		ioctl(fd, MIXER_WRITE(i), & level);
 	} else {
-		level = (100<<8)+100;
-		ioctl(fd, MIXER_WRITE(i), &level);
+		level = (100 << 8) + 100;
+		ioctl(fd, MIXER_WRITE(i), & level);
 	}
 	close(fd);
 }
 
 bool SoundMixer::isPlaybackMuted() {
-	int fd,devmask,i,level;
-  
-	fd = open("/dev/mixer",O_RDONLY);
-	ioctl(fd,SOUND_MIXER_READ_DEVMASK,&devmask);
-	
+	int fd, devmask, i, level;
+
+	fd = open("/dev/mixer", O_RDONLY);
+	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
+
 	// Find device
-	for( i=0; i < SOUND_MIXER_NRDEVICES; i++ ) {
-		if(  ((1<<i)&devmask) &&!strcmp("mic",sound_device_names[i])) {
+	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
+		if (((1 << i) & devmask) && !strcmp("mic", sound_device_names[i])) {
 			break;
 		}
 	}
-	
-	ioctl(fd, MIXER_READ(i), &level);
+
+	ioctl(fd, MIXER_READ(i), & level);
 	level = level >> 8;
-	close(fd);	
+	close(fd);
 	return (level == 0);
 }

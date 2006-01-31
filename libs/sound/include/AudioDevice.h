@@ -21,15 +21,19 @@
 #define AUDIODEVICE_H
 
 #include <NonCopyable.h>
-#include <StringList.h>
+
+#include <list>
+#include <string>
 
 /**
- * Sound managing: get and set the wave out/in and default devices for Windows.
+ * Sound managing: gets and sets the wave out/in and default devices for Windows.
  *
  * Manage sound Windows routines.
  *
  * @author Philippe Kajmar
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
+ * @author David Ferlier
  */
 class AudioDevice : NonCopyable {
 public:
@@ -39,14 +43,14 @@ public:
 	 *
 	 * @return list of input mixer devices
 	 */
-	static StringList getInputMixerDeviceList();
+	static std::list<std::string> getInputMixerDeviceList();
 
 	/**
 	 * Gets the list of output mixer devices.
 	 *
 	 * @return list of output mixer devices
 	 */
-	static StringList getOutputMixerDeviceList();
+	static std::list<std::string> getOutputMixerDeviceList();
 
 	/**
 	 * Gets the default playback device.

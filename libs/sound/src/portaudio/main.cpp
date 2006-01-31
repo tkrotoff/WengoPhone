@@ -24,7 +24,7 @@
 #include <iostream>
 using namespace std;
 
-int main(int argc, char *argv[]) {
+int main(void) {
 	while (true) {
 		AudioDevice::getWaveOutDeviceId("SigmaTel Audio");
 		Sleep(5 * 1000);

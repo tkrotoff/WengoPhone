@@ -19,6 +19,8 @@
 
 #include <AudioDevice.h>
 
+#include <StringList.h>
+
 #include <windows.h>
 
 /**
@@ -247,11 +249,11 @@ StringList getMixerDeviceList(DWORD targetType) {
 	return listDevices;
 }
 
-StringList AudioDevice::getOutputMixerDeviceList() {
+std::list<std::string> AudioDevice::getOutputMixerDeviceList() {
 	return getMixerDeviceList(MIXERLINE_TARGETTYPE_WAVEOUT);
 }
 
-StringList AudioDevice::getInputMixerDeviceList() {
+std::list<std::string> AudioDevice::getInputMixerDeviceList() {
 	return getMixerDeviceList(MIXERLINE_TARGETTYPE_WAVEIN);
 }
 

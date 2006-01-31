@@ -19,39 +19,41 @@
 
 #include <AudioDevice.h>
 
+#include <StringList.h>
+
 #include <portaudio.h>
 
 #define PRINT_HOSTAPI
 
 #include <stdio.h>
 
-StringList AudioDevice::getInputMixerDeviceList() {
+std::list < std::string > AudioDevice::getInputMixerDeviceList() {
 	int i, numDevices;
-	const PaDeviceInfo *deviceInfo;
+	const PaDeviceInfo * deviceInfo;
 	PaError err;
 	StringList deviceList;
-	
+
 	Pa_Initialize();
-	 
+
 	//retrive number of device found
 	numDevices = Pa_GetDeviceCount();
-	if( numDevices < 0 ) {
-		printf( "ERROR: Pa_CountDevices returned 0x%x\n", numDevices );
+	if (numDevices < 0) {
+		printf("ERROR: Pa_CountDevices returned 0x%x\n", numDevices);
 		err = numDevices;
 		Pa_Terminate();
-		fprintf( stderr, "An error occured while using the portaudio stream\n" );
-		fprintf( stderr, "Error number: %d\n", err );
-		fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( err ) );
+		fprintf(stderr, "An error occured while using the portaudio stream\n");
+		fprintf(stderr, "Error number: %d\n", err);
+		fprintf(stderr, "Error message: %s\n", Pa_GetErrorText(err));
 		return StringList();
 	}
-	
+
 	//iterate over devices
-	for( i=0; i<numDevices; i++ ) {
-		deviceInfo = Pa_GetDeviceInfo( i );
-		
-		if( deviceInfo->maxInputChannels > 0 ) {
+	for (i = 0; i < numDevices; i++) {
+		deviceInfo = Pa_GetDeviceInfo(i);
+
+		if (deviceInfo->maxInputChannels > 0) {
 			String deviceName;
-			if( i == Pa_GetHostApiInfo( deviceInfo->hostApi )->defaultInputDevice ) {
+			if (i == Pa_GetHostApiInfo(deviceInfo->hostApi)->defaultInputDevice) {
 				deviceName = "(default) ";
 			} else {
 				deviceName = "";
@@ -67,33 +69,33 @@ StringList AudioDevice::getInputMixerDeviceList() {
 	return deviceList;
 }
 
-StringList AudioDevice::getOutputMixerDeviceList() {
+std::list < std::string > AudioDevice::getOutputMixerDeviceList() {
 	int i, numDevices;
-	const PaDeviceInfo *deviceInfo;
+	const PaDeviceInfo * deviceInfo;
 	PaError err;
 	StringList deviceList;
-	
+
 	Pa_Initialize();
-	 
+
 	//retrive number of device found
 	numDevices = Pa_GetDeviceCount();
-	if( numDevices < 0 ) {
-		printf( "ERROR: Pa_CountDevices returned 0x%x\n", numDevices );
+	if (numDevices < 0) {
+		printf("ERROR: Pa_CountDevices returned 0x%x\n", numDevices);
 		err = numDevices;
 		Pa_Terminate();
-		fprintf( stderr, "An error occured while using the portaudio stream\n" );
-		fprintf( stderr, "Error number: %d\n", err );
-		fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( err ) );
+		fprintf(stderr, "An error occured while using the portaudio stream\n");
+		fprintf(stderr, "Error number: %d\n", err);
+		fprintf(stderr, "Error message: %s\n", Pa_GetErrorText(err));
 		return StringList();
-	}	
-	
+	}
+
 	//iterate over devices
-	for( i=0; i<numDevices; i++ ) {
-		deviceInfo = Pa_GetDeviceInfo( i );
-		
-		if( deviceInfo->maxOutputChannels > 0 ) {
+	for (i = 0; i < numDevices; i++) {
+		deviceInfo = Pa_GetDeviceInfo(i);
+
+		if (deviceInfo->maxOutputChannels > 0) {
 			String deviceName;
-			if( i == Pa_GetHostApiInfo( deviceInfo->hostApi )->defaultOutputDevice ) {
+			if (i == Pa_GetHostApiInfo(deviceInfo->hostApi)->defaultOutputDevice) {
 				deviceName = "(default) ";
 			} else {
 				deviceName = "";
@@ -111,27 +113,27 @@ StringList AudioDevice::getOutputMixerDeviceList() {
 
 std::string AudioDevice::getDefaultPlaybackDevice() {
 	int i, numDevices;
-	const PaDeviceInfo *deviceInfo;
+	const PaDeviceInfo * deviceInfo;
 	PaError err;
-	
+
 	Pa_Initialize();
-	
+
 	//retrive number of device found
 	numDevices = Pa_GetDeviceCount();
-	if( numDevices < 0 ) {
-		printf( "ERROR: Pa_CountDevices returned 0x%x\n", numDevices );
+	if (numDevices < 0) {
+		printf("ERROR: Pa_CountDevices returned 0x%x\n", numDevices);
 		err = numDevices;
 		Pa_Terminate();
-		fprintf( stderr, "An error occured while using the portaudio stream\n" );
-		fprintf( stderr, "Error number: %d\n", err );
-		fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( err ) );
+		fprintf(stderr, "An error occured while using the portaudio stream\n");
+		fprintf(stderr, "Error number: %d\n", err);
+		fprintf(stderr, "Error message: %s\n", Pa_GetErrorText(err));
 		return "";
 	}
-	
+
 	//iterate over devices
-	for( i=0; i<numDevices; i++ ) {
-		deviceInfo = Pa_GetDeviceInfo( i );
-		if( i == Pa_GetDefaultOutputDevice() ) {
+	for (i = 0; i < numDevices; i++) {
+		deviceInfo = Pa_GetDeviceInfo(i);
+		if (i == Pa_GetDefaultOutputDevice()) {
 			String deviceName = "";
 #ifdef PRINT_HOSTAPI
 			deviceName += Pa_GetHostApiInfo(deviceInfo->hostApi)->name;
@@ -155,13 +157,13 @@ bool AudioDevice::setDefaultRecordDevice(const std::string & /*deviceName*/) {
 int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {
 	StringList deviceList = getOutputMixerDeviceList();
 
-	if( deviceName.length() ) {
-		for(unsigned int currentDeviceIndex = 0; 
-		    currentDeviceIndex < deviceList.size(); 
-		    ++currentDeviceIndex) {
-		  if( deviceName == deviceList.get(currentDeviceIndex)) {
-		    return currentDeviceIndex;
-		  }
+	if (deviceName.length()) {
+		for (unsigned int currentDeviceIndex = 0;
+		currentDeviceIndex < deviceList.size();
+		++currentDeviceIndex) {
+			if (deviceName == deviceList.get(currentDeviceIndex)) {
+				return currentDeviceIndex;
+			}
 		}
 	}
 	return 0;
@@ -169,15 +171,15 @@ int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {
 
 int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
 	StringList deviceList = getInputMixerDeviceList();
-	
-	if( deviceName.length() ) {
-	  for(unsigned int currentDeviceIndex = 0; 
-	      currentDeviceIndex < deviceList.size(); 
-	      ++currentDeviceIndex) {
-	    if( deviceName == deviceList.get(currentDeviceIndex)) {
-	      return currentDeviceIndex;
-	    }
-	  }
+
+	if (deviceName.length()) {
+		for (unsigned int currentDeviceIndex = 0;
+		currentDeviceIndex < deviceList.size();
+		++currentDeviceIndex) {
+			if (deviceName == deviceList.get(currentDeviceIndex)) {
+				return currentDeviceIndex;
+			}
+		}
 	}
 	return 0;
 }

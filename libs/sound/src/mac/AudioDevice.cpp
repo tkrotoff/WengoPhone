@@ -19,16 +19,18 @@
 
 #include <AudioDevice.h>
 
-StringList AudioDevice::getInputMixerDeviceList() {
+#include <StringList.h>
+
+std::list<std::string> AudioDevice::getInputMixerDeviceList() {
 	return StringList();
 }
 
-StringList AudioDevice::getOutputMixerDeviceList() {
+std::list<std::string> AudioDevice::getOutputMixerDeviceList() {
 	return StringList();
 }
 
 std::string AudioDevice::getDefaultPlaybackDevice() {
-	return "";
+	return String::null;
 }
 
 bool AudioDevice::setDefaultPlaybackDevice(const std::string & /*deviceName*/) {

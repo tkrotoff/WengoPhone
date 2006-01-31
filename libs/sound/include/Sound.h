@@ -30,9 +30,9 @@
  * The big difference is that you can choose the wave out audio device.
  * Currently it only plays wave audio files.
  *
- * Under Unix it uses QSound from the Qt library so the wave out audio device
- * is not handled.
+ * Different backends are implemented: UNIX, PortAudio, Windows...
  *
+ * @see QSound
  * @author Tanguy Krotoff
  */
 class Sound : NonCopyable {
