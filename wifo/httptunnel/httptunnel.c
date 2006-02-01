@@ -64,11 +64,17 @@ static char	*proxyUsername;
 static char	*proxyPassword;
 
 int	UseProxy = 0;
+
+
 int UseSSL = 0;
+    
+#ifdef HT_USE_SSL    
 
 SSL_METHOD	*sslMethod;
 SSL_CTX		*ctx;
-
+#endif
+    
+    
 int get_ip_addr(char * outbuf, int size, const char * hostname)
 {
 	struct addrinfo aiHints;
@@ -103,6 +109,7 @@ void http_tunnel_init_host(const char *hostname, int port, int ssl)
 	
 	UseSSL = ssl;
 
+#if HT_USE_SLL
 	if (UseSSL)
 	{
 		SSL_load_error_strings();
@@ -113,7 +120,8 @@ void http_tunnel_init_host(const char *hostname, int port, int ssl)
 		SSL_CTX_set_options(ctx, SSL_OP_ALL);
 		SSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, 0);
 	}
-
+#endif
+    
 	get_ip_addr(hostIP, sizeof(hostIP), hostname);
 	//httpServerIP = strdup(hostIP);
 	//httpServerPort = port;
@@ -171,6 +179,7 @@ static SOCKET easy_get_sock(CURL *curl)
 
 int get_https_response(http_sock_t *hs, char *buff, int buffsize)
 {
+#ifdef HT_USE_SSL    
 	struct timeval	timeout;
 	fd_set	rfds;
 	int ret;
@@ -212,6 +221,9 @@ int get_https_response(http_sock_t *hs, char *buff, int buffsize)
 	}
 
 	return nbytes;
+#else
+    return 0;
+#endif
 }
 
 int	get_http_response2(http_sock_t *hs, char *buff, int buffsize)
@@ -377,9 +389,11 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code)
 				return NULL;
 			}
 
+#ifdef HT_USE_SSL
 			if (UseSSL)
 				hs->s_ssl = (SSL *) curl_easy_get_SSL_handle();
-
+#endif
+            
 			curl_slist_free_all(slist);
 
 			hs->fd = easy_get_sock(hs->curl);
@@ -418,6 +432,7 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code)
 			return NULL;
 		}
 
+#ifdef HT_USE_SSL
 		if (UseSSL)
 		{
 			hs->s_ssl = SSL_new(ctx);
@@ -435,15 +450,18 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code)
 			}
 
 		}
-
+#endif
+        
 		if (mode == HTTP_TUNNEL_FIXE_MODE)
 			sprintf(query, "GET / HTTP/1.1\r\nUdpHost: %s:%d\r\nMode: 1\r\n\r\n", ipaddr, port);
 		else
 			sprintf(query, "GET / HTTP/1.1\r\nUdpHost: %s:%d\r\n\r\n", ipaddr, port);
 
+#ifdef HT_USE_SSL        
 		if (UseSSL)
 			nbytes = SSL_write(hs->s_ssl, query, (int) strlen(query));
 		else
+#endif
 			nbytes = send(hs->fd, query, (int) strlen(query), 0);
 
 		if (nbytes < 0)
@@ -452,9 +470,11 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code)
 			return NULL;
 		}
 
+#ifdef HT_USE_SSL
 		if (UseSSL)
 			nbytes = get_https_response(hs, buff, 511);
 		else
+#endif
 			nbytes = get_http_response2(hs, buff, 511);
 
 		if (nbytes > 0)
@@ -498,8 +518,10 @@ int http_tunnel_close(void *h_tunnel)
 	}
 	else {
 		closesocket(hs->fd);
-		if (UseSSL)
+#ifdef HT_USE_SSL		
+        if (UseSSL)
 			SSL_free(hs->s_ssl);
+#endif
 	}
 	free(hs);
 	return 0;
@@ -547,10 +569,11 @@ int	http_tunnel_send(void *h_tunnel, const void *buffer, int size)
 				ptr2 = ptr;
 				size2send = size + sizeof(size);
 			}
-
+#ifdef HT_USE_SSL
 			if (UseSSL)
 				send_bytes = SSL_write(hs->s_ssl, (char *) ptr2, size2send);
 			else
+#endif
 				send_bytes = send(hs->fd, (char *) ptr2, size2send, 0);
 
 			if (send_bytes < 0)
@@ -635,18 +658,21 @@ int http_tunnel_recv(void *h_tunnel, void *buffer, int size)
 			FD_SET(hs->fd, &rfds);
 
 			err = 0;
-
+#ifdef HT_USE_SSL
 			if (UseSSL)
 				err = SSL_pending(hs->s_ssl);
-
+#endif
+            
 			if (err == 0)
 				err = select(hs->fd + 1, &rfds, 0, 0, &to);
 			
 			if (err && FD_ISSET(hs->fd, &rfds))
 			{
+#ifdef HT_USE_SSL
 				if (UseSSL)
 					received = SSL_read(hs->s_ssl, (char *) &(hs->recv_size) + total, 4 - total);
 				else
+#endif
 					received = recv(hs->fd, ((char *) &(hs->recv_size)) + total, 4 - total, 0);
 
 				if (received <= 0)
@@ -694,10 +720,10 @@ int http_tunnel_recv(void *h_tunnel, void *buffer, int size)
 		FD_SET(hs->fd, &rfds);
 
 		err = 0;
-
+#ifdef HT_USE_SSL
 		if (UseSSL)
 			err = SSL_pending(hs->s_ssl);
-
+#endif        
 		if (err == 0)
 			err = select(hs->fd + 1, &rfds, 0, 0, &to);
 
@@ -705,9 +731,11 @@ int http_tunnel_recv(void *h_tunnel, void *buffer, int size)
 
 		if (err && FD_ISSET(hs->fd, &rfds))
 		{
+#ifdef HT_USE_SSL
 			if (UseSSL)
 				received = SSL_read(hs->s_ssl, (char *) buffer + total, size_tmp);
 			else
+#endif
 				received = recv(hs->fd, (char *) buffer + total, size_tmp, 0);
 
 				if (received <= 0)
