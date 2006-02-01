@@ -20,6 +20,7 @@
  */
 
 #include "phglobal.h"
+#include "phdebug.h"
 #include <osip2/osip_mt.h>
 #include <osip2/osip.h>
 #ifdef OS_POSIX
@@ -256,51 +257,44 @@ static PayloadType mpeg4 ={
 int 
 ph_media_init(int useTunnel, const char *pluginpath)
 {
-  static int first_time = 1;
-  RtpProfile *profile;
-
-
-  ph_media_use_tunnel = useTunnel;
-  
-  if (!first_time)
-    return 0;
-
-  ortp_init();
-  ph_media_audio_init();
-  ph_media_codecs_init(pluginpath);
-
-
-
-
-  profile = get_av_profile();
-
-
-  /* initialize audio payloads */
-  rtp_profile_set_payload(profile,PH_MEDIA_DTMF_PAYLOAD,
-			  get_telephone_event());
-  rtp_profile_set_payload(profile,PH_MEDIA_ILBC_PAYLOAD, &ilbc);
-  rtp_profile_set_payload(profile,PH_MEDIA_AMR_PAYLOAD, &amr);
-  rtp_profile_set_payload(profile,PH_MEDIA_AMR_WB_PAYLOAD, &amr_wb);
-  rtp_profile_set_payload(profile,PH_MEDIA_CN_PAYLOAD, &cng_8);
-  rtp_profile_set_payload(profile,PH_MEDIA_SPEEXNB_PAYLOAD, &mspeex_nb);
-  rtp_profile_set_payload(profile,PH_MEDIA_SPEEXWB_PAYLOAD, &mspeex_wb);
-  rtp_profile_set_payload(profile,PH_MEDIA_G729_PAYLOAD, &g729);
-  rtp_profile_set_payload(profile,PH_MEDIA_G726WB_PAYLOAD, &g726_wb);
-
-
-
+    static int first_time = 1;
+    RtpProfile *profile;
+    
+    ph_media_use_tunnel = useTunnel;
+    
+    if (!first_time) {
+        return 0;
+    }
+    
+    ortp_init();
+    ph_media_audio_init();
+    ph_media_codecs_init(pluginpath);
+    
+    /* initialize audio payloads (ortp needs this) */
+    profile = get_av_profile();
+    rtp_profile_set_payload(profile,PH_MEDIA_DTMF_PAYLOAD, get_telephone_event());
+    rtp_profile_set_payload(profile,PH_MEDIA_ILBC_PAYLOAD, &ilbc);
+    rtp_profile_set_payload(profile,PH_MEDIA_AMR_PAYLOAD, &amr);
+    rtp_profile_set_payload(profile,PH_MEDIA_AMR_WB_PAYLOAD, &amr_wb);
+    rtp_profile_set_payload(profile,PH_MEDIA_CN_PAYLOAD, &cng_8);
+    rtp_profile_set_payload(profile,PH_MEDIA_SPEEXNB_PAYLOAD, &mspeex_nb);
+    rtp_profile_set_payload(profile,PH_MEDIA_SPEEXWB_PAYLOAD, &mspeex_wb);
+    rtp_profile_set_payload(profile,PH_MEDIA_G729_PAYLOAD, &g729);
+    rtp_profile_set_payload(profile,PH_MEDIA_G726WB_PAYLOAD, &g726_wb);
 #ifdef PHAPI_VIDEO_SUPPORT
-  rtp_profile_set_payload(profile,PH_MEDIA_H263_PAYLOAD, &h263);
-  rtp_profile_set_payload(profile,PH_MEDIA_H264_PAYLOAD, &h264);
-  rtp_profile_set_payload(profile,PH_MEDIA_MPEG4_PAYLOAD, &mpeg4);
+    rtp_profile_set_payload(profile,PH_MEDIA_H263_PAYLOAD, &h263);
+    rtp_profile_set_payload(profile,PH_MEDIA_H264_PAYLOAD, &h264);
+    rtp_profile_set_payload(profile,PH_MEDIA_MPEG4_PAYLOAD, &mpeg4);
+#endif
+    
+#if 0
+    ortp_scheduler_init();
 #endif
 
-#if 0
-  ortp_scheduler_init();
-#endif
-  ortp_set_debug_file("oRTP", NULL);
-  first_time = 0;  
-  return 0;
+    ortp_set_debug_file("oRTP", NULL);
+    
+    first_time = 0;  
+    return 0;
 }
 
 
@@ -339,41 +333,64 @@ int ph_media_is_stream_stopped(phcall_t *ca)
 }
 #endif
 
-/* find a codec object corresponding to give payload */
+/* find a codec object corresponding to given payload */
 phcodec_t *ph_media_lookup_codec(int payload)
 {
-  RtpProfile *profile = get_av_profile();
-  PayloadType *pt = rtp_profile_get_payload(profile, payload);
-  phcodec_t *codec = ph_codec_list;
-  int plen;
+    RtpProfile *profile = get_av_profile();
+    PayloadType *pt = rtp_profile_get_payload(profile, payload);
+    phcodec_t *codec = ph_codec_list;
+    int plen;
 
-  if (!pt)
-    return 0;
-
-  plen = strlen(pt->mime_type);
-  
-  while(codec)
+    DBG4_CODEC_LOOKUP("CODEC LOOKUP: ph_media_lookup_codec\n", 0, 0, 0);
+    
+    if (!pt)
     {
-      int mlen = strlen(codec->mime);
-      if(mlen == plen){
-#ifdef _MSC_VER
-	if (!strnicmp(codec->mime, pt->mime_type, mlen)) {
-#else
-	if (!strncasecmp(codec->mime, pt->mime_type, mlen)){
-#endif
-	  if (!codec->clockrate || !pt->clock_rate)
-	    return codec;
-
-	  if (codec->clockrate == pt->clock_rate)
-	    return codec;
-	}
-      }
-      codec = codec->next;
+        DBG4_CODEC_LOOKUP("could not find payload %d in ortp profile list\n", payload, 0, 0);
+        return 0;
     }
-
-  return 0;
-
-
+    
+    if (!pt->mime_type) {
+        DBG4_CODEC_LOOKUP("fatal error - NULL mime type for codec %d in ortp\n", payload, 0, 0);
+        return 0;
+    }
+    plen = strlen(pt->mime_type);
+    DBG4_CODEC_LOOKUP("we need to match against : \"%s/%d\" in phcodec list\n", pt->mime_type, pt->clock_rate, 0);
+    
+    while(codec)
+    {
+        int mlen;
+        
+        DBG4_CODEC_LOOKUP("....trying \"%s/%d\"\n", codec->mime, codec->clockrate, 0);
+        mlen = strlen(codec->mime);
+        if(mlen == plen)
+        {
+#ifdef _MSC_VER
+            if (!strnicmp(codec->mime, pt->mime_type, mlen))
+            {
+#else
+            if (!strncasecmp(codec->mime, pt->mime_type, mlen))
+            {
+#endif
+                if (!codec->clockrate || !pt->clock_rate)
+                {
+                    DBG4_CODEC_LOOKUP("....\"%s/%d\" matched\n", codec->mime, codec->clockrate, 0);
+                    return codec;
+                }
+    
+                if (codec->clockrate == pt->clock_rate)
+                {
+                    DBG4_CODEC_LOOKUP("....\"%s/%d\" matched\n", codec->mime, codec->clockrate, 0);
+                    return codec;
+                }
+            }
+        }
+        
+        codec = codec->next;
+    }
+    
+    DBG4_CODEC_LOOKUP("could not find ortp's codec ref \"%s\" in phcodec list\n", pt->mime_type, 0, 0);
+    return 0;
+    
 }
 
 void ph_tvsub(register struct timeval *out, register struct timeval *in)

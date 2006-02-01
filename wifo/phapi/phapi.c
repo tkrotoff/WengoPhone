@@ -63,6 +63,7 @@
 #include <eXosip/eXosip.h>
 #include <eXosip/eXosip_cfg.h>
 
+#include "phdebug.h"
 #include "phapi.h"
 #include "phcall.h"
 #include "phrpc.h"
@@ -1184,71 +1185,76 @@ phAcceptCall2(int cid, void *userData)
 MY_DLLEXPORT int 
 phAcceptCall3(int cid, void *userData, int streams)
 {
-  int i;
-  phcall_t *ca = ph_locate_call_by_cid(cid);
-  char  local_video_port[16];
-  char  local_voice_port[16];
+    int i;
+    phcall_t *ca = ph_locate_call_by_cid(cid);
+    char  local_video_port[16];
+    char  local_voice_port[16];
 #ifdef STUN_ENABLE
-  char  public_voice_port[16];
-  char  public_video_port[16];
+    char  public_voice_port[16];
+    char  public_video_port[16];
 #endif
-	
-  printf("phAcceptCall3");
-  if (!ca)
-    return -PH_BADCID;
 
-  ca->user_mflags = streams; // trace of what the user decided
-  ca->nego_mflags = ca->user_mflags; // current negociated media flags
-  
-  if (_is_video_enabled(streams))
-    _get_local_video_sdp_port(local_video_port);
-
-  _get_local_audio_sdp_port(local_voice_port);
-
-#ifdef STUN_ENABLE
-	
-  ph_printf(" phAcceptCall3 nattype: %s \n", eXosip_get_nattype());
-
-  if (0!=strncasecmp(eXosip_get_nattype(), "none", 4) && (0!=strncasecmp(eXosip_get_nattype(), "sym", 3) ))
-    {
-	int ret = getPublicPort(local_voice_port, local_video_port, public_voice_port , public_video_port );
-	if (ret <1)
-	  {
-	    printf("unable to alocate public port ...");
-	    return;
-	}
-	
-
-	eXosip_lock();
-	i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), local_video_port , public_voice_port , public_video_port);
+    DBG4_SIP_NEGO("SIP NEGO: phAcceptCall3\n", 0, 0, 0);
+    if (!ca) {
+        return -PH_BADCID;
     }
-  else
-    {
-#endif
-  eXosip_lock();
-  i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), local_video_port, local_voice_port, local_video_port);
+
+    ca->user_mflags = streams; // trace of what the user decided
+    ca->nego_mflags = ca->user_mflags; // current negociated media flags
+  
+    if (_is_video_enabled(streams)) {
+        _get_local_video_sdp_port(local_video_port);
+    }
+
+    _get_local_audio_sdp_port(local_voice_port);
 
 #ifdef STUN_ENABLE
-}
+    DBG4_SIP_NEGO(" phAcceptCall3 nattype: %s \n", eXosip_get_nattype(), 0, 0);
+
+    if (0!=strncasecmp(eXosip_get_nattype(), "none", 4) && (0!=strncasecmp(eXosip_get_nattype(), "sym", 3) ))
+    {
+        int ret = getPublicPort(local_voice_port, local_video_port, public_voice_port , public_video_port );
+        if (ret <1)
+        {
+            printf("unable to alocate public port ...");
+            return;
+        }
+
+        eXosip_lock();
+        i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), local_video_port , public_voice_port , public_video_port);
+    }
+    else 
+    { // start ifdef'ed else clause
+#endif
+    
+        
+    eXosip_lock();
+    i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), local_video_port, local_voice_port, local_video_port);
+
+
+#ifdef STUN_ENABLE
+    } // end ifdef'ed else clause
 #endif 
  
-  if (i == 0)
-  {
-    i = ph_call_retrieve_payloads(ca, NULL, streams | PH_STREAM_CNG );
+    if (i == 0)
+    {
+        i = ph_call_retrieve_payloads(ca, NULL, streams | PH_STREAM_CNG );
 
-    ca->local_sdp_audio_port = atoi(local_voice_port);
-    if (_is_video_enabled(streams))
-      ca->local_sdp_video_port = atoi(local_video_port);
+        ca->local_sdp_audio_port = atoi(local_voice_port);
+        if (_is_video_enabled(streams)) {
+            ca->local_sdp_video_port = atoi(local_video_port);
+        }
 
-  }
-  eXosip_unlock();
+    }
+  
+    eXosip_unlock();
 
-  if (i == 0)
-  {
-    i = ph_call_media_start(ca, NULL, streams);
-  }
+    if (i == 0)
+    {
+        i = ph_call_media_start(ca, NULL, streams);
+    }
 
-  return i;
+    return i;
 }
 
   
@@ -2322,24 +2328,30 @@ ph_get_vline_id(const char *userid, const char *altid)
 
 
 
-static void setup_payload(const char *ptsring)
+static void setup_payload(const char *ptstring)
 {
-  char  tmp[64];
-  char  num[8];
-  ph_media_payload_t  pt;
+    char  tmp[64];
+    char  num[8];
+    ph_media_payload_t  pt;
 
-  if (ph_media_supported_payload(&pt, ptsring))
+    DBG4_CODEC_LOOKUP("trying to setup codec in eXosip: %s\n", ptstring, 0, 0);
+    if (ph_media_supported_payload(&pt, ptstring))
     {
-      snprintf(num, sizeof(num), "%d", pt.number);
-      snprintf(tmp, sizeof(tmp), "%d %s/%d/1", pt.number, pt.string, pt.rate);
-
-      eXosip_sdp_negotiation_add_codec(osip_strdup(num),
-				   NULL,
-				   osip_strdup("RTP/AVP"),
-				   NULL, NULL, NULL,
-				   NULL,NULL,
-				   osip_strdup(tmp));
+        DBG4_CODEC_LOOKUP("...setup accepted : %d - %s/%d\n", pt.number, pt.string, pt.rate);
+        snprintf(num, sizeof(num), "%d", pt.number);
+        snprintf(tmp, sizeof(tmp), "%d %s/%d/1", pt.number, pt.string, pt.rate);
+    
+        eXosip_sdp_negotiation_add_codec(
+                                        osip_strdup(num),
+                                        NULL,
+                                        osip_strdup("RTP/AVP"),
+                                        NULL, NULL, NULL,
+                                        NULL,NULL,
+                                        osip_strdup(tmp));
+        return;
     }
+    DBG4_CODEC_LOOKUP("...setup refused - not found in ortp profile", 0, 0, 0);
+
 }
 
 
@@ -2633,7 +2645,9 @@ ph_nat_init()
 
 }
 
-
+/**
+ * @brief initialize the payload/codecs that are allowed to be handled by the SIP stack
+ */
 static void
 ph_payloads_init()
 {
@@ -2641,7 +2655,8 @@ ph_payloads_init()
   /* reset all payload to fit application capabilities */
   eXosip_sdp_negotiation_remove_audio_payloads();
 
-
+  // init payload/codecs for VIDEO
+    
 #ifdef PHAPI_VIDEO_SUPPORT
   setup_video_payload("H263/90000");
 
@@ -2663,19 +2678,24 @@ ph_payloads_init()
 #endif
 #endif
 
+  // init payload/codecs for AUDIO
+
+  // add codecs out of an ENV var
   {
     char *aclist = getenv("PH_AUDIO_CODECS");
-    if (aclist)
+    if (aclist) {
       strncpy(phcfg.audio_codecs, aclist, sizeof(phcfg.audio_codecs));
-  }
+    }
+    
+   }
 
 
+  // limit codecs to G711 codecs according to compile time DEFINE
 #ifdef G711_ONLY
   strcpy(phcfg.audio_codecs, "PCMU/8000,PCMA/8000");
 #endif
 
-
-
+  // if at this stage, no codecs are required, fix a default list
   if (!phcfg.audio_codecs[0])
     {
       setup_payload("PCMU/8000");
@@ -2688,8 +2708,19 @@ ph_payloads_init()
       setup_payload("AMR-WB/16000");
 
     }
+    // phapi.h client has required a specific list of codecs
   else
     {
+    
+        /*
+        The list is "," separated
+        some hacks are present to allow for :
+        - payload usurpation
+        - default /8000 clockrate when not specified
+        - ... look at the code
+        */
+        
+        
       char tmp[32];
       char *tok = strtok(phcfg.audio_codecs, ",");
 
@@ -2722,9 +2753,11 @@ ph_payloads_init()
 	}
     }
 
+  // set codec in sip stack for CNG (confort noise generator=
   if(phcfg.cng)
     setup_payload("CN/8000");
   
+  // set codec in sip stack for DTMF
   setup_payload("telephone-event/8000");
 }
 
@@ -2734,7 +2767,7 @@ phInit(phCallbacks_t *cbk, char * server, int asyncmode)
 {
   int i;
   char buf[200];
-  
+    
   memset(vcontact, 0, sizeof(vcontact));
 
   i = ph_debug_init();
@@ -2971,25 +3004,31 @@ void ph_refer_notify(int did, int status, const char* msg, int final)
 static int
 ph_call_retrieve_payloads(phcall_t *ca, eXosip_event_t *je, int flags)
 {
-   int  i = 0;
+    int  i = 0;
 
-   if (_is_audio_enabled(flags))
-     {
-       i = eXosip_retrieve_negotiated_audio_payload(ca->did, &ca->audio_payload, ca->audio_payload_name, sizeof(ca->audio_payload_name));
-       ph_printf("ph_call_retrieve_payloads: remote_audio=%s payload=%s(%d)\n", ca->remote_sdp_audio_ip, ca->audio_payload_name, ca->audio_payload); 
-     }
-
-   ca->video_payload = 0;
-   if (ca->remote_sdp_video_ip[0] && (_is_video_enabled(flags)))
+    DBG4_SIP_NEGO("looking for payloads...\n", 0, 0, 0);
+    DBG4_SIP_NEGO("audio...\n", 0, 0, 0);
+    if (_is_audio_enabled(flags))
     {
-     i = eXosip_retrieve_negotiated_video_payload(ca->did, &ca->video_payload, ca->video_payload_name, sizeof(ca->video_payload_name));
-     ph_printf("ph_call_retrieve_payloads: remote_video=%s payload=%s(%d)\n", ca->remote_sdp_video_ip, ca->video_payload_name, ca->video_payload); 
+        i = eXosip_retrieve_negotiated_audio_payload(ca->did, &ca->audio_payload, ca->audio_payload_name, sizeof(ca->audio_payload_name));
+        DBG4_SIP_NEGO("remote_audio=%s payload=%s(%d)\n", ca->remote_sdp_audio_ip, ca->audio_payload_name, ca->audio_payload); 
     }
 
-  if(!i && phcfg.cng && (flags & PH_STREAM_CNG))
-     ca->cng = !eXosip_retrieve_negotiated_specific_payload(ca->did, PH_MEDIA_CN_PT_STR, strlen(PH_MEDIA_CN_PT_STR));
+    DBG4_SIP_NEGO("video...\n", 0, 0, 0);
+    ca->video_payload = 0;
+    if (ca->remote_sdp_video_ip[0] && (_is_video_enabled(flags)))
+    {
+        i = eXosip_retrieve_negotiated_video_payload(ca->did, &ca->video_payload, ca->video_payload_name, sizeof(ca->video_payload_name));
+        DBG4_SIP_NEGO("remote_video=%s payload=%s(%d)\n", ca->remote_sdp_video_ip, ca->video_payload_name, ca->video_payload); 
+    }
 
-  return i;
+    DBG4_SIP_NEGO("cng...\n", 0, 0, 0);
+    if(!i && phcfg.cng && (flags & PH_STREAM_CNG)) {
+        ca->cng = !eXosip_retrieve_negotiated_specific_payload(ca->did, PH_MEDIA_CN_PT_STR, strlen(PH_MEDIA_CN_PT_STR));
+        DBG4_SIP_NEGO("cng: %d", ca->cng, 0, 0);
+    }
+
+    return i;
 }
 
 
@@ -3311,46 +3350,53 @@ ph_call_replaces(eXosip_event_t *je)
 void 
 ph_call_answered(eXosip_event_t *je)
 {
-  phCallStateInfo_t info;
-  phcall_t *ca, *rca=0;
+    phCallStateInfo_t info;
+    phcall_t *ca, *rca=0;
 
-  clear(info);
-
-  ca = ph_locate_call(je, 1);
-  if (ca)
-    rca = ph_locate_call_by_cid(ca->rcid);
-
-  ph_call_retrieve_payloads(ca, je, -1);
-  ph_call_media_start(ca, je, -1);
-
-
-
-  info.localUri = je->local_uri;
-  info.userData = je->external_reference;
-  if (ca->localhold)
-    info.event = phHOLDOK;
-  else if (ca->localresume)
+    DBG4_SIP_NEGO("SIP NEGO: ph_call_answered\n", 0, 0, 0);
+    clear(info);
+    
+    ca = ph_locate_call(je, 1);
+    if (ca)
     {
-      info.event = phRESUMEOK;
-      ca->localresume = 0;
+        rca = ph_locate_call_by_cid(ca->rcid);
     }
-  else
-      info.event = phCALLOK;
-
-  info.u.remoteUri = je->remote_uri; 
-  info.vlid = ca->vlid;
-
-  info.streams = PH_STREAM_AUDIO;
-  if (ca->video_payload)
-    info.streams |= PH_STREAM_VIDEO_RX;
-
-
-  if (!ca->localrefer)
-    phcb->callProgress(ca->cid, &info);
-
-  if (rca)
+    
+    ph_call_retrieve_payloads(ca, je, -1);
+    ph_call_media_start(ca, je, -1);
+    
+    info.localUri = je->local_uri;
+    info.userData = je->external_reference;
+    if (ca->localhold)
     {
-    ph_refer_notify(rca->rdid, je->status_code, "Answered", 1);
+        info.event = phHOLDOK;
+    }
+    else if (ca->localresume)
+    {
+        info.event = phRESUMEOK;
+        ca->localresume = 0;
+    }
+    else {
+        info.event = phCALLOK;
+    }
+    
+    info.u.remoteUri = je->remote_uri; 
+    info.vlid = ca->vlid;
+    
+    info.streams = PH_STREAM_AUDIO;
+    if (ca->video_payload)
+    {
+        info.streams |= PH_STREAM_VIDEO_RX;
+    }
+    
+    if (!ca->localrefer)
+    {
+        phcb->callProgress(ca->cid, &info);
+    }
+    
+    if (rca)
+    {
+        ph_refer_notify(rca->rdid, je->status_code, "Answered", 1);
     }
 
 }
@@ -3359,38 +3405,39 @@ ph_call_answered(eXosip_event_t *je)
 void 
 ph_call_proceeding(eXosip_event_t *je)
 {
-  phCallStateInfo_t info;
-  phcall_t *ca, *rca=0;
-  int cng = 0;
-
-  clear(info);
-
-  ca = ph_locate_call(je, 1);
-  if (ca)
-    rca = ph_locate_call_by_cid(ca->rcid);
-
-
-  if (!ca->localrefer)
+    phCallStateInfo_t info;
+    phcall_t *ca, *rca=0;
+    int cng = 0;
+    
+    DBG4_SIP_NEGO("SIP NEGO: ph_call_proceeding\n", 0, 0, 0);
+    clear(info);
+    
+    ca = ph_locate_call(je, 1);
+    if (ca)
     {
-      ph_call_retrieve_payloads(ca, je, PH_STREAM_CNG);
-      ph_call_media_start(ca, je, -1);
-
-      info.userData = je->external_reference;
-      info.event = phDIALING;
-      info.u.remoteUri = je->remote_uri; 
-      info.vlid = ca->vlid;
-
-      info.streams = ca->nego_mflags;
-
-      phcb->callProgress(ca->cid, &info);
+        rca = ph_locate_call_by_cid(ca->rcid);
     }
-
-  if (rca)
+    
+    if (!ca->localrefer)
     {
-    ph_refer_notify(rca->rdid, je->status_code, "Proceeding", 0);
+        ph_call_retrieve_payloads(ca, je, PH_STREAM_CNG);
+        ph_call_media_start(ca, je, -1);
+    
+        info.userData = je->external_reference;
+        info.event = phDIALING;
+        info.u.remoteUri = je->remote_uri; 
+        info.vlid = ca->vlid;
+        
+        info.streams = ca->nego_mflags;
+        
+        phcb->callProgress(ca->cid, &info);
     }
-
-
+    
+    if (rca)
+    {
+        ph_refer_notify(rca->rdid, je->status_code, "Proceeding", 0);
+    }
+    
 }
 
 void 
@@ -3466,49 +3513,52 @@ void ph_callStopRinging(eXosip_event_t *je)
 void 
 ph_call_ringing(eXosip_event_t *je)
 {
-  int ret = 0;
-  phCallStateInfo_t info;
-  phcall_t *ca, *rca=0;
-  int cng=0;
-
-  clear(info);
-
-  ca = ph_locate_call(je, 1);
-  if (ca)
-    rca = ph_locate_call_by_cid(ca->rcid);
-
-
-  ph_call_retrieve_payloads(ca, je, PH_STREAM_CNG);
-
-  ret = ph_call_media_start(ca, je, -1);
-  
-  info.event = phRINGING;
-  if (ret == -PH_NOMEDIA && !ph_call_hasaudio(ca) && !ca->isringing) /*  no audio and softPhone is now not ringing and has no sound */
+    int ret = 0;
+    phCallStateInfo_t info;
+    phcall_t *ca, *rca=0;
+    int cng=0;
+    
+    DBG4_SIP_NEGO("SIP NEGO: ph_call_ringing\n", 0, 0, 0);
+    
+    clear(info);
+    
+    ca = ph_locate_call(je, 1);
+    if (ca)
     {
-      ca->isringing = 1;
-      info.event = phRINGandSTART;
-      
+        rca = ph_locate_call_by_cid(ca->rcid);
     }
-  else if (ca->isringing )
+    
+    ph_call_retrieve_payloads(ca, je, PH_STREAM_CNG);
+    
+    ret = ph_call_media_start(ca, je, -1);
+    
+    info.event = phRINGING;
+    if (ret == -PH_NOMEDIA && !ph_call_hasaudio(ca) && !ca->isringing) /*  no audio and softPhone is now not ringing and has no sound */
     {
-      ca->isringing = 0;
-      info.event = phRINGandSTOP;
+        ca->isringing = 1;
+        info.event = phRINGandSTART;
     }
-  
-  
-  info.localUri = je->local_uri;
-  info.userData = je->external_reference;
-
-  info.u.remoteUri = je->remote_uri; 
-  info.vlid = ca->vlid;
-
-  info.streams = ca->nego_mflags;
-
-  phcb->callProgress(je->cid, &info);
-
-  if (rca)
-    ph_refer_notify(rca->rdid, 180, "Ringing", 0);
-
+    else if (ca->isringing )
+    {
+        ca->isringing = 0;
+        info.event = phRINGandSTOP;
+    }
+    
+    
+    info.localUri = je->local_uri;
+    info.userData = je->external_reference;
+    
+    info.u.remoteUri = je->remote_uri; 
+    info.vlid = ca->vlid;
+    
+    info.streams = ca->nego_mflags;
+    
+    phcb->callProgress(je->cid, &info);
+    
+    if (rca)
+    {
+        ph_refer_notify(rca->rdid, 180, "Ringing", 0);
+    }
 
 }
 
@@ -3729,42 +3779,43 @@ ph_call_onhold(eXosip_event_t *je)
 void 
 ph_call_offhold(eXosip_event_t *je)
 {
-  phCallStateInfo_t info;
-  phcall_t *ca;
-  int cng=0;
-  int remhold;
-
-
-  ca = ph_locate_call(je, 0);
-  if (!ca)
-    return;
-
-  clear(info);
-
-  info.vlid = ca->vlid;
-  // ph_media_resume(ca);
-
-//  if (ph_call_hasaudio(ca))
-//      ph_media_stop(ca);
-  
- 
-  remhold = ca->remotehold;
-  ca->remotehold = 0;
-
-
-  ph_call_retrieve_payloads(ca, je, -1);
-  ph_call_media_start(ca, je, -1);
-
-  if (remhold)
+    phCallStateInfo_t info;
+    phcall_t *ca;
+    int cng=0;
+    int remhold;
+    
+    DBG4_SIP_NEGO("SIP NEGO: ph_call_offhold\n", 0, 0, 0);
+    
+    ca = ph_locate_call(je, 0);
+    if (!ca)
     {
-      info.userData = je->external_reference;
-      info.event = phCALLRESUMED;
-      info.streams = ca->nego_mflags;
-
-      phcb->callProgress(je->cid, &info);
+        return;
     }
-  
-  ca->remotehold = 0;
+    
+    clear(info);
+    
+    info.vlid = ca->vlid;
+    // ph_media_resume(ca);
+    
+    //  if (ph_call_hasaudio(ca))
+    //      ph_media_stop(ca);
+    
+    remhold = ca->remotehold;
+    ca->remotehold = 0;
+    
+    ph_call_retrieve_payloads(ca, je, -1);
+    ph_call_media_start(ca, je, -1);
+    
+    if (remhold)
+    {
+        info.userData = je->external_reference;
+        info.event = phCALLRESUMED;
+        info.streams = ca->nego_mflags;
+        
+        phcb->callProgress(je->cid, &info);
+    }
+    
+    ca->remotehold = 0;
 
 }
 

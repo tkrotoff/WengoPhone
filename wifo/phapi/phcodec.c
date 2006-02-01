@@ -1,4 +1,5 @@
 #include "phglobal.h"
+#include "phdebug.h"
 #include <stdlib.h>
 #ifdef OS_POSIX
 #include <sys/types.h>
@@ -618,10 +619,13 @@ void ph_media_plugin_codec_init(const char *dirpath)
   if (!dirpath)
     dirpath = "./";
 
+  DBG4_CODEC_LOOKUP("looking for dynamic codecs in : %s\n", dirpath, 0, 0);
 
   dir = opendir(dirpath);
-  if (!dir)
+  if (!dir) {
+    DBG4_CODEC_LOOKUP("pay attention: path does not exist\n", 0, 0, 0);
     return;
+  }
 
   while(0 != (entry = readdir(dir)))
     {
@@ -646,6 +650,7 @@ void ph_media_plugin_codec_init(const char *dirpath)
 	{
 	  if (plugin_init(ph_media_register_codec))
 	    {
+          DBG4_CODEC_LOOKUP("registering dynamic codecs from : %s\n", entry->d_name, 0, 0);
 	      dlclose(lib);
 	    }
 	}
@@ -671,6 +676,7 @@ void ph_media_codecs_init(const char *pluginpath)
      
   while(0 != (codec= codec_table[i++]))
   {
+      DBG4_CODEC_LOOKUP("setup codec in phcodec: \"%s/%d\"\n", codec->mime, codec->clockrate, 0);
 	  codec->next = codec_table[i];
   }
 

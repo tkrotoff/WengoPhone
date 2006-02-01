@@ -53,7 +53,7 @@ int ph_speexwb_decode(void *ctx, const void *src, int srcsize, void *dst, int ds
 #elif defined(PH_SPEEXWB_REPLACES_G726WB)
 #define SPEEX_PAYLOAD_STRING "G726-64wb"
 #else    
-#define SPEEX_PAYLOAD_STRING "SPEEX"
+#define SPEEX_PAYLOAD_STRING "SPEEX-WB"
 #endif
 
 

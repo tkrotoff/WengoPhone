@@ -21,6 +21,7 @@
  */
 
 #include "phglobal.h"
+#include "phdebug.h"
 #include <osip2/osip_mt.h>
 #include <osip2/osip.h>
 #ifdef OS_POSIX
@@ -1494,8 +1495,9 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   ph_mstream_params_t *sp = &s->streams[PH_MSTREAM_AUDIO1];
   int newstreams;
 
+  DBG4_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_audio_start\n", 0, 0, 0);
   PH_MSESSION_AUDIO_LOCK();
-  ph_printf("ph_msession_audio_start: deviceId:%s\n", deviceId);
+  DBG4_MEDIA_ENGINE("device macro: \"%s\"\n", deviceId, 0, 0);
 
   newstreams = s->newstreams;
   s->newstreams = 0;
@@ -1633,10 +1635,13 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
       
     }
 
+  // begin branch 2
+  DBG4_MEDIA_ENGINE("audio start branch 2 - begin\n", 0, 0, 0);
+  DBG4_MEDIA_ENGINE("audio start branch 2 - looking for codec with payload = %d\n", codecpt, 0, 0);
   codec = ph_media_lookup_codec(codecpt);
   if (!codec)
     {
-      ph_printf("ph_media_audio_start: found NO codec\n");
+      DBG4_MEDIA_ENGINE("audio start branch 2: found NO codec\n", 0, 0, 0);
       PH_MSESSION_AUDIO_UNLOCK();
       return -1;
     }
