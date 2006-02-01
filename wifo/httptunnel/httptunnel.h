@@ -1,45 +1,11 @@
 #ifndef	_HTTPTUNNEL_H_
 #define	_HTTPTUNNEL_H_
 
-#if defined(WIN32)
-	#include <windows.h>
-	//#pragma comment(lib, "ws2_32.lib")
-	#define FCNTL_BLOCK(fd)		{u_long arg1 = 0;\
-								ioctlsocket(fd, FIONBIO, &arg1);}
-	#define FCNTL_NOBLOCK(fd)	{u_long arg2 = 1;\
-								ioctlsocket(fd, FIONBIO, &arg2);}
-
-	#define ERR_SOCK(err)	(err == WSAENETDOWN ||\
-							 err == WSAEHOSTUNREACH ||\
-							 err == WSAENETRESET ||\
-							 err == WSAENOTCONN ||\
-							 err == WSAESHUTDOWN ||\
-							 err == WSAECONNABORTED ||\
-							 err == WSAECONNRESET ||\
-							 err == WSAETIMEDOUT)
-#else
-	#include <unistd.h>
-	#include <sys/socket.h>
-	#include <fcntl.h>
-	#include <netinet/in.h>
-	#include <arpa/inet.h>
-	#include <netdb.h>
-	#include <errno.h>
-	#define FCNTL_BLOCK(fd)		{int flags1 = fcntl(fd, F_GETFL, 0);\
-								fcntl(fd, F_SETFL, flags1 & ~O_NONBLOCK);}
-
-	#define FCNTL_NOBLOCK(fd)	{int flags2 = fcntl(fd, F_GETFL, 0);\
-								fcntl(fd, F_SETFL, flags2 | O_NONBLOCK);}
-
-
-	#define WSAEWOULDBLOCK 	EAGAIN
-	#define ERR_SOCK(err)	(ECONNREFUSED || ENOTCONN)
-
-#endif
-
-//#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+/* ***** SSL ***** */
+#include <openssl/ssl.h>
+#include <openssl/pem.h>
+#include <openssl/err.h>
+/* *************** */
 
 #ifdef __cplusplus
 extern "C" {
@@ -62,11 +28,12 @@ extern int	UseProxy;
 
 typedef struct	http_sock
 {
-	int	fd;
-	int	mode;
-	int	send_size;
-	int	recv_size;
-	void 	*curl;
+	int		fd;
+	int		mode;
+	int		send_size;
+	int		recv_size;
+	void	*curl;
+	SSL		*s_ssl;
 }				http_sock_t;
 
 typedef struct	http_distant_host
@@ -88,10 +55,9 @@ typedef enum {
 int http_tunnel_get_socket(void *h_tunnel);
 int http_tunnel_recv(void *h_tunnel, void *buffer, int size);
 int	http_tunnel_send(void *h_tunnel, const void *buffer, int size);
-void* http_tunnel_open(const char *host, int port, int mode, int *httpcode);
+void* http_tunnel_open(const char *host, int port, int mode, int *http_code);
 int http_tunnel_close(void *h_tunnel);
-void* http_tunnel_open_with_existing_sock(const char *host, int port, int mode, int sock);
-void http_tunnel_init_host(const char *hostname, int port, NETLIB_BOOLEAN ssl);
+void http_tunnel_init_host(const char *hostname, int port, int ssl);
 void http_tunnel_init_proxy(const char *hostname, int port, const char *username, const char *password);
 #ifdef __cplusplus
 }

@@ -1,20 +1,54 @@
-#ifdef WIN32
-#include <winsock2.h>
-#include <ws2tcpip.h>
+#if defined(WIN32)
+	#include <winsock2.h>
+	#include <ws2tcpip.h>
+	#include <windows.h>
+	#define FCNTL_BLOCK(fd)		{u_long arg1 = 0;\
+								ioctlsocket(fd, FIONBIO, &arg1);}
+	#define FCNTL_NOBLOCK(fd)	{u_long arg2 = 1;\
+								ioctlsocket(fd, FIONBIO, &arg2);}
+
+	#define ERR_SOCK(err)	(err == WSAENETDOWN ||\
+							 err == WSAEHOSTUNREACH ||\
+							 err == WSAENETRESET ||\
+							 err == WSAENOTCONN ||\
+							 err == WSAESHUTDOWN ||\
+							 err == WSAECONNABORTED ||\
+							 err == WSAECONNRESET ||\
+							 err == WSAETIMEDOUT)
+#else
+	#include <unistd.h>
+	#include <sys/socket.h>
+	#include <fcntl.h>
+	#include <netinet/in.h>
+	#include <arpa/inet.h>
+	#include <netdb.h>
+	#include <errno.h>
+	#define FCNTL_BLOCK(fd)		{int flags1 = fcntl(fd, F_GETFL, 0);\
+								fcntl(fd, F_SETFL, flags1 & ~O_NONBLOCK);}
+
+	#define FCNTL_NOBLOCK(fd)	{int flags2 = fcntl(fd, F_GETFL, 0);\
+								fcntl(fd, F_SETFL, flags2 | O_NONBLOCK);}
+
+
+	#define WSAEWOULDBLOCK 	EAGAIN
+	#define ERR_SOCK(err)	(ECONNREFUSED || ENOTCONN)
+
+	inline int Sleep(int a) {return usleep(a * 1000);}
+	inline int closesocket(int sock) {return close(sock);}
+	inline int WSAGetLastError() {return errno;}
+	inline int GetLastError() {return errno;}
+	#define SOCKET int
+
 #endif
+
+
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include <curl/curl.h>
 #include "httptunnel.h"
 
-#include <string.h>
-
-#ifndef WIN32
-inline int Sleep(int a) {return usleep(a * 1000);}
-inline int closesocket(int sock) {return close(sock);}
-inline int WSAGetLastError() {return errno;}
-inline int GetLastError() {return errno;}
-#define SOCKET int
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,6 +65,9 @@ static char	*proxyPassword;
 
 int	UseProxy = 0;
 int UseSSL = 0;
+
+SSL_METHOD	*sslMethod;
+SSL_CTX		*ctx;
 
 int get_ip_addr(char * outbuf, int size, const char * hostname)
 {
@@ -60,13 +97,29 @@ int get_ip_addr(char * outbuf, int size, const char * hostname)
 }
 
 
-void http_tunnel_init_host(const char *hostname, int port, NETLIB_BOOLEAN ssl)
+void http_tunnel_init_host(const char *hostname, int port, int ssl)
 {
 	char hostIP[20];
+	
+	UseSSL = ssl;
+
+	if (UseSSL)
+	{
+		SSL_load_error_strings();
+		SSLeay_add_ssl_algorithms();
+		
+		sslMethod = SSLv23_client_method();
+		ctx = SSL_CTX_new(sslMethod);
+		SSL_CTX_set_options(ctx, SSL_OP_ALL);
+		SSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, 0);
+	}
 
 	get_ip_addr(hostIP, sizeof(hostIP), hostname);
-	httpServerIP = strdup(hostIP);
-	httpServerPort = port;
+	//httpServerIP = strdup(hostIP);
+	//httpServerPort = port;
+
+	httpServerIP = strdup("213.91.9.199");
+	httpServerPort = 443;
 }
 
 void http_tunnel_init_proxy(const char *hostname, int port, const char *username, const char *password)
@@ -115,19 +168,61 @@ static SOCKET easy_get_sock(CURL *curl)
   return fd;
 }
 
-int	get_httpresponse2(http_sock_t *hs, char *buff, int buffsize, int ssl)
+
+int get_https_response(http_sock_t *hs, char *buff, int buffsize)
 {
 	struct timeval	timeout;
 	fd_set	rfds;
 	int ret;
 	int nbytes = 0;
 
-	timeout.tv_sec = 2;
-	timeout.tv_usec = 0;
+	while (1)
+	{
+		timeout.tv_sec = 2;
+		timeout.tv_usec = 0;
+		FD_ZERO(&rfds);
+		FD_SET(hs->fd, &rfds);
+
+		ret = select(hs->fd + 1, &rfds, 0, 0, &timeout);
+		
+		if (ret <= 0)
+			return -1;
+
+		if (FD_ISSET(hs->fd, &rfds))
+		{
+			do 
+			{
+				ret = SSL_read(hs->s_ssl, buff + nbytes, 1);
+			
+				if (ret < 0)
+					return -1;
+				else if (ret == 0)
+					return nbytes;
+				else
+					nbytes += ret;
+
+				if (nbytes == buffsize)
+					return nbytes;
+			
+				if (nbytes > 3 && strncmp("\r\n\r\n", buff + nbytes - 4, 4) == 0)
+					return nbytes;
+			}
+			while (SSL_pending(hs->s_ssl));
+		}
+	}
+
+	return nbytes;
+}
+
+int	get_http_response2(http_sock_t *hs, char *buff, int buffsize)
+{
+	struct timeval	timeout;
+	fd_set	rfds;
+	int ret;
+	int nbytes = 0;
 
 	while (1)
 	{
-
 		timeout.tv_sec = 2;
 		timeout.tv_usec = 0;
 		FD_ZERO(&rfds);
@@ -184,7 +279,7 @@ void get_proxy_auth_type()
 		curl_easy_cleanup(curl_tmp);
 }
 
-void *http_tunnel_open(const char *host, int port, int mode, int * httpcode)
+void *http_tunnel_open(const char *host, int port, int mode, int *http_code)
 {
 	struct sockaddr_in	addr;
 	char query[512];
@@ -198,6 +293,9 @@ void *http_tunnel_open(const char *host, int port, int mode, int * httpcode)
 
 	// SETSOCKOPT VALUE
 	int buffsize = 256000;
+
+	// 404 (NOT FOUND) default value
+	*http_code = 404;
 
 	hs = (http_sock_t *) malloc(sizeof(http_sock_t));
 	if (!hs) 
@@ -270,12 +368,17 @@ void *http_tunnel_open(const char *host, int port, int mode, int * httpcode)
 
 			// curl_easy_use_mysock(hs->fd);
 			ret = curl_easy_perform(hs->curl);
+			
+			curl_easy_getinfo(hs->curl, CURLINFO_RESPONSE_CODE, http_code);
+
 			if (ret != 0)
 			{
-				curl_easy_cleanup(hs->curl);
-				free(hs);
+				http_tunnel_close(hs);
 				return NULL;
 			}
+
+			if (UseSSL)
+				hs->s_ssl = (SSL *) curl_easy_get_SSL_handle();
 
 			curl_slist_free_all(slist);
 
@@ -311,9 +414,26 @@ void *http_tunnel_open(const char *host, int port, int mode, int * httpcode)
 		{	
 			//ret = GetLastError();
 			perror("connect");
-			closesocket(hs->fd);
-			free(hs);
+			http_tunnel_close(hs);
 			return NULL;
+		}
+
+		if (UseSSL)
+		{
+			hs->s_ssl = SSL_new(ctx);
+			//SSL_set_connect_state(hs->s_ssl);
+			SSL_set_fd(hs->s_ssl, hs->fd);
+			
+			if ((ret = SSL_connect(hs->s_ssl)) <= 0)
+			{
+				ret = SSL_get_error(hs->s_ssl, ret);
+				//ret = ERR_get_error();
+				ret = WSAGetLastError();
+				//ERR_error_string_n(ret , str, 127);
+				http_tunnel_close(hs);
+				return NULL;
+			}
+
 		}
 
 		if (mode == HTTP_TUNNEL_FIXE_MODE)
@@ -321,23 +441,27 @@ void *http_tunnel_open(const char *host, int port, int mode, int * httpcode)
 		else
 			sprintf(query, "GET / HTTP/1.1\r\nUdpHost: %s:%d\r\n\r\n", ipaddr, port);
 
-		nbytes = send(hs->fd, query, (int) strlen(query), 0);
+		if (UseSSL)
+			nbytes = SSL_write(hs->s_ssl, query, (int) strlen(query));
+		else
+			nbytes = send(hs->fd, query, (int) strlen(query), 0);
 
 		if (nbytes < 0)
 		{
-			closesocket(hs->fd);
-			free(hs);
+			http_tunnel_close(hs);
 			return NULL;
 		}
 
-		nbytes = get_httpresponse2(hs, buff, 511, UseSSL);
+		if (UseSSL)
+			nbytes = get_https_response(hs, buff, 511);
+		else
+			nbytes = get_http_response2(hs, buff, 511);
 
 		if (nbytes > 0)
 			buff[nbytes] = 0;
 		else
 		{
-			closesocket(hs->fd);
-			free(hs);
+			http_tunnel_close(hs);
 			return NULL;
 		}
 
@@ -345,12 +469,12 @@ void *http_tunnel_open(const char *host, int port, int mode, int * httpcode)
 		{
 			setsockopt(hs->fd, SOL_SOCKET, SO_RCVBUF, (const char *) &buffsize, sizeof(buffsize));
 			setsockopt(hs->fd, SOL_SOCKET, SO_SNDBUF, (const char *) &buffsize, sizeof(buffsize));
+			*http_code = 200;
 			return hs;
 		}
 		else
 		{
-			closesocket(hs->fd);
-		    free(hs);
+			http_tunnel_close(hs);
 		    return NULL;
 		}
 	}
@@ -374,6 +498,8 @@ int http_tunnel_close(void *h_tunnel)
 	}
 	else {
 		closesocket(hs->fd);
+		if (UseSSL)
+			SSL_free(hs->s_ssl);
 	}
 	free(hs);
 	return 0;
@@ -422,7 +548,10 @@ int	http_tunnel_send(void *h_tunnel, const void *buffer, int size)
 				size2send = size + sizeof(size);
 			}
 
-			send_bytes = send(hs->fd, (char *) ptr2, size2send, 0);
+			if (UseSSL)
+				send_bytes = SSL_write(hs->s_ssl, (char *) ptr2, size2send);
+			else
+				send_bytes = send(hs->fd, (char *) ptr2, size2send, 0);
 
 			if (send_bytes < 0)
 			{
@@ -504,11 +633,21 @@ int http_tunnel_recv(void *h_tunnel, void *buffer, int size)
 			
 			FD_ZERO(&rfds);
 			FD_SET(hs->fd, &rfds);
-			err = select(hs->fd + 1, &rfds, 0, 0, &to);
 
+			err = 0;
+
+			if (UseSSL)
+				err = SSL_pending(hs->s_ssl);
+
+			if (err == 0)
+				err = select(hs->fd + 1, &rfds, 0, 0, &to);
+			
 			if (err && FD_ISSET(hs->fd, &rfds))
 			{
-				received = recv(hs->fd, ((char *) &(hs->recv_size)) + total, 4 - total, 0);
+				if (UseSSL)
+					received = SSL_read(hs->s_ssl, (char *) &(hs->recv_size) + total, 4 - total);
+				else
+					received = recv(hs->fd, ((char *) &(hs->recv_size)) + total, 4 - total, 0);
 
 				if (received <= 0)
 				{
@@ -553,12 +692,22 @@ int http_tunnel_recv(void *h_tunnel, void *buffer, int size)
 			
 		FD_ZERO(&rfds);
 		FD_SET(hs->fd, &rfds);
-		err = select(hs->fd + 1, &rfds, 0, 0, &to);
+
+		err = 0;
+
+		if (UseSSL)
+			err = SSL_pending(hs->s_ssl);
+
+		if (err == 0)
+			err = select(hs->fd + 1, &rfds, 0, 0, &to);
 
 		received = 0;
 
 		if (err && FD_ISSET(hs->fd, &rfds))
 		{
+			if (UseSSL)
+				received = SSL_read(hs->s_ssl, (char *) buffer + total, size_tmp);
+			else
 				received = recv(hs->fd, (char *) buffer + total, size_tmp, 0);
 
 				if (received <= 0)
