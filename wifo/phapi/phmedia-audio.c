@@ -491,7 +491,7 @@ void do_echo_update(phastream_t *s, char *micdata, int length)
 
 	
       }
-    memcpy(micdata, tmpmic, total);
+    memcpy(micdata, tmpmic, length*2);
 	
 #else 
     
