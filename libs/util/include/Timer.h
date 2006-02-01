@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,16 +68,22 @@ public:
 
 private:
 
+	/** @see Thread::start() */
 	void run();
 
+	/** Number of retries currenlty done, _nbRetry is always <= _nbShots. */
 	unsigned _nbRetry;
 
+	/** @see start() */
 	unsigned _nbShots;
 
+	/** @see start() */
 	unsigned _timeout;
 
+	/** @see start() */
 	unsigned _firstTime;
 
+	/** Stops or not the timer. */
 	bool _stop;
 };
 

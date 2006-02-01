@@ -168,7 +168,8 @@ std::string getDefaultDeviceFromRegistry(const std::string & registryKeyDeviceTy
 }
 
 std::string AudioDevice::getDefaultPlaybackDevice() {
-	if (getDefaultDeviceFromRegistry(PLAYBACK_DEVICE_REGISTRY_KEY) == String::null) {
+	std::string defaultDevice(getDefaultDeviceFromRegistry(PLAYBACK_DEVICE_REGISTRY_KEY));
+	if (defaultDevice == String::null) {
 		WAVEOUTCAPSA outcaps;
 
 		//We didn't find the default playback audio device using the registry
@@ -179,12 +180,12 @@ std::string AudioDevice::getDefaultPlaybackDevice() {
 		}
 	}
 
-	//Cannot determine the default playback audio device
-	return String::null;
+	return defaultDevice;
 }
 
 std::string AudioDevice::getDefaultRecordDevice() {
-	if (getDefaultDeviceFromRegistry(RECORD_DEVICE_REGISTRY_KEY) == String::null) {
+	std::string defaultDevice(getDefaultDeviceFromRegistry(RECORD_DEVICE_REGISTRY_KEY));
+	if (defaultDevice == String::null) {
 		WAVEINCAPSA incaps;
 
 		//We didn't find the default record audio device using the registry
@@ -195,8 +196,7 @@ std::string AudioDevice::getDefaultRecordDevice() {
 		}
 	}
 
-	//Cannot determine the default playback audio device
-	return String::null;
+	return defaultDevice;
 }
 
 bool AudioDevice::setDefaultPlaybackDevice(const std::string & deviceName) {
