@@ -59,35 +59,51 @@ speex_env.WengoAddDefines(speex_defines)
 speex_env.Append(LIBS = speex_libs)
 speex = speex_env.WengoPlugin('phspeexplugin', ['phcodec-speex.c'])
 
-
-
-print "=======enable-ipp=",WengoGetConsoleArgument('enable-ipp')
 if WengoGetConsoleArgument('enable-ipp'):
-	
- 	IPPROOT=os.environ.get('IPPROOT', None)
-	IPPSAMPLEROOT=os.environ.get('IPPSAMPLEROOT', None)
+    IPPROOT = False
+    IPPSAMPLEROOT = False
+ 
+  
+    if os.environ.has_key('IPPROOT'):
+        IPPROOT = os.environ['IPPROOT']
+ 
+    if os.environ.has_key('IPPSAMPLEROOT'):
+        IPPSAMPLEROOT = os.environ['IPPSAMPLEROOT']
 
-	print "IPPROOT=" + IPPROOT
-	print "IPPSAMPLEROOT=" + IPPSAMPLEROOT
-	if IPPROOT and IPPSAMPLEROOT:
-		ipp_env = WengoGetEnvironment()
-		ipp_libs = [
-			'ippsc', 'ipps',  'ippsr',  'ippcore', 'usc'	
-			]
-		ipp_includes = [
-			IPPROOT + "/include", IPPSAMPLEROOT + "/codec/include"
-			]
-	
-		ipp_libpath = [
-			IPPROOT + "/sharedlib", IPPROOT + "/sharedlib/linux32",
-			IPPROOT + "/stublib",
-			IPPSAMPLEROOT + "/bin/ia32/lib"
-			]	    
+    if IPPROOT and IPPSAMPLEROOT:
 
-		ipp_env.Append( LIBS = ipp_libs,  LIBPATH = ipp_libpath) 
-		ipp_env.WengoAddIncludePath(ipp_includes)
-		ipp = ipp_env.WengoPlugin('phippplugin', ['phcodec-intel-ipp.c'])
+        print "building ipp plugin"
+        ipp_env = WengoGetEnvironment()
+        ipp_libs = [
+            'ippsc', 'ipps',  'ippsr',  'ippcore',  
+         #   'guide', 
+            'usc'	
+            ]
+        
+        ipp_includes = [
+            IPPROOT + "/include", IPPSAMPLEROOT + "/codec/include"
+            ]
+            
+    
+        if WengoOSWindows():
+             ipp_libpath = [
 
+                IPPROOT + "/lib", IPPROOT + "/stublib",
+                IPPSAMPLEROOT + "/bin/ia32/lib"
+            ]
+    
+        else:         
+          ipp_libpath = [
+
+            IPPROOT + "/sharedlib", IPPROOT + "/sharedlib/linux32",
+            IPPSAMPLEROOT + "/bin/ia32/lib"
+            ]
+                    
+
+        ipp_env.Append( LIBS = ipp_libs,  LIBPATH = ipp_libpath) 
+        ipp_env.WengoAddIncludePath(ipp_includes)
+        ipp = ipp_env.WengoPlugin('phippplugin', ['phcodec-intel-ipp.c'])
+        Alias('phippp', [ipp])
 
 env = WengoGetEnvironment()
 
@@ -101,8 +117,9 @@ libs = [
 	'stun',
 	'gsm',
 	'global',
-	'wtimer'
+	'wtimer',
 ]
+
 
 lib_path = []
 include_path = ['.']
@@ -141,6 +158,11 @@ sources = [
 	'spxec.c',
 	'spxecfft.c'
 ]
+
+if WengoGetConsoleArgument('enable_netlib'):
+    defines['PH_USE_NETLIB'] = 1
+    libs += ['netlib']
+    
 
 if WengoOSLinux() or WengoOSBSD():
 	sources += ['phmedia-oss.c']

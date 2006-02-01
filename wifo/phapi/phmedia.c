@@ -449,11 +449,12 @@ RtpTunnel *
 rtptun_connect(const char *address, int port)
 {
     RtpTunnel *tn = rtptun_new();
+    int tunErr;
     
     if (!tn)
         return 0;
     
-    tn->h_tunnel = http_tunnel_open(address, port, HTTP_TUNNEL_VAR_MODE);
+    tn->h_tunnel = http_tunnel_open(address, port, HTTP_TUNNEL_VAR_MODE, &tunErr);
     
     return tn;    
 }

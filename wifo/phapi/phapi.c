@@ -2460,11 +2460,12 @@ ph_tunnel_init()
   int port;
   char *c;
   char buf[256];
+  int tunerr;
 
   if (!phcfg.use_tunnel) 
     return 0;
 
-  http_tunnel_init_host(phcfg.httpt_server, phcfg.httpt_server_port);
+  http_tunnel_init_host(phcfg.httpt_server, phcfg.httpt_server_port, 0);
   http_tunnel_init_proxy(phcfg.http_proxy,phcfg.http_proxy_port, 
 			 phcfg.http_proxy_user, phcfg.http_proxy_passwd);
   
@@ -2480,10 +2481,10 @@ ph_tunnel_init()
 	  *c++ = 0;
 	  port = atoi(c);
 	}
-      tunnel->h_tunnel = http_tunnel_open(buf, port, HTTP_TUNNEL_VAR_MODE);
+      tunnel->h_tunnel = http_tunnel_open(buf, port, HTTP_TUNNEL_VAR_MODE, &tunerr);
       if (!tunnel->h_tunnel)
 	{
-#ifdef CC_MSVC
+#if defined(PH_USE_NETLIB) && defined(CC_MSVC)
 	  if (phcfg.use_tunnel & PH_TUNNEL_AUTOCONF)
 	    {
 	      net_info_t netInfo;
@@ -2491,7 +2492,7 @@ ph_tunnel_init()
 	      http_tunnel_init_proxy(netInfo.Proxy_IP, netInfo.Proxy_Port, 
 				     phcfg.http_proxy_user, phcfg.http_proxy_passwd);
 	      
-	      tunnel->h_tunnel = http_tunnel_open(buf, port, HTTP_TUNNEL_VAR_MODE);
+	      tunnel->h_tunnel = http_tunnel_open(buf, port, HTTP_TUNNEL_VAR_MODE, &tunerr);
 	      
 	    }
 #endif		
