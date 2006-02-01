@@ -92,6 +92,7 @@
 
 /* //////////// <JULIEN> //////////// */
 extern curl_socket_t gl_sockfd;
+extern void *gl_ssl_handle;
 /* ********************************** */
 
 #if defined(WIN32) && !defined(__GNUC__) || defined(__MINGW32__)
@@ -660,6 +661,17 @@ CURL_EXTERN void curl_easy_reset(CURL *curl)
 
 
 /* //////////// <JULIEN> //////////// */
+
+/*
+ * curl_easy_get_SSl_handle() is an external interface that allows an app to get
+ * the SSL handle of a CURL session.
+ */
+CURL_EXTERN void *curl_easy_get_SSL_handle()
+{
+	return gl_ssl_handle;
+}
+
+
 /*
  * curl_easy_get_sock() is an external interface that allows an app to get
  * the socket of a session handle.

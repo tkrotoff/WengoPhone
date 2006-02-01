@@ -72,6 +72,10 @@
 /* The last #include file should be: */
 #include "memdebug.h"
 
+/* //////////// <JULIEN> //////////// */
+void *gl_ssl_handle = 0;
+/* ********************************** */
+
 #ifndef min
 #define min(a, b)   ((a) < (b) ? (a) : (b))
 #endif
@@ -1290,6 +1294,8 @@ Curl_ossl_connect(struct connectdata *conn,
            ERR_error_string(ERR_get_error(),NULL));
      return CURLE_SSL_CONNECT_ERROR;
   }
+
+  gl_ssl_handle = connssl->handle;
 
   while(1) {
     int writefd;
