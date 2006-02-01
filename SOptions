@@ -3,6 +3,7 @@
 
 args = {
 	'enable-video' : 0,
+    'enable-ssl' : 0,
 	'enable-http-tunnel' : 1,
 	'enable-netlib' : 1,
 	'enable-phapi-embed' : 0,
