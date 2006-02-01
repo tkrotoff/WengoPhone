@@ -455,7 +455,7 @@ void do_echo_update(phastream_t *s, char *micdata, int length)
       {
 	memcpy(tmpspk, spkchunk1, spklen1);
 	if (spklen2)
-	  memcpy(tmpspk+spklen1, spkchunk1, spklen2);
+	  memcpy(tmpspk+spklen1, spkchunk2, spklen2);
       }
 
 
@@ -491,6 +491,7 @@ void do_echo_update(phastream_t *s, char *micdata, int length)
 
 	
       }
+    memcpy(micdata, tmpmic, total);
 	
 #else 
     
