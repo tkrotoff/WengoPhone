@@ -60,7 +60,7 @@ int get_ip_addr(char * outbuf, int size, const char * hostname)
 }
 
 
-void http_tunnel_init_host(const char *hostname, int port)
+void http_tunnel_init_host(const char *hostname, int port, NETLIB_BOOLEAN ssl)
 {
 	char hostIP[20];
 
@@ -184,7 +184,7 @@ void get_proxy_auth_type()
 		curl_easy_cleanup(curl_tmp);
 }
 
-void *http_tunnel_open(const char *host, int port, int mode)
+void *http_tunnel_open(const char *host, int port, int mode, int * httpcode)
 {
 	struct sockaddr_in	addr;
 	char query[512];
