@@ -1,6 +1,9 @@
 env = WengoGetEnvironment()
 
-libs = []
+libs = [
+		'wengocurl',
+		'httptunnel'
+]
 lib_path = []
 include_path = [
 	'include',
@@ -9,8 +12,7 @@ include_path = [
 defines = {}
 headers = []
 sources = [
-	'src/netlib.cpp',
-	'get_net_conf.cpp',
+	'src/netlib.cpp', 
 	'stun_func.cpp',
 	'udp_func.cpp',
 	'bugfix.cpp'
