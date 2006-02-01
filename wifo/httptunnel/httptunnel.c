@@ -123,11 +123,8 @@ void http_tunnel_init_host(const char *hostname, int port, int ssl)
 #endif
     
 	get_ip_addr(hostIP, sizeof(hostIP), hostname);
-	//httpServerIP = strdup(hostIP);
-	//httpServerPort = port;
-
-	httpServerIP = strdup("213.91.9.199");
-	httpServerPort = 443;
+	httpServerIP = strdup(hostIP);
+	httpServerPort = port;
 }
 
 void http_tunnel_init_proxy(const char *hostname, int port, const char *username, const char *password)
@@ -426,7 +423,7 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code)
 
 		if (connect(hs->fd, (struct sockaddr *) &addr, sizeof(addr)) == -1)
 		{	
-			//ret = GetLastError();
+			ret = GetLastError();
 			perror("connect");
 			http_tunnel_close(hs);
 			return NULL;
