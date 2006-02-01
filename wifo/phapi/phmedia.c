@@ -194,6 +194,18 @@ static PayloadType mspeex_wb={
 };
 
 
+static PayloadType g726_wb={
+    TYPE( PAYLOAD_AUDIO_PACKETIZED),
+    CLOCK_RATE(16000),
+    BYTES_PER_SAMPLE(0),
+    ZERO_PATTERN(NULL),
+    PATTERN_LENGTH(0),
+    NORMAL_BITRATE(28000),
+    MIME_TYPE ("G726-64")
+};
+
+
+
 static PayloadType g729={
     PAYLOAD_AUDIO_PACKETIZED,
     8000,
@@ -273,6 +285,7 @@ ph_media_init(int useTunnel, const char *pluginpath)
   rtp_profile_set_payload(profile,PH_MEDIA_SPEEXNB_PAYLOAD, &mspeex_nb);
   rtp_profile_set_payload(profile,PH_MEDIA_SPEEXWB_PAYLOAD, &mspeex_wb);
   rtp_profile_set_payload(profile,PH_MEDIA_G729_PAYLOAD, &g729);
+  rtp_profile_set_payload(profile,PH_MEDIA_G726WB_PAYLOAD, &g726_wb);
 
 
 

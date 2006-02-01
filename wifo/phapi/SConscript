@@ -1,18 +1,33 @@
 import os
 
+amr_defines = { }
+speex_defines = {}
+defines = { }
 
-if WengoGetConsoleArgument('speexwb-replaces-amrwb') and  WengoGetConsoleArgument('speexwb-replaces-amrnb'):
-   print "******* Please Select ONLY ONE of: [ speexwb-replaces-amrwb  speexwb-replaces-amrnb]"
+if WengoGetConsoleArgument('speexwb-replaces-amrwb') and \
+     WengoGetConsoleArgument('speexwb-replaces-amrnb') and WengoGetConsoleArgument('speexwb-replaces-g726wb'):
+   print "******* Please Select ONLY ONE of: [ speexwb-replaces-amrwb  speexwb-replaces-amrnb or speexwb-replaces-g726wb]"
    Exit(1)
 
    
 
-amr_defines = { }
 if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
     amr_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
+    speex_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
+    defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
 
 if WengoGetConsoleArgument('speexwb-replaces-amrnb'):
     amr_defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1    
+    speex_defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1    
+    defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1    
+
+
+if WengoGetConsoleArgument('speexwb-replaces-g726wb'):
+    amr_defines['PH_SPEEXWB_REPLACES_G726WB'] = 1    
+    speex_defines['PH_SPEEXWB_REPLACES_G726WB'] = 1    
+    defines['PH_SPEEXWB_REPLACES_G726WB'] = 1    
+
+
 
 
 amr_env = WengoGetEnvironment()
@@ -33,15 +48,10 @@ speex_env = WengoGetEnvironment()
 speex_libs = [
 	'speex',
 ]
-speex_defines = {}
+
 speex_env.WengoUseLibraries(speex_libs)
 speex_env.WengoAddCCFlags(WengoGetVariable('phapi_optimization_flags'))
 
-if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
-    speex_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
-
-if WengoGetConsoleArgument('speexwb-replaces-amrnb'):
-    speex_defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1
 
 
 speex_env.WengoAddDefines(speex_defines)
@@ -236,11 +246,6 @@ if WengoOSMacOSX():
 	sources += ['phmedia-coreaudio.c']
 
 
-if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
-    defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
-
-if WengoGetConsoleArgument('speexwb-replaces-amrnb'):
-    defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1
 
 env.WengoAddIncludePath(include_path)
 env.WengoAddDefines(defines)

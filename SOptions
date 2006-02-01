@@ -2,7 +2,7 @@
 #Set your own global options here
 
 args = {
-	'enable-video' : 1,
+	'enable-video' : 0,
 	'enable-http-tunnel' : 1,
 	'enable-netlib' : 1,
 	'enable-phapi-embed' : 0,
@@ -16,8 +16,9 @@ args = {
 	'enable-phapi-audio-arts' : 0,
 	'portaudio-oss' : 0,
 	'portaudio-dsound' :0,			#if 0 wmme support
-	'speexwb-replaces-amrwb' : 1,		# if 1 replace 	negotiated AMR-WB payload by SPEEX WB
+	'speexwb-replaces-amrwb' : 0,		# if 1 replace 	negotiated AMR-WB payload by SPEEX WB
 	'speexwb-replaces-amrnb' : 0,            # if 1 replace 	negotiated AMR-NB payload by SPEEX WB
+	'speexwb-replaces-g726wb' : 1,            # if 1 replace 	negotiated G726-WB payload by SPEEX WB
 	'enable-ipp' : 0,
 }
 

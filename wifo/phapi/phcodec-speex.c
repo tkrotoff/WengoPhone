@@ -50,7 +50,9 @@ int ph_speexwb_decode(void *ctx, const void *src, int srcsize, void *dst, int ds
 #define SPEEX_PAYLOAD_STRING "AMR-WB"
 #elif defined(PH_SPEEXWB_REPLACES_AMRNB)    
 #define SPEEX_PAYLOAD_STRING "AMR"
-#else
+#elif defined(PH_SPEEXWB_REPLACES_G726WB)
+#define SPEEX_PAYLOAD_STRING "G726-64"
+#else    
 #define SPEEX_PAYLOAD_STRING "SPEEX"
 #endif
 
