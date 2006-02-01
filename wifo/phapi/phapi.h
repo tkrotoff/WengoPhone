@@ -746,7 +746,7 @@ MY_DLLEXPORT int phAddAuthInfo(const char *username, const char *userid,
  *									is properly set up.
  *
  * @param http_proxy			    IP address of http proxy in local network, set to 0 if there is no local proxy
- * @param http_proxy				Port of local http proxy
+ * @param http_proxy_port				Port of local http proxy
  * @param httpt_server				IP address of the HTTP TUNNEL SERVER that do the http to udp conversion
  * @param httpt_server_port			Port of the HTTP TUNNEL SERVER that do the http to udp conversion
  * @param proxy_user				User name used for authentication purpose
