@@ -169,7 +169,7 @@ std::string getDefaultDeviceFromRegistry(const std::string & registryKeyDeviceTy
 
 std::string AudioDevice::getDefaultPlaybackDevice() {
 	std::string defaultDevice(getDefaultDeviceFromRegistry(PLAYBACK_DEVICE_REGISTRY_KEY));
-	if (defaultDevice == String::null) {
+	if (defaultDevice.empty()) {
 		WAVEOUTCAPSA outcaps;
 
 		//We didn't find the default playback audio device using the registry
@@ -185,7 +185,7 @@ std::string AudioDevice::getDefaultPlaybackDevice() {
 
 std::string AudioDevice::getDefaultRecordDevice() {
 	std::string defaultDevice(getDefaultDeviceFromRegistry(RECORD_DEVICE_REGISTRY_KEY));
-	if (defaultDevice == String::null) {
+	if (defaultDevice.empty()) {
 		WAVEINCAPSA incaps;
 
 		//We didn't find the default record audio device using the registry
