@@ -201,7 +201,7 @@ static PayloadType g726_wb={
     ZERO_PATTERN(NULL),
     PATTERN_LENGTH(0),
     NORMAL_BITRATE(28000),
-    MIME_TYPE ("G726-64")
+    MIME_TYPE ("G726-64wb")
 };
 
 
