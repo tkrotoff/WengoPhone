@@ -113,7 +113,7 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 
 	//Codec list
 	//strncpy(phcfg.audio_codecs, "PCMU,PCMA,GSM,ILBC,SPEEX,SPEEX,AMR,AMR-WB", 128);
-	strncpy(phcfg.audio_codecs, "G726-64wb/16000,ILBC/8000,AMR-WB/16000,PCMU/8000,PCMA/8000,GSM/8000", 128);
+	strncpy(phcfg.audio_codecs, "G726-64wb/16000,ILBC/8000,PCMU/8000,PCMA/8000,GSM/8000", 128);
 
 	strncpy(phcfg.video_codecs, "H263,H264,MPEG4", 128);
 

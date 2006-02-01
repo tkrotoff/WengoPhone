@@ -87,8 +87,8 @@ WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string
 
 	text = sso.FirstChild("proxy").FirstChild("host").FirstChild().Text();
 	if (text) {
-		//account._proxyServerHostname = text->Value();
-		account._proxyServerHostname = "213.91.9.210";
+		account._proxyServerHostname = text->Value();
+		//account._proxyServerHostname = "213.91.9.210";
 	}
 
 	text = sso.FirstChild("proxy").FirstChild("port").FirstChild().Text();
