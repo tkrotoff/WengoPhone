@@ -116,28 +116,6 @@ typedef struct	HttpProxy_s
 
 HttpProxy_t	_LocalProxy = {0, NULL, 0};
 
-static void	_setbindhost(struct sockaddr *ia, int pf,
-                        const char *bindhost, const char *servname)
-{
-        int n;
-        struct addrinfo hints, *res;
-
-        memset(&hints, 0, sizeof(hints));
-        hints.ai_flags = AI_PASSIVE;    /* We create listening socket */
-        hints.ai_family = pf;           /* Protocol family */
-        hints.ai_socktype = SOCK_DGRAM;
-
-        if (bindhost && (strcmp(bindhost, "*") == 0))
-                bindhost = NULL;
-
-        if ((n = getaddrinfo(bindhost, servname, &hints, &res)) != 0)
-
-        /* Use the first socket address returned */
-        memcpy(ia, res->ai_addr, res->ai_addrlen);
-
-        freeaddrinfo(res);
-}
-
 char *_cleanStr(char *str)
 {
 	int i;
@@ -311,18 +289,20 @@ NETLIB_BOOLEAN is_udp_port_opened(const char *stun_server, int port)
 
 NETLIB_BOOLEAN is_local_udp_port_used(const char *itf, int port)
 {
+	struct sockaddr_in  raddr;
 	Socket localsock;
-	struct sockaddr_storage ifsin;
-	char str_port[128];
-
-	_snprintf(str_port, sizeof (str_port), "%d", port);
-
-	_setbindhost((struct sockaddr *)&ifsin, PF_INET, itf, str_port);
+	
+	if (!itf)
+		raddr.sin_addr.s_addr = htons(INADDR_ANY);
+	else
+		raddr.sin_addr.s_addr = inet_addr(itf);
+	raddr.sin_port = htons((short)port);
+	raddr.sin_family = AF_INET;
 	
 	if ((localsock = socket(PF_INET, SOCK_DGRAM, 0)) == -1)
 		return NETLIB_FALSE;
 	
-	if (bind(localsock, (struct sockaddr *)&ifsin, sizeof (struct sockaddr_in)) < 0)
+	if (bind(localsock, (struct sockaddr *)&raddr, sizeof (raddr)) < 0)
 	{
 		closesocket(localsock);
 		return NETLIB_FALSE;
