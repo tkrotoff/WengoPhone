@@ -300,16 +300,16 @@ NETLIB_BOOLEAN is_local_udp_port_used(const char *itf, int port)
 	raddr.sin_family = AF_INET;
 	
 	if ((localsock = socket(PF_INET, SOCK_DGRAM, 0)) == -1)
-		return NETLIB_FALSE;
+		return NETLIB_TRUE;
 	
 	if (bind(localsock, (struct sockaddr *)&raddr, sizeof (raddr)) < 0)
 	{
 		closesocket(localsock);
-		return NETLIB_FALSE;
+		return NETLIB_TRUE;
 	}
 
 	closesocket(localsock);
-	return NETLIB_TRUE;
+	return NETLIB_FALSE;
 }
 
 NETLIB_BOOLEAN sip_ping(Socket sock, int ping_timeout)
