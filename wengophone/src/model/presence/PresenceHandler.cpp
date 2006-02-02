@@ -22,12 +22,17 @@
 #include <model/presence/Presence.h>
 #include <model/contactlist/ContactList.h>
 #include <model/imwrapper/IMContact.h>
+#include <model/connect/ConnectHandler.h>
 
 #include <Logger.h>
 
 using namespace std;
 
-PresenceHandler::PresenceHandler() {
+PresenceHandler::PresenceHandler(ConnectHandler & connectHandler) {
+	connectHandler.connectedEvent += 
+		boost::bind(&PresenceHandler::connectedEventHandler, this, _1, _2);
+	connectHandler.disconnectedEvent += 
+		boost::bind(&PresenceHandler::disconnectedEventHandler, this, _1, _2);
 }
 
 PresenceHandler::~PresenceHandler() {
@@ -72,7 +77,7 @@ void PresenceHandler::unblockContact(const IMContact & imContact) {
 	}
 }
 
-void PresenceHandler::connected(IMAccount & imAccount) {
+void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
 	PresenceMap::const_iterator i = _presenceMap.find(&imAccount);
 	
 	LOG_DEBUG("an account is connected: login: " + imAccount.getLogin() 
@@ -106,7 +111,7 @@ void PresenceHandler::connected(IMAccount & imAccount) {
 	(*i).second->changeMyPresence(EnumPresenceState::PresenceStateOnline, "");
 }
 
-void PresenceHandler::disconnected(IMAccount & imAccount) {
+void PresenceHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
 	PresenceMap::iterator i = _presenceMap.find(&imAccount);
 	
 	LOG_DEBUG("an account is disconnected: login: " + imAccount.getLogin() 

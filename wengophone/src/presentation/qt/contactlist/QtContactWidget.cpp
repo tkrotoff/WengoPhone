@@ -19,8 +19,9 @@
 
 #include "QtContactWidget.h"
 
+#include <model/WengoPhone.h>
 #include <model/presence/PresenceHandler.h>
-#include <model/imwrapper/IMAccountList.h>
+#include <model/imwrapper/IMAccountHandler.h>
 #include <model/imwrapper/IMContact.h>
 
 #include <WidgetFactory.h>
@@ -78,7 +79,7 @@ void QtContactWidget::setContact(Contact * contact, const QStringList & listCont
 	setPicture(QString::fromStdString(contact->getPicture()));
 	setWebsite(QString::fromStdString(contact->getWebsite()));
 	setCompany(QString::fromStdString(contact->getCompany()));
-	setWengoPhone(QString::fromStdString(contact->getWengoPhone()));
+	setWengoPhone(QString::fromStdString(contact->getWengoPhoneId()));
 	setMobilePhone(QString::fromStdString(contact->getMobilePhone()));
 	setHomePhone(QString::fromStdString(contact->getHomePhone()));
 	setWorkPhone(QString::fromStdString(contact->getWorkPhone()));
@@ -112,7 +113,7 @@ QString QtContactWidget::createContact(Contact * contact) {
 	contact->setPicture(getPicture().toStdString());
 	contact->setWebsite(getWebsite().toStdString());
 	contact->setCompany(getCompany().toStdString());
-	contact->setWengoPhone(getWengoPhone().toStdString());
+	contact->setWengoPhoneId(getWengoPhone().toStdString());
 	contact->setMobilePhone(getMobilePhone().toStdString());
 	contact->setHomePhone(getHomePhone().toStdString());
 	contact->setWorkPhone(getWorkPhone().toStdString());
@@ -125,7 +126,7 @@ QString QtContactWidget::createContact(Contact * contact) {
 	contact->setNotes(getNotes().toStdString());
 
 	if (!getWengoPhone().isEmpty()) {
-		List<IMAccount *> list = IMAccountList::getInstance().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		List<IMAccount *> list = contact->getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
 		if (list.size() > 0) {
 			contact->addIMContact(IMContact(*list[0],
 				getWengoPhone().toStdString()));

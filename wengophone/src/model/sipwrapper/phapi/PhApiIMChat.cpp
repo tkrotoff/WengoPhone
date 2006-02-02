@@ -31,7 +31,7 @@ PhApiIMChat::PhApiIMChat(IMAccount & account, PhApiWrapper & phApiWrapper)
 	_phApiWrapper.statusMessageEvent += boost::bind(&PhApiIMChat::messageStatusEventHandler, this, _1, _2, _3, _4);
 }
 
-void PhApiIMChat::messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message) {
+void PhApiIMChat::messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession * chatSession, const std::string & from, const std::string & message) {
 	messageReceivedEvent(*this, chatSession, from, message);
 }
 

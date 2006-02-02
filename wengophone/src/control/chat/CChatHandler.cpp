@@ -26,12 +26,10 @@ CChatHandler::CChatHandler(ChatHandler & chatHandler)
 	: _chatHandler(chatHandler) {
 
 	_pChatHandler = PFactory::getFactory().createPresentationChatHandler(*this);
+
+	_chatHandler.newChatSessionCreatedEvent += newChatSessionCreatedEvent;
 }
 
 CChatHandler::~CChatHandler() {
 
-}
-
-IMChatSession * CChatHandler::createSession(const IMAccount & imAccount) {
-	return _chatHandler.createSession(imAccount);
 }

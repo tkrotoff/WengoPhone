@@ -23,7 +23,8 @@
 #include "model/WengoPhoneLogger.h"
 #include "ContactGroupParser.h"
 
-ContactGroup::ContactGroup(const std::string & groupName) {
+ContactGroup::ContactGroup(const std::string & groupName, WengoPhone & wengoPhone)
+	:  _wengoPhone(wengoPhone) {
 	_groupName = groupName;
 }
 
@@ -78,6 +79,6 @@ std::string ContactGroup::serialize() {
 }
 
 bool ContactGroup::unserialize(const std::string & data) {
-	ContactGroupParser parser(*this, data);
+	ContactGroupParser parser(*this, _wengoPhone, data);
 	return true;
 }

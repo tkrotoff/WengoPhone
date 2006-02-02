@@ -42,12 +42,12 @@ public:
 	/**
 	 * Chat message received callback.
 	 *
-	 * @param session the associated IMChatSession
+	 * @param session the associated IMChatSession. NULL if no IMChatSession exists
 	 * @param sender this class
 	 * @param from message sender
 	 * @param message message received
 	 */
-	Event<void (IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (IMChat & sender, IMChatSession * chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
 
 	enum StatusMessage {
 		/** Chat message has been received. */

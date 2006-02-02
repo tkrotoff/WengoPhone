@@ -26,9 +26,14 @@
 #include <set>
 
 class IMAccount;
+class IMAccountHandler;
 class IMContact;
+class IMChat;
+class IMChatMap;
+class ChatHandler;
 
 class IMChatSession {
+	friend class ChatHandler;
 public:
 
 	typedef std::set<const IMContact *> IMContactList;
@@ -37,7 +42,7 @@ public:
 
 	Event<void (IMChatSession & sender, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
 
-	IMChatSession(IMChat & imChat);
+	IMChatSession(IMChatMap & imChatMap);
 
 	~IMChatSession();
 
@@ -55,15 +60,24 @@ public:
 
 private:
 
-	void messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & from, const std::string & message);
+	typedef std::set<IMChat *> IMChatSet;
+
+	void messageReceivedEventHandler(IMChat & sender, IMChatSession * imChatSession, const std::string & from, const std::string & message);
 
 	void statusMessageEventHandler(IMChat & sender, IMChatSession & imChatSession, IMChat::StatusMessage status, const std::string & message);
 
 	const IMContact * getIMContact(const IMAccount & imAccount, const std::string & contactId) const;
 
+	/**
+	 * Update the IMChatList regarding IMContactList.
+	 */
+	void updateIMChatList();
+
 	IMContactList _imContactList;
 
-	IMChat & _imChat;
+	IMChatSet _imChatSet;
+
+	IMChatMap & _imChatMap;
 
 };
 

@@ -22,6 +22,7 @@
 
 #include <presentation/PChatHandler.h>
 
+class ChatHandler;
 class CChatHandler;
 
 /**
@@ -37,9 +38,12 @@ public:
 
 	~QtChatHandler();
 
-	IMChatSession * createSession(const IMAccount & imAccount);
-
 private:
+	
+	/**
+	 * @see ChatHandler::newChatSessionCreatedEvent
+	 */
+	void newChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession);
 
 	CChatHandler & _cChatHandler;
 

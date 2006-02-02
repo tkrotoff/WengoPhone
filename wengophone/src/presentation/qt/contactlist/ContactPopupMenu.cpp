@@ -19,14 +19,19 @@
 
 #include "ContactPopupMenu.h"
 
-#include "model/contactlist/Contact.h"
+#include <model/WengoPhone.h>
+#include <model/contactlist/Contact.h>
+#include <model/chat/ChatHandler.h>
 
 #include <QtGui>
+
+#include <Logger.h>
 
 #include <iostream>
 using namespace std;
 
-ContactPopupMenu::ContactPopupMenu(QWidget * parent) : QMenu(parent) {
+ContactPopupMenu::ContactPopupMenu(QWidget * parent, WengoPhone & wengoPhone)
+	: QMenu(parent), _wengoPhone(wengoPhone) {
 	_contact = NULL;
 
 	QMenu * callMenu = new QMenu(parent);
@@ -87,6 +92,8 @@ void ContactPopupMenu::sendSms() const {
 }
 
 void ContactPopupMenu::startChat() const {
+	LOG_DEBUG("starting chat with " + _contact->getWengoPhoneId());
+	_wengoPhone.getChatHandler().createSession();
 }
 
 void ContactPopupMenu::blockContact() const {

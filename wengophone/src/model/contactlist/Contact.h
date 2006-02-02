@@ -31,7 +31,7 @@
 
 #include <string>
 
-class PresenceHandler;
+class WengoPhone;
 class IMAccount;
 class IMContact;
 
@@ -58,15 +58,15 @@ public:
 	 */
 	Event<void (Contact & sender)> contactModifiedEvent;
 
-	Contact(PresenceHandler & presenceHandler)
-		: _presenceHandler(presenceHandler) {
+	Contact(WengoPhone & wengoPhone)
+		: _wengoPhone(wengoPhone) {
 		_sex = SexUnknown;
 		_state = EnumPresenceState::PresenceStateOffline;
 		_blocked = false;
 	}
 
 	Contact(const Contact & contact)
-		: _presenceHandler(contact._presenceHandler) {
+		: _wengoPhone(contact._wengoPhone) {
 		initialize(contact);
 	}
 
@@ -100,8 +100,8 @@ public:
 	void setCompany(const std::string & company) { _company = company; }
 	const std::string & getCompany() const { return _company; }
 
-	void setWengoPhone(const std::string & wengoPhone) { _wengoPhone = wengoPhone; }
-	const std::string & getWengoPhone() const { return _wengoPhone; }
+	void setWengoPhoneId(const std::string & wengoPhoneId) { _wengoPhoneId = wengoPhoneId; }
+	const std::string & getWengoPhoneId() const { return _wengoPhoneId; }
 
 	void setMobilePhone(const std::string & mobilePhone) { _mobilePhone = mobilePhone; }
 	const std::string & getMobilePhone() const { return _mobilePhone; }
@@ -183,6 +183,10 @@ public:
 		return display;
 	}
 
+	WengoPhone & getWengoPhone() const {
+			return _wengoPhone;
+	}
+
 	std::string serialize();
 
 	bool unserialize(const std::string & data);
@@ -210,7 +214,7 @@ private:
 	std::string _picture;
 	std::string _website;
 	std::string _company;
-	std::string _wengoPhone;
+	std::string _wengoPhoneId;
 	std::string _mobilePhone;
 	std::string _homePhone;
 	std::string _workPhone;
@@ -224,7 +228,7 @@ private:
 	EnumPresenceState::PresenceState _state;
 	bool _blocked;
 	IMContactList _imContactList;
-	PresenceHandler & _presenceHandler;
+	WengoPhone & _wengoPhone;
 };
 
 #endif	//CONTACT_H

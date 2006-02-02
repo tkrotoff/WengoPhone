@@ -17,19 +17,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "IMAccountList.h"
+#ifndef IMACCOUNTHANDLER_H
+#define IMACCOUNTHANDLER_H
 
-#include "IMAccount.h"
+#include <model/imwrapper/EnumIMProtocol.h>
 
-List<IMAccount *> IMAccountList::getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) {
-	List<IMAccount *> result;
-	
-	for (register unsigned i = 0 ; i < size() ; i++) {
-		IMAccount * account = this->operator[](i);
-		if (account->getProtocol() == protocol) {
-			result.add(account);
-		}
-	}
-	
-	return result;
-}
+#include <List.h>
+
+class IMAccount;
+
+/**
+ * Instant Messaging account handler.
+ *
+ * @ingroup model
+ * @author Philippe Bernery
+ */
+class IMAccountHandler : public List<IMAccount *> {
+public:
+
+	/**
+	 * @param protocol the desired protocol
+	 * @return IMAccount with protocol 'protocol'
+	 */
+	List<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
+};
+
+#endif	//IMACCOUNTHANDLER_H

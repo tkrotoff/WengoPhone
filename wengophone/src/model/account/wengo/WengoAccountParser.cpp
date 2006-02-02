@@ -110,6 +110,12 @@ WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string
 
 	text = sso.FirstChild("httptunnel").FirstChild("host").FirstChild().Text();
 	if (text) {
-		//account._registerServerHostname = text->Value();
+		account._tunnelServerHostname = text->Value();
+	}
+
+	text = sso.FirstChild("httptunnel").FirstChild("port").FirstChild().Text();
+	if (text) {
+		String tmp(text->Value());
+		account._tunnelServerPort = tmp.toInteger();
 	}
 }

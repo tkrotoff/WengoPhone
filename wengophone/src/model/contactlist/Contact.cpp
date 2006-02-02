@@ -21,6 +21,7 @@
 
 #include "ContactParser.h"
 
+#include <model/WengoPhone.h>
 #include <model/presence/PresenceHandler.h>
 #include <model/imwrapper/IMAccount.h>
 #include <model/imwrapper/IMContact.h>
@@ -58,7 +59,7 @@ void Contact::initialize(const Contact & contact) {
 	_picture = contact._picture;
 	_website = contact._website;
 	_company = contact._company;
-	_wengoPhone = contact._wengoPhone;
+	_wengoPhoneId = contact._wengoPhoneId;
 	_mobilePhone = contact._mobilePhone;
 	_homePhone = contact._homePhone;
 	_workPhone = contact._workPhone;
@@ -113,7 +114,7 @@ Contact::IMContactList::iterator Contact::findIMContact(IMContactList & imContac
 
 void Contact::block() {
 	for (IMContactList::const_iterator it = _imContactList.begin() ; it != _imContactList.end() ; it++) {
-		_presenceHandler.blockContact(*(*it));
+		_wengoPhone.getPresenceHandler().blockContact(*(*it));
 	}
 	
 	_blocked = true;
@@ -121,7 +122,7 @@ void Contact::block() {
 
 void Contact::unblock() {
 	for (IMContactList::const_iterator it = _imContactList.begin() ; it != _imContactList.end() ; it++) {
-		_presenceHandler.unblockContact(*(*it));
+		_wengoPhone.getPresenceHandler().unblockContact(*(*it));
 	}
 	
 	_blocked = false;
@@ -138,5 +139,5 @@ string Contact::imContactsToString() {
 }
 
 void Contact::subscribeToPresenceOf(const IMContact & imContact) {
-	_presenceHandler.subscribeToPresenceOf(imContact);
+	_wengoPhone.getPresenceHandler().subscribeToPresenceOf(imContact);
 }

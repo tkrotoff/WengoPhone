@@ -33,6 +33,10 @@ class ContactList;
 class StringList;
 class WenboxPlugin;
 class IMHandler;
+class PresenceHandler;
+class ChatHandler;
+class CPresenceHandler;
+class CChatHandler;
 
 /**
  * @defgroup control Control Component
@@ -108,7 +112,15 @@ public:
 	 */
 	void terminate();
 
+	WengoPhone & getWengoPhone() const {
+		return _wengoPhone;
+	}
+
 private:
+
+	void presenceHandlerCreatedEventHandler(WengoPhone & sender, PresenceHandler & presenceHandler);
+
+	void chatHandlerCreatedEventHandler(WengoPhone & sender, ChatHandler & chatHandler);
 
 	void phoneLineCreatedEventHandler(WengoPhone & sender, IPhoneLine & phoneLine);
 
@@ -129,6 +141,11 @@ private:
 
 	/** Direct link to the presentation via an interface. */
 	PWengoPhone * _pWengoPhone;
+
+	CPresenceHandler * _cPresenceHandler;
+
+	CChatHandler * _cChatHandler;
+
 };
 
 #endif	//CWENGOPHONE_H

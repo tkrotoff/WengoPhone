@@ -4,6 +4,7 @@ libs = [
 	'qt4',
 	'wengoutil',
 	'boost-unit-test',
+	'libboost_unit_test_framework-vc71-mt.lib'
 ]
 lib_path = []
 include_path = []

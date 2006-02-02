@@ -1,6 +1,8 @@
 env = WengoGetEnvironment()
 
-libs = []
+libs = [
+	'openssl',
+]
 lib_path = []
 include_path = [
 	'include',
@@ -83,44 +85,22 @@ sources = [
 ]
 
 if WengoOSWindows():
-	include_path += [
-		'../openssl/inc32/openssl',
-		'../openssl/inc32'
+	libs += [
+		'ws2_32',
+		'winmm',
+		'gdi32'
 	]
-
-	if WengoCCMSVC():
-		libs += [
-			'libeay32',
-			'ssleay32',
-			'ws2_32',
-			'winmm',
-			'gdi32'
-		]
-		lib_path += ['../openssl/out32/msvc']
-
-	elif WengoCCMinGW():
-		libs += [
-			'ssl',
-			'crypto',
-			'ws2_32',
-			'winmm',
-			'gdi32'
-		]
-		lib_path += ['../openssl/out32/mingw']
 
 elif WengoOSLinux():
 	libs += [
-		'ssl',
-#		'idn'
+		#'idn',
 	]
 
 elif WengoOSMacOSX():
 	libs += [
-		'ssl',
-		'crypto',
 		'z'
 	]
-	
+
 	defines['CURL_STATICLIB'] = 1
 
 env.WengoAddLibPath(lib_path)

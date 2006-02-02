@@ -34,7 +34,6 @@ class ContactPopupMenu;
 class ContactGroupPopupMenu;
 class ContactListDelegate;
 class TreeModel;
-class Qwidget;
 class QTreeView;
 class QModelIndex;
 class QMouseEvent;
@@ -57,7 +56,7 @@ public:
 	void updatePresentation();
 
 	void addContactGroup(PContactGroup * pContactGroup);
-	
+
 private Q_SLOTS:
 
 	void entered(const QModelIndex & index);
@@ -67,9 +66,9 @@ private Q_SLOTS:
 	void mousePressEventHandler(QEvent *event);
 
 private:
-	
+
 	void leftButtonPressEventHandler(QMouseEvent *event);
-	
+
 	void rightButtonPressEventHandler(QMouseEvent *event);
 
 	void initThreadSafe();
@@ -85,11 +84,11 @@ private:
 	ContactPopupMenu * _contactPopupMenu;
 
 	ContactGroupPopupMenu * _contactGroupPopupMenu;
-	
+
 	QTreeView * _treeView;
 
 	TreeModel * _model;
-	
+
 	ContactListDelegate *_delegate;
 
 };

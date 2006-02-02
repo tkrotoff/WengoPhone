@@ -38,9 +38,12 @@ class CChatHandler : NonCopyable {
 public:
 
 	/**
-	 * @see ChatHandler::createSession
+	 * Emitted when a new IMChatSession has been created.
+	 * 
+	 * @param sender this class
+	 * @param imChatSession the new IMChatSession
 	 */
-	IMChatSession * createSession(const IMAccount & imAccount);
+	Event<void (ChatHandler & sender, IMChatSession & imChatSession)> newChatSessionCreatedEvent;
 
 	CChatHandler(ChatHandler & chatHandler);
 

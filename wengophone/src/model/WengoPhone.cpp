@@ -32,6 +32,11 @@
 #include "contactlist/Contact.h"
 #include "contactlist/ContactGroup.h"
 #include "sipwrapper/SipWrapper.h"
+#include "config/ConfigManager.h"
+#include "config/Config.h"
+#include "chat/ChatHandler.h"
+#include "presence/PresenceHandler.h"
+#include "connect/ConnectHandler.h"
 
 #include <StringList.h>
 
@@ -48,14 +53,14 @@ std::string WengoPhone::getConfigFilesPath() {
 }
 
 
-WengoPhone::WengoPhone()
-	: _contactList(ContactList::getInstance()) {
+WengoPhone::WengoPhone() {
 	_logger = new WengoPhoneLogger();
 	_wenboxPlugin = new WenboxPlugin(*this);
 	_activePhoneLine = NULL;
 	_activePhoneCall = NULL;
 	_terminate = false;
 	_wengoAccountDataLayer = NULL;
+	_wengoAccount = NULL;
 }
 
 WengoPhone::~WengoPhone() {
@@ -64,6 +69,8 @@ WengoPhone::~WengoPhone() {
 	delete _activePhoneLine;
 	delete _activePhoneCall;
 	delete _wengoAccountDataLayer;
+	if (_wengoAccount)
+		delete _wengoAccount;
 }
 
 void WengoPhone::init() {
@@ -73,9 +80,23 @@ void WengoPhone::init() {
 	//Creates the history
 	//historyCreatedEvent
 
+	//Load IMAccounts
+	//
+
+	//Create ConnectHandler, PresenceHandler and ChatHandler
+	_connectHandler = new ConnectHandler();
+	connectHandlerCreatedEvent(*this, *_connectHandler);
+
+	_presenceHandler = new PresenceHandler(*_connectHandler);
+	presenceHandlerCreatedEvent(*this, *_presenceHandler);
+
+	_chatHandler = new ChatHandler(*_connectHandler);
+	chatHandlerCreatedEvent(*this, *_chatHandler);
+
 	//Creates the contact list
-	contactListCreatedEvent(*this, _contactList);
-	_contactList.load();
+	_contactList = new ContactList(*this);
+	contactListCreatedEvent(*this, *_contactList);
+	_contactList->load();
 
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
@@ -85,27 +106,12 @@ void WengoPhone::init() {
 	localAccount->init();
 	addPhoneLine(localAccount);*/
 
-	//Loads SIP accounts
-	WengoAccount * account = new WengoAccount(String::null, String::null, true);
-	account->loginEvent += boost::bind(&WengoPhone::wengoLoginEventHandler, this, _1, _2, _3, _4);
+	//Discover Network configuration
+	_networkDiscovery.proxySettingsNeededEvent += proxySettingsNeededEvent;
+	_networkDiscovery.discoveryDoneEvent += 
+		boost::bind(&WengoPhone::discoveryDoneEventHandler, this, _1, _2);
 
-	//Creates the connection to the IM services
-	ConnectHandler * connectHandler = new ConnectHandler(*this, *account);
-	connectHandlerCreatedEvent(*this, *connectHandler);
-
-	_wengoAccountDataLayer = new WengoAccountXMLLayer(*account);
-	bool noAccount = true;
-	if (_wengoAccountDataLayer->load()) {
-		if (account->hasAutoLogin()) {
-			//Sends the HTTP request to the SSO
-			account->init();
-			noAccount = false;
-		}
-	}
-
-	if (noAccount) {
-		wengoLoginEvent(*this, LoginNoAccount, String::null, String::null);
-	}
+	_networkDiscovery.discoverForSSO();
 
 	//initFinishedEvent
 	initFinishedEvent(*this);
@@ -128,7 +134,7 @@ void WengoPhone::makeCall(const std::string & phoneNumber) {
 }
 
 StringList WengoPhone::getContactGroupStringList() const {
-	return _contactList.toStringList();
+	return _contactList->toStringList();
 }
 
 void WengoPhone::terminate() {
@@ -149,25 +155,30 @@ void WengoPhone::addWengoAccount(const std::string & login, const std::string & 
 
 void WengoPhone::addWengoAccountThreadSafe(const std::string & login, const std::string & password, bool autoLogin) {
 	//Creates a SipAccount
-	WengoAccount * account = new WengoAccount(login, password, autoLogin);
-	account->loginEvent += boost::bind(&WengoPhone::wengoLoginEventHandler, this, _1, _2, _3, _4);
+	_wengoAccount = new WengoAccount(login, password, autoLogin);
+	_wengoAccount->loginEvent += boost::bind(&WengoPhone::wengoLoginEventHandler, this, _1, _2, _3, _4);
 
 	//Sends the HTTP request to the SSO
-	account->init();
+	_wengoAccount->init();
 }
 
 void WengoPhone::wengoLoginEventHandler(WengoAccount & sender, WengoAccount::LoginState state, const std::string & login, const std::string & password) {
 	//Retrieval and parsing of the XML datas from the SSO has been done
 
 	switch (state) {
-	case WengoAccount::LoginOk:
-		wengoLoginEvent(*this, LoginOk, login, password);
-		delete _wengoAccountDataLayer;
-		_wengoAccountDataLayer = new WengoAccountXMLLayer(sender);
-		_wengoAccountDataLayer->save();
+	case WengoAccount::LoginOk: {
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		config.set(Config::NETWORK_TUNNEL_SERVER_KEY, sender.getTunnelServerHostname());
+		config.set(Config::NETWORK_TUNNEL_PORT_KEY, (int)sender.getTunnelServerPort());
 
-		addPhoneLine(sender);
+		config.set(Config::NETWORK_SIP_SERVER_KEY, sender.getProxyServerHostname());
+		//TODO: we should also take the SIP port.
+
+		_networkDiscovery.discoverForSIP(sender.getProxyServerHostname(),
+			sender.getProxyServerPort());
+
 		break;
+	}
 
 	case WengoAccount::LoginNetworkError:
 		wengoLoginEvent(*this, LoginNetworkError, login, password);
@@ -190,12 +201,12 @@ void WengoPhone::addContact(Contact * contact, const std::string & contactGroupN
 }
 
 void WengoPhone::addContactThreadSafe(Contact * contact, const std::string & contactGroupName) {
-	ContactGroup * contactGroup = _contactList[contactGroupName];
+	ContactGroup * contactGroup = (*_contactList)[contactGroupName];
 
 	if (!contactGroup) {
 		//Creates a new ContactGroup
-		contactGroup = new ContactGroup(contactGroupName);
-		_contactList.addContactGroup(contactGroup);
+		contactGroup = new ContactGroup(contactGroupName, *this);
+		_contactList->addContactGroup(contactGroup);
 	}
 
 	contactGroup->addContact(contact);
@@ -229,4 +240,73 @@ void WengoPhone::addPhoneLine(const SipAccount & account) {
 
 WenboxPlugin & WengoPhone::getWenboxPlugin() const {
 	return *_wenboxPlugin;
+}
+
+void WengoPhone::discoveryDoneEventHandler(NetworkDiscovery & sender,
+	NetworkDiscovery::DiscoveryResult result) {
+	
+	switch (result) {
+	case NetworkDiscovery::DiscoveryResultSSOCanConnect: {
+		LOG_DEBUG("SSO can connect");
+		//Load SIP Accounts
+		_wengoAccount = new WengoAccount(String::null, String::null, true);
+		_wengoAccount->loginEvent += boost::bind(&WengoPhone::wengoLoginEventHandler, this, _1, _2, _3, _4);
+
+		_wengoAccountDataLayer = new WengoAccountXMLLayer(*_wengoAccount);
+		bool noAccount = true;
+		if (_wengoAccountDataLayer->load()) {
+			if (_wengoAccount->hasAutoLogin()) {
+				//Sends the HTTP request to the SSO
+				_wengoAccount->init();
+				noAccount = false;
+			}
+		}
+	
+		if (noAccount) {
+			wengoLoginEvent(*this, LoginNoAccount, String::null, String::null);
+		}
+		break;
+	}
+
+	case NetworkDiscovery::DiscoveryResultSSOCannotConnect:
+		LOG_DEBUG("SSO cannot connect");
+		break;
+
+	case NetworkDiscovery::DiscoveryResultSIPCanConnect: {
+		LOG_DEBUG("SIP can connect");
+
+		addPhoneLine(*_wengoAccount);
+
+		wengoLoginEvent(*this, LoginOk, _wengoAccount->getWengoLogin(), _wengoAccount->getWengoPassword());
+
+		if (_wengoAccountDataLayer) {
+			delete _wengoAccountDataLayer;
+		}
+		_wengoAccountDataLayer = new WengoAccountXMLLayer(*_wengoAccount);
+		_wengoAccountDataLayer->save();
+
+		IMAccount * imAccount = new IMAccount(_wengoAccount->getWengoLogin(), _wengoAccount->getWengoPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
+		_imAccountHandler.add(imAccount);
+		_connectHandler->connect(*imAccount);
+		
+		break;
+	}
+
+	case NetworkDiscovery::DiscoveryResultSIPCannotConnect:
+		LOG_DEBUG("SIP cannot connect");
+		break;
+	}
+}
+
+void WengoPhone::setProxySettings(const std::string & proxyAddress, int proxyPort,
+	const std::string & proxyLogin, const std::string & proxyPassword) {
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	config.set(Config::NETWORK_PROXY_SERVER_KEY, proxyAddress);
+	config.set(Config::NETWORK_PROXY_PORT_KEY, proxyPort);
+	config.set(Config::NETWORK_PROXY_LOGIN_KEY, proxyLogin);
+	config.set(Config::NETWORK_PROXY_PASSWORD_KEY, proxyPassword);
+
+	_networkDiscovery.discoverForSSO();
 }

@@ -19,18 +19,27 @@
 
 #include "QtChatHandler.h"
 
+#include "QtChatWidget.h"
+
 #include <control/chat/CChatHandler.h>
 
 #include <Logger.h>
 
+#include <QWidget>
+
 QtChatHandler::QtChatHandler(CChatHandler & cChatHandler) 
 	: _cChatHandler(cChatHandler) {
+
+	_cChatHandler.newChatSessionCreatedEvent +=
+		boost::bind(&QtChatHandler::newChatSessionCreatedEventHandler, this, _1, _2);
 }
 
 QtChatHandler::~QtChatHandler() {
 
 }
 
-IMChatSession * QtChatHandler::createSession(const IMAccount & imAccount) {
-	return _cChatHandler.createSession(imAccount);
+void QtChatHandler::newChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession) {
+	LOG_DEBUG("new ChatSession created");
+	QtChatWidget * qtChatWidget = new QtChatWidget(imChatSession);
+	qtChatWidget->getWidget()->show();
 }

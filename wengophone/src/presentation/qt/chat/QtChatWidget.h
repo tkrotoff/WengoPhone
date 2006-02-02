@@ -17,44 +17,57 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CHAT_H
-#define CHAT_H
+#ifndef QTCHATWIDGET_H
+#define QTCHATWIDGET_H
 
-#include <model/imwrapper/IMChat.h>
-
-#include <Interface.h>
-#include <Event.h>
-#include <List.h>
+#include <QObject>
 
 #include <string>
 
-class IMAccount;
 class IMChatSession;
+class IMContact;
+class QListWidget;
+class QWidget;
+class QLineEdit;
+class QPushButton;
 
 /**
- * Wrapper for Instant Messaging chat.
  *
- * @ingroup model
- * @author Tanguy Krotoff
+ * @ingroup presentation
  * @author Philippe Bernery
  */
-class Chat : Interface {
+class QtChatWidget : public QObject {
+	Q_OBJECT
 public:
 
-	Chat(IMAccount & account);
+	QtChatWidget(IMChatSession & imChatSession);
 
-	virtual ~Chat() { }
+	~QtChatWidget();
 
-	IMChatSession & createSession();
+	QWidget * getWidget() const {
+		return _chatWidget;
+	}
 
-protected:
+private Q_SLOTS:
 
-	List<IMChatSession *> _imChatSessionList;
+	void sendMessage();
 
-	IMAccount & _imAccount;
+private:
 
-	IMChat * _imChat;
+	void messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message);
+
+	void initThreadSafe();
+
+	QWidget * _chatWidget;
+
+	QLineEdit * _lineEdit;
+
+	QListWidget * _listWidget;
+
+	QPushButton * _sendButton;
+
+	IMChatSession & _imChatSession;
 
 };
 
-#endif	//CHAT_H
+#endif	//QTCHATWIDGET_H

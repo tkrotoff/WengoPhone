@@ -47,7 +47,7 @@ private:
 
 	PhApiIMChat(IMAccount & account, PhApiWrapper & phApiWrapper);
 
-	void messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message);
+	void messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession * chatSession, const std::string & from, const std::string & message);
 
 	void messageStatusEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message);
 

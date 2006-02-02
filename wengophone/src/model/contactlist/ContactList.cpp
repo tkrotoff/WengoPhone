@@ -27,7 +27,8 @@
 
 #include <StringList.h>
 
-ContactList::ContactList() {
+ContactList::ContactList(WengoPhone & wengoPhone)
+	: _wengoPhone(wengoPhone) {
 	_dataLayer = NULL;
 }
 
@@ -107,6 +108,6 @@ std::string ContactList::serialize() {
 }
 
 bool ContactList::unserialize(const std::string & data) {
-	ContactListParser parser(*this, data);
+	ContactListParser parser(*this, _wengoPhone, data);
 	return true;
 }

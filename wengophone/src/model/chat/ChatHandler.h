@@ -21,6 +21,7 @@
 #define CHATHANDLER_H
 
 #include <model/imwrapper/IMChat.h>
+#include <model/imwrapper/IMChatMap.h>
 
 #include <NonCopyable.h>
 #include <Event.h>
@@ -29,7 +30,7 @@
 
 class IMAccount;
 class IMChatSession;
-class Chat;
+class ConnectHandler;
 
 /**
  *
@@ -40,36 +41,37 @@ class Chat;
 class ChatHandler : NonCopyable {
 public:
 
-	ChatHandler();
+	ChatHandler(ConnectHandler & connectHandler);
 
 	~ChatHandler();
 
 	/**
-	 * Create a new session.
-	 *
-	 * @param imAccount IMAccount that will be associated with the new session
-	 * @return a new IMChatSession or NULL if IMAccount does not exist
+	 * Emitted when a new IMChatSession has been created.
+	 * 
+	 * @param sender this class
+	 * @param imChatSession the new IMChatSession
 	 */
-	IMChatSession * createSession(const IMAccount & imAccount);
+	Event<void (ChatHandler & sender, IMChatSession & imChatSession)> newChatSessionCreatedEvent;
 
-	void connected(IMAccount & account);
-
-	void disconnected(IMAccount & account);
+	/**
+	 * Create a new IMChatSession.
+	 * The newChatSessionCreatedEvent is emitted when an IMChatSession is created
+	 */
+	void createSession();
 
 private:
 
-	typedef std::map<IMAccount *, Chat *> ChatMap;
+	typedef std::vector<IMChatSession *> IMChatSessionList;
 
-	/**
-	 * Find the Chat related to the given protocol.
-	 *
-	 * @param chatMap the ChatMap to search in
-	 * @param protocol the protocol
-	 * @return an iterator to the desired Chat or 'end' of the given ChatMap
-	 */
-	static ChatMap::iterator findChat(ChatMap & chatMap, IMAccount & imAccount);
+	void connectedEventHandler(ConnectHandler & sender, IMAccount & account);
 
-	ChatMap _chatMap;
+	void disconnectedEventHandler(ConnectHandler & sender, IMAccount & account);
+
+	void messageReceivedEventHandler(IMChat & sender, IMChatSession * chatSession, const std::string & from, const std::string & message);
+
+	IMChatMap _imChatMap;
+
+	IMChatSessionList _imChatSessionList;
 
 };
 

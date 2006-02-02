@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTACTLISTPARSER_H
-#define CONTACTLISTPARSER_H
+#ifndef IMCHATMAP_H
+#define IMCHATMAP_H
 
-#include <string>
+#include <map>
 
-class ContactList;
-class WengoPhone;
+class IMAccount;
+class IMChat;
 
-/**
- * Parses the XML datas to create the ContactList.
- *
- * This a separated class rather than to be inside the class ContactList,
- * this allows more modularity and encapsulates the use of TinyXML.
- *
- * @ingroup model
- * @author Tanguy Krotoff
- */
-class ContactListParser {
-public:
-
-	ContactListParser(ContactList & contactList, WengoPhone & wengoPhone, 
-		const std::string & data);
+class IMChatMap : public std::map<IMAccount *, IMChat *>
+{
 };
 
-#endif	//CONTACTLISTPARSER_H
+#endif /*IMCHATMAP_H*/

@@ -19,59 +19,63 @@
 
 #include "ChatHandler.h"
 
-#include <model/chat/Chat.h>
 #include <model/imwrapper/IMAccount.h>
 #include <model/imwrapper/IMChatSession.h>
+#include <model/imwrapper/IMWrapperFactory.h>
+#include <model/connect/ConnectHandler.h>
 
 #include <Logger.h>
 
 using namespace std;
 
-ChatHandler::ChatHandler() {
-
+ChatHandler::ChatHandler(ConnectHandler & connectHandler) {
+	connectHandler.connectedEvent += 
+		boost::bind(&ChatHandler::connectedEventHandler, this, _1, _2);
+	connectHandler.disconnectedEvent += 
+		boost::bind(&ChatHandler::disconnectedEventHandler, this, _1, _2);	
 }
 
 ChatHandler::~ChatHandler() {
-	for (ChatMap::iterator i = _chatMap.begin() ; i != _chatMap.end() ; i++) {
+	for (IMChatMap::iterator i = _imChatMap.begin() ; i != _imChatMap.end() ; i++) {
 		delete (*i).second;
 	}
-}
 
-IMChatSession * ChatHandler::createSession(const IMAccount & imAccount) {
-	ChatMap::iterator it = findChat(_chatMap, (IMAccount &)imAccount);
-
-	if (it != _chatMap.end()) {
-		IMChatSession & newSession = (*it).second->createSession();
-		LOG_DEBUG("new session created for protocol: " + String::fromNumber(imAccount.getProtocol()) 
-			+ " and login: " + imAccount.getLogin());
-		return &newSession;
-	} else {
-		return NULL;
+	for (IMChatSessionList::iterator i = _imChatSessionList.begin() ; i != _imChatSessionList.end() ; i++) {
+		delete (*i);
 	}
 }
 
-void ChatHandler::connected(IMAccount & account) {
-	ChatMap::iterator i = _chatMap.find(&account);
+void ChatHandler::createSession() {
+	IMChatSession * imChatSession = new IMChatSession(_imChatMap);
+	_imChatSessionList.push_back(imChatSession);
+
+	newChatSessionCreatedEvent(*this, *imChatSession);
+}
+
+void ChatHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & account) {
+	IMChatMap::iterator i = _imChatMap.find(&account);
 	
 	LOG_DEBUG("an account is connected: login: " + account.getLogin() 
 		+ "protocol: " + String::fromNumber(account.getProtocol()));
-	//Chat for this IMAccount has not been created yet
-	if (i == _chatMap.end()) {
-		Chat * chat = new Chat(account);
-		_chatMap[&account] = chat;
+	//IMChat for this IMAccount has not been created yet
+	if (i == _imChatMap.end()) {
+		IMChat * imChat = IMWrapperFactory::getFactory().createIMChat(account);
+		imChat->messageReceivedEvent +=
+			boost::bind(&ChatHandler::messageReceivedEventHandler, this, _1, _2, _3, _4);
+
+		_imChatMap[&account] = imChat;
 	}
 }
 
-void ChatHandler::disconnected(IMAccount & account) {
-
+void ChatHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & account) {
 }
 
-ChatHandler::ChatMap::iterator ChatHandler::findChat(ChatMap & chatMap, IMAccount & imAccount) {
-	ChatMap::iterator i;
-	for (i = chatMap.begin() ; i != chatMap.end() ; i++) {
-		if ((*((*i).first)) == imAccount) {
-			break;
-		} 
+void ChatHandler::messageReceivedEventHandler(IMChat & sender, IMChatSession * chatSession, const std::string & from, const std::string & message) {
+	if (!chatSession) {
+		IMChatSession * imChatSession = new IMChatSession(_imChatMap);
+		_imChatSessionList.push_back(imChatSession);
+
+		newChatSessionCreatedEvent(*this, *imChatSession);
+		imChatSession->messageReceivedEventHandler(sender, imChatSession, from, message);
 	}
-	return i;
 }

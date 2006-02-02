@@ -27,6 +27,7 @@
 #include <string>
 
 class Contact;
+class WengoPhone;
 
 /**
  * A group of contacts (i.e familly, friends ect...).
@@ -62,7 +63,7 @@ public:
 	 */
 	Event < void(ContactGroup & sender, Contact & contact) > contactRemovedEvent;
 
-	ContactGroup(const std::string & groupName);
+	ContactGroup(const std::string & groupName, WengoPhone & wengoPhone);
 
 	void setName(const std::string & groupName) {
 		_groupName = groupName;
@@ -121,6 +122,9 @@ private:
 
 	/** Name of the ContactGroup. */
 	std::string _groupName;
+
+	WengoPhone & _wengoPhone;
+
 };
 
 #endif	//CONTACTGROUP_H

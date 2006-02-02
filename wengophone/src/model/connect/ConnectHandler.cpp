@@ -20,76 +20,51 @@
 #include "ConnectHandler.h"
 
 #include <model/connect/Connect.h>
-#include <model/chat/Chat.h>
 #include <model/WengoPhone.h>
 #include <model/imwrapper/IMAccount.h>
-#include <model/imwrapper/IMAccountList.h>
 #include <model/imwrapper/EnumIMProtocol.h>
 #include <model/presence/Presence.h>
 #include <model/presence/PresenceHandler.h>
 
 #include <Logger.h>
 
-ConnectHandler::ConnectHandler(WengoPhone & wengoPhone, WengoAccount & wengoAccount)
-	: _wengoPhone(wengoPhone),
-	_presenceHandler(PresenceHandler::getInstance()) {
+using namespace std;
 
-	wengoAccount.loginEvent += boost::bind(&ConnectHandler::wengoLoginEventHandler, this, _1, _2, _3, _4);
-
-	//Read the configuration file.
-	/* Should be in IMAccountList
-	for () {
-		IMAccount * imAccount = new IMAccount(login, password, IMAccount::IMProtocolSIPSIMPLE);
-		_accountList += imAccount;
-
-		IMConnect * connect = IMWrapperFactory::getFactory().createIMConnect(*imAccount);
-		_connectList += connect;
-		connect->loginStatusEvent += boost::bind(&ConnectHandler::loginStatusEventHandler, this, _1, _2);
-		connect->connect();
-	}
-	*/
+ConnectHandler::ConnectHandler() {
 }
 
 ConnectHandler::~ConnectHandler() {
 }
 
-void ConnectHandler::wengoLoginEventHandler(WengoAccount & sender, WengoAccount::LoginState state,
-			const std::string & login, const std::string & password) {
+void ConnectHandler::connect(const IMAccount & imAccount) {
+	Connect *connect;
+	ConnectMap::const_iterator it = _connectMap.find(&imAccount);
 
-	switch (state) {
-	case WengoAccount::LoginOk: {
-		presenceHandlerCreatedEvent(*this, _presenceHandler);
-		chatHandlerCreatedEvent(*this, _chatHandler);
-
-		//Creates the connection to the IM service
-		IMAccount * imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolSIPSIMPLE);
-		IMAccountList::getInstance().add(imAccount);
-
-		Connect * connect = new Connect(*imAccount);
-		_connectList += connect;
-		connect->loginStatusEvent += boost::bind(&ConnectHandler::loginStatusEventHandler, this, _1, _2);
-		connect->connect();
-
-		break;
+	if (it == _connectMap.end()) {
+		connect = new Connect((IMAccount &)imAccount);
+		connect->loginStatusEvent +=
+			boost::bind(&ConnectHandler::loginStatusEventHandler, this, _1, _2);
+		_connectMap.insert(pair<const IMAccount *, Connect *>(&imAccount, connect));
+	} else {
+		connect = (*it).second;	
 	}
 
-	case WengoAccount::LoginNetworkError:
-		break;
+	connect->connect();
+}
 
-	case WengoAccount::LoginPasswordError:
-		break;
+void ConnectHandler::disconnect(const IMAccount & imAccount) {
+	ConnectMap::const_iterator it = _connectMap.find(&imAccount);
 
-	default:
-		LOG_FATAL("WengoAccount::LoginState unknown state");
-		break;
+	if (it != _connectMap.end()) {
+		(*it).second->disconnect();
 	}
 }
 
-void ConnectHandler::loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status) {
+void ConnectHandler::loginStatusEventHandler(IMConnect & sender,
+	IMConnect::LoginStatus status) {
 	switch(status) {
 	case IMConnect::LoginStatusConnected: {
-		_chatHandler.connected(sender.getIMAccount());
-		_presenceHandler.connected(sender.getIMAccount());
+		connectedEvent(*this, sender.getIMAccount());
 		break;
 	}
 
@@ -97,8 +72,7 @@ void ConnectHandler::loginStatusEventHandler(IMConnect & sender, IMConnect::Logi
 		break;
 
 	case IMConnect::LoginStatusDisconnected:
-		_chatHandler.disconnected(sender.getIMAccount());
-		_presenceHandler.disconnected(sender.getIMAccount());
+		disconnectedEvent(*this, sender.getIMAccount());
 		break;
 
 	default:

@@ -28,7 +28,8 @@ Connect::Connect(IMAccount & account)
 	
 	_imConnect = IMWrapperFactory::getFactory().createIMConnect(account);
 	
-	_imConnect->loginStatusEvent += boost::bind(&Connect::loginStatusEventHandler, this, _1, _2);
+	_imConnect->loginStatusEvent +=
+		boost::bind(&Connect::loginStatusEventHandler, this, _1, _2);
 	_imConnect->loginStatusEvent += loginStatusEvent;
 }
 

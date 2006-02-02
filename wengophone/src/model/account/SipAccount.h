@@ -52,6 +52,10 @@ public:
 	virtual unsigned getProxyServerPort() const = 0;
 
 	virtual const std::string & getPassword() const = 0;
+
+	virtual const std::string & getTunnelServerHostname() const = 0;
+
+	virtual unsigned getTunnelServerPort() const = 0;
 };
 
 #endif	//SIPACCOUNT_H

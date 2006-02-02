@@ -60,7 +60,7 @@ public:
 
 	bool isConnected() { return _connected; }
 	
-	IMAccount & getIMAccount() const {
+	const IMAccount & getIMAccount() const {
 		return _account;
 	}
 

@@ -89,6 +89,11 @@ public:
 private:
 
 	/**
+	 * Create and set the SIP stack.
+	 */
+	void initSIPWrapper();
+
+	/**
 	 * Creates a new PhoneCall waiting to receive callbacks.
 	 *
 	 * @return PhoneCall created

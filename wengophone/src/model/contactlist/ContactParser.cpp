@@ -21,8 +21,9 @@
 
 #include "Contact.h"
 #include <model/WengoPhoneLogger.h>
+#include <model/WengoPhone.h>
 #include <model/presence/PresenceHandler.h>
-#include <model/imwrapper/IMAccountList.h>
+#include <model/imwrapper/IMAccountHandler.h>
 #include <model/imwrapper/IMContact.h>
 
 #include <tinyxml.h>
@@ -52,16 +53,15 @@ ContactParser::ContactParser(Contact & contact, const std::string & data) {
 	parseIMAccount(contact, vCard, "JABBERID", EnumIMProtocol::IMProtocolJabber);
 
 	text = vCard.FirstChild("WENGOID").FirstChild().Text();
-	/*
+
 	if (text) {
 		//FIXME: crashes when IMAccountList is populated after initializing the ContactList
-		List<IMAccount *> list = IMAccountList::getInstance().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		List<IMAccount *> list = contact.getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
 		
 		IMContact imContact(*list[0], text->Value());
 		contact.addIMContact(imContact);
-		contact.setWengoPhone(text->Value());
+		contact.setWengoPhoneId(text->Value());
 	}
-	*/
 }
 
 void ContactParser::parseIMAccount(Contact & contact, const TiXmlHandle & handle, const std::string & protocolId, EnumIMProtocol::IMProtocol protocol) {

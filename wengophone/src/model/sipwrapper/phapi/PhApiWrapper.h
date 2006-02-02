@@ -48,7 +48,7 @@ class IMChatSession;
 class PhApiWrapper : public SipWrapper {
 public:
 
-	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (PhApiWrapper & sender, IMChatSession * chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
 
 	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
 
@@ -103,6 +103,17 @@ public:
 	bool setCallOutputAudioDevice(const std::string & deviceName);
 
 	bool enableAEC(bool enable);
+
+	void init();
+
+	void setProxy(const std::string & address, int port, 
+		const std::string & login, const std::string & password);
+
+	void setTunnel(bool needed, const std::string & address, int port, bool ssl);
+
+	void setNatType(NatType natType);
+
+	void setSIP(const std::string & server, int localPort);
 
 	static void callProgress(int callId, const phCallStateInfo_t * info);
 
@@ -163,9 +174,12 @@ public:
 
 private:
 
-	PhApiWrapper(PhApiCallbacks & callbacks);
+	/**
+	 * Set phApi with parameters previously set with setProxy, etc. methods.
+	 */
+	void setNetworkParameter();
 
-	void detectNetworkConfig();
+	PhApiWrapper(PhApiCallbacks & callbacks);
 
 	static PhApiCallbacks * _callbacks;
 
@@ -182,6 +196,29 @@ private:
 	std::string _realm;
 
 	std::map<int, IMChatSession *> _messageIdChatSessionMap;
+
+	std::string _proxyAddress;
+
+	int _proxyPort;
+
+	std::string _proxyLogin;
+
+	std::string _proxyPassword;
+
+	bool _tunnelNeeded;
+
+	std::string _tunnelAddress;
+
+	int _tunnelPort;
+
+	bool _tunnelSSL;
+
+	NatType _natType;
+
+	std::string _sipAddress;
+
+	int _sipLocalPort;
+
 };
 
 #endif	//PHAPIWRAPPER_H

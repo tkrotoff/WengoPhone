@@ -20,7 +20,10 @@
 #ifndef WENGOPHONE_H
 #define WENGOPHONE_H
 
-#include "account/wengo/WengoAccount.h"
+#include <model/account/wengo/WengoAccount.h>
+#include <model/NetworkDiscovery.h>
+#include <model/account/wengo/WengoAccount.h>
+#include <model/imwrapper/IMAccountHandler.h>
 
 #include <Event.h>
 #include <Thread.h>
@@ -32,12 +35,15 @@
 class IPhoneLine;
 class PhoneCall;
 class WengoPhoneLogger;
+class WengoAccount;
 class WengoAccountDataLayer;
 class WenboxPlugin;
 class ContactList;
 class Contact;
 class StringList;
 class ConnectHandler;
+class PresenceHandler;
+class ChatHandler;
 
 /**
  * @defgroup model Model Component
@@ -138,6 +144,31 @@ public:
 	 */
 	Event<void (WengoPhone & sender, ContactList & contactList)> contactListCreatedEvent;
 
+	/**
+	 * Proxy Settings are needed to connect.
+	 * 
+	 * @param proxyAddress address of the detected proxy
+	 * @param proxyPort port of the detected proxy
+	 */
+	Event<void (NetworkDiscovery & sender, const std::string & proxyAddress,
+		int proxyPort)> proxySettingsNeededEvent;
+
+	/**
+	 * PresenceHandler has been created.
+	 *
+	 * @param sender this class
+	 * @param imHandler ConnectHandler created
+	 */
+	Event<void (WengoPhone & sender, PresenceHandler & presenceHandler)> presenceHandlerCreatedEvent;
+
+	/**
+	 * ChatHandler has been created.
+	 *
+	 * @param sender this class
+	 * @param imHandler ConnectHandler created
+	 */
+	Event<void (WengoPhone & sender, ChatHandler & chatHandler)> chatHandlerCreatedEvent;
+
 	/** Defines the vector of IPhoneLine. */
 	typedef List < IPhoneLine * > PhoneLines;
 
@@ -231,6 +262,18 @@ public:
 	 */
 	void terminate();
 
+	PresenceHandler & getPresenceHandler() const {
+		return *_presenceHandler;
+	}
+
+	ChatHandler & getChatHandler() const {
+		return *_chatHandler;
+	}
+
+	IMAccountHandler & getIMAccountHandler() {
+		return _imAccountHandler;
+	}
+
 private:
 
 	/**
@@ -253,9 +296,16 @@ private:
 	 */
 	void addContactThreadSafe(Contact * contact, const std::string & contactGroupName);
 
-	void wengoLoginEventHandler(WengoAccount & sender, WengoAccount::LoginState state, const std::string & login, const std::string & password);
+	void discoveryDoneEventHandler(NetworkDiscovery & sender,
+		NetworkDiscovery::DiscoveryResult result);
 
-	/**
+	void setProxySettings(const std::string & proxyAddress, int proxyPort,
+		const std::string & proxyLogin, const std::string & proxyPassword);
+
+	void wengoLoginEventHandler(WengoAccount & sender, WengoAccount::LoginState state,
+		const std::string & login, const std::string & password);
+
+		/**
 	 * Creates and adds a new PhoneLine given a SipAccount.
 	 *
 	 * This is a helper method.
@@ -274,7 +324,7 @@ private:
 	PhoneLines _phoneLineList;
 
 	/** List of Contact. */
-	ContactList & _contactList;
+	ContactList * _contactList;
 
 	/** The logging system. */
 	WengoPhoneLogger * _logger;
@@ -284,6 +334,19 @@ private:
 
 	/** Data layer to save the Wengo account. */
 	WengoAccountDataLayer * _wengoAccountDataLayer;
+
+	/** NetworkDiscovery service. */
+	NetworkDiscovery _networkDiscovery;
+
+	ConnectHandler * _connectHandler;
+
+	PresenceHandler * _presenceHandler;
+
+	ChatHandler * _chatHandler;
+
+	IMAccountHandler _imAccountHandler;
+
+	WengoAccount * _wengoAccount;
 
 	/**
 	 * If this thread should be terminate or not.

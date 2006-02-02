@@ -7,6 +7,7 @@ projects = [
 	'wengoscons/libs/sdl_image',
 	'libs/global',
 	'libs/timer',
+	'libs/openssl',
 	'libs/samplerate',
 	'libs/tinyxml',
 	'libs/curl',

@@ -30,7 +30,8 @@
 #include <iostream>
 using namespace std;
 
-ContactGroupParser::ContactGroupParser(ContactGroup & contactGroup, const std::string & data) {
+ContactGroupParser::ContactGroupParser(ContactGroup & contactGroup,
+	WengoPhone & wengoPhone, const std::string & data) {
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
 
@@ -44,7 +45,7 @@ ContactGroupParser::ContactGroupParser(ContactGroup & contactGroup, const std::s
 	for (TiXmlNode * node = list->FirstChild("vCard"); node; node = node->NextSibling("vCard")) {
 		TiXmlElement * elem = node->ToElement();
 		if (elem) {
-			Contact * contact = new Contact(PresenceHandler::getInstance());
+			Contact * contact = new Contact(wengoPhone);
 			std::string tmp;
 			tmp << *elem;
 			contact->unserialize(tmp);

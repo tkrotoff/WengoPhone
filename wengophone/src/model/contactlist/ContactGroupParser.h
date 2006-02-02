@@ -23,7 +23,7 @@
 #include <string>
 
 class ContactGroup;
-class PresenceHandler;
+class WengoPhone;
 
 /**
  * Parses the XML datas to create a ContactGroup.
@@ -37,7 +37,8 @@ class PresenceHandler;
 class ContactGroupParser {
 public:
 
-	ContactGroupParser(ContactGroup & contactGroup, const std::string & data);
+	ContactGroupParser(ContactGroup & contactGroup, WengoPhone & wengoPhone,
+		const std::string & data);
 };
 
 #endif	//CONTACTGROUPPARSER_H

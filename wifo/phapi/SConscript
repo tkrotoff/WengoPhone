@@ -214,7 +214,8 @@ if WengoGetConsoleArgument('enable-video'):
 if WengoGetConsoleArgument('enable-http-tunnel'):
 	libs += [
 		'wengocurl',
-		'httptunnel'
+		'httptunnel',
+		'openssl',
 	]
 	defines['USE_HTTP_TUNNEL'] = 1
 

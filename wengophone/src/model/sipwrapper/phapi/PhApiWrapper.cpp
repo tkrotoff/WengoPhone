@@ -97,37 +97,7 @@ phCallbacks_t phApiCallbacks = {
 PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 	_callbacks = &callbacks;
 	_wengoVline = -1;
-
-	//NAT type + HTTP tunnel
-	detectNetworkConfig();
-
-	//Ignored since we are in direct link mode
-	static const std::string phApiServer = "127.0.0.1";
-
-	//If asynchronous mode = false then we have to call phPoll()
-	static const bool asynchronousMode = true;
-
-	//FIXME ugly hack for xpcom component
-	std::string pluginPath = File::convertPathSeparators(WengoPhone::getConfigFilesPath() + "../extensions/{debaffee-a972-4d8a-b426-8029170f2a89}/libraries/");
-	strncpy(phcfg.plugin_path, pluginPath.c_str(), 256);
-
-	//Codec list
-	//strncpy(phcfg.audio_codecs, "PCMU,PCMA,GSM,ILBC,SPEEX,SPEEX,AMR,AMR-WB", 128);
-	strncpy(phcfg.audio_codecs, "G726-64wb/16000,ILBC/8000,PCMU/8000,PCMA/8000,GSM/8000", 128);
-
-	strncpy(phcfg.video_codecs, "H263,H264,MPEG4", 128);
-
-	int ret = phInit(&phApiCallbacks, (char *) phApiServer.c_str(), asynchronousMode);
-	if (ret == PhApiResultNoError) {
-		_isInitialized = true;
-	} else {
-		_isInitialized = false;
-		LOG_DEBUG("cannot initialize phApi");
-	}
-
-	//Stub
-	setCallInputAudioDevice("");
-
+	_isInitialized = false;
 	PhApiWrapperHack = this;
 }
 
@@ -140,48 +110,42 @@ void PhApiWrapper::terminate() {
 	}
 }
 
-void PhApiWrapper::detectNetworkConfig() {
-	const string stunAddress = "stun.wengo.fr";
+void PhApiWrapper::setNetworkParameter() {
+	std::string natType = "auto";
+	int natRefreshTime = 30;
 
-	//is_udp_port_open only tests if the stun server is accessible by any port
-	if (is_udp_port_open(stunAddress.c_str(), SIP_PORT) != NETLIB_TRUE) {
-		LOG_DEBUG("phApi initialization with http tunnel");
+	if (_tunnelNeeded) {
+		//TODO: activate SSL for HTTP tunnel
+		phTunnelConfig(_proxyAddress.c_str(), _proxyPort, _tunnelAddress.c_str(), _tunnelPort,
+			_proxyLogin.c_str(), _proxyPassword.c_str(), 0);
 
-		//Connection via Http or Https Tunnel maybe through a proxy
-		char * localProxyUrl = get_local_http_proxy_address();
-		int localProxyPort = get_local_http_proxy_port();
-		//TODO: test if proxy needs an authentication
-		string proxyLogin = "";
-		string proxyPassword = "";
-
-		if (localProxyUrl) {
-			LOG_DEBUG("local proxy URL: " + string(localProxyUrl));
-			LOG_DEBUG("local proxy port: " + String::fromNumber(localProxyPort));
-		}
-
-		int port = 0;
-		if (is_tcp_port_open(stunAddress.c_str(), HTTP_PORT) == NETLIB_TRUE) {
-			port = HTTP_PORT;
-		} else if (is_tcp_port_open(stunAddress.c_str(), HTTPS_PORT) == NETLIB_TRUE) {
-			port = HTTPS_PORT;
-		} else {
-			LOG_DEBUG("cannot open a connection to stun server");
-		}
-
-		phTunnelConfig(localProxyUrl, localProxyPort, "", port,
-			proxyLogin.c_str(), proxyPassword.c_str(), 0);
+		natType = "fcone";		
 	} else {
-		//Direct Connection
-		LOG_DEBUG("phApi initialization without HTTP tunnel");
+		switch(_natType) {
+		case StunTypeOpen:
+			natType = "none";
+			natRefreshTime = 0;
+			break;
+		case StunTypeConeNat:
+			natType = "fcone";
+			break;
+		case StunTypeRestrictedNat:
+			natType = "rcone";
+			break;
+		case StunTypePortRestrictedNat:
+			natType = "prcone";
+			break;
+		case StunTypeSymNat:
+		case StunTypeSymFirewall:
+			natType = "sym";
+			break;
+		}
 
-		//Configure the NAT type
-		//If fcone then it sends a SIP option message in order to traverse NAT
-		std::string tmp = "fcone";
-		strncpy(phcfg.nattype, tmp.c_str(), 16);
-
-		phcfg.nat_refresh_time = 30;
 		phcfg.use_tunnel = 0;
 	}
+
+	strncpy(phcfg.nattype, natType.c_str(), 16);
+	phcfg.nat_refresh_time = natRefreshTime;
 }
 
 int PhApiWrapper::addVirtualLine(const std::string & displayName,
@@ -482,4 +446,63 @@ void PhApiWrapper::unblockContact(const std::string & contactId) {
 	allowWatcher(sipAddress);
 }
 
+void PhApiWrapper::setProxy(const std::string & address, int port, 
+	const std::string & login, const std::string & password) {
+	
+	_proxyAddress = address;
+	_proxyPort = port;
+	_proxyLogin = login;
+	_proxyPassword = password;
+}
 
+void PhApiWrapper::setTunnel(bool needed, const std::string & address, int port, bool ssl) {
+	_tunnelNeeded = needed;
+	_tunnelAddress = address;
+	_tunnelPort = port;
+	_tunnelSSL = ssl;
+}
+
+void PhApiWrapper::setNatType(NatType natType) {
+	_natType = natType;
+}
+
+void PhApiWrapper::setSIP(const string & server, int localPort) {
+	_sipAddress = server;
+	_sipLocalPort = localPort;
+}
+
+void PhApiWrapper::init() {
+	setNetworkParameter();
+
+	//Ignored since we are in direct link mode
+	static const std::string phApiServer = "127.0.0.1";
+
+	//If asynchronous mode = false then we have to call phPoll()
+	static const bool asynchronousMode = true;
+
+	//FIXME ugly hack for xpcom component
+	std::string pluginPath = File::convertPathSeparators(WengoPhone::getConfigFilesPath() + "../extensions/{debaffee-a972-4d8a-b426-8029170f2a89}/libraries/");
+	strncpy(phcfg.plugin_path, pluginPath.c_str(), 256);
+
+	//Codec list
+	//strncpy(phcfg.audio_codecs, "PCMU,PCMA,GSM,ILBC,SPEEX,SPEEX,AMR,AMR-WB", 128);
+	strncpy(phcfg.audio_codecs, "G726-64wb/16000,ILBC/8000,PCMU/8000,PCMA/8000,GSM/8000", 128);
+
+	strncpy(phcfg.video_codecs, "H263,H264,MPEG4", 128);
+
+	strncpy(phcfg.proxy, _sipAddress.c_str(), 64);
+
+	String localPort = String::fromNumber(_sipLocalPort);
+	strncpy(phcfg.sipport, localPort.c_str(), 16);
+
+	int ret = phInit(&phApiCallbacks, (char *) phApiServer.c_str(), asynchronousMode);
+	if (ret == PhApiResultNoError) {
+		_isInitialized = true;
+	} else {
+		_isInitialized = false;
+		LOG_DEBUG("cannot initialize phApi");
+	}
+
+	//Stub
+	setCallInputAudioDevice("");
+}

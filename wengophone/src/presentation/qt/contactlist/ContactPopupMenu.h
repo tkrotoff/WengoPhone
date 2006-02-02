@@ -27,6 +27,7 @@
 class Contact;
 class QTreeWidgetItem;
 class QModelIndex;
+class WengoPhone;
 
 /**
  * Menu of a Contact, popped each time a user clicks on a Contact using
@@ -43,7 +44,7 @@ public:
 	 *
 	 * @param parent parent widget
 	 */
-	ContactPopupMenu(QWidget * parent);
+	ContactPopupMenu(QWidget * parent, WengoPhone & wengoPhone);
 
 public Q_SLOTS:
 
@@ -111,6 +112,9 @@ private Q_SLOTS:
 private:
 
 	const Contact * _contact;
+
+	WengoPhone & _wengoPhone;
+
 };
 
 #endif	//CONTACTPOPUPMENU_H

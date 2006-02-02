@@ -15,7 +15,8 @@ sources = [
 	'src/netlib.cpp', 
 	'stun_func.cpp',
 	'udp_func.cpp',
-	'bugfix.cpp'
+	'bugfix.cpp',
+	'get_net_conf.cpp',
 ]
 
 if WengoOSWindows():

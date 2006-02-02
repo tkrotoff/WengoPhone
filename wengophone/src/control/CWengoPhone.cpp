@@ -32,6 +32,8 @@
 #include "wenbox/CWenboxPlugin.h"
 #include "WengoPhoneBuildId.h"
 #include "connect/CConnectHandler.h"
+#include <control/chat/CChatHandler.h>
+#include <control/presence/CPresenceHandler.h>
 
 #include <WebBrowser.h>
 #include <StringList.h>
@@ -50,6 +52,10 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.contactListCreatedEvent += boost::bind(&CWengoPhone::contactListCreatedEventHandler, this, _1, _2);
 	_wengoPhone.connectHandlerCreatedEvent += boost::bind(&CWengoPhone::connectHandlerCreatedEventHandler, this, _1, _2);
+	_wengoPhone.presenceHandlerCreatedEvent += 
+		boost::bind(&CWengoPhone::presenceHandlerCreatedEventHandler, this, _1, _2);
+	_wengoPhone.chatHandlerCreatedEvent += 
+		boost::bind(&CWengoPhone::chatHandlerCreatedEventHandler, this, _1, _2);
 }
 
 void CWengoPhone::makeCall(const std::string & phoneNumber) {
@@ -136,4 +142,13 @@ void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 
 void CWengoPhone::wengoLoginEventHandler(WengoPhone & sender, WengoPhone::LoginState state, const std::string & login, const std::string & password) {
 	_pWengoPhone->wengoLoginStateChangedEvent(state, login, password);
+}
+
+
+void CWengoPhone::presenceHandlerCreatedEventHandler(WengoPhone & sender, PresenceHandler & presenceHandler) {
+	_cPresenceHandler = new CPresenceHandler(presenceHandler);
+}
+
+void CWengoPhone::chatHandlerCreatedEventHandler(WengoPhone & sender, ChatHandler & chatHandler) {
+	_cChatHandler = new CChatHandler(chatHandler);
 }

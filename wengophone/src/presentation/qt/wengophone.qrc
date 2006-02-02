@@ -11,6 +11,7 @@
 		<file>contactlist/ContactListWidget.ui</file>
 		<file>contactlist/ContactWidget.ui</file>
 		<file>contactlist/AddContactWindow.ui</file>
+		<file>chat/ChatWidget.ui</file>
 	</qresource>
 	<qresource>
 		<file>pics/arrow_down.png</file>

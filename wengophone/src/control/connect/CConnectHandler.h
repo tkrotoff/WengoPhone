@@ -29,10 +29,6 @@ class IMChat;
 class IMConnect;
 class ConnectHandler;
 class PConnectHandler;
-class PresenceHandler;
-class ChatHandler;
-class CPresenceHandler;
-class CChatHandler;
 
 /**
  *
@@ -54,17 +50,9 @@ public:
 
 private:
 
-	void presenceHandlerCreatedEventHandler(ConnectHandler & sender, PresenceHandler & presenceHandler);
-
-	void chatHandlerCreatedEventHandler(ConnectHandler & sender, ChatHandler & chatHandler);
-
 	ConnectHandler & _connectHandler;
 
 	PConnectHandler * _pConnectHandler;
-
-	CPresenceHandler * _cPresenceHandler;
-
-	CChatHandler * _cChatHandler;
 
 };
 

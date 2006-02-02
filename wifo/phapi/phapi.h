@@ -177,17 +177,17 @@ enum phErrors {
  *
  * @param  displayname display name component of the SIP identity "displayname" <sip:username@host> 
  * @param  username    username    
- * @param  host        the host component of SIP identity username@host corresponding to this virtual ligne
+ * @param  host        the host component of SIP identity username@host corresponding to this virtual line
  *                     if regTimeout != 0 'host' will designate the REGISTRAR server, in this case it may have form of host:port
  *                     otherwise it should be set to IP address or hostname of the local machine
- * @param  proxy       outgoing proxy URI  (all calls using this virtual ligne will be routed
+ * @param  proxy       outgoing proxy URI  (all calls using this virtual line will be routed
  *                     through this proxy) 
  * @param  regTimeout  registration timeout  (when 0 will NOT use registrations)
  *                     to unergister one should do phDelVline (or phUnregister -- depreciated)
  * @return             -1 in case of error vlid  in case of success
  */
 MY_DLLEXPORT int phAddVline(const char* username, const char *host, const char*  proxy,  int regTimeout);
-MY_DLLEXPORT int phAddVline2(const char* displayname, const char* username, const char *host, const char*  proxy,  int regTimeout);
+MY_DLLEXPORT int phAddVline2(const char* displayname, const char* username, const char *host, const char*  proxy, int regTimeout);
  
 /**
  * Delete virtual line 

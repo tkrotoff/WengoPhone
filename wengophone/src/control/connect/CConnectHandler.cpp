@@ -20,37 +20,16 @@
 #include "CConnectHandler.h"
 
 #include <model/connect/ConnectHandler.h>
-#include <control/chat/CChatHandler.h>
-#include <control/presence/CPresenceHandler.h>
 #include <presentation/PFactory.h>
 
 CConnectHandler::CConnectHandler(ConnectHandler & connectHandler) 
 	: _connectHandler(connectHandler) {
 
-	_cPresenceHandler = NULL;
-	_cChatHandler = NULL;
-
 	_pConnectHandler = PFactory::getFactory().createPresentationConnectHandler(*this);
 
 	_connectHandler.loginStatusEvent += loginStatusEvent;
-	_connectHandler.presenceHandlerCreatedEvent += 
-		boost::bind(&CConnectHandler::presenceHandlerCreatedEventHandler, this, _1, _2);
-	_connectHandler.chatHandlerCreatedEvent += 
-		boost::bind(&CConnectHandler::chatHandlerCreatedEventHandler, this, _1, _2);
 }
 
 CConnectHandler::~CConnectHandler() {
-	if (_cPresenceHandler)
-		delete _cPresenceHandler;
-
-	if (_cChatHandler)
-		delete _cChatHandler;
 }
 
-void CConnectHandler::presenceHandlerCreatedEventHandler(ConnectHandler & sender, PresenceHandler & presenceHandler) {
-	_cPresenceHandler = new CPresenceHandler(presenceHandler);
-}
-
-void CConnectHandler::chatHandlerCreatedEventHandler(ConnectHandler & sender, ChatHandler & chatHandler) {
-	_cChatHandler = new CChatHandler(chatHandler);
-}

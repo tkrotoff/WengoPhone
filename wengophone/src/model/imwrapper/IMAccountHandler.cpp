@@ -17,21 +17,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "Chat.h"
+#include "IMAccountHandler.h"
 
-#include <model/imwrapper/IMChatSession.h>
-#include <model/imwrapper/IMWrapperFactory.h>
+#include "IMAccount.h"
 
-Chat::Chat(IMAccount & account)
-	: _imAccount(account) {
+List<IMAccount *> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) {
+	List<IMAccount *> result;
+
+	for (register unsigned i = 0 ; i < size() ; i++) {
+		IMAccount * account = this->operator[](i);
+		if (account->getProtocol() == protocol) {
+			result.add(account);
+		}
+	}
 	
-	_imChat = IMWrapperFactory::getFactory().createIMChat(account);	
-}
-
-IMChatSession & Chat::createSession() {
-	IMChatSession * imChatSession = new IMChatSession(*_imChat);
-
-	_imChatSessionList.add(imChatSession);
-
-	return *imChatSession;
+	return result;
 }

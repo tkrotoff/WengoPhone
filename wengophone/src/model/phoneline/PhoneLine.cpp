@@ -19,15 +19,19 @@
 
 #include "PhoneLine.h"
 
-#include "model/sipwrapper/SipWrapper.h"
-#include "model/sipwrapper/SipCallbacks.h"
-#include "model/sipwrapper/SipWrapperFactory.h"
-#include "model/phonecall/PhoneCall.h"
-#include "model/phonecall/PhoneCallStateClosed.h"
-#include "model/phonecall/PhoneCallStateError.h"
-#include "model/phonecall/PhoneCallStateTalking.h"
-#include "model/phonecall/PhoneCallStateIncoming.h"
-#include "model/WengoPhoneLogger.h"
+#include <model/sipwrapper/SipWrapper.h>
+#include <model/sipwrapper/SipCallbacks.h>
+#include <model/sipwrapper/SipWrapperFactory.h>
+#include <model/phonecall/PhoneCall.h>
+#include <model/phonecall/PhoneCallStateClosed.h>
+#include <model/phonecall/PhoneCallStateError.h>
+#include <model/phonecall/PhoneCallStateTalking.h>
+#include <model/phonecall/PhoneCallStateIncoming.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+#include <model/WengoPhoneLogger.h>
+
+# include <netlib.h>
 
 #include "PhoneLineStateDefault.h"
 #include "PhoneLineStateOk.h"
@@ -37,13 +41,18 @@
 
 #include <cstring>
 
+#include <string>
+
+using namespace std;
+
 PhoneLine::PhoneLine(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
 
 	static SipCallbacks callbacks(wengoPhone);
 
-	//Loads the SIP stack implementation
 	_sipWrapper = SipWrapperFactory::getFactory().createSipWrapper(callbacks);
+
+	initSIPWrapper();
 
 	_sipAccount = NULL;
 	_lineId = SipWrapper::VirtualLineIdError;
@@ -174,7 +183,7 @@ void PhoneLine::connect() {
 			" lineId=" + String::fromNumber(_lineId));
 
 	if (_lineId == SipWrapper::VirtualLineIdError) {
-		LOG_DEBUG("SipWrapper::addVirtualLine() failed");
+		LOG_ERROR("SipWrapper::addVirtualLine() failed");
 	}
 }
 
@@ -346,4 +355,54 @@ void PhoneLine::setState(int status) {
 
 PhoneCall * PhoneLine::getPhoneCall(int callId) {
 	return _phoneCallHash[callId];
+}
+
+void PhoneLine::initSIPWrapper() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
+	if (!proxyAddress.empty()) {
+		int proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
+		string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
+		string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
+
+		_sipWrapper->setProxy(proxyAddress, proxyPort, proxyLogin, proxyPassword);
+	}
+
+	bool tunnelNeeded = config.get(Config::NETWORK_TUNNEL_NEEDED_KEY, false);
+	if (tunnelNeeded) {
+		string tunnelAddress = config.get(Config::NETWORK_TUNNEL_SERVER_KEY, string(""));
+		int tunnelPort = config.get(Config::NETWORK_TUNNEL_PORT_KEY, 0);
+		bool tunnelSSL = config.get(Config::NETWORK_TUNNEL_SSL_KEY, false);
+		_sipWrapper->setTunnel(true, tunnelAddress, tunnelPort, tunnelSSL);
+	} else {
+		_sipWrapper->setTunnel(false, "", 0, false);
+	}
+
+	string sipAddress = config.get(Config::NETWORK_SIP_SERVER_KEY, string(""));
+	int sipPort = config.get(Config::NETWORK_SIP_LOCAL_PORT_KEY, 0);
+	_sipWrapper->setSIP(sipAddress, sipPort);
+
+	string natType = config.get(Config::NETWORK_NAT_TYPE_KEY, string("auto"));
+	NatType nat;
+
+	if (natType ==	"cone") {
+		nat = StunTypeConeNat;
+	} else if (natType == "restricted") {
+		nat = StunTypeRestrictedNat;
+	} else if (natType == "portRestricted") {
+		nat = StunTypePortRestrictedNat;
+	} else if (natType == "sym") {
+		nat = StunTypeSymNat;
+	} else if (natType == "symfirewall") {
+		nat = StunTypeSymFirewall;
+	} else if (natType == "blocked") {
+		nat = StunTypeBlocked;
+	} else {
+		nat = StunTypeOpen;
+	}
+
+	_sipWrapper->setNatType(nat);
+
+	_sipWrapper->init();
 }

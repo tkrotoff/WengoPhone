@@ -67,7 +67,7 @@ void QtContactList::initThreadSafe() {
 	_treeView->setModel(_model);
 	
 	//Popup Menus
-	_contactPopupMenu = new ContactPopupMenu(_treeView);
+	_contactPopupMenu = new ContactPopupMenu(_treeView, _cContactList.getCWengoPhone().getWengoPhone());
 	_contactGroupPopupMenu = new ContactGroupPopupMenu(_treeView);
 
 	//Connect events

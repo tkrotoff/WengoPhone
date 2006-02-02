@@ -22,6 +22,8 @@
 
 #include "SipCallbacks.h"
 
+#include <netlib.h>
+
 #include <Interface.h>
 
 #include <string>
@@ -176,6 +178,32 @@ public:
 	 * @param callId id of the phone call to resume
 	 */
 	virtual void resumeCall(int callId) = 0;
+
+	/**
+	 * Set proxy parameter.
+	 */
+	virtual void setProxy(const std::string & address, int port, 
+		const std::string & login, const std::string & password) = 0;
+
+	/**
+	 * Set HTTP Tunnel parameter.
+	 */
+	virtual void setTunnel(bool needed, const std::string & address, int port, bool ssl) = 0;
+
+	/**
+	 * Set NAT Type.
+	 */
+	virtual void setNatType(NatType natType) = 0;
+
+	/**
+	 * Set SIP paramter.
+	 */
+	virtual void setSIP(const std::string & server, int localPort) = 0;
+
+	/**
+	 * Initialize the SIPWrapper.
+	 */
+	virtual void init() = 0;
 
 	/** @} */
 

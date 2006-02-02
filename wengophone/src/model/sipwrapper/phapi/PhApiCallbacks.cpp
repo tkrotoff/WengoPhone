@@ -210,15 +210,21 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 	std::string from;
 	std::string content;
-	
+	IMChatSession * imChatSession;
+
 	std::map<int, IMChatSession *> messageIdChatSessionMap = p->getMessageIdChatSessionMap();
-	IMChatSession * imChatSession = messageIdChatSessionMap[messageId];
+	std::map<int, IMChatSession *>::const_iterator it = messageIdChatSessionMap.find(messageId);
+	if (it == messageIdChatSessionMap.end()) {
+		imChatSession = NULL;
+	} else {
+		imChatSession = messageIdChatSessionMap[messageId];
+	}
 	
 	switch(info->event) {
 	case phMsgNew:
 		from = info->from;
 		content = info->content;
-		p->messageReceivedEvent(*p, *imChatSession, from, content);
+		p->messageReceivedEvent(*p, imChatSession, from, content);
 		break;
 
 	case phMsgOk:

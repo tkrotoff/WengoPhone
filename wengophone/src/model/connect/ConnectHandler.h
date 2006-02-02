@@ -21,18 +21,17 @@
 #define CONNECTHANDLER_H
 
 #include <model/imwrapper/IMConnect.h>
-#include <model/account/wengo/WengoAccount.h>
 #include <model/chat/ChatHandler.h>
 
 #include <NonCopyable.h>
-#include <List.h>
 #include <Event.h>
 
+#include <map>
+
 class Connect;
-class Chat;
 class PresenceHandler;
 class WengoPhone;
-class PresenceHandler;
+class IMAccount;
 
 /**
  *
@@ -49,40 +48,35 @@ public:
 	Event<void (IMConnect & sender, IMConnect::LoginStatus status)> loginStatusEvent;
 
 	/**
-	 * PresenceHandler has been created.
-	 *
-	 * @param sender this class
-	 * @param imHandler ConnectHandler created
+	 * Emitted when a IMAccount is connected.
+	 * 
+	 * @param imAccount the IMAccount that is connected
 	 */
-	Event<void (ConnectHandler & sender, PresenceHandler & presenceHandler)> presenceHandlerCreatedEvent;
+	Event<void (ConnectHandler & sender, IMAccount & imAccount)> connectedEvent;
 
 	/**
-	 * ChatHandler has been created.
-	 *
-	 * @param sender this class
-	 * @param imHandler ConnectHandler created
+	 * Emitted when a IMAccount is connected.
+	 * 
+	 * @param imAccount the IMAccount that is disconnected
 	 */
-	Event<void (ConnectHandler & sender, ChatHandler & chatHandler)> chatHandlerCreatedEvent;
+	Event<void (ConnectHandler & sender, IMAccount & imAccount)> disconnectedEvent;
 
-	ConnectHandler(WengoPhone & wengoPhone, WengoAccount & wengoAccount);
+	void connect(const IMAccount & imAccount);
+
+	void disconnect(const IMAccount & imAccount);
+
+	ConnectHandler();
 
 	~ConnectHandler();
 
 private:
 
-	void wengoLoginEventHandler(WengoAccount & sender, WengoAccount::LoginState state,
-				const std::string & login, const std::string & password);
-
 	void loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status);
 
-	List<Connect *> _connectList;
+	typedef std::map<const IMAccount *, Connect *> ConnectMap;
 
-	WengoPhone & _wengoPhone;
+	ConnectMap _connectMap;
 
-	PresenceHandler  & _presenceHandler;
-
-	ChatHandler _chatHandler;
-	
 };
 
 #endif	//CONNECTHANDLER_H

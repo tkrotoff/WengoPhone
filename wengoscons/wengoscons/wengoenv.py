@@ -1,5 +1,4 @@
 #
-#
 # WengoSCons, a high-level library for SCons
 #
 # Copyright (C) 2004-2005  Wengo
@@ -135,7 +134,9 @@ class WengoSConsEnvironment(SConsEnvironment):
 			@see WengoSConsEnvironment.WengoAddCCFlags()
 			"""
 
-			env.AppendUnique(CCFLAGS = flags)
+			for flag in flags:
+				if not flag in env['CCFLAGS']:
+					env.Append(CCFLAGS = flag)
 		addCCFlags = staticmethod(addCCFlags)
 
 		def removeCCFlags(env, flags):
@@ -219,7 +220,9 @@ class WengoSConsEnvironment(SConsEnvironment):
 			@see WengoSConsEnvironment.WengoAddLibPath()
 			"""
 
-			env.AppendUnique(LIBPATH = paths)
+			for path in paths:
+				if not path in env['LIBPATH']:
+					env.Append(LIBPATH = path)
 		addLibPath = staticmethod(addLibPath)
 
 		def getLibPath(env):
@@ -250,7 +253,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 			"""
 
 			for lib in libs:
-				#FIXME for MinGW because MinGW has some problems with libraries order
+				#Fix for MinGW because MinGW has some problems with libraries order
 				#during linking (MSVC does not have this issue)
 				#This line modifies the libraries order
 				if lib in env['LIBS']:
@@ -527,14 +530,9 @@ class WengoSConsEnvironment(SConsEnvironment):
 		#System library (e.g Qt, boost...) or internal library?
 		#By default internal library
 		self.__isSystemLibrary = False
-		self.__isStaticLib = False
-		self.usedLibs = []
-		self.childLibs = []
+
 		#MacOS X app template path
 		self.__macOSXTemplatePath = None
-
-		self.fNode = None
-		
 
 	def isReleaseMode(self):
 		"""
@@ -662,20 +660,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		return self.__projectName
 
-	def __prepareUsedLibs(self):
-		#print "preparing used libs for ", self.__getProjectName(), self.usedLibs
-		for name in self.usedLibs:
-			libEnv = _libs.get(name, None)
-			if libEnv:
-				self.__useLibrary(libEnv)
-				if libEnv.__isStaticLib:
-					self.__useChildsOf(libEnv)
-			else:
-				print name, '(system)'
-				self.__addLibs([name])
-
-
-
 	def WengoProgram(self, programName, sources, headers = []):
 		"""
 		Generates a program e.g a .exe file given its name and source code.
@@ -705,11 +689,10 @@ class WengoSConsEnvironment(SConsEnvironment):
 			tmp += '/Contents/MacOS/' + programName
 
 		self.__setProjectName(programName)
-
 		prog = self.Program(tmp, sources)
-		self.__prepareUsedLibs()
 		self.__createVCProj(prog, sources, headers)
 		self.__installProject(prog)
+		self.__useChildLibraries()
 		self.__installPDBFile()
 		return prog
 
@@ -821,10 +804,8 @@ class WengoSConsEnvironment(SConsEnvironment):
 		self.WengoDeclareLibrary(libraryName, outputFiles)
 		for file in outputFiles:
 			#Gets the file path
-			self.fNode = self.File(file)
-#			print "libname %s node %s", (libraryName, str(fnode), fnode.abspath) 
-#			file = os.path.split()[0]
-#			self.WengoAddLibPath([file])
+			file = os.path.split(file)[0]
+			self.WengoAddLibPath([file])
 
 	def WengoDeclareMacOSXAppTemplate(self, templatePath):
 		"""
@@ -889,12 +870,10 @@ class WengoSConsEnvironment(SConsEnvironment):
 		"""
 
 		self.__setProjectName(libraryName)
-		self.__prepareUsedLibs()
 		lib = self.SharedLibrary(libraryName, sources)
-		self.fNode = lib
 		self.__createVCProj(lib, sources, headers)
 		self.__installProject(lib)
-		#self.__useChildLibraries()
+		self.__useChildLibraries()
 		self.__installPDBFile()
 		return lib
 
@@ -911,7 +890,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		lib = None
 		self.__setProjectName(pluginName)
-		self.__prepareUsedLibs()
 		try:
 			#SCons 0.96.91 support (pre-release for 0.97)
 			tmp = self['LDMODULEPREFIX']
@@ -929,23 +907,9 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		self.__createVCProj(lib, sources, headers)
 		self.__installProject(lib)
-		#self.__useChildLibraries()
+		self.__useChildLibraries()
 		self.__installPDBFile()
 		return lib
-
-	def __useChildsOf(self, libEnv):
-		n = libEnv.__getProjectName()
-		libs = self.__getAllDependencies([libEnv.__getProjectName()])
-	
-	
-		for name in libs:
-			env = _libs.get(name, None)
-			if env:
-				if not name in self.childLibs:
-					self.childLibs += [name]
-					self.__linkWithLibrary(env)
-			else:
-				self.__addLibs([name])
 
 	def __useChildLibraries(self):
 		"""
@@ -960,7 +924,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		for name in libs:
 			libEnv = _libs.get(name, None)
 			if libEnv:
-				#self.Alias(self.__getProjectName(), libEnv.__getProjectName())
+				self.Alias(self.__getProjectName(), libEnv.__getProjectName())
 				self.__linkWithLibrary(libEnv)
 			else:
 				self.__addLibs([name])
@@ -979,11 +943,8 @@ class WengoSConsEnvironment(SConsEnvironment):
 		@return SCons project generated using SCons
 		"""
 
-		self.__isStaticLib = True
 		self.__setProjectName(libraryName)
-		self.__prepareUsedLibs()
 		lib = self.StaticLibrary(libraryName, sources)
-		self.fNode = lib
 		self.__createVCProj(lib, sources, headers)
 		self.__installProject(lib)
 		return lib
@@ -1046,11 +1007,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 			self.Depends(project, vcproj)
 
 	def __getAllDependencies(self, libs):
-		deps = self.__getAllDeps([], libs)
-		#print "deps:", self.__getProjectName(), deps
-		return deps
-
-	def __getAllDeps(self, list, libs):
 		"""
 		Gets the complete list of the child libraries of the current Environment.
 
@@ -1059,23 +1015,18 @@ class WengoSConsEnvironment(SConsEnvironment):
 		@rtype stringlist
 		@return all the child libraries of the current Environment
 		"""
-		
-		myname = self.__getProjectName()
-		#print "getAllDeps(" + myname + "," + str(list) + "," + str(libs) + ")"
-		
-		
-		for name in libs:
-			if not name in list:	
-				list.append(name)
-			# traceit = name == 'webcam'
-			env = _libs.get(name, None)
-			if env:
-				childLibs = env.usedLibs
-				if len(childLibs):
-					#print "childs(%s):" % name, childLibs
-					if env.__isStaticLib or env.__isSystemLibrary:
-						list = self.__getAllDeps(list, childLibs)
 
+		list = []
+		for name in libs:
+			env = _libs.get(name, None)
+			if not env:
+				list += [name]
+			else:
+				childLibs = env.Libs.getLibs(env)
+				if len(childLibs) == 0:
+					list += [name]
+				else:
+					list += [name] + self.__getAllDependencies(childLibs)
 		return list
 
 	def setVariable(self, variable, value):
@@ -1245,7 +1196,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		@param files list of files (.lib/.dll/.a...) to install
 		"""
 
-		self.__isStaticLib = True
+		#self.__isSystemLibrary = True
 		self.__declareLibrary(projectName)
 		for file in files:
 			install = self.Install(self.WengoGetRootBuildDir(), file)
@@ -1341,18 +1292,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 			self.WengoAddLibPath(libEnv.LibPath.getLibPath(libEnv))
 			self.__addLibs(libEnv.Libs.getLibs(libEnv))
 		else:
-			tmp2 = libEnv.fNode
-			if not tmp2:
-				#print "empty node in ", libEnv.__getProjectName()
-				return
-			#else:
-				#print "linking ", self.__getProjectName(), "with node", str(tmp2)
-			 
-			if type(tmp2) == type([]) and len(tmp2) > 0:
-			   tmp2 = tmp2[0]
-			#print "linking ", self.__getProjectName(), "with tmp2 = ", str(tmp2), "abspath= ", tmp2.abspath   
-			self.WengoAddLibPath([os.path.split(tmp2.abspath)[0]])
-
+			self.WengoAddLibPath([self.__getBuildDirAbsPath(libEnv.__getBuildPath())])
 			self.__addLibs([libEnv.__getProjectName()])
 
 	def __useLibrary(self, libEnv):
@@ -1378,16 +1318,9 @@ class WengoSConsEnvironment(SConsEnvironment):
 				tmp1.append(self.__getBuildDirAbsPath(dir))
 			self.WengoAddIncludePath(tmp1)
 
-
-			tmp2 = libEnv.fNode
-			if tmp2:
-				if type(tmp2) == type([]) and len(tmp2) > 0:
-					tmp2 = tmp2[0]
-
-				#print self.__getProjectName(), "tmp2 = %s abspath = %s " % (str(tmp2), tmp2.abspath)   
-				self.WengoAddLibPath([os.path.split(tmp2.abspath)[0]])
-
-
+			#LibPath for libEnv (e.g debug/libs/curl if the project is curl)
+			tmp2 = [self.__getBuildDirAbsPath(libEnv.__getBuildPath())]
+			self.WengoAddLibPath(tmp2)
 
 			#LibPaths from libEnv that were added inside libEnv using WengoAddLibPath()
 			tmp3 = []
@@ -1395,7 +1328,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 			for libPath in libPaths:
 				dir = os.path.join(libEnv.__getBuildPath(), libPath)
 				tmp3.append(self.__getBuildDirAbsPath(dir))
-			#self.WengoAddLibPath(tmp3)
+			self.WengoAddLibPath(tmp3)
 
 			self.__addLibs([libEnv.__getProjectName()])
 
@@ -1411,7 +1344,13 @@ class WengoSConsEnvironment(SConsEnvironment):
 		@param libs libraries to use
 		"""
 
-		self.usedLibs += libs
+		for name in libs:
+			libEnv = _libs.get(name, None)
+			if libEnv:
+				self.__useLibrary(libEnv)
+			else:
+				print name, '(system)'
+				self.__addLibs([name])
 
 	def WengoAddDoxyfile(self):
 		"""
@@ -1510,11 +1449,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 		fd.close()
 		return filename
 
-	def Clone(self):
-		e = self.Copy()
-		e.usedLibs = e.childLibs = []
-		return e
-		
 
 #FIXME ugly?
 WengoSConsEnvironment._globalEnv = None
@@ -1550,9 +1484,8 @@ def WengoGetEnvironment():
 	@rtype Environment
 	@return local Environment
 	"""
-	
-	return getGlobalEnvironment().Clone()
-	
+
+	return getGlobalEnvironment().Copy()
 
 def WengoGetQt3Environment():
 	"""
@@ -1562,7 +1495,7 @@ def WengoGetQt3Environment():
 	@return Qt3 Environment
 	"""
 
-	return getGlobalEnvironment().Copy(tools = ['qt'], LIBS = []).Clone()
+	return getGlobalEnvironment().Copy(tools = ['qt'], LIBS = [])
 
 def WengoGetQt4Environment():
 	"""
@@ -1572,8 +1505,7 @@ def WengoGetQt4Environment():
 	@return Qt4 Environment
 	"""
 
-	e = WengoGetQt3Environment()
-	return e
+	return WengoGetQt3Environment()
 
 def WengoGetRootBuildDir():
 	"""

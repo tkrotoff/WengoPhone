@@ -28,7 +28,7 @@ class Contact;
 class ContactGroup;
 class ContactListDataLayer;
 class StringList;
-
+class WengoPhone;
 /**
  * Contact list.
  *
@@ -40,10 +40,9 @@ class StringList;
 class ContactList : public Serializable {
 public:
 
-	static ContactList & getInstance() {
-		static ContactList contactList;
-		return contactList;
-	}
+	ContactList(WengoPhone & wengoPhone);
+
+	~ContactList();
 
 	/**
 	 * A ContactGroup has been added.
@@ -102,7 +101,7 @@ public:
 	 * @return the contact or NULL if not found
 	 */
 	Contact * getContact(const std::string & contactId) const;
-	
+
 	/**
 	 * Gets the StringList representation of the ContactGroup list.
 	 *
@@ -116,10 +115,6 @@ public:
 
 private:
 
-	ContactList();
-
-	~ContactList();
-
 	/** Data layer for the ContactList. */
 	ContactListDataLayer * _dataLayer;
 
@@ -128,6 +123,9 @@ private:
 
 	/** List of ContactGroup. */
 	ContactGroups _contactGroupList;
+
+	WengoPhone & _wengoPhone;
+
 };
 
 #endif	//CONTACTLIST_H

@@ -37,6 +37,7 @@ class Connect;
 class Presence;
 class IMAccount;
 class IMContact;
+class ConnectHandler;
 
 /**
  *
@@ -46,11 +47,6 @@ class IMContact;
  */
 class PresenceHandler : NonCopyable {
 public:
-
-	static PresenceHandler & getInstance() {
-		static PresenceHandler presenceHandler;
-		return presenceHandler;
-	}
 
 	/**
 	 * @see IMPresence::presenceStateChangedEvent
@@ -71,6 +67,10 @@ public:
 	 */
 	Event<void (PresenceHandler & sender, const IMAccount & imAccount, 
 		const std::string & contactId, IMPresence::SubscribeStatus status)> subscribeStatusEvent;
+
+	PresenceHandler(ConnectHandler & connectHandler);
+
+	~PresenceHandler();
 
 	/**
 	 * Change my presence on desired protocol.
@@ -99,19 +99,15 @@ public:
 	 */
 	void unblockContact(const IMContact & imContact);
 
-	void connected(IMAccount & imAccount);
-
-	void disconnected(IMAccount & imAccount);
-
 private:
 
 	typedef std::map<IMAccount *, Presence *> PresenceMap;
 
 	typedef	std::multimap<const IMAccount *, const IMContact *> IMContactMultiMap;
 
-	PresenceHandler();
+	void connectedEventHandler(ConnectHandler & sender, IMAccount & account);
 
-	~PresenceHandler();
+	void disconnectedEventHandler(ConnectHandler & sender, IMAccount & account);
 
 	void presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
 		const std::string & note, const std::string & from);

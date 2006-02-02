@@ -47,6 +47,10 @@ public:
 
 	virtual const std::string & getPassword() const { return _password; }
 
+	virtual const std::string & getTunnelServerHostname() const { return _tunnelServerHostname; }
+
+	virtual unsigned getTunnelServerPort() const { return _tunnelServerPort; }
+
 protected:
 	std::string _identity;
 	std::string _username;
@@ -57,6 +61,8 @@ protected:
 	std::string _proxyServerHostname;
 	unsigned _proxyServerPort;
 	std::string _password;
+	std::string _tunnelServerHostname;
+	unsigned _tunnelServerPort;
 };
 
 #endif	//SIPACCOUNTTYPE_H
