@@ -3,7 +3,7 @@
 
 args = {
 	'enable-video' : 0,
-    'enable-ssl' : 0,
+    'enable-ssl' : 1,
 	'enable-http-tunnel' : 1,
 	'enable-netlib' : 1,
 	'enable-phapi-embed' : 0,
@@ -22,6 +22,6 @@ args = {
 	'speexwb-replaces-g726wb' : 1,            # if 1 replace 	negotiated G726-WB payload by SPEEX WB
 	'enable-ipp' : 0,
 }
-
+    
 WengoAddConsoleArguments(args)
 WengoShowWindowsConsole(True)
