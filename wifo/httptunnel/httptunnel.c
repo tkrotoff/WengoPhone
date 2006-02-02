@@ -33,7 +33,6 @@
 	#define WSAEWOULDBLOCK 	EAGAIN
 	#define ERR_SOCK(err)	(ECONNREFUSED || ENOTCONN)
 
-	inline int Sleep(int a) {return usleep(a * 1000);}
 	inline int closesocket(int sock) {return close(sock);}
 	inline int WSAGetLastError() {return errno;}
 	inline int GetLastError() {return errno;}

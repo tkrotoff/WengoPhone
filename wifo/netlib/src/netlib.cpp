@@ -83,9 +83,10 @@ typedef BOOL(CALLBACK * pfnInternetGetProxyInfo) (
 #include <netinet/in.h>
 #include <errno.h>
 
+/*
 typedef int Socket;
-inline int closesocket(int fd) {return close(fd)}
-
+inline int closesocket(Socket fd) {return close(fd);}
+*/
 #endif	//WIN32
 
 #include "udp_func.h"
