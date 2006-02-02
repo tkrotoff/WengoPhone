@@ -91,9 +91,11 @@
 #include "memdebug.h"
 
 /* //////////// <JULIEN> //////////// */
+#ifdef USE_SSL
 extern curl_socket_t gl_sockfd;
 extern void *gl_ssl_handle;
 /* ********************************** */
+#endif
 
 #if defined(WIN32) && !defined(__GNUC__) || defined(__MINGW32__)
 /* win32_cleanup() is for win32 socket cleanup functionality, the opposite
@@ -668,7 +670,11 @@ CURL_EXTERN void curl_easy_reset(CURL *curl)
  */
 CURL_EXTERN void *curl_easy_get_SSL_handle()
 {
+#ifdef USE_SSL
 	return gl_ssl_handle;
+#else
+    return 0;
+#endif
 }
 
 

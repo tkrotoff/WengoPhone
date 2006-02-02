@@ -1,7 +1,7 @@
 env = WengoGetEnvironment()
 
 libs = [
-	'openssl',
+#	'ssleay32', 
 ]
 lib_path = []
 include_path = [
@@ -11,8 +11,8 @@ include_path = [
 
 defines = {
 	'BUILDING_LIBCURL' : 1,
-	'USE_SSLEAY' : 1,
-	'USE_OPENSSL' : 1,
+#	'USE_SSLEAY' : 0,
+#	'USE_OPENSSL' : 0,
 	'CURL_DISABLE_FILE' : 1,
 	'CURL_DISABLE_LDAP' : 1,
 	'CURL_DISABLE_DICT' : 1,
@@ -22,6 +22,12 @@ defines = {
 }
 if WengoDebugMode():
 	defines['CURLDEBUG'] = 1
+
+if WengoGetConsoleArgument('enable-ssl'):
+    libs += ['openssl']
+    defines['USE_SSLEAY'] = 1
+    defines['USE_OPENSSL'] = 1
+    
 
 headers = []
 sources = [
