@@ -385,9 +385,9 @@ MY_DLLEXPORT phConfig_t phcfg = { "10600", "", "10700", "",
 			 0 ,0 ,
 		     /* audio_dev */   "" ,
 			 /* softboost */ 0,0,0,
-			 /* vad */ 0,0,0,
+			 /* vad */ 0,0,0, 0,
 			 0,0,0,
-		     /* stunserver */ "80.118.132.74",
+		     /* stunserver */  "80.118.132.74",
 			 0
 };
 
