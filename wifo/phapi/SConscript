@@ -86,12 +86,13 @@ if WengoGetConsoleArgument('enable-ipp'):
             
     
         if WengoOSWindows():
-             ipp_libpath = [
+            ipp_libpath = [
 
                 IPPROOT + "/lib", IPPROOT + "/stublib",
                 IPPSAMPLEROOT + "/bin/ia32/lib"
             ]
-    
+        
+            ipp_env.Append( LINKFLAGS = '/NODEFAULTLIB:MSVCRT')
         else:         
           ipp_libpath = [
 
@@ -212,11 +213,15 @@ if WengoGetConsoleArgument('enable-video'):
 	]
 
 if WengoGetConsoleArgument('enable-http-tunnel'):
-	libs += [
-		'wengocurl',
-		'httptunnel',
-		'openssl',
-	]
+    libs += [
+        'wengocurl',
+        'httptunnel'
+        ]
+
+    if WengoGetConsoleArgument('enable-ssl'):
+        libs += ['openssl']
+        
+
 	defines['USE_HTTP_TUNNEL'] = 1
 
 if WengoGetConsoleArgument('enable-samplerate'):
