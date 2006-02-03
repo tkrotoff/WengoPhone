@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 /* */
 
 #define G729_FRAME_SAMPLES 160
@@ -9,7 +10,7 @@
 
 
 #include <usc.h>
-
+//
 
 
 #define ERROR printf
@@ -359,8 +360,13 @@ int main(int argc, char *argv[])
 	int rn, cn, wn;
 	
 	ifile = open(argv[2], O_RDONLY|O_BINARY);
-	ofile = open(argv[3], O_WRONLY|O_CREAT|O_BINARY, 0666);
-	
+	ofile = open(argv[3], O_WRONLY|O_CREAT|O_BINARY|O_TRUNC, _S_IREAD|_S_IWRITE);
+	if (ofile < 0)
+    {
+            perror("output file");
+            exit(1);
+    }
+    
 	if (!strcmp(argv[1], "-d"))
 	{
 		codec = ph_g729_dec_init(0);
@@ -384,10 +390,17 @@ int main(int argc, char *argv[])
 
 
 			rn = read(ifile, ibuf, G729_FRAME_SAMPLES*2);
+           // printf("read %d bytes\n", rn);
 			if (!rn)
 				break;
 			cn = ph_g729_encode(codec, ibuf, rn, obuf, sizeof(obuf));
 			wn = write(ofile, obuf, cn);
+            // printf("wrote %d bytes\n", wn);
+            if (wn < 0)
+            {
+                perror("writing file");
+                exit(1);
+            }
 
 		}
 		ph_g729_enc_cleanup(codec);
