@@ -24,6 +24,10 @@
 #include <iostream>
 #include <sstream>
 
+#include <time.h>
+
+using namespace std;
+
 Logger Logger::logger;
 
 Logger::Logger() {
@@ -83,11 +87,19 @@ void Logger::log(Level level, const std::string & className, const std::string &
 		break;
 	}
 
+	time_t t = time(NULL);
+	struct tm * localTime = localtime(&t);
+
+	string timeMsg = String::fromNumber(localTime->tm_hour) + ":" 
+		+ String::fromNumber(localTime->tm_min) + ":"
+		+ String::fromNumber(localTime->tm_sec);
+
+
 	String classNameTmp = className;
 	classNameTmp.remove("class");
 	classNameTmp.remove("*");
 	classNameTmp.remove(" ");
-	std::string tmp = "(" + levelString + ")\t" + classNameTmp + ": " + message;
+	std::string tmp = "(" + levelString + ") - " + timeMsg + " - " + classNameTmp +  ": " + message;
 	std::cerr << tmp << std::endl;
 
 	messageAddedEvent(tmp);
