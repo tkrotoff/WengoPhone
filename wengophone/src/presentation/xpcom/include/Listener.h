@@ -187,7 +187,15 @@ public:
 	 *
 	 * @param status SMS status (ok or error)
 	 */
-	virtual void smsStatusEvent(SmsStatus status) = 0;
+	virtual void smsStatusEvent(SmsStatus status)/* = 0*/ { }
+
+	/**
+	 * A login/password is needed for the HTTP proxy.
+	 *
+	 * @param hostname HTTP proxy server hostname
+	 * @param port HTTP proxy server port
+	 */
+	virtual void proxySettingsNeededEvent(const std::string & hostname, unsigned port)/* = 0*/ { }
 };
 
 #endif	//LISTENER_H
