@@ -258,7 +258,7 @@ int _getProxyAddress()
 	return 0;
 }
 
-void _get_proxy_auth_type(const char *server, int port)
+void _get_proxy_auth_type(const char *url)
 {
 		CURL *curl_tmp;
 		char buff[2048];
@@ -267,7 +267,7 @@ void _get_proxy_auth_type(const char *server, int port)
 		ret = 0;
 		curl_tmp = curl_easy_init();
 
-		sprintf(buff, "http://%s:%d", server, port);
+		sprintf(buff, "http://%s", url);
 		curl_easy_setopt(curl_tmp, CURLOPT_URL, strdup(buff));
 
 		sprintf(buff, "%s:%d", _LocalProxy.address, _LocalProxy.port);
@@ -398,7 +398,7 @@ HttpRet is_http_conn_allowed(const char *url,
 		if (proxy_login)
 		{
 			if (!_LocalProxy.auth_type)
-				_get_proxy_auth_type(remote_addr, remote_port);
+				_get_proxy_auth_type(url);
 
 			sprintf(buff, "%s:%s", proxy_login, proxy_passwd);
 			curl_easy_setopt(mcurl, CURLOPT_PROXYUSERPWD, strdup(buff));
@@ -466,7 +466,7 @@ NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port)
 {
 	HttpRet ret;
 
-	ret = is_http_conn_allowed("google.fr", 80, proxy_addr, proxy_port, 
+	ret = is_http_conn_allowed("google.com:80", proxy_addr, proxy_port, 
 								NULL, NULL, NETLIB_FALSE);
 
 	return (ret == HTTP_AUTH ? NETLIB_TRUE : NETLIB_FALSE);
