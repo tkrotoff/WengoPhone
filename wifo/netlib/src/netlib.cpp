@@ -369,7 +369,7 @@ NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int ping_timeo
 }
 
 
-HttpRet is_http_conn_allowed(const char *remote_addr, int remote_port, 
+HttpRet is_http_conn_allowed(const char *url, 
 							  const char *proxy_addr, int proxy_port, 
 							  const char *proxy_login, const char *proxy_passwd,
 							  NETLIB_BOOLEAN ssl)
@@ -383,13 +383,13 @@ HttpRet is_http_conn_allowed(const char *remote_addr, int remote_port,
 	
 	if (ssl)
 	{
-		sprintf(buff, "https://%s:%d", remote_addr, remote_port);
+		sprintf(buff, "https://%s", url);
 		curl_easy_setopt(mcurl, CURLOPT_SSLVERSION, CURL_SSLVERSION_SSLv3);
 		curl_easy_setopt(mcurl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_easy_setopt(mcurl, CURLOPT_SSL_VERIFYHOST, 0);
 	}
 	else
-		sprintf(buff, "http://%s:%d", remote_addr, remote_port);
+		sprintf(buff, "http://%s", url);
 	
 	curl_easy_setopt(mcurl, CURLOPT_URL, strdup(buff));
  

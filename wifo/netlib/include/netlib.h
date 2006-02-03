@@ -108,8 +108,7 @@ typedef enum
 /**
  * Checks if a http request can be sent.
  *
- * @param remote_addr host address we want to connect to
- * @param remote_port host port we want to connect to
+ * @param url url we try to request
  * @param proxy_addr proxy address we want to connect through
  * @param proxy_port proxy port we want to connect through
  * @param proxy_login if proxy authentication needed
@@ -117,7 +116,7 @@ typedef enum
  * @param ssl use ssl or not
  * @return State of HTTP response
  */
- HttpRet is_http_conn_allowed(const char *remote_addr, int remote_port, 
+ HttpRet is_http_conn_allowed(const char *url, 
 							  const char *proxy_addr, int proxy_port, 
 							  const char *proxy_login, const char *proxy_passwd,
 							  NETLIB_BOOLEAN ssl);
