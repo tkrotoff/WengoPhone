@@ -335,7 +335,39 @@ NETLIB_BOOLEAN sip_ping(Socket sock, int ping_timeout)
 
 	ret = recv(sock, buff, sizeof (buff), 0);
 	if (ret < 1)
+	{
+		ret = GetLastError();
 		return NETLIB_FALSE;
+	}
+	else
+		return NETLIB_TRUE;
+}
+
+NETLIB_BOOLEAN sip_ping2(http_sock_t *hs, int ping_timeout)
+{
+	fd_set rfds;
+	int ret;
+	char buff[1024];
+	struct timeval	timeout;
+
+	http_tunnel_send(hs, OPT_REQ, strlen(OPT_REQ));
+
+	timeout.tv_sec = ping_timeout / 1000;
+	timeout.tv_usec = (ping_timeout % 1000) * 1000;
+	FD_ZERO(&rfds);
+	FD_SET(hs->fd, &rfds);
+
+	ret = select(hs->fd + 1, &rfds, 0, 0, &timeout);
+
+	if (ret < 1 || !FD_ISSET(hs->fd, &rfds))
+		return NETLIB_FALSE;
+
+	ret = http_tunnel_recv(hs, buff, sizeof (buff));
+	if (ret < 1)
+	{
+		ret = GetLastError();
+		return NETLIB_FALSE;
+	}
 	else
 		return NETLIB_TRUE;
 }
@@ -454,7 +486,7 @@ HttpRet is_tunnel_conn_allowed(const char *http_gate_addr, int http_gate_port,
 
 	if (ping)
 	{
-		if (sip_ping(hs->fd, ping_timeout) == NETLIB_FALSE)
+		if (sip_ping2(hs, ping_timeout) == NETLIB_FALSE)
 			return HTTP_NOK;
 	}
 
