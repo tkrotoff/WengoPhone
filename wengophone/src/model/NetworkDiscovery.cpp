@@ -23,11 +23,13 @@
 #include <model/config/Config.h>
 
 #include <Logger.h>
+#include <StringList.h>
 
 using namespace std;
 
 const string NetworkDiscovery::_stunAddress = "stun.wengo.fr";
 const string NetworkDiscovery::_ssoAddress = "ws.wengo.fr";
+const string NetworkDiscovery::_ssoURL = "/softphone-sso/sso.php";
 const unsigned NetworkDiscovery::_pingTimeout = 3000;
 
 NetworkDiscovery::NetworkDiscovery() {
@@ -38,8 +40,10 @@ NetworkDiscovery::~NetworkDiscovery() {
 
 void NetworkDiscovery::discoverForSSO() {
 	//Test HTTPS connection
-	if (is_http_conn_allowed(_ssoAddress.c_str(), HTTPS_PORT,
-		NULL, 0, NULL, NULL, NETLIB_TRUE)) {
+	string url = _ssoAddress + ":443" + _ssoURL;
+	
+	if (is_http_conn_allowed(url.c_str(),
+		NULL, 0, NULL, NULL, NETLIB_TRUE) == HTTP_OK) {
 			LOG_DEBUG("SSO connection with SSL");
 			setSSOConfig(true);
 			discoveryDoneEvent(*this, DiscoveryResultSSOCanConnect);
@@ -51,40 +55,33 @@ void NetworkDiscovery::discoverForSSO() {
 	//Get proxy information from Settings
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	string proxyAddress;
-	int proxyPort = 0;
-	string proxyLogin;
-	string proxyPassword;
+	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
+	int proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
+	string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
+	string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
 
 	//Test HTTPS connection via proxy
-	if (is_http_conn_allowed(_ssoAddress.c_str(), HTTPS_PORT,
-		proxyAddress.c_str(), proxyPort,
-		proxyLogin.c_str(), proxyPassword.c_str(), NETLIB_TRUE)) {
-			LOG_DEBUG("SSO connection with SSL via a proxy");
-			setSSOConfig(true);
-			setProxyConfig(proxyAddress.c_str(), proxyPort,
-				proxyLogin.c_str(), proxyPassword.c_str());
-			discoveryDoneEvent(*this, DiscoveryResultSSOCanConnect);
-			return;
+	if (!proxyAddress.empty()) {
+		if (is_http_conn_allowed(url.c_str(),
+			proxyAddress.c_str(), proxyPort,
+			proxyLogin.c_str(), proxyPassword.c_str(), NETLIB_TRUE) == HTTP_OK) {
+				LOG_DEBUG("SSO connection with SSL via a proxy");
+				setSSOConfig(true);
+				setProxyConfig(proxyAddress.c_str(), proxyPort,
+					proxyLogin.c_str(), proxyPassword.c_str());
+				discoveryDoneEvent(*this, DiscoveryResultSSOCanConnect);
+				return;
+		}
 	}
 
 	//Test HTTP connection
-	if (is_http_conn_allowed(_ssoAddress.c_str(), HTTP_PORT,
-		NULL, 0, NULL, NULL, NETLIB_FALSE)) {
+	url = _ssoAddress + ":80" + _ssoURL;
+	
+	if (is_http_conn_allowed(url.c_str(),
+		proxyAddress.c_str(), proxyPort,
+		proxyLogin.c_str(), proxyPassword.c_str(), NETLIB_FALSE) == HTTP_OK) {
 			LOG_DEBUG("SSO connection without SSL");
 			setSSOConfig(false);
-			discoveryDoneEvent(*this, DiscoveryResultSSOCanConnect);
-			return;
-	}
-
-	//Test HTTP connection via proxy
-	if (is_http_conn_allowed(_ssoAddress.c_str(), HTTPS_PORT,
-		proxyAddress.c_str(), proxyPort,
-		proxyLogin.c_str(), proxyPassword.c_str(), NETLIB_FALSE)) {
-			LOG_DEBUG("SSO connection without SSL via a proxy");
-			setSSOConfig(false);
-			setProxyConfig(proxyAddress.c_str(), proxyPort,
-				proxyLogin.c_str(), proxyPassword.c_str());
 			discoveryDoneEvent(*this, DiscoveryResultSSOCanConnect);
 			return;
 	}
@@ -141,17 +138,20 @@ bool NetworkDiscovery::udpTest(const std::string sipServer, unsigned sipPort) {
 	setNatConfig(natType);
 
 	if (!is_local_udp_port_used(NULL, SIP_PORT)) {
+		LOG_DEBUG("udp port 5060 is free");
 		setSIPConfig(SIP_PORT);
 	} else if (!is_local_udp_port_used(NULL, SIP_PORT + 1)) {
+		LOG_DEBUG("udp port 5060 is busy, will use 5061");
 		setSIPConfig(SIP_PORT + 1);
 	} else {
+		LOG_DEBUG("udp port 5061 is busy, will use random port");
 		//TODO: should we use 0 for random port?
 		setSIPConfig(0);
 	}
 
 	if (is_udp_port_opened(_stunAddress.c_str(), SIP_PORT)
 		&& udp_sip_ping(sipServer.c_str(), sipPort, _pingTimeout)) {
-
+		LOG_DEBUG("can connect directly, no tunnel needed");
 		setTunnelNeededConfig(false);
 		return true;
 	} else {
@@ -167,8 +167,14 @@ bool NetworkDiscovery::tunnelTest(const char * sipServer, int sipPort,
 	if (is_tunnel_conn_allowed(tunnelServer, HTTP_PORT,
 		sipServer, sipPort,
 		proxyAddress, proxyPort, proxyLogin, proxyPassword,
-		NETLIB_FALSE, NETLIB_TRUE, _pingTimeout)) {
-		//Save config to Settings, using Tunnel on HTTP_PORT without SSL and proxy
+		NETLIB_FALSE, NETLIB_TRUE, _pingTimeout) == HTTP_OK) {
+		//Save config to Settings, using Tunnel on HTTP_PORT without SSL
+		LOG_DEBUG(string("SIP can connect through a tunnel on port 80 without SSL and proxy settings: login:")
+			+ ((proxyAddress == NULL) ? "" : string(proxyAddress))
+			+ ", port: " + String::fromNumber(proxyPort)
+			+ ", login: " + ((proxyLogin == NULL) ? "" : string(proxyLogin))
+			+ ", password: " + ((proxyPassword == NULL) ? "" : string(proxyPassword)));
+
 		setTunnelConfig(tunnelServer, HTTP_PORT, false);
 		setProxyConfig(proxyAddress, proxyPort, proxyLogin, proxyPassword);
 		setTunnelNeededConfig(true);
@@ -178,8 +184,14 @@ bool NetworkDiscovery::tunnelTest(const char * sipServer, int sipPort,
 	if (is_tunnel_conn_allowed(tunnelServer, HTTPS_PORT, 
 		sipServer, sipPort,
 		proxyAddress, proxyPort, proxyLogin, proxyPassword,
-		NETLIB_FALSE, NETLIB_TRUE, _pingTimeout)) {
-		//Save config to Settings, using Tunnel on HTTPS_PORT without SSL and proxy
+		NETLIB_FALSE, NETLIB_TRUE, _pingTimeout) == HTTP_OK) {
+		//Save config to Settings, using Tunnel on HTTPS_PORT without SSL
+		LOG_DEBUG(string("SIP can connect through a tunnel on port 443 without SSL and proxy settings: login:")
+			+ ((proxyAddress == NULL) ? string("") : string(proxyAddress))
+			+ ", port: " + String::fromNumber(proxyPort)
+			+ ", login: " + ((proxyLogin == NULL) ? "" : string(proxyLogin))
+			+ ", password: " + ((proxyPassword == NULL) ? "" : string(proxyPassword)));
+
 		setTunnelConfig(tunnelServer, HTTPS_PORT, false);
 		setProxyConfig(proxyAddress, proxyPort, proxyLogin, proxyPassword);
 		setTunnelNeededConfig(true);
@@ -189,8 +201,14 @@ bool NetworkDiscovery::tunnelTest(const char * sipServer, int sipPort,
 	if (is_tunnel_conn_allowed(tunnelServer, HTTPS_PORT, 
 		sipServer, sipPort,
 		proxyAddress, proxyPort, proxyLogin, proxyPassword,
-		NETLIB_TRUE, NETLIB_TRUE, _pingTimeout)) {
-		//Save config to Settings, using Tunnel on HTTPS_PORT with SSL and without proxy
+		NETLIB_TRUE, NETLIB_TRUE, _pingTimeout) == HTTP_OK) {
+		//Save config to Settings, using Tunnel on HTTPS_PORT with SSL
+		LOG_DEBUG(string("SIP can connect through a tunnel on port 443 with SSL and proxy settings: login:")
+			+ ((proxyAddress == NULL) ? "" : string(proxyAddress))
+			+ ", port: " + String::fromNumber(proxyPort)
+			+ ", login: " + ((proxyLogin == NULL) ? "" : string(proxyLogin))
+			+ ", password: " + ((proxyPassword == NULL) ? "" : string(proxyPassword)));
+
 		setTunnelConfig(tunnelServer, HTTPS_PORT, true);
 		setProxyConfig(proxyAddress, proxyPort, proxyLogin, proxyPassword);
 		setTunnelNeededConfig(true);
@@ -286,6 +304,7 @@ void NetworkDiscovery::setNatConfig(NatType nat) {
 		break;
 	};
 
+	LOG_DEBUG("Nat type: " + natType);
 	config.set(Config::NETWORK_NAT_TYPE_KEY, natType);
 }
 

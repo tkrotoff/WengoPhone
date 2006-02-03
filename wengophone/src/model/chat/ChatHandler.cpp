@@ -19,6 +19,7 @@
 
 #include "ChatHandler.h"
 
+#include <model/WengoPhone.h>
 #include <model/imwrapper/IMAccount.h>
 #include <model/imwrapper/IMChatSession.h>
 #include <model/imwrapper/IMWrapperFactory.h>
@@ -28,10 +29,11 @@
 
 using namespace std;
 
-ChatHandler::ChatHandler(ConnectHandler & connectHandler) {
-	connectHandler.connectedEvent += 
+ChatHandler::ChatHandler(WengoPhone & wengoPhone) 
+	: _wengoPhone(wengoPhone) {
+	_wengoPhone.getConnectHandler().connectedEvent += 
 		boost::bind(&ChatHandler::connectedEventHandler, this, _1, _2);
-	connectHandler.disconnectedEvent += 
+	_wengoPhone.getConnectHandler().disconnectedEvent += 
 		boost::bind(&ChatHandler::disconnectedEventHandler, this, _1, _2);	
 }
 
@@ -74,7 +76,14 @@ void ChatHandler::messageReceivedEventHandler(IMChat & sender, IMChatSession * c
 	if (!chatSession) {
 		IMChatSession * imChatSession = new IMChatSession(_imChatMap);
 		_imChatSessionList.push_back(imChatSession);
-
+/*
+		IMContact * imContact = _imContactMap.findIMContact(sender.getIMAccount(), from);
+		if (imContact) {
+			imChatSession.addIMContact(&imContact);
+		} else {
+			LOG_DEBUG(from + "is not in current ContactList");
+		}
+*/
 		newChatSessionCreatedEvent(*this, *imChatSession);
 		imChatSession->messageReceivedEventHandler(sender, imChatSession, from, message);
 	}

@@ -90,7 +90,7 @@ void WengoPhone::init() {
 	_presenceHandler = new PresenceHandler(*_connectHandler);
 	presenceHandlerCreatedEvent(*this, *_presenceHandler);
 
-	_chatHandler = new ChatHandler(*_connectHandler);
+	_chatHandler = new ChatHandler(*this);
 	chatHandlerCreatedEvent(*this, *_chatHandler);
 
 	//Creates the contact list

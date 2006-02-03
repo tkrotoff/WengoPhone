@@ -113,6 +113,8 @@ private:
 
 	static const std::string _ssoAddress;
 
+	static const std::string _ssoURL;
+
 	static const unsigned _pingTimeout;
 
 };

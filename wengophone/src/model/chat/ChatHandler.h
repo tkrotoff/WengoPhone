@@ -31,6 +31,7 @@
 class IMAccount;
 class IMChatSession;
 class ConnectHandler;
+class WengoPhone;
 
 /**
  *
@@ -41,7 +42,7 @@ class ConnectHandler;
 class ChatHandler : NonCopyable {
 public:
 
-	ChatHandler(ConnectHandler & connectHandler);
+	ChatHandler(WengoPhone & wengoPhone);
 
 	~ChatHandler();
 
@@ -72,6 +73,8 @@ private:
 	IMChatMap _imChatMap;
 
 	IMChatSessionList _imChatSessionList;
+
+	WengoPhone & _wengoPhone;
 
 };
 

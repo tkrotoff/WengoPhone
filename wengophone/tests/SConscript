@@ -21,3 +21,5 @@ env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 
 env.WengoProgram('wengophone-test', sources, headers)
+
+env.SConscript('NetworkDiscoveryTest/SConscript')

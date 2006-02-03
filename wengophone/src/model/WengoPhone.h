@@ -24,6 +24,7 @@
 #include <model/NetworkDiscovery.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/imwrapper/IMAccountHandler.h>
+#include <model/imwrapper/IMContactMap.h>
 
 #include <Event.h>
 #include <Thread.h>
@@ -262,6 +263,10 @@ public:
 	 */
 	void terminate();
 
+	ConnectHandler & getConnectHandler() const {
+		return *_connectHandler;
+	}
+
 	PresenceHandler & getPresenceHandler() const {
 		return *_presenceHandler;
 	}
@@ -274,6 +279,22 @@ public:
 		return _imAccountHandler;
 	}
 
+	NetworkDiscovery & getNetworkDiscovery() {
+			return _networkDiscovery;
+	}
+
+	IMContactMap & getIMContactMap() {
+		return _imContactMap;
+	}
+
+	void setProxySettings(const std::string & proxyAddress, int proxyPort,
+		const std::string & proxyLogin, const std::string & proxyPassword);
+
+	/**
+	 * Starts the thread of the model component.
+	 */
+	void run();
+
 private:
 
 	/**
@@ -281,10 +302,6 @@ private:
 	 */
 	void init();
 
-	/**
-	 * Starts the thread of the model component.
-	 */
-	void run();
 
 	/**
 	 * @see addWengoAccount()
@@ -298,9 +315,6 @@ private:
 
 	void discoveryDoneEventHandler(NetworkDiscovery & sender,
 		NetworkDiscovery::DiscoveryResult result);
-
-	void setProxySettings(const std::string & proxyAddress, int proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword);
 
 	void wengoLoginEventHandler(WengoAccount & sender, WengoAccount::LoginState state,
 		const std::string & login, const std::string & password);
@@ -347,6 +361,8 @@ private:
 	IMAccountHandler _imAccountHandler;
 
 	WengoAccount * _wengoAccount;
+
+	IMContactMap _imContactMap;
 
 	/**
 	 * If this thread should be terminate or not.
