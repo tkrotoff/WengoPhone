@@ -31,7 +31,7 @@ void Object::showErrorMessage(const QString & objectName) {
 	const QString errorMsg = "Cannot find QObject: " + objectName;
 
 	QMessageBox::critical(NULL, "Critical Error", errorMsg);
-	LOG_FATAL_C(errorMsg.toStdString());
+	LOG_FATAL(errorMsg.toStdString());
 }
 
 void Object::print(QObject * object, const char * leadingString) {

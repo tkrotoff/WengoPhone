@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,6 @@
 #include <StringList.h>
 #include <Event.h>
 
-#include <typeinfo>
-
 class FileWriter;
 
 /*
@@ -33,24 +31,16 @@ __FILE__ : file source name
 __LINE__ : line number inside the source file
 __DATE__ : compilation date
 __TIME__ : compilation time
+__FUNCTION__ : function name
+__PRETTY_FUNCTION__ : function name
 */
 
-#define TYPEID_C String(__FILE__) + ":" + String::fromNumber(__LINE__) + ":"
-#define TYPEID_CPP typeid(this).name()
-
-/** Macros for the Logger class, to use only inside C++ classes. */
-#define LOG_DEBUG(message) Logger::logger.debug(TYPEID_CPP, message);
-#define LOG_INFO(message) Logger::logger.info(TYPEID_CPP, message);
-#define LOG_WARN(message) Logger::logger.warn(TYPEID_CPP, message);
-#define LOG_ERROR(message) Logger::logger.error(TYPEID_CPP, message);
-#define LOG_FATAL(message) Logger::logger.fatal(TYPEID_CPP, message);
-
-/** Specific macros for C functions. */
-#define LOG_DEBUG_C(message) Logger::logger.debug(TYPEID_C, message);
-#define LOG_INFO_C(message) Logger::logger.info(TYPEID_C, message);
-#define LOG_WARN_C(message) Logger::logger.warn(TYPEID_C, message);
-#define LOG_ERROR_C(message) Logger::logger.error(TYPEID_C, message);
-#define LOG_FATAL_C(message) Logger::logger.fatal(TYPEID_C, message);
+/** Macros for the Logger class. */
+#define LOG_DEBUG(message) Logger::logger.debug(String(__FUNCTION__), message);
+#define LOG_INFO(message) Logger::logger.info(String(__FUNCTION__), message);
+#define LOG_WARN(message) Logger::logger.warn(String(__FUNCTION__), message);
+#define LOG_ERROR(message) Logger::logger.error(String(__FUNCTION__), message);
+#define LOG_FATAL(message) Logger::logger.fatal(String(__FUNCTION__), message);
 
 /**
  * Logger class.
@@ -103,8 +93,6 @@ public:
 	/** Singleton. */
 	static Logger logger;
 
-	Logger();
-
 	~Logger();
 
 	void debug(const std::string & className, const std::string & message);
@@ -125,6 +113,8 @@ public:
 
 private:
 
+	Logger();
+
 	enum Level {
 		Debug,
 		Info,
@@ -135,6 +125,7 @@ private:
 
 	void log(Level level, const std::string & className, const std::string & message);
 
+	/** Writes the log messages to a file named log.txt. */
 	FileWriter * _file;
 };
 

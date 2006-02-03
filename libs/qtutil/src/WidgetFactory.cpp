@@ -36,7 +36,7 @@ QWidget * WidgetFactory::create(const QString & uiFile, QWidget * parent) {
 
 	if (!widget) {
 		QMessageBox::critical(parent, "Critical Error", errorMsg);
-		LOG_FATAL_C(errorMsg.toStdString());
+		LOG_FATAL(errorMsg.toStdString());
 	}
 
 	return widget;

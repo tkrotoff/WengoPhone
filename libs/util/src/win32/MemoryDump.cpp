@@ -83,7 +83,7 @@ HMODULE MemoryDump::loadDebugHelpLibrary() {
 	}
 
 	if (!hDll) {
-		LOG_ERROR_C(String(DBGHELP_DLL) + " not found");
+		LOG_ERROR(String(DBGHELP_DLL) + " not found");
 	}
 
 	return hDll;
@@ -95,7 +95,7 @@ MINIDUMPWRITEDUMP MemoryDump::loadMiniDumpWriteDumpFunction() {
 	if (hDll) {
 		pDump = (MINIDUMPWRITEDUMP)::GetProcAddress(hDll, "MiniDumpWriteDump");
 		if (!pDump) {
-			LOG_ERROR_C(String(DBGHELP_DLL) + " too old");
+			LOG_ERROR(String(DBGHELP_DLL) + " too old");
 		}
 	}
 
@@ -147,14 +147,14 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 			//Write the dump
 			BOOL ok = pDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, MiniDumpNormal, &ExInfo, NULL, NULL);
 			if (ok) {
-				LOG_DEBUG_C("dump file saved to: " + String(memoryDumpName));
+				LOG_DEBUG("dump file saved to: " + String(memoryDumpName));
 				ret = EXCEPTION_EXECUTE_HANDLER;
 			} else {
-				LOG_ERROR_C("failed to save dump file to: " + String(memoryDumpName) + " " + String::fromNumber(GetLastError()));
+				LOG_ERROR("failed to save dump file to: " + String(memoryDumpName) + " " + String::fromNumber(GetLastError()));
 			}
 			::CloseHandle(hFile);
 		} else {
-			LOG_ERROR_C("failed to create dump file: " + String(memoryDumpName) + " " + String::fromNumber(GetLastError()));
+			LOG_ERROR("failed to create dump file: " + String(memoryDumpName) + " " + String::fromNumber(GetLastError()));
 		}
 
 		//Launch memorydump.exe
