@@ -192,10 +192,11 @@ public:
 	/**
 	 * A login/password is needed for the HTTP proxy.
 	 *
-	 * @param hostname HTTP proxy server hostname
-	 * @param port HTTP proxy server port
+	 * @param hostname HTTP proxy server hostname detected
+	 * @param port HTTP proxy server port detected
+	 * @see Command::setHttpProxySettings()
 	 */
-	virtual void proxySettingsNeededEvent(const std::string & hostname, unsigned port)/* = 0*/ { }
+	virtual void httpProxySettingsNeededEvent(const std::string & hostname, unsigned port)/* = 0*/ { }
 };
 
 #endif	//LISTENER_H
