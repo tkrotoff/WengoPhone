@@ -209,12 +209,12 @@ static PayloadType g726_wb={
 
 static PayloadType g729={
     PAYLOAD_AUDIO_PACKETIZED,
-    8000,
-    320,
-    NULL,
-    0,
-    24000,   /* set mode 2385 as default */
-    "G729"
+    CLOCK_RATE(8000),
+    BYTES_PER_SAMPLE(0),
+    ZERO_PATTERN(NULL),
+    PATTERN_LENGTH(0),
+    NORMAL_BITRATE(24000),
+    MIME_TYPE ("G729")
 };
 
  
@@ -281,6 +281,7 @@ ph_media_init(int useTunnel, const char *pluginpath)
     rtp_profile_set_payload(profile,PH_MEDIA_SPEEXWB_PAYLOAD, &mspeex_wb);
     rtp_profile_set_payload(profile,PH_MEDIA_G729_PAYLOAD, &g729);
     rtp_profile_set_payload(profile,PH_MEDIA_G726WB_PAYLOAD, &g726_wb);
+
 #ifdef PHAPI_VIDEO_SUPPORT
     rtp_profile_set_payload(profile,PH_MEDIA_H263_PAYLOAD, &h263);
     rtp_profile_set_payload(profile,PH_MEDIA_H264_PAYLOAD, &h264);

@@ -154,7 +154,12 @@ struct ph_audio_stream
   struct timeval now;                /* time of thread's current execution */
 
   int activate_recorder; /** 0/1 will init a recorder on "recording.raw" */
+  int record_send_stream; /** 0/1 will init a recorder on "recording.raw" */
+  int record_recv_stream; /** 0/1 will init a recorder on "recording.raw" */
   recording_t recorder; /** recording structure associated with the activate_recorder int */
+  recording_t send_stream_recorder;
+  recording_t recv_stream_recorder;
+
 
   int using_out_callback; /** used to choose the location where network data is recorded in the echo canceller circular buffer */
   void *lastframe;   /** last played frame to be reused in the case of underflow */
@@ -181,7 +186,10 @@ void ph_generate_out_dtmf(phastream_t *stream, short *signal, int siglen, long t
 
 /** first version of recodring functions (mainly used for audio processing debugging purpose) */
 void ph_media_audio_recording_init(recording_t *recording, const char *filename, int nchannels, int chunksize);
+void ph_media_payload_recording_init(recording_t *recording, const char *filename);
 void ph_media_audio_recording_close(recording_t *recording);
 static void ph_media_audio_recording_dump(recording_t *recording);
 void ph_media_audio_recording_record_one(recording_t *recording, short c1, short c2, short c3);
+void ph_media_payload_record(recording_t *recording, const void *payload, int size);
+
 #endif

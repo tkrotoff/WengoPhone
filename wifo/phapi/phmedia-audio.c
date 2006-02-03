@@ -1090,6 +1090,10 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
         if (!silok)
             {
             int enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
+
+	    if (stream->record_send_stream)
+	      ph_media_payload_record(&stream->send_stream_recorder, data_out_enc, enclen);
+
             if (silok != stream->cngi.lastsil || wakeup)
                 {
                 rtp_session_set_markbit(stream->ms.rtp_session, 1);
@@ -1667,6 +1671,26 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
       snprintf(fname, 128, rname, fnindex++);
       ph_media_audio_recording_init(&stream->recorder, fname, 3, 4000);
     }
+
+  stream->record_send_stream = 0;
+  if (getenv("PH_RECORD_SEND_STREAM"))
+    stream->record_send_stream = atoi(getenv("PH_RECORD_SEND_STREAM"));
+  
+
+
+  if (stream->record_send_stream)
+    {
+      char *rname = getenv("PH_SEND_STREAM_FILE");
+      char fname[128];
+      static int sfnindex = 1;
+      if (!rname)
+	rname = "sendstream%d.data";
+		
+      snprintf(fname, 128, rname, sfnindex++);
+      ph_media_payload_recording_init(&stream->send_stream_recorder, fname);
+    }
+
+
   
   gettimeofday(&stream->last_rtp_sent_time, 0);
   stream->cngi.last_noise_sent_time = stream->last_rtp_recv_time = stream->cngi.last_dtx_time = stream->last_rtp_sent_time;
@@ -2037,6 +2061,8 @@ int ph_media_audio_start(phcall_t *ca, int port,
   if (getenv("PH_USE_RECORDER"))
     stream->activate_recorder = atoi(getenv("PH_USE_RECORDER"));
   
+
+
   if (stream->activate_recorder)
     {
       char *rname = getenv("PH_RECORD_FILE");
@@ -2048,6 +2074,12 @@ int ph_media_audio_start(phcall_t *ca, int port,
       snprintf(fname, 128, rname, fnindex++);
       ph_media_audio_recording_init(&stream->recorder, fname, 3, 4000);
     }
+
+
+
+  /* */
+  
+
   
   gettimeofday(&stream->last_rtp_sent_time, 0);
   stream->cngi.last_noise_sent_time = stream->last_rtp_recv_time = stream->cngi.last_dtx_time = stream->last_rtp_sent_time;
@@ -2432,6 +2464,18 @@ void ph_media_audio_stop(phcall_t *ca)
     {
       ph_media_audio_recording_close(&stream->recorder);
     }
+
+  if (stream->record_send_stream)
+    {
+      ph_media_audio_recording_close(&stream->send_stream_recorder);
+    }
+
+  if (stream->record_recv_stream)
+    {
+      ph_media_audio_recording_close(&stream->recv_stream_recorder);
+    }
+
+
   
   DBG("\naudio stream closed\n");
 
@@ -2649,7 +2693,8 @@ ph_telephone_event(RtpSession *rtp_session, int event, struct ph_msession_s *s)
 }
 
 void
-ph_media_audio_recording_init(recording_t *recording, const char *filename, int nchannels, int chunksize) {
+ph_media_audio_recording_init(recording_t *recording, const char *filename, int nchannels, int chunksize) 
+{
 	
   recording->samples = (short *) malloc(nchannels * chunksize * sizeof(short));
   recording->chunksize = chunksize;
@@ -2658,6 +2703,25 @@ ph_media_audio_recording_init(recording_t *recording, const char *filename, int 
   recording->fd = fopen(filename,"wb");
 
 }
+
+void
+ph_media_payload_recording_init(recording_t *recording, const char *filename)
+{
+	
+  recording->samples = 0;
+  recording->chunksize = 0;
+  recording->nchannels = 0;
+  recording->position = 0;
+  recording->fd = fopen(filename,"wb");
+
+}
+
+void
+ph_media_payload_record(recording_t *recording, const void *payload, int size)
+{
+  fwrite(payload, 1, size, recording->fd);
+}
+
 
 void
 ph_media_audio_recording_record_one(recording_t *recording, short c1, short c2, short c3) 
@@ -2691,12 +2755,15 @@ ph_media_audio_recording_dump(recording_t *recording)
     }
 	
 }
+
 void
 ph_media_audio_recording_close(recording_t *recording) 
 {
 		
   ph_media_audio_recording_dump(recording);
   fclose(recording->fd);
-  free(recording->samples);
+
+  if (recording->samples)
+    free(recording->samples);
 	
 }
