@@ -68,6 +68,7 @@ sources = [
 	'model/account/LocalNetworkAccount.cpp',
 	'model/phoneline/PhoneLineStateDefault.cpp',
 	'model/phoneline/PhoneLineStateOk.cpp',
+	'model/phoneline/PhoneLineStateClosed.cpp',
 	'model/phoneline/PhoneLineStateTimeout.cpp',
 	'model/phoneline/PhoneLineStateProxyError.cpp',
 	'model/phoneline/PhoneLineStateServerError.cpp',

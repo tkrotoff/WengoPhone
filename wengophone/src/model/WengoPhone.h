@@ -61,6 +61,8 @@ class ChatHandler;
 /**
  * Entry point of the application.
  *
+ * Design Pattern Mediator.
+ *
  * This class starts the model thread.
  * 2 threads are running: the model (including the control) and the presentation.
  * Thus the presentation component can be loaded and showed to the user
@@ -257,9 +259,12 @@ public:
 	 * @return ContactGroup list as a StringList
 	 */
 	StringList getContactGroupStringList() const;
-	
+
 	/**
 	 * Terminates the model component thread i.e this thread.
+	 *
+	 * This method should be called when you exit definitly WengoPhone.
+	 * You cannot call start() then terminate() several times.
 	 */
 	void terminate();
 
@@ -328,6 +333,11 @@ private:
 	 */
 	void addPhoneLine(const SipAccount & account);
 
+	/**
+	 * @see terminate()
+	 */
+	void terminateThreadSafe();
+
 	/** The active/current PhoneLine. */
 	IPhoneLine * _activePhoneLine;
 
@@ -371,7 +381,6 @@ private:
 	 * @see terminate()
 	 */
 	bool _terminate;
-
 };
 
 #endif	//WENGOPHONE_H

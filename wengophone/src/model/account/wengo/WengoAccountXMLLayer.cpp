@@ -21,9 +21,9 @@
 
 #include "WengoAccount.h"
 #include "model/WengoPhone.h"
-#include "model/WengoPhoneLogger.h"
 
 #include <File.h>
+#include <Logger.h>
 
 #include <string>
 using namespace std;

@@ -104,6 +104,11 @@ public:
 
 	bool enableAEC(bool enable);
 
+	/**
+	 * @name PhApi callbacks
+	 * @{
+	 */
+
 	void init();
 
 	void setProxy(const std::string & address, int port, 
@@ -127,27 +132,35 @@ public:
 
 	static void onNotify(const char * event, const char * from, const char * content);
 
-	/*
-	 * IMConnect implementation
+	/** @} */
+
+	/**
+	 * @name IMConnect Implementation
+	 * @{
 	 */
 
 	void connect();
+
 	void disconnect();
 
-	/*
-	 * IMChat implementation
+	/** @} */
+
+	/**
+	 * @name IMChat Implementation
+	 * @{
 	 */
 
-	//int sendMessage(const std::string & contactId, const std::string & message);
 	void sendMessage(IMChatSession & chatSession, const std::string & message);
 	void createSession(IMChatSession & chatSession);
 	void closeSession(IMChatSession & chatSession);
 	void addContact(IMChatSession & chatSession, const std::string & contactId);
 	void removeContact(IMChatSession & chatSession, const std::string & contactId);
 
+	/** @} */
 
-	/*
-	 * IMPresence implementation
+	/**
+	 * @name IMPresence Implementation
+	 * @{
 	 */
 
 	void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
@@ -163,6 +176,8 @@ public:
 	}
 
 	void allowWatcher(const std::string & watcher);
+
+	/** @} */
 
 	void forbidWatcher(const std::string & watcher);
 
@@ -181,19 +196,39 @@ private:
 
 	PhApiWrapper(PhApiCallbacks & callbacks);
 
-	static PhApiCallbacks * _callbacks;
+	/**
+	 * Factorizes code.
+	 *
+	 * @see publishOnline()
+	 * @see publishOffline()
+	 */
+	void publishPresence(const std::string & pidf);
 
-	bool _isInitialized;
-
+	/** @see changeMyPresence() */
 	void publishOnline(const std::string & note);
 
+	/** @see changeMyPresence() */
 	void publishOffline(const std::string & note);
 
+	/** Timer timeout event handler for re-sending my presence. */
+	void renewPublishEventHandler();
+
+	static PhApiCallbacks * _callbacks;
+
+	/** Checks if phApi has been initialized: if phInit() has been called. */
+	bool _isInitialized;
+
+	/** Virtual line for the Wengo SIP service. */
 	int _wengoVline;
 
+	/** SIP address for the Wengo SIP service. */
 	std::string _wengoSipAddress;
 
-	std::string _realm;
+	/** Realm for the Wengo SIP service. */
+	std::string _wengoRealm;
+
+	/** Last pidf for my presence. */
+	std::string _lastPidf;
 
 	std::map<int, IMChatSession *> _messageIdChatSessionMap;
 
@@ -218,7 +253,6 @@ private:
 	std::string _sipAddress;
 
 	int _sipLocalPort;
-
 };
 
 #endif	//PHAPIWRAPPER_H

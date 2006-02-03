@@ -39,6 +39,7 @@
 #include "connect/ConnectHandler.h"
 
 #include <StringList.h>
+#include <Logger.h>
 
 #include <iostream>
 using namespace std;
@@ -138,9 +139,16 @@ StringList WengoPhone::getContactGroupStringList() const {
 }
 
 void WengoPhone::terminate() {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&WengoPhone::terminateThreadSafe, this));
+	postEvent(event);
+}
+
+void WengoPhone::terminateThreadSafe() {
 	//Terminates the SIP stack
 	if (_activePhoneLine) {
 		_activePhoneLine->disconnect();
+		sleep(5);
 		_activePhoneLine->getSipWrapper().terminate();
 	}
 

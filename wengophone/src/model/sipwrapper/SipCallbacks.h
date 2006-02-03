@@ -73,9 +73,10 @@ public:
 
 	static const int LINE_DEFAULT_STATE = 0;
 	static const int LINE_OK = 1;
-	static const int LINE_PROXY_ERROR = 2;
-	static const int LINE_SERVER_ERROR = 3;
-	static const int LINE_TIMEOUT = 4;
+	static const int LINE_CLOSED = 2;
+	static const int LINE_PROXY_ERROR = 3;
+	static const int LINE_SERVER_ERROR = 4;
+	static const int LINE_TIMEOUT = 5;
 
 	void registerProgress(int lineId, int status);
 

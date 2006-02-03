@@ -23,7 +23,8 @@
 #include "ListenerList.h"
 
 #include <control/phonecall/CPhoneCall.h>
-#include <model/WengoPhoneLogger.h>
+
+#include <Logger.h>
 
 XPCOMPhoneCall::XPCOMPhoneCall(CPhoneCall & cPhoneCall)
 	: _cPhoneCall(cPhoneCall) {

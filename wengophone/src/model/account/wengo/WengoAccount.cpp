@@ -22,12 +22,12 @@
 #include "WengoPhoneBuildId.h"
 #include "WengoAccountParser.h"
 #include "WengoAccountSerializer.h"
-#include "model/WengoPhoneLogger.h"
 
 #include <http/HttpRequestFactory.h>
 #include <http/CurlHttpRequestFactory.h>
 #include <Timer.h>
 #include <StringList.h>
+#include <Logger.h>
 
 #include <sstream>
 #include <exception>
@@ -69,7 +69,8 @@ void WengoAccount::timeoutEventHandler() {
 	//TODO not implemented inside libutil
 	//httpRequest.setProxy("proxy.wengo.fr", 8080, "myProxyUsername", "myProxyPassword");
 
-	//First parameter: false = HTTP, true = HTTPS
+	//First parameter: true = HTTPS, false = HTTP
+	//Last parameter: true = POST method, false = GET method
 	httpRequest.sendRequest(false, WENGO_SERVER_HOSTNAME, 80, WENGO_LOGIN_PATH, data, true);
 }
 

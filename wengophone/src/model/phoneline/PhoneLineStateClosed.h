@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,37 +17,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PPHONELINE_H
-#define PPHONELINE_H
+#ifndef PHONELINESTATECLOSED_H
+#define PHONELINESTATECLOSED_H
 
-#include "Presentation.h"
+#include "PhoneLineState.h"
 
-#include <string>
-
-/**
- *
- * @ingroup presentation
- * @author Tanguy Krotoff
- */
-class PPhoneLine : public Presentation {
+class PhoneLineStateClosed : public PhoneLineState {
 public:
 
-	virtual ~PPhoneLine() {
+	void execute(IPhoneLine & phoneLine);
+
+	static const int CODE = SipCallbacks::LINE_CLOSED;
+
+	int getCode() const {
+		return CODE;
 	}
 
-	enum PhoneLineState {
-		LineProxyError,
-		LineServerError,
-		LineTimeout,
-		LineOk,
-		LineClosed
-	};
-
-	virtual void phoneLineStateChangedEvent(PhoneLineState state, int lineId) = 0;
-
-protected:
-
-	virtual void phoneLineStateChangedEventThreadSafe(PhoneLineState state, int lineId) = 0;
+	std::string toString() const {
+		return "PhoneLineStateClosed";
+	}
 };
 
-#endif	//PPHONELINE_H
+#endif	//PHONELINESTATECLOSED_H

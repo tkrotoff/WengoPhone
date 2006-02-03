@@ -20,7 +20,6 @@
 #include "PhoneCall.h"
 
 #include "model/phoneline/IPhoneLine.h"
-#include "model/WengoPhoneLogger.h"
 #include "model/WengoPhone.h"
 #include "model/sipwrapper/SipCallbacks.h"
 #include "model/wenbox/WenboxPlugin.h"
@@ -36,6 +35,7 @@
 #include "PhoneCallStateRinging.h"
 
 #include <StringList.h>
+#include <Logger.h>
 
 PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 	: _phoneLine(phoneLine) {

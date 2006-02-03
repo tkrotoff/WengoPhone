@@ -20,8 +20,9 @@
 #include "ContactGroup.h"
 
 #include "Contact.h"
-#include "model/WengoPhoneLogger.h"
 #include "ContactGroupParser.h"
+
+#include <Logger.h>
 
 ContactGroup::ContactGroup(const std::string & groupName, WengoPhone & wengoPhone)
 	:  _wengoPhone(wengoPhone) {

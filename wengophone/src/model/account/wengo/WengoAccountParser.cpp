@@ -19,9 +19,8 @@
 
 #include "WengoAccountParser.h"
 
-#include "model/WengoPhoneLogger.h"
-
 #include <StringList.h>
+#include <Logger.h>
 
 #include <tinyxml.h>
 
@@ -39,7 +38,7 @@ WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string
 	_registerServerPort = 5060;
 	_proxyServerHostname = "proxy1.host.wengo.fr";
 	_proxyServerPort = 5060;
-	_password = "8j1hvrekmxzr94lh";*/
+	_password = "XXXXXXX";*/
 
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
@@ -88,7 +87,6 @@ WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string
 	text = sso.FirstChild("proxy").FirstChild("host").FirstChild().Text();
 	if (text) {
 		account._proxyServerHostname = text->Value();
-		//account._proxyServerHostname = "213.91.9.210";
 	}
 
 	text = sso.FirstChild("proxy").FirstChild("port").FirstChild().Text();

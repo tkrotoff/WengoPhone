@@ -25,7 +25,6 @@
 #include "model/contactlist/ContactGroup.h"
 #include "presentation/qt/QtWengoPhone.h"
 #include "control/CWengoPhone.h"
-#include "model/WengoPhoneLogger.h"
 #include "TreeModel.h"
 #include "TreeItem.h"
 #include "QtContactGroup.h"
@@ -34,6 +33,8 @@
 #include "ContactListUtil.h"
 
 #include <StringList.h>
+#include <Logger.h>
+
 #include <Object.h>
 #include <WidgetFactory.h>
 #include <MouseEventFilter.h>

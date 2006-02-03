@@ -82,7 +82,7 @@ Command::Command(const std::string & configFilesPath) {
 	_cWengoPhone = new CWengoPhone(*_wengoPhone);
 
 	try {
-		_soundMixer = new SoundMixer(AudioDevice::getDefaultPlaybackDevice(),
+		_soundMixer = new SoundMixer(AudioDevice::getDefaultRecordDevice(),
 					AudioDevice::getDefaultPlaybackDevice());
 	} catch(Exception &) {
 		_soundMixer = NULL;

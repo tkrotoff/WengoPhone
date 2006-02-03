@@ -19,7 +19,6 @@
 
 #include "CWengoPhone.h"
 
-#include "model/WengoPhoneLogger.h"
 #include "model/wenbox/WenboxPlugin.h"
 #include "model/account/wengo/WengoAccount.h"
 #include "model/contactlist/Contact.h"
@@ -37,6 +36,7 @@
 
 #include <WebBrowser.h>
 #include <StringList.h>
+#include <Logger.h>
 
 using namespace std;
 
@@ -106,10 +106,10 @@ void CWengoPhone::terminate() {
 }
 
 void CWengoPhone::phoneLineCreatedEventHandler(WengoPhone & sender, IPhoneLine & phoneLine) {
-	static CPhoneLine cPhoneLine(phoneLine, *this);
+	CPhoneLine * cPhoneLine = new CPhoneLine(phoneLine, *this);
 
 	LOG_DEBUG("PhoneLine created");
-	_pWengoPhone->addPhoneLine(cPhoneLine.getPresentation());
+	_pWengoPhone->addPhoneLine(cPhoneLine->getPresentation());
 }
 
 void CWengoPhone::loggerCreatedEventHandler(WengoPhone & sender, WengoPhoneLogger & logger) {

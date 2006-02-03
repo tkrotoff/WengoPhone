@@ -34,6 +34,7 @@
 #include <StringList.h>
 #include <Logger.h>
 #include <File.h>
+#include <Timer.h>
 
 #include <string>
 using namespace std;
@@ -107,6 +108,7 @@ PhApiWrapper::~PhApiWrapper() {
 void PhApiWrapper::terminate() {
 	if (_isInitialized) {
 		phTerminate();
+		_isInitialized = false;
 	}
 }
 
@@ -119,26 +121,33 @@ void PhApiWrapper::setNetworkParameter() {
 		phTunnelConfig(_proxyAddress.c_str(), _proxyPort, _tunnelAddress.c_str(), _tunnelPort,
 			_proxyLogin.c_str(), _proxyPassword.c_str(), 0);
 
-		natType = "fcone";		
+		natType = "fcone";
 	} else {
 		switch(_natType) {
 		case StunTypeOpen:
 			natType = "none";
 			natRefreshTime = 0;
 			break;
+
 		case StunTypeConeNat:
 			natType = "fcone";
 			break;
+
 		case StunTypeRestrictedNat:
 			natType = "rcone";
 			break;
+
 		case StunTypePortRestrictedNat:
 			natType = "prcone";
 			break;
+
 		case StunTypeSymNat:
 		case StunTypeSymFirewall:
 			natType = "sym";
 			break;
+
+		default:
+			LOG_FATAL("unknown NAT type");
 		}
 
 		phcfg.use_tunnel = 0;
@@ -168,7 +177,7 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 	if (tmp.contains("wengo")) {
 		_wengoVline = ret;
 		_wengoSipAddress = "sip:" + identity + "@" + realm;
-		_realm = realm;
+		_wengoRealm = realm;
 	}
 
 	return ret;
@@ -257,6 +266,11 @@ bool PhApiWrapper::setCallOutputAudioDevice(const std::string & deviceName) {
 }
 
 bool PhApiWrapper::enableAEC(bool enable) {
+	if (enable) {
+		phcfg.noaec = 0;
+	} else {
+		phcfg.noaec = 1;
+	}
 	return true;
 }
 
@@ -277,8 +291,8 @@ void PhApiWrapper::disconnect() {
 void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & message) {
 	const IMChatSession::IMContactList & buddies = chatSession.getIMContactList();
 	IMChatSession::IMContactList::const_iterator it;
-	for(it = buddies.begin(); it != buddies.end(); it++) {
-		std::string sipAddress = "sip:" + (*it)->getContactId() + "@" + _realm;
+	for (it = buddies.begin(); it != buddies.end(); it++) {
+		std::string sipAddress = "sip:" + (*it)->getContactId() + "@" + _wengoRealm;
 		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message.c_str());
 		_messageIdChatSessionMap[messageId] =  &chatSession;
 	}
@@ -329,8 +343,6 @@ void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, cons
 }
 
 void PhApiWrapper::publishOnline(const std::string & note) {
-	static const std::string contentType = "application/pidf+xml";
-
 	if (_isInitialized) {
 		std::string pidfOnline = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 		pidfOnline += "<presence entity=\"";
@@ -347,19 +359,11 @@ void PhApiWrapper::publishOnline(const std::string & note) {
 		pidfOnline += "</tuple>\n";
 		pidfOnline += "</presence>\n";
 
-		int phError = phLinePublish(_wengoVline, _wengoSipAddress.c_str(), 0, contentType.c_str(), pidfOnline.c_str());
-
-		if (phError != 0) {
-			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusError);
-		} else {
-			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusOk);
-		}
+		publishPresence(pidfOnline);
 	}
 }
 
 void PhApiWrapper::publishOffline(const std::string & note) {
-	static const std::string contentType = "application/pidf+xml";
-
 	if (_isInitialized) {
 		std::string pidfOffline = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 		pidfOffline += "<presence entity=\"";
@@ -373,17 +377,44 @@ void PhApiWrapper::publishOffline(const std::string & note) {
 		pidfOffline += "</tuple>\n";
 		pidfOffline += "</presence>\n";
 
-		int phError = phLinePublish(_wengoVline, _wengoSipAddress.c_str(), 0, contentType.c_str(), pidfOffline.c_str());
+		publishPresence(pidfOffline);
+	}
+}
+
+void PhApiWrapper::publishPresence(const std::string & pidf) {
+	static const std::string contentType = "application/pidf+xml";
+
+	if (_isInitialized) {
+		int phError = phLinePublish(_wengoVline, _wengoSipAddress.c_str(), 0, contentType.c_str(), pidf.c_str());
 		if (phError != 0) {
 			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusError);
 		} else {
 			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusOk);
 		}
 	}
+
+	/* Timer to renew publish presence */
+
+	//Renew presence every 9 minutes
+	static const unsigned PUBLISH_TIMEOUT = 9 * 60 * 1000;
+
+	if (_lastPidf.empty()) {
+		//Creates and launches the timer only once
+		static Timer timer;
+		timer.timeoutEvent += boost::bind(&PhApiWrapper::renewPublishEventHandler, this);
+		timer.start(PUBLISH_TIMEOUT, PUBLISH_TIMEOUT);
+	}
+
+	//Saves the pidf
+	_lastPidf = pidf;
+}
+
+void PhApiWrapper::renewPublishEventHandler() {
+	publishPresence(_lastPidf);
 }
 
 void PhApiWrapper::subscribeToPresenceOf(const std::string & contactId) {
-	std::string sipAddress = "sip:" + contactId + "@" + _realm;
+	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
 
 	if (phLineSubscribe(_wengoVline, sipAddress.c_str(), 0) != 0) {
 		subscribeStatusEvent(*this, sipAddress, IMPresence::SubscribeStatusError);
@@ -423,7 +454,7 @@ void PhApiWrapper::allowWatcher(const std::string & watcher) {
 void PhApiWrapper::forbidWatcher(const std::string & watcher) {
 	static const int winfo = 1;	//Publish with event = presence.winfo
 	static const std::string contentType = "application/watcherinfo+xml";
-	
+
 	std::string winfoForbid = "<?xml version=\"1.0\"?>\n";
 	winfoForbid += "<watcherinfo>\n";
 	winfoForbid += "<watcher-list>\n";
@@ -437,18 +468,18 @@ void PhApiWrapper::forbidWatcher(const std::string & watcher) {
 }
 
 void PhApiWrapper::blockContact(const std::string & contactId) {
-	std::string sipAddress = "sip:" + contactId + "@" + _realm;
+	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
 	allowWatcher(sipAddress);
 }
 
 void PhApiWrapper::unblockContact(const std::string & contactId) {
-	std::string sipAddress = "sip:" + contactId + "@" + _realm;
+	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
 	allowWatcher(sipAddress);
 }
 
-void PhApiWrapper::setProxy(const std::string & address, int port, 
+void PhApiWrapper::setProxy(const std::string & address, int port,
 	const std::string & login, const std::string & password) {
-	
+
 	_proxyAddress = address;
 	_proxyPort = port;
 	_proxyLogin = login;
@@ -474,26 +505,26 @@ void PhApiWrapper::setSIP(const string & server, int localPort) {
 void PhApiWrapper::init() {
 	setNetworkParameter();
 
-	//Ignored since we are in direct link mode
-	static const std::string phApiServer = "127.0.0.1";
-
-	//If asynchronous mode = false then we have to call phPoll()
-	static const bool asynchronousMode = true;
-
 	//FIXME ugly hack for xpcom component
 	std::string pluginPath = File::convertPathSeparators(WengoPhone::getConfigFilesPath() + "../extensions/{debaffee-a972-4d8a-b426-8029170f2a89}/libraries/");
 	strncpy(phcfg.plugin_path, pluginPath.c_str(), 256);
 
 	//Codec list
-	//strncpy(phcfg.audio_codecs, "PCMU,PCMA,GSM,ILBC,SPEEX,SPEEX,AMR,AMR-WB", 128);
 	strncpy(phcfg.audio_codecs, "G726-64wb/16000,ILBC/8000,PCMU/8000,PCMA/8000,GSM/8000", 128);
-
 	strncpy(phcfg.video_codecs, "H263,H264,MPEG4", 128);
 
 	strncpy(phcfg.proxy, _sipAddress.c_str(), 64);
 
 	String localPort = String::fromNumber(_sipLocalPort);
 	strncpy(phcfg.sipport, localPort.c_str(), 16);
+
+	enableAEC(true);
+
+	//Ignored since we are in direct link mode
+	static const std::string phApiServer = "127.0.0.1";
+
+	//If asynchronous mode = false then we have to call phPoll()
+	static const bool asynchronousMode = true;
 
 	int ret = phInit(&phApiCallbacks, (char *) phApiServer.c_str(), asynchronousMode);
 	if (ret == PhApiResultNoError) {

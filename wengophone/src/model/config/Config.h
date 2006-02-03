@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,13 +41,14 @@ public:
 		return _name;
 	}
 
-	/** String key. Network branch */	
+	/** String key. Network branch */
 	static const std::string NETWORK_KEY;
 
 	/** Boolean key. True if SSL connection to SSO is available */
 	static const std::string NETWORK_SSO_SSL_KEY;
 
-	/** String key. Type of NAT. Can be
+	/**
+	 * String key. Type of NAT. Can be
 	 * - cone
 	 * - restricted
 	 * - portRestricted
@@ -90,7 +91,6 @@ public:
 private:
 
 	std::string _name;
-
 };
 
 #endif	//CONFIG_H

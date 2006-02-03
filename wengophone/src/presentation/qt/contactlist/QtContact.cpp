@@ -19,11 +19,12 @@
 
 #include "QtContact.h"
 
-#include "model/WengoPhoneLogger.h"
-#include "control/contactlist/CContact.h"
 #include "TreeItem.h"
 #include "QtContactList.h"
 
+#include <control/contactlist/CContact.h>
+
+#include <Logger.h>
 
 QtContact::QtContact(CContact & cContact, QtContactList * qtContactList) 
 	: QObjectThreadSafe(), IQtContact(&cContact.getContact()), _cContact(cContact) {

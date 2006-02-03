@@ -21,15 +21,13 @@
 #define WENGOPHONELOGGER_H
 
 #include <NonCopyable.h>
-#include <Logger.h>
+#include <Event.h>
 
 /**
  * Logging system.
  *
  * Example:
  * <pre>
- * include "WengoPhoneLogger.h"
- * ...
  * LOG_DEBUG("debug message");
  * </pre>
  *
@@ -39,13 +37,12 @@
  * There is only one instance of this class inside the application.
  *
  * If a control and a presentation component exist for this class,
- * all logged messages will be showed graphically (this is why there is such a
- * class inside WengoPhone rather than to rely only on a external library).
+ * all logged messages will be showed graphically.
  *
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class WengoPhoneLogger : Logger {
+class WengoPhoneLogger {
 public:
 
 	/**

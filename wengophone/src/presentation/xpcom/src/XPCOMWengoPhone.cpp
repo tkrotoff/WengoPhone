@@ -23,8 +23,9 @@
 #include "ListenerList.h"
 #include "XPCOMIMHandler.h"
 
-#include <model/WengoPhoneLogger.h>
 #include <control/CWengoPhone.h>
+
+#include <Logger.h>
 
 #include <cassert>
 

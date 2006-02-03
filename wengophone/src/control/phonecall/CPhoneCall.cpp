@@ -23,7 +23,6 @@
 #include "presentation/PPhoneCall.h"
 #include "presentation/PFactory.h"
 #include "model/WengoPhone.h"
-#include "model/WengoPhoneLogger.h"
 #include "model/phoneline/PhoneLine.h"
 #include "model/sipwrapper/SipCallbacks.h"
 #include "control/CWengoPhone.h"
@@ -37,6 +36,8 @@
 #include "model/phonecall/PhoneCallStateTalking.h"
 #include "model/phonecall/PhoneCallStateResumeOk.h"
 #include "model/phonecall/PhoneCallStateRinging.h"
+
+#include <Logger.h>
 
 CPhoneCall::CPhoneCall(PhoneCall & phoneCall, CWengoPhone & cWengoPhone)
 	: _phoneCall(phoneCall),

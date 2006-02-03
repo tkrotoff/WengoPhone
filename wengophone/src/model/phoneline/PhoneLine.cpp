@@ -29,15 +29,17 @@
 #include <model/phonecall/PhoneCallStateIncoming.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
-#include <model/WengoPhoneLogger.h>
-
-# include <netlib.h>
 
 #include "PhoneLineStateDefault.h"
 #include "PhoneLineStateOk.h"
+#include "PhoneLineStateClosed.h"
 #include "PhoneLineStateTimeout.h"
 #include "PhoneLineStateProxyError.h"
 #include "PhoneLineStateServerError.h"
+
+#include <Logger.h>
+
+#include <netlib.h>
 
 #include <cstring>
 
@@ -66,6 +68,9 @@ PhoneLine::PhoneLine(WengoPhone & wengoPhone)
 
 	static PhoneLineStateOk stateOk;
 	_phoneLineStateList += &stateOk;
+
+	static PhoneLineStateClosed stateClosed;
+	_phoneLineStateList += &stateClosed;
 
 	static PhoneLineStateTimeout stateTimeout;
 	_phoneLineStateList += &stateTimeout;
@@ -360,33 +365,33 @@ PhoneCall * PhoneLine::getPhoneCall(int callId) {
 void PhoneLine::initSIPWrapper() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
+	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, String::null);
 	if (!proxyAddress.empty()) {
 		int proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
-		string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
-		string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
+		string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, String::null);
+		string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, String::null);
 
 		_sipWrapper->setProxy(proxyAddress, proxyPort, proxyLogin, proxyPassword);
 	}
 
 	bool tunnelNeeded = config.get(Config::NETWORK_TUNNEL_NEEDED_KEY, false);
 	if (tunnelNeeded) {
-		string tunnelAddress = config.get(Config::NETWORK_TUNNEL_SERVER_KEY, string(""));
+		string tunnelAddress = config.get(Config::NETWORK_TUNNEL_SERVER_KEY, String::null);
 		int tunnelPort = config.get(Config::NETWORK_TUNNEL_PORT_KEY, 0);
 		bool tunnelSSL = config.get(Config::NETWORK_TUNNEL_SSL_KEY, false);
 		_sipWrapper->setTunnel(true, tunnelAddress, tunnelPort, tunnelSSL);
 	} else {
-		_sipWrapper->setTunnel(false, "", 0, false);
+		_sipWrapper->setTunnel(false, String::null, 0, false);
 	}
 
-	string sipAddress = config.get(Config::NETWORK_SIP_SERVER_KEY, string(""));
+	string sipAddress = config.get(Config::NETWORK_SIP_SERVER_KEY, String::null);
 	int sipPort = config.get(Config::NETWORK_SIP_LOCAL_PORT_KEY, 0);
 	_sipWrapper->setSIP(sipAddress, sipPort);
 
 	string natType = config.get(Config::NETWORK_NAT_TYPE_KEY, string("auto"));
 	NatType nat;
 
-	if (natType ==	"cone") {
+	if (natType == "cone") {
 		nat = StunTypeConeNat;
 	} else if (natType == "restricted") {
 		nat = StunTypeRestrictedNat;

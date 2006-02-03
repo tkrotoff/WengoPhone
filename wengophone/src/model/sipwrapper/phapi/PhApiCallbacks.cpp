@@ -21,11 +21,12 @@
 
 #include <model/sipwrapper/SipCallbacks.h>
 #include <model/sipwrapper/SipWrapper.h>
-#include <model/WengoPhoneLogger.h>
 #include <model/imwrapper/IMPresence.h>
 #include <model/imwrapper/EnumPresenceState.h>
 
 #include <model/sipwrapper/phapi/PhApiWrapper.h>
+
+#include <Logger.h>
 
 #ifdef ENABLE_VIDEO
 	#include <pixertool.h>
@@ -170,15 +171,28 @@ void PhApiCallbacks::transferProgress(int /*callId*/, const phTransferStateInfo_
 void PhApiCallbacks::conferenceProgress(int /*conferenceId*/, const phConfStateInfo_t * /*info*/) { }
 
 void PhApiCallbacks::registerProgress(int lineId, int status) {
-	LOG_DEBUG("registerProgress status=" + status);
+	LOG_DEBUG("registerProgress status=" + String::fromNumber(status));
 
 	switch(status) {
+
+	//401 Unauthorized
 	case 401:
 		_callbacks.registerProgress(lineId, SipCallbacks::LINE_PROXY_ERROR);
 		break;
 
-	case 407:
+	//404 Not Found
+	case 404:
 		_callbacks.registerProgress(lineId, SipCallbacks::LINE_SERVER_ERROR);
+		break;
+
+	//407 Proxy Authentication Required
+	case 407:
+		_callbacks.registerProgress(lineId, SipCallbacks::LINE_PROXY_ERROR);
+		break;
+
+	//408 Request Timeout
+	case 408:
+		_callbacks.registerProgress(lineId, SipCallbacks::LINE_TIMEOUT);
 		break;
 
 	case -1:
@@ -189,18 +203,23 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 		_callbacks.registerProgress(lineId, SipCallbacks::LINE_DEFAULT_STATE);
 		break;
 
+	//Register ok
 	case 0:
 		_callbacks.registerProgress(lineId, SipCallbacks::LINE_OK);
 		break;
 
+	//Unregister ok
 	case 32768:
+		_callbacks.registerProgress(lineId, SipCallbacks::LINE_CLOSED);
 		break;
 
+	//500 Server Internal Error
 	case 500:
 		break;
 
 	default:
-		LOG_FATAL("unknown phApi event=" + String::fromNumber(status));
+		_callbacks.registerProgress(lineId, SipCallbacks::LINE_SERVER_ERROR);
+		//LOG_FATAL("unknown phApi event=" + String::fromNumber(status));
 	}
 }
 

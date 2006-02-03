@@ -23,9 +23,9 @@
 #include "ContactGroup.h"
 #include "ContactListXMLLayer.h"
 #include "ContactListParser.h"
-#include "model/WengoPhoneLogger.h"
 
 #include <StringList.h>
+#include <Logger.h>
 
 ContactList::ContactList(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {

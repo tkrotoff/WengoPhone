@@ -24,7 +24,8 @@
 #include "XPCOMIMHandler.h"
 
 #include <control/phoneline/CPhoneLine.h>
-#include <model/WengoPhoneLogger.h>
+
+#include <Logger.h>
 
 XPCOMPhoneLine::XPCOMPhoneLine(CPhoneLine & cPhoneLine)
 	: _cPhoneLine(cPhoneLine) {
@@ -56,6 +57,11 @@ void XPCOMPhoneLine::phoneLineStateChangedEvent(PhoneLineState state, int lineId
 		case LineOk:
 			XPCOMIMHandler::getInstance().connected();
 			listener->phoneLineStateChangedEvent(Listener::LineOk, lineId, NULL);
+			break;
+
+		case LineClosed:
+			XPCOMIMHandler::getInstance().connected();
+			listener->phoneLineStateChangedEvent(Listener::LineClosed, lineId, NULL);
 			break;
 
 		default:

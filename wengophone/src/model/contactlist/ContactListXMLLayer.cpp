@@ -22,9 +22,9 @@
 #include "ContactList.h"
 #include "ContactGroup.h"
 #include "Contact.h"
-#include "model/WengoPhoneLogger.h"
 
 #include <File.h>
+#include <Logger.h>
 
 #include <string>
 using namespace std;

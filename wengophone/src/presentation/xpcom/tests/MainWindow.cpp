@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,11 @@
 #include <Listener.h>
 #include <Command.h>
 
-#include <model/WengoPhoneLogger.h>
-
 #include <Object.h>
 #include <WidgetFactory.h>
+
+#include <Thread.h>
+#include <Logger.h>
 
 #include <QtGui>
 
@@ -114,7 +115,12 @@ void QtListener::phoneLineStateChangedEvent(PhoneLineState state, int lineId, vo
 		_mainWindow._command->subscribeToPresenceOf("dbitton_office");
 		_mainWindow._command->subscribeToPresenceOf("antesoft");
 		_mainWindow._command->subscribeToPresenceOf("tanguy-krotoff");
+		break;
 
+	case LineClosed:
+		_mainWindow.addLogMessage("LineClosed");
+		delete _mainWindow._command;
+		_mainWindow._command = NULL;
 		break;
 
 	default:
@@ -295,7 +301,6 @@ void MainWindow::commandTerminateButtonClicked() {
 	if (_command) {
 		_command->terminate();
 	}
-	delete _command;
-	_command = NULL;
+
 	addLogMessage("Command::terminate()");
 }

@@ -23,15 +23,17 @@
 #include "presentation/PPhoneLine.h"
 #include "presentation/PFactory.h"
 #include "model/phoneline/PhoneLineState.h"
-#include "model/WengoPhoneLogger.h"
 #include "control/phonecall/CPhoneCall.h"
 #include "control/CWengoPhone.h"
 
 #include "model/phoneline/PhoneLineStateDefault.h"
 #include "model/phoneline/PhoneLineStateOk.h"
+#include "model/phoneline/PhoneLineStateClosed.h"
 #include "model/phoneline/PhoneLineStateTimeout.h"
 #include "model/phoneline/PhoneLineStateProxyError.h"
 #include "model/phoneline/PhoneLineStateServerError.h"
+
+#include <Logger.h>
 
 CPhoneLine::CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone)
 	: _phoneLine(phoneLine),
@@ -56,6 +58,10 @@ void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender) {
 
 	case PhoneLineStateOk::CODE:
 		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineOk, lineId);
+		break;
+
+	case PhoneLineStateClosed::CODE:
+		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineClosed, lineId);
 		break;
 
 	case PhoneLineStateTimeout::CODE:

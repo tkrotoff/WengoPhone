@@ -19,6 +19,8 @@
 
 #include "WengoPhoneLogger.h"
 
+#include <Logger.h>
+
 WengoPhoneLogger::WengoPhoneLogger() {
 	Logger::logger.messageAddedEvent += messageAddedEvent;
 }

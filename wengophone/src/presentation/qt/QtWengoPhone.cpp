@@ -19,7 +19,6 @@
 
 #include "QtWengoPhone.h"
 
-#include <model/WengoPhoneLogger.h>
 #include <control/CWengoPhone.h>
 #include <WengoPhoneBuildId.h>
 
@@ -35,6 +34,7 @@
 #include <WidgetFactory.h>
 #include <Object.h>
 #include <Thread.h>
+#include <Logger.h>
 
 #include <QtGui>
 
