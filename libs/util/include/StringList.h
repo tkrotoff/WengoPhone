@@ -191,6 +191,15 @@ public:
 class StringList : public List<std::string> {
 public:
 
+	StringList();
+
+	/**
+	 * Converts a std::list<std::string> to a StringList using a constructor.
+	 *
+	 * @param strList list<string> to convert to StringList
+	 */
+	StringList(const std::list<std::string> & strList);
+
 	/**
 	 * Converts this StringList to std::list<std::string>.
 	 *
@@ -198,13 +207,6 @@ public:
 	 */
 	operator std::list<std::string>();
 
-	  /**
-	   * Convert a std::list<std::string> to a StringList using a
-	   * copy-constructor.
-	   * @return a new StringList.
-	   */
-	  StringList(const std::list<std::string>&);
-	  StringList() {}
 	/**
 	 * Permits to use StringList as an array.
 	 *
@@ -257,7 +259,7 @@ public:
 	};
 
 	/**
-	 * Sort the string list alphabetically
+	 * Sorts the string list alphabetically.
 	 *
 	 * @param order sorting order
 	 */

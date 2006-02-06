@@ -146,12 +146,24 @@ std::string String::encodeUrl(const std::string & str) {
 	return out;
 }
 
-StringList::operator std::list<std::string>() {
-	std::list<std::string> stringList;
-	for (unsigned i = 0; i < size(); i++) {
-		stringList.push_back((*this)[i]);
+
+StringList::StringList(const std::list<string> & strList) {
+	for (std::list<string>::const_iterator it = strList.begin();
+		it != strList.end(); ++it) {
+
+		this->add(*it);
 	}
-	return stringList;
+}
+
+StringList::StringList() {
+}
+
+StringList::operator std::list<std::string>() {
+	std::list<std::string> strList;
+	for (unsigned i = 0; i < size(); i++) {
+		strList.push_back((*this)[i]);
+	}
+	return strList;
 }
 
 StringList StringList::split(const std::string & str, const std::string & separator) {
@@ -206,19 +218,16 @@ unsigned StringList::contains(const std::string & str, bool caseSensitive) const
 }
 
 void StringList::sort(SortingOrder order) {
-	switch (order) {
+	switch(order) {
 	case Ascendant:
 		std::sort(_list.begin(), _list.end());
 		break;
+
 	case Descendant:
 		std::sort(_list.begin(), _list.end(), StringCompareDescendant());
 		break;
-	}
-}
 
-StringList::StringList(const std::list<string>& strings_list) {
-  for (std::list<string>::const_iterator iter = strings_list.begin();
-       iter != strings_list.end();
-       ++iter)
-    this->add(*iter);
+	default:
+		LOG_FATAL("unknown sorting order");
+	}
 }
