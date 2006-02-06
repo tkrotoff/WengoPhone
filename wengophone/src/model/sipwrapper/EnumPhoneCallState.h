@@ -17,36 +17,45 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCHATHANDLER_H
-#define QTCHATHANDLER_H
+#ifndef ENUMPHONECALLSTATE_H
+#define ENUMPHONECALLSTATE_H
 
-#include <presentation/PChatHandler.h>
-
-class ChatHandler;
-class CChatHandler;
+#include <NonCopyable.h>
 
 /**
- *
- * @ingroup presentation
  * @author Tanguy Krotoff
- * @author Philippe Bernery
  */
-class QtChatHandler : public PChatHandler {
+class EnumPhoneCallState : NonCopyable {
 public:
 
-	QtChatHandler(CChatHandler & cChatHandler);
+	enum PhoneCallState {
+		/** Default state. */
+		PhoneCallStateDefault,
 
-	~QtChatHandler();
+		/** An error occured. */
+		PhoneCallStateError,
 
-private:
+		/** Phone call resumed (after holding a call). */
+		PhoneCallStateResumeOk,
 
-	/**
-	 * @see ChatHandler::newChatSessionCreatedEvent
-	 */
-	void newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession);
+		/** Conversation state. */
+		PhoneCallStateTalking,
 
-	CChatHandler & _cChatHandler;
+		/** Outgoing phone call: dialing. */
+		PhoneCallStateDialing,
 
+		/** Outgoing phone call: ringing. */
+		PhoneCallStateRinging,
+
+		/** Phone call closed (call rejected or call hang up). */
+		PhoneCallStateClosed,
+
+		/** Incoming phone call. */
+		PhoneCallStateIncoming,
+
+		/** Phone call hold. */
+		PhoneCallStateHoldOk,
+	};
 };
 
-#endif	//QTCHATHANDLER_H
+#endif	//ENUMPHONECALLSTATE_H

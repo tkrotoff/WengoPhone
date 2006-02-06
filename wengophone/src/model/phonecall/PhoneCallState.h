@@ -20,7 +20,7 @@
 #ifndef PHONECALLSTATE_H
 #define PHONECALLSTATE_H
 
-#include "model/sipwrapper/SipCallbacks.h"
+#include "model/sipwrapper/EnumPhoneCallState.h"
 
 #include <string>
 

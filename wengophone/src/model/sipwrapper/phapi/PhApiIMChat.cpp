@@ -23,9 +23,13 @@
 
 #include "PhApiWrapper.h"
 
+PhApiIMChat * PhApiIMChat::PhApiIMChatHack = NULL;
+
 PhApiIMChat::PhApiIMChat(IMAccount & account, const IMContactMap & imContactMap, PhApiWrapper & phApiWrapper)
 	: IMChat(account, imContactMap),
 	_phApiWrapper(phApiWrapper) {
+
+	PhApiIMChatHack = this;
 
 	_phApiWrapper.messageReceivedEvent += boost::bind(&PhApiIMChat::messageReceivedEventHandler, this, _1, _2, _3, _4);
 	_phApiWrapper.statusMessageReceivedEvent += boost::bind(&PhApiIMChat::statusMessageReceivedEventHandler, this, _1, _2, _3, _4);

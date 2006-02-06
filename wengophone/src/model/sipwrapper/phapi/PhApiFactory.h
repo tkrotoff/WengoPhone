@@ -23,7 +23,6 @@
 #include <model/sipwrapper/SipWrapperFactory.h>
 #include <model/imwrapper/IMWrapperFactory.h>
 
-class SipCallbacks;
 class IMAccount;
 class IMConnect;
 class IMChat;
@@ -41,7 +40,7 @@ public:
 
 	PhApiFactory();
 
-	SipWrapper * createSipWrapper(SipCallbacks & callbacks);
+	SipWrapper * createSipWrapper();
 
 	IMConnect * createIMConnect(IMAccount & account);
 

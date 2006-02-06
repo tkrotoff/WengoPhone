@@ -22,8 +22,6 @@
 
 #include <phapi.h>
 
-class SipCallbacks;
-
 /**
  * PhApi callbacks.
  *
@@ -34,7 +32,7 @@ class SipCallbacks;
 class PhApiCallbacks {
 public:
 
-	PhApiCallbacks(SipCallbacks & callbacks);
+	PhApiCallbacks();
 
 	void callProgress(int callId, const phCallStateInfo_t * info);
 
@@ -51,10 +49,6 @@ public:
 	void subscriptionProgress(int subscriptionId, const phSubscriptionStateInfo_t * info);
 
 	void onNotify(const char * event, const char * from, const char * content);
-
-private:
-
-	SipCallbacks & _callbacks;
 };
 
 #endif	//PHAPICALLBACKS_H

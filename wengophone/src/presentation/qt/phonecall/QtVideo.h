@@ -41,7 +41,7 @@ public:
 	QWidget * getWidget() const {
 		return _videoWindow;
 	}
-	
+
 private Q_SLOTS:
 
 	void paintEvent();

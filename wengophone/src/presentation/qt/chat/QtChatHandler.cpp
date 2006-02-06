@@ -38,7 +38,7 @@ QtChatHandler::~QtChatHandler() {
 
 }
 
-void QtChatHandler::newChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession) {
+void QtChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession) {
 	LOG_DEBUG("new ChatSession created");
 	QtChatWidget * qtChatWidget = new QtChatWidget(imChatSession);
 	qtChatWidget->getWidget()->show();

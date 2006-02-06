@@ -91,7 +91,7 @@ private:
 	/**
 	 * Create and set the SIP stack.
 	 */
-	void initSIPWrapper();
+	void initSipWrapper();
 
 	/**
 	 * Creates a new PhoneCall waiting to receive callbacks.

@@ -28,8 +28,8 @@ PhApiFactory::PhApiFactory() {
 	_phApiWrapperInstance = NULL;
 }
 
-SipWrapper * PhApiFactory::createSipWrapper(SipCallbacks & callbacks) {
-	_phApiWrapperInstance = PhApiWrapper::getInstance(callbacks);
+SipWrapper * PhApiFactory::createSipWrapper() {
+	_phApiWrapperInstance = PhApiWrapper::getInstance();
 	return _phApiWrapperInstance;
 }
 

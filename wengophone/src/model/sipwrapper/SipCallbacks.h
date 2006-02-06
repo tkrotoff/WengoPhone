@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,21 @@
 #ifndef SIPCALLBACKS_H
 #define SIPCALLBACKS_H
 
+#include "EnumPhoneCallState.h"
+#include "EnumPhoneLineState.h"
+
+#include <NonCopyable.h>
+
 #include <string>
 
 class WengoPhone;
-class LocalWebcam;
-class VideoFrame;
+class SipWrapper;
+class WebcamVideoFrame;
 
 /**
  * Callbacks for SIP stacks.
  *
- * This methods should be called inside the SIP stack callbacks handling system
- * (i.e SipXCallbacks and PhApiCallbacks).
+ * Handles events/callbacks from SipWrapper.
  *
  * phApi states: [INCOMING], [ACCEPTING], [OUTGOING], [ESTABLISHED], [ONHOLD], [CLOSED]
  * phApi call events (in the right order):
@@ -42,153 +46,26 @@ class VideoFrame;
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class SipCallbacks {
+class SipCallbacks : NonCopyable {
 public:
 
-	SipCallbacks(WengoPhone & wengoPhone);
-
-	/**
-	 * @name Call States
-	 * @{
-	 */
-
-	static const int CALL_DEFAULT_STATE = 0;
-	static const int CALL_ERROR = 1;
-	static const int CALL_RESUME_OK = 2;
-	static const int CALL_TALKING = 3;
-	static const int CALL_DIALING = 4;
-	static const int CALL_RINGING = 5;
-	static const int CALL_CLOSED = 6;
-	static const int CALL_INCOMING = 7;
-	static const int CALL_HOLD_OK = 8;
-
-	void callProgress(int callId, int status, const std::string & from);
-
-	/** @} */
-
-	/**
-	 * @name Virtual Line States (SIP States)
-	 * @{
-	 */
-
-	static const int LINE_DEFAULT_STATE = 0;
-	static const int LINE_OK = 1;
-	static const int LINE_CLOSED = 2;
-	static const int LINE_PROXY_ERROR = 3;
-	static const int LINE_SERVER_ERROR = 4;
-	static const int LINE_TIMEOUT = 5;
-
-	void registerProgress(int lineId, int status);
-
-	/** @} */
-
-	/**
-	 * @name Video
-	 * @{
-	 */
-
-	void videoFrameReceived(int callId, const VideoFrame & frame, const LocalWebcam & localWebcam);
-
-	/** @} */
-
-	WengoPhone & getWengoPhone() const {
-		return _wengoPhone;
-	}
+	SipCallbacks(SipWrapper & sipWrapper, WengoPhone & wengoPhone);
 
 private:
 
+	void phoneCallStateChangedEventHandler(SipWrapper & sender, int callId,
+		EnumPhoneCallState::PhoneCallState state, const std::string & from);
+
+	void phoneLineStateChangedEventHandler(SipWrapper & sender, int lineId,
+		EnumPhoneLineState::PhoneLineState state);
+
+	void videoFrameReceivedEventHandler(SipWrapper & sender, int callId,
+		const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame);
+
 	/** WengoPhone instance in order to access the phone lines and the phone calls. */
 	WengoPhone & _wengoPhone;
-};
 
-
-class VideoFrame {
-public:
-
-	VideoFrame() {
-		_width = 0;
-		_height = 0;
-		_frame = NULL;
-	}
-
-	virtual ~VideoFrame() = 0;
-
-	void setFrame(unsigned char * frame) {
-		_frame = frame;
-	}
-
-	unsigned char * getFrame() const {
-		return _frame;
-	}
-
-	void setWidth(int width) {
-		_width = width;
-	}
-
-	int getWidth() const {
-		return _width;
-	}
-
-	void setHeight(int height) {
-		_height = height;
-	}
-
-	int getHeight() const {
-		return _height;
-	}
-
-protected:
-
-	int _width;
-
-	int _height;
-
-	unsigned char * _frame;
-};
-
-
-class LocalWebcam {
-public:
-
-	LocalWebcam() {
-		_width = 0;
-		_height = 0;
-		_frame = NULL;
-	}
-
-	virtual ~LocalWebcam() = 0;
-
-	void setFrame(unsigned char * frame) {
-		_frame = frame;
-	}
-
-	unsigned char * getFrame() const {
-		return _frame;
-	}
-
-	void setWidth(int width) {
-		_width = width;
-	}
-
-	int getWidth() const {
-		return _width;
-	}
-
-	void setHeight(int height) {
-		_height = height;
-	}
-
-	int getHeight() const {
-		return _height;
-	}
-
-protected:
-
-	int _width;
-
-	int _height;
-
-	unsigned char * _frame;
+	SipWrapper & _sipWrapper;
 };
 
 #endif	//SIPCALLBACKS_H

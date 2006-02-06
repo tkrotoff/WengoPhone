@@ -44,6 +44,8 @@ public:
 	void addContact(IMChatSession & chatSession, const std::string & contactId);
 	void removeContact(IMChatSession & chatSession, const std::string & contactId);
 
+	static PhApiIMChat * PhApiIMChatHack;
+
 private:
 
 	PhApiIMChat(IMAccount & account, const IMContactMap & imContactMap, PhApiWrapper & phApiWrapper);

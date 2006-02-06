@@ -26,8 +26,7 @@ class PhoneCall;
 class PPhoneCall;
 class WengoPhone;
 class CWengoPhone;
-class VideoFrame;
-class LocalWebcam;
+class WebcamVideoFrame;
 
 /**
  *
@@ -86,7 +85,8 @@ private:
 
 	void stateChangedEventHandler(PhoneCall & sender, int status);
 
-	void videoFrameReceivedEventHandler(PhoneCall & sender, const VideoFrame & frame, const LocalWebcam & localWebcam);
+	void videoFrameReceivedEventHandler(PhoneCall & sender, const WebcamVideoFrame & remoteVideoFrame,
+		const WebcamVideoFrame & localVideoFrame);
 
 	PhoneCall & _phoneCall;
 

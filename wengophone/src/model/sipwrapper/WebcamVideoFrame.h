@@ -17,36 +17,58 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCHATHANDLER_H
-#define QTCHATHANDLER_H
+#ifndef WEBCAMVIDEOFRAME_H
+#define WEBCAMVIDEOFRAME_H
 
-#include <presentation/PChatHandler.h>
-
-class ChatHandler;
-class CChatHandler;
+#include <Interface.h>
 
 /**
+ * Video frame received from a webcam.
  *
- * @ingroup presentation
  * @author Tanguy Krotoff
- * @author Philippe Bernery
  */
-class QtChatHandler : public PChatHandler {
+class WebcamVideoFrame : Interface {
 public:
 
-	QtChatHandler(CChatHandler & cChatHandler);
+	WebcamVideoFrame() {
+		_width = 0;
+		_height = 0;
+		_frame = NULL;
+	}
 
-	~QtChatHandler();
+	virtual ~WebcamVideoFrame() = 0;
 
-private:
+	void setFrame(unsigned char * frame) {
+		_frame = frame;
+	}
 
-	/**
-	 * @see ChatHandler::newChatSessionCreatedEvent
-	 */
-	void newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession);
+	unsigned char * getFrame() const {
+		return _frame;
+	}
 
-	CChatHandler & _cChatHandler;
+	void setWidth(int width) {
+		_width = width;
+	}
 
+	int getWidth() const {
+		return _width;
+	}
+
+	void setHeight(int height) {
+		_height = height;
+	}
+
+	int getHeight() const {
+		return _height;
+	}
+
+protected:
+
+	int _width;
+
+	int _height;
+
+	unsigned char * _frame;
 };
 
-#endif	//QTCHATHANDLER_H
+#endif	//WEBCAMVIDEOFRAME_H

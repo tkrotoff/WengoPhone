@@ -19,6 +19,8 @@
 
 #include "PhApiCallbacks.h"
 
+#include "PhApiIMChat.h"
+
 #include <model/sipwrapper/SipCallbacks.h>
 #include <model/sipwrapper/SipWrapper.h>
 #include <model/imwrapper/IMPresence.h>
@@ -38,10 +40,11 @@
 using namespace std;
 
 #ifdef ENABLE_VIDEO
-class PhApiVideoFrame : public VideoFrame {
+class PhApiVideoFrame : public WebcamVideoFrame {
 public:
+
 	PhApiVideoFrame(piximage * image)
-		: VideoFrame() {
+		: WebcamVideoFrame() {
 		setWidth(image->width);
 		setHeight(image->height);
 		setFrame(image->data);
@@ -51,10 +54,11 @@ public:
 	}
 };
 
-class PhApiWebcam : public LocalWebcam {
+class PhApiWebcam : public WebcamVideoFrame {
 public:
+
 	PhApiWebcam(piximage * image)
-		: LocalWebcam() {
+		: WebcamVideoFrame() {
 		setWidth(image->width);
 		setHeight(image->height);
 		setFrame(image->data);
@@ -65,23 +69,24 @@ public:
 };
 #endif
 
-PhApiCallbacks::PhApiCallbacks(SipCallbacks & callbacks)
-	: _callbacks(callbacks) {
+PhApiCallbacks::PhApiCallbacks() {
 }
 
 void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 	int status = info->event;
 	std::string from;
 
+	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
+
 	switch (status) {
 	case phDIALING:
 		from = info->u.remoteUri;
-		_callbacks.callProgress(callId, SipCallbacks::CALL_DIALING, from);
+		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateDialing, from);
 		break;
 
 	case phRINGING:
 		from = info->u.remoteUri;
-		_callbacks.callProgress(callId, SipCallbacks::CALL_RINGING, from);
+		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateRinging, from);
 		break;
 
 	case phNOANSWER:
@@ -95,7 +100,7 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 
 	case phCALLOK:
 		from = info->u.remoteUri;
-		_callbacks.callProgress(callId, SipCallbacks::CALL_TALKING, from);
+		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateTalking, from);
 		break;
 
 	case phCALLHELD:
@@ -106,7 +111,7 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 
 	case phHOLDOK:
 		from = info->u.remoteUri;
-		_callbacks.callProgress(callId, SipCallbacks::CALL_HOLD_OK, from);
+		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateHoldOk, from);
 		break;
 
 	case phRESUMEOK:
@@ -114,15 +119,15 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 
 	case phINCALL:
 		from = info->u.remoteUri;
-		_callbacks.callProgress(callId, SipCallbacks::CALL_INCOMING, from);
+		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateIncoming, from);
 		break;
 
 	case phCALLCLOSED:
-		_callbacks.callProgress(callId, SipCallbacks::CALL_CLOSED, from);
+		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateClosed, from);
 		break;
 
 	case phCALLERROR:
-		_callbacks.callProgress(callId, SipCallbacks::CALL_ERROR, from);
+		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateError, from);
 		break;
 
 	case phDTMF:
@@ -158,11 +163,12 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 }
 
 void PhApiCallbacks::videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * info) {
+	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 #ifdef ENABLE_VIDEO
 	PhApiVideoFrame videoFrame(info->frame_remote);
 	PhApiWebcam phApiWebcam(info->frame_local);
 
-	_callbacks.videoFrameReceived(callId, videoFrame, phApiWebcam);
+	p->videoFrameReceivedEvent(*p, callId, videoFrame, phApiWebcam);
 #endif
 }
 
@@ -173,53 +179,56 @@ void PhApiCallbacks::conferenceProgress(int /*conferenceId*/, const phConfStateI
 void PhApiCallbacks::registerProgress(int lineId, int status) {
 	LOG_DEBUG("registerProgress status=" + String::fromNumber(status));
 
+	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
+
 	switch(status) {
 
 	//401 Unauthorized
 	case 401:
-		_callbacks.registerProgress(lineId, SipCallbacks::LINE_PROXY_ERROR);
+		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
 		break;
 
 	//404 Not Found
 	case 404:
-		_callbacks.registerProgress(lineId, SipCallbacks::LINE_SERVER_ERROR);
+		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
 		break;
 
 	//407 Proxy Authentication Required
 	case 407:
-		_callbacks.registerProgress(lineId, SipCallbacks::LINE_PROXY_ERROR);
+		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
 		break;
 
 	//408 Request Timeout
 	case 408:
-		_callbacks.registerProgress(lineId, SipCallbacks::LINE_TIMEOUT);
+		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateTimeout);
 		break;
 
 	case -1:
-		_callbacks.registerProgress(lineId, SipCallbacks::LINE_TIMEOUT);
+		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateTimeout);
 		break;
 
 	case -2:
-		_callbacks.registerProgress(lineId, SipCallbacks::LINE_DEFAULT_STATE);
+		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateDefault);
 		break;
 
 	//Register ok
 	case 0:
-		_callbacks.registerProgress(lineId, SipCallbacks::LINE_OK);
+		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateOk);
 		break;
 
 	//Unregister ok
 	case 32768:
-		_callbacks.registerProgress(lineId, SipCallbacks::LINE_CLOSED);
+		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateClosed);
 		break;
 
 	//500 Server Internal Error
 	case 500:
+		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
 		break;
 
 	default:
-		_callbacks.registerProgress(lineId, SipCallbacks::LINE_SERVER_ERROR);
-		//LOG_FATAL("unknown phApi event=" + String::fromNumber(status));
+		LOG_ERROR("unknown phApi event=" + String::fromNumber(status));
+		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
 	}
 }
 
@@ -227,36 +236,36 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 
 void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * info) {
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
-	std::string from;
-	std::string content;
 	IMChatSession * imChatSession;
 
 	std::map<int, IMChatSession *> messageIdChatSessionMap = p->getMessageIdChatSessionMap();
 	std::map<int, IMChatSession *>::const_iterator it = messageIdChatSessionMap.find(messageId);
 	if (it == messageIdChatSessionMap.end()) {
-		/*TODO:Create a new Session and add the Contact*/
+		//imChatSession = new IMChatSession(PhApiIMChat::PhApiIMChatHack);
+		//p->newIMChatSessionCreatedEvent(*p, *imChatSession);
 	} else {
 		imChatSession = messageIdChatSessionMap[messageId];
 	}
-	
+
 	switch(info->event) {
-	case phMsgNew:
-		from = info->from;
-		content = info->content;
+	case phMsgNew: {
+		std::string from = info->from;
+		std::string content = info->content;
+		p->contactAddedEvent(*p, *imChatSession, from);
 		p->messageReceivedEvent(*p, *imChatSession, from, content);
 		break;
+	}
 
 	case phMsgOk:
-		p->statusMessageReceivedEvent(*p, *imChatSession, IMChat::StatusMessageReceived, "");
+		p->statusMessageReceivedEvent(*p, *imChatSession, IMChat::StatusMessageReceived, String::null);
 		break;
 
 	case phMsgError:
-		p->statusMessageReceivedEvent(*p, *imChatSession, IMChat::StatusMessageError, "");
+		p->statusMessageReceivedEvent(*p, *imChatSession, IMChat::StatusMessageError, String::null);
 		break;
 
 	default:
-		LOG_FATAL("Unknown message event");
-		break;
+		LOG_FATAL("unknown message event");
 	}
 }
 
@@ -290,10 +299,11 @@ void PhApiCallbacks::onNotify(const char * event, const char * from, const char 
 
 			//buddy is offline
 			if (basic == "closed") {
-				p->presenceStateChangedEvent(*p,  EnumPresenceState::PresenceStateOffline, "", buddy);
+				p->presenceStateChangedEvent(*p,  EnumPresenceState::PresenceStateOffline, String::null, buddy);
+			}
 
 			//buddy is online
-			} else if (basic == "open") {
+			else if (basic == "open") {
 				TiXmlText * noteText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("note").FirstChild().Text();
 				if (noteText) {
 					std::string note = noteText->Value();

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 class PhoneCallStateTalking : public PhoneCallState {
 public:
 
-	static const int CODE = SipCallbacks::CALL_TALKING;
+	static const int CODE = EnumPhoneCallState::PhoneCallStateTalking;
 
 	int getCode() const {
 		return CODE;

@@ -24,8 +24,7 @@
 
 #include <string>
 
-class VideoFrame;
-class LocalWebcam;
+class WebcamVideoFrame;
 
 /**
  *
@@ -54,7 +53,7 @@ public:
 
 	virtual void close() = 0;
 
-	virtual void videoFrameReceived(const VideoFrame & frame, const LocalWebcam & localWebcam) = 0;
+	virtual void videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) = 0;
 };
 
 #endif	//PPHONECALL_H

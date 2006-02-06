@@ -71,7 +71,6 @@ sources = [
 	'model/phoneline/PhoneLineStateOk.cpp',
 	'model/phoneline/PhoneLineStateClosed.cpp',
 	'model/phoneline/PhoneLineStateTimeout.cpp',
-	'model/phoneline/PhoneLineStateProxyError.cpp',
 	'model/phoneline/PhoneLineStateServerError.cpp',
 	'model/presence/Presence.cpp',
 	'model/presence/PresenceHandler.cpp',

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,7 @@
 
 #include <string>
 
-class LocalWebcam;
-class VideoFrame;
+class WebcamVideoFrame;
 class PhoneCallState;
 class IPhoneLine;
 class WenboxPlugin;
@@ -56,10 +55,10 @@ public:
 	 * A video frame has been received from the network.
 	 *
 	 * @param sender this class
-	 * @param frame remote video frame
-	 * @param localWebcam local video frame from the webcam
+	 * @param remoteVideoFrame remote video frame
+	 * @param localVideoFrame local video frame from the webcam
 	 */
-	Event<void (PhoneCall & sender, const VideoFrame & frame, const LocalWebcam & localWebcam)> videoFrameReceivedEvent;
+	Event<void (PhoneCall & sender, const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame)> videoFrameReceivedEvent;
 
 	/**
 	 * Creates a new PhoneCall given a PhoneLine.
@@ -86,10 +85,10 @@ public:
 	/**
 	 * Video frame received.
 	 *
-	 * @param frame received
+	 * @param remoteVideoFrame received
 	 * @param localWebcam local webcam
 	 */
-	void videoFrameReceived(const VideoFrame & frame, const LocalWebcam & localWebcam);
+	void videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame);
 
 	/**
 	 * Changes the state of this PhoneCall.

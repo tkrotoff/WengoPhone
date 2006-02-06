@@ -27,7 +27,7 @@ public:
 
 	void execute(IPhoneLine & phoneLine);
 
-	static const int CODE = SipCallbacks::LINE_CLOSED;
+	static const int CODE = EnumPhoneLineState::PhoneLineStateClosed;
 
 	int getCode() const {
 		return CODE;

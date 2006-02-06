@@ -31,7 +31,7 @@
 class PhoneCallStateDefault : public PhoneCallState {
 public:
 
-	static const int CODE = SipCallbacks::CALL_DEFAULT_STATE;
+	static const int CODE = EnumPhoneCallState::PhoneCallStateDefault;
 
 	int getCode() const {
 		return CODE;

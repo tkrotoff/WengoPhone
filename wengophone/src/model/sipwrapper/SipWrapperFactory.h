@@ -23,7 +23,6 @@
 #include <Interface.h>
 
 class SipWrapper;
-class SipCallbacks;
 
 /**
  * Factories for the SIP wrapper component.
@@ -62,10 +61,9 @@ public:
 	/**
 	 * Instantiates a SIP stack implementation.
 	 *
-	 * @param callbacks SIP callbacks
 	 * @return the SIP stack implementation instance
 	 */
-	virtual SipWrapper * createSipWrapper(SipCallbacks & callbacks) = 0;
+	virtual SipWrapper * createSipWrapper() = 0;
 
 private:
 

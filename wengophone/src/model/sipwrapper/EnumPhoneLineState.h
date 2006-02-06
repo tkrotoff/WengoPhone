@@ -17,36 +17,33 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCHATHANDLER_H
-#define QTCHATHANDLER_H
+#ifndef ENUMPHONELINESTATE_H
+#define ENUMPHONELINESTATE_H
 
-#include <presentation/PChatHandler.h>
-
-class ChatHandler;
-class CChatHandler;
+#include <NonCopyable.h>
 
 /**
- *
- * @ingroup presentation
  * @author Tanguy Krotoff
- * @author Philippe Bernery
  */
-class QtChatHandler : public PChatHandler {
+class EnumPhoneLineState : NonCopyable {
 public:
 
-	QtChatHandler(CChatHandler & cChatHandler);
+	enum PhoneLineState {
+		/** Default state. */
+		PhoneLineStateDefault,
 
-	~QtChatHandler();
+		/** Connection to the SIP server failed. */
+		PhoneLineStateServerError,
 
-private:
+		/** Connection to the SIP platform failed due to a timeout. */
+		PhoneLineStateTimeout,
 
-	/**
-	 * @see ChatHandler::newChatSessionCreatedEvent
-	 */
-	void newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession);
+		/** Successfull connection to the SIP platform. */
+		PhoneLineStateOk,
 
-	CChatHandler & _cChatHandler;
-
+		/** Line unregistered. */
+		PhoneLineStateClosed
+	};
 };
 
-#endif	//QTCHATHANDLER_H
+#endif	//ENUMPHONELINESTATE_H

@@ -27,7 +27,7 @@ public:
 
 	void execute(IPhoneLine & phoneLine);
 
-	static const int CODE = SipCallbacks::LINE_TIMEOUT;
+	static const int CODE = EnumPhoneLineState::PhoneLineStateTimeout;
 
 	int getCode() const {
 		return CODE;

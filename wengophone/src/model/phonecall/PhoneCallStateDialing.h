@@ -31,7 +31,7 @@
 class PhoneCallStateDialing : public PhoneCallState {
 public:
 
-	static const int CODE = SipCallbacks::CALL_DIALING;
+	static const int CODE = EnumPhoneCallState::PhoneCallStateDialing;
 
 	int getCode() const {
 		return CODE;

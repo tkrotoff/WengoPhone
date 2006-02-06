@@ -20,11 +20,14 @@
 #ifndef SIPWRAPPER_H
 #define SIPWRAPPER_H
 
-#include "SipCallbacks.h"
-
-#include <netlib.h>
+#include "EnumPhoneCallState.h"
+#include "EnumPhoneLineState.h"
+#include "WebcamVideoFrame.h"
 
 #include <Interface.h>
+#include <Event.h>
+
+#include <netlib.h>
 
 #include <string>
 
@@ -47,20 +50,51 @@
  *
  * In order to integrate a new SIP implementation for WengoPhone,
  * create a subdirectory by the name of the SIP implementation.
- * Subclass the SipWrapper interface. SIP events/callbacks should call methods from
- * SipCallbacks.
+ * Subclass the SipWrapper interface. SIP events/callbacks are handled via the Event class.
+ *
  * Create a factory implementing the interface SipWrapperFactory.
  * Inside main.cpp just instanciates the right factory for your plugin.
  * Check the current SIP wrapper implementations: phApi and sipX.
  *
- * When LibGaim will be integrated, all methods about presence and chat will be removed:
- * SipWrapper will handled telephony and video only.
+ * SipWrapper will handles telephony and video only.
  *
  * @ingroup model
  * @author Tanguy Krotoff
  */
 class SipWrapper : Interface {
 public:
+
+	/**
+	 * Phone call state changed.
+	 *
+	 * @param sender this class
+	 * @param callId phone call identifier that changed its state
+	 * @param state new call state
+	 * @param from usually a SIP address (when state = PhoneCallStateIncoming) or empty string
+	 */
+	Event<void (SipWrapper & sender, int callId,
+		EnumPhoneCallState::PhoneCallState state, const std::string & from)> phoneCallStateChangedEvent;
+
+	/**
+	 * Phone line state changed.
+	 *
+	 * @param sender this class
+	 * @param lineId phone line identifier that changed its state
+	 * @param state new line state
+	 */
+	Event<void (SipWrapper & sender, int lineId,
+		EnumPhoneLineState::PhoneLineState state)> phoneLineStateChangedEvent;
+
+	/**
+	 * A video frame has been received from the network.
+	 *
+	 * @param sender this class
+	 * @param callId phone call that received the video frame
+	 * @param remoteVideoFrame remote (network) webcam video frame
+	 * @param localVideoFrame local webcam video frame
+	 */
+	Event<void (SipWrapper & sender, int callId,
+		const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame)> videoFrameReceivedEvent;
 
 	virtual ~SipWrapper() {
 	}
@@ -186,7 +220,7 @@ public:
 		const std::string & login, const std::string & password) = 0;
 
 	/**
-	 * Set HTTP Tunnel parameter.
+	 * Set HTTP tunnel parameters.
 	 */
 	virtual void setTunnel(bool needed, const std::string & address, int port, bool ssl) = 0;
 

@@ -29,13 +29,13 @@ using namespace std;
 IMChatSession::IMChatSession(IMChat & imChat)
 	: _imChat(imChat) {
 
-	_imChat.messageReceivedEvent += 
+	_imChat.messageReceivedEvent +=
 		boost::bind(&IMChatSession::messageReceivedEventHandler, this, _1, _2, _3, _4);
-	_imChat.statusMessageReceivedEvent += 
+	_imChat.statusMessageReceivedEvent +=
 		boost::bind(&IMChatSession::statusMessageReceivedEventHandler, this, _1, _2, _3, _4);
-	_imChat.contactAddedEvent += 
+	_imChat.contactAddedEvent +=
 		boost::bind(&IMChatSession::contactAddedEventHandler, this, _1, _2, _3);
-	_imChat.contactRemovedEvent += 
+	_imChat.contactRemovedEvent +=
 		boost::bind(&IMChatSession::contactRemovedEventHandler, this, _1, _2, _3);
 
 }
@@ -114,7 +114,7 @@ void IMChatSession::contactAddedEventHandler(IMChat & sender, IMChatSession & im
 			_imContactList.insert(imContact);
 			contactAddedEvent(*this, *imContact);
 		} else {
-			LOG_ERROR("IMContact for " + contactId + " not in IMContactMap");	
+			LOG_ERROR("IMContact for " + contactId + " not in IMContactMap");
 		}
 	}
 }
@@ -126,7 +126,7 @@ void IMChatSession::contactRemovedEventHandler(IMChat & sender, IMChatSession & 
 			_imContactList.erase(_imContactList.find(imContact));
 			contactRemovedEvent(*this, *imContact);
 		} else {
-			LOG_ERROR("IMContact for " + contactId + " not in IMContactList");	
+			LOG_ERROR("IMContact for " + contactId + " not in IMContactList");
 		}
 	}
 }

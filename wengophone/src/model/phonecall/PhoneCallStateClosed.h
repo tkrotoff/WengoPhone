@@ -31,7 +31,7 @@
 class PhoneCallStateClosed : public PhoneCallState {
 public:
 
-	static const int CODE = SipCallbacks::CALL_CLOSED;
+	static const int CODE = EnumPhoneCallState::PhoneCallStateClosed;
 
 	int getCode() const {
 		return CODE;

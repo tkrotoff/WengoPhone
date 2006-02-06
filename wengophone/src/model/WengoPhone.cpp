@@ -108,7 +108,7 @@ void WengoPhone::init() {
 	addPhoneLine(localAccount);*/
 
 	//Discover Network configuration
-	_networkDiscovery.discoveryDoneEvent += 
+	_networkDiscovery.discoveryDoneEvent +=
 		boost::bind(&WengoPhone::discoveryDoneEventHandler, this, _1, _2);
 
 	_networkDiscovery.discoverForSSO();
@@ -251,7 +251,7 @@ WenboxPlugin & WengoPhone::getWenboxPlugin() const {
 
 void WengoPhone::discoveryDoneEventHandler(NetworkDiscovery & sender,
 	NetworkDiscovery::DiscoveryResult result) {
-	
+
 	switch (result) {
 	case NetworkDiscovery::DiscoveryResultSSOCanConnect: {
 		LOG_DEBUG("SSO can connect");
@@ -268,7 +268,7 @@ void WengoPhone::discoveryDoneEventHandler(NetworkDiscovery & sender,
 				noAccount = false;
 			}
 		}
-	
+
 		if (noAccount) {
 			wengoLoginEvent(*this, LoginNoAccount, String::null, String::null);
 		}
@@ -295,13 +295,16 @@ void WengoPhone::discoveryDoneEventHandler(NetworkDiscovery & sender,
 		IMAccount * imAccount = new IMAccount(_wengoAccount->getWengoLogin(), _wengoAccount->getWengoPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 		_imAccountHandler.add(imAccount);
 		_connectHandler->connect(*imAccount);
-		
+
 		break;
 	}
 
 	case NetworkDiscovery::DiscoveryResultSIPCannotConnect:
 		LOG_DEBUG("SIP cannot connect");
 		break;
+
+	default:
+		LOG_FATAL("unknown network discovery state");
 	}
 }
 

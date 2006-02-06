@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,7 +101,7 @@ void PhoneCall::resume() {
 }
 
 void PhoneCall::setState(int status) {
-	for (unsigned int i = 0; i < _phoneCallStateList.size(); i++) {
+	for (unsigned i = 0; i < _phoneCallStateList.size(); i++) {
 		PhoneCallState * state = _phoneCallStateList[i];
 		if (state->getCode() == status) {
 			if (_state->getCode() != state->getCode()) {
@@ -137,6 +137,6 @@ WenboxPlugin & PhoneCall::getWenboxPlugin() const {
 	return wengoPhone.getWenboxPlugin();
 }
 
-void PhoneCall::videoFrameReceived(const VideoFrame & frame, const LocalWebcam & localWebcam) {
-	videoFrameReceivedEvent(*this, frame, localWebcam);
+void PhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
+	videoFrameReceivedEvent(*this, remoteVideoFrame, localVideoFrame);
 }

@@ -23,7 +23,7 @@
 #include "control/phonecall/CPhoneCall.h"
 #include "control/CWengoPhone.h"
 #include "presentation/qt/QtWengoPhone.h"
-#include "model/sipwrapper/SipCallbacks.h"
+#include <model/sipwrapper/WebcamVideoFrame.h>
 #include "QtVideo.h"
 
 #include <WidgetFactory.h>
@@ -110,9 +110,10 @@ void QtPhoneCall::closeThreadSafe() {
 	_phoneCallWindow->hide();
 }
 
-void QtPhoneCall::videoFrameReceived(const VideoFrame & frame, const LocalWebcam & localWebcam) {
-	// Image will be deleted in videoFrameReceivedThreadSafe
-	QImage *image = new QImage(frame.getFrame(), frame.getWidth(), frame.getHeight(), QImage::Format_RGB32);
+void QtPhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
+	//Image will be deleted in videoFrameReceivedThreadSafe
+	QImage * image = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
+			remoteVideoFrame.getHeight(), QImage::Format_RGB32);
 
 	typedef PostEvent1<void (QImage *), QImage *> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::videoFrameReceivedThreadSafe, this, _1), image);

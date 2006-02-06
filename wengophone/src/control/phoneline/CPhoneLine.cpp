@@ -30,7 +30,6 @@
 #include "model/phoneline/PhoneLineStateOk.h"
 #include "model/phoneline/PhoneLineStateClosed.h"
 #include "model/phoneline/PhoneLineStateTimeout.h"
-#include "model/phoneline/PhoneLineStateProxyError.h"
 #include "model/phoneline/PhoneLineStateServerError.h"
 
 #include <Logger.h>
@@ -66,10 +65,6 @@ void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender) {
 
 	case PhoneLineStateTimeout::CODE:
 		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineTimeout, lineId);
-		break;
-
-	case PhoneLineStateProxyError::CODE:
-		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineProxyError, lineId);
 		break;
 
 	case PhoneLineStateServerError::CODE:

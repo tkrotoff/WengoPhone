@@ -114,8 +114,10 @@ void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, int status) {
 	};
 }
 
-void CPhoneCall::videoFrameReceivedEventHandler(PhoneCall & sender, const VideoFrame & frame, const LocalWebcam & localWebcam) {
-	_pPhoneCall->videoFrameReceived(frame, localWebcam);
+void CPhoneCall::videoFrameReceivedEventHandler(PhoneCall & sender, const WebcamVideoFrame & remoteVideoFrame,
+	const WebcamVideoFrame & localVideoFrame) {
+
+	_pPhoneCall->videoFrameReceived(remoteVideoFrame, localVideoFrame);
 }
 
 void CPhoneCall::hangUp() {

@@ -34,7 +34,6 @@
 #include "PhoneLineStateOk.h"
 #include "PhoneLineStateClosed.h"
 #include "PhoneLineStateTimeout.h"
-#include "PhoneLineStateProxyError.h"
 #include "PhoneLineStateServerError.h"
 
 #include <Logger.h>
@@ -50,21 +49,18 @@ using namespace std;
 PhoneLine::PhoneLine(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
 
-	static SipCallbacks callbacks(wengoPhone);
+	_sipWrapper = SipWrapperFactory::getFactory().createSipWrapper();
 
-	_sipWrapper = SipWrapperFactory::getFactory().createSipWrapper(callbacks);
+	static SipCallbacks callbacks(*_sipWrapper, wengoPhone);
 
-	initSIPWrapper();
+	initSipWrapper();
 
 	_sipAccount = NULL;
 	_lineId = SipWrapper::VirtualLineIdError;
 
 	static PhoneLineStateDefault stateDefault;
-
-	//Default state (PhoneLineStateDefault)
-	_state = &stateDefault;
-
 	_phoneLineStateList += &stateDefault;
+	_state = &stateDefault;
 
 	static PhoneLineStateOk stateOk;
 	_phoneLineStateList += &stateOk;
@@ -74,9 +70,6 @@ PhoneLine::PhoneLine(WengoPhone & wengoPhone)
 
 	static PhoneLineStateTimeout stateTimeout;
 	_phoneLineStateList += &stateTimeout;
-
-	static PhoneLineStateProxyError stateProxyError;
-	_phoneLineStateList += &stateProxyError;
 
 	static PhoneLineStateServerError stateServerError;
 	_phoneLineStateList += &stateServerError;
@@ -362,7 +355,7 @@ PhoneCall * PhoneLine::getPhoneCall(int callId) {
 	return _phoneCallHash[callId];
 }
 
-void PhoneLine::initSIPWrapper() {
+void PhoneLine::initSipWrapper() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, String::null);

@@ -70,8 +70,8 @@ public:
 	/** Value when phApi returns an error message. */
 	static const int PhApiResultNoError = 0;
 
-	static PhApiWrapper * getInstance(SipCallbacks & callbacks) {
-		static PhApiCallbacks phApiCallbacks(callbacks);
+	static PhApiWrapper * getInstance() {
+		static PhApiCallbacks phApiCallbacks;
 		static PhApiWrapper instance(phApiCallbacks);
 
 		return &instance;

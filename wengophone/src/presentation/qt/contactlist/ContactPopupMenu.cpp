@@ -93,7 +93,7 @@ void ContactPopupMenu::sendSms() const {
 
 void ContactPopupMenu::startChat() const {
 	LOG_DEBUG("starting chat with " + _contact->getWengoPhoneId());
-	_wengoPhone.getChatHandler().createSession();
+	//_wengoPhone.getChatHandler().createSession();
 }
 
 void ContactPopupMenu::blockContact() const {

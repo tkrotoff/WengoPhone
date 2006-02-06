@@ -27,7 +27,7 @@ public:
 
 	void execute(IPhoneLine & phoneLine);
 
-	static const int CODE = SipCallbacks::LINE_OK;
+	static const int CODE = EnumPhoneLineState::PhoneLineStateOk;
 
 	int getCode() const {
 		return CODE;

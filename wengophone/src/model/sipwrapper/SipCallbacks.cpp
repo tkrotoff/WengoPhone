@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 
 #include "SipCallbacks.h"
 
+#include "SipWrapper.h"
+
 #include <model/WengoPhone.h>
 #include <model/phoneline/IPhoneLine.h>
 #include <model/phonecall/PhoneCall.h>
@@ -26,53 +28,62 @@
 #include <StringList.h>
 #include <Logger.h>
 
-VideoFrame::~VideoFrame() {
+SipCallbacks::SipCallbacks(SipWrapper & sipWrapper, WengoPhone & wengoPhone)
+	: _sipWrapper(sipWrapper),
+	_wengoPhone(wengoPhone) {
+
+	_sipWrapper.phoneCallStateChangedEvent +=
+		boost::bind(&SipCallbacks::phoneCallStateChangedEventHandler, this, _1, _2, _3, _4);
+	_sipWrapper.phoneLineStateChangedEvent +=
+		boost::bind(&SipCallbacks::phoneLineStateChangedEventHandler, this, _1, _2, _3);
+	_sipWrapper.videoFrameReceivedEvent +=
+		boost::bind(&SipCallbacks::videoFrameReceivedEventHandler, this, _1, _2, _3, _4);
 }
 
-LocalWebcam::~LocalWebcam() {
-}
+void SipCallbacks::phoneCallStateChangedEventHandler(SipWrapper & sender, int callId,
+	EnumPhoneCallState::PhoneCallState state, const std::string & from) {
 
-SipCallbacks::SipCallbacks(WengoPhone & wengoPhone)
-: _wengoPhone(wengoPhone) {
-}
-
-void SipCallbacks::videoFrameReceived(int callId, const VideoFrame & frame, const LocalWebcam & localWebcam) {
-	//LOG_DEBUG("videoFrameReceived: callId=" + String::fromNumber(callId));
+	LOG_DEBUG("callProgress: callId=" + String::fromNumber(callId) +
+		" state=" + String::fromNumber(state) +
+		" from=" + from);
 
 	const WengoPhone::PhoneLines & lines = _wengoPhone.getPhoneLineList();
-	for (unsigned int i = 0; i < lines.size(); i++) {
+	for (unsigned i = 0; i < lines.size(); i++) {
 		IPhoneLine * line = lines[i];
+		line->setPhoneCallState(callId, state, SipAddress(from));
+	}
+}
 
-		PhoneCall * call = line->getPhoneCall(callId);
-		if (call) {
-			//The correct PhoneCall has been found given its callId
-			call->videoFrameReceived(frame, localWebcam);
+void SipCallbacks::phoneLineStateChangedEventHandler(SipWrapper & sender, int lineId,
+	EnumPhoneLineState::PhoneLineState state) {
+
+	LOG_DEBUG("registerProgress: lineId=" + String::fromNumber(lineId) +
+		" state=" + String::fromNumber(state));
+
+	const WengoPhone::PhoneLines & lines = _wengoPhone.getPhoneLineList();
+	for (unsigned i = 0; i < lines.size(); i++) {
+		IPhoneLine * line = lines[i];
+		LOG_DEBUG("lineId=" + String::fromNumber(line->getLineId()));
+		if (line->getLineId() == lineId) {
+			line->setState(state);
 			break;
 		}
 	}
 }
 
-void SipCallbacks::callProgress(int callId, int status, const std::string & from) {
-	LOG_DEBUG("callProgress: callId=" + String::fromNumber(callId) +
-		" status=" + String::fromNumber(status) +
-		" from=" + from);
+void SipCallbacks::videoFrameReceivedEventHandler(SipWrapper & sender, int callId,
+	const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
+
+	//LOG_DEBUG("videoFrameReceived: callId=" + String::fromNumber(callId));
 
 	const WengoPhone::PhoneLines & lines = _wengoPhone.getPhoneLineList();
-	for (unsigned int i = 0; i < lines.size(); i++) {
+	for (unsigned i = 0; i < lines.size(); i++) {
 		IPhoneLine * line = lines[i];
-		line->setPhoneCallState(callId, status, SipAddress(from));
-	}
-}
 
-void SipCallbacks::registerProgress(int lineId, int status) {
-	LOG_DEBUG("registerProgress: lineId=" + String::fromNumber(lineId) + " status=" + String::fromNumber(status));
-
-	const WengoPhone::PhoneLines & lines = _wengoPhone.getPhoneLineList();
-	for (unsigned int i = 0; i < lines.size(); i++) {
-		IPhoneLine * line = lines[i];
-		LOG_DEBUG("lineId=" + String::fromNumber(line->getLineId()));
-		if (line->getLineId() == lineId) {
-			line->setState(status);
+		PhoneCall * call = line->getPhoneCall(callId);
+		if (call) {
+			//The correct PhoneCall has been found given its callId
+			call->videoFrameReceived(remoteVideoFrame, localVideoFrame);
 			break;
 		}
 	}

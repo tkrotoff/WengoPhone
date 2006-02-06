@@ -346,7 +346,6 @@ void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, cons
 
 	default:
 		LOG_FATAL("unknown presence state");
-		break;
 	}
 }
 
