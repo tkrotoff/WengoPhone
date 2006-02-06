@@ -432,6 +432,11 @@ HttpRet is_http_conn_allowed(const char *url,
 		sprintf(buff, "http://%s", url);
 	
 	curl_easy_setopt(mcurl, CURLOPT_URL, strdup(buff));
+
+	/* FOLLOW REDIRECTION */
+	curl_easy_setopt(mcurl, CURLOPT_FOLLOWLOCATION, 1);
+	curl_easy_setopt(mcurl, CURLOPT_UNRESTRICTED_AUTH, 1);
+	/* ****************** */
  
 	if (proxy_addr)
 	{

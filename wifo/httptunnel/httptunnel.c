@@ -351,6 +351,11 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code)
 			sprintf(buff, "%s:%d", proxyServerIP, proxyServerPort);
 			curl_easy_setopt(hs->curl, CURLOPT_PROXY, strdup(buff));
 
+			/* FOLLOW REDIRECTION */
+			curl_easy_setopt(hs->curl, CURLOPT_FOLLOWLOCATION, 1);
+			curl_easy_setopt(hs->curl, CURLOPT_UNRESTRICTED_AUTH, 1);
+			/* ****************** */
+
 			if (proxyAuthType)
 			{
 				sprintf(buff, "%s:%s", proxyUsername, proxyPassword);
