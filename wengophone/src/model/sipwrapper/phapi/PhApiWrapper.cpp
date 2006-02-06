@@ -302,16 +302,20 @@ void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & 
 	}
 }
 
-void PhApiWrapper::createSession(IMChatSession & chatSession) {
+void PhApiWrapper::createSession(IMChat & imChat) {
+	IMChatSession * imChatSession = new IMChatSession(imChat);
+	newIMChatSessionCreatedEvent(*this, *imChatSession);
 }
 
 void PhApiWrapper::closeSession(IMChatSession & chatSession) {
 }
 
 void PhApiWrapper::addContact(IMChatSession & chatSession, const std::string & contactId) {
+	contactAddedEvent(*this, chatSession, contactId);
 }
 
 void PhApiWrapper::removeContact(IMChatSession & chatSession, const std::string & contactId) {
+	contactRemovedEvent(*this, chatSession, contactId);
 }
 
 void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {

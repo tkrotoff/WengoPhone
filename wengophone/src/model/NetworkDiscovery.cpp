@@ -39,38 +39,46 @@ NetworkDiscovery::~NetworkDiscovery() {
 }
 
 void NetworkDiscovery::discoverForSSO() {
-	//Test HTTPS connection
-	string url = _ssoAddress + ":443" + _ssoURL;
-	
-	if (is_http_conn_allowed(url.c_str(),
-		NULL, 0, NULL, NULL, NETLIB_TRUE) == HTTP_OK) {
-			LOG_DEBUG("SSO connection with SSL");
-			setSSOConfig(true);
-			discoveryDoneEvent(*this, DiscoveryResultSSOCanConnect);
-			return;
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	bool isProxyDetected = config.get(Config::NETWORK_PROXY_DETECTED_KEY, false);
+	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
+	string url;
+
+	//if the proxy is not detected yet or if there is no proxy
+	if (!isProxyDetected || proxyAddress.empty()) {
+		//Test HTTPS connection
+		url = _ssoAddress + ":443" + _ssoURL;
+		
+		LOG_DEBUG("proxy not detected yet or no proxy found: testing SSO connection with SSL");
+		if (is_http_conn_allowed(url.c_str(),
+			NULL, 0, NULL, NULL, NETLIB_TRUE) == HTTP_OK) {
+				LOG_DEBUG("SSO connection with SSL");
+				setSSOConfig(true);
+				setProxyConfig(NULL, 0, NULL, NULL);
+				discoveryDoneEvent(*this, DiscoveryResultSSOCanConnect);
+				return;
+		}
 	}
 
+	//Stop if authentication is needed
 	if (!discoverProxySettings()) {
 		return;
 	}
 
 	//Get proxy information from Settings
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-
-	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
+	proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
 	int proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
 	string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
 	string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
 
 	//Test HTTPS connection via proxy
 	if (!proxyAddress.empty()) {
+		LOG_DEBUG("proxy found: testing SSO connection with SSL via a proxy");
 		if (is_http_conn_allowed(url.c_str(),
 			proxyAddress.c_str(), proxyPort,
 			proxyLogin.c_str(), proxyPassword.c_str(), NETLIB_TRUE) == HTTP_OK) {
 				LOG_DEBUG("SSO connection with SSL via a proxy");
 				setSSOConfig(true);
-				setProxyConfig(proxyAddress.c_str(), proxyPort,
-					proxyLogin.c_str(), proxyPassword.c_str());
 				discoveryDoneEvent(*this, DiscoveryResultSSOCanConnect);
 				return;
 		}
@@ -79,6 +87,8 @@ void NetworkDiscovery::discoverForSSO() {
 	//Test HTTP connection
 	url = _ssoAddress + ":80" + _ssoURL;
 	
+	LOG_DEBUG(string("testing SSO connection without SSL on port 80 ")
+		+ (proxyAddress.empty() ? "without proxy" : "via a proxy"));
 	if (is_http_conn_allowed(url.c_str(),
 		proxyAddress.c_str(), proxyPort,
 		proxyLogin.c_str(), proxyPassword.c_str(), NETLIB_FALSE) == HTTP_OK) {
@@ -93,42 +103,46 @@ void NetworkDiscovery::discoverForSSO() {
 }
 
 void NetworkDiscovery::discoverForSIP(const string & sipServer, int sipPort) {
-	if (udpTest(sipServer, sipPort)) {
-		discoveryDoneEvent(*this, DiscoveryResultSIPCanConnect);
-		return;	
-	}
-
-	//Get Tunnel server from SSO config.
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-
+	bool isProxyDetected = config.get(Config::NETWORK_PROXY_DETECTED_KEY, false);
+	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
 	string tunnelServer = config.get(Config::NETWORK_TUNNEL_SERVER_KEY, string(""));
 
-	//TODO: we should test the port given by SSO
-	if (tunnelTest(sipServer.c_str(), sipPort,
-		tunnelServer.c_str(),
-		NULL, 0, NULL, NULL)) {
-		
-		discoveryDoneEvent(*this, DiscoveryResultSIPCanConnect);
+	if (!isProxyDetected || proxyAddress.empty()) {
+		LOG_DEBUG("proxy not detected yet or no proxy found: testing direct SIP connection");
+		if (udpTest(sipServer, sipPort)) {
+			setProxyConfig(NULL, 0, NULL, NULL);
+			discoveryDoneEvent(*this, DiscoveryResultSIPCanConnect);
+			return;	
+		}
+
+		LOG_DEBUG("testing SIP connection through a tunnel");
+		if (tunnelTest(sipServer.c_str(), sipPort,
+			tunnelServer.c_str(),
+			NULL, 0, NULL, NULL)) {
+			discoveryDoneEvent(*this, DiscoveryResultSIPCanConnect);
+			return;
+		}
+	}
+
+	//Stop if authentication is needed
+	if (!discoverProxySettings()) {
 		return;
 	}
 
-	if (!discoverProxySettings()) {
-		return;	
-	}
-
 	//Get proxy information from Settings
-	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
+	proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
 	int proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
 	string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
 	string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
 
 	// Restart tunnel test with proxy settings if proxy found
 	if (!proxyAddress.empty()) {
+		LOG_DEBUG("proxy found: testing SIP connection through a tunnel via a proxy");
 		if (tunnelTest(sipServer.c_str(), sipPort,
 			tunnelServer.c_str(),
 			proxyAddress.c_str(), proxyPort,
 			proxyLogin.c_str(), proxyPassword.c_str())) {
-			
 			discoveryDoneEvent(*this, DiscoveryResultSIPCanConnect);
 			return;
 		}
@@ -220,7 +234,6 @@ bool NetworkDiscovery::tunnelTest(const char * sipServer, int sipPort,
 		return true;
 	}
 
-
 	return false;
 }
 
@@ -228,28 +241,47 @@ bool NetworkDiscovery::discoverProxySettings() {
 	LOG_DEBUG("proxy test");
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	string proxyServer = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
-	if (proxyServer.empty()) {
+	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
+	int proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
+
+	bool isProxyDetected = config.get(Config::NETWORK_PROXY_DETECTED_KEY, false);
+
+	if (!isProxyDetected) {
 		LOG_DEBUG("searching for proxy");
-		//TODO: Check if proxy is already set
+
 		char * localProxyUrl = get_local_http_proxy_address();
 		int localProxyPort = get_local_http_proxy_port();
+		setProxyConfig(localProxyUrl, localProxyPort, NULL, NULL);
 
 		if (localProxyUrl) {
 			LOG_DEBUG("proxy found");
 			config.set(Config::NETWORK_PROXY_SERVER_KEY, string(localProxyUrl));
 			config.set(Config::NETWORK_PROXY_PORT_KEY, localProxyPort);
-
-			if (is_proxy_auth_needed(localProxyUrl, localProxyPort)) {
-				LOG_DEBUG("proxy needs a login/password");
-				proxySettingsNeededEvent(*this, localProxyUrl, localProxyPort);
-				return false;
-			}
+			proxyAddress = localProxyUrl;
+			proxyPort = localProxyPort;
 		} else {
 			LOG_DEBUG("no proxy found");
+			return true;
 		}
-	} else {
-		LOG_DEBUG("proxy already found");
+	}
+
+	if (is_proxy_auth_needed(proxyAddress.c_str(), proxyPort)) {
+		LOG_DEBUG("proxy authentication needed");
+
+		string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
+		string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
+
+		if (proxyLogin.empty()) {
+			LOG_DEBUG("proxy needs login/password");
+			proxyNeedsAuthenticationEvent(*this, proxyAddress, proxyPort);
+			return false;
+		}
+
+		if (!is_proxy_auth_ok(proxyAddress.c_str(), proxyPort, proxyLogin.c_str(), proxyPassword.c_str())) {
+			LOG_DEBUG("proxy needs valid login/password");
+			wrongProxyAuthenticationEvent(*this, proxyAddress, proxyPort, proxyLogin, proxyPassword);
+			return false;
+		}
 	}
 
 	return true;
@@ -259,6 +291,8 @@ void NetworkDiscovery::setProxyConfig(const char * proxyAddress, int proxyPort,
 	const char * proxyLogin, const char * proxyPassword) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	config.set(Config::NETWORK_PROXY_DETECTED_KEY, true);
 
 	if (proxyAddress) {
 		config.set(Config::NETWORK_PROXY_SERVER_KEY, string(proxyAddress));

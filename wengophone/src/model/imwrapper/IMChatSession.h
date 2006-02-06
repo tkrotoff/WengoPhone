@@ -28,8 +28,8 @@
 class IMAccount;
 class IMAccountHandler;
 class IMContact;
+class IMContactMap;
 class IMChat;
-class IMChatMap;
 class ChatHandler;
 
 class IMChatSession {
@@ -40,9 +40,13 @@ public:
 
 	Event<void (IMChatSession & sender, const IMContact & from, const std::string & message)> messageReceivedEvent;
 
-	Event<void (IMChatSession & sender, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
+	Event<void (IMChatSession & sender, IMChat::StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
 
-	IMChatSession(IMChatMap & imChatMap);
+	Event<void (IMChatSession & sender, const IMContact & imContact)> contactAddedEvent;
+
+	Event<void (IMChatSession & sender, const IMContact & imContact)> contactRemovedEvent;
+
+	IMChatSession(IMChat & imChat);
 
 	~IMChatSession();
 
@@ -60,24 +64,19 @@ public:
 
 private:
 
-	typedef std::set<IMChat *> IMChatSet;
+	void messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & from, const std::string & message);
 
-	void messageReceivedEventHandler(IMChat & sender, IMChatSession * imChatSession, const std::string & from, const std::string & message);
+	void statusMessageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, IMChat::StatusMessage status, const std::string & message);
 
-	void statusMessageEventHandler(IMChat & sender, IMChatSession & imChatSession, IMChat::StatusMessage status, const std::string & message);
+	void contactAddedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId);
+
+	void contactRemovedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId);
 
 	const IMContact * getIMContact(const IMAccount & imAccount, const std::string & contactId) const;
 
-	/**
-	 * Update the IMChatList regarding IMContactList.
-	 */
-	void updateIMChatList();
-
 	IMContactList _imContactList;
 
-	IMChatSet _imChatSet;
-
-	IMChatMap & _imChatMap;
+	IMChat & _imChat;
 
 };
 

@@ -27,6 +27,7 @@ class SipCallbacks;
 class IMAccount;
 class IMConnect;
 class IMChat;
+class IMContactMap;
 class IMPresence;
 class PhApiWrapper;
 
@@ -44,7 +45,7 @@ public:
 
 	IMConnect * createIMConnect(IMAccount & account);
 
-	IMChat * createIMChat(IMAccount & account);
+	IMChat * createIMChat(IMAccount & account, const IMContactMap & imContactMap);
 
 	IMPresence * createIMPresence(IMAccount & account);
 

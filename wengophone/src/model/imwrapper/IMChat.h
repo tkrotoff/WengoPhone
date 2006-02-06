@@ -26,6 +26,7 @@
 #include <string>
 
 class IMAccount;
+class IMContactMap;
 class IMChatSession;
 
 /**
@@ -36,18 +37,45 @@ class IMChatSession;
  */
 class IMChat : Interface {
 	friend class IMChatSession;
+	friend class ChatHandler;
 
 public:
 
 	/**
+	 * Emitted when a new IMChatSession has been created.
+	 * 
+	 * @param sender this class
+	 * @param imChatSession the new IMChatSession
+	 */
+	Event<void (IMChat & sender, IMChatSession & imChatSession)> newIMChatSessionCreatedEvent;
+
+	/**
+	 * Emitted when a contact has been added to a session
+	 * 
+	 * @param sender this class
+	 * @param imChatSession the session where a contact has been added
+	 * @param contactId the added contact
+	 */
+	Event<void (IMChat & sender, IMChatSession & imChatSession, const std::string & contactId)> contactAddedEvent;
+
+	/**
+	 * Emitted when a contact is removed from a session
+	 * 
+	 * @param sender this class
+	 * @param imChatSession the session where a contact has been removed
+	 * @param imChatSession the removed contact
+	 */
+	Event<void (IMChat & sender, IMChatSession & imChatSession, const std::string & contactId)> contactRemovedEvent;
+
+	/**
 	 * Chat message received callback.
 	 *
-	 * @param session the associated IMChatSession. NULL if no IMChatSession exists
+	 * @param session the associated IMChatSession.
 	 * @param sender this class
 	 * @param from message sender
 	 * @param message message received
 	 */
-	Event<void (IMChat & sender, IMChatSession * chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
 
 	enum StatusMessage {
 		/** Chat message has been received. */
@@ -68,7 +96,7 @@ public:
 	 * @param status new status
 	 * @param message @see StatusMessage
 	 */
-	Event<void (IMChat & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message)> statusMessageEvent;
+	Event<void (IMChat & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
 
 	virtual ~IMChat() { }
 
@@ -76,14 +104,18 @@ public:
 		return _imAccount;
 	}
 
+	const IMContactMap & getIMContactMap() const {
+		return _imContactMap;
+	}
+
 protected:
 
 	/**
-	 * Says IMChat to create a new session given a IMChatSession
-	 *
-	 * @param chatSession the IMChatSession
+	 * Create a new IMChatSession.
+	 * 
+	 * The new IMChatSession is returned by the Event newIMChatSessionCreatedEvent
 	 */
-	virtual void createSession(IMChatSession & chatSession) = 0;
+	virtual void createSession() = 0;
 
 	/**
 	 * Says IMChat to close a new session given a IMChatSession
@@ -118,9 +150,13 @@ protected:
 	 */
 	virtual void removeContact(IMChatSession & chatSession, const std::string & contactId) = 0;
 
-	IMChat(IMAccount & imAccount) : _imAccount(imAccount) {}
+	IMChat(IMAccount & imAccount, const IMContactMap & imContactMap) 
+		: _imAccount(imAccount), _imContactMap(imContactMap) {}
 
 	IMAccount & _imAccount;
+
+	const IMContactMap & _imContactMap;
+
 };
 
 #endif	//IMCHAT_H

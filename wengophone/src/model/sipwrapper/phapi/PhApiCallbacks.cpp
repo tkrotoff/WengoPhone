@@ -234,7 +234,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	std::map<int, IMChatSession *> messageIdChatSessionMap = p->getMessageIdChatSessionMap();
 	std::map<int, IMChatSession *>::const_iterator it = messageIdChatSessionMap.find(messageId);
 	if (it == messageIdChatSessionMap.end()) {
-		imChatSession = NULL;
+		/*TODO:Create a new Session and add the Contact*/
 	} else {
 		imChatSession = messageIdChatSessionMap[messageId];
 	}
@@ -243,15 +243,15 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	case phMsgNew:
 		from = info->from;
 		content = info->content;
-		p->messageReceivedEvent(*p, imChatSession, from, content);
+		p->messageReceivedEvent(*p, *imChatSession, from, content);
 		break;
 
 	case phMsgOk:
-		p->statusMessageEvent(*p, *imChatSession, IMChat::StatusMessageReceived, "");
+		p->statusMessageReceivedEvent(*p, *imChatSession, IMChat::StatusMessageReceived, "");
 		break;
 
 	case phMsgError:
-		p->statusMessageEvent(*p, *imChatSession, IMChat::StatusMessageError, "");
+		p->statusMessageReceivedEvent(*p, *imChatSession, IMChat::StatusMessageError, "");
 		break;
 
 	default:

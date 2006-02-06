@@ -42,7 +42,7 @@ void wengoLoginEventHandler(WengoPhone & sender, WengoPhone::LoginState state, c
 		}
 }
 
-void proxySettingsNeededEventHandler(NetworkDiscovery & sender, const std::string & proxyUrl, int proxyPort) {
+void proxyNeedsAuthenticationEvent(NetworkDiscovery & sender, const std::string & proxyUrl, int proxyPort) {
 	string url = proxyUrl;
 	int port = proxyPort;
 	string login;
@@ -90,7 +90,7 @@ int main(int argc, char * argv[]) {
 	wengoPhone = new WengoPhone();
 
 	wengoPhone->wengoLoginEvent += &wengoLoginEventHandler;
-	wengoPhone->getNetworkDiscovery().proxySettingsNeededEvent += &proxySettingsNeededEventHandler;
+	wengoPhone->getNetworkDiscovery().proxyNeedsAuthenticationEvent += &proxyNeedsAuthenticationEvent;
 
 	wengoPhone->run();
 

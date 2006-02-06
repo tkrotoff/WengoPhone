@@ -50,7 +50,20 @@ public:
 	 * @param proxyPort the port of the detected proxy
 	 */
 	Event< void(NetworkDiscovery & sender, 
-		const std::string & proxyUrl, int proxyPort) > proxySettingsNeededEvent;
+		const std::string & proxyUrl, int proxyPort) > proxyNeedsAuthenticationEvent;
+
+	/**
+	 * Emitted when given login/password are wrong.
+	 *
+	 * @param sender this class
+	 * @param proxyUrl the url of the detected proxy
+	 * @param proxyPort the port of the detected proxy
+	 * @param proxyLogin the maybe wrong login
+	 * @param proxyPassword the maybe wrong password
+	 */
+	Event< void(NetworkDiscovery & sender,
+		const std::string & proxyUrl, int proxyPort,
+		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
 	/**
 	 * Emitted when detectoin is finished and Settings are set.
@@ -85,7 +98,7 @@ private:
 
 	/**
 	 * 
-	 * @return false if proxy needs authentication, true otherwise
+	 * @return false if proxy is not set (usually when proxy needs authentication), true otherwise
 	 */
 	bool discoverProxySettings();
 

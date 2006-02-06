@@ -23,28 +23,43 @@
 
 #include "PhApiWrapper.h"
 
-PhApiIMChat::PhApiIMChat(IMAccount & account, PhApiWrapper & phApiWrapper)
-	: IMChat(account),
+PhApiIMChat::PhApiIMChat(IMAccount & account, const IMContactMap & imContactMap, PhApiWrapper & phApiWrapper)
+	: IMChat(account, imContactMap),
 	_phApiWrapper(phApiWrapper) {
 
 	_phApiWrapper.messageReceivedEvent += boost::bind(&PhApiIMChat::messageReceivedEventHandler, this, _1, _2, _3, _4);
-	_phApiWrapper.statusMessageEvent += boost::bind(&PhApiIMChat::messageStatusEventHandler, this, _1, _2, _3, _4);
+	_phApiWrapper.statusMessageReceivedEvent += boost::bind(&PhApiIMChat::statusMessageReceivedEventHandler, this, _1, _2, _3, _4);
+	_phApiWrapper.contactAddedEvent += boost::bind(&PhApiIMChat::contactAddedEventHandler, this, _1, _2, _3);
+	_phApiWrapper.contactRemovedEvent += boost::bind(&PhApiIMChat::contactRemovedEventHandler, this, _1, _2, _3);
+	_phApiWrapper.newIMChatSessionCreatedEvent += boost::bind(&PhApiIMChat::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
 
-void PhApiIMChat::messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession * chatSession, const std::string & from, const std::string & message) {
+void PhApiIMChat::messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message) {
 	messageReceivedEvent(*this, chatSession, from, message);
 }
 
-void PhApiIMChat::messageStatusEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message) {
-	statusMessageEvent(*this, chatSession, status, message);
+void PhApiIMChat::statusMessageReceivedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message) {
+	statusMessageReceivedEvent(*this, chatSession, status, message);
+}
+
+void PhApiIMChat::newIMChatSessionCreatedEventHandler(PhApiWrapper & sender, IMChatSession & imChatSession) {
+	newIMChatSessionCreatedEvent(*this, imChatSession);
+}
+
+void PhApiIMChat::contactAddedEventHandler(PhApiWrapper & sender, IMChatSession & imChatSession, const std::string & contactId) {
+	contactAddedEvent(*this, imChatSession, contactId);
+}
+
+void PhApiIMChat::contactRemovedEventHandler(PhApiWrapper & sender, IMChatSession & imChatSession, const std::string & contactId) {
+	contactRemovedEvent(*this, imChatSession, contactId);
 }
 
 void PhApiIMChat::sendMessage(IMChatSession & chatSession, const std::string & message) {
 	_phApiWrapper.sendMessage(chatSession, message);
 }
 
-void PhApiIMChat::createSession(IMChatSession & chatSession) {
-	_phApiWrapper.createSession(chatSession);
+void PhApiIMChat::createSession() {
+	_phApiWrapper.createSession(*this);
 }
 
 void PhApiIMChat::closeSession(IMChatSession & chatSession) {

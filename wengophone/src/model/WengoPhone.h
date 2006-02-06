@@ -147,16 +147,7 @@ public:
 	 */
 	Event<void (WengoPhone & sender, ContactList & contactList)> contactListCreatedEvent;
 
-	/**
-	 * Proxy Settings are needed to connect.
-	 * 
-	 * @param proxyAddress address of the detected proxy
-	 * @param proxyPort port of the detected proxy
-	 */
-	Event<void (NetworkDiscovery & sender, const std::string & proxyAddress,
-		int proxyPort)> proxySettingsNeededEvent;
-
-	/**
+/**
 	 * PresenceHandler has been created.
 	 *
 	 * @param sender this class

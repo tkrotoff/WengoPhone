@@ -52,13 +52,15 @@ public:
 	 * @param sender this class
 	 * @param imChatSession the new IMChatSession
 	 */
-	Event<void (ChatHandler & sender, IMChatSession & imChatSession)> newChatSessionCreatedEvent;
+	Event<void (ChatHandler & sender, IMChatSession & imChatSession)> newIMChatSessionCreatedEvent;
 
 	/**
 	 * Create a new IMChatSession.
 	 * The newChatSessionCreatedEvent is emitted when an IMChatSession is created
+	 * 
+	 * @param imAccount the IMAccount for which we want to create the new IMChatSession
 	 */
-	void createSession();
+	void createSession(const IMAccount & imAccount);
 
 private:
 
@@ -68,7 +70,7 @@ private:
 
 	void disconnectedEventHandler(ConnectHandler & sender, IMAccount & account);
 
-	void messageReceivedEventHandler(IMChat & sender, IMChatSession * chatSession, const std::string & from, const std::string & message);
+	void newIMChatSessionCreatedEventHandler(IMChat & sender, IMChatSession & imChatSession);
 
 	IMChatMap _imChatMap;
 

@@ -48,9 +48,15 @@ class IMChatSession;
 class PhApiWrapper : public SipWrapper {
 public:
 
-	Event<void (PhApiWrapper & sender, IMChatSession * chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (PhApiWrapper & sender, IMChatSession & imChatSession)> newIMChatSessionCreatedEvent;
 
-	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, IMChat::StatusMessage status, const std::string & message)> statusMessageEvent;
+	Event<void (PhApiWrapper & sender, IMChatSession & imChatSession, const std::string & contactId)> contactAddedEvent;
+
+	Event<void (PhApiWrapper & sender, IMChatSession & imChatSession, const std::string & contactId)> contactRemovedEvent;
+
+	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
+
+	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, IMChat::StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
 
 	Event<void (PhApiWrapper & sender, IMConnect::LoginStatus status)> loginStatusEvent;
 
@@ -151,7 +157,7 @@ public:
 	 */
 
 	void sendMessage(IMChatSession & chatSession, const std::string & message);
-	void createSession(IMChatSession & chatSession);
+	void createSession(IMChat & imChat);
 	void closeSession(IMChatSession & chatSession);
 	void addContact(IMChatSession & chatSession, const std::string & contactId);
 	void removeContact(IMChatSession & chatSession, const std::string & contactId);

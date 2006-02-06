@@ -40,6 +40,7 @@ sources = [
 	'model/connect/ConnectHandler.cpp',
 	#'model/chat/Chat.cpp',
 	'model/chat/ChatHandler.cpp',
+	'model/imwrapper/IMContactMap.cpp',
 	'model/imwrapper/IMChatMap.cpp',
 	'model/imwrapper/IMAccountHandler.cpp',
 	'model/imwrapper/IMContact.cpp',

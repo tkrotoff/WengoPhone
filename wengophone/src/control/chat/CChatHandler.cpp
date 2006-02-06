@@ -27,7 +27,7 @@ CChatHandler::CChatHandler(ChatHandler & chatHandler)
 
 	_pChatHandler = PFactory::getFactory().createPresentationChatHandler(*this);
 
-	_chatHandler.newChatSessionCreatedEvent += newChatSessionCreatedEvent;
+	_chatHandler.newIMChatSessionCreatedEvent += newIMChatSessionCreatedEvent;
 }
 
 CChatHandler::~CChatHandler() {

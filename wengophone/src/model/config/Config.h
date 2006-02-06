@@ -76,6 +76,9 @@ public:
 	/** Integer key. Tunnel server port */
 	static const std::string NETWORK_TUNNEL_PORT_KEY;
 
+	/** Boolean key. Is proxy detected ? */
+	static const std::string NETWORK_PROXY_DETECTED_KEY;
+
 	/** String key. Proxy server. Empty if no proxy */
 	static const std::string NETWORK_PROXY_SERVER_KEY;
 

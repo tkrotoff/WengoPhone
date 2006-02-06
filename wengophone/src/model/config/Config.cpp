@@ -30,6 +30,7 @@ const string Config::NETWORK_TUNNEL_NEEDED_KEY = "network.tunnel.needed";
 const string Config::NETWORK_TUNNEL_SSL_KEY = "network.tunnel.ssl";
 const string Config::NETWORK_TUNNEL_SERVER_KEY = "network.tunnel.server";
 const string Config::NETWORK_TUNNEL_PORT_KEY = "network.tunnel.port";
+const string Config::NETWORK_PROXY_DETECTED_KEY = "network.proxy.detected";
 const string Config::NETWORK_PROXY_SERVER_KEY = "network.proxy.server";
 const string Config::NETWORK_PROXY_PORT_KEY = "network.proxy.port";
 const string Config::NETWORK_PROXY_LOGIN_KEY = "network.proxy.login";

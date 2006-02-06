@@ -47,11 +47,9 @@ ChatHandler::~ChatHandler() {
 	}
 }
 
-void ChatHandler::createSession() {
-	IMChatSession * imChatSession = new IMChatSession(_imChatMap);
-	_imChatSessionList.push_back(imChatSession);
-
-	newChatSessionCreatedEvent(*this, *imChatSession);
+void ChatHandler::createSession(const IMAccount & imAccount) {
+	LOG_DEBUG("creating new IMChatSession for: " + imAccount.getLogin());
+	_imChatMap[&((IMAccount &)imAccount)]->createSession();
 }
 
 void ChatHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & account) {
@@ -61,9 +59,9 @@ void ChatHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & acc
 		+ "protocol: " + String::fromNumber(account.getProtocol()));
 	//IMChat for this IMAccount has not been created yet
 	if (i == _imChatMap.end()) {
-		IMChat * imChat = IMWrapperFactory::getFactory().createIMChat(account);
-		imChat->messageReceivedEvent +=
-			boost::bind(&ChatHandler::messageReceivedEventHandler, this, _1, _2, _3, _4);
+		IMChat * imChat = IMWrapperFactory::getFactory().createIMChat(account, _wengoPhone.getIMContactMap());
+		imChat->newIMChatSessionCreatedEvent +=
+			boost::bind(&ChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 
 		_imChatMap[&account] = imChat;
 	}
@@ -72,19 +70,8 @@ void ChatHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & acc
 void ChatHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & account) {
 }
 
-void ChatHandler::messageReceivedEventHandler(IMChat & sender, IMChatSession * chatSession, const std::string & from, const std::string & message) {
-	if (!chatSession) {
-		IMChatSession * imChatSession = new IMChatSession(_imChatMap);
-		_imChatSessionList.push_back(imChatSession);
-/*
-		IMContact * imContact = _imContactMap.findIMContact(sender.getIMAccount(), from);
-		if (imContact) {
-			imChatSession.addIMContact(&imContact);
-		} else {
-			LOG_DEBUG(from + "is not in current ContactList");
-		}
-*/
-		newChatSessionCreatedEvent(*this, *imChatSession);
-		imChatSession->messageReceivedEventHandler(sender, imChatSession, from, message);
-	}
+void ChatHandler::newIMChatSessionCreatedEventHandler(IMChat & sender, IMChatSession & imChatSession) {
+	LOG_DEBUG("a new IMChatSession has been created");
+	_imChatSessionList.push_back(&imChatSession);
+	newIMChatSessionCreatedEvent(*this, imChatSession);
 }

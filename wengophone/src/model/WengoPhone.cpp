@@ -108,7 +108,6 @@ void WengoPhone::init() {
 	addPhoneLine(localAccount);*/
 
 	//Discover Network configuration
-	_networkDiscovery.proxySettingsNeededEvent += proxySettingsNeededEvent;
 	_networkDiscovery.discoveryDoneEvent += 
 		boost::bind(&WengoPhone::discoveryDoneEventHandler, this, _1, _2);
 

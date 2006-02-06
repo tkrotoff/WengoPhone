@@ -30,8 +30,8 @@
 QtChatHandler::QtChatHandler(CChatHandler & cChatHandler) 
 	: _cChatHandler(cChatHandler) {
 
-	_cChatHandler.newChatSessionCreatedEvent +=
-		boost::bind(&QtChatHandler::newChatSessionCreatedEventHandler, this, _1, _2);
+	_cChatHandler.newIMChatSessionCreatedEvent +=
+		boost::bind(&QtChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
 
 QtChatHandler::~QtChatHandler() {

@@ -25,6 +25,7 @@
 #include <model/imwrapper/IMChat.h>
 
 class IMAccount;
+class IMContactMap;
 class IMChatSession;
 
 /**
@@ -36,20 +37,26 @@ class IMChatSession;
 class PhApiIMChat : public IMChat {
 	friend class PhApiFactory;
 public:
-	
+
 	void sendMessage(IMChatSession & chatSession, const std::string & message);
-	void createSession(IMChatSession & chatSession);
+	void createSession();
 	void closeSession(IMChatSession & chatSession);
 	void addContact(IMChatSession & chatSession, const std::string & contactId);
 	void removeContact(IMChatSession & chatSession, const std::string & contactId);
-	
+
 private:
 
-	PhApiIMChat(IMAccount & account, PhApiWrapper & phApiWrapper);
+	PhApiIMChat(IMAccount & account, const IMContactMap & imContactMap, PhApiWrapper & phApiWrapper);
 
-	void messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession * chatSession, const std::string & from, const std::string & message);
+	void messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message);
 
-	void messageStatusEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message);
+	void statusMessageReceivedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message);
+
+	void newIMChatSessionCreatedEventHandler(PhApiWrapper & sender, IMChatSession & imChatSession);
+
+	void contactAddedEventHandler(PhApiWrapper & sender, IMChatSession & imChatSession, const std::string & contactId);
+
+	void contactRemovedEventHandler(PhApiWrapper & sender, IMChatSession & imChatSession, const std::string & contactId);
 
 	PhApiWrapper & _phApiWrapper;
 };

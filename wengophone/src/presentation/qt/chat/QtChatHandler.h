@@ -43,7 +43,7 @@ private:
 	/**
 	 * @see ChatHandler::newChatSessionCreatedEvent
 	 */
-	void newChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession);
+	void newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession);
 
 	CChatHandler & _cChatHandler;
 

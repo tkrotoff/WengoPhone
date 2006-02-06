@@ -43,7 +43,7 @@ public:
 	 * @param sender this class
 	 * @param imChatSession the new IMChatSession
 	 */
-	Event<void (ChatHandler & sender, IMChatSession & imChatSession)> newChatSessionCreatedEvent;
+	Event<void (ChatHandler & sender, IMChatSession & imChatSession)> newIMChatSessionCreatedEvent;
 
 	CChatHandler(ChatHandler & chatHandler);
 
