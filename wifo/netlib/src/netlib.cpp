@@ -453,7 +453,7 @@ HttpRet is_http_conn_allowed(const char *url,
 	
 	if (http_resp_code == 200)
 		return HTTP_OK;
-	else if (http_resp_code == 407 || http_resp_code == 401)
+	else if (http_resp_code != 404 && http_resp_code != 200)
 		return HTTP_AUTH;
 	else
 		return HTTP_NOK;
@@ -478,10 +478,10 @@ HttpRet is_tunnel_conn_allowed(const char *http_gate_addr, int http_gate_port,
 
 	if (hs == NULL)
 	{
-		if (http_code == 407 || http_code == 401)
-			return HTTP_AUTH;
-		else
+		if (http_code == 404)
 			return HTTP_NOK;
+		else
+			return HTTP_AUTH;
 	}
 
 	if (ping)
