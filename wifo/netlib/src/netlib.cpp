@@ -512,6 +512,18 @@ NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port)
 	return (ret == HTTP_AUTH ? NETLIB_TRUE : NETLIB_FALSE);
 }
 
+NETLIB_BOOLEAN is_proxy_auth_ok(const char *proxy_addr, int proxy_port,
+								const char *proxy_login, const char *proxy_passwd)
+{
+	HttpRet ret;
+
+	ret = is_http_conn_allowed("google.com:80", proxy_addr, proxy_port, 
+								proxy_login, proxy_passwd, NETLIB_FALSE);
+
+	return (ret == HTTP_OK ? NETLIB_TRUE : NETLIB_FALSE);
+}
+
+
 
 char *get_local_http_proxy_address() 
 {

@@ -88,12 +88,24 @@ int get_local_http_proxy_port();
 /**
  * Checks if an authentication with proxy is needed 
  *
- * @param itf IP address of an interface. If NULL, default address is used.
- * @param port port number to test
- * @return true if the port is used; false otherwise
+ * @param proxy_addr IP address of the proxy we want to connect through
+ * @param proxy_port port of the proxy we want to connect through
+ * @return true if an authentication is needed; false otherwise
  */
 NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port);
 
+
+/**
+ * Try to authenticate with a proxy 
+ *
+ * @param proxy_addr IP address of the proxy we want to connect through
+ * @param proxy_port port of the proxy we want to connect through
+ * @param proxy_login proxy authentication login
+ * @param proxy_passwd proxy authentication password
+ * @return true if the authentication succeeds; false otherwise
+ */
+NETLIB_BOOLEAN is_proxy_auth_ok(const char *proxy_addr, int proxy_port,
+								const char *proxy_login, const char *proxy_passwd);
 
 /**
  * is_http_conn_allowed() or is_tunnel_conn_allowed() return.
