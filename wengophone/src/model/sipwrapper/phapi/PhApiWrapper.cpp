@@ -47,7 +47,11 @@ const std::string PhApiWrapper::PresenceStateDoNotDisturb = "Do Not Disturb";
 PhApiWrapper * PhApiWrapper::PhApiWrapperHack = NULL;
 PhApiCallbacks * PhApiWrapper::_callbacks = NULL;
 
+#ifdef ENABLE_VIDEO
 static const int MEDIA_FLAGS = PH_STREAM_AUDIO | PH_STREAM_VIDEO_RX | PH_STREAM_VIDEO_TX;
+#else
+static const int MEDIA_FLAGS = PH_STREAM_AUDIO;
+#endif
 
 extern "C" {
 
