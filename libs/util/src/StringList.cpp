@@ -215,3 +215,10 @@ void StringList::sort(SortingOrder order) {
 		break;
 	}
 }
+
+StringList::StringList(const std::list<string>& strings_list) {
+  for (std::list<string>::const_iterator iter = strings_list.begin();
+       iter != strings_list.end();
+       ++iter)
+    this->add(*iter);
+}

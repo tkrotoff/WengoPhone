@@ -336,7 +336,11 @@ NETLIB_BOOLEAN sip_ping(Socket sock, int ping_timeout)
 	ret = recv(sock, buff, sizeof (buff), 0);
 	if (ret < 1)
 	{
+#if defined(WIN32)
 		ret = GetLastError();
+#else
+		ret = errno;
+#endif
 		return NETLIB_FALSE;
 	}
 	else
@@ -365,7 +369,11 @@ NETLIB_BOOLEAN sip_ping2(http_sock_t *hs, int ping_timeout)
 	ret = http_tunnel_recv(hs, buff, sizeof (buff));
 	if (ret < 1)
 	{
+#if defined(WIN32)
 		ret = GetLastError();
+#else
+		ret = errno;
+#endif
 		return NETLIB_FALSE;
 	}
 	else
