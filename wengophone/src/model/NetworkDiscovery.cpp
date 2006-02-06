@@ -50,7 +50,9 @@ void NetworkDiscovery::discoverForSSO() {
 			return;
 	}
 
-	discoverProxySettings();
+	if (!discoverProxySettings()) {
+		return;
+	}
 
 	//Get proxy information from Settings
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -120,13 +122,16 @@ void NetworkDiscovery::discoverForSIP(const string & sipServer, int sipPort) {
 	string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
 	string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
 
-	if (tunnelTest(sipServer.c_str(), sipPort,
-		tunnelServer.c_str(),
-		proxyAddress.c_str(), proxyPort,
-		proxyLogin.c_str(), proxyPassword.c_str())) {
-		
-		discoveryDoneEvent(*this, DiscoveryResultSIPCanConnect);
-		return;
+	// Restart tunnel test with proxy settings if proxy found
+	if (!proxyAddress.empty()) {
+		if (tunnelTest(sipServer.c_str(), sipPort,
+			tunnelServer.c_str(),
+			proxyAddress.c_str(), proxyPort,
+			proxyLogin.c_str(), proxyPassword.c_str())) {
+			
+			discoveryDoneEvent(*this, DiscoveryResultSIPCanConnect);
+			return;
+		}
 	}
 
 	discoveryDoneEvent(*this, DiscoveryResultSIPCannotConnect);
@@ -240,16 +245,14 @@ bool NetworkDiscovery::discoverProxySettings() {
 				proxySettingsNeededEvent(*this, localProxyUrl, localProxyPort);
 				return false;
 			}
-
-			return true;
 		} else {
 			LOG_DEBUG("no proxy found");
-			return false;
 		}
 	} else {
 		LOG_DEBUG("proxy already found");
-		return true;
 	}
+
+	return true;
 }
 
 void NetworkDiscovery::setProxyConfig(const char * proxyAddress, int proxyPort,

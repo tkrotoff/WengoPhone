@@ -85,7 +85,7 @@ private:
 
 	/**
 	 * 
-	 * @return false if no proxy found or proxySettings needs a login/password
+	 * @return false if proxy needs authentication, true otherwise
 	 */
 	bool discoverProxySettings();
 
