@@ -51,7 +51,15 @@ extern "C" {
  * Decorate exportable functions for Win32 DLL linking.
  * This avoids using a .def file for building libcurl.dll.
  */
+#if (defined(WIN32) || defined(_WIN32)) && !defined(CURL_STATICLIB)
+#if defined(BUILDING_LIBCURL)
+#define CURL_EXTERN  __declspec(dllexport)
+#else
+#define CURL_EXTERN  __declspec(dllimport)
+#endif
+#else
 #define CURL_EXTERN
+#endif
 
 /*
  * We want the typedef curl_off_t setup for large file support on all
