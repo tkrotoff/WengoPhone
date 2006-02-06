@@ -1,0 +1,18 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'wengophone',
+	'wengoutil',
+	'sipXtapi'
+]
+lib_path = []
+include_path = []
+defines = {}
+headers = []
+sources = [
+	'SipXWrapper.cpp',
+	'SipXCallbacks.cpp'
+]
+
+env.WengoUseLibraries(libs)
+env.WengoStaticLibrary('sipxwrapper', sources)

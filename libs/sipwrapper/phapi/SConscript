@@ -1,0 +1,44 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'boost',
+	'wengoutil',
+	'phapi',
+	'ortp',
+	'stun',
+	'httptunnel',
+	'wengophone',
+	'tinyxml',
+]
+
+if env.getConsoleArgument('enable-netlib') == 1:
+	libs += ['netlib']
+	env.WengoAddDefines( {'ENABLE_NETLIB' : 1} )
+
+lib_path = []
+include_path = []
+
+defines = {}
+
+if WengoGetConsoleArgument('enable-video'):
+	defines['ENABLE_VIDEO'] = 1
+	libs += [
+		'pixertool'
+	]
+
+if WengoGetConsoleArgument('enable-shared-phapi'):
+	defines['PHAPI_DLL'] = 1
+
+headers = []
+sources = [
+	'PhApiFactory.cpp',
+	'PhApiWrapper.cpp',
+	'PhApiCallbacks.cpp',
+	'PhApiIMChat.cpp',
+	'PhApiIMConnect.cpp',
+	'PhApiIMPresence.cpp',
+]
+
+env.WengoAddDefines(defines)
+env.WengoUseLibraries(libs)
+env.WengoStaticLibrary('phapiwrapper', sources)

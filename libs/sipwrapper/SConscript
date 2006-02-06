@@ -1,0 +1,12 @@
+env = WengoGetEnvironment()
+
+projects = [
+	'src/sipx',
+	'src/phapi',
+	'src/null',
+]
+
+env.WengoAddDoxyfile()
+env.SConscript(dirs = projects)
+
+#env.SConscript('tests/SConscript')
