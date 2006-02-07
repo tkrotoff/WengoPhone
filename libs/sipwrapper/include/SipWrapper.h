@@ -312,6 +312,14 @@ public:
 	//virtual void setCodecList(const StringList & codecList) = 0;
 
 	/** @} */
+
+	/**
+	 * Set the plugins path.
+	 * 
+	 * @param path the absolute path to the plugins (e.g: "/home/robert/plugins")
+	 */
+	virtual void setPluginPath(const std::string & path) = 0;
+
 };
 
 #endif	//SIPWRAPPER_H

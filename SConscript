@@ -5,6 +5,7 @@ projects = [
 	'wengoscons/libs/gtk',
 	'wengoscons/libs/sdl',
 	'wengoscons/libs/sdl_image',
+	'wifo',
 	'libs/global',
 	'libs/timer',
 	'libs/openssl',
@@ -24,7 +25,6 @@ projects = [
 	'libs/pixertool',
 	'libs/wenbox',
 	'libs/webcam',
-	'wifo',
 	'wengophone',
 ]
 

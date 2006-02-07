@@ -22,9 +22,6 @@
 #include <IMChatSession.h>
 #include <IMContact.h>
 
-//FIXME include to remove
-#include <model/WengoPhone.h>
-
 #ifdef ENABLE_NETLIB
 #include <netlib.h>
 #endif
@@ -511,9 +508,7 @@ void PhApiWrapper::setSIP(const string & server, int localPort) {
 void PhApiWrapper::init() {
 	setNetworkParameter();
 
-	//FIXME ugly hack for xpcom component
-	std::string pluginPath = File::convertPathSeparators(WengoPhone::getConfigFilesPath() + "../extensions/{debaffee-a972-4d8a-b426-8029170f2a89}/libraries/");
-	strncpy(phcfg.plugin_path, pluginPath.c_str(), 256);
+	strncpy(phcfg.plugin_path, _pluginPath.c_str(), 256);
 
 	//Codec list
 	strncpy(phcfg.audio_codecs, "G726-64wb/16000,ILBC/8000,PCMU/8000,PCMA/8000,GSM/8000", 128);
@@ -542,4 +537,9 @@ void PhApiWrapper::init() {
 
 	//Stub
 	setCallInputAudioDevice("");
+}
+
+
+void PhApiWrapper::setPluginPath(const string & path) {
+	_pluginPath = path;	
 }

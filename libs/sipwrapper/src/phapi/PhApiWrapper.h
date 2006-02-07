@@ -110,6 +110,8 @@ public:
 
 	bool enableAEC(bool enable);
 
+	void setPluginPath(const std::string & path);
+
 	/**
 	 * @name PhApi callbacks
 	 * @{
@@ -259,6 +261,9 @@ private:
 	std::string _sipAddress;
 
 	int _sipLocalPort;
+
+	std::string _pluginPath;
+
 };
 
 #endif	//PHAPIWRAPPER_H
