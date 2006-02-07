@@ -20,9 +20,8 @@
 #ifndef SIPWRAPPER_H
 #define SIPWRAPPER_H
 
-#include "EnumPhoneCallState.h"
-#include "EnumPhoneLineState.h"
-#include "WebcamVideoFrame.h"
+#include <EnumPhoneCallState.h>
+#include <EnumPhoneLineState.h>
 
 #include <Interface.h>
 #include <Event.h>
@@ -30,6 +29,8 @@
 #include <netlib.h>
 
 #include <string>
+
+class WebcamVideoFrame;
 
 /**
  * Wrapper for SIP stacks.

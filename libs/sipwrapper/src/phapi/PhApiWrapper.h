@@ -22,12 +22,12 @@
 
 #include "PhApiCallbacks.h"
 
-#include <model/sipwrapper/SipWrapper.h>
+#include <SipWrapper.h>
 
-#include <model/imwrapper/EnumPresenceState.h>
-#include <model/imwrapper/IMChat.h>
-#include <model/imwrapper/IMConnect.h>
-#include <model/imwrapper/IMPresence.h>
+#include <EnumPresenceState.h>
+#include <IMChat.h>
+#include <IMConnect.h>
+#include <IMPresence.h>
 
 #include <Event.h>
 

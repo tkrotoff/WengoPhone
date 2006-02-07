@@ -19,14 +19,12 @@
 
 #include "PhApiCallbacks.h"
 
+#include "PhApiWrapper.h"
 #include "PhApiIMChat.h"
 
-#include <model/sipwrapper/SipCallbacks.h>
-#include <model/sipwrapper/SipWrapper.h>
-#include <model/imwrapper/IMPresence.h>
-#include <model/imwrapper/EnumPresenceState.h>
-
-#include <model/sipwrapper/phapi/PhApiWrapper.h>
+#include <SipWrapper.h>
+#include <IMPresence.h>
+#include <EnumPresenceState.h>
 
 #include <Logger.h>
 

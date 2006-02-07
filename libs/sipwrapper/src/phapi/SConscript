@@ -9,16 +9,16 @@ libs = [
 	'httptunnel',
 	'wengophone',
 	'tinyxml',
+	'imwrapper',
 ]
 
-if env.getConsoleArgument('enable-netlib') == 1:
-	libs += ['netlib']
-	env.WengoAddDefines( {'ENABLE_NETLIB' : 1} )
-
+defines = {}
 lib_path = []
 include_path = []
 
-defines = {}
+if WengoGetConsoleArgument('enable-netlib'):
+	defines['ENABLE_NETLIB'] = 1
+	libs += ['netlib']
 
 if WengoGetConsoleArgument('enable-video'):
 	defines['ENABLE_VIDEO'] = 1

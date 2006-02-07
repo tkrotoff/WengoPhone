@@ -18,13 +18,12 @@
  */
 
 #include "PhApiWrapper.h"
-#include <model/imwrapper/IMChatSession.h>
-#include <model/imwrapper/IMContact.h>
+
+#include <IMChatSession.h>
+#include <IMContact.h>
 
 //FIXME include to remove
 #include <model/WengoPhone.h>
-
-#include <model/account/SipAccount.h>
 
 #ifdef ENABLE_NETLIB
 #include <netlib.h>

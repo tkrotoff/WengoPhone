@@ -22,7 +22,7 @@
 
 #include "PhApiFactory.h"
 
-#include <model/imwrapper/IMChat.h>
+#include <IMChat.h>
 
 class IMAccount;
 class IMContactMap;

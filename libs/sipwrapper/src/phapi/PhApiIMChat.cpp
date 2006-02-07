@@ -19,7 +19,7 @@
 
 #include "PhApiIMChat.h"
 
-#include <model/imwrapper/IMChatSession.h>
+#include <IMChatSession.h>
 
 #include "PhApiWrapper.h"
 
