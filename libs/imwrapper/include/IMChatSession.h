@@ -20,7 +20,7 @@
 #ifndef IMCHATSESSION_H
 #define IMCHATSESSION_H
 
-#include "IMChat.h"
+#include <IMChat.h>
 
 #include <string>
 #include <set>
@@ -58,7 +58,7 @@ public:
 
 	const IMContactList & getIMContactList() const;
 
-	bool operator == (const IMChatSession & imChatSession) const;
+	bool operator==(const IMChatSession & imChatSession) const;
 
 	int getId() const;
 

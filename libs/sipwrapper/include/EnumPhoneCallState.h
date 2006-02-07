@@ -23,6 +23,8 @@
 #include <NonCopyable.h>
 
 /**
+ * Phone call states (error, dialing, talking...).
+ *
  * @author Tanguy Krotoff
  */
 class EnumPhoneCallState : NonCopyable {

@@ -32,4 +32,4 @@ public:
 	IMContact * findIMContact(const IMAccount & imAccount, const std::string & contactId) const;
 };
 
-#endif /*IMCONTACTMAP_H*/
+#endif	//IMCONTACTMAP_H

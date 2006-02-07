@@ -32,8 +32,8 @@ class IMChatSession;
 /**
  * Wrapper for Instant Messaging chat.
  *
- * @ingroup model
  * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
 class IMChat : Interface {
 	friend class IMChatSession;
@@ -156,7 +156,6 @@ protected:
 	IMAccount & _imAccount;
 
 	const IMContactMap & _imContactMap;
-
 };
 
 #endif	//IMCHAT_H

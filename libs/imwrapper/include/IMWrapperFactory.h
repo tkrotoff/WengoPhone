@@ -34,7 +34,7 @@ class IMPresence;
  * Depending on the factory instanciated, the IM implementation component will use Gaim
  * or what ever you prefer.
  *
- * @ingroup model
+ * @author Philippe Bernery
  * @author Tanguy Krotoff
  */
 class IMWrapperFactory : Interface {

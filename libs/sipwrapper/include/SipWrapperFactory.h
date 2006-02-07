@@ -30,7 +30,6 @@ class SipWrapper;
  * Depending on the factory instanciated, the SIP implementation component will use phApi, sipX
  * or what ever you prefer.
  *
- * @ingroup model
  * @author Tanguy Krotoff
  */
 class SipWrapperFactory : Interface {

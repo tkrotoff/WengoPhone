@@ -57,9 +57,8 @@ class WebcamVideoFrame;
  * Inside main.cpp just instanciates the right factory for your plugin.
  * Check the current SIP wrapper implementations: phApi and sipX.
  *
- * SipWrapper will handles telephony and video only.
+ * SipWrapper handles telephony and video only.
  *
- * @ingroup model
  * @author Tanguy Krotoff
  */
 class SipWrapper : Interface {
@@ -217,7 +216,7 @@ public:
 	/**
 	 * Set proxy parameter.
 	 */
-	virtual void setProxy(const std::string & address, int port, 
+	virtual void setProxy(const std::string & address, int port,
 		const std::string & login, const std::string & password) = 0;
 
 	/**
@@ -314,12 +313,11 @@ public:
 	/** @} */
 
 	/**
-	 * Set the plugins path.
-	 * 
+	 * Sets the plugins path.
+	 *
 	 * @param path the absolute path to the plugins (e.g: "/home/robert/plugins")
 	 */
 	virtual void setPluginPath(const std::string & path) = 0;
-
 };
 
 #endif	//SIPWRAPPER_H

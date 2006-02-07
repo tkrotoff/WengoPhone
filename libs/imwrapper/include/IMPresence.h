@@ -20,8 +20,8 @@
 #ifndef IMPRESENCE_H
 #define IMPRESENCE_H
 
-#include "IMAccount.h"
-#include "EnumPresenceState.h"
+#include <IMAccount.h>
+#include <EnumPresenceState.h>
 
 #include <Interface.h>
 #include <Event.h>
@@ -30,7 +30,7 @@
 /**
  * Wrapper for Instant Messaging presence.
  *
- * @ingroup model
+ * @author Philippe Bernery
  * @author Tanguy Krotoff
  */
 class IMPresence : Interface {

@@ -25,8 +25,6 @@
 /**
  * Instant Messaging protocols.
  *
- * @ingroup model
- * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
 class EnumIMProtocol : NonCopyable {

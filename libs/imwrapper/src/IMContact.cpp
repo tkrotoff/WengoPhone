@@ -37,7 +37,6 @@ IMContact::IMContact(const IMContact & imContact)
 }
 
 IMContact::~IMContact() {
-
 }
 
 bool IMContact::operator == (const IMContact & imContact) const {
@@ -53,25 +52,31 @@ std::string IMContact::serialize() {
 	case EnumIMProtocol::IMProtocolMSN:
 		protocolId = "MSNID";
 		break;
+
 	case EnumIMProtocol::IMProtocolYahoo:
 		protocolId = "YAHOOID";
 		break;
+
 	case EnumIMProtocol::IMProtocolAIM:
 		protocolId = "AIMID";
 		break;
+
 	case EnumIMProtocol::IMProtocolICQ:
 		protocolId = "ICQID";
 		break;
+
 	case EnumIMProtocol::IMProtocolJabber:
 		protocolId = "JABBERID";
 		break;
+
 	case EnumIMProtocol::IMProtocolSIPSIMPLE:
 		protocolId = "WENGOID";
 		break;
+
 	default:
 		LOG_FATAL("Protocol not supported.");
 	}
-	
+
 	result = "<" + protocolId + ">"
 		+ _contactId
 		+ "</" + protocolId + ">\n";

@@ -22,6 +22,11 @@
 
 #include <NonCopyable.h>
 
+/**
+ * Presence states (online, offline, away...).
+ *
+ * @author Philippe Bernery
+ */
 class EnumPresenceState : NonCopyable {
 public:
 

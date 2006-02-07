@@ -20,7 +20,7 @@
 #ifndef IMACCOUNT_H
 #define IMACCOUNT_H
 
-#include "EnumIMProtocol.h"
+#include <EnumIMProtocol.h>
 
 #include <NonCopyable.h>
 
@@ -29,8 +29,8 @@
 /**
  * Instant Messaging account.
  *
- * @ingroup model
  * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
 class IMAccount : NonCopyable {
 public:

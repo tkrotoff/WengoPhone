@@ -23,6 +23,8 @@
 #include <NonCopyable.h>
 
 /**
+ * Phone line states (server error, timeout, closed...).
+ *
  * @author Tanguy Krotoff
  */
 class EnumPhoneLineState : NonCopyable {

@@ -28,7 +28,7 @@ class IMAccount;
 /**
  * Wrapper for Instant Messaging connection.
  *
- * @ingroup model
+ * @author Philippe Bernery
  * @author Tanguy Krotoff
  */
 class IMConnect : Interface {

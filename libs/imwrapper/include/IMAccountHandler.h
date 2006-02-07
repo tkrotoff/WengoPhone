@@ -20,7 +20,7 @@
 #ifndef IMACCOUNTHANDLER_H
 #define IMACCOUNTHANDLER_H
 
-#include "EnumIMProtocol.h"
+#include <EnumIMProtocol.h>
 
 #include <List.h>
 
@@ -29,7 +29,6 @@ class IMAccount;
 /**
  * Instant Messaging account handler.
  *
- * @ingroup model
  * @author Philippe Bernery
  */
 class IMAccountHandler : public List<IMAccount *> {

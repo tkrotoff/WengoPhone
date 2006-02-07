@@ -34,6 +34,7 @@ class IMAccount;
  */
 class IMContact {
 public:
+
 	/**
 	 * Construct a new IMContact.
 	 * 
@@ -69,7 +70,6 @@ private:
 	const IMAccount & _imAccount;
 
 	std::string _contactId;
-
 };
 
-#endif //IMCONTACT_H
+#endif	//IMCONTACT_H
