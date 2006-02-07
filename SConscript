@@ -12,6 +12,7 @@ projects = [
 	'libs/tinyxml',
 	'libs/curl',
 	'libs/util',
+	'libs/imwrapper',
 	'libs/shlibloader',
 	'libs/sipx',
 	'libs/qtutil',
