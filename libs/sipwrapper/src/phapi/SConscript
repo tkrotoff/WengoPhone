@@ -15,7 +15,9 @@ libs = [
 
 defines = {}
 lib_path = []
-include_path = []
+include_path = [
+	'.'
+]
 
 if WengoGetConsoleArgument('enable-netlib'):
 	defines['ENABLE_NETLIB'] = 1
@@ -40,6 +42,7 @@ sources = [
 	'PhApiIMPresence.cpp',
 ]
 
+env.WengoAddIncludePath(include_path)
 env.WengoAddDefines(defines)
 env.WengoUseLibraries(libs)
 env.WengoStaticLibrary('phapiwrapper', sources)

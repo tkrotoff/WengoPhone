@@ -19,11 +19,9 @@
 
 #include <model/WengoPhone.h>
 
-#include <model/imwrapper/IMWrapperFactory.h>
-#include <model/sipwrapper/SipWrapperFactory.h>
-
-#include <model/sipwrapper/phapi/PhApiFactory.h>
-
+#include <IMWrapperFactory.h>
+#include <SipWrapperFactory.h>
+#include <PhApiFactory.h>
 #include <global.h>
 
 #if defined(CC_MSVC)

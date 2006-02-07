@@ -36,6 +36,7 @@ sources = [
 	'model/WengoPhone.cpp',
 	'model/WengoPhoneLogger.cpp',
 	'model/NetworkDiscovery.cpp',
+	'model/SipCallbacks.cpp',
 	'model/config/Config.cpp',
 	'model/config/ConfigManager.cpp',
 	'model/connect/Connect.cpp',
