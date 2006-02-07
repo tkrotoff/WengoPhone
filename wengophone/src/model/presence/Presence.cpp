@@ -20,11 +20,11 @@
 #include "Presence.h"
 
 #include <model/WengoPhone.h>
-#include <model/imwrapper/IMWrapperFactory.h>
 #include <model/contactlist/ContactList.h>
 #include <model/presence/MyPresenceState.h>
 #include <model/presence/MyPresenceStateOffline.h>
 
+#include <IMWrapperFactory.h>
 #include <Logger.h>
 
 Presence::Presence(IMAccount & imAccount)

@@ -19,8 +19,7 @@
 
 #include "Connect.h"
 
-#include <model/imwrapper/IMWrapperFactory.h>
-
+#include <IMWrapperFactory.h>
 #include <Logger.h>
 
 Connect::Connect(IMAccount & account)

@@ -20,8 +20,7 @@
 #ifndef CONTACTPARSER_H
 #define CONTACTPARSER_H
 
-#include <model/imwrapper/EnumIMProtocol.h>
-
+#include <EnumIMProtocol.h>
 #include <string>
 
 class Contact;

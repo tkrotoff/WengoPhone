@@ -20,11 +20,11 @@
 #include "ChatHandler.h"
 
 #include <model/WengoPhone.h>
-#include <model/imwrapper/IMAccount.h>
-#include <model/imwrapper/IMChatSession.h>
-#include <model/imwrapper/IMWrapperFactory.h>
 #include <model/connect/ConnectHandler.h>
 
+#include <IMAccount.h>
+#include <IMChatSession.h>
+#include <IMWrapperFactory.h>
 #include <Logger.h>
 
 using namespace std;

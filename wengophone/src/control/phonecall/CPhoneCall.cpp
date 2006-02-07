@@ -19,23 +19,24 @@
 
 #include "CPhoneCall.h"
 
-#include "model/phonecall/PhoneCall.h"
-#include "presentation/PPhoneCall.h"
-#include "presentation/PFactory.h"
-#include "model/WengoPhone.h"
-#include "model/phoneline/PhoneLine.h"
-#include "model/sipwrapper/SipCallbacks.h"
-#include "control/CWengoPhone.h"
+#include <presentation/PPhoneCall.h>
+#include <presentation/PFactory.h>
 
-#include "model/phonecall/PhoneCallStateDefault.h"
-#include "model/phonecall/PhoneCallStateClosed.h"
-#include "model/phonecall/PhoneCallStateDialing.h"
-#include "model/phonecall/PhoneCallStateError.h"
-#include "model/phonecall/PhoneCallStateHoldOk.h"
-#include "model/phonecall/PhoneCallStateIncoming.h"
-#include "model/phonecall/PhoneCallStateTalking.h"
-#include "model/phonecall/PhoneCallStateResumeOk.h"
-#include "model/phonecall/PhoneCallStateRinging.h"
+#include <control/CWengoPhone.h>
+
+#include <model/WengoPhone.h>
+#include <model/SipCallbacks.h>
+#include <model/phonecall/PhoneCall.h>
+#include <model/phoneline/PhoneLine.h>
+#include <model/phonecall/PhoneCallStateDefault.h>
+#include <model/phonecall/PhoneCallStateClosed.h>
+#include <model/phonecall/PhoneCallStateDialing.h>
+#include <model/phonecall/PhoneCallStateError.h>
+#include <model/phonecall/PhoneCallStateHoldOk.h>
+#include <model/phonecall/PhoneCallStateIncoming.h>
+#include <model/phonecall/PhoneCallStateTalking.h>
+#include <model/phonecall/PhoneCallStateResumeOk.h>
+#include <model/phonecall/PhoneCallStateRinging.h>
 
 #include <Logger.h>
 

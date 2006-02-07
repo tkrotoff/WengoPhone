@@ -21,11 +21,11 @@
 #define PRESENCEHANDLER_H
 
 #include <model/chat/ChatHandler.h>
-#include <model/imwrapper/IMConnect.h>
-#include <model/imwrapper/EnumIMProtocol.h>
-#include <model/imwrapper/EnumPresenceState.h>
-#include <model/imwrapper/IMPresence.h>
 
+#include <IMConnect.h>
+#include <EnumIMProtocol.h>
+#include <EnumPresenceState.h>
+#include <IMPresence.h>
 #include <NonCopyable.h>
 #include <Event.h>
 

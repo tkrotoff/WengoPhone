@@ -19,11 +19,6 @@
 
 #include "PhoneCall.h"
 
-#include "model/phoneline/IPhoneLine.h"
-#include "model/WengoPhone.h"
-#include "model/sipwrapper/SipCallbacks.h"
-#include "model/wenbox/WenboxPlugin.h"
-
 #include "PhoneCallStateDefault.h"
 #include "PhoneCallStateClosed.h"
 #include "PhoneCallStateDialing.h"
@@ -33,6 +28,12 @@
 #include "PhoneCallStateTalking.h"
 #include "PhoneCallStateResumeOk.h"
 #include "PhoneCallStateRinging.h"
+
+
+#include <model/phoneline/IPhoneLine.h>
+#include <model/wenbox/WenboxPlugin.h>
+#include <model/SipCallbacks.h>
+#include <model/WengoPhone.h>
 
 #include <StringList.h>
 #include <Logger.h>

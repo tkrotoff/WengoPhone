@@ -15,6 +15,7 @@ projects = [
 	'libs/imwrapper',
 	'libs/shlibloader',
 	'libs/sipx',
+	'libs/sipwrapper',
 	'libs/qtutil',
 	'libs/skinstyle',
 	'libs/portaudio',

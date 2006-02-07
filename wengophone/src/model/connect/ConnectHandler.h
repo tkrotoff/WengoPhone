@@ -20,9 +20,9 @@
 #ifndef CONNECTHANDLER_H
 #define CONNECTHANDLER_H
 
-#include <model/imwrapper/IMConnect.h>
 #include <model/chat/ChatHandler.h>
 
+#include <IMConnect.h>
 #include <NonCopyable.h>
 #include <Event.h>
 

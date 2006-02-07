@@ -2,10 +2,6 @@ env = WengoGetEnvironment()
 
 projects = [
 	'src',
-	'src/model/sipwrapper/sipx',
-	'src/model/sipwrapper/phapi',
-	'src/model/sipwrapper/null',
-	'src/model/imwrapper/null',
 	'src/presentation/gtk',
 	'src/presentation/qt',
 	'src/presentation/xpcom',

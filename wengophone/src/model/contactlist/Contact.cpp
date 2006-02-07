@@ -23,9 +23,9 @@
 
 #include <model/WengoPhone.h>
 #include <model/presence/PresenceHandler.h>
-#include <model/imwrapper/IMAccount.h>
-#include <model/imwrapper/IMContact.h>
 
+#include <IMAccount.h>
+#include <IMContact.h>
 #include <StringList.h>
 
 #include <iostream>

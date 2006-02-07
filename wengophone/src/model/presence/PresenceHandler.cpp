@@ -21,9 +21,9 @@
 
 #include <model/presence/Presence.h>
 #include <model/contactlist/ContactList.h>
-#include <model/imwrapper/IMContact.h>
 #include <model/connect/ConnectHandler.h>
 
+#include <IMContact.h>
 #include <Logger.h>
 
 using namespace std;

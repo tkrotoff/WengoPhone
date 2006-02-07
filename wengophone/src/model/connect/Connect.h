@@ -20,8 +20,7 @@
 #ifndef CONNECT_H
 #define CONNECT_H
 
-#include <model/imwrapper/IMConnect.h>
-
+#include <IMConnect.h>
 #include <Interface.h>
 #include <Event.h>
 

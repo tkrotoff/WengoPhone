@@ -22,9 +22,8 @@
 
 #include "StreetAddress.h"
 
-#include <model/imwrapper/EnumPresenceState.h>
-#include <model/imwrapper/IMAccount.h>
-
+#include <EnumPresenceState.h>
+#include <IMAccount.h>
 #include <Event.h>
 #include <Serializable.h>
 #include <Date.h>

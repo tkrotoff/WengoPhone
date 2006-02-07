@@ -19,9 +19,13 @@
 
 #include "PhoneLine.h"
 
-#include <model/sipwrapper/SipWrapper.h>
-#include <model/sipwrapper/SipCallbacks.h>
-#include <model/sipwrapper/SipWrapperFactory.h>
+#include "PhoneLineStateDefault.h"
+#include "PhoneLineStateOk.h"
+#include "PhoneLineStateClosed.h"
+#include "PhoneLineStateTimeout.h"
+#include "PhoneLineStateServerError.h"
+
+#include <model/SipCallbacks.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/phonecall/PhoneCallStateClosed.h>
 #include <model/phonecall/PhoneCallStateError.h>
@@ -30,12 +34,8 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include "PhoneLineStateDefault.h"
-#include "PhoneLineStateOk.h"
-#include "PhoneLineStateClosed.h"
-#include "PhoneLineStateTimeout.h"
-#include "PhoneLineStateServerError.h"
-
+#include <SipWrapper.h>
+#include <SipWrapperFactory.h>
 #include <Logger.h>
 
 #include <netlib.h>

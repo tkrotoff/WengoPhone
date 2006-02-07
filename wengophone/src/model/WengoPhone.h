@@ -21,10 +21,11 @@
 #define WENGOPHONE_H
 
 #include <model/account/wengo/WengoAccount.h>
-#include <model/NetworkDiscovery.h>
 #include <model/account/wengo/WengoAccount.h>
-#include <model/imwrapper/IMAccountHandler.h>
-#include <model/imwrapper/IMContactMap.h>
+#include <model/NetworkDiscovery.h>
+
+#include <IMAccountHandler.h>
+#include <IMContactMap.h>
 
 #include <Event.h>
 #include <Thread.h>

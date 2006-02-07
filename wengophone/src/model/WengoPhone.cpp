@@ -31,13 +31,13 @@
 #include "contactlist/ContactList.h"
 #include "contactlist/Contact.h"
 #include "contactlist/ContactGroup.h"
-#include "sipwrapper/SipWrapper.h"
 #include "config/ConfigManager.h"
 #include "config/Config.h"
 #include "chat/ChatHandler.h"
 #include "presence/PresenceHandler.h"
 #include "connect/ConnectHandler.h"
 
+#include <SipWrapper.h>
 #include <StringList.h>
 #include <Logger.h>
 

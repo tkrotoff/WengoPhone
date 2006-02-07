@@ -1,10 +1,34 @@
 env = WengoGetEnvironment()
 
+libs = [
+	'wengoutil',
+]
+
+include_path = [
+	'include',
+]
+
 projects = [
 	'src/sipx',
 	'src/phapi',
 	'src/null',
 ]
+
+headers = [
+	'include/EnumPhoneCallState.h',
+	'include/EnumPhoneLineState.h',
+	'include/SipWrapper.h',
+	'include/SipWrapperFactory.h'
+	'include/WebcamVideoFrame.h',
+]
+
+sources = [
+	'src/SipWrapperFactory.cpp',
+]
+
+env.WengoUseLibraries(libs)
+env.WengoAddIncludePath(include_path)
+env.WengoStaticLibrary('sipwrapper', sources, headers)
 
 env.WengoAddDoxyfile()
 env.SConscript(dirs = projects)

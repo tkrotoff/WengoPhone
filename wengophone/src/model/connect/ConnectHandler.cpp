@@ -19,13 +19,13 @@
 
 #include "ConnectHandler.h"
 
-#include <model/connect/Connect.h>
 #include <model/WengoPhone.h>
-#include <model/imwrapper/IMAccount.h>
-#include <model/imwrapper/EnumIMProtocol.h>
+#include <model/connect/Connect.h>
 #include <model/presence/Presence.h>
 #include <model/presence/PresenceHandler.h>
 
+#include <IMAccount.h>
+#include <EnumIMProtocol.h>
 #include <Logger.h>
 
 using namespace std;

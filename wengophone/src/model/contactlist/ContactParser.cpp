@@ -20,12 +20,13 @@
 #include "ContactParser.h"
 
 #include "Contact.h"
+
 #include <model/WengoPhoneLogger.h>
 #include <model/WengoPhone.h>
 #include <model/presence/PresenceHandler.h>
-#include <model/imwrapper/IMAccountHandler.h>
-#include <model/imwrapper/IMContact.h>
 
+#include <IMAccountHandler.h>
+#include <IMContact.h>
 #include <tinyxml.h>
 
 ContactParser::ContactParser(Contact & contact, const std::string & data) {
