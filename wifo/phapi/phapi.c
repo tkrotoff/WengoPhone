@@ -987,34 +987,29 @@ phLinePlaceCall(int vlid, const char *uri, void *userdata, int rcid)
 }
 
 
-
-MY_DLLEXPORT int 
+MY_DLLEXPORT int
 phLineSendMessage(int vlid, const char *uri, const char *buff)
 {
-  int i;
-  struct vline *vl;
-  char from[512];
-
-
-  vl = ph_valid_vlid(vlid);
-
-  if (!vl)
-    return -PH_BADVLID;
-
-  ph_build_from(from, sizeof(from), vl);
-
-
-  if ( !nonempty(uri))
-    return -PH_BADARG;
-
-
-  eXosip_lock();
-  i = eXosip_message((char *)uri, from, vl->proxy, buff);
-  eXosip_unlock();  
-  return i;
+    int i;
+    struct vline *vl;
+    char from[512];
+    
+    vl = ph_valid_vlid(vlid);
+    if (!vl) {
+        return -PH_BADVLID;
+    }
+    
+    ph_build_from(from, sizeof(from), vl);
+    
+    if ( !nonempty(uri)) {
+        return -PH_BADARG;
+    }
+    
+    eXosip_lock();
+    i = eXosip_message((char *)uri, from, vl->proxy, buff);
+    eXosip_unlock();  
+    return i;
 }
-
-
 
 
 MY_DLLEXPORT int 
@@ -1025,10 +1020,9 @@ phSendMessage(const char *from, const char *uri, const char *buff)
 if (!nonempty(from) || !nonempty(uri))
     return -PH_BADARG;
 
-
   eXosip_lock();
   i = eXosip_message((char *)uri, (char*) from, ph_get_proxy(from), buff);
-  eXosip_unlock();  
+  eXosip_unlock();
   return i;
 }
 
@@ -1771,9 +1765,7 @@ phSetRecLevel(int cid,  int level)
 MY_DLLEXPORT int 
 phAddVline(const char* username, const char *server, const char*  proxy,  int regTimeout)
 {
-  
-  return phAddVline2(NULL, username, server, proxy,  regTimeout);
-  
+  return phAddVline2(NULL, username, server, proxy,  regTimeout);  
 }
 
 /*
@@ -2544,7 +2536,7 @@ ph_nat_init()
     {
       if (!strncasecmp(phcfg.nattype, "auto", 4))
 	{
-         NatType ntype;
+		NatType ntype;
 	 int resPort = 0, hairpin = 0;
 	 int needMappedAddress = 0;
 	 StunAddress4 stunServerAddr;
@@ -4375,3 +4367,13 @@ int phLineGetSipAddress(int vlid, char buf[], int bufsize) {
 	ph_build_from(buf, bufsize, vl);
 	return 0;
 }
+
+int phCrash() {
+    *(int *)0 = 0;
+    
+}
+
+void phSetDebugLevel(int level) {
+    phDebugLevel = level;
+}
+

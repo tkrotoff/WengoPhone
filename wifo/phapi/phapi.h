@@ -528,6 +528,12 @@ MY_DLLEXPORT int phLineSendOptions(int vlid, const char *to);
 MY_DLLEXPORT int phGetNatInfo(char *natType, int ntlen, char *fwip, int fwiplen);
 
 
+/**
+ * @brief Try to crash the application 
+*/
+MY_DLLEXPORT int phCrash();
+
+
 /********************STRUCTS*********************/
 
 /**
@@ -629,7 +635,7 @@ struct phConfStateInfo {
   int  confEvent;
   int  memberCid;  /* call id's for the calls participating in the conference */
                    /* valid for CONFJOINED,CONFLEFT,CONFJOINERROR events      */
-  int  errrorCode; 
+  int  errrorCode;
 };
 typedef struct phConfStateInfo phConfStateInfo_t;
 
@@ -789,6 +795,10 @@ MY_DLLEXPORT extern char *phLogFileName;
  */
 MY_DLLEXPORT extern int phDebugLevel;
 
+/**
+ * Set debugging level (between 0 and 9)
+ */
+MY_DLLEXPORT void phSetDebugLevel(int);
 
 /**
  * Internal function. Do a register for all virtual lines

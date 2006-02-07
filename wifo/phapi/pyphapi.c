@@ -28,42 +28,50 @@
 /*
  *  TODO:
  *
- *  - phAcceptCall3
- *  - sendDTMF
  *  - play/stop soundfile
  *  - rec/speaker set volume
  *  - getNatInfo
  *  - conference functions
  *
- *  - phCallStateEvent
- *  - phMsgEvent
- *  - phSubscriptionEvent
- *
  */
  
-#ifdef WIN32
+#include "phglobal.h"
+ 
+#ifdef OS_WINDOWS
 #undef DEBUG
 #undef _DEBUG
+
+#include <windows.h>
+#include <shlwapi.h>
+
+static void (*userNotify)(char *buf, int size);
+LONG unhandledExceptionFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
+    userNotify(NULL, NULL);
+    return 0;
+}
+
 #endif
 
 #include <Python.h>
 #include <phapi.h>
 
-static void pyphapi_callback_callProgress(int cid,
-    const phCallStateInfo_t *info);
-
-static void pyphapi_callback_registerProgress(int cid, int regStatus);
+static void pyphapi_callback_callProgress(int cid, 
+                const phCallStateInfo_t *info);
+static void pyphapi_callback_registerProgress(int cid, 
+                int regStatus);
 static void pyphapi_callback_transferProgress(int cid,
                 const phTransferStateInfo_t *info);
 static void pyphapi_callback_confProgress(int cfid,
                 const phConfStateInfo_t *info);
-static void pyphapi_callback_msgProgress(int mid,const phMsgStateInfo_t *info);
-static void pyphapi_callback_onNotify(const char* event, const char* from,
-                const char* content);
+static void pyphapi_callback_msgProgress(int mid,
+                const phMsgStateInfo_t *info);
+static void pyphapi_callback_onNotify(const char* event, 
+                const char* from, const char* content);
 static void pyphapi_callback_subscriptionProgress(int sid,
                 const phSubscriptionStateInfo_t *info);
 static void pyphapi_callback_errorNotify(enum phErrors error);
-static void pyphapi_callback_frameDisplay(int cid, phVideoFrameReceivedEvent_t *ev);
+static void pyphapi_callback_frameDisplay(int cid, 
+                phVideoFrameReceivedEvent_t *ev);
 
 static phCallbacks_t pyphapi_callbacks = {
     pyphapi_callback_callProgress,
@@ -91,9 +99,9 @@ static PyObject *pyphapi_errorNotify = NULL;
  * @brief Initializes the module
  *
  */
-
 static PyObject * pyphapi(PyObject* self) {
     PyEval_InitThreads();
+        
     return Py_BuildValue("s","");
 }
 
@@ -101,8 +109,8 @@ static PyObject * pyphapi(PyObject* self) {
  * @brief Wraps phInit()
  *
  */
-
 static PyObject * PyPhInit(PyObject * self, PyObject * params) {
+    
     char * server;
     int asyncmode;
     int ret;
@@ -118,8 +126,6 @@ static PyObject * PyPhInit(PyObject * self, PyObject * params) {
     cfg->nat_refresh_time = 30;
     cfg->use_tunnel = 0;
 
-    strncpy(cfg->audio_codecs, "ILBC/8000,AMR-WB/16000,SPEEX/16000,SPEEX/8000,PCMU/8000,PCMA/8000,GSM/8000", 128);
-	
     if (PyArg_ParseTuple(params, "si", &server, &asyncmode)) {
         ret = phInit(&pyphapi_callbacks, server, asyncmode);
     }
@@ -131,7 +137,6 @@ static PyObject * PyPhInit(PyObject * self, PyObject * params) {
  * @brief Wraps phAddAuthInfo()
  *
  */
-
 static PyObject * PyPhAddAuthInfo(PyObject *self, PyObject *params) {
     const char *username;
     const char *userid;
@@ -155,7 +160,6 @@ static PyObject * PyPhAddAuthInfo(PyObject *self, PyObject *params) {
  * @brief phAddVline
  *
  */
-
 static PyObject * PyPhAddVline(PyObject *self, PyObject *params) {
     const char *username;
     const char *host;
@@ -174,12 +178,10 @@ static PyObject * PyPhAddVline(PyObject *self, PyObject *params) {
     return Py_BuildValue("i", ret);
 }
 
-
 /*
  * @brief phTunnelConfig
  *
  */
-
 static PyObject * PyPhTunnelConfig(PyObject *self, PyObject *params) {
     const char *http_proxy;
     const char *httpt_server;
@@ -207,12 +209,10 @@ static PyObject * PyPhTunnelConfig(PyObject *self, PyObject *params) {
     return Py_BuildValue("i", ret);
 }
 
-
 /*
  * @brief phAddVline2
  *
  */
-
 static PyObject * PyPhAddVline2(PyObject *self, PyObject *params) {
     const char *displayname;
     const char *username;
@@ -237,13 +237,10 @@ static PyObject * PyPhAddVline2(PyObject *self, PyObject *params) {
     return Py_BuildValue("i", ret);
 }
 
-
-
 /*
  * @brief Wraps phPoll()
  *
  */
-
 static PyObject * PyPhPoll(PyObject *self, PyObject *params) {
     int ret;
 
@@ -255,7 +252,6 @@ static PyObject * PyPhPoll(PyObject *self, PyObject *params) {
  * @brief Wraps phRefresh()
  *
  */
-
 static PyObject * PyPhRefresh(PyObject *self, PyObject *params) {
     phRefresh();
     return Py_None;
@@ -265,18 +261,15 @@ static PyObject * PyPhRefresh(PyObject *self, PyObject *params) {
  * @brief Wraps phTerminate()
  *
  */
-
 static PyObject * PyPhTerminate(PyObject *self, PyObject *params) {
     phTerminate();
     return Py_None;
 }
 
-
 /*
  * @brief Wraps phLinePlaceCall2()
  *
  */
-
 static PyObject * PyPhLinePlaceCall2(PyObject *self, PyObject *params) {
     const char *uri;
     int rcid;
@@ -296,7 +289,6 @@ static PyObject * PyPhLinePlaceCall2(PyObject *self, PyObject *params) {
  * @brief Wraps phLineSendOptions
  *
  */
-
 static PyObject * PyPhLineSendOptions(PyObject *self, PyObject *params) {
     int vlid;
     int ret;
@@ -313,7 +305,6 @@ static PyObject * PyPhLineSendOptions(PyObject *self, PyObject *params) {
  * @brief Wraps phLineSendMessage()
  *
  */
-
 static PyObject * PyPhLineSendMessage(PyObject *self, PyObject *params) {
     int vlid;
     int ret;
@@ -331,7 +322,6 @@ static PyObject * PyPhLineSendMessage(PyObject *self, PyObject *params) {
  * @brief Wraps phLinePublish()
  *
  */
-
 static PyObject * PyPhLinePublish(PyObject *self, PyObject *params) {
     int vlid;
     int ret;
@@ -351,7 +341,6 @@ static PyObject * PyPhLinePublish(PyObject *self, PyObject *params) {
  * @brief Wraps phLineSubscribe
  *
  */
-
 static PyObject * PyPhLineSubscribe(PyObject *self, PyObject *params) {
     int vlid;
     int ret;
@@ -369,7 +358,6 @@ static PyObject * PyPhLineSubscribe(PyObject *self, PyObject *params) {
  * @brief Wraps phLineSetFollowMe
  *
  */
-
 static PyObject * PyPhLineSetFollowMe(PyObject *self, PyObject *params) {
     int vlid;
     int ret;
@@ -386,7 +374,6 @@ static PyObject * PyPhLineSetFollowMe(PyObject *self, PyObject *params) {
  * @brief Wraps phLineSetBusy
  *
  */
-
 static PyObject * PyPhLineSetBusy(PyObject *self, PyObject *params) {
     int vlid;
     int ret;
@@ -399,12 +386,10 @@ static PyObject * PyPhLineSetBusy(PyObject *self, PyObject *params) {
     return Py_BuildValue("i", ret);
 }
 
-
 /*
  * @brief Wraps phAcceptCall2()
  *
  */
-
 static PyObject * PyPhAcceptCall2(PyObject *self, PyObject *params) {
     int cid;
     int ret;
@@ -417,12 +402,10 @@ static PyObject * PyPhAcceptCall2(PyObject *self, PyObject *params) {
     return Py_BuildValue("i", ret);
 }
 
-
 /*
  * @brief Wraps phAcceptCall3()
  *
  */
-
 static PyObject * PyPhAcceptCall3(PyObject *self, PyObject *params) {
     int cid;
     int ret;
@@ -436,12 +419,10 @@ static PyObject * PyPhAcceptCall3(PyObject *self, PyObject *params) {
     return Py_BuildValue("i", ret);
 }
 
-
 /*
  * @brief Wraps phRejectCall()
  *
  */
-
 static PyObject * PyPhRejectCall(PyObject *self, PyObject *params) {
     int cid;
     int reason;
@@ -458,7 +439,6 @@ static PyObject * PyPhRejectCall(PyObject *self, PyObject *params) {
  * @brief Wraps phRingingCall()
  *
  */
-
 static PyObject * PyPhRingingCall(PyObject *self, PyObject *params) {
     int cid;
     int ret;
@@ -474,7 +454,6 @@ static PyObject * PyPhRingingCall(PyObject *self, PyObject *params) {
  * @brief Wraps phCloseCall()
  *
  */
-
 static PyObject * PyPhCloseCall(PyObject *self, PyObject *params) {
     int cid;
     int ret;
@@ -490,7 +469,6 @@ static PyObject * PyPhCloseCall(PyObject *self, PyObject *params) {
  * @brief Wraps phSendMessage()
  *
  */
-
 static PyObject * PyPhSendMessage(PyObject *self, PyObject *params) {
     const char *from;
     const char *uri;
@@ -508,7 +486,6 @@ static PyObject * PyPhSendMessage(PyObject *self, PyObject *params) {
  * @brief Wraps phSubscribe()
  *
  */
-
 static PyObject * PyPhSubscribe(PyObject *self, PyObject *params) {
     const char *from;
     const char *to;
@@ -526,7 +503,6 @@ static PyObject * PyPhSubscribe(PyObject *self, PyObject *params) {
  * @brief Wraps phPublish()
  *
  */
-
 static PyObject * PyPhPublish(PyObject *self, PyObject *params) {
     const char *from;
     const char *to;
@@ -547,7 +523,6 @@ static PyObject * PyPhPublish(PyObject *self, PyObject *params) {
  * @brief Wraps phDelVline
  *
  */
-
 static PyObject * PyPhDelVline(PyObject *self, PyObject *params) {
     int vlid;
     int ret;
@@ -564,7 +539,6 @@ static PyObject * PyPhDelVline(PyObject *self, PyObject *params) {
  * @brief Wraps phTransferCall
  *
  */
-
 static PyObject * PyPhTransferCall(PyObject *self, PyObject *params) {
     int cid;
     int targetCid;
@@ -577,12 +551,10 @@ static PyObject * PyPhTransferCall(PyObject *self, PyObject *params) {
     return Py_BuildValue("i", ret);
 }
 
-
 /*
  * @brief Wraps phBlindTransferCall
  *
  */
-
 static PyObject * PyPhBlindTransferCall(PyObject *self, PyObject *params) {
     int cid;
     char * uri;
@@ -599,7 +571,6 @@ static PyObject * PyPhBlindTransferCall(PyObject *self, PyObject *params) {
  * @brief Wraps phResumeCall
  *
  */
-
 static PyObject * PyPhResumeCall(PyObject *self, PyObject *params) {
     int cid;
     int ret;
@@ -610,7 +581,6 @@ static PyObject * PyPhResumeCall(PyObject *self, PyObject *params) {
 
     return Py_BuildValue("i", ret);
 }
-
 
 /*
  * @brief Wraps phHoldCall
@@ -659,6 +629,54 @@ static PyObject * PyPhChangeAudioDevices(PyObject *self, PyObject *params) {
 	return Py_BuildValue("i", ret);
 }
 
+/*
+ * @brief Wraps phCrash
+ *
+ */
+static PyObject * PyPhCrash(PyObject *self, PyObject *params) {
+	int ret;
+	ret = phCrash();
+	return Py_BuildValue("i", ret);
+}
+
+/*
+ * @brief Wraps phSetDebugLevel
+ *
+ */
+static PyObject * PyPhSetDebugLevel(PyObject *self, PyObject *params) {
+    int level;
+
+    if (PyArg_ParseTuple(params, "i", &level)) {
+        phSetDebugLevel(level);
+    }
+    
+    return Py_None;
+}
+
+/*
+ * @brief Wraps" phGetNatInfo
+ *
+ */
+static PyObject * PyPhGetNatInfo(PyObject *self, PyObject *params) {
+    char * arg;
+    char nattype[8];
+    char firewallip[16];
+    int ret;
+    
+    ret = phGetNatInfo(nattype, 8, firewallip, 16);
+    if( !ret ) {
+    
+        if (PyArg_ParseTuple(params, "s", &arg)) {
+            if(strcmp(arg, "type" ) == 0) {
+                return Py_BuildValue("s", nattype);
+            }
+            if(strcmp(arg, "firewall" ) == 0) {
+                return Py_BuildValue("s", firewallip);
+            }
+        }
+    }
+    return Py_None;
+}
 
 /*
  * This function initialize the python callbacks functions that will
@@ -671,15 +689,26 @@ static PyObject * PyPhChangeAudioDevices(PyObject *self, PyObject *params) {
  *      regProgress
  *
  */
-
 static PyObject * PyPhSetCallbacks(PyObject *self, PyObject *args) {
     PyObject *result = NULL;
     PyObject *callback_call_progress;
     PyObject *callback_reg_progress;
+    PyObject *callback_error_notify;
+    PyObject *callback_transfer_progress;
+    PyObject *callback_conf_progress;
+    PyObject *callback_msg_progress;
+    PyObject *callback_on_notify;
+    PyObject *callback_subscription_progress;
     
-    if (PyArg_ParseTuple(args, "OO",
+    if (PyArg_ParseTuple(args, "OOOOOOOO",
                 &callback_call_progress,
-                &callback_reg_progress)) {
+                &callback_reg_progress,
+                &callback_error_notify,
+                &callback_transfer_progress,
+                &callback_conf_progress,
+                &callback_msg_progress,
+                &callback_on_notify,
+                &callback_subscription_progress)) {
 
         if (!PyCallable_Check(callback_reg_progress)) {
             PyErr_SetString(PyExc_TypeError, "parameter must be callable");
@@ -692,9 +721,33 @@ static PyObject * PyPhSetCallbacks(PyObject *self, PyObject *args) {
         Py_XINCREF(callback_call_progress);
         Py_XDECREF(pyphapi_callProgress);
 
+        Py_XINCREF(callback_error_notify);
+        Py_XDECREF(pyphapi_errorNotify);
+
+        Py_XINCREF(callback_transfer_progress);
+        Py_XDECREF(pyphapi_transferProgress);
+        
+        Py_XINCREF(callback_conf_progress);
+        Py_XDECREF(pyphapi_confProgress);
+
+        Py_XINCREF(callback_msg_progress);
+        Py_XDECREF(pyphapi_msgProgress);
+
+        Py_XINCREF(callback_on_notify);
+        Py_XDECREF(pyphapi_onNotify);
+
+        Py_XINCREF(callback_subscription_progress);
+        Py_XDECREF(pyphapi_subscriptionProgress);
+        
         Py_INCREF(Py_None);
         pyphapi_registerProgress = callback_reg_progress;
         pyphapi_callProgress = callback_call_progress;
+        pyphapi_errorNotify = callback_error_notify;
+        pyphapi_transferProgress = callback_transfer_progress;
+        pyphapi_confProgress = callback_conf_progress;
+        pyphapi_msgProgress = callback_msg_progress;
+        pyphapi_onNotify = callback_on_notify;
+        pyphapi_subscriptionProgress = callback_subscription_progress;
         result = Py_None;
     }
 
@@ -712,7 +765,6 @@ static PyObject * PyPhSetCallbacks(PyObject *self, PyObject *args) {
  * @param   args        The arguments to pass to the function
  *
  */
-
 void pyphapi_lock_and_call(PyObject *callback, PyObject *args) {
     PyGILState_STATE gstate;
 
@@ -728,11 +780,10 @@ void pyphapi_lock_and_call(PyObject *callback, PyObject *args) {
  * callProgress() phapi's C callback
  *
  */
-
 void pyphapi_callback_callProgress(int cid, const phCallStateInfo_t *info) {
     PyObject *call_info;
     
-    call_info = Py_BuildValue("(ii)", cid, 0);
+    call_info = Py_BuildValue("(ii)", cid, info->event);
     pyphapi_lock_and_call(pyphapi_callProgress, call_info);
 }
 
@@ -740,12 +791,11 @@ void pyphapi_callback_callProgress(int cid, const phCallStateInfo_t *info) {
  * transferProgress() phapi's C callback
  *
  */
-
 void pyphapi_callback_transferProgress(int cid,
                 const phTransferStateInfo_t *info) {
     PyObject *transfer_info;
 
-    transfer_info = Py_BuildValue("(i)", cid);
+    transfer_info = Py_BuildValue("(ii)", cid, 0);
     pyphapi_lock_and_call(pyphapi_transferProgress, transfer_info);
 }
 
@@ -753,12 +803,11 @@ void pyphapi_callback_transferProgress(int cid,
  * confProgress() phapi's C callback
  *
  */
-
 void pyphapi_callback_confProgress(int cfid,
                 const phConfStateInfo_t *info) {
     PyObject *conf_info;
 
-    conf_info = Py_BuildValue("(i)", cfid);
+    conf_info = Py_BuildValue("(iiii)", cfid, info->confEvent, info->memberCid, info->errrorCode);
     pyphapi_lock_and_call(pyphapi_confProgress, conf_info);
 }
 
@@ -766,19 +815,18 @@ void pyphapi_callback_confProgress(int cfid,
  * msgProgress() phapi's C callback
  *
  */
-
 void pyphapi_callback_msgProgress(int mid,const phMsgStateInfo_t *info) {
     PyObject *msg_info;
-
+            
     msg_info = Py_BuildValue("(iiisssss)",
                     mid,
-                    &info->event,
-                    &info->status,
-                    &info->from,
-                    &info->to,
-                    &info->ctype,
-                    &info->subtype,
-                    &info->content);
+                    info->event,
+                    info->status,
+                    info->from,
+                    info->to,
+                    info->ctype,
+                    info->subtype,
+                    info->content);
 
     pyphapi_lock_and_call(pyphapi_msgProgress, msg_info);
 }
@@ -787,7 +835,6 @@ void pyphapi_callback_msgProgress(int mid,const phMsgStateInfo_t *info) {
  * onNotify() phapi's C callback
  *
  */
-
 void pyphapi_callback_onNotify(const char* event, const char* from,
                 const char* content) {
     PyObject *notify_info;
@@ -800,12 +847,11 @@ void pyphapi_callback_onNotify(const char* event, const char* from,
  * subscriptionProgress() phapi's C callback
  *
  */
-
 void pyphapi_callback_subscriptionProgress(int sid,
                 const phSubscriptionStateInfo_t *info) {
     PyObject *sub_info;
 
-    sub_info = Py_BuildValue("(i)", sid);
+    sub_info = Py_BuildValue("(iiiss)", sid, info->event, info->status, info->from, info->to);
     pyphapi_lock_and_call(pyphapi_subscriptionProgress, sub_info);
 }
 
@@ -813,7 +859,6 @@ void pyphapi_callback_subscriptionProgress(int sid,
  * errorNotify() phapi's C callback
  *
  */
-
 void pyphapi_callback_errorNotify(enum phErrors error) {
     PyObject *err_info;
 
@@ -825,7 +870,6 @@ void pyphapi_callback_errorNotify(enum phErrors error) {
  * registerProgress() phapi's C callback
  *
  */
-
 static void pyphapi_callback_registerProgress(int cid, int regStatus) {
     PyObject *reg_info;
 
@@ -833,55 +877,73 @@ static void pyphapi_callback_registerProgress(int cid, int regStatus) {
     pyphapi_lock_and_call(pyphapi_registerProgress, reg_info);
 }
 
+/*
+ * frameDisplay() phapi's C callback
+ *
+ */
 static void pyphapi_callback_frameDisplay(int cid, phVideoFrameReceivedEvent_t *ev) {
 }
 
+/*
+ * @brief wrap access to phcfg
+ *
+ */
+static PyObject * PyPhCfgSetS(PyObject *self, PyObject *params) {
+    char * field;
+    int value_int;
+    char * value_string;
+    phConfig_t *cfg;
+    
+    cfg = phGetConfig();
+    
+    if (PyArg_ParseTuple(params, "ss", &field, &value_string)) {
+        if( strcmp(field, "local_rtp_port" )==0) {strncpy(cfg->local_rtp_port, value_string,16);}
+        if( strcmp(field, "local_audio_rtcp_port" )==0) {strncpy(cfg->local_audio_rtcp_port, value_string,16);}
+        if( strcmp(field, "local_video_rtp_port" )==0) {strncpy(cfg->local_video_rtp_port, value_string,16);}
+        if( strcmp(field, "local_video_rtcp_port" )==0) {strncpy(cfg->local_video_rtcp_port, value_string,16);}
+        if( strcmp(field, "sipport" )==0) {strncpy(cfg->sipport, value_string,16);}
+        if( strcmp(field, "nattype" )==0) {strncpy(cfg->nattype, value_string,16);}
+        if( strcmp(field, "audio_codecs" )==0) {strncpy(cfg->audio_codecs, value_string,128);}
+        if( strcmp(field, "video_codecs" )==0) {strncpy(cfg->video_codecs, value_string,128);}
+        if( strcmp(field, "audio_dev" )==0) {strncpy(cfg->audio_dev, value_string,64);}
+        if( strcmp(field, "stunserver" )==0) {strncpy(cfg->stunserver, value_string,128);}
+        if( strcmp(field, "httpt_server" )==0) {strncpy(cfg->httpt_server, value_string,128);}
+        if( strcmp(field, "http_proxy" )==0) {strncpy(cfg->http_proxy, value_string,128);}
+        if( strcmp(field, "http_proxy_user" )==0) {strncpy(cfg->http_proxy_user, value_string,128);}
+        if( strcmp(field, "http_proxy_passwd" )==0) {strncpy(cfg->http_proxy_passwd, value_string,128);}
+        if( strcmp(field, "plugin_path" )==0) {strncpy(cfg->plugin_path, value_string,256);}
+    }
+    return Py_None;
+}
 
-static PyObject * PyPhCfgSet(PyObject *self, PyObject *params) {
-	char * field;
-	int value_int;
-	char * value_string;
-	phConfig_t *cfg;
-	
-	cfg = phGetConfig();
-	
-	if (PyArg_ParseTuple(params, "si", &field, &value_int)) {
-		
-		if( strcmp(field, "asyncmode" ) == 0) {cfg->asyncmode=value_int;}
-		if( strcmp(field, "nomedia" ) == 0) {cfg->nomedia=value_int;}
-		if( strcmp(field, "noaec" ) == 0) {cfg->noaec=value_int;}
-		if( strcmp(field, "vad" ) == 0) {cfg->vad=value_int;}
-		if( strcmp(field, "cng" ) == 0) {cfg->cng=value_int;}
-		if( strcmp(field, "hdxmode" ) == 0) {cfg->hdxmode=value_int;}
-		if( strcmp(field, "nat_refresh_time" ) == 0) {cfg->nat_refresh_time=value_int;}
-		if( strcmp(field, "jitterdepth" ) == 0) {cfg->jitterdepth=value_int;}
-		if( strcmp(field, "autoredir" ) == 0) {cfg->autoredir=value_int;}
-		if( strcmp(field, "use_tunnel" ) == 0) {cfg->use_tunnel=value_int;}
-		if( strcmp(field, "httpt_server_port" ) == 0) {cfg->httpt_server_port=value_int;}
-		if( strcmp(field, "http_proxy_port" ) == 0) {cfg->http_proxy_port=value_int;}
-	}
-	
-	if (PyArg_ParseTuple(params, "ss", &field, &value_string)) {
-		
-		if( strcmp(field, "audio_dev" )==0) {strncpy(cfg->audio_dev, value_string,64);}
-		if( strcmp(field, "local_rtp_port" )==0) {strncpy(cfg->local_rtp_port, value_string,16);}
-		if( strcmp(field, "local_audio_rtcp_port" )==0) {strncpy(cfg->local_audio_rtcp_port, value_string,16);}
-		if( strcmp(field, "local_video_rtp_port" )==0) {strncpy(cfg->local_video_rtp_port, value_string,16);}
-		if( strcmp(field, "local_video_rtcp_port" )==0) {strncpy(cfg->local_video_rtcp_port, value_string,16);}
-		if( strcmp(field, "sipport" )==0) {strncpy(cfg->sipport, value_string,16);}
-		if( strcmp(field, "nattype" )==0) {strncpy(cfg->nattype, value_string,16);}
-		if( strcmp(field, "audio_codecs" )==0) {strncpy(cfg->audio_codecs, value_string,128);}
-		if( strcmp(field, "video_codecs" )==0) {strncpy(cfg->video_codecs, value_string,128);}
-		if( strcmp(field, "audio_dev" )==0) {strncpy(cfg->audio_dev, value_string,64);}
-		if( strcmp(field, "stunserver" )==0) {strncpy(cfg->stunserver, value_string,128);}
-		if( strcmp(field, "httpt_server" )==0) {strncpy(cfg->httpt_server, value_string,128);}
-		if( strcmp(field, "http_proxy" )==0) {strncpy(cfg->http_proxy, value_string,128);}
-		if( strcmp(field, "http_proxy_user" )==0) {strncpy(cfg->http_proxy_user, value_string,128);}
-		if( strcmp(field, "http_proxy_passwd" )==0) {strncpy(cfg->http_proxy_passwd, value_string,128);}
-		if( strcmp(field, "plugin_path" )==0) {strncpy(cfg->plugin_path, value_string,256);}
-	}
-	
-	return Py_None;
+
+/*
+ * @brief wrap access to phcfg
+ *
+ */
+static PyObject * PyPhCfgSetI(PyObject *self, PyObject *params) {
+    char * field;
+    int value_int;
+    char * value_string;
+    phConfig_t *cfg;
+    
+    cfg = phGetConfig();
+    
+    if (PyArg_ParseTuple(params, "si", &field, &value_int)) {
+        if( strcmp(field, "asyncmode" ) == 0) {cfg->asyncmode=value_int;}
+        if( strcmp(field, "nomedia" ) == 0) {cfg->nomedia=value_int;}
+        if( strcmp(field, "noaec" ) == 0) {cfg->noaec=value_int;}
+        if( strcmp(field, "vad" ) == 0) {cfg->vad=value_int;}
+        if( strcmp(field, "cng" ) == 0) {cfg->cng=value_int;}
+        if( strcmp(field, "hdxmode" ) == 0) {cfg->hdxmode=value_int;}
+        if( strcmp(field, "nat_refresh_time" ) == 0) {cfg->nat_refresh_time=value_int;}
+        if( strcmp(field, "jitterdepth" ) == 0) {cfg->jitterdepth=value_int;}
+        if( strcmp(field, "autoredir" ) == 0) {cfg->autoredir=value_int;}
+        if( strcmp(field, "use_tunnel" ) == 0) {cfg->use_tunnel=value_int;}
+        if( strcmp(field, "httpt_server_port" ) == 0) {cfg->httpt_server_port=value_int;}
+        if( strcmp(field, "http_proxy_port" ) == 0) {cfg->http_proxy_port=value_int;}
+    }
+    return Py_None;
 }
 
 
@@ -890,7 +952,6 @@ static PyObject * PyPhCfgSet(PyObject *self, PyObject *params) {
  * the module's API table
  *
  */
-
 #define PY_PHAPI_FUNCTION_DECL(n,f) \
     { n, (PyCFunction) f, METH_VARARGS, "" }
 
@@ -901,7 +962,6 @@ static PyObject * PyPhCfgSet(PyObject *self, PyObject *params) {
  * Declaration of the module API table
  *
  */
-
 static PyMethodDef pyphapi_funcs[] = {
     { "pyphapi",(PyCFunction) pyphapi, METH_NOARGS,  "Python Module of phApi"},
     PY_PHAPI_FUNCTION_DECL("phInit",                PyPhInit),
@@ -933,9 +993,14 @@ static PyMethodDef pyphapi_funcs[] = {
     PY_PHAPI_FUNCTION_DECL("phBlindTransferCall",   PyPhBlindTransferCall),
     PY_PHAPI_FUNCTION_DECL("phResumeCall",          PyPhResumeCall),
     PY_PHAPI_FUNCTION_DECL("phHoldCall",            PyPhHoldCall),
-    PY_PHAPI_FUNCTION_DECL("phCfgSet",              PyPhCfgSet),
+    PY_PHAPI_FUNCTION_DECL("phCfgSetS",             PyPhCfgSetS),
+    PY_PHAPI_FUNCTION_DECL("phCfgSetI",             PyPhCfgSetI),
     PY_PHAPI_FUNCTION_DECL("phSendDtmf",            PyPhSendDtmf),
     PY_PHAPI_FUNCTION_DECL("phChangeAudioDevices",  PyPhChangeAudioDevices),
+    PY_PHAPI_FUNCTION_DECL("phCrash",               PyPhCrash),
+    PY_PHAPI_FUNCTION_DECL("phSetDebugLevel",       PyPhSetDebugLevel),
+    PY_PHAPI_FUNCTION_DECL("phGetNatInfo",          PyPhGetNatInfo),
+    
     PY_PHAPI_FUNCTION_DECL_NULL,
 };
 
@@ -943,7 +1008,7 @@ static PyMethodDef pyphapi_funcs[] = {
  * Function called on import
  *
  */
-
 PyMODINIT_FUNC initpyphapi(void) {
+    SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)unhandledExceptionFilter);
     Py_InitModule3("pyphapi", pyphapi_funcs, "");
 }
