@@ -19,14 +19,14 @@
 
 #include "QtChatWidget.h"
 
-#include <model/imwrapper/IMContact.h>
-#include <model/imwrapper/IMChatSession.h>
 #include <control/chat/CChatHandler.h>
 
 #include <QLineEdit>
 #include <QListWidget>
 #include <QPushButton>
 
+#include <IMContact.h>
+#include <IMChatSession.h>
 #include <WidgetFactory.h>
 #include <Object.h>
 #include <Logger.h>

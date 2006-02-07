@@ -21,9 +21,9 @@
 
 #include <model/WengoPhone.h>
 #include <model/presence/PresenceHandler.h>
-#include <model/imwrapper/IMAccountHandler.h>
-#include <model/imwrapper/IMContact.h>
 
+#include <IMAccountHandler.h>
+#include <IMContact.h>
 #include <WidgetFactory.h>
 #include <Object.h>
 

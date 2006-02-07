@@ -20,9 +20,9 @@
 #ifndef PCHATHANDLER_H
 #define PCHATHANDLER_H
 
-#include <model/imwrapper/IMChat.h>
 #include <presentation/Presentation.h>
 
+#include <IMChat.h>
 #include <NonCopyable.h>
 #include <Event.h>
 

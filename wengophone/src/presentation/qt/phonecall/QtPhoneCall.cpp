@@ -19,13 +19,16 @@
 
 #include "QtPhoneCall.h"
 
-#include "model/WengoPhoneLogger.h"
-#include "control/phonecall/CPhoneCall.h"
-#include "control/CWengoPhone.h"
-#include "presentation/qt/QtWengoPhone.h"
-#include <model/sipwrapper/WebcamVideoFrame.h>
 #include "QtVideo.h"
 
+#include <presentation/qt/QtWengoPhone.h>
+
+#include <control/phonecall/CPhoneCall.h>
+#include <control/CWengoPhone.h>
+
+#include <model/WengoPhoneLogger.h>
+
+#include <WebcamVideoFrame.h>
 #include <WidgetFactory.h>
 #include <Object.h>
 

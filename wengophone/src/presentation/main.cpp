@@ -27,17 +27,17 @@
 	#include <presentation/qt/QtFactory.h>
 #endif
 
-#include <model/imwrapper/IMWrapperFactory.h>
-#include <model/sipwrapper/SipWrapperFactory.h>
+#include <IMWrapperFactory.h>
+#include <SipWrapperFactory.h>
 
 #ifdef PHAPIWRAPPER
-	#include <model/sipwrapper/phapi/PhApiFactory.h>
+	#include <PhApiFactory.h>
 #elif defined(SIPXWRAPPER)
-	#include <model/sipwrapper/sipx/SipXFactory.h>
-	#include <model/imwrapper/null/NullIMFactory.h>
+	#include <SipXFactory.h>
+	#include <NullIMFactory.h>
 #else
-	#include <model/sipwrapper/null/NullSipFactory.h>
-	#include <model/imwrapper/null/NullIMFactory.h>
+	#include <NullSipFactory.h>
+	#include <NullIMFactory.h>
 #endif
 
 #include <global.h>

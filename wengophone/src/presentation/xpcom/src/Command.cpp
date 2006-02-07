@@ -30,8 +30,8 @@
 #include <control/CWengoPhone.h>
 #include <model/WengoPhone.h>
 #include <model/contactlist/Contact.h>
-#include <model/imwrapper/IMWrapperFactory.h>
 
+#include <IMWrapperFactory.h>
 #include <SoundMixer.h>
 #include <AudioDevice.h>
 
@@ -40,13 +40,13 @@
 #endif
 
 #ifdef PHAPIWRAPPER
-	#include <model/sipwrapper/phapi/PhApiFactory.h>
+	#include <PhApiFactory.h>
 #elif defined(SIPXWRAPPER)
-	#include <model/sipwrapper/sipx/SipXFactory.h>
-	#include <model/imwrapper/null/NullIMFactory.h>
+	#include <SipXFactory.h>
+	#include <NullIMFactory.h>
 #else
-	#include <model/sipwrapper/null/NullSipFactory.h>
-	#include <model/imwrapper/null/NullIMFactory.h>
+	#include <NullSipFactory.h>
+	#include <NullIMFactory.h>
 #endif
 
 Command::Command(const std::string & configFilesPath) {
