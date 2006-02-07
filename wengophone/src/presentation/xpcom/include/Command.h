@@ -128,7 +128,7 @@ public:
 	int makeCall(const std::string & phoneNumber, int lineId);
 
 	/**
-	 * Raccrocher.
+	 * Hang up.
 	 *
 	 * Can correspond to reject or close call depending on PhoneCallState.
 	 *
@@ -137,14 +137,15 @@ public:
 	void hangUp(int callId);
 
 	/**
-	 * S'il est possible de raccrocher le telephone.
+	 * Used to determine if hang up is possible.
 	 *
 	 * @param callId phone call id
+	 * @returns true if it is possible to hang up the phone, false instead.
 	 */
 	bool canHangUp(int callId) const;
 
 	/**
-	 * Decrocher.
+	 * Pick up.
 	 *
 	 * Corresponds to accept call.
 	 *
@@ -153,9 +154,10 @@ public:
 	void pickUp(int callId);
 
 	/**
-	 * S'il est possible de decrocher le telephone.
+	 * Used to determine if it is possible to pick up the phone.
 	 *
 	 * @param callId phone call id
+	 * @returns true if it is possible to pick up the phone, false instead.
 	 */
 	bool canPickUp(int callId) const;
 
