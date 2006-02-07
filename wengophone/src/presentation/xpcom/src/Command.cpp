@@ -30,6 +30,8 @@
 #include <control/CWengoPhone.h>
 #include <model/WengoPhone.h>
 #include <model/contactlist/Contact.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 #include <IMWrapperFactory.h>
 #include <SoundMixer.h>
@@ -78,8 +80,11 @@ Command::Command(const std::string & configFilesPath) {
 	SipWrapperFactory::setFactory(sipFactory);
 	IMWrapperFactory::setFactory(imFactory);
 
-ConfigManager::getInstance().getCurrentConfig().set(Config::CODEC_PLUGIN_PATH,
-	 WengoPhone::getConfigFilesPath() + "../extensions/{debaffee-a972-4d8a-b426-8029170f2a89}/libraries/");
+	WengoPhone::CONFIG_FILES_PATH = configFilesPath;
+
+	//Codec plugin path (phspeexplugin and phamrplugin)
+	ConfigManager::getInstance().getCurrentConfig().set(Config::CODEC_PLUGIN_PATH,
+		WengoPhone::getConfigFilesPath() + "../extensions/{debaffee-a972-4d8a-b426-8029170f2a89}/libraries/");
 
 	_wengoPhone = new WengoPhone();
 	_cWengoPhone = new CWengoPhone(*_wengoPhone);
@@ -90,8 +95,6 @@ ConfigManager::getInstance().getCurrentConfig().set(Config::CODEC_PLUGIN_PATH,
 	} catch(Exception &) {
 		_soundMixer = NULL;
 	}
-
-	WengoPhone::CONFIG_FILES_PATH = configFilesPath;
 }
 
 Command::~Command() {

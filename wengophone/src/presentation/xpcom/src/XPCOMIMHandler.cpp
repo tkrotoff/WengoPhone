@@ -21,12 +21,12 @@
 
 #include "ListenerList.h"
 
-#include <model/imwrapper/IMWrapperFactory.h>
-#include <model/imwrapper/EnumIMProtocol.h>
-#include <model/imwrapper/IMAccount.h>
-#include <model/imwrapper/IMConnect.h>
-#include <model/imwrapper/IMChat.h>
-#include <model/imwrapper/IMPresence.h>
+#include <IMWrapperFactory.h>
+#include <EnumIMProtocol.h>
+#include <IMAccount.h>
+#include <IMConnect.h>
+#include <IMChat.h>
+#include <IMPresence.h>
 
 #include <model/phonecall/SipAddress.h>
 
@@ -42,9 +42,9 @@ void XPCOMIMHandler::connected() {
 	}
 
 	if (!_chat) {
-		_chat = IMWrapperFactory::getFactory().createIMChat(*_account);
+		/*_chat = IMWrapperFactory::getFactory().createIMChat(*_account);
 		_chat->messageReceivedEvent +=
-				boost::bind(&XPCOMIMHandler::messageReceivedEventHandler, this, _1, _2, _3);
+				boost::bind(&XPCOMIMHandler::messageReceivedEventHandler, this, _1, _2, _3);*/
 	}
 
 	if (!_presence) {
@@ -163,5 +163,6 @@ int XPCOMIMHandler::sendChatMessage(const std::string & sipAddress, const std::s
 		return 0;
 	}
 
-	return _chat->sendMessage(sipAddress, message);
+	//return _chat->sendMessage(sipAddress, message);
+	return 0;
 }

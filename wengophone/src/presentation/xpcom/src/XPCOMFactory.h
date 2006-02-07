@@ -90,18 +90,6 @@ public:
 		return NULL;
 	}
 
-	PIMHandler * createPresentationIMHandler(CIMHandler & cIMHandler) {
-		return NULL;
-	}
-
-	PChat * createPresentationChat(CChat & cChat) {
-		return NULL;
-	}
-
-	PPresence * createPresentationPresence(CPresence & cPresence) {
-		return NULL;
-	}
-
 	PConnectHandler * createPresentationConnectHandler(CConnectHandler & cConnectHandler) {
 		return NULL;
 	}

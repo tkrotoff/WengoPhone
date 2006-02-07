@@ -38,7 +38,7 @@ public:
 	void phoneCallStateChangedEvent(PhoneCallState state, int lineId, int callId,
 				const std::string & sipAddress, const std::string & userName, const std::string & displayName);
 
-	void videoFrameReceived(const VideoFrame & frame, const LocalWebcam & localWebcam) { }
+	void videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) { }
 
 	void updatePresentation() { }
 
