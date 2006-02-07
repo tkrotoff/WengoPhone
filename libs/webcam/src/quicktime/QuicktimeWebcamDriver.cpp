@@ -476,7 +476,7 @@ void QuicktimeWebcamDriver::frameBufferAvailable(piximage *image) {
 
 
 void QuicktimeWebcamDriver::logPixMap(PixMap *pm) {
-	LOG_DEBUG_C(string("\nPixMap:")
+	LOG_DEBUG(string("\nPixMap:")
 		+ "\n\tbaseAddr: " + String::fromNumber((unsigned)pm->baseAddr)
 		+ "\n\tPixMap?: " + String::fromNumber((short)(pm->rowBytes & 32768 ? 1 : 0))
 		+ "\n\tthe other bit: " + String::fromNumber((short)(pm->rowBytes & 65536 ? 1 : 0))
@@ -513,7 +513,7 @@ OSErr mySGDataProc(SGChannel c,
 	piximage *image;
 	
 	if(webcamDriver->_PGWorld) {
-		LOG_DEBUG_C("decompressing");
+		LOG_DEBUG("decompressing");
 		err = DecompressSequenceFrameS(webcamDriver->_decomSeq,
 					       p,
 					       len,
@@ -521,7 +521,7 @@ OSErr mySGDataProc(SGChannel c,
 					       &ignore,
 					       NULL);
 		if (err != noErr) {
-			LOG_ERROR_C("can't decompress sequence frame in GWorld");
+			LOG_ERROR("can't decompress sequence frame in GWorld");
 			return err;
 		}
 	}
@@ -535,7 +535,7 @@ OSErr mySGDataProc(SGChannel c,
 	unsigned rowBytes = pixmap->rowBytes & (((unsigned short) 0xFFFF) >> 2); // The tow first bits are flags
 	unsigned pixelSize = pixmap->pixelSize / 8; // Pixel size in bytes
 	unsigned lineOffset = rowBytes - image->width * pixelSize;
-	LOG_DEBUG_C("rowBytes: " + String::fromNumber(rowBytes)
+	LOG_DEBUG("rowBytes: " + String::fromNumber(rowBytes)
 		+ ", pixelSize: " + String::fromNumber(pixelSize)
 		+ ", lineOffset: " + String::fromNumber(lineOffset));
 	
