@@ -25,7 +25,7 @@
 
 QStringList StringListConvert::toQStringList(const StringList & strList) {
 	QStringList tmp;
-	for (int i = 0; i < strList.size(); i++) {
+	for (unsigned i = 0; i < strList.size(); i++) {
 		tmp += strList[i].c_str();
 	}
 	return tmp;
