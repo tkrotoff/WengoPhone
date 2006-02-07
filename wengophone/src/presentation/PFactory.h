@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ public:
 
 	virtual PChatHandler * createPresentationChatHandler(CChatHandler & cChatHandler) = 0;
 
-	/** Because of the event loop of the presentation (QApplication::exec()). */
+	/** Because of the presentation event loop (QApplication::exec()). */
 	virtual int exec() = 0;
 
 private:

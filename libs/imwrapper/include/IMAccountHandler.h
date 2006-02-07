@@ -27,7 +27,7 @@
 class IMAccount;
 
 /**
- * Instant Messaging account handler.
+ * Instant Messaging account list.
  *
  * @author Philippe Bernery
  */

@@ -25,7 +25,9 @@
 #include <string>
 
 /**
+ * Stores the configuration options of WengoPhone.
  *
+ * @see Settings
  * @ingroup model
  * @author Tanguy Krotoff
  * @author Philippe Bernery
