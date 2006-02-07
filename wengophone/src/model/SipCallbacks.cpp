@@ -19,7 +19,7 @@
 
 #include "SipCallbacks.h"
 
-#include "SipWrapper.h"
+#include <SipWrapper.h>
 
 #include <model/WengoPhone.h>
 #include <model/phoneline/IPhoneLine.h>

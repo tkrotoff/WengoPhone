@@ -20,8 +20,8 @@
 #ifndef SIPCALLBACKS_H
 #define SIPCALLBACKS_H
 
-#include "EnumPhoneCallState.h"
-#include "EnumPhoneLineState.h"
+#include <EnumPhoneCallState.h>
+#include <EnumPhoneLineState.h>
 
 #include <NonCopyable.h>
 
