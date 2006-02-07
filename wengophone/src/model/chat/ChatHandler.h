@@ -76,7 +76,6 @@ private:
 	IMChatSessionList _imChatSessionList;
 
 	WengoPhone & _wengoPhone;
-
 };
 
 #endif	//CHATHANDLER_H

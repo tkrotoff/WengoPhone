@@ -29,12 +29,12 @@
 
 using namespace std;
 
-ChatHandler::ChatHandler(WengoPhone & wengoPhone) 
+ChatHandler::ChatHandler(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
-	_wengoPhone.getConnectHandler().connectedEvent += 
+	_wengoPhone.getConnectHandler().connectedEvent +=
 		boost::bind(&ChatHandler::connectedEventHandler, this, _1, _2);
-	_wengoPhone.getConnectHandler().disconnectedEvent += 
-		boost::bind(&ChatHandler::disconnectedEventHandler, this, _1, _2);	
+	_wengoPhone.getConnectHandler().disconnectedEvent +=
+		boost::bind(&ChatHandler::disconnectedEventHandler, this, _1, _2);
 }
 
 ChatHandler::~ChatHandler() {
@@ -54,12 +54,12 @@ void ChatHandler::createSession(const IMAccount & imAccount) {
 
 void ChatHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & account) {
 	IMChatMap::iterator i = _imChatMap.find(&account);
-	
-	LOG_DEBUG("an account is connected: login: " + account.getLogin() 
+
+	LOG_DEBUG("an account is connected: login: " + account.getLogin()
 		+ "protocol: " + String::fromNumber(account.getProtocol()));
 	//IMChat for this IMAccount has not been created yet
 	if (i == _imChatMap.end()) {
-		IMChat * imChat = IMWrapperFactory::getFactory().createIMChat(account, _wengoPhone.getIMContactMap());
+		IMChat * imChat = IMWrapperFactory::getFactory().createIMChat(account);
 		imChat->newIMChatSessionCreatedEvent +=
 			boost::bind(&ChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 

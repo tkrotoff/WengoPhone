@@ -292,9 +292,9 @@ void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & 
 	const IMChatSession::IMContactList & buddies = chatSession.getIMContactList();
 	IMChatSession::IMContactList::const_iterator it;
 	for (it = buddies.begin(); it != buddies.end(); it++) {
-		std::string sipAddress = "sip:" + (*it)->getContactId() + "@" + _wengoRealm;
+		std::string sipAddress = "sip:" + (*it).getContactId() + "@" + _wengoRealm;
 		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message.c_str());
-		_messageIdChatSessionMap[messageId] =  &chatSession;
+		_messageIdChatSessionMap[messageId] = &chatSession;
 	}
 }
 

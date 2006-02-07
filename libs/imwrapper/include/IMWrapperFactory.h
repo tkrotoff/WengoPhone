@@ -24,7 +24,6 @@
 
 class IMAccount;
 class IMChat;
-class IMContactMap;
 class IMConnect;
 class IMPresence;
 
@@ -73,10 +72,9 @@ public:
 	 * Instantiates a IM chat implementation.
 	 *
 	 * @param account IM account
-	 * @param imContactMap the IMContactMap
 	 * @return IM chat implementation instance
 	 */
-	virtual IMChat * createIMChat(IMAccount & account, const IMContactMap & imContactMap) = 0;
+	virtual IMChat * createIMChat(IMAccount & account) = 0;
 
 	/**
 	 * Instantiates a IM presence implementation.

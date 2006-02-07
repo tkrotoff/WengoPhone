@@ -25,8 +25,8 @@
 
 PhApiIMChat * PhApiIMChat::PhApiIMChatHack = NULL;
 
-PhApiIMChat::PhApiIMChat(IMAccount & account, const IMContactMap & imContactMap, PhApiWrapper & phApiWrapper)
-	: IMChat(account, imContactMap),
+PhApiIMChat::PhApiIMChat(IMAccount & account, PhApiWrapper & phApiWrapper)
+	: IMChat(account),
 	_phApiWrapper(phApiWrapper) {
 
 	PhApiIMChatHack = this;

@@ -26,7 +26,6 @@
 #include <string>
 
 class IMAccount;
-class IMContactMap;
 class IMChatSession;
 
 /**
@@ -43,7 +42,7 @@ public:
 
 	/**
 	 * Emitted when a new IMChatSession has been created.
-	 * 
+	 *
 	 * @param sender this class
 	 * @param imChatSession the new IMChatSession
 	 */
@@ -51,7 +50,7 @@ public:
 
 	/**
 	 * Emitted when a contact has been added to a session
-	 * 
+	 *
 	 * @param sender this class
 	 * @param imChatSession the session where a contact has been added
 	 * @param contactId the added contact
@@ -60,7 +59,7 @@ public:
 
 	/**
 	 * Emitted when a contact is removed from a session
-	 * 
+	 *
 	 * @param sender this class
 	 * @param imChatSession the session where a contact has been removed
 	 * @param imChatSession the removed contact
@@ -72,10 +71,10 @@ public:
 	 *
 	 * @param session the associated IMChatSession.
 	 * @param sender this class
-	 * @param from message sender
+	 * @param contactId message sender
 	 * @param message message received
 	 */
-	Event<void (IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
+	Event<void (IMChat & sender, IMChatSession & chatSession, const std::string & contactId, const std::string & message)> messageReceivedEvent;
 
 	enum StatusMessage {
 		/** Chat message has been received. */
@@ -83,7 +82,7 @@ public:
 
 		/** Chat message sending error. 'message' contains the one that produces the error */
 		StatusMessageError,
-		
+
 		/** Information message (e.g "toto has left the chat room"). 'message' contains the information message */
 		StatusMessageInfo
 	};
@@ -104,15 +103,11 @@ public:
 		return _imAccount;
 	}
 
-	const IMContactMap & getIMContactMap() const {
-		return _imContactMap;
-	}
-
 protected:
 
 	/**
-	 * Create a new IMChatSession.
-	 * 
+	 * Creates a new IMChatSession.
+	 *
 	 * The new IMChatSession is returned by the Event newIMChatSessionCreatedEvent
 	 */
 	virtual void createSession() = 0;
@@ -125,7 +120,7 @@ protected:
 	virtual void closeSession(IMChatSession & chatSession) = 0;
 
 	/**
-	 * Send a message to all Contact linked to the session session.
+	 * Sends a message to all IMContact linked to the chat session.
 	 *
 	 * @param chatSession the session to send the message to
 	 * @param message the message to send
@@ -133,7 +128,7 @@ protected:
 	virtual void sendMessage(IMChatSession & chatSession, const std::string & message) = 0;
 
 	/**
-	 * Add a contact to the session.
+	 * Adds a contact to the session.
 	 *
 	 * @param chatSession the session id
 	 * @param protocol the protocol of the contact to add
@@ -142,7 +137,7 @@ protected:
 	virtual void addContact(IMChatSession & chatSession, const std::string & contactId) = 0;
 
 	/**
-	 * Remove a contact from the session.
+	 * Removes a contact from the session.
 	 *
 	 * @param chatSession the session id
 	 * @param protocol the protocol of the contact to add
@@ -150,12 +145,10 @@ protected:
 	 */
 	virtual void removeContact(IMChatSession & chatSession, const std::string & contactId) = 0;
 
-	IMChat(IMAccount & imAccount, const IMContactMap & imContactMap) 
-		: _imAccount(imAccount), _imContactMap(imContactMap) {}
+	IMChat(IMAccount & imAccount)
+		: _imAccount(imAccount) {}
 
 	IMAccount & _imAccount;
-
-	const IMContactMap & _imContactMap;
 };
 
 #endif	//IMCHAT_H

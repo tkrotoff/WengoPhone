@@ -39,9 +39,13 @@ IMContact::IMContact(const IMContact & imContact)
 IMContact::~IMContact() {
 }
 
-bool IMContact::operator == (const IMContact & imContact) const {
+bool IMContact::operator==(const IMContact & imContact) const {
 	return ((_imAccount == imContact._imAccount)
 		&& (_contactId == imContact._contactId));
+}
+
+bool IMContact::operator<(const IMContact & imContact) const {
+	return _contactId < imContact._contactId;
 }
 
 std::string IMContact::serialize() {

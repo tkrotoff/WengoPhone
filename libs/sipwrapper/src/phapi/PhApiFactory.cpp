@@ -37,8 +37,8 @@ IMConnect * PhApiFactory::createIMConnect(IMAccount & account) {
 	return new PhApiIMConnect(account, *_phApiWrapperInstance);
 }
 
-IMChat * PhApiFactory::createIMChat(IMAccount & account, const IMContactMap & imContactMap) {
-	return new PhApiIMChat(account, imContactMap, *_phApiWrapperInstance);
+IMChat * PhApiFactory::createIMChat(IMAccount & account) {
+	return new PhApiIMChat(account, *_phApiWrapperInstance);
 }
 
 IMPresence * PhApiFactory::createIMPresence(IMAccount & account) {

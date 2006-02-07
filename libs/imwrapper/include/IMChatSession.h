@@ -28,7 +28,6 @@
 class IMAccount;
 class IMAccountHandler;
 class IMContact;
-class IMContactMap;
 class IMChat;
 class ChatHandler;
 
@@ -36,7 +35,8 @@ class IMChatSession {
 	friend class ChatHandler;
 public:
 
-	typedef std::set<const IMContact *> IMContactList;
+	/** List of IMContact, each IMContact is unique inside the list, thus we use a set. */
+	typedef std::set<IMContact> IMContactList;
 
 	Event<void (IMChatSession & sender, const IMContact & from, const std::string & message)> messageReceivedEvent;
 
@@ -56,7 +56,9 @@ public:
 
 	void sendMessage(const std::string & message);
 
-	const IMContactList & getIMContactList() const;
+	const IMContactList & getIMContactList() const {
+		return _imContactList;
+	}
 
 	bool operator==(const IMChatSession & imChatSession) const;
 
@@ -64,7 +66,7 @@ public:
 
 private:
 
-	void messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & from, const std::string & message);
+	void messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, const std::string & message);
 
 	void statusMessageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, IMChat::StatusMessage status, const std::string & message);
 
@@ -72,12 +74,9 @@ private:
 
 	void contactRemovedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId);
 
-	const IMContact * getIMContact(const IMAccount & imAccount, const std::string & contactId) const;
-
 	IMContactList _imContactList;
 
 	IMChat & _imChat;
-
 };
 
 #endif //IMCHATSESSION_H

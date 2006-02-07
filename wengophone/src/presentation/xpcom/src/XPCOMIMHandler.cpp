@@ -42,9 +42,9 @@ void XPCOMIMHandler::connected() {
 	}
 
 	if (!_chat) {
-		/*_chat = IMWrapperFactory::getFactory().createIMChat(*_account);
+		_chat = IMWrapperFactory::getFactory().createIMChat(*_account);
 		_chat->messageReceivedEvent +=
-				boost::bind(&XPCOMIMHandler::messageReceivedEventHandler, this, _1, _2, _3);*/
+				boost::bind(&XPCOMIMHandler::messageReceivedEventHandler, this, _1, _2, _3, _4);
 	}
 
 	if (!_presence) {
@@ -54,7 +54,7 @@ void XPCOMIMHandler::connected() {
 	}
 }
 
-void XPCOMIMHandler::messageReceivedEventHandler(IMChat & sender, const std::string & from, const std::string & message) {
+void XPCOMIMHandler::messageReceivedEventHandler(IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message) {
 	SipAddress sipUri(from);
 	std::string sipAddress = sipUri.getSipAddress();
 	std::string userName = sipUri.getUserName();

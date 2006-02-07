@@ -15,7 +15,6 @@ headers = [
 	'include/IMChatSession.h',
 	'include/IMChatMap.h',
 	'include/IMConnect.h',
-	'include/IMContactMap.h',
 	'include/IMPresence.h',
 	'include/IMWrapperFactory.h',
 ]
@@ -25,7 +24,6 @@ sources = [
 	'src/IMChatMap.cpp',
 	'src/IMChatSession.cpp',
 	'src/IMContact.cpp',
-	'src/IMContactMap.cpp',
 	'src/IMWrapperFactory.cpp',
 ]
 

@@ -25,7 +25,6 @@
 #include <model/NetworkDiscovery.h>
 
 #include <IMAccountHandler.h>
-#include <IMContactMap.h>
 
 #include <Event.h>
 #include <Thread.h>
@@ -280,10 +279,6 @@ public:
 			return _networkDiscovery;
 	}
 
-	IMContactMap & getIMContactMap() {
-		return _imContactMap;
-	}
-
 	void setProxySettings(const std::string & proxyAddress, int proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword);
 
@@ -316,7 +311,7 @@ private:
 	void wengoLoginEventHandler(WengoAccount & sender, WengoAccount::LoginState state,
 		const std::string & login, const std::string & password);
 
-		/**
+	/**
 	 * Creates and adds a new PhoneLine given a SipAccount.
 	 *
 	 * This is a helper method.
@@ -363,8 +358,6 @@ private:
 	IMAccountHandler _imAccountHandler;
 
 	WengoAccount * _wengoAccount;
-
-	IMContactMap _imContactMap;
 
 	/**
 	 * If this thread should be terminate or not.

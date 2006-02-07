@@ -31,6 +31,7 @@
 class IMAccount;
 class IMConnect;
 class IMChat;
+class IMChatSession;
 class IMPresence;
 
 class XPCOMIMHandler : NonCopyable {
@@ -65,7 +66,7 @@ public:
 
 private:
 
-	void messageReceivedEventHandler(IMChat & sender, const std::string & from, const std::string & message);
+	void messageReceivedEventHandler(IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message);
 
 	void presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
 					const std::string & note, const std::string & from);

@@ -25,7 +25,6 @@
 #include <IMChat.h>
 
 class IMAccount;
-class IMContactMap;
 class IMChatSession;
 
 /**
@@ -48,7 +47,7 @@ public:
 
 private:
 
-	PhApiIMChat(IMAccount & account, const IMContactMap & imContactMap, PhApiWrapper & phApiWrapper);
+	PhApiIMChat(IMAccount & account, PhApiWrapper & phApiWrapper);
 
 	void messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message);
 

@@ -36,7 +36,7 @@ class IMContact {
 public:
 
 	/**
-	 * Construct a new IMContact.
+	 * Constructs a new IMContact.
 	 * 
 	 * @param imAccount the imAccount that the IMContact is associated with
 	 * @param contactId id of the IMContact to create
@@ -49,11 +49,13 @@ public:
 	~IMContact();
 
 	/**
-	 * Check if imContact is equal to this IMContact.
+	 * Checks if imContact is equal to this IMContact.
 	 *
 	 * @param imContact the IMContact to test
 	 */
-	bool operator == (const IMContact & imContact) const;
+	bool operator==(const IMContact & imContact) const;
+
+	bool operator<(const IMContact & imContact) const;
 
 	std::string serialize();
 
