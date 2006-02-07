@@ -290,6 +290,7 @@ else:
 Depends(phapi, [amr, speex])
 
 phapi_py_env = WengoGetEnvironment()
-phapi_py_lib = phapi_py_env.WengoSharedLibrary("pyphapi", "pyphapi.c")
-phapi_py_env.WengoUseLibraries(["phapi", "python", "python24"])
-phapi_py_env.WengoSharedLibrary("phapi-python-wrapper", phapi_py_lib)
+phapi_py_env.WengoAddIncludePath(["C:\Program Files\Python24\include"])
+phapi_py_env.WengoAddLibPath(["C:\Program Files\Python24\libs"])
+phapi_py_env.WengoUseLibraries(["phapi", "python24"])
+phapi_py_env.WengoSharedLibrary("pyphapi", "pyphapi.c")
