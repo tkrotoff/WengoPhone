@@ -20,7 +20,7 @@
 #ifndef IMACCOUNTHANDLER_H
 #define IMACCOUNTHANDLER_H
 
-#include <EnumIMProtocol.h>
+#include <imwrapper/EnumIMProtocol.h>
 
 #include <List.h>
 

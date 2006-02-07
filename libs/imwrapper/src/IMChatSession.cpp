@@ -17,9 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <IMChatSession.h>
+#include <imwrapper/IMChatSession.h>
 
-#include <IMContact.h>
+#include <imwrapper/IMContact.h>
 
 #include <Logger.h>
 

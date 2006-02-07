@@ -7,16 +7,16 @@ libs = [
 include_path = ['include']
 
 headers = [
-	'include/EnumIMProtocol.h',
-	'include/EnumPresenceState.h',
-	'include/IMAccount.h',
-	'include/IMAccountHandler.h',
-	'include/IMChat.h',
-	'include/IMChatSession.h',
-	'include/IMChatMap.h',
-	'include/IMConnect.h',
-	'include/IMPresence.h',
-	'include/IMWrapperFactory.h',
+	'include/imwrapper/EnumIMProtocol.h',
+	'include/imwrapper/EnumPresenceState.h',
+	'include/imwrapper/IMAccount.h',
+	'include/imwrapper/IMAccountHandler.h',
+	'include/imwrapper/IMChat.h',
+	'include/imwrapper/IMChatSession.h',
+	'include/imwrapper/IMChatMap.h',
+	'include/imwrapper/IMConnect.h',
+	'include/imwrapper/IMPresence.h',
+	'include/imwrapper/IMWrapperFactory.h',
 ]
 
 sources = [

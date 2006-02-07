@@ -22,7 +22,7 @@
 
 #include <Listener.h>
 
-#include <EnumPresenceState.h>
+#include <imwrapper/EnumPresenceState.h>
 
 #include <NonCopyable.h>
 

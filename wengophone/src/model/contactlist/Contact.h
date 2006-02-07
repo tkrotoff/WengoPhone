@@ -22,8 +22,9 @@
 
 #include "StreetAddress.h"
 
-#include <EnumPresenceState.h>
-#include <IMAccount.h>
+#include <imwrapper/EnumPresenceState.h>
+#include <imwrapper/IMAccount.h>
+
 #include <Event.h>
 #include <Serializable.h>
 #include <Date.h>

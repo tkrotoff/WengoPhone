@@ -22,7 +22,7 @@
 
 #include "PhApiFactory.h"
 
-#include <IMChat.h>
+#include <imwrapper/IMChat.h>
 
 class IMAccount;
 class IMChatSession;

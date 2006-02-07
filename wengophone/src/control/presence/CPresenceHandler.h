@@ -20,9 +20,10 @@
 #ifndef CPRESENCEHANDLER_H
 #define CPRESENCEHANDLER_H
 
-#include <EnumIMProtocol.h>
-#include <EnumPresenceState.h>
-#include <IMPresence.h>
+#include <imwrapper/EnumIMProtocol.h>
+#include <imwrapper/EnumPresenceState.h>
+#include <imwrapper/IMPresence.h>
+
 #include <NonCopyable.h>
 #include <Event.h>
 

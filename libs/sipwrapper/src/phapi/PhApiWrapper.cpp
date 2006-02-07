@@ -19,8 +19,8 @@
 
 #include "PhApiWrapper.h"
 
-#include <IMChatSession.h>
-#include <IMContact.h>
+#include <imwrapper/IMChatSession.h>
+#include <imwrapper/IMContact.h>
 
 #ifdef ENABLE_NETLIB
 #include <netlib.h>

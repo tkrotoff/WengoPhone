@@ -20,7 +20,8 @@
 #ifndef CCHATHANDLER_H
 #define CCHATHANDLER_H
 
-#include <IMChat.h>
+#include <imwrapper/IMChat.h>
+
 #include <NonCopyable.h>
 #include <Event.h>
 

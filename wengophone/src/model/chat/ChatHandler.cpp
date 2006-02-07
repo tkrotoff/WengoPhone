@@ -22,9 +22,10 @@
 #include <model/WengoPhone.h>
 #include <model/connect/ConnectHandler.h>
 
-#include <IMAccount.h>
-#include <IMChatSession.h>
-#include <IMWrapperFactory.h>
+#include <imwrapper/IMAccount.h>
+#include <imwrapper/IMChatSession.h>
+#include <imwrapper/IMWrapperFactory.h>
+
 #include <Logger.h>
 
 using namespace std;

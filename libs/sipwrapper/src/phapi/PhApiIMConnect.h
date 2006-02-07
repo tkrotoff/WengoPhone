@@ -22,7 +22,7 @@
 
 #include "PhApiFactory.h"
 
-#include <IMConnect.h>
+#include <imwrapper/IMConnect.h>
 
 class IMAccount;
 

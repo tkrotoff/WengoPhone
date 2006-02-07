@@ -24,8 +24,9 @@
 #include <model/presence/Presence.h>
 #include <model/presence/PresenceHandler.h>
 
-#include <IMAccount.h>
-#include <EnumIMProtocol.h>
+#include <imwrapper/IMAccount.h>
+#include <imwrapper/EnumIMProtocol.h>
+
 #include <Logger.h>
 
 using namespace std;

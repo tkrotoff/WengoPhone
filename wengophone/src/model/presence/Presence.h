@@ -20,8 +20,9 @@
 #ifndef PRESENCE_H
 #define PRESENCE_H
 
-#include <EnumPresenceState.h>
-#include <IMPresence.h>
+#include <imwrapper/EnumPresenceState.h>
+#include <imwrapper/IMPresence.h>
+
 #include <NonCopyable.h>
 #include <Event.h>
 

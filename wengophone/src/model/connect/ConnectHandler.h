@@ -22,7 +22,8 @@
 
 #include <model/chat/ChatHandler.h>
 
-#include <IMConnect.h>
+#include <imwrapper/IMConnect.h>
+
 #include <NonCopyable.h>
 #include <Event.h>
 

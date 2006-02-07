@@ -27,8 +27,8 @@
 	#include <presentation/qt/QtFactory.h>
 #endif
 
-#include <IMWrapperFactory.h>
-#include <SipWrapperFactory.h>
+#include <imwrapper/IMWrapperFactory.h>
+#include <sipwrapper/SipWrapperFactory.h>
 
 #ifdef PHAPIWRAPPER
 	#include <PhApiFactory.h>

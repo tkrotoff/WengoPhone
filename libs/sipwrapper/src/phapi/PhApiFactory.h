@@ -20,8 +20,8 @@
 #ifndef PHAPIFACTORY_H
 #define PHAPIFACTORY_H
 
-#include <SipWrapperFactory.h>
-#include <IMWrapperFactory.h>
+#include <sipwrapper/SipWrapperFactory.h>
+#include <imwrapper/IMWrapperFactory.h>
 
 class IMAccount;
 class IMConnect;

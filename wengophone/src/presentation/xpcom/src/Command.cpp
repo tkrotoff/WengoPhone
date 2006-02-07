@@ -33,7 +33,8 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <IMWrapperFactory.h>
+#include <imwrapper/IMWrapperFactory.h>
+
 #include <SoundMixer.h>
 #include <AudioDevice.h>
 

@@ -20,7 +20,7 @@
 #ifndef IMACCOUNT_H
 #define IMACCOUNT_H
 
-#include <EnumIMProtocol.h>
+#include <imwrapper/EnumIMProtocol.h>
 
 #include <NonCopyable.h>
 

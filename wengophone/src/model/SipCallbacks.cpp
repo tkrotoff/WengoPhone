@@ -19,11 +19,11 @@
 
 #include "SipCallbacks.h"
 
-#include <SipWrapper.h>
-
 #include <model/WengoPhone.h>
 #include <model/phoneline/IPhoneLine.h>
 #include <model/phonecall/PhoneCall.h>
+
+#include <sipwrapper/SipWrapper.h>
 
 #include <StringList.h>
 #include <Logger.h>

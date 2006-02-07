@@ -15,11 +15,11 @@ projects = [
 ]
 
 headers = [
-	'include/EnumPhoneCallState.h',
-	'include/EnumPhoneLineState.h',
-	'include/SipWrapper.h',
-	'include/SipWrapperFactory.h'
-	'include/WebcamVideoFrame.h',
+	'include/sipwrapper/EnumPhoneCallState.h',
+	'include/sipwrapper/EnumPhoneLineState.h',
+	'include/sipwrapper/SipWrapper.h',
+	'include/sipwrapper/SipWrapperFactory.h'
+	'include/sipwrapper/WebcamVideoFrame.h',
 ]
 
 sources = [

@@ -20,8 +20,8 @@
 #ifndef IMPRESENCE_H
 #define IMPRESENCE_H
 
-#include <IMAccount.h>
-#include <EnumPresenceState.h>
+#include <imwrapper/IMAccount.h>
+#include <imwrapper/EnumPresenceState.h>
 
 #include <Interface.h>
 #include <Event.h>

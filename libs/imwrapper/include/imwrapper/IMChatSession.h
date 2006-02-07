@@ -20,7 +20,7 @@
 #ifndef IMCHATSESSION_H
 #define IMCHATSESSION_H
 
-#include <IMChat.h>
+#include <imwrapper/IMChat.h>
 
 #include <string>
 #include <set>

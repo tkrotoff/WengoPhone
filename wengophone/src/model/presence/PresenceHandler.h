@@ -22,10 +22,11 @@
 
 #include <model/chat/ChatHandler.h>
 
-#include <IMConnect.h>
-#include <EnumIMProtocol.h>
-#include <EnumPresenceState.h>
-#include <IMPresence.h>
+#include <imwrapper/IMConnect.h>
+#include <imwrapper/EnumIMProtocol.h>
+#include <imwrapper/EnumPresenceState.h>
+#include <imwrapper/IMPresence.h>
+
 #include <NonCopyable.h>
 #include <Event.h>
 

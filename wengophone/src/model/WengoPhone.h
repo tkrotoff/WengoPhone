@@ -24,7 +24,7 @@
 #include <model/account/wengo/WengoAccount.h>
 #include <model/NetworkDiscovery.h>
 
-#include <IMAccountHandler.h>
+#include <imwrapper/IMAccountHandler.h>
 
 #include <Event.h>
 #include <Thread.h>

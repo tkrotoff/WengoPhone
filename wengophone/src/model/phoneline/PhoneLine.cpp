@@ -34,8 +34,9 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <SipWrapper.h>
-#include <SipWrapperFactory.h>
+#include <sipwrapper/SipWrapper.h>
+#include <sipwrapper/SipWrapperFactory.h>
+
 #include <Logger.h>
 
 #include <netlib.h>

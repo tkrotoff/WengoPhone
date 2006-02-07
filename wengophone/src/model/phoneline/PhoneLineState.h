@@ -20,7 +20,8 @@
 #ifndef PHONELINESTATE_H
 #define PHONELINESTATE_H
 
-#include <EnumPhoneLineState.h>
+#include <sipwrapper/EnumPhoneLineState.h>
+
 #include <string>
 
 class IPhoneLine;

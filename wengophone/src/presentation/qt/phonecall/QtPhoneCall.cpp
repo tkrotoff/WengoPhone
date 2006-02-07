@@ -28,7 +28,8 @@
 
 #include <model/WengoPhoneLogger.h>
 
-#include <WebcamVideoFrame.h>
+#include <sipwrapper/WebcamVideoFrame.h>
+
 #include <WidgetFactory.h>
 #include <Object.h>
 

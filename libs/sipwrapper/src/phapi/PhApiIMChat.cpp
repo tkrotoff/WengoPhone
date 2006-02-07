@@ -19,9 +19,9 @@
 
 #include "PhApiIMChat.h"
 
-#include <IMChatSession.h>
-
 #include "PhApiWrapper.h"
+
+#include <imwrapper/IMChatSession.h>
 
 PhApiIMChat * PhApiIMChat::PhApiIMChatHack = NULL;
 

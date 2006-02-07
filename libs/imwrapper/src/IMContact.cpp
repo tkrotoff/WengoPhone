@@ -17,10 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "IMContact.h"
+#include <imwrapper/IMContact.h>
 
-#include <IMAccount.h>
-#include <EnumIMProtocol.h>
+#include <imwrapper/IMAccount.h>
+#include <imwrapper/EnumIMProtocol.h>
 
 #include <Logger.h>
 

@@ -23,7 +23,8 @@
 #include <model/contactlist/ContactList.h>
 #include <model/connect/ConnectHandler.h>
 
-#include <IMContact.h>
+#include <imwrapper/IMContact.h>
+
 #include <Logger.h>
 
 using namespace std;

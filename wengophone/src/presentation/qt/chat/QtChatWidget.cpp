@@ -25,8 +25,9 @@
 #include <QListWidget>
 #include <QPushButton>
 
-#include <IMContact.h>
-#include <IMChatSession.h>
+#include <imwrapper/IMContact.h>
+#include <imwrapper/IMChatSession.h>
+
 #include <WidgetFactory.h>
 #include <Object.h>
 #include <Logger.h>

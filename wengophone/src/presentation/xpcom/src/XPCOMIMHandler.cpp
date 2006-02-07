@@ -21,12 +21,12 @@
 
 #include "ListenerList.h"
 
-#include <IMWrapperFactory.h>
-#include <EnumIMProtocol.h>
-#include <IMAccount.h>
-#include <IMConnect.h>
-#include <IMChat.h>
-#include <IMPresence.h>
+#include <imwrapper/IMWrapperFactory.h>
+#include <imwrapper/EnumIMProtocol.h>
+#include <imwrapper/IMAccount.h>
+#include <imwrapper/IMConnect.h>
+#include <imwrapper/IMChat.h>
+#include <imwrapper/IMPresence.h>
 
 #include <model/phonecall/SipAddress.h>
 

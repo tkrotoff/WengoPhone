@@ -22,9 +22,9 @@
 #include "PhApiWrapper.h"
 #include "PhApiIMChat.h"
 
-#include <SipWrapper.h>
-#include <IMPresence.h>
-#include <EnumPresenceState.h>
+#include <sipwrapper/SipWrapper.h>
+#include <imwrapper/IMPresence.h>
+#include <imwrapper/EnumPresenceState.h>
 
 #include <Logger.h>
 

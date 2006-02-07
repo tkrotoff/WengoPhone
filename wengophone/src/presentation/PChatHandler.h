@@ -22,7 +22,8 @@
 
 #include <presentation/Presentation.h>
 
-#include <IMChat.h>
+#include <imwrapper/IMChat.h>
+
 #include <NonCopyable.h>
 #include <Event.h>
 

@@ -22,7 +22,7 @@
 
 #include "PhApiFactory.h"
 
-#include <IMPresence.h>
+#include <imwrapper/IMPresence.h>
 
 class IMAccount;
 

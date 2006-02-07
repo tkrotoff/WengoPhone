@@ -22,9 +22,9 @@
 
 #include "Presentation.h"
 
-#include <EnumIMProtocol.h>
-#include <EnumPresenceState.h>
-#include <IMPresence.h>
+#include <imwrapper/EnumIMProtocol.h>
+#include <imwrapper/EnumPresenceState.h>
+#include <imwrapper/IMPresence.h>
 
 class PresenceHandler;
 class IMContact;

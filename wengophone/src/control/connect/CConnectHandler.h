@@ -20,7 +20,8 @@
 #ifndef CCONNECTHANDLER_H
 #define CCONNECTHANDLER_H
 
-#include <IMConnect.h>
+#include <imwrapper/IMConnect.h>
+
 #include <NonCopyable.h>
 #include <Event.h>
 

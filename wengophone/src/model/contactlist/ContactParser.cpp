@@ -25,8 +25,9 @@
 #include <model/WengoPhone.h>
 #include <model/presence/PresenceHandler.h>
 
-#include <IMAccountHandler.h>
-#include <IMContact.h>
+#include <imwrapper/IMAccountHandler.h>
+#include <imwrapper/IMContact.h>
+
 #include <tinyxml.h>
 
 ContactParser::ContactParser(Contact & contact, const std::string & data) {

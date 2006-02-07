@@ -37,7 +37,8 @@
 #include "presence/PresenceHandler.h"
 #include "connect/ConnectHandler.h"
 
-#include <SipWrapper.h>
+#include <sipwrapper/SipWrapper.h>
+
 #include <StringList.h>
 #include <Logger.h>
 

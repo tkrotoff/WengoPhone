@@ -20,8 +20,8 @@
 #ifndef SIPWRAPPER_H
 #define SIPWRAPPER_H
 
-#include <EnumPhoneCallState.h>
-#include <EnumPhoneLineState.h>
+#include <sipwrapper/EnumPhoneCallState.h>
+#include <sipwrapper/EnumPhoneLineState.h>
 
 #include <Interface.h>
 #include <Event.h>
