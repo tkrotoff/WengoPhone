@@ -35,6 +35,7 @@ const string Config::NETWORK_PROXY_SERVER_KEY = "network.proxy.server";
 const string Config::NETWORK_PROXY_PORT_KEY = "network.proxy.port";
 const string Config::NETWORK_PROXY_LOGIN_KEY = "network.proxy.login";
 const string Config::NETWORK_PROXY_PASSWORD_KEY = "network.proxy.password";
+const string Config::CODEC_PLUGIN_PATH = "codec.plugin.path";
 
 Config::Config(const std::string & name) {
 	_name = name;

@@ -91,6 +91,9 @@ public:
 	/** String key. Proxy Password. Empty if not needed */
 	static const std::string NETWORK_PROXY_PASSWORD_KEY;
 
+	/** String key. Path to codecs. */
+	static const std::string CODEC_PLUGIN_PATH;
+
 private:
 
 	std::string _name;

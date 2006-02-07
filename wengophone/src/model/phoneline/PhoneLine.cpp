@@ -358,6 +358,9 @@ PhoneCall * PhoneLine::getPhoneCall(int callId) {
 void PhoneLine::initSipWrapper() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+	string pluginPath = config.get(Config::CODEC_PLUGIN_PATH, String::null);
+	_sipWrapper->setPluginPath(pluginPath);
+	
 	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, String::null);
 	if (!proxyAddress.empty()) {
 		int proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);

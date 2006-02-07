@@ -78,6 +78,9 @@ Command::Command(const std::string & configFilesPath) {
 	SipWrapperFactory::setFactory(sipFactory);
 	IMWrapperFactory::setFactory(imFactory);
 
+ConfigManager::getInstance().getCurrentConfig().set(Config::CODEC_PLUGIN_PATH,
+	 WengoPhone::getConfigFilesPath() + "../extensions/{debaffee-a972-4d8a-b426-8029170f2a89}/libraries/");
+
 	_wengoPhone = new WengoPhone();
 	_cWengoPhone = new CWengoPhone(*_wengoPhone);
 
