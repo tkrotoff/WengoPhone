@@ -20,7 +20,7 @@
 #ifndef IMCONTACT_H
 #define IMCONTACT_H
 
-#include <model/imwrapper/IMAccount.h>
+#include "IMAccount.h"
 
 #include <string>
 

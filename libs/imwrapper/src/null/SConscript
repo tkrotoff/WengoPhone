@@ -1,7 +1,7 @@
 env = WengoGetEnvironment()
 
 libs = [
-	'wengophone',
+	'imwrapper',
 	'wengoutil'
 ]
 lib_path = []

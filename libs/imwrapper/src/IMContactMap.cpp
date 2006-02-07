@@ -17,29 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLER_H
-#define IMACCOUNTHANDLER_H
+#include <IMContactMap.h>
 
-#include <model/imwrapper/EnumIMProtocol.h>
+#include <IMContact.h>
 
-#include <List.h>
-
-class IMAccount;
-
-/**
- * Instant Messaging account handler.
- *
- * @ingroup model
- * @author Philippe Bernery
- */
-class IMAccountHandler : public List<IMAccount *> {
-public:
-
-	/**
-	 * @param protocol the desired protocol
-	 * @return IMAccount with protocol 'protocol'
-	 */
-	List<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
-};
-
-#endif	//IMACCOUNTHANDLER_H
+IMContact * IMContactMap::findIMContact(const IMAccount & imAccount, const std::string & contactId) const {
+	for (const_iterator it = find(&imAccount) ; it != end() ; it++) {
+		if ((*it).second->getContactId() == contactId) {
+			return (*it).second;
+		}
+	}
+	return NULL;
+}

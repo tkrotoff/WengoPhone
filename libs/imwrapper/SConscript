@@ -1,0 +1,37 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'wengoutil',
+]
+
+include_path = ['include']
+
+headers = [
+	'include/EnumIMProtocol.h',
+	'include/EnumPresenceState.h',
+	'include/IMAccount.h',
+	'include/IMAccountHandler.h',
+	'include/IMChat.h',
+	'include/IMChatSession.h',
+	'include/IMChatMap.h',
+	'include/IMConnect.h',
+	'include/IMContactMap.h',
+	'include/IMPresence.h',
+	'include/IMWrapperFactory.h',
+]
+
+sources = [
+	'src/IMAccountHandler.cpp',
+	'src/IMChatMap.cpp',
+	'src/IMChatSession.cpp',
+	'src/IMContact.cpp',
+	'src/IMContactMap.cpp',
+	'src/IMWrapperFactory.cpp',
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+
+env.WengoStaticLibrary('imwrapper', sources, headers)
+
+env.SConscript('tests/SConscript')
