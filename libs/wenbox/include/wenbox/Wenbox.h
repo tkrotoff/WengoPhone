@@ -20,7 +20,7 @@
 #ifndef WENBOX_H
 #define WENBOX_H
 
-#include <IWenbox.h>
+#include <wenbox/IWenbox.h>
 
 /**
  * Plugin interface for USB phone devices.

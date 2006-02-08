@@ -17,11 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "Wenbox.h"
+#include <wenbox/Wenbox.h>
 
 #include <Logger.h>
 #include <File.h>
-#include <SharedLibLoader.h>
+
+#include <shlibloader/SharedLibLoader.h>
 
 IWenbox * getInstance() {
 	return NULL;

@@ -20,7 +20,7 @@
 #ifndef YEALINKWENBOX_H
 #define YEALINKWENBOX_H
 
-#include <IWenbox.h>
+#include <wenbox/IWenbox.h>
 
 /**
  * Wenbox backend for Xiamen Yealink Network Technology USB Phone.

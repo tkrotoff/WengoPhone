@@ -20,7 +20,7 @@
 #ifndef NULLWENBOX_H
 #define NULLWENBOX_H
 
-#include <IWenbox.h>
+#include <wenbox/IWenbox.h>
 
 /**
  * Wenbox stub (null) backend.
