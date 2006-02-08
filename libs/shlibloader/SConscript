@@ -7,7 +7,6 @@ lib_path = []
 include_path = ['include']
 headers = []
 sources = [
-	'src/shlibloader.cpp',
 	'src/SharedLibLoader.cpp'
 ]
 

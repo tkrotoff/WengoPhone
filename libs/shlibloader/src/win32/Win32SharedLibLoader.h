@@ -20,7 +20,7 @@
 #ifndef WIN32SHAREDLIBLOADER_H
 #define WIN32SHAREDLIBLOADER_H
 
-#include <ISharedLibLoader.h>
+#include <shlibloader/ISharedLibLoader.h>
 
 #include <windows.h>
 

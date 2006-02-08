@@ -20,7 +20,7 @@
 #ifndef POSIXSHAREDLIBLOADER_H
 #define POSIXSHAREDLIBLOADER_H
 
-#include <ISharedLibLoader.h>
+#include <shlibloader/ISharedLibLoader.h>
 
 /**
  * Posix implementation for shlibloader.

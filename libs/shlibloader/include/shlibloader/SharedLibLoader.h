@@ -20,7 +20,7 @@
 #ifndef SHAREDLIBLOADER_H
 #define SHAREDLIBLOADER_H
 
-#include <ISharedLibLoader.h>
+#include <shlibloader/ISharedLibLoader.h>
 
 /**
  * Loads shared libraries at runtime.
