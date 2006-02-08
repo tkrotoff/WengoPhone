@@ -36,7 +36,6 @@
 #include <assert.h>
 
 #include "phapi.h"
-//#include "phcall.h"
 #include "phmedia.h"
 #include "phcodec.h"
 #include "tonegen.h"
@@ -54,23 +53,8 @@
 #include <samplerate.h>
 #endif
 
-static void no_printf(const char *x, ...) { }
- 
-#define ph_printf  printf
-
 #define RTP_SESSION_LOCK(x)
 #define RTP_SESSION_UNLOCK(x)
-
-#ifdef __GCC__
-#define DBG(x...)  ph_printf(x)
-#define DBG_SILOK(x...)
-#else
-#define DBG   no_printf
-#define DBG_SILOK  no_printf
-#define DBG_DYNA_RX  no_printf
-#define DBG_ECHO  no_printf
-#endif
-
 
 #ifdef DO_ECHO_CAN
 
@@ -311,7 +295,7 @@ void ph_gen_noise()
   if(1)
     {
       norm = normalize(RAND_MAX);
-      DBG_SILOK("no NOISE file, using random normalized %u\n", norm);
+      DBG5_DYNA_AUDIO("no NOISE file, using random normalized %u\n", norm,0,0,0);
       for(i=0; i<NOISE_LEN; i++)
       noise_pattern[i] =  rand()>>norm;
     }
@@ -321,7 +305,7 @@ void ph_gen_noise()
     noise_max = abs(noise_pattern[i]);
       sum += abs(noise_pattern[i]);
     }
-  DBG_SILOK("max noise %u mean %u\n", noise_max, sum/NOISE_LEN);
+  DBG5_DYNA_AUDIO("max noise %u mean %u\n", noise_max, sum/NOISE_LEN,0,0);
 }
 
 
@@ -355,19 +339,11 @@ ph_on_cng_packet(RtpSession *rtp_session, mblk_t *mp, struct ph_msession_s *s)
         }
     }
       CNG_UNLOCK(stream);
-      DBG_SILOK("PHMEDIA:got CNG %u -> %u -> %u factor %u\n",*p, tab_tx_cng[*p], cng_level, factor); 
+      DBG5_DYNA_AUDIO("PHMEDIA:got CNG %u -> %u -> %u factor %u\n",*p, tab_tx_cng[*p], cng_level, factor); 
       stream->cngi.got_cng =  1;
     }else{
-      DBG_SILOK("PHMEDIA:got CNG, discarding\n");
+      DBG5_DYNA_AUDIO("PHMEDIA:got CNG, discarding\n",0,0,0,0);
     } 
-}
-void 
-dbgbpt1(void)
-{
-}
-void 
-dbgbpt2(void)
-{
 }
 
 
@@ -389,7 +365,7 @@ void store_pcm(phastream_t *s, char *buf, int len)
       int used;
       
  //     audio_stream_get_out_space(s, &used);
- //     printf("Detected Underrun: used = %d lat = %d\n", used, s->audio_loop_latency);
+ //     DBG5_DYNA_AUDIO("Detected Underrun: used = %d lat = %d\n", used, s->audio_loop_latency, 0, 0);
       cb_zfill(&s->pcmoutbuf, s->audio_loop_latency);
       s->underrun = 0;
     }
@@ -397,7 +373,7 @@ void store_pcm(phastream_t *s, char *buf, int len)
   cb_put(&s->pcmoutbuf, buf, len);
   s->sent_cnt += len;
   ECHO_SYNC_UNLOCK(s);    
-  DBG_ECHO("PUT read, recv, sent: %d, %d, %d\n", s->read_cnt, s->recv_cnt, s->sent_cnt);
+  DBG5_DYNA_AUDIO_ECHO("PUT read, recv, sent: %d, %d, %d\n", s->read_cnt, s->recv_cnt, s->sent_cnt,0);
 }
 
 
@@ -422,21 +398,21 @@ void do_echo_update(phastream_t *s, char *micdata, int length)
   if (!s->ec)
     return;
 
-  DBG_ECHO("echo pointers: %d, %d, %d\n", 2*s->spk_current_sample - s->read_cnt, length, s->sent_cnt - 2*s->mic_current_sample);
+  DBG5_DYNA_AUDIO_ECHO("echo pointers: %d, %d, %d\n", 2*s->spk_current_sample - s->read_cnt, length, s->sent_cnt - 2*s->mic_current_sample,0);
 	// echo critical section : recovering the data that was previously saved from the speaker
     ECHO_SYNC_LOCK(s);
 	s->recv_cnt += length;
-	//DBG_ECHO("length: %d\n", length);
+
     cb_get(&s->pcmoutbuf, &spkchunk1, &spklen1, &spkchunk2, &spklen2, length);
     s->read_cnt += (spklen1 + spklen2);
     ECHO_SYNC_UNLOCK(s);
-    DBG_ECHO("GET read (just read) - recv, sent (diff): %d (%d), - %d, %d (%d)\n", s->read_cnt, (spklen1 + spklen2), s->recv_cnt, s->sent_cnt, s->recv_cnt - s->sent_cnt);
+    DBG8_DYNA_AUDIO_ECHO("GET read (just read) - recv, sent (diff): %d (%d), - %d, %d (%d)\n", s->read_cnt, (spklen1 + spklen2), s->recv_cnt, s->sent_cnt, s->recv_cnt - s->sent_cnt,0,0);
     if (spklen1 + spklen2 < length)
       {
 	s->underrun = 1;
 #if 0
 	audio_stream_get_out_space(s, &used); 
-	DBG_ECHO("UNDERRUN: current out queue length: %d \n", used);
+	DBG5_DYNA_AUDIO_ECHO("UNDERRUN: current out queue length: %d \n", used,0,0,0);
 #endif
       }
 
@@ -538,7 +514,7 @@ void do_echo_update(phastream_t *s, char *micdata, int length)
 #endif
     if (total > savedlen)
       {
-	DBG("do_echo_update: total=%d savedlen=%d\n", total, savedlen);
+	DBG5_DYNA_AUDIO_ECHO("do_echo_update: total=%d savedlen=%d\n", total, savedlen,0,0);
       }
 
     
@@ -556,7 +532,7 @@ static int max_sil;
 void print_pwrstats(phastream_t *s)
 {
   if(s->cngi.pwr_size)
-    printf("\nPWR SUM: min %x max %x mean %x max_sil_cnt %d\n", min_pwr/s->cngi.pwr_size, max_pwr/s->cngi.pwr_size,  
+    DBG5_DYNA_AUDIO("\nPWR SUM: min %x max %x mean %x max_sil_cnt %d\n", min_pwr/s->cngi.pwr_size, max_pwr/s->cngi.pwr_size,  
        s->cngi.mean_pwr/s->cngi.pwr_size, max_sil); 
 }
 #endif
@@ -628,7 +604,7 @@ ph_vad_update(phastream_t *as, char *data, int len)
   
   if (ph_trace_mic && (tracecnt++ == 50))
   {
-      ph_printf("ph_media_audiuo: mean MIC signal: %d\n", power);
+      DBG5_DYNA_AUDIO("ph_media_audiuo: mean MIC signal: %d\n", power,0,0,0);
       tracecnt = 0;
   }
 #endif
@@ -677,10 +653,10 @@ ph_send_cng(phastream_t *stream, unsigned long timestamp)
   level = find_level(stream->cngi.long_mean_pwr);
   if (level < 0)
      {
-       ph_printf("cng db invalid\n");
+       DBG5_DYNA_AUDIO("cng db invalid\n",0,0,0,0);
        return;
      }
-   DBG_SILOK("PHMEDIA:send CNG %d\n", level);
+   DBG5_DYNA_AUDIO("PHMEDIA:send CNG %d\n", level,0,0,0);
   /* send CNG packet */
    mp = rtp_session_create_specific_payload_packet(stream->ms.rtp_session, RTP_FIXED_HEADER_SIZE, stream->cngi.cng_pt, &level, 1);
    if (mp != NULL)
@@ -705,7 +681,7 @@ ph_generate_comfort_noice(phastream_t *stream, void *buf)
        ret = audio_stream_get_out_space(stream, &used);
        if (ret < 0)
            {
-            no_printf("IOCTL error");
+            DBG5_DYNA_AUDIO("IOCTL error",0,0,0,0);
             return 0;
            }
         /* if less than 200ms of voice, send noise */
@@ -753,8 +729,8 @@ ph_handle_network_data(phastream_t *stream)
   int usedspace;
   struct timeval now, now2;
 	  
-  DBG_DYNA_RX("ph_handle_network_data :: start\n");
-  DBG_ECHO("echo cirbuf size %d\n", stream->sent_cnt - stream->read_cnt);
+  DBG5_DYNA_AUDIO_RX("ph_handle_network_data :: start\n",0,0,0,0);
+  DBG5_DYNA_AUDIO_ECHO("echo cirbuf size %d\n", stream->sent_cnt - stream->read_cnt,0,0,0);
 
 #if 0
   freespace = audio_stream_get_out_space(stream, &used); 
@@ -774,7 +750,7 @@ ph_handle_network_data(phastream_t *stream)
      gettimeofday(&now, 0);
      // read pack
      len = ph_audio_play_cbk(stream, data_in_dec, codec->decoded_framesize);
-     DBG_DYNA_RX("ph_handle_network_data:%u.%u :: read %d full size packets\n", now.tv_sec, now.tv_usec, len/codec->decoded_framesize);
+     DBG5_DYNA_AUDIO_RX("ph_handle_network_data:%u.%u :: read %d full size packets\n", now.tv_sec, now.tv_usec, len/codec->decoded_framesize,0);
      
      if (!len)
        break;
@@ -804,7 +780,7 @@ ph_handle_network_data(phastream_t *stream)
      
    }
  
- DBG_DYNA_RX("ph_handle_network_data :: end\n");
+ DBG5_DYNA_AUDIO_RX("ph_handle_network_data :: end\n",0,0,0,0);
       
 } 
 
@@ -833,8 +809,8 @@ void ph_audio_resample(void *ctx, void *inbuf, int inbsize, void *outbuf, int *o
 
 
   if (cnt <= 2)
-     ph_printf("resample: ratio=%f in=%d out=%d\n", sd->src_ratio, 
-  	sd->input_frames, sd->output_frames_gen);
+     DBG5_DYNA_AUDIO("resample: ratio=%f in=%d out=%d\n", sd->src_ratio, 
+  	sd->input_frames, sd->output_frames_gen,0);
 
   cnt--;
   if (cnt <= 0)
@@ -891,13 +867,13 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
     rtp=(rtp_header_t*)mp->b_rptr;
     if ( rtp->paytype != stream->ms.payload )
       {
-	ph_printf("wrong audio payload: %d expecting %d\n", rtp->paytype, stream->ms.payload);
+	DBG5_DYNA_AUDIO("wrong audio payload: %d expecting %d\n", rtp->paytype, stream->ms.payload, 0, 0);
 	freemsg(mp);
 	continue;
       }
 
      
-    no_printf("got %d bytes from net(%d)\n", len, ++iter);
+    DBG5_DYNA_AUDIO_RX("got %d bytes from net(%d)\n", len, ++iter,0,0);
     if (!stream->ms.running)
         break;
     
@@ -907,7 +883,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
     
     if (len > 0)
       {
-	no_printf("Playing %d bytes from net\n", len);
+	DBG5_DYNA_AUDIO_RX("Playing %d bytes from net\n", len,0,0,0);
 
 	/* if we're in Half Duplex mode, attenuate speaker signal */
 	if (stream->hdxmode && !stream->hdxsilence)
@@ -1063,7 +1039,7 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 	  {
 	    int hdxsil = ph_vad_update(stream, recordbuf, framesize);
 	    if (hdxsil != stream->hdxsilence)
-	      ph_printf("phmedia_audio: HDXSIL=%d\n", hdxsil);
+	      DBG5_DYNA_AUDIO("phmedia_audio: HDXSIL=%d\n", hdxsil,0,0,0);
 
 	    stream->hdxsilence = hdxsil;
 	  }
@@ -1165,9 +1141,9 @@ ph_handle_audio_data(phastream_t *stream)
   int i;
 
     
-  no_printf("Reading Got %d bytes from mic\n", framesize);
+  DBG5_DYNA_AUDIO_TX("Reading Got %d bytes from mic\n", framesize,0,0,0);
   i=audio_stream_read(stream, data_out, framesize);
-  no_printf("Got %d bytes from mic\n", i);
+  DBG5_DYNA_AUDIO_TX("Got %d bytes from mic\n", i,0,0,0);
   if (i>0)
     {        
       i = ph_audio_rec_cbk(stream, data_out, i);
@@ -1190,7 +1166,7 @@ ph_audio_io_thread(void *p)
   if (stream->ms.media_io_thread)
 	  osip_thread_set_priority(stream->ms.media_io_thread, -19);
 
-  ph_printf("new media io thread started\n");
+  DBG5_DYNA_AUDIO("new media io thread started\n",0,0,0,0);
 
 
 
@@ -1200,7 +1176,6 @@ ph_audio_io_thread(void *p)
 
      gettimeofday(&start_time, 0);
 
-     no_printf("audio looop\n");
      if (!audio_driver_has_play_callback())
         ph_handle_network_data(stream);
      if (!audio_driver_has_rec_callback())
@@ -1224,8 +1199,7 @@ ph_audio_io_thread(void *p)
 #endif     
        }
     }
-  ph_printf("media io thread stopping\n");
-  dbgbpt2();
+  DBG5_DYNA_AUDIO("media io thread stopping\n",0,0,0,0);
   return NULL;
 }
 
@@ -1376,9 +1350,9 @@ void ph_audio_init_vad(phastream_t *stream)
   if(cngp->pwr)
     {
       memset(cngp->pwr, 0, cngp->pwr_size * sizeof(int));
-      DBG_SILOK(" DTX/VAD PWR table of %d ints allocated \n", cngp->pwr_size);
+      DBG5_DYNA_AUDIO(" DTX/VAD PWR table of %d ints allocated \n", cngp->pwr_size,0,0,0);
     }else{
-      ph_printf("No memory for DTX/VAD !: %d \n", cngp->pwr_size*2);
+      DBG5_DYNA_AUDIO("No memory for DTX/VAD !: %d \n", cngp->pwr_size*2,0,0,0);
       cngp->vad = cngp->cng = 0;
     }
   
@@ -1403,7 +1377,7 @@ void ph_audio_init_cng(phastream_t *stream)
   if(!cngp->noise)
     {
       cngp->cng = 0;
-      ph_printf("No memory for NOISE ! \n");
+      DBG5_DYNA_AUDIO("No memory for NOISE ! \n",0,0,0,0);
     }
   else
     {
@@ -1425,7 +1399,7 @@ void ph_resample_init(phastream_t *stream)
 
   playRatio = (1.0 * stream->actual_rate) / stream->clock_rate;  
   recRatio = (1.0 * stream->clock_rate) / stream->actual_rate;
-  ph_printf("ph_resample_init: wanted = %d actual = %d play=%f rec=%f\n",
+  DBG5_DYNA_AUDIO("ph_resample_init: wanted = %d actual = %d play=%f rec=%f\n",
   	stream->clock_rate, stream->actual_rate, playRatio, recRatio);
 	
 
@@ -1550,7 +1524,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   if (codecpt == ph_speex_hook_pt)
     {
       codecpt = PH_MEDIA_SPEEXWB_PAYLOAD;
-      ph_printf("ph_msession_audio_start: replacing payload %d by %d\n", ph_speex_hook_pt, codecpt);
+      DBG4_MEDIA_ENGINE("ph_msession_audio_start: replacing payload %d by %d\n", ph_speex_hook_pt, codecpt,0);
     }
 
   if (!sp->jitter)
@@ -1566,7 +1540,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
       stream = (phastream_t*) sp->streamerData;
       assert(stream);
  
-      ph_printf("ph_msession_audio_start: current=%08x(rip=<%s:%u> pt=%d)=>(rip=<%s:%u> pt=%d)\n", 
+      DBG8_MEDIA_ENGINE("ph_msession_audio_start: current=%08x(rip=<%s:%u> pt=%d)=>(rip=<%s:%u> pt=%d)\n", 
 		stream, stream->ms.remote_ip, stream->ms.remote_port, stream->ms.payload,
 		sp->remoteaddr, sp->remoteport, sp->ipayloads[0].number);
       
@@ -1574,7 +1548,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	{
 	  if ((stream->ms.payload ==  sp->ipayloads[0].number) &&  !strcmp(stream->ms.remote_ip, sp->remoteaddr))
 	    {
-	      ph_printf("ph_msession_audio_start: reusing current stream\n");
+	      DBG4_MEDIA_ENGINE("ph_msession_audio_start: reusing current stream\n",0,0,0);
 	      PH_MSESSION_AUDIO_UNLOCK();
 	      return 0;
 	    }
@@ -1594,12 +1568,12 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	      RtpTunnel *newTun, *old;
 	      RtpTunnel *newTun2, *old2;
 	      
-	      ph_printf("ph_msessio_audio_start Replacing audio tunnel\n");
+	      DBG4_MEDIA_ENGINE("ph_msessio_audio_start Replacing audio tunnel\n",0,0,0);
 	      newTun = rtptun_connect(stream->ms.remote_ip, stream->ms.remote_port);
 	      
 	      if (!newTun)
 		{
-		  ph_printf("ph_msession_audio_start: Audio tunnel replacement failed\n");
+		  DBG4_MEDIA_ENGINE("ph_msession_audio_start: Audio tunnel replacement failed\n",0,0,0);
 		  sp->flags |= ~PH_MSTREAM_FLAG_RUNNING;
 		  PH_MSESSION_AUDIO_UNLOCK();
 		  return -PH_NORESOURCES;
@@ -1627,13 +1601,13 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 					stream->ms.remote_ip,
 					stream->ms.remote_port);
 	  
-	  ph_printf("ph_msession_audio_start: audio stream reset done\n");
+	  DBG4_MEDIA_ENGINE("ph_msession_audio_start: audio stream reset done\n",0,0,0);
 	  PH_MSESSION_AUDIO_UNLOCK();
 	  return 0;
 	}
       
       /* new payload is differrent from the old one */
-      ph_printf("ph_mession_audio_start: Replacing audio session\n");
+      DBG4_MEDIA_ENGINE("ph_mession_audio_start: Replacing audio session\n",0,0,0);
       ph_msession_audio_stop(s);
 	// end branch 1
       
@@ -1653,7 +1627,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   stream = (phastream_t *)osip_malloc(sizeof(phastream_t));
   memset(stream, 0, sizeof(*stream));
 
-  ph_printf("new audiostream = %08x\n", stream);
+  DBG4_MEDIA_ENGINE("new audiostream = %08x\n", stream,0,0);
 
 	// recording activity
   stream->activate_recorder = 0;
@@ -1706,7 +1680,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
       if (fhdx)
 	sp->vadthreshold = atoi(fhdx);
 
-      ph_printf("ph_mession_audio_start: HDX mode level=%d\n",  sp->vadthreshold);
+      DBG4_MEDIA_ENGINE("ph_mession_audio_start: HDX mode level=%d\n",  sp->vadthreshold,0,0);
 
     }
 
@@ -1719,17 +1693,16 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   stream->ms.payload =  sp->ipayloads[0].number;
   stream->cngi.cng_pt = (stream->clock_rate > 8000) ? PH_MEDIA_CN_16000_PAYLOAD : PH_MEDIA_CN_PAYLOAD; /* FIXME: we need to handle separate directions too */
 
-  ph_printf("ph_mession_audio_start: DTX/VAD %x\n", stream->cngi.pwr_threshold);
-  ph_printf("ph_msession_audio_start: clock rate %d\n", stream->clock_rate);
-  ph_printf("ph_msession_audio_start: CNG %s\n", stream->cngi.cng ? "activating" : "desactivating");
-
-  ph_printf("ph_msession_audio_start: opening AUDIO device %s\n", deviceId);
+  DBG4_MEDIA_ENGINE("ph_mession_audio_start: DTX/VAD %x\n", stream->cngi.pwr_threshold,0,0);
+  DBG4_MEDIA_ENGINE("ph_msession_audio_start: clock rate %d\n", stream->clock_rate,0,0);
+  DBG4_MEDIA_ENGINE("ph_msession_audio_start: CNG %s\n", stream->cngi.cng ? "activating" : "desactivating",0,0);
+  DBG4_MEDIA_ENGINE("ph_msession_audio_start: opening AUDIO device %s\n", deviceId,0,0);
 
   fd = audio_stream_open(stream, deviceId, stream->clock_rate, codec->decoded_framesize, ph_audio_callback); 
   if (fd < 0)
     {
 //	  phcb->errorNotify(PH_NOMEDIA);
-      ph_printf("ph_msession_audio_start: can't open  AUDIO device\n");
+      DBG4_MEDIA_ENGINE("ph_msession_audio_start: can't open  AUDIO device\n",0,0,0);
       free(stream);
       PH_MSESSION_AUDIO_UNLOCK();
       return -PH_NORESOURCES;
@@ -1757,7 +1730,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
     {
 	RtpTunnel *tun, *tun2;
 
-	ph_printf("ph_mession_audio_start: Creating audio tunnel\n");
+	DBG4_MEDIA_ENGINE("ph_mession_audio_start: Creating audio tunnel\n",0,0,0);
 		
 		
 	tun = rtptun_connect(sp->remoteaddr, sp->remoteport);
@@ -1812,7 +1785,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   sp->streamerData = stream;
   s->activestreams |= (1 << PH_MSTREAM_AUDIO1);
 
-  ph_printf("ph_mession_audio_start: s=%08x.stream=%08x\n", s, stream);
+  DBG4_MEDIA_ENGINE("ph_mession_audio_start: s=%08x.stream=%08x\n", s, stream,0);
 
   stream->ms.running = 1;
   stream->ms.rtp_session = session;
@@ -1832,7 +1805,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   if ( !(sp->flags & PH_MSTREAM_FLAG_AEC) )
     {
 #ifdef DO_ECHO_CAN  
-      ph_printf("ph_media_audio_start: Echo CAN desactivated\n");
+      DBG5_DYNA_AUDIO_ECHO("ph_media_audio_start: Echo CAN desactivated\n",0,0,0,0);
       stream->ec = 0;
     }
   else
@@ -1862,7 +1835,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	  stream->ecmux = g_mutex_new();
           
 	}
-      ph_printf("ph_msession_audio_start: Echo CAN created OK\n");
+      DBG5_DYNA_AUDIO_ECHO("ph_msession_audio_start: Echo CAN created OK\n",0,0,0,0);
 #endif
     }
 
@@ -1891,8 +1864,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
 
 
-  ph_printf("ph_msession_audio_start: audio stream init OK\n");
-
+  DBG4_MEDIA_ENGINE("ph_msession_audio_start: audio stream init OK\n",0,0,0);
   PH_MSESSION_AUDIO_UNLOCK();
 
   return 0;
@@ -1919,12 +1891,12 @@ int ph_media_audio_start(phcall_t *ca, int port,
   RtpProfile *profile = &av_profile;
 
 #ifdef WORDS_BIGENDIAN
-  ph_printf("ph_media_audio_start: BIGENDIAN\n");
+  DBG4_MEDIA_ENGINE("ph_media_audio_start: BIGENDIAN\n",0,0,0);
 #endif
-  ph_printf("ph_media_audio_start: deviceId:%s\n", deviceId);
+  DBG4_MEDIA_ENGINE("ph_media_audio_start: deviceId:%s\n", deviceId,0,0);
 
-  ph_printf("Starting audio stream from port: %d to %s:%d payload=%d ca=%08x.stream=%08x\n", 
-        port, ca->remote_sdp_audio_ip, ca->remote_sdp_audio_port, ca->audio_payload, ca, ca->ph_audio_stream);
+  DBG8_MEDIA_ENGINE("Starting audio stream from port: %d to %s:%d payload=%d ca=%08x.stream=%08x\n", 
+        port, ca->remote_sdp_audio_ip, ca->remote_sdp_audio_port, ca->audio_payload, ca, ca->ph_audio_stream,0);
 
   
   /* 
@@ -1973,7 +1945,7 @@ int ph_media_audio_start(phcall_t *ca, int port,
      stream = (phastream_t*) ca->ph_audio_stream;
      assert(stream);
  
-      ph_printf("ph_media_audio_start: current=%08x(rip=<%s:%u> pt=%d)=>(rip=<%s:%u> pt=%d)\n", 
+      DBG8_MEDIA_ENGINE("ph_media_audio_start: current=%08x(rip=<%s:%u> pt=%d)=>(rip=<%s:%u> pt=%d)\n", 
 		stream, stream->ms.remote_ip, stream->ms.remote_port, stream->ms.payload,
 		ca->remote_sdp_audio_ip, ca->remote_sdp_audio_port, ca->audio_payload);
       
@@ -1981,7 +1953,7 @@ int ph_media_audio_start(phcall_t *ca, int port,
 	{
 	  if ((stream->ms.payload ==  ca->audio_payload) &&  !strcmp(stream->ms.remote_ip, ca->remote_sdp_audio_ip))
 	    {
-	      ph_printf("ph_media_audio_start: reusing current stream\n");
+	      DBG4_MEDIA_ENGINE("ph_media_audio_start: reusing current stream\n",0,0,0);
 	      return 0;
 	    }
 	}
@@ -2000,12 +1972,12 @@ int ph_media_audio_start(phcall_t *ca, int port,
 	      RtpTunnel *newTun, *old;
 	      RtpTunnel *newTun2, *old2;
 	      
-	      ph_printf("ph_media_audio_start: Replacing audio tunnel\n");
+	      DBG4_MEDIA_ENGINE("ph_media_audio_start: Replacing audio tunnel\n",0,0,0);
 	      newTun = rtptun_connect(stream->ms.remote_ip, stream->ms.remote_port);
 	      
 	      if (!newTun)
 		{
-		  ph_printf("ph_media_audio_start: Audio tunnel replacement failed\n");
+		  DBG4_MEDIA_ENGINE("ph_media_audio_start: Audio tunnel replacement failed\n",0,0,0);
 		  return -PH_NORESOURCES;
 		}
 	      
@@ -2031,12 +2003,12 @@ int ph_media_audio_start(phcall_t *ca, int port,
 					stream->ms.remote_ip,
 					stream->ms.remote_port);
 	  
-	  DBG("audio stream reset done\n");
+	  DBG4_MEDIA_ENGINE("audio stream reset done\n",0,0,0);
 	  return 0;
 	}
       
       /* new payload is differrent from the old one */
-      ph_printf("ph_media_audio_start: Replacing audio session\n");
+      DBG4_MEDIA_ENGINE("ph_media_audio_start: Replacing audio session\n",0,0,0);
       ph_media_audio_stop(ca);
       
 	// end branch 1
@@ -2047,14 +2019,14 @@ int ph_media_audio_start(phcall_t *ca, int port,
   codec = ph_media_lookup_codec(codecpt);
   if (!codec)
     {
-      ph_printf("ph_media_audio_start: found NO codec\n");
+      DBG4_CODEC_LOOKUP("ph_media_audio_start: found NO codec\n",0,0,0);
       return -1;
     }
 
   stream = (phastream_t *)osip_malloc(sizeof(phastream_t));
   memset(stream, 0, sizeof(*stream));
 
-  ph_printf("new audiostream = %08x\n", stream);
+  DBG4_MEDIA_ENGINE("new audiostream = %08x\n", stream,0,0);
 
 	// recording activity
   stream->activate_recorder = 0;
@@ -2095,17 +2067,17 @@ int ph_media_audio_start(phcall_t *ca, int port,
   stream->ms.payload =  ca->audio_payload;
   stream->cngi.cng_pt = (stream->clock_rate > 8000) ? PH_MEDIA_CN_16000_PAYLOAD : PH_MEDIA_CN_PAYLOAD;
 
-  ph_printf("ph_media_audio_start: DTX/VAD %x\n", vad);
-  ph_printf("ph_media_audio_start: clock rate %d\n", stream->clock_rate);
-  ph_printf(cng ? "ph_media_audio_start: CNG activating \n" : "ph_media_audio_start: CNG desactivated \n");
+  DBG4_MEDIA_ENGINE("ph_media_audio_start: DTX/VAD %x\n", vad,0,0);
+  DBG4_MEDIA_ENGINE("ph_media_audio_start: clock rate %d\n", stream->clock_rate,0,0);
+  DBG4_MEDIA_ENGINE(cng ? "ph_media_audio_start: CNG activating \n" : "ph_media_audio_start: CNG desactivated \n",0,0,0);
 
-  ph_printf("ph_media_audio_start: opening AUDIO device %s\n", deviceId);
+  DBG4_MEDIA_ENGINE("ph_media_audio_start: opening AUDIO device %s\n", deviceId,0,0);
 
   fd = audio_stream_open(stream, deviceId, stream->clock_rate, codec->decoded_framesize, ph_audio_callback); 
   if (fd < 0)
     {
 //	  phcb->errorNotify(PH_NOMEDIA);
-	  ph_printf("ph_media_audio_start: can't open  AUDIO device\n");
+	  DBG4_MEDIA_ENGINE("ph_media_audio_start: can't open  AUDIO device\n",0,0,0);
       free(stream);
       return -PH_NORESOURCES;
     }
@@ -2132,7 +2104,7 @@ int ph_media_audio_start(phcall_t *ca, int port,
 	{
 	RtpTunnel *tun, *tun2;
 
-	ph_printf("ph_media_audio_start: Creating audio tunnel\n");
+	DBG4_MEDIA_ENGINE("ph_media_audio_start: Creating audio tunnel\n",0,0,0);
 		
 		
 	tun = rtptun_connect(ca->remote_sdp_audio_ip, ca->remote_sdp_audio_port);
@@ -2186,7 +2158,7 @@ int ph_media_audio_start(phcall_t *ca, int port,
   ca->hasaudio = 1;
   ca->ph_audio_stream = stream;
 
-  ph_printf("ph_media_audio_start: ca=%08x.stream=%08x\n", ca, ca->ph_audio_stream);
+  DBG4_MEDIA_ENGINE("ph_media_audio_start: ca=%08x.stream=%08x\n", ca, ca->ph_audio_stream,0);
 
   stream->ms.running = 1;
   stream->ms.rtp_session = session;
@@ -2206,7 +2178,7 @@ int ph_media_audio_start(phcall_t *ca, int port,
   if ( noaec )
     {
 #ifdef DO_ECHO_CAN  
-      ph_printf("ph_media_audio_start: Echo CAN desactivated\n");
+      DBG5_DYNA_AUDIO_ECHO("ph_media_audio_start: Echo CAN desactivated\n",0,0,0,0);
       stream->ec = 0;
     }
   else
@@ -2223,7 +2195,7 @@ int ph_media_audio_start(phcall_t *ca, int port,
 			stream->audio_loop_latency = atoi(lat) * 2 * stream->clock_rate/1000;
 		}
 	}
-	ph_printf("ph_media_audio_start: Echo CAN created OK\n");
+	DBG5_DYNA_AUDIO_ECHO("ph_media_audio_start: Echo CAN created OK\n",0,0,0,0);
 #endif //DO_ECHO_CAN
     }
 
@@ -2252,7 +2224,7 @@ int ph_media_audio_start(phcall_t *ca, int port,
 
 
 
-  ph_printf("ph_media_audio_start: audio stream init OK\n");
+  DBG4_MEDIA_ENGINE("ph_media_audio_start: audio stream init OK\n",0,0,0);
   return 0;
   // end branch 2
 }
@@ -2359,7 +2331,6 @@ void ph_msession_audio_stop(struct ph_msession_s *s)
 #ifdef DO_ECHO_CAN
   if(stream->ec)
     {
-      //   DBG("\nbytes echoed %d %d\n", stream->sent_cnt, stream->recv_cnt);
       cb_clean(&stream->pcmoutbuf);
       if(stream->ec)
 	ph_ec_cleanup(stream->ec);
@@ -2375,7 +2346,7 @@ void ph_msession_audio_stop(struct ph_msession_s *s)
       ph_media_audio_recording_close(&stream->recorder);
     }
   
-  DBG("\naudio stream closed\n");
+  DBG4_MEDIA_ENGINE("\naudio stream closed\n",0,0,0);
 
   if (stream->lastframe)
     free(stream->lastframe);
@@ -2449,7 +2420,6 @@ void ph_media_audio_stop(phcall_t *ca)
 #ifdef DO_ECHO_CAN
   if(stream->ec)
     {
-      //   DBG("\nbytes echoed %d %d\n", stream->sent_cnt, stream->recv_cnt);
       cb_clean(&stream->pcmoutbuf);
       if(stream->ec)
 	ph_ec_cleanup(stream->ec);
@@ -2477,7 +2447,7 @@ void ph_media_audio_stop(phcall_t *ca)
 
 
   
-  DBG("\naudio stream closed\n");
+  DBG4_MEDIA_ENGINE("\naudio stream closed\n",0,0,0);
 
   if (stream->lastframe)
     free(stream->lastframe);

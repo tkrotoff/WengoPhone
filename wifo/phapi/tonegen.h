@@ -11,9 +11,6 @@
  */ 
 extern short tg_sine_tab[];
 
-
-
-
 /* Each DTMF digit is defined bay a (low,high) frequency pair */
 struct tg_dtmf_desc
 {
@@ -22,7 +19,6 @@ struct tg_dtmf_desc
   unsigned char  digit; 
 }; 
 
-
 /* tone geneartor context  */
 struct tonegen
 {
@@ -30,14 +26,12 @@ struct tonegen
   unsigned short inc;  /*  phase increment   */
 };
 
-
 /* tone generator context for a DTMF digit */
 struct dtmfgen
 {
   struct tonegen  g1;   /* low frequency generator */
   struct tonegen  g2;   /* high frequency generator */
 };
-
 
 
 void tg_init_sine_table(void);
@@ -53,5 +47,3 @@ short tg_dtmf_next_sample(struct dtmfgen *dg);
 
 
 #endif
-
-
