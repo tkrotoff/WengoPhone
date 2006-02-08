@@ -20,7 +20,7 @@
 #ifndef CWENBOXPLUGIN_H
 #define CWENBOXPLUGIN_H
 
-#include <Wenbox.h>
+#include <wenbox/Wenbox.h>
 
 class CWengoPhone;
 class PWenboxPlugin;

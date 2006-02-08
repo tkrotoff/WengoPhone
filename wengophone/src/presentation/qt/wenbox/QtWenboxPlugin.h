@@ -24,7 +24,7 @@
 
 #include <QObjectThreadSafe.h>
 
-#include <Wenbox.h>
+#include <wenbox/Wenbox.h>
 #include <StringList.h>
 
 class CWenboxPlugin;

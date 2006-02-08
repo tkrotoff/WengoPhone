@@ -19,9 +19,9 @@
 
 #include "CWenboxPlugin.h"
 
-#include "presentation/PFactory.h"
-#include "presentation/PWenboxPlugin.h"
-#include "model/wenbox/WenboxPlugin.h"
+#include <presentation/PFactory.h>
+#include <presentation/PWenboxPlugin.h>
+#include <model/wenbox/WenboxPlugin.h>
 
 CWenboxPlugin::CWenboxPlugin(WenboxPlugin & wenboxPlugin, CWengoPhone & cWengoPhone)
 	: _wenboxPlugin(wenboxPlugin),

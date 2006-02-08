@@ -19,8 +19,8 @@
 
 #include "WenboxPlugin.h"
 
-#include "model/WengoPhone.h"
-#include "model/phonecall/PhoneCall.h"
+#include <model/WengoPhone.h>
+#include <model/phonecall/PhoneCall.h>
 
 WenboxPlugin::WenboxPlugin(const WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
