@@ -70,7 +70,8 @@
 
 #endif
 
-#define EXOSIP_VERSION	"0.1"
+#define EXOSIP_VERSION "eXosip/0.1(wengophone)"
+
 
 #ifdef __cplusplus
 extern "C"
