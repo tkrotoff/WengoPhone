@@ -29,6 +29,9 @@
 /**
  * Instant Messaging account.
  *
+ * Associates a login/password to an IM protocol.
+ * Example: login: "bob@hotmail.com" password: "bob" protocol: IMProtocolMSN
+ *
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
@@ -54,7 +57,7 @@ public:
 	}
 
 	bool operator == (const IMAccount & imAccount) const {
-		//TODO: should we check the password too?
+		//TODO should we check the password too?
 		return ((_login == imAccount._login)
 			&& (_protocol == imAccount._protocol));
 	}
@@ -66,7 +69,6 @@ private:
 	std::string _password;
 
 	EnumIMProtocol::IMProtocol _protocol;
-
 };
 
 #endif	//IMACCOUNT_H

@@ -30,6 +30,9 @@ class IMAccount;
 /**
  * An Instant Message Contact.
  *
+ * Associates a contact identifier (bob@hotmail.com) with a IMAccount.
+ * This is needed since several accounts using the same protocol can used in parallel.
+ *
  * @author Philippe Bernery
  */
 class IMContact {

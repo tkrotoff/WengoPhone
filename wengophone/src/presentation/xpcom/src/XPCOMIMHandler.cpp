@@ -26,6 +26,8 @@
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMConnect.h>
 #include <imwrapper/IMChat.h>
+#include <imwrapper/IMChatSession.h>
+#include <imwrapper/IMContact.h>
 #include <imwrapper/IMPresence.h>
 
 #include <model/phonecall/SipAddress.h>
@@ -163,6 +165,9 @@ int XPCOMIMHandler::sendChatMessage(const std::string & sipAddress, const std::s
 		return 0;
 	}
 
-	//return _chat->sendMessage(sipAddress, message);
-	return 0;
+	IMChatSession chatSession(*_chat);
+	chatSession.addIMContact(IMContact(*_account, sipAddress));
+	chatSession.sendMessage(message);
+
+	return 1;
 }

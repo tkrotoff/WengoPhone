@@ -31,13 +31,15 @@ class IMChatSession;
 /**
  * Wrapper for Instant Messaging chat.
  *
+ * Low-level functions to implement by the IM backend.
+ * Users of imwrapper will use IMChatSession instead.
+ *
+ * @see IMChatSession
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
 class IMChat : Interface {
 	friend class IMChatSession;
-	friend class ChatHandler;
-
 public:
 
 	/**
@@ -103,14 +105,14 @@ public:
 		return _imAccount;
 	}
 
-protected:
-
 	/**
 	 * Creates a new IMChatSession.
 	 *
 	 * The new IMChatSession is returned by the Event newIMChatSessionCreatedEvent
 	 */
 	virtual void createSession() = 0;
+
+protected:
 
 	/**
 	 * Says IMChat to close a new session given a IMChatSession

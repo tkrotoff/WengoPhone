@@ -29,10 +29,54 @@ class IMAccount;
 class IMAccountHandler;
 class IMContact;
 class IMChat;
-class ChatHandler;
 
+/**
+ * Instant Messaging chat.
+ *
+ * Example 1 - sending a message:
+ * <pre>
+ * IMAccount account("bob@hotmail.com", "bob", EnumIMProtocol::IMProtocolMSN);
+ * IMConnect connect(account);
+ * connect.connect();
+ * //Waits that account is connected using IMConnect::LoginStatusConnected
+ * IMChat * chat = IMWrapperFactory::getFactory().createIMChat(account);
+ * IMChatSession chatSession(*chat);
+ * chatSession.addIMContact(IMContact(account, "alice@hotmail.com"));
+ * chatSession.addIMContact(IMContact(account, "caroline@hotmail.com"));
+ * chatSession.addIMContact(IMContact(account, "tanguy.krotoff@wengo.fr"));
+ * chatSession.sendMessage("Hola! how are you?");
+ * </pre>
+ *
+ * Example 2 - sending a message:
+ * <pre>
+ * IMAccount account("bob@hotmail.com", "bob", EnumIMProtocol::IMProtocolMSN);
+ * IMConnect connect(account);
+ * connect.connect();
+ * //Waits that account is connected using IMConnect::LoginStatusConnected
+ * IMChat * chat = IMWrapperFactory::getFactory().createIMChat(account);
+ * chat->createSession();
+ * //Waits for IMChat::newIMChatSessionCreatedEvent and gets the IMChatSession
+ * chatSession.addIMContact(IMContact(account, "alice@hotmail.com"));
+ * chatSession.addIMContact(IMContact(account, "caroline@hotmail.com"));
+ * chatSession.addIMContact(IMContact(account, "tanguy.krotoff@wengo.fr"));
+ * chatSession.sendMessage("Hola! how are you?");
+ * </pre>
+ *
+ * Example 3 - receiving a message:
+ * <pre>
+ * IMAccount account("bob@hotmail.com", "bob", EnumIMProtocol::IMProtocolMSN);
+ * IMConnect connect(account);
+ * connect.connect();
+ * //Waits that account is connected using IMConnect::LoginStatusConnected
+ * IMChat * chat = IMWrapperFactory::getFactory().createIMChat(account);
+ * //Waits for IMChat::newIMChatSessionCreatedEvent and gets the IMChatSession
+ * //Waits for IMChatSession::messageReceivedEvent
+ * <pre>
+ *
+ * @author Tanguy Krotoff
+ * @author Philippe Bernery
+ */
 class IMChatSession {
-	friend class ChatHandler;
 public:
 
 	/** List of IMContact, each IMContact is unique inside the list, thus we use a set. */
@@ -46,14 +90,29 @@ public:
 
 	Event<void (IMChatSession & sender, const IMContact & imContact)> contactRemovedEvent;
 
+	/**
+	 * Constructs a chat session given a IMChat.
+	 *
+	 * @param imChat because a chat session is associated to 1 IMAccount
+	 */
 	IMChatSession(IMChat & imChat);
 
 	~IMChatSession();
 
+	/**
+	 * Adds a contact to the chat session.
+	 *
+	 * @param imContact contact that will receive messages from this chat session
+	 */
 	void addIMContact(const IMContact & imContact);
 
 	void removeIMContact(const IMContact & imContact);
 
+	/**
+	 * Sends a chat message to all the contacts from this chat session.
+	 *
+	 * @param message chat message to send
+	 */
 	void sendMessage(const std::string & message);
 
 	const IMContactList & getIMContactList() const {

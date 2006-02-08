@@ -1,0 +1,58 @@
+** cutil
+#include <cutil/dllexport.h>
+global.h
+dllexport.h
+log.h	//Logger.h in C
+/msvc/dirent.h
+/msvc/stdint.h
+
+
+** util (depends on cutil + boost::signals)
+#include <util/NonCopyable.h>
+NonCopyable.h
+Base64.h
+Date.h
+Event.h
+File.h
+Interface.h
+List.h
+Logger.h	//log.h in C++
+SharedPtr.h
+StringList.h
+/exception
+
+
+** thread (depends on util + boost::thread)
+#include <thread/Timer.h>
+Mutex.h
+Thread.h
+Timer.h
+
+
+** settings (depends on util)
+#include <settings/Settings.h>
+Settings.h
+SettingsSerializer.h
+
+
+** http (depends on util + curl)
+#include <http/HttpRequest.h>
+HttpRequest.h
+
+
+** serialization (depends on util + boost::serialization)
+#include <serialization/Storage.h>
+Serializable.h
+Storage.h
+
+
+** system (depends on util + sys)
+#include <system/WebBrowser.h>
+WebBrowser.h
+Startup.h
+MemoryDump.h
+
+
+** shlibloader (depends on util + sys)
+#include <shlibloader/SharedLibLoader.h>
+SharedLibLoader.h
