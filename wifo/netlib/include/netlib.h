@@ -107,6 +107,16 @@ NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port);
 NETLIB_BOOLEAN is_proxy_auth_ok(const char *proxy_addr, int proxy_port,
 								const char *proxy_login, const char *proxy_passwd);
 
+
+/**
+ * Try to find a url in the proxyless exceptions list
+ *
+ * @param url url we want to check
+ * @return true if url is in exception list; false otherwise
+ */
+NETLIB_BOOLEAN is_url_proxyless_exception(const char *url);
+
+
 /**
  * is_http_conn_allowed() or is_tunnel_conn_allowed() return.
  */
@@ -126,6 +136,7 @@ typedef enum
  * @param proxy_login if proxy authentication needed
  * @param proxy_passwd if proxy authentication needed
  * @param ssl use ssl or not
+ * @param redir_follow follow redirections (HTTP code 3XX)
  * @return State of HTTP response
  */
  HttpRet is_http_conn_allowed(const char *url, 

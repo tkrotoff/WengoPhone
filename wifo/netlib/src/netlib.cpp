@@ -17,8 +17,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <netlib.h>
-
 #include <cassert>
 #include <cstring>
 #include <iostream>
@@ -94,6 +92,9 @@ inline int closesocket(Socket fd) {return close(fd);}
 
 #include <curl/curl.h>
 #include "httptunnel.h"
+#include <netlib.h>
+#include "netlib_util.h"
+
 
 #define OPT_REQ	\
 "OPTIONS sip:nobody@nobody.com SIP/2.0\r\n\
@@ -114,9 +115,11 @@ typedef struct	HttpProxy_s
 	int			port;
 	char		*address;
 	long		auth_type;
+	long		proxy_auth_type;
+	char		**proxy_exceptions;
 }				HttpProxy_t;
 
-HttpProxy_t	_LocalProxy = {0, NULL, 0};
+HttpProxy_t	_LocalProxy = {0, NULL, 0, 0};
 
 char *_cleanStr(char *str)
 {
@@ -282,11 +285,71 @@ void _get_proxy_auth_type(const char *url)
 		curl_easy_cleanup(curl_tmp);
 }
 
+void _get_auth_type(const char *url)
+{
+		CURL *curl_tmp;
+		char buff[2048];
+		int ret;
+
+		ret = 0;
+		curl_tmp = curl_easy_init();
+
+		sprintf(buff, "http://%s", url);
+		curl_easy_setopt(curl_tmp, CURLOPT_URL, strdup(buff));
+
+		ret = curl_easy_perform(curl_tmp);
+
+		curl_easy_getinfo(curl_tmp, CURLINFO_HTTPAUTH_AVAIL, &(_LocalProxy.auth_type));
+		
+		// free the Curl tmp handle
+		curl_easy_cleanup(curl_tmp);
+}
+
+char **internet_explorer_proxyless_exception_list()
+{
+	char **list;
+	long ret;
+	HKEY result;
+	char buff[1024];
+	DWORD buff_size = sizeof(buff);
+
+	ret = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", 0, KEY_QUERY_VALUE, &result);
+	ret = RegQueryValueEx(result, "ProxyOverride", 0, 0, (LPBYTE)buff, &buff_size);
+	RegCloseKey(result);
+
+	list = my_split(buff, ';');
+	return list;
+}
+
+NETLIB_BOOLEAN is_url_proxyless_exception(const char *url)
+{
+	int i;
+
+	if (!url)
+		return NETLIB_FALSE;
+
+	if (!_LocalProxy.proxy_exceptions)
+		_LocalProxy.proxy_exceptions = internet_explorer_proxyless_exception_list();
+
+	if (!_LocalProxy.proxy_exceptions)
+		return NETLIB_FALSE;
+
+	for (i = 0; _LocalProxy.proxy_exceptions[i]; i++)
+	{
+		if (domain_url_cmp((char *)url, _LocalProxy.proxy_exceptions[i]) == false)
+		{
+			return NETLIB_TRUE;
+		}
+	}
+
+	return NETLIB_FALSE;
+}
 
 NETLIB_BOOLEAN is_udp_port_opened(const char *stun_server, int port)
 {
 	NatType natType = get_nat_type(stun_server);
-	return (natType > StunTypeUnknown && natType < StunTypeBlocked ? 1 : 0);
+	return (natType > StunTypeUnknown && natType < StunTypeBlocked ? 
+			NETLIB_TRUE : NETLIB_FALSE);
 }
 
 NETLIB_BOOLEAN is_local_udp_port_used(const char *itf, int port)
@@ -408,6 +471,13 @@ NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int ping_timeo
 	return (ret ? NETLIB_TRUE : NETLIB_FALSE);
 }
 
+NETLIB_BOOLEAN is_https(const char *url)
+{
+	if (strnicmp(url, "https", 5) == 0)
+		return NETLIB_TRUE;
+	else
+		return NETLIB_FALSE;
+}
 
 HttpRet is_http_conn_allowed(const char *url, 
 							  const char *proxy_addr, int proxy_port, 
@@ -418,6 +488,8 @@ HttpRet is_http_conn_allowed(const char *url,
 	CURL *mcurl;
 	int ret;
 	long http_resp_code;
+	char *toto;
+	char *redir_url;
 
 	mcurl = curl_easy_init();
 	
@@ -437,32 +509,78 @@ HttpRet is_http_conn_allowed(const char *url,
 	curl_easy_setopt(mcurl, CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(mcurl, CURLOPT_UNRESTRICTED_AUTH, 1);
 	/* ****************** */
+	curl_easy_setopt(mcurl, CURLOPT_VERBOSE, 1);
  
 	if (proxy_addr)
 	{
 		if (proxy_login)
 		{
-			if (!_LocalProxy.auth_type)
+			if (!_LocalProxy.proxy_auth_type)
 				_get_proxy_auth_type(url);
 
 			sprintf(buff, "%s:%s", proxy_login, proxy_passwd);
 			curl_easy_setopt(mcurl, CURLOPT_PROXYUSERPWD, strdup(buff));
 			
-			if ((_LocalProxy.auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC)
+			if ((_LocalProxy.proxy_auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC)
 				curl_easy_setopt(mcurl, CURLOPT_PROXYAUTH, CURLAUTH_BASIC);
-			else if ((_LocalProxy.auth_type & CURLAUTH_DIGEST) == CURLAUTH_DIGEST)
+			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_DIGEST) == CURLAUTH_DIGEST)
 				curl_easy_setopt(mcurl, CURLOPT_PROXYAUTH, CURLAUTH_DIGEST);
-			else if ((_LocalProxy.auth_type & CURLAUTH_NTLM) == CURLAUTH_NTLM)
+			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_NTLM) == CURLAUTH_NTLM)
 				curl_easy_setopt(mcurl, CURLOPT_PROXYAUTH, CURLAUTH_NTLM);
 		}
 		sprintf(buff, "%s:%d", proxy_addr, proxy_port);
 		curl_easy_setopt(mcurl, CURLOPT_PROXY, strdup(buff));
 	}
+	else
+	{
+		if (proxy_login)
+		{
+			if (!_LocalProxy.auth_type)
+				_get_auth_type(url);
+
+			sprintf(buff, "%s:%s", proxy_login, proxy_passwd);
+			curl_easy_setopt(mcurl, CURLOPT_USERPWD, strdup(buff));
+
+			if ((_LocalProxy.proxy_auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC)
+				curl_easy_setopt(mcurl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_DIGEST) == CURLAUTH_DIGEST)
+				curl_easy_setopt(mcurl, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_NTLM) == CURLAUTH_NTLM)
+				curl_easy_setopt(mcurl, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
+		}
+
+	}
 
 	ret = curl_easy_perform(mcurl);
 	curl_easy_getinfo(mcurl, CURLINFO_RESPONSE_CODE, &http_resp_code);
 
+	curl_easy_getinfo(mcurl, CURLINFO_EFFECTIVE_URL, &toto);
+
+	redir_url = strdup(toto);
+
 	curl_easy_cleanup(mcurl);
+
+	if ((http_resp_code / 100) == 3)
+	{
+		NETLIB_BOOLEAN is_ssl;
+		char *tmp;
+
+		if ((is_ssl= is_https(redir_url)) == NETLIB_TRUE)
+			tmp = redir_url + 8;
+		else
+			tmp = redir_url + 7;
+
+		if (is_url_proxyless_exception(tmp))
+		{
+			return is_http_conn_allowed(tmp, NULL, NULL, 
+										proxy_login, proxy_passwd, is_ssl);
+		}
+		else
+		{
+			return is_http_conn_allowed(tmp, proxy_addr, proxy_port, 
+										proxy_login, proxy_passwd, is_ssl);
+		}
+	}
 	
 	if (http_resp_code == 200)
 		return HTTP_OK;
@@ -511,7 +629,10 @@ NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port)
 {
 	HttpRet ret;
 
-	ret = is_http_conn_allowed("google.com:80", proxy_addr, proxy_port, 
+	if (_LocalProxy.auth_type)
+		return NETLIB_TRUE;
+
+	ret = is_http_conn_allowed("www.google.com:80", proxy_addr, proxy_port, 
 								NULL, NULL, NETLIB_FALSE);
 
 	return (ret == HTTP_AUTH ? NETLIB_TRUE : NETLIB_FALSE);
@@ -522,8 +643,9 @@ NETLIB_BOOLEAN is_proxy_auth_ok(const char *proxy_addr, int proxy_port,
 {
 	HttpRet ret;
 
-	ret = is_http_conn_allowed("google.com:80", proxy_addr, proxy_port, 
-								proxy_login, proxy_passwd, NETLIB_FALSE);
+	ret = is_http_conn_allowed("www.google.com:80", proxy_addr, proxy_port, 
+								proxy_login, proxy_passwd, 
+								NETLIB_FALSE);
 
 	return (ret == HTTP_OK ? NETLIB_TRUE : NETLIB_FALSE);
 }

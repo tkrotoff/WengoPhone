@@ -12,7 +12,8 @@ include_path = [
 defines = {}
 headers = []
 sources = [
-	'src/netlib.cpp', 
+	'src/netlib.cpp',
+	'src/netlib_util.cpp',
 	'stun_func.cpp',
 	'udp_func.cpp',
 	'bugfix.cpp',
