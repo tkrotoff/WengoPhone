@@ -43,8 +43,8 @@
 
 #include <strings.h>
 
-#define ph_printf  printf
-//#define ph_printf
+//#define ph_printf  printf
+#define ph_printf
 
 /**
  * Declare the driver to phmedia-audio and initialize it.
@@ -93,7 +93,7 @@ typedef struct _ca_dev {
 	unsigned inputConverterBufferSize;
 	ph_audio_cbk cbk;
 	
-	char tmpOutputBuffer[4096]; // FIXME: should be set dynamically
+	char tmpOutputBuffer[32768]; // FIXME: should be set dynamically
 	unsigned tmpOutputCount;
 	
 	char tmpInputBuffer[32768]; // FIXME: should be set dynamically
@@ -101,7 +101,7 @@ typedef struct _ca_dev {
 	
 	char *currentInputBuffer;
 	
-	char convertedInputBuffer[320]; // FIXME: should be set dynamically
+	char *convertedInputBuffer; 
 	unsigned convertedInputCount;
 	
 	char *recordBuffer;
@@ -368,7 +368,7 @@ static OSStatus input_proc(AudioDeviceID device,
 	cadev->tmpInputCount += cadev->recordBufferCount;
 	
 	if (cadev->tmpInputCount >= cadev->inputConverterBufferSize) {
-		cadev->convertedInputCount = sizeof(cadev->convertedInputBuffer); //FIXME: sizeof will not work if convertedInputBuffer is set dynamically
+		cadev->convertedInputCount = as->ms.codec->decoded_framesize; //FIXME: sizeof will not work if convertedInputBuffer is set dynamically
 		unsigned savedtmpInputCount = cadev->tmpInputCount;
 		cadev->currentInputBuffer = cadev->tmpInputBuffer;
 		cadev->sumDataSize = 0;
@@ -399,7 +399,7 @@ static OSStatus input_proc(AudioDeviceID device,
 static OSStatus buffer_data_proc(AudioConverterRef inAudioConverter, UInt32 *ioDataSize, void **outData, void *context) {
 	ca_dev *cadev = (ca_dev *) context;
 
-	ph_printf("**CoreAudio: buffer size: %d, ioDataSize: %d\n", cadev->tmpInputCount, *ioDataSize);
+	ph_printf("**CoreAudio: buffer size: %u, ioDataSize: %d\n", cadev->tmpInputCount, *ioDataSize);
 
 	cadev->sumDataSize += *ioDataSize;
 	
@@ -600,6 +600,10 @@ static void set_recorded_format(phastream_t *as, float rate, unsigned channels, 
 	
 	propsize = sizeof(unsigned);
 	cadev->inputConverterBufferSize = as->ms.codec->decoded_framesize;
+	if ((cadev->convertedInputBuffer = malloc(sizeof(char) * as->ms.codec->decoded_framesize)) == NULL) {
+		ph_printf("!!CoreAudio: can't allocate enough memory for cadev->convertedInputBuffer\n");
+		return;
+	}
 	
 	err = AudioConverterGetProperty(cadev->inputConverter, kAudioConverterPropertyCalculateInputBufferSize,
 		&propsize, &cadev->inputConverterBufferSize);
@@ -710,7 +714,12 @@ void ca_close(phastream_t *as) {
 	
 	verify_noerr(AudioOutputUnitStop(cadev->outputAU));
 	verify_noerr(AudioUnitUninitialize (cadev->outputAU));
-	
-	free(cadev);
+	if (cadev)
+		{
+			if (cadev->convertedInputBuffer)
+				free(cadev->convertedInputBuffer);
+			cadev->convertedInputBuffer = NULL;
+			free(cadev);
+		}
 }
 
