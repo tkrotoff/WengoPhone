@@ -39,12 +39,12 @@ ChatHandler::ChatHandler(WengoPhone & wengoPhone)
 }
 
 ChatHandler::~ChatHandler() {
-	for (IMChatMap::iterator i = _imChatMap.begin() ; i != _imChatMap.end() ; i++) {
-		delete (*i).second;
+	for (IMChatMap::iterator it = _imChatMap.begin(); it != _imChatMap.end(); it++) {
+		delete (*it).second;
 	}
 
-	for (IMChatSessionList::iterator i = _imChatSessionList.begin() ; i != _imChatSessionList.end() ; i++) {
-		delete (*i);
+	for (IMChatSessionList::iterator it = _imChatSessionList.begin(); it != _imChatSessionList.end(); it++) {
+		delete (*it);
 	}
 }
 
@@ -54,12 +54,12 @@ void ChatHandler::createSession(const IMAccount & imAccount) {
 }
 
 void ChatHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & account) {
-	IMChatMap::iterator i = _imChatMap.find(&account);
+	IMChatMap::iterator it = _imChatMap.find(&account);
 
 	LOG_DEBUG("an account is connected: login: " + account.getLogin()
-		+ "protocol: " + String::fromNumber(account.getProtocol()));
+		+ " protocol: " + String::fromNumber(account.getProtocol()));
 	//IMChat for this IMAccount has not been created yet
-	if (i == _imChatMap.end()) {
+	if (it == _imChatMap.end()) {
 		IMChat * imChat = IMWrapperFactory::getFactory().createIMChat(account);
 		imChat->newIMChatSessionCreatedEvent +=
 			boost::bind(&ChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);

@@ -55,6 +55,12 @@ void IMChatSession::removeIMContact(const IMContact & imContact) {
 	_imChat.removeContact(*this, imContact.getContactId());
 }
 
+void IMChatSession::removeAllIMContact() {
+	for (IMContactList::const_iterator it = _imContactList.begin(); it != _imContactList.end(); ++it) {
+		_imChat.removeContact(*this, (*it).getContactId());
+	}
+}
+
 void IMChatSession::sendMessage(const std::string & message) {
 	LOG_DEBUG("sending message: " + message);
 	_imChat.sendMessage(*this, message);

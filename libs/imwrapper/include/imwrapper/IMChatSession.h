@@ -108,6 +108,8 @@ public:
 
 	void removeIMContact(const IMContact & imContact);
 
+	void removeAllIMContact();
+
 	/**
 	 * Sends a chat message to all the contacts from this chat session.
 	 *

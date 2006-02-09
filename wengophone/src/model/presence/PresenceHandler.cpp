@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 #include "PresenceHandler.h"
 
 #include <model/presence/Presence.h>
@@ -30,15 +30,15 @@
 using namespace std;
 
 PresenceHandler::PresenceHandler(ConnectHandler & connectHandler) {
-	connectHandler.connectedEvent += 
+	connectHandler.connectedEvent +=
 		boost::bind(&PresenceHandler::connectedEventHandler, this, _1, _2);
-	connectHandler.disconnectedEvent += 
+	connectHandler.disconnectedEvent +=
 		boost::bind(&PresenceHandler::disconnectedEventHandler, this, _1, _2);
 }
 
 PresenceHandler::~PresenceHandler() {
-	for (PresenceMap::iterator i = _presenceMap.begin() ; i != _presenceMap.end() ; i++) {
-		delete (*i).second;
+	for (PresenceMap::iterator it = _presenceMap.begin(); it != _presenceMap.end(); it++) {
+		delete (*it).second;
 	}
 }
 
@@ -58,8 +58,8 @@ void PresenceHandler::blockContact(const IMContact & imContact) {
 	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
-		LOG_DEBUG("blocking Contact: " + imContact.getContactId() 
-			+ " of IMAccount: " + imContact.getIMAccount().getLogin() 
+		LOG_DEBUG("blocking Contact: " + imContact.getContactId()
+			+ " of IMAccount: " + imContact.getIMAccount().getLogin()
 				+ " of protocol " + String::fromNumber(imContact.getIMAccount().getProtocol()));
 
 		(*it).second->blockContact(imContact.getContactId());
@@ -70,8 +70,8 @@ void PresenceHandler::unblockContact(const IMContact & imContact) {
 	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
-		LOG_DEBUG("unblocking Contact: " + imContact.getContactId() 
-			+ " of IMAccount: " + imContact.getIMAccount().getLogin() 
+		LOG_DEBUG("unblocking Contact: " + imContact.getContactId()
+			+ " of IMAccount: " + imContact.getIMAccount().getLogin()
 				+ " of protocol " + String::fromNumber(imContact.getIMAccount().getProtocol()));
 
 		(*it).second->unblockContact(imContact.getContactId());
@@ -80,19 +80,19 @@ void PresenceHandler::unblockContact(const IMContact & imContact) {
 
 void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
 	PresenceMap::const_iterator i = _presenceMap.find(&imAccount);
-	
-	LOG_DEBUG("an account is connected: login: " + imAccount.getLogin() 
-		+ "protocol: " + String::fromNumber(imAccount.getProtocol()));
+
+	LOG_DEBUG("an account is connected: login: " + imAccount.getLogin()
+		+ " protocol: " + String::fromNumber(imAccount.getProtocol()));
 	//Presence for this IMAccount has not been created yet
 	if (i == _presenceMap.end()) {
 		Presence * presence = new Presence(imAccount);
 		_presenceMap[&imAccount] = presence;
 
-		presence->presenceStateChangedEvent += 
+		presence->presenceStateChangedEvent +=
 			boost::bind(&PresenceHandler::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
-		presence->myPresenceStatusEvent += 
+		presence->myPresenceStatusEvent +=
 			boost::bind(&PresenceHandler::myPresenceStatusEventHandler, this, _1, _2);
-		presence->subscribeStatusEvent += 
+		presence->subscribeStatusEvent +=
 			boost::bind(&PresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3);
 
 		//Launch all pending subscriptions
@@ -109,20 +109,20 @@ void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount &
 	}
 
 	//TODO: Presence must be change to Presence set before disconnection
-	(*i).second->changeMyPresence(EnumPresenceState::PresenceStateOnline, "");
+	(*i).second->changeMyPresence(EnumPresenceState::PresenceStateOnline, String::null);
 }
 
 void PresenceHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
-	PresenceMap::iterator i = _presenceMap.find(&imAccount);
-	
-	LOG_DEBUG("an account is disconnected: login: " + imAccount.getLogin() 
+	PresenceMap::iterator it = _presenceMap.find(&imAccount);
+
+	LOG_DEBUG("an account is disconnected: login: " + imAccount.getLogin()
 		+ ", protocol: " + String::fromNumber(imAccount.getProtocol()));
-	if (i != _presenceMap.end()) {
-		(*i).second->changeMyPresence(EnumPresenceState::PresenceStateOffline, "");
+	if (it != _presenceMap.end()) {
+		(*it).second->changeMyPresence(EnumPresenceState::PresenceStateOffline, String::null);
 	}
 }
 
-void PresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,	
+void PresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,
 	const std::string & note, IMAccount * imAccount) {
 
 	LOG_DEBUG("changing MyPresenceState for "
@@ -130,13 +130,13 @@ void PresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,
 		+ " with state " + String::fromNumber(state) + " and note " + note);
 
 	if (!imAccount) {
-		for (PresenceMap::const_iterator i = _presenceMap.begin() ; i != _presenceMap.end() ; i++) {
-			(*i).second->changeMyPresence(state, note);
+		for (PresenceMap::const_iterator it = _presenceMap.begin(); it != _presenceMap.end(); it++) {
+			(*it).second->changeMyPresence(state, note);
 		}
 	} else {
 		//Find the desired Protocol
 		PresenceMap::iterator it = findPresence(_presenceMap, *imAccount);
-		
+
 		if (it != _presenceMap.end()) {
 			(*it).second->changeMyPresence(state, note);
 		}
@@ -145,7 +145,7 @@ void PresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,
 
 void PresenceHandler::presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
 	const std::string & note, const std::string & from) {
-	
+
 	presenceStateChangedEvent(*this, state, note, sender.getIMAccount(), from);
 }
 
@@ -158,11 +158,11 @@ void PresenceHandler::subscribeStatusEventHandler(IMPresence & sender, const std
 }
 
 PresenceHandler::PresenceMap::iterator PresenceHandler::findPresence(PresenceMap & presenceMap, IMAccount & imAccount) {
-	PresenceMap::iterator i;
-	for (i = presenceMap.begin() ; i != presenceMap.end() ; i++) {
-		if ((*((*i).first)) == imAccount) {
+	PresenceMap::iterator it;
+	for (it = presenceMap.begin(); it != presenceMap.end(); it++) {
+		if ((*((*it).first)) == imAccount) {
 			break;
-		} 
+		}
 	}
-	return i;
+	return it;
 }

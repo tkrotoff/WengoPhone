@@ -20,6 +20,7 @@
 #include "Sms.h"
 
 #include <model/account/wengo/WengoAccount.h>
+#include <WengoPhoneBuildId.h>
 
 #include <Logger.h>
 #include <http/HttpRequestFactory.h>
@@ -32,25 +33,15 @@ Sms::Sms(WengoAccount & wengoAccount)
 	: _wengoAccount(wengoAccount) {
 }
 
-/* If you modify this please modify all use of HttpRequest (WengoAccount for example). */
 void Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
 
 	std::string data = "login=" + String::encodeUrl(_wengoAccount.getWengoLogin()) +
 				"&password=" + String::encodeUrl(_wengoAccount.getWengoPassword()) +
 				"&message=" + String::encodeUrl(message) +
 				"&target=" + phoneNumber +
-				"&wl=" + QString(WL_TAG);
+				"&wl=" + WengoPhoneBuildId::SOFTPHONE_NAME;
 
 	LOG_DEBUG("sending SMS");
-
-	//HTTPS + POST method
-	sendRequest(true, Softphone::WENGO_SERVER_HOSTNAME, 443, Softphone::WENGO_SMS_PATH, data, true);
-
-	////
-
-	//Url::encode(_wengoLogin);
-	//Url::encode(_wengoPassword);
-	std::string data = "login=" + _wengoLogin + "&password=" + _wengoPassword + "&wl=" + WengoPhoneBuildId::SOFTPHONE_NAME;
 
 	//FIXME if not static it crashes inside boost::thread, do not know why
 	static HttpRequest httpRequest;
@@ -74,7 +65,7 @@ void Sms::answerReceivedEventHandler(const std::string & answer, HttpRequest::Er
 	if (error == HttpRequest::NoError && !tmp.empty()) {
 		if (tmp.contains(STATUS_OK) && !tmp.contains(STATUS_UNAUTHORIZED)) {
 			LOG_DEBUG("SMS sent");
-			loginEvent(*this, SmsStatusOk);
+			smsStatusEvent(*this, SmsStatusOk);
 			return;
 		}
 	}

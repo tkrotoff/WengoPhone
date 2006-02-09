@@ -35,6 +35,8 @@ class IMChatSession;
  */
 class PhApiIMChat : public IMChat {
 	friend class PhApiFactory;
+	friend class PhApiWrapper;
+	friend class PhApiCallbacks;
 public:
 
 	void sendMessage(IMChatSession & chatSession, const std::string & message);

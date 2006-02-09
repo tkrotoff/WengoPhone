@@ -22,6 +22,8 @@
 
 #include "PhApiCallbacks.h"
 
+#include "PhApiIMChat.h"
+
 #include <sipwrapper/SipWrapper.h>
 
 #include <imwrapper/EnumPresenceState.h>
@@ -56,7 +58,7 @@ public:
 
 	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message)> messageReceivedEvent;
 
-	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, IMChat::StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
+	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, PhApiIMChat::StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
 
 	Event<void (PhApiWrapper & sender, IMConnect::LoginStatus status)> loginStatusEvent;
 

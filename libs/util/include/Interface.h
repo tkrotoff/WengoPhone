@@ -27,6 +27,9 @@
  * @author Tanguy Krotoff
  */
 class Interface : NonCopyable {
+public:
+
+	virtual ~Interface() { }
 };
 
 #endif	//INTERFACE_H

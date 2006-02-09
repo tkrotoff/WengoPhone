@@ -54,6 +54,7 @@ public:
 
 	/**
 	 * Softphone name when connecting on the Wengo platform.
+	 * WL_TAG
 	 */
 	static const char * SOFTPHONE_NAME;
 };

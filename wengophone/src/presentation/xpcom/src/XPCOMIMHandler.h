@@ -29,6 +29,7 @@
 #include <string>
 
 class IMAccount;
+class IMContact;
 class IMConnect;
 class IMChat;
 class IMChatSession;
@@ -66,7 +67,7 @@ public:
 
 private:
 
-	void messageReceivedEventHandler(IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message);
+	void messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message);
 
 	void presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
 					const std::string & note, const std::string & from);
@@ -77,6 +78,7 @@ private:
 	IMAccount * _account;
 	IMConnect * _connect;
 	IMChat * _chat;
+	IMChatSession * _chatSession;
 	IMPresence * _presence;
 };
 

@@ -45,8 +45,9 @@ void XPCOMIMHandler::connected() {
 
 	if (!_chat) {
 		_chat = IMWrapperFactory::getFactory().createIMChat(*_account);
-		_chat->messageReceivedEvent +=
-				boost::bind(&XPCOMIMHandler::messageReceivedEventHandler, this, _1, _2, _3, _4);
+		_chatSession = new IMChatSession(*_chat);
+		_chatSession->messageReceivedEvent +=
+				boost::bind(&XPCOMIMHandler::messageReceivedEventHandler, this, _1, _2, _3);
 	}
 
 	if (!_presence) {
@@ -56,8 +57,8 @@ void XPCOMIMHandler::connected() {
 	}
 }
 
-void XPCOMIMHandler::messageReceivedEventHandler(IMChat & sender, IMChatSession & chatSession, const std::string & from, const std::string & message) {
-	SipAddress sipUri(from);
+void XPCOMIMHandler::messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message) {
+	SipAddress sipUri(from.getContactId());
 	std::string sipAddress = sipUri.getSipAddress();
 	std::string userName = sipUri.getUserName();
 	std::string displayName = sipUri.getDisplayName();
@@ -160,14 +161,14 @@ void XPCOMIMHandler::publishMyPresence(Listener::PresenceState state, const std:
 }
 
 int XPCOMIMHandler::sendChatMessage(const std::string & sipAddress, const std::string & message) {
-	if (!_chat) {
-		LOG_DEBUG("cannot call sendChatMessage(): _chat is NULL");
+	if (!_chatSession) {
+		LOG_DEBUG("cannot call sendMessage(): _chatSession is NULL");
 		return 0;
 	}
 
-	IMChatSession chatSession(*_chat);
-	chatSession.addIMContact(IMContact(*_account, sipAddress));
-	chatSession.sendMessage(message);
+	_chatSession->removeAllIMContact();
+	_chatSession->addIMContact(IMContact(*_account, sipAddress));
+	_chatSession->sendMessage(message);
 
 	return 1;
 }

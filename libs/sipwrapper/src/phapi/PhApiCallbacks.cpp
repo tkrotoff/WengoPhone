@@ -255,11 +255,11 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	}
 
 	case phMsgOk:
-		p->statusMessageReceivedEvent(*p, *imChatSession, IMChat::StatusMessageReceived, String::null);
+		p->statusMessageReceivedEvent(*p, *imChatSession, PhApiIMChat::StatusMessageReceived, String::null);
 		break;
 
 	case phMsgError:
-		p->statusMessageReceivedEvent(*p, *imChatSession, IMChat::StatusMessageError, String::null);
+		p->statusMessageReceivedEvent(*p, *imChatSession, PhApiIMChat::StatusMessageError, String::null);
 		break;
 
 	default:

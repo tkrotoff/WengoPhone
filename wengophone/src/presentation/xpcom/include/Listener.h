@@ -32,8 +32,6 @@
 class Listener : Interface {
 public:
 
-	virtual ~Listener() { }
-
 	enum LoginState {
 		/** Connected to the Wengo platform, login is OK. */
 		LoginOk,

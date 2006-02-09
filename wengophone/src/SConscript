@@ -28,7 +28,7 @@ WengoPhoneBuildId = {
 	'buildId': WengoGetCurrentDateTime(),
 	'version': '2.0',
 	'revision': WengoGetSubversionRevision(),
-	'sofphoneName': 'WengoPhone'
+	'sofphoneName': 'wengo'
 }
 
 sources = [
@@ -81,6 +81,7 @@ sources = [
 	'model/contactlist/ContactParser.cpp',
 	'model/contactlist/ContactListXMLLayer.cpp',
 	'model/contactlist/ContactListRPCLayer.cpp',
+	'model/sms/SMS.cpp',
 	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
 	'control/CWengoPhoneLogger.cpp',
