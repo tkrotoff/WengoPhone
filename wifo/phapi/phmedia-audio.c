@@ -62,8 +62,10 @@
 #define ECHO_SYNC_LOCK(x) if (s->ec) g_mutex_lock(s->ecmux)
 #define ECHO_SYNC_UNLOCK(x) if (s->ec) g_mutex_unlock(s->ecmux)
 */
+
 #define ECHO_SYNC_LOCK(x)
 #define ECHO_SYNC_UNLOCK(x)
+
 
 #define NO_ECHO__SUPPRESSOR 1	
 #define abs(x) ((x>=0)?x:(-x))
@@ -454,7 +456,7 @@ void do_echo_update(phastream_t *s, char *micdata, int length)
 #ifdef USE_SPXEC
 
     total = spklen1 + spklen2;
-    spxec_echo_cancel(s->ec, (short *) tmpspk, micpcm, (short *) tmpmic, 0);
+    spxec_echo_cancel(s->ec, micpcm, (short *) tmpspk, (short *) tmpmic, 0);
     if (s->activate_recorder)
       {
 	short *cleansignal = (short *) tmpmic;
