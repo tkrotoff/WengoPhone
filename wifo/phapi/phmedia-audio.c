@@ -1510,7 +1510,13 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
     deviceId = getenv("PH_AUDIO_DEVICE");
 
   if (!deviceId)
-    deviceId = "pa:";
+	{
+#if defined(OS_MACOSX)
+		deviceId = "ca:";
+#else
+		deviceId = "pa:";
+#endif
+	}
 
   if (ph_activate_audio_driver(deviceId))
     {

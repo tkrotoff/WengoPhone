@@ -41,6 +41,11 @@ bool AudioDevice::setDefaultRecordDevice(const std::string & /*deviceName*/) {
 	return false;
 }
 
+
+std::string AudioDevice::getDefaultRecordDevice() {
+	return std::string("");
+}
+
 int AudioDevice::getWaveOutDeviceId(const std::string & /*deviceName*/) {
 	return 0;
 }

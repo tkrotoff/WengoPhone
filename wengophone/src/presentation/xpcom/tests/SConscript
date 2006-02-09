@@ -10,6 +10,8 @@ include_path = []
 export_defines = {}
 defines = {}
 link_flags = []
+if WengoOSMacOSX():
+	link_flags += ['-framework AudioUnit', '-framework AudioToolbox', '-framework CoreAudio']
 headers = []
 sources = [
 	'main.cpp',

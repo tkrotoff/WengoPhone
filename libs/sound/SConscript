@@ -1,5 +1,5 @@
 env = WengoGetEnvironment()
-
+link_flags = []
 libs = [
 	'wengoutil',
 ]
@@ -33,12 +33,12 @@ elif WengoOSLinux():
 
 elif WengoOSMacOSX():
 	sources += [
-		'src/qsound/AudioDevice.cpp',
-		'src/qsound/Sound.cpp',
-		'src/qsound/SoundMixer.cpp',
-		'src/qsound/SoundMixerException.cpp'
+		'src/mac/AudioDevice.cpp',
+		'src/mac/Sound.cpp',
+		'src/mac/SoundMixer.cpp',
+		'src/mac/SoundMixerException.cpp'
 	]
-	libs += ['qt4']
+	link_flags += ['framework CoreAudio', '-framework AudioToolbox', '-framework AudioUnit']
 
 if WengoGetConsoleArgument('enable-libsound-portaudio'):
 	sources += ['src/portaudio/AudioDevice.cpp']
@@ -51,6 +51,7 @@ elif WengoOSLinux():
 
 env.WengoAddIncludePath(include_path)
 env.WengoAddDefines(defines)
+env.WengoAddLinkFlags(link_flags)
 env.WengoUseLibraries(libs)
 
 env.WengoStaticLibrary('sound', sources)

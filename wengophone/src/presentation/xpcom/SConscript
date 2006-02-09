@@ -4,6 +4,8 @@ libs = [
 	'wengoutil',
 	'wengophone',
 ]
+if WengoOSMacOSX():
+	libs += ['glib-2.0', 'gthread-2.0']
 lib_path = []
 include_path = [
 	'include'
@@ -14,6 +16,8 @@ defines = {
 	'BUILD_XPCOM_DLL' : 1
 }
 link_flags = []
+if WengoOSMacOSX():
+	link_flags += ['-framework CoreAudio', '-framework AudioUnit', '-framework AudioToolbox']
 headers = []
 sources = [
 	'src/Command.cpp',
@@ -41,4 +45,4 @@ env.WengoAddDefines(defines)
 env.WengoAddLinkFlags(link_flags)
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
-env.WengoSharedLibrary('xpcomwengophone', sources, headers)
+env.WengoStaticLibrary('xpcomwengophone', sources, headers)

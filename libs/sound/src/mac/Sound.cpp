@@ -19,17 +19,20 @@
 
 #include <Sound.h>
 
-#include <qsound.h>
+//#include <qsound.h>
 
 /**
  * SoundPrivate is a QSound object under UNIX.
  *
  * @author Tanguy Krotoff
  */
-class Sound::SoundPrivate : NonCopyable, public QSound {
+class Sound::SoundPrivate : NonCopyable {
 public:
-
-	SoundPrivate(const std::string & filename) : QSound(filename) {
+	void stop() {}
+	void setLoops(int loops) {}
+	void play() {}
+	
+	SoundPrivate(const std::string & filename) {
 	}
 };
 
@@ -60,5 +63,5 @@ void Sound::play() {
 }
 
 void Sound::play(const std::string & filename, const std::string & /*deviceName*/) {
-	QSound::play(filename);
+	//QSound::play(filename);
 }
