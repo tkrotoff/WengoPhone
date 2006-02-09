@@ -162,7 +162,6 @@ sources = [
 
 if WengoGetConsoleArgument('enable_netlib'):
     defines['PH_USE_NETLIB'] = 1
-    libs += ['netlib']
     
 
 if WengoOSLinux() or WengoOSBSD():

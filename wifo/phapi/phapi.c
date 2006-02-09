@@ -73,12 +73,7 @@
 
 #ifdef USE_HTTP_TUNNEL
 #include "httptunnel.h"
-
-#ifdef CC_MSVC
-#include "get_net_conf.h"
 #endif
-#endif
-
 /*
 #define G711_ONLY
 */
@@ -2560,18 +2555,6 @@ ph_tunnel_init()
       tunnel->h_tunnel = http_tunnel_open(buf, port, HTTP_TUNNEL_VAR_MODE, &tunerr);
       if (!tunnel->h_tunnel)
 	{
-#if defined(PH_USE_NETLIB) && defined(CC_MSVC)
-	  if (phcfg.use_tunnel & PH_TUNNEL_AUTOCONF)
-	    {
-	      net_info_t netInfo;
-	      GetNetConf(&netInfo, 0);
-	      http_tunnel_init_proxy(netInfo.Proxy_IP, netInfo.Proxy_Port, 
-				     phcfg.http_proxy_user, phcfg.http_proxy_passwd);
-	      
-	      tunnel->h_tunnel = http_tunnel_open(buf, port, HTTP_TUNNEL_VAR_MODE, &tunerr);
-	      
-	    }
-#endif		
 	  if (!tunnel->h_tunnel)
 	    {
 	      free(tunnel);
