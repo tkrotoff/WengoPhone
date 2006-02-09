@@ -2371,12 +2371,14 @@ static int phcodec_is_codec_registered(const char *ptstring) {
                 if (!codec->clockrate || !clockrate)
                 {
                     DBG4_CODEC_LOOKUP("....YES: \"%s/%d\"\n", codec->mime, codec->clockrate, 0);
+		    free(mime);
                     return 1;
                 }
 
                 if (codec->clockrate == clockrate)
                 {
                     DBG4_CODEC_LOOKUP("....YES: \"%s/%d\"\n", codec->mime, codec->clockrate, 0);
+		    free(mime);
                     return 1;
                 }
             }
@@ -2385,6 +2387,7 @@ static int phcodec_is_codec_registered(const char *ptstring) {
     }
 
 	DBG4_CODEC_LOOKUP("....NO\n", 0, 0, 0);
+	free(mime);
 	return 0;
 
 } 
