@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 
 #ifndef SOUNDTHREAD_H
 #define SOUNDTHREAD_H
+
+#include "playsound/PlaySoundFile.h"
 
 #include <Thread.h>
 
@@ -94,6 +96,8 @@ private:
 	 * Stops or continues playing the sound.
 	 */
 	bool _stop;
+
+	PlaySoundFile _soundFile;
 };
 
 #endif	//SOUNDTHREAD_H

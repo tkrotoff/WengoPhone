@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,9 @@
 #include "SoundThread.h"
 
 #include "playsound/PlaySoundFile.h"
+
+#include <windows.h>
+#include <process.h>
 
 #include <iostream>
 using namespace std;
@@ -46,12 +49,11 @@ void SoundThread::setLoops(int loops) {
 }
 
 void SoundThread::run() {
-	PlaySoundFile soundFile;
-	soundFile.setWaveOutDevice(_deviceName);
+	_soundFile.setWaveOutDevice(_deviceName);
 
 	int i = 0;
 	while ((i < _loops || _loops == -1) && !_stop) {
-		if (!soundFile.play(_filename)) {
+		if (!_soundFile.play(_filename)) {
 			//If the file cannot be played, stop the thread
 			_stop = true;
 		}
@@ -62,4 +64,5 @@ void SoundThread::run() {
 
 void SoundThread::stop() {
 	_stop = true;
+	_soundFile.stop();
 }

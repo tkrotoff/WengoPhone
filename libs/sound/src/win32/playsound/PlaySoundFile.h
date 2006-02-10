@@ -55,6 +55,11 @@ public:
 	 */
 	bool play(const std::string & filename);
 
+	/**
+	 * Stops playing immediately the sound file.
+	 */
+	void stop();
+
 private:
 
 	std::string _audioDeviceName;

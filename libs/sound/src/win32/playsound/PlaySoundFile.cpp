@@ -27,13 +27,21 @@
 
 #include "SoundFile.h"
 
+#include <Logger.h>
+#include <StringList.h>
+
 #include <windows.h>
 #include <mmsystem.h>
 
 #include <stdio.h>
 
-#include <iostream>
-using namespace std;
+void stopWaveOutDevice(HWAVEOUT * hWaveOut) {
+	if (*hWaveOut != NULL) {
+		waveOutReset(*hWaveOut);
+		waveOutClose(*hWaveOut);
+		*hWaveOut = NULL;
+	}
+}
 
 bool openWaveOutDevice(HWAVEOUT * hWaveOut, const char * deviceName, WAVEFORMATEX * waveFormat, HANDLE hDoneEvent) {
 	WAVEOUTCAPSA outcaps;
@@ -41,8 +49,6 @@ bool openWaveOutDevice(HWAVEOUT * hWaveOut, const char * deviceName, WAVEFORMATE
 	unsigned int deviceId;
 	for (deviceId = 0; deviceId < nbDevices; deviceId++) {
 		if (MMSYSERR_NOERROR == waveOutGetDevCapsA(deviceId, &outcaps, sizeof(WAVEOUTCAPSA))) {
-			fprintf(stderr, "playsound: audio device available: %s.\n", outcaps.szPname);
-
 			if (deviceName != NULL) {
 				if (strncmp(deviceName, outcaps.szPname, strlen(deviceName)) == 0) {
 					//The right audio device was found
@@ -53,10 +59,10 @@ bool openWaveOutDevice(HWAVEOUT * hWaveOut, const char * deviceName, WAVEFORMATE
 	}
 
 	if (deviceId == nbDevices) {
-		cerr << "playsound: cannot find the audio device: " << deviceName << ", use the default one instead" << endl;
+		LOG_ERROR("cannot find the audio device=" + String(deviceName) + ", use the default one instead");
 
 		/*
-		* Try to open the default wave device. WAVE_MAPPER is
+		* Tries to open the default wave device. WAVE_MAPPER is
 		* a constant defined in mmsystem.h, it always points to the
 		* default wave device on the system (some people have 2 or
 		* more sound cards).
@@ -83,14 +89,10 @@ bool openWaveOutDevice(HWAVEOUT * hWaveOut, const char * deviceName, WAVEFORMATE
 		deviceId = 0;
 	}
 
-	cerr << "playsound: audio device used: " << deviceName << " - " << deviceId << endl;
+	LOG_DEBUG("audio device used=" + String(deviceName) + " - " + String::fromNumber(deviceId));
 
 	//Stops wave out
-	if (*hWaveOut != NULL) {
-		waveOutReset(*hWaveOut);
-		waveOutClose(*hWaveOut);
-		*hWaveOut = NULL;
-	}
+	stopWaveOutDevice(hWaveOut);
 
 	//Opens wave out
 	if (MMSYSERR_NOERROR != waveOutOpen(hWaveOut, deviceId, waveFormat, (DWORD) hDoneEvent, 0, CALLBACK_EVENT)) {
@@ -101,36 +103,38 @@ bool openWaveOutDevice(HWAVEOUT * hWaveOut, const char * deviceName, WAVEFORMATE
 }
 
 PlaySoundFile::PlaySoundFile() {
+	stop();
 }
 
 PlaySoundFile::~PlaySoundFile() {
 }
 
+HWAVEOUT _hWaveOut;
+
 bool PlaySoundFile::play(const std::string & filename) {
 	SoundFile * soundFile;
 
-	//Open wave file
-	string::size_type pos = filename.find(".raw");
-	if (pos != string::npos) {
+	//Opens wave file
+	std::string::size_type pos = filename.find(".raw");
+	if (pos != std::string::npos) {
 		soundFile = new RawSoundFile();
 	} else {
 		soundFile = new WavSoundFile();
 	}
 
 	if (!soundFile->open(filename)) {
-		cerr << "playsound: can't open file: " << filename << endl;
+		LOG_ERROR("can't open file=" + filename);
 		return false;
 	}
 
-	//Open output audio wave device
-	HWAVEOUT hWaveOut;
+	//Opens output audio wave device
 	HANDLE hDoneEvent = CreateEventA(NULL, FALSE, FALSE, "DONE_EVENT");
-	if (!openWaveOutDevice(&hWaveOut, _audioDeviceName.c_str(), soundFile->getFormat(), hDoneEvent)) {
-		cerr << "playsound: can't open wave out device" << endl;
+	if (!openWaveOutDevice(&_hWaveOut, _audioDeviceName.c_str(), soundFile->getFormat(), hDoneEvent)) {
+		LOG_ERROR("can't open wave out device");
 		return false;
 	}
 
-	//Initialize wave header
+	//Initializes wave header
 	WAVEHDR waveHeader;
 	ZeroMemory(&waveHeader, sizeof(WAVEHDR));
 	waveHeader.lpData = new char[soundFile->getLength()];
@@ -142,31 +146,31 @@ bool PlaySoundFile::play(const std::string & filename) {
 	waveHeader.lpNext = 0;
 	waveHeader.reserved = 0;
 
-	//Play buffer
+	//Plays buffer
 	soundFile->read(waveHeader.lpData, waveHeader.dwBufferLength);
 
-	MMRESULT mr = waveOutPrepareHeader(hWaveOut, &waveHeader, sizeof(WAVEHDR));
+	MMRESULT mr = waveOutPrepareHeader(_hWaveOut, &waveHeader, sizeof(WAVEHDR));
 	if (mr != MMSYSERR_NOERROR) {
 		return false;
 	}
 
-	mr = waveOutWrite(hWaveOut, &waveHeader, sizeof(WAVEHDR));
+	mr = waveOutWrite(_hWaveOut, &waveHeader, sizeof(WAVEHDR));
 	if (mr != MMSYSERR_NOERROR) {
 		return false;
 	}
 
-	//Wait for audio to finish playing
+	//Waits for audio to finish playing
 	while (!(waveHeader.dwFlags & WHDR_DONE)) {
 		WaitForSingleObject(hDoneEvent, INFINITE);
 	}
 
-	//Clean up
-	mr = waveOutUnprepareHeader(hWaveOut, &waveHeader, sizeof(WAVEHDR));
+	//Cleans up
+	mr = waveOutUnprepareHeader(_hWaveOut, &waveHeader, sizeof(WAVEHDR));
 	if (mr != MMSYSERR_NOERROR) {
 		return false;
 	}
 
-	mr = waveOutClose(hWaveOut);
+	mr = waveOutClose(_hWaveOut);
 	if (mr != MMSYSERR_NOERROR) {
 		return false;
 	}
@@ -176,4 +180,8 @@ bool PlaySoundFile::play(const std::string & filename) {
 	delete soundFile;
 
 	return true;
+}
+
+void PlaySoundFile::stop() {
+	stopWaveOutDevice(&_hWaveOut);
 }
