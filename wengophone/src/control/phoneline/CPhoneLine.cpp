@@ -71,8 +71,12 @@ void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender) {
 		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineServerError, lineId);
 		break;
 
+	case PhoneLineStateClosed::CODE:
+		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineClosed, lineId);
+		break;
+
 	default:
-		LOG_FATAL("Unknown PhoneLine state");
+		LOG_FATAL("unknown PhoneLine state=" + String::fromNumber(sender.getState().getCode()));
 	};
 }
 

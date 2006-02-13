@@ -27,7 +27,6 @@ sources = [
 	'src/XPCOMPhoneCall.cpp',
 	'src/XPCOMPhoneLine.cpp',
 	'src/XPCOMWengoPhone.cpp',
-	'src/XPCOMWengoPhoneLogger.cpp',
 	'src/XPCOMIMHandler.cpp',
 ]
 

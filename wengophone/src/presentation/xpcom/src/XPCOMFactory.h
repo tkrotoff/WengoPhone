@@ -21,7 +21,6 @@
 #define XPCOMFACTORY_H
 
 #include "XPCOMWengoPhone.h"
-#include "XPCOMWengoPhoneLogger.h"
 #include "XPCOMPhoneLine.h"
 #include "XPCOMPhoneCall.h"
 #include "XPCOMContact.h"
@@ -64,11 +63,6 @@ public:
 	PPhoneCall * createPresentationPhoneCall(CPhoneCall & cPhoneCall) {
 		XPCOMPhoneCall * xpcomPhoneCall = new XPCOMPhoneCall(cPhoneCall);
 		return xpcomPhoneCall;
-	}
-
-	PWengoPhoneLogger * createPresentationLogger(CWengoPhoneLogger & cWengoPhoneLogger) {
-		static XPCOMWengoPhoneLogger xpcomWengoPhoneLogger(cWengoPhoneLogger);
-		return &xpcomWengoPhoneLogger;
 	}
 
 	PContactList * createPresentationContactList(CContactList & cContactList) {

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,40 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef XPCOMWENGOPHONELOGGER_H
-#define XPCOMWENGOPHONELOGGER_H
+#ifndef CSMS_H
+#define CSMS_H
 
-#include <presentation/PWengoPhoneLogger.h>
+#include <model/sms/Sms.h>
 
-class CWengoPhoneLogger;
-class Listener;
+#include <string>
 
-class XPCOMWengoPhoneLogger : public PWengoPhoneLogger {
+class CWengoPhone;
+
+/**
+ *
+ * @ingroup control
+ * @author Tanguy Krotoff
+ */
+class CSms {
 public:
 
-	XPCOMWengoPhoneLogger(CWengoPhoneLogger & cWengoPhoneLogger);
+	/**
+	 * @see Sms::smsStatusEvent
+	 */
+	Event <void (Sms & sender, Sms::SmsStatus status)> smsStatusEvent;
 
-	void addMessage(const std::string & message);
+	CSms(Sms & sms, CWengoPhone & cWengoPhone);
 
-	void updatePresentation() { }
+	~CSms();
+
+	/**
+	 * @see Sms::sendSMS()
+	 */
+	void sendSMS(const std::string & phoneNumber, const std::string & message);
 
 private:
 
-	void addMessageThreadSafe(std::string message) { }
-
-	void updatePresentationThreadSafe() { }
-
-	void initThreadSafe() { }
+	Sms & _sms;
 };
 
-#endif	//XPCOMWENGOPHONELOGGER_H
+#endif	//CSMS_H

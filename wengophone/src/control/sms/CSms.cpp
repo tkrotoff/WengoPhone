@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,23 +17,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "XPCOMWengoPhoneLogger.h"
+#include "CSms.h"
 
-#include <Listener.h>
-#include "ListenerList.h"
+CSms::CSms(Sms & sms, CWengoPhone & cWengoPhone)
+	_sms(sms) {
 
-#include <control/CWengoPhoneLogger.h>
+	_pSms = PFactory::getFactory().createPresentationSms(*this);
 
-#include <iostream>
-using namespace std;
-
-XPCOMWengoPhoneLogger::XPCOMWengoPhoneLogger(CWengoPhoneLogger & cWengoPhoneLogger) {
+	_sms.smsStatusEvent += smsStatusEvent;
 }
 
-void XPCOMWengoPhoneLogger::addMessage(const std::string & message) {
-	ListenerList & listenerList = ListenerList::getInstance();
-	for (int i = 0; i < listenerList.size(); i++) {
-		Listener * listener = listenerList[i];
-		listener->loggerMessageAddedEvent(message);
-	}
+CSms::~CSms() {
+}
+
+void CSms::sendSMS(const std::string & phoneNumber, const std::string & message) {
+	_sms.sendSMS(phoneNumber, message);
 }

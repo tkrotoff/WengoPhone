@@ -1,7 +1,7 @@
 WengoPhoneNG is a free voice over Internet phone under the GNU GPL license.
 WengoPhoneNG is at a very early stage of development.
 
-WengoPhoneNG is developed in C++ and is at a very early stage of development.
+WengoPhoneNG is developed in C++.
 The core application is totally separated from the graphical representation.
 This is achieved via PAC, a kind of MVC pattern.
 

@@ -57,6 +57,7 @@ void Logger::error(const std::string & className, const std::string & message) {
 
 void Logger::fatal(const std::string & className, const std::string & message) {
 	log(Fatal, className, message);
+	_file->close();
 	assert(NULL && "Fatal error");
 }
 
