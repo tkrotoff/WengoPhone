@@ -2864,13 +2864,10 @@ int phTunnelConfig(const char* http_proxy, const int http_proxy_port,
   if (http_proxy)
     strncpy(phcfg.http_proxy, http_proxy, sizeof(phcfg.http_proxy));
   
-  /* *** JULIEN *** */
   if (proxy_user)
     strncpy(phcfg.http_proxy_user, proxy_user, sizeof(phcfg.http_proxy_user));
   if (proxy_passwd)
     strncpy(phcfg.http_proxy_passwd, proxy_passwd, sizeof(phcfg.http_proxy_passwd));
-  /* ************** */
-  
   
   phcfg.use_tunnel = PH_TUNNEL_USE;
   if (autoconf)

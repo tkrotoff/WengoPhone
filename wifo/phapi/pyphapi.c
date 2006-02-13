@@ -1009,6 +1009,8 @@ static PyMethodDef pyphapi_funcs[] = {
  *
  */
 PyMODINIT_FUNC initpyphapi(void) {
+#ifdef WIN32
     SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)unhandledExceptionFilter);
+#endif
     Py_InitModule3("pyphapi", pyphapi_funcs, "");
 }

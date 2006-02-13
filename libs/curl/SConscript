@@ -1,7 +1,6 @@
 env = WengoGetEnvironment()
 
 libs = [
-#	'ssleay32', 
 ]
 lib_path = []
 include_path = [
@@ -11,8 +10,6 @@ include_path = [
 
 defines = {
 	'BUILDING_LIBCURL' : 1,
-#	'USE_SSLEAY' : 0,
-#	'USE_OPENSSL' : 0,
 	'CURL_DISABLE_FILE' : 1,
 	'CURL_DISABLE_LDAP' : 1,
 	'CURL_DISABLE_DICT' : 1,
@@ -99,8 +96,9 @@ if WengoOSWindows():
 
 elif WengoOSLinux():
 	libs += [
-		#'idn',
+		'z'
 	]
+	defines['HAVE_LIBZ_TRUE'] = 1
 
 elif WengoOSMacOSX():
 	libs += [
@@ -118,3 +116,4 @@ if WengoOSMacOSX():
 	env.WengoStaticLibrary('wengocurl', sources)
 else:
 	env.WengoSharedLibrary('wengocurl', sources)
+
