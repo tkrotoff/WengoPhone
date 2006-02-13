@@ -325,22 +325,6 @@ int ph_media_supported_payload(ph_media_payload_t *pt, const char *ptstring)
   
 }
 
-#if 0
-int ph_media_is_stream_stopped(phcall_t *ca)
-{
-  phmstream_t* stream;
-	
-  if (ca->cid == -1)
-    return -1;
-
-  stream = (phmstream_t*) ca->ph_audio_stream;
-  if (!stream)
-    return -1;
-
-  return stream->is_terminated;
-}
-#endif
-
 
 phcodec_t *ph_media_lookup_codec_bymime(const char *mime, int rate)
 {

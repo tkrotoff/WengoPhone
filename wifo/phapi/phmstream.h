@@ -30,8 +30,6 @@ struct phcall_s;
 struct phmstream
 {
   struct _RtpSession *rtp_session;
-
-  struct phcall  *_ca;
   struct ph_msession_s *mses;
  
   phcodec_t *codec;
@@ -43,7 +41,7 @@ struct phmstream
 
   int payload;
   int running;
-  int is_terminated;
+
 
   unsigned long rxtstamp;
   unsigned long txtstamp;
