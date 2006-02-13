@@ -41,6 +41,9 @@ struct phmstream
 
   int payload;
   int running;
+  int suspended;
+  int lastsuspended;
+
 
 
   unsigned long rxtstamp;

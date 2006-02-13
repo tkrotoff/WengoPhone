@@ -999,15 +999,101 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 
 
 
+void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int framesize)
+{
+  int silok = 0;
+  int wakeup = 0;
+  struct timeval diff;
+  char data_out_enc[1000];
+  phcodec_t *codec = stream->ms.codec;
+
+  /* do we need to do Voice Activity Detection ? */
+  if (stream->cngi.vad)
+    {
+      stream->hdxsilence = silok = ph_vad_update(stream, recordbuf, framesize);
+      if (!stream->cngi.cng && silok)
+	{
+	  /* resend dummy CNG packet only if CNG was not negotiated */
+	  ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
+	  wakeup = (diff.tv_sec > RTP_RETRANSMIT);
+	}
+    }
+  else if (stream->hdxmode)
+    {
+      int hdxsil = ph_vad_update(stream, recordbuf, framesize);
+      if (hdxsil != stream->hdxsilence)
+	DBG5_DYNA_AUDIO("phmedia_audio: HDXSIL=%d\n", hdxsil,0,0,0);
+      
+      stream->hdxsilence = hdxsil;
+    }
+  
+  if ((stream->dtmfi.dtmfg_phase != DTMF_IDLE) || (stream->dtmfi.dtmfq_cnt != 0))
+    {
+      ph_generate_out_dtmf(stream, (short *) recordbuf, framesize/2, stream->ms.txtstamp);
+      silok = 0;
+    }
+
+  if (stream->mixbuf)
+    {   
+      int n = ph_mediabuf_mixaudio(stream->mixbuf, (short *)recordbuf, framesize/2);
+      if (!n)
+	{
+	  ph_mediabuf_free(stream->mixbuf);
+	  stream->mixbuf =  0;
+	}
+      else
+	stream->hdxsilence = silok = 0;
+    }
+
+  
+  if (!silok)
+    {
+      int enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
+
+      if (stream->record_send_stream)
+	ph_media_payload_record(&stream->send_stream_recorder, data_out_enc, enclen);
+
+      if (silok != stream->cngi.lastsil || wakeup)
+	{
+	  rtp_session_set_markbit(stream->ms.rtp_session, 1);
+	  rtp_session_send_with_ts(stream->ms.rtp_session, data_out_enc, enclen, stream->ms.txtstamp);
+	  rtp_session_set_markbit(stream->ms.rtp_session, 0);
+	}
+      else
+	{
+	  rtp_session_send_with_ts(stream->ms.rtp_session, data_out_enc, enclen, stream->ms.txtstamp);
+	}
+      stream->last_rtp_sent_time = stream->now;
+    }
+  else if (stream->cngi.cng)
+    {
+      ph_tvdiff(&diff, &stream->now, &stream->cngi.last_dtx_time);
+      if (diff.tv_sec >= DTX_RETRANSMIT)
+	{
+	  ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
+	  if (diff.tv_sec >= DTX_RETRANSMIT)
+	    {
+	      ph_send_cng(stream, stream->ms.txtstamp);
+	      stream->cngi.last_dtx_time = stream->now;
+	    }
+	}
+      
+      if (wakeup)
+	{
+	  /* send cng packet with -127dB */ 
+	  ph_send_cng(stream, stream->ms.txtstamp);
+	  stream->last_rtp_sent_time = stream->now;
+	}
+    }
+  
+  stream->cngi.lastsil = silok;
+  stream->ms.txtstamp += framesize/2;
+} 
+
 int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 {
-    phcodec_t *codec = stream->ms.codec;
-    int framesize = codec->decoded_framesize;
+    int framesize = stream->ms.codec->decoded_framesize;
     int processed = 0;
-    int silok = 0;
-    char data_out_enc[1000];
-    struct timeval diff;
-    int wakeup = 0;
 #ifdef PH_USE_RESAMPLE
     unsigned char resampleBuf[1000];
     int resampledSize;
@@ -1027,86 +1113,34 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 #ifdef DO_ECHO_CAN
         do_echo_update(stream, recordbuf, framesize);
 #endif
-        if (stream->cngi.vad)
-            {
-            stream->hdxsilence = silok = ph_vad_update(stream, recordbuf, framesize);
-            if (!stream->cngi.cng && silok)
-                {
-                /* resend dummy CNG packet only if CNG was not negotiated */
-                ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
-                wakeup = (diff.tv_sec > RTP_RETRANSMIT);
-                }
-            }
-	else if (stream->hdxmode)
+
+#ifdef DO_CONF
+	if (stream->to_mix) /* we're in conference mode */
 	  {
-	    int hdxsil = ph_vad_update(stream, recordbuf, framesize);
-	    if (hdxsil != stream->hdxsilence)
-	      DBG5_DYNA_AUDIO("phmedia_audio: HDXSIL=%d\n", hdxsil,0,0,0);
+	    phastream_t *other = stream->to_mix;
 
-	    stream->hdxsilence = hdxsil;
+	    other->now = stream->now;
+
+	    memcpy(stream->data_out.buf, recordbuf, framesise);
+	    stream->data_out.next = framesize/2;
+
+	    if (other->data_in.next)
+	      ph_mixmedia(&stream->data_out, &other->data_in);
+
+	    if (stream->data_in.next)
+	      ph_mixmedia(&other->data_out, &stream->data_in);
+
+
+	    ph_encode_and_send_audio_frame(stream, stream->data_out.buf, framesize);
+	    ph_encode_and_send_audio_frame(stream->to_mix, stream->to_mix->data_out.buf, framesize);
+	    
+	    //	    ph_handle_conference_in(stream, framesize);
 	  }
-            
-        if ((stream->dtmfi.dtmfg_phase != DTMF_IDLE) || (stream->dtmfi.dtmfq_cnt != 0))
-            {
-            ph_generate_out_dtmf(stream, (short *) recordbuf, framesize/2, stream->ms.txtstamp);
-            silok = 0;
-            }
+	else
+#endif
+	ph_encode_and_send_audio_frame(stream, recordbuf, framesize);
 
 
-        if (stream->mixbuf)
-            {   
-            int n = ph_mediabuf_mixaudio(stream->mixbuf, (short *)recordbuf, framesize/2);
-            if (!n)
-                {
-                ph_mediabuf_free(stream->mixbuf);
-                stream->mixbuf =  0;
-                }
-            else
-                stream->hdxsilence = silok = 0;
-            }
-
-        if (!silok)
-            {
-            int enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
-
-	    if (stream->record_send_stream)
-	      ph_media_payload_record(&stream->send_stream_recorder, data_out_enc, enclen);
-
-            if (silok != stream->cngi.lastsil || wakeup)
-                {
-                rtp_session_set_markbit(stream->ms.rtp_session, 1);
-                rtp_session_send_with_ts(stream->ms.rtp_session, data_out_enc, enclen, stream->ms.txtstamp);
-                rtp_session_set_markbit(stream->ms.rtp_session, 0);
-                }
-            else
-                {
-                rtp_session_send_with_ts(stream->ms.rtp_session, data_out_enc, enclen, stream->ms.txtstamp);
-                }
-            stream->last_rtp_sent_time = stream->now;
-            }
-        else if (stream->cngi.cng)
-            {
-            ph_tvdiff(&diff, &stream->now, &stream->cngi.last_dtx_time);
-            if (diff.tv_sec >= DTX_RETRANSMIT)
-                {
-                ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
-                if (diff.tv_sec >= DTX_RETRANSMIT)
-                    {
-                    ph_send_cng(stream, stream->ms.txtstamp);
-                    stream->cngi.last_dtx_time = stream->now;
-                    }
-                }
-            
-            if (wakeup)
-                {
-                /* send cng packet with -127dB */ 
-                ph_send_cng(stream, stream->ms.txtstamp);
-                stream->last_rtp_sent_time = stream->now;
-                }
-            }
-            
-        stream->cngi.lastsil = silok;
-        stream->ms.txtstamp += framesize/2;
         recbufsize -= framesize;
         processed += framesize;
         recordbuf = framesize + (char *)recordbuf;

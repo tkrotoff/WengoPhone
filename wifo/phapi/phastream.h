@@ -119,6 +119,12 @@ struct ph_audio_stream
 {
   struct phmstream ms;
   void   *drvinfo;
+  
+  struct ph_aduio_stream *to_mix;
+  ph_mediabuf_t   data_in;
+  ph_mediabuf_t   data_out;
+
+
 
   ph_mediabuf_t      *mixbuf;
   struct dtmf_info   dtmfi;
