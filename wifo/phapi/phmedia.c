@@ -44,6 +44,13 @@
 #include <httptunnel.h>
 #endif
 
+
+#ifdef _MSC_VER
+#define strncasecmp strnicmp
+#endif
+
+
+
 int ph_media_use_tunnel = 0;
 
 static void no_printf(const char *x, ...) { }
@@ -334,13 +341,55 @@ int ph_media_is_stream_stopped(phcall_t *ca)
 }
 #endif
 
+
+phcodec_t *ph_media_lookup_codec_bymime(const char *mime, int rate)
+{
+    phcodec_t *codec = ph_codec_list;
+    int plen = strlen(mime);
+
+
+    plen = strlen(mime);
+    DBG4_CODEC_LOOKUP("we need to match against : <%s/%d> in phcodec list\n", mime, rate, 0);
+    
+    while(codec)
+    {
+        int mlen;
+        
+        DBG4_CODEC_LOOKUP("....trying <%s/%d>\n", codec->mime, codec->clockrate, 0);
+        mlen = strlen(codec->mime);
+        if(mlen == plen)
+	  {
+            if (!strncasecmp(codec->mime, mime, mlen))
+	      {
+                if (!codec->clockrate || !rate)
+		  {
+                    DBG4_CODEC_LOOKUP("....<%s/%d> matched\n", codec->mime, codec->clockrate, 0);
+                    return codec;
+		  }
+    
+                if (codec->clockrate == rate)
+		  {
+                    DBG4_CODEC_LOOKUP("....<%s/%d> matched\n", codec->mime, codec->clockrate, 0);
+                    return codec;
+		  }
+	      }
+	  }
+        
+        codec = codec->next;
+    }
+    
+    DBG4_CODEC_LOOKUP("could not find phapi codec ref <%s> in phcodec list\n", mime, 0, 0);
+    return 0;
+
+
+}
+
+
 /* find a codec object corresponding to given payload */
 phcodec_t *ph_media_lookup_codec(int payload)
 {
     RtpProfile *profile = get_av_profile();
     PayloadType *pt = rtp_profile_get_payload(profile, payload);
-    phcodec_t *codec = ph_codec_list;
-    int plen;
 
     DBG4_CODEC_LOOKUP("CODEC LOOKUP: ph_media_lookup_codec\n", 0, 0, 0);
     
@@ -354,45 +403,43 @@ phcodec_t *ph_media_lookup_codec(int payload)
         DBG4_CODEC_LOOKUP("fatal error - NULL mime type for codec %d in ortp\n", payload, 0, 0);
         return 0;
     }
-    plen = strlen(pt->mime_type);
-    DBG4_CODEC_LOOKUP("we need to match against : \"%s/%d\" in phcodec list\n", pt->mime_type, pt->clock_rate, 0);
-    
-    while(codec)
-    {
-        int mlen;
-        
-        DBG4_CODEC_LOOKUP("....trying \"%s/%d\"\n", codec->mime, codec->clockrate, 0);
-        mlen = strlen(codec->mime);
-        if(mlen == plen)
-        {
-#ifdef _MSC_VER
-            if (!strnicmp(codec->mime, pt->mime_type, mlen))
-            {
-#else
-            if (!strncasecmp(codec->mime, pt->mime_type, mlen))
-            {
-#endif
-                if (!codec->clockrate || !pt->clock_rate)
-                {
-                    DBG4_CODEC_LOOKUP("....\"%s/%d\" matched\n", codec->mime, codec->clockrate, 0);
-                    return codec;
-                }
-    
-                if (codec->clockrate == pt->clock_rate)
-                {
-                    DBG4_CODEC_LOOKUP("....\"%s/%d\" matched\n", codec->mime, codec->clockrate, 0);
-                    return codec;
-                }
-            }
-        }
-        
-        codec = codec->next;
-    }
-    
-    DBG4_CODEC_LOOKUP("could not find ortp's codec ref \"%s\" in phcodec list\n", pt->mime_type, 0, 0);
-    return 0;
+
+    return ph_media_lookup_codec_bymime(pt->mime_type, pt->clock_rate);
     
 }
+
+
+/* 
+ given the mime string of type ENCODING/RATE return TRUE if we have a codec able to handle this
+ payload
+*/   
+int ph_media_can_handle_payload(const char *mime)
+{
+  const char *slash;
+  char mime2[64];
+  int mlen;
+
+  if (!mime)
+    return 0;
+
+
+  slash = strchr(mime, '/');
+  if (!slash)
+    return 0 != ph_media_lookup_codec_bymime(mime, 0);
+
+  mlen = slash - mime;
+  if (mlen > (sizeof(mime2) - 1))
+    return 0;
+
+  strncpy(mime2, mime, mlen);
+  mime2[mlen] = 0;
+  return 0 != ph_media_lookup_codec_bymime(mime2, atoi(slash+1));
+}
+
+
+  
+  
+
 
 void ph_tvsub(register struct timeval *out, register struct timeval *in)
 {

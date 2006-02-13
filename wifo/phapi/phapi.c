@@ -67,7 +67,6 @@
 #include "phapi.h"
 #include "phcall.h"
 #include "phrpc.h"
-#include "phcodec.h"
 #include "phmedia.h"
 #include "stun/stun.h"
 
@@ -2314,79 +2313,6 @@ ph_get_vline_id(const char *userid, const char *altid)
 
 }
 
-/**
- * @brief returns 0/1 depending on whether the phcodec engine has registered the "mime/clockrate"
- *		  (it knows how to handle the corresponding codec/decodec)
- *        (it only works for real codecs, and not for CN of telephone-event)
- */
-static int phcodec_is_codec_registered(const char *ptstring) {
-
-    phcodec_t *codec = ph_codec_list;
-	char* pos_delim=NULL;
-	int mime_size=0;
-	char* mime=NULL;
-	int clockrate=0;
-
-    DBG4_CODEC_LOOKUP("is \"%s\" supported in the phcodec engine ?\n", ptstring, 0, 0);
-	pos_delim = strchr(ptstring, '/');
-	if (!pos_delim)
-	{
-		DBG4_CODEC_LOOKUP("...missing \"/\" in %s\n", ptstring, 0, 0);
-		return 0;
-	}
-
-	mime_size = pos_delim-ptstring;
-	mime = (char*) malloc((mime_size+1)*sizeof(char*));
-	if (!mime)
-	{
-		DBG4_CODEC_LOOKUP("...not enough memory\n", 0, 0, 0);
-		return 0;
-	}
-
-	strncpy(mime, ptstring, mime_size);
-	mime[mime_size+1]='\0';
-
-	clockrate = atoi(pos_delim+1);
-	
-    while(codec)
-    {
-        int mlen;
-
-        //DBG4_CODEC_LOOKUP("....trying \"%s/%d\"\n", codec->mime, codec->clockrate, 0);
-        mlen = strlen(codec->mime);
-        if(mlen == mime_size)
-        {
-#ifdef _MSC_VER
-            if (!strnicmp(codec->mime, mime, mlen))
-            {
-#else
-            if (!strncasecmp(codec->mime, mime, mlen))
-            {
-#endif
-                if (!codec->clockrate || !clockrate)
-                {
-                    DBG4_CODEC_LOOKUP("....YES: \"%s/%d\"\n", codec->mime, codec->clockrate, 0);
-		    free(mime);
-                    return 1;
-                }
-
-                if (codec->clockrate == clockrate)
-                {
-                    DBG4_CODEC_LOOKUP("....YES: \"%s/%d\"\n", codec->mime, codec->clockrate, 0);
-		    free(mime);
-                    return 1;
-                }
-            }
-        }
-        codec = codec->next;
-    }
-
-	DBG4_CODEC_LOOKUP("....NO\n", 0, 0, 0);
-	free(mime);
-	return 0;
-
-} 
-
 static void setup_payload(const char *ptstring)
 {
     char  tmp[64];
@@ -2792,10 +2718,10 @@ ph_payloads_init()
 	  else
 	    snprintf(tmp, sizeof(tmp), "%s/8000", tok);
 	  
-	  if (phcodec_is_codec_registered(tmp))
-	  {
-	  	setup_payload(tmp);
-	  }
+	  if (ph_media_can_handle_payload(tmp))
+	    {
+	      setup_payload(tmp);
+	    }
 
 	  tok = strtok(0, ",");
 	}

@@ -142,6 +142,7 @@ int ph_media_cleanup(void);
 
 
 int ph_media_supported_payload(ph_media_payload_t *pt, const char *ptstring);
+int ph_media_can_handle_payload(const char *mime);
 
 
 
