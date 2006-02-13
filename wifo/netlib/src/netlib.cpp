@@ -71,6 +71,8 @@ typedef BOOL(CALLBACK * pfnInternetGetProxyInfo) (
 #define PROXY_AUTO_DETECT_TYPE_DNS_A 2
 #define PROXY_AUTO_DETECT_TYPE_DHCP 1
 
+inline int strncasecmp(const char *str1, const char *str2, int size) {return strnicmp(str1, str2, size);}
+
 #else
 
 #include <sys/time.h>
@@ -307,6 +309,7 @@ void _get_auth_type(const char *url)
 
 char **internet_explorer_proxyless_exception_list()
 {
+#ifdef WIN32
 	char **list;
 	long ret;
 	HKEY result;
@@ -319,6 +322,9 @@ char **internet_explorer_proxyless_exception_list()
 
 	list = my_split(buff, ';');
 	return list;
+#else
+	return 0;
+#endif
 }
 
 NETLIB_BOOLEAN is_url_proxyless_exception(const char *url)
@@ -473,7 +479,7 @@ NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int ping_timeo
 
 NETLIB_BOOLEAN is_https(const char *url)
 {
-	if (strnicmp(url, "https", 5) == 0)
+	if (strncasecmp(url, "https", 5) == 0)
 		return NETLIB_TRUE;
 	else
 		return NETLIB_FALSE;
