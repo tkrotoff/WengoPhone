@@ -28,7 +28,6 @@ class Contact;
 class PWengoPhone;
 class IPhoneLine;
 class CPhoneLine;
-class WengoPhoneLogger;
 class ContactList;
 class StringList;
 class WenboxPlugin;
@@ -123,8 +122,6 @@ private:
 	void chatHandlerCreatedEventHandler(WengoPhone & sender, ChatHandler & chatHandler);
 
 	void phoneLineCreatedEventHandler(WengoPhone & sender, IPhoneLine & phoneLine);
-
-	void loggerCreatedEventHandler(WengoPhone & sender, WengoPhoneLogger & logger);
 
 	void contactListCreatedEventHandler(WengoPhone & sender, ContactList & contactList);
 

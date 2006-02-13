@@ -26,8 +26,6 @@ class CPhoneLine;
 class PPhoneLine;
 class CPhoneCall;
 class PPhoneCall;
-class CWengoPhoneLogger;
-class PWengoPhoneLogger;
 class CContactList;
 class PContactList;
 class CContactGroup;
@@ -77,8 +75,6 @@ public:
 	virtual PPhoneLine * createPresentationPhoneLine(CPhoneLine & cPhoneLine) = 0;
 
 	virtual PPhoneCall * createPresentationPhoneCall(CPhoneCall & cPhoneCall) = 0;
-
-	virtual PWengoPhoneLogger * createPresentationLogger(CWengoPhoneLogger & cWengoPhoneLogger) = 0;
 
 	virtual PContactList * createPresentationContactList(CContactList & cContactList) = 0;
 

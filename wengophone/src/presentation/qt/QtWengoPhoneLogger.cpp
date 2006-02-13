@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,28 +19,19 @@
 
 #include "QtWengoPhoneLogger.h"
 
-#include "QtWengoPhone.h"
-#include "control/CWengoPhone.h"
+#include <Logger.h>
 
 #include <WidgetFactory.h>
 #include <Object.h>
 
 #include <QtGui>
 
-QtWengoPhoneLogger::QtWengoPhoneLogger(CWengoPhoneLogger & cWengoPhoneLogger)
-	: QObjectThreadSafe(),
-	_cWengoPhoneLogger(cWengoPhoneLogger) {
+QtWengoPhoneLogger::QtWengoPhoneLogger(QWidget * parent)
+	: QObjectThreadSafe() {
 
-	typedef PostEvent0<void ()> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhoneLogger::initThreadSafe, this));
-	postEvent(event);
-}
-
-void QtWengoPhoneLogger::initThreadSafe() {
 	_loggerWidget = WidgetFactory::create(":/forms/WengoPhoneLoggerWidget.ui", NULL);
 
-	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhoneLogger.getCWengoPhone().getPresentation();
-	qtWengoPhone->setLogger(this);
+	Logger::logger.messageAddedEvent += boost::bind(&QtWengoPhoneLogger::addMessage, this, _1);
 }
 
 void QtWengoPhoneLogger::addMessage(const std::string & message) {
@@ -54,13 +45,4 @@ void QtWengoPhoneLogger::addMessageThreadSafe(std::string message) {
 
 	listWidget->addItem(message.c_str());
 	listWidget->scrollToItem(listWidget->item(listWidget->count() - 1));
-}
-
-void QtWengoPhoneLogger::updatePresentation() {
-	typedef PostEvent0<void ()> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhoneLogger::updatePresentationThreadSafe, this));
-	postEvent(event);
-}
-
-void QtWengoPhoneLogger::updatePresentationThreadSafe() {
 }

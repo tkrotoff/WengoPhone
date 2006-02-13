@@ -29,7 +29,6 @@
 class CWengoPhone;
 class PPhoneLine;
 class QtPhoneCall;
-class QtWengoPhoneLogger;
 class QtContactList;
 
 class QPushButton;
@@ -49,8 +48,6 @@ public:
 	QtWengoPhone(CWengoPhone & cWengoPhone);
 
 	void addPhoneLine(PPhoneLine * pPhoneLine);
-
-	void setLogger(QtWengoPhoneLogger * qtWengoPhoneLogger);
 
 	void setContactList(QtContactList * qtContactList);
 

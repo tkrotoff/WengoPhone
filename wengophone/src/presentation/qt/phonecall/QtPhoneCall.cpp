@@ -26,8 +26,6 @@
 #include <control/phonecall/CPhoneCall.h>
 #include <control/CWengoPhone.h>
 
-#include <model/WengoPhoneLogger.h>
-
 #include <sipwrapper/WebcamVideoFrame.h>
 
 #include <WidgetFactory.h>

@@ -68,6 +68,10 @@ void QtWengoPhone::initThreadSafe() {
 	QWidget * tabDialpad = Object::findChild<QWidget *>(_tabWidget, "tabDialpad");
 	createLayout(tabDialpad)->addWidget(qtDialpad->getWidget());
 
+	//logger
+	QtWengoPhoneLogger * qtWengoPhoneLogger = new QtWengoPhoneLogger(_wengoPhoneWindow);
+	QWidget * tabLogger = Object::findChild<QWidget *>(_tabWidget, "tabLogger");
+	createLayout(tabLogger)->addWidget(qtWengoPhoneLogger->getWidget());
 
 	//actionShowWengoAccount
 	QAction * actionShowWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowWengoAccount");
@@ -166,12 +170,6 @@ QLayout * QtWengoPhone::createLayout(QWidget * parent) {
 	return layout;
 }
 
-void QtWengoPhone::setLogger(QtWengoPhoneLogger * qtWengoPhoneLogger) {
-	QWidget * tabLogger = Object::findChild<QWidget *>(_tabWidget, "tabLogger");
-	createLayout(tabLogger)->addWidget(qtWengoPhoneLogger->getWidget());
-	LOG_DEBUG("QtWengoPhoneLogger added");
-}
-
 void QtWengoPhone::setContactList(QtContactList * qtContactList) {
 	QWidget * tabContactList = Object::findChild<QWidget *>(_tabWidget, "tabContactList");
 	createLayout(tabContactList)->addWidget(qtContactList->getWidget());
@@ -237,11 +235,8 @@ void QtWengoPhone::openWengoAccount() {
 }
 
 void QtWengoPhone::exitApplication() {
-	static const unsigned int TIME_BEFORE_EXIT = 0000;
-
 	_wengoPhoneWindow->hide();
 	_cWengoPhone.terminate();
-	Thread::msleep(TIME_BEFORE_EXIT);
 	QCoreApplication::exit(EXIT_SUCCESS);
 }
 

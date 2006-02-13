@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,6 @@
 #ifndef QTWENGOPHONELOGGER_H
 #define QTWENGOPHONELOGGER_H
 
-#include "control/CWengoPhoneLogger.h"
-#include "presentation/PWengoPhoneLogger.h"
-
 #include <QObjectThreadSafe.h>
 
 class QWidget;
@@ -32,29 +29,23 @@ class QWidget;
  *
  * @author Tanguy Krotoff
  */
-class QtWengoPhoneLogger : public QObjectThreadSafe, public PWengoPhoneLogger {
+class QtWengoPhoneLogger : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtWengoPhoneLogger(CWengoPhoneLogger & cWengoPhoneLogger);
+	QtWengoPhoneLogger(QWidget * parent);
 
 	QWidget * getWidget() const {
 		return _loggerWidget;
 	}
 
-	void updatePresentation();
+private:
 
 	void addMessage(const std::string & message);
 
-private:
-
-	void initThreadSafe();
-
-	void updatePresentationThreadSafe();
-
 	void addMessageThreadSafe(std::string message);
 
-	CWengoPhoneLogger & _cWengoPhoneLogger;
+	void initThreadSafe() { }
 
 	QWidget * _loggerWidget;
 };

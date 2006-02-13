@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 
 #include "presentation/PFactory.h"
 #include "QtWengoPhone.h"
-#include "QtWengoPhoneLogger.h"
 #include "control/CWengoPhone.h"
 #include "phoneline/QtPhoneLine.h"
 #include "control/phoneline/CPhoneLine.h"
@@ -72,11 +71,6 @@ public:
 	PPhoneCall * createPresentationPhoneCall(CPhoneCall & cPhoneCall) {
 		QtPhoneCall * qtPhoneCall = new QtPhoneCall(cPhoneCall);
 		return qtPhoneCall;
-	}
-
-	PWengoPhoneLogger * createPresentationLogger(CWengoPhoneLogger & cWengoPhoneLogger) {
-		static QtWengoPhoneLogger qtWengoPhoneLogger(cWengoPhoneLogger);
-		return &qtWengoPhoneLogger;
 	}
 
 	PContactList * createPresentationContactList(CContactList & cContactList) {

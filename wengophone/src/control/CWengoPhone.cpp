@@ -46,7 +46,6 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
 
 	_wengoPhone.phoneLineCreatedEvent += boost::bind(&CWengoPhone::phoneLineCreatedEventHandler, this, _1, _2);
-	_wengoPhone.loggerCreatedEvent += boost::bind(&CWengoPhone::loggerCreatedEventHandler, this, _1, _2);
 	_wengoPhone.wenboxPluginCreatedEvent += boost::bind(&CWengoPhone::wenboxPluginCreatedEventHandler, this, _1, _2);
 	_wengoPhone.wengoLoginEvent += boost::bind(&CWengoPhone::wengoLoginEventHandler, this, _1, _2, _3, _4);
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
@@ -110,12 +109,6 @@ void CWengoPhone::phoneLineCreatedEventHandler(WengoPhone & sender, IPhoneLine &
 
 	LOG_DEBUG("PhoneLine created");
 	_pWengoPhone->addPhoneLine(cPhoneLine->getPresentation());
-}
-
-void CWengoPhone::loggerCreatedEventHandler(WengoPhone & sender, WengoPhoneLogger & logger) {
-	static CWengoPhoneLogger cWengoPhoneLogger(logger, *this);
-
-	LOG_DEBUG("WengoPhoneLogger created");
 }
 
 void CWengoPhone::contactListCreatedEventHandler(WengoPhone & sender, ContactList & contactList) {

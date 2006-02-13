@@ -47,9 +47,7 @@ public:
 
 	virtual void addContactList(PContactList * pContactList) = 0;
 
-	virtual void addHistory(PHistory * pHistory) = 0;
-
-	virtual void addLogger(PLogger * pLogger) = 0;*/
+	virtual void addHistory(PHistory * pHistory) = 0;*/
 
 protected:
 

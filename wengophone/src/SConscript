@@ -34,7 +34,6 @@ WengoPhoneBuildId = {
 sources = [
 	env.WengoCreateFile('WengoPhoneBuildId.cpp', WengoPhoneBuildIdTemplate, WengoPhoneBuildId),
 	'model/WengoPhone.cpp',
-	'model/WengoPhoneLogger.cpp',
 	'model/NetworkDiscovery.cpp',
 	'model/SipCallbacks.cpp',
 	'model/config/Config.cpp',
@@ -84,7 +83,6 @@ sources = [
 	'model/sms/Sms.cpp',
 	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
-	'control/CWengoPhoneLogger.cpp',
 	'control/connect/CConnectHandler.cpp',
 	'control/chat/CChatHandler.cpp',
 	'control/presence/CPresenceHandler.cpp',

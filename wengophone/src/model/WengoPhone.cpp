@@ -20,7 +20,6 @@
 #include "WengoPhone.h"
 
 #include "connect/ConnectHandler.h"
-#include "WengoPhoneLogger.h"
 #include "wenbox/WenboxPlugin.h"
 #include "phoneline/PhoneLine.h"
 #include "phoneline/IPhoneLine.h"
@@ -56,7 +55,6 @@ std::string WengoPhone::getConfigFilesPath() {
 
 
 WengoPhone::WengoPhone() {
-	_logger = new WengoPhoneLogger();
 	_wenboxPlugin = new WenboxPlugin(*this);
 	_activePhoneLine = NULL;
 	_activePhoneCall = NULL;
@@ -66,19 +64,16 @@ WengoPhone::WengoPhone() {
 }
 
 WengoPhone::~WengoPhone() {
-	delete _logger;
 	delete _wenboxPlugin;
 	delete _activePhoneLine;
 	delete _activePhoneCall;
 	delete _wengoAccountDataLayer;
-	if (_wengoAccount)
+	if (_wengoAccount) {
 		delete _wengoAccount;
+	}
 }
 
 void WengoPhone::init() {
-	//Sends the logger creation event
-	loggerCreatedEvent(*this, *_logger);
-
 	//Creates the history
 	//historyCreatedEvent
 

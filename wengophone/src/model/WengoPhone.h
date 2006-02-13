@@ -35,7 +35,6 @@
 
 class IPhoneLine;
 class PhoneCall;
-class WengoPhoneLogger;
 class WengoAccount;
 class WengoAccountDataLayer;
 class WenboxPlugin;
@@ -107,14 +106,6 @@ public:
 	 * @param phoneLine PhoneLine created
 	 */
 	Event<void (WengoPhone & sender, IPhoneLine & phoneLine)> phoneLineCreatedEvent;
-
-	/**
-	 * The WengoPhoneLogger has been created.
-	 *
-	 * @param sender this class
-	 * @param logger WengoPhoneLogger created
-	 */
-	Event<void (WengoPhone & sender, WengoPhoneLogger & logger)> loggerCreatedEvent;
 
 	/**
 	 * WenboxPlugin has been created.
@@ -336,9 +327,6 @@ private:
 
 	/** List of Contact. */
 	ContactList * _contactList;
-
-	/** The logging system. */
-	WengoPhoneLogger * _logger;
 
 	/** Wenbox. */
 	WenboxPlugin * _wenboxPlugin;
