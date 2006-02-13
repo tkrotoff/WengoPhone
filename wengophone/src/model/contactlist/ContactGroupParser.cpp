@@ -31,6 +31,7 @@ using namespace std;
 
 ContactGroupParser::ContactGroupParser(ContactGroup & contactGroup,
 	WengoPhone & wengoPhone, const std::string & data) {
+
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
 

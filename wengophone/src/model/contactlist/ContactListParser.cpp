@@ -29,6 +29,7 @@ using namespace std;
 
 ContactListParser::ContactListParser(ContactList & contactList,
 	WengoPhone & wengoPhone, const std::string & data) {
+
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
 

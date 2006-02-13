@@ -59,10 +59,6 @@ void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender) {
 		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineOk, lineId);
 		break;
 
-	case PhoneLineStateClosed::CODE:
-		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineClosed, lineId);
-		break;
-
 	case PhoneLineStateTimeout::CODE:
 		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineTimeout, lineId);
 		break;
