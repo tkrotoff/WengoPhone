@@ -22,7 +22,6 @@
 #include "ContactGroup.h"
 #include "Contact.h"
 
-#include <model/WengoPhoneLogger.h>
 #include <model/presence/PresenceHandler.h>
 
 #include <tinyxml.h>

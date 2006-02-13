@@ -21,7 +21,6 @@
 
 #include "ContactList.h"
 #include "ContactGroup.h"
-#include "model/WengoPhoneLogger.h"
 
 #include <tinyxml.h>
 

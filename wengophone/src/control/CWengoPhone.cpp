@@ -27,7 +27,6 @@
 #include "model/phoneline/IPhoneLine.h"
 #include "phoneline/CPhoneLine.h"
 #include "contactlist/CContactList.h"
-#include "CWengoPhoneLogger.h"
 #include "wenbox/CWenboxPlugin.h"
 #include "WengoPhoneBuildId.h"
 #include "connect/CConnectHandler.h"
