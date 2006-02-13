@@ -1,11 +1,3 @@
-** .pro generation
-
-** Test all functions and methods
-
-** Improve speed
-
-** Install target for nsis, RPM, DEB, tar.gz source code
-
-** Why __createVCproj() does not work anymore? it was before
-
-** Generate version number for shared libraries + symlinks
+Please have a look at this report: 
+http://dev.openwengo.com/trac/openwengo/trac.cgi/query?status=new&status=assigned&status=reopened&group=milestone&component=scons&version=NG&order=priority 
+to know what needs to be done.
