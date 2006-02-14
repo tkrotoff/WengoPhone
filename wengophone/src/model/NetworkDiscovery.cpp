@@ -150,7 +150,7 @@ void NetworkDiscovery::discoverProxySettings() {
 
 		char * localProxyUrl = get_local_http_proxy_address();
 		int localProxyPort = get_local_http_proxy_port();
-		setProxySettings((localProxyUrl ? string(localProxyUrl) : String::null), localProxyPort, String::null, String::null);
+		setProxySettings((localProxyUrl ? string(localProxyUrl) : string(String::null)), localProxyPort, String::null, String::null);
 
 		if (localProxyUrl) {
 			LOG_DEBUG("proxy found");
