@@ -807,7 +807,7 @@ void pyphapi_callback_confProgress(int cfid,
                 const phConfStateInfo_t *info) {
     PyObject *conf_info;
 
-    conf_info = Py_BuildValue("(iiii)", cfid, info->confEvent, info->memberCid, info->errrorCode);
+    conf_info = Py_BuildValue("(iiii)", cfid, info->confEvent, info->memberCid, info->errorCode);
     pyphapi_lock_and_call(pyphapi_confProgress, conf_info);
 }
 

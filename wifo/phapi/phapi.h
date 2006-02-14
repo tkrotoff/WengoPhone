@@ -635,7 +635,7 @@ struct phConfStateInfo {
   int  confEvent;
   int  memberCid;  /* call id's for the calls participating in the conference */
                    /* valid for CONFJOINED,CONFLEFT,CONFJOINERROR events      */
-  int  errrorCode;
+  int  errorCode;
 };
 typedef struct phConfStateInfo phConfStateInfo_t;
 
