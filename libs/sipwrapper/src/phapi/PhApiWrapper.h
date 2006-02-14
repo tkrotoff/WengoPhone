@@ -35,6 +35,8 @@
 
 #include <phapi.h>
 
+#include <string>
+
 class IMChatSession;
 
 /**
@@ -114,21 +116,21 @@ public:
 
 	void setPluginPath(const std::string & path);
 
+	void setProxy(const std::string & address, unsigned port, 
+		const std::string & login, const std::string & password);
+
+	void setTunnel(const std::string & address, unsigned port, bool ssl);
+
+	void setNatType(NatType natType);
+
+	void setSIP(const std::string & server, unsigned serverPort, unsigned localPort);
+
 	/**
 	 * @name PhApi callbacks
 	 * @{
 	 */
 
 	void init();
-
-	void setProxy(const std::string & address, int port, 
-		const std::string & login, const std::string & password);
-
-	void setTunnel(bool needed, const std::string & address, int port, bool ssl);
-
-	void setNatType(NatType natType);
-
-	void setSIP(const std::string & server, int localPort);
 
 	static void callProgress(int callId, const phCallStateInfo_t * info);
 
@@ -242,9 +244,9 @@ private:
 
 	std::map<int, IMChatSession *> _messageIdChatSessionMap;
 
-	std::string _proxyAddress;
+	std::string _proxyServer;
 
-	int _proxyPort;
+	unsigned _proxyPort;
 
 	std::string _proxyLogin;
 
@@ -252,17 +254,19 @@ private:
 
 	bool _tunnelNeeded;
 
-	std::string _tunnelAddress;
+	std::string _tunnelServer;
 
-	int _tunnelPort;
+	unsigned _tunnelPort;
 
 	bool _tunnelSSL;
 
 	NatType _natType;
 
-	std::string _sipAddress;
+	std::string _sipServer;
 
-	int _sipLocalPort;
+	unsigned _sipServerPort;
+
+	unsigned _sipLocalPort;
 
 	std::string _pluginPath;
 

@@ -20,6 +20,9 @@
 #ifndef NETWORKDISCOVERY_H
 #define NETWORKDISCOVERY_H
 
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
 #include <netlib.h>
 
 #include <Event.h>
@@ -35,13 +38,6 @@
 class NetworkDiscovery
 {
 public:
-
-	enum DiscoveryResult {
-		DiscoveryResultSSOCanConnect,
-		DiscoveryResultSSOCannotConnect,
-		DiscoveryResultSIPCanConnect,
-		DiscoveryResultSIPCannotConnect,
-	};
 
 	/**
 	 * Emitted when a poxy has been detected and needs a login/password.
@@ -65,70 +61,106 @@ public:
 		const std::string & proxyUrl, int proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
-	/**
-	 * Emitted when detectoin is finished and Settings are set.
-	 * 
-	 * @param result the result of the discovery
-	 */
-	Event< void(NetworkDiscovery & sender, 
-		DiscoveryResult result) > discoveryDoneEvent;
-
 	NetworkDiscovery();
 
 	~NetworkDiscovery();
 
 	/**
-	 * Launch the discovery of the network configuration for simple Http connection.
+	 * Test if an url is joinable by Http.
 	 * 
-	 * If proxy settings are set in Settings, they are used.
+	 * @param the url to test (e.g: "ws.wengo.fr:443/softphone-sso/sso.php") 
+	 * @param true if a SSL connection must be tested
+	 * @return true if connection ok
 	 */
-	void discoverForSSO();
+	bool testHTTP(const std::string & url, bool ssl);
 
 	/**
-	 * Launch the discovery of the network configuration for sip packets sending.
+	 * Test if a UDP connection is possible.
 	 * 
-	 * If proxy settings are set in Settings, they are used.
-	 * 
-	 * @param sipServer SIP server to test
-	 * @param sipPort SIP port to test
+	 * @param stunServer the STUN server
+	 * @return true if ok
 	 */
-	void discoverForSIP(const std::string & sipServer, int sipPort);
+	bool testUDP(const std::string & stunServer);
+	
+	/**
+	 * Test if a server respond to a SIP ping.
+	 * 
+	 * @param server the server to test
+	 * @param port the server port
+	 * @return true if ok
+	 */
+	bool testSIP(const std::string & server, unsigned port);
+
+	/**
+	 * Test if a HttpTunnel can be create and if SIP can pass through this tunnel.
+	 * 
+	 * @param tunnelServer the tunnel server
+	 * @param tunnelPort the tunnel port
+ 	 * @param ssl true if tunnel must be done with SSL
+	 * @param sipServer the SIP server to ping
+	 * @param sipServerPort the SIP server port
+	 * @return true if ok
+	 */
+	bool testSIPHTTPTunnel(const std::string & tunnelServer, unsigned tunnelPort, bool ssl,
+		const std::string & sipServer, unsigned sipServerPort);
+
+	/**
+	 * @return a free local port.
+	 */
+	unsigned getFreeLocalPort();
+
+	/**
+	 * Set the proxy.
+	 * 
+	 * Unblock discoverProxySettings if it was.
+	 */
+	void setProxySettings(const std::string & proxyServer, unsigned proxyPort,
+		const std::string & proxyLogin, const std::string & proxyPassword);
+
+	/**
+	 * @return the proxy server.
+	 */
+	const std::string getProxyServer() const {
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		return config.get(Config::NETWORK_PROXY_SERVER_KEY, std::string(""));
+	}
+
+	/**
+	 * @return the proxy server port.
+	 */
+	unsigned getProxyServerPort() const {
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		return config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
+	}
+
+	/**
+	 * @return the proxy login.
+	 */
+	const std::string getProxyLogin() const {
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		return config.get(Config::NETWORK_PROXY_LOGIN_KEY, std::string(""));
+	}
+
+	/**
+	 * @return the proxy password.
+	 */
+	const std::string getProxyPassword() const {
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		return config.get(Config::NETWORK_PROXY_PASSWORD_KEY, std::string(""));
+	}
 
 private:
 
 	/**
-	 * 
 	 * @return false if proxy is not set (usually when proxy needs authentication), true otherwise
 	 */
-	bool discoverProxySettings();
-
-	bool udpTest(const std::string sipServer, unsigned sipPort);
-
-	bool tunnelTest(const char * sipServer, int sipPort,
-		const char * tunnelServer,
-		const char * proxyAddress, int proxyPort,
-		const char * proxyLogin, const char * proxyPassword);
-
-	void setProxyConfig(const char * proxyAddress, int proxyPort,
-		const char * proxyLogin, const char * proxyPassword);
+	void discoverProxySettings();
 
 	void setNatConfig(NatType nat);
 
-	void setSSOConfig(bool ssoSSL);
-
-	void setTunnelNeededConfig(bool needed);
-
-	void setTunnelConfig(const char * server, int port, bool tunnelSSL);
-
-	void setSIPConfig(int port);
-
-	static const std::string _stunAddress;
-
-	static const std::string _ssoAddress;
-
-	static const std::string _ssoURL;
-
 	static const unsigned _pingTimeout;
+
+	bool _proxySettingsSet;
 
 };
 

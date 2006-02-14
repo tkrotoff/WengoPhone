@@ -216,13 +216,13 @@ public:
 	/**
 	 * Set proxy parameter.
 	 */
-	virtual void setProxy(const std::string & address, int port,
+	virtual void setProxy(const std::string & address, unsigned port,
 		const std::string & login, const std::string & password) = 0;
 
 	/**
 	 * Set HTTP tunnel parameters.
 	 */
-	virtual void setTunnel(bool needed, const std::string & address, int port, bool ssl) = 0;
+	virtual void setTunnel(const std::string & address, unsigned port, bool ssl) = 0;
 
 	/**
 	 * Set NAT Type.
@@ -230,9 +230,9 @@ public:
 	virtual void setNatType(NatType natType) = 0;
 
 	/**
-	 * Set SIP paramter.
+	 * Set SIP parameter.
 	 */
-	virtual void setSIP(const std::string & server, int localPort) = 0;
+	virtual void setSIP(const std::string & server, unsigned serverPort, unsigned localPort) = 0;
 
 	/**
 	 * Initialize the SIPWrapper.

@@ -20,22 +20,21 @@
 #ifndef WENGOACCOUNT_H
 #define WENGOACCOUNT_H
 
-#include "model/account/SipAccountType.h"
-#include "model/account/SipAccount.h"
-#include "model/config/ConfigItem.h"
+#include <model/account/SipAccount.h>
+#include <model/config/ConfigItem.h>
 
 #include <http/HttpRequest.h>
+#include <Timer.h>
 #include <Event.h>
-
-class Timer;
 
 /**
  * Connects to the single sign-on (SSO) system of the Wengo SIP service.
  *
  * @ingroup model
  * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
-class WengoAccount : public SipAccountType, public ConfigItem {
+class WengoAccount : public SipAccount, public ConfigItem {
 
 	/**
 	 * WengoAccountParser can directly access to _identity, _username ect...
@@ -47,32 +46,11 @@ class WengoAccount : public SipAccountType, public ConfigItem {
 
 public:
 
-	enum LoginState {
-		/** Connected to the Wengo platform, login is OK. */
-		LoginOk,
-
-		/** login/password is incorrect. */
-		LoginPasswordError,
-
-		/** A network error occured. */
-		LoginNetworkError
-	};
-
-	/**
-	 * Login procedure is done, event with the procedure result.
-	 *
-	 * @param sender this class
-	 * @param state login procedure result
-	 * @param login Wengo login used
-	 * @param password Wengo password used
-	 */
-	Event<void (WengoAccount & sender, LoginState state, const std::string & login, const std::string & password)> loginEvent;
-
 	WengoAccount(const std::string & login, const std::string & password, bool autoLogin);
 
 	~WengoAccount();
 
-	void init();
+	bool init();
 
 	const std::string & getWengoLogin() const {
 		return _wengoLogin;
@@ -80,10 +58,6 @@ public:
 
 	const std::string & getWengoPassword() const {
 		return _wengoPassword;
-	}
-
-	bool hasAutoLogin() const {
-		return _autoLogin;
 	}
 
 	std::string serialize();
@@ -96,11 +70,15 @@ public:
 
 private:
 
+	bool discoverForSSO();
+
+	bool discoverForSIP();
+
+	void wengoLoginEventHandler();
+
 	void answerReceivedEventHandler(const std::string & answer, HttpRequest::Error error);
 
 	void timeoutEventHandler();
-
-	void lastTimeoutEventHandler();
 
 	bool _answerReceivedAlready;
 
@@ -108,9 +86,21 @@ private:
 
 	std::string _wengoPassword;
 
-	bool _autoLogin;
+	Timer _timer;
 
-	Timer * _timer;
+	static const std::string _SSOServer;
+
+	static const std::string _SSOLoginPath;
+
+	/** True if SSO request can be done with SSL. */
+	bool _SSOWithSSL;
+
+	/** True if SSO request is Ok. */
+	bool _ssoRequestOk;
+
+	/** True if SSO request is Ok and login/password are valid. */
+	bool _wengoLoginOk;
+
 };
 
 #endif	//WENGOACCOUNT_H

@@ -25,6 +25,7 @@
 #include <NonCopyable.h>
 #include <Event.h>
 
+class IMAccount;
 class ChatHandler;
 class PChatHandler;
 
@@ -45,11 +46,15 @@ public:
 	 */
 	Event<void (ChatHandler & sender, IMChatSession & imChatSession)> newIMChatSessionCreatedEvent;
 
+	void createSession(const IMAccount & imAccount);
+
 	CChatHandler(ChatHandler & chatHandler);
 
 	~CChatHandler();
 
 private:
+
+	void newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession);
 
 	ChatHandler & _chatHandler;
 

@@ -18,11 +18,13 @@
  */
 
 #include <model/WengoPhone.h>
-
-#include <IMWrapperFactory.h>
-#include <SipWrapperFactory.h>
+#include <model/account/SipAccount.h>
+#include <imwrapper/IMWrapperFactory.h>
+#include <sipwrapper/SipWrapperFactory.h>
 #include <PhApiFactory.h>
 #include <global.h>
+
+#include <Logger.h>
 
 #if defined(CC_MSVC)
 	#include <win32/MemoryDump.h>
@@ -34,13 +36,33 @@ using namespace std;
 
 WengoPhone * wengoPhone = NULL;
 
-void wengoLoginEventHandler(WengoPhone & sender, WengoPhone::LoginState state, const std::string & login, const std::string & password) {
-		if (state == WengoPhone::LoginNoAccount) {
-			sender.addWengoAccount("jerome.leleu@wengo.fr", "b1234b", true);
-		}
+void loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
+	switch (state) {
+	case SipAccount::LoginStateConnected:
+		LOG_DEBUG(sender.getUsername() + " is connected");
+		break;
+	case SipAccount::LoginStateDisconnected:
+		LOG_DEBUG(sender.getUsername() + " has been disconnected");
+		break;
+	case SipAccount::LoginStateNetworkError:
+		LOG_DEBUG("a network error occured while attempting to connect " + sender.getUsername());
+		break;
+	case SipAccount::LoginStatePasswordError:
+		LOG_DEBUG("wrong login/password for " + sender.getUsername());
+		break;
+	case SipAccount::LoginStateReady:
+		LOG_DEBUG(sender.getUsername() + " is ready to connect");
+		break;
+	default:
+		LOG_FATAL("this state is unknown");
+	}
 }
 
-void proxyNeedsAuthenticationEvent(NetworkDiscovery & sender, const std::string & proxyUrl, int proxyPort) {
+void noAccountAvailableEventHandler(WengoPhone & sender) {
+	sender.addSipAccount("jerome.leleu@wengo.fr", "b1234b", true);	
+}
+
+void proxyNeedsAuthenticationEventHandler(SipAccount & sender, const std::string & proxyUrl, unsigned proxyPort) {
 	string url = proxyUrl;
 	int port = proxyPort;
 	string login;
@@ -50,7 +72,7 @@ void proxyNeedsAuthenticationEvent(NetworkDiscovery & sender, const std::string 
 	cout << "Proxy settings needed for " << proxyUrl << ":" << proxyPort << endl;
 	cout << "Is proxy URL and proxy port valid? (y, n)" << endl;
 	cin >> input;
-	if ((input == "y") || (input == "Y") || (input == "o") || (input == "O")) {
+	if ((input == "n") || (input == "N")) {
 		cout << "Please enter proxy url: ";
 		cin >> url;
 		cout << "Please enter proxy port: ";
@@ -61,9 +83,33 @@ void proxyNeedsAuthenticationEvent(NetworkDiscovery & sender, const std::string 
 	cout << "Please enter proxy password: ";
 	cin >> password;
 	
-	wengoPhone->setProxySettings(url, port, login, password);
+	sender.setProxySettings(url, port, login, password);
 }
 
+void wrongProxyAuthenticationEventHandler(SipAccount & sender, const std::string & proxyUrl, unsigned proxyPort,
+	const std::string & proxyLogin, const std::string proxyPassword) {
+	string url = proxyUrl;
+	int port = proxyPort;
+	string login;
+	string password;
+	string input;
+
+	cout << "Wrong proxy login/password. Please enter again parameter for " << proxyUrl << ":" << proxyPort << endl;
+	cout << "Is proxy URL and proxy port valid? (y, n)" << endl;
+	cin >> input;
+	if ((input == "n") || (input == "N")) {
+		cout << "Please enter proxy url: ";
+		cin >> url;
+		cout << "Please enter proxy port: ";
+		cin >> port;
+	}
+	cout << "Please enter proxy login: ";
+	cin >> login;
+	cout << "Please enter proxy password: ";
+	cin >> password;
+	
+	sender.setProxySettings(url, port, login, password);
+}
 
 int main(int argc, char * argv[]) {
 
@@ -87,10 +133,12 @@ int main(int argc, char * argv[]) {
 
 	wengoPhone = new WengoPhone();
 
-	wengoPhone->wengoLoginEvent += &wengoLoginEventHandler;
-	wengoPhone->getNetworkDiscovery().proxyNeedsAuthenticationEvent += &proxyNeedsAuthenticationEvent;
+	wengoPhone->loginStateChangedEvent += &loginStateChangedEventHandler;
+	wengoPhone->noAccountAvailableEvent += &noAccountAvailableEventHandler;
+	wengoPhone->proxyNeedsAuthenticationEvent += &proxyNeedsAuthenticationEventHandler;
+	wengoPhone->wrongProxyAuthenticationEvent += &wrongProxyAuthenticationEventHandler;
 
-	wengoPhone->run();
+	wengoPhone->start();
 
 	wengoPhone->join();
 

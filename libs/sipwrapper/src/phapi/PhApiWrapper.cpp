@@ -99,6 +99,12 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 	_callbacks = &callbacks;
 	_wengoVline = -1;
 	_isInitialized = false;
+	_tunnelNeeded = false;
+	_tunnelPort = 0;
+	_tunnelSSL = false;
+	_natType = StunTypeUnknown;
+	_sipServerPort = 0;
+	_sipLocalPort = 0;
 	PhApiWrapperHack = this;
 }
 
@@ -118,7 +124,7 @@ void PhApiWrapper::setNetworkParameter() {
 
 	if (_tunnelNeeded) {
 		//TODO: activate SSL for HTTP tunnel
-		phTunnelConfig(_proxyAddress.c_str(), _proxyPort, _tunnelAddress.c_str(), _tunnelPort,
+		phTunnelConfig(_proxyServer.c_str(), _proxyPort, _tunnelServer.c_str(), _tunnelPort,
 			_proxyLogin.c_str(), _proxyPassword.c_str(), 0);
 
 		natType = "fcone";
@@ -289,6 +295,7 @@ void PhApiWrapper::disconnect() {
 }
 
 void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & message) {
+	LOG_DEBUG("sending message: " + message);
 	const IMChatSession::IMContactList & buddies = chatSession.getIMContactList();
 	IMChatSession::IMContactList::const_iterator it;
 	for (it = buddies.begin(); it != buddies.end(); it++) {
@@ -480,18 +487,18 @@ void PhApiWrapper::unblockContact(const std::string & contactId) {
 	allowWatcher(sipAddress);
 }
 
-void PhApiWrapper::setProxy(const std::string & address, int port,
+void PhApiWrapper::setProxy(const std::string & address, unsigned port,
 	const std::string & login, const std::string & password) {
 
-	_proxyAddress = address;
+	_proxyServer = address;
 	_proxyPort = port;
 	_proxyLogin = login;
 	_proxyPassword = password;
 }
 
-void PhApiWrapper::setTunnel(bool needed, const std::string & address, int port, bool ssl) {
-	_tunnelNeeded = needed;
-	_tunnelAddress = address;
+void PhApiWrapper::setTunnel(const std::string & address, unsigned port, bool ssl) {
+	_tunnelNeeded = true;
+	_tunnelServer = address;
 	_tunnelPort = port;
 	_tunnelSSL = ssl;
 }
@@ -500,8 +507,9 @@ void PhApiWrapper::setNatType(NatType natType) {
 	_natType = natType;
 }
 
-void PhApiWrapper::setSIP(const string & server, int localPort) {
-	_sipAddress = server;
+void PhApiWrapper::setSIP(const string & server, unsigned serverPort, unsigned localPort) {
+	_sipServer = server;
+	_sipServerPort = serverPort;
 	_sipLocalPort = localPort;
 }
 
@@ -514,7 +522,7 @@ void PhApiWrapper::init() {
 	strncpy(phcfg.audio_codecs, "G726-64wb/16000,ILBC/8000,PCMU/8000,PCMA/8000,GSM/8000", 128);
 	strncpy(phcfg.video_codecs, "H263,H264,MPEG4", 128);
 
-	strncpy(phcfg.proxy, _sipAddress.c_str(), 64);
+	strncpy(phcfg.proxy, _sipServer.c_str(), 64);
 
 	String localPort = String::fromNumber(_sipLocalPort);
 	strncpy(phcfg.sipport, localPort.c_str(), 16);

@@ -20,7 +20,7 @@
 #ifndef WENGOACCOUNTDATALAYER_H
 #define WENGOACCOUNTDATALAYER_H
 
-#include "model/DataLayer.h"
+#include <model/DataLayer.h>
 
 class WengoAccount;
 

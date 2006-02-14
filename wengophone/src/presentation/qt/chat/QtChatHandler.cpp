@@ -28,18 +28,43 @@
 #include <QWidget>
 
 QtChatHandler::QtChatHandler(CChatHandler & cChatHandler) 
-	: _cChatHandler(cChatHandler) {
+	: QObjectThreadSafe(), _cChatHandler(cChatHandler) {
 
+	LOG_DEBUG("QtChatHandler created");
 	_cChatHandler.newIMChatSessionCreatedEvent +=
 		boost::bind(&QtChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
 
 QtChatHandler::~QtChatHandler() {
-
+	LOG_DEBUG("QtChatHandler destroyed");
 }
 
 void QtChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession) {
 	LOG_DEBUG("new ChatSession created");
+
+	typedef PostEvent2<void (ChatHandler & sender, IMChatSession & imChatSession), ChatHandler &, IMChatSession &> MyPostEvent;
+	MyPostEvent * event = 
+		new MyPostEvent(boost::bind(&QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe, this, _1, _2), sender, imChatSession);
+	postEvent(event);
+}
+
+void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(ChatHandler & sender, IMChatSession & imChatSession) {
 	QtChatWidget * qtChatWidget = new QtChatWidget(imChatSession);
 	qtChatWidget->getWidget()->show();
+}
+
+void QtChatHandler::createSession(const IMAccount & imAccount) {
+	_cChatHandler.createSession(imAccount);
+}
+
+void QtChatHandler::updatePresentation() {
+	
+}
+
+void QtChatHandler::updatePresentationThreadSafe() {
+
+}
+
+void QtChatHandler::initThreadSafe() {
+
 }

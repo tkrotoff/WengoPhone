@@ -20,7 +20,8 @@
 #ifndef CWENGOPHONE_H
 #define CWENGOPHONE_H
 
-#include "model/WengoPhone.h"
+#include <model/WengoPhone.h>
+#include <model/account/SipAccount.h>
 
 #include <string>
 
@@ -36,6 +37,7 @@ class PresenceHandler;
 class ChatHandler;
 class CPresenceHandler;
 class CChatHandler;
+class SipAccount;
 
 /**
  * @defgroup control Control Component
@@ -63,6 +65,16 @@ class CChatHandler;
  */
 class CWengoPhone {
 public:
+
+	/**
+	 * @see WengoPhone::loginStateChangedEvent
+	 */
+	Event<void (SipAccount & sender, SipAccount::LoginState state)> loginStateChangedEvent;
+
+	/**
+	 * @see WengoPhone::noAccountAvailableEvent
+	 */
+	Event< void (WengoPhone & sender) > noAccountAvailableEvent;
 
 	CWengoPhone(WengoPhone & wengoPhone);
 
@@ -126,8 +138,6 @@ private:
 	void contactListCreatedEventHandler(WengoPhone & sender, ContactList & contactList);
 
 	void wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin);
-
-	void wengoLoginEventHandler(WengoPhone & sender, WengoPhone::LoginState state, const std::string & login, const std::string & password);
 
 	void connectHandlerCreatedEventHandler(WengoPhone & sender, ConnectHandler & connectHandler);
 

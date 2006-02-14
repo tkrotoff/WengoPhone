@@ -22,6 +22,8 @@
 
 #include <presentation/PChatHandler.h>
 
+#include <QObjectThreadSafe.h>
+
 class ChatHandler;
 class CChatHandler;
 
@@ -31,12 +33,16 @@ class CChatHandler;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class QtChatHandler : public PChatHandler {
+class QtChatHandler : public QObjectThreadSafe, public PChatHandler {
 public:
 
 	QtChatHandler(CChatHandler & cChatHandler);
 
 	~QtChatHandler();
+
+	void createSession(const IMAccount & imAccount);
+
+	void updatePresentation();
 
 private:
 
@@ -44,6 +50,12 @@ private:
 	 * @see ChatHandler::newChatSessionCreatedEvent
 	 */
 	void newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession);
+
+	void newIMChatSessionCreatedEventHandlerThreadSafe(ChatHandler & sender, IMChatSession & imChatSession);
+
+	void updatePresentationThreadSafe();
+
+	void initThreadSafe();
 
 	CChatHandler & _cChatHandler;
 

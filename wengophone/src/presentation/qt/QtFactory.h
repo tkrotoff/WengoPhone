@@ -36,6 +36,7 @@
 #include "wenbox/QtWenboxPlugin.h"
 #include "control/wenbox/CWenboxPlugin.h"
 #include "presence/QtPresenceHandler.h"
+#include "chat/QtChatHandler.h"
 
 #include <QApplication>
 
@@ -105,7 +106,8 @@ public:
 	}
 
 	PChatHandler * createPresentationChatHandler(CChatHandler & cChatHandler) {
-		return NULL;
+		static QtChatHandler * qtChatHandler = new QtChatHandler(cChatHandler);
+		return qtChatHandler;
 	}
 
 private:

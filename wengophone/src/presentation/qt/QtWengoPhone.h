@@ -21,11 +21,13 @@
 #define QTWENGOPHONE_H
 
 #include <presentation/PWengoPhone.h>
+#include <model/account/SipAccount.h>
 
 #include <QObjectThreadSafe.h>
 
 #include <QMainWindow>
 
+class SipAccount;
 class CWengoPhone;
 class PPhoneLine;
 class QtPhoneCall;
@@ -52,8 +54,6 @@ public:
 	void setContactList(QtContactList * qtContactList);
 
 	void updatePresentation();
-
-	void wengoLoginStateChangedEvent(WengoPhone::LoginState state, const std::string & login, const std::string & password);
 
 	void dialpad(const QString & num);
 
@@ -113,7 +113,13 @@ private:
 
 	void updatePresentationThreadSafe();
 
-	void wengoLoginStateChangedEventThreadSafe(WengoPhone::LoginState state, std::string login, std::string password);
+	void noAccountAvailableEventHandler(WengoPhone & sender);
+
+	void noAccountAvailableEventHandlerThreadSafe(WengoPhone & sender);
+
+	void loginStateChangedEventHandler(SipAccount & sipAccount, SipAccount::LoginState state);
+
+	void loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state);
 
 	void showLoginWindow();
 

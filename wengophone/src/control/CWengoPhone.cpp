@@ -46,7 +46,8 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 
 	_wengoPhone.phoneLineCreatedEvent += boost::bind(&CWengoPhone::phoneLineCreatedEventHandler, this, _1, _2);
 	_wengoPhone.wenboxPluginCreatedEvent += boost::bind(&CWengoPhone::wenboxPluginCreatedEventHandler, this, _1, _2);
-	_wengoPhone.wengoLoginEvent += boost::bind(&CWengoPhone::wengoLoginEventHandler, this, _1, _2, _3, _4);
+	_wengoPhone.loginStateChangedEvent += loginStateChangedEvent;
+	_wengoPhone.noAccountAvailableEvent += noAccountAvailableEvent;
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.contactListCreatedEvent += boost::bind(&CWengoPhone::contactListCreatedEventHandler, this, _1, _2);
 	_wengoPhone.connectHandlerCreatedEvent += boost::bind(&CWengoPhone::connectHandlerCreatedEventHandler, this, _1, _2);
@@ -61,7 +62,7 @@ void CWengoPhone::makeCall(const std::string & phoneNumber) {
 }
 
 void CWengoPhone::addWengoAccount(const std::string & login, const std::string & password, bool autoLogin) {
-	_wengoPhone.addWengoAccount(login, password, autoLogin);
+	_wengoPhone.addSipAccount(login, password, autoLogin);
 }
 
 void CWengoPhone::addContact(Contact * contact, const std::string & contactGroupName) {
@@ -131,11 +132,6 @@ void CWengoPhone::wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlu
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 	LOG_DEBUG("WengoPhone::init() finished");
 }
-
-void CWengoPhone::wengoLoginEventHandler(WengoPhone & sender, WengoPhone::LoginState state, const std::string & login, const std::string & password) {
-	_pWengoPhone->wengoLoginStateChangedEvent(state, login, password);
-}
-
 
 void CWengoPhone::presenceHandlerCreatedEventHandler(WengoPhone & sender, PresenceHandler & presenceHandler) {
 	_cPresenceHandler = new CPresenceHandler(presenceHandler);

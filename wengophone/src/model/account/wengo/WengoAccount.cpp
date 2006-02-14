@@ -25,35 +25,140 @@
 
 #include <http/HttpRequestFactory.h>
 #include <http/CurlHttpRequestFactory.h>
-#include <Timer.h>
+
 #include <StringList.h>
 #include <Logger.h>
 
 #include <sstream>
 #include <exception>
 
-static const std::string WENGO_SERVER_HOSTNAME = "ws.wengo.fr";
-static const std::string WENGO_LOGIN_PATH = "/softphone-sso/sso.php";
+using namespace std;
 
-WengoAccount::WengoAccount(const std::string & login, const std::string & password, bool autoLogin) {
+const string WengoAccount::_SSOServer = "ws.wengo.fr";
+const string WengoAccount::_SSOLoginPath = "/softphone-sso/sso.php";
+
+WengoAccount::WengoAccount(const std::string & login, const std::string & password, bool autoLogin)
+	: SipAccount() {
 	_wengoLogin = login;
 	_wengoPassword = password;
 	_autoLogin = autoLogin;
-	_timer = new Timer();
 	_answerReceivedAlready = false;
+	_ssoRequestOk = false;
+	_wengoLoginOk = false;
+	_stunServer = "stun.wengo.fr";
+
+	_SSOWithSSL = false;
 }
 
 WengoAccount::~WengoAccount() {
-	delete _timer;
 }
 
-void WengoAccount::init() {
+bool WengoAccount::init() {
 	static const unsigned LOGIN_TIMEOUT = 10000;
 	static const unsigned LIMIT_RETRY = 5;
 
-	_timer->timeoutEvent += boost::bind(&WengoAccount::timeoutEventHandler, this);
-	_timer->lastTimeoutEvent += boost::bind(&WengoAccount::lastTimeoutEventHandler, this);
-	_timer->start(0, LOGIN_TIMEOUT, LIMIT_RETRY);
+	if (!discoverForSSO()) {
+		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateHTTPError);
+		return false;
+	}
+
+	_timer.timeoutEvent += boost::bind(&WengoAccount::timeoutEventHandler, this);
+	_timer.start(0, LOGIN_TIMEOUT, LIMIT_RETRY);
+	_timer.join();
+
+	if (!_ssoRequestOk) {
+		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateError);
+		return false;
+	} else if (_ssoRequestOk && !_wengoLoginOk) {
+		loginStateChangedEvent(*this, LoginStatePasswordError);
+		return false;
+	}
+
+	if (!discoverForSIP()) {
+		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateSIPError);
+		return false;
+	}
+
+	LOG_DEBUG("initialization Ok");
+	loginStateChangedEvent(*this, LoginStateReady);
+	return true;
+}
+
+bool WengoAccount::discoverForSSO() {
+	string url;
+
+	LOG_DEBUG("discovering network parameters for SSO connection");
+
+	url = _SSOServer + ":" + String::fromNumber(443) + _SSOLoginPath;
+	if (_networkDiscovery.testHTTP(url, true)) {
+		_SSOWithSSL = true;
+		LOG_DEBUG("SSO can connect on port 443 with SSL");
+		return true;
+	}
+
+	url = _SSOServer + ":" + String::fromNumber(80) + _SSOLoginPath;
+	if (_networkDiscovery.testHTTP(url, false)) {
+		_SSOWithSSL = false;
+		LOG_DEBUG("SSO can connect on port 80 without SSL");
+		return true;
+	}
+
+	LOG_DEBUG("SSO cannot connect");
+	return false;
+}
+
+bool WengoAccount::discoverForSIP() {
+	LOG_DEBUG("discovering network parameters for SIP connection");
+
+	_localSIPPort = _networkDiscovery.getFreeLocalPort();
+	LOG_DEBUG("SIP will use " + String::fromNumber(_localSIPPort) + " as local SIP port");
+
+	if (_networkDiscovery.testUDP(_stunServer)
+		&& _networkDiscovery.testSIP(_sipProxyServerHostname, _sipProxyServerPort)) {
+
+		_needsHttpTunnel = false;
+
+		LOG_DEBUG("SIP can connect via UDP");
+		return true;
+	}
+
+	LOG_DEBUG("cannot connect via UDP");
+
+	if (_networkDiscovery.testSIPHTTPTunnel(_httpTunnelServerHostname, 80, false,
+		_sipProxyServerHostname, _sipProxyServerPort)) {
+
+		_needsHttpTunnel = true;
+		_httpTunnelServerPort = 80;
+		_httpTunnelWithSSL = false;
+
+		LOG_DEBUG("SIP can connect via a tunnel on port 80 without SSL");
+		return true;
+	}
+
+	if (_networkDiscovery.testSIPHTTPTunnel(_httpTunnelServerHostname, 443, false,
+		_sipProxyServerHostname, _sipProxyServerPort)) {
+
+		_needsHttpTunnel = true;
+		_httpTunnelServerPort = 443;
+		_httpTunnelWithSSL = false;
+
+		LOG_DEBUG("SIP can connect via a tunnel on port 443 without SSL");
+		return true;
+	}
+
+	if (_networkDiscovery.testSIPHTTPTunnel(_httpTunnelServerHostname, 443, true,
+		_sipProxyServerHostname, _sipProxyServerPort)) {
+
+		_needsHttpTunnel = true;
+		_httpTunnelServerPort = 443;
+		_httpTunnelWithSSL = true;
+
+		LOG_DEBUG("SIP can connect via a tunnel on port 443 with SSL");
+		return true;
+	}
+
+	LOG_DEBUG("SIP cannot connect");
+	return false;
 }
 
 void WengoAccount::timeoutEventHandler() {
@@ -66,16 +171,20 @@ void WengoAccount::timeoutEventHandler() {
 
 	httpRequest.answerReceivedEvent += boost::bind(&WengoAccount::answerReceivedEventHandler, this, _1, _2);
 	httpRequest.setFactory(new CurlHttpRequestFactory());
-	//TODO not implemented inside libutil
-	//httpRequest.setProxy("proxy.wengo.fr", 8080, "myProxyUsername", "myProxyPassword");
+
+	LOG_DEBUG("setting proxy settings for SSO request");
+	httpRequest.setProxy(_networkDiscovery.getProxyServer(), _networkDiscovery.getProxyServerPort(),
+		 _networkDiscovery.getProxyLogin(), _networkDiscovery.getProxyPassword());
 
 	//First parameter: true = HTTPS, false = HTTP
 	//Last parameter: true = POST method, false = GET method
-	httpRequest.sendRequest(false, WENGO_SERVER_HOSTNAME, 80, WENGO_LOGIN_PATH, data, true);
-}
-
-void WengoAccount::lastTimeoutEventHandler() {
-	loginEvent(*this, LoginNetworkError, _wengoLogin, _wengoPassword);
+	if (_SSOWithSSL) {
+		LOG_DEBUG("sending SSO request with SSL");
+		httpRequest.sendRequest(true, _SSOServer, 443, _SSOLoginPath, data, true);
+	} else {
+		LOG_DEBUG("sending SSO request without SSL");
+		httpRequest.sendRequest(false, _SSOServer, 80, _SSOLoginPath, data, true);
+	}
 }
 
 void WengoAccount::answerReceivedEventHandler(const std::string & answer, HttpRequest::Error error) {
@@ -85,12 +194,17 @@ void WengoAccount::answerReceivedEventHandler(const std::string & answer, HttpRe
 
 	_answerReceivedAlready = true;
 	if (error == HttpRequest::NoError && !answer.empty()) {
-		_timer->stop();
+		LOG_DEBUG("SSO request has been processed successfully");
+		_ssoRequestOk = true;
 		WengoAccountParser parser(*this, answer);
 		if (parser.isLoginPasswordOk()) {
-			loginEvent(*this, LoginOk, _wengoLogin, _wengoPassword);
+			LOG_DEBUG("login/password is Ok");
+			_wengoLoginOk = true;
+			_timer.stop();
+			//SIP connection test can now be launched as _timer has been joined in init()
 		} else {
-			loginEvent(*this, LoginPasswordError, _wengoLogin, _wengoPassword);
+			LOG_DEBUG("login/password is not Ok");
+			_timer.stop();
 		}
 	}
 }

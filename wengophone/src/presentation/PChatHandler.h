@@ -39,7 +39,7 @@ public:
 	/**
 	 * @see ChatHandler::createSession
 	 */
-	virtual IMChatSession * createSession(const IMAccount & imAccount) = 0;
+	virtual void createSession(const IMAccount & imAccount) = 0;
 
 };
 

@@ -38,7 +38,7 @@ class SipPresenceState;
 class PhoneLine : public IPhoneLine {
 public:
 
-	PhoneLine(WengoPhone & wengoPhone);
+	PhoneLine(SipAccount & sipAccount, WengoPhone & wengoPhone);
 
 	~PhoneLine();
 
@@ -60,9 +60,9 @@ public:
 		return *_sipWrapper;
 	}
 
-	void setSipAccount(const SipAccount & account);
-
-	const SipAccount & getSipAccount() const;
+	SipAccount & getSipAccount() const {
+		return _sipAccount;
+	}
 
 	void connect();
 
@@ -120,7 +120,7 @@ private:
 	PhoneCall * _waitingPhoneCall;
 
 	/** SipAccount associated with this PhoneLine. */
-	const SipAccount * _sipAccount;
+	SipAccount & _sipAccount;
 
 	/** Line id of this PhoneLine. */
 	int _lineId;

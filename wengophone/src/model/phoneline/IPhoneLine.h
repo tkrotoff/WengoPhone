@@ -108,17 +108,6 @@ public:
 	virtual void resumeCall(int callId) = 0;
 
 	/**
-	 * Sets the SIP account associated with this PhoneLine.
-	 *
-	 * Only one SIP account is associated to a PhoneLine.
-	 * Of course multiple PhoneLine can be created. The class WengoPhone
-	 * keeps track of all the PhoneLine created.
-	 *
-	 * @param account SIP account associated with the PhoneLine
-	 */
-	virtual void setSipAccount(const SipAccount & account) = 0;
-
-	/**
 	 * Gets the SIP account associated with this PhoneLine.
 	 *
 	 * @return SIP account associated with this PhoneLine or NULL

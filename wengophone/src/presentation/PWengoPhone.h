@@ -22,7 +22,8 @@
 
 #include "Presentation.h"
 
-#include "model/WengoPhone.h"
+#include <model/WengoPhone.h>
+#include <model/account/SipAccount.h>
 
 #include <string>
 
@@ -40,8 +41,6 @@ public:
 	}
 
 	virtual void addPhoneLine(PPhoneLine * pPhoneLine) = 0;
-
-	virtual void wengoLoginStateChangedEvent(WengoPhone::LoginState state, const std::string & login, const std::string & password) = 0;
 
 	/*virtual void addCommand(PCommand * command) = 0;
 

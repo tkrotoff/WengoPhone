@@ -59,3 +59,7 @@ void Timer::run() {
 		msleep(_timeout);
 	}
 }
+
+void Timer::join() {
+	Thread::join();
+}

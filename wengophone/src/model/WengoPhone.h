@@ -20,11 +20,8 @@
 #ifndef WENGOPHONE_H
 #define WENGOPHONE_H
 
-#include <model/account/wengo/WengoAccount.h>
-#include <model/account/wengo/WengoAccount.h>
-#include <model/NetworkDiscovery.h>
-
 #include <imwrapper/IMAccountHandler.h>
+#include <model/account/SipAccount.h>
 
 #include <Event.h>
 #include <Thread.h>
@@ -35,7 +32,7 @@
 
 class IPhoneLine;
 class PhoneCall;
-class WengoAccount;
+class SipAccount;
 class WengoAccountDataLayer;
 class WenboxPlugin;
 class ContactList;
@@ -82,22 +79,15 @@ public:
 	static std::string CONFIG_FILES_PATH;
 	static std::string getConfigFilesPath();
 
-	enum LoginState {
-		LoginOk,
-		LoginPasswordError,
-		LoginNetworkError,
-		LoginNoAccount
-	};
-
 	/**
 	 * Login procedure is done, event with the procedure result.
 	 *
-	 * @param sender this class
+	 * @param sender the SipAccount that sends this event
 	 * @param state login procedure result
 	 * @param login Wengo login used
 	 * @param password Wengo password used
 	 */
-	Event<void (WengoPhone & sender, LoginState state, const std::string & login, const std::string & password)> wengoLoginEvent;
+	Event<void (SipAccount & sender, SipAccount::LoginState state)> loginStateChangedEvent;
 
 	/**
 	 * A PhoneLine has been created.
@@ -154,6 +144,34 @@ public:
 	 */
 	Event<void (WengoPhone & sender, ChatHandler & chatHandler)> chatHandlerCreatedEvent;
 
+	/**
+	 * Emitted when a poxy has been detected and needs a login/password.
+	 * 
+	 * @param sender the SipAccount that sends this event
+	 * @param proxyUrl the url of the detected proxy
+	 * @param proxyPort the port of the detected proxy
+	 */
+	Event< void(SipAccount & sender, 
+		const std::string & proxyUrl, int proxyPort) > proxyNeedsAuthenticationEvent;
+
+	/**
+	 * Emitted when given login/password are wrong.
+	 *
+	 * @param sender the SipAccount that sends this event
+	 * @param proxyUrl the url of the detected proxy
+	 * @param proxyPort the port of the detected proxy
+	 * @param proxyLogin the maybe wrong login
+	 * @param proxyPassword the maybe wrong password
+	 */
+	Event< void(SipAccount & sender,
+		const std::string & proxyUrl, int proxyPort,
+		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
+
+	/**
+	 * Emitted when no account exists.
+	 */
+	Event< void (WengoPhone & sender) > noAccountAvailableEvent;
+
 	/** Defines the vector of IPhoneLine. */
 	typedef List < IPhoneLine * > PhoneLines;
 
@@ -162,13 +180,13 @@ public:
 	~WengoPhone();
 
 	/**
-	 * Adds a Wengo account.
+	 * Adds a SipAccount.
 	 *
 	 * @param login Wengo account login
 	 * @param password Wengo account password
 	 * @param autoLogin if true login the user automatically (save it to the file)
 	 */
-	void addWengoAccount(const std::string & login, const std::string & password, bool autoLogin);
+	void addSipAccount(const std::string & login, const std::string & password, bool autoLogin);
 
 	/**
 	 * Adds a Contact to the ContactList.
@@ -266,10 +284,6 @@ public:
 		return _imAccountHandler;
 	}
 
-	NetworkDiscovery & getNetworkDiscovery() {
-			return _networkDiscovery;
-	}
-
 	void setProxySettings(const std::string & proxyAddress, int proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword);
 
@@ -281,26 +295,29 @@ public:
 private:
 
 	/**
+	 * Login the WengoAccount.
+	 */
+	void wengoAccountLogin();
+
+	/**
 	 * Entry point of the application, equivalent to main().
 	 */
 	void init();
 
+	/**
+	 * Handle SipAccount::loginStateEvent.
+	 */
+	void loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState loginState);
 
 	/**
-	 * @see addWengoAccount()
+	 * @see addSipAccount()
 	 */
-	void addWengoAccountThreadSafe(const std::string & login, const std::string & password, bool autoLogin);
+	void addSipAccountThreadSafe(const std::string & login, const std::string & password, bool autoLogin);
 
 	/**
 	 * @see addContact()
 	 */
 	void addContactThreadSafe(Contact * contact, const std::string & contactGroupName);
-
-	void discoveryDoneEventHandler(NetworkDiscovery & sender,
-		NetworkDiscovery::DiscoveryResult result);
-
-	void wengoLoginEventHandler(WengoAccount & sender, WengoAccount::LoginState state,
-		const std::string & login, const std::string & password);
 
 	/**
 	 * Creates and adds a new PhoneLine given a SipAccount.
@@ -309,7 +326,7 @@ private:
 	 *
 	 * @param account SipAccount associated with the newly created PhoneLine
 	 */
-	void addPhoneLine(const SipAccount & account);
+	void addPhoneLine(SipAccount & account);
 
 	/**
 	 * @see terminate()
@@ -331,12 +348,6 @@ private:
 	/** Wenbox. */
 	WenboxPlugin * _wenboxPlugin;
 
-	/** Data layer to save the Wengo account. */
-	WengoAccountDataLayer * _wengoAccountDataLayer;
-
-	/** NetworkDiscovery service. */
-	NetworkDiscovery _networkDiscovery;
-
 	ConnectHandler * _connectHandler;
 
 	PresenceHandler * _presenceHandler;
@@ -345,7 +356,10 @@ private:
 
 	IMAccountHandler _imAccountHandler;
 
-	WengoAccount * _wengoAccount;
+	SipAccount * _wengoAccount;
+
+	/** The data layer of this WengoAccount. Used to unserialize. */
+	WengoAccountDataLayer * _wengoAccountDataLayer;
 
 	/**
 	 * If this thread should be terminate or not.

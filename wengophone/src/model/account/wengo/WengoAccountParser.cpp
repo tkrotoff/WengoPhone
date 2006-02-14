@@ -86,13 +86,13 @@ WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string
 
 	text = sso.FirstChild("proxy").FirstChild("host").FirstChild().Text();
 	if (text) {
-		account._proxyServerHostname = text->Value();
+		account._sipProxyServerHostname = text->Value();
 	}
 
 	text = sso.FirstChild("proxy").FirstChild("port").FirstChild().Text();
 	if (text) {
 		String tmp(text->Value());
-		account._proxyServerPort = tmp.toInteger();
+		account._sipProxyServerPort = tmp.toInteger();
 	}
 
 	text = sso.FirstChild("server").FirstChild("host").FirstChild().Text();
@@ -108,12 +108,12 @@ WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string
 
 	text = sso.FirstChild("httptunnel").FirstChild("host").FirstChild().Text();
 	if (text) {
-		account._tunnelServerHostname = text->Value();
+		account._httpTunnelServerHostname = text->Value();
 	}
 
 	text = sso.FirstChild("httptunnel").FirstChild("port").FirstChild().Text();
 	if (text) {
 		String tmp(text->Value());
-		account._tunnelServerPort = tmp.toInteger();
+		account._httpTunnelServerPort = tmp.toInteger();
 	}
 }

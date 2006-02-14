@@ -66,6 +66,11 @@ public:
 	 */
 	void stop();
 
+	/**
+	 * Wait for the end of the timer Thread.
+	 */
+	void join();
+
 private:
 
 	/** @see Thread::start() */

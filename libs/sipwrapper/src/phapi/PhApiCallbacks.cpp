@@ -25,7 +25,9 @@
 #include <sipwrapper/SipWrapper.h>
 #include <imwrapper/IMPresence.h>
 #include <imwrapper/EnumPresenceState.h>
+#include <imwrapper/IMChatSession.h>
 
+#include <StringList.h>
 #include <Logger.h>
 
 #ifdef ENABLE_VIDEO
@@ -236,20 +238,25 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 	IMChatSession * imChatSession;
 
+	LOG_DEBUG("message received from " + string(info->from) 
+		+ ": " + string((info->content ? info->content : "")));
 	std::map<int, IMChatSession *> messageIdChatSessionMap = p->getMessageIdChatSessionMap();
 	std::map<int, IMChatSession *>::const_iterator it = messageIdChatSessionMap.find(messageId);
 	if (it == messageIdChatSessionMap.end()) {
-		//imChatSession = new IMChatSession(PhApiIMChat::PhApiIMChatHack);
-		//p->newIMChatSessionCreatedEvent(*p, *imChatSession);
+		//FIXME: This test is false and should be replaced by a test on session id.
+		LOG_DEBUG("creating new IMChatSession");
+		imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
+		p->newIMChatSessionCreatedEvent(*p, *imChatSession);
 	} else {
+		LOG_DEBUG("a session already exists");
 		imChatSession = messageIdChatSessionMap[messageId];
 	}
 
 	switch(info->event) {
 	case phMsgNew: {
-		std::string from = info->from;
-		std::string content = info->content;
-		p->contactAddedEvent(*p, *imChatSession, from);
+		string from = info->from;
+		string content = info->content;
+		p->contactAddedEvent(*p, *imChatSession, StringList::split(from)[0]);
 		p->messageReceivedEvent(*p, *imChatSession, from, content);
 		break;
 	}

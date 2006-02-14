@@ -47,8 +47,8 @@
 
 using namespace std;
 
-PhoneLine::PhoneLine(WengoPhone & wengoPhone)
-	: _wengoPhone(wengoPhone) {
+PhoneLine::PhoneLine(SipAccount & sipAccount, WengoPhone & wengoPhone)
+	: _sipAccount(sipAccount), _wengoPhone(wengoPhone) {
 
 	_sipWrapper = SipWrapperFactory::getFactory().createSipWrapper();
 
@@ -56,7 +56,6 @@ PhoneLine::PhoneLine(WengoPhone & wengoPhone)
 
 	initSipWrapper();
 
-	_sipAccount = NULL;
 	_lineId = SipWrapper::VirtualLineIdError;
 
 	static PhoneLineStateDefault stateDefault;
@@ -91,11 +90,10 @@ PhoneLine::~PhoneLine() {
 	_sipWrapper = NULL;
 	_activePhoneCall = NULL;
 	_waitingPhoneCall = NULL;
-	_sipAccount = NULL;
 }
 
 std::string PhoneLine::getMySipAddress() const {
-	return "sip:" + _sipAccount->getIdentity() + "@" + _sipAccount->getRealm();
+	return "sip:" + _sipAccount.getIdentity() + "@" + _sipAccount.getRealm();
 }
 
 int PhoneLine::makeCall(const std::string & phoneNumber) {
@@ -153,36 +151,24 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 	return callId;
 }
 
-void PhoneLine::setSipAccount(const SipAccount & account) {
-	_sipAccount = &account;
-}
-
-const SipAccount & PhoneLine::getSipAccount() const {
-	if (!_sipAccount) {
-		LOG_FATAL("_sipAccount cannot be NULL, call setSipAccount() first");
-	}
-	return *_sipAccount;
-}
-
 void PhoneLine::connect() {
-	if (!_sipAccount) {
-		LOG_FATAL("_sipAccount cannot be NULL, call setSipAccount() first");
-	}
-
 	_lineId = _sipWrapper->addVirtualLine(
-		_sipAccount->getDisplayName(),
-		_sipAccount->getUsername(),
-		_sipAccount->getIdentity(),
-		_sipAccount->getPassword(),
-		_sipAccount->getRealm(),
-		_sipAccount->getProxyServerHostname(),
-		_sipAccount->getRegisterServerHostname());
+		_sipAccount.getDisplayName(),
+		_sipAccount.getUsername(),
+		_sipAccount.getIdentity(),
+		_sipAccount.getPassword(),
+		_sipAccount.getRealm(),
+		_sipAccount.getSIPProxyServerHostname(),
+		_sipAccount.getRegisterServerHostname());
 
-	LOG_DEBUG("connect username=" + _sipAccount->getUsername() + " server=" + _sipAccount->getRegisterServerHostname() +
+	LOG_DEBUG("connect username=" + _sipAccount.getUsername() + " server=" + _sipAccount.getRegisterServerHostname() +
 			" lineId=" + String::fromNumber(_lineId));
 
 	if (_lineId == SipWrapper::VirtualLineIdError) {
 		LOG_ERROR("SipWrapper::addVirtualLine() failed");
+		_sipAccount.setConnected(false);
+	} else {
+		_sipAccount.setConnected(true);
 	}
 }
 
@@ -362,47 +348,44 @@ void PhoneLine::initSipWrapper() {
 	string pluginPath = config.get(Config::CODEC_PLUGIN_PATH, String::null);
 	_sipWrapper->setPluginPath(pluginPath);
 	
-	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, String::null);
-	if (!proxyAddress.empty()) {
-		int proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
+	// Setting proxy
+	string proxyServer = config.get(Config::NETWORK_PROXY_SERVER_KEY, String::null);
+	if (!proxyServer.empty()) {
+		unsigned proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
 		string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, String::null);
 		string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, String::null);
 
-		_sipWrapper->setProxy(proxyAddress, proxyPort, proxyLogin, proxyPassword);
+		_sipWrapper->setProxy(proxyServer, proxyPort, proxyLogin, proxyPassword);
 	}
 
-	bool tunnelNeeded = config.get(Config::NETWORK_TUNNEL_NEEDED_KEY, false);
-	if (tunnelNeeded) {
-		string tunnelAddress = config.get(Config::NETWORK_TUNNEL_SERVER_KEY, String::null);
-		int tunnelPort = config.get(Config::NETWORK_TUNNEL_PORT_KEY, 0);
-		bool tunnelSSL = config.get(Config::NETWORK_TUNNEL_SSL_KEY, false);
-		_sipWrapper->setTunnel(true, tunnelAddress, tunnelPort, tunnelSSL);
-	} else {
-		_sipWrapper->setTunnel(false, String::null, 0, false);
+	// Setting Http Tunnel
+	if (_sipAccount.isHttpTunnelNeeded()) {
+		_sipWrapper->setTunnel(_sipAccount.getHttpTunnelServerHostname(), 
+			_sipAccount.getHttpTunnelServerPort(), _sipAccount.httpTunnelHasSSL());
 	}
 
-	string sipAddress = config.get(Config::NETWORK_SIP_SERVER_KEY, String::null);
-	int sipPort = config.get(Config::NETWORK_SIP_LOCAL_PORT_KEY, 0);
-	_sipWrapper->setSIP(sipAddress, sipPort);
+	// Setting SIP proxy
+	_sipWrapper->setSIP(_sipAccount.getSIPProxyServerHostname(), _sipAccount.getSIPProxyServerPort(), _sipAccount.getLocalSIPPort());
 
-	string natType = config.get(Config::NETWORK_NAT_TYPE_KEY, string("auto"));
-	NatType nat;
-
-	if (natType == "cone") {
-		nat = StunTypeConeNat;
-	} else if (natType == "restricted") {
-		nat = StunTypeRestrictedNat;
-	} else if (natType == "portRestricted") {
-		nat = StunTypePortRestrictedNat;
-	} else if (natType == "sym") {
-		nat = StunTypeSymNat;
-	} else if (natType == "symfirewall") {
-		nat = StunTypeSymFirewall;
-	} else if (natType == "blocked") {
-		nat = StunTypeBlocked;
-	} else {
-		nat = StunTypeOpen;
-	}
+	// Setting NAT
+	string natType = config.get(Config::NETWORK_NAT_TYPE_KEY, string("auto"));	
+	NatType nat;	
+	
+	if (natType == "cone") {	
+		nat = StunTypeConeNat;	
+	} else if (natType == "restricted") {	
+		nat = StunTypeRestrictedNat;	
+	} else if (natType == "portRestricted") {	
+		nat = StunTypePortRestrictedNat;	
+	} else if (natType == "sym") {	
+		nat = StunTypeSymNat;	
+	} else if (natType == "symfirewall") {	
+		nat = StunTypeSymFirewall;	
+	} else if (natType == "blocked") {	
+		nat = StunTypeBlocked;	
+	} else {	
+		nat = StunTypeOpen;	
+	}	
 
 	_sipWrapper->setNatType(nat);
 

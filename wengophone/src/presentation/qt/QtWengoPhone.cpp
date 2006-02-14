@@ -19,6 +19,7 @@
 
 #include "QtWengoPhone.h"
 
+#include <model/account/SipAccount.h>
 #include <control/CWengoPhone.h>
 #include <WengoPhoneBuildId.h>
 
@@ -41,6 +42,11 @@
 QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 	: QObjectThreadSafe(),
 	_cWengoPhone(cWengoPhone) {
+
+	_cWengoPhone.loginStateChangedEvent +=
+		boost::bind(&QtWengoPhone::loginStateChangedEventHandler, this, _1, _2);
+	_cWengoPhone.noAccountAvailableEvent +=
+		boost::bind(&QtWengoPhone::noAccountAvailableEventHandler, this, _1);
 
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::initThreadSafe, this));
@@ -185,30 +191,43 @@ void QtWengoPhone::updatePresentation() {
 void QtWengoPhone::updatePresentationThreadSafe() {
 }
 
-void QtWengoPhone::wengoLoginStateChangedEvent(WengoPhone::LoginState state, const std::string & login, const std::string & password) {
-	typedef PostEvent3<void (WengoPhone::LoginState, const std::string &, const std::string &), WengoPhone::LoginState, std::string, std::string> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::wengoLoginStateChangedEventThreadSafe, this, _1, _2, _3), state, login, password);
+void QtWengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
+	typedef PostEvent2<void (SipAccount & sender, SipAccount::LoginState), SipAccount &, SipAccount::LoginState> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::loginStateChangedEventHandlerThreadSafe, this, _1, _2), sender, state);
 	postEvent(event);
 }
 
-void QtWengoPhone::wengoLoginStateChangedEventThreadSafe(WengoPhone::LoginState state, std::string login, std::string password) {
+void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state) {
 	switch (state) {
-	case WengoPhone::LoginOk:
+
+	case SipAccount::LoginStateReady:
+		break;
+	
+	case SipAccount::LoginStateConnected:
 		break;
 
-	case WengoPhone::LoginPasswordError:
+	case SipAccount::LoginStateDisconnected:
 		break;
 
-	case WengoPhone::LoginNetworkError:
+	case SipAccount::LoginStatePasswordError:
 		break;
 
-	case WengoPhone::LoginNoAccount:
-		showLoginWindow();
+	case SipAccount::LoginStateNetworkError:
 		break;
 
 	default:
 		LOG_FATAL("Unknown state");
 	};
+}
+
+void QtWengoPhone::noAccountAvailableEventHandler(WengoPhone & sender) {
+	typedef PostEvent1<void (WengoPhone & sender), WengoPhone &> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::noAccountAvailableEventHandlerThreadSafe, this, _1), sender);
+	postEvent(event);
+}
+
+void QtWengoPhone::noAccountAvailableEventHandlerThreadSafe(WengoPhone & sender) {
+	showLoginWindow();
 }
 
 void QtWengoPhone::dialpad(const QString & num) {

@@ -38,11 +38,11 @@ QtChatWidget::QtChatWidget(IMChatSession & imChatSession)
 	_chatWidget = WidgetFactory::create(":/forms/chat/ChatWidget.ui", NULL);
 
 	_lineEdit = Object::findChild<QLineEdit *>(_chatWidget, "lineEdit");
-	_listWidget = Object::findChild<QListWidget *>(_chatWidget, "textEdit");
+	_listWidget = Object::findChild<QListWidget *>(_chatWidget, "listWidget");
 	_sendButton = Object::findChild<QPushButton *>(_chatWidget, "sendButton");
 
-	connect(_lineEdit, SIGNAL(returnPressed()), SLOT(sendMessage()));
-	connect(_sendButton, SIGNAL(clicked()), SLOT(sendMessage()));
+	connect(_lineEdit, SIGNAL(returnPressed()), SLOT(sendMessage()), Qt::DirectConnection);
+	connect(_sendButton, SIGNAL(clicked()), SLOT(sendMessage()), Qt::DirectConnection);
 
 	_imChatSession.messageReceivedEvent +=
 		boost::bind(&QtChatWidget::messageReceivedEventHandler, this, _1, _2, _3);
@@ -60,6 +60,8 @@ void QtChatWidget::sendMessage() {
 
 void QtChatWidget::messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message) {
 	LOG_DEBUG("message received: " + message);
-	
+
 	_listWidget->addItem(QString::fromStdString(from.getContactId() + ": " + message));
+
+	_chatWidget->show();
 }
