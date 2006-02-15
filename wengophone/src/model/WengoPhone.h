@@ -199,10 +199,10 @@ public:
 
 	/**
 	 * Add an IMAccount.
-	 * 
+	 * The IMAccount is copied internally.
 	 * @param imAccount the IMAccount to add
 	 */
-	void addIMAccount(IMAccount & imAccount);
+	void addIMAccount(const IMAccount & imAccount);
 
 	/**
 	 * Adds a Contact to the ContactList.

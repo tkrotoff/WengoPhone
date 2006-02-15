@@ -82,14 +82,6 @@ void WengoPhone::init() {
 	//Creates the history
 	//historyCreatedEvent
 
-	//Load the WengoAccount
-	wengoAccountLogin();
-
-	//Load other SipAccount
-
-	//Load IMAccounts
-	//
-
 	//Create ConnectHandler, PresenceHandler and ChatHandler
 	_connectHandler = new ConnectHandler();
 	connectHandlerCreatedEvent(*this, *_connectHandler);
@@ -112,6 +104,14 @@ void WengoPhone::init() {
 	/*LocalNetworkAccount * localAccount = new LocalNetworkAccount();
 	localAccount->init();
 	addPhoneLine(localAccount);*/
+
+	//Load the WengoAccount
+	wengoAccountLogin();
+
+	//Load other SipAccount
+
+	//Load IMAccounts
+	//
 
 	//initFinishedEvent
 	initFinishedEvent(*this);
@@ -262,11 +262,11 @@ void WengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::
 		_imAccountHandler.insert(imAccount);
 		_connectHandler->connect(*_imAccountHandler.find(imAccount));
 
-		break;	
+		break;
 	}
 }
 
-void WengoPhone::addIMAccount(IMAccount & imAccount) {
+void WengoPhone::addIMAccount(const IMAccount & imAccount) {
 	LOG_DEBUG("adding an IMAccount");
 
 	_imAccountHandler.insert(imAccount);
