@@ -30,6 +30,8 @@
 
 #include <QtGui>
 
+using namespace std;
+
 QtContactWidget::QtContactWidget(Contact * contact, const QStringList & listContactGroup, QWidget * parent) : QObject(parent) {
 	_contactWidget = WidgetFactory::create(":/forms/contactlist/ContactWidget.ui", parent);
 
@@ -127,9 +129,9 @@ QString QtContactWidget::createContact(Contact * contact) {
 	contact->setNotes(getNotes().toStdString());
 
 	if (!getWengoPhone().isEmpty()) {
-		List<IMAccount *> list = contact->getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
-		if (list.size() > 0) {
-			contact->addIMContact(IMContact(*list[0],
+		set<IMAccount> list = contact->getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		if (list.begin() != list.end()) {
+			contact->addIMContact(IMContact(*list.begin(),
 				getWengoPhone().toStdString()));
 		}
 	}

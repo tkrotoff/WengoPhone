@@ -21,24 +21,23 @@
 #define IMACCOUNTHANDLER_H
 
 #include <imwrapper/EnumIMProtocol.h>
+#include <imwrapper/IMAccount.h>
 
-#include <List.h>
-
-class IMAccount;
+#include <set>
 
 /**
  * Instant Messaging account list.
  *
  * @author Philippe Bernery
  */
-class IMAccountHandler : public List<IMAccount *> {
+class IMAccountHandler : public std::set<IMAccount> {
 public:
 
 	/**
 	 * @param protocol the desired protocol
 	 * @return IMAccount with protocol 'protocol'
 	 */
-	List<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
+	std::set<IMAccount> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
 };
 
 #endif	//IMACCOUNTHANDLER_H

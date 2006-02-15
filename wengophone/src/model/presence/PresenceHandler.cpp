@@ -22,6 +22,7 @@
 #include <model/presence/Presence.h>
 #include <model/contactlist/ContactList.h>
 #include <model/connect/ConnectHandler.h>
+#include <model/WengoPhone.h>
 
 #include <imwrapper/IMContact.h>
 
@@ -29,10 +30,12 @@
 
 using namespace std;
 
-PresenceHandler::PresenceHandler(ConnectHandler & connectHandler) {
-	connectHandler.connectedEvent +=
+PresenceHandler::PresenceHandler(WengoPhone & wengoPhone) {
+	wengoPhone.newIMAccountAddedEvent +=
+		boost::bind(&PresenceHandler::newIMAccountAddedEventHandler, this, _1, _2);
+	wengoPhone.getConnectHandler().connectedEvent +=
 		boost::bind(&PresenceHandler::connectedEventHandler, this, _1, _2);
-	connectHandler.disconnectedEvent +=
+	wengoPhone.getConnectHandler().disconnectedEvent +=
 		boost::bind(&PresenceHandler::disconnectedEventHandler, this, _1, _2);
 }
 
@@ -83,30 +86,6 @@ void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount &
 
 	LOG_DEBUG("an account is connected: login: " + imAccount.getLogin()
 		+ " protocol: " + String::fromNumber(imAccount.getProtocol()));
-	//Presence for this IMAccount has not been created yet
-	if (i == _presenceMap.end()) {
-		Presence * presence = new Presence(imAccount);
-		_presenceMap[&imAccount] = presence;
-
-		presence->presenceStateChangedEvent +=
-			boost::bind(&PresenceHandler::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
-		presence->myPresenceStatusEvent +=
-			boost::bind(&PresenceHandler::myPresenceStatusEventHandler, this, _1, _2);
-		presence->subscribeStatusEvent +=
-			boost::bind(&PresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3);
-
-		//Launch all pending subscriptions
-		IMContactMultiMap::iterator it = _pendingSubscriptions.find(&imAccount);
-		while (it != _pendingSubscriptions.end()) {
-			LOG_DEBUG("subscribing to Presence of: " + (*it).second->getContactId());
-			presence->subscribeToPresenceOf((*it).second->getContactId());
-			//TODO: should we keep the list in case of disconnection?
-			_pendingSubscriptions.erase(it);
-			it = _pendingSubscriptions.find(&imAccount);
-		}
-
-		i = _presenceMap.find(&imAccount);
-	}
 
 	//TODO: Presence must be change to Presence set before disconnection
 	(*i).second->changeMyPresence(EnumPresenceState::PresenceStateOnline, String::null);
@@ -119,6 +98,8 @@ void PresenceHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccoun
 		+ ", protocol: " + String::fromNumber(imAccount.getProtocol()));
 	if (it != _presenceMap.end()) {
 		(*it).second->changeMyPresence(EnumPresenceState::PresenceStateOffline, String::null);
+	} else {
+		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());
 	}
 }
 
@@ -165,4 +146,35 @@ PresenceHandler::PresenceMap::iterator PresenceHandler::findPresence(PresenceMap
 		}
 	}
 	return it;
+}
+
+void PresenceHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
+	PresenceMap::const_iterator i = _presenceMap.find(&imAccount);
+
+	//Presence for this IMAccount has not yet been created
+	if (i == _presenceMap.end()) {
+		Presence * presence = new Presence(imAccount);
+		_presenceMap[&imAccount] = presence;
+
+		presence->presenceStateChangedEvent +=
+			boost::bind(&PresenceHandler::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
+		presence->myPresenceStatusEvent +=
+			boost::bind(&PresenceHandler::myPresenceStatusEventHandler, this, _1, _2);
+		presence->subscribeStatusEvent +=
+			boost::bind(&PresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3);
+
+		//Launch all pending subscriptions
+		IMContactMultiMap::iterator it = _pendingSubscriptions.find(&imAccount);
+		while (it != _pendingSubscriptions.end()) {
+			LOG_DEBUG("subscribing to Presence of: " + (*it).second->getContactId());
+			presence->subscribeToPresenceOf((*it).second->getContactId());
+			//TODO: should we keep the list in case of disconnection?
+			_pendingSubscriptions.erase(it);
+			it = _pendingSubscriptions.find(&imAccount);
+		}
+
+		i = _presenceMap.find(&imAccount);
+	} else {
+		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());
+	}
 }

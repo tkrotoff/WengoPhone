@@ -38,7 +38,6 @@ class Connect;
 class Presence;
 class IMAccount;
 class IMContact;
-class ConnectHandler;
 
 /**
  *
@@ -69,7 +68,7 @@ public:
 	Event<void (PresenceHandler & sender, const IMAccount & imAccount, 
 		const std::string & contactId, IMPresence::SubscribeStatus status)> subscribeStatusEvent;
 
-	PresenceHandler(ConnectHandler & connectHandler);
+	PresenceHandler(WengoPhone & wengoPhone);
 
 	~PresenceHandler();
 
@@ -116,6 +115,8 @@ private:
 	void myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status);
 
 	void subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status);
+
+	void newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount);
 
 	/**
 	 * Find the Presence related to the given protocol.

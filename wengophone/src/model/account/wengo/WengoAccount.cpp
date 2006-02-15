@@ -58,6 +58,7 @@ bool WengoAccount::init() {
 	static const unsigned LIMIT_RETRY = 5;
 
 	if (!discoverForSSO()) {
+		LOG_DEBUG("error while discovering netowork for SSO");
 		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateHTTPError);
 		return false;
 	}
@@ -67,14 +68,17 @@ bool WengoAccount::init() {
 	_timer.join();
 
 	if (!_ssoRequestOk) {
+		LOG_DEBUG("error while doing SSO request");
 		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateError);
 		return false;
 	} else if (_ssoRequestOk && !_wengoLoginOk) {
+		LOG_DEBUG("SSO request Ok but login/password are invalid");
 		loginStateChangedEvent(*this, LoginStatePasswordError);
 		return false;
 	}
 
 	if (!discoverForSIP()) {
+		LOG_DEBUG("error while discovering network for SIP");
 		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateSIPError);
 		return false;
 	}

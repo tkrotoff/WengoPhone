@@ -29,6 +29,8 @@
 
 #include <tinyxml.h>
 
+using namespace std;
+
 ContactParser::ContactParser(Contact & contact, const std::string & data) {
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
@@ -57,9 +59,9 @@ ContactParser::ContactParser(Contact & contact, const std::string & data) {
 
 	if (text) {
 		//FIXME: crashes when IMAccountList is populated after initializing the ContactList
-		List<IMAccount *> list = contact.getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		set<IMAccount> list = contact.getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
 		
-		IMContact imContact(*list[0], text->Value());
+		IMContact imContact(*list.begin(), text->Value());
 		contact.addIMContact(imContact);
 		contact.setWengoPhoneId(text->Value());
 	}

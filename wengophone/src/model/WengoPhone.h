@@ -82,12 +82,16 @@ public:
 	/**
 	 * Login procedure is done, event with the procedure result.
 	 *
-	 * @param sender the SipAccount that sends this event
-	 * @param state login procedure result
-	 * @param login Wengo login used
-	 * @param password Wengo password used
+	 * @see SipAccount::loginStateChangedEvent
 	 */
 	Event<void (SipAccount & sender, SipAccount::LoginState state)> loginStateChangedEvent;
+
+	/**
+	 * Network event while trying to connect a SipAccount.
+	 * 
+	 * @see SipAccount::networkDiscoveryStateEvent
+	 */
+	Event< void (SipAccount & sender, SipAccount::NetworkDiscoveryState networkDiscoveryState) > networkDiscoveryStateEvent;
 
 	/**
 	 * A PhoneLine has been created.
@@ -128,7 +132,7 @@ public:
 	 */
 	Event<void (WengoPhone & sender, ContactList & contactList)> contactListCreatedEvent;
 
-/**
+	/**
 	 * PresenceHandler has been created.
 	 *
 	 * @param sender this class
@@ -172,6 +176,11 @@ public:
 	 */
 	Event< void (WengoPhone & sender) > noAccountAvailableEvent;
 
+	/**
+	 * A new IMAccount has been added.
+	 */
+	Event< void (WengoPhone & sender, IMAccount & imAccount) > newIMAccountAddedEvent;
+
 	/** Defines the vector of IPhoneLine. */
 	typedef List < IPhoneLine * > PhoneLines;
 
@@ -187,6 +196,13 @@ public:
 	 * @param autoLogin if true login the user automatically (save it to the file)
 	 */
 	void addSipAccount(const std::string & login, const std::string & password, bool autoLogin);
+
+	/**
+	 * Add an IMAccount.
+	 * 
+	 * @param imAccount the IMAccount to add
+	 */
+	void addIMAccount(IMAccount & imAccount);
 
 	/**
 	 * Adds a Contact to the ContactList.

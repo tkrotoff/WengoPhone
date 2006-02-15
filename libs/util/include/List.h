@@ -36,6 +36,7 @@ class List {
 public:
 
 	List() {
+		_list.empty();
 	}
 
 	virtual ~List() {

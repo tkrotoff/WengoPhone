@@ -21,15 +21,16 @@
 
 #include <imwrapper/IMAccount.h>
 
-List<IMAccount *> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) {
-	List<IMAccount *> result;
+using namespace std;
 
-	for (register unsigned i = 0 ; i < size() ; i++) {
-		IMAccount * account = this->operator[](i);
-		if (account->getProtocol() == protocol) {
-			result.add(account);
+set<IMAccount> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) {
+	set<IMAccount> result;
+
+	for (set<IMAccount>::const_iterator it = begin() ; it != end() ; it++) {
+		if ((*it).getProtocol() == protocol) {
+			result.insert(*it);
 		}
 	}
-	
+
 	return result;
 }

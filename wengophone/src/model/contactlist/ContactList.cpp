@@ -83,6 +83,7 @@ ContactGroup * ContactList::operator[](const std::string & contactGroupName) con
 
 StringList ContactList::toStringList() const {
 	StringList strList;
+	unsigned size = _contactGroupList.size();
 	for (unsigned int i = 0; i < _contactGroupList.size(); i++) {
 		ContactGroup * group = _contactGroupList[i];
 		if (group) {

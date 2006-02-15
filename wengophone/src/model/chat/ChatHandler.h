@@ -72,6 +72,8 @@ private:
 
 	void newIMChatSessionCreatedEventHandler(IMChat & sender, IMChatSession & imChatSession);
 
+	void newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount);
+
 	IMChatMap _imChatMap;
 
 	IMChatSessionList _imChatSessionList;

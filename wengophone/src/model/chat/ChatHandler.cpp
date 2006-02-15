@@ -32,6 +32,8 @@ using namespace std;
 
 ChatHandler::ChatHandler(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
+	_wengoPhone.newIMAccountAddedEvent +=
+		boost::bind(&ChatHandler::newIMAccountAddedEventHandler, this, _1, _2);
 	_wengoPhone.getConnectHandler().connectedEvent +=
 		boost::bind(&ChatHandler::connectedEventHandler, this, _1, _2);
 	_wengoPhone.getConnectHandler().disconnectedEvent +=
@@ -54,18 +56,8 @@ void ChatHandler::createSession(const IMAccount & imAccount) {
 }
 
 void ChatHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & account) {
-	IMChatMap::iterator it = _imChatMap.find(&account);
-
 	LOG_DEBUG("an account is connected: login: " + account.getLogin()
 		+ " protocol: " + String::fromNumber(account.getProtocol()));
-	//IMChat for this IMAccount has not been created yet
-	if (it == _imChatMap.end()) {
-		IMChat * imChat = IMWrapperFactory::getFactory().createIMChat(account);
-		imChat->newIMChatSessionCreatedEvent +=
-			boost::bind(&ChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
-
-		_imChatMap[&account] = imChat;
-	}
 }
 
 void ChatHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & account) {
@@ -75,4 +67,21 @@ void ChatHandler::newIMChatSessionCreatedEventHandler(IMChat & sender, IMChatSes
 	LOG_DEBUG("a new IMChatSession has been created");
 	_imChatSessionList.push_back(&imChatSession);
 	newIMChatSessionCreatedEvent(*this, imChatSession);
+}
+
+void ChatHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
+	IMChatMap::iterator it = _imChatMap.find(&imAccount);
+
+	LOG_DEBUG("new account added: login: " + imAccount.getLogin()
+		+ " protocol: " + String::fromNumber(imAccount.getProtocol()));
+	//IMChat for this IMAccount has not been created yet
+	if (it == _imChatMap.end()) {
+		IMChat * imChat = IMWrapperFactory::getFactory().createIMChat(imAccount);
+		imChat->newIMChatSessionCreatedEvent +=
+			boost::bind(&ChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
+
+		_imChatMap[&imAccount] = imChat;
+	} else {
+		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());
+	}
 }

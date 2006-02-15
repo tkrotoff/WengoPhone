@@ -44,6 +44,12 @@ public:
 		_protocol = protocol;
 	}
 
+	IMAccount(const IMAccount & imAccount) {
+		_login = imAccount._login;
+		_password = imAccount._password;
+		_protocol = imAccount._protocol;
+	}
+
 	const std::string & getLogin() const {
 		return _login;
 	}
@@ -60,6 +66,11 @@ public:
 		//TODO should we check the password too?
 		return ((_login == imAccount._login)
 			&& (_protocol == imAccount._protocol));
+	}
+
+	bool operator < (const IMAccount & imAccount) const {
+		return ((_login < imAccount._login)
+			&& (_protocol < imAccount._protocol));
 	}
 
 private:

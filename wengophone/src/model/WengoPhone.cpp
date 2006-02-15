@@ -94,7 +94,7 @@ void WengoPhone::init() {
 	_connectHandler = new ConnectHandler();
 	connectHandlerCreatedEvent(*this, *_connectHandler);
 
-	_presenceHandler = new PresenceHandler(*_connectHandler);
+	_presenceHandler = new PresenceHandler(*this);
 	presenceHandlerCreatedEvent(*this, *_presenceHandler);
 
 	_chatHandler = new ChatHandler(*this);
@@ -169,6 +169,7 @@ void WengoPhone::addSipAccountThreadSafe(const std::string & login, const std::s
 
 	_wengoAccount = new WengoAccount(login, password, autoLogin);
 	_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
+	_wengoAccount->networkDiscoveryStateEvent += networkDiscoveryStateEvent;
 	_wengoAccount->loginStateChangedEvent += boost::bind(&WengoPhone::loginStateChangedEventHandler, this, _1, _2);
 	_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 	_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
@@ -225,6 +226,7 @@ WenboxPlugin & WengoPhone::getWenboxPlugin() const {
 void WengoPhone::wengoAccountLogin() {
 	_wengoAccount = new WengoAccount(String::null, String::null, true);
 	_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
+	_wengoAccount->networkDiscoveryStateEvent += networkDiscoveryStateEvent;
 	_wengoAccount->loginStateChangedEvent += boost::bind(&WengoPhone::loginStateChangedEventHandler, this, _1, _2);
 	_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 	_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
@@ -256,10 +258,18 @@ void WengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::
 		_wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *)_wengoAccount);
 		_wengoAccountDataLayer->save();
 
-		IMAccount * imAccount = new IMAccount(_wengoAccount->getIdentity(), _wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
-		_imAccountHandler.add(imAccount);
-		_connectHandler->connect(*imAccount);
+		IMAccount imAccount(_wengoAccount->getIdentity(), _wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
+		_imAccountHandler.insert(imAccount);
+		_connectHandler->connect(*_imAccountHandler.find(imAccount));
 
 		break;	
 	}
+}
+
+void WengoPhone::addIMAccount(IMAccount & imAccount) {
+	LOG_DEBUG("adding an IMAccount");
+
+	_imAccountHandler.insert(imAccount);
+
+	newIMAccountAddedEvent(*this, *_imAccountHandler.find(imAccount));
 }
