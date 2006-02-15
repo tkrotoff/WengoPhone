@@ -159,7 +159,7 @@ void PhApiWrapper::setNetworkParameter() {
 		phcfg.use_tunnel = 0;
 	}
 
-	strncpy(phcfg.nattype, natType.c_str(), 16);
+	strncpy(phcfg.nattype, natType.c_str(), sizeof(phcfg.nattype));
 	phcfg.nat_refresh_time = natRefreshTime;
 }
 
@@ -516,16 +516,16 @@ void PhApiWrapper::setSIP(const string & server, unsigned serverPort, unsigned l
 void PhApiWrapper::init() {
 	setNetworkParameter();
 
-	strncpy(phcfg.plugin_path, _pluginPath.c_str(), 256);
+	strncpy(phcfg.plugin_path, _pluginPath.c_str(), sizeof(phcfg.plugin_path));
 
 	//Codec list
-	strncpy(phcfg.audio_codecs, "G726-64wb/16000,ILBC/8000,PCMU/8000,PCMA/8000,GSM/8000", 128);
-	strncpy(phcfg.video_codecs, "H263,H264,MPEG4", 128);
+	strncpy(phcfg.audio_codecs, "G726-64wb/16000,ILBC/8000,PCMU/8000,PCMA/8000,GSM/8000", sizeof(phcfg.audio_codecs));
+	strncpy(phcfg.video_codecs, "H263,H264,MPEG4", sizeof(phcfg.video_codecs));
 
-	strncpy(phcfg.proxy, _sipServer.c_str(), 64);
+	strncpy(phcfg.proxy, _sipServer.c_str(), sizeof(phcfg.proxy));
 
 	String localPort = String::fromNumber(_sipLocalPort);
-	strncpy(phcfg.sipport, localPort.c_str(), 16);
+	strncpy(phcfg.sipport, localPort.c_str(), sizeof(phcfg.sipport));
 
 	enableAEC(true);
 
@@ -547,7 +547,6 @@ void PhApiWrapper::init() {
 	setCallInputAudioDevice("");
 }
 
-
 void PhApiWrapper::setPluginPath(const string & path) {
-	_pluginPath = path;	
+	_pluginPath = path;
 }

@@ -269,7 +269,6 @@ private:
 	unsigned _sipLocalPort;
 
 	std::string _pluginPath;
-
 };
 
 #endif	//PHAPIWRAPPER_H

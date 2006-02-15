@@ -67,7 +67,9 @@ public:
 	void stop();
 
 	/**
-	 * Wait for the end of the timer Thread.
+	 * Waits for the end of the timer Thread.
+	 *
+	 * This method is a blocking method.
 	 */
 	void join();
 
