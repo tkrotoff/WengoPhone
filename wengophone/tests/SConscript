@@ -22,4 +22,5 @@ env.WengoUseLibraries(libs)
 
 env.WengoProgram('wengophone-test', sources, headers)
 
-env.SConscript('NetworkDiscoveryTest/SConscript')
+env.SConscript('networkdiscovery-test/SConscript')
+env.SConscript('wengophoneimwrapper-test/SConscript')
