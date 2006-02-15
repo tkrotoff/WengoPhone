@@ -271,7 +271,12 @@ if WengoOSWindows():
 
 if WengoOSMacOSX():
 	sources += ['phmedia-coreaudio.c']
-
+	link_flags += [
+		'-framework AudioUnit',
+		'-framework CoreAudio',
+		'-framework AudioToolbox',
+		'-framework CoreServices',
+	]
 
 
 env.WengoAddIncludePath(include_path)

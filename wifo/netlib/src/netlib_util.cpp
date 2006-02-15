@@ -18,7 +18,7 @@
  */
 
 #include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 char *my_strndup(const char *str, int size)
 {
