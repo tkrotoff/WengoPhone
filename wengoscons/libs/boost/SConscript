@@ -2,6 +2,13 @@ import os, sys
 
 env = WengoGetEnvironment()
 
+cc_flags = []
+link_flags = []
+#It does not build without -pthread on some GNU/Linux distros (e.g Debian Sarge)
+if WengoOSLinux():
+	cc_flags += ['-pthread']
+	link_flags += ['-pthread']
+
 if os.environ.has_key('BOOSTINCLUDEDIR') and os.environ.has_key('BOOSTLIBDIR'):
 	boost_inc_dir = os.environ['BOOSTINCLUDEDIR']
 	boost_lib_dir = os.environ['BOOSTLIBDIR']
@@ -10,7 +17,6 @@ if os.environ.has_key('BOOSTINCLUDEDIR') and os.environ.has_key('BOOSTLIBDIR'):
 	Return()
 
 BOOSTVER='1_33_1'
-cc_flags = []
 libs = []
 if WengoCCGCC() and not WengoOSWindows():
 	conf = Configure(env)
@@ -70,7 +76,6 @@ if WengoOSLinux():
 
 
 defines = {}
-link_flags = []
 headers = []
 sources = []
 
