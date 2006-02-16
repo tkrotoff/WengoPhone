@@ -271,5 +271,5 @@ void WengoPhone::addIMAccount(const IMAccount & imAccount) {
 
 	_imAccountHandler.insert(imAccount);
 
-	newIMAccountAddedEvent(*this, *_imAccountHandler.find(imAccount));
+	newIMAccountAddedEvent(*this, (IMAccount &)*_imAccountHandler.find(imAccount));
 }
