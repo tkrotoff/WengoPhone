@@ -160,6 +160,8 @@ private:
 
 	static const unsigned _pingTimeout;
 
+	static const unsigned _httpTimeout;
+
 	bool _proxySettingsSet;
 
 };

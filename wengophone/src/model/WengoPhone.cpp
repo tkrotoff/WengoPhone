@@ -259,7 +259,7 @@ void WengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::
 		_wengoAccountDataLayer->save();
 
 		IMAccount imAccount(_wengoAccount->getIdentity(), _wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
-		_imAccountHandler.insert(imAccount);
+		addIMAccount(imAccount);
 		_connectHandler->connect(*_imAccountHandler.find(imAccount));
 
 		break;

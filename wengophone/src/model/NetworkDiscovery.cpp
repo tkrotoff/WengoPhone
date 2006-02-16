@@ -28,7 +28,8 @@
 
 using namespace std;
 
-const unsigned NetworkDiscovery::_pingTimeout = 3000;
+const unsigned NetworkDiscovery::_pingTimeout = 3;
+const unsigned NetworkDiscovery::_httpTimeout = 3;
 
 NetworkDiscovery::NetworkDiscovery() {
 	_proxySettingsSet = false;
@@ -45,7 +46,7 @@ bool NetworkDiscovery::testHTTP(const std::string & url, bool ssl) {
 	if (!isProxyDetected) {
 		LOG_DEBUG("proxy not yet detected. Testing http connection without proxy");
 		if (is_http_conn_allowed(url.c_str(),
-			NULL, 0, NULL, NULL, sslActivated) == HTTP_OK) {
+			NULL, 0, NULL, NULL, sslActivated, _httpTimeout) == HTTP_OK) {
 
 			setProxySettings(String::null, 0, String::null, String::null);
 			return true;
@@ -62,7 +63,7 @@ bool NetworkDiscovery::testHTTP(const std::string & url, bool ssl) {
 	LOG_DEBUG("proxy detected. Testing http connection");
 	if (is_http_conn_allowed(url.c_str(),
 		proxyAddress.c_str(), proxyPort,
-		proxyLogin.c_str(), proxyPassword.c_str(), NETLIB_TRUE) == HTTP_OK) {
+		proxyLogin.c_str(), proxyPassword.c_str(), NETLIB_TRUE, _httpTimeout) == HTTP_OK) {
 		
 		return true;
 	}
@@ -93,7 +94,7 @@ bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned t
 		if (is_tunnel_conn_allowed(tunnelServer.c_str(), tunnelPort,
 			sipServer.c_str(), sipServerPort,
 			NULL, 0, NULL, NULL,
-			(ssl ? NETLIB_TRUE : NETLIB_FALSE), NETLIB_TRUE, _pingTimeout) == HTTP_OK) {
+			(ssl ? NETLIB_TRUE : NETLIB_FALSE), _httpTimeout, NETLIB_TRUE, _pingTimeout) == HTTP_OK) {
 
 			setProxySettings(String::null, 0, String::null, String::null);
 			return true;
@@ -111,7 +112,7 @@ bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned t
 	if (is_tunnel_conn_allowed(tunnelServer.c_str(), tunnelPort,
 		sipServer.c_str(), sipServerPort,
 		proxyAddress.c_str(), proxyPort, proxyLogin.c_str(), proxyPassword.c_str(),
-		(ssl ? NETLIB_TRUE : NETLIB_FALSE), NETLIB_TRUE, _pingTimeout) == HTTP_OK) {
+		(ssl ? NETLIB_TRUE : NETLIB_FALSE), _httpTimeout, NETLIB_TRUE, _pingTimeout) == HTTP_OK) {
 
 		return true;
 	}
@@ -164,7 +165,7 @@ void NetworkDiscovery::discoverProxySettings() {
 		}
 	}
 
-	if (is_proxy_auth_needed(proxyAddress.c_str(), proxyPort)) {
+	if (is_proxy_auth_needed(proxyAddress.c_str(), proxyPort, _httpTimeout)) {
 		LOG_DEBUG("proxy authentication needed");
 
 		string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
@@ -187,7 +188,7 @@ void NetworkDiscovery::discoverProxySettings() {
 		proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
 		proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
 
-		while (!is_proxy_auth_ok(proxyAddress.c_str(), proxyPort, proxyLogin.c_str(), proxyPassword.c_str())) {
+		while (!is_proxy_auth_ok(proxyAddress.c_str(), proxyPort, proxyLogin.c_str(), proxyPassword.c_str(), _httpTimeout)) {
 			LOG_DEBUG("proxy needs valid login/password");
 			_proxySettingsSet = false;
 
