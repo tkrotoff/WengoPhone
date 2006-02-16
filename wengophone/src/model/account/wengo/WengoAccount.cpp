@@ -26,6 +26,7 @@
 #include <http/HttpRequestFactory.h>
 #include <http/CurlHttpRequestFactory.h>
 
+#include <Thread.h>
 #include <StringList.h>
 #include <Logger.h>
 
@@ -47,6 +48,9 @@ WengoAccount::WengoAccount(const std::string & login, const std::string & passwo
 	_wengoLoginOk = false;
 	_stunServer = "stun.wengo.fr";
 
+	_timer.timeoutEvent += boost::bind(&WengoAccount::timeoutEventHandler, this);
+	_timer.lastTimeoutEvent += boost::bind(&WengoAccount::lastTimeoutEventHandler, this);
+
 	_SSOWithSSL = false;
 }
 
@@ -63,9 +67,11 @@ bool WengoAccount::init() {
 		return false;
 	}
 
-	_timer.timeoutEvent += boost::bind(&WengoAccount::timeoutEventHandler, this);
+	_timerFinished = false;
 	_timer.start(0, LOGIN_TIMEOUT, LIMIT_RETRY);
-	_timer.join();
+	while (!_timerFinished) {
+		Thread::msleep(100);
+	}
 
 	if (!_ssoRequestOk) {
 		LOG_DEBUG("error while doing SSO request");
@@ -191,6 +197,10 @@ void WengoAccount::timeoutEventHandler() {
 	}
 }
 
+void WengoAccount::lastTimeoutEventHandler() {
+	_timerFinished = true;
+}
+
 void WengoAccount::answerReceivedEventHandler(const std::string & answer, HttpRequest::Error error) {
 	if (_answerReceivedAlready) {
 		return;
@@ -205,10 +215,12 @@ void WengoAccount::answerReceivedEventHandler(const std::string & answer, HttpRe
 			LOG_DEBUG("login/password is Ok");
 			_wengoLoginOk = true;
 			_timer.stop();
+			_timerFinished = true;
 			//SIP connection test can now be launched as _timer has been joined in init()
 		} else {
 			LOG_DEBUG("login/password is not Ok");
 			_timer.stop();
+			_timerFinished = true;
 		}
 	}
 }

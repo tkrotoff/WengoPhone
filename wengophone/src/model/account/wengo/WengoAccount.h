@@ -80,6 +80,8 @@ private:
 
 	void timeoutEventHandler();
 
+	void lastTimeoutEventHandler();
+
 	bool _answerReceivedAlready;
 
 	std::string _wengoLogin;
@@ -101,6 +103,8 @@ private:
 	/** True if SSO request is Ok and login/password are valid. */
 	bool _wengoLoginOk;
 
+	/** True when _timer is finished. */
+	bool _timerFinished;
 };
 
 #endif	//WENGOACCOUNT_H

@@ -23,6 +23,7 @@
 #include <imwrapper/EnumIMProtocol.h>
 
 #include <NonCopyable.h>
+#include <Settings.h>
 
 #include <string>
 
@@ -73,6 +74,10 @@ public:
 			&& (_protocol < imAccount._protocol));
 	}
 
+	Settings & getSettings() {
+		return _settings;
+	}
+
 private:
 
 	std::string _login;
@@ -80,6 +85,10 @@ private:
 	std::string _password;
 
 	EnumIMProtocol::IMProtocol _protocol;
+
+	/** This Settings is used to contain more parameters (eg.: "use_http => true" for MSN protocol). */
+	Settings _settings;
+
 };
 
 #endif	//IMACCOUNT_H
