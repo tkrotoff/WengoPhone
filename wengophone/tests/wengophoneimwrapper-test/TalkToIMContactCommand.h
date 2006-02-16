@@ -86,6 +86,11 @@ public:
 		string contactId;
 		string command;
 
+		imChatSession.messageReceivedEvent +=
+			boost::bind(&TalkToIMContactCommand::messageReceivedEvent, this, _1, _2, _3);
+		imChatSession.statusMessageReceivedEvent +=
+			boost::bind(&TalkToIMContactCommand::statusMessageReceivedEvent, this, _1, _2, _3);
+		
 		cout << "Commands are: quit, add" << endl;
 		
 		while (command != "quit") {
@@ -106,6 +111,22 @@ public:
 			}
 		}
 		_chatFinished = true;
+	}
+
+	void messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message) {
+		cout << "Message received from " << from.getLogin() << ": " << message << endl;
+	}
+
+	void statusMessageReceivedEventHandler(IMChatSession & sender, IMChat::StatusMessage status, const std::string & message) {
+		cout << "** Status message: " << (int)status << " " << message << endl;
+	}
+
+	void contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact) {
+		cout << "** Contact added to IMChatSession: " << imContact.getContactId() << endl;
+	}
+
+	void contactRemovedEventHandler(IMChatSession & sender, const IMContact & imContact) {
+		cout << "** Contact removed from IMChatSession: " << imContact.getContactId() << endl;
 	}
 
 private:

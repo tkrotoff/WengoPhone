@@ -412,7 +412,7 @@ int get_local_free_udp_port(const char *itf)
 		return -1;
 	}
 
-	if (getsockname(localsock, (struct sockaddr *) &name, &name_size) < 0)
+	if (getsockname(localsock, (struct sockaddr *) &name, (socklen_t *)&name_size) < 0)
 	{
 		closesocket(localsock);
 		return -1;
@@ -621,7 +621,7 @@ HttpRet is_http_conn_allowed(const char *url,
 
 		if (is_url_proxyless_exception(tmp))
 		{
-			return is_http_conn_allowed(tmp, NULL, NULL, 
+			return is_http_conn_allowed(tmp, NULL, 0, 
 										proxy_login, proxy_passwd, is_ssl, timeout);
 		}
 		else
