@@ -1,0 +1,19 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'wengophone',
+	'phapiwrapper',
+#	'gaimimwrapper',
+]
+
+headers = [
+]
+
+sources = [
+	'WengoPhoneIMWrapperTest.cpp',
+	'main.cpp',
+]
+
+env.WengoUseLibraries(libs)
+
+env.WengoProgram('wengophoneimwrapper-test', sources, headers)
