@@ -2478,7 +2478,7 @@ ph_tunnel_init()
 	  *c++ = 0;
 	  port = atoi(c);
 	}
-      tunnel->h_tunnel = http_tunnel_open(buf, port, HTTP_TUNNEL_VAR_MODE, &tunerr);
+      tunnel->h_tunnel = http_tunnel_open(buf, port, HTTP_TUNNEL_VAR_MODE, &tunerr, -1);
       if (!tunnel->h_tunnel)
 	{
 	  if (!tunnel->h_tunnel)

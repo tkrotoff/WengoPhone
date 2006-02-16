@@ -503,7 +503,8 @@ rtptun_connect(const char *address, int port)
     if (!tn)
         return 0;
     
-    tn->h_tunnel = http_tunnel_open(address, port, HTTP_TUNNEL_VAR_MODE, &tunErr);
+    tn->h_tunnel = http_tunnel_open(address, port, HTTP_TUNNEL_VAR_MODE, 
+									&tunErr, -1);
     
     return tn;    
 }

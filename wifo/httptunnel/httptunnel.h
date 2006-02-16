@@ -55,7 +55,7 @@ typedef enum {
 int http_tunnel_get_socket(void *h_tunnel);
 int http_tunnel_recv(void *h_tunnel, void *buffer, int size);
 int	http_tunnel_send(void *h_tunnel, const void *buffer, int size);
-void* http_tunnel_open(const char *host, int port, int mode, int *http_code);
+void* http_tunnel_open(const char *host, int port, int mode, int *http_code, int timeout);
 int http_tunnel_close(void *h_tunnel);
 void http_tunnel_init_host(const char *hostname, int port, int ssl);
 void http_tunnel_init_proxy(const char *hostname, int port, const char *username, const char *password);

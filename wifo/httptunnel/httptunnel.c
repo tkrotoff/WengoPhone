@@ -287,7 +287,7 @@ void get_proxy_auth_type()
 		curl_easy_cleanup(curl_tmp);
 }
 
-void *http_tunnel_open(const char *host, int port, int mode, int *http_code)
+void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int timeout)
 {
 	struct sockaddr_in	addr;
 	char query[512];
@@ -351,10 +351,8 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code)
 			sprintf(buff, "%s:%d", proxyServerIP, proxyServerPort);
 			curl_easy_setopt(hs->curl, CURLOPT_PROXY, strdup(buff));
 
-			/* FOLLOW REDIRECTION */
-			curl_easy_setopt(hs->curl, CURLOPT_FOLLOWLOCATION, 1);
-			curl_easy_setopt(hs->curl, CURLOPT_UNRESTRICTED_AUTH, 1);
-			/* ****************** */
+			if (timeout > 0)
+			  curl_easy_setopt(hs->curl, CURLOPT_CONNECTTIMEOUT, timeout);
 
 			if (proxyAuthType)
 			{

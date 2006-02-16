@@ -145,7 +145,7 @@ int _parseProxyUrl(char *url)
 {
 	char * tmp;
 
-	for (tmp = _cleanStr(url); *tmp && *tmp != ':'; tmp++);
+	for (tmp = _cleanStr(url), url = tmp; *tmp && *tmp != ':'; tmp++);
 
 	if (tmp && *tmp) 
 	{
@@ -263,7 +263,7 @@ int _getProxyAddress()
 	return 0;
 }
 
-void _get_proxy_auth_type(const char *url)
+void _get_proxy_auth_type(const char *url, int timeout)
 {
 		CURL *curl_tmp;
 		char buff[2048];
@@ -278,6 +278,9 @@ void _get_proxy_auth_type(const char *url)
 		sprintf(buff, "%s:%d", _LocalProxy.address, _LocalProxy.port);
 		curl_easy_setopt(curl_tmp, CURLOPT_PROXY, strdup(buff));
 
+		if (timeout > 0)
+			curl_easy_setopt(curl_tmp, CURLOPT_TIMEOUT, timeout);
+
 		curl_easy_setopt(curl_tmp, CURLOPT_HTTPPROXYTUNNEL, 1);
 		ret = curl_easy_perform(curl_tmp);
 
@@ -287,7 +290,7 @@ void _get_proxy_auth_type(const char *url)
 		curl_easy_cleanup(curl_tmp);
 }
 
-void _get_auth_type(const char *url)
+void _get_auth_type(const char *url, int timeout)
 {
 		CURL *curl_tmp;
 		char buff[2048];
@@ -298,6 +301,9 @@ void _get_auth_type(const char *url)
 
 		sprintf(buff, "http://%s", url);
 		curl_easy_setopt(curl_tmp, CURLOPT_URL, strdup(buff));
+
+		if (timeout > 0)
+			curl_easy_setopt(curl_tmp, CURLOPT_TIMEOUT, timeout);
 
 		ret = curl_easy_perform(curl_tmp);
 
@@ -383,6 +389,40 @@ NETLIB_BOOLEAN is_local_udp_port_used(const char *itf, int port)
 	return NETLIB_FALSE;
 }
 
+int get_local_free_udp_port(const char *itf)
+{
+	struct sockaddr_in  raddr;
+	struct sockaddr_in name;
+	int name_size = sizeof (struct sockaddr_in);
+	Socket localsock;
+	
+	if (!itf)
+		raddr.sin_addr.s_addr = htons(INADDR_ANY);
+	else
+		raddr.sin_addr.s_addr = inet_addr(itf);
+	raddr.sin_port = htons(0);
+	raddr.sin_family = AF_INET;
+	
+	if ((localsock = socket(PF_INET, SOCK_DGRAM, 0)) == -1)
+		return -1;
+	
+	if (bind(localsock, (struct sockaddr *)&raddr, sizeof (raddr)) < 0)
+	{
+		closesocket(localsock);
+		return -1;
+	}
+
+	if (getsockname(localsock, (struct sockaddr *) &name, &name_size) < 0)
+	{
+		closesocket(localsock);
+		return -1;
+	}
+
+	closesocket(localsock);
+	return ntohs(name.sin_port);
+}
+
+
 NETLIB_BOOLEAN sip_ping(Socket sock, int ping_timeout)
 {
 	fd_set rfds;
@@ -392,8 +432,8 @@ NETLIB_BOOLEAN sip_ping(Socket sock, int ping_timeout)
 
 	send(sock, OPT_REQ, strlen(OPT_REQ), 0);
 
-	timeout.tv_sec = ping_timeout / 1000;
-	timeout.tv_usec = (ping_timeout % 1000) * 1000;
+	timeout.tv_sec = ping_timeout;
+	timeout.tv_usec = 0;
 	FD_ZERO(&rfds);
 	FD_SET(sock, &rfds);
 
@@ -425,8 +465,8 @@ NETLIB_BOOLEAN sip_ping2(http_sock_t *hs, int ping_timeout)
 
 	http_tunnel_send(hs, OPT_REQ, strlen(OPT_REQ));
 
-	timeout.tv_sec = ping_timeout / 1000;
-	timeout.tv_usec = (ping_timeout % 1000) * 1000;
+	timeout.tv_sec = ping_timeout;
+	timeout.tv_usec = 0;
 	FD_ZERO(&rfds);
 	FD_SET(hs->fd, &rfds);
 
@@ -488,7 +528,7 @@ NETLIB_BOOLEAN is_https(const char *url)
 HttpRet is_http_conn_allowed(const char *url, 
 							  const char *proxy_addr, int proxy_port, 
 							  const char *proxy_login, const char *proxy_passwd,
-							  NETLIB_BOOLEAN ssl)
+							  NETLIB_BOOLEAN ssl, int timeout)
 {
 	char buff[1024];
 	CURL *mcurl;
@@ -511,6 +551,9 @@ HttpRet is_http_conn_allowed(const char *url,
 	
 	curl_easy_setopt(mcurl, CURLOPT_URL, strdup(buff));
 
+	if (timeout > 0)
+		curl_easy_setopt(mcurl, CURLOPT_TIMEOUT, timeout);
+
 	/* FOLLOW REDIRECTION */
 	curl_easy_setopt(mcurl, CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(mcurl, CURLOPT_UNRESTRICTED_AUTH, 1);
@@ -522,7 +565,7 @@ HttpRet is_http_conn_allowed(const char *url,
 		if (proxy_login)
 		{
 			if (!_LocalProxy.proxy_auth_type)
-				_get_proxy_auth_type(url);
+				_get_proxy_auth_type(url, timeout);
 
 			sprintf(buff, "%s:%s", proxy_login, proxy_passwd);
 			curl_easy_setopt(mcurl, CURLOPT_PROXYUSERPWD, strdup(buff));
@@ -542,7 +585,7 @@ HttpRet is_http_conn_allowed(const char *url,
 		if (proxy_login)
 		{
 			if (!_LocalProxy.auth_type)
-				_get_auth_type(url);
+				_get_auth_type(url, timeout);
 
 			sprintf(buff, "%s:%s", proxy_login, proxy_passwd);
 			curl_easy_setopt(mcurl, CURLOPT_USERPWD, strdup(buff));
@@ -579,12 +622,12 @@ HttpRet is_http_conn_allowed(const char *url,
 		if (is_url_proxyless_exception(tmp))
 		{
 			return is_http_conn_allowed(tmp, NULL, NULL, 
-										proxy_login, proxy_passwd, is_ssl);
+										proxy_login, proxy_passwd, is_ssl, timeout);
 		}
 		else
 		{
 			return is_http_conn_allowed(tmp, proxy_addr, proxy_port, 
-										proxy_login, proxy_passwd, is_ssl);
+										proxy_login, proxy_passwd, is_ssl, timeout);
 		}
 	}
 	
@@ -600,8 +643,8 @@ HttpRet is_tunnel_conn_allowed(const char *http_gate_addr, int http_gate_port,
 								const char *sip_addr, int sip_port,
 								const char *proxy_addr, int proxy_port, 
 								const char *proxy_login, const char *proxy_passwd,
-								NETLIB_BOOLEAN ssl, NETLIB_BOOLEAN ping,
-								int ping_timeout)
+								NETLIB_BOOLEAN ssl, int timeout,
+								NETLIB_BOOLEAN ping, int ping_timeout)
 {
 
 	http_sock_t *hs;
@@ -611,7 +654,7 @@ HttpRet is_tunnel_conn_allowed(const char *http_gate_addr, int http_gate_port,
 		http_tunnel_init_proxy(proxy_addr, proxy_port, proxy_login, proxy_passwd);
 
 	http_tunnel_init_host(http_gate_addr, http_gate_port, ssl);
-	hs = (http_sock_t *)http_tunnel_open(sip_addr, sip_port, HTTP_TUNNEL_VAR_MODE, &http_code);
+	hs = (http_sock_t *)http_tunnel_open(sip_addr, sip_port, HTTP_TUNNEL_VAR_MODE, &http_code, timeout);
 
 	if (hs == NULL)
 	{
@@ -631,7 +674,7 @@ HttpRet is_tunnel_conn_allowed(const char *http_gate_addr, int http_gate_port,
 }
 
 
-NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port)
+NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port, int timeout)
 {
 	HttpRet ret;
 
@@ -639,19 +682,20 @@ NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port)
 		return NETLIB_TRUE;
 
 	ret = is_http_conn_allowed("www.google.com:80", proxy_addr, proxy_port, 
-								NULL, NULL, NETLIB_FALSE);
+								NULL, NULL, NETLIB_FALSE, timeout);
 
 	return (ret == HTTP_AUTH ? NETLIB_TRUE : NETLIB_FALSE);
 }
 
 NETLIB_BOOLEAN is_proxy_auth_ok(const char *proxy_addr, int proxy_port,
-								const char *proxy_login, const char *proxy_passwd)
+								const char *proxy_login, const char *proxy_passwd,
+								int timeout)
 {
 	HttpRet ret;
 
 	ret = is_http_conn_allowed("www.google.com:80", proxy_addr, proxy_port, 
 								proxy_login, proxy_passwd, 
-								NETLIB_FALSE);
+								NETLIB_FALSE, timeout);
 
 	return (ret == HTTP_OK ? NETLIB_TRUE : NETLIB_FALSE);
 }

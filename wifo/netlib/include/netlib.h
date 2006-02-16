@@ -50,11 +50,11 @@ extern "C" {
 NETLIB_BOOLEAN is_udp_port_opened(const char *stun_server, int port);
 
 /**
- * Try to send a SIP request and wait for a response.
+ * Tries to send a SIP request and wait for a response.
  *
  * @param sip_server Sip server address we try to SIPping
  * @param sip_port Sip server port we try to SIPping
- * @param timeout in milliseconds
+ * @param ping_timeout in seconds
  * @return true if a response is received; false otherwise
  */
 NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int ping_timeout);
@@ -67,6 +67,14 @@ NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int ping_timeo
  * @return true if the port is used; false otherwise
  */
 NETLIB_BOOLEAN is_local_udp_port_used(const char *itf, int port);
+
+/**
+ * Gets a random unused local port.
+ * 
+ * @param itf IP address of an interface. If NULL, default address is used.
+ * @return unused local port or -1 if an error occurred
+ */
+int get_local_free_udp_port(const char *itf);
 
 
 /**
@@ -90,26 +98,29 @@ int get_local_http_proxy_port();
  *
  * @param proxy_addr IP address of the proxy we want to connect through
  * @param proxy_port port of the proxy we want to connect through
+ * @param timeout in seconds
  * @return true if an authentication is needed; false otherwise
  */
-NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port);
+NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port, int timeout);
 
 
 /**
- * Try to authenticate with a proxy 
+ * Tries to authenticate with a proxy 
  *
  * @param proxy_addr IP address of the proxy we want to connect through
  * @param proxy_port port of the proxy we want to connect through
  * @param proxy_login proxy authentication login
  * @param proxy_passwd proxy authentication password
+ * @param timeout in seconds
  * @return true if the authentication succeeds; false otherwise
  */
 NETLIB_BOOLEAN is_proxy_auth_ok(const char *proxy_addr, int proxy_port,
-								const char *proxy_login, const char *proxy_passwd);
+								const char *proxy_login, const char *proxy_passwd,
+								int timeout);
 
 
 /**
- * Try to find a url in the proxyless exceptions list
+ * Tries to find a url in the proxyless exceptions list
  *
  * @param url url we want to check
  * @return true if url is in exception list; false otherwise
@@ -136,13 +147,13 @@ typedef enum
  * @param proxy_login if proxy authentication needed
  * @param proxy_passwd if proxy authentication needed
  * @param ssl use ssl or not
- * @param redir_follow follow redirections (HTTP code 3XX)
+ * @param timeout in seconds
  * @return State of HTTP response
  */
  HttpRet is_http_conn_allowed(const char *url, 
 							  const char *proxy_addr, int proxy_port, 
 							  const char *proxy_login, const char *proxy_passwd,
-							  NETLIB_BOOLEAN ssl);
+							  NETLIB_BOOLEAN ssl, int timeout);
 
 /**
  * Checks if a http tunnel can be created.
@@ -156,6 +167,7 @@ typedef enum
  * @param proxy_login if proxy authentication needed
  * @param proxy_passwd if proxy authentication needed
  * @param ssl use ssl or not
+ * @param timeout in seconds
  * @param sip_ping try to send a SIPping
  * @param ping_timeout in milliseconds
  * @return State of HTTP response or SIPping result if it's enabled
@@ -164,8 +176,8 @@ typedef enum
 								const char *sip_addr, int sip_port,
 								const char *proxy_addr, int proxy_port, 
 								const char *proxy_login, const char *proxy_passwd,
-								NETLIB_BOOLEAN ssl, NETLIB_BOOLEAN sip_ping,
-								int ping_timeout);
+								NETLIB_BOOLEAN ssl, int timeout,
+								NETLIB_BOOLEAN sip_ping, int ping_timeout);
 					
 
 /**
