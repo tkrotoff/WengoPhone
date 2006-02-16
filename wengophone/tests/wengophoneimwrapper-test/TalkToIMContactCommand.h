@@ -87,9 +87,9 @@ public:
 		string command;
 
 		imChatSession.messageReceivedEvent +=
-			boost::bind(&TalkToIMContactCommand::messageReceivedEvent, this, _1, _2, _3);
+			boost::bind(&TalkToIMContactCommand::messageReceivedEventHandler, this, _1, _2, _3);
 		imChatSession.statusMessageReceivedEvent +=
-			boost::bind(&TalkToIMContactCommand::statusMessageReceivedEvent, this, _1, _2, _3);
+			boost::bind(&TalkToIMContactCommand::statusMessageReceivedEventHandler, this, _1, _2, _3);
 		
 		cout << "Commands are: quit, add" << endl;
 		
@@ -114,7 +114,7 @@ public:
 	}
 
 	void messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message) {
-		cout << "Message received from " << from.getLogin() << ": " << message << endl;
+		cout << "Message received from " << from.getContactId() << ": " << message << endl;
 	}
 
 	void statusMessageReceivedEventHandler(IMChatSession & sender, IMChat::StatusMessage status, const std::string & message) {

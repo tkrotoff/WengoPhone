@@ -42,6 +42,17 @@ class IMChat : Interface {
 	friend class IMChatSession;
 public:
 
+	enum StatusMessage {
+		/** Chat message has been received. */
+		StatusMessageReceived,
+
+		/** Chat message sending error. 'message' contains the one that produces the error */
+		StatusMessageError,
+
+		/** Information message (e.g "toto has left the chat room"). 'message' contains the information message */
+		StatusMessageInfo
+	};
+
 	/**
 	 * Emitted when a new IMChatSession has been created.
 	 *
@@ -49,15 +60,6 @@ public:
 	 * @param imChatSession the new IMChatSession
 	 */
 	Event<void (IMChat & sender, IMChatSession & imChatSession)> newIMChatSessionCreatedEvent;
-
-	/**
-	 * Creates a new IMChatSession.
-	 *
-	 * The new IMChatSession is returned by the Event newIMChatSessionCreatedEvent
-	 */
-	virtual void createSession() = 0;
-
-protected:
 
 	/**
 	 * Emitted when a contact has been added to a session
@@ -87,17 +89,6 @@ protected:
 	 */
 	Event<void (IMChat & sender, IMChatSession & chatSession, const std::string & contactId, const std::string & message)> messageReceivedEvent;
 
-	enum StatusMessage {
-		/** Chat message has been received. */
-		StatusMessageReceived,
-
-		/** Chat message sending error. 'message' contains the one that produces the error */
-		StatusMessageError,
-
-		/** Information message (e.g "toto has left the chat room"). 'message' contains the information message */
-		StatusMessageInfo
-	};
-
 	/**
 	 * Message status event.
 	 *
@@ -107,6 +98,15 @@ protected:
 	 * @param message @see StatusMessage
 	 */
 	Event<void (IMChat & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
+
+	/**
+	 * Creates a new IMChatSession.
+	 *
+	 * The new IMChatSession is returned by the Event newIMChatSessionCreatedEvent
+	 */
+	virtual void createSession() = 0;
+
+protected:
 
 	IMAccount & getIMAccount() const {
 		return _imAccount;

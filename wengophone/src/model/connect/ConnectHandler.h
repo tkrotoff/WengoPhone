@@ -74,7 +74,7 @@ private:
 
 	void loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status);
 
-	typedef std::map<const IMAccount *, Connect *> ConnectMap;
+	typedef std::map<IMAccount, Connect *> ConnectMap;
 
 	ConnectMap _connectMap;
 

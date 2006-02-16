@@ -534,7 +534,7 @@ HttpRet is_http_conn_allowed(const char *url,
 	CURL *mcurl;
 	int ret;
 	long http_resp_code;
-	char *toto;
+	char *redir_tmp;
 	char *redir_url;
 
 	mcurl = curl_easy_init();
@@ -603,9 +603,9 @@ HttpRet is_http_conn_allowed(const char *url,
 	ret = curl_easy_perform(mcurl);
 	curl_easy_getinfo(mcurl, CURLINFO_RESPONSE_CODE, &http_resp_code);
 
-	curl_easy_getinfo(mcurl, CURLINFO_EFFECTIVE_URL, &toto);
+	curl_easy_getinfo(mcurl, CURLINFO_EFFECTIVE_URL, &redir_tmp);
 
-	redir_url = strdup(toto);
+	redir_url = strdup(redir_tmp);
 
 	curl_easy_cleanup(mcurl);
 

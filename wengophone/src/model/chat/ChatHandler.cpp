@@ -52,7 +52,7 @@ ChatHandler::~ChatHandler() {
 
 void ChatHandler::createSession(const IMAccount & imAccount) {
 	LOG_DEBUG("creating new IMChatSession for: " + imAccount.getLogin());
-	_imChatMap[&((IMAccount &)imAccount)]->createSession();
+	_imChatMap[(IMAccount &)imAccount]->createSession();
 }
 
 void ChatHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & account) {
@@ -70,7 +70,7 @@ void ChatHandler::newIMChatSessionCreatedEventHandler(IMChat & sender, IMChatSes
 }
 
 void ChatHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
-	IMChatMap::iterator it = _imChatMap.find(&imAccount);
+	IMChatMap::iterator it = _imChatMap.find(imAccount);
 
 	LOG_DEBUG("new account added: login: " + imAccount.getLogin()
 		+ " protocol: " + String::fromNumber(imAccount.getProtocol()));
@@ -80,7 +80,7 @@ void ChatHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount &
 		imChat->newIMChatSessionCreatedEvent +=
 			boost::bind(&ChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 
-		_imChatMap[&imAccount] = imChat;
+		_imChatMap[imAccount] = imChat;
 	} else {
 		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());
 	}

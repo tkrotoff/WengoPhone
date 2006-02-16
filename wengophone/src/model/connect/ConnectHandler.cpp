@@ -39,13 +39,13 @@ ConnectHandler::~ConnectHandler() {
 
 void ConnectHandler::connect(const IMAccount & imAccount) {
 	Connect *connect;
-	ConnectMap::const_iterator it = _connectMap.find(&imAccount);
+	ConnectMap::const_iterator it = _connectMap.find(imAccount);
 
 	if (it == _connectMap.end()) {
 		connect = new Connect((IMAccount &)imAccount);
 		connect->loginStatusEvent +=
 			boost::bind(&ConnectHandler::loginStatusEventHandler, this, _1, _2);
-		_connectMap.insert(pair<const IMAccount *, Connect *>(&imAccount, connect));
+		_connectMap.insert(pair<IMAccount, Connect *>(imAccount, connect));
 	} else {
 		connect = (*it).second;	
 	}
@@ -54,7 +54,7 @@ void ConnectHandler::connect(const IMAccount & imAccount) {
 }
 
 void ConnectHandler::disconnect(const IMAccount & imAccount) {
-	ConnectMap::const_iterator it = _connectMap.find(&imAccount);
+	ConnectMap::const_iterator it = _connectMap.find(imAccount);
 
 	if (it != _connectMap.end()) {
 		(*it).second->disconnect();

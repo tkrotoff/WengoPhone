@@ -25,7 +25,7 @@
 class IMAccount;
 class IMChat;
 
-class IMChatMap : public std::map<IMAccount *, IMChat *> {
+class IMChatMap : public std::map<IMAccount, IMChat *> {
 };
 
 #endif	//IMCHATMAP_H
