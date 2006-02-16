@@ -822,19 +822,71 @@ void ph_audio_resample(void *ctx, void *inbuf, int inbsize, void *outbuf, int *o
 
 #endif
 
-  
 
 static int
-ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
+ph_media_retreive_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf)
 {
   int len;
   mblk_t *mp;
   rtp_header_t *rtp;
   phcodec_t *codec = stream->ms.codec;
   int framesize = codec->decoded_framesize;
+
+
+  mp = rtp_session_recvm_with_ts(stream->ms.rtp_session,stream->ms.rxtstamp);
+  if (!mp)
+    return 0;
+
+
+  len = mp->b_cont->b_wptr-mp->b_cont->b_rptr;
+  rtp = (rtp_header_t*)mp->b_rptr;
+  if ( rtp->paytype != stream->ms.payload )
+    {
+      DBG5_DYNA_AUDIO("wrong audio payload: %d expecting %d\n", rtp->paytype, stream->ms.payload, 0, 0);
+      freemsg(mp);
+      return 0;
+    }
+
+     
+  DBG5_DYNA_AUDIO_RX("got %d bytes from net(%d)\n", len, ++iter,0,0);
+  if (!stream->ms.running)
+    {
+      freemsg(mp);
+      return 0;
+    }
+
+    
+  if (len)
+    len = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, len, mbf->buf, framesize);
+
+  freemsg(mp);
+
+  mbf->next = len/2;
+
+  stream->ms.rxts_inc += mbf->next;
+
+  if (len)
+    {
+      struct timeval now;
+
+      gettimeofday(&now, 0);
+      stream->last_rtp_recv_time = now;
+    }
+
+
+  return len;
+
+}
+  
+
+static int
+ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
+{
+  int len;
+  phcodec_t *codec = stream->ms.codec;
+  int framesize = codec->decoded_framesize;
   struct timeval now;
   int iter = 0;
-  int ts_inc = 0;
   int played = 0;
 
 #ifdef PH_USE_RESAMPLE
@@ -858,72 +910,74 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
   //		read packets from the network
   //		the best case scenario is that one packet is ready to go
   //		we do not try to read more than 4 packets in a row
+  stream->ms.rxts_inc = 0;
+#ifdef DO_CONF
+  if (stream->to_mix)
+    stream->->to_mix->ms.rxts_inc = 0;
+#endif
+
   while (stream->ms.running && (playbufsize >= framesize))
     {
-    mp=rtp_session_recvm_with_ts(stream->ms.rtp_session,stream->ms.rxtstamp);
-    if (!mp)
-        break;
+      ph_mediabuf_t spkrbuf;
 
+      ph_mediabuf_init(&spkrbuf, playbuf, framesize);
 
-    len=mp->b_cont->b_wptr-mp->b_cont->b_rptr;
-    rtp=(rtp_header_t*)mp->b_rptr;
-    if ( rtp->paytype != stream->ms.payload )
-      {
-	DBG5_DYNA_AUDIO("wrong audio payload: %d expecting %d\n", rtp->paytype, stream->ms.payload, 0, 0);
-	freemsg(mp);
-	continue;
-      }
+#ifdef DO_CONF
+      if (stream->to_mix)
+	{
+	  int len2;
 
-     
-    DBG5_DYNA_AUDIO_RX("got %d bytes from net(%d)\n", len, ++iter,0,0);
-    if (!stream->ms.running)
-        break;
-    
-    if (len)
-        len = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, len, playbuf, playbufsize);
+	  len = ph_media_retreive_decoded_frame(stream, &stream->data_in);
+	  len2 = ph_media_retreive_decoded_frame(stream->to_mix, &stream->to_mix->data_in);
+	  ph_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in);
 
-    
-    if (len > 0)
-      {
-	DBG5_DYNA_AUDIO_RX("Playing %d bytes from net\n", len,0,0,0);
+	  len = spkrbuf.next * 2;
+	}
+      else
+#else
+      len = ph_media_retreive_decoded_frame(stream, &spkrbuf);
+#endif
 
-	/* if we're in Half Duplex mode, attenuate speaker signal */
-	if (stream->hdxmode && !stream->hdxsilence)
-	  {
-	    short *samples = (short *) playbuf;
-	    int nsamples = len >> 1;
-	    const int HDXSHIFT = 7;
+      if (!len)
+	break;
 
-	    while(nsamples--)
-	      {
-		*samples = *samples >> HDXSHIFT;
-		samples++;
-	      }
-	  }
+      DBG5_DYNA_AUDIO_RX("Playing %d bytes from net\n", len,0,0,0);
+
+      /* if we're in Half Duplex mode, attenuate speaker signal */
+      if (stream->hdxmode && !stream->hdxsilence)
+	{
+	  short *samples = (short *) playbuf;
+	  int nsamples = len >> 1;
+	  const int HDXSHIFT = 7;
+	  
+	  while(nsamples--)
+	    {
+	      *samples = *samples >> HDXSHIFT;
+	      samples++;
+	    }
+	}
 
 
 #ifdef DO_ECHO_CAN
-	if (stream->using_out_callback)
-	  store_pcm(stream, playbuf, len);
+      if (stream->using_out_callback)
+	store_pcm(stream, playbuf, len);
 #endif
 	
         /* save played data */    
-        if (stream->lastframe)
-	  memcpy(stream->lastframe, playbuf, len);
-            
-        ts_inc += len/2;
-        played += len;
-        }
+      if (stream->lastframe)
+	memcpy(stream->lastframe, playbuf, len);
+      
+      played += len;
+
      
-    freemsg(mp);
 
       
     /* exit loop if we've played 4 full size packets */
-    if (ts_inc >= codec->decoded_framesize * 4 / 2)
-       break;
+      if (played >= codec->decoded_framesize * 4)
+	break;
 
 #ifdef PH_USE_RESAMPLE
-	if (needResample)
+      if (needResample)
 	{
 	  ph_audio_resample(stream->play_resample_ctx, playbuf, len, savedPlayBuf, &resampledLen);
 	  savedPlayBuf += resampledLen;
@@ -931,43 +985,45 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 	  if (savedBufSize <= 0)
 	    break;
 	}
-	else
+      else
 #endif
 	{
 	  // updating the placeholder for the next decode loop
 	  playbuf = len + (char *) playbuf;
 	  playbufsize -= len;
 	}
-	}
-	// while end : read packets from the network
-   
-    gettimeofday(&now, 0);
-    if (ts_inc == 0)
-        {
-      /* if no data for at least NOISE_START_DELAY ms, start sending noise audio data */
-        if (stream->ms.running && stream->cngi.cng)
-            {
-            int len;
-                
-            len = ph_generate_comfort_noice(stream, playbuf);
-            if (len)
-                {
-#ifdef DO_ECHO_CAN
-		  if (stream->using_out_callback)
-		    store_pcm(stream, playbuf, len);
+    }
+  // while end : read packets from the network
+
+  
+  stream->ms.rxtstamp += stream->ms.rxts_inc;
+#ifdef DO_CONF
+  if (stream->to_mix)
+      stream->to_mix->ms.rxtstamp += stream->to_mix->ms.rxts_inc;
 #endif
-                 }
-            played += len;
-            playbufsize -= len;
-            }
-        }
-    else
-        {
-        stream->last_rtp_recv_time = now;
-        }
+
+  if (played == 0)
+    {
+      /* if no data for at least NOISE_START_DELAY ms, start sending noise audio data */
+      if (stream->ms.running && stream->cngi.cng)
+	{
+	  int len;
+	  
+	  len = ph_generate_comfort_noice(stream, playbuf);
+	  if (len)
+	    {
+#ifdef DO_ECHO_CAN
+	      if (stream->using_out_callback)
+		store_pcm(stream, playbuf, len);
+#endif
+	    }
+	  played += len;
+	  playbufsize -= len;
+	}
+    }
+
      
-    stream->ms.rxts_inc = ts_inc;
-    stream->ms.rxtstamp += ts_inc;
+
 
 #ifdef PH_USE_RESAMPLE
     if (needResample)
@@ -2628,7 +2684,6 @@ int ph_media_send_dtmf(phcall_t *ca, int dtmf, int mode)
 int ph_msession_send_dtmf(struct ph_msession_s *s, int dtmf, int mode)
 {
   phastream_t *stream = (phastream_t *)(s->streams[PH_MSTREAM_AUDIO1].streamerData);
-  unsigned long ts;
 
   if (!stream)
     return -1;

@@ -45,6 +45,19 @@ void ph_mediabuf_free(ph_mediabuf_t *mb)
     free(mb);
 }
 
+void ph_mediabuf_init(ph_mediabuf_t *mb, void *buf, int size)
+{
+  mb->buf = buf;
+  mb->size = size/2;
+  mb->next = 0;
+}
+
+void ph_mediabuf_cleanup(ph_mediabuf_t *mb)
+{
+  if (mb->buf)
+    free(mb->buf);
+}
+
 
 int ph_mediabuf_mixaudio(ph_mediabuf_t *mb, short *mix, int samples)
 {

@@ -15,6 +15,8 @@ typedef struct ph_mediabuf ph_mediabuf_t;
 
 
 ph_mediabuf_t *ph_mediabuf_new(int size);
+void ph_mediabuf_init(ph_mediabuf_t *mb, void *buf, int size);
+void ph_mediabuf_cleanup(ph_mediabuf_t *mb);
 void ph_mediabuf_free(ph_mediabuf_t *mb);
 int ph_mediabuf_mixaudio(ph_mediabuf_t *mb, short *mix, int samples);
 ph_mediabuf_t *ph_mediabuf_load(const char *filename, int samplerate);
