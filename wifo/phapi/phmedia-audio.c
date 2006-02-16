@@ -822,6 +822,67 @@ void ph_audio_resample(void *ctx, void *inbuf, int inbsize, void *outbuf, int *o
 
 #endif
 
+#define SATURATE(x) ((x > 0x7fff) ? 0x7fff : ((x < ~0x7fff) ? ~0x7fff : x))
+
+static void ph_mixmedia2(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1, ph_mediabuf_t *smb2)
+{
+  int tmp;
+  short *src1 = smb1->buf;
+  short *send1 = smb1->buf + smb1->next;
+  short *src2 = smb2->buf;
+  short *send2 = smb2->buf + smb2->next;
+  short *dst = dmb->buf;
+  short *dend;
+
+
+  if (smb1->next < smb2->next)
+    dend = dmb->buf + smb1->next;
+  else
+    dend = dmb->buf + smb2->next;
+
+  while(dst < dend)
+    {
+      tmp = (int)*src1++ + (int)*src2++;
+
+      tmp = SATURATE(tmp);
+      *dst++ = (short) tmp;
+    }
+
+  while(src1 < send1)
+    *dst++ = *src1++;
+
+  while(src2 < send2)
+    *dst++ = *src2++;
+
+  dmb->next = dst - dmb->buf;
+}
+
+
+
+static void ph_mixmedia(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1)
+{
+  int tmp;
+  short *src1 = smb1->buf;
+  short *dst = dmb->buf;
+  short *dend;
+
+
+  if (smb1->next < dmb->next)
+    dend = dmb->buf + smb1->next;
+  else
+    dend = dmb->buf + dmb->next;
+
+  while(dst < dend)
+    {
+      tmp = (int)*src1++ + (int)*dst;
+
+      tmp = SATURATE(tmp);
+      *dst++ = (short) tmp;
+    }
+
+}
+
+
 
 static int
 ph_media_retreive_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf)
