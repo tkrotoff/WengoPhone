@@ -28,6 +28,7 @@
 #include <model/account/SipAccount.h>
 #include <model/connect/ConnectHandler.h>
 #include <imwrapper/IMWrapperFactory.h>
+#include <GaimIMFactory.h>
 #include <sipwrapper/SipWrapperFactory.h>
 #include <PhApiFactory.h>
 
@@ -135,7 +136,8 @@ void WengoPhoneIMWrapperTest::initWrappers() {
 
 	PhApiFactory * phApiFactory = new PhApiFactory();
 	sipFactory = phApiFactory;
-	imFactory = phApiFactory;
+	//imFactory = phApiFactory;
+	imFactory = new GaimIMFactory();
 
 	SipWrapperFactory::setFactory(sipFactory);
 	IMWrapperFactory::setFactory(imFactory);
@@ -165,6 +167,8 @@ int WengoPhoneIMWrapperTest::run() {
 		boost::bind(&WengoPhoneIMWrapperTest::proxyNeedsAuthenticationEventHandler, this, _1, _2, _3);
 	wengoPhone->wrongProxyAuthenticationEvent += 
 		boost::bind(&WengoPhoneIMWrapperTest::wrongProxyAuthenticationEventHandler, this, _1, _2, _3, _4, _5);
+	wengoPhone->newIMAccountAddedEvent += 
+		boost::bind(&WengoPhoneIMWrapperTest::newIMAccountAddedEventHandler, this, _1, _2);
 
 	wengoPhone->start();
 

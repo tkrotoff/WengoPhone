@@ -5,6 +5,8 @@ projects = [
 	'wengoscons/libs/gtk',
 	'wengoscons/libs/sdl',
 	'wengoscons/libs/sdl_image',
+	'wengoscons/libs/glib',
+	'wengoscons/libs/libgaim',
 	'libs/portaudio',
 	'libs/global',
 	'libs/timer',
@@ -25,6 +27,7 @@ projects = [
 	'libs/pixertool',
 	'libs/wenbox',
 	'libs/webcam',
+#	'libs/libgaim',
 	'wengophone',
 ]
 

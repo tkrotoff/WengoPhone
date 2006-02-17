@@ -1,0 +1,27 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'glib',
+	'libgaim',
+	'imwrapper',
+]
+lib_path = []
+include_path = ['.']
+defines = {}
+headers = []
+sources = [
+	'GaimIMFactory.cpp',
+	'GaimIMChat.cpp',
+	'GaimIMConnect.cpp',
+	'GaimIMPresence.cpp',
+	'GaimChatMngr.cpp',
+	'GaimConnectMngr.cpp',
+	'GaimPresenceMngr.cpp',
+	'GaimAccountMngr.cpp',
+	'GaimEnumPresenceState.cpp',
+	'GaimEnumIMProtocol.cpp'
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoStaticLibrary('gaimimwrapper', sources)

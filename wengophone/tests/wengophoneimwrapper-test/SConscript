@@ -3,7 +3,7 @@ env = WengoGetEnvironment()
 libs = [
 	'wengophone',
 	'phapiwrapper',
-#	'gaimimwrapper',
+	'gaimimwrapper',
 ]
 
 headers = [
