@@ -1,8 +1,9 @@
 env = WengoGetEnvironment()
 
 libs = [
-	'glib',
-	'libgaim',
+	'glib-2.0',
+	'gthread-2.0',
+	'gaim',
 	'imwrapper',
 ]
 lib_path = []
