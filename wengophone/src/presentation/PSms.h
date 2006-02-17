@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PCONTACT_H
-#define PCONTACT_H
+#ifndef PSMS_H
+#define PSMS_H
 
 #include "Presentation.h"
 
@@ -27,9 +27,9 @@
  * @ingroup presentation
  * @author Tanguy Krotoff
  */
-class PContact : public Presentation {
+class PSms : public Presentation {
 public:
 
 };
 
-#endif	//PCONTACT_H
+#endif	//PSMS_H

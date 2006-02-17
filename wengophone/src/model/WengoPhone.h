@@ -41,6 +41,7 @@ class StringList;
 class ConnectHandler;
 class PresenceHandler;
 class ChatHandler;
+class Sms;
 
 /**
  * @defgroup model Model Component
@@ -110,6 +111,14 @@ public:
 	Event<void (WengoPhone & sender, WenboxPlugin & wenboxPlugin)> wenboxPluginCreatedEvent;
 
 	/**
+	 * Sms has been created.
+	 *
+	 * @param sender this class
+	 * @param sms Sms created
+	 */
+	Event<void (WengoPhone & sender, Sms & sms)> smsCreatedEvent;
+
+	/**
 	 * ConnectHandler has been created.
 	 *
 	 * @param sender this class
@@ -155,8 +164,8 @@ public:
 	 * @param proxyUrl the url of the detected proxy
 	 * @param proxyPort the port of the detected proxy
 	 */
-	Event< void(SipAccount & sender, 
-		const std::string & proxyUrl, int proxyPort) > proxyNeedsAuthenticationEvent;
+	Event<void(SipAccount & sender, 
+		const std::string & proxyUrl, int proxyPort)> proxyNeedsAuthenticationEvent;
 
 	/**
 	 * Emitted when given login/password are wrong.
@@ -167,14 +176,14 @@ public:
 	 * @param proxyLogin the maybe wrong login
 	 * @param proxyPassword the maybe wrong password
 	 */
-	Event< void(SipAccount & sender,
+	Event<void(SipAccount & sender,
 		const std::string & proxyUrl, int proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
 	/**
 	 * Emitted when no account exists.
 	 */
-	Event< void (WengoPhone & sender) > noAccountAvailableEvent;
+	Event<void (WengoPhone & sender)> noAccountAvailableEvent;
 
 	/**
 	 * A new IMAccount has been added.
@@ -363,6 +372,9 @@ private:
 
 	/** Wenbox. */
 	WenboxPlugin * _wenboxPlugin;
+
+	/** SMS. */
+	Sms * _sms;
 
 	ConnectHandler * _connectHandler;
 

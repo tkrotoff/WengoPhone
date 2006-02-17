@@ -34,10 +34,19 @@ Sms::Sms(WengoAccount & wengoAccount)
 }
 
 void Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
+	//FIXME QUrl::encode() from Qt3 does not encode .
+	//String::encodeUrl() encodes . to %2e
+	//see http://www.w3schools.com/tags/ref_urlencode.asp
+	String login = String::encodeUrl(_wengoAccount.getWengoLogin());
+	login.replace("%2e", ".", false);
+	String password = String::encodeUrl(_wengoAccount.getWengoPassword());
+	password.replace("%2e", ".", false);
+	String message2 = String::encodeUrl(message);
+	message2.replace("%2e", ".", false);
 
-	std::string data = "login=" + String::encodeUrl(_wengoAccount.getWengoLogin()) +
-				"&password=" + String::encodeUrl(_wengoAccount.getWengoPassword()) +
-				"&message=" + String::encodeUrl(message) +
+	std::string data = "login=" + login +
+				"&password=" + password +
+				"&message=" + message2 +
 				"&target=" + phoneNumber +
 				"&wl=" + WengoPhoneBuildId::SOFTPHONE_NAME;
 

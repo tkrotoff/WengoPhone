@@ -19,8 +19,12 @@
 
 #include "CSms.h"
 
+#include "presentation/PFactory.h"
+#include "presentation/PSms.h"
+
 CSms::CSms(Sms & sms, CWengoPhone & cWengoPhone)
-	_sms(sms) {
+	: _sms(sms),
+	_cWengoPhone(cWengoPhone) {
 
 	_pSms = PFactory::getFactory().createPresentationSms(*this);
 

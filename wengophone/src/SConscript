@@ -82,6 +82,7 @@ sources = [
 	'model/contactlist/ContactListXMLLayer.cpp',
 	'model/contactlist/ContactListRPCLayer.cpp',
 	'model/sms/Sms.cpp',
+
 	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
 	'control/connect/CConnectHandler.cpp',
@@ -92,6 +93,8 @@ sources = [
 	'control/contactlist/CContact.cpp',
 	'control/contactlist/CContactList.cpp',
 	'control/contactlist/CContactGroup.cpp',
+	'control/sms/CSms.cpp',
+
 	'presentation/PFactory.cpp'
 ]
 

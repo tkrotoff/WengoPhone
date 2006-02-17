@@ -2,16 +2,17 @@
 	<qresource prefix="/forms">
 		<file>WengoPhoneWindow.ui</file>
 		<file>AboutWindow.ui</file>
-		<file>WengoPhoneLoggerWidget.ui</file>
+		<file>LoggerWidget.ui</file>
 		<file>DialpadWidget.ui</file>
 		<file>login/LoginWindow.ui</file>
-		<file>phonecall/PhoneCallWindow.ui</file>
+		<file>phonecall/PhoneCallWidget.ui</file>
 		<file>phonecall/VideoWindow.ui</file>
 		<file>phoneline/PhoneLineWidget.ui</file>
 		<file>contactlist/ContactListWidget.ui</file>
 		<file>contactlist/ContactWidget.ui</file>
 		<file>contactlist/AddContactWindow.ui</file>
 		<file>chat/ChatWidget.ui</file>
+		<file>sms/SmsWindow.ui</file>
 	</qresource>
 	<qresource>
 		<file>pics/arrow_down.png</file>
@@ -19,6 +20,7 @@
 		<file>pics/background.png</file>
 		<file>pics/call_button.png</file>
 		<file>pics/call_button_small.png</file>
+		<file>pics/call_video_button.png</file>
 		<file>pics/call_history.png</file>
 		<file>pics/call_incoming.png</file>
 		<file>pics/call_missed.png</file>

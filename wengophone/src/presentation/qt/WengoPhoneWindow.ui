@@ -8,17 +8,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>279</width>
-    <height>396</height>
+    <width>329</width>
+    <height>442</height>
    </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>WengoPhone</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
    <layout class="QGridLayout" >
     <property name="margin" >
-     <number>4</number>
+     <number>2</number>
     </property>
     <property name="spacing" >
-     <number>4</number>
+     <number>0</number>
     </property>
     <item row="1" column="0" >
      <widget class="QComboBox" name="phoneComboBox" >
@@ -37,11 +40,11 @@
     </item>
     <item row="1" column="1" >
      <widget class="QPushButton" name="callButton" >
-      <property name="text" >
-       <string>Call</string>
-      </property>
       <property name="icon" >
        <iconset resource="wengophone.qrc" >:/pics/call_button_small.png</iconset>
+      </property>
+      <property name="flat" >
+       <bool>true</bool>
       </property>
      </widget>
     </item>
@@ -63,44 +66,34 @@
     </item>
     <item row="0" column="0" colspan="2" >
      <widget class="QTabWidget" name="tabWidget" >
-      <widget class="QWidget" name="tabHome" >
-       <attribute name="title" >
-        <string/>
-       </attribute>
-       <attribute name="icon" >
-        <iconset resource="wengophone.qrc" >:/pics/home.png</iconset>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tabLogger" >
-       <attribute name="title" >
-        <string/>
-       </attribute>
-       <attribute name="icon" >
-        <iconset resource="wengophone.qrc" >:/pics/config_expert.png</iconset>
-       </attribute>
-      </widget>
       <widget class="QWidget" name="tabContactList" >
        <attribute name="title" >
-        <string/>
-       </attribute>
-       <attribute name="icon" >
-        <iconset resource="wengophone.qrc" >:/pics/contact_list.png</iconset>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tabDialpad" >
-       <attribute name="title" >
-        <string/>
-       </attribute>
-       <attribute name="icon" >
-        <iconset resource="wengophone.qrc" >:/pics/dialpad.png</iconset>
+        <string>Contacts</string>
        </attribute>
       </widget>
       <widget class="QWidget" name="tabCallHistory" >
        <attribute name="title" >
-        <string/>
+        <string>History</string>
        </attribute>
-       <attribute name="icon" >
-        <iconset resource="wengophone.qrc" >:/pics/call_history.png</iconset>
+      </widget>
+      <widget class="QWidget" name="tabDialpad" >
+       <attribute name="title" >
+        <string>Dialpad</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabPhoneCall" >
+       <attribute name="title" >
+        <string>Call</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabHome" >
+       <attribute name="title" >
+        <string>Web</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabLogger" >
+       <attribute name="title" >
+        <string>Logger</string>
        </attribute>
       </widget>
      </widget>
@@ -112,10 +105,33 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>279</width>
+     <width>329</width>
      <height>19</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>Wengo</string>
+    </property>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionOpenWengoAccount" />
+    <addaction name="separator" />
+    <addaction name="actionExit" />
+   </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>Contacts</string>
+    </property>
+    <addaction name="actionAddContact" />
+   </widget>
+   <widget class="QMenu" name="menuTools" >
+    <property name="title" >
+     <string>Tools</string>
+    </property>
+    <addaction name="actionSendSms" />
+    <addaction name="separator" />
+    <addaction name="actionConfiguration" />
+   </widget>
    <widget class="QMenu" name="menuHelp" >
     <property name="title" >
      <string>Help</string>
@@ -124,23 +140,8 @@
     <addaction name="actionShowHelp" />
     <addaction name="actionShowAbout" />
    </widget>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>File</string>
-    </property>
-    <addaction name="actionShowWengoAccount" />
-    <addaction name="actionOpenWengoAccount" />
-    <addaction name="separator" />
-    <addaction name="actionExit" />
-   </widget>
-   <widget class="QMenu" name="menuTools" >
-    <property name="title" >
-     <string>Tools</string>
-    </property>
-    <addaction name="actionAddContact" />
-    <addaction name="actionConfiguration" />
-   </widget>
    <addaction name="menuFile" />
+   <addaction name="menuContacts" />
    <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
@@ -148,8 +149,8 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>377</y>
-     <width>279</width>
+     <y>423</y>
+     <width>329</width>
      <height>19</height>
     </rect>
    </property>
@@ -192,6 +193,11 @@
   <action name="actionConfiguration" >
    <property name="text" >
     <string>Configuration</string>
+   </property>
+  </action>
+  <action name="actionSendSms" >
+   <property name="text" >
+    <string>Send SMS</string>
    </property>
   </action>
  </widget>

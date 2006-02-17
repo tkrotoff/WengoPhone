@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 }
 
 void QtPhoneCall::initThreadSafe() {
-	_phoneCallWindow = WidgetFactory::create(":/forms/phonecall/PhoneCallWindow.ui", _qtWengoPhone->getWidget());
+	_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/PhoneCallWidget.ui", _qtWengoPhone->getWidget());
 
 	QString sipAddress = QString::fromStdString(_cPhoneCall.getPeerSipAddress());
 	QString callAddress = QString::fromStdString(_cPhoneCall.getPeerDisplayName());;
@@ -54,41 +54,39 @@ void QtPhoneCall::initThreadSafe() {
 		callAddress = QString::fromStdString(_cPhoneCall.getPeerUserName());
 	}
 
-	_phoneCallWindow->setWindowTitle(callAddress);
-
 	//acceptButton
-	_acceptButton = Object::findChild<QPushButton *>(_phoneCallWindow, "acceptButton");
+	_acceptButton = Object::findChild<QPushButton *>(_phoneCallWidget, "acceptButton");
 	_acceptButton->setEnabled(true);
 	_acceptButton->disconnect();
 	connect(_acceptButton, SIGNAL(clicked()), SLOT(acceptButtonClicked()));
 
 	//phoneNumberLabel
-	QLabel * phoneNumberLabel = Object::findChild<QLabel *>(_phoneCallWindow, "phoneNumberLabel");
+	QLabel * phoneNumberLabel = Object::findChild<QLabel *>(_phoneCallWidget, "phoneNumberLabel");
 	phoneNumberLabel->setText(callAddress);
 	phoneNumberLabel->setToolTip(sipAddress);
 
 	//rejectButton
-	_rejectButton = Object::findChild<QPushButton *>(_phoneCallWindow, "rejectButton");
+	_rejectButton = Object::findChild<QPushButton *>(_phoneCallWidget, "rejectButton");
 	_rejectButton->setEnabled(true);
 	_rejectButton->disconnect();
 	connect(_rejectButton, SIGNAL(clicked()), SLOT(rejectButtonClicked()));
 
 	//muteButton
-	_muteButton = Object::findChild<QPushButton *>(_phoneCallWindow, "muteButton");
+	_muteButton = Object::findChild<QPushButton *>(_phoneCallWidget, "muteButton");
 	_muteButton->disconnect();
 	connect(_muteButton, SIGNAL(clicked()), SLOT(muteButtonClicked()));
 
 	//holdButton
-	_holdButton = Object::findChild<QPushButton *>(_phoneCallWindow, "holdButton");
+	_holdButton = Object::findChild<QPushButton *>(_phoneCallWidget, "holdButton");
 	_holdButton->disconnect();
 	connect(_holdButton, SIGNAL(clicked()), SLOT(holdButtonClicked()));
 
 	//addContactButton
-	_addContactButton = Object::findChild<QPushButton *>(_phoneCallWindow, "addContactButton");
+	_addContactButton = Object::findChild<QPushButton *>(_phoneCallWidget, "addContactButton");
 	_addContactButton->disconnect();
 	connect(_addContactButton, SIGNAL(clicked()), SLOT(addContactButtonClicked()));
 
-	_phoneCallWindow->show();
+	_qtWengoPhone->addPhoneCall(this);
 }
 
 void QtPhoneCall::updatePresentation() {
@@ -109,11 +107,11 @@ void QtPhoneCall::close() {
 }
 
 void QtPhoneCall::closeThreadSafe() {
-	_phoneCallWindow->hide();
+	//_phoneCallWidget->hide();
 }
 
 void QtPhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
-	//Image will be deleted in videoFrameReceivedThreadSafe
+	//image will be deleted in videoFrameReceivedThreadSafe
 	QImage * image = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
 			remoteVideoFrame.getHeight(), QImage::Format_RGB32);
 
@@ -124,14 +122,14 @@ void QtPhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, 
 
 void QtPhoneCall::videoFrameReceivedThreadSafe(QImage *image) {
 	if (!_videoWindow) {
-		_videoWindow = new QtVideo(_phoneCallWindow);
+		_videoWindow = new QtVideo(_phoneCallWidget);
 		_videoWindow->getWidget()->show();
 	}
 
 	//_videoWindow->getWidget()->resize(image.size());
 	_videoWindow->showImage(*image);
 
-	// image was created in videoFrameReceived
+	//image was created in videoFrameReceived
 	delete image;
 }
 

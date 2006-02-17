@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,11 +27,17 @@
 class WebcamVideoFrame;
 class CPhoneCall;
 class QtWengoPhone;
+class QtVideo;
+
 class QPushButton;
 class QImage;
 class QWidget;
-class QtVideo;
 
+/**
+ * Qt Presentation component for PhoneCall.
+ *
+ * @author Tanguy Krotoff
+ */
 class QtPhoneCall : public QObjectThreadSafe, public PPhoneCall {
 	Q_OBJECT
 public:
@@ -48,7 +54,7 @@ public:
 				const std::string & sipAddress, const std::string & userName, const std::string & displayName) { }
 
 	QWidget * getWidget() const {
-		return _phoneCallWindow;
+		return _phoneCallWidget;
 	}
 
 private Q_SLOTS:
@@ -77,7 +83,7 @@ private:
 
 	QtWengoPhone * _qtWengoPhone;
 
-	QWidget * _phoneCallWindow;
+	QWidget * _phoneCallWidget;
 
 	QPushButton * _acceptButton;
 

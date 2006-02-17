@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ class CWengoPhone;
 class PPhoneLine;
 class QtPhoneCall;
 class QtContactList;
+class QtSms;
 
 class QPushButton;
 class QComboBox;
@@ -51,7 +52,11 @@ public:
 
 	void addPhoneLine(PPhoneLine * pPhoneLine);
 
+	void addPhoneCall(QtPhoneCall * qtPhoneCall);
+
 	void setContactList(QtContactList * qtContactList);
+
+	void setSms(QtSms * qtSms);
 
 	void updatePresentation();
 
@@ -97,6 +102,8 @@ private Q_SLOTS:
 
 	void showCallHistory();
 
+	void sendSms();
+
 private:
 
 	void initThreadSafe();
@@ -136,6 +143,8 @@ private:
 	QComboBox * _phoneComboBox;
 
 	QTabWidget * _tabWidget;
+
+	QtSms * _qtSms;
 };
 
 #endif	//QTWENGOPHONE_H

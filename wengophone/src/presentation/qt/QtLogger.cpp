@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtWengoPhoneLogger.h"
+#include "QtLogger.h"
 
 #include <Logger.h>
 
@@ -26,21 +26,21 @@
 
 #include <QtGui>
 
-QtWengoPhoneLogger::QtWengoPhoneLogger(QWidget * parent)
+QtLogger::QtLogger(QWidget * parent)
 	: QObjectThreadSafe() {
 
-	_loggerWidget = WidgetFactory::create(":/forms/WengoPhoneLoggerWidget.ui", NULL);
+	_loggerWidget = WidgetFactory::create(":/forms/LoggerWidget.ui", NULL);
 
-	Logger::logger.messageAddedEvent += boost::bind(&QtWengoPhoneLogger::addMessage, this, _1);
+	Logger::logger.messageAddedEvent += boost::bind(&QtLogger::addMessage, this, _1);
 }
 
-void QtWengoPhoneLogger::addMessage(const std::string & message) {
+void QtLogger::addMessage(const std::string & message) {
 	typedef PostEvent1<void (const std::string &), std::string> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhoneLogger::addMessageThreadSafe, this, _1), message);
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtLogger::addMessageThreadSafe, this, _1), message);
 	postEvent(event);
 }
 
-void QtWengoPhoneLogger::addMessageThreadSafe(std::string message) {
+void QtLogger::addMessageThreadSafe(std::string message) {
 	static QListWidget * listWidget = Object::findChild<QListWidget *>(_loggerWidget, "listWidget");
 
 	listWidget->addItem(message.c_str());

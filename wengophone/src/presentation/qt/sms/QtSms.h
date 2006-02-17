@@ -17,19 +17,50 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PCONTACT_H
-#define PCONTACT_H
+#ifndef QTSMS_H
+#define QTSMS_H
 
-#include "Presentation.h"
+#include <presentation/PSms.h>
+
+#include <QObjectThreadSafe.h>
+
+class CSms;
+class QtWengoPhone;
+
+class QWidget;
 
 /**
+ * Qt Presentation component for SMS.
  *
- * @ingroup presentation
  * @author Tanguy Krotoff
  */
-class PContact : public Presentation {
+class QtSms : public QObjectThreadSafe, public PSms {
+	Q_OBJECT
 public:
 
+	QtSms(CSms & cSms);
+
+	QWidget * getWidget() const {
+		return _smsWindow;
+	}
+
+	void updatePresentation();
+
+private Q_SLOTS:
+
+	void sendButtonClicked();
+
+private:
+
+	void initThreadSafe();
+
+	void updatePresentationThreadSafe();
+
+	CSms & _cSms;
+
+	QtWengoPhone * _qtWengoPhone;
+
+	QWidget * _smsWindow;
 };
 
-#endif	//PCONTACT_H
+#endif	//QTSMS_H

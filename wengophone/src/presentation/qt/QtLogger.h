@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTWENGOPHONELOGGER_H
-#define QTWENGOPHONELOGGER_H
+#ifndef QTLOGGER_H
+#define QTLOGGER_H
 
 #include <QObjectThreadSafe.h>
 
@@ -29,11 +29,11 @@ class QWidget;
  *
  * @author Tanguy Krotoff
  */
-class QtWengoPhoneLogger : public QObjectThreadSafe {
+class QtLogger : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtWengoPhoneLogger(QWidget * parent);
+	QtLogger(QWidget * parent);
 
 	QWidget * getWidget() const {
 		return _loggerWidget;
@@ -50,4 +50,4 @@ private:
 	QWidget * _loggerWidget;
 };
 
-#endif	//QTWENGOPHONELOGGER_H
+#endif	//QTLOGGER_H

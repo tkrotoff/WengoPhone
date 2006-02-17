@@ -77,7 +77,6 @@ private:
 	typedef std::map<IMAccount, Connect *> ConnectMap;
 
 	ConnectMap _connectMap;
-
 };
 
 #endif	//CONNECTHANDLER_H

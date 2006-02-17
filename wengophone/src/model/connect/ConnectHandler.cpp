@@ -38,7 +38,7 @@ ConnectHandler::~ConnectHandler() {
 }
 
 void ConnectHandler::connect(const IMAccount & imAccount) {
-	Connect *connect;
+	Connect * connect = NULL;
 	ConnectMap::const_iterator it = _connectMap.find(imAccount);
 
 	if (it == _connectMap.end()) {

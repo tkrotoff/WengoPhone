@@ -25,6 +25,7 @@
 #include <string>
 
 class CWengoPhone;
+class PSms;
 
 /**
  *
@@ -43,6 +44,10 @@ public:
 
 	~CSms();
 
+	CWengoPhone & getCWengoPhone() const {
+		return _cWengoPhone;
+	}
+
 	/**
 	 * @see Sms::sendSMS()
 	 */
@@ -51,6 +56,10 @@ public:
 private:
 
 	Sms & _sms;
+
+	CWengoPhone & _cWengoPhone;
+
+	PSms * _pSms;
 };
 
 #endif	//CSMS_H

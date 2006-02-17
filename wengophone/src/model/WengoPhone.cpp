@@ -36,6 +36,7 @@
 #include "chat/ChatHandler.h"
 #include "presence/PresenceHandler.h"
 #include "connect/ConnectHandler.h"
+#include "sms/Sms.h"
 
 #include <sipwrapper/SipWrapper.h>
 
@@ -57,6 +58,7 @@ std::string WengoPhone::getConfigFilesPath() {
 
 WengoPhone::WengoPhone() {
 	_wenboxPlugin = new WenboxPlugin(*this);
+	_sms = NULL;
 	_activePhoneLine = NULL;
 	_activePhoneCall = NULL;
 	_terminate = false;
@@ -75,6 +77,10 @@ WengoPhone::~WengoPhone() {
 
 	if (_wengoAccount) {
 		delete _wengoAccount;
+	}
+
+	if (_sms) {
+		delete _sms;
 	}
 }
 
@@ -161,9 +167,9 @@ void WengoPhone::addSipAccount(const std::string & login, const std::string & pa
 }
 
 void WengoPhone::addSipAccountThreadSafe(const std::string & login, const std::string & password, bool autoLogin) {
-	//TODO: allow several SipAccount
+	//TODO allow several SipAccount
 	if (_wengoAccount) {
-		//TODO: destroy the PhoneLine if it exists
+		//TODO destroy the PhoneLine if it exists
 		delete _wengoAccount;
 	}
 
@@ -249,13 +255,18 @@ void WengoPhone::wengoAccountLogin() {
 void WengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
 	switch (state) {
 	case SipAccount::LoginStateReady:
+		LOG_DEBUG("SMS created");
+		//Creates SMS, SMS needs a WengoAccount
+		_sms = new Sms(*(WengoAccount *) _wengoAccount);
+		smsCreatedEvent(*this, *_sms);
+
 		addPhoneLine(sender);
 
 		if (_wengoAccountDataLayer) {
 			delete _wengoAccountDataLayer;
 		}
 
-		_wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *)_wengoAccount);
+		_wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *) _wengoAccount);
 		_wengoAccountDataLayer->save();
 
 		IMAccount imAccount(_wengoAccount->getIdentity(), _wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);

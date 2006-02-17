@@ -32,6 +32,8 @@
 #include "connect/CConnectHandler.h"
 #include <control/chat/CChatHandler.h>
 #include <control/presence/CPresenceHandler.h>
+#include <model/sms/Sms.h>
+#include <control/sms/CSms.h>
 
 #include <WebBrowser.h>
 #include <StringList.h>
@@ -51,10 +53,9 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.contactListCreatedEvent += boost::bind(&CWengoPhone::contactListCreatedEventHandler, this, _1, _2);
 	_wengoPhone.connectHandlerCreatedEvent += boost::bind(&CWengoPhone::connectHandlerCreatedEventHandler, this, _1, _2);
-	_wengoPhone.presenceHandlerCreatedEvent += 
-		boost::bind(&CWengoPhone::presenceHandlerCreatedEventHandler, this, _1, _2);
-	_wengoPhone.chatHandlerCreatedEvent += 
-		boost::bind(&CWengoPhone::chatHandlerCreatedEventHandler, this, _1, _2);
+	_wengoPhone.presenceHandlerCreatedEvent += boost::bind(&CWengoPhone::presenceHandlerCreatedEventHandler, this, _1, _2);
+	_wengoPhone.chatHandlerCreatedEvent += boost::bind(&CWengoPhone::chatHandlerCreatedEventHandler, this, _1, _2);
+	_wengoPhone.smsCreatedEvent += boost::bind(&CWengoPhone::smsCreatedEventHandler, this, _1, _2);
 }
 
 void CWengoPhone::makeCall(const std::string & phoneNumber) {
@@ -107,14 +108,14 @@ void CWengoPhone::terminate() {
 void CWengoPhone::phoneLineCreatedEventHandler(WengoPhone & sender, IPhoneLine & phoneLine) {
 	CPhoneLine * cPhoneLine = new CPhoneLine(phoneLine, *this);
 
-	LOG_DEBUG("PhoneLine created");
+	LOG_DEBUG("CPhoneLine created");
 	_pWengoPhone->addPhoneLine(cPhoneLine->getPresentation());
 }
 
 void CWengoPhone::contactListCreatedEventHandler(WengoPhone & sender, ContactList & contactList) {
 	static CContactList cContactList(contactList, *this);
 
-	LOG_DEBUG("ContactList created");
+	LOG_DEBUG("CContactList created");
 }
 
 void CWengoPhone::connectHandlerCreatedEventHandler(WengoPhone & sender, ConnectHandler & connectHandler) {
@@ -126,7 +127,7 @@ void CWengoPhone::connectHandlerCreatedEventHandler(WengoPhone & sender, Connect
 void CWengoPhone::wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin) {
 	static CWenboxPlugin cWenboxPlugin(wenboxPlugin, *this);
 
-	LOG_DEBUG("WenboxPlugin created");
+	LOG_DEBUG("CWenboxPlugin created");
 }
 
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
@@ -134,9 +135,19 @@ void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 }
 
 void CWengoPhone::presenceHandlerCreatedEventHandler(WengoPhone & sender, PresenceHandler & presenceHandler) {
-	_cPresenceHandler = new CPresenceHandler(presenceHandler);
+	CPresenceHandler * cPresenceHandler = new CPresenceHandler(presenceHandler);
+
+	LOG_DEBUG("CPresenceHandler created");
 }
 
 void CWengoPhone::chatHandlerCreatedEventHandler(WengoPhone & sender, ChatHandler & chatHandler) {
-	_cChatHandler = new CChatHandler(chatHandler);
+	CChatHandler * cChatHandler = new CChatHandler(chatHandler);
+
+	LOG_DEBUG("CChatHandler created");
+}
+
+void CWengoPhone::smsCreatedEventHandler(WengoPhone & sender, Sms & sms) {
+	static CSms cSms(sms, *this);
+
+	LOG_DEBUG("CSms created");
 }

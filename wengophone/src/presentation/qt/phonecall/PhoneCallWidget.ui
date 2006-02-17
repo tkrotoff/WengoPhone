@@ -2,25 +2,22 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>PhoneCallWindow</class>
- <widget class="QDialog" name="PhoneCallWindow" >
+ <class>PhoneCallWidget</class>
+ <widget class="QWidget" name="PhoneCallWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>220</width>
-    <height>176</height>
+    <width>248</width>
+    <height>175</height>
    </rect>
-  </property>
-  <property name="windowTitle" >
-   <string>WengoPhone - Phone Call</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>8</number>
+    <number>4</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>0</number>
    </property>
    <item row="1" column="1" >
     <widget class="QLabel" name="phoneNumberLabel" >
@@ -174,7 +171,7 @@
  </widget>
  <pixmapfunction></pixmapfunction>
  <resources>
-  <include location="..\wengophone.qrc" />
+  <include location="../wengophone.qrc" />
  </resources>
  <connections/>
 </ui>

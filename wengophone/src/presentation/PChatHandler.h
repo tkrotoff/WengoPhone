@@ -40,7 +40,6 @@ public:
 	 * @see ChatHandler::createSession
 	 */
 	virtual void createSession(const IMAccount & imAccount) = 0;
-
 };
 
 #endif	//PCHATHANDLER_H

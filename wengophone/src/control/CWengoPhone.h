@@ -35,8 +35,6 @@ class WenboxPlugin;
 class IMHandler;
 class PresenceHandler;
 class ChatHandler;
-class CPresenceHandler;
-class CChatHandler;
 class SipAccount;
 
 /**
@@ -74,7 +72,7 @@ public:
 	/**
 	 * @see WengoPhone::noAccountAvailableEvent
 	 */
-	Event< void (WengoPhone & sender) > noAccountAvailableEvent;
+	Event<void (WengoPhone & sender)> noAccountAvailableEvent;
 
 	CWengoPhone(WengoPhone & wengoPhone);
 
@@ -139,6 +137,8 @@ private:
 
 	void wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin);
 
+	void smsCreatedEventHandler(WengoPhone & sender, Sms & sms);
+
 	void connectHandlerCreatedEventHandler(WengoPhone & sender, ConnectHandler & connectHandler);
 
 	void initFinishedEventHandler(WengoPhone & sender);
@@ -148,11 +148,6 @@ private:
 
 	/** Direct link to the presentation via an interface. */
 	PWengoPhone * _pWengoPhone;
-
-	CPresenceHandler * _cPresenceHandler;
-
-	CChatHandler * _cChatHandler;
-
 };
 
 #endif	//CWENGOPHONE_H

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,16 +21,16 @@
 
 #include <model/account/SipAccount.h>
 #include <control/CWengoPhone.h>
-#include <WengoPhoneBuildId.h>
 
 #include "phoneline/QtPhoneLine.h"
 #include "phonecall/QtPhoneCall.h"
-#include "QtWengoPhoneLogger.h"
+#include "QtLogger.h"
 #include "login/QtLogin.h"
 #include "contactlist/QtContactList.h"
 #include "contactlist/QtAddContact.h"
 #include "QtDialpad.h"
 #include "QtAbout.h"
+#include "sms/QtSms.h"
 
 #include <WidgetFactory.h>
 #include <Object.h>
@@ -42,6 +42,8 @@
 QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 	: QObjectThreadSafe(),
 	_cWengoPhone(cWengoPhone) {
+
+	_qtSms = NULL;
 
 	_cWengoPhone.loginStateChangedEvent +=
 		boost::bind(&QtWengoPhone::loginStateChangedEventHandler, this, _1, _2);
@@ -55,7 +57,6 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 
 void QtWengoPhone::initThreadSafe() {
 	_wengoPhoneWindow = qobject_cast<QMainWindow *>(WidgetFactory::create(":/forms/WengoPhoneWindow.ui", NULL));
-	_wengoPhoneWindow->setWindowTitle(WengoPhoneBuildId::SOFTPHONE_NAME);
 
 	//callButton
 	_callButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "callButton");
@@ -75,9 +76,9 @@ void QtWengoPhone::initThreadSafe() {
 	createLayout(tabDialpad)->addWidget(qtDialpad->getWidget());
 
 	//logger
-	QtWengoPhoneLogger * qtWengoPhoneLogger = new QtWengoPhoneLogger(_wengoPhoneWindow);
+	QtLogger * qtLogger = new QtLogger(_wengoPhoneWindow);
 	QWidget * tabLogger = Object::findChild<QWidget *>(_tabWidget, "tabLogger");
-	createLayout(tabLogger)->addWidget(qtWengoPhoneLogger->getWidget());
+	createLayout(tabLogger)->addWidget(qtLogger->getWidget());
 
 	//actionShowWengoAccount
 	QAction * actionShowWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowWengoAccount");
@@ -111,6 +112,10 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionShowAbout = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowAbout");
 	connect(actionShowAbout, SIGNAL(triggered()), SLOT(showAbout()));
 
+	//actionSendSms
+	QAction * actionSendSms = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSendSms");
+	connect(actionSendSms, SIGNAL(triggered()), SLOT(sendSms()));
+
 
 	//centralwidget
 	QWidget * centralwidget = Object::findChild<QWidget *>(_wengoPhoneWindow, "centralwidget");
@@ -130,8 +135,7 @@ void QtWengoPhone::initThreadSafe() {
 void QtWengoPhone::initButtons() {
 	//callButton
 	_callButton->disconnect();
-	connect(_callButton, SIGNAL(clicked()),
-		this, SLOT(callButtonClicked()));
+	connect(_callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
 	enableCallButton();
 
 	//phoneComboBox
@@ -159,6 +163,13 @@ void QtWengoPhone::addPhoneLineThreadSafe(PPhoneLine * pPhoneLine) {
 	LOG_DEBUG("QtPhoneLine added" + widget->objectName().toStdString());
 }
 
+void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
+	static QWidget * tabPhoneCall = Object::findChild<QWidget *>(_tabWidget, "tabPhoneCall");
+	static QGridLayout * layout = new QGridLayout(tabPhoneCall);
+
+	layout->addWidget(qtPhoneCall->getWidget());
+}
+
 void QtWengoPhone::showLoginWindow() {
 	static QtLogin * login = new QtLogin(_wengoPhoneWindow);
 
@@ -182,6 +193,10 @@ void QtWengoPhone::setContactList(QtContactList * qtContactList) {
 	LOG_DEBUG("QtContactList added");
 }
 
+void QtWengoPhone::setSms(QtSms * qtSms) {
+	_qtSms = qtSms;
+}
+
 void QtWengoPhone::updatePresentation() {
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::updatePresentationThreadSafe, this));
@@ -199,10 +214,9 @@ void QtWengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount
 
 void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state) {
 	switch (state) {
-
 	case SipAccount::LoginStateReady:
 		break;
-	
+
 	case SipAccount::LoginStateConnected:
 		break;
 
@@ -274,7 +288,7 @@ void QtWengoPhone::showHelp() {
 }
 
 void QtWengoPhone::showAbout() {
-	static QtAbout * aboutWindow = new QtAbout(this);
+	static QtAbout * aboutWindow = new QtAbout(_wengoPhoneWindow);
 
 	aboutWindow->getWidget()->show();
 }
@@ -286,4 +300,10 @@ void QtWengoPhone::showContactList() {
 }
 
 void QtWengoPhone::showCallHistory() {
+}
+
+void QtWengoPhone::sendSms() {
+	if (_qtSms) {
+		_qtSms->getWidget()->show();
+	}
 }

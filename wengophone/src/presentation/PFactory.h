@@ -40,6 +40,8 @@ class CPresenceHandler;
 class PPresenceHandler;
 class CChatHandler;
 class PChatHandler;
+class PSms;
+class CSms;
 
 /**
  * Factories for the presentation component.
@@ -89,6 +91,8 @@ public:
 	virtual PPresenceHandler * createPresentationPresenceHandler(CPresenceHandler & cPresenceHandler) = 0;
 
 	virtual PChatHandler * createPresentationChatHandler(CChatHandler & cChatHandler) = 0;
+
+	virtual PSms * createPresentationSms(CSms & cSms) = 0;
 
 	/** Because of the presentation event loop (QApplication::exec()). */
 	virtual int exec() = 0;

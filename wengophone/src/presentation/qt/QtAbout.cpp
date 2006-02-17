@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,6 @@
 
 #include "QtAbout.h"
 
-#include "QtWengoPhone.h"
-
 #include <WengoPhoneBuildId.h>
 
 #include <Object.h>
@@ -28,8 +26,8 @@
 
 #include <QtGui>
 
-QtAbout::QtAbout(QtWengoPhone * qtWengoPhone) : QObject() {
-	_aboutWindow = WidgetFactory::create(":/forms/AboutWindow.ui", qtWengoPhone->getWidget());
+QtAbout::QtAbout(QWidget * parent) : QObject() {
+	_aboutWindow = WidgetFactory::create(":/forms/AboutWindow.ui", parent);
 
 	QLabel * wengoPhoneBuildIdStringLabel = Object::findChild<QLabel *>(_aboutWindow, "wengoPhoneBuildIdStringLabel");
 	wengoPhoneBuildIdStringLabel->setText(WengoPhoneBuildId::SOFTPHONE_NAME + QString(" ") +

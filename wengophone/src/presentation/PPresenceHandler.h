@@ -37,10 +37,11 @@ class IMContact;
  */
 class PPresenceHandler : public Presentation {
 public:
+
 	/**
 	 * @see PresenceHandler::changeMyPresence
 	 */
-	virtual void changeMyPresence(EnumPresenceState::PresenceState state,	
+	virtual void changeMyPresence(EnumPresenceState::PresenceState state,
 		const std::string & note, IMAccount * imAccount = NULL) = 0;
 
 	/**
@@ -57,27 +58,26 @@ public:
 	 * @see PresenceHandler::unblockContact
 	 */
 	virtual void unblockContact(const IMContact & imContact) = 0;
-	
+
 private:
 
 	/**
 	 * @see IMPresence::presenceStateChangedEvent
 	 */
-	virtual void presenceStateChangedEventHandler(PresenceHandler & sender, EnumPresenceState::PresenceState state, 
+	virtual void presenceStateChangedEventHandler(PresenceHandler & sender, EnumPresenceState::PresenceState state,
 		const std::string & note, const IMAccount & imAccount, const std::string & from) = 0;
 
 	/**
 	 * @see IMPresence::presenceStatusEvent
 	 */
-	virtual void myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount, 
+	virtual void myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
 		EnumPresenceState::MyPresenceStatus status) = 0;
 
 	/**
 	 * @see IMPresence::subscribeStatusEvent
 	 */
-	virtual void subscribeStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount, 
+	virtual void subscribeStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
 		const std::string & contactId, IMPresence::SubscribeStatus status) = 0;
-
 };
 
 #endif //PPRESENCEHANDLER_H
