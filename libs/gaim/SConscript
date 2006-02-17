@@ -1,0 +1,41 @@
+import os
+
+env = WengoGetEnvironment()
+
+
+libs = []
+
+lib_path = []
+
+include_path = [
+	'include',
+]
+
+libs_file = []
+
+if WengoOSWindows():
+	if WengoCCMSVC():
+		lib_path += [
+			'binary-lib/msvc',
+		]
+
+		libs_file += [
+			'binary-lib/msvc/gaim.lib',
+			'binary-lib/msvc/gaim.dll',
+#			'binary-lib/msvc/iconv.dll',	#already used by SipX
+#			'binary-lib/msvc/intl.dll',		#already used by SipX		
+			'binary-lib/msvc/nspr4.dll',
+			'binary-lib/msvc/nss3.dll',
+			'binary-lib/msvc/nssckbi.dll',
+			'binary-lib/msvc/plc4.dll',
+			'binary-lib/msvc/plds4.dll',
+			'binary-lib/msvc/softokn3.dll',
+			'binary-lib/msvc/ssl3.dll',
+			'binary-lib/msvc/zlib1.dll',
+		]
+
+env.WengoAddLibPath(lib_path)
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+
+env.WengoDeclareLibrary('gaim', libs_file)
