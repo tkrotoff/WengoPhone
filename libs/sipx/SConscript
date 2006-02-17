@@ -1,6 +1,9 @@
 env = WengoGetEnvironment()
 
-libs = []
+libs = [
+	'glib-2.0',
+	'gthread-2.0',
+]
 lib_path = ['bin']
 include_path = ['include']
 headers = []
@@ -15,8 +18,6 @@ if WengoOSWindows():
 	files += [
 		'bin/iconv.dll',
 		'bin/intl.dll',
-		'bin/libglib-2.0-0.dll',
-		'bin/libgthread-2.0-0.dll',
 		'bin/sipXtapi.dll',
 		'bin/sipXtapi.lib',
 		'bin/sipXtapid.dll',
