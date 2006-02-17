@@ -21,15 +21,15 @@
 
 extern "C" {
 #include "glib.h"
-#include "GaimInc/internal.h"
-#include "GaimInc/core.h"
-#include "GaimInc/eventloop.h"
-#include "GaimInc/blist.h"
-#include "GaimInc/util.h"
-#include "GaimInc/connection.h"
-#include "GaimInc/blist.h"
-#include "GaimInc/conversation.h"
-#include "GaimInc/account.h"
+#include "gaim/internal.h"
+#include "gaim/core.h"
+#include "gaim/eventloop.h"
+#include "gaim/blist.h"
+#include "gaim/util.h"
+#include "gaim/connection.h"
+#include "gaim/blist.h"
+#include "gaim/conversation.h"
+#include "gaim/account.h"
 }
 
 #include "GaimIMFactory.h"

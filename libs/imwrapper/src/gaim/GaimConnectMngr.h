@@ -23,7 +23,7 @@
 #include <list>
 
 extern "C" {
-#include "GaimInc/connection.h"
+#include "gaim/connection.h"
 }
 
 #include "GaimIMConnect.h"

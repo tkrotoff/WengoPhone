@@ -23,7 +23,7 @@
 #include <list>
 
 #include <imwrapper/IMAccount.h>
-#include <GaimInc/account.h>
+#include <gaim/account.h>
 
 /**
  *

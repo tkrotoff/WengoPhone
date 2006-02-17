@@ -25,7 +25,7 @@
 #include "GaimIMChat.h"
 
 extern "C" {
-#include "GaimInc/conversation.h"
+#include "gaim/conversation.h"
 }
 
 /**

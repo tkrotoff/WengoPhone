@@ -23,7 +23,7 @@
 #include "GaimEnumIMProtocol.h"
 
 extern "C" {
-#include "GaimInc/conversation.h"
+#include "gaim/conversation.h"
 }
 
 std::list<mConvInfo_t *> GaimIMChat::_GaimChatSessionList;

@@ -18,9 +18,9 @@
  */
 
 extern "C" {
-#include "GaimInc/account.h"
-#include "GaimInc/connection.h"
-#include "GaimInc/core.h"
+#include "gaim/account.h"
+#include "gaim/connection.h"
+#include "gaim/core.h"
 }
 
 #include "GaimIMConnect.h"

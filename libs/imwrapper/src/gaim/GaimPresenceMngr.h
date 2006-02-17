@@ -24,7 +24,7 @@
 
 #include "GaimIMPresence.h"
 extern "C" {
-#include "GaimInc/blist.h"
+#include "gaim/blist.h"
 }
 
 /**

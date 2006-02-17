@@ -22,8 +22,8 @@
 #include "GaimEnumPresenceState.h"
 
 extern "C" {
-#include "GaimInc/account.h"
-#include "GaimInc/privacy.h"
+#include "gaim/account.h"
+#include "gaim/privacy.h"
 }
 
 #include <Logger.h>
