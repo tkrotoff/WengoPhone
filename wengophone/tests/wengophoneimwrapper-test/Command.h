@@ -30,6 +30,8 @@ public:
 	Command(WengoPhone & wengoPhone) 
 		: _wengoPhone(wengoPhone) {}
 
+	virtual ~Command() {}
+
 	/**
 	 * @return true if this Command class can handle the command.
 	 */

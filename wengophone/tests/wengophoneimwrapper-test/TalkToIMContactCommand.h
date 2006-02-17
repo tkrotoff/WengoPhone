@@ -38,6 +38,8 @@ public:
 	TalkToIMContactCommand(WengoPhone & wengoPhone) 
 		: Command(wengoPhone) {}
 
+	virtual ~TalkToIMContactCommand() {}
+
 	void execute() {
 		IMAccountHandler & imAccountHandler = _wengoPhone.getIMAccountHandler();
 		unsigned account, i;
@@ -73,7 +75,7 @@ public:
 	}
 
 	const string & name() const {
-		static string commandName = "talktoim";
+		static string commandName = "talk";
 		return commandName;
 	}
 
@@ -85,6 +87,7 @@ public:
 	void newIMChatSessionCreatedEventHandler(ChatHandler & chatHandler, IMChatSession & imChatSession) {
 		string contactId;
 		string command;
+		char buffer[512];
 
 		imChatSession.messageReceivedEvent +=
 			boost::bind(&TalkToIMContactCommand::messageReceivedEventHandler, this, _1, _2, _3);
@@ -95,7 +98,8 @@ public:
 		
 		while (command != "quit") {
 			cout << "> ";
-			cin >> command;
+			cin.getline(buffer, sizeof(buffer));
+			command = string(buffer);
 
 			if (command == "add") {
 				cout << "Please enter the contact id to talk to: ";

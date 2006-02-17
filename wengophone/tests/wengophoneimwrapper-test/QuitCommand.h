@@ -34,6 +34,8 @@ public:
 	QuitCommand(WengoPhone & wengoPhone, WengoPhoneIMWrapperTest & wengoPhoneIMWrapperTest) 
 		: Command(wengoPhone), _wengoPhoneIMWrapperTest(wengoPhoneIMWrapperTest) {}
 
+	virtual ~QuitCommand() {}
+
 	void execute() {
 		_wengoPhone.terminate();
 		_wengoPhoneIMWrapperTest.quit();

@@ -34,6 +34,8 @@ public:
 	AddIMAccountCommand(WengoPhone & wengoPhone) 
 		: Command(wengoPhone) {}
 
+	virtual ~AddIMAccountCommand() {}
+
 	void execute() {
 		unsigned protocol;
 		string login;
@@ -42,6 +44,8 @@ public:
 		cout << "Adding an IMAccount: " << endl;
 		cout << "Please enter the number of the desired protocol: " << endl;
 		cout << "\t1: msn" << endl;
+		cout << "\t2: yahoo!" << endl;
+		cout << "\t3: jabber" << endl;
 		cout << endl;
 		cin >> protocol;
 		cout << "Enter your login: ";
@@ -54,6 +58,15 @@ public:
 			_wengoPhone.addIMAccount(IMAccount(login, password,
 				EnumIMProtocol::IMProtocolMSN));
 			break;
+		case 2:
+			_wengoPhone.addIMAccount(IMAccount(login, password,
+				EnumIMProtocol::IMProtocolYahoo));
+			break;
+		case 3:
+			_wengoPhone.addIMAccount(IMAccount(login, password,
+				EnumIMProtocol::IMProtocolJabber));
+			break;
+		
 		default:
 			cout << "Unknown protocol" << endl;
 		}

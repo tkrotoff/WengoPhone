@@ -34,6 +34,8 @@ public:
 
 	WengoPhoneIMWrapperTest();
 
+	~WengoPhoneIMWrapperTest();
+
 	/**
 	 * Entry point of this class.
 	 */

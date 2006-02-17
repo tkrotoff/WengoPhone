@@ -34,6 +34,8 @@ public:
 	AddWengoAccountCommand(WengoPhone & wengoPhone) 
 		: Command(wengoPhone) {}
 
+	virtual ~AddWengoAccountCommand() {}
+
 	void execute() {
 		string login;
 		string password;
