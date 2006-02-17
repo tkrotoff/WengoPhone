@@ -1,0 +1,33 @@
+import os
+
+env = WengoGetEnvironment()
+
+libs = []
+lib_path = []
+include_path = []
+libs_file = []
+
+if WengoOSWindows():
+	if WengoCCMSVC():
+		libs += [
+			'glib-2.0',
+		]
+
+		lib_path += [
+			'binary-lib/msvc',
+		]
+
+		libs_file += [	
+			'binary-lib/msvc/gthread-2.0.lib',
+			'binary-lib/msvc/libgthread-2.0-0.dll', 
+		]
+
+		env.WengoAddLibPath(lib_path)
+		env.WengoAddIncludePath(include_path)
+		env.WengoUseLibraries(libs)
+		env.WengoDeclareLibrary('gthread-2.0', libs_file)
+else:
+	env.WengoAddLibPath(lib_path)
+	env.WengoAddIncludePath(include_path)
+	env.WengoUseLibraries(libs)
+	env.WengoDeclareSystemLibrary('gthread-2.0')

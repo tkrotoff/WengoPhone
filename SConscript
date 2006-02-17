@@ -6,7 +6,7 @@ projects = [
 	'wengoscons/libs/sdl',
 	'wengoscons/libs/sdl_image',
 	'wengoscons/libs/glib',
-	'wengoscons/libs/libgaim',
+	'wengoscons/libs/gthread',
 	'libs/portaudio',
 	'libs/global',
 	'libs/timer',
@@ -15,6 +15,7 @@ projects = [
 	'libs/tinyxml',
 	'libs/curl',
 	'libs/util',
+	'libs/gaim',
 	'libs/imwrapper',
 	'libs/shlibloader',
 	'libs/sipx',
@@ -27,7 +28,6 @@ projects = [
 	'libs/pixertool',
 	'libs/wenbox',
 	'libs/webcam',
-#	'libs/libgaim',
 	'wengophone',
 ]
 

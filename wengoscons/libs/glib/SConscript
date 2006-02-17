@@ -1,0 +1,33 @@
+import os
+
+env = WengoGetEnvironment()
+
+libs = []
+lib_path = []
+include_path = []
+libs_file = []
+
+if WengoOSWindows():
+	if WengoCCMSVC():
+		include_path += [
+			'include',
+		]
+
+		lib_path += [
+			'binary-lib/msvc',
+		]
+
+		libs_file += [	
+			'binary-lib/msvc/glib-2.0.lib',
+			'binary-lib/msvc/libglib-2.0-0.dll',
+		]
+
+		env.WengoAddLibPath(lib_path)
+		env.WengoAddIncludePath(include_path)
+		env.WengoUseLibraries(libs)
+		env.WengoDeclareLibrary('glib-2.0', libs_file)
+else:
+	env.WengoAddLibPath(lib_path)
+	env.WengoAddIncludePath(include_path)
+	env.WengoUseLibraries(libs)
+	env.WengoDeclareSystemLibrary('glib-2.0')
