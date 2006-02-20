@@ -24,4 +24,3 @@ env.WengoProgram('wengophone-test', sources, headers)
 
 env.SConscript('networkdiscovery-test/SConscript')
 env.SConscript('wengophoneimwrapper-test/SConscript')
-env.SConscript('GaimTest/SConscript')
