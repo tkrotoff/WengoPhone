@@ -51,6 +51,7 @@ int eXosip_reg_init(eXosip_reg_t **jr, char *from, char *proxy, char *contact, c
   (*jr)->next   = NULL;
   (*jr)->parent = NULL;
   (*jr)->r_cid = osip_call_id_new_random();
+  (*jr)->r_seq = 0;
 
   return 0;
 }
