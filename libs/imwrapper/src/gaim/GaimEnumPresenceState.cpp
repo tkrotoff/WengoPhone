@@ -40,7 +40,9 @@ const char *GaimEnumPresenceState::GetStatusId(EnumPresenceState::PresenceState 
 
 EnumPresenceState::PresenceState GaimEnumPresenceState::GetPresenceState(const char *StatusId)
 {
-	for (int i = 0; _GaimPresenceStatus[i]; i++)
+	int i;
+
+	for (i = 0; _GaimPresenceStatus[i]; i++)
 		if (strcmp(_GaimPresenceStatus[i], StatusId) == 0)
 			break;
 

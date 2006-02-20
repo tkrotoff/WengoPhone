@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <global.h> 
 #include <Logger.h>
 #include <imwrapper/IMContact.h>
 #include "GaimIMChat.h"
@@ -25,6 +26,12 @@
 extern "C" {
 #include "gaim/conversation.h"
 }
+
+#ifdef OS_WIN32
+#define snprintf _snprintf
+#else
+#include <stdio.h>
+#endif
 
 std::list<mConvInfo_t *> GaimIMChat::_GaimChatSessionList;
 
@@ -97,7 +104,7 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 
 			conv = (GaimConversation *) mConv->gaim_conv_session;
 			gaim_conversation_destroy(conv);
-			_snprintf(ChatName, sizeof(ChatName), "Chat_%d", chatSession.getId());
+			snprintf(ChatName, sizeof(ChatName), "Chat_%d", chatSession.getId());
 			conv = gaim_conversation_new(GAIM_CONV_TYPE_CHAT, Gaccount, ChatName);
 			mConv->gaim_conv_session = conv;
 			conv->ui_data = mConv;

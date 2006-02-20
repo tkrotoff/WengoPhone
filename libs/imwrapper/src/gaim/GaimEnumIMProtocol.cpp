@@ -42,9 +42,11 @@ const char *GaimEnumIMProtocol::GetPrclId(EnumIMProtocol::IMProtocol protocol)
 
 EnumIMProtocol::IMProtocol GaimEnumIMProtocol::GetEnumIMProtocol(const char *GaimPrclId) 
 {
-		for (int i = 0; _GaimIMProtocol[i]; i++)
-			if (strcmp(_GaimIMProtocol[i], GaimPrclId) ==0)
-				break;
+	int i;
 
-		return (EnumIMProtocol::IMProtocol)i;
+	for (i = 0; _GaimIMProtocol[i]; i++)
+		if (strcmp(_GaimIMProtocol[i], GaimPrclId) == 0)
+			break;
+
+	return (EnumIMProtocol::IMProtocol)i;
 }
