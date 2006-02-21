@@ -21,7 +21,6 @@
 
 #include <presentation/qt/QtWengoPhone.h>
 
-#include <control/sms/CSms.h>
 #include <control/CWengoPhone.h>
 
 #include <Object.h>
@@ -33,6 +32,7 @@ QtSms::QtSms(CSms & cSms)
 	: QObjectThreadSafe(),
 	_cSms(cSms) {
 
+	_cSms.smsStatusEvent += boost::bind(&QtSms::smsStatusEventHandler, this, _1, _2);
 	_qtWengoPhone = (QtWengoPhone *) _cSms.getCWengoPhone().getPresentation();
 
 	typedef PostEvent0<void ()> MyPostEvent;
@@ -43,8 +43,8 @@ QtSms::QtSms(CSms & cSms)
 void QtSms::initThreadSafe() {
 	_smsWindow = WidgetFactory::create(":/forms/sms/SmsWindow.ui", _qtWengoPhone->getWidget());
 
-	QPushButton * sendButton = Object::findChild<QPushButton *>(_smsWindow, "sendButton");
-	connect(sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
+	_sendButton = Object::findChild<QPushButton *>(_smsWindow, "sendButton");
+	connect(_sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
 
 	_qtWengoPhone->setSms(this);
 }
@@ -59,5 +59,21 @@ void QtSms::sendButtonClicked() {
 	static QTextEdit * smsText = Object::findChild<QTextEdit *>(_smsWindow, "smsText");
 	static QComboBox * phoneComboBox = Object::findChild<QComboBox *>(_smsWindow, "phoneComboBox");
 
-	_cSms.sendSMS(phoneComboBox->currentText().toStdString(), smsText->toPlainText().toStdString());
+	_sendButton->setEnabled(false);
+
+	//Converts to UTF-8
+	std::string phoneNumber(phoneComboBox->currentText().toUtf8().constData());
+	std::string sms(smsText->toPlainText().toUtf8().constData());
+
+	_cSms.sendSMS(phoneNumber, sms);
+}
+
+void QtSms::smsStatusEventHandler(Sms & sender, Sms::SmsStatus status) {
+	typedef PostEvent0<void ()> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSms::enableSendButton, this));
+	postEvent(event);
+}
+
+void QtSms::enableSendButton() {
+	_sendButton->setEnabled(true);
 }

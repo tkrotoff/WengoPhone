@@ -77,6 +77,12 @@ bool String::contains(const std::string & str, bool caseSensitive) const {
 	return false;
 }
 
+bool String::contains(char ch, bool caseSensitive) const {
+	std::string str;
+	str += ch;
+	return contains(str, caseSensitive);
+}
+
 void String::replace(const std::string & before, const std::string & after, bool caseSensitive) {
 	//Copy this + before to tmp + before2
 	string tmp(c_str());
@@ -112,40 +118,72 @@ std::string String::fromNumber(int number) {
 	return ss.str();
 }
 
-std::string String::decodeUrl(const std::string & str) {
-	string out;
-	string::const_iterator it;
+static unsigned char hex_to_int(unsigned char ch) {
+	if (ch >= 'A' && ch <= 'F') {
+		return ch - 'A' + 10;
+	}
+	if (ch >= 'a' && ch <= 'f') {
+		return ch - 'a' + 10;
+	}
+	if (ch >= '0' && ch <= '9') {
+		return ch - '0';
+	}
+	return 0;
+}
 
-	for (it = str.begin(); it != str.end(); ++it) {
-		if (*it == '%') {
-			char entity[3] = {*(++it), *(++it), 0};
-			int c = strtol(entity, NULL, 16);
-			out += c;
+/* Taken from Qt3 QUrl::decode() */
+std::string String::decodeUrl(const std::string & url) {
+	string newUrl;
+
+	if (url.empty()) {
+		return newUrl;
+	}
+
+	int oldlen = url.length();
+	int i = 0;
+	while (i < oldlen) {
+		unsigned char ch = url[i++];
+		if (ch == '%' && i <= oldlen - 2) {
+			ch = hex_to_int(url[i]) * 16 + hex_to_int(url[i + 1]);
+			i += 2;
+		}
+		newUrl += ch;
+	}
+
+	return newUrl;
+}
+
+/* Taken from Qt3 QUrl::encode() */
+std::string String::encodeUrl(const std::string & url) {
+	string newUrl;
+
+	if (url.empty()) {
+		return newUrl;
+	}
+
+	static const String special("+<>#@\"&%$:,;?={}|^~[]\'`\\ \n\t\r");
+
+	int oldlen = url.length();
+	for (int i = 0; i < oldlen; ++i) {
+		unsigned char inCh = url[i];
+
+		if (inCh >= 128 || special.contains(inCh)) {
+			newUrl += '%';
+
+			unsigned short c = inCh / 16;
+			c += c > 9 ? 'A' - 10 : '0';
+			newUrl += c;
+
+			c = inCh % 16;
+			c += c > 9 ? 'A' - 10 : '0';
+			newUrl += c;
 		} else {
-			out += *it;
+			newUrl += inCh;
 		}
 	}
-	return out;
+
+	return newUrl;
 }
-
-std::string String::encodeUrl(const std::string & str) {
-	string out;
-	string::const_iterator it;
-
-	for (it = str.begin(); it != str.end(); ++it) {
-		if (!(isalpha(*it) || isdigit(*it))) {
-			unsigned char highNibble = ((unsigned char) *it) >> 4;
-			unsigned char lowNibble = ((unsigned char) *it) & 0x0F;
-			out += '%';
-			out += (highNibble < 0x0A ? '0' + highNibble : 'a' + highNibble - 0x0A);
-			out += (lowNibble < 0x0A ? '0' + lowNibble : 'a' + lowNibble - 0x0A);
-			continue;
-		}
-		out += *it;
-	}
-	return out;
-}
-
 
 StringList::StringList(const std::list<string> & strList) {
 	for (std::list<string>::const_iterator it = strList.begin();

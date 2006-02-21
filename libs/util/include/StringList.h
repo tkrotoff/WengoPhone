@@ -125,6 +125,11 @@ public:
 	bool contains(const std::string & str, bool caseSensitive = true) const;
 
 	/**
+	 * @see contains()
+	 */
+	bool contains(char ch, bool caseSensitive = true) const;
+
+	/**
 	 * Replaces every occurence of the string before with the string after.
 	 *
 	 * @param before occurence to find
@@ -159,20 +164,20 @@ public:
 	/**
 	 * URL-encodes a string.
 	 *
-	 * @param str the string to encode
+	 * @param url the string to encode
 	 * @return a string with all non-alphanumeric characters replaced by their
 	 *         URL-encoded equivalent.
 	 */
-	static std::string encodeUrl(const std::string & str);
+	static std::string encodeUrl(const std::string & url);
 
 	/**
 	 * URL-decodes a string.
 	 *
-	 * @param str the URL-encoded string to decode
+	 * @param url the URL-encoded string to decode
 	 * @return a string with all URL-encoded sequences replaced by their
 	 *         ASCII equivalent
 	 */
-	static std::string decodeUrl(const std::string & str);
+	static std::string decodeUrl(const std::string & url);
 };
 
 

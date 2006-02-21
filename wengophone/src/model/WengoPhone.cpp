@@ -174,6 +174,13 @@ void WengoPhone::addSipAccountThreadSafe(const std::string & login, const std::s
 	}
 
 	_wengoAccount = new WengoAccount(login, password, autoLogin);
+
+	//Empty login or password
+	if (login.empty() || password.empty()) {
+		loginStateChangedEvent(*_wengoAccount, SipAccount::LoginStatePasswordError);
+		return;
+	}
+
 	_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
 	_wengoAccount->networkDiscoveryStateEvent += networkDiscoveryStateEvent;
 	_wengoAccount->loginStateChangedEvent += boost::bind(&WengoPhone::loginStateChangedEventHandler, this, _1, _2);

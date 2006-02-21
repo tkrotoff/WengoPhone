@@ -43,7 +43,7 @@ public:
 
 		/** Registration has been successful. */
 		LoginStateConnected,
-	
+
 		/** This SipAccount has been disconnected. */
 		LoginStateDisconnected,
 
@@ -56,7 +56,7 @@ public:
 
 	/**
 	 * Emitted when the account tried to register.
-	 * 
+	 *
 	 * @param sender this class
 	 * @param loginState the LoginState
 	 */
@@ -81,7 +81,7 @@ public:
 
 	/**
 	 * Emitted when an event occured while detecting network configuration.
-	 * 
+	 *
 	 * @param sender this class
 	 * @param networkDiscoveryState state of the network discovery
 	 */
@@ -105,9 +105,9 @@ public:
 
 	/**
 	 * Initialize the SIP account.
-	 * 
+	 *
 	 * Discover network and set configuration.
-	 * 
+	 *
 	 * @return true if initialization is OK
 	 */
 	virtual bool init() = 0;
@@ -239,7 +239,7 @@ public:
 	/**
 	 * Set proxy settings and unblock the NetworkDiscovery if it was waiting for
 	 * proxy authentication parameters.
-	 * 
+	 *
 	 * @param proxyAddress the proxy server
 	 * @param proxyPort the proxy server port
 	 * @param proxyLogin the proxy login
@@ -309,7 +309,6 @@ protected:
 
 	/** The STUN server used by NetworkDiscovery to check NAT and UDP connection. */
 	std::string _stunServer;
-
 };
 
 #endif	//SIPACCOUNT_H

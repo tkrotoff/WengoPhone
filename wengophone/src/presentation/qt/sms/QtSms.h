@@ -21,13 +21,14 @@
 #define QTSMS_H
 
 #include <presentation/PSms.h>
+#include <control/sms/CSms.h>
 
 #include <QObjectThreadSafe.h>
 
-class CSms;
 class QtWengoPhone;
 
 class QWidget;
+class QPushButton;
 
 /**
  * Qt Presentation component for SMS.
@@ -56,11 +57,17 @@ private:
 
 	void updatePresentationThreadSafe();
 
+	void smsStatusEventHandler(Sms & sender, Sms::SmsStatus status);
+
+	void enableSendButton();
+
 	CSms & _cSms;
 
 	QtWengoPhone * _qtWengoPhone;
 
 	QWidget * _smsWindow;
+
+	QPushButton * _sendButton;
 };
 
 #endif	//QTSMS_H
