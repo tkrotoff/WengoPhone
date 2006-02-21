@@ -31,6 +31,14 @@ static const std::string WENGO_SMS_PATH = "/sms/sendsms.php";
 
 Sms::Sms(WengoAccount & wengoAccount)
 	: _wengoAccount(wengoAccount) {
+
+	_httpRequest = NULL;
+}
+
+Sms::~Sms() {
+	if (_httpRequest) {
+		delete _httpRequest;
+	}
 }
 
 void Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
@@ -52,22 +60,24 @@ void Sms::sendSMS(const std::string & phoneNumber, const std::string & message) 
 
 	LOG_DEBUG("sending SMS");
 
-	//FIXME if not static it crashes inside boost::thread, do not know why
-	static HttpRequest httpRequest;
+	_httpRequest = new HttpRequest();
 
-	httpRequest.answerReceivedEvent += boost::bind(&Sms::answerReceivedEventHandler, this, _1, _2);
-	httpRequest.setFactory(new CurlHttpRequestFactory());
+	_httpRequest->answerReceivedEvent += boost::bind(&Sms::answerReceivedEventHandler, this, _1, _2);
+	_httpRequest->setFactory(new CurlHttpRequestFactory());
 	//TODO not implemented inside libutil
-	//httpRequest.setProxy("proxy.wengo.fr", 8080, "myProxyUsername", "myProxyPassword");
+	//_httpRequest->setProxy("proxy.wengo.fr", 8080, "myProxyUsername", "myProxyPassword");
 
 	//First parameter: true = HTTPS, false = HTTP
 	//Last parameter: true = POST method, false = GET method
-	httpRequest.sendRequest(true, WENGO_SERVER_HOSTNAME, 443, WENGO_SMS_PATH, data, true);
+	_httpRequest->sendRequest(true, WENGO_SERVER_HOSTNAME, 443, WENGO_SMS_PATH, data, true);
 }
 
 void Sms::answerReceivedEventHandler(const std::string & answer, HttpRequest::Error error) {
 	static const std::string STATUS_UNAUTHORIZED = "401";
 	static const std::string STATUS_OK = "200";
+
+	delete _httpRequest;
+	_httpRequest = NULL;
 
 	String tmp(answer);
 

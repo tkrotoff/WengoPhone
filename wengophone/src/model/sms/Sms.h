@@ -128,6 +128,8 @@ public:
 
 	Sms(WengoAccount & wengoAccount);
 
+	~Sms();
+
 	/**
 	 * Sends a SMS given a destination phone number and a message.
 	 *
@@ -141,6 +143,8 @@ private:
 	void answerReceivedEventHandler(const std::string & answer, HttpRequest::Error error);
 
 	WengoAccount & _wengoAccount;
+
+	HttpRequest * _httpRequest;
 };
 
 #endif	//SMS_H
