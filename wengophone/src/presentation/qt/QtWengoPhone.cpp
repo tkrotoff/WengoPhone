@@ -31,6 +31,7 @@
 #include "QtDialpad.h"
 #include "QtAbout.h"
 #include "sms/QtSms.h"
+#include "QtHttpProxyLogin.h"
 
 #include <WidgetFactory.h>
 #include <Object.h>
@@ -49,6 +50,10 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 		boost::bind(&QtWengoPhone::loginStateChangedEventHandler, this, _1, _2);
 	_cWengoPhone.noAccountAvailableEvent +=
 		boost::bind(&QtWengoPhone::noAccountAvailableEventHandler, this, _1);
+	_cWengoPhone.proxyNeedsAuthenticationEvent +=
+		boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandler, this, _1, _2, _3);
+	_cWengoPhone.wrongProxyAuthenticationEvent +=
+		boost::bind(&QtWengoPhone::wrongProxyAuthenticationEventHandler, this, _1, _2, _3, _4, _5);
 
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::initThreadSafe, this));
@@ -305,5 +310,34 @@ void QtWengoPhone::showCallHistory() {
 void QtWengoPhone::sendSms() {
 	if (_qtSms) {
 		_qtSms->getWidget()->show();
+	}
+}
+
+void QtWengoPhone::wrongProxyAuthenticationEventHandler(SipAccount & sender,
+		const std::string & proxyAddress, unsigned proxyPort,
+		const std::string & proxyLogin, const std::string & proxyPassword) {
+
+	typedef PostEvent3<void (SipAccount & sender, const std::string & proxyAddress, int proxyPort),
+			SipAccount &, std::string, unsigned> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1, _2, _3),
+				sender, proxyAddress, proxyPort);
+	postEvent(event);
+}
+
+void QtWengoPhone::proxyNeedsAuthenticationEventHandler(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort) {
+	typedef PostEvent3<void (SipAccount & sender, const std::string & proxyAddress, int proxyPort),
+			SipAccount &, std::string, unsigned> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1, _2, _3),
+				sender, proxyAddress, proxyPort);
+	postEvent(event);
+}
+
+void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort) {
+	static QtHttpProxyLogin * httpProxy = new QtHttpProxyLogin(_wengoPhoneWindow, proxyAddress, proxyPort);
+
+	int ret = httpProxy->exec();
+
+	if (ret == QDialog::Accepted) {
+		sender.setProxySettings(httpProxy->getProxyAddress(), httpProxy->getProxyPort(), httpProxy->getLogin(), httpProxy->getPassword());
 	}
 }

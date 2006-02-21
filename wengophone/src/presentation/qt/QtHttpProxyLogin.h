@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTLOGIN_H
-#define QTLOGIN_H
+#ifndef QTHTTPPROXYLOGIN_H
+#define QTHTTPPROXYLOGIN_H
 
 #include <QObject>
 
 #include <string>
 
 class QWidget;
+class QLineEdit;
 class QDialog;
 
 /**
- * Qt login window.
+ * Window for entering the local HTTP proxy login/password.
  *
  * @author Tanguy Krotoff
  */
-class QtLogin : public QObject {
+class QtHttpProxyLogin : public QObject {
 	Q_OBJECT
 public:
 
-	QtLogin(QWidget * parent);
+	QtHttpProxyLogin(QWidget * parent, const std::string & proxyAddress, unsigned proxyPort);
 
 	QDialog * getWidget() const {
-		return _loginWindow;
+		return _httpProxyLoginWindow;
 	}
 
 	std::string getLogin() const;
 
 	std::string getPassword() const;
 
-	bool hasAutoLogin() const;
+	std::string getProxyAddress() const;
+
+	unsigned getProxyPort() const;
 
 public Q_SLOTS:
 
@@ -54,7 +57,11 @@ public Q_SLOTS:
 
 private:
 
-	QDialog * _loginWindow;
+	QDialog * _httpProxyLoginWindow;
+
+	QLineEdit * _addressLineEdit;
+
+	QLineEdit * _portLineEdit;
 };
 
-#endif	//QTLOGIN_H
+#endif	//QTHTTPPROXYLOGIN_H

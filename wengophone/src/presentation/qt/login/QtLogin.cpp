@@ -26,33 +26,21 @@
 
 QtLogin::QtLogin(QWidget * parent) {
 	_loginWindow = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/login/LoginWindow.ui", parent));
-
-	//loginComboBox
-	_loginComboBox = Object::findChild<QComboBox *>(_loginWindow, "loginComboBox");
-
-	//passwordLineEdit
-	_passwordLineEdit = Object::findChild<QLineEdit *>(_loginWindow, "passwordLineEdit");
-
-	//autoLoginCheckBox
-	_autoLoginCheckBox = Object::findChild<QCheckBox *>(_loginWindow, "autoLoginCheckBox");
-
-	//loginButton
-	QPushButton * loginButton = Object::findChild<QPushButton *>(_loginWindow, "loginButton");
-
-	//cancelButton
-	QPushButton * cancelButton = Object::findChild<QPushButton *>(_loginWindow, "cancelButton");
 }
 
 std::string QtLogin::getLogin() const {
-	return _loginComboBox->currentText().toStdString();
+	QComboBox * loginComboBox = Object::findChild<QComboBox *>(_loginWindow, "loginComboBox");
+	return loginComboBox->currentText().toStdString();
 }
 
 std::string QtLogin::getPassword() const {
-	return _passwordLineEdit->text().toStdString();
+	QLineEdit * passwordLineEdit = Object::findChild<QLineEdit *>(_loginWindow, "passwordLineEdit");
+	return passwordLineEdit->text().toStdString();
 }
 
 bool QtLogin::hasAutoLogin() const {
-	return _autoLoginCheckBox->isChecked();
+	QCheckBox * autoLoginCheckBox = Object::findChild<QCheckBox *>(_loginWindow, "autoLoginCheckBox");
+	return autoLoginCheckBox->isChecked();
 }
 
 int QtLogin::exec() {

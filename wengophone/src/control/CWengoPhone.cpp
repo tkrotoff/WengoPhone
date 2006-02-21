@@ -56,6 +56,8 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.presenceHandlerCreatedEvent += boost::bind(&CWengoPhone::presenceHandlerCreatedEventHandler, this, _1, _2);
 	_wengoPhone.chatHandlerCreatedEvent += boost::bind(&CWengoPhone::chatHandlerCreatedEventHandler, this, _1, _2);
 	_wengoPhone.smsCreatedEvent += boost::bind(&CWengoPhone::smsCreatedEventHandler, this, _1, _2);
+	_wengoPhone.proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
+	_wengoPhone.wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 }
 
 void CWengoPhone::makeCall(const std::string & phoneNumber) {

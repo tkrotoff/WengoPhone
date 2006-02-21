@@ -65,7 +65,7 @@ bool WengoAccount::init() {
 	static const unsigned LIMIT_RETRY = 5;
 
 	if (!discoverForSSO()) {
-		LOG_DEBUG("error while discovering netowork for SSO");
+		LOG_DEBUG("error while discovering network for SSO");
 		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateHTTPError);
 		return false;
 	}

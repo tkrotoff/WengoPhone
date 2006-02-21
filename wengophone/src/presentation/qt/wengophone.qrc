@@ -4,6 +4,7 @@
 		<file>AboutWindow.ui</file>
 		<file>LoggerWidget.ui</file>
 		<file>DialpadWidget.ui</file>
+		<file>HttpProxyLoginWindow.ui</file>
 		<file>login/LoginWindow.ui</file>
 		<file>phonecall/PhoneCallWidget.ui</file>
 		<file>phonecall/VideoWindow.ui</file>

@@ -89,7 +89,7 @@ public:
 
 	/**
 	 * Network event while trying to connect a SipAccount.
-	 * 
+	 *
 	 * @see SipAccount::networkDiscoveryStateEvent
 	 */
 	Event< void (SipAccount & sender, SipAccount::NetworkDiscoveryState networkDiscoveryState) > networkDiscoveryStateEvent;
@@ -158,26 +158,15 @@ public:
 	Event<void (WengoPhone & sender, ChatHandler & chatHandler)> chatHandlerCreatedEvent;
 
 	/**
-	 * Emitted when a poxy has been detected and needs a login/password.
-	 * 
-	 * @param sender the SipAccount that sends this event
-	 * @param proxyUrl the url of the detected proxy
-	 * @param proxyPort the port of the detected proxy
+	 * @see SipAccount::proxyNeedsAuthenticationEvent
 	 */
-	Event<void(SipAccount & sender, 
-		const std::string & proxyUrl, int proxyPort)> proxyNeedsAuthenticationEvent;
+	Event<void(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort)> proxyNeedsAuthenticationEvent;
 
 	/**
-	 * Emitted when given login/password are wrong.
-	 *
-	 * @param sender the SipAccount that sends this event
-	 * @param proxyUrl the url of the detected proxy
-	 * @param proxyPort the port of the detected proxy
-	 * @param proxyLogin the maybe wrong login
-	 * @param proxyPassword the maybe wrong password
+	 * @see SipAccount::wrongProxyAuthenticationEvent
 	 */
 	Event<void(SipAccount & sender,
-		const std::string & proxyUrl, int proxyPort,
+		const std::string & proxyAddress, unsigned proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
 	/**

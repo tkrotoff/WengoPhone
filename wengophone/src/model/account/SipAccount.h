@@ -90,13 +90,13 @@ public:
 	/**
 	 * @see NetworkDiscovery::proxyNeedsAuthenticationEvent
 	 */
-	Event< void(SipAccount & sender, const std::string & proxyUrl, int proxyPort) > proxyNeedsAuthenticationEvent;
+	Event< void(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort) > proxyNeedsAuthenticationEvent;
 
 	/**
 	 * @see NetworkDiscovery::wrongProxyAuthenticationEvent
 	 */
 	Event< void(SipAccount & sender,
-		const std::string & proxyUrl, int proxyPort,
+		const std::string & proxyAddress, unsigned proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
 	SipAccount();

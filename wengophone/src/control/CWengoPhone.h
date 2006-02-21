@@ -35,7 +35,6 @@ class WenboxPlugin;
 class IMHandler;
 class PresenceHandler;
 class ChatHandler;
-class SipAccount;
 
 /**
  * @defgroup control Control Component
@@ -73,6 +72,18 @@ public:
 	 * @see WengoPhone::noAccountAvailableEvent
 	 */
 	Event<void (WengoPhone & sender)> noAccountAvailableEvent;
+
+	/**
+	 * @see WengoPhone::proxyNeedsAuthenticationEvent
+	 */
+	Event<void(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort)> proxyNeedsAuthenticationEvent;
+
+	/**
+	 * @see WengoPhone::wrongProxyAuthenticationEvent
+	 */
+	Event<void(SipAccount & sender,
+		const std::string & proxyAddress, unsigned proxyPort,
+		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
 	CWengoPhone(WengoPhone & wengoPhone);
 

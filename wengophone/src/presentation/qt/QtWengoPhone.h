@@ -128,6 +128,14 @@ private:
 
 	void loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state);
 
+	void wrongProxyAuthenticationEventHandler(SipAccount & sender,
+		const std::string & proxyAddress, unsigned proxyPort,
+		const std::string & proxyLogin, const std::string & proxyPassword);
+
+	void proxyNeedsAuthenticationEventHandler(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort);
+
+	void proxyNeedsAuthenticationEventHandlerThreadSafe(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort);
+
 	void showLoginWindow();
 
 	static QLayout * createLayout(QWidget * parent);

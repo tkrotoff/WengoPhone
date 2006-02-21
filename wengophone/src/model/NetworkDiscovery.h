@@ -42,23 +42,23 @@ public:
 	/**
 	 * Emitted when a poxy has been detected and needs a login/password.
 	 * 
-	 * @param proxyUrl the url of the detected proxy
+	 * @param proxyAddress the url of the detected proxy
 	 * @param proxyPort the port of the detected proxy
 	 */
 	Event< void(NetworkDiscovery & sender, 
-		const std::string & proxyUrl, int proxyPort) > proxyNeedsAuthenticationEvent;
+		const std::string & proxyAddress, unsigned proxyPort) > proxyNeedsAuthenticationEvent;
 
 	/**
 	 * Emitted when given login/password are wrong.
 	 *
 	 * @param sender this class
-	 * @param proxyUrl the url of the detected proxy
+	 * @param proxyAddress the url of the detected proxy
 	 * @param proxyPort the port of the detected proxy
 	 * @param proxyLogin the maybe wrong login
 	 * @param proxyPassword the maybe wrong password
 	 */
 	Event< void(NetworkDiscovery & sender,
-		const std::string & proxyUrl, int proxyPort,
+		const std::string & proxyAddress, unsigned proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
 	NetworkDiscovery();
@@ -158,12 +158,11 @@ private:
 
 	void setNatConfig(NatType nat);
 
-	static const unsigned _pingTimeout;
+	static const unsigned PING_TIMEOUT = 3;
 
-	static const unsigned _httpTimeout;
+	static const unsigned HTTP_TIMEOUT = 3;
 
 	bool _proxySettingsSet;
-
 };
 
 #endif /*NETWORKDISCOVERY_H*/
