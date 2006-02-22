@@ -30,36 +30,69 @@ class IMContactList : Interface {
 public:
 
 	/**
-	* Emitted when an IMContact has been added remotely.
+	 * Emitted when an IMContact has been added remotely.
 	 *
 	 * @param sender this class
 	 * @param contactId the new contact
 	 */
-	Event< void (IMContactList & sender, const std::string & contactId) > newContactAddedEvent;
-	
+	Event< void (IMContactList & sender, const std::string & groupName, const std::string & contactId) > newContactAddedEvent;
+
 	/**
-	* Emitted when an IMContact has been removed remotely.
+	 * Emitted when an IMContact has been removed remotely.
 	 *
 	 * @param sender this class
 	 * @param contactId the removed contact
 	 */
-	Event< void (IMContactList & sender, const std::string & contactId) > contactRemovedEvent;
+	Event< void (IMContactList & sender, const std::string & groupName, const std::string & contactId) > contactRemovedEvent;
+
+	/**
+	 * Emitted when an IMContact has been added remotely.
+	 *
+	 * @param sender this class
+	 * @param groupName the added group
+	 */
+	Event< void (IMContactList & sender, const std::string & groupName) > newContactGroupAddedEvent;
+
+	/**
+	 * Emitted when a group has been removed.
+	 *
+	 * @param sender this class
+	 * @param groupName the removed group
+	 */
+	Event< void (IMContactList & sender, const std::string & groupName) > contactGroupRemovedEvent;
 
 	virtual ~IMContactList();
 
 	/**
 	 * Remotely adds a contact.
 	 *
+	 * If the group does not exist, it is automatically created.
+	 * @param groupName the group name to add the contact in
 	 * @param contactId the contact to add
 	 */
-	virtual void addContact(const std::string & contactId) = 0;
-	
+	virtual void addContact(const std::string groupName, const std::string & contactId) = 0;
+
 	/**
 	 * Remotely deletes a contact.
 	 *
+	 * @param groupName the group name of the contact
 	 * @param contactId the contact to remove
 	 */
-	virtual void removeContact(const std::string & contactId) = 0;
+	virtual void removeContact(const std::string groupName, const std::string & contactId) = 0;
+
+	/**
+	 * Remotely adds a group.
+	 *
+	 * @param groupName the group name to add the contact in
+	 */
+	virtual void addGroup(const std::string groupName) = 0;
+
+	/**
+	 * Remotely deletes a group.
+	 *
+	 * @param groupName the group name of the contact
+	 */
+	virtual void removeGroup(const std::string groupName) = 0;
 
 	/**
 	 * @return the associated IMAccount.
