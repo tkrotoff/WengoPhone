@@ -114,8 +114,10 @@ bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned t
 		return true;
 	}
 
-	LOG_DEBUG("cannot create a tunnel to " + tunnelServer
-		+ " for SIP server " + sipServer + (ssl ? " with " : " without ") + " ssl");
+	LOG_DEBUG("cannot create a tunnel to " + tunnelServer + ":" + String::fromNumber(tunnelPort)
+		+ " for SIP server " + sipServer + ":" + String::fromNumber(sipServerPort)
+		+ (ssl ? " with " : " without ") + " ssl");
+
 	return false;
 }
 
