@@ -160,7 +160,7 @@ private:
 	static long _proxyAuthentication;
 
 	/** Requests fifo. */
-	RequestList _requestList;
+	static RequestList _requestList;
 
 	/** Post data structure. */
 	static struct POST_DATA pooh;

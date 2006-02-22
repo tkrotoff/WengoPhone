@@ -128,8 +128,6 @@ public:
 
 	Sms(WengoAccount & wengoAccount);
 
-	~Sms();
-
 	/**
 	 * Sends a SMS given a destination phone number and a message.
 	 *
@@ -144,7 +142,7 @@ private:
 
 	WengoAccount & _wengoAccount;
 
-	HttpRequest * _httpRequest;
+	bool _answerReceivedAlready;
 };
 
 #endif	//SMS_H

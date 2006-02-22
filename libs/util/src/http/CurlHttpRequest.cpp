@@ -26,6 +26,7 @@ using namespace std;
 
 size_t curlHttpHeaderWrite(void * ptr, size_t size, size_t nmemb, void * stream);
 
+RequestList CurlHttpRequest::_requestList;
 POST_DATA CurlHttpRequest::pooh;
 bool CurlHttpRequest::_verbose;
 bool CurlHttpRequest::_proxyAuthenticationDetermine;

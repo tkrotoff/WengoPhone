@@ -82,7 +82,7 @@ private:
 
 	void lastTimeoutEventHandler();
 
-	HttpRequest * _httpRequest;
+	bool _answerReceivedAlready;
 
 	std::string _wengoLogin;
 

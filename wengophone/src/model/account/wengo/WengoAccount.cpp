@@ -43,10 +43,10 @@ WengoAccount::WengoAccount(const std::string & login, const std::string & passwo
 	_wengoLogin = login;
 	_wengoPassword = password;
 	_autoLogin = autoLogin;
+	_answerReceivedAlready = false;
 	_ssoRequestOk = false;
 	_wengoLoginOk = false;
 	_stunServer = "stun.wengo.fr";
-	_httpRequest = NULL;
 
 	_timer.timeoutEvent += boost::bind(&WengoAccount::timeoutEventHandler, this);
 	_timer.lastTimeoutEvent += boost::bind(&WengoAccount::lastTimeoutEventHandler, this);
@@ -55,9 +55,6 @@ WengoAccount::WengoAccount(const std::string & login, const std::string & passwo
 }
 
 WengoAccount::~WengoAccount() {
-	if (_httpRequest) {
-		delete _httpRequest;
-	}
 }
 
 bool WengoAccount::init() {
@@ -65,7 +62,7 @@ bool WengoAccount::init() {
 	static const unsigned LIMIT_RETRY = 5;
 
 	if (!discoverForSSO()) {
-		LOG_DEBUG("error while discovering network for SSO");
+		LOG_DEBUG("error while discovering netowork for SSO");
 		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateHTTPError);
 		return false;
 	}
@@ -179,23 +176,24 @@ void WengoAccount::timeoutEventHandler() {
 	//Url::encode(_wengoPassword);
 	std::string data = "login=" + _wengoLogin + "&password=" + _wengoPassword + "&wl=" + WengoPhoneBuildId::SOFTPHONE_NAME;
 
-	_httpRequest = new HttpRequest();
+	//FIXME if not static it crashes inside boost::thread, do not know why
+	static HttpRequest httpRequest;
 
-	_httpRequest->answerReceivedEvent += boost::bind(&WengoAccount::answerReceivedEventHandler, this, _1, _2);
-	_httpRequest->setFactory(new CurlHttpRequestFactory());
+	httpRequest.answerReceivedEvent += boost::bind(&WengoAccount::answerReceivedEventHandler, this, _1, _2);
+	httpRequest.setFactory(new CurlHttpRequestFactory());
 
 	LOG_DEBUG("setting proxy settings for SSO request");
-	_httpRequest->setProxy(_networkDiscovery.getProxyServer(), _networkDiscovery.getProxyServerPort(),
-			_networkDiscovery.getProxyLogin(), _networkDiscovery.getProxyPassword());
+	httpRequest.setProxy(_networkDiscovery.getProxyServer(), _networkDiscovery.getProxyServerPort(),
+		 _networkDiscovery.getProxyLogin(), _networkDiscovery.getProxyPassword());
 
 	//First parameter: true = HTTPS, false = HTTP
 	//Last parameter: true = POST method, false = GET method
 	if (_SSOWithSSL) {
 		LOG_DEBUG("sending SSO request with SSL");
-		_httpRequest->sendRequest(true, _SSOServer, 443, _SSOLoginPath, data, true);
+		httpRequest.sendRequest(true, _SSOServer, 443, _SSOLoginPath, data, true);
 	} else {
 		LOG_DEBUG("sending SSO request without SSL");
-		_httpRequest->sendRequest(false, _SSOServer, 80, _SSOLoginPath, data, true);
+		httpRequest.sendRequest(false, _SSOServer, 80, _SSOLoginPath, data, true);
 	}
 }
 
@@ -204,9 +202,11 @@ void WengoAccount::lastTimeoutEventHandler() {
 }
 
 void WengoAccount::answerReceivedEventHandler(const std::string & answer, HttpRequest::Error error) {
-	delete _httpRequest;
-	_httpRequest = NULL;
+	if (_answerReceivedAlready) {
+		return;
+	}
 
+	_answerReceivedAlready = true;
 	if (error == HttpRequest::NoError && !answer.empty()) {
 		LOG_DEBUG("SSO request has been processed successfully");
 		_ssoRequestOk = true;
