@@ -22,9 +22,11 @@
 
 #include <string>
 
+#include <Interface.h>
+
 class IMAccount;
 
-class IMContactList {
+class IMContactList : Interface {
 public:
 
 	/**
@@ -42,9 +44,6 @@ public:
 	 * @param contactId the removed contact
 	 */
 	Event< void (IMContactList & sender, const std::string & contactId) > contactRemovedEvent;
-
-	IMContactList(const IMAccount & imAccount) 
-		: _imAccount(imAccount) {}
 
 	virtual ~IMContactList();
 
@@ -70,6 +69,9 @@ public:
 	}
 
 private:
+
+	IMContactList(const IMAccount & imAccount) 
+		: _imAccount(imAccount) {}
 
 	const IMAccount & _imAccount;
 

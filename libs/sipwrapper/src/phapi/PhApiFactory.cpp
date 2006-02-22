@@ -44,3 +44,7 @@ IMChat * PhApiFactory::createIMChat(IMAccount & account) {
 IMPresence * PhApiFactory::createIMPresence(IMAccount & account) {
 	return new PhApiIMPresence(account, *_phApiWrapperInstance);
 }
+
+IMContactList * PhApiFactory::createIMContactList(IMAccount & account) {
+	return NULL;
+}

@@ -47,6 +47,8 @@ public:
 
 	IMPresence * createIMPresence(IMAccount & account);
 
+	IMContactList * createIMContactList(IMAccount & account);
+
 private:
 
 	PhApiWrapper * _phApiWrapperInstance;
