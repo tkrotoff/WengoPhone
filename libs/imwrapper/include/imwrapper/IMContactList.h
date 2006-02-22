@@ -71,7 +71,7 @@ public:
 	 * @param groupName the group name to add the contact in
 	 * @param contactId the contact to add
 	 */
-	virtual void addContact(const std::string groupName, const std::string & contactId) = 0;
+	virtual void addContact(const std::string & groupName, const std::string & contactId) = 0;
 
 	/**
 	 * Remotely deletes a contact.
@@ -79,21 +79,21 @@ public:
 	 * @param groupName the group name of the contact
 	 * @param contactId the contact to remove
 	 */
-	virtual void removeContact(const std::string groupName, const std::string & contactId) = 0;
+	virtual void removeContact(const std::string & groupName, const std::string & contactId) = 0;
 
 	/**
 	 * Remotely adds a group.
 	 *
 	 * @param groupName the group name to add the contact in
 	 */
-	virtual void addGroup(const std::string groupName) = 0;
+	virtual void addGroup(const std::string & groupName) = 0;
 
 	/**
 	 * Remotely deletes a group.
 	 *
 	 * @param groupName the group name of the contact
 	 */
-	virtual void removeGroup(const std::string groupName) = 0;
+	virtual void removeGroup(const std::string & groupName) = 0;
 
 	/**
 	 * @return the associated IMAccount.

@@ -114,14 +114,14 @@ public:
 	virtual void unblockContact(const std::string & contactId) = 0;
 
 	IMAccount & getIMAccount() const {
-		return _account;
+		return _imAccount;
 	}
 
 protected:
 
-	IMPresence(IMAccount & account) : _account(account) {}
+	IMPresence(IMAccount & account) : _imAccount(account) {}
 
-	IMAccount & _account;
+	IMAccount & _imAccount;
 };
 
 #endif	//IMPRESENCE_H

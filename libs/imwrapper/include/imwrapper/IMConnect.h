@@ -60,14 +60,14 @@ public:
 	virtual void disconnect() = 0;
 
 	IMAccount & getIMAccount() const {
-		return _account;
+		return _imAccount;
 	}
 
 protected:
 
-	IMConnect(IMAccount & account) : _account(account) {}
+	IMConnect(IMAccount & account) : _imAccount(account) {}
 
-	IMAccount & _account;
+	IMAccount & _imAccount;
 };
 
 #endif	//IMCONNECT_H
