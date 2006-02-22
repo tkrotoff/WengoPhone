@@ -96,6 +96,7 @@ static int ph_event_get();
 
 static char *ph_get_call_contact(phcall_t *ca);
 
+#define MEDIA_SUSPEND
 
 #ifndef PH_STREAM_AUDIO
 #define PH_STREAM_AUDIO (1 << 0)
@@ -107,7 +108,7 @@ static char *ph_get_call_contact(phcall_t *ca);
 
 
 static int ph_call_retrieve_payloads(phcall_t *ca, eXosip_event_t *je, int flags);
-static int ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags);
+static int ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags, int resumeflag);
 
 
 
@@ -1240,7 +1241,7 @@ phAcceptCall3(int cid, void *userData, int streams)
 
     if (i == 0)
     {
-        i = ph_call_media_start(ca, NULL, streams);
+        i = ph_call_media_start(ca, NULL, streams, 0);
     }
 
     return i;
@@ -1422,7 +1423,7 @@ phSetContact(int vlid, const char *uri)
 }
 
 
-#ifdef NOTYET
+
 MY_DLLEXPORT int 
 phConf(int cid1, int cid2)
 {
@@ -1432,28 +1433,29 @@ phConf(int cid1, int cid2)
   if(!ca1 || !ca2)
     return -PH_BADCFID;
 
-  if(0 > ph_media_mix_calls(ca1, ca2))
+  if (0 > ph_msession_conf_start(ca1->mses, ca2->mses, phcfg.audio_dev))
     return PH_NORESOURCES;
   else
     return 0;
 }
 
 MY_DLLEXPORT int 
-phStopConf(int cid1, int cid2){
+phStopConf(int cid1, int cid2)
+{
   phcall_t *ca1 = ph_locate_call_by_cid(cid1);
   phcall_t *ca2 = ph_locate_call_by_cid(cid2);
 
   if(!ca1 || !ca2)
     return -PH_BADCFID;
 
-  if( 0 > ph_media_stop_mix_calls(ca1, ca2))
+  if( 0 > ph_msession_conf_stop(ca1->mses, ca2->mses))
     return PH_NORESOURCES;
   else
     return 0;
 }
 
 #define CONF_MODE 1
-#endif  /* NOTYET */
+
 
 MY_DLLEXPORT int 
 phResumeCall(int cid)
@@ -3051,7 +3053,38 @@ ph_call_media_stop(phcall_t *ca)
 
 }
 
-static int ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags)
+static int
+ph_call_media_suspend(phcall_t *ca, int localhold)
+{
+  if (ca->mses)
+    {
+      ph_msession_suspend(ca->mses, localhold);
+    }
+
+  return 0;
+  
+
+}
+
+
+static int
+ph_call_media_resume(phcall_t *ca, int localhold)
+{
+  if (ca->mses)
+    {
+      ph_msession_suspend(ca->mses, localhold);
+    }
+
+  return 0;
+  
+
+}
+
+
+
+
+static int 
+ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags, int resumeflag)
 {
   int i = 0;
   int port_audio, port_video;
@@ -3189,7 +3222,12 @@ static int ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags)
 
     if (s->newstreams | s->activestreams)
       {
-	if (ph_msession_start(s, phcfg.audio_dev))
+	if (resumeflag)
+	  {
+	    if (ph_msession_resume(s, PH_MSTREAM_TRAFFIC_IO, phcfg.audio_dev))
+	      i = -PH_NOMEDIA;
+	  }
+	else if (ph_msession_start(s, phcfg.audio_dev))
 	  {
 	    i = -PH_NOMEDIA;
 	  }
@@ -3334,7 +3372,7 @@ ph_call_answered(eXosip_event_t *je)
     }
     
     ph_call_retrieve_payloads(ca, je, -1);
-    ph_call_media_start(ca, je, -1);
+    ph_call_media_start(ca, je, -1, ca->localresume);
     
     info.localUri = je->local_uri;
     info.userData = je->external_reference;
@@ -3392,7 +3430,7 @@ ph_call_proceeding(eXosip_event_t *je)
     if (!ca->localrefer)
     {
         ph_call_retrieve_payloads(ca, je, PH_STREAM_CNG);
-        ph_call_media_start(ca, je, -1);
+        ph_call_media_start(ca, je, -1, 0);
     
         info.userData = je->external_reference;
         info.event = phDIALING;
@@ -3501,7 +3539,7 @@ ph_call_ringing(eXosip_event_t *je)
     
     ph_call_retrieve_payloads(ca, je, PH_STREAM_CNG);
     
-    ret = ph_call_media_start(ca, je, -1);
+    ret = ph_call_media_start(ca, je, -1, 0);
     
     info.event = phRINGING;
     if (ret == -PH_NOMEDIA && !ph_call_hasaudio(ca) && !ca->isringing) /*  no audio and softPhone is now not ringing and has no sound */
@@ -3775,7 +3813,7 @@ ph_call_offhold(eXosip_event_t *je)
     ca->remotehold = 0;
     
     ph_call_retrieve_payloads(ca, je, -1);
-    ph_call_media_start(ca, je, -1);
+    ph_call_media_start(ca, je, -1, remhold);
     
     if (remhold)
     {

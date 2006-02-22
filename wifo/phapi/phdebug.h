@@ -21,8 +21,10 @@ DYNA_AUDIO : around the audio dynamics
 // global definitions
 
 #define DBG4_SIP_NEGO(x1, x2, x3, x4)
+#if 0
 #define DBG4_MEDIA_ENGINE(x1, x2, x3, x4)
 #define DBG8_MEDIA_ENGINE(x1, x2, x3, x4, x5, x6, x7, x8)
+#endif
 #define DBG4_CODEC_LOOKUP(x1, x2, x3, x4)
 #define DBG5_DYNA_AUDIO(x1, x2, x3, x4, x5)
 #define DBG5_DYNA_AUDIO_ECHO(x1, x2, x3, x4, x5)
@@ -34,7 +36,7 @@ DYNA_AUDIO : around the audio dynamics
 #define DBG4_SIP_NEGO(x1, x2, x3, x4) printf(x1, x2, x3, x4)
 #endif
 
-#if 0
+#if 1
 #define DBG4_MEDIA_ENGINE(x1, x2, x3, x4) printf(x1, x2, x3, x4)
 #define DBG8_MEDIA_ENGINE(x1, x2, x3, x4, x5, x6, x7, x8) printf(x1, x2, x3, x4, x5, x6, x7, x8)
 #endif

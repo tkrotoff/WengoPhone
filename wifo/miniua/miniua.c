@@ -889,7 +889,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	    break;
 	  }
 
-#if 0
+#if 1
 	case CMD_CONF:
 	  {
 	    int cid2;

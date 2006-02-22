@@ -82,6 +82,31 @@ int ph_msession_start(struct ph_msession_s *s, const char *deviceid)
 
 }
 
+int ph_msession_conf_start(struct ph_msession_s *s1, struct ph_msession_s *s2, const char *device)
+{
+  return ph_msession_audio_conf_start(s1, s2, device);
+
+}
+int ph_msession_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2)
+{
+ return ph_msession_audio_conf_stop(s1, s2);
+}
+
+
+int ph_msession_suspend(struct ph_msession_s *s,  int traffictype)
+{
+   ph_msession_audio_suspend(s, traffictype);
+   return (0);
+}
+
+int ph_msession_resume(struct ph_msession_s *s, int traffictype, const char *device)
+{
+   ph_msession_audio_resume(s, traffictype, device);
+}
+
+
+
+
 void ph_msession_stop(struct ph_msession_s *s)
 {
 

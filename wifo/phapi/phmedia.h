@@ -65,9 +65,11 @@ enum ph_media_types {
 };
 
 enum ph_mstream_traffic_type { 
+  PH_MSTREAM_TRAFFIC_NONE = 0,
   PH_MSTREAM_TRAFFIC_IN = 1,
   PH_MSTREAM_TRAFFIC_OUT = 2,
   PH_MSTREAM_TRAFFIC_IO = 3
+
 
 };
 
@@ -78,7 +80,8 @@ enum ph_mstream_flags {
   PH_MSTREAM_FLAG_AEC = 4,
   PH_MSTREAM_FLAG_HDX = 8,  /* half duplex mode */
   PH_MSTREAM_FLAG_RUNNING = 16,
-  PH_MSTREAM_FLAG_TUNNEL = 32
+  PH_MSTREAM_FLAG_TUNNEL = 32,
+  
 };
 
 /* media stream creation parameters */
@@ -111,12 +114,20 @@ typedef struct ph_mstream_params_s ph_mstream_params_t;
 #define PH_MSTREAM_AUDIO2 2
 #define PH_MSTREAM_VIDEO2 3
 
+enum ph_mession_conf_flags
+  {
+    PH_MSESSION_CONF_MEMBER = 1,
+    PH_MSESSION_CONF_MASTER = 2
+  };
+
 
 /*  session englobes up to 2 aduio and 2 video streams */
 struct ph_msession_s
 {
   int    activestreams;   /* bit mask of active streams */
   int    newstreams;      /* bit mask of new streams to be activated */
+  int    confflags;       /* when nonzero this session make part of a conference */
+  struct ph_msession_s *confsession;
   struct ph_mstream_params_s streams[PH_MSESSION_MAX_STREAMS];
 
   void (*dtmfCallback)(void *info, int event);
@@ -152,10 +163,13 @@ void ph_msession_stop(struct ph_msession_s *s);
 #define ph_msession_stream_active(s, n)  (s->activestreams & (1 << n))
 int ph_msession_set_recvol(struct ph_msession_s *s,  int level);
 int ph_msession_set_playvol(struct ph_msession_s *s,  int level);
-int ph_msession_suspend(struct ph_msession_s *s,  int local);
-int ph_msession_resume(struct ph_msession_s *s);
 int ph_msession_send_sound_file(struct ph_msession_s *s, const char *filename);
 int ph_msession_send_dtmf(struct ph_msession_s *s, int dtmf, int mode);
+int ph_msession_conf_start(struct ph_msession_s *s1, struct ph_msession_s *s2, const char *device);
+int ph_msession_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2);
+int ph_msession_suspend(struct ph_msession_s *s,  int traffictype);
+int ph_msession_resume(struct ph_msession_s *s, int traffictype, const char *device);
+
 
 #if 0
 int ph_media_start(phcall_t *ca, int port, int videoport, 
