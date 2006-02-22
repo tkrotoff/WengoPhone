@@ -86,14 +86,18 @@ void IMContactListHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IM
 	if (it == _imContactListMap.end()) {
 		IMContactList * imContactList = IMWrapperFactory::getFactory().createIMContactList(imAccount);
 		
-		imContactList->newContactAddedEvent += 
-			boost::bind(&IMContactListHandler::newContactAddedEventHandler, this, _1, _2, _3);
-		imContactList->contactRemovedEvent += 
-			boost::bind(&IMContactListHandler::contactRemovedEventHandler, this, _1, _2, _3);
-		imContactList->newContactGroupAddedEvent += newContactGroupAddedEvent;
-		imContactList->contactGroupRemovedEvent += contactGroupRemovedEvent;
-
-		_imContactListMap[&imAccount] = imContactList;
+		if (imContactList) {
+			imContactList->newContactAddedEvent += 
+				boost::bind(&IMContactListHandler::newContactAddedEventHandler, this, _1, _2, _3);
+			imContactList->contactRemovedEvent += 
+				boost::bind(&IMContactListHandler::contactRemovedEventHandler, this, _1, _2, _3);
+			imContactList->newContactGroupAddedEvent += newContactGroupAddedEvent;
+			imContactList->contactGroupRemovedEvent += contactGroupRemovedEvent;
+	
+			_imContactListMap[&imAccount] = imContactList;
+		} else {
+			LOG_DEBUG("cannot create an IMContactList");
+		}
 	} else {
 		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());
 	}
