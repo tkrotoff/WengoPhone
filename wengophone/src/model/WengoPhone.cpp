@@ -31,6 +31,7 @@
 #include "contactlist/ContactList.h"
 #include "contactlist/Contact.h"
 #include "contactlist/ContactGroup.h"
+#include "contactlist/IMContactListHandler.h"
 #include "config/ConfigManager.h"
 #include "config/Config.h"
 #include "chat/ChatHandler.h"
@@ -98,8 +99,10 @@ void WengoPhone::init() {
 	_chatHandler = new ChatHandler(*this);
 	chatHandlerCreatedEvent(*this, *_chatHandler);
 
+	_imContactListHandler = new IMContactListHandler(*this);
+	
 	//Creates the contact list
-	_contactList = new ContactList(*this);
+	_contactList = new ContactList(*this, *_imContactListHandler);
 	contactListCreatedEvent(*this, *_contactList);
 	_contactList->load();
 

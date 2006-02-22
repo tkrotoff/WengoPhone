@@ -41,6 +41,7 @@ class StringList;
 class ConnectHandler;
 class PresenceHandler;
 class ChatHandler;
+class IMContactListHandler;
 class Sms;
 
 /**
@@ -370,6 +371,8 @@ private:
 	PresenceHandler * _presenceHandler;
 
 	ChatHandler * _chatHandler;
+
+	IMContactListHandler * _imContactListHandler;
 
 	IMAccountHandler _imAccountHandler;
 

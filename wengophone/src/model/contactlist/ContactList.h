@@ -27,8 +27,11 @@
 class Contact;
 class ContactGroup;
 class ContactListDataLayer;
+class IMContactListHandler;
+class IMContact;
 class StringList;
 class WengoPhone;
+
 /**
  * Contact list.
  *
@@ -40,7 +43,7 @@ class WengoPhone;
 class ContactList : public Serializable {
 public:
 
-	ContactList(WengoPhone & wengoPhone);
+	ContactList(WengoPhone & wengoPhone, IMContactListHandler & imContactListHandler);
 
 	~ContactList();
 
@@ -115,6 +118,10 @@ public:
 
 private:
 
+	void newIMContactAddedEventHandler(IMContactListHandler & sender, IMContact & newIMContact);
+
+	void imContactRemovedEventHandler(IMContactListHandler & sender, IMContact & imContact);
+
 	/** Data layer for the ContactList. */
 	ContactListDataLayer * _dataLayer;
 
@@ -125,6 +132,8 @@ private:
 	ContactGroups _contactGroupList;
 
 	WengoPhone & _wengoPhone;
+
+	IMContactListHandler & _imContactListHandler;
 
 };
 

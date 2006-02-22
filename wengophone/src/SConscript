@@ -81,6 +81,7 @@ sources = [
 	'model/contactlist/ContactParser.cpp',
 	'model/contactlist/ContactListXMLLayer.cpp',
 	'model/contactlist/ContactListRPCLayer.cpp',
+	'model/contactlist/IMContactListHandler.cpp',
 	'model/sms/Sms.cpp',
 
 	'control/wenbox/CWenboxPlugin.cpp',

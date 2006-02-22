@@ -26,6 +26,7 @@ class IMAccount;
 class IMChat;
 class IMConnect;
 class IMPresence;
+class IMContactList;
 
 /**
  * Factories for the Instant Messaging wrapper component.
@@ -83,6 +84,14 @@ public:
 	 * @return IM presence implementation instance
 	 */
 	virtual IMPresence * createIMPresence(IMAccount & account) = 0;
+
+	/**
+	 * Instantiates a IMContactList implementation.
+	 *
+	 * @param account an IMAccount
+	 * @return the new IMContactList instance.
+	 */
+	virtual IMContactList * createIMContactList(IMAccount & account) = 0;
 
 private:
 

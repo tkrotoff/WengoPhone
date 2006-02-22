@@ -23,12 +23,19 @@
 #include "ContactGroup.h"
 #include "ContactListXMLLayer.h"
 #include "ContactListParser.h"
+#include "IMContactListhandler.h"
 
 #include <StringList.h>
 #include <Logger.h>
 
-ContactList::ContactList(WengoPhone & wengoPhone)
-	: _wengoPhone(wengoPhone) {
+ContactList::ContactList(WengoPhone & wengoPhone, IMContactListHandler & imContactListHandler)
+	: _wengoPhone(wengoPhone), _imContactListHandler(imContactListHandler) {
+
+	_imContactListHandler.newIMContactAddedEvent +=
+		boost::bind(&ContactList::newIMContactAddedEventHandler, this, _1, _2);
+	_imContactListHandler.imContactRemovedEvent +=
+		boost::bind(&ContactList::imContactRemovedEventHandler, this, _1, _2);
+
 	_dataLayer = NULL;
 }
 
@@ -111,3 +118,13 @@ bool ContactList::unserialize(const std::string & data) {
 	ContactListParser parser(*this, _wengoPhone, data);
 	return true;
 }
+
+void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender, IMContact & newIMContact) {
+
+}
+
+void ContactList::imContactRemovedEventHandler(IMContactListHandler & sender, IMContact & imContact) {
+
+}
+
+

@@ -46,8 +46,6 @@ public:
 
 private:
 
-	IMAccount & _account;
-
 	void *CreateAccount(void);
 	void InitConn(void);
 

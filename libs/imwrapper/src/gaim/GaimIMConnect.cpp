@@ -43,7 +43,7 @@ int GetTabSize(char **tab)
 }
 
 GaimIMConnect::GaimIMConnect(IMAccount & account)
-	: IMConnect(account), _account(account)
+	: IMConnect(account)
 {
 }
 
