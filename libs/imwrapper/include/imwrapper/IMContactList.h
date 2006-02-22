@@ -20,9 +20,10 @@
 #ifndef IMCONTACTLIST_H
 #define IMCONTACTLIST_H
 
-#include <string>
-
 #include <Interface.h>
+#include <Event.h>
+
+#include <string>
 
 class IMAccount;
 
@@ -101,7 +102,7 @@ public:
 		return _imAccount;
 	}
 
-private:
+protected:
 
 	IMContactList(const IMAccount & imAccount) 
 		: _imAccount(imAccount) {}
