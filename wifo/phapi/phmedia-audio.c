@@ -2233,6 +2233,10 @@ void ph_msession_audio_stop(struct ph_msession_s *s)
   int confflags = s->confflags;
 
   s->activestreams &= ~(1 << PH_MSTREAM_AUDIO1);
+
+  if (confflags)
+    ph_msession_audio_conf_stop(s->confsession, s);
+
   ph_msession_audio_stream_stop(s, confflags != PH_MSESSION_CONF_MEMBER);
 
   msp->streamerData = 0;
