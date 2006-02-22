@@ -38,40 +38,44 @@ IMContactListHandler::~IMContactListHandler() {
 	}
 }
 
-void IMContactListHandler::addIMContact(IMContact & imContact) {
+void IMContactListHandler::addIMContact(const std::string & groupName, IMContact & imContact) {
 	IMContactListMap::const_iterator it = _imContactListMap.find(&imContact.getIMAccount());
 
 	if (it != _imContactListMap.end()) {
-		(*it).second->addContact(imContact.getContactId());
+		(*it).second->addContact(groupName, imContact.getContactId());
 	} else {
-		LOG_ERROR("this IMAccount is not registered: " + imContact.getIMAccount().getLogin());		
+		LOG_ERROR("this IMAccount is not registered: " 
+			+ imContact.getIMAccount().getLogin());
 	}
 }
 
-void IMContactListHandler::removeIMContact(IMContact & imContact) {
+void IMContactListHandler::removeIMContact(const std::string & groupName, IMContact & imContact) {
 	IMContactListMap::const_iterator it = _imContactListMap.find(&imContact.getIMAccount());
 	
 	if (it != _imContactListMap.end()) {
-		(*it).second->removeContact(imContact.getContactId());
+		(*it).second->removeContact(groupName, imContact.getContactId());
 	} else {
-		LOG_ERROR("this IMAccount is not registered: " + imContact.getIMAccount().getLogin());		
+		LOG_ERROR("this IMAccount is not registered: " 
+			+ imContact.getIMAccount().getLogin());
 	}	
 }
 
-void IMContactListHandler::newContactAddedEventHandler(IMContactList & sender, const std::string & contactId) {
+void IMContactListHandler::newContactAddedEventHandler(IMContactList & sender,
+	const std::string & groupName, const std::string & contactId) {
 	IMContact imContact(sender.getIMAccount(), contactId);
 
 	_imContactSet.insert(imContact);
 	
-	newIMContactAddedEvent(*this, (IMContact &)*_imContactSet.find(imContact));
+	newIMContactAddedEvent(*this, groupName, (IMContact &)*_imContactSet.find(imContact));
 }
 
-void IMContactListHandler::contactRemovedEventHandler(IMContactList & sender, const std::string & contactId) {
+void IMContactListHandler::contactRemovedEventHandler(IMContactList & sender,
+	const std::string & groupName, const std::string & contactId) {
 	IMContact imContact(sender.getIMAccount(), contactId);
 
 	IMContactSet::iterator it = _imContactSet.find(imContact);
 
-	imContactRemovedEvent(*this, (IMContact &)*it);
+	imContactRemovedEvent(*this, groupName, (IMContact &)*it);
 
 	_imContactSet.erase(it);	
 }
@@ -83,10 +87,12 @@ void IMContactListHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IM
 		IMContactList * imContactList = IMWrapperFactory::getFactory().createIMContactList(imAccount);
 		
 		imContactList->newContactAddedEvent += 
-			boost::bind(&IMContactListHandler::newContactAddedEventHandler, this, _1, _2);
+			boost::bind(&IMContactListHandler::newContactAddedEventHandler, this, _1, _2, _3);
 		imContactList->contactRemovedEvent += 
-			boost::bind(&IMContactListHandler::contactRemovedEventHandler, this, _1, _2);	
-		
+			boost::bind(&IMContactListHandler::contactRemovedEventHandler, this, _1, _2, _3);
+		imContactList->newContactGroupAddedEvent += newContactGroupAddedEvent;
+		imContactList->contactGroupRemovedEvent += contactGroupRemovedEvent;
+
 		_imContactListMap[&imAccount] = imContactList;
 	} else {
 		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());

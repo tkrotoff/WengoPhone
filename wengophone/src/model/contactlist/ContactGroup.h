@@ -27,6 +27,7 @@
 #include <string>
 
 class Contact;
+class IMContact;
 class WengoPhone;
 
 /**
@@ -108,11 +109,29 @@ public:
 	 */
 	bool operator==(const ContactGroup & contactGroup) const;
 
+	/**
+	 * Find a Contact associated with the given IMContact.
+	 *
+	 * @param imContact the associated IMContact
+	 * @return the found Contact or NULL if not found
+	 */
+	Contact * findContact(const IMContact & imContact) const;
+
 	std::string serialize();
 
 	bool unserialize(const std::string & data);
 
 private:
+
+	/**
+	 * @see Contact::newIMContactAddedEvent
+	 */
+	void newIMContactAddedEventHandler(Contact & sender, IMContact & imContact);
+
+	/**
+	 * @see Contact::imContactRemovedEvent
+	 */
+	void imContactRemovedEventHandler(Contact & sender, IMContact & imContact);
 
 	/** Defines the vector of Contact. */
 	typedef List<Contact *> Contacts;

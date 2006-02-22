@@ -89,7 +89,8 @@ void WengoPhone::init() {
 	//Creates the history
 	//historyCreatedEvent
 
-	//Create ConnectHandler, PresenceHandler and ChatHandler
+	//Create ConnectHandler, PresenceHandler, ChatHandler 
+	// and IMContactListHandler
 	_connectHandler = new ConnectHandler();
 	connectHandlerCreatedEvent(*this, *_connectHandler);
 
@@ -102,7 +103,7 @@ void WengoPhone::init() {
 	_imContactListHandler = new IMContactListHandler(*this);
 	
 	//Creates the contact list
-	_contactList = new ContactList(*this, *_imContactListHandler);
+	_contactList = new ContactList(*this);
 	contactListCreatedEvent(*this, *_contactList);
 	_contactList->load();
 

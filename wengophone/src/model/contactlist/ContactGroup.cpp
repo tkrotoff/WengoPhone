@@ -21,6 +21,9 @@
 
 #include "Contact.h"
 #include "ContactGroupParser.h"
+#include "IMContactListHandler.h"
+
+#include <model/WengoPhone.h>
 
 #include <Logger.h>
 
@@ -62,6 +65,24 @@ Contact * ContactGroup::operator[](unsigned i) const {
 
 bool ContactGroup::operator==(const ContactGroup & contactGroup) const {
 	return _groupName == contactGroup._groupName;
+}
+
+Contact * ContactGroup::findContact(const IMContact & imContact) const {
+	for (register unsigned i = 0 ; i < _contactList.size() ; i++) {
+		if (_contactList[i]->hasIMContact(imContact)) {
+			return _contactList[i];
+		}
+	}
+
+	return NULL;
+}
+
+void ContactGroup::newIMContactAddedEventHandler(Contact & sender, IMContact & imContact) {
+	_wengoPhone.getIMContactListHandler().addIMContact(_groupName, imContact);
+}
+
+void ContactGroup::imContactRemovedEventHandler(Contact & sender, IMContact & imContact) {
+	_wengoPhone.getIMContactListHandler().removeIMContact(_groupName, imContact);
 }
 
 std::string ContactGroup::serialize() {

@@ -299,6 +299,10 @@ public:
 		return _imAccountHandler;
 	}
 
+	IMContactListHandler & getIMContactListHandler() {
+		return *_imContactListHandler;
+	}
+
 	void setProxySettings(const std::string & proxyAddress, int proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword);
 

@@ -60,7 +60,7 @@ public:
 
 	bool operator<(const IMContact & imContact) const;
 
-	std::string serialize();
+	std::string serialize() const;
 
 	const IMAccount & getIMAccount() const {
 		return _imAccount;

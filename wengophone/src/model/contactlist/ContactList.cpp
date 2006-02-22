@@ -23,20 +23,25 @@
 #include "ContactGroup.h"
 #include "ContactListXMLLayer.h"
 #include "ContactListParser.h"
-#include "IMContactListhandler.h"
+#include "IMContactListHandler.h"
+
+#include <model/WengoPhone.h>
 
 #include <StringList.h>
 #include <Logger.h>
 
-ContactList::ContactList(WengoPhone & wengoPhone, IMContactListHandler & imContactListHandler)
-	: _wengoPhone(wengoPhone), _imContactListHandler(imContactListHandler) {
-
-	_imContactListHandler.newIMContactAddedEvent +=
-		boost::bind(&ContactList::newIMContactAddedEventHandler, this, _1, _2);
-	_imContactListHandler.imContactRemovedEvent +=
-		boost::bind(&ContactList::imContactRemovedEventHandler, this, _1, _2);
-
+ContactList::ContactList(WengoPhone & wengoPhone)
+	: _wengoPhone(wengoPhone) {
 	_dataLayer = NULL;
+
+	_wengoPhone.getIMContactListHandler().newIMContactAddedEvent +=
+		boost::bind(&ContactList::newIMContactAddedEventHandler, this, _1, _2, _3);
+	_wengoPhone.getIMContactListHandler().imContactRemovedEvent +=
+		boost::bind(&ContactList::imContactRemovedEventHandler, this, _1, _2, _3);
+	_wengoPhone.getIMContactListHandler().newContactGroupAddedEvent +=
+		boost::bind(&ContactList::newContactGroupAddedEventHandler, this, _1, _2);
+	_wengoPhone.getIMContactListHandler().contactGroupRemovedEvent +=
+		boost::bind(&ContactList::contactGroupRemovedEventHandler, this, _1, _2);
 }
 
 ContactList::~ContactList() {
@@ -119,12 +124,71 @@ bool ContactList::unserialize(const std::string & data) {
 	return true;
 }
 
-void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender, IMContact & newIMContact) {
+void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
+	const std::string & groupName, IMContact & newIMContact) {
+	LOG_DEBUG("new IMContact added in group " + groupName + ": "
+		+ newIMContact.getContactId());
 
+	ContactGroup * contactGroup = this->operator[](groupName);
+	Contact * contact = NULL;
+
+	if (!contactGroup) {
+		contactGroup = new ContactGroup(groupName, _wengoPhone);
+		addContactGroup(contactGroup);
+	} else { 
+		contact = contactGroup->findContact(newIMContact);
+	}
+	
+	if (contact) {
+		LOG_DEBUG("Contact found");
+	} else {
+		LOG_DEBUG("No Contact found, creating one");
+		contact = new Contact(_wengoPhone);
+		contactGroup->addContact(contact);
+	}
+
+	LOG_DEBUG("adding the IMContact");
+	contact->addIMContact(newIMContact);	
 }
 
-void ContactList::imContactRemovedEventHandler(IMContactListHandler & sender, IMContact & imContact) {
+void ContactList::imContactRemovedEventHandler(IMContactListHandler & sender,
+	const std::string & groupName, IMContact & imContact) {
+	LOG_DEBUG("IMContact removed from group " + groupName + ": "
+		+ imContact.getContactId());
 
+	ContactGroup * contactGroup = this->operator[](groupName);
+	Contact * contact = NULL;
+
+	if (contactGroup) {
+		contact = contactGroup->findContact(imContact);
+		if (contact) {
+			LOG_DEBUG("remove an IMContact from a Contact");
+			contact->removeIMContact(imContact);
+		}
+	}
 }
 
+void ContactList::newContactGroupAddedEventHandler(IMContactList & sender,
+	const std::string & groupName) {
+	LOG_DEBUG("new group added " + groupName);
+
+	ContactGroup * contactGroup = this->operator[](groupName);
+	if (contactGroup) {
+		LOG_DEBUG("this group already exists");
+	} else {
+		addContactGroup(new ContactGroup(groupName, _wengoPhone));
+	}
+}
+
+void ContactList::contactGroupRemovedEventHandler(IMContactList & sender,
+	const std::string & groupName) {
+	LOG_DEBUG("group " + groupName + " removed");
+
+	ContactGroup * contactGroup = this->operator[](groupName);
+	if (contactGroup) {
+		removeContactGroup(contactGroup);
+	} else {
+		LOG_DEBUG("there is no group " + groupName);
+	}
+}
 

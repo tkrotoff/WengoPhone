@@ -28,6 +28,7 @@ class Contact;
 class ContactGroup;
 class ContactListDataLayer;
 class IMContactListHandler;
+class IMContactList;
 class IMContact;
 class StringList;
 class WengoPhone;
@@ -43,7 +44,7 @@ class WengoPhone;
 class ContactList : public Serializable {
 public:
 
-	ContactList(WengoPhone & wengoPhone, IMContactListHandler & imContactListHandler);
+	ContactList(WengoPhone & wengoPhone);
 
 	~ContactList();
 
@@ -118,9 +119,29 @@ public:
 
 private:
 
-	void newIMContactAddedEventHandler(IMContactListHandler & sender, IMContact & newIMContact);
+	/**
+	 * @see IMContactListHandler::newIMContactAddedEvent
+	 */
+	void newIMContactAddedEventHandler(IMContactListHandler & sender,
+		const std::string & groupName, IMContact & newIMContact);
 
-	void imContactRemovedEventHandler(IMContactListHandler & sender, IMContact & imContact);
+	/**
+	 * @see IMContactListHandler::imContactRemovedEvent
+	 */
+	void imContactRemovedEventHandler(IMContactListHandler & sender,
+		const std::string & groupName, IMContact & imContact);
+
+	/**
+	 * @see IMContactListHandler::newContactGroupAddedEvent
+	 */
+	void newContactGroupAddedEventHandler(IMContactList & sender,
+		const std::string & groupName);
+
+	/**
+	 * @see IMContactListHandler::contactGroupRemovedEvent
+	 */
+	void contactGroupRemovedEventHandler(IMContactList & sender,
+		const std::string & groupName);
 
 	/** Data layer for the ContactList. */
 	ContactListDataLayer * _dataLayer;
@@ -132,8 +153,6 @@ private:
 	ContactGroups _contactGroupList;
 
 	WengoPhone & _wengoPhone;
-
-	IMContactListHandler & _imContactListHandler;
 
 };
 

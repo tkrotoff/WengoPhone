@@ -73,57 +73,52 @@ void Contact::initialize(const Contact & contact) {
 	_notes = contact._notes;
 	_state = contact._state;
 	_blocked = contact._blocked;
-	_imContactList = contact._imContactList;
+	_imContactSet = contact._imContactSet;
 }
 
 Contact::~Contact() {
-	for (IMContactList::const_iterator it = _imContactList.begin() ; it != _imContactList.end() ; it++) {
-		delete (*it);
-	}
 }
 
 void Contact::addIMContact(const IMContact & imContact) {
-	IMContact * newContact = new IMContact(imContact);
+	IMContact newContact(imContact);
 
 	//Check if IMContact already exists
-	if (findIMContact(_imContactList, *newContact) == _imContactList.end()) {
-		subscribeToPresenceOf(*newContact);
-		_imContactList.push_back(newContact);
-	} else {
-		delete newContact;
+	if (_imContactSet.find(newContact) == _imContactSet.end()) {
+		_imContactSet.insert(newContact);
+		newIMContactAddedEvent(*this, (IMContact &)*_imContactSet.find(newContact));
+		contactModifiedEvent(*this);
 	}
 }
 
 void Contact::removeIMContact(const IMContact & imContact) {
-	IMContactList::iterator it = findIMContact(_imContactList, imContact);
+	IMContactSet::iterator it = _imContactSet.find(imContact);
 
-	if (it != _imContactList.end()) {
-		//newContact->unsubscribeToPresence();
-		_imContactList.erase(it);
+	if (it != _imContactSet.end()) {
+		imContactRemovedEvent(*this, (IMContact &)*it);
+		contactModifiedEvent(*this);
+		_imContactSet.erase(it);
 	}
 }
 
-Contact::IMContactList::iterator Contact::findIMContact(IMContactList & imContactList, const IMContact & imContact) {
-	IMContactList::iterator i;
-	for (i = imContactList.begin() ; i != imContactList.end() ; i++) {
-		if (imContact == *(*i)) {
-			break;
-		}
+bool Contact::hasIMContact(const IMContact & imContact) const {
+	if (_imContactSet.find(imContact) != _imContactSet.end()) {
+		return true;
+	} else {
+		return false;
 	}
-	return i;
 }
 
 void Contact::block() {
-	for (IMContactList::const_iterator it = _imContactList.begin() ; it != _imContactList.end() ; it++) {
-		_wengoPhone.getPresenceHandler().blockContact(*(*it));
+	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; it++) {
+		_wengoPhone.getPresenceHandler().blockContact(*it);
 	}
 	
 	_blocked = true;
 }
 
 void Contact::unblock() {
-	for (IMContactList::const_iterator it = _imContactList.begin() ; it != _imContactList.end() ; it++) {
-		_wengoPhone.getPresenceHandler().unblockContact(*(*it));
+	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; it++) {
+		_wengoPhone.getPresenceHandler().unblockContact(*it);
 	}
 	
 	_blocked = false;
@@ -132,13 +127,10 @@ void Contact::unblock() {
 string Contact::imContactsToString() {
 	string result;
 
-	for (IMContactList::const_iterator it = _imContactList.begin() ; it != _imContactList.end() ; it++) {
-		result = result + (*it)->serialize();
+	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; it++) {
+		result = result + (*it).serialize();
 	}
 
 	return result;
 }
 
-void Contact::subscribeToPresenceOf(const IMContact & imContact) {
-	_wengoPhone.getPresenceHandler().subscribeToPresenceOf(imContact);
-}

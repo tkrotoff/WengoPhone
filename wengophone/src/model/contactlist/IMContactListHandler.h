@@ -39,17 +39,37 @@ public:
 	 * Emitted when an IMContact has been added remotely.
 	 *
 	 * @param sender this class
+	 * @param groupName the group where the IMContact has been added
 	 * @param newIMContact the new IMContact
+	 * @see IMContactList::newContactAddedEvent
 	 */
-	Event< void (IMContactListHandler & sender, IMContact & newIMContact) > newIMContactAddedEvent;
+	Event< void (IMContactListHandler & sender, const std::string & groupName, IMContact & newIMContact) > newIMContactAddedEvent;
 
 	/**
 	 * Emitted when an IMContact has been removed remotely.
 	 *
 	 * @param sender this class
+	 * @param groupName the group where the IMContact is
 	 * @param imContact the removed IMContact
+	 * @see IMContactList::imContactRemovedEvent
 	 */
-	Event< void (IMContactListHandler & sender, IMContact & imContact) > imContactRemovedEvent;
+	Event< void (IMContactListHandler & sender, const std::string & groupName, IMContact & imContact) > imContactRemovedEvent;
+
+	/**
+	 * Emitted when an IMContact has been added remotely.
+	 *
+	 * @param sender this class
+	 * @param groupName the added group
+	 */
+	Event< void (IMContactList & sender, const std::string & groupName) > newContactGroupAddedEvent;
+
+	/**
+	 * Emitted when a group has been removed.
+	 *
+	 * @param sender this class
+	 * @param groupName the removed group
+	 */
+	Event< void (IMContactList & sender, const std::string & groupName) > contactGroupRemovedEvent;
 
 	IMContactListHandler(WengoPhone & wengoPhone);
 
@@ -58,22 +78,26 @@ public:
 	/**
 	 * Remotely adds an IMContact.
 	 *
+	 * @param groupName the group where we want to add the IMContact
 	 * @param imContact the IMContact to add
 	 */
-	void addIMContact(IMContact & imContact);
+	void addIMContact(const std::string & groupName, IMContact & imContact);
 
 	/**
 	 * Remotely deletes an IMContact.
 	 *
+	 * @param groupName the group if the IMContact
 	 * @param imContact the IMContact to remove
 	 */
-	void removeIMContact(IMContact & imContact);
+	void removeIMContact(const std::string & groupName, IMContact & imContact);
 
 private:
 
-	void newContactAddedEventHandler(IMContactList & sender, const std::string & contactId);
+	void newContactAddedEventHandler(IMContactList & sender,
+		const std::string & groupName, const std::string & contactId);
 
-	void contactRemovedEventHandler(IMContactList & sender, const std::string & contactId);
+	void contactRemovedEventHandler(IMContactList & sender,
+		const std::string & groupName, const std::string & contactId);
 
 	void newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount);
 

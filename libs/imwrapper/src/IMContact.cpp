@@ -48,7 +48,7 @@ bool IMContact::operator<(const IMContact & imContact) const {
 	return _contactId < imContact._contactId;
 }
 
-std::string IMContact::serialize() {
+std::string IMContact::serialize() const {
 	string result;
 	string protocolId;
 

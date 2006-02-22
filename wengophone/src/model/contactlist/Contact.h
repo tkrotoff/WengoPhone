@@ -24,16 +24,18 @@
 
 #include <imwrapper/EnumPresenceState.h>
 #include <imwrapper/IMAccount.h>
+#include <imwrapper/IMContact.h>
 
 #include <Event.h>
 #include <Serializable.h>
 #include <Date.h>
 
 #include <string>
+#include <set>
 
 class WengoPhone;
 class IMAccount;
-class IMContact;
+class ContactGroup;
 
 /**
  * Contact inside an address book.
@@ -43,6 +45,7 @@ class IMContact;
  * @author Philippe Bernery
  */
 class Contact : public Serializable {
+	friend class ContactGroup;
 public:
 
 	enum Sex {
@@ -153,6 +156,12 @@ public:
 	void removeIMContact(const IMContact & imContact);
 
 	/**
+	 * @param imContact the maybe associated IMContact
+	 * @return true if this Contact is associated with the given IMContact.
+	 */
+	bool hasIMContact(const IMContact & imContact) const;
+
+	/**
 	 * Avoid this contact to see my presence.
 	 */
 	void block();
@@ -193,19 +202,29 @@ public:
 
 private:
 
-	typedef std::vector<IMContact *> IMContactList;
-	
-	/** Find an IMContact in a IMContactList. */
-	static IMContactList::iterator findIMContact(IMContactList & imContactList, const IMContact & imContact);
+	/**
+	 * Emitted when an IMContact has been added.
+	 *
+	 * @param sender this class
+	 * @param imContact the added IMContact
+	 */
+	Event<void (Contact & sender, IMContact & imContact)> newIMContactAddedEvent;
+
+	/**
+	 * Emitted when an IMContact has been removed.
+	 *
+	 * @param sender this class
+	 * @param imContact the added IMContact
+	 */
+	Event<void (Contact & sender, IMContact & imContact)> imContactRemovedEvent;
+
+	typedef std::set<IMContact> IMContactSet;
 	
 	/** Factorizes code between contructor and copy contructor. */
 	void initialize(const Contact & contact);
 
 	/** Return all IMContact in a vCard string format. */
 	std::string imContactsToString();
-
-	/** Subscribe to presence of an IMContact */
-	void subscribeToPresenceOf(const IMContact & imContact);
 
 	std::string _firstName;
 	std::string _lastName;
@@ -227,7 +246,7 @@ private:
 	std::string _notes;
 	EnumPresenceState::PresenceState _state;
 	bool _blocked;
-	IMContactList _imContactList;
+	IMContactSet _imContactSet;
 	WengoPhone & _wengoPhone;
 };
 
