@@ -549,9 +549,6 @@ void PhApiWrapper::init() {
 		_isInitialized = false;
 		LOG_DEBUG("cannot initialize phApi");
 	}
-
-	//Stub
-	setCallInputAudioDevice("");
 }
 
 void PhApiWrapper::setPluginPath(const string & path) {

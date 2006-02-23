@@ -86,6 +86,10 @@ public:
 
 	PhoneCall * getPhoneCall(int callId) /*const*/;
 
+	PhoneCall * getActivePhoneCall() const {
+		return _activePhoneCall;
+	}
+
 private:
 
 	/**

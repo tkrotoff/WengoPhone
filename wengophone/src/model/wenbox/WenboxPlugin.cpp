@@ -20,6 +20,7 @@
 #include "WenboxPlugin.h"
 
 #include <model/WengoPhone.h>
+#include <model/phoneline/IPhoneLine.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -50,7 +51,11 @@ WenboxPlugin::~WenboxPlugin() {
 }
 
 void WenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
-	PhoneCall * phoneCall = _wengoPhone.getActivePhoneCall();
+	IPhoneLine * phoneLine = _wengoPhone.getActivePhoneLine();
+	PhoneCall * phoneCall = NULL;
+	if (phoneLine) {
+		phoneCall = phoneLine->getActivePhoneCall();
+	}
 
 	switch (key) {
 	case IWenbox::KeyPickUp:
@@ -101,7 +106,7 @@ std::string WenboxPlugin::getWenboxAudioDeviceName() const {
 }
 
 bool WenboxPlugin::switchCurrentAudioDeviceToWenbox() const {
-	string defaultPlaybackDevice(AudioDevice::getDefaultPlaybackDevice());
+	string defaultPlaybackDevice = AudioDevice::getDefaultPlaybackDevice();
 	string intputDeviceName = defaultPlaybackDevice;
 	string outputDeviceName = defaultPlaybackDevice;
 	string ringerDeviceName = defaultPlaybackDevice;
@@ -114,9 +119,9 @@ bool WenboxPlugin::switchCurrentAudioDeviceToWenbox() const {
 		ringerDeviceName = wenboxAudioDeviceName;
 	}
 
-	if (outputDeviceName == AudioDevice::getDefaultPlaybackDevice() ||
-		intputDeviceName == AudioDevice::getDefaultPlaybackDevice() ||
-		ringerDeviceName == AudioDevice::getDefaultPlaybackDevice()) {
+	if (outputDeviceName == defaultPlaybackDevice ||
+		intputDeviceName == defaultPlaybackDevice ||
+		ringerDeviceName == defaultPlaybackDevice) {
 
 		return false;
 	}

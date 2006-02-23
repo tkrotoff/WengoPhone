@@ -174,6 +174,13 @@ public:
 	 * @return PhoneCall given its callId or NULL if no PhoneCall corresponds to the callId
 	 */
 	virtual PhoneCall * getPhoneCall(int callId) /*const*/ = 0;
+
+	/**
+	 * Gets the active PhoneCall associated with this PhoneLine.
+	 *
+	 * @return active PhoneCall
+	 */
+	virtual PhoneCall * getActivePhoneCall() const = 0;
 };
 
 #endif	//IPHONELINE_H

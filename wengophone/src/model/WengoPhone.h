@@ -251,24 +251,6 @@ public:
 	WenboxPlugin & getWenboxPlugin() const;
 
 	/**
-	 * Sets the active PhoneCall.
-	 *
-	 * @param phoneCall the active PhoneCall to set
-	 */
-	void setActivePhoneCall(PhoneCall * phoneCall) {
-		_activePhoneCall = phoneCall;
-	}
-
-	/**
-	 * Gets the active PhoneCall.
-	 *
-	 * @return the active PhoneCall
-	 */
-	PhoneCall * getActivePhoneCall() const {
-		return _activePhoneCall;
-	}
-
-	/**
 	 * Gets the StringList representation of all the ContactGroup inside ContactList.
 	 *
 	 * @return ContactGroup list as a StringList
