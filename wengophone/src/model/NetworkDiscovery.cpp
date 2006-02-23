@@ -60,7 +60,7 @@ bool NetworkDiscovery::testHTTP(const std::string & url, bool ssl) {
 	LOG_DEBUG("proxy detected. Testing http connection");
 	if (is_http_conn_allowed(url.c_str(),
 		proxyAddress.c_str(), proxyPort,
-		proxyLogin.c_str(), proxyPassword.c_str(), NETLIB_TRUE, HTTP_TIMEOUT) == HTTP_OK) {
+		proxyLogin.c_str(), proxyPassword.c_str(), sslActivated, HTTP_TIMEOUT) == HTTP_OK) {
 
 		return true;
 	}
@@ -71,8 +71,19 @@ bool NetworkDiscovery::testHTTP(const std::string & url, bool ssl) {
 
 bool NetworkDiscovery::testUDP(const string & stunServer) {
 	LOG_DEBUG("testing UDP connection and discovering NAT type with STUN server " + stunServer);
-	setNatConfig(get_nat_type(stunServer.c_str()));
-	return (is_udp_port_opened(stunServer.c_str(), SIP_PORT) == NETLIB_TRUE ? true : false);
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	bool isProxyDetected = config.get(Config::NETWORK_PROXY_DETECTED_KEY, false);
+	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
+
+	if (!isProxyDetected || (isProxyDetected && proxyAddress.empty())) {
+		NatType nType;
+		bool opened = (is_udp_port_opened(stunServer.c_str(), SIP_PORT, &nType) == NETLIB_TRUE ? true : false);
+		setNatConfig(nType);
+		return opened;
+	} else {
+		return false;
+	}
 }
 
 bool NetworkDiscovery::testSIP(const string & server, unsigned port) {

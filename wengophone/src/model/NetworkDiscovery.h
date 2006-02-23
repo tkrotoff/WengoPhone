@@ -160,7 +160,7 @@ private:
 
 	static const unsigned PING_TIMEOUT = 3;
 
-	static const unsigned HTTP_TIMEOUT = 3;
+	static const unsigned HTTP_TIMEOUT = 10;
 
 	bool _proxySettingsSet;
 };

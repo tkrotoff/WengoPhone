@@ -41,13 +41,37 @@ extern "C" {
 #define SIP_PORT 5060
 
 /**
+ * NAT type.
+ */
+typedef enum  {
+	StunTypeUnknown=0,
+	StunTypeOpen,
+	StunTypeConeNat,
+	StunTypeRestrictedNat,
+	StunTypePortRestrictedNat,
+	StunTypeSymNat,
+	StunTypeSymFirewall,
+	StunTypeBlocked,
+	StunTypeFailure
+} NatType;
+
+/**
+ * Gets the NAT type of the computer.
+ *
+ * @param stun_server STUN server IP address used to detect the NAT type
+ * @return NAT type or -1 if the STUN server is incorrect
+ */
+NatType get_nat_type(const char * stun_server);
+
+/**
  * Checks if a specific UDP port is opened.
  *
  * @param stun_server STUN server IP address
  * @param port port number to test
+ * @param ntype filled with proxy type
  * @return true if the port is opened; false otherwise
  */
-NETLIB_BOOLEAN is_udp_port_opened(const char *stun_server, int port);
+NETLIB_BOOLEAN is_udp_port_opened(const char *stun_server, int port, NatType *ntype);
 
 /**
  * Tries to send a SIP request and wait for a response.
@@ -179,30 +203,6 @@ typedef enum
 								NETLIB_BOOLEAN ssl, int timeout,
 								NETLIB_BOOLEAN sip_ping, int ping_timeout);
 					
-
-/**
- * NAT type.
- */
-typedef enum  {
-	StunTypeUnknown=0,
-	StunTypeOpen,
-	StunTypeConeNat,
-	StunTypeRestrictedNat,
-	StunTypePortRestrictedNat,
-	StunTypeSymNat,
-	StunTypeSymFirewall,
-	StunTypeBlocked,
-	StunTypeFailure
-} NatType;
-
-/**
- * Gets the NAT type of the computer.
- *
- * @param stun_server STUN server IP address used to detect the NAT type
- * @return NAT type or -1 if the STUN server is incorrect
- */
-NatType get_nat_type(const char * stun_server);
-
 
 
 #ifdef __cplusplus
