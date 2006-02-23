@@ -238,7 +238,7 @@ if True:
 	defines['ENABLE_PORTAUDIO'] = 1
 	sources += ['phmedia-portaudio.c']
 
-if WengoOSLinux() or WengoOSBSD():
+if WengoOSPosix():
 	env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
 
 if WengoOSLinux():
