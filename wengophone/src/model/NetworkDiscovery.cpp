@@ -218,7 +218,7 @@ void NetworkDiscovery::discoverProxySettings() {
 }
 
 void NetworkDiscovery::setProxySettings(const std::string & proxyServer, unsigned proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword) {
+	const std::string & proxyLogin, const std::string & proxyPassword) {
 
  	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
