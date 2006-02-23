@@ -73,8 +73,8 @@ bool NetworkDiscovery::testUDP(const string & stunServer) {
 	LOG_DEBUG("testing UDP connection and discovering NAT type with STUN server " + stunServer);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	bool isProxyDetected = config.get(Config::NETWORK_PROXY_DETECTED_KEY, false);
-	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
+	bool isProxyDetected = config.getNetworkProxyDetected();
+	string proxyAddress = config.getNetworkProxyServer();
 
 	if (!isProxyDetected || (isProxyDetected && proxyAddress.empty())) {
 		NatType nType;

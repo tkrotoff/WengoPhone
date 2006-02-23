@@ -19,33 +19,45 @@
 
 #include "Config.h"
 
-using namespace std;
+#include <AudioDevice.h>
 
-const string Config::NETWORK_KEY = "network";
-const string Config::NETWORK_SSO_SSL_KEY = "network.sso.ssl";
-const string Config::NETWORK_NAT_TYPE_KEY = "network.nat.type";
-const string Config::NETWORK_SIP_SERVER_KEY = "network.sip.server";
-const string Config::NETWORK_SIP_LOCAL_PORT_KEY = "network.sip.localport";
-const string Config::NETWORK_TUNNEL_NEEDED_KEY = "network.tunnel.needed";
-const string Config::NETWORK_TUNNEL_SSL_KEY = "network.tunnel.ssl";
-const string Config::NETWORK_TUNNEL_SERVER_KEY = "network.tunnel.server";
-const string Config::NETWORK_TUNNEL_PORT_KEY = "network.tunnel.port";
-const string Config::NETWORK_PROXY_DETECTED_KEY = "network.proxy.detected";
-const string Config::NETWORK_PROXY_SERVER_KEY = "network.proxy.server";
-const string Config::NETWORK_PROXY_PORT_KEY = "network.proxy.port";
-const string Config::NETWORK_PROXY_LOGIN_KEY = "network.proxy.login";
-const string Config::NETWORK_PROXY_PASSWORD_KEY = "network.proxy.password";
-const string Config::CODEC_PLUGIN_PATH_KEY = "codec.plugin.path";
-const string Config::AUDIO_OUTPUT_DEVICENAME_KEY = "audio.output.devicename";
-const string Config::AUDIO_INPUT_DEVICENAME_KEY = "audio.input.devicename";
-const string Config::AUDIO_RINGER_DEVICENAME_KEY = "audio.ringer.devicename";
-const string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
-const string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
-const string Config::WENGO_SSO_PATH_KEY = "wengo.sso.path";
+const std::string Config::NETWORK_KEY = "network";
+const std::string Config::NETWORK_SSO_SSL_KEY = "network.sso.ssl";
+const std::string Config::NETWORK_NAT_TYPE_KEY = "network.nat.type";
+const std::string Config::NETWORK_SIP_SERVER_KEY = "network.sip.server";
+const std::string Config::NETWORK_SIP_LOCAL_PORT_KEY = "network.sip.localport";
+const std::string Config::NETWORK_TUNNEL_NEEDED_KEY = "network.tunnel.needed";
+const std::string Config::NETWORK_TUNNEL_SSL_KEY = "network.tunnel.ssl";
+const std::string Config::NETWORK_TUNNEL_SERVER_KEY = "network.tunnel.server";
+const std::string Config::NETWORK_TUNNEL_PORT_KEY = "network.tunnel.port";
+const std::string Config::NETWORK_PROXY_DETECTED_KEY = "network.proxy.detected";
+const std::string Config::NETWORK_PROXY_SERVER_KEY = "network.proxy.server";
+const std::string Config::NETWORK_PROXY_PORT_KEY = "network.proxy.port";
+const std::string Config::NETWORK_PROXY_LOGIN_KEY = "network.proxy.login";
+const std::string Config::NETWORK_PROXY_PASSWORD_KEY = "network.proxy.password";
+const std::string Config::CODEC_PLUGIN_PATH_KEY = "codec.plugin.path";
+const std::string Config::AUDIO_OUTPUT_DEVICENAME_KEY = "audio.output.devicename";
+const std::string Config::AUDIO_INPUT_DEVICENAME_KEY = "audio.input.devicename";
+const std::string Config::AUDIO_RINGER_DEVICENAME_KEY = "audio.ringer.devicename";
+const std::string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
+const std::string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
+const std::string Config::WENGO_SSO_PATH_KEY = "wengo.sso.path";
 
 Config::Config(const std::string & name) {
 	_name = name;
 }
 
 Config::~Config() {
+}
+
+std::string Config::getAudioOutputDeviceName() const {
+	return get(AUDIO_OUTPUT_DEVICENAME_KEY, AudioDevice::getDefaultPlaybackDevice());
+}
+
+std::string Config::getAudioInputDeviceName() const {
+	return get(AUDIO_INPUT_DEVICENAME_KEY, AudioDevice::getDefaultRecordDevice());
+}
+
+std::string Config::getAudioRingerDeviceName() const {
+	return get(AUDIO_RINGER_DEVICENAME_KEY, AudioDevice::getDefaultPlaybackDevice());
 }

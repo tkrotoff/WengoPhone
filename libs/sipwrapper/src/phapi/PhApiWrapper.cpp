@@ -107,6 +107,8 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 	_sipServerPort = 0;
 	_sipLocalPort = 0;
 	PhApiWrapperHack = this;
+	_inputAudioDeviceId = 0;
+	_outputAudioDeviceId = 0;
 }
 
 PhApiWrapper::~PhApiWrapper() {
@@ -259,14 +261,14 @@ bool PhApiWrapper::setAudioDevices() {
 	static const std::string INPUT_DEVICE_TAG = "pa:IN=";
 	static const std::string OUTPUT_DEVICE_TAG  = "OUT=";
 
-	/*std::string tmp = INPUT_DEVICE_TAG
+	std::string tmp = INPUT_DEVICE_TAG
 			+ String::fromNumber(_inputAudioDeviceId)
 			+ std::string(" ")
 			+ OUTPUT_DEVICE_TAG
-			+ String::fromNumber(_outputAudioDeviceId);*/
+			+ String::fromNumber(_outputAudioDeviceId);
 
 	//Takes the default Windows audio device
-	std::string tmp = "pa:";
+	//std::string tmp = "pa:";
 
 	int ret = phChangeAudioDevices(tmp.c_str());
 	if (ret == 0) {

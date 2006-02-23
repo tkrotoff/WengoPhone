@@ -21,16 +21,27 @@
 
 #include <model/WengoPhone.h>
 #include <model/phonecall/PhoneCall.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
+#include <StringList.h>
+#include <Logger.h>
+
+#include <AudioDevice.h>
+
+using namespace std;
 
 WenboxPlugin::WenboxPlugin(const WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
 
 	_wenbox = new Wenbox();
-	_wenbox->open();
-	_wenbox->setDefaultMode(Wenbox::ModeUSB);
-	_wenbox->switchMode(Wenbox::ModeUSB);
-	_wenbox->keyPressedEvent += boost::bind(&WenboxPlugin::keyPressedEventHandler, this, _1, _2);
-	_wenbox->keyPressedEvent += keyPressedEvent;
+	if (_wenbox->open()) {
+		switchCurrentAudioDeviceToWenbox();
+		_wenbox->setDefaultMode(Wenbox::ModeUSB);
+		_wenbox->switchMode(Wenbox::ModeUSB);
+		_wenbox->keyPressedEvent += boost::bind(&WenboxPlugin::keyPressedEventHandler, this, _1, _2);
+		_wenbox->keyPressedEvent += keyPressedEvent;
+	}
 }
 
 WenboxPlugin::~WenboxPlugin() {
@@ -58,4 +69,63 @@ void WenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
 
 void WenboxPlugin::setState(Wenbox::PhoneCallState state, const std::string & phoneNumber) {
 	_wenbox->setState(state, phoneNumber);
+}
+
+std::string WenboxPlugin::getWenboxAudioDeviceName() const {
+	/*
+	 * First looks in the Wenbox audio device list, then
+	 * it looks into the audio device list and try to find a matching
+	 * string pattern.
+	 */
+
+	StringList wenboxAudioDeviceList = _wenbox->getAudioDeviceNameList();
+	for (unsigned i = 0; i < wenboxAudioDeviceList.size(); i++) {
+		string wenboxAudioDeviceName = wenboxAudioDeviceList[i];
+
+		StringList audioDeviceList = AudioDevice::getOutputMixerDeviceList();
+		for (unsigned j = 0; j < audioDeviceList.size(); j++) {
+			string audioDeviceName = audioDeviceList[j];
+
+			if (audioDeviceName.find(wenboxAudioDeviceName) != -1) {
+				//We found the real name of the Wenbox audio device
+				LOG_DEBUG("wenbox audio device name=" + audioDeviceName);
+				return audioDeviceName;
+			}
+		}
+	}
+
+	//We didn't find the real name of the Wenbox audio device
+	LOG_DEBUG("wenbox audio device not found");
+	//Empty string
+	return String::null;
+}
+
+bool WenboxPlugin::switchCurrentAudioDeviceToWenbox() const {
+	string defaultPlaybackDevice(AudioDevice::getDefaultPlaybackDevice());
+	string intputDeviceName = defaultPlaybackDevice;
+	string outputDeviceName = defaultPlaybackDevice;
+	string ringerDeviceName = defaultPlaybackDevice;
+
+	//Looks for the Wenbox audio device from the list of devices from Windows
+	string wenboxAudioDeviceName(getWenboxAudioDeviceName());
+	if (!wenboxAudioDeviceName.empty()) {
+		outputDeviceName = wenboxAudioDeviceName;
+		intputDeviceName = wenboxAudioDeviceName;
+		ringerDeviceName = wenboxAudioDeviceName;
+	}
+
+	if (outputDeviceName == AudioDevice::getDefaultPlaybackDevice() ||
+		intputDeviceName == AudioDevice::getDefaultPlaybackDevice() ||
+		ringerDeviceName == AudioDevice::getDefaultPlaybackDevice()) {
+
+		return false;
+	}
+
+	//Changes audio settings
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, outputDeviceName);
+	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, intputDeviceName);
+	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, ringerDeviceName);
+
+	return true;
 }

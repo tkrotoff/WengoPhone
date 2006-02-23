@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,10 +38,10 @@
 int getNbDevices() {
 	int nbDevices = Pa_GetDeviceCount();
 	if (nbDevices < 0) {
-		LOG_ERROR_C("Pa_GetDeviceCount()=" + String::fromNumber(nbDevices));
+		LOG_ERROR("Pa_GetDeviceCount()=" + String::fromNumber(nbDevices));
 		PaError err = nbDevices;
 		Pa_Terminate();
-		LOG_ERROR_C("an error occured while using the portaudio stream, error message=" + String(Pa_GetErrorText(err)));
+		LOG_ERROR("an error occured while using the portaudio stream, error message=" + String(Pa_GetErrorText(err)));
 	}
 	return nbDevices;
 }
@@ -66,7 +66,7 @@ std::list<std::string> AudioDevice::getInputMixerDeviceList() {
 				(Pa_GetHostApiInfo(deviceInfo->hostApi)->type == paOSS) ||
 				(i != Pa_GetHostApiInfo(deviceInfo->hostApi)->defaultInputDevice)) {
 
-				LOG_DEBUG_C("input device found=" + String(deviceInfo->name)
+				LOG_DEBUG("input device found=" + String(deviceInfo->name)
 					+ " " + String(Pa_GetHostApiInfo(deviceInfo->hostApi)->name));
 
 				deviceList += deviceInfo->name;
@@ -99,7 +99,7 @@ std::list<std::string> AudioDevice::getOutputMixerDeviceList() {
 				(Pa_GetHostApiInfo(deviceInfo->hostApi)->type == paOSS) ||
 				(i != Pa_GetHostApiInfo(deviceInfo->hostApi)->defaultOutputDevice)) {
 
-				LOG_DEBUG_C("output device found=" + String(deviceInfo->name)
+				LOG_DEBUG("output device found=" + String(deviceInfo->name)
 					+ " " + String(Pa_GetHostApiInfo(deviceInfo->hostApi)->name));
 
 				deviceList += deviceInfo->name;
@@ -120,13 +120,13 @@ std::string AudioDevice::getDefaultPlaybackDevice() {
 		return String::null;
 	}
 
-	//iterate over devices
+	//Iterates over devices
 	for (int i = 0; i < nbDevices; i++) {
 		const PaDeviceInfo * deviceInfo = Pa_GetDeviceInfo(i);
 		if (i == Pa_GetDefaultOutputDevice()) {
 			std::string name(deviceInfo->name);
 
-			LOG_DEBUG_C("default device=" + name);
+			LOG_DEBUG("default output device=" + name);
 
 			Pa_Terminate();
 			return name;
@@ -139,6 +139,28 @@ std::string AudioDevice::getDefaultPlaybackDevice() {
 }
 
 std::string AudioDevice::getDefaultRecordDevice() {
+	Pa_Initialize();
+
+	int nbDevices = getNbDevices();
+	if (nbDevices < 0) {
+		return String::null;
+	}
+
+	//Iterates over devices
+	for (int i = 0; i < nbDevices; i++) {
+		const PaDeviceInfo * deviceInfo = Pa_GetDeviceInfo(i);
+		if (i == Pa_GetDefaultInputDevice()) {
+			std::string name(deviceInfo->name);
+
+			LOG_DEBUG("default input device=" + name);
+
+			Pa_Terminate();
+			return name;
+		}
+	}
+
+	Pa_Terminate();
+
 	return String::null;
 }
 
@@ -160,7 +182,7 @@ int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {
 			if (pdi->maxOutputChannels > 0 && pdi->name == deviceName) {
 				int deviceId = Pa_HostApiDeviceIndexToDeviceIndex(pdi->hostApi, i);
 
-				LOG_DEBUG_C("found output device id=" + String::fromNumber(i) + " for="
+				LOG_DEBUG("found output device id=" + String::fromNumber(i) + " for="
 					+ deviceName + " (" + String(pdi->name) + ")");
 
 				Pa_Terminate();
@@ -171,7 +193,7 @@ int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {
 		}
 	}
 
-	LOG_ERROR_C("no output device id found for=" + deviceName);
+	LOG_ERROR("no output device id found for=" + deviceName);
 
 	Pa_Terminate();
 
@@ -188,7 +210,7 @@ int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
 			if (pdi->maxInputChannels > 0 && pdi->name == deviceName) {
 				int deviceId = Pa_HostApiDeviceIndexToDeviceIndex(pdi->hostApi, i);
 
-				LOG_DEBUG_C("found input device id=" + String::fromNumber(i) + " for="
+				LOG_DEBUG("found input device id=" + String::fromNumber(i) + " for="
 					+ deviceName + " (" + String(pdi->name) + ")");
 
 				Pa_Terminate();
@@ -199,7 +221,7 @@ int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
 		}
 	}
 
-	LOG_ERROR_C("no input device id found for=" + deviceName);
+	LOG_ERROR("no input device id found for=" + deviceName);
 
 	Pa_Terminate();
 

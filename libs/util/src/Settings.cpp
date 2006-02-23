@@ -24,8 +24,6 @@
 using namespace std;
 using boost::any_cast;
 
-const string Settings::DOT = ".";
-
 Settings::Settings() {
 }
 
@@ -68,14 +66,17 @@ bool Settings::contains(const std::string & key) {
 }
 
 void Settings::set(const std::string & key, const std::string & value) {
+	valueChangedEvent(*this, key);
 	_keyMap[key] = value;
 }
 
 void Settings::set(const std::string & key, bool value) {
+	valueChangedEvent(*this, key);
 	_keyMap[key] = value;
 }
 
 void Settings::set(const std::string & key, int value) {
+	valueChangedEvent(*this, key);
 	_keyMap[key] = value;
 }
 
@@ -85,7 +86,7 @@ std::string Settings::get(const std::string & key, const std::string & defaultVa
 		if (isString(it->second)) {
 			return any_cast<std::string>(it->second);
 		} else {
-			LOG_FATAL("The key doesn't match a string value");
+			LOG_FATAL("the key doesn't match a string value");
 		}
 	}
 
@@ -98,7 +99,7 @@ bool Settings::get(const std::string & key, bool defaultValue) const {
 		if (isBoolean(it->second)) {
 			return any_cast<bool>(it->second);
 		} else {
-			LOG_FATAL("The key doesn't match a string value");
+			LOG_FATAL("the key doesn't match a string value");
 		}
 	}
 
@@ -111,7 +112,7 @@ int Settings::get(const std::string & key, int defaultValue) const {
 		if (isInteger(it->second)) {
 			return any_cast<int>(it->second);
 		} else {
-			LOG_FATAL("The key doesn't match a string value");
+			LOG_FATAL("the key doesn't match a string value");
 		}
 	}
 

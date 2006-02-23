@@ -55,6 +55,10 @@ private:
 
 	void keyPressedEventHandler(IWenbox & sender, IWenbox::Key key);
 
+	std::string getWenboxAudioDeviceName() const;
+
+	bool switchCurrentAudioDeviceToWenbox() const;
+
 	Wenbox * _wenbox;
 
 	const WengoPhone & _wengoPhone;

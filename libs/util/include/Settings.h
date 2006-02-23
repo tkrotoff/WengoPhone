@@ -23,6 +23,7 @@
 #include <Serializable.h>
 
 #include <StringList.h>
+#include <Event.h>
 
 #include <boost/any.hpp>
 #include <map>
@@ -40,7 +41,13 @@
 class Settings : public Serializable {
 public:
 
-	static const std::string DOT;
+	/**
+	 * A value has changed inside Settings.
+	 *
+	 * @param sender this class
+	 * @param key key whose value has changed
+	 */
+	Event<void (Settings & sender, const std::string & key)> valueChangedEvent;
 
 	Settings();
 

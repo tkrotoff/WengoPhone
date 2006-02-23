@@ -141,21 +141,15 @@ public:
 
 	/** Playback audio device name. */
 	static const std::string AUDIO_OUTPUT_DEVICENAME_KEY;
-	std::string getAudioOutputDeviceName() const {
-		return get(AUDIO_OUTPUT_DEVICENAME_KEY, std::string(""));
-	}
+	std::string getAudioOutputDeviceName() const;
 
 	/** Record audio device name. */
 	static const std::string AUDIO_INPUT_DEVICENAME_KEY;
-	std::string getAudioInputDeviceName() const {
-		return get(AUDIO_INPUT_DEVICENAME_KEY, std::string(""));
-	}
+	std::string getAudioInputDeviceName() const;
 
-	/** Ringing audio device name. */
+	/** Ringer audio device name. */
 	static const std::string AUDIO_RINGER_DEVICENAME_KEY;
-	std::string getAudioRingerDeviceName() const {
-		return get(AUDIO_RINGER_DEVICENAME_KEY, std::string(""));
-	}
+	std::string getAudioRingerDeviceName() const;
 
 	/** Wengo server hostname. */
 	static const std::string WENGO_SERVER_HOSTNAME_KEY;
