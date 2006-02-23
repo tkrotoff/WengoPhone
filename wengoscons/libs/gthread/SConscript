@@ -27,7 +27,4 @@ if WengoOSWindows():
 		env.WengoUseLibraries(libs)
 		env.WengoDeclareLibrary('gthread-2.0', libs_file)
 else:
-	env.WengoAddLibPath(lib_path)
-	env.WengoAddIncludePath(include_path)
-	env.WengoUseLibraries(libs)
-	env.WengoDeclareSystemLibrary('gthread-2.0')
+	env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
