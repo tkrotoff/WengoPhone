@@ -142,6 +142,7 @@ static void  ph_call_requestfailure(eXosip_event_t *je);
 static void ph_frame_display_cbk(void *ctx, void *event);
 
 static int ph_call_media_stop(phcall_t * ca);
+static int ph_call_media_suspend(phcall_t *ca, int localhold);
 
 #define nonempty(x)  ((x) && (x)[0])
 
