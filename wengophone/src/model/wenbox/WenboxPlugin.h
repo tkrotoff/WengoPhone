@@ -38,7 +38,7 @@ class WenboxPlugin {
 public:
 
 	/**
-	 * @see IWenbox
+	 * @see IWenbox::keyPressedEvent
 	 */
 	Event<void (IWenbox & sender, IWenbox::Key key)> keyPressedEvent;
 

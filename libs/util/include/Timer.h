@@ -66,13 +66,6 @@ public:
 	 */
 	void stop();
 
-	/**
-	 * Waits for the end of the timer Thread.
-	 *
-	 * This method is a blocking method.
-	 */
-	void join();
-
 private:
 
 	/** @see Thread::start() */

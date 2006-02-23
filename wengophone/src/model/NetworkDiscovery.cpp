@@ -38,7 +38,7 @@ NetworkDiscovery::~NetworkDiscovery() {
 bool NetworkDiscovery::testHTTP(const std::string & url, bool ssl) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	NETLIB_BOOLEAN sslActivated = ((ssl) ? NETLIB_TRUE : NETLIB_FALSE);
-	bool isProxyDetected = config.get(Config::NETWORK_PROXY_DETECTED_KEY, false);
+	bool isProxyDetected = config.getNetworkProxyDetected();
 
 	if (!isProxyDetected) {
 		LOG_DEBUG("proxy not yet detected. Testing http connection without proxy");
@@ -52,10 +52,10 @@ bool NetworkDiscovery::testHTTP(const std::string & url, bool ssl) {
 		}
 	}
 
-	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
-	int proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
-	string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
-	string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
+	string proxyAddress = config.getNetworkProxyServer();
+	int proxyPort = config.getNetworkProxyPort();
+	string proxyLogin = config.getNetworkProxyLogin();
+	string proxyPassword = config.getNetworkProxyPassword();
 
 	LOG_DEBUG("proxy detected. Testing http connection");
 	if (is_http_conn_allowed(url.c_str(),
@@ -84,7 +84,7 @@ bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned t
 	const string & sipServer, unsigned sipServerPort) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	bool isProxyDetected = config.get(Config::NETWORK_PROXY_DETECTED_KEY, false);
+	bool isProxyDetected = config.getNetworkProxyDetected();
 
 	if (!isProxyDetected) {
 		LOG_DEBUG("proxy not yet detected. Testing SIP tunnel connection without proxy");
@@ -100,10 +100,10 @@ bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned t
 		}
 	}
 
-	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
-	int proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
-	string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
-	string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
+	string proxyAddress = config.getNetworkProxyServer();
+	int proxyPort = config.getNetworkProxyPort();
+	string proxyLogin = config.getNetworkProxyLogin();
+	string proxyPassword = config.getNetworkProxyPassword();
 
 	LOG_DEBUG("proxy detected. Testing SIP tunnel connection");
 	if (is_tunnel_conn_allowed(tunnelServer.c_str(), tunnelPort,
@@ -140,10 +140,10 @@ void NetworkDiscovery::discoverProxySettings() {
 	LOG_DEBUG("proxy test");
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	string proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
-	int proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
+	string proxyAddress = config.getNetworkProxyServer();
+	int proxyPort = config.getNetworkProxyPort();
 
-	bool isProxyDetected = config.get(Config::NETWORK_PROXY_DETECTED_KEY, false);
+	bool isProxyDetected = config.getNetworkProxyDetected();
 
 	if (!isProxyDetected) {
 		LOG_DEBUG("searching for proxy");
@@ -167,8 +167,8 @@ void NetworkDiscovery::discoverProxySettings() {
 	if (is_proxy_auth_needed(proxyAddress.c_str(), proxyPort, HTTP_TIMEOUT)) {
 		LOG_DEBUG("proxy authentication needed");
 
-		string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
-		string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
+		string proxyLogin = config.getNetworkProxyLogin();
+		string proxyPassword = config.getNetworkProxyPassword();
 
 		if (proxyLogin.empty()) {
 			LOG_DEBUG("proxy needs login/password");
@@ -182,10 +182,10 @@ void NetworkDiscovery::discoverProxySettings() {
 			}
 		}
 
-		proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
-		proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
-		proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
-		proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
+		proxyLogin = config.getNetworkProxyLogin();
+		proxyPassword = config.getNetworkProxyPassword();
+		proxyAddress = config.getNetworkProxyServer();
+		proxyPort = config.getNetworkProxyPort();
 
 		while (!is_proxy_auth_ok(proxyAddress.c_str(), proxyPort, proxyLogin.c_str(), proxyPassword.c_str(), HTTP_TIMEOUT)) {
 			LOG_DEBUG("proxy needs valid login/password");
@@ -198,10 +198,10 @@ void NetworkDiscovery::discoverProxySettings() {
 				Thread::msleep(100);
 			}
 
-			proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, string(""));
-			proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, string(""));
-			proxyAddress = config.get(Config::NETWORK_PROXY_SERVER_KEY, string(""));
-			proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
+			proxyLogin = config.getNetworkProxyLogin();
+			proxyPassword = config.getNetworkProxyPassword();
+			proxyAddress = config.getNetworkProxyServer();
+			proxyPort = config.getNetworkProxyPort();
 		}
 	}
 }

@@ -225,6 +225,9 @@ private:
 	/** Timer timeout event handler for re-sending my presence. */
 	void renewPublishEventHandler();
 
+	/** Changes audio devices inside PhApi. */
+	bool setAudioDevices();
+
 	static PhApiCallbacks * _callbacks;
 
 	/** Checks if phApi has been initialized: if phInit() has been called. */
@@ -241,6 +244,12 @@ private:
 
 	/** Last pidf for my presence. */
 	std::string _lastPidf;
+
+	/** Playback audio device id. */
+	int _outputAudioDeviceId;
+
+	/** Record audio device id. */
+	int _inputAudioDeviceId;
 
 	std::map<int, IMChatSession *> _messageIdChatSessionMap;
 

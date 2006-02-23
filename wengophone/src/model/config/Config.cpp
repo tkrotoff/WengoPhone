@@ -35,7 +35,13 @@ const string Config::NETWORK_PROXY_SERVER_KEY = "network.proxy.server";
 const string Config::NETWORK_PROXY_PORT_KEY = "network.proxy.port";
 const string Config::NETWORK_PROXY_LOGIN_KEY = "network.proxy.login";
 const string Config::NETWORK_PROXY_PASSWORD_KEY = "network.proxy.password";
-const string Config::CODEC_PLUGIN_PATH = "codec.plugin.path";
+const string Config::CODEC_PLUGIN_PATH_KEY = "codec.plugin.path";
+const string Config::AUDIO_OUTPUT_DEVICENAME_KEY = "audio.output.devicename";
+const string Config::AUDIO_INPUT_DEVICENAME_KEY = "audio.input.devicename";
+const string Config::AUDIO_RINGER_DEVICENAME_KEY = "audio.ringer.devicename";
+const string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
+const string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
+const string Config::WENGO_SSO_PATH_KEY = "wengo.sso.path";
 
 Config::Config(const std::string & name) {
 	_name = name;

@@ -31,7 +31,7 @@
 
 /**
  * Discover Network configuration.
- * 
+ *
  * @ingroup model
  * @author Philippe Bernery
  */
@@ -41,11 +41,11 @@ public:
 
 	/**
 	 * Emitted when a poxy has been detected and needs a login/password.
-	 * 
+	 *
 	 * @param proxyAddress the url of the detected proxy
 	 * @param proxyPort the port of the detected proxy
 	 */
-	Event< void(NetworkDiscovery & sender, 
+	Event< void(NetworkDiscovery & sender,
 		const std::string & proxyAddress, unsigned proxyPort) > proxyNeedsAuthenticationEvent;
 
 	/**
@@ -67,8 +67,8 @@ public:
 
 	/**
 	 * Test if an url is joinable by Http.
-	 * 
-	 * @param the url to test (e.g: "ws.wengo.fr:443/softphone-sso/sso.php") 
+	 *
+	 * @param the url to test (e.g: "ws.wengo.fr:443/softphone-sso/sso.php")
 	 * @param true if a SSL connection must be tested
 	 * @return true if connection ok
 	 */
@@ -76,15 +76,15 @@ public:
 
 	/**
 	 * Test if a UDP connection is possible.
-	 * 
+	 *
 	 * @param stunServer the STUN server
 	 * @return true if ok
 	 */
 	bool testUDP(const std::string & stunServer);
-	
+
 	/**
 	 * Test if a server respond to a SIP ping.
-	 * 
+	 *
 	 * @param server the server to test
 	 * @param port the server port
 	 * @return true if ok
@@ -93,7 +93,7 @@ public:
 
 	/**
 	 * Test if a HttpTunnel can be create and if SIP can pass through this tunnel.
-	 * 
+	 *
 	 * @param tunnelServer the tunnel server
 	 * @param tunnelPort the tunnel port
  	 * @param ssl true if tunnel must be done with SSL
@@ -111,7 +111,7 @@ public:
 
 	/**
 	 * Set the proxy.
-	 * 
+	 *
 	 * Unblock discoverProxySettings if it was.
 	 */
 	void setProxySettings(const std::string & proxyServer, unsigned proxyPort,
@@ -122,7 +122,7 @@ public:
 	 */
 	const std::string getProxyServer() const {
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		return config.get(Config::NETWORK_PROXY_SERVER_KEY, std::string(""));
+		return config.getNetworkProxyServer();
 	}
 
 	/**
@@ -130,7 +130,7 @@ public:
 	 */
 	unsigned getProxyServerPort() const {
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		return config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
+		return config.getNetworkProxyPort();
 	}
 
 	/**
@@ -138,7 +138,7 @@ public:
 	 */
 	const std::string getProxyLogin() const {
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		return config.get(Config::NETWORK_PROXY_LOGIN_KEY, std::string(""));
+		return config.getNetworkProxyLogin();
 	}
 
 	/**
@@ -146,7 +146,7 @@ public:
 	 */
 	const std::string getProxyPassword() const {
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		return config.get(Config::NETWORK_PROXY_PASSWORD_KEY, std::string(""));
+		return config.getNetworkProxyPassword();
 	}
 
 private:

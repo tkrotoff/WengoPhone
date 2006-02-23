@@ -345,49 +345,53 @@ PhoneCall * PhoneLine::getPhoneCall(int callId) {
 void PhoneLine::initSipWrapper() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	string pluginPath = config.get(Config::CODEC_PLUGIN_PATH, String::null);
+	//Setting plugin path
+	string pluginPath = config.getCodecPluginPath();
 	_sipWrapper->setPluginPath(pluginPath);
-	
-	// Setting proxy
-	string proxyServer = config.get(Config::NETWORK_PROXY_SERVER_KEY, String::null);
+
+	//Setting proxy
+	string proxyServer = config.getNetworkProxyServer();
 	if (!proxyServer.empty()) {
-		unsigned proxyPort = config.get(Config::NETWORK_PROXY_PORT_KEY, 0);
-		string proxyLogin = config.get(Config::NETWORK_PROXY_LOGIN_KEY, String::null);
-		string proxyPassword = config.get(Config::NETWORK_PROXY_PASSWORD_KEY, String::null);
+		unsigned proxyPort = config.getNetworkProxyPort();
+		string proxyLogin = config.getNetworkProxyLogin();
+		string proxyPassword = config.getNetworkProxyPassword();
 
 		_sipWrapper->setProxy(proxyServer, proxyPort, proxyLogin, proxyPassword);
 	}
 
-	// Setting Http Tunnel
+	//Setting HTTP tunnel
 	if (_sipAccount.isHttpTunnelNeeded()) {
-		_sipWrapper->setTunnel(_sipAccount.getHttpTunnelServerHostname(), 
+		_sipWrapper->setTunnel(_sipAccount.getHttpTunnelServerHostname(),
 			_sipAccount.getHttpTunnelServerPort(), _sipAccount.httpTunnelHasSSL());
 	}
 
-	// Setting SIP proxy
+	//Setting SIP proxy
 	_sipWrapper->setSIP(_sipAccount.getSIPProxyServerHostname(), _sipAccount.getSIPProxyServerPort(), _sipAccount.getLocalSIPPort());
 
-	// Setting NAT
-	string natType = config.get(Config::NETWORK_NAT_TYPE_KEY, string("auto"));	
-	NatType nat;	
-	
-	if (natType == "cone") {	
-		nat = StunTypeConeNat;	
-	} else if (natType == "restricted") {	
-		nat = StunTypeRestrictedNat;	
-	} else if (natType == "portRestricted") {	
-		nat = StunTypePortRestrictedNat;	
-	} else if (natType == "sym") {	
-		nat = StunTypeSymNat;	
-	} else if (natType == "symfirewall") {	
-		nat = StunTypeSymFirewall;	
-	} else if (natType == "blocked") {	
-		nat = StunTypeBlocked;	
-	} else {	
-		nat = StunTypeOpen;	
-	}	
-
+	//Setting NAT
+	string natType = config.getNetworkNatType();
+	NatType nat;
+	if (natType == "cone") {
+		nat = StunTypeConeNat;
+	} else if (natType == "restricted") {
+		nat = StunTypeRestrictedNat;
+	} else if (natType == "portRestricted") {
+		nat = StunTypePortRestrictedNat;
+	} else if (natType == "sym") {
+		nat = StunTypeSymNat;
+	} else if (natType == "symfirewall") {
+		nat = StunTypeSymFirewall;
+	} else if (natType == "blocked") {
+		nat = StunTypeBlocked;
+	} else {
+		nat = StunTypeOpen;
+	}
 	_sipWrapper->setNatType(nat);
+
+	//Setting audio devices
+	_sipWrapper->setCallOutputAudioDevice(config.getAudioOutputDeviceName());
+	_sipWrapper->setCallInputAudioDevice(config.getAudioInputDeviceName());
+	_sipWrapper->setRingerOutputAudioDevice(config.getAudioRingerDeviceName());
 
 	_sipWrapper->init();
 }

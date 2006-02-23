@@ -31,6 +31,7 @@
 #include <Logger.h>
 #include <File.h>
 #include <Timer.h>
+#include <AudioDevice.h>
 
 #include <string>
 using namespace std;
@@ -240,17 +241,31 @@ void PhApiWrapper::videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * 
 }
 
 bool PhApiWrapper::setCallInputAudioDevice(const std::string & deviceName) {
-	//Stub
+	_inputAudioDeviceId = AudioDevice::getWaveInDeviceId(deviceName);
+	return setAudioDevices();
+}
+
+bool PhApiWrapper::setRingerOutputAudioDevice(const std::string & deviceName) {
+	return false;
+}
+
+bool PhApiWrapper::setCallOutputAudioDevice(const std::string & deviceName) {
+	_outputAudioDeviceId = AudioDevice::getWaveOutDeviceId(deviceName);
+	return setAudioDevices();
+}
+
+bool PhApiWrapper::setAudioDevices() {
+	//Uses PortAudio
 	static const std::string INPUT_DEVICE_TAG = "pa:IN=";
 	static const std::string OUTPUT_DEVICE_TAG  = "OUT=";
 
 	/*std::string tmp = INPUT_DEVICE_TAG
-			+ std::string("0")
+			+ String::fromNumber(_inputAudioDeviceId)
 			+ std::string(" ")
 			+ OUTPUT_DEVICE_TAG
-			+ std::string("0");*/
+			+ String::fromNumber(_outputAudioDeviceId);*/
 
-	//Takes the default Windows sound device
+	//Takes the default Windows audio device
 	std::string tmp = "pa:";
 
 	int ret = phChangeAudioDevices(tmp.c_str());
@@ -259,16 +274,6 @@ bool PhApiWrapper::setCallInputAudioDevice(const std::string & deviceName) {
 		return true;
 	}
 	return false;
-}
-
-bool PhApiWrapper::setRingerOutputAudioDevice(const std::string & deviceName) {
-	//Stub
-	return setCallInputAudioDevice("");
-}
-
-bool PhApiWrapper::setCallOutputAudioDevice(const std::string & deviceName) {
-	//Stub
-	return setCallInputAudioDevice("");
 }
 
 bool PhApiWrapper::enableAEC(bool enable) {

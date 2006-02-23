@@ -20,14 +20,13 @@
 #include "Sms.h"
 
 #include <model/account/wengo/WengoAccount.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 #include <WengoPhoneBuildId.h>
 
 #include <Logger.h>
 #include <http/HttpRequestFactory.h>
 #include <http/CurlHttpRequestFactory.h>
-
-static const std::string WENGO_SERVER_HOSTNAME = "ws.wengo.fr";
-static const std::string WENGO_SMS_PATH = "/sms/sendsms.php";
 
 Sms::Sms(WengoAccount & wengoAccount)
 	: _wengoAccount(wengoAccount) {
@@ -64,9 +63,11 @@ void Sms::sendSMS(const std::string & phoneNumber, const std::string & message) 
 
 	_answerReceivedAlready = false;
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 	//First parameter: true = HTTPS, false = HTTP
 	//Last parameter: true = POST method, false = GET method
-	httpRequest.sendRequest(true, WENGO_SERVER_HOSTNAME, 443, WENGO_SMS_PATH, data, true);
+	httpRequest.sendRequest(true, config.getWengoServerHostname(), 443, config.getWengoSMSPath(), data, true);
 }
 
 void Sms::answerReceivedEventHandler(const std::string & answer, HttpRequest::Error error) {

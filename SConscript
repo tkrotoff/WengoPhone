@@ -20,7 +20,6 @@ projects = [
 	'libs/shlibloader',
 	'libs/sipx',
 	'wifo',
-	'libs/sipwrapper',
 	'libs/qtutil',
 	'libs/skinstyle',
 	'libs/sound',
@@ -28,6 +27,7 @@ projects = [
 	'libs/pixertool',
 	'libs/wenbox',
 	'libs/webcam',
+	'libs/sipwrapper',
 	'wengophone',
 ]
 

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,10 +89,6 @@ private:
 	std::string _wengoPassword;
 
 	Timer _timer;
-
-	static const std::string _SSOServer;
-
-	static const std::string _SSOLoginPath;
 
 	/** True if SSO request can be done with SSL. */
 	bool _SSOWithSSL;

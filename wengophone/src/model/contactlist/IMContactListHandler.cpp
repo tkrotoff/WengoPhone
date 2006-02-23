@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,9 +31,8 @@ IMContactListHandler::IMContactListHandler(WengoPhone & wengoPhone) {
 }
 
 IMContactListHandler::~IMContactListHandler() {
-	for (IMContactListMap::const_iterator it = _imContactListMap.begin() ;
-		 it != _imContactListMap.end() ;
-		 it++) {
+	for (IMContactListMap::const_iterator it = _imContactListMap.begin();
+		it != _imContactListMap.end(); it++) {
 		delete (*it).second;
 	}
 }
@@ -44,20 +43,20 @@ void IMContactListHandler::addIMContact(const std::string & groupName, IMContact
 	if (it != _imContactListMap.end()) {
 		(*it).second->addContact(groupName, imContact.getContactId());
 	} else {
-		LOG_ERROR("this IMAccount is not registered: " 
+		LOG_ERROR("this IMAccount is not registered: "
 			+ imContact.getIMAccount().getLogin());
 	}
 }
 
 void IMContactListHandler::removeIMContact(const std::string & groupName, IMContact & imContact) {
 	IMContactListMap::const_iterator it = _imContactListMap.find(&imContact.getIMAccount());
-	
+
 	if (it != _imContactListMap.end()) {
 		(*it).second->removeContact(groupName, imContact.getContactId());
 	} else {
-		LOG_ERROR("this IMAccount is not registered: " 
+		LOG_ERROR("this IMAccount is not registered: "
 			+ imContact.getIMAccount().getLogin());
-	}	
+	}
 }
 
 void IMContactListHandler::newContactAddedEventHandler(IMContactList & sender,
@@ -65,7 +64,7 @@ void IMContactListHandler::newContactAddedEventHandler(IMContactList & sender,
 	IMContact imContact(sender.getIMAccount(), contactId);
 
 	_imContactSet.insert(imContact);
-	
+
 	newIMContactAddedEvent(*this, groupName, (IMContact &)*_imContactSet.find(imContact));
 }
 
@@ -77,7 +76,7 @@ void IMContactListHandler::contactRemovedEventHandler(IMContactList & sender,
 
 	imContactRemovedEvent(*this, groupName, (IMContact &)*it);
 
-	_imContactSet.erase(it);	
+	_imContactSet.erase(it);
 }
 
 void IMContactListHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
@@ -85,15 +84,15 @@ void IMContactListHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IM
 
 	if (it == _imContactListMap.end()) {
 		IMContactList * imContactList = IMWrapperFactory::getFactory().createIMContactList(imAccount);
-		
+
 		if (imContactList) {
-			imContactList->newContactAddedEvent += 
+			imContactList->newContactAddedEvent +=
 				boost::bind(&IMContactListHandler::newContactAddedEventHandler, this, _1, _2, _3);
-			imContactList->contactRemovedEvent += 
+			imContactList->contactRemovedEvent +=
 				boost::bind(&IMContactListHandler::contactRemovedEventHandler, this, _1, _2, _3);
 			imContactList->newContactGroupAddedEvent += newContactGroupAddedEvent;
 			imContactList->contactGroupRemovedEvent += contactGroupRemovedEvent;
-	
+
 			_imContactListMap[&imAccount] = imContactList;
 		} else {
 			LOG_DEBUG("cannot create an IMContactList");

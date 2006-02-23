@@ -59,6 +59,8 @@ public:
 
 protected:
 
+	static std::string getRingerAudioDeviceName();
+
 	static void stopSoundRingin();
 
 	static std::string getSoundRinginFile();

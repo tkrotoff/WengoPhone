@@ -9,6 +9,7 @@ libs = [
 	'httptunnel',
 	'wengophone',
 	'tinyxml',
+	'sound',
 	'imwrapper',
 	'sipwrapper',
 ]

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +19,14 @@
 
 #include "PhoneCallStateIncoming.h"
 
-#include "model/wenbox/WenboxPlugin.h"
+#include <model/wenbox/WenboxPlugin.h>
 
 #include <Sound.h>
 
 void PhoneCallStateIncoming::execute(PhoneCall & phoneCall) {
 	//Ringin tonality
 	_soundRingin = new Sound(getSoundRinginFile());
+	_soundRingin->setWaveOutDevice(getRingerAudioDeviceName());
 	//Play the sound indefinitely
 	_soundRingin->setLoops(-1);
 	_soundRingin->play();

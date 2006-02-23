@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 
 #include <http/HttpRequestFactory.h>
 #include <http/CurlHttpRequestFactory.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 #include <Thread.h>
 #include <StringList.h>
@@ -34,9 +36,6 @@
 #include <exception>
 
 using namespace std;
-
-const string WengoAccount::_SSOServer = "ws.wengo.fr";
-const string WengoAccount::_SSOLoginPath = "/softphone-sso/sso.php";
 
 WengoAccount::WengoAccount(const std::string & login, const std::string & password, bool autoLogin)
 	: SipAccount() {
@@ -62,7 +61,7 @@ bool WengoAccount::init() {
 	static const unsigned LIMIT_RETRY = 5;
 
 	if (!discoverForSSO()) {
-		LOG_DEBUG("error while discovering netowork for SSO");
+		LOG_DEBUG("error while discovering network for SSO");
 		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateHTTPError);
 		return false;
 	}
@@ -99,14 +98,16 @@ bool WengoAccount::discoverForSSO() {
 
 	LOG_DEBUG("discovering network parameters for SSO connection");
 
-	url = _SSOServer + ":" + String::fromNumber(443) + _SSOLoginPath;
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	url = config.getWengoServerHostname() + ":" + String::fromNumber(443) + config.getWengoSSOPath();
 	if (_networkDiscovery.testHTTP(url, true)) {
 		_SSOWithSSL = true;
 		LOG_DEBUG("SSO can connect on port 443 with SSL");
 		return true;
 	}
 
-	url = _SSOServer + ":" + String::fromNumber(80) + _SSOLoginPath;
+	url = config.getWengoServerHostname() + ":" + String::fromNumber(80) + config.getWengoSSOPath();
 	if (_networkDiscovery.testHTTP(url, false)) {
 		_SSOWithSSL = false;
 		LOG_DEBUG("SSO can connect on port 80 without SSL");
@@ -186,14 +187,16 @@ void WengoAccount::timeoutEventHandler() {
 	httpRequest.setProxy(_networkDiscovery.getProxyServer(), _networkDiscovery.getProxyServerPort(),
 		 _networkDiscovery.getProxyLogin(), _networkDiscovery.getProxyPassword());
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 	//First parameter: true = HTTPS, false = HTTP
 	//Last parameter: true = POST method, false = GET method
 	if (_SSOWithSSL) {
 		LOG_DEBUG("sending SSO request with SSL");
-		httpRequest.sendRequest(true, _SSOServer, 443, _SSOLoginPath, data, true);
+		httpRequest.sendRequest(true, config.getWengoServerHostname(), 443, config.getWengoSSOPath(), data, true);
 	} else {
 		LOG_DEBUG("sending SSO request without SSL");
-		httpRequest.sendRequest(false, _SSOServer, 80, _SSOLoginPath, data, true);
+		httpRequest.sendRequest(false, config.getWengoServerHostname(), 80, config.getWengoSSOPath(), data, true);
 	}
 }
 
