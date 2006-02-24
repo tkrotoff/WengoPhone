@@ -138,7 +138,7 @@ void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 	} else { 
 		contact = contactGroup->findContact(newIMContact);
 	}
-	
+
 	if (contact) {
 		LOG_DEBUG("Contact found");
 	} else {
@@ -170,22 +170,22 @@ void ContactList::imContactRemovedEventHandler(IMContactListHandler & sender,
 
 void ContactList::newContactGroupAddedEventHandler(IMContactList & sender,
 	const std::string & groupName) {
-	LOG_DEBUG("new group added " + groupName);
 
 	ContactGroup * contactGroup = this->operator[](groupName);
 	if (contactGroup) {
 		LOG_DEBUG("this group already exists");
 	} else {
+		LOG_DEBUG("new group added " + groupName);
 		addContactGroup(new ContactGroup(groupName, _wengoPhone));
 	}
 }
 
 void ContactList::contactGroupRemovedEventHandler(IMContactList & sender,
 	const std::string & groupName) {
-	LOG_DEBUG("group " + groupName + " removed");
 
 	ContactGroup * contactGroup = this->operator[](groupName);
 	if (contactGroup) {
+		LOG_DEBUG("group " + groupName + " removed");
 		removeContactGroup(contactGroup);
 	} else {
 		LOG_DEBUG("there is no group " + groupName);
