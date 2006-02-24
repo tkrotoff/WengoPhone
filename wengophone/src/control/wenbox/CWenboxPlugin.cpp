@@ -29,64 +29,12 @@ CWenboxPlugin::CWenboxPlugin(WenboxPlugin & wenboxPlugin, CWengoPhone & cWengoPh
 
 	_pWenboxPlugin = PFactory::getFactory().createPresentationWenboxPlugin(*this);
 
-	_wenboxPlugin.keyPressedEvent += boost::bind(&CWenboxPlugin::keyPressedEventHandler, this, _1, _2);
+	_wenboxPlugin.phoneNumberBufferUpdatedEvent += boost::bind(&CWenboxPlugin::phoneNumberBufferUpdatedEventHandler, this, _1, _2);
 }
 
 CWenboxPlugin::~CWenboxPlugin() {
 }
 
-void CWenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
-	switch (key) {
-	case Wenbox::KeyPickUp:
-		_pWenboxPlugin->keyPickUpPressedEvent();
-		break;
-
-	case Wenbox::KeyHangUp:
-		_pWenboxPlugin->keyHangUpPressedEvent();
-		break;
-
-	case Wenbox::Key0:
-		_pWenboxPlugin->keyNumberPressedEvent("0");
-		break;
-
-	case Wenbox::Key1:
-		_pWenboxPlugin->keyNumberPressedEvent("1");
-		break;
-
-	case Wenbox::Key2:
-		_pWenboxPlugin->keyNumberPressedEvent("2");
-		break;
-
-	case Wenbox::Key3:
-		_pWenboxPlugin->keyNumberPressedEvent("3");
-		break;
-
-	case Wenbox::Key4:
-		_pWenboxPlugin->keyNumberPressedEvent("4");
-		break;
-
-	case Wenbox::Key5:
-		_pWenboxPlugin->keyNumberPressedEvent("5");
-		break;
-
-	case Wenbox::Key6:
-		_pWenboxPlugin->keyNumberPressedEvent("6");
-		break;
-
-	case Wenbox::Key7:
-		_pWenboxPlugin->keyNumberPressedEvent("7");
-		break;
-
-	case Wenbox::Key8:
-		_pWenboxPlugin->keyNumberPressedEvent("8");
-		break;
-
-	case Wenbox::Key9:
-		_pWenboxPlugin->keyNumberPressedEvent("9");
-		break;
-
-	case Wenbox::KeyStar:
-		_pWenboxPlugin->keyNumberPressedEvent("*");
-		break;
-	}
+void CWenboxPlugin::phoneNumberBufferUpdatedEventHandler(WenboxPlugin & sender, const std::string & phoneNumberBuffer) {
+	_pWenboxPlugin->phoneNumberBufferUpdatedEvent(phoneNumberBuffer);
 }

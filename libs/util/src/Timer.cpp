@@ -19,7 +19,49 @@
 
 #include <Timer.h>
 
-Timer::Timer() {
+#include <Thread.h>
+
+class PrivateThread : Thread {
+public:
+
+	Event<void (PrivateThread & thread)> timeoutEvent;
+
+	Event<void (PrivateThread & thread)> lastTimeoutEvent;
+
+	PrivateThread();
+
+	~PrivateThread();
+
+	void start(unsigned firstTime, unsigned timeout, unsigned nbShots);
+
+	void stop();
+
+	bool isStopped() const {
+		return _stop;
+	}
+
+private:
+
+	/** @see Thread::start() */
+	void run();
+
+	/** Number of retries currenlty done, _nbRetry is always <= _nbShots. */
+	unsigned _nbRetry;
+
+	/** @see start() */
+	unsigned _nbShots;
+
+	/** @see start() */
+	unsigned _timeout;
+
+	/** @see start() */
+	unsigned _firstTime;
+
+	/** Stops or not the timer. */
+	bool _stop;
+};
+
+PrivateThread::PrivateThread() {
 	_firstTime = 0;
 	_timeout = 0;
 	_nbShots = 0;
@@ -28,11 +70,11 @@ Timer::Timer() {
 	_nbRetry = 0;
 }
 
-Timer::~Timer() {
-	_stop = true;
+PrivateThread::~PrivateThread() {
+	stop();
 }
 
-void Timer::start(unsigned firstTime, unsigned timeout, unsigned nbShots) {
+void PrivateThread::start(unsigned firstTime, unsigned timeout, unsigned nbShots) {
 	_firstTime = firstTime;
 	_timeout = timeout;
 	_nbShots = nbShots;
@@ -43,19 +85,64 @@ void Timer::start(unsigned firstTime, unsigned timeout, unsigned nbShots) {
 	Thread::start();
 }
 
-void Timer::stop() {
+void PrivateThread::stop() {
 	_stop = true;
 }
 
-void Timer::run() {
+void PrivateThread::run() {
 	msleep(_firstTime);
-	while (((_nbShots == 0) || (_nbRetry < _nbShots)) && !_stop) {
+
+	while ((_nbShots == 0) || (_nbRetry < _nbShots)) {
 		_nbRetry++;
+
+		//If timer has been stopped
+		if (_stop) {
+			return;
+		}
+
 		if (_nbRetry == _nbShots) {
 			lastTimeoutEvent(*this);
 		} else {
 			timeoutEvent(*this);
 		}
 		msleep(_timeout);
+	}
+}
+
+
+Timer::Timer() {
+}
+
+Timer::~Timer() {
+	stop();
+	for (int i = 0; i != _threadList.size(); i++) {
+		delete _threadList[i];
+	}
+	_threadList.clear();
+}
+
+void Timer::start(unsigned firstTime, unsigned timeout, unsigned nbShots) {
+	PrivateThread * thread = new PrivateThread();
+	thread->timeoutEvent += boost::bind(&Timer::timeoutEventHandler, this, _1);
+	thread->lastTimeoutEvent += boost::bind(&Timer::lastTimeoutEventHandler, this, _1);
+	thread->start(firstTime, timeout, nbShots);
+	_threadList += thread;
+}
+
+void Timer::stop() {
+	for (int i = 0; i != _threadList.size(); i++) {
+		_threadList[i]->stop();
+	}
+}
+
+void Timer::timeoutEventHandler(PrivateThread & thread) {
+	if (!thread.isStopped()) {
+		timeoutEvent(*this);
+	}
+}
+
+void Timer::lastTimeoutEventHandler(PrivateThread & thread) {
+	if (!thread.isStopped()) {
+		lastTimeoutEvent(*this);
 	}
 }

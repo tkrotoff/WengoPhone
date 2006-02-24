@@ -21,7 +21,9 @@
 #define TIMER_H
 
 #include <Event.h>
-#include <Thread.h>
+#include <List.h>
+
+class PrivateThread;
 
 /**
  * A facility for threads to schedule tasks for future execution in a background thread.
@@ -31,7 +33,7 @@
  * @see QTimer
  * @author Tanguy Krotoff
  */
-class Timer : Thread {
+class Timer {
 public:
 
 	/**
@@ -68,23 +70,12 @@ public:
 
 private:
 
-	/** @see Thread::start() */
-	void run();
+	/** List of private threads. */
+	List<PrivateThread *> _threadList;
 
-	/** Number of retries currenlty done, _nbRetry is always <= _nbShots. */
-	unsigned _nbRetry;
+	void timeoutEventHandler(PrivateThread & thread);
 
-	/** @see start() */
-	unsigned _nbShots;
-
-	/** @see start() */
-	unsigned _timeout;
-
-	/** @see start() */
-	unsigned _firstTime;
-
-	/** Stops or not the timer. */
-	bool _stop;
+	void lastTimeoutEventHandler(PrivateThread & thread);
 };
 
 #endif	//TIMER_H

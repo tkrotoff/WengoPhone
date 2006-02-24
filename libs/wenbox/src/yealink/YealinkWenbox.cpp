@@ -299,6 +299,9 @@ void YealinkWenbox::callback(unsigned int wParam, long lParam) {
 		case KEY_POUND:
 			keyPressedEvent(*this, KeySharp);
 			break;
+
+		case KEY_SEND:
+			break;
 		}
 
 		break;

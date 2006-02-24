@@ -97,6 +97,10 @@ std::string PhoneLine::getMySipAddress() const {
 }
 
 int PhoneLine::makeCall(const std::string & phoneNumber) {
+	if (phoneNumber.empty()) {
+		return -1;
+	}
+
 	//Puts all the PhoneCall in the hold state
 	/*for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
 		(* it).second->hold();

@@ -20,7 +20,7 @@
 #ifndef CWENBOXPLUGIN_H
 #define CWENBOXPLUGIN_H
 
-#include <wenbox/Wenbox.h>
+#include <string>
 
 class CWengoPhone;
 class PWenboxPlugin;
@@ -44,7 +44,7 @@ public:
 
 private:
 
-	void keyPressedEventHandler(IWenbox & sender, IWenbox::Key key);
+	void phoneNumberBufferUpdatedEventHandler(WenboxPlugin & sender, const std::string & phoneNumberBuffer);
 
 	/** Direct link to the model. */
 	WenboxPlugin & _wenboxPlugin;

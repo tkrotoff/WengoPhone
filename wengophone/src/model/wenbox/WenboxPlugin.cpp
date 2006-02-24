@@ -32,7 +32,7 @@
 
 using namespace std;
 
-WenboxPlugin::WenboxPlugin(const WengoPhone & wengoPhone)
+WenboxPlugin::WenboxPlugin(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
 
 	_wenbox = new Wenbox();
@@ -41,7 +41,6 @@ WenboxPlugin::WenboxPlugin(const WengoPhone & wengoPhone)
 		_wenbox->setDefaultMode(Wenbox::ModeUSB);
 		_wenbox->switchMode(Wenbox::ModeUSB);
 		_wenbox->keyPressedEvent += boost::bind(&WenboxPlugin::keyPressedEventHandler, this, _1, _2);
-		_wenbox->keyPressedEvent += keyPressedEvent;
 	}
 }
 
@@ -51,11 +50,7 @@ WenboxPlugin::~WenboxPlugin() {
 }
 
 void WenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
-	IPhoneLine * phoneLine = _wengoPhone.getActivePhoneLine();
-	PhoneCall * phoneCall = NULL;
-	if (phoneLine) {
-		phoneCall = phoneLine->getActivePhoneCall();
-	}
+	PhoneCall * phoneCall = getActivePhoneCall();
 
 	switch (key) {
 	case IWenbox::KeyPickUp:
@@ -65,11 +60,80 @@ void WenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
 		break;
 
 	case IWenbox::KeyHangUp:
+		_phoneNumberBuffer = "";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
 		if (phoneCall) {
 			phoneCall->close();
 		}
 		break;
+
+	case Wenbox::Key0:
+		_phoneNumberBuffer += "0";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
+		break;
+
+	case Wenbox::Key1:
+		_phoneNumberBuffer += "1";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
+		break;
+
+	case Wenbox::Key2:
+		_phoneNumberBuffer += "2";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
+		break;
+
+	case Wenbox::Key3:
+		_phoneNumberBuffer += "3";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
+		break;
+
+	case Wenbox::Key4:
+		_phoneNumberBuffer += "4";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
+		break;
+
+	case Wenbox::Key5:
+		_phoneNumberBuffer += "5";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
+		break;
+
+	case Wenbox::Key6:
+		_phoneNumberBuffer += "6";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
+		break;
+
+	case Wenbox::Key7:
+		_phoneNumberBuffer += "7";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
+		break;
+
+	case Wenbox::Key8:
+		_phoneNumberBuffer += "8";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
+		break;
+
+	case Wenbox::Key9:
+		_phoneNumberBuffer += "9";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
+		break;
+
+	case Wenbox::KeyStar:
+		_phoneNumberBuffer += "*";
+		phoneNumberBufferUpdatedEvent(*this, _phoneNumberBuffer);
+		break;
+
+	default:
+		LOG_FATAL("unknown key pressed");
 	}
+}
+
+PhoneCall * WenboxPlugin::getActivePhoneCall() const {
+	IPhoneLine * phoneLine = _wengoPhone.getActivePhoneLine();
+	PhoneCall * phoneCall = NULL;
+	if (phoneLine) {
+		phoneCall = phoneLine->getActivePhoneCall();
+	}
+	return phoneCall;
 }
 
 void WenboxPlugin::setState(Wenbox::PhoneCallState state, const std::string & phoneNumber) {

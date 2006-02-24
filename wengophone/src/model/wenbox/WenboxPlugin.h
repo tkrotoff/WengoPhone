@@ -23,6 +23,7 @@
 #include <wenbox/Wenbox.h>
 
 class WengoPhone;
+class PhoneCall;
 
 /**
  * Handles the Wenbox.
@@ -37,12 +38,9 @@ class WengoPhone;
 class WenboxPlugin {
 public:
 
-	/**
-	 * @see IWenbox::keyPressedEvent
-	 */
-	Event<void (IWenbox & sender, IWenbox::Key key)> keyPressedEvent;
+	Event<void (WenboxPlugin & sender, const std::string & phoneNumberBuffer)> phoneNumberBufferUpdatedEvent;
 
-	WenboxPlugin(const WengoPhone & wengoPhone);
+	WenboxPlugin(WengoPhone & wengoPhone);
 
 	~WenboxPlugin();
 
@@ -55,13 +53,18 @@ private:
 
 	void keyPressedEventHandler(IWenbox & sender, IWenbox::Key key);
 
+	/** Code factorization. */
+	PhoneCall * getActivePhoneCall() const;
+
 	std::string getWenboxAudioDeviceName() const;
 
 	bool switchCurrentAudioDeviceToWenbox() const;
 
 	Wenbox * _wenbox;
 
-	const WengoPhone & _wengoPhone;
+	WengoPhone & _wengoPhone;
+
+	std::string _phoneNumberBuffer;
 };
 
 #endif	//WENBOXPLUGIN_H

@@ -32,19 +32,11 @@
 class PWenboxPlugin : public Presentation {
 public:
 
-	virtual void keyNumberPressedEvent(const std::string & number) = 0;
-
-	virtual void keyPickUpPressedEvent() = 0;
-
-	virtual void keyHangUpPressedEvent() = 0;
+	virtual void phoneNumberBufferUpdatedEvent(const std::string & phoneNumberBuffer) = 0;
 
 protected:
 
-	virtual void keyNumberPressedEventThreadSafe(const std::string & number) = 0;
-
-	virtual void keyPickUpPressedEventThreadSafe() = 0;
-
-	virtual void keyHangUpPressedEventThreadSafe() = 0;
+	virtual void phoneNumberBufferUpdatedEventThreadSafe(const std::string & phoneNumberBuffer) = 0;
 };
 
 #endif	//PWENBOXPLUGIN_H

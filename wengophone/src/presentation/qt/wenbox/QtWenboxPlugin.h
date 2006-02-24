@@ -24,22 +24,18 @@
 
 #include <QObjectThreadSafe.h>
 
-#include <wenbox/Wenbox.h>
-#include <StringList.h>
-
 class CWenboxPlugin;
 class QComboBox;
+class Timer;
 
 class QtWenboxPlugin : public QObjectThreadSafe, public PWenboxPlugin {
 public:
 
 	QtWenboxPlugin(CWenboxPlugin & cWenboxPlugin);
 
-	void keyNumberPressedEvent(const std::string & number);
+	~QtWenboxPlugin();
 
-	void keyPickUpPressedEvent();
-
-	void keyHangUpPressedEvent();
+	void phoneNumberBufferUpdatedEvent(const std::string & phoneNumberBuffer);
 
 	void updatePresentation() { }
 
@@ -49,21 +45,15 @@ private:
 
 	void updatePresentationThreadSafe() { }
 
-	void keyNumberPressedEventThreadSafe(const std::string & number);
+	void phoneNumberBufferUpdatedEventThreadSafe(const std::string & phoneNumberBuffer);
 
-	void keyPickUpPressedEventThreadSafe();
-
-	void keyHangUpPressedEventThreadSafe();
-
-	void appendToPhoneComboBox(const std::string & number);
-
-	void clearPhoneComboBox();
+	void timeoutEventHandler();
 
 	CWenboxPlugin & _cWenboxPlugin;
 
 	QComboBox * _phoneComboBox;
 
-	String _phoneNumberBuffer;
+	Timer * _timer;
 };
 
 #endif	//QTWENBOXPLUGIN_H

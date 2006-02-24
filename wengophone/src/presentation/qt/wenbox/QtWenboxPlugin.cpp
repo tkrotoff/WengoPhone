@@ -27,15 +27,25 @@
 #include <WidgetFactory.h>
 #include <Object.h>
 
+#include <Timer.h>
+
 #include <QtGui>
 
 QtWenboxPlugin::QtWenboxPlugin(CWenboxPlugin & cWenboxPlugin)
 	: QObjectThreadSafe(),
 	_cWenboxPlugin(cWenboxPlugin) {
 
+	_timer = new Timer();
+	_timer->timeoutEvent += boost::bind(&QtWenboxPlugin::timeoutEventHandler, this);
+
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWenboxPlugin::initThreadSafe, this));
 	postEvent(event);
+}
+
+QtWenboxPlugin::~QtWenboxPlugin() {
+	_timer->stop();
+	delete _timer;
 }
 
 void QtWenboxPlugin::initThreadSafe() {
@@ -43,36 +53,25 @@ void QtWenboxPlugin::initThreadSafe() {
 	_phoneComboBox = qtWengoPhone->getPhoneComboBox();
 }
 
-void QtWenboxPlugin::keyNumberPressedEvent(const std::string & number) {
+void QtWenboxPlugin::phoneNumberBufferUpdatedEvent(const std::string & phoneNumberBuffer) {
 	typedef PostEvent1<void (const std::string &), std::string> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWenboxPlugin::keyNumberPressedEventThreadSafe, this, _1), number);
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWenboxPlugin::phoneNumberBufferUpdatedEventThreadSafe, this, _1), phoneNumberBuffer);
 	postEvent(event);
 }
 
-void QtWenboxPlugin::keyNumberPressedEventThreadSafe(const std::string & number) {
-	appendToPhoneComboBox(number);
+void QtWenboxPlugin::phoneNumberBufferUpdatedEventThreadSafe(const std::string & phoneNumberBuffer) {
+	static const unsigned TIMEOUT = 3 * 1000;	//3 seconds
+
+	_phoneComboBox->setEditText(QString::fromStdString(phoneNumberBuffer));
+	_timer->stop();
+	if (!phoneNumberBuffer.empty()) {
+		_timer->start(TIMEOUT, TIMEOUT);
+	}
 }
 
-void QtWenboxPlugin::keyPickUpPressedEvent() {
-	clearPhoneComboBox();
-}
+void QtWenboxPlugin::timeoutEventHandler() {
+	_timer->stop();
 
-void QtWenboxPlugin::keyPickUpPressedEventThreadSafe() {
-}
-
-void QtWenboxPlugin::keyHangUpPressedEvent() {
-	clearPhoneComboBox();
-}
-
-void QtWenboxPlugin::keyHangUpPressedEventThreadSafe() {
-}
-
-void QtWenboxPlugin::appendToPhoneComboBox(const std::string & number) {
-	_phoneNumberBuffer.append(number);
-	_phoneComboBox->setEditText(QString::fromStdString(_phoneNumberBuffer));
-}
-
-void QtWenboxPlugin::clearPhoneComboBox() {
-	_phoneNumberBuffer = "";
-	_phoneComboBox->setEditText("");
+	CWengoPhone & cWengoPhone = _cWenboxPlugin.getCWengoPhone();
+	cWengoPhone.makeCall(_phoneComboBox->currentText().toStdString());
 }
