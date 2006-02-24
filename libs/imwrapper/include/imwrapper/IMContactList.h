@@ -62,7 +62,7 @@ public:
 	 */
 	Event< void (IMContactList & sender, const std::string & groupName) > contactGroupRemovedEvent;
 
-	virtual ~IMContactList();
+	virtual ~IMContactList() {};
 
 	/**
 	 * Remotely adds a contact.
