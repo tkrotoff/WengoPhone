@@ -53,6 +53,8 @@ public:
 	void removeContact(IMChatSession & chatSession, const std::string & contactId);
 	bool equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol);
 
+	mConvInfo_t *mCreateSession();
+
 private:
 
 	/* ************ MANAGE CHAT SESSION LIST ************ */
@@ -63,8 +65,6 @@ private:
 	bool IsChatSessionInList(int convId);
 	static mConvInfo_t *FindChatStructById(int convId);
 	/* ************************************************** */
-	
-	IMAccount &_account;
 };
 
 #endif	//GAIMIMCHAT_H

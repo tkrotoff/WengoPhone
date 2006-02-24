@@ -61,21 +61,21 @@ GaimConnectionUiOps conn_wg_ops =
 
 /* ************************************************** */
 
-GaimConnectMngr *GaimConnectMngr::StaticInstance = NULL;
-std::list<GaimIMConnect *> GaimConnectMngr::_GaimIMConnectList;
+GaimConnectMngr *GaimConnectMngr::_staticInstance = NULL;
+std::list<GaimIMConnect *> GaimConnectMngr::_gaimIMConnectList;
 
 GaimConnectMngr::GaimConnectMngr()
 {
-	AccountMngr = GaimAccountMngr::getInstance();
+	_accountMngr = GaimAccountMngr::getInstance();
 }
 
 GaimConnectMngr *GaimConnectMngr::getInstance() 
 {
-	if (!StaticInstance) 
+	if (!_staticInstance) 
 	{
-		StaticInstance = new GaimConnectMngr();
+		_staticInstance = new GaimConnectMngr();
 	}
-	return StaticInstance;
+	return _staticInstance;
 }
 
 GaimIMConnect *FindIMConnnectByGaimConnection(GaimConnection *gc)
@@ -140,7 +140,7 @@ void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *te
 GaimIMConnect *GaimConnectMngr::FindIMConnect(IMAccount &account)
 {
 	GaimIMConnectIterator i;
-	for (i = _GaimIMConnectList.begin(); i != _GaimIMConnectList.end(); i++)
+	for (i = _gaimIMConnectList.begin(); i != _gaimIMConnectList.end(); i++)
 	{
 		if ((*i)->equalsTo(account.getLogin(), account.getProtocol()))
 		{
@@ -158,9 +158,9 @@ GaimIMConnect *GaimConnectMngr::AddIMConnect(IMAccount &account)
 	if (mIMConnect == NULL)
 	{
 		mIMConnect = new GaimIMConnect(account);
-		_GaimIMConnectList.push_back(mIMConnect);
+		_gaimIMConnectList.push_back(mIMConnect);
 
-		AccountMngr->AddIMAccount(account);
+		_accountMngr->AddIMAccount(account);
 	}
 	
 	return mIMConnect;
@@ -169,11 +169,11 @@ GaimIMConnect *GaimConnectMngr::AddIMConnect(IMAccount &account)
 void GaimConnectMngr::RemoveIMConnect(IMAccount &account)
 {
 	GaimIMConnectIterator i;
-	for (i = _GaimIMConnectList.begin(); i != _GaimIMConnectList.end(); i++)
+	for (i = _gaimIMConnectList.begin(); i != _gaimIMConnectList.end(); i++)
 	{
 		if ((*i)->equalsTo(account.getLogin(), account.getProtocol()))
 		{
-			_GaimIMConnectList.erase(i);
+			_gaimIMConnectList.erase(i);
 			delete (*i);
 			break;
 		}

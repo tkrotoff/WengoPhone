@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2005  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,39 +17,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GAIMIMPRESENCE_H
-#define GAIMIMPRESENCE_H
+#ifndef GAIMIMCONTACTLIST_H
+#define GAIMIMCONTACTLIST_H
 
-//#include "GaimIMFactory.h"
+#include <string>
 
 #include <imwrapper/IMAccount.h>
-#include <imwrapper/IMPresence.h>
+#include <imwrapper/IMContactList.h>
 #include <imwrapper/EnumPresenceState.h>
 
-/**
- * Stub for Instant Messaging presence.
- *
- * @ingroup model
- * @author Julien Bossart
- */
-class GaimIMPresence : public IMPresence 
+
+class GaimIMContactList : public IMContactList
 {
 	friend class GaimIMFactory;
 
 public:
 
-	GaimIMPresence(IMAccount & account);
+	GaimIMContactList(IMAccount &imAccount);
 
-	virtual void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
-	virtual void subscribeToPresenceOf(const std::string & contactId);
-	virtual void blockContact(const std::string & contactId);
-	virtual void unblockContact(const std::string & contactId);
+	virtual void addContact(const std::string & groupName, const std::string & contactId);
+	virtual void removeContact(const std::string & groupName, const std::string & contactId);
+	virtual void addGroup(const std::string & groupName);
+	virtual void removeGroup(const std::string & groupName);
 
 	bool equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol);
-
-private:
-
-
 };
 
-#endif	//GAIMIMPRESENCE_H
+#endif //GAIMIMCONTACTLIST_H

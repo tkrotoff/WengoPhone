@@ -25,6 +25,7 @@
 #include "GaimChatMngr.h"
 #include "GaimConnectMngr.h"
 #include "GaimPresenceMngr.h"
+#include "GaimContactListMngr.h"
 /**
  *
  * @ingroup model
@@ -35,25 +36,22 @@ public:
 
 	GaimIMFactory();
 
-	IMConnect *createIMConnect(IMAccount & account);
+	virtual IMConnect *createIMConnect(IMAccount & account);
 
-	IMChat *createIMChat(IMAccount & account);
+	virtual IMChat *createIMChat(IMAccount & account);
 
-	IMPresence *createIMPresence(IMAccount & account);
+	virtual IMPresence *createIMPresence(IMAccount & account);
+
+	virtual IMContactList *createIMContactList(IMAccount & account);
 
 private:
 
 	GaimConnectMngr *ConnectMngr;
 	GaimPresenceMngr *PresenceMngr;
 	GaimChatMngr *ChatMngr;
+	GaimContactListMngr *ContactListMngr;
 
 	static void GaimIMInit();
-	static void SetCoreCbk();
-	static void SetEventloopCbk();
-	static void SetConnectionsCbk();
-	static void SetChatCbk();
-	static void SetBuddylistCbk();
-	static void SetAccountCbk();
 };
 
 #endif	//GAIMIMFACTORY_H

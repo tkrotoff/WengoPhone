@@ -19,203 +19,88 @@
 
 #include "GaimPresenceMngr.h"
 #include "GaimAccountMngr.h"
-#include "GaimEnumIMProtocol.h"
-#include "GaimEnumPresenceState.h"
+
+extern "C" {
+#include "gaim/privacy.h"
+}
 
 #include <Logger.h>
 
+
 /* ***************** GAIM CALLBACK ***************** */
-static void C_NewListCbk(GaimBuddyList *blist)
+static void C_PermitAddedCbk(GaimAccount *account, const char *name)
 {
-	GaimPresenceMngr::NewListCbk(blist);
+	GaimPresenceMngr::PermitAddedCbk(account, name);
 }
 
-static void C_NewNodeCbk(GaimBlistNode *node)
+static void C_PermitRemovedCbk(GaimAccount *account, const char *name)
 {
-	GaimPresenceMngr::NewNodeCbk(node);
+	GaimPresenceMngr::PermitRemovedCbk(account, name);
 }
 
-static void C_ShowCbk(GaimBuddyList *list)
+static void C_DenyAddedCbk(GaimAccount *account, const char *name)
 {
-	GaimPresenceMngr::ShowCbk(list);
+	GaimPresenceMngr::DenyAddedCbk(account, name);
 }
 
-static void C_UpdateCbk(GaimBuddyList *list, GaimBlistNode *node)
+static void C_DenyRemovedCbk(GaimAccount *account, const char *name)
 {
-	GaimPresenceMngr::UpdateCbk(list, node);
+	GaimPresenceMngr::DenyRemovedCbk(account, name);
 }
 
-static void C_RemoveCbk(GaimBuddyList *list, GaimBlistNode *node)
-{
-	GaimPresenceMngr::RemoveCbk(list, node);
-}
-
-static void C_DestroyCbk(GaimBuddyList *list)
-{
-	GaimPresenceMngr::DestroyCbk(list);
-}
-
-static void C_SetVisibleCbk(GaimBuddyList *list, gboolean show)
-{
-	GaimPresenceMngr::SetVisibleCbk(list, show);
-}
-
-static void C_RequestAddBuddyCbk(GaimAccount *account, const char *username,
-								const char *group, const char *alias)
-{
-	GaimPresenceMngr::RequestAddBuddyCbk(account, username, group, alias);
-}
-
-static void C_RequestAddChatCbk(GaimAccount *account, GaimGroup *group,
-								const char *alias, const char *name)
-{
-	GaimPresenceMngr::RequestAddChatCbk(account, group, alias, name);
-}
-
-static void C_RequestAddGroupCbk(void)
-{
-	GaimPresenceMngr::RequestAddGroupCbk();
-}
-
-GaimBlistUiOps blist_wg_ops = {
-										C_NewListCbk,
-										C_NewNodeCbk,
-										C_ShowCbk,
-										C_UpdateCbk,
-										C_RemoveCbk,
-										C_DestroyCbk,
-										C_SetVisibleCbk,
-										C_RequestAddBuddyCbk,
-										C_RequestAddChatCbk,
-										C_RequestAddGroupCbk
+GaimPrivacyUiOps privacy_wg_ops =	{
+										C_PermitAddedCbk,
+										C_PermitRemovedCbk,
+										C_DenyAddedCbk,
+										C_DenyRemovedCbk
 									};
+
 /* ************************************************** */
 
-GaimPresenceMngr *GaimPresenceMngr::StaticInstance = NULL;
-std::list<GaimIMPresence *> GaimPresenceMngr::_GaimIMPresenceList;
+
+GaimPresenceMngr *GaimPresenceMngr::_staticInstance = NULL;
+std::list<GaimIMPresence *> GaimPresenceMngr::_gaimIMPresenceList;
 
 GaimPresenceMngr::GaimPresenceMngr()
 {
-	gaim_set_blist(gaim_blist_new());
-	gaim_blist_load();
 }
 
 GaimPresenceMngr *GaimPresenceMngr::getInstance()
 {
-	if (!StaticInstance)
-		StaticInstance = new GaimPresenceMngr();
+	if (!_staticInstance)
+		_staticInstance = new GaimPresenceMngr();
 
-	return StaticInstance;
+	return _staticInstance;
 }
 
-void GaimPresenceMngr::NewListCbk(GaimBuddyList *blist)
+
+void GaimPresenceMngr::PermitAddedCbk(GaimAccount *account, const char *name)
 {
-	fprintf(stderr, "GaimPresenceMngr : NewListCbk()\n");
+	fprintf(stderr, "GaimPresenceMngr : PermitAddedCbk()\n");
 }
 
-void GaimPresenceMngr::NewNodeCbk(GaimBlistNode *node)
+void GaimPresenceMngr::PermitRemovedCbk(GaimAccount *account, const char *name)
 {
-	fprintf(stderr, "GaimPresenceMngr : NewNodeCbk()\n");
+	fprintf(stderr, "GaimPresenceMngr : PermitRemovedCbk()\n");
 }
 
-
-void GaimPresenceMngr::ShowCbk(GaimBuddyList *list)
+void GaimPresenceMngr::DenyAddedCbk(GaimAccount *account, const char *name)
 {
-	fprintf(stderr, "GaimPresenceMngr : ShowCbk()\n");
+	fprintf(stderr, "GaimPresenceMngr : DenyAddedCbk()\n");
 }
 
-void GaimPresenceMngr::UpdateBuddy(GaimBuddyList *list, GaimBlistNode *node)
+void GaimPresenceMngr::DenyRemovedCbk(GaimAccount *account, const char *name)
 {
-	GaimIMPresence *GIMpresence = NULL;
-	GaimAccount	*Gaccount = NULL;
-	GaimPresence *presence;
-	GaimStatus *status;
-	GaimStatusType *status_type;
-	GaimStatusPrimitive primitive;
-	IMAccount *account = NULL;
-	const char *GPrclId;
-	const char *GPresenceId;
-
-	presence = gaim_buddy_get_presence((GaimBuddy *)node);
-	status = gaim_presence_get_active_status(presence);
-	status_type = gaim_status_get_type(status);
-	primitive = gaim_status_type_get_primitive(status_type);
-	GPresenceId = gaim_primitive_get_id_from_type(primitive);
-	Gaccount = gaim_buddy_get_account((GaimBuddy *)node);
-	GPrclId = gaim_account_get_protocol_id(Gaccount);
-	account = GaimAccountMngr::FindIMAccount(gaim_account_get_username(Gaccount),
-											GaimEnumIMProtocol::GetEnumIMProtocol(GPrclId));
-	if (account)
-	{
-		GIMpresence = FindIMPresence(*account);
-
-		if (GIMpresence == NULL)
-			GIMpresence = AddIMPresence(*account);
-
-		GIMpresence->presenceStateChangedEvent(*GIMpresence, 
-												GaimEnumPresenceState::GetPresenceState(GPresenceId),
-												"",
-												std::string(gaim_buddy_get_name((GaimBuddy *)node))
-												);
-	}											
+	fprintf(stderr, "GaimPresenceMngr : DenyRemovedCbk()\n");
 }
 
-
-void GaimPresenceMngr::UpdateCbk(GaimBuddyList *list, GaimBlistNode *node)
-{
-	fprintf(stderr, "GaimPresenceMngr : UpdateCbk()\n");
-	
-	switch (node->type)
-	{
-		case GAIM_BLIST_BUDDY_NODE:
-			UpdateBuddy(list, node);
-			break;
-
-		default:
-			return;
-	}
-}
-
-void GaimPresenceMngr::RemoveCbk(GaimBuddyList *list, GaimBlistNode *node)
-{
-	fprintf(stderr, "GaimPresenceMngr : RemoveCbk()\n");
-}
-
-void GaimPresenceMngr::DestroyCbk(GaimBuddyList *list)
-{
-	fprintf(stderr, "GaimPresenceMngr : DestroyCbk()");
-}
-
-void GaimPresenceMngr::SetVisibleCbk(GaimBuddyList *list, gboolean show)
-{
-	fprintf(stderr, "GaimPresenceMngr : SetVisibleCbk()\n");
-}
-
-
-void GaimPresenceMngr::RequestAddBuddyCbk(GaimAccount *account, const char *username,
-												const char *group, const char *alias)
-{
-	fprintf(stderr, "GaimPresenceMngr : RequestAddBuddyCbk()\n");
-}
-
-
-void GaimPresenceMngr::RequestAddChatCbk(GaimAccount *account, GaimGroup *group,
-												const char *alias, const char *name)
-{
-	fprintf(stderr, "GaimPresenceMngr : RequestAddChatCbk()\n");
-}
-
-void GaimPresenceMngr::RequestAddGroupCbk(void)
-{
-	fprintf(stderr, "GaimPresenceMngr : RequestAddGroupCbk()\n");
-}
 
 /* **************** MANAGE PRESENCE LIST (Buddy list) ****************** */
 
 GaimIMPresence *GaimPresenceMngr::FindIMPresence(IMAccount &account)
 {
 	GaimIMPresenceIterator i;
-	for (i = _GaimIMPresenceList.begin(); i != _GaimIMPresenceList.end(); i++)
+	for (i = _gaimIMPresenceList.begin(); i != _gaimIMPresenceList.end(); i++)
 	{
 		if ((*i)->equalsTo(account.getLogin(), account.getProtocol()))
 		{
@@ -234,7 +119,7 @@ GaimIMPresence *GaimPresenceMngr::AddIMPresence(IMAccount &account)
 	{
 		mIMPresence = new GaimIMPresence(account);
 
-		_GaimIMPresenceList.push_back(mIMPresence);
+		_gaimIMPresenceList.push_back(mIMPresence);
 	}
 	
 	return mIMPresence;
@@ -243,11 +128,11 @@ GaimIMPresence *GaimPresenceMngr::AddIMPresence(IMAccount &account)
 void GaimPresenceMngr::RemoveIMPresence(IMAccount &account)
 {
 	GaimIMPresenceIterator i;
-	for (i = _GaimIMPresenceList.begin(); i != _GaimIMPresenceList.end(); i++)
+	for (i = _gaimIMPresenceList.begin(); i != _gaimIMPresenceList.end(); i++)
 	{
 		if ((*i)->equalsTo(account.getLogin(), account.getProtocol()))
 		{
-			_GaimIMPresenceList.erase(i);
+			_gaimIMPresenceList.erase(i);
 			delete (*i);
 			break;
 		}

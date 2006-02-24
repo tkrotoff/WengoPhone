@@ -21,8 +21,8 @@
 
 #include <Logger.h>
 
-GaimAccountMngr *GaimAccountMngr::StaticInstance = NULL;
-std::list<IMAccount *> GaimAccountMngr::_GaimIMAccountList;
+GaimAccountMngr *GaimAccountMngr::_staticInstance = NULL;
+std::list<IMAccount *> GaimAccountMngr::_gaimIMAccountList;
 
 /* ***************** GAIM CALLBACK ***************** */
 static void C_NotifyAddedCbk(GaimAccount *account, const char *remote_user,
@@ -57,10 +57,10 @@ GaimAccountMngr::GaimAccountMngr()
 
 GaimAccountMngr *GaimAccountMngr::getInstance()
 {
-	if (!StaticInstance)
-		StaticInstance = new GaimAccountMngr();
+	if (!_staticInstance)
+		_staticInstance = new GaimAccountMngr();
 
-	return StaticInstance;
+	return _staticInstance;
 }
 
 void GaimAccountMngr::NotifyAddedCbk(GaimAccount *account, const char *remote_user,
@@ -77,10 +77,23 @@ void GaimAccountMngr::RequestAddCbk(GaimAccount *account, const char *remote_use
 	fprintf(stderr, "GaimAccountMngr : RequestAddCbk()\n");
 }
 
+
+/* **************** MANAGE ACCOUNT LIST (Buddy list) ****************** */
+
+IMAccount *GaimAccountMngr::GetFirstIMAccount()
+{
+	GaimIMAccountIterator i = _gaimIMAccountList.begin();
+
+	if (i == _gaimIMAccountList.end())
+		return NULL;
+	else
+		return (*i);
+}
+
 IMAccount *GaimAccountMngr::FindIMAccount(const char *login, EnumIMProtocol::IMProtocol protocol)
 {
 	GaimIMAccountIterator i;
-	for (i = _GaimIMAccountList.begin(); i != _GaimIMAccountList.end(); i++)
+	for (i = _gaimIMAccountList.begin(); i != _gaimIMAccountList.end(); i++)
 	{
 		if ((*i)->getLogin().compare(login) == 0 
 			&& (*i)->getProtocol() == protocol)
@@ -98,20 +111,21 @@ void GaimAccountMngr::AddIMAccount(IMAccount &account)
 
 	if (mIMAccount == NULL)
 	{
-		_GaimIMAccountList.push_back(&account);
+		_gaimIMAccountList.push_back(&account);
 	}
 }
 
 void GaimAccountMngr::RemoveIMAccount(IMAccount &account)
 {
 	GaimIMAccountIterator i;
-	for (i = _GaimIMAccountList.begin(); i != _GaimIMAccountList.end(); i++)
+	for (i = _gaimIMAccountList.begin(); i != _gaimIMAccountList.end(); i++)
 	{
 		if ((*i)->getLogin().compare(account.getLogin()) == 0 
 			&& (*i)->getProtocol() == account.getProtocol())
 		{
-			_GaimIMAccountList.erase(i);
+			_gaimIMAccountList.erase(i);
 			break;
 		}
 	}
 }
+/* ******************************************************************** */

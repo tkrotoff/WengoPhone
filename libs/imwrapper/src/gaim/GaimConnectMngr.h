@@ -58,12 +58,12 @@ public:
 private:
 
 	GaimConnectMngr();
-	static GaimConnectMngr *StaticInstance;
+	static GaimConnectMngr *_staticInstance;
 
-	GaimAccountMngr *AccountMngr;
+	GaimAccountMngr *_accountMngr;
 
 	/* ********** CONNECT_LIST *********** */
-	static std::list<GaimIMConnect *> _GaimIMConnectList;
+	static std::list<GaimIMConnect *> _gaimIMConnectList;
 	typedef std::list<GaimIMConnect *>::iterator GaimIMConnectIterator;
 	/* *********************************** */
 };

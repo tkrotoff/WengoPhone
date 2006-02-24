@@ -34,18 +34,16 @@ extern "C" {
 #include "gaim/blist.h"
 #include "gaim/conversation.h"
 #include "gaim/account.h"
+#include "gaim/privacy.h"
 }
 
 #include "GaimIMFactory.h"
-#include "GaimIMChat.h"
-#include "GaimIMConnect.h"
-#include "GaimIMPresence.h"
-
 
 extern GaimConversationUiOps chat_wg_ops;
 extern GaimBlistUiOps blist_wg_ops;
 extern GaimConnectionUiOps conn_wg_ops;
 extern GaimAccountUiOps acc_wg_ops;
+extern GaimPrivacyUiOps privacy_wg_ops;
 
 
 /* ********************* GAIM CALLBACK ********************* */
@@ -164,7 +162,8 @@ GaimIMFactory::GaimIMFactory()
 	
 	ConnectMngr = GaimConnectMngr::getInstance();
 	PresenceMngr = GaimPresenceMngr::getInstance();
-	ChatMngr = GaimChatMngr::getInstance(); 
+	ChatMngr = GaimChatMngr::getInstance();
+	ContactListMngr = GaimContactListMngr::getInstance();
 }	
 
 void GaimIMFactory::GaimIMInit()
@@ -175,19 +174,20 @@ void GaimIMFactory::GaimIMInit()
 	wgaim_init(GetModuleHandle(0));
 #endif
 
-	SetCoreCbk();
-	SetEventloopCbk();
-	SetConnectionsCbk();
-	SetChatCbk();
-	SetBuddylistCbk();
-	SetAccountCbk();
+	gaim_core_set_ui_ops(&core_wg_ops);
+	gaim_eventloop_set_ui_ops(&eventloop_wg_ops);
+	gaim_connections_set_ui_ops(&conn_wg_ops);
+	gaim_conversations_set_ui_ops(&chat_wg_ops);
+	gaim_blist_set_ui_ops(&blist_wg_ops);
+	gaim_accounts_set_ui_ops(&acc_wg_ops);
+	gaim_privacy_set_ui_ops(&privacy_wg_ops);
 
 	search_path = g_build_filename(gaim_user_dir(), "plugins", NULL);
 	gaim_plugins_add_search_path(search_path);
 	gaim_plugins_add_search_path("plugins");
 	g_free(search_path);
 
-	if (!gaim_core_init("Console GAIM"))
+	if (!gaim_core_init("Wengo GAIM"))
 	{
 		fprintf(stderr, "Initialization of the Gaim core failed\n");
 	}
@@ -196,36 +196,6 @@ void GaimIMFactory::GaimIMInit()
 		g_thread_init(NULL);
 
 	g_thread_create(GaimMainEventLoop, NULL, FALSE, NULL);
-}
-
-void GaimIMFactory::SetCoreCbk()
-{
-	gaim_core_set_ui_ops(&core_wg_ops);
-}
-
-void GaimIMFactory::SetEventloopCbk()
-{
-	gaim_eventloop_set_ui_ops(&eventloop_wg_ops);
-}
-
-void GaimIMFactory::SetConnectionsCbk()
-{
-	gaim_connections_set_ui_ops(&conn_wg_ops);
-}
-
-void GaimIMFactory::SetChatCbk()
-{	
-	gaim_conversations_set_ui_ops(&chat_wg_ops);
-}
-
-void GaimIMFactory::SetBuddylistCbk()
-{
-	gaim_blist_set_ui_ops(&blist_wg_ops);
-}
-
-void GaimIMFactory::SetAccountCbk()
-{
-	gaim_accounts_set_ui_ops(&acc_wg_ops);
 }
 
 IMConnect *GaimIMFactory::createIMConnect(IMAccount &account) 
@@ -242,3 +212,9 @@ IMPresence *GaimIMFactory::createIMPresence(IMAccount &account)
 {
 	return PresenceMngr->AddIMPresence(account);
 }
+
+IMContactList *GaimIMFactory::createIMContactList(IMAccount &account)
+{
+	return ContactListMngr->AddIMContactList(account);
+}
+

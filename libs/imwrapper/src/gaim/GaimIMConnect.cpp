@@ -49,8 +49,9 @@ GaimIMConnect::GaimIMConnect(IMAccount & account)
 
 bool GaimIMConnect::equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol)
 {
-	if (login.compare(_account.getLogin()) == 0 
-		&& _account.getProtocol() == protocol)
+	IMAccount imAccount(login, "", protocol);
+
+	if (_imAccount == imAccount)
 		return true;
 	else
 		return false;
@@ -58,42 +59,47 @@ bool GaimIMConnect::equalsTo(std::string login, EnumIMProtocol::IMProtocol proto
 
 void *GaimIMConnect::CreateAccount()
 {
-	GaimAccount	*GAccount;
-	char *PrclId = (char *)GaimEnumIMProtocol::GetPrclId(_account.getProtocol());
+	GaimAccount	*gAccount = NULL;
+	char *PrclId = (char *)GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol());
 	
-	GAccount = gaim_account_new(_account.getLogin().c_str(), PrclId);
-	gaim_account_set_password(GAccount, _account.getPassword().c_str());
-	gaim_account_set_bool(GAccount, "http_method", TRUE);
+	gAccount = gaim_account_new(_imAccount.getLogin().c_str(), PrclId);
+	
+	if (gAccount)
+	{
+		gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
+		gaim_account_set_bool(gAccount, "http_method", TRUE);
 
-	gaim_accounts_add(GAccount);
+		gaim_accounts_add(gAccount);
+	}
 
-	return GAccount;
+	return gAccount;
 }
 
 void GaimIMConnect::connect() 
 {	
-	GaimAccount	*GAccount;
+	GaimAccount	*gAccount;
 
-	GAccount = gaim_accounts_find(_account.getLogin().c_str(), 
-								GaimEnumIMProtocol::GetPrclId(_account.getProtocol()));
-	if (GAccount == NULL)
+	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
+								GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
+	if (gAccount == NULL)
 	{
-		GAccount = (GaimAccount *) CreateAccount();
+		if (!(gAccount = (GaimAccount *) CreateAccount()))
+			return;
 	}
 
-	gaim_account_set_password(GAccount, _account.getPassword().c_str());
-	if (!gaim_account_get_enabled(GAccount, gaim_core_get_ui()))
-		gaim_account_set_enabled(GAccount, gaim_core_get_ui(), TRUE);
+	gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
+	if (!gaim_account_get_enabled(gAccount, gaim_core_get_ui()))
+		gaim_account_set_enabled(gAccount, gaim_core_get_ui(), TRUE);
 
-	gaim_account_connect(GAccount);
+	gaim_account_connect(gAccount);
 }
 
 void GaimIMConnect::disconnect() 
 {
-	GaimAccount	*GAccount;
+	GaimAccount	*gAccount;
 
-	GAccount = gaim_accounts_find(_account.getLogin().c_str(), 
-								GaimEnumIMProtocol::GetPrclId(_account.getProtocol()));
-	if (GAccount)
-		gaim_account_disconnect(GAccount);
+	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
+								GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
+	if (gAccount)
+		gaim_account_disconnect(gAccount);
 }

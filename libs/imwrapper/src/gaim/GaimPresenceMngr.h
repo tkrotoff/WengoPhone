@@ -23,9 +23,7 @@
 #include <list>
 
 #include "GaimIMPresence.h"
-extern "C" {
-#include "gaim/blist.h"
-}
+#include "GaimAccountMngr.h"
 
 /**
  *
@@ -38,37 +36,27 @@ public:
 
 	static GaimPresenceMngr *getInstance();
 
-	/* ********** GaimBuddyListCallback *********** */
-	static void NewListCbk(GaimBuddyList *blist);
-	static void NewNodeCbk(GaimBlistNode *node);
-	static void ShowCbk(GaimBuddyList *list);
-	static void UpdateCbk(GaimBuddyList *list, GaimBlistNode *node);
-	static void RemoveCbk(GaimBuddyList *list, GaimBlistNode *node);
-	static void DestroyCbk(GaimBuddyList *list);
-	static void SetVisibleCbk(GaimBuddyList *list, gboolean show);
-	static void RequestAddBuddyCbk(GaimAccount *account, const char *username,
-									const char *group, const char *alias);
-	static void RequestAddChatCbk(GaimAccount *account, GaimGroup *group,
-									const char *alias, const char *name);
-	static void RequestAddGroupCbk(void);
-	/* ******************************************** */
-
-
 	static GaimIMPresence *AddIMPresence(IMAccount &account);
 	void RemoveIMPresence(IMAccount &account);
+	static GaimIMPresence *FindIMPresence(IMAccount &account);
+
+	/* ********** GaimPrivacyCallback *********** */
+	static void PermitAddedCbk(GaimAccount *account, const char *name);
+	static void PermitRemovedCbk(GaimAccount *account, const char *name);
+	static void DenyAddedCbk(GaimAccount *account, const char *name);
+	static void DenyRemovedCbk(GaimAccount *account, const char *name);
+	/* ******************************************** */
 
 private:
 
 	GaimPresenceMngr();
-	static GaimPresenceMngr *StaticInstance;
-
-	static void UpdateBuddy(GaimBuddyList *list, GaimBlistNode *node);
+	static GaimPresenceMngr *_staticInstance;
 
 	/* ********** PRESENCE_LIST *********** */
-	static std::list<GaimIMPresence *> _GaimIMPresenceList;
+	static std::list<GaimIMPresence *> _gaimIMPresenceList;
 	typedef std::list<GaimIMPresence *>::iterator GaimIMPresenceIterator;
 	/* ********** PRESENCE_LIST *********** */
-	static GaimIMPresence *FindIMPresence(IMAccount &account);
+
 };
 
 #endif	//GAIMPRESENCEMNGR_H

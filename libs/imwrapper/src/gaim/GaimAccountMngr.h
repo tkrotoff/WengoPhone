@@ -23,7 +23,10 @@
 #include <list>
 
 #include <imwrapper/IMAccount.h>
+
+extern "C" {
 #include <gaim/account.h>
+}
 
 /**
  *
@@ -39,6 +42,7 @@ public:
 	void AddIMAccount(IMAccount &account);
 	void RemoveIMAccount(IMAccount &account);
 	static IMAccount *FindIMAccount(const char *login, EnumIMProtocol::IMProtocol protocol);
+	static IMAccount *GetFirstIMAccount();
 
 	/* ********** GaimAccountCallback *********** */
 	static void NotifyAddedCbk(GaimAccount *account, const char *remote_user,
@@ -54,9 +58,9 @@ public:
 private:
 
 	GaimAccountMngr();
-	static GaimAccountMngr *StaticInstance;
+	static GaimAccountMngr *_staticInstance;
 
-	static std::list<IMAccount *> _GaimIMAccountList;
+	static std::list<IMAccount *> _gaimIMAccountList;
 	typedef std::list<IMAccount *>::iterator GaimIMAccountIterator;
 };
 

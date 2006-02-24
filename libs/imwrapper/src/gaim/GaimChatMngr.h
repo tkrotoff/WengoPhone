@@ -23,6 +23,7 @@
 #include <list>
 
 #include "GaimIMChat.h"
+#include "GaimAccountMngr.h"
 
 extern "C" {
 #include "gaim/conversation.h"
@@ -71,10 +72,14 @@ public:
 private:
 
 	GaimChatMngr();
-	static GaimChatMngr *StaticInstance;
+	static GaimChatMngr *_staticInstance;
+
+	static GaimAccountMngr *_accountMngr;
+	
+	static GaimIMChat *FindIMChatByGaimConv(void *gConv);
 	
 	/* ********** CHAT_LIST *********** */
-	static std::list<GaimIMChat *> _GaimIMChatList;
+	static std::list<GaimIMChat *> _gaimIMChatList;
 	typedef std::list<GaimIMChat *>::iterator GaimIMChatIterator;
 	static GaimIMChat *FindIMChat(IMAccount &account);
 	/* *********************************** */

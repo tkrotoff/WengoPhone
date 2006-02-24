@@ -15,10 +15,12 @@ sources = [
 	'GaimIMChat.cpp',
 	'GaimIMConnect.cpp',
 	'GaimIMPresence.cpp',
+	'GaimIMContactList.cpp',
 	'GaimChatMngr.cpp',
 	'GaimConnectMngr.cpp',
 	'GaimPresenceMngr.cpp',
 	'GaimAccountMngr.cpp',
+	'GaimContactListMngr.cpp',
 	'GaimEnumPresenceState.cpp',
 	'GaimEnumIMProtocol.cpp'
 ]

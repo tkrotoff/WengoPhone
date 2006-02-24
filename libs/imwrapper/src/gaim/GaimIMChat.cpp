@@ -36,22 +36,29 @@ extern "C" {
 std::list<mConvInfo_t *> GaimIMChat::_GaimChatSessionList;
 
 GaimIMChat::GaimIMChat(IMAccount & account)
-	: IMChat(account), _account(account)
+	: IMChat(account)
 {
 
 }
 
-void GaimIMChat::createSession()
+
+mConvInfo_t *GaimIMChat::mCreateSession()
 {
-	mConvInfo_t	conv;
+	mConvInfo_t	*conv = new mConvInfo_t();
 	IMChatSession *chatSession = new IMChatSession(*this);
 
-	conv.conv_session = (void *) chatSession;
-	conv.conv_id = chatSession->getId();
-	conv.gaim_conv_session = NULL;
+	conv->conv_session = (void *) chatSession;
+	conv->conv_id = chatSession->getId();
+	conv->gaim_conv_session = NULL;
 
-	AddChatSessionInList(&conv);
+	AddChatSessionInList(conv);
 	newIMChatSessionCreatedEvent(*this, *chatSession);
+	return conv;
+}
+
+void GaimIMChat::createSession()
+{
+	mCreateSession();
 }
 
 void GaimIMChat::closeSession(IMChatSession & chatSession)
@@ -83,8 +90,8 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 {
 	mConvInfo_t *mConv = FindChatStructById(chatSession.getId());
 	GaimConversation *conv;
-	GaimAccount *Gaccount = gaim_accounts_find(_account.getLogin().c_str(),
-											GaimEnumIMProtocol::GetPrclId(_account.getProtocol()));
+	GaimAccount *Gaccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
+											GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
 	int BuddyNbr = chatSession.getIMContactList().size();
 	
 	if (Gaccount)
@@ -115,9 +122,9 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 		{
 			gaim_conv_chat_add_user(GAIM_CONV_CHAT((GaimConversation *)mConv->gaim_conv_session), 
 									contactId.c_str(), NULL, GAIM_CBFLAGS_NONE, true);
+			
+			contactAddedEvent(*this, chatSession, contactId);
 		}
-
-		contactAddedEvent(*this, chatSession, contactId);
 	}
 }
 
@@ -134,8 +141,9 @@ void GaimIMChat::removeContact(IMChatSession & chatSession, const std::string & 
 
 bool GaimIMChat::equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol)
 {
-	if (login.compare(_account.getLogin()) == 0 
-		&& _account.getProtocol() == protocol)
+	IMAccount imAccount(login, "", protocol);
+
+	if (_imAccount == imAccount)
 		return true;
 	else
 		return false;
@@ -176,17 +184,10 @@ mConvInfo_t *GaimIMChat::FindChatStructById(int convId)
 	return NULL;
 }
 
-
 bool GaimIMChat::IsChatSessionInList(int convId)
 {
-	GaimChatSessionIterator i;
-	for (i = _GaimChatSessionList.begin(); i != _GaimChatSessionList.end(); i++)
-	{
-		if ((*i)->conv_id == convId)
-		{
-			return true;
-		}
-	}
-
-	return false;
+	if (FindChatStructById(convId) != NULL)
+		return true;
+	else
+		return false;
 }

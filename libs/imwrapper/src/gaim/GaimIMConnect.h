@@ -48,8 +48,6 @@ private:
 
 	void *CreateAccount(void);
 	void InitConn(void);
-
-
 };
 
 #endif	//GAIMIMCONNECT_H

@@ -29,14 +29,15 @@ extern "C" {
 #include <Logger.h>
 
 GaimIMPresence::GaimIMPresence(IMAccount & account)
-	: IMPresence(account), _account(account) 
+	: IMPresence(account) 
 {
 }
 
 bool GaimIMPresence::equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol)
 {
-	if (login.compare(_account.getLogin()) == 0 
-		&& _account.getProtocol() == protocol)
+	IMAccount imAccount(login, "", protocol);
+
+	if (_imAccount == imAccount)
 		return true;
 	else
 		return false;
@@ -45,67 +46,46 @@ bool GaimIMPresence::equalsTo(std::string login, EnumIMProtocol::IMProtocol prot
 void GaimIMPresence::changeMyPresence(EnumPresenceState::PresenceState state, 
 									  const std::string & note) 
 {
-	GaimAccount *Gaccount = gaim_accounts_find(_account.getLogin().c_str(),
-											GaimEnumIMProtocol::GetPrclId(_account.getProtocol()));
+	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
+											GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
 	
-	if (Gaccount)
+	if (gAccount)
 	{
 		if (note.length() == 0)
-			gaim_account_set_status(Gaccount, GaimEnumPresenceState::GetStatusId(state), 
+			gaim_account_set_status(gAccount, GaimEnumPresenceState::GetStatusId(state), 
 									TRUE, NULL);
 		else
-			gaim_account_set_status(Gaccount, GaimEnumPresenceState::GetStatusId(state),
+			gaim_account_set_status(gAccount, GaimEnumPresenceState::GetStatusId(state),
 									TRUE, "message", note.c_str(), NULL);
 	}
 }
 
 void GaimIMPresence::subscribeToPresenceOf(const std::string & contactId)
 {
-	GaimGroup *group;
-	GaimBuddy *buddy;
-	GaimAccount *Gaccount;
-
-	const char *grp = "default";
-
-	if ((group = gaim_find_group(grp)) == NULL)
-		{
-			group = gaim_group_new(grp);
-			gaim_blist_add_group(group, NULL);
-		}
-
-	Gaccount = gaim_accounts_find(_account.getLogin().c_str(), 
-								GaimEnumIMProtocol::GetPrclId(_account.getProtocol()));
-
-	if (Gaccount)
-	{
-		buddy = gaim_buddy_new(Gaccount, contactId.c_str(), contactId.c_str());
-		gaim_blist_add_buddy(buddy, NULL, group, NULL);
-		gaim_account_add_buddy(Gaccount, buddy);
-	}
 }
 
 void GaimIMPresence::blockContact(const std::string & contactId)
 {
-	GaimAccount *Gaccount;
+	GaimAccount *gAccount;
 
-	Gaccount = gaim_accounts_find(_account.getLogin().c_str(), 
-								GaimEnumIMProtocol::GetPrclId(_account.getProtocol()));
+	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
+								GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
 
-	if (Gaccount)
+	if (gAccount)
 	{
-		gaim_privacy_deny_add(Gaccount, contactId.c_str(), FALSE);
+		gaim_privacy_deny_add(gAccount, contactId.c_str(), FALSE);
 	}
 }
 
 void GaimIMPresence::unblockContact(const std::string & contactId)
 {
-	GaimAccount *Gaccount;
+	GaimAccount *gAccount;
 
-	Gaccount = gaim_accounts_find(_account.getLogin().c_str(), 
-								GaimEnumIMProtocol::GetPrclId(_account.getProtocol()));
+	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
+								GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
 
-	if (Gaccount)
+	if (gAccount)
 	{
-		gaim_privacy_permit_add(Gaccount, contactId.c_str(), FALSE);
+		gaim_privacy_permit_add(gAccount, contactId.c_str(), FALSE);
 	}
 }
