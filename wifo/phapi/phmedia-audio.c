@@ -1170,7 +1170,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
     }
   else if (stream->hdxmode == PH_HDX_MODE_MIC)
     {
-      int hdxsil = ph_vad_update(stream, recordbuf, framesize);
+      int hdxsil = ph_vad_update0(&stream->cngi, recordbuf, framesize);
       if (hdxsil != stream->hdxsilence)
 	DBG5_DYNA_AUDIO("phmedia_audio: HDXSIL=%d\n", hdxsil,0,0,0);
       
