@@ -20,7 +20,7 @@
 #include "QtChatHandler.h"
 
 #include "QtChatWidget.h"
-
+#include "QtChatWindow.h"
 #include <control/chat/CChatHandler.h>
 
 #include <Logger.h>
@@ -49,8 +49,8 @@ void QtChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IM
 }
 
 void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(ChatHandler & sender, IMChatSession & imChatSession) {
-	QtChatWidget * qtChatWidget = new QtChatWidget(imChatSession);
-	qtChatWidget->getWidget()->show();
+	ChatWindow * qtChatWidget = new ChatWindow(imChatSession);
+	// qtChatWidget->getWidget()->show();
 }
 
 void QtChatHandler::createSession(const IMAccount & imAccount, IMContactSet & imContactSet) {

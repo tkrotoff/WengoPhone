@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2005  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,50 +18,195 @@
  */
 
 #include "QtChatWidget.h"
+#include "chatwidgetmanager.h"
+#include "QtEmoticonsWidget.h"
 
-#include <control/chat/CChatHandler.h>
+ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
 
-#include <QLineEdit>
-#include <QListWidget>
-#include <QPushButton>
+{
 
-#include <imwrapper/IMContact.h>
-#include <imwrapper/IMChatSession.h>
+    _widget =WidgetFactory::create(":/forms/ChatWidget.ui", this);
+    QGridLayout * layout = new QGridLayout();
+    layout->addWidget(_widget);
+    layout->setMargin(0);
+    setLayout(layout);
 
-#include <WidgetFactory.h>
-#include <Object.h>
-#include <Logger.h>
-
-QtChatWidget::QtChatWidget(IMChatSession & imChatSession) 
-	: QObject(), _imChatSession(imChatSession) {
-
-	_chatWidget = WidgetFactory::create(":/forms/chat/ChatWidget.ui", NULL);
-
-	_lineEdit = Object::findChild<QLineEdit *>(_chatWidget, "lineEdit");
-	_listWidget = Object::findChild<QListWidget *>(_chatWidget, "listWidget");
-	_sendButton = Object::findChild<QPushButton *>(_chatWidget, "sendButton");
-
-	connect(_lineEdit, SIGNAL(returnPressed()), SLOT(sendMessage()), Qt::DirectConnection);
-	connect(_sendButton, SIGNAL(clicked()), SLOT(sendMessage()), Qt::DirectConnection);
-
-	_imChatSession.messageReceivedEvent +=
-		boost::bind(&QtChatWidget::messageReceivedEventHandler, this, _1, _2, _3);
+    //    setupUi(this);
+    /* Defaults fonts and colors */
+    
+    _nickFont = QFont("Helvetica", 12);
+    _nickTextColor = "'#000000'"; // Black
+    _nickBgColor = "'#ffcc66'";
+    _nickName = "Wengo";
+    
+    
+    
+    
+    _fontButton  = _seeker.getPushButton(_widget,"fontButton");
+    _chatHistory = _seeker.getTextBrowser(_widget,"chatHistory");
+    _emoticonsButton = _seeker.getPushButton(_widget,"emoticonsButton");
+    _sendButton = _seeker.getPushButton(_widget,"sendButton");
+    _chatEdit = _seeker.getTextEdit(_widget,"chatEdit");
+    
+    ChatWidgetManager * cwm = new ChatWidgetManager(this,_chatEdit);
+    
+    connect (cwm,SIGNAL(enterPressed()),this, SLOT (enterPressed()));
+    connect (_fontButton,SIGNAL(clicked()), this, SLOT (chooseFont()));
+    connect (_chatHistory,SIGNAL(anchorClicked(const QUrl &)),this,SLOT(urlClicked(const QUrl & )));
+    connect (_emoticonsButton,SIGNAL(clicked()),this,SLOT(chooseEmoticon()));
+    connect (_sendButton,SIGNAL(clicked()),this,SLOT(enterPressed()));
+    _chatHistory->setHtml ("<qt type=detail>");
+    
+    _emoticonsWidget = new EmoticonsWidget(this,Qt::Dialog);
+    
+    connect(_emoticonsWidget,SIGNAL(emoticonClicked(const QString &)),this,SLOT(emoticonSelected(const QString&)));
 }
 
-QtChatWidget::~QtChatWidget() {
-	LOG_DEBUG("chat window closed");
-	_imChatSession.sendMessage("I closed the conversation window");
+void  ChatWidget::setNickName(const QString & nickname)
+{
+    _nickName = nickname;
+}
+const QString & ChatWidget::nickName()
+{
+    return _nickName;
 }
 
-void QtChatWidget::sendMessage() {
-	LOG_DEBUG("sending message: " + _lineEdit->text().toStdString());
-	_imChatSession.sendMessage(_lineEdit->text().toStdString());
+
+void ChatWidget::setNickBgColor(const QString &color){
+    _nickBgColor = color;
 }
 
-void QtChatWidget::messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message) {
-	LOG_DEBUG("message received: " + message);
+void ChatWidget::setNickTextColor(const QString  &color){
+    _nickTextColor = color;
+}
 
-	_listWidget->addItem(QString::fromStdString(from.getContactId() + ": " + message));
+void ChatWidget::setNickFont(QFont &font){
+    _nickFont = font;
+}
+const QFont&    ChatWidget::nickFont(){
+    return _nickFont;
+}
+const QString &   ChatWidget::nickBgColor(){
+    return _nickBgColor;
+}
+const QString &   ChatWidget::nickTextColor(){
+    return _nickTextColor;
+}
 
-	_chatWidget->show();
+
+void ChatWidget::addToHistory(const QString & senderName,const QString & str)
+{
+
+    QTextCursor curs(_chatHistory->document());
+    curs.movePosition(QTextCursor::End);
+
+    QString text= QString("<table border=0 width=100% cellspacing=0 "
+    "cellpadding=0><tr><td BGCOLOR=%1> <font color=%2> %3 </font></td><td BGCOLOR=%4 align=right>"
+    "<font color=%5> %6 </font></td></tr></table>").
+    arg(_nickBgColor).
+    arg(_nickTextColor).
+    arg(senderName).
+    arg(_nickBgColor).
+    arg(_nickTextColor).
+    arg(QTime::currentTime().toString());
+    
+    _chatHistory->insertHtml (text);
+    _chatHistory->insertHtml (str);
+    _chatHistory->ensureCursorVisible();
+}
+
+    /* SLOTS */
+void ChatWidget::urlClicked(const QUrl & link){
+    _chatHistory->setSource(QUrl(""));
+    QStringList args;
+    args << link.toString();
+    QProcess::startDetached ("explorer.exe",args );
+    _chatHistory->ensureCursorVisible();
+}
+
+void ChatWidget::enterPressed()
+{
+    QTextCursor curs(_chatHistory->document());
+    curs.movePosition(QTextCursor::End);
+
+    QString text= QString("<table border=0 width=100% cellspacing=0 "
+    "cellpadding=0><tr><td BGCOLOR=%1> <font color=%2> %3 </font></td><td BGCOLOR=%4 align=right>"
+    "<font color=%5> %6 </font></td></tr></table>").
+    arg(_nickBgColor).
+    arg(_nickTextColor).
+    arg(_nickName).
+    arg(_nickBgColor).
+    arg(_nickTextColor).
+    arg(QTime::currentTime().toString());
+    
+    _chatHistory->setTextCursor(curs);
+    _chatHistory->insertHtml (text);
+    _chatHistory->insertHtml (replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>"));
+    _chatHistory->ensureCursorVisible();
+    
+    newMessage(_chatEdit->toHtml());
+    
+    _chatEdit->clear();
+    _chatEdit->setFocus();
+    
+//    newMessage(replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>"));
+    
+}
+
+void ChatWidget::chooseFont()
+{
+    bool ok;
+    _currentFont = QFontDialog::getFont(&ok,_currentFont,this);
+    _chatEdit->setCurrentFont(_currentFont);
+    _chatEdit->setFocus();
+}
+
+const QString  ChatWidget::replaceUrls(const QString & str, const QString & htmlstr)
+{
+    int beginPos = 0;
+    QString tmp=htmlstr;
+    int endPos;
+    int repCount=0;
+    
+    QStringList urls;
+    QStringList reps;
+    while(1)
+    {
+        beginPos = str.indexOf( QRegExp("(http://|https://|ftp://)",Qt::CaseInsensitive),beginPos);
+
+        if ( beginPos == -1)
+            break;
+        for ( endPos = beginPos; endPos<str.size();endPos++)
+        {
+            if ( (str[endPos]==' ') || (str[endPos]=='\r') || (str[endPos]=='\n') )
+                break;
+        }
+        QString url = str.mid(beginPos,endPos - beginPos );
+        urls << url;
+        QString r = QString("$$_$$*_WENGOSTRUTILS_|KB|%1").arg(repCount);
+        reps << r;
+        repCount++;
+        tmp.replace(url,r);
+        beginPos = endPos;
+        
+    }
+    for (int i = 0; i < reps.size(); i++)
+    {
+        QString url = QString("<a href='"+urls[i]+"'>"+urls[i]+"</a>");
+        tmp.replace(reps[i],url);
+    }
+    return tmp;
+}
+
+void ChatWidget::chooseEmoticon()
+{
+    _emoticonsWidget->show();
+}
+
+void ChatWidget::emoticonSelected(const QString & emoticonName)
+{
+    QString path = QString("emoticons/") + emoticonName;
+    QString image = QString("<img src='%1' />").arg(path);
+    _chatEdit->insertHtml (image);
+    _chatEdit->ensureCursorVisible();
 }

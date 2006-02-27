@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2005  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,57 +17,61 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCHATWIDGET_H
-#define QTCHATWIDGET_H
+#ifndef CHATWIDGET_H
+#define CHATWIDGET_H
 
-#include <QObject>
+#include <QtGui>
 
-#include <string>
+#include "QtEmoticonsWidget.h"
+#include "widgetseeker.h"
+#include <WidgetFactory.h>
 
-class IMChatSession;
-class IMContact;
-class QListWidget;
-class QWidget;
-class QLineEdit;
-class QPushButton;
-
-/**
- *
- * @ingroup presentation
- * @author Philippe Bernery
- */
-class QtChatWidget : public QObject {
-	Q_OBJECT
+class ChatWidget : public QWidget //, Ui::ChatWidget
+{
+    Q_OBJECT
+    
 public:
+    
+    ChatWidget(QWidget * parent =0, Qt::WFlags f = 0);
+    
+    void            setNickBgColor(const QString &color);
+    void            setNickTextColor(const QString &color);
+    void            setNickFont(QFont &font);
+    void            setNickName(const QString & nickname);
+    const QString & nickName();
+    const QFont&    nickFont();
+    const QString&   nickBgColor();
+    const QString&   nickTextColor();
+    void             addToHistory(const QString & senderName,const QString & str);
+protected:
+    
+    QWidget *       _widget;
+    WidgetSeeker    _seeker;
 
-	QtChatWidget(IMChatSession & imChatSession);
+    QPushButton  *   _fontButton;
+    QTextBrowser *   _chatHistory;
+    QTextEdit    *   _chatEdit;
+    QPushButton  *   _emoticonsButton;
+    QPushButton  *   _sendButton;
 
-	~QtChatWidget();
-
-	QWidget * getWidget() const {
-		return _chatWidget;
-	}
-
-private Q_SLOTS:
-
-	void sendMessage();
-
-private:
-
-	void messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message);
-
-	void initThreadSafe();
-
-	QWidget * _chatWidget;
-
-	QLineEdit * _lineEdit;
-
-	QListWidget * _listWidget;
-
-	QPushButton * _sendButton;
-
-	IMChatSession & _imChatSession;
-
+    
+    
+    QFont            _currentFont;
+    QFont            _nickFont;
+    QString          _nickBgColor;
+    QString          _nickTextColor;
+    QString          _nickName;
+    
+    EmoticonsWidget *_emoticonsWidget;
+    const QString    replaceUrls(const QString & str, const QString & htmlstr);
+public Q_SLOTS:
+    void enterPressed();
+    void chooseFont();
+    void chooseEmoticon();
+    void emoticonSelected(const QString & emoticonName);
+    void urlClicked(const QUrl & link);
+Q_SIGNALS:
+    void newMessage(const QString & msg);
 };
 
-#endif	//QTCHATWIDGET_H
+#endif

@@ -107,11 +107,11 @@ public:
 	 */
 	virtual void createSession(IMContactSet & imContactList) = 0;
 
-protected:
-
 	IMAccount & getIMAccount() const {
 		return _imAccount;
 	}
+
+protected:
 
 	/**
 	 * Says IMChat to close a new session given a IMChatSession
