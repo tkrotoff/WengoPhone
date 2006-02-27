@@ -62,8 +62,8 @@ void PhApiIMChat::sendMessage(IMChatSession & chatSession, const std::string & m
 	_phApiWrapper.sendMessage(chatSession, message);
 }
 
-void PhApiIMChat::createSession() {
-	_phApiWrapper.createSession(*this);
+void PhApiIMChat::createSession(IMContactSet & imContactSet) {
+	_phApiWrapper.createSession(*this, imContactSet);
 }
 
 void PhApiIMChat::closeSession(IMChatSession & chatSession) {

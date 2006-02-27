@@ -50,9 +50,9 @@ ChatHandler::~ChatHandler() {
 	}
 }
 
-void ChatHandler::createSession(const IMAccount & imAccount) {
+void ChatHandler::createSession(const IMAccount & imAccount, IMContactSet & imContactSet) {
 	LOG_DEBUG("creating new IMChatSession for: " + imAccount.getLogin());
-	_imChatMap[(IMAccount &)imAccount]->createSession();
+	_imChatMap[(IMAccount &)imAccount]->createSession(imContactSet);
 }
 
 void ChatHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & account) {

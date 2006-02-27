@@ -30,6 +30,7 @@
 
 class IMAccount;
 class IMChatSession;
+class IMContactSet;
 class ConnectHandler;
 class WengoPhone;
 
@@ -60,7 +61,7 @@ public:
 	 * 
 	 * @param imAccount the IMAccount for which we want to create the new IMChatSession
 	 */
-	void createSession(const IMAccount & imAccount);
+	void createSession(const IMAccount & imAccount, IMContactSet & imContactSet);
 
 private:
 

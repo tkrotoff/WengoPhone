@@ -26,6 +26,7 @@
 
 class ChatHandler;
 class CChatHandler;
+class IMContactSet;
 
 /**
  *
@@ -40,7 +41,7 @@ public:
 
 	~QtChatHandler();
 
-	void createSession(const IMAccount & imAccount);
+	void createSession(const IMAccount & imAccount, IMContactSet & imContactSet);
 
 	void updatePresentation();
 

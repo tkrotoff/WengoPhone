@@ -303,24 +303,34 @@ void PhApiWrapper::disconnect() {
 
 void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & message) {
 	LOG_DEBUG("sending message: " + message);
-	const IMChatSession::IMContactList & buddies = chatSession.getIMContactList();
-	IMChatSession::IMContactList::const_iterator it;
+	const IMContactSet & buddies = chatSession.getIMContactSet();
+	IMContactSet::const_iterator it;
 	for (it = buddies.begin(); it != buddies.end(); it++) {
 		std::string sipAddress = "sip:" + (*it).getContactId() + "@" + _wengoRealm;
 		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message.c_str());
-		_messageIdChatSessionMap[messageId] = &chatSession;
+		//_messageIdChatSessionMap[messageId] = &chatSession;
 	}
 }
 
-void PhApiWrapper::createSession(IMChat & imChat) {
+void PhApiWrapper::createSession(IMChat & imChat, IMContactSet & imContactSet) {
 	IMChatSession * imChatSession = new IMChatSession(imChat);
 	newIMChatSessionCreatedEvent(*this, *imChatSession);
+
+	//FIXME: Currently, phApi supports chat with only one person
+	if (imContactSet.size() > 0) {
+		addContact(*imChatSession, (*imContactSet.begin()).getContactId());
+		//FIXME: this map is never emptied
+		_contactChatMap[(*imContactSet.begin()).getContactId()] = imChatSession;
+	}
 }
 
 void PhApiWrapper::closeSession(IMChatSession & chatSession) {
 }
 
 void PhApiWrapper::addContact(IMChatSession & chatSession, const std::string & contactId) {
+	//FIXME: this map is never emptied
+	//FIXME: Currently, phApi supports chat with only one person
+	_contactChatMap[contactId] = &chatSession;
 	contactAddedEvent(*this, chatSession, contactId);
 }
 

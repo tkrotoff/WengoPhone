@@ -56,7 +56,7 @@ void IMChatSession::removeIMContact(const IMContact & imContact) {
 }
 
 void IMChatSession::removeAllIMContact() {
-	for (IMContactList::const_iterator it = _imContactList.begin(); it != _imContactList.end(); ++it) {
+	for (IMContactSet::const_iterator it = _imContactSet.begin(); it != _imContactSet.end(); ++it) {
 		_imChat.removeContact(*this, (*it).getContactId());
 	}
 }
@@ -71,8 +71,8 @@ void IMChatSession::messageReceivedEventHandler(IMChat & sender, IMChatSession &
 
 	if (imChatSession == *this) {
 		IMContact imContact(_imChat.getIMAccount(), contactId);
-		if (_imContactList.find(imContact) != _imContactList.end()) {
-			messageReceivedEvent(*this, *_imContactList.find(imContact), message);
+		if (_imContactSet.find(imContact) != _imContactSet.end()) {
+			messageReceivedEvent(*this, *_imContactSet.find(imContact), message);
 		} else {
 			LOG_ERROR("this session does not know " + contactId);
 		}
@@ -98,14 +98,14 @@ int IMChatSession::getId() const {
 void IMChatSession::contactAddedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId) {
 	if (imChatSession == *this) {
 		IMContact imContact(_imChat.getIMAccount(), contactId);
-		if (_imContactList.find(imContact) != _imContactList.end()) {
+		if (_imContactSet.find(imContact) != _imContactSet.end()) {
 			LOG_ERROR("IMContact for " + contactId + " already in IMContactList");
 		} else {
-			_imContactList.insert(imContact);
+			_imContactSet.insert(imContact);
 			LOG_DEBUG("IMContact " + contactId + " added to IMContactList");
 
-			//Takes the one from _imContactList rather than imContact directly
-			contactAddedEvent(*this, *_imContactList.find(imContact));
+			//Takes the one from _imContactSet rather than imContact directly
+			contactAddedEvent(*this, *_imContactSet.find(imContact));
 		}
 	}
 }
@@ -113,11 +113,11 @@ void IMChatSession::contactAddedEventHandler(IMChat & sender, IMChatSession & im
 void IMChatSession::contactRemovedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId) {
 	if (imChatSession == *this) {
 		IMContact imContact(_imChat.getIMAccount(), contactId);
-		if (_imContactList.find(imContact) == _imContactList.end()) {
+		if (_imContactSet.find(imContact) == _imContactSet.end()) {
 			LOG_ERROR("IMContact for " + contactId + " not in IMContactList");
 		} else {
-			contactRemovedEvent(*this, *_imContactList.find(imContact));
-			_imContactList.erase(_imContactList.find(imContact));
+			contactRemovedEvent(*this, *_imContactSet.find(imContact));
+			_imContactSet.erase(_imContactSet.find(imContact));
 			LOG_DEBUG("IMContact " + contactId + " removed from IMContactList");
 		}
 	}

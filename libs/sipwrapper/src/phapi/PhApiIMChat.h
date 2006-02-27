@@ -23,9 +23,9 @@
 #include "PhApiFactory.h"
 
 #include <imwrapper/IMChat.h>
+#include <imwrapper/IMChatSession.h>
 
 class IMAccount;
-class IMChatSession;
 
 /**
  * PhApi IM chat.
@@ -40,7 +40,7 @@ class PhApiIMChat : public IMChat {
 public:
 
 	void sendMessage(IMChatSession & chatSession, const std::string & message);
-	void createSession();
+	void createSession(IMContactSet & imContactSet);
 	void closeSession(IMChatSession & chatSession);
 	void addContact(IMChatSession & chatSession, const std::string & contactId);
 	void removeContact(IMChatSession & chatSession, const std::string & contactId);

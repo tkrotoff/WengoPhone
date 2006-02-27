@@ -42,6 +42,6 @@ void CChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMC
 	LOG_DEBUG("new IMChatSessionCreatedEvent");
 }
 
-void CChatHandler::createSession(const IMAccount & imAccount) {
-	_chatHandler.createSession(imAccount);
+void CChatHandler::createSession(const IMAccount & imAccount, IMContactSet & imContactSet) {
+	_chatHandler.createSession(imAccount, imContactSet);
 }

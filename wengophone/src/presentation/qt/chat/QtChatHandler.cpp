@@ -53,8 +53,8 @@ void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(ChatHandler & 
 	qtChatWidget->getWidget()->show();
 }
 
-void QtChatHandler::createSession(const IMAccount & imAccount) {
-	_cChatHandler.createSession(imAccount);
+void QtChatHandler::createSession(const IMAccount & imAccount, IMContactSet & imContactSet) {
+	_cChatHandler.createSession(imAccount, imContactSet);
 }
 
 void QtChatHandler::updatePresentation() {

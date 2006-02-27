@@ -20,12 +20,13 @@
 #ifndef IMCHAT_H
 #define IMCHAT_H
 
+#include <imwrapper/IMContactSet.h>
+
 #include <Interface.h>
 #include <Event.h>
 
 #include <string>
 
-class IMAccount;
 class IMChatSession;
 
 /**
@@ -104,7 +105,7 @@ public:
 	 *
 	 * The new IMChatSession is returned by the Event newIMChatSessionCreatedEvent
 	 */
-	virtual void createSession() = 0;
+	virtual void createSession(IMContactSet & imContactList) = 0;
 
 protected:
 

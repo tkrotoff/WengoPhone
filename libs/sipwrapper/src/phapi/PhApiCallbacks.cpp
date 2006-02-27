@@ -240,21 +240,24 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 
 	LOG_DEBUG("message received from " + string(info->from) 
 		+ ": " + string((info->content ? info->content : "")));
-	std::map<int, IMChatSession *> messageIdChatSessionMap = p->getMessageIdChatSessionMap();
-	std::map<int, IMChatSession *>::const_iterator it = messageIdChatSessionMap.find(messageId);
-	if (it == messageIdChatSessionMap.end()) {
-		//FIXME: This test is false and should be replaced by a test on session id.
+
+	// Getting maps from PhApiWrapper
+	std::map<const std::string, IMChatSession *> & contactChatMap = p->getContactChatMap();
+
+	// Finding associated session
+	string from = info->from;
+	std::map<const std::string, IMChatSession *>::const_iterator sessionIt = contactChatMap.find(StringList::split(from)[0]);
+
+	if (sessionIt != contactChatMap.end()) {
+		imChatSession = (*sessionIt).second;
+	} else {
 		LOG_DEBUG("creating new IMChatSession");
 		imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
-		p->newIMChatSessionCreatedEvent(*p, *imChatSession);
-	} else {
-		LOG_DEBUG("a session already exists");
-		imChatSession = messageIdChatSessionMap[messageId];
+		p->newIMChatSessionCreatedEvent(*p, *imChatSession);		
 	}
 
 	switch(info->event) {
 	case phMsgNew: {
-		string from = info->from;
 		string content = info->content;
 		p->contactAddedEvent(*p, *imChatSession, StringList::split(from)[0]);
 		p->messageReceivedEvent(*p, *imChatSession, from, content);

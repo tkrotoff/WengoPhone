@@ -30,14 +30,13 @@
 #include <imwrapper/IMChat.h>
 #include <imwrapper/IMConnect.h>
 #include <imwrapper/IMPresence.h>
+#include <imwrapper/IMChatSession.h>
 
 #include <Event.h>
 
 #include <phapi.h>
 
 #include <string>
-
-class IMChatSession;
 
 /**
  * SIP wrapper for PhApi.
@@ -163,7 +162,7 @@ public:
 	 */
 
 	void sendMessage(IMChatSession & chatSession, const std::string & message);
-	void createSession(IMChat & imChat);
+	void createSession(IMChat & imChat, IMContactSet & imContactSet);
 	void closeSession(IMChatSession & chatSession);
 	void addContact(IMChatSession & chatSession, const std::string & contactId);
 	void removeContact(IMChatSession & chatSession, const std::string & contactId);
@@ -183,8 +182,12 @@ public:
 
 	void unblockContact(const std::string & contactId);
 
-	std::map<int, IMChatSession *> getMessageIdChatSessionMap() {
+	std::map<int, IMChatSession *> & getMessageIdChatSessionMap() {
 		return _messageIdChatSessionMap;
+	}
+
+	std::map<const std::string, IMChatSession *> & getContactChatMap() {
+		return _contactChatMap;
 	}
 
 	void allowWatcher(const std::string & watcher);
@@ -252,6 +255,8 @@ private:
 	int _inputAudioDeviceId;
 
 	std::map<int, IMChatSession *> _messageIdChatSessionMap;
+
+	std::map<const std::string, IMChatSession *> _contactChatMap;
 
 	std::string _proxyServer;
 

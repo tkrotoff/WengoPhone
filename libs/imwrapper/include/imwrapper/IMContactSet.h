@@ -17,31 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PCHATHANDLER_H
-#define PCHATHANDLER_H
+#ifndef IMCONTACTSET_H
+#define IMCONTACTSET_H
 
-#include <presentation/Presentation.h>
+#include <imwrapper/IMContact.h>
 
-#include <imwrapper/IMChat.h>
+#include <set>
 
-#include <NonCopyable.h>
-#include <Event.h>
+class IMContactSet : public std::set<IMContact> {
 
-class IMContactSet;
-
-/**
- *
- * @ingroup presentation
- * @author Tanguy Krotoff
- * @author Philippe Bernery
- */
-class PChatHandler : public Presentation {
-public:
-
-	/**
-	 * @see ChatHandler::createSession
-	 */
-	virtual void createSession(const IMAccount & imAccount, IMContactSet & imContactSet) = 0;
 };
 
-#endif	//PCHATHANDLER_H
+#endif //IMCONTACTSET_H

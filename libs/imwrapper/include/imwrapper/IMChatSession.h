@@ -21,6 +21,7 @@
 #define IMCHATSESSION_H
 
 #include <imwrapper/IMChat.h>
+#include <imwrapper/IMContactSet.h>
 
 #include <string>
 #include <set>
@@ -28,7 +29,6 @@
 class IMAccount;
 class IMAccountHandler;
 class IMContact;
-class IMChat;
 
 /**
  * Instant Messaging chat.
@@ -79,9 +79,6 @@ class IMChat;
 class IMChatSession {
 public:
 
-	/** List of IMContact, each IMContact is unique inside the list, thus we use a set. */
-	typedef std::set<IMContact> IMContactList;
-
 	Event<void (IMChatSession & sender, const IMContact & from, const std::string & message)> messageReceivedEvent;
 
 	Event<void (IMChatSession & sender, IMChat::StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
@@ -117,8 +114,8 @@ public:
 	 */
 	void sendMessage(const std::string & message);
 
-	const IMContactList & getIMContactList() const {
-		return _imContactList;
+	const IMContactSet & getIMContactSet() const {
+		return _imContactSet;
 	}
 
 	bool operator==(const IMChatSession & imChatSession) const;
@@ -135,7 +132,7 @@ private:
 
 	void contactRemovedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId);
 
-	IMContactList _imContactList;
+	IMContactSet _imContactSet;
 
 	IMChat & _imChat;
 };

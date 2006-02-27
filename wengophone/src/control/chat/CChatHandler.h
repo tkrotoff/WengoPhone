@@ -26,6 +26,7 @@
 #include <Event.h>
 
 class IMAccount;
+class IMContactSet;
 class ChatHandler;
 class PChatHandler;
 
@@ -46,7 +47,7 @@ public:
 	 */
 	Event<void (ChatHandler & sender, IMChatSession & imChatSession)> newIMChatSessionCreatedEvent;
 
-	void createSession(const IMAccount & imAccount);
+	void createSession(const IMAccount & imAccount, IMContactSet & imContactSet);
 
 	CChatHandler(ChatHandler & chatHandler);
 
