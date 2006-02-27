@@ -34,7 +34,6 @@ WengoPhoneBuildId = {
 sources = [
 	env.WengoCreateFile('WengoPhoneBuildId.cpp', WengoPhoneBuildIdTemplate, WengoPhoneBuildId),
 	'model/WengoPhone.cpp',
-	'model/NetworkDiscovery.cpp',
 	'model/SipCallbacks.cpp',
 	'model/config/Config.cpp',
 	'model/config/ConfigManager.cpp',
@@ -55,6 +54,7 @@ sources = [
 	'model/phonecall/PhoneCallStateResumeOk.cpp',
 	'model/phonecall/PhoneCallStateRinging.cpp',
 	'model/phoneline/PhoneLine.cpp',
+	'model/account/NetworkDiscovery.cpp',
 	'model/account/wengo/WengoAccount.cpp',
 	'model/account/wengo/WengoAccountRPCLayer.cpp',
 	'model/account/wengo/WengoAccountXMLLayer.cpp',
