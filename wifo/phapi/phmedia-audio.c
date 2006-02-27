@@ -836,7 +836,7 @@ void ph_audio_resample(void *ctx, void *inbuf, int inbsize, void *outbuf, int *o
 
 #define SATURATE(x) ((x > 0x7fff) ? 0x7fff : ((x < ~0x7fff) ? ~0x7fff : x))
 
-static void ph_mixmedia2(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1, ph_mediabuf_t *smb2)
+static void ph_mixmedia2(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1, ph_mediabuf_t *smb2, int framesize)
 {
   int tmp;
   short *src1 = smb1->buf;
@@ -844,26 +844,25 @@ static void ph_mixmedia2(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1, ph_mediabuf_t 
   short *src2 = smb2->buf;
   short *send2 = smb2->buf + smb2->next;
   short *dst = dmb->buf;
-  short *dend;
+  short *dend = dst + framesize;
+  int s1len = smb1->next;
+  int s2len = smb2->next;
 
 
-  if (smb1->next < smb2->next)
-    dend = dmb->buf + smb1->next;
-  else
-    dend = dmb->buf + smb2->next;
-
-  while(dst < dend)
+  while((dst < dend) && s1len && s2len )
     {
       tmp = (int)*src1++ + (int)*src2++;
 
       tmp = SATURATE(tmp);
       *dst++ = (short) tmp;
+      s1len--; 
+      s2len--;
     }
 
-  while(src1 < send1)
+  while((src1 < send1) && (dst < dend))
     *dst++ = *src1++;
 
-  while(src2 < send2)
+  while((src2 < send2) && (dst < dend))
     *dst++ = *src2++;
 
   dmb->next = dst - dmb->buf;
@@ -1009,7 +1008,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 	  
 	      len = ph_media_retreive_decoded_frame(stream, &stream->data_in);
 	      len2 = ph_media_retreive_decoded_frame(stream->to_mix, &stream->to_mix->data_in);
-	      ph_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in);
+	      ph_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, framesize/2);
 	  
 	      len = spkrbuf.next * 2;
 	    }
