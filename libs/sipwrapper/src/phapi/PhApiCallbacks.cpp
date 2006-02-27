@@ -245,21 +245,22 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	std::map<const std::string, IMChatSession *> & contactChatMap = p->getContactChatMap();
 
 	// Finding associated session
-	string from = info->from;
-	std::map<const std::string, IMChatSession *>::const_iterator sessionIt = contactChatMap.find(StringList::split(from)[0]);
+	string from = StringList::split(string(info->from))[0];
+	std::map<const std::string, IMChatSession *>::const_iterator sessionIt = contactChatMap.find(from);
 
 	if (sessionIt != contactChatMap.end()) {
 		imChatSession = (*sessionIt).second;
 	} else {
 		LOG_DEBUG("creating new IMChatSession");
 		imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
+		contactChatMap[from] = imChatSession;
 		p->newIMChatSessionCreatedEvent(*p, *imChatSession);		
 	}
 
 	switch(info->event) {
 	case phMsgNew: {
 		string content = info->content;
-		p->contactAddedEvent(*p, *imChatSession, StringList::split(from)[0]);
+		p->contactAddedEvent(*p, *imChatSession, from);
 		p->messageReceivedEvent(*p, *imChatSession, from, content);
 		break;
 	}
