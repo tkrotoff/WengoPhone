@@ -20,6 +20,10 @@
 #include <model/WengoPhone.h>
 #include <control/CWengoPhone.h>
 
+#ifdef MULTIIMWRAPPER
+	#include <multiim/MultiIMFactory.h>
+	#include <GaimIMFactory.h>
+#endif
 
 #ifdef GTKINTERFACE
 	#include <presentation/gtk/GtkFactory.h>
@@ -87,6 +91,11 @@ int main(int argc, char * argv[]) {
 	PhApiFactory * phApiFactory = new PhApiFactory();
 	sipFactory = phApiFactory;
 	imFactory = phApiFactory;
+#elif defined(MULTIIMWRAPPER)
+	PhApiFactory * phApiFactory = new PhApiFactory();
+	GaimIMFactory * gaimIMFactory = new GaimIMFactory();
+	sipFactory = phApiFactory;
+	imFactory = new MultiIMFactory(*phApiFactory, *gaimIMFactory);
 #else
 	sipFactory = new NullSipFactory();
 	imFactory = new NullIMFactory();

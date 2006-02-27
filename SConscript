@@ -28,6 +28,7 @@ projects = [
 	'libs/wenbox',
 	'libs/webcam',
 	'libs/sipwrapper',
+	'libs/imwrapper/src/multiim',
 	'wengophone',
 ]
 

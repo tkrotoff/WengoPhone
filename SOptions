@@ -12,6 +12,7 @@ args = {
 	'build-vcproj' : 0,
 	'sipxwrapper' : 0,
 	'phapiwrapper' : 1,
+	'multiimwrapper' : 0,
 	'nullsipwrapper' : 0,
 	'enable-samplerate' : 0,
 	'enable-phapi-audio-arts' : 0,

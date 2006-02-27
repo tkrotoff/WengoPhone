@@ -1,0 +1,17 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'phapiwrapper',
+	'gaimimwrapper',
+]
+lib_path = []
+include_path = ['../multiim']
+defines = {}
+headers = []
+sources = [
+	'MultiIMFactory.cpp'
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoStaticLibrary('multiimwrapper', sources)
