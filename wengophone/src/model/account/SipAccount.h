@@ -20,7 +20,7 @@
 #ifndef SIPACCOUNT_H
 #define SIPACCOUNT_H
 
-#include <model/NetworkDiscovery.h>
+#include <model/account/NetworkDiscovery.h>
 
 #include <Event.h>
 #include <Interface.h>
