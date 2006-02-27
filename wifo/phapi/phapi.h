@@ -841,6 +841,12 @@ MY_DLLEXPORT void phVideoControlCodecGet(int, struct phVideoCodecConfig *);
 #define VAD_VALID_MASK 0x80000000
 #define VAD_THRESHOLD_MASK 0x7fffffff
 
+enum PH_HDX_MODES {
+  PH_HDX_MODE_MIC = 1,   /*!< Half Duplex mode where microphone signal has priority over speaker signal */
+  PH_HDX_MODE_SPK = 2    /*!< Half Duplex mode where speaker signal has priority over microphone signal */
+};
+
+
 #ifdef EMBED
 struct phConfig {
   char local_rtp_port[16]; /*!< port number used for RTP data */ /* range 1st - last */

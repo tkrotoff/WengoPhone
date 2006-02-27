@@ -562,12 +562,11 @@ calc_shift(int val)
 }
 
 static int
-ph_vad_update(phastream_t *as, char *data, int len)
+ph_vad_update0(struct vadcng_info *s, char *data, int len)
 {
   int i;
   unsigned int power;
   short *p = (short *)data; 
-  struct vadcng_info *s = &as->cngi;
   static int tracecnt = 0;
   
   /* calc mean power */
@@ -1025,7 +1024,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
       DBG5_DYNA_AUDIO_RX("Playing %d bytes from net\n", len,0,0,0);
 
       /* if we're in Half Duplex mode, attenuate speaker signal */
-      if (stream->hdxmode && !stream->hdxsilence)
+      if ((stream->hdxmode == PH_HDX_MODE_MIC) && !stream->hdxsilence)
 	{
 	  short *samples = (short *) playbuf;
 	  int nsamples = len >> 1;
@@ -1043,6 +1042,10 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
       if (stream->using_out_callback)
 	store_pcm(stream, playbuf, len);
 #endif
+
+      if (stream->hdxmode == PH_HDX_MODE_SPK)
+	  stream->spksilence = ph_vad_update0(&stream->cngo, playbuf, len);
+
 	
         /* save played data */    
       if (stream->lastframe)
@@ -1157,7 +1160,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
   /* do we need to do Voice Activity Detection ? */
   if (stream->cngi.vad)
     {
-      stream->hdxsilence = silok = ph_vad_update(stream, recordbuf, framesize);
+      stream->hdxsilence = silok = ph_vad_update0(&stream->cngi, recordbuf, framesize);
       if (!stream->cngi.cng && silok)
 	{
 	  /* resend dummy CNG packet only if CNG was not negotiated */
@@ -1165,7 +1168,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 	  wakeup = (diff.tv_sec > RTP_RETRANSMIT);
 	}
     }
-  else if (stream->hdxmode)
+  else if (stream->hdxmode == PH_HDX_MODE_MIC)
     {
       int hdxsil = ph_vad_update(stream, recordbuf, framesize);
       if (hdxsil != stream->hdxsilence)
@@ -1254,9 +1257,22 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 #endif
 
     while(recbufsize >= framesize)
-        {
+      {
         gettimeofday(&stream->now,0);
-           
+        
+	if ((stream->hdxmode == PH_HDX_MODE_SPK) && !stream->spksilence)
+	  {
+	    short *samples = (short *) recordbuf;
+	    int nsamples = framesize >> 1;
+	    const int SPKHDXSHIFT = 4;
+	  
+	    while(nsamples--)
+	      {
+		*samples = *samples >> SPKHDXSHIFT;
+		samples++;
+	      }
+	  }
+	    
 #ifdef DO_ECHO_CAN
         do_echo_update(stream, recordbuf, framesize);
 #endif
@@ -1534,11 +1550,8 @@ int ph_media_set_spkvol(phcall_t *ca, int level)
 #endif
 
 
-void ph_audio_init_vad(phastream_t *stream)
+void ph_audio_init_vad0(struct vadcng_info *cngp, int samples)
 {
-  int samples = (stream->clock_rate)/1000;
-  struct vadcng_info *cngp = &stream->cngi;
-
   
   cngp->pwr_size = PWR_WINDOW * samples;
   cngp->pwr_shift = calc_shift(cngp->pwr_size);
@@ -1563,6 +1576,32 @@ void ph_audio_init_vad(phastream_t *stream)
 #endif      
 
 }
+
+
+
+
+void ph_audio_init_ivad(phastream_t *stream)
+{
+  int samples = (stream->clock_rate)/1000;
+  struct vadcng_info *cngp = &stream->cngi;
+
+  ph_audio_init_vad0(cngp, samples);
+  
+}
+
+void ph_audio_init_ovad(phastream_t *stream)
+{
+  int samples = (stream->clock_rate)/1000;
+  struct vadcng_info *cngp = &stream->cngo;
+
+  ph_audio_init_vad0(cngp, samples);
+  
+}
+
+
+
+
+
 
 
 void ph_audio_init_cng(phastream_t *stream)
@@ -1878,18 +1917,35 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
     
 
-  if ((sp->flags & PH_MSTREAM_FLAG_HDX) || getenv("PH_FORCE_HDX"))
+  if ((sp->flags & PH_MSTREAM_FLAG_MICHDX) || getenv("PH_FORCE_MICHDX"))
     {
-      char*  fhdx =  getenv("PH_FORCE_HDX");
+      char*  fhdx =  getenv("PH_FORCE_MICHDX");
       
-      stream->hdxmode = 1;
+      stream->hdxmode = PH_HDX_MODE_MIC;
       stream->hdxsilence = 1;
       if (fhdx)
 	sp->vadthreshold = atoi(fhdx);
 
-      DBG4_MEDIA_ENGINE("ph_mession_audio_start: HDX mode level=%d\n",  sp->vadthreshold,0,0);
+      DBG4_MEDIA_ENGINE("ph_mession_audio_start: MICHDX mode level=%d\n",  sp->vadthreshold,0,0);
 
     }
+
+
+  if ((sp->flags & PH_MSTREAM_FLAG_SPKHDX) || getenv("PH_FORCE_SPKHDX"))
+    {
+      char*  spkfhdx =  getenv("PH_FORCE_SPKHDX");
+      
+      stream->hdxmode = PH_HDX_MODE_SPK;
+      stream->cngo.pwr_threshold = 700;
+      stream->spksilence = 1;
+
+      if (spkfhdx)
+	stream->cngo.pwr_threshold = atoi(spkfhdx);
+
+      DBG4_MEDIA_ENGINE("ph_mession_audio_start: SPKHDX mode level=%d\n",  stream->cngo.pwr_threshold, 0, 0);
+
+    }
+
 
   stream->ms.mses = s;
   stream->clock_rate = stream->actual_rate = codec->clockrate;
@@ -2006,10 +2062,17 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   stream->ms.rtp_session = session;
   stream->dtmfCallback = s->dtmfCallback;
 
-  if (stream->cngi.vad || stream->hdxmode)
+  if (stream->cngi.vad || stream->hdxmode == PH_HDX_MODE_SPK)
     {
-      ph_audio_init_vad(stream);
+      ph_audio_init_ivad(stream);
     }
+
+
+  if (stream->hdxmode == PH_HDX_MODE_SPK)
+    {
+      ph_audio_init_ovad(stream);
+    }
+
 
   if (stream->cngi.cng)
     {

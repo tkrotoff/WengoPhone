@@ -115,6 +115,8 @@ struct vadcng_info
 
 enum EC_PHASE { EC_PRETRAINING=1, EC_TRAINING };
 
+
+
 struct ph_audio_stream
 {
   struct phmstream ms;
@@ -129,9 +131,11 @@ struct ph_audio_stream
   ph_mediabuf_t      *mixbuf;
   struct dtmf_info   dtmfi;
   struct vadcng_info cngi;
+  struct vadcng_info cngo;
 
   int    hdxmode;
   int    hdxsilence;
+  int    spksilence;
 
 #ifdef DO_ECHO_CAN
   void  *ec;

@@ -3206,11 +3206,19 @@ ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags, int resumeflag)
 	else
 	  strncpy(msp->remoteaddr, ca->remote_sdp_audio_ip, sizeof(msp->remoteaddr));
 
-	if (phcfg.hdxmode)
+
+	if (phcfg.hdxmode == PH_HDX_MODE_MIC)
 	  {
-	    msp->flags |= PH_MSTREAM_FLAG_HDX;
+	    msp->flags |= PH_MSTREAM_FLAG_MICHDX;
 	    msp->vadthreshold = phcfg.vad & 0x7fff;
 	  }
+
+	if (phcfg.hdxmode == PH_HDX_MODE_SPK)
+	  {
+	    msp->flags |= PH_MSTREAM_FLAG_SPKHDX;
+	    msp->vadthreshold = phcfg.vad & 0x7fff;
+	  }
+
 
 
 	msp->localport = port_audio;

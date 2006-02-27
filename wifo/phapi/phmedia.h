@@ -78,9 +78,10 @@ enum ph_mstream_flags {
   PH_MSTREAM_FLAG_VAD = 1,
   PH_MSTREAM_FLAG_CNG = 2,
   PH_MSTREAM_FLAG_AEC = 4,
-  PH_MSTREAM_FLAG_HDX = 8,  /* half duplex mode */
-  PH_MSTREAM_FLAG_RUNNING = 16,
-  PH_MSTREAM_FLAG_TUNNEL = 32,
+  PH_MSTREAM_FLAG_MICHDX = 8,  /* half duplex mode */
+  PH_MSTREAM_FLAG_SPKHDX = 16,  /* half duplex mode */
+  PH_MSTREAM_FLAG_RUNNING = 32,
+  PH_MSTREAM_FLAG_TUNNEL = 64,
   
 };
 
