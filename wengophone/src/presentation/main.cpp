@@ -20,11 +20,6 @@
 #include <model/WengoPhone.h>
 #include <control/CWengoPhone.h>
 
-#ifdef MULTIIMWRAPPER
-	#include <multiim/MultiIMFactory.h>
-	#include <GaimIMFactory.h>
-#endif
-
 #ifdef GTKINTERFACE
 	#include <presentation/gtk/GtkFactory.h>
 #else
@@ -39,6 +34,10 @@
 #elif defined(SIPXWRAPPER)
 	#include <SipXFactory.h>
 	#include <NullIMFactory.h>
+#elif defined (MULTIIMWRAPPER)
+	#include <PhApiFactory.h>
+	#include <multiim/MultiIMFactory.h>
+	#include <GaimIMFactory.h>
 #else
 	#include <NullSipFactory.h>
 	#include <NullIMFactory.h>
