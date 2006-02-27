@@ -64,10 +64,26 @@ public:
 
 		_imAccount = new IMAccount(*it);
 
+		IMContactSet imContactSet;
+		string command;
+		char buffer[512];
+		cout << "Add contacts to the chat. Type 'start' to start the chat: " << endl;
+		while (command != "start") {
+
+			cout << "contact id: ";
+			cin.getline(buffer, sizeof(buffer));
+			command = string(buffer);
+
+			if (!command.empty() && command != "start")
+			{
+				imContactSet.insert(IMContact(*_imAccount, command));
+			}
+		}
+
 		_chatFinished = false;
 		_wengoPhone.getChatHandler().newIMChatSessionCreatedEvent +=
 			boost::bind(&TalkToIMContactCommand::newIMChatSessionCreatedEventHandler, this, _1, _2);
-		_wengoPhone.getChatHandler().createSession(*_imAccount);
+		_wengoPhone.getChatHandler().createSession(*_imAccount, imContactSet);
 
 		while (!_chatFinished) {
 			Thread::msleep(100);
@@ -96,25 +112,25 @@ public:
 		
 		cout << "Commands are: quit, add" << endl;
 		
-		while (command != "quit") {
-			cout << "> ";
-			cin.getline(buffer, sizeof(buffer));
-			command = string(buffer);
+		//while (command != "quit") {
+		//	cout << "> ";
+		//	cin.getline(buffer, sizeof(buffer));
+		//	command = string(buffer);
 
-			if (command == "add") {
-				cout << "Please enter the contact id to talk to: ";
-				cin >> contactId;
-		
-				imChatSession.addIMContact(IMContact(*_imAccount, contactId));
+		//	if (command == "add") {
+		//		cout << "Please enter the contact id to talk to: ";
+		//		cin >> contactId;
+		//
+		//		imChatSession.addIMContact(IMContact(*_imAccount, contactId));
 
-				continue;
-			}
+		//		continue;
+		//	}
 
-			if (command != "quit") {
-				imChatSession.sendMessage(command);
-			}
-		}
-		_chatFinished = true;
+		//	if (command != "quit") {
+		//		imChatSession.sendMessage(command);
+		//	}
+		//}
+		//_chatFinished = true;
 	}
 
 	void messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message) {
