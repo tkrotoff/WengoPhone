@@ -22,7 +22,6 @@
 
 #include <NonCopyable.h>
 #include <Event.h>
-#include <List.h>
 #include <http/HttpRequest.h>
 
 #include <string>
@@ -146,8 +145,6 @@ private:
 	WengoAccount & _wengoAccount;
 
 	bool _answerReceivedAlready;
-
-	int _smsId;
 };
 
 #endif	//SMS_H
