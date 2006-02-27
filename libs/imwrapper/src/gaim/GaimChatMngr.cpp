@@ -158,73 +158,98 @@ GaimChatMngr *GaimChatMngr::getInstance()
 
 void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 {
+	GaimAccount *gAccount = gaim_conversation_get_account(conv);
 	GaimConversationType chatType = gaim_conversation_get_type(conv);
-	IMChatSession *chatSession = NULL;
-	GaimIMChat *gChat = FindIMChatByGaimConv(conv);
-	mConvInfo_t *mConv = (mConvInfo_t *) conv->ui_data;
-	
-	if (mConv == NULL)
-	{
-		// We receive an incoming message
-		// and the ChatSession is not created yet
+	const char *gPrclId = gaim_account_get_protocol_id(gAccount);	
+	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
+								GaimEnumIMProtocol::GetEnumIMProtocol(gPrclId));
+	GaimIMChat *mChat = FindIMChat(*account);
 
-		mConv = gChat->mCreateSession();
-		conv->ui_data = mConv;
-		chatSession = (IMChatSession *) mConv->conv_session;
+	mConvInfo_t *mConv = new mConvInfo_t();
+	IMChatSession *chatSession = new IMChatSession(*mChat);
 
-		if (chatType == GAIM_CONV_TYPE_IM)
-		{
-			gChat->contactAddedEvent(*gChat, *chatSession, 
-									gaim_conversation_get_name(conv));
-		}
-		else if (chatType == GAIM_CONV_TYPE_CHAT)
-		{
-			GList *gChatUsers = gaim_conv_chat_get_users(GAIM_CONV_CHAT(conv));
+	mConv->conv_session = chatSession;
+	mConv->conv_id = chatSession->getId();
+	mConv->gaim_conv_session = conv;
+	conv->ui_data = mConv;
 
-			GaimConvChatBuddy *gUser;
-			for ( ; gChatUsers; gChatUsers = gChatUsers->next)
-			{
-				gUser = (GaimConvChatBuddy *) gChatUsers->data;
-				gChat->contactAddedEvent(*gChat, *chatSession, gUser->name);
-			}
-		}
+	mChat->AddChatSessionInList(mConv);
 
-		return;
-	}
-
-	// Get IMChatSession buddies number to know
-	// if we have to send an event to IMWrapper
-	// (because of an asynchrone management of create/add
-	// operations between IMWrapper and Gaim)
-	chatSession = (IMChatSession *) mConv->conv_session;
+	mChat->newIMChatSessionCreatedEvent(*mChat, *chatSession);
 
 	if (chatType == GAIM_CONV_TYPE_IM)
 	{
-		if (chatSession->getIMContactList().size() == 0)
-		{
-			gChat->contactAddedEvent(*gChat, *chatSession, gaim_conversation_get_name(conv));
-		}
+		mChat->contactAddedEvent(*mChat, *chatSession, gaim_conversation_get_name(conv));
+		mChat->sendMessage(*chatSession, std::string("I'm joining the chat (^_^) !"));
 	}
 	else if (chatType == GAIM_CONV_TYPE_CHAT)
 	{
-		const IMChatSession::IMContactList &ChatContact = chatSession->getIMContactList();
-		IMChatSession::IMContactList::const_iterator it = ChatContact.begin();
-		const char *contactId = (*it).getContactId().c_str();
-		
-		GList *gChatUsers = gaim_conv_chat_get_users(GAIM_CONV_CHAT(conv));
-		
-		GaimConvChatBuddy *gUser;
-
-		for ( ; gChatUsers; gChatUsers = gChatUsers->next)
-		{	
-			gUser = (GaimConvChatBuddy *) gChatUsers->data;
-			if (gaim_utf8_strcasecmp(gUser->name, contactId) != 0)
-			{
-				gChat->contactAddedEvent(*gChat, *chatSession, gUser->name);
-				break;
-			}
-		}
+		;
 	}
+	 
+	
+	//if (mConv == NULL)
+	//{
+	//	// We receive an incoming message
+	//	// and the ChatSession is not created yet
+
+	//	mConv = gChat->mCreateSession();
+	//	conv->ui_data = mConv;
+	//	chatSession = (IMChatSession *) mConv->conv_session;
+	//	
+	//	if (chatType == GAIM_CONV_TYPE_IM)
+	//	{
+	//		gChat->contactAddedEvent(*gChat, *chatSession, 
+	//								gaim_conversation_get_name(conv));
+	//	}
+	//	else if (chatType == GAIM_CONV_TYPE_CHAT)
+	//	{
+	//		GList *gChatUsers = gaim_conv_chat_get_users(GAIM_CONV_CHAT(conv));
+
+	//		GaimConvChatBuddy *gUser;
+	//		for ( ; gChatUsers; gChatUsers = gChatUsers->next)
+	//		{
+	//			gUser = (GaimConvChatBuddy *) gChatUsers->data;
+	//			gChat->contactAddedEvent(*gChat, *chatSession, gUser->name);
+	//		}
+	//	}
+
+	//	return;
+	//}
+
+	//// Get IMChatSession buddies number to know
+	//// if we have to send an event to IMWrapper
+	//// (because of an asynchrone management of create/add
+	//// operations between IMWrapper and Gaim)
+	//chatSession = (IMChatSession *) mConv->conv_session;
+
+	//if (chatType == GAIM_CONV_TYPE_IM)
+	//{
+	//	if (chatSession->getIMContactList().size() == 0)
+	//	{
+	//		gChat->contactAddedEvent(*gChat, *chatSession, gaim_conversation_get_name(conv));
+	//	}
+	//}
+	//else if (chatType == GAIM_CONV_TYPE_CHAT)
+	//{
+	//	const IMChatSession::IMContactList &ChatContact = chatSession->getIMContactList();
+	//	IMChatSession::IMContactList::const_iterator it = ChatContact.begin();
+	//	const char *contactId = (*it).getContactId().c_str();
+	//	
+	//	GList *gChatUsers = gaim_conv_chat_get_users(GAIM_CONV_CHAT(conv));
+	//	
+	//	GaimConvChatBuddy *gUser;
+
+	//	for ( ; gChatUsers; gChatUsers = gChatUsers->next)
+	//	{	
+	//		gUser = (GaimConvChatBuddy *) gChatUsers->data;
+	//		if (gaim_utf8_strcasecmp(gUser->name, contactId) != 0)
+	//		{
+	//			gChat->contactAddedEvent(*gChat, *chatSession, gUser->name);
+	//			break;
+	//		}
+	//	}
+	//}
 
 	fprintf(stderr, "wgconv : gaim_wgconv_new()\n");
 }
@@ -256,8 +281,8 @@ void GaimChatMngr::WriteConvCbk(GaimConversation *conv, const char *name, const 
 	if ((flags & GAIM_MESSAGE_RECV))
 	{
 		mConvInfo_t *mConv = (mConvInfo_t *)conv->ui_data;
-		GaimIMChat *GIMChat = FindIMChatByGaimConv(conv);
-		GIMChat->messageReceivedEvent(*GIMChat, *((IMChatSession *)(mConv->conv_session)), std::string(name), std::string(message));
+		GaimIMChat *gIMChat = FindIMChatByGaimConv(conv);
+		gIMChat->messageReceivedEvent(*gIMChat, *((IMChatSession *)(mConv->conv_session)), std::string(name), std::string(message));
 	}
 }
 

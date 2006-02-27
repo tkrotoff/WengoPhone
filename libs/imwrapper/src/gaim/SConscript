@@ -7,7 +7,7 @@ libs = [
 	'imwrapper',
 ]
 lib_path = []
-include_path = ['.']
+include_path = ['../gaim']
 defines = {}
 headers = []
 sources = [

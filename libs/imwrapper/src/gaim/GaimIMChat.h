@@ -25,6 +25,7 @@
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMChat.h>
 #include <imwrapper/IMChatSession.h>
+#include <imwrapper/IMContactSet.h>
 
 typedef struct	mConvInfo_s
 {
@@ -46,21 +47,19 @@ class GaimIMChat : public IMChat
 public:
 
 	GaimIMChat(IMAccount &account);
-	void createSession();
+	void createSession(IMContactSet & imContactList);
 	void closeSession(IMChatSession & chatSession);
 	void sendMessage(IMChatSession & chatSession, const std::string & message);
 	void addContact(IMChatSession & chatSession, const std::string & contactId);
 	void removeContact(IMChatSession & chatSession, const std::string & contactId);
 	bool equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol);
-
-	mConvInfo_t *mCreateSession();
+	void AddChatSessionInList(mConvInfo_t *conv);
 
 private:
 
 	/* ************ MANAGE CHAT SESSION LIST ************ */
 	static std::list<mConvInfo_t *> _GaimChatSessionList;
 	typedef std::list<mConvInfo_t *>::iterator GaimChatSessionIterator;
-	void AddChatSessionInList(mConvInfo_t *conv);
 	void RemoveChatSessionFromList(int convId);
 	bool IsChatSessionInList(int convId);
 	static mConvInfo_t *FindChatStructById(int convId);

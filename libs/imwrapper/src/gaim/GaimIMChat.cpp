@@ -33,6 +33,7 @@ extern "C" {
 #include <stdio.h>
 #endif
 
+
 std::list<mConvInfo_t *> GaimIMChat::_GaimChatSessionList;
 
 GaimIMChat::GaimIMChat(IMAccount & account)
@@ -41,24 +42,45 @@ GaimIMChat::GaimIMChat(IMAccount & account)
 
 }
 
-
-mConvInfo_t *GaimIMChat::mCreateSession()
+void GaimIMChat::createSession(IMContactSet & imContactSet)
 {
-	mConvInfo_t	*conv = new mConvInfo_t();
-	IMChatSession *chatSession = new IMChatSession(*this);
+	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
+											GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
 
-	conv->conv_session = (void *) chatSession;
-	conv->conv_id = chatSession->getId();
-	conv->gaim_conv_session = NULL;
+	GaimConversation *gConv = NULL;
 
-	AddChatSessionInList(conv);
-	newIMChatSessionCreatedEvent(*this, *chatSession);
-	return conv;
-}
+	if (!gAccount)
+		return;
 
-void GaimIMChat::createSession()
-{
-	mCreateSession();
+	if (imContactSet.size() == 0)
+	{
+		return;
+	}
+	else if (imContactSet.size() == 1)
+	{
+		IMContactSet::const_iterator it = imContactSet.begin();
+		std::string contactId = (*it).getContactId();
+
+		gConv = gaim_conversation_new(GAIM_CONV_TYPE_IM, gAccount, contactId.c_str());
+	}
+	else
+	{
+		gConv = gaim_conversation_new(GAIM_CONV_TYPE_CHAT, gAccount, "ChatName");
+	}
+
+	//mConvInfo_t	*conv = new mConvInfo_t();
+	//IMChatSession *chatSession = new IMChatSession(*this);
+
+	//conv->conv_session = (void *) chatSession;
+	//conv->conv_id = chatSession->getId();
+	//conv->gaim_conv_session = gConv;
+	//gConv->ui_data = conv;
+
+	//AddChatSessionInList(conv);
+	//newIMChatSessionCreatedEvent(*this, *chatSession);
+
+	//if (gConv->type == GAIM_CONV_TYPE_IM)
+	//	contactAddedEvent(*this, *chatSession, gaim_conversation_get_name(gConv));
 }
 
 void GaimIMChat::closeSession(IMChatSession & chatSession)
@@ -71,11 +93,15 @@ void GaimIMChat::closeSession(IMChatSession & chatSession)
 
 void GaimIMChat::sendMessage(IMChatSession & chatSession, const std::string & message)
 {
+	if (message.empty())
+		return;
+
 	mConvInfo_t *mConv = FindChatStructById(chatSession.getId());
-	int BuddyNbr = chatSession.getIMContactList().size();
+	int BuddyNbr = chatSession.getIMContactSet().size();
 	
 	if (BuddyNbr == 1)
 	{
+
 		gaim_conv_im_send_with_flags(GAIM_CONV_IM((GaimConversation *)mConv->gaim_conv_session), 
 									message.c_str(), GAIM_MESSAGE_SEND);
 	}
@@ -92,22 +118,23 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 	GaimConversation *conv;
 	GaimAccount *Gaccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 											GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
-	int BuddyNbr = chatSession.getIMContactList().size();
+	int BuddyNbr = chatSession.getIMContactSet().size();
 	
 	if (Gaccount)
 	{
 		if (BuddyNbr == 0)
 		{
-			conv = gaim_conversation_new(GAIM_CONV_TYPE_IM, Gaccount, contactId.c_str());
+			conv = gaim_conversation_new(GAIM_CONV_TYPE_IM, Gaccount, 
+										contactId.c_str());
+	
 			mConv->gaim_conv_session = conv;
-			conv->ui_data = mConv;
 		}
 		else if (BuddyNbr == 1)
 		{
 			char ChatName[100];
-			const IMChatSession::IMContactList &ChatContact = chatSession.getIMContactList();
-			IMChatSession::IMContactList::const_iterator it = ChatContact.begin();
-			std::string FirstContactId = (*it).getContactId();
+			const IMContactSet &chatContact = chatSession.getIMContactSet();
+			IMContactSet::const_iterator it = chatContact.begin();
+			std::string firstContactId = (*it).getContactId();
 
 			conv = (GaimConversation *) mConv->gaim_conv_session;
 			gaim_conversation_destroy(conv);
@@ -115,7 +142,7 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 			conv = gaim_conversation_new(GAIM_CONV_TYPE_CHAT, Gaccount, ChatName);
 			mConv->gaim_conv_session = conv;
 			conv->ui_data = mConv;
-			gaim_conv_chat_add_user(GAIM_CONV_CHAT(conv), FirstContactId.c_str(), NULL, GAIM_CBFLAGS_NONE, false);
+			gaim_conv_chat_add_user(GAIM_CONV_CHAT(conv), firstContactId.c_str(), NULL, GAIM_CBFLAGS_NONE, false);
 			gaim_conv_chat_add_user(GAIM_CONV_CHAT(conv), contactId.c_str(), NULL, GAIM_CBFLAGS_NONE, true);
 		}	
 		else

@@ -126,7 +126,7 @@ static guint gaim_wg_input_add(gint fd, GaimInputCondition condition, GaimInputF
 	return closure->result;
 }
 
-static gpointer GaimMainEventLoop(gpointer data)
+gpointer GaimMainEventLoop(gpointer data)
 {
 	GMainLoop *loop;
 
@@ -170,6 +170,9 @@ void GaimIMFactory::GaimIMInit()
 {
 	char *search_path;
 
+	if (!g_thread_supported())
+		g_thread_init(NULL);
+
 #ifdef OS_WIN32
 	wgaim_init(GetModuleHandle(0));
 #endif
@@ -191,9 +194,6 @@ void GaimIMFactory::GaimIMInit()
 	{
 		fprintf(stderr, "Initialization of the Gaim core failed\n");
 	}
-
-	if (!g_thread_supported())
-		g_thread_init(NULL);
 
 	g_thread_create(GaimMainEventLoop, NULL, FALSE, NULL);
 }
