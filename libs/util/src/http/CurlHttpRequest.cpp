@@ -20,6 +20,7 @@
 #include <http/CurlHttpRequest.h>
 #include <http/HttpRequest.h>
 #include <StringList.h>
+#include <IdGenerator.h>
 
 #include <iostream>
 using namespace std;
@@ -50,11 +51,12 @@ int CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname,
 	Request r = {sslProtocol, hostname, hostPort, path, data, postMethod};
 	_requestList.push_back(r);
 
+	_lastRequestId = IdGenerator::generate();
 	if (_requestList.size() <= 1) {
 		start();
 	}
 
-	return 1;
+	return _lastRequestId;
 }
 
 void CurlHttpRequest::run() {
@@ -68,11 +70,12 @@ void CurlHttpRequest::run() {
 			setProxyUserParam();
 			setSslParam();
 			setUrl(_requestList.front());
+			curl_easy_setopt(_curl, CURLOPT_PRIVATE, _lastRequestId);
 
 			res = curl_easy_perform(_curl);
 			if (res != CURLE_OK) {
 				cerr << curl_easy_strerror(res) << endl;
-				answerReceivedEvent(1, String::null, getReturnCode(res));
+				answerReceivedEvent(_lastRequestId, String::null, getReturnCode(res));
 			}
 
 			curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, & response);
@@ -282,15 +285,12 @@ HttpRequest::Error CurlHttpRequest::getReturnCode(int curlcode) {
 }
 
 size_t curlHTTPWrite(void * ptr, size_t size, size_t nmemb, void * stream) {
-
 	if (stream && ptr) {
 		CurlHttpRequest * instance = (CurlHttpRequest *) stream;
 
-		if (true) { //sizeof(size_t) * nmemb == size ){
-			instance->answerReceivedEvent(1, string((const char *) ptr, nmemb), HttpRequest::NoError);
-		} else {
-			instance->answerReceivedEvent(1, string((const char *) ptr, nmemb), HttpRequest::WrongContentLength);
-		}
+		int requestId;
+		curl_easy_getinfo(instance->_curl, CURLINFO_PRIVATE, & requestId);
+		instance->answerReceivedEvent(requestId, string((const char *) ptr, nmemb), HttpRequest::NoError);
 		return nmemb;
 	}
 	else {

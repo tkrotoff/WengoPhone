@@ -21,6 +21,7 @@ sources = [
 	'src/http/HttpRequest.cpp',
 	'src/http/NullHttpRequest.cpp',
 	'src/http/CurlHttpRequest.cpp',
+	'src/IdGenerator.cpp',
 ]
 
 if WengoOSWindows():

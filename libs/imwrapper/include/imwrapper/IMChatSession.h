@@ -117,8 +117,8 @@ public:
 	const IMContactSet & getIMContactSet() const {
 		return _imContactSet;
 	}
-    
-    IMChat & getIMChat() { return _imChat; }
+
+	IMChat & getIMChat() { return _imChat; }
 
 	bool operator==(const IMChatSession & imChatSession) const;
 

@@ -20,6 +20,7 @@
 #include <IdGenerator.h>
 
 #include <StringList.h>
+#include <Logger.h>
 
 #include <ctime>
 
@@ -31,7 +32,16 @@ int IdGenerator::generate() {
 	int seconds = time(NULL);
 
 	static int seed = 0;
-	std::string date = String::fromNumber(seconds) + String::fromNumber(seed++);
+	String tmp = String::fromNumber(seconds) + String::fromNumber(seed++ % 10);
+	String date;
 
-	return date.toInteger();
+	//Removes the first digit
+	for (int i = 1; i < tmp.length(); i++) {
+		date += tmp[i];
+	}
+
+	int id = date.toInteger();
+	LOG_DEBUG("generated id=" + String::fromNumber(id));
+
+	return id;
 }

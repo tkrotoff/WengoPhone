@@ -72,6 +72,9 @@ public:
 
 	virtual int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
 
+	/** Libcurl component. */
+	CURL * _curl;
+
 protected:
 
 	virtual void run();
@@ -147,9 +150,6 @@ private:
 	 */
 	HttpRequest * _httpRequest;
 
-	/** Libcurl component. */
-	CURL * _curl;
-
 	/** Tells curl to be verbose + additionnal information. */
 	static bool _verbose;
 
@@ -164,6 +164,8 @@ private:
 
 	/** Post data structure. */
 	static struct POST_DATA pooh;
+
+	int _lastRequestId;
 };
 
 
