@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,6 @@ class IHttpRequest : public Thread {
 public:
 
 	enum Error {
-
 		/** No error. */
 		NoError,
 
@@ -92,16 +91,16 @@ public:
 
 		/** Unknow error. */
 		UnknownError
-
 	};
 
 	/**
 	 * The HTTP answer to the request has been received.
 	 *
+	 * @param requestId HTTP request ID
 	 * @param answer HTTP answer
 	 * @param error Error code
 	 */
-	Event<void (const std::string & answer, Error error)> answerReceivedEvent;
+	Event<void (int requestId, const std::string & answer, Error error)> answerReceivedEvent;
 
 	virtual ~IHttpRequest() { }
 
@@ -117,8 +116,9 @@ public:
 	 * @param path path on the server (e.g login.php)
 	 * @param data HTTP data (e.g login=mylogin&password=mypassword)
 	 * @param postMethod HTTP POST method if true, HTTP GET method if false
+	 * @return HTTP request ID
 	 */
-	virtual void sendRequest(bool sslProtocol,
+	virtual int sendRequest(bool sslProtocol,
 			const std::string & hostname,
 			unsigned int hostPort,
 			const std::string & path,
@@ -137,8 +137,9 @@ public:
 	 * @param data HTTP data (e.g login=mylogin&password=mypassword)
 	 * @param postMethod HTTP POST method if true, HTTP GET method if false
 	 * @see sendRequest(bool, const std::string &, unsigned int, const std::string &, const std::string &, bool)
+	 * @return HTTP request ID
 	 */
-	virtual void sendRequest(const std::string & url, const std::string & data, bool postMethod = false) = 0;
+	virtual int sendRequest(const std::string & url, const std::string & data, bool postMethod = false) = 0;
 
 	virtual void run() = 0;
 };
@@ -175,14 +176,14 @@ public:
 
 	virtual ~HttpRequest();
 
-	virtual void sendRequest(bool sslProtocol,
+	virtual int sendRequest(bool sslProtocol,
 			const std::string & hostname,
 			unsigned int hostPort,
 			const std::string & path,
 			const std::string & data,
 			bool postMethod = false);
 
-	virtual void sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
+	virtual int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
 
 	/**
 	 * Sets the local proxy settings.
@@ -245,8 +246,6 @@ public:
 	virtual void run();
 
 private:
-
-	void answerReceivedEventHandler(const std::string & answer, Error error);
 
 	static HttpRequestFactory * _factory;
 

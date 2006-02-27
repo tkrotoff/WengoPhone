@@ -34,6 +34,6 @@ CSms::CSms(Sms & sms, CWengoPhone & cWengoPhone)
 CSms::~CSms() {
 }
 
-void CSms::sendSMS(const std::string & phoneNumber, const std::string & message) {
-	_sms.sendSMS(phoneNumber, message);
+int CSms::sendSMS(const std::string & phoneNumber, const std::string & message) {
+	return _sms.sendSMS(phoneNumber, message);
 }

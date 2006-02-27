@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ CurlHttpRequest::CurlHttpRequest(HttpRequest * httpRequest) {
 	_httpRequest = httpRequest;
 }
 
-void CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname, unsigned int hostPort,
+int CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname, unsigned int hostPort,
 	const std::string & path, const std::string & data, bool postMethod) {
 
 	if (!_proxyAuthenticationDetermine) {
@@ -53,6 +53,8 @@ void CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname
 	if (_requestList.size() <= 1) {
 		start();
 	}
+
+	return 1;
 }
 
 void CurlHttpRequest::run() {
@@ -70,7 +72,7 @@ void CurlHttpRequest::run() {
 			res = curl_easy_perform(_curl);
 			if (res != CURLE_OK) {
 				cerr << curl_easy_strerror(res) << endl;
-				answerReceivedEvent(String::null, getReturnCode(res));
+				answerReceivedEvent(1, String::null, getReturnCode(res));
 			}
 
 			curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, & response);
@@ -93,8 +95,8 @@ void CurlHttpRequest::run() {
 	curl_easy_cleanup(_curl);
 }
 
-void CurlHttpRequest::sendRequest(const std::string & url, const std::string & data, bool postMethod) {
-	_httpRequest->sendRequest(url, data, postMethod);
+int CurlHttpRequest::sendRequest(const std::string & url, const std::string & data, bool postMethod) {
+	return _httpRequest->sendRequest(url, data, postMethod);
 }
 
 void CurlHttpRequest::setUrl(Request r) {
@@ -285,9 +287,9 @@ size_t curlHTTPWrite(void * ptr, size_t size, size_t nmemb, void * stream) {
 		CurlHttpRequest * instance = (CurlHttpRequest *) stream;
 
 		if (true) { //sizeof(size_t) * nmemb == size ){
-			instance->answerReceivedEvent(string((const char *) ptr, nmemb), HttpRequest::NoError);
+			instance->answerReceivedEvent(1, string((const char *) ptr, nmemb), HttpRequest::NoError);
 		} else {
-			instance->answerReceivedEvent(string((const char *) ptr, nmemb), HttpRequest::WrongContentLength);
+			instance->answerReceivedEvent(1, string((const char *) ptr, nmemb), HttpRequest::WrongContentLength);
 		}
 		return nmemb;
 	}

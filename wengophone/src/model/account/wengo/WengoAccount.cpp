@@ -180,12 +180,12 @@ void WengoAccount::timeoutEventHandler() {
 	//FIXME if not static it crashes inside boost::thread, do not know why
 	static HttpRequest httpRequest;
 
-	httpRequest.answerReceivedEvent += boost::bind(&WengoAccount::answerReceivedEventHandler, this, _1, _2);
+	httpRequest.answerReceivedEvent += boost::bind(&WengoAccount::answerReceivedEventHandler, this, _1, _2, _3);
 	httpRequest.setFactory(new CurlHttpRequestFactory());
 
 	LOG_DEBUG("setting proxy settings for SSO request");
 	httpRequest.setProxy(_networkDiscovery.getProxyServer(), _networkDiscovery.getProxyServerPort(),
-		 _networkDiscovery.getProxyLogin(), _networkDiscovery.getProxyPassword());
+		_networkDiscovery.getProxyLogin(), _networkDiscovery.getProxyPassword());
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
@@ -204,7 +204,7 @@ void WengoAccount::lastTimeoutEventHandler() {
 	_timerFinished = true;
 }
 
-void WengoAccount::answerReceivedEventHandler(const std::string & answer, HttpRequest::Error error) {
+void WengoAccount::answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error) {
 	if (_answerReceivedAlready) {
 		return;
 	}

@@ -38,7 +38,7 @@ public:
 	/**
 	 * @see Sms::smsStatusEvent
 	 */
-	Event <void (Sms & sender, Sms::SmsStatus status)> smsStatusEvent;
+	Event <void (Sms & sender, int smsId, Sms::SmsStatus status)> smsStatusEvent;
 
 	CSms(Sms & sms, CWengoPhone & cWengoPhone);
 
@@ -51,7 +51,7 @@ public:
 	/**
 	 * @see Sms::sendSMS()
 	 */
-	void sendSMS(const std::string & phoneNumber, const std::string & message);
+	int sendSMS(const std::string & phoneNumber, const std::string & message);
 
 private:
 

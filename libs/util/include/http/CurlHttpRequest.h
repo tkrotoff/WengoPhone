@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,14 +63,14 @@ public:
 	 */
 	CurlHttpRequest(HttpRequest * httpRequest);
 
-	virtual void sendRequest(bool sslProtocol,
+	virtual int sendRequest(bool sslProtocol,
 			const std::string & hostname,
 			unsigned int hostPort,
 			const std::string & path,
 			const std::string & data,
 			bool postMethod = false);
 
-	virtual void sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
+	virtual int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
 
 protected:
 

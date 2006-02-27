@@ -22,6 +22,7 @@
 
 #include <NonCopyable.h>
 #include <Event.h>
+#include <List.h>
 #include <http/HttpRequest.h>
 
 #include <string>
@@ -122,9 +123,10 @@ public:
 	 * Callback to check if the SMS was received or not.
 	 *
 	 * @param sender this class
+	 * @param smsId SMS unique identifier
 	 * @param status SMS status (ok or error)
 	 */
-	Event <void (Sms & sender, SmsStatus status)> smsStatusEvent;
+	Event<void (Sms & sender, int smsId, SmsStatus status)> smsStatusEvent;
 
 	Sms(WengoAccount & wengoAccount);
 
@@ -133,16 +135,19 @@ public:
 	 *
 	 * @param phoneNumber phone that will receive the SMS
 	 * @param message SMS message
+	 * @return unique SMS ID
 	 */
-	void sendSMS(const std::string & phoneNumber, const std::string & message);
+	int sendSMS(const std::string & phoneNumber, const std::string & message);
 
 private:
 
-	void answerReceivedEventHandler(const std::string & answer, HttpRequest::Error error);
+	void answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error);
 
 	WengoAccount & _wengoAccount;
 
 	bool _answerReceivedAlready;
+
+	int _smsId;
 };
 
 #endif	//SMS_H

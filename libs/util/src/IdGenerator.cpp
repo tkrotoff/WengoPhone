@@ -17,24 +17,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <http/NullHttpRequest.h>
+#include <IdGenerator.h>
 
-#include <http/HttpRequest.h>
+#include <StringList.h>
 
-NullHttpRequest::NullHttpRequest(HttpRequest * httpRequest) {
-	_httpRequest = httpRequest;
-}
+#include <ctime>
 
-int NullHttpRequest::sendRequest(bool, const std::string &, unsigned int,
-	const std::string &, const std::string &, bool) {
+int IdGenerator::generate() {
+	//Under GNU systems
+	//int = 32 bits from -2,147,483,647 to 2,147,483,647
 
-	return 1;
-}
+	//Number of seconds since 1970
+	int seconds = time(NULL);
 
-void NullHttpRequest::run() {
-	_httpRequest->run();
-}
+	static int seed = 0;
+	std::string date = String::fromNumber(seconds) + String::fromNumber(seed++);
 
-int NullHttpRequest::sendRequest(const std::string & url, const std::string & data, bool postMethod) {
-	return _httpRequest->sendRequest(url, data, postMethod);
+	return date.toInteger();
 }

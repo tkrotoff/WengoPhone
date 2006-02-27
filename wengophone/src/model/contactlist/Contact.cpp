@@ -112,7 +112,7 @@ void Contact::block() {
 	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; it++) {
 		_wengoPhone.getPresenceHandler().blockContact(*it);
 	}
-	
+
 	_blocked = true;
 }
 
@@ -120,7 +120,7 @@ void Contact::unblock() {
 	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; it++) {
 		_wengoPhone.getPresenceHandler().unblockContact(*it);
 	}
-	
+
 	_blocked = false;
 }
 

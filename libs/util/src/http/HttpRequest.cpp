@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,21 +50,21 @@ HttpRequest::HttpRequest() {
 		_factory = new DefaultHttpRequestFactory();
 	}
 	_httpRequestPrivate = _factory->create(this);
-	_httpRequestPrivate->answerReceivedEvent += boost::bind(&HttpRequest::answerReceivedEventHandler, this, _1, _2);
+	_httpRequestPrivate->answerReceivedEvent += answerReceivedEvent;
 }
 
 HttpRequest::~HttpRequest() {
 	delete _httpRequestPrivate;
 }
 
-void HttpRequest::sendRequest(bool sslProtocol,
+int HttpRequest::sendRequest(bool sslProtocol,
 			const std::string & hostname,
 			unsigned int hostPort,
 			const std::string & path,
 			const std::string & data,
 			bool postMethod) {
 
-	_httpRequestPrivate->sendRequest(sslProtocol, hostname, hostPort, path, data, postMethod);
+	return _httpRequestPrivate->sendRequest(sslProtocol, hostname, hostPort, path, data, postMethod);
 }
 
 bool usesSSLProtocol(const std::string & url) {
@@ -137,7 +137,7 @@ std::string getPath(const std::string & url) {
 	return tmp;
 }
 
-void HttpRequest::sendRequest(const std::string & url, const std::string & data, bool postMethod) {
+int HttpRequest::sendRequest(const std::string & url, const std::string & data, bool postMethod) {
 	bool sslProtocol = usesSSLProtocol(url);
 	string hostname = getHostname(url);
 	unsigned int hostPort = getHostPort(url);
@@ -145,13 +145,9 @@ void HttpRequest::sendRequest(const std::string & url, const std::string & data,
 
 	//cerr << "HttpRequest: " << "HTTPS:" << sslProtocol << " " << hostname << ":" << hostPort << path << endl;
 
-	sendRequest(sslProtocol, hostname, hostPort, path, data, postMethod);
+	return sendRequest(sslProtocol, hostname, hostPort, path, data, postMethod);
 }
 
 void HttpRequest::run() {
 	_httpRequestPrivate->run();
-}
-
-void HttpRequest::answerReceivedEventHandler(const std::string & answer, Error error) {
-	answerReceivedEvent(answer, error);
 }

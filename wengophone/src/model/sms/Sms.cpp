@@ -34,7 +34,7 @@ Sms::Sms(WengoAccount & wengoAccount)
 	_answerReceivedAlready = false;
 }
 
-void Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
+int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
 	//FIXME QUrl::encode() from Qt3 does not encode .
 	//String::encodeUrl() encodes . to %2e
 	//see http://www.w3schools.com/tags/ref_urlencode.asp
@@ -56,7 +56,7 @@ void Sms::sendSMS(const std::string & phoneNumber, const std::string & message) 
 	//FIXME if not static it crashes inside boost::thread, do not know why
 	static HttpRequest httpRequest;
 
-	httpRequest.answerReceivedEvent += boost::bind(&Sms::answerReceivedEventHandler, this, _1, _2);
+	httpRequest.answerReceivedEvent += boost::bind(&Sms::answerReceivedEventHandler, this, _1, _2, _3);
 	httpRequest.setFactory(new CurlHttpRequestFactory());
 	//TODO not implemented inside libutil
 	//httpRequest.setProxy("proxy.wengo.fr", 8080, "myProxyUsername", "myProxyPassword");
@@ -67,10 +67,10 @@ void Sms::sendSMS(const std::string & phoneNumber, const std::string & message) 
 
 	//First parameter: true = HTTPS, false = HTTP
 	//Last parameter: true = POST method, false = GET method
-	httpRequest.sendRequest(true, config.getWengoServerHostname(), 443, config.getWengoSMSPath(), data, true);
+	return httpRequest.sendRequest(true, config.getWengoServerHostname(), 443, config.getWengoSMSPath(), data, true);
 }
 
-void Sms::answerReceivedEventHandler(const std::string & answer, HttpRequest::Error error) {
+void Sms::answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error) {
 	if (_answerReceivedAlready) {
 		return;
 	}
@@ -85,11 +85,11 @@ void Sms::answerReceivedEventHandler(const std::string & answer, HttpRequest::Er
 	if (error == HttpRequest::NoError && !tmp.empty()) {
 		if (tmp.contains(STATUS_OK) && !tmp.contains(STATUS_UNAUTHORIZED)) {
 			LOG_DEBUG("SMS sent");
-			smsStatusEvent(*this, SmsStatusOk);
+			smsStatusEvent(*this, requestId, SmsStatusOk);
 			return;
 		}
 	}
 
 	LOG_DEBUG("SMS unsent");
-	smsStatusEvent(*this, SmsStatusError);
+	smsStatusEvent(*this, requestId, SmsStatusError);
 }

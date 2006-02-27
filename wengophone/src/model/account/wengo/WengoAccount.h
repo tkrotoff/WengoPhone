@@ -76,7 +76,7 @@ private:
 
 	void wengoLoginEventHandler();
 
-	void answerReceivedEventHandler(const std::string & answer, HttpRequest::Error error);
+	void answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error);
 
 	void timeoutEventHandler();
 

@@ -32,7 +32,7 @@ QtSms::QtSms(CSms & cSms)
 	: QObjectThreadSafe(),
 	_cSms(cSms) {
 
-	_cSms.smsStatusEvent += boost::bind(&QtSms::smsStatusEventHandler, this, _1, _2);
+	_cSms.smsStatusEvent += boost::bind(&QtSms::smsStatusEventHandler, this, _1, _2, _3);
 	_qtWengoPhone = (QtWengoPhone *) _cSms.getCWengoPhone().getPresentation();
 
 	typedef PostEvent0<void ()> MyPostEvent;
@@ -68,7 +68,7 @@ void QtSms::sendButtonClicked() {
 	_cSms.sendSMS(phoneNumber, sms);
 }
 
-void QtSms::smsStatusEventHandler(Sms & sender, Sms::SmsStatus status) {
+void QtSms::smsStatusEventHandler(Sms & sender, int smsId, Sms::SmsStatus status) {
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSms::enableSendButton, this));
 	postEvent(event);

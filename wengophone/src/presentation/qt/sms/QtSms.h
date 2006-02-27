@@ -57,7 +57,7 @@ private:
 
 	void updatePresentationThreadSafe();
 
-	void smsStatusEventHandler(Sms & sender, Sms::SmsStatus status);
+	void smsStatusEventHandler(Sms & sender, int smsId, Sms::SmsStatus status);
 
 	void enableSendButton();
 
