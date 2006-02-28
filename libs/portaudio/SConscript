@@ -158,7 +158,7 @@ elif WengoOSWindows():
 
 else:
 	print 'Portaudio does not support your platform'
-	sys.quit()
+	sys.exit()
 
 env.WengoAddLinkFlags(lib_flags)
 env.WengoAddLibPath(lib_path)
