@@ -23,7 +23,7 @@
 #include <Object.h>
 #include <Logger.h>
 
-ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(),QObjectThreadSafe(), _imChatSession(imChatSession)
+ChatWindow::ChatWindow(IMChatSession & imChatSession) : QObjectThreadSafe(), _imChatSession(imChatSession)
 {
     LOG_DEBUG("ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(), _imChatSession(imChatSession)");
     _imChatSession.messageReceivedEvent +=
@@ -54,17 +54,17 @@ void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, c
 	LOG_DEBUG("message received: " + message);
     QString senderName = QString::fromStdString(from.getContactId());
     QString msg = QString::fromStdString(message);
-    show();
+    _dialog.show();
     _chatWidget->addToHistory(senderName,msg);
 }
 
 void ChatWindow::initThreadSafe() {
-
-    _widget = WidgetFactory::create(":/forms/chat.ui", this);
+	
+    _widget = WidgetFactory::create(":/forms/chat.ui", &_dialog);
     QGridLayout * layout = new QGridLayout();
     layout->addWidget(_widget);
     layout->setMargin(0);
-    setLayout(layout);
+    _dialog.setLayout(layout);
     
     _tabWidget = _seeker.getTabWidget(_widget,"tabWidget");
     _tabWidget->removeTab(0);
@@ -72,7 +72,7 @@ void ChatWindow::initThreadSafe() {
     _chatWidget = new ChatWidget(_tabWidget);
     _tabWidget->insertTab(0,_chatWidget,"Chat");
     _chatWidget->setNickName(QString().fromStdString(_imChatSession.getIMChat().getIMAccount().getLogin()));
-    QObject::connect (_chatWidget,SIGNAL(newMessage(const QString & )),SLOT(newMessage(const QString &)));
+    connect (_chatWidget,SIGNAL(newMessage(const QString & )),SLOT(newMessage(const QString &)));
     
     LOG_DEBUG("ChatWindow init ok");
 
