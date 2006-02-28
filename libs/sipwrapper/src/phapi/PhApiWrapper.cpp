@@ -533,6 +533,10 @@ void PhApiWrapper::setSIP(const string & server, unsigned serverPort, unsigned l
 void PhApiWrapper::init() {
 	setNetworkParameter();
 
+	//Half duplex (2e mode)
+	phcfg.hdxmode = 2;
+
+	//Plugin path
 	strncpy(phcfg.plugin_path, _pluginPath.c_str(), sizeof(phcfg.plugin_path));
 
 	//Codec list

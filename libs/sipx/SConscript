@@ -16,8 +16,9 @@ env.WengoAddIncludePath(include_path)
 files = []
 if WengoOSWindows():
 	files += [
-		'bin/iconv.dll',
-		'bin/intl.dll',
+		#needed by gaim
+		#'bin/iconv.dll',
+		#'bin/intl.dll',
 		'bin/sipXtapi.dll',
 		'bin/sipXtapi.lib',
 		'bin/sipXtapid.dll',

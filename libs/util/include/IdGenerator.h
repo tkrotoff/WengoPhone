@@ -22,8 +22,10 @@
 
 #include <NonCopyable.h>
 
+#include <string>
+
 /**
- * Generated a unique ID based on the seconds since 1970.
+ * Generated a pseudo-unique ID based on the seconds since 1970.
  *
  * @see ctime
  * @author Tanguy Krotoff
@@ -32,11 +34,26 @@ class IdGenerator : NonCopyable {
 public:
 
 	/**
-	 * Generates a unique ID.
+	 * Generates a pseudo-unique ID.
+	 *
+	 * Current implementation works with less that 10 ID generated per second,
+	 * above 10 an id already generated will be obtain.
+	 * Every 4 years there is a risk to get the same ID.
+	 * This is the price to fit the ID inside a integer.
 	 *
 	 * @return unique ID generated
 	 */
 	static int generate();
+
+	/**
+	 * Generates a unique ID.
+	 *
+	 * Allows 1000 ID generated per second.
+	 * Should work properly until 2038.
+	 *
+	 * @return unique ID generated
+	 */
+	static std::string generateString();
 };
 
 #endif	//IDGENERATOR_H

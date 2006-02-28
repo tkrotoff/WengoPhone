@@ -31,6 +31,7 @@ int IdGenerator::generate() {
 	//Number of seconds since 1970
 	int seconds = time(NULL);
 
+	//Until 10 id generated per second
 	static int seed = 0;
 	String tmp = String::fromNumber(seconds) + String::fromNumber(seed++ % 10);
 	String date;
@@ -44,4 +45,17 @@ int IdGenerator::generate() {
 	LOG_DEBUG("generated id=" + String::fromNumber(id));
 
 	return id;
+}
+
+std::string IdGenerator::generateString() {
+	//Number of seconds since 1970
+	time_t seconds = time(NULL);
+
+	//Until 1000 id generated per second
+	static int seed = 0;
+	std::string date = String::fromNumber(seconds) + String::fromNumber(seed++ % 1000);
+
+	LOG_DEBUG("generated id=" + date);
+
+	return date;
 }

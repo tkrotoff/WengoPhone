@@ -36,7 +36,8 @@ public:
 		_frame = NULL;
 	}
 
-	virtual ~WebcamVideoFrame() = 0;
+	virtual ~WebcamVideoFrame() {
+	}
 
 	void setFrame(unsigned char * frame) {
 		_frame = frame;

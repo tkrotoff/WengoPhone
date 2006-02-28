@@ -25,8 +25,8 @@ if WengoOSWindows():
 		libs_file += [
 			'binary-lib/msvc/gaim.lib',
 			'binary-lib/msvc/gaim.dll',
-#			'binary-lib/msvc/iconv.dll',	#already used by SipX
-#			'binary-lib/msvc/intl.dll',		#already used by SipX		
+			'binary-lib/msvc/iconv.dll',
+			'binary-lib/msvc/intl.dll',
 			'binary-lib/msvc/nspr4.dll',
 			'binary-lib/msvc/nss3.dll',
 			'binary-lib/msvc/nssckbi.dll',

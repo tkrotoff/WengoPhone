@@ -22,6 +22,8 @@
 #include "PhApiWrapper.h"
 #include "PhApiIMChat.h"
 
+#include <sipwrapper/WebcamVideoFrame.h>
+
 #include <sipwrapper/SipWrapper.h>
 #include <imwrapper/IMPresence.h>
 #include <imwrapper/EnumPresenceState.h>
@@ -50,7 +52,7 @@ public:
 		setFrame(image->data);
 	}
 
-	virtual ~PhApiVideoFrame() {
+	~PhApiVideoFrame() {
 	}
 };
 
@@ -163,6 +165,7 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 }
 
 void PhApiCallbacks::videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * info) {
+	LOG_DEBUG("video frame from call=" + String::fromNumber(callId));
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 #ifdef ENABLE_VIDEO
 	PhApiVideoFrame videoFrame(info->frame_remote);
@@ -238,7 +241,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 	IMChatSession * imChatSession;
 
-	LOG_DEBUG("message received from " + string(info->from) 
+	LOG_DEBUG("message received from " + string(info->from)
 		+ ": " + string((info->content ? info->content : "")));
 
 	// Getting maps from PhApiWrapper
@@ -254,7 +257,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		LOG_DEBUG("creating new IMChatSession");
 		imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
 		contactChatMap[from] = imChatSession;
-		p->newIMChatSessionCreatedEvent(*p, *imChatSession);		
+		p->newIMChatSessionCreatedEvent(*p, *imChatSession);
 	}
 
 	switch(info->event) {
