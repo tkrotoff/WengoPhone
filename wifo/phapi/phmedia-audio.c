@@ -1715,7 +1715,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   newstreams = s->newstreams;
   s->newstreams = 0;
 
-  if (!(newstreams & (1 << PH_MSTREAM_AUDIO1)))
+  if (!(newstreams & (PH_MSTREAM_AUDIO1)))
     {
       PH_MSESSION_AUDIO_UNLOCK();
       return 0;
@@ -2054,7 +2054,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
   sp->flags |= PH_MSTREAM_FLAG_RUNNING;
   sp->streamerData = stream;
-  s->activestreams |= (1 << PH_MSTREAM_AUDIO1);
+  s->activestreams |= (PH_MSTREAM_AUDIO1);
 
   DBG4_MEDIA_ENGINE("ph_mession_audio_start: s=%08x.stream=%08x\n", s, stream,0);
 
@@ -2294,7 +2294,7 @@ void ph_msession_audio_stop(struct ph_msession_s *s)
   phastream_t *stream = (phastream_t *) msp->streamerData;
   int confflags = s->confflags;
 
-  s->activestreams &= ~(1 << PH_MSTREAM_AUDIO1);
+  s->activestreams &= ~(PH_MSTREAM_AUDIO1);
 
   if (confflags)
     ph_msession_audio_conf_stop(s->confsession, s);

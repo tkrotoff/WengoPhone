@@ -673,7 +673,7 @@ int ph_has_active_calls()
 
 int ph_call_hasaudio(phcall_t *ca)
 {
-  if (ca->mses && (ca->mses->activestreams & (1 << PH_MSTREAM_AUDIO1)))
+  if (ca->mses && (ca->mses->activestreams & (PH_MSTREAM_AUDIO1)))
     return 1;
 
   return 0;
@@ -3134,7 +3134,7 @@ ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags, int resumeflag)
       struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_VIDEO1];
       int ttype;
 
-      s->newstreams |= (1 << PH_MSTREAM_VIDEO1);
+      s->newstreams |= (PH_MSTREAM_VIDEO1);
 
       ttype = ca->nego_mflags & (PH_STREAM_VIDEO_RX | PH_STREAM_VIDEO_RX);
       
@@ -3176,7 +3176,7 @@ ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags, int resumeflag)
       {
 	struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
 	
-	s->newstreams |= (1 << PH_MSTREAM_AUDIO1);
+	s->newstreams |= (PH_MSTREAM_AUDIO1);
 
 	s->dtmfCallback = ph_wegot_dtmf;
 	s->endCallback = ph_stream_ended;
