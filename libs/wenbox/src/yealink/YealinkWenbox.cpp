@@ -155,7 +155,7 @@ bool YealinkWenbox::setState(PhoneCallState state, const std::string & phoneNumb
 
 	case CallClosed:
 		LOG_DEBUG("call closed");
-		return true;
+		return gotoReady();
 
 	default:
 		LOG_FATAL("unknown state=" + String::fromNumber(status));
