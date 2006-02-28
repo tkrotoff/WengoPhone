@@ -47,16 +47,6 @@
 #include <iostream>
 using namespace std;
 
-std::string WengoPhone::HTTP_PROXY_HOSTNAME = "";
-unsigned WengoPhone::HTTP_PROXY_PORT = 0;
-std::string WengoPhone::CONFIG_FILES_PATH = "";
-std::string WengoPhone::getConfigFilesPath() {
-	/*std::string tmp = File::getApplicationDirPath();
-	return tmp;*/
-	return CONFIG_FILES_PATH;
-}
-
-
 WengoPhone::WengoPhone() {
 	_wenboxPlugin = new WenboxPlugin(*this);
 	_sms = NULL;
@@ -101,7 +91,7 @@ void WengoPhone::init() {
 	chatHandlerCreatedEvent(*this, *_chatHandler);
 
 	_imContactListHandler = new IMContactListHandler(*this);
-	
+
 	//Creates the contact list
 	_contactList = new ContactList(*this);
 	contactListCreatedEvent(*this, *_contactList);
@@ -121,7 +111,9 @@ void WengoPhone::init() {
 	//Load other SipAccount
 
 	//Load IMAccounts
-	//
+	/*IMAccount account("LOGIN", "PASSWORD", EnumIMProtocol::IMProtocolMSN);
+	addIMAccount(account);
+	_connectHandler->connect(*_imAccountHandler.find(account));*/
 
 	//initFinishedEvent
 	initFinishedEvent(*this);

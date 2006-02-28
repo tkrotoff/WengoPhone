@@ -133,6 +133,11 @@ public:
 		return get(NETWORK_PROXY_PASSWORD_KEY, std::string(""));
 	}
 
+	/**
+	 * @name Audio Methods
+	 * @{
+	 */
+
 	/** Path to codecs. */
 	static const std::string CODEC_PLUGIN_PATH_KEY;
 	std::string getCodecPluginPath() const {
@@ -151,6 +156,22 @@ public:
 	static const std::string AUDIO_RINGER_DEVICENAME_KEY;
 	std::string getAudioRingerDeviceName() const;
 
+	/** Ringing audio file name. */
+	static const std::string AUDIO_RINGING_FILE_KEY;
+	std::string getAudioRingingFile() const;
+
+	/** Call closed audio file name. */
+	static const std::string AUDIO_CALLCLOSED_FILE_KEY;
+	std::string getAudioCallClosedFile() const;
+
+	/** @} */
+
+
+	/**
+	 * @name Wengo Specific Methods
+	 * @{
+	 */
+
 	/** Wengo server hostname. */
 	static const std::string WENGO_SERVER_HOSTNAME_KEY;
 	std::string getWengoServerHostname() const {
@@ -168,6 +189,12 @@ public:
 	std::string getWengoSMSPath() const {
 		return get(WENGO_SMS_PATH_KEY, std::string("/sms/sendsms.php"));
 	}
+
+	/** @} */
+
+	/** Location of configuration files on the hard disk. */
+	static const std::string CONFIG_DIR_KEY;
+	std::string getConfigDir() const;
 
 private:
 

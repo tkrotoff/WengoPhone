@@ -19,12 +19,10 @@
 
 #include "PhoneCallState.h"
 
-#include <model/WengoPhone.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
 #include <Sound.h>
-#include <File.h>
 #include <Logger.h>
 
 Sound * PhoneCallState::_soundRingin = NULL;
@@ -41,15 +39,13 @@ void PhoneCallState::stopSoundRingin() {
 }
 
 std::string PhoneCallState::getSoundRinginFile() {
-	std::string file = File::convertPathSeparators(WengoPhone::getConfigFilesPath() + "../extensions/{debaffee-a972-4d8a-b426-8029170f2a89}/sounds/ringin.wav");
-	LOG_DEBUG("ringin.wav=" + file);
-	return file;
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	return config.getAudioRingingFile();
 }
 
 std::string PhoneCallState::getSoundCallClosedFile() {
-	std::string file = File::convertPathSeparators(WengoPhone::getConfigFilesPath() + "../extensions/{debaffee-a972-4d8a-b426-8029170f2a89}/sounds/callclosed.wav");
-	LOG_DEBUG("callclosed.wav=" + file);
-	return file;
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	return config.getAudioCallClosedFile();
 }
 
 std::string PhoneCallState::getRingerAudioDeviceName() {

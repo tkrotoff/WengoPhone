@@ -72,15 +72,6 @@ class Sms;
 class WengoPhone : public Thread {
 public:
 
-	/*
-	 * FIXME
-	 * Temporary hack, to remove when a configuration framework will be implemented.
-	 */
-	static std::string HTTP_PROXY_HOSTNAME;
-	static unsigned HTTP_PROXY_PORT;
-	static std::string CONFIG_FILES_PATH;
-	static std::string getConfigFilesPath();
-
 	/**
 	 * Login procedure is done, event with the procedure result.
 	 *

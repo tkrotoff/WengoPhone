@@ -20,7 +20,9 @@
 #include "WengoAccountXMLLayer.h"
 
 #include "WengoAccount.h"
-#include "model/WengoPhone.h"
+
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 #include <File.h>
 #include <Logger.h>
@@ -36,7 +38,8 @@ WengoAccountXMLLayer::~WengoAccountXMLLayer() {
 }
 
 bool WengoAccountXMLLayer::load() {
-	FileReader file(WengoPhone::getConfigFilesPath() + "user.config");
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	FileReader file(config.getConfigDir() + "user.config");
 
 	if (file.open()) {
 		string data = file.read();
@@ -54,7 +57,9 @@ bool WengoAccountXMLLayer::load() {
 }
 
 bool WengoAccountXMLLayer::save() {
-	FileWriter file(WengoPhone::getConfigFilesPath() + "user.config");
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	FileWriter file(config.getConfigDir() + "user.config");
+
 	std::string data = _wengoAccount.serialize();
 	if (data.empty()) {
 		return false;
