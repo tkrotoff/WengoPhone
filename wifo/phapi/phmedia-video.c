@@ -280,7 +280,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   ph_mstream_params_t *sp = &s->streams[PH_MSTREAM_VIDEO1];
 
 
-  if (!(s->newstreams & (PH_MSTREAM_VIDEO1)))
+  if (!(s->newstreams & (1 << PH_MSTREAM_VIDEO1)))
     return 0;
 
   if (!sp->localport || !sp->remoteport)
@@ -488,7 +488,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   video_stream->mbCounter = 0;
   video_stream->rxtstamp = 0;
   sp->flags |= PH_MSTREAM_FLAG_RUNNING;
-  s->activestreams |= (PH_MSTREAM_VIDEO1);
+  s->activestreams |= (1 << PH_MSTREAM_VIDEO1);
 
 
 
@@ -1083,10 +1083,10 @@ void ph_msession_video_stop(struct ph_msession_s *s)
   struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_VIDEO1];
   phvstream_t *stream = (phvstream_t *) msp->streamerData;
 
-  if (!(s->activestreams & (PH_MSTREAM_VIDEO1)))
+  if (!(s->activestreams & (1 << PH_MSTREAM_VIDEO1)))
       return;
 
-  s->activestreams &= ~(PH_MSTREAM_VIDEO1);
+  s->activestreams &= ~(1 << PH_MSTREAM_VIDEO1);
  
 
   if (!stream)

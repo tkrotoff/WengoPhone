@@ -30,11 +30,10 @@
  *
  *  - play/stop soundfile
  *  - rec/speaker set volume
- *  - getNatInfo
  *  - conference functions
  *
  */
- 
+
 #include "phglobal.h"
  
 #ifdef OS_WINDOWS
@@ -267,6 +266,24 @@ static PyObject * PyPhTerminate(PyObject *self, PyObject *params) {
 }
 
 /*
+ * @brief Wraps phLinePlaceCall()
+ *
+ */
+static PyObject * PyPhLinePlaceCall(PyObject *self, PyObject *params) {
+    const char *uri;
+    int rcid;
+    void *userdata;
+    int vlid;
+    int ret = -12;
+
+    if (PyArg_ParseTuple(params, "issi", &vlid, &uri, &userdata, &rcid)) {
+        ret = phLinePlaceCall(vlid, uri, userdata, rcid);
+    }
+
+    return Py_BuildValue("i", ret);
+}
+
+/*
  * @brief Wraps phLinePlaceCall2()
  *
  */
@@ -284,6 +301,7 @@ static PyObject * PyPhLinePlaceCall2(PyObject *self, PyObject *params) {
 
     return Py_BuildValue("i", ret);
 }
+
 
 /*
  * @brief Wraps phLineSendOptions
@@ -678,6 +696,22 @@ static PyObject * PyPhGetNatInfo(PyObject *self, PyObject *params) {
     return Py_None;
 }
 
+
+/*
+ * @brief Wraps" phConf
+ *
+ */
+static PyObject * PyPhConf(PyObject *self, PyObject *params) {
+    int cid1, cid2;
+    int ret;
+    
+    if (PyArg_ParseTuple(params, "ii", &cid1, &cid2)) {
+        printf("PyPhConf: %i / %i\n", cid1, cid2);
+        phConf(cid1, cid2);
+    }
+}
+
+
 /*
  * This function initialize the python callbacks functions that will
  * be called when a corresponding C callback from the phCallbacks
@@ -973,6 +1007,7 @@ static PyMethodDef pyphapi_funcs[] = {
     PY_PHAPI_FUNCTION_DECL("phRefresh",             PyPhRefresh),
     PY_PHAPI_FUNCTION_DECL("phTerminate",           PyPhTerminate),
     PY_PHAPI_FUNCTION_DECL("phTunnelConfig",        PyPhTunnelConfig),
+    PY_PHAPI_FUNCTION_DECL("phLinePlaceCall",       PyPhLinePlaceCall),
     PY_PHAPI_FUNCTION_DECL("phLinePlaceCall2",      PyPhLinePlaceCall2),
     PY_PHAPI_FUNCTION_DECL("phLineSendOptions",     PyPhLineSendOptions),
     PY_PHAPI_FUNCTION_DECL("phLineSendMessage",     PyPhLineSendMessage),
@@ -1000,6 +1035,7 @@ static PyMethodDef pyphapi_funcs[] = {
     PY_PHAPI_FUNCTION_DECL("phCrash",               PyPhCrash),
     PY_PHAPI_FUNCTION_DECL("phSetDebugLevel",       PyPhSetDebugLevel),
     PY_PHAPI_FUNCTION_DECL("phGetNatInfo",          PyPhGetNatInfo),
+    PY_PHAPI_FUNCTION_DECL("phConf",                PyPhConf),
     
     PY_PHAPI_FUNCTION_DECL_NULL,
 };
