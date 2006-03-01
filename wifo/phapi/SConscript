@@ -180,7 +180,10 @@ if WengoOSLinux() or WengoOSBSD():
 if WengoGetConsoleArgument('enable-phapi-embed'):
 	defines['SCHEDULING_MODE'] =  1
 
-shphapi =  WengoGetConsoleArgument('enable-shared-phapi')
+if WengoOSMacOSX():
+	shphapi = False
+else:
+	shphapi =  WengoGetConsoleArgument('enable-shared-phapi')
 
 if shphapi:
     defines['BUILD_PHAPI_DLL'] = 1    
