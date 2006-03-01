@@ -32,5 +32,5 @@ env.WengoUseLibraries(libs)
 
 env.WengoStaticLibrary('imwrapper', sources, headers)
 
-env.SConscript('src/gaim/Sconscript')
+env.SConscript('src/gaim/SConscript')
 env.SConscript('tests/SConscript')

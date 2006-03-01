@@ -280,7 +280,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   ph_mstream_params_t *sp = &s->streams[PH_MSTREAM_VIDEO1];
 
 
-  if (!(s->newstreams & (1 << PH_MSTREAM_VIDEO1)))
+  if ((s->newstreams & (1 << PH_MSTREAM_VIDEO1)))
     return 0;
 
   if (!sp->localport || !sp->remoteport)
