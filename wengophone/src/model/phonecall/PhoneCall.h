@@ -22,6 +22,8 @@
 
 #include "SipAddress.h"
 
+#include <sipwrapper/EnumTone.h>
+
 #include <Event.h>
 #include <List.h>
 
@@ -70,17 +72,30 @@ public:
 
 	~PhoneCall();
 
-	/** Accepts the incoming PhoneCall. */
+	/**
+	 * @see IPhoneLine::acceptCall()
+	 */
 	void accept();
 
-	/** Resumes the PhoneCall. */
+	/**
+	 * @see IPhoneLine::resumeCall()
+	 */
 	void resume();
 
-	/** Holds the PhoneCall. */
+	/**
+	 * @see IPhoneLine::holdCall()
+	 */
 	void hold();
 
-	/** Closes the PhoneCall. */
+	/**
+	 * @see IPhoneLine::closeCall()
+	 */
 	void close();
+
+	/**
+	 * @see IPhoneLine::playTone()
+	 */
+	void playTone(EnumTone::Tone tone);
 
 	/**
 	 * Video frame received.

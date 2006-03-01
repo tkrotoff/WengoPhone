@@ -56,6 +56,8 @@ public:
 
 	void resumeCall(int callId);
 
+	void playTone(int callId, EnumTone::Tone tone);
+
 	SipWrapper & getSipWrapper() const {
 		return *_sipWrapper;
 	}

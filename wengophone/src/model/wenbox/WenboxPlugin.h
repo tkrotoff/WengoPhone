@@ -22,6 +22,8 @@
 
 #include <wenbox/Wenbox.h>
 
+#include <StringList.h>
+
 class WengoPhone;
 class PhoneCall;
 

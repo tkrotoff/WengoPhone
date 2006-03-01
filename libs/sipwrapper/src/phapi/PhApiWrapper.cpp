@@ -230,6 +230,93 @@ void PhApiWrapper::resumeCall(int callId) {
 	phResumeCall(callId);
 }
 
+void PhApiWrapper::playTone(int callId, EnumTone::Tone tone) {
+	static const int INBAND_DTMF = 1;
+
+	switch (tone) {
+	case EnumTone::Tone0:
+		phSendDtmf(callId, '0', INBAND_DTMF);
+		break;
+
+	case EnumTone::Tone1:
+		phSendDtmf(callId, '1', INBAND_DTMF);
+		break;
+
+	case EnumTone::Tone2:
+		phSendDtmf(callId, '2', INBAND_DTMF);
+		break;
+
+	case EnumTone::Tone3:
+		phSendDtmf(callId, '3', INBAND_DTMF);
+		break;
+
+	case EnumTone::Tone4:
+		phSendDtmf(callId, '4', INBAND_DTMF);
+		break;
+
+	case EnumTone::Tone5:
+		phSendDtmf(callId, '5', INBAND_DTMF);
+		break;
+
+	case EnumTone::Tone6:
+		phSendDtmf(callId, '6', INBAND_DTMF);
+		break;
+
+	case EnumTone::Tone7:
+		phSendDtmf(callId, '7', INBAND_DTMF);
+		break;
+
+	case EnumTone::Tone8:
+		phSendDtmf(callId, '8', INBAND_DTMF);
+		break;
+
+	case EnumTone::Tone9:
+		phSendDtmf(callId, '9', INBAND_DTMF);
+		break;
+
+	case EnumTone::ToneStar:
+		phSendDtmf(callId, '*', INBAND_DTMF);
+		break;
+
+	case EnumTone::TonePound:
+		phSendDtmf(callId, '#', INBAND_DTMF);
+		break;
+
+	case EnumTone::ToneDialtone:
+		break;
+
+	case EnumTone::ToneBusy:
+		break;
+
+	case EnumTone::ToneRingback:
+		break;
+
+	case EnumTone::ToneRingtone:
+		break;
+
+	case EnumTone::ToneCallFailed:
+		break;
+
+	case EnumTone::ToneSilence:
+		break;
+
+	case EnumTone::ToneBackspace:
+		break;
+
+	case EnumTone::ToneCallWaiting:
+		break;
+
+	case EnumTone::ToneCallHeld:
+		break;
+
+	case EnumTone::ToneLoudFastBusy:
+		break;
+
+	default:
+		LOG_FATAL("unknown tone");
+	}
+}
+
 void PhApiWrapper::callProgress(int callId, const phCallStateInfo_t * info) {
 	_callbacks->callProgress(callId, info);
 }

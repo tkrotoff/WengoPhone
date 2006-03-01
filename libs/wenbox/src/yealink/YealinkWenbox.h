@@ -30,6 +30,8 @@
 class YealinkWenbox : public IWenbox {
 public:
 
+	void setKeyPressedCallback(KeyPressedCallback keyPressedCallback, void * param);
+
 	YealinkWenbox();
 
 	~YealinkWenbox();
@@ -40,7 +42,7 @@ public:
 
 	std::string getDeviceName();
 
-	StringList getAudioDeviceNameList() const;
+	std::list<std::string> getAudioDeviceNameList() const;
 
 	bool setDefaultMode(Mode mode);
 
@@ -50,7 +52,7 @@ public:
 
 	bool setRingingTone(int tone);
 
-	bool setState(PhoneCallState state, const std::string & phoneNumber = String::null);
+	bool setState(PhoneCallState state, const std::string & phoneNumber);
 
 	/** Message callback. */
 	void callback(unsigned int wParam, long lParam);
@@ -76,6 +78,12 @@ private:
 	 * @param instance this class
 	 */
 	//static void callback(void * wParam, void * lParam, unsigned long instance);
+
+	/** Key pressed callback. */
+	KeyPressedCallback _keyPressedCallback;
+
+	/** User callback param. */
+	void * _userCallbackParam;
 };
 
 #endif	//YEALINKWENBOX_H

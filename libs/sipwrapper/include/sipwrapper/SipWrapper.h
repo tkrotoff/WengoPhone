@@ -22,6 +22,7 @@
 
 #include <sipwrapper/EnumPhoneCallState.h>
 #include <sipwrapper/EnumPhoneLineState.h>
+#include <sipwrapper/EnumTone.h>
 
 #include <Interface.h>
 #include <Event.h>
@@ -103,6 +104,11 @@ public:
 	 * @name Initialization Methods
 	 * @{
 	 */
+
+	/**
+	 * Initializes the SIPWrapper.
+	 */
+	virtual void init() = 0;
 
 	/**
 	 * Terminates the SIP connection.
@@ -214,30 +220,40 @@ public:
 	virtual void resumeCall(int callId) = 0;
 
 	/**
-	 * Set proxy parameter.
+	 * Sends a DTMF to a given phone call.
+	 *
+	 * @param callId if of the phone call to send a DTMF
+	 * @param tone DTMF tone to send
+	 */
+	virtual void playTone(int callId, EnumTone::Tone tone) = 0;
+
+	/** @} */
+
+	/**
+	 * @name Configuration Methods
+	 * @{
+	 */
+
+	/**
+	 * Sets proxy parameters.
 	 */
 	virtual void setProxy(const std::string & address, unsigned port,
 		const std::string & login, const std::string & password) = 0;
 
 	/**
-	 * Set HTTP tunnel parameters.
+	 * Sets HTTP tunnel parameters.
 	 */
 	virtual void setTunnel(const std::string & address, unsigned port, bool ssl) = 0;
 
 	/**
-	 * Set NAT Type.
+	 * Sets the NAT type.
 	 */
 	virtual void setNatType(NatType natType) = 0;
 
 	/**
-	 * Set SIP parameter.
+	 * Sets the SIP parameters.
 	 */
 	virtual void setSIP(const std::string & server, unsigned serverPort, unsigned localPort) = 0;
-
-	/**
-	 * Initialize the SIPWrapper.
-	 */
-	virtual void init() = 0;
 
 	/** @} */
 

@@ -218,6 +218,10 @@ void PhoneLine::resumeCall(int callId) {
 	_sipWrapper->resumeCall(callId);
 }
 
+void PhoneLine::playTone(int callId, EnumTone::Tone tone) {
+	_sipWrapper->playTone(callId, tone);
+}
+
 void PhoneLine::setPhoneCallState(int callId, int status, const SipAddress & sipAddress) {
 	LOG_DEBUG("call state changed callId=" + String::fromNumber(callId) +
 		" status=" + String::fromNumber(status) +

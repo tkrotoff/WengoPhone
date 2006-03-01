@@ -20,6 +20,7 @@
 #include "YealinkWenbox.h"
 
 #include <Logger.h>
+#include <StringList.h>
 
 #include "YLUSBTEL.h"
 
@@ -32,6 +33,11 @@ YealinkWenbox::YealinkWenbox() {
 }
 
 YealinkWenbox::~YealinkWenbox() {
+}
+
+void YealinkWenbox::setKeyPressedCallback(KeyPressedCallback keyPressedCallback, void * param) {
+	_keyPressedCallback = keyPressedCallback;
+	_userCallbackParam = param;
 }
 
 void /*YealinkWenbox::*/callback(void * wParam, void * lParam, unsigned long instance) {
@@ -57,7 +63,7 @@ std::string YealinkWenbox::getDeviceName() {
 	return "Yealink-Wenbox";
 }
 
-StringList YealinkWenbox::getAudioDeviceNameList() const {
+std::list<std::string> YealinkWenbox::getAudioDeviceNameList() const {
 	StringList deviceList;
 
 	//winXP us/fr
@@ -233,12 +239,12 @@ void YealinkWenbox::callback(unsigned int wParam, long lParam) {
 
 	case YL_CALLBACK_GEN_OFFHOOK:
 		LOG_DEBUG("wenbox offhook");
-		keyPressedEvent(*this, KeyPickUp);
+		_keyPressedCallback(KeyPickUp, _userCallbackParam);
 		break;
 
 	case YL_CALLBACK_GEN_HANGUP:
 		LOG_DEBUG("wenbox hangup");
-		keyPressedEvent(*this, KeyHangUp);
+		_keyPressedCallback(KeyHangUp, _userCallbackParam);
 		break;
 
 	case YL_CALLBACK_GEN_KEYBUF_CHANGED: {
@@ -253,51 +259,51 @@ void YealinkWenbox::callback(unsigned int wParam, long lParam) {
 
 		switch(key) {
 		case KEY_0:
-			keyPressedEvent(*this, Key0);
+			_keyPressedCallback(Key0, _userCallbackParam);
 			break;
 
 		case KEY_1:
-			keyPressedEvent(*this, Key1);
+			_keyPressedCallback(Key1, _userCallbackParam);
 			break;
 
 		case KEY_2:
-			keyPressedEvent(*this, Key2);
+			_keyPressedCallback(Key2, _userCallbackParam);
 			break;
 
 		case KEY_3:
-			keyPressedEvent(*this, Key3);
+			_keyPressedCallback(Key3, _userCallbackParam);
 			break;
 
 		case KEY_4:
-			keyPressedEvent(*this, Key4);
+			_keyPressedCallback(Key4, _userCallbackParam);
 			break;
 
 		case KEY_5:
-			keyPressedEvent(*this, Key5);
+			_keyPressedCallback(Key5, _userCallbackParam);
 			break;
 
 		case KEY_6:
-			keyPressedEvent(*this, Key6);
+			_keyPressedCallback(Key6, _userCallbackParam);
 			break;
 
 		case KEY_7:
-			keyPressedEvent(*this, Key7);
+			_keyPressedCallback(Key7, _userCallbackParam);
 			break;
 
 		case KEY_8:
-			keyPressedEvent(*this, Key8);
+			_keyPressedCallback(Key8, _userCallbackParam);
 			break;
 
 		case KEY_9:
-			keyPressedEvent(*this, Key9);
+			_keyPressedCallback(Key9, _userCallbackParam);
 			break;
 
 		case KEY_STAR:
-			keyPressedEvent(*this, KeyStar);
+			_keyPressedCallback(KeyStar, _userCallbackParam);
 			break;
 
 		case KEY_POUND:
-			keyPressedEvent(*this, KeySharp);
+			_keyPressedCallback(KeyPound, _userCallbackParam);
 			break;
 
 		case KEY_SEND:
@@ -308,11 +314,9 @@ void YealinkWenbox::callback(unsigned int wParam, long lParam) {
 	}
 
 	case YL_CALLBACK_GEN_PSTNRING_START:
-		//keyPressedEvent(*this, key);
 		break;
 
 	case YL_CALLBACK_GEN_PSTNRING_STOP:
-		//keyPressedEvent(*this, key);
 		break;
 
 	case YL_CALLBACK_GEN_INUSB:

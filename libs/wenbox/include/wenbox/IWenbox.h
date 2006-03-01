@@ -22,9 +22,10 @@
 
 #include <dllexport.h>
 
-#include <NonCopyable.h>
-#include <Event.h>
-#include <StringList.h>
+#include <Interface.h>
+
+#include <string>
+#include <list>
 
 #ifdef WENBOX_DLL
 	#ifdef BUILDING_DLL
@@ -40,7 +41,7 @@
  * @see Wenbox
  * @author Tanguy Krotoff
  */
-class IWenbox : NonCopyable {
+class IWenbox : Interface {
 public:
 
 	enum Key {
@@ -59,7 +60,7 @@ public:
 		KeyStar,
 
 		/** # button. */
-		KeySharp,
+		KeyPound,
 
 		/** Pick up button. */
 		KeyPickUp,
@@ -69,12 +70,22 @@ public:
 	};
 
 	/**
-	 * A key has been pressed from the USB phone device.
+	 * Callback, a key has been pressed from the USB phone device.
 	 *
-	 * @param sender this class
 	 * @param key key pressed by the user
+	 * @param param user parameter
 	 */
-	Event<void (IWenbox & sender, Key key)> keyPressedEvent;
+	typedef void (*KeyPressedCallback)(Key key, void * param);
+
+	/**
+	 * Internal method, only usefull when implementing a Wenbox USB device.
+	 *
+	 * Sets the callback for the key pressed event.
+	 *
+	 * @param keyPressedCallback callback called each time a key is pressed
+	 * @param param user parameter
+	 */
+	virtual void setKeyPressedCallback(KeyPressedCallback keyPressedCallback, void * param) = 0;
 
 	virtual ~IWenbox() { }
 
@@ -109,7 +120,7 @@ public:
 	 *
 	 * @return list of the possible names for the audio device
 	 */
-	virtual StringList getAudioDeviceNameList() const = 0;
+	virtual std::list<std::string> getAudioDeviceNameList() const = 0;
 
 	enum Mode {
 		/** PSTN mode (standard phone line). */
@@ -184,7 +195,7 @@ public:
 	 * @param phoneNumber only used when in state CallIncoming
 	 * @return true if manage to change the state
 	 */
-	virtual bool setState(PhoneCallState state, const std::string & phoneNumber = String::null) = 0;
+	virtual bool setState(PhoneCallState state, const std::string & phoneNumber) = 0;
 };
 
 /**

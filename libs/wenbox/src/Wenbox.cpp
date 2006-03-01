@@ -21,6 +21,7 @@
 
 #include <Logger.h>
 #include <File.h>
+#include <StringList.h>
 
 #include <shlibloader/SharedLibLoader.h>
 
@@ -47,7 +48,7 @@ Wenbox::Wenbox() {
 	if (getInstance) {
 		LOG_DEBUG("Wenbox dll loaded");
 		_wenboxPrivate = getInstance();
-		_wenboxPrivate->keyPressedEvent += keyPressedEvent;
+		_wenboxPrivate->setKeyPressedCallback(Wenbox::keyPressedCallback, this);
 	} else {
 		LOG_ERROR("Wenbox dll not loaded");
 	}
@@ -83,7 +84,7 @@ std::string Wenbox::getDeviceName() {
 	return String::null;
 }
 
-StringList Wenbox::getAudioDeviceNameList() const {
+std::list<std::string> Wenbox::getAudioDeviceNameList() const {
 	StringList strList;
 
 	if (_wenboxPrivate) {
@@ -128,4 +129,13 @@ bool Wenbox::setState(PhoneCallState state, const std::string & phoneNumber) {
 		return _wenboxPrivate->setState(state, phoneNumber);
 	}
 	return false;
+}
+
+void Wenbox::keyPressedCallback(Key key, void * param) {
+	Wenbox * wenbox = (Wenbox *) param;
+	if (wenbox) {
+		wenbox->keyPressedEvent(*wenbox, key);
+	} else {
+		LOG_FATAL("wenbox instance is null, check void * param for IWenbox::keyPressedCallback()");
+	}
 }

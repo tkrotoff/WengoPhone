@@ -22,6 +22,8 @@
 
 #include <wenbox/IWenbox.h>
 
+#include <Event.h>
+
 /**
  * Plugin interface for USB phone devices.
  *
@@ -37,6 +39,20 @@
 class Wenbox : public IWenbox {
 public:
 
+	/**
+	 * A key has been pressed from the USB phone device.
+	 *
+	 * @param sender this class
+	 * @param key key pressed by the user
+	 * @see IWenbox::setKeyPressedCallback()
+	 */
+	Event<void (IWenbox & sender, Key key)> keyPressedEvent;
+
+	/**
+	 * Does nothing.
+	 */
+	void setKeyPressedCallback(KeyPressedCallback keyPressedCallback, void * param) { }
+
 	Wenbox();
 
 	~Wenbox();
@@ -51,7 +67,7 @@ public:
 
 	std::string getDeviceName();
 
-	StringList getAudioDeviceNameList() const;
+	std::list<std::string> getAudioDeviceNameList() const;
 
 	bool setDefaultMode(Mode mode);
 
@@ -61,9 +77,16 @@ public:
 
 	bool setRingingTone(int tone);
 
-	bool setState(PhoneCallState state, const std::string & phoneNumber = String::null);
+	bool setState(PhoneCallState state, const std::string & phoneNumber);
 
 private:
+
+	/**
+	 * Callback from IWenbox.
+	 *
+	 * @see IWenbox::setKeyPressedCallback()
+	 */
+	static void keyPressedCallback(Key key, void * param);
 
 	IWenbox * _wenboxPrivate;
 

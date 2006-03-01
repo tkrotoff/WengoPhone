@@ -23,6 +23,8 @@
 #include <Event.h>
 #include <Interface.h>
 
+#include <sipwrapper/EnumTone.h>
+
 #include <string>
 
 class SipAccount;
@@ -45,9 +47,7 @@ class IPhoneLine : Interface {
 public:
 
 	/**
-	 * The state of the PhoneLine has changed.
-	 *
-	 * @param sender this class
+	 * @see SipWrapper::phoneLineStateChangedEvent
 	 */
 	Event<void (IPhoneLine & sender)> stateChangedEvent;
 
@@ -65,47 +65,39 @@ public:
 	virtual std::string getMySipAddress() const = 0;
 
 	/**
-	 * Dials a phone number.
-	 *
-	 * @param phoneNumber SIP address to call (e.g phone number to dial)
-	 * @return the call id
+	 * @see SipWrapper::makeCall()
 	 */
 	virtual int makeCall(const std::string & phoneNumber) = 0;
 
 	/**
-	 * Accepts a given phone call.
-	 *
-	 * @param callId id of the phone call to accept
+	 * @see SipWrapper::acceptCall()
 	 */
 	virtual void acceptCall(int callId) = 0;
 
 	/**
-	 * Rejects a given phone call.
-	 *
-	 * @param callId id of the phone call to reject
+	 * @see SipWrapper::rejectCall()
 	 */
 	virtual void rejectCall(int callId) = 0;
 
 	/**
-	 * Closes a given phone call.
-	 *
-	 * @param callId id of the phone call to close
+	 * @see SipWrapper::closeCall()
 	 */
 	virtual void closeCall(int callId) = 0;
 
 	/**
-	 * Holds a given phone call.
-	 *
-	 * @param callId id of the phone call to hold
+	 * @see SipWrapper::holdCall()
 	 */
 	virtual void holdCall(int callId) = 0;
 
 	/**
-	 * Resumes a given phone call.
-	 *
-	 * @param callId id of the phone call to resume
+	 * @see SipWrapper::resumeCall()
 	 */
 	virtual void resumeCall(int callId) = 0;
+
+	/**
+	 * @see SipWrapper::playTone()
+	 */
+	virtual void playTone(int callId, EnumTone::Tone tone) = 0;
 
 	/**
 	 * Gets the SIP account associated with this PhoneLine.
@@ -178,7 +170,7 @@ public:
 	/**
 	 * Gets the active PhoneCall associated with this PhoneLine.
 	 *
-	 * @return active PhoneCall
+	 * @return active PhoneCall or NULL
 	 */
 	virtual PhoneCall * getActivePhoneCall() const = 0;
 };
