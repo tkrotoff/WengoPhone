@@ -141,3 +141,7 @@ WenboxPlugin & PhoneCall::getWenboxPlugin() const {
 void PhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
 	videoFrameReceivedEvent(*this, remoteVideoFrame, localVideoFrame);
 }
+
+void PhoneCall::playTone(EnumTone::Tone tone) {
+	_phoneLine.playTone(_callId, tone);
+}

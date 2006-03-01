@@ -233,6 +233,8 @@ void PhApiWrapper::resumeCall(int callId) {
 void PhApiWrapper::playTone(int callId, EnumTone::Tone tone) {
 	static const int INBAND_DTMF = 1;
 
+	LOG_DEBUG("tone=" + String::fromNumber(tone));
+
 	switch (tone) {
 	case EnumTone::Tone0:
 		phSendDtmf(callId, '0', INBAND_DTMF);

@@ -153,3 +153,11 @@ void CWengoPhone::smsCreatedEventHandler(WengoPhone & sender, Sms & sms) {
 
 	LOG_DEBUG("CSms created");
 }
+
+PhoneCall * CWengoPhone::getActivePhoneCall() const {
+	IPhoneLine * phoneLine = _wengoPhone.getActivePhoneLine();
+	if (phoneLine) {
+		return phoneLine->getActivePhoneCall();
+	}
+	return NULL;
+}

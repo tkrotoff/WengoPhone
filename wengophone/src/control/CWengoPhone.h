@@ -136,6 +136,15 @@ public:
 		return _wengoPhone;
 	}
 
+	/**
+	 * Gets the active phone call.
+	 *
+	 * Used for playing DTMF.
+	 *
+	 * @return active phone call or NULL
+	 */
+	PhoneCall * getActivePhoneCall() const;
+
 private:
 
 	void presenceHandlerCreatedEventHandler(WengoPhone & sender, PresenceHandler & presenceHandler);

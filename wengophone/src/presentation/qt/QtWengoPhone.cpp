@@ -20,6 +20,7 @@
 #include "QtWengoPhone.h"
 
 #include <model/account/SipAccount.h>
+#include <model/phonecall/PhoneCall.h>
 #include <control/CWengoPhone.h>
 
 #include "phoneline/QtPhoneLine.h"
@@ -250,11 +251,23 @@ void QtWengoPhone::noAccountAvailableEventHandlerThreadSafe(WengoPhone & sender)
 }
 
 void QtWengoPhone::dialpad(const QString & num) {
-	//if (_cWengoPhone.hasActiveCall()) {
-	//	_cWengoPhone.dialpad(num);
-	//} else {
+	PhoneCall * phoneCall = _cWengoPhone.getActivePhoneCall();
+	if (phoneCall) {
+		if (num == "0") { phoneCall->playTone(EnumTone::Tone0); }
+		if (num == "1") { phoneCall->playTone(EnumTone::Tone1); }
+		if (num == "2") { phoneCall->playTone(EnumTone::Tone2); }
+		if (num == "3") { phoneCall->playTone(EnumTone::Tone3); }
+		if (num == "4") { phoneCall->playTone(EnumTone::Tone4); }
+		if (num == "5") { phoneCall->playTone(EnumTone::Tone5); }
+		if (num == "6") { phoneCall->playTone(EnumTone::Tone6); }
+		if (num == "7") { phoneCall->playTone(EnumTone::Tone7); }
+		if (num == "8") { phoneCall->playTone(EnumTone::Tone8); }
+		if (num == "9") { phoneCall->playTone(EnumTone::Tone9); }
+		if (num == "*") { phoneCall->playTone(EnumTone::ToneStar); }
+		if (num == "#") { phoneCall->playTone(EnumTone::TonePound); }
+	} else {
 		_phoneComboBox->setEditText(_phoneComboBox->currentText() + num);
-	//}
+	}
 }
 
 void QtWengoPhone::callButtonClicked() {
