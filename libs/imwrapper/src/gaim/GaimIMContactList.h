@@ -39,7 +39,11 @@ public:
 	virtual void removeContact(const std::string & groupName, const std::string & contactId);
 	virtual void addGroup(const std::string & groupName);
 	virtual void removeGroup(const std::string & groupName);
-
+	virtual void changeGroupName(const std::string & oldGroupName, const std::string & newGroupName);
+	virtual void moveContactToGroup(const std::string & newGroupName,
+									const std::string & oldGroupName, 
+									const std::string & contactId);
+	
 	bool equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol);
 };
 

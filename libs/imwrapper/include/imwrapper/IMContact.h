@@ -70,11 +70,22 @@ public:
 		return _contactId;
 	}
 
+	void setBlocked(bool blocked) {
+		_blocked = blocked;
+	}
+
+	bool isBlocked() const {
+		return _blocked;
+	}
+
 private:
 
 	const IMAccount & _imAccount;
 
 	std::string _contactId;
+
+	/** True if this IMContact is blocked. */ 
+	bool _blocked;
 };
 
 #endif	//IMCONTACT_H

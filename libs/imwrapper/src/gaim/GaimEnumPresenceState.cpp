@@ -21,8 +21,7 @@
 
 #include "GaimEnumPresenceState.h"
 
-
-const char *GaimEnumPresenceState::_GaimPresenceStatus[] = {
+const char *GaimPreState::_GaimPresenceStatus[] = {
 		"available",
 		"offline",
 		"away",
@@ -33,12 +32,12 @@ const char *GaimEnumPresenceState::_GaimPresenceStatus[] = {
 };
 
 
-const char *GaimEnumPresenceState::GetStatusId(EnumPresenceState::PresenceState status) 
+const char *GaimPreState::GetStatusId(EnumPresenceState::PresenceState status) 
 {
 	return _GaimPresenceStatus[status];
 }
 
-EnumPresenceState::PresenceState GaimEnumPresenceState::GetPresenceState(const char *StatusId)
+EnumPresenceState::PresenceState GaimPreState::GetPresenceState(const char *StatusId)
 {
 	int i;
 
@@ -46,5 +45,5 @@ EnumPresenceState::PresenceState GaimEnumPresenceState::GetPresenceState(const c
 		if (strcmp(_GaimPresenceStatus[i], StatusId) == 0)
 			break;
 
-	return (EnumPresenceState::PresenceState)i;
+	return (PresenceState)i;
 }

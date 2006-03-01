@@ -17,7 +17,7 @@ libs = [
 defines = {}
 lib_path = []
 include_path = [
-	'.'
+	'../phapi'
 ]
 
 if WengoGetConsoleArgument('enable-netlib'):

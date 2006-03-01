@@ -26,6 +26,8 @@
 #include <imwrapper/IMPresence.h>
 #include <imwrapper/EnumPresenceState.h>
 
+#include "GaimEnumIMProtocol.h"
+
 /**
  * Stub for Instant Messaging presence.
  *
@@ -41,6 +43,7 @@ public:
 	GaimIMPresence(IMAccount & account);
 
 	virtual void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
+	virtual void changeMyNickname(const std::string & nickname);
 	virtual void subscribeToPresenceOf(const std::string & contactId);
 	virtual void blockContact(const std::string & contactId);
 	virtual void unblockContact(const std::string & contactId);

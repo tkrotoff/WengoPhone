@@ -60,7 +60,7 @@ bool GaimIMConnect::equalsTo(std::string login, EnumIMProtocol::IMProtocol proto
 void *GaimIMConnect::CreateAccount()
 {
 	GaimAccount	*gAccount = NULL;
-	char *PrclId = (char *)GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol());
+	char *PrclId = (char *)GaimIMPrcl::GetPrclId(_imAccount.getProtocol());
 	
 	gAccount = gaim_account_new(_imAccount.getLogin().c_str(), PrclId);
 	
@@ -80,7 +80,7 @@ void GaimIMConnect::connect()
 	GaimAccount	*gAccount;
 
 	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
-								GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
+								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	if (gAccount == NULL)
 	{
 		if (!(gAccount = (GaimAccount *) CreateAccount()))
@@ -99,7 +99,7 @@ void GaimIMConnect::disconnect()
 	GaimAccount	*gAccount;
 
 	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
-								GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
+								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	if (gAccount)
 		gaim_account_disconnect(gAccount);
 }

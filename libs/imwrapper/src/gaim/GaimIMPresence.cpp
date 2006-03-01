@@ -18,7 +18,6 @@
  */
 
 #include "GaimIMPresence.h"
-#include "GaimEnumIMProtocol.h"
 #include "GaimEnumPresenceState.h"
 
 extern "C" {
@@ -47,17 +46,22 @@ void GaimIMPresence::changeMyPresence(EnumPresenceState::PresenceState state,
 									  const std::string & note) 
 {
 	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
-											GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
+											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	
 	if (gAccount)
 	{
 		if (note.length() == 0)
-			gaim_account_set_status(gAccount, GaimEnumPresenceState::GetStatusId(state), 
+			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state), 
 									TRUE, NULL);
 		else
-			gaim_account_set_status(gAccount, GaimEnumPresenceState::GetStatusId(state),
+			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state),
 									TRUE, "message", note.c_str(), NULL);
 	}
+}
+
+void GaimIMPresence::changeMyNickname(const std::string & nickname)
+{
+
 }
 
 void GaimIMPresence::subscribeToPresenceOf(const std::string & contactId)
@@ -69,7 +73,7 @@ void GaimIMPresence::blockContact(const std::string & contactId)
 	GaimAccount *gAccount;
 
 	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
-								GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
+								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
 	if (gAccount)
 	{
@@ -82,7 +86,7 @@ void GaimIMPresence::unblockContact(const std::string & contactId)
 	GaimAccount *gAccount;
 
 	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
-								GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
+								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
 	if (gAccount)
 	{

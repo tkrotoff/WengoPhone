@@ -45,7 +45,7 @@ GaimIMChat::GaimIMChat(IMAccount & account)
 void GaimIMChat::createSession(IMContactSet & imContactSet)
 {
 	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
-											GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
+											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
 	GaimConversation *gConv = NULL;
 
@@ -117,7 +117,7 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 	mConvInfo_t *mConv = FindChatStructById(chatSession.getId());
 	GaimConversation *conv;
 	GaimAccount *Gaccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
-											GaimEnumIMProtocol::GetPrclId(_imAccount.getProtocol()));
+											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	int BuddyNbr = chatSession.getIMContactSet().size();
 	
 	if (Gaccount)

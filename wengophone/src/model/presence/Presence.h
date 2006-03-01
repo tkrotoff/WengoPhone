@@ -47,7 +47,7 @@ public:
 	/**
 	 * @see IMPresence::presenceStatusEvent
 	 */
-	Event<void (IMPresence & sender, EnumPresenceState::MyPresenceStatus status)> myPresenceStatusEvent;
+	Event<void (IMPresence & sender, EnumPresenceState::MyPresenceStatus status, const std::string & note)> myPresenceStatusEvent;
 
 	/**
 	 * @see IMPresence::subscribeStatusEvent

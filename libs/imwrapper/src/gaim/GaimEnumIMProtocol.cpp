@@ -21,9 +21,7 @@
 
 #include "GaimEnumIMProtocol.h"
 
-
-
-const char *GaimEnumIMProtocol::_GaimIMProtocol[] = {
+const char *GaimIMPrcl::_GaimIMProtocol[] = {
 		"prpl-all",
 		"prpl-msn",
 		"prpl-yahoo",
@@ -35,12 +33,12 @@ const char *GaimEnumIMProtocol::_GaimIMProtocol[] = {
 };
 
 
-const char *GaimEnumIMProtocol::GetPrclId(EnumIMProtocol::IMProtocol protocol) 
+const char *GaimIMPrcl::GetPrclId(EnumIMProtocol::IMProtocol protocol) 
 {
 		return _GaimIMProtocol[protocol];
 }
 
-EnumIMProtocol::IMProtocol GaimEnumIMProtocol::GetEnumIMProtocol(const char *GaimPrclId) 
+EnumIMProtocol::IMProtocol GaimIMPrcl::GetEnumIMProtocol(const char *GaimPrclId) 
 {
 	int i;
 
@@ -48,5 +46,5 @@ EnumIMProtocol::IMProtocol GaimEnumIMProtocol::GetEnumIMProtocol(const char *Gai
 		if (strcmp(_GaimIMProtocol[i], GaimPrclId) == 0)
 			break;
 
-	return (EnumIMProtocol::IMProtocol)i;
+	return (IMProtocol)i;
 }

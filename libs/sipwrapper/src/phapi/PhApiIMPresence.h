@@ -38,6 +38,8 @@ public:
 
 	void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note = String::null);
 
+	void changeMyNickname(const std::string & nickname);
+
 	void subscribeToPresenceOf(const std::string & contactId);
 
 	void blockContact(const std::string & contactId);
@@ -50,7 +52,7 @@ private:
 
 	void presenceStateChangedEventHandler(PhApiWrapper & sender, EnumPresenceState::PresenceState state, const std::string & note, const std::string & from);
 
-	void myPresenceStatusEventHandler(PhApiWrapper & sender, EnumPresenceState::MyPresenceStatus status);
+	void myPresenceStatusEventHandler(PhApiWrapper & sender, EnumPresenceState::MyPresenceStatus status, const std::string & note);
 
 	void subscribeStatusEventHandler(PhApiWrapper & sender, const std::string & contactId, IMPresence::SubscribeStatus status);
 

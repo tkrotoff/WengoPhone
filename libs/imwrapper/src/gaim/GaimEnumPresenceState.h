@@ -22,14 +22,14 @@
 
 #include <imwrapper/EnumPresenceState.h>
 
-class GaimEnumPresenceState
+class GaimPreState : EnumPresenceState
 {
 
 public:
 
-	static const char *GetStatusId(EnumPresenceState::PresenceState status);
+	static const char *GetStatusId(PresenceState status);
 
-	static EnumPresenceState::PresenceState GetPresenceState(const char *StatusId);
+	static PresenceState GetPresenceState(const char *StatusId);
 
 private:
 

@@ -139,14 +139,14 @@ void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
 	GaimAccount *gAccount = gaim_buddy_get_account(gBuddy);
 	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
 	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
-												GaimEnumIMProtocol::GetEnumIMProtocol(gPrclId));
+												GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 	
-	GaimIMContactList *gIMContactList = FindIMContactList(*account);
-	if (gIMContactList)
+	GaimIMContactList *mIMContactList = FindIMContactList(*account);
+	if (mIMContactList)
 	{
 		const char *groupName = FindBuddyGroup(gBuddy);
 
-		gIMContactList->newContactAddedEvent(*gIMContactList,
+		mIMContactList->newContactAddedEvent(*mIMContactList,
 											gaim_buddy_get_name(gBuddy),
 											groupName);
 	}
@@ -205,36 +205,36 @@ void GaimContactListMngr::ShowCbk(GaimBuddyList *list)
 
 void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 {
-	GaimIMPresence *gIMpresence = NULL;
+	GaimIMPresence *mIMpresence = NULL;
 	GaimAccount	*gAccount = NULL;
-	GaimPresence *presence;
-	GaimStatus *status;
-	GaimStatusType *status_type;
-	GaimStatusPrimitive primitive;
+	GaimPresence *gPresence;
+	GaimStatus *gStatus;
+	GaimStatusType *gStatusType;
+	GaimStatusPrimitive gStatusPrim;
 	IMAccount *account = NULL;
 	const char *gPrclId;
 	const char *gPresenceId;
 
-	GaimGroup *mgroup = gaim_buddy_get_group(gBuddy);
+	GaimGroup *gGroup = gaim_buddy_get_group(gBuddy);
 
-	presence = gaim_buddy_get_presence(gBuddy);
-	status = gaim_presence_get_active_status(presence);
-	status_type = gaim_status_get_type(status);
-	primitive = gaim_status_type_get_primitive(status_type);
-	gPresenceId = gaim_primitive_get_id_from_type(primitive);
+	gPresence = gaim_buddy_get_presence(gBuddy);
+	gStatus = gaim_presence_get_active_status(gPresence);
+	gStatusType = gaim_status_get_type(gStatus);
+	gStatusPrim = gaim_status_type_get_primitive(gStatusType);
+	gPresenceId = gaim_primitive_get_id_from_type(gStatusPrim);
 	gAccount = gaim_buddy_get_account(gBuddy);
 	gPrclId = gaim_account_get_protocol_id(gAccount);
 	account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
-											GaimEnumIMProtocol::GetEnumIMProtocol(gPrclId));
+											GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 	if (account)
 	{
-		gIMpresence = _presenceMngr->FindIMPresence(*account);
+		mIMpresence = _presenceMngr->FindIMPresence(*account);
 
-		if (gIMpresence == NULL)
+		if (mIMpresence == NULL)
 			return;
 
-		gIMpresence->presenceStateChangedEvent(*gIMpresence, 
-												GaimEnumPresenceState::GetPresenceState(gPresenceId),
+		mIMpresence->presenceStateChangedEvent(*mIMpresence, 
+												GaimPreState::GetPresenceState(gPresenceId),
 												"",
 												std::string(gaim_buddy_get_name(gBuddy))
 												);

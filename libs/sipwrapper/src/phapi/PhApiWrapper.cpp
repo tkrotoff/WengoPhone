@@ -450,7 +450,7 @@ void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, cons
 		break;
 
 	case EnumPresenceState::PresenceStateUnknown:
-		myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusError);
+		myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusError, note);
 		break;
 
 	default:
@@ -475,7 +475,7 @@ void PhApiWrapper::publishOnline(const std::string & note) {
 		pidfOnline += "</tuple>\n";
 		pidfOnline += "</presence>\n";
 
-		publishPresence(pidfOnline);
+		publishPresence(pidfOnline, note);
 	}
 }
 
@@ -493,19 +493,19 @@ void PhApiWrapper::publishOffline(const std::string & note) {
 		pidfOffline += "</tuple>\n";
 		pidfOffline += "</presence>\n";
 
-		publishPresence(pidfOffline);
+		publishPresence(pidfOffline, note);
 	}
 }
 
-void PhApiWrapper::publishPresence(const std::string & pidf) {
+void PhApiWrapper::publishPresence(const std::string & pidf, const std::string & note) {
 	static const std::string contentType = "application/pidf+xml";
 
 	if (_isInitialized) {
 		int phError = phLinePublish(_wengoVline, _wengoSipAddress.c_str(), 0, contentType.c_str(), pidf.c_str());
 		if (phError != 0) {
-			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusError);
+			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusError, note);
 		} else {
-			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusOk);
+			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusOk, note);
 		}
 	}
 
@@ -523,10 +523,11 @@ void PhApiWrapper::publishPresence(const std::string & pidf) {
 
 	//Saves the pidf
 	_lastPidf = pidf;
+	_lastNote = note;
 }
 
-void PhApiWrapper::renewPublishEventHandler() {
-	publishPresence(_lastPidf);
+void PhApiWrapper::renewPublishEventHandler() {	
+	publishPresence(_lastPidf, _lastNote);
 }
 
 void PhApiWrapper::subscribeToPresenceOf(const std::string & contactId) {

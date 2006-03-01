@@ -26,6 +26,7 @@
 #include <string>
 
 class IMAccount;
+class IMContact;
 
 class IMContactList : Interface {
 public:
@@ -45,6 +46,23 @@ public:
 	 * @param contactId the removed contact
 	 */
 	Event< void (IMContactList & sender, const std::string & groupName, const std::string & contactId) > contactRemovedEvent;
+
+	/**
+	 * Emitted when an IMContact has been moved remotely.
+	 *
+	 * @param sender this class
+	 * @param contactId the moved contact
+	 */
+	Event< void (IMContactList & sender, const std::string & groupName, const std::string & contactId) > contactMovedEvent;
+
+	/**
+	 * Emitted when a contact state has been changed.
+	 *
+	 * @param sender this class
+	 * @param groupName group name of the contact
+	 * @param imContact the changed IMContact
+	 */
+	Event< void (IMContactList & sender, const std::string & groupName, const IMContact & imContact) > imContactChangedEvent;
 
 	/**
 	 * Emitted when an IMContact has been added remotely.
@@ -94,6 +112,24 @@ public:
 	 * @param groupName the group name of the contact
 	 */
 	virtual void removeGroup(const std::string & groupName) = 0;
+
+	/**
+	 * Move a contact to another group.
+	 *
+	 * @param newGroupName the new group name
+	 * @param oldGroupName the old group name
+	 * @param contactId the contact to move
+	 */
+	virtual void moveContactToGroup(const std::string & newGroupName,
+		const std::string & oldGroupName, const std::string & contactId) = 0;
+
+	/**
+	 * Change group name.
+	 *
+	 * @param oldGroupName the old group name
+	 * @param newGroupName the new group name
+	 */
+	virtual void changeGroupName(const std::string & oldGroupName, const std::string & newGroupName) = 0;
 
 	/**
 	 * @return the associated IMAccount.

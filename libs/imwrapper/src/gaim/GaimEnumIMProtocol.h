@@ -22,14 +22,14 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 
-class GaimEnumIMProtocol
+class GaimIMPrcl : EnumIMProtocol
 {
 
 public:
 	
-	static const char *GetPrclId(EnumIMProtocol::IMProtocol protocol);
+	static const char *GetPrclId(IMProtocol protocol);
 
-	static EnumIMProtocol::IMProtocol GetEnumIMProtocol(const char *GaimPrclId);
+	static IMProtocol GetEnumIMProtocol(const char *GaimPrclId);
 
 private:
 

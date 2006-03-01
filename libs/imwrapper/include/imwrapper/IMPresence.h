@@ -52,8 +52,18 @@ public:
 	 *
 	 * @param sender this class
 	 * @param status new status
+	 * @param note used when PresenceStateUserDefined is used
 	 */
-	Event<void (IMPresence & sender, EnumPresenceState::MyPresenceStatus status)> myPresenceStatusEvent;
+	Event<void (IMPresence & sender, EnumPresenceState::MyPresenceStatus status,
+		const std::string & note)> myPresenceStatusEvent;
+
+	/**
+	 * Emitted when my nickname changed.
+	 *
+	 * @param sender this class
+	 * @param nickname the new nickname
+	 */
+	Event< void (IMPresence & sender, const std::string & nickname) > myNicknameChangedEvent;
 
 	enum SubscribeStatus {
 		/** Subscription to contact id has been successful */
@@ -70,7 +80,8 @@ public:
 	 * @param contactId the contact id
 	 * @param status the SubscribeStatus
 	 */
-	Event<void (IMPresence & sender, const std::string & contactId, SubscribeStatus status)> subscribeStatusEvent;
+	Event<void (IMPresence & sender, const std::string & contactId,
+		SubscribeStatus status)> subscribeStatusEvent;
 
 	/**
 	 * Ask for authorization to see MyPresenceState.
@@ -82,15 +93,34 @@ public:
 	Event<void (IMPresence & sender, const std::string & contactId,
 			const std::string & message)> authorizationRequestEvent;
 
+	/**
+	 * Emitted when a contact has been blocked or unblocked.
+	 *
+	 * @param sender this class
+	 * @param contactId the contact that has been changed
+	 * @param blocked blocking state
+	 */
+	Event< void (IMPresence & sender, const std::string & contactId,
+		bool blocked) > contactBlockingStateChangedEvent;
+
 	virtual ~IMPresence() { }
 
 	/**
 	 * Changes my presence status: online, offline, under the shower...
 	 *
 	 * @param state new presence state
-	 * @param note personnalized status string ("I'm under the shower"), used only with PresenceUserDefined
+	 * @param note personnalized status string ("I'm under the shower"),
+	 *	used only with PresenceUserDefined
 	 */
-	virtual void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note = String::null) = 0;
+	virtual void changeMyPresence(EnumPresenceState::PresenceState state,
+		const std::string & note = String::null) = 0;
+
+	/**
+	 * Changes my nickname.
+	 *
+	 * @param nickname the new nickname
+	 */
+	virtual void changeMyNickname(const std::string & nickname) = 0;
 
 	/**
 	 * Subscribe to the presence of a contact.

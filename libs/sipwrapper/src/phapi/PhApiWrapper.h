@@ -65,7 +65,7 @@ public:
 
 	Event<void (PhApiWrapper & sender, EnumPresenceState::PresenceState state, const std::string & note, const std::string & from)> presenceStateChangedEvent;
 
-	Event<void (PhApiWrapper & sender, EnumPresenceState::MyPresenceStatus status)> myPresenceStatusEvent;
+	Event<void (PhApiWrapper & sender, EnumPresenceState::MyPresenceStatus status, const std::string & note)> myPresenceStatusEvent;
 
 	Event<void (PhApiWrapper & sender, const std::string & contactId, IMPresence::SubscribeStatus status)> subscribeStatusEvent;
 
@@ -219,7 +219,7 @@ private:
 	 * @see publishOnline()
 	 * @see publishOffline()
 	 */
-	void publishPresence(const std::string & pidf);
+	void publishPresence(const std::string & pidf, const std::string & note);
 
 	/** @see changeMyPresence() */
 	void publishOnline(const std::string & note);
@@ -249,6 +249,9 @@ private:
 
 	/** Last pidf for my presence. */
 	std::string _lastPidf;
+
+	/** Last note for my presence. */
+	std::string _lastNote;
 
 	/** Playback audio device id. */
 	int _outputAudioDeviceId;
