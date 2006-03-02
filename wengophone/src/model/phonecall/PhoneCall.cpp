@@ -145,3 +145,7 @@ void PhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, co
 void PhoneCall::playTone(EnumTone::Tone tone) {
 	_phoneLine.playTone(_callId, tone);
 }
+
+void PhoneCall::playSoundFile(const std::string & soundFile) {
+	_phoneLine.playSoundFile(_callId, soundFile);
+}

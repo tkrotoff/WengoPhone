@@ -107,6 +107,8 @@ public:
 
 	void playTone(int callId, EnumTone::Tone tone);
 
+	void playSoundFile(int callId, const std::string & soundFile);
+
 	bool setCallInputAudioDevice(const std::string & deviceName);
 
 	bool setRingerOutputAudioDevice(const std::string & deviceName);

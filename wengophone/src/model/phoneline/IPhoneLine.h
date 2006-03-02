@@ -100,6 +100,11 @@ public:
 	virtual void playTone(int callId, EnumTone::Tone tone) = 0;
 
 	/**
+	 * @see SipWrapper::playSoundFile()
+	 */
+	virtual void playSoundFile(int callId, const std::string & soundFile) = 0;
+
+	/**
 	 * Gets the SIP account associated with this PhoneLine.
 	 *
 	 * @return SIP account associated with this PhoneLine or NULL

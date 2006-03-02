@@ -43,6 +43,7 @@ const std::string Config::AUDIO_INPUT_DEVICENAME_KEY = "audio.input.devicename";
 const std::string Config::AUDIO_RINGER_DEVICENAME_KEY = "audio.ringer.devicename";
 const std::string Config::AUDIO_RINGING_FILE_KEY = "audio.ringing.file";
 const std::string Config::AUDIO_CALLCLOSED_FILE_KEY = "audio.callclosed.file";
+const std::string Config::AUDIO_SMILEYS_DIR_KEY = "audio.smileys.dir";
 
 const std::string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
 const std::string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
@@ -83,4 +84,9 @@ std::string Config::getAudioCallClosedFile() const {
 std::string Config::getConfigDir() const {
 	std::string file = File::getApplicationDirPath();
 	return get(CONFIG_DIR_KEY, file);
+}
+
+std::string Config::getAudioSmileysDir() const {
+	std::string file = File::convertPathSeparators(File::getApplicationDirPath() + "sounds/tones/");
+	return get(AUDIO_SMILEYS_DIR_KEY, file);
 }

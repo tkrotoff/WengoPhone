@@ -233,55 +233,57 @@ void PhApiWrapper::resumeCall(int callId) {
 void PhApiWrapper::playTone(int callId, EnumTone::Tone tone) {
 	static const int INBAND_DTMF = 1;
 
-	LOG_DEBUG("tone=" + String::fromNumber(tone));
+	LOG_DEBUG("callId=" + String::fromNumber(callId) + " tone=" + String::fromNumber(tone));
+
+	char dtmf;
 
 	switch (tone) {
 	case EnumTone::Tone0:
-		phSendDtmf(callId, '0', INBAND_DTMF);
+		dtmf = '0';
 		break;
 
 	case EnumTone::Tone1:
-		phSendDtmf(callId, '1', INBAND_DTMF);
+		dtmf = '1';
 		break;
 
 	case EnumTone::Tone2:
-		phSendDtmf(callId, '2', INBAND_DTMF);
+		dtmf = '2';
 		break;
 
 	case EnumTone::Tone3:
-		phSendDtmf(callId, '3', INBAND_DTMF);
+		dtmf = '3';
 		break;
 
 	case EnumTone::Tone4:
-		phSendDtmf(callId, '4', INBAND_DTMF);
+		dtmf = '4';
 		break;
 
 	case EnumTone::Tone5:
-		phSendDtmf(callId, '5', INBAND_DTMF);
+		dtmf = '5';
 		break;
 
 	case EnumTone::Tone6:
-		phSendDtmf(callId, '6', INBAND_DTMF);
+		dtmf = '6';
 		break;
 
 	case EnumTone::Tone7:
-		phSendDtmf(callId, '7', INBAND_DTMF);
+		dtmf = '7';
 		break;
 
 	case EnumTone::Tone8:
-		phSendDtmf(callId, '8', INBAND_DTMF);
+		dtmf = '8';
 		break;
 
 	case EnumTone::Tone9:
-		phSendDtmf(callId, '9', INBAND_DTMF);
+		dtmf = '9';
 		break;
 
 	case EnumTone::ToneStar:
-		phSendDtmf(callId, '*', INBAND_DTMF);
+		dtmf = '*';
 		break;
 
 	case EnumTone::TonePound:
-		phSendDtmf(callId, '#', INBAND_DTMF);
+		dtmf = '#';
 		break;
 
 	case EnumTone::ToneDialtone:
@@ -317,6 +319,12 @@ void PhApiWrapper::playTone(int callId, EnumTone::Tone tone) {
 	default:
 		LOG_FATAL("unknown tone");
 	}
+
+	phSendDtmf(callId, dtmf, INBAND_DTMF);
+}
+
+void PhApiWrapper::playSoundFile(int callId, const std::string & soundFile) {
+	phSendSoundFile(callId, soundFile.c_str());
 }
 
 void PhApiWrapper::callProgress(int callId, const phCallStateInfo_t * info) {
@@ -372,6 +380,9 @@ bool PhApiWrapper::enableAEC(bool enable) {
 		phcfg.noaec = 0;
 	} else {
 		phcfg.noaec = 1;
+
+		//Half duplex (second mode)
+		phcfg.hdxmode = 2;
 	}
 	return true;
 }
@@ -622,9 +633,6 @@ void PhApiWrapper::setSIP(const string & server, unsigned serverPort, unsigned l
 
 void PhApiWrapper::init() {
 	setNetworkParameter();
-
-	//Half duplex (2e mode)
-	phcfg.hdxmode = 2;
 
 	//Plugin path
 	strncpy(phcfg.plugin_path, _pluginPath.c_str(), sizeof(phcfg.plugin_path));

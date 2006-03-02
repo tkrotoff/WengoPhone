@@ -60,7 +60,7 @@ public:
 
 	void updatePresentation();
 
-	void dialpad(const QString & num);
+	void dialpad(const std::string & tone, const std::string & soundFile);
 
 	QWidget * getWidget() const {
 		return _wengoPhoneWindow;

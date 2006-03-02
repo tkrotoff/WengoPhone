@@ -164,6 +164,10 @@ public:
 	static const std::string AUDIO_CALLCLOSED_FILE_KEY;
 	std::string getAudioCallClosedFile() const;
 
+	/** Audio smileys directory. */
+	static const std::string AUDIO_SMILEYS_DIR_KEY;
+	std::string getAudioSmileysDir() const;
+
 	/** @} */
 
 

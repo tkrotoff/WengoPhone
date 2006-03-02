@@ -250,23 +250,27 @@ void QtWengoPhone::noAccountAvailableEventHandlerThreadSafe(WengoPhone & sender)
 	showLoginWindow();
 }
 
-void QtWengoPhone::dialpad(const QString & num) {
+void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFile) {
 	PhoneCall * phoneCall = _cWengoPhone.getActivePhoneCall();
 	if (phoneCall) {
-		if (num == "0") { phoneCall->playTone(EnumTone::Tone0); }
-		if (num == "1") { phoneCall->playTone(EnumTone::Tone1); }
-		if (num == "2") { phoneCall->playTone(EnumTone::Tone2); }
-		if (num == "3") { phoneCall->playTone(EnumTone::Tone3); }
-		if (num == "4") { phoneCall->playTone(EnumTone::Tone4); }
-		if (num == "5") { phoneCall->playTone(EnumTone::Tone5); }
-		if (num == "6") { phoneCall->playTone(EnumTone::Tone6); }
-		if (num == "7") { phoneCall->playTone(EnumTone::Tone7); }
-		if (num == "8") { phoneCall->playTone(EnumTone::Tone8); }
-		if (num == "9") { phoneCall->playTone(EnumTone::Tone9); }
-		if (num == "*") { phoneCall->playTone(EnumTone::ToneStar); }
-		if (num == "#") { phoneCall->playTone(EnumTone::TonePound); }
+		if (soundFile.empty()) {
+			if (tone == "0") { phoneCall->playTone(EnumTone::Tone0); }
+			if (tone == "1") { phoneCall->playTone(EnumTone::Tone1); }
+			if (tone == "2") { phoneCall->playTone(EnumTone::Tone2); }
+			if (tone == "3") { phoneCall->playTone(EnumTone::Tone3); }
+			if (tone == "4") { phoneCall->playTone(EnumTone::Tone4); }
+			if (tone == "5") { phoneCall->playTone(EnumTone::Tone5); }
+			if (tone == "6") { phoneCall->playTone(EnumTone::Tone6); }
+			if (tone == "7") { phoneCall->playTone(EnumTone::Tone7); }
+			if (tone == "8") { phoneCall->playTone(EnumTone::Tone8); }
+			if (tone == "9") { phoneCall->playTone(EnumTone::Tone9); }
+			if (tone == "*") { phoneCall->playTone(EnumTone::ToneStar); }
+			if (tone == "#") { phoneCall->playTone(EnumTone::TonePound); }
+		} else {
+			phoneCall->playSoundFile(soundFile);
+		}
 	} else {
-		_phoneComboBox->setEditText(_phoneComboBox->currentText() + num);
+		_phoneComboBox->setEditText(_phoneComboBox->currentText() + QString::fromStdString(tone));
 	}
 }
 

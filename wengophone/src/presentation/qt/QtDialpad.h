@@ -22,9 +22,14 @@
 
 #include <QObject>
 
-class QWidget;
-class QString;
+#include <string>
+
 class QtWengoPhone;
+
+class QWidget;
+class QStringList;
+class QComboBox;
+class QPushButton;
 
 class QtDialpad : public QObject {
 	Q_OBJECT
@@ -60,15 +65,40 @@ private Q_SLOTS:
 
 	void starButtonClicked();
 
-	void sharpButtonClicked();
+	void poundButtonClicked();
+
+	void audioSmileysComboBoxActivated(int index);
 
 private:
 
-	void buttonClicked(const QString & num);
+	/**
+	 * FIXME put this intelligence inside model/control.
+	 */
+	void playTone(const std::string & tone);
+
+	/**
+	 * FIXME put this intelligence inside model/control.
+	 */
+	QStringList getListAudioSmileys() const;
 
 	QWidget * _dialpadWidget;
 
 	QtWengoPhone * _qtWengoPhone;
+
+	QComboBox * _audioSmileysComboBox;
+
+	QPushButton * _zeroButton;
+	QPushButton * _oneButton;
+	QPushButton * _twoButton;
+	QPushButton * _threeButton;
+	QPushButton * _fourButton;
+	QPushButton * _fiveButton;
+	QPushButton * _sixButton;
+	QPushButton * _sevenButton;
+	QPushButton * _eightButton;
+	QPushButton * _nineButton;
+	QPushButton * _starButton;
+	QPushButton * _poundButton;
 };
 
 #endif	//QTDIALPAD_H

@@ -222,10 +222,18 @@ public:
 	/**
 	 * Sends a DTMF to a given phone call.
 	 *
-	 * @param callId if of the phone call to send a DTMF
+	 * @param callId phone call id to send a DTMF
 	 * @param tone DTMF tone to send
 	 */
 	virtual void playTone(int callId, EnumTone::Tone tone) = 0;
+
+	/**
+	 * Sends and plays a sound file to a given phone call.
+	 *
+	 * @param callId phone call id to play the sound file
+	 * @param soundFile sound file to play
+	 */
+	virtual void playSoundFile(int callId, const std::string & soundFile) = 0;
 
 	/** @} */
 

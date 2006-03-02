@@ -98,6 +98,11 @@ public:
 	void playTone(EnumTone::Tone tone);
 
 	/**
+	 * @see IPhoneLine::playSoundFile()
+	 */
+	void playSoundFile(const std::string & soundFile);
+
+	/**
 	 * Video frame received.
 	 *
 	 * @param remoteVideoFrame received

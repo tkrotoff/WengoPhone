@@ -8,16 +8,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>233</width>
-    <height>143</height>
+    <width>323</width>
+    <height>205</height>
    </rect>
-  </property>
-  <property name="windowTitle" >
-   <string>Form</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>8</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -29,21 +26,8 @@
      </property>
      <property name="sizeHint" >
       <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>40</width>
-       <height>20</height>
+       <width>16</width>
+       <height>116</height>
       </size>
      </property>
     </spacer>
@@ -56,91 +40,116 @@
      <property name="spacing" >
       <number>6</number>
      </property>
-     <item row="2" column="1" >
-      <widget class="QPushButton" name="eightButton" >
-       <property name="text" >
-        <string>8 tuv</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1" >
-      <widget class="QPushButton" name="fiveButton" >
-       <property name="text" >
-        <string>5 jkl</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" >
-      <widget class="QPushButton" name="fourButton" >
-       <property name="text" >
-        <string>4 ghi</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1" >
-      <widget class="QPushButton" name="zeroButton" >
-       <property name="text" >
-        <string>0 +</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2" >
-      <widget class="QPushButton" name="nineButton" >
-       <property name="text" >
-        <string>9 wxyz</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" >
-      <widget class="QPushButton" name="oneButton" >
-       <property name="text" >
-        <string>1</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2" >
-      <widget class="QPushButton" name="threeButton" >
-       <property name="text" >
-        <string>3 def</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" >
+     <item row="4" column="0" >
       <widget class="QPushButton" name="starButton" >
        <property name="text" >
         <string>*</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="2" >
-      <widget class="QPushButton" name="sharpButton" >
+     <item row="3" column="1" >
+      <widget class="QPushButton" name="eightButton" >
        <property name="text" >
-        <string>#</string>
+        <string>8 tuv</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1" >
-      <widget class="QPushButton" name="twoButton" >
-       <property name="text" >
-        <string>2 abc</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0" >
+     <item row="3" column="0" >
       <widget class="QPushButton" name="sevenButton" >
        <property name="text" >
         <string>7 pqrs</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="2" >
+     <item row="1" column="1" >
+      <widget class="QPushButton" name="twoButton" >
+       <property name="text" >
+        <string>2 abc</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="3" >
+      <widget class="QComboBox" name="audioSmileysComboBox" >
+       <item>
+        <property name="text" >
+         <string>Audio Smileys</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="wengophone.qrc" >:/emoticons/chat/emoticons/face-devil-grin16.png</iconset>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="2" column="2" >
       <widget class="QPushButton" name="sixButton" >
        <property name="text" >
         <string>6 mno</string>
        </property>
       </widget>
      </item>
+     <item row="3" column="2" >
+      <widget class="QPushButton" name="nineButton" >
+       <property name="text" >
+        <string>9 wxyz</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1" >
+      <widget class="QPushButton" name="zeroButton" >
+       <property name="text" >
+        <string>0 +</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QPushButton" name="oneButton" >
+       <property name="text" >
+        <string>1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2" >
+      <widget class="QPushButton" name="poundButton" >
+       <property name="text" >
+        <string>#</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="QPushButton" name="fiveButton" >
+       <property name="text" >
+        <string>5 jkl</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2" >
+      <widget class="QPushButton" name="threeButton" >
+       <property name="text" >
+        <string>3 def</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QPushButton" name="fourButton" >
+       <property name="text" >
+        <string>4 ghi</string>
+       </property>
+      </widget>
+     </item>
     </layout>
+   </item>
+   <item row="0" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>16</width>
+       <height>116</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -157,8 +166,10 @@
   <tabstop>nineButton</tabstop>
   <tabstop>starButton</tabstop>
   <tabstop>zeroButton</tabstop>
-  <tabstop>sharpButton</tabstop>
+  <tabstop>poundButton</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="wengophone.qrc" />
+ </resources>
  <connections/>
 </ui>

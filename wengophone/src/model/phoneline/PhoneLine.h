@@ -58,6 +58,8 @@ public:
 
 	void playTone(int callId, EnumTone::Tone tone);
 
+	void playSoundFile(int callId, const std::string & soundFile);
+
 	SipWrapper & getSipWrapper() const {
 		return *_sipWrapper;
 	}
