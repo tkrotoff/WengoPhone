@@ -31,13 +31,22 @@
 
 using namespace std;
 
-ConnectHandler::ConnectHandler() {
+ConnectHandler::ConnectHandler(WengoPhone & wengoPhone) {
+	wengoPhone.newIMAccountAddedEvent +=
+		boost::bind(&ConnectHandler::newIMAccountAddedEventHandler, this, _1, _2);
 }
 
 ConnectHandler::~ConnectHandler() {
 }
 
 void ConnectHandler::connect(const IMAccount & imAccount) {
+	IMAccountSet::const_iterator actIt = _actualIMAccount.find(imAccount);
+	if (actIt == _actualIMAccount.end()) {
+		LOG_DEBUG("This IMAccount has not yet been added. Pending connection.");
+		_pendingConnections.insert(imAccount);
+		return;
+	}
+
 	Connect * connect = NULL;
 	ConnectMap::const_iterator it = _connectMap.find(imAccount);
 
@@ -80,3 +89,15 @@ void ConnectHandler::loginStatusEventHandler(IMConnect & sender,
 		LOG_FATAL("unknown status");
 	}
 }
+
+void ConnectHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
+	IMAccountSet::iterator it = _pendingConnections.find(imAccount);
+	if (it != _pendingConnections.end()) {
+		LOG_DEBUG("A connection was pending for this IMAccount. Releasing connection.");
+		connect(imAccount);
+		_pendingConnections.erase(it);
+	}
+
+	_actualIMAccount.insert(imAccount);
+}
+

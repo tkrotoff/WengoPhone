@@ -28,11 +28,13 @@
 #include <Event.h>
 
 #include <map>
+#include <set>
 
 class Connect;
 class PresenceHandler;
 class WengoPhone;
 class IMAccount;
+class WengoPhone;
 
 /**
  *
@@ -66,17 +68,36 @@ public:
 
 	void disconnect(const IMAccount & imAccount);
 
-	ConnectHandler();
+	ConnectHandler(WengoPhone & wengoPhone);
 
 	~ConnectHandler();
 
 private:
 
+	void newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount);
+
 	void loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status);
 
 	typedef std::map<IMAccount, Connect *> ConnectMap;
 
+	typedef std::set<IMAccount> IMAccountSet;
+
 	ConnectMap _connectMap;
+
+	/**
+	 * Used to store connect demands until IMAccount has been
+	 * actually creaded. Without this stack, we could have
+	 * synchronisation problems with PresencHandler (trying to
+	 * change the presence state of an IMAccount whereas it has not
+	 * received the newIMAccountAddedEvent.
+	 */
+	IMAccountSet _pendingConnections;
+
+	/**
+	 * IMAccount actually added to WengoPhone. connect could be called
+	 * before adding IMAccount. This could leads some problem.
+	 */
+	IMAccountSet _actualIMAccount;
 };
 
 #endif	//CONNECTHANDLER_H
