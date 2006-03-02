@@ -884,7 +884,7 @@ phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int 
    public_voice_port[0] = 0;
 #endif
    
-   ph_printf("phLinePlaceCall_withCa: a new call has been placed\n");
+   DBG4_SIP_NEGO("phLinePlaceCall_withCa: a new call has been placed\n",0,0,0);
 
 
    local_video_port[0] = 0;
@@ -934,7 +934,7 @@ phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int 
 
 	if (ret <1)
 	{
-		ph_printf("unable to alocate public port ...");
+		DBG4_SIP_NEGO("unable to alocate public port ...",0,0,0);
 		return;
 	}
 	
@@ -1207,7 +1207,7 @@ phAcceptCall3(int cid, void *userData, int streams)
         int ret = getPublicPort(local_voice_port, local_video_port, public_voice_port , public_video_port );
         if (ret <1)
         {
-            printf("unable to alocate public port ...");
+            DBG4_SIP_NEGO("unable to alocate public port ...",0,0,0);
             return;
         }
 
@@ -1303,7 +1303,7 @@ phCloseCall(int cid)
 	phCallStateInfo_t info;
   int did;
   
-  ph_printf("phCloseCall %d\n", cid);
+  DBG4_SIP_NEGO("phCloseCall %d\n", cid,0,0);
   clear(info);
   info.event = phCALLCLOSED;
   
@@ -1811,7 +1811,7 @@ phAddVline2(const char *displayname, const char* username, const char *server, c
 
 
   if (phDebugLevel)
-    ph_printf("AddVline2(dn = %s, un=%s, srv=%s pxy=%s regT=%d)\n", nonull(displayname), nonull(username), nonull(server), nonull(proxy), regTimeout);
+    DBG8_SIP_NEGO("AddVline2(dn = %s, un=%s, srv=%s pxy=%s regT=%d)\n", nonull(displayname), nonull(username), nonull(server), nonull(proxy), regTimeout,0,0);
 
   srv2 = ph_scrap_port(srvbuf, sizeof(srvbuf), server, &port);
 
@@ -2532,7 +2532,6 @@ ph_nat_init()
                                       0, 0);
 
 
-	ph_printf (" \n aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \n \n  nat type: %d \n \n \n ", ntype);
 	switch (ntype)
 	  {
 	    
@@ -2802,7 +2801,7 @@ phInit(phCallbacks_t *cbk, char * server, int asyncmode)
   ph_nat_init();
 
   // if (phDebugLevel > 0)
-  ph_printf("NAT type: %s fw=%s \n", ph_nat_type_str, ph_nat_router_addr);
+  DBG4_SIP_NEGO("NAT type: %s fw=%s \n", ph_nat_type_str, ph_nat_router_addr,0);
 
   if (phcfg.force_proxy)
     eXosip_force_proxy(phcfg.proxy);
@@ -2888,7 +2887,7 @@ phTerminate()
 {
   int i;
 	
-  ph_printf("TERMINATE\n");
+  DBG4_SIP_NEGO("SIP NEGO: phTerminate\n",0,0,0);
   if (!phIsInitialized)
 	  return;
 
@@ -3117,15 +3116,15 @@ ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags, int resumeflag)
       ca->nego_mflags = ca->nego_mflags | PH_STREAM_VIDEO_RX;
       ca->nego_mflags = ca->nego_mflags | PH_STREAM_VIDEO_TX;
       frameDisplay = phcb->onFrameReady;
-      ph_printf("will have video stream ip: %s payload=%d\n", ca->remote_sdp_video_ip, ca->video_payload);
-      ph_printf("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags); 
+      DBG4_SIP_NEGO("will have video stream ip: %s payload=%d\n", ca->remote_sdp_video_ip, ca->video_payload,0);
+      DBG4_SIP_NEGO("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags,0); 
     } 
   else 
     {
 	// video is not negociated
 	ca->nego_mflags = ca->nego_mflags & ~PH_STREAM_VIDEO_RX;
 	ca->nego_mflags = ca->nego_mflags & ~PH_STREAM_VIDEO_TX;
-	ph_printf("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags); 
+	DBG4_SIP_NEGO("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags,0); 
     }
 
 
@@ -3207,6 +3206,7 @@ ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags, int resumeflag)
 	  strncpy(msp->remoteaddr, ca->remote_sdp_audio_ip, sizeof(msp->remoteaddr));
 
 
+	// SPIKE_HDX
 	if (phcfg.hdxmode == PH_HDX_MODE_MIC)
 	  {
 	    msp->flags |= PH_MSTREAM_FLAG_MICHDX;
@@ -3856,8 +3856,7 @@ void ph_reg_progress(eXosip_event_t *je)
 
 
 
-
-  SKIP(printf("REGPROGRESS reg=%d for vlid=%d\n", je->rid, vlid));
+  DBG4_SIP_NEGO("REGPROGRESS reg=%d for vlid=%d\n", je->rid, vlid,0);
 
   if (je->type == EXOSIP_REGISTRATION_SUCCESS)
     {
@@ -3884,6 +3883,7 @@ void ph_reg_progress(eXosip_event_t *je)
 	  eXosip_lock();
 	  i = eXosip_register(je->rid, newtimeout);
 	  eXosip_unlock();
+	  
 	  SKIP(printf("Retrying reg=%d for vlid=%d i=%d t=%d\n", je->rid, vlid, i, newtimeout))
 	  if (i == 0) return;
 	}

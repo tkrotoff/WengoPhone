@@ -133,9 +133,10 @@ struct ph_audio_stream
   struct vadcng_info cngi;
   struct vadcng_info cngo;
 
+  // SPIKE_HDX: declaration of possible hdx state values on an audio stream
   int    hdxmode;
-  int    hdxsilence;
-  int    spksilence;
+  int    hdxsilence; /* 0: MIC is busy, 1: MIC is silent */
+  int    spksilence; /* 0: SPK is busy, 1: SPK is silent */
 
 #ifdef DO_ECHO_CAN
   void  *ec;

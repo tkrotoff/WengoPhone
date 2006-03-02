@@ -551,81 +551,107 @@ void print_pwrstats(phastream_t *s)
 }
 #endif
 
+/**
+ * @brief finds greatest N such that 2^N <= val
+ */
 static int
 calc_shift(int val)
 {
-  int ret=0;
-  while((val=(val/2)))
-    ret++;
+	int ret=0;
+	while((val=(val/2)))
+	{
+		ret++;
+	}
 
-  return ret;
+	return ret;
 }
 
+/**
+ * @brief update a previously initialized vadcng structure with a given sample buffer and decide whether there is silence or not
+ */
 static int
 ph_vad_update0(struct vadcng_info *s, char *data, int len)
 {
-  int i;
-  unsigned int power;
-  short *p = (short *)data; 
-  static int tracecnt = 0;
+	int i;
+	unsigned int power;
+	short *p = (short *)data; 
+	static int tracecnt = 0;
   
-  /* calc mean power */
-  for(i = 0; i<len/2; i++)
-    {
-      s->mean_pwr -= s->pwr[s->pwr_pos];
-      //      s->pwr[s->pwr_pos] = p[i]*p[i];   
-      s->pwr[s->pwr_pos] = abs(p[i]);          // only magnitude, not power 
-      s->mean_pwr += s->pwr[s->pwr_pos];       // no overflow as long as pwr size is less then 65536 */
+	/* calculate short term mean power/magnitude over the window */
+	for(i = 0; i<len/2; i++)
+	{
+		s->mean_pwr -= s->pwr[s->pwr_pos];
+
+		//s->pwr[s->pwr_pos] = p[i]*p[i]; // (un)comment for a "power" threshold   
+		s->pwr[s->pwr_pos] = abs(p[i]); //(un)comment for a "magnitude" threshold
+
+		s->mean_pwr += s->pwr[s->pwr_pos];       // no overflow as long as pwr size is less then 65536 */
    
 #ifdef TRACE_POWER
-      if(s->mean_pwr > max_pwr)
-	max_pwr = s->mean_pwr;
+		if(s->mean_pwr > max_pwr)
+		{
+			max_pwr = s->mean_pwr;
+		}
 
-      if(s->mean_pwr < min_pwr)
-	min_pwr = s->mean_pwr;
+		if(s->mean_pwr < min_pwr)
+		{
+			min_pwr = s->mean_pwr;
+		}
 #endif
-      s->pwr_pos++;
-      if(s->pwr_pos >= s->pwr_size)
+		
+		s->pwr_pos++;
+		if(s->pwr_pos >= s->pwr_size)
+		{
+			s->pwr_pos = 0;
+			if(s->cng)
+			{
+				/* now update the "long term" mean power, which is the sum of 64 mean powers calculated each pwr_size samples */
+				s->long_mean_pwr -= s->long_pwr[s->long_pwr_pos];
+				s->long_pwr[s->long_pwr_pos] =  s->mean_pwr>>s->pwr_shift;  
+				s->long_mean_pwr += s->long_pwr[s->long_pwr_pos];
+				s->long_pwr_pos++;
+				if(s->long_pwr_pos >= LONG_PWR_WINDOW)
+				{
+					s->long_pwr_pos = 0;
+				}
+			}
+		}
+    }
+	
+	/* mean power in last PWR_WINDOW ms */
+	power = s->mean_pwr>>s->pwr_shift;
+	/* compare with threshold */
+	if(power > s->pwr_threshold)
 	{
-	  s->pwr_pos = 0;
-	  if(s->cng)
-	    {
-	      /* now update the "long" mean power, which is the sum of 64 mean powers calculated each pwr_size samples */
-	      s->long_mean_pwr -= s->long_pwr[s->long_pwr_pos];
-	      s->long_pwr[s->long_pwr_pos] =  s->mean_pwr>>s->pwr_shift;  
-	      s->long_mean_pwr += s->long_pwr[s->long_pwr_pos];
-	      s->long_pwr_pos++;
-	      if(s->long_pwr_pos >= LONG_PWR_WINDOW)
-		s->long_pwr_pos = 0;
-	    }
+		s->sil_cnt = 0;
 	}
-    }
-  /* mean power in last PWR_WINDOW ms */
-  power = s->mean_pwr>>s->pwr_shift;
-  /* compare with threshold */
-  if(power > s->pwr_threshold)
-    {
-    s->sil_cnt = 0;
-  }
-  else
-    {
-      s->sil_cnt += len/2;
-    }
+	else
+	{
+		s->sil_cnt += len/2;
+	}
+	
 #ifdef TRACE_POWER
-  if(s->sil_cnt > max_sil)
-    max_sil = s->sil_cnt;
+	if(s->sil_cnt > max_sil)
+	{
+		max_sil = s->sil_cnt;
+	}
   
-  if (ph_trace_mic && (tracecnt++ == 50))
-  {
-      DBG5_DYNA_AUDIO("ph_media_audiuo: mean MIC signal: %d\n", power,0,0,0);
-      tracecnt = 0;
-  }
+	if (ph_trace_mic && (tracecnt++ == 50))
+	{
+		DBG5_DYNA_AUDIO("ph_media_audiuo: mean MIC signal: %d\n", power,0,0,0);
+		tracecnt = 0;
+	}
 #endif
   
-  if(s->sil_cnt > s->sil_max)
-    return 1;
-  else
-    return 0;
+	if(s->sil_cnt > s->sil_max)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+	
 }
 
 char find_level(unsigned int pwr)
@@ -1023,8 +1049,9 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 
       DBG5_DYNA_AUDIO_RX("Playing %d bytes from net\n", len,0,0,0);
 
-      /* if we're in Half Duplex mode, attenuate speaker signal */
-      if ((stream->hdxmode == PH_HDX_MODE_MIC) && !stream->hdxsilence)
+	
+	// SPIKE_HDX: if (mode == MIC has priority) and MIC is playing, attenuate SPK
+	if ((stream->hdxmode == PH_HDX_MODE_MIC) && !stream->hdxsilence)
 	{
 	  short *samples = (short *) playbuf;
 	  int nsamples = len >> 1;
@@ -1043,8 +1070,11 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 	store_pcm(stream, playbuf, len);
 #endif
 
-      if (stream->hdxmode == PH_HDX_MODE_SPK)
-	  stream->spksilence = ph_vad_update0(&stream->cngo, playbuf, len);
+	// SPIKE_HDX: if (mode == SPK has priority) update SPK voice activity detection
+	if (stream->hdxmode == PH_HDX_MODE_SPK)
+	{
+		stream->spksilence = ph_vad_update0(&stream->cngo, playbuf, len);
+	}
 
 	
         /* save played data */    
@@ -1147,34 +1177,37 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 
 void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int framesize)
 {
-  int silok = 0;
-  int wakeup = 0;
-  struct timeval diff;
-  char data_out_enc[1000];
-  phcodec_t *codec = stream->ms.codec;
+	int silok = 0;
+	int wakeup = 0;
+	struct timeval diff;
+	char data_out_enc[1000];
+	phcodec_t *codec = stream->ms.codec;
 
 
-  if (stream->ms.suspended)
-    return;
-
-  /* do we need to do Voice Activity Detection ? */
-  if (stream->cngi.vad)
-    {
-      stream->hdxsilence = silok = ph_vad_update0(&stream->cngi, recordbuf, framesize);
-      if (!stream->cngi.cng && silok)
+	if (stream->ms.suspended)
 	{
-	  /* resend dummy CNG packet only if CNG was not negotiated */
-	  ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
-	  wakeup = (diff.tv_sec > RTP_RETRANSMIT);
+		return;
 	}
+
+	/* do we need to do Voice Activity Detection ? */
+	if (stream->cngi.vad)
+	{
+		stream->hdxsilence = silok = ph_vad_update0(&stream->cngi, recordbuf, framesize);
+		if (!stream->cngi.cng && silok)
+		{
+			/* resend dummy CNG packet only if CNG was not negotiated */
+			ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
+			wakeup = (diff.tv_sec > RTP_RETRANSMIT);
+		}
     }
-  else if (stream->hdxmode == PH_HDX_MODE_MIC)
-    {
-      int hdxsil = ph_vad_update0(&stream->cngi, recordbuf, framesize);
-      if (hdxsil != stream->hdxsilence)
-	DBG5_DYNA_AUDIO("phmedia_audio: HDXSIL=%d\n", hdxsil,0,0,0);
-      
-      stream->hdxsilence = hdxsil;
+	// SPIKE_HDX: if MIC has priority, update MIC voice activity detection
+	else if (stream->hdxmode == PH_HDX_MODE_MIC)
+	{
+		int hdxsil = ph_vad_update0(&stream->cngi, recordbuf, framesize);
+		if (hdxsil != stream->hdxsilence) {
+			DBG5_DYNA_AUDIO("phmedia_audio: HDXSIL=%d\n", hdxsil,0,0,0);
+			stream->hdxsilence = hdxsil;
+		}
     }
   
   if ((stream->dtmfi.dtmfg_phase != DTMF_IDLE) || (stream->dtmfi.dtmfq_cnt != 0))
@@ -1183,16 +1216,18 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
       silok = 0;
     }
 
-  if (stream->mixbuf)
-    {   
-      int n = ph_mediabuf_mixaudio(stream->mixbuf, (short *)recordbuf, framesize/2);
-      if (!n)
-	{
-	  ph_mediabuf_free(stream->mixbuf);
-	  stream->mixbuf =  0;
-	}
-      else
-	stream->hdxsilence = silok = 0;
+	if (stream->mixbuf)
+	{   
+		int n = ph_mediabuf_mixaudio(stream->mixbuf, (short *)recordbuf, framesize/2);
+		if (!n)
+		{
+			ph_mediabuf_free(stream->mixbuf);
+			stream->mixbuf =  0;
+		}
+		else
+		{
+			stream->hdxsilence = silok = 0;
+		}
     }
 
   
@@ -1259,19 +1294,20 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
     while(recbufsize >= framesize)
       {
         gettimeofday(&stream->now,0);
-        
+
+	// SPIKE_HDX: if (mode = SPK has priority) and SPK is active, attenuate MIC
 	if ((stream->hdxmode == PH_HDX_MODE_SPK) && !stream->spksilence)
-	  {
-	    short *samples = (short *) recordbuf;
-	    int nsamples = framesize >> 1;
-	    const int SPKHDXSHIFT = 4;
-	  
-	    while(nsamples--)
-	      {
-		*samples = *samples >> SPKHDXSHIFT;
-		samples++;
-	      }
-	  }
+	{
+		short *samples = (short *) recordbuf;
+		int nsamples = framesize >> 1;
+		const int SPKHDXSHIFT = 4;
+		
+		while(nsamples--)
+		{
+			*samples = *samples >> SPKHDXSHIFT;
+			samples++;
+		}
+	}
 	    
 #ifdef DO_ECHO_CAN
         do_echo_update(stream, recordbuf, framesize);
@@ -1550,31 +1586,34 @@ int ph_media_set_spkvol(phcall_t *ca, int level)
 #endif
 
 
+/**
+ * @brief init a vad (voice activity detection) structure
+ */
 void ph_audio_init_vad0(struct vadcng_info *cngp, int samples)
 {
-  
-  cngp->pwr_size = PWR_WINDOW * samples;
-  cngp->pwr_shift = calc_shift(cngp->pwr_size);
-  cngp->pwr = osip_malloc(cngp->pwr_size * sizeof(int));
-  if(cngp->pwr)
-    {
-      memset(cngp->pwr, 0, cngp->pwr_size * sizeof(int));
-      DBG5_DYNA_AUDIO(" DTX/VAD PWR table of %d ints allocated \n", cngp->pwr_size,0,0,0);
-    }else{
-      DBG5_DYNA_AUDIO("No memory for DTX/VAD !: %d \n", cngp->pwr_size*2,0,0,0);
-      cngp->vad = cngp->cng = 0;
+	cngp->pwr_size = PWR_WINDOW * samples;
+	cngp->pwr_shift = calc_shift(cngp->pwr_size);
+	cngp->pwr = osip_malloc(cngp->pwr_size * sizeof(int));
+	if(cngp->pwr)
+	{
+		memset(cngp->pwr, 0, cngp->pwr_size * sizeof(int));
+		DBG5_DYNA_AUDIO(" DTX/VAD PWR table of %d ints allocated \n", cngp->pwr_size,0,0,0);
     }
+	else
+	{
+		DBG5_DYNA_AUDIO("No memory for DTX/VAD !: %d \n", cngp->pwr_size*2,0,0,0);
+		cngp->vad = cngp->cng = 0;
+	}
   
-  cngp->pwr_pos = 0;
-  cngp->sil_max = SIL_SETUP * samples;
-  cngp->long_pwr_shift = calc_shift(LONG_PWR_WINDOW);
-  cngp->long_pwr_pos = 0;
+	cngp->pwr_pos = 0;
+	cngp->sil_max = SIL_SETUP * samples;
+	cngp->long_pwr_shift = calc_shift(LONG_PWR_WINDOW);
+	cngp->long_pwr_pos = 0;
 #ifdef TRACE_POWER
-  min_pwr = 0x80000001;
-  max_pwr = 0;
-  max_sil = 0;
-#endif      
-
+	min_pwr = 0x80000001;
+	max_pwr = 0;
+	max_sil = 0;
+#endif
 }
 
 
@@ -1916,34 +1955,36 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   stream->cngi.last_noise_sent_time = stream->last_rtp_recv_time = stream->cngi.last_dtx_time = stream->last_rtp_sent_time;
 
     
-
-  if ((sp->flags & PH_MSTREAM_FLAG_MICHDX) || getenv("PH_FORCE_MICHDX"))
-    {
-      char*  fhdx =  getenv("PH_FORCE_MICHDX");
-      
-      stream->hdxmode = PH_HDX_MODE_MIC;
-      stream->hdxsilence = 1;
-      if (fhdx)
-	sp->vadthreshold = atoi(fhdx);
-
-      DBG4_MEDIA_ENGINE("ph_mession_audio_start: MICHDX mode level=%d\n",  sp->vadthreshold,0,0);
-
+	// SPIKE_HDX: initialization for mode = MIC has priority
+	if ((sp->flags & PH_MSTREAM_FLAG_MICHDX) || getenv("PH_FORCE_MICHDX"))
+	{
+		char*  fhdx =  getenv("PH_FORCE_MICHDX");
+		
+		stream->hdxmode = PH_HDX_MODE_MIC;
+		stream->hdxsilence = 1;
+		if (fhdx)
+		{
+			sp->vadthreshold = atoi(fhdx);
+		}
+		
+		DBG4_MEDIA_ENGINE("ph_mession_audio_start: MICHDX mode level=%d\n",  sp->vadthreshold,0,0);
     }
 
 
-  if ((sp->flags & PH_MSTREAM_FLAG_SPKHDX) || getenv("PH_FORCE_SPKHDX"))
+	// SPIKE_HDX: initialization for mode = SPK has priority
+	if ((sp->flags & PH_MSTREAM_FLAG_SPKHDX) || getenv("PH_FORCE_SPKHDX"))
     {
-      char*  spkfhdx =  getenv("PH_FORCE_SPKHDX");
+		char*  spkfhdx =  getenv("PH_FORCE_SPKHDX");
       
-      stream->hdxmode = PH_HDX_MODE_SPK;
-      stream->cngo.pwr_threshold = 700;
-      stream->spksilence = 1;
+		stream->hdxmode = PH_HDX_MODE_SPK;
+		stream->cngo.pwr_threshold = 700;
+		stream->spksilence = 1;
 
-      if (spkfhdx)
-	stream->cngo.pwr_threshold = atoi(spkfhdx);
+		if (spkfhdx) {
+			stream->cngo.pwr_threshold = atoi(spkfhdx);
+		}
 
-      DBG4_MEDIA_ENGINE("ph_mession_audio_start: SPKHDX mode level=%d\n",  stream->cngo.pwr_threshold, 0, 0);
-
+		DBG4_MEDIA_ENGINE("ph_mession_audio_start: SPKHDX mode level=%d\n",  stream->cngo.pwr_threshold, 0, 0);
     }
 
 
@@ -2062,16 +2103,18 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   stream->ms.rtp_session = session;
   stream->dtmfCallback = s->dtmfCallback;
 
-  if (stream->cngi.vad || stream->hdxmode == PH_HDX_MODE_SPK)
-    {
-      ph_audio_init_ivad(stream);
+	// SPIKE_HDX: init the voice activity detection on the local input stream (MIC)
+	if (stream->cngi.vad || stream->hdxmode == PH_HDX_MODE_SPK)
+	{
+		ph_audio_init_ivad(stream);
     }
 
 
-  if (stream->hdxmode == PH_HDX_MODE_SPK)
-    {
-      ph_audio_init_ovad(stream);
-    }
+	// SPIKE_HDX: init the voice activity detection on the local output stream (SPK)
+	if (stream->hdxmode == PH_HDX_MODE_SPK)
+	{
+		ph_audio_init_ovad(stream);
+	}
 
 
   if (stream->cngi.cng)

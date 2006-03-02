@@ -841,6 +841,7 @@ MY_DLLEXPORT void phVideoControlCodecGet(int, struct phVideoCodecConfig *);
 #define VAD_VALID_MASK 0x80000000
 #define VAD_THRESHOLD_MASK 0x7fffffff
 
+// SPIKE_HDX:different configuration modes are available
 enum PH_HDX_MODES {
   PH_HDX_MODE_MIC = 1,   /*!< Half Duplex mode where microphone signal has priority over speaker signal */
   PH_HDX_MODE_SPK = 2    /*!< Half Duplex mode where speaker signal has priority over microphone signal */
@@ -913,7 +914,10 @@ struct phConfig {
   int noaec;				/* when non-zero - disable aec */
   unsigned int vad;         /* if bit31=1  DTX/VAD features activated and bits0-30 contains the power threshold */
   int cng;                  /* if 1,  CNG feature will be negotiated */
-  int hdxmode;              /* if 1, activate half duplex mode */ 
+  
+  // SPIKE_HDX: setting of hdxmode in phconfig
+  int hdxmode;              /* if 0, half duplex mode is desactivated. otherwise check enum PH_HDX_MODES */ 
+  
   int nat_refresh_time;       /* timeout for sip address/port refresh (when 0 no-refresh) */
   int jitterdepth;           /* jitter buffer depth in miliseconds (if 0 default of 60 msecs is used) */
   int nodefaultline;         /* temporary hack for implementing backward compatibility... Don't touch it */
