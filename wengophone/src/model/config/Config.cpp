@@ -44,6 +44,8 @@ const std::string Config::AUDIO_RINGER_DEVICENAME_KEY = "audio.ringer.devicename
 const std::string Config::AUDIO_RINGING_FILE_KEY = "audio.ringing.file";
 const std::string Config::AUDIO_CALLCLOSED_FILE_KEY = "audio.callclosed.file";
 const std::string Config::AUDIO_SMILEYS_DIR_KEY = "audio.smileys.dir";
+const std::string Config::AUDIO_AEC_KEY = "audio.aec";
+const std::string Config::AUDIO_HALFDUPLEX_KEY = "audio.halfduplex";
 
 const std::string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
 const std::string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";

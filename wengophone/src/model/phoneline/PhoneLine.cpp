@@ -405,5 +405,9 @@ void PhoneLine::initSipWrapper() {
 	_sipWrapper->setCallInputAudioDevice(config.getAudioInputDeviceName());
 	_sipWrapper->setRingerOutputAudioDevice(config.getAudioRingerDeviceName());
 
+	//AEC + half duplex
+	_sipWrapper->enableAEC(config.getAudioAEC());
+	_sipWrapper->enableHalfDuplex(config.getAudioHalfDuplex());
+
 	_sipWrapper->init();
 }

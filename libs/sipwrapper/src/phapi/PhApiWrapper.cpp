@@ -375,16 +375,25 @@ bool PhApiWrapper::setAudioDevices() {
 	return false;
 }
 
-bool PhApiWrapper::enableAEC(bool enable) {
+void PhApiWrapper::enableAEC(bool enable) {
 	if (enable) {
 		phcfg.noaec = 0;
+		LOG_DEBUG("AEC enabled");
 	} else {
 		phcfg.noaec = 1;
-
-		//Half duplex (second mode)
-		phcfg.hdxmode = 2;
+		LOG_DEBUG("AEC disabled");
 	}
-	return true;
+}
+
+void PhApiWrapper::enableHalfDuplex(bool enable) {
+	if (enable) {
+		//Half duplex (mode where speaker signal has priority over microphone signal)
+		phcfg.hdxmode = PH_HDX_MODE_SPK;
+		LOG_DEBUG("half-duplex enabled");
+	} else {
+		phcfg.hdxmode = 0;
+		LOG_DEBUG("half-duplex disabled");
+	}
 }
 
 
@@ -646,8 +655,6 @@ void PhApiWrapper::init() {
 	String localPort = String::fromNumber(_sipLocalPort);
 	strncpy(phcfg.sipport, localPort.c_str(), sizeof(phcfg.sipport));
 
-	enableAEC(true);
-
 	//Ignored since we are in direct link mode
 	static const std::string phApiServer = "127.0.0.1";
 
@@ -657,6 +664,7 @@ void PhApiWrapper::init() {
 	int ret = phInit(&phApiCallbacks, (char *) phApiServer.c_str(), asynchronousMode);
 	if (ret == PhApiResultNoError) {
 		_isInitialized = true;
+		LOG_DEBUG("phApi successfully initialized");
 	} else {
 		_isInitialized = false;
 		LOG_DEBUG("cannot initialize phApi");

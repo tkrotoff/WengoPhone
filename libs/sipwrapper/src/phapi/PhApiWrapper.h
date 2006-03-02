@@ -115,7 +115,9 @@ public:
 
 	bool setCallOutputAudioDevice(const std::string & deviceName);
 
-	bool enableAEC(bool enable);
+	void enableAEC(bool enable);
+
+	void enableHalfDuplex(bool enable);
 
 	void setPluginPath(const std::string & path);
 

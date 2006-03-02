@@ -306,7 +306,18 @@ public:
 	 *
 	 * @param enable true if AEC enable, false if AEC should be disabled
 	 */
-	virtual bool enableAEC(bool enable) = 0;
+	virtual void enableAEC(bool enable) = 0;
+
+	/**
+	 * Enables or disables half duplex mode.
+	 *
+	 * Two modes exist:
+	 * - one where microphone signal has priority over speaker signal
+	 * - one where speaker signal has priority over microphone signal
+	 *
+	 * @param enable true if half duplex enable, false if half duplex should be disabled
+	 */
+	virtual void enableHalfDuplex(bool enable) = 0;
 
 	/**
 	 * Plays the designed file (sipX).

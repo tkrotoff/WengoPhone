@@ -76,10 +76,10 @@ QtDialpad::QtDialpad(QtWengoPhone * qtWengoPhone) : QObject() {
 	_poundButton = Object::findChild<QPushButton *>(_dialpadWidget, "poundButton");
 	connect(_poundButton, SIGNAL(clicked()), SLOT(poundButtonClicked()));
 
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	_audioSmileysComboBox = Object::findChild<QComboBox *>(_dialpadWidget, "audioSmileysComboBox");
 	connect(_audioSmileysComboBox, SIGNAL(activated(int)), SLOT(audioSmileysComboBoxActivated(int)));
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QStringList listAudioSmileys = getListAudioSmileys();
 	for (int i = 0; i < listAudioSmileys.size(); ++i) {
 		std::string theme = listAudioSmileys[i].toStdString();
@@ -109,24 +109,26 @@ QStringList QtDialpad::getListAudioSmileys() const {
 void QtDialpad::playTone(const std::string & tone) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	std::string soundFile = config.getAudioSmileysDir();
+	std::string soundFile;
+	if (tone == "*") {
+		soundFile = "star";
+	} else if (tone == "#") {
+		soundFile = "pound";
+	} else {
+		soundFile = tone;
+	}
 
 	if (_audioSmileysComboBox->currentIndex() == 0) {
-		if (tone == "*") {
-			soundFile = soundFile + "star.wav";
-		} else if (tone == "#") {
-			soundFile = soundFile + "pound.wav";
-		} else {
-			soundFile = soundFile + tone + ".wav";
-		}
 		_qtWengoPhone->dialpad(tone, String::null);
+		Sound::play(File::convertPathSeparators(config.getAudioSmileysDir() + soundFile + ".wav"), config.getAudioRingerDeviceName());
 	} else {
-		soundFile = soundFile + _audioSmileysComboBox->currentText().toStdString() + File::getPathSeparator() + tone + ".raw";
+		soundFile = config.getAudioSmileysDir() + _audioSmileysComboBox->currentText().toStdString()
+				+ File::getPathSeparator() + soundFile + ".raw";
 		_qtWengoPhone->dialpad(tone, File::convertPathSeparators(soundFile));
+		Sound::play(File::convertPathSeparators(soundFile), config.getAudioRingerDeviceName());
 	}
 
 	LOG_DEBUG("sound file=" + soundFile);
-	Sound::play(File::convertPathSeparators(soundFile), config.getAudioRingerDeviceName());
 }
 
 void QtDialpad::oneButtonClicked() {

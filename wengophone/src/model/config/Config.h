@@ -168,6 +168,18 @@ public:
 	static const std::string AUDIO_SMILEYS_DIR_KEY;
 	std::string getAudioSmileysDir() const;
 
+	/** AEC (echo canceller) enable or not. */
+	static const std::string AUDIO_AEC_KEY;
+	bool getAudioAEC() const {
+		return get(AUDIO_AEC_KEY, false);
+	}
+
+	/** Half duplex mode enable or not. */
+	static const std::string AUDIO_HALFDUPLEX_KEY;
+	bool getAudioHalfDuplex() const {
+		return get(AUDIO_HALFDUPLEX_KEY, true);
+	}
+
 	/** @} */
 
 
