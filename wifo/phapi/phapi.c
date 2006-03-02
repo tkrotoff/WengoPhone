@@ -3005,6 +3005,27 @@ ph_call_retrieve_payloads(phcall_t *ca, eXosip_event_t *je, int flags)
 }
 
 
+MY_DLLEXPORT int phCallGetCodecs(int cid, char *audioCodecBuf, int aBufLen, char *videoCodecBuf, int vBufLen)
+{
+  phcall_t *ca = ph_locate_call_by_cid(cid);
+  
+
+  if (!ca)
+    return -PH_BADCID;
+
+
+  if (audioCodecBuf)
+    strncpy(audioCodecBuf, ca->audio_payload_name, aBufLen);
+
+
+  if (videoCodecBuf)
+    strncpy(videoCodecBuf, ca->video_payload_name, vBufLen);
+
+
+  return 0;
+
+  
+}
 
 static void
 ph_parse_payload_mime(struct ph_media_payload_s *pt, const char *mime, int rate, int chans)

@@ -556,7 +556,19 @@ MY_DLLEXPORT int phGetNatInfo(char *natType, int ntlen, char *fwip, int fwiplen)
 
 
 
- 
+/**
+ * Return the codecs used for the given call
+ *
+ * @param   cid  call id in question
+ * @param   audioCodecBuf  buffer to return audio codec used (or NULL)
+ * @param   aBufLen  size of audioCodecBuf
+ * @param   videoCodecBuf  buffer to return video codec used (or NULL)
+ * @param   vBufLen  size of videoCodecBuf
+ * @return  0 or error code
+ *
+ */
+
+MY_DLLEXPORT int phCallGetCodecs(int cid, char *audioCodecBuf, int aBufLen, char *videoCodecBuf, int vBufLen); 
 
 
 
