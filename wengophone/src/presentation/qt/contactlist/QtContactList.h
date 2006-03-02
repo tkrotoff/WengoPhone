@@ -29,12 +29,14 @@
 
 #include <map>
 
+#include <QTreeWidgetItem>
+
 class Contact;
 class ContactPopupMenu;
 class ContactGroupPopupMenu;
 class ContactListDelegate;
 class TreeModel;
-class QTreeView;
+class QTreeWidget;
 class QModelIndex;
 class QMouseEvent;
 
@@ -53,7 +55,7 @@ public:
 		return _contactListWidget;
 	}
 
-	void updatePresentation();
+	void updatePresentation ();
 
 	void addContactGroup(PContactGroup * pContactGroup);
 
@@ -85,11 +87,17 @@ private:
 
 	ContactGroupPopupMenu * _contactGroupPopupMenu;
 
-	QTreeView * _treeView;
+	QTreeWidget * _treeWidget;
 
 	TreeModel * _model;
 
 	ContactListDelegate *_delegate;
+
+	QTreeWidgetItem * _previous;
+	
+	QTreeWidgetItem * _lastClicked;
+	
+	QSize * _itemSize;
 
 };
 

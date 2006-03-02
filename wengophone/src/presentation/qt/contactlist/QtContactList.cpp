@@ -31,7 +31,10 @@
 #include "QtContact.h"
 #include "ContactListDelegate.h"
 #include "ContactListUtil.h"
-
+#include "QtUserList.h"
+#include "QtContactPixmap.h"
+#include "QtUserManager.h"
+#include "QtTreeViewDelegate.h"
 #include <StringList.h>
 #include <Logger.h>
 
@@ -40,11 +43,12 @@
 #include <MouseEventFilter.h>
 
 #include <QtGui>
+#include <QDebug>
 
 QtContactList::QtContactList(CContactList & cContactList) 
 	: QObjectThreadSafe(), _cContactList(cContactList) {
 
-	_treeView = NULL;
+	_treeWidget = NULL;
 	
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtContactList::initThreadSafe, this));
@@ -52,34 +56,148 @@ QtContactList::QtContactList(CContactList & cContactList)
 }
 
 void QtContactList::initThreadSafe() {
-	_contactListWidget = WidgetFactory::create(":/forms/contactlist/ContactListWidget.ui", NULL);
+
+
 	
-	//treeView
-	_treeView = Object::findChild<QTreeView *>(_contactListWidget, "treeView");
-	_delegate = new ContactListDelegate(_treeView, _treeView);
-	_treeView->setRootIsDecorated(false);
-	_treeView->setDragEnabled(true);
-	_treeView->setItemDelegate(_delegate);
-	_treeView->setAttribute(Qt::WA_MouseTracking);
-	_treeView->setAttribute(Qt::WA_Hover);
+	_contactListWidget = WidgetFactory::create(":/forms/contactlist/contactList.ui", NULL);
 	
-	//model
-	_model = new TreeModel();
-	_treeView->setModel(_model);
+	//treeWidget
+	_treeWidget = Object::findChild<QTreeWidget *>(_contactListWidget, "treeWidget");
 	
+	
+	_delegate = new ContactListDelegate(_treeWidget, _treeWidget);
+    
+	
+    _treeWidget->setAcceptDrops(true);
+    _treeWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _treeWidget->setProperty("showDropIndicator", QVariant(true));
+    _treeWidget->setDragEnabled(true);
+    _treeWidget->setAlternatingRowColors(false);
+    _treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    _treeWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
+    _treeWidget->setIndentation(0);
+    _treeWidget->setRootIsDecorated(false);
+
+
+    // icons
+    QtContactPixmap * spx = QtContactPixmap::getInstance();
+
+	spx->setPixmap (QtContactPixmap::ContactOnline,QPixmap("images/online.png"));
+	spx->setPixmap (QtContactPixmap::ContactDND,QPixmap("images/dnd.png"));
+	spx->setPixmap (QtContactPixmap::ContactInvisible,QPixmap("images/offline.png"));
+	spx->setPixmap (QtContactPixmap::ContactBRB,QPixmap("images/dnd.png"));
+	spx->setPixmap (QtContactPixmap::ContactAway,QPixmap("images/away.png"));
+	spx->setPixmap (QtContactPixmap::ContactNotAvailable,QPixmap("images/dnd.png"));
+	spx->setPixmap (QtContactPixmap::ContactForward,QPixmap("images/online.png"));
+	// Fonctions icons
+	spx->setPixmap (QtContactPixmap::ContactIM,QPixmap("images/contact_phone_home.png"));
+	spx->setPixmap (QtContactPixmap::ContactCall,QPixmap("images/contact_phone_mobile.png"));
+	spx->setPixmap (QtContactPixmap::ContactVideo,QPixmap("images/call_video_button.png"));
+	// Group icons
+	spx->setPixmap (QtContactPixmap::ContactGroupOpen,QPixmap("images/group_open.png"));
+	spx->setPixmap (QtContactPixmap::ContactGroupClose,QPixmap("images/group_close.png"));
+	
+    new QtUserManager(_treeWidget,_treeWidget);
+    
+    _previous = NULL;
+    _lastClicked = NULL;
+
+    QtTreeViewDelegate * delegate = new QtTreeViewDelegate(_treeWidget);
+    delegate->setParent(_treeWidget->viewport());
+    
+    _treeWidget->setItemDelegate(delegate);
+    _treeWidget->setUniformRowHeights(false);
+    _treeWidget->header()->hide();
+
+
 	//Popup Menus
-	_contactPopupMenu = new ContactPopupMenu(_treeView, _cContactList.getCWengoPhone().getWengoPhone());
-	_contactGroupPopupMenu = new ContactGroupPopupMenu(_treeView);
+	_contactPopupMenu = new ContactPopupMenu(_treeWidget, _cContactList.getCWengoPhone().getWengoPhone());
+	_contactGroupPopupMenu = new ContactGroupPopupMenu(_treeWidget);
 
 	//Connect events
-	_treeView->viewport()->installEventFilter(new MousePressEventFilter(this, SLOT(mousePressEventHandler(QEvent *))));
-	connect(_treeView, SIGNAL(entered(const QModelIndex &)), SLOT(entered(const QModelIndex &)), Qt::DirectConnection);
-	//connect(_treeView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(doubleClicked(const QModelIndex &)), Qt::DirectConnection);
-	
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cContactList.getCWengoPhone().getPresentation();
 	qtWengoPhone->setContactList(this);
+	_treeWidget->viewport()->setFocus();
+	/**********************************************************************************************************************************/
+	/*
 	
-	_treeView->viewport()->setFocus();
+		DELETE THIS !
+	
+	*/
+	QtUserList * ul = QtUserList::getInstance();
+    QTreeWidgetItem *group = new QTreeWidgetItem(_treeWidget);
+    group->setText(0,"Group 1");
+
+    QTreeWidgetItem *wengo; 
+    QString uname;
+    QString userId;
+	QtUser * user;
+	
+	int counter = 0;
+	
+	wengo = new QTreeWidgetItem(group);
+	uname = QString("Kavous");
+	wengo->setText(0,uname);
+	wengo->setFlags(wengo->flags() | Qt::ItemIsEditable);
+	
+	user = new QtUser();
+	user->setId(uname);
+	user->setUserName(uname);
+	user->setStatus(QtContactPixmap::ContactOnline);
+	user->haveIM(true);
+	user->haveCall(true);
+	user->haveVideo(true);	
+	ul->addUser(user);
+	
+	wengo = new QTreeWidgetItem(group);
+	uname = QString("Guirec");
+	wengo->setText(0,uname);
+	wengo->setFlags(wengo->flags() | Qt::ItemIsEditable);
+	
+	user = new QtUser();
+	user->setId(uname);
+	user->setUserName(uname);
+	user->setStatus(QtContactPixmap::ContactAway);
+	user->haveIM(true);
+	user->haveVideo(true);	
+	ul->addUser(user);
+	
+    for (int i=1; i< 10; i++){
+        wengo = new QTreeWidgetItem(group);
+        uname = QString("User %1 in group 1").arg(i);
+        wengo->setText(0,uname);
+        wengo->setFlags(wengo->flags() | Qt::ItemIsEditable);
+		userId = QString("USER%1").arg(counter);
+		user = new QtUser();
+		user->setId(uname);
+		user->setUserName(uname);
+		user->setStatus(QtContactPixmap::ContactOnline);
+		user->haveIM(true);
+		
+		ul->addUser(user);
+		counter++;
+    }
+    group = new QTreeWidgetItem(_treeWidget);
+    group->setText(0,"Group 2");
+
+    for (int i=1; i< 10; i++){
+        wengo = new QTreeWidgetItem(group);
+        wengo->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
+        uname = QString("User %1 in group 2").arg(i);
+        wengo->setText(0,uname);
+        wengo->setFlags(wengo->flags() | Qt::ItemIsEditable);
+		userId = QString("USER%1").arg(counter);
+		user = new QtUser();
+		user->setId(uname);
+		user->setUserName(uname);
+		user->setStatus(QtContactPixmap::ContactNotAvailable);
+		user->haveIM(true);
+		user->haveVideo(true);
+		ul->addUser(user);
+		counter++;		
+    }
+
+
 }
 
 void QtContactList::updatePresentation() {
@@ -93,16 +211,16 @@ void QtContactList::updatePresentationThreadSafe() {
 	
 	_model->reset();
 
-	QModelIndex rootIndex = _treeView->rootIndex();
-	_treeView->setExpanded(rootIndex, true);
+	QModelIndex rootIndex = _treeWidget->rootIndex();
+	_treeWidget->setExpanded(rootIndex, true);
 
 	QModelIndex index = rootIndex.child(0, 0);
 	while (index.isValid()) {
-		_treeView->setExpanded(index, true);
+		_treeWidget->setExpanded(index, true);
 		index = rootIndex.child(++row, 0);
 	}
 
-	_treeView->update();
+	_treeWidget->update();
 }
 
 void QtContactList::addContactGroup(PContactGroup * pContactGroup) {
@@ -141,10 +259,10 @@ void QtContactList::mousePressEventHandler(QEvent *event) {
 }
 
 void QtContactList::leftButtonPressEventHandler(QMouseEvent *event) {
-	QModelIndex index = _treeView->indexAt(event->pos());
+	QModelIndex index = _treeWidget->indexAt(event->pos());
 
 	if (!index.parent().isValid()) {
-		_treeView->setExpanded(index, !_treeView->isExpanded(index));
+		_treeWidget->setExpanded(index, !_treeWidget->isExpanded(index));
 	} else {
 		IQtContact *iQtContact = ContactListUtil::getIQtContact(index.data(Qt::UserRole));
 		iQtContact->setDisplayDetails(!iQtContact->isDisplayDetailsEnabled());
@@ -152,7 +270,7 @@ void QtContactList::leftButtonPressEventHandler(QMouseEvent *event) {
 }
 
 void QtContactList::rightButtonPressEventHandler(QMouseEvent *event) {
-	QModelIndex index = _treeView->indexAt(event->pos());
+	QModelIndex index = _treeWidget->indexAt(event->pos());
 
 	if (!index.parent().isValid()) {
 		_contactGroupPopupMenu->showMenu(

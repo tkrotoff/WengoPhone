@@ -99,9 +99,8 @@
         <file alias="ChatWidget.ui">chat/ChatWidget.ui</file>
         <file alias="chat.ui">chat/chat.ui</file>
         <file alias="emoticonswidget.ui">chat/emoticonswidget.ui</file>
-        <file>contactlist/AddContactWindow.ui</file>
-        <file>contactlist/ContactListWidget.ui</file>
-        <file>contactlist/ContactWidget.ui</file>
+        <file>contactlist/contactList.ui</file>
+        <file>contactlist/userWidget.ui</file>
         <file>login/LoginWindow.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
         <file>phonecall/VideoWindow.ui</file>

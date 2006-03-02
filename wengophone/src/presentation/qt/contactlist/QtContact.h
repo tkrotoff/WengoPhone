@@ -20,6 +20,7 @@
 #ifndef QTCONTACT_H
 #define QTCONTACT_H
 
+
 #include "control/contactlist/CContact.h"
 #include "presentation/PContact.h"
 #include "MetaContact.h"
