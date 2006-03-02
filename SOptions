@@ -36,4 +36,4 @@ args = {
 }
 
 WengoAddConsoleArguments(args)
-WengoShowWindowsConsole(True)
+WengoShowWindowsConsole(False)

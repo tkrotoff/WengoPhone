@@ -454,7 +454,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		def setReleaseModeWithSymbols(self):
 			self.__setDefaultFlags()
 			self.__CCFlags += ['/O1', '/MD', '/Zi']
-			self.__linkFlags += ['/DEBUG']
+			self.__linkFlags += []
 
 		def __setDefaultFlags(self):
 			self.__CCFlags = ['/Zm200', '/EHsc', '/GX', '/GR']
