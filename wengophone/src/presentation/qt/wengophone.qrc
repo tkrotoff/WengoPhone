@@ -53,6 +53,9 @@
         <file>pics/systray_icon.png</file>
         <file>pics/systray_icon_error.png</file>
         <file>pics/systray_popup_window.png</file>
+        <file>pics/video_flip.png</file>
+        <file>pics/video_fullscreen.png</file>
+        <file>pics/video_unfullscreen.png</file>
     </qresource>
     <qresource prefix="/emoticons" >
         <file>chat/emoticons/emblem-unreadable.png</file>

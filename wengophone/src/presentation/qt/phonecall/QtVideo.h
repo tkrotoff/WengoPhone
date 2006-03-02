@@ -23,12 +23,10 @@
 #include <QObject>
 #include <QImage>
 
-#include <IWebcamDriver.h>
-
 class QWidget;
 class QFrame;
 class QSize;
-class QCheckBox;
+class QPushButton;
 
 class QtVideo : public QObject {
 	Q_OBJECT
@@ -45,9 +43,16 @@ public:
 private Q_SLOTS:
 
 	void paintEvent();
-	void flipHorizontally(bool flip);
+
+	void flipWebcam();
+
+	void fullScreenButtonClicked();
 
 private:
+
+	void fullScreen();
+
+	void unFullScreen();
 
 	QWidget * _videoWindow;
 
@@ -55,10 +60,10 @@ private:
 	QImage _image;
 
 	QFrame * _frame;
-	
-	QCheckBox * _flipCheckBox;
-	
-	IWebcamDriver *_driver;
+
+	int _frameWindowFlags;
+
+	QPushButton * _fullScreenButton;
 };
 
 #endif	//QTVIDEO_H

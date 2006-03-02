@@ -32,8 +32,8 @@ WebcamDriver::WebcamDriver(int flags)
 		_factory = new DefaultWebcamDriverFactory();
 	}
 
-	_webcamPrivate = _factory->create(this, flags);	
-	
+	_webcamPrivate = _factory->create(this, flags);
+
 	_convImage = NULL;
 
 	cleanup();
@@ -45,9 +45,9 @@ WebcamDriver::WebcamDriver(int flags)
 	_desiredPalette = PIX_OSI_YUV420P;
 	_desiredWidth = 176;
 	_desiredHeight = 144;
-	
+
 	_flags = flags;
-	
+
 	_convFlags = PIX_NO_FLAG;
 }
 
@@ -55,7 +55,7 @@ WebcamDriver::WebcamDriver(int flags)
 WebcamDriver::~WebcamDriver() {
 	stopCapture();
 	delete _webcamPrivate;
-	
+
 	if (_convImage)
 		pix_free(_convImage);
 }
@@ -64,7 +64,7 @@ WebcamDriver::~WebcamDriver() {
 void WebcamDriver::cleanup() {
 	LOG_DEBUG("Cleaning up the webcam driver");
 	_webcamPrivate->cleanup();
-	
+
 	initializeConvImage();
 }
 
@@ -81,7 +81,7 @@ std::string WebcamDriver::getDefaultDevice() {
 
 webcamerrorcode WebcamDriver::setDevice(const std::string & deviceName) {
 	cleanup();
-	
+
 	std::string actualDeviceName = deviceName;
 	if (actualDeviceName.empty()) {
 		actualDeviceName = getDefaultDevice();
@@ -250,7 +250,7 @@ void WebcamDriver::frameBufferAvailable(piximage *image) {
 	if ((isFormatForced() && ((_desiredPalette != image->palette)
 			|| (_desiredWidth != image->width) || (_desiredHeight != image->height)))
 		|| (_convFlags != PIX_NO_FLAG)) {
-		LOG_DEBUG("conversion needed: from palette #" + String::fromNumber(image->palette) 
+		LOG_DEBUG("conversion needed: from palette #" + String::fromNumber(image->palette)
 			+ " to palette #" + String::fromNumber(_desiredPalette)
 			+ " and from (" + String::fromNumber(image->width) + "x" + String::fromNumber(image->height)
 			+ ") to (" + String::fromNumber(_desiredWidth) + "x" + String::fromNumber(_desiredHeight) + ")");
@@ -259,7 +259,7 @@ void WebcamDriver::frameBufferAvailable(piximage *image) {
 
 		frameCapturedEvent(this, _convImage);
 	} else {
-		LOG_DEBUG("no Conversion needed");
+		//LOG_DEBUG("no conversion needed");
 		frameCapturedEvent(this, image);
 	}
 }
@@ -268,6 +268,6 @@ void WebcamDriver::frameBufferAvailable(piximage *image) {
 void WebcamDriver::initializeConvImage() {
 	if (_convImage)
 		pix_free(_convImage);
-		
+
 	_convImage = pix_alloc(_desiredPalette, _desiredWidth, _desiredHeight);
 }

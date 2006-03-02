@@ -165,7 +165,7 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 }
 
 void PhApiCallbacks::videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * info) {
-	LOG_DEBUG("video frame from call=" + String::fromNumber(callId));
+	//LOG_DEBUG("video frame from call=" + String::fromNumber(callId));
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 #ifdef ENABLE_VIDEO
 	PhApiVideoFrame videoFrame(info->frame_remote);
