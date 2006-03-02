@@ -81,7 +81,7 @@ void WengoPhone::init() {
 
 	//Create ConnectHandler, PresenceHandler, ChatHandler 
 	// and IMContactListHandler
-	_connectHandler = new ConnectHandler();
+	_connectHandler = new ConnectHandler(*this);
 	connectHandlerCreatedEvent(*this, *_connectHandler);
 
 	_presenceHandler = new PresenceHandler(*this);
