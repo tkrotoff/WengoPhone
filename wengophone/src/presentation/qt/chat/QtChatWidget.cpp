@@ -30,18 +30,13 @@ ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
     layout->addWidget(_widget);
     layout->setMargin(0);
     setLayout(layout);
-
-    //    setupUi(this);
-    /* Defaults fonts and colors */
     
+    /* Defaults fonts and colors */
     _nickFont = QFont("Helvetica", 12);
     _nickTextColor = "'#000000'"; // Black
     _nickBgColor = "'#ffcc66'";
     _nickName = "Wengo";
-    
-    
-    
-    
+
     _fontButton  = _seeker.getPushButton(_widget,"fontButton");
     _chatHistory = _seeker.getTextBrowser(_widget,"chatHistory");
     _emoticonsButton = _seeker.getPushButton(_widget,"emoticonsButton");
@@ -200,6 +195,10 @@ const QString  ChatWidget::replaceUrls(const QString & str, const QString & html
 
 void ChatWidget::chooseEmoticon()
 {
+	QPoint p = _emoticonsButton->pos();
+	p.setY(p.y() + _emoticonsButton->rect().bottom());
+	_emoticonsWidget->move(mapToGlobal(p));
+	_emoticonsWidget->setWindowOpacity(0.85);	
     _emoticonsWidget->show();
 }
 
