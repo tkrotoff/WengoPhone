@@ -487,14 +487,41 @@ MY_DLLEXPORT int phConfClose(int cfid);
 
 /* Conference Test: simple implementation */
 
+/**
+ * Start conferencing btewwen to calls
+ * This will start mixing of audio streams coming from two correspodents
+ * @param    cid1 first call id to mix
+ * @param    cid2 second call id to mix
+ * @return   0 or error code
+ *
+ */ 
 MY_DLLEXPORT int phConf(int cid1, int cid2);
 
+/**
+ * Stop  conferencing between to calls
+ * This will stop mixing of audio streams coming from two correspodents
+ * @param    cid1 first call id to mix
+ * @param    cid2 second call id to mix
+ * @return   0 or error code
+ *
+ */ 
 MY_DLLEXPORT int phStopConf(int cid1, int cid2);
 
-MY_DLLEXPORT  int phSetContact(int vlid, const char *uri);
+
+
 
 
 /********************UTILS*********************/
+
+/**
+ * Set value of SIP "Contact:"  associated with given virtual line
+ * @param    vlid virtual line id
+ * @param    uri value of the "Contact:" header
+ * @return   0 or error code
+ *
+ */ 
+MY_DLLEXPORT  int phSetContact(int vlid, const char *uri);
+
 
 /**
  * Return the SIP address associated to the given virtual ine id
@@ -526,6 +553,11 @@ MY_DLLEXPORT int phLineSendOptions(int vlid, const char *to);
  *
  */
 MY_DLLEXPORT int phGetNatInfo(char *natType, int ntlen, char *fwip, int fwiplen);
+
+
+
+ 
+
 
 
 /**
