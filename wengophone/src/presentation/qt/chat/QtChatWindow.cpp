@@ -71,13 +71,15 @@ void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, c
 		}
 	}
 	// New tab
-	addChat(&sender,from );
+	// addChat(&sender,from );
 }
 
 void ChatWindow::addChatSession(IMChatSession * imChatSession)
 {
 	imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1, _2, _3);
+	IMContact from = *imChatSession->getIMContactSet().begin();
+	addChat(imChatSession,from);
 }
 
 void ChatWindow::initThreadSafe() {
@@ -90,6 +92,9 @@ void ChatWindow::initThreadSafe() {
     _tabWidget = _seeker.getTabWidget(_widget,"tabWidget");
     _tabWidget->removeTab(0);
 	_dialog.show();
+	IMContact from = *_imChatSession->getIMContactSet().begin();
+	addChat(imChatSession,from);
+
     LOG_DEBUG("ChatWindow init ok");
 
 }
