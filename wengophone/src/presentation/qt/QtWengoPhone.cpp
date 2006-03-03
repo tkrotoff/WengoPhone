@@ -316,7 +316,9 @@ void QtWengoPhone::actionSetLogin() {
 
 	EnumIMProtocol::IMProtocol protocol;
 	string selProtocol = qtSetLogin->getProtocol();
-	
+	string login = qtSetLogin->getLogin();
+	string password = qtSetLogin->getPassword();
+
 	if (selProtocol == "MSN") {
 		protocol = EnumIMProtocol::IMProtocolMSN;
 	} else if (selProtocol == "Yahoo") {
@@ -325,7 +327,7 @@ void QtWengoPhone::actionSetLogin() {
 		protocol = EnumIMProtocol::IMProtocolJabber;
 	}
 
-	_cWengoPhone.addIMAccount(qtSetLogin->getLogin(), qtSetLogin->getPassword(), protocol);
+	_cWengoPhone.addIMAccount(login, password, protocol);
 
 	LOG_DEBUG("set login");
 }

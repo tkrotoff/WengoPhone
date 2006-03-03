@@ -70,8 +70,9 @@ public:
 	}
 
 	bool operator < (const IMAccount & imAccount) const {
-		return ((_login < imAccount._login)
-			&& (_protocol < imAccount._protocol));
+		//FIXME: what is a inferior IMAccount?
+		return ((_login < imAccount._login));
+			//&& (_protocol < imAccount._protocol));
 	}
 
 	Settings & getSettings() {
