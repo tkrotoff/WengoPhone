@@ -89,6 +89,7 @@ void ChatWindow::initThreadSafe() {
     
     _tabWidget = _seeker.getTabWidget(_widget,"tabWidget");
     _tabWidget->removeTab(0);
+	_dialog.show();
     LOG_DEBUG("ChatWindow init ok");
 
 }
