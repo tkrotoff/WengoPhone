@@ -19,12 +19,12 @@
 
 #include "CWengoPhone.h"
 
-#include "model/wenbox/WenboxPlugin.h"
-#include "model/account/wengo/WengoAccount.h"
-#include "model/contactlist/Contact.h"
-#include "presentation/PFactory.h"
-#include "presentation/PWengoPhone.h"
-#include "model/phoneline/IPhoneLine.h"
+#include <model/wenbox/WenboxPlugin.h>
+#include <model/account/wengo/WengoAccount.h>
+#include <model/contactlist/Contact.h>
+#include <presentation/PFactory.h>
+#include <presentation/PWengoPhone.h>
+#include <model/phoneline/IPhoneLine.h>
 #include "phoneline/CPhoneLine.h"
 #include "contactlist/CContactList.h"
 #include "wenbox/CWenboxPlugin.h"
@@ -161,3 +161,9 @@ PhoneCall * CWengoPhone::getActivePhoneCall() const {
 	}
 	return NULL;
 }
+
+void CWengoPhone::addIMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol) {
+	_wengoPhone.addIMAccount(IMAccount(login, password, protocol));
+}
+
+

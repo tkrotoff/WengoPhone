@@ -23,6 +23,8 @@
 #include <model/WengoPhone.h>
 #include <model/account/SipAccount.h>
 
+#include <imwrapper/EnumIMProtocol.h>
+
 #include <string>
 
 class Contact;
@@ -105,6 +107,11 @@ public:
 	 * @see WengoPhone::addContact()
 	 */
 	void addContact(Contact * contact, const std::string & contactGroupName);
+
+	/**
+	 * @see WengoPhone::addIMAccount()
+	 */
+	void addIMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol);
 
 	/**
 	 * @see WengoPhone::getContactGroupStringList()

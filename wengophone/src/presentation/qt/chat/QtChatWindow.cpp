@@ -83,19 +83,19 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession)
 }
 
 void ChatWindow::initThreadSafe() {
-    _widget = WidgetFactory::create(":/forms/chat/chat.ui", &_dialog);
-    QGridLayout * layout = new QGridLayout();
-    layout->addWidget(_widget);
-    layout->setMargin(0);
-    _dialog.setLayout(layout);
-    
-    _tabWidget = _seeker.getTabWidget(_widget,"tabWidget");
-    _tabWidget->removeTab(0);
+	_widget = WidgetFactory::create(":/forms/chat/chat.ui", &_dialog);
+	QGridLayout * layout = new QGridLayout();
+	layout->addWidget(_widget);
+	layout->setMargin(0);
+	_dialog.setLayout(layout);
+	
+	_tabWidget = _seeker.getTabWidget(_widget,"tabWidget");
+	_tabWidget->removeTab(0);
 	_dialog.show();
 	IMContact from = *_imChatSession->getIMContactSet().begin();
 	addChat(_imChatSession,from);
 
-    LOG_DEBUG("ChatWindow init ok");
+	LOG_DEBUG("ChatWindow init ok");
 
 }
 

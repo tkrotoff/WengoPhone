@@ -23,6 +23,8 @@
 #include <model/phonecall/PhoneCall.h>
 #include <control/CWengoPhone.h>
 
+#include <imwrapper/EnumIMProtocol.h>
+
 #include "phoneline/QtPhoneLine.h"
 #include "phonecall/QtPhoneCall.h"
 #include "QtLogger.h"
@@ -41,6 +43,8 @@
 #include <Logger.h>
 
 #include <QtGui>
+
+using namespace std;
 
 QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 	: QObjectThreadSafe(),
@@ -307,7 +311,22 @@ void QtWengoPhone::addContact() {
 
 void QtWengoPhone::actionSetLogin() {
 	QtSetLogin * qtSetLogin = new QtSetLogin(_wengoPhoneWindow);
+
 	qtSetLogin->exec();
+
+	EnumIMProtocol::IMProtocol protocol;
+	string selProtocol = qtSetLogin->getProtocol();
+	
+	if (selProtocol == "MSN") {
+		protocol = EnumIMProtocol::IMProtocolMSN;
+	} else if (selProtocol == "Yahoo") {
+		protocol = EnumIMProtocol::IMProtocolYahoo;
+	} else if (selProtocol == "Jabber") {
+		protocol = EnumIMProtocol::IMProtocolJabber;
+	}
+
+	_cWengoPhone.addIMAccount(qtSetLogin->getLogin(), qtSetLogin->getPassword(), protocol);
+
 	LOG_DEBUG("set login");
 }
 
