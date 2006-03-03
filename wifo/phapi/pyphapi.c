@@ -21,7 +21,7 @@
  */
 
 /*
- * @æuthor David Ferlier <david.ferlier@wengo.fr>
+ * @author David Ferlier <david.ferlier@wengo.fr>
  * @author Mathieu Stute <mathieu.stute@wengo.fr>
  */
 
@@ -113,17 +113,17 @@ static PyObject * PyPhInit(PyObject * self, PyObject * params) {
     char * server;
     int asyncmode;
     int ret;
+    /*
     phConfig_t *cfg;
 
     cfg = phGetConfig();
-
     strcpy(cfg->nattype, "fcone");
     strcpy(cfg->sipport, "5060");
-
     cfg->nodefaultline = 1;
     cfg->force_proxy = 1;
     cfg->nat_refresh_time = 30;
     cfg->use_tunnel = 0;
+    */
 
     if (PyArg_ParseTuple(params, "si", &server, &asyncmode)) {
         ret = phInit(&pyphapi_callbacks, server, asyncmode);
@@ -707,8 +707,9 @@ static PyObject * PyPhConf(PyObject *self, PyObject *params) {
     
     if (PyArg_ParseTuple(params, "ii", &cid1, &cid2)) {
         printf("PyPhConf: %i / %i\n", cid1, cid2);
-        phConf(cid1, cid2);
+        ret = phConf(cid1, cid2);
     }
+    return Py_BuildValue("i", ret);
 }
 
 

@@ -298,13 +298,21 @@ Depends(phapi, [amr, speex])
 #pyphapi
 phapi_py_env = WengoGetEnvironment()
 
+
+"""
+pyphapi
+"""
+
+#python_include = "C:\Program Files\Python24\include"
+#python_lib = "C:\Program Files\Python24\libs"
+python_lib = "/usr/lib/python2.4/config"
+python_include = "/usr/include/python2.4"
+
 if WengoOSWindows():
-	phapi_py_env.WengoAddIncludePath(["C:\Program Files\Python24\include"])
-	phapi_py_env.WengoAddLibPath(["C:\Program Files\Python24\libs"])
 	phapi_py_env.WengoUseLibraries(["phapi", "python24"])
 else:
-	phapi_py_env.WengoAddIncludePath(["/usr/include/python2.4"])
-	phapi_py_env.WengoAddLibPath(["/usr/lib/python2.4/config"])
 	phapi_py_env.WengoUseLibraries(["phapi", "python2.4"])
 
+phapi_py_env.WengoAddIncludePath([python_include])
+phapi_py_env.WengoAddLibPath([python_lib])
 phapi_py_env.WengoSharedLibrary("pyphapi", "pyphapi.c")
