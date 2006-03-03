@@ -2,12 +2,13 @@ env = WengoGetEnvironment()
 
 libs = [
 	'global',
-	'gthread-2.0',
 	'gaim',
 	'imwrapper',
 ]
-if WengoOSLinux():
-        env.ParseConfig('pkg-config --cflags --libs glib-2.0')
+
+if WengoOSPosix():
+        env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
+
 lib_path = []
 include_path = ['../gaim']
 defines = {}
@@ -27,7 +28,6 @@ sources = [
 	'GaimEnumIMProtocol.cpp'
 ]
 
-env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 env.WengoStaticLibrary('gaimimwrapper', sources)

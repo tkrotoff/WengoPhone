@@ -47,9 +47,15 @@ if WengoOSWindows():
 	include_path += ['C:\\Boost\\include\\boost-' + BOOSTVER]
 if WengoOSMacOSX():
 	#Installed from source code
-	if os.path.exists(os.environ['BOOSTINCLUDEDIR']) and os.path.exists(os.environ['BOOSTLIBDIR']):
-		include_path += [os.environ['BOOSTINCLUDEDIR']]
-		lib_path += [os.environ['BOOSTLIBDIR']]
+	if not os.environ.has_key('BOOSTINCLUDEDIR'):
+		boost_inc_dir = '/usr/local/include/boost-' + BOOSTVER
+
+	if not os.environ.has_key('BOOSTLIBDIR'):
+		boost_lib_dir = '/usr/local/lib'
+
+	if os.path.exists(boost_inc_dir) and os.path.exists(boost_lib_dir):
+		include_path += [boost_inc_dir]
+		lib_path += [boost_lib_dir]
 		print "libpath :" + str(lib_path)
 		print "include path :" + str(include_path)
 		libs += [
