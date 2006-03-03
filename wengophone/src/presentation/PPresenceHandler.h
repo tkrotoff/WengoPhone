@@ -64,8 +64,8 @@ private:
 	/**
 	 * @see IMPresence::presenceStateChangedEvent
 	 */
-	virtual void presenceStateChangedEventHandler(PresenceHandler & sender, EnumPresenceState::PresenceState state,
-		const std::string & note, const IMAccount & imAccount, const std::string & from) = 0;
+	virtual void presenceStateChangedEventHandler(PresenceHandler & sender, EnumPresenceState::PresenceState state, 
+		const std::string & note, const IMContact & imContact) = 0;
 
 	/**
 	 * @see IMPresence::presenceStatusEvent
@@ -76,8 +76,8 @@ private:
 	/**
 	 * @see IMPresence::subscribeStatusEvent
 	 */
-	virtual void subscribeStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
-		const std::string & contactId, IMPresence::SubscribeStatus status) = 0;
+	virtual void subscribeStatusEventHandler(PresenceHandler & sender, const IMContact & imContact,
+		IMPresence::SubscribeStatus status) = 0;
 };
 
 #endif //PPRESENCEHANDLER_H

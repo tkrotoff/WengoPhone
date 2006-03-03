@@ -22,6 +22,8 @@
 
 #include "Presentation.h"
 
+#include <string>
+
 /**
  *
  * @ingroup presentation
@@ -29,7 +31,14 @@
  */
 class PContact : public Presentation {
 public:
-
+	virtual const std::string & getDisplayName() const = 0;
+	virtual const std::string & getId() const = 0;
+	virtual bool haveIM() const = 0;
+	virtual bool haveCall() const = 0;
+	virtual bool haveVideo() const = 0;
+	virtual void placeCall() = 0;
+	virtual void placeVideoCall() = 0;
+	virtual void startIM() = 0;
 };
 
 #endif	//PCONTACT_H

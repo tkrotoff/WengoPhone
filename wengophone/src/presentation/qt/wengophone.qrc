@@ -2,6 +2,7 @@
     <qresource prefix="/" >
         <file>pics/arrow_down.png</file>
         <file>pics/arrow_right.png</file>
+	<file>pics/away.png</file>
         <file>pics/background.png</file>
         <file>pics/call_button.png</file>
         <file>pics/call_button_small.png</file>
@@ -30,6 +31,9 @@
         <file>pics/contact_remove.png</file>
         <file>pics/contact_view.png</file>
         <file>pics/dialpad.png</file>
+	<file>pics/dnd.png</file>
+	<file>pics/group_close.png</file>
+	<file>pics/group_open.png</file>
         <file>pics/hangup_button_small.png</file>
         <file>pics/headphones.png</file>
         <file>pics/help.png</file>
@@ -40,6 +44,8 @@
         <file>pics/logo.png</file>
         <file>pics/microphone.png</file>
         <file>pics/no.png</file>
+	<file>pics/online.png</file>
+	<file>pics/offline.png</file>
         <file>pics/point.gif</file>
         <file>pics/sms_send.png</file>
         <file>pics/statusbar_audio.png</file>
@@ -99,9 +105,11 @@
         <file>HttpProxyLoginWindow.ui</file>
         <file>LoggerWidget.ui</file>
         <file>WengoPhoneWindow.ui</file>
-        <file>chat/ChatWidget.ui</file>
-        <file>chat/chat.ui</file>
-        <file>chat/emoticonswidget.ui</file>
+        <file alias="ChatWidget.ui">chat/ChatWidget.ui</file>
+        <file alias="chat.ui">chat/chat.ui</file>
+        <file alias="emoticonswidget.ui">chat/emoticonswidget.ui</file>
+	<file>contactlist/AddContactWindow.ui</file>
+	<file>contactlist/ContactWidget.ui</file>
         <file>contactlist/contactList.ui</file>
         <file>contactlist/userWidget.ui</file>
         <file>login/LoginWindow.ui</file>

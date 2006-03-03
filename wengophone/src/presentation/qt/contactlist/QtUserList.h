@@ -19,14 +19,11 @@ public:
 	void	setUserStatus(const QString & userid,QtContactPixmap::contactPixmap status);
 	
 	
-	void 	haveIM(const QString & userid, bool value);
 	bool	haveIM(const QString & userid);
 	
 	bool	haveCall(const QString & userid);
-	void	haveCall(const QString & userid,bool value);
 	
 	bool	haveVideo(const QString & userid);
-	void	haveVideo(const QString & userid,bool value);
 
 	QtUser * getUser(const QString & userid);
 	

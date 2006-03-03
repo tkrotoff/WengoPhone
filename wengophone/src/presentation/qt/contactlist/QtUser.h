@@ -1,12 +1,36 @@
+/*
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2005  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 #ifndef QTUSER_H
 #define QTUSER_H
+
 #include <QtGui>
 #include "QtContactPixmap.h"
+#include <presentation/PContact.h>
+
+class PContact;
+
 class QtUser : QObject
 {
 	Q_OBJECT
 public:
-	QtUser ( QObject * parent = 0);
+	QtUser (PContact & pContact, QObject * parent = 0);
 	virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 	
 	QString		getId();
@@ -15,12 +39,9 @@ public:
 	QString		getUserName();
 	void		setUserName(const QString & uname);
 	
-	void 		haveIM( bool value){ _haveIM = value;};
-	bool		haveIM(){ return _haveIM;};
-	bool		haveCall(){ return _haveCall;};
-	void		haveCall(bool value){_haveCall=value;};
-	bool		haveVideo(){ return _haveVideo;};
-	void		haveVideo(bool value){ _haveVideo=value;};
+	bool		haveIM(){ return _pContact.haveIM();};
+	bool		haveCall(){ return _pContact.haveCall();};
+	bool		haveVideo(){ return _pContact.haveVideo();};
 	
 	void		setMouseOn(bool value) { _mouseOn = value;};
 	
@@ -52,15 +73,14 @@ protected:
 	QPixmap		_videoPixmap;
 
 	QtContactPixmap::contactPixmap _status;
-	
-	bool		_haveIM;
-	bool		_haveCall;
-	bool		_haveVideo;
+
 	bool		_mouseOn;
 	bool		_openStatus;
 	int			_iconsStartPosition;
 	
 	Qt::MouseButton _mouseButton;
+
+	PContact & _pContact;
 };
 
 #endif

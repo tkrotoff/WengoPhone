@@ -50,12 +50,15 @@ private:
 
 	QtPresenceHandler();
 
-	void presenceStateChangedEventHandler(PresenceHandler & sender, EnumPresenceState::PresenceState state, 
-		const std::string & note, const IMAccount & imAccount, const std::string & from);
+	void presenceStateChangedEventHandler(PresenceHandler & sender,
+		EnumPresenceState::PresenceState state, const std::string & note,
+		const IMContact & imContact);
 
-	void myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount, EnumPresenceState::MyPresenceStatus status);
+	void myPresenceStatusEventHandler(PresenceHandler & sender,
+		const IMAccount & imAccount, EnumPresenceState::MyPresenceStatus status);
 
-	void subscribeStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount, const std::string & contactId, IMPresence::SubscribeStatus status);
+	void subscribeStatusEventHandler(PresenceHandler & sender,
+		const IMContact & imContact, IMPresence::SubscribeStatus status);
 
 	void updatePresentationThreadSafe();
 

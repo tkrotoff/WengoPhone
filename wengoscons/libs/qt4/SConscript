@@ -38,7 +38,6 @@ if WengoOSMacOSX():
 	include_path += [os.path.join(qtdir, 'lib', 'QtCore.framework', 'Headers')]
 	include_path += [os.path.join(qtdir, 'lib', 'QtGui.framework', 'Headers')]
 	include_path += [os.path.join(qtdir, 'lib', 'QtNetwork.framework', 'Headers')]
-	include_path += [os.path.join(qtdir, 'lib', 'QtDesigner.framework', 'Headers')]
 	include_path += [os.path.join(qtdir, 'lib', 'QtXml.framework', 'Headers')]
 elif WengoOSLinux():
 	include_path += [qtincludedir]
@@ -137,6 +136,12 @@ elif WengoOSMacOSX():
 		'-F' + os.path.join(qtdir, 'lib'),
 	]
 
+	libs += [
+		'z',
+	]
+
+	include_path += [os.path.join(qtdir, 'mkspecs', 'macx-g++')]
+
 	link_flags += [
 		'-framework Carbon',
 		'-framework QuickTime',
@@ -148,11 +153,15 @@ elif WengoOSMacOSX():
 		'-F' + os.path.join(qtdir, 'lib'),
 		'-headerpad_max_install_names'
 	]
-	libs += [
-		'z',
-		'QtDesigner_debug'
-	]
-	include_path += [os.path.join(qtdir, 'mkspecs', 'macx-g++')]
+
+	if WengoDebugMode():
+		libs += [
+			'QtDesigner_debug'
+		]
+	else:
+		libs += [
+			'QtDesigner'
+		]
 
 
 env.WengoAddLibPath(lib_path)

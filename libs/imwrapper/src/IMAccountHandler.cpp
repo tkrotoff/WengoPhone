@@ -23,12 +23,12 @@
 
 using namespace std;
 
-set<IMAccount> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) {
-	set<IMAccount> result;
+set<IMAccount *> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) {
+	set<IMAccount *> result;
 
-	for (set<IMAccount>::const_iterator it = begin() ; it != end() ; it++) {
+	for (IMAccountHandler::const_iterator it = begin() ; it != end() ; it++) {
 		if ((*it).getProtocol() == protocol) {
-			result.insert(*it);
+			result.insert((IMAccount *)(&(*it)));
 		}
 	}
 

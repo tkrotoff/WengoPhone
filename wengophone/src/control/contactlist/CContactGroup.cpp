@@ -40,7 +40,7 @@ CContactGroup::CContactGroup(ContactGroup & contactGroup, CContactList & cContac
 	_contactGroup.contactGroupModifiedEvent += boost::bind(&CContactGroup::contactGroupModifiedEventHandler, this, _1);
 }
 
-std::string CContactGroup::getContactGroupString() const {
+std::string CContactGroup::getContactGroupName() const {
 	return _contactGroup.toString();
 }
 

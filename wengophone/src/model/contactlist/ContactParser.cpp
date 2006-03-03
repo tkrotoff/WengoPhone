@@ -59,9 +59,10 @@ ContactParser::ContactParser(Contact & contact, const std::string & data) {
 
 	if (text) {
 		//FIXME: crashes when IMAccountList is populated after initializing the ContactList
-		set<IMAccount> list = contact.getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		set<IMAccount *> list;
+		list = contact.getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
 		
-		IMContact imContact(*list.begin(), text->Value());
+		IMContact imContact(*(*list.begin()), text->Value());
 		contact.addIMContact(imContact);
 		contact.setWengoPhoneId(text->Value());
 	}

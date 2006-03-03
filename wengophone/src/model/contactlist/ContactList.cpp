@@ -26,6 +26,7 @@
 #include "IMContactListHandler.h"
 
 #include <model/WengoPhone.h>
+#include <model/presence/PresenceHandler.h>
 
 #include <StringList.h>
 #include <Logger.h>
@@ -42,6 +43,8 @@ ContactList::ContactList(WengoPhone & wengoPhone)
 		boost::bind(&ContactList::newContactGroupAddedEventHandler, this, _1, _2);
 	_wengoPhone.getIMContactListHandler().contactGroupRemovedEvent +=
 		boost::bind(&ContactList::contactGroupRemovedEventHandler, this, _1, _2);
+	_wengoPhone.getPresenceHandler().presenceStateChangedEvent +=
+		boost::bind(&ContactList::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
 }
 
 ContactList::~ContactList() {
@@ -189,6 +192,22 @@ void ContactList::contactGroupRemovedEventHandler(IMContactList & sender,
 		removeContactGroup(contactGroup);
 	} else {
 		LOG_DEBUG("there is no group " + groupName);
+	}
+}
+
+void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender, EnumPresenceState::PresenceState state, 
+	const std::string & note, const IMContact & imContact) {
+
+	for (register unsigned i = 0 ; i < size() ; i++) {
+		ContactGroup * contactGroup = this->operator[](i);
+		Contact * contact = contactGroup->findContact(imContact);
+		if (contact) {
+			if (contact->hasIMContact(imContact)) {
+				contact->getIMContact(imContact).setPresenceState(state);
+			}
+		} else {
+			LOG_ERROR("unknown IMContact:" + imContact.getContactId());
+		}
 	}
 }
 

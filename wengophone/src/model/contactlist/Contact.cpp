@@ -28,6 +28,7 @@
 #include <imwrapper/IMContact.h>
 
 #include <StringList.h>
+#include <Logger.h>
 
 #include <iostream>
 using namespace std;
@@ -85,6 +86,7 @@ void Contact::addIMContact(const IMContact & imContact) {
 	//Check if IMContact already exists
 	if (_imContactSet.find(newContact) == _imContactSet.end()) {
 		_imContactSet.insert(newContact);
+		_wengoPhone.getPresenceHandler().subscribeToPresenceOf(imContact);
 		newIMContactAddedEvent(*this, (IMContact &)*_imContactSet.find(newContact));
 		contactModifiedEvent(*this);
 	}
@@ -106,6 +108,10 @@ bool Contact::hasIMContact(const IMContact & imContact) const {
 	} else {
 		return false;
 	}
+}
+
+IMContact & Contact::getIMContact(const IMContact & imContact) const {
+	return (IMContact &)*_imContactSet.find(imContact);
 }
 
 void Contact::block() {
@@ -132,5 +138,59 @@ string Contact::imContactsToString() {
 	}
 
 	return result;
+}
+
+bool Contact::haveIM() const {
+	if ((_imContactSet.size() > 0) || (!_wengoPhoneId.empty())) {
+		for (IMContactSet::const_iterator it = _imContactSet.begin() ;
+			it != _imContactSet.end() ;
+			it++) {
+			if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool Contact::haveCall() const {
+	//FIXME: check phone numbers
+	return true;
+}
+
+bool Contact::haveVideo() const {
+	//FIXME: can we check if we can place a video call
+	if (!_wengoPhoneId.empty()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void Contact::placeCall() {
+	if (!_wengoPhoneId.empty()) {
+		_wengoPhone.makeCall(_wengoPhoneId);
+	}
+}
+
+void Contact::placeVideoCall() {
+	if (!_wengoPhoneId.empty()) {
+		_wengoPhone.makeCall(_wengoPhoneId);
+	}
+}
+
+void Contact::startIM() {
+	LOG_DEBUG("start a chat with " + _firstName);
+	for (IMContactSet::const_iterator it = _imContactSet.begin() ;
+		it != _imContactSet.end() ;
+		it++) {
+		if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
+			IMContactSet list;
+			list.insert((*it));
+			_wengoPhone.getChatHandler().createSession((*it).getIMAccount(), list);
+			break;
+		}
+	}
 }
 

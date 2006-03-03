@@ -20,15 +20,12 @@
 #ifndef QTCONTACT_H
 #define QTCONTACT_H
 
+#include <presentation/PContact.h>
 
-#include "control/contactlist/CContact.h"
-#include "presentation/PContact.h"
-#include "MetaContact.h"
-#include "IQtContact.h"
+#include <control/contactlist/CContact.h>
 
 #include <QObjectThreadSafe.h>
 
-class TreeItem;
 class QtContactList;
 
 /**
@@ -36,18 +33,30 @@ class QtContactList;
  *
  * @author Tanguy Krotoff
  */
-class QtContact : public QObjectThreadSafe, public PContact, public IQtContact {
+class QtContact : public QObjectThreadSafe, public PContact {
 public:
 
 	QtContact(CContact & cContact, QtContactList * qtContactList);
 
 	~QtContact();
 
-	TreeItem * getTreeItem() const {
-		return _item;
-	}
-
 	void updatePresentation();
+
+	const std::string & getDisplayName() const;
+
+	const std::string & getId() const;
+
+	bool haveIM() const;
+
+	bool haveCall() const;
+
+	bool haveVideo() const;
+
+	void placeCall();
+
+	void placeVideoCall();
+
+	void startIM();
 
 private:
 
@@ -56,10 +65,6 @@ private:
 	void updatePresentationThreadSafe();
 
 	CContact & _cContact;
-
-	TreeItem * _item;
-
-	MetaContact * _metaContact;
 
 	QtContactList * _qtContactList;
 

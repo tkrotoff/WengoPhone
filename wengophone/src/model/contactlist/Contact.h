@@ -25,6 +25,7 @@
 #include <imwrapper/EnumPresenceState.h>
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMContact.h>
+#include <imwrapper/IMContactSet.h>
 
 #include <Event.h>
 #include <Serializable.h>
@@ -162,6 +163,51 @@ public:
 	bool hasIMContact(const IMContact & imContact) const;
 
 	/**
+	 * Return the IMContact equals to given IMContact.
+	 *
+	 * @param imContact the desired IMContact
+	 * @return the IMContact
+	 */
+	IMContact & getIMContact(const IMContact & imContact) const;
+
+	/**
+	 * @return Set of IMContact
+	 */
+	const IMContactSet & getIMContactSet() const {
+		return _imContactSet;
+	}
+
+	/**
+	 * @return true if chat is available with this Contact.
+	 */
+	bool haveIM() const;
+
+	/**
+	 * @return true if we can place a call with this Contact.
+	 */
+	bool haveCall() const;
+
+	/**
+	 * @return true if we can place a video call with this Contact.
+	 */
+	bool haveVideo() const;
+
+	/**
+	 * Start a call with the preferred phone number.
+	 */
+	void placeCall();
+
+	/**
+	 * Start a video call with wengo.
+	 */
+	void placeVideoCall();
+
+	/**
+	 * Start a chat with the preferred IM service.
+	 */
+	void startIM();
+
+	/**
 	 * Avoid this contact to see my presence.
 	 */
 	void block();
@@ -218,8 +264,6 @@ private:
 	 */
 	Event<void (Contact & sender, IMContact & imContact)> imContactRemovedEvent;
 
-	typedef std::set<IMContact> IMContactSet;
-	
 	/** Factorizes code between contructor and copy contructor. */
 	void initialize(const Contact & contact);
 

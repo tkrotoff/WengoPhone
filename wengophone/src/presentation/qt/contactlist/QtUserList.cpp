@@ -65,12 +65,6 @@ QtUser * QtUserList::getUser(const QString & userid)
 	return user;
 }
 
-void QtUserList::haveIM(const QString & userid, bool value){
-	QtUser * user = _userList[userid];
-	if (user)
-		user->haveIM(value);
-}
-
 bool QtUserList::haveIM(const QString & userid){
 	QtUser * user = _userList[userid];
 	if (user)
@@ -85,23 +79,12 @@ bool QtUserList::haveCall(const QString & userid){
 		return user->haveCall();
 	return false;
 }
-void QtUserList::haveCall(const QString & userid,bool value){
-	QtUser * user = _userList[userid];
-	if (user)
-		user->haveCall(value);
-}
 	
 bool QtUserList::haveVideo(const QString & userid){
 	QtUser * user = _userList[userid];
 	if (user)
 		return user->haveVideo();
 	return false;
-}
-
-void QtUserList::haveVideo(const QString & userid,bool value){
-	QtUser * user = _userList[userid];
-	if (user)
-		user->haveVideo(value);
 }
 
 void QtUserList::mouseClicked(const QString & userid,const QPoint pos, const QRect & rect)

@@ -18,9 +18,18 @@
  */
 
 #include "QtContactGroup.h"
-#include "TreeItem.h"
+
 #include "QtContact.h"
 #include "QtContactList.h"
+#include "QtUserList.h"
+#include "QtUser.h"
+
+#include <QTreeWidgetItem>
+#include <QString>
+
+#include <Logger.h>
+
+using namespace std;
 
 QtContactGroup::QtContactGroup(CContactGroup & cContactGroup, QtContactList * qtContactList)
 	: QObjectThreadSafe(),
@@ -34,16 +43,13 @@ QtContactGroup::QtContactGroup(CContactGroup & cContactGroup, QtContactList * qt
 }
 
 QtContactGroup::~QtContactGroup() {
-	delete _metaContactGroup;
-	delete _item;
 }
 
 void QtContactGroup::initThreadSafe() {
-	qRegisterMetaType<MetaContactGroup>("MetaContactGroup");
+}
 
-	_metaContactGroup = new MetaContactGroup(_cContactGroup.getContactGroup());
-
-	_item = new TreeItem(QVariant(QMetaType::type("MetaContactGroup"), _metaContactGroup));
+const string & QtContactGroup::getName() const {
+	return _cContactGroup.getContactGroupName();
 }
 
 void QtContactGroup::addContact(PContact * pContact) {
@@ -53,10 +59,31 @@ void QtContactGroup::addContact(PContact * pContact) {
 }
 
 void QtContactGroup::addContactThreadSafe(PContact * pContact) {
-	QtContact * qtContact = (QtContact *) pContact;
+	QList<QTreeWidgetItem *> list;
 
-	_item->appendChild(qtContact->getTreeItem());
-	updatePresentation();
+	list = _qtContactList->_treeWidget->findItems(QString::fromStdString(getName()), Qt::MatchExactly);
+	// A goup name is unique inside the model so we are sure that the first 
+	// QTreeWidgetItem is the right one.
+	QtUserList * ul = QtUserList::getInstance();
+
+	QTreeWidgetItem * newContact; 
+	QString contactName;
+	QString contactId;
+	QtUser * user;
+
+	LOG_DEBUG("display name: " + pContact->getDisplayName());
+	contactName = QString::fromStdString(pContact->getDisplayName());
+
+	newContact = new QTreeWidgetItem(list[0]);
+	newContact->setText(0, QString::fromStdString(pContact->getId()));
+	newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
+
+	user = new QtUser(*pContact);
+	user->setId(QString::fromStdString(pContact->getId()));
+	user->setUserName(QString::fromStdString(pContact->getDisplayName()));
+	user->setStatus(QtContactPixmap::ContactOnline);
+
+	ul->addUser(user);
 }
 
 void QtContactGroup::updatePresentation() {
@@ -64,5 +91,5 @@ void QtContactGroup::updatePresentation() {
 }
 
 void QtContactGroup::updatePresentationThreadSafe() {
-	//_item->setData(_metaContactGroup);
 }
+

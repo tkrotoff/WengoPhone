@@ -27,6 +27,7 @@ sources = [
 	'GaimEnumIMProtocol.cpp'
 ]
 
+env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 env.WengoStaticLibrary('gaimimwrapper', sources)

@@ -20,14 +20,13 @@
 #ifndef QTCONTACTGROUP_H
 #define QTCONTACTGROUP_H
 
-#include "control/contactlist/CContactGroup.h"
-#include "presentation/PContactGroup.h"
-#include "presentation/PContact.h"
-#include "MetaContactGroup.h"
+#include <presentation/PContactGroup.h>
+#include <presentation/PContact.h>
+
+#include <control/contactlist/CContactGroup.h>
 
 #include <QObjectThreadSafe.h>
 
-class TreeItem;
 class QtContactList;
 
 class QtContactGroup : public QObjectThreadSafe, public PContactGroup {
@@ -37,11 +36,9 @@ public:
 
 	~QtContactGroup();
 
-	void addContact(PContact * pContact);
+	const std::string & getName() const;
 
-	TreeItem * getTreeItem() const {
-		return _item;
-	}
+	void addContact(PContact * pContact);
 
 	void updatePresentation();
 
@@ -55,11 +52,8 @@ private:
 
 	CContactGroup & _cContactGroup;
 
-	TreeItem * _item;
-	
-	MetaContactGroup * _metaContactGroup;
-	
 	QtContactList *_qtContactList;
 };
 
 #endif	//QTCONTACTGROUP_H
+

@@ -15,8 +15,8 @@ public:
 
 	void setPixmap (contactPixmap status,const  QPixmap & px);
 	QPixmap & getPixmap(contactPixmap  status);
-	
-	protected:
+
+protected:
 	QtContactPixmap ( );
 	QtContactPixmap (const QtContactPixmap&) {};
 	QtContactPixmap & operator= (const QtContactPixmap &) {};

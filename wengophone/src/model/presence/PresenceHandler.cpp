@@ -127,7 +127,7 @@ void PresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,
 void PresenceHandler::presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
 	const std::string & note, const std::string & from) {
 
-	presenceStateChangedEvent(*this, state, note, sender.getIMAccount(), from);
+	presenceStateChangedEvent(*this, state, note, IMContact(sender.getIMAccount(), from));
 }
 
 void PresenceHandler::myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status) {
@@ -135,7 +135,7 @@ void PresenceHandler::myPresenceStatusEventHandler(IMPresence & sender, EnumPres
 }
 
 void PresenceHandler::subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status) {
-	subscribeStatusEvent(*this, sender.getIMAccount(), contactId, status);
+	subscribeStatusEvent(*this, IMContact(sender.getIMAccount(), contactId), status);
 }
 
 PresenceHandler::PresenceMap::iterator PresenceHandler::findPresence(PresenceMap & presenceMap, IMAccount & imAccount) {

@@ -47,7 +47,21 @@ public:
 		return _contact;
 	}
 
-	std::string getContactString() const;
+	std::string getDisplayName() const;
+
+	std::string getId() const;
+
+	bool haveIM() const;
+
+	bool haveCall() const;
+
+	bool haveVideo() const;
+
+	void placeCall();
+
+	void placeVideoCall();
+
+	void startIM();
 
 private:
 

@@ -295,7 +295,11 @@ void PhApiCallbacks::subscriptionProgress(int subscriptionId, const phSubscripti
 void PhApiCallbacks::onNotify(const char * event, const char * from, const char * content) {
 	std::string tmp(event);
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
-	std::string buddy(from);
+
+	std::string buddyTmp(from);
+	unsigned colonIndex = buddyTmp.find(':', 0);
+	unsigned atIndex = buddyTmp.find('@', 0);
+	std::string buddy = buddyTmp.substr(colonIndex, atIndex - colonIndex);
 
 	TiXmlDocument doc;
 	doc.Parse(content);

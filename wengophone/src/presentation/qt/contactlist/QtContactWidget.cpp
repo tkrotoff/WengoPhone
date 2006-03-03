@@ -129,9 +129,10 @@ QString QtContactWidget::createContact(Contact * contact) {
 	contact->setNotes(getNotes().toStdString());
 
 	if (!getWengoPhone().isEmpty()) {
-		set<IMAccount> list = contact->getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		set<IMAccount *> list;
+		list = contact->getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
 		if (list.begin() != list.end()) {
-			contact->addIMContact(IMContact(*list.begin(),
+			contact->addIMContact(IMContact(*(*list.begin()),
 				getWengoPhone().toStdString()));
 		}
 	}

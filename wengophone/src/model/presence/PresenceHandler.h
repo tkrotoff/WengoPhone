@@ -53,7 +53,7 @@ public:
 	 * @param imAccount the IMAccount that posses
 	 */
 	Event<void (PresenceHandler & sender, EnumPresenceState::PresenceState state, 
-		const std::string & note, const IMAccount & imAccount, const std::string & from)> presenceStateChangedEvent;
+		const std::string & note, const IMContact & imContact)> presenceStateChangedEvent;
 
 	/**
 	 * @see IMPresence::presenceStatusEvent
@@ -65,8 +65,8 @@ public:
 	 * @see IMPresence::subscribeStatusEvent
 	 * @param protocol protocol of the contact
 	 */
-	Event<void (PresenceHandler & sender, const IMAccount & imAccount, 
-		const std::string & contactId, IMPresence::SubscribeStatus status)> subscribeStatusEvent;
+	Event<void (PresenceHandler & sender, const IMContact & imContact,
+		IMPresence::SubscribeStatus status)> subscribeStatusEvent;
 
 	PresenceHandler(WengoPhone & wengoPhone);
 

@@ -45,7 +45,7 @@ public:
 		return _contactGroup;
 	}
 
-	std::string getContactGroupString() const;
+	std::string getContactGroupName() const;
 
 private:
 

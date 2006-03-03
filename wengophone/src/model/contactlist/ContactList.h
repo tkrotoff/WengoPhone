@@ -20,6 +20,8 @@
 #ifndef CONTACTLIST_H
 #define CONTACTLIST_H
 
+#include <imwrapper/EnumPresenceState.h>
+
 #include <Event.h>
 #include <Serializable.h>
 #include <List.h>
@@ -30,6 +32,8 @@ class ContactListDataLayer;
 class IMContactListHandler;
 class IMContactList;
 class IMContact;
+class IMPresence;
+class PresenceHandler;
 class StringList;
 class WengoPhone;
 
@@ -107,6 +111,13 @@ public:
 	Contact * getContact(const std::string & contactId) const;
 
 	/**
+	 * @return amount of ContactGroup
+	 */
+	unsigned size() const {
+		return _contactGroupList.size();
+	}
+
+	/**
 	 * Gets the StringList representation of the ContactGroup list.
 	 *
 	 * @return ContactGroup StringList
@@ -142,6 +153,12 @@ private:
 	 */
 	void contactGroupRemovedEventHandler(IMContactList & sender,
 		const std::string & groupName);
+
+	/**
+	 * @see PresenceHandler::presenceStateChangedEventHandler
+	 */
+	void presenceStateChangedEventHandler(PresenceHandler & sender, EnumPresenceState::PresenceState state, 
+		const std::string & note, const IMContact & imContact);
 
 	/** Data layer for the ContactList. */
 	ContactListDataLayer * _dataLayer;

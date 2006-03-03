@@ -19,13 +19,18 @@
 
 #include "CContactList.h"
 
-#include "model/contactlist/ContactList.h"
-#include "model/contactlist/Contact.h"
-#include "model/contactlist/ContactGroup.h"
+#include <presentation/PFactory.h>
+#include <presentation/PContactList.h>
+
+#include <control/CWengoPhone.h>
+
+#include <model/contactlist/ContactList.h>
+#include <model/contactlist/Contact.h>
+#include <model/contactlist/ContactGroup.h>
+
 #include "CContactGroup.h"
-#include "presentation/PFactory.h"
-#include "control/CWengoPhone.h"
-#include "presentation/PContactList.h"
+
+#include <Logger.h>
 
 CContactList::CContactList(ContactList & contactList, CWengoPhone & cWengoPhone)
 	: _contactList(contactList),
@@ -40,6 +45,7 @@ CContactList::CContactList(ContactList & contactList, CWengoPhone & cWengoPhone)
 void CContactList::contactGroupAddedEventHandler(ContactList & sender, ContactGroup & contactGroup) {
 	CContactGroup * cContactGroup = new CContactGroup(contactGroup, *this, _cWengoPhone);
 
+	LOG_DEBUG("contact group added: " + contactGroup.toString());
 	_pContactList->addContactGroup(cContactGroup->getPresentation());
 	_pContactList->updatePresentation();
 }

@@ -25,8 +25,6 @@
 
 #include <QObjectThreadSafe.h>
 
-#include <QPersistentModelIndex>
-
 #include <map>
 
 #include <QTreeWidgetItem>
@@ -34,11 +32,9 @@
 class Contact;
 class ContactPopupMenu;
 class ContactGroupPopupMenu;
-class ContactListDelegate;
-class TreeModel;
 class QTreeWidget;
-class QModelIndex;
 class QMouseEvent;
+class QtContactGroup;
 
 /**
  * Qt Presentation component for ContactList.
@@ -47,6 +43,7 @@ class QMouseEvent;
  */
 class QtContactList : public QObjectThreadSafe, public PContactList {
 	Q_OBJECT
+	friend class QtContactGroup;
 public:
 
 	QtContactList(CContactList & cContactList);
@@ -59,19 +56,7 @@ public:
 
 	void addContactGroup(PContactGroup * pContactGroup);
 
-private Q_SLOTS:
-
-	void entered(const QModelIndex & index);
-
-	void doubleClicked(const QModelIndex & index);
-
-	void mousePressEventHandler(QEvent *event);
-
 private:
-
-	void leftButtonPressEventHandler(QMouseEvent *event);
-
-	void rightButtonPressEventHandler(QMouseEvent *event);
 
 	void initThreadSafe();
 
@@ -89,15 +74,9 @@ private:
 
 	QTreeWidget * _treeWidget;
 
-	TreeModel * _model;
-
-	ContactListDelegate *_delegate;
-
 	QTreeWidgetItem * _previous;
 	
 	QTreeWidgetItem * _lastClicked;
-	
-	QSize * _itemSize;
 
 };
 

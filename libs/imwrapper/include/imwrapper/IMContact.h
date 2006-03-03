@@ -21,6 +21,7 @@
 #define IMCONTACT_H
 
 #include <imwrapper/IMAccount.h>
+#include <imwrapper/EnumPresenceState.h>
 
 #include <string>
 
@@ -70,6 +71,14 @@ public:
 		return _contactId;
 	}
 
+	EnumPresenceState::PresenceState getPresenceState() const {
+		return _presenceState;
+	}
+
+	void setPresenceState(EnumPresenceState::PresenceState presenceState) {
+		_presenceState = presenceState;
+	}
+
 	void setBlocked(bool blocked) {
 		_blocked = blocked;
 	}
@@ -86,6 +95,9 @@ private:
 
 	/** True if this IMContact is blocked. */ 
 	bool _blocked;
+
+	EnumPresenceState::PresenceState _presenceState;
+
 };
 
 #endif	//IMCONTACT_H

@@ -19,15 +19,16 @@
 
 #include "QtContact.h"
 
-#include "TreeItem.h"
 #include "QtContactList.h"
 
 #include <control/contactlist/CContact.h>
 
 #include <Logger.h>
 
+using namespace std;
+
 QtContact::QtContact(CContact & cContact, QtContactList * qtContactList) 
-	: QObjectThreadSafe(), IQtContact(&cContact.getContact()), _cContact(cContact) {
+	: QObjectThreadSafe(), _cContact(cContact) {
 
 	_qtContactList = qtContactList;
 	
@@ -37,17 +38,9 @@ QtContact::QtContact(CContact & cContact, QtContactList * qtContactList)
 }
 
 QtContact::~QtContact() {
-	delete _metaContact;
-	delete _item;
 }
 
 void QtContact::initThreadSafe() {
-	qRegisterMetaType<MetaContact>("MetaContact");
-	
-	LOG_DEBUG("contact: " + _cContact.getContactString());
-	_metaContact = new MetaContact(this);
-	
-	_item = new TreeItem(QVariant(QMetaType::type("MetaContact"), _metaContact));
 }
 
 void QtContact::updatePresentation() {
@@ -55,5 +48,37 @@ void QtContact::updatePresentation() {
 }
 
 void QtContact::updatePresentationThreadSafe() {
-	//_item->setData(_metaContact);
 }
+
+const string & QtContact::getDisplayName() const {
+	return _cContact.getDisplayName();
+}
+
+const string & QtContact::getId() const {
+	return _cContact.getId();
+}
+
+bool QtContact::haveIM() const {
+	return _cContact.haveIM();
+}
+
+bool QtContact::haveCall() const {
+	return _cContact.haveCall();
+}
+
+bool QtContact::haveVideo() const {
+	return _cContact.haveVideo();
+}
+
+void QtContact::placeCall() {
+	_cContact.placeCall();
+}
+
+void QtContact::placeVideoCall(){
+	_cContact.placeVideoCall();
+}
+
+void QtContact::startIM() {
+	_cContact.startIM();
+}
+

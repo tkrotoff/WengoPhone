@@ -21,17 +21,19 @@
 
 #include <control/presence/CPresenceHandler.h>
 
+#include <imwrapper/IMContact.h>
+
 #include <Logger.h>
 
 QtPresenceHandler::QtPresenceHandler(CPresenceHandler & cPresenceHandler) 
 	: _cPresenceHandler(cPresenceHandler) {
 
 	_cPresenceHandler.presenceStateChangedEvent += 
-		boost::bind(&QtPresenceHandler::presenceStateChangedEventHandler, this, _1, _2, _3, _4, _5);
+		boost::bind(&QtPresenceHandler::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
 	_cPresenceHandler.myPresenceStatusEvent += 
 		boost::bind(&QtPresenceHandler::myPresenceStatusEventHandler, this, _1, _2, _3);
 	_cPresenceHandler.subscribeStatusEvent += 
-		boost::bind(&QtPresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3, _4);
+		boost::bind(&QtPresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3);
 }
 
 void QtPresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,
@@ -52,10 +54,9 @@ void QtPresenceHandler::unblockContact(const IMContact & imContact) {
 }
 	
 void QtPresenceHandler::presenceStateChangedEventHandler(PresenceHandler & sender,
-	EnumPresenceState::PresenceState state, const std::string & note, 
-	const IMAccount & imAccount, const std::string & from) {
+	EnumPresenceState::PresenceState state, const std::string & note, const IMContact & imContact) {
 	
-	LOG_DEBUG("presence of " + from + " change to " + String::fromNumber(state));
+	LOG_DEBUG("presence of " + imContact.getContactId() + " change to " + String::fromNumber(state));
 }
 
 void QtPresenceHandler::myPresenceStatusEventHandler(PresenceHandler & sender,
@@ -65,7 +66,7 @@ void QtPresenceHandler::myPresenceStatusEventHandler(PresenceHandler & sender,
 }
 
 void QtPresenceHandler::subscribeStatusEventHandler(PresenceHandler & sender,
-	const IMAccount & imAccount, const std::string & contactId, IMPresence::SubscribeStatus status) {
+	const IMContact & imContact, IMPresence::SubscribeStatus status) {
 
 	LOG_DEBUG("QtPresenceHandler::subscribeStatusEventHandler");
 }

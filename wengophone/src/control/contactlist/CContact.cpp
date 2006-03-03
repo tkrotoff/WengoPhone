@@ -26,6 +26,8 @@
 #include "presentation/PContact.h"
 #include "CContactGroup.h"
 
+using namespace std;
+
 CContact::CContact(Contact & contact, CContactGroup & cContactGroup, CWengoPhone & cWengoPhone)
 	: _contact(contact),
 	_cContactGroup(cContactGroup),
@@ -34,12 +36,41 @@ CContact::CContact(Contact & contact, CContactGroup & cContactGroup, CWengoPhone
 	_pContact = PFactory::getFactory().createPresentationContact(*this);
 }
 
-std::string CContact::getContactString() const {
-	return _contact.toString();
-}
-
 void CContact::call() {
 	/*if (this.softphone.isConnected) {
 		this.softphone.decrocher(this.model.address);
 	}*/
+}
+
+string CContact::getDisplayName() const {
+	return _contact.getFirstName() + " " + _contact.getLastName();
+}
+
+string CContact::getId() const {
+	//FIXME: this id is not unique
+	return _contact.getFirstName() + " " + _contact.getLastName();
+}
+
+bool CContact::haveIM() const {
+	return _contact.haveIM();
+}
+
+bool CContact::haveCall() const {
+	return _contact.haveCall();
+}
+
+bool CContact::haveVideo() const {
+	return _contact.haveVideo();
+}
+
+void CContact::placeCall() {
+	_contact.placeCall();
+}
+
+void CContact::placeVideoCall(){
+	_contact.placeVideoCall();
+}
+
+void CContact::startIM() {
+	_contact.startIM();
 }
