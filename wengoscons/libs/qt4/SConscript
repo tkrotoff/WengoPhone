@@ -97,6 +97,7 @@ if WengoOSWindows():
 			'QtNetworkd4',
 			'QtDesignerd4',
 			'QtXmld4',
+			'qtmain'
 		]
 	else:
 		libs += [
