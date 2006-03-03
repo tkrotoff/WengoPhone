@@ -24,7 +24,11 @@
 
 #include "QtEmoticonsWidget.h"
 #include "widgetseeker.h"
+
 #include <WidgetFactory.h>
+#include <imwrapper/IMContact.h>
+#include <imwrapper/IMChatSession.h>
+
 
 class ChatWidget : public QWidget //, Ui::ChatWidget
 {
@@ -34,10 +38,12 @@ public:
     
     ChatWidget(QWidget * parent =0, Qt::WFlags f = 0);
     
-    void            setNickBgColor(const QString &color);
-    void            setNickTextColor(const QString &color);
-    void            setNickFont(QFont &font);
-    void            setNickName(const QString & nickname);
+    void setNickBgColor(const QString &color);
+    void setNickTextColor(const QString &color);
+    void setNickFont(QFont &font);
+    void setNickName(const QString & nickname);
+	void setIMChatSession(IMChatSession * imChatSession);
+	IMChatSession * getIMChatSession() {return _imChatSession;};
     const QString & nickName();
     const QFont&    nickFont();
     const QString&   nickBgColor();
@@ -53,8 +59,7 @@ protected:
     QTextEdit    *   _chatEdit;
     QPushButton  *   _emoticonsButton;
     QPushButton  *   _sendButton;
-
-    
+	IMChatSession* _imChatSession;
     
     QFont            _currentFont;
     QFont            _nickFont;
@@ -71,7 +76,7 @@ public Q_SLOTS:
     void emoticonSelected(const QString & emoticonName);
     void urlClicked(const QUrl & link);
 Q_SIGNALS:
-    void newMessage(const QString & msg);
+    void newMessage(IMChatSession* session,const QString & msg);
 };
 
 #endif

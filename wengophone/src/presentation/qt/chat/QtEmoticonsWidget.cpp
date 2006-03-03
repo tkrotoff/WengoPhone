@@ -23,15 +23,18 @@
 
 EmoticonsWidget::EmoticonsWidget(QWidget * parent, Qt::WFlags f) : QWidget(parent,f){
     
-    _widget =WidgetFactory::create(":/forms/emoticonswidget.ui", this);
+    _widget =WidgetFactory::create(":/forms/chat/emoticonswidget.ui", this);
     QGridLayout * layout = new QGridLayout();
     layout->addWidget(_widget);
     layout->setMargin(0);
     setLayout(layout);
     
+	// Default stat is popup
+	_stat=Popup;
+
     QPushButton * exitButton = _seeker.getPushButton(_widget, "emoticonCloseButton");
     
-    connect(exitButton,SIGNAL(clicked()),this,SLOT(close()));
+    connect(exitButton,SIGNAL(clicked()),this,SLOT(changeStat()));
     
     _iconName << "face-wink48.png";
     _iconName << "face-angel48.png";
@@ -73,47 +76,84 @@ EmoticonsWidget::EmoticonsWidget(QWidget * parent, Qt::WFlags f) : QWidget(paren
 }
 void EmoticonsWidget::emoticon1Clicked()
 {
-    
-    emoticonClicked(_iconName[0]);
-    
+	emoticonClicked(_iconName[0]);
+	if (_stat == Popup)
+		close();
 }
 void EmoticonsWidget::emoticon2Clicked()
 {
-    emoticonClicked(_iconName[1]);
+	emoticonClicked(_iconName[1]);
+	if (_stat == Popup)
+		close();
 }
 void EmoticonsWidget::emoticon3Clicked()
 {
     emoticonClicked(_iconName[2]);
+	if (_stat == Popup)
+		close();
 }
 void EmoticonsWidget::emoticon4Clicked()
 {
     emoticonClicked(_iconName[3]);
+	if (_stat == Popup)
+		close();
 }
 void EmoticonsWidget::emoticon5Clicked()
 {
     emoticonClicked(_iconName[4]);
+	if (_stat == Popup)
+		close();
 }
 void EmoticonsWidget::emoticon6Clicked()
 {
     emoticonClicked(_iconName[5]);
+	if (_stat == Popup)
+		close();
 }
 void EmoticonsWidget::emoticon7Clicked()
 {
     emoticonClicked(_iconName[6]);
+	if (_stat == Popup)
+		close();
 }
 void EmoticonsWidget::emoticon8Clicked()
 {
     emoticonClicked(_iconName[7]);
+	if (_stat == Popup)
+		close();
 }
 void EmoticonsWidget::emoticon9Clicked()
 {
     emoticonClicked(_iconName[8]);
+	if (_stat == Popup)
+		close();
 }
 void EmoticonsWidget::emoticon10Clicked()
 {
     emoticonClicked(_iconName[9]);
+	if (_stat == Popup)
+		close();
 }
 void EmoticonsWidget::emoticon11Clicked()
 {
     emoticonClicked(_iconName[10]);
+	if (_stat == Popup)
+		close();
+}
+
+void EmoticonsWidget::changeStat()
+{
+	if (_stat == Popup)
+	{
+		close();
+		setWindowFlags(Qt::Window);
+		_stat = Window;
+		show();
+	}
+	else
+	{
+		close();
+		setWindowFlags(Qt::Popup);
+		_stat=Popup;
+	}
 }

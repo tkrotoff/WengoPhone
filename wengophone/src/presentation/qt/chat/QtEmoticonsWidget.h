@@ -29,7 +29,7 @@ class EmoticonsWidget : public QWidget //, Ui::EmoticonsWidget
     Q_OBJECT
     
 public:
-
+	enum EmoticonsWidgetStat {Window,Popup};
     EmoticonsWidget(QWidget * parent = 0, Qt::WFlags f= 0);
     
 protected:
@@ -39,7 +39,7 @@ protected:
     QWidget * _widget;
     WidgetSeeker _seeker;
     QStringList _iconName;
-    
+    EmoticonsWidgetStat _stat;
     
 	QPushButton * emoticonButton1;
 	QPushButton * emoticonButton2;
@@ -65,7 +65,7 @@ public Q_SLOTS:
 	void emoticon9Clicked();
 	void emoticon10Clicked();
 	void emoticon11Clicked();
-    
+    void changeStat(); 
 Q_SIGNALS:
     void emoticonClicked(const QString & emoticonName);
     

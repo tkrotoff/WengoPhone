@@ -25,7 +25,7 @@ ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
 
 {
 
-    _widget =WidgetFactory::create(":/forms/ChatWidget.ui", this);
+    _widget =WidgetFactory::create(":/forms/chat/ChatWidget.ui", this);
     QGridLayout * layout = new QGridLayout();
     layout->addWidget(_widget);
     layout->setMargin(0);
@@ -52,10 +52,11 @@ ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
     connect (_sendButton,SIGNAL(clicked()),this,SLOT(enterPressed()));
     _chatHistory->setHtml ("<qt type=detail>");
     
-    _emoticonsWidget = new EmoticonsWidget(this,Qt::Dialog);
+    _emoticonsWidget = new EmoticonsWidget(this,Qt::Popup);
     
     connect(_emoticonsWidget,SIGNAL(emoticonClicked(const QString &)),this,SLOT(emoticonSelected(const QString&)));
 }
+
 
 void  ChatWidget::setNickName(const QString & nickname)
 {
@@ -139,7 +140,7 @@ void ChatWidget::enterPressed()
     _chatHistory->insertHtml (replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>"));
     _chatHistory->ensureCursorVisible();
     
-    newMessage(_chatEdit->toHtml());
+    newMessage(_imChatSession,_chatEdit->toHtml());
     
     _chatEdit->clear();
     _chatEdit->setFocus();
@@ -208,4 +209,9 @@ void ChatWidget::emoticonSelected(const QString & emoticonName)
     QString image = QString("<img src='%1' />").arg(path);
     _chatEdit->insertHtml (image);
     _chatEdit->ensureCursorVisible();
+}
+
+void ChatWidget::setIMChatSession(IMChatSession * imChatSession)
+{
+	_imChatSession = imChatSession;
 }

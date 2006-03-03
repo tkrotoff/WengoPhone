@@ -24,6 +24,9 @@
 
 #include <QObjectThreadSafe.h>
 
+#include "QtChatWidget.h"
+#include "QtChatWindow.h"
+
 class ChatHandler;
 class CChatHandler;
 class IMContactSet;
@@ -60,6 +63,7 @@ private:
 
 	CChatHandler & _cChatHandler;
 
+	ChatWindow * _qtChatWidget;
 };
 
 #endif	//QTCHATHANDLER_H
