@@ -187,8 +187,8 @@ void WengoPhone::addSipAccountThreadSafe(const std::string & login, const std::s
 	_wengoAccount->init();
 }
 
-void WengoPhone::addContact(Contact * contact, const std::string & contactGroupName) {
-	typedef ThreadEvent2<void (Contact *, const std::string &), Contact *, std::string> MyThreadEvent;
+void WengoPhone::addContact(Contact * contact, const std::string contactGroupName) {
+	typedef ThreadEvent2<void (Contact *, const std::string), Contact *, std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&WengoPhone::addContactThreadSafe, this, _1, _2), contact, contactGroupName);
 	postEvent(event);
 }

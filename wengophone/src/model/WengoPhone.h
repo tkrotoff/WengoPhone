@@ -203,7 +203,7 @@ public:
 	 * @param contact Contact to add to the ContactList
 	 * @param contactGroupName name of the ContactGroup where the Contact should be added
 	 */
-	void addContact(Contact * contact, const std::string & contactGroupName);
+	void addContact(Contact * contact, const std::string contactGroupName);
 
 	/**
 	 * Gets the list of PhoneLine.
