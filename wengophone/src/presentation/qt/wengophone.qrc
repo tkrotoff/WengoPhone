@@ -112,7 +112,11 @@
 	<file>contactlist/ContactWidget.ui</file>
         <file>contactlist/contactList.ui</file>
         <file>contactlist/userWidget.ui</file>
+		<file>contactlist/AddContactWindow.ui</file>
+		<file>contactlist/ContactListWidget.ui</file>
+		<file>contactlist/ContactWidget.ui</file>
         <file>login/LoginWindow.ui</file>
+        <file>login/setLoginWindow.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
         <file>phonecall/VideoWindow.ui</file>
         <file>phoneline/PhoneLineWidget.ui</file>

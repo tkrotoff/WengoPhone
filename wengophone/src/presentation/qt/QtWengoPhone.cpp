@@ -27,6 +27,7 @@
 #include "phonecall/QtPhoneCall.h"
 #include "QtLogger.h"
 #include "login/QtLogin.h"
+#include "login/QtSetLogin.h"
 #include "contactlist/QtContactList.h"
 #include "contactlist/QtAddContact.h"
 #include "QtDialpad.h"
@@ -102,6 +103,10 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionAddContact = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAddContact");
 	connect(actionAddContact, SIGNAL(triggered()), SLOT(addContact()));
 
+	//actionSetLogin
+	QAction * actionSetLogin = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSet_login");
+	connect(actionSetLogin, SIGNAL(triggered()), SLOT(actionSetLogin()));
+	
 	//actionConfiguration
 	QAction * actionConfiguration = Object::findChild<QAction *>(_wengoPhoneWindow, "actionConfiguration");
 	connect(actionConfiguration, SIGNAL(triggered()), SLOT(showConfig()));
@@ -298,6 +303,12 @@ void QtWengoPhone::exitApplication() {
 void QtWengoPhone::addContact() {
 	QtAddContact * qtAddContact = new QtAddContact(_cWengoPhone, _wengoPhoneWindow);
 	LOG_DEBUG("add contact");
+}
+
+void QtWengoPhone::actionSetLogin() {
+	QtSetLogin * qtSetLogin = new QtSetLogin(_wengoPhoneWindow);
+	qtSetLogin->exec();
+	LOG_DEBUG("set login");
 }
 
 void QtWengoPhone::showConfig() {

@@ -87,6 +87,8 @@ private Q_SLOTS:
 	void exitApplication();
 
 	void addContact();
+	
+	void actionSetLogin();
 
 	void showConfig();
 
