@@ -93,7 +93,7 @@ void ChatWindow::initThreadSafe() {
     _tabWidget->removeTab(0);
 	_dialog.show();
 	IMContact from = *_imChatSession->getIMContactSet().begin();
-	addChat(imChatSession,from);
+	addChat(_imChatSession,from);
 
     LOG_DEBUG("ChatWindow init ok");
 
