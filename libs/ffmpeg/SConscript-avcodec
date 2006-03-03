@@ -11,8 +11,13 @@ includes = [
 env.WengoAddIncludePath(includes)
 env.WengoUseLibraries(libs)
 
-env.WengoAutoconf('avcodec', ['libavcodec/libavcodec.a'],
-	'./configure', 'cd libavcodec && make',
-	['configure'], ['config.mak'])
+if WengoArchX86() and WengoOSMacOSX():
+	env.WengoAutoconf('avcodec', ['libavcodec/libavcodec.a'],
+		'./configure --disable-mmx --enable-memalign-hack', 'cd 	libavcodec && make',
+		['configure'], ['config.mak'])
+else:
+	env.WengoAutoconf('avcodec', ['libavcodec/libavcodec.a'],
+		'./configure', 'cd 	libavcodec && make',
+		['configure'], ['config.mak'])
 
 

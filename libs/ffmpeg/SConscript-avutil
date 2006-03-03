@@ -5,7 +5,12 @@ includes = [
 ]
 env.WengoAddIncludePath(includes)
 
-env.WengoAutoconf('avutil', ['libavutil/libavutil.a'],
-	'./configure', 'cd libavutil && make',
-	['configure'], ['config.mak'])
+if WengoArchX86() and WengoOSMacOSX():
+	env.WengoAutoconf('avutil', ['libavutil/libavutil.a'],
+		'./configure --disable-mmx --enable-memalign-hack', 'cd	libavutil && make',
+		['configure'], ['config.mak'])
+else:
+	env.WengoAutoconf('avutil', ['libavutil/libavutil.a'],
+		'./configure', 'cd 	libavutil && make',
+		['configure'], ['config.mak'])
 

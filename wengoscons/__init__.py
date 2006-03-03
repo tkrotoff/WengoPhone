@@ -45,6 +45,9 @@ gdict['WengoOSMacOSX'] = wengoenv.WengoOSMacOSX
 gdict['WengoOSBSD'] = wengoenv.WengoOSBSD
 gdict['WengoOSPosix'] = wengoenv.WengoOSPosix
 
+gdict['WengoArchX86'] = wengoenv.WengoArchX86
+gdict['WengoArchPPCMacintosh'] = wengoenv.WengoArchPPCMacintosh
+
 gdict['WengoGetConsoleArgument'] = wengoenv.WengoGetConsoleArgument
 gdict['WengoAddConsoleArguments'] = wengoenv.WengoAddConsoleArguments
 

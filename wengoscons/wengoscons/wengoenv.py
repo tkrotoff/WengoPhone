@@ -1626,6 +1626,24 @@ def WengoOSPosix():
 	else:
 		return False
 
+def WengoArchX86():
+	"""
+	Check if the architecture is compatible with X86.
+	@rtype boolean
+	@return true if the architecture used is compatible with x86, false otherwise
+	"""
+	import platform
+	return platform.machine() == "i386"
+
+def WengoArchPPCMacintosh():
+	"""
+	Check if the architecture is compatible with PPC as used on Macintosh computers.
+	@rtype boolean
+	@return true if the architecture used is compatible with PPC as used on Macintosh computers, false otherwise
+	"""
+	import platform
+	return platform.machine() == "Power Macintosh"
+
 def WengoSetDebugMode():
 	"""
 	@see WengoSConsEnvironment.setDebugMode()

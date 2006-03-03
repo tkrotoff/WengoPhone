@@ -9,13 +9,6 @@ if WengoOSLinux():
 	cc_flags += ['-pthread']
 	link_flags += ['-pthread']
 
-if os.environ.has_key('BOOSTINCLUDEDIR') and os.environ.has_key('BOOSTLIBDIR'):
-	boost_inc_dir = os.environ['BOOSTINCLUDEDIR']
-	boost_lib_dir = os.environ['BOOSTLIBDIR']
-	env.WengoAddLibPath([boost_lib_dir])
-	env.WengoAddIncludePath([boost_inc_dir])
-	Return()
-
 BOOSTVER='1_33_1'
 libs = []
 if WengoCCGCC() and not WengoOSWindows():
@@ -33,13 +26,12 @@ if WengoCCGCC() and not WengoOSWindows():
 			'boost_signals'
 		]
 	env = conf.Finish()
-
 if WengoCCMSVC():
 	libs += [
 		'libboost_thread-vc71-mt.lib',
 		'libboost_serialization-vc71-mt.lib',
 		'libboost_signals-vc71-mt.lib'
-	]
+	]		
 
 if WengoCCMinGW():
 	libs += [
@@ -50,16 +42,22 @@ if WengoCCMinGW():
 
 lib_path = []
 include_path = []
-
 if WengoOSWindows():
 	lib_path += ['C:\\Boost\\lib']
 	include_path += ['C:\\Boost\\include\\boost-' + BOOSTVER]
-
 if WengoOSMacOSX():
 	#Installed from source code
-	if os.path.exists('/usr/local/include/boost-' + BOOSTVER) and os.path.exists('/usr/local/lib'):
-		include_path += ['/usr/local/include/boost-' + BOOSTVER]
-		lib_path += ['/usr/local/lib/boost-' + BOOSTVER]
+	if os.path.exists(os.environ['BOOSTINCLUDEDIR']) and os.path.exists(os.environ['BOOSTLIBDIR']):
+		include_path += [os.environ['BOOSTINCLUDEDIR']]
+		lib_path += [os.environ['BOOSTLIBDIR']]
+		print "libpath :" + str(lib_path)
+		print "include path :" + str(include_path)
+		libs += [
+                        'boost_thread',
+                        'boost_serialization',
+                        'boost_signals'
+                ]
+	
 	#Installed with Darwinports
 	elif os.path.exists('/opt/local/include/') and os.path.exists('/opt/local/lib'):
 		include_path += ['/opt/local/include']
@@ -74,7 +72,6 @@ if WengoOSLinux():
 		lib_path += ['/usr/local/lib']
 		cc_flags += ['-pthread']
 
-
 defines = {}
 headers = []
 sources = []
@@ -85,5 +82,4 @@ env.WengoAddLinkFlags(link_flags)
 env.WengoAddIncludePath(include_path)
 env.WengoAddDefines(defines)
 env.WengoUseLibraries(libs)
-
 env.WengoDeclareSystemLibrary('boost')

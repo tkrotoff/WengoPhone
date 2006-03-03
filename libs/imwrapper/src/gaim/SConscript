@@ -6,6 +6,8 @@ libs = [
 	'gaim',
 	'imwrapper',
 ]
+if WengoOSLinux():
+        env.ParseConfig('pkg-config --cflags --libs glib-2.0')
 lib_path = []
 include_path = ['../gaim']
 defines = {}

@@ -2,8 +2,10 @@ env = WengoGetEnvironment()
 
 libs = [
 	'wengoutil',
+	'glib-2.0',
 ]
-
+if WengoOSMacOSX():
+	env.ParseConfig('pkg-config --cflags --libs glib-2.0')
 include_path = ['include']
 
 headers = [

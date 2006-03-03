@@ -28,6 +28,7 @@ projects = [
 	'libs/webcam',
 	'wifo',
 	'libs/sipwrapper',
+	'libs/imwrapper/src/gaim',
 	'libs/imwrapper/src/multiim',
 	'wengophone',
 ]
