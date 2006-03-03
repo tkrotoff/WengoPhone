@@ -21,11 +21,10 @@
 #define CONNECT_H
 
 #include <imwrapper/IMConnect.h>
+#include <imwrapper/IMAccount.h>
 
 #include <Interface.h>
 #include <Event.h>
-
-class IMAccount;
 
 /**
  * Wrapper for Instant Messaging connection.
@@ -66,7 +65,7 @@ public:
 
 protected:
 
-	IMAccount & _account;
+	IMAccount _account;
 
 	IMConnect * _imConnect;
 	

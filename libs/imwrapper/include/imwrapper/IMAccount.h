@@ -51,6 +51,10 @@ public:
 		_protocol = imAccount._protocol;
 	}
 
+	IMAccount operator = (const IMAccount & imAccount) {
+		return IMAccount(imAccount);
+	}
+
 	const std::string & getLogin() const {
 		return _login;
 	}
@@ -71,9 +75,10 @@ public:
 
 	bool operator < (const IMAccount & imAccount) const {
 		//FIXME: what is a inferior IMAccount?
-		return ((_login < imAccount._login));
-			//&& (_protocol < imAccount._protocol));
+		return ((_login < imAccount._login)
+			&& (_protocol < imAccount._protocol));
 	}
+
 
 	Settings & getSettings() {
 		return _settings;
@@ -91,5 +96,6 @@ private:
 	Settings _settings;
 
 };
+
 
 #endif	//IMACCOUNT_H

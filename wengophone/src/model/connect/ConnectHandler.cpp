@@ -94,10 +94,11 @@ void ConnectHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccoun
 	IMAccountSet::iterator it = _pendingConnections.find(imAccount);
 	if (it != _pendingConnections.end()) {
 		LOG_DEBUG("A connection was pending for this IMAccount. Releasing connection.");
+		_actualIMAccount.insert(imAccount);
 		connect(imAccount);
 		_pendingConnections.erase(it);
+	} else {
+		_actualIMAccount.insert(imAccount);
 	}
-
-	_actualIMAccount.insert(imAccount);
 }
 
