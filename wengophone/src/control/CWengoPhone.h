@@ -170,6 +170,8 @@ private:
 
 	void initFinishedEventHandler(WengoPhone & sender);
 
+	void newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount);
+
 	/** Direct link to the model. */
 	WengoPhone & _wengoPhone;
 

@@ -22,6 +22,7 @@
 #include <model/wenbox/WenboxPlugin.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/contactlist/Contact.h>
+#include <model/connect/ConnectHandler.h>
 #include <presentation/PFactory.h>
 #include <presentation/PWengoPhone.h>
 #include <model/phoneline/IPhoneLine.h>
@@ -58,6 +59,8 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.smsCreatedEvent += boost::bind(&CWengoPhone::smsCreatedEventHandler, this, _1, _2);
 	_wengoPhone.proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 	_wengoPhone.wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
+	_wengoPhone.newIMAccountAddedEvent +=
+		boost::bind(&CWengoPhone::newIMAccountAddedEventHandler, this, _1, _2);
 }
 
 void CWengoPhone::makeCall(const std::string & phoneNumber) {
@@ -166,4 +169,6 @@ void CWengoPhone::addIMAccount(const std::string & login, const std::string & pa
 	_wengoPhone.addIMAccount(IMAccount(login, password, protocol));
 }
 
-
+void CWengoPhone::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
+	_wengoPhone.getConnectHandler().connect(imAccount);
+}
