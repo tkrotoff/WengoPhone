@@ -18,9 +18,9 @@
  */
 #include <QtGui>
 #include <QSize>
-#include "QtTreeViewDelegate.h"
-//#include <qFramePaintEventFilter.h>
 
+#include "QtTreeViewDelegate.h"
+#include "QtUserWidgetEventFilter.h"
 #include "QtUserList.h"
 #include "QtContactPixmap.h"
 /*
@@ -29,8 +29,6 @@
 */
 QtTreeViewDelegate::QtTreeViewDelegate(QObject *parent) : QItemDelegate(parent)
 {
-    
-    
 }
 void QtTreeViewDelegate::setParent(QWidget * parent) 
 {
@@ -38,17 +36,18 @@ void QtTreeViewDelegate::setParent(QWidget * parent)
 }
 QWidget * QtTreeViewDelegate::createEditor(QWidget *parent,
                                      const QStyleOptionViewItem & ,
-                                     const QModelIndex &) const
+                                     const QModelIndex &index) const
 {
-    
-    UserWidget * widget  = new UserWidget(parent);
-    // widget->getFrame()->installEventFilter(new QFramePaintEventFilter( (QObject *)this) );
+    QtUserWidget * widget  = new QtUserWidget(parent);
+	QtUserList * ul = QtUserList::getInstance();
+	QWidget * w = widget->findChild<QWidget *>("UserWidget");
+	w->installEventFilter(new QtUserWidgetEventFilter((QObject *)this,w,ul->getUser(index.data().toString() )));
     return (QWidget *)widget;
 }
 
 void QtTreeViewDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-    UserWidget *widget = qobject_cast<UserWidget *>(editor);
+    QtUserWidget *widget = qobject_cast<QtUserWidget *>(editor);
     if (!widget)
         return;
     widget->setText(index.model()->data(index).toString());
@@ -57,7 +56,7 @@ void QtTreeViewDelegate::setEditorData(QWidget *editor, const QModelIndex &index
 void QtTreeViewDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                  const QModelIndex &index) const
 {
-    UserWidget *widget = qobject_cast<UserWidget *>(editor);
+    QtUserWidget *widget = qobject_cast<QtUserWidget *>(editor);
     if (!widget)
         return;
     model->setData(index, widget->text());
@@ -87,7 +86,7 @@ QSize QtTreeViewDelegate::sizeHint ( const QStyleOptionViewItem & option, const 
 		return QSize(orig.width(),ul->getUser(index.data().toString())->getHeight());
 	else 
 		if ( !index.parent().isValid())
-			return (QSize(orig.width(),22));
+			return (QSize(orig.width(),QtUser::UserSize));
 	return orig;
 }
 

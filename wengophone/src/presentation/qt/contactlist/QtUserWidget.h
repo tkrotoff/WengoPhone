@@ -16,39 +16,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include "userwidget.h"
+
+#ifndef QTUserWidget_H
+#define QTUserWidget_H
+
+#include <WidgetFactory.h>
+#include <QtGui>
 
 
-UserWidget::UserWidget(QWidget * parent, Qt::WFlags f) : QWidget( parent, f)
+class QtUserWidget : public QWidget
 {
-    // setupUi(this);
-    _widget = WidgetFactory::create(":/forms/contactlist/userWidget.ui", NULL);
-    QGridLayout * layout = new QGridLayout();
-    layout->addWidget(_widget);
-    layout->setMargin(0);
-    setLayout(layout);
+    Q_OBJECT
+public:
+    QtUserWidget(QWidget * parent = 0, Qt::WFlags f=0);
+    void setText(const QString & text);
+    const QString & text();
+    virtual void paintEvent(QPaintEvent * event);
+    QFrame *    getFrame();
+    QPixmap *   getTux();
     
-}
+protected:
+    QString     _text;
+    QPixmap  *  _tux;
+	QFrame   *  _frame;
+	QWidget * _widget;
+};
 
-void UserWidget::setText(const QString & text){
-    _text = text;
-    
-}
-
-const QString & UserWidget::text(){
-    return _text;
-}
-
-void UserWidget::paintEvent(QPaintEvent * event){
-    QPalette  p = palette();
-    QPainter painter(this);
-    painter.fillRect(rect(),p.brush(QPalette::Window));
-}
-
-QFrame * UserWidget::getFrame(){
-    return frame;
-}
-
-QPixmap * UserWidget::getTux(){
-    return _tux;
-}
+#endif

@@ -23,7 +23,7 @@
 #include <QItemDelegate>
 #include <QLineEdit>
 #include <QDebug>
-#include "userwidget.h"
+#include "QtUserWidget.h"
 
 class QtTreeViewDelegate : public QItemDelegate
 {

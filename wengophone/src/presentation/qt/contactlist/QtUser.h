@@ -30,22 +30,32 @@ class QtUser : QObject
 {
 	Q_OBJECT
 public:
+
+	enum SizeHint { UserSize = 22};
+
 	QtUser (PContact & pContact, QObject * parent = 0);
+
 	virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 	
 	QString getId();
+
 	void setId(const QString & id);
 	
 	QString getUserName();
+
 	void setUserName(const QString & uname);
 	
 	bool haveIM(){ return _pContact.haveIM();};
+
 	bool haveCall(){ return _pContact.haveCall();};
+
 	bool haveVideo(){ return _pContact.haveVideo();};
 	
 	void setMouseOn(bool value) { _mouseOn = value;};
 	
 	void setStatus(QtContactPixmap::contactPixmap status);
+	
+	//QtContactPixmap::contactPixmap getStatus() {return _status;};
 	
 	void mouseClicked(const QPoint & pos,const QRect & rec);
 	
@@ -63,24 +73,34 @@ public:
 	
 	Qt::MouseButton getButton();
 	
+	int getText_y() { return _centeredText_y;};
+
 public Q_SLOTS:
+
 Q_SIGNALS:
 	void clicked(QtUser * user,int prt);
 protected:	
 	QString		_userId;
+
 	QString		_userName;
 	
 	QPixmap		_imPixmap;
+
 	QPixmap		_callPixmap;
+
 	QPixmap		_videoPixmap;
 
 	QtContactPixmap::contactPixmap _status;
 
 	bool		_mouseOn;
+
 	bool		_openStatus;
+
 	int			_iconsStartPosition;
 	
 	Qt::MouseButton _mouseButton;
+
+	int _centeredText_y;
 
 	PContact & _pContact;
 };

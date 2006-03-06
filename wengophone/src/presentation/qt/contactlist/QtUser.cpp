@@ -71,8 +71,8 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	painter->setFont(option.font);
 	// Center the text vertically
 	QRect textRect = r;
-	int y = ((r.bottom()-r.top()) - QFontMetrics(option.font).height() ) / 2;
-	textRect.setTop(y+textRect.top());
+	_centeredText_y = ((r.bottom()-r.top()) - QFontMetrics(option.font).height() ) / 2;
+	textRect.setTop(_centeredText_y+textRect.top());
 	// Draw the text
 	
 	painter->drawText(textRect,Qt::AlignLeft,index.data().toString(),0);
@@ -214,5 +214,5 @@ int QtUser::getHeight()
 {
 	if (_openStatus)
 		return 90;
-	return 22;
+	return UserSize;
 }

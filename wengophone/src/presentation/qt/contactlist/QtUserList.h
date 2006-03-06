@@ -30,8 +30,8 @@ public:
 	static QtUserList * getInstance();
 	
 	void addUser(QtUser * user);
-	void removeUser(const QString & userid);
 	
+	void removeUser(const QString & userid);
 
 	void paintUser(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 
@@ -70,6 +70,7 @@ protected:
 protected:
 	QHash<QString,QtUser *>	_userList;
 	QTreeWidget * _tree;
+	
 private:
 	static QtUserList * _instance;
 	QString			    _lastMouseOn;

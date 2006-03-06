@@ -16,30 +16,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifndef QTUSERWIDGETEVENTFILTER
+#define QTUSERWIDGETEVENTFILTER
 
-#ifndef USERWIDGET_H
-#define USERWIDGET_H
-
-#include <WidgetFactory.h>
 #include <QtGui>
-
-
-class UserWidget : public QWidget
+#include "QtUserWidget.h"
+#include "QtUser.h"
+class QtUserWidgetEventFilter : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
+	
 public:
-    UserWidget(QWidget * parent = 0, Qt::WFlags f=0);
-    void setText(const QString & text);
-    const QString & text();
-    virtual void paintEvent(QPaintEvent * event);
-    QFrame *    getFrame();
-    QPixmap *   getTux();
-    
+	 
+	QtUserWidgetEventFilter (QObject * parent , QWidget * target,QtUser * user);
+
 protected:
-    QString     _text;
-    QPixmap  *  _tux;
-	QFrame   *  frame;
-	QWidget * _widget;
+
+	bool eventFilter(QObject *obj, QEvent *event);
+	void paintEvent(QPaintEvent * event);
+	void paintUser(QPainter * painter,QRect rect);
+	QWidget * _target;
+	QtUser * _user;
+
 };
 
 #endif
+
