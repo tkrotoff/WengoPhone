@@ -42,28 +42,38 @@ if WengoCCMinGW():
 
 lib_path = []
 include_path = []
-if WengoOSWindows():
-	lib_path += ['C:\\Boost\\lib']
-	include_path += ['C:\\Boost\\include\\boost-' + BOOSTVER]
-if WengoOSMacOSX():
-	#Installed from source code
-	if not os.environ.has_key('BOOSTINCLUDEDIR'):
+
+if not os.environ.has_key('BOOSTINCLUDEDIR'):
+	if WengoOSMacOSX():
 		boost_inc_dir = '/usr/local/include/boost-' + BOOSTVER
+	if WengoOSWindows():
+		boost_inc_dir  = 'C:\\Boost\\include\\boost-' + BOOSTVER
+else:
+	boost_inc_dir = os.environ['BOOSTINCLUDEDIR']
 
-	if not os.environ.has_key('BOOSTLIBDIR'):
+if not os.environ.has_key('BOOSTLIBDIR'):
+	if WengoOSMacOSX():
 		boost_lib_dir = '/usr/local/lib'
+	if WengoOSWindows():
+		boost_lib_dir = 'C:\\Boost\\lib'
+else:
+	boost_inc_dir = os.environ['BOOSTLIBDIR']
 
+include_path += [boost_inc_dir]
+lib_path += [boost_lib_dir]
+
+if WengoOSMacOSX():
+	libs += [
+		'boost_thread',
+		'boost_serialization',
+		'boost_signals'
+	]
+
+	#Installed from source code
 	if os.path.exists(boost_inc_dir) and os.path.exists(boost_lib_dir):
-		include_path += [boost_inc_dir]
-		lib_path += [boost_lib_dir]
 		print "libpath :" + str(lib_path)
 		print "include path :" + str(include_path)
-		libs += [
-                        'boost_thread',
-                        'boost_serialization',
-                        'boost_signals'
-                ]
-	
+
 	#Installed with Darwinports
 	elif os.path.exists('/opt/local/include/') and os.path.exists('/opt/local/lib'):
 		include_path += ['/opt/local/include']
