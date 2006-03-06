@@ -147,8 +147,8 @@ void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
 		const char *groupName = FindBuddyGroup(gBuddy);
 
 		mIMContactList->newContactAddedEvent(*mIMContactList,
-											gaim_buddy_get_name(gBuddy),
-											groupName);
+											groupName,
+											gaim_buddy_get_name(gBuddy));
 	}
 }
 
