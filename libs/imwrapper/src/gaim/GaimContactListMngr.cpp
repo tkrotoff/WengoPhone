@@ -205,7 +205,8 @@ void GaimContactListMngr::ShowCbk(GaimBuddyList *list)
 
 void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 {
-	GaimIMPresence *mIMpresence = NULL;
+	GaimIMPresence *mIMPresence = NULL;
+	GaimIMContactList *mIMBList = NULL;
 	GaimAccount	*gAccount = NULL;
 	GaimPresence *gPresence;
 	GaimStatus *gStatus;
@@ -228,16 +229,26 @@ void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 											GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 	if (account)
 	{
-		mIMpresence = _presenceMngr->FindIMPresence(*account);
+		mIMBList = FindIMContactList(*account);
+		mIMPresence = _presenceMngr->FindIMPresence(*account);
+	
+		if (mIMBList)
+		{
+			mIMBList->contactMovedEvent(*mIMBList, 
+										FindBuddyGroup(gBuddy),
+										gaim_buddy_get_name(gBuddy));
+		}
 
-		if (mIMpresence == NULL)
-			return;
 
-		mIMpresence->presenceStateChangedEvent(*mIMpresence, 
-												GaimPreState::GetPresenceState(gPresenceId),
-												"",
-												std::string(gaim_buddy_get_name(gBuddy))
-												);
+		if (mIMPresence)
+		{
+			mIMPresence->presenceStateChangedEvent(*mIMPresence, 
+													GaimPreState::GetPresenceState(gPresenceId),
+													"",
+													gaim_buddy_get_name(gBuddy)
+													);
+		}
+
 	}											
 }
 
