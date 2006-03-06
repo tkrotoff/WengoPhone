@@ -159,18 +159,18 @@ int ph_media_can_handle_payload(const char *mime);
 
 
 
-int ph_msession_start(struct ph_msession_s *s, const char* dieviceid);
-void ph_msession_stop(struct ph_msession_s *s);
+int ph_msession_start(struct ph_msession_s *s, const char *adeviceId);
+void ph_msession_stop(struct ph_msession_s *s, const char *adeviceId);
 #define ph_msession_stopped(s)  (s->activestreams == 0)
 #define ph_msession_stream_active(s, n)  (s->activestreams & (1 << n))
 int ph_msession_set_recvol(struct ph_msession_s *s,  int level);
 int ph_msession_set_playvol(struct ph_msession_s *s,  int level);
 int ph_msession_send_sound_file(struct ph_msession_s *s, const char *filename);
 int ph_msession_send_dtmf(struct ph_msession_s *s, int dtmf, int mode);
-int ph_msession_conf_start(struct ph_msession_s *s1, struct ph_msession_s *s2, const char *device);
+int ph_msession_conf_start(struct ph_msession_s *s1, struct ph_msession_s *s2, const char *adevice);
 int ph_msession_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2);
-int ph_msession_suspend(struct ph_msession_s *s,  int traffictype);
-int ph_msession_resume(struct ph_msession_s *s, int traffictype, const char *device);
+int ph_msession_suspend(struct ph_msession_s *s,  int traffictype, const char *adevice);
+int ph_msession_resume(struct ph_msession_s *s, int traffictype, const char *adevice);
 
 
 #if 0

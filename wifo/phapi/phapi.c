@@ -3067,7 +3067,7 @@ ph_call_media_stop(phcall_t *ca)
   if (ca->mses)
     {
       if (!ph_msession_stopped(ca->mses))
-	ph_msession_stop(ca->mses);
+	ph_msession_stop(ca->mses, phcfg.audio_dev);
       free(ca->mses);
       ca->mses = 0;
     }
@@ -3079,7 +3079,7 @@ ph_call_media_suspend(phcall_t *ca, int localhold)
 {
   if (ca->mses)
     {
-      ph_msession_suspend(ca->mses, localhold);
+      ph_msession_suspend(ca->mses, PH_MSTREAM_TRAFFIC_IO, phcfg.audio_dev);
     }
 
   return 0;
@@ -3093,7 +3093,7 @@ ph_call_media_resume(phcall_t *ca, int localhold)
 {
   if (ca->mses)
     {
-      ph_msession_suspend(ca->mses, localhold);
+      ph_msession_resume(ca->mses, PH_MSTREAM_TRAFFIC_IO, phcfg.audio_dev);
     }
 
   return 0;

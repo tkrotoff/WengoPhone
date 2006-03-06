@@ -111,10 +111,10 @@ struct timespec {
 
 void ph_msession_video_stop(struct ph_msession_s *s);
 int  ph_msession_video_start(struct ph_msession_s *s, const char *device);
-void ph_msession_audio_stop(struct ph_msession_s *s);
+void ph_msession_audio_stop(struct ph_msession_s *s, const char *device);
 int  ph_msession_audio_start(struct ph_msession_s *s, const char *device);
 void ph_msession_audio_resume(struct ph_msession_s *s, int resumewhat, const char *deviceId);
-void ph_msession_audio_suspend(struct ph_msession_s *s, int suspendwhat);
+void ph_msession_audio_suspend(struct ph_msession_s *s, int suspendwhat, const char *deviceId);
 int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s *s2, const char *deviceId);
 int ph_msession_audio_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2);
 

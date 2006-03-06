@@ -93,9 +93,9 @@ int ph_msession_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2)
 }
 
 
-int ph_msession_suspend(struct ph_msession_s *s,  int traffictype)
+int ph_msession_suspend(struct ph_msession_s *s,  int traffictype, const char *device)
 {
-   ph_msession_audio_suspend(s, traffictype);
+   ph_msession_audio_suspend(s, traffictype, device);
    return (0);
 }
 
@@ -107,13 +107,13 @@ int ph_msession_resume(struct ph_msession_s *s, int traffictype, const char *dev
 
 
 
-void ph_msession_stop(struct ph_msession_s *s)
+void ph_msession_stop(struct ph_msession_s *s, const char *adevid)
 {
 
 #ifdef PHAPI_VIDEO_SUPPORT
   ph_msession_video_stop(s);
 #endif
-  ph_msession_audio_stop(s);
+  ph_msession_audio_stop(s, adevid);
 }
 
 
