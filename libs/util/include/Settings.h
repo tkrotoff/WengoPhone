@@ -51,6 +51,12 @@ public:
 
 	Settings();
 
+	Settings(const Settings & settings);
+
+	Settings operator = (const Settings & settings) {
+		return Settings(settings);
+	}
+
 	/**
 	 * Gets all the keys.
 	 *

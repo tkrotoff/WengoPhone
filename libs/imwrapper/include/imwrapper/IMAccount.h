@@ -22,7 +22,6 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 
-#include <NonCopyable.h>
 #include <Settings.h>
 
 #include <string>
@@ -36,7 +35,7 @@
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class IMAccount : NonCopyable {
+class IMAccount {
 public:
 
 	IMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol) {
@@ -49,10 +48,7 @@ public:
 		_login = imAccount._login;
 		_password = imAccount._password;
 		_protocol = imAccount._protocol;
-	}
-
-	IMAccount operator = (const IMAccount & imAccount) {
-		return IMAccount(imAccount);
+		_settings = imAccount._settings;
 	}
 
 	const std::string & getLogin() const {
@@ -73,12 +69,10 @@ public:
 			&& (_protocol == imAccount._protocol));
 	}
 
-	bool operator < (const IMAccount & imAccount) const {
-		//FIXME: what is a inferior IMAccount?
+	bool operator < (const IMAccount imAccount) const {
 		return ((_login < imAccount._login)
-			&& (_protocol < imAccount._protocol));
+			|| (_protocol < imAccount._protocol));
 	}
-
 
 	Settings & getSettings() {
 		return _settings;

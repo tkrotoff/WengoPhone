@@ -27,6 +27,10 @@ using boost::any_cast;
 Settings::Settings() {
 }
 
+Settings::Settings(const Settings & settings) {
+	_keyMap = settings._keyMap;
+}
+
 StringList Settings::getAllKeys() const {
 	StringList tmp;
 	for (Keys::const_iterator it = _keyMap.begin(); it != _keyMap.end(); ++it) {

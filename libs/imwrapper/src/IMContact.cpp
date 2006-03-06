@@ -48,7 +48,7 @@ bool IMContact::operator == (const IMContact & imContact) const {
 
 bool IMContact::operator < (const IMContact & imContact) const {
 	return ((_imAccount < imContact._imAccount) 
-		&& (_contactId < imContact._contactId));
+		|| (_contactId < imContact._contactId));
 }
 
 std::string IMContact::serialize() const {
