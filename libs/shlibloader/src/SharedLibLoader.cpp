@@ -34,19 +34,9 @@ SharedLibLoader::SharedLibLoader(const std::string & fileName) {
 	_loaderPrivate = NULL;
 	String tmp(fileName);
 
-#if defined(OS_WINDOWS)
-	if (!tmp.contains(".dll", false)) {
-		tmp.append(".dll");
+	if (!tmp.contains(SharedLibLoader::getSharedLibExtension(), false)) {
+		tmp += SharedLibLoader::getSharedLibExtension();
 	}
-#elif defined(OS_LINUX)
-	if (!tmp.contains(".so", false)) {
-		tmp.append(".so");
-	}
-#elif defined(OS_MACOSX)
-	if (!tmp.contains(".dylib", false)) {
-		tmp.append(".dylib");
-	}
-#endif
 
 #if defined(OS_WINDOWS)
 	_loaderPrivate = new Win32SharedLibLoader(fileName);
@@ -77,4 +67,14 @@ void * SharedLibLoader::resolve(const std::string & fileName, const std::string 
 	SharedLibLoader loader(fileName);
 	loader.load();
 	return loader.resolve(symbol);
+}
+
+std::string SharedLibLoader::getSharedLibExtension() {
+#if defined(OS_WINDOWS)
+	return ".dll";
+#elif defined(OS_LINUX)
+	return ".so";
+#elif defined(OS_MACOSX)
+	return ".dylib";
+#endif
 }

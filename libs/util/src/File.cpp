@@ -20,12 +20,25 @@
 #include <File.h>
 
 #include <StringList.h>
+#include <Logger.h>
 
 #include <global.h>
 
 #include <stddef.h>
 #include <sys/types.h>
+#include <sys/stat.h>
+
+#ifdef OS_WINDOWS
+	#ifndef S_ISDIR
+		#define S_ISDIR(x) ((x) & _S_IFDIR)
+		#define S_ISREG(x) ((x) & _S_IFREG)
+	#endif
+#endif	//OS_WINDOWS
+
+
 #include <dirent.h>
+
+
 
 #include <string>
 #include <iostream>
@@ -54,13 +67,27 @@ std::string File::getPath() {
 }
 
 StringList File::getDirectoryList() const {
+	//Same code as File::getFileList()
+
 	StringList dirList;
 
 	DIR * dp = opendir(_filename.c_str());
 	if (dp) {
 		struct dirent * ep = NULL;
 		while ((ep = readdir(dp))) {
-			dirList += ep->d_name;
+			String dir(ep->d_name);
+
+			if (dir == "." || dir == "..") {
+				continue;
+			}
+
+			struct stat statinfo;
+			if (stat(dir.c_str(), &statinfo) == 0) {
+				if (S_ISDIR(statinfo.st_mode)) {
+					//ep->d_name is a directory
+					dirList += dir;
+				}
+			}
 		}
 	}
 
@@ -70,21 +97,44 @@ StringList File::getDirectoryList() const {
 }
 
 StringList File::getFileList() const {
+	//Same code as File::getDirectoryList()
+
 	StringList fileList;
+
+	DIR * dp = opendir(_filename.c_str());
+	if (dp) {
+		struct dirent * ep = NULL;
+		while ((ep = readdir(dp))) {
+			String file(ep->d_name);
+
+			struct stat statinfo;
+			if (stat(file.c_str(), &statinfo) == 0) {
+				if (S_ISREG(statinfo.st_mode)) {
+					//ep->d_name is a file
+					fileList += file;
+				}
+			}
+		}
+	}
+
+	closedir(dp);
 
 	return fileList;
 }
 
 std::string File::getApplicationDirPath() {
+	std::string tmp;
+
 #ifdef OS_WINDOWS
 	char moduleName[256];
 	GetModuleFileNameA(0, moduleName, sizeof(moduleName));
 
 	File file(moduleName);
-	std::string tmp = file.getPath();
+	tmp = file.getPath();
+	tmp += File::getPathSeparator();
 #endif	//OS_WINDOWS
 
-	return "";
+	return tmp;
 }
 
 std::string File::convertPathSeparators(const std::string & path) {

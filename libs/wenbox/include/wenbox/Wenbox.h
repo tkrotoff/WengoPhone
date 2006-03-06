@@ -25,15 +25,7 @@
 #include <Event.h>
 
 /**
- * Plugin interface for USB phone devices.
- *
- * Wenbox is a USB phone device loaded at runtime via a .dll
- * Historically named Wenbox since the first USB device handled by WengoPhone
- * was named Wenbox.
- *
- * Wenbox aimed to handle different USB phones via runtime dll loading.
- * Each USB device should implement the interface IWenbox.
- *
+ * @see IWenbox
  * @author Tanguy Krotoff
  */
 class Wenbox : public IWenbox {

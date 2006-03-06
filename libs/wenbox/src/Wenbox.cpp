@@ -30,18 +30,14 @@ IWenbox * getInstance() {
 }
 
 Wenbox::Wenbox() {
-	/*File file(File::getApplicationDirPath() + "wenbox" + File::getPathSeparator());
-	StringList files = file.getFileList();
-	for (int i = 0; i < files.size(); i++) {
-		files[i].contains(".dll");
-	}*/
+	//Plugin name hardcoded, there is only one Wenbox at a time
+	String wenboxDll = "wenboxplugin";
 
 	_open = false;
 	_wenboxPrivate = NULL;
 	typedef IWenbox * (*GetInstanceFunction)();
 
-	std::string dllPath = File::getApplicationDirPath() + "yealinkwenbox";
-	LOG_DEBUG(dllPath);
+	std::string dllPath = File::getApplicationDirPath() + wenboxDll;
 
 	GetInstanceFunction getInstance = (GetInstanceFunction) SharedLibLoader::resolve(dllPath, "getInstance");
 

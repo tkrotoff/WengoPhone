@@ -48,6 +48,15 @@ public:
 	 */
 	static void * resolve(const std::string & fileName, const std::string & symbol);
 
+	/**
+	 * Gets the system shared library extension.
+	 *
+	 * Windows: .dll
+	 * MacOSX: .dylib
+	 * UNIX: .so
+	 */
+	static std::string getSharedLibExtension();
+
 private:
 
 	/** Private implementation. */

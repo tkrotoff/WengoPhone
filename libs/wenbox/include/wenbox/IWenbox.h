@@ -28,7 +28,7 @@
 #include <list>
 
 #ifdef WENBOX_DLL
-	#ifdef BUILDING_DLL
+	#ifdef BUILD_WENBOX_DLL
 		#define API DLLEXPORT
 	#else
 		#define API DLLIMPORT
@@ -38,7 +38,48 @@
 #endif
 
 /**
- * @see Wenbox
+ * Plugin interface for USB phone devices.
+ *
+ * Wenbox is a USB phone device loaded at runtime via a .dll
+ * Historically named Wenbox since the first USB device handled by WengoPhone
+ * was named Wenbox.
+ *
+ * Wenbox aims to handle different USB phones via runtime dll loading.
+ * Each USB device should implement the interface IWenbox.
+ *
+ * For an example of IWenbox implementation, check:
+ * http://dev.openwengo.com/trac/openwengo/trac.cgi/browser/wengophone-ng/trunk/libs/wenbox/src/yealink
+ *
+ * All methods are called from outside (i.e WengoPhone) except KeyPressedCallback.
+ *
+ * Your plugin must be a shared library (.dll under Windows, .dylib under MacOSX and .so under UNIX),
+ * named 'wenboxplugin' and should be placed where qtwengophone.exe lies.
+ *
+ * Check log.txt (same directory as qtwenboxphone.exe) for error messages, examples:
+ * <pre>
+ * //wenboxplugin.dll not found
+ * (error) Win32SharedLibLoader::load: couldn't load dll:126
+ * (error) Win32SharedLibLoader::resolve: couldn't resolve symbol:127
+ * (error) Wenbox::Wenbox: Wenbox dll not loaded
+ *
+ * //wenboxplugin.dll loaded + USB device disconnected (Yealink)
+ * (debug) Wenbox::Wenbox: Wenbox dll loaded
+ * (debug) Wenbox::open: open device
+ * (error) YealinkWenbox::errorHandler: no device found
+ *
+ * //wenboxplugin.dll found + USB device connected (Yealink)
+ * (debug) Wenbox::Wenbox: Wenbox dll loaded
+ * (debug) Wenbox::open: open device
+ * (debug) YealinkWenbox::gotoReady: ready state
+ * (debug) YealinkWenbox::callback: Yealink USB Phone version: 0525 - B2K
+ * </pre>
+ *
+ * If you have any problem implementing IWenbox,
+ * - check the development website http://dev.openwengo.com/
+ * - post on our mailing-list wengophone-devel@lists.openwengo.com
+ * - talk to us on our IRC channel irc.freenode.net #openwengo
+ * - send me a mail at tanguy.krotoff@wengo.fr
+ *
  * @author Tanguy Krotoff
  */
 class IWenbox : Interface {
@@ -118,7 +159,7 @@ public:
 	 * The list should be ordered from the most specific name to the
 	 * most generic (e.g USB).
 	 *
-	 * @return list of the possible names for the audio device
+	 * @return list of the possible names for the USB audio device
 	 */
 	virtual std::list<std::string> getAudioDeviceNameList() const = 0;
 
