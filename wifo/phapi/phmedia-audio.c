@@ -1472,16 +1472,16 @@ dtmf_again:
     case DTMF_IDLE:
       /* if the DTMF queue is empty we do nothing */
       if (!dtmfp->dtmfq_cnt)
-    break;
+	break;
 
       dtmfDigit =  dtmfp->dtmfq_buf[dtmfp->dtmfq_rd++];
 
       /* start generating the requested tone */
       if (dtmfDigit & (PH_DTMF_MODE_INBAND << 8))
-    tg_dtmf_init(&dtmfp->dtmfg_ctx, dtmfDigit & 0x0ff, rate, 0);
+	tg_dtmf_init(&dtmfp->dtmfg_ctx, dtmfDigit & 0x0ff, rate, 0);
 
       if (dtmfDigit & (PH_DTMF_MODE_RTPPAYLOAD << 8))
-    rtp_session_send_dtmf2(stream->ms.rtp_session,  dtmfDigit & 0x0ff, timestamp, samples*DTMF_MSECS);
+	rtp_session_send_dtmf2(stream->ms.rtp_session,  dtmfDigit & 0x0ff, timestamp, samples*DTMF_MSECS);
 
       /* update queue pointers and state */
       if (!stream->to_mix)
@@ -1501,7 +1501,7 @@ dtmf_again:
 
       /* if we're not using INBAND mode we're done */
       if (!(dtmfDigit & (PH_DTMF_MODE_INBAND << 8)))
-    return;
+	return;
 
       // fall down
 
@@ -1512,7 +1512,7 @@ dtmf_again:
 
       /* mix in the generated tone */
       for( mixn = 0;  mixn < mixlen; mixn++)
-    signal[mixn] += tg_dtmf_next_sample(&dtmfp->dtmfg_ctx);
+	signal[mixn] += tg_dtmf_next_sample(&dtmfp->dtmfg_ctx);
 
       /* keep track of the amount of the still ungenerated samples */
       dtmfp->dtmfg_len -= mixlen;
@@ -1521,10 +1521,10 @@ dtmf_again:
      we'll stay in the GEN state 
       */
       if (dtmfp->dtmfg_len)
-    break;
+	break;
 
       /* we've done with the current digit, ensure we have 50msec before the next
-     DTMF digit 
+	 DTMF digit 
       */
       dtmfp->dtmfg_phase = DTMF_SILENT;
       dtmfp->dtmfg_len =  50*samples; 
@@ -1542,17 +1542,17 @@ dtmf_again:
       
       /* if we have more silence to generate, keep the SILENT state */
       if (dtmfp->dtmfg_len)
-    break;
+	break;
 
 
       /* we can handle a next DTMF digit now */
       dtmfp->dtmfg_phase = DTMF_IDLE;
       if (dtmfp->dtmfq_cnt)
-    {
-      signal += mixlen;
-      siglen -= mixlen;
-      goto dtmf_again;
-    }
+	{
+	  signal += mixlen;
+	  siglen -= mixlen;
+	  goto dtmf_again;
+	}
       break;
 
     }
@@ -1594,28 +1594,28 @@ int ph_media_set_spkvol(phcall_t *ca, int level)
  */
 void ph_audio_init_vad0(struct vadcng_info *cngp, int samples)
 {
-	cngp->pwr_size = PWR_WINDOW * samples;
-	cngp->pwr_shift = calc_shift(cngp->pwr_size);
-	cngp->pwr = osip_malloc(cngp->pwr_size * sizeof(int));
-	if(cngp->pwr)
-	{
-		memset(cngp->pwr, 0, cngp->pwr_size * sizeof(int));
-		DBG5_DYNA_AUDIO(" DTX/VAD PWR table of %d ints allocated \n", cngp->pwr_size,0,0,0);
+  cngp->pwr_size = PWR_WINDOW * samples;
+  cngp->pwr_shift = calc_shift(cngp->pwr_size);
+  cngp->pwr = osip_malloc(cngp->pwr_size * sizeof(int));
+  if(cngp->pwr)
+    {
+      memset(cngp->pwr, 0, cngp->pwr_size * sizeof(int));
+      DBG5_DYNA_AUDIO(" DTX/VAD PWR table of %d ints allocated \n", cngp->pwr_size,0,0,0);
     }
-	else
-	{
-		DBG5_DYNA_AUDIO("No memory for DTX/VAD !: %d \n", cngp->pwr_size*2,0,0,0);
-		cngp->vad = cngp->cng = 0;
-	}
+  else
+    {
+      DBG5_DYNA_AUDIO("No memory for DTX/VAD !: %d \n", cngp->pwr_size*2,0,0,0);
+      cngp->vad = cngp->cng = 0;
+    }
   
-	cngp->pwr_pos = 0;
-	cngp->sil_max = SIL_SETUP * samples;
-	cngp->long_pwr_shift = calc_shift(LONG_PWR_WINDOW);
-	cngp->long_pwr_pos = 0;
+  cngp->pwr_pos = 0;
+  cngp->sil_max = SIL_SETUP * samples;
+  cngp->long_pwr_shift = calc_shift(LONG_PWR_WINDOW);
+  cngp->long_pwr_pos = 0;
 #ifdef TRACE_POWER
-	min_pwr = 0x80000001;
-	max_pwr = 0;
-	max_sil = 0;
+  min_pwr = 0x80000001;
+  max_pwr = 0;
+  max_sil = 0;
 #endif
 }
 
@@ -1736,46 +1736,6 @@ void ph_ec_cleanup(void *ctx)
 }
 
 
-static int 
-select_audio_device(const char *deviceId)
-{
-  char *forcedDeviceId;
-  /* 
-     Audio device selection:
-     if we have 	PH_FORCE_AUDIO_DEVICE env var it overrides everything else
-     otherwise we try to use the device specified by the UI....
-     if UI didn't specify anything we try to use content of PH_AUDIO_DEVICE env var (if it is nonempty)
-     and in the last resort we use PoartAudio default device
-  */
-  forcedDeviceId = getenv("PH_FORCE_AUDIO_DEVICE");
-
-  if (forcedDeviceId) 
-    deviceId = forcedDeviceId;
- 
-  if (!deviceId || !deviceId[0])
-    deviceId = getenv("PH_AUDIO_DEVICE");
-
-  if (!deviceId)
-    {
-#if defined(OS_MACOSX)
-      deviceId = "ca:";
-#else
-      deviceId = "pa:";
-#endif
-    }
-
-
-  if (ph_activate_audio_driver(deviceId))
-    {
-      return -PH_NORESOURCES;
-    }
-
-
-  return 0;
-
-
-}
-
 static void
 setup_recording(phastream_t *stream)
 {
@@ -1818,6 +1778,47 @@ setup_recording(phastream_t *stream)
 
 
 static int 
+select_audio_device(const char *deviceId)
+{
+  char *forcedDeviceId;
+  /* 
+     Audio device selection:
+     if we have 	PH_FORCE_AUDIO_DEVICE env var it overrides everything else
+     otherwise we try to use the device specified by the UI....
+     if UI didn't specify anything we try to use content of PH_AUDIO_DEVICE env var (if it is nonempty)
+     and in the last resort we use PoartAudio default device
+  */
+  forcedDeviceId = getenv("PH_FORCE_AUDIO_DEVICE");
+
+  if (forcedDeviceId) 
+    deviceId = forcedDeviceId;
+ 
+  if (!deviceId || !deviceId[0])
+    deviceId = getenv("PH_AUDIO_DEVICE");
+
+  if (!deviceId)
+    {
+#if defined(OS_MACOSX)
+      deviceId = "ca:";
+#else
+      deviceId = "pa:";
+#endif
+    }
+
+
+  if (ph_activate_audio_driver(deviceId))
+    {
+      return -PH_NORESOURCES;
+    }
+
+
+  return 0;
+
+
+}
+
+
+static int 
 open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *deviceId)
 {
   int fd;
@@ -1828,7 +1829,7 @@ open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *devi
       if (fd < 0)
 	{
 	  //	  phcb->errorNotify(PH_NOMEDIA);
-	  DBG4_MEDIA_ENGINE("open_audio_device: can't open  AUDIO device\n",0,0,0);
+	  DBG1_MEDIA_ENGINE("open_audio_device: can't open  AUDIO device\n");
 	  return -1;
 	}
     }
@@ -1876,8 +1877,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   ph_mstream_params_t *sp = &s->streams[PH_MSTREAM_AUDIO1];
   int newstreams;
 
-  DBG4_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_audio_start\n", 0, 0, 0);
-  DBG4_MEDIA_ENGINE("device macro: \"%s\"\n", deviceId, 0, 0);
+  DBG2_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_audio_start devid=%s\n", deviceId);
 
   newstreams = s->newstreams;
   s->newstreams = 0;
@@ -1935,7 +1935,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	{
 	  if ((stream->ms.payload ==  sp->ipayloads[0].number) &&  !strcmp(stream->ms.remote_ip, sp->remoteaddr))
 	    {
-	      DBG4_MEDIA_ENGINE("ph_msession_audio_start: reusing current stream\n",0,0,0);
+	      DBG1_MEDIA_ENGINE("ph_msession_audio_start: reusing current stream\n");
 	      PH_MSESSION_AUDIO_UNLOCK();
 	      return 0;
 	    }
@@ -1955,12 +1955,12 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	      RtpTunnel *newTun, *old;
 	      RtpTunnel *newTun2, *old2;
 	      
-	      DBG4_MEDIA_ENGINE("ph_msessio_audio_start Replacing audio tunnel\n",0,0,0);
+	      DBG1_MEDIA_ENGINE("ph_msessio_audio_start Replacing audio tunnel\n");
 	      newTun = rtptun_connect(stream->ms.remote_ip, stream->ms.remote_port);
 	      
 	      if (!newTun)
 		{
-		  DBG4_MEDIA_ENGINE("ph_msession_audio_start: Audio tunnel replacement failed\n",0,0,0);
+		  DBG1_MEDIA_ENGINE("ph_msession_audio_start: Audio tunnel replacement failed\n");
 		  sp->flags |= ~PH_MSTREAM_FLAG_RUNNING;
 		  PH_MSESSION_AUDIO_UNLOCK();
 		  return -PH_NORESOURCES;
@@ -1988,24 +1988,24 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 					stream->ms.remote_ip,
 					stream->ms.remote_port);
 	  
-	  DBG4_MEDIA_ENGINE("ph_msession_audio_start: audio stream reset done\n",0,0,0);
+	  DBG1_MEDIA_ENGINE("ph_msession_audio_start: audio stream reset done\n");
 	  PH_MSESSION_AUDIO_UNLOCK();
 	  return 0;
 	}
       
       /* new payload is differrent from the old one */
-      DBG4_MEDIA_ENGINE("ph_mession_audio_start: Replacing audio session\n",0,0,0);
+      DBG1_MEDIA_ENGINE("ph_mession_audio_start: Replacing audio session\n");
       ph_msession_audio_stop(s, deviceId);
       // end branch 1
       
     }
 
   // begin branch 2
-  DBG4_MEDIA_ENGINE("audio start branch 2 - looking for codec with payload = %d\n", codecpt, 0, 0);
+  DBG2_MEDIA_ENGINE("audio start branch 2 - looking for codec with payload = %d\n", codecpt);
   codec = ph_media_lookup_codec(codecpt);
   if (!codec)
     {
-      DBG4_MEDIA_ENGINE("audio start branch 2: found NO codec\n", 0, 0, 0);
+      DBG1_MEDIA_ENGINE("audio start branch 2: found NO codec\n");
       PH_MSESSION_AUDIO_UNLOCK();
       return -1;
     }
@@ -2019,7 +2019,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
     stream = (phastream_t *)sp->streamerData;
 
 
-  DBG4_MEDIA_ENGINE("new audiostream = %08x\n", stream,0,0);
+  DBG2_MEDIA_ENGINE("new audiostream = %08x\n", stream);
 
   setup_recording(stream);
 
@@ -2040,7 +2040,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	  sp->vadthreshold = atoi(fhdx);
 	}
 		
-      DBG4_MEDIA_ENGINE("ph_mession_audio_start: MICHDX mode level=%d\n",  sp->vadthreshold,0,0);
+      DBG2_MEDIA_ENGINE("ph_mession_audio_start: MICHDX mode level=%d\n",  sp->vadthreshold);
     }
 
 
@@ -2057,7 +2057,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	stream->cngo.pwr_threshold = atoi(spkfhdx);
       }
 
-      DBG4_MEDIA_ENGINE("ph_mession_audio_start: SPKHDX mode level=%d\n",  stream->cngo.pwr_threshold, 0, 0);
+      DBG2_MEDIA_ENGINE("ph_mession_audio_start: SPKHDX mode level=%d\n",  stream->cngo.pwr_threshold);
     }
 
 
@@ -2070,10 +2070,10 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   stream->ms.payload =  sp->ipayloads[0].number;
   stream->cngi.cng_pt = (stream->clock_rate > 8000) ? PH_MEDIA_CN_16000_PAYLOAD : PH_MEDIA_CN_PAYLOAD; /* FIXME: we need to handle separate directions too */
 
-  DBG4_MEDIA_ENGINE("ph_mession_audio_start: DTX/VAD %x\n", stream->cngi.pwr_threshold,0,0);
-  DBG4_MEDIA_ENGINE("ph_msession_audio_start: clock rate %d\n", stream->clock_rate,0,0);
-  DBG4_MEDIA_ENGINE("ph_msession_audio_start: CNG %s\n", stream->cngi.cng ? "activating" : "desactivating",0,0);
-  DBG4_MEDIA_ENGINE("ph_msession_audio_start: opening AUDIO device %s\n", deviceId,0, 0);
+  DBG2_MEDIA_ENGINE("ph_mession_audio_start: DTX/VAD %x\n", stream->cngi.pwr_threshold);
+  DBG2_MEDIA_ENGINE("ph_msession_audio_start: clock rate %d\n", stream->clock_rate);
+  DBG2_MEDIA_ENGINE("ph_msession_audio_start: CNG %s\n", stream->cngi.cng ? "activating" : "desactivating");
+  DBG2_MEDIA_ENGINE("ph_msession_audio_start: opening AUDIO device %s\n", deviceId);
 
   if (open_audio_device(s, stream, deviceId))
     {
@@ -2101,7 +2101,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
   ph_mediabuf_init(&stream->data_in, malloc(2048), 2048);
   ph_mediabuf_init(&stream->data_out, malloc(2048), 2048);
-  DBG4_MEDIA_ENGINE("ph_msession_audio_start: opening session remoteport: %d\n", stream->ms.remote_port,0,0);
+  DBG2_MEDIA_ENGINE("ph_msession_audio_start: opening session remoteport: %d\n", stream->ms.remote_port);
 
   
   
@@ -2111,7 +2111,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
     {
       RtpTunnel *tun, *tun2;
 
-      DBG4_MEDIA_ENGINE("ph_mession_audio_start: Creating audio tunnel\n",0,0,0);
+      DBG1_MEDIA_ENGINE("ph_mession_audio_start: Creating audio tunnel\n");
 		
 		
       tun = rtptun_connect(sp->remoteaddr, sp->remoteport);
@@ -2166,7 +2166,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   sp->streamerData = stream;
   s->activestreams |= (1 << PH_MSTREAM_AUDIO1);
 
-  DBG4_MEDIA_ENGINE("ph_mession_audio_start: s=%08x.stream=%08x\n", s, stream,0);
+  DBG3_MEDIA_ENGINE("ph_mession_audio_start: s=%08x.stream=%08x\n", s, stream);
 
   stream->ms.running = 1;
   stream->ms.rtp_session = session;
@@ -2239,7 +2239,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   start_audio_device(s, stream);
 
 
-  DBG4_MEDIA_ENGINE("ph_msession_audio_start: audio stream init OK\n",0,0,0);
+  DBG1_MEDIA_ENGINE("ph_msession_audio_start: audio stream init OK\n");
   PH_MSESSION_AUDIO_UNLOCK();
 
   return 0;
@@ -2377,7 +2377,7 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
 
 
   
-  DBG4_MEDIA_ENGINE("\naudio stream closed\n",0,0,0);
+  DBG1_MEDIA_ENGINE("\naudio stream closed\n");
 
   if (stream->lastframe)
     free(stream->lastframe);
