@@ -207,18 +207,20 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender, Enu
 		if (contact) {
 			if (contact->hasIMContact(imContact)) {
 				contact->getIMContact(imContact).setPresenceState(state);
+				return;
 			}
-		} else {
-			LOG_INFO("adding a new IMContact:" + imContact.getContactId());
-			contactGroup = this->operator[]("Default");
-			if (!contactGroup) {
-				contactGroup = new ContactGroup("Default", _wengoPhone);
-				addContactGroup(contactGroup);
-			}
-			contact = new Contact(_wengoPhone);
-			contactGroup->addContact(contact);
-			contact->addIMContact(imContact);
 		}
 	}
+
+	// If ContactList is empty or no asssociated contact IMContact found
+	LOG_INFO("adding a new IMContact:" + imContact.getContactId());
+	contactGroup = this->operator[]("Default");
+	if (!contactGroup) {
+		contactGroup = new ContactGroup("Default", _wengoPhone);
+		addContactGroup(contactGroup);
+	}
+	contact = new Contact(_wengoPhone);
+	contact->addIMContact(imContact);
+	contactGroup->addContact(contact);
 }
 

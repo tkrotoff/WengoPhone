@@ -19,11 +19,16 @@
 
 #include "CContact.h"
 
-#include "model/contactlist/Contact.h"
-#include "model/contactlist/ContactGroup.h"
-#include "presentation/PFactory.h"
-#include "control/CWengoPhone.h"
-#include "presentation/PContact.h"
+#include <presentation/PFactory.h>
+#include <presentation/PContact.h>
+
+#include <control/CWengoPhone.h>
+
+#include <model/contactlist/Contact.h>
+#include <model/contactlist/ContactGroup.h>
+
+#include <imwrapper/IMContactSet.h>
+
 #include "CContactGroup.h"
 
 using namespace std;
@@ -43,7 +48,21 @@ void CContact::call() {
 }
 
 string CContact::getDisplayName() const {
-	return _contact.getFirstName() + " " + _contact.getLastName();
+	string result;
+
+	if (!_contact.getFirstName().empty() || !_contact.getLastName().empty()) {
+		result = _contact.getFirstName() + " " + _contact.getLastName();
+	} else if (!_contact.getWengoPhoneId().empty()) {
+		result = _contact.getWengoPhoneId();
+	} else {
+		// Take the contact id of the first IMContact
+		IMContactSet::const_iterator it = _contact.getIMContactSet().begin();
+		if (it != _contact.getIMContactSet().end()) {
+			result = (*it).getContactId();
+		}
+	}
+
+	return result;
 }
 
 string CContact::getId() const {

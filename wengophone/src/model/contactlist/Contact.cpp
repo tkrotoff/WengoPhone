@@ -81,13 +81,11 @@ Contact::~Contact() {
 }
 
 void Contact::addIMContact(const IMContact & imContact) {
-	IMContact newContact(imContact);
-
 	//Check if IMContact already exists
-	if (_imContactSet.find(newContact) == _imContactSet.end()) {
-		_imContactSet.insert(newContact);
-		_wengoPhone.getPresenceHandler().subscribeToPresenceOf(imContact);
-		newIMContactAddedEvent(*this, (IMContact &)*_imContactSet.find(newContact));
+	if (_imContactSet.find(imContact) == _imContactSet.end()) {
+		_imContactSet.insert(imContact);
+		_wengoPhone.getPresenceHandler().subscribeToPresenceOf(*_imContactSet.find(imContact));
+		newIMContactAddedEvent(*this, (IMContact &)*_imContactSet.find(imContact));
 		contactModifiedEvent(*this);
 	}
 }
