@@ -29,37 +29,47 @@ class QtUserList
 public:
 	static QtUserList * getInstance();
 	
-	void	addUser(QtUser * user);
-	void	removeUser(const QString & userid);
+	void addUser(QtUser * user);
+	void removeUser(const QString & userid);
 	
-	void	paintUser(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
-	void	mouseOn(const QString & userid);
-	void	setUserStatus(const QString & userid,QtContactPixmap::contactPixmap status);
+
+	void paintUser(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
+
+	void mouseOn(const QString & userid);
+
+	void setUserStatus(const QString & userid,QtContactPixmap::contactPixmap status);
+
+	bool haveIM(const QString & userid);
 	
+	bool haveCall(const QString & userid);
 	
-	bool	haveIM(const QString & userid);
-	
-	bool	haveCall(const QString & userid);
-	
-	bool	haveVideo(const QString & userid);
+	bool haveVideo(const QString & userid);
 
 	QtUser * getUser(const QString & userid);
 	
-	void	mouseClicked(const QString & userid,const QPoint pos, const QRect & rect); 
+	void mouseClicked(const QString & userid,const QPoint pos, const QRect & rect); 
 	
-	int		getIconsStartPosition(const QString & userid);
+	int	 getIconsStartPosition(const QString & userid);
 	
-	void	setButton(const QString & userid,const Qt::MouseButton button);
+	void setButton(const QString & userid,const Qt::MouseButton button);
 	
-	void	setOpenStatus(const QString & userid,bool value);
+	void setOpenStatus(const QString & userid,bool value);
 	
 	Qt::MouseButton getButton(const QString & userid);
+	
+	int	 getHeight(const QString & userid);
+
+	void setTreeWidget(QTreeWidget * tree) { _tree=tree;};
+
+	QTreeWidget * getTreeWidget() {return _tree;};
+	
 protected:
 	QtUserList ( );
 	QtUserList (const QtUserList&) {};
 	QtUserList & operator= (const QtUserList &) {};
 protected:
 	QHash<QString,QtUser *>	_userList;
+	QTreeWidget * _tree;
 private:
 	static QtUserList * _instance;
 	QString			    _lastMouseOn;

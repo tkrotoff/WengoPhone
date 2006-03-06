@@ -26,13 +26,12 @@ QtUserManager::QtUserManager(QObject * parent, QTreeWidget * target) : QObject(p
     _previous = NULL;
     _lastClicked=NULL;
 	
+	QtUserList::getInstance()->setTreeWidget(target);
 	target->setMouseTracking(true);
-    UserTreeEventManager * dnd = new UserTreeEventManager(this,target);
+	UserTreeEventManager * dnd = new UserTreeEventManager(this,target);
     
-    
-    
-    connect (target,SIGNAL(itemSelectionChanged ()),this,SLOT(treeViewSelectionChanged()));
-    connect (target,SIGNAL(itemClicked (QTreeWidgetItem *,int )),this,SLOT(itemClicked(QTreeWidgetItem *,int)));
+	connect (target,SIGNAL(itemSelectionChanged ()),this,SLOT(treeViewSelectionChanged()));
+	connect (target,SIGNAL(itemClicked (QTreeWidgetItem *,int )),this,SLOT(itemClicked(QTreeWidgetItem *,int)));
 	connect (dnd,SIGNAL(itemEntered ( QTreeWidgetItem *)),this,SLOT(itemEntered ( QTreeWidgetItem * )));
 	connect (dnd,SIGNAL(itemTimeout(QTreeWidgetItem *)),this,SLOT(openUserInfo(QTreeWidgetItem *)));
 	
@@ -52,11 +51,7 @@ QtUserManager::QtUserManager(QObject * parent, QTreeWidget * target) : QObject(p
 }
 
 void QtUserManager::treeViewSelectionChanged(){
-    if ( _previous != NULL ){
-        _tree->closePersistentEditor(_previous,0);
-        _previous->setSizeHint(0,QSize(-1,MIN_ITEM_SIZE));
-    }
-    _tree->viewport()->update();
+	closeUserInfo();
 }
 
 void QtUserManager::itemEntered ( QTreeWidgetItem * item)
@@ -66,20 +61,10 @@ void QtUserManager::itemEntered ( QTreeWidgetItem * item)
 	if (ul)
 	{
 		ul->mouseOn(item->text(0));
-		/*
-		if ( _previous != NULL )
-		{
-			_tree->closePersistentEditor(_previous,0);
-			// _previous->setSizeHint(0,QSize(-1,MIN_ITEM_SIZE));
-			_previous->setSizeHint(0,QSize(-1,QFontMetrics(_tree->font()).height()) );
-			_previous = item;
-			_tree->viewport()->update();
-		}	
-		*/
 		closeUserInfo();
+		
 	}
 	_tree->viewport()->update();
-
 }
 
 void QtUserManager::closeUserInfo()
@@ -88,8 +73,8 @@ void QtUserManager::closeUserInfo()
 	if ( _previous != NULL )
 	{
 		_tree->closePersistentEditor(_previous,0);
-		_previous->setSizeHint(0,QSize(-1,QFontMetrics(_tree->font()).height()) );
 		ul->setOpenStatus(_previous->text(0),false);
+		_previous->setSizeHint(0,QSize(-1,ul->getHeight(_previous->text(0))));
 	}
 	_tree->viewport()->update();
 }
@@ -97,30 +82,25 @@ void QtUserManager::closeUserInfo()
 void QtUserManager::openUserInfo( QTreeWidgetItem * i)
 {
 	QTreeWidgetItem * item = i;
-	
+	QtUserList * ul = QtUserList::getInstance();
     if ( _previous != NULL )
     {
-        
-        _tree->closePersistentEditor(_previous,0);
-		//_previous->setSizeHint(0,QSize(-1,MIN_ITEM_SIZE));
-		_previous->setSizeHint(0,QSize(-1,QFontMetrics(_tree->font()).height()) );
+        closeUserInfo();
         _previous = item;
-        
-        if ( item->childCount() == 0 ){
-            item->setSizeHint(0,QSize(-1,MAX_ITEM_SIZE));
-            _tree->openPersistentEditor(_previous);
+        if ( item->parent() ){
+			ul->setOpenStatus(_previous->text(0),true);
+			item->setSizeHint(0,QSize(-1,ul->getHeight(item->text(0))));
+            _tree->openPersistentEditor(item);
         }
     }
     else
     {
         _previous = item;
-        if ( item->childCount() == 0 ){
-            item->setSizeHint(0,QSize(-1,MAX_ITEM_SIZE));
-            _tree->openPersistentEditor(_previous);
-            }
-        else
-            //item->setSizeHint(0,QSize(-1,MIN_ITEM_SIZE));
-			_previous->setSizeHint(0,QSize(-1,QFontMetrics(_tree->font()).height()) );
+        if ( item->parent() ){
+			ul->setOpenStatus(_previous->text(0),true);
+			item->setSizeHint(0,QSize(-1,ul->getHeight(item->text(0))));
+            _tree->openPersistentEditor(item);
+           }
     }
     _tree->viewport()->update();
 }
@@ -133,15 +113,19 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
     QRect widgetSize = _tree->rect();
     QPoint  mousepos = _tree->mapFromGlobal(QCursor::pos());
     
-    ul->mouseClicked(item->text(0),mousepos,widgetSize);
+    
+	if (  ! item->parent() )
+	{
+		if (_tree->isItemExpanded(item) )
+			_tree->collapseItem ( item );
+		else
+			_tree->expandItem ( item );
+	}
 	
-	
+	ul->mouseClicked(item->text(0),mousepos,widgetSize);
 	
 	if (mousepos.x() > ul->getIconsStartPosition(item->text(0)) )
 		return;
-	
-
-	qDebug() << ul->getButton(item->text(0));
 	
 	if ( ul->getButton(item->text(0)) == Qt::RightButton)
 	{
@@ -151,30 +135,21 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
 
 	if ( _previous != NULL )
 	{
-		
-		_tree->closePersistentEditor(_previous,0);
-		//_previous->setSizeHint(0,QSize(-1,MIN_ITEM_SIZE));
-		_previous->setSizeHint(0,QSize(-1,QFontMetrics(_tree->font()).height()) );
+		closeUserInfo();
 		_previous = item;
 		
-		if ( item->childCount() == 0 ){
-			item->setSizeHint(0,QSize(-1,MAX_ITEM_SIZE));
-			_tree->openPersistentEditor(_previous);
+		if ( item->parent()){
+			openUserInfo(item);
 		}
 	}
 	else
 	{
 		_previous = item;
-		if ( item->childCount() == 0 ){
-			item->setSizeHint(0,QSize(-1,MAX_ITEM_SIZE));
-			_tree->openPersistentEditor(_previous);
-			}
-		else
-			//item->setSizeHint(0,QSize(-1,MIN_ITEM_SIZE));
-			_previous->setSizeHint(0,QSize(-1,QFontMetrics(_tree->font()).height()) );
+		if ( item->parent() ){
+			openUserInfo( item);
+		}
 	}
 	_tree->viewport()->update();
-	
 }
 
 

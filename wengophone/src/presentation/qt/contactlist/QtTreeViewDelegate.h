@@ -38,7 +38,8 @@ public:
 	void setParent(QWidget * parent);
 	virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 protected:
-    
+    void	drawGroup( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
     const	QWidget *	_parent;
     QPixmap				_menuIcon;
     

@@ -25,15 +25,16 @@ QtUser::QtUser(PContact & pContact, QObject * parent)
 	: QObject (parent), _pContact(pContact)
 {
 	_mouseOn = false;
+	_openStatus = false;
 }
 
 void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index)
 {
-	QRect r;
+    QRect r;
 	QPixmap px;
 	QtContactPixmap * spx;
 	int x;
-	bool parentItem = false;
+    bool parentItem = false;
 	
 	QLinearGradient lg( QPointF(1,1), QPointF(option.rect.width(),1));
 	lg.setSpread(QGradient::RepeatSpread);
@@ -41,63 +42,58 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	lg.setColorAt ( .8, QColor(210, 216, 234));
 	
 	spx = QtContactPixmap::getInstance();
+	
 	/*
-	if ( (option.state & QStyle::State_Selected)){
-		painter->fillRect(option.rect,option.palette.highlight());
-		painter->setPen(option.palette.highlightedText().color() );
-	}
+	QLinearGradient lg2( QPointF(1,1), QPointF(option.rect.width(),1));
+	lg2.setSpread(QGradient::RepeatSpread);
+	lg2.setColorAt ( 0, QColor(181,203,255));
+	lg2.setColorAt ( .8, QColor(255, 255, 234));
+	painter->fillRect(option.rect, lg2);
 	*/
+	
 	if (_mouseOn)
 	{
-		// painter->fillRect(option.rect,option.palette.midlight());
 		painter->fillRect(option.rect,QBrush(lg));
 		painter->setPen(option.palette.text().color());
 	}
-	else
-	{
-		painter->setPen(option.palette.text().color() );
-	}
+    else
+    {
+        painter->setPen(option.palette.text().color() );
+    }
 	// Draw the status pixmap
 	px = spx->getPixmap(_status);
-	
-	r = option.rect;
+    r = option.rect;
 	x = r.left();
 	painter->drawPixmap (x,r.top(),px);
 	x+=px.width()+5;
 	r.setLeft(x);
+	// Draw the user
+	painter->setFont(option.font);
+	// Center the text vertically
+	QRect textRect = r;
+	int y = ((r.bottom()-r.top()) - QFontMetrics(option.font).height() ) / 2;
+	textRect.setTop(y+textRect.top());
+	// Draw the text
 	
-	if (  ! index.child(0,0).isValid() ){
-		painter->setFont(option.font);
-		painter->drawText(r,Qt::AlignLeft,index.data().toString(),0);
-	}
-	else
-	{
-		QFont f = option.font;
-		f.setBold(true);
-		painter->setFont(f);
-		painter->drawText(r,Qt::AlignLeft,index.data().toString(),0);
-		parentItem=true;
-	}
-	/*
-	    Draw Functions icons
-	*/
+	painter->drawText(textRect,Qt::AlignLeft,index.data().toString(),0);
+    /*
+            Draw Functions icons
+        */
 	x=option.rect.width();
 	if (_mouseOn)
 	{
 		if (_status != QtContactPixmap::ContactNotAvailable)
 		{
-			
 			px = spx->getPixmap(QtContactPixmap::ContactVideo);
-			if (_pContact.haveVideo())
+			if (haveVideo())
 			{
 				x-=px.width();
 				painter->drawPixmap (x,r.top(),px);
 			}
 			else
 				x-=px.width();
-				
 			px = spx->getPixmap(QtContactPixmap::ContactCall);
-			if (_pContact.haveCall())
+			if (haveCall())
 			{
 				x-=px.width();
 				painter->drawPixmap (x,r.top(),px);
@@ -106,7 +102,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 				x-=px.width();
 				
 			px = spx->getPixmap(QtContactPixmap::ContactIM);
-			if (_pContact.haveIM())
+			if (haveIM())
 			{
 				px = spx->getPixmap(QtContactPixmap::ContactIM);
 				x-=px.width();
@@ -212,4 +208,11 @@ void QtUser::setButton(const Qt::MouseButton button)
 void QtUser::setOpenStatus(bool value)
 {
 	_openStatus = value;
+}
+
+int QtUser::getHeight()
+{
+	if (_openStatus)
+		return 90;
+	return 22;
 }

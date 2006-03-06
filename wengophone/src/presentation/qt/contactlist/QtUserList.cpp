@@ -134,9 +134,18 @@ Qt::MouseButton QtUserList::getButton(const QString & userid)
 		return user->getButton();
 	return Qt::NoButton;
 }
+
 void QtUserList::setOpenStatus(const QString & userid,bool value)
 {
 	QtUser * user = _userList[userid];
 	if (user)
 		user->setOpenStatus(value);
+}
+
+int	QtUserList::getHeight(const QString & userid){
+
+	QtUser * user = _userList[userid];
+	if (user)
+		return user->getHeight();
+ 	else return 0;
 }

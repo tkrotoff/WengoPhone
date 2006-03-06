@@ -33,31 +33,33 @@ public:
 	QtUser (PContact & pContact, QObject * parent = 0);
 	virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 	
-	QString		getId();
-	void		setId(const QString & id);
+	QString getId();
+	void setId(const QString & id);
 	
-	QString		getUserName();
-	void		setUserName(const QString & uname);
+	QString getUserName();
+	void setUserName(const QString & uname);
 	
-	bool		haveIM(){ return _pContact.haveIM();};
-	bool		haveCall(){ return _pContact.haveCall();};
-	bool		haveVideo(){ return _pContact.haveVideo();};
+	bool haveIM(){ return _pContact.haveIM();};
+	bool haveCall(){ return _pContact.haveCall();};
+	bool haveVideo(){ return _pContact.haveVideo();};
 	
-	void		setMouseOn(bool value) { _mouseOn = value;};
+	void setMouseOn(bool value) { _mouseOn = value;};
 	
-	void		setStatus(QtContactPixmap::contactPixmap status);
+	void setStatus(QtContactPixmap::contactPixmap status);
 	
-	void		mouseClicked(const QPoint & pos,const QRect & rec);
+	void mouseClicked(const QPoint & pos,const QRect & rec);
 	
 	QtContactPixmap::contactPixmap getStatus();
 	
-	void		setFunction(bool im, bool call, bool video);
+	void setFunction(bool im, bool call, bool video);
 	
-	int			getIconsStartPosition() {return _iconsStartPosition;};
+	int	 getIconsStartPosition() {return _iconsStartPosition;};
 	
-	void		setButton(const Qt::MouseButton button);
+	void setButton(const Qt::MouseButton button);
 	
-	void		setOpenStatus(bool value);
+	void setOpenStatus(bool value);
+	
+	int getHeight();
 	
 	Qt::MouseButton getButton();
 	

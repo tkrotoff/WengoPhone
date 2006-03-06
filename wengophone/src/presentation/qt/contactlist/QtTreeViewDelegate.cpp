@@ -65,45 +65,8 @@ void QtTreeViewDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
 
 void QtTreeViewDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-	QRect r;
-	bool parentItem = false;
-	QtContactPixmap * spx;
-	QPixmap px;
-	int x;
-	spx = QtContactPixmap::getInstance();
-/*		
-    if (option.state & QStyle::State_Selected){
-        painter->fillRect(option.rect,option.palette.highlight());
-        painter->setPen(option.palette.highlightedText().color() );
-    }
-	
-    else
-    {
-	*/
-        painter->setPen(option.palette.text().color() );
-    /* }
-	*/
-	r = option.rect;
-	if ( index.child(0,0).isValid() )
-	{
-        QFont f = option.font;
-        f.setBold(true);
-        painter->setFont(f);
-		if ( option.state & QStyle::State_Open)
-			px = spx->getPixmap(QtContactPixmap::ContactGroupOpen);
-		else
-			px = spx->getPixmap(QtContactPixmap::ContactGroupClose);
-			
-		x = option.rect.left();
-		painter->drawPixmap (x,r.top(),px);
-		x+=px.width()+5;
-		r.setLeft(x);
-        painter->drawText(r,Qt::AlignLeft,index.data().toString(),0);
-		painter->drawLine(option.rect.left(),option.rect.bottom(),
-						  option.rect.width(),option.rect.bottom());
-
-        parentItem=true;
-	}
+	if ( ! index.parent().isValid() )
+		drawGroup(painter,option,index);
 	else
 	{
 		QtUserList * ul = QtUserList::getInstance();
@@ -116,8 +79,51 @@ void QtTreeViewDelegate::paint ( QPainter * painter, const QStyleOptionViewItem 
 
 QSize QtTreeViewDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-	// QTreeWidget * p = (QTreeWidget *)(_parent);
-	// qDebug() << option;
-	//return QSize(-1,QFontMetrics(_parent->font()).height());
-	return QItemDelegate::sizeHint(option,index);
+	QSize orig = QItemDelegate::sizeHint(option,index);
+
+	QtUserList * ul =  QtUserList::getInstance();
+	QtUser * user = ul->getUser(index.data().toString());
+	if (user)
+		return QSize(orig.width(),ul->getUser(index.data().toString())->getHeight());
+	else 
+		if ( !index.parent().isValid())
+			return (QSize(orig.width(),22));
+	return orig;
+}
+
+void QtTreeViewDelegate::drawGroup( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+	QRect r;
+	QtContactPixmap * spx;
+	QPixmap px;
+	int x;
+	spx = QtContactPixmap::getInstance();
+	painter->setPen(option.palette.text().color() );
+	r = option.rect;
+
+	QLinearGradient lg( QPointF(1,option.rect.top()), QPointF(1,option.rect.bottom() ));
+	lg.setColorAt ( .8, QColor(212,208,200));
+	lg.setColorAt ( 0, QColor(255, 255, 255));
+	painter->fillRect(option.rect,QBrush(lg));
+	
+	QFont f = option.font;
+	f.setBold(true);
+	painter->setFont(f);
+	
+	if ( option.state & QStyle::State_Open)
+		px = spx->getPixmap(QtContactPixmap::ContactGroupOpen);
+	else
+		px = spx->getPixmap(QtContactPixmap::ContactGroupClose);
+
+	x = option.rect.left();
+	//painter->drawPixmap (x,r.top(),px);
+	//x+=px.width()+5;
+	r.setLeft(x);
+	QFont font = painter->font();
+	int y = ((r.bottom()-r.top()) - QFontMetrics(font).height() ) / 2;
+	r.setTop(y+r.top());
+	r.setLeft(r.left()+10);
+	painter->drawText(r,Qt::AlignLeft,index.data().toString(),0);
+	/*painter->drawLine(option.rect.left(),option.rect.bottom(),
+					  option.rect.width(),option.rect.bottom()); */
 }

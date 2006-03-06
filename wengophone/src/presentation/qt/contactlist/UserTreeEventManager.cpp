@@ -28,6 +28,7 @@ UserTreeEventManager::UserTreeEventManager(QObject * parent, QTreeWidget * targe
 	_timer.setSingleShot(true);
     connect (&_timer,SIGNAL(timeout()),this,SLOT(timerTimeout()));
 	_inDrag = false;
+	_selectedItem = NULL;
 }
 
 bool UserTreeEventManager::eventFilter(QObject *obj, QEvent *event){
@@ -77,7 +78,10 @@ void UserTreeEventManager::mouseMoveEvent(QMouseEvent *event)
 {
 	
     QTreeWidgetItem * item = _selectedItem;
-    
+
+    if ( ! _selectedItem )
+        return;
+
 	if ( !(event->buttons() & Qt::LeftButton) && !(event->buttons() & Qt::RightButton) )
 	{
 		QTreeWidgetItem * tmp = _tree->itemAt(event->pos());
@@ -102,17 +106,15 @@ void UserTreeEventManager::mouseMoveEvent(QMouseEvent *event)
     if ((event->pos() - _dstart).manhattanLength() < QApplication::startDragDistance())
         return;
         
-    if ( ! _selectedItem )
-        return;
     
     
     if ( ! item )
         return;
         
     /* 
-                If item->childCount()>0 then the item is a group (parent item for contact), a group cannot be moved 
-          */
-    if ( item->childCount() > 0)
+		If item->parent() == NULL then the item is a group (parent item for contact), a group cannot be moved 
+	*/
+    if ( !item->parent())
         return;
 
     QByteArray custom;  // Define a new empty custom data    
@@ -151,7 +153,7 @@ void UserTreeEventManager::dropEvent(QDropEvent *event)
             p = _selectedItem->parent();
             p->takeChild(p->indexOfChild ( _selectedItem));
 
-            if (item->childCount() > 0){
+            if ( ! item->parent()){ // GROUP
                 p = item;
                 p->insertChild(0,_selectedItem);
                 _selectedItem = NULL;
