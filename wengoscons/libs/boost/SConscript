@@ -42,6 +42,8 @@ if WengoCCMinGW():
 
 lib_path = []
 include_path = []
+boost_lib_dir = ''
+boost_inc_dir = ''
 
 if not os.environ.has_key('BOOSTINCLUDEDIR'):
 	if WengoOSMacOSX():
@@ -57,7 +59,7 @@ if not os.environ.has_key('BOOSTLIBDIR'):
 	if WengoOSWindows():
 		boost_lib_dir = 'C:\\Boost\\lib'
 else:
-	boost_inc_dir = os.environ['BOOSTLIBDIR']
+	boost_lib_dir = os.environ['BOOSTLIBDIR']
 
 include_path += [boost_inc_dir]
 lib_path += [boost_lib_dir]
