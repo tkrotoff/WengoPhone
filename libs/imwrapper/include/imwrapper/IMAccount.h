@@ -70,8 +70,8 @@ public:
 	}
 
 	bool operator < (const IMAccount & imAccount) const {
-		return ((_login < imAccount._login)
-			|| (_protocol < imAccount._protocol));
+		return ((_login < imAccount._login) 
+			|| ((_login == imAccount._login) && (_protocol < imAccount._protocol)));
 	}
 
 	Settings & getSettings() {
