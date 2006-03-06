@@ -151,7 +151,7 @@ void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 	}
 
 	LOG_DEBUG("adding the IMContact");
-	contact->addIMContact(newIMContact);	
+	contact->addIMContact(newIMContact);
 }
 
 void ContactList::imContactRemovedEventHandler(IMContactListHandler & sender,
@@ -198,15 +198,26 @@ void ContactList::contactGroupRemovedEventHandler(IMContactList & sender,
 void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender, EnumPresenceState::PresenceState state, 
 	const std::string & note, const IMContact & imContact) {
 
+	ContactGroup * contactGroup;
+	Contact * contact;
+
 	for (register unsigned i = 0 ; i < size() ; i++) {
-		ContactGroup * contactGroup = this->operator[](i);
-		Contact * contact = contactGroup->findContact(imContact);
+		contactGroup = this->operator[](i);
+		contact = contactGroup->findContact(imContact);
 		if (contact) {
 			if (contact->hasIMContact(imContact)) {
 				contact->getIMContact(imContact).setPresenceState(state);
 			}
 		} else {
-			LOG_ERROR("unknown IMContact:" + imContact.getContactId());
+			LOG_INFO("adding a new IMContact:" + imContact.getContactId());
+			contactGroup = this->operator[]("Default");
+			if (!contactGroup) {
+				contactGroup = new ContactGroup("Default", _wengoPhone);
+				addContactGroup(contactGroup);
+			}
+			contact = new Contact(_wengoPhone);
+			contactGroup->addContact(contact);
+			contact->addIMContact(imContact);
 		}
 	}
 }
