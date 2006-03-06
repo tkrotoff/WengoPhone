@@ -156,7 +156,13 @@ bool Contact::haveIM() const {
 
 bool Contact::haveCall() const {
 	//FIXME: check phone numbers
-	return true;
+	if (!_wengoPhoneId.empty()
+		|| !_mobilePhone.empty()
+		|| !_homePhone.empty()) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 bool Contact::haveVideo() const {
@@ -171,6 +177,10 @@ bool Contact::haveVideo() const {
 void Contact::placeCall() {
 	if (!_wengoPhoneId.empty()) {
 		_wengoPhone.makeCall(_wengoPhoneId);
+	} else if (!_mobilePhone.empty()) {
+		_wengoPhone.makeCall(_mobilePhone);
+	} else if (!_homePhone.empty()) {
+		_wengoPhone.makeCall(_homePhone);
 	}
 }
 
