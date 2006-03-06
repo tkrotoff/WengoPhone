@@ -241,6 +241,11 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 	IMChatSession * imChatSession;
 
+	if ((info->event == phMsgOk) || (info->event == phMsgError)) {
+		//We drop status message
+		return;
+	}
+
 	LOG_DEBUG("message received from " + string(info->from)
 		+ ": " + string((info->content ? info->content : "")));
 
@@ -268,14 +273,6 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		break;
 	}
 
-	case phMsgOk:
-		p->statusMessageReceivedEvent(*p, *imChatSession, PhApiIMChat::StatusMessageReceived, String::null);
-		break;
-
-	case phMsgError:
-		p->statusMessageReceivedEvent(*p, *imChatSession, PhApiIMChat::StatusMessageError, String::null);
-		break;
-
 	default:
 		LOG_FATAL("unknown message event");
 	}
@@ -299,7 +296,7 @@ void PhApiCallbacks::onNotify(const char * event, const char * from, const char 
 	std::string buddyTmp(from);
 	unsigned colonIndex = buddyTmp.find(':', 0);
 	unsigned atIndex = buddyTmp.find('@', 0);
-	std::string buddy = buddyTmp.substr(colonIndex, atIndex - colonIndex);
+	std::string buddy = buddyTmp.substr(colonIndex + 1, atIndex - colonIndex - 1);
 
 	TiXmlDocument doc;
 	doc.Parse(content);

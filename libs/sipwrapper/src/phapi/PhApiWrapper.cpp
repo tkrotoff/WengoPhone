@@ -423,14 +423,15 @@ void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & 
 
 void PhApiWrapper::createSession(IMChat & imChat, IMContactSet & imContactSet) {
 	IMChatSession * imChatSession = new IMChatSession(imChat);
-	newIMChatSessionCreatedEvent(*this, *imChatSession);
 
 	//FIXME: Currently, phApi supports chat with only one person
 	if (imContactSet.size() > 0) {
 		addContact(*imChatSession, (*imContactSet.begin()).getContactId());
 		//FIXME: this map is never emptied
-		_contactChatMap[(*imContactSet.begin()).getContactId()] = imChatSession;
+		//_contactChatMap[(*imContactSet.begin()).getContactId()] = imChatSession;
 	}
+
+	newIMChatSessionCreatedEvent(*this, *imChatSession);
 }
 
 void PhApiWrapper::closeSession(IMChatSession & chatSession) {
