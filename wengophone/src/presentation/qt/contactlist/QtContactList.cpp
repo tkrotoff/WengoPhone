@@ -214,6 +214,6 @@ void QtContactList::addContactGroupThreadSafe(PContactGroup * pContactGroup) {
 	//LOG_DEBUG("contact group added:" + pContactGroup->getName());
 
 	QTreeWidgetItem *group = new QTreeWidgetItem(_treeWidget);
-	group->setText(0, QString::fromStdString(pContactGroup->getName()));
+	group->setText(0, QString::fromStdString(pContactGroup->getDisplayName()));
 }
 

@@ -69,7 +69,7 @@ public:
 			&& (_protocol == imAccount._protocol));
 	}
 
-	bool operator < (const IMAccount imAccount) const {
+	bool operator < (const IMAccount & imAccount) const {
 		return ((_login < imAccount._login)
 			|| (_protocol < imAccount._protocol));
 	}

@@ -170,5 +170,5 @@ void CWengoPhone::addIMAccount(const std::string & login, const std::string & pa
 }
 
 void CWengoPhone::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
-	_wengoPhone.getConnectHandler().connect(imAccount);
+	//_wengoPhone.getConnectHandler().connect(imAccount);
 }

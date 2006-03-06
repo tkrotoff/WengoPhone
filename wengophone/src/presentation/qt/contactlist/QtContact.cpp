@@ -50,11 +50,11 @@ void QtContact::updatePresentation() {
 void QtContact::updatePresentationThreadSafe() {
 }
 
-const string & QtContact::getDisplayName() const {
+string QtContact::getDisplayName() const {
 	return _cContact.getDisplayName();
 }
 
-const string & QtContact::getId() const {
+string QtContact::getId() const {
 	return _cContact.getId();
 }
 

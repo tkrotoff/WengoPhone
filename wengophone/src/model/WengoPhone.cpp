@@ -187,13 +187,13 @@ void WengoPhone::addSipAccountThreadSafe(const std::string & login, const std::s
 	_wengoAccount->init();
 }
 
-void WengoPhone::addContact(Contact * contact, const std::string contactGroupName) {
-	typedef ThreadEvent2<void (Contact *, const std::string), Contact *, std::string> MyThreadEvent;
+void WengoPhone::addContact(Contact * contact, std::string contactGroupName) {
+	typedef ThreadEvent2<void (Contact *, std::string), Contact *, std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&WengoPhone::addContactThreadSafe, this, _1, _2), contact, contactGroupName);
 	postEvent(event);
 }
 
-void WengoPhone::addContactThreadSafe(Contact * contact, const std::string & contactGroupName) {
+void WengoPhone::addContactThreadSafe(Contact * contact, std::string contactGroupName) {
 	ContactGroup * contactGroup = (*_contactList)[contactGroupName];
 
 	if (!contactGroup) {
@@ -283,8 +283,15 @@ void WengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::
 void WengoPhone::addIMAccount(const IMAccount & imAccount) {
 	LOG_DEBUG("adding an IMAccount");
 
+	unsigned size = _imAccountHandler.size();
 	_imAccountHandler.insert(imAccount);
-	IMAccount & account = (IMAccount &)*_imAccountHandler.find(imAccount);
+	size = _imAccountHandler.size();
 
-	newIMAccountAddedEvent(*this, account);
+	IMAccountHandler::const_iterator it = _imAccountHandler.find(imAccount);
+
+	if (it == _imAccountHandler.end()) {
+		LOG_FATAL("Error while inserting this IMAccount: " + imAccount.getLogin());
+	}
+
+	newIMAccountAddedEvent(*this, (IMAccount &)*it);
 }

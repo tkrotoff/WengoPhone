@@ -34,7 +34,7 @@ class PContact;
 class PContactGroup : public Presentation {
 public:
 
-	virtual const std::string & getName() const = 0;
+	virtual std::string getDisplayName() const = 0;
 
 	virtual void addContact(PContact * pContact) = 0;
 };

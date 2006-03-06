@@ -21,6 +21,7 @@
 
 #include <model/account/SipAccount.h>
 #include <model/phonecall/PhoneCall.h>
+#include <model/connect/ConnectHandler.h>
 #include <control/CWengoPhone.h>
 
 #include <imwrapper/EnumIMProtocol.h>
@@ -328,7 +329,7 @@ void QtWengoPhone::actionSetLogin() {
 	}
 
 	_cWengoPhone.addIMAccount(login, password, protocol);
-
+	_cWengoPhone.getWengoPhone().getConnectHandler().connect(IMAccount(login, password, protocol));
 	LOG_DEBUG("set login");
 }
 

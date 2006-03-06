@@ -42,9 +42,9 @@ public:
 
 	void updatePresentation();
 
-	const std::string & getDisplayName() const;
+	std::string getDisplayName() const;
 
-	const std::string & getId() const;
+	std::string getId() const;
 
 	bool haveIM() const;
 

@@ -53,7 +53,7 @@ void PresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {
 		(*it).second->subscribeToPresenceOf(imContact.getContactId());
 	} else {
 		//Presence for 'protocol' has not yet been created. The contactId is pushed in the pending subscription list
-		_pendingSubscriptions.insert(pair<const IMAccount *, const IMContact *>(&imContact.getIMAccount(), &imContact));
+		_pendingSubscriptions.insert(pair<IMAccount, const IMContact *>(imContact.getIMAccount(), &imContact));
 	}
 }
 
@@ -66,6 +66,8 @@ void PresenceHandler::blockContact(const IMContact & imContact) {
 				+ " of protocol " + String::fromNumber(imContact.getIMAccount().getProtocol()));
 
 		(*it).second->blockContact(imContact.getContactId());
+	} else {
+		LOG_FATAL("the given IMAccount has not been added yet");
 	}
 }
 
@@ -78,21 +80,27 @@ void PresenceHandler::unblockContact(const IMContact & imContact) {
 				+ " of protocol " + String::fromNumber(imContact.getIMAccount().getProtocol()));
 
 		(*it).second->unblockContact(imContact.getContactId());
+	} else {
+		LOG_FATAL("the given IMAccount has not been added yet");
 	}
 }
 
 void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
-	PresenceMap::const_iterator i = _presenceMap.find(&imAccount);
+	PresenceMap::const_iterator it = _presenceMap.find(imAccount);
 
-	LOG_DEBUG("an account is connected: login: " + imAccount.getLogin()
-		+ " protocol: " + String::fromNumber(imAccount.getProtocol()));
+	if (it != _presenceMap.end()) {
+		LOG_DEBUG("an account is connected: login: " + imAccount.getLogin()
+			+ " protocol: " + String::fromNumber(imAccount.getProtocol()));
 
-	//TODO: Presence must be change to Presence set before disconnection
-	(*i).second->changeMyPresence(EnumPresenceState::PresenceStateOnline, String::null);
+		//TODO: Presence must be change to Presence set before disconnection
+		(*it).second->changeMyPresence(EnumPresenceState::PresenceStateOnline, String::null);
+	} else {
+		LOG_FATAL("the given IMAccount has not been added yet");
+	}
 }
 
 void PresenceHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
-	PresenceMap::iterator it = _presenceMap.find(&imAccount);
+	PresenceMap::iterator it = _presenceMap.find(imAccount);
 
 	LOG_DEBUG("an account is disconnected: login: " + imAccount.getLogin()
 		+ ", protocol: " + String::fromNumber(imAccount.getProtocol()));
@@ -141,7 +149,7 @@ void PresenceHandler::subscribeStatusEventHandler(IMPresence & sender, const std
 PresenceHandler::PresenceMap::iterator PresenceHandler::findPresence(PresenceMap & presenceMap, IMAccount & imAccount) {
 	PresenceMap::iterator it;
 	for (it = presenceMap.begin(); it != presenceMap.end(); it++) {
-		if ((*((*it).first)) == imAccount) {
+		if ((*it).first == imAccount) {
 			break;
 		}
 	}
@@ -149,12 +157,12 @@ PresenceHandler::PresenceMap::iterator PresenceHandler::findPresence(PresenceMap
 }
 
 void PresenceHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
-	PresenceMap::const_iterator i = _presenceMap.find(&imAccount);
+	PresenceMap::const_iterator i = _presenceMap.find(imAccount);
 
 	//Presence for this IMAccount has not yet been created
 	if (i == _presenceMap.end()) {
 		Presence * presence = new Presence(imAccount);
-		_presenceMap[&imAccount] = presence;
+		_presenceMap[imAccount] = presence;
 
 		presence->presenceStateChangedEvent +=
 			boost::bind(&PresenceHandler::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
@@ -164,16 +172,16 @@ void PresenceHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccou
 			boost::bind(&PresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3);
 
 		//Launch all pending subscriptions
-		IMContactMultiMap::iterator it = _pendingSubscriptions.find(&imAccount);
+		IMContactMultiMap::iterator it = _pendingSubscriptions.find(imAccount);
 		while (it != _pendingSubscriptions.end()) {
 			LOG_DEBUG("subscribing to Presence of: " + (*it).second->getContactId());
 			presence->subscribeToPresenceOf((*it).second->getContactId());
 			//TODO: should we keep the list in case of disconnection?
 			_pendingSubscriptions.erase(it);
-			it = _pendingSubscriptions.find(&imAccount);
+			it = _pendingSubscriptions.find(imAccount);
 		}
 
-		i = _presenceMap.find(&imAccount);
+		i = _presenceMap.find(imAccount);
 	} else {
 		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());
 	}

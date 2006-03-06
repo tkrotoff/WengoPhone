@@ -36,7 +36,7 @@ public:
 
 	~QtContactGroup();
 
-	const std::string & getName() const;
+	std::string getDisplayName() const;
 
 	void addContact(PContact * pContact);
 

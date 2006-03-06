@@ -101,9 +101,9 @@ public:
 
 private:
 
-	typedef std::map<IMAccount *, Presence *> PresenceMap;
+	typedef std::map<IMAccount, Presence *> PresenceMap;
 
-	typedef	std::multimap<const IMAccount *, const IMContact *> IMContactMultiMap;
+	typedef	std::multimap<IMAccount, const IMContact *> IMContactMultiMap;
 
 	void connectedEventHandler(ConnectHandler & sender, IMAccount & account);
 

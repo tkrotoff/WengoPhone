@@ -203,7 +203,7 @@ public:
 	 * @param contact Contact to add to the ContactList
 	 * @param contactGroupName name of the ContactGroup where the Contact should be added
 	 */
-	void addContact(Contact * contact, const std::string contactGroupName);
+	void addContact(Contact * contact, std::string contactGroupName);
 
 	/**
 	 * Gets the list of PhoneLine.
@@ -309,7 +309,7 @@ private:
 	/**
 	 * @see addContact()
 	 */
-	void addContactThreadSafe(Contact * contact, const std::string & contactGroupName);
+	void addContactThreadSafe(Contact * contact, std::string contactGroupName);
 
 	/**
 	 * Creates and adds a new PhoneLine given a SipAccount.

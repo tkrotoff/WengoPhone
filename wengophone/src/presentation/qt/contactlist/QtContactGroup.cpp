@@ -48,7 +48,7 @@ QtContactGroup::~QtContactGroup() {
 void QtContactGroup::initThreadSafe() {
 }
 
-const string & QtContactGroup::getName() const {
+string QtContactGroup::getDisplayName() const {
 	return _cContactGroup.getContactGroupName();
 }
 
@@ -61,7 +61,7 @@ void QtContactGroup::addContact(PContact * pContact) {
 void QtContactGroup::addContactThreadSafe(PContact * pContact) {
 	QList<QTreeWidgetItem *> list;
 
-	list = _qtContactList->_treeWidget->findItems(QString::fromStdString(getName()), Qt::MatchExactly);
+	list = _qtContactList->_treeWidget->findItems(QString::fromStdString(getDisplayName()), Qt::MatchExactly);
 	// A goup name is unique inside the model so we are sure that the first 
 	// QTreeWidgetItem is the right one.
 	QtUserList * ul = QtUserList::getInstance();

@@ -31,8 +31,8 @@
  */
 class PContact : public Presentation {
 public:
-	virtual const std::string & getDisplayName() const = 0;
-	virtual const std::string & getId() const = 0;
+	virtual std::string getDisplayName() const = 0;
+	virtual std::string getId() const = 0;
 	virtual bool haveIM() const = 0;
 	virtual bool haveCall() const = 0;
 	virtual bool haveVideo() const = 0;
