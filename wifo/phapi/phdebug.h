@@ -27,7 +27,9 @@ DYNA_AUDIO : around the audio dynamics
 #define DBG8_MEDIA_ENGINE(x1, x2, x3, x4, x5, x6, x7, x8)
 #endif
 #define DBG4_CODEC_LOOKUP(x1, x2, x3, x4)
+#define DBG1_DYNA_AUDIO(x1)
 #define DBG5_DYNA_AUDIO(x1, x2, x3, x4, x5)
+#define DBG1_DYNA_AUDIO_ECHO(x1)
 #define DBG5_DYNA_AUDIO_ECHO(x1, x2, x3, x4, x5)
 #define DBG8_DYNA_AUDIO_ECHO(x1, x2, x3, x4, x5, x6, x7, x8)
 #define DBG5_DYNA_AUDIO_RX(x1, x2, x3, x4, x5)
@@ -51,7 +53,9 @@ DYNA_AUDIO : around the audio dynamics
 #endif
 
 #if 0
+#define DBG1_DYNA_AUDIO(x1, x2, x3, x4, x5) printf(x1)
 #define DBG5_DYNA_AUDIO(x1, x2, x3, x4, x5) printf(x1, x2, x3, x4, x5)
+#define DBG1_DYNA_AUDIO_ECHO(x1) printf(x1)
 #define DBG5_DYNA_AUDIO_ECHO(x1, x2, x3, x4, x5) printf(x1, x2, x3, x4, x5)
 #define DBG8_DYNA_AUDIO_ECHO(x1, x2, x3, x4, x5, x6, x7, x8) printf(x1, x2, x3, x4, x5, x6, x7, x8)
 #endif

@@ -1866,6 +1866,94 @@ start_audio_device(struct ph_msession_s *s, phastream_t *stream)
 }
 
 
+static void
+setup_hdx_mode(struct ph_msession_s *s, phastream_t *stream)
+{
+  ph_mstream_params_t *sp = &s->streams[PH_MSTREAM_AUDIO1];
+
+  // SPIKE_HDX: initialization for mode = MIC has priority
+  if ((sp->flags & PH_MSTREAM_FLAG_MICHDX) || getenv("PH_FORCE_MICHDX"))
+    {
+      char*  fhdx =  getenv("PH_FORCE_MICHDX");
+		
+      stream->hdxmode = PH_HDX_MODE_MIC;
+      stream->hdxsilence = 1;
+      if (fhdx)
+	{
+	  sp->vadthreshold = atoi(fhdx);
+	}
+		
+      DBG2_MEDIA_ENGINE("ph_mession_audio_start: MICHDX mode level=%d\n",  sp->vadthreshold);
+    }
+
+
+  // SPIKE_HDX: initialization for mode = SPK has priority
+  if ((sp->flags & PH_MSTREAM_FLAG_SPKHDX) || getenv("PH_FORCE_SPKHDX"))
+    {
+      char*  spkfhdx =  getenv("PH_FORCE_SPKHDX");
+      
+      stream->hdxmode = PH_HDX_MODE_SPK;
+      stream->cngo.pwr_threshold = 700;
+      stream->spksilence = 1;
+
+      if (spkfhdx) {
+	stream->cngo.pwr_threshold = atoi(spkfhdx);
+      }
+
+      DBG2_MEDIA_ENGINE("ph_mession_audio_start: SPKHDX mode level=%d\n",  stream->cngo.pwr_threshold);
+    }
+
+
+}
+
+
+static void
+setup_aec(struct ph_msession_s *s, phastream_t *stream)
+{
+  ph_mstream_params_t *sp = &s->streams[PH_MSTREAM_AUDIO1];
+
+
+  if ( !(sp->flags & PH_MSTREAM_FLAG_AEC) )
+    {
+#ifdef DO_ECHO_CAN  
+      DBG1_DYNA_AUDIO_ECHO("setup_aec: Echo CAN desactivated\n");
+      stream->ec = 0;
+    }
+  else
+    {
+      stream->ec = ph_ec_init(stream->ms.codec->decoded_framesize, stream->clock_rate);
+      if (stream->ec)
+	{
+	  const char *lat = getenv("PH_ECHO_LATENCY");
+
+#if 0
+	  if (!lat)
+	    lat = "120"; 
+#endif
+      
+	  stream->audio_loop_latency = 0;
+      
+	  if (lat)
+	    stream->audio_loop_latency = atoi(lat) * 2 * stream->clock_rate/1000;
+
+        
+	  /* 
+	     circular buffer must be able to accomodate MAX_OUTPUT_LATENCY millisecs in output direction
+	     and the same amount in input direction 
+	  */
+	  cb_init(&stream->pcmoutbuf, 2 * sizeof(short) * MAX_OUTPUT_LATENCY * stream->clock_rate/1000);
+	  stream->sent_cnt = stream->recv_cnt = 0;
+	  stream->ecmux = g_mutex_new();
+          
+	}
+      DBG1_DYNA_AUDIO_ECHO("ph_msession_audio_start: Echo CAN created OK\n");
+#endif
+    }
+
+
+}
+
+
 int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 {
   RtpSession *session;
@@ -1955,7 +2043,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	      RtpTunnel *newTun, *old;
 	      RtpTunnel *newTun2, *old2;
 	      
-	      DBG1_MEDIA_ENGINE("ph_msessio_audio_start Replacing audio tunnel\n");
+	      DBG1_MEDIA_ENGINE("ph_msession_audio_start: Replacing audio tunnel\n");
 	      newTun = rtptun_connect(stream->ms.remote_ip, stream->ms.remote_port);
 	      
 	      if (!newTun)
@@ -2027,38 +2115,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   stream->cngi.last_noise_sent_time = stream->last_rtp_recv_time = stream->cngi.last_dtx_time = stream->last_rtp_sent_time;
 
 
-  
-  // SPIKE_HDX: initialization for mode = MIC has priority
-  if ((sp->flags & PH_MSTREAM_FLAG_MICHDX) || getenv("PH_FORCE_MICHDX"))
-    {
-      char*  fhdx =  getenv("PH_FORCE_MICHDX");
-		
-      stream->hdxmode = PH_HDX_MODE_MIC;
-      stream->hdxsilence = 1;
-      if (fhdx)
-	{
-	  sp->vadthreshold = atoi(fhdx);
-	}
-		
-      DBG2_MEDIA_ENGINE("ph_mession_audio_start: MICHDX mode level=%d\n",  sp->vadthreshold);
-    }
-
-
-  // SPIKE_HDX: initialization for mode = SPK has priority
-  if ((sp->flags & PH_MSTREAM_FLAG_SPKHDX) || getenv("PH_FORCE_SPKHDX"))
-    {
-      char*  spkfhdx =  getenv("PH_FORCE_SPKHDX");
-      
-      stream->hdxmode = PH_HDX_MODE_SPK;
-      stream->cngo.pwr_threshold = 700;
-      stream->spksilence = 1;
-
-      if (spkfhdx) {
-	stream->cngo.pwr_threshold = atoi(spkfhdx);
-      }
-
-      DBG2_MEDIA_ENGINE("ph_mession_audio_start: SPKHDX mode level=%d\n",  stream->cngo.pwr_threshold);
-    }
+  setup_hdx_mode(s, stream);
 
 
   stream->ms.mses = s;
@@ -2171,7 +2228,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   stream->ms.running = 1;
   stream->ms.rtp_session = session;
 
-  stream->dtmfCallback = s->dtmfCallback;
+
 
   // SPIKE_HDX: init the voice activity detection on the local input stream (MIC)
   if (stream->cngi.vad || stream->hdxmode == PH_HDX_MODE_SPK)
@@ -2193,43 +2250,9 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
     }
   
 
-  if ( !(sp->flags & PH_MSTREAM_FLAG_AEC) )
-    {
-#ifdef DO_ECHO_CAN  
-      DBG5_DYNA_AUDIO_ECHO("ph_media_audio_start: Echo CAN desactivated\n",0,0,0,0);
-      stream->ec = 0;
-    }
-  else
-    {
-      stream->ec = ph_ec_init(codec->decoded_framesize, stream->clock_rate);
-      if (stream->ec)
-	{
-	  const char *lat = getenv("PH_ECHO_LATENCY");
+  setup_aec(s, stream);
 
-#if 0
-	  if (!lat)
-	    lat = "120"; 
-#endif
-      
-	  stream->audio_loop_latency = 0;
-      
-	  if (lat)
-	    stream->audio_loop_latency = atoi(lat) * 2 * stream->clock_rate/1000;
-
-        
-	  /* 
-	     circular buffer must be able to accomodate MAX_OUTPUT_LATENCY millisecs in output direction
-	     and the same amount in input direction 
-	  */
-	  cb_init(&stream->pcmoutbuf, 2 * sizeof(short) * MAX_OUTPUT_LATENCY * stream->clock_rate/1000);
-	  stream->sent_cnt = stream->recv_cnt = 0;
-	  stream->ecmux = g_mutex_new();
-          
-	}
-      DBG5_DYNA_AUDIO_ECHO("ph_msession_audio_start: Echo CAN created OK\n",0,0,0,0);
-#endif
-    }
-
+  stream->dtmfCallback = s->dtmfCallback;
   stream->dtmfi.dtmfg_lock = g_mutex_new();
   stream->dtmfi.dtmfq_cnt = 0;
   stream->dtmfi.dtmfg_phase = DTMF_IDLE;
