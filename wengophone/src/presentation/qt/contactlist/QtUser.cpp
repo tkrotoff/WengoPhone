@@ -86,8 +86,10 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	x=option.rect.width();
 	if (_mouseOn)
 	{
+/*
 		if (status != QtContactPixmap::ContactNotAvailable)
 		{
+*/
 			px = spx->getPixmap(QtContactPixmap::ContactVideo);
 			if (haveVideo())
 			{
@@ -115,9 +117,11 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 			else
 				x-=px.width();
 			_iconsStartPosition = x;
+/*
 		}
-		else
-			_iconsStartPosition = x;
+*/
+//		else
+//			_iconsStartPosition = x;
 	}
 		
 }
