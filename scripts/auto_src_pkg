@@ -30,16 +30,40 @@ rm -rf openwengo_$rev openwengo_$rev.tar.bz2
 # Download sources from svn
 echo -n "Downloading sources... "
 mkdir -p openwengo_$rev/wengoscons
-svn export --force -q -r {$rev} --password guest --username guest http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/wengoscons openwengo_$rev/wengoscons
+
+svn export --force -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/wengoscons\
+    openwengo_$rev/wengoscons
+
 mkdir -p openwengo_$rev/wengophone
-svn export --force -q -r {$rev} --password guest --username guest http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/wengophone openwengo_$rev/wengophone
+
+svn export --force -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/wengophone\
+    openwengo_$rev/wengophone
+
 mkdir -p openwengo_$rev/libs
-svn export --force -q -r {$rev} --password guest --username guest http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/libs openwengo_$rev/libs
+
+svn export --force -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/libs\
+    openwengo_$rev/libs
+
 mkdir -p openwengo_$rev/wifo
-svn export --force -q -r {$rev} --password guest --username guest http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/wifo openwengo_$rev/wifo
-svn export -q -r {$rev} --password guest --username guest http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/SConscript openwengo_$rev/SConscript
-svn export -q -r {$rev} --password guest --username guest http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/SConstruct openwengo_$rev/SConstruct
-svn export -q -r {$rev} --password guest --username guest http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/SOptions openwengo_$rev/SOptions
+
+svn export --force -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/wifo\
+    openwengo_$rev/wifo
+
+svn export -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/SConscript\
+    openwengo_$rev/SConscript
+
+svn export -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/SConstruct\
+    openwengo_$rev/SConstruct
+
+svn export -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/SOptions\
+    openwengo_$rev/SOptions
 echo "done"
 
 # Remove binaries
@@ -50,7 +74,7 @@ find openwengo_$rev -iname \*.dll | xargs rm -f
 find openwengo_$rev -iname \*.jpg | xargs rm -f 
 find openwengo_$rev -iname \*.lib | xargs rm -f
 find openwengo_$rev -iname \*.pdf -a -iname \*.html | xargs rm -f
-echo -n "Tree cleaned!"
+echo "done"
 
 # Make the sources archive
 echo -n "Writing archive... "
