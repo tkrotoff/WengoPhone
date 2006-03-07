@@ -72,21 +72,27 @@ public:
 	Qt::MouseButton getButton();
 	
 	int getText_y() { return _centeredText_y;};
+	
+	void setAvatar(QString path) {_avatarPath = path;};
+	
+	QString getAvatar() { return _avatarPath;};
 
 public Q_SLOTS:
 
 Q_SIGNALS:
 	void clicked(QtUser * user,int prt);
 protected:	
-	QString		_userId;
+	QString	_userId;
 
-	QString		_userName;
+	QString	_userName;
 	
-	QPixmap		_imPixmap;
+	QPixmap	_imPixmap;
 
-	QPixmap		_callPixmap;
+	QPixmap	_callPixmap;
 
-	QPixmap		_videoPixmap;
+	QPixmap	_videoPixmap;
+	
+	QRect _painterRect;
 
 	QtContactPixmap::contactPixmap _status;
 
@@ -100,6 +106,8 @@ protected:
 
 	int _centeredText_y;
 
+	QString _avatarPath;
+	
 	PContact & _pContact;
 };
 

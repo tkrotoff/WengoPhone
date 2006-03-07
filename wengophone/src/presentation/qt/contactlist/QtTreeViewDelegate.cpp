@@ -21,6 +21,7 @@
 
 #include "QtTreeViewDelegate.h"
 #include "QtUserWidgetEventFilter.h"
+#include "QtUserWidget.h"
 #include "QtUserList.h"
 #include "QtContactPixmap.h"
 /*
@@ -42,6 +43,7 @@ QWidget * QtTreeViewDelegate::createEditor(QWidget *parent,
 	QtUserList * ul = QtUserList::getInstance();
 	QWidget * w = widget->findChild<QWidget *>("UserWidget");
 	w->installEventFilter(new QtUserWidgetEventFilter((QObject *)this,w,ul->getUser(index.data().toString() )));
+	//widget->setAvatar("emoticons/cat.svg");
     return (QWidget *)widget;
 }
 

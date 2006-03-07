@@ -36,6 +36,8 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	int x;
     bool parentItem = false;
 	
+	_painterRect = option.rect;
+	
 	QLinearGradient lg( QPointF(1,1), QPointF(option.rect.width(),1));
 	lg.setSpread(QGradient::RepeatSpread);
 	lg.setColorAt ( 0, option.palette.midlight().color());
@@ -163,7 +165,8 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	
 	spx = QtContactPixmap::getInstance();
 	
-	x=rect.width();
+	//x=rect.width();
+	x = _painterRect.width();
 	
 	
 	

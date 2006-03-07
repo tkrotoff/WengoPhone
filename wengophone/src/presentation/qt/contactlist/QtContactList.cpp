@@ -83,9 +83,9 @@ void QtContactList::initThreadSafe() {
 	spx->setPixmap (QtContactPixmap::ContactForward,QPixmap(":/pics/online.png"));
 
 	// Fonctions icons
-	spx->setPixmap (QtContactPixmap::ContactIM,QPixmap(":/pics/contact_phone_home.png"));
-	spx->setPixmap (QtContactPixmap::ContactCall,QPixmap(":/pics/contact_phone_mobile.png"));
-	spx->setPixmap (QtContactPixmap::ContactVideo,QPixmap(":/pics/call_video_button.png"));
+	spx->setPixmap (QtContactPixmap::ContactIM,QPixmap(":/pics/contact_im.png"));
+	spx->setPixmap (QtContactPixmap::ContactCall,QPixmap(":/pics/contact_call.png"));
+	spx->setPixmap (QtContactPixmap::ContactVideo,QPixmap(":/pics/contact_video.png"));
 
 	// Group icons
 	spx->setPixmap (QtContactPixmap::ContactGroupOpen,QPixmap(":/pics/group_open.png"));

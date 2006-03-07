@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 #include "QtUserWidget.h"
-
+#include "QtUserWidgetAvatarManager.h"
 
 QtUserWidget::QtUserWidget(QWidget * parent, Qt::WFlags f) : QWidget( parent, f)
 {
@@ -27,7 +27,9 @@ QtUserWidget::QtUserWidget(QWidget * parent, Qt::WFlags f) : QWidget( parent, f)
 	layout->setMargin(0);
 	setLayout(layout);
 	
-	_frame = findChild<QFrame *>("frame");
+	_frame = findChild<QFrame *>("avatarFrame");
+	_avatarManager = new QtUserWidgetAvatarManager(this,_frame);
+	_frame->installEventFilter(_avatarManager);
 }
 
 void QtUserWidget::setText(const QString & text){
@@ -50,4 +52,8 @@ QFrame * QtUserWidget::getFrame(){
 
 QPixmap * QtUserWidget::getTux(){
 	return _tux;
+}
+void QtUserWidget::setAvatar(QString path)
+{
+	_avatarManager->loadAvatar(path);
 }

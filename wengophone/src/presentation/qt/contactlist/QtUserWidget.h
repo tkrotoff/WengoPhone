@@ -23,23 +23,37 @@
 #include <WidgetFactory.h>
 #include <QtGui>
 
+#include "QtUserWidgetAvatarManager.h"
 
 class QtUserWidget : public QWidget
 {
     Q_OBJECT
 public:
     QtUserWidget(QWidget * parent = 0, Qt::WFlags f=0);
-    void setText(const QString & text);
-    const QString & text();
-    virtual void paintEvent(QPaintEvent * event);
-    QFrame *    getFrame();
-    QPixmap *   getTux();
+    
+	void setText(const QString & text);
+    
+	const QString & text();
+    
+	virtual void paintEvent(QPaintEvent * event);
+	
+	void setAvatar(QString path);
+    
+	QFrame *    getFrame();
+    
+	QPixmap *   getTux();
     
 protected:
-    QString     _text;
-    QPixmap  *  _tux;
+    
+	QString     _text;
+    
+	QPixmap  *  _tux;
+	
 	QFrame   *  _frame;
+	
 	QWidget * _widget;
+	
+	QtUserWidgetAvatarManager * _avatarManager;
 };
 
 #endif
