@@ -32,6 +32,7 @@
 #include <File.h>
 #include <Timer.h>
 #include <AudioDevice.h>
+#include <global.h>
 
 #include <string>
 using namespace std;
@@ -354,6 +355,7 @@ bool PhApiWrapper::setCallOutputAudioDevice(const std::string & deviceName) {
 }
 
 bool PhApiWrapper::setAudioDevices() {
+#ifndef OS_MACOSX
 	//Uses PortAudio
 	static const std::string INPUT_DEVICE_TAG = "pa:IN=";
 	static const std::string OUTPUT_DEVICE_TAG  = "OUT=";
@@ -366,6 +368,11 @@ bool PhApiWrapper::setAudioDevices() {
 
 	//Takes the default Windows audio device
 	//std::string tmp = "pa:";
+#else
+	//FIXME: needs to be changed to take the set audio device
+	//.(currently takes the default audio device)
+	std::string tmp = "ca:";
+#endif
 
 	int ret = phChangeAudioDevices(tmp.c_str());
 	if (ret == 0) {
