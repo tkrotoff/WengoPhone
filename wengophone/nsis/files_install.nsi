@@ -42,6 +42,7 @@ File "${BUILD_DIR}\libgthread-2.0-0.dll"
 File "${BUILD_DIR}\phapi.dll"
 File "${BUILD_DIR}\phspeexplugin.dll"
 File "${BUILD_DIR}\phamrplugin.dll"
+File "${BUILD_DIR}\wengocurl.dll"
 
 /** Wenbox. */
 File "${BUILD_DIR}\wenboxplugin.dll"

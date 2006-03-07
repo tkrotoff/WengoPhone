@@ -3,7 +3,7 @@
  *
  * If you add a global variable, declare it here as commented.
  */
-!define PRODUCT_VERSION "0.7"
+!define PRODUCT_VERSION "0.9"
 ;!define DEBUG
 !define BUILD_DIR "..\..\release-symbols\"
 

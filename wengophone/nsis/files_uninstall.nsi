@@ -21,6 +21,9 @@ RMDir "$INSTDIR\sounds\"
 Delete "$INSTDIR\emoticons\*"
 RMDir "$INSTDIR\emoticons\"
 
+Delete "$INSTDIR\plugins\*"
+RMDir "$INSTDIR\plugins\"
+
 Delete "$INSTDIR\*"
 RMDir "$INSTDIR"
 
