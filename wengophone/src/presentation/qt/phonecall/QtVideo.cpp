@@ -128,10 +128,6 @@ void QtVideo::unFullScreen() {
 	_frame->setParent(_videoWindow);
 	QLayout * layout = _videoWindow->layout();
 	layout->addWidget(_frame);
-	//FIXME bug inside Qt-4.1.0???
-	//_frame->setWindowFlags((Qt::WindowFlags) (_frameWindowFlags & ~Qt::Window));
-	_frame->setWindowFlags((Qt::WindowFlags) 0);
-	_frame->setWindowFlags(Qt::SubWindow);
 
 #ifdef OS_WINDOWS
 	//Restores previous resolution
