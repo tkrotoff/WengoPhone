@@ -124,8 +124,8 @@ elif WengoOSLinux():
 			'QtGui_debug',
 			'QtNetwork_debug',
 			'QtDesigner_debug',
-			'QtXml_debug'
-			'QtSvg_debug'
+			'QtXml_debug',
+			'QtSvg_debug',
 		]
 	else:
 		libs += [
@@ -133,8 +133,8 @@ elif WengoOSLinux():
 			'QtGui',
 			'QtNetwork',
 			'QtDesigner',
-			'QtXml'
-			'QtSvg'
+			'QtXml',
+			'QtSvg',
 		]
 	include_path += [os.path.join(qtdir, 'mkspecs', 'linux-g++')]
 
