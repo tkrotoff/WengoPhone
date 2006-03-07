@@ -108,7 +108,7 @@ void ChatWidget::addToHistory(const QString & senderName,const QString & str)
     arg(_nickBgColor).
     arg(_nickTextColor).
     arg(senderName).
-	arg(_nickBgColor).
+	arg(bgColor).
     arg(_nickTextColor).
     arg(QTime::currentTime().toString());
     
