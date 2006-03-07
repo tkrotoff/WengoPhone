@@ -23,6 +23,7 @@ File "${BUILD_DIR}\..\wengophone\COPYING"
 
 /** Gaim. */
 File "${BUILD_DIR}\gaim.dll"
+File "${BUILD_DIR}\iconv.dll"
 File "${BUILD_DIR}\intl.dll"
 File "${BUILD_DIR}\nspr4.dll"
 File "${BUILD_DIR}\nss3.dll"
