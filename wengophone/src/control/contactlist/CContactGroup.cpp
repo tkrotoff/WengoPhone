@@ -59,6 +59,7 @@ void CContactGroup::contactRemovedEventHandler(ContactGroup & sender, Contact & 
 			_pContactGroup->removeContact((*it)->getPresentation());
 			_pContactGroup->updatePresentation();
 			_cContactVector.erase(it);
+			return;
 		}
 	}
 }
