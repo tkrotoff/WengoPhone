@@ -115,4 +115,5 @@ if WengoOSMacOSX():
 env.WengoAddDefines(defines)
 env.WengoAddLinkFlags(link_flags)
 env.WengoUseLibraries(libs)
+env.WengoCopyToBuildDir('chat/emoticons', 'emoticons')
 env.WengoProgram('qtwengophone', sources, headers)
