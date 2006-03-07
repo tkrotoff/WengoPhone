@@ -22,25 +22,105 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
+#include <Logger.h>
+
 #include <Object.h>
 #include <WidgetFactory.h>
 
 #include <QtGui>
 
-static const int PREFERENCE_NAME_COLUMN = 0;
+static const int KEY_NAME_COLUMN = 0;
 static const int STATUS_COLUMN = 1;
 static const int TYPE_COLUMN = 2;
 static const int VALUE_COLUMN = 3;
 
+static const QString TYPE_STRING = "string";
+static const QString TYPE_BOOLEAN = "boolean";
+static const QString TYPE_INTEGER = "integer";
+
 QtAdvancedConfig::QtAdvancedConfig(QWidget * parent) : QObject() {
-	_advancedConfigWindow = WidgetFactory::create(":/forms/AdvancedConfigWindow.ui", parent);
+	_advancedConfigWindow = WidgetFactory::create(":/forms/config/AdvancedConfigWindow.ui", parent);
 
-	QTableWidget * tableWidget = Object::findChild<QLabel *>(_advancedConfigWindow, "tableWidget");
+	_tableWidget = Object::findChild<QTableWidget *>(_advancedConfigWindow, "tableWidget");
 
-	StringList keys = config.getAllKeys();
-	for (int i = 0; i < keys; i++) {
-		tableWidget->insertRow(i);
+	QPushButton * saveButton = Object::findChild<QPushButton *>(_advancedConfigWindow, "saveButton");
+	connect(saveButton, SIGNAL(clicked()), SLOT(saveConfig()));
+}
 
-		tableWidget->
+void QtAdvancedConfig::populate() {
+	//_tableWidget->clear();
+
+	Settings & settings = ConfigManager::getInstance().getCurrentConfig().getSettingsInterface();
+
+	StringList keys = settings.getAllKeys();
+	for (unsigned i = 0; i < keys.size(); i++) {
+		if (i >= _tableWidget->rowCount()) {
+			_tableWidget->insertRow(i);
+		}
+
+		QTableWidgetItem * itemKey = new QTableWidgetItem(QString::fromStdString(keys[i]));
+		_tableWidget->setItem(i, KEY_NAME_COLUMN, itemKey);
+
+		boost::any value = settings.getAny(keys[i]);
+		if (value.empty()) {
+			continue;
+		}
+
+		QTableWidgetItem * itemValue = NULL;
+		QTableWidgetItem * itemType = NULL;
+		if (Settings::isBoolean(value)) {
+			itemType = new QTableWidgetItem(TYPE_BOOLEAN);
+			bool tmp = boost::any_cast<bool>(value);
+			if (tmp) {
+				itemValue = new QTableWidgetItem("true");
+			} else {
+				itemValue = new QTableWidgetItem("false");
+			}
+		} else if (Settings::isInteger(value)) {
+			itemType = new QTableWidgetItem(TYPE_INTEGER);
+			int tmp = boost::any_cast<int>(value);
+			itemValue = new QTableWidgetItem(QString::fromStdString(String::fromNumber(tmp)));
+		} else if (Settings::isString(value)) {
+			itemType = new QTableWidgetItem(TYPE_STRING);
+			std::string tmp = boost::any_cast<std::string>(value);
+			itemValue = new QTableWidgetItem(QString::fromStdString(tmp));
+		}
+
+		_tableWidget->setItem(i, VALUE_COLUMN, itemValue);
+		_tableWidget->setItem(i, TYPE_COLUMN, itemType);
+	}
+}
+
+void QtAdvancedConfig::saveConfig() {
+	for (int row = 0; row < _tableWidget->rowCount(); row++) {
+
+		QTableWidgetItem * itemKey = _tableWidget->item(row, KEY_NAME_COLUMN);
+		if (!itemKey) {
+			return;
+		}
+		std::string key = itemKey->text().toStdString();
+
+		QTableWidgetItem * itemValue = _tableWidget->item(row, VALUE_COLUMN);
+		if (!itemValue) {
+			return;
+		}
+
+		Settings & settings = ConfigManager::getInstance().getCurrentConfig().getSettingsInterface();
+
+		QTableWidgetItem * itemType = _tableWidget->item(row, TYPE_COLUMN);
+		if (!itemType) {
+			return;
+		}
+
+		if (itemType->text() == TYPE_BOOLEAN) {
+			String tmp = itemValue->text().toStdString();
+			settings.set(key, tmp.toBoolean());
+		} else if (itemType->text() == TYPE_INTEGER) {
+			String tmp = itemValue->text().toStdString();
+			settings.set(key, tmp.toInteger());
+		} else if (itemType->text() == TYPE_STRING) {
+			std::string tmp = itemValue->text().toStdString();
+			settings.set(key, tmp);
+		}
 	}
 }

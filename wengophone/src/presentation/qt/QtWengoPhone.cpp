@@ -37,6 +37,7 @@
 #include "QtAbout.h"
 #include "sms/QtSms.h"
 #include "QtHttpProxyLogin.h"
+#include "config/QtAdvancedConfig.h"
 
 #include <WidgetFactory.h>
 #include <Object.h>
@@ -109,9 +110,9 @@ void QtWengoPhone::initThreadSafe() {
 	connect(actionAddContact, SIGNAL(triggered()), SLOT(addContact()));
 
 	//actionSetLogin
-	QAction * actionSetLogin = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSet_login");
+	QAction * actionSetLogin = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSetLogin");
 	connect(actionSetLogin, SIGNAL(triggered()), SLOT(actionSetLogin()));
-	
+
 	//actionConfiguration
 	QAction * actionConfiguration = Object::findChild<QAction *>(_wengoPhoneWindow, "actionConfiguration");
 	connect(actionConfiguration, SIGNAL(triggered()), SLOT(showConfig()));
@@ -132,18 +133,9 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionSendSms = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSendSms");
 	connect(actionSendSms, SIGNAL(triggered()), SLOT(sendSms()));
 
-
-	//centralwidget
-	QWidget * centralwidget = Object::findChild<QWidget *>(_wengoPhoneWindow, "centralwidget");
-	_wengoPhoneWindow->setCentralWidget(centralwidget);
-
-	//menubar
-	QMenuBar * menubar = Object::findChild<QMenuBar *>(_wengoPhoneWindow, "menubar");
-	_wengoPhoneWindow->setMenuBar(menubar);
-
-	//statusbar
-	QStatusBar * statusbar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusbar");
-	_wengoPhoneWindow->setStatusBar(statusbar);
+	//actionAdvancedConfiguration
+	QAction * actionAdvancedConfiguration = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAdvancedConfiguration");
+	connect(actionAdvancedConfiguration, SIGNAL(triggered()), SLOT(showAdvancedConfig()));
 
 	_wengoPhoneWindow->show();
 }
@@ -363,6 +355,13 @@ void QtWengoPhone::sendSms() {
 	}
 }
 
+void QtWengoPhone::showAdvancedConfig() {
+	static QtAdvancedConfig * configWindow = new QtAdvancedConfig(_wengoPhoneWindow);
+
+	configWindow->populate();
+	configWindow->getWidget()->show();
+}
+
 void QtWengoPhone::wrongProxyAuthenticationEventHandler(SipAccount & sender,
 		const std::string & proxyAddress, unsigned proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword) {
@@ -382,12 +381,15 @@ void QtWengoPhone::proxyNeedsAuthenticationEventHandler(SipAccount & sender, con
 	postEvent(event);
 }
 
-void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort) {
+void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(SipAccount & sender,
+		const std::string & proxyAddress, unsigned proxyPort) {
+
 	static QtHttpProxyLogin * httpProxy = new QtHttpProxyLogin(_wengoPhoneWindow, proxyAddress, proxyPort);
 
 	int ret = httpProxy->exec();
 
 	if (ret == QDialog::Accepted) {
-		sender.setProxySettings(httpProxy->getProxyAddress(), httpProxy->getProxyPort(), httpProxy->getLogin(), httpProxy->getPassword());
+		sender.setProxySettings(httpProxy->getProxyAddress(), httpProxy->getProxyPort(),
+			httpProxy->getLogin(), httpProxy->getPassword());
 	}
 }

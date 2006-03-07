@@ -41,11 +41,12 @@ headers = [
 	'presence/QtPresenceHandler.h',
 	'chat/QtChatHandler.h',
 	'chat/QtChatWidget.h',
-    'chat/QtChatWindow.h',
-    'chat/QtEmoticonsWidget.h',
-    'chat/widgetseeker.h',
-    'chat/chatwidgetmanager.h',
+	'chat/QtChatWindow.h',
+	'chat/QtEmoticonsWidget.h',
+	'chat/widgetseeker.h',
+	'chat/chatwidgetmanager.h',
 	'sms/QtSms.h',
+	'config/QtAdvancedConfig.h',
 ]
 sources = [
 	'../main.cpp',
@@ -78,11 +79,12 @@ sources = [
 	'presence/QtPresenceHandler.cpp',
 	'chat/QtChatHandler.cpp',
 	'chat/QtChatWidget.cpp',
-    'chat/chatwidgetmanager.cpp',
-    'chat/QtChatWindow.cpp',
-    'chat/QtEmoticonsWidget.cpp',
-    'chat/widgetseeker.cpp',
+	'chat/chatwidgetmanager.cpp',
+	'chat/QtChatWindow.cpp',
+	'chat/QtEmoticonsWidget.cpp',
+	'chat/widgetseeker.cpp',
 	'sms/QtSms.cpp',
+	'config/QtAdvancedConfig.cpp',
 	env.WengoCompileQt4Resource('wengophone.qrc')
 ]
 
@@ -112,6 +114,7 @@ if WengoOSMacOSX():
 
 	env.WengoDeclareMacOSXAppTemplate('./macosx/template.app')
 
+env.WengoCopyToBuildDir('chat/')
 env.WengoAddDefines(defines)
 env.WengoAddLinkFlags(link_flags)
 env.WengoUseLibraries(libs)

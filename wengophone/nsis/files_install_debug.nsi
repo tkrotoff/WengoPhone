@@ -1,13 +1,10 @@
-/**
- * DLL in debug mode.
- */
+/** DLL in debug mode. */
 
 SetOutPath "$INSTDIR"
-File "dll\debug\*.dll"
-File "dll\msvcr71.dll"
-File "${BUILD_DIR}\softphone\memorydump\memorydump.exe"
-File "${BUILD_DIR}\softphone\gui\wengophone.pdb"
-File "${BUILD_DIR}\wifo\exosip\phapi\phapi.pdb"
+File "C:\Qt\4.1.1\bin\QtCored4.dll"
+File "C:\Qt\4.1.1\bin\QtDesignerd4.dll"
+File "C:\Qt\4.1.1\bin\QtGuid4.dll"
+File "C:\Qt\4.1.1\bin\QtXmld4.dll"
 
-SetOutPath "$INSTDIR\styles"
-File "dll\styles\*.dll"
+File "C:\WINDOWS\system32\msvcr71d.dll"
+File "C:\WINDOWS\system32\msvcp71d.dll"

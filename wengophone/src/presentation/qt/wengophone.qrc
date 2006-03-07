@@ -108,8 +108,6 @@
         <file>chat/ChatWidget.ui</file>
         <file>chat/chat.ui</file>
         <file>chat/emoticonswidget.ui</file>
-	<file>contactlist/AddContactWindow.ui</file>
-	<file>contactlist/ContactWidget.ui</file>
         <file>contactlist/contactList.ui</file>
         <file>contactlist/userWidget.ui</file>
 	<file>contactlist/AddContactWindow.ui</file>

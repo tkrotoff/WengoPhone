@@ -61,34 +61,34 @@ Config::Config(const std::string & name) {
 Config::~Config() {
 }
 
-std::string Config::getAudioOutputDeviceName() const {
-	return get(AUDIO_OUTPUT_DEVICENAME_KEY, AudioDevice::getDefaultPlaybackDevice());
+std::string Config::getAudioOutputDeviceName() {
+	return setKeyValue(AUDIO_OUTPUT_DEVICENAME_KEY, AudioDevice::getDefaultPlaybackDevice());
 }
 
-std::string Config::getAudioInputDeviceName() const {
-	return get(AUDIO_INPUT_DEVICENAME_KEY, AudioDevice::getDefaultRecordDevice());
+std::string Config::getAudioInputDeviceName() {
+	return setKeyValue(AUDIO_INPUT_DEVICENAME_KEY, AudioDevice::getDefaultRecordDevice());
 }
 
-std::string Config::getAudioRingerDeviceName() const {
-	return get(AUDIO_RINGER_DEVICENAME_KEY, AudioDevice::getDefaultPlaybackDevice());
+std::string Config::getAudioRingerDeviceName() {
+	return setKeyValue(AUDIO_RINGER_DEVICENAME_KEY, AudioDevice::getDefaultPlaybackDevice());
 }
 
-std::string Config::getAudioRingingFile() const {
+std::string Config::getAudioRingingFile() {
 	std::string file = File::convertPathSeparators(File::getApplicationDirPath() + "sounds/ringin.wav");
-	return get(AUDIO_RINGING_FILE_KEY, file);
+	return setKeyValue(AUDIO_RINGING_FILE_KEY, file);
 }
 
-std::string Config::getAudioCallClosedFile() const {
+std::string Config::getAudioCallClosedFile() {
 	std::string file = File::convertPathSeparators(File::getApplicationDirPath() + "sounds/callclosed.wav");
-	return get(AUDIO_CALLCLOSED_FILE_KEY, file);
+	return setKeyValue(AUDIO_CALLCLOSED_FILE_KEY, file);
 }
 
-std::string Config::getConfigDir() const {
+std::string Config::getConfigDir() {
 	std::string file = File::getApplicationDirPath();
-	return get(CONFIG_DIR_KEY, file);
+	return setKeyValue(CONFIG_DIR_KEY, file);
 }
 
-std::string Config::getAudioSmileysDir() const {
+std::string Config::getAudioSmileysDir() {
 	std::string file = File::convertPathSeparators(File::getApplicationDirPath() + "sounds/tones/");
-	return get(AUDIO_SMILEYS_DIR_KEY, file);
+	return setKeyValue(AUDIO_SMILEYS_DIR_KEY, file);
 }

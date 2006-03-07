@@ -120,6 +120,13 @@ public:
 	int get(const std::string & key, int defaultValue) const;
 
 	/**
+	 * To use only if you know what you are doing!
+	 *
+	 * @see get()
+	 */
+	boost::any getAny(const std::string & key) const;
+
+	/**
 	 * @return number of elements
 	 */
 	unsigned size() const {
@@ -130,13 +137,31 @@ public:
 
 	bool unserialize(const std::string & data);
 
+	/**
+	 * Checks if the value is a boolean.
+	 *
+	 * @param value to check
+	 * @return true if value is a boolean; false otherwise
+	 */
+	static bool isBoolean(const boost::any & value);
+
+	/**
+	 * Checks if the value is an integer.
+	 *
+	 * @param value to check
+	 * @return true if value is an integer; false otherwise
+	 */
+	static bool isInteger(const boost::any & value);
+
+	/**
+	 * Checks if the value is a std::string.
+	 *
+	 * @param value to check
+	 * @return true if value is a std::string; false otherwise
+	 */
+	static bool isString(const boost::any & value);
+
 private:
-
-	bool isBoolean(const boost::any & operand) const;
-
-	bool isInteger(const boost::any & operand) const;
-
-	bool isString(const boost::any & operand) const;
 
 	typedef std::map<const std::string, boost::any> Keys;
 

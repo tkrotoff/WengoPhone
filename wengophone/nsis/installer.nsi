@@ -1,14 +1,18 @@
 /**
- * Already defined by the autobuild.py script
+ * Global variables, already defined.
+ *
+ * If you add a global variable, declare it here as commented.
  */
-;!define PRODUCT_VERSION "20050316150100"
+!define PRODUCT_VERSION "0.7"
 ;!define DEBUG
+!define BUILD_DIR "..\..\release-symbols\"
+
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "WengoPhone"
 
 !define PRODUCT_PUBLISHER ${PRODUCT_NAME}
-!define PRODUCT_WEB_SITE "http://www.wengo.fr"
+!define PRODUCT_WEB_SITE "http://www.wengo.com"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\qtwengophone.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -20,8 +24,8 @@ SetCompressor lzma
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "src\presentation\qt\win32\wengophone.ico"
-!define MUI_UNICON "src\presentation\qt\win32\wengophone.ico"
+!define MUI_ICON "..\src\presentation\qt\win32\wengophone.ico"
+!define MUI_UNICON "..\src\presentation\qt\win32\wengophone.ico"
 
 ; Language Selection Dialog Settings
 !define MUI_LANGDLL_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
@@ -63,13 +67,18 @@ LicenseData $(license)
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 
-OutFile "${GENERATED_INSTALLER_PATH}/${GENERATED_INSTALLER_NAME}"
+/** Changes the name of the setup depending if we are in debug or release mode. */
+!ifdef DEBUG
+	OutFile "${PRODUCT_NAME}-setup-dbg-${PRODUCT_VERSION}.exe"
+!else
+	OutFile "${PRODUCT_NAME}-setup-${PRODUCT_VERSION}.exe"
+!endif
 
 !include "isUserAdmin.nsi"
 !include "writeToFile.nsi"
 Function .onInit
 	!insertmacro MUI_LANGDLL_DISPLAY
-	nsProcess::KillProcess "wengophone.exe" .R0
+	nsProcess::KillProcess "qtwengophone.exe" .R0
 	Call isUserAdmin
 	Pop $R0
 	StrCmp $R0 "true" isAdmin

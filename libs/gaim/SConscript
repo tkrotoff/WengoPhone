@@ -40,6 +40,8 @@ if WengoOSWindows():
 			'binary-lib/msvc/zlib1.dll',
 		]
 
+	env.WengoCopyToBuildDir('binary-lib/msvc/')
+
 	env.WengoAddLibPath(lib_path)
 	env.WengoAddIncludePath(include_path)
 	env.WengoUseLibraries(libs)

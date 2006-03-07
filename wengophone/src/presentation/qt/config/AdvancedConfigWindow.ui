@@ -24,6 +24,9 @@
    </property>
    <item row="0" column="0" >
     <widget class="QTableWidget" name="tableWidget" >
+     <property name="selectionBehavior" >
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
      <column>
       <property name="text" >
        <string>Preference Name</string>
@@ -89,5 +92,38 @@
  <resources>
   <include location="../wengophone.qrc" />
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>AdvancedConfigWindow</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>416</x>
+     <y>463</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>237</x>
+     <y>455</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>saveButton</sender>
+   <signal>clicked()</signal>
+   <receiver>AdvancedConfigWindow</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>330</x>
+     <y>466</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>136</x>
+     <y>458</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

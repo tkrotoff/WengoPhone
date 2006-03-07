@@ -87,7 +87,7 @@ private Q_SLOTS:
 	void exitApplication();
 
 	void addContact();
-	
+
 	void actionSetLogin();
 
 	void showConfig();
@@ -105,6 +105,8 @@ private Q_SLOTS:
 	void showCallHistory();
 
 	void sendSms();
+
+	void showAdvancedConfig();
 
 private:
 

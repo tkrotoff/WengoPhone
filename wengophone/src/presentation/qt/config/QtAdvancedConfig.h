@@ -23,6 +23,7 @@
 #include <QObject>
 
 class QWidget;
+class QTableWidget;
 
 class QtAdvancedConfig : public QObject {
 	Q_OBJECT
@@ -30,13 +31,21 @@ public:
 
 	QtAdvancedConfig(QWidget * parent);
 
+	void populate();
+
 	QWidget * getWidget() const {
 		return _advancedConfigWindow;
 	}
 
+private Q_SLOTS:
+
+	void saveConfig();
+
 private:
 
 	QWidget * _advancedConfigWindow;
+
+	QTableWidget * _tableWidget;
 };
 
 #endif	//QTADVANCEDCONFIG_H

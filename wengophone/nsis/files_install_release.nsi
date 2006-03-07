@@ -1,14 +1,10 @@
-/**
- * DLL in release mode.
- */
+/** DLL in release mode. */
 
 SetOutPath "$INSTDIR"
-File "dll\qt-mt335.dll"
-File "dll\msvcr71.dll"
-File "dll\msvcp71.dll"
-File "${BUILD_DIR}\softphone\memorydump\memorydump.exe"
-File "${BUILD_DIR}\softphone\gui\wengophone.pdb"
-File "${BUILD_DIR}\wifo\exosip\phapi\phapi.pdb"
+File "C:\Qt\4.1.1\bin\QtCore4.dll"
+File "C:\Qt\4.1.1\bin\QtDesigner4.dll"
+File "C:\Qt\4.1.1\bin\QtGui4.dll"
+File "C:\Qt\4.1.1\bin\QtXml4.dll"
 
-SetOutPath "$INSTDIR\styles\"
-File "dll\styles\*.dll"
+File "C:\WINDOWS\system32\msvcr71.dll"
+File "C:\WINDOWS\system32\msvcp71.dll"

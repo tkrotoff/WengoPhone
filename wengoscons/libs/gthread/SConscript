@@ -1,5 +1,3 @@
-import os
-
 env = WengoGetEnvironment()
 
 libs = []
@@ -17,9 +15,9 @@ if WengoOSWindows():
 			'binary-lib/msvc',
 		]
 
-		libs_file += [	
+		libs_file += [
 			'binary-lib/msvc/gthread-2.0.lib',
-			'binary-lib/msvc/libgthread-2.0-0.dll', 
+			'binary-lib/msvc/libgthread-2.0-0.dll',
 		]
 
 		env.WengoAddLibPath(lib_path)

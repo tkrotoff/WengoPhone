@@ -103,7 +103,7 @@ bool Settings::get(const std::string & key, bool defaultValue) const {
 		if (isBoolean(it->second)) {
 			return any_cast<bool>(it->second);
 		} else {
-			LOG_FATAL("the key doesn't match a string value");
+			LOG_FATAL("the key doesn't match a boolean value");
 		}
 	}
 
@@ -116,11 +116,21 @@ int Settings::get(const std::string & key, int defaultValue) const {
 		if (isInteger(it->second)) {
 			return any_cast<int>(it->second);
 		} else {
-			LOG_FATAL("the key doesn't match a string value");
+			LOG_FATAL("the key doesn't match an integer value");
 		}
 	}
 
 	return defaultValue;
+}
+
+boost::any Settings::getAny(const std::string & key) const {
+	Keys::const_iterator it = _keyMap.find(key);
+	if (it != _keyMap.end()) {
+		return it->second;
+	}
+
+	boost::any value;
+	return value;
 }
 
 std::string Settings::serialize() {
@@ -131,14 +141,14 @@ bool Settings::unserialize(const std::string & /*data*/) {
 	return true;
 }
 
-bool Settings::isBoolean(const boost::any & operand) const {
-	return (operand.type() == typeid(bool));
+bool Settings::isBoolean(const boost::any & value) {
+	return (value.type() == typeid(bool));
 }
 
-bool Settings::isInteger(const boost::any & operand) const {
-	return (operand.type() == typeid(int));
+bool Settings::isInteger(const boost::any & value) {
+	return (value.type() == typeid(int));
 }
 
-bool Settings::isString(const boost::any & operand) const {
-	return any_cast<std::string>(&operand);
+bool Settings::isString(const boost::any & value) {
+	return any_cast<std::string>(&value);
 }

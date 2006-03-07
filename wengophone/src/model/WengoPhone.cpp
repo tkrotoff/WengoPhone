@@ -32,8 +32,6 @@
 #include "contactlist/Contact.h"
 #include "contactlist/ContactGroup.h"
 #include "contactlist/IMContactListHandler.h"
-#include "config/ConfigManager.h"
-#include "config/Config.h"
 #include "chat/ChatHandler.h"
 #include "presence/PresenceHandler.h"
 #include "connect/ConnectHandler.h"

@@ -1,26 +1,27 @@
-nsProcess::KillProcess "wengophone.exe" .R0
+nsProcess::KillProcess "qtwengophone.exe" .R0
+
 Delete "$INSTDIR\styles\*"
 RMDir "$INSTDIR\styles\"
-Delete "$INSTDIR\designer\*"
-RMDir "$INSTDIR\designer\"
-Delete "$INSTDIR\bin\*"
-RMDir "$INSTDIR\bin\"
+
 Delete "$INSTDIR\icons\*"
 RMDir "$INSTDIR\icons\"
+
 Delete "$INSTDIR\lang\*"
 RMDir "$INSTDIR\lang\"
-Delete "$INSTDIR\sounds\dtmf\jungle\*"
-RMDir "$INSTDIR\sounds\dtmf\jungle\"
-Delete "$INSTDIR\sounds\dtmf\*"
-RMDir "$INSTDIR\sounds\dtmf\"
+
+Delete "$INSTDIR\sounds\tones\jungle\*"
+RMDir "$INSTDIR\sounds\tones\jungle\"
+
+Delete "$INSTDIR\sounds\tones\*"
+RMDir "$INSTDIR\sounds\tones\"
+
 Delete "$INSTDIR\sounds\*"
 RMDir "$INSTDIR\sounds\"
-Delete "$INSTDIR\connecting\*"
-RMDir "$INSTDIR\connecting\"
-Delete "$INSTDIR\*"
-Delete "$INSTDIR\emoticons\default\*"
-RMDir "$INSTDIR\emoticons\default\"
+
+Delete "$INSTDIR\emoticons\*"
 RMDir "$INSTDIR\emoticons\"
+
+Delete "$INSTDIR\*"
 RMDir "$INSTDIR"
 
 Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk"

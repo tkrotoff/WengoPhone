@@ -133,11 +133,11 @@
    <sender>closeButton</sender>
    <signal>clicked()</signal>
    <receiver>AboutWindow</receiver>
-   <slot>accept()</slot>
+   <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>311</x>
-     <y>270</y>
+     <x>453</x>
+     <y>498</y>
     </hint>
     <hint type="destinationlabel" >
      <x>212</x>
