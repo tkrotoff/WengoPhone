@@ -66,8 +66,8 @@ string CContact::getDisplayName() const {
 }
 
 string CContact::getId() const {
-	//FIXME: this id is not unique
-	return _contact.getFirstName() + " " + _contact.getLastName();
+	//FIXME: this id may be not unique
+	return getDisplayName();
 }
 
 bool CContact::haveIM() const {

@@ -80,7 +80,7 @@ void QtContactGroup::addContactThreadSafe(PContact * pContact) {
 
 	user = new QtUser(*pContact);
 	user->setId(QString::fromStdString(pContact->getId()));
-	user->setUserName(QString::fromStdString(pContact->getDisplayName()));
+	user->setUserName(contactName);
 	user->setStatus(QtContactPixmap::ContactOnline);
 
 	ul->addUser(user);
