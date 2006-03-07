@@ -20,6 +20,7 @@ if WengoOSWindows():
 		lib_files += [	
 			'binary-lib/msvc/glib-2.0.lib',
 			'binary-lib/msvc/libglib-2.0-0.dll',
+			'binary-lib/msvc/libgmodule-2.0-0.dll',
 		]
 
 		env.WengoAddLibPath(lib_path)
