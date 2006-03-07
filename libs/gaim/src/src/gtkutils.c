@@ -57,7 +57,6 @@
 #include "gtkdialogs.h"
 #include "gtkimhtml.h"
 #include "gtkimhtmltoolbar.h"
-#include "gtkstock.h"
 #include "gtkthemes.h"
 #include "gtkutils.h"
 
@@ -101,7 +100,7 @@ gaim_setup_imhtml(GtkWidget *imhtml)
 }
 
 GtkWidget *
-gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **toolbar_ret, GtkWidget **sw_ret)
+gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **toolbar_ret)
 {
 	GtkWidget *frame;
 	GtkWidget *imhtml;
@@ -127,9 +126,19 @@ gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **to
 		gtk_widget_show(sep);
 	}
 
+	/*
+	 * We never show the horizontal scrollbar in editable imhtmls becuase
+	 * it was causing weird lockups when typing text just as you type the
+	 * character that would cause both scrollbars to appear.  Definitely
+	 * seems like a gtk bug to me.
+	 */
 	sw = gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
-								   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	if (editable)
+		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+									   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	else
+		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+									   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_box_pack_start(GTK_BOX(vbox), sw, TRUE, TRUE, 0);
 	gtk_widget_show(sw);
 
@@ -156,9 +165,6 @@ gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **to
 
 	if (editable && (toolbar_ret != NULL))
 		*toolbar_ret = toolbar;
-
-	if (sw_ret != NULL)
-		*sw_ret = sw;
 
 	return frame;
 }
@@ -375,18 +381,17 @@ GtkWidget *
 gaim_gtk_make_frame(GtkWidget *parent, const char *title)
 {
 	GtkWidget *vbox, *label, *hbox;
-	char *labeltitle;
+	char labeltitle[256];
 
 	vbox = gtk_vbox_new(FALSE, GAIM_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(parent), vbox, FALSE, FALSE, 0);
 	gtk_widget_show(vbox);
 
 	label = gtk_label_new(NULL);
+	g_snprintf(labeltitle, sizeof(labeltitle),
+			   "<span weight=\"bold\">%s</span>", title);
 
-	labeltitle = g_strdup_printf("<span weight=\"bold\">%s</span>", title);
 	gtk_label_set_markup(GTK_LABEL(label), labeltitle);
-	g_free(labeltitle);
-
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 	gtk_widget_show(label);
@@ -1438,7 +1443,7 @@ gaim_dnd_file_manage(GtkSelectionData *sd, GaimAccount *account, const char *who
 						    _("You have dragged an image"),
 						    _("You can send this image as a file transfer, "
 						      "embed it into this message, or use it as the buddy icon for this user."),
-						    DND_FILE_TRANSFER, "OK", (GCallback)dnd_image_ok_callback,
+						    DND_BUDDY_ICON, "OK", (GCallback)dnd_image_ok_callback,
 						    "Cancel", (GCallback)dnd_image_cancel_callback, data,
 						    _("Set as buddy icon"), DND_BUDDY_ICON,
 						    _("Send image file"), DND_FILE_TRANSFER,
@@ -1453,7 +1458,7 @@ gaim_dnd_file_manage(GtkSelectionData *sd, GaimAccount *account, const char *who
 						    ft ? _("You can send this image as a file transfer or "
 							   "embed it into this message, or use it as the buddy icon for this user.") :
 						    _("You can insert this image into this message, or use it as the buddy icon for this user"),
-						    ft ? DND_FILE_TRANSFER : DND_IM_IMAGE, "OK", (GCallback)dnd_image_ok_callback,
+						    DND_BUDDY_ICON, "OK", (GCallback)dnd_image_ok_callback,
 						    "Cancel", (GCallback)dnd_image_cancel_callback, data,
 						    _("Set as buddy icon"), DND_BUDDY_ICON,
 						    ft ? _("Send image file") : _("Insert in message"), ft ? DND_FILE_TRANSFER : DND_IM_IMAGE, NULL);
@@ -1538,26 +1543,26 @@ void gaim_gtk_buddy_icon_get_scale_size(GdkPixbuf *buf, GaimBuddyIconSpec *spec,
 }
 
 GdkPixbuf *
-gaim_gtk_create_prpl_icon(GaimAccount *account, double scale_factor)
+gaim_gtk_create_prpl_icon(GaimAccount *account)
 {
 	GaimPlugin *prpl;
-	GaimPluginProtocolInfo *prpl_info;
+	GaimPluginProtocolInfo *prpl_info = NULL;
+	GdkPixbuf *status = NULL;
+	char *filename = NULL;
 	const char *protoname = NULL;
 	char buf[256]; /* TODO: We should use a define for max file length */
-	char *filename = NULL;
-	GdkPixbuf *pixbuf, *scaled;
 
 	g_return_val_if_fail(account != NULL, NULL);
 
 	prpl = gaim_find_prpl(gaim_account_get_protocol_id(account));
-	if (prpl == NULL)
-		return NULL;
 
-	prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(prpl);
-	if (prpl_info->list_icon == NULL)
-		return NULL;
+	if (prpl != NULL) {
+		prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(prpl);
 
-	protoname = prpl_info->list_icon(account, NULL);
+		if (prpl_info->list_icon != NULL)
+			protoname = prpl_info->list_icon(account, NULL);
+	}
+
 	if (protoname == NULL)
 		return NULL;
 
@@ -1569,102 +1574,53 @@ gaim_gtk_create_prpl_icon(GaimAccount *account, double scale_factor)
 
 	filename = g_build_filename(DATADIR, "pixmaps", "gaim", "status",
 								"default", buf, NULL);
-	pixbuf = gdk_pixbuf_new_from_file(filename, NULL);
+	status = gdk_pixbuf_new_from_file(filename, NULL);
 	g_free(filename);
 
-	scaled = gdk_pixbuf_scale_simple(pixbuf, 32*scale_factor,
-				32*scale_factor, GDK_INTERP_BILINEAR);
-	g_object_unref(pixbuf);
-
-	return scaled;
+	return status;
 }
 
-static GdkPixbuf *
-overlay_status_onto_icon(GdkPixbuf *pixbuf, GaimStatusPrimitive primitive)
+GdkPixbuf *
+gaim_gtk_create_prpl_icon_with_status(GaimAccount *account, GaimStatusType *status_type)
 {
-	const char *type_name;
-	char basename[256];
+	char basename2[BUFSIZ];
 	char *filename;
-	GdkPixbuf *emblem;
+	const char *type_name;
+	GdkPixbuf *pixbuf, *scale = NULL, *emblem;
 
-	type_name = gaim_primitive_get_id_from_type(primitive);
+	pixbuf = gaim_gtk_create_prpl_icon(account);
 
-	g_snprintf(basename, sizeof(basename), "%s.png", type_name);
-	filename = g_build_filename(DATADIR, "pixmaps", "gaim", "status",
-								"default", basename, NULL);
+	if (pixbuf != NULL) {
+		scale = gdk_pixbuf_scale_simple(pixbuf, 32, 32,
+		                                GDK_INTERP_BILINEAR);
+		g_object_unref(G_OBJECT(pixbuf));
+	} else {
+		return NULL;
+	}
+
+	/* TODO: let the prpl pick the emblem on a per status basis, and only
+	 * use the primitive as a fallback */
+	type_name = gaim_primitive_get_id_from_type(gaim_status_type_get_primitive(status_type));
+
+	g_snprintf(basename2, sizeof(basename2), "%s.png",
+	           type_name);
+	filename = g_build_filename(DATADIR, "pixmaps", "gaim", "status", "default",
+	                            basename2, NULL);
 	emblem = gdk_pixbuf_new_from_file(filename, NULL);
 	g_free(filename);
 
-	if (emblem != NULL) {
-		int width, height, emblem_width, emblem_height;
-		int new_emblem_width, new_emblem_height;
+	if (emblem) {
+		gdk_pixbuf_composite(emblem,
+		                     scale, 32-15, 32-15,
+		                     15, 15,
+		                     32-15, 32-15,
+		                     1, 1,
+		                     GDK_INTERP_BILINEAR,
+		                     255);
 
-		width = gdk_pixbuf_get_width(pixbuf);
-		height = gdk_pixbuf_get_height(pixbuf);
-		emblem_width = gdk_pixbuf_get_width(emblem);
-		emblem_height = gdk_pixbuf_get_height(emblem);
-
-		/*
-		 * Figure out how big to make the emblem.  Normally the emblem
-		 * will have half the width of the pixbuf.  But we don't make
-		 * an emblem any smaller than 10 pixels because it becomes
-		 * unrecognizable, unless the width of the pixbuf is less than
-		 * 10 pixels, in which case we make the emblem width the same
-		 * as the pixbuf width.
-		 */
-		new_emblem_width = MAX(width / 2, MIN(width, 10));
-		new_emblem_height = MAX(height / 2, MIN(height, 10));
-
-		/* Overlay emblem onto the bottom right corner of pixbuf */
-		gdk_pixbuf_composite(emblem, pixbuf,
-				width - new_emblem_width, height - new_emblem_height,
-				new_emblem_width, new_emblem_height,
-				width - new_emblem_width, height - new_emblem_height,
-				(double)new_emblem_width / (double)emblem_width,
-				(double)new_emblem_height / (double)emblem_height,
-				GDK_INTERP_BILINEAR,
-				255);
 		g_object_unref(emblem);
 	}
-
-	return pixbuf;
-}
-
-GdkPixbuf *
-gaim_gtk_create_prpl_icon_with_status(GaimAccount *account, GaimStatusType *status_type, double scale_factor)
-{
-	GdkPixbuf *pixbuf;
-
-	pixbuf = gaim_gtk_create_prpl_icon(account, scale_factor);
-	if (pixbuf == NULL)
-		return NULL;
-
-	/*
-	 * TODO: Let the prpl pick the emblem on a per status basis,
-	 *       and only use the primitive as a fallback?
-	 */
-
-	return overlay_status_onto_icon(pixbuf,
-				gaim_status_type_get_primitive(status_type));
-}
-
-GdkPixbuf *
-gaim_gtk_create_gaim_icon_with_status(GaimStatusPrimitive primitive, double scale_factor)
-{
-	gchar *filename;
-	GdkPixbuf *orig, *pixbuf;
-
-	filename = g_build_filename(DATADIR, "pixmaps", "gaim.png", NULL);
-	orig = gdk_pixbuf_new_from_file(filename, NULL);
-	g_free(filename);
-	if (orig == NULL)
-		return NULL;
-
-	pixbuf = gdk_pixbuf_scale_simple(orig, 32*scale_factor,
-					32*scale_factor, GDK_INTERP_BILINEAR);
-	g_object_unref(G_OBJECT(orig));
-
-	return overlay_status_onto_icon(pixbuf, primitive);
+	return scale;
 }
 
 static void
@@ -1731,6 +1687,6 @@ gaim_gtk_append_menu_action(GtkWidget *menu, GaimMenuAction *act,
 			g_list_free(act->children);
 			act->children = NULL;
 		}
-		gaim_menu_action_free(act);
+		g_free(act);
 	}
 }

@@ -114,10 +114,17 @@ static void search_cb(GtkWidget *button, GaimGtkLogViewer *lv)
 		if (read && *read && gaim_strcasestr(read, search_term)) {
 			GtkTreeIter iter;
 			GaimLog *log = logs->data;
+			char title[64];
+			char *title_utf8; /* temporary variable for utf8 conversion */
+
+			gaim_strftime(title, sizeof(title), "%c", localtime(&log->time));
+			title_utf8 = gaim_utf8_try_convert(title);
+			strncpy(title, title_utf8, sizeof(title));
+			g_free(title_utf8);
 
 			gtk_tree_store_append (lv->treestore, &iter, NULL);
 			gtk_tree_store_set(lv->treestore, &iter,
-					   0, gaim_date_format_full(localtime(&log->time)),
+					   0, title,
 					   1, log, -1);
 		}
 		g_free(read);
@@ -174,6 +181,7 @@ static void log_select_cb(GtkTreeSelection *sel, GaimGtkLogViewer *viewer) {
 	GdkCursor *cursor;
 	GaimLogReadFlags flags;
 	char *read = NULL;
+	char time[64];
 
 	if (!gtk_tree_selection_get_selected(sel, &model, &iter))
 		return;
@@ -198,16 +206,20 @@ static void log_select_cb(GtkTreeSelection *sel, GaimGtkLogViewer *viewer) {
 
 	if (log->type != GAIM_LOG_SYSTEM) {
 		char *title;
+		char *title_utf8; /* temporary variable for utf8 conversion */
+
+		gaim_strftime(time, sizeof(time), "%c", localtime(&log->time));
+
 		if (log->type == GAIM_LOG_CHAT)
-			title = g_strdup_printf(_("<span size='larger' weight='bold'>Conversation in %s on %s</span>"),
-									log->name,
-									log->tm ? gaim_date_format_full(log->tm) :
-									          gaim_date_format_full(localtime(&log->time)));
+			title = g_strdup_printf(_("Conversation in %s on %s"), log->name, time);
 		else
-			title = g_strdup_printf(_("<span size='larger' weight='bold'>Conversation with %s on %s</span>"),
-									log->name,
-									log->tm ? gaim_date_format_full(log->tm) :
-									          gaim_date_format_full(localtime(&log->time)));
+			title = g_strdup_printf(_("Conversation with %s on %s"), log->name, time);
+
+		title_utf8 = gaim_utf8_try_convert(title);
+		g_free(title);
+
+		title = g_strdup_printf("<span size='larger' weight='bold'>%s</span>", title_utf8);
+		g_free(title_utf8);
 
 		gtk_label_set_markup(GTK_LABEL(viewer->label), title);
 		g_free(title);
@@ -247,19 +259,28 @@ static void populate_log_tree(GaimGtkLogViewer *lv)
      /* Logs are made from trees in real life.
         This is a tree made from logs */
 {
-	const char *month;
+	char month[30];
+	char title[64];
 	char prev_top_month[30] = "";
+	char *utf8_tmp; /* temporary variable for utf8 conversion */
 	GtkTreeIter toplevel, child;
 	GList *logs = lv->logs;
 
 	while (logs != NULL) {
 		GaimLog *log = logs->data;
 
-		month = gaim_utf8_strftime(_("%B %Y"),
-		                           log->tm ? log->tm : localtime(&log->time));
+		gaim_strftime(month, sizeof(month), "%B %Y", localtime(&log->time));
+		gaim_strftime(title, sizeof(title), "%c", localtime(&log->time));
 
-		if (strcmp(month, prev_top_month) != 0)
-		{
+		/* do utf8 conversions */
+		utf8_tmp = gaim_utf8_try_convert(month);
+		strncpy(month, utf8_tmp, sizeof(month));
+		g_free(utf8_tmp);
+		utf8_tmp = gaim_utf8_try_convert(title);
+		strncpy(title, utf8_tmp, sizeof(title));
+		g_free(utf8_tmp);
+
+		if (strncmp(month, prev_top_month, sizeof(month)) != 0) {
 			/* top level */
 			gtk_tree_store_append(lv->treestore, &toplevel, NULL);
 			gtk_tree_store_set(lv->treestore, &toplevel, 0, month, 1, NULL, -1);
@@ -269,10 +290,7 @@ static void populate_log_tree(GaimGtkLogViewer *lv)
 
 		/* sub */
 		gtk_tree_store_append(lv->treestore, &child, &toplevel);
-		gtk_tree_store_set(lv->treestore, &child,
-						   0, log->tm ? gaim_date_format_full(log->tm) : gaim_date_format_full(localtime(&log->time)),
-						   1, log,
-						   -1);
+		gtk_tree_store_set(lv->treestore, &child, 0, title, 1, log, -1);
 
 		logs = logs->next;
 	}
@@ -410,7 +428,7 @@ static GaimGtkLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList 
 	gtk_paned_add2(GTK_PANED(pane), vbox);
 
 	/* Viewer ************/
-	frame = gaim_gtk_create_imhtml(FALSE, &lv->imhtml, NULL, NULL);
+	frame = gaim_gtk_create_imhtml(FALSE, &lv->imhtml, NULL);
 	gtk_widget_set_name(lv->imhtml, "gaim_gtklog_imhtml");
 	gtk_widget_set_size_request(lv->imhtml, 320, 200);
 	gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
@@ -483,7 +501,7 @@ void gaim_gtk_log_show(GaimLogType type, const char *screenname, GaimAccount *ac
 	}
 
 	display_log_viewer(ht, gaim_log_get_logs(type, screenname, account),
-			title, gaim_gtk_create_prpl_icon(account, 0.5), gaim_log_get_total_size(type, screenname, account));
+			title, gaim_gtk_create_prpl_icon(account), gaim_log_get_total_size(type, screenname, account));
 	g_free(title);
 }
 

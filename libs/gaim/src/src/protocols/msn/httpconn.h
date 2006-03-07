@@ -27,7 +27,6 @@
 typedef struct _MsnHttpConn MsnHttpConn;
 
 #include "servconn.h"
-#include "gaim_buffer.h"
 
 /**
  * An HTTP Connection.
@@ -51,15 +50,13 @@ struct _MsnHttpConn
 								 connect to. */
 
 	char *host; /**< The HTTP gateway host. */
+	GList *queue; /**< The queue of data chunks to write. */
 
 	int fd; /**< The connection's file descriptor. */
-	guint inpa; /**< The connection's input handler. */
+	int inpa; /**< The connection's input handler. */
 
 	char *rx_buf; /**< The receive buffer. */
-	int rx_len; /**< The receive buffer length. */
-
-	GaimCircBuffer *tx_buf;
-	guint tx_handler;
+	int rx_len; /**< The receive buffer lenght. */
 };
 
 /**
@@ -87,7 +84,7 @@ void msn_httpconn_destroy(MsnHttpConn *httpconn);
  *
  * @return The number of bytes written.
  */
-ssize_t msn_httpconn_write(MsnHttpConn *httpconn, const char *data, size_t size);
+size_t msn_httpconn_write(MsnHttpConn *httpconn, const char *data, size_t size);
 
 /**
  * Connects the HTTP connection object to a host.

@@ -89,7 +89,7 @@ if WengoOSPosix():
 		'src/src/dnssrv.c',
 		'src/src/eventloop.c',
 		'src/src/ft.c',
-		'src/src/gaim_buffer.c',
+#		'src/src/gaim_buffer.c',
 		'src/src/getopt.c',
 		'src/src/getopt1.c',
 		'src/src/idle.c',

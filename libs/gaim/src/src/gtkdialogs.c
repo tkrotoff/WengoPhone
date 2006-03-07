@@ -144,7 +144,6 @@ static struct translator current_translators[] = {
 	{N_("Swedish"),             "sv", "Tore Lundqvist", "tlt@mima.x.se"},
 	{N_("Tamil"),               "ta", "Viveka Nathan K", "vivekanathan@users.sourceforge.net"},
 	{N_("Telugu"),              "te", "Mr. Subbaramaih", "info.gist@cdac.in"},
-	{N_("Turkish"),             "tr", "Ahmet Alp BALKAN", "prf_q@users.sf.net"},
 	{N_("Vietnamese"),          "vi", N_("T.M.Thanh and the Gnome-Vi Team"), "gnomevi-list@lists.sf.net"},
 	{N_("Simplified Chinese"),  "zh_CN", "Funda Wang", "fundawang@linux.net.cn"},
 	{N_("Traditional Chinese"), "zh_TW", "Ambrose C. Li", "acli@ada.dhs.org"},
@@ -241,7 +240,7 @@ void gaim_gtkdialogs_about()
 	atk_object_set_description(obj, "Gaim " VERSION);
 	gtk_box_pack_start(GTK_BOX(vbox), logo, FALSE, FALSE, 0);
 
-	frame = gaim_gtk_create_imhtml(FALSE, &text, NULL, NULL);
+	frame = gaim_gtk_create_imhtml(FALSE, &text, NULL);
 	gtk_imhtml_set_format_functions(GTK_IMHTML(text), GTK_IMHTML_ALL ^ GTK_IMHTML_SMILEY);
 	gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
 
@@ -251,7 +250,7 @@ void gaim_gtkdialogs_about()
 		_("Gaim is a modular messaging client capable of using "
 		  "AIM, MSN, Yahoo!, Jabber, ICQ, IRC, SILC, "
 		  "Novell GroupWise, Lotus Sametime, Napster, Zephyr, and Gadu-Gadu "
-		  "all at once.  It is written using GTK+.<BR><BR>"
+		  "all at once.  It is written using GTK+.  "
 		  "You may modify and redistribute the program under "
 		  "the terms of the GPL (version 2 or later).  A copy of the GPL is "
 		  "contained in the 'COPYING' file distributed with Gaim.  "

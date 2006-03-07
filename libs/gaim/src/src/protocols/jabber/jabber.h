@@ -26,7 +26,6 @@
 #include "connection.h"
 #include "roomlist.h"
 #include "sslconn.h"
-#include "gaim_buffer.h"
 
 #include "jutil.h"
 #include "xmlnode.h"
@@ -108,9 +107,6 @@ typedef struct _JabberStream
 
 	char *avatar_hash;
 	GSList *pending_avatar_requests;
-
-	GaimCircBuffer *write_buffer;
-	guint writeh;
 
 	/* OK, this stays at the end of the struct, so plugins can depend
 	 * on the rest of the stuff being in the right place

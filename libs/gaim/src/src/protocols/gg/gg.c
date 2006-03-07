@@ -25,7 +25,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "../../internal.h"
+#include "internal.h"
 
 #include "plugin.h"
 #include "version.h"
@@ -1864,13 +1864,6 @@ static GList *ggp_actions(GaimPlugin *plugin, gpointer context)
 }
 /* }}} */
 
-/* static gboolean ggp_offline_message(const GaimBuddy *buddy) {{{ */
-static gboolean ggp_offline_message(const GaimBuddy *buddy)
-{
-	return TRUE;
-}
-/* }}} */
-
 /* prpl_info setup {{{ */
 static GaimPluginProtocolInfo prpl_info =
 {
@@ -1932,8 +1925,9 @@ static GaimPluginProtocolInfo prpl_info =
 	NULL,				/* can_receive_file */
 	NULL,				/* send_file */
 	NULL,				/* new_xfer */
-	ggp_offline_message,		/* offline_message */
+	NULL,				/* offline_message */
 	NULL,				/* whiteboard_prpl_ops */
+	NULL,				/* media_prpl_ops */
 };
 /* }}} */
 

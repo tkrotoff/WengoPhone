@@ -136,8 +136,8 @@ static int primitive_scores[] =
 
 static GHashTable *buddy_presences = NULL;
 
-#define SCORE_IDLE      8
-#define SCORE_IDLE_TIME 9
+#define SCORE_IDLE      7
+#define SCORE_IDLE_TIME 8
 
 /**************************************************************************
  * GaimStatusPrimitive API
@@ -182,10 +182,10 @@ gaim_primitive_get_name_from_type(GaimStatusPrimitive type)
     for (i = 0; i < GAIM_STATUS_NUM_PRIMITIVES; i++)
     {
 	if (type == status_primitive_map[i].type)
-		return _(status_primitive_map[i].name);
+		return status_primitive_map[i].name;
     }
 
-    return _(status_primitive_map[0].name);
+    return status_primitive_map[0].name;
 }
 
 GaimStatusPrimitive
@@ -233,7 +233,7 @@ gaim_status_type_new_full(GaimStatusPrimitive primitive, const char *id,
 	if (name != NULL)
 		status_type->name = g_strdup(name);
 	else
-		status_type->name = g_strdup(gaim_primitive_get_name_from_type(primitive));
+		status_type->name = g_strdup(_(gaim_primitive_get_name_from_type(primitive)));
 
 	return status_type;
 }
@@ -713,7 +713,7 @@ status_has_changed(GaimStatus *status)
 void
 gaim_status_set_active(GaimStatus *status, gboolean active)
 {
-	gaim_status_set_active_with_attrs_list(status, active, NULL);
+	gaim_status_set_active_with_attrs(status, active, NULL);
 }
 
 /*

@@ -217,7 +217,7 @@ GaimSavedStatus *gaim_savedstatus_find_by_creation_time(time_t creation_time);
  *
  * @return The saved status if found, or NULL.
  */
-GaimSavedStatus *gaim_savedstatus_find_transient_by_type_and_message(GaimStatusPrimitive type, const char *message);
+GaimSavedStatus *gaim_savedstatus_find_by_type_and_message(GaimStatusPrimitive type, const char *message);
 
 /**
  * Determines if a given saved status is "transient."
@@ -264,10 +264,7 @@ GaimStatusPrimitive gaim_savedstatus_get_type(const GaimSavedStatus *saved_statu
  *
  * @param saved_status The saved status.
  *
- * @return The message.  This will return NULL if the saved
- *         status does not have a message.  This will
- *         contain the normal markup that is created by
- *         Gaim's IMHTML (basically HTML markup).
+ * @return The name.
  */
 const char *gaim_savedstatus_get_message(const GaimSavedStatus *saved_status);
 

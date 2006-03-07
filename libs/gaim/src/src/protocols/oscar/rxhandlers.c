@@ -1,24 +1,4 @@
 /*
- * Gaim's oscar protocol plugin
- * This file is the legal property of its developers.
- * Please see the AUTHORS file distributed alongside this file.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-/*
  * rxhandlers.c
  *
  * This file contains most all of the incoming packet handlers, along
@@ -27,18 +7,18 @@
  *
  */
 
-#include "oscar.h"
-#include "peer.h"
+#define FAIM_INTERNAL
+#include <aim.h>
 
 struct aim_rxcblist_s {
-	guint16 family;
-	guint16 type;
+	fu16_t family;
+	fu16_t type;
 	aim_rxcallback_t handler;
-	guint16 flags;
+	fu16_t flags;
 	struct aim_rxcblist_s *next;
 };
 
-faim_internal aim_module_t *aim__findmodulebygroup(OscarSession *sess, guint16 group)
+faim_internal aim_module_t *aim__findmodulebygroup(aim_session_t *sess, fu16_t group)
 {
 	aim_module_t *cur;
 
@@ -50,7 +30,7 @@ faim_internal aim_module_t *aim__findmodulebygroup(OscarSession *sess, guint16 g
 	return NULL;
 }
 
-faim_internal aim_module_t *aim__findmodule(OscarSession *sess, const char *name)
+faim_internal aim_module_t *aim__findmodule(aim_session_t *sess, const char *name)
 {
 	aim_module_t *cur;
 
@@ -62,7 +42,7 @@ faim_internal aim_module_t *aim__findmodule(OscarSession *sess, const char *name
 	return NULL;
 }
 
-faim_internal int aim__registermodule(OscarSession *sess, int (*modfirst)(OscarSession *, aim_module_t *))
+faim_internal int aim__registermodule(aim_session_t *sess, int (*modfirst)(aim_session_t *, aim_module_t *))
 {
 	aim_module_t *mod;
 
@@ -93,7 +73,7 @@ faim_internal int aim__registermodule(OscarSession *sess, int (*modfirst)(OscarS
 	return 0;
 }
 
-faim_internal void aim__shutdownmodules(OscarSession *sess)
+faim_internal void aim__shutdownmodules(aim_session_t *sess)
 {
 	aim_module_t *cur;
 
@@ -115,7 +95,7 @@ faim_internal void aim__shutdownmodules(OscarSession *sess)
 	return;
 }
 
-static int consumesnac(OscarSession *sess, FlapFrame *rx)
+static int consumesnac(aim_session_t *sess, aim_frame_t *rx)
 {
 	aim_module_t *cur;
 	aim_modsnac_t snac;
@@ -163,7 +143,7 @@ static int consumesnac(OscarSession *sess, FlapFrame *rx)
 	return 0;
 }
 
-static int consumenonsnac(OscarSession *sess, FlapFrame *rx, guint16 family, guint16 subtype)
+static int consumenonsnac(aim_session_t *sess, aim_frame_t *rx, fu16_t family, fu16_t subtype)
 {
 	aim_module_t *cur;
 	aim_modsnac_t snac;
@@ -186,11 +166,11 @@ static int consumenonsnac(OscarSession *sess, FlapFrame *rx, guint16 family, gui
 	return 0;
 }
 
-static int negchan_middle(OscarSession *sess, FlapFrame *fr)
+static int negchan_middle(aim_session_t *sess, aim_frame_t *fr)
 {
 	aim_tlvlist_t *tlvlist;
 	char *msg = NULL;
-	guint16 code = 0;
+	fu16_t code = 0;
 	aim_rxcallback_t userfunc;
 	int ret = 1;
 
@@ -226,10 +206,10 @@ static int negchan_middle(OscarSession *sess, FlapFrame *fr)
  * Bleck functions get called when there's no non-bleck functions
  * around to cleanup the mess...
  */
-static int bleck(OscarSession *sess, FlapFrame *frame, ...)
+static int bleck(aim_session_t *sess, aim_frame_t *frame, ...)
 {
-	guint16 family, subtype;
-	guint16 maxf, maxs;
+	fu16_t family, subtype;
+	fu16_t maxf, maxs;
 
 	static const char *channels[6] = {
 		"Invalid (0)",
@@ -411,7 +391,7 @@ static int bleck(OscarSession *sess, FlapFrame *frame, ...)
 	return 1;
 }
 
-faim_export int aim_conn_addhandler(OscarSession *sess, OscarConnection *conn, guint16 family, guint16 type, aim_rxcallback_t newhandler, guint16 flags)
+faim_export int aim_conn_addhandler(aim_session_t *sess, aim_conn_t *conn, fu16_t family, fu16_t type, aim_rxcallback_t newhandler, fu16_t flags)
 {
 	struct aim_rxcblist_s *newcb;
 
@@ -442,7 +422,7 @@ faim_export int aim_conn_addhandler(OscarSession *sess, OscarConnection *conn, g
 	return 0;
 }
 
-faim_export int aim_clearhandlers(OscarConnection *conn)
+faim_export int aim_clearhandlers(aim_conn_t *conn)
 {
 	struct aim_rxcblist_s *cur;
 
@@ -461,7 +441,7 @@ faim_export int aim_clearhandlers(OscarConnection *conn)
 	return 0;
 }
 
-faim_internal aim_rxcallback_t aim_callhandler(OscarSession *sess, OscarConnection *conn, guint16 family, guint16 type)
+faim_internal aim_rxcallback_t aim_callhandler(aim_session_t *sess, aim_conn_t *conn, fu16_t family, fu16_t type)
 {
 	struct aim_rxcblist_s *cur;
 
@@ -475,22 +455,29 @@ faim_internal aim_rxcallback_t aim_callhandler(OscarSession *sess, OscarConnecti
 			return cur->handler;
 	}
 
-	return NULL;
+	if (type == AIM_CB_SPECIAL_DEFAULT) {
+		/* gaim_debug_misc("oscar", "aim_callhandler: no default handler for family 0x%04x\n", family); */
+		return NULL; /* prevent infinite recursion */
+	}
+
+	/* gaim_debug_misc("oscar", "aim_callhandler: no handler for  0x%04x/0x%04x\n", family, type); */
+
+	return aim_callhandler(sess, conn, family, AIM_CB_SPECIAL_DEFAULT);
 }
 
-faim_internal void aim_clonehandlers(OscarSession *sess, OscarConnection *dest, OscarConnection *src)
+faim_internal void aim_clonehandlers(aim_session_t *sess, aim_conn_t *dest, aim_conn_t *src)
 {
 	struct aim_rxcblist_s *cur;
 
 	for (cur = (struct aim_rxcblist_s *)src->handlerlist; cur; cur = cur->next) {
-		aim_conn_addhandler(sess, dest, cur->family, cur->type,
+		aim_conn_addhandler(sess, dest, cur->family, cur->type, 
 						cur->handler, cur->flags);
 	}
 
 	return;
 }
 
-faim_internal int aim_callhandler_noparam(OscarSession *sess, OscarConnection *conn,guint16 family, guint16 type, FlapFrame *ptr)
+faim_internal int aim_callhandler_noparam(aim_session_t *sess, aim_conn_t *conn,fu16_t family, fu16_t type, aim_frame_t *ptr)
 {
 	aim_rxcallback_t userfunc;
 
@@ -515,10 +502,10 @@ faim_internal int aim_callhandler_noparam(OscarSession *sess, OscarConnection *c
  * TODO: Allow for NULL handlers.
  *
  */
-faim_export void aim_rxdispatch(OscarSession *sess)
+faim_export void aim_rxdispatch(aim_session_t *sess)
 {
 	int i;
-	FlapFrame *cur;
+	aim_frame_t *cur;
 
 	for (cur = sess->queue_incoming, i = 0; cur; cur = cur->next, i++) {
 
@@ -577,7 +564,7 @@ faim_export void aim_rxdispatch(OscarSession *sess)
 	return;
 }
 
-faim_internal int aim_parse_unknown(OscarSession *sess, FlapFrame *frame, ...)
+faim_internal int aim_parse_unknown(aim_session_t *sess, aim_frame_t *frame, ...)
 {
 	int i;
 

@@ -52,16 +52,10 @@ gaim_build_dir(path, mode)
 	int mode
 
 const char *
-gaim_date_format_full(tm)
-	const struct tm *tm
+gaim_date()
 
 const char *
-gaim_date_format_long(tm)
-	const struct tm *tm
-
-const char *
-gaim_date_format_short(tm)
-	const struct tm *tm
+gaim_date_full()
 
 gboolean
 gaim_email_is_valid(address)
@@ -79,7 +73,7 @@ const gchar *
 gaim_home_dir()
 
 gboolean
-gaim_markup_extract_info_field(str, len, dest, start_token, skip, end_token, check_value, no_value_token, display_name, is_link, link_prefix, format_cb)
+gaim_markup_extract_info_field(str, len, dest, start_token, skip, end_token, check_value, no_value_token, display_name, is_link, link_prefix)
 	const char *str
 	int len
 	GString *dest
@@ -91,7 +85,6 @@ gaim_markup_extract_info_field(str, len, dest, start_token, skip, end_token, che
 	const char *display_name
 	gboolean is_link
 	const char *link_prefix
-	Gaim::Util::InfoFieldFormatCallback format_cb
 
 gboolean
 gaim_markup_find_tag(needle, haystack, start, end, attributes)
@@ -182,12 +175,9 @@ gaim_str_sub_away_formatters(str, name)
 	const char *name
 
 time_t
-gaim_str_to_time(timestamp, utc = FALSE, tm = NULL, tz_off = NULL, rest = NULL)
+gaim_str_to_time(timestamp, utc)
 	const char *timestamp
 	gboolean utc
-	struct tm *tm
-	long *tz_off
-	const char **rest
 
 gchar *
 gaim_strcasereplace(string, delimiter, replacement)
@@ -203,6 +193,13 @@ gaim_strcasestr(haystack, needle)
 gchar *
 gaim_strdup_withhtml(src)
 	const gchar *src
+
+size_t
+gaim_strftime(s, max, format, tm)
+	char *s
+	size_t max
+	const char *format
+	const struct tm *tm
 
 gchar *
 gaim_strreplace(string, delimiter, replacement)
@@ -222,10 +219,6 @@ gaim_time_build(year, month, day, hour, min, sec)
 	int hour
 	int min
 	int sec
-
-const char *
-gaim_time_format(tm)
-	const struct tm *tm
 
 const char *
 gaim_unescape_filename(str)
@@ -254,9 +247,6 @@ gaim_url_parse(url, ret_host, ret_port, ret_path, ret_user, ret_passwd)
 
 const char *
 gaim_user_dir()
-
-const char *
-gaim_utf8_strftime(const char *format, const struct tm *tm);
 
 void
 gaim_util_set_user_dir(dir)

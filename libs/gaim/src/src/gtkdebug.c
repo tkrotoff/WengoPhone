@@ -219,7 +219,7 @@ save_writefile_cb(void *user_data, const char *filename)
 	}
 
 	tmp = gtk_imhtml_get_text(GTK_IMHTML(win->text), NULL, NULL);
-	fprintf(fp, "Gaim Debug Log : %s\n", gaim_date_format_full(NULL));
+	fprintf(fp, "Gaim Debug log : %s\n", gaim_date_full());
 	fprintf(fp, "%s", tmp);
 	g_free(tmp);
 
@@ -769,7 +769,7 @@ debug_window_new(void)
 	}
 
 	/* Add the gtkimhtml */
-	frame = gaim_gtk_create_imhtml(FALSE, &win->text, NULL, NULL);
+	frame = gaim_gtk_create_imhtml(FALSE, &win->text, NULL);
 	gtk_imhtml_set_format_functions(GTK_IMHTML(win->text),
 									GTK_IMHTML_ALL ^ GTK_IMHTML_SMILEY ^ GTK_IMHTML_IMAGE);
 	gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
@@ -955,10 +955,10 @@ gaim_gtk_debug_print(GaimDebugLevel level, const char *category,
 	 * not NULL.  Why the hell do we do that?  --Mark
 	 */
 	if ((category != NULL) && (timestamps)) {
-		const char *mdate;
+		gchar mdate[64];
 
 		time_t mtime = time(NULL);
-		mdate = gaim_utf8_strftime("%H:%M:%S", localtime(&mtime));
+		strftime(mdate, sizeof(mdate), "%H:%M:%S", localtime(&mtime));
 		ts_s = g_strdup_printf("(%s) ", mdate);
 	} else {
 		ts_s = g_strdup("");

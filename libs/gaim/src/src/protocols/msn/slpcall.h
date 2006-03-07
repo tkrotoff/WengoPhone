@@ -28,6 +28,10 @@
 
 typedef struct _MsnSlpCall MsnSlpCall;
 
+typedef void (*MsnSlpCb)(MsnSlpCall *slpcall,
+						 const guchar *data, gsize size);
+typedef void (*MsnSlpEndCb)(MsnSlpCall *slpcall);
+
 #include "slplink.h"
 #include "slpsession.h"
 
@@ -74,7 +78,7 @@ struct _MsnSlpCall
 	void *xfer;
 
 	MsnSlpCb cb;
-	void (*end_cb)(MsnSlpCall *slpcall, MsnSession *session);
+	void (*end_cb)(MsnSlpCall *slpcall);
 
 	int timer;
 };

@@ -68,14 +68,6 @@ account_status_changed(GaimAccount *account, GaimStatus *old, GaimStatus *new,
 					gaim_status_get_name(new));
 }
 
-static void
-account_alias_changed(GaimAccount *account, const char *old, gpointer data)
-{
-	gaim_debug_misc("signals test", "account-alias-changed (%s, %s, %s)\n",
-					gaim_account_get_username(account),
-					old, gaim_account_get_alias(account));
-}
-
 /**************************************************************************
  * Buddy Icons signal callbacks
  **************************************************************************/
@@ -208,8 +200,7 @@ signed_off_cb(GaimConnection *gc, void *data)
  * Conversation subsystem signal callbacks
  **************************************************************************/
 static gboolean
-writing_im_msg_cb(GaimAccount *account, const char *who, char **buffer,
-				GaimConversation *conv, GaimMessageFlags flags, void *data)
+writing_im_msg_cb(GaimAccount *account, GaimConversation  *conv, char **buffer, void *data)
 {
 	gaim_debug_misc("signals test", "writing-im-msg (%s, %s, %s)\n",
 					gaim_account_get_username(account), gaim_conversation_get_name(conv), *buffer);
@@ -219,8 +210,7 @@ writing_im_msg_cb(GaimAccount *account, const char *who, char **buffer,
 }
 
 static void
-wrote_im_msg_cb(GaimAccount *account, const char *who, const char *buffer,
-				GaimConversation *conv, GaimMessageFlags flags, void *data)
+wrote_im_msg_cb(GaimAccount *account, GaimConversation *conv, const char *buffer, void *data)
 {
 	gaim_debug_misc("signals test", "wrote-im-msg (%s, %s, %s)\n",
 					gaim_account_get_username(account), gaim_conversation_get_name(conv), buffer);
@@ -262,8 +252,8 @@ received_im_msg_cb(GaimAccount *account, char *sender, char *buffer,
 }
 
 static gboolean
-writing_chat_msg_cb(GaimAccount *account, const char *who, char **buffer,
-				GaimConversation *conv, GaimMessageFlags flags, void *data)
+writing_chat_msg_cb(GaimAccount *account, GaimConversation *conv,
+		       char **buffer, void *data)
 {
 	gaim_debug_misc("signals test", "writing-chat-msg (%s, %s)\n",
 					gaim_conversation_get_name(conv), *buffer);
@@ -272,8 +262,7 @@ writing_chat_msg_cb(GaimAccount *account, const char *who, char **buffer,
 }
 
 static void
-wrote_chat_msg_cb(GaimAccount *account, const char *who, const char *buffer,
-				GaimConversation *conv, GaimMessageFlags flags, void *data)
+wrote_chat_msg_cb(GaimAccount *account, GaimConversation *conv, const char *buffer, void *data)
 {
 	gaim_debug_misc("signals test", "wrote-chat-msg (%s, %s)\n",
 					gaim_conversation_get_name(conv), buffer);
@@ -545,8 +534,6 @@ plugin_load(GaimPlugin *plugin)
 						plugin, GAIM_CALLBACK(account_set_info_cb), NULL);
 	gaim_signal_connect(accounts_handle, "account-status-changed",
 						plugin, GAIM_CALLBACK(account_status_changed), NULL);
-	gaim_signal_connect(accounts_handle, "account-alias-changed",
-						plugin, GAIM_CALLBACK(account_alias_changed), NULL);
 
 	/* Buddy List subsystem signals */
 	gaim_signal_connect(blist_handle, "buddy-status-changed",

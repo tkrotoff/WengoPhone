@@ -26,7 +26,6 @@
 #define _YAHOO_H_
 
 #include "prpl.h"
-#include "gaim_buffer.h"
 
 #define YAHOO_PAGER_HOST "scs.msg.yahoo.com"
 #define YAHOO_PAGER_PORT 5050
@@ -98,12 +97,9 @@ struct yahoo_buddy_icon_upload_data {
 struct _YchtConn;
 
 struct yahoo_data {
-	GaimConnection *gc;
 	int fd;
 	guchar *rxqueue;
 	int rxlen;
-	GaimCircBuffer *txbuf;
-	guint txhandler;
 	GHashTable *friends;
 	int current_status;
 	gboolean logged_in;
@@ -114,7 +110,6 @@ struct yahoo_data {
 	gboolean in_chat;
 	char *chat_name;
 	char *auth;
-	gsize auth_written;
 	char *cookie_y;
 	char *cookie_t;
 	int session_id;

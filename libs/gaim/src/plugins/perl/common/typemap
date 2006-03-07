@@ -22,7 +22,6 @@ guchar **				T_PTR
 const guchar *				T_PV
 char *					T_PV
 int *					T_PTR
-long *					T_PTR
 size_t *				T_PTR
 Gaim::GTK::Widget *			T_PTR
 GCallback				T_PTR
@@ -31,7 +30,6 @@ GString *				T_PTR
 GData *					T_PTR
 GData **				T_PTR
 const unsigned char *			T_PTR
-struct tm *				T_PTR
 const struct tm *			T_PTR
 xmlnode *				T_PTR
 const xmlnode *				T_PTR
@@ -157,7 +155,6 @@ const Gaim::StatusType			T_GaimObj
 
 Gaim::StoredImage			T_GaimObj
 Gaim::Stringref				T_GaimObj
-Gaim::Util::InfoFieldFormatCallback	T_PTR
 Gaim::Value				T_GaimObj
 
 Gaim::Xfer				T_GaimObj

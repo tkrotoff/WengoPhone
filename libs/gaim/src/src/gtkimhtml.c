@@ -2951,7 +2951,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 				}
 			c += tlen;
 			pos += tlen;
-			g_free(tag); /* This was allocated back in VALID_TAG() */
+			if(tag)
+				g_free(tag); /* This was allocated back in VALID_TAG() */
 		} else if (gtk_imhtml_is_smiley(imhtml, fonts, c, &smilelen)) {
 			GtkIMHtmlFontDetail *fd;
 
@@ -3035,7 +3036,8 @@ void gtk_imhtml_insert_html_at_iter(GtkIMHtml        *imhtml,
 	}
 
 	g_free(ws);
-	g_free(bg);
+	if (bg)
+		g_free(bg);
 
 	if (!imhtml->wbfo)
 		gtk_imhtml_close_tags(imhtml, iter);
@@ -3738,29 +3740,20 @@ imhtml_clear_formatting(GtkIMHtml *imhtml)
 	gtk_text_buffer_remove_tag_by_name(imhtml->text_buffer, "ITALICS", &start, &end);
 	gtk_text_buffer_remove_tag_by_name(imhtml->text_buffer, "UNDERLINE", &start, &end);
 	gtk_text_buffer_remove_tag_by_name(imhtml->text_buffer, "STRIKE", &start, &end);
-	remove_font_size(imhtml, &start, &end, FALSE);
-	remove_font_face(imhtml, &start, &end, FALSE);
-	remove_font_forecolor(imhtml, &start, &end, FALSE);
-	remove_font_backcolor(imhtml, &start, &end, FALSE);
-	remove_font_background(imhtml, &start, &end, FALSE);
-	remove_font_link(imhtml, &start, &end, FALSE);
+	remove_font_size(imhtml, &start, &end, TRUE);
+	remove_font_face(imhtml, &start, &end, TRUE);
+	remove_font_forecolor(imhtml, &start, &end, TRUE);
+	remove_font_backcolor(imhtml, &start, &end, TRUE);
+	remove_font_background(imhtml, &start, &end, TRUE);
+	remove_font_link(imhtml, &start, &end, TRUE);
 
 	imhtml->edit.bold = 0;
 	imhtml->edit.italic = 0;
 	imhtml->edit.underline = 0;
 	imhtml->edit.strike = 0;
 	imhtml->edit.fontsize = 0;
-
-	g_free(imhtml->edit.fontface);
-	imhtml->edit.fontface = NULL;
-
-	g_free(imhtml->edit.forecolor);
 	imhtml->edit.forecolor = NULL;
-
-	g_free(imhtml->edit.backcolor);
 	imhtml->edit.backcolor = NULL;
-
-	g_free(imhtml->edit.background);
 	imhtml->edit.background = NULL;
 }
 
@@ -4041,21 +4034,21 @@ static void mark_set_cb(GtkTextBuffer *buffer, GtkTextIter *arg1, GtkTextMark *m
 		if (tag->name) {
 			if (strcmp(tag->name, "BOLD") == 0)
 				imhtml->edit.bold = TRUE;
-			else if (strcmp(tag->name, "ITALICS") == 0)
+			if (strcmp(tag->name, "ITALICS") == 0)
 				imhtml->edit.italic = TRUE;
-			else if (strcmp(tag->name, "UNDERLINE") == 0)
+			if (strcmp(tag->name, "UNDERLINE") == 0)
 				imhtml->edit.underline = TRUE;
-			else if (strcmp(tag->name, "STRIKE") == 0)
+			if (strcmp(tag->name, "STRIKE") == 0)
 				imhtml->edit.strike = TRUE;
-			else if (strncmp(tag->name, "FORECOLOR ", 10) == 0)
+			if (strncmp(tag->name, "FORECOLOR ", 10) == 0)
 				imhtml->edit.forecolor = g_strdup(&(tag->name)[10]);
-			else if (strncmp(tag->name, "BACKCOLOR ", 10) == 0)
+			if (strncmp(tag->name, "BACKCOLOR ", 10) == 0)
 				imhtml->edit.backcolor = g_strdup(&(tag->name)[10]);
-			else if (strncmp(tag->name, "FONT FACE ", 10) == 0)
+			if (strncmp(tag->name, "FONT FACE ", 10) == 0)
 				imhtml->edit.fontface = g_strdup(&(tag->name)[10]);
-			else if (strncmp(tag->name, "FONT SIZE ", 10) == 0)
+			if (strncmp(tag->name, "FONT SIZE ", 10) == 0)
 				imhtml->edit.fontsize = strtol(&(tag->name)[10], NULL, 10);
-			else if ((strncmp(tag->name, "LINK ", 5) == 0) && !gtk_text_iter_is_end(&iter))
+			if ((strncmp(tag->name, "LINK ", 5) == 0) && !gtk_text_iter_is_end(&iter))
 				imhtml->edit.link = tag;
 		}
 	}
@@ -4256,89 +4249,67 @@ void gtk_imhtml_font_grow(GtkIMHtml *imhtml)
 	imhtml_emit_signal_for_format(imhtml, GTK_IMHTML_GROW);
 }
 
-static gboolean gtk_imhtml_toggle_str_tag(GtkIMHtml *imhtml, const char *value, char **edit_field,
-				void (*remove_func)(GtkIMHtml *imhtml, GtkTextIter *i, GtkTextIter *e, gboolean homo),
-				GtkTextTag *(find_func)(GtkIMHtml *imhtml, gchar *color), GtkIMHtmlButtons button)
-{
-	GObject *object;
-	GtkTextIter start;
-	GtkTextIter end;
-
-	g_free(*edit_field);
-	*edit_field = NULL;
-
-	if (value && strcmp(value, "") != 0)
-	{
-		*edit_field = g_strdup(value);
-
-		if (imhtml->wbfo)
-		{
-			gtk_text_buffer_get_bounds(imhtml->text_buffer, &start, &end);
-			remove_func(imhtml, &start, &end, TRUE);
-			gtk_text_buffer_apply_tag(imhtml->text_buffer,
-		                              find_func(imhtml, *edit_field), &start, &end);
-		}
-		else
-		{
-			gtk_text_buffer_get_iter_at_mark(imhtml->text_buffer, &start,
-			                                 gtk_text_buffer_get_mark(imhtml->text_buffer, "insert"));
-			if (imhtml->editable && gtk_text_buffer_get_selection_bounds(imhtml->text_buffer, &start, &end))
-			{
-				remove_func(imhtml, &start, &end, FALSE);
-				gtk_text_buffer_apply_tag(imhtml->text_buffer,
-				                          find_func(imhtml,
-				                                    *edit_field),
-				                                    &start, &end);
-			}
-		}
-	}
-	else
-	{
-		if (imhtml->wbfo)
-		{
-			gtk_text_buffer_get_bounds(imhtml->text_buffer, &start, &end);
-			remove_func(imhtml, &start, &end, TRUE);
-		}
-		else
-		{
-			if (imhtml->editable && gtk_text_buffer_get_selection_bounds(imhtml->text_buffer, &start, &end))
-				remove_func(imhtml, &start, &end, TRUE);
-		}
-	}
-
-	object = g_object_ref(G_OBJECT(imhtml));
-	g_signal_emit(object, signals[TOGGLE_FORMAT], 0, button);
-	g_object_unref(object);
-
-	return *edit_field != NULL;
+#define gtk_imhtml_toggle_str_tag(imhtml, color, edit_field, remove_func, find_func, button) { \
+	GObject *object; \
+	GtkTextIter start, end; \
+\
+	g_free(edit_field); \
+	edit_field = NULL; \
+\
+	if (color && strcmp(color, "") != 0) { \
+		edit_field = g_strdup(color); \
+\
+		if (imhtml->wbfo) { \
+			gtk_text_buffer_get_bounds(imhtml->text_buffer, &start, &end); \
+			remove_func(imhtml, &start, &end, TRUE); \
+			gtk_text_buffer_apply_tag(imhtml->text_buffer, \
+		                                  find_func(imhtml, edit_field), &start, &end); \
+		} else { \
+			gtk_text_buffer_get_iter_at_mark(imhtml->text_buffer, &start, \
+							 gtk_text_buffer_get_mark(imhtml->text_buffer, "insert")); \
+			if (imhtml->editable && gtk_text_buffer_get_selection_bounds(imhtml->text_buffer, &start, &end)) { \
+				remove_func(imhtml, &start, &end, FALSE); \
+				gtk_text_buffer_apply_tag(imhtml->text_buffer, \
+							  find_func(imhtml, \
+				                                   edit_field), \
+				                                   &start, &end); \
+			} \
+		} \
+	} else { \
+		if (imhtml->wbfo) { \
+			gtk_text_buffer_get_bounds(imhtml->text_buffer, &start, &end); \
+			remove_func(imhtml, &start, &end, TRUE); \
+		} else { \
+			if (gtk_text_buffer_get_selection_bounds(imhtml->text_buffer, &start, &end)) \
+				remove_func(imhtml, &start, &end, TRUE); \
+		} \
+	} \
+\
+	object = g_object_ref(G_OBJECT(imhtml)); \
+	g_signal_emit(object, signals[TOGGLE_FORMAT], 0, button); \
+	g_object_unref(object); \
+\
+	return edit_field != NULL; \
 }
 
 gboolean gtk_imhtml_toggle_forecolor(GtkIMHtml *imhtml, const char *color)
 {
-	return gtk_imhtml_toggle_str_tag(imhtml, color, &imhtml->edit.forecolor,
-	                                 remove_font_forecolor, find_font_forecolor_tag,
-	                                 GTK_IMHTML_FORECOLOR);
+	gtk_imhtml_toggle_str_tag(imhtml, color, imhtml->edit.forecolor, remove_font_forecolor, find_font_forecolor_tag, GTK_IMHTML_FORECOLOR);
 }
 
 gboolean gtk_imhtml_toggle_backcolor(GtkIMHtml *imhtml, const char *color)
 {
-	return gtk_imhtml_toggle_str_tag(imhtml, color, &imhtml->edit.backcolor,
-	                                 remove_font_backcolor, find_font_backcolor_tag,
-	                                 GTK_IMHTML_BACKCOLOR);
+	gtk_imhtml_toggle_str_tag(imhtml, color, imhtml->edit.backcolor, remove_font_backcolor, find_font_backcolor_tag, GTK_IMHTML_BACKCOLOR);
 }
 
 gboolean gtk_imhtml_toggle_background(GtkIMHtml *imhtml, const char *color)
 {
-	return gtk_imhtml_toggle_str_tag(imhtml, color, &imhtml->edit.background,
-	                                 remove_font_background, find_font_background_tag,
-	                                 GTK_IMHTML_BACKGROUND);
+	gtk_imhtml_toggle_str_tag(imhtml, color, imhtml->edit.background, remove_font_background, find_font_background_tag, GTK_IMHTML_BACKGROUND);
 }
 
 gboolean gtk_imhtml_toggle_fontface(GtkIMHtml *imhtml, const char *face)
 {
-	return gtk_imhtml_toggle_str_tag(imhtml, face, &imhtml->edit.fontface,
-	                                 remove_font_face, find_font_face_tag,
-	                                 GTK_IMHTML_FACE);
+	gtk_imhtml_toggle_str_tag(imhtml, face, imhtml->edit.fontface, remove_font_face, find_font_face_tag, GTK_IMHTML_FACE);
 }
 
 void gtk_imhtml_toggle_link(GtkIMHtml *imhtml, const char *url)

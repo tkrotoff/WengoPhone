@@ -85,8 +85,6 @@ version 2.0.0:
 	* The functionality of the auto-reconnect plugin has been
 	  moved into the Gaim core, and the plugin itself has been
 	  removed.
-	* 'Highlight when nick said' option added to Message Notification
-	  plugin.
 
 	MSN Features:
 	* Custom smiley receiving support (Irving Cordova & Francesco Fracassi)
@@ -101,7 +99,6 @@ version 2.0.0:
 	  authorization
 	* Account option to ignore chat and conference invitations (Peter
 	  Lawler)
-	* Added a /list command to bring up the room list (Peter Lawler)
 
 	AIM/ICQ Features:
 	* ICQ file transfer support with newer ICQ clients (Jonathan Clark,
@@ -160,9 +157,6 @@ version 2.0.0:
 	  (Sadrul Habib Chowdhury)
 	* New e-mail notices are now grouped into one dialog.
 	  (Sadrul Habib Chowdhury)
-	* "Open" in the File Transfer window integrates with KDE now (in
-	  addition to existing GNOME and Windows integration) and falls back to
-	  the browser in other environments.
 
 	Preference Changes:
 	* Preferences have been substantially reorganized and cleaned up

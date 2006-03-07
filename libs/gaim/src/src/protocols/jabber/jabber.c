@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-#include "../../internal.h"
+#include "internal.h"
 
 #include "account.h"
 #include "accountopt.h"
@@ -194,42 +194,6 @@ void jabber_process_packet(JabberStream *js, xmlnode *packet)
 	}
 }
 
-static int jabber_do_send(JabberStream *js, const char *data, int len)
-{
-	int ret;
-
-	if (js->gsc)
-		ret = gaim_ssl_write(js->gsc, data, len);
-	else
-		ret = write(js->fd, data, len);
-
-	return ret;
-}
-
-static void jabber_send_cb(gpointer data, gint source, GaimInputCondition cond)
-{
-	JabberStream *js = data;
-	int ret, writelen;
-	writelen = gaim_circ_buffer_get_max_read(js->write_buffer);
-
-	if (writelen == 0) {
-		gaim_input_remove(js->writeh);
-		js->writeh = -1;
-		return;
-	}
-
-	ret = jabber_do_send(js, js->write_buffer->outptr, writelen);
-
-	if (ret < 0 && errno == EAGAIN)
-		return;
-	else if (ret <= 0) {
-		gaim_connection_error(js->gc, _("Write error"));
-		return;
-	}
-
-	gaim_circ_buffer_mark_read(js->write_buffer, ret);
-}
-
 void jabber_send_raw(JabberStream *js, const char *data, int len)
 {
 	int ret;
@@ -264,53 +228,27 @@ void jabber_send_raw(JabberStream *js, const char *data, int len)
 			sasl_encode(js->sasl, &data[pos], towrite, &out, &olen);
 			pos += towrite;
 
-			if (js->writeh != -1)
-				ret = jabber_do_send(js, out, olen);
-			else {
-				ret = -1;
-				errno = EAGAIN;
-			}
-
-			if (ret < 0 && errno != EAGAIN)
+			if (js->gsc)
+				ret = gaim_ssl_write(js->gsc, out, olen);
+			else
+				ret = write(js->fd, out, olen);
+			if (ret < 0)
 				gaim_connection_error(js->gc, _("Write error"));
-			else if (ret < olen) {
-				if (ret < 0)
-					ret = 0;
-				if (js->writeh == -1)
-					js->writeh = gaim_input_add(
-						js->gsc ? js->gsc->fd : js->fd,
-						GAIM_INPUT_WRITE,
-						jabber_send_cb, js);
-				gaim_circ_buffer_append(js->write_buffer,
-					out + ret, olen - ret);
-			}
 		}
 		return;
 	}
 #endif
-
-	if (len == -1)
-		len = strlen(data);
-
-	if (js->writeh == -1)
-		ret = jabber_do_send(js, data, len);
-	else {
-		ret = -1;
-		errno = EAGAIN;
+	
+	if(js->gsc) {
+		ret = gaim_ssl_write(js->gsc, data, len == -1 ? strlen(data) : len);
+	} else {
+		if(js->fd < 0)
+			return;
+		ret = write(js->fd, data, len == -1 ? strlen(data) : len);
 	}
 
-	if (ret < 0 && errno != EAGAIN)
+	if(ret < 0)
 		gaim_connection_error(js->gc, _("Write error"));
-	else if (ret < len) {
-		if (ret < 0)
-			ret = 0;
-		if (js->writeh == -1)
-			js->writeh = gaim_input_add(
-				js->gsc ? js->gsc->fd : js->fd,
-				GAIM_INPUT_WRITE, jabber_send_cb, js);
-		gaim_circ_buffer_append(js->write_buffer,
-			data + ret, len - ret);
-	}
 
 }
 
@@ -343,16 +281,13 @@ jabber_recv_cb_ssl(gpointer data, GaimSslConnection *gsc,
 		return;
 	}
 
-	while((len = gaim_ssl_read(gsc, buf, sizeof(buf) - 1)) > 0) {
+	if((len = gaim_ssl_read(gsc, buf, sizeof(buf) - 1)) > 0) {
 		buf[len] = '\0';
 		gaim_debug(GAIM_DEBUG_INFO, "jabber", "Recv (ssl)(%d): %s\n", len, buf);
 		jabber_parser_process(js, buf, len);
-	}
-
-	if(errno == EAGAIN)
-		return;
-	else
+	} else {
 		gaim_connection_error(gc, _("Read Error"));
+	}
 }
 
 static void
@@ -382,8 +317,6 @@ jabber_recv_cb(gpointer data, gint source, GaimInputCondition condition)
 		buf[len] = '\0';
 		gaim_debug(GAIM_DEBUG_INFO, "jabber", "Recv (%d): %s\n", len, buf);
 		jabber_parser_process(js, buf, len);
-	} else if(errno == EAGAIN) {
-		return;
 	} else {
 		gaim_connection_error(gc, _("Read Error"));
 	}
@@ -513,8 +446,6 @@ jabber_login(GaimAccount *account)
 	js->chat_servers = g_list_append(NULL, g_strdup("conference.jabber.org"));
 	js->user = jabber_id_new(gaim_account_get_username(account));
 	js->next_id = g_random_int();
-	js->write_buffer = gaim_circ_buffer_new(512);
-	js->writeh = -1;
 
 	if(!js->user) {
 		gaim_connection_error(gc, _("Invalid Jabber ID"));
@@ -858,9 +789,6 @@ static void jabber_register_account(GaimAccount *account)
 		return;
 	}
 
-	js->write_buffer = gaim_circ_buffer_new(512);
-	js->writeh = -1;
-
 	if(!js->user->resource) {
 		char *me;
 		js->user->resource = g_strdup("Home");
@@ -905,25 +833,10 @@ static void jabber_close(GaimConnection *gc)
 {
 	JabberStream *js = gc->proto_data;
 
-/* This is for Adium.  Gaim never uses OpenSSL, because of licensing issues,
- * and our configure doesn't check for it. -- rlaager */
-#ifdef HAVE_OPENSSL
-	/* If using OpenSSL, don't perform any actions on the ssl connection
-	 * if we were forcibly disconnected because it will crash. -- evands
-	 */
-	if (!gc->disconnect_timeout)
-		jabber_send_raw(js, "</stream:stream>", -1);
-#else
 	jabber_send_raw(js, "</stream:stream>", -1);
-#endif
 
 	if(js->gsc) {
-#ifdef HAVE_OPENSSL
-		if (!gc->disconnect_timeout)
-			gaim_ssl_close(js->gsc);
-#else
-		gaim_ssl_close(js->gsc);		
-#endif
+		gaim_ssl_close(js->gsc);
 	} else if (js->fd > 0) {
 		if(js->gc->inpa)
 			gaim_input_remove(js->gc->inpa);
@@ -954,9 +867,6 @@ static void jabber_close(GaimConnection *gc)
 		jabber_id_free(js->user);
 	if(js->avatar_hash)
 		g_free(js->avatar_hash);
-	gaim_circ_buffer_destroy(js->write_buffer);
-	if(js->writeh)
-		gaim_input_remove(js->writeh);
 #ifdef HAVE_CYRUS_SASL
 	if(js->sasl)
 		sasl_dispose(&js->sasl);
@@ -1479,7 +1389,6 @@ char *jabber_parse_error(JabberStream *js, xmlnode *packet)
 		} else if(xmlnode_get_child(error, "temporary-auth-failure")) {
 			text = _("Temporary Authentication Failure");
 		} else {
-			js->gc->wants_to_die = TRUE;
 			text = _("Authentication Failure");
 		}
 	} else if(!strcmp(packet->name, "stream:error")) {
@@ -1615,44 +1524,19 @@ static GaimCmdRet jabber_cmd_chat_affiliate(GaimConversation *conv,
 	if (!args || !args[0] || !args[1])
 		return GAIM_CMD_RET_FAILED;
 
-	if (strcmp(args[1], "owner") != 0 && 
-	    strcmp(args[1], "admin") != 0 &&
-	    strcmp(args[1], "member") != 0 &&
-	    strcmp(args[1], "outcast") != 0 &&
-	    strcmp(args[1], "none") != 0) {
+	if (
+		strcmp(args[1], "owner") != 0 && 
+		strcmp(args[1], "admin") != 0 &&
+		strcmp(args[1], "member") != 0 &&
+		strcmp(args[1], "outcast") != 0 &&
+		strcmp(args[1], "none") != 0
+	) {
 		*error = g_strdup_printf(_("Unknown affiliation: \"%s\""), args[1]);
 		return GAIM_CMD_RET_FAILED;
 	}
 
 	if (!jabber_chat_affiliate_user(chat, args[0], args[1])) {
 		*error = g_strdup_printf(_("Unable to affiliate user %s as \"%s\""), args[0], args[1]);
-		return GAIM_CMD_RET_FAILED;
-	}
-
-	return GAIM_CMD_RET_OK;
-}
-
-static GaimCmdRet jabber_cmd_chat_role(GaimConversation *conv,
-		const char *cmd, char **args, char **error, void *data)
-{
-	JabberChat *chat;
-
-	if (!args || !args[0] || !args[1])
-		return GAIM_CMD_RET_FAILED;
-
-	if (strcmp(args[1], "moderator") != 0 &&
-	    strcmp(args[1], "participant") != 0 &&
-	    strcmp(args[1], "visitor") != 0 &&
-	    strcmp(args[1], "none") != 0) {
-		*error = g_strdup_printf(_("Unknown role: \"%s\""), args[1]);
-		return GAIM_CMD_RET_FAILED;
-	}
-
-	chat = jabber_chat_find_by_conv(conv);
-
-	if (!jabber_chat_role_user(chat, args[0], args[1])) {
-		*error = g_strdup_printf(_("Unable to set role \"%s\" for user: %s"),
-		                         args[1], args[0]);
 		return GAIM_CMD_RET_FAILED;
 	}
 
@@ -1768,17 +1652,11 @@ static void jabber_register_commands(void)
 	                  _("ban &lt;user&gt; [room]:  Ban a user from the room."),
 	                  NULL);
 	gaim_cmd_register("affiliate", "ws", GAIM_CMD_P_PRPL,
-	                  GAIM_CMD_FLAG_CHAT | GAIM_CMD_FLAG_PRPL_ONLY |
-	                  GAIM_CMD_FLAG_ALLOW_WRONG_ARGS, "prpl-jabber",
-	                  jabber_cmd_chat_affiliate,
-	                  _("affiliate &lt;user&gt; &lt;owner|admin|member|outcast|none&gt;: Set a user's affiliation with the room."),
-	                  NULL);
-	gaim_cmd_register("role", "ws", GAIM_CMD_P_PRPL,
-	                  GAIM_CMD_FLAG_CHAT | GAIM_CMD_FLAG_PRPL_ONLY |
-	                  GAIM_CMD_FLAG_ALLOW_WRONG_ARGS, "prpl-jabber",
-	                  jabber_cmd_chat_role,
-	                  _("role &lt;user&gt; &lt;moderator|participant|visitor|none&gt;: Set a user's role in the room."),
-	                  NULL);
+					  GAIM_CMD_FLAG_CHAT | GAIM_CMD_FLAG_PRPL_ONLY |
+					  GAIM_CMD_FLAG_ALLOW_WRONG_ARGS, "prpl-jabber",
+					  jabber_cmd_chat_affiliate,
+					  _("affiliate &lt;user&gt; &lt;owner|admin|member|outcast|none&gt;: Set a user's affiliation with the room."),
+					  NULL);
 	gaim_cmd_register("invite", "ws", GAIM_CMD_P_PRPL,
 	                  GAIM_CMD_FLAG_CHAT | GAIM_CMD_FLAG_PRPL_ONLY |
 	                  GAIM_CMD_FLAG_ALLOW_WRONG_ARGS, "prpl-jabber",
@@ -1866,6 +1744,7 @@ static GaimPluginProtocolInfo prpl_info =
 	jabber_si_new_xfer,				/* new_xfer */
 	jabber_offline_message,			/* offline_message */
 	NULL,							/* whiteboard_prpl_ops */
+	NULL,							/* media_prpl_ops */
 };
 
 static GaimPluginInfo info =

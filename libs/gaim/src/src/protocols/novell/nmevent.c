@@ -803,13 +803,13 @@ nm_event_get_type(NMEvent * event)
 		return -1;
 }
 
-time_t
+guint32
 nm_event_get_gmt(NMEvent * event)
 {
 	if (event)
 		return event->gmt;
 	else
-		return (time_t)-1;
+		return (guint32)-1;
 }
 
 NMERR_T

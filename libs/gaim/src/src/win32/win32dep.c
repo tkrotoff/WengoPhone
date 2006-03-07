@@ -36,7 +36,7 @@
 #include "notify.h"
 
 #include "resource.h"
-//#include "idletrack.h"
+#include "idletrack.h"
 #include "zlib.h"
 #include "untar.h"
 
@@ -431,8 +431,8 @@ void wgaim_init(HINSTANCE hint) {
 	gaim_debug(GAIM_DEBUG_INFO, "wgaim", "Gaim settings dir: %s\n", app_data_dir);
 
 	/* IdleTracker Initialization */
-/* 	if(!wgaim_set_idlehooks()) */
-/* 		gaim_debug(GAIM_DEBUG_ERROR, "wgaim", "Failed to initialize idle tracker\n"); */
+	if(!wgaim_set_idlehooks())
+		gaim_debug(GAIM_DEBUG_ERROR, "wgaim", "Failed to initialize idle tracker\n");
 
 	gaim_debug(GAIM_DEBUG_INFO, "wgaim", "wgaim_init end\n");
 }
@@ -446,7 +446,7 @@ void wgaim_cleanup(void) {
 	WSACleanup();
 
 	/* Idle tracker cleanup */
-/* 	wgaim_remove_idlehooks(); */
+	wgaim_remove_idlehooks();
 
 	g_free(app_data_dir);
 }

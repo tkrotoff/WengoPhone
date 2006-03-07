@@ -70,20 +70,18 @@ void gaim_setup_imhtml(GtkWidget *imhtml);
  * functions puts both widgets in a nice GtkFrame.  They're separate by an
  * attractive GtkSeparator.
  *
- * @param editable @c TRUE if this imhtml should be editable.  If this is @c FALSE,
+ * @param editable TRUE if this imhtml should be editable.  If this is FALSE,
  *        then the toolbar will NOT be created.  If this imthml should be
  *        read-only at first, but may become editable later, then pass in
- *        @c TRUE here and then manually call gtk_imhtml_set_editable() later.
+ *        TRUE here and then manually call gtk_imhtml_set_editable() later.
  * @param imhtml_ret A pointer to a pointer to a GtkWidget.  This pointer
  *        will be set to the imhtml when this function exits.
  * @param toolbar_ret A pointer to a pointer to a GtkWidget.  If editable is
  *        TRUE then this will be set to the toolbar when this function exits.
- *        Otherwise this will be set to @c NULL.
- * @param sw_ret This will be filled with a pointer to the scrolled window
- *        widget which contains the imhtml.
+ *        Otherwise this will be set to NULL.
  * @return The GtkFrame containing the toolbar and imhtml.
  */
-GtkWidget *gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **toolbar_ret, GtkWidget **sw_ret);
+GtkWidget *gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **toolbar_ret);
 
 /**
  * Toggles the sensitivity of a widget.
@@ -357,63 +355,21 @@ void gaim_gtk_buddy_icon_get_scale_size(GdkPixbuf *buf, GaimBuddyIconSpec *spec,
  * Returns the base image to represent the account, based on
  * the currently selected theme.
  *
- * @param account      The account.
- * @param scale_factor The amount to scale to the original image.
- *                     The default size is 32x32 pixels.  A scale
- *                     factor of 1 means no scaling will be done.
- *                     A scale factor of 0.5 means the length
- *                     and width will be 16 pixels each.
+ * @param account The account.
  *
- * @return A newly-created pixbuf with a reference count of 1,
- *         or NULL if any of several error conditions occurred:
- *         the file could not be opened, there was no loader
- *         for the file's format, there was not enough memory
- *         to allocate the image buffer, or the image file
- *         contained invalid data.
+ * @return The icon.
  */
-GdkPixbuf *gaim_gtk_create_prpl_icon(GaimAccount *account, double scale_factor);
+GdkPixbuf *gaim_gtk_create_prpl_icon(GaimAccount *account);
 
 /**
- * Create a protocol icon with the status emblem overlayed in
- * the lower right corner.
+ * Create a protocol-icon with the status emblem.
  *
- * @param account      The account.
- * @param status_type  The status type of the emblem to overlay.
- * @param scale_factor The amount to scale to the original image.
- *                     The default size is 32x32 pixels.  A scale
- *                     factor of 1 means no scaling will be done.
- *                     A scale factor of 0.5 means the length
- *                     and width will be 16 pixels each.
+ * @param account     The account.
+ * @param status_type The status type to set the emblem for.
  *
- * @return A newly-created pixbuf with a reference count of 1,
- *         or NULL if any of several error conditions occurred:
- *         the file could not be opened, there was no loader
- *         for the file's format, there was not enough memory
- *         to allocate the image buffer, or the image file
- *         contained invalid data.
+ * @return The icon.
  */
-GdkPixbuf *gaim_gtk_create_prpl_icon_with_status(GaimAccount *account, GaimStatusType *status_type, double scale_factor);
-
-/**
- * Create a Gaim running-man icon with the status emblem overlayed
- * in the lower right corner.
- *
- * @param status_type  The status type to set the emblem for.
- * @param scale_factor The amount to scale to the original image.
- *                     The default size is 32x32 pixels.  A scale
- *                     factor of 1 means no scaling will be done.
- *                     A scale factor of 0.5 means the length
- *                     and width will be 16 pixels each.
- *
- * @return A newly-created pixbuf with a reference count of 1,
- *         or NULL if any of several error conditions occurred:
- *         the file could not be opened, there was no loader for
- *         the file's format, there was not enough memory to
- *         allocate the image buffer, or the image file contained
- *         invalid data.
- */
-GdkPixbuf *gaim_gtk_create_gaim_icon_with_status(GaimStatusPrimitive primitve, double scale_factor);
-
+GdkPixbuf * gaim_gtk_create_prpl_icon_with_status(GaimAccount *account, GaimStatusType *status_type);
 
 /**
  * Append a GaimMenuAction to a menu.

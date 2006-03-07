@@ -3,7 +3,6 @@
 #include "debug.h"
 #include "log.h"
 #include "plugin.h"
-#include "util.h"
 #include "version.h"
 
 #include "gtkconv.h"
@@ -34,18 +33,18 @@ get_plugin_pref_frame(GaimPlugin *plugin)
 			"/plugins/gtk/timestamp_format/use_dates/conversation",
 			_("Co_nversations:"));
         gaim_plugin_pref_set_type(ppref, GAIM_PLUGIN_PREF_CHOICE);
-        gaim_plugin_pref_add_choice(ppref, _("For delayed messages"), "automatic");
-        gaim_plugin_pref_add_choice(ppref, _("For delayed messages and in chats"), "chats");
-        gaim_plugin_pref_add_choice(ppref, _("Always"), "always");
+        gaim_plugin_pref_add_choice(ppref, "For delayed messages", "automatic");
+        gaim_plugin_pref_add_choice(ppref, "For delayed messages and in chats", "chats");
+        gaim_plugin_pref_add_choice(ppref, "Always", "always");
 	gaim_plugin_pref_frame_add(frame, ppref);
 
 	ppref = gaim_plugin_pref_new_with_name_and_label(
 			"/plugins/gtk/timestamp_format/use_dates/log",
 			_("_Message Logs:"));
         gaim_plugin_pref_set_type(ppref, GAIM_PLUGIN_PREF_CHOICE);
-        gaim_plugin_pref_add_choice(ppref, _("For delayed messages"), "automatic");
-        gaim_plugin_pref_add_choice(ppref, _("For delayed messages and in chats"), "chats");
-        gaim_plugin_pref_add_choice(ppref, _("Always"), "always");
+        gaim_plugin_pref_add_choice(ppref, "For delayed messages", "automatic");
+        gaim_plugin_pref_add_choice(ppref, "For delayed messages and in chats", "chats");
+        gaim_plugin_pref_add_choice(ppref, "Always", "always");
 	gaim_plugin_pref_frame_add(frame, ppref);
 
 	return frame;
@@ -56,6 +55,8 @@ static char *timestamp_cb_common(GaimConversation *conv,
                                  gboolean force,
                                  const char *dates)
 {
+	char buf[64];
+
 	g_return_val_if_fail(conv != NULL, NULL);
 	g_return_val_if_fail(tm != NULL, NULL);
 	g_return_val_if_fail(dates != NULL, NULL);
@@ -66,13 +67,18 @@ static char *timestamp_cb_common(GaimConversation *conv,
 	    (time(NULL) > (mktime((struct tm *)tm) + 20*60)))
 	{
 		if (force)
-			return g_strdup(gaim_utf8_strftime("%Y-%m-%d %H:%M:%S", tm));
+			strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", tm);
 		else
-			return g_strdup(gaim_date_format_long(tm));
+			strftime(buf, sizeof(buf), "%x %X", tm);
+
+		return g_strdup(buf);
 	}
 
 	if (force)
-		return g_strdup(gaim_utf8_strftime("%H:%M:%S", tm));
+	{
+		strftime(buf, sizeof(buf), "%H:%M:%S", tm);
+		return g_strdup(buf);
+	}
 
 	return NULL;
 }
@@ -84,10 +90,6 @@ static char *conversation_timestamp_cb(GaimConversation *conv,
 				"/plugins/gtk/timestamp_format/force_24hr");
 	const char *dates = gaim_prefs_get_string(
 				"/plugins/gtk/timestamp_format/use_dates/conversation");
-
-	g_return_val_if_fail(conv != NULL, NULL);
-	g_return_val_if_fail(tm != NULL, NULL);
-
 	return timestamp_cb_common(conv, tm, force, dates);
 }
 
@@ -99,13 +101,14 @@ static char *log_timestamp_cb(GaimLog *log,
 	const char *dates = gaim_prefs_get_string(
 				"/plugins/gtk/timestamp_format/use_dates/log");
 
-	g_return_val_if_fail(log != NULL, NULL);
-	g_return_val_if_fail(tm != NULL, NULL);
-
 	if (log->type == GAIM_LOG_SYSTEM)
 	{
 		if (force)
-			return g_strdup(gaim_utf8_strftime("%Y-%m-%d %H:%M:%S", tm));
+		{
+			char buf[64];
+			strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", tm);
+			return g_strdup(buf);
+		}
 		else
 			return NULL;
 	}

@@ -22,7 +22,6 @@
 #include "internal.h"
 
 #include "accountopt.h"
-#include "dbus-maybe.h"
 #include "debug.h"
 #include "notify.h"
 #include "prefs.h"
@@ -191,8 +190,6 @@ gaim_plugin_new(gboolean native, const char *path)
 
 	plugin->native_plugin = native;
 	plugin->path = (path == NULL ? NULL : g_strdup(path));
-
-	GAIM_DBUS_REGISTER_POINTER(plugin, GaimPlugin);
 
 	return plugin;
 }
@@ -467,7 +464,6 @@ gaim_plugin_probe(const char *filename)
 #endif /* !GAIM_PLUGINS */
 }
 
-#ifdef GAIM_PLUGINS
 static gint
 compare_plugins(gconstpointer a, gconstpointer b)
 {
@@ -476,7 +472,6 @@ compare_plugins(gconstpointer a, gconstpointer b)
 
 	return strcmp(plugina->info->name, pluginb->info->name);
 }
-#endif /* GAIM_PLUGINS */
 
 gboolean
 gaim_plugin_load(GaimPlugin *plugin)
@@ -766,9 +761,6 @@ gaim_plugin_destroy(GaimPlugin *plugin)
 			plugin->info->major_version != GAIM_MAJOR_VERSION) {
 		if(plugin->handle)
 			g_module_close(plugin->handle);
-
-		GAIM_DBUS_UNREGISTER_POINTER(plugin);
-	
 		g_free(plugin);
 		return;
 	}
@@ -836,8 +828,6 @@ gaim_plugin_destroy(GaimPlugin *plugin)
 
 	if (plugin->path  != NULL) g_free(plugin->path);
 	if (plugin->error != NULL) g_free(plugin->error);
-
-	GAIM_DBUS_UNREGISTER_POINTER(plugin);
 
 	g_free(plugin);
 #endif /* !GAIM_PLUGINS */
@@ -1555,21 +1545,12 @@ gaim_plugins_get_all(void)
 
 
 GaimPluginAction *
-gaim_plugin_action_new(const char* label, void (*callback)(GaimPluginAction *))
+gaim_plugin_action_new(char* label, void (*callback)(GaimPluginAction *))
 {
 	GaimPluginAction *act = g_new0(GaimPluginAction, 1);
 
-	act->label = g_strdup(label);
+	act->label = label;
 	act->callback = callback;
 
 	return act;
-}
-
-void
-gaim_plugin_action_free(GaimPluginAction *action)
-{
-	g_return_if_fail(action != NULL);
-
-	g_free(action->label);
-	g_free(action);
 }

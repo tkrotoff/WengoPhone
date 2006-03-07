@@ -27,7 +27,7 @@ TARGET = gaim
 
 # Compiler and Linker Options
 
-CFLAGS = -g
+CFLAGS =
 
 DEFINES =
 
@@ -35,7 +35,7 @@ ifeq ($(MAKECMDGOALS), $(TARGET)-portable.exe)
 DEFINES := $(DEFINES) -DPORTABLE
 endif
 
-LDFLAGS = -mconsole
+LDFLAGS = -mwindows
 
 #-mconsole
 #-mwindows
@@ -56,17 +56,17 @@ INCLUDE_PATHS =		-I$(INCLUDE_DIR) \
 			-I$(INCLUDE_DIR)/win32 \
 			-I$(IDLETRACK_TOP) \
 			-I$(GAIM_TOP) \
+			-I$(GTK_TOP)/include \
+			-I$(GTK_TOP)/include/gtk-2.0 \
 			-I$(GTK_TOP)/include/glib-2.0 \
 			-I$(GTK_TOP)/include/pango-1.0 \
+			-I$(GTK_TOP)/include/atk-1.0 \
 			-I$(GTK_TOP)/lib/glib-2.0/include \
+			-I$(GTK_TOP)/lib/gtk-2.0/include \
 			-I$(ASPELL_TOP)/include \
 			-I$(GTKSPELL_TOP) \
 			-I$(NSS_DIR)/include \
-			-I$(NSPR_DIR)/include \
-			-I$(GTK_TOP)/include \
-#			-I$(GTK_TOP)/lib/gtk-2.0/include \
-#			-I$(GTK_TOP)/include/atk-1.0 \
-#			-I$(GTK_TOP)/include/gtk-2.0 \
+			-I$(NSPR_DIR)/include
 
 
 LIB_PATHS =		-L$(GTK_TOP)/lib \
@@ -94,7 +94,39 @@ DLL_C_SRC =	\
 			dnssrv.c \
 			eventloop.c \
 			ft.c \
-			gaim_buffer.c \
+			gtkaccount.c \
+			gtkblist.c \
+			gtkconn.c \
+			gtkconv.c \
+			gtkcellrendererprogress.c \
+			gtkdebug.c \
+			gtkdialogs.c \
+			gtkdnd-hints.c \
+			gtkeventloop.c \
+			gtkexpander.c \
+			gtkft.c \
+			gtkidle.c \
+			gtkimhtml.c \
+			gtkimhtmltoolbar.c \
+			gtklog.c \
+			gtkmain.c \
+			gtkmenutray.c \
+			gtknotify.c \
+			gtkplugin.c \
+			gtkpluginpref.c \
+			gtkpounce.c \
+			gtkprefs.c \
+			gtkprivacy.c \
+			gtkrequest.c \
+			gtkroomlist.c \
+			gtksavedstatuses.c \
+			gtksound.c \
+			gtksourceiter.c \
+			gtkstatusbox.c \
+			gtkstock.c \
+			gtkthemes.c \
+			gtkutils.c \
+			gtkwhiteboard.c \
 			idle.c \
 			imgstore.c \
 			log.c \
@@ -124,27 +156,10 @@ DLL_C_SRC =	\
 			value.c \
 			xmlnode.c \
 			whiteboard.c \
-# 			win32/win32dep.c \
-# 			win32/libc_interface.c \
-# 			win32/untar.c \
-# 			wengo\wgaccount.c \
-# 			wengo\wgblist.c \
-# 			wengo\wgconn.c \
-# 			wengo\wgconv.c \
-# 			wengo\wgdebug.c \
-# 			wengo\wgeventloop.c \
-# 			wengo\wgft.c \
-# 			wengo\wgidle.c \
-# 			wengo\wgmain.c \
-# 			wengo\wgmedia.c \
-# 			wengo\wgnotify.c \
-# 			wengo\wgprivacy.c \
-# 			wengo\wgrequest.c \
-# 			wengo\wgroomlist.c \
-# 			wengo\wgsound.c \
-# 			wengo\wgwhiteboard.c \
-#			win32/wspell.c \
-
+			win32/win32dep.c \
+			win32/libc_interface.c \
+			win32/wspell.c \
+			win32/untar.c
 
 RC_SRC =		win32/gaimrc.rc
 
@@ -158,12 +173,16 @@ EXE_OBJECTS = $(EXE_C_SRC:%.c=%.o) $(RC_SRC:%.rc=%.o)
 ## LIBRARIES
 ##
 
-DLL_LIBS =		-lpango-1.0 \
+DLL_LIBS =		-lgtk-win32-2.0 \
+			-latk-1.0 \
+			-lpango-1.0 \
 			-lglib-2.0 \
 			-lgthread-2.0 \
+			-lgdk-win32-2.0 \
 			-lgobject-2.0 \
 			-lintl \
 			-lgmodule-2.0 \
+			-lgdk_pixbuf-2.0 \
 			-lws2_32 \
 			-liberty \
 			-lwinmm \
@@ -172,7 +191,7 @@ DLL_LIBS =		-lpango-1.0 \
 			-lnss3 \
 			-lnspr4 \
 			-lssl3
-
+			
 
 EXE_LIBS =
 
@@ -182,7 +201,7 @@ EXE_LIBS =
 
 # How to make a C file
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDE_PATHS) -I../../../../usr/include/w32api $(DEFINES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE_PATHS) $(DEFINES) -c $< -o $@
 
 # How to make an RC file
 %.o: %.rc
@@ -207,9 +226,7 @@ $(IDLETRACK_TOP)/idletrack.dll:
 #
 
 $(TARGET).lib $(TARGET).dll: $(DLL_OBJECTS) $(IDLETRACK_TOP)/idletrack.dll
-	$(CC) -shared $(DLL_OBJECTS) $(LIB_PATHS) $(DLL_LIBS) $(DLL_LD_FLAGS) -Wl,--output-def,gaim.def,--out-implib,$(TARGET).lib -o $(TARGET).dll
-#	ar -q $(TARGET).lib $(DLL_OBJECTS)
-#	$(CC) -static $(DLL_OBJECTS) $(LIB_PATHS) $(DLL_LIBS) $(DLL_LD_FLAGS) -Wl,--out-implib,$(TARGET).lib -o $(TARGET).dll
+	$(CC) -shared $(DLL_OBJECTS) $(LIB_PATHS) $(DLL_LIBS) $(DLL_LD_FLAGS) -Wl,--out-implib,$(TARGET).lib -o $(TARGET).dll
 
 #
 # BUILD EXE

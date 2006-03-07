@@ -354,9 +354,8 @@ _client_socket_handler(gpointer data, gint socket, GaimInputCondition condition)
 
 		/* Inform the user that the conversation has been closed */
 		conversation = gaim_find_conversation_with_account(GAIM_CONV_TYPE_IM, gb->name, account);
-		closed_conv_message = g_strdup_printf(_("%s has closed the conversation."), gb->name);
+		closed_conv_message = g_strconcat(gb->name, " has closed the conversation.", NULL);
 		gaim_conversation_write(conversation, NULL, closed_conv_message, GAIM_MESSAGE_SYSTEM, time(NULL));
-		g_free(closed_conv_message);
 	} else {
 		/* Parse the message to get the data and send to the ui */
 		_jabber_parse_and_write_message_to_ui(message, account->gc, gb);
@@ -391,7 +390,7 @@ _server_socket_handler(gpointer data, int server_socket, GaimInputCondition cond
 	cbba = g_new0(struct _check_buddy_by_address_t, 1);
 	cbba->address = address_text;
 	cbba->gb = &gb;
-	g_hash_table_foreach(bl->buddies, _check_buddy_by_address, cbba);
+	g_hash_table_foreach(bl->buddies, _check_buddy_by_address, address_text);
 	g_free(cbba);
 	if (gb == NULL)
 	{
@@ -431,20 +430,25 @@ bonjour_jabber_start(BonjourJabber *data)
 {
 	struct sockaddr_in my_addr;
 	int yes = 1;
+	char *error_message = NULL;
 
 	/* Open a listening socket for incoming conversations */
 	if ((data->socket = socket(PF_INET, SOCK_STREAM, 0)) < 0)
 	{
-		gaim_debug_error("bonjour", "Cannot open socket: %s\n", strerror(errno));
-		gaim_connection_error(data->account->gc, _("Cannot open socket"));
+		gaim_debug_error("bonjour", "Cannot get socket\n");
+		error_message = strerror(errno);
+		gaim_debug_error("bonjour", "%s\n", error_message);
+		gaim_connection_error(data->account->gc, "Cannot open socket");
 		return -1;
 	}
 
 	/* Make the socket reusable */
 	if (setsockopt(data->socket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) != 0)
 	{
-		gaim_debug_error("bonjour", "Error setting socket options: %s\n", strerror(errno));
-		gaim_connection_error(data->account->gc, _("Error setting socket options"));
+		gaim_debug_error("bonjour", "Cannot make socket reusable\n");
+		error_message = strerror(errno);
+		gaim_debug_error("bonjour", "%s\n", error_message);
+		gaim_connection_error(data->account->gc, "Error setting socket options");
 		return -1;
 	}
 
@@ -454,15 +458,19 @@ bonjour_jabber_start(BonjourJabber *data)
 
 	if (bind(data->socket, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) != 0)
 	{
-		gaim_debug_error("bonjour", "Cannot bind socket: %s\n", strerror(errno));
-		gaim_connection_error(data->account->gc, _("Cannot bind socket to port"));
+		gaim_debug_error("bonjour", "Cannot bind socket\n");
+		error_message = strerror(errno);
+		gaim_debug_error("bonjour", "%s\n", error_message);
+		gaim_connection_error(data->account->gc, "Cannot bind socket to port");
 		return -1;
 	}
 
 	if (listen(data->socket, 10) != 0)
 	{
-		gaim_debug_error("bonjour", "Cannot listen on socket: %s\n", strerror(errno));
-		gaim_connection_error(data->account->gc, _("Cannot listen on socket"));
+		gaim_debug_error("bonjour", "Cannot listen to socket\n");
+		error_message = strerror(errno);
+		gaim_debug_error("bonjour", "%s\n", error_message);
+		gaim_connection_error(data->account->gc, "Cannot listen to socket");
 		return -1;
 	}
 
@@ -556,7 +564,7 @@ bonjour_jabber_send_message(BonjourJabber *data, const gchar *to, const gchar *b
 		{
 				gaim_debug_error("bonjour", "Unable to start a conversation\n");
 				gaim_debug_warning("bonjour", "send error: %s\n", strerror(errno));
-				conv_message = g_strdup(_("Unable to send the message, the conversation couldn't be started."));
+				conv_message = g_strdup("Unable to send the message, the conversation couldn't be started.");
 				conversation = gaim_find_conversation_with_account(GAIM_CONV_TYPE_IM, bb->name, data->account);
 				gaim_conversation_write(conversation, NULL, conv_message, GAIM_MESSAGE_SYSTEM, time(NULL));
 				close(bb->conversation->socket);

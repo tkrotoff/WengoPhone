@@ -312,7 +312,6 @@ static gboolean tcl_unload_plugin(GaimPlugin *plugin)
 static void tcl_destroy_plugin(GaimPlugin *plugin)
 {
 	if (plugin->info != NULL) {
-		g_free(plugin->info->id);
 		g_free(plugin->info->name);
 		g_free(plugin->info->version);
 		g_free(plugin->info->description);

@@ -25,7 +25,6 @@
 #include "debug.h"
 #include "internal.h"
 #include "prefs.h"
-#include "util.h"
 
 static GaimDebugUiOps *debug_ui_ops = NULL;
 
@@ -58,10 +57,10 @@ gaim_debug_vargs(GaimDebugLevel level, const char *category,
 		if ((category != NULL) &&
 			(gaim_prefs_exists("/core/debug/timestamps")) &&
 			(gaim_prefs_get_bool("/core/debug/timestamps"))) {
-			const char *mdate;
+			gchar mdate[64];
 
 			time_t mtime = time(NULL);
-			mdate = gaim_utf8_strftime("%H:%M:%S", localtime(&mtime));
+			strftime(mdate, sizeof(mdate), "%H:%M:%S", localtime(&mtime));
 			ts_s = g_strdup_printf("(%s) ", mdate);
 		} else {
 			ts_s = g_strdup("");

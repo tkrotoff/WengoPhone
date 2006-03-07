@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-#include "../../internal.h"
+#include "internal.h"
 #include "cipher.h"
 #include "debug.h"
 #include "imgstore.h"

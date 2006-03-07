@@ -181,11 +181,9 @@ static void
 remove_old_transient_statuses()
 {
 	GList *l, *next;
-	GaimSavedStatus *saved_status, *current_status;
+	GaimSavedStatus *saved_status;
 	int count;
 	time_t creation_time;
-
-	current_status = gaim_savedstatus_get_current();
 
 	/*
 	 * Iterate through the list of saved statuses.  Delete all
@@ -201,13 +199,10 @@ remove_old_transient_statuses()
 		{
 			if (count == MAX_TRANSIENTS)
 			{
-				if (saved_status != current_status)
-				{
-					saved_statuses = g_list_remove(saved_statuses, saved_status);
-					creation_time = gaim_savedstatus_get_creation_time(saved_status);
-					g_hash_table_remove(creation_times, &creation_time);
-					free_saved_status(saved_status);
-				}
+				saved_statuses = g_list_remove(saved_statuses, saved_status);
+				creation_time = gaim_savedstatus_get_creation_time(saved_status);
+				g_hash_table_remove(creation_times, &creation_time);
+				free_saved_status(saved_status);
 			}
 			else
 				count++;
@@ -583,10 +578,7 @@ gaim_savedstatus_set_message(GaimSavedStatus *status, const char *message)
 	g_return_if_fail(status != NULL);
 
 	g_free(status->message);
-	if ((message != NULL) && (*message == '\0'))
-		status->message = NULL;
-	else
-		status->message = g_strdup(message);
+	status->message = g_strdup(message);
 
 	schedule_save();
 }
@@ -741,8 +733,6 @@ gaim_savedstatus_get_current()
 		 * using?  In any case, add a default status.
 		 */
 		saved_status = gaim_savedstatus_new(NULL, GAIM_STATUS_AVAILABLE);
-		gaim_prefs_set_int("/core/savedstatus/current",
-						   gaim_savedstatus_get_creation_time(saved_status));
 	}
 
 	return saved_status;
@@ -765,8 +755,6 @@ gaim_savedstatus_get_idleaway()
 		 */
 		saved_status = gaim_savedstatus_new(NULL, GAIM_STATUS_AWAY);
 		gaim_savedstatus_set_message(saved_status, _("I'm not here right now"));
-		gaim_prefs_set_int("/core/savedstatus/idleaway",
-						   gaim_savedstatus_get_creation_time(saved_status));
 	}
 	else
 	{
@@ -811,8 +799,8 @@ gaim_savedstatus_find_by_creation_time(time_t creation_time)
 }
 
 GaimSavedStatus *
-gaim_savedstatus_find_transient_by_type_and_message(GaimStatusPrimitive type,
-													const char *message)
+gaim_savedstatus_find_by_type_and_message(GaimStatusPrimitive type,
+										  const char *message)
 {
 	GList *iter;
 	GaimSavedStatus *status;
@@ -820,7 +808,7 @@ gaim_savedstatus_find_transient_by_type_and_message(GaimStatusPrimitive type,
 	for (iter = saved_statuses; iter != NULL; iter = iter->next)
 	{
 		status = (GaimSavedStatus *)iter->data;
-		if ((status->type == type) && gaim_savedstatus_is_transient(status) &&
+		if ((status->type == type) &&
 			(((status->message == NULL) && (message == NULL)) ||
 			((status->message != NULL) && (message != NULL) && !strcmp(status->message, message))))
 		{

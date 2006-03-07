@@ -994,7 +994,6 @@ void gaim_blist_rename_group(GaimGroup *source, const char *new_name)
 		/* Make a copy of the old group name and then delete the old group */
 		old_name = g_strdup(source->name);
 		gaim_blist_remove_group(source);
-		source = dest;
 	} else {
 		/* A simple rename */
 		GaimBlistNode *cnode, *bnode;
@@ -1008,6 +1007,7 @@ void gaim_blist_rename_group(GaimGroup *source, const char *new_name)
 
 		old_name = source->name;
 		source->name = g_strdup(new_name);
+
 	}
 
 	/* Save our changes */
@@ -1018,7 +1018,6 @@ void gaim_blist_rename_group(GaimGroup *source, const char *new_name)
 		ops->update(gaimbuddylist, (GaimBlistNode*)source);
 
 	/* Notify all PRPLs */
-	/* TODO: Is this condition needed?  Seems like it would always be TRUE */
 	if(old_name && source && strcmp(source->name, old_name)) {
 		for (accts = gaim_group_get_accounts(source); accts; accts = g_slist_remove(accts, accts->data)) {
 			GaimAccount *account = accts->data;
@@ -1884,14 +1883,13 @@ void gaim_blist_remove_group(GaimGroup *group)
 			count++;
 
 		buf = g_strdup_printf(ngettext("%d buddy from group %s was not removed "
-									   "because it belongs to an account which is "
-									   "disabled or offline.  This buddy and the "
-									   "group were not removed.\n",
+									   "because its account was not logged in."
+									   "  This buddy and the group were not "
+									   "removed.\n",
 									   "%d buddies from group %s were not "
-									   "removed because they belong to accounts "
-									   "which are currently disabled or offline.  "
-									   "These buddies and the group were not "
-									   "removed.\n", count),
+									   "removed because their accounts were "
+									   "not logged in.  These buddies and "
+									   "the group were not removed.\n", count),
 							  count, group->name);
 		gaim_notify_error(NULL, NULL, _("Group not removed"), buf);
 		g_free(buf);

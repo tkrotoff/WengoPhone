@@ -45,7 +45,7 @@ static GtkWidget *tickerwindow = NULL;
 static GtkWidget *ticker;
 
 typedef struct {
-	GaimContact *contact;
+	GaimBuddy *buddy;
 	GtkWidget *ebox;
 	GtkWidget *label;
 	GtkWidget *icon;
@@ -53,8 +53,6 @@ typedef struct {
 } TickerData;
 
 GList *tickerbuds = NULL;
-
-static void buddy_ticker_update_contact(GaimContact *contact);
 
 static gboolean buddy_ticker_destroy_window(GtkWidget *window,
 		GdkEventAny *event, gpointer data) {
@@ -89,25 +87,24 @@ static void buddy_ticker_create_window() {
 }
 
 static gboolean buddy_click_cb(GtkWidget *widget, GdkEventButton *event, gpointer user_data) {
-	GaimContact *contact = user_data;
-	GaimBuddy *b = gaim_contact_get_priority_buddy(contact);
+	GaimBuddy *b = user_data;
 
 	gaim_conversation_new(GAIM_CONV_TYPE_IM, b->account, b->name);
 	return TRUE;
 }
 
-static TickerData *buddy_ticker_find_contact(GaimContact *c) {
+static TickerData *buddy_ticker_find_buddy(GaimBuddy *b) {
 	GList *tb;
 	for(tb = tickerbuds; tb; tb = tb->next) {
 		TickerData *td = tb->data;
-		if(td->contact == c)
+		if(td->buddy == b)
 			return td;
 	}
 	return NULL;
 }
 
-static void buddy_ticker_set_pixmap(GaimContact *c) {
-	TickerData *td = buddy_ticker_find_contact(c);
+static void buddy_ticker_set_pixmap(GaimBuddy *b) {
+	TickerData *td = buddy_ticker_find_buddy(b);
 	GdkPixbuf *pixbuf;
 
 	if(!td)
@@ -116,7 +113,7 @@ static void buddy_ticker_set_pixmap(GaimContact *c) {
 	if(!td->icon)
 		td->icon = gtk_image_new();
 
-	pixbuf = gaim_gtk_blist_get_status_icon((GaimBlistNode*)c,
+	pixbuf = gaim_gtk_blist_get_status_icon((GaimBlistNode*)b,
 			GAIM_STATUS_ICON_SMALL);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(td->icon), pixbuf);
 	g_object_unref(G_OBJECT(pixbuf));
@@ -125,7 +122,8 @@ static void buddy_ticker_set_pixmap(GaimContact *c) {
 static gboolean buddy_ticker_set_pixmap_cb(gpointer data) {
 	TickerData *td = data;
 
-	buddy_ticker_update_contact(td->contact);
+gaim_debug(GAIM_DEBUG_ERROR, "XXX", "we're updating the pixmap, you bitch\n");
+	buddy_ticker_set_pixmap(td->buddy);
 	td->timeout = 0;
 
 	return FALSE;
@@ -134,37 +132,31 @@ static gboolean buddy_ticker_set_pixmap_cb(gpointer data) {
 static void buddy_ticker_add_buddy(GaimBuddy *b) {
 	GtkWidget *hbox;
 	TickerData *td;
-	GaimContact *contact;
-
-	contact = gaim_buddy_get_contact(b);
 
 	buddy_ticker_create_window();
 
 	if (!ticker)
 		return;
 
-	if (buddy_ticker_find_contact(contact))
-	{
-		buddy_ticker_update_contact(contact);
+	if (buddy_ticker_find_buddy(b))
 		return;
-	}
 
 	td = g_new0(TickerData, 1);
-	td->contact = contact;
+	td->buddy = b;
 	tickerbuds = g_list_append(tickerbuds, td);
 
 	td->ebox = gtk_event_box_new();
 	gtk_ticker_add(GTK_TICKER(ticker), td->ebox);
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(td->ebox), hbox);
-	buddy_ticker_set_pixmap(contact);
-	gtk_box_pack_start(GTK_BOX(hbox), td->icon, FALSE, FALSE, 0);
+	buddy_ticker_set_pixmap(b);
+	gtk_box_pack_start(GTK_BOX(hbox), td->icon, FALSE, FALSE, 5);
 
 	g_signal_connect(G_OBJECT(td->ebox), "button-press-event",
-		G_CALLBACK(buddy_click_cb), contact);
+		G_CALLBACK(buddy_click_cb), b);
 
-	td->label = gtk_label_new(gaim_contact_get_alias(contact));
-	gtk_box_pack_start(GTK_BOX(hbox), td->label, FALSE, FALSE, 2);
+	td->label = gtk_label_new(gaim_buddy_get_alias(b));
+	gtk_box_pack_start(GTK_BOX(hbox), td->label, FALSE, FALSE, 5);
 
 	gtk_widget_show_all(td->ebox);
 	gtk_widget_show(tickerwindow);
@@ -176,42 +168,20 @@ static void buddy_ticker_add_buddy(GaimBuddy *b) {
 	td->timeout = g_timeout_add(11000, buddy_ticker_set_pixmap_cb, td);
 }
 
-static void buddy_ticker_remove(TickerData *td) {
+static void buddy_ticker_remove_buddy(GaimBuddy *b) {
+	TickerData *td = buddy_ticker_find_buddy(b);
+
+	if (!td)
+		return;
+
+	/* pop up the ticker window again */
+	buddy_ticker_create_window();
+
 	gtk_ticker_remove(GTK_TICKER(ticker), td->ebox);
 	tickerbuds = g_list_remove(tickerbuds, td);
 	if (td->timeout != 0)
 		g_source_remove(td->timeout);
 	g_free(td);
-}
-
-static void buddy_ticker_update_contact(GaimContact *contact) {
-	TickerData *td = buddy_ticker_find_contact(contact);
-
-	if (!td)
-		return;
-
-	/* pop up the ticker window again */
-	buddy_ticker_create_window();
-	if (gaim_contact_get_priority_buddy(contact) == NULL)
-		buddy_ticker_remove(td);
-	else {
-		buddy_ticker_set_pixmap(contact);
-		gtk_label_set_text(GTK_LABEL(td->label), gaim_contact_get_alias(contact));
-	}
-}
-
-static void buddy_ticker_remove_buddy(GaimBuddy *b) {
-	GaimContact *c = gaim_buddy_get_contact(b);
-	TickerData *td = buddy_ticker_find_contact(c);
-
-	if (!td)
-		return;
-
-	gaim_contact_invalidate_priority_buddy(c);
-
-	/* pop up the ticker window again */
-	buddy_ticker_create_window();
-	buddy_ticker_update_contact(c);
 }
 
 static void buddy_ticker_show()
@@ -243,10 +213,8 @@ static void buddy_ticker_show()
 static void
 buddy_signon_cb(GaimBuddy *b)
 {
-	GaimContact *c = gaim_buddy_get_contact(b);
-	gaim_contact_invalidate_priority_buddy(c);
-	if(buddy_ticker_find_contact(c))
-		buddy_ticker_update_contact(c);
+	if(buddy_ticker_find_buddy(b))
+		buddy_ticker_set_pixmap(b);
 	else
 		buddy_ticker_add_buddy(b);
 }
@@ -262,9 +230,8 @@ buddy_signoff_cb(GaimBuddy *b)
 static void
 status_changed_cb(GaimBuddy *b, GaimStatus *os, GaimStatus *s)
 {
-	GaimContact *c = gaim_buddy_get_contact(b);
-	if(buddy_ticker_find_contact(c))
-		buddy_ticker_set_pixmap(c);
+	if(buddy_ticker_find_buddy(b))
+		buddy_ticker_set_pixmap(b);
 	else
 		buddy_ticker_add_buddy(b);
 }
@@ -289,7 +256,9 @@ signoff_cb(GaimConnection *gc)
 		while (t) {
 			td = t->data;
 			t = t->next;
-			buddy_ticker_update_contact(td->contact);
+			if (td->buddy->account == gc->account) {
+				buddy_signoff_cb(td->buddy);
+			}
 		}
 	}
 }

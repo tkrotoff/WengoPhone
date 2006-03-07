@@ -40,13 +40,10 @@
  * taken from an email to the texinfo mailing list by Manuel Guerrero.
  * Thank you Manuel, and thank you Alex's good friend Google.
  */
-
-#define N_(String) (String)
-
 #ifdef ENABLE_NLS
 #  include <locale.h>
 #  include <libintl.h>
-#  define _(x) ((const char *)gettext(x))
+#  define _(x) gettext(x)
 #  ifdef gettext_noop
 #    define N_(String) gettext_noop (String)
 #  else
@@ -56,9 +53,9 @@
 #  include <locale.h>
 #  define N_(String) (String)
 #  ifndef _
-#    define _(x) ((const char *)x)
+#    define _(x) (x)
 #  endif
-#  define ngettext(Singular, Plural, Number) ((Number == 1) ? ((const char *)Singular) : ((const char *)Plural))
+#  define ngettext(Singular, Plural, Number) ((Number == 1) ? (Singular) : (Plural))
 #endif
 
 #ifdef HAVE_ENDIAN_H
@@ -164,12 +161,6 @@
 #		define G_GSIZE_FORMAT "u"
 #	endif
 #endif
-
-/* Safer ways to work with static buffers. When using non-static
- * buffers, either use g_strdup_* functions (preferred) or use
- * g_strlcpy/g_strlcpy directly. */
-#define gaim_strlcpy(dest, src) g_strlcpy(dest, src, sizeof(dest))
-#define gaim_strlcat(dest, src) g_strlcat(dest, src, sizeof(dest))
 
 #define GAIM_WEBSITE "http://gaim.sourceforge.net/"
 

@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include "../../internal.h"
+#include "internal.h"
 
 #include "account.h"
 #include "accountopt.h"
@@ -508,11 +508,6 @@ static void nap_login_connect(gpointer data, gint source, GaimInputCondition con
 		return;
 	}
 
-	/* Clear the nonblocking flag
-	   This protocol should be updated to support nonblocking I/O if
-	   anyone is going to actually use it */
-	fcntl(source, F_SETFL, 0);
-
 	ndata->fd = source;
 
 	/* Update the login progress status display */
@@ -679,6 +674,7 @@ static GaimPluginProtocolInfo prpl_info =
 	NULL,					/* new_xfer */
 	NULL,					/* offline_message */
 	NULL,					/* whiteboard_prpl_ops */
+	NULL,					/* media_prpl_ops */
 };
 
 static GaimPluginInfo info =

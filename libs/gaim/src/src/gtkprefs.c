@@ -527,9 +527,6 @@ theme_got_url(void *data, const char *themedata, size_t len)
 	FILE *f;
 	gchar *path;
 
-	if (len == 0)
-		return;
-
 	f = gaim_mkstemp(&path, TRUE);
 	fwrite(themedata, len, 1, f);
 	fclose(f);
@@ -564,18 +561,14 @@ static void theme_dnd_recv(GtkWidget *widget, GdkDragContext *dc, guint x, guint
 		} else if (!g_ascii_strncasecmp(name, "http://", 7)) {
 			/* Oo, a web drag and drop. This is where things
 			 * will start to get interesting */
+			gchar *tail;
+
+			if ((tail = strrchr(name, '.')) == NULL)
+				return;
+
+			/* We'll check this just to make sure. This also lets us do something different on
+			 * other platforms, if need be */
 			gaim_url_fetch(name, TRUE, NULL, FALSE, theme_got_url, ".tgz");
-		} else if (!g_ascii_strncasecmp(name, "https://", 8)) {
-			/* gaim_url_fetch() doesn't support HTTPS, but we want users
-			 * to be able to drag and drop links from the SF trackers, so
-			 * we'll try it as an HTTP URL. */
-			char *tmp = g_strdup(name + 1);
-			tmp[0] = 'h';
-			tmp[1] = 't';
-			tmp[2] = 't';
-			tmp[3] = 'p';
-			gaim_url_fetch(tmp, TRUE, NULL, FALSE, theme_got_url, ".tgz");
-			g_free(tmp);
 		}
 
 		gtk_drag_finish(dc, TRUE, FALSE, t);
@@ -848,7 +841,7 @@ conv_page()
 
 	gaim_gtk_prefs_checkbox(_("Use smooth-scrolling"), "/gaim/gtk/conversations/use_smooth_scrolling", vbox);
 
-	frame = gaim_gtk_create_imhtml(TRUE, &imhtml, &toolbar, NULL);
+	frame = gaim_gtk_create_imhtml(TRUE, &imhtml, &toolbar);
 	gtk_widget_set_name(imhtml, "gaim_gtkprefs_font_imhtml");
 	gtk_imhtml_set_whole_buffer_formatting_only(GTK_IMHTML(imhtml), TRUE);
 	gtk_imhtml_set_format_functions(GTK_IMHTML(imhtml),
@@ -993,13 +986,9 @@ network_page()
 	g_signal_connect(G_OBJECT(entry), "changed",
 					 G_CALLBACK(network_ip_changed), NULL);
 
-	/*
-	 * TODO: This could be better by showing the autodeteced
-	 * IP separately from the user-specified IP.
-	 */
-	if (gaim_network_get_my_ip(-1) != NULL)
+	if (gaim_network_get_public_ip() != NULL)
 		gtk_entry_set_text(GTK_ENTRY(entry),
-		                   gaim_network_get_my_ip(-1));
+		                   gaim_network_get_public_ip());
 
 	gaim_set_accessible_label (entry, label);
 
@@ -1170,14 +1159,14 @@ static GList *get_available_browsers()
 	int i = 0;
 	char *browser_setting = (char *)gaim_prefs_get_string("/gaim/gtk/browsers/browser");
 
-	browsers = g_list_prepend(browsers, (gpointer)"custom");
-	browsers = g_list_prepend(browsers, (gpointer)_("Manual"));
+	browsers = g_list_prepend(browsers, "custom");
+	browsers = g_list_prepend(browsers, _("Manual"));
 
 	for (i = 0; i < num_possible_browsers; i++) {
 		if (gaim_program_is_valid(possible_browsers[i].command)) {
 			browsers = g_list_prepend(browsers,
 									  possible_browsers[i].command);
-			browsers = g_list_prepend(browsers, (gpointer)_(possible_browsers[i].name));
+			browsers = g_list_prepend(browsers, _(possible_browsers[i].name));
 			if(browser_setting && !strcmp(possible_browsers[i].command, browser_setting))
 				browser_setting = NULL;
 		}
@@ -1458,20 +1447,14 @@ static void select_sound(GtkWidget *button, gpointer being_NULL_is_fun)
 #ifdef USE_AO
 static gchar* prefs_sound_volume_format(GtkScale *scale, gdouble val)
 {
-	if(val < 15) {
- 		return g_strdup_printf(_("Quietest"));
-	} else if(val < 30) {
-		return g_strdup_printf(_("Quieter"));
-	} else if(val < 45) {
-		return g_strdup_printf(_("Quiet"));
-	} else if(val < 55) {
-		return g_strdup_printf(_("Normal"));
-	} else if(val < 70) {
-		return g_strdup_printf(_("Loud"));
-	} else if(val < 85) {
-		return g_strdup_printf(_("Louder"));
+	if(val == 0) {
+ 		return g_strdup_printf("Silent");
+	} else if(val < 35) {
+		return g_strdup_printf("Quiet");
+	} else if(val > 65) {
+		return g_strdup_printf("Loud");
 	} else {
-		return g_strdup_printf(_("Loudest"));
+		return g_strdup_printf("Normal");
 	}
 }
 

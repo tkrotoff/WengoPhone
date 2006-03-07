@@ -156,16 +156,15 @@ gaim_privacy_deny_remove(GaimAccount *account, const char *who,
 	if (l == NULL)
 		return FALSE;
 
-	name = l->data;
+	g_free(l->data);
 	account->deny = g_slist_delete_link(account->deny, l);
 
 	if (!local_only && gaim_account_is_connected(account))
-		serv_rem_deny(gaim_account_get_connection(account), name);
+		serv_rem_deny(gaim_account_get_connection(account), who);
 
 	if (privacy_ops != NULL && privacy_ops->deny_removed != NULL)
-		privacy_ops->deny_removed(account, name);
+		privacy_ops->deny_removed(account, who);
 
-	g_free(name);
 	gaim_blist_schedule_save();
 
 	return TRUE;

@@ -163,7 +163,7 @@ add_ims(GevoAddBuddyDialog *dialog, EContact *contact, const char *name,
 	GaimAccount *account = NULL;
 	GList *l;
 	GtkTreeIter iter;
-	GdkPixbuf *pixbuf;
+	GdkPixbuf *pixbuf, *icon = NULL;
 
 	if (list == NULL)
 		return;
@@ -183,7 +183,11 @@ add_ims(GevoAddBuddyDialog *dialog, EContact *contact, const char *name,
 	if (account == NULL)
 		return;
 
-	pixbuf = gaim_gtk_create_prpl_icon(account, 0.5);
+	pixbuf = gaim_gtk_create_prpl_icon(account);
+
+	if (pixbuf != NULL)
+		icon = gdk_pixbuf_scale_simple(pixbuf, 16, 16,
+									   GDK_INTERP_BILINEAR);
 
 	for (l = list; l != NULL; l = l->next)
 	{
@@ -199,7 +203,7 @@ add_ims(GevoAddBuddyDialog *dialog, EContact *contact, const char *name,
 
 		gtk_list_store_set(dialog->model, &iter,
 						   COLUMN_NAME, name,
-						   COLUMN_PRPL_ICON, pixbuf,
+						   COLUMN_PRPL_ICON, icon,
 						   COLUMN_USERNAME, account_name,
 						   COLUMN_DATA, contact,
 						   -1);
@@ -219,8 +223,8 @@ add_ims(GevoAddBuddyDialog *dialog, EContact *contact, const char *name,
 		}
 	}
 
-	if (pixbuf != NULL)
-		g_object_unref(G_OBJECT(pixbuf));
+	if (pixbuf != NULL) g_object_unref(G_OBJECT(pixbuf));
+	if (icon != NULL)   g_object_unref(G_OBJECT(icon));
 
 	g_list_foreach(list, (GFunc)g_free, NULL);
 	g_list_free(list);
@@ -607,16 +611,19 @@ gevo_add_buddy_dialog_add_person(GevoAddBuddyDialog *dialog,
 								 EContact *contact, const char *name,
 								 GaimAccount *account, const char *screenname)
 {
-	GdkPixbuf *pixbuf;
+	GdkPixbuf *pixbuf, *icon = NULL;
 	GtkTreeIter iter;
 
-	pixbuf = gaim_gtk_create_prpl_icon(account, 0.5);
+	pixbuf = gaim_gtk_create_prpl_icon(account);
+
+	if (pixbuf != NULL)
+		icon = gdk_pixbuf_scale_simple(pixbuf, 16, 16, GDK_INTERP_BILINEAR);
 
 	gtk_list_store_append(dialog->model, &iter);
 
 	gtk_list_store_set(dialog->model, &iter,
 					   COLUMN_NAME, name,
-					   COLUMN_PRPL_ICON, pixbuf,
+					   COLUMN_PRPL_ICON, icon,
 					   COLUMN_DATA, contact,
 					   COLUMN_USERNAME, screenname,
 					   -1);
@@ -624,6 +631,6 @@ gevo_add_buddy_dialog_add_person(GevoAddBuddyDialog *dialog,
 	if (contact != NULL)
 		dialog->contacts = g_list_append(dialog->contacts, contact);
 
-	if (pixbuf != NULL)
-		g_object_unref(G_OBJECT(pixbuf));
+	if (pixbuf != NULL) g_object_unref(G_OBJECT(pixbuf));
+	if (icon != NULL)   g_object_unref(G_OBJECT(icon));
 }

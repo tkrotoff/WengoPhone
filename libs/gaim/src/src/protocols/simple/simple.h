@@ -27,7 +27,6 @@
 #include <time.h>
 
 #include <cipher.h>
-#include <gaim_buffer.h>
 #include <prpl.h>
 
 #include "sipmsg.h"
@@ -44,7 +43,6 @@ struct simple_watcher {
 	gchar *name;
 	time_t expire;
 	struct sip_dialog dialog;
-	int needsxpidf;
 };
 
 struct simple_buddy {
@@ -55,10 +53,8 @@ struct simple_buddy {
 struct sip_auth {
 	int type; /* 1 = Digest / 2 = NTLM */
 	gchar *nonce;
-	gchar *opaque;
 	gchar *realm;
 	gchar *target;
-	guint32 flags;
 	int nc;
 	gchar *digest_session_key;
 	int retries;
@@ -83,10 +79,9 @@ struct simple_account_data {
 	GHashTable *buddies;
 	guint registertimeout;
 	guint resendtimeout;
-	gboolean connecting;
+	int connecting;
 	GaimAccount *account;
-	GaimCircBuffer *txbuf;
-	guint tx_handler;
+	gchar *sendlater;
 	gchar *regcallid;
 	GSList *transactions;
 	GSList *watcher;

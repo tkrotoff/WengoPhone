@@ -35,7 +35,7 @@
 /* #define MSN_DEBUG_NS 1 */
 /* #define MSN_DEBUG_SB 1 */
 
-#include "../../internal.h"
+#include "internal.h"
 
 #include "account.h"
 #include "accountopt.h"

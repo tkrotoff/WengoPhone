@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-#include "../../internal.h"
+#include "internal.h"
 
 #include "account.h"
 #include "accountopt.h"
@@ -2299,6 +2299,7 @@ static GaimPluginProtocolInfo prpl_info =
 	NULL,					/* new_xfer */
 	NULL,					/* offline_message */
 	NULL,					/* whiteboard_prpl_ops */
+	NULL,					/* media_prpl_ops */
 };
 
 static GaimPluginInfo info =

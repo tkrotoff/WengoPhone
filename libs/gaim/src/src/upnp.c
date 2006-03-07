@@ -39,6 +39,7 @@
 ****************************************************************/
 #define HTTP_OK "200 OK"
 #define DEFAULT_HTTP_PORT 80
+#define SIZEOF_HTTP 7         /* size of "http://" string */
 #define DISCOVERY_TIMEOUT 1000
 
 /***************************************************************
@@ -328,8 +329,10 @@ gaim_upnp_parse_description_response(const gchar* httpResponse, gsize len,
 		return NULL;
 	}
 
-	if(!gaim_str_has_prefix(xmlnode_get_data(controlURLNode), "http://") &&
-	   !gaim_str_has_prefix(xmlnode_get_data(controlURLNode), "HTTP://")) {
+	if(g_strstr_len(xmlnode_get_data(controlURLNode),
+			SIZEOF_HTTP, "http://") == NULL &&
+			g_strstr_len(xmlnode_get_data(controlURLNode),
+				SIZEOF_HTTP, "HTTP://") == NULL) {
 		controlURL = g_strdup_printf("%s%s", baseURL,
 			xmlnode_get_data(controlURLNode));
 	}else{
@@ -408,7 +411,6 @@ gaim_upnp_parse_description(const gchar* descriptionURL, UPnPDiscoveryData *dd)
 
 	dd->full_url = g_strdup_printf("http://%s:%d",
 			descriptionAddress, port);
-	g_free(descriptionAddress);
 
 	/* Remove the timeout because everything it is waiting for has
 	 * successfully completed */
@@ -418,6 +420,7 @@ gaim_upnp_parse_description(const gchar* descriptionURL, UPnPDiscoveryData *dd)
 	gaim_url_fetch_request(descriptionURL, TRUE, NULL, TRUE, httpRequest,
 			TRUE, upnp_parse_description_cb, dd);
 
+	g_free(descriptionAddress);
 	g_free(httpRequest);
 
 }
@@ -543,7 +546,7 @@ gaim_upnp_discover_send_broadcast(UPnPDiscoveryData *dd)
 	   we should retry the send NUM_UDP_ATTEMPTS times. Also,
 	   try different requests for WANIPConnection and WANPPPConnection*/
 	for(; dd->retry_count < NUM_UDP_ATTEMPTS; dd->retry_count++) {
-		sentSuccess = FALSE;
+		sentSuccess = TRUE;
 
 		if((dd->retry_count % 2) == 0) {
 			strncpy(dd->service_type, WAN_IP_CONN_SERVICE, sizeof(dd->service_type));
@@ -563,7 +566,7 @@ gaim_upnp_discover_send_broadcast(UPnPDiscoveryData *dd)
 				sentSuccess = TRUE;
 				break;
 			}
-		} while (errno == EINTR || errno == EAGAIN);
+		} while (errno == EINTR);
 
 		g_free(sendMessage);
 

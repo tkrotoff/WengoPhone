@@ -73,10 +73,10 @@ static void handle_chat(JabberMessage *jm)
 			GaimConversation *conv;
 
 			from = g_strdup_printf("%s@%s", jid->node, jid->domain);
-			conv = gaim_find_conversation_with_account(GAIM_CONV_TYPE_IM, from, jm->js->gc->account);
+			conv = jabber_find_unnormalized_conv(from, jm->js->gc->account);
 			if(conv) {
 				gaim_conversation_set_name(conv, jm->from);
-				}
+			}
 			g_free(from);
 		}
 		from = g_strdup(jm->from);
@@ -311,7 +311,7 @@ void jabber_message_parse(JabberStream *js, xmlnode *packet)
 				const char *timestamp = xmlnode_get_attrib(child, "stamp");
 				jm->delayed = TRUE;
 				if(timestamp)
-					jm->sent = gaim_str_to_time(timestamp, TRUE, NULL, NULL, NULL);
+					jm->sent = gaim_str_to_time(timestamp, TRUE);
 			} else if(xmlns && !strcmp(xmlns, "jabber:x:conference") &&
 					jm->type != JABBER_MESSAGE_GROUPCHAT_INVITE &&
 					jm->type != JABBER_MESSAGE_ERROR) {

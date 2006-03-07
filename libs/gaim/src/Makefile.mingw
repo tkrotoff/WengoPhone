@@ -32,7 +32,8 @@ MAKENSIS := makensis.exe
 
 VERSION := $(shell cat ./VERSION)
 
-NEEDED_DLLS =		$(IDLETRACK_TOP)/idletrack.dll
+NEEDED_DLLS =		$(GTKSPELL_TOP)/libgtkspell.dll \
+			$(IDLETRACK_TOP)/idletrack.dll
 
 SOUNDS =		$(GAIM_SOUNDS)/alert.wav \
 			$(GAIM_SOUNDS)/login.wav \
@@ -55,7 +56,7 @@ JABBER_TYPE = PLUGIN
 NAPSTER_TYPE = PLUGIN
 GG_TYPE = PLUGIN
 NOVELL_TYPE = PLUGIN
-#SILC_TYPE = PLUGIN
+SILC_TYPE = PLUGIN
 SIMPLE_TYPE = PLUGIN
 SAMETIME_TYPE = PLUGIN
 
