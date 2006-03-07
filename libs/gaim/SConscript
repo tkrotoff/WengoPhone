@@ -50,7 +50,7 @@ if WengoOSWindows():
 
 elif WengoOSMacOSX():
 	include_path += [
-		'/sw/include',
+		'/sw/include', # for gnutls
 	]
 
 	libs += [
@@ -190,37 +190,36 @@ if WengoOSPosix():
 		'src/src/protocols/novell/nmuser.c',
 		'src/src/protocols/novell/nmuserrecord.c',
 		'src/src/protocols/novell/novell.c',
+		'src/src/protocols/oscar/admin.c',
+		'src/src/protocols/oscar/adverts.c',
+		'src/src/protocols/oscar/auth.c',
+		'src/src/protocols/oscar/bart.c',
+		'src/src/protocols/oscar/bos.c',
 		'src/src/protocols/oscar/bstream.c',
+		'src/src/protocols/oscar/buddylist.c',
+		'src/src/protocols/oscar/chat.c',
+		'src/src/protocols/oscar/chatnav.c',
 		'src/src/protocols/oscar/conn.c',
-		'src/src/protocols/oscar/family_admin.c',
-		'src/src/protocols/oscar/family_advert.c',
-		'src/src/protocols/oscar/family_alert.c',
-		'src/src/protocols/oscar/family_auth.c',
-		'src/src/protocols/oscar/family_bart.c',
-		'src/src/protocols/oscar/family_bos.c',
-		'src/src/protocols/oscar/family_buddy.c',
-		'src/src/protocols/oscar/family_chat.c',
-		'src/src/protocols/oscar/family_chatnav.c',
-		'src/src/protocols/oscar/family_feedbag.c',
-		'src/src/protocols/oscar/family_icbm.c',
-		'src/src/protocols/oscar/family_icq.c',
-		'src/src/protocols/oscar/family_invite.c',
-		'src/src/protocols/oscar/family_locate.c',
-		'src/src/protocols/oscar/family_odir.c',
-		'src/src/protocols/oscar/family_oservice.c',
-		'src/src/protocols/oscar/family_popup.c',
-		'src/src/protocols/oscar/family_stats.c',
-		'src/src/protocols/oscar/family_translate.c',
-		'src/src/protocols/oscar/family_userlookup.c',
+		'src/src/protocols/oscar/email.c',
+		'src/src/protocols/oscar/ft.c',
+		'src/src/protocols/oscar/icq.c',
+		'src/src/protocols/oscar/im.c',
+		'src/src/protocols/oscar/invite.c',
+		'src/src/protocols/oscar/locate.c',
 		'src/src/protocols/oscar/misc.c',
 		'src/src/protocols/oscar/msgcookie.c',
+		'src/src/protocols/oscar/odir.c',
 		'src/src/protocols/oscar/oscar.c',
-		'src/src/protocols/oscar/peer.c',
+		'src/src/protocols/oscar/popups.c',
 		'src/src/protocols/oscar/rxhandlers.c',
 		'src/src/protocols/oscar/rxqueue.c',
-		'src/src/protocols/oscar/session.c',
+		'src/src/protocols/oscar/search.c',
+		'src/src/protocols/oscar/service.c',
 		'src/src/protocols/oscar/snac.c',
+		'src/src/protocols/oscar/ssi.c',
+		'src/src/protocols/oscar/stats.c',
 		'src/src/protocols/oscar/tlv.c',
+		'src/src/protocols/oscar/translate.c',
 		'src/src/protocols/oscar/txqueue.c',
 		'src/src/protocols/oscar/util.c',
 		'src/src/protocols/yahoo/util.c',
@@ -238,6 +237,7 @@ if WengoOSPosix():
 	]
 
 	env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
+	env.ParseConfig('pkg-config --cflags --libs gmodule-2.0')
 
 	env.WengoAddDefines(defines)
 	env.WengoAddLibPath(lib_path)

@@ -540,7 +540,20 @@
 /* #undef STACK_DIRECTION */
 
 /* Loads static protocol plugin module initialization functions. */
-#define STATIC_PROTO_INIT static void static_proto_init() {  }
+#define STATIC_PROTO_INIT \
+extern gboolean gaim_init_ssl_gnutls_plugin(); \
+extern gboolean gaim_init_ssl_plugin(); \
+extern gboolean gaim_init_yahoo_plugin(); \
+extern gboolean gaim_init_msn_plugin(); \
+extern gboolean gaim_init_oscar_plugin(); \
+\
+static void static_proto_init() { \
+	gaim_init_ssl_gnutls_plugin(); \
+	gaim_init_ssl_plugin(); \
+	gaim_init_yahoo_plugin(); \
+	gaim_init_msn_plugin(); \
+	gaim_init_oscar_plugin(); \
+}
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
