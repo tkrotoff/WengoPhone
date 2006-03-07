@@ -78,12 +78,12 @@ echo "done"
 
 # Make the sources archive
 echo -n "Writing archive... "
-tar cjf wengophone-ng_$rev.tar.bz2 openwengo_$rev
+tar cjf wengophone-ng-GNULinux-latest.tar.bz2 openwengo_$rev
 echo "done"
 
 #echo -n "Cleaning..."
 #rm -rf openwengo_$rev
 #echo -n "Cleaning done!"
 
-md5=`md5sum wengophone-ng_$rev.tar.bz2`
-echo "MD5 checksum: $md5" | tee wengophone-ng_$rev.info
+md5=`md5sum wengophone-ng_GNULinux-latest.tar.bz2`
+echo "MD5 checksum: $md5" | tee wengophone-ng_GNULinux-latest.info
