@@ -34,7 +34,8 @@ ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
     /* Defaults fonts and colors */
     _nickFont = QFont("Helvetica", 12);
     _nickTextColor = "'#000000'"; // Black
-    _nickBgColor = "'#ffcc66'";
+    _nickBgColor = "'#84FFB3'";
+	_nickBgColorAlt = "#B0FFB3''";
     _nickName = "Wengo";
 
     _fontButton  = _seeker.getPushButton(_widget,"fontButton");
@@ -92,17 +93,22 @@ const QString &   ChatWidget::nickTextColor(){
 
 void ChatWidget::addToHistory(const QString & senderName,const QString & str)
 {
-
+	QString bgColor;
     QTextCursor curs(_chatHistory->document());
     curs.movePosition(QTextCursor::End);
 
+	if (senderName == _nickName)
+		bgColor = _nickBgColor;
+	else
+		bgColor = _nickBgColorAlt;
+	
     QString text= QString("<table border=0 width=100% cellspacing=0 "
     "cellpadding=0><tr><td BGCOLOR=%1> <font color=%2> %3 </font></td><td BGCOLOR=%4 align=right>"
     "<font color=%5> %6 </font></td></tr></table>").
     arg(_nickBgColor).
     arg(_nickTextColor).
     arg(senderName).
-    arg(_nickBgColor).
+	arg(_nickBgColor).
     arg(_nickTextColor).
     arg(QTime::currentTime().toString());
     

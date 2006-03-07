@@ -80,6 +80,7 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession)
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1, _2, _3);
 	IMContact from = *imChatSession->getIMContactSet().begin();
 	addChat(imChatSession,from);
+	_dialog.show();
 }
 
 void ChatWindow::initThreadSafe() {
@@ -91,6 +92,7 @@ void ChatWindow::initThreadSafe() {
 	
 	_tabWidget = _seeker.getTabWidget(_widget,"tabWidget");
 	_tabWidget->removeTab(0);
+	_dialog.resize(384,464);
 	_dialog.show();
 	IMContact from = *_imChatSession->getIMContactSet().begin();
 	addChat(_imChatSession,from);
@@ -112,4 +114,5 @@ void ChatWindow::addChat(IMChatSession * session,const IMContact & from )
 		_tabWidget->insertTab(0,_chatWidget,senderName);
     _chatWidget->setNickName(nickName);
     connect (_chatWidget,SIGNAL(newMessage(IMChatSession *,const QString & )),SLOT(newMessage(IMChatSession *,const QString &)));
+	_dialog.show();
 }

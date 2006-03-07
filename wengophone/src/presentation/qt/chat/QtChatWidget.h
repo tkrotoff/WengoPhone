@@ -61,11 +61,12 @@ protected:
     QPushButton  *   _sendButton;
 	IMChatSession* _imChatSession;
     
-    QFont            _currentFont;
-    QFont            _nickFont;
-    QString          _nickBgColor;
-    QString          _nickTextColor;
-    QString          _nickName;
+	QFont _currentFont;
+	QFont _nickFont;
+	QString _nickBgColor;
+	QString _nickBgColorAlt;
+    QString _nickTextColor;
+    QString _nickName;
     
     EmoticonsWidget *_emoticonsWidget;
     const QString    replaceUrls(const QString & str, const QString & htmlstr);

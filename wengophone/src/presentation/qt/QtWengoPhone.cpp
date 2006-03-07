@@ -69,6 +69,8 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 }
 
 void QtWengoPhone::initThreadSafe() {
+	QApplication::setStyle(new QPlastiqueStyle);
+
 	_wengoPhoneWindow = qobject_cast<QMainWindow *>(WidgetFactory::create(":/forms/WengoPhoneWindow.ui", NULL));
 
 	//callButton
