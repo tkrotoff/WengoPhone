@@ -21,12 +21,14 @@
 #define CCONTACTGROUP_H
 
 #include <string>
+#include <vector>
 
 class ContactGroup;
 class CContactList;
 class CWengoPhone;
 class PContactGroup;
 class Contact;
+class CContact;
 
 /**
  *
@@ -62,6 +64,9 @@ private:
 	CWengoPhone & _cWengoPhone;
 
 	PContactGroup * _pContactGroup;
+
+	typedef std::vector<CContact *> CContactVector;
+	CContactVector _cContactVector;
 };
 
 #endif	//CCONTACTGROUP_H

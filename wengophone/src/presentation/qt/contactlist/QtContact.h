@@ -58,6 +58,8 @@ public:
 
 	void startIM();
 
+	EnumPresenceState::PresenceState getPresenceState() const;
+
 private:
 
 	void initThreadSafe();

@@ -20,6 +20,8 @@
 #ifndef PCONTACT_H
 #define PCONTACT_H
 
+#include <imwrapper/EnumPresenceState.h>
+
 #include "Presentation.h"
 
 #include <string>
@@ -39,6 +41,7 @@ public:
 	virtual void placeCall() = 0;
 	virtual void placeVideoCall() = 0;
 	virtual void startIM() = 0;
+	virtual EnumPresenceState::PresenceState getPresenceState() const = 0;
 };
 
 #endif	//PCONTACT_H

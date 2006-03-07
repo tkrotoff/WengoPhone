@@ -20,6 +20,8 @@
 #ifndef CCONTACT_H
 #define CCONTACT_H
 
+#include <imwrapper/EnumPresenceState.h>
+
 #include <string>
 
 class Contact;
@@ -62,6 +64,8 @@ public:
 	void placeVideoCall();
 
 	void startIM();
+
+	EnumPresenceState::PresenceState getPresenceState() const;
 
 private:
 

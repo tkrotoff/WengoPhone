@@ -46,6 +46,14 @@ public:
 		return *this;
 	}
 
+	bool operator == (const StreetAddress & streetAddress) {
+		return ((_street == streetAddress._street)
+			&& (_stateProvince == streetAddress._stateProvince)
+			&& (_city == streetAddress._city)
+			&& (_zipCode == streetAddress._zipCode)
+			&& (_country == streetAddress._country));
+	}
+
 	void setStreet(const std::string & street) { _street = street; }
 	const std::string & getStreet() const { return _street; }
 

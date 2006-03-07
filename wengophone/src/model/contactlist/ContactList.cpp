@@ -43,6 +43,8 @@ ContactList::ContactList(WengoPhone & wengoPhone)
 		boost::bind(&ContactList::newContactGroupAddedEventHandler, this, _1, _2);
 	_wengoPhone.getIMContactListHandler().contactGroupRemovedEvent +=
 		boost::bind(&ContactList::contactGroupRemovedEventHandler, this, _1, _2);
+	_wengoPhone.getIMContactListHandler().imContactMovedEvent +=
+		boost::bind(&ContactList::imContactMovedEventHandler, this, _1, _2, _3);
 	_wengoPhone.getPresenceHandler().presenceStateChangedEvent +=
 		boost::bind(&ContactList::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
 }
@@ -224,3 +226,24 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender, Enu
 	contactGroup->addContact(contact);
 }
 
+void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,
+	const std::string & groupName, IMContact & imContact) {
+
+	ContactGroup * oldContactGroup, * newContactGroup;
+	Contact * contact;
+
+	for (register unsigned i = 0 ; i < size() ; i++) {
+		oldContactGroup = this->operator[](i);
+		contact = oldContactGroup->findContact(imContact);
+		if (contact) {
+			newContactGroup = this->operator [](groupName);
+			if (!newContactGroup) {
+				newContactGroup = new ContactGroup(groupName, _wengoPhone);
+				addContactGroup(newContactGroup);
+			}
+			newContactGroup->addContact(contact);
+			oldContactGroup->removeContact(contact);
+			return;
+		}	
+	}
+}

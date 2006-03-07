@@ -40,6 +40,8 @@ public:
 
 	void addContact(PContact * pContact);
 
+	void removeContact(PContact * pContact);
+
 	void updatePresentation();
 
 private:
@@ -49,6 +51,8 @@ private:
 	void updatePresentationThreadSafe();
 
 	void addContactThreadSafe(PContact * pContact);
+
+	void removeContactThreadSafe(PContact * pContact);
 
 	CContactGroup & _cContactGroup;
 

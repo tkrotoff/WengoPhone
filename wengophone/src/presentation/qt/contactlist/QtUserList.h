@@ -37,8 +37,6 @@ public:
 
 	void mouseOn(const QString & userid);
 
-	void setUserStatus(const QString & userid,QtContactPixmap::contactPixmap status);
-
 	bool haveIM(const QString & userid);
 	
 	bool haveCall(const QString & userid);

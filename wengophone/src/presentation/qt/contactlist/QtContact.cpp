@@ -82,3 +82,6 @@ void QtContact::startIM() {
 	_cContact.startIM();
 }
 
+EnumPresenceState::PresenceState QtContact::getPresenceState() const {
+	return _cContact.getPresenceState();
+}

@@ -68,14 +68,6 @@ void QtUserList::mouseOn(const QString & userid)
 	_lastMouseOn = userid;
 }
 
-void QtUserList::setUserStatus(const QString & userid,QtContactPixmap::contactPixmap status)
-{
-	QtUser * user;
-	user = _userList[userid];
-	if (user)
-		user->setStatus(status);
-}
-
 QtUser * QtUserList::getUser(const QString & userid)
 {
 	QtUser * user;

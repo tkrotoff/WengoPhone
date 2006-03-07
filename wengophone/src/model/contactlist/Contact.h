@@ -83,6 +83,8 @@ public:
 		return *this;
 	}
 
+	bool operator == (const Contact & contact);
+
 	void setFirstName(const std::string & firstName) { _firstName = firstName; }
 	const std::string & getFirstName() const { return _firstName; }
 
@@ -137,8 +139,8 @@ public:
 	void setNotes(const std::string & notes) { _notes = notes; }
 	const std::string & getNotes() const { return _notes; }
 
-	void setPresenceState(EnumPresenceState::PresenceState state) { _state = state; }
-	EnumPresenceState::PresenceState getPresenceState() const { return _state; }
+	//void setPresenceState(EnumPresenceState::PresenceState state) { _state = state; }
+	EnumPresenceState::PresenceState getPresenceState() const;
 
 	/**
 	 * Add an IMContact to the Contact.
@@ -269,6 +271,12 @@ private:
 
 	/** Return all IMContact in a vCard string format. */
 	std::string imContactsToString();
+
+	/**
+	 * @return true when a wengo id has been declared and this
+	 * id is online.
+	 */
+	bool wengoIsAvailable() const;
 
 	std::string _firstName;
 	std::string _lastName;

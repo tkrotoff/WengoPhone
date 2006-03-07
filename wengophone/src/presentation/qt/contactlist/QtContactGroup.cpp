@@ -81,9 +81,19 @@ void QtContactGroup::addContactThreadSafe(PContact * pContact) {
 	user = new QtUser(*pContact);
 	user->setId(QString::fromStdString(pContact->getId()));
 	user->setUserName(contactName);
-	user->setStatus(QtContactPixmap::ContactOnline);
 
 	ul->addUser(user);
+}
+
+void QtContactGroup::removeContact(PContact * pContact) {
+	typedef PostEvent1<void (PContact *), PContact *> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtContactGroup::removeContactThreadSafe, this, _1), pContact);
+	postEvent(event);
+}
+
+void QtContactGroup::removeContactThreadSafe(PContact * pContact) {
+	//TODO: remove the contact from the GUI
+	LOG_DEBUG("removing contact " + pContact->getDisplayName() + " from group " + getDisplayName());
 }
 
 void QtContactGroup::updatePresentation() {

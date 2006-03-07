@@ -64,6 +64,12 @@ public:
 
 	~Date() {}
 
+	bool operator == (const Date & date) {
+		return ((_day == date._day)
+			&& (_month == date._month)
+			&& (_year == date._year));
+	}
+
 	/**
 	 * @return the day number of the date. Day range: 1-31.
 	 */

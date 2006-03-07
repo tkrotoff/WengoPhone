@@ -93,3 +93,7 @@ void CContact::placeVideoCall(){
 void CContact::startIM() {
 	_contact.startIM();
 }
+
+EnumPresenceState::PresenceState CContact::getPresenceState() const {
+	return _contact.getPresenceState();
+}

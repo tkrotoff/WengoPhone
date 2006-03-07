@@ -53,8 +53,6 @@ public:
 	
 	void setMouseOn(bool value) { _mouseOn = value;};
 	
-	void setStatus(QtContactPixmap::contactPixmap status);
-	
 	//QtContactPixmap::contactPixmap getStatus() {return _status;};
 	
 	void mouseClicked(const QPoint & pos,const QRect & rec);

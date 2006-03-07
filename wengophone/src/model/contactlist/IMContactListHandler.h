@@ -43,7 +43,8 @@ public:
 	 * @param newIMContact the new IMContact
 	 * @see IMContactList::newContactAddedEvent
 	 */
-	Event< void (IMContactListHandler & sender, const std::string & groupName, IMContact & newIMContact) > newIMContactAddedEvent;
+	Event< void (IMContactListHandler & sender, const std::string & groupName,
+		IMContact & newIMContact) > newIMContactAddedEvent;
 
 	/**
 	 * Emitted when an IMContact has been removed remotely.
@@ -53,7 +54,14 @@ public:
 	 * @param imContact the removed IMContact
 	 * @see IMContactList::imContactRemovedEvent
 	 */
-	Event< void (IMContactListHandler & sender, const std::string & groupName, IMContact & imContact) > imContactRemovedEvent;
+	Event< void (IMContactListHandler & sender, const std::string & groupName,
+		IMContact & imContact) > imContactRemovedEvent;
+
+	/**
+	 * @see IMContactList::contactMovedEvent
+	 */
+	Event< void (IMContactListHandler & sender, const std::string & groupName,
+		IMContact & imContact) > imContactMovedEvent;
 
 	/**
 	 * Emitted when an IMContact has been added remotely.
@@ -99,9 +107,12 @@ private:
 	void contactRemovedEventHandler(IMContactList & sender,
 		const std::string & groupName, const std::string & contactId);
 
+	void contactMovedEventHandler(IMContactList & sender,
+		const std::string & groupName, const std::string & contactId);
+
 	void newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount);
 
-	typedef std::map<const IMAccount *, IMContactList *> IMContactListMap;
+	typedef std::map<IMAccount, IMContactList *> IMContactListMap;
 
 	typedef std::set<IMContact> IMContactSet;
 

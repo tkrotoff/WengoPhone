@@ -80,6 +80,30 @@ void Contact::initialize(const Contact & contact) {
 Contact::~Contact() {
 }
 
+bool Contact::operator == (const Contact & contact) {
+	return 	((_firstName == contact._firstName)
+		&& (_lastName == contact._lastName)
+		&& (_sex == contact._sex)
+		&& (_birthdate == contact._birthdate)
+		&& (_picture == contact._picture)
+		&& (_website == contact._website)
+		&& (_company == contact._company)
+		&& (_wengoPhoneId == contact._wengoPhoneId)
+		&& (_mobilePhone == contact._mobilePhone)
+		&& (_homePhone == contact._homePhone)
+		&& (_workPhone == contact._workPhone)
+		&& (_otherPhone == contact._otherPhone)
+		&& (_fax == contact._fax)
+		&& (_personalEmail == contact._personalEmail)
+		&& (_workEmail == contact._workEmail)
+		&& (_otherEmail == contact._otherEmail)
+		&& (_streetAddress == contact._streetAddress)
+		&& (_notes == contact._notes)
+		&& (_state == contact._state)
+		&& (_blocked == contact._blocked)
+		&& (_imContactSet == contact._imContactSet));
+}
+
 void Contact::addIMContact(const IMContact & imContact) {
 	//Check if IMContact already exists
 	if (_imContactSet.find(imContact) == _imContactSet.end()) {
@@ -139,22 +163,11 @@ string Contact::imContactsToString() {
 }
 
 bool Contact::haveIM() const {
-	if ((_imContactSet.size() > 0) || (!_wengoPhoneId.empty())) {
-		for (IMContactSet::const_iterator it = _imContactSet.begin() ;
-			it != _imContactSet.end() ;
-			it++) {
-			if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
-				return true;
-			}
-		}
-	}
-
-	return false;
+	return (getPresenceState() != EnumPresenceState::PresenceStateOffline);
 }
 
 bool Contact::haveCall() const {
-	//FIXME: check phone numbers
-	if (!_wengoPhoneId.empty()
+	if (wengoIsAvailable()
 		|| !_mobilePhone.empty()
 		|| !_homePhone.empty()) {
 		return true;
@@ -165,15 +178,11 @@ bool Contact::haveCall() const {
 
 bool Contact::haveVideo() const {
 	//FIXME: can we check if we can place a video call
-	if (!_wengoPhoneId.empty()) {
-		return true;
-	} else {
-		return false;
-	}
+	return wengoIsAvailable();
 }
 
 void Contact::placeCall() {
-	if (!_wengoPhoneId.empty()) {
+	if (wengoIsAvailable()) {
 		_wengoPhone.makeCall(_wengoPhoneId);
 	} else if (!_mobilePhone.empty()) {
 		_wengoPhone.makeCall(_mobilePhone);
@@ -183,7 +192,7 @@ void Contact::placeCall() {
 }
 
 void Contact::placeVideoCall() {
-	if (!_wengoPhoneId.empty()) {
+	if (wengoIsAvailable()) {
 		_wengoPhone.makeCall(_wengoPhoneId);
 	}
 }
@@ -202,3 +211,38 @@ void Contact::startIM() {
 	}
 }
 
+EnumPresenceState::PresenceState Contact::getPresenceState() const {
+	unsigned onlineIMContact = 0;
+	unsigned offlineIMContact = 0;
+
+	for (IMContactSet::const_iterator it = _imContactSet.begin() ;
+		it != _imContactSet.end() ;
+		it++) {
+		if ((*it).getPresenceState() == EnumPresenceState::PresenceStateOffline) {
+			offlineIMContact++;
+		} else if ((*it).getPresenceState() == EnumPresenceState::PresenceStateOnline) {
+			onlineIMContact++;
+		}
+	}
+
+	if (onlineIMContact > 0) {
+		return EnumPresenceState::PresenceStateOnline;
+	} else if (offlineIMContact == _imContactSet.size()) {
+		return EnumPresenceState::PresenceStateOffline;
+	} else {
+		return EnumPresenceState::PresenceStateAway;
+	}
+}
+
+bool Contact::wengoIsAvailable() const {
+	if (!_wengoPhoneId.empty()) {
+		for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; ++it) {
+			if (((*it).getContactId() == _wengoPhoneId)
+				&& ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline)) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}

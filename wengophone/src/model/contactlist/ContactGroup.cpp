@@ -40,11 +40,12 @@ void ContactGroup::addContact(Contact * contact) {
 
 bool ContactGroup::removeContact(Contact * contact) {
 	bool ret = _contactList.remove(contact);
+
 	if (ret) {
 		contactRemovedEvent(*this, *contact);
 		LOG_DEBUG("Contact removed");
-		//delete contact;
 	}
+
 	return ret;
 }
 

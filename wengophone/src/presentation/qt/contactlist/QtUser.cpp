@@ -61,7 +61,9 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
         painter->setPen(option.palette.text().color() );
     }
 	// Draw the status pixmap
-	px = spx->getPixmap(_status);
+	QtContactPixmap::contactPixmap status = getStatus();
+
+	px = spx->getPixmap(status);
     r = option.rect;
 	x = r.left();
 	painter->drawPixmap (x,r.top(),px);
@@ -82,7 +84,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	x=option.rect.width();
 	if (_mouseOn)
 	{
-		if (_status != QtContactPixmap::ContactNotAvailable)
+		if (status != QtContactPixmap::ContactNotAvailable)
 		{
 			px = spx->getPixmap(QtContactPixmap::ContactVideo);
 			if (haveVideo())
@@ -136,13 +138,21 @@ QString	QtUser::getUserName()
 	return _userName;
 }
 
-void QtUser::setStatus(QtContactPixmap::contactPixmap status)
-{
-	_status = status;
-}
-
 QtContactPixmap::contactPixmap QtUser::getStatus(){
-	return _status;
+	QtContactPixmap::contactPixmap status;
+
+	switch (_pContact.getPresenceState()) {
+	case EnumPresenceState::PresenceStateOnline:
+		status = QtContactPixmap::ContactOnline;
+		break;
+	case EnumPresenceState::PresenceStateOffline:
+		status = QtContactPixmap::ContactInvisible;
+		break;
+	default:
+		status = QtContactPixmap::ContactNotAvailable;
+	}
+
+	return status;
 }
 
 void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)

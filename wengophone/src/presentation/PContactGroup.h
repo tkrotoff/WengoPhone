@@ -37,6 +37,9 @@ public:
 	virtual std::string getDisplayName() const = 0;
 
 	virtual void addContact(PContact * pContact) = 0;
+
+	virtual void removeContact(PContact * pContact) = 0;
+
 };
 
 #endif	//PCONTACTGROUP_H

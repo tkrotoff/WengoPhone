@@ -157,8 +157,15 @@ private:
 	/**
 	 * @see PresenceHandler::presenceStateChangedEventHandler
 	 */
-	void presenceStateChangedEventHandler(PresenceHandler & sender, EnumPresenceState::PresenceState state, 
+	void presenceStateChangedEventHandler(PresenceHandler & sender,
+		EnumPresenceState::PresenceState state, 
 		const std::string & note, const IMContact & imContact);
+
+	/**
+	 * @see IMContactListHandler::imContactMovedEvent
+	 */
+	void imContactMovedEventHandler(IMContactListHandler & sender,
+		const std::string & groupName, IMContact & imContact);
 
 	/** Data layer for the ContactList. */
 	ContactListDataLayer * _dataLayer;

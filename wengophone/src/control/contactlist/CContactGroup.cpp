@@ -47,11 +47,20 @@ std::string CContactGroup::getContactGroupName() const {
 void CContactGroup::contactAddedEventHandler(ContactGroup & sender, Contact & contact) {
 	CContact * cContact = new CContact(contact, *this, _cWengoPhone);
 
+	_cContactVector.push_back(cContact);
+
 	_pContactGroup->addContact(cContact->getPresentation());
 	_pContactGroup->updatePresentation();
 }
 
 void CContactGroup::contactRemovedEventHandler(ContactGroup & sender, Contact & contact) {
+	for (CContactVector::iterator it = _cContactVector.begin() ; it != _cContactVector.end() ; it++) {
+		if ((*it)->getContact() == contact) {
+			_pContactGroup->removeContact((*it)->getPresentation());
+			_pContactGroup->updatePresentation();
+			_cContactVector.erase(it);
+		}
+	}
 }
 
 void CContactGroup::contactGroupModifiedEventHandler(ContactGroup & sender) {
