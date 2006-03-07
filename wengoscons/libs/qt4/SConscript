@@ -100,7 +100,7 @@ if WengoOSWindows():
 			'QtDesignerd4',
 			'QtXmld4',
 			'QtSvgd4',
-			'qtmain'
+			'qtmaind',
 		]
 	else:
 		libs += [
