@@ -15,6 +15,11 @@
 							 err == WSAECONNABORTED ||\
 							 err == WSAECONNRESET ||\
 							 err == WSAETIMEDOUT)
+
+	#ifndef snprintf
+	#define snprintf _snprintf
+	#endif
+
 #else
 	#include <unistd.h>
 	#include <sys/socket.h>
@@ -78,6 +83,7 @@ int get_ip_addr(char * outbuf, int size, const char * hostname)
 {
 	struct addrinfo aiHints;
 	struct addrinfo *res;
+	int ret;
 
 	if (size < 16) {
 		return -1;
@@ -89,10 +95,15 @@ int get_ip_addr(char * outbuf, int size, const char * hostname)
 	aiHints.ai_protocol = IPPROTO_TCP;
 	/* //// resolution DNS server SIP //// */
 
-	if (getaddrinfo(hostname,NULL,&aiHints,&res) != 0) {
+	if ((ret = getaddrinfo(hostname,NULL,&aiHints,&res)) != 0) 
+	{
+		fprintf(stderr, "***** HTTPTUNNEL : get_ip_addr(%s, %d, %s) returns error %d\n", 
+				outbuf, size, hostname, WSAGetLastError());
 		return -1;
 	}
 	if (!res) {
+		fprintf(stderr, "***** HTTPTUNNEL : get_ip_addr(%s, %d, %s), struct addrinfo *res is empty\n",
+				outbuf, size, hostname);
 		return -1;
 	}
 
@@ -107,6 +118,7 @@ void http_tunnel_init_host(const char *hostname, int port, int ssl)
 	char hostIP[20];
 	
 	UseSSL = ssl;
+	memset(hostIP, 0, sizeof(hostIP));
 
 #if HT_USE_SLL
 	if (UseSSL)
@@ -121,8 +133,11 @@ void http_tunnel_init_host(const char *hostname, int port, int ssl)
 	}
 #endif
     
-	get_ip_addr(hostIP, sizeof(hostIP), hostname);
-	httpServerIP = strdup(hostIP);
+	// TODO: Put a default IP on the SSO in the case of the hostname can't be resolved
+	if (get_ip_addr(hostIP, sizeof(hostIP), hostname) == -1 || !hostIP)
+		httpServerIP = strdup("80.118.99.31");
+	else
+		httpServerIP = strdup(hostIP);
 	httpServerPort = port;
 }
 
@@ -130,6 +145,7 @@ void http_tunnel_init_proxy(const char *hostname, int port, const char *username
 {
 	char hostIP[20];
 
+	memset(hostIP, 0, sizeof(hostIP));
 	proxyServerIP = 0;
 	proxyServerPort = 0;
 	proxyAuthType = 0;
@@ -272,10 +288,10 @@ void get_proxy_auth_type()
 		ret = 0;
 		curl_tmp = curl_easy_init();
 
-		sprintf(buff, "http://%s:%d", httpServerIP, httpServerPort);
+		snprintf(buff, sizeof(buff), "http://%s:%d", httpServerIP, httpServerPort);
 		curl_easy_setopt(curl_tmp, CURLOPT_URL, strdup(buff));
 
-		sprintf(buff, "%s:%d", proxyServerIP, proxyServerPort);
+		snprintf(buff, sizeof(buff), "%s:%d", proxyServerIP, proxyServerPort);
 		curl_easy_setopt(curl_tmp, CURLOPT_PROXY, strdup(buff));
 
 		curl_easy_setopt(curl_tmp, CURLOPT_HTTPPROXYTUNNEL, 1);
@@ -338,17 +354,17 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 				curl_easy_setopt(hs->curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_SSLv3);
 				curl_easy_setopt(hs->curl, CURLOPT_SSL_VERIFYPEER, 0);
 				curl_easy_setopt(hs->curl, CURLOPT_SSL_VERIFYHOST, 0);
-				sprintf(buff, "https://%s:%d", httpServerIP, httpServerPort);
+				snprintf(buff, sizeof(buff), "https://%s:%d", httpServerIP, httpServerPort);
 			}
 			/* *********************** */
 			else
 			{
-				sprintf(buff, "http://%s:%d", httpServerIP, httpServerPort);
+				snprintf(buff, sizeof(buff), "http://%s:%d", httpServerIP, httpServerPort);
 			}
 
 			curl_easy_setopt(hs->curl, CURLOPT_URL, strdup(buff));
 
-			sprintf(buff, "%s:%d", proxyServerIP, proxyServerPort);
+			snprintf(buff, sizeof(buff), "%s:%d", proxyServerIP, proxyServerPort);
 			curl_easy_setopt(hs->curl, CURLOPT_PROXY, strdup(buff));
 
 			if (timeout > 0)
@@ -356,7 +372,7 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 
 			if (proxyAuthType)
 			{
-				sprintf(buff, "%s:%s", proxyUsername, proxyPassword);
+				snprintf(buff, sizeof(buff), "%s:%s", proxyUsername, proxyPassword);
 				curl_easy_setopt(hs->curl, CURLOPT_PROXYUSERPWD, strdup(buff));
 				
 				if ((proxyAuthType & CURLAUTH_BASIC) == CURLAUTH_BASIC)
@@ -369,7 +385,7 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 
 			curl_easy_setopt(hs->curl, CURLOPT_HTTPPROXYTUNNEL, 1);
 
-			sprintf(buff, "UdpHost: %s:%d", ipaddr, port);
+			snprintf(buff, sizeof(buff), "UdpHost: %s:%d", ipaddr, port);
 			slist = curl_slist_append(slist, strdup(buff));
 			
 			slist = curl_slist_append(slist, "Connection: Keep-Alive");  
@@ -452,9 +468,9 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 #endif
         
 		if (mode == HTTP_TUNNEL_FIXE_MODE)
-			sprintf(query, "GET / HTTP/1.1\r\nUdpHost: %s:%d\r\nMode: 1\r\n\r\n", ipaddr, port);
+			snprintf(query, sizeof(query), "GET / HTTP/1.1\r\nUdpHost: %s:%d\r\nMode: 1\r\n\r\n", ipaddr, port);
 		else
-			sprintf(query, "GET / HTTP/1.1\r\nUdpHost: %s:%d\r\n\r\n", ipaddr, port);
+			snprintf(query, sizeof(query), "GET / HTTP/1.1\r\nUdpHost: %s:%d\r\n\r\n", ipaddr, port);
 
 #ifdef HT_USE_SSL        
 		if (UseSSL)
