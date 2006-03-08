@@ -155,7 +155,7 @@ elif WengoOSMacOSX():
 		'-framework ApplicationServices',
 		'-framework QtCore',
 		'-framework QtGui',
-		'-framework QtNetwork',
+		#'-framework QtNetwork',
 		'-framework QtXml',
 		'-framework QtSvg',
 		'-F' + os.path.join(qtdir, 'lib'),
