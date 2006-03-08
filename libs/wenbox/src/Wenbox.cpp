@@ -23,6 +23,8 @@
 #include <File.h>
 #include <StringList.h>
 
+#include <global.h>
+
 #include <shlibloader/SharedLibLoader.h>
 
 IWenbox * getInstance() {
@@ -35,6 +37,7 @@ Wenbox::Wenbox() {
 
 	_open = false;
 	_wenboxPrivate = NULL;
+#ifndef OS_MACOSX
 	typedef IWenbox * (*GetInstanceFunction)();
 
 	std::string dllPath = File::getApplicationDirPath() + wenboxDll;
@@ -48,6 +51,7 @@ Wenbox::Wenbox() {
 	} else {
 		LOG_ERROR("Wenbox dll not loaded");
 	}
+#endif
 }
 
 Wenbox::~Wenbox() {
