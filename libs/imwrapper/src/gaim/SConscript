@@ -27,7 +27,9 @@ sources = [
 	'GaimEnumPresenceState.cpp',
 	'GaimEnumIMProtocol.cpp'
 ]
-
+if WengoOSLinux():
+	defines['ENABLE_NLS'] = 1
+env.WengoAddDefines(defines)
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 env.WengoStaticLibrary('gaimimwrapper', sources)

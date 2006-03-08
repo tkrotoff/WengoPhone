@@ -19,6 +19,7 @@ include_path = [
 
 libs_file = []
 
+
 if WengoOSWindows():
 	if WengoCCMSVC():
 		lib_path += [
@@ -47,15 +48,13 @@ if WengoOSWindows():
 	env.WengoUseLibraries(libs)
 
 	env.WengoDeclareLibrary('gaim', libs_file)
-
+	
 elif WengoOSMacOSX():
 	include_path += [
 		'/sw/include', # for gnutls
 	]
 
-	libs += [
-		'resolv'
-		]
+	env.WengoCopyToBuildDir('binary-lib/macosx', 'plugins')
 
 if WengoOSPosix():
 	include_path += [
@@ -66,6 +65,7 @@ if WengoOSPosix():
 
 	libs += [
 		'gnutls',
+		'resolv',
 	]
 
 	defines['HAVE_CONFIG_H'] = 1
