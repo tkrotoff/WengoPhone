@@ -44,6 +44,8 @@
 #include <Thread.h>
 #include <Logger.h>
 
+#include <global.h>
+
 #include <QtGui>
 
 using namespace std;
@@ -69,8 +71,9 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 }
 
 void QtWengoPhone::initThreadSafe() {
+#ifndef OS_MACOSX
 	QApplication::setStyle(new QPlastiqueStyle);
-
+#endif
 	_wengoPhoneWindow = qobject_cast<QMainWindow *>(WidgetFactory::create(":/forms/WengoPhoneWindow.ui", NULL));
 
 	//callButton
