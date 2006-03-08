@@ -91,9 +91,13 @@ void QtWengoPhone::initThreadSafe() {
 	createLayout(tabDialpad)->addWidget(qtDialpad->getWidget());
 
 	//logger
-	QtLogger * qtLogger = new QtLogger(_wengoPhoneWindow);
+	/*QtLogger * qtLogger = new QtLogger(_wengoPhoneWindow);
 	QWidget * tabLogger = Object::findChild<QWidget *>(_tabWidget, "tabLogger");
-	createLayout(tabLogger)->addWidget(qtLogger->getWidget());
+	createLayout(tabLogger)->addWidget(qtLogger->getWidget());*/
+
+	//No more logger tab
+	QWidget * tabLogger = Object::findChild<QWidget *>(_tabWidget, "tabLogger");
+	tabLogger->hide();
 
 	//actionShowWengoAccount
 	QAction * actionShowWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowWengoAccount");

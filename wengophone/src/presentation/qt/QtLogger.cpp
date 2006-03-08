@@ -31,7 +31,8 @@ QtLogger::QtLogger(QWidget * parent)
 
 	_loggerWidget = WidgetFactory::create(":/forms/LoggerWidget.ui", NULL);
 
-	Logger::logger.messageAddedEvent += boost::bind(&QtLogger::addMessage, this, _1);
+	//No more log inside the graphical interface
+	//Logger::logger.messageAddedEvent += boost::bind(&QtLogger::addMessage, this, _1);
 }
 
 void QtLogger::addMessage(const std::string & message) {
