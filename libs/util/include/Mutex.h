@@ -33,17 +33,17 @@
  *     Counter() : _counter(0) { }
  *
  *     void increment() {
- *         Mutex::ScopedLock ScopedLock(_mutex);
+ *         Mutex::ScopedLock scopedLock(_mutex);
  *         _counter++;
  *     }
  *
  *     void decrement() {
- *         Mutex::ScopedLock ScopedLock(_mutex);
+ *         Mutex::ScopedLock scopedLock(_mutex);
  *         _counter--;
  *     }
  *
  *     int getValue() const {
- *         Mutex::ScopedLock ScopedLock(_mutex);
+ *         Mutex::ScopedLock scopedLock(_mutex);
  *         return _counter;
  *     }
  *

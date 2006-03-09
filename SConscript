@@ -30,6 +30,7 @@ projects = [
 	'libs/sipwrapper',
 	'libs/imwrapper/src/gaim',
 	'libs/imwrapper/src/multiim',
+	'libs/imwrapper/src/null',
 	'wengophone',
 ]
 

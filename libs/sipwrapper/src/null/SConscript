@@ -1,16 +1,19 @@
 env = WengoGetEnvironment()
 
 libs = [
-	'wengophone',
-	'wengoutil'
+	'wengoutil',
+	'sipwrapper',
 ]
 lib_path = []
-include_path = []
+include_path = [
+	'../null',
+]
 defines = {}
 headers = []
 sources = [
 	'NullSipWrapper.cpp'
 ]
 
+env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 env.WengoStaticLibrary('nullsipwrapper', sources)

@@ -17,27 +17,41 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef NULLSIPFACTORY_H
-#define NULLSIPFACTORY_H
+#ifndef NULLIMCONTACTLIST_H
+#define NULLIMCONTACTLIST_H
 
-#include <sipwrapper/SipWrapperFactory.h>
+#include "NullIMFactory.h"
 
-#include "NullSipWrapper.h"
+#include <imwrapper/IMContactList.h>
+
+class IMAccount;
 
 /**
+ * Null IM contact list (stub).
  *
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class NullSipFactory : public SipWrapperFactory {
+class NullIMContactList : public IMContactList {
+	friend class NullIMFactory;
 public:
 
-	NullSipFactory() {
-	}
+	void addContact(const std::string & groupName, const std::string & contactId);
 
-	SipWrapper * createSipWrapper() {
-		return NullSipWrapper::getInstance();
-	}
+	void removeContact(const std::string & groupName, const std::string & contactId);
+
+	void addGroup(const std::string & groupName);
+
+	void removeGroup(const std::string & groupName);
+
+	void moveContactToGroup(const std::string & newGroupName,
+		const std::string & oldGroupName, const std::string & contactId);
+
+	void changeGroupName(const std::string & oldGroupName, const std::string & newGroupName);
+
+private:
+
+	NullIMContactList(IMAccount & account);
 };
 
-#endif	//NULLSIPFACTORY_H
+#endif	//NULLIMCONTACTLIST_H

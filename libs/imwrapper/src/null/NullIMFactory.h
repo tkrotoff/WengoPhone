@@ -20,7 +20,7 @@
 #ifndef NULLIMFACTORY_H
 #define NULLIMFACTORY_H
 
-#include <model/imwrapper/IMWrapperFactory.h>
+#include <imwrapper/IMWrapperFactory.h>
 
 class IMAccount;
 
@@ -39,6 +39,8 @@ public:
 	IMChat * createIMChat(IMAccount & account);
 
 	IMPresence * createIMPresence(IMAccount & account);
+
+	IMContactList * createIMContactList(IMAccount & account);
 };
 
 #endif	//NULLIMFACTORY_H

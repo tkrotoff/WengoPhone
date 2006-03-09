@@ -110,7 +110,7 @@ public:
 	 *
 	 * @param state new presence state
 	 * @param note personnalized status string ("I'm under the shower"),
-	 *	used only with PresenceUserDefined
+	 *        used only with PresenceUserDefined
 	 */
 	virtual void changeMyPresence(EnumPresenceState::PresenceState state,
 		const std::string & note = String::null) = 0;

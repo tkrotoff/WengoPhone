@@ -26,6 +26,8 @@
 #include <Logger.h>
 #include <StringList.h>
 
+#include <netlib.h>
+
 using namespace std;
 
 NetworkDiscovery::NetworkDiscovery() {
@@ -65,7 +67,7 @@ bool NetworkDiscovery::testHTTP(const std::string & url, bool ssl) {
 		return true;
 	}
 
-	LOG_DEBUG("cannot connect to " + url + (ssl ? " with " : " without ") + " ssl");
+	LOG_DEBUG("cannot connect to " + url + (ssl ? " with" : " without") + " ssl");
 	return false;
 }
 
@@ -77,9 +79,44 @@ bool NetworkDiscovery::testUDP(const string & stunServer) {
 	string proxyAddress = config.getNetworkProxyServer();
 
 	if (!isProxyDetected || (isProxyDetected && proxyAddress.empty())) {
-		NatType nType;
-		bool opened = (is_udp_port_opened(stunServer.c_str(), SIP_PORT, &nType) == NETLIB_TRUE ? true : false);
-		setNatConfig(nType);
+		NatType natType;
+		bool opened = (is_udp_port_opened(stunServer.c_str(), SIP_PORT, &natType) == NETLIB_TRUE ? true : false);
+
+		EnumNatType::NatType nat = EnumNatType::NatTypeUnknown;
+
+		switch(natType) {
+		case StunTypeUnknown:
+			nat = EnumNatType::NatTypeUnknown;
+			break;
+		case StunTypeOpen:
+			nat = EnumNatType::NatTypeOpen;
+			break;
+		case StunTypeConeNat:
+			nat = EnumNatType::NatTypeFullCone;
+			break;
+		case StunTypeRestrictedNat:
+			nat = EnumNatType::NatTypeRestrictedCone;
+			break;
+		case StunTypePortRestrictedNat:
+			nat = EnumNatType::NatTypePortRestrictedCone;
+			break;
+		case StunTypeSymNat:
+			nat = EnumNatType::NatTypeSymmetric;
+			break;
+		case StunTypeSymFirewall:
+			nat = EnumNatType::NatTypeSymmetricFirewall;
+			break;
+		case StunTypeBlocked:
+			nat = EnumNatType::NatTypeBlocked;
+			break;
+		case StunTypeFailure:
+			nat = EnumNatType::NatTypeFailure;
+			break;
+		default:
+			LOG_FATAL("unknown NAT type");
+		}
+
+		setNatConfig(nat);
 		return opened;
 	} else {
 		return false;
@@ -231,35 +268,52 @@ void NetworkDiscovery::setProxySettings(const std::string & proxyServer, unsigne
 	_proxySettingsSet = true;
 }
 
-void NetworkDiscovery::setNatConfig(NatType nat) {
+void NetworkDiscovery::setNatConfig(EnumNatType::NatType natType) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	string natType;
 
-	switch(nat) {
-	case StunTypeUnknown:
-	case StunTypeOpen:
-	case StunTypeFailure:
-		break;
-	case StunTypeConeNat:
-		natType = "cone";
-		break;
-	case StunTypeRestrictedNat:
-		natType = "restricted";
-		break;
-	case StunTypePortRestrictedNat:
-		natType = "portRestricted";
-		break;
-	case StunTypeSymNat:
-		natType = "sym";
-		break;
-	case StunTypeSymFirewall:
-		natType = "symfirewall";
-		break;
-	case StunTypeBlocked:
-		natType = "blocked";
-		break;
-	};
+	string nat;
 
-	LOG_DEBUG("Nat type: " + natType);
-	config.set(Config::NETWORK_NAT_TYPE_KEY, natType);
+	switch(natType) {
+	case EnumNatType::NatTypeOpen:
+		nat = "NatTypeOpen";
+		break;
+
+	case EnumNatType::NatTypeFullCone:
+		nat = "NatTypeFullCone";
+		break;
+
+	case EnumNatType::NatTypeRestrictedCone:
+		nat = "NatTypeRestrictedCone";
+		break;
+
+	case EnumNatType::NatTypePortRestrictedCone:
+		nat = "NatTypePortRestrictedCone";
+		break;
+
+	case EnumNatType::NatTypeSymmetric:
+		nat = "NatTypeSymmetric";
+		break;
+
+	case EnumNatType::NatTypeSymmetricFirewall:
+		nat = "NatTypeSymmetricFirewall";
+		break;
+
+	case EnumNatType::NatTypeBlocked:
+		nat = "NatTypeBlocked";
+		break;
+
+	case EnumNatType::NatTypeFailure:
+		nat = "NatTypeFailure";
+		break;
+
+	case EnumNatType::NatTypeUnknown:
+		nat = "NatTypeUnknown";
+		break;
+
+	default:
+		LOG_FATAL("unknown NAT type");
+	}
+
+	LOG_DEBUG("NAT type=" + nat);
+	config.set(Config::NETWORK_NAT_TYPE_KEY, nat);
 }

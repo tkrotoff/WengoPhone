@@ -25,5 +25,18 @@ NullIMPresence::NullIMPresence(IMAccount & account)
 	: IMPresence(account) {
 }
 
-void NullIMPresence::changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {
+void NullIMPresence::changeMyPresence(EnumPresenceState::PresenceState state,
+		const std::string & note) {
+}
+
+void NullIMPresence::changeMyNickname(const std::string & nickname) {
+}
+
+void NullIMPresence::subscribeToPresenceOf(const std::string & contactId) {
+}
+
+void NullIMPresence::blockContact(const std::string & contactId) {
+}
+
+void NullIMPresence::unblockContact(const std::string & contactId) {
 }

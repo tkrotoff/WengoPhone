@@ -94,13 +94,10 @@ void QtWengoPhone::initThreadSafe() {
 	createLayout(tabDialpad)->addWidget(qtDialpad->getWidget());
 
 	//logger
+	//FIXME no more logger tab widget
 	/*QtLogger * qtLogger = new QtLogger(_wengoPhoneWindow);
 	QWidget * tabLogger = Object::findChild<QWidget *>(_tabWidget, "tabLogger");
 	createLayout(tabLogger)->addWidget(qtLogger->getWidget());*/
-
-	//No more logger tab
-	QWidget * tabLogger = Object::findChild<QWidget *>(_tabWidget, "tabLogger");
-	tabLogger->hide();
 
 	//actionShowWengoAccount
 	QAction * actionShowWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowWengoAccount");
@@ -147,9 +144,11 @@ void QtWengoPhone::initThreadSafe() {
 	connect(actionAdvancedConfiguration, SIGNAL(triggered()), SLOT(showAdvancedConfig()));
 
 #if QT_VERSION == 0x040100
-	// QT 4.1.1 correctly creatses following stuf from QTDesigner specs
-	// QT 4.1.0 obliges us to create them explicitly
-	//centralwidget 
+	//FIXME
+	//QT 4.1.1 correctly creates following stuff from QTDesigner specs
+	//QT 4.1.0 obliges us to create them explicitly
+
+	//centralwidget
 	QWidget * centralwidget = Object::findChild<QWidget *>(_wengoPhoneWindow, "centralwidget");
 	_wengoPhoneWindow->setCentralWidget(centralwidget);
 

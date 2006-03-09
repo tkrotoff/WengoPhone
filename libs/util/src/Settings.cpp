@@ -22,7 +22,6 @@
 #include <Logger.h>
 
 using namespace std;
-using boost::any_cast;
 
 Settings::Settings() {
 }
@@ -88,7 +87,7 @@ std::string Settings::get(const std::string & key, const std::string & defaultVa
 	Keys::const_iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
 		if (isString(it->second)) {
-			return any_cast<std::string>(it->second);
+			return boost::any_cast<std::string>(it->second);
 		} else {
 			LOG_FATAL("the key doesn't match a string value");
 		}
@@ -101,7 +100,7 @@ bool Settings::get(const std::string & key, bool defaultValue) const {
 	Keys::const_iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
 		if (isBoolean(it->second)) {
-			return any_cast<bool>(it->second);
+			return boost::any_cast<bool>(it->second);
 		} else {
 			LOG_FATAL("the key doesn't match a boolean value");
 		}
@@ -114,7 +113,7 @@ int Settings::get(const std::string & key, int defaultValue) const {
 	Keys::const_iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
 		if (isInteger(it->second)) {
-			return any_cast<int>(it->second);
+			return boost::any_cast<int>(it->second);
 		} else {
 			LOG_FATAL("the key doesn't match an integer value");
 		}
@@ -123,14 +122,13 @@ int Settings::get(const std::string & key, int defaultValue) const {
 	return defaultValue;
 }
 
-boost::any Settings::getAny(const std::string & key) const {
+boost::any Settings::getAny(const std::string & key, const boost::any & defaultValue) const {
 	Keys::const_iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
 		return it->second;
 	}
 
-	boost::any value;
-	return value;
+	return defaultValue;
 }
 
 std::string Settings::serialize() {
@@ -150,5 +148,5 @@ bool Settings::isInteger(const boost::any & value) {
 }
 
 bool Settings::isString(const boost::any & value) {
-	return any_cast<std::string>(&value);
+	return boost::any_cast<std::string>(&value);
 }

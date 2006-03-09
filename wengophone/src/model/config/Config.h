@@ -22,10 +22,10 @@
 
 #include <Settings.h>
 
-#include <string>
-
 /**
  * Stores the configuration options of WengoPhone.
+ *
+ * High component above Settings, tries to make it impossible to make a mistake.
  *
  * @see Settings
  * @ingroup model
@@ -39,99 +39,68 @@ public:
 
 	~Config();
 
-	std::string getName() const {
-		return _name;
-	}
+	std::string getName() const;
 
-	/** String key. Network branch */
-	static const std::string NETWORK_KEY;
+	/**
+	 * @see Settings::getAllKeys()
+	 */
+	StringList getAllKeys() const;
 
 	/** True if SSL connection to SSO is available. */
 	static const std::string NETWORK_SSO_SSL_KEY;
-	bool getNetworkSSOSSL() {
-		return setKeyValue(NETWORK_SSO_SSL_KEY, true);
-	}
+	bool getNetworkSSOSSL() const;
 
 	/**
 	 * Type of NAT.
-	 * Can be:
-	 * - cone
-	 * - restricted
-	 * - portRestricted
-	 * - sym
-	 * - symfirewall
-	 * - blocked
+	 *
+	 * @see EnumNatType::NatType
 	 */
 	static const std::string NETWORK_NAT_TYPE_KEY;
-	std::string getNetworkNatType() {
-		return setKeyValue(NETWORK_NAT_TYPE_KEY, std::string("auto"));
-	}
+	std::string getNetworkNatType() const;
 
 	/** Client SIP Port to use. */
 	static const std::string NETWORK_SIP_LOCAL_PORT_KEY;
-	int getNetworkSipLocalPort() {
-		return setKeyValue(NETWORK_SIP_LOCAL_PORT_KEY, 5060);
-	}
+	int getNetworkSipLocalPort() const;
 
 	/** SIP server. */
 	static const std::string NETWORK_SIP_SERVER_KEY;
-	std::string getNetWorkSipServer() {
-		return setKeyValue(NETWORK_SIP_SERVER_KEY, std::string(""));
-	}
+	std::string getNetWorkSipServer() const;
 
 	/** True if tunnel is SSL. */
 	static const std::string NETWORK_TUNNEL_SSL_KEY;
-	bool getNetworkTunnelSSL() {
-		return setKeyValue(NETWORK_TUNNEL_SSL_KEY, false);
-	}
+	bool getNetworkTunnelSSL() const;
 
 	/** Tunnel server. Empty if no tunnel is needed */
 	static const std::string NETWORK_TUNNEL_SERVER_KEY;
-	std::string getNetworkTunnelServer() {
-		return setKeyValue(NETWORK_TUNNEL_SERVER_KEY, std::string(""));
-	}
+	std::string getNetworkTunnelServer() const;
 
 	/** True if HTTP tunnel needed. */
 	static const std::string NETWORK_TUNNEL_NEEDED_KEY;
-	bool getNetWorkTunnelNeeded() {
-		return setKeyValue(NETWORK_TUNNEL_NEEDED_KEY, false);
-	}
+	bool getNetWorkTunnelNeeded() const;
 
 	/** Tunnel server port. */
 	static const std::string NETWORK_TUNNEL_PORT_KEY;
-	int getNetworkTunnelPort() {
-		return setKeyValue(NETWORK_TUNNEL_PORT_KEY, 80);
-	}
+	int getNetworkTunnelPort() const;
 
 	/** Is proxy detected ?. */
 	static const std::string NETWORK_PROXY_DETECTED_KEY;
-	bool getNetworkProxyDetected() {
-		return setKeyValue(NETWORK_PROXY_DETECTED_KEY, false);
-	}
+	bool getNetworkProxyDetected() const;
 
 	/** Proxy server. Empty if no proxy */
 	static const std::string NETWORK_PROXY_SERVER_KEY;
-	std::string getNetworkProxyServer() {
-		return setKeyValue(NETWORK_PROXY_SERVER_KEY, std::string(""));
-	}
+	std::string getNetworkProxyServer() const;
 
 	/** Proxy server port. */
 	static const std::string NETWORK_PROXY_PORT_KEY;
-	int getNetworkProxyPort() {
-		return setKeyValue(NETWORK_PROXY_PORT_KEY, 0);
-	}
+	int getNetworkProxyPort() const;
 
 	/** Proxy login. Empty if not needed */
 	static const std::string NETWORK_PROXY_LOGIN_KEY;
-	std::string getNetworkProxyLogin() {
-		return setKeyValue(NETWORK_PROXY_LOGIN_KEY, std::string(""));
-	}
+	std::string getNetworkProxyLogin() const;
 
 	/** Proxy Password. Empty if not needed */
 	static const std::string NETWORK_PROXY_PASSWORD_KEY;
-	std::string getNetworkProxyPassword() {
-		return setKeyValue(NETWORK_PROXY_PASSWORD_KEY, std::string(""));
-	}
+	std::string getNetworkProxyPassword() const;
 
 	/**
 	 * @name Audio Methods
@@ -140,45 +109,39 @@ public:
 
 	/** Path to codecs. */
 	static const std::string CODEC_PLUGIN_PATH_KEY;
-	std::string getCodecPluginPath() {
-		return setKeyValue(CODEC_PLUGIN_PATH_KEY, std::string(""));
-	}
+	std::string getCodecPluginPath() const;
 
 	/** Playback audio device name. */
 	static const std::string AUDIO_OUTPUT_DEVICENAME_KEY;
-	std::string getAudioOutputDeviceName();
+	std::string getAudioOutputDeviceName() const;
 
 	/** Record audio device name. */
 	static const std::string AUDIO_INPUT_DEVICENAME_KEY;
-	std::string getAudioInputDeviceName();
+	std::string getAudioInputDeviceName() const;
 
 	/** Ringer audio device name. */
 	static const std::string AUDIO_RINGER_DEVICENAME_KEY;
-	std::string getAudioRingerDeviceName();
+	std::string getAudioRingerDeviceName() const;
 
 	/** Ringing audio file name. */
 	static const std::string AUDIO_RINGING_FILE_KEY;
-	std::string getAudioRingingFile();
+	std::string getAudioRingingFile() const;
 
 	/** Call closed audio file name. */
 	static const std::string AUDIO_CALLCLOSED_FILE_KEY;
-	std::string getAudioCallClosedFile();
+	std::string getAudioCallClosedFile() const;
 
 	/** Audio smileys directory. */
 	static const std::string AUDIO_SMILEYS_DIR_KEY;
-	std::string getAudioSmileysDir();
+	std::string getAudioSmileysDir() const;
 
 	/** AEC (echo canceller) enable or not. */
 	static const std::string AUDIO_AEC_KEY;
-	bool getAudioAEC() {
-		return setKeyValue(AUDIO_AEC_KEY, false);
-	}
+	bool getAudioAEC() const;
 
 	/** Half duplex mode enable or not. */
 	static const std::string AUDIO_HALFDUPLEX_KEY;
-	bool getAudioHalfDuplex() {
-		return setKeyValue(AUDIO_HALFDUPLEX_KEY, true);
-	}
+	bool getAudioHalfDuplex() const;
 
 	/** @} */
 
@@ -190,85 +153,71 @@ public:
 
 	/** Wengo server hostname. */
 	static const std::string WENGO_SERVER_HOSTNAME_KEY;
-	std::string getWengoServerHostname() {
-		return setKeyValue(WENGO_SERVER_HOSTNAME_KEY, std::string("ws.wengo.fr"));
-	}
+	std::string getWengoServerHostname() const;
 
 	/** Wengo SSO path on the server. */
 	static const std::string WENGO_SSO_PATH_KEY;
-	std::string getWengoSSOPath() {
-		return setKeyValue(WENGO_SERVER_HOSTNAME_KEY, std::string("/softphone-sso/sso.php"));
-	}
+	std::string getWengoSSOPath() const;
 
 	/** Wengo SMS path on the server. */
 	static const std::string WENGO_SMS_PATH_KEY;
-	std::string getWengoSMSPath() {
-		return setKeyValue(WENGO_SMS_PATH_KEY, std::string("/sms/sendsms.php"));
-	}
+	std::string getWengoSMSPath() const;
 
 	/** @} */
 
 	/** Location of configuration files on the hard disk. */
 	static const std::string CONFIG_DIR_KEY;
-	std::string getConfigDir();
+	std::string getConfigDir() const;
 
 	/**
-	 * If really needed, gets the Settings interface.
-	 *
-	 * @return Settings interface
+	 * @see Settings::getAny()
 	 */
-	Settings & getSettingsInterface() {
-		return *this;
-	}
+	boost::any getAny(const std::string & key) const;
 
 private:
 
 	/**
+	 * Makes it impossible to use get() directly.
+	 *
 	 * @see Settings::get()
 	 */
-	std::string get(const std::string & key, const std::string & defaultValue) const {
-		return Settings::get(key, defaultValue);
-	}
+	std::string get(const std::string &, const std::string &) const {}
 
 	/**
 	 * @see get()
 	 */
-	bool get(const std::string & key, bool defaultValue) const {
-		return Settings::get(key, defaultValue);
-	}
+	bool get(const std::string &, bool) const {}
 
 	/**
 	 * @see get()
 	 */
-	int get(const std::string & key, int defaultValue) const {
-		return Settings::get(key, defaultValue);
-	}
+	int get(const std::string &, int) const {}
 
 	/**
-	 * @see Settings::set()
+	 * @see get()
 	 */
-	std::string setKeyValue(const std::string & key, const std::string & defaultValue) {
-		Settings::set(key, defaultValue);
-		return Settings::get(key, defaultValue);
-	}
+	boost::any getAny(const std::string &, const boost::any &) const {}
 
 	/**
-	 * @see setKeyValue()
+	 * @see get()
 	 */
-	bool setKeyValue(const std::string & key, bool defaultValue) {
-		Settings::set(key, defaultValue);
-		return Settings::get(key, defaultValue);
-	}
+	bool getBooleanKeyValue(const std::string & key) const;
 
 	/**
-	 * @see setKeyValue()
+	 * @see get()
 	 */
-	int setKeyValue(const std::string & key, int defaultValue) {
-		Settings::set(key, defaultValue);
-		return Settings::get(key, defaultValue);
-	}
+	int getIntegerKeyValue(const std::string & key) const;
 
+	/**
+	 * @see get()
+	 */
+	std::string getStringKeyValue(const std::string & key) const;
+
+	/** Name of this configuration. */
 	std::string _name;
+
+	/** Associates a key to a default value. */
+	Keys _keyDefaultValueMap;
 };
 
 #endif	//CONFIG_H

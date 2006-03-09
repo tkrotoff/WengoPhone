@@ -22,10 +22,6 @@
 #include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMContact.h>
 
-#ifdef ENABLE_NETLIB
-#include <netlib.h>
-#endif
-
 #include <Thread.h>
 #include <StringList.h>
 #include <Logger.h>
@@ -104,7 +100,7 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 	_tunnelNeeded = false;
 	_tunnelPort = 0;
 	_tunnelSSL = false;
-	_natType = StunTypeUnknown;
+	_natType = EnumNatType::NatTypeUnknown;
 	_sipServerPort = 0;
 	_sipLocalPort = 0;
 	PhApiWrapperHack = this;
@@ -134,25 +130,28 @@ void PhApiWrapper::setNetworkParameter() {
 		natType = "fcone";
 	} else {
 		switch(_natType) {
-		case StunTypeOpen:
+		case EnumNatType::NatTypeOpen:
 			natType = "none";
 			natRefreshTime = 0;
 			break;
 
-		case StunTypeConeNat:
+		case EnumNatType::NatTypeFullCone:
 			natType = "fcone";
 			break;
 
-		case StunTypeRestrictedNat:
+		case EnumNatType::NatTypeRestrictedCone:
 			natType = "rcone";
 			break;
 
-		case StunTypePortRestrictedNat:
+		case EnumNatType::NatTypePortRestrictedCone:
 			natType = "prcone";
 			break;
 
-		case StunTypeSymNat:
-		case StunTypeSymFirewall:
+		case EnumNatType::NatTypeSymmetric:
+		case EnumNatType::NatTypeSymmetricFirewall:
+		case EnumNatType::NatTypeBlocked:
+		case EnumNatType::NatTypeFailure:
+		case EnumNatType::NatTypeUnknown:
 			natType = "sym";
 			break;
 
@@ -554,7 +553,7 @@ void PhApiWrapper::publishPresence(const std::string & pidf, const std::string &
 	_lastNote = note;
 }
 
-void PhApiWrapper::renewPublishEventHandler() {	
+void PhApiWrapper::renewPublishEventHandler() {
 	publishPresence(_lastPidf, _lastNote);
 }
 
@@ -638,7 +637,7 @@ void PhApiWrapper::setTunnel(const std::string & address, unsigned port, bool ss
 	_tunnelSSL = ssl;
 }
 
-void PhApiWrapper::setNatType(NatType natType) {
+void PhApiWrapper::setNatType(EnumNatType::NatType natType) {
 	_natType = natType;
 }
 

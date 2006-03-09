@@ -23,11 +23,10 @@
 #include <sipwrapper/EnumPhoneCallState.h>
 #include <sipwrapper/EnumPhoneLineState.h>
 #include <sipwrapper/EnumTone.h>
+#include <sipwrapper/EnumNatType.h>
 
 #include <Interface.h>
 #include <Event.h>
-
-#include <netlib.h>
 
 #include <string>
 
@@ -256,7 +255,7 @@ public:
 	/**
 	 * Sets the NAT type.
 	 */
-	virtual void setNatType(NatType natType) = 0;
+	virtual void setNatType(EnumNatType::NatType natType) = 0;
 
 	/**
 	 * Sets the SIP parameters.

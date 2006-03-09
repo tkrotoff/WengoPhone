@@ -21,6 +21,7 @@
 #define CONFIGMANAGER_H
 
 #include <StringList.h>
+#include <Mutex.h>
 
 #include <map>
 
@@ -40,10 +41,7 @@ class Config;
 class ConfigManager {
 public:
 
-	static ConfigManager & getInstance() {
-		static ConfigManager configManager;
-		return configManager;
-	}
+	static ConfigManager & getInstance();
 
 	/**
 	 * Gets the current config.
@@ -94,6 +92,8 @@ private:
 	ConfigList _configList;
 
 	Config * _currentConfig;
+
+	static Mutex _mutex;
 };
 
 #endif	//CONFIGMANAGER_H

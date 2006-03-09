@@ -7,7 +7,6 @@ libs = [
 	'ortp',
 	'stun',
 	'httptunnel',
-	'wengophone',
 	'tinyxml',
 	'sound',
 	'imwrapper',
@@ -19,10 +18,6 @@ lib_path = []
 include_path = [
 	'../phapi'
 ]
-
-if WengoGetConsoleArgument('enable-netlib'):
-	defines['ENABLE_NETLIB'] = 1
-	libs += ['netlib']
 
 if WengoGetConsoleArgument('enable-video'):
 	defines['ENABLE_VIDEO'] = 1

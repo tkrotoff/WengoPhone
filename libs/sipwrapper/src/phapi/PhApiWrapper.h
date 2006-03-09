@@ -126,7 +126,7 @@ public:
 
 	void setTunnel(const std::string & address, unsigned port, bool ssl);
 
-	void setNatType(NatType natType);
+	void setNatType(EnumNatType::NatType natType);
 
 	void setSIP(const std::string & server, unsigned serverPort, unsigned localPort);
 
@@ -283,7 +283,7 @@ private:
 
 	bool _tunnelSSL;
 
-	NatType _natType;
+	EnumNatType::NatType _natType;
 
 	std::string _sipServer;
 

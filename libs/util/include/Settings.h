@@ -120,11 +120,11 @@ public:
 	int get(const std::string & key, int defaultValue) const;
 
 	/**
-	 * To use only if you know what you are doing!
+	 * Gets the value for a given key in a generic manner.
 	 *
 	 * @see get()
 	 */
-	boost::any getAny(const std::string & key) const;
+	boost::any getAny(const std::string & key, const boost::any & defaultValue) const;
 
 	/**
 	 * @return number of elements
@@ -161,9 +161,11 @@ public:
 	 */
 	static bool isString(const boost::any & value);
 
-private:
+protected:
 
 	typedef std::map<const std::string, boost::any> Keys;
+
+private:
 
 	Keys _keyMap;
 };

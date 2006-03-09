@@ -9,6 +9,3 @@ File "C:\Qt\4.1.1\bin\QtSvg4.dll"
 
 File "C:\WINDOWS\system32\msvcr71.dll"
 File "C:\WINDOWS\system32\msvcp71.dll"
-
-/** FIXME to remove. */
-File "C:\WINDOWS\system32\msvcr71d.dll"

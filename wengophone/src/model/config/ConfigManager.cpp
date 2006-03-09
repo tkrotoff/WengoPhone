@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 
 using namespace std;
 
+Mutex ConfigManager::_mutex;
+
 ConfigManager::ConfigManager() {
 	const string defaultConfig = "default";
 
@@ -31,10 +33,17 @@ ConfigManager::ConfigManager() {
 }
 
 ConfigManager::~ConfigManager() {
-	for (ConfigList::const_iterator it = _configList.begin()
-		; it != _configList.end() ; it++) {
-		delete (*it).second;	
+	for (ConfigList::const_iterator it = _configList.begin();
+		it != _configList.end(); it++) {
+		delete (*it).second;
 	}
+}
+
+ConfigManager & ConfigManager::getInstance() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
+	static ConfigManager configManager;
+	return configManager;
 }
 
 Config & ConfigManager::getCurrentConfig() const {
@@ -52,8 +61,8 @@ void ConfigManager::setCurrentConfig(const std::string & configName) {
 StringList ConfigManager::getConfigList() const {
 	StringList result;
 
-	for (ConfigList::const_iterator it = _configList.begin()
-		; it != _configList.end() ; it++) {
+	for (ConfigList::const_iterator it = _configList.begin();
+		it != _configList.end(); it++) {
 		result += (*it).first;
 	}
 
@@ -66,12 +75,12 @@ Config * ConfigManager::getConfig(const std::string & configName) const {
 	if (it != _configList.end()) {
 		return (*it).second;
 	} else {
-		return NULL;	
+		return NULL;
 	}
 }
 
 void ConfigManager::addConfig(Config * config) {
 	if (config) {
-		_configList[config->getName()] = config;	
-	}	
+		_configList[config->getName()] = config;
+	}
 }

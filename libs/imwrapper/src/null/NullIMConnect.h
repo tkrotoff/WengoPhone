@@ -22,7 +22,7 @@
 
 #include "NullIMFactory.h"
 
-#include <model/imwrapper/IMConnect.h>
+#include <imwrapper/IMConnect.h>
 
 class IMAccount;
 

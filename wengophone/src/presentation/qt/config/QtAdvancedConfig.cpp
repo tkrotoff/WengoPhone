@@ -50,9 +50,9 @@ QtAdvancedConfig::QtAdvancedConfig(QWidget * parent) : QObject() {
 void QtAdvancedConfig::populate() {
 	//_tableWidget->clear();
 
-	Settings & settings = ConfigManager::getInstance().getCurrentConfig().getSettingsInterface();
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	StringList keys = settings.getAllKeys();
+	StringList keys = config.getAllKeys();
 	for (unsigned i = 0; i < keys.size(); i++) {
 		if (i >= _tableWidget->rowCount()) {
 			_tableWidget->insertRow(i);
@@ -61,7 +61,7 @@ void QtAdvancedConfig::populate() {
 		QTableWidgetItem * itemKey = new QTableWidgetItem(QString::fromStdString(keys[i]));
 		_tableWidget->setItem(i, KEY_NAME_COLUMN, itemKey);
 
-		boost::any value = settings.getAny(keys[i]);
+		boost::any value = config.getAny(keys[i]);
 		if (value.empty()) {
 			continue;
 		}
@@ -84,6 +84,8 @@ void QtAdvancedConfig::populate() {
 			itemType = new QTableWidgetItem(TYPE_STRING);
 			std::string tmp = boost::any_cast<std::string>(value);
 			itemValue = new QTableWidgetItem(QString::fromStdString(tmp));
+		} else {
+			LOG_FATAL("unknown type");
 		}
 
 		_tableWidget->setItem(i, VALUE_COLUMN, itemValue);
@@ -92,6 +94,8 @@ void QtAdvancedConfig::populate() {
 }
 
 void QtAdvancedConfig::saveConfig() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 	for (int row = 0; row < _tableWidget->rowCount(); row++) {
 
 		QTableWidgetItem * itemKey = _tableWidget->item(row, KEY_NAME_COLUMN);
@@ -105,8 +109,6 @@ void QtAdvancedConfig::saveConfig() {
 			return;
 		}
 
-		Settings & settings = ConfigManager::getInstance().getCurrentConfig().getSettingsInterface();
-
 		QTableWidgetItem * itemType = _tableWidget->item(row, TYPE_COLUMN);
 		if (!itemType) {
 			return;
@@ -114,13 +116,15 @@ void QtAdvancedConfig::saveConfig() {
 
 		if (itemType->text() == TYPE_BOOLEAN) {
 			String tmp = itemValue->text().toStdString();
-			settings.set(key, tmp.toBoolean());
+			config.set(key, tmp.toBoolean());
 		} else if (itemType->text() == TYPE_INTEGER) {
 			String tmp = itemValue->text().toStdString();
-			settings.set(key, tmp.toInteger());
+			config.set(key, tmp.toInteger());
 		} else if (itemType->text() == TYPE_STRING) {
 			std::string tmp = itemValue->text().toStdString();
-			settings.set(key, tmp);
+			config.set(key, tmp);
+		} else {
+			LOG_FATAL("unknown type");
 		}
 	}
 }

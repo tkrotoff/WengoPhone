@@ -5,14 +5,17 @@ libs = [
 	'wengoutil'
 ]
 lib_path = []
-include_path = []
+include_path = ['../null']
 defines = {}
 headers = []
 sources = [
+	'NullIMFactory.cpp',
 	'NullIMChat.cpp',
 	'NullIMConnect.cpp',
 	'NullIMPresence.cpp',
+	'NullIMContactList.cpp',
 ]
 
+env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 env.WengoStaticLibrary('nullimwrapper', sources)

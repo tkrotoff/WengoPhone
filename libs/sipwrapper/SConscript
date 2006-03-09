@@ -8,12 +8,6 @@ include_path = [
 	'include',
 ]
 
-projects = [
-	'src/sipx',
-	'src/phapi',
-	'src/null',
-]
-
 headers = [
 	'include/sipwrapper/EnumPhoneCallState.h',
 	'include/sipwrapper/EnumPhoneLineState.h',
@@ -31,6 +25,12 @@ env.WengoAddIncludePath(include_path)
 env.WengoStaticLibrary('sipwrapper', sources, headers)
 
 env.WengoAddDoxyfile()
+
+projects = [
+	'src/sipx',
+	'src/phapi',
+	'src/null',
+]
 env.SConscript(dirs = projects)
 
 #env.SConscript('tests/SConscript')

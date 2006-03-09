@@ -36,10 +36,9 @@
 
 #include <sipwrapper/SipWrapper.h>
 #include <sipwrapper/SipWrapperFactory.h>
+#include <sipwrapper/EnumNatType.h>
 
 #include <Logger.h>
-
-#include <netlib.h>
 
 #include <cstring>
 
@@ -381,24 +380,30 @@ void PhoneLine::initSipWrapper() {
 	_sipWrapper->setSIP(_sipAccount.getSIPProxyServerHostname(), _sipAccount.getSIPProxyServerPort(), _sipAccount.getLocalSIPPort());
 
 	//Setting NAT
-	string natType = config.getNetworkNatType();
-	NatType nat;
-	if (natType == "cone") {
-		nat = StunTypeConeNat;
-	} else if (natType == "restricted") {
-		nat = StunTypeRestrictedNat;
-	} else if (natType == "portRestricted") {
-		nat = StunTypePortRestrictedNat;
-	} else if (natType == "sym") {
-		nat = StunTypeSymNat;
-	} else if (natType == "symfirewall") {
-		nat = StunTypeSymFirewall;
-	} else if (natType == "blocked") {
-		nat = StunTypeBlocked;
+	string nat = config.getNetworkNatType();
+	EnumNatType::NatType natType;
+	if (nat == "NatTypeOpen") {
+		natType = EnumNatType::NatTypeOpen;
+	} else if (nat == "NatTypeFullCone") {
+		natType = EnumNatType::NatTypeFullCone;
+	} else if (nat == "NatTypeRestrictedCone") {
+		natType = EnumNatType::NatTypeRestrictedCone;
+	} else if (nat == "NatTypePortRestrictedCone") {
+		natType = EnumNatType::NatTypePortRestrictedCone;
+	} else if (nat == "NatTypeSymmetric") {
+		natType = EnumNatType::NatTypeSymmetric;
+	} else if (nat == "NatTypeSymmetricFirewall") {
+		natType = EnumNatType::NatTypeSymmetricFirewall;
+	} else if (nat == "NatTypeBlocked") {
+		natType = EnumNatType::NatTypeBlocked;
+	} else if (nat == "NatTypeFailure") {
+		natType = EnumNatType::NatTypeFailure;
+	} else if (nat == "NatTypeUnknown") {
+		natType = EnumNatType::NatTypeUnknown;
 	} else {
-		nat = StunTypeOpen;
+		LOG_FATAL("unknown NAT type");
 	}
-	_sipWrapper->setNatType(nat);
+	_sipWrapper->setNatType(natType);
 
 	//Setting audio devices
 	_sipWrapper->setCallOutputAudioDevice(config.getAudioOutputDeviceName());

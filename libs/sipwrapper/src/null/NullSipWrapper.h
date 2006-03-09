@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #ifndef NULLSIPWRAPPER_H
 #define NULLSIPWRAPPER_H
 
-#include "model/sipwrapper/SipWrapper.h"
+#include <sipwrapper/SipWrapper.h>
 
 /**
  * Null SIP wrapper.
@@ -45,6 +45,8 @@ public:
 
 	~NullSipWrapper();
 
+	void init();
+
 	void terminate();
 
 	int addVirtualLine(const std::string & displayName,
@@ -68,13 +70,30 @@ public:
 
 	void resumeCall(int callId);
 
+	void playTone(int callId, EnumTone::Tone tone);
+
+	void playSoundFile(int callId, const std::string & soundFile);
+
+	void setProxy(const std::string & address, unsigned port,
+		const std::string & login, const std::string & password);
+
+	void setTunnel(const std::string & address, unsigned port, bool ssl);
+
+	void setNatType(EnumNatType::NatType natType);
+
+	void setSIP(const std::string & server, unsigned serverPort, unsigned localPort);
+
 	bool setCallInputAudioDevice(const std::string & deviceName);
 
 	bool setRingerOutputAudioDevice(const std::string & deviceName);
 
 	bool setCallOutputAudioDevice(const std::string & deviceName);
 
-	bool enableAEC(bool enable);
+	void enableAEC(bool enable);
+
+	void enableHalfDuplex(bool enable);
+
+	void setPluginPath(const std::string & path);
 
 private:
 

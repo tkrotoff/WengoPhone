@@ -86,10 +86,14 @@ public:
 		 */
 		NatTypeSymmetric,
 
-		/** FIXME to remove or not in the future. */
+		/**
+		 * FIXME to remove or not in the future.
+		 *
+		 * No idea what is it, check netlib
+		 */
 		NatTypeSymmetricFirewall,
 
-		/** FIXME to remove or not in the future. */
+		/** Cannot pass the network. */
 		NatTypeBlocked,
 
 		/** Failed to detect the NAT type. */

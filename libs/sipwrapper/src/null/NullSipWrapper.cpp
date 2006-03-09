@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,17 +19,18 @@
 
 #include "NullSipWrapper.h"
 
-#include "model/WengoPhoneLogger.h"
-#include "model/account/SipAccount.h"
-
 #include <Thread.h>
 #include <StringList.h>
+#include <Logger.h>
 
 NullSipWrapper::NullSipWrapper() {
 	LOG_DEBUG("NullSip initialization");
 }
 
 NullSipWrapper::~NullSipWrapper() { }
+
+void NullSipWrapper::init() {
+}
 
 void NullSipWrapper::terminate() {
 }
@@ -71,18 +72,42 @@ void NullSipWrapper::holdCall(int) {
 void NullSipWrapper::resumeCall(int) {
 }
 
+void NullSipWrapper::playTone(int callId, EnumTone::Tone tone) {
+}
+
+void NullSipWrapper::playSoundFile(int callId, const std::string & soundFile) {
+}
+
+void NullSipWrapper::setProxy(const std::string & address, unsigned port,
+	const std::string & login, const std::string & password) {
+}
+
+void NullSipWrapper::setTunnel(const std::string & address, unsigned port, bool ssl) {
+}
+
+void NullSipWrapper::setNatType(EnumNatType::NatType natType) {
+}
+
+void NullSipWrapper::setSIP(const std::string & server, unsigned serverPort, unsigned localPort) {
+}
+
 bool NullSipWrapper::setCallInputAudioDevice(const std::string &) {
 	return false;
 }
 
 bool NullSipWrapper::setRingerOutputAudioDevice(const std::string &) {
-	return setCallInputAudioDevice("");
+	return false;
 }
 
 bool NullSipWrapper::setCallOutputAudioDevice(const std::string &) {
-	return setCallInputAudioDevice("");
+	return false;
 }
 
-bool NullSipWrapper::enableAEC(bool) {
-	return false;
+void NullSipWrapper::enableAEC(bool enable) {
+}
+
+void NullSipWrapper::enableHalfDuplex(bool enable) {
+}
+
+void NullSipWrapper::setPluginPath(const std::string & path) {
 }

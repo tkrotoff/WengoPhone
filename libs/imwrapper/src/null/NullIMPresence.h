@@ -22,7 +22,7 @@
 
 #include "NullIMFactory.h"
 
-#include <model/imwrapper/IMPresence.h>
+#include <imwrapper/IMPresence.h>
 
 class IMAccount;
 
@@ -36,7 +36,16 @@ class NullIMPresence : public IMPresence {
 	friend class NullIMFactory;
 public:
 
-	void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
+	void changeMyPresence(EnumPresenceState::PresenceState state,
+		const std::string & note = String::null);
+
+	void changeMyNickname(const std::string & nickname);
+
+	void subscribeToPresenceOf(const std::string & contactId);
+
+	void blockContact(const std::string & contactId);
+
+	void unblockContact(const std::string & contactId);
 
 private:
 

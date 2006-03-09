@@ -25,6 +25,17 @@ NullIMChat::NullIMChat(IMAccount & account)
 	: IMChat(account) {
 }
 
-int NullIMChat::sendMessage(const std::string & to, const std::string & message) {
-	return 0;
+void NullIMChat::createSession(IMContactSet & imContactList) {
+}
+
+void NullIMChat::closeSession(IMChatSession & chatSession) {
+}
+
+void NullIMChat::sendMessage(IMChatSession & chatSession, const std::string & message) {
+}
+
+void NullIMChat::addContact(IMChatSession & chatSession, const std::string & contactId) {
+}
+
+void NullIMChat::removeContact(IMChatSession & chatSession, const std::string & contactId) {
 }

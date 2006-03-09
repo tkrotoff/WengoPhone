@@ -7,7 +7,7 @@ libs = [
 ]
 
 if WengoOSPosix():
-        env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
+	env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
 
 lib_path = []
 include_path = ['../gaim']

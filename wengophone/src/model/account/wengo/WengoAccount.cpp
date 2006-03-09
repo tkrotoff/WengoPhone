@@ -94,13 +94,11 @@ bool WengoAccount::init() {
 }
 
 bool WengoAccount::discoverForSSO() {
-	string url;
-
 	LOG_DEBUG("discovering network parameters for SSO connection");
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	url = config.getWengoServerHostname() + ":" + String::fromNumber(443) + config.getWengoSSOPath();
+	string url = config.getWengoServerHostname() + ":" + String::fromNumber(443) + config.getWengoSSOPath();
 	if (_networkDiscovery.testHTTP(url, true)) {
 		_SSOWithSSL = true;
 		LOG_DEBUG("SSO can connect on port 443 with SSL");

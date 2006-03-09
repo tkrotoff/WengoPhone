@@ -17,28 +17,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "NullIMFactory.h"
-
-#include "NullIMChat.h"
-#include "NullIMConnect.h"
-#include "NullIMPresence.h"
 #include "NullIMContactList.h"
 
-NullIMFactory::NullIMFactory() {
+#include <Logger.h>
+
+NullIMContactList::NullIMContactList(IMAccount & account)
+	: IMContactList(account) {
 }
 
-IMConnect * NullIMFactory::createIMConnect(IMAccount & account) {
-	return new NullIMConnect(account);
+void NullIMContactList::addContact(const std::string & groupName, const std::string & contactId) {
 }
 
-IMChat * NullIMFactory::createIMChat(IMAccount & account) {
-	return new NullIMChat(account);
+void NullIMContactList::removeContact(const std::string & groupName, const std::string & contactId) {
 }
 
-IMPresence * NullIMFactory::createIMPresence(IMAccount & account) {
-	return new NullIMPresence(account);
+void NullIMContactList::addGroup(const std::string & groupName) {
 }
 
-IMContactList * NullIMFactory::createIMContactList(IMAccount & account) {
-	return new NullIMContactList(account);
+void NullIMContactList::removeGroup(const std::string & groupName) {
+}
+
+void NullIMContactList::moveContactToGroup(const std::string & newGroupName,
+	const std::string & oldGroupName, const std::string & contactId) {
+}
+
+void NullIMContactList::changeGroupName(const std::string & oldGroupName, const std::string & newGroupName) {
 }

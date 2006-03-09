@@ -23,7 +23,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <netlib.h>
+#include <sipwrapper/EnumNatType.h>
 
 #include <Event.h>
 
@@ -40,7 +40,7 @@ class NetworkDiscovery
 public:
 
 	/**
-	 * Emitted when a poxy has been detected and needs a login/password.
+	 * Emitted when a proxy has been detected and needs a login/password.
 	 *
 	 * @param proxyAddress the url of the detected proxy
 	 * @param proxyPort the port of the detected proxy
@@ -66,7 +66,7 @@ public:
 	~NetworkDiscovery();
 
 	/**
-	 * Test if an url is joinable by Http.
+	 * Tests if an url is joinable by Http.
 	 *
 	 * @param the url to test (e.g: "ws.wengo.fr:443/softphone-sso/sso.php")
 	 * @param true if a SSL connection must be tested
@@ -75,7 +75,7 @@ public:
 	bool testHTTP(const std::string & url, bool ssl);
 
 	/**
-	 * Test if a UDP connection is possible.
+	 * Tests if a UDP connection is possible.
 	 *
 	 * @param stunServer the STUN server
 	 * @return true if ok
@@ -83,7 +83,7 @@ public:
 	bool testUDP(const std::string & stunServer);
 
 	/**
-	 * Test if a server respond to a SIP ping.
+	 * Tests if a server respond to a SIP ping.
 	 *
 	 * @param server the server to test
 	 * @param port the server port
@@ -92,7 +92,7 @@ public:
 	bool testSIP(const std::string & server, unsigned port);
 
 	/**
-	 * Test if a HttpTunnel can be create and if SIP can pass through this tunnel.
+	 * Tests if a HttpTunnel can be create and if SIP can pass through this tunnel.
 	 *
 	 * @param tunnelServer the tunnel server
 	 * @param tunnelPort the tunnel port
@@ -110,7 +110,7 @@ public:
 	unsigned getFreeLocalPort();
 
 	/**
-	 * Set the proxy.
+	 * Sets the proxy.
 	 *
 	 * Unblock discoverProxySettings if it was.
 	 */
@@ -156,7 +156,7 @@ private:
 	 */
 	void discoverProxySettings();
 
-	void setNatConfig(NatType nat);
+	void setNatConfig(EnumNatType::NatType natType);
 
 	static const unsigned PING_TIMEOUT = 3;
 

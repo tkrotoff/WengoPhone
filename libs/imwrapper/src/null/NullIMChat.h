@@ -22,9 +22,10 @@
 
 #include "NullIMFactory.h"
 
-#include <model/imwrapper/IMChat.h>
+#include <imwrapper/IMChat.h>
 
 class IMAccount;
+class IMContactSet;
 
 /**
  * Null IM chat (stub).
@@ -36,11 +37,19 @@ class NullIMChat : public IMChat {
 	friend class NullIMFactory;
 public:
 
-	int sendMessage(const std::string & to, const std::string & message);
+	void createSession(IMContactSet & imContactList);
 
 private:
 
 	NullIMChat(IMAccount & account);
+
+	void closeSession(IMChatSession & chatSession);
+
+	void sendMessage(IMChatSession & chatSession, const std::string & message);
+
+	void addContact(IMChatSession & chatSession, const std::string & contactId);
+
+	void removeContact(IMChatSession & chatSession, const std::string & contactId);
 };
 
 #endif	//NULLIMCHAT_H

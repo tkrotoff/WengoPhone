@@ -21,10 +21,9 @@ if WengoDebugMode():
 	defines['CURLDEBUG'] = 1
 
 if WengoGetConsoleArgument('enable-ssl'):
-    libs += ['openssl']
-    defines['USE_SSLEAY'] = 1
-    defines['USE_OPENSSL'] = 1
-    
+	libs += ['openssl']
+	defines['USE_SSLEAY'] = 1
+	defines['USE_OPENSSL'] = 1
 
 headers = []
 sources = [
@@ -116,4 +115,3 @@ if WengoOSMacOSX():
 	env.WengoStaticLibrary('wengocurl', sources)
 else:
 	env.WengoSharedLibrary('wengocurl', sources)
-

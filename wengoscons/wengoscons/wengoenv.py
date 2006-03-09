@@ -444,17 +444,17 @@ class WengoSConsEnvironment(SConsEnvironment):
 		def setDebugMode(self):
 			self.__setDefaultFlags()
 			self.__CCFlags += ['-Zi', '/LDd', '-Gm', '/DEBUG', '-D_DEBUG', '/MDd']
-			self.__linkFlags += ['/DEBUG']
+			self.__linkFlags += ['/DEBUG', '/NODEFAULTLIB:MSVCRT.LIB']
 
 		def setReleaseMode(self):
 			self.__setDefaultFlags()
 			self.__CCFlags += ['/O1', '/MD']
-			self.__linkFlags += []
+			self.__linkFlags += ['/NODEFAULTLIB:MSVCRTD.LIB']
 
 		def setReleaseModeWithSymbols(self):
 			self.__setDefaultFlags()
 			self.__CCFlags += ['/O1', '/MD', '/Zi']
-			self.__linkFlags += ['/DEBUG']
+			self.__linkFlags += ['/DEBUG', '/NODEFAULTLIB:MSVCRTD.LIB']
 
 		def __setDefaultFlags(self):
 			self.__CCFlags = ['/Zm200', '/EHsc', '/GX', '/GR']
