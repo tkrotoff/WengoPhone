@@ -48,7 +48,10 @@ void ChatWindow::messageReceivedEventHandler(IMChatSession & sender, const IMCon
 void ChatWindow::newMessage(IMChatSession *session,const QString & msg)
 {
     LOG_DEBUG("ChatWindow::newMessage : sending message");
-	session->sendMessage(msg.toStdString());
+	// session->sendMessage(msg.toStdString());
+	std::string message(msg.toUtf8().constData());
+	
+	session->sendMessage(message);
 }
 
 void ChatWindow::show()
@@ -61,7 +64,8 @@ void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, c
 	
 	LOG_DEBUG("message received: " + message);
     QString senderName = QString::fromStdString(from.getContactId());
-    QString msg = QString::fromStdString(message);
+    // QString msg = QString::fromStdString(message);
+	QString msg = QString::fromUtf8(message.c_str());
     _dialog.show();
 	int tabs=_tabWidget->count();
 	

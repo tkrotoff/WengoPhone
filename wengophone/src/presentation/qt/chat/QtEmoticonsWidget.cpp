@@ -26,14 +26,10 @@
 
 EmoticonsWidget::EmoticonsWidget(QWidget * parent, Qt::WFlags f) : QWidget(parent,f){
     
-    // _widget =WidgetFactory::create(":/forms/chat/emoticonswidget.ui", this);
-	qDebug() << "EmoticonsWidget";
     _layout = new QGridLayout(this);
-	//addWidget ( QWidget * widget, int row, int column, Qt::Alignment alignment = 0 )
-    //_layout->addWidget(_widget);
     _layout->setMargin(0);
-    //setLayout(_layout);
     loadConfig("emoticons/icondef.xml");
+
 	// Default stat is popup
 	_stat=Popup;
 
