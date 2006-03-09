@@ -74,10 +74,10 @@ int ph_msession_start(struct ph_msession_s *s, const char *deviceid)
   ret2 = ph_msession_video_start(s, deviceid);
 #endif
 
-  if (!ret1 || !ret2)
+  if (!ret1 && !ret2)
     return 0;
 
-  return ret1; 
+  return ret1 ? ret1 : ret2; 
   
 
 }
@@ -95,13 +95,27 @@ int ph_msession_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2)
 
 int ph_msession_suspend(struct ph_msession_s *s,  int traffictype, const char *device)
 {
+#ifdef PHAPI_VIDEO_SUPPORT
+   ph_msession_video_stop(s);
+#endif
    ph_msession_audio_suspend(s, traffictype, device);
    return (0);
 }
 
 int ph_msession_resume(struct ph_msession_s *s, int traffictype, const char *device)
 {
-   ph_msession_audio_resume(s, traffictype, device);
+  int ret;
+
+  ph_msession_audio_resume(s, traffictype, device);
+#ifdef PHAPI_VIDEO_SUPPORT
+  ret = ph_msession_video_start(s, "");
+  return ret;
+#else
+  return 0;
+#endif
+
+  
+
 }
 
 
@@ -403,15 +417,16 @@ phcodec_t *ph_media_lookup_codec(int payload)
     DBG4_CODEC_LOOKUP("CODEC LOOKUP: ph_media_lookup_codec\n", 0, 0, 0);
     
     if (!pt)
-    {
+      {
         DBG4_CODEC_LOOKUP("could not find payload %d in ortp profile list\n", payload, 0, 0);
         return 0;
-    }
+      }
     
-    if (!pt->mime_type) {
+    if (!pt->mime_type) 
+      {
         DBG4_CODEC_LOOKUP("fatal error - NULL mime type for codec %d in ortp\n", payload, 0, 0);
         return 0;
-    }
+      }
 
     return ph_media_lookup_codec_bymime(pt->mime_type, pt->clock_rate);
     
