@@ -78,11 +78,10 @@ else:
 debug_print('Qt libraries directory is ' + qt_libraries_directory)
 
 debug_print('Copying Qt DLL...')
-shutil.copyfile(qt_libraries_directory + '/' +  'libQtCore.so.4.1.1', str(temp_directory) + '/libQtCore.so.4.1.1')
-shutil.copyfile(qt_libraries_directory + '/' + 'libQtDesigner.so.4.1.1', str(temp_directory) + '/libQtDesigner.so.4.1.1')
-shutil.copyfile(qt_libraries_directory + '/' + 'libQtGui.so.4.1.1', str(temp_directory) + '/libQtGui.so.4.1.1')
-shutil.copyfile(qt_libraries_directory + '/' + 'libQtXml.so.4.1.1', str(temp_directory) + '/libQtXml.so.4.1.1')
-shutil.copyfile(qt_libraries_directory + '/' + 'libQtSvg.so.4.1.1', str(temp_directory) + '/libQtSvg.so.4.1.1')
+for root, dirs, files in os.walk(qt_libraries_directory):
+    for file in files:
+        if re.match( 'libQt(Core|Designer|Gui|Xml|Svg).so.\d.\d.\d', file):
+            shutil.copyfile(os.path.join(root, file), os.path.join(str(temp_directory), file))
 debug_print('Done copying Qt DLL!')
 
 #Creating tarball and adding files to it
