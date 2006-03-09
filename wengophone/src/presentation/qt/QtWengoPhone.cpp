@@ -146,6 +146,22 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionAdvancedConfiguration = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAdvancedConfiguration");
 	connect(actionAdvancedConfiguration, SIGNAL(triggered()), SLOT(showAdvancedConfig()));
 
+#if QT_VERSION == 0x040100
+	// QT 4.1.1 correctly creatses following stuf from QTDesigner specs
+	// QT 4.1.0 obliges us to create them explicitly
+	//centralwidget 
+	QWidget * centralwidget = Object::findChild<QWidget *>(_wengoPhoneWindow, "centralwidget");
+	_wengoPhoneWindow->setCentralWidget(centralwidget);
+
+	//menubar
+	QMenuBar * menubar = Object::findChild<QMenuBar *>(_wengoPhoneWindow, "menubar");
+	_wengoPhoneWindow->setMenuBar(menubar);
+
+	//statusbar
+	QStatusBar * statusbar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusbar");
+	_wengoPhoneWindow->setStatusBar(statusbar);
+#endif
+
 	_wengoPhoneWindow->show();
 }
 
