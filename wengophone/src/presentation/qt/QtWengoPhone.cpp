@@ -72,8 +72,11 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 
 void QtWengoPhone::initThreadSafe() {
 #ifndef OS_MACOSX
-	QApplication::setStyle(new QPlastiqueStyle);
+	//FIXME shit man, this is fucking ugly!
+	//read http://wiki.mozilla.org/FX2_Visual_Update
+	//QApplication::setStyle(new QPlastiqueStyle);
 #endif
+
 	_wengoPhoneWindow = qobject_cast<QMainWindow *>(WidgetFactory::create(":/forms/WengoPhoneWindow.ui", NULL));
 
 	//callButton
