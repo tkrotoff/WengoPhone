@@ -31,7 +31,7 @@ if WengoCCMSVC():
 		'libboost_thread-vc71-mt.lib',
 		'libboost_serialization-vc71-mt.lib',
 		'libboost_signals-vc71-mt.lib'
-	]		
+	]
 
 if WengoCCMinGW():
 	libs += [
