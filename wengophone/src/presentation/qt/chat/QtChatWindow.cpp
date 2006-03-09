@@ -51,6 +51,11 @@ void ChatWindow::newMessage(IMChatSession *session,const QString & msg)
 	session->sendMessage(msg.toStdString());
 }
 
+void ChatWindow::show()
+{
+	_dialog.show();
+}
+
 void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string message)
 {
 	

@@ -16,64 +16,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
-#ifndef EMOTICONSWIDGET_H
-#define EMOTICONSWIDGET_H
+#ifndef QTEMOTICONBUTTON_H
+#define QTEMOTICONBUTTON_H
 
 #include <QtGui>
-
-#include "widgetseeker.h"
 #include "QtEmoticon.h"
-#include "QtEmoticonButton.h"
 
-class EmoticonsWidget : public QWidget //, Ui::EmoticonsWidget
+class QtEmoticonButton : public QPushButton
 {
-    Q_OBJECT
-    
+	Q_OBJECT
+
 public:
-	enum EmoticonsWidgetStat {Window,Popup};
+	QtEmoticonButton ( QWidget * parent = 0 );
 	
-    EmoticonsWidget(QWidget * parent = 0, Qt::WFlags f= 0);
+	QtEmoticonButton ( const QString & text, QWidget * parent = 0 );
 	
-    void loadConfig(const QString & path);
+	QtEmoticonButton ( const QIcon & icon, const QString & text, QWidget * parent = 0 );
 	
-	QVector<QtEmoticon> getEmoticonsVector() {return _emoticonsVector;};
+	void setEmoticon(QtEmoticon emoticon);
 	
-protected:
+public Q_SLOTS: 
 
-	QWidget * _widget;
+	void buttonClickedSlot();
 	
-	WidgetSeeker _seeker;
-	
-	QStringList _iconName;
-	
-	EmoticonsWidgetStat _stat;
-
-	int _buttonX;
-
-	int _buttonY;
-
-	QGridLayout * _layout;
-
-	QVector<QtEmoticon> _emoticonsVector;
-	
-	void addButton(QtEmoticon emoticon);
-	
-	virtual void closeEvent ( QCloseEvent * event );
-public Q_SLOTS:
-
-	void changeStat(); 
-
-	void buttonClicked(QtEmoticon emoticon);
-
 Q_SIGNALS:
 
-	void emoticonClicked(QtEmoticon emoticon);
+	void buttonClicked(QtEmoticon emoticon);
 	
-	void closed();
-
+protected:
+	void init();
 	
+	QtEmoticon _emoticon;
 };
-
 
 #endif

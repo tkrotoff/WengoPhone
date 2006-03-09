@@ -1,0 +1,62 @@
+/*
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2005  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+#include "QtEmoticon.h"
+
+#include <Logger.h>
+
+QtEmoticon::QtEmoticon()
+{
+
+}
+
+QtEmoticon::QtEmoticon(const QtEmoticon & source)
+{
+	_path=source._path;
+	_text=QStringList(source._text);
+	_pixmap=source._pixmap;
+	_regExp = source._regExp;
+	_buttonPixmap = source._buttonPixmap;
+}
+
+QtEmoticon::~QtEmoticon()
+{
+}
+
+QString QtEmoticon::getHtml()
+{
+    QString html = QString("<img src='%1' />").arg(_path);
+	return html;
+}
+
+QString QtEmoticon::getHtmlRegExp()
+{
+	return QString("<img src=\"%1\" \\/>").arg(_path);
+}
+
+bool QtEmoticon::isNull()
+{
+	if (_text.isEmpty())
+		return true;
+	return false;
+}
+
+void QtEmoticon::setRegExp(const QString & regExp)
+{ 
+	_regExp = regExp;
+}

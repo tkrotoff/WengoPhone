@@ -20,9 +20,7 @@
 #include "QtChatHandler.h"
 
 #include <control/chat/CChatHandler.h>
-
 #include <Logger.h>
-
 #include <QWidget>
 
 QtChatHandler::QtChatHandler(CChatHandler & cChatHandler) 
@@ -50,12 +48,16 @@ void QtChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IM
 }
 
 void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(ChatHandler & sender, IMChatSession & imChatSession) {
-
 	if (!_qtChatWidget)
+	{
+		LOG_DEBUG("Creating new Chat window");
 		_qtChatWidget =  new ChatWindow(imChatSession);
+	}
 	else
+	{	
+		LOG_DEBUG("Reusing chat window");
 		_qtChatWidget->addChatSession(&imChatSession); 
-
+	}
 }
 
 void QtChatHandler::createSession(const IMAccount & imAccount, IMContactSet & imContactSet) {
@@ -71,5 +73,5 @@ void QtChatHandler::updatePresentationThreadSafe() {
 }
 
 void QtChatHandler::initThreadSafe() {
-
+	_qtChatWidget = NULL;
 }

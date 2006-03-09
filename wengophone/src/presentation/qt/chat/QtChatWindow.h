@@ -40,25 +40,38 @@ public:
     
     ChatWindow(IMChatSession & imChatSession);
     
-    // void addChat(IMChatSession * session);
 	void addChat(IMChatSession * session,const IMContact & from );
+	
 	void addChatSession(IMChatSession * imChatSession);
+	
 protected:
+
     QWidget     *   _widget; 
+	
     WidgetSeeker    _seeker;
+	
     ChatWidget  *   _chatWidget;
+	
     QTabWidget  *   _tabWidget;
     
     IMChatSession * _imChatSession;
+	
     QDialog			_dialog;
     
 public Q_SLOTS:
-    //void    newMessage(const QString & msg);
+    
 	void newMessage(IMChatSession* session,const QString & msg);
+	
+	void show();
+	
 private:
+	
 	void initThreadSafe();
-    void messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message);
-    void messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string  message);
+    
+	void messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message);
+    
+	void messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string  message);
+	
 };
 
 #endif

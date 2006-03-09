@@ -24,6 +24,7 @@
 
 #include "QtEmoticonsWidget.h"
 #include "widgetseeker.h"
+#include "QtEmoticon.h"
 
 #include <WidgetFactory.h>
 #include <imwrapper/IMContact.h>
@@ -39,44 +40,79 @@ public:
     ChatWidget(QWidget * parent =0, Qt::WFlags f = 0);
     
     void setNickBgColor(const QString &color);
+	
     void setNickTextColor(const QString &color);
+	
     void setNickFont(QFont &font);
+	
     void setNickName(const QString & nickname);
+	
 	void setIMChatSession(IMChatSession * imChatSession);
+	
 	IMChatSession * getIMChatSession() {return _imChatSession;};
+	
     const QString & nickName();
+	
     const QFont&    nickFont();
+	
     const QString&   nickBgColor();
+	
     const QString&   nickTextColor();
+	
     void             addToHistory(const QString & senderName,const QString & str);
+	
 protected:
     
     QWidget *       _widget;
-    WidgetSeeker    _seeker;
+    
+	WidgetSeeker    _seeker;
 
     QPushButton  *   _fontButton;
-    QTextBrowser *   _chatHistory;
-    QTextEdit    *   _chatEdit;
-    QPushButton  *   _emoticonsButton;
-    QPushButton  *   _sendButton;
-	IMChatSession* _imChatSession;
     
+	QTextBrowser *   _chatHistory;
+    
+	QTextEdit    *   _chatEdit;
+    
+	QPushButton  *   _emoticonsButton;
+    
+	QPushButton  *   _sendButton;
+	
+	IMChatSession* _imChatSession;
+	
 	QFont _currentFont;
+	
 	QFont _nickFont;
+	
 	QString _nickBgColor;
+	
 	QString _nickBgColorAlt;
+	
     QString _nickTextColor;
+	
     QString _nickName;
     
     EmoticonsWidget *_emoticonsWidget;
-    const QString    replaceUrls(const QString & str, const QString & htmlstr);
+	
+    const QString replaceUrls(const QString & str, const QString & htmlstr);
+	
+	const QString text2Emoticon(const QString &htmlstr);
+	
+	const QString Emoticon2Text(const QString &htmlstr);
+	
 public Q_SLOTS:
+
     void enterPressed();
+	
     void chooseFont();
+	
     void chooseEmoticon();
-    void emoticonSelected(const QString & emoticonName);
+	
+    void emoticonSelected(QtEmoticon emoticon);
+	
     void urlClicked(const QUrl & link);
+	
 Q_SIGNALS:
+
     void newMessage(IMChatSession* session,const QString & msg);
 };
 

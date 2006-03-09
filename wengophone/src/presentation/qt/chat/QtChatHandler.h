@@ -21,7 +21,6 @@
 #define QTCHATHANDLER_H
 
 #include <presentation/PChatHandler.h>
-
 #include <QObjectThreadSafe.h>
 
 #include "QtChatWidget.h"

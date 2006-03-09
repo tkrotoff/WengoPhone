@@ -18,127 +18,36 @@
  */
 
 #include "QtEmoticonsWidget.h"
-#include <WidgetFactory.h>
+#include "QtEmoticonButton.h"
 
+#include <WidgetFactory.h>
+#include <QtXml>
+#include <Logger.h>
 
 EmoticonsWidget::EmoticonsWidget(QWidget * parent, Qt::WFlags f) : QWidget(parent,f){
     
-    _widget =WidgetFactory::create(":/forms/chat/emoticonswidget.ui", this);
-    QGridLayout * layout = new QGridLayout();
-    layout->addWidget(_widget);
-    layout->setMargin(0);
-    setLayout(layout);
-    
+    // _widget =WidgetFactory::create(":/forms/chat/emoticonswidget.ui", this);
+	qDebug() << "EmoticonsWidget";
+    _layout = new QGridLayout(this);
+	//addWidget ( QWidget * widget, int row, int column, Qt::Alignment alignment = 0 )
+    //_layout->addWidget(_widget);
+    _layout->setMargin(0);
+    //setLayout(_layout);
+    loadConfig("emoticons/icondef.xml");
 	// Default stat is popup
 	_stat=Popup;
 
-    QPushButton * exitButton = _seeker.getPushButton(_widget, "emoticonCloseButton");
+//    QPushButton * exitButton = _seeker.getPushButton(_widget, "emoticonCloseButton");
     
-    connect(exitButton,SIGNAL(clicked()),this,SLOT(changeStat()));
-    
-    _iconName << "face-wink48.png";
-    _iconName << "face-angel48.png";
-    _iconName << "face-crying48.png";
-    _iconName << "face-devil-grin48.png";
-    _iconName << "face-glasses48.png";
-    _iconName << "face-kiss48.png";
-    _iconName << "face-plain48.png";
-    _iconName << "face-sad48.png";
-    _iconName << "face-smile48.png";
-    _iconName << "face-smile-big48.png";
-    _iconName << "face-surprise48.png";
-    
-    
-    emoticonButton1 = _seeker.getPushButton(_widget,"emoticonButton1");
-    emoticonButton2 = _seeker.getPushButton(_widget,"emoticonButton2");
-    emoticonButton3 = _seeker.getPushButton(_widget,"emoticonButton3");
-    emoticonButton4 = _seeker.getPushButton(_widget,"emoticonButton4");
-    emoticonButton5 = _seeker.getPushButton(_widget,"emoticonButton5");
-    emoticonButton6 = _seeker.getPushButton(_widget,"emoticonButton6");
-    emoticonButton7 = _seeker.getPushButton(_widget,"emoticonButton7");
-    emoticonButton8 = _seeker.getPushButton(_widget,"emoticonButton8");
-    emoticonButton9 = _seeker.getPushButton(_widget,"emoticonButton9");
-    emoticonButton10 = _seeker.getPushButton(_widget,"emoticonButton10");
-    emoticonButton11 = _seeker.getPushButton(_widget,"emoticonButton11");
-    
-    connect(emoticonButton1,SIGNAL(clicked()),this,SLOT(emoticon1Clicked()));
-    connect(emoticonButton2,SIGNAL(clicked()),this,SLOT(emoticon2Clicked()));
-    connect(emoticonButton3,SIGNAL(clicked()),this,SLOT(emoticon3Clicked()));
-    connect(emoticonButton4,SIGNAL(clicked()),this,SLOT(emoticon4Clicked()));
-    connect(emoticonButton5,SIGNAL(clicked()),this,SLOT(emoticon5Clicked()));
-    connect(emoticonButton6,SIGNAL(clicked()),this,SLOT(emoticon6Clicked()));
-    connect(emoticonButton7,SIGNAL(clicked()),this,SLOT(emoticon7Clicked()));
-    connect(emoticonButton8,SIGNAL(clicked()),this,SLOT(emoticon8Clicked()));
-    connect(emoticonButton9,SIGNAL(clicked()),this,SLOT(emoticon9Clicked()));
-    connect(emoticonButton10,SIGNAL(clicked()),this,SLOT(emoticon10Clicked()));
-    connect(emoticonButton11,SIGNAL(clicked()),this,SLOT(emoticon11Clicked()));
-    
+//    connect(exitButton,SIGNAL(clicked()),this,SLOT(changeStat()));
+
 }
-void EmoticonsWidget::emoticon1Clicked()
+
+void EmoticonsWidget::buttonClicked(QtEmoticon emoticon)
 {
-	emoticonClicked(_iconName[0]);
 	if (_stat == Popup)
 		close();
-}
-void EmoticonsWidget::emoticon2Clicked()
-{
-	emoticonClicked(_iconName[1]);
-	if (_stat == Popup)
-		close();
-}
-void EmoticonsWidget::emoticon3Clicked()
-{
-    emoticonClicked(_iconName[2]);
-	if (_stat == Popup)
-		close();
-}
-void EmoticonsWidget::emoticon4Clicked()
-{
-    emoticonClicked(_iconName[3]);
-	if (_stat == Popup)
-		close();
-}
-void EmoticonsWidget::emoticon5Clicked()
-{
-    emoticonClicked(_iconName[4]);
-	if (_stat == Popup)
-		close();
-}
-void EmoticonsWidget::emoticon6Clicked()
-{
-    emoticonClicked(_iconName[5]);
-	if (_stat == Popup)
-		close();
-}
-void EmoticonsWidget::emoticon7Clicked()
-{
-    emoticonClicked(_iconName[6]);
-	if (_stat == Popup)
-		close();
-}
-void EmoticonsWidget::emoticon8Clicked()
-{
-    emoticonClicked(_iconName[7]);
-	if (_stat == Popup)
-		close();
-}
-void EmoticonsWidget::emoticon9Clicked()
-{
-    emoticonClicked(_iconName[8]);
-	if (_stat == Popup)
-		close();
-}
-void EmoticonsWidget::emoticon10Clicked()
-{
-    emoticonClicked(_iconName[9]);
-	if (_stat == Popup)
-		close();
-}
-void EmoticonsWidget::emoticon11Clicked()
-{
-    emoticonClicked(_iconName[10]);
-	if (_stat == Popup)
-		close();
+	emoticonClicked(emoticon);
 }
 
 void EmoticonsWidget::changeStat()
@@ -157,3 +66,86 @@ void EmoticonsWidget::changeStat()
 		_stat=Popup;
 	}
 }
+
+void EmoticonsWidget::loadConfig(const QString & path)
+{
+	//regexp = QString("(\\b(%1))|((%2)\\b)").arg(regexp).arg(regexp);
+	_buttonX = 0;
+	_buttonY = 0;
+	
+	QFile file(path);
+	QDomDocument doc("wengoIcons");
+	
+    if (!file.open(QIODevice::ReadOnly))
+        return;
+    if (!doc.setContent(&file)) {
+        file.close();
+        return;
+    }
+    file.close();
+	
+	QDomElement docElem = doc.documentElement();
+
+	QDomNode n = docElem.firstChild();
+	
+	QtEmoticon emoticon;
+	
+	QStringList textList;
+
+	while(!n.isNull()) {
+        QDomElement e = n.toElement(); 
+        if(!e.isNull()) {
+			if (e.tagName() == "icon")
+			{
+				textList.clear();
+				QDomNode n1 = e.firstChild();
+				while ( ! n1.isNull() )
+				{
+					QDomElement e1 = n1.toElement();
+					if ( !e1.isNull()){
+						if (e1.tagName() == "text"){
+							textList << e1.text();
+						}
+						if (e1.tagName() == "object"){
+							emoticon.setPath("emoticons/"+e1.text());
+							emoticon.setPixmap(QPixmap("emoticons/"+e1.text()));
+						}
+						if (e1.tagName() == "regexp"){
+							emoticon.setRegExp(e1.text());
+						}
+						if (e1.tagName() == "button"){
+							emoticon.setButtonPixmap(QPixmap("emoticons/"+e1.text()));
+						}
+					}
+					n1 = n1.nextSibling();
+				}
+			}
+        }
+		emoticon.setText(textList);
+		_emoticonsVector.append(emoticon);
+		addButton(emoticon);
+        n = n.nextSibling();
+    }
+}
+
+void EmoticonsWidget::addButton(QtEmoticon emoticon){
+	
+	if ( _buttonX == 3 ){
+		_buttonX=0;
+		_buttonY+=1;
+	}
+	QtEmoticonButton * button = new QtEmoticonButton(this);
+	button->setEmoticon(emoticon);
+	button->setMaximumSize(emoticon.getButtonPixmap().size());
+	button->setMinimumSize(emoticon.getButtonPixmap().size());
+	_layout->addWidget( button, _buttonY, _buttonX);
+	connect (button,SIGNAL(buttonClicked(QtEmoticon )),this,SLOT(buttonClicked(QtEmoticon )));
+	_buttonX++;
+}
+
+void EmoticonsWidget::closeEvent ( QCloseEvent * event )
+{
+	closed();
+	event->accept();
+}
+

@@ -21,6 +21,8 @@
 #include "chatwidgetmanager.h"
 #include "QtEmoticonsWidget.h"
 
+#include <Logger.h>
+
 ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
 
 {
@@ -34,8 +36,8 @@ ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
     /* Defaults fonts and colors */
     _nickFont = QFont("Helvetica", 12);
     _nickTextColor = "'#000000'"; // Black
-    _nickBgColor = "'#84FFB3'";
-	_nickBgColorAlt = "#B0FFB3''";
+    _nickBgColor = "'#B4C8FF'";
+	_nickBgColorAlt = "'#B0FFB3'";
     _nickName = "Wengo";
 
     _fontButton  = _seeker.getPushButton(_widget,"fontButton");
@@ -55,7 +57,8 @@ ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
     
     _emoticonsWidget = new EmoticonsWidget(this,Qt::Popup);
     
-    connect(_emoticonsWidget,SIGNAL(emoticonClicked(const QString &)),this,SLOT(emoticonSelected(const QString&)));
+    connect(_emoticonsWidget,SIGNAL(emoticonClicked(QtEmoticon)),this,SLOT(emoticonSelected(QtEmoticon)));
+	connect(_emoticonsWidget,SIGNAL(closed()),_chatEdit,SLOT(setFocus()));
 }
 
 
@@ -105,15 +108,16 @@ void ChatWidget::addToHistory(const QString & senderName,const QString & str)
     QString text= QString("<table border=0 width=100% cellspacing=0 "
     "cellpadding=0><tr><td BGCOLOR=%1> <font color=%2> %3 </font></td><td BGCOLOR=%4 align=right>"
     "<font color=%5> %6 </font></td></tr></table>").
-    arg(_nickBgColor).
+    arg(_nickBgColorAlt).
     arg(_nickTextColor).
     arg(senderName).
-	arg(bgColor).
+	arg(_nickBgColorAlt).
     arg(_nickTextColor).
     arg(QTime::currentTime().toString());
     
-    _chatHistory->insertHtml (text);
-    _chatHistory->insertHtml (str);
+    LOG_DEBUG("Chat histor : "  + text.toStdString());
+	_chatHistory->insertHtml (text);
+    _chatHistory->insertHtml (text2Emoticon(str));
     _chatHistory->ensureCursorVisible();
 }
 
@@ -143,15 +147,15 @@ void ChatWidget::enterPressed()
     
     _chatHistory->setTextCursor(curs);
     _chatHistory->insertHtml (text);
-    _chatHistory->insertHtml (replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>"));
+    _chatHistory->insertHtml (text2Emoticon(replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>")));
     _chatHistory->ensureCursorVisible();
     
-    newMessage(_imChatSession,_chatEdit->toHtml());
+    newMessage(_imChatSession,Emoticon2Text(_chatEdit->toHtml()));
     
     _chatEdit->clear();
     _chatEdit->setFocus();
     
-//    newMessage(replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>"));
+
     
 }
 
@@ -163,6 +167,29 @@ void ChatWidget::chooseFont()
     _chatEdit->setFocus();
 }
 
+const QString ChatWidget::Emoticon2Text(const QString &htmlstr)
+{
+	QVector<QtEmoticon> emoticons = _emoticonsWidget->getEmoticonsVector();
+	QString tmp = htmlstr;
+	
+	for (int i = 0; i < emoticons.size(); i++)
+	{
+		tmp.replace(QRegExp(emoticons[i].getHtmlRegExp(),Qt::CaseInsensitive),emoticons[i].getDefaultText());
+	}
+	return tmp;
+}
+
+const QString ChatWidget::text2Emoticon(const QString &htmlstr)
+{
+	QVector<QtEmoticon> emoticons = _emoticonsWidget->getEmoticonsVector();
+	QString tmp = htmlstr;
+	
+	for (int i = 0; i < emoticons.size(); i++)
+	{
+		tmp.replace(QRegExp(emoticons[i].getRegExp(),Qt::CaseInsensitive),emoticons[i].getHtml());
+	}
+	return tmp;
+}
 const QString  ChatWidget::replaceUrls(const QString & str, const QString & htmlstr)
 {
     int beginPos = 0;
@@ -205,16 +232,20 @@ void ChatWidget::chooseEmoticon()
 	QPoint p = _emoticonsButton->pos();
 	p.setY(p.y() + _emoticonsButton->rect().bottom());
 	_emoticonsWidget->move(mapToGlobal(p));
-	_emoticonsWidget->setWindowOpacity(0.85);	
+	_emoticonsWidget->setWindowOpacity(0.95);	
     _emoticonsWidget->show();
 }
 
-void ChatWidget::emoticonSelected(const QString & emoticonName)
+void ChatWidget::emoticonSelected(QtEmoticon emoticon)
 {
+ /*
     QString path = QString("emoticons/") + emoticonName;
     QString image = QString("<img src='%1' />").arg(path);
     _chatEdit->insertHtml (image);
     _chatEdit->ensureCursorVisible();
+*/
+	_chatEdit->insertHtml(emoticon.getHtml());
+	_chatEdit->ensureCursorVisible();
 }
 
 void ChatWidget::setIMChatSession(IMChatSession * imChatSession)
