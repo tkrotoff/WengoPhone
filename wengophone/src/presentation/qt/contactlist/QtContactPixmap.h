@@ -36,8 +36,8 @@ public:
 
 protected:
 	QtContactPixmap ( );
-	QtContactPixmap (const QtContactPixmap&) {};
-	QtContactPixmap & operator= (const QtContactPixmap &) {};
+	QtContactPixmap (const QtContactPixmap& other) : _contactPixmap(other._contactPixmap) {}
+	QtContactPixmap & operator= (const QtContactPixmap &other) { _contactPixmap = other._contactPixmap; return *this; }
 	
 protected:
 	QHash<contactPixmap, QPixmap>	_contactPixmap;

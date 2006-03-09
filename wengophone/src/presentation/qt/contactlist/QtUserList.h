@@ -63,8 +63,8 @@ public:
 	
 protected:
 	QtUserList ( );
-	QtUserList (const QtUserList&) {};
-	QtUserList & operator= (const QtUserList &) {};
+	QtUserList (const QtUserList& other) : _tree(other._tree), _userList(other._userList) {}
+	QtUserList & operator= (const QtUserList &other) { _tree = other._tree;  _userList = other._userList; return *this; }
 protected:
 	QHash<QString,QtUser *>	_userList;
 	QTreeWidget * _tree;
