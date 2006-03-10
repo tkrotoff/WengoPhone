@@ -134,7 +134,7 @@ void http_tunnel_init_host(const char *hostname, int port, int ssl)
 #endif
     
 	// TODO: Put a default IP on the SSO in the case of the hostname can't be resolved
-	if (get_ip_addr(hostIP, sizeof(hostIP), hostname) == -1 || !hostIP)
+	if (get_ip_addr(hostIP, sizeof(hostIP), hostname) == -1 || !hostIP || hostIP[0] == '\0')
 		httpServerIP = strdup("80.118.99.31");
 	else
 		httpServerIP = strdup(hostIP);
