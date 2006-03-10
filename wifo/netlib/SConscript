@@ -17,7 +17,6 @@ sources = [
 	'src/stun_func.cpp',
 	'src/udp_func.cpp',
 	'src/bugfix.cpp',
-	'src/get_net_conf.cpp',
 ]
 
 if WengoOSWindows():
