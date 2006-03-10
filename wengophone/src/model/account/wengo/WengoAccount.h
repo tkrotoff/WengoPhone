@@ -21,7 +21,6 @@
 #define WENGOACCOUNT_H
 
 #include <model/account/SipAccount.h>
-#include <model/config/ConfigItem.h>
 
 #include <http/HttpRequest.h>
 #include <Timer.h>
@@ -34,7 +33,7 @@
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class WengoAccount : public SipAccount, public ConfigItem {
+class WengoAccount : public SipAccount {
 
 	/**
 	 * WengoAccountParser can directly access to _identity, _username ect...

@@ -37,6 +37,7 @@ sources = [
 	'model/SipCallbacks.cpp',
 	'model/config/Config.cpp',
 	'model/config/ConfigManager.cpp',
+	'model/config/LanguageList.cpp',
 	'model/connect/Connect.cpp',
 	'model/connect/ConnectHandler.cpp',
 	'model/chat/ChatHandler.cpp',

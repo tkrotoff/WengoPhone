@@ -17,27 +17,31 @@ if WengoCCGCC() and not WengoOSWindows():
 		libs += [
 			'boost_thread-gcc-mt',
 			'boost_serialization-gcc-mt',
-			'boost_signals-gcc-mt'
+			'boost_signals-gcc-mt',
+			'boost_regex-gcc-mt',
 		]
 	else:
 		libs += [
 			'boost_thread',
 			'boost_serialization',
-			'boost_signals'
+			'boost_signals',
+			'boost_regex',
 		]
 	env = conf.Finish()
 if WengoCCMSVC():
 	libs += [
 		'libboost_thread-vc71-mt.lib',
 		'libboost_serialization-vc71-mt.lib',
-		'libboost_signals-vc71-mt.lib'
+		'libboost_signals-vc71-mt.lib',
+		'libboost_regex-vc71-mt.lib',
 	]
 
 if WengoCCMinGW():
 	libs += [
 		'libboost_thread-mgw-mt',
 		'libboost_serialization-mgw-mt',
-		'libboost_signals-mgw-mt'
+		'libboost_signals-mgw-mt',
+		'libboost_regex-mgw-mt',
 	]
 
 lib_path = []
@@ -68,7 +72,8 @@ if WengoOSMacOSX():
 	libs += [
 		'boost_thread',
 		'boost_serialization',
-		'boost_signals'
+		'boost_signals',
+		'boost_regex',
 	]
 
 	#Installed from source code
