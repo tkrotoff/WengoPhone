@@ -35,6 +35,10 @@ public:
 	/**
 	 * Gets the language name given its ISO 639 Alpha-2 code.
 	 *
+	 * Warning!
+	 * returns a UTF-8 encoded string.
+	 * For Qt4, check QString::fromUtf8()
+	 *
 	 * @param iso639Code ISO 639 Alpha-2 code (e.g en, fr ect...)
 	 * @return language name (e.g français, english...) or empty string
 	 */
