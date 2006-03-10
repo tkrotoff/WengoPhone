@@ -11,16 +11,20 @@ nsis_scripts = [
     "isUserAdmin.nsi",
     "writeToFile.nsi",
 ]
-print "PATH : " + os.path.join(os.environ['QTDIR'], "lib","QtCore4.dll")
+qt_lib_dir = None
+if os.path.exists(os.path.join(os.environ['QTDIR'], 'lib', 'QtCore4.dll')):
+	qt_lib_dir = os.path.join(os.environ['QTDIR'], 'lib')
+else:
+	qt_lib_dir = os.path.join(os.environ['QTDIR'], 'bin')
 nsis_dlls = [
     "dll/dbghelp.dll",
     "c:\windows\system32\msvcp71d.dll",
     "c:\windows\system32\msvcr71d.dll",
-    os.path.join(os.environ['QTDIR'], "lib","QtCore4.dll"),
-    os.path.join(os.environ['QTDIR'], "lib","QtGui4.dll"),
-    os.path.join(os.environ['QTDIR'], "lib","QtXml4.dll"),
-    os.path.join(os.environ['QTDIR'], "lib","QtSvg4.dll"),
-    os.path.join(os.environ['QTDIR'], "lib","QtDesigner4.dll"),
+    os.path.join(qt_lib_dir,"QtCore4.dll"),
+    os.path.join(qt_lib_dir,"QtGui4.dll"),
+    os.path.join(qt_lib_dir,"QtXml4.dll"),
+    os.path.join(qt_lib_dir,"QtSvg4.dll"),
+    os.path.join(qt_lib_dir,"QtDesigner4.dll"),
     "c:\windows\system32\msvcp71.dll",
     "c:\windows\system32\msvcr71.dll",
 ]
@@ -44,7 +48,7 @@ else:
 nsis_defines = {}
 nsis_defines["GENERATED_INSTALLER_NAME"] = installer_name
 nsis_defines["GENERATED_INSTALLER_PATH"] = "."
-nsis_defines["PRODUCT_VERSION"] = '0.10'
+nsis_defines["PRODUCT_VERSION"] = '0.12'
 nsis_defines["BUILD_DIR"] = nsis_env.WengoGetRootBuildDir()
 nsis_defines["PRODUCT_NAME"] = 'WengoPhone NG'
 nsis_defines["QTDIR"] = os.environ['QTDIR']
