@@ -1,4 +1,4 @@
-﻿/*
+/**
  * WengoPhone, a voice over Internet phone
  * Copyright (C) 2004-2006  Wengo
  *
