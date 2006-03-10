@@ -87,9 +87,14 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession)
 {
 	imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1, _2, _3);
-	IMContact from = *imChatSession->getIMContactSet().begin();
-	addChat(imChatSession,from);
-	_dialog.show();
+	
+	if ( imChatSession->getIMContactSet().size() != 0 ) {
+		IMContact from = *imChatSession->getIMContactSet().begin();
+		addChat(imChatSession,from);
+		_dialog.show();
+	}
+	else
+		LOG_FATAL("New chat session is empty !!!!!");
 }
 
 void ChatWindow::initThreadSafe() {
