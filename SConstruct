@@ -1,9 +1,10 @@
 from wengoscons import wengoenv
 
-env = wengoenv.getGlobalEnvironment()
+env = wengoenv.getGlobalEnvironment(tools = ['nsis', 'default'], 
+	toolpath = ['wengoscons/Tools'])
 
 #Uncomment to compile with MinGW
-#env = wengoenv.getGlobalEnvironment(tools=['mingw'])
+#env = wengoenv.getGlobalEnvironment(tools=['mingw'], toolpath=['wengoscons/Tools'])
 #env['CC'] = 'gcc'
 #env['CXX'] = 'g++'
 

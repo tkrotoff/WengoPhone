@@ -3,8 +3,6 @@ import sys, os, popen2
 env = WengoGetEnvironment()
 nsis_env = env.Copy()
 
-nsis_env.Tool("nsis")
-
 nsis_scripts = [
     "files_install.nsi",
     "files_install_debug.nsi",
