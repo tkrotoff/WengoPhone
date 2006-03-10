@@ -28,6 +28,7 @@
 #include <Serializable.h>
 
 #include <set>
+#include <list>
 
 class Contact;
 class ContactListDataLayer;
@@ -287,13 +288,13 @@ private:
 	ContactListDataLayer * _dataLayer;
 
 	/** List of Contact. */
-	typedef std::vector<Contact> ContactVector;
+	typedef std::list<Contact> Contacts;
 
 	/** Set of ContactGroup. */
 	ContactGroupSet _contactGroupSet;
 
 	/** Vector of Contact. */
-	ContactVector _contactVector;
+	Contacts _contacts;
 
 	WengoPhone & _wengoPhone;
 

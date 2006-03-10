@@ -178,7 +178,7 @@ void Contact::_addToContactGroup(const std::string & groupName) {
 }
 
 void Contact::_removeFromContactGroup(const std::string & groupName) {
-	ContactGroupSet::const_iterator it = _contactGroupSet.find(groupName);
+	ContactGroupSet::iterator it = _contactGroupSet.find(groupName);
 
 	if (it != _contactGroupSet.end()) {
 		_contactGroupSet.erase(it);

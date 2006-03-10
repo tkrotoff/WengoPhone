@@ -72,12 +72,12 @@ void ContactList::removeContactGroup(const string & groupName) {
 
 Contact & ContactList::createContact() {
 	Contact contact(_wengoPhone);
-	ContactVector::const_iterator it;
+	Contacts::const_iterator it;
 
-	_contactVector.push_back(contact);
+	_contacts.push_back(contact);
 	//Look for the added Contact
-	for (it = _contactVector.begin();
-		it != _contactVector.end();
+	for (it = _contacts.begin();
+		it != _contacts.end();
 		++it) {
 		if (contact == (*it)) {
 			contactAddedEvent(*this, (Contact &)*it);
@@ -90,12 +90,12 @@ Contact & ContactList::createContact() {
 
 void ContactList::removeContact(const Contact & contact) {
 	//TODO: Remove the contact from all its groups
-	for (ContactVector::iterator it = _contactVector.begin();
-		it != _contactVector.end();
+	for (Contacts::iterator it = _contacts.begin();
+		it != _contacts.end();
 		++it) {
 		if (contact == (*it)) {
 			contactRemovedEvent(*this, (Contact &)*it);
-			_contactVector.erase(it);
+			_contacts.erase(it);
 		}
 	}
 }
@@ -226,8 +226,8 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 	EnumPresenceState::PresenceState state,
 	const std::string & note, const IMContact & imContact) {
 
-	for (ContactVector::const_iterator it = _contactVector.begin();
-		it != _contactVector.end();
+	for (Contacts::const_iterator it = _contacts.begin();
+		it != _contacts.end();
 		++it) {
 		if ((*it).hasIMContact(imContact)) {
 			(*it).getIMContact(imContact).setPresenceState(state);
@@ -252,8 +252,8 @@ void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,
 }
 
 Contact * ContactList::findContactThatOwns(const IMContact & imContact) const {
-	for (ContactVector::const_iterator it = _contactVector.begin();
-		it != _contactVector.end();
+	for (Contacts::const_iterator it = _contacts.begin();
+		it != _contacts.end();
 		++it) {
 		if ((*it).hasIMContact(imContact)) {
 			return (Contact *)&(*it);
@@ -286,8 +286,8 @@ void ContactList::_removeContactGroup(const std::string & groupName) {
 	ContactGroupSet::iterator it = _contactGroupSet.find(groupName);
 
 	if (it != _contactGroupSet.end()) {
-		for (ContactVector::const_iterator vectIt = _contactVector.begin();
-			vectIt != _contactVector.end();
+		for (Contacts::const_iterator vectIt = _contacts.begin();
+			vectIt != _contacts.end();
 			++vectIt) {
 			((Contact &)(*vectIt))._removeFromContactGroup(groupName);
 		}
