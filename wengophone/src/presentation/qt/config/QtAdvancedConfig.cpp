@@ -35,6 +35,7 @@ static const int TYPE_COLUMN = 2;
 static const int VALUE_COLUMN = 3;
 
 static const QString TYPE_STRING = "string";
+static const QString TYPE_STRINGLIST = "stringlist";
 static const QString TYPE_BOOLEAN = "boolean";
 static const QString TYPE_INTEGER = "integer";
 
@@ -84,6 +85,10 @@ void QtAdvancedConfig::populate() {
 			itemType = new QTableWidgetItem(TYPE_STRING);
 			std::string tmp = boost::any_cast<std::string>(value);
 			itemValue = new QTableWidgetItem(QString::fromStdString(tmp));
+		} else if (Settings::isStringList(value)) {
+			itemType = new QTableWidgetItem(TYPE_STRINGLIST);
+			StringList tmp = boost::any_cast<StringList>(value);
+			//itemValue = new QTableWidgetItem(QString::fromStdString(tmp));
 		} else {
 			LOG_FATAL("unknown type");
 		}
@@ -123,6 +128,9 @@ void QtAdvancedConfig::saveConfig() {
 		} else if (itemType->text() == TYPE_STRING) {
 			std::string tmp = itemValue->text().toStdString();
 			config.set(key, tmp);
+		} else if (itemType->text() == TYPE_STRINGLIST) {
+			//std::string tmp = itemValue->text().toStdString();
+			//config.set(key, tmp);
 		} else {
 			LOG_FATAL("unknown type");
 		}

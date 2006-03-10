@@ -186,6 +186,11 @@ private:
 	/**
 	 * @see get()
 	 */
+	StringList get(const std::string &, const StringList &) const {}
+
+	/**
+	 * @see get()
+	 */
 	bool get(const std::string &, bool) const {}
 
 	/**

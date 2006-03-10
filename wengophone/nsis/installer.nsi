@@ -3,10 +3,9 @@
  *
  * If you add a global variable, declare it here as commented.
  */
-!define PRODUCT_VERSION "0.10"
+!define PRODUCT_VERSION "0.11"
 ;!define DEBUG
 !define BUILD_DIR "..\..\release-symbols\"
-
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "WengoPhone"
@@ -77,8 +76,11 @@ Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 !include "isUserAdmin.nsi"
 !include "writeToFile.nsi"
 Function .onInit
-	!insertmacro MUI_LANGDLL_DISPLAY
+	/** Kills running qtwengophone.exe */
 	nsProcess::KillProcess "qtwengophone.exe" .R0
+
+	!insertmacro MUI_LANGDLL_DISPLAY
+
 	Call isUserAdmin
 	Pop $R0
 	StrCmp $R0 "true" isAdmin

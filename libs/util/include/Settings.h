@@ -93,6 +93,11 @@ public:
 	/**
 	 * @see set()
 	 */
+	void set(const std::string & key, const StringList & value);
+
+	/**
+	 * @see set()
+	 */
 	void set(const std::string & key, bool value);
 
 	/**
@@ -108,6 +113,11 @@ public:
 	 * @return the value associated with the key or the default value if the value doesn't exist
 	 */
 	std::string get(const std::string & key, const std::string & defaultValue) const;
+
+	/**
+	 * @see get()
+	 */
+	StringList get(const std::string & key, const StringList & defaultValue) const;
 
 	/**
 	 * @see get()
@@ -160,6 +170,14 @@ public:
 	 * @return true if value is a std::string; false otherwise
 	 */
 	static bool isString(const boost::any & value);
+
+	/**
+	 * Checks if the value is a StringList.
+	 *
+	 * @param value to check
+	 * @return true if value is a StringList; false otherwise
+	 */
+	static bool isStringList(const boost::any & value);
 
 protected:
 

@@ -1,3 +1,4 @@
+/** Kills running qtwengophone.exe */
 nsProcess::KillProcess "qtwengophone.exe" .R0
 
 Delete "$INSTDIR\styles\*"
