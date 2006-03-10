@@ -21,8 +21,10 @@
 
 #include <presentation/PContact.h>
 
-QtUser::QtUser(PContact & pContact, QObject * parent) 
-	: QObject (parent), _pContact(pContact)
+#include <model/WengoPhone.h>
+
+QtUser::QtUser(PContact & pContact, WengoPhone & wengoPhone, QObject * parent) 
+	: QObject (parent), _pContact(pContact), _wengoPhone(wengoPhone)
 {
 	_mouseOn = false;
 	_openStatus = false;
@@ -180,7 +182,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
 			qDebug() << "Video clicked";
-			//_pContact.placeVideoCall();
+			_wengoPhone.makeCall(_pContact.getContact());
 		}
 	}
 	else
@@ -193,7 +195,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
 			qDebug() << "Call clicked";
-			//_pContact.placeCall();
+			_wengoPhone.makeCall(_pContact.getContact());
 		}
 	}
 	else
@@ -205,7 +207,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
 			qDebug() << "IM clicked";
-			//_pContact.startIM();
+			_wengoPhone.startIM(_pContact.getContact());
 		}
 	}
 	else

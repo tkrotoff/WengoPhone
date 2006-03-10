@@ -26,6 +26,8 @@
 
 #include <string>
 
+class Contact;
+
 /**
  *
  * @ingroup presentation
@@ -33,12 +35,23 @@
  */
 class PContact : public Presentation {
 public:
+	PContact(Contact & contact) : _contact(contact) {}
+
 	virtual std::string getDisplayName() const = 0;
 	virtual std::string getId() const = 0;
 	virtual bool hasIM() const = 0;
 	virtual bool hasCall() const = 0;
 	virtual bool hasVideo() const = 0;
 	virtual EnumPresenceState::PresenceState getPresenceState() const = 0;
+
+	Contact & getContact() const {
+		return _contact;
+	}
+
+private:
+
+	Contact & _contact;
+
 };
 
 #endif	//PCONTACT_H

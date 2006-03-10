@@ -49,6 +49,10 @@ public:
 
 	std::string getContactGroupName() const;
 
+	CWengoPhone & getCWengoPhone() const {
+		return _cWengoPhone;
+	}
+
 private:
 
 	void contactAddedEventHandler(ContactGroup & sender, Contact & contact);

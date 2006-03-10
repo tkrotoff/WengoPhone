@@ -57,6 +57,7 @@ private:
 	CContactGroup & _cContactGroup;
 
 	QtContactList *_qtContactList;
+
 };
 
 #endif	//QTCONTACTGROUP_H

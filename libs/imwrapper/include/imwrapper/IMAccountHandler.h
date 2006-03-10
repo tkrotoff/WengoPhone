@@ -30,7 +30,7 @@
  *
  * @author Philippe Bernery
  */
-class IMAccountHandler : public std::set<IMAccount> {
+class IMAccountHandler : public std::set<IMAccount>, public Serializable {
 public:
 
 	/**
@@ -38,6 +38,11 @@ public:
 	 * @return IMAccount with protocol 'protocol'
 	 */
 	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
+
+	std::string serialize();
+
+	bool unserialize(const std::string & data);
+
 };
 
 #endif	//IMACCOUNTHANDLER_H

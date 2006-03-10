@@ -250,8 +250,8 @@ std::string Contact::getPreferredNumber() const {
 	return result;
 }
 
-const IMContact * Contact::getPreferredIMContact() const {
-	const IMContact * result = NULL;
+IMContact * Contact::getPreferredIMContact() const {
+	IMContact * result = NULL;
 
 	if (_preferredIMContact != NULL) {
 		result = _preferredIMContact;
@@ -261,7 +261,7 @@ const IMContact * Contact::getPreferredIMContact() const {
 			it != _imContactSet.end() ;
 			it++) {
 			if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
-				return &(*it);
+				return (IMContact *)&(*it);
 				break;
 			}
 		}	

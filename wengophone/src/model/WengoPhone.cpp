@@ -77,6 +77,8 @@ void WengoPhone::init() {
 	//Creates the history
 	//historyCreatedEvent
 
+	//Load IMAccounts
+	
 	//Create ConnectHandler, PresenceHandler, ChatHandler 
 	// and IMContactListHandler
 	_connectHandler = new ConnectHandler(*this);
@@ -127,10 +129,25 @@ void WengoPhone::run() {
 	}
 }
 
+void WengoPhone::makeCall(Contact & contact) {
+	if (_activePhoneLine) {
+		_activePhoneLine->makeCall(contact.getPreferredNumber());
+	}
+}
+
 void WengoPhone::makeCall(const std::string & phoneNumber) {
 	if (_activePhoneLine) {
 		_activePhoneLine->makeCall(phoneNumber);
 	}
+}
+
+void WengoPhone::startIM(Contact & contact) {
+	IMContactSet imContactSet;
+	IMContact * imContact = contact.getPreferredIMContact();
+
+	//FIXME: we should give a set of pointer to IMContacts
+	imContactSet.insert(*imContact);
+	_chatHandler->createSession(imContact->getIMAccount(), imContactSet);
 }
 
 void WengoPhone::terminate() {

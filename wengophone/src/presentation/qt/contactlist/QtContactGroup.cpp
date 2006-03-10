@@ -24,6 +24,8 @@
 #include "QtUserList.h"
 #include "QtUser.h"
 
+#include <control/CWengoPhone.h>
+
 #include <QTreeWidgetItem>
 #include <QString>
 
@@ -78,7 +80,7 @@ void QtContactGroup::addContactThreadSafe(PContact * pContact) {
 	newContact->setText(0, QString::fromStdString(pContact->getId()));
 	newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
 
-	user = new QtUser(*pContact);
+	user = new QtUser(*pContact, _cContactGroup.getCWengoPhone().getWengoPhone());
 	user->setId(QString::fromStdString(pContact->getId()));
 	user->setUserName(contactName);
 

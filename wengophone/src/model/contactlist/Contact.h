@@ -148,7 +148,7 @@ public:
 	 * @param the imContact to set. The given reference must stay valid during
 	 * the execution (this must be a reference to an IMContact of this Contact).
 	 */
-	void setPreferredIMContact(const IMContact & imContact) { _preferredIMContact = &imContact; contactModifiedEvent(*this); }
+	void setPreferredIMContact(const IMContact & imContact) { _preferredIMContact = (IMContact *)&imContact; contactModifiedEvent(*this); }
 
 	/**
 	 * Get the preferred IMContact.
@@ -156,7 +156,7 @@ public:
 	 * @return the preferred IMContact. If no IMContact has been set or no
 	 * IMContact is online, return NULL.
 	 */
-	const IMContact * getPreferredIMContact() const;
+	IMContact * getPreferredIMContact() const;
 
 	/**
 	 * Return the PresneceState of the Contact.
@@ -360,7 +360,7 @@ private:
 	std::string _otherEmail;
 	StreetAddress _streetAddress;
 	std::string _notes;
-	const IMContact * _preferredIMContact;
+	IMContact * _preferredIMContact;
 
 	EnumPresenceState::PresenceState _state;
 

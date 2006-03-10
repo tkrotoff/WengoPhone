@@ -30,6 +30,7 @@
 #include <string>
 #include <vector>
 
+class Contact;
 class IPhoneLine;
 class PhoneCall;
 class SipAccount;
@@ -206,11 +207,25 @@ public:
 	}
 
 	/**
+	 * Makes a call given a Contact.
+	 *
+	 * @param contact the Contact to call
+	 */
+	void makeCall(Contact & contact);
+
+	/**
 	 * Makes a call given a phone number.
 	 *
-	 * @param phoneNumber phone number to call
+	 * @param phoneNumber the phone number to call
 	 */
 	void makeCall(const std::string & phoneNumber);
+
+	/**
+	 * Start a instant messaging with a Contact.
+	 *  
+	 * @param contact the Contact to talk to
+	 */
+	void startIM(Contact & contact);
 
 	/**
 	 * Gets the active/current PhoneLine.

@@ -25,6 +25,7 @@
 #include <presentation/PContact.h>
 
 class PContact;
+class WengoPhone;
 
 class QtUser : QObject
 {
@@ -33,7 +34,7 @@ public:
 
 	enum SizeHint { UserSize = 22};
 
-	QtUser (PContact & pContact, QObject * parent = 0);
+	QtUser (PContact & pContact, WengoPhone & wengoPhone, QObject * parent = 0);
 
 	virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 	
@@ -109,6 +110,9 @@ protected:
 	QString _avatarPath;
 	
 	PContact & _pContact;
+
+	WengoPhone & _wengoPhone;
+
 };
 
 #endif
