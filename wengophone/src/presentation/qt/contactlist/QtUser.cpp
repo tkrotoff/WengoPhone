@@ -91,7 +91,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 		{
 */
 			px = spx->getPixmap(QtContactPixmap::ContactVideo);
-			if (haveVideo())
+			if (hasVideo())
 			{
 				x-=px.width();
 				painter->drawPixmap (x,r.top(),px);
@@ -99,7 +99,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 			else
 				x-=px.width();
 			px = spx->getPixmap(QtContactPixmap::ContactCall);
-			if (haveCall())
+			if (hasCall())
 			{
 				x-=px.width();
 				painter->drawPixmap (x,r.top(),px);
@@ -108,7 +108,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 				x-=px.width();
 				
 			px = spx->getPixmap(QtContactPixmap::ContactIM);
-			if (haveIM())
+			if (hasIM())
 			{
 				px = spx->getPixmap(QtContactPixmap::ContactIM);
 				x-=px.width();
@@ -175,12 +175,12 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	
 	
 	px = spx->getPixmap(QtContactPixmap::ContactVideo);
-	if (_pContact.haveVideo())
+	if (_pContact.hasVideo())
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
 			qDebug() << "Video clicked";
-			_pContact.placeVideoCall();
+			//_pContact.placeVideoCall();
 		}
 	}
 	else
@@ -188,24 +188,24 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 
 
 	px = spx->getPixmap(QtContactPixmap::ContactCall);		
-	if (_pContact.haveCall())
+	if (_pContact.hasCall())
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
 			qDebug() << "Call clicked";
-			_pContact.placeCall();
+			//_pContact.placeCall();
 		}
 	}
 	else
 		x-=px.width();
 
 	px = spx->getPixmap(QtContactPixmap::ContactIM);		
-	if (_pContact.haveIM())
+	if (_pContact.hasIM())
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
 			qDebug() << "IM clicked";
-			_pContact.startIM();
+			//_pContact.startIM();
 		}
 	}
 	else

@@ -79,7 +79,7 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter,QRect rect)
 	if ( _user->getStatus() != QtContactPixmap::ContactNotAvailable)
 	{
 		px = spx->getPixmap(QtContactPixmap::ContactVideo);
-		if (_user->haveVideo())
+		if (_user->hasVideo())
 		{
 			x-=px.width();
 			painter->drawPixmap (x,r.top(),px);
@@ -87,7 +87,7 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter,QRect rect)
 		else
 			x-=px.width();
 		px = spx->getPixmap(QtContactPixmap::ContactCall);
-		if (_user->haveCall())
+		if (_user->hasCall())
 		{
 			x-=px.width();
 			painter->drawPixmap (x,r.top(),px);
@@ -96,7 +96,7 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter,QRect rect)
 			x-=px.width();
 			
 		px = spx->getPixmap(QtContactPixmap::ContactIM);
-		if (_user->haveIM())
+		if (_user->hasIM())
 		{
 			px = spx->getPixmap(QtContactPixmap::ContactIM);
 			x-=px.width();

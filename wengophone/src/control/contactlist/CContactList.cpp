@@ -40,17 +40,42 @@ CContactList::CContactList(ContactList & contactList, CWengoPhone & cWengoPhone)
 
 	_contactList.contactGroupAddedEvent += boost::bind(&CContactList::contactGroupAddedEventHandler, this, _1, _2);
 	_contactList.contactGroupRemovedEvent += boost::bind(&CContactList::contactGroupRemovedEventHandler, this, _1, _2);
+	_contactList.contactAddedEvent += boost::bind(&CContactList::contactAddedEventHandler, this, _1, _2);
+	_contactList.contactRemovedEvent += boost::bind(&CContactList::contactRemovedEventHandler, this, _1, _2);
+}
+
+void CContactList::contactAddedEventHandler(ContactList & sender, Contact & contact) {
+	
+	//_pContactList->addContact(
+}
+
+void CContactList::contactRemovedEventHandler(ContactList & sender, Contact & contact) {
+	
 }
 
 void CContactList::contactGroupAddedEventHandler(ContactList & sender, ContactGroup & contactGroup) {
 	CContactGroup * cContactGroup = new CContactGroup(contactGroup, *this, _cWengoPhone);
 
-	LOG_DEBUG("contact group added: " + contactGroup.toString());
+	LOG_DEBUG("contact group added: " + contactGroup.getName());
 	_pContactList->addContactGroup(cContactGroup->getPresentation());
 	_pContactList->updatePresentation();
 }
 
 void CContactList::contactGroupRemovedEventHandler(ContactList & sender, ContactGroup & contactGroup) {
-	/*pContactList->removeContactGroup(contactGroup->getPresentation());
-	pContactList->updatePresentation();*/
+//	LOG_DEBUG("contact group removed: " + contactGroup.getName());
+//	_pContactList->removeContactGroup(contactGroup->getPresentation());
+//	_pContactList->updatePresentation();
+}
+
+StringList CContactList::getContactGroupStringList() const {
+	StringList result;
+
+	ContactList::ContactGroupSet contactGroupSet = _contactList.getContactGroupSet();
+	for (ContactList::ContactGroupSet::const_iterator it = contactGroupSet.begin();
+		it != contactGroupSet.end();
+		++it) {
+		result.add((*it).getName());
+	}
+
+	return result;
 }

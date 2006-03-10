@@ -71,14 +71,6 @@ void CWengoPhone::addWengoAccount(const std::string & login, const std::string &
 	_wengoPhone.addSipAccount(login, password, autoLogin);
 }
 
-void CWengoPhone::addContact(Contact * contact, const std::string & contactGroupName) {
-	_wengoPhone.addContact(contact, contactGroupName);
-}
-
-StringList CWengoPhone::getContactGroupStringList() const {
-	return _wengoPhone.getContactGroupStringList();
-}
-
 void CWengoPhone::showWengoAccount() const {
 	static const string URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php";
 	//TODO
@@ -118,7 +110,7 @@ void CWengoPhone::phoneLineCreatedEventHandler(WengoPhone & sender, IPhoneLine &
 }
 
 void CWengoPhone::contactListCreatedEventHandler(WengoPhone & sender, ContactList & contactList) {
-	static CContactList cContactList(contactList, *this);
+	_cContactList = new CContactList(contactList, *this);
 
 	LOG_DEBUG("CContactList created");
 }

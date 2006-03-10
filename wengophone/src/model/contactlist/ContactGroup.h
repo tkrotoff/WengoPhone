@@ -21,14 +21,11 @@
 #define CONTACTGROUP_H
 
 #include <Event.h>
-#include <Serializable.h>
-#include <List.h>
 
 #include <string>
 
 class Contact;
-class IMContact;
-class WengoPhone;
+class ContactList;
 
 /**
  * A group of contacts (i.e familly, friends ect...).
@@ -37,8 +34,10 @@ class WengoPhone;
  *
  * @ingroup model
  * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
-class ContactGroup : public Serializable {
+class ContactGroup {
+	friend class ContactList;
 public:
 
 	/**
@@ -46,7 +45,7 @@ public:
 	 *
 	 * @param sender ContactGroup modified/updated
 	 */
-	Event < void(ContactGroup & sender) > contactGroupModifiedEvent;
+	Event<void(ContactGroup & sender)> contactGroupModifiedEvent;
 
 	/**
 	 * A Contact has been added.
@@ -54,7 +53,7 @@ public:
 	 * @param sender this class
 	 * @param contact Contact added
 	 */
-	Event < void(ContactGroup & sender, Contact & contact) > contactAddedEvent;
+	Event<void(ContactGroup & sender, Contact & contact)> contactAddedEvent;
 
 	/**
 	 * A Contact has been removed.
@@ -62,27 +61,21 @@ public:
 	 * @param sender this class
 	 * @param contact Contact removed
 	 */
-	Event < void(ContactGroup & sender, Contact & contact) > contactRemovedEvent;
+	Event<void(ContactGroup & sender, Contact & contact)> contactRemovedEvent;
 
-	ContactGroup(const std::string & groupName, WengoPhone & wengoPhone);
+	ContactGroup(const std::string & groupName);
 
-	void setName(const std::string & groupName) {
-		_groupName = groupName;
+	ContactGroup(const ContactGroup & contactGroup);
+
+	void setName(const std::string & groupName);
+
+	std::string getName() const {
+		return _groupName;
 	}
 
 	std::string toString() const {
 		return _groupName;
 	}
-
-	/**
-	 * @see List::add()
-	 */
-	void addContact(Contact * contact);
-
-	/**
-	 * @see List::remove()
-	 */
-	bool removeContact(Contact * contact);
 
 	/**
 	 * Permits to use ContactGroup as an array.
@@ -94,28 +87,21 @@ public:
 	Contact * operator[](unsigned i) const;
 
 	/**
-	 * Get a Contact from a contact id.
-	 *
-	 * @param contactId the contact id
-	 * @return the Contact or NULL if not found
+	 * @return the number of Contact in this ContactGroup
 	 */
-	Contact * operator[](const std::string & contactId) const;
-	
+	unsigned size() const {
+		return _contactList.size();
+	}
+
 	/**
 	 * Compare two groups.
 	 *
 	 * @param contactGroup group to compare
 	 * @return true if equal
 	 */
-	bool operator==(const ContactGroup & contactGroup) const;
+	bool operator == (const ContactGroup & contactGroup) const;
 
-	/**
-	 * Find a Contact associated with the given IMContact.
-	 *
-	 * @param imContact the associated IMContact
-	 * @return the found Contact or NULL if not found
-	 */
-	Contact * findContact(const IMContact & imContact) const;
+	bool operator < (const ContactGroup & contactGroup) const;
 
 	std::string serialize();
 
@@ -124,25 +110,31 @@ public:
 private:
 
 	/**
-	 * @see Contact::newIMContactAddedEvent
+	 * Add a Contact to the ContactGroup.
+	 * 
+	 * Must only be called by ContactList
+	 * 
+	 * @param contact the Contact to add
 	 */
-	void newIMContactAddedEventHandler(Contact & sender, IMContact & imContact);
+	void addContact(Contact & contact);
 
 	/**
-	 * @see Contact::imContactRemovedEvent
+	 * Remove a Contact from the ContactGroup.
+	 * 
+	 * Must only be called by ContactList
+	 * 
+	 * @param contact the Contact to remove
 	 */
-	void imContactRemovedEventHandler(Contact & sender, IMContact & imContact);
-
+	void removeContact(Contact & contact);
+	
 	/** Defines the vector of Contact. */
-	typedef List<Contact *> Contacts;
+	typedef std::vector<Contact *> ContactVector;
 
 	/** List of Contact associated with the ContactGroup. */
-	Contacts _contactList;
+	ContactVector _contactList;
 
 	/** Name of the ContactGroup. */
 	std::string _groupName;
-
-	WengoPhone & _wengoPhone;
 
 };
 

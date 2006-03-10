@@ -39,6 +39,9 @@ CContact::CContact(Contact & contact, CContactGroup & cContactGroup, CWengoPhone
 	_cWengoPhone(cWengoPhone) {
 
 	_pContact = PFactory::getFactory().createPresentationContact(*this);
+
+	_contact.contactModifiedEvent += contactModifiedEvent;
+
 }
 
 void CContact::call() {
@@ -70,28 +73,16 @@ string CContact::getId() const {
 	return getDisplayName();
 }
 
-bool CContact::haveIM() const {
-	return _contact.haveIM();
+bool CContact::hasIM() const {
+	return _contact.hasIM();
 }
 
-bool CContact::haveCall() const {
-	return _contact.haveCall();
+bool CContact::hasCall() const {
+	return _contact.hasCall();
 }
 
-bool CContact::haveVideo() const {
-	return _contact.haveVideo();
-}
-
-void CContact::placeCall() {
-	_contact.placeCall();
-}
-
-void CContact::placeVideoCall(){
-	_contact.placeVideoCall();
-}
-
-void CContact::startIM() {
-	_contact.startIM();
+bool CContact::hasVideo() const {
+	return _contact.hasVideo();
 }
 
 EnumPresenceState::PresenceState CContact::getPresenceState() const {

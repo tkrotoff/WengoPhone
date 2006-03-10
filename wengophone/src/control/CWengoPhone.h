@@ -32,6 +32,7 @@ class PWengoPhone;
 class IPhoneLine;
 class CPhoneLine;
 class ContactList;
+class CContactList;
 class StringList;
 class WenboxPlugin;
 class IMHandler;
@@ -104,19 +105,9 @@ public:
 	void addWengoAccount(const std::string & login, const std::string & password, bool autoLogin);
 
 	/**
-	 * @see WengoPhone::addContact()
-	 */
-	void addContact(Contact * contact, const std::string & contactGroupName);
-
-	/**
 	 * @see WengoPhone::addIMAccount()
 	 */
 	void addIMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol);
-
-	/**
-	 * @see WengoPhone::getContactGroupStringList()
-	 */
-	StringList getContactGroupStringList() const;
 
 	/**
 	 * Opens a web browser and shows the Wengo account informations inside.
@@ -152,6 +143,15 @@ public:
 	 */
 	PhoneCall * getActivePhoneCall() const;
 
+	/**
+	 * Get the CContactList.
+	 * 
+	 * @return the CContactList
+	 */
+	CContactList & getCContactList() const {
+		return *_cContactList;
+	}
+
 private:
 
 	void presenceHandlerCreatedEventHandler(WengoPhone & sender, PresenceHandler & presenceHandler);
@@ -177,6 +177,9 @@ private:
 
 	/** Direct link to the presentation via an interface. */
 	PWengoPhone * _pWengoPhone;
+
+	CContactList * _cContactList;
+
 };
 
 #endif	//CWENGOPHONE_H

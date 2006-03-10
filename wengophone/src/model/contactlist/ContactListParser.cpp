@@ -30,6 +30,7 @@ using namespace std;
 ContactListParser::ContactListParser(ContactList & contactList,
 	WengoPhone & wengoPhone, const std::string & data) {
 
+/*
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
 
@@ -44,7 +45,7 @@ ContactListParser::ContactListParser(ContactList & contactList,
 		TiXmlElement * elem = node->ToElement();
 		if (elem) {
 			std::string contactGroupName = elem->Attribute("name");
-			ContactGroup * contactGroup = contactList[contactGroupName];
+			contactList.addContactGroup(contactGroupName);
 			if (!contactGroup) {
 				contactGroup = new ContactGroup(contactGroupName, wengoPhone);
 			}
@@ -54,4 +55,5 @@ ContactListParser::ContactListParser(ContactList & contactList,
 			contactGroup->unserialize(tmp);
 		}
 	}
+*/
 }

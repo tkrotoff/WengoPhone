@@ -22,6 +22,8 @@
 
 #include <imwrapper/EnumPresenceState.h>
 
+#include <Event.h>
+
 #include <string>
 
 class Contact;
@@ -36,6 +38,11 @@ class PContact;
  */
 class CContact {
 public:
+
+	/**
+	 * @see Contact::contactModifiedEvent
+	 */
+	Event<void (Contact & sender)> contactModifiedEvent;
 
 	CContact(Contact & contact, CContactGroup & cContactGroup, CWengoPhone & cWengoPhone);
 
@@ -53,17 +60,11 @@ public:
 
 	std::string getId() const;
 
-	bool haveIM() const;
+	bool hasIM() const;
 
-	bool haveCall() const;
+	bool hasCall() const;
 
-	bool haveVideo() const;
-
-	void placeCall();
-
-	void placeVideoCall();
-
-	void startIM();
+	bool hasVideo() const;
 
 	EnumPresenceState::PresenceState getPresenceState() const;
 

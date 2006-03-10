@@ -89,7 +89,7 @@ public:
 	 * @param groupName the group where we want to add the IMContact
 	 * @param imContact the IMContact to add
 	 */
-	void addIMContact(const std::string & groupName, IMContact & imContact);
+	void addIMContact(const std::string & groupName, const IMContact & imContact);
 
 	/**
 	 * Remotely deletes an IMContact.
@@ -97,7 +97,21 @@ public:
 	 * @param groupName the group if the IMContact
 	 * @param imContact the IMContact to remove
 	 */
-	void removeIMContact(const std::string & groupName, IMContact & imContact);
+	void removeIMContact(const std::string & groupName, const IMContact & imContact);
+
+	/**
+	 * Remotely adds a group.
+	 *
+	 * @param groupName the group name to add the contact in
+	 */
+	void addGroup(const std::string & groupName);
+
+	/**
+	 * Remotely deletes a group.
+	 *
+	 * @param groupName the group name of the contact
+	 */
+	void removeGroup(const std::string & groupName);
 
 private:
 

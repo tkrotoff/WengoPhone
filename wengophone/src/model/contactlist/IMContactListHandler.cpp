@@ -37,7 +37,7 @@ IMContactListHandler::~IMContactListHandler() {
 	}
 }
 
-void IMContactListHandler::addIMContact(const std::string & groupName, IMContact & imContact) {
+void IMContactListHandler::addIMContact(const std::string & groupName, const IMContact & imContact) {
 	IMContactListMap::const_iterator it = _imContactListMap.find(imContact.getIMAccount());
 
 	if (it != _imContactListMap.end()) {
@@ -48,7 +48,7 @@ void IMContactListHandler::addIMContact(const std::string & groupName, IMContact
 	}
 }
 
-void IMContactListHandler::removeIMContact(const std::string & groupName, IMContact & imContact) {
+void IMContactListHandler::removeIMContact(const std::string & groupName, const IMContact & imContact) {
 	IMContactListMap::const_iterator it = _imContactListMap.find(imContact.getIMAccount());
 
 	if (it != _imContactListMap.end()) {
@@ -114,5 +114,19 @@ void IMContactListHandler::contactMovedEventHandler(IMContactList & sender,
 		imContactMovedEvent(*this, groupName, imContact);
 	} else {
 		LOG_ERROR("this IMContact has not been added yet: " + contactId);
+	}
+}
+
+void IMContactListHandler::addGroup(const std::string & groupName) {
+	for (IMContactListMap::const_iterator it = _imContactListMap.begin();
+		it != _imContactListMap.end(); it++) {
+		(*it).second->addGroup(groupName);
+	}
+}
+
+void IMContactListHandler::removeGroup(const std::string & groupName) {
+	for (IMContactListMap::const_iterator it = _imContactListMap.begin();
+		it != _imContactListMap.end(); it++) {
+		(*it).second->removeGroup(groupName);
 	}
 }

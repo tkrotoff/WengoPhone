@@ -195,17 +195,6 @@ public:
 	void addIMAccount(const IMAccount & imAccount);
 
 	/**
-	 * Adds a Contact to the ContactList.
-	 *
-	 * A new Contact() should be done.
-	 * The Contact will be deleted if asked otherwise when the application will be closed.
-	 *
-	 * @param contact Contact to add to the ContactList
-	 * @param contactGroupName name of the ContactGroup where the Contact should be added
-	 */
-	void addContact(Contact * contact, std::string contactGroupName);
-
-	/**
 	 * Gets the list of PhoneLine.
 	 *
 	 * Only one PhoneLine is active at a time.
@@ -242,13 +231,6 @@ public:
 	WenboxPlugin & getWenboxPlugin() const;
 
 	/**
-	 * Gets the StringList representation of all the ContactGroup inside ContactList.
-	 *
-	 * @return ContactGroup list as a StringList
-	 */
-	StringList getContactGroupStringList() const;
-
-	/**
 	 * Terminates the model component thread i.e this thread.
 	 *
 	 * This method should be called when you exit definitly WengoPhone.
@@ -272,8 +254,12 @@ public:
 		return _imAccountHandler;
 	}
 
-	IMContactListHandler & getIMContactListHandler() {
+	IMContactListHandler & getIMContactListHandler() const {
 		return *_imContactListHandler;
+	}
+
+	ContactList & getContactList() const {
+		return *_contactList;
 	}
 
 	void setProxySettings(const std::string & proxyAddress, int proxyPort,
@@ -305,11 +291,6 @@ private:
 	 * @see addSipAccount()
 	 */
 	void addSipAccountThreadSafe(const std::string & login, const std::string & password, bool autoLogin);
-
-	/**
-	 * @see addContact()
-	 */
-	void addContactThreadSafe(Contact * contact, std::string contactGroupName);
 
 	/**
 	 * Creates and adds a new PhoneLine given a SipAccount.

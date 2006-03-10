@@ -37,11 +37,11 @@ public:
 
 	void mouseOn(const QString & userid);
 
-	bool haveIM(const QString & userid);
+	bool hasIM(const QString & userid);
 	
-	bool haveCall(const QString & userid);
+	bool hasCall(const QString & userid);
 	
-	bool haveVideo(const QString & userid);
+	bool hasVideo(const QString & userid);
 
 	QtUser * getUser(const QString & userid);
 	

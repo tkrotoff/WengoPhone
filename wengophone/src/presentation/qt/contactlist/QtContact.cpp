@@ -58,30 +58,22 @@ string QtContact::getId() const {
 	return _cContact.getId();
 }
 
-bool QtContact::haveIM() const {
-	return _cContact.haveIM();
+bool QtContact::hasIM() const {
+	return _cContact.hasIM();
 }
 
-bool QtContact::haveCall() const {
-	return _cContact.haveCall();
+bool QtContact::hasCall() const {
+	return _cContact.hasCall();
 }
 
-bool QtContact::haveVideo() const {
-	return _cContact.haveVideo();
-}
-
-void QtContact::placeCall() {
-	_cContact.placeCall();
-}
-
-void QtContact::placeVideoCall(){
-	_cContact.placeVideoCall();
-}
-
-void QtContact::startIM() {
-	_cContact.startIM();
+bool QtContact::hasVideo() const {
+	return _cContact.hasVideo();
 }
 
 EnumPresenceState::PresenceState QtContact::getPresenceState() const {
 	return _cContact.getPresenceState();
+}
+
+void QtContact::contactModifiedEventHandler(Contact & sender) {
+		updatePresentation();
 }

@@ -45,11 +45,11 @@ public:
 
 	void setUserName(const QString & uname);
 	
-	bool haveIM(){ return _pContact.haveIM();};
+	bool hasIM(){ return _pContact.hasIM();};
 
-	bool haveCall(){ return _pContact.haveCall();};
+	bool hasCall(){ return _pContact.hasCall();};
 
-	bool haveVideo(){ return _pContact.haveVideo();};
+	bool hasVideo(){ return _pContact.hasVideo();};
 	
 	void setMouseOn(bool value) { _mouseOn = value;};
 	

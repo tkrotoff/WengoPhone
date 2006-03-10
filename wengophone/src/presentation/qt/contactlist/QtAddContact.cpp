@@ -21,10 +21,12 @@
 
 #include "QtContactWidget.h"
 
+#include <control/CWengoPhone.h>
+#include <control/contactlist/CContactList.h>
+
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactList.h>
 #include <model/presence/PresenceHandler.h>
-#include <control/CWengoPhone.h>
 
 #include <Logger.h>
 
@@ -40,7 +42,7 @@ QtAddContact::QtAddContact(CWengoPhone & cWengoPhone, QWidget * parent)
 
 	_addContactWindow = WidgetFactory::create(":/forms/contactlist/AddContactWindow.ui", parent);
 
-	QStringList tmp = StringListConvert::toQStringList(_cWengoPhone.getContactGroupStringList());
+	QStringList tmp = StringListConvert::toQStringList(_cWengoPhone.getCContactList().getContactGroupStringList());
 	_qtContactWidget = new QtContactWidget(NULL, tmp, NULL);
 	QWidget * contactWidget = _qtContactWidget->getWidget();
 
@@ -60,13 +62,11 @@ void QtAddContact::showContactGroups() {
 }
 
 void QtAddContact::addContact() {
-	Contact * contact = new Contact(_cWengoPhone.getWengoPhone());
+	Contact & contact = _cWengoPhone.getWengoPhone().getContactList().createContact();
 
-	QString contactGroupName = _qtContactWidget->createContact(contact);
+	_qtContactWidget->createContact(contact);
 
 	((QDialog *) _addContactWindow)->accept();
 
-	LOG_DEBUG("contact: " + contactGroupName.toStdString() + contact->toString());
-
-	_cWengoPhone.addContact(contact, contactGroupName.toStdString());
+	LOG_DEBUG("contact: " + contact.toString());
 }

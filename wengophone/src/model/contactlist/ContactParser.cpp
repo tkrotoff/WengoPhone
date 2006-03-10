@@ -32,6 +32,7 @@
 using namespace std;
 
 ContactParser::ContactParser(Contact & contact, const std::string & data) {
+	/*
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
 
@@ -66,9 +67,11 @@ ContactParser::ContactParser(Contact & contact, const std::string & data) {
 		contact.addIMContact(imContact);
 		contact.setWengoPhoneId(text->Value());
 	}
+	*/
 }
 
 void ContactParser::parseIMAccount(Contact & contact, const TiXmlHandle & handle, const std::string & protocolId, EnumIMProtocol::IMProtocol protocol) {
+	/*
 	TiXmlNode * parentNode = handle.Node();
 	TiXmlNode * node = parentNode->IterateChildren(protocolId, NULL);
 
@@ -81,5 +84,6 @@ void ContactParser::parseIMAccount(Contact & contact, const TiXmlHandle & handle
 		}
 		node = parentNode->IterateChildren(protocolId, node);
 	}
+	*/
 }
 

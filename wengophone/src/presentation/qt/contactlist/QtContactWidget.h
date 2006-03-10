@@ -59,9 +59,8 @@ public:
 	 * Creates a new Contact by setting its first name, last name ect...
 	 *
 	 * @param contact Contact to be completed with first name, last name...
-	 * @return name of the ContactGroup where the Contact has to be created
 	 */
-	QString createContact(Contact * contact);
+	void createContact(Contact & contact);
 
 private:
 

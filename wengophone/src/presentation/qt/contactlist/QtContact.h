@@ -46,21 +46,17 @@ public:
 
 	std::string getId() const;
 
-	bool haveIM() const;
+	bool hasIM() const;
 
-	bool haveCall() const;
+	bool hasCall() const;
 
-	bool haveVideo() const;
-
-	void placeCall();
-
-	void placeVideoCall();
-
-	void startIM();
+	bool hasVideo() const;
 
 	EnumPresenceState::PresenceState getPresenceState() const;
 
 private:
+
+	void contactModifiedEventHandler(Contact & sender);
 
 	void initThreadSafe();
 

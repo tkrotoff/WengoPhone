@@ -133,10 +133,6 @@ void WengoPhone::makeCall(const std::string & phoneNumber) {
 	}
 }
 
-StringList WengoPhone::getContactGroupStringList() const {
-	return _contactList->toStringList();
-}
-
 void WengoPhone::terminate() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&WengoPhone::terminateThreadSafe, this));
@@ -183,26 +179,6 @@ void WengoPhone::addSipAccountThreadSafe(const std::string & login, const std::s
 
 	//Sends the HTTP request to the SSO
 	_wengoAccount->init();
-}
-
-void WengoPhone::addContact(Contact * contact, std::string contactGroupName) {
-	typedef ThreadEvent2<void (Contact *, std::string), Contact *, std::string> MyThreadEvent;
-	MyThreadEvent * event = new MyThreadEvent(boost::bind(&WengoPhone::addContactThreadSafe, this, _1, _2), contact, contactGroupName);
-	postEvent(event);
-}
-
-void WengoPhone::addContactThreadSafe(Contact * contact, std::string contactGroupName) {
-	ContactGroup * contactGroup = (*_contactList)[contactGroupName];
-
-	if (!contactGroup) {
-		//Creates a new ContactGroup
-		contactGroup = new ContactGroup(contactGroupName, *this);
-		_contactList->addContactGroup(contactGroup);
-	}
-
-	contactGroup->addContact(contact);
-
-	LOG_DEBUG("contact added: " + contactGroup->toString() + " " + contact->toString());
 }
 
 void WengoPhone::addPhoneLine(SipAccount & account) {

@@ -46,7 +46,7 @@ public:
 		return *this;
 	}
 
-	bool operator == (const StreetAddress & streetAddress) {
+	bool operator == (const StreetAddress & streetAddress) const {
 		return ((_street == streetAddress._street)
 			&& (_stateProvince == streetAddress._stateProvince)
 			&& (_city == streetAddress._city)

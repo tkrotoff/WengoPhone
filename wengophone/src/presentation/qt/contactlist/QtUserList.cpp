@@ -75,25 +75,25 @@ QtUser * QtUserList::getUser(const QString & userid)
 	return user;
 }
 
-bool QtUserList::haveIM(const QString & userid){
+bool QtUserList::hasIM(const QString & userid){
 	QtUser * user = _userList[userid];
 	if (user)
-		return user->haveIM();
+		return user->hasIM();
 	return false;
 }
 
-bool QtUserList::haveCall(const QString & userid){
+bool QtUserList::hasCall(const QString & userid){
 
 	QtUser * user = _userList[userid];
 	if (user)
-		return user->haveCall();
+		return user->hasCall();
 	return false;
 }
 	
-bool QtUserList::haveVideo(const QString & userid){
+bool QtUserList::hasVideo(const QString & userid){
 	QtUser * user = _userList[userid];
 	if (user)
-		return user->haveVideo();
+		return user->hasVideo();
 	return false;
 }
 

@@ -26,6 +26,8 @@ class ContactGroup;
 class PContactList;
 class CWengoPhone;
 
+#include <StringList.h>
+
 /**
  *
  * @ingroup control
@@ -40,7 +42,13 @@ public:
 		return _cWengoPhone;
 	}
 
+	StringList getContactGroupStringList() const;
+
 private:
+
+	void contactAddedEventHandler(ContactList & sender, Contact & contact);
+
+	void contactRemovedEventHandler(ContactList & sender, Contact & contact);
 
 	void contactGroupAddedEventHandler(ContactList & sender, ContactGroup & contactGroup);
 

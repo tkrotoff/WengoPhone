@@ -23,85 +23,52 @@
 #include "ContactGroupParser.h"
 #include "IMContactListHandler.h"
 
-#include <model/WengoPhone.h>
-
 #include <Logger.h>
 
-ContactGroup::ContactGroup(const std::string & groupName, WengoPhone & wengoPhone)
-	:  _wengoPhone(wengoPhone) {
-	_groupName = groupName;
+ContactGroup::ContactGroup(const std::string & groupName) 
+	: _groupName(groupName) {
 }
 
-void ContactGroup::addContact(Contact * contact) {
-	_contactList.add(contact);
-	contactAddedEvent(*this, *contact);
-	LOG_DEBUG("Contact added");
+ContactGroup::ContactGroup(const ContactGroup & contactGroup) 
+	: _groupName(contactGroup._groupName), _contactList(contactGroup._contactList) {
 }
 
-bool ContactGroup::removeContact(Contact * contact) {
-	bool ret = _contactList.remove(contact);
-
-	if (ret) {
-		contactRemovedEvent(*this, *contact);
-		LOG_DEBUG("Contact removed");
-	}
-
-	return ret;
+void ContactGroup::addContact(Contact & contact) {
+	_contactList.push_back(&contact);
+	contactAddedEvent(*this, contact);
+	LOG_DEBUG("Contact added to group " + _groupName);
 }
 
-/*unsigned ContactGroup::size() const {
-	return _contactList.size();
-}*/
-
-Contact * ContactGroup::operator[](unsigned i) const {
-	Contact * tmp = NULL;
-	try {
-		tmp = _contactList[i];
-	} catch (OutOfRangeException & e) {
-		LOG_DEBUG(e.what());
-		return NULL;
-	}
-	return tmp;
-}
-
-bool ContactGroup::operator==(const ContactGroup & contactGroup) const {
-	return _groupName == contactGroup._groupName;
-}
-
-Contact * ContactGroup::findContact(const IMContact & imContact) const {
-	for (register unsigned i = 0 ; i < _contactList.size() ; i++) {
-		if (_contactList[i]->hasIMContact(imContact)) {
-			return _contactList[i];
+void ContactGroup::removeContact(Contact & contact) {
+	for (ContactVector::iterator it = _contactList.begin();
+		it != _contactList.end();
+		++it) {
+		if ((*(*it)) == contact) {
+			contactRemovedEvent(*this, *(*it));
+			_contactList.erase(it);
+			break;
 		}
 	}
-
-	return NULL;
 }
 
-void ContactGroup::newIMContactAddedEventHandler(Contact & sender, IMContact & imContact) {
-	_wengoPhone.getIMContactListHandler().addIMContact(_groupName, imContact);
-}
-
-void ContactGroup::imContactRemovedEventHandler(Contact & sender, IMContact & imContact) {
-	_wengoPhone.getIMContactListHandler().removeIMContact(_groupName, imContact);
-}
-
-std::string ContactGroup::serialize() {
-	std::string data;
-
-	data += "<contactGroup name=\"" + _groupName + "\">\n";
-
-	for (unsigned int i = 0; i < _contactList.size(); i++) {
-		Contact * contact = _contactList[i];
-		data += contact->serialize();
+Contact * ContactGroup::operator[](unsigned i) const {
+	if ((i >= 0) || (i <= size())) {
+		return _contactList[i];
+	} else {
+		return NULL;
 	}
-
-	data += "</contactGroup>\n";
-
-	return data;
 }
 
-bool ContactGroup::unserialize(const std::string & data) {
-	ContactGroupParser parser(*this, _wengoPhone, data);
-	return true;
+bool ContactGroup::operator == (const ContactGroup & contactGroup) const {
+	return (_groupName == contactGroup._groupName);
 }
+
+bool ContactGroup::operator < (const ContactGroup & contactGroup) const {
+	return (_groupName < contactGroup._groupName);
+}
+
+void ContactGroup::setName(const std::string & groupName) {
+	_groupName = groupName;
+	contactGroupModifiedEvent(*this);
+}
+

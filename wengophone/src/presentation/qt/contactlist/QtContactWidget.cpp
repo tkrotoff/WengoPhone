@@ -101,43 +101,39 @@ void QtContactWidget::setContactGroupStringList(const QStringList & listContactG
 	_contactGroupComboBox->insertItems(0, listContactGroup);
 }
 
-QString QtContactWidget::createContact(Contact * contact) {
-	if (!contact) {
-		return QString::null;
-	}
-
-	contact->setFirstName(getFirstName().toStdString());
-	contact->setLastName(getLastName().toStdString());
-	contact->setSex(getSex());
+void QtContactWidget::createContact(Contact & contact) {
+	contact.setFirstName(getFirstName().toStdString());
+	contact.setLastName(getLastName().toStdString());
+	contact.setSex(getSex());
 	
 	QDateTime dateTime = getBirthdate();
-	contact->setBirthdate(Date(dateTime.date().day(), dateTime.date().month(), dateTime.date().year()));
+	contact.setBirthdate(Date(dateTime.date().day(), dateTime.date().month(), dateTime.date().year()));
 	
-	contact->setPicture(getPicture().toStdString());
-	contact->setWebsite(getWebsite().toStdString());
-	contact->setCompany(getCompany().toStdString());
-	contact->setWengoPhoneId(getWengoPhone().toStdString());
-	contact->setMobilePhone(getMobilePhone().toStdString());
-	contact->setHomePhone(getHomePhone().toStdString());
-	contact->setWorkPhone(getWorkPhone().toStdString());
-	contact->setOtherPhone(getOtherPhone().toStdString());
-	contact->setFax(getFax().toStdString());
-	contact->setPersonalEmail(getPersonalEmail().toStdString());
-	contact->setWorkEmail(getWorkEmail().toStdString());
-	contact->setOtherEmail(getOtherEmail().toStdString());
-	contact->setStreetAddress(getStreetAddress());
-	contact->setNotes(getNotes().toStdString());
+	contact.setPicture(getPicture().toStdString());
+	contact.setWebsite(getWebsite().toStdString());
+	contact.setCompany(getCompany().toStdString());
+	contact.setWengoPhoneId(getWengoPhone().toStdString());
+	contact.setMobilePhone(getMobilePhone().toStdString());
+	contact.setHomePhone(getHomePhone().toStdString());
+	contact.setWorkPhone(getWorkPhone().toStdString());
+	contact.setOtherPhone(getOtherPhone().toStdString());
+	contact.setFax(getFax().toStdString());
+	contact.setPersonalEmail(getPersonalEmail().toStdString());
+	contact.setWorkEmail(getWorkEmail().toStdString());
+	contact.setOtherEmail(getOtherEmail().toStdString());
+	contact.setStreetAddress(getStreetAddress());
+	contact.setNotes(getNotes().toStdString());
 
 	if (!getWengoPhone().isEmpty()) {
 		set<IMAccount *> list;
-		list = contact->getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		list = contact.getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
 		if (list.begin() != list.end()) {
-			contact->addIMContact(IMContact(*(*list.begin()),
+			contact.addIMContact(IMContact(*(*list.begin()),
 				getWengoPhone().toStdString()));
 		}
 	}
 
-	return _contactGroupComboBox->currentText();
+	contact.addToContactGroup(_contactGroupComboBox->currentText().toStdString());
 }
 
 void QtContactWidget::setFirstName(const QString & firstName) {

@@ -19,9 +19,9 @@
 
 #include "Contact.h"
 
-#include "ContactParser.h"
-
 #include <model/WengoPhone.h>
+#include <model/contactlist/ContactParser.h>
+#include <model/contactlist/ContactList.h>
 #include <model/presence/PresenceHandler.h>
 
 #include <imwrapper/IMAccount.h>
@@ -32,6 +32,29 @@
 
 #include <iostream>
 using namespace std;
+
+Contact::Contact(WengoPhone & wengoPhone)
+	: _wengoPhone(wengoPhone), _contactList(wengoPhone.getContactList()) {
+	_sex = SexUnknown;
+	_state = EnumPresenceState::PresenceStateOffline;
+	_blocked = false;
+	_preferredIMContact = NULL;
+}
+
+Contact::Contact(const Contact & contact)
+	: _wengoPhone(contact._wengoPhone), _contactList(contact._contactList) {
+	initialize(contact);
+}
+
+Contact::~Contact() {
+}	
+
+Contact & Contact::operator = (const Contact & contact) {
+	if (&contact != this) {
+		initialize(contact);
+	}
+	return *this;
+}
 
 string Contact::serialize() {
 	string result =
@@ -74,13 +97,11 @@ void Contact::initialize(const Contact & contact) {
 	_notes = contact._notes;
 	_state = contact._state;
 	_blocked = contact._blocked;
+	_preferredIMContact = contact._preferredIMContact;
 	_imContactSet = contact._imContactSet;
 }
 
-Contact::~Contact() {
-}
-
-bool Contact::operator == (const Contact & contact) {
+bool Contact::operator == (const Contact & contact) const {
 	return 	((_firstName == contact._firstName)
 		&& (_lastName == contact._lastName)
 		&& (_sex == contact._sex)
@@ -93,6 +114,7 @@ bool Contact::operator == (const Contact & contact) {
 		&& (_homePhone == contact._homePhone)
 		&& (_workPhone == contact._workPhone)
 		&& (_otherPhone == contact._otherPhone)
+		&& (_preferredNumber == contact._preferredNumber)
 		&& (_fax == contact._fax)
 		&& (_personalEmail == contact._personalEmail)
 		&& (_workEmail == contact._workEmail)
@@ -101,24 +123,31 @@ bool Contact::operator == (const Contact & contact) {
 		&& (_notes == contact._notes)
 		&& (_state == contact._state)
 		&& (_blocked == contact._blocked)
+		&& (_preferredIMContact == contact._preferredIMContact)
 		&& (_imContactSet == contact._imContactSet));
 }
 
 void Contact::addIMContact(const IMContact & imContact) {
-	//Check if IMContact already exists
-	if (_imContactSet.find(imContact) == _imContactSet.end()) {
-		_imContactSet.insert(imContact);
-		_wengoPhone.getPresenceHandler().subscribeToPresenceOf(*_imContactSet.find(imContact));
-		newIMContactAddedEvent(*this, (IMContact &)*_imContactSet.find(imContact));
+	_contactList.addIMContact(*this, imContact);
+}
+
+void Contact::removeIMContact(const IMContact & imContact) {
+	_contactList.removeIMContact(*this, imContact);
+}
+
+void Contact::_addIMContact(const IMContact & imContact) {
+	pair<IMContactSet::const_iterator, bool> result = _imContactSet.insert(imContact);
+
+	if (result.second) {
+		_wengoPhone.getPresenceHandler().subscribeToPresenceOf(*result.first);
 		contactModifiedEvent(*this);
 	}
 }
 
-void Contact::removeIMContact(const IMContact & imContact) {
+void Contact::_removeIMContact(const IMContact & imContact) {
 	IMContactSet::iterator it = _imContactSet.find(imContact);
 
 	if (it != _imContactSet.end()) {
-		imContactRemovedEvent(*this, (IMContact &)*it);
 		contactModifiedEvent(*this);
 		_imContactSet.erase(it);
 	}
@@ -134,6 +163,26 @@ bool Contact::hasIMContact(const IMContact & imContact) const {
 
 IMContact & Contact::getIMContact(const IMContact & imContact) const {
 	return (IMContact &)*_imContactSet.find(imContact);
+}
+
+void Contact::addToContactGroup(const std::string & groupName) {
+	_contactList.addToContactGroup(groupName, *this);
+}
+
+void Contact::removeFromContactGroup(const std::string & groupName) {
+	_contactList.removeFromContactGroup(groupName, *this);	
+}
+
+void Contact::_addToContactGroup(const std::string & groupName) {
+	_contactGroupSet.insert(groupName);
+}
+
+void Contact::_removeFromContactGroup(const std::string & groupName) {
+	ContactGroupSet::const_iterator it = _contactGroupSet.find(groupName);
+
+	if (it != _contactGroupSet.end()) {
+		_contactGroupSet.erase(it);
+	}
 }
 
 void Contact::block() {
@@ -162,12 +211,13 @@ string Contact::imContactsToString() {
 	return result;
 }
 
-bool Contact::haveIM() const {
+bool Contact::hasIM() const {
 	return (getPresenceState() != EnumPresenceState::PresenceStateOffline);
 }
 
-bool Contact::haveCall() const {
-	if (wengoIsAvailable()
+bool Contact::hasCall() const {
+	if (!_preferredNumber.empty() 
+		|| wengoIsAvailable()
 		|| !_mobilePhone.empty()
 		|| !_homePhone.empty()) {
 		return true;
@@ -176,39 +226,48 @@ bool Contact::haveCall() const {
 	}
 }
 
-bool Contact::haveVideo() const {
-	//FIXME: can we check if we can place a video call
+bool Contact::hasVideo() const {
 	return wengoIsAvailable();
 }
 
-void Contact::placeCall() {
-	if (wengoIsAvailable()) {
-		_wengoPhone.makeCall(_wengoPhoneId);
+std::string Contact::getPreferredNumber() const {
+	string result;
+	
+	if (!_preferredNumber.empty()) {
+		result = _preferredNumber;
+	} else if (wengoIsAvailable()) {
+		result = _wengoPhoneId;
 	} else if (!_mobilePhone.empty()) {
-		_wengoPhone.makeCall(_mobilePhone);
+		result = _mobilePhone;
 	} else if (!_homePhone.empty()) {
-		_wengoPhone.makeCall(_homePhone);
+		result = _homePhone;
+	} else if (!_workPhone.empty()) {
+		result = _workPhone;
+	} else if (!_otherPhone.empty()) {
+		result = _otherPhone;
 	}
+
+	return result;
 }
 
-void Contact::placeVideoCall() {
-	if (wengoIsAvailable()) {
-		_wengoPhone.makeCall(_wengoPhoneId);
-	}
-}
+const IMContact * Contact::getPreferredIMContact() const {
+	const IMContact * result = NULL;
 
-void Contact::startIM() {
-	LOG_DEBUG("start a chat with " + _firstName);
-	for (IMContactSet::const_iterator it = _imContactSet.begin() ;
-		it != _imContactSet.end() ;
-		it++) {
-		if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
-			IMContactSet list;
-			list.insert((*it));
-			_wengoPhone.getChatHandler().createSession((*it).getIMAccount(), list);
-			break;
-		}
+	if (_preferredIMContact != NULL) {
+		result = _preferredIMContact;
+	} else {
+		// Look for a connected IMContact
+		for (IMContactSet::const_iterator it = _imContactSet.begin() ;
+			it != _imContactSet.end() ;
+			it++) {
+			if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
+				return &(*it);
+				break;
+			}
+		}	
 	}
+
+	return result;
 }
 
 EnumPresenceState::PresenceState Contact::getPresenceState() const {
@@ -246,3 +305,8 @@ bool Contact::wengoIsAvailable() const {
 
 	return false;
 }
+
+void Contact::moveToGroup(const std::string & to, const std::string & from) {
+	_contactList.moveContactToGroup(*this, to, from);
+}
+
