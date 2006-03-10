@@ -226,23 +226,18 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 	EnumPresenceState::PresenceState state,
 	const std::string & note, const IMContact & imContact) {
 
-	for (Contacts::const_iterator it = _contacts.begin();
-		it != _contacts.end();
-		++it) {
-		if ((*it).hasIMContact(imContact)) {
-			(*it).getIMContact(imContact).setPresenceState(state);
-			return;
-		}
-	}
-	
-	// If ContactList is empty or no asssociated contact IMContact found, we create
-	// one.
-	LOG_INFO("adding a new IMContact:" + imContact.getContactId());
-	const string groupName = "Default";
 
-	Contact & contact = createContact();
-	contact._addIMContact(imContact);
-	_addToContactGroup(groupName, contact);
+	// Find the Contact that owns the IMContact. Creating a new one if needed
+	Contact * contact = findContactThatOwns(imContact);
+	if (!contact) {
+		LOG_INFO("adding a new IMContact:" + imContact.getContactId());
+		const string groupName = "Default";
+		contact = &(createContact());
+		contact->_addIMContact(imContact);
+		_addToContactGroup(groupName, *contact);
+	}
+
+	contact->getIMContact(imContact).setPresenceState(state);
 }
 
 void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,
