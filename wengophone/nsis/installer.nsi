@@ -3,14 +3,14 @@
  *
  * If you add a global variable, declare it here as commented.
  */
-!define PRODUCT_VERSION "0.11"
+;!define PRODUCT_VERSION "0.11"
+
 ;!define DEBUG
-!define BUILD_DIR "..\..\release-symbols\"
-
+;!define BUILD_DIR "..\..\release-symbols\"
 ; HM NIS Edit Wizard helper defines
-!define PRODUCT_NAME "WengoPhone"
+;!define PRODUCT_NAME "WengoPhone"
 
-!define PRODUCT_PUBLISHER ${PRODUCT_NAME}
+!define PRODUCT_PUBLISHER "${PRODUCT_NAME}"
 !define PRODUCT_WEB_SITE "http://www.wengo.com"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\qtwengophone.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"

@@ -522,7 +522,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		self.__consoleArguments = {}
 
 		#Aliases, see Scons.Alias()
-		#self.__aliases = {}
+		self.__aliases = {}
 
 		#By default warnings are activated
 		self.__activeWarnings()
@@ -533,7 +533,14 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		#MacOS X app template path
 		self.__macOSXTemplatePath = None
-
+	
+	def WengoAlias(self, alias_name, target):
+		self.Alias(alias_name, target)
+		self.__aliases[alias_name] = target
+		
+	def WengoGetAlias(self, alias_name):
+		return self.__aliases.get(alias_name, None)
+			
 	def isReleaseMode(self):
 		"""
 		Checks if the compilation is done in release mode.
