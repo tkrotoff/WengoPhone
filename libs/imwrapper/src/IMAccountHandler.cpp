@@ -36,10 +36,10 @@ set<IMAccount *> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMPro
 }
 
 std::string IMAccountHandler::serialize() {
-	
+	return "";
 }
 
 bool IMAccountHandler::unserialize(const std::string & data) {
-	
+	return false;
 }
 
