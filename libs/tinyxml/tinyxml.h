@@ -22,7 +22,6 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
-#define TIXML_USE_STL
 
 #ifndef TINYXML_INCLUDED
 #define TINYXML_INCLUDED
@@ -44,13 +43,6 @@ distribution.
 #define DEBUG
 #endif
 
-#if defined( DEBUG ) && defined( _MSC_VER )
-#include <windows.h>
-#define TIXML_LOG OutputDebugString
-#else
-#define TIXML_LOG printf
-#endif
-
 #ifdef TIXML_USE_STL
 	#include <string>
  	#include <iostream>
@@ -70,7 +62,11 @@ distribution.
 
 #define TIXML_SAFE		// TinyXml isn't fully buffer overrun protected, safe code. This is work in progress.
 #ifdef TIXML_SAFE
-	#if defined(_MSC_VER) && (_MSC_VER >= 1200 )
+	#if defined(_MSC_VER) && (_MSC_VER >= 1400 )
+		// Microsoft visual studio, version 2005 and higher.
+		#define TIXML_SNPRINTF _snprintf_s
+		#define TIXML_SNSCANF  _snscanf_s
+	#elif defined(_MSC_VER) && (_MSC_VER >= 1200 )
 		// Microsoft visual studio, version 6 and higher.
 		//#pragma message( "Using _sn* functions." )
 		#define TIXML_SNPRINTF _snprintf
@@ -94,7 +90,7 @@ class TiXmlParsingData;
 
 const int TIXML_MAJOR_VERSION = 2;
 const int TIXML_MINOR_VERSION = 4;
-const int TIXML_PATCH_VERSION = 2;
+const int TIXML_PATCH_VERSION = 3;
 
 /*	Internal structure for tracking location of items 
 	in the XML file.
@@ -248,6 +244,12 @@ protected:
 	inline static bool	IsWhiteSpace( char c )		
 	{ 
 		return ( isspace( (unsigned char) c ) || c == '\n' || c == '\r' ); 
+	}
+	inline static bool	IsWhiteSpace( int c )
+	{
+		if ( c < 256 )
+			return IsWhiteSpace( (char) c );
+		return false;	// Again, only truly correct for English/Latin...but usually works.
 	}
 
 	virtual void StreamOut (TIXML_OSTREAM *) const = 0;
@@ -470,11 +472,7 @@ public:
 
     #ifdef TIXML_USE_STL
 	/// STL std::string form.
-	void SetValue( const std::string& _value )    
-	{	  
-		StringToBuffer buf( _value );
-		SetValue( buf.buffer ? buf.buffer : "" );    	
-	}	
+	void SetValue( const std::string& _value )	{ value = _value; }
 	#endif
 
 	/// Delete all the children of this node. Does not affect 'this'.
@@ -634,19 +632,19 @@ public:
 	/// Returns true if this node has no children.
 	bool NoChildren() const						{ return !firstChild; }
 
-	const TiXmlDocument* ToDocument()	const		{ return ( this && type == DOCUMENT ) ? (const TiXmlDocument*) this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
-	const TiXmlElement*  ToElement() const			{ return ( this && type == ELEMENT  ) ? (const TiXmlElement*)  this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
-	const TiXmlComment*  ToComment() const			{ return ( this && type == COMMENT  ) ? (const TiXmlComment*)  this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
-	const TiXmlUnknown*  ToUnknown() const			{ return ( this && type == UNKNOWN  ) ? (const TiXmlUnknown*)  this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
-	const TiXmlText*	   ToText()    const		{ return ( this && type == TEXT     ) ? (const TiXmlText*)     this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
-	const TiXmlDeclaration* ToDeclaration() const	{ return ( this && type == DECLARATION ) ? (const TiXmlDeclaration*) this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
+	virtual const TiXmlDocument*    ToDocument()    const { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
+	virtual const TiXmlElement*     ToElement()     const { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
+	virtual const TiXmlComment*     ToComment()     const { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
+	virtual const TiXmlUnknown*     ToUnknown()     const { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
+	virtual const TiXmlText*        ToText()        const { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
+	virtual const TiXmlDeclaration* ToDeclaration() const { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
 
-	TiXmlDocument* ToDocument()			{ return ( this && type == DOCUMENT ) ? (TiXmlDocument*) this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
-	TiXmlElement*  ToElement()			{ return ( this && type == ELEMENT  ) ? (TiXmlElement*)  this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
-	TiXmlComment*  ToComment()			{ return ( this && type == COMMENT  ) ? (TiXmlComment*)  this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
-	TiXmlUnknown*  ToUnknown()			{ return ( this && type == UNKNOWN  ) ? (TiXmlUnknown*)  this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
-	TiXmlText*	   ToText()   			{ return ( this && type == TEXT     ) ? (TiXmlText*)     this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
-	TiXmlDeclaration* ToDeclaration()	{ return ( this && type == DECLARATION ) ? (TiXmlDeclaration*) this : 0; } ///< Cast to a more defined type. Will return null not of the requested type.
+	virtual TiXmlDocument*          ToDocument()    { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
+	virtual TiXmlElement*           ToElement()	    { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
+	virtual TiXmlComment*           ToComment()     { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
+	virtual TiXmlUnknown*           ToUnknown()	    { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
+	virtual TiXmlText*	            ToText()        { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
+	virtual TiXmlDeclaration*       ToDeclaration() { return 0; } ///< Cast to a more defined type. Will return null if not of the requested type.
 
 	/** Create an exact duplicate of this node and return it. The memory must be deleted
 		by the caller. 
@@ -729,6 +727,9 @@ public:
 	int				IntValue() const;									///< Return the value of this attribute, converted to an integer.
 	double			DoubleValue() const;								///< Return the value of this attribute, converted to a double.
 
+	// Get the tinyxml string representation
+	const TIXML_STRING& NameTStr() const { return name; }
+
 	/** QueryIntValue examines the value string. It is an alternative to the
 		IntValue() method with richer error checking.
 		If the value is an integer, it is stored in 'value' and 
@@ -750,17 +751,9 @@ public:
 
     #ifdef TIXML_USE_STL
 	/// STL std::string form.
-	void SetName( const std::string& _name )	
-	{	
-		StringToBuffer buf( _name );
-		SetName ( buf.buffer ? buf.buffer : "error" );	
-	}
+	void SetName( const std::string& _name )	{ name = _name; }	
 	/// STL std::string form.	
-	void SetValue( const std::string& _value )	
-	{	
-		StringToBuffer buf( _value );
-		SetValue( buf.buffer ? buf.buffer : "error" );	
-	}
+	void SetValue( const std::string& _value )	{ value = _value; }
 	#endif
 
 	/// Get the next sibling attribute in the DOM. Returns null at end.
@@ -825,8 +818,8 @@ public:
 	const TiXmlAttribute* Last() const		{ return ( sentinel.prev == &sentinel ) ? 0 : sentinel.prev; }
 	TiXmlAttribute* Last()					{ return ( sentinel.prev == &sentinel ) ? 0 : sentinel.prev; }
 
-	const TiXmlAttribute*	Find( const char * name ) const;
-	TiXmlAttribute*	Find( const char * name );
+	const TiXmlAttribute*	Find( const TIXML_STRING& name ) const;
+	TiXmlAttribute*	Find( const TIXML_STRING& name );
 
 private:
 	//*ME:	Because of hidden/disabled copy-construktor in TiXmlAttribute (sentinel-element),
@@ -913,20 +906,9 @@ public:
 	int QueryDoubleAttribute( const std::string& name, double* _value ) const { return QueryDoubleAttribute( name.c_str(), _value ); }
 
 	/// STL std::string form.
-	void SetAttribute( const std::string& name, const std::string& _value )	
-	{	
-		StringToBuffer n( name );
-		StringToBuffer v( _value );
-		if ( n.buffer && v.buffer )
-			SetAttribute (n.buffer, v.buffer );	
-	}	
+	void SetAttribute( const std::string& name, const std::string& _value );
 	///< STL std::string form.
-	void SetAttribute( const std::string& name, int _value )	
-	{	
-		StringToBuffer n( name );
-		if ( n.buffer )
-			SetAttribute (n.buffer, _value);	
-	}	
+	void SetAttribute( const std::string& name, int _value );
 	#endif
 
 	/** Sets an attribute of name to a given value. The attribute
@@ -995,6 +977,9 @@ public:
 	*/
 	virtual const char* Parse( const char* p, TiXmlParsingData* data, TiXmlEncoding encoding );
 
+	virtual const TiXmlElement*     ToElement()     const { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
+	virtual TiXmlElement*           ToElement()	          { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
+	
 protected:
 
 	void CopyTo( TiXmlElement* target ) const;
@@ -1039,6 +1024,9 @@ public:
 						 returns: next char past '>'
 	*/
 	virtual const char* Parse( const char* p, TiXmlParsingData* data, TiXmlEncoding encoding );
+
+	virtual const TiXmlComment*  ToComment() const { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
+	virtual TiXmlComment*  ToComment() { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
 
 protected:
 	void CopyTo( TiXmlComment* target ) const;
@@ -1095,6 +1083,9 @@ public:
 	void SetCDATA( bool _cdata )	{ cdata = _cdata; }
 
 	virtual const char* Parse( const char* p, TiXmlParsingData* data, TiXmlEncoding encoding );
+
+	virtual const TiXmlText* ToText() const { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
+	virtual TiXmlText*       ToText()       { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
 
 protected :
 	///  [internal use] Creates a new Element and returns it.
@@ -1163,6 +1154,9 @@ public:
 
 	virtual const char* Parse( const char* p, TiXmlParsingData* data, TiXmlEncoding encoding );
 
+	virtual const TiXmlDeclaration* ToDeclaration() const { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
+	virtual TiXmlDeclaration*       ToDeclaration()       { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
+
 protected:
 	void CopyTo( TiXmlDeclaration* target ) const;
 	// used to be public
@@ -1201,6 +1195,9 @@ public:
 	virtual void Print( FILE* cfile, int depth ) const;
 
 	virtual const char* Parse( const char* p, TiXmlParsingData* data, TiXmlEncoding encoding );
+
+	virtual const TiXmlUnknown*     ToUnknown()     const { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
+	virtual TiXmlUnknown*           ToUnknown()	    { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
 
 protected:
 	void CopyTo( TiXmlUnknown* target ) const;
@@ -1248,6 +1245,14 @@ public:
 	bool LoadFile( const char * filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
 	/// Save a file using the given filename. Returns true if successful.
 	bool SaveFile( const char * filename ) const;
+	/** Load a file using the given FILE*. Returns true if successful. Note that this method
+		doesn't stream - the entire object pointed at by the FILE*
+		will be interpreted as an XML file. TinyXML doesn't stream in XML from the current
+		file location. Streaming may be added in the future.
+	*/
+	bool LoadFile( FILE*, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
+	/// Save a file using the given FILE*. Returns true if successful.
+	bool SaveFile( FILE* ) const;
 
 	#ifdef TIXML_USE_STL
 	bool LoadFile( const std::string& filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING )			///< STL std::string version.
@@ -1345,6 +1350,9 @@ public:
 	virtual void Print( FILE* cfile, int depth = 0 ) const;
 	// [internal use]
 	void SetError( int err, const char* errorLocation, TiXmlParsingData* prevData, TiXmlEncoding encoding );
+
+	virtual const TiXmlDocument*    ToDocument()    const { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
+	virtual TiXmlDocument*          ToDocument()          { return this; } ///< Cast to a more defined type. Will return null not of the requested type.
 
 protected :
 	virtual void StreamOut ( TIXML_OSTREAM * out) const;

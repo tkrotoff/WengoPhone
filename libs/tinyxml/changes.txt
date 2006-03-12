@@ -212,3 +212,15 @@ Changes in version 2.1.5
 - Fixed CDATA output formatting
 - Fixed memory allocators in TinyString to work with overloaded new/delete
 
+2.4.2
+- solosnake pointed out that TIXML_LOG causes problems on an XBOX. The definition in the header
+  was superflous and was moved inside of DEBUG_PARSING
+
+2.4.3
+- Fixed a test bug that caused a crash in 'xmltest'. TinyXML was fine, but it isn't good
+  to ship with a broken test suite.
+- Started converting some functions to not cast between std::string and const char* 
+  quite as often.
+- Added FILE* versions of the document loads - good suggestion from Wade Brainerd
+- Empty documents might not always return the errors they should. [1398915] Thanks to igor v.
+- Added some asserts for multiply adding a node, regardng bug [1391937] suggested by Paco Arjonilla.

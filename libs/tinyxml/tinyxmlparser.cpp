@@ -27,6 +27,14 @@ distribution.
 #include <stddef.h>
 
 //#define DEBUG_PARSER
+#if defined( DEBUG_PARSER )
+#	if defined( DEBUG ) && defined( _MSC_VER )
+#		include <windows.h>
+#		define TIXML_LOG OutputDebugString
+#	else
+#		define TIXML_LOG printf
+#	endif
+#endif
 
 // Note tha "PutString" hardcodes the same list. This
 // is less flexible than it appears. Changing the entries
@@ -1116,7 +1124,7 @@ const char* TiXmlElement::Parse( const char* p, TiXmlParsingData* data, TiXmlEnc
 			}
 
 			// Handle the strange case of double attributes:
-			TiXmlAttribute* node = attributeSet.Find( attrib->Name() );
+			TiXmlAttribute* node = attributeSet.Find( attrib->NameTStr() );
 			if ( node )
 			{
 				node->SetValue( attrib->Value() );
