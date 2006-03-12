@@ -4,12 +4,13 @@
  * If you add a global variable, declare it here as commented.
  */
 ;!define PRODUCT_VERSION "0.11"
-
 ;!define DEBUG
 ;!define BUILD_DIR "..\..\release-symbols\"
-; HM NIS Edit Wizard helper defines
 ;!define PRODUCT_NAME "WengoPhone"
+;!define INSTALLER_NAME "WengoPhone-setup-0.13.exe"
+;!define QTDIR "C:\Qt\4.4.1\"
 
+; HM NIS Edit Wizard helper defines
 !define PRODUCT_PUBLISHER "${PRODUCT_NAME}"
 !define PRODUCT_WEB_SITE "http://www.wengo.com"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\qtwengophone.exe"
@@ -66,12 +67,8 @@ LicenseData $(license)
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 
-/** Changes the name of the setup depending if we are in debug or release mode. */
-!ifdef DEBUG
-	OutFile "${PRODUCT_NAME}-setup-dbg-${PRODUCT_VERSION}.exe"
-!else
-	OutFile "${PRODUCT_NAME}-setup-${PRODUCT_VERSION}.exe"
-!endif
+/** Installer name (e.g. WengoPhone-setup-0.13.exe). */
+OutFile "${INSTALLER_NAME}"
 
 !include "isUserAdmin.nsi"
 !include "writeToFile.nsi"

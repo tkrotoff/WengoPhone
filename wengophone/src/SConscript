@@ -26,10 +26,12 @@ const char * WengoPhoneBuildId::SOFTPHONE_NAME = "%(sofphoneName)s";
 
 WengoPhoneBuildId = {
 	'buildId': WengoGetCurrentDateTime(),
-	'version': '2.0',
+	'version': '0.13',
 	'revision': WengoGetSubversionRevision(),
 	'sofphoneName': 'wengo'
 }
+
+WengoSetVariable('WengoPhoneBuildId', WengoPhoneBuildId)
 
 sources = [
 	env.WengoCreateFile('WengoPhoneBuildId.cpp', WengoPhoneBuildIdTemplate, WengoPhoneBuildId),

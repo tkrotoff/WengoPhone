@@ -1,64 +1,29 @@
-import sys, os, popen2
+import os
 
 env = WengoGetEnvironment()
-nsis_env = env.Copy()
-
-nsis_scripts = [
-    "files_install.nsi",
-    "files_install_debug.nsi",
-    "files_install_release.nsi",
-    "files_uninstall.nsi",
-    "isUserAdmin.nsi",
-    "writeToFile.nsi",
-]
-qt_lib_dir = None
-if os.path.exists(os.path.join(os.environ['QTDIR'], 'lib', 'QtCore4.dll')):
-	qt_lib_dir = os.path.join(os.environ['QTDIR'], 'lib')
-else:
-	qt_lib_dir = os.path.join(os.environ['QTDIR'], 'bin')
-nsis_dlls = [
-    "dll/dbghelp.dll",
-    "c:\windows\system32\msvcp71d.dll",
-    "c:\windows\system32\msvcr71d.dll",
-    os.path.join(qt_lib_dir,"QtCore4.dll"),
-    os.path.join(qt_lib_dir,"QtGui4.dll"),
-    os.path.join(qt_lib_dir,"QtXml4.dll"),
-    os.path.join(qt_lib_dir,"QtSvg4.dll"),
-    os.path.join(qt_lib_dir,"QtDesigner4.dll"),
-    "c:\windows\system32\msvcp71.dll",
-    "c:\windows\system32\msvcr71.dll",
-]
-
-if WengoDebugMode():
-	compilation_mode = "debug"
-elif WengoReleaseMode():
-	compilation_mode = "release"
-else:
-	compilation_mode = "release-symbols"
-	
-installer_tag = WengoGetConsoleArgument("installer-tag")
-if installer_tag == "":
-    installer_tag = WengoGetVariable("WENGOPHONE_VER_STRING")
-    
-if installer_tag != "" and installer_tag != None:
-    installer_name = "WengoSetup-" + compilation_mode + "-" + WengoGetVariable("WENGOPHONE_ID") + "-TAGGED-AS-%s.exe" % installer_tag
-else:
-    installer_name = "WengoSetup-" + compilation_mode + "-" + ".exe"
 
 nsis_defines = {}
-nsis_defines["GENERATED_INSTALLER_NAME"] = installer_name
-nsis_defines["GENERATED_INSTALLER_PATH"] = "."
-nsis_defines["PRODUCT_VERSION"] = '0.12'
-nsis_defines["BUILD_DIR"] = nsis_env.WengoGetRootBuildDir()
-nsis_defines["PRODUCT_NAME"] = 'WengoPhone NG'
-nsis_defines["QTDIR"] = os.environ['QTDIR']
+WengoPhoneBuildId = WengoGetVariable('WengoPhoneBuildId')
+nsis_defines['PRODUCT_VERSION'] = str(WengoPhoneBuildId['buildId'])
+nsis_defines['BUILD_DIR'] = env.WengoGetRootBuildDir()
+nsis_defines['PRODUCT_NAME'] = 'WengoPhoneNG'
+nsis_defines['QTDIR'] = os.environ['QTDIR']
 
-if compilation_mode == "debug":
-    nsis_defines["DEBUG"] = ""
+if WengoDebugMode():
+	compilation_mode = 'dbg-'
+	nsis_defines['DEBUG'] = ''
+else:
+	compilation_mode = ''
 
-nsis_env["NSISDEFINES"] = nsis_defines
+installer_tag = WengoGetConsoleArgument('installer-tag')
+if installer_tag != '' and installer_tag != None:
+	installer_name = nsis_defines['PRODUCT_NAME'] + '-setup-' + compilation_mode + nsis_defines['PRODUCT_VERSION'] + '-%s.exe' % installer_tag
+else:
+	installer_name = nsis_defines['PRODUCT_NAME'] + '-setup-' + compilation_mode + nsis_defines['PRODUCT_VERSION'] + '.exe'
+nsis_defines['INSTALLER_NAME'] = installer_name
 
-nsis_inst = nsis_env.Installer("installer")
-nsis_env.Depends(nsis_inst, nsis_scripts)
-nsis_env.Depends(nsis_inst, nsis_dlls)
-nsis_env.WengoAlias("qtwengophone-nsis-installer", nsis_inst)
+env['NSISDEFINES'] = nsis_defines
+
+nsis_inst = env.Installer('installer')
+
+env.Alias('qtwengophone-nsis-installer', nsis_inst)

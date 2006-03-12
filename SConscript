@@ -30,9 +30,9 @@ projects = [
 	'libs/sipwrapper',
 	'libs/imwrapper/src/gaim',
 	'libs/imwrapper/src/multiim',
-	'wengophone/nsis',
 	'libs/imwrapper/src/null',
 	'wengophone',
+	'wengophone/nsis',
 ]
 
 SConscript(dirs = projects)

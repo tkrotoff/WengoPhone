@@ -522,7 +522,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		self.__consoleArguments = {}
 
 		#Aliases, see Scons.Alias()
-		self.__aliases = {}
+		#self.__aliases = {}
 
 		#By default warnings are activated
 		self.__activeWarnings()
@@ -533,14 +533,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		#MacOS X app template path
 		self.__macOSXTemplatePath = None
-	
-	def WengoAlias(self, alias_name, target):
-		self.Alias(alias_name, target)
-		self.__aliases[alias_name] = target
-		
-	def WengoGetAlias(self, alias_name):
-		return self.__aliases.get(alias_name, None)
-			
+
 	def isReleaseMode(self):
 		"""
 		Checks if the compilation is done in release mode.
@@ -1635,19 +1628,23 @@ def WengoOSPosix():
 
 def WengoArchX86():
 	"""
-	Check if the architecture is compatible with X86.
+	Checks if the architecture is compatible with X86.
+
 	@rtype boolean
 	@return true if the architecture used is compatible with x86, false otherwise
 	"""
+
 	import platform
 	return platform.machine() == "i386"
 
 def WengoArchPPCMacintosh():
 	"""
-	Check if the architecture is compatible with PPC as used on Macintosh computers.
+	Checks if the architecture is compatible with PPC as used on Macintosh computers.
+
 	@rtype boolean
 	@return true if the architecture used is compatible with PPC as used on Macintosh computers, false otherwise
 	"""
+
 	import platform
 	return platform.machine() == "Power Macintosh"
 
