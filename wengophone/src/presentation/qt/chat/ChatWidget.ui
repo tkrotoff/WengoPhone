@@ -31,7 +31,10 @@
       </size>
      </property>
      <property name="text" >
-      <string>SEND</string>
+      <string/>
+     </property>
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/chat_send_message.png</iconset>
      </property>
      <property name="flat" >
       <bool>false</bool>
@@ -103,6 +106,9 @@
       <widget class="QPushButton" name="pushButton" >
        <property name="text" >
         <string>Call</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/call_button.png</iconset>
        </property>
       </widget>
      </item>

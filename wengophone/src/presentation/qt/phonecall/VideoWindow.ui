@@ -29,12 +29,12 @@
        <number>0</number>
       </property>
       <property name="spacing" >
-       <number>0</number>
+       <number>6</number>
       </property>
       <item row="1" column="0" >
        <widget class="QPushButton" name="flipButton" >
         <property name="icon" >
-         <iconset resource="..\wengophone.qrc" >:/pics/video_flip.png</iconset>
+         <iconset resource="../wengophone.qrc" >:/pics/video_flip.png</iconset>
         </property>
         <property name="iconSize" >
          <size>
@@ -53,7 +53,7 @@
       <item row="1" column="1" >
        <widget class="QPushButton" name="fullScreenButton" >
         <property name="icon" >
-         <iconset resource="..\wengophone.qrc" >:/pics/video_fullscreen.png</iconset>
+         <iconset resource="../wengophone.qrc" >:/pics/video_fullscreen.png</iconset>
         </property>
         <property name="iconSize" >
          <size>
@@ -72,7 +72,7 @@
       <item row="1" column="2" >
        <widget class="QPushButton" name="hangUpButton" >
         <property name="icon" >
-         <iconset resource="..\wengophone.qrc" >:/pics/hangup_button_small.png</iconset>
+         <iconset resource="../wengophone.qrc" >:/pics/hangup_button.png</iconset>
         </property>
         <property name="iconSize" >
          <size>

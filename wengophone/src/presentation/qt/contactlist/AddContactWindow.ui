@@ -51,6 +51,9 @@
        <property name="text" >
         <string>Add Contact</string>
        </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/contact_add.png</iconset>
+       </property>
        <property name="default" >
         <bool>true</bool>
        </property>
@@ -80,7 +83,9 @@
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction></pixmapfunction>
- <resources/>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
  <connections>
   <connection>
    <sender>cancelButton</sender>

@@ -2,10 +2,9 @@
     <qresource prefix="/" >
         <file>pics/arrow_down.png</file>
         <file>pics/arrow_right.png</file>
-	<file>pics/away.png</file>
+        <file>pics/away.png</file>
         <file>pics/background.png</file>
         <file>pics/call_button.png</file>
-        <file>pics/call_button_small.png</file>
         <file>pics/call_history.png</file>
         <file>pics/call_incoming.png</file>
         <file>pics/call_missed.png</file>
@@ -13,11 +12,11 @@
         <file>pics/call_video_button.png</file>
         <file>pics/chat_send_message.png</file>
         <file>pics/config.png</file>
-        <file>pics/config_apparence.png</file>
+        <file>pics/config_appearance.png</file>
         <file>pics/config_audio.png</file>
         <file>pics/config_expert.png</file>
         <file>pics/config_general.png</file>
-        <file>pics/config_langues.png</file>
+        <file>pics/config_languages.png</file>
         <file>pics/contact_add.png</file>
         <file>pics/contact_block.png</file>
         <file>pics/contact_find.png</file>
@@ -30,14 +29,18 @@
         <file>pics/contact_picture_mini.png</file>
         <file>pics/contact_remove.png</file>
         <file>pics/contact_view.png</file>
-		<file>pics/contact_call.png</file>
+        <file>pics/contact_call.png</file>
         <file>pics/contact_im.png</file>
         <file>pics/contact_video.png</file>
         <file>pics/dialpad.png</file>
-	<file>pics/dnd.png</file>
-	<file>pics/group_close.png</file>
-	<file>pics/group_open.png</file>
-        <file>pics/hangup_button_small.png</file>
+        <file>pics/forward.png</file>
+        <file>pics/donotdisturb.png</file>
+        <file>pics/berightback.png</file>
+        <file>pics/notavailable.png</file>
+        <file>pics/invisible.png</file>
+        <file>pics/group_close.png</file>
+        <file>pics/group_open.png</file>
+        <file>pics/hangup_button.png</file>
         <file>pics/headphones.png</file>
         <file>pics/help.png</file>
         <file>pics/home.png</file>
@@ -47,8 +50,8 @@
         <file>pics/logo.png</file>
         <file>pics/microphone.png</file>
         <file>pics/no.png</file>
-	<file>pics/online.png</file>
-	<file>pics/offline.png</file>
+        <file>pics/online.png</file>
+        <file>pics/offline.png</file>
         <file>pics/point.gif</file>
         <file>pics/sms_send.png</file>
         <file>pics/statusbar_audio.png</file>
@@ -113,11 +116,11 @@
         <file>chat/emoticonswidget.ui</file>
         <file>contactlist/contactList.ui</file>
         <file>contactlist/userWidget.ui</file>
-		<file>contactlist/AddContactWindow.ui</file>
-		<file>contactlist/ContactListWidget.ui</file>
-		<file>contactlist/ContactWidget.ui</file>
+        <file>contactlist/AddContactWindow.ui</file>
+        <file>contactlist/ContactListWidget.ui</file>
+        <file>contactlist/ContactWidget.ui</file>
         <file>login/LoginWindow.ui</file>
-		<file>login/profileWindow.ui</file>
+        <file>login/profileWindow.ui</file>
         <file>login/setLoginWindow.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
         <file>phonecall/VideoWindow.ui</file>

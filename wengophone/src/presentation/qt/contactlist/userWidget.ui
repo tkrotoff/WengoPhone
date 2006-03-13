@@ -146,7 +146,13 @@
           </size>
          </property>
          <property name="text" >
-          <string>SMS</string>
+          <string/>
+         </property>
+         <property name="icon" >
+          <iconset resource="../wengophone.qrc" >:/pics/sms_send.png</iconset>
+         </property>
+         <property name="flat" >
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -159,6 +165,7 @@
  <pixmapfunction></pixmapfunction>
  <resources>
   <include location="imagesdata.qrc" />
+  <include location="../wengophone.qrc" />
  </resources>
  <connections/>
 </ui>

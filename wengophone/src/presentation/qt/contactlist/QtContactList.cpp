@@ -45,6 +45,11 @@
 #include <QtGui>
 #include <QDebug>
 
+static inline QPixmap scaleImg(const char *name)
+{
+	return QPixmap(name).scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+}
+
 QtContactList::QtContactList(CContactList & cContactList) 
 	: QObjectThreadSafe(), _cContactList(cContactList) {
 
@@ -74,18 +79,18 @@ void QtContactList::initThreadSafe() {
 	// icons
 	QtContactPixmap * spx = QtContactPixmap::getInstance();
 
-	spx->setPixmap (QtContactPixmap::ContactOnline,QPixmap(":/pics/online.png"));
-	spx->setPixmap (QtContactPixmap::ContactDND,QPixmap(":/pics/dnd.png"));
-	spx->setPixmap (QtContactPixmap::ContactInvisible,QPixmap(":/pics/offline.png"));
-	spx->setPixmap (QtContactPixmap::ContactBRB,QPixmap(":/pics/dnd.png"));
-	spx->setPixmap (QtContactPixmap::ContactAway,QPixmap(":/pics/away.png"));
-	spx->setPixmap (QtContactPixmap::ContactNotAvailable,QPixmap(":/pics/dnd.png"));
-	spx->setPixmap (QtContactPixmap::ContactForward,QPixmap(":/pics/online.png"));
+	spx->setPixmap (QtContactPixmap::ContactOnline,scaleImg(":/pics/online.png"));
+	spx->setPixmap (QtContactPixmap::ContactDND,scaleImg(":/pics/donotdisturb.png"));
+	spx->setPixmap (QtContactPixmap::ContactInvisible,scaleImg(":/pics/offline.png"));
+	spx->setPixmap (QtContactPixmap::ContactBRB,scaleImg(":/pics/donotdisturb.png"));
+	spx->setPixmap (QtContactPixmap::ContactAway,scaleImg(":/pics/away.png"));
+	spx->setPixmap (QtContactPixmap::ContactNotAvailable,scaleImg(":/pics/notavailable.png"));
+	spx->setPixmap (QtContactPixmap::ContactForward,scaleImg(":/pics/forward.png"));
 
 	// Fonctions icons
-	spx->setPixmap (QtContactPixmap::ContactIM,QPixmap(":/pics/contact_im.png"));
-	spx->setPixmap (QtContactPixmap::ContactCall,QPixmap(":/pics/contact_call.png"));
-	spx->setPixmap (QtContactPixmap::ContactVideo,QPixmap(":/pics/contact_video.png"));
+	spx->setPixmap (QtContactPixmap::ContactIM,scaleImg(":/pics/contact_im.png"));
+	spx->setPixmap (QtContactPixmap::ContactCall,scaleImg(":/pics/contact_call.png"));
+	spx->setPixmap (QtContactPixmap::ContactVideo,scaleImg(":/pics/contact_video.png"));
 
 	// Group icons
 	spx->setPixmap (QtContactPixmap::ContactGroupOpen,QPixmap(":/pics/group_open.png"));
