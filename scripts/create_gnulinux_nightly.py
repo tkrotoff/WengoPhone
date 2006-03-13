@@ -28,10 +28,10 @@ debug_print('Using release mode ' + str(release_mode) + '...')
 temp_directory = '/tmp/' + str(os.getpid())
 debug_print('Using temporary directory: ' + temp_directory + '...')
 
-emoticons_path = 'debug/emoticons'
+emoticons_path = release_mode + '/emoticons'
 debug_print('Using emoticons path: ' + emoticons_path + '...')
 
-sounds_path = 'debug/sounds'
+sounds_path = release_mode + '/sounds'
 debug_print('Using sounds path: ' + sounds_path + '...')
 
 gaim_libs_path = 'libs/gaim/binary-lib/msvc'
