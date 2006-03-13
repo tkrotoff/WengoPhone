@@ -129,7 +129,7 @@ TrayIcon::TrayIconPrivate::TrayIconPrivate(TrayIcon *object, int _size)
 	size = _size;
 
 	setFocusPolicy(Qt::NoFocus);
-	setBackgroundMode(Qt::OpaqueMode);
+	//setBackgroundMode(Qt::OpaqueMode);
 
 	setMinimumSize(size, size);
 	setMaximumSize(size, size);
