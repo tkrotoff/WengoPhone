@@ -47,6 +47,47 @@ const std::string Config::AUDIO_SMILEYS_DIR_KEY = "audio.smileys.dir";
 const std::string Config::AUDIO_AEC_KEY = "audio.aec";
 const std::string Config::AUDIO_HALFDUPLEX_KEY = "audio.halfduplex";
 
+const std::string Config::PROFILE_NICKNAME = "profile.nickname";
+const std::string Config::PROFILE_FIRSTNAME = "profile.firstname";
+const std::string Config::PROFILE_LASTNAME = "profile.lastname";
+const std::string Config::PROFILE_BIRTHDATE = "profile.birthdate";
+const std::string Config::PROFILE_CITY = "profile.city";
+const std::string Config::PROFILE_ALTSIP = "profile.altsip";
+const std::string Config::PROFILE_GENDER = "profile.gender";
+const std::string Config::PROFILE_COUNTRY = "profile.country";
+const std::string Config::PROFILE_STATE = "profile.state";
+const std::string Config::PROFILE_IMPIC1 = "profile.impic1";
+const std::string Config::PROFILE_IMPIC2 = "profile.impic2";
+const std::string Config::PROFILE_IMPIC3 = "profile.impic3";
+const std::string Config::PROFILE_IMPIC4 = "profile.impic4";
+const std::string Config::PROFILE_IMPIC5 = "profile.impic5";
+const std::string Config::PROFILE_IMPIC6 = "profile.impic6";
+const std::string Config::PROFILE_IMPIC7 = "profile.impic7";
+const std::string Config::PROFILE_IMPIC8 = "profile.impic8";
+const std::string Config::PROFILE_IMPIC9 = "profile.impic9";
+const std::string Config::PROFILE_IMEMAIL1 = "profile.impemail1";
+const std::string Config::PROFILE_IMEMAIL2 = "profile.impemail2";
+const std::string Config::PROFILE_IMEMAIL3 = "profile.impemail3";
+const std::string Config::PROFILE_IMEMAIL4 = "profile.impemail4";
+const std::string Config::PROFILE_IMEMAIL5 = "profile.impemail5";
+const std::string Config::PROFILE_IMEMAIL6 = "profile.impemail6";
+const std::string Config::PROFILE_IMEMAIL7 = "profile.impemail7";
+const std::string Config::PROFILE_IMEMAIL8 = "profile.impemail8";
+const std::string Config::PROFILE_IMEMAIL9 = "profile.impemail9";
+const std::string Config::PROFILE_CELLPHONE = "profile.cellphone";
+const std::string Config::PROFILE_WENGOPHONE = "profile.wengophone";
+const std::string Config::PROFILE_HOMEPHONE = "profile.homephone";
+const std::string Config::PROFILE_WORKPHONE = "profile.workphone";
+const std::string Config::PROFILE_EMAIL = "profile.email";
+const std::string Config::PROFILE_BLOG = "profile.blog";
+const std::string Config::PROFILE_WEB = "profile.web";
+const std::string Config::PROFILE_ABOUT = "profile.about";
+const std::string Config::PROFILE_AVATAR = "profile.avatar"; 
+const std::string Config::PROFILE_WIDTH = "profile.width";
+const std::string Config::PROFILE_HEIGHT = "profile.height";
+const std::string Config::PROFILE_POSX = "profile.posx";
+const std::string Config::PROFILE_POSY = "profile.posy";
+
 const std::string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
 const std::string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
 const std::string Config::WENGO_SSO_PATH_KEY = "wengo.sso.path";
@@ -55,23 +96,24 @@ const std::string Config::CONFIG_DIR_KEY = "config.dir";
 
 
 Config::Config(const std::string & name) {
+	static const std::string empty("");
 	_name = name;
 
 	_keyDefaultValueMap[NETWORK_SSO_SSL_KEY] = true;
 	_keyDefaultValueMap[NETWORK_NAT_TYPE_KEY] = std::string("NatTypeSymmetric");
 	_keyDefaultValueMap[NETWORK_SIP_SERVER_KEY] = 5060;
-	_keyDefaultValueMap[NETWORK_SIP_LOCAL_PORT_KEY] = std::string("");
+	_keyDefaultValueMap[NETWORK_SIP_LOCAL_PORT_KEY] = empty;
 	_keyDefaultValueMap[NETWORK_TUNNEL_NEEDED_KEY] = false;
 	_keyDefaultValueMap[NETWORK_TUNNEL_SSL_KEY] = false;
-	_keyDefaultValueMap[NETWORK_TUNNEL_SERVER_KEY] = std::string("");
+	_keyDefaultValueMap[NETWORK_TUNNEL_SERVER_KEY] = empty;
 	_keyDefaultValueMap[NETWORK_TUNNEL_PORT_KEY] = 80;
 	_keyDefaultValueMap[NETWORK_PROXY_DETECTED_KEY] = false;
-	_keyDefaultValueMap[NETWORK_PROXY_SERVER_KEY] = std::string("");
+	_keyDefaultValueMap[NETWORK_PROXY_SERVER_KEY] = empty;
 	_keyDefaultValueMap[NETWORK_PROXY_PORT_KEY] = 0;
-	_keyDefaultValueMap[NETWORK_PROXY_LOGIN_KEY] = std::string("");
-	_keyDefaultValueMap[NETWORK_PROXY_PASSWORD_KEY] = std::string("");
+	_keyDefaultValueMap[NETWORK_PROXY_LOGIN_KEY] = empty;
+	_keyDefaultValueMap[NETWORK_PROXY_PASSWORD_KEY] = empty;
 
-	_keyDefaultValueMap[CODEC_PLUGIN_PATH_KEY] = std::string("");
+	_keyDefaultValueMap[CODEC_PLUGIN_PATH_KEY] = empty;
 	_keyDefaultValueMap[AUDIO_OUTPUT_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
 	_keyDefaultValueMap[AUDIO_INPUT_DEVICENAME_KEY] = AudioDevice::getDefaultRecordDevice();
 	_keyDefaultValueMap[AUDIO_RINGER_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
@@ -81,6 +123,46 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[AUDIO_AEC_KEY] = false;
 	_keyDefaultValueMap[AUDIO_HALFDUPLEX_KEY] = true;
 
+	_keyDefaultValueMap[PROFILE_FIRSTNAME] = empty;
+	_keyDefaultValueMap[PROFILE_LASTNAME] = empty;
+	_keyDefaultValueMap[PROFILE_BIRTHDATE] = empty;
+	_keyDefaultValueMap[PROFILE_CITY] = empty;
+	_keyDefaultValueMap[PROFILE_ALTSIP] = empty;
+	_keyDefaultValueMap[PROFILE_GENDER] = empty;
+	_keyDefaultValueMap[PROFILE_COUNTRY] = empty;
+	_keyDefaultValueMap[PROFILE_STATE] = empty;
+	_keyDefaultValueMap[PROFILE_IMPIC1] = empty;
+	_keyDefaultValueMap[PROFILE_IMPIC2] = empty;
+	_keyDefaultValueMap[PROFILE_IMPIC3] = empty;
+	_keyDefaultValueMap[PROFILE_IMPIC4] = empty;
+	_keyDefaultValueMap[PROFILE_IMPIC5] = empty;
+	_keyDefaultValueMap[PROFILE_IMPIC6] = empty;
+	_keyDefaultValueMap[PROFILE_IMPIC7] = empty;
+	_keyDefaultValueMap[PROFILE_IMPIC8] = empty;
+	_keyDefaultValueMap[PROFILE_IMPIC9] = empty;
+	_keyDefaultValueMap[PROFILE_IMEMAIL1] = empty;
+	_keyDefaultValueMap[PROFILE_IMEMAIL2] = empty;
+	_keyDefaultValueMap[PROFILE_IMEMAIL3] = empty;
+	_keyDefaultValueMap[PROFILE_IMEMAIL4] = empty;
+	_keyDefaultValueMap[PROFILE_IMEMAIL5] = empty;
+	_keyDefaultValueMap[PROFILE_IMEMAIL6] = empty;
+	_keyDefaultValueMap[PROFILE_IMEMAIL7] = empty;
+	_keyDefaultValueMap[PROFILE_IMEMAIL8] = empty;
+	_keyDefaultValueMap[PROFILE_IMEMAIL9] = empty;
+	_keyDefaultValueMap[PROFILE_CELLPHONE] = empty;
+	_keyDefaultValueMap[PROFILE_WENGOPHONE] = empty;
+	_keyDefaultValueMap[PROFILE_HOMEPHONE] = empty;
+	_keyDefaultValueMap[PROFILE_WORKPHONE] = empty;
+	_keyDefaultValueMap[PROFILE_EMAIL] = empty;
+	_keyDefaultValueMap[PROFILE_BLOG] = empty;
+	_keyDefaultValueMap[PROFILE_WEB] = empty;
+	_keyDefaultValueMap[PROFILE_ABOUT] = empty;
+	_keyDefaultValueMap[PROFILE_AVATAR] = empty;
+	_keyDefaultValueMap[PROFILE_WIDTH] = 786;
+	_keyDefaultValueMap[PROFILE_HEIGHT] = 758;
+	_keyDefaultValueMap[PROFILE_POSX] = 100;
+	_keyDefaultValueMap[PROFILE_POSY] = 100;
+	
 	_keyDefaultValueMap[WENGO_SERVER_HOSTNAME_KEY] = std::string("ws.wengo.fr");
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
 	_keyDefaultValueMap[WENGO_SSO_PATH_KEY] = std::string("/softphone-sso/sso.php");
@@ -205,6 +287,162 @@ std::string Config::getWengoSSOPath() const {
 
 std::string Config::getWengoSMSPath() const {
 	return getStringKeyValue(WENGO_SMS_PATH_KEY);
+}
+
+std::string Config::getProfileNickName() const {
+	return getStringKeyValue(PROFILE_NICKNAME);
+}
+	
+std::string Config::getProfileFirstName() const {
+	return getStringKeyValue(PROFILE_FIRSTNAME);
+}
+	
+std::string Config::getProfileLastName() const {
+	return getStringKeyValue(PROFILE_LASTNAME);
+}
+
+std::string Config::getProfileBirthDate() const {
+	return getStringKeyValue(PROFILE_BIRTHDATE);
+}
+	
+std::string Config::getProfileCity() const {
+	return getStringKeyValue(PROFILE_CITY);
+}
+	
+std::string Config::getProfileAltSip() const {
+	return getStringKeyValue(PROFILE_ALTSIP);
+}
+
+std::string Config::getProfileGender() const {
+	return getStringKeyValue(PROFILE_GENDER);
+}
+
+std::string Config::getProfileCountry() const {
+	return getStringKeyValue(PROFILE_COUNTRY);
+}
+
+std::string Config::getProfileState() const {
+	return getStringKeyValue(PROFILE_STATE);
+}
+
+std::string Config::getProfileIMPic1() const {
+	return getStringKeyValue(PROFILE_IMPIC1);
+}
+
+std::string Config::getProfileIMPic2() const {
+	return getStringKeyValue(PROFILE_IMPIC2);
+}
+
+std::string Config::getProfileIMPic3() const {
+	return getStringKeyValue(PROFILE_IMPIC3);
+}
+
+std::string Config::getProfileIMPic4() const {
+	return getStringKeyValue(PROFILE_IMPIC4);
+}
+
+std::string Config::getProfileIMPic5() const {
+	return getStringKeyValue(PROFILE_IMPIC5);
+}
+
+std::string Config::getProfileIMPic6() const {
+	return getStringKeyValue(PROFILE_IMPIC6);
+}
+
+std::string Config::getProfileIMPic7() const {
+	return getStringKeyValue(PROFILE_IMPIC7);
+}
+
+std::string Config::getProfileIMPic8() const {
+	return getStringKeyValue(PROFILE_IMPIC8);
+}
+
+std::string Config::getProfileIMEmail1()  const {
+	return getStringKeyValue(PROFILE_IMEMAIL1);
+}
+
+std::string Config::getProfileIMEmail2()  const {
+	return getStringKeyValue(PROFILE_IMEMAIL2);
+}
+
+std::string Config::getProfileIMEmail3()  const {
+	return getStringKeyValue(PROFILE_IMEMAIL3);
+}
+
+std::string Config::getProfileIMEmail4()  const {
+	return getStringKeyValue(PROFILE_IMEMAIL4);
+}
+
+std::string Config::getProfileIMEmail5()  const {
+	return getStringKeyValue(PROFILE_IMEMAIL5);
+}
+
+std::string Config::getProfileIMEmail6()  const {
+	return getStringKeyValue(PROFILE_IMEMAIL6);
+}
+
+std::string Config::getProfileIMEmail7()  const {
+	return getStringKeyValue(PROFILE_IMEMAIL7);
+}
+
+std::string Config::getProfileIMEmail8()  const {
+	return getStringKeyValue(PROFILE_IMEMAIL8);
+}
+
+std::string Config::getProfileIMEmail9()  const {
+	return getStringKeyValue(PROFILE_IMEMAIL9);
+}
+
+std::string Config::getProfileCellPhone() const {
+	return getStringKeyValue(PROFILE_CELLPHONE);
+}
+
+std::string Config::getProfileWengoPhone() const {
+	return getStringKeyValue(PROFILE_WENGOPHONE);
+}
+
+std::string Config::getProfileHomePhone() const {
+	return getStringKeyValue(PROFILE_HOMEPHONE);
+}
+
+std::string Config::getProfileWorkPhone() const {
+	return getStringKeyValue(PROFILE_WORKPHONE);
+}
+
+std::string Config::getProfileEmail() const {
+	return getStringKeyValue(PROFILE_EMAIL);
+}
+
+std::string Config::getProfileBlog() const {
+	return getStringKeyValue(PROFILE_BLOG);
+}
+
+std::string Config::getProfileWeb() const {
+	return getStringKeyValue(PROFILE_WEB);
+}
+
+std::string Config::getProfileAbout() const {
+	return getStringKeyValue(PROFILE_ABOUT);
+}
+
+std::string Config::getProfileAvatar() const {
+	return getStringKeyValue(PROFILE_AVATAR);
+}
+
+int Config::getProfileWidth() const {
+	return getIntegerKeyValue(PROFILE_WIDTH);
+}
+
+int Config::getProfileHeight() const {
+	return getIntegerKeyValue(PROFILE_HEIGHT);
+}
+
+int Config::getProfilePosX() const {
+	return getIntegerKeyValue(PROFILE_POSX);
+}
+
+int Config::getProfilePoxY() const {
+	return getIntegerKeyValue(PROFILE_POSY);
 }
 
 boost::any Config::getAny(const std::string & key) const {
