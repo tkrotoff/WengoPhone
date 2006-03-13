@@ -3,7 +3,6 @@
  *
  * Copyright (C) 2005 Wengo SAS
  * Copyright (C) 2004 Vadim Lebedev <vadim@mbdsys.com>
- * Copyright (C) 2002,2003   Aymeric Moizard <jack@atosc.org>
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -593,19 +592,19 @@ ph_vad_update0(struct vadcng_info *s, char *data, int len)
       s->mean_pwr += s->pwr[s->pwr_pos];       // no overflow as long as pwr size is less then 65536 */
    
 #ifdef TRACE_POWER
-      if(s->mean_pwr > max_pwr)
+      if (s->mean_pwr > max_pwr)
 	{
 	  max_pwr = s->mean_pwr;
-	    }
+	}
 
       if(s->mean_pwr < min_pwr)
 	{
 	  min_pwr = s->mean_pwr;
-	    }
+	}
 #endif
 		
       s->pwr_pos++;
-      if(s->pwr_pos >= s->pwr_size)
+      if (s->pwr_pos >= s->pwr_size)
 	{
 	  s->pwr_pos = 0;
 	  if(s->cng)
@@ -618,45 +617,45 @@ ph_vad_update0(struct vadcng_info *s, char *data, int len)
 	      if(s->long_pwr_pos >= LONG_PWR_WINDOW)
 		{
 		  s->long_pwr_pos = 0;
-		    }
+		}
 	    }
 	}
     }
 	
-      /* mean power in last PWR_WINDOW ms */
-      power = s->mean_pwr>>s->pwr_shift;
-      /* compare with threshold */
-      if(power > s->pwr_threshold)
-	{
-	  s->sil_cnt = 0;
-	}
-      else
-	{
-	  s->sil_cnt += len/2;
-	}
-	
-#ifdef TRACE_POWER
-				    if(s->sil_cnt > max_sil)
-				      {
-					max_sil = s->sil_cnt;
-					  }
+  /* mean power in last PWR_WINDOW ms */
+  power = s->mean_pwr>>s->pwr_shift;
+  /* compare with threshold */
+  if(power > s->pwr_threshold)
+    {
+      s->sil_cnt = 0;
+    }
+  else
+    {
+      s->sil_cnt += len/2;
+    }
   
-				    if (ph_trace_mic && (tracecnt++ == 50))
-				      {
-					DBG5_DYNA_AUDIO("ph_media_audiuo: mean MIC signal: %d\n", power,0,0,0);
-					tracecnt = 0;
-				      }
+#ifdef TRACE_POWER
+  if(s->sil_cnt > max_sil)
+    {
+      max_sil = s->sil_cnt;
+    }
+  
+  if (ph_trace_mic && (tracecnt++ == 50))
+    {
+      DBG5_DYNA_AUDIO("ph_media_audiuo: mean MIC signal: %d\n", power,0,0,0);
+      tracecnt = 0;
+    }
 #endif
   
-				    if(s->sil_cnt > s->sil_max)
-				      {
-					return 1;
-					  }
-				    else
-				      {
-					return 0;
-					  }
-	
+  if(s->sil_cnt > s->sil_max)
+    {
+      return 1;
+    }
+  else
+    {
+      return 0;
+    }
+  
 }
 
 char find_level(unsigned int pwr)
@@ -669,20 +668,20 @@ char find_level(unsigned int pwr)
   while(1)
     {
       if(left > right)
-    break;
+	break;
       mid = (left+right)>>1;
       if(pwr >= tab_tx_cng[mid] && pwr < tab_tx_cng[mid-1])
-    {
-      index = mid;
-      break;
-    }
+	{
+	  index = mid;
+	  break;
+	}
       else
-    {
-      if(pwr > tab_tx_cng[mid])
-        right = mid-1;
-      else
-        left = mid+1;
-    }
+	{
+	  if(pwr > tab_tx_cng[mid])
+	    right = mid-1;
+	  else
+	    left = mid+1;
+	}
     }
   return index;
 }

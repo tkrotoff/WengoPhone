@@ -8,12 +8,14 @@
 typedef long off_t;
 #define SEEK_END 2
 #define SEEK_SET 0
+#define SEEK_CUR 1
 #endif
 
 #include <fcntl.h>
 #include <stdlib.h>
 
 #include "phmbuf.h"
+#include "wav.h"
 
 #define DONT(x)
 #define DO(x) x
@@ -87,6 +89,124 @@ int ph_mediabuf_mixaudio(ph_mediabuf_t *mb, short *mix, int samples)
 
 }
 
+#define ABUFLEN (4*1024)
+#define BAD_HDR -1
+#define BAD_FMT -2
+#define NO_MEM  -3
+
+int ph_mediabuf_loadwavffile(int fd,  int samplerate, ph_mediabuf_t **pmb)
+{
+  WAVEAUDIOFORMAT  wfmt;
+  int filedatalen;
+  ph_mediabuf_t *mb = 0;
+  char *audiodata = 0;
+  int targetlen;
+  int errcode;
+
+
+  filedatalen = wav_read_header(fd, &wfmt);
+
+  if (filedatalen <= 0)
+    return BAD_HDR;
+
+  if (wfmt.channels != 1 && wfmt.bits_per_sample != 16)
+    return BAD_FMT;
+
+
+  if (wfmt.samplerate != 16000 && wfmt.samplerate != 8000)
+    return BAD_FMT;
+
+  if (samplerate == wfmt.samplerate)
+    {
+      mb = ph_mediabuf_new((int) filedatalen);
+      if (!mb)
+	return NO_MEM;
+
+      if (filedatalen != read(fd, (char *) (mb->buf),  filedatalen))
+	{
+	  errcode = BAD_FMT; goto err;
+	}
+
+      *pmb = mb;
+      return filedatalen;
+
+    }
+
+
+  targetlen = (samplerate == 8000) ? filedatalen/2 : filedatalen*2;
+  mb = ph_mediabuf_new(targetlen);
+  if (!mb)
+    {
+      errcode = NO_MEM; goto err;
+    }
+  
+  if (!(audiodata = malloc(filedatalen))) 
+    {
+      errcode = NO_MEM; goto err;
+    }
+
+
+  if (filedatalen != read(fd, audiodata, filedatalen))
+    {
+      errcode = BAD_FMT; goto err;
+    }
+
+  if (samplerate == 8000)
+    {
+      short *src, *dst;
+      int nsamples;
+
+      nsamples = targetlen/2;
+      
+
+      src = (short *) audiodata;
+      dst = (short*) mb->buf;
+      
+      while(nsamples--)
+	{
+	  *dst++ = *src++;
+	  src++;
+	}
+      
+    }
+  else
+    {
+      short *src, *dst;
+      int nsamples;
+
+      nsamples = targetlen/2;
+
+      src = (short *) audiodata;
+      dst = (short*) mb->buf;
+      
+      while(nsamples--)
+	{
+	  *dst++ = *src;
+	  *dst++ = *src++;
+	}
+	  
+    }
+
+
+  *pmb = mb;
+  free(audiodata);
+  return targetlen;
+
+
+err:
+
+  if (audiodata)
+    free(audiodata);
+  
+  if (mb)
+    ph_mediabuf_free(mb);
+
+  *pmb = 0;
+  return errcode;
+
+
+}
+
 
 ph_mediabuf_t *
 ph_mediabuf_load(const char *filename, int samplerate)
@@ -95,6 +215,7 @@ ph_mediabuf_load(const char *filename, int samplerate)
   off_t flen;
   int  xlen;
   ph_mediabuf_t *mb;
+  int err;
 
 
   if (16000 != samplerate && samplerate != 8000)
@@ -104,6 +225,14 @@ ph_mediabuf_load(const char *filename, int samplerate)
   
   if (fd == -1)
     return 0;
+
+  err = ph_mediabuf_loadwavffile(fd, samplerate, &mb);
+  if (err > 0 || err != BAD_HDR)
+    {
+      close(fd);
+      return (err > 0) ? mb : 0;
+    }
+
 
   flen = lseek(fd, 0, SEEK_END);
 

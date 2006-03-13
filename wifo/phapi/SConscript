@@ -147,6 +147,7 @@ headers = []
 sources = [
 	'phcodec.c',
 	'phmbuf.c',
+	'wav.c',
 	'tonegen.c',
 #	'phx.c',
 	'phmedia-audio-null.c',
