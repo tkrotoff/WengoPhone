@@ -144,7 +144,7 @@ createFile:
 	french:
 		Push "<Wengo><style>WengoKeramik2</style><audio><input><name></name></input><output><name></name></output><ringing><name></name></ringing></audio><lang>wengo_fr.qm</lang></Wengo>"
 		Goto writeFile
-	default: ; Englis
+	default: ; English
 		Push "<Wengo><style>WengoKeramik2</style><audio><input><name></name></input><output><name></name></output><ringing><name></name></ringing></audio><lang>wengo_en.qm</lang></Wengo>"
 		Goto writeFile
 

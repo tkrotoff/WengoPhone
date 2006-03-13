@@ -10,16 +10,14 @@
 ;!define INSTALLER_NAME "WengoPhone-setup-0.13.exe"
 ;!define QTDIR "C:\Qt\4.4.1\"
 
-; HM NIS Edit Wizard helper defines
-!define PRODUCT_PUBLISHER "${PRODUCT_NAME}"
+!define PRODUCT_PUBLISHER "Wengo"
 !define PRODUCT_WEB_SITE "http://www.wengo.com"
-!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\qtwengophone.exe"
-!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
-!define PRODUCT_UNINST_ROOT_KEY "HKLM"
+!define PRODUCT_REGKEY "Software\${PRODUCT_NAME}"
+!define PRODUCT_UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 
 SetCompressor lzma
 
-; MUI 1.67 compatible ------
+; Modern UI 1.67 compatible
 !include "MUI.nsh"
 
 ; MUI Settings
@@ -28,34 +26,28 @@ SetCompressor lzma
 !define MUI_UNICON "..\src\presentation\qt\win32\wengophone.ico"
 
 ; Language Selection Dialog Settings
-!define MUI_LANGDLL_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
-!define MUI_LANGDLL_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
-!define MUI_LANGDLL_REGISTRY_VALUENAME "NSIS:Language"
+; Remember the installer language
+!define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
+!define MUI_LANGDLL_REGISTRY_KEY "${PRODUCT_REGKEY}"
+!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
 
-; Welcome page
+; Pages
 !insertmacro MUI_PAGE_WELCOME
-
-; License page
 !insertmacro MUI_PAGE_LICENSE $(license)
-
-; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
-
-; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
-
-; Finish page
 !define MUI_FINISHPAGE_RUN "$INSTDIR\qtwengophone.exe"
 !insertmacro MUI_PAGE_FINISH
 
-; Uninstaller pages
+!insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
 
-; Language files
+; Language files, first language is the default language
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "French"
 
-; Load license translation
+; Loads license translation
 LicenseLangString license ${LANG_ENGLISH} "..\COPYING"
 LicenseLangString license ${LANG_FRENCH} "..\COPYING"
 LicenseData $(license)
@@ -63,7 +55,8 @@ LicenseData $(license)
 ; Reserve files
 !insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
 
-; MUI end ------
+; MUI end
+
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 
@@ -90,41 +83,38 @@ Function .onInit
 	initDone:
 FunctionEnd
 
-InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
+; Gets installation folder from registry if available
+InstallDirRegKey HKCU "${PRODUCT_REGKEY}" ""
+
 ShowInstDetails show
 ShowUnInstDetails show
 
-Section "BaseSection" BaseSection
+Section BaseSection
 	!include "files_install.nsi"
 SectionEnd
 
 Section -AdditionalIcons
-	WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-	CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
-	CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" "$INSTDIR\uninst.exe"
+	WriteIniStr "$INSTDIR\${PRODUCT_PUBLISHER}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+	CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk" "$INSTDIR\${PRODUCT_PUBLISHER}.url"
 SectionEnd
 
 Section -Post
-	WriteUninstaller "$INSTDIR\uninst.exe"
-	WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\qtwengophone.exe"
-	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
-	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\qtwengophone.exe"
-	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
-	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
-	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+	; Stores installation folder
+	WriteRegStr HKCU "${PRODUCT_REGKEY}" "" $INSTDIR
+
+	; Creates uninstaller
+	WriteUninstaller "$INSTDIR\uninstall.exe"
+
+	WriteRegStr HKLM "${PRODUCT_UNINSTALL_KEY}" "DisplayName" "$(^Name)"
+	WriteRegStr HKLM "${PRODUCT_UNINSTALL_KEY}" "UninstallString" "$INSTDIR\uninstall.exe"
+	WriteRegStr HKLM "${PRODUCT_UNINSTALL_KEY}" "DisplayIcon" "$INSTDIR\qtwengophone.exe"
+	WriteRegStr HKLM "${PRODUCT_UNINSTALL_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
+	WriteRegStr HKLM "${PRODUCT_UNINSTALL_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
+	WriteRegStr HKLM "${PRODUCT_UNINSTALL_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
 SectionEnd
 
 Function un.onInit
-!insertmacro MUI_UNGETLANGUAGE
-	MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 \
-	"Are you sure you want to completely remove ${PRODUCT_NAME} and all of its components?" IDYES +2
-	Abort
-FunctionEnd
-
-Function un.onUninstSuccess
-	HideWindow
-	MessageBox MB_ICONINFORMATION|MB_OK "${PRODUCT_NAME} was successfully removed from your computer."
+	!insertmacro MUI_UNGETLANGUAGE
 FunctionEnd
 
 Section Uninstall

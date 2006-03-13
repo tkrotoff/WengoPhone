@@ -43,6 +43,6 @@ RMDir "${WENGODIR}\contacts\"
 Delete "${WENGODIR}\*"
 RMDir "${WENGODIR}"*/
 
-DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
-DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+DeleteRegKey HKLM "${PRODUCT_UNINSTALL_KEY}"
+DeleteRegKey HKCU "${PRODUCT_REGKEY}"
 SetAutoClose true
