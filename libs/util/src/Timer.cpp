@@ -115,7 +115,7 @@ Timer::Timer() {
 
 Timer::~Timer() {
 	stop();
-	for (int i = 0; i != _threadList.size(); i++) {
+	for (register unsigned i = 0; i != _threadList.size(); i++) {
 		delete _threadList[i];
 	}
 	_threadList.clear();
@@ -130,7 +130,7 @@ void Timer::start(unsigned firstTime, unsigned timeout, unsigned nbShots) {
 }
 
 void Timer::stop() {
-	for (int i = 0; i != _threadList.size(); i++) {
+	for (register unsigned i = 0; i != _threadList.size(); i++) {
 		_threadList[i]->stop();
 	}
 }
