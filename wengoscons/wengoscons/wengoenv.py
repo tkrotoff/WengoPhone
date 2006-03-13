@@ -1385,7 +1385,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		#Visual C++ does not have this limitation
 		if self.OS.isWindows():
 			return self.RES(rcFile)
-		return None
+		return None 
 
 	def WengoCompileQt4Resource(self, qrcFile):
 		"""
