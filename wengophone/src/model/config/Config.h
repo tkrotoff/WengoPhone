@@ -164,176 +164,176 @@ public:
 	std::string getWengoSMSPath() const;
 
 	/** @} */
-	
+
 	/**
 	 * @name Profile Methods
 	 * @{
 	 */
-	
+
 	/** Profile nickname. */
 	static const std::string PROFILE_NICKNAME;
 	std::string getProfileNickName() const;
-	
+
 	/** Profile firstname. */
 	static const std::string PROFILE_FIRSTNAME;
 	std::string getProfileFirstName() const;
-	
+
 	/** Profile lastname. */
 	static const std::string PROFILE_LASTNAME;
 	std::string getProfileLastName() const;
-	
+
 	/** Profile birth date. */
 	static const std::string PROFILE_BIRTHDATE;
 	std::string getProfileBirthDate() const;
-	
+
 	/** Profile city. */
 	static const std::string PROFILE_CITY;
 	std::string getProfileCity() const;
-	
+
 	/** Profile alt. sip. */
 	static const std::string PROFILE_ALTSIP;
 	std::string getProfileAltSip() const;
-	
+
 	/** Profile gender. */
 	static const std::string PROFILE_GENDER;
 	std::string getProfileGender() const;
-	
+
 	/** Profile country. */
 	static const std::string PROFILE_COUNTRY;
 	std::string getProfileCountry() const;
-	
+
 	/** Profile state. */
 	static const std::string PROFILE_STATE;
 	std::string getProfileState() const;
-	
+
 	/** Profile IM picture 1. */
 	static const std::string PROFILE_IMPIC1;
 	std::string getProfileIMPic1() const;
-	
+
 	/** Profile IM picture 2. */
 	static const std::string PROFILE_IMPIC2;
 	std::string getProfileIMPic2() const;
-	
+
 	/** Profile IM picture 3. */
 	static const std::string PROFILE_IMPIC3;
 	std::string getProfileIMPic3() const;
-	
+
 	/** Profile IM picture 4. */
 	static const std::string PROFILE_IMPIC4;
 	std::string getProfileIMPic4() const;
-	
+
 	/** Profile IM picture 5. */
 	static const std::string PROFILE_IMPIC5;
 	std::string getProfileIMPic5() const;
-	
+
 	/** Profile IM picture 6. */
 	static const std::string PROFILE_IMPIC6;
 	std::string getProfileIMPic6() const;
-	
+
 	/** Profile IM picture 7. */
 	static const std::string PROFILE_IMPIC7;
 	std::string getProfileIMPic7() const;
-	
+
 	/** Profile IM picture 8. */
 	static const std::string PROFILE_IMPIC8;
 	std::string getProfileIMPic8() const;
-	
+
 	/** Profile IM picture 9. */
 	static const std::string PROFILE_IMPIC9;
 	std::string getProfileIMPic9() const;
-	
+
 	/** Profile email 1. */
 	static const std::string PROFILE_IMEMAIL1;
 	std::string getProfileIMEmail1() const;
-	
+
 	/** Profile email 2. */
 	static const std::string PROFILE_IMEMAIL2;
 	std::string getProfileIMEmail2() const;
-	
+
 	/** Profile email 3. */
 	static const std::string PROFILE_IMEMAIL3;
 	std::string getProfileIMEmail3() const;
-	
+
 	/** Profile email 4. */
 	static const std::string PROFILE_IMEMAIL4;
 	std::string getProfileIMEmail4() const;
-	
+
 	/** Profile email 5. */
 	static const std::string PROFILE_IMEMAIL5;
 	std::string getProfileIMEmail5() const;
-	
+
 	/** Profile email 6. */
 	static const std::string PROFILE_IMEMAIL6;
 	std::string getProfileIMEmail6() const;
-	
+
 	/** Profile email 7. */
 	static const std::string PROFILE_IMEMAIL7;
 	std::string getProfileIMEmail7() const;
-	
+
 	/** Profile email 8. */
 	static const std::string PROFILE_IMEMAIL8;
 	std::string getProfileIMEmail8() const;
-	
+
 	/** Profile email 9. */
 	static const std::string PROFILE_IMEMAIL9;
 	std::string getProfileIMEmail9() const;
-	
+
 	/** Profile cell phone. */
 	static const std::string PROFILE_CELLPHONE;
 	std::string getProfileCellPhone() const;
-	
+
 	/** Profile wengo phone. */
 	static const std::string PROFILE_WENGOPHONE;
 	std::string getProfileWengoPhone() const;
-	
+
 	/** Profile home phone. */
 	static const std::string PROFILE_HOMEPHONE;
 	std::string getProfileHomePhone() const;
-	
+
 	/** Profile work phone. */
 	static const std::string PROFILE_WORKPHONE;
 	std::string getProfileWorkPhone() const;
-	
+
 	/** Profile email. */
 	static const std::string PROFILE_EMAIL;
 	std::string getProfileEmail() const;
-	
+
 	/** Profile blog url. */
 	static const std::string PROFILE_BLOG;
 	std::string getProfileBlog() const;
-	
+
 	/** Profile web url. */
 	static const std::string PROFILE_WEB;
 	std::string getProfileWeb() const;
-	
+
 	/** Profile about text. */
 	static const std::string PROFILE_ABOUT;
 	std::string getProfileAbout() const;
-	
+
 	/** Profile avatar file path. */
 	static const std::string PROFILE_AVATAR;
 	std::string getProfileAvatar() const;
-	
+
 	/** Profile all widget enabled. */
 	static const std::string PROFILE_ALL;
 	bool getProfileAll() const;
-	
+
 	/** Profile window width. */
 	static const std::string PROFILE_WIDTH;
 	int getProfileWidth() const;
-	
+
 	/** Profile window height. */
 	static const std::string PROFILE_HEIGHT;
 	int getProfileHeight() const;
-	
+
 	/** Profile window position X. */
 	static const std::string PROFILE_POSX;
 	int getProfilePosX() const;
-	
+
 	/** Profile window position Y. */
 	static const std::string PROFILE_POSY;
 	int getProfilePoxY() const;
-	
+
 	/** @} */
 
 	/**
@@ -365,27 +365,39 @@ private:
 	 *
 	 * @see Settings::get()
 	 */
-	std::string get(const std::string &, const std::string &) const {}
+	std::string get(const std::string &, const std::string &) const {
+		return String::null;
+	}
 
 	/**
 	 * @see get()
 	 */
-	StringList get(const std::string &, const StringList &) const {}
+	StringList get(const std::string &, const StringList &) const {
+		static const StringList empty;
+		return empty;
+	}
 
 	/**
 	 * @see get()
 	 */
-	bool get(const std::string &, bool) const {}
+	bool get(const std::string &, bool) const {
+		return false;
+	}
 
 	/**
 	 * @see get()
 	 */
-	int get(const std::string &, int) const {}
+	int get(const std::string &, int) const {
+		return 0;
+	}
 
 	/**
 	 * @see get()
 	 */
-	boost::any getAny(const std::string &, const boost::any &) const {}
+	boost::any getAny(const std::string &, const boost::any &) const {
+		static const boost::any empty;
+		return empty;
+	}
 
 	/**
 	 * @see get()

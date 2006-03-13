@@ -95,7 +95,8 @@ sources = [
 	'systray/trayicon.cpp',
 	'sms/QtSms.cpp',
 	'config/QtAdvancedConfig.cpp',
-	env.WengoCompileQt4Resource('wengophone.qrc')
+	env.WengoCompileQt4Resource('wengophone.qrc'),
+	WengoGetEnvironment().WengoCompileWindowsResource('win32/wengophone.rc'),
 ]
 
 if WengoOSMacOSX():
@@ -104,7 +105,7 @@ if WengoOSWindows():
 	sources += ['systray/trayicon_win.cpp'];
 if WengoOSLinux():
 	sources += ['systray/trayicon_x11.cpp'];
-	
+
 if WengoGetConsoleArgument('sipxwrapper'):
 	defines['SIPXWRAPPER'] = 1
 	libs += ['sipxwrapper']
@@ -118,9 +119,6 @@ elif WengoGetConsoleArgument('multiimwrapper'):
 	]
 else:
 	libs += ['nullsipwrapper']
-
-#if WengoOSWindows():
-#	sources += env.WengoCompileWindowsResource('win32/wengophone.rc')
 
 if WengoOSMacOSX():
 	link_flags += [	

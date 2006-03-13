@@ -88,7 +88,7 @@ const std::string Config::PROFILE_EMAIL = "profile.email";
 const std::string Config::PROFILE_BLOG = "profile.blog";
 const std::string Config::PROFILE_WEB = "profile.web";
 const std::string Config::PROFILE_ABOUT = "profile.about";
-const std::string Config::PROFILE_AVATAR = "profile.avatar"; 
+const std::string Config::PROFILE_AVATAR = "profile.avatar";
 const std::string Config::PROFILE_WIDTH = "profile.width";
 const std::string Config::PROFILE_HEIGHT = "profile.height";
 const std::string Config::PROFILE_POSX = "profile.posx";
@@ -115,11 +115,11 @@ Config::Config(const std::string & name) {
 	if (mainBundle) {
 		CFURLRef url = CFBundleCopyResourcesDirectoryURL(mainBundle);
 		char applicationPath[1024];
-	
+
 		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)applicationPath, sizeof(applicationPath))) {
 			resourcesPath = (std::string(applicationPath) + File::getPathSeparator());
 		}
-	
+
 		CFRelease(url);
 	}
 #endif
@@ -189,7 +189,7 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[PROFILE_HEIGHT] = 758;
 	_keyDefaultValueMap[PROFILE_POSX] = 100;
 	_keyDefaultValueMap[PROFILE_POSY] = 100;
-	
+
 	_keyDefaultValueMap[WENGO_SERVER_HOSTNAME_KEY] = std::string("ws.wengo.fr");
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
 	_keyDefaultValueMap[WENGO_SSO_PATH_KEY] = std::string("/softphone-sso/sso.php");
@@ -322,11 +322,11 @@ std::string Config::getWengoSMSPath() const {
 std::string Config::getProfileNickName() const {
 	return getStringKeyValue(PROFILE_NICKNAME);
 }
-	
+
 std::string Config::getProfileFirstName() const {
 	return getStringKeyValue(PROFILE_FIRSTNAME);
 }
-	
+
 std::string Config::getProfileLastName() const {
 	return getStringKeyValue(PROFILE_LASTNAME);
 }
@@ -334,11 +334,11 @@ std::string Config::getProfileLastName() const {
 std::string Config::getProfileBirthDate() const {
 	return getStringKeyValue(PROFILE_BIRTHDATE);
 }
-	
+
 std::string Config::getProfileCity() const {
 	return getStringKeyValue(PROFILE_CITY);
 }
-	
+
 std::string Config::getProfileAltSip() const {
 	return getStringKeyValue(PROFILE_ALTSIP);
 }

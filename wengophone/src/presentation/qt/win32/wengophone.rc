@@ -32,9 +32,9 @@ VS_VERSION_INFO VERSIONINFO
 				VALUE "FileDescription", "WengoPhone\0"
 				VALUE "FileVersion", "beta\0"
 				VALUE "InternalName", "wengophone\0"
-				VALUE "LegalCopyright", "Copyright (C) 2004-2005 Wengo\0"
+				VALUE "LegalCopyright", "Copyright (C) 2004-2006 Wengo\0"
 				VALUE "LegalTrademarks", "Wengo\0"
-				VALUE "OriginalFilename", "wengophone.exe\0"
+				VALUE "OriginalFilename", "qtwengophone.exe\0"
 				VALUE "ProductName", "Wengo\0"
 				VALUE "ProductVersion", "beta\0"
 			END
