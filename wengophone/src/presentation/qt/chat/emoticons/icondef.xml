@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <icondef>
 	<icon>
-		<text> :-)</text>
-		<text> :)</text>
-		<regexp>( :\)| :-\))</regexp>
+		<text>:-)</text>
+		<text>:)</text>
+		<regexp>(:\)|:-\))</regexp>
 		<object>face-smile22.png</object>
 		<button>face-smile48.png</button>
 	</icon>
-	
+
 	<icon>
 		<text> O:-)</text>
 		<text> O:)</text>
@@ -19,32 +19,32 @@
 	</icon>
 
 	<icon>
-		<text> :'-(</text>
-		<text> :'(</text>
-		<text> ;-(</text>
-		<text> ;(</text>
-		<regexp>( :'-\(| :'\(| ;-\(| ;\()</regexp>
+		<text>:'-(</text>
+		<text>:'(</text>
+		<text>;-(</text>
+		<text>;(</text>
+		<regexp>(:'-\(|:'\(|;-\(|;\()</regexp>
 		<object>face-crying22.png</object>
 		<button>face-crying48.png</button>
 	</icon>
 
 	<icon>
-		<text> :-O</text>
-		<text> :-o</text>
-		<text> :O</text>
-		<text> :o</text>
-		<regexp>( :-O| :O)</regexp>
+		<text>:-O</text>
+		<text>:-o</text>
+		<text>:O</text>
+		<text>:o</text>
+		<regexp>(:-O|:O)</regexp>
 		<object>face-surprise22.png</object>
 		<button>face-surprise48.png</button>
 	</icon>
 
 	<icon>
-		<text> 8-)</text>
-		<text> 8-)</text>
-		<text> 8)</text>
-		<text> B-)</text>
-		<text> B)</text>
-		<regexp>( 8\)| 8-\)| B-\)| B\))</regexp>
+		<text>8-)</text>
+		<text>8-)</text>
+		<text>8)</text>
+		<text>B-)</text>
+		<text>B)</text>
+		<regexp>(8\)|8-\)|B-\)|B\))</regexp>
 		<object>face-glasses22.png</object>
 		<button>face-glasses48.png</button>
 	</icon>
@@ -52,10 +52,9 @@
 	<icon>
 		<text>(K)</text>
 		<text>(k)</text>
-		<regexp>( \(K\))</regexp>
+		<regexp>(\(K\))</regexp>
 		<object>face-kiss22.png</object>
 		<button>face-kiss48.png</button>
 	</icon>
 	
 </icondef>
-

@@ -134,6 +134,7 @@
     </property>
     <addaction name="actionShowWengoAccount" />
     <addaction name="actionOpenWengoAccount" />
+    <addaction name="actionEditMyProfile" />
     <addaction name="separator" />
     <addaction name="actionExit" />
    </widget>
@@ -205,6 +206,11 @@
   <action name="actionAdvancedConfiguration" >
    <property name="text" >
     <string>Advanced Configuration</string>
+   </property>
+  </action>
+  <action name="actionEditMyProfile" >
+   <property name="text" >
+    <string>&amp;Edit my profile</string>
    </property>
   </action>
  </widget>

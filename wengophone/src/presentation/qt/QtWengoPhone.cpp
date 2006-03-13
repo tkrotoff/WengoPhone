@@ -31,6 +31,7 @@
 #include "QtLogger.h"
 #include "login/QtLogin.h"
 #include "login/QtSetLogin.h"
+#include "login/QtEditMyProfile.h"
 #include "contactlist/QtContactList.h"
 #include "contactlist/QtAddContact.h"
 #include "QtDialpad.h"
@@ -109,6 +110,10 @@ void QtWengoPhone::initThreadSafe() {
 	//actionOpenWengoAccount
 	QAction * actionOpenWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionOpenWengoAccount");
 	connect(actionOpenWengoAccount, SIGNAL(triggered()), SLOT(openWengoAccount()));
+
+	//actionEditMyProfile
+	QAction * actionEditMyProfile = Object::findChild<QAction *>(_wengoPhoneWindow, "actionEditMyProfile");
+	connect(actionEditMyProfile, SIGNAL(triggered()), SLOT(editMyProfile()));
 
 	//actionExit
 	QAction * actionExit = Object::findChild<QAction *>(_wengoPhoneWindow, "actionExit");
@@ -316,6 +321,11 @@ void QtWengoPhone::showWengoAccount() {
 
 void QtWengoPhone::openWengoAccount() {
 	showLoginWindow();
+}
+
+void QtWengoPhone::editMyProfile(){
+	QtEditMyProfile profile(_tabWidget);
+	profile.exec();
 }
 
 void QtWengoPhone::exitApplication() {

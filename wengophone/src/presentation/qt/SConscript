@@ -25,6 +25,7 @@ headers = [
 	'phonecall/QtVideo.h',
 	'login/QtLogin.h',
 	'login/QtSetLogin.h',
+	'login/QtEditMyProfile.h',
 	'contactlist/TreeModel.h',
 	'contactlist/QtContactWidget.h',
 	'contactlist/QtContactList.h',
@@ -48,6 +49,7 @@ headers = [
 	'chat/QtEmoticon.h',
 	'chat/QtEmoticonButton.h',
 	'chat/chatwidgetmanager.h',
+	'systray/trayicon.h',
 	'sms/QtSms.h',
 	'config/QtAdvancedConfig.h',
 ]
@@ -63,6 +65,7 @@ sources = [
 	'phonecall/QtVideo.cpp',
 	'login/QtLogin.cpp',
 	'login/QtSetLogin.cpp',
+	'login/QtEditMyProfile.cpp',
 	'wenbox/QtWenboxPlugin.cpp',
 	'contactlist/QtContact.cpp',
 	'contactlist/QtContactWidget.cpp',
@@ -89,11 +92,19 @@ sources = [
 	'chat/widgetseeker.cpp',
 	'chat/QtEmoticon.cpp',
 	'chat/QtEmoticonButton.cpp',
+	'systray/trayicon.cpp',
 	'sms/QtSms.cpp',
 	'config/QtAdvancedConfig.cpp',
 	env.WengoCompileQt4Resource('wengophone.qrc')
 ]
 
+if WengoOSMacOSX():
+	sources += ['systray/trayicon_mac.cpp'];
+if WengoOSWindows():
+	sources += ['systray/trayicon_win.cpp'];
+if WengoOSLinux():
+	sources += ['systray/trayicon_x11.cpp'];
+	
 if WengoGetConsoleArgument('sipxwrapper'):
 	defines['SIPXWRAPPER'] = 1
 	libs += ['sipxwrapper']

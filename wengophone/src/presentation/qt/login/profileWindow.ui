@@ -1,0 +1,678 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>Form</class>
+ <widget class="QWidget" name="Form" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>786</width>
+    <height>863</height>
+   </rect>
+  </property>
+  <property name="font" >
+   <font>
+    <family>MS Shell Dlg</family>
+    <pointsize>8</pointsize>
+    <weight>50</weight>
+    <italic>false</italic>
+    <bold>false</bold>
+    <underline>false</underline>
+    <strikeout>false</strikeout>
+   </font>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="5" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Only approved details will be published in the directory !</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <widget class="QGroupBox" name="detailsSeenWPhoneGroup" >
+     <property name="title" >
+      <string>Details seen via Wphone</string>
+     </property>
+     <property name="flat" >
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="avatar" >
+        <property name="minimumSize" >
+         <size>
+          <width>91</width>
+          <height>91</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>91</width>
+          <height>91</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Avatar</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="Line" name="line" >
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QPushButton" name="editDetails" >
+        <property name="text" >
+         <string>&amp;Edit</string>
+        </property>
+        <property name="flat" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QTextEdit" name="aboutYou" />
+      </item>
+      <item row="1" column="0" >
+       <widget class="QPushButton" name="changeAvatar" >
+        <property name="text" >
+         <string>Change A&amp;vatar</string>
+        </property>
+        <property name="flat" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <widget class="QGroupBox" name="advancedDetailsGroup" >
+     <property name="title" >
+      <string>Advanced details</string>
+     </property>
+     <property name="flat" >
+      <bool>false</bool>
+     </property>
+     <property name="checkable" >
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="3" column="1" >
+       <widget class="QLineEdit" name="web" />
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="label_21" >
+        <property name="text" >
+         <string>web</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QLineEdit" name="blog" />
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="label_20" >
+        <property name="text" >
+         <string>blog</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2" >
+       <widget class="QLabel" name="label_4" >
+        <property name="text" >
+         <string>Public e-mail for directory (if different from Wengo login)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QLineEdit" name="email" />
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label_19" >
+        <property name="text" >
+         <string>Email</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>248</width>
+          <height>21</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2" >
+    <widget class="QGroupBox" name="personalDetailsGroup" >
+     <property name="title" >
+      <string>More personal details</string>
+     </property>
+     <property name="flat" >
+      <bool>false</bool>
+     </property>
+     <property name="checkable" >
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="2" >
+       <widget class="QLabel" name="label_17" >
+        <property name="text" >
+         <string>Home phone</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3" >
+       <widget class="QLineEdit" name="homePhone" />
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_16" >
+        <property name="text" >
+         <string>Wengo phone</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label_15" >
+        <property name="text" >
+         <string>Cell phone</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QLineEdit" name="wengoPhone" />
+      </item>
+      <item row="0" column="1" >
+       <widget class="QLineEdit" name="cellPhone" />
+      </item>
+      <item row="1" column="2" >
+       <widget class="QLabel" name="label_18" >
+        <property name="text" >
+         <string>Work phone</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3" >
+       <widget class="QLineEdit" name="workPhone" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QGroupBox" name="IMAccountGroup" >
+     <property name="title" >
+      <string>Instant Messaging accounts</string>
+     </property>
+     <property name="flat" >
+      <bool>false</bool>
+     </property>
+     <property name="checkable" >
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="1" column="1" >
+       <widget class="QLineEdit" name="imAccount1" />
+      </item>
+      <item row="3" column="5" >
+       <widget class="QLineEdit" name="imAccount9" />
+      </item>
+      <item row="1" column="6" >
+       <widget class="QPushButton" name="addIMAccount" >
+        <property name="text" >
+         <string>A&amp;dd IM accounts</string>
+        </property>
+        <property name="flat" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="6" >
+       <widget class="QPushButton" name="modityIMAccount" >
+        <property name="text" >
+         <string>Mo&amp;dify IM accounts</string>
+        </property>
+        <property name="flat" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="5" >
+       <widget class="QLineEdit" name="imAccount8" />
+      </item>
+      <item row="1" column="5" >
+       <widget class="QLineEdit" name="imAccount7" >
+        <property name="enabled" >
+         <bool>true</bool>
+        </property>
+        <property name="readOnly" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3" >
+       <widget class="QLineEdit" name="imAccount6" />
+      </item>
+      <item row="2" column="3" >
+       <widget class="QLineEdit" name="imAccount5" />
+      </item>
+      <item row="1" column="3" >
+       <widget class="QLineEdit" name="imAccount4" />
+      </item>
+      <item row="3" column="1" >
+       <widget class="QLineEdit" name="imAccount3" />
+      </item>
+      <item row="2" column="1" >
+       <widget class="QLineEdit" name="imAccount2" />
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="imPic1" >
+        <property name="text" >
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="imPic2" >
+        <property name="text" >
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="imPic3" >
+        <property name="text" >
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QLabel" name="imPic4" >
+        <property name="text" >
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" >
+       <widget class="QLabel" name="imPic5" >
+        <property name="text" >
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2" >
+       <widget class="QLabel" name="imPic6" >
+        <property name="text" >
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4" >
+       <widget class="QLabel" name="imPic7" >
+        <property name="text" >
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4" >
+       <widget class="QLabel" name="imPic8" >
+        <property name="text" >
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="4" >
+       <widget class="QLabel" name="imPic9" >
+        <property name="text" >
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QGroupBox" name="wengoGeneralDetailsGroup" >
+     <property name="layoutDirection" >
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="title" >
+      <string>Wengo general details</string>
+     </property>
+     <property name="flat" >
+      <bool>false</bool>
+     </property>
+     <property name="checkable" >
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="0" column="2" >
+         <widget class="QLineEdit" name="wengoNickName" />
+        </item>
+        <item row="4" column="0" >
+         <widget class="QLabel" name="label_7" >
+          <property name="text" >
+           <string>Birth Date</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="2" >
+         <widget class="QLineEdit" name="firstName" >
+          <property name="maxLength" >
+           <number>20</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" >
+         <widget class="QLabel" name="label_5" >
+          <property name="text" >
+           <string>First name</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2" >
+         <widget class="QLabel" name="label_3" >
+          <property name="text" >
+           <string>Wengo nickname</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1" colspan="2" >
+         <widget class="QLineEdit" name="city" >
+          <property name="maxLength" >
+           <number>20</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1" colspan="2" >
+         <widget class="QLineEdit" name="lastName" >
+          <property name="maxLength" >
+           <number>20</number>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0" >
+         <widget class="QLabel" name="label_8" >
+          <property name="text" >
+           <string>City</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1" colspan="2" >
+         <widget class="QDateEdit" name="birthDate" >
+          <property name="displayFormat" >
+           <string>dd MMMM yyyy</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" >
+         <widget class="QLabel" name="label_6" >
+          <property name="text" >
+           <string>Last name</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2" >
+         <widget class="QPushButton" name="changePassword" >
+          <property name="text" >
+           <string>Change pass&amp;word</string>
+          </property>
+          <property name="flat" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1" >
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="5" column="0" colspan="2" >
+         <widget class="QLabel" name="label_12" >
+          <property name="text" >
+           <string>State</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2" >
+         <widget class="QComboBox" name="state" />
+        </item>
+        <item row="3" column="2" >
+         <widget class="QComboBox" name="gender" >
+          <item>
+           <property name="text" >
+            <string>Male</string>
+           </property>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Female</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="4" column="2" >
+         <widget class="QComboBox" name="country" />
+        </item>
+        <item row="3" column="0" colspan="2" >
+         <widget class="QLabel" name="label_10" >
+          <property name="text" >
+           <string>Gender</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0" colspan="2" >
+         <widget class="QLabel" name="label_11" >
+          <property name="text" >
+           <string>Country / Region</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QLabel" name="label_9" >
+          <property name="text" >
+           <string>Atl. SIP @</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2" >
+         <widget class="QLineEdit" name="altSip" />
+        </item>
+        <item row="2" column="2" >
+         <widget class="QPushButton" name="addSipAcount" >
+          <property name="text" >
+           <string>Add a &amp;SIP account</string>
+          </property>
+          <property name="flat" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2" >
+    <widget class="QFrame" name="frame" >
+     <property name="frameShape" >
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>0</number>
+        </property>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2" >
+          <property name="font" >
+           <font>
+            <family>MS Shell Dlg</family>
+            <pointsize>8</pointsize>
+            <weight>50</weight>
+            <italic>false</italic>
+            <bold>false</bold>
+            <underline>false</underline>
+            <strikeout>false</strikeout>
+           </font>
+          </property>
+          <property name="text" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:12pt; font-weight:600;">Directory details&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="1" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="saveChange" >
+       <property name="text" >
+        <string>&amp;Save</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelChange" >
+       <property name="text" >
+        <string>&amp;Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

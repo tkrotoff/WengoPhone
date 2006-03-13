@@ -84,6 +84,8 @@ private Q_SLOTS:
 
 	void openWengoAccount();
 
+	void editMyProfile();
+	
 	void exitApplication();
 
 	void addContact();
