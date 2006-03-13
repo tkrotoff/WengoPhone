@@ -7,6 +7,7 @@ libs = [
 ]
 lib_path = []
 include_path = ['include']
+link_flags = []
 headers = []
 sources = [
 	'src/Startup.cpp',
@@ -27,10 +28,14 @@ sources = [
 if WengoOSWindows():
 	libs += ['advapi32', 'shell32']
 
+elif WengoOSMacOSX():	
+	link_flags += ['-framework CoreFoundation']
+
 if WengoCCMSVC():
 	sources += ['src/win32/MemoryDump.cpp']
 	libs += ['shlwapi']
 
+env.WengoAddLinkFlags(link_flags)
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 env.WengoAddDoxyfile()

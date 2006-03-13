@@ -28,12 +28,14 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#ifdef OS_WINDOWS
+#if defined(OS_WINDOWS)
 	#ifndef S_ISDIR
 		#define S_ISDIR(x) ((x) & _S_IFDIR)
 		#define S_ISREG(x) ((x) & _S_IFREG)
 	#endif
-#endif	//OS_WINDOWS
+#elif defined(OS_MACOSX)
+	#include <CoreFoundation/CoreFoundation.h>
+#endif
 
 
 #include <dirent.h>
@@ -123,18 +125,37 @@ StringList File::getFileList() const {
 }
 
 std::string File::getApplicationDirPath() {
-	std::string tmp;
+	std::string result;
 
-#ifdef OS_WINDOWS
+#if defined(OS_WINDOWS)
+
 	char moduleName[256];
 	GetModuleFileNameA(0, moduleName, sizeof(moduleName));
 
 	File file(moduleName);
-	tmp = file.getPath();
-	tmp += File::getPathSeparator();
-#endif	//OS_WINDOWS
+	result = file.getPath();
+	result += File::getPathSeparator();
 
-	return tmp;
+#elif defined(OS_MACOSX)
+
+	CFBundleRef mainBundle = CFBundleGetMainBundle();
+	if (mainBundle) {
+		CFURLRef execUrl = CFBundleCopyExecutableURL(mainBundle);
+		CFURLRef url = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, execUrl);
+
+		char applicationPath[1024];
+	
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)applicationPath, sizeof(applicationPath))) {
+			result = (std::string(applicationPath) + File::getPathSeparator());
+		}
+	
+		CFRelease(execUrl);
+		CFRelease(url);
+	}
+
+#endif //OS_MACOSX
+
+	return result;
 }
 
 std::string File::convertPathSeparators(const std::string & path) {
