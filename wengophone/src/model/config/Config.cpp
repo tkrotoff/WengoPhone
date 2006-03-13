@@ -123,6 +123,7 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[AUDIO_AEC_KEY] = false;
 	_keyDefaultValueMap[AUDIO_HALFDUPLEX_KEY] = true;
 
+	_keyDefaultValueMap[PROFILE_NICKNAME] = empty;
 	_keyDefaultValueMap[PROFILE_FIRSTNAME] = empty;
 	_keyDefaultValueMap[PROFILE_LASTNAME] = empty;
 	_keyDefaultValueMap[PROFILE_BIRTHDATE] = empty;
@@ -356,6 +357,11 @@ std::string Config::getProfileIMPic7() const {
 std::string Config::getProfileIMPic8() const {
 	return getStringKeyValue(PROFILE_IMPIC8);
 }
+
+std::string Config::getProfileIMPic9() const {
+	return getStringKeyValue(PROFILE_IMPIC9);
+}
+
 
 std::string Config::getProfileIMEmail1()  const {
 	return getStringKeyValue(PROFILE_IMEMAIL1);
