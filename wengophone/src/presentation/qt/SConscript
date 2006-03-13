@@ -98,7 +98,7 @@ sources = [
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]
 if WengoOSWindows():  
-	source.append(WengoGetEnvironment().WengoCompileWindowsResource('win32/wengophone.rc'))
+	sources.append(WengoGetEnvironment().WengoCompileWindowsResource('win32/wengophone.rc'))
 
 if WengoOSMacOSX():
 	sources += ['systray/trayicon_mac.cpp'];
