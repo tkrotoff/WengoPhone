@@ -402,6 +402,8 @@ void QtWengoPhone::showAdvancedConfig() {
 }
 
 void QtWengoPhone::setTrayMenu(){
+	if ( ! _trayMenu )
+		_trayMenu = new QMenu(_wengoPhoneWindow);
 	_trayMenu->clear();
 	_trayMenu->addAction(tr("Open Wengophone"));
 	_trayMenu->addAction(tr("Status"));
