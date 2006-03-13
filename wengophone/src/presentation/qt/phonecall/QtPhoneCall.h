@@ -65,7 +65,7 @@ private Q_SLOTS:
 
 	void muteButtonClicked();
 
-	void holdButtonClicked();
+	void holdResumeButtonClicked();
 
 	void addContactButtonClicked();
 
@@ -91,11 +91,13 @@ private:
 
 	QPushButton * _muteButton;
 
-	QPushButton * _holdButton;
+	QPushButton * _holdResumeButton;
 
 	QPushButton * _addContactButton;
 
 	QtVideo * _videoWindow;
+
+	bool _hold;
 };
 
 #endif	//QTPHONECALL_H

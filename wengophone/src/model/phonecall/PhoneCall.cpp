@@ -101,6 +101,11 @@ void PhoneCall::resume() {
 	LOG_DEBUG("call resumed");
 }
 
+void PhoneCall::mute() {
+	_phoneLine.muteCall(_callId);
+	LOG_DEBUG("call muted");
+}
+
 void PhoneCall::setState(int status) {
 	for (unsigned i = 0; i < _phoneCallStateList.size(); i++) {
 		PhoneCallState * state = _phoneCallStateList[i];

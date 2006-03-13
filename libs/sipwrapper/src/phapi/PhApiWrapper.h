@@ -105,6 +105,8 @@ public:
 
 	void resumeCall(int callId);
 
+	void muteCall(int callId);
+
 	void playTone(int callId, EnumTone::Tone tone);
 
 	void playSoundFile(int callId, const std::string & soundFile);

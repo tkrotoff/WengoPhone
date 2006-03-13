@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 
 #include <QObject>
 
+#include <string>
+
 class CWengoPhone;
 class QtContactWidget;
 class QWidget;
@@ -30,7 +32,7 @@ class QtAddContact : public QObject {
 	Q_OBJECT
 public:
 
-	QtAddContact(CWengoPhone & cWengoPhone, QWidget * parent);
+	QtAddContact(CWengoPhone & cWengoPhone, QWidget * parent, const std::string & contactPhoneNumber = "");
 
 private Q_SLOTS:
 
@@ -45,6 +47,8 @@ private:
 	QtContactWidget * _qtContactWidget;
 
 	CWengoPhone & _cWengoPhone;
+
+	std::string _contactPhoneNumber;
 };
 
 #endif	//QTADDCONTACT_H

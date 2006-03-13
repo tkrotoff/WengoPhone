@@ -21,12 +21,15 @@
 
 #include "QtVideo.h"
 
+#include <presentation/qt/contactlist/QtAddContact.h>
 #include <presentation/qt/QtWengoPhone.h>
 
 #include <control/phonecall/CPhoneCall.h>
 #include <control/CWengoPhone.h>
 
 #include <sipwrapper/WebcamVideoFrame.h>
+
+#include <Logger.h>
 
 #include <WidgetFactory.h>
 #include <Object.h>
@@ -39,6 +42,7 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 
 	_qtWengoPhone = (QtWengoPhone *) _cPhoneCall.getCWengoPhone().getPresentation();
 	_videoWindow = NULL;
+	_hold = true;
 
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::initThreadSafe, this));
@@ -49,7 +53,7 @@ void QtPhoneCall::initThreadSafe() {
 	_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/PhoneCallWidget.ui", _qtWengoPhone->getWidget());
 
 	QString sipAddress = QString::fromStdString(_cPhoneCall.getPeerSipAddress());
-	QString callAddress = QString::fromStdString(_cPhoneCall.getPeerDisplayName());;
+	QString callAddress = QString::fromStdString(_cPhoneCall.getPeerDisplayName());
 	if (callAddress.isEmpty()) {
 		callAddress = QString::fromStdString(_cPhoneCall.getPeerUserName());
 	}
@@ -76,10 +80,10 @@ void QtPhoneCall::initThreadSafe() {
 	_muteButton->disconnect();
 	connect(_muteButton, SIGNAL(clicked()), SLOT(muteButtonClicked()));
 
-	//holdButton
-	_holdButton = Object::findChild<QPushButton *>(_phoneCallWidget, "holdButton");
-	_holdButton->disconnect();
-	connect(_holdButton, SIGNAL(clicked()), SLOT(holdButtonClicked()));
+	//holdResumeButton
+	_holdResumeButton = Object::findChild<QPushButton *>(_phoneCallWidget, "holdResumeButton");
+	_holdResumeButton->disconnect();
+	connect(_holdResumeButton, SIGNAL(clicked()), SLOT(holdResumeButtonClicked()));
 
 	//addContactButton
 	_addContactButton = Object::findChild<QPushButton *>(_phoneCallWidget, "addContactButton");
@@ -145,10 +149,32 @@ void QtPhoneCall::rejectButtonClicked() {
 }
 
 void QtPhoneCall::muteButtonClicked() {
+	_cPhoneCall.mute();
 }
 
-void QtPhoneCall::holdButtonClicked() {
+void QtPhoneCall::holdResumeButtonClicked() {
+	static const QString originalHoldText = _holdResumeButton->text();
+
+	if (_hold) {
+		_holdResumeButton->setEnabled(false);
+		_cPhoneCall.hold();
+		_holdResumeButton->setText(tr("Resume"));
+		_holdResumeButton->setEnabled(true);
+	} else {
+		_holdResumeButton->setEnabled(false);
+		_cPhoneCall.resume();
+		_holdResumeButton->setText(originalHoldText);
+		_holdResumeButton->setEnabled(true);
+	}
+
+	_hold = !_hold;
 }
 
 void QtPhoneCall::addContactButtonClicked() {
+	std::string callAddress = _cPhoneCall.getPeerDisplayName();
+	if (callAddress.empty()) {
+		callAddress = _cPhoneCall.getPeerUserName();
+	}
+	QtAddContact * qtAddContact = new QtAddContact(_cPhoneCall.getCWengoPhone(), _phoneCallWidget, callAddress);
+	LOG_DEBUG("add contact=" + callAddress);
 }

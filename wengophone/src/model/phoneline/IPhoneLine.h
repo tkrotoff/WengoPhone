@@ -95,6 +95,11 @@ public:
 	virtual void resumeCall(int callId) = 0;
 
 	/**
+	 * @see SipWrapper::muteCall()
+	 */
+	virtual void muteCall(int callId) = 0;
+
+	/**
 	 * @see SipWrapper::playTone()
 	 */
 	virtual void playTone(int callId, EnumTone::Tone tone) = 0;

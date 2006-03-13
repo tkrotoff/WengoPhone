@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,9 +36,11 @@
 
 #include <QtGui>
 
-QtAddContact::QtAddContact(CWengoPhone & cWengoPhone, QWidget * parent)
+QtAddContact::QtAddContact(CWengoPhone & cWengoPhone, QWidget * parent, const std::string & contactPhoneNumber)
 	: QObject(parent),
 	_cWengoPhone(cWengoPhone) {
+
+	_contactPhoneNumber = contactPhoneNumber;
 
 	_addContactWindow = WidgetFactory::create(":/forms/contactlist/AddContactWindow.ui", parent);
 
@@ -63,6 +65,7 @@ void QtAddContact::showContactGroups() {
 
 void QtAddContact::addContact() {
 	Contact & contact = _cWengoPhone.getWengoPhone().getContactList().createContact();
+	contact.setWengoPhoneId(_contactPhoneNumber);
 
 	_qtContactWidget->createContact(contact);
 

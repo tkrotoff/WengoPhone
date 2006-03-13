@@ -219,6 +219,13 @@ public:
 	virtual void resumeCall(int callId) = 0;
 
 	/**
+	 * Mutes a given phone call.
+	 *
+	 * @param callId id of the phone call to mute
+	 */
+	virtual void muteCall(int callId) = 0;
+
+	/**
 	 * Sends a DTMF to a given phone call.
 	 *
 	 * @param callId phone call id to send a DTMF

@@ -217,6 +217,10 @@ void PhoneLine::resumeCall(int callId) {
 	_sipWrapper->resumeCall(callId);
 }
 
+void PhoneLine::muteCall(int callId) {
+	_sipWrapper->muteCall(callId);
+}
+
 void PhoneLine::playTone(int callId, EnumTone::Tone tone) {
 	_sipWrapper->playTone(callId, tone);
 }

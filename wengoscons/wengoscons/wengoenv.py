@@ -520,6 +520,8 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		#Command line arguments
 		self.__consoleArguments = {}
+		for arg, value in ARGUMENTS.iteritems():
+			self.__consoleArguments[arg] = value
 
 		#Aliases, see Scons.Alias()
 		#self.__aliases = {}

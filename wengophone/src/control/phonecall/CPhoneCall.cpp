@@ -153,3 +153,15 @@ bool CPhoneCall::canPickUp() const {
 		return false;
 	}
 }
+
+void CPhoneCall::mute() {
+	_phoneCall.mute();
+}
+
+void CPhoneCall::hold() {
+	_phoneCall.hold();
+}
+
+void CPhoneCall::resume() {
+	_phoneCall.resume();
+}

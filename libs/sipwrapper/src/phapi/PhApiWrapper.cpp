@@ -230,6 +230,9 @@ void PhApiWrapper::resumeCall(int callId) {
 	phResumeCall(callId);
 }
 
+void PhApiWrapper::muteCall(int callId) {
+}
+
 void PhApiWrapper::playTone(int callId, EnumTone::Tone tone) {
 	static const int INBAND_DTMF = 1;
 

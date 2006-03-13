@@ -50,7 +50,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="holdButton" >
+      <widget class="QPushButton" name="holdResumeButton" >
        <property name="text" >
         <string>Hold</string>
        </property>
@@ -92,7 +92,7 @@
         <string>Accept</string>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/pics/call_button_small.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/pics/call_button_small.png</iconset>
        </property>
       </widget>
      </item>
@@ -102,7 +102,7 @@
         <string>Reject</string>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/pics/hangup_button_small.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/pics/hangup_button_small.png</iconset>
        </property>
       </widget>
      </item>
@@ -148,7 +148,7 @@
         <string/>
        </property>
        <property name="pixmap" >
-        <pixmap resource="..\wengophone.qrc" >:/pics/contact_picture.png</pixmap>
+        <pixmap resource="../wengophone.qrc" >:/pics/contact_picture.png</pixmap>
        </property>
       </widget>
      </item>

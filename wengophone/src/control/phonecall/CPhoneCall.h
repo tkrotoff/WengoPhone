@@ -57,6 +57,21 @@ public:
 	bool canPickUp() const;
 
 	/**
+	 * @see PhoneCall::mute()
+	 */
+	void mute();
+
+	/**
+	 * @see PhoneCall::hold()
+	 */
+	void hold();
+
+	/**
+	 * @see PhoneCall::resume()
+	 */
+	void resume();
+
+	/**
 	 * Gets the peer SIP address (phone number) of the current call.
 	 *
 	 * @return SIP address

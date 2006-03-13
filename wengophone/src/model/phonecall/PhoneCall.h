@@ -93,6 +93,11 @@ public:
 	void close();
 
 	/**
+	 * @see IPhoneLine::mute()
+	 */
+	void mute();
+
+	/**
 	 * @see IPhoneLine::playTone()
 	 */
 	void playTone(EnumTone::Tone tone);
