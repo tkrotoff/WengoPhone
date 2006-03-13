@@ -2,9 +2,9 @@ import ftplib
 import ConfigParser
 import sys
 
-if len(sys.argv) != 6:
+if len(sys.argv) < 5:
     print "usage: python upload_nightly.py"\
-    "[source|binary] [NG|Classic] [GNULinux|Win32|MacOSX]"\
+    "[source|binary|installer] [NG|Classic] [GNULinux|Win32|MacOSX]"\
     "[data_file] [info_file]"
     sys.exit(1)
 nightly_type = sys.argv[1]
