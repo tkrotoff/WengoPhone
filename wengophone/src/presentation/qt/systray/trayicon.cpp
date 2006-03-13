@@ -212,7 +212,7 @@ void TrayIcon::mousePressEvent( QMouseEvent *e )
 			break;
 		case Qt::LeftButton:
 		case Qt::MidButton:
-			emit clicked( e->globalPos(), e->button() );
+			clicked( e->globalPos(), e->button() );
 			break;
 		default:
 			break;
