@@ -336,9 +336,22 @@ public:
 	
 	/** @} */
 
+	/**
+	 * @name Path Methods
+	 * @{
+	 */
+
 	/** Location of configuration files on the hard disk. */
 	static const std::string CONFIG_DIR_KEY;
 	std::string getConfigDir() const;
+
+	/** Resources directory. */
+	static const std::string RESOURCES_DIR_KEY;
+	std::string getResourcesDir() const;
+
+	/**
+	 * @}
+	 */
 
 	/**
 	 * @see Settings::getAny()

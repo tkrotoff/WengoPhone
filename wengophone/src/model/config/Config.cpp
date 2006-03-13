@@ -23,6 +23,12 @@
 #include <File.h>
 #include <Logger.h>
 
+#include <global.h>
+
+#ifdef OS_MACOSX
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 const std::string Config::NETWORK_SSO_SSL_KEY = "network.sso.ssl";
 const std::string Config::NETWORK_NAT_TYPE_KEY = "network.nat.type";
 const std::string Config::NETWORK_SIP_SERVER_KEY = "network.sip.server";
@@ -93,11 +99,31 @@ const std::string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
 const std::string Config::WENGO_SSO_PATH_KEY = "wengo.sso.path";
 
 const std::string Config::CONFIG_DIR_KEY = "config.dir";
-
+const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
 
 Config::Config(const std::string & name) {
 	static const std::string empty("");
+	std::string resourcesPath;
 	_name = name;
+
+	_keyDefaultValueMap[CONFIG_DIR_KEY] = File::getApplicationDirPath();
+
+#if defined(OS_WINDOWS)
+	resourcesPath = File::getApplicationDirPath();
+#elif defined(OS_MACOSX)
+	CFBundleRef mainBundle = CFBundleGetMainBundle();
+	if (mainBundle) {
+		CFURLRef url = CFBundleCopyResourcesDirectoryURL(mainBundle);
+		char applicationPath[1024];
+	
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)applicationPath, sizeof(applicationPath))) {
+			resourcesPath = (std::string(applicationPath) + File::getPathSeparator());
+		}
+	
+		CFRelease(url);
+	}
+#endif
+	_keyDefaultValueMap[RESOURCES_DIR_KEY] = resourcesPath;
 
 	_keyDefaultValueMap[NETWORK_SSO_SSL_KEY] = true;
 	_keyDefaultValueMap[NETWORK_NAT_TYPE_KEY] = std::string("NatTypeSymmetric");
@@ -117,9 +143,9 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[AUDIO_OUTPUT_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
 	_keyDefaultValueMap[AUDIO_INPUT_DEVICENAME_KEY] = AudioDevice::getDefaultRecordDevice();
 	_keyDefaultValueMap[AUDIO_RINGER_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
-	_keyDefaultValueMap[AUDIO_RINGING_FILE_KEY] = File::convertPathSeparators(File::getApplicationDirPath() + "sounds/ringin.wav");
-	_keyDefaultValueMap[AUDIO_CALLCLOSED_FILE_KEY] = File::convertPathSeparators(File::getApplicationDirPath() + "sounds/callclosed.wav");
-	_keyDefaultValueMap[AUDIO_SMILEYS_DIR_KEY] = File::convertPathSeparators(File::getApplicationDirPath() + "sounds/tones/");
+	_keyDefaultValueMap[AUDIO_RINGING_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
+	_keyDefaultValueMap[AUDIO_CALLCLOSED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/callclosed.wav");
+	_keyDefaultValueMap[AUDIO_SMILEYS_DIR_KEY] = File::convertPathSeparators(resourcesPath + "sounds/tones/");
 	_keyDefaultValueMap[AUDIO_AEC_KEY] = false;
 	_keyDefaultValueMap[AUDIO_HALFDUPLEX_KEY] = true;
 
@@ -168,7 +194,6 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
 	_keyDefaultValueMap[WENGO_SSO_PATH_KEY] = std::string("/softphone-sso/sso.php");
 
-	_keyDefaultValueMap[CONFIG_DIR_KEY] = File::getApplicationDirPath();
 }
 
 Config::~Config() {
@@ -252,6 +277,10 @@ bool Config::getAudioHalfDuplex() const {
 
 std::string Config::getConfigDir() const {
 	return getStringKeyValue(CONFIG_DIR_KEY);
+}
+
+std::string Config::getResourcesDir() const {
+	return getStringKeyValue(RESOURCES_DIR_KEY);
 }
 
 std::string Config::getAudioSmileysDir() const {
