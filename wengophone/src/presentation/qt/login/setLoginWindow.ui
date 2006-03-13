@@ -39,6 +39,16 @@
        </item>
        <item>
         <property name="text" >
+         <string>ICQ</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>AIM</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
          <string>Jabber</string>
         </property>
        </item>

@@ -416,7 +416,7 @@ static void srv_resolved_cb(GaimSrvResponse *resp, int results, gpointer data)
 		g_free(resp);
 	} else {
 		jabber_login_connect(js, js->user->domain,
-			gaim_account_get_int(js->gc->account, "port", 0));
+			gaim_account_get_int(js->gc->account, "port", 5222));
 	}
 }
 

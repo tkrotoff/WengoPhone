@@ -344,24 +344,29 @@ void QtWengoPhone::addContact() {
 void QtWengoPhone::actionSetLogin() {
 	QtSetLogin * qtSetLogin = new QtSetLogin(_wengoPhoneWindow);
 
-	qtSetLogin->exec();
-
-	EnumIMProtocol::IMProtocol protocol;
-	string selProtocol = qtSetLogin->getProtocol();
-	string login = qtSetLogin->getLogin();
-	string password = qtSetLogin->getPassword();
-
-	if (selProtocol == "MSN") {
-		protocol = EnumIMProtocol::IMProtocolMSN;
-	} else if (selProtocol == "Yahoo") {
-		protocol = EnumIMProtocol::IMProtocolYahoo;
-	} else if (selProtocol == "Jabber") {
-		protocol = EnumIMProtocol::IMProtocolJabber;
+	if (qtSetLogin->exec()) {
+		EnumIMProtocol::IMProtocol protocol;
+		string selProtocol = qtSetLogin->getProtocol();
+		string login = qtSetLogin->getLogin();
+		string password = qtSetLogin->getPassword();
+	
+		if (selProtocol == "MSN") {
+			protocol = EnumIMProtocol::IMProtocolMSN;
+		} else if (selProtocol == "Yahoo") {
+			protocol = EnumIMProtocol::IMProtocolYahoo;
+		} else if (selProtocol == "AIM") {
+			protocol = EnumIMProtocol::IMProtocolAIM;
+		} else if (selProtocol == "ICQ") {
+			protocol = EnumIMProtocol::IMProtocolICQ;
+		} else if (selProtocol == "Jabber") {
+			protocol = EnumIMProtocol::IMProtocolJabber;
+			login += "/WengoPhone";
+		}
+	
+		_cWengoPhone.addIMAccount(login, password, protocol);
+		_cWengoPhone.getWengoPhone().getConnectHandler().connect(IMAccount(login, password, protocol));
+		LOG_DEBUG("set login");
 	}
-
-	_cWengoPhone.addIMAccount(login, password, protocol);
-	_cWengoPhone.getWengoPhone().getConnectHandler().connect(IMAccount(login, password, protocol));
-	LOG_DEBUG("set login");
 }
 
 void QtWengoPhone::showConfig() {
