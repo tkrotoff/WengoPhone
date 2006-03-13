@@ -32,6 +32,7 @@
 #include "login/QtLogin.h"
 #include "login/QtSetLogin.h"
 #include "login/QtEditMyProfile.h"
+
 #include "contactlist/QtContactList.h"
 #include "contactlist/QtAddContact.h"
 #include "QtDialpad.h"
@@ -48,6 +49,7 @@
 #include <global.h>
 
 #include <QtGui>
+#include <trayicon.h>
 
 using namespace std;
 
@@ -72,12 +74,6 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 }
 
 void QtWengoPhone::initThreadSafe() {
-#ifndef OS_MACOSX
-	//FIXME shit man, this is fucking ugly!
-	//read http://wiki.mozilla.org/FX2_Visual_Update
-	//QApplication::setStyle(new QPlastiqueStyle);
-#endif
-
 	_wengoPhoneWindow = qobject_cast<QMainWindow *>(WidgetFactory::create(":/forms/WengoPhoneWindow.ui", NULL));
 
 	//callButton
@@ -97,6 +93,12 @@ void QtWengoPhone::initThreadSafe() {
 	QWidget * tabDialpad = Object::findChild<QWidget *>(_tabWidget, "tabDialpad");
 	createLayout(tabDialpad)->addWidget(qtDialpad->getWidget());
 
+	// systray
+	_trayMenu = NULL;
+	_trayIcon = new TrayIcon( QPixmap("images/systray_icon.png"),QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
+	setTrayMenu();
+	_trayIcon->show();
+	
 	//logger
 	//FIXME no more logger tab widget
 	/*QtLogger * qtLogger = new QtLogger(_wengoPhoneWindow);
@@ -397,6 +399,16 @@ void QtWengoPhone::showAdvancedConfig() {
 
 	configWindow->populate();
 	configWindow->getWidget()->show();
+}
+
+void QtWengoPhone::setTrayMenu(){
+	_trayMenu->clear();
+	_trayMenu->addAction(tr("Open Wengophone"));
+	_trayMenu->addAction(tr("Status"));
+	_trayMenu->addAction(tr("Call"));
+	_trayMenu->addAction(tr("Send a SMS"));
+	_trayMenu->addAction(tr("Start a chat"));
+	_trayMenu->addAction(tr("Quit Wengophone"));
 }
 
 void QtWengoPhone::wrongProxyAuthenticationEventHandler(SipAccount & sender,

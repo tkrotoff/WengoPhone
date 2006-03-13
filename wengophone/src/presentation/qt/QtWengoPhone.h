@@ -26,6 +26,8 @@
 #include <QObjectThreadSafe.h>
 
 #include <QMainWindow>
+#include <QMenu>
+#include <trayicon.h>
 
 class SipAccount;
 class CWengoPhone;
@@ -109,6 +111,8 @@ private Q_SLOTS:
 	void sendSms();
 
 	void showAdvancedConfig();
+	
+	void setTrayMenu();
 
 private:
 
@@ -157,6 +161,10 @@ private:
 	QComboBox * _phoneComboBox;
 
 	QTabWidget * _tabWidget;
+	
+	TrayIcon * _trayIcon;
+	
+	QMenu  * _trayMenu;
 
 	QtSms * _qtSms;
 };

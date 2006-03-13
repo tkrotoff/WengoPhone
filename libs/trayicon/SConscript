@@ -1,0 +1,33 @@
+env = WengoGetQt4Environment()
+
+libs = [
+	'qt4'
+]
+
+lib_path = []
+include_path = ['.']
+headers = ['trayicon.h']
+sources = [
+	'trayicon.cpp',
+]
+
+if WengoOSMacOSX():
+	sources += ['trayicon_mac.cpp'];
+if WengoOSWindows():
+	sources += ['trayicon_win.cpp'];
+if WengoOSLinux():
+	sources += ['trayicon_x11.cpp'];
+
+
+def moc(env, headers):
+	moced = []
+	for header in headers:
+		moced += [ env.Moc(header) ]
+	return moced
+moced = moc(env, headers)
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+
+env.WengoStaticLibrary('trayicon', sources + moced, headers)

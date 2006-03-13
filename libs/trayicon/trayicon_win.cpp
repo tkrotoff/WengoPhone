@@ -20,18 +20,16 @@
 
 #include "trayicon.h"
 
-#include <qwidget.h>
-#include <qapplication.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qbitmap.h>
-#include <qcursor.h>
-#include <qlibrary.h>
+#include <QWidget>
+#include <QApplication>
+#include <QImage>
+#include <QPixmap>
+#include <QBitmap>
+#include <QCursor>
+#include <QLibrary>
+#include <QPainter>
 
 #include <qt_windows.h>
-
-#include <windows.h>
-#include <shellapi.h>
 
 static uint WM_TASKBARCREATED = 0;
 #define WM_NOTIFYICON	(WM_APP+101)
@@ -42,7 +40,7 @@ static PtrShell_NotifyIcon ptrShell_NotifyIcon = 0;
 static void resolveLibs()
 {
 	QLibrary lib("shell32");
-	lib.setAutoUnload( FALSE );
+	//lib.setAutoUnload( FALSE );
 	static bool triedResolve = FALSE;
 	if ( !ptrShell_NotifyIcon && !triedResolve ) {
 		triedResolve = TRUE;
@@ -91,9 +89,8 @@ public:
  			tnd.hIcon		= hIcon;
  			if ( !iconObject->toolTip().isNull() ) {
 				// Tip is limited to 63 + NULL; lstrcpyn appends a NULL terminator.
-				QString tip = iconObject->toolTip().left( 63 );
-				tip.append('\0');
-				lstrcpynA(tnd.szTip, (const char*)tip.local8Bit(), QMIN( tip.length()+1, 64 ) );
+				QString tip = iconObject->toolTip().left( 63 ) + QChar();
+				lstrcpynA(tnd.szTip, (const char*)tip.toLocal8Bit(), qMin( tip.length()+1, 64 ) );
  			}
  		}
 
@@ -104,7 +101,7 @@ public:
     bool trayMessageW( DWORD msg )
     {
 		resolveLibs();
-		if ( ! (ptrShell_NotifyIcon && qWinVersion() & Qt::WV_NT_based) )
+		if ( ! (ptrShell_NotifyIcon && QSysInfo::WindowsVersion & QSysInfo::WV_NT_based) )
 			return trayMessageA( msg );
 
 		NOTIFYICONDATAW tnd;
@@ -120,7 +117,7 @@ public:
 			if ( !iconObject->toolTip().isNull() ) {
 				// Tip is limited to 63 + NULL; lstrcpyn appends a NULL terminator.
 				QString tip = iconObject->toolTip().left( 63 ) + QChar();
-				lstrcpynW(tnd.szTip, (TCHAR*)tip.unicode(), QMIN( tip.length()+1, 64 ) );
+				lstrcpynW(tnd.szTip, (TCHAR*)tip.unicode(), qMin( tip.length()+1, 64 ) );
 				//		lstrcpynW(tnd.szTip, (TCHAR*)qt_winTchar( tip, FALSE ), QMIN( tip.length()+1, 64 ) );
 			}
 		}
@@ -146,7 +143,7 @@ public:
 		return TRUE;
     }
 
-    bool winEvent( MSG *m )
+    bool winEvent( MSG *m, long *result )
     {
 		switch(m->message) {
 			case WM_DRAWITEM:
@@ -156,17 +153,17 @@ public:
 				QMouseEvent *e = 0;
 				QPoint gpos = QCursor::pos();
 				switch (m->lParam) {
-					case WM_MOUSEMOVE: e = new QMouseEvent( QEvent::MouseMove, mapFromGlobal( gpos ), gpos, 0, 0 );	break;
-					case WM_LBUTTONDOWN: e = new QMouseEvent( QEvent::MouseButtonPress, mapFromGlobal( gpos ), gpos, LeftButton, LeftButton ); break;
-					case WM_LBUTTONUP: e = new QMouseEvent( QEvent::MouseButtonRelease, mapFromGlobal( gpos ), gpos, LeftButton, LeftButton ); break;
-					case WM_LBUTTONDBLCLK: e = new QMouseEvent( QEvent::MouseButtonDblClick, mapFromGlobal( gpos ), gpos, LeftButton, LeftButton );	break;
-					case WM_RBUTTONDOWN: e = new QMouseEvent( QEvent::MouseButtonPress, mapFromGlobal( gpos ), gpos, RightButton, RightButton ); break;
-					case WM_RBUTTONUP: e = new QMouseEvent( QEvent::MouseButtonRelease, mapFromGlobal( gpos ), gpos, RightButton, RightButton ); break;
-					case WM_RBUTTONDBLCLK: e = new QMouseEvent( QEvent::MouseButtonDblClick, mapFromGlobal( gpos ), gpos, RightButton, RightButton ); break;
-					case WM_MBUTTONDOWN: e = new QMouseEvent( QEvent::MouseButtonPress, mapFromGlobal( gpos ), gpos, MidButton, MidButton ); break;
-					case WM_MBUTTONUP: e = new QMouseEvent( QEvent::MouseButtonRelease, mapFromGlobal( gpos ), gpos, MidButton, MidButton ); break;
-					case WM_MBUTTONDBLCLK: e = new QMouseEvent( QEvent::MouseButtonDblClick, mapFromGlobal( gpos ), gpos, MidButton, MidButton ); break;
-					case WM_CONTEXTMENU: e = new QMouseEvent( QEvent::MouseButtonRelease, mapFromGlobal( gpos ), gpos, RightButton, RightButton ); break;
+					case WM_MOUSEMOVE: e = new QMouseEvent( QEvent::MouseMove, mapFromGlobal( gpos ), gpos, Qt::NoButton, Qt::NoButton,Qt::NoModifier); break;
+					case WM_LBUTTONDOWN: e = new QMouseEvent( QEvent::MouseButtonPress, mapFromGlobal( gpos ), gpos, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier ); break;
+					case WM_LBUTTONUP: e = new QMouseEvent( QEvent::MouseButtonRelease, mapFromGlobal( gpos ), gpos, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier ); break;
+					case WM_LBUTTONDBLCLK: e = new QMouseEvent( QEvent::MouseButtonDblClick, mapFromGlobal( gpos ), gpos, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier );	break;
+					case WM_RBUTTONDOWN: e = new QMouseEvent( QEvent::MouseButtonPress, mapFromGlobal( gpos ), gpos, Qt::RightButton, Qt::RightButton,Qt::NoModifier ); break;
+					case WM_RBUTTONUP: e = new QMouseEvent( QEvent::MouseButtonRelease, mapFromGlobal( gpos ), gpos, Qt::RightButton, Qt::RightButton,Qt::NoModifier ); break;
+					case WM_RBUTTONDBLCLK: e = new QMouseEvent( QEvent::MouseButtonDblClick, mapFromGlobal( gpos ), gpos, Qt::RightButton, Qt::RightButton,Qt::NoModifier ); break;
+					case WM_MBUTTONDOWN: e = new QMouseEvent( QEvent::MouseButtonPress, mapFromGlobal( gpos ), gpos, Qt::MidButton, Qt::MidButton,Qt::NoModifier ); break;
+					case WM_MBUTTONUP: e = new QMouseEvent( QEvent::MouseButtonRelease, mapFromGlobal( gpos ), gpos, Qt::MidButton, Qt::MidButton,Qt::NoModifier ); break;
+					case WM_MBUTTONDBLCLK: e = new QMouseEvent( QEvent::MouseButtonDblClick, mapFromGlobal( gpos ), gpos, Qt::MidButton, Qt::MidButton,Qt::NoModifier ); break;
+					case WM_CONTEXTMENU: e = new QMouseEvent( QEvent::MouseButtonRelease, mapFromGlobal( gpos ), gpos, Qt::RightButton, Qt::RightButton,Qt::NoModifier ); break;
 				}
 				if ( e ) {
 					bool res = QApplication::sendEvent( iconObject, e );
@@ -178,45 +175,28 @@ public:
 			default:
 				if ( m->message == WM_TASKBARCREATED ) trayMessage( NIM_ADD );
 		}
-		return QWidget::winEvent( m );
+		return QWidget::winEvent( m, result );
     }
 };
 
-static HBITMAP createIconMask( const QPixmap &qp )
-{
-    QImage bm = qp.convertToImage();
-    int w = bm.width();
-    int h = bm.height();
-    int bpl = ((w+15)/16)*2;			// bpl, 16 bit alignment
-    uchar *bits = new uchar[bpl*h];
-    bm.invertPixels();
-    for ( int y=0; y<h; y++ )
-		memcpy( bits+y*bpl, bm.scanLine(y), bpl );
-    HBITMAP hbm = CreateBitmap( w, h, 1, 1, bits );
-    delete [] bits;
-    return hbm;
-}
-
 static HICON createIcon( const QPixmap &pm, HBITMAP &hbm )
 {
-    QPixmap maskpm( pm.size(), pm.depth(), QPixmap::NormalOptim );
-    QBitmap mask( pm.size(), FALSE, QPixmap::NormalOptim );
-    if ( pm.mask() ) {
-        maskpm.fill( Qt::black );			// make masked area black
-        bitBlt( &mask, 0, 0, pm.mask() );
-    } else
-        maskpm.fill( Qt::color1 );
+	HBITMAP pmhbitmap = pm.toWinHBITMAP( QPixmap::PremultipliedAlpha );
+ 
+	ICONINFO iconInfo;
+	iconInfo.fIcon    = TRUE;
+	iconInfo.hbmMask  = pmhbitmap;
+	iconInfo.hbmColor = pmhbitmap;
+	
+	HICON icon = CreateIconIndirect( &iconInfo );
 
-    bitBlt( &maskpm, 0, 0, &pm);
-    ICONINFO iconInfo;
-    iconInfo.fIcon    = TRUE;
-    iconInfo.hbmMask  = hbm = createIconMask(mask);
-    iconInfo.hbmColor = maskpm.hbm();
+	DeleteObject(pmhbitmap);
 
-    HICON icon = CreateIconIndirect( &iconInfo );
-    DeleteObject(iconInfo.hbmMask);
-        iconInfo.hbmMask = hbm = 0; // michalj
-    return icon;
+	iconInfo.hbmMask = 0;
+	iconInfo.hbmColor = 0;
+	hbm = 0; // michalj
+
+	return icon;
 }
 
 void TrayIcon::sysInstall()
@@ -224,7 +204,6 @@ void TrayIcon::sysInstall()
     if ( !d ) {
 		d = new TrayIconPrivate( this );
 		d->hIcon = createIcon( pm, d->hMask );
-
 		d->trayMessage( NIM_ADD );
 	}
 }
@@ -252,6 +231,7 @@ void TrayIcon::sysUpdateIcon()
 		}
 
 		d->hIcon = createIcon( pm, d->hMask );
+
 		d->trayMessage( NIM_MODIFY );
 	}
 }
