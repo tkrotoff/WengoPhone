@@ -92,12 +92,16 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 		break;
 
 	case phNOANSWER:
+		from = info->u.remoteUri;
+		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateMissed, from);
 		break;
 
 	case phCALLBUSY:
 		break;
 
 	case phCALLREDIRECTED:
+		from = info->u.remoteUri;
+		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateRedirected, from);
 		break;
 
 	case phCALLOK:
@@ -117,6 +121,8 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 		break;
 
 	case phRESUMEOK:
+		from = info->u.remoteUri;
+		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateResumeOk, from);
 		break;
 
 	case phINCALL:

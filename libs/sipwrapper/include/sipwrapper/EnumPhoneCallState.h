@@ -57,6 +57,12 @@ public:
 
 		/** Phone call hold. */
 		PhoneCallStateHoldOk,
+
+		/** Phone call missed */
+		PhoneCallStateMissed,
+
+		/** Phone call redirected */
+		PhoneCallStateRedirected,
 	};
 };
 
