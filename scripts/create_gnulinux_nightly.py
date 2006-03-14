@@ -19,8 +19,7 @@ if DEBUG:
     sys.stdout = f
 
 def debug_print(str):
-    if DEBUG:
-        print str
+    print str
     
 release_mode = sys.argv[1]
 debug_print('Using release mode ' + str(release_mode) + '...')
@@ -77,13 +76,28 @@ else:
     sys.exit(1)
 debug_print('Qt libraries directory is ' + qt_libraries_directory)
 
-debug_print('Copying Qt DLL...')
+debug_print('Copying Qt DLLs...')
 for root, dirs, files in os.walk(qt_libraries_directory):
     for file in files:
         if re.match('libQt(Core|Designer|Gui|Xml|Svg).so.\d.\d.\d', file):
             shutil.copyfile(os.path.join(root, file), os.path.join(str(temp_directory),
                                                                    re.sub('.so.4.1.1', '.so.4', file)))
 debug_print('Done copying Qt DLL!')
+
+#copy Boost runtime libraries
+if os.environ.has_key('BOOSTLIBDIR'):
+    boost_libraries_directory = os.environ['BOOSTLIBDIR']
+else:
+    print 'Can\'t find Boost libraries directory, aborting!'
+    sys.exit(1)
+debug_print('Boost libraries directory is ' + boost_libraries_directory)
+
+debug_print('Copying Boost DLLs...')
+for root, dirs, files in os.walk(boost_libraries_directory):
+    for file in files:
+        if re.match('libboost_(thread|signals|regex|)-gcc-mt-\d_\d\d_\d.so.\d.\d\d.\d', file):
+            shutil.copyfile(os.path.join(root, file), os.path.join(str(temp_directory), file))
+debug_print('Done copying Boost DLL!')
 
 #Creating tarball and adding files to it
 zip_file = tarfile.open('wengophone-ng-GNULinux-binary-latest.tar.bz2', 'w:bz2')
@@ -100,6 +114,6 @@ debug_print('Zip file created!')
 
 #Cleaning temporary directory
 debug_print('Cleaning temporary...')
-shutil.rmtree(temp_directory)
+#shutil.rmtree(temp_directory)
 debug_print('Temporary directory cleaned!')
 debug_print('Done!')
