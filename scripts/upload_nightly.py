@@ -1,6 +1,7 @@
 import ftplib
 import ConfigParser
 import sys
+import os
 
 if len(sys.argv) < 5:
     print "usage: python upload_nightly.py"\
