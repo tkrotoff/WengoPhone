@@ -108,7 +108,7 @@ dependencies = {
     }
 for library in dependencies.keys():
     filename = 'lib' + library + '.so.' + dependencies[library]
-    shutil.copyfile('/usr/lib/' + filename, filename)
+    shutil.copyfile('/usr/lib/' + filename, os.path.join(str(temp_directory), filename))
 
 #Creating tarball and adding files to it
 zip_file = tarfile.open('wengophone-ng-GNULinux-binary-latest.tar.bz2', 'w:bz2')

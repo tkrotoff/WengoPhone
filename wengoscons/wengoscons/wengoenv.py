@@ -1677,11 +1677,10 @@ def WengoSetReleaseMode():
 def WengoReleaseMode():
 	"""
 	@see WengoSConsEnvironment.isReleaseMode()
-	@see WengoSConsEnvironment.isReleaseModeWithSymbols()
 	"""
 
 	env = getGlobalEnvironment()
-	return env.isReleaseMode() or env.isReleaseModeWithSymbols()
+	return env.isReleaseMode()
 
 def WengoSetReleaseModeWithSymbols():
 	"""
@@ -1690,6 +1689,14 @@ def WengoSetReleaseModeWithSymbols():
 
 	env = getGlobalEnvironment()
 	env.setReleaseModeWithSymbols()
+
+def WengoReleaseSymbolsMode():
+	"""
+	@see WengoSConsEnvironment.isReleaseModeWithSymbols()
+	"""
+	
+	env = getGlobalEnvironment()
+	return env.isReleaseModeWithSymbols()
 
 def WengoSetVariable(variable, value):
 	"""

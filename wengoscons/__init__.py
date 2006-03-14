@@ -58,6 +58,7 @@ gdict['WengoGetVariable'] = wengoenv.WengoGetVariable
 
 gdict['WengoDebugMode'] = wengoenv.WengoDebugMode
 gdict['WengoReleaseMode'] = wengoenv.WengoReleaseMode
+gdict['WengoReleaseSymbolsMode'] = wengoenv.WengoReleaseSymbolsMode
 
 gdict['WengoGetSubversionRevision'] = wengoenv.WengoGetSubversionRevision
 gdict['WengoGetCurrentDateTime'] = wengoenv.WengoGetCurrentDateTime
