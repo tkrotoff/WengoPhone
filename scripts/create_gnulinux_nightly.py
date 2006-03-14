@@ -92,7 +92,7 @@ debug_print('Adding files to zip archive...')
 for root, dirs, files in os.walk(temp_directory):
     for file in files:
         filename_to_add = os.path.join(root, file)
-        filename_in_zip = re.sub(re.escape(temp_directory + '/'), '', filename_to_add)
+        filename_in_zip = re.sub(re.escape(temp_directory + '/'), 'wengophone-ng-binary-latest/', filename_to_add)
         debug_print('Adding file ' + re.escape(filename_to_add) + ' as ' + filename_in_zip + '...') 
         zip_file.add(filename_to_add, filename_in_zip)
 debug_print('Zip file created!')
