@@ -36,11 +36,11 @@ __PRETTY_FUNCTION__ : function name
 */
 
 /** Macros for the Logger class. */
-#define LOG_DEBUG(message) Logger::logger.debug(String(__FUNCTION__), message);
-#define LOG_INFO(message) Logger::logger.info(String(__FUNCTION__), message);
-#define LOG_WARN(message) Logger::logger.warn(String(__FUNCTION__), message);
-#define LOG_ERROR(message) Logger::logger.error(String(__FUNCTION__), message);
-#define LOG_FATAL(message) Logger::logger.fatal(String(__FUNCTION__), message);
+#define LOG_DEBUG(message) Logger::logger.debug(String(__PRETTY_FUNCTION__), message);
+#define LOG_INFO(message) Logger::logger.info(String(__PRETTY_FUNCTION__), message);
+#define LOG_WARN(message) Logger::logger.warn(String(__PRETTY_FUNCTION__), message);
+#define LOG_ERROR(message) Logger::logger.error(String(__PRETTY_FUNCTION__), message);
+#define LOG_FATAL(message) Logger::logger.fatal(String(__PRETTY_FUNCTION__), message);
 
 /**
  * Logger class.
