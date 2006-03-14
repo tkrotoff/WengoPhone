@@ -105,6 +105,7 @@ dependencies = {
     'crypto':'0.9.8',
     'icui18n':'34',
     'icuuc':'34',
+    'icudata':'34',
     }
 for library in dependencies.keys():
     filename = 'lib' + library + '.so.' + dependencies[library]
