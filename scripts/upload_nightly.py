@@ -32,7 +32,7 @@ ftp_connection.sendcmd('cwd ' + dst_directory)
 
 # Actually upload files
 for filename in sys.argv[4:]:
-    ftp_connection.storbinary('STOR ' + filename, open(filename))
+    ftp_connection.storbinary('STOR ' + os.path.basename(filename), open(filename))
 
 ftp_connection.quit()
 
