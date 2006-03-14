@@ -99,6 +99,17 @@ for root, dirs, files in os.walk(boost_libraries_directory):
             shutil.copyfile(os.path.join(root, file), os.path.join(str(temp_directory), file))
 debug_print('Done copying Boost DLL!')
 
+#Copy other dependencies: ssl, icu and gnutls
+dependencies = {
+    'ssl':'0.9.8',
+    'crypto':'0.9.8',
+    'icui18n':'34',
+    'icuuc':'34',
+    }
+for library in dependencies.keys():
+    filename = 'lib' + library + '.so.' + dependencies[library]
+    shutil.copyfile('/usr/lib/' + filename, filename)
+
 #Creating tarball and adding files to it
 zip_file = tarfile.open('wengophone-ng-GNULinux-binary-latest.tar.bz2', 'w:bz2')
 debug_print('Using zip file: ' + str(zip_file) + '...')
