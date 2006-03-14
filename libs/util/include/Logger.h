@@ -23,6 +23,7 @@
 #include <NonCopyable.h>
 #include <StringList.h>
 #include <Event.h>
+#include <global.h>
 
 class FileWriter;
 
@@ -35,12 +36,16 @@ __FUNCTION__ : function name
 __PRETTY_FUNCTION__ : function name
 */
 
+#ifdef CC_GCC
+#define __FUNCTION__ __PRETTY_FUNCTION__
+#endif
+
 /** Macros for the Logger class. */
-#define LOG_DEBUG(message) Logger::logger.debug(String(__PRETTY_FUNCTION__), message);
-#define LOG_INFO(message) Logger::logger.info(String(__PRETTY_FUNCTION__), message);
-#define LOG_WARN(message) Logger::logger.warn(String(__PRETTY_FUNCTION__), message);
-#define LOG_ERROR(message) Logger::logger.error(String(__PRETTY_FUNCTION__), message);
-#define LOG_FATAL(message) Logger::logger.fatal(String(__PRETTY_FUNCTION__), message);
+#define LOG_DEBUG(message) Logger::logger.debug(String(__FUNCTION__), message);
+#define LOG_INFO(message) Logger::logger.info(String(__FUNCTION__), message);
+#define LOG_WARN(message) Logger::logger.warn(String(__FUNCTION__), message);
+#define LOG_ERROR(message) Logger::logger.error(String(__FUNCTION__), message);
+#define LOG_FATAL(message) Logger::logger.fatal(String(__FUNCTION__), message);
 
 /**
  * Logger class.
