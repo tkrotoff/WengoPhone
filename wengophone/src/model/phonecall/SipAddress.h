@@ -95,6 +95,15 @@ public:
 
 	std::string toString() const;
 
+	/**
+	 * Creates a SipAddress from a unknown string.
+	 *
+	 * @param str unknown string that can be a SIP address or a phone number
+	 * @param realm SIP server realm
+	 * @return the SipAddress created from the given string
+	 */
+	static SipAddress fromString(const std::string & str, const std::string & realm);
+
 private:
 
 	/**

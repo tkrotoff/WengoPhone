@@ -87,3 +87,41 @@ std::string SipAddress::toString() const {
 
 	return getUserName();
 }
+
+SipAddress SipAddress::fromString(const std::string & str, const std::string & realm) {
+	/*if (str.empty()) {
+		return -1;
+	}*/
+
+	String sipUri(str);
+	size_t length = strspn(sipUri.c_str(), " .,;:()[]{}-_/#+0123456789");
+	if (length == sipUri.length()) {
+		//sipUri is a real phone number not a SIP URI or a pseudo
+
+		sipUri.remove(" ");
+		sipUri.remove(".");
+		sipUri.remove(",");
+		sipUri.remove(";");
+		sipUri.remove(":");
+		sipUri.remove("(");
+		sipUri.remove(")");
+		sipUri.remove("[");
+		sipUri.remove("]");
+		sipUri.remove("{");
+		sipUri.remove("}");
+		sipUri.remove("-");
+		sipUri.remove("_");
+		sipUri.remove("/");
+		sipUri.remove("#");
+
+		//Replaces + by 00
+		sipUri.replace("+", "00");
+	}
+
+	if (!sipUri.contains("@")) {
+		//Not a SIP URI
+		sipUri = "sip:" + sipUri + "@" + realm;
+	}
+
+	return SipAddress(sipUri);
+}

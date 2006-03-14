@@ -1,0 +1,87 @@
+/*
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2006  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+#ifndef CONFERENCEPHONECALL_H
+#define CONFERENCEPHONECALL_H
+
+#include <Event.h>
+#include <List.h>
+
+#include <string>
+
+class PhoneLine;
+
+/**
+ * Handles a conference call.
+ *
+ * The number of participant is unlimited in this model but probably
+ * limited by the SIP stack that uses ConferenceCall.
+ *
+ * @ingroup model
+ * @author Tanguy Krotoff
+ */
+class ConferenceCall {
+public:
+
+	/**
+	 * The state of the ConferenceCall has changed.
+	 *
+	 * @param sender this class
+	 * @param status new status
+	 */
+	Event<void (ConferenceCall & sender, int status)> stateChangedEvent;
+
+	/**
+	 * Creates a new ConferenceCall given a PhoneLine.
+	 */
+	ConferenceCall(const PhoneLine & phoneLine);
+
+	~ConferenceCall();
+
+	void addPhoneCall(const PhoneCall & phoneCall);
+
+	void removePhoneCall(const PhoneCall & phoneCall);
+
+	void addPhoneNumber(const std::string & phoneNumber);
+
+	void removePhoneNumber(const std::string & phoneNumber);
+
+	/**
+	 * Starts the conference call using the added phone calls and phone numbers.
+	 */
+	void start();
+
+	/**
+	 * Stops the conference call.
+	 */
+	void stop();
+
+private:
+
+	/** PhoneLine associated with the ConferenceCall. */
+	PhoneLine & _phoneLine;
+
+	/** Defines the vector of PhoneCall. */
+	typedef List < PhoneCall * > PhoneCalls;
+
+	/** List of PhoneCall. */
+	PhoneCalls _phoneCallList;
+};
+
+#endif	//CONFERENCEPHONECALL_H

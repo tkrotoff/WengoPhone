@@ -271,12 +271,30 @@ public:
 
 	/** @} */
 
+
 	/**
 	 * @name Conference Methods
 	 * @{
 	 */
 
+	/** An error occured while creating a phone call. */
+	static const int ConfIdError = -1;
+
+	/**
+	 * Creates a new conference.
+	 *
+	 * @return conference id or ConfIdError if an error occured
+	 */
+	/*virtual int createConference() = 0;
+
+	virtual void joinConference() = 0;
+
+	virtual void addToConference(int confId, int lineId, int callId, const std::string & sipAddress) = 0;
+
+	virtual void removeFromConference(int confId, int callId) = 0;*/
+
 	/** @} */
+
 
 	/**
 	 * @name Audio Methods
