@@ -79,7 +79,7 @@ debug_print('Qt libraries directory is ' + qt_libraries_directory)
 debug_print('Copying Qt DLLs...')
 for root, dirs, files in os.walk(qt_libraries_directory):
     for file in files:
-        if re.match('libQt(Core|Designer|Gui|Xml|Svg).so.\d.\d.\d', file):
+        if re.match('libQt(Core|Designer|Network|Gui|Xml|Svg).so.\d.\d.\d', file):
             shutil.copyfile(os.path.join(root, file), os.path.join(str(temp_directory),
                                                                    re.sub('.so.4.1.1', '.so.4', file)))
 debug_print('Done copying Qt DLL!')
