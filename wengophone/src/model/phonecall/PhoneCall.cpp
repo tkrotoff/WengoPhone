@@ -35,6 +35,8 @@
 #include <model/SipCallbacks.h>
 #include <model/WengoPhone.h>
 
+#include <sipwrapper/SipWrapper.h>
+
 #include <StringList.h>
 #include <Logger.h>
 
@@ -82,27 +84,27 @@ PhoneCall::~PhoneCall() {
 }
 
 void PhoneCall::hold() {
-	_phoneLine.holdCall(_callId);
+	_phoneLine.getSipWrapper().holdCall(_callId);
 	//stateChangedEvent(this, _state->getCode());
 	LOG_DEBUG("call hold");
 }
 
 void PhoneCall::accept() {
-	_phoneLine.acceptCall(_callId);
+	_phoneLine.getSipWrapper().acceptCall(_callId);
 	if (_state->getCode() == PhoneCallStateIncoming::CODE) {
-		_phoneLine.setPhoneCallState(_callId, PhoneCallStateTalking::CODE, String::null);
+		setState(PhoneCallStateTalking::CODE);
 	}
 	LOG_DEBUG("call accepted");
 }
 
 void PhoneCall::resume() {
-	_phoneLine.resumeCall(_callId);
+	_phoneLine.getSipWrapper().resumeCall(_callId);
 	//stateChangedEvent(this, _state->getCode());
 	LOG_DEBUG("call resumed");
 }
 
 void PhoneCall::mute() {
-	_phoneLine.muteCall(_callId);
+	_phoneLine.getSipWrapper().muteCall(_callId);
 	LOG_DEBUG("call muted");
 }
 
@@ -124,7 +126,7 @@ void PhoneCall::setState(int status) {
 void PhoneCall::close() {
 	if (_state->getCode() != PhoneCallStateClosed::CODE) {
 		if (_state->getCode() == PhoneCallStateIncoming::CODE /* && this.hasTakedDown == false*/) {
-			_phoneLine.rejectCall(_callId);
+			_phoneLine.getSipWrapper().rejectCall(_callId);
 		} else {
 			_phoneLine.closeCall(_callId);
 		}
@@ -139,7 +141,7 @@ void PhoneCall::close() {
 }
 
 WenboxPlugin & PhoneCall::getWenboxPlugin() const {
-	WengoPhone & wengoPhone = getPhoneLine().getWengoPhone();
+	WengoPhone & wengoPhone = _phoneLine.getWengoPhone();
 	return wengoPhone.getWenboxPlugin();
 }
 
@@ -148,9 +150,9 @@ void PhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, co
 }
 
 void PhoneCall::playTone(EnumTone::Tone tone) {
-	_phoneLine.playTone(_callId, tone);
+	_phoneLine.getSipWrapper().playTone(_callId, tone);
 }
 
 void PhoneCall::playSoundFile(const std::string & soundFile) {
-	_phoneLine.playSoundFile(_callId, soundFile);
+	_phoneLine.getSipWrapper().playSoundFile(_callId, soundFile);
 }

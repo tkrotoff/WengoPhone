@@ -46,21 +46,7 @@ public:
 
 	int makeCall(const std::string & phoneNumber);
 
-	void acceptCall(int callId);
-
-	void rejectCall(int callId);
-
 	void closeCall(int callId);
-
-	void holdCall(int callId);
-
-	void resumeCall(int callId);
-
-	void muteCall(int callId);
-
-	void playTone(int callId, EnumTone::Tone tone);
-
-	void playSoundFile(int callId, const std::string & soundFile);
 
 	SipWrapper & getSipWrapper() const {
 		return *_sipWrapper;

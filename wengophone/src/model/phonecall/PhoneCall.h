@@ -73,17 +73,17 @@ public:
 	~PhoneCall();
 
 	/**
-	 * @see IPhoneLine::acceptCall()
+	 * @see SipWrapper::acceptCall()
 	 */
 	void accept();
 
 	/**
-	 * @see IPhoneLine::resumeCall()
+	 * @see SipWrapper::resumeCall()
 	 */
 	void resume();
 
 	/**
-	 * @see IPhoneLine::holdCall()
+	 * @see SipWrapper::holdCall()
 	 */
 	void hold();
 
@@ -93,17 +93,17 @@ public:
 	void close();
 
 	/**
-	 * @see IPhoneLine::mute()
+	 * @see SipWrapper::mute()
 	 */
 	void mute();
 
 	/**
-	 * @see IPhoneLine::playTone()
+	 * @see SipWrapper::playTone()
 	 */
 	void playTone(EnumTone::Tone tone);
 
 	/**
-	 * @see IPhoneLine::playSoundFile()
+	 * @see SipWrapper::playSoundFile()
 	 */
 	void playSoundFile(const std::string & soundFile);
 

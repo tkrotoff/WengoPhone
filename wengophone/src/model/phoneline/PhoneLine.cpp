@@ -181,14 +181,6 @@ void PhoneLine::disconnect() {
 	}
 }
 
-void PhoneLine::acceptCall(int callId) {
-	_sipWrapper->acceptCall(callId);
-}
-
-void PhoneLine::rejectCall(int callId) {
-	_sipWrapper->rejectCall(callId);
-}
-
 void PhoneLine::closeCall(int callId) {
 	PhoneCall * phoneCall = _phoneCallHash[callId];
 	if (!phoneCall) {
@@ -202,57 +194,17 @@ void PhoneLine::closeCall(int callId) {
 	//Deletes the PhoneCall that is closed now
 	//Removes it from the list of PhoneCall
 	//Cannot do that here
-	/*delete _phoneCallHash[callId];
-	_phoneCallHash[callId] = NULL;*/
+	//delete _phoneCallHash[callId];
+	//_phoneCallHash[callId] = NULL;
 
 	_sipWrapper->closeCall(callId);
 	LOG_DEBUG("call closed callId=" + String::fromNumber(callId));
-}
-
-void PhoneLine::holdCall(int callId) {
-	_sipWrapper->holdCall(callId);
-}
-
-void PhoneLine::resumeCall(int callId) {
-	_sipWrapper->resumeCall(callId);
-}
-
-void PhoneLine::muteCall(int callId) {
-	_sipWrapper->muteCall(callId);
-}
-
-void PhoneLine::playTone(int callId, EnumTone::Tone tone) {
-	_sipWrapper->playTone(callId, tone);
-}
-
-void PhoneLine::playSoundFile(int callId, const std::string & soundFile) {
-	_sipWrapper->playSoundFile(callId, soundFile);
 }
 
 void PhoneLine::setPhoneCallState(int callId, int status, const SipAddress & sipAddress) {
 	LOG_DEBUG("call state changed callId=" + String::fromNumber(callId) +
 		" status=" + String::fromNumber(status) +
 		" from=" + sipAddress.getSipAddress());
-
-	//FIXME
-	//No double call for the moment: one active call at a time
-	if (status == PhoneCallStateTalking::CODE || status == PhoneCallStateIncoming::CODE) {
-		for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
-			PhoneCall * phoneCall = it->second;
-			if (phoneCall) {
-				const PhoneCallState & state = phoneCall->getState();
-				if (phoneCall->getCallId() != callId) {
-					if (state.getCode() == PhoneCallStateTalking::CODE ||
-						state.getCode() == PhoneCallStateIncoming::CODE) {
-
-						rejectCall(callId);
-						return;
-					}
-				}
-			}
-		}
-	}
-
 
 	if (!_phoneCallHash[callId]) {
 		//No PhoneCall for this callId
