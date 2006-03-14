@@ -36,6 +36,7 @@ IMContact::IMContact(const IMContact & imContact)
 	: _imAccount(imContact._imAccount) {
 	_contactId = imContact._contactId;
 	_presenceState = imContact._presenceState;
+	_groupSet = imContact._groupSet;
 }
 
 IMContact::~IMContact() {
@@ -49,6 +50,26 @@ bool IMContact::operator == (const IMContact & imContact) const {
 bool IMContact::operator < (const IMContact & imContact) const {
 	return ((_imAccount < imContact._imAccount) 
 		|| ((_imAccount == imContact._imAccount) && (_contactId < imContact._contactId)));
+}
+
+void IMContact::addToGroup(const std::string & groupName) {
+	_groupSet.insert(groupName);
+	imContactAddedToGroupEvent(*this, *_groupSet.find(groupName));
+}
+
+void IMContact::removeFromGroup(const std::string & groupName) {
+	GroupSet::iterator it = _groupSet.find(groupName);
+	if (it != _groupSet.end()) {
+		imContactRemovedFromGroupEvent(*this, *it);
+		_groupSet.erase(it);
+	}
+}
+
+void IMContact::removeFromAllGroup() {
+	for (GroupSet::iterator it = _groupSet.begin() ; it != _groupSet.end() ; it++) {
+		imContactRemovedFromGroupEvent(*this, *it);
+		_groupSet.erase(it);	
+	}
 }
 
 std::string IMContact::serialize() const {

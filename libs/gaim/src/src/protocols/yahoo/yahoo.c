@@ -3038,12 +3038,14 @@ static int yahoo_send_im(GaimConnection *gc, const char *who, const char *what, 
 	struct yahoo_data *yd = gc->proto_data;
 	struct yahoo_packet *pkt = yahoo_packet_new(YAHOO_SERVICE_MESSAGE, YAHOO_STATUS_OFFLINE, 0);
 	char *msg = yahoo_html_to_codes(what);
+	printf("***************************** msg: %s\n", msg);
 	char *msg2;
 	gboolean utf8 = TRUE;
 	GaimWhiteboard *wb;
 	int ret = 1;
 
 	msg2 = yahoo_string_encode(gc, msg, &utf8);
+	printf("***************************** msg2: %s\n", msg2);
 
 	yahoo_packet_hash(pkt, "ss", 1, gaim_connection_get_display_name(gc), 5, who);
 	if (utf8)

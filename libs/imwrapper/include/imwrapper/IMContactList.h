@@ -28,6 +28,9 @@
 class IMAccount;
 class IMContact;
 
+/**
+ * FIXME: Currently an IMContact can be in only one group (because of Gaim limitation)
+ */
 class IMContactList : Interface {
 public:
 
@@ -54,15 +57,6 @@ public:
 	 * @param contactId the moved contact
 	 */
 	Event< void (IMContactList & sender, const std::string & groupName, const std::string & contactId) > contactMovedEvent;
-
-	/**
-	 * Emitted when a contact state has been changed.
-	 *
-	 * @param sender this class
-	 * @param groupName group name of the contact
-	 * @param imContact the changed IMContact
-	 */
-	Event< void (IMContactList & sender, const std::string & groupName, const IMContact & imContact) > imContactChangedEvent;
 
 	/**
 	 * Emitted when an IMContact has been added remotely.

@@ -139,6 +139,11 @@ void Contact::_addIMContact(const IMContact & imContact) {
 	pair<IMContactSet::const_iterator, bool> result = _imContactSet.insert(imContact);
 
 	if (result.second) {
+		((IMContact &)(*result.first)).imContactAddedToGroupEvent +=
+			boost::bind(&Contact::imContactAddedToGroupEventHandler, this, _1, _2);
+		((IMContact &)(*result.first)).imContactRemovedFromGroupEvent +=
+			boost::bind(&Contact::imContactRemovedFromGroupEventHandler, this, _1, _2);
+
 		_wengoPhone.getPresenceHandler().subscribeToPresenceOf(*result.first);
 		contactModifiedEvent(*this);
 	}
@@ -165,6 +170,18 @@ IMContact & Contact::getIMContact(const IMContact & imContact) const {
 	return (IMContact &)*_imContactSet.find(imContact);
 }
 
+void Contact::imContactAddedToGroupEventHandler(IMContact & sender, const std::string & groupName) {
+	if (_contactGroupSet.find(groupName) == _contactGroupSet.end()) {
+		_contactList._addToContactGroup(groupName, *this);
+	}
+}
+
+void Contact::imContactRemovedFromGroupEventHandler(IMContact & sender, const std::string & groupName) {
+//	if (_contactGroupSet.size() > 1) {
+		_contactList._removeFromContactGroup(groupName, *this);
+//	}
+}
+
 void Contact::addToContactGroup(const std::string & groupName) {
 	_contactList.addToContactGroup(groupName, *this);
 }
@@ -182,6 +199,16 @@ void Contact::_removeFromContactGroup(const std::string & groupName) {
 
 	if (it != _contactGroupSet.end()) {
 		_contactGroupSet.erase(it);
+	}
+}
+
+bool Contact::isInContactGroup(const std::string & groupName) {
+	ContactGroupSet::const_iterator it = _contactGroupSet.find(groupName);
+	
+	if (it != _contactGroupSet.end()) {
+		return true;
+	} else {
+		return false;
 	}
 }
 

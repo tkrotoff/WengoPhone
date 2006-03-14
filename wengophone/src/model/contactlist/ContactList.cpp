@@ -96,6 +96,7 @@ void ContactList::removeContact(const Contact & contact) {
 		if (contact == (*it)) {
 			contactRemovedEvent(*this, (Contact &)*it);
 			_contacts.erase(it);
+			break;
 		}
 	}
 }
@@ -179,19 +180,22 @@ bool ContactList::unserialize(const std::string & data) {
 
 void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 	const std::string & groupName, IMContact & newIMContact) {
-	LOG_DEBUG("new IMContact added in group " + groupName + ": "
-		+ newIMContact.getContactId());
+
+	LOG_DEBUG("adding a new IMContact in group " + groupName + ": " + newIMContact.getContactId());
 
 	// Find the Contact that owns the IMContact. Creating a new one if needed
 	Contact * contact = findContactThatOwns(newIMContact);
 	if (!contact) {
+		LOG_DEBUG("IMContact " + newIMContact.getContactId() + " not found. Adding a new Contact");
 		contact = &(createContact());
 	}
 
-	contact->_addIMContact(newIMContact);
-	_addToContactGroup(groupName, *contact);
+	if (!contact->hasIMContact(newIMContact)) {
+		contact->_addIMContact(newIMContact);
+		_addToContactGroup(groupName, *contact);
 
-	LOG_DEBUG("IMContact added");
+		LOG_DEBUG("IMContact added in group " + groupName + ": " + newIMContact.getContactId());
+	}
 }
 
 void ContactList::imContactRemovedEventHandler(IMContactListHandler & sender,
@@ -207,7 +211,7 @@ void ContactList::imContactRemovedEventHandler(IMContactListHandler & sender,
 
 	contact->_removeIMContact(imContact);
 
-	LOG_DEBUG("IMContact removed");
+	LOG_DEBUG("IMContact removed: " + imContact.getContactId());
 }
 
 void ContactList::newContactGroupAddedEventHandler(IMContactList & sender,
@@ -243,7 +247,18 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,
 	const std::string & groupName, IMContact & imContact) {
 
-	//TODO: implement this. an IMContact should know its groups.
+	Contact * contact = findContactThatOwns(imContact);
+	if (contact) {
+		//FIXME: currently we don't know from wich group the IMContact has been
+		// moved (because of Gaim limitation). So we are removing the found
+		// IMContact from all its groups (although the IMContact should be in only
+		// one group).
+		LOG_DEBUG("IMContact moved to " + groupName);
+		contact->getIMContact(imContact).removeFromAllGroup();
+		contact->getIMContact(imContact).addToGroup(groupName);
+	} else {
+		LOG_DEBUG("IMContact not found: " + imContact.getContactId());
+	}
 }
 
 Contact * ContactList::findContactThatOwns(const IMContact & imContact) const {
@@ -300,14 +315,18 @@ void ContactList::_addToContactGroup(const std::string & groupName, Contact & co
 
 	ContactGroupSet::const_iterator it = _contactGroupSet.find(ContactGroup(groupName));
 	if (it != _contactGroupSet.end()) {
+		LOG_DEBUG("adding a Contact to group " + groupName);
 		((ContactGroup &)(*it)).addContact(contact);
 	} else {
-		LOG_FATAL("the group has not been added");
+		LOG_FATAL("the group " + groupName + " has not been added");
 	}
 }
 
 void ContactList::_removeFromContactGroup(const std::string & groupName, Contact & contact) {
-	contact._removeFromContactGroup(groupName);
+	if (!contact.isInContactGroup(groupName)) {
+		contact._removeFromContactGroup(groupName);
 
-	((ContactGroup &)(*_contactGroupSet.find(ContactGroup(groupName)))).removeContact(contact);
+		LOG_DEBUG("removing a Contact from group " + groupName);
+		((ContactGroup &)(*_contactGroupSet.find(ContactGroup(groupName)))).removeContact(contact);
+	}
 }

@@ -23,7 +23,10 @@
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumPresenceState.h>
 
+#include <Event.h>
+
 #include <string>
+#include <set>
 
 class PresenceHandler;
 class IMAccount;
@@ -38,6 +41,22 @@ class IMAccount;
  */
 class IMContact {
 public:
+
+	/**
+	 * Emitted when this IMContact has been added to a group.
+	 * 
+	 * @param sender this IMContact
+	 * @param groupName the group where the IMContact has been added to
+	 */
+	Event< void (IMContact & sender, const std::string & groupName)> imContactAddedToGroupEvent;
+
+	/**
+	 * Emitted when this IMContact has been removed from a group.
+	 * 
+	 * @param sender this IMContact
+	 * @param groupName the group where the IMContact has been removed from
+	 */
+	Event< void (IMContact & sender, const std::string & groupName)> imContactRemovedFromGroupEvent;
 
 	/**
 	 * Constructs a new IMContact.
@@ -71,6 +90,25 @@ public:
 		return _contactId;
 	}
 
+	/**
+	 * Add this IMContact to a group.
+	 * 
+	 * @param groupName the group to add this IMContact to
+	 */
+	void addToGroup(const std::string & groupName);
+
+	/**
+	 * Remove this IMContact to a group.
+	 * 
+	 * @param groupName the group to remove this IMContact from
+	 */
+	void removeFromGroup(const std::string & groupName);
+
+	/**
+	 * Remove from all group.
+	 */
+	void removeFromAllGroup();
+
 	EnumPresenceState::PresenceState getPresenceState() const {
 		return _presenceState;
 	}
@@ -98,6 +136,8 @@ private:
 
 	EnumPresenceState::PresenceState _presenceState;
 
+	typedef std::set<std::string> GroupSet;
+	GroupSet _groupSet;
 };
 
 #endif	//IMCONTACT_H

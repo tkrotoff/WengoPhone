@@ -187,6 +187,14 @@ public:
 	void removeFromContactGroup(const std::string & groupName);
 
 	/**
+	 * Test if the Contact is in a group.
+	 *
+	 * @param groupName thr group
+	 * @return true if in the group
+	 */
+	bool isInContactGroup(const std::string & groupName);
+
+	/**
 	 * Add an IMContact to the Contact.
 	 * 
 	 * This method will send a request to ContactList that will send a request
@@ -290,6 +298,16 @@ public:
 	bool unserialize(const std::string & data);
 
 private:
+
+	/**
+	 * @see IMContact::imContactAddedToGroupEvent
+	 */
+	void imContactAddedToGroupEventHandler(IMContact & sender, const std::string & groupName);
+
+	/**
+	 * @see IMContact::imContactRemovedFromGroupEvent
+	 */
+	void imContactRemovedFromGroupEventHandler(IMContact & sender, const std::string & groupName);
 
 	/**
 	 * Actually add the Contact to a ContactGroup.

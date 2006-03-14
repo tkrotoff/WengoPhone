@@ -111,9 +111,12 @@ void IMContactListHandler::contactMovedEventHandler(IMContactList & sender,
 	IMContactSet::const_iterator it = _imContactSet.find(imContact);
 
 	if (it != _imContactSet.end()) {
+		LOG_DEBUG("an IMContact has moved:" + contactId);
 		imContactMovedEvent(*this, groupName, imContact);
 	} else {
-		LOG_ERROR("this IMContact has not been added yet: " + contactId);
+		LOG_DEBUG("this IMContact(" + contactId + ") from group " + groupName
+			+ " has not been added yet. Adding it as new IMContact.");
+		newContactAddedEventHandler(sender, groupName, contactId);
 	}
 }
 
