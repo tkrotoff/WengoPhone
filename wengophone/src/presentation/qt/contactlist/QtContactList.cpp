@@ -45,16 +45,15 @@
 #include <QtGui>
 #include <QDebug>
 
-static inline QPixmap scaleImg(const char *name)
-{
+static inline QPixmap scalePixmap(const char *name) {
 	return QPixmap(name).scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
-QtContactList::QtContactList(CContactList & cContactList) 
+QtContactList::QtContactList(CContactList & cContactList)
 	: QObjectThreadSafe(), _cContactList(cContactList) {
 
 	_treeWidget = NULL;
-	
+
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtContactList::initThreadSafe, this));
 	postEvent(event);
@@ -62,10 +61,10 @@ QtContactList::QtContactList(CContactList & cContactList)
 
 void QtContactList::initThreadSafe() {
 	_contactListWidget = WidgetFactory::create(":/forms/contactlist/contactList.ui", NULL);
-	
+
 	//treeWidget
 	_treeWidget = Object::findChild<QTreeWidget *>(_contactListWidget, "treeWidget");
-	
+
 	_treeWidget->setAcceptDrops(true);
 	_treeWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	_treeWidget->setProperty("showDropIndicator", QVariant(true));
@@ -79,31 +78,31 @@ void QtContactList::initThreadSafe() {
 	// icons
 	QtContactPixmap * spx = QtContactPixmap::getInstance();
 
-	spx->setPixmap (QtContactPixmap::ContactOnline,scaleImg(":/pics/online.png"));
-	spx->setPixmap (QtContactPixmap::ContactDND,scaleImg(":/pics/donotdisturb.png"));
-	spx->setPixmap (QtContactPixmap::ContactInvisible,scaleImg(":/pics/offline.png"));
-	spx->setPixmap (QtContactPixmap::ContactBRB,scaleImg(":/pics/donotdisturb.png"));
-	spx->setPixmap (QtContactPixmap::ContactAway,scaleImg(":/pics/away.png"));
-	spx->setPixmap (QtContactPixmap::ContactNotAvailable,scaleImg(":/pics/notavailable.png"));
-	spx->setPixmap (QtContactPixmap::ContactForward,scaleImg(":/pics/forward.png"));
+	spx->setPixmap (QtContactPixmap::ContactOnline, scalePixmap(":/pics/status/online.png"));
+	spx->setPixmap (QtContactPixmap::ContactDND, scalePixmap(":/pics/status/donotdisturb.png"));
+	spx->setPixmap (QtContactPixmap::ContactInvisible, scalePixmap(":/pics/status/offline.png"));
+	spx->setPixmap (QtContactPixmap::ContactBRB, scalePixmap(":/pics/status/donotdisturb.png"));
+	spx->setPixmap (QtContactPixmap::ContactAway, scalePixmap(":/pics/status/away.png"));
+	spx->setPixmap (QtContactPixmap::ContactNotAvailable, scalePixmap(":/pics/status/notavailable.png"));
+	spx->setPixmap (QtContactPixmap::ContactForward, scalePixmap(":/pics/status/forward.png"));
 
 	// Fonctions icons
-	spx->setPixmap (QtContactPixmap::ContactIM,scaleImg(":/pics/contact_im.png"));
-	spx->setPixmap (QtContactPixmap::ContactCall,scaleImg(":/pics/contact_call.png"));
-	spx->setPixmap (QtContactPixmap::ContactVideo,scaleImg(":/pics/contact_video.png"));
+	spx->setPixmap (QtContactPixmap::ContactIM, scalePixmap(":/pics/contact_im.png"));
+	spx->setPixmap (QtContactPixmap::ContactCall, scalePixmap(":/pics/contact_call.png"));
+	spx->setPixmap (QtContactPixmap::ContactVideo, scalePixmap(":/pics/contact_video.png"));
 
 	// Group icons
 	spx->setPixmap (QtContactPixmap::ContactGroupOpen,QPixmap(":/pics/group_open.png"));
 	spx->setPixmap (QtContactPixmap::ContactGroupClose,QPixmap(":/pics/group_close.png"));
-	
+
 	new QtUserManager(_treeWidget,_treeWidget);
-	
+
 	_previous = NULL;
 	_lastClicked = NULL;
-	
+
 	QtTreeViewDelegate * delegate = new QtTreeViewDelegate(_treeWidget);
 	delegate->setParent(_treeWidget->viewport());
-	
+
 	_treeWidget->setItemDelegate(delegate);
 	_treeWidget->setUniformRowHeights(false);
 	_treeWidget->header()->hide();
@@ -127,41 +126,41 @@ void QtContactList::initThreadSafe() {
 	QtUserList * ul = QtUserList::getInstance();
 	QTreeWidgetItem *group = new QTreeWidgetItem(_treeWidget);
 	group->setText(0, "Group 1");
-	
-	QTreeWidgetItem *wengo; 
+
+	QTreeWidgetItem *wengo;
 	QString uname;
 	QString userId;
 	QtUser * user;
-	
+
 	int counter = 0;
-	
+
 	wengo = new QTreeWidgetItem(group);
 	uname = QString("Kavous");
 	wengo->setText(0,uname);
 	wengo->setFlags(wengo->flags() | Qt::ItemIsEditable);
-	
+
 	user = new QtUser();
 	user->setId(uname);
 	user->setUserName(uname);
 	user->setStatus(QtContactPixmap::ContactOnline);
 	user->haveIM(true);
 	user->haveCall(true);
-	user->haveVideo(true);	
+	user->haveVideo(true);
 	ul->addUser(user);
-	
+
 	wengo = new QTreeWidgetItem(group);
 	uname = QString("Guirec");
 	wengo->setText(0,uname);
 	wengo->setFlags(wengo->flags() | Qt::ItemIsEditable);
-	
+
 	user = new QtUser();
 	user->setId(uname);
 	user->setUserName(uname);
 	user->setStatus(QtContactPixmap::ContactAway);
 	user->haveIM(true);
-	user->haveVideo(true);	
+	user->haveVideo(true);
 	ul->addUser(user);
-	
+
 	for (int i=1; i< 10; i++){
 		wengo = new QTreeWidgetItem(group);
 		uname = QString("User %1 in group 1").arg(i);
@@ -173,7 +172,7 @@ void QtContactList::initThreadSafe() {
 		user->setUserName(uname);
 		user->setStatus(QtContactPixmap::ContactOnline);
 		user->haveIM(true);
-		
+
 		ul->addUser(user);
 		counter++;
 	}
@@ -195,7 +194,7 @@ void QtContactList::initThreadSafe() {
 		user->haveIM(true);
 		user->haveVideo(true);
 		ul->addUser(user);
-		counter++;		
+		counter++;
 	}*/
 }
 
@@ -221,4 +220,3 @@ void QtContactList::addContactGroupThreadSafe(PContactGroup * pContactGroup) {
 	QTreeWidgetItem *group = new QTreeWidgetItem(_treeWidget);
 	group->setText(0, QString::fromStdString(pContactGroup->getDisplayName()));
 }
-

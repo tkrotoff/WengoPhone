@@ -58,39 +58,39 @@ void QtUserList::mouseOn(const QString & userid)
 {
 	QtUser * user;
 	user = _userList[userid];
-	
+
 	if (user)
 		user->setMouseOn(true);
-		
+
 	user = _userList[_lastMouseOn];
 	if (user)
 		user->setMouseOn(false);
 	_lastMouseOn = userid;
 }
 
-QtUser * QtUserList::getUser(const QString & userid)
+QtUser * QtUserList::getUser(const QString & userid) const
 {
 	QtUser * user;
 	user = _userList[userid];
 	return user;
 }
 
-bool QtUserList::hasIM(const QString & userid){
+bool QtUserList::hasIM(const QString & userid) const {
 	QtUser * user = _userList[userid];
 	if (user)
 		return user->hasIM();
 	return false;
 }
 
-bool QtUserList::hasCall(const QString & userid){
+bool QtUserList::hasCall(const QString & userid) const {
 
 	QtUser * user = _userList[userid];
 	if (user)
 		return user->hasCall();
 	return false;
 }
-	
-bool QtUserList::hasVideo(const QString & userid){
+
+bool QtUserList::hasVideo(const QString & userid) const {
 	QtUser * user = _userList[userid];
 	if (user)
 		return user->hasVideo();
@@ -104,7 +104,7 @@ void QtUserList::mouseClicked(const QString & userid,const QPoint pos, const QRe
 		user->mouseClicked(pos,rect);
 }
 
-int	QtUserList::getIconsStartPosition(const QString & userid)
+int	QtUserList::getIconsStartPosition(const QString & userid) const
 {
 	QtUser * user = _userList[userid];
 	if (user)
@@ -119,7 +119,7 @@ void QtUserList::setButton(const QString & userid,const Qt::MouseButton button)
 		user->setButton(button);
 }
 
-Qt::MouseButton QtUserList::getButton(const QString & userid)
+Qt::MouseButton QtUserList::getButton(const QString & userid) const
 {
 	QtUser * user = _userList[userid];
 	if (user)
@@ -134,7 +134,7 @@ void QtUserList::setOpenStatus(const QString & userid,bool value)
 		user->setOpenStatus(value);
 }
 
-int	QtUserList::getHeight(const QString & userid){
+int	QtUserList::getHeight(const QString & userid) const {
 
 	QtUser * user = _userList[userid];
 	if (user)

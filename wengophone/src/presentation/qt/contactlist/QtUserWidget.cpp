@@ -16,8 +16,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #include "QtUserWidget.h"
+
 #include "QtUserWidgetAvatarManager.h"
+
+#include <WidgetFactory.h>
+
+#include <QtGui>
 
 QtUserWidget::QtUserWidget(QWidget * parent, Qt::WFlags f) : QWidget( parent, f)
 {
@@ -26,7 +32,7 @@ QtUserWidget::QtUserWidget(QWidget * parent, Qt::WFlags f) : QWidget( parent, f)
 	layout->addWidget(_widget);
 	layout->setMargin(0);
 	setLayout(layout);
-	
+
 	_frame = findChild<QFrame *>("avatarFrame");
 	_avatarManager = new QtUserWidgetAvatarManager(this,_frame);
 	_frame->installEventFilter(_avatarManager);
@@ -36,7 +42,7 @@ void QtUserWidget::setText(const QString & text){
 	_text = text;
 }
 
-const QString & QtUserWidget::text(){
+const QString & QtUserWidget::text() const {
 	return _text;
 }
 
@@ -46,11 +52,11 @@ void QtUserWidget::paintEvent(QPaintEvent * event){
 	painter.fillRect(rect(),QBrush(QColor(255,255,128)));
 }
 
-QFrame * QtUserWidget::getFrame(){
+QFrame * QtUserWidget::getFrame() const {
 	return _frame;
 }
 
-QPixmap * QtUserWidget::getTux(){
+QPixmap * QtUserWidget::getTux() const {
 	return _tux;
 }
 void QtUserWidget::setAvatar(QString path)

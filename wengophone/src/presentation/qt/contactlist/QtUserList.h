@@ -24,43 +24,43 @@
 #include "QtContactPixmap.h"
 #include "QtUserList.h"
 
-class QtUserList 
+class QtUserList
 {
 public:
 	static QtUserList * getInstance();
-	
+
 	void addUser(QtUser * user);
-	
+
 	void removeUser(const QString & userid);
 
 	void paintUser(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 
 	void mouseOn(const QString & userid);
 
-	bool hasIM(const QString & userid);
-	
-	bool hasCall(const QString & userid);
-	
-	bool hasVideo(const QString & userid);
+	bool hasIM(const QString & userid) const;
 
-	QtUser * getUser(const QString & userid);
-	
-	void mouseClicked(const QString & userid,const QPoint pos, const QRect & rect); 
-	
-	int	 getIconsStartPosition(const QString & userid);
-	
+	bool hasCall(const QString & userid) const;
+
+	bool hasVideo(const QString & userid) const;
+
+	QtUser * getUser(const QString & userid) const;
+
+	void mouseClicked(const QString & userid,const QPoint pos, const QRect & rect);
+
+	int	 getIconsStartPosition(const QString & userid) const;
+
 	void setButton(const QString & userid,const Qt::MouseButton button);
-	
+
 	void setOpenStatus(const QString & userid,bool value);
-	
-	Qt::MouseButton getButton(const QString & userid);
-	
-	int	 getHeight(const QString & userid);
 
-	void setTreeWidget(QTreeWidget * tree) { _tree=tree;};
+	Qt::MouseButton getButton(const QString & userid) const;
 
-	QTreeWidget * getTreeWidget() {return _tree;};
-	
+	int	 getHeight(const QString & userid) const;
+
+	void setTreeWidget(QTreeWidget * tree) { _tree=tree;}
+
+	QTreeWidget * getTreeWidget() const {return _tree;}
+
 protected:
 	QtUserList ( );
 	QtUserList (const QtUserList& other) : _tree(other._tree), _userList(other._userList) {}
@@ -68,9 +68,9 @@ protected:
 protected:
 	QHash<QString,QtUser *>	_userList;
 	QTreeWidget * _tree;
-	
+
 private:
 	static QtUserList * _instance;
 	QString			    _lastMouseOn;
 };
-#endif 
+#endif

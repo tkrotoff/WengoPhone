@@ -23,7 +23,7 @@
 
 #include <model/WengoPhone.h>
 
-QtUser::QtUser(PContact & pContact, WengoPhone & wengoPhone, QObject * parent) 
+QtUser::QtUser(PContact & pContact, WengoPhone & wengoPhone, QObject * parent)
 	: QObject (parent), _pContact(pContact), _wengoPhone(wengoPhone)
 {
 	_mouseOn = false;
@@ -37,16 +37,16 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	QtContactPixmap * spx;
 	int x;
     bool parentItem = false;
-	
+
 	_painterRect = option.rect;
-	
+
 	QLinearGradient lg( QPointF(1,1), QPointF(option.rect.width(),1));
 	lg.setSpread(QGradient::RepeatSpread);
 	lg.setColorAt ( 0, option.palette.midlight().color());
 	lg.setColorAt ( .8, QColor(210, 216, 234));
-	
+
 	spx = QtContactPixmap::getInstance();
-	
+
 	/*
 	QLinearGradient lg2( QPointF(1,1), QPointF(option.rect.width(),1));
 	lg2.setSpread(QGradient::RepeatSpread);
@@ -54,7 +54,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	lg2.setColorAt ( .8, QColor(255, 255, 234));
 	painter->fillRect(option.rect, lg2);
 	*/
-	
+
 	if (_mouseOn)
 	{
 		painter->fillRect(option.rect,QBrush(lg));
@@ -80,7 +80,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	_centeredText_y = ((r.bottom()-r.top()) - QFontMetrics(option.font).height() ) / 2;
 	textRect.setTop(_centeredText_y+textRect.top());
 	// Draw the text
-	
+
 	painter->drawText(textRect,Qt::AlignLeft,index.data().toString(),0);
     /*
             Draw Functions icons
@@ -108,7 +108,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 			}
 			else
 				x-=px.width();
-				
+
 			px = spx->getPixmap(QtContactPixmap::ContactIM);
 			if (hasIM())
 			{
@@ -125,10 +125,10 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 //		else
 //			_iconsStartPosition = x;
 	}
-		
+
 }
 
-QString  QtUser::getId()
+QString  QtUser::getId() const
 {
 	return _userId;
 }
@@ -141,12 +141,12 @@ void QtUser::setUserName(const QString & uname)
 {
 	_userName = uname;
 }
-QString	QtUser::getUserName()
+QString	QtUser::getUserName() const
 {
 	return _userName;
 }
 
-QtContactPixmap::contactPixmap QtUser::getStatus(){
+QtContactPixmap::contactPixmap QtUser::getStatus() const {
 	QtContactPixmap::contactPixmap status;
 
 	switch (_pContact.getPresenceState()) {
@@ -166,16 +166,16 @@ QtContactPixmap::contactPixmap QtUser::getStatus(){
 void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 {
 	QPixmap px;
-	QtContactPixmap * spx;	
+	QtContactPixmap * spx;
 	int x;
-	
+
 	spx = QtContactPixmap::getInstance();
-	
+
 	//x=rect.width();
 	x = _painterRect.width();
-	
-	
-	
+
+
+
 	px = spx->getPixmap(QtContactPixmap::ContactVideo);
 	if (_pContact.hasVideo())
 	{
@@ -189,7 +189,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 		x-=px.width();
 
 
-	px = spx->getPixmap(QtContactPixmap::ContactCall);		
+	px = spx->getPixmap(QtContactPixmap::ContactCall);
 	if (_pContact.hasCall())
 	{
 		x-=px.width();
@@ -201,7 +201,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	else
 		x-=px.width();
 
-	px = spx->getPixmap(QtContactPixmap::ContactIM);		
+	px = spx->getPixmap(QtContactPixmap::ContactIM);
 	if (_pContact.hasIM())
 	{
 		x-=px.width();
@@ -219,7 +219,7 @@ void QtUser::setButton(const Qt::MouseButton button)
 	_mouseButton = button;
 }
 
- Qt::MouseButton QtUser::getButton()
+ Qt::MouseButton QtUser::getButton() const
 {
 	return _mouseButton;
 }
@@ -229,7 +229,7 @@ void QtUser::setOpenStatus(bool value)
 	_openStatus = value;
 }
 
-int QtUser::getHeight()
+int QtUser::getHeight() const
 {
 	if (_openStatus)
 		return 90;

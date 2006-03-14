@@ -16,35 +16,59 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include <QtGui>
-#include <QSize>
 
 #include "QtTreeViewDelegate.h"
+
 #include "QtUserWidgetEventFilter.h"
 #include "QtUserWidget.h"
 #include "QtUserList.h"
 #include "QtContactPixmap.h"
+
+#include <Logger.h>
+#include <StringList.h>
+
+#include <Object.h>
+
+#include <QtGui>
+#include <QSize>
+
 /*
 #define MENUICON_WIDTH  8
 #define MENUICON_HEIGHT 8
 */
+
+static int USER_TITLE_FRAME_HEIGHT = 0;
+static int USER_WIDGET_FRAME_HEIGHT = 0;
+static int GROUP_WIDGET_FRAME_HEIGHT = 22;
+
 QtTreeViewDelegate::QtTreeViewDelegate(QObject *parent) : QItemDelegate(parent)
 {
+	QtUserWidget * widget  = new QtUserWidget(NULL);
+	QWidget * userWidget = Object::findChild<QWidget *>(widget, "UserWidget");
+	QFrame * userTitleFrame = Object::findChild<QFrame *>(userWidget, "userTitleFrame");
+	USER_TITLE_FRAME_HEIGHT = userTitleFrame->height();
+	USER_WIDGET_FRAME_HEIGHT = userWidget->height();
 }
-void QtTreeViewDelegate::setParent(QWidget * parent) 
+
+void QtTreeViewDelegate::setParent(QWidget * parent)
 {
     _parent = parent;
 }
+
 QWidget * QtTreeViewDelegate::createEditor(QWidget *parent,
                                      const QStyleOptionViewItem & ,
                                      const QModelIndex &index) const
 {
-    QtUserWidget * widget  = new QtUserWidget(parent);
+	QtUserWidget * widget  = new QtUserWidget(parent);
+	QWidget * userWidget = Object::findChild<QWidget *>(widget, "UserWidget");
+	QFrame * userTitleFrame = Object::findChild<QFrame *>(userWidget, "userTitleFrame");
+	USER_TITLE_FRAME_HEIGHT = userTitleFrame->height();
+	LOG_DEBUG("height= " + String::fromNumber(USER_TITLE_FRAME_HEIGHT));
+
 	QtUserList * ul = QtUserList::getInstance();
-	QWidget * w = widget->findChild<QWidget *>("UserWidget");
-	w->installEventFilter(new QtUserWidgetEventFilter((QObject *)this,w,ul->getUser(index.data().toString() )));
+	userWidget->installEventFilter(new QtUserWidgetEventFilter((QObject *)this,userWidget,ul->getUser(index.data().toString() )));
 	//widget->setAvatar("emoticons/cat.svg");
-    return (QWidget *)widget;
+	return (QWidget *)widget;
 }
 
 void QtTreeViewDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
@@ -80,15 +104,25 @@ void QtTreeViewDelegate::paint ( QPainter * painter, const QStyleOptionViewItem 
 
 QSize QtTreeViewDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+	LOG_DEBUG("height= " + String::fromNumber(USER_TITLE_FRAME_HEIGHT));
+
 	QSize orig = QItemDelegate::sizeHint(option,index);
 
 	QtUserList * ul =  QtUserList::getInstance();
 	QtUser * user = ul->getUser(index.data().toString());
-	if (user)
-		return QSize(orig.width(),ul->getUser(index.data().toString())->getHeight());
-	else 
-		if ( !index.parent().isValid())
-			return (QSize(orig.width(),QtUser::UserSize));
+	if (user) {
+		//return QSize(orig.width(),ul->getUser(index.data().toString())->getHeight());
+		if (user->isOpen()) {
+			return QSize(orig.width(), USER_WIDGET_FRAME_HEIGHT);
+		} else {
+			return QSize(orig.width(), USER_TITLE_FRAME_HEIGHT);
+		}
+	}
+	else {
+		if ( !index.parent().isValid()) {
+			return (QSize(orig.width(), GROUP_WIDGET_FRAME_HEIGHT));
+		}
+	}
 	return orig;
 }
 
@@ -106,11 +140,11 @@ void QtTreeViewDelegate::drawGroup( QPainter * painter, const QStyleOptionViewIt
 	lg.setColorAt ( .8, QColor(212,208,200));
 	lg.setColorAt ( 0, QColor(255, 255, 255));
 	painter->fillRect(option.rect,QBrush(lg));
-	
+
 	QFont f = option.font;
 	f.setBold(true);
 	painter->setFont(f);
-	
+
 	if ( option.state & QStyle::State_Open)
 		px = spx->getPixmap(QtContactPixmap::ContactGroupOpen);
 	else

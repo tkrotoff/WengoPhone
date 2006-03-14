@@ -2,7 +2,6 @@
     <qresource prefix="/" >
         <file>pics/arrow_down.png</file>
         <file>pics/arrow_right.png</file>
-        <file>pics/away.png</file>
         <file>pics/background.png</file>
         <file>pics/call_button.png</file>
         <file>pics/call_history.png</file>
@@ -32,12 +31,15 @@
         <file>pics/contact_call.png</file>
         <file>pics/contact_im.png</file>
         <file>pics/contact_video.png</file>
+        <file>pics/status/away.png</file>
+        <file>pics/status/forward.png</file>
+        <file>pics/status/donotdisturb.png</file>
+        <file>pics/status/berightback.png</file>
+        <file>pics/status/notavailable.png</file>
+        <file>pics/status/invisible.png</file>
+        <file>pics/status/online.png</file>
+        <file>pics/status/offline.png</file>
         <file>pics/dialpad.png</file>
-        <file>pics/forward.png</file>
-        <file>pics/donotdisturb.png</file>
-        <file>pics/berightback.png</file>
-        <file>pics/notavailable.png</file>
-        <file>pics/invisible.png</file>
         <file>pics/group_close.png</file>
         <file>pics/group_open.png</file>
         <file>pics/hangup_button.png</file>
@@ -50,8 +52,6 @@
         <file>pics/logo.png</file>
         <file>pics/microphone.png</file>
         <file>pics/no.png</file>
-        <file>pics/online.png</file>
-        <file>pics/offline.png</file>
         <file>pics/point.gif</file>
         <file>pics/sms_send.png</file>
         <file>pics/statusbar_audio.png</file>

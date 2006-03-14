@@ -37,62 +37,66 @@ public:
 	QtUser (PContact & pContact, WengoPhone & wengoPhone, QObject * parent = 0);
 
 	virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
-	
-	QString getId();
+
+	QString getId() const;
 
 	void setId(const QString & id);
-	
-	QString getUserName();
+
+	QString getUserName() const;
 
 	void setUserName(const QString & uname);
-	
-	bool hasIM(){ return _pContact.hasIM();};
 
-	bool hasCall(){ return _pContact.hasCall();};
+	bool hasIM() const { return _pContact.hasIM();}
 
-	bool hasVideo(){ return _pContact.hasVideo();};
-	
-	void setMouseOn(bool value) { _mouseOn = value;};
-	
-	//QtContactPixmap::contactPixmap getStatus() {return _status;};
-	
+	bool hasCall() const { return _pContact.hasCall();}
+
+	bool hasVideo() const { return _pContact.hasVideo();}
+
+	void setMouseOn(bool value) { _mouseOn = value;}
+
+	//QtContactPixmap::contactPixmap getStatus() {return _status;}
+
 	void mouseClicked(const QPoint & pos,const QRect & rec);
-	
-	QtContactPixmap::contactPixmap getStatus();
-	
+
+	QtContactPixmap::contactPixmap getStatus() const;
+
 	void setFunction(bool im, bool call, bool video);
-	
-	int	 getIconsStartPosition() {return _iconsStartPosition;};
-	
+
+	int	 getIconsStartPosition() const {return _iconsStartPosition;}
+
 	void setButton(const Qt::MouseButton button);
-	
+
 	void setOpenStatus(bool value);
-	
-	int getHeight();
-	
-	Qt::MouseButton getButton();
-	
-	int getText_y() { return _centeredText_y;};
-	
-	void setAvatar(QString path) {_avatarPath = path;};
-	
-	QString getAvatar() { return _avatarPath;};
+
+	bool isOpen() const {
+		return _openStatus;
+	}
+
+	int getHeight() const;
+
+	Qt::MouseButton getButton() const;
+
+	int getText_y() const { return _centeredText_y;}
+
+	void setAvatar(QString path) {_avatarPath = path;}
+
+	QString getAvatar() const { return _avatarPath;}
 
 public Q_SLOTS:
 
 Q_SIGNALS:
 	void clicked(QtUser * user,int prt);
-protected:	
+protected:
 	QString	_userId;
 
 	QString	_userName;
-	
+
 	QPixmap	_imPixmap;
 
 	QPixmap	_callPixmap;
 
 	QPixmap	_videoPixmap;
-	
+
 	QRect _painterRect;
 
 	QtContactPixmap::contactPixmap _status;
@@ -102,13 +106,13 @@ protected:
 	bool		_openStatus;
 
 	int			_iconsStartPosition;
-	
+
 	Qt::MouseButton _mouseButton;
 
 	int _centeredText_y;
 
 	QString _avatarPath;
-	
+
 	PContact & _pContact;
 
 	WengoPhone & _wengoPhone;
