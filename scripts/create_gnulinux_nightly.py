@@ -106,6 +106,7 @@ dependencies = {
     'icui18n':'34',
     'icuuc':'34',
     'icudata':'34',
+    'gnutls':'11',
     }
 for library in dependencies.keys():
     filename = 'lib' + library + '.so.' + dependencies[library]
