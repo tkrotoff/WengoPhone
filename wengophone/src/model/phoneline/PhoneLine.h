@@ -60,13 +60,13 @@ public:
 
 	void disconnect();
 
-	void PhoneLine::setPhoneCallState(int callId, int status, const SipAddress & sipAddress);
+	void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState status, const SipAddress & sipAddress);
 
 	int getLineId() const {
 		return _lineId;
 	}
 
-	void setState(int status);
+	void setState(EnumPhoneLineState::PhoneLineState status);
 
 	const PhoneLineState & getState() const {
 		return *_state;

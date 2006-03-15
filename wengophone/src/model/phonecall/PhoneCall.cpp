@@ -108,7 +108,7 @@ void PhoneCall::mute() {
 	LOG_DEBUG("call muted");
 }
 
-void PhoneCall::setState(int status) {
+void PhoneCall::setState(EnumPhoneCallState::PhoneCallState status) {
 	for (unsigned i = 0; i < _phoneCallStateList.size(); i++) {
 		PhoneCallState * state = _phoneCallStateList[i];
 		if (state->getCode() == status) {

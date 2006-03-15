@@ -31,9 +31,9 @@
 class PhoneCallStateError : public PhoneCallState {
 public:
 
-	static const int CODE = EnumPhoneCallState::PhoneCallStateError;
+	static const EnumPhoneCallState::PhoneCallState CODE = EnumPhoneCallState::PhoneCallStateError;
 
-	int getCode() const {
+	EnumPhoneCallState::PhoneCallState getCode() const {
 		return CODE;
 	}
 

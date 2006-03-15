@@ -31,9 +31,9 @@
 class PhoneCallStateDefault : public PhoneCallState {
 public:
 
-	static const int CODE = EnumPhoneCallState::PhoneCallStateDefault;
+	static const EnumPhoneCallState::PhoneCallState CODE = EnumPhoneCallState::PhoneCallStateDefault;
 
-	int getCode() const {
+	EnumPhoneCallState::PhoneCallState getCode() const {
 		return CODE;
 	}
 

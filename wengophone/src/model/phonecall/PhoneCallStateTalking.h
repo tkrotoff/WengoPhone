@@ -32,9 +32,9 @@
 class PhoneCallStateTalking : public PhoneCallState {
 public:
 
-	static const int CODE = EnumPhoneCallState::PhoneCallStateTalking;
+	static const EnumPhoneCallState::PhoneCallState CODE = EnumPhoneCallState::PhoneCallStateTalking;
 
-	int getCode() const {
+	EnumPhoneCallState::PhoneCallState getCode() const {
 		return CODE;
 	}
 

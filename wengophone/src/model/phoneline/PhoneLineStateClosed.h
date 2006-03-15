@@ -27,9 +27,9 @@ public:
 
 	void execute(IPhoneLine & phoneLine);
 
-	static const int CODE = EnumPhoneLineState::PhoneLineStateClosed;
+	static const EnumPhoneLineState::PhoneLineState CODE = EnumPhoneLineState::PhoneLineStateClosed;
 
-	int getCode() const {
+	EnumPhoneLineState::PhoneLineState getCode() const {
 		return CODE;
 	}
 

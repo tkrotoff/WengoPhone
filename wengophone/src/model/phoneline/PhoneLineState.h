@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ public:
 	 *
 	 * @return status code of this state
 	 */
-	virtual int getCode() const = 0;
+	virtual EnumPhoneLineState::PhoneLineState getCode() const = 0;
 
 	/**
 	 * Gets the string representation of this PhoneLine state.

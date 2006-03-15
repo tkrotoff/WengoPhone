@@ -48,7 +48,7 @@ public:
 	 *
 	 * @return status code of this state
 	 */
-	virtual int getCode() const = 0;
+	virtual EnumPhoneCallState::PhoneCallState getCode() const = 0;
 
 	/**
 	 * Gets the string representation of this PhoneCall state.

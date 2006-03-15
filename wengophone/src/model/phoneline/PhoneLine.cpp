@@ -201,7 +201,7 @@ void PhoneLine::closeCall(int callId) {
 	LOG_DEBUG("call closed callId=" + String::fromNumber(callId));
 }
 
-void PhoneLine::setPhoneCallState(int callId, int status, const SipAddress & sipAddress) {
+void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState status, const SipAddress & sipAddress) {
 	LOG_DEBUG("call state changed callId=" + String::fromNumber(callId) +
 		" status=" + String::fromNumber(status) +
 		" from=" + sipAddress.getSipAddress());
@@ -290,7 +290,7 @@ PhoneCall * PhoneLine::createWaitingPhoneCall() {
 	return NULL;
 }
 
-void PhoneLine::setState(int status) {
+void PhoneLine::setState(EnumPhoneLineState::PhoneLineState status) {
 	for (unsigned int i = 0; i < _phoneLineStateList.size(); i++) {
 		PhoneLineState * state = _phoneLineStateList[i];
 		if (state->getCode() == status) {

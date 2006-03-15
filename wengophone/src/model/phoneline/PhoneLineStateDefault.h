@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +27,9 @@ public:
 
 	void execute(IPhoneLine & phoneLine);
 
-	static const int CODE = EnumPhoneLineState::PhoneLineStateDefault;
+	static const EnumPhoneLineState::PhoneLineState CODE = EnumPhoneLineState::PhoneLineStateDefault;
 
-	int getCode() const {
+	EnumPhoneLineState::PhoneLineState getCode() const {
 		return CODE;
 	}
 

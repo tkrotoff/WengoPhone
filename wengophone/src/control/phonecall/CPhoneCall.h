@@ -22,6 +22,8 @@
 
 #include <string>
 
+#include <sipwrapper/EnumPhoneCallState.h>
+
 class PhoneCall;
 class PPhoneCall;
 class WengoPhone;
@@ -98,7 +100,7 @@ public:
 
 private:
 
-	void stateChangedEventHandler(PhoneCall & sender, int status);
+	void stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState status);
 
 	void videoFrameReceivedEventHandler(PhoneCall & sender, const WebcamVideoFrame & remoteVideoFrame,
 		const WebcamVideoFrame & localVideoFrame);

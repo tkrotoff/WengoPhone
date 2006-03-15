@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@
 #include <Interface.h>
 
 #include <sipwrapper/EnumTone.h>
+#include <sipwrapper/EnumPhoneCallState.h>
+#include <sipwrapper/EnumPhoneLineState.h>
 
 #include <string>
 
@@ -98,7 +100,7 @@ public:
 	 * @param status the state (e.g event)
 	 * @param sipAddress from who we get a phone call
 	 */
-	virtual void setPhoneCallState(int callId, int status, const SipAddress & sipAddress) = 0;
+	virtual void setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState status, const SipAddress & sipAddress) = 0;
 
 	/**
 	 * Gets the SIP implementation wrapper.
@@ -119,7 +121,7 @@ public:
 	 *
 	 * @param status status code corresponding to the new PhoneLine state
 	 */
-	virtual void setState(int status) = 0;
+	virtual void setState(EnumPhoneLineState::PhoneLineState status) = 0;
 
 	/**
 	 * Gets the current state of this PhoneLine.

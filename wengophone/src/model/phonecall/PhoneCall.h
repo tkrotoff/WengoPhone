@@ -23,6 +23,7 @@
 #include "SipAddress.h"
 
 #include <sipwrapper/EnumTone.h>
+#include <sipwrapper/EnumPhoneCallState.h>
 
 #include <Event.h>
 #include <List.h>
@@ -51,7 +52,7 @@ public:
 	 * @param sender this class
 	 * @param status new status
 	 */
-	Event<void (PhoneCall & sender, int status)> stateChangedEvent;
+	Event<void (PhoneCall & sender, EnumPhoneCallState::PhoneCallState status)> stateChangedEvent;
 
 	/**
 	 * A video frame has been received from the network.
@@ -120,7 +121,7 @@ public:
 	 *
 	 * @param status status code corresponding to the new PhoneCall state
 	 */
-	void setState(int status);
+	void setState(EnumPhoneCallState::PhoneCallState status);
 
 	/**
 	 * Gets the current state of this PhoneCall.

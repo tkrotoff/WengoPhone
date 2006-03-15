@@ -62,7 +62,7 @@ std::string CPhoneCall::getPeerDisplayName() const {
 	return _phoneCall.getPeerSipAddress().getDisplayName();
 }
 
-void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, int status) {
+void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState status) {
 	if (status == PhoneCallStateClosed::CODE) {
 		_pPhoneCall->close();
 	}
