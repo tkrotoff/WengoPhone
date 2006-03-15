@@ -25,11 +25,10 @@
 #include "PhApiIMPresence.h"
 
 PhApiFactory::PhApiFactory() {
-	_phApiWrapperInstance = NULL;
+	_phApiWrapperInstance = PhApiWrapper::getInstance();
 }
 
 SipWrapper * PhApiFactory::createSipWrapper() {
-	_phApiWrapperInstance = PhApiWrapper::getInstance();
 	return _phApiWrapperInstance;
 }
 
