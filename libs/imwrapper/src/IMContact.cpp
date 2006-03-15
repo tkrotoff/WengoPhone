@@ -66,10 +66,11 @@ void IMContact::removeFromGroup(const std::string & groupName) {
 }
 
 void IMContact::removeFromAllGroup() {
-	for (GroupSet::iterator it = _groupSet.begin() ; it != _groupSet.end() ; it++) {
+	for (GroupSet::const_iterator it = _groupSet.begin() ; it != _groupSet.end() ; it++) {
 		imContactRemovedFromGroupEvent(*this, *it);
-		_groupSet.erase(it);	
 	}
+
+	_groupSet.clear();
 }
 
 std::string IMContact::serialize() const {
