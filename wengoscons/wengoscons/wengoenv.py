@@ -401,8 +401,14 @@ class WengoSConsEnvironment(SConsEnvironment):
 		"""
 
 		def __init__(self):
-			self.__CCFlags = []
-			self.__linkFlags = []
+			cflags = []
+			ldflags = []
+			if os.environ.has_key('CFLAGS'):
+				cflags = os.environ['CFLAGS'].split(' ')
+			self.__CCFlags = cflags
+			if os.environ.has_key('LDFLAGS'):
+				ldflags = os.environ['LDFLAGS'].split(' ')
+			self.__linkFlags = ldflags
 
 		def setDebugMode(self):
 			self.__setDefaultFlags()
