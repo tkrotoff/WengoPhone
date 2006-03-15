@@ -8,7 +8,6 @@ include_path = [
 defines = {}
 headers = []
 sources = [
-	'tinystr.cpp',
 	'tinyxml.cpp',
 	'tinyxmlerror.cpp',
 	'tinyxmlparser.cpp'
