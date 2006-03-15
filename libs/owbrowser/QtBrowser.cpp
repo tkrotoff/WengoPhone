@@ -33,14 +33,14 @@ using namespace std;
 
 QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode) : QObject() {
     _browserWidget = new QWidget(parent);
-    
+
     _ieBrowser = NULL;
     _qtBrowser = NULL;
-    
+
     _layout = new QVBoxLayout(_browserWidget);
     _layout->setMargin(1);
     _layout->setSpacing(0);
-    
+
     setMode(mode);
 }
 
@@ -64,7 +64,7 @@ void * QtBrowser::getWidget() const {
     return (void*)_browserWidget;
 }
 
-std::string QtBrowser::getUrl() {
+std::string QtBrowser::getUrl() const {
     return _url.toStdString();
 }
 
@@ -104,9 +104,9 @@ void QtBrowser::initBrowser() {
         LOG_FATAL("IEMODE not allowed");
     }
 #endif
-    
+
     if( _mode == QTMODE ) {
-        
+
         // clean ie browser
         if( _ieBrowser ) {
             _layout->removeWidget(_ieBrowser);
@@ -117,9 +117,9 @@ void QtBrowser::initBrowser() {
         //init qt browser
         _qtBrowser = new QTextBrowser(_browserWidget);
         connect(_qtBrowser, SIGNAL(anchorClicked(const QUrl &)),
-            SLOT(BeforeNavigate(const QUrl &)));        
+            SLOT(BeforeNavigate(const QUrl &)));
         _layout->addWidget(_qtBrowser);
-        
+
     } else {
 #ifdef OS_WINDOWS
         //clean qt browser
@@ -128,14 +128,14 @@ void QtBrowser::initBrowser() {
             delete _qtBrowser;
             _qtBrowser = NULL;
         }
-        
+
         //init ie browser
         _ieBrowser = new QAxWidget(_browserWidget);
         _ieBrowser->setControl(QString::fromUtf8("{8856F961-340A-11D0-A96B-00C04FD705A2}"));
         _ieBrowser->setObjectName(QString::fromUtf8("mwbAx"));
         _ieBrowser->setFocusPolicy(Qt::StrongFocus);
         connect(_ieBrowser, SIGNAL(BeforeNavigate(const QString&, int, const QString&, const QVariant&, const QString&, bool&)),
-            SLOT(BeforeNavigate(const QString&, int, const QString&, const QVariant&, const QString&, bool&)));        
+            SLOT(BeforeNavigate(const QString&, int, const QString&, const QVariant&, const QString&, bool&)));
         _layout->addWidget(_ieBrowser);
     }
 #endif

@@ -31,50 +31,49 @@
  * @author Mathieu Stute
  */
 class OWBrowser : Interface {
-    
+
 public:
 
     /**
      * A link has been clicked
      *
-     * @param sender sender of the event
      * @param image captured image
      */
-    Event<void (std::string url)> urlClickedEvent;
+    Event<void (const std::string & url)> urlClickedEvent;
 
     /**
-     * Set current url to browse
+     * Sets current url to browse
      *
      * @param url the url to browse
      */
     virtual void setUrl(const std::string & url) = 0;
-    
+
     /**
-     * Set current url to browse
+     * Gets current url to browse
      *
-     * @return  the current url
+     * @return the current url
      */
-    virtual std::string getUrl() = 0;
-    
+    virtual std::string getUrl() const = 0;
+
     /**
      * return the low level widget
      *
      * @return the low level widget
      */
     virtual void * getWidget() const = 0;
-    
+
     /**
-     * show the widget
+     * Shows the widget
      */
     virtual void show() = 0;
-    
+
     /**
-     * Browse backward
+     * Browses backward
      */
     virtual void backward() = 0;
-    
+
     /**
-     * Browse forward
+     * Browses forward
      */
     virtual void forward() = 0;
 };
