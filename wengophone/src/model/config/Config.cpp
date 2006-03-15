@@ -520,3 +520,12 @@ std::string Config::getStringKeyValue(const std::string & key) const {
 
 	return boost::any_cast<std::string>(value);
 }
+
+StringList Config::getStringListKeyValue(const std::string & key) const {
+	boost::any value = getAny(key);
+	if (!Settings::isStringList(value)) {
+		LOG_FATAL("value for key=" + key + " is not a string list");
+	}
+
+	return boost::any_cast<StringList>(value);
+}

@@ -414,6 +414,11 @@ private:
 	 */
 	std::string getStringKeyValue(const std::string & key) const;
 
+	/**
+	 * @see get()
+	 */
+	StringList Config::getStringListKeyValue(const std::string & key) const;
+
 	/** Name of this configuration. */
 	std::string _name;
 
