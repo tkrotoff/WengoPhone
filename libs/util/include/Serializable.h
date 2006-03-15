@@ -20,8 +20,6 @@
 #ifndef SERIALIZABLE_H
 #define SERIALIZABLE_H
 
-#include <Interface.h>
-
 #include <string>
 
 /**
@@ -29,7 +27,7 @@
  *
  * @author Tanguy Krotoff
  */
-class Serializable : Interface {
+class Serializable {
 public:
 
 	virtual ~Serializable() {
