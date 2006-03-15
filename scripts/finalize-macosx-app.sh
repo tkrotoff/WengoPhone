@@ -1,0 +1,164 @@
+#!/bin/sh
+#
+# WengoPhone, a voice over Internet phone
+# Copyright (C) 2004-2005  Wengo
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# Finalize the .app folder for WengoPhone on MacOS X.
+# This script copies every dependent files and change their install name.
+#
+# @author Philippe Bernery
+
+usage()
+{
+	echo "usage: finalize [NG source path] [mode]"
+	echo "mode can be 'debug' or 'release'"
+}
+
+##
+# Check command line parameters.
+##
+if [ ! $# -eq 2 ]; then
+	usage
+	exit -1
+fi
+
+if [ $2 = "debug" ]; then
+	MODE="debug"
+	LIBQTDESIGNER="libQtDesigner_debug.4.dylib"
+elif [ $2 = "release" ]; then
+	MODE="release-symbols"
+	LIBQTDESIGNER="libQtDesigner.4.dylib"
+else
+	usage
+	exit -1
+fi
+
+##
+# Set needed variables
+##
+WENGO_BUILD_PATH=$1/$MODE
+WENGO_PATH=$WENGO_BUILD_PATH/wengophone/src/presentation/qt
+WENGO_FRAMEWORK_PATH=$WENGO_PATH/qtwengophone.app/Contents/Frameworks
+WENGO_EXE=$WENGO_PATH/qtwengophone.app/Contents/MacOS/qtwengophone
+WENGO_FRAMEWORK_PREFIX=@executable_path/../Frameworks
+
+QTDIR=/usr/local/Trolltech/Qt-4.1.1/lib
+
+##
+# $1: full path to the lib
+##
+changeWengoPhoneInstallName()
+{
+	if [ $# -eq 1 ]; then
+		install_name_tool -change $1 $WENGO_FRAMEWORK_PREFIX/`basename $1` $WENGO_EXE
+	fi
+
+	if [ $# -eq 2 ]; then
+		install_name_tool -change $1 $WENGO_FRAMEWORK_PREFIX/$2 $WENGO_EXE
+	fi
+}
+
+changeInstallName()
+{
+	install_name_tool -change $1 $WENGO_FRAMEWORK_PREFIX/`basename $1` $2
+}
+
+testAndMkdir()
+{
+	
+	if [ ! -d $1 ]; then
+		mkdir -p $1
+	fi
+}
+
+##
+# Creates the needed directories if they do not exist
+##
+testAndMkdir $WENGO_FRAMEWORK_PATH
+testAndMkdir $WENGO_FRAMEWORK_PATH/QtCore.framework/Versions/4.0
+testAndMkdir $WENGO_FRAMEWORK_PATH/QtGui.framework/Versions/4.0
+testAndMkdir $WENGO_FRAMEWORK_PATH/QtXml.framework/Versions/4.0
+testAndMkdir $WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0
+
+##
+# Copy needed frameworks
+##
+cp $QTDIR/QtCore.framework/Versions/4.0/QtCore $WENGO_FRAMEWORK_PATH/QtCore.framework/Versions/4.0/QtCore
+cp $QTDIR/QtGui.framework/Versions/4.0/QtGui $WENGO_FRAMEWORK_PATH/QtGui.framework/Versions/4.0/QtGui
+cp $QTDIR/QtXml.framework/Versions/4.0/QtXml $WENGO_FRAMEWORK_PATH/QtXml.framework/Versions/4.0/QtXml
+cp $QTDIR/QtSvg.framework/Versions/4.0/QtSvg $WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg
+
+cp $QTDIR/$LIBQTDESIGNER $WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER
+cp /sw/lib/libgnutls.12.dylib /sw/lib/libgcrypt.11.dylib /sw/lib/libtasn1.2.dylib /sw/lib/libpth.14.dylib /sw/lib/libgpg-error.0.dylib $WENGO_FRAMEWORK_PATH
+cp /sw/lib/libgmodule-2.0.0.dylib /sw/lib/libintl.1.dylib /sw/lib/libintl.3.dylib /sw/lib/libiconv.2.dylib /sw/lib/libglib-2.0.0.dylib /sw/lib/libgthread-2.0.0.dylib $WENGO_FRAMEWORK_PATH
+
+##
+# Change install name of qtwengophone
+##
+changeWengoPhoneInstallName "/sw/lib/libglib-2.0.0.dylib"
+changeWengoPhoneInstallName "/sw/lib/libintl.3.dylib"
+changeWengoPhoneInstallName "/sw/lib/libiconv.2.dylib"
+changeWengoPhoneInstallName "/sw/lib/libgthread-2.0.0.dylib"
+changeWengoPhoneInstallName "/sw/lib/libgmodule-2.0.0.dylib"
+changeWengoPhoneInstallName "/sw/lib/libgnutls.12.dylib"
+changeWengoPhoneInstallName "$QTDIR/$LIBQTDESIGNER"
+changeWengoPhoneInstallName "$QTDIR/QtCore.framework/Versions/4.0/QtCore" "QtCore.framework/Versions/4.0/QtCore"
+changeWengoPhoneInstallName "$QTDIR/QtGui.framework/Versions/4.0/QtGui" "QtGui.framework/Versions/4.0/QtGui"
+changeWengoPhoneInstallName "$QTDIR/QtXml.framework/Versions/4.0/QtXml" "QtXml.framework/Versions/4.0/QtXml"
+changeWengoPhoneInstallName "$QTDIR/QtSvg.framework/Versions/4.0/QtSvg" "QtSvg.framework/Versions/4.0/QtSvg"
+
+##
+# Change install name of copied libraries
+##
+install_name_tool -change "$QTDIR/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/QtGui.framework/Versions/4.0/QtGui"
+install_name_tool -change "$QTDIR/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/QtXml.framework/Versions/4.0/QtXml"
+install_name_tool -change "$QTDIR/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg"
+install_name_tool -change "$QTDIR/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PREFIX/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg"
+install_name_tool -change "$QTDIR/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PREFIX/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg"
+install_name_tool -change "$QTDIR/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
+install_name_tool -change "$QTDIR/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PREFIX/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
+install_name_tool -change "$QTDIR/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PREFIX/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
+
+changeInstallName "/sw/lib/libglib-2.0.0.dylib" "$WENGO_FRAMEWORK_PATH/libgmodule-2.0.0.dylib"
+changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgmodule-2.0.0.dylib"
+changeInstallName "/sw/lib/libintl.3.dylib" "$WENGO_FRAMEWORK_PATH/libgmodule-2.0.0.dylib"
+
+changeInstallName "/sw/lib/libglib-2.0.0.dylib" "$WENGO_FRAMEWORK_PATH/libgthread-2.0.0.dylib"
+changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgthread-2.0.0.dylib"
+changeInstallName "/sw/lib/libintl.3.dylib" "$WENGO_FRAMEWORK_PATH/libgthread-2.0.0.dylib"
+
+changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libglib-2.0.0.dylib"
+changeInstallName "/sw/lib/libintl.3.dylib" "$WENGO_FRAMEWORK_PATH/libglib-2.0.0.dylib"
+
+changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libintl.3.dylib"
+
+changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libintl.1.dylib"
+
+changeInstallName "/sw/lib/libintl.3.dylib" "$WENGO_FRAMEWORK_PATH/libgpg-error.0.dylib"
+changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgpg-error.0.dylib"
+
+changeInstallName "/sw/lib/libtasn1.2.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
+changeInstallName "/sw/lib/libgcrypt.11.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
+changeInstallName "/sw/lib/libpth.14.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
+changeInstallName "/sw/lib/libintl.3.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
+changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
+changeInstallName "/sw/lib/libgpg-error.0.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
+
+changeInstallName "/sw/lib/libpth.14.dylib" "$WENGO_FRAMEWORK_PATH/libgcrypt.11.dylib"
+changeInstallName "/sw/lib/libgpg-error.0.dylib" "$WENGO_FRAMEWORK_PATH/libgcrypt.11.dylib"
+changeInstallName "/sw/lib/libintl.1.dylib" "$WENGO_FRAMEWORK_PATH/libgcrypt.11.dylib"
+changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgcrypt.11.dylib"
