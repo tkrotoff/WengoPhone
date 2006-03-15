@@ -170,6 +170,15 @@ public:
 
 	WenboxPlugin & getWenboxPlugin() const;
 
+	/**
+	 * Gets the duration of the call in seconds
+	 *
+	 * @return duration of the call
+	 */
+	int getDuration() {
+		return _duration;
+	}
+	
 private:
 
 	/** PhoneLine associated with this PhoneCall. */
@@ -189,6 +198,12 @@ private:
 
 	/** List of PhoneCallState. */
 	PhoneCallStates _phoneCallStateList;
+
+	/** The duration of the call in second */
+	int _duration;
+
+	/** store temporary the time */
+	int _temp;
 };
 
 #endif	//PHONECALL_H

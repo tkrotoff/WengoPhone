@@ -40,9 +40,14 @@
 #include <StringList.h>
 #include <Logger.h>
 
+#include <ctime>
+
 PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 	: _phoneLine(phoneLine) {
 
+	_temp = -1;
+	_duration = -1;
+		
 	_sipAddress = sipAddress;
 
 	static PhoneCallStateDefault stateDefault;
@@ -113,6 +118,17 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState status) {
 		PhoneCallState * state = _phoneCallStateList[i];
 		if (state->getCode() == status) {
 			if (_state->getCode() != state->getCode()) {
+				
+				// start of the call
+				if(status == EnumPhoneCallState::PhoneCallStateTalking) {
+					_temp = time(NULL);
+				// end of the call
+				} else if(status == EnumPhoneCallState::PhoneCallStateClosed) {
+					if(_temp != -1) {
+						_duration = time(NULL) - _temp;
+					}
+				}
+				
 				_state = state;
 				_state->execute(*this);
 				LOG_DEBUG("call state changed callId=" + String::fromNumber(_callId) + " state=" + _state->toString());
@@ -156,3 +172,4 @@ void PhoneCall::playTone(EnumTone::Tone tone) {
 void PhoneCall::playSoundFile(const std::string & soundFile) {
 	_phoneLine.getSipWrapper().playSoundFile(_callId, soundFile);
 }
+
