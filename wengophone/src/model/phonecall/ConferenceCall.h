@@ -25,10 +25,14 @@
 
 #include <string>
 
-class PhoneLine;
+class IPhoneLine;
+class PhoneCall;
 
 /**
  * Handles a conference call.
+ *
+ * Conferences are an association of calls
+ * where the audio media is mixed.
  *
  * The number of participant is unlimited in this model but probably
  * limited by the SIP stack that uses ConferenceCall.
@@ -50,13 +54,13 @@ public:
 	/**
 	 * Creates a new ConferenceCall given a PhoneLine.
 	 */
-	ConferenceCall(const PhoneLine & phoneLine);
+	ConferenceCall(IPhoneLine & phoneLine);
 
 	~ConferenceCall();
 
-	void addPhoneCall(const PhoneCall & phoneCall);
+	void addPhoneCall(PhoneCall & phoneCall);
 
-	void removePhoneCall(const PhoneCall & phoneCall);
+	void removePhoneCall(PhoneCall & phoneCall);
 
 	void addPhoneNumber(const std::string & phoneNumber);
 
@@ -75,13 +79,16 @@ public:
 private:
 
 	/** PhoneLine associated with the ConferenceCall. */
-	PhoneLine & _phoneLine;
+	IPhoneLine & _phoneLine;
 
 	/** Defines the vector of PhoneCall. */
 	typedef List < PhoneCall * > PhoneCalls;
 
 	/** List of PhoneCall. */
 	PhoneCalls _phoneCallList;
+
+	/** Conference id of this ConferenceCall. */
+	int _confId;
 };
 
 #endif	//CONFERENCEPHONECALL_H

@@ -169,10 +169,10 @@ public:
 	 * Dials a phone number.
 	 *
 	 * @param lineId line to use to dial the phone number
-	 * @param phoneNumber SIP address to call (e.g phone number to dial)
+	 * @param sipAddress SIP address to call (e.g phone number to dial)
 	 * @return the phone call id (callId)
 	 */
-	virtual int makeCall(int lineId, const std::string & phoneNumber) = 0;
+	virtual int makeCall(int lineId, const std::string & sipAddress) = 0;
 
 	/**
 	 * Notifies the remote side (the caller) that this phone is ringing.
@@ -281,17 +281,40 @@ public:
 	static const int ConfIdError = -1;
 
 	/**
-	 * Creates a new conference.
+	 * Creates a new conference given a phone call.
 	 *
+	 * Conferences are an association of calls
+	 * where the audio media is mixed.
+	 *
+	 * @param callid phone call that will be transformed into a conference call
 	 * @return conference id or ConfIdError if an error occured
 	 */
-	/*virtual int createConference() = 0;
+	virtual int createConference() = 0;
 
-	virtual void joinConference() = 0;
+	/**
+	 * Stops a conference call.
+	 *
+	 * All participants within a conference are dropped.
+	 *
+	 * @param confIf conference to close
+	 */
+	virtual void destroyConference(int confId) = 0;
 
-	virtual void addToConference(int confId, int lineId, int callId, const std::string & sipAddress) = 0;
+	/**
+	 * Joins (adds) an existing call into a conference.
+	 *
+	 * @param confId conference id
+	 * @param callId phone call id
+	 */
+	virtual void joinConference(int confId, int callId) = 0;
 
-	virtual void removeFromConference(int confId, int callId) = 0;*/
+	/**
+	 * Splits (removes) an existing call from a conference.
+	 *
+	 * @param confId conference id
+	 * @param callId existing call to remove from the conference
+	 */
+	virtual void splitConference(int confId, int callId) = 0;
 
 	/** @} */
 

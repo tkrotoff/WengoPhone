@@ -199,9 +199,9 @@ void PhApiWrapper::removeVirtualLine(int lineId) {
 	}
 }
 
-int PhApiWrapper::makeCall(int lineId, const std::string & phoneNumber) {
-	LOG_DEBUG("call " + phoneNumber);
-	return phLinePlaceCall2(lineId, phoneNumber.c_str(), NULL, 0, MEDIA_FLAGS);
+int PhApiWrapper::makeCall(int lineId, const std::string & sipAddress) {
+	LOG_DEBUG("call=" + sipAddress);
+	return phLinePlaceCall2(lineId, sipAddress.c_str(), NULL, 0, MEDIA_FLAGS);
 }
 
 void PhApiWrapper::sendRingingNotification(int callId) {
@@ -649,6 +649,71 @@ void PhApiWrapper::setSIP(const string & server, unsigned serverPort, unsigned l
 	_sipServerPort = serverPort;
 	_sipLocalPort = localPort;
 }
+
+
+/*
+int callId1 = placeCall();
+phHold(callId1);
+int callId2 = placeCall();
+phConf(callId1, callId2);
+phResume(callId1);
+phStopConf(callId1, callId2);
+*/
+
+static int callId1 = -1;
+static int callId2 = -1;
+
+int PhApiWrapper::createConference() {
+	//FIXME return phConfCreate();
+
+	return 1;
+}
+
+void PhApiWrapper::destroyConference(int confId) {
+	//FIXME phConfClose(confId);
+
+	if (callId1 != -1 && callId2 != -1) {
+		phStopConf(callId1, callId2);
+	}
+
+	callId1 = -1;
+	callId2 = -1;
+}
+
+void PhApiWrapper::joinConference(int confId, int callId) {
+	//FIXME phConfAddMember(confId, callId);
+
+	if (callId1 == -1) {
+		callId1 = callId;
+		holdCall(callId1);
+	} else if (callId2 == -1) {
+		callId2 = callId;
+	}
+
+	if (callId1 != -1 && callId2 != -1) {
+		resumeCall(callId1);
+		phConf(callId1, callId2);
+	}
+}
+
+void PhApiWrapper::splitConference(int confId, int callId) {
+	//FIXME phConfRemoveMember(confId, callId);
+
+	if (callId1 != -1 && callId2 != -1) {
+		phStopConf(callId1, callId2);
+		callId1 = -1;
+		callId2 = -1;
+	} else {
+		if (callId1 == callId) {
+			closeCall(callId1);
+			callId1 = -1;
+		} else if (callId2 == callId) {
+			callId2 = -1;
+			closeCall(callId2);
+		}
+	}
+}
+
 
 void PhApiWrapper::init() {
 	setNetworkParameter();

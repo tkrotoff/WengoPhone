@@ -91,7 +91,7 @@ public:
 
 	void removeVirtualLine(int lineId);
 
-	int makeCall(int lineId, const std::string & phoneNumber);
+	int makeCall(int lineId, const std::string & sipAddress);
 
 	void sendRingingNotification(int callId);
 
@@ -123,7 +123,7 @@ public:
 
 	void setPluginPath(const std::string & path);
 
-	void setProxy(const std::string & address, unsigned port, 
+	void setProxy(const std::string & address, unsigned port,
 		const std::string & login, const std::string & password);
 
 	void setTunnel(const std::string & address, unsigned port, bool ssl);
@@ -131,6 +131,18 @@ public:
 	void setNatType(EnumNatType::NatType natType);
 
 	void setSIP(const std::string & server, unsigned serverPort, unsigned localPort);
+
+
+	int createConference();
+
+	void destroyConference(int confId);
+
+	void joinConference(int confId, int callId);
+
+	int joinConference(int confId, int lineId, const std::string & sipAddress);
+
+	void splitConference(int confId, int callId);
+
 
 	/**
 	 * @name PhApi callbacks

@@ -19,42 +19,78 @@
 
 #include "ConferenceCall.h"
 
-ConferenceCall::ConferenceCall(const PhoneLine & phoneLine)
+#include <model/phoneline/IPhoneLine.h>
+#include <model/phonecall/PhoneCall.h>
+#include <model/account/SipAccount.h>
+
+#include <sipwrapper/SipWrapper.h>
+
+ConferenceCall::ConferenceCall(IPhoneLine & phoneLine)
 	: _phoneLine(phoneLine) {
+
+	//No conference started yet
+	_confId = -1;
+
+	_phoneCallList.clear();
 }
 
 ConferenceCall::~ConferenceCall() {
+	stop();
+	for (unsigned i = 0; i < _phoneCallList.size(); i++) {
+		PhoneCall * phoneCall = _phoneCallList[i];
+		//delete phoneCall;
+	}
+	_phoneCallList.clear();
 }
 
-void ConferenceCall::addPhoneCall(const PhoneCall & phoneCall) {
+void ConferenceCall::addPhoneCall(PhoneCall & phoneCall) {
+	if (_confId != -1) {
+		_phoneLine.getSipWrapper().joinConference(_confId, phoneCall.getCallId());
+	}
+	//Remove it before to add it to the list
+	_phoneCallList -= &phoneCall;
+
 	_phoneCallList += &phoneCall;
 }
 
-void ConferenceCall::removePhoneCall(const PhoneCall & phoneCall) {
+void ConferenceCall::removePhoneCall(PhoneCall & phoneCall) {
+	if (_confId != -1) {
+		_phoneLine.getSipWrapper().splitConference(_confId, phoneCall.getCallId());
+	}
 	_phoneCallList -= &phoneCall;
+	//delete &phoneCall;
 }
 
 void ConferenceCall::addPhoneNumber(const std::string & phoneNumber) {
 	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _phoneLine.getSipAccount().getRealm());
 	PhoneCall * phoneCall = new PhoneCall(_phoneLine, sipAddress);
-	_phoneCallList += phoneCall;
+	addPhoneCall(*phoneCall);
 }
 
 void ConferenceCall::removePhoneNumber(const std::string & phoneNumber) {
 	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _phoneLine.getSipAccount().getRealm());
 	for (unsigned i = 0; i < _phoneCallList.size(); i++) {
-		SipAddress tmp = _phoneCallList[i].getPeerSipAddress();
+		SipAddress tmp = _phoneCallList[i]->getPeerSipAddress();
 		if (tmp.toString() == sipAddress.toString()) {
 			PhoneCall * phoneCall = _phoneCallList[i];
-			_phoneCallList -= phoneCall;
-			delete phoneCall;
+			removePhoneCall(*phoneCall);
 		}
 	}
 }
 
 void ConferenceCall::start() {
-	_phoneCallList[];
+	if (_confId == -1) {
+		_confId = _phoneLine.getSipWrapper().createConference();
+		for (unsigned i = 0; i < _phoneCallList.size(); i++) {
+			PhoneCall * phoneCall = _phoneCallList[i];
+			addPhoneCall(*phoneCall);
+		}
+	}
 }
 
 void ConferenceCall::stop() {
+	if (_confId != -1) {
+		_phoneLine.getSipWrapper().destroyConference(_confId);
+	}
+	_confId = -1;
 }
