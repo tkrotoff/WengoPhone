@@ -19,6 +19,8 @@
 
 #include <imwrapper/IMAccountHandler.h>
 
+#include <imwrapper/IMAccountHandlerFileDataLayer.h>
+#include <imwrapper/IMAccountHandlerParser.h>
 #include <imwrapper/IMAccount.h>
 
 using namespace std;
@@ -35,11 +37,45 @@ set<IMAccount *> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMPro
 	return result;
 }
 
+IMAccountHandler::IMAccountHandler() 
+: _dataLayer(NULL) {
+}
+
+IMAccountHandler::~IMAccountHandler() {
+}
+
+void IMAccountHandler::load() {
+	if (!_dataLayer) {
+		_dataLayer = new IMAccountHandlerFileDataLayer(*this);
+	}
+
+	_dataLayer->load();
+}
+
+void IMAccountHandler::save() {
+	if (!_dataLayer) {
+		_dataLayer = new IMAccountHandlerFileDataLayer(*this);
+	}
+
+	_dataLayer->save();
+}
+
 std::string IMAccountHandler::serialize() {
-	return "";
+	string result;
+
+	result += "<imaccounts>\n";
+
+	for (IMAccountHandler::const_iterator it = begin() ; it != end() ; it++) {
+		result += ((IMAccount &)(*it)).serialize();
+	}
+
+	result += "</imaccounts>\n";
+
+	return result;
 }
 
 bool IMAccountHandler::unserialize(const std::string & data) {
-	return false;
+	IMAccountHandlerParser parser(*this, data);
+	return parser.parse();
 }
 

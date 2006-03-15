@@ -23,6 +23,7 @@
 #include <imwrapper/EnumIMProtocol.h>
 
 #include <Settings.h>
+#include <Serializable.h>
 
 #include <string>
 
@@ -35,21 +36,15 @@
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class IMAccount {
+class IMAccount : public Serializable {
+	friend class IMAccountParser;
 public:
 
-	IMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol) {
-		_login = login;
-		_password = password;
-		_protocol = protocol;
-	}
+	IMAccount();
 
-	IMAccount(const IMAccount & imAccount) {
-		_login = imAccount._login;
-		_password = imAccount._password;
-		_protocol = imAccount._protocol;
-		_settings = imAccount._settings;
-	}
+	IMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol);
+
+	IMAccount(const IMAccount & imAccount);
 
 	const std::string & getLogin() const {
 		return _login;
@@ -63,20 +58,17 @@ public:
 		return _protocol;
 	}
 
-	bool operator == (const IMAccount & imAccount) const {
-		//TODO should we check the password too?
-		return ((_login == imAccount._login)
-			&& (_protocol == imAccount._protocol));
-	}
-
-	bool operator < (const IMAccount & imAccount) const {
-		return ((_login < imAccount._login) 
-			|| ((_login == imAccount._login) && (_protocol < imAccount._protocol)));
-	}
-
 	Settings & getSettings() {
 		return _settings;
 	}
+
+	bool operator == (const IMAccount & imAccount) const;
+
+	bool operator < (const IMAccount & imAccount) const;
+
+	std::string serialize();
+	
+	bool unserialize(const std::string & data);
 
 private:
 

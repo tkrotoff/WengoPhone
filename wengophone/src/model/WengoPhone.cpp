@@ -71,14 +71,14 @@ WengoPhone::~WengoPhone() {
 	if (_sms) {
 		delete _sms;
 	}
+
+	_imAccountHandler.save();
 }
 
 void WengoPhone::init() {
 	//Creates the history
 	//historyCreatedEvent
 
-	//Load IMAccounts
-	
 	//Create ConnectHandler, PresenceHandler, ChatHandler 
 	// and IMContactListHandler
 	_connectHandler = new ConnectHandler(*this);
@@ -92,10 +92,21 @@ void WengoPhone::init() {
 
 	_imContactListHandler = new IMContactListHandler(*this);
 
-	//Creates the contact list
+	//Loads IMAccounts
+	_imAccountHandler.load();
+
+	//Creates and loads the contact list
 	_contactList = new ContactList(*this);
 	contactListCreatedEvent(*this, *_contactList);
 	_contactList->load();
+
+	//Connects all IMAccounts
+	for (IMAccountHandler::const_iterator it = _imAccountHandler.begin();
+		 it != _imAccountHandler.end();
+		 ++it) {
+		newIMAccountAddedEvent(*this, (IMAccount &)*it);
+		_connectHandler->connect(*it);
+	}
 
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
@@ -109,11 +120,6 @@ void WengoPhone::init() {
 	wengoAccountLogin();
 
 	//Load other SipAccount
-
-	//Load IMAccounts
-	/*IMAccount account("LOGIN", "PASSWORD", EnumIMProtocol::IMProtocolMSN);
-	addIMAccount(account);
-	_connectHandler->connect(*_imAccountHandler.find(account));*/
 
 	//initFinishedEvent
 	initFinishedEvent(*this);
@@ -274,9 +280,7 @@ void WengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::
 void WengoPhone::addIMAccount(const IMAccount & imAccount) {
 	LOG_DEBUG("adding an IMAccount");
 
-	unsigned size = _imAccountHandler.size();
 	_imAccountHandler.insert(imAccount);
-	size = _imAccountHandler.size();
 
 	IMAccountHandler::const_iterator it = _imAccountHandler.find(imAccount);
 

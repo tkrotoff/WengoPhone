@@ -3,9 +3,12 @@ env = WengoGetEnvironment()
 libs = [
 	'wengoutil',
 	'glib-2.0',
+	'tinyxml',
 ]
+
 if WengoOSMacOSX():
 	env.ParseConfig('pkg-config --cflags --libs glib-2.0')
+
 include_path = ['include']
 
 headers = [
@@ -14,19 +17,32 @@ headers = [
 	'include/imwrapper/IMAccount.h',
 	'include/imwrapper/IMAccountHandler.h',
 	'include/imwrapper/IMChat.h',
-	'include/imwrapper/IMChatSession.h',
 	'include/imwrapper/IMChatMap.h',
+	'include/imwrapper/IMChatSession.h',
 	'include/imwrapper/IMConnect.h',
+	'include/imwrapper/IMContact.h',
+	'include/imwrapper/IMContactList.h',
+	'include/imwrapper/IMContactSet.h',
 	'include/imwrapper/IMPresence.h',
 	'include/imwrapper/IMWrapperFactory.h',
+	'include/imwrapper/IMAccountHandlerParser.h',
+	'include/imwrapper/IMAccountHandlerDataLayer.h',
+	'include/imwrapper/IMAccountHandlerFileDataLayer.h',
+	'include/imwrapper/IMAccountParser.h',
 ]
 
 sources = [
+	'src/IMAccount.cpp',
 	'src/IMAccountHandler.cpp',
 	'src/IMChatMap.cpp',
 	'src/IMChatSession.cpp',
 	'src/IMContact.cpp',
+	'src/IMContactSet.cpp',
 	'src/IMWrapperFactory.cpp',
+	'src/EnumIMProtocol.cpp',
+	'src/IMAccountHandlerFileDataLayer.cpp',
+	'src/IMAccountHandlerParser.cpp',
+	'src/IMAccountParser.cpp',
 ]
 
 env.WengoAddIncludePath(include_path)

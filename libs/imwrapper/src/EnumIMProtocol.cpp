@@ -17,52 +17,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLER_H
-#define IMACCOUNTHANDLER_H
-
 #include <imwrapper/EnumIMProtocol.h>
-#include <imwrapper/IMAccount.h>
 
-#include <set>
+using namespace std;
 
-class IMAccountHandlerDataLayer;
+EnumIMProtocol::EnumIMProtocol() {
+	_protocolMap[IMProtocolUnknown] = "Unknown";
+	_protocolMap[IMProtocolAll] = "All";
+	_protocolMap[IMProtocolMSN] = "MSN";
+	_protocolMap[IMProtocolYahoo] = "Yahoo";
+	_protocolMap[IMProtocolAIM] = "AIM";
+	_protocolMap[IMProtocolICQ] = "ICQ";
+	_protocolMap[IMProtocolJabber] = "Jabber";
+	_protocolMap[IMProtocolSIPSIMPLE] = "SIP/SIMPLE";
+}
 
-/**
- * Instant Messaging account list.
- *
- * @author Philippe Bernery
- */
-class IMAccountHandler : public std::set<IMAccount>, public Serializable {
-public:
+string EnumIMProtocol::toString(IMProtocol protocol) {
+	return _protocolMap[protocol];
+}
 
-	IMAccountHandler();
+EnumIMProtocol::IMProtocol EnumIMProtocol::toIMProtocol(const std::string & protocol) {
+	for (ProtocolMap::const_iterator it = _protocolMap.begin();
+		it != _protocolMap.end();
+		++it) {
+		
+		if ((*it).second == protocol) {
+			return (*it).first;
+		}
+	}
 
-	virtual ~IMAccountHandler();
-
-	/**
-	 * @param protocol the desired protocol
-	 * @return IMAccount with protocol 'protocol'
-	 */
-	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
-
-	/**
-	 * Load the IMAccounts.
-	 */
-	void load();
-
-	/**
-	 * Save the IMAccounts.
-	 */
-	void save();
-
-	std::string serialize();
-
-	bool unserialize(const std::string & data);
-
-private:
-
-	IMAccountHandlerDataLayer  * _dataLayer;
-
-};
-
-#endif	//IMACCOUNTHANDLER_H
+	return IMProtocolUnknown;
+}

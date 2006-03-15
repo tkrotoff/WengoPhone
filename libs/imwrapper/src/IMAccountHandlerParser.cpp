@@ -17,51 +17,35 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENUMIMPROTOCOL_H
-#define ENUMIMPROTOCOL_H
+#include <imwrapper/IMAccountHandlerParser.h>
 
-#include <NonCopyable.h>
+#include <imwrapper/IMAccountHandler.h>
+#include <imwrapper/EnumIMProtocol.h>
 
-#include <string>
-#include <map>
+#include <tinyxml.h>
 
-/**
- * Instant Messaging protocols.
- *
- * @author Philippe Bernery
- */
-class EnumIMProtocol : NonCopyable {
-public:
-	EnumIMProtocol();
+using namespace std;
 
-	enum IMProtocol {
-		IMProtocolUnknown,
-		IMProtocolAll,
-		IMProtocolMSN,
-		IMProtocolYahoo,
-		IMProtocolAIM,
-		IMProtocolICQ,
-		IMProtocolJabber,
-		IMProtocolSIPSIMPLE
-	};
+IMAccountHandlerParser::IMAccountHandlerParser(IMAccountHandler & imAccountHandler, const string & data)
+: _imAccountHandler(imAccountHandler), _data(data) {
+}
 
-	/**
-	 * Get a protocol in string.
-	 *
-	 * @return the string
-	 */
-	std::string toString(IMProtocol protocol);
+bool IMAccountHandlerParser::parse() {
+	TiXmlDocument doc;
+	doc.Parse(_data.c_str());
+	
+	TiXmlHandle docHandle(& doc);
+	TiXmlNode * imaccounts = docHandle.FirstChild("imaccounts").Node();
 
-	/**
-	 * Get a string in protocol.
-	 *
-	 * @return the protocol
-	 */
-	IMProtocol toIMProtocol(const std::string & protocol);
+	TiXmlNode * lastChild = NULL;
+	while ((lastChild = imaccounts->IterateChildren("account", lastChild))) {
+		string accountData;
+		accountData << *lastChild;
 
-private:
-	typedef std::map<IMProtocol, std::string> ProtocolMap;
-	ProtocolMap _protocolMap;
-};
+		IMAccount account;
+		account.unserialize(accountData);
+		_imAccountHandler.insert(account);
+	}
 
-#endif	//ENUMIMPROTOCOL_H
+	return true;
+}

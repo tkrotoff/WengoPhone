@@ -24,6 +24,7 @@
 #include <imwrapper/EnumPresenceState.h>
 
 #include <Event.h>
+#include <Serializable.h>
 
 #include <string>
 #include <set>
@@ -39,7 +40,7 @@ class IMAccount;
  *
  * @author Philippe Bernery
  */
-class IMContact {
+class IMContact : public Serializable {
 public:
 
 	/**
@@ -79,8 +80,6 @@ public:
 	bool operator==(const IMContact & imContact) const;
 
 	bool operator<(const IMContact & imContact) const;
-
-	std::string serialize() const;
 
 	const IMAccount & getIMAccount() const {
 		return _imAccount;
@@ -124,7 +123,11 @@ public:
 	bool isBlocked() const {
 		return _blocked;
 	}
-
+	
+	std::string serialize();
+	
+	bool unserialize(const std::string & data);
+	
 private:
 
 	const IMAccount & _imAccount;

@@ -73,42 +73,24 @@ void IMContact::removeFromAllGroup() {
 	_groupSet.clear();
 }
 
-std::string IMContact::serialize() const {
+std::string IMContact::serialize() {
 	string result;
-	string protocolId;
+	EnumIMProtocol enumIMProtocol;
 
-	switch (_imAccount.getProtocol()) {
-	case EnumIMProtocol::IMProtocolMSN:
-		protocolId = "MSNID";
-		break;
+	result += "<im protocol=\"" + enumIMProtocol.toString(_imAccount.getProtocol()) + "\">\n";
 
-	case EnumIMProtocol::IMProtocolYahoo:
-		protocolId = "YAHOOID";
-		break;
+	result += ("<id>" + _contactId + "</id>");
+	result += ("<account>" + _imAccount.getLogin() + "</account>");
 
-	case EnumIMProtocol::IMProtocolAIM:
-		protocolId = "AIMID";
-		break;
-
-	case EnumIMProtocol::IMProtocolICQ:
-		protocolId = "ICQID";
-		break;
-
-	case EnumIMProtocol::IMProtocolJabber:
-		protocolId = "JABBERID";
-		break;
-
-	case EnumIMProtocol::IMProtocolSIPSIMPLE:
-		protocolId = "WENGOID";
-		break;
-
-	default:
-		LOG_FATAL("Protocol not supported.");
-	}
-
-	result = "<" + protocolId + ">"
-		+ _contactId
-		+ "</" + protocolId + ">\n";
+	result += "</im>";
 
 	return result;
 }
+
+
+bool IMContact::unserialize(const std::string & data) {
+//	IMContactParser parser(*this, data);
+//	return parser.parse();
+	return false;
+}
+

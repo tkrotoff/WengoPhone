@@ -17,51 +17,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENUMIMPROTOCOL_H
-#define ENUMIMPROTOCOL_H
+#ifndef IMACCOUNTHANDLERFILEDATALAYER_H
+#define IMACCOUNTHANDLERFILEDATALAYER_H
 
-#include <NonCopyable.h>
+#include <imwrapper/IMAccountHandlerDataLayer.h>
 
-#include <string>
-#include <map>
-
-/**
- * Instant Messaging protocols.
- *
- * @author Philippe Bernery
- */
-class EnumIMProtocol : NonCopyable {
+class IMAccountHandlerFileDataLayer : public IMAccountHandlerDataLayer {
 public:
-	EnumIMProtocol();
+	IMAccountHandlerFileDataLayer(IMAccountHandler & imAccountHandler);
 
-	enum IMProtocol {
-		IMProtocolUnknown,
-		IMProtocolAll,
-		IMProtocolMSN,
-		IMProtocolYahoo,
-		IMProtocolAIM,
-		IMProtocolICQ,
-		IMProtocolJabber,
-		IMProtocolSIPSIMPLE
-	};
+	virtual ~IMAccountHandlerFileDataLayer();
 
-	/**
-	 * Get a protocol in string.
-	 *
-	 * @return the string
-	 */
-	std::string toString(IMProtocol protocol);
+	bool load();
 
-	/**
-	 * Get a string in protocol.
-	 *
-	 * @return the protocol
-	 */
-	IMProtocol toIMProtocol(const std::string & protocol);
+	bool save();
 
-private:
-	typedef std::map<IMProtocol, std::string> ProtocolMap;
-	ProtocolMap _protocolMap;
+protected:
+
+	IMAccountHandler & _imAccountHandler;
+
 };
 
-#endif	//ENUMIMPROTOCOL_H
+#endif //IMACCOUNTHANDLERFILEDATALAYER_H

@@ -22,14 +22,15 @@
 #include "GaimEnumIMProtocol.h"
 
 const char *GaimIMPrcl::_GaimIMProtocol[] = {
-		"prpl-all",
-		"prpl-msn",
-		"prpl-yahoo",
-		"prpl-oscar",
-		"prpl-oscar",
-		"prpl-jabber",
-		"prpl-simple",
-		NULL
+	"prpl-unknown",
+	"prpl-all",
+	"prpl-msn",
+	"prpl-yahoo",
+	"prpl-oscar",
+	"prpl-oscar",
+	"prpl-jabber",
+	"prpl-simple",
+	NULL
 };
 
 
