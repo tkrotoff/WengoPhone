@@ -40,8 +40,8 @@ while index < len(sys.argv):
     ftp_connection.storbinary('STOR ' + re.sub('timestamp',
                                                time.strftime("%Y%m%d%H%M%S",
                                                              time.gmtime()),
-                                               remote_filename,
-                              open(local_filename, 'rb')))
+                                               remote_filename),
+                              open(local_filename, 'rb'))
     index += 2
 ftp_connection.quit()
 
