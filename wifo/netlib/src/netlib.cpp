@@ -564,9 +564,9 @@ HttpRet is_http_conn_allowed(const char *url,
 	/* ****************** */
 	curl_easy_setopt(mcurl, CURLOPT_VERBOSE, 1);
  
-	if (proxy_addr)
+	if (proxy_addr && *proxy_addr != 0)
 	{
-		if (proxy_login)
+		if (proxy_login && *proxy_login != 0)
 		{
 			if (!_LocalProxy.proxy_auth_type)
 				_get_proxy_auth_type(url, timeout);
@@ -586,7 +586,7 @@ HttpRet is_http_conn_allowed(const char *url,
 	}
 	else
 	{
-		if (proxy_login)
+		if (proxy_login && *proxy_login != 0)
 		{
 			if (!_LocalProxy.auth_type)
 				_get_auth_type(url, timeout);

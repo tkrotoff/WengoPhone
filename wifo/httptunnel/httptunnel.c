@@ -151,7 +151,7 @@ void http_tunnel_init_proxy(const char *hostname, int port, const char *username
 	proxyAuthType = 0;
 	UseProxy = 0;
 
-	if (hostname && (strlen(hostname) > 0)) 
+	if (hostname && *hostname != 0) 
 	{
 		if (get_ip_addr(hostIP, sizeof(hostIP), hostname) < 0) 
 		{
@@ -162,10 +162,10 @@ void http_tunnel_init_proxy(const char *hostname, int port, const char *username
 		UseProxy = 1;
 	}
 
-	if (username)
+	if (username && *username != 0)
 		proxyUsername = strdup(username);
 
-	if (password)
+	if (password && *password != 0)
 		proxyPassword = strdup(password);
 }
 
