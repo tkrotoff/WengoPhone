@@ -640,7 +640,6 @@ ph_locate_call(eXosip_event_t *je, int creatit)
 
 void ph_release_call(phcall_t *ca)
 {
-  ca->cid = -1;
 
   if (ph_call_hasaudio(ca))
     {
@@ -648,6 +647,7 @@ void ph_release_call(phcall_t *ca)
     }
 
   memset(ca, 0, sizeof(phcall_t));
+  ca->cid = -1;
 
 
 }

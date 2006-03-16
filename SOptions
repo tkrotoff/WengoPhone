@@ -33,6 +33,7 @@ args = {
 	'speexwb-replaces-g726wb' : 1,
 
 	'enable-ipp' : 0,
+
 }
 
 WengoAddConsoleArguments(args)
