@@ -2,6 +2,7 @@ import ftplib
 import ConfigParser
 import sys
 import os
+import re, time
 
 if len(sys.argv) < 5:
     print "usage: python upload_nightly.py"\
@@ -33,8 +34,12 @@ ftp_connection.sendcmd('cwd ' + dst_directory)
 
 # Actually upload files
 for filename in sys.argv[4:]:
-    ftp_connection.storbinary('STOR ' + os.path.basename(filename),\
+    index = sys.argv(index(filename)
+    ftp_connection.storbinary('STOR ' + re.sub('timestamp',
+                                               time.strftime("%Y%m%d%H%M%S",
+                                                             time.gmtime()),
+                                               sys.argv[index + 1]),
                               open(filename, 'rb'))
-
+    del sys.argv[index + 1]
 ftp_connection.quit()
 
