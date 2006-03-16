@@ -37,41 +37,41 @@ class ChatWindow : public QObjectThreadSafe
     Q_OBJECT
 
 public:
-    
+
     ChatWindow(IMChatSession & imChatSession);
-    
+
 	void addChat(IMChatSession * session,const IMContact & from );
-	
+
 	void addChatSession(IMChatSession * imChatSession);
-	
+
 protected:
 
-    QWidget     *   _widget; 
-	
+    QWidget     *   _widget;
+
     WidgetSeeker    _seeker;
-	
+
     ChatWidget  *   _chatWidget;
-	
+
     QTabWidget  *   _tabWidget;
-    
+
     IMChatSession * _imChatSession;
-	
-    QDialog			_dialog;
-    
+
+    QWidget			_dialog;
+
 public Q_SLOTS:
-    
+
 	void newMessage(IMChatSession* session,const QString & msg);
-	
+
 	void show();
-	
+
 private:
-	
+
 	void initThreadSafe();
-    
+
 	void messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message);
-    
+
 	void messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string  message);
-	
+
 };
 
 #endif
