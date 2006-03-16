@@ -56,8 +56,6 @@ WENGO_FRAMEWORK_PATH=$WENGO_PATH/qtwengophone.app/Contents/Frameworks
 WENGO_EXE=$WENGO_PATH/qtwengophone.app/Contents/MacOS/qtwengophone
 WENGO_FRAMEWORK_PREFIX=@executable_path/../Frameworks
 
-QTDIR=/usr/local/Trolltech/Qt-4.1.1/lib
-
 ##
 # $1: full path to the lib
 ##
@@ -97,12 +95,12 @@ testAndMkdir $WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0
 ##
 # Copy needed frameworks
 ##
-cp $QTDIR/QtCore.framework/Versions/4.0/QtCore $WENGO_FRAMEWORK_PATH/QtCore.framework/Versions/4.0/QtCore
-cp $QTDIR/QtGui.framework/Versions/4.0/QtGui $WENGO_FRAMEWORK_PATH/QtGui.framework/Versions/4.0/QtGui
-cp $QTDIR/QtXml.framework/Versions/4.0/QtXml $WENGO_FRAMEWORK_PATH/QtXml.framework/Versions/4.0/QtXml
-cp $QTDIR/QtSvg.framework/Versions/4.0/QtSvg $WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg
+cp $QTDIR/lib/QtCore.framework/Versions/4.0/QtCore $WENGO_FRAMEWORK_PATH/QtCore.framework/Versions/4.0/QtCore
+cp $QTDIR/lib/QtGui.framework/Versions/4.0/QtGui $WENGO_FRAMEWORK_PATH/QtGui.framework/Versions/4.0/QtGui
+cp $QTDIR/lib/QtXml.framework/Versions/4.0/QtXml $WENGO_FRAMEWORK_PATH/QtXml.framework/Versions/4.0/QtXml
+cp $QTDIR/lib/QtSvg.framework/Versions/4.0/QtSvg $WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg
 
-cp $QTDIR/$LIBQTDESIGNER $WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER
+cp $QTDIR/lib/$LIBQTDESIGNER $WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER
 cp /sw/lib/libgnutls.12.dylib /sw/lib/libgcrypt.11.dylib /sw/lib/libtasn1.2.dylib /sw/lib/libpth.14.dylib /sw/lib/libgpg-error.0.dylib $WENGO_FRAMEWORK_PATH
 cp /sw/lib/libgmodule-2.0.0.dylib /sw/lib/libintl.1.dylib /sw/lib/libintl.3.dylib /sw/lib/libiconv.2.dylib /sw/lib/libglib-2.0.0.dylib /sw/lib/libgthread-2.0.0.dylib $WENGO_FRAMEWORK_PATH
 
@@ -116,22 +114,22 @@ changeWengoPhoneInstallName "/sw/lib/libgthread-2.0.0.dylib"
 changeWengoPhoneInstallName "/sw/lib/libgmodule-2.0.0.dylib"
 changeWengoPhoneInstallName "/sw/lib/libgnutls.12.dylib"
 changeWengoPhoneInstallName "$QTDIR/$LIBQTDESIGNER"
-changeWengoPhoneInstallName "$QTDIR/QtCore.framework/Versions/4.0/QtCore" "QtCore.framework/Versions/4.0/QtCore"
-changeWengoPhoneInstallName "$QTDIR/QtGui.framework/Versions/4.0/QtGui" "QtGui.framework/Versions/4.0/QtGui"
-changeWengoPhoneInstallName "$QTDIR/QtXml.framework/Versions/4.0/QtXml" "QtXml.framework/Versions/4.0/QtXml"
-changeWengoPhoneInstallName "$QTDIR/QtSvg.framework/Versions/4.0/QtSvg" "QtSvg.framework/Versions/4.0/QtSvg"
+changeWengoPhoneInstallName "$QTDIR/lib/QtCore.framework/Versions/4.0/QtCore" "QtCore.framework/Versions/4.0/QtCore"
+changeWengoPhoneInstallName "$QTDIR/lib/QtGui.framework/Versions/4.0/QtGui" "QtGui.framework/Versions/4.0/QtGui"
+changeWengoPhoneInstallName "$QTDIR/lib/QtXml.framework/Versions/4.0/QtXml" "QtXml.framework/Versions/4.0/QtXml"
+changeWengoPhoneInstallName "$QTDIR/lib/QtSvg.framework/Versions/4.0/QtSvg" "QtSvg.framework/Versions/4.0/QtSvg"
 
 ##
 # Change install name of copied libraries
 ##
-install_name_tool -change "$QTDIR/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/QtGui.framework/Versions/4.0/QtGui"
-install_name_tool -change "$QTDIR/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/QtXml.framework/Versions/4.0/QtXml"
-install_name_tool -change "$QTDIR/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg"
-install_name_tool -change "$QTDIR/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PREFIX/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg"
-install_name_tool -change "$QTDIR/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PREFIX/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg"
-install_name_tool -change "$QTDIR/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
-install_name_tool -change "$QTDIR/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PREFIX/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
-install_name_tool -change "$QTDIR/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PREFIX/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
+install_name_tool -change "$QTDIR/lib/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/QtGui.framework/Versions/4.0/QtGui"
+install_name_tool -change "$QTDIR/lib/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/QtXml.framework/Versions/4.0/QtXml"
+install_name_tool -change "$QTDIR/lib/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg"
+install_name_tool -change "$QTDIR/lib/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PREFIX/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg"
+install_name_tool -change "$QTDIR/lib/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PREFIX/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg"
+install_name_tool -change "$QTDIR/lib/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
+install_name_tool -change "$QTDIR/lib/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PREFIX/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
+install_name_tool -change "$QTDIR/lib/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PREFIX/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
 
 changeInstallName "/sw/lib/libglib-2.0.0.dylib" "$WENGO_FRAMEWORK_PATH/libgmodule-2.0.0.dylib"
 changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgmodule-2.0.0.dylib"
