@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EDITMYPROFILE_H
-#define EDITMYPROFILE_H
+#ifndef QTEDITCONTACTPROFILE_H
+#define QTEDITCONTACTPROFILE_H
 
 #include <QtGui>
 
@@ -28,13 +28,13 @@
 #include <model/config/Config.h>
 
 
-class QtEditMyProfile : public QDialog
+class QtEditContactProfile : public QDialog
 {
 	Q_OBJECT
 
 public:
 
-	QtEditMyProfile (QWidget * parent =0, Qt::WFlags f=0);
+	QtEditContactProfile (QWidget * parent =0, Qt::WFlags f=0);
 
 protected:
 
@@ -51,7 +51,7 @@ protected:
 public Q_SLOTS:
 	void saveClicked();
 	void cancelClicked();
-	void imAccountAdded();
+
 protected:
 
 	QWidget * _widget;
@@ -82,10 +82,6 @@ protected:
 
 	QList<QString> _imAccountsPicPath;
 
-	QPushButton * _addIMAccount;
-
-	QPushButton * _modifyIMAccount;
-
 	QLineEdit * _cellphone;
 
 	QLineEdit * _wengoPhone;
@@ -109,11 +105,6 @@ protected:
 	QPushButton * _saveChange;
 
 	QPushButton * _cancelChange;
-
-
-	QMap<QString,QVariant> _data;
-
-
 
 };
 

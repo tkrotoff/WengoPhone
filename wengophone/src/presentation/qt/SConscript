@@ -27,6 +27,7 @@ headers = [
 	'login/QtLogin.h',
 	'login/QtSetLogin.h',
 	'login/QtEditMyProfile.h',
+	'login/QtEditContactProfile.h',
 	'contactlist/TreeModel.h',
 	'contactlist/QtContactWidget.h',
 	'contactlist/QtContactList.h',
@@ -52,7 +53,18 @@ headers = [
 	'chat/chatwidgetmanager.h',
 	'sms/QtSms.h',
 	'config/QtAdvancedConfig.h',
+	'config/QtAccountSettings.h',
+	'config/QtAdvancedSettings.h',
+	'config/QtAudioSettings.h',
+	'config/QtCallForwardSettings.h',
+	'config/QtGeneralSettings.h',
+	'config/QtNotificationSettings.h',
+	'config/QtPrivacySettings.h',
+	'config/QtProtocolSettings.h',
+	'config/QtVideoSettings.h',
+	'config/QtWengoConfigDialog.h'
 ]
+
 sources = [
 	'../main.cpp',
 	'QtWengoPhone.cpp',
@@ -66,6 +78,7 @@ sources = [
 	'login/QtLogin.cpp',
 	'login/QtSetLogin.cpp',
 	'login/QtEditMyProfile.cpp',
+	'login/QtEditContactProfile.cpp',
 	'wenbox/QtWenboxPlugin.cpp',
 	'contactlist/QtContact.cpp',
 	'contactlist/QtContactWidget.cpp',
@@ -94,9 +107,20 @@ sources = [
 	'chat/QtEmoticonButton.cpp',
 	'sms/QtSms.cpp',
 	'config/QtAdvancedConfig.cpp',
+	'config/QtAccountSettings.cpp',
+	'config/QtAdvancedSettings.cpp',
+	'config/QtAudioSettings.cpp',
+	'config/QtCallForwardSettings.cpp',
+	'config/QtGeneralSettings.cpp',
+	'config/QtNotificationSettings.cpp',
+	'config/QtPrivacySettings.cpp',
+	'config/QtProtocolSettings.cpp',
+	'config/QtVideoSettings.cpp',
+	'config/QtWengoConfigDialog.cpp',
+
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]
-if WengoOSWindows():  
+if WengoOSWindows():
 	sources.append(WengoGetEnvironment().WengoCompileWindowsResource('win32/wengophone.rc'))
 
 if WengoGetConsoleArgument('sipxwrapper'):
@@ -114,7 +138,7 @@ else:
 	libs += ['nullsipwrapper']
 
 if WengoOSMacOSX():
-	link_flags += [	
+	link_flags += [
 		'-framework CoreAudio',
 		'-framework AudioToolbox',
 		'-framework AudioUnit'

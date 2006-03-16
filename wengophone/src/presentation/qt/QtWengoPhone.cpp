@@ -33,6 +33,7 @@
 #include "login/QtSetLogin.h"
 #include "login/QtEditMyProfile.h"
 
+#include "config/QtWengoConfigDialog.h"
 #include "contactlist/QtContactList.h"
 #include "contactlist/QtAddContact.h"
 #include "QtDialpad.h"
@@ -98,7 +99,7 @@ void QtWengoPhone::initThreadSafe() {
 	_trayIcon = new TrayIcon( QPixmap("images/systray_icon.png"),QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
 	setTrayMenu();
 	_trayIcon->show();
-	
+
 	//logger
 	//FIXME no more logger tab widget
 	/*QtLogger * qtLogger = new QtLogger(_wengoPhoneWindow);
@@ -349,7 +350,7 @@ void QtWengoPhone::actionSetLogin() {
 		string selProtocol = qtSetLogin->getProtocol();
 		string login = qtSetLogin->getLogin();
 		string password = qtSetLogin->getPassword();
-	
+
 		if (selProtocol == "MSN") {
 			protocol = EnumIMProtocol::IMProtocolMSN;
 		} else if (selProtocol == "Yahoo") {
@@ -362,7 +363,7 @@ void QtWengoPhone::actionSetLogin() {
 			protocol = EnumIMProtocol::IMProtocolJabber;
 			login += "/WengoPhone";
 		}
-	
+
 		_cWengoPhone.addIMAccount(login, password, protocol);
 		_cWengoPhone.getWengoPhone().getConnectHandler().connect(IMAccount(login, password, protocol));
 		LOG_DEBUG("set login");
@@ -370,6 +371,8 @@ void QtWengoPhone::actionSetLogin() {
 }
 
 void QtWengoPhone::showConfig() {
+	QtWengoConfigDialog dialog(_wengoPhoneWindow);
+	dialog.exec();
 }
 
 void QtWengoPhone::showForum() {
@@ -417,7 +420,7 @@ void QtWengoPhone::setTrayMenu(){
 	_trayMenu->addAction(tr("Start a chat"));
 	_trayMenu->addAction(tr("Quit Wengophone"));
 	_trayIcon->setPopup(_trayMenu);
-	
+
 }
 
 void QtWengoPhone::wrongProxyAuthenticationEventHandler(SipAccount & sender,

@@ -58,7 +58,6 @@ const std::string Config::PROFILE_FIRSTNAME = "profile.firstname";
 const std::string Config::PROFILE_LASTNAME = "profile.lastname";
 const std::string Config::PROFILE_BIRTHDATE = "profile.birthdate";
 const std::string Config::PROFILE_CITY = "profile.city";
-const std::string Config::PROFILE_ALTSIP = "profile.altsip";
 const std::string Config::PROFILE_GENDER = "profile.gender";
 const std::string Config::PROFILE_COUNTRY = "profile.country";
 const std::string Config::PROFILE_STATE = "profile.state";
@@ -87,7 +86,6 @@ const std::string Config::PROFILE_WORKPHONE = "profile.workphone";
 const std::string Config::PROFILE_EMAIL = "profile.email";
 const std::string Config::PROFILE_BLOG = "profile.blog";
 const std::string Config::PROFILE_WEB = "profile.web";
-const std::string Config::PROFILE_ABOUT = "profile.about";
 const std::string Config::PROFILE_AVATAR = "profile.avatar";
 const std::string Config::PROFILE_WIDTH = "profile.width";
 const std::string Config::PROFILE_HEIGHT = "profile.height";
@@ -154,7 +152,6 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[PROFILE_LASTNAME] = empty;
 	_keyDefaultValueMap[PROFILE_BIRTHDATE] = empty;
 	_keyDefaultValueMap[PROFILE_CITY] = empty;
-	_keyDefaultValueMap[PROFILE_ALTSIP] = empty;
 	_keyDefaultValueMap[PROFILE_GENDER] = empty;
 	_keyDefaultValueMap[PROFILE_COUNTRY] = empty;
 	_keyDefaultValueMap[PROFILE_STATE] = empty;
@@ -183,7 +180,6 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[PROFILE_EMAIL] = empty;
 	_keyDefaultValueMap[PROFILE_BLOG] = empty;
 	_keyDefaultValueMap[PROFILE_WEB] = empty;
-	_keyDefaultValueMap[PROFILE_ABOUT] = empty;
 	_keyDefaultValueMap[PROFILE_AVATAR] = empty;
 	_keyDefaultValueMap[PROFILE_WIDTH] = 786;
 	_keyDefaultValueMap[PROFILE_HEIGHT] = 758;
@@ -339,10 +335,6 @@ std::string Config::getProfileCity() const {
 	return getStringKeyValue(PROFILE_CITY);
 }
 
-std::string Config::getProfileAltSip() const {
-	return getStringKeyValue(PROFILE_ALTSIP);
-}
-
 std::string Config::getProfileGender() const {
 	return getStringKeyValue(PROFILE_GENDER);
 }
@@ -390,7 +382,6 @@ std::string Config::getProfileIMPic8() const {
 std::string Config::getProfileIMPic9() const {
 	return getStringKeyValue(PROFILE_IMPIC9);
 }
-
 
 std::string Config::getProfileIMEmail1()  const {
 	return getStringKeyValue(PROFILE_IMEMAIL1);
@@ -454,10 +445,6 @@ std::string Config::getProfileBlog() const {
 
 std::string Config::getProfileWeb() const {
 	return getStringKeyValue(PROFILE_WEB);
-}
-
-std::string Config::getProfileAbout() const {
-	return getStringKeyValue(PROFILE_ABOUT);
 }
 
 std::string Config::getProfileAvatar() const {

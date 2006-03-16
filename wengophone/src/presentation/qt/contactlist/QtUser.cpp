@@ -171,7 +171,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 
 	spx = QtContactPixmap::getInstance();
 
-	//x=rect.width();
+
 	x = _painterRect.width();
 
 
@@ -181,7 +181,6 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			qDebug() << "Video clicked";
 			_wengoPhone.makeCall(_pContact.getContact());
 		}
 	}
@@ -194,7 +193,6 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			qDebug() << "Call clicked";
 			_wengoPhone.makeCall(_pContact.getContact());
 		}
 	}
@@ -206,7 +204,6 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			qDebug() << "IM clicked";
 			_wengoPhone.startIM(_pContact.getContact());
 		}
 	}

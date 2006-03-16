@@ -190,10 +190,6 @@ public:
 	static const std::string PROFILE_CITY;
 	std::string getProfileCity() const;
 
-	/** Profile alt. sip. */
-	static const std::string PROFILE_ALTSIP;
-	std::string getProfileAltSip() const;
-
 	/** Profile gender. */
 	static const std::string PROFILE_GENDER;
 	std::string getProfileGender() const;
@@ -305,10 +301,6 @@ public:
 	/** Profile web url. */
 	static const std::string PROFILE_WEB;
 	std::string getProfileWeb() const;
-
-	/** Profile about text. */
-	static const std::string PROFILE_ABOUT;
-	std::string getProfileAbout() const;
 
 	/** Profile avatar file path. */
 	static const std::string PROFILE_AVATAR;
