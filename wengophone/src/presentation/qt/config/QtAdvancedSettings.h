@@ -14,7 +14,7 @@ class QtAdvancedSettings : public QWidget {
 
 	protected:
 
-		setupChild();
+		void setupChild();
 
 		QWidget * _widget;
 

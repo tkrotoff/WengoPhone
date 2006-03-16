@@ -27,7 +27,7 @@ QtAdvancedSettings::QtAdvancedSettings( QWidget * parent, Qt::WFlags f ) : QWidg
 	setLayout( layout );
 }
 
-QtAdvancedSettings::setupChild() {
+void QtAdvancedSettings::setupChild() {
 
 	_callAutomaticallyAnswerCheckBox = _widget->findChild<QCheckBox *>( "callAutomaticallyAnswerCheckBox" );
 
