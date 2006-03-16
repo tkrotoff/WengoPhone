@@ -33,13 +33,15 @@ ftp_connection.set_pasv(True)
 ftp_connection.sendcmd('cwd ' + dst_directory)
 
 # Actually upload files
-for filename in sys.argv[4:]:
-    index = sys.argv.index(filename)
+index = 4
+while index < len(sys.argv):
+    remote_filename = sys.argv[index + 1]
+    local_filename
     ftp_connection.storbinary('STOR ' + re.sub('timestamp',
                                                time.strftime("%Y%m%d%H%M%S",
                                                              time.gmtime()),
-                                               sys.argv[index + 1]),
-                              open(filename, 'rb'))
-    del sys.argv[index + 1]
+                                               remote_filename,
+                              open(local_filename, 'rb'))
+    index += 2
 ftp_connection.quit()
 
