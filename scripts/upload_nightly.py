@@ -34,7 +34,7 @@ ftp_connection.sendcmd('cwd ' + dst_directory)
 
 # Actually upload files
 for filename in sys.argv[4:]:
-    index = sys.argv(index(filename)
+    index = sys.argv.index(filename)
     ftp_connection.storbinary('STOR ' + re.sub('timestamp',
                                                time.strftime("%Y%m%d%H%M%S",
                                                              time.gmtime()),
