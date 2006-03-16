@@ -36,7 +36,7 @@ ftp_connection.sendcmd('cwd ' + dst_directory)
 index = 4
 while index < len(sys.argv):
     remote_filename = sys.argv[index + 1]
-    local_filename
+    local_filename = sys.argv[index]
     ftp_connection.storbinary('STOR ' + re.sub('timestamp',
                                                time.strftime("%Y%m%d%H%M%S",
                                                              time.gmtime()),
