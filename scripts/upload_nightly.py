@@ -41,7 +41,7 @@ while index < len(sys.argv):
                                                time.strftime("%Y%m%d%H%M%S",
                                                              time.gmtime()),
                                                remote_filename,
-                              open(local_filename, 'rb'))
+                              open(local_filename, 'rb')))
     index += 2
 ftp_connection.quit()
 
