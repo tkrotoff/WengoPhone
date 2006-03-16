@@ -162,6 +162,15 @@ public:
 	static std::string fromNumber(int number);
 
 	/**
+	 * Gets a string from a boolean.
+	 *
+	 * @param boolean boolean to convert into a string
+	 * @return boolean converted to a string
+	 */
+	static std::string fromBool(bool boolean);
+
+
+	/**
 	 * URL-encodes a string.
 	 *
 	 * @param url the string to encode

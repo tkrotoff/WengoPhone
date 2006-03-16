@@ -118,6 +118,12 @@ std::string String::fromNumber(int number) {
 	return ss.str();
 }
 
+std::string String::fromBool(bool boolean) {
+	stringstream ss;
+	ss << boolean;
+	return ss.str();
+}
+
 static unsigned char hex_to_int(unsigned char ch) {
 	if (ch >= 'A' && ch <= 'F') {
 		return ch - 'A' + 10;
