@@ -320,7 +320,12 @@ private:
 	 * @see terminate()
 	 */
 	void terminateThreadSafe();
-
+	
+	/**
+	 * find the wengo phone line
+	 */
+	IPhoneLine * findWengoPhoneLine();
+	
 	/** The active/current PhoneLine. */
 	IPhoneLine * _activePhoneLine;
 

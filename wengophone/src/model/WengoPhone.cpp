@@ -290,3 +290,16 @@ void WengoPhone::addIMAccount(const IMAccount & imAccount) {
 
 	newIMAccountAddedEvent(*this, (IMAccount &)*it);
 }
+
+IPhoneLine * WengoPhone::findWengoPhoneLine() {
+	for( int i = 0; i != _phoneLineList.size() ; i++) {
+		const SipAccount & sipAccount = _phoneLineList[i]->getSipAccount();
+		try {
+			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(sipAccount);
+			return _phoneLineList[i];
+		} catch ( bad_cast ) {
+			LOG_DEBUG("WengoAccount dynamic_cast failed");
+		}
+	}
+    return NULL;
+}
