@@ -123,12 +123,12 @@ if WengoOSWindows():
 		]
 	else:
 		libs += [
-			'QtCore',
-			'QtGui',
-			'QtNetwork',
-			'QtDesigner',
-			'QtXml',
-			'QtSvg',
+			'QtCore4',
+			'QtGui4',
+			'QtNetwork4',
+			'QtDesigner4',
+			'QtXml4',
+			'QtSvg4',
 			'QAxContainer',
 			'qtmain',
 
