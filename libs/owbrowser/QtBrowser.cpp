@@ -33,7 +33,9 @@ using namespace std;
 QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode) : QObject() {
 	_browserWidget = new QWidget(parent);
 
+#ifdef OS_WINDOW
 	_ieBrowser = NULL;
+#endif
 	_qtBrowser = NULL;
 
 	_layout = new QVBoxLayout(_browserWidget);
@@ -89,7 +91,7 @@ bool QtBrowser::setMode(BrowserMode mode) {
 	if (mode == IEMODE) {
 		_mode = QTMODE;
 		initBrowser();
-		return false
+		return false;
 	}
 #endif
 	_mode = mode;
@@ -105,13 +107,14 @@ void QtBrowser::initBrowser() {
 #endif
 
 	if (_mode == QTMODE) {
-
+#ifdef OS_WINDOWS
 		//clean ie browser
 		if (_ieBrowser) {
 			_layout->removeWidget(_ieBrowser);
 			delete _ieBrowser;
 			_ieBrowser = NULL;
 		}
+#endif
 
 		//init qt browser
 		_qtBrowser = new QTextBrowser(_browserWidget);
@@ -136,6 +139,6 @@ void QtBrowser::initBrowser() {
 		connect(_ieBrowser, SIGNAL(BeforeNavigate(const QString &, int, const QString &, const QVariant &, const QString &, bool &)),
 			SLOT(beforeNavigate(const QString &, int, const QString &, const QVariant &, const QString &, bool &)));
 		_layout->addWidget(_ieBrowser);
-	}
 #endif
+	}
 }
