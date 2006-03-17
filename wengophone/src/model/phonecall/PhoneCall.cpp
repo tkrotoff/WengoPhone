@@ -29,7 +29,6 @@
 #include "PhoneCallStateResumeOk.h"
 #include "PhoneCallStateRinging.h"
 
-
 #include <model/phoneline/IPhoneLine.h>
 #include <model/wenbox/WenboxPlugin.h>
 #include <model/SipCallbacks.h>
@@ -45,9 +44,8 @@
 PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 	: _phoneLine(phoneLine) {
 
-	_temp = -1;
 	_duration = -1;
-		
+
 	_sipAddress = sipAddress;
 
 	static PhoneCallStateDefault stateDefault;
@@ -114,21 +112,25 @@ void PhoneCall::mute() {
 }
 
 void PhoneCall::setState(EnumPhoneCallState::PhoneCallState status) {
+	static int timeStart = -1;
+
 	for (unsigned i = 0; i < _phoneCallStateList.size(); i++) {
 		PhoneCallState * state = _phoneCallStateList[i];
 		if (state->getCode() == status) {
 			if (_state->getCode() != state->getCode()) {
-				
-				// start of the call
-				if(status == EnumPhoneCallState::PhoneCallStateTalking) {
-					_temp = time(NULL);
-				// end of the call
-				} else if(status == EnumPhoneCallState::PhoneCallStateClosed) {
-					if(_temp != -1) {
-						_duration = time(NULL) - _temp;
+
+				//Start of the call
+				if (status == EnumPhoneCallState::PhoneCallStateTalking) {
+					timeStart = time(NULL);
+				}
+
+				//End of the call
+				else if (status == EnumPhoneCallState::PhoneCallStateClosed) {
+					if (timeStart != -1) {
+						_duration = time(NULL) - timeStart;
 					}
 				}
-				
+
 				_state = state;
 				_state->execute(*this);
 				LOG_DEBUG("call state changed callId=" + String::fromNumber(_callId) + " state=" + _state->toString());

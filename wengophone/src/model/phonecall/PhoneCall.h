@@ -174,12 +174,12 @@ public:
 	/**
 	 * Gets the duration of the call in seconds
 	 *
-	 * @return duration of the call
+	 * @return duration of the call or -1 if not call duration
 	 */
-	int getDuration() {
+	int getDuration() const {
 		return _duration;
 	}
-	
+
 private:
 
 	/** PhoneLine associated with this PhoneCall. */
@@ -200,11 +200,8 @@ private:
 	/** List of PhoneCallState. */
 	PhoneCallStates _phoneCallStateList;
 
-	/** The duration of the call in second */
+	/** Call duration in seconds. */
 	int _duration;
-
-	/** store temporary the time */
-	int _temp;
 };
 
 #endif	//PHONECALL_H
