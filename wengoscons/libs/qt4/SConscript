@@ -61,13 +61,16 @@ else:
 	include_path += [os.path.join(qtdir, 'include', 'ActiveQt')]
 defines = {
 	'UNICODE' : 1,
-	'QT_DLL' : 1,
-	'QT_PLUGIN' : 1,
+	'QT_DLL' : 0,
+	'QT_PLUGIN' : 0,
+	'QT_XML_LIB' : 1,
 	'QT_CORE_LIB' : 1,
 	'QT_GUI_LIB' : 1,
-	'QT_THREAD_SUPPORT' : 1,
 	'QT_CORE_LIB' : 1,
+	'QT_NETWORK_LIB' : 1,
+	'QT_THREAD_SUPPORT' : 1,
 	'QT_NO_KEYWORDS' : 1,
+	'QT_EDITION' : 'QT_EDITION_DESKTOP',
 }
 cc_flags = []
 headers = []
@@ -100,20 +103,54 @@ if WengoOSWindows():
 			'QtDesignerd4',
 			'QtXmld4',
 			'QtSvgd4',
+			'QAxContainerd',
 			'qtmaind',
+
+			'gdi32',
+			'comdlg32',
+			'oleaut32',
+			'imm32',
+			'winmm',
+			'winspool',
+			'ws2_32',
+			'ole32',
+			'user32',
+			'msimg32',
+			'shell32',
+			'kernel32',
+			'uuid',
+			'advapi32',
 		]
 	else:
 		libs += [
-			'QtCore4',
-			'QtGui4',
-			'QtNetwork4',
-			'QtDesigner4',
-			'QtXml4',
-			'QtSvg4',
+			'QtCore',
+			'QtGui',
+			'QtNetwork',
+			'QtDesigner',
+			'QtXml',
+			'QtSvg',
+			'QAxContainer',
 			'qtmain',
+
+			'gdi32',
+			'comdlg32',
+			'oleaut32',
+			'imm32',
+			'winmm',
+			'winspool',
+			'ws2_32',
+			'ole32',
+			'user32',
+			'msimg32',
+			'shell32',
+			'kernel32',
+			'uuid',
+			'advapi32',
 		]
+
 	if WengoCCMinGW():
 		include_path += [os.path.join(qtdir, 'mkspecs', 'win32-g++')]
+
 	defines['QT_LARGEFILE_SUPPORT'] = 1
 	defines['WIN32'] = 1
 
