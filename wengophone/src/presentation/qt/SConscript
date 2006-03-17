@@ -147,10 +147,9 @@ if WengoOSMacOSX():
 
 	env.WengoDeclareMacOSXAppTemplate('./macosx/template.app')
 
-env.WengoCopyToBuildDir('chat/')
-env.WengoCopyToBuildDir('webpagess', 'webpages')
+env.WengoCopyToBuildDir('chat/emoticons', 'emoticons')
+env.WengoCopyToBuildDir('webpages', 'webpages')
 env.WengoAddDefines(defines)
 env.WengoAddLinkFlags(link_flags)
 env.WengoUseLibraries(libs)
-env.WengoCopyToBuildDir('chat/emoticons', 'emoticons')
 env.WengoProgram('qtwengophone', sources, headers)
