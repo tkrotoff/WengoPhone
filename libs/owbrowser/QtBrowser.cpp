@@ -23,7 +23,7 @@
 
 #include <QtGui>
 
-#ifdef OS_WINDOWS
+#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
 #include <QAxWidget>
 #endif
 
