@@ -6,7 +6,9 @@ const unsigned long long WengoPhoneBuildId::BUILDID = %(buildId)uULL;
 const char * WengoPhoneBuildId::VERSION = "%(version)s";
 const unsigned long long WengoPhoneBuildId::REVISION = %(revision)uULL;
 const char * WengoPhoneBuildId::SOFTPHONE_NAME = "%(sofphoneName)s";
-const char * WengoPhoneBuildId::SOFTPHONE_DESCRIPTION = "%(sofphoneDescription)s";
+const char * WengoPhoneBuildId::COPYRIGHT = "%(copyright)s";
+const char * WengoPhoneBuildId::LICENSE = "%(license)s";
+const char * WengoPhoneBuildId::DESCRIPTION = "%(description)s";
 """
 
 WengoPhoneBuildId = {
@@ -14,7 +16,15 @@ WengoPhoneBuildId = {
 	'version': '0.13',
 	'revision': WengoGetSubversionRevision(),
 	'sofphoneName': 'wengo',
-	'sofphoneDescription': 'WengoPhone is a VoIP application',
+
+	'copyright': 'Copyright (C) 2004-2006 Wengo  http://openwengo.com',
+
+	'license': 'This program is free software; you can redistribute it and/or\\n'\
+			'modify it under the terms of the GNU General Public License\\n'\
+			'as published by the Free Software Foundation; either version 2\\n'\
+			'of the License, or (at your option) any later version.',
+
+	'description': 'WengoPhone is a VoIP application',
 }
 
 WengoSetVariable('WengoPhoneBuildId', WengoPhoneBuildId)

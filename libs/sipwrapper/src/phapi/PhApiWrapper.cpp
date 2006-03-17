@@ -702,12 +702,10 @@ void PhApiWrapper::phoneCallStateChangedEventHandler(SipWrapper & sender, int ca
 	if (state == EnumPhoneCallState::PhoneCallStateTalking) {
 		if (callId1 != -1 && callId == callId1 && callId1WaitsForTalkingState) {
 			holdCall(callId1);
-			Thread::sleep(2);
 		}
 
 		else if (callId2 != -1 && callId == callId2 && callId2WaitsForTalkingState) {
 			phConf(callId1, callId2);
-			Thread::sleep(2);
 			resumeCall(callId1);
 			LOG_DEBUG("conference call started");
 		}
@@ -719,7 +717,7 @@ void PhApiWrapper::joinConference(int confId, int callId) {
 
 	if (callId1 == -1) {
 		callId1 = callId;
-		callId1WaitsForTalkingState = true;
+ 		callId1WaitsForTalkingState = true;
 	} else if (callId2 == -1) {
 		callId2 = callId;
 		callId2WaitsForTalkingState = true;

@@ -59,11 +59,23 @@ public:
 	static const char * SOFTPHONE_NAME;
 
 	/**
+	 * Softphone copyright.
+	 */
+	static const char * COPYRIGHT;
+
+	/**
+	 * Softphone license.
+	 *
+	 * GNU GPL license header.
+	 */
+	static const char * LICENSE;
+
+	/**
 	 * Softphone description.
 	 *
 	 * Used for Debian and RPM packages.
 	 */
-	static const char * SOFTPHONE_DESCRIPTION;
+	static const char * DESCRIPTION;
 };
 
 #endif	//WENGOPHONEBUILDID_H

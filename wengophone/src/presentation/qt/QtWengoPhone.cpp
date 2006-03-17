@@ -282,12 +282,12 @@ void QtWengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount
 
 void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state) {
 	const WengoAccount * wengoAccount = dynamic_cast<const WengoAccount *>(&sender);
-	
+
 	switch (state) {
 	case SipAccount::LoginStateReady:
 #ifdef OS_WINDOWS
 		if( wengoAccount ) {
-			std::string data = "?login=" + wengoAccount->getWengoLogin() + "&password=" + wengoAccount->getWengoPassword() 
+			std::string data = "?login=" + wengoAccount->getWengoLogin() + "&password=" + wengoAccount->getWengoPassword()
 				+ "&lang=" + "fr" + "&wl=" + "wengo" + "&page=softphone-web";
 			_browser->setUrl(URL_WENGO_MINI_HOME + data);
 		}
@@ -314,7 +314,7 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 	default:
 		LOG_FATAL("Unknown state");
 	};
-	
+
 }
 
 void QtWengoPhone::noAccountAvailableEventHandler(WengoPhone & sender) {
@@ -465,7 +465,7 @@ void QtWengoPhone::showCreateConferenceCall() {
 		if (phoneLine != NULL) {
 			ConferenceCall * confCall = new ConferenceCall(*phoneLine);
 			confCall->addPhoneNumber(phoneNumber1LineEdit->text().toStdString());
-			Thread::sleep(5);
+
 			confCall->addPhoneNumber(phoneNumber2LineEdit->text().toStdString());
 			confCall->start();
 		} else {
@@ -524,14 +524,14 @@ void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(SipAccount & s
 
 void QtWengoPhone::urlClickedEventHandler(std::string url) {
 	LOG_DEBUG(url);
-	
+
 	//find anchor
 	std::string anchor = "";
 	int sharpPos = QString::fromStdString(url).indexOf('#');
 	if( sharpPos != -1 ){
 		anchor = QString::fromStdString(url).right(url.length() - sharpPos - 1).toStdString();
 	}
-	
+
 	if( anchor == ANCHOR_CONTACTLIST ) {
 		showContactList();
 	}
@@ -542,7 +542,7 @@ void QtWengoPhone::urlClickedEventHandler(std::string url) {
 		showConfig();
 	}
 	else if( anchor == ANCHOR_DIALPAD ) {
-		
+
 	}
 	else if( anchor == ANCHOR_ADDCONTACT ) {
 		addContact();

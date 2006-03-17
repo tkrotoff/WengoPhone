@@ -39,24 +39,29 @@ ConferenceCall::ConferenceCall(IPhoneLine & phoneLine)
 ConferenceCall::~ConferenceCall() {
 	stop();
 	for (unsigned i = 0; i < _phoneCallList.size(); i++) {
-		PhoneCall * phoneCall = _phoneCallList[i];
+		//PhoneCall * phoneCall = _phoneCallList[i];
 		//delete phoneCall;
 	}
 	_phoneCallList.clear();
 }
 
 void ConferenceCall::addPhoneCall(PhoneCall & phoneCall) {
+	int callId = phoneCall.getCallId();
+
 	if (_confId != -1) {
-		_phoneLine.getSipWrapper().joinConference(_confId, phoneCall.getCallId());
+		_phoneLine.getSipWrapper().joinConference(_confId, callId);
 	}
 
-	_phoneCallList.push_back(&phoneCall);
+	_phoneCallList.push_back(callId);
 }
 
 void ConferenceCall::removePhoneCall(PhoneCall & phoneCall) {
+	int callId = phoneCall.getCallId();
+
 	if (_confId != -1) {
-		_phoneLine.getSipWrapper().splitConference(_confId, phoneCall.getCallId());
+		_phoneLine.getSipWrapper().splitConference(_confId, callId);
 	}
+
 	//_phoneCallList -= &phoneCall;
 	//delete &phoneCall;
 }
@@ -70,22 +75,22 @@ void ConferenceCall::addPhoneNumber(const std::string & phoneNumber) {
 }
 
 void ConferenceCall::removePhoneNumber(const std::string & phoneNumber) {
-	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _phoneLine.getSipAccount().getRealm());
+	/*SipAddress sipAddress = SipAddress::fromString(phoneNumber, _phoneLine.getSipAccount().getRealm());
 	for (unsigned i = 0; i < _phoneCallList.size(); i++) {
 		SipAddress tmp = _phoneCallList[i]->getPeerSipAddress();
 		if (tmp.toString() == sipAddress.toString()) {
 			PhoneCall * phoneCall = _phoneCallList[i];
 			removePhoneCall(*phoneCall);
 		}
-	}
+	}*/
 }
 
 void ConferenceCall::start() {
 	if (_confId == -1) {
 		_confId = _phoneLine.getSipWrapper().createConference();
 		for (unsigned i = 0; i < _phoneCallList.size(); i++) {
-			PhoneCall * phoneCall = _phoneCallList[i];
-			_phoneLine.getSipWrapper().joinConference(_confId, phoneCall->getCallId());
+			int callId = _phoneCallList[i];
+			_phoneLine.getSipWrapper().joinConference(_confId, callId);
 		}
 	}
 }

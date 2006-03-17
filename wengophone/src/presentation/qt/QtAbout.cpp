@@ -29,6 +29,15 @@
 QtAbout::QtAbout(QWidget * parent) : QObject() {
 	_aboutWindow = WidgetFactory::create(":/forms/AboutWindow.ui", parent);
 
+	QLabel * descriptionLabel = Object::findChild<QLabel *>(_aboutWindow, "descriptionLabel");
+	descriptionLabel->setText(WengoPhoneBuildId::DESCRIPTION);
+
+	QLabel * copyrightLabel = Object::findChild<QLabel *>(_aboutWindow, "copyrightLabel");
+	copyrightLabel->setText(WengoPhoneBuildId::COPYRIGHT);
+
+	QLabel * licenseLabel = Object::findChild<QLabel *>(_aboutWindow, "licenseLabel");
+	licenseLabel->setText(WengoPhoneBuildId::LICENSE);
+
 	QLabel * wengoPhoneBuildIdStringLabel = Object::findChild<QLabel *>(_aboutWindow, "wengoPhoneBuildIdStringLabel");
 	wengoPhoneBuildIdStringLabel->setText(WengoPhoneBuildId::SOFTPHONE_NAME + QString(" ") +
 					WengoPhoneBuildId::VERSION +

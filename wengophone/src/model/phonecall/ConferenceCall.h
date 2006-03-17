@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONFERENCEPHONECALL_H
-#define CONFERENCEPHONECALL_H
+#ifndef CONFERENCECALL_H
+#define CONFERENCECALL_H
 
 #include <Event.h>
 #include <List.h>
@@ -83,7 +83,7 @@ private:
 	IPhoneLine & _phoneLine;
 
 	/** Defines the vector of PhoneCall. */
-	typedef std::vector < PhoneCall * > PhoneCalls;
+	typedef std::vector < int > PhoneCalls;
 
 	/** List of PhoneCall. */
 	PhoneCalls _phoneCallList;
@@ -92,4 +92,4 @@ private:
 	int _confId;
 };
 
-#endif	//CONFERENCEPHONECALL_H
+#endif	//CONFERENCECALL_H
