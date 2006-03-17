@@ -18,7 +18,7 @@
 */
 
 #include <QtGui>
-
+#include <Object.h>
 #include <WidgetFactory.h>
 
 #include "QtWengoConfigDialog.h"
@@ -42,11 +42,11 @@ QtWengoConfigDialog::QtWengoConfigDialog( QWidget * parent, Qt::WFlags f ) : QDi
 	_advancedSettingsWidget = new QtAdvancedSettings();
 	_callForwardWidget = new QtCallForwardSettings();
 
-	_stackedWidget = _widget->findChild<QStackedWidget *>( "stackedWidget" );
-	_treeWidget = _widget->findChild<QTreeWidget *>( "treeWidget" );
+	_stackedWidget = Object::findChild<QStackedWidget *>( _widget, "stackedWidget" );
+	_treeWidget = Object::findChild<QTreeWidget *>( _widget, "treeWidget" );
 
 	// Hide the header of the tree view
-	_treeWidget->header()->hide();
+	_treeWidget->header() ->hide();
 
 	_stackedWidget->addWidget( _notificationWidget );
 	_stackedWidget->addWidget( _generalSettingsWidget );
@@ -61,9 +61,9 @@ QtWengoConfigDialog::QtWengoConfigDialog( QWidget * parent, Qt::WFlags f ) : QDi
 
 	QPushButton * pb;
 
-	pb = _widget->findChild<QPushButton *>( "okButton" );
+	pb = Object::findChild<QPushButton *>( _widget, "okButton" );
 	connect ( pb, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	pb = _widget->findChild<QPushButton *>( "cancelButton" );
+	pb = Object::findChild<QPushButton *>( _widget, "cancelButton" );
 	connect ( pb, SIGNAL( clicked() ), this, SLOT( reject() ) );
 
 	connect ( _treeWidget, SIGNAL( itemSelectionChanged() ), this, SLOT( itemActivated ( ) ) );

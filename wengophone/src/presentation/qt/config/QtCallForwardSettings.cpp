@@ -18,6 +18,7 @@
 */
 
 #include <WidgetFactory.h>
+#include <Object.h>
 
 #include "QtCallForwardSettings.h"
 
@@ -33,17 +34,17 @@ QtCallForwardSettings::QtCallForwardSettings( QWidget * parent, Qt::WFlags f ) :
 
 void QtCallForwardSettings::setupChilds() {
 
-	_forwardCallCheckBox = _widget->findChild<QCheckBox *>( "forwardCallCheckBox" );
+	_forwardCallCheckBox = Object::findChild<QCheckBox *>(_widget,"forwardCallCheckBox" );
 
-	_forwardAllCallCheckBox = _widget->findChild<QCheckBox *>( "forwardAllCallCheckBox" );
+	_forwardAllCallCheckBox = Object::findChild<QCheckBox *>( _widget,"forwardAllCallCheckBox" );
 
-	_phoneNumber1Edit = _widget->findChild<QLineEdit *>( "phoneNumber1Edit" );
+	_phoneNumber1Edit = Object::findChild<QLineEdit *>( _widget,"phoneNumber1Edit" );
 
-	_phoneNumber2Edit = _widget->findChild<QLineEdit *>( "phoneNumber2Edit" );
+	_phoneNumber2Edit = Object::findChild<QLineEdit *>( _widget,"phoneNumber2Edit" );
 
-	_phoneNumber3Edit = _widget->findChild<QLineEdit *>( "phoneNumber3Edit" );
+	_phoneNumber3Edit = Object::findChild<QLineEdit *>( _widget,"phoneNumber3Edit" );
 
-	_forwardCallMobilCheckBox = _widget->findChild<QCheckBox *>( "forwardCallMobilCheckBox" );
+	_forwardCallMobilCheckBox = Object::findChild<QCheckBox *>(_widget, "forwardCallMobilCheckBox" );
 
 	connect ( _forwardCallCheckBox, SIGNAL( stateChanged( int ) ), this,
 			  SLOT( forwardCallStateChanged( int ) ) );

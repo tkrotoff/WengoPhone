@@ -17,6 +17,8 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <Object.h>
+
 #include "QtAccountSettings.h"
 
 QtAccountSettings::QtAccountSettings ( QWidget * parent, Qt::WFlags f ) : QWidget ( parent, f ) {
@@ -26,13 +28,13 @@ QtAccountSettings::QtAccountSettings ( QWidget * parent, Qt::WFlags f ) : QWidge
 	layout->setMargin( 0 );
 	setLayout( layout );
 
-	_imAddPushButton = _widget->findChild<QPushButton *>( "imAddPushButton" );
-	_imModifyPushButton = _widget->findChild<QPushButton *>( "imModifyPushButton" );
-	_imDeletePushButton = _widget->findChild<QPushButton *>( "imDeletePushButton" );
+	_imAddPushButton = Object::findChild<QPushButton *>( _widget,"imAddPushButton" );
+	_imModifyPushButton = Object::findChild<QPushButton *>( _widget,"imModifyPushButton" );
+	_imDeletePushButton = Object::findChild<QPushButton *>( _widget,"imDeletePushButton" );
 
-	_sipAddPushButton = _widget->findChild<QPushButton *>( "sipAddPushButton" );
-	_sipModifyPushButton = _widget->findChild<QPushButton *>( "sipModifyPushButton" );
-	_sipDeletePushButton = _widget->findChild<QPushButton *>( "sipDeletePushButton" );
+	_sipAddPushButton = Object::findChild<QPushButton *>( _widget,"sipAddPushButton" );
+	_sipModifyPushButton = Object::findChild<QPushButton *>( _widget,"sipModifyPushButton" );
+	_sipDeletePushButton = Object::findChild<QPushButton *>( _widget,"sipDeletePushButton" );
 
 	connect ( _imAddPushButton, SIGNAL( clicked() ), this, SLOT( editProfileClicked() ) );
 }

@@ -26,7 +26,7 @@ if not, write to the Free Software
 
 #include <QtGui>
 #include <QGridLayout>
-
+#include <Object.h>
 #include "QtNotificationSettings.h"
 
 /**
@@ -51,40 +51,40 @@ QtNotificationSettings::QtNotificationSettings( QWidget * parent, Qt::WFlags f )
 
 void QtNotificationSettings::setupChilds() {
 
-	_snShowWindowOnTopCheckBox = _widget->findChild<QCheckBox *>( "snShowWindowOnTopCheckBox" );
+	_snShowWindowOnTopCheckBox = Object::findChild<QCheckBox *>(_widget,"snShowWindowOnTopCheckBox" );
 
-	_snShowBlinkingWindow = _widget->findChild<QCheckBox *>( "snShowBlinkingWindow" );
+	_snShowBlinkingWindow = Object::findChild<QCheckBox *>(_widget,"snShowBlinkingWindow" );
 
-	_snShowToasterOnIncomingCall = _widget->findChild<QCheckBox *>( "snShowToasterOnIncomingCall" );
+	_snShowToasterOnIncomingCall = Object::findChild<QCheckBox *>(_widget,"snShowToasterOnIncomingCall" );
 
-	_snShowToasterOnContactOnLine = _widget->findChild<QCheckBox *>( "snShowToasterOnContactOnLine" );
+	_snShowToasterOnContactOnLine = Object::findChild<QCheckBox *>(_widget,"snShowToasterOnContactOnLine" );
 
-	_snShowWindowpopUpAuthorisations = _widget->findChild<QCheckBox *>( "snShowWindowpopUpAuthorisations" );
+	_snShowWindowpopUpAuthorisations = Object::findChild<QCheckBox *>(_widget,"snShowWindowpopUpAuthorisations" );
 
-	_asShowNoToaster = _widget->findChild<QCheckBox *>( "asShowNoToaster" );
+	_asShowNoToaster = Object::findChild<QCheckBox *>(_widget,"asShowNoToaster" );
 
-	_asSwitchOffAudioNotifications = _widget->findChild<QCheckBox *>( "asSwitchOffAudioNotifications" );
+	_asSwitchOffAudioNotifications = Object::findChild<QCheckBox *>(_widget,"asSwitchOffAudioNotifications" );
 
-	_asNotShowAwayToasterAndChatWindow = _widget->findChild<QCheckBox *>( "asNotShowAwayToasterAndChatWindow" );
+	_asNotShowAwayToasterAndChatWindow = Object::findChild<QCheckBox *>(_widget,"asNotShowAwayToasterAndChatWindow" );
 
-	asSwitchOffAwayAudioNotifications = _widget->findChild<QCheckBox *>( "asSwitchOffAwayAudioNotifications" );
+	asSwitchOffAwayAudioNotifications = Object::findChild<QCheckBox *>(_widget,"asSwitchOffAwayAudioNotifications" );
 
-	_acIncomingChat = _widget->findChild<QCheckBox *>( "acIncomingChat" );
+	_acIncomingChat = Object::findChild<QCheckBox *>(_widget,"acIncomingChat" );
 
-	_acIncomingCalls = _widget->findChild<QCheckBox *>( "acIncomingCalls" );
+	_acIncomingCalls = Object::findChild<QCheckBox *>(_widget,"acIncomingCalls" );
 
-	_acWengophoneOpen = _widget->findChild<QCheckBox *>( "acWengophoneOpen" );
+	_acWengophoneOpen = Object::findChild<QCheckBox *>(_widget,"acWengophoneOpen" );
 
-	_acWengophoneConnects = _widget->findChild<QCheckBox *>( "acWengophoneConnects" );
+	_acWengophoneConnects = Object::findChild<QCheckBox *>(_widget,"acWengophoneConnects" );
 
-	_acWengophoneNotSuccedConnect = _widget->findChild<QCheckBox *>( "acWengophoneNotSuccedConnect" );
+	_acWengophoneNotSuccedConnect = Object::findChild<QCheckBox *>(_widget,"acWengophoneNotSuccedConnect" );
 
-	_acAlternativeIMAcount = _widget->findChild<QCheckBox *>( "acAlternativeIMAcount" );
+	_acAlternativeIMAcount = Object::findChild<QCheckBox *>(_widget,"acAlternativeIMAcount" );
 
-	_acContactTurningOnline = _widget->findChild<QCheckBox *>( "acContactTurningOnline" );
+	_acContactTurningOnline = Object::findChild<QCheckBox *>(_widget,"acContactTurningOnline" );
 
-	_acAuthorization = _widget->findChild<QCheckBox *>( "acAuthorization" );
+	_acAuthorization = Object::findChild<QCheckBox *>(_widget,"acAuthorization" );
 
-	_acErrorMessage = _widget->findChild<QCheckBox *>( "acErrorMessage" );
+	_acErrorMessage = Object::findChild<QCheckBox *>(_widget,"acErrorMessage" );
 
 }

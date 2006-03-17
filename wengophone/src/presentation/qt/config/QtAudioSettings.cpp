@@ -17,6 +17,8 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <Object.h>
+
 #include "QtAudioSettings.h"
 
 QtAudioSettings::QtAudioSettings(QWidget * parent, Qt::WFlags f) : QWidget (parent,f)
@@ -29,12 +31,12 @@ QtAudioSettings::QtAudioSettings(QWidget * parent, Qt::WFlags f) : QWidget (pare
 }
 
 void QtAudioSettings::setupChilds(){
-	_inputDeviceComboBox = _widget->findChild<QComboBox *>("inputDeviceComboBox");
+	_inputDeviceComboBox = Object::findChild<QComboBox *>(_widget,"inputDeviceComboBox");
 
-	_outputDeviceComboBox = _widget->findChild<QComboBox *>("outputDeviceComboBox");
+	_outputDeviceComboBox = Object::findChild<QComboBox *>(_widget,"outputDeviceComboBox");
 
-	_ringingDeviceComboBox = _widget->findChild<QComboBox *>("ringingDeviceComboBox");
+	_ringingDeviceComboBox = Object::findChild<QComboBox *>(_widget,"ringingDeviceComboBox");
 
-	_makeTestCallPushButton = _widget->findChild<QPushButton *>("makeTestCallPushButton");
+	_makeTestCallPushButton = Object::findChild<QPushButton *>(_widget,"makeTestCallPushButton");
 
 }

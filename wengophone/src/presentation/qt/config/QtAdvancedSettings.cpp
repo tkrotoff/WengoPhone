@@ -19,6 +19,8 @@
 
 #include "QtAdvancedSettings.h"
 
+#include <Object.h>
+
 QtAdvancedSettings::QtAdvancedSettings( QWidget * parent, Qt::WFlags f ) : QWidget ( parent, f ) {
 	_widget = WidgetFactory::create( ":/forms/config/AdvancedSettings.ui", this );
 	QGridLayout * layout = new QGridLayout();
@@ -29,12 +31,12 @@ QtAdvancedSettings::QtAdvancedSettings( QWidget * parent, Qt::WFlags f ) : QWidg
 
 void QtAdvancedSettings::setupChild() {
 
-	_callAutomaticallyAnswerCheckBox = _widget->findChild<QCheckBox *>( "callAutomaticallyAnswerCheckBox" );
+	_callAutomaticallyAnswerCheckBox = Object::findChild<QCheckBox *>( _widget,"callAutomaticallyAnswerCheckBox" );
 
-	_callAnswerDelaySpinBox = _widget->findChild<QSpinBox *>( "callAnswerDelaySpinBox" );
+	_callAnswerDelaySpinBox = Object::findChild<QSpinBox *>( _widget,"callAnswerDelaySpinBox" );
 
-	_chatPopUpCheckBox = _widget->findChild<QCheckBox *>( "chatPopUpCheckBox" );
+	_chatPopUpCheckBox = Object::findChild<QCheckBox *>( _widget,"chatPopUpCheckBox" );
 
-	_forwardAllCallsToCellPhoneCheckBox = _widget->findChild<QCheckBox *>( "forwardAllCallsToCellPhoneCheckBox" );
+	_forwardAllCallsToCellPhoneCheckBox = Object::findChild<QCheckBox *>( _widget,"forwardAllCallsToCellPhoneCheckBox" );
 
 }

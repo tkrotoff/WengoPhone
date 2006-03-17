@@ -1,5 +1,6 @@
 #ifndef QTACCOUNTSETTINGS_H
 #define QTACCOUNTSETTINGS_H
+
 #include <QWidget>
 #include <QPushButton>
 #include <QGridLayout>

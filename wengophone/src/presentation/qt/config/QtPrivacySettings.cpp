@@ -17,6 +17,8 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <Object.h>
+
 #include "QtPrivacySettings.h"
 
 QtPrivacySettings::QtPrivacySettings ( QWidget * parent, Qt::WFlags f ) : QWidget ( parent, f ) {
@@ -30,15 +32,15 @@ QtPrivacySettings::QtPrivacySettings ( QWidget * parent, Qt::WFlags f ) : QWidge
 
 void QtPrivacySettings::setupChilds() {
 
-	_allowCallFromAnyoneRadioButton = _widget->findChild<QRadioButton *>( "allowCallFromAnyoneRadioButton" );
+	_allowCallFromAnyoneRadioButton = Object::findChild<QRadioButton *>(_widget,"allowCallFromAnyoneRadioButton" );
 
-	_allowCallOnlyFromContactListRadioButton = _widget->findChild<QRadioButton *>( "allowCallOnlyFromContactListRadioButton" );
+	_allowCallOnlyFromContactListRadioButton = Object::findChild<QRadioButton *>(_widget,"allowCallOnlyFromContactListRadioButton" );
 
-	_allowChatsFromAnyoneRadioButton = _widget->findChild<QRadioButton *>( "allowChatsFromAnyoneRadioButton" );
+	_allowChatsFromAnyoneRadioButton = Object::findChild<QRadioButton *>(_widget,"allowChatsFromAnyoneRadioButton" );
 
-	_allowChatFromOnlyContactListRadioButton = _widget->findChild<QRadioButton *>( "allowChatFromOnlyContactListRadioButton" );
+	_allowChatFromOnlyContactListRadioButton = Object::findChild<QRadioButton *>(_widget,"allowChatFromOnlyContactListRadioButton" );
 
-	_alwaysSignAsInvisible = _widget->findChild<QCheckBox *>( "alwaysSignAsInvisible" );
+	_alwaysSignAsInvisible = Object::findChild<QCheckBox *>(_widget,"alwaysSignAsInvisible" );
 
-	_manageBlockedUserPushButton = _widget->findChild<QPushButton *>( "manageBlockedUserPushButton" );
+	_manageBlockedUserPushButton = Object::findChild<QPushButton *>(_widget,"manageBlockedUserPushButton" );
 }

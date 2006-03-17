@@ -16,10 +16,9 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-
+#include <Object.h>
 #include "QtGeneralSettings.h"
 
-#include <QDebug>
 
 
 QtGeneralSettings::QtGeneralSettings( QWidget * parent, Qt::WFlags f ) : QWidget( parent, f ) {
@@ -29,17 +28,16 @@ QtGeneralSettings::QtGeneralSettings( QWidget * parent, Qt::WFlags f ) : QWidget
 	layout->setMargin( 0 );
 	setLayout( layout );
 
-	_startWengoCheckBox = _widget->findChild<QCheckBox *>( "startWengoCheckBox" );
-	_checkForUpdateCheckBox = _widget->findChild<QCheckBox *>( "checkForUpdateCheckBox" );
-	_startFreeCallRadioButton = _widget->findChild<QRadioButton *>( "startFreeCallRadioButton" );
-	_startChatOnlyRadioButton = _widget->findChild<QRadioButton *>( "startChatOnlyRadioButton" );
-	_callCellPhoneCheckBox = _widget->findChild<QCheckBox *>( "callCellPhoneCheckBox" );
-	_showAwayCheckBox = _widget->findChild<QCheckBox *>( "showAwayCheckBox" );
-	_showNotAvailableCheckBox = _widget->findChild<QCheckBox *>( "showNotAvailableCheckBox" );
-	_awaySpinBox = _widget->findChild<QSpinBox *>( "awaySpinBox" );
-	_notAvailableSpinBox = _widget->findChild<QSpinBox *>( "notAvailableSpinBox" );
-	_editProfilePushButton = _widget->findChild<QPushButton *>( "editProfilePushButton" );
+	_startWengoCheckBox = Object::findChild<QCheckBox *>(_widget,"startWengoCheckBox" );
+	_checkForUpdateCheckBox = Object::findChild<QCheckBox *>(_widget,"checkForUpdateCheckBox" );
+	_startFreeCallRadioButton = Object::findChild<QRadioButton *>(_widget,"startFreeCallRadioButton" );
+	_startChatOnlyRadioButton = Object::findChild<QRadioButton *>(_widget,"startChatOnlyRadioButton" );
+	_callCellPhoneCheckBox = Object::findChild<QCheckBox *>(_widget,"callCellPhoneCheckBox" );
+	_showAwayCheckBox = Object::findChild<QCheckBox *>(_widget,"showAwayCheckBox" );
+	_showNotAvailableCheckBox = Object::findChild<QCheckBox *>(_widget,"showNotAvailableCheckBox" );
+	_awaySpinBox = Object::findChild<QSpinBox *>(_widget,"awaySpinBox" );
+	_notAvailableSpinBox = Object::findChild<QSpinBox *>(_widget,"notAvailableSpinBox" );
+	_editProfilePushButton = Object::findChild<QPushButton *>(_widget,"editProfilePushButton" );
 
 }
-
 

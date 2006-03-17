@@ -36,11 +36,11 @@ QtProtocolSettings::QtProtocolSettings ( QWidget * parent, Qt::WFlags f ) : QDia
 	layout->setMargin( 0 );
 	setLayout( layout );
 
-	_protocolComboBox = _widget->findChild<QComboBox *>( "protocolComboBox" );
-	_basicStackedWidget = _widget->findChild<QStackedWidget *>( "basicStackedWidget" );
-	_advancedStackedWidget = _widget->findChild<QStackedWidget *>( "advancedStackedWidget" );
-	_okButton = _widget->findChild<QPushButton *>( "okButton" );
-	_cancelButton = _widget->findChild<QPushButton *>( "cancelButton" );
+	_protocolComboBox = Object::findChild<QComboBox *>(_widget,"protocolComboBox" );
+	_basicStackedWidget = Object::findChild<QStackedWidget *>(_widget,"basicStackedWidget" );
+	_advancedStackedWidget = Object::findChild<QStackedWidget *>(_widget,"advancedStackedWidget" );
+	_okButton = Object::findChild<QPushButton *>(_widget,"okButton" );
+	_cancelButton = Object::findChild<QPushButton *>(_widget,"cancelButton" );
 	setupChilds();
 	//readFromConfig();
 	setupGui();

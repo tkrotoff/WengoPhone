@@ -18,6 +18,7 @@
 */
 
 #include <WidgetFactory.h>
+#include <Object.h>
 
 #include "QtVideoSettings.h"
 
@@ -32,14 +33,14 @@ QtVideoSettings::QtVideoSettings( QWidget * parent, Qt::WFlags f ) : QWidget( pa
 
 void QtVideoSettings::setupChilds() {
 
-	_webcamDeviceComboBox = _widget->findChild<QComboBox *>( "webcamDeviceComboBox" );
+	_webcamDeviceComboBox = Object::findChild<QComboBox *>(_widget,"webcamDeviceComboBox" );
 
-	_webcamPreviewPushButton = _widget->findChild<QPushButton *>( "webcamPreviewPushButton" );
+	_webcamPreviewPushButton = Object::findChild<QPushButton *>(_widget,"webcamPreviewPushButton" );
 
-	_webcamPreviewFrame = _widget->findChild<QFrame *>( "webcamPreviewFrame" );
+	_webcamPreviewFrame = Object::findChild<QFrame *>(_widget,"webcamPreviewFrame" );
 
-	_videoQualityTreeWidget = _widget->findChild<QTreeWidget *>( "videoQualityTreeWidget" );
+	_videoQualityTreeWidget = Object::findChild<QTreeWidget *>(_widget,"videoQualityTreeWidget" );
 
-	_makeTestVideoCallPushButton = _widget->findChild<QPushButton *>( "makeTestVideoCallPushButton" );
+	_makeTestVideoCallPushButton = Object::findChild<QPushButton *>(_widget,"makeTestVideoCallPushButton" );
 
 }
