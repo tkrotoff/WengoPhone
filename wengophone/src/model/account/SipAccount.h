@@ -227,15 +227,8 @@ public:
 	/**
 	 * Set connection state.
 	 */
-	void setConnected(bool connected) {
-		_isConnected = connected;
-		if (_isConnected) {
-			loginStateChangedEvent(*this, LoginStateConnected);
-		} else {
-			loginStateChangedEvent(*this, LoginStateDisconnected);
-		}
-	}
-
+	void setConnected(bool connected);
+    
 	/**
 	 * Set proxy settings and unblock the NetworkDiscovery if it was waiting for
 	 * proxy authentication parameters.

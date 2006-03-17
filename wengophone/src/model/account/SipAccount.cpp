@@ -55,3 +55,12 @@ void SipAccount::wrongProxyAuthenticationEventHandler(NetworkDiscovery & sender,
 
 	wrongProxyAuthenticationEvent(*this, proxyUrl, proxyPort, proxyLogin, proxyPassword);
 }
+
+void SipAccount::setConnected(bool connected) {
+	_isConnected = connected;
+	if (_isConnected) {
+		loginStateChangedEvent(*this, LoginStateConnected);
+	} else {
+		loginStateChangedEvent(*this, LoginStateDisconnected);
+	}
+}
