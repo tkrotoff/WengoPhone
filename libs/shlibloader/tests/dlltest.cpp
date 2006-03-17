@@ -23,21 +23,21 @@
 #include <StringList.h>
 
 void function_noparam() {
-	LOG_DEBUG_C("function_noparam");
+	LOG_DEBUG("function_noparam");
 }
 
 void function_param_int(int i) {
-	LOG_DEBUG_C("function_param_int=" + String::fromNumber(i));
+	LOG_DEBUG("function_param_int=" + String::fromNumber(i));
 }
 
 int function_return_int() {
 	int i = 10;
-	LOG_DEBUG_C("function_return_int=" + String::fromNumber(i));
+	LOG_DEBUG("function_return_int=" + String::fromNumber(i));
 	return i;
 }
 
 int * function_return_pointer() {
 	static int i = 10;
-	LOG_DEBUG_C("function_return_int=" + String::fromNumber(i));
+	LOG_DEBUG("function_return_int=" + String::fromNumber(i));
 	return &i;
 }
