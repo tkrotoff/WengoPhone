@@ -35,6 +35,7 @@ class PPhoneLine;
 class QtPhoneCall;
 class QtContactList;
 class QtSms;
+class QtBrowser;
 
 class QPushButton;
 class QComboBox;
@@ -148,8 +149,9 @@ private:
 
 	void showLoginWindow();
 
-	static QLayout * createLayout(QWidget * parent);
+    void urlClickedEventHandler(std::string url);
 
+	static QLayout * createLayout(QWidget * parent);
 
 	/** Direct link to the control. */
 	CWengoPhone & _cWengoPhone;
@@ -167,6 +169,27 @@ private:
 	QMenu  * _trayMenu;
 
 	QtSms * _qtSms;
+    
+	QtBrowser *_browser;
+
+	static const std::string ANCHOR_CONTACTLIST;
+	
+	static const std::string ANCHOR_HISTORY;
+	
+	static const std::string ANCHOR_CONFIGURATION;
+	
+	static const std::string ANCHOR_DIALPAD;
+	
+	static const std::string ANCHOR_ADDCONTACT;
+	
+	static const std::string ANCHOR_SELFCARE;
+
+	static const std::string ANCHOR_FORUM;
+    
+	static const std::string URL_WENGO_MINI_HOME;
+
+	static const std::string LOCAL_WEB_DIR;
+
 };
 
 #endif	//QTWENGOPHONE_H

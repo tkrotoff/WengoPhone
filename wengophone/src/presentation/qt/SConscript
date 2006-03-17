@@ -6,6 +6,7 @@ libs = [
 	'webcam',
 	'qt4',
 	'boost',
+	'owbrowser',
 	'trayicon'
 ]
 if WengoOSMacOSX():
@@ -147,6 +148,7 @@ if WengoOSMacOSX():
 	env.WengoDeclareMacOSXAppTemplate('./macosx/template.app')
 
 env.WengoCopyToBuildDir('chat/')
+env.WengoCopyToBuildDir('webpagess', 'webpages')
 env.WengoAddDefines(defines)
 env.WengoAddLinkFlags(link_flags)
 env.WengoUseLibraries(libs)

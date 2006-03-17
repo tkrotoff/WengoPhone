@@ -20,6 +20,7 @@
 #include "QtWengoPhone.h"
 
 #include <model/account/SipAccount.h>
+#include <model/account/wengo/WengoAccount.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/connect/ConnectHandler.h>
 #include <control/CWengoPhone.h>
@@ -46,6 +47,7 @@
 #include <Object.h>
 #include <Thread.h>
 #include <Logger.h>
+#include <QtBrowser.h>
 
 #include <global.h>
 
@@ -53,6 +55,17 @@
 #include <trayicon.h>
 
 using namespace std;
+
+const std::string QtWengoPhone::ANCHOR_CONTACTLIST = "openwengo_phonebook";
+const std::string QtWengoPhone::ANCHOR_HISTORY = "openwengo_log";
+const std::string QtWengoPhone::ANCHOR_CONFIGURATION = "openwengo_configuration";
+const std::string QtWengoPhone::ANCHOR_DIALPAD = "openwengo_dial";
+const std::string QtWengoPhone::ANCHOR_ADDCONTACT = "openwengo_addcontact";
+const std::string QtWengoPhone::ANCHOR_SELFCARE = "openwengo_selfcare";
+const std::string QtWengoPhone::ANCHOR_FORUM = "openwengo_forum";
+const std::string QtWengoPhone::URL_WENGO_MINI_HOME = "https://www.wengo.fr/auth/auth.php";
+const std::string QtWengoPhone::LOCAL_WEB_DIR = "webpages/windows";
+
 
 QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 	: QObjectThreadSafe(),
@@ -172,6 +185,14 @@ void QtWengoPhone::initThreadSafe() {
 	_wengoPhoneWindow->setStatusBar(statusbar);
 #endif
 
+	//embedded Browser
+	_browser = new QtBrowser(NULL);
+	_browser->urlClickedEvent +=  boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
+	QWidget * tabWeb = Object::findChild<QWidget *>(_tabWidget, "tabHome");
+	createLayout(tabWeb)->addWidget((QWidget*)_browser->getWidget());
+#ifdef OS_WINDOWS
+	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
+#endif
 	_wengoPhoneWindow->show();
 }
 
@@ -256,14 +277,28 @@ void QtWengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount
 }
 
 void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state) {
+	const WengoAccount * wengoAccount = dynamic_cast<const WengoAccount *>(&sender);
+	
 	switch (state) {
 	case SipAccount::LoginStateReady:
+#ifdef OS_WINDOWS
+		if( wengoAccount ) {
+			std::string data = "?login=" + wengoAccount->getWengoLogin() + "&password=" + wengoAccount->getWengoPassword() 
+				+ "&lang=" + "fr" + "&wl=" + "wengo" + "&page=softphone-web";
+			_browser->setUrl(URL_WENGO_MINI_HOME + data);
+		}
+#endif
 		break;
 
 	case SipAccount::LoginStateConnected:
 		break;
 
 	case SipAccount::LoginStateDisconnected:
+#ifdef OS_WINDOWS
+		if( wengoAccount ) {
+			_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
+		}
+#endif
 		break;
 
 	case SipAccount::LoginStatePasswordError:
@@ -275,6 +310,7 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 	default:
 		LOG_FATAL("Unknown state");
 	};
+	
 }
 
 void QtWengoPhone::noAccountAvailableEventHandler(WengoPhone & sender) {
@@ -452,5 +488,38 @@ void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(SipAccount & s
 	if (ret == QDialog::Accepted) {
 		sender.setProxySettings(httpProxy->getProxyAddress(), httpProxy->getProxyPort(),
 			httpProxy->getLogin(), httpProxy->getPassword());
+	}
+}
+
+void QtWengoPhone::urlClickedEventHandler(std::string url) {
+	LOG_DEBUG(url);
+	
+	//find anchor
+	std::string anchor = "";
+	int sharpPos = QString::fromStdString(url).indexOf('#');
+	if( sharpPos != -1 ){
+		anchor = QString::fromStdString(url).right(url.length() - sharpPos - 1).toStdString();
+	}
+	
+	if( anchor == ANCHOR_CONTACTLIST ) {
+		showContactList();
+	}
+	else if( anchor == ANCHOR_HISTORY ) {
+		showCallHistory();
+	}
+	else if( anchor == ANCHOR_CONFIGURATION ) {
+		showConfig();
+	}
+	else if( anchor == ANCHOR_DIALPAD ) {
+		
+	}
+	else if( anchor == ANCHOR_ADDCONTACT ) {
+		addContact();
+	}
+	else if( anchor == ANCHOR_SELFCARE ) {
+		showWengoAccount();
+	}
+	else if( anchor == ANCHOR_FORUM ) {
+		showForum();
 	}
 }
