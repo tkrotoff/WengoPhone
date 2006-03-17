@@ -21,11 +21,13 @@
 
 #include <imwrapper/IMAccount.h>
 
+#include <Base64.h>
+
 #include <tinyxml.h>
 
 using namespace std;
 
-IMAccountParser::IMAccountParser(IMAccount & imAccount, const std::string & data) 
+IMAccountParser::IMAccountParser(IMAccount & imAccount, const std::string & data)
 : _imAccount(imAccount), _data(data) {
 }
 
@@ -34,10 +36,10 @@ bool IMAccountParser::parse() {
 	EnumIMProtocol imProtocol;
 
 	doc.Parse(_data.c_str());
-	
+
 	TiXmlHandle docHandle(&doc);
 	TiXmlHandle account = docHandle.FirstChild("account");
-	
+
 	// Retrieving protocol
 	TiXmlElement * lastChildElt = account.Element();
 	if (lastChildElt) {
@@ -48,9 +50,10 @@ bool IMAccountParser::parse() {
 
 	//Retrieving login
 	_imAccount._login = account.FirstChild("login").FirstChild().Text()->Value();
-	
+
 	//Retrieving password
-	_imAccount._password = account.FirstChild("password").FirstChild().Text()->Value();
+	std::string password = account.FirstChild("password").FirstChild().Text()->Value();
+	_imAccount._password = Base64::decode(password);
 
 	return true;
 }

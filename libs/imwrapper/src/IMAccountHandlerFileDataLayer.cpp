@@ -28,14 +28,14 @@
 
 using namespace std;
 
-IMAccountHandlerFileDataLayer::IMAccountHandlerFileDataLayer(IMAccountHandler & imAccountHandler) 
+IMAccountHandlerFileDataLayer::IMAccountHandlerFileDataLayer(IMAccountHandler & imAccountHandler)
 : IMAccountHandlerDataLayer(imAccountHandler), _imAccountHandler(imAccountHandler) {
 }
 
 IMAccountHandlerFileDataLayer::~IMAccountHandlerFileDataLayer() {
 	save();
 }
-	
+
 bool IMAccountHandlerFileDataLayer::load() {
 	FileReader file("imaccounts.xml");
 	LOG_DEBUG("loading imaccounts.xml");
@@ -52,7 +52,7 @@ bool IMAccountHandlerFileDataLayer::load() {
 
 	return false;
 }
-	
+
 bool IMAccountHandlerFileDataLayer::save() {
 	FileWriter file("imaccounts.xml");
 	LOG_DEBUG("saving imaccounts.xml");

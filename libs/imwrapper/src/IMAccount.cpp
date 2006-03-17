@@ -21,6 +21,8 @@
 
 #include <imwrapper/IMAccountParser.h>
 
+#include <Base64.h>
+
 using namespace std;
 
 IMAccount::IMAccount() {
@@ -47,7 +49,7 @@ bool IMAccount::operator == (const IMAccount & imAccount) const {
 }
 
 bool IMAccount::operator < (const IMAccount & imAccount) const {
-	return ((_login < imAccount._login) 
+	return ((_login < imAccount._login)
 			|| ((_login == imAccount._login) && (_protocol < imAccount._protocol)));
 }
 
@@ -57,7 +59,7 @@ string IMAccount::serialize() {
 
 	result += "<account protocol=\"" + enumIMProtocol.toString(_protocol) + "\">\n";
 	result += ("<login>" + _login + "</login>\n");
-	result += ("<password>" + _password + "</password>\n");
+	result += ("<password>" + Base64::encode(_password) + "</password>\n");
 	result += "</account>\n";
 
 	return result;
