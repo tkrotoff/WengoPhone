@@ -455,9 +455,12 @@ gaim_dns_resolverthread(int child_out, int child_in, gboolean show_debug)
 		dns_params.hostname[0] = '\0';
 	}
 
+	if (show_debug)
+	  fprintf(stderr,"dns[%d]: close child_out %d | child_in %d\n", getpid(), child_out, child_in);
+	
 	close(child_out);
 	close(child_in);
-
+	
 	_exit(0);
 }
 
@@ -489,6 +492,7 @@ gaim_dns_new_resolverthread(gboolean show_debug)
 
 		gaim_dns_resolverthread(child_out[1], child_in[0], show_debug);
 		/* The thread calls _exit() rather than returning, so we never get here */
+		gaim_debug_error("dns", " The thread calls _exit() rather than returning, so we never get here\n");
 	}
 
 	/* We should not access the child's side of the pipes, so close them */
@@ -523,6 +527,8 @@ req_free(pending_dns_request_t *req)
 {
 	g_return_if_fail(req != NULL);
 
+	gaim_debug_warning("dns", "DNS req_free fd_in %d | fd_out %d\n", req->fd_in, req->fd_out);
+
 	close(req->fd_in);
 	close(req->fd_out);
 
@@ -537,19 +543,30 @@ send_dns_request_to_child(pending_dns_request_t *req, dns_params_t *dns_params)
 {
 	char ch;
 	int rc;
-
+	int pid;
+	
 	/* Are you alive? */
-	if (kill(req->dns_pid, 0) != 0) {
+	if ((pid = waitpid(req->dns_pid, 0, WNOHANG)) > 0)
+	{
 		gaim_debug_warning("dns",
-				   "DNS child %d no longer exists\n", req->dns_pid);
+						   "DNS child %d no longer exists\n", req->dns_pid);
 		return -1;
 	}
-
+	else if (pid < 0)
+	{
+		gaim_debug_error("dns",
+						 "Unable to wait for DNS child %d: %s\n",
+						 req->dns_pid, strerror(errno));
+		return -1;
+	}
+	
+	
+	
 	/* Let's contact this lost child! */
 	rc = write(req->fd_in, dns_params, sizeof(*dns_params));
 	if (rc < 0) {
 		gaim_debug_error("dns",
-				   "Unable to write to DNS child %d: %d\n",
+				   "Unable to write to DNS child %d: %s\n",
 				   req->dns_pid, strerror(errno));
 		close(req->fd_in);
 		return -1;
@@ -727,6 +744,8 @@ gaim_gethostbyname_async(const char *hostname, int port, dns_callback_t callback
 			if (!queued_requests)
 				queued_requests = g_queue_new();
 			g_queue_push_tail(queued_requests, r);
+
+			gaim_debug_info("dns", "MAX_DNS_CHILDREN is reached\n");
 
 			gaim_debug_info("dns",
 					   "DNS query for '%s' queued\n", dns_params.hostname);
