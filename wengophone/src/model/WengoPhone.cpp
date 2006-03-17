@@ -182,7 +182,11 @@ void WengoPhone::addSipAccount(const std::string & login, const std::string & pa
 void WengoPhone::addSipAccountThreadSafe(const std::string & login, const std::string & password, bool autoLogin) {
 	//TODO allow several SipAccount
 	if (_wengoAccount) {
-		//TODO destroy the PhoneLine if it exists
+		IPhoneLine * p = findWengoPhoneLine();
+		if( p ) {
+			p->disconnect();
+			//TODO remove the PhoneLine from _phoneLines & destroy it
+		}
 		delete _wengoAccount;
 	}
 
