@@ -105,44 +105,14 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 		(* it).second->hold();
 	}*/
 
-	String sipUri(phoneNumber);
-	size_t length = strspn(sipUri.c_str(), " .,;:()[]{}-_/#+0123456789");
-	if (length == sipUri.length()) {
-		//sipUri is a real phone number not a SIP URI or a pseudo
-
-		sipUri.remove(" ");
-		sipUri.remove(".");
-		sipUri.remove(",");
-		sipUri.remove(";");
-		sipUri.remove(":");
-		sipUri.remove("(");
-		sipUri.remove(")");
-		sipUri.remove("[");
-		sipUri.remove("]");
-		sipUri.remove("{");
-		sipUri.remove("}");
-		sipUri.remove("-");
-		sipUri.remove("_");
-		sipUri.remove("/");
-		sipUri.remove("#");
-
-		//Replaces + by 00
-		sipUri.replace("+", "00");
-	}
-
-	if (!sipUri.contains("@")) {
-		//Not a SIP URI
-		sipUri = "sip:" + sipUri + "@" + getSipAccount().getRealm();
-	}
-
-	SipAddress sipAddress(sipUri);
+	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _sipAccount.getRealm());
 
 	//PhoneCall in waiting state
 	//PhoneCall * phoneCall = createWaitingPhoneCall();
 	PhoneCall * phoneCall = new PhoneCall(*this, sipAddress);
 	_activePhoneCall = phoneCall;
 
-	int callId = _sipWrapper->makeCall(_lineId, sipUri);
+	int callId = _sipWrapper->makeCall(_lineId, sipAddress.getRawSipAddress());
 	phoneCall->setCallId(callId);
 
 	//Adds the PhoneCall to the list of PhoneCall
@@ -308,6 +278,14 @@ void PhoneLine::setState(EnumPhoneLineState::PhoneLineState status) {
 
 PhoneCall * PhoneLine::getPhoneCall(int callId) {
 	return _phoneCallHash[callId];
+}
+
+List<PhoneCall *> PhoneLine::getPhoneCallList() const {
+	List<PhoneCall *> calls;
+	for (PhoneCalls::const_iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
+		calls += (*it).second;
+	}
+	return calls;
 }
 
 void PhoneLine::initSipWrapper() {

@@ -674,6 +674,9 @@ static int callId1 = -1;
 static int callId2 = -1;
 static int callId1WaitsForTalkingState = false;
 static int callId2WaitsForTalkingState = false;
+//               callId, state
+static std::map<int, EnumPhoneCallState::PhoneCallState> callMap;
+
 
 int PhApiWrapper::createConference() {
 	//FIXME return phConfCreate();
@@ -699,13 +702,19 @@ void PhApiWrapper::destroyConference(int confId) {
 void PhApiWrapper::phoneCallStateChangedEventHandler(SipWrapper & sender, int callId,
 	EnumPhoneCallState::PhoneCallState state, const std::string & from) {
 
+	callMap[callId] = state;
+
 	if (state == EnumPhoneCallState::PhoneCallStateTalking) {
+
 		if (callId1 != -1 && callId == callId1 && callId1WaitsForTalkingState) {
 			holdCall(callId1);
+			Thread::sleep(2);
 		}
 
 		else if (callId2 != -1 && callId == callId2 && callId2WaitsForTalkingState) {
+			Thread::sleep(2);
 			phConf(callId1, callId2);
+			Thread::sleep(2);
 			resumeCall(callId1);
 			LOG_DEBUG("conference call started");
 		}
@@ -717,11 +726,32 @@ void PhApiWrapper::joinConference(int confId, int callId) {
 
 	if (callId1 == -1) {
 		callId1 = callId;
- 		callId1WaitsForTalkingState = true;
-	} else if (callId2 == -1) {
-		callId2 = callId;
-		callId2WaitsForTalkingState = true;
+
+		if (callMap[callId1] == EnumPhoneCallState::PhoneCallStateTalking) {
+			holdCall(callId1);
+			Thread::sleep(2);
+		} else {
+			callId1WaitsForTalkingState = true;
+		}
 	}
+
+	else if (callId2 == -1) {
+		callId2 = callId;
+
+		if (callMap[callId2] == EnumPhoneCallState::PhoneCallStateTalking
+			&& callMap[callId1] == EnumPhoneCallState::PhoneCallStateHoldOk) {
+
+			Thread::sleep(2);
+			phConf(callId1, callId2);
+			Thread::sleep(2);
+			resumeCall(callId1);
+			LOG_DEBUG("conference call started");
+		} else {
+			callId2WaitsForTalkingState = true;
+		}
+
+	}
+
 
 	if (callId1 != -1 && callId2 != -1) {
 		/*

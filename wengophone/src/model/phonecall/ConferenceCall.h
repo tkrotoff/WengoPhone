@@ -22,6 +22,7 @@
 
 #include <Event.h>
 #include <List.h>
+#include <Mutex.h>
 
 #include <string>
 #include <vector>
@@ -79,17 +80,22 @@ public:
 
 private:
 
+	/** Checks if the PhoneCall is not already created. */
+	PhoneCall * getPhoneCall(const std::string & phoneNumber) const;
+
 	/** PhoneLine associated with the ConferenceCall. */
 	IPhoneLine & _phoneLine;
 
 	/** Defines the vector of PhoneCall. */
-	typedef std::vector < int > PhoneCalls;
+	typedef std::vector < PhoneCall * > PhoneCalls;
 
 	/** List of PhoneCall. */
 	PhoneCalls _phoneCallList;
 
 	/** Conference id of this ConferenceCall. */
 	int _confId;
+
+	static Mutex _mutex;
 };
 
 #endif	//CONFERENCECALL_H

@@ -82,6 +82,8 @@ public:
 		return _activePhoneCall;
 	}
 
+	List<PhoneCall *> getPhoneCallList() const;
+
 private:
 
 	/**

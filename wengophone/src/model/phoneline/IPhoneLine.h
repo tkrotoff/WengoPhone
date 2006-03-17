@@ -22,6 +22,7 @@
 
 #include <Event.h>
 #include <Interface.h>
+#include <List.h>
 
 #include <sipwrapper/EnumTone.h>
 #include <sipwrapper/EnumPhoneCallState.h>
@@ -150,6 +151,13 @@ public:
 	 * @return active PhoneCall or NULL
 	 */
 	virtual PhoneCall * getActivePhoneCall() const = 0;
+
+	/**
+	 * Gets the list of PhoneCall associated with this PhoneLine.
+	 *
+	 * @return the list of PhoneCall
+	 */
+	virtual List<PhoneCall *> getPhoneCallList() const = 0;
 };
 
 #endif	//IPHONELINE_H

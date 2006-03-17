@@ -136,6 +136,8 @@ public:
 	/**
 	 * Sets the call id associated with this PhoneCall.
 	 *
+	 * Should only be called by PhoneLine.
+	 *
 	 * @param callId call id of this PhoneCall
 	 */
 	void setCallId(int callId) {
