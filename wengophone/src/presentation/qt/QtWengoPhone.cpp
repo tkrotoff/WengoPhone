@@ -486,7 +486,8 @@ void QtWengoPhone::setTrayMenu() {
 	_trayMenu->addAction(tr("Call"));
 	_trayMenu->addAction(tr("Send a SMS"));
 	_trayMenu->addAction(tr("Start a chat"));
-	_trayMenu->addAction(tr("Quit Wengophone"));
+	QAction * exitAction = _trayMenu->addAction(tr("Quit Wengophone"));
+	connect (exitAction,SIGNAL(triggered()),this,SLOT(exitApplication()));
 	_trayIcon->setPopup(_trayMenu);
 }
 
