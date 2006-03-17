@@ -177,6 +177,7 @@ void PhoneLine::connect() {
 
 void PhoneLine::disconnect() {
 	if (_lineId != SipWrapper::VirtualLineIdError) {
+		_sipAccount.setConnected(false);
 		_sipWrapper->removeVirtualLine(_lineId);
 	}
 }
