@@ -121,7 +121,7 @@ if WengoOSWindows():
 			'uuid',
 			'advapi32',
 		]
-	if WengoQtEdition() != 'QT_EDITION_OPENSOURCE':
+	if env.WengoQtEdition() != 'QT_EDITION_OPENSOURCE':
 		libs.append('QAxContainerd')
 	else:
 		libs += [
@@ -149,7 +149,7 @@ if WengoOSWindows():
 			'uuid',
 			'advapi32',
 		]
-	if WengoQtEdition() != 'QT_EDITION_OPENSOURCE':
+	if env.WengoQtEdition() != 'QT_EDITION_OPENSOURCE':
 		libs.append('QAxContainer')
 
 	if WengoCCMinGW():

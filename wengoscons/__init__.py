@@ -63,4 +63,3 @@ gdict['WengoReleaseSymbolsMode'] = wengoenv.WengoReleaseSymbolsMode
 gdict['WengoGetSubversionRevision'] = wengoenv.WengoGetSubversionRevision
 gdict['WengoGetCurrentDateTime'] = wengoenv.WengoGetCurrentDateTime
 
-gdict['WengoQtEdition'] = wengoenv.WengoQtEdition
