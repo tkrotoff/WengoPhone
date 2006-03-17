@@ -37,17 +37,17 @@ class QAxWidget;
 
 /**
  * Qt implementation of OWBrowser.
- * 
+ *
  * Implemented with:
  *  - QTextBrowser: local url
  *  - Microsoft Web Browser: local & remote url
- * 
+ *
  * @author Mathieu Stute
  */
 class QtBrowser : public QObject, public OWBrowser {
     Q_OBJECT
 public:
-    
+
     /**
      * Browser mode enum
      */
@@ -57,64 +57,33 @@ public:
     };
 
     /**
-     * Default constructor
+     * Default constructor.
      *
      * @param parent the parent widget
      */
     QtBrowser(QWidget * parent = NULL, BrowserMode mode = IEMODE);
 
-    /**
-     * Set current url to browse
-     *
-     * @param url the url to browse
-     */
     void setUrl(const std::string & url);
-    
-    /**
-     * Set the brower mode to QTMODE or IEMODE
-     *
-     * @param mode BrowserMode
-     * @return true if mode has been set
-     */
+
     bool setMode(BrowserMode mode);
-    
-    /**
-     * show the browser widget
-     */
+
     void show();
-    
-    /**
-     * return the low level widget,
-     * mostely used to reparent the widget
-     *
-     * @return the low level widget
-     */
+
     void * getWidget() const;
 
-    /**
-     * Set current url to browse
-     *
-     * @return the current url
-     */
-    std::string getUrl();
+    std::string getUrl() const;
 
-    /**
-     * Browse backward
-     */
     void backward();
-    
-    /**
-     * Browse forward
-     */
+
     void forward();
 
 private Q_SLOTS:
-    
+
     /**
      * Slot called before loading a page in a Microsoft Web Browser.
      */
     void BeforeNavigate(const QString&, int, const QString&, const QVariant&, const QString&, bool&);
-    
+
     /**
      * Slot called before loading a page in a QTextBrowser.
      */
@@ -123,17 +92,17 @@ private Q_SLOTS:
 private:
 
     /**
-     * current url
+     * Current url.
      */
     QString _url;
 
     /**
-     * init browser (IE or QT)
+     * Inits the browser (IE or Qt).
      */
     void initBrowser();
 
     /**
-     * BrowserMode: QT or IE
+     * BrowserMode: Qt or IE
      */
     BrowserMode _mode;
 
@@ -144,7 +113,7 @@ private:
 
 #ifdef OS_WINDOWS
     /**
-     * Microsoft Web Browser ActiveX
+     * Microsoft Web Browser ActiveX.
      */
     QAxWidget * _ieBrowser;
 #endif
@@ -153,7 +122,7 @@ private:
      * Qt html viewer
      */
     QTextBrowser * _qtBrowser;
-    
+
     /**
      * Layout of the widget
      */
