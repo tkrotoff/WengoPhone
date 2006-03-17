@@ -62,10 +62,10 @@ void QtUserManager::editContact(bool ){
     QTreeWidgetItem * item = _tree->currentItem();
 
 	// The edit contact window
-	QtEditContactProfile editContact;
+	QtEditContactProfile editContactDialog(ul->getPContact(item->text(0)));
 	//editContact->set
 
-	editContact.exec();
+	editContactDialog.exec();
 }
 void QtUserManager::treeViewSelectionChanged(){
 	closeUserInfo();

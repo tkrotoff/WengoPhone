@@ -47,14 +47,6 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 
 	spx = QtContactPixmap::getInstance();
 
-	/*
-	QLinearGradient lg2( QPointF(1,1), QPointF(option.rect.width(),1));
-	lg2.setSpread(QGradient::RepeatSpread);
-	lg2.setColorAt ( 0, QColor(181,203,255));
-	lg2.setColorAt ( .8, QColor(255, 255, 234));
-	painter->fillRect(option.rect, lg2);
-	*/
-
 	if (_mouseOn)
 	{
 		painter->fillRect(option.rect,QBrush(lg));
@@ -85,49 +77,41 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	textRect.setTop(_centeredText_y+textRect.top());
 	// Draw the text
 
-	painter->drawText(textRect,Qt::AlignLeft,index.data().toString(),0);
+	painter->drawText(textRect,Qt::AlignLeft,_userName,0);
+
     /*
             Draw Functions icons
-        */
+	*/
 	x=option.rect.width();
 	if (_mouseOn)
 	{
-/*
-		if (status != QtContactPixmap::ContactNotAvailable)
+		px = spx->getPixmap(QtContactPixmap::ContactVideo);
+		if (hasVideo())
 		{
-*/
-			px = spx->getPixmap(QtContactPixmap::ContactVideo);
-			if (hasVideo())
-			{
-				x-=px.width();
-				painter->drawPixmap (x,r.top(),px);
-			}
-			else
-				x-=px.width();
-			px = spx->getPixmap(QtContactPixmap::ContactCall);
-			if (hasCall())
-			{
-				x-=px.width();
-				painter->drawPixmap (x,r.top(),px);
-			}
-			else
-				x-=px.width();
-
-			px = spx->getPixmap(QtContactPixmap::ContactIM);
-			if (hasIM())
-			{
-				px = spx->getPixmap(QtContactPixmap::ContactIM);
-				x-=px.width();
-				painter->drawPixmap (x,r.top(),px);
-			}
-			else
-				x-=px.width();
-			_iconsStartPosition = x;
-/*
+			x-=px.width();
+			painter->drawPixmap (x,r.top(),px);
 		}
-*/
-//		else
-//			_iconsStartPosition = x;
+		else
+			x-=px.width();
+		px = spx->getPixmap(QtContactPixmap::ContactCall);
+		if (hasCall())
+		{
+			x-=px.width();
+			painter->drawPixmap (x,r.top(),px);
+		}
+		else
+			x-=px.width();
+
+		px = spx->getPixmap(QtContactPixmap::ContactIM);
+		if (hasIM())
+		{
+			px = spx->getPixmap(QtContactPixmap::ContactIM);
+			x-=px.width();
+			painter->drawPixmap (x,r.top(),px);
+		}
+		else
+			x-=px.width();
+		_iconsStartPosition = x;
 	}
 
 }

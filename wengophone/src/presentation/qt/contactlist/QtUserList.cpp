@@ -144,7 +144,8 @@ int	QtUserList::getHeight(const QString & userid) const {
 		return user->getHeight();
  	else return 0;
 }
-const PContact * QtUserList::getPContact(const QString & userid) const {
+
+PContact & QtUserList::getPContact(const QString & userid) const {
 
 	QtUser * user = _userList[userid];
 	if (! user )

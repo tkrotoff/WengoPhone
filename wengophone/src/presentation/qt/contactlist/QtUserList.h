@@ -61,7 +61,7 @@ public:
 
 	void setTreeWidget(QTreeWidget * tree) { _tree=tree;}
 
-	const PContact * getPContact(const QString & userid) const;
+	PContact & getPContact(const QString & userid) const;
 
 	QTreeWidget * getTreeWidget() const {return _tree;}
 

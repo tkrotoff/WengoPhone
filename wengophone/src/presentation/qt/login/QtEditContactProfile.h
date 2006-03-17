@@ -23,18 +23,19 @@
 #include <QtGui>
 
 #include <Logger.h>
-
+#include <model/contactlist/Contact.h>
+#include <presentation/PContact.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-
+// FIXME:Ui, cpp and h files should be moved from login dir to another dir (contact ?)
 class QtEditContactProfile : public QDialog
 {
 	Q_OBJECT
 
 public:
 
-	QtEditContactProfile (QWidget * parent =0, Qt::WFlags f=0);
+	QtEditContactProfile (const PContact & contact,QWidget * parent =0, Qt::WFlags f=0);
 
 protected:
 
@@ -54,13 +55,13 @@ public Q_SLOTS:
 
 protected:
 
+	const PContact & _contact;
+
 	QWidget * _widget;
 
 	QGridLayout * layout;
 
-	QLineEdit * _wengoNickName;
-
-	QPushButton * _changePassword;
+	QLineEdit * _alias;
 
 	QLineEdit * _firstName;
 

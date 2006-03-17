@@ -82,7 +82,8 @@ public:
 
 	QString getAvatar() const { return _avatarPath;}
 
-	const PContact * getPContact() const { return &_pContact;}
+	PContact & getPContact() const { return _pContact;}
+
 
 public Q_SLOTS:
 

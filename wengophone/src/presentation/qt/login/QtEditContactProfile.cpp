@@ -1,28 +1,31 @@
 /*
- * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+* WengoPhone, a voice over Internet phone
+* Copyright (C) 2004-2006  Wengo
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
 #include <Object.h>
 #include <Logger.h>
 #include <WidgetFactory.h>
+#include <Date.h>
 
 #include "QtEditContactProfile.h"
 
-QtEditContactProfile::QtEditContactProfile( QWidget * parent, Qt::WFlags f ) : QDialog( parent, f ) {
+
+QtEditContactProfile::QtEditContactProfile( const PContact & contact, QWidget * parent, Qt::WFlags f ) : QDialog( parent, f ), _contact( contact ) {
 
 	_widget = qobject_cast<QWidget *>( WidgetFactory::create( ":/forms/login/contactWindow.ui", this ) );
 	layout = new QGridLayout( this );
@@ -47,30 +50,37 @@ void QtEditContactProfile::cancelClicked() {
 }
 
 void QtEditContactProfile::hideAccountWidgets() {
-	for ( int i = 0; i < _imAccountLineEdit.size(); i++ ) {
+	for ( int i = 1; i < _imAccountLineEdit.size(); i++ ) {
 			_imAccountLineEdit[ i ] ->setVisible( false );
-			_imAccountLineEdit[ i ] ->setReadOnly(true);
+			_imAccountLineEdit[ i ] ->setReadOnly( true );
 		}
 
-	for ( int i = 0; i < _imAccountsPic.size(); i++ ) {
+	for ( int i = 1; i < _imAccountsPic.size(); i++ ) {
 			_imAccountsPic[ i ] ->setVisible( false );
 		}
-
 }
 
 void QtEditContactProfile::writeToConfig() {
 
+	Contact & c = _contact.getContact();
+	c.setFirstName( _firstName->text().toStdString() );
+	c.setLastName( _lastName->text().toStdString() );
+	c.setSex( ( Contact::Sex ) _gender->currentIndex() );
+	QDate qdate = _birthDate->date();
+	Date date;
+	date.setDay( qdate.day() );
+	date.setMonth( qdate.month() );
+	date.setYear( qdate.year() );
+	c.setBirthdate( date );
 }
 
 void QtEditContactProfile::readFromConfig() {
-
-
+	Contact & c = _contact.getContact();
 }
 
 void QtEditContactProfile::init() {
 
-	_wengoNickName = Object::findChild<QLineEdit *>( _widget, "wengoNickName" );
-	_changePassword = Object::findChild<QPushButton *>( _widget, "changePassword" );
+	_alias = Object::findChild<QLineEdit *>( _widget, "alias" );
 	_firstName = Object::findChild<QLineEdit *>( _widget, "firstName" );
 	_lastName = Object::findChild<QLineEdit *>( _widget, "lastName" );
 	_birthDate = Object::findChild<QDateEdit *>( _widget, "birthDate" );
@@ -92,7 +102,6 @@ void QtEditContactProfile::init() {
 
 	_saveChange = Object::findChild<QPushButton *>( _widget, "saveChange" );
 	_cancelChange = Object::findChild<QPushButton *>( _widget, "cancelChange" );
-
 
 	// IM accounts pics
 	QLabel * imAccountsPic;

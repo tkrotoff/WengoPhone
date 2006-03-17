@@ -37,16 +37,18 @@
 #define MENUICON_HEIGHT 8
 */
 
+/*
 static int USER_TITLE_FRAME_HEIGHT = 0;
 static int USER_WIDGET_FRAME_HEIGHT = 0;
+*/
 static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 
 QtTreeViewDelegate::QtTreeViewDelegate( QObject *parent ) : QItemDelegate( parent ) {
 	QtUserWidget * widget = new QtUserWidget( NULL );
 	QWidget * userWidget = Object::findChild<QWidget *>( widget, "UserWidget" );
 	QFrame * userTitleFrame = Object::findChild<QFrame *>( userWidget, "userTitleFrame" );
-	USER_TITLE_FRAME_HEIGHT = userTitleFrame->height();
-	USER_WIDGET_FRAME_HEIGHT = userWidget->height();
+//	USER_TITLE_FRAME_HEIGHT = userTitleFrame->height();
+//	USER_WIDGET_FRAME_HEIGHT = userWidget->height();
 }
 
 void QtTreeViewDelegate::setParent( QWidget * parent ) {
@@ -59,7 +61,7 @@ QWidget * QtTreeViewDelegate::createEditor( QWidget *parent,
 		QtUserWidget * widget = new QtUserWidget( parent );
 		QWidget * userWidget = Object::findChild<QWidget *>( widget, "UserWidget" );
 		QFrame * userTitleFrame = Object::findChild<QFrame *>( userWidget, "userTitleFrame" );
-		USER_TITLE_FRAME_HEIGHT = userTitleFrame->height();
+		// USER_TITLE_FRAME_HEIGHT = userTitleFrame->height();
 		//LOG_DEBUG( "height= " + String::fromNumber( USER_TITLE_FRAME_HEIGHT ) );
 
 		QtUserList * ul = QtUserList::getInstance();
@@ -101,7 +103,7 @@ void QtTreeViewDelegate::paint ( QPainter * painter, const QStyleOptionViewItem 
 	}
 
 QSize QtTreeViewDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const {
-		LOG_DEBUG( "height= " + String::fromNumber( USER_TITLE_FRAME_HEIGHT ) );
+		// LOG_DEBUG( "height= " + String::fromNumber( USER_TITLE_FRAME_HEIGHT ) );
 
 		QSize orig = QItemDelegate::sizeHint( option, index );
 
