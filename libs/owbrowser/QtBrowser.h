@@ -45,88 +45,89 @@ class QAxWidget;
  * @author Mathieu Stute
  */
 class QtBrowser : public QObject, public OWBrowser {
-    Q_OBJECT
+	Q_OBJECT
 public:
 
-    /**
-     * Browser mode enum
-     */
-    enum BrowserMode {
-        QTMODE,
-        IEMODE
-    };
+	/**
+	* Browser mode enum
+	*/
+	enum BrowserMode {
+		QTMODE,
+		IEMODE
+	};
 
-    /**
-     * Default constructor.
-     *
-     * @param parent the parent widget
-     */
-    QtBrowser(QWidget * parent = NULL, BrowserMode mode = IEMODE);
+	/**
+	 * Default constructor.
+	 *
+	 * @param parent the parent widget
+	 * @param mode browser mode to use (IE or Qt)
+	 */
+	QtBrowser(QWidget * parent, BrowserMode mode = IEMODE);
 
-    void setUrl(const std::string & url);
+	void setUrl(const std::string & url);
 
-    bool setMode(BrowserMode mode);
+	bool setMode(BrowserMode mode);
 
-    void show();
+	void show();
 
-    void * getWidget() const;
+	void * getWidget() const;
 
-    std::string getUrl() const;
+	std::string getUrl() const;
 
-    void backward();
+	void backward();
 
-    void forward();
+	void forward();
 
 private Q_SLOTS:
 
-    /**
-     * Slot called before loading a page in a Microsoft Web Browser.
-     */
-    void BeforeNavigate(const QString&, int, const QString&, const QVariant&, const QString&, bool&);
+	/**
+	 * Slot called before loading a page in a Microsoft Web Browser.
+	 */
+	void beforeNavigate(const QString &, int, const QString &, const QVariant &, const QString &, bool &);
 
-    /**
-     * Slot called before loading a page in a QTextBrowser.
-     */
-    void BeforeNavigate(const QUrl & link);
+	/**
+	 * Slot called before loading a page in a QTextBrowser.
+	 */
+	void beforeNavigate(const QUrl & link);
 
 private:
 
-    /**
-     * Current url.
-     */
-    QString _url;
+	/**
+	 * Current url.
+	 */
+	QString _url;
 
-    /**
-     * Inits the browser (IE or Qt).
-     */
-    void initBrowser();
+	/**
+	 * Inits the browser (IE or Qt).
+	 */
+	void initBrowser();
 
-    /**
-     * BrowserMode: Qt or IE
-     */
-    BrowserMode _mode;
+	/**
+	 * BrowserMode: Qt or IE.
+	 */
+	BrowserMode _mode;
 
-    /**
-     * Main widget
-     */
-    QWidget * _browserWidget;
+	/**
+	 * Main widget.
+	 */
+	QWidget * _browserWidget;
 
 #ifdef OS_WINDOWS
-    /**
-     * Microsoft Web Browser ActiveX.
-     */
-    QAxWidget * _ieBrowser;
+	/**
+	 * Microsoft Web Browser ActiveX.
+	 */
+	QAxWidget * _ieBrowser;
 #endif
 
-    /**
-     * Qt html viewer
-     */
-    QTextBrowser * _qtBrowser;
+	/**
+	 * Qt html viewer.
+	 */
+	QTextBrowser * _qtBrowser;
 
-    /**
-     * Layout of the widget
-     */
-    QVBoxLayout * _layout;
+	/**
+	 * Widget layout.
+	 */
+	QVBoxLayout * _layout;
 };
 
 #endif	//OWQTBROWSER_H

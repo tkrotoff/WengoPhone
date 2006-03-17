@@ -22,8 +22,7 @@
 #include <Logger.h>
 
 #include <QtGui>
-#include <QTextBrowser>
-#include <QVBoxLayout>
+
 #ifdef OS_WINDOWS
 #include <QAxWidget>
 #endif
@@ -32,111 +31,111 @@
 using namespace std;
 
 QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode) : QObject() {
-    _browserWidget = new QWidget(parent);
+	_browserWidget = new QWidget(parent);
 
-    _ieBrowser = NULL;
-    _qtBrowser = NULL;
+	_ieBrowser = NULL;
+	_qtBrowser = NULL;
 
-    _layout = new QVBoxLayout(_browserWidget);
-    _layout->setMargin(1);
-    _layout->setSpacing(0);
+	_layout = new QVBoxLayout(_browserWidget);
+	_layout->setMargin(1);
+	_layout->setSpacing(0);
 
-    setMode(mode);
+	setMode(mode);
 }
 
 void QtBrowser::setUrl(const std::string & url) {
-    LOG_DEBUG(url);
-    _url = QString::fromStdString(url);
-    if(_mode == IEMODE) {
+	LOG_DEBUG(url);
+	_url = QString::fromStdString(url);
+	if (_mode == IEMODE) {
 #ifdef OS_WINDOWS
-        _ieBrowser->dynamicCall("Navigate(const QString&)", _url);
+		_ieBrowser->dynamicCall("Navigate(const QString&)", _url);
 #endif
-    } else {
-        _qtBrowser->setSource(_url);
-    }
+	} else {
+		_qtBrowser->setSource(_url);
+	}
 }
 
 void QtBrowser::show() {
-    _browserWidget->show();
+	_browserWidget->show();
 }
 
 void * QtBrowser::getWidget() const {
-    return (void*)_browserWidget;
+	return (void *) _browserWidget;
 }
 
 std::string QtBrowser::getUrl() const {
-    return _url.toStdString();
+	return _url.toStdString();
 }
 
 void QtBrowser::backward() {
-    LOG_FATAL("Not yet implemented");
+	LOG_FATAL("Not yet implemented");
 }
 
 void QtBrowser::forward() {
-    LOG_FATAL("Not yet implemented");
+	LOG_FATAL("Not yet implemented");
 }
 
-void QtBrowser::BeforeNavigate(const QUrl & link) {
-    urlClickedEvent(link.toString().toStdString());
+void QtBrowser::beforeNavigate(const QUrl & link) {
+	urlClickedEvent(link.toString().toStdString());
 }
 
-void QtBrowser::BeforeNavigate(const QString& url, int, const QString&, const QVariant&, const QString&, bool&) {
-    urlClickedEvent(url.toStdString());
+void QtBrowser::beforeNavigate(const QString & url, int, const QString &, const QVariant &, const QString &, bool &) {
+	urlClickedEvent(url.toStdString());
 }
 
 bool QtBrowser::setMode(BrowserMode mode) {
-//IEMODE is only available on Windows
+	//IEMODE is only available on Windows
 #ifndef OS_WINDOWS
-    if(mode == IEMODE) {
-        _mode = QTMODE;
-        initBrowser();
-        return false
-    }
+	if (mode == IEMODE) {
+		_mode = QTMODE;
+		initBrowser();
+		return false
+	}
 #endif
-    _mode = mode;
-    initBrowser();
-    return true;
+	_mode = mode;
+	initBrowser();
+	return true;
 }
 
 void QtBrowser::initBrowser() {
 #ifndef OS_WINDOWS
-    if( _mode == IEMODE ) {
-        LOG_FATAL("IEMODE not allowed");
-    }
+	if (_mode == IEMODE) {
+		LOG_FATAL("IEMODE not allowed");
+	}
 #endif
 
-    if( _mode == QTMODE ) {
+	if (_mode == QTMODE) {
 
-        // clean ie browser
-        if( _ieBrowser ) {
-            _layout->removeWidget(_ieBrowser);
-            delete _ieBrowser;
-            _ieBrowser = NULL;
-        }
+		//clean ie browser
+		if (_ieBrowser) {
+			_layout->removeWidget(_ieBrowser);
+			delete _ieBrowser;
+			_ieBrowser = NULL;
+		}
 
-        //init qt browser
-        _qtBrowser = new QTextBrowser(_browserWidget);
-        connect(_qtBrowser, SIGNAL(anchorClicked(const QUrl &)),
-            SLOT(BeforeNavigate(const QUrl &)));
-        _layout->addWidget(_qtBrowser);
+		//init qt browser
+		_qtBrowser = new QTextBrowser(_browserWidget);
+		connect(_qtBrowser, SIGNAL(anchorClicked(const QUrl &)),
+			SLOT(beforeNavigate(const QUrl &)));
+		_layout->addWidget(_qtBrowser);
 
-    } else {
+	} else {
 #ifdef OS_WINDOWS
-        //clean qt browser
-        if( _qtBrowser ) {
-            _layout->removeWidget(_qtBrowser);
-            delete _qtBrowser;
-            _qtBrowser = NULL;
-        }
+		//clean qt browser
+		if (_qtBrowser) {
+			_layout->removeWidget(_qtBrowser);
+			delete _qtBrowser;
+			_qtBrowser = NULL;
+		}
 
-        //init ie browser
-        _ieBrowser = new QAxWidget(_browserWidget);
-        _ieBrowser->setControl(QString::fromUtf8("{8856F961-340A-11D0-A96B-00C04FD705A2}"));
-        _ieBrowser->setObjectName(QString::fromUtf8("mwbAx"));
-        _ieBrowser->setFocusPolicy(Qt::StrongFocus);
-        connect(_ieBrowser, SIGNAL(BeforeNavigate(const QString&, int, const QString&, const QVariant&, const QString&, bool&)),
-            SLOT(BeforeNavigate(const QString&, int, const QString&, const QVariant&, const QString&, bool&)));
-        _layout->addWidget(_ieBrowser);
-    }
+		//init ie browser
+		_ieBrowser = new QAxWidget(_browserWidget);
+		_ieBrowser->setControl(QString::fromUtf8("{8856F961-340A-11D0-A96B-00C04FD705A2}"));
+		_ieBrowser->setObjectName(QString::fromUtf8("mwbAx"));
+		_ieBrowser->setFocusPolicy(Qt::StrongFocus);
+		connect(_ieBrowser, SIGNAL(BeforeNavigate(const QString &, int, const QString &, const QVariant &, const QString &, bool &)),
+			SLOT(beforeNavigate(const QString &, int, const QString &, const QVariant &, const QString &, bool &)));
+		_layout->addWidget(_ieBrowser);
+	}
 #endif
 }

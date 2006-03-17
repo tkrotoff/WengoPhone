@@ -26,55 +26,55 @@
 #include <string>
 
 /**
- * class OWBrowser, a minimalist embedded browser.
+ * OWBrowser, a minimalist embedded browser.
  *
  * @author Mathieu Stute
  */
 class OWBrowser : Interface {
 public:
 
-    /**
-     * A link has been clicked.
-     *
-     * @param url url clicked
-     */
-    Event<void (const std::string & url)> urlClickedEvent;
+	/**
+	 * A link has been clicked.
+	 *
+	 * @param url url clicked
+	 */
+	Event < void(const std::string & url) > urlClickedEvent;
 
-    /**
-     * Sets the current url to browse.
-     *
-     * @param url the url to browse
-     */
-    virtual void setUrl(const std::string & url) = 0;
+	/**
+	 * Sets the current url to browse.
+	 *
+	 * @param url the url to browse
+	 */
+	virtual void setUrl(const std::string & url) = 0;
 
-    /**
-     * Gets the current url browsed.
-     *
-     * @return the current url
-     */
-    virtual std::string getUrl() const = 0;
+	/**
+	 * Gets the current url browsed.
+	 *
+	 * @return the current url
+	 */
+	virtual std::string getUrl() const = 0;
 
-    /**
-     * Gets the low level widget.
-     *
-     * @return the low level widget
-     */
-    virtual void * getWidget() const = 0;
+	/**
+	 * Gets the low level widget.
+	 *
+	 * @return the low level widget
+	 */
+	virtual void * getWidget() const = 0;
 
-    /**
-     * Shows the widget.
-     */
-    virtual void show() = 0;
+	/**
+	 * Shows the widget.
+	 */
+	virtual void show() = 0;
 
-    /**
-     * Browses backward.
-     */
-    virtual void backward() = 0;
+	/**
+	 * Browses backward.
+	 */
+	virtual void backward() = 0;
 
-    /**
-     * Browses forward.
-     */
-    virtual void forward() = 0;
+	/**
+	 * Browses forward.
+	 */
+	virtual void forward() = 0;
 };
 
 #endif	//OWBROWSER_H
