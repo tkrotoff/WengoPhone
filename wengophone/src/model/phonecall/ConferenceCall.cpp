@@ -25,6 +25,8 @@
 
 #include <sipwrapper/SipWrapper.h>
 
+#include <Logger.h>
+
 ConferenceCall::ConferenceCall(IPhoneLine & phoneLine)
 	: _phoneLine(phoneLine) {
 
@@ -47,23 +49,23 @@ void ConferenceCall::addPhoneCall(PhoneCall & phoneCall) {
 	if (_confId != -1) {
 		_phoneLine.getSipWrapper().joinConference(_confId, phoneCall.getCallId());
 	}
-	//Remove it before to add it to the list
-	_phoneCallList -= &phoneCall;
 
-	_phoneCallList += &phoneCall;
+	_phoneCallList.push_back(&phoneCall);
 }
 
 void ConferenceCall::removePhoneCall(PhoneCall & phoneCall) {
 	if (_confId != -1) {
 		_phoneLine.getSipWrapper().splitConference(_confId, phoneCall.getCallId());
 	}
-	_phoneCallList -= &phoneCall;
+	//_phoneCallList -= &phoneCall;
 	//delete &phoneCall;
 }
 
 void ConferenceCall::addPhoneNumber(const std::string & phoneNumber) {
-	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _phoneLine.getSipAccount().getRealm());
-	PhoneCall * phoneCall = new PhoneCall(_phoneLine, sipAddress);
+	LOG_DEBUG("phone number added=" + phoneNumber);
+	int callId = _phoneLine.makeCall(phoneNumber);
+
+	PhoneCall * phoneCall = _phoneLine.getPhoneCall(callId);
 	addPhoneCall(*phoneCall);
 }
 
@@ -83,7 +85,7 @@ void ConferenceCall::start() {
 		_confId = _phoneLine.getSipWrapper().createConference();
 		for (unsigned i = 0; i < _phoneCallList.size(); i++) {
 			PhoneCall * phoneCall = _phoneCallList[i];
-			addPhoneCall(*phoneCall);
+			_phoneLine.getSipWrapper().joinConference(_confId, phoneCall->getCallId());
 		}
 	}
 }

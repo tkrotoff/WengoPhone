@@ -27,7 +27,9 @@
 #include <Logger.h>
 #include <File.h>
 #include <Timer.h>
+
 #include <AudioDevice.h>
+
 #include <global.h>
 
 #include <string>
@@ -106,6 +108,9 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 	PhApiWrapperHack = this;
 	_inputAudioDeviceId = 0;
 	_outputAudioDeviceId = 0;
+
+	//FIXME ugly hack for conference
+	phoneCallStateChangedEvent += boost::bind(&PhApiWrapper::phoneCallStateChangedEventHandler, this, _1, _2, _3, _4);
 }
 
 PhApiWrapper::~PhApiWrapper() {
@@ -372,7 +377,7 @@ bool PhApiWrapper::setAudioDevices() {
 	//std::string tmp = "pa:";
 #else
 	//FIXME: needs to be changed to take the set audio device
-	//.(currently takes the default audio device)
+	//(currently takes the default audio device)
 	std::string tmp = "ca:";
 #endif
 
@@ -652,16 +657,23 @@ void PhApiWrapper::setSIP(const string & server, unsigned serverPort, unsigned l
 
 
 /*
+** Conference Algorithm **
+
 int callId1 = placeCall();
+//wait for CALLOK on callId1
 phHold(callId1);
 int callId2 = placeCall();
+//wait for CALLOK on callId2
 phConf(callId1, callId2);
 phResume(callId1);
 phStopConf(callId1, callId2);
+
 */
 
 static int callId1 = -1;
 static int callId2 = -1;
+static int callId1WaitsForTalkingState = false;
+static int callId2WaitsForTalkingState = false;
 
 int PhApiWrapper::createConference() {
 	//FIXME return phConfCreate();
@@ -677,7 +689,29 @@ void PhApiWrapper::destroyConference(int confId) {
 	}
 
 	callId1 = -1;
+	callId1WaitsForTalkingState = false;
 	callId2 = -1;
+	callId2WaitsForTalkingState = false;
+
+	LOG_DEBUG("conference call destroyed");
+}
+
+void PhApiWrapper::phoneCallStateChangedEventHandler(SipWrapper & sender, int callId,
+	EnumPhoneCallState::PhoneCallState state, const std::string & from) {
+
+	if (state == EnumPhoneCallState::PhoneCallStateTalking) {
+		if (callId1 != -1 && callId == callId1 && callId1WaitsForTalkingState) {
+			holdCall(callId1);
+			Thread::sleep(2);
+		}
+
+		else if (callId2 != -1 && callId == callId2 && callId2WaitsForTalkingState) {
+			phConf(callId1, callId2);
+			Thread::sleep(2);
+			resumeCall(callId1);
+			LOG_DEBUG("conference call started");
+		}
+	}
 }
 
 void PhApiWrapper::joinConference(int confId, int callId) {
@@ -685,14 +719,18 @@ void PhApiWrapper::joinConference(int confId, int callId) {
 
 	if (callId1 == -1) {
 		callId1 = callId;
-		holdCall(callId1);
+		callId1WaitsForTalkingState = true;
 	} else if (callId2 == -1) {
 		callId2 = callId;
+		callId2WaitsForTalkingState = true;
 	}
 
 	if (callId1 != -1 && callId2 != -1) {
-		resumeCall(callId1);
+		/*
 		phConf(callId1, callId2);
+		resumeCall(callId1);
+		LOG_DEBUG("conference call started");
+		*/
 	}
 }
 
@@ -702,14 +740,18 @@ void PhApiWrapper::splitConference(int confId, int callId) {
 	if (callId1 != -1 && callId2 != -1) {
 		phStopConf(callId1, callId2);
 		callId1 = -1;
+		callId1WaitsForTalkingState = false;
 		callId2 = -1;
+		callId2WaitsForTalkingState = false;
 	} else {
 		if (callId1 == callId) {
 			closeCall(callId1);
 			callId1 = -1;
+			callId1WaitsForTalkingState = false;
 		} else if (callId2 == callId) {
-			callId2 = -1;
 			closeCall(callId2);
+			callId2 = -1;
+			callId2WaitsForTalkingState = false;
 		}
 	}
 }

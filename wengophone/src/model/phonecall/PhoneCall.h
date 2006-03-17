@@ -27,6 +27,7 @@
 
 #include <Event.h>
 #include <List.h>
+#include <NonCopyable.h>
 
 #include <string>
 
@@ -43,7 +44,7 @@ class WenboxPlugin;
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class PhoneCall {
+class PhoneCall : NonCopyable {
 public:
 
 	/**

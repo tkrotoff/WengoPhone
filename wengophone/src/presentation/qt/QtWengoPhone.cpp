@@ -167,6 +167,10 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionAdvancedConfiguration = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAdvancedConfiguration");
 	connect(actionAdvancedConfiguration, SIGNAL(triggered()), SLOT(showAdvancedConfig()));
 
+
+	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
+	connect(actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
+
 #if QT_VERSION == 0x040100
 	//FIXME
 	//QT 4.1.1 correctly creates following stuff from QTDesigner specs
@@ -445,9 +449,37 @@ void QtWengoPhone::showAdvancedConfig() {
 	configWindow->getWidget()->show();
 }
 
-void QtWengoPhone::setTrayMenu(){
-	if ( ! _trayMenu )
+
+//FIXME
+#include <model/phonecall/ConferenceCall.h>
+void QtWengoPhone::showCreateConferenceCall() {
+	QDialog * conferenceDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/phonecall/ConferenceCallWidget.ui", _wengoPhoneWindow));
+	QLineEdit * phoneNumber1LineEdit = Object::findChild<QLineEdit *>(conferenceDialog, "phoneNumber1LineEdit");
+	QLineEdit * phoneNumber2LineEdit = Object::findChild<QLineEdit *>(conferenceDialog, "phoneNumber2LineEdit");
+
+	int ret = conferenceDialog->exec();
+
+	if (ret == QDialog::Accepted) {
+		IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getActivePhoneLine();
+
+		if (phoneLine != NULL) {
+			ConferenceCall * confCall = new ConferenceCall(*phoneLine);
+			confCall->addPhoneNumber(phoneNumber1LineEdit->text().toStdString());
+			Thread::sleep(5);
+			confCall->addPhoneNumber(phoneNumber2LineEdit->text().toStdString());
+			confCall->start();
+		} else {
+			LOG_DEBUG("phoneLine is NULL");
+		}
+	}
+}
+//!FIXME
+
+
+void QtWengoPhone::setTrayMenu() {
+	if (!_trayMenu) {
 		_trayMenu = new QMenu(_wengoPhoneWindow);
+	}
 	_trayMenu->clear();
 	_trayMenu->addAction(tr("Open Wengophone"));
 	_trayMenu->addAction(tr("Status"));
@@ -456,7 +488,6 @@ void QtWengoPhone::setTrayMenu(){
 	_trayMenu->addAction(tr("Start a chat"));
 	_trayMenu->addAction(tr("Quit Wengophone"));
 	_trayIcon->setPopup(_trayMenu);
-
 }
 
 void QtWengoPhone::wrongProxyAuthenticationEventHandler(SipAccount & sender,

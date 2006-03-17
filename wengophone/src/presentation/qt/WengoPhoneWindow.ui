@@ -160,6 +160,16 @@
     <addaction name="actionShowHelp" />
     <addaction name="actionShowAbout" />
    </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>Wengo</string>
+    </property>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionOpenWengoAccount" />
+    <addaction name="actionEditMyProfile" />
+    <addaction name="separator" />
+    <addaction name="actionExit" />
+   </widget>
    <widget class="QMenu" name="menuContacts" >
     <property name="title" >
      <string>Contacts</string>
@@ -171,20 +181,11 @@
     <property name="title" >
      <string>Tools</string>
     </property>
+    <addaction name="actionCreateConferenceCall" />
     <addaction name="actionSendSms" />
     <addaction name="separator" />
     <addaction name="actionConfiguration" />
     <addaction name="actionAdvancedConfiguration" />
-   </widget>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>Wengo</string>
-    </property>
-    <addaction name="actionShowWengoAccount" />
-    <addaction name="actionOpenWengoAccount" />
-    <addaction name="actionEditMyProfile" />
-    <addaction name="separator" />
-    <addaction name="actionExit" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -259,6 +260,11 @@
   <action name="actionEditMyProfile" >
    <property name="text" >
     <string>&amp;Edit my profile</string>
+   </property>
+  </action>
+  <action name="actionCreateConferenceCall" >
+   <property name="text" >
+    <string>Create Conference Call</string>
    </property>
   </action>
  </widget>

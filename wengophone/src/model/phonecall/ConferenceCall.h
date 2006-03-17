@@ -24,6 +24,7 @@
 #include <List.h>
 
 #include <string>
+#include <vector>
 
 class IPhoneLine;
 class PhoneCall;
@@ -82,7 +83,7 @@ private:
 	IPhoneLine & _phoneLine;
 
 	/** Defines the vector of PhoneCall. */
-	typedef List < PhoneCall * > PhoneCalls;
+	typedef std::vector < PhoneCall * > PhoneCalls;
 
 	/** List of PhoneCall. */
 	PhoneCalls _phoneCallList;

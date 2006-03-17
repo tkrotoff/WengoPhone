@@ -251,6 +251,10 @@ private:
 	/** Changes audio devices inside PhApi. */
 	bool setAudioDevices();
 
+	//FIXME ugly for call conference
+	void phoneCallStateChangedEventHandler(SipWrapper & sender, int callId,
+			EnumPhoneCallState::PhoneCallState state, const std::string & from);
+
 	static PhApiCallbacks * _callbacks;
 
 	/** Checks if phApi has been initialized: if phInit() has been called. */

@@ -88,7 +88,7 @@ private Q_SLOTS:
 	void openWengoAccount();
 
 	void editMyProfile();
-	
+
 	void exitApplication();
 
 	void addContact();
@@ -112,7 +112,9 @@ private Q_SLOTS:
 	void sendSms();
 
 	void showAdvancedConfig();
-	
+
+	void showCreateConferenceCall();
+
 	void setTrayMenu();
 
 private:
@@ -163,10 +165,10 @@ private:
 	QComboBox * _phoneComboBox;
 
 	QTabWidget * _tabWidget;
-	
+
 	TrayIcon * _trayIcon;
-	
-	QMenu  * _trayMenu;
+
+	QMenu * _trayMenu;
 
 	QtSms * _qtSms;
     

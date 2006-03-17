@@ -125,6 +125,7 @@
         <file>login/setLoginWindow.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
         <file>phonecall/VideoWindow.ui</file>
+        <file>phonecall/ConferenceCallWidget.ui</file>
         <file>phoneline/PhoneLineWidget.ui</file>
         <file>sms/SmsWindow.ui</file>
         <file>config/AdvancedConfigWindow.ui</file>
