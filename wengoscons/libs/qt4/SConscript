@@ -121,8 +121,13 @@ if WengoOSWindows():
 			'uuid',
 			'advapi32',
 		]
-	if env.WengoQtEdition() != 'QT_EDITION_OPENSOURCE':
-		libs.append('QAxContainerd')
+
+		try:
+			if env.WengoQtEdition() != 'QT_EDITION_OPENSOURCE':
+				libs.append('QAxContainerd')
+		except:
+			print 'env.WengoQtEdition() error'
+
 	else:
 		libs += [
 			'QtCore4',
@@ -149,8 +154,11 @@ if WengoOSWindows():
 			'uuid',
 			'advapi32',
 		]
-	if env.WengoQtEdition() != 'QT_EDITION_OPENSOURCE':
-		libs.append('QAxContainer')
+		try:
+			if env.WengoQtEdition() != 'QT_EDITION_OPENSOURCE':
+				libs.append('QAxContainer')
+		except:
+			print 'env.WengoQtEdition() error'
 
 	if WengoCCMinGW():
 		include_path += [os.path.join(qtdir, 'mkspecs', 'win32-g++')]
