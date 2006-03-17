@@ -46,7 +46,7 @@
 #include <QDebug>
 
 static inline QPixmap scalePixmap(const char *name) {
-	return QPixmap(name).scaled(QSize(24, 24), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	return QPixmap(name).scaled(QSize(16, 16), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
 QtContactList::QtContactList(CContactList & cContactList)

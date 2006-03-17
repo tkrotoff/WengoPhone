@@ -82,6 +82,8 @@ public:
 
 	QString getAvatar() const { return _avatarPath;}
 
+	const PContact * getPContact() const { return &_pContact;}
+
 public Q_SLOTS:
 
 Q_SIGNALS:
@@ -110,6 +112,8 @@ protected:
 	Qt::MouseButton _mouseButton;
 
 	int _centeredText_y;
+
+	int _centeredPx_y;
 
 	QString _avatarPath;
 

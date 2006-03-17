@@ -16,6 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
+#include <Logger.h>
+
 #include "QtUserList.h"
 
 QtUserList * QtUserList::_instance = 0;
@@ -140,4 +143,12 @@ int	QtUserList::getHeight(const QString & userid) const {
 	if (user)
 		return user->getHeight();
  	else return 0;
+}
+const PContact * QtUserList::getPContact(const QString & userid) const {
+
+	QtUser * user = _userList[userid];
+	if (! user )
+		LOG_FATAL("User lookup failed !!!");
+
+	return user->getPContact();
 }

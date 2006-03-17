@@ -70,7 +70,11 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	px = spx->getPixmap(status);
     r = option.rect;
 	x = r.left();
-	painter->drawPixmap (x,r.top(),px);
+
+	_centeredPx_y = ((r.bottom()-r.top()) - px.size().height()) / 2;
+
+	painter->drawPixmap (x,r.top() + _centeredPx_y,px);
+
 	x+=px.width()+5;
 	r.setLeft(x);
 	// Draw the user

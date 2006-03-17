@@ -16,40 +16,57 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#include <presentation/PContact.h>
 #include "QtUserManager.h"
 #include "UserTreeEventManager.h"
 #include "QtUserList.h"
+#include "../login/QtEditContactProfile.h"
 
 QtUserManager::QtUserManager(QObject * parent, QTreeWidget * target) : QObject(parent)
 {
     _tree = target;
     _previous = NULL;
     _lastClicked=NULL;
-	
+
 	QtUserList::getInstance()->setTreeWidget(target);
 	target->setMouseTracking(true);
 	UserTreeEventManager * dnd = new UserTreeEventManager(this,target);
-    
+
 	connect (target,SIGNAL(itemSelectionChanged ()),this,SLOT(treeViewSelectionChanged()));
 	connect (target,SIGNAL(itemClicked (QTreeWidgetItem *,int )),this,SLOT(itemClicked(QTreeWidgetItem *,int)));
 	connect (dnd,SIGNAL(itemEntered ( QTreeWidgetItem *)),this,SLOT(itemEntered ( QTreeWidgetItem * )));
 	connect (dnd,SIGNAL(itemTimeout(QTreeWidgetItem *)),this,SLOT(openUserInfo(QTreeWidgetItem *)));
-	
+
     _menu = new QMenu(dynamic_cast<QWidget *>(parent));
-    _menu->addAction("Call");
-    _menu->addAction("Start Chat");
-    _menu->addAction("Send SMS");
-    _menu->addAction("Send a file");
-    _menu->addAction("Invite to conference");
+    _menu->addAction(tr("Call"));
+    _menu->addAction(tr("Start Chat"));
+    _menu->addAction(tr("Send SMS"));
+    _menu->addAction(tr("Send a file"));
+    _menu->addAction(tr("Invite to conference"));
     _menu->addSeparator();
-    _menu->addAction("Edit contact");
-    _menu->addAction("Delete contact");
+
+    QAction * action = _menu->addAction(tr("Edit contact"));
+    connect(action,SIGNAL(triggered(bool)),this,SLOT(editContact(bool)));
+
+    _menu->addAction(tr("Delete contact"));
     _menu->addSeparator();
-    _menu->addAction("Block contact");
-    _menu->addAction("Forward to Cell phone");
+
+    _menu->addAction(tr("Block contact"));
+    _menu->addAction(tr("Forward to Cell phone"));
     _menu->setWindowOpacity(0.97);
 }
+void QtUserManager::editContact(bool ){
+    QtUserList * ul = QtUserList::getInstance();
 
+    // The current selected item
+    QTreeWidgetItem * item = _tree->currentItem();
+
+	// The edit contact window
+	QtEditContactProfile editContact;
+	//editContact->set
+
+	editContact.exec();
+}
 void QtUserManager::treeViewSelectionChanged(){
 	closeUserInfo();
 }
@@ -62,7 +79,7 @@ void QtUserManager::itemEntered ( QTreeWidgetItem * item)
 	{
 		ul->mouseOn(item->text(0));
 		closeUserInfo();
-		
+
 	}
 	_tree->viewport()->update();
 }
@@ -106,14 +123,14 @@ void QtUserManager::openUserInfo( QTreeWidgetItem * i)
 }
 
 void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
-    
+
     QtUserList * ul = QtUserList::getInstance();
     QTreeWidgetItem * item = _tree->currentItem();
 
     QRect widgetSize = _tree->rect();
     QPoint  mousepos = _tree->mapFromGlobal(QCursor::pos());
-    
-    
+
+
 	if (  ! item->parent() )
 	{
 		if (_tree->isItemExpanded(item) )
@@ -121,12 +138,12 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
 		else
 			_tree->expandItem ( item );
 	}
-	
+
 	ul->mouseClicked(item->text(0),mousepos,widgetSize);
-	
+
 	if (mousepos.x() > ul->getIconsStartPosition(item->text(0)) )
 		return;
-	
+
 	if ( ul->getButton(item->text(0)) == Qt::RightButton)
 	{
 		_menu->popup(QCursor::pos());
@@ -137,7 +154,7 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
 	{
 		closeUserInfo();
 		_previous = item;
-		
+
 		if ( item->parent()){
 			openUserInfo(item);
 		}

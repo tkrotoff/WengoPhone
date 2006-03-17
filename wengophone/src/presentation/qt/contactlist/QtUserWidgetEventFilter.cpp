@@ -39,7 +39,7 @@ bool QtUserWidgetEventFilter::eventFilter(QObject *obj, QEvent *event){
 void QtUserWidgetEventFilter::paintEvent(QPaintEvent * event){
 	QPalette  p = _target->palette();
 	QLinearGradient lg( QPointF(1,1), QPointF(_target->rect().width(),1));
-	
+
 	lg.setSpread(QGradient::RepeatSpread);
 	lg.setColorAt ( 0, p.midlight().color());
 	lg.setColorAt ( .8, QColor(210, 216, 234));
@@ -55,14 +55,17 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter,QRect rect)
 	QtContactPixmap * spx;
 	int x;
 	QPalette  p = _target->palette();
-	
+
 	spx = QtContactPixmap::getInstance();
 	painter->setPen(p.text().color() );
 	// Draw the status pixmap
 	px = spx->getPixmap(_user->getStatus());
     r = rect;
 	x = r.left();
-	painter->drawPixmap (x,r.top(),px);
+
+	int centeredPx_y = (QtUser::UserSize - px.size().height()) / 2;
+
+	painter->drawPixmap (x,r.top() + centeredPx_y,px);
 	x+=px.width()+5;
 	r.setLeft(x);
 	// Draw the user
@@ -70,11 +73,11 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter,QRect rect)
 	QRect textRect = r;
 	int centeredText_y = (QtUser::UserSize - QFontMetrics(_target->font()).height() ) / 2;
 	textRect.setTop(textRect.top() + centeredText_y );
-	
+
 	painter->drawText(textRect,Qt::AlignLeft,_user->getUserName(),0);
-	
+
 	int _iconsStartPosition;
-	
+
 	x=rect.width()-1;
 	if ( _user->getStatus() != QtContactPixmap::ContactNotAvailable)
 	{
@@ -94,7 +97,7 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter,QRect rect)
 		}
 		else
 			x-=px.width();
-			
+
 		px = spx->getPixmap(QtContactPixmap::ContactIM);
 		if (_user->hasIM())
 		{

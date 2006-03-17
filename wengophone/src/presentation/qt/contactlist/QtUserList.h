@@ -24,6 +24,8 @@
 #include "QtContactPixmap.h"
 #include "QtUserList.h"
 
+class PContact;
+
 class QtUserList
 {
 public:
@@ -58,6 +60,8 @@ public:
 	int	 getHeight(const QString & userid) const;
 
 	void setTreeWidget(QTreeWidget * tree) { _tree=tree;}
+
+	const PContact * getPContact(const QString & userid) const;
 
 	QTreeWidget * getTreeWidget() const {return _tree;}
 
