@@ -33,7 +33,7 @@ using namespace std;
 QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode) : QObject() {
 	_browserWidget = new QWidget(parent);
 
-#ifdef OS_WINDOW
+#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
 	_ieBrowser = NULL;
 #endif
 	_qtBrowser = NULL;
@@ -49,7 +49,7 @@ void QtBrowser::setUrl(const std::string & url) {
 	LOG_DEBUG(url);
 	_url = QString::fromStdString(url);
 	if (_mode == IEMODE) {
-#ifdef OS_WINDOWS
+#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
 		_ieBrowser->dynamicCall("Navigate(const QString&)", _url);
 #endif
 	} else {
@@ -87,7 +87,7 @@ void QtBrowser::beforeNavigate(const QString & url, int, const QString &, const 
 
 bool QtBrowser::setMode(BrowserMode mode) {
 	//IEMODE is only available on Windows
-#ifndef OS_WINDOWS
+#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
 	if (mode == IEMODE) {
 		_mode = QTMODE;
 		initBrowser();
@@ -100,14 +100,14 @@ bool QtBrowser::setMode(BrowserMode mode) {
 }
 
 void QtBrowser::initBrowser() {
-#ifndef OS_WINDOWS
+#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
 	if (_mode == IEMODE) {
 		LOG_FATAL("IEMODE not allowed");
 	}
 #endif
 
 	if (_mode == QTMODE) {
-#ifdef OS_WINDOWS
+#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
 		//clean ie browser
 		if (_ieBrowser) {
 			_layout->removeWidget(_ieBrowser);
@@ -123,7 +123,7 @@ void QtBrowser::initBrowser() {
 		_layout->addWidget(_qtBrowser);
 
 	} else {
-#ifdef OS_WINDOWS
+#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
 		//clean qt browser
 		if (_qtBrowser) {
 			_layout->removeWidget(_qtBrowser);
