@@ -1,0 +1,30 @@
+env = WengoGetEnvironment()
+
+WengoPhoneBuildIdTemplate = """
+#include "WengoPhoneBuildId.h"
+const unsigned long long WengoPhoneBuildId::BUILDID = %(buildId)uULL;
+const char * WengoPhoneBuildId::VERSION = "%(version)s";
+const unsigned long long WengoPhoneBuildId::REVISION = %(revision)uULL;
+const char * WengoPhoneBuildId::SOFTPHONE_NAME = "%(sofphoneName)s";
+const char * WengoPhoneBuildId::SOFTPHONE_DESCRIPTION = "%(sofphoneDescription)s";
+"""
+
+WengoPhoneBuildId = {
+	'buildId': WengoGetCurrentDateTime(),
+	'version': '0.13',
+	'revision': WengoGetSubversionRevision(),
+	'sofphoneName': 'wengo',
+	'sofphoneDescription': 'WengoPhone is a VoIP application',
+}
+
+WengoSetVariable('WengoPhoneBuildId', WengoPhoneBuildId)
+
+#If you don't want WengoPhoneBuildIdFile to be generated
+#uncomment this line and comment the other one
+#If you do so, never ever commit this file!
+#WengoPhoneBuildIdFile = 'WengoPhoneBuildId.cpp'
+
+#Generates WengoPhoneBuildIdFile with proper buildId number and svn revision
+WengoPhoneBuildIdFile = env.WengoCreateFile('WengoPhoneBuildId.cpp', WengoPhoneBuildIdTemplate, WengoPhoneBuildId)
+
+WengoSetVariable('WengoPhoneBuildIdFile', WengoPhoneBuildIdFile)

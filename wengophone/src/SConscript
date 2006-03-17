@@ -1,5 +1,7 @@
 env = WengoGetEnvironment()
 
+env.SConscript('WengoPhoneBuildIdSConscript')
+
 libs = [
 	'wengoutil',
 	'imwrapper',
@@ -16,42 +18,8 @@ include_path = ['.']
 defines = {}
 headers = []
 
-WengoPhoneBuildIdTemplate = """
-#include "WengoPhoneBuildId.h"
-const unsigned long long WengoPhoneBuildId::BUILDID = %(buildId)uULL;
-const char * WengoPhoneBuildId::VERSION = "%(version)s";
-const unsigned long long WengoPhoneBuildId::REVISION = %(revision)uULL;
-const char * WengoPhoneBuildId::SOFTPHONE_NAME = "%(sofphoneName)s";
-"""
-
-WengoPhoneBuildId = {
-	'buildId': WengoGetCurrentDateTime(),
-	'version': '0.13',
-	'revision': WengoGetSubversionRevision(),
-	'sofphoneName': 'wengo'
-}
-
-WengoSetVariable('WengoPhoneBuildId', WengoPhoneBuildId)
-
-env2 = WengoGetEnvironment()
-env2.Append( CPPDEFINES = {
-                         'DD_BUILDID'	     : str(WengoPhoneBuildId['buildId'])+'LL',
-                         'DD_VERSION'	     : WengoPhoneBuildId['version'],
-                         'DD_REVISION'	     : WengoPhoneBuildId['revision'],
-                         'DD_SOFTPHONE_NAME' : WengoPhoneBuildId['sofphoneName']
-                         }
-             )
-
-buildid = env2.Object( source = 'WengoPhoneBuildId.cpp' )
-env2.AlwaysBuild(buildid)
-env2.Alias('buildid',  buildid)
-
-
-
-
-
 sources = [
-#	env.WengoCreateFile('WengoPhoneBuildId.cpp', WengoPhoneBuildIdTemplate, WengoPhoneBuildId),
+	WengoGetVariable('WengoPhoneBuildIdFile'),
 	'model/WengoPhone.cpp',
 	'model/SipCallbacks.cpp',
 	'model/config/Config.cpp',
@@ -123,4 +91,4 @@ sources = [
 env.WengoCopyToBuildDir('../sounds', 'sounds')
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
-env.WengoStaticLibrary('wengophone', sources + [buildid])
+env.WengoStaticLibrary('wengophone', sources)

@@ -20,17 +20,14 @@
 #ifndef WENGOPHONEBUILDID_H
 #define WENGOPHONEBUILDID_H
 
-// #include <NonCopyable.h>
+#include <NonCopyable.h>
 
 /**
  * Identifies uniquely a revision of WengoPhone.
  *
  * @author Tanguy Krotoff
  */
-class WengoPhoneBuildId {
-  WengoPhoneBuildId(const WengoPhoneBuildId &);
-  WengoPhoneBuildId& operator=(const WengoPhoneBuildId &);
-
+class WengoPhoneBuildId : NonCopyable {
 public:
 
 	/**
@@ -60,6 +57,13 @@ public:
 	 * WL_TAG
 	 */
 	static const char * SOFTPHONE_NAME;
+
+	/**
+	 * Softphone description.
+	 *
+	 * Used for Debian and RPM packages.
+	 */
+	static const char * SOFTPHONE_DESCRIPTION;
 };
 
 #endif	//WENGOPHONEBUILDID_H
