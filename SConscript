@@ -27,6 +27,7 @@ projects = [
 	'libs/pixertool',
 	'libs/wenbox',
 	'libs/webcam',
+	'libs/owbrowser',
 	'wifo',
 	'libs/sipwrapper',
 	'libs/imwrapper/src/gaim',
