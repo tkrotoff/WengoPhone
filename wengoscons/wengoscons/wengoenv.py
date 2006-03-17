@@ -1376,7 +1376,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		self.__saveCurrentSourcePath()
 		doc = self.Command(os.path.join(self.__getSourcePath(), 'doc'), 'Doxyfile', 'cd $SOURCE_PATH & doxygen')
 		#FIXME duplicate alias cf warning message from SCons
-		#self.Alias('doxygen', doc)
+		self.Alias('doxygen', doc)
 
 	def WengoCompileWindowsResource(self, rcFile):
 		"""
@@ -1395,6 +1395,29 @@ class WengoSConsEnvironment(SConsEnvironment):
 			return self.RES(rcFile)
 		return None 
 
+        def WengoQtEdition(self):
+            """
+            Get edition name of Qt setup.
+            """
+
+            import re
+            matched = False
+            try:
+                qconfig_file = open(os.path.join(os.environ['QTDIR'], 'include', 'QtCore', 'qconfig.h'))
+            except os.IOError:
+                pass
+            regexp = re.compile('^#\s*define\s+qt_edition\s+.*(\w+)', re.IGNORECASE)
+            for line in qconfig_file.readlines():
+                match = regexp.match(line)
+                if match:
+                    matched = True
+                    print 'Found Qt Edition : %s' % match.group(1)
+                    break
+            if matched:
+                return match.group(1)
+            else:
+                raise 'QtEditionNotFound'
+            
 	def WengoCompileQt4Resource(self, qrcFile):
 		"""
 		Compiles the Qt4 resource file .qrc.
