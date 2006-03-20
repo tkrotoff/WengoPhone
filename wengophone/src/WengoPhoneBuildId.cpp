@@ -1,6 +1,8 @@
 
 #include "WengoPhoneBuildId.h"
-#define stringize(x) #x
+
+#define stringize2(x) #x
+#define stringize(x) stringize2(x)
 
 const unsigned long long WengoPhoneBuildId::BUILDID = DD_BUILDID;
 const char * WengoPhoneBuildId::VERSION = stringize(DD_VERSION);
