@@ -1376,7 +1376,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		self.__saveCurrentSourcePath()
 		doc = self.Command(os.path.join(self.__getSourcePath(), 'doc'), 'Doxyfile', 'cd $SOURCE_PATH & doxygen')
 		#FIXME duplicate alias cf warning message from SCons
-		self.Alias('doxygen', doc)
+		#self.Alias('doxygen', doc)
 
 	def WengoCompileWindowsResource(self, rcFile):
 		"""
