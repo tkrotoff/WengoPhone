@@ -20,6 +20,8 @@
 #ifndef STREETADDRESS_H
 #define STREETADDRESS_H
 
+#include <Serializable.h>
+
 #include <string>
 
 /**
@@ -28,31 +30,18 @@
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class StreetAddress {
+class StreetAddress : public Serializable {
 public:
 
-	StreetAddress() { }
+	StreetAddress();
 
-	StreetAddress(const StreetAddress & streetAddress) {
-		initialize(streetAddress);
-	}
+	StreetAddress(const StreetAddress & streetAddress);
 
-	~StreetAddress() { }
+	~StreetAddress();
 
-	StreetAddress & operator=(const StreetAddress & streetAddress) {
-		if (&streetAddress != this) {
-			initialize(streetAddress);
-		}
-		return *this;
-	}
+	StreetAddress & operator=(const StreetAddress & streetAddress);
 
-	bool operator == (const StreetAddress & streetAddress) const {
-		return ((_street == streetAddress._street)
-			&& (_stateProvince == streetAddress._stateProvince)
-			&& (_city == streetAddress._city)
-			&& (_zipCode == streetAddress._zipCode)
-			&& (_country == streetAddress._country));
-	}
+	bool operator == (const StreetAddress & streetAddress) const;
 
 	void setStreet(const std::string & street) { _street = street; }
 	const std::string & getStreet() const { return _street; }
@@ -69,16 +58,14 @@ public:
 	void setCountry(const std::string & country) { _country = country; }
 	const std::string & getCountry() const { return _country; }
 
+	std::string serialize();
+	
+	bool unserialize(const std::string & data);
+	
 private:
 
 	/** Factorizes code between contructor and copy contructor. */
-	void initialize(const StreetAddress & streetAddress) {
-		_street = streetAddress._street;
-		_stateProvince = streetAddress._stateProvince;
-		_city = streetAddress._city;
-		_zipCode = streetAddress._zipCode;
-		_country = streetAddress._country;
-	}
+	void initialize(const StreetAddress & streetAddress);
 
 	std::string _street;
 	std::string _stateProvince;

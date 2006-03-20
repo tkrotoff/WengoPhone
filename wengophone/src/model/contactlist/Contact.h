@@ -106,6 +106,9 @@ public:
 
 	void setOtherPhone(const std::string & otherPhone) { _otherPhone = otherPhone; contactModifiedEvent(*this); }
 	const std::string & getOtherPhone() const { return _otherPhone; }
+	
+	void setWengoPhoneNumber(const std::string & wengoPhoneNumber) { _wengoPhoneNumber = wengoPhoneNumber; contactModifiedEvent(*this); }
+	const std::string & getWengoPhoneNumber() const { return _wengoPhoneNumber; }
 
 	void setFax(const std::string & fax) { _fax = fax; contactModifiedEvent(*this); }
 	const std::string & getFax() const { return _fax; }
@@ -350,9 +353,6 @@ private:
 	/** Factorizes code between contructor and copy contructor. */
 	void initialize(const Contact & contact);
 
-	/** Return all IMContact in a vCard string format. */
-	std::string imContactsToString();
-
 	/**
 	 * @return true when a wengo id has been declared and this
 	 * id is online.
@@ -370,6 +370,7 @@ private:
 	std::string _mobilePhone;
 	std::string _homePhone;
 	std::string _workPhone;
+	std::string _wengoPhoneNumber;
 	std::string _otherPhone;
 	std::string _preferredNumber;
 	std::string _fax;

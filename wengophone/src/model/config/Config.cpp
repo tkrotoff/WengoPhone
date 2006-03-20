@@ -104,7 +104,7 @@ Config::Config(const std::string & name) {
 	std::string resourcesPath;
 	_name = name;
 
-	_keyDefaultValueMap[CONFIG_DIR_KEY] = File::getApplicationDirPath();
+	_keyDefaultValueMap[CONFIG_DIR_KEY] = std::string("");
 
 #if defined(OS_WINDOWS)
 	resourcesPath = File::getApplicationDirPath();

@@ -228,16 +228,6 @@ void Contact::unblock() {
 	_blocked = false;
 }
 
-string Contact::imContactsToString() {
-	string result;
-
-	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; it++) {
-		//result += result + (*it).serialize();
-	}
-
-	return result;
-}
-
 bool Contact::hasIM() const {
 	return (getPresenceState() != EnumPresenceState::PresenceStateOffline);
 }
