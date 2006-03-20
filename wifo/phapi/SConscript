@@ -317,3 +317,10 @@ else:
 phapi_py_env.WengoAddIncludePath([python_include])
 phapi_py_env.WengoAddLibPath([python_lib])
 phapi_py_env.WengoSharedLibrary("pyphapi", "pyphapi.c")
+
+
+
+tenv = WengoGetEnvironment()
+tec = tenv.Program(tqrget = 'testec',  source = ['testec.c', 'spxec.c', 'spxecfft.c'],  LIBS='m')
+Alias('testec',  tec)
+ 
