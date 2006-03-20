@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,22 +20,13 @@
 #ifndef WENGOPHONEBUILDID_H
 #define WENGOPHONEBUILDID_H
 
-//#include <NonCopyable.h>
-
 /**
  * Identifies uniquely a revision of WengoPhone.
  *
  * @author Tanguy Krotoff
  */
 class WengoPhoneBuildId {
-  // avoid copying of this object
-  WengoPhoneBuildId(const WengoPhoneBuildId &);
-  WengoPhoneBuildId& operator=(const WengoPhoneBuildId &);
-
-
 public:
-        // This constructor is here to avoid warning in some versions of GCC
-        WengoPhoneBuildId() { }
 
 	/**
 	 * Build id is the WengoPhone compilation date/time (e.g 2005/12/07 - 18:18:09)
@@ -65,24 +56,13 @@ public:
 	 */
 	static const char * SOFTPHONE_NAME;
 
-	/**
-	 * Softphone copyright.
-	 */
-	static const char * COPYRIGHT;
+private:
 
-	/**
-	 * Softphone license.
-	 *
-	 * GNU GPL license header.
-	 */
-	static const char * LICENSE;
+	/** Avoid copying of this object. */
 
-	/**
-	 * Softphone description.
-	 *
-	 * Used for Debian and RPM packages.
-	 */
-	static const char * DESCRIPTION;
+	WengoPhoneBuildId() { }
+	WengoPhoneBuildId(const WengoPhoneBuildId &);
+	WengoPhoneBuildId& operator=(const WengoPhoneBuildId &);
 };
 
 #endif	//WENGOPHONEBUILDID_H
