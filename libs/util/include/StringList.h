@@ -21,6 +21,7 @@
 #define STRINGLIST_H
 
 #include <List.h>
+#include <Serializable.h>
 
 #include <string>
 #include <list>

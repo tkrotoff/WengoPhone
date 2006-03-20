@@ -19,6 +19,8 @@
 
 #include <Settings.h>
 
+#include <StringListXMLSerializer.h>
+#include <StringList.h>
 #include <Logger.h>
 
 using namespace std;
@@ -27,7 +29,21 @@ Settings::Settings() {
 }
 
 Settings::Settings(const Settings & settings) {
+	copy(settings);
+}
+
+Settings & Settings::operator = (const Settings & settings) {
+	copy(settings);
+	return *this;
+}
+
+void Settings::copy(const Settings & settings) {
 	_keyMap = settings._keyMap;
+	//valueChangedEvent = settings.valueChangedEvent;
+}
+
+Settings::~Settings() {
+	
 }
 
 StringList Settings::getAllKeys() const {
@@ -147,14 +163,6 @@ boost::any Settings::getAny(const std::string & key, const boost::any & defaultV
 	}
 
 	return defaultValue;
-}
-
-std::string Settings::serialize() {
-	return "";
-}
-
-bool Settings::unserialize(const std::string & /*data*/) {
-	return true;
 }
 
 bool Settings::isBoolean(const boost::any & value) {

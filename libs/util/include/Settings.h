@@ -38,7 +38,8 @@
  * @author Philippe Bernery
  * @author Tanguy Krotoff
  */
-class Settings : public Serializable {
+class Settings {
+	friend class SettingsXMLSerializer;
 public:
 
 	/**
@@ -53,9 +54,9 @@ public:
 
 	Settings(const Settings & settings);
 
-	Settings operator = (const Settings & settings) {
-		return Settings(settings);
-	}
+	Settings & operator = (const Settings & settings);
+
+	virtual ~Settings();
 
 	/**
 	 * Gets all the keys.
@@ -143,10 +144,6 @@ public:
 		return _keyMap.size();
 	}
 
-	std::string serialize();
-
-	bool unserialize(const std::string & data);
-
 	/**
 	 * Checks if the value is a boolean.
 	 *
@@ -181,11 +178,11 @@ public:
 
 protected:
 
+	virtual void copy(const Settings & settings);
+
 	typedef std::map<const std::string, boost::any> Keys;
-
-private:
-
 	Keys _keyMap;
+
 };
 
 #endif	//SETTINGS_H

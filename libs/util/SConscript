@@ -3,7 +3,8 @@ env = WengoGetEnvironment()
 libs = [
 	'boost',
 	'wengocurl',
-	'global'
+	'global',
+	'tinyxml',
 ]
 lib_path = []
 include_path = ['include']
@@ -13,12 +14,14 @@ sources = [
 	'src/Startup.cpp',
 	'src/WebBrowser.cpp',
 	'src/StringList.cpp',
+	'src/StringListXMLSerializer.cpp',
 	'src/File.cpp',
 	'src/Settings.cpp',
 	'src/Base64.cpp',
 	'src/Timer.cpp',
 	'src/Logger.cpp',
 	'src/Settings.cpp',
+	'src/SettingsXMLSerializer.cpp',
 	'src/http/HttpRequest.cpp',
 	'src/http/NullHttpRequest.cpp',
 	'src/http/CurlHttpRequest.cpp',

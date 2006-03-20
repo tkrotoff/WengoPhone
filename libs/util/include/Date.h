@@ -21,6 +21,7 @@
 #define DATE_H
 
 #include <ctime>
+#include <string>
 
 /**
  * Represent a Date.
@@ -122,6 +123,13 @@ public:
 	 */
 	void setYear(unsigned year) {
 		_year = year;
+	}
+
+	/**
+	 * @return a string representing the date. (e.g: "dd/mm/yyyy")
+	 */
+	std::string toString() const {
+		return String::fromNumber(_day) + "/" + String::fromNumber(_month) + "/" + String::fromNumber(_year);
 	}
 
 private:
