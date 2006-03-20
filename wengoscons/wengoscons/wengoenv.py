@@ -1403,7 +1403,10 @@ class WengoSConsEnvironment(SConsEnvironment):
             import re
             matched = False
             try:
-                qconfig_file = open(os.path.join(os.environ['QTDIR'], 'include', 'QtCore', 'qconfig.h'))
+                if WengoOSPosix():
+                    qconfig_file = open(os.path.join(os.environ['QTDIR'], 'include', 'QtCore', 'qconfig.h'))
+                else :
+                    qconfig_file = open(os.path.join(os.environ['QTDIR'], 'src', 'corelib', 'global', 'qconfig.h'))
             except os.IOError:
                 pass
             regexp = re.compile('^#\s*define\s+qt_edition\s+.*(\w+)', re.IGNORECASE)
