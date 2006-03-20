@@ -135,7 +135,6 @@ if WengoOSWindows():
 			'QtDesigner4',
 			'QtXml4',
 			'QtSvg4',
-			'QAxContainer',
 			'qtmain',
 
 			'gdi32',
