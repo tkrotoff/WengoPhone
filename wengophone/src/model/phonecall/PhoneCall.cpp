@@ -111,6 +111,13 @@ void PhoneCall::mute() {
 	LOG_DEBUG("call muted");
 }
 
+void PhoneCall::blindTransfer(const std::string & phoneNumber) {
+	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _phoneLine.getSipAccount().getRealm());
+
+	_phoneLine.getSipWrapper().blindTransfer(_callId, sipAddress.getRawSipAddress());
+	LOG_DEBUG("call transfered to=" + phoneNumber);
+}
+
 void PhoneCall::setState(EnumPhoneCallState::PhoneCallState status) {
 	static int timeStart = -1;
 
@@ -174,4 +181,3 @@ void PhoneCall::playTone(EnumTone::Tone tone) {
 void PhoneCall::playSoundFile(const std::string & soundFile) {
 	_phoneLine.getSipWrapper().playSoundFile(_callId, soundFile);
 }
-

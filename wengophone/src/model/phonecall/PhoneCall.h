@@ -100,6 +100,11 @@ public:
 	void mute();
 
 	/**
+	 * @see SipWrapper::blindTransfer()
+	 */
+	void blindTransfer(const std::string & phoneNumber);
+
+	/**
 	 * @see SipWrapper::playTone()
 	 */
 	void playTone(EnumTone::Tone tone);

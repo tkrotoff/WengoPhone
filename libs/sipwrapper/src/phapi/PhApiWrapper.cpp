@@ -238,6 +238,10 @@ void PhApiWrapper::resumeCall(int callId) {
 void PhApiWrapper::muteCall(int callId) {
 }
 
+void PhApiWrapper::blindTransfer(int callId, const std::string & sipAddress) {
+	phBlindTransferCall(callId, sipAddress.c_str());
+}
+
 void PhApiWrapper::playTone(int callId, EnumTone::Tone tone) {
 	static const int INBAND_DTMF = 1;
 

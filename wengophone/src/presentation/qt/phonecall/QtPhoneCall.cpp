@@ -90,6 +90,11 @@ void QtPhoneCall::initThreadSafe() {
 	_addContactButton->disconnect();
 	connect(_addContactButton, SIGNAL(clicked()), SLOT(addContactButtonClicked()));
 
+	//transferButton
+	QPushButton * transferButton = Object::findChild<QPushButton *>(_phoneCallWidget, "transferButton");
+	transferButton->disconnect();
+	connect(transferButton, SIGNAL(clicked()), SLOT(transferButtonClicked()));
+
 	_qtWengoPhone->addPhoneCall(this);
 }
 
@@ -177,4 +182,10 @@ void QtPhoneCall::addContactButtonClicked() {
 	}
 	QtAddContact * qtAddContact = new QtAddContact(_cPhoneCall.getCWengoPhone(), _phoneCallWidget, callAddress);
 	LOG_DEBUG("add contact=" + callAddress);
+}
+
+void QtPhoneCall::transferButtonClicked() {
+	static QLineEdit * transferPhoneNumberLineEdit = Object::findChild<QLineEdit *>(_phoneCallWidget, "transferPhoneNumberLineEdit");
+
+	_cPhoneCall.blindTransfer(transferPhoneNumberLineEdit->text().toStdString());
 }

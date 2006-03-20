@@ -141,15 +141,19 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 	case phDTMF:
 		break;
 
+	//Transfer progress
 	case phXFERPROGRESS:
 		break;
 
+	//Transfer OK
 	case phXFEROK:
 		break;
 
+	//Transfer failed
 	case phXFERFAIL:
 		break;
 
+	//Transfer request
 	case phXFERREQ:
 		break;
 

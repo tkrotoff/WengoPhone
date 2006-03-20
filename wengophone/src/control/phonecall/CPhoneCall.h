@@ -74,6 +74,11 @@ public:
 	void resume();
 
 	/**
+	 * @see PhoneCall::blindTransfer()
+	 */
+	void blindTransfer(const std::string & phoneNumber);
+
+	/**
 	 * Gets the peer SIP address (phone number) of the current call.
 	 *
 	 * @return SIP address

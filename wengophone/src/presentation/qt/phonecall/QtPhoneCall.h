@@ -69,6 +69,8 @@ private Q_SLOTS:
 
 	void addContactButtonClicked();
 
+	void transferButtonClicked();
+
 private:
 
 	void initThreadSafe();

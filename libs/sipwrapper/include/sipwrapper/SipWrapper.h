@@ -226,6 +226,14 @@ public:
 	virtual void muteCall(int callId) = 0;
 
 	/**
+	 * Blind transfer the specified call to another party.
+	 *
+	 * @param callId id of the phone call to transfer
+	 * @param sipAddress transfer target
+	 */
+	virtual void blindTransfer(int callId, const std::string & sipAddress) = 0;
+
+	/**
 	 * Sends a DTMF to a given phone call.
 	 *
 	 * @param callId phone call id to send a DTMF

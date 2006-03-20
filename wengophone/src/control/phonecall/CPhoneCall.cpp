@@ -165,3 +165,7 @@ void CPhoneCall::hold() {
 void CPhoneCall::resume() {
 	_phoneCall.resume();
 }
+
+void CPhoneCall::blindTransfer(const std::string & phoneNumber) {
+	_phoneCall.blindTransfer(phoneNumber);
+}
