@@ -64,7 +64,7 @@ string Contact::serialize() {
 		<FAMILLY>" + getLastName() + "</FAMILLY>\n\
 	</N>\n";
 
-	result = result + imContactsToString();
+	//result = result + imContactsToString();
 
 	result = result + "</vCard>\n";
 
