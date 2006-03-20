@@ -36,6 +36,8 @@
 #include "presence/PresenceHandler.h"
 #include "connect/ConnectHandler.h"
 #include "sms/Sms.h"
+#include "config/ConfigManager.h"
+#include "config/Config.h"
 
 #include <sipwrapper/SipWrapper.h>
 
@@ -72,10 +74,13 @@ WengoPhone::~WengoPhone() {
 		delete _sms;
 	}
 
-	_imAccountHandler.save();
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	_imAccountHandler.save(config.getConfigDir() + "imaccounts.xml");
 }
 
 void WengoPhone::init() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 	//Creates the history
 	//historyCreatedEvent
 
@@ -93,7 +98,7 @@ void WengoPhone::init() {
 	_imContactListHandler = new IMContactListHandler(*this);
 
 	//Loads IMAccounts
-	_imAccountHandler.load();
+	_imAccountHandler.load(config.getConfigDir() + "imaccounts.xml");
 
 	//Creates and loads the contact list
 	_contactList = new ContactList(*this);
@@ -278,6 +283,8 @@ void WengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::
 		_connectHandler->connect(*_imAccountHandler.find(imAccount));
 
 		break;
+	default:
+		;
 	}
 }
 
