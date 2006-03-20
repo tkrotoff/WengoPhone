@@ -3,12 +3,12 @@
  *
  * If you add a global variable, declare it here as commented.
  */
-;!define PRODUCT_VERSION "0.11"
+;!define PRODUCT_VERSION "0.13"
 ;!define DEBUG
 ;!define BUILD_DIR "..\..\release-symbols\"
 ;!define PRODUCT_NAME "WengoPhone"
 ;!define INSTALLER_NAME "WengoPhone-setup-0.13.exe"
-;!define QTDIR "C:\Qt\4.4.1\"
+;!define QTDIR "C:\Qt\4.1.1\"
 
 !define PRODUCT_PUBLISHER "Wengo"
 !define PRODUCT_WEB_SITE "http://www.wengo.com"
@@ -63,11 +63,13 @@ Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 /** Installer name (e.g. WengoPhone-setup-0.13.exe). */
 OutFile "${INSTALLER_NAME}"
 
+!include "nsProcess.nsh"
+
 !include "isUserAdmin.nsi"
 !include "writeToFile.nsi"
 Function .onInit
 	/** Kills running qtwengophone.exe */
-	nsProcess::KillProcess "qtwengophone.exe" .R0
+	${nsProcess::KillProcess} "qtwengophone.exe" $R0
 
 	!insertmacro MUI_LANGDLL_DISPLAY
 

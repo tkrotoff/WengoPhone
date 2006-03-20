@@ -10,22 +10,22 @@ nsis_defines['PRODUCT_NAME'] = 'WengoPhoneNG'
 nsis_defines['QTDIR'] = os.environ['QTDIR']
 
 if WengoDebugMode():
-    compilation_mode = 'debug'
-    nsis_defines['DEBUG'] = ''
+	compilation_mode = 'debug'
+	nsis_defines['DEBUG'] = ''
 elif WengoReleaseMode():
-    compilation_mode = 'release'
+	compilation_mode = 'release'
 else:
-    compilation_mode = 'release-symbols'
-    
+	compilation_mode = 'release-symbols'
+
 installer_tag = WengoGetConsoleArgument('installer-tag')
 if installer_tag != '' and installer_tag != None:
 	installer_name = nsis_defines['PRODUCT_NAME'] + '-setup-'\
-                         + compilation_mode + '-' + nsis_defines['PRODUCT_VERSION'] + '-%s.exe'\
-                         % installer_tag
+			+ compilation_mode + '-' + nsis_defines['PRODUCT_VERSION'] + '-%s.exe'\
+			% installer_tag
 else:
 	installer_name = nsis_defines['PRODUCT_NAME'] + '-setup-'\
-                         + compilation_mode + '-'\
-                         + nsis_defines['PRODUCT_VERSION'] + '.exe'
+			+ compilation_mode + '-'\
+			+ nsis_defines['PRODUCT_VERSION'] + '.exe'
 
 nsis_defines['INSTALLER_NAME'] = installer_name
 

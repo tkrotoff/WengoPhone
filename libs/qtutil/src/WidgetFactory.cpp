@@ -20,16 +20,16 @@
 #include <WidgetFactory.h>
 
 #include <QFile>
-#include <QtDesigner/QFormBuilder>
 #include <QMessageBox>
+#include <QtUiTools>
 
 #include <Logger.h>
 
 QWidget * WidgetFactory::create(const QString & uiFile, QWidget * parent) {
-	QFormBuilder builder;
+	QUiLoader loader;
 	QFile file(uiFile);
 	file.open(QFile::ReadOnly);
-	QWidget * widget = builder.load(&file, parent);
+	QWidget * widget = loader.load(&file, parent);
 	file.close();
 
 	const QString errorMsg = "Wrong ui file: " + uiFile;
