@@ -26,14 +26,12 @@
 #include <set>
 #include <string>
 
-class IMAccountHandlerDataLayer;
-
 /**
  * Instant Messaging account list.
  *
  * @author Philippe Bernery
  */
-class IMAccountHandler : public std::set<IMAccount>, public Serializable {
+class IMAccountHandler : public std::set<IMAccount> {
 public:
 
 	IMAccountHandler();
@@ -45,24 +43,6 @@ public:
 	 * @return IMAccount with protocol 'protocol'
 	 */
 	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
-
-	/**
-	 * Load the IMAccounts.
-	 */
-	void load(const std::string & url);
-
-	/**
-	 * Save the IMAccounts.
-	 */
-	void save(const std::string & url);
-
-	std::string serialize();
-
-	bool unserialize(const std::string & data);
-
-private:
-
-	IMAccountHandlerDataLayer  * _dataLayer;
 
 };
 

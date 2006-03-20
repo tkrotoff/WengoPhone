@@ -19,6 +19,7 @@
 
 #include <imwrapper/IMAccountHandlerFileDataLayer.h>
 
+#include <imwrapper/IMAccountHandlerXMLSerializer.h>
 #include <imwrapper/IMAccountHandler.h>
 
 #include <File.h>
@@ -43,7 +44,8 @@ bool IMAccountHandlerFileDataLayer::load(const string & url) {
 		string data = file.read();
 		file.close();
 
-		_imAccountHandler.unserialize(data);
+		IMAccountHandlerXMLSerializer serializer(_imAccountHandler);
+		serializer.unserialize(data);
 
 		LOG_DEBUG("file " + url + " loaded");
 		return true;
@@ -56,7 +58,8 @@ bool IMAccountHandlerFileDataLayer::save(const string & url) {
 	FileWriter file(url);
 	LOG_DEBUG("saving " + url);
 
-	file.write(_imAccountHandler.serialize());
+	IMAccountHandlerXMLSerializer serializer(_imAccountHandler);
+	file.write(serializer.serialize());
 	file.close();
 
 	LOG_DEBUG(url + " saved");

@@ -53,22 +53,3 @@ bool IMAccount::operator < (const IMAccount & imAccount) const {
 	return ((_login < imAccount._login)
 			|| ((_login == imAccount._login) && (_protocol < imAccount._protocol)));
 }
-
-string IMAccount::serialize() {
-	string result;
-	EnumIMProtocol enumIMProtocol;
-
-	result += "<account protocol=\"" + enumIMProtocol.toString(_protocol) + "\">\n";
-	result += ("<login>" + _login + "</login>\n");
-	result += ("<password>" + Base64::encode(_password) + "</password>\n");
-	SettingsXMLSerializer serializer(_imAccountParameters);
-	result += serializer.serialize();
-	result += "</account>\n";
-
-	return result;
-}
-
-bool IMAccount::unserialize(const std::string & data) {
-	IMAccountParser parser(*this, data);
-	return parser.parse();
-}

@@ -37,45 +37,8 @@ set<IMAccount *> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMPro
 	return result;
 }
 
-IMAccountHandler::IMAccountHandler() 
-: _dataLayer(NULL) {
+IMAccountHandler::IMAccountHandler() {
 }
 
 IMAccountHandler::~IMAccountHandler() {
 }
-
-void IMAccountHandler::load(const string & url) {
-	if (!_dataLayer) {
-		_dataLayer = new IMAccountHandlerFileDataLayer(*this);
-	}
-
-	_dataLayer->load(url);
-}
-
-void IMAccountHandler::save(const string & url) {
-	if (!_dataLayer) {
-		_dataLayer = new IMAccountHandlerFileDataLayer(*this);
-	}
-
-	_dataLayer->save(url);
-}
-
-std::string IMAccountHandler::serialize() {
-	string result;
-
-	result += "<imaccounts>\n";
-
-	for (IMAccountHandler::const_iterator it = begin() ; it != end() ; it++) {
-		result += ((IMAccount &)(*it)).serialize();
-	}
-
-	result += "</imaccounts>\n";
-
-	return result;
-}
-
-bool IMAccountHandler::unserialize(const std::string & data) {
-	IMAccountHandlerParser parser(*this, data);
-	return parser.parse();
-}
-

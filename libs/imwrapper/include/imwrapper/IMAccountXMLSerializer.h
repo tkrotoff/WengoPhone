@@ -17,35 +17,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <imwrapper/IMAccountHandlerParser.h>
+#ifndef IMACCOUNTXMLSERIALIZER_H
+#define IMACCOUNTXMLSERIALIZER_H
 
-#include <imwrapper/IMAccountHandler.h>
-#include <imwrapper/EnumIMProtocol.h>
+#include <Serializable.h>
 
-#include <tinyxml.h>
+class IMAccount;
 
-using namespace std;
+/**
+ * Serialize an IMAccount object.
+ *
+ * @author Philippe Bernery
+ */
+class IMAccountXMLSerializer : public Serializable {
+public:
 
-IMAccountHandlerParser::IMAccountHandlerParser(IMAccountHandler & imAccountHandler, const string & data)
-: _imAccountHandler(imAccountHandler), _data(data) {
-}
+	IMAccountXMLSerializer(IMAccount & imAccount);
 
-bool IMAccountHandlerParser::parse() {
-	TiXmlDocument doc;
-	doc.Parse(_data.c_str());
-	
-	TiXmlHandle docHandle(& doc);
-	TiXmlNode * imaccounts = docHandle.FirstChild("imaccounts").Node();
+	std::string serialize();
 
-	TiXmlNode * lastChild = NULL;
-	while ((lastChild = imaccounts->IterateChildren("account", lastChild))) {
-		string accountData;
-		accountData << *lastChild;
+	bool unserialize(const std::string & data);
 
-		IMAccount account;
-		account.unserialize(accountData);
-		_imAccountHandler.insert(account);
-	}
+private:
 
-	return true;
-}
+	IMAccount & _imAccount;
+
+};
+
+#endif //IMACCOUNTXMLSERIALIZER_H

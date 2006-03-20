@@ -17,28 +17,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTPARSER_H
-#define IMACCOUNTPARSER_H
+#ifndef IMACCOUNTHANDLERXMLSERIALIZER_H
+#define IMACCOUNTHANDLERXMLSERIALIZER_H
 
-#include <string>
+#include <Serializable.h>
 
-class IMAccount;
+class IMAccountHandler;
 
-class IMAccountParser {
+/**
+* Serialize an IMAccount object.
+ *
+ * @author Philippe Bernery
+ */
+class IMAccountHandlerXMLSerializer : public Serializable {
 public:
-	IMAccountParser(IMAccount & imAccount, const std::string & data);
-
-	/**
-	 * @return true if parse has been successful
-	 */
-	bool parse();
+	
+	IMAccountHandlerXMLSerializer(IMAccountHandler & imAccountHandler);
+	
+	std::string serialize();
+	
+	bool unserialize(const std::string & data);
 	
 private:
 
-	IMAccount & _imAccount;
-
-	std::string _data;
-
+	IMAccountHandler & _imAccountHandler;
+	
 };
 
-#endif //IMACCOUNTPARSER_H
+#endif //IMACCOUNTHANDLERXMLSERIALIZER_H

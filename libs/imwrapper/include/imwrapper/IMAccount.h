@@ -23,8 +23,6 @@
 #include <imwrapper/EnumIMProtocol.h>
 #include <imwrapper/IMAccountParameters.h>
 
-#include <Serializable.h>
-
 #include <string>
 
 /**
@@ -36,8 +34,8 @@
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class IMAccount : public Serializable {
-	friend class IMAccountParser;
+class IMAccount {
+	friend class IMAccountXMLSerializer;
 public:
 
 	IMAccount();
@@ -65,10 +63,6 @@ public:
 	bool operator == (const IMAccount & imAccount) const;
 
 	bool operator < (const IMAccount & imAccount) const;
-
-	std::string serialize();
-	
-	bool unserialize(const std::string & data);
 
 private:
 
