@@ -122,7 +122,7 @@ if WengoOSWindows():
 			'advapi32',
 		]
 		try:
-			if env.WengoQtEdition() != 'QT_EDITION_DESKTOP':
+			if env.WengoQtEdition() == 'QT_EDITION_DESKTOP':
 				libs.append('QAxContainerd')
 		except:
 			print 'env.WengoQtEdition() error'
@@ -154,7 +154,7 @@ if WengoOSWindows():
 			'advapi32',
 		]
 		try:
-			if env.WengoQtEdition() != 'QT_EDITION_DESKTOP':
+			if env.WengoQtEdition() == 'QT_EDITION_DESKTOP':
 				libs.append('QAxContainer')
 		except:
 			print 'env.WengoQtEdition() error'
