@@ -84,7 +84,7 @@ void WengoPhone::init() {
 	//Creates the history
 	//historyCreatedEvent
 
-	//Create ConnectHandler, PresenceHandler, ChatHandler 
+	//Create ConnectHandler, PresenceHandler, ChatHandler
 	// and IMContactListHandler
 	_connectHandler = new ConnectHandler(*this);
 	connectHandlerCreatedEvent(*this, *_connectHandler);
@@ -263,7 +263,7 @@ void WengoPhone::wengoAccountLogin() {
 
 void WengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
 	switch (state) {
-	case SipAccount::LoginStateReady:
+	case SipAccount::LoginStateReady: {
 		LOG_DEBUG("SMS created");
 		//Creates SMS, SMS needs a WengoAccount
 		_sms = new Sms(*(WengoAccount *) _wengoAccount);
@@ -283,6 +283,8 @@ void WengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::
 		_connectHandler->connect(*_imAccountHandler.find(imAccount));
 
 		break;
+	}
+
 	default:
 		;
 	}
