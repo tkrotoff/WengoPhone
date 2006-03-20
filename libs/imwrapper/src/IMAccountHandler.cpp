@@ -44,20 +44,20 @@ IMAccountHandler::IMAccountHandler()
 IMAccountHandler::~IMAccountHandler() {
 }
 
-void IMAccountHandler::load() {
+void IMAccountHandler::load(const string & url) {
 	if (!_dataLayer) {
 		_dataLayer = new IMAccountHandlerFileDataLayer(*this);
 	}
 
-	_dataLayer->load();
+	_dataLayer->load(url);
 }
 
-void IMAccountHandler::save() {
+void IMAccountHandler::save(const string & url) {
 	if (!_dataLayer) {
 		_dataLayer = new IMAccountHandlerFileDataLayer(*this);
 	}
 
-	_dataLayer->save();
+	_dataLayer->save(url);
 }
 
 std::string IMAccountHandler::serialize() {

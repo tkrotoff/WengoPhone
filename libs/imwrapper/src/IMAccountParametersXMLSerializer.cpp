@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2005  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLERFILEDATALAYER_H
-#define IMACCOUNTHANDLERFILEDATALAYER_H
+#include <imwrapper/IMAccountParametersXMLSerializer.h>
 
-#include <imwrapper/IMAccountHandlerDataLayer.h>
+#include <imwrapper/IMAccountParameters.h>
 
-class IMAccountHandlerFileDataLayer : public IMAccountHandlerDataLayer {
-public:
-	IMAccountHandlerFileDataLayer(IMAccountHandler & imAccountHandler);
-
-	virtual ~IMAccountHandlerFileDataLayer();
-
-	bool load(const std::string & url);
-
-	bool save(const std::string & url);
-
-protected:
-
-	IMAccountHandler & _imAccountHandler;
-
-};
-
-#endif //IMACCOUNTHANDLERFILEDATALAYER_H
+IMAccountParametersXMLSerializer::IMAccountParametersXMLSerializer(IMAccountParameters & imAccountParameters)
+: SettingsXMLSerializer(imAccountParameters) {
+}

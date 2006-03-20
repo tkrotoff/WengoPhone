@@ -21,6 +21,8 @@
 
 #include <imwrapper/IMAccountParser.h>
 
+#include <SettingsXMLSerializer.h>
+
 #include <Base64.h>
 
 using namespace std;
@@ -39,11 +41,10 @@ IMAccount::IMAccount(const IMAccount & imAccount) {
 	_login = imAccount._login;
 	_password = imAccount._password;
 	_protocol = imAccount._protocol;
-	_settings = imAccount._settings;
+	_imAccountParameters = imAccount._imAccountParameters;
 }
 
 bool IMAccount::operator == (const IMAccount & imAccount) const {
-	//TODO should we check the password too?
 	return ((_login == imAccount._login)
 			&& (_protocol == imAccount._protocol));
 }
@@ -60,6 +61,8 @@ string IMAccount::serialize() {
 	result += "<account protocol=\"" + enumIMProtocol.toString(_protocol) + "\">\n";
 	result += ("<login>" + _login + "</login>\n");
 	result += ("<password>" + Base64::encode(_password) + "</password>\n");
+	SettingsXMLSerializer serializer(_imAccountParameters);
+	result += serializer.serialize();
 	result += "</account>\n";
 
 	return result;

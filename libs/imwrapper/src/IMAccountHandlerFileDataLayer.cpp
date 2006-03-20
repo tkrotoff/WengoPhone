@@ -33,12 +33,11 @@ IMAccountHandlerFileDataLayer::IMAccountHandlerFileDataLayer(IMAccountHandler & 
 }
 
 IMAccountHandlerFileDataLayer::~IMAccountHandlerFileDataLayer() {
-	save();
 }
 
-bool IMAccountHandlerFileDataLayer::load() {
-	FileReader file("imaccounts.xml");
-	LOG_DEBUG("loading imaccounts.xml");
+bool IMAccountHandlerFileDataLayer::load(const string & url) {
+	FileReader file(url);
+	LOG_DEBUG("loading " + url);
 
 	if (file.open()) {
 		string data = file.read();
@@ -46,21 +45,21 @@ bool IMAccountHandlerFileDataLayer::load() {
 
 		_imAccountHandler.unserialize(data);
 
-		LOG_DEBUG("file imaccounts.xml loaded");
+		LOG_DEBUG("file " + url + " loaded");
 		return true;
 	}
 
 	return false;
 }
 
-bool IMAccountHandlerFileDataLayer::save() {
-	FileWriter file("imaccounts.xml");
-	LOG_DEBUG("saving imaccounts.xml");
+bool IMAccountHandlerFileDataLayer::save(const string & url) {
+	FileWriter file(url);
+	LOG_DEBUG("saving " + url);
 
 	file.write(_imAccountHandler.serialize());
 	file.close();
 
-	LOG_DEBUG("imaccounts.xml saved");
+	LOG_DEBUG(url + " saved");
 
 	return true;
 }

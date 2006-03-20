@@ -39,7 +39,7 @@ Settings & Settings::operator = (const Settings & settings) {
 
 void Settings::copy(const Settings & settings) {
 	_keyMap = settings._keyMap;
-	//valueChangedEvent = settings.valueChangedEvent;
+	//FIXME: should we copy the event? valueChangedEvent = settings.valueChangedEvent;
 }
 
 Settings::~Settings() {

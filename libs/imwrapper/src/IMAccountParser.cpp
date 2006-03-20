@@ -20,6 +20,7 @@
 #include <imwrapper/IMAccountParser.h>
 
 #include <imwrapper/IMAccount.h>
+#include <imwrapper/IMAccountParametersXMLSerializer.h>
 
 #include <Base64.h>
 
@@ -54,6 +55,15 @@ bool IMAccountParser::parse() {
 	//Retrieving password
 	std::string password = account.FirstChild("password").FirstChild().Text()->Value();
 	_imAccount._password = Base64::decode(password);
+
+	//Retrieving IMAccountParameters
+	IMAccountParameters imAccountParameters;
+	IMAccountParametersXMLSerializer serializer(imAccountParameters);
+	TiXmlNode * settingsNode = account.FirstChild("settings").Node();
+	string nodeData;
+	nodeData << *settingsNode;
+	serializer.unserialize(nodeData);
+	_imAccount._imAccountParameters = imAccountParameters;
 
 	return true;
 }

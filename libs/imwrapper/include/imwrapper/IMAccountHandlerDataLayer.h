@@ -20,6 +20,8 @@
 #ifndef IMACCOUNTHANDLERDATALAYER_H
 #define IMACCOUNTHANDLERDATALAYER_H
 
+#include <string>
+
 class IMAccountHandler;
 
 class IMAccountHandlerDataLayer {
@@ -30,9 +32,9 @@ public:
 
 	virtual ~IMAccountHandlerDataLayer() {};
 
-	virtual bool load() = 0;
+	virtual bool load(const std::string & url) = 0;
 
-	virtual bool save() = 0;
+	virtual bool save(const std::string & url) = 0;
 
 protected:
 

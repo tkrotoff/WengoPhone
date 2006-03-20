@@ -24,6 +24,7 @@
 #include <imwrapper/IMAccount.h>
 
 #include <set>
+#include <string>
 
 class IMAccountHandlerDataLayer;
 
@@ -48,12 +49,12 @@ public:
 	/**
 	 * Load the IMAccounts.
 	 */
-	void load();
+	void load(const std::string & url);
 
 	/**
 	 * Save the IMAccounts.
 	 */
-	void save();
+	void save(const std::string & url);
 
 	std::string serialize();
 

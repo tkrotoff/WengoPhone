@@ -21,8 +21,8 @@
 #define IMACCOUNT_H
 
 #include <imwrapper/EnumIMProtocol.h>
+#include <imwrapper/IMAccountParameters.h>
 
-#include <Settings.h>
 #include <Serializable.h>
 
 #include <string>
@@ -58,8 +58,8 @@ public:
 		return _protocol;
 	}
 
-	Settings & getSettings() {
-		return _settings;
+	IMAccountParameters & getIMAccountParameters() {
+		return _imAccountParameters;
 	}
 
 	bool operator == (const IMAccount & imAccount) const;
@@ -79,7 +79,7 @@ private:
 	EnumIMProtocol::IMProtocol _protocol;
 
 	/** This Settings is used to contain more parameters (eg.: "use_http => true" for MSN protocol). */
-	Settings _settings;
+	IMAccountParameters _imAccountParameters;
 
 };
 
