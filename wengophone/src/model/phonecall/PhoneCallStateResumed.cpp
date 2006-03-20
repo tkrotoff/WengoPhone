@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2005  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,31 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHONECALLSTATERESUMEOK_H
-#define PHONECALLSTATERESUMEOK_H
+#include "PhoneCallStateResumed.h"
 
-#include "PhoneCallState.h"
-#include "PhoneCall.h"
-
-/**
- *
- * @ingroup model
- * @author Tanguy Krotoff
- */
-class PhoneCallStateResumeOk : public PhoneCallState {
-public:
-
-	static const EnumPhoneCallState::PhoneCallState CODE = EnumPhoneCallState::PhoneCallStateResumeOk;
-
-	EnumPhoneCallState::PhoneCallState getCode() const {
-		return CODE;
-	}
-
-	std::string toString() const {
-		return "PhoneCallStateResumeOk";
-	}
-
-	void execute(PhoneCall & phoneCall);
-};
-
-#endif	//PHONECALLSTATERESUMEOK_H
+void PhoneCallStateResumed::execute(PhoneCall & phoneCall) {
+	stopSoundRingin();
+}

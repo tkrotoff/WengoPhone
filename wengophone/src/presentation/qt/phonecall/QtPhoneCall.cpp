@@ -129,7 +129,7 @@ void QtPhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, 
 	postEvent(event);
 }
 
-void QtPhoneCall::videoFrameReceivedThreadSafe(QImage *image) {
+void QtPhoneCall::videoFrameReceivedThreadSafe(QImage * image) {
 	if (!_videoWindow) {
 		_videoWindow = new QtVideo(_phoneCallWidget);
 		_videoWindow->getWidget()->show();

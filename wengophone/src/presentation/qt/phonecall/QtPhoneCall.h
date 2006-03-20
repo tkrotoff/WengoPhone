@@ -50,7 +50,7 @@ public:
 
 	void videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame);
 
-	void phoneCallStateChangedEvent(PhoneCallState state, int lineId, int callId,
+	void phoneCallStateChangedEvent(EnumPhoneCallState::PhoneCallState state, int lineId, int callId,
 				const std::string & sipAddress, const std::string & userName, const std::string & displayName) { }
 
 	QWidget * getWidget() const {
@@ -79,7 +79,7 @@ private:
 
 	void closeThreadSafe();
 
-	void videoFrameReceivedThreadSafe(QImage *image);
+	void videoFrameReceivedThreadSafe(QImage * image);
 
 	CPhoneCall & _cPhoneCall;
 

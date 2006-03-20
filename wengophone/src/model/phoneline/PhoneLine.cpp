@@ -73,9 +73,6 @@ PhoneLine::PhoneLine(SipAccount & sipAccount, WengoPhone & wengoPhone)
 	static PhoneLineStateServerError stateServerError;
 	_phoneLineStateList += &stateServerError;
 
-	//PhoneCall in waiting state for incoming calls
-	//createWaitingPhoneCall();
-	_waitingPhoneCall = NULL;
 	_activePhoneCall = NULL;
 }
 
@@ -88,7 +85,6 @@ PhoneLine::~PhoneLine() {
 
 	_sipWrapper = NULL;
 	_activePhoneCall = NULL;
-	_waitingPhoneCall = NULL;
 }
 
 std::string PhoneLine::getMySipAddress() const {
@@ -101,9 +97,9 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 	}
 
 	//Puts all the PhoneCall in the hold state
-	/*for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
+	for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
 		(* it).second->hold();
-	}*/
+	}
 
 	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _sipAccount.getRealm());
 
@@ -152,121 +148,110 @@ void PhoneLine::disconnect() {
 	}
 }
 
-void PhoneLine::closeCall(int callId) {
-	PhoneCall * phoneCall = _phoneCallHash[callId];
-	if (!phoneCall) {
-		LOG_FATAL("rejecting an unknow phone call");
+void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState state, const SipAddress & sipAddress) {
+	LOG_DEBUG("call state changed callId=" + String::fromNumber(callId) +
+		" state=" + String::fromNumber(state) +
+		" from=" + sipAddress.getSipAddress());
+
+	if (_phoneCallHash[callId]) {
+		_phoneCallHash[callId]->setState(state);
 	}
 
-	if (_activePhoneCall == phoneCall) {
+	switch(state) {
+
+	case EnumPhoneCallState::PhoneCallStateDefault:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateError:
+		closeCall(callId);
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateResumed:
+		holdCallsExcept(callId);
+		_activePhoneCall = _phoneCallHash[callId];
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateTalking:
+		_activePhoneCall = _phoneCallHash[callId];
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateDialing:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateRinging:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateClosed:
+		closeCall(callId);
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateIncoming: {
+		holdCallsExcept(callId);
+
+		//Sends SIP code 180
+		//TODO automatically??
+		_sipWrapper->sendRingingNotification(callId);
+
+		PhoneCall * phoneCall = new PhoneCall(*this, sipAddress);
+		phoneCall->setCallId(callId);
+
+		//Adds the PhoneCall to the list of PhoneCall
+		_phoneCallHash[callId] = phoneCall;
+
+		//Sends the event a new PhoneCall has been created
+		phoneCallCreatedEvent(*this, *phoneCall);
+
+		phoneCall->setState(state);
+
+		_activePhoneCall = phoneCall;
+
+		//Adds the PhoneCall to the history
+		//phoneCall.type = "Appel entrant";
+		//this._softphone.history.addMemento(phoneCall);
+		break;
+	}
+
+	case EnumPhoneCallState::PhoneCallStateHold:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateMissed:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateRedirected:
+		break;
+
+	default:
+		LOG_FATAL("unknown PhoneCallState=" + state);
+	}
+}
+
+void PhoneLine::holdCallsExcept(int callId) {
+	for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
+		PhoneCall * phoneCall = (*it).second;
+		if (phoneCall->getCallId() != callId) {
+			phoneCall->hold();
+		}
+	}
+}
+
+void PhoneLine::closeCall(int callId) {
+	if (_activePhoneCall == _phoneCallHash[callId]) {
 		_activePhoneCall = NULL;
 	}
 
 	//Deletes the PhoneCall that is closed now
-	//Removes it from the list of PhoneCall
-	//Cannot do that here
 	//delete _phoneCallHash[callId];
-	//_phoneCallHash[callId] = NULL;
 
-	_sipWrapper->closeCall(callId);
-	LOG_DEBUG("call closed callId=" + String::fromNumber(callId));
+	//Removes it from the list of PhoneCall
+	_phoneCallHash.erase(callId);
 }
 
-void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState status, const SipAddress & sipAddress) {
-	LOG_DEBUG("call state changed callId=" + String::fromNumber(callId) +
-		" status=" + String::fromNumber(status) +
-		" from=" + sipAddress.getSipAddress());
-
-	if (!_phoneCallHash[callId]) {
-		//No PhoneCall for this callId
-
-		if (!_waitingPhoneCall) {
-			//Incoming call
-			//Sends SIP code 180
-			//TODO automatically??
-			_sipWrapper->sendRingingNotification(callId);
-
-			PhoneCall * phoneCall = new PhoneCall(*this, sipAddress);
-			phoneCall->setCallId(callId);
-
-			//Adds the PhoneCall to the list of PhoneCall
-			_phoneCallHash[callId] = phoneCall;
-
-			//Sends the event a new PhoneCall has been created
-			phoneCallCreatedEvent(*this, *_phoneCallHash[callId]);
-
-			phoneCall->setState(status);
-
-			if (!_activePhoneCall) {
-				_activePhoneCall = phoneCall;
-				//this.status = Status.RECEIVING;
-			}
-
-			//Adds the PhoneCall to the history
-			//phoneCall.type = "Appel entrant";
-			//this._softphone.history.addMemento(phoneCall);
-		}
-
-		else {
-			//Outgoing call, 1st callback
-			_waitingPhoneCall->setCallId(callId);
-			_waitingPhoneCall->setState(status);
-
-			//Adds the PhoneCall to the list of PhoneCall
-			_phoneCallHash[callId] = _waitingPhoneCall;
-
-			_activePhoneCall = _waitingPhoneCall;
-
-			_waitingPhoneCall = NULL;
-			//_activePhoneCall->setAsMakeCall();
-			//this.status = Status.CALLING;
-
-			//We can make new call
-			//isAvailableForNewCall_t = true;
-		}
-	}
-
-	else {
-		//No callId? so PhoneCall already closed
-
-		_phoneCallHash[callId]->setState(status);
-
-		if (status == PhoneCallStateClosed::CODE || status == PhoneCallStateError::CODE) {
-			//this.ClosePhoneCall(callid);
-			if (_waitingPhoneCall && _waitingPhoneCall->getCallId() == callId) {
-				_waitingPhoneCall = NULL;
-			}
-			if (_activePhoneCall && _activePhoneCall->getCallId() == callId) {
-				_activePhoneCall = NULL;
-			}
-		} else {
-			_waitingPhoneCall = NULL;
-		}
-		//this.StatusChangeSendEvent(this.status);
-	}
-}
-
-PhoneCall * PhoneLine::createWaitingPhoneCall() {
-	/*if (_waitingPhoneCall) {
-		LOG_ERROR("can't have more than one waiting PhoneCall");
-		return _waitingPhoneCall;
-	}
-
-	//this.status = Status.CALLING;
-	//this.StatusChangeSendEvent(this.status);
-	//isAvailableForNewCall_t = false;
-	_waitingPhoneCall = new PhoneCall(this);
-
-	return _waitingPhoneCall;*/
-	return NULL;
-}
-
-void PhoneLine::setState(EnumPhoneLineState::PhoneLineState status) {
+void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
 	for (unsigned int i = 0; i < _phoneLineStateList.size(); i++) {
-		PhoneLineState * state = _phoneLineStateList[i];
-		if (state->getCode() == status) {
-			if (_state->getCode() != state->getCode()) {
-				_state = state;
+		PhoneLineState * callState = _phoneLineStateList[i];
+		if (callState->getCode() == state) {
+			if (_state->getCode() != callState->getCode()) {
+				_state = callState;
 				_state->execute(*this);
 				LOG_DEBUG("line state changed lineId=" + String::fromNumber(_lineId) + " state=" + _state->toString());
 				stateChangedEvent(*this);

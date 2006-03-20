@@ -22,6 +22,8 @@
 
 #include "Presentation.h"
 
+#include <sipwrapper/EnumPhoneCallState.h>
+
 #include <string>
 
 class WebcamVideoFrame;
@@ -34,18 +36,7 @@ class WebcamVideoFrame;
 class PPhoneCall : public Presentation {
 public:
 
-	enum PhoneCallState {
-		CallIncoming,
-		CallTalking,
-		CallError,
-		CallResumeOk,
-		CallDialing,
-		CallRinging,
-		CallClosed,
-		CallHoldOk
-	};
-
-	virtual void phoneCallStateChangedEvent(PhoneCallState state, int lineId, int callId,
+	virtual void phoneCallStateChangedEvent(EnumPhoneCallState::PhoneCallState state, int lineId, int callId,
 				const std::string & sipAddress, const std::string & userName, const std::string & displayName) = 0;
 
 	virtual void close() = 0;

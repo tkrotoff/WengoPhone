@@ -23,10 +23,10 @@
 #include "PhoneCallStateClosed.h"
 #include "PhoneCallStateDialing.h"
 #include "PhoneCallStateError.h"
-#include "PhoneCallStateHoldOk.h"
+#include "PhoneCallStateHold.h"
 #include "PhoneCallStateIncoming.h"
 #include "PhoneCallStateTalking.h"
-#include "PhoneCallStateResumeOk.h"
+#include "PhoneCallStateResumed.h"
 #include "PhoneCallStateRinging.h"
 
 #include <model/phoneline/IPhoneLine.h>
@@ -64,8 +64,8 @@ PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 	static PhoneCallStateError stateError;
 	_phoneCallStateList += &stateError;
 
-	static PhoneCallStateHoldOk stateHoldOk;
-	_phoneCallStateList += &stateHoldOk;
+	static PhoneCallStateHold stateHold;
+	_phoneCallStateList += &stateHold;
 
 	static PhoneCallStateIncoming stateIncoming;
 	_phoneCallStateList += &stateIncoming;
@@ -73,8 +73,8 @@ PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 	static PhoneCallStateTalking stateTalking;
 	_phoneCallStateList += &stateTalking;
 
-	static PhoneCallStateResumeOk stateResumeOk;
-	_phoneCallStateList += &stateResumeOk;
+	static PhoneCallStateResumed stateResumed;
+	_phoneCallStateList += &stateResumed;
 
 	static PhoneCallStateRinging stateRinging;
 	_phoneCallStateList += &stateRinging;
@@ -118,30 +118,30 @@ void PhoneCall::blindTransfer(const std::string & phoneNumber) {
 	LOG_DEBUG("call transfered to=" + phoneNumber);
 }
 
-void PhoneCall::setState(EnumPhoneCallState::PhoneCallState status) {
+void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 	static int timeStart = -1;
 
 	for (unsigned i = 0; i < _phoneCallStateList.size(); i++) {
-		PhoneCallState * state = _phoneCallStateList[i];
-		if (state->getCode() == status) {
-			if (_state->getCode() != state->getCode()) {
+		PhoneCallState * callState = _phoneCallStateList[i];
+		if (callState->getCode() == state) {
+			if (_state->getCode() != callState->getCode()) {
 
 				//Start of the call
-				if (status == EnumPhoneCallState::PhoneCallStateTalking) {
+				if (state == EnumPhoneCallState::PhoneCallStateTalking) {
 					timeStart = time(NULL);
 				}
 
 				//End of the call
-				else if (status == EnumPhoneCallState::PhoneCallStateClosed) {
+				else if (state == EnumPhoneCallState::PhoneCallStateClosed) {
 					if (timeStart != -1) {
 						_duration = time(NULL) - timeStart;
 					}
 				}
 
-				_state = state;
+				_state = callState;
 				_state->execute(*this);
 				LOG_DEBUG("call state changed callId=" + String::fromNumber(_callId) + " state=" + _state->toString());
-				stateChangedEvent(*this, status);
+				stateChangedEvent(*this, state);
 				break;
 			}
 		}
@@ -153,7 +153,7 @@ void PhoneCall::close() {
 		if (_state->getCode() == PhoneCallStateIncoming::CODE /* && this.hasTakedDown == false*/) {
 			_phoneLine.getSipWrapper().rejectCall(_callId);
 		} else {
-			_phoneLine.closeCall(_callId);
+			_phoneLine.getSipWrapper().closeCall(_callId);
 		}
 		setState(PhoneCallStateClosed::CODE);
 

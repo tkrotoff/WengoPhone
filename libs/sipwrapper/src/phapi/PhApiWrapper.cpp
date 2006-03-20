@@ -743,7 +743,7 @@ void PhApiWrapper::joinConference(int confId, int callId) {
 		callId2 = callId;
 
 		if (callMap[callId2] == EnumPhoneCallState::PhoneCallStateTalking
-			&& callMap[callId1] == EnumPhoneCallState::PhoneCallStateHoldOk) {
+			&& callMap[callId1] == EnumPhoneCallState::PhoneCallStateHold) {
 
 			Thread::sleep(2);
 			phConf(callId1, callId2);

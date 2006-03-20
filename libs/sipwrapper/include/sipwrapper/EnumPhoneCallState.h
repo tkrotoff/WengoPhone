@@ -38,7 +38,7 @@ public:
 		PhoneCallStateError,
 
 		/** Phone call resumed (after holding a call). */
-		PhoneCallStateResumeOk,
+		PhoneCallStateResumed,
 
 		/** Conversation state. */
 		PhoneCallStateTalking,
@@ -56,7 +56,7 @@ public:
 		PhoneCallStateIncoming,
 
 		/** Phone call hold. */
-		PhoneCallStateHoldOk,
+		PhoneCallStateHold,
 
 		/** Phone call missed */
 		PhoneCallStateMissed,

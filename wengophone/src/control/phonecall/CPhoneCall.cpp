@@ -32,10 +32,10 @@
 #include <model/phonecall/PhoneCallStateClosed.h>
 #include <model/phonecall/PhoneCallStateDialing.h>
 #include <model/phonecall/PhoneCallStateError.h>
-#include <model/phonecall/PhoneCallStateHoldOk.h>
+#include <model/phonecall/PhoneCallStateHold.h>
 #include <model/phonecall/PhoneCallStateIncoming.h>
 #include <model/phonecall/PhoneCallStateTalking.h>
-#include <model/phonecall/PhoneCallStateResumeOk.h>
+#include <model/phonecall/PhoneCallStateResumed.h>
 #include <model/phonecall/PhoneCallStateRinging.h>
 
 #include <Logger.h>
@@ -62,8 +62,8 @@ std::string CPhoneCall::getPeerDisplayName() const {
 	return _phoneCall.getPeerSipAddress().getDisplayName();
 }
 
-void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState status) {
-	if (status == PhoneCallStateClosed::CODE) {
+void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state) {
+	if (state == PhoneCallStateClosed::CODE) {
 		_pPhoneCall->close();
 	}
 	_pPhoneCall->updatePresentation();
@@ -74,45 +74,7 @@ void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState
 	int lineId = sender.getPhoneLine().getLineId();
 	int callId = sender.getCallId();
 
-	switch (sender.getState().getCode()) {
-	case PhoneCallStateDefault::CODE:
-		break;
-
-	case PhoneCallStateTalking::CODE:
-		_pPhoneCall->phoneCallStateChangedEvent(PPhoneCall::CallTalking, lineId, callId, sipAddress, userName, displayName);
-		break;
-
-	case PhoneCallStateClosed::CODE:
-		_pPhoneCall->phoneCallStateChangedEvent(PPhoneCall::CallClosed, lineId, callId, sipAddress, userName, displayName);
-		break;
-
-	case PhoneCallStateDialing::CODE:
-		_pPhoneCall->phoneCallStateChangedEvent(PPhoneCall::CallDialing, lineId, callId, sipAddress, userName, displayName);
-		break;
-
-	case PhoneCallStateError::CODE:
-		_pPhoneCall->phoneCallStateChangedEvent(PPhoneCall::CallError, lineId, callId, sipAddress, userName, displayName);
-		break;
-
-	case PhoneCallStateHoldOk::CODE:
-		_pPhoneCall->phoneCallStateChangedEvent(PPhoneCall::CallHoldOk, lineId, callId, sipAddress, userName, displayName);
-		break;
-
-	case PhoneCallStateIncoming::CODE:
-		_pPhoneCall->phoneCallStateChangedEvent(PPhoneCall::CallIncoming, lineId, callId, sipAddress, userName, displayName);
-		break;
-
-	case PhoneCallStateResumeOk::CODE:
-		_pPhoneCall->phoneCallStateChangedEvent(PPhoneCall::CallResumeOk, lineId, callId, sipAddress, userName, displayName);
-		break;
-
-	case PhoneCallStateRinging::CODE:
-		_pPhoneCall->phoneCallStateChangedEvent(PPhoneCall::CallRinging, lineId, callId, sipAddress, userName, displayName);
-		break;
-
-	default:
-		LOG_FATAL("Unknown PhoneLine state");
-	};
+	_pPhoneCall->phoneCallStateChangedEvent(state, lineId, callId, sipAddress, userName, displayName);
 }
 
 void CPhoneCall::videoFrameReceivedEventHandler(PhoneCall & sender, const WebcamVideoFrame & remoteVideoFrame,
@@ -131,8 +93,8 @@ bool CPhoneCall::canHangUp() const {
 	if (code == PhoneCallStateTalking::CODE ||
 		code == PhoneCallStateIncoming::CODE ||
 		code == PhoneCallStateRinging::CODE ||
-		code == PhoneCallStateHoldOk::CODE ||
-		code == PhoneCallStateResumeOk::CODE ||
+		code == PhoneCallStateHold::CODE ||
+		code == PhoneCallStateResumed::CODE ||
 		code == PhoneCallStateDialing::CODE) {
 
 		return true;

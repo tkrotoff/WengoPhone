@@ -73,11 +73,6 @@ public:
 	virtual int makeCall(const std::string & phoneNumber) = 0;
 
 	/**
-	 * @see SipWrapper::closeCall()
-	 */
-	virtual void closeCall(int callId) = 0;
-
-	/**
 	 * Gets the SIP account associated with this PhoneLine.
 	 *
 	 * @return SIP account associated with this PhoneLine or NULL
@@ -98,10 +93,10 @@ public:
 	 * Sets the state of a PhoneCall.
 	 *
 	 * @param callId PhoneCall id
-	 * @param status the state (e.g event)
+	 * @param state the state (e.g event)
 	 * @param sipAddress from who we get a phone call
 	 */
-	virtual void setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState status, const SipAddress & sipAddress) = 0;
+	virtual void setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState state, const SipAddress & sipAddress) = 0;
 
 	/**
 	 * Gets the SIP implementation wrapper.
@@ -120,9 +115,9 @@ public:
 	/**
 	 * Changes the state of this PhoneLine.
 	 *
-	 * @param status status code corresponding to the new PhoneLine state
+	 * @param state state code corresponding to the new PhoneLine state
 	 */
-	virtual void setState(EnumPhoneLineState::PhoneLineState status) = 0;
+	virtual void setState(EnumPhoneLineState::PhoneLineState state) = 0;
 
 	/**
 	 * Gets the current state of this PhoneLine.

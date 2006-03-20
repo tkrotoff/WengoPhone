@@ -105,7 +105,7 @@ public:
 
 private:
 
-	void stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState status);
+	void stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state);
 
 	void videoFrameReceivedEventHandler(PhoneCall & sender, const WebcamVideoFrame & remoteVideoFrame,
 		const WebcamVideoFrame & localVideoFrame);

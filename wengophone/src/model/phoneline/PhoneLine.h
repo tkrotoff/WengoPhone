@@ -46,8 +46,6 @@ public:
 
 	int makeCall(const std::string & phoneNumber);
 
-	void closeCall(int callId);
-
 	SipWrapper & getSipWrapper() const {
 		return *_sipWrapper;
 	}
@@ -60,13 +58,13 @@ public:
 
 	void disconnect();
 
-	void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState status, const SipAddress & sipAddress);
+	void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState state, const SipAddress & sipAddress);
 
 	int getLineId() const {
 		return _lineId;
 	}
 
-	void setState(EnumPhoneLineState::PhoneLineState status);
+	void setState(EnumPhoneLineState::PhoneLineState state);
 
 	const PhoneLineState & getState() const {
 		return *_state;
@@ -87,16 +85,27 @@ public:
 private:
 
 	/**
-	 * Create and set the SIP stack.
+	 * Creates and sets the SIP stack.
 	 */
 	void initSipWrapper();
 
 	/**
-	 * Creates a new PhoneCall waiting to receive callbacks.
+	 * Puts all the PhoneCall in the hold state except one.
 	 *
-	 * @return PhoneCall created
+	 * Code factorization.
+	 *
+	 * @param callId phone call that won't be put in hold state
 	 */
-	PhoneCall * createWaitingPhoneCall();
+	void holdCallsExcept(int callId);
+
+	/**
+	 * Closes a given phone call.
+	 *
+	 * Code factorization.
+	 *
+	 * @param callId phone call to close
+	 */
+	void closeCall(int callId);
 
 	/** SIP implementation. */
 	SipWrapper * _sipWrapper;
@@ -108,14 +117,6 @@ private:
 
 	/** Active PhoneCall. */
 	PhoneCall * _activePhoneCall;
-
-	/**
-	 * PhoneCall waiting for incoming calls.
-	 *
-	 * At least they should be always a PhoneCall waiting
-	 * for incoming calls.
-	 */
-	PhoneCall * _waitingPhoneCall;
 
 	/** SipAccount associated with this PhoneLine. */
 	SipAccount & _sipAccount;

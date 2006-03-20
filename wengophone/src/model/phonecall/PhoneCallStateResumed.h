@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHONECALLSTATEHOLDOK_H
-#define PHONECALLSTATEHOLDOK_H
+#ifndef PHONECALLSTATERESUME_H
+#define PHONECALLSTATERESUME_H
 
 #include "PhoneCallState.h"
 #include "PhoneCall.h"
@@ -28,20 +28,20 @@
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class PhoneCallStateHoldOk : public PhoneCallState {
+class PhoneCallStateResumed : public PhoneCallState {
 public:
 
-	static const EnumPhoneCallState::PhoneCallState CODE = EnumPhoneCallState::PhoneCallStateHoldOk;
+	static const EnumPhoneCallState::PhoneCallState CODE = EnumPhoneCallState::PhoneCallStateResumed;
 
 	EnumPhoneCallState::PhoneCallState getCode() const {
 		return CODE;
 	}
 
 	std::string toString() const {
-		return "PhoneCallStateHoldOk";
+		return "PhoneCallStateResumed";
 	}
 
 	void execute(PhoneCall & phoneCall);
 };
 
-#endif	//PHONECALLSTATEHOLDOK_H
+#endif	//PHONECALLSTATERESUME_H

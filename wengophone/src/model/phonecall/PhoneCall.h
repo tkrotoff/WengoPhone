@@ -90,7 +90,7 @@ public:
 	void hold();
 
 	/**
-	 * @see IPhoneLine::closeCall()
+	 * @see SipWrapper::closeCall()
 	 */
 	void close();
 
@@ -125,9 +125,9 @@ public:
 	/**
 	 * Changes the state of this PhoneCall.
 	 *
-	 * @param status status code corresponding to the new PhoneCall state
+	 * @param state state code corresponding to the new PhoneCall state
 	 */
-	void setState(EnumPhoneCallState::PhoneCallState status);
+	void setState(EnumPhoneCallState::PhoneCallState state);
 
 	/**
 	 * Gets the current state of this PhoneCall.
