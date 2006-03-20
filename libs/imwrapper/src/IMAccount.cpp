@@ -19,8 +19,6 @@
 
 #include <imwrapper/IMAccount.h>
 
-#include <imwrapper/IMAccountParser.h>
-
 #include <SettingsXMLSerializer.h>
 
 #include <Base64.h>
