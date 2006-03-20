@@ -39,6 +39,8 @@
 #include "config/ConfigManager.h"
 #include "config/Config.h"
 
+#include <imwrapper/IMAccountHandlerFileDataLayer.h>
+
 #include <sipwrapper/SipWrapper.h>
 
 #include <StringList.h>
@@ -75,7 +77,9 @@ WengoPhone::~WengoPhone() {
 	}
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	_imAccountHandler.save(config.getConfigDir() + "imaccounts.xml");
+	IMAccountHandlerDataLayer * dataLayer = new IMAccountHandlerFileDataLayer(_imAccountHandler);
+	dataLayer->save(config.getConfigDir() + "imaccounts.xml");
+	delete dataLayer;
 }
 
 void WengoPhone::init() {
@@ -98,7 +102,9 @@ void WengoPhone::init() {
 	_imContactListHandler = new IMContactListHandler(*this);
 
 	//Loads IMAccounts
-	_imAccountHandler.load(config.getConfigDir() + "imaccounts.xml");
+	IMAccountHandlerDataLayer * dataLayer = new IMAccountHandlerFileDataLayer(_imAccountHandler);
+	dataLayer->load(config.getConfigDir() + "imaccounts.xml");
+	delete dataLayer;
 
 	//Creates and loads the contact list
 	_contactList = new ContactList(*this);
