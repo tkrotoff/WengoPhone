@@ -20,7 +20,6 @@
 #include <imwrapper/IMAccountHandler.h>
 
 #include <imwrapper/IMAccountHandlerFileDataLayer.h>
-#include <imwrapper/IMAccountHandlerParser.h>
 #include <imwrapper/IMAccount.h>
 
 using namespace std;

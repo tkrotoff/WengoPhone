@@ -48,31 +48,7 @@ bool StreetAddress::operator == (const StreetAddress & streetAddress) const {
 }
 
 string StreetAddress::serialize() {
-	string result;
-
-	result += "<address type=\"home\">\n";
-
-	if (!_street.empty()) {
-		result += ("<street>" + _street + "</street>\n");
-	}
-
-	if (!_city.empty()) {
-		result += ("<locality>" + _city + "</locality>\n");
-	}
-
-	if (!_stateProvince.empty()) {
-		result += ("<region>" + _stateProvince + "</region>\n");
-	}
-
-	if (!_zipCode.empty()) {
-		result += ("<postcode>" + _zipCode + "</postcode>\n");
-	}
-
-	if (!_country.empty()) {
-		result += ("<country>" + _country + "</country>\n");
-	}
-
-	result += "</address>";
+	return "";
 }
 
 bool StreetAddress::unserialize(const std::string & data) {
