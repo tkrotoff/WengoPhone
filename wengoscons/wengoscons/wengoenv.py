@@ -1409,7 +1409,7 @@ class WengoSConsEnvironment(SConsEnvironment):
                     qconfig_file = open(os.path.join(os.environ['QTDIR'], 'src', 'corelib', 'global', 'qconfig.h'))
             except os.IOError:
                 pass
-            regexp = re.compile('^#\s*define\s+qt_edition\s+.*(\w+)', re.IGNORECASE)
+            regexp = re.compile('^#\s*define\s+qt_edition\s+(\w+)', re.IGNORECASE)
             for line in qconfig_file.readlines():
                 match = regexp.match(line)
                 if match:
