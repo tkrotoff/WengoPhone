@@ -20,15 +20,22 @@
 #ifndef WENGOPHONEBUILDID_H
 #define WENGOPHONEBUILDID_H
 
-#include <NonCopyable.h>
+//#include <NonCopyable.h>
 
 /**
  * Identifies uniquely a revision of WengoPhone.
  *
  * @author Tanguy Krotoff
  */
-class WengoPhoneBuildId : NonCopyable {
+class WengoPhoneBuildId {
+  // avoid copying of this object
+  WengoPhoneBuildId(const WengoPhoneBuildId &);
+  WengoPhoneBuildId& operator=(const WengoPhoneBuildId &);
+
+
 public:
+        // This constructor is here to avoid warning in some versions of GCC
+        WengoPhoneBuildId() { }
 
 	/**
 	 * Build id is the WengoPhone compilation date/time (e.g 2005/12/07 - 18:18:09)

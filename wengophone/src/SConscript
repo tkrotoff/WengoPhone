@@ -1,6 +1,25 @@
 env = WengoGetEnvironment()
 
-env.SConscript('WengoPhoneBuildIdSConscript')
+#env.SConscript('WengoPhoneBuildIdSConscript')
+
+WengoPhoneBuildId = {
+	'buildId': WengoGetCurrentDateTime(),
+	'version': '0.13',
+	'revision': WengoGetSubversionRevision(),
+	'sofphoneName': 'wengo',
+
+	'copyright': 'Copyright (C) 2004-2006 Wengo  http://openwengo.com',
+
+	'license': 'This program is free software; you can redistribute it and/or\\n'\
+			'modify it under the terms of the GNU General Public License\\n'\
+			'as published by the Free Software Foundation; either version 2\\n'\
+			'of the License, or (at your option) any later version.',
+
+	'description': 'WengoPhone is a VoIP application',
+}
+
+WengoSetVariable('WengoPhoneBuildId', WengoPhoneBuildId)
+
 
 libs = [
 	'wengoutil',
@@ -18,8 +37,37 @@ include_path = ['.']
 defines = {}
 headers = []
 
+env2 = WengoGetEnvironment()
+if WengoGetConsoleArgument('newbuildid') :
+  env2.Append( CPPDEFINES = {
+   'DD_BUILDID'	     : str(WengoPhoneBuildId['buildId'])+'LL',
+   'DD_VERSION'	     : WengoPhoneBuildId['version'],
+   'DD_REVISION'	     : WengoPhoneBuildId['revision'],
+   'DD_SOFTPHONE_NAME' : WengoPhoneBuildId['sofphoneName']
+   }
+   )
+else :
+  env2.Append( CPPDEFINES = {
+   'DD_BUILDID'	     : '1234LL',
+   'DD_VERSION'	     : '1.33',
+   'DD_REVISION'     :	0,
+   'DD_SOFTPHONE_NAME' : 'wengo'
+   }
+   )
+
+
+buildid = env2.Object( source = 'WengoPhoneBuildId.cpp' )
+
+#if WengoGetConsoleArgument('newbuildid') :
+#   env2.AlwaysBuild(buildid)
+
+
+env2.WengoStaticLibrary('buildid',  buildid)
+
+
+
+
 sources = [
-	WengoGetVariable('WengoPhoneBuildIdFile'),
 	'model/WengoPhone.cpp',
 	'model/SipCallbacks.cpp',
 	'model/config/Config.cpp',

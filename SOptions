@@ -2,6 +2,7 @@
 #Set your own global options here
 
 args = {
+        'newbuildid' : 0, 
 	'enable-video' : 1,
 	'enable-ssl' : 1,
 	'enable-http-tunnel' : 1,
