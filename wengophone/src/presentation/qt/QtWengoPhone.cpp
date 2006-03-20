@@ -34,7 +34,7 @@
 #include "login/QtSetLogin.h"
 #include "login/QtEditMyProfile.h"
 
-#include "config/QtWengoConfigDialog.h"
+
 #include "contactlist/QtContactList.h"
 #include "contactlist/QtAddContact.h"
 #include "QtDialpad.h"
@@ -42,6 +42,8 @@
 #include "sms/QtSms.h"
 #include "QtHttpProxyLogin.h"
 #include "config/QtAdvancedConfig.h"
+#include "config/QtWengoConfigDialog.h"
+#include "statusbar/QtStatusBar.h"
 
 #include <WidgetFactory.h>
 #include <Object.h>
@@ -197,6 +199,18 @@ void QtWengoPhone::initThreadSafe() {
 #ifdef OS_WINDOWS
 	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
 #endif
+
+	// Add the status bar
+	QWidget * cw = Object::findChild<QWidget *>(_wengoPhoneWindow, "centralwidget");
+
+	QFrame * dummyframe = Object::findChild<QFrame *>(_wengoPhoneWindow, "statusbar");
+
+	QGridLayout * gridlayout;
+	gridlayout = (QGridLayout *) cw->layout();
+	gridlayout->removeWidget(dummyframe);
+
+	gridlayout->addWidget(new QtStatusBar(cw),1,0);
+
 	_wengoPhoneWindow->show();
 }
 

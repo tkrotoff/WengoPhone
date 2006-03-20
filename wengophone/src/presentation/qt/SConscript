@@ -64,7 +64,11 @@ headers = [
 	'config/QtPrivacySettings.h',
 	'config/QtProtocolSettings.h',
 	'config/QtVideoSettings.h',
-	'config/QtWengoConfigDialog.h'
+	'config/QtWengoConfigDialog.h',
+	'statusbar/QtEventWidget.h',
+	'statusbar/QtNickNameWidget.h',
+	'statusbar/QtStatusBar.h',
+	'statusbar/QtClickableLabel.h'
 ]
 
 sources = [
@@ -119,6 +123,10 @@ sources = [
 	'config/QtProtocolSettings.cpp',
 	'config/QtVideoSettings.cpp',
 	'config/QtWengoConfigDialog.cpp',
+	'statusbar/QtEventWidget.cpp',
+	'statusbar/QtNickNameWidget.cpp',
+	'statusbar/QtStatusBar.cpp',
+	'statusbar/QtClickableLabel.cpp',
 
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]

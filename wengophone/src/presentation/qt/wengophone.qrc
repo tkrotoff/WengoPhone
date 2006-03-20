@@ -18,7 +18,9 @@
         <file>pics/config_languages.png</file>
         <file>pics/contact_add.png</file>
         <file>pics/contact_block.png</file>
+        <file>pics/contact_call.png</file>
         <file>pics/contact_find.png</file>
+        <file>pics/contact_im.png</file>
         <file>pics/contact_list.png</file>
         <file>pics/contact_phone_home.png</file>
         <file>pics/contact_phone_mobile.png</file>
@@ -27,18 +29,8 @@
         <file>pics/contact_picture.png</file>
         <file>pics/contact_picture_mini.png</file>
         <file>pics/contact_remove.png</file>
-        <file>pics/contact_view.png</file>
-        <file>pics/contact_call.png</file>
-        <file>pics/contact_im.png</file>
         <file>pics/contact_video.png</file>
-        <file>pics/status/away.png</file>
-        <file>pics/status/forward.png</file>
-        <file>pics/status/donotdisturb.png</file>
-        <file>pics/status/berightback.png</file>
-        <file>pics/status/notavailable.png</file>
-        <file>pics/status/invisible.png</file>
-        <file>pics/status/online.png</file>
-        <file>pics/status/offline.png</file>
+        <file>pics/contact_view.png</file>
         <file>pics/dialpad.png</file>
         <file>pics/group_close.png</file>
         <file>pics/group_open.png</file>
@@ -47,6 +39,10 @@
         <file>pics/help.png</file>
         <file>pics/home.png</file>
         <file>pics/homepage.png</file>
+        <file>pics/iconbar_cal.png</file>
+        <file>pics/iconbar_chat.png</file>
+        <file>pics/iconbar_search.png</file>
+        <file>pics/iconbar_sendfile.png</file>
         <file>pics/logo-mini.png</file>
         <file>pics/logo-spiral.png</file>
         <file>pics/logo.png</file>
@@ -54,6 +50,14 @@
         <file>pics/no.png</file>
         <file>pics/point.gif</file>
         <file>pics/sms_send.png</file>
+        <file>pics/status/away.png</file>
+        <file>pics/status/berightback.png</file>
+        <file>pics/status/donotdisturb.png</file>
+        <file>pics/status/forward.png</file>
+        <file>pics/status/invisible.png</file>
+        <file>pics/status/notavailable.png</file>
+        <file>pics/status/offline.png</file>
+        <file>pics/status/online.png</file>
         <file>pics/statusbar_audio.png</file>
         <file>pics/statusbar_audio_error.png</file>
         <file>pics/statusbar_connect.png</file>
@@ -114,22 +118,8 @@
         <file>chat/ChatWidget.ui</file>
         <file>chat/chat.ui</file>
         <file>chat/emoticonswidget.ui</file>
-        <file>contactlist/contactList.ui</file>
-        <file>contactlist/userWidget.ui</file>
-        <file>contactlist/AddContactWindow.ui</file>
-        <file>contactlist/ContactListWidget.ui</file>
-        <file>contactlist/ContactWidget.ui</file>
-        <file>login/LoginWindow.ui</file>
-        <file>login/profileWindow.ui</file>
-        <file>login/contactWindow.ui</file>
-        <file>login/setLoginWindow.ui</file>
-        <file>phonecall/PhoneCallWidget.ui</file>
-        <file>phonecall/VideoWindow.ui</file>
-        <file>phonecall/ConferenceCallWidget.ui</file>
-        <file>phoneline/PhoneLineWidget.ui</file>
-        <file>sms/SmsWindow.ui</file>
-        <file>config/AdvancedConfigWindow.ui</file>
         <file>config/AcountSettings.ui</file>
+        <file>config/AdvancedConfigWindow.ui</file>
         <file>config/AdvancedSettings.ui</file>
         <file>config/AudioSettings.ui</file>
         <file>config/CallForwardSettings.ui</file>
@@ -140,5 +130,19 @@
         <file>config/ProtocolSettings.ui</file>
         <file>config/VideoSettings.ui</file>
         <file>config/WengoConfigDialog.ui</file>
+        <file>contactlist/AddContactWindow.ui</file>
+        <file>contactlist/ContactListWidget.ui</file>
+        <file>contactlist/ContactWidget.ui</file>
+        <file>contactlist/contactList.ui</file>
+        <file>contactlist/userWidget.ui</file>
+        <file>login/LoginWindow.ui</file>
+        <file>login/contactWindow.ui</file>
+        <file>login/profileWindow.ui</file>
+        <file>login/setLoginWindow.ui</file>
+        <file>phonecall/ConferenceCallWidget.ui</file>
+        <file>phonecall/PhoneCallWidget.ui</file>
+        <file>phonecall/VideoWindow.ui</file>
+        <file>phoneline/PhoneLineWidget.ui</file>
+        <file>sms/SmsWindow.ui</file>
     </qresource>
 </RCC>
