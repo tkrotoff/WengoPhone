@@ -40,7 +40,7 @@ if WengoOSMacOSX():
 	include_path += [os.path.join(qtdir, 'lib', 'QtNetwork.framework', 'Headers')]
 	include_path += [os.path.join(qtdir, 'lib', 'QtXml.framework', 'Headers')]
 	include_path += [os.path.join(qtdir, 'lib', 'QtSvg.framework', 'Headers')]
-	include_path += [os.path.join(qtdir, 'lib', 'QtUiTools.framework', 'Headers')]
+	include_path += [os.path.join(qtdir, 'include', 'QtUiTools')]
 elif WengoOSLinux():
 	include_path += [qtincludedir]
 	include_path += [os.path.join(qtincludedir, 'Qt')]
@@ -190,6 +190,7 @@ elif WengoOSMacOSX():
 
 	libs += [
 		'z',
+		'QtUiTools',
 	]
 
 	include_path += [os.path.join(qtdir, 'mkspecs', 'macx-g++')]
@@ -200,10 +201,8 @@ elif WengoOSMacOSX():
 		'-framework ApplicationServices',
 		'-framework QtCore',
 		'-framework QtGui',
-		#'-framework QtNetwork',
 		'-framework QtXml',
 		'-framework QtSvg',
-		'-framework QtUiTools',
 		'-F' + os.path.join(qtdir, 'lib'),
 		'-headerpad_max_install_names'
 	]
