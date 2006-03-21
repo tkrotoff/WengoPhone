@@ -19,8 +19,6 @@ args = {
 	'enable-phapi-audio-arts' : 0,
 	'portaudio-oss' : 0,
 
-	'enable-libsound-portaudio' : 1,
-
 	#if 0 wmme support
 	'portaudio-dsound' : 0,
 
@@ -36,6 +34,9 @@ args = {
 	'enable-ipp' : 0,
 
 }
+
+if not WengoOSMacOSX():
+	args['enable-libsound-portaudio'] = 1
 
 WengoAddConsoleArguments(args)
 WengoShowWindowsConsole(False)

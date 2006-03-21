@@ -237,7 +237,7 @@ if WengoGetConsoleArgument('enable-phapi-video-hack'):
 if WengoGetConsoleArgument('enable-netlib'):
 	libs += ['netlib']
 
-if True:
+if not WengoOSMacOSX():
 	libs += ['portaudio']
 	defines['ENABLE_PORTAUDIO'] = 1
 	sources += ['phmedia-portaudio.c']
@@ -318,9 +318,7 @@ phapi_py_env.WengoAddIncludePath([python_include])
 phapi_py_env.WengoAddLibPath([python_lib])
 phapi_py_env.WengoSharedLibrary("pyphapi", "pyphapi.c")
 
-
-
-if not WengoOSWindows():
+if not WengoOSWindows() and not WengoOSMacOSX():
     tenv = WengoGetEnvironment()
     tec = tenv.Program(tqrget = 'testec',  source = ['testec.c', 'spxec.c', 'spxecfft.c'],  LIBS='m')
     Alias('testec',  tec)
