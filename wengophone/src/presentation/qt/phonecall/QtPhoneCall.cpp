@@ -44,6 +44,9 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	_videoWindow = NULL;
 	_hold = true;
 
+	stateChangedEvent += boost::bind(&QtPhoneCall::stateChangedEventHandler, this, _1);
+	videoFrameReceivedEvent += boost::bind(&QtPhoneCall::videoFrameReceivedEventHandler, this, _1, _2);
+
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::initThreadSafe, this));
 	postEvent(event);
@@ -75,11 +78,6 @@ void QtPhoneCall::initThreadSafe() {
 	_rejectButton->disconnect();
 	connect(_rejectButton, SIGNAL(clicked()), SLOT(rejectButtonClicked()));
 
-	//muteButton
-	_muteButton = Object::findChild<QPushButton *>(_phoneCallWidget, "muteButton");
-	_muteButton->disconnect();
-	connect(_muteButton, SIGNAL(clicked()), SLOT(muteButtonClicked()));
-
 	//holdResumeButton
 	_holdResumeButton = Object::findChild<QPushButton *>(_phoneCallWidget, "holdResumeButton");
 	_holdResumeButton->disconnect();
@@ -105,31 +103,84 @@ void QtPhoneCall::updatePresentation() {
 }
 
 void QtPhoneCall::updatePresentationThreadSafe() {
-	_acceptButton->setEnabled(_cPhoneCall.canPickUp());
-	_rejectButton->setEnabled(_cPhoneCall.canHangUp());
 }
 
-void QtPhoneCall::close() {
-	typedef PostEvent0<void ()> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::closeThreadSafe, this));
+void QtPhoneCall::stateChangedEventHandler(EnumPhoneCallState::PhoneCallState state) {
+	typedef PostEvent1<void (EnumPhoneCallState::PhoneCallState), EnumPhoneCallState::PhoneCallState> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::stateChangedEventHandlerThreadSafe, this, _1), state);
 	postEvent(event);
 }
 
-void QtPhoneCall::closeThreadSafe() {
-	//_phoneCallWidget->hide();
+void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state) {
+	static const QString originalHoldText = _holdResumeButton->text();
+
+	switch(state) {
+
+	case EnumPhoneCallState::PhoneCallStateDefault:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateError:
+		_acceptButton->setEnabled(false);
+		_rejectButton->setEnabled(false);
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateResumed:
+		_holdResumeButton->setText(originalHoldText);
+		_hold = true;
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateTalking:
+		_acceptButton->setEnabled(false);
+		_rejectButton->setEnabled(true);
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateDialing:
+		_acceptButton->setEnabled(false);
+		_rejectButton->setEnabled(true);
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateRinging:
+		_acceptButton->setEnabled(false);
+		_rejectButton->setEnabled(true);
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateClosed:
+		_acceptButton->setEnabled(false);
+		_rejectButton->setEnabled(false);
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateIncoming:
+		_acceptButton->setEnabled(true);
+		_rejectButton->setEnabled(true);
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateHold:
+		_holdResumeButton->setText(tr("Resume"));
+		_hold = false;
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateMissed:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateRedirected:
+		break;
+
+	default:
+		LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
+	}
 }
 
-void QtPhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
+void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
 	//image will be deleted in videoFrameReceivedThreadSafe
 	QImage * image = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
 			remoteVideoFrame.getHeight(), QImage::Format_RGB32);
 
 	typedef PostEvent1<void (QImage *), QImage *> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::videoFrameReceivedThreadSafe, this, _1), image);
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe, this, _1), image);
 	postEvent(event);
 }
 
-void QtPhoneCall::videoFrameReceivedThreadSafe(QImage * image) {
+void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(QImage * image) {
 	if (!_videoWindow) {
 		_videoWindow = new QtVideo(_phoneCallWidget);
 		_videoWindow->getWidget()->show();
@@ -148,31 +199,14 @@ void QtPhoneCall::acceptButtonClicked() {
 
 void QtPhoneCall::rejectButtonClicked() {
 	_cPhoneCall.hangUp();
-	if (_videoWindow) {
-		//_videoWindow->getWidget()->hide();
-	}
-}
-
-void QtPhoneCall::muteButtonClicked() {
-	_cPhoneCall.mute();
 }
 
 void QtPhoneCall::holdResumeButtonClicked() {
-	static const QString originalHoldText = _holdResumeButton->text();
-
 	if (_hold) {
-		_holdResumeButton->setEnabled(false);
 		_cPhoneCall.hold();
-		_holdResumeButton->setText(tr("Resume"));
-		_holdResumeButton->setEnabled(true);
 	} else {
-		_holdResumeButton->setEnabled(false);
 		_cPhoneCall.resume();
-		_holdResumeButton->setText(originalHoldText);
-		_holdResumeButton->setEnabled(true);
 	}
-
-	_hold = !_hold;
 }
 
 void QtPhoneCall::addContactButtonClicked() {

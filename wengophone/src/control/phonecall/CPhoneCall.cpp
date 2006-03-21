@@ -63,61 +63,21 @@ std::string CPhoneCall::getPeerDisplayName() const {
 }
 
 void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state) {
-	if (state == PhoneCallStateClosed::CODE) {
-		_pPhoneCall->close();
-	}
-	_pPhoneCall->updatePresentation();
-
-	std::string sipAddress = sender.getPeerSipAddress().getSipAddress();
-	std::string userName = sender.getPeerSipAddress().getUserName();
-	std::string displayName = sender.getPeerSipAddress().getDisplayName();
-	int lineId = sender.getPhoneLine().getLineId();
-	int callId = sender.getCallId();
-
-	_pPhoneCall->phoneCallStateChangedEvent(state, lineId, callId, sipAddress, userName, displayName);
+	_pPhoneCall->stateChangedEvent(state);
 }
 
 void CPhoneCall::videoFrameReceivedEventHandler(PhoneCall & sender, const WebcamVideoFrame & remoteVideoFrame,
 	const WebcamVideoFrame & localVideoFrame) {
 
-	_pPhoneCall->videoFrameReceived(remoteVideoFrame, localVideoFrame);
+	_pPhoneCall->videoFrameReceivedEvent(remoteVideoFrame, localVideoFrame);
 }
 
 void CPhoneCall::hangUp() {
 	_phoneCall.close();
 }
 
-bool CPhoneCall::canHangUp() const {
-	int code = _phoneCall.getState().getCode();
-
-	if (code == PhoneCallStateTalking::CODE ||
-		code == PhoneCallStateIncoming::CODE ||
-		code == PhoneCallStateRinging::CODE ||
-		code == PhoneCallStateHold::CODE ||
-		code == PhoneCallStateResumed::CODE ||
-		code == PhoneCallStateDialing::CODE) {
-
-		return true;
-	} else {
-		return false;
-	}
-}
-
 void CPhoneCall::pickUp() {
 	_phoneCall.accept();
-	_pPhoneCall->updatePresentation();
-}
-
-bool CPhoneCall::canPickUp() const {
-	if (_phoneCall.getState().getCode() == PhoneCallStateIncoming::CODE/* && this.model.hasTakedDown == false*/) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-void CPhoneCall::mute() {
-	_phoneCall.mute();
 }
 
 void CPhoneCall::hold() {

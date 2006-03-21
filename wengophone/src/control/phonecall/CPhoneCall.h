@@ -44,19 +44,16 @@ public:
 		return _pPhoneCall;
 	}
 
+	/**
+	 * @see PhoneCall::accept()
+	 */
 	void hangUp();
 
 	/**
-	 * S'il est possible de raccrocher le telephone.
+	 * @see PhoneCall::close()
+	 * @see PhoneCall::reject()
 	 */
-	bool canHangUp() const;
-
 	void pickUp();
-
-	/**
-	 * S'il est possible de decrocher le telephone.
-	 */
-	bool canPickUp() const;
 
 	/**
 	 * @see PhoneCall::mute()

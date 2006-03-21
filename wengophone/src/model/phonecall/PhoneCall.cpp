@@ -45,6 +45,8 @@ PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 	: _phoneLine(phoneLine) {
 
 	_duration = -1;
+	_hold = false;
+	_resume = false;
 
 	_sipAddress = sipAddress;
 
@@ -86,12 +88,6 @@ PhoneCall::~PhoneCall() {
 	_state = NULL;
 }
 
-void PhoneCall::hold() {
-	_phoneLine.getSipWrapper().holdCall(_callId);
-	//stateChangedEvent(this, _state->getCode());
-	LOG_DEBUG("call hold");
-}
-
 void PhoneCall::accept() {
 	_phoneLine.getSipWrapper().acceptCall(_callId);
 	if (_state->getCode() == PhoneCallStateIncoming::CODE) {
@@ -101,9 +97,25 @@ void PhoneCall::accept() {
 }
 
 void PhoneCall::resume() {
-	_phoneLine.getSipWrapper().resumeCall(_callId);
-	//stateChangedEvent(this, _state->getCode());
-	LOG_DEBUG("call resumed");
+	if (_state->getCode() == PhoneCallStateHold::CODE) {
+		_phoneLine.getSipWrapper().resumeCall(_callId);
+		LOG_DEBUG("call resumed");
+		_resume = false;
+	} else {
+		_resume = true;
+	}
+}
+
+void PhoneCall::hold() {
+	if (_state->getCode() == PhoneCallStateTalking::CODE ||
+		_state->getCode() == PhoneCallStateResumed::CODE) {
+
+		_phoneLine.getSipWrapper().holdCall(_callId);
+		LOG_DEBUG("call hold");
+		_hold = false;
+	} else {
+		_hold = true;
+	}
 }
 
 void PhoneCall::mute() {
@@ -125,19 +137,6 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 		PhoneCallState * callState = _phoneCallStateList[i];
 		if (callState->getCode() == state) {
 			if (_state->getCode() != callState->getCode()) {
-
-				//Start of the call
-				if (state == EnumPhoneCallState::PhoneCallStateTalking) {
-					timeStart = time(NULL);
-				}
-
-				//End of the call
-				else if (state == EnumPhoneCallState::PhoneCallStateClosed) {
-					if (timeStart != -1) {
-						_duration = time(NULL) - timeStart;
-					}
-				}
-
 				_state = callState;
 				_state->execute(*this);
 				LOG_DEBUG("call state changed callId=" + String::fromNumber(_callId) + " state=" + _state->toString());
@@ -146,20 +145,69 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 			}
 		}
 	}
+
+	//This should not replace the state machine pattern PhoneCallState
+	switch(state) {
+
+	case EnumPhoneCallState::PhoneCallStateDefault:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateError:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateResumed:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateTalking:
+		if (_hold) {
+			hold();
+		} else {
+			//Start of the call, computes duration
+			timeStart = time(NULL);
+		}
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateDialing:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateRinging:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateClosed:
+		//End of the call, computes duration
+		if (timeStart != -1) {
+			_duration = time(NULL) - timeStart;
+		}
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateIncoming:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateHold:
+		if (_resume) {
+			resume();
+		}
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateMissed:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateRedirected:
+		break;
+
+	default:
+		LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
+	}
 }
 
 void PhoneCall::close() {
 	if (_state->getCode() != PhoneCallStateClosed::CODE) {
-		if (_state->getCode() == PhoneCallStateIncoming::CODE /* && this.hasTakedDown == false*/) {
+		if (_state->getCode() == PhoneCallStateIncoming::CODE) {
 			_phoneLine.getSipWrapper().rejectCall(_callId);
 		} else {
 			_phoneLine.getSipWrapper().closeCall(_callId);
 		}
 		setState(PhoneCallStateClosed::CODE);
-
-		//FIXME Already done?
-		//int code = PhoneCallStateClosed::CODE;
-		//stateChangedEvent(this, code);
 
 		LOG_DEBUG("call closed");
 	}

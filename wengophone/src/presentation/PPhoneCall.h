@@ -24,6 +24,8 @@
 
 #include <sipwrapper/EnumPhoneCallState.h>
 
+#include <Event.h>
+
 #include <string>
 
 class WebcamVideoFrame;
@@ -36,12 +38,9 @@ class WebcamVideoFrame;
 class PPhoneCall : public Presentation {
 public:
 
-	virtual void phoneCallStateChangedEvent(EnumPhoneCallState::PhoneCallState state, int lineId, int callId,
-				const std::string & sipAddress, const std::string & userName, const std::string & displayName) = 0;
+	Event<void (EnumPhoneCallState::PhoneCallState state)> stateChangedEvent;
 
-	virtual void close() = 0;
-
-	virtual void videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) = 0;
+	Event<void (const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame)> videoFrameReceivedEvent;
 };
 
 #endif	//PPHONECALL_H

@@ -209,6 +209,12 @@ private:
 
 	/** Call duration in seconds. */
 	int _duration;
+
+	/** If the PhoneCall should be held. */
+	bool _hold;
+
+	/** If the PhoneCall should be resumed. */
+	bool _resume;
 };
 
 #endif	//PHONECALL_H

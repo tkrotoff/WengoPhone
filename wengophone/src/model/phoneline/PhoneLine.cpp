@@ -39,12 +39,12 @@
 #include <sipwrapper/EnumNatType.h>
 
 #include <Logger.h>
-
-#include <cstring>
+#include <Thread.h>
 
 #include <string>
-
 using namespace std;
+
+#include <cstring>
 
 PhoneLine::PhoneLine(SipAccount & sipAccount, WengoPhone & wengoPhone)
 	: _sipAccount(sipAccount), _wengoPhone(wengoPhone) {
@@ -96,18 +96,19 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 		return -1;
 	}
 
-	//Puts all the PhoneCall in the hold state
-	for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
-		(* it).second->hold();
-	}
-
 	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _sipAccount.getRealm());
 
-	//PhoneCall in waiting state
-	//PhoneCall * phoneCall = createWaitingPhoneCall();
-	PhoneCall * phoneCall = new PhoneCall(*this, sipAddress);
-	_activePhoneCall = phoneCall;
+	for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
+		PhoneCall * phoneCall = (*it).second;
+		while (phoneCall->getState().getCode() != EnumPhoneCallState::PhoneCallStateTalking) {
+			Thread::msleep(100);
+		}
+	}
 
+	//Puts all the PhoneCall in the hold state before to create a new PhoneCall
+	holdCallsExcept(-1);
+
+	PhoneCall * phoneCall = new PhoneCall(*this, sipAddress);
 	int callId = _sipWrapper->makeCall(_lineId, sipAddress.getRawSipAddress());
 	phoneCall->setCallId(callId);
 
@@ -157,6 +158,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		_phoneCallHash[callId]->setState(state);
 	}
 
+	//This should not replace the state machine pattern PhoneCallState or PhoneLineState
 	switch(state) {
 
 	case EnumPhoneCallState::PhoneCallStateDefault:
@@ -221,15 +223,17 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	default:
-		LOG_FATAL("unknown PhoneCallState=" + state);
+		LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
 	}
 }
 
 void PhoneLine::holdCallsExcept(int callId) {
 	for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
 		PhoneCall * phoneCall = (*it).second;
-		if (phoneCall->getCallId() != callId) {
-			phoneCall->hold();
+		if (phoneCall) {
+			if (phoneCall->getCallId() != callId) {
+				phoneCall->hold();
+			}
 		}
 	}
 }
@@ -321,7 +325,7 @@ void PhoneLine::initSipWrapper() {
 	} else if (nat == "NatTypeUnknown") {
 		natType = EnumNatType::NatTypeUnknown;
 	} else {
-		LOG_FATAL("unknown NAT type");
+		LOG_FATAL("unknown NAT type=" + String::fromNumber(natType));
 	}
 	_sipWrapper->setNatType(natType);
 

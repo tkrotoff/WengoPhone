@@ -46,13 +46,6 @@ public:
 
 	void updatePresentation();
 
-	void close();
-
-	void videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame);
-
-	void phoneCallStateChangedEvent(EnumPhoneCallState::PhoneCallState state, int lineId, int callId,
-				const std::string & sipAddress, const std::string & userName, const std::string & displayName) { }
-
 	QWidget * getWidget() const {
 		return _phoneCallWidget;
 	}
@@ -62,8 +55,6 @@ private Q_SLOTS:
 	void acceptButtonClicked();
 
 	void rejectButtonClicked();
-
-	void muteButtonClicked();
 
 	void holdResumeButtonClicked();
 
@@ -77,9 +68,13 @@ private:
 
 	void updatePresentationThreadSafe();
 
-	void closeThreadSafe();
+	void stateChangedEventHandler(EnumPhoneCallState::PhoneCallState state);
 
-	void videoFrameReceivedThreadSafe(QImage * image);
+	void stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state);
+
+	void videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame);
+
+	void videoFrameReceivedEventHandlerThreadSafe(QImage * image);
 
 	CPhoneCall & _cPhoneCall;
 
@@ -90,8 +85,6 @@ private:
 	QPushButton * _acceptButton;
 
 	QPushButton * _rejectButton;
-
-	QPushButton * _muteButton;
 
 	QPushButton * _holdResumeButton;
 
