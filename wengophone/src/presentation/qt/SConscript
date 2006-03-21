@@ -2,7 +2,7 @@ env = WengoGetQt4Environment()
 
 libs = [
 	'wengophone',
-	'buildid',
+	'buildId',
 	'qtutil',
 	'webcam',
 	'qt4',
