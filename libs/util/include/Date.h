@@ -23,6 +23,11 @@
 #include <ctime>
 #include <string>
 
+#include <StringList.h>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/archive/archive_exception.hpp>
+
 /**
  * Represent a Date.
  *
@@ -30,6 +35,9 @@
  */
 class Date {
 public:
+
+    static const unsigned int SERIALIZATION_VERSION = 1;
+
 	/**
 	 * Create a date with the current time.
 	 */
@@ -125,17 +133,52 @@ public:
 		_year = year;
 	}
 
-	/**
-	 * @return a string representing the date. (e.g: "dd/mm/yyyy")
-	 */
-	std::string toString() const {
-		return String::fromNumber(_day) + "/" + String::fromNumber(_month) + "/" + String::fromNumber(_year);
-	}
+    /**
+     * @return a string representing the date. (e.g: "dd/mm/yyyy")
+     */
+    std::string toString() {
+        return String::fromNumber(_day) + "/" + String::fromNumber(_month) + "/" + String::fromNumber(_year);
+    }
 
 private:
-	unsigned _day;
-	unsigned _month;
-	unsigned _year;
+
+    friend class boost::serialization::access;
+
+    template < class Archive >
+    void load(Archive & ar, const unsigned int version) {
+        if (version == SERIALIZATION_VERSION) {
+            unsigned day;
+            unsigned month;
+            unsigned year;
+
+            ar >> BOOST_SERIALIZATION_NVP(day);
+            ar >> BOOST_SERIALIZATION_NVP(month);
+            ar >> BOOST_SERIALIZATION_NVP(year);
+
+            _day = day;
+            _month = month;
+            _year = year;
+        }
+    }
+
+    template < class Archive >
+    void save(Archive & ar, const unsigned int version) const {
+            unsigned day= _day;
+            unsigned month = _month;
+            unsigned year = _year;
+
+            ar << BOOST_SERIALIZATION_NVP(day);
+            ar << BOOST_SERIALIZATION_NVP(month);
+            ar << BOOST_SERIALIZATION_NVP(year);
+    }
+
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
+
+    unsigned _day;
+    unsigned _month;
+    unsigned _year;
 };
+
+BOOST_CLASS_VERSION(Date, Date::SERIALIZATION_VERSION)
 
 #endif //DATE_H
