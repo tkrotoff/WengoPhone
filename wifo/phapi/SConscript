@@ -320,7 +320,8 @@ phapi_py_env.WengoSharedLibrary("pyphapi", "pyphapi.c")
 
 
 
-tenv = WengoGetEnvironment()
-tec = tenv.Program(tqrget = 'testec',  source = ['testec.c', 'spxec.c', 'spxecfft.c'],  LIBS='m')
-Alias('testec',  tec)
+if not WengoOSWindows():
+    tenv = WengoGetEnvironment()
+    tec = tenv.Program(tqrget = 'testec',  source = ['testec.c', 'spxec.c', 'spxecfft.c'],  LIBS='m')
+    Alias('testec',  tec)
  
