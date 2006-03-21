@@ -333,7 +333,11 @@ class WengoSConsEnvironment(SConsEnvironment):
 		isMacOSX = staticmethod(isMacOSX)
 
 		def isBSD():
-			return WengoSConsEnvironment.OS.__platformMatch('bsd')
+			bsdoses = ['bsd', 'dragonfly']
+			for bsdos in bsdoses:
+				if WengoSConsEnvironment.OS.__platformMatch(bsdos):
+					return True
+			return False
 		isBSD = staticmethod(isBSD)
 
 		def __getOS():
