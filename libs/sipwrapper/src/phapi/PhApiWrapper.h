@@ -214,9 +214,17 @@ public:
 
 	void allowWatcher(const std::string & watcher);
 
+	void forbidWatcher(const std::string & watcher);
+
 	/** @} */
 
-	void forbidWatcher(const std::string & watcher);
+	/**
+	 * Helper function for the enum phCallStateEvent
+	 *
+	 * @param event a phCallStateEvent to "convert" into a string
+	 * @return a string representing the enum
+	 */
+	std::string phapiCallStateToString(enum  phCallStateEvent event);
 
 	static const std::string PresenceStateOnline;
 	static const std::string PresenceStateAway;

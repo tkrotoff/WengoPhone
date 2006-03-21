@@ -823,3 +823,79 @@ void PhApiWrapper::init() {
 void PhApiWrapper::setPluginPath(const string & path) {
 	_pluginPath = path;
 }
+
+std::string PhApiWrapper::phapiCallStateToString(enum  phCallStateEvent event) {
+	std::string toReturn = "";
+	switch(event) {
+	case phDIALING:
+		toReturn = "phDIALING";
+		break;
+	case phRINGING:
+		toReturn = "phRINGING";
+		break;
+	case phNOANSWER:
+		toReturn = "phNOANSWER";
+		break;
+	case phCALLBUSY:
+		toReturn = "phCALLBUSY";
+		break;
+	case phCALLREDIRECTED:
+		toReturn = "phCALLREDIRECTED";
+		break;
+	case phCALLOK:
+		toReturn = "phCALLOK";
+		break;
+	case phCALLHELD:
+		toReturn = "phCALLHELD";
+		break;
+	case phCALLRESUMED:
+		toReturn = "phCALLRESUMED";
+		break;
+	case phHOLDOK:
+		toReturn = "phHOLDOK";
+		break;
+	case phRESUMEOK: 
+		toReturn = "phRESUMEOK";
+		break;
+	case phINCALL:
+		toReturn = "phINCALL";
+		break;
+	case phCALLCLOSED:
+		toReturn = "phCALLCLOSED";
+		break; 
+	case phCALLERROR:
+		toReturn = "phCALLERROR";
+		break;
+	case phDTMF:
+		toReturn = "phDTMF";
+		break;
+	case phXFERPROGRESS:
+		toReturn = "phXFERPROGRESS";
+		break;
+	case phXFEROK:
+		toReturn = "phXFEROK";
+		break;
+	case phXFERFAIL:
+		toReturn = "phXFERFAIL";
+		break; 
+	case phXFERREQ:
+		toReturn = "phXFERREQ";
+		break;
+	case phCALLREPLACED:
+		toReturn = "phCALLREPLACED";
+		break;
+	case phRINGandSTART:
+		toReturn = "phRINGandSTART";
+		break;
+	case phRINGandSTOP: 
+		toReturn = "phRINGandSTOP";
+		break;
+	case phCALLCLOSEDandSTOPRING:
+		toReturn = "phCALLCLOSEDandSTOPRING";
+		break;
+	default:
+	 	toReturn = "Unknown phapi state: " + String::fromNumber(event);
+	}
+	return toReturn;
+}
+

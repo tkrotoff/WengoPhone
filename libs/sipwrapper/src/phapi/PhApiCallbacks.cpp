@@ -74,12 +74,15 @@ public:
 PhApiCallbacks::PhApiCallbacks() {
 }
 
+#include <StringList.h>
+
 void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 	int status = info->event;
 	std::string from;
 
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
-
+    LOG_DEBUG(p->phapiCallStateToString(info->event));
+ 
 	switch (status) {
 	case phDIALING:
 		from = info->u.remoteUri;
@@ -160,9 +163,13 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 	case phCALLREPLACED:
 		break;
 
+	// begin ringing
 	case phRINGandSTART:
+		from = info->u.remoteUri;
+		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateRinging, from);
 		break;
 
+	// stop ringing
 	case phRINGandSTOP:
 		break;
 
