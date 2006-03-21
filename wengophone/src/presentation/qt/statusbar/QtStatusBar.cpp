@@ -5,6 +5,8 @@ QtStatusBar::QtStatusBar( QWidget * parent , Qt::WFlags f ) : QWidget (parent,f)
 	_statusMenu = NULL;
 
 	_nickNameWidgetVisible = false;
+	_eventsWidgetVisible = false;
+	_crediWidgetVisible = false;
 
 	_widgetLayout = new QGridLayout(this);
 	_widgetLayout->setMargin(0);
@@ -50,32 +52,116 @@ QtStatusBar::QtStatusBar( QWidget * parent , Qt::WFlags f ) : QWidget (parent,f)
 
 
 void QtStatusBar::statusClicked(){
-	qDebug() << "Status clicked";
 	createStatusMenu();
 }
 
 void QtStatusBar::nicknameClicked(){
 	if ( _nickNameWidgetVisible ){
-		_widgetLayout->removeWidget ( _nickNameWidget );
-		_nickNameWidget->setVisible(false);
-		_nickNameWidgetVisible=false;
-		setMinimumSize(QSize(0,0));
-		resize(QSize(0,0));
-		delete _nickNameWidget;
+		removeNickNameWidget();
 	}
 	else{
+		_nicknameLabel->setSelected(true);
+		_eventsLabel->setSelected(false);
+		_creditLabel->setSelected(false);
+		showNickNameWidget();
+	}
+}
+
+void QtStatusBar::showNickNameWidget(){
+
+	removeEventsWidget();
+	removeCreditWidget();
+
+	if ( ! _nickNameWidgetVisible )
+	{
 		_nickNameWidget = new QtNickNameWidget( this );
 		_widgetLayout->addWidget(_nickNameWidget, 1, 0 );
 		_nickNameWidgetVisible=true;
 	}
 }
 
+void QtStatusBar::removeNickNameWidget(){
+
+	if ( _nickNameWidgetVisible ){
+		_widgetLayout->removeWidget ( _nickNameWidget );
+		_nickNameWidget->setVisible(false);
+		setMinimumSize(QSize(0,0));
+		resize(QSize(0,0));
+		delete _nickNameWidget;
+		_nickNameWidgetVisible=false;
+		_nicknameLabel->setSelected(false);
+	}
+}
+
 void QtStatusBar::eventsClicked(){
-	qDebug() << "events clicked";
+	if ( _eventsWidgetVisible )
+		removeEventsWidget();
+	else
+	{
+		_nicknameLabel->setSelected(false);
+		_eventsLabel->setSelected(true);
+		_creditLabel->setSelected(false);
+		showEventsWidget();
+	}
 }
+
+void QtStatusBar::showEventsWidget(){
+
+	removeNickNameWidget();
+	removeCreditWidget();
+	if ( !_eventsWidgetVisible ){
+		_eventWidget = new QtEventWidget(this);
+		_widgetLayout->addWidget(_eventWidget, 1, 0);
+		_eventsWidgetVisible=true;
+	}
+}
+
+void QtStatusBar::removeEventsWidget(){
+	if ( _eventsWidgetVisible ){
+		_widgetLayout->removeWidget( _eventWidget );
+		_eventWidget->setVisible(false);
+		setMinimumSize(QSize(0,0));
+		resize(QSize(0,0));
+		delete _eventWidget;
+		_eventsWidgetVisible=false;
+		_eventsLabel->setSelected(false);
+	}
+}
+
 void QtStatusBar::creditClicked(){
-	qDebug() << "credit clicked";
+	if ( _crediWidgetVisible )
+		removeCreditWidget();
+	else{
+		_nicknameLabel->setSelected(false);
+		_eventsLabel->setSelected(false);
+		_creditLabel->setSelected(true);
+		showCreditWidget();
+	}
 }
+
+void QtStatusBar::showCreditWidget(){
+	removeNickNameWidget();
+	removeEventsWidget();
+	if ( ! _crediWidgetVisible ){
+		_creditWidget = new QtCreditWidget(this);
+		_widgetLayout->addWidget(_creditWidget, 1, 0);
+		_crediWidgetVisible=true;
+	}
+}
+
+void QtStatusBar::removeCreditWidget(){
+
+	if ( _crediWidgetVisible ){
+		_widgetLayout->removeWidget( _creditWidget );
+		_creditWidget->setVisible(false);
+		setMinimumSize(QSize(0,0));
+		resize(QSize(0,0));
+		delete _creditWidget;
+		_crediWidgetVisible=false;
+		_creditLabel->setSelected(false);
+	}
+}
+
 
 void QtStatusBar::createStatusMenu(){
 	if (_statusMenu)

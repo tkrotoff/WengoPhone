@@ -5,6 +5,8 @@
 
 #include "QtClickableLabel.h"
 #include "QtNickNameWidget.h"
+#include "QtEventWidget.h"
+#include "QtCreditWidget.h"
 
 class QtStatusBar : public QWidget
 {
@@ -29,13 +31,33 @@ protected:
 
 	QtNickNameWidget * _nickNameWidget;
 
+	QtCreditWidget * _creditWidget;
+
+	QtEventWidget * _eventWidget;
+
 	bool _nickNameWidgetVisible;
+
+	bool _eventsWidgetVisible;
+
+	bool _crediWidgetVisible;
 
 	QPixmap _statusPixmap;
 
 	QMenu * _statusMenu;
 
 	void createStatusMenu();
+
+	void showNickNameWidget();
+
+	void removeNickNameWidget();
+
+	void showEventsWidget();
+
+	void removeEventsWidget();
+
+	void showCreditWidget();
+
+	void removeCreditWidget();
 
 public Q_SLOTS:
 

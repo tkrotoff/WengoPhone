@@ -3,6 +3,12 @@
 QtNickNameWidget::QtNickNameWidget(QWidget * parent , Qt::WFlags f ) : QWidget(parent,f){
 
 
+	QPalette p = palette();
+	p.setColor(QPalette::Active,QPalette::Window,Qt::white);
+	setPalette(p);
+	setAutoFillBackground(true);
+
+
 	_msnIMAccountMenu = NULL;
 	_yahooIMAccountMenu = NULL;
 	_jabberIMAccountMenu = NULL;

@@ -68,7 +68,8 @@ headers = [
 	'statusbar/QtEventWidget.h',
 	'statusbar/QtNickNameWidget.h',
 	'statusbar/QtStatusBar.h',
-	'statusbar/QtClickableLabel.h'
+	'statusbar/QtClickableLabel.h',
+	'statusbar/QtCreditWidget.h'
 ]
 
 sources = [
@@ -127,6 +128,7 @@ sources = [
 	'statusbar/QtNickNameWidget.cpp',
 	'statusbar/QtStatusBar.cpp',
 	'statusbar/QtClickableLabel.cpp',
+	'statusbar/QtCreditWidget.cpp',
 
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]
