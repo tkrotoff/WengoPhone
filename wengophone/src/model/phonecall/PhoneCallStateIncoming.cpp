@@ -21,7 +21,7 @@
 
 #include <model/wenbox/WenboxPlugin.h>
 
-#include <Sound.h>
+#include <sound/Sound.h>
 
 void PhoneCallStateIncoming::execute(PhoneCall & phoneCall) {
 	//Ringin tonality

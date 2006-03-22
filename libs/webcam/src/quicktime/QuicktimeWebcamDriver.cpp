@@ -17,10 +17,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <quicktime-pixertool.h>
+#include <webcam/QuicktimeWebcamDriver.h>
 
-#include <QuicktimeWebcamDriver.h>
-#include <WebcamDriver.h>
+#include <webcam/WebcamDriver.h>
+
+#include <pixertool/quicktime-pixertool.h>
 
 #include <util/Logger.h>
 

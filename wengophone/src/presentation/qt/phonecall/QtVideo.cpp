@@ -19,11 +19,13 @@
 
 #include "QtVideo.h"
 
+#include <cutil/global.h>
+
+#include <webcam/WebcamDriver.h>
+
 #include <PaintEventFilter.h>
 #include <WidgetFactory.h>
 #include <Object.h>
-#include <cutil/global.h>
-#include <WebcamDriver.h>
 
 #include <QtGui>
 

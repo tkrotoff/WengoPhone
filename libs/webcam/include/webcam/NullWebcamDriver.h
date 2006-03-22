@@ -20,7 +20,7 @@
 #ifndef NULLWEBCAMDRIVER_H
 #define NULLWEBCAMDRIVER_H
 
-#include <WebcamDriver.h>
+#include <webcam/WebcamDriver.h>
 
 /**
  * Null webcam driver.

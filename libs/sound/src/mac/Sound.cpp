@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Sound.h>
+#include <sound/Sound.h>
 
 //#include <qsound.h>
 
@@ -31,7 +31,7 @@ public:
 	void stop() {}
 	void setLoops(int loops) {}
 	void play() {}
-	
+
 	SoundPrivate(const std::string & filename) {
 	}
 };

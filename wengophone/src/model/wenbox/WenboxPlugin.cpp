@@ -25,9 +25,9 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <util/Logger.h>
+#include <sound/AudioDevice.h>
 
-#include <AudioDevice.h>
+#include <util/Logger.h>
 
 using namespace std;
 

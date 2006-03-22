@@ -1,6 +1,6 @@
 projects = [
 	'cutil',
-	'core',
+	'util',
 	'thread',
 	'memorydump',
 	'http',

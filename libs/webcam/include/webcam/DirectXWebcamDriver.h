@@ -20,7 +20,7 @@
 #ifndef DIRECTXWEBCAMDRIVER_H
 #define DIRECTXWEBCAMDRIVER_H
 
-#include <WebcamDriver.h>
+#include <webcam/WebcamDriver.h>
 
 #include <dshow.h>
 #include <atlbase.h>

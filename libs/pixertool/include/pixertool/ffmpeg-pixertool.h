@@ -20,7 +20,8 @@
 #ifndef FFMPEG_PIXERTOOL_H
 #define FFMPEG_PIXERTOOL_H
 
-#include <pixertool.h>
+#include <pixertool/pixertool.h>
+
 #include <avcodec.h>
 
 #ifdef __cplusplus

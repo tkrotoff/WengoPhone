@@ -17,9 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <v4l-pixertool.h>
+#include <webcam/V4LWebcamDriver.h>
 
-#include <V4LWebcamDriver.h>
+#include <pixertool/v4l-pixertool.h>
 
 #include <util/File.h>
 

@@ -17,10 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QUICKTIME_PIXERTOOL_H
-#define QUICKTIME_PIXERTOOL_H
+#ifndef V4L_PIXERTOOL_H
+#define V4L_PIXERTOOL_H
 
-#include <pixertool.h>
+#include <pixertool/pixertool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,7 +35,7 @@ extern "C" {
  * @param pix palette identifier to convert
  * @return equivalent pixosi identifier
  */
-pixosi pix_quicktime_to_pix_osi(int pix);
+pixosi pix_v4l_to_pix_osi(int pix);
 
 /**
  * Palette identifier conversion.
@@ -46,17 +46,10 @@ pixosi pix_quicktime_to_pix_osi(int pix);
  * @param pix palette identifier to convert
  * @return equivalent v4l identifier
  */
-int pix_quicktime_from_pix_osi(pixosi pix);
-
-/**
- * Get a string describing the format.
- * @param pix pixel format quicktime id
- * @return the string describing the format
- */
-const char *pix_quicktime_to_string(unsigned pix);
+int pix_v4l_from_pix_osi(pixosi pix);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	//QUICKTIME_PIXERTOOL_H
+#endif	//V4L_PIXERTOOL_H

@@ -22,7 +22,7 @@
 
 //Warning: this file can only be included by a C++ file
 
-#include <pixertool.h>
+#include <pixertool/pixertool.h>
 
 #include <common.h>
 #include <dshow.h>

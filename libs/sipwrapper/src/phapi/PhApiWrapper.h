@@ -219,7 +219,7 @@ public:
 	/** @} */
 
 	/**
-	 * Helper function for the enum phCallStateEvent
+	 * Helper function for the enum phCallStateEvent.
 	 *
 	 * @param event a phCallStateEvent to "convert" into a string
 	 * @return a string representing the enum

@@ -17,8 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <pixertool.h>
-#include <directx-pixertool.h>
+#include <pixertool/directx-pixertool.h>
 
 #include <stdio.h>
 #include <stdlib.h>

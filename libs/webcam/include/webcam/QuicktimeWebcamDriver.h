@@ -20,7 +20,7 @@
 #ifndef QUICKTIMEWEBCAMDRIVER_H
 #define QUICKTIMEWEBCAMDRIVER_H
 
-#include <IWebcamDriver.h>
+#include <webcam/IWebcamDriver.h>
 
 #include <thread/Timer.h>
 

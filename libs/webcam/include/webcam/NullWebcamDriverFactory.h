@@ -17,39 +17,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef V4L_PIXERTOOL_H
-#define V4L_PIXERTOOL_H
+#ifndef NULLWEBCAMDRIVERFACTORY_H
+#define NULLWEBCAMDRIVERFACTORY_H
 
-#include <pixertool.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <webcam/WebcamDriverFactory.h>
+#include <webcam/NullWebcamDriver.h>
 
 /**
- * Palette identifier conversion.
+ * Webcam driver factory for Null driver.
  *
- * Converts from v4l palette identifier to
- * pixer palette identifier
- *
- * @param pix palette identifier to convert
- * @return equivalent pixosi identifier
+ * @author Philippe Bernery
  */
-pixosi pix_v4l_to_pix_osi(int pix);
+class NullWebcamDriverFactory : public WebcamDriverFactory {
+public:
+	IWebcamDriver * create(WebcamDriver *driver, int flags) const {
+		return new NullWebcamDriver(driver, flags);
+	}
+};
 
-/**
- * Palette identifier conversion.
- *
- * Converts from pixer palette identifier to
- * v4l palette identifier
- *
- * @param pix palette identifier to convert
- * @return equivalent v4l identifier
- */
-int pix_v4l_from_pix_osi(pixosi pix);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif	//V4L_PIXERTOOL_H
+#endif	//NULLWEBCAMDRIVERFACTORY_H

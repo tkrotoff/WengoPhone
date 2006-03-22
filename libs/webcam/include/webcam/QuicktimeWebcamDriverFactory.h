@@ -17,49 +17,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef DEFAULTWEBCAMDRIVERFACTORY_H
-#define DEFAULTWEBCAMDRIVERFACTORY_H
+#ifndef QUICKTIMEWEBCAMDRIVERFACTORY_H
+#define QUICKTIMEWEBCAMDRIVERFACTORY_H
 
-#include <cutil/global.h>
-
-#include <WebcamDriverFactory.h>
-
-#if defined(CC_MSVC)
-	#include <DirectXWebcamDriver.h>
-#elif defined(OS_LINUX)
-	#include <V4LWebcamDriver.h>
-#elif defined(OS_MACOSX)
-	#include <QuicktimeWebcamDriver.h>
-#else
-	#include <NullWebcamDriver.h>
-#endif //!OS_MACOSX
+#include <webcam/WebcamDriverFactory.h>
+#include <webcam/QuicktimeWebcamDriver.h>
 
 /**
- * Default webcam driver factory.
- *
- * The default webcam driver depends on the build platform:
- *	- MacOS X: Quicktime
- *	- Linux: Video for Linux (V4L)
- *	- Windows: DirectX
+ * Webcam driver factory for Quicktime.
  *
  * @author Philippe Bernery
  */
-class DefaultWebcamDriverFactory : public WebcamDriverFactory {
+class QuicktimeWebcamDriverFactory : public WebcamDriverFactory {
 public:
-	DefaultWebcamDriverFactory() {};
-	virtual ~DefaultWebcamDriverFactory() {};
-
 	IWebcamDriver * create(WebcamDriver *driver, int flags) const {
-#if defined(CC_MSVC)
-		return new DirectXWebcamDriver(driver, flags);
-#elif defined(OS_LINUX)
-		return new V4LWebcamDriver(driver, flags);
-#elif defined(OS_MACOSX)
 		return new QuicktimeWebcamDriver(driver, flags);
-#else
-		return new NullWebcamDriver(driver, flags);
-#endif //!OS_MACOSX
 	}
 };
 
-#endif	//DEFAULTWEBCAMDRIVERFACTORY_H
+#endif	//QUICKTIMEWEBCAMDRIVERFACTORY_H

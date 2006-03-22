@@ -20,8 +20,9 @@
 #ifndef WEBCAMDRIVER_H
 #define WEBCAMDRIVER_H
 
-#include <IWebcamDriver.h>
-#include <pixertool.h>
+#include <webcam/IWebcamDriver.h>
+
+#include <pixertool/pixertool.h>
 
 #include <cutil/global.h>
 

@@ -19,7 +19,7 @@
 
 #include "Config.h"
 
-#include <AudioDevice.h>
+#include <sound/AudioDevice.h>
 
 #include <util/File.h>
 #include <util/Logger.h>

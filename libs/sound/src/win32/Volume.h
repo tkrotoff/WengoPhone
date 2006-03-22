@@ -20,7 +20,7 @@
 #ifndef VOLUME_H
 #define VOLUME_H
 
-#include <SoundMixerException.h>
+#include <sound/SoundMixerException.h>
 
 #include <util/NonCopyable.h>
 

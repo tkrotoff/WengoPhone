@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <SoundMixer.h>
+#include <sound/SoundMixer.h>
 
 SoundMixer::SoundMixer(const std::string & /*inputDeviceName*/, const std::string & /*outputDeviceName*/)
 	throw (NoSoundCardException, SoundMixerException) {

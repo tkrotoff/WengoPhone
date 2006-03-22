@@ -33,7 +33,7 @@
 #include <util/Logger.h>
 
 #ifdef ENABLE_VIDEO
-	#include <pixertool.h>
+	#include <pixertool/pixertool.h>
 #endif
 
 #include <tinyxml.h>
@@ -79,7 +79,7 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 	std::string from;
 
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
-    LOG_DEBUG(p->phapiCallStateToString(info->event));
+	LOG_DEBUG(p->phapiCallStateToString(info->event));
 
 	switch (status) {
 	case phDIALING:
@@ -250,7 +250,7 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 	}
 }
 
-#include <stdio.h>
+#include <cstdio>
 
 void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * info) {
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;

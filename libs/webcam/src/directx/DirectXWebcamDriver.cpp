@@ -17,10 +17,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <directx-pixertool.h>
+#include <webcam/DirectXWebcamDriver.h>
 
-#include <DirectXWebcamDriver.h>
-#include <DirectXWebcamUtils.h>
+#include <webcam/DirectXWebcamUtils.h>
+
+#include <pixertool/directx-pixertool.h>
 
 #include <util/Logger.h>
 

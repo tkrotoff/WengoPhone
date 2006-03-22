@@ -20,8 +20,8 @@
 #ifndef V4LWEBCAMDRIVERFACTORY_H
 #define V4LWEBCAMDRIVERFACTORY_H
 
-#include <WebcamDriverFactory.h>
-#include <V4LWebcamDriver.h>
+#include <webcam/WebcamDriverFactory.h>
+#include <webcam/V4LWebcamDriver.h>
 
 /**
  * Webcam driver factory for Video For Linux(V4L).

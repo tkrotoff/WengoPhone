@@ -33,11 +33,11 @@
 #include <time.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include <webcam.h>
+#include <webcam/webcam.h>
 #include <wtimer.h>
 #include <avcodec.h>
-#include <ffmpeg-pixertool.h>
-#include <pixertool.h>
+#include <pixertool/ffmpeg-pixertool.h>
+#include <pixertool/pixertool.h>
 
 #include "phcodec.h"
 #include "phapi.h"
@@ -79,12 +79,12 @@ void phmedia_video_rtpsend_callback (void *ctx, void *data, int size,
 	mblk_t *m1 ;
 
 	video_stream->txtstamp = ts;
-	
+
 	m1 = rtp_session_create_packet (video_stream->ms.rtp_session,
-			RTP_FIXED_HEADER_SIZE, (char *)data, size);	
+			RTP_FIXED_HEADER_SIZE, (char *)data, size);
 	if (!m1)
 		return;
-	
+
 	if (eof) {
 		rtp_set_markbit(m1, 1);
 	}
@@ -98,7 +98,7 @@ void phmedia_video_rtpsend_callback (void *ctx, void *data, int size,
  * @brief Initializes the webcam for a given stream
  *
  * This setups the webcam, and sets the resolution decided by the user.
- * 
+ *
  * @param vstream		The video stream
  * @return	return code of webcamOpen (WEBCAM_CODE_OK on ok, NOK on nok)
  *
@@ -121,7 +121,7 @@ webcamerrorcode ph_media_video_initialize_webcam(phvstream_t *vstream) {
 			PHMEDIA_VIDEO_FRAME_HEIGHT);
 		webcam_set_palette(vstream->wt, PIX_OSI_YUV420P);
 	}
-	
+
 	return err;
 }
 
@@ -174,7 +174,7 @@ phm_videoframe_t *ph_media_video_new_video_frame(piximage *image) {
 	phmvf->image.data = image->data;
 	phmvf->image.width = image->width;
 	phmvf->image.height = image->height;
-	
+
 	return phmvf;
 }
 
@@ -217,7 +217,7 @@ int ph_media_video_send_frame(phvstream_t *video_stream, phm_videoframe_t *phmvf
 	enclen = video_stream->ms.codec->encode(video_encoder,
 		video_encoder->encoder_ctx.sampled_frame, length,
 		video_encoder->data_enc, video_encoder->max_frame_len);
-	
+
 	video_stream->num_encoded_frames += 1;
 	video_stream->txtstamp += 90000;
 
@@ -238,7 +238,7 @@ void ph_media_video_alloc_processing_buffers(phvstream_t *vstream, unsigned widt
 void ph_media_video_check_processing_buffers(phvstream_t *vstream, unsigned width_source, unsigned height_source){
 	if ((width_source != vstream->width_proc_source) || (height_source != vstream->height_proc_source)) {
 		ph_media_video_free_processing_buffers(vstream);
-		ph_media_video_alloc_processing_buffers(vstream, width_source, height_source);		
+		ph_media_video_alloc_processing_buffers(vstream, width_source, height_source);
 	}
 }
 
@@ -285,22 +285,22 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 
   if (!sp->localport || !sp->remoteport)
     return 0;
-	
-	
+
+
   printf("Starting video stream from port: %d to %s:%d\n",
 	 sp->localport, sp->remoteaddr, sp->remoteport);
 
-  // the function is cut into 2 branches : 
+  // the function is cut into 2 branches :
   //   - branch1: video stream is already open (RE-INVITE for example)
   //   - branch2: video stream is not already open
-	
+
   // begin branch1
   if (sp->streamerData)
     {
       video_stream = (phvstream_t*) sp->streamerData;
 
       if (video_stream->ms.remote_port == sp->remoteport)
-	{ 
+	{
 	  if (!strcmp(video_stream->ms.remote_ip, sp->remoteaddr))
 	    {
 	      return 0;
@@ -315,24 +315,24 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
       if (video_stream->ms.tunRtp)
 	{
 	  RtpTunnel *newTun, *old;
-                
+
 	  printf("Replacing video tunnel\n"),
 	    newTun = rtptun_connect(video_stream->ms.remote_ip, video_stream->ms.remote_port);
-                
-                
+
+
 	  if (!newTun)
 	    {
 	      printf("Video tunnel replacement failed\n"),
 		ph_msession_video_stop(s);
-                    
+
 	      return -PH_NORESOURCES;
 	    }
 
 	  rtp_session_set_tunnels(video_stream->ms.rtp_session, newTun, NULL);
-                
+
 	  old = video_stream->ms.tunRtp;
 	  video_stream->ms.tunRtp = newTun;
-                
+
 	  TUNNEL_CLOSE(old);
 	  rtptun_free(old);
 	}
@@ -341,17 +341,17 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 	rtp_session_set_remote_addr(video_stream->ms.rtp_session,
 				    video_stream->ms.remote_ip,
 				    video_stream->ms.remote_port);
-        
-      return 0;      
-        
-    }      
+
+      return 0;
+
+    }
   // end branch1
-  
+
   // begin branch2
   profile = get_av_profile();
 
   // we should be able to find a codec structure based on the negociated video payload
-  if (!sp->ipayloads[0].number) 
+  if (!sp->ipayloads[0].number)
     {
       return -1;
     }
@@ -360,7 +360,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
     if (!codec) {
       return -1;
     }
-   
+
   // init phase : a stream structure is created and initialized
   video_stream = (phvstream_t *)osip_malloc(sizeof(phvstream_t));
   memset(video_stream, 0, sizeof(phvstream_t));
@@ -380,11 +380,11 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   if (codec->encoder_init) {
     video_stream->ms.encoder_ctx = codec->encoder_init(video_stream);
   }
-	
+
   if (codec->decoder_init) {
     video_stream->ms.decoder_ctx = codec->decoder_init(video_stream);
   }
-	
+
 #ifdef PHAPI_VIDEO_LOCAL_HACK
   strcpy(sp->remoteaddr, "127.0.0.1");
   sp->remoteport = video_port;
@@ -392,7 +392,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 #endif
 
   video_session = rtp_session_new(RTP_SESSION_SENDRECV);
-  
+
 #ifdef USE_HTTP_TUNNEL
   if (sp->flags & PH_MSTREAM_FLAG_TUNNEL)
     {
@@ -406,7 +406,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
       rtp_session_set_tunnels(video_session, video_stream->ms.tunRtp, NULL);
     }
 #endif
- 
+
   rtp_session_set_scheduling_mode(video_session, SCHEDULING_MODE);
   rtp_session_set_blocking_mode(video_session, BLOCKING_MODE);
 
@@ -417,7 +417,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 #ifdef USE_HTTP_TUNNEL
   if (!video_stream->ms.tunRtp)
     {
-      rtp_session_set_local_addr(video_session, "0.0.0.0", sp->localport);  
+      rtp_session_set_local_addr(video_session, "0.0.0.0", sp->localport);
 
       rtp_session_set_remote_addr(video_session,
 				  sp->remoteaddr,
@@ -429,7 +429,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   // HACK
   // wt is always initialized because the webcam object holds the convertImage function...
   video_stream->wt = webcam_get_instance();
-	
+
   // choixe of the frame server and init sequence
   if (sp->traffictype & PH_MSTREAM_TRAFFIC_OUT) {
     if (ph_media_video_initialize_webcam(video_stream)) {
@@ -446,7 +446,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
     webcam_add_callback(video_stream->wt, webcam_frame_callback, (void *)video_stream);
     webcam_start_capture(video_stream->wt);
     video_stream->phmfs_webcam.state = 2;
-		
+
   }
 
   // start sequence of the virtual webcam frame server
@@ -454,8 +454,8 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 
     // note :	this "virtual" webcam may seem a little strange, but it facilitates NAT traversal right now
     //			and makes it possible to have only the tx or rx having a cam
-		
-    fs_buffer = (uint8_t*)av_malloc((176*144*3)/2); 
+
+    fs_buffer = (uint8_t*)av_malloc((176*144*3)/2);
 
     for(fs_y=0;fs_y<144;fs_y++) {
       for(fs_x=0;fs_x<176;fs_x++) {
@@ -471,12 +471,12 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
     }
 
     video_stream->phmfs_onewaycam.buffer = fs_buffer;
-		
-    video_stream->phmfs_onewaycam.state = 2; // start producing		
+
+    video_stream->phmfs_onewaycam.state = 2; // start producing
 
     yuv_local_len = avpicture_get_size(PIX_FMT_YUV420P, 176, 144);
     memcpy(video_stream->phmfs_onewaycam.buffer, pic_yuv, yuv_local_len);
-		
+
   }
 
   video_stream->ms.running = 1;
@@ -552,17 +552,17 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
 	printf("Starting video stream from port: %d to %s:%d\n",
 		video_port, ca->remote_sdp_video_ip, ca->remote_sdp_video_port);
 
-	// the function is cut into 2 branches : 
+	// the function is cut into 2 branches :
 	//   - branch1: video stream is already open (RE-INVITE for example)
 	//   - branch2: video stream is not already open
-	
+
 	// begin branch1
 	if (ca->ph_video_stream)
 	  {
 		video_stream = (phvstream_t*) ca->ph_video_stream;
 
 		if (video_stream->ms.remote_port == ca->remote_sdp_video_port)
-		{ 
+		{
 			if (!strcmp(video_stream->ms.remote_ip, ca->remote_sdp_video_ip))
 			{
 				return 0;
@@ -577,24 +577,24 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
         if (video_stream->ms.tunRtp)
             {
                 RtpTunnel *newTun, *old;
-                
+
                 printf("Replacing video tunnel\n"),
                 newTun = rtptun_connect(video_stream->ms.remote_ip, video_stream->ms.remote_port);
-                
-                
+
+
                 if (!newTun)
                 {
                     printf("Video tunnel replacement failed\n"),
                     ph_media_video_stop(ca);
-                    
+
                     return -PH_NORESOURCES;
                 }
 
             	rtp_session_set_tunnels(video_stream->ms.rtp_session, newTun, NULL);
-                
+
                 old = video_stream->ms.tunRtp;
                 video_stream->ms.tunRtp = newTun;
-                
+
                 TUNNEL_CLOSE(old);
                 rtptun_free(old);
             }
@@ -603,12 +603,12 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
          rtp_session_set_remote_addr(video_stream->ms.rtp_session,
 				  video_stream->ms.remote_ip,
 				  video_stream->ms.remote_port);
-        
-        return 0;      
-        
-    }      
+
+        return 0;
+
+    }
 	// end branch1
-  
+
 	// begin branch2
 	profile = get_av_profile();
 
@@ -620,7 +620,7 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
 	if (!codec) {
 		return -1;
 	}
-   
+
 	// init phase : a stream structure is created and initialized
 	video_stream = (phvstream_t *)osip_malloc(sizeof(phvstream_t));
 	memset(video_stream, 0, sizeof(phvstream_t));
@@ -640,11 +640,11 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
 	if (codec->encoder_init) {
 		video_stream->ms.encoder_ctx = codec->encoder_init(video_stream);
 	}
-	
+
 	if (codec->decoder_init) {
 		video_stream->ms.decoder_ctx = codec->decoder_init(video_stream);
 	}
-	
+
 #ifdef PHAPI_VIDEO_LOCAL_HACK
 	strcpy(ca->remote_sdp_video_ip, "127.0.0.1");
 	ca->remote_sdp_video_port = video_port;
@@ -652,7 +652,7 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
 #endif
 
 	video_session = rtp_session_new(RTP_SESSION_SENDRECV);
-  
+
 #ifdef USE_HTTP_TUNNEL
 	if (ph_media_use_tunnel)
 	{
@@ -666,7 +666,7 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
 		rtp_session_set_tunnels(video_session, video_stream->ms.tunRtp, NULL);
 	}
 #endif
- 
+
 	rtp_session_set_scheduling_mode(video_session, SCHEDULING_MODE);
 	rtp_session_set_blocking_mode(video_session, BLOCKING_MODE);
 
@@ -677,7 +677,7 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
 #ifdef USE_HTTP_TUNNEL
 	if (!video_stream->ms.tunRtp)
 	{
-		rtp_session_set_local_addr(video_session, "0.0.0.0", video_port);  
+		rtp_session_set_local_addr(video_session, "0.0.0.0", video_port);
 
 		rtp_session_set_remote_addr(video_session,
 				ca->remote_sdp_video_ip,
@@ -689,7 +689,7 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
 	// HACK
 	// wt is always initialized because the webcam object holds the convertImage function...
 	video_stream->wt = webcam_get_instance();
-	
+
 	// choixe of the frame server and init sequence
 	if (ca->user_mflags & PH_STREAM_VIDEO_TX) {
 		if (ph_media_video_initialize_webcam(video_stream)) {
@@ -706,7 +706,7 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
 		webcam_add_callback(video_stream->wt, webcam_frame_callback, (void *)video_stream);
 		webcam_start_capture(video_stream->wt);
 		video_stream->phmfs_webcam.state = 2;
-		
+
 	}
 
 	// start sequence of the virtual webcam frame server
@@ -714,8 +714,8 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
 
 		// note :	this "virtual" webcam may seem a little strange, but it facilitates NAT traversal right now
 		//			and makes it possible to have only the tx or rx having a cam
-		
-		fs_buffer = (uint8_t*)av_malloc((176*144*3)/2); 
+
+		fs_buffer = (uint8_t*)av_malloc((176*144*3)/2);
 
 		for(fs_y=0;fs_y<144;fs_y++) {
             for(fs_x=0;fs_x<176;fs_x++) {
@@ -731,12 +731,12 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
         }
 
 		video_stream->phmfs_onewaycam.buffer = fs_buffer;
-		
-		video_stream->phmfs_onewaycam.state = 2; // start producing		
+
+		video_stream->phmfs_onewaycam.state = 2; // start producing
 
 		yuv_local_len = avpicture_get_size(PIX_FMT_YUV420P, 176, 144);
 		memcpy(video_stream->phmfs_onewaycam.buffer, pic_yuv, yuv_local_len);
-		
+
 	}
 
 	video_stream->ms.running = 1;
@@ -808,11 +808,11 @@ int ph_media_video_flush_queue(phvstream_t *stream, unsigned long seqnumber_star
 	int counter = 0;
 	static AVPicture *rgb = NULL;
 	struct ph_video_stream_packet *phvs;
-		
+
 	phcodec_t *codec = stream->ms.codec;
 	video_decoder = (ph_h263_decoder_ctx_t *) stream->ms.decoder_ctx;
 	picIn = video_decoder->decoder_ctx.pictureIn;
-	
+
 	q_size = osip_list_size(&stream->received_packets_q);
 
 	video_decoder->buf_index = 0;
@@ -901,7 +901,7 @@ int ph_media_video_flush_queue(phvstream_t *stream, unsigned long seqnumber_star
 			pix_convert(PIX_NO_FLAG, stream->frame_event.frame_local, stream->local_frame_cache);
 
 			stream->frameDisplayCallback(stream->ms.mses->cbkInfo, &stream->frame_event);
-			
+
 			return 1;
 
 		}
@@ -944,7 +944,7 @@ ph_handle_video_network_data(phvstream_t *stream, unsigned long timestamp,
 	int flushed;
 
 	*ts_inc = 0;
-	while ((stream->ms.running)&&((mp = rtp_session_recvm_with_ts(stream->ms.rtp_session,timestamp))!=NULL)) 
+	while ((stream->ms.running)&&((mp = rtp_session_recvm_with_ts(stream->ms.rtp_session,timestamp))!=NULL))
 	{
 
 
@@ -953,13 +953,13 @@ ph_handle_video_network_data(phvstream_t *stream, unsigned long timestamp,
 			rx_observed_timestamp = rtp_get_timestamp(mp);
 			rx_observed_seqnumber = rtp_get_seqnumber(mp);
 			rx_observed_markbit = rtp_get_markbit(mp);
-			
+
 			if (stream->rx_trace_initialize == 0) {
 				stream->rx_trace_initialize = 1;
 				stream->rx_current_timestamp = rx_observed_timestamp;
 				stream->rx_current_seqnumber = rx_observed_seqnumber;
 			}
-				
+
 			phvs = (struct ph_video_stream_packet *) malloc(sizeof(struct ph_video_stream_packet));
 			phvs->mp = mp;
 			phvs->timestamp = rx_observed_timestamp;
@@ -972,9 +972,9 @@ ph_handle_video_network_data(phvstream_t *stream, unsigned long timestamp,
 				*ts_inc = 90000;
 				stream->stat_markbit_hit +=1;
 				//printf("frame decode hit: (markbit: %d), (ts: %d)\n", stream->stat_markbit_hit, stream->stat_timestamp_hit);
-				return;				
+				return;
 			}
-			
+
 			// beware of this algorithm with clients that put a different ts on each slice (!)
 			if (!rx_observed_markbit && (rx_observed_timestamp > stream->rx_current_timestamp)) {
 				flushed = ph_media_video_flush_queue(stream, stream->rx_current_seqnumber, rx_observed_seqnumber-1);
@@ -986,9 +986,9 @@ ph_handle_video_network_data(phvstream_t *stream, unsigned long timestamp,
 			}
 
 		}
-		
+
 	}
-		
+
 }
 
 void ph_video_handle_data(phvstream_t *stream) {
@@ -1002,7 +1002,7 @@ void ph_video_handle_data(phvstream_t *stream) {
 	if (!stream->ms.running) {
 		return;
 	}
-	
+
 	// lock mutex : mainly used to protect the webcam_frames_q
 #ifdef PH_VIDEO_USELOCK
 	osip_mutex_lock(stream->mtx);
@@ -1015,7 +1015,7 @@ void ph_video_handle_data(phvstream_t *stream) {
 
 	// adjust the rtp timestamp synchro for the next pull
 	stream->rxtstamp += rxts_inc;
-	
+
 	// if the 'onewaycam' frame server is activated, it must produce a frame now
 	if ((stream->phmfs_onewaycam.state == 2) && (stream->threadcount_encoding%15==0)) {
 		fs_phmvf = (phm_videoframe_t*) malloc(sizeof(phm_videoframe_t));
@@ -1029,7 +1029,7 @@ void ph_video_handle_data(phvstream_t *stream) {
 
 	}
 
-	
+
 	// iterate over the available local frames in order to flush them into to the encoder
 	q_size = osip_list_size(&stream->webcam_frames_q);
 	if (q_size > 1) {
@@ -1046,7 +1046,7 @@ void ph_video_handle_data(phvstream_t *stream) {
 		}
 
 		ph_media_free_video_frame(phmvf);
-		
+
 		osip_list_remove(&stream->webcam_frames_q, 0);
 	}
 
@@ -1087,7 +1087,7 @@ void ph_msession_video_stop(struct ph_msession_s *s)
       return;
 
   s->activestreams &= ~(1 << PH_MSTREAM_VIDEO1);
- 
+
 
   if (!stream)
     return;
@@ -1115,7 +1115,7 @@ void ph_msession_video_stop(struct ph_msession_s *s)
 
   if (stream->ms.codec->encoder_cleanup)
     stream->ms.codec->encoder_cleanup(stream->ms.encoder_ctx);
-	
+
   if (stream->ms.codec->decoder_cleanup)
     stream->ms.codec->decoder_cleanup(stream->ms.decoder_ctx);
 
@@ -1124,9 +1124,9 @@ void ph_msession_video_stop(struct ph_msession_s *s)
 
 
 
-  ortp_set_debug_file("oRTP", stdout); 
+  ortp_set_debug_file("oRTP", stdout);
   ortp_session_stats_display(stream->ms.rtp_session);
-  ortp_set_debug_file("oRTP", NULL); 
+  ortp_set_debug_file("oRTP", NULL);
 
   rtp_session_destroy(stream->ms.rtp_session);
 
@@ -1138,7 +1138,7 @@ void ph_msession_video_stop(struct ph_msession_s *s)
       rtptun_free(stream->ms.tunRtp);
     }
 #endif
-  
+
   memset(stream, 0, sizeof(phvstream_t));
   osip_free(stream);
 }
@@ -1148,7 +1148,7 @@ void ph_msession_video_stop(struct ph_msession_s *s)
 void ph_media_video_stop(phcall_t *ca)
 {
   phvstream_t *stream = (phvstream_t *) ca->ph_video_stream;
- 
+
 
   if (!stream)
       return;
@@ -1173,7 +1173,7 @@ void ph_media_video_stop(phcall_t *ca)
 
 	if (stream->ms.codec->encoder_cleanup)
 		stream->ms.codec->encoder_cleanup(stream->ms.encoder_ctx);
-	
+
 	if (stream->ms.codec->decoder_cleanup)
 		stream->ms.codec->decoder_cleanup(stream->ms.decoder_ctx);
 
@@ -1181,9 +1181,9 @@ void ph_media_video_stop(phcall_t *ca)
 
 	ca->ph_video_stream = 0;
 
-	ortp_set_debug_file("oRTP", stdout); 
+	ortp_set_debug_file("oRTP", stdout);
 	ortp_session_stats_display(stream->ms.rtp_session);
-	ortp_set_debug_file("oRTP", NULL); 
+	ortp_set_debug_file("oRTP", NULL);
 
 	rtp_session_destroy(stream->ms.rtp_session);
 
@@ -1195,7 +1195,7 @@ void ph_media_video_stop(phcall_t *ca)
 	  rtptun_free(stream->ms.tunRtp);
   }
 #endif
-  
+
 	memset(stream, 0, sizeof(phvstream_t));
 	osip_free(stream);
 }

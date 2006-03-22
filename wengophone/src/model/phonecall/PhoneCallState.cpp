@@ -22,7 +22,8 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <Sound.h>
+#include <sound/Sound.h>
+
 #include <util/Logger.h>
 
 Sound * PhoneCallState::_soundRingin = NULL;

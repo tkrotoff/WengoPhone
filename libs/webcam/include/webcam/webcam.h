@@ -20,7 +20,7 @@
 #ifndef WEBCAM_H
 #define WEBCAM_H
 
-#include <pixertool.h>
+#include <pixertool/pixertool.h>
 
 /*TODO: add function to set factory*/
 

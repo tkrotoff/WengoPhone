@@ -20,8 +20,8 @@
 #ifndef SOUNDMIXER_H
 #define SOUNDMIXER_H
 
-#include <SoundMixerException.h>
-#include <NoSoundCardException.h>
+#include <sound/SoundMixerException.h>
+#include <sound/NoSoundCardException.h>
 
 #include <util/NonCopyable.h>
 

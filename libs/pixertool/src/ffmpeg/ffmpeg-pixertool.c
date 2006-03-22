@@ -17,7 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <ffmpeg-pixertool.h>
+#include <pixertool/ffmpeg-pixertool.h>
+
 #include <avcodec.h>
 
 #include <stdlib.h>

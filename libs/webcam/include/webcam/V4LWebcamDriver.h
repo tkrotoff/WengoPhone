@@ -20,7 +20,7 @@
 #ifndef V4LWEBCAMDRIVER_H
 #define V4LWEBCAMDRIVER_H
 
-#include <WebcamDriver.h>
+#include <webcam/WebcamDriver.h>
 
 #include <thread/Thread.h>
 

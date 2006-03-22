@@ -29,7 +29,7 @@
 #include <thread/Thread.h>
 #include <thread/Timer.h>
 
-#include <AudioDevice.h>
+#include <sound/AudioDevice.h>
 
 #include <string>
 using namespace std;
@@ -893,8 +893,7 @@ std::string PhApiWrapper::phapiCallStateToString(enum  phCallStateEvent event) {
 		toReturn = "phCALLCLOSEDandSTOPRING";
 		break;
 	default:
-	 	toReturn = "Unknown phapi state: " + String::fromNumber(event);
+		toReturn = "Unknown phapi state: " + String::fromNumber(event);
 	}
 	return toReturn;
 }
-

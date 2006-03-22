@@ -35,7 +35,7 @@
 #include <time.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include <webcam.h>
+#include <webcam/webcam.h>
 #include <wtimer.h>
 #include <avcodec.h>
 
@@ -116,7 +116,7 @@ void ph_video_rtcp_rr_sent(RtpSession *session, rtcp_t * r) {
 
 	s = (phvstream_t *) (session->user_data);
 
-	if (s && s->ms.rtp_session == session) 
+	if (s && s->ms.rtp_session == session)
 	  {
 	    rr = (rtcp_t *) malloc (sizeof(rtcp_t));
 	    memcpy(rr, r, sizeof(rtcp_t));

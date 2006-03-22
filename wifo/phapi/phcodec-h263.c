@@ -27,7 +27,8 @@
 #include <ortp.h>
 #include <osip2/osip_mt.h>
 #include <osipparser2/osip_list.h>
-#include <webcam.h>
+#include <webcam/webcam.h>
+
 #include "phcodec.h"
 #include "phapi.h"
 #include "phcall.h"
@@ -78,7 +79,7 @@ void *h263_encoder_init(void *ctx) {
 	//h263t->encoder_ctx.context->flags |= CODEC_FLAG_INPUT_PRESERVED;
 	//h263t->encoder_ctx.context->flags |= CODEC_FLAG_EMU_EDGE;
 	//h263t->encoder_ctx.context->flags |= CODEC_FLAG_PASS1;
-	
+
 	h263t->encoder_ctx.context->mb_decision = FF_MB_DECISION_RD;
 
 	h263t->encoder_ctx.context->gop_size = 30;

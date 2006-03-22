@@ -29,7 +29,7 @@
 #include <time.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include <webcam.h>
+#include <webcam/webcam.h>
 #include <wtimer.h>
 #include <avcodec.h>
 

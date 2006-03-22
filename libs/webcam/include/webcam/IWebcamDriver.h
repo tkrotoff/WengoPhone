@@ -20,8 +20,9 @@
 #ifndef IWEBCAMDRIVER_H
 #define IWEBCAMDRIVER_H
 
-#include <webcam.h>
-#include <pixertool.h>
+#include <webcam/webcam.h>
+
+#include <pixertool/pixertool.h>
 
 #include <util/Event.h>
 #include <util/NonCopyable.h>
@@ -206,5 +207,4 @@ public:
 	virtual void flipHorizontally(bool flip) = 0;
 };
 
-#endif //IWEBCAMDRIVER_H
-
+#endif	//IWEBCAMDRIVER_H

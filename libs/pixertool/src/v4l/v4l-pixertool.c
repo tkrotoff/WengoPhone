@@ -17,9 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <pixertool/v4l-pixertool.h>
+
 #include <sys/types.h>
-#include <pixertool.h>
-#include <v4l-pixertool.h>
 
 #include <linux/videodev.h>
 

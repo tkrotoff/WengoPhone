@@ -41,7 +41,8 @@
 #include <ortp.h>
 #include <osip2/osip_mt.h>
 #include <osipparser2/osip_list.h>
-#include <webcam.h>
+#include <webcam/webcam.h>
+
 #include "phcodec.h"
 #include "phapi.h"
 #include "phcall.h"
@@ -175,7 +176,7 @@ ImgReSampleContext* phcodec_avcodec_get_resampler(ph_avcodec_encoder_ctx_t *enco
 	);
 
 	return encoder_t->res_ctx;
-	
+
 }
 
 
@@ -235,6 +236,6 @@ void phcodec_avcodec_video_rtp_callback(struct AVCodecContext * context, void *d
 	if (eof) {
 		video_stream->mbCounter = 0;
 	}
-	
+
 	video_stream->rtpCallback(video_stream, data, size, ts, eof);
 }

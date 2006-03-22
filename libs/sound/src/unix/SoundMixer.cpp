@@ -17,16 +17,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <SoundMixer.h>
+#include <sound/SoundMixer.h>
+
+#include <cutil/global.h>
 
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <fcntl.h>
 
-#if defined(__linux__)
-#include <linux/soundcard.h>
-#elif defined(__FreeBSD__)
-#include <sys/soundcard.h>
+#if defined(OS_LINUX)
+	#include <linux/soundcard.h>
+#elif defined(OS_BSD)
+	#include <sys/soundcard.h>
 #endif
 
 #include <iostream>
@@ -47,7 +49,7 @@ int SoundMixer::getOutputVolume() {
 	fd = open("/dev/mixer", O_RDONLY);
 	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
 
-	// Find device
+	//Find device
 	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
 		if (((1 << i) & devmask) && !strcmp("pcm", sound_device_names[i])) {
 			break;
@@ -66,7 +68,7 @@ int SoundMixer::getInputVolume() {
 	fd = open("/dev/mixer", O_RDONLY);
 	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
 
-	// Find device
+	//Find device
 	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
 		if (((1 << i) & devmask) && !strcmp("igain", sound_device_names[i])) {
 			break;
@@ -85,7 +87,7 @@ void SoundMixer::setOutputVolume(int volume) {
 	fd = open("/dev/mixer", O_RDONLY);
 	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
 
-	// Find device
+	//Find device
 	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
 		if (((1 << i) & devmask) && !strcmp("pcm", sound_device_names[i])) {
 			break;
@@ -103,7 +105,7 @@ void SoundMixer::setInputVolume(int volume) {
 	fd = open("/dev/mixer", O_RDONLY);
 	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
 
-	// Find device
+	//Find device
 	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
 		if (((1 << i) & devmask) && !strcmp("igain", sound_device_names[i])) {
 			break;
@@ -121,7 +123,7 @@ void SoundMixer::setMicPlayBack(bool mute) {
 	fd = open("/dev/mixer", O_RDONLY);
 	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
 
-	// Find device
+	//Find device
 	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
 		if (((1 << i) & devmask) && !strcmp("mic", sound_device_names[i])) {
 			break;
@@ -144,7 +146,7 @@ bool SoundMixer::isPlaybackMuted() {
 	fd = open("/dev/mixer", O_RDONLY);
 	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
 
-	// Find device
+	//Find device
 	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
 		if (((1 << i) & devmask) && !strcmp("mic", sound_device_names[i])) {
 			break;

@@ -17,9 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <SoundMixer.h>
+#include <sound/SoundMixer.h>
 
-#include <AudioDevice.h>
+#include <sound/AudioDevice.h>
 
 #include <util/Logger.h>
 

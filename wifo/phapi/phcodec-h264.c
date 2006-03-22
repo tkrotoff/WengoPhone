@@ -25,7 +25,8 @@
 #include <ortp.h>
 #include <osip2/osip_mt.h>
 #include <osipparser2/osip_list.h>
-#include <webcam.h>
+#include <webcam/webcam.h>
+
 #include "phcodec.h"
 #include "phapi.h"
 #include "phcall.h"
