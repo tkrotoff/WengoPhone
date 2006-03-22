@@ -1,12 +1,7 @@
 from wengoscons import wengoenv
 
-env = wengoenv.getGlobalEnvironment(tools = ['nsis', 'default'], 
-	toolpath = ['wengoscons/Tools'])
-
-#Uncomment to compile with MinGW
-#env = wengoenv.getGlobalEnvironment(tools=['mingw'], toolpath=['wengoscons/Tools'])
-#env['CC'] = 'gcc'
-#env['CXX'] = 'g++'
+#env = wengoenv.getGlobalEnvironment(tools = ['nsis', 'mingw'], toolpath = ['wengoscons/Tools'])
+env = wengoenv.getGlobalEnvironment(tools = ['nsis', 'default'], toolpath = ['wengoscons/Tools'])
 
 if env.File('SOptions').exists():
 	env.SConscript('SOptions')
