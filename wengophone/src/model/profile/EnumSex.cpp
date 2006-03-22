@@ -39,6 +39,8 @@ string EnumSex::toString(EnumSex::Sex sex) {
 	default:
 		LOG_FATAL("unknown case");
 	}
+
+	return result;
 }
 
 EnumSex::Sex EnumSex::toSex(const string & sex) {
