@@ -20,7 +20,8 @@
 #include "ContactXMLSerializer.h"
 
 #include "Contact.h"
-#include "StreetAddressXMLSerializer.h"
+
+#include <model/profile/StreetAddressXMLSerializer.h>
 
 #include <imwrapper/IMContactXMLSerializer.h>
 #include <imwrapper/IMContactSet.h>
@@ -58,8 +59,8 @@ string ContactXMLSerializer::serialize() {
 	////
 
 	//Serializing sex
-	if (_contact._sex != Contact::SexUnknown) {
-		result += ("<sex>" + ((_contact._sex == Contact::SexFemale) ? string("female") : string("male")) + "</sex>\n");
+	if (_contact._sex != EnumSex::SexUnknown) {
+		result += ("<sex>" + EnumSex::toString(_contact._sex) + "</sex>\n");
 	}
 	////
 
@@ -81,9 +82,12 @@ string ContactXMLSerializer::serialize() {
 	result += "</birthday>\n";
 	////
 
-	// Serializing street address
-	StreetAddressXMLSerializer streetSerializer(_contact._streetAddress);
-	result += streetSerializer.serialize();
+	// Serializing organization
+	/*
+	result += "<organization>\n";
+
+	result += "</organization>\n";
+	*/
 	////
 
 	// Serializing phone numbers
@@ -98,11 +102,29 @@ string ContactXMLSerializer::serialize() {
 	if (!_contact._homePhone.empty()) {
 		result += ("<tel type=\"home\">" + _contact._homePhone + "</tel>\n");
 	}
-/*
-	if (!_contact._mobilePhone.empty()) {
+
+	if (!_contact._wengoPhoneNumber.empty()) {
 		result += ("<tel type=\"wengo\">" + _contact._wengoPhoneNumber + "</tel>");
 	}
-	*/
+	////
+
+	// Serializing street address
+	StreetAddressXMLSerializer streetSerializer(_contact._streetAddress);
+	result += streetSerializer.serialize();
+	////
+
+	// Serializing emails
+	if (!_contact._personalEmail.empty()) {
+		result += ("<email type=\"home\">" + _contact._personalEmail + "</email>\n");
+	}
+
+	if (!_contact._workEmail.empty()) {
+		result += ("<email type=\"work\">" + _contact._workEmail + "</email>\n");	
+	}
+
+	if (!_contact._otherEmail.empty()) {
+		result += ("<email type=\"other\">" + _contact._otherEmail + "</email>\n");	
+	}
 	////
 
 	// Serializing IMContacts
@@ -142,6 +164,79 @@ bool ContactXMLSerializer::unserialize(const string & data) {
 	TiXmlNode * wengoid = wgCard.FirstChild("wengoid").Node();
 	if (wengoid) {
 		_contact.setWengoPhoneId(wengoid->FirstChild()->Value());
+	}
+	////
+
+	// Retrieving names
+	TiXmlNode * name = wgCard.FirstChild("name").Node();
+	if (name) {
+		TiXmlNode * firstName = name->FirstChild("first");
+		if (firstName) {
+			_contact.setFirstName(firstName->FirstChild()->Value());
+		}
+		TiXmlNode * lastName = name->FirstChild("last");
+		if (lastName) {
+			_contact.setLastName(lastName->FirstChild()->Value());
+		}
+	}
+	////
+
+	// Retrieving sex
+	TiXmlNode * sex = wgCard.FirstChild("sex").Node();
+	if (sex) {
+		_contact.setSex(EnumSex::toSex(sex->FirstChild()->Value()));
+	}
+	////
+
+	// Retrieving URLs
+	TiXmlNode * url = NULL;
+	while ((url = wgCard.Node()->IterateChildren("url", url))) {
+		TiXmlElement * urlElt = url->ToElement();
+		string typeAttr = string(urlElt->Attribute("type"));
+		if (typeAttr == "website") {
+			_contact.setWebsite(url->FirstChild()->Value());
+		}
+	}
+	////
+
+	// Retrieving birthday
+	/////
+
+	// Retrieving organization
+	////
+
+	// Retrieving address
+	////
+
+	// Retrieving phone numbers
+	TiXmlNode * tel = NULL;
+	while ((tel = wgCard.Node()->IterateChildren("tel", url))) {
+		TiXmlElement * telElt = tel->ToElement();
+		string typeAttr = string(telElt->Attribute("type"));
+		if (typeAttr == "home") {
+			_contact.setHomePhone(tel->FirstChild()->Value());
+		} else if (typeAttr == "work") {
+			_contact.setWorkPhone(tel->FirstChild()->Value());
+		} else if (typeAttr == "cell") {
+			_contact.setMobilePhone(tel->FirstChild()->Value());
+		} else if (typeAttr == "wengo") {
+			_contact.setWengoPhoneNumber(tel->FirstChild()->Value());
+		}
+	}
+	////
+
+	// Retrieving emails
+	TiXmlNode * email = NULL;
+	while ((email = wgCard.Node()->IterateChildren("email", url))) {
+		TiXmlElement * emailElt = email->ToElement();
+		string typeAttr = string(emailElt->Attribute("type"));
+		if (typeAttr == "home") {
+			_contact.setPersonalEmail(email->FirstChild()->Value());
+		} else if (typeAttr == "work") {
+			_contact.setWorkEmail(email->FirstChild()->Value());
+		} else if (typeAttr == "other") {
+			_contact.setOtherEmail(email->FirstChild()->Value());
+		}
 	}
 	////
 

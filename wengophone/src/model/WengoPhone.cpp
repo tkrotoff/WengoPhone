@@ -130,7 +130,10 @@ void WengoPhone::init() {
 		 it != _imAccountHandler.end();
 		 ++it) {
 		newIMAccountAddedEvent(*this, (IMAccount &)*it);
-		_connectHandler->connect(*it);
+		//FIXME: hack for phApi connection
+		if ((*it).getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
+			_connectHandler->connect(*it);
+		}
 	}
 	////
 
@@ -314,7 +317,7 @@ void WengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::
 void WengoPhone::addIMAccount(const IMAccount & imAccount) {
 	LOG_DEBUG("adding an IMAccount");
 
-	_imAccountHandler.insert(imAccount);
+	pair<IMAccountHandler::const_iterator, bool> result = _imAccountHandler.insert(imAccount);
 
 	IMAccountHandler::const_iterator it = _imAccountHandler.find(imAccount);
 
@@ -322,7 +325,9 @@ void WengoPhone::addIMAccount(const IMAccount & imAccount) {
 		LOG_FATAL("Error while inserting this IMAccount: " + imAccount.getLogin());
 	}
 
-	newIMAccountAddedEvent(*this, (IMAccount &)*it);
+	if (result.second) {
+		newIMAccountAddedEvent(*this, (IMAccount &)*it);
+	}
 }
 
 IPhoneLine * WengoPhone::findWengoPhoneLine() {

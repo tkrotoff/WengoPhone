@@ -20,7 +20,6 @@
 #include "ContactGroup.h"
 
 #include "Contact.h"
-#include "ContactGroupParser.h"
 #include "IMContactListHandler.h"
 
 #include <util/Logger.h>

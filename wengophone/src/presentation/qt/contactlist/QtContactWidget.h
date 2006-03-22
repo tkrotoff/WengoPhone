@@ -74,8 +74,8 @@ private:
 	void setLastName(const QString & lastName);
 	QString getLastName() const;
 
-	void setSex(Contact::Sex sex);
-	Contact::Sex getSex() const;
+	void setSex(EnumSex::Sex sex);
+	EnumSex::Sex getSex() const;
 
 	void setBirthdate(const QDateTime & birthdate);
 	QDateTime getBirthdate() const;

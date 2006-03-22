@@ -20,7 +20,7 @@
 #ifndef CONTACT_H
 #define CONTACT_H
 
-#include "StreetAddress.h"
+#include <model/profile/Profile.h>
 
 #include <imwrapper/EnumPresenceState.h>
 #include <imwrapper/IMAccount.h>
@@ -43,16 +43,10 @@ class ContactList;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class Contact {
+class Contact : public Profile {
 	friend class ContactList;
 	friend class ContactXMLSerializer;
 public:
-
-	enum Sex {
-		SexUnknown,
-		SexMale,
-		SexFemale
-	};
 
 	/**
 	 * A Contact has been modified/updated.
@@ -70,63 +64,6 @@ public:
 	~Contact();
 
 	bool operator == (const Contact & contact) const;
-
-	void setFirstName(const std::string & firstName) { _firstName = firstName; contactModifiedEvent(*this); }
-	const std::string & getFirstName() const { return _firstName; }
-
-	void setLastName(const std::string & lastName) { _lastName = lastName; contactModifiedEvent(*this); }
-	const std::string & getLastName() const { return _lastName; }
-
-	void setSex(Sex sex) { _sex = sex; contactModifiedEvent(*this); }
-	Sex getSex() const { return _sex; }
-
-	void setBirthdate(const Date & birthdate) { _birthdate = birthdate; contactModifiedEvent(*this); }
-	Date getBirthdate() const { return _birthdate; }
-
-	void setPicture(const std::string & picture) { _picture = picture; contactModifiedEvent(*this); }
-	const std::string & getPicture() const { return _picture; }
-
-	void setWebsite(const std::string & website) { _website = website; contactModifiedEvent(*this); }
-	const std::string & getWebsite() const { return _website; }
-
-	void setCompany(const std::string & company) { _company = company; contactModifiedEvent(*this); }
-	const std::string & getCompany() const { return _company; }
-
-	void setWengoPhoneId(const std::string & wengoPhoneId) { _wengoPhoneId = wengoPhoneId; contactModifiedEvent(*this); }
-	const std::string & getWengoPhoneId() const { return _wengoPhoneId; }
-
-	void setMobilePhone(const std::string & mobilePhone) { _mobilePhone = mobilePhone; contactModifiedEvent(*this); }
-	const std::string & getMobilePhone() const { return _mobilePhone; }
-
-	void setHomePhone(const std::string & homePhone) { _homePhone = homePhone; contactModifiedEvent(*this); }
-	const std::string & getHomePhone() const { return _homePhone; }
-
-	void setWorkPhone(const std::string & workPhone) { _workPhone = workPhone; contactModifiedEvent(*this); }
-	const std::string & getWorkPhone() const { return _workPhone; }
-
-	void setOtherPhone(const std::string & otherPhone) { _otherPhone = otherPhone; contactModifiedEvent(*this); }
-	const std::string & getOtherPhone() const { return _otherPhone; }
-
-	void setWengoPhoneNumber(const std::string & wengoPhoneNumber) { _wengoPhoneNumber = wengoPhoneNumber; contactModifiedEvent(*this); }
-	const std::string & getWengoPhoneNumber() const { return _wengoPhoneNumber; }
-
-	void setFax(const std::string & fax) { _fax = fax; contactModifiedEvent(*this); }
-	const std::string & getFax() const { return _fax; }
-
-	void setPersonalEmail(const std::string & personalEmail) { _personalEmail = personalEmail; contactModifiedEvent(*this); }
-	const std::string & getPersonalEmail() const { return _personalEmail; }
-
-	void setWorkEmail(const std::string & workEmail) { _workEmail = workEmail; contactModifiedEvent(*this); }
-	const std::string & getWorkEmail() const { return _workEmail; }
-
-	void setOtherEmail(const std::string & otherEmail) { _otherEmail = otherEmail; contactModifiedEvent(*this); }
-	const std::string & getOtherEmail() const { return _otherEmail; }
-
-	void setStreetAddress(const StreetAddress & streetAddress) { _streetAddress = streetAddress; contactModifiedEvent(*this); }
-	const StreetAddress & getStreetAddress() const { return _streetAddress; }
-
-	void setNotes(const std::string & notes) { _notes = notes; contactModifiedEvent(*this); }
-	const std::string & getNotes() const { return _notes; }
 
 	/**
 	 * Set the preferred phone number (can also be a wengo id or a sip address).
@@ -160,16 +97,6 @@ public:
 	 * IMContact is online, return NULL.
 	 */
 	IMContact * getPreferredIMContact() const;
-
-	/**
-	 * Return the PresneceState of the Contact.
-	 *
-	 * The PresenceState is computed from the PresenceState of all its
-	 * IMContact.
-	 *
-	 * @return the PresenceState
-	 */
-	EnumPresenceState::PresenceState getPresenceState() const;
 
 	/**
 	 * Add the Contact to the given ContactGroup.
@@ -261,6 +188,8 @@ public:
 	 */
 	void moveToGroup(const std::string & to, const std::string & from);
 
+	EnumPresenceState::PresenceState getPresenceState() const;
+
 	/**
 	 * Avoid this contact to see my presence.
 	 */
@@ -295,6 +224,8 @@ public:
 	WengoPhone & getWengoPhone() const {
 			return _wengoPhone;
 	}
+
+	void setWengoPhoneId(const std::string & wengoId);
 
 private:
 
@@ -355,29 +286,9 @@ private:
 	 */
 	bool wengoIsAvailable() const;
 
-	std::string _firstName;
-	std::string _lastName;
-	Sex _sex;
-	Date _birthdate;
-	std::string _picture;
-	std::string _website;
-	std::string _company;
-	std::string _wengoPhoneId;
-	std::string _mobilePhone;
-	std::string _homePhone;
-	std::string _workPhone;
-	std::string _wengoPhoneNumber;
-	std::string _otherPhone;
 	std::string _preferredNumber;
-	std::string _fax;
-	std::string _personalEmail;
-	std::string _workEmail;
-	std::string _otherEmail;
-	StreetAddress _streetAddress;
-	std::string _notes;
-	IMContact * _preferredIMContact;
 
-	EnumPresenceState::PresenceState _state;
+	IMContact * _preferredIMContact;
 
 	bool _blocked;
 

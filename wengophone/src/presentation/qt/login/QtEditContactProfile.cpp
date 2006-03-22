@@ -65,7 +65,7 @@ void QtEditContactProfile::writeToConfig() {
 	Contact & c = _contact.getContact();
 	c.setFirstName( _firstName->text().toStdString() );
 	c.setLastName( _lastName->text().toStdString() );
-	c.setSex( ( Contact::Sex ) _gender->currentIndex() );
+	c.setSex((EnumSex::Sex) _gender->currentIndex());
 	QDate qdate = _birthDate->date();
 	Date date;
 	date.setDay( qdate.day() );

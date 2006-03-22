@@ -102,8 +102,10 @@ sources = [
 	'model/contactlist/ContactListFileStorage.cpp',
 	'model/contactlist/ContactListRPCStorage.cpp',
 	'model/contactlist/IMContactListHandler.cpp',
-	'model/contactlist/StreetAddress.cpp',
-	'model/contactlist/StreetAddressXMLSerializer.cpp',
+	'model/profile/UserProfile.cpp',
+	'model/profile/EnumSex.cpp',
+	'model/profile/StreetAddress.cpp',
+	'model/profile/StreetAddressXMLSerializer.cpp',
 	'model/sms/Sms.cpp',
 
 	'control/wenbox/CWenboxPlugin.cpp',

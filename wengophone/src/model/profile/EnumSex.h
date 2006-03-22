@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006 Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,40 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTACTPARSER_H
-#define CONTACTPARSER_H
-
-#include <imwrapper/EnumIMProtocol.h>
+#ifndef SEX_H
+#define SEX_H
 
 #include <string>
 
-class Contact;
-class TiXmlHandle;
-
 /**
- * Parses the XML datas to create a Contact.
  *
- * This a separated class rather than to be inside the class Contact,
- * this allows more modularity and encapsulates the use of TinyXML.
- * What would be interresting is to create a separated XML VCard library that
- * uses TinyXML.
- *
- * @ingroup model
- * @author Tanguy Krotoff
+ * @author Philippe BERNERY
  */
-class ContactParser {
+class EnumSex {
 public:
 
-	ContactParser(Contact & contact, const std::string & data);
-	
-private:
+	enum Sex {
+		SexUnknown,
+		SexMale,
+		SexFemale
+	};
 
-	void parseIMAccount(Contact & contact, const TiXmlHandle & handle, const std::string & protocolId, EnumIMProtocol::IMProtocol protocol);
+	/**
+	 * Get a string represencation of the sex.
+	 *
+	 * @param sex the sex to transform
+	 * @result the string representing the sex
+	 */
+	static std::string toString(Sex sex);
+
+	/**
+	 * Get the sex from a string representation.
+	 *
+	 * @param sex the string to transform.
+	 * @return the sex represented by the string
+	 */
+	static Sex toSex(const std::string & sex);
 
 };
 
-#endif	//CONTACTPARSER_H
+#endif //SEX_H

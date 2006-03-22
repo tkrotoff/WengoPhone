@@ -94,6 +94,16 @@ void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount &
 
 		//TODO: Presence must be change to Presence set before disconnection
 		(*it).second->changeMyPresence(EnumPresenceState::PresenceStateOnline, String::null);
+		
+		//Launch all pending subscriptions
+		IMContactMultiMap::iterator pendIt = _pendingSubscriptions.find(imAccount);
+		while (pendIt != _pendingSubscriptions.end()) {
+			LOG_DEBUG("subscribing to Presence of: " + (*pendIt).second->getContactId());
+			(*it).second->subscribeToPresenceOf((*pendIt).second->getContactId());
+			//TODO: should we keep the list in case of disconnection?
+			_pendingSubscriptions.erase(pendIt);
+			pendIt = _pendingSubscriptions.find(imAccount);
+		}
 	} else {
 		LOG_FATAL("the given IMAccount has not been added yet");
 	}
@@ -172,6 +182,7 @@ void PresenceHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccou
 			boost::bind(&PresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3);
 
 		//Launch all pending subscriptions
+		/*
 		IMContactMultiMap::iterator it = _pendingSubscriptions.find(imAccount);
 		while (it != _pendingSubscriptions.end()) {
 			LOG_DEBUG("subscribing to Presence of: " + (*it).second->getContactId());
@@ -180,6 +191,7 @@ void PresenceHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccou
 			_pendingSubscriptions.erase(it);
 			it = _pendingSubscriptions.find(imAccount);
 		}
+		*/
 
 		i = _presenceMap.find(imAccount);
 	} else {

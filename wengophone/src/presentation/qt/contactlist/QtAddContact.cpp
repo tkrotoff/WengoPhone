@@ -65,7 +65,9 @@ void QtAddContact::showContactGroups() {
 
 void QtAddContact::addContact() {
 	Contact & contact = _cWengoPhone.getWengoPhone().getContactList().createContact();
-	contact.setWengoPhoneId(_contactPhoneNumber);
+	if (!_contactPhoneNumber.empty()) {
+		contact.setWengoPhoneId(_contactPhoneNumber);
+	}
 
 	_qtContactWidget->createContact(contact);
 

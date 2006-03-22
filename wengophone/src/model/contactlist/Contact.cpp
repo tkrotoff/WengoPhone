@@ -20,7 +20,6 @@
 #include "Contact.h"
 
 #include <model/WengoPhone.h>
-#include <model/contactlist/ContactParser.h>
 #include <model/contactlist/ContactList.h>
 #include <model/presence/PresenceHandler.h>
 
@@ -35,7 +34,7 @@ using namespace std;
 
 Contact::Contact(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone), _contactList(wengoPhone.getContactList()) {
-	_sex = SexUnknown;
+	_sex = EnumSex::SexUnknown;
 	_blocked = false;
 	_preferredIMContact = NULL;
 }
@@ -132,6 +131,16 @@ void Contact::_removeIMContact(const IMContact & imContact) {
 	if (it != _imContactSet.end()) {
 		contactModifiedEvent(*this);
 		_imContactSet.erase(it);
+	}
+}
+
+void Contact::setWengoPhoneId(const string & wengoId) {
+	_wengoPhoneId = wengoId;
+
+	set<IMAccount *> list;
+	list = _wengoPhone.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+	if (list.begin() != list.end()) {
+		addIMContact(IMContact(*(*list.begin()), _wengoPhoneId));
 	}
 }
 

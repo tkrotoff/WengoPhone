@@ -124,15 +124,6 @@ void QtContactWidget::createContact(Contact & contact) {
 	contact.setStreetAddress(getStreetAddress());
 	contact.setNotes(getNotes().toStdString());
 
-	if (!getWengoPhone().isEmpty()) {
-		set<IMAccount *> list;
-		list = contact.getWengoPhone().getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
-		if (list.begin() != list.end()) {
-			contact.addIMContact(IMContact(*(*list.begin()),
-				getWengoPhone().toStdString()));
-		}
-	}
-
 	contact.addToContactGroup(_contactGroupComboBox->currentText().toStdString());
 }
 
@@ -152,12 +143,12 @@ QString QtContactWidget::getLastName() const {
 	return _lastNameLineEdit->text();
 }
 
-void QtContactWidget::setSex(Contact::Sex sex) {
+void QtContactWidget::setSex(EnumSex::Sex sex) {
 	_sexComboBox->setCurrentIndex(sex);
 }
 
-Contact::Sex QtContactWidget::getSex() const {
-	return (Contact::Sex) _sexComboBox->currentIndex();
+EnumSex::Sex QtContactWidget::getSex() const {
+	return (EnumSex::Sex) _sexComboBox->currentIndex();
 }
 
 void QtContactWidget::setBirthdate(const QDateTime & birthdate) {

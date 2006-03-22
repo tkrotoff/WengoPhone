@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006 Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,36 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTACTLISTPARSER_H
-#define CONTACTLISTPARSER_H
+#include "EnumSex.h"
 
-#include <string>
+#include <util/Logger.h>
 
-class ContactList;
-class WengoPhone;
+using namespace std;
 
-/**
- * Parses the XML datas to create the ContactList.
- *
- * This a separated class rather than to be inside the class ContactList,
- * this allows more modularity and encapsulates the use of TinyXML.
- *
- * @ingroup model
- * @author Tanguy Krotoff
- */
-class ContactListParser {
-public:
+string EnumSex::toString(EnumSex::Sex sex) {
+	string result;
 
-	ContactListParser(ContactList & contactList, WengoPhone & wengoPhone, 
-		const std::string & data);
-};
+	switch (sex) {
+	case SexUnknown:
+		result = "unknown";
+		break;
+	case SexFemale:
+		result = "female";
+		break;
+	case SexMale:
+		result = "male";
+		break;
+	default:
+		LOG_FATAL("unknown case");
+	}
+}
 
-#endif	//CONTACTLISTPARSER_H
+EnumSex::Sex EnumSex::toSex(const string & sex) {
+	if (sex == "male") {
+		return SexMale;
+	} else if (sex == "female") {
+		return SexFemale;
+	} else {
+		return SexUnknown;
+	}
+}
