@@ -4,6 +4,8 @@ libs = [
 	'owutil',
 	'pixertool',
 ]
+if WengoOSLinux() or WengoOSMacOSX():
+	libs.append('owthread')
 
 include_path = [
 	'include'
@@ -44,7 +46,6 @@ if WengoOSLinux():
 	sources += [
 		'src/v4l/V4LWebcamDriver.cpp'
 	]
-	libs += ['owthread']
 
 if WengoOSMacOSX():
 	headers += [
