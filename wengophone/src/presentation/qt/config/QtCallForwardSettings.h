@@ -7,11 +7,16 @@ class QtCallForwardSettings : public QWidget {
 		Q_OBJECT
 
 	public:
+
 		QtCallForwardSettings( QWidget * parent = 0, Qt::WFlags f = 0 );
+
+		void saveData();
 
 	protected:
 
 		void setupChilds();
+
+		void readConfigData();
 
 		QWidget * _widget;
 
@@ -28,6 +33,8 @@ class QtCallForwardSettings : public QWidget {
 		QCheckBox * _forwardCallMobilCheckBox;
 
 	private:
+
+
 
 	public Q_SLOTS:
 

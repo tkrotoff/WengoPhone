@@ -20,6 +20,9 @@
 #include <WidgetFactory.h>
 #include <Object.h>
 
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
 #include "QtCallForwardSettings.h"
 
 QtCallForwardSettings::QtCallForwardSettings( QWidget * parent, Qt::WFlags f ) : QWidget ( parent, f ) {
@@ -65,4 +68,54 @@ void QtCallForwardSettings::forwardAllCallToStateChanged( int state ) {
 	if ( state == Qt::Checked ) {
 			_forwardCallCheckBox->setCheckState( Qt::Unchecked );
 		}
+}
+
+void QtCallForwardSettings::saveData(){
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	if ( _forwardCallCheckBox->checkState() == Qt::Checked )
+		config.set(config.CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY, true );
+	else
+		config.set(config.CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY, false );
+
+	if ( _forwardAllCallCheckBox->checkState() == Qt::Checked )
+		config.set(config.CALL_FORWARD_ALL_UNDELIVREDTO_KEY,true);
+	else
+		config.set(config.CALL_FORWARD_ALL_UNDELIVREDTO_KEY,false);
+
+	if ( _forwardCallMobilCheckBox->checkState() == Qt::Checked )
+		config.set(config.CALL_FORWARD_TOMOBILE_KEY,true);
+	else
+		config.set(config.CALL_FORWARD_TOMOBILE_KEY,false);
+
+	config.set(config.CALL_FORWARD_PHONENUMBER1_KEY,_phoneNumber1Edit->text().toStdString());
+	config.set(config.CALL_FORWARD_PHONENUMBER2_KEY,_phoneNumber2Edit->text().toStdString());
+	config.set(config.CALL_FORWARD_PHONENUMBER3_KEY,_phoneNumber3Edit->text().toStdString());
+
+}
+
+void QtCallForwardSettings::readConfigData(){
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	if ( config.getCallForwardAllUndelivredToVm() )
+		_forwardCallCheckBox->setCheckState(Qt::Checked);
+	else
+		_forwardCallCheckBox->setCheckState(Qt::Unchecked);
+
+	if ( config.getCallForwardAllUndelivredTo() )
+		_forwardAllCallCheckBox->setCheckState(Qt::Checked);
+	else
+		_forwardCallCheckBox->setCheckState(Qt::Unchecked);
+
+	if ( config.getCallForwardToMobile() )
+		_forwardCallMobilCheckBox->setCheckState(Qt::Checked);
+	else
+		_forwardCallMobilCheckBox->setCheckState(Qt::Unchecked);
+
+	_phoneNumber1Edit->setText( QString::fromStdString(config.getCallForwardPhoneNumber1()) );
+	_phoneNumber2Edit->setText( QString::fromStdString(config.getCallForwardPhoneNumber2()) );
+	_phoneNumber3Edit->setText( QString::fromStdString(config.getCallForwardPhoneNumber3()) );
+
 }

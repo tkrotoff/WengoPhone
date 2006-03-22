@@ -48,6 +48,7 @@ const std::string Config::AUDIO_OUTPUT_DEVICENAME_KEY = "audio.output.devicename
 const std::string Config::AUDIO_INPUT_DEVICENAME_KEY = "audio.input.devicename";
 const std::string Config::AUDIO_RINGER_DEVICENAME_KEY = "audio.ringer.devicename";
 const std::string Config::AUDIO_RINGING_FILE_KEY = "audio.ringing.file";
+const std::string Config::AUDIO_PERSONAL_CONFIGURATION_KEY = "audio.personal.configuration";
 const std::string Config::AUDIO_CALLCLOSED_FILE_KEY = "audio.callclosed.file";
 const std::string Config::AUDIO_SMILEYS_DIR_KEY = "audio.smileys.dir";
 const std::string Config::AUDIO_AEC_KEY = "audio.aec";
@@ -91,6 +92,25 @@ const std::string Config::PROFILE_WIDTH = "profile.width";
 const std::string Config::PROFILE_HEIGHT = "profile.height";
 const std::string Config::PROFILE_POSX = "profile.posx";
 const std::string Config::PROFILE_POSY = "profile.posy";
+
+const std::string Config::CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY = "call.forward.all.undelivredtovm";
+const std::string Config::CALL_FORWARD_ALL_UNDELIVREDTO_KEY = "call.forward.all.undelivredto";
+const std::string Config::CALL_FORWARD_PHONENUMBER1_KEY = "call.forward.phonenumber1";
+const std::string Config::CALL_FORWARD_PHONENUMBER2_KEY = "call.forward.phonenumber2";
+const std::string Config::CALL_FORWARD_PHONENUMBER3_KEY = "call.forward.phonenumber3";
+const std::string Config::CALL_FORWARD_TOMOBILE_KEY = "call.forward.tomobile";
+
+const std::string Config::GENERAL_SETTINGS_AUTOSTART_WENGO_KEY = "general.settings.autostart.wengo";
+const std::string Config::GENERAL_SETTINGS_CHECK_UPDATE_KEY = "general.settings.check.update";
+const std::string Config::GENERAL_SETTINGS_START_FREECALL_KEY = "general.settings.start.freecall";
+const std::string Config::GENERAL_SETTINGS_START_CHATONLY_KEY = "general.settings.start.chatonly";
+const std::string Config::GENERAL_SETTINGS_CALL_CELLPHONE_KEY = "general.settings.call.cellphone";
+const std::string Config::GENERAL_SETTINGS_SHOW_AWAY_KEY = "general.settings.show.away";
+const std::string Config::GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY = "general.settings.show.notavailable";
+const std::string Config::GENERAL_SETTINGS_AWAY_TIMER_KEY = "general.settings.away.timer";
+const std::string Config::GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY = "general.settings.notavailable.timer";
+
+
 
 const std::string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
 const std::string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
@@ -142,6 +162,7 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[AUDIO_INPUT_DEVICENAME_KEY] = AudioDevice::getDefaultRecordDevice();
 	_keyDefaultValueMap[AUDIO_RINGER_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
 	_keyDefaultValueMap[AUDIO_RINGING_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
+	_keyDefaultValueMap[AUDIO_PERSONAL_CONFIGURATION_KEY] = false;
 	_keyDefaultValueMap[AUDIO_CALLCLOSED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/callclosed.wav");
 	_keyDefaultValueMap[AUDIO_SMILEYS_DIR_KEY] = File::convertPathSeparators(resourcesPath + "sounds/tones/");
 	_keyDefaultValueMap[AUDIO_AEC_KEY] = false;
@@ -185,6 +206,23 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[PROFILE_HEIGHT] = 758;
 	_keyDefaultValueMap[PROFILE_POSX] = 100;
 	_keyDefaultValueMap[PROFILE_POSY] = 100;
+
+	_keyDefaultValueMap[CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY] = false;
+	_keyDefaultValueMap[CALL_FORWARD_ALL_UNDELIVREDTO_KEY] = false;
+	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER1_KEY] = empty;
+	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER2_KEY] = empty;
+	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER3_KEY] = empty;
+	_keyDefaultValueMap[CALL_FORWARD_TOMOBILE_KEY] = false;
+
+	_keyDefaultValueMap[GENERAL_SETTINGS_AUTOSTART_WENGO_KEY] = false;
+	_keyDefaultValueMap[GENERAL_SETTINGS_CHECK_UPDATE_KEY] = false;
+	_keyDefaultValueMap[GENERAL_SETTINGS_START_FREECALL_KEY] = false;
+	_keyDefaultValueMap[GENERAL_SETTINGS_START_CHATONLY_KEY] = false;
+	_keyDefaultValueMap[GENERAL_SETTINGS_CALL_CELLPHONE_KEY] = false;
+	_keyDefaultValueMap[GENERAL_SETTINGS_SHOW_AWAY_KEY] = false;
+	_keyDefaultValueMap[GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY] = false;
+	_keyDefaultValueMap[GENERAL_SETTINGS_AWAY_TIMER_KEY] = 0;
+	_keyDefaultValueMap[GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY] = 0;
 
 	_keyDefaultValueMap[WENGO_SERVER_HOSTNAME_KEY] = std::string("ws.wengo.fr");
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
@@ -301,6 +339,10 @@ std::string Config::getAudioInputDeviceName() const {
 
 std::string Config::getAudioOutputDeviceName() const {
 	return getStringKeyValue(AUDIO_OUTPUT_DEVICENAME_KEY);
+}
+
+bool Config::getAudioPersonalConfiguration() const {
+	return getBooleanKeyValue(AUDIO_PERSONAL_CONFIGURATION_KEY);
 }
 
 std::string Config::getWengoServerHostname() const {
@@ -466,6 +508,67 @@ int Config::getProfilePosX() const {
 int Config::getProfilePoxY() const {
 	return getIntegerKeyValue(PROFILE_POSY);
 }
+
+bool Config::getCallForwardAllUndelivredToVm() const {
+		return getBooleanKeyValue(CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY);
+}
+
+bool Config::getCallForwardAllUndelivredTo() const {
+		return getBooleanKeyValue(CALL_FORWARD_ALL_UNDELIVREDTO_KEY);
+}
+
+std::string Config::getCallForwardPhoneNumber1() const {
+	return getStringKeyValue(CALL_FORWARD_PHONENUMBER1_KEY);
+}
+
+std::string Config::getCallForwardPhoneNumber2() const {
+	return getStringKeyValue(CALL_FORWARD_PHONENUMBER2_KEY);
+}
+
+std::string Config::getCallForwardPhoneNumber3() const {
+	return getStringKeyValue(CALL_FORWARD_PHONENUMBER3_KEY);
+}
+
+bool Config::getCallForwardToMobile() const {
+	return getBooleanKeyValue(CALL_FORWARD_TOMOBILE_KEY);
+}
+
+bool Config::getGeneralSettingsAutoStartWengo() const {
+	return getBooleanKeyValue(GENERAL_SETTINGS_AUTOSTART_WENGO_KEY);
+}
+
+bool Config::getGeneralSettingsCheckUpdate() const {
+	return getBooleanKeyValue(GENERAL_SETTINGS_CHECK_UPDATE_KEY);
+}
+
+bool Config::getGeneralSettingsStartFreeCall() const {
+	return getBooleanKeyValue(GENERAL_SETTINGS_START_FREECALL_KEY);
+}
+
+bool Config::getGeneralSettingsStartChatOnly() const {
+	return getBooleanKeyValue(GENERAL_SETTINGS_START_CHATONLY_KEY);
+}
+
+bool Config::getGeneralSettingsCallCellPhone() const {
+	return getBooleanKeyValue(GENERAL_SETTINGS_CALL_CELLPHONE_KEY);
+}
+
+bool Config::getGeneralSettingsShowAway() const {
+	return getBooleanKeyValue(GENERAL_SETTINGS_SHOW_AWAY_KEY);
+}
+
+bool Config::getGeneralSettingsShowNotAvailable() const {
+	return getBooleanKeyValue(GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY);
+}
+
+int Config::getGeneralSettingsGetAwayTimer() const {
+	return getIntegerKeyValue(GENERAL_SETTINGS_AWAY_TIMER_KEY);
+}
+
+int Config::getGeneralSettingsNotAvailableTimer() const {
+	return getIntegerKeyValue(GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY);
+}
+
 
 boost::any Config::getAny(const std::string & key) const {
 	Keys::const_iterator it = _keyDefaultValueMap.find(key);

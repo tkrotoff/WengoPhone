@@ -19,7 +19,13 @@
 
 #include <Object.h>
 
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
+
 #include "QtAudioSettings.h"
+
+
 
 QtAudioSettings::QtAudioSettings(QWidget * parent, Qt::WFlags f) : QWidget (parent,f)
 {
@@ -38,5 +44,38 @@ void QtAudioSettings::setupChilds(){
 	_ringingDeviceComboBox = Object::findChild<QComboBox *>(_widget,"ringingDeviceComboBox");
 
 	_makeTestCallPushButton = Object::findChild<QPushButton *>(_widget,"makeTestCallPushButton");
+
+	_personalAudioConfig = Object::findChild<QGroupBox *> (_widget,"personalAudioConfig");
+
+}
+
+void QtAudioSettings::saveData() {
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	config.set(config.AUDIO_INPUT_DEVICENAME_KEY, _inputDeviceComboBox->currentText().toStdString() );
+	config.set(config.AUDIO_INPUT_DEVICENAME_KEY,_inputDeviceComboBox->currentText().toStdString() );
+	config.set(config.AUDIO_OUTPUT_DEVICENAME_KEY,_outputDeviceComboBox->currentText().toStdString() );
+	config.set(config.AUDIO_RINGER_DEVICENAME_KEY,_ringingDeviceComboBox->currentText().toStdString() );
+
+	if (_personalAudioConfig->isChecked())
+		config.set(config.AUDIO_PERSONAL_CONFIGURATION_KEY,true);
+	else
+		config.set(config.AUDIO_PERSONAL_CONFIGURATION_KEY,false);
+
+}
+
+void QtAudioSettings::readConfigData(){
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	_inputDeviceComboBox->setCurrentIndex ( _inputDeviceComboBox->findText(QString().fromStdString(config.getAudioInputDeviceName())));
+	_outputDeviceComboBox->setCurrentIndex ( _outputDeviceComboBox->findText(QString().fromStdString(config.getAudioOutputDeviceName())));
+	_ringingDeviceComboBox->setCurrentIndex ( _ringingDeviceComboBox->findText(QString().fromStdString(config.getAudioRingerDeviceName())));
+
+	if ( config.getAudioPersonalConfiguration() )
+		_personalAudioConfig->setChecked(true);
+	else
+		_personalAudioConfig->setChecked(false);
 
 }

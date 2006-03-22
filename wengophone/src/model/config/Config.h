@@ -123,6 +123,10 @@ public:
 	static const std::string AUDIO_RINGER_DEVICENAME_KEY;
 	std::string getAudioRingerDeviceName() const;
 
+	/** Personal audio configuration. */
+	static const std::string AUDIO_PERSONAL_CONFIGURATION_KEY;
+	bool getAudioPersonalConfiguration() const;
+
 	/** Ringing audio file name. */
 	static const std::string AUDIO_RINGING_FILE_KEY;
 	std::string getAudioRingingFile() const;
@@ -327,6 +331,85 @@ public:
 	int getProfilePoxY() const;
 
 	/** @} */
+
+	/**
+	 * @name Call forwarding Methods
+	 * @{
+	 */
+
+	/** Forward all undelivred call to vm */
+	static const std::string CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY;
+	bool getCallForwardAllUndelivredToVm() const;
+
+	/** Forward all undelivred call to : */
+	static const std::string CALL_FORWARD_ALL_UNDELIVREDTO_KEY;
+	bool getCallForwardAllUndelivredTo() const;
+
+	/** Forward call phone number 1. */
+	static const std::string CALL_FORWARD_PHONENUMBER1_KEY;
+	std::string getCallForwardPhoneNumber1() const;
+
+	/** Forward call phone number 2. */
+	static const std::string CALL_FORWARD_PHONENUMBER2_KEY;
+	std::string getCallForwardPhoneNumber2() const;
+
+	/** Forward call phone number 3. */
+	static const std::string CALL_FORWARD_PHONENUMBER3_KEY;
+	std::string getCallForwardPhoneNumber3() const;
+
+	/** Forward call to mobile when status is set to mobile. */
+	static const std::string CALL_FORWARD_TOMOBILE_KEY;
+	bool getCallForwardToMobile() const;
+
+	/**
+	 * @}
+	 */
+
+	/**
+	 * @name General settings Methods
+	 * @{
+	 */
+
+	/** Automatically start Wengo. */
+	static const std::string GENERAL_SETTINGS_AUTOSTART_WENGO_KEY;
+	bool getGeneralSettingsAutoStartWengo() const;
+
+	/** Check for updates automatically. */
+	static const std::string GENERAL_SETTINGS_CHECK_UPDATE_KEY;
+	bool getGeneralSettingsCheckUpdate() const;
+
+	/** Start a free call if applicable */
+	static const std::string GENERAL_SETTINGS_START_FREECALL_KEY;
+	bool getGeneralSettingsStartFreeCall() const;
+
+	/** Start a chat-only when applicable */
+	static const std::string GENERAL_SETTINGS_START_CHATONLY_KEY;
+	bool getGeneralSettingsStartChatOnly() const;
+
+	/** Call cell phone or land line if contact not available. */
+	static const std::string GENERAL_SETTINGS_CALL_CELLPHONE_KEY;
+	bool getGeneralSettingsCallCellPhone() const;
+
+	/** Show me as away when I am inactive for. */
+	static const std::string GENERAL_SETTINGS_SHOW_AWAY_KEY;
+	bool getGeneralSettingsShowAway() const;
+
+	/** Show me as not available when I am inactive for. */
+	static const std::string GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY;
+	bool getGeneralSettingsShowNotAvailable() const;
+
+
+	static const std::string GENERAL_SETTINGS_AWAY_TIMER_KEY;
+	int getGeneralSettingsGetAwayTimer() const;
+
+
+	static const std::string GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY;
+	int getGeneralSettingsNotAvailableTimer() const;
+
+	/**
+	 * @}
+	 */
+
 
 	/**
 	 * @name Path Methods

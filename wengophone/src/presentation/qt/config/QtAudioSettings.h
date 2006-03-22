@@ -14,17 +14,22 @@ class QtAudioSettings : public QWidget
 public:
     QtAudioSettings(QWidget * parent = 0, Qt::WFlags f=0);
 
+	void saveData();
 
 protected:
     QWidget     *   _widget;
 
 	void setupChilds();
 
+	void readConfigData();
+
 	QComboBox * _inputDeviceComboBox;
 
 	QComboBox * _outputDeviceComboBox;
 
 	QComboBox * _ringingDeviceComboBox;
+
+	QGroupBox * _personalAudioConfig;
 
 	QPushButton * _makeTestCallPushButton;
 

@@ -17,6 +17,11 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <Object.h>
+
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
+
 #include "QtGeneralSettings.h"
 
 
@@ -41,3 +46,91 @@ QtGeneralSettings::QtGeneralSettings( QWidget * parent, Qt::WFlags f ) : QWidget
 
 }
 
+void QtGeneralSettings::readConfigData(){
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	if ( config.getGeneralSettingsAutoStartWengo() )
+		_startWengoCheckBox->setCheckState(Qt::Checked);
+	else
+		_startWengoCheckBox->setCheckState(Qt::Unchecked);
+
+	if ( config.getGeneralSettingsCheckUpdate() )
+		_checkForUpdateCheckBox->setCheckState(Qt::Checked);
+	else
+		_checkForUpdateCheckBox->setCheckState(Qt::Unchecked);
+
+	if ( config.getGeneralSettingsStartFreeCall() )
+		_startFreeCallRadioButton->setChecked ( true );
+	else
+		_startFreeCallRadioButton->setChecked ( false );
+
+	if ( config.getGeneralSettingsStartChatOnly() )
+		_startChatOnlyRadioButton->setChecked ( true );
+	else
+		_startChatOnlyRadioButton->setChecked ( false );
+
+	if ( config.getGeneralSettingsCallCellPhone() )
+		_callCellPhoneCheckBox->setCheckState(Qt::Checked);
+	else
+		_callCellPhoneCheckBox->setCheckState(Qt::Unchecked);
+
+	if ( config.getGeneralSettingsShowAway() )
+		_showAwayCheckBox->setCheckState(Qt::Checked);
+	else
+		_showAwayCheckBox->setCheckState(Qt::Unchecked);
+
+	if ( config.getGeneralSettingsShowNotAvailable() )
+		_showNotAvailableCheckBox->setCheckState(Qt::Checked);
+	else
+		_showNotAvailableCheckBox->setCheckState(Qt::Checked);
+
+	_notAvailableSpinBox->setValue(config.getGeneralSettingsGetAwayTimer());
+
+	_awaySpinBox->setValue(config.getGeneralSettingsGetAwayTimer());
+
+}
+
+void QtGeneralSettings::saveData(){
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	if ( _startWengoCheckBox->checkState() == Qt::Checked )
+		config.set(config.GENERAL_SETTINGS_AUTOSTART_WENGO_KEY, true);
+	else
+		config.set(config.GENERAL_SETTINGS_AUTOSTART_WENGO_KEY, false);
+
+	if ( _startFreeCallRadioButton->isChecked() )
+		config.set(config.GENERAL_SETTINGS_START_FREECALL_KEY,true);
+	else
+		config.set(config.GENERAL_SETTINGS_START_FREECALL_KEY,false);
+
+	if ( _checkForUpdateCheckBox->checkState() == Qt::Checked )
+		config.set(config.GENERAL_SETTINGS_CHECK_UPDATE_KEY,true);
+	else
+		config.set(config.GENERAL_SETTINGS_CHECK_UPDATE_KEY,false);
+
+	if ( _startChatOnlyRadioButton->isChecked() )
+		config.set(config.GENERAL_SETTINGS_START_CHATONLY_KEY,true);
+	else
+		config.set(config.GENERAL_SETTINGS_START_CHATONLY_KEY,false);
+
+	if ( _callCellPhoneCheckBox->checkState() == Qt::Checked )
+		config.set(config.GENERAL_SETTINGS_CALL_CELLPHONE_KEY,true);
+	else
+		config.set(config.GENERAL_SETTINGS_CALL_CELLPHONE_KEY,false);
+
+	if ( _showAwayCheckBox->checkState() == Qt::Checked )
+		config.set(config.GENERAL_SETTINGS_SHOW_AWAY_KEY,true);
+	else
+		config.set(config.GENERAL_SETTINGS_SHOW_AWAY_KEY,false);
+
+	if ( _showNotAvailableCheckBox->checkState() == Qt::Checked )
+		config.set(config.GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY,true);
+	else
+		config.set(config.GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY,false);
+
+	config.set(config.GENERAL_SETTINGS_AWAY_TIMER_KEY,_awaySpinBox->value());
+	config.set(config.GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY,_awaySpinBox->value());
+
+}

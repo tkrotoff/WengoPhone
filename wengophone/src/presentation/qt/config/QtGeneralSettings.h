@@ -30,10 +30,13 @@ class QtGeneralSettings : public QWidget {
 	public:
 		QtGeneralSettings ( QWidget * parent = 0, Qt::WFlags f = 0 );
 
+		void saveData();
+
 	protected:
 
-		QWidget * _widget;
+		void readConfigData();
 
+		QWidget * _widget;
 
 		QCheckBox * _startWengoCheckBox;
 
