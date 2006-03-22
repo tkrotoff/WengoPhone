@@ -61,7 +61,7 @@ void IMContactListHandler::removeIMContact(const std::string & groupName, const 
 
 void IMContactListHandler::newContactAddedEventHandler(IMContactList & sender,
 	const std::string & groupName, const std::string & contactId) {
-	IMContact imContact(sender.getIMAccount(), contactId);
+	IMContact imContact((IMAccount &)sender.getIMAccount(), contactId);
 
 	_imContactSet.insert(imContact);
 
@@ -70,7 +70,7 @@ void IMContactListHandler::newContactAddedEventHandler(IMContactList & sender,
 
 void IMContactListHandler::contactRemovedEventHandler(IMContactList & sender,
 	const std::string & groupName, const std::string & contactId) {
-	IMContact imContact(sender.getIMAccount(), contactId);
+	IMContact imContact((IMAccount &)sender.getIMAccount(), contactId);
 
 	IMContactSet::iterator it = _imContactSet.find(imContact);
 
@@ -107,7 +107,7 @@ void IMContactListHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IM
 void IMContactListHandler::contactMovedEventHandler(IMContactList & sender,
 	const std::string & groupName, const std::string & contactId) {
 
-	IMContact imContact(sender.getIMAccount(), contactId);
+	IMContact imContact((IMAccount &)sender.getIMAccount(), contactId);
 	IMContactSet::const_iterator it = _imContactSet.find(imContact);
 
 	if (it != _imContactSet.end()) {

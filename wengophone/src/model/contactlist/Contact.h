@@ -28,7 +28,6 @@
 #include <imwrapper/IMContactSet.h>
 
 #include <util/Event.h>
-#include <serialization/Serializable.h>
 #include <util/Date.h>
 
 #include <string>
@@ -44,8 +43,9 @@ class ContactList;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class Contact : public Serializable {
+class Contact {
 	friend class ContactList;
+	friend class ContactXMLSerializer;
 public:
 
 	enum Sex {
@@ -295,10 +295,6 @@ public:
 	WengoPhone & getWengoPhone() const {
 			return _wengoPhone;
 	}
-
-	std::string serialize();
-
-	bool unserialize(const std::string & data);
 
 private:
 

@@ -19,9 +19,6 @@
 
 #include <imwrapper/IMAccountHandler.h>
 
-#include <imwrapper/IMAccountHandlerFileDataLayer.h>
-#include <imwrapper/IMAccount.h>
-
 using namespace std;
 
 set<IMAccount *> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) {
@@ -34,10 +31,4 @@ set<IMAccount *> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMPro
 	}
 
 	return result;
-}
-
-IMAccountHandler::IMAccountHandler() {
-}
-
-IMAccountHandler::~IMAccountHandler() {
 }

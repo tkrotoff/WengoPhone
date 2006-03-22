@@ -24,7 +24,6 @@
 #include <imwrapper/EnumPresenceState.h>
 
 #include <util/Event.h>
-#include <serialization/Serializable.h>
 
 #include <string>
 #include <set>
@@ -40,7 +39,8 @@ class IMAccount;
  *
  * @author Philippe Bernery
  */
-class IMContact : public Serializable {
+class IMContact {
+	friend class IMContactXMLSerializer;
 public:
 
 	/**
@@ -66,7 +66,7 @@ public:
 	 * @param contactId id of the IMContact to create
 	 * @param presenceHandler the PresenceHandler that will receive presence message
 	 */
-	IMContact(const IMAccount & imAccount, const std::string & contactId);
+	IMContact(IMAccount & imAccount, const std::string & contactId);
 
 	IMContact(const IMContact & imContact);
 
@@ -124,13 +124,9 @@ public:
 		return _blocked;
 	}
 
-	std::string serialize();
-
-	bool unserialize(const std::string & data);
-
 private:
-
-	const IMAccount & _imAccount;
+	//FIXME: should be a reference to the associated IMAccount.
+	IMAccount _imAccount;
 
 	std::string _contactId;
 

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2005  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +17,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLER_H
-#define IMACCOUNTHANDLER_H
+#ifndef CONTACTLISTSTORAGE_H
+#define CONTACTLISTSTORAGE_H
 
-#include <imwrapper/EnumIMProtocol.h>
-#include <imwrapper/IMAccount.h>
+#include <serialization/Storage.h>
 
-#include <set>
-#include <string>
+class ContactList;
 
 /**
- * Instant Messaging account list.
  *
+ * @ingroup model
+ * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class IMAccountHandler : public std::set<IMAccount> {
+class ContactListStorage : public Storage {
 public:
 
-	/**
-	 * @param protocol the desired protocol
-	 * @return IMAccount with protocol 'protocol'
-	 */
-	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
+	ContactListStorage(ContactList & contactList)
+		: _contactList(contactList) { }
 
+	virtual ~ContactListStorage() { }
+
+	virtual bool load(const std::string & url) = 0;
+
+	virtual bool save(const std::string & url) = 0;
+
+protected:
+
+	ContactList & _contactList;
 };
 
-#endif	//IMACCOUNTHANDLER_H
+#endif //CONTACTLISTSTORAGE_H

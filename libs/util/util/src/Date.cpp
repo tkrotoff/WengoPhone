@@ -17,29 +17,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLER_H
-#define IMACCOUNTHANDLER_H
+#include <util/Date.h>
 
-#include <imwrapper/EnumIMProtocol.h>
-#include <imwrapper/IMAccount.h>
+#include <util/StringList.h>
 
-#include <set>
-#include <string>
+Date::Date() {
+	std::time_t curTime = time(NULL);
+	struct std::tm *timeinfo = std::localtime(&curTime);
+	_day = timeinfo->tm_mday;
+	_month = timeinfo->tm_mon + 1;
+	_year = timeinfo->tm_year + 1900;
+}
 
-/**
- * Instant Messaging account list.
- *
- * @author Philippe Bernery
- */
-class IMAccountHandler : public std::set<IMAccount> {
-public:
+Date::Date(const Date &d) {
+	_day = d._day;
+	_month = d._month;
+	_year = d._year;
+}
 
-	/**
-	 * @param protocol the desired protocol
-	 * @return IMAccount with protocol 'protocol'
-	 */
-	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
+Date::Date(unsigned day, unsigned month, unsigned year) {
+	setDay(day);
+	setMonth(month);
+	setYear(year);
+}
 
-};
+Date::~Date() {
+}
 
-#endif	//IMACCOUNTHANDLER_H
+bool Date::operator == (const Date & date) const {
+	return ((_day == date._day)
+		&& (_month == date._month)
+		&& (_year == date._year));
+}
+
+std::string Date::toString() const {
+	return String::fromNumber(_day) + "/" + String::fromNumber(_month) + "/" + String::fromNumber(_year);
+}

@@ -53,16 +53,20 @@ bool IMAccountHandlerXMLSerializer::unserialize(const std::string & data) {
 	TiXmlHandle docHandle(& doc);
 	TiXmlNode * imaccounts = docHandle.FirstChild("imaccounts").Node();
 	
-	TiXmlNode * lastChild = NULL;
-	while ((lastChild = imaccounts->IterateChildren("account", lastChild))) {
-		string accountData;
-		accountData << *lastChild;
-		
-		IMAccount account;
-		IMAccountXMLSerializer serializer(account);
-		serializer.unserialize(accountData);
-		_imAccountHandler.insert(account);
+	if (imaccounts) {
+		TiXmlNode * lastChild = NULL;
+		while ((lastChild = imaccounts->IterateChildren("account", lastChild))) {
+			string accountData;
+			accountData << *lastChild;
+			
+			IMAccount account;
+			IMAccountXMLSerializer serializer(account);
+			serializer.unserialize(accountData);
+			_imAccountHandler.insert(account);
+		}
+
+		return true;
 	}
-	
-	return true;
+
+	return false;
 }

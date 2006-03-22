@@ -25,13 +25,11 @@
 #include <imwrapper/EnumPresenceState.h>
 
 #include <util/Event.h>
-#include <serialization/Serializable.h>
 
 #include <set>
 #include <list>
 
 class Contact;
-class ContactListDataLayer;
 class IMContactListHandler;
 class IMContactList;
 class IMContact;
@@ -49,8 +47,9 @@ class WengoPhone;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class ContactList : public Serializable {
+class ContactList {
 	friend class Contact;
+	friend class ContactListXMLSerializer;
 public:
 
 	/** Set of ContactGroup. */
@@ -127,11 +126,6 @@ public:
 	void removeContact(const Contact & contact);
 
 	/**
-	 * Loads the ContactList from the data layer.
-	 */
-	void load();
-
-	/**
 	 * Get a ContactGroup.
 	 * 
 	 * @param groupName the name of the desired ContactGroup
@@ -145,10 +139,6 @@ public:
 	ContactGroupSet getContactGroupSet() const {
 		return ContactGroupSet(_contactGroupSet);
 	}
-
-	std::string serialize();
-
-	bool unserialize(const std::string & data);
 
 private:
 
@@ -283,9 +273,6 @@ private:
 	 * @return the Contact or NULL if not found
 	 */
 	Contact * findContactThatOwns(const IMContact & imContact) const;
-
-	/** Data layer for the ContactList. */
-	ContactListDataLayer * _dataLayer;
 
 	/** List of Contact. */
 	typedef std::list<Contact> Contacts;

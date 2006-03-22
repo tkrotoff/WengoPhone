@@ -17,33 +17,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTACTLISTDATALAYER_H
-#define CONTACTLISTDATALAYER_H
+#include "ContactListRPCStorage.h"
 
-#include "model/DataLayer.h"
+#include "ContactList.h"
 
-class ContactList;
+ContactListRPCStorage::ContactListRPCStorage(ContactList & contactList)
+	: ContactListStorage(contactList) {
+}
 
-/**
- *
- * @ingroup model
- * @author Tanguy Krotoff
- */
-class ContactListDataLayer : public DataLayer {
-public:
+ContactListRPCStorage::~ContactListRPCStorage() {
+}
 
-	ContactListDataLayer(ContactList & contactList)
-		: _contactList(contactList) { }
+bool ContactListRPCStorage::load(const std::string & url) {
+	return false;
+}
 
-	virtual ~ContactListDataLayer() { }
-
-	virtual bool load() = 0;
-
-	virtual bool save() = 0;
-
-protected:
-
-	ContactList & _contactList;
-};
-
-#endif	//CONTACTLISTDATALAYER_H
+bool ContactListRPCStorage::save(const std::string & url) {
+	return true;
+}

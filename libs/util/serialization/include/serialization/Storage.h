@@ -22,12 +22,13 @@
 
 #include <util/Interface.h>
 
-class Serializable;
+#include <string>
 
 /**
  * Storage interface that loads and saves data to a given format (File, RPC...).
  *
  * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
 class Storage : Interface {
 public:
@@ -37,13 +38,19 @@ public:
 
 	/**
 	 * Loads the datas from a media.
+	 *
+	 * @param url the url where to load the data from
+	 * @return true if success
 	 */
-	virtual bool load(Serializable & serializable) = 0;
+	virtual bool load(const std::string & url) = 0;
 
 	/**
 	 * Saves the datas to a media.
+	 *
+	 * @param url the url where to save the data to
+	 * @return true if success
 	 */
-	virtual bool save(Serializable & serializable) = 0;
+	virtual bool save(const std::string & url) = 0;
 };
 
 #endif //STORAGE_H

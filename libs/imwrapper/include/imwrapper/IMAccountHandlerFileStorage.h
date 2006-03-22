@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTACTLISTRPCLAYER_H
-#define CONTACTLISTRPCLAYER_H
+#ifndef IMACCOUNTHANDLERFILESTORAGE_H
+#define IMACCOUNTHANDLERFILESTORAGE_H
 
-#include "ContactListDataLayer.h"
+#include <imwrapper/IMAccountHandlerStorage.h>
 
-class ContactList;
-
-/**
- *
- * @ingroup model
- * @author Tanguy Krotoff
- */
-class ContactListRPCLayer : public ContactListDataLayer {
+class IMAccountHandlerFileStorage : public IMAccountHandlerStorage {
 public:
+	IMAccountHandlerFileStorage(IMAccountHandler & imAccountHandler);
 
-	ContactListRPCLayer(ContactList & contactList);
+	virtual ~IMAccountHandlerFileStorage();
 
-	~ContactListRPCLayer();
+	bool load(const std::string & url);
 
-	bool load();
+	bool save(const std::string & url);
 
-	bool save();
+protected:
+
+	IMAccountHandler & _imAccountHandler;
+
 };
 
-#endif	//CONTACTLISTRPCLAYER_H
+#endif //IMACCOUNTHANDLERFILESTORAGE_H

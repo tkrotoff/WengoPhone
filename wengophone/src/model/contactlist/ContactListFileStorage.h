@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2005  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +17,37 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLERDATALAYER_H
-#define IMACCOUNTHANDLERDATALAYER_H
+#ifndef CONTACTLISTFILESTORAGE_H
+#define CONTACTLISTFILESTORAGE_H
 
-#include <string>
+#include "ContactListStorage.h"
 
+class ContactList;
 class IMAccountHandler;
 
-class IMAccountHandlerDataLayer {
+/**
+ * WARNING: the IMAccountHandler given in the constructor must be poupulated
+ * BEFORE using the 'load' method.
+ * 
+ * @ingroup model
+ * @author Tanguy Krotoff
+ * @author Philippe Bernery
+ */
+class ContactListFileStorage : public ContactListStorage {
 public:
 
-	IMAccountHandlerDataLayer(IMAccountHandler & imAccountHandler)
-	: _imAccountHandler(imAccountHandler) {};
+	ContactListFileStorage(ContactList & contactList, IMAccountHandler & _imAccountHandler);
 
-	virtual ~IMAccountHandlerDataLayer() {};
+	~ContactListFileStorage();
 
-	virtual bool load(const std::string & url) = 0;
+	bool load(const std::string & url);
 
-	virtual bool save(const std::string & url) = 0;
+	bool save(const std::string & url);
 
-protected:
+private:
 
 	IMAccountHandler & _imAccountHandler;
 
 };
 
-#endif //IMACCOUNTHANDLERDATALAYER_H
+#endif //CONTACTLISTFILESTORAGE_H

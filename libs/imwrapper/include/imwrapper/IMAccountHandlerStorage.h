@@ -17,29 +17,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLER_H
-#define IMACCOUNTHANDLER_H
+#ifndef IMACCOUNTHANDLERSTORAGE_H
+#define IMACCOUNTHANDLERSTORAGE_H
 
-#include <imwrapper/EnumIMProtocol.h>
-#include <imwrapper/IMAccount.h>
-
-#include <set>
 #include <string>
 
-/**
- * Instant Messaging account list.
- *
- * @author Philippe Bernery
- */
-class IMAccountHandler : public std::set<IMAccount> {
+class IMAccountHandler;
+
+class IMAccountHandlerStorage {
 public:
 
-	/**
-	 * @param protocol the desired protocol
-	 * @return IMAccount with protocol 'protocol'
-	 */
-	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
+	IMAccountHandlerStorage(IMAccountHandler & imAccountHandler)
+	: _imAccountHandler(imAccountHandler) {};
+
+	virtual ~IMAccountHandlerStorage() {};
+
+	virtual bool load(const std::string & url) = 0;
+
+	virtual bool save(const std::string & url) = 0;
+
+protected:
+
+	IMAccountHandler & _imAccountHandler;
 
 };
 
-#endif	//IMACCOUNTHANDLER_H
+#endif //IMACCOUNTHANDLERSTORAGE_H

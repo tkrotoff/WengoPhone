@@ -36,7 +36,6 @@ using namespace std;
 Contact::Contact(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone), _contactList(wengoPhone.getContactList()) {
 	_sex = SexUnknown;
-	_state = EnumPresenceState::PresenceStateOffline;
 	_blocked = false;
 	_preferredIMContact = NULL;
 }
@@ -54,26 +53,6 @@ Contact & Contact::operator = (const Contact & contact) {
 		initialize(contact);
 	}
 	return *this;
-}
-
-string Contact::serialize() {
-	string result =
-"<vCard>\n\
-	<FN>" + getFirstName() + "</FN>\n\
-	<N>\n\
-		<FAMILLY>" + getLastName() + "</FAMILLY>\n\
-	</N>\n";
-
-	//result = result + imContactsToString();
-
-	result = result + "</vCard>\n";
-
-	return result;
-}
-
-bool Contact::unserialize(const std::string & data) {
-	ContactParser parser(*this, data);
-	return true;
 }
 
 void Contact::initialize(const Contact & contact) {
@@ -95,7 +74,6 @@ void Contact::initialize(const Contact & contact) {
 	_otherEmail = contact._otherEmail;
 	_streetAddress = contact._streetAddress;
 	_notes = contact._notes;
-	_state = contact._state;
 	_blocked = contact._blocked;
 	_preferredIMContact = contact._preferredIMContact;
 	_imContactSet = contact._imContactSet;
@@ -121,7 +99,6 @@ bool Contact::operator == (const Contact & contact) const {
 		&& (_otherEmail == contact._otherEmail)
 		&& (_streetAddress == contact._streetAddress)
 		&& (_notes == contact._notes)
-		&& (_state == contact._state)
 		&& (_blocked == contact._blocked)
 		&& (_preferredIMContact == contact._preferredIMContact)
 		&& (_imContactSet == contact._imContactSet));

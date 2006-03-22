@@ -19,7 +19,11 @@
 
 #include "StreetAddressXMLSerializer.h"
 
-#include <StreetAddress.h>
+#include "StreetAddress.h"
+
+#include <tinyxml.h>
+
+using namespace std;
 
 StreetAddressXMLSerializer::StreetAddressXMLSerializer(StreetAddress & streetAddress)
 : _streetAddress(streetAddress) {
@@ -31,27 +35,27 @@ std::string StreetAddressXMLSerializer::serialize() {
 	
 	result += "<address type=\"home\">\n";
 	
-	if (!_street.empty()) {
-		result += ("<street>" + _street + "</street>\n");
+	if (!_streetAddress._street.empty()) {
+		result += ("<street>" + _streetAddress._street + "</street>\n");
 	}
 	
-	if (!_city.empty()) {
-		result += ("<locality>" + _city + "</locality>\n");
+	if (!_streetAddress._city.empty()) {
+		result += ("<locality>" + _streetAddress._city + "</locality>\n");
 	}
 	
-	if (!_stateProvince.empty()) {
-		result += ("<region>" + _stateProvince + "</region>\n");
+	if (!_streetAddress._stateProvince.empty()) {
+		result += ("<region>" + _streetAddress._stateProvince + "</region>\n");
 	}
 	
-	if (!_zipCode.empty()) {
-		result += ("<postcode>" + _zipCode + "</postcode>\n");
+	if (!_streetAddress._zipCode.empty()) {
+		result += ("<postcode>" + _streetAddress._zipCode + "</postcode>\n");
 	}
 	
-	if (!_country.empty()) {
-		result += ("<country>" + _country + "</country>\n");
+	if (!_streetAddress._country.empty()) {
+		result += ("<country>" + _streetAddress._country + "</country>\n");
 	}
 	
-	result += "</address>";
+	result += "</address>\n";
 
 	return result;
 }
@@ -59,14 +63,15 @@ std::string StreetAddressXMLSerializer::serialize() {
 bool StreetAddressXMLSerializer::unserialize(const std::string & data) {
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
-	
+	/*
 	TiXmlHandle docHandle(& doc);
 	TiXmlNode * stringlist = docHandle.FirstChild("stringlist").Node();
+	
 	
 	TiXmlNode * lastChild = NULL;
 	while ((lastChild = stringlist->IterateChildren("elt", lastChild))) {
 		_stringList += lastChild->FirstChild()->Value();
 	}
-	
+	*/
 	return true;	
 }

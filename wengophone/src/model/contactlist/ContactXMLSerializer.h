@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,46 +17,36 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "ContactListXMLLayer.h"
+#ifndef CONTACTXMLSERIALIZER_H
+#define CONTACTXMLSERIALIZER_H
 
-#include "ContactList.h"
-#include "ContactGroup.h"
-#include "Contact.h"
-
-#include <util/File.h>
-#include <util/Logger.h>
+#include <serialization/Serializable.h>
 
 #include <string>
-using namespace std;
 
-ContactListXMLLayer::ContactListXMLLayer(ContactList & contactList)
-	: ContactListDataLayer(contactList) {
-	load();
-}
+class Contact;
+class IMAccountHandler;
 
-ContactListXMLLayer::~ContactListXMLLayer() {
-	save();
-}
+/**
+ * Serialize a Contact object.
+ *
+ * @author Philippe Bernery
+ */
+class ContactXMLSerializer : public Serializable {
+public:
 
-bool ContactListXMLLayer::load() {
-	FileReader file("contactlist.xml");
-	if (file.open()) {
-		string data = file.read();
-		file.close();
+	ContactXMLSerializer(Contact & contact, IMAccountHandler & imAccountHandler);
 
-		_contactList.unserialize(data);
+	std::string serialize();
 
-		LOG_DEBUG("file contactlist.xml loaded");
-		return true;
-	}
+	bool unserialize(const std::string & data);
 
-	return false;
-}
+private:
 
-bool ContactListXMLLayer::save() {
-	FileWriter file("contactlist.xml");
-	file.write(_contactList.serialize());
-	file.close();
-	
-	return true;
-}
+	Contact & _contact;
+
+	IMAccountHandler & _imAccountHandler;
+
+};
+
+#endif //CONTACTXMLSERIALIZER_H

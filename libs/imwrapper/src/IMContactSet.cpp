@@ -27,7 +27,7 @@ string IMContactSet::serialize() {
 	string result;
 
 	for (const_iterator it = begin() ; it != end() ; ++it) {
-		result += ((IMContact &)(*it)).serialize();
+		//result += ((IMContact &)(*it)).serialize();
 	}
 
 	return result;

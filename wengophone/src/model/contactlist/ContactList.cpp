@@ -20,8 +20,6 @@
 #include "ContactList.h"
 
 #include "Contact.h"
-#include "ContactListXMLLayer.h"
-#include "ContactListParser.h"
 #include "IMContactListHandler.h"
 
 #include <model/WengoPhone.h>
@@ -34,7 +32,6 @@ using namespace std;
 
 ContactList::ContactList(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone), _imContactListHandler(wengoPhone.getIMContactListHandler()) {
-	_dataLayer = NULL;
 
 	_imContactListHandler.newIMContactAddedEvent +=
 		boost::bind(&ContactList::newIMContactAddedEventHandler, this, _1, _2, _3);
@@ -51,13 +48,6 @@ ContactList::ContactList(WengoPhone & wengoPhone)
 }
 
 ContactList::~ContactList() {
-	delete _dataLayer;
-}
-
-void ContactList::load() {
-	if (!_dataLayer) {
-		_dataLayer = new ContactListXMLLayer(*this);
-	}
 }
 
 void ContactList::addContactGroup(const string & groupName) {
@@ -161,23 +151,6 @@ void ContactList::removeFromContactGroup(const std::string & groupName, Contact 
 	}
 }
 
-std::string ContactList::serialize() {
-	std::string data;
-
-	data += "<contactList>\n";
-
-	//TODO: full the ContactList
-
-	data += "</contactList>\n";
-
-	return data;
-}
-
-bool ContactList::unserialize(const std::string & data) {
-	ContactListParser parser(*this, _wengoPhone, data);
-	return true;
-}
-
 void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 	const std::string & groupName, IMContact & newIMContact) {
 
@@ -191,6 +164,7 @@ void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 	}
 
 	if (!contact->hasIMContact(newIMContact)) {
+		newIMContact.addToGroup(groupName);
 		contact->_addIMContact(newIMContact);
 		_addToContactGroup(groupName, *contact);
 
@@ -265,8 +239,9 @@ Contact * ContactList::findContactThatOwns(const IMContact & imContact) const {
 	for (Contacts::const_iterator it = _contacts.begin();
 		it != _contacts.end();
 		++it) {
-		if ((*it).hasIMContact(imContact)) {
-			return (Contact *)&(*it);
+		Contact & contact = (Contact &)*it;
+		if (contact.hasIMContact(imContact)) {
+			return &contact;
 		}
 	}
 

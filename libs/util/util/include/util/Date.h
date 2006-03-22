@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,66 +20,40 @@
 #ifndef DATE_H
 #define DATE_H
 
-#include <util/StringList.h>
-
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
-#include <boost/archive/archive_exception.hpp>
-
+#include <ctime>
 #include <string>
 
-#include <ctime>
-
 /**
- * Represents a Date.
+ * Represent a Date.
  *
- * @author Philippe Bernery
+ * @author Philippe BERNERY
  */
 class Date {
+	friend class DateXMLSerializer;
 public:
 
-	static const unsigned int SERIALIZATION_VERSION = 1;
-
 	/**
-	 * Creates a date with the current time.
+	 * Create a date with the current time.
 	 */
-	Date() {
-		std::time_t curTime = time(NULL);
-		struct std::tm *timeinfo = std::localtime(&curTime);
-		_day = timeinfo->tm_mday;
-		_month = timeinfo->tm_mon + 1;
-		_year = timeinfo->tm_year + 1900;
-	}
+	Date();
 
 	/**
 	 * Copy constructor.
 	 */
-	Date(const Date &d) {
-		_day = d._day;
-		_month = d._month;
-		_year = d._year;
-	}
+	Date(const Date &d);
 
 	/**
-	 * Creates a date from a day a month and a year.
+	 * Create a date from a day a month and a year.
 	 *
 	 * @param day day of the date
 	 * @param month month of the date
 	 * @param year year of the date
 	 */
-	Date(unsigned day, unsigned month, unsigned year) {
-		setDay(day);
-		setMonth(month);
-		setYear(year);
-	}
+	Date(unsigned day, unsigned month, unsigned year);
 
-	~Date() {}
+	~Date();
 
-	bool operator==(const Date & date) const {
-		return ((_day == date._day)
-			&& (_month == date._month)
-			&& (_year == date._year));
-	}
+	bool operator == (const Date & date) const;
 
 	/**
 	 * @return the day number of the date. Day range: 1-31.
@@ -89,9 +63,7 @@ public:
 	}
 
 	/**
-	 * Sets the date day.
-	 *
-	 * @see getDay()
+	 * Set the date day. @see getDay
 	 */
 	void setDay(unsigned day) {
 		if (day < 1) {
@@ -99,21 +71,19 @@ public:
 		} else if (day > 31) {
 			day = 31;
 		}
-
+		
 		_day = day;
-	}
+	}		
 
 	/**
-	 * @return the month number of the date, month range: 1-12
+	 * @return the month number of the date. Month range: 1-12.
 	 */
 	unsigned getMonth() const {
 		return _month;
 	}
 
 	/**
-	 * Sets the date month.
-	 *
-	 * @see getMonth()
+	 * Set the date month. @see getMonth
 	 */
 	void setMonth(unsigned month) {
 		if (month < 1) {
@@ -121,74 +91,33 @@ public:
 		} else if (month > 12) {
 			month = 12;
 		}
-
+		
 		_month = month;
 	}
 
 	/**
-	 * Gets the date year.
-	 *
-	 * Year range: 0-infinite.
+	 * Get the date year. Year range: 0-infinite.
 	 */
 	unsigned getYear() const {
 		return _year;
 	}
 
 	/**
-	 * Sets the date year.
-	 *
-	 * @see getYear()
+	 * Set date year. @see getYear
 	 */
 	void setYear(unsigned year) {
 		_year = year;
 	}
 
 	/**
-	 * @return a string representing the date (e.g: "dd/mm/yyyy")
+	 * @return a string representing the date. (e.g: "dd/mm/yyyy")
 	 */
-	std::string toString() const {
-		return String::fromNumber(_day) + "/" + String::fromNumber(_month) + "/" + String::fromNumber(_year);
-	}
+	std::string toString() const;
 
 private:
-
-	friend class boost::serialization::access;
-
-	template<class Archive>
-	void load(Archive & ar, const unsigned int version) {
-		if (version == SERIALIZATION_VERSION) {
-			unsigned day;
-			unsigned month;
-			unsigned year;
-
-			ar >> BOOST_SERIALIZATION_NVP(day);
-			ar >> BOOST_SERIALIZATION_NVP(month);
-			ar >> BOOST_SERIALIZATION_NVP(year);
-
-			_day = day;
-			_month = month;
-			_year = year;
-		}
-	}
-
-	template<class Archive>
-	void save(Archive & ar, const unsigned int version) const {
-		unsigned day= _day;
-		unsigned month = _month;
-		unsigned year = _year;
-
-		ar << BOOST_SERIALIZATION_NVP(day);
-		ar << BOOST_SERIALIZATION_NVP(month);
-		ar << BOOST_SERIALIZATION_NVP(year);
-	}
-
-	BOOST_SERIALIZATION_SPLIT_MEMBER()
-
 	unsigned _day;
 	unsigned _month;
 	unsigned _year;
 };
-
-BOOST_CLASS_VERSION(Date, Date::SERIALIZATION_VERSION)
 
 #endif //DATE_H

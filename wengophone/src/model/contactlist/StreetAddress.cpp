@@ -47,16 +47,6 @@ bool StreetAddress::operator == (const StreetAddress & streetAddress) const {
 			&& (_country == streetAddress._country));
 }
 
-string StreetAddress::serialize() {
-	return "";
-}
-
-bool StreetAddress::unserialize(const std::string & data) {
-	//StreetAddressParser parser(*this, data);
-	//return parser.parse();
-	return false;
-}
-
 void StreetAddress::initialize(const StreetAddress & streetAddress) {
 	_street = streetAddress._street;
 	_stateProvince = streetAddress._stateProvince;

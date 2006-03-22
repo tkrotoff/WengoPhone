@@ -20,8 +20,6 @@
 #ifndef STREETADDRESS_H
 #define STREETADDRESS_H
 
-#include <serialization/Serializable.h>
-
 #include <string>
 
 /**
@@ -30,7 +28,8 @@
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class StreetAddress : public Serializable {
+class StreetAddress {
+	friend class StreetAddressXMLSerializer;
 public:
 
 	StreetAddress();
@@ -57,10 +56,6 @@ public:
 
 	void setCountry(const std::string & country) { _country = country; }
 	const std::string & getCountry() const { return _country; }
-
-	std::string serialize();
-	
-	bool unserialize(const std::string & data);
 	
 private:
 

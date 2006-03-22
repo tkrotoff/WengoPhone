@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTACTLISTXMLLAYER_H
-#define CONTACTLISTXMLLAYER_H
+#ifndef DATEXMLSERIALIZER_H
+#define DATEXMLSERIALIZER_H
 
-#include "ContactListDataLayer.h"
+#include <serialization/Serializable.h>
 
-class ContactList;
+class Date;
 
 /**
+ * Serialize a Date object.
  *
- * @ingroup model
- * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
-class ContactListXMLLayer : public ContactListDataLayer {
+class DateXMLSerializer : public Serializable {
 public:
 
-	ContactListXMLLayer(ContactList & contactList);
+	DateXMLSerializer(Date & date);
 
-	~ContactListXMLLayer();
+	std::string serialize();
 
-	bool load();
+	bool unserialize(const std::string & data);
 
-	bool save();
+private:
+
+	Date & _date;
+
 };
 
-#endif	//CONTACTLISTXMLLAYER_H
+#endif //DATEXMLSERIALIZER_H

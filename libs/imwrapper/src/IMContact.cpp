@@ -26,7 +26,7 @@
 
 using namespace std;
 
-IMContact::IMContact(const IMAccount & imAccount, const std::string & contactId)
+IMContact::IMContact(IMAccount & imAccount, const std::string & contactId)
 	: _imAccount(imAccount) {
 	_contactId = contactId;
 	_presenceState = EnumPresenceState::PresenceStateOffline;
@@ -72,25 +72,3 @@ void IMContact::removeFromAllGroup() {
 
 	_groupSet.clear();
 }
-
-std::string IMContact::serialize() {
-	string result;
-	EnumIMProtocol enumIMProtocol;
-
-	result += "<im protocol=\"" + enumIMProtocol.toString(_imAccount.getProtocol()) + "\">\n";
-
-	result += ("<id>" + _contactId + "</id>");
-	result += ("<account>" + _imAccount.getLogin() + "</account>");
-
-	result += "</im>";
-
-	return result;
-}
-
-
-bool IMContact::unserialize(const std::string & data) {
-//	IMContactParser parser(*this, data);
-//	return parser.parse();
-	return false;
-}
-

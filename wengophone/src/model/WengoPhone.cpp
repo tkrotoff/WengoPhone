@@ -28,6 +28,7 @@
 #include "account/wengo/WengoAccount.h"
 #include "account/wengo/WengoAccountXMLLayer.h"
 //#include "account/LocalNetworkAccount.h"
+#include "contactlist/ContactListFileStorage.h"
 #include "contactlist/ContactList.h"
 #include "contactlist/Contact.h"
 #include "contactlist/ContactGroup.h"
@@ -39,7 +40,7 @@
 #include "config/ConfigManager.h"
 #include "config/Config.h"
 
-#include <imwrapper/IMAccountHandlerFileDataLayer.h>
+#include <imwrapper/IMAccountHandlerFileStorage.h>
 
 #include <sipwrapper/SipWrapper.h>
 
@@ -57,6 +58,7 @@ WengoPhone::WengoPhone() {
 	_terminate = false;
 	_wengoAccount = NULL;
 	_wengoAccountDataLayer = NULL;
+	_contactList = NULL;
 }
 
 WengoPhone::~WengoPhone() {
@@ -77,9 +79,16 @@ WengoPhone::~WengoPhone() {
 	}
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	IMAccountHandlerDataLayer * dataLayer = new IMAccountHandlerFileDataLayer(_imAccountHandler);
-	dataLayer->save(config.getConfigDir() + "imaccounts.xml");
-	delete dataLayer;
+
+	IMAccountHandlerStorage * imAccountHandlerStorage = new IMAccountHandlerFileStorage(_imAccountHandler);
+	imAccountHandlerStorage->save(config.getConfigDir() + "imaccounts.xml");
+	delete imAccountHandlerStorage;
+
+	if (_contactList) {
+		ContactListStorage * contactListStorage = new ContactListFileStorage(*_contactList, _imAccountHandler);
+		contactListStorage->save(config.getConfigDir() + "contactlist.xml");
+		delete contactListStorage;
+	}
 }
 
 void WengoPhone::init() {
@@ -102,14 +111,19 @@ void WengoPhone::init() {
 	_imContactListHandler = new IMContactListHandler(*this);
 
 	//Loads IMAccounts
-	IMAccountHandlerDataLayer * dataLayer = new IMAccountHandlerFileDataLayer(_imAccountHandler);
-	dataLayer->load(config.getConfigDir() + "imaccounts.xml");
-	delete dataLayer;
+	IMAccountHandlerStorage * imAccountHandlerStorage = new IMAccountHandlerFileStorage(_imAccountHandler);
+	imAccountHandlerStorage->load(config.getConfigDir() + "imaccounts.xml");
+	delete imAccountHandlerStorage;
+	////
 
 	//Creates and loads the contact list
 	_contactList = new ContactList(*this);
 	contactListCreatedEvent(*this, *_contactList);
-	_contactList->load();
+
+	ContactListStorage * contactListStorage = new ContactListFileStorage(*_contactList, _imAccountHandler);
+	contactListStorage->load(config.getConfigDir() + "contactlist.xml");
+	delete contactListStorage;	
+	////
 
 	//Connects all IMAccounts
 	for (IMAccountHandler::const_iterator it = _imAccountHandler.begin();
@@ -118,6 +132,7 @@ void WengoPhone::init() {
 		newIMAccountAddedEvent(*this, (IMAccount &)*it);
 		_connectHandler->connect(*it);
 	}
+	////
 
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
@@ -311,7 +326,7 @@ void WengoPhone::addIMAccount(const IMAccount & imAccount) {
 }
 
 IPhoneLine * WengoPhone::findWengoPhoneLine() {
-	for( int i = 0; i != _phoneLineList.size() ; i++) {
+	for (unsigned i = 0; i != _phoneLineList.size() ; i++) {
 		const SipAccount & sipAccount = _phoneLineList[i]->getSipAccount();
 		try {
 			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(sipAccount);

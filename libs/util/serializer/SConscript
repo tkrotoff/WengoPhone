@@ -1,19 +1,20 @@
 env = WengoGetEnvironment()
 
 libs = [
-	'owutil'
+	'owutil',
+	'owserialization',
+	'tinyxml',
 ]
 lib_path = []
 include_path = ['include']
 link_flags = []
 headers = []
-sources = ['src/fake.cpp']
+sources = ['src/DateXMLSerializer.cpp']
 
-env.WengoAddLinkFlags(link_flags)
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 env.WengoAddDoxyfile()
 
-env.WengoStaticLibrary('owserialization', sources)
+env.WengoStaticLibrary('owserializer', sources)
 
 env.SConscript('tests/SConscript')

@@ -17,29 +17,36 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLER_H
-#define IMACCOUNTHANDLER_H
+#ifndef CONTACTLISTXMLSERIALIZER_H
+#define CONTACTLISTXMLSERIALIZER_H
 
-#include <imwrapper/EnumIMProtocol.h>
-#include <imwrapper/IMAccount.h>
+#include <serialization/Serializable.h>
 
-#include <set>
 #include <string>
 
+class ContactList;
+class IMAccountHandler;
+
 /**
- * Instant Messaging account list.
+ * Serialize a Contact object.
  *
  * @author Philippe Bernery
  */
-class IMAccountHandler : public std::set<IMAccount> {
+class ContactListXMLSerializer : public Serializable {
 public:
 
-	/**
-	 * @param protocol the desired protocol
-	 * @return IMAccount with protocol 'protocol'
-	 */
-	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
+	ContactListXMLSerializer(ContactList & contactList, IMAccountHandler & _imAccountHandler);
+
+	std::string serialize();
+
+	bool unserialize(const std::string & data);
+
+private:
+
+	ContactList & _contactList;
+
+	IMAccountHandler & _imAccountHandler;
 
 };
 
-#endif	//IMACCOUNTHANDLER_H
+#endif //CONTACTLISTXMLSERIALIZER_H

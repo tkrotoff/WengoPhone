@@ -4,6 +4,7 @@ projects = [
 	'thread',
 	'http',
 	'serialization',
+	'serializer',
 	'shlibloader',
 	'settings',
 	'system',

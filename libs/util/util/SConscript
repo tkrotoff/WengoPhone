@@ -3,13 +3,14 @@ env = WengoGetEnvironment()
 libs = [
 	'boost',
 	'owcurl',
-	'owcutil'
+	'owcutil',
 ]
 lib_path = []
 include_path = ['include']
 link_flags = []
 headers = []
 sources = [
+	'src/Date.cpp',
 	'src/StringList.cpp',
 	'src/File.cpp',
 	'src/Base64.cpp',

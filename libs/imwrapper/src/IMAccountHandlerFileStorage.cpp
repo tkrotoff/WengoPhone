@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <imwrapper/IMAccountHandlerFileDataLayer.h>
+#include <imwrapper/IMAccountHandlerFileStorage.h>
 
 #include <imwrapper/IMAccountHandlerXMLSerializer.h>
 #include <imwrapper/IMAccountHandler.h>
@@ -29,14 +29,14 @@
 
 using namespace std;
 
-IMAccountHandlerFileDataLayer::IMAccountHandlerFileDataLayer(IMAccountHandler & imAccountHandler)
-: IMAccountHandlerDataLayer(imAccountHandler), _imAccountHandler(imAccountHandler) {
+IMAccountHandlerFileStorage::IMAccountHandlerFileStorage(IMAccountHandler & imAccountHandler)
+: IMAccountHandlerStorage(imAccountHandler), _imAccountHandler(imAccountHandler) {
 }
 
-IMAccountHandlerFileDataLayer::~IMAccountHandlerFileDataLayer() {
+IMAccountHandlerFileStorage::~IMAccountHandlerFileStorage() {
 }
 
-bool IMAccountHandlerFileDataLayer::load(const string & url) {
+bool IMAccountHandlerFileStorage::load(const string & url) {
 	FileReader file(url);
 	LOG_DEBUG("loading " + url);
 
@@ -54,7 +54,7 @@ bool IMAccountHandlerFileDataLayer::load(const string & url) {
 	return false;
 }
 
-bool IMAccountHandlerFileDataLayer::save(const string & url) {
+bool IMAccountHandlerFileStorage::save(const string & url) {
 	FileWriter file(url);
 	LOG_DEBUG("saving " + url);
 
