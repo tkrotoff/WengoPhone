@@ -154,7 +154,7 @@ std::string WenboxPlugin::getWenboxAudioDeviceName() const {
 		for (unsigned j = 0; j < audioDeviceList.size(); j++) {
 			string audioDeviceName = audioDeviceList[j];
 
-			if (audioDeviceName.find(wenboxAudioDeviceName) != -1) {
+			if (audioDeviceName.find(wenboxAudioDeviceName) != string::npos) {
 				//We found the real name of the Wenbox audio device
 				LOG_DEBUG("wenbox audio device name=" + audioDeviceName);
 				return audioDeviceName;
