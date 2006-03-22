@@ -19,7 +19,7 @@
 
 #include <AudioDevice.h>
 
-#include <StringList.h>
+#include <util/StringList.h>
 
 std::list<std::string> AudioDevice::getInputMixerDeviceList() {
 	StringList deviceList;

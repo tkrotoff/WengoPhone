@@ -16,11 +16,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #include <webcam.h>
 #include <WebcamDriver.h>
 
 using namespace std;
-
 
 typedef struct _webcamcallbacklist {
 	/** sender */
@@ -33,41 +33,37 @@ typedef struct _webcamcallbacklist {
 	_webcamcallbacklist *prev, *next;
 } webcamcallbacklist;
 
-
 struct opaquewebcam {
 	WebcamDriver *driver;
 };
-
 
 //FIXME: there is only one list for all created webcam struct.
 static webcamcallbacklist *cbks = NULL;
 
 static void webcam_frame_captured_event_handler(IWebcamDriver *sender, piximage *image) {
 	webcamcallbacklist *cur = cbks;
-	
+
 	while (cur) {
 		cur->cbk(cur->wc, image, cur->data);
 		cur = cur->next;
 	}
 }
 
-
 webcamdevicelist * webcam_get_device_list(webcam *) {
 	IWebcamDriver *driver = WebcamDriver::getInstance();
 	StringList deviceList = driver->getDeviceList();
 	webcamdevicelist *devlist = (webcamdevicelist *)malloc(sizeof(webcamdevicelist));
-	
+
 	devlist->count = deviceList.size();
 	devlist->name = (const char **)malloc(devlist->count * sizeof(const char *));
-	
+
 	for (register unsigned i = 0 ; i < devlist->count ; i++) {
 		devlist->name[i] = (const char *)malloc(deviceList[i].size());
 		sprintf((char *)devlist->name[i], deviceList[i].c_str(), deviceList[i].size());
 	}
-	
+
 	return devlist;
 }
-
 
 void webcam_release_webcamdevicelist(webcamdevicelist *devlist) {
 	if (devlist) {
@@ -83,7 +79,6 @@ void webcam_release_webcamdevicelist(webcamdevicelist *devlist) {
 	}
 }
 
-
 const char * webcam_get_default_device(webcam *) {
 	IWebcamDriver * driver = WebcamDriver::getInstance();
 	static string device;
@@ -93,26 +88,22 @@ const char * webcam_get_default_device(webcam *) {
 	return device.c_str();
 }
 
-
 webcam * webcam_get_instance() {
 	webcam *wc = (webcam *)malloc(sizeof(webcam));
-	
+
 	wc->driver = WebcamDriver::getInstance();
 	wc->driver->frameCapturedEvent += &webcam_frame_captured_event_handler;
-	
+
 	return wc;
 }
-
 
 void webcam_set_flags(webcam *wc, int flags) {
 	wc->driver->setFlags(flags);
 }
 
-
 void webcam_unset_flags(webcam *wc, int flags) {
 	wc->driver->unsetFlags(flags);
 }
-
 
 int webcam_is_flag_set(webcam *wc, int flag) {
 	if (wc->driver->isFlagSet(flag))
@@ -121,14 +112,13 @@ int webcam_is_flag_set(webcam *wc, int flag) {
 		return 0;
 }
 
-
 void webcam_release(webcam *wc) {
 	webcamcallbacklist *nxt, *cur;
 
 	webcam_stop_capture(wc);
 	if (wc) {
 		free(wc);
-	
+
 		cur = cbks;
 		while(cur) {
 			nxt = cur->next;
@@ -139,15 +129,13 @@ void webcam_release(webcam *wc) {
 	}
 }
 
-
 webcamerrorcode webcam_set_device(webcam *wc, const char *device_name) {
 	return wc->driver->setDevice(device_name);
 }
 
-
 void webcam_add_callback(webcam *wc, webcamcallback *callback, void *userData) {
 	webcamcallbacklist *cur;
-	
+
 	if (cbks == NULL) {
 		cbks = (webcamcallbacklist *)malloc(sizeof(webcamcallbacklist));
 		cbks->prev = NULL;
@@ -158,24 +146,23 @@ void webcam_add_callback(webcam *wc, webcamcallback *callback, void *userData) {
 		cur = cbks;
 		while (cur->next != NULL)
 			cur = cur->next;
-		
+
 		cur->next = (webcamcallbacklist *)malloc(sizeof(webcamcallbacklist));
 		cur->next->prev = cur;
 		cur->next->next = NULL;
 	}
-	
+
 	cur->wc = wc;
 	cur->cbk = callback;
 	cur->data = userData;
 }
 
-
 void webcam_remove_callback(webcam *wc, webcamcallback *callback) {
 	webcamcallbacklist *cur = cbks;
-	
+
 	while ((cur != NULL) && (cur->cbk != callback))
 		cur = cur->next;
-	
+
 	if (cur != NULL) {
 		cur->prev->next = cur->next;
 		if (cur->next)
@@ -184,89 +171,74 @@ void webcam_remove_callback(webcam *wc, webcamcallback *callback) {
 	}
 }
 
-
 void webcam_start_capture(webcam *wc) {
 	wc->driver->startCapture();
 }
-
 
 void webcam_pause_capture(webcam *wc) {
 	wc->driver->pauseCapture();
 }
 
-
 void webcam_stop_capture(webcam *wc) {
 	wc->driver->stopCapture();
 }
-
 
 unsigned webcam_get_width(webcam *wc) {
 	return wc->driver->getWidth();
 }
 
-
 unsigned webcam_get_height(webcam *wc) {
 	return wc->driver->getHeight();
 }
-
 
 pixosi webcam_get_palette(webcam *wc) {
 	return wc->driver->getPalette();
 }
 
-
 webcamerrorcode webcam_set_palette(webcam *wc, pixosi palette) {
 	return wc->driver->setPalette(palette);
 }
 
-
 int webcam_is_opened(webcam *wc) {
-	if (wc->driver->isOpened())
+	if (wc->driver->isOpened()) {
 		return 1;
-	else
+	} else {
 		return 0;
+	}
 }
-
 
 webcamerrorcode webcam_set_fps(webcam *wc, unsigned fps) {
 	return wc->driver->setFPS(fps);
 }
 
-
 unsigned webcam_get_fps(webcam *wc) {
 	return wc->driver->getFPS();
 }
-
 
 void webcam_set_resolution(webcam *wc, unsigned width, unsigned height) {
 	wc->driver->setResolution(width, height);
 }
 
-
 void webcam_flip_horizontally(webcam *wc, int flip) {
-	if (flip)
+	if (flip) {
 		wc->driver->flipHorizontally(true);
-	else
+	} else {
 		wc->driver->flipHorizontally(false);
+	}
 }
-
 
 void webcam_set_brightness(webcam *wc, int brightness) {
 	wc->driver->setBrightness(brightness);
 }
 
-
 int webcam_get_brightness(webcam *wc) {
 	return wc->driver->getBrightness();
 }
-
 
 void webcam_set_contrast(webcam *wc, int contrast) {
 	wc->driver->setContrast(contrast);
 }
 
-
 int webcam_get_contrast(webcam *wc) {
 	return wc->driver->getContrast();
 }
-

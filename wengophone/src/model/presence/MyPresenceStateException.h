@@ -20,7 +20,7 @@
 #ifndef MYPRESENCESTATEEXCEPTION_H
 #define MYPRESENCESTATEEXCEPTION_H
 
-#include <exception/Exception.h>
+#include <util/exception/Exception.h>
 
 /**
  *

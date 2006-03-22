@@ -20,7 +20,7 @@
 #ifndef CONTACTGROUP_H
 #define CONTACTGROUP_H
 
-#include <Event.h>
+#include <util/Event.h>
 
 #include <string>
 
@@ -111,22 +111,22 @@ private:
 
 	/**
 	 * Add a Contact to the ContactGroup.
-	 * 
+	 *
 	 * Must only be called by ContactList
-	 * 
+	 *
 	 * @param contact the Contact to add
 	 */
 	void addContact(Contact & contact);
 
 	/**
 	 * Remove a Contact from the ContactGroup.
-	 * 
+	 *
 	 * Must only be called by ContactList
-	 * 
+	 *
 	 * @param contact the Contact to remove
 	 */
 	void removeContact(Contact & contact);
-	
+
 	/** Defines the vector of Contact. */
 	typedef std::vector<Contact *> ContactVector;
 

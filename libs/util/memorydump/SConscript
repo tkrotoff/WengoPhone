@@ -1,0 +1,23 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'owutil'
+]
+lib_path = []
+include_path = ['include']
+link_flags = []
+headers = []
+sources = []
+
+if WengoCCMSVC():
+	sources += ['src/win32/MemoryDump.cpp']
+	libs += ['shlwapi']
+
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+
+env.WengoStaticLibrary('owmemorydump', sources)
+
+env.SConscript('tests/SConscript')

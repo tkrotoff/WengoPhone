@@ -17,12 +17,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/**
- * DirectX utils functions
- *
- * @author Mathieu Stute
- */
-
 #include <DirectXWebcamUtils.h>
 
 #include <iostream>
@@ -35,7 +29,7 @@ HRESULT FindMyCaptureDevice(IBaseFilter **pF, BSTR bstrName)
     CComPtr<IBaseFilter> pFilter;
     CComPtr<ICreateDevEnum> pSysDevEnum;
     CComPtr<IEnumMoniker> pEnumCat = NULL;
-    
+
     // Create the System Device Enumerator.
     pSysDevEnum.CoCreateInstance(CLSID_SystemDeviceEnum);
     if (!pSysDevEnum) {
@@ -49,7 +43,7 @@ HRESULT FindMyCaptureDevice(IBaseFilter **pF, BSTR bstrName)
     }
 
     pEnumCat->Reset();
-    
+
     // Enumerate the monikers.
     //CComPtr<IMoniker> pMoniker;
 
@@ -73,7 +67,7 @@ HRESULT FindMyCaptureDevice(IBaseFilter **pF, BSTR bstrName)
 
         VARIANT varName;
         VariantInit(&varName); // Try to match the friendly name.
-        hr = pProp->Read(L"FriendlyName", &varName, 0); 
+        hr = pProp->Read(L"FriendlyName", &varName, 0);
         if (SUCCEEDED(hr) && (wcscmp(bstrName, varName.bstrVal) == 0))
         {
             hr = pMoniker->BindToObject(0, 0, IID_IBaseFilter, (void**)&pFilter);
@@ -95,39 +89,39 @@ CComPtr< IBaseFilter > GetCaptureDevice(char * device_name) {
     CComPtr< IBaseFilter > ppCap = NULL;
     //CComPtr< IBaseFilter > pCap;
     HRESULT hr;
-    
+
     // create an enumerator
     CComPtr< ICreateDevEnum > pCreateDevEnum;
     pCreateDevEnum.CoCreateInstance( CLSID_SystemDeviceEnum );
     if( !pCreateDevEnum ) {
         return NULL;
     }
-    
+
     // enumerate video capture devices
     CComPtr< IEnumMoniker > pEm;
     pCreateDevEnum->CreateClassEnumerator( CLSID_VideoInputDeviceCategory, &pEm, 0 );
     if( !pEm ) {
         return NULL;
     }
-    
+
     pEm->Reset();
-    
+
     // go through and find first video capture device
     while( 1 ) {
         ULONG ulFetched = 0;
         CComPtr< IMoniker > pM;
-    
+
         hr = pEm->Next( 1, &pM, &ulFetched );
         if( hr != S_OK )
             break;
-    
+
         // get the property bag
         CComPtr< IPropertyBag > pBag;
         hr = pM->BindToStorage( 0, 0, IID_IPropertyBag, (void**) &pBag );
         if( hr != S_OK ) {
             continue;
         }
-    
+
         // ask for the english-readable name
         CComVariant var;
         var.vt = VT_BSTR;
@@ -135,7 +129,7 @@ CComPtr< IBaseFilter > GetCaptureDevice(char * device_name) {
         if( hr != S_OK ) {
             continue;
         }
-        
+
         //QString temp = (QString)_bstr_t(var);
         char * temp = (char*)_bstr_t(var);
         if( temp == device_name) {
@@ -160,7 +154,7 @@ IAMStreamConfig * GetIAMStreamConfig(IBaseFilter *pFilter) {
     if (FAILED(hr)) {
         return NULL;
     }
-    
+
     while (pEnum->Next(1, &pPin, NULL) == S_OK) {
         hr = pPin->QueryInterface(IID_IAMStreamConfig, (void**)&pIAMS);
         if(hr == S_OK) {
@@ -181,7 +175,7 @@ HRESULT ConnectFilters(IGraphBuilder *pGraph, IPin *pOut, IBaseFilter *pDest) {
         pOut->QueryDirection(&PinDir);
         _ASSERTE(PinDir == PINDIR_OUTPUT);
     #endif
-    
+
     // Find an input pin on the downstream filter.
     IPin *pIn = 0;
     HRESULT hr = GetUnconnectedPin(pDest, PINDIR_INPUT, &pIn);
@@ -198,14 +192,14 @@ HRESULT ConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pSrc, IBaseFilter *pD
     if ((pGraph == NULL) || (pSrc == NULL) || (pDest == NULL)) {
         return E_POINTER;
     }
-    
+
     // Find an output pin on the first filter.
     IPin *pOut = 0;
     HRESULT hr = GetUnconnectedPin(pSrc, PINDIR_OUTPUT, &pOut);
     if (FAILED(hr)) {
         return hr;
     }
-    
+
     hr = ConnectFilters(pGraph, pOut, pDest);
     pOut->Release();
     return hr;
@@ -249,51 +243,51 @@ HRESULT GetUnconnectedPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppP
 
 void GetDefaultCapDevice(IBaseFilter ** ppCap) {
     HRESULT hr;
-    
+
     _ASSERTE(ppCap);
-    if (!ppCap) { 
+    if (!ppCap) {
         return;
     }
-    
+
     *ppCap = NULL;
-    
+
     // create an enumerator
     CComPtr< ICreateDevEnum > pCreateDevEnum;
     pCreateDevEnum.CoCreateInstance( CLSID_SystemDeviceEnum );
-    
+
     _ASSERTE(pCreateDevEnum);
     if( !pCreateDevEnum ) {
         return;
     }
-    
+
     // enumerate video capture devices
     CComPtr< IEnumMoniker > pEm;
     pCreateDevEnum->CreateClassEnumerator( CLSID_VideoInputDeviceCategory, &pEm, 0 );
-    
+
     //_ASSERTE(pEm);
     if( !pEm ) {
         return;
     }
-    
+
     pEm->Reset( );
-    
+
     // go through and find first video capture device
     while(1) {
         ULONG ulFetched = 0;
         CComPtr< IMoniker > pM;
-        
+
         hr = pEm->Next( 1, &pM, &ulFetched );
         if( hr != S_OK ) {
             break;
         }
-        
+
         // get the property bag
         CComPtr< IPropertyBag > pBag;
         hr = pM->BindToStorage( 0, 0, IID_IPropertyBag, (void**) &pBag );
         if( hr != S_OK ) {
             continue;
         }
-        
+
         // ask for the english-readable name
         CComVariant var;
         var.vt = VT_BSTR;
@@ -301,7 +295,7 @@ void GetDefaultCapDevice(IBaseFilter ** ppCap) {
         if( hr != S_OK ) {
             continue;
         }
-        
+
         // ask for the actual filter
         hr = pM->BindToObject( 0, 0, IID_IBaseFilter, (void**) ppCap );
         if( *ppCap ) {

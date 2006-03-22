@@ -19,7 +19,7 @@
 
 #include "NullIMConnect.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 NullIMConnect::NullIMConnect(IMAccount & account)
 	: IMConnect(account) {

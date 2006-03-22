@@ -2,7 +2,6 @@
 
 SetOutPath "$INSTDIR"
 File "${QTDIR}\bin\QtCored4.dll"
-File "${QTDIR}\bin\QtDesignerd4.dll"
 File "${QTDIR}\bin\QtGuid4.dll"
 File "${QTDIR}\bin\QtXmld4.dll"
 File "${QTDIR}\bin\QtSvgd4.dll"

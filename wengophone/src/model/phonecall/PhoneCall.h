@@ -25,9 +25,9 @@
 #include <sipwrapper/EnumTone.h>
 #include <sipwrapper/EnumPhoneCallState.h>
 
-#include <Event.h>
-#include <List.h>
-#include <NonCopyable.h>
+#include <util/Event.h>
+#include <util/List.h>
+#include <util/NonCopyable.h>
 
 #include <string>
 

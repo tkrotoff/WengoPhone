@@ -24,7 +24,7 @@ extern "C" {
 #include "gaim/privacy.h"
 }
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 
 /* ***************** GAIM CALLBACK ***************** */
@@ -121,7 +121,7 @@ GaimIMPresence *GaimPresenceMngr::AddIMPresence(IMAccount &account)
 
 		_gaimIMPresenceList.push_back(mIMPresence);
 	}
-	
+
 	return mIMPresence;
 }
 

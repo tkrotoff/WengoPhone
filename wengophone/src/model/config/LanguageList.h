@@ -20,8 +20,8 @@
 #ifndef LANGUAGELIST_H
 #define LANGUAGELIST_H
 
-#include <NonCopyable.h>
-#include <StringList.h>
+#include <util/NonCopyable.h>
+#include <util/StringList.h>
 
 /**
  * Parses Languages.h

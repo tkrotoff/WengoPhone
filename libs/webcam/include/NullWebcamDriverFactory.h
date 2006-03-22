@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef NULLWEBCAMDRIVERFACTORY_H
 #define NULLWEBCAMDRIVERFACTORY_H
 
@@ -23,9 +24,9 @@
 #include <NullWebcamDriver.h>
 
 /**
- * Webcam driver factory for Null driver
+ * Webcam driver factory for Null driver.
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class NullWebcamDriverFactory : public WebcamDriverFactory {
 public:
@@ -34,5 +35,4 @@ public:
 	}
 };
 
-#endif //NULLWEBCAMDRIVERFACTORY_H
-
+#endif	//NULLWEBCAMDRIVERFACTORY_H

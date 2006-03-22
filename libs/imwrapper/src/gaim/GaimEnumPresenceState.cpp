@@ -17,9 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <string.h>
-
 #include "GaimEnumPresenceState.h"
+
+#include <cstring>
 
 const char *GaimPreState::_GaimPresenceStatus[] = {
 		"available",
@@ -32,7 +32,7 @@ const char *GaimPreState::_GaimPresenceStatus[] = {
 };
 
 
-const char *GaimPreState::GetStatusId(EnumPresenceState::PresenceState status) 
+const char *GaimPreState::GetStatusId(EnumPresenceState::PresenceState status)
 {
 	return _GaimPresenceStatus[status];
 }

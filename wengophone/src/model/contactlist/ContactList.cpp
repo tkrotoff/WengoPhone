@@ -27,8 +27,8 @@
 #include <model/WengoPhone.h>
 #include <model/presence/PresenceHandler.h>
 
-#include <StringList.h>
-#include <Logger.h>
+#include <util/StringList.h>
+#include <util/Logger.h>
 
 using namespace std;
 
@@ -306,7 +306,7 @@ void ContactList::_removeContactGroup(const std::string & groupName) {
 		LOG_DEBUG("ContactGroup removed: " + groupName);
 	} else {
 		LOG_DEBUG("this ContactGroup does not exist: " + groupName);
-	}	
+	}
 }
 
 void ContactList::_addToContactGroup(const std::string & groupName, Contact & contact) {

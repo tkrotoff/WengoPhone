@@ -22,9 +22,9 @@
 #include <imwrapper/IMWrapperFactory.h>
 #include <sipwrapper/SipWrapperFactory.h>
 #include <PhApiFactory.h>
-#include <global.h>
+#include <cutil/global.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #if defined(CC_MSVC)
 	#include <win32/MemoryDump.h>

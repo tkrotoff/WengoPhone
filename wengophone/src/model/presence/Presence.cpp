@@ -26,7 +26,7 @@
 
 #include <imwrapper/IMWrapperFactory.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 Presence::Presence(IMAccount & imAccount)
 	: _imAccount(imAccount) {

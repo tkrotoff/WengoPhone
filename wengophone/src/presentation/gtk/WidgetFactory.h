@@ -20,7 +20,7 @@
 #ifndef WIDGETFACTORY_H
 #define WIDGETFACTORY_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <gtk/gtk.h>
 #include <glade/glade.h>

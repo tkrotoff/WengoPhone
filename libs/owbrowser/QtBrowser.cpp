@@ -19,7 +19,7 @@
 
 #include "QtBrowser.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #include <QtGui>
 
@@ -116,7 +116,7 @@ void QtBrowser::initBrowser() {
 		}
 #endif
 
-		//init qt browser
+		//Init Qt browser
 		_qtBrowser = new QTextBrowser(_browserWidget);
 		connect(_qtBrowser, SIGNAL(anchorClicked(const QUrl &)),
 			SLOT(beforeNavigate(const QUrl &)));
@@ -131,7 +131,7 @@ void QtBrowser::initBrowser() {
 			_qtBrowser = NULL;
 		}
 
-		//init ie browser
+		//Init IE browser
 		_ieBrowser = new QAxWidget(_browserWidget);
 		_ieBrowser->setControl(QString::fromUtf8("{8856F961-340A-11D0-A96B-00C04FD705A2}"));
 		_ieBrowser->setObjectName(QString::fromUtf8("mwbAx"));

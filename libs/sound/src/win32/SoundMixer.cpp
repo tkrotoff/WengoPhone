@@ -20,12 +20,12 @@
 #include <SoundMixer.h>
 
 #include <AudioDevice.h>
-#include <Logger.h>
+
+#include <util/Logger.h>
 
 #include "Volume.h"
 
 #include <string>
-
 #include <iostream>
 using namespace std;
 

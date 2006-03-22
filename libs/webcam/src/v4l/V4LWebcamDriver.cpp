@@ -16,12 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #include <v4l-pixertool.h>
 
 #include <V4LWebcamDriver.h>
 
-#include <File.h>
-#include <StringList.h>
+#include <util/File.h>
 
 #include <fcntl.h>
 #include <sys/ioctl.h>
@@ -30,7 +30,6 @@
 
 using namespace std;
 
-
 V4LWebcamDriver::V4LWebcamDriver(WebcamDriver *driver, int flags)
 : IWebcamDriver(flags) {
 	_webcamDriver = driver;
@@ -38,11 +37,9 @@ V4LWebcamDriver::V4LWebcamDriver(WebcamDriver *driver, int flags)
 	_fhandle = 0;
 }
 
-
 V4LWebcamDriver::~V4LWebcamDriver() {
 	cleanup();
 }
-
 
 void V4LWebcamDriver::cleanup() {
 	if (_fhandle > 0)
@@ -53,13 +50,12 @@ void V4LWebcamDriver::cleanup() {
 	_fps = 15;
 }
 
-
 StringList V4LWebcamDriver::getDeviceList() {
 	StringList deviceList;
 	DevNameArray devName = getDevices();
 
 	DevNameArray::const_iterator i = devName.begin();
-	
+
 	while (i != devName.end()) {
 		deviceList.add((*i).second);
 		i++;
@@ -67,7 +63,6 @@ StringList V4LWebcamDriver::getDeviceList() {
 
 	return deviceList;
 }
-
 
 string V4LWebcamDriver::getDefaultDevice() {
 	string defaultDeviceName;
@@ -77,7 +72,6 @@ string V4LWebcamDriver::getDefaultDevice() {
 
 	return defaultDeviceName;
 }
-
 
 webcamerrorcode V4LWebcamDriver::setDevice(const std::string & deviceName) {
 	//TODO: test if a webcam is already opened
@@ -111,26 +105,21 @@ webcamerrorcode V4LWebcamDriver::setDevice(const std::string & deviceName) {
 	return WEBCAM_OK;
 }
 
-
 bool V4LWebcamDriver::isOpened() const {
 	return _isOpened;
 }
-
 
 void V4LWebcamDriver::startCapture() {
 	start();
 }
 
-
 void V4LWebcamDriver::pauseCapture() {
 	//TODO: implement pause
 }
 
-
 void V4LWebcamDriver::stopCapture() {
 	terminate();
 }
-
 
 webcamerrorcode V4LWebcamDriver::setPalette(pixosi palette) {
 	int depth;
@@ -172,11 +161,9 @@ webcamerrorcode V4LWebcamDriver::setPalette(pixosi palette) {
 	return (_vPic.palette == v4l_palette ? WEBCAM_OK : WEBCAM_NOK);
 }
 
-
 pixosi V4LWebcamDriver::getPalette() const {
 	return pix_v4l_to_pix_osi(_vPic.palette);
 }
-
 
 webcamerrorcode V4LWebcamDriver::setFPS(unsigned fps) {
 	_fps = fps;
@@ -184,11 +171,9 @@ webcamerrorcode V4LWebcamDriver::setFPS(unsigned fps) {
 	return WEBCAM_OK;
 }
 
-
 unsigned V4LWebcamDriver::getFPS() const {
 	return _fps;
 }
-
 
 webcamerrorcode V4LWebcamDriver::setResolution(unsigned width, unsigned height) {
 	memset(&_vWin, 0, sizeof(struct video_window));
@@ -204,39 +189,31 @@ webcamerrorcode V4LWebcamDriver::setResolution(unsigned width, unsigned height) 
 	return WEBCAM_OK;
 }
 
-
 unsigned V4LWebcamDriver::getWidth() const {
 	return _vWin.width;
 }
-
 
 unsigned V4LWebcamDriver::getHeight() const {
 	return _vWin.height;;
 }
 
-
 void V4LWebcamDriver::setBrightness(int brightness) {
 }
-
 
 int V4LWebcamDriver::getBrightness() const {
 	return 0;
 }
 
-
 void V4LWebcamDriver::setContrast(int contrast) {
 }
-
 
 int V4LWebcamDriver::getContrast() const {
 	return 0;
 }
 
-
 void V4LWebcamDriver::flipHorizontally(bool flip) {
 	//TODO: add horizontal flip support
 }
-
 
 void V4LWebcamDriver::readCaps() {
 	if (isOpened()) {
@@ -246,16 +223,15 @@ void V4LWebcamDriver::readCaps() {
 	}
 }
 
-
 void V4LWebcamDriver::run() {
 	int len, fsize;
 	piximage *image;
 
 	image = pix_alloc(getPalette(), getWidth(), getHeight());
-	
+
 	while (isOpened() && !_terminate) {
 		msleep(1000 / _fps);
-		
+
 		fsize = pix_size(image->palette, image->width, image->height);
 		len = read(_fhandle, image->data, pix_size(image->palette, image->width, image->height));
 
@@ -270,16 +246,13 @@ void V4LWebcamDriver::run() {
 	pix_free(image);
 }
 
-
 void V4LWebcamDriver::terminate() {
 	_terminate = true;
 }
 
-
 V4LWebcamDriver::DevNameArray V4LWebcamDriver::getDevices() {
 	return getDevices2_6();
 }
-
 
 V4LWebcamDriver::DevNameArray V4LWebcamDriver::getDevices2_6() {
 	const string dir = "/sys/class/video4linux";

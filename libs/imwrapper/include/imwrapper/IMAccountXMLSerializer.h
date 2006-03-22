@@ -20,7 +20,7 @@
 #ifndef IMACCOUNTXMLSERIALIZER_H
 #define IMACCOUNTXMLSERIALIZER_H
 
-#include <Serializable.h>
+#include <serialization/Serializable.h>
 
 class IMAccount;
 

@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 #ifndef FFMPEG_PIXERTOOL_H
 #define FFMPEG_PIXERTOOL_H
 
@@ -29,7 +29,7 @@ extern "C" {
 
 /**
  * Palette identifier conversion.
- * 
+ *
  * Converts from ffmpeg palette identifier to
  * pixer palette identifier
  *
@@ -38,10 +38,9 @@ extern "C" {
  */
 pixosi pix_ffmpeg_to_pix_osi(int pix);
 
-
 /**
  * Palette identifier conversion.
- * 
+ *
  * Converts from pixer palette identifier to
  * ffmpeg palette identifier
  *
@@ -49,7 +48,6 @@ pixosi pix_ffmpeg_to_pix_osi(int pix);
  * @return equivalent ffmpeg identifier
  */
 int pix_ffmpeg_from_pix_osi(pixosi pix);
-
 
 /**
  * Fill an AVPicture with a piximage.
@@ -61,12 +59,11 @@ int pix_ffmpeg_from_pix_osi(pixosi pix);
  */
 void pix_fill_avpicture(AVPicture *dst, piximage *src);
 
-
 /**
  * Convert an AVPicture to an img_dst
  *
  * This function exists because of AVPicture buffer size. They are not
- * sometimes bigger than real picture size so img_src->data[0] is unusable to 
+ * sometimes bigger than real picture size so img_src->data[0] is unusable to
  * get the picture data.
  * Size of the picture are taken from the img_dst.
  * This method does not auto resize the picture as pix_convert does
@@ -78,10 +75,8 @@ void pix_fill_avpicture(AVPicture *dst, piximage *src);
  */
 pixerrorcode pix_convert_avpicture(int flags, piximage *img_dst, AVPicture *img_src, pixosi src_fmt);
 
-
 #ifdef __cplusplus
 }
 #endif
-	
-#endif
 
+#endif	//FFMPEG_PIXERTOOL_H

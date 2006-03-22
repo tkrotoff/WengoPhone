@@ -22,7 +22,7 @@
 
 #include <imwrapper/IMContact.h>
 
-#include <Serializable.h>
+#include <serialization/Serializable.h>
 
 #include <set>
 
@@ -30,7 +30,7 @@ class IMContactSet : public std::set<IMContact>, public Serializable {
 public:
 
 	std::string serialize();
-	
+
 	bool unserialize(const std::string & data);
 
 };

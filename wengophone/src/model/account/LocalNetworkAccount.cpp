@@ -19,7 +19,7 @@
 
 #include "LocalNetworkAccount.h"
 
-#include <StringList.h>
+#include <util/StringList.h>
 
 LocalNetworkAccount::LocalNetworkAccount() {
 	//init();

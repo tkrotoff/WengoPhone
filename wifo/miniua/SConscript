@@ -22,7 +22,7 @@ if WengoOSMacOSX():
 ]
 
 if WengoOSLinux():
-   libs += ["z", "wengocurl", "portaudio"]
+   libs += ["z", "owcurl", "portaudio"]
 
 
 

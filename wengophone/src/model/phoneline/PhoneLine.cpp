@@ -38,8 +38,8 @@
 #include <sipwrapper/SipWrapperFactory.h>
 #include <sipwrapper/EnumNatType.h>
 
-#include <Logger.h>
-#include <Thread.h>
+#include <util/Logger.h>
+#include <thread/Thread.h>
 
 #include <string>
 using namespace std;

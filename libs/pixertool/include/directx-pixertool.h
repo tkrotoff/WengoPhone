@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 #ifndef DIRECTX_PIXERTOOL_H
 #define DIRECTX_PIXERTOOL_H
 
@@ -36,24 +36,24 @@ extern "C" const __declspec(selectany) GUID OUR_MEDIASUBTYPE_IYUV =
 	{0x56555949,0x0000,0x0010, {0x80,0x00,0x00,0xAA,0x00,0x38,0x9B,0x71}};
 
 /* Y444 */
-extern "C" const __declspec(selectany) GUID OUR_MEDIASUBTYPE_Y444 = 
+extern "C" const __declspec(selectany) GUID OUR_MEDIASUBTYPE_Y444 =
 	{0x34343459, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71}};
 
 /* Y800 */
-extern "C" const __declspec(selectany) GUID OUR_MEDIASUBTYPE_Y800 = 
+extern "C" const __declspec(selectany) GUID OUR_MEDIASUBTYPE_Y800 =
 	{0x30303859, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71}};
 
 /* Y422 */
-extern "C" const __declspec(selectany) GUID OUR_MEDIASUBTYPE_Y422 = 
+extern "C" const __declspec(selectany) GUID OUR_MEDIASUBTYPE_Y422 =
 	{0x32323459, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71}};
 
 /* NV12 */
-extern "C" const __declspec(selectany) GUID OUR_MEDIASUBTYPE_NV12 = 
+extern "C" const __declspec(selectany) GUID OUR_MEDIASUBTYPE_NV12 =
 	{0x3231564E, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71}};
 
 /**
  * Palette identifier conversion.
- * 
+ *
  * Converts from directx palette identifier to
  * pixer palette identifier
  *
@@ -62,10 +62,9 @@ extern "C" const __declspec(selectany) GUID OUR_MEDIASUBTYPE_NV12 =
  */
 pixosi pix_directx_to_pix_osi(GUID pix);
 
-
 /**
  * Palette identifier conversion.
- * 
+ *
  * Converts from pixer palette identifier to
  * directx palette identifier
  *
@@ -74,4 +73,4 @@ pixosi pix_directx_to_pix_osi(GUID pix);
  */
 GUID pix_directx_from_pix_osi(pixosi pix);
 
-#endif //DIRECTX_PIXERTOOL_H
+#endif	//DIRECTX_PIXERTOOL_H

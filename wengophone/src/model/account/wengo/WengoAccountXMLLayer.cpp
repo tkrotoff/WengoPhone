@@ -24,8 +24,8 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <File.h>
-#include <Logger.h>
+#include <util/File.h>
+#include <util/Logger.h>
 
 #include <string>
 using namespace std;

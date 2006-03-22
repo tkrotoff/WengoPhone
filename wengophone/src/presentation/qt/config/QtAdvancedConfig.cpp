@@ -22,7 +22,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #include <Object.h>
 #include <WidgetFactory.h>

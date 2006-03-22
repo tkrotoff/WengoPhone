@@ -16,12 +16,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #include <directx-pixertool.h>
 
 #include <DirectXWebcamDriver.h>
 #include <DirectXWebcamUtils.h>
-#include <Logger.h>
-#include <String.h>
+
+#include <util/Logger.h>
 
 using namespace std;
 
@@ -125,10 +126,9 @@ StringList DirectXWebcamDriver::getDeviceList() {
 		}
 */
 	}
-	
+
 	return toReturn;
 }
-
 
 string DirectXWebcamDriver::getDefaultDevice() {
 	string defaultDevice;
@@ -191,7 +191,6 @@ string DirectXWebcamDriver::getDefaultDevice() {
 
 	return defaultDevice;
 }
-
 
 webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 	//TODO: test i a webcam is already opened
@@ -291,11 +290,9 @@ webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 	return WEBCAM_OK;
 }
 
-
 bool DirectXWebcamDriver::isOpened() const {
 	return _isOpened;
 }
-
 
 void DirectXWebcamDriver::startCapture() {
 	HRESULT hr;
@@ -307,10 +304,8 @@ void DirectXWebcamDriver::startCapture() {
 	}
 }
 
-
 void DirectXWebcamDriver::pauseCapture() {
 }
-
 
 void DirectXWebcamDriver::stopCapture() {
 	if (!_pGraph) {
@@ -325,7 +320,6 @@ void DirectXWebcamDriver::stopCapture() {
 	}
 }
 
-
 webcamerrorcode DirectXWebcamDriver::setPalette(pixosi palette) {
 	setCaps(palette, getFPS(), getWidth(), getHeight());
 	if (_cachedPalette != palette) {
@@ -335,11 +329,9 @@ webcamerrorcode DirectXWebcamDriver::setPalette(pixosi palette) {
 	}
 }
 
-
 pixosi DirectXWebcamDriver::getPalette() const {
 	return _cachedPalette;
 }
-
 
 webcamerrorcode DirectXWebcamDriver::setFPS(unsigned fps) {
 	setCaps(getPalette(), fps, getWidth(), getHeight());
@@ -348,11 +340,9 @@ webcamerrorcode DirectXWebcamDriver::setFPS(unsigned fps) {
 	return WEBCAM_NOK;
 }
 
-
 unsigned DirectXWebcamDriver::getFPS() const {
 	return _cachedFPS;
 }
-
 
 webcamerrorcode DirectXWebcamDriver::setResolution(unsigned width, unsigned height) {
 	setCaps(getPalette(), getFPS(), width, height);
@@ -368,29 +358,23 @@ unsigned DirectXWebcamDriver::getWidth() const {
 	return _cachedWidth;
 }
 
-
 unsigned DirectXWebcamDriver::getHeight() const {
 	return _cachedHeight;
 }
 
-
 void DirectXWebcamDriver::setBrightness(int brightness) {
 }
-
 
 int DirectXWebcamDriver::getBrightness() const {
 	return 0;
 }
 
-
 void DirectXWebcamDriver::setContrast(int contrast) {
 }
-
 
 int DirectXWebcamDriver::getContrast() const {
 	return 0;
 }
-
 
 void DirectXWebcamDriver::flipHorizontally(bool flip) {
 	//TODO: add horizontal flip support
@@ -464,7 +448,6 @@ webcamerrorcode DirectXWebcamDriver::setCaps(pixosi palette, unsigned fps, unsig
 	return WEBCAM_NOK;
 }
 
-
 void DirectXWebcamDriver::readCaps() {
 	HRESULT hr;
 	VIDEOINFOHEADER *pvi;
@@ -481,7 +464,6 @@ void DirectXWebcamDriver::readCaps() {
 	_cachedHeight = pvi->bmiHeader.biHeight;
 }
 
-
 STDMETHODIMP DirectXWebcamDriver::QueryInterface(REFIID riid, void ** ppv) {
 	LOG_DEBUG("CSampleGrabberCB::QueryInterface");
 
@@ -493,13 +475,11 @@ STDMETHODIMP DirectXWebcamDriver::QueryInterface(REFIID riid, void ** ppv) {
 	return E_NOINTERFACE;
 }
 
-
 STDMETHODIMP DirectXWebcamDriver::BufferCB(double dblSampleTime, BYTE * pBuffer, long lBufferSize) {
 	// This method is not used but must be implemented
 	LOG_ERROR("This method should not be called");
 	return 0;
 }
-
 
 STDMETHODIMP DirectXWebcamDriver::SampleCB(double SampleTime, IMediaSample * pSample) {
 	BYTE *pBuffer;

@@ -20,7 +20,7 @@
 #ifndef STRINGLISTCONVERT_H
 #define STRINGLISTCONVERT_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 class QStringList;
 class StringList;

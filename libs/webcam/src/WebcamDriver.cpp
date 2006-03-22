@@ -16,10 +16,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #include <DefaultWebcamDriverFactory.h>
 #include <WebcamDriver.h>
-#include <Logger.h>
-#include <StringList.h>
+
+#include <util/Logger.h>
 
 WebcamDriverFactory * WebcamDriver::_factory = 0;
 
@@ -51,7 +52,6 @@ WebcamDriver::WebcamDriver(int flags)
 	_convFlags = PIX_NO_FLAG;
 }
 
-
 WebcamDriver::~WebcamDriver() {
 	stopCapture();
 	delete _webcamPrivate;
@@ -60,7 +60,6 @@ WebcamDriver::~WebcamDriver() {
 		pix_free(_convImage);
 }
 
-
 void WebcamDriver::cleanup() {
 	LOG_DEBUG("Cleaning up the webcam driver");
 	_webcamPrivate->cleanup();
@@ -68,16 +67,13 @@ void WebcamDriver::cleanup() {
 	initializeConvImage();
 }
 
-
 StringList WebcamDriver::getDeviceList() {
 	return _webcamPrivate->getDeviceList();
 }
 
-
 std::string WebcamDriver::getDefaultDevice() {
 	return _webcamPrivate->getDefaultDevice();
 }
-
 
 webcamerrorcode WebcamDriver::setDevice(const std::string & deviceName) {
 	cleanup();
@@ -91,30 +87,25 @@ webcamerrorcode WebcamDriver::setDevice(const std::string & deviceName) {
 	return _webcamPrivate->setDevice(actualDeviceName);
 }
 
-
 bool WebcamDriver::isOpened() const {
 	return _webcamPrivate->isOpened();
 }
-
 
 void WebcamDriver::startCapture() {
 	LOG_DEBUG("Starting capture");
 	_webcamPrivate->startCapture();
 }
 
-
 void WebcamDriver::pauseCapture() {
 	LOG_DEBUG("Pausing capture");
 	_webcamPrivate->pauseCapture();
 }
-
 
 void WebcamDriver::stopCapture() {
 	LOG_DEBUG("Stopping capture");
 	_webcamPrivate->stopCapture();
 	cleanup();
 }
-
 
 webcamerrorcode WebcamDriver::setPalette(pixosi palette) {
 	if (_webcamPrivate->setPalette(palette) == WEBCAM_NOK) {
@@ -134,7 +125,6 @@ webcamerrorcode WebcamDriver::setPalette(pixosi palette) {
 	}
 }
 
-
 pixosi WebcamDriver::getPalette() const {
 	if (isFormatForced()) {
 		return _desiredPalette;
@@ -142,7 +132,6 @@ pixosi WebcamDriver::getPalette() const {
 		return _webcamPrivate->getPalette();
 	}
 }
-
 
 webcamerrorcode WebcamDriver::setFPS(unsigned fps) {
 	if (_webcamPrivate->setFPS(fps) == WEBCAM_NOK) {
@@ -158,11 +147,9 @@ webcamerrorcode WebcamDriver::setFPS(unsigned fps) {
 	return WEBCAM_OK;
 }
 
-
 unsigned WebcamDriver::getFPS() const {
 	return _forcedFPS;
 }
-
 
 webcamerrorcode WebcamDriver::setResolution(unsigned width, unsigned height) {
 	if (_webcamPrivate->setResolution(width, height) == WEBCAM_NOK) {
@@ -181,7 +168,6 @@ webcamerrorcode WebcamDriver::setResolution(unsigned width, unsigned height) {
 	}
 }
 
-
 unsigned WebcamDriver::getWidth() const {
 	if (isFormatForced()) {
 		return _desiredWidth;
@@ -189,7 +175,6 @@ unsigned WebcamDriver::getWidth() const {
 		return _webcamPrivate->getWidth();
 	}
 }
-
 
 unsigned WebcamDriver::getHeight() const {
 	if (isFormatForced()) {
@@ -199,26 +184,21 @@ unsigned WebcamDriver::getHeight() const {
 	}
 }
 
-
 void WebcamDriver::setBrightness(int brightness) {
 	_webcamPrivate->setBrightness(brightness);
 }
-
 
 int WebcamDriver::getBrightness() const {
 	return _webcamPrivate->getBrightness();
 }
 
-
 void WebcamDriver::setContrast(int contrast) {
 	_webcamPrivate->setContrast(contrast);
 }
 
-
 int WebcamDriver::getContrast() const {
 	return _webcamPrivate->getContrast();
 }
-
 
 void WebcamDriver::flipHorizontally(bool flip) {
 	if (flip) {
@@ -229,7 +209,6 @@ void WebcamDriver::flipHorizontally(bool flip) {
 		_convFlags &= ~PIX_FLIP_HORIZONTALLY;
 	}
 }
-
 
 void WebcamDriver::frameBufferAvailable(piximage *image) {
 	float now;
@@ -264,10 +243,10 @@ void WebcamDriver::frameBufferAvailable(piximage *image) {
 	}
 }
 
-
 void WebcamDriver::initializeConvImage() {
-	if (_convImage)
+	if (_convImage) {
 		pix_free(_convImage);
+	}
 
 	_convImage = pix_alloc(_desiredPalette, _desiredWidth, _desiredHeight);
 }

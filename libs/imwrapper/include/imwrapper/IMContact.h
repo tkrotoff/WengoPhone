@@ -23,8 +23,8 @@
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumPresenceState.h>
 
-#include <Event.h>
-#include <Serializable.h>
+#include <util/Event.h>
+#include <serialization/Serializable.h>
 
 #include <string>
 #include <set>
@@ -45,7 +45,7 @@ public:
 
 	/**
 	 * Emitted when this IMContact has been added to a group.
-	 * 
+	 *
 	 * @param sender this IMContact
 	 * @param groupName the group where the IMContact has been added to
 	 */
@@ -53,7 +53,7 @@ public:
 
 	/**
 	 * Emitted when this IMContact has been removed from a group.
-	 * 
+	 *
 	 * @param sender this IMContact
 	 * @param groupName the group where the IMContact has been removed from
 	 */
@@ -61,7 +61,7 @@ public:
 
 	/**
 	 * Constructs a new IMContact.
-	 * 
+	 *
 	 * @param imAccount the imAccount that the IMContact is associated with
 	 * @param contactId id of the IMContact to create
 	 * @param presenceHandler the PresenceHandler that will receive presence message
@@ -91,14 +91,14 @@ public:
 
 	/**
 	 * Add this IMContact to a group.
-	 * 
+	 *
 	 * @param groupName the group to add this IMContact to
 	 */
 	void addToGroup(const std::string & groupName);
 
 	/**
 	 * Remove this IMContact to a group.
-	 * 
+	 *
 	 * @param groupName the group to remove this IMContact from
 	 */
 	void removeFromGroup(const std::string & groupName);
@@ -123,18 +123,18 @@ public:
 	bool isBlocked() const {
 		return _blocked;
 	}
-	
+
 	std::string serialize();
-	
+
 	bool unserialize(const std::string & data);
-	
+
 private:
 
 	const IMAccount & _imAccount;
 
 	std::string _contactId;
 
-	/** True if this IMContact is blocked. */ 
+	/** True if this IMContact is blocked. */
 	bool _blocked;
 
 	EnumPresenceState::PresenceState _presenceState;

@@ -22,8 +22,8 @@
 #include <imwrapper/IMAccountHandlerXMLSerializer.h>
 #include <imwrapper/IMAccountHandler.h>
 
-#include <File.h>
-#include <Logger.h>
+#include <util/File.h>
+#include <util/Logger.h>
 
 #include <string>
 

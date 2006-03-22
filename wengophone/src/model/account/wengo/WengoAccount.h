@@ -23,8 +23,8 @@
 #include <model/account/SipAccount.h>
 
 #include <http/HttpRequest.h>
-#include <Timer.h>
-#include <Event.h>
+#include <thread/Timer.h>
+#include <util/Event.h>
 
 /**
  * Connects to the single sign-on (SSO) system of the Wengo SIP service.

@@ -1,0 +1,33 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'boost',
+	'owcurl',
+	'owcutil'
+]
+lib_path = []
+include_path = ['include']
+link_flags = []
+headers = []
+sources = [
+	'src/StringList.cpp',
+	'src/File.cpp',
+	'src/Base64.cpp',
+	'src/Logger.cpp',
+	'src/IdGenerator.cpp',
+]
+
+if WengoOSWindows():
+	libs += ['advapi32', 'shell32']
+
+elif WengoOSMacOSX():
+	link_flags += ['-framework CoreFoundation']
+
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+
+env.WengoStaticLibrary('owutil', sources)
+
+env.SConscript('tests/SConscript')

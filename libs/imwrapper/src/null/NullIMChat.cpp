@@ -19,7 +19,7 @@
 
 #include "NullIMChat.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 NullIMChat::NullIMChat(IMAccount & account)
 	: IMChat(account) {

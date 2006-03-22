@@ -20,7 +20,7 @@
 #ifndef IMWRAPPERFACTORY_H
 #define IMWRAPPERFACTORY_H
 
-#include <Interface.h>
+#include <util/Interface.h>
 
 class IMAccount;
 class IMChat;

@@ -20,9 +20,9 @@
 #ifndef IWENBOX_H
 #define IWENBOX_H
 
-#include <dllexport.h>
+#include <cutil/dllexport.h>
 
-#include <Interface.h>
+#include <util/Interface.h>
 
 #include <string>
 #include <list>

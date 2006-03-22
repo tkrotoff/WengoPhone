@@ -19,7 +19,7 @@
 
 #include <AudioDevice.h>
 
-#include <StringList.h>
+#include <util/StringList.h>
 
 #include <portaudio.h>
 

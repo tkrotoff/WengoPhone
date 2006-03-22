@@ -22,7 +22,7 @@
 
 #include "MyPresenceStateException.h"
 
-#include <Interface.h>
+#include <util/Interface.h>
 
 #include <string>
 

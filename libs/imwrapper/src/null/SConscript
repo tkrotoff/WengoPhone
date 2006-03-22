@@ -2,7 +2,7 @@ env = WengoGetEnvironment()
 
 libs = [
 	'imwrapper',
-	'wengoutil'
+	'owutil'
 ]
 lib_path = []
 include_path = ['../null']

@@ -20,7 +20,7 @@
 #ifndef CONTACTContactGroupPopupMenu_H
 #define CONTACTContactGroupPopupMenu_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <QMenu>
 

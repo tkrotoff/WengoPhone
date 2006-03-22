@@ -20,10 +20,10 @@
 #include "Config.h"
 
 #include <AudioDevice.h>
-#include <File.h>
-#include <Logger.h>
 
-#include <global.h>
+#include <util/File.h>
+#include <util/Logger.h>
+#include <cutil/global.h>
 
 #ifdef OS_MACOSX
 #include <CoreFoundation/CoreFoundation.h>

@@ -17,18 +17,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include "GaimIMConnect.h"
+
 extern "C" {
 #include "gaim/account.h"
 #include "gaim/connection.h"
 #include "gaim/core.h"
 }
 
-#include "GaimIMConnect.h"
 #include "GaimEnumIMProtocol.h"
 #include <imwrapper/IMAccount.h>
 
-#include <Logger.h>
-
+#include <util/Logger.h>
 
 int GetTabSize(char **tab)
 {
@@ -61,9 +61,9 @@ void *GaimIMConnect::CreateAccount()
 {
 	GaimAccount	*gAccount = NULL;
 	char *PrclId = (char *)GaimIMPrcl::GetPrclId(_imAccount.getProtocol());
-	
+
 	gAccount = gaim_account_new(_imAccount.getLogin().c_str(), PrclId);
-	
+
 	if (gAccount)
 	{
 		gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
@@ -75,11 +75,11 @@ void *GaimIMConnect::CreateAccount()
 	return gAccount;
 }
 
-void GaimIMConnect::connect() 
-{	
+void GaimIMConnect::connect()
+{
 	GaimAccount	*gAccount;
 
-	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
+	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	if (gAccount == NULL)
 	{
@@ -94,11 +94,11 @@ void GaimIMConnect::connect()
 	gaim_account_connect(gAccount);
 }
 
-void GaimIMConnect::disconnect() 
+void GaimIMConnect::disconnect()
 {
 	GaimAccount	*gAccount;
 
-	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
+	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	if (gAccount)
 		gaim_account_disconnect(gAccount);

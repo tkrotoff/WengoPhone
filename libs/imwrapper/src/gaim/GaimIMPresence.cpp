@@ -25,10 +25,10 @@ extern "C" {
 #include "gaim/privacy.h"
 }
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 GaimIMPresence::GaimIMPresence(IMAccount & account)
-	: IMPresence(account) 
+	: IMPresence(account)
 {
 }
 
@@ -42,16 +42,16 @@ bool GaimIMPresence::equalsTo(std::string login, EnumIMProtocol::IMProtocol prot
 		return false;
 }
 
-void GaimIMPresence::changeMyPresence(EnumPresenceState::PresenceState state, 
-									  const std::string & note) 
+void GaimIMPresence::changeMyPresence(EnumPresenceState::PresenceState state,
+									  const std::string & note)
 {
 	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
-	
+
 	if (gAccount)
 	{
 		if (note.length() == 0)
-			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state), 
+			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state),
 									TRUE, NULL);
 		else
 			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state),
@@ -72,7 +72,7 @@ void GaimIMPresence::blockContact(const std::string & contactId)
 {
 	GaimAccount *gAccount;
 
-	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
+	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
 	if (gAccount)
@@ -85,7 +85,7 @@ void GaimIMPresence::unblockContact(const std::string & contactId)
 {
 	GaimAccount *gAccount;
 
-	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
+	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
 	if (gAccount)

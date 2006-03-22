@@ -25,7 +25,7 @@
 
 #include <sipwrapper/SipWrapper.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 Mutex ConferenceCall::_mutex;
 

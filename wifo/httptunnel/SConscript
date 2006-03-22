@@ -1,7 +1,7 @@
 env = WengoGetEnvironment()
 
 libs = [
-	'wengocurl'
+	'owcurl'
 ]
 lib_path = []
 include_path = ['.']
@@ -13,7 +13,7 @@ sources = [
 
 if env.getConsoleArgument('enable-ssl'):
     defines['HT_USE_SSL'] = 1
-    
+
 if WengoOSWindows():
 	libs += ['ws2_32']
 	defines['WIN32'] = 1

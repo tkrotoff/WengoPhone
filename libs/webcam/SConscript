@@ -1,9 +1,8 @@
 env = WengoGetEnvironment()
 
 libs = [
-	'wengoutil',
+	'owutil',
 	'pixertool',
-	'boost'
 ]
 
 include_path = [

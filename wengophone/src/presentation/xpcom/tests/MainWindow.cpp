@@ -25,8 +25,8 @@
 #include <Object.h>
 #include <WidgetFactory.h>
 
-#include <Thread.h>
-#include <Logger.h>
+#include <thread/Thread.h>
+#include <util/Logger.h>
 
 #include <QtGui>
 

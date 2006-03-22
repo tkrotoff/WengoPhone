@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef QUICKTIME_PIXERTOOL_H
 #define QUICKTIME_PIXERTOOL_H
 
@@ -27,7 +28,7 @@ extern "C" {
 
 /**
  * Palette identifier conversion.
- * 
+ *
  * Converts from v4l palette identifier to
  * pixer palette identifier
  *
@@ -36,10 +37,9 @@ extern "C" {
  */
 pixosi pix_quicktime_to_pix_osi(int pix);
 
-
 /**
  * Palette identifier conversion.
- * 
+ *
  * Converts from pixer palette identifier to
  * v4l palette identifier
  *
@@ -48,16 +48,15 @@ pixosi pix_quicktime_to_pix_osi(int pix);
  */
 int pix_quicktime_from_pix_osi(pixosi pix);
 
-
 /**
  * Get a string describing the format.
  * @param pix pixel format quicktime id
  * @return the string describing the format
  */
 const char *pix_quicktime_to_string(unsigned pix);
- 
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif //QUICKTIME_PIXERTOOL_H
+#endif	//QUICKTIME_PIXERTOOL_H

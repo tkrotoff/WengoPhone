@@ -20,7 +20,7 @@
 #ifndef NOSOUNDCARDEXCEPTION_H
 #define NOSOUNDCARDEXCEPTION_H
 
-#include <exception/Exception.h>
+#include <util/exception/Exception.h>
 
 /**
  * No sound card available on the system.

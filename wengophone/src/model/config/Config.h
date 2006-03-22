@@ -20,7 +20,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <Settings.h>
+#include <settings/Settings.h>
 
 /**
  * Stores the configuration options of WengoPhone.

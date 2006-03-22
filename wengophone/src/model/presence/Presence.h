@@ -23,8 +23,8 @@
 #include <imwrapper/EnumPresenceState.h>
 #include <imwrapper/IMPresence.h>
 
-#include <NonCopyable.h>
-#include <Event.h>
+#include <util/NonCopyable.h>
+#include <util/Event.h>
 
 class IMAccount;
 class ContactList;

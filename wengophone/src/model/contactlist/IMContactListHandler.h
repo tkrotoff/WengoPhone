@@ -22,7 +22,7 @@
 
 #include <imwrapper/IMContact.h>
 
-#include <Event.h>
+#include <util/Event.h>
 
 #include <map>
 #include <set>

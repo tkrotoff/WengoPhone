@@ -21,7 +21,7 @@
 
 #include <imwrapper/IMContact.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 using namespace std;
 

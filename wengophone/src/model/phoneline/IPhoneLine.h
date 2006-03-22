@@ -20,9 +20,9 @@
 #ifndef IPHONELINE_H
 #define IPHONELINE_H
 
-#include <Event.h>
-#include <Interface.h>
-#include <List.h>
+#include <util/Event.h>
+#include <util/Interface.h>
+#include <util/List.h>
 
 #include <sipwrapper/EnumTone.h>
 #include <sipwrapper/EnumPhoneCallState.h>

@@ -25,7 +25,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #include <AudioDevice.h>
 

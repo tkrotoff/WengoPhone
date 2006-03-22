@@ -2,8 +2,7 @@ env = WengoGetEnvironment()
 
 libs = [
 	'boost-unit-test',
-	'global',
-	'wengoutil',
+	'owutil',
 	'webcam'
 ]
 

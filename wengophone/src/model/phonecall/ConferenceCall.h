@@ -20,9 +20,9 @@
 #ifndef CONFERENCECALL_H
 #define CONFERENCECALL_H
 
-#include <Event.h>
-#include <List.h>
-#include <Mutex.h>
+#include <util/Event.h>
+#include <util/List.h>
+#include <thread/Mutex.h>
 
 #include <string>
 #include <vector>

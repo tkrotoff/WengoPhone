@@ -23,9 +23,9 @@
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumPresenceState.h>
 
-#include <Interface.h>
-#include <Event.h>
-#include <StringList.h>
+#include <util/Interface.h>
+#include <util/Event.h>
+#include <util/StringList.h>
 
 /**
  * Wrapper for Instant Messaging presence.
@@ -44,7 +44,7 @@ public:
 	 * @param note user presence defined (state = PresenceUserDefined)
 	 * @param from buddy who changed its presence status
 	 */
-	Event<void (IMPresence & sender, EnumPresenceState::PresenceState state, 
+	Event<void (IMPresence & sender, EnumPresenceState::PresenceState state,
 		const std::string & note, const std::string & from)> presenceStateChangedEvent;
 
 	/**

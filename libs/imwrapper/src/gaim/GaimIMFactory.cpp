@@ -16,7 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include <global.h>
+
+#include <cutil/global.h>
 
 #ifdef OS_WIN32
 #include <winsock2.h>
@@ -140,7 +141,7 @@ gpointer GaimMainEventLoop(gpointer data)
 
 /* ******************************************************* */
 
-static GaimCoreUiOps core_wg_ops =	
+static GaimCoreUiOps core_wg_ops =
 {
 	NULL,
 	NULL,
@@ -148,7 +149,7 @@ static GaimCoreUiOps core_wg_ops =
 	NULL
 };
 
-static GaimEventLoopUiOps eventloop_wg_ops = 
+static GaimEventLoopUiOps eventloop_wg_ops =
 {
 	g_timeout_add,
 	(guint (*)(guint))g_source_remove,
@@ -156,15 +157,15 @@ static GaimEventLoopUiOps eventloop_wg_ops =
 	(guint (*)(guint))g_source_remove
 };
 
-GaimIMFactory::GaimIMFactory() 
+GaimIMFactory::GaimIMFactory()
 {
 	GaimIMInit();
-	
+
 	ConnectMngr = GaimConnectMngr::getInstance();
 	PresenceMngr = GaimPresenceMngr::getInstance();
 	ChatMngr = GaimChatMngr::getInstance();
 	ContactListMngr = GaimContactListMngr::getInstance();
-}	
+}
 
 void GaimIMFactory::GaimIMInit()
 {
@@ -198,17 +199,17 @@ void GaimIMFactory::GaimIMInit()
 	g_thread_create(GaimMainEventLoop, NULL, FALSE, NULL);
 }
 
-IMConnect *GaimIMFactory::createIMConnect(IMAccount &account) 
+IMConnect *GaimIMFactory::createIMConnect(IMAccount &account)
 {
 	return ConnectMngr->AddIMConnect(account);
 }
 
-IMChat *GaimIMFactory::createIMChat(IMAccount &account) 
+IMChat *GaimIMFactory::createIMChat(IMAccount &account)
 {
 	return ChatMngr->AddIMChat(account);
 }
 
-IMPresence *GaimIMFactory::createIMPresence(IMAccount &account) 
+IMPresence *GaimIMFactory::createIMPresence(IMAccount &account)
 {
 	return PresenceMngr->AddIMPresence(account);
 }

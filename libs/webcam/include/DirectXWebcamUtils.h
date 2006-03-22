@@ -18,13 +18,15 @@
  */
 
 /**
- * DirectX utils functions
+ * @file DirectXWebcamUtils.h
+ *
+ * DirectX utils functions.
  *
  * @author Mathieu Stute
  */
 
-#ifndef WEBCAM_UTILS_WIN32_H
-#define WEBCAM_UTILS_WIN32_H
+#ifndef DIRECTXWEBCAMUTILS_H
+#define DIRECTXWEBCAMUTILS_H
 
 #include <dshow.h>
 #include <atlbase.h>
@@ -34,18 +36,19 @@
 void webcam_dx_error(char * error);
 void webcam_dx_log(char * mess);
 
-CComPtr< IBaseFilter > GetCaptureDevice( char * device_name );
-void GetDefaultCapDevice( IBaseFilter ** ppCap );
-HRESULT FindMyCaptureDevice(IBaseFilter **pF, BSTR bstrName);
+CComPtr< IBaseFilter > GetCaptureDevice(char * device_name);
+void GetDefaultCapDevice(IBaseFilter ** ppCap);
+HRESULT FindMyCaptureDevice(IBaseFilter ** pF, BSTR bstrName);
 
 /**
-* take a base filter and try to return a pointer to its IAMStreamConfig
+ * Takes a base filter and try to return a pointer to its IAMStreamConfig.
+ *
  * @return a NULL pointer in the case it fails
  */
-IAMStreamConfig * GetIAMStreamConfig( IBaseFilter *pFilter);
+IAMStreamConfig * GetIAMStreamConfig(IBaseFilter * pFilter);
 
-HRESULT ConnectFilters( IGraphBuilder *pGraph, IPin *pOut, IBaseFilter *pDest);
-HRESULT ConnectFilters( IGraphBuilder *pGraph, IBaseFilter *pSrc, IBaseFilter *pDest);
-HRESULT GetUnconnectedPin( IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin);
+HRESULT ConnectFilters(IGraphBuilder * pGraph, IPin * pOut, IBaseFilter * pDest);
+HRESULT ConnectFilters(IGraphBuilder * pGraph, IBaseFilter * pSrc, IBaseFilter * pDest);
+HRESULT GetUnconnectedPin(IBaseFilter * pFilter, PIN_DIRECTION PinDir, IPin ** ppPin);
 
-#endif
+#endif	//DIRECTXWEBCAMUTILS_H

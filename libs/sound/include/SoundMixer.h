@@ -23,7 +23,7 @@
 #include <SoundMixerException.h>
 #include <NoSoundCardException.h>
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <string>
 

@@ -22,7 +22,7 @@
 
 #include <wenbox/Wenbox.h>
 
-#include <StringList.h>
+#include <util/StringList.h>
 
 class WengoPhone;
 class PhoneCall;

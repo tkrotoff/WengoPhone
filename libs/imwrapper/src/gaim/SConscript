@@ -1,7 +1,7 @@
 env = WengoGetEnvironment()
 
 libs = [
-	'global',
+	'owcutil',
 	'gaim',
 	'imwrapper',
 ]

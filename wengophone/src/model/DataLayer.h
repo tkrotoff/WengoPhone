@@ -20,7 +20,7 @@
 #ifndef DATALAYER_H
 #define DATALAYER_H
 
-#include <Interface.h>
+#include <util/Interface.h>
 
 /**
  * Data layer interface that loads and saves data to a given format (XML, RPC...).

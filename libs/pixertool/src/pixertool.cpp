@@ -23,11 +23,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/**
- * @file pixertool.h
- * @author Philippe Bernery
- */
-
 /*
  * Private functions
  */
@@ -35,28 +30,26 @@
 /**
  * Convert data from NV12 to YUV420P.
  *
- * @param data data to convert 
+ * @param data data to convert
  * @param width image widht
  * @param height image height
  * @return converted data
  */
 static uint8_t * _nv12_to_yuv420p(uint8_t *data, unsigned width, unsigned height);
 
-
 piximage * pix_alloc(pixosi pix, unsigned width, unsigned height) {
 	piximage *image = (piximage *) malloc(sizeof(piximage));
-	
+
 	avcodec_init();
 
 	image->width = width;
 	image->height = height;
 	image->palette = pix;
-	
+
 	image->data = (uint8_t *)av_malloc(pix_size(pix, width, height)  * sizeof(uint8_t));
-	
+
 	return image;
 }
-
 
 void pix_free(piximage *ptr) {
 	if (ptr) {
@@ -66,11 +59,9 @@ void pix_free(piximage *ptr) {
 	}
 }
 
-
 unsigned pix_size(pixosi pix, unsigned width, unsigned height) {
 	return avpicture_get_size(pix_ffmpeg_from_pix_osi(pix), width, height);
 }
-
 
 //TODO implement picture resize
 pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
@@ -90,7 +81,7 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 		need_avfree = 1;
 		pix_osi_source = PIX_OSI_YUV420P;
 	}
-	
+
 	len_target = pix_size(img_dst->palette, width, height);
 
 	pix_fmt_source = pix_ffmpeg_from_pix_osi(pix_osi_source);
@@ -124,7 +115,7 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 	if (need_avfree) {
 		av_free(buf_source);
 	}
-	
+
 	return PIX_OK;
 }
 
@@ -133,11 +124,11 @@ static uint8_t * _nv12_to_yuv420p(uint8_t *data, unsigned width, unsigned height
 	uint8_t *buf_target;
 	int len_target;
 	register unsigned i;
-	
+
 	buf_source = data;
 	len_target = (width * height * 3) / 2;
 	buf_target = (uint8_t *) av_malloc(len_target * sizeof(uint8_t));
-	
+
 	memcpy(buf_target, buf_source, width * height);
 
 	for (i = 0 ; i < (width * height / 4) ; i++) {
@@ -145,14 +136,13 @@ static uint8_t * _nv12_to_yuv420p(uint8_t *data, unsigned width, unsigned height
 		buf_target[(width * height) + (width * height / 4) + i]
 			= buf_source[(width * height) + 2 * i + 1];
 	}
-	
+
 	return buf_target;
 }
-
 
 piximage * pix_copy(piximage *src) {
 	piximage *result = pix_alloc(src->palette, src->width, src->height);
 	memcpy(result->data, src->data, pix_size(src->palette, src->width, src->height));
-	
+
 	return result;
 }

@@ -20,8 +20,8 @@
 #ifndef CODECLIST_H
 #define CODECLIST_H
 
-#include <List.h>
-#include <NonCopyable.h>
+#include <util/List.h>
+#include <util/NonCopyable.h>
 
 #include <string>
 

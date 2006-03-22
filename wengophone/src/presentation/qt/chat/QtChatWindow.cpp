@@ -21,7 +21,7 @@
 #include "QtChatWidget.h"
 
 #include <Object.h>
-#include <Logger.h>
+#include <util/Logger.h>
 
 ChatWindow::ChatWindow(IMChatSession & imChatSession) : QObjectThreadSafe() //, _imChatSession(imChatSession)
 {

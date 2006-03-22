@@ -23,7 +23,7 @@
 #include <imwrapper/IMContactList.h>
 #include <imwrapper/IMWrapperFactory.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 IMContactListHandler::IMContactListHandler(WengoPhone & wengoPhone) {
 	wengoPhone.newIMAccountAddedEvent +=

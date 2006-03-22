@@ -19,7 +19,7 @@
 
 #include <StringListConvert.h>
 
-#include <StringList.h>
+#include <util/StringList.h>
 
 #include <QStringList>
 

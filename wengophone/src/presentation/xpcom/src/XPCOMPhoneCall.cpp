@@ -24,7 +24,7 @@
 
 #include <control/phonecall/CPhoneCall.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 XPCOMPhoneCall::XPCOMPhoneCall(CPhoneCall & cPhoneCall)
 	: _cPhoneCall(cPhoneCall) {

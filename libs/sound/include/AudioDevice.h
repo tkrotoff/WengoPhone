@@ -20,7 +20,7 @@
 #ifndef AUDIODEVICE_H
 #define AUDIODEVICE_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <list>
 #include <string>

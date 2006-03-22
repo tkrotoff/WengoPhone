@@ -16,21 +16,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef QUICKTIMEWEBCAMDRIVER_H
 #define QUICKTIMEWEBCAMDRIVER_H
 
 #include <IWebcamDriver.h>
 
-#include <Timer.h>
+#include <thread/Timer.h>
 
 #include <Quicktime/Quicktime.h>
 
 class WebcamDriver;
 
 /**
- * Quictime implementation of webcam driver
+ * Quicktime implementation of webcam driver.
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class QuicktimeWebcamDriver : public IWebcamDriver {
 public:
@@ -50,9 +51,9 @@ public:
 	 * To prevent error, a getDeviceList is done at webcam driver launch. Then
 	 * if getDeviceList is called and if a webcam is in use, this list will be returned,
 	 * otherwise the list is updated.
-	 */ 
+	 */
 	StringList getDeviceList();
-	
+
 	/**
 	 * @see IWebcamDriver::getDefaultDevice()
 	 * @see QuicktimeWebcamDriver::getDeviceList
@@ -86,6 +87,7 @@ public:
 	void flipHorizontally(bool flip);
 
 private:
+
 	/** Out capture procedure */
 	friend OSErr mySGDataProc(SGChannel c,
 				  Ptr p,
@@ -125,10 +127,10 @@ private:
 
 	/** Device list. @see QuicktimWebcamDriver::getDeviceList */
 	StringList _deviceList;
-	
+
 	/** Default device. @see QuicktimeWebcamDriver::getDefaultDevice */
 	std::string _defaultDevice;
-	
+
 	/**
 	 * Called by SGDataProc when a frame has been captured and decompressed.
 	 */
@@ -169,17 +171,16 @@ private:
 	 */
 	static std::string genDeviceName(unsigned char *device,
 		short inputIndex, unsigned char *input);
-	
+
 	/**
 	 * Log information about a PixMap
 	 */
 	static void logPixMap(PixMap *pm);
-	
+
 	/**
 	 * Initialize common components: Sequence grabber component, a video channel.
 	 */
 	void initializeCommonComponents();
 };
 
-#endif //QUICKTIMEWEBCAMDRIVER_H
-
+#endif	//QUICKTIMEWEBCAMDRIVER_H

@@ -24,8 +24,8 @@
 #include "QtUserList.h"
 #include "QtContactPixmap.h"
 
-#include <Logger.h>
-#include <StringList.h>
+#include <util/Logger.h>
+#include <util/StringList.h>
 
 #include <Object.h>
 

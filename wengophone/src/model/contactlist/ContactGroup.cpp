@@ -23,13 +23,13 @@
 #include "ContactGroupParser.h"
 #include "IMContactListHandler.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
-ContactGroup::ContactGroup(const std::string & groupName) 
+ContactGroup::ContactGroup(const std::string & groupName)
 	: _groupName(groupName) {
 }
 
-ContactGroup::ContactGroup(const ContactGroup & contactGroup) 
+ContactGroup::ContactGroup(const ContactGroup & contactGroup)
 	: _groupName(contactGroup._groupName), _contactList(contactGroup._contactList) {
 }
 

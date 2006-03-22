@@ -22,7 +22,7 @@
 
 #include <WidgetFactory.h>
 #include <QtXml>
-#include <Logger.h>
+#include <util/Logger.h>
 
 EmoticonsWidget::EmoticonsWidget(QWidget * parent, Qt::WFlags f) : QWidget(parent,f){
     

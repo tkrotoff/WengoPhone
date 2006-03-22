@@ -23,7 +23,7 @@
 
 #include <imwrapper/IMContact.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 QtPresenceHandler::QtPresenceHandler(CPresenceHandler & cPresenceHandler) 
 	: _cPresenceHandler(cPresenceHandler) {

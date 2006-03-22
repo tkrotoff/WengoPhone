@@ -24,7 +24,7 @@
 #include <model/config/Config.h>
 #include <WengoPhoneBuildId.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 #include <http/HttpRequestFactory.h>
 #include <http/CurlHttpRequestFactory.h>
 

@@ -25,7 +25,7 @@
 /**
  * Tools to convert image data from a format to another.
  *
- * This library also provides an OS independent way to 
+ * This library also provides an OS independent way to
  * identify palette.
  *
  * @file pixertool.h
@@ -34,9 +34,9 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif
 
-/** 
+/**
  * Palette identifiers
  * See http://www.fourcc.org for details about formats
  */
@@ -67,7 +67,6 @@ typedef enum {
 	PIX_OSI_NV12
 } pixosi;
 
-
 /** Flags for pix_convert */
 enum {
 	PIX_NO_FLAG,
@@ -75,13 +74,11 @@ enum {
 	PIX_FLIP_HORIZONTALLY
 };
 
-
 /** Error code */
 typedef enum {
 	PIX_OK,
 	PIX_NOK
 } pixerrorcode;
-
 
 /** Image */
 typedef struct _piximage {
@@ -90,7 +87,6 @@ typedef struct _piximage {
 	unsigned height;
 	pixosi palette;
 } piximage;
-
 
 /**
  * Allocate memory for image.
@@ -102,14 +98,12 @@ typedef struct _piximage {
  */
 piximage * pix_alloc(pixosi pix, unsigned width, unsigned height);
 
-
 /**
  * Free memore allocated with pixNew.
  *
  * @param ptr pointer to allocated data
  */
 void pix_free(piximage *ptr);
-
 
 /**
  * Compute size of image in memory.
@@ -120,7 +114,6 @@ void pix_free(piximage *ptr);
  * @return size of image
  */
 unsigned pix_size(pixosi pix, unsigned width, unsigned height);
-
 
 /**
  * Convert image data from original palette to desired palette.
@@ -134,7 +127,6 @@ unsigned pix_size(pixosi pix, unsigned width, unsigned height);
  */
 pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src);
 
-
 /**
  * Copy a piximage.
  *
@@ -143,9 +135,8 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src);
  */
 piximage * pix_copy(piximage *src);
 
-
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif
 
-#endif //PIXERTOOL_H
+#endif	//PIXERTOOL_H

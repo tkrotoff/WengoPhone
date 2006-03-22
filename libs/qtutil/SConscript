@@ -2,7 +2,7 @@ env = WengoGetQt4Environment()
 
 libs = [
 	'qt4',
-	'wengoutil'
+	'owutil'
 ]
 lib_path = []
 include_path = ['include']

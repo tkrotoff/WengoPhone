@@ -20,8 +20,8 @@
 #ifndef CONFIGMANAGER_H
 #define CONFIGMANAGER_H
 
-#include <StringList.h>
-#include <Mutex.h>
+#include <util/StringList.h>
+#include <thread/Mutex.h>
 
 #include <map>
 

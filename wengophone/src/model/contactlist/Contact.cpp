@@ -27,8 +27,8 @@
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMContact.h>
 
-#include <StringList.h>
-#include <Logger.h>
+#include <util/StringList.h>
+#include <util/Logger.h>
 
 #include <iostream>
 using namespace std;
@@ -47,7 +47,7 @@ Contact::Contact(const Contact & contact)
 }
 
 Contact::~Contact() {
-}	
+}
 
 Contact & Contact::operator = (const Contact & contact) {
 	if (&contact != this) {
@@ -187,7 +187,7 @@ void Contact::addToContactGroup(const std::string & groupName) {
 }
 
 void Contact::removeFromContactGroup(const std::string & groupName) {
-	_contactList.removeFromContactGroup(groupName, *this);	
+	_contactList.removeFromContactGroup(groupName, *this);
 }
 
 void Contact::_addToContactGroup(const std::string & groupName) {
@@ -204,7 +204,7 @@ void Contact::_removeFromContactGroup(const std::string & groupName) {
 
 bool Contact::isInContactGroup(const std::string & groupName) {
 	ContactGroupSet::const_iterator it = _contactGroupSet.find(groupName);
-	
+
 	if (it != _contactGroupSet.end()) {
 		return true;
 	} else {
@@ -233,7 +233,7 @@ bool Contact::hasIM() const {
 }
 
 bool Contact::hasCall() const {
-	if (!_preferredNumber.empty() 
+	if (!_preferredNumber.empty()
 		|| wengoIsAvailable()
 		|| !_mobilePhone.empty()
 		|| !_homePhone.empty()) {
@@ -249,7 +249,7 @@ bool Contact::hasVideo() const {
 
 std::string Contact::getPreferredNumber() const {
 	string result;
-	
+
 	if (!_preferredNumber.empty()) {
 		result = _preferredNumber;
 	} else if (wengoIsAvailable()) {
@@ -281,7 +281,7 @@ IMContact * Contact::getPreferredIMContact() const {
 				return (IMContact *)&(*it);
 				break;
 			}
-		}	
+		}
 	}
 
 	return result;

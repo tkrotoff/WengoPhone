@@ -32,7 +32,7 @@
 #include <sipwrapper/SipWrapperFactory.h>
 #include <PhApiFactory.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #include <string>
 #include <iostream>

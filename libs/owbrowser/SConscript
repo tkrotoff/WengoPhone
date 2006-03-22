@@ -4,8 +4,8 @@ lib_path = []
 include_path = ['.']
 
 libs = [
-    'wengoutil',
-    'qt4',
+	'owutil',
+	'qt4',
 ]
 
 headers = ['QtBrowser.h']

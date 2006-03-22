@@ -25,12 +25,12 @@
 /*TODO: add function to set factory*/
 
 /**
- * C interface to OS independent webcam controller
+ * C interface to OS independent webcam controller.
  *
  * @file webcam.h
- * @author David Ferlier <david.ferlier@wengo.fr>
- * @author Mathieu Stute <mathieu.stute@wengo.fr>
- * @author Philippe Bernery <philippe.bernery@wengo.fr>
+ * @author David Ferlier
+ * @author Mathieu Stute
+ * @author Philippe Bernery
  */
 
 #ifdef __cplusplus
@@ -43,18 +43,15 @@ typedef enum {
 	WEBCAM_OK
 } webcamerrorcode;
 
-
 typedef struct {
 	unsigned count;
 	const char ** name;
 } webcamdevicelist;
 
-
 /**
  * Name returned by get_default_device when there is no webcam.
  */
 #define WEBCAM_NULL "(null)"
-
 
 /**
  * The flag says that we want the webcam driver to convert the captured
@@ -64,11 +61,9 @@ typedef struct {
 #define WEBCAM_FORCE_IMAGE_FORMAT 1
 
 
-
 /** Contains access to C++ code */
 struct opaquewebcam;
 typedef struct opaquewebcam webcam;
-
 
 /**
  * Frame captured callback type.
@@ -78,7 +73,6 @@ typedef struct opaquewebcam webcam;
  * @param userData user data
  */
 typedef void (webcamcallback)(webcam *sender, piximage *image, void *userData);
-
 
 /**
  * @see IWebcamDriver::getDeviceList()
@@ -92,15 +86,13 @@ webcamdevicelist * webcam_get_device_list(webcam *);
  */
 void webcam_release_webcamdevicelist(webcamdevicelist *devlist);
 
-
 /**
  * @see IWebcamDriver::getDefaultDevice()
  */
 const char * webcam_get_default_device(webcam *);
 
-
 /**
- * Get instance of webcam.
+ * Gets instance of webcam.
  *
  * Webcam is a singleton
  *
@@ -113,18 +105,15 @@ webcam * webcam_get_instance();
  */
 void webcam_set_flags(webcam *wc, int flags);
 
-
 /**
  * @see IWebcamDriver::unsetFlags()
  */
 void webcam_unset_flags(webcam *wc, int flags);
 
-
 /**
  * @see IWebcamDriver::isFlagSet()
  */
 int webcam_is_flag_set(webcam *wc, int flag);
-
 
 /**
  * Release webcam.
@@ -132,15 +121,13 @@ int webcam_is_flag_set(webcam *wc, int flag);
  */
 void webcam_release(webcam *wc);
 
-
 /**
  * @see IWebcamDriver::setDevice()
  */
 webcamerrorcode webcam_set_device(webcam *wc, const char *device_name);
 
-
 /**
- * Add a callback.
+ * Adds a callback.
  *
  * The callbacks are called when a new frame has been captured.
  *
@@ -149,113 +136,95 @@ webcamerrorcode webcam_set_device(webcam *wc, const char *device_name);
  */
 void webcam_add_callback(webcam *wc, webcamcallback *callback, void *userData);
 
-
 /**
- * Remove the callback from callback list.
+ * Removes the callback from callback list.
  *
  * @param callback the callback to unregister
  */
 void webcam_remove_callback(webcam *wc, webcamcallback *callback);
-
 
 /**
  * @see IWebcamDriver::startCapture()
  */
 void webcam_start_capture(webcam *wc);
 
-
 /**
  * @see IWebcamDriver::pauseCapture()
  */
 void webcam_pause_capture(webcam *wc);
-
 
 /**
  * @see IWebcamDriver::stopCapture()
  */
 void webcam_stop_capture(webcam *wc);
 
-
 /**
  * @see IWebcamDriver::getWidth()
  */
 unsigned webcam_get_width(webcam *wc);
-
 
 /**
  * @see IWebcamDriver::getHeight()
  */
 unsigned webcam_get_height(webcam *wc);
 
-
 /**
  * @see IWebcamDriver::getPalette()
  */
 pixosi webcam_get_palette(webcam *wc);
-
 
 /**
  * @see IWebcamDriver::setPalette()
  */
 webcamerrorcode webcam_set_palette(webcam *wc, pixosi palette);
 
-
 /**
  * @see IWebcamDriver::isOpened()
  */
 int webcam_is_opened(webcam *wc);
-
 
 /**
  * @see IWebcamDriver::setFPS()
  */
 webcamerrorcode webcam_set_fps(webcam *wc, unsigned fps);
 
-
 /**
  * @see IWebcamDriver::getFPS()
  */
 unsigned webcam_get_fps(webcam *wc);
-
 
 /**
  * @see IWebcamDriver::setResolution()
  */
 void webcam_set_resolution(webcam *wc, unsigned width, unsigned height);
 
-
 /**
  * @see IWebcamDriver::flipHorizontally()
  */
 void webcam_flip_horizontally(webcam *wc, int flip);
-
 
 /**
  * @see IWebcamDriver::setBrightness()
  */
 void webcam_set_brightness(webcam *wc, int brightness);
 
-
 /**
  * @see IWebcamDriver::getBrightness()
  */
 int webcam_get_brightness(webcam *wc);
-
 
 /**
  * @see IWebcamDriver::setContrast()
  */
 void webcam_set_contrast(webcam *wc, int contrast);
 
-
 /**
  * @see IWebcamDriver::getContrast()
  */
 int webcam_get_contrast(webcam *wc);
 
-
 #ifdef __cplusplus
 }
 #endif /*__cplusplus*/
 
-#endif /*WEBCAM_H*/
+#endif	/*WEBCAM_H*/

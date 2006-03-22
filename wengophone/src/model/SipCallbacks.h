@@ -23,7 +23,7 @@
 #include <sipwrapper/EnumPhoneCallState.h>
 #include <sipwrapper/EnumPhoneLineState.h>
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <string>
 
@@ -39,7 +39,7 @@ class WebcamVideoFrame;
  * phApi states: [INCOMING], [ACCEPTING], [OUTGOING], [ESTABLISHED], [ONHOLD], [CLOSED]
  * phApi call events (in the right order):
  * phDIALING, phRINGING, phNOANSWER, phCALLBUSY, phCALLREDIRECTED,
- * phCALLOK, phCALLHELD, phCALLRESUMED, phHOLDOK, phRESUMEOK, 
+ * phCALLOK, phCALLHELD, phCALLRESUMED, phHOLDOK, phRESUMEOK,
  * phINCALL, phCALLCLOSED, phCALLERROR, phDTMF, phXFERPROGRESS,
  * phXFEROK, phXFERFAIL, phXFERREQ, phCALLREPLACED
  *

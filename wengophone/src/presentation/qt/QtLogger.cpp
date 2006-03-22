@@ -19,7 +19,7 @@
 
 #include "QtLogger.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #include <WidgetFactory.h>
 #include <Object.h>

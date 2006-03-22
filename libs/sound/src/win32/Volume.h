@@ -22,7 +22,7 @@
 
 #include <SoundMixerException.h>
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <windows.h>
 

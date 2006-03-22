@@ -23,10 +23,6 @@
 
 #include <linux/videodev.h>
 
-/**
- * @file pixertool.h
- * @author Philippe Bernery
- */
 pixosi pix_v4l_to_pix_osi(int pix) {
 	pixosi palette;
 
@@ -57,7 +53,7 @@ pixosi pix_v4l_to_pix_osi(int pix) {
 
 int pix_v4l_from_pix_osi(pixosi pix) {
 	int palette;
-	
+
 	switch (pix) {
 	case PIX_OSI_YUV420P:
 		palette = VIDEO_PALETTE_YUV420P;
@@ -79,4 +75,3 @@ int pix_v4l_from_pix_osi(pixosi pix) {
 
 	return palette;
 }
-

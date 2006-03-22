@@ -26,9 +26,9 @@
 
 #include <Sound.h>
 #include <AudioDevice.h>
-#include <File.h>
-#include <Logger.h>
-#include <StringList.h>
+#include <util/File.h>
+#include <util/Logger.h>
+#include <util/StringList.h>
 
 #include <Object.h>
 #include <WidgetFactory.h>

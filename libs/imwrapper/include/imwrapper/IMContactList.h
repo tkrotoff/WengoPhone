@@ -20,8 +20,8 @@
 #ifndef IMCONTACTLIST_H
 #define IMCONTACTLIST_H
 
-#include <Interface.h>
-#include <Event.h>
+#include <util/Interface.h>
+#include <util/Event.h>
 
 #include <string>
 
@@ -134,7 +134,7 @@ public:
 
 protected:
 
-	IMContactList(const IMAccount & imAccount) 
+	IMContactList(const IMAccount & imAccount)
 		: _imAccount(imAccount) {}
 
 	const IMAccount & _imAccount;

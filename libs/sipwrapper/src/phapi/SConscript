@@ -1,8 +1,7 @@
 env = WengoGetEnvironment()
 
 libs = [
-	'boost',
-	'wengoutil',
+	'owthread',
 	'phapi',
 	'ortp',
 	'stun',

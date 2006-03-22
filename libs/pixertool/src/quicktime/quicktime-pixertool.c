@@ -27,7 +27,6 @@ typedef struct _pix_quicktime_table_elt {
 	unsigned qtime;
 } pix_quicktime_table_elt;
 
-
 pix_quicktime_table_elt pix_quicktime_table[] = {
 	{ PIX_OSI_RGB555, k16BE555PixelFormat },
 	{ PIX_OSI_RGB32, k32ARGBPixelFormat },
@@ -52,36 +51,34 @@ pix_quicktime_table_elt pix_quicktime_table[] = {
 pixosi pix_quicktime_to_pix_osi(int pix) {
 	pixosi palette = PIX_OSI_UNSUPPORTED;
 	register unsigned i;
-	
+
 	for (i = 0 ; i < sizeof(pix_quicktime_table) / sizeof(pix_quicktime_table_elt) ; i++) {
 		if (pix == pix_quicktime_table[i].qtime) {
 			palette =  pix_quicktime_table[i].osi;
 			break;
 		}
 	}
-	
+
 	return palette;
 }
-
 
 int pix_quicktime_from_pix_osi(pixosi pix) {
 	int palette = -1;
 	register unsigned i;
-	
+
 	for (i = 0 ; i < sizeof(pix_quicktime_table) / sizeof(pix_quicktime_table_elt) ; i++) {
 		if (pix == pix_quicktime_table[i].osi) {
 			palette =  pix_quicktime_table[i].qtime;
 			break;
 		}
 	}
-	
-	return palette;	
-}
 
+	return palette;
+}
 
 const char *pix_quicktime_to_string(unsigned pix) {
 	static char pixfmt[512];
-	
+
 	//Description are taken from Apple documentation
 	switch (pix) {
 	case k16LE555PixelFormat:
@@ -162,6 +159,6 @@ const char *pix_quicktime_to_string(unsigned pix) {
 	default:
 		strcpy(pixfmt, "not found");
 	}
-	
+
 	return pixfmt;
 }

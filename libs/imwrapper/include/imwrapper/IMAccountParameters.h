@@ -20,7 +20,7 @@
 #ifndef IMACCOUNTPARAMETER_H
 #define IMACCOUNTPARAMETER_H
 
-#include <Settings.h>
+#include <settings/Settings.h>
 
 /**
  * Contains specific parameters needed by some protocols for connection.
@@ -64,7 +64,7 @@ public:
 
 	static const std::string YAHOO_PORT_KEY;
 	int getYahooServerPort() const;
-	
+
 	static const std::string YAHOO_XFER_HOST_KEY;
 	std::string getYahooXferHost() const;
 
@@ -145,7 +145,7 @@ private:
 	 * @see Settings::get()
 	 */
 	std::string get(const std::string &, const std::string &) const { return String::null; }
-	
+
 	/**
 	 * @see get()
 	 */
@@ -153,17 +153,17 @@ private:
 		static const StringList empty;
 		return empty;
 	}
-	
+
 	/**
 	 * @see get()
 	 */
 	bool get(const std::string &, bool) const { return false; }
-	
+
 	/**
 	 * @see get()
 	 */
 	int get(const std::string &, int) const { return 0; }
-	
+
 	/**
 	 * @see get()
 	 */
@@ -171,7 +171,7 @@ private:
 		static const boost::any empty;
 		return empty;
 	}
-	
+
 	/*
 	 * @see Settings::getAny()
 	 */
@@ -181,20 +181,20 @@ private:
 	 * @see get()
 	 */
 	bool getBooleanKeyValue(const std::string & key) const;
-	
+
 	/**
 	 * @see get()
 	 */
 	int getIntegerKeyValue(const std::string & key) const;
-	
+
 	/**
 	 * @see get()
 	 */
 	std::string getStringKeyValue(const std::string & key) const;
-	
+
 	/** Associates a key to a default value. */
 	Keys _keyDefaultValueMap;
-	
+
 };
 
 #endif //IMACCOUNTPARAMETER_H

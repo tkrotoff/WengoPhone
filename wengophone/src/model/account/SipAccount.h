@@ -22,8 +22,8 @@
 
 #include <model/account/NetworkDiscovery.h>
 
-#include <Event.h>
-#include <Interface.h>
+#include <util/Event.h>
+#include <util/Interface.h>
 
 #include <string>
 
@@ -228,7 +228,7 @@ public:
 	 * Set connection state.
 	 */
 	void setConnected(bool connected);
-    
+
 	/**
 	 * Set proxy settings and unblock the NetworkDiscovery if it was waiting for
 	 * proxy authentication parameters.

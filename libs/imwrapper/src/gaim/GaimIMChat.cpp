@@ -17,11 +17,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <global.h> 
-#include <Logger.h>
-#include <imwrapper/IMContact.h>
 #include "GaimIMChat.h"
+
 #include "GaimEnumIMProtocol.h"
+
+#include <imwrapper/IMContact.h>
+
+#include <util/Logger.h>
+#include <cutil/global.h>
 
 extern "C" {
 #include "gaim/conversation.h"
@@ -98,16 +101,16 @@ void GaimIMChat::sendMessage(IMChatSession & chatSession, const std::string & me
 
 	mConvInfo_t *mConv = FindChatStructById(chatSession.getId());
 	int BuddyNbr = chatSession.getIMContactSet().size();
-	
+
 	if (BuddyNbr == 1)
 	{
 
-		gaim_conv_im_send_with_flags(GAIM_CONV_IM((GaimConversation *)mConv->gaim_conv_session), 
+		gaim_conv_im_send_with_flags(GAIM_CONV_IM((GaimConversation *)mConv->gaim_conv_session),
 									message.c_str(), GAIM_MESSAGE_SEND);
 	}
 	else
 	{
-		gaim_conv_chat_send_with_flags(GAIM_CONV_CHAT((GaimConversation *)mConv->gaim_conv_session), 
+		gaim_conv_chat_send_with_flags(GAIM_CONV_CHAT((GaimConversation *)mConv->gaim_conv_session),
 									message.c_str(), GAIM_MESSAGE_SEND);
 	}
 }
@@ -119,14 +122,14 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 	GaimAccount *Gaccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	int BuddyNbr = chatSession.getIMContactSet().size();
-	
+
 	if (Gaccount)
 	{
 		if (BuddyNbr == 0)
 		{
-			conv = gaim_conversation_new(GAIM_CONV_TYPE_IM, Gaccount, 
+			conv = gaim_conversation_new(GAIM_CONV_TYPE_IM, Gaccount,
 										contactId.c_str());
-	
+
 			mConv->gaim_conv_session = conv;
 		}
 		else if (BuddyNbr == 1)
@@ -144,12 +147,12 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 			conv->ui_data = mConv;
 			gaim_conv_chat_add_user(GAIM_CONV_CHAT(conv), firstContactId.c_str(), NULL, GAIM_CBFLAGS_NONE, false);
 			gaim_conv_chat_add_user(GAIM_CONV_CHAT(conv), contactId.c_str(), NULL, GAIM_CBFLAGS_NONE, true);
-		}	
+		}
 		else
 		{
-			gaim_conv_chat_add_user(GAIM_CONV_CHAT((GaimConversation *)mConv->gaim_conv_session), 
+			gaim_conv_chat_add_user(GAIM_CONV_CHAT((GaimConversation *)mConv->gaim_conv_session),
 									contactId.c_str(), NULL, GAIM_CBFLAGS_NONE, true);
-			
+
 			contactAddedEvent(*this, chatSession, contactId);
 		}
 	}
@@ -161,7 +164,7 @@ void GaimIMChat::removeContact(IMChatSession & chatSession, const std::string & 
 	GaimConvChat *conv = GAIM_CONV_CHAT((GaimConversation *)(mConv->gaim_conv_session));
 
 	gaim_conv_chat_remove_user(conv, contactId.c_str(), NULL);
-	
+
 	contactRemovedEvent(*this, chatSession, contactId);
 }
 

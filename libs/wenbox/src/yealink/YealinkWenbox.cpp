@@ -19,8 +19,8 @@
 
 #include "YealinkWenbox.h"
 
-#include <Logger.h>
-#include <StringList.h>
+#include <util/Logger.h>
+#include <util/StringList.h>
 
 #include "YLUSBTEL.h"
 

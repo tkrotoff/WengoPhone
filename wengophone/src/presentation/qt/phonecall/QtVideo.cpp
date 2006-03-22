@@ -22,7 +22,7 @@
 #include <PaintEventFilter.h>
 #include <WidgetFactory.h>
 #include <Object.h>
-#include <global.h>
+#include <cutil/global.h>
 #include <WebcamDriver.h>
 
 #include <QtGui>

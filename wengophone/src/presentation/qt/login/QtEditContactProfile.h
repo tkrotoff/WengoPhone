@@ -22,7 +22,7 @@
 
 #include <QtGui>
 
-#include <Logger.h>
+#include <util/Logger.h>
 #include <model/contactlist/Contact.h>
 #include <presentation/PContact.h>
 #include <model/config/ConfigManager.h>

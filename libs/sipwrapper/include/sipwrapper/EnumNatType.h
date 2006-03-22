@@ -20,7 +20,7 @@
 #ifndef ENUMNATTYPE_H
 #define ENUMNATTYPE_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 /**
  * NAT types from STUN protocol.

@@ -43,10 +43,10 @@
 	#include <NullIMFactory.h>
 #endif
 
-#include <global.h>
+#include <cutil/global.h>
 
 #if defined(CC_MSVC)
-	#include <win32/MemoryDump.h>
+	#include <memorydump/MemoryDump.h>
 #endif
 
 #include <string>

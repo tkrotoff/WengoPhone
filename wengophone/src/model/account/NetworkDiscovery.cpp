@@ -22,9 +22,9 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <Thread.h>
-#include <Logger.h>
-#include <StringList.h>
+#include <thread/Thread.h>
+#include <util/Logger.h>
+#include <util/StringList.h>
 
 #include <netlib.h>
 

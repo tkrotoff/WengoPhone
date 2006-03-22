@@ -19,8 +19,8 @@
 
 #include "WengoAccountParser.h"
 
-#include <StringList.h>
-#include <Logger.h>
+#include <util/StringList.h>
+#include <util/Logger.h>
 
 #include <tinyxml.h>
 

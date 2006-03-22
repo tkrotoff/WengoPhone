@@ -19,7 +19,7 @@
 
 #include "NullIMPresence.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 NullIMPresence::NullIMPresence(IMAccount & account)
 	: IMPresence(account) {

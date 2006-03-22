@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef V4LWEBCAMDRIVERFACTORY_H
 #define V4LWEBCAMDRIVERFACTORY_H
 
@@ -23,9 +24,9 @@
 #include <V4LWebcamDriver.h>
 
 /**
- * Webcam driver factory for Video For Linux(V4L)
+ * Webcam driver factory for Video For Linux(V4L).
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class V4LWebcamDriverFactory : public WebcamDriverFactory {
 public:
@@ -34,5 +35,4 @@ public:
 	}
 };
 
-#endif //V4LWEBCAMDRIVERFACTORY_H
-
+#endif	//V4LWEBCAMDRIVERFACTORY_H

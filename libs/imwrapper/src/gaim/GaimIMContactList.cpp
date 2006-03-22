@@ -24,12 +24,11 @@ extern "C" {
 #include "gaim/blist.h"
 }
 
-#include <Logger.h>
-
+#include <util/Logger.h>
 
 
 GaimIMContactList::GaimIMContactList(IMAccount & account)
-	: IMContactList(account) 
+	: IMContactList(account)
 {
 }
 
@@ -52,7 +51,7 @@ void GaimIMContactList::addContact(const std::string & groupName, const std::str
 	if (contactId.empty())
 		return;
 
-	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
+	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	if (gAccount)
 	{
@@ -74,7 +73,7 @@ void GaimIMContactList::removeContact(const std::string & groupName, const std::
 	GaimBuddy *gBuddy = NULL;
 	GaimAccount *gAccount = NULL;
 
-	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(), 
+	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
 	if (contactId.empty())
@@ -100,7 +99,7 @@ void GaimIMContactList::addGroup(const std::string & groupName)
 		return;
 
 	GaimGroup *gGroup = gaim_find_group(groupName.c_str());
-		
+
 	if (!gGroup)
 	{
 		gGroup = gaim_group_new(groupName.c_str());
@@ -124,7 +123,7 @@ void GaimIMContactList::removeGroup(const std::string & groupName)
 void GaimIMContactList::changeGroupName(const std::string & oldGroupName, const std::string & newGroupName)
 {
 	GaimGroup *gGroup = gaim_find_group(oldGroupName.c_str());
-	
+
 	if (!gGroup)
 		return;
 
@@ -132,13 +131,13 @@ void GaimIMContactList::changeGroupName(const std::string & oldGroupName, const 
 }
 
 void GaimIMContactList::moveContactToGroup(const std::string & newGroupName,
-											const std::string & oldGroupName, 
+											const std::string & oldGroupName,
 											const std::string & contactId)
 {
 	GaimAccount *gAccount = NULL;
 	GaimBuddy *gBuddy = NULL;
 	GaimGroup *gOldGroup, *gNewGroup;
-	
+
 	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	if (!gAccount)
@@ -155,7 +154,7 @@ void GaimIMContactList::moveContactToGroup(const std::string & newGroupName,
 	gNewGroup = gaim_find_group(newGroupName.c_str());
 	if (!gNewGroup)
 		gNewGroup = gaim_group_new(newGroupName.c_str());
-	
+
 	gaim_blist_add_buddy(gBuddy, NULL, gNewGroup, NULL);
 }
 

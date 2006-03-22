@@ -24,7 +24,7 @@
 
 #include <model/account/SipAccount.h>
 
-#include <List.h>
+#include <util/List.h>
 
 #include <map>
 

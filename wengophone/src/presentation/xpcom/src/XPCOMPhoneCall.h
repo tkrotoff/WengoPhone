@@ -22,7 +22,7 @@
 
 #include <presentation/PPhoneCall.h>
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <map>
 

@@ -20,10 +20,10 @@
 #ifndef GAIMCHATMNGR_H
 #define GAIMCHATMNGR_H
 
-#include <list>
-
 #include "GaimIMChat.h"
 #include "GaimAccountMngr.h"
+
+#include <list>
 
 extern "C" {
 #include "gaim/conversation.h"
@@ -61,7 +61,7 @@ public:
 	static void ChatUpdateUserCbk(GaimConversation *conv, const char *user);
 	static void PresentConvCbk(GaimConversation *conv);
 	static gboolean HasFocusCbk(GaimConversation *conv);
-	static gboolean CustomSmileyAddCbk(GaimConversation *conv, const char *smile, 
+	static gboolean CustomSmileyAddCbk(GaimConversation *conv, const char *smile,
 										gboolean remote);
 	static void CustomSmileyWriteCbk(GaimConversation *conv, const char *smile,
 									const guchar *data, gsize size);
@@ -75,9 +75,9 @@ private:
 	static GaimChatMngr *_staticInstance;
 
 	static GaimAccountMngr *_accountMngr;
-	
+
 	static GaimIMChat *FindIMChatByGaimConv(void *gConv);
-	
+
 	/* ********** CHAT_LIST *********** */
 	static std::list<GaimIMChat *> _gaimIMChatList;
 	typedef std::list<GaimIMChat *>::iterator GaimIMChatIterator;

@@ -19,7 +19,7 @@
 
 #include <Sound.h>
 
-#include <qsound.h>
+#include <QSound>
 
 /**
  * SoundPrivate is a QSound object under UNIX.

@@ -19,7 +19,7 @@
 
 #include <AudioDevice.h>
 
-#include <StringList.h>
+#include <util/StringList.h>
 
 std::list<std::string> AudioDevice::getInputMixerDeviceList() {
 	return StringList();
@@ -40,7 +40,6 @@ bool AudioDevice::setDefaultPlaybackDevice(const std::string & /*deviceName*/) {
 bool AudioDevice::setDefaultRecordDevice(const std::string & /*deviceName*/) {
 	return false;
 }
-
 
 std::string AudioDevice::getDefaultRecordDevice() {
 	return std::string("");

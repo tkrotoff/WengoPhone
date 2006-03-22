@@ -25,7 +25,7 @@
 
 #include <QtGui>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #include <iostream>
 using namespace std;

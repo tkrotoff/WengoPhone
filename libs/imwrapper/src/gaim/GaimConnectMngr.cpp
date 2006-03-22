@@ -17,14 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Logger.h>
-
 #include "GaimConnectMngr.h"
+
 #include "GaimEnumIMProtocol.h"
+
+#include <util/Logger.h>
 
 
 /* ***************** GAIM CALLBACK ***************** */
-static void C_ConnProgressCbk(GaimConnection *gc, const char *text, 
+static void C_ConnProgressCbk(GaimConnection *gc, const char *text,
 							  size_t step, size_t step_count)
 {
 	GaimConnectMngr::ConnProgressCbk(gc, text, step, step_count);
@@ -50,8 +51,8 @@ static void C_ConnReportDisconnectCbk(GaimConnection *gc, const char *text)
 	GaimConnectMngr::ConnReportDisconnectCbk(gc, text);
 }
 
-GaimConnectionUiOps conn_wg_ops =	
-{	
+GaimConnectionUiOps conn_wg_ops =
+{
 	C_ConnProgressCbk,
 	C_ConnConnectedCbk,
 	C_ConnDisconnectedCbk,
@@ -69,9 +70,9 @@ GaimConnectMngr::GaimConnectMngr()
 	_accountMngr = GaimAccountMngr::getInstance();
 }
 
-GaimConnectMngr *GaimConnectMngr::getInstance() 
+GaimConnectMngr *GaimConnectMngr::getInstance()
 {
-	if (!_staticInstance) 
+	if (!_staticInstance)
 	{
 		_staticInstance = new GaimConnectMngr();
 	}
@@ -88,11 +89,11 @@ GaimIMConnect *FindIMConnnectByGaimConnection(GaimConnection *gc)
 
 	protocol = GaimIMPrcl::GetEnumIMProtocol(gAccount->protocol_id);
 	account = GaimAccountMngr::FindIMAccount(gAccount->username, protocol);
-	
+
 	return GaimConnectMngr::FindIMConnect(*account);
 }
 
-void GaimConnectMngr::ConnProgressCbk(GaimConnection *gc, const char *text, 
+void GaimConnectMngr::ConnProgressCbk(GaimConnection *gc, const char *text,
 									  size_t step, size_t step_count)
 {
   fprintf(stderr, "GaimConnectMngr : ConnProgressCbk()\n");
@@ -162,7 +163,7 @@ GaimIMConnect *GaimConnectMngr::AddIMConnect(IMAccount &account)
 
 		_accountMngr->AddIMAccount(account);
 	}
-	
+
 	return mIMConnect;
 }
 

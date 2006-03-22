@@ -20,7 +20,7 @@
 #ifndef STREETADDRESSXMLSERIALIZER_H
 #define STREETADDRESSXMLSERIALIZER_H
 
-#include <Serializable.h>
+#include <serialization/Serializable.h>
 
 class StreetAddress;
 

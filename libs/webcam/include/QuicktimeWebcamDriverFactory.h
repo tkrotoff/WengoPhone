@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef QUICKTIMEWEBCAMDRIVERFACTORY_H
 #define QUICKTIMEWEBCAMDRIVERFACTORY_H
 
@@ -23,9 +24,9 @@
 #include <QuicktimeWebcamDriver.h>
 
 /**
- * Webcam driver factory for Quicktime
+ * Webcam driver factory for Quicktime.
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class QuicktimeWebcamDriverFactory : public WebcamDriverFactory {
 public:
@@ -34,5 +35,4 @@ public:
 	}
 };
 
-#endif //QUICKTIMEWEBCAMDRIVERFACTORY_H
-
+#endif	//QUICKTIMEWEBCAMDRIVERFACTORY_H

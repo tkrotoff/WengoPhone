@@ -19,10 +19,10 @@
 
 #include <AudioDevice.h>
 
-#include <StringList.h>
-#include <Logger.h>
+#include <util/StringList.h>
+#include <util/Logger.h>
 
-#include <global.h>
+#include <cutil/global.h>
 
 #include <portaudio.h>
 

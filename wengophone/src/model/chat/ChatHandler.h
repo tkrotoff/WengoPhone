@@ -23,8 +23,8 @@
 #include <imwrapper/IMChat.h>
 #include <imwrapper/IMChatMap.h>
 
-#include <NonCopyable.h>
-#include <Event.h>
+#include <util/NonCopyable.h>
+#include <util/Event.h>
 
 #include <map>
 
@@ -49,7 +49,7 @@ public:
 
 	/**
 	 * Emitted when a new IMChatSession has been created.
-	 * 
+	 *
 	 * @param sender this class
 	 * @param imChatSession the new IMChatSession
 	 */
@@ -58,7 +58,7 @@ public:
 	/**
 	 * Create a new IMChatSession.
 	 * The newChatSessionCreatedEvent is emitted when an IMChatSession is created
-	 * 
+	 *
 	 * @param imAccount the IMAccount for which we want to create the new IMChatSession
 	 */
 	void createSession(const IMAccount & imAccount, IMContactSet & imContactSet);

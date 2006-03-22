@@ -20,12 +20,13 @@
 #ifndef SOUNDFILE_H
 #define SOUNDFILE_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <windows.h>
 
 #include <string>
-#include <stdio.h>
+
+#include <cstdio>
 
 /**
  * Wrapper around a sound file.

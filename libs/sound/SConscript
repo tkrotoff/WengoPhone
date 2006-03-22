@@ -1,7 +1,7 @@
 env = WengoGetEnvironment()
 link_flags = []
 libs = [
-	'wengoutil',
+	'owthread',
 ]
 lib_path = []
 include_path = [

@@ -32,7 +32,7 @@
 
 #include <model/phonecall/SipAddress.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 void XPCOMIMHandler::connected() {
 	if (!_account) {

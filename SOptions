@@ -2,7 +2,9 @@
 #Set your own global options here
 
 args = {
-        'newbuildid' : 0, 
+	#if 1 then WengoPhoneBuildId is not generated
+	'nobuildid' : 0,
+
 	'enable-video' : 1,
 	'enable-ssl' : 1,
 	'enable-http-tunnel' : 1,
@@ -32,7 +34,6 @@ args = {
 	'speexwb-replaces-g726wb' : 1,
 
 	'enable-ipp' : 0,
-
 }
 
 if not WengoOSMacOSX():

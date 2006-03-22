@@ -20,7 +20,7 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <string>
 

@@ -21,7 +21,7 @@
 #include "chatwidgetmanager.h"
 #include "QtEmoticonsWidget.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
 

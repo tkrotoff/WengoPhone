@@ -112,6 +112,6 @@ env.WengoUseLibraries(libs)
 env.WengoAddIncludePath(include_path)
 
 if WengoOSMacOSX():
-	env.WengoStaticLibrary('wengocurl', sources)
+	env.WengoStaticLibrary('owcurl', sources)
 else:
-	env.WengoSharedLibrary('wengocurl', sources)
+	env.WengoSharedLibrary('owcurl', sources)

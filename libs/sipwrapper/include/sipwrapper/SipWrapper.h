@@ -25,8 +25,8 @@
 #include <sipwrapper/EnumTone.h>
 #include <sipwrapper/EnumNatType.h>
 
-#include <Interface.h>
-#include <Event.h>
+#include <util/Interface.h>
+#include <util/Event.h>
 
 #include <string>
 

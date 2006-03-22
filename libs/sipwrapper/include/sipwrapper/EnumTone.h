@@ -20,7 +20,7 @@
 #ifndef ENUMTONE_H
 #define ENUMTONE_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 /**
  * DTMF tones.

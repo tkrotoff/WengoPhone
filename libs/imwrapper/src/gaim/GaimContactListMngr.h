@@ -20,11 +20,11 @@
 #ifndef GAIMCONTACTLISTMNGR_H
 #define GAIMCONTACTLISTMNGR_H
 
-#include <list>
-
 #include <imwrapper/IMContactList.h>
 #include "GaimPresenceMngr.h"
 #include "GaimIMContactList.h"
+
+#include <list>
 
 extern "C" {
 #include "gaim/blist.h"
@@ -44,7 +44,7 @@ public:
 	GaimIMContactList *AddIMContactList(IMAccount &account);
 	void RemoveIMContactList(IMAccount &account);
 	static GaimIMContactList *FindIMContactList(IMAccount &account);
-	
+
 	/* ********** GaimBuddyListCallback *********** */
 	static void NewListCbk(GaimBuddyList *blist);
 	static void NewNodeCbk(GaimBlistNode *node);

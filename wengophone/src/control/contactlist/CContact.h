@@ -22,7 +22,7 @@
 
 #include <imwrapper/EnumPresenceState.h>
 
-#include <Event.h>
+#include <util/Event.h>
 
 #include <string>
 

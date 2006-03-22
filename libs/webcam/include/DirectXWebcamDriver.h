@@ -16,10 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef DIRECTXWEBCAMDRIVER_H
 #define DIRECTXWEBCAMDRIVER_H
 
-#include <IWebcamDriver.h>
 #include <WebcamDriver.h>
 
 #include <dshow.h>
@@ -35,7 +35,7 @@
  * @author Mathieu Stute
  * @author David Ferlier
  * @author Jerome Wagner
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class DirectXWebcamDriver : public IWebcamDriver, public ISampleGrabberCB {
 public:
@@ -130,7 +130,7 @@ private:
 
 	/** Piximage sended to callbacks */
 	piximage _capturedImage;
-	
+
 	/** True if webcam is opened */
 	bool _isOpened;
 
@@ -149,4 +149,4 @@ private:
 	webcamerrorcode setCaps(pixosi palette, unsigned fps, unsigned resolutionWidth, unsigned resolutionHeight);
 };
 
-#endif //DIRECTXWEBCAMDRIVER_H
+#endif	//DIRECTXWEBCAMDRIVER_H

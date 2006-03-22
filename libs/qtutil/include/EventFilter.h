@@ -20,7 +20,7 @@
 #ifndef EVENTFILTER_H
 #define EVENTFILTER_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <QObject>
 

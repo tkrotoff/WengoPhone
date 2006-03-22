@@ -23,7 +23,7 @@
 #include <QMessageBox>
 #include <QtUiTools>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 QWidget * WidgetFactory::create(const QString & uiFile, QWidget * parent) {
 	QUiLoader loader;

@@ -24,8 +24,8 @@
 
 #include <imwrapper/IMConnect.h>
 
-#include <NonCopyable.h>
-#include <Event.h>
+#include <util/NonCopyable.h>
+#include <util/Event.h>
 
 #include <map>
 #include <set>
@@ -52,14 +52,14 @@ public:
 
 	/**
 	 * Emitted when a IMAccount is connected.
-	 * 
+	 *
 	 * @param imAccount the IMAccount that is connected
 	 */
 	Event<void (ConnectHandler & sender, IMAccount & imAccount)> connectedEvent;
 
 	/**
 	 * Emitted when a IMAccount is connected.
-	 * 
+	 *
 	 * @param imAccount the IMAccount that is disconnected
 	 */
 	Event<void (ConnectHandler & sender, IMAccount & imAccount)> disconnectedEvent;

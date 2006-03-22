@@ -22,15 +22,14 @@
 #include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMContact.h>
 
-#include <Thread.h>
-#include <StringList.h>
-#include <Logger.h>
-#include <File.h>
-#include <Timer.h>
+#include <cutil/global.h>
+#include <util/StringList.h>
+#include <util/Logger.h>
+#include <util/File.h>
+#include <thread/Thread.h>
+#include <thread/Timer.h>
 
 #include <AudioDevice.h>
-
-#include <global.h>
 
 #include <string>
 using namespace std;
@@ -854,7 +853,7 @@ std::string PhApiWrapper::phapiCallStateToString(enum  phCallStateEvent event) {
 	case phHOLDOK:
 		toReturn = "phHOLDOK";
 		break;
-	case phRESUMEOK: 
+	case phRESUMEOK:
 		toReturn = "phRESUMEOK";
 		break;
 	case phINCALL:
@@ -862,7 +861,7 @@ std::string PhApiWrapper::phapiCallStateToString(enum  phCallStateEvent event) {
 		break;
 	case phCALLCLOSED:
 		toReturn = "phCALLCLOSED";
-		break; 
+		break;
 	case phCALLERROR:
 		toReturn = "phCALLERROR";
 		break;
@@ -877,7 +876,7 @@ std::string PhApiWrapper::phapiCallStateToString(enum  phCallStateEvent event) {
 		break;
 	case phXFERFAIL:
 		toReturn = "phXFERFAIL";
-		break; 
+		break;
 	case phXFERREQ:
 		toReturn = "phXFERREQ";
 		break;
@@ -887,7 +886,7 @@ std::string PhApiWrapper::phapiCallStateToString(enum  phCallStateEvent event) {
 	case phRINGandSTART:
 		toReturn = "phRINGandSTART";
 		break;
-	case phRINGandSTOP: 
+	case phRINGandSTOP:
 		toReturn = "phRINGandSTOP";
 		break;
 	case phCALLCLOSEDandSTOPRING:

@@ -16,25 +16,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef WEBCAMDRIVERFACTORY_H
 #define WEBCAMDRIVERFACTORY_H
 
 class IWebcamDriver;
 class WebcamDriver;
 
-
 /**
- * Factory for webcam drivers
+ * Factory for webcam drivers.
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class WebcamDriverFactory {
 public:
+
 	WebcamDriverFactory() {}
 	virtual ~WebcamDriverFactory() {}
 
 	/**
-	 * Create a webcam driver instance
+	 * Creates a webcam driver instance.
 	 *
 	 * If a webcam driver factory has not been set, the default one
 	 * is returned.
@@ -46,5 +47,4 @@ public:
 	virtual IWebcamDriver * create(WebcamDriver *driver, int flags) const = 0;
 };
 
-#endif //WEBCAMDRIVERFACTORY_H
-
+#endif	//WEBCAMDRIVERFACTORY_H

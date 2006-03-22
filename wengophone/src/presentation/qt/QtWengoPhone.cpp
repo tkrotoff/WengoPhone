@@ -47,11 +47,11 @@
 
 #include <WidgetFactory.h>
 #include <Object.h>
-#include <Thread.h>
-#include <Logger.h>
+#include <thread/Thread.h>
+#include <util/Logger.h>
 #include <QtBrowser.h>
 
-#include <global.h>
+#include <cutil/global.h>
 
 #include <QtGui>
 #include <trayicon.h>

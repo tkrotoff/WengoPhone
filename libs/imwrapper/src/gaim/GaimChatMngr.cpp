@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software	
+ * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
@@ -22,7 +22,7 @@
 #include "GaimEnumIMProtocol.h"
 
 #include <imwrapper/IMContact.h>
-#include <Logger.h>
+#include <util/Logger.h>
 
 extern "C" {
 #include "gaim/util.h"
@@ -60,7 +60,7 @@ static void C_WriteConvCbk(GaimConversation *conv, const char *name, const char 
 	GaimChatMngr::WriteConvCbk(conv, name, alias, message, flags, mtime);
 }
 
-static void C_ChatAddUsersCbk(GaimConversation *conv, GList *users, GList *flags, 
+static void C_ChatAddUsersCbk(GaimConversation *conv, GList *users, GList *flags,
 						   GList *aliases, gboolean new_arrivals)
 {
 	GaimChatMngr::ChatAddUsersCbk(conv, users, flags, aliases, new_arrivals);
@@ -152,7 +152,7 @@ GaimChatMngr *GaimChatMngr::getInstance()
 {
 	if (!_staticInstance)
 		_staticInstance = new GaimChatMngr();
-	
+
 	return _staticInstance;
 }
 
@@ -160,7 +160,7 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 {
 	GaimAccount *gAccount = gaim_conversation_get_account(conv);
 	GaimConversationType chatType = gaim_conversation_get_type(conv);
-	const char *gPrclId = gaim_account_get_protocol_id(gAccount);	
+	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
 	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
 								GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 	GaimIMChat *mChat = FindIMChat(*account);
@@ -186,8 +186,8 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 	{
 		;
 	}
-	 
-	
+
+
 	//if (mConv == NULL)
 	//{
 	//	// We receive an incoming message
@@ -196,10 +196,10 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 	//	mConv = gChat->mCreateSession();
 	//	conv->ui_data = mConv;
 	//	chatSession = (IMChatSession *) mConv->conv_session;
-	//	
+	//
 	//	if (chatType == GAIM_CONV_TYPE_IM)
 	//	{
-	//		gChat->contactAddedEvent(*gChat, *chatSession, 
+	//		gChat->contactAddedEvent(*gChat, *chatSession,
 	//								gaim_conversation_get_name(conv));
 	//	}
 	//	else if (chatType == GAIM_CONV_TYPE_CHAT)
@@ -235,13 +235,13 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 	//	const IMChatSession::IMContactList &ChatContact = chatSession->getIMContactList();
 	//	IMChatSession::IMContactList::const_iterator it = ChatContact.begin();
 	//	const char *contactId = (*it).getContactId().c_str();
-	//	
+	//
 	//	GList *gChatUsers = gaim_conv_chat_get_users(GAIM_CONV_CHAT(conv));
-	//	
+	//
 	//	GaimConvChatBuddy *gUser;
 
 	//	for ( ; gChatUsers; gChatUsers = gChatUsers->next)
-	//	{	
+	//	{
 	//		gUser = (GaimConvChatBuddy *) gChatUsers->data;
 	//		if (gaim_utf8_strcasecmp(gUser->name, contactId) != 0)
 	//		{
@@ -257,7 +257,7 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 void GaimChatMngr::DestroyConversationCbk(GaimConversation *conv)
 {
 	fprintf(stderr, "wgconv : gaim_wgconv_destroy()\n");
-	
+
 }
 
 void GaimChatMngr::WriteChatCbk(GaimConversation *conv, const char *who,
@@ -282,7 +282,7 @@ void GaimChatMngr::WriteConvCbk(GaimConversation *conv, const char *name, const 
 	{
 		mConvInfo_t *mConv = (mConvInfo_t *)conv->ui_data;
 		GaimIMChat *gIMChat = FindIMChatByGaimConv(conv);
-		gIMChat->messageReceivedEvent(*gIMChat, *((IMChatSession *)(mConv->conv_session)), 
+		gIMChat->messageReceivedEvent(*gIMChat, *((IMChatSession *)(mConv->conv_session)),
 										std::string(name), std::string(message));
 	}
 }
@@ -318,7 +318,7 @@ gboolean GaimChatMngr::HasFocusCbk(GaimConversation *conv)
 	return TRUE;
 }
 
-gboolean GaimChatMngr::CustomSmileyAddCbk(GaimConversation *conv, const char *smile, 
+gboolean GaimChatMngr::CustomSmileyAddCbk(GaimConversation *conv, const char *smile,
 									   gboolean remote)
 {
 	return TRUE;
@@ -345,7 +345,7 @@ GaimIMChat *GaimChatMngr::FindIMChatByGaimConv(void *gConv)
 	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
 													GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 	GaimIMChat *mChat = FindIMChat(*account);
-	
+
 	return mChat;
 }
 
@@ -375,7 +375,7 @@ GaimIMChat *GaimChatMngr::AddIMChat(IMAccount &account)
 
 		_gaimIMChatList.push_back(mIMChat);
 	}
-	
+
 	return mIMChat;
 }
 

@@ -22,8 +22,8 @@
 
 #include <OWBrowser.h>
 
-#include <global.h>
-#include <Event.h>
+#include <util/Event.h>
+#include <cutil/global.h>
 
 #include <QObject>
 

@@ -19,8 +19,8 @@
 
 #include "PlaySoundFile.h"
 
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 
 int main(int argc, char * argv[]) {
 	char * soundFilename = argv[1];

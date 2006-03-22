@@ -22,8 +22,8 @@
 
 #include <Listener.h>
 
-#include <List.h>
-#include <NonCopyable.h>
+#include <util/List.h>
+#include <util/NonCopyable.h>
 
 /**
  * @author Tanguy Krotoff

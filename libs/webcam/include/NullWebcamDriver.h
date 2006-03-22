@@ -16,16 +16,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef NULLWEBCAMDRIVER_H
 #define NULLWEBCAMDRIVER_H
 
-#include <IWebcamDriver.h>
 #include <WebcamDriver.h>
 
 /**
- * Null webcam driver
+ * Null webcam driver.
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class NullWebcamDriver : public IWebcamDriver {
 public:
@@ -80,5 +80,4 @@ public:
 	void flipHorizontally(bool flip);
 };
 
-#endif //NULLWEBCAMDRIVER_H
-
+#endif	//NULLWEBCAMDRIVER_H

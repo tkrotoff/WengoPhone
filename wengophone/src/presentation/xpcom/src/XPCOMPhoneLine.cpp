@@ -25,7 +25,7 @@
 
 #include <control/phoneline/CPhoneLine.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 XPCOMPhoneLine::XPCOMPhoneLine(CPhoneLine & cPhoneLine)
 	: _cPhoneLine(cPhoneLine) {

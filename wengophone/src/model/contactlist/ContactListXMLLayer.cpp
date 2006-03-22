@@ -23,8 +23,8 @@
 #include "ContactGroup.h"
 #include "Contact.h"
 
-#include <File.h>
-#include <Logger.h>
+#include <util/File.h>
+#include <util/Logger.h>
 
 #include <string>
 using namespace std;

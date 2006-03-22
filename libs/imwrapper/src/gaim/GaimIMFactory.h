@@ -26,6 +26,7 @@
 #include "GaimConnectMngr.h"
 #include "GaimPresenceMngr.h"
 #include "GaimContactListMngr.h"
+
 /**
  *
  * @ingroup model

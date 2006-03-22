@@ -27,7 +27,7 @@
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumIMProtocol.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 using namespace std;
 
@@ -57,7 +57,7 @@ void ConnectHandler::connect(const IMAccount & imAccount) {
 			boost::bind(&ConnectHandler::loginStatusEventHandler, this, _1, _2);
 		_connectMap.insert(pair<IMAccount, Connect *>(account, connect));
 	} else {
-		connect = (*it).second;	
+		connect = (*it).second;
 	}
 
 	connect->connect();

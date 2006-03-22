@@ -18,9 +18,9 @@
 */
 
 #include <Object.h>
-#include <Logger.h>
+#include <util/Logger.h>
 #include <WidgetFactory.h>
-#include <Date.h>
+#include <util/Date.h>
 
 #include "QtEditContactProfile.h"
 

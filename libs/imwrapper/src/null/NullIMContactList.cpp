@@ -19,7 +19,7 @@
 
 #include "NullIMContactList.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 NullIMContactList::NullIMContactList(IMAccount & account)
 	: IMContactList(account) {

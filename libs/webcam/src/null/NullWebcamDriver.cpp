@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #include <NullWebcamDriver.h>
 
 using namespace std;
@@ -24,14 +25,11 @@ NullWebcamDriver::NullWebcamDriver(WebcamDriver *driver, int flags)
 : IWebcamDriver(flags) {
 }
 
-
 NullWebcamDriver::~NullWebcamDriver() {
 }
 
-
 void NullWebcamDriver::cleanup() {
 }
-
 
 StringList NullWebcamDriver::getDeviceList() {
 	static StringList deviceList;
@@ -39,89 +37,70 @@ StringList NullWebcamDriver::getDeviceList() {
 	return deviceList;
 }
 
-
 string NullWebcamDriver::getDefaultDevice() {
 	static string defaultDevice;
 
 	return defaultDevice;
 }
 
-
 webcamerrorcode NullWebcamDriver::setDevice(const std::string & deviceName) {
 	return WEBCAM_OK;
 }
-
 
 bool NullWebcamDriver::isOpened() const {
 	return false;
 }
 
-
 void NullWebcamDriver::startCapture() {
 }
-
 
 void NullWebcamDriver::pauseCapture() {
 }
 
-
 void NullWebcamDriver::stopCapture() {
 }
-
 
 webcamerrorcode NullWebcamDriver::setPalette(pixosi palette) {
 	return WEBCAM_OK;
 }
 
-
 pixosi NullWebcamDriver::getPalette() const {
 	return PIX_OSI_UNSUPPORTED;
 }
-
 
 webcamerrorcode NullWebcamDriver::setFPS(unsigned fps) {
 	return WEBCAM_OK;
 }
 
-
 unsigned NullWebcamDriver::getFPS() const {
 	return 0;
 }
-
 
 webcamerrorcode NullWebcamDriver::setResolution(unsigned width, unsigned height) {
 	return WEBCAM_OK;
 }
 
-
 unsigned NullWebcamDriver::getWidth() const {
 	return 0;
 }
-
 
 unsigned NullWebcamDriver::getHeight() const {
 	return 0;
 }
 
-
 void NullWebcamDriver::setBrightness(int brightness) {
 }
-
 
 int NullWebcamDriver::getBrightness() const {
 	return 0;
 }
 
-
 void NullWebcamDriver::setContrast(int contrast) {
 }
-
 
 int NullWebcamDriver::getContrast() const {
 	return 0;
 }
 
-
 void NullWebcamDriver::flipHorizontally(bool flip) {
 }
-

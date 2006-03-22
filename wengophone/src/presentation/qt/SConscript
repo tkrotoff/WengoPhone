@@ -6,7 +6,7 @@ libs = [
 	'qtutil',
 	'webcam',
 	'qt4',
-	'boost',
+	'owmemorydump',
 	'owbrowser',
 	'trayicon'
 ]

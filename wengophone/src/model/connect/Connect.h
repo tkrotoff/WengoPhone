@@ -23,8 +23,8 @@
 #include <imwrapper/IMConnect.h>
 #include <imwrapper/IMAccount.h>
 
-#include <Interface.h>
-#include <Event.h>
+#include <util/Interface.h>
+#include <util/Event.h>
 
 /**
  * Wrapper for Instant Messaging connection.
@@ -58,7 +58,7 @@ public:
 	void disconnect();
 
 	bool isConnected() { return _connected; }
-	
+
 	const IMAccount & getIMAccount() const {
 		return _account;
 	}
@@ -68,7 +68,7 @@ protected:
 	IMAccount _account;
 
 	IMConnect * _imConnect;
-	
+
 	bool _connected;
 };
 

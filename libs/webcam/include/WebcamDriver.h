@@ -16,12 +16,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef WEBCAMDRIVER_H
 #define WEBCAMDRIVER_H
 
-#include <pixertool.h>
 #include <IWebcamDriver.h>
-#include <global.h>
+#include <pixertool.h>
+
+#include <cutil/global.h>
 
 #if defined(OS_WIN32)
 	class DirectXWebcamDriver;
@@ -37,13 +39,13 @@ class WebcamDriverFactory;
 
 /**
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class WebcamDriver : public IWebcamDriver {
 public:
 
 	/**
-	 * Set current factory
+	 * Sets current factory
 	 *
 	 * @param factory factory to use
 	 */
@@ -52,7 +54,7 @@ public:
 	}
 
 	/**
-	 * Get instance of WebcamDriver.
+	 * Gets instance of WebcamDriver.
 	 *
 	 * Implements singleton pattern. This method create a WebcamDriver with
 	 * WEBCAM_FORCE_IMAGE_FORMAT flag.
@@ -146,12 +148,12 @@ private:
 	bool isFormatForced() const {
 		return _flags & WEBCAM_FORCE_IMAGE_FORMAT;
 	}
-	
+
 	/**
-	 * Initialize _convImage
+	 * Initializes _convImage.
 	 */
 	void initializeConvImage();
-	
+
 	/** Pointer to factory to use. */
 	static WebcamDriverFactory *_factory;
 
@@ -174,20 +176,18 @@ private:
 
 	/** Desired width */
 	unsigned _desiredWidth;
-	
+
 	/** Desired height */
 	unsigned _desiredHeight;
-	
+
 	/** Flags */
 	int _flags;
-	
+
 	/** Contains the converted captured frame */
 	piximage *_convImage;
-	
+
 	/** Conversion flags */
 	int _convFlags;
 };
 
-
-#endif //WEBCAMDRIVER_H
-
+#endif	//WEBCAMDRIVER_H

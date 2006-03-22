@@ -43,8 +43,8 @@
 
 #include <sipwrapper/SipWrapper.h>
 
-#include <StringList.h>
-#include <Logger.h>
+#include <util/StringList.h>
+#include <util/Logger.h>
 
 #include <iostream>
 using namespace std;

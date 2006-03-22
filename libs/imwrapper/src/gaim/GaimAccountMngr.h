@@ -20,9 +20,9 @@
 #ifndef GAIMACCOUNTMNGR_H
 #define GAIMACCOUNTMNGR_H
 
-#include <list>
-
 #include <imwrapper/IMAccount.h>
+
+#include <list>
 
 extern "C" {
 #include <gaim/account.h>
@@ -52,7 +52,7 @@ public:
 	static void RequestAddCbk(GaimAccount *account, const char *remote_user,
 								const char *id, const char *alias,
 								const char *message);
-	
+
 	/* ****************************************** */
 
 private:

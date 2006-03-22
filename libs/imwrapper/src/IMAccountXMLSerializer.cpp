@@ -22,39 +22,39 @@
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMAccountParametersXMLSerializer.h>
 
-#include <Base64.h>
+#include <util/Base64.h>
 
 #include <tinyxml.h>
 
 using namespace std;
 
-IMAccountXMLSerializer::IMAccountXMLSerializer(IMAccount & imAccount) 
+IMAccountXMLSerializer::IMAccountXMLSerializer(IMAccount & imAccount)
 : _imAccount(imAccount) {
 }
 
 std::string IMAccountXMLSerializer::serialize() {
 	string result;
 	EnumIMProtocol enumIMProtocol;
-	
+
 	result += "<account protocol=\"" + enumIMProtocol.toString(_imAccount._protocol) + "\">\n";
 	result += ("<login>" + _imAccount._login + "</login>\n");
 	result += ("<password>" + Base64::encode(_imAccount._password) + "</password>\n");
 	IMAccountParametersXMLSerializer serializer(_imAccount._imAccountParameters);
 	result += serializer.serialize();
 	result += "</account>\n";
-	
-	return result;	
+
+	return result;
 }
 
 bool IMAccountXMLSerializer::unserialize(const std::string & data) {
 	TiXmlDocument doc;
 	EnumIMProtocol imProtocol;
-	
+
 	doc.Parse(data.c_str());
-	
+
 	TiXmlHandle docHandle(&doc);
 	TiXmlHandle account = docHandle.FirstChild("account");
-	
+
 	// Retrieving protocol
 	TiXmlElement * lastChildElt = account.Element();
 	if (lastChildElt) {
@@ -62,14 +62,14 @@ bool IMAccountXMLSerializer::unserialize(const std::string & data) {
 	} else {
 		return false;
 	}
-	
+
 	//Retrieving login
 	_imAccount._login = account.FirstChild("login").FirstChild().Text()->Value();
-	
+
 	//Retrieving password
 	std::string password = account.FirstChild("password").FirstChild().Text()->Value();
 	_imAccount._password = Base64::decode(password);
-	
+
 	//Retrieving IMAccountParameters
 	IMAccountParameters imAccountParameters;
 	IMAccountParametersXMLSerializer serializer(imAccountParameters);
@@ -78,6 +78,6 @@ bool IMAccountXMLSerializer::unserialize(const std::string & data) {
 	nodeData << *settingsNode;
 	serializer.unserialize(nodeData);
 	_imAccount._imAccountParameters = imAccountParameters;
-	
-	return true;	
+
+	return true;
 }

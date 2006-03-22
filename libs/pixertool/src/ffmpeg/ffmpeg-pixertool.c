@@ -22,21 +22,15 @@
 
 #include <stdlib.h>
 
-/**
- * @file pixertool.h
- * @author Philippe Bernery
- */
-
 /** Used by pix_convert_avpicture */
 static AVPicture *pictureBuffer = NULL;
 
 /** Called at program exit */
 static void pix_ffmpeg_cleanup(void);
 
-
 pixosi pix_ffmpeg_to_pix_osi(int pix) {
 	pixosi palette;
-	
+
 	switch(pix) {
 	case PIX_FMT_RGB24:
 		palette = PIX_OSI_RGB24;
@@ -69,10 +63,9 @@ pixosi pix_ffmpeg_to_pix_osi(int pix) {
 	return palette;
 }
 
-
 int pix_ffmpeg_from_pix_osi(pixosi pix) {
 	int palette;
-	
+
 	switch(pix) {
 	case PIX_OSI_RGB24:
 		palette = PIX_FMT_RGB24;
@@ -106,12 +99,10 @@ int pix_ffmpeg_from_pix_osi(pixosi pix) {
 	return palette;
 }
 
-
 void pix_fill_avpicture(AVPicture *dst , piximage *src) {
 	avpicture_fill(dst, src->data, pix_ffmpeg_from_pix_osi(src->palette),
 		src->width, src->height);
 }
-
 
 pixerrorcode pix_convert_avpicture(int flags, piximage *img_dst, AVPicture *img_src, pixosi src_fmt) {
 	pixosi desiredPalette = pix_ffmpeg_from_pix_osi(img_dst->palette);
@@ -120,7 +111,7 @@ pixerrorcode pix_convert_avpicture(int flags, piximage *img_dst, AVPicture *img_
 		pictureBuffer = (AVPicture *)malloc(sizeof(AVPicture));
 		atexit(pix_ffmpeg_cleanup);
 	}
-	
+
 	avpicture_fill(pictureBuffer, img_dst->data, desiredPalette, img_dst->width, img_dst->height);
 
 	img_convert(pictureBuffer, desiredPalette,
@@ -128,7 +119,7 @@ pixerrorcode pix_convert_avpicture(int flags, piximage *img_dst, AVPicture *img_
 		img_dst->width, img_dst->height);
 
 	//pictureBuffer->data[0] should contain only valid data
-	
+
 	return PIX_OK;
 }
 

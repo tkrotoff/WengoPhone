@@ -22,14 +22,14 @@
 
 #include "playsound/PlaySoundFile.h"
 
-#include <Thread.h>
+#include <thread/Thread.h>
 
 #include <string>
 
 /**
  * Plays a sound in a threaded way.
  *
- * Helper for the Sound class. 
+ * Helper for the Sound class.
  *
  * @see Sound
  * @see Thread

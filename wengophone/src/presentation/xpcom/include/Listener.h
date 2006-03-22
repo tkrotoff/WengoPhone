@@ -20,7 +20,7 @@
 #ifndef LISTENER_H
 #define LISTENER_H
 
-#include <Interface.h>
+#include <util/Interface.h>
 
 #include <string>
 

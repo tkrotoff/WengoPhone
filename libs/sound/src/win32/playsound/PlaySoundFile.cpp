@@ -27,13 +27,13 @@
 
 #include "SoundFile.h"
 
-#include <Logger.h>
-#include <StringList.h>
+#include <util/Logger.h>
+#include <util/StringList.h>
 
 #include <windows.h>
 #include <mmsystem.h>
 
-#include <stdio.h>
+#include <cstdio>
 
 void stopWaveOutDevice(HWAVEOUT * hWaveOut) {
 	if (*hWaveOut != NULL) {

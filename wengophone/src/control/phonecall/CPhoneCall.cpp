@@ -38,7 +38,7 @@
 #include <model/phonecall/PhoneCallStateResumed.h>
 #include <model/phonecall/PhoneCallStateRinging.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 CPhoneCall::CPhoneCall(PhoneCall & phoneCall, CWengoPhone & cWengoPhone)
 	: _phoneCall(phoneCall),

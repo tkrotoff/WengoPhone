@@ -20,15 +20,15 @@
 #ifndef IMACCOUNTPARAMETERSXMLSERIALIZER_H
 #define IMACCOUNTPARAMETERSXMLSERIALIZER_H
 
-#include <SettingsXMLSerializer.h>
+#include <settings/SettingsXMLSerializer.h>
 
 class IMAccountParameters;
 
 class IMAccountParametersXMLSerializer : public SettingsXMLSerializer {
 public:
-	
+
 	IMAccountParametersXMLSerializer(IMAccountParameters & imAccountParameters);
-	
+
 };
 
 #endif //IMACCOUNTPARAMETERSXMLSERIALIZER_H

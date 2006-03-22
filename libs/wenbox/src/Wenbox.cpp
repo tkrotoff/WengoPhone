@@ -19,11 +19,11 @@
 
 #include <wenbox/Wenbox.h>
 
-#include <Logger.h>
-#include <File.h>
-#include <StringList.h>
+#include <util/Logger.h>
+#include <util/File.h>
+#include <util/StringList.h>
 
-#include <global.h>
+#include <cutil/global.h>
 
 #include <shlibloader/SharedLibLoader.h>
 

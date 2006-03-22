@@ -26,7 +26,7 @@ class ContactGroup;
 class PContactList;
 class CWengoPhone;
 
-#include <StringList.h>
+#include <util/StringList.h>
 
 /**
  *

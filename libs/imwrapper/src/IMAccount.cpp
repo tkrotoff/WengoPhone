@@ -19,9 +19,9 @@
 
 #include <imwrapper/IMAccount.h>
 
-#include <SettingsXMLSerializer.h>
+#include <settings/SettingsXMLSerializer.h>
 
-#include <Base64.h>
+#include <util/Base64.h>
 
 using namespace std;
 

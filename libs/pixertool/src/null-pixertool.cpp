@@ -19,34 +19,24 @@
 
 #include <pixertool.h>
 
-/**
- * @file pixertool.h
- * @author Philippe Bernery
- */
-
 piximage * pix_alloc(pixosi pix, unsigned width, unsigned height) {
 	return (piximage *)0;
 }
 
-
 void pix_free(piximage *ptr) {
 }
-
 
 unsigned pix_size(pixosi pix, unsigned width, unsigned height) {
 	return 0;
 }
 
-
 pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 	return PIX_NOK;
 }
 
-
 pixosi pix_ffmpeg_to_pix_osi(int pix) {
 	return PIX_OSI_UNSUPPORTED;
 }
-
 
 int pix_ffmpeg_from_pix_osi(pixosi pix) {
 	 return (int)PIX_OSI_UNSUPPORTED;

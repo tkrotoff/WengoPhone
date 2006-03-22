@@ -20,7 +20,7 @@
 #ifndef SIPWRAPPERFACTORY_H
 #define SIPWRAPPERFACTORY_H
 
-#include <Interface.h>
+#include <util/Interface.h>
 
 class SipWrapper;
 

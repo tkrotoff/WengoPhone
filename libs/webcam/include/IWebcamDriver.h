@@ -20,35 +20,37 @@
 #ifndef IWEBCAMDRIVER_H
 #define IWEBCAMDRIVER_H
 
-#include "webcam.h"
+#include <webcam.h>
 #include <pixertool.h>
-#include <Event.h>
-#include <NonCopyable.h>
-#include <StringList.h>
+
+#include <util/Event.h>
+#include <util/NonCopyable.h>
+#include <util/StringList.h>
+
 #include <string>
 
 /**
- * Drive a webcam device
+ * Drive a webcam device.
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class IWebcamDriver : NonCopyable {
 public:
 
 	/**
-	 * Get webcam device list
+	 * Gets webcam device list.
 	 */
 	virtual StringList getDeviceList() = 0;
 
 	/**
-	 * Get default webcam device
+	 * Gets default webcam device.
 	 *
 	 * @return the name of the device. WEBCAM_NULL if no webcam or error.
 	 */
 	virtual std::string getDefaultDevice() = 0;
 
 	/**
-	 * A frame has been captured
+	 * A frame has been captured.
 	 *
 	 * @param sender sender of the event
 	 * @param image captured image
@@ -68,7 +70,7 @@ public:
 	virtual void cleanup() = 0;
 
 	/**
-	 * Set flags.
+	 * Sets flags.
 	 *
 	 * @param flags OR_bitwise flags to set
 	 * @see webcam.h for documentation about valid flags
@@ -76,7 +78,7 @@ public:
 	virtual void setFlags(int flags) = 0;
 
 	/**
-	 * Unset flags.
+	 * Unsets flags.
 	 *
 	 * @param flags OR-bitwise flags to unset
 	 */
@@ -91,7 +93,7 @@ public:
 	virtual bool isFlagSet(int flag) = 0;
 
 	/**
-	 * Set webcam device to use
+	 * Sets webcam device to use
 	 *
 	 * @param deviceName name of the device to use, if name == "" then use the default device
 	 * @return WEBCAM_OK if no error, WEBCAM_NOK otherwise
@@ -104,50 +106,50 @@ public:
 	virtual bool isOpened() const = 0;
 
 	/**
-	 * Start capture of video frames
+	 * Starts capture of video frames
 	 */
 	virtual void startCapture() = 0;
 
 	/**
-	 * Pause capture of video frames
+	 * Pauses capture of video frames
 	 */
 	virtual void pauseCapture() = 0;
 
 	/**
-	 * Stop capture of video frames
+	 * Stops capture of video frames
 	 */
 	virtual void stopCapture() = 0;
 
 	/**
-	 * Set palette
+	 * Sets palette
 	 *
 	 * @param palette palette to use
 	 */
 	virtual webcamerrorcode setPalette(pixosi palette) = 0;
 
 	/**
-	 * Get palette
+	 * Gets palette
 	 *
 	 * @return current palette
 	 */
 	virtual pixosi getPalette() const = 0;
 
 	/**
-	 * Set capture rate
+	 * Sets capture rate
 	 *
 	 * @param fps desired frame per seconds
 	 */
 	virtual webcamerrorcode setFPS(unsigned fps) = 0;
 
 	/**
-	 * Get capture rate
+	 * Gets capture rate
 	 *
 	 * @return current frame per seconds
 	 */
 	virtual unsigned getFPS() const = 0;
 
 	/**
-	 * Set capture resolution
+	 * Sets capture resolution
 	 *
 	 * @param width desired width
 	 * @param height desired height
@@ -155,49 +157,49 @@ public:
 	virtual webcamerrorcode setResolution(unsigned width, unsigned height) = 0;
 
 	/**
-	 * Get captured frame width
+	 * Gets captured frame width
 	 *
 	 * @return captured frame width
 	 */
 	virtual unsigned getWidth() const = 0;
 
 	/**
-	 * Get captured frame height
+	 * Gets captured frame height
 	 *
 	 * @return captured frame height
 	 */
 	virtual unsigned getHeight() const = 0;
 
 	/**
-	 * Set capture brightness
+	 * Sets capture brightness
 	 *
 	 * @param brightness brightness value
 	 */
 	virtual void setBrightness(int brightness) = 0;
 
 	/**
-	 * Get capture brightness
+	 * Gets capture brightness
 	 *
 	 * @param brightness brightness value
 	 */
 	virtual int getBrightness() const = 0;
 
 	/**
-	 * Set capture contrast
+	 * Sets capture contrast
 	 *
 	 * @param contrast contrast value
 	 */
 	virtual void setContrast(int contrast) = 0;
 
 	/**
-	 * Get capture contrast
+	 * Gets capture contrast
 	 *
 	 * @param contrast contrast value
 	 */
 	virtual int getContrast() const = 0;
 
 	/**
-	 * Flip captured frame horizontally
+	 * Flips captured frame horizontally
 	 *
 	 * @param flip if true the picture will be flipped horizontally
 	 */

@@ -22,7 +22,7 @@
 
 #include <wenbox/IWenbox.h>
 
-#include <Event.h>
+#include <util/Event.h>
 
 /**
  * @see IWenbox

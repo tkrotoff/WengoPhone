@@ -26,7 +26,7 @@
 #include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMWrapperFactory.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 using namespace std;
 

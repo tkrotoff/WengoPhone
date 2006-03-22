@@ -10,7 +10,9 @@ WengoPhoneBuildId = {
 WengoSetVariable('WengoPhoneBuildId', WengoPhoneBuildId)
 
 libs = [
-	'wengoutil',
+	'owhttp',
+	'owserialization',
+	'owsystem',
 	'imwrapper',
 	'sipwrapper',
 	'wenbox',
@@ -18,7 +20,6 @@ libs = [
 	'sound',
 	'netlib',
 	'qt4',
-	'boost',
 ]
 lib_path = []
 include_path = ['.']

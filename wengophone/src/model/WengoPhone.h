@@ -23,9 +23,9 @@
 #include <imwrapper/IMAccountHandler.h>
 #include <model/account/SipAccount.h>
 
-#include <Event.h>
-#include <Thread.h>
-#include <List.h>
+#include <util/Event.h>
+#include <util/List.h>
+#include <thread/Thread.h>
 
 #include <string>
 #include <vector>
@@ -222,7 +222,7 @@ public:
 
 	/**
 	 * Start a instant messaging with a Contact.
-	 *  
+	 *
 	 * @param contact the Contact to talk to
 	 */
 	void startIM(Contact & contact);
@@ -320,12 +320,12 @@ private:
 	 * @see terminate()
 	 */
 	void terminateThreadSafe();
-	
+
 	/**
 	 * find the wengo phone line
 	 */
 	IPhoneLine * findWengoPhoneLine();
-	
+
 	/** The active/current PhoneLine. */
 	IPhoneLine * _activePhoneLine;
 

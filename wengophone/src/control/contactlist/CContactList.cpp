@@ -30,7 +30,7 @@
 
 #include "CContactGroup.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 CContactList::CContactList(ContactList & contactList, CWengoPhone & cWengoPhone)
 	: _contactList(contactList),

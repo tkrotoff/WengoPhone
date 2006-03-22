@@ -22,8 +22,8 @@
 
 #include <presentation/PPhoneLine.h>
 
-#include <List.h>
-#include <NonCopyable.h>
+#include <util/List.h>
+#include <util/NonCopyable.h>
 
 #include <string>
 

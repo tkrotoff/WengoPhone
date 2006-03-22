@@ -20,7 +20,7 @@
 #include "QtChatHandler.h"
 
 #include <control/chat/CChatHandler.h>
-#include <Logger.h>
+#include <util/Logger.h>
 #include <QWidget>
 
 QtChatHandler::QtChatHandler(CChatHandler & cChatHandler) 

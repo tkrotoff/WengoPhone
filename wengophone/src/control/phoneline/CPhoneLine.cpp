@@ -32,7 +32,7 @@
 #include "model/phoneline/PhoneLineStateTimeout.h"
 #include "model/phoneline/PhoneLineStateServerError.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 CPhoneLine::CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone)
 	: _phoneLine(phoneLine),

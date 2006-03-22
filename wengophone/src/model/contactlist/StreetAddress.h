@@ -20,7 +20,7 @@
 #ifndef STREETADDRESS_H
 #define STREETADDRESS_H
 
-#include <Serializable.h>
+#include <serialization/Serializable.h>
 
 #include <string>
 

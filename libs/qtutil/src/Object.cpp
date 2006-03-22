@@ -22,7 +22,7 @@
 #include <QMessageBox>
 #include <QMetaObject>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #include <iostream>
 using namespace std;

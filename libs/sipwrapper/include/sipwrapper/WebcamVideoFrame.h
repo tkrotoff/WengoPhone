@@ -20,7 +20,7 @@
 #ifndef WEBCAMVIDEOFRAME_H
 #define WEBCAMVIDEOFRAME_H
 
-#include <Interface.h>
+#include <util/Interface.h>
 
 /**
  * Video frame received from a webcam.

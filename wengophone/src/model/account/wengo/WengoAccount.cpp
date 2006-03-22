@@ -28,9 +28,9 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <Thread.h>
-#include <StringList.h>
-#include <Logger.h>
+#include <thread/Thread.h>
+#include <util/StringList.h>
+#include <util/Logger.h>
 
 #include <sstream>
 #include <exception>

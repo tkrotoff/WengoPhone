@@ -25,8 +25,8 @@
 
 #include <sipwrapper/SipWrapper.h>
 
-#include <StringList.h>
-#include <Logger.h>
+#include <util/StringList.h>
+#include <util/Logger.h>
 
 SipCallbacks::SipCallbacks(SipWrapper & sipWrapper, WengoPhone & wengoPhone)
 	: _sipWrapper(sipWrapper),

@@ -8,7 +8,6 @@ projects = [
 	'wengoscons/libs/glib',
 	'wengoscons/libs/gthread',
 	'libs/portaudio',
-	'libs/global',
 	'libs/timer',
 	'libs/openssl',
 	'libs/samplerate',

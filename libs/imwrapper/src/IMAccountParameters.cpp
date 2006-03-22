@@ -19,7 +19,7 @@
 
 #include <imwrapper/IMAccountParameters.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 using namespace std;
 
@@ -90,7 +90,7 @@ void IMAccountParameters::copy(const IMAccountParameters & imAccountParameters) 
 }
 
 IMAccountParameters::~IMAccountParameters() {
-	
+
 }
 
 bool IMAccountParameters::isMailNotified() const {
@@ -194,12 +194,12 @@ boost::any IMAccountParameters::getAny(const std::string & key) const {
 	if (it == _keyDefaultValueMap.end()) {
 		LOG_FATAL("key=" + key + " not found, add it inside the Config constructor");
 	}
-	
+
 	boost::any defaultValue = it->second;
 	if (defaultValue.empty()) {
 		LOG_FATAL("default value for key=" + key + " not defined, add it inside the Config constructor");
 	}
-	
+
 	return Settings::getAny(key, defaultValue);
 }
 
@@ -208,7 +208,7 @@ bool IMAccountParameters::getBooleanKeyValue(const std::string & key) const {
 	if (!Settings::isBoolean(value)) {
 		LOG_FATAL("value for key=" + key + " is not a boolean");
 	}
-	
+
 	return boost::any_cast<bool>(value);
 }
 
@@ -217,7 +217,7 @@ int IMAccountParameters::getIntegerKeyValue(const std::string & key) const {
 	if (!Settings::isInteger(value)) {
 		LOG_FATAL("value for key=" + key + " is not an integer");
 	}
-	
+
 	return boost::any_cast<int>(value);
 }
 
@@ -226,7 +226,7 @@ std::string IMAccountParameters::getStringKeyValue(const std::string & key) cons
 	if (!Settings::isString(value)) {
 		LOG_FATAL("value for key=" + key + " is not a string");
 	}
-	
+
 	return boost::any_cast<std::string>(value);
 }
 

@@ -16,26 +16,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef V4LWEBCAMDRIVER_H
 #define V4LWEBCAMDRIVER_H
 
-#include <IWebcamDriver.h>
 #include <WebcamDriver.h>
 
+#include <thread/Thread.h>
+
 #include <linux/videodev.h>
-#include <Thread.h>
 
 #include <map>
 #include <string>
 
 /**
- * V4L implementation of webcam driver
- * 
+ * V4L implementation of webcam driver.
+ *
  * @author David Ferlier
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class V4LWebcamDriver : public IWebcamDriver, public Thread {
 public:
+
 	V4LWebcamDriver(WebcamDriver *driver, int flags);
 
 	virtual ~V4LWebcamDriver();
@@ -115,4 +117,4 @@ private:
 	DevNameArray getDevices2_6();
 };
 
-#endif //V4LWEBCAMDRIVER_H
+#endif	//V4LWEBCAMDRIVER_H

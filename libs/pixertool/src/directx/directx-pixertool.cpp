@@ -24,10 +24,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/**
- * @file pixertool.h
- * @author Philippe Bernery
- */
 typedef struct {
 	GUID pix_ms;
 	pixosi pix_osi;
@@ -55,12 +51,11 @@ pixms_pixosi _ms_table[] = {
 	{ OUR_MEDIASUBTYPE_NV12, PIX_OSI_NV12 }
 };
 
-
 pixosi pix_directx_to_pix_osi(GUID pix) {
 	register unsigned i;
 	pixosi palette = PIX_OSI_UNSUPPORTED;
-	
-	for (i = 0 ; i < sizeof(_ms_table) / sizeof(pixms_pixosi) ; i++) {
+
+	for (i = 0; i < sizeof(_ms_table) / sizeof(pixms_pixosi); i++) {
 		if (memcmp(&_ms_table[i].pix_ms, &pix, sizeof(GUID)) == 0) {
 			palette = _ms_table[i].pix_osi;
 			break;
@@ -69,12 +64,11 @@ pixosi pix_directx_to_pix_osi(GUID pix) {
 	return palette;
 }
 
-
 GUID pix_directx_from_pix_osi(pixosi pix) {
 	register unsigned i;
 	GUID palette = MEDIASUBTYPE_NULL;
-	
-	for (i = 0 ; i < sizeof(_ms_table) / sizeof(pixms_pixosi) ; i++) {
+
+	for (i = 0; i < sizeof(_ms_table) / sizeof(pixms_pixosi); i++) {
 		if (_ms_table[i].pix_osi == pix) {
 			return _ms_table[i].pix_ms;
 		}

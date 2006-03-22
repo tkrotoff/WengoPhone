@@ -18,7 +18,7 @@
  */
 
 #include <Object.h>
-#include <Logger.h>
+#include <util/Logger.h>
 #include <WidgetFactory.h>
 
 #include "QtEditMyProfile.h"

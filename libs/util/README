@@ -1,4 +1,0 @@
-This package/directory is a library containing utility classes using
-the Boost libraries.
-
-libutil does not depend on Qt. It is just a plain C++ library.

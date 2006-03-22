@@ -20,7 +20,7 @@
 #ifndef ENUMPHONECALLSTATE_H
 #define ENUMPHONECALLSTATE_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 /**
  * Phone call states (error, dialing, talking...).

@@ -22,7 +22,7 @@
 
 #include "WengoAccount.h"
 
-#include <Base64.h>
+#include <util/Base64.h>
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>

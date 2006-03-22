@@ -22,7 +22,7 @@
 #include <model/chat/ChatHandler.h>
 #include <presentation/PFactory.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 CChatHandler::CChatHandler(ChatHandler & chatHandler)
 	: _chatHandler(chatHandler) {

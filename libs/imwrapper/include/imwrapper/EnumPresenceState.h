@@ -20,7 +20,7 @@
 #ifndef ENUMPRESENCESTATE_H
 #define ENUMPRESENCESTATE_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 /**
  * Presence states (online, offline, away...).

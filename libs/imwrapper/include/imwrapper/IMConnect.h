@@ -20,8 +20,8 @@
 #ifndef IMCONNECT_H
 #define IMCONNECT_H
 
-#include <Interface.h>
-#include <Event.h>
+#include <util/Interface.h>
+#include <util/Event.h>
 
 class IMAccount;
 

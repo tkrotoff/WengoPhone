@@ -29,7 +29,7 @@
 #include <QTreeWidgetItem>
 #include <QString>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 using namespace std;
 

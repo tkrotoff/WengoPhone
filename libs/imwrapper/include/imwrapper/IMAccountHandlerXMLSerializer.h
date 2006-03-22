@@ -20,7 +20,7 @@
 #ifndef IMACCOUNTHANDLERXMLSERIALIZER_H
 #define IMACCOUNTHANDLERXMLSERIALIZER_H
 
-#include <Serializable.h>
+#include <serialization/Serializable.h>
 
 class IMAccountHandler;
 
@@ -31,17 +31,17 @@ class IMAccountHandler;
  */
 class IMAccountHandlerXMLSerializer : public Serializable {
 public:
-	
+
 	IMAccountHandlerXMLSerializer(IMAccountHandler & imAccountHandler);
-	
+
 	std::string serialize();
-	
+
 	bool unserialize(const std::string & data);
-	
+
 private:
 
 	IMAccountHandler & _imAccountHandler;
-	
+
 };
 
 #endif //IMACCOUNTHANDLERXMLSERIALIZER_H

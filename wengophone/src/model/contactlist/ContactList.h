@@ -24,8 +24,8 @@
 
 #include <imwrapper/EnumPresenceState.h>
 
-#include <Event.h>
-#include <Serializable.h>
+#include <util/Event.h>
+#include <serialization/Serializable.h>
 
 #include <set>
 #include <list>

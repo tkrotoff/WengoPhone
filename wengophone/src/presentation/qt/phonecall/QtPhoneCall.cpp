@@ -29,7 +29,7 @@
 
 #include <sipwrapper/WebcamVideoFrame.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #include <WidgetFactory.h>
 #include <Object.h>

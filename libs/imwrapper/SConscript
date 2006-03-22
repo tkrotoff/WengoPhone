@@ -1,7 +1,7 @@
 env = WengoGetEnvironment()
 
 libs = [
-	'wengoutil',
+	'owsettings',
 	'glib-2.0',
 	'tinyxml',
 ]

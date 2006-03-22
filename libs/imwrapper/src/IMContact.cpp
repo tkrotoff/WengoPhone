@@ -22,7 +22,7 @@
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumIMProtocol.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 using namespace std;
 
@@ -48,7 +48,7 @@ bool IMContact::operator == (const IMContact & imContact) const {
 }
 
 bool IMContact::operator < (const IMContact & imContact) const {
-	return ((_imAccount < imContact._imAccount) 
+	return ((_imAccount < imContact._imAccount)
 		|| ((_imAccount == imContact._imAccount) && (_contactId < imContact._contactId)));
 }
 

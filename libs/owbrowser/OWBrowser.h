@@ -20,8 +20,8 @@
 #ifndef OWBROWSER_H
 #define OWBROWSER_H
 
-#include <Event.h>
-#include <Interface.h>
+#include <util/Event.h>
+#include <util/Interface.h>
 
 #include <string>
 

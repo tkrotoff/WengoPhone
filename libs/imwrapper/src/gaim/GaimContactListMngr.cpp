@@ -26,7 +26,7 @@ extern "C" {
 #include "gaim/status.h"
 }
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #define DEFAULT_GROUP_NAME	"Default"
 
@@ -127,7 +127,7 @@ void GaimContactListMngr::NewListCbk(GaimBuddyList *blist)
 const char *GaimContactListMngr::FindBuddyGroup(GaimBuddy *gBuddy)
 {
 	GaimGroup *gGroup = gaim_buddy_get_group(gBuddy);
-	
+
 	if (gGroup)
 		return gGroup->name;
 	else
@@ -140,7 +140,7 @@ void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
 	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
 	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
 												GaimIMPrcl::GetEnumIMProtocol(gPrclId));
-	
+
 	GaimIMContactList *mIMContactList = FindIMContactList(*account);
 	if (mIMContactList)
 	{
@@ -155,7 +155,7 @@ void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
 void GaimContactListMngr::NewGroupAdded(GaimGroup *gGroup)
 {
 	// GAIM CONTACT LIST GROUPS ARE NOT ASSOCIATED WITH ANY ACCOUNTS
-	// THAT'S WHY WE TAKE THE FIRST FOUND IM_CONTACTLIST 
+	// THAT'S WHY WE TAKE THE FIRST FOUND IM_CONTACTLIST
 	// TO SEND NEW_GROUP_ADDDED EVENT
 
 	IMAccount *account = _accountMngr->GetFirstIMAccount();
@@ -175,7 +175,7 @@ void GaimContactListMngr::NewGroupAdded(GaimGroup *gGroup)
 void GaimContactListMngr::NewNodeCbk(GaimBlistNode *node)
 {
 	fprintf(stderr, "GaimContactListMngr : NewNodeCbk()\n");
-	
+
 	switch (node->type)
 	{
 		case GAIM_BLIST_BUDDY_NODE:
@@ -231,10 +231,10 @@ void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 	{
 		mIMBList = FindIMContactList(*account);
 		mIMPresence = _presenceMngr->FindIMPresence(*account);
-	
+
 		if (mIMBList)
 		{
-			mIMBList->contactMovedEvent(*mIMBList, 
+			mIMBList->contactMovedEvent(*mIMBList,
 										FindBuddyGroup(gBuddy),
 										gaim_buddy_get_name(gBuddy));
 		}
@@ -242,20 +242,20 @@ void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 
 		if (mIMPresence)
 		{
-			mIMPresence->presenceStateChangedEvent(*mIMPresence, 
+			mIMPresence->presenceStateChangedEvent(*mIMPresence,
 													GaimPreState::GetPresenceState(gPresenceId),
 													"",
 													gaim_buddy_get_name(gBuddy)
 													);
 		}
 
-	}											
+	}
 }
 
 void GaimContactListMngr::UpdateCbk(GaimBuddyList *list, GaimBlistNode *node)
 {
 	fprintf(stderr, "GaimContactListMngr : UpdateCbk()\n");
-	
+
 	switch (node->type)
 	{
 		case GAIM_BLIST_BUDDY_NODE:

@@ -20,7 +20,7 @@
 #ifndef PLAYSOUNDFILE_H
 #define PLAYSOUNDFILE_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <string>
 

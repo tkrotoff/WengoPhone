@@ -32,7 +32,7 @@
 #include <imwrapper/IMPresence.h>
 #include <imwrapper/IMChatSession.h>
 
-#include <Event.h>
+#include <util/Event.h>
 
 #include <phapi.h>
 

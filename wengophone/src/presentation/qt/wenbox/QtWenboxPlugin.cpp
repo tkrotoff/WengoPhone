@@ -27,7 +27,7 @@
 #include <WidgetFactory.h>
 #include <Object.h>
 
-#include <Timer.h>
+#include <thread/Timer.h>
 
 #include <QtGui>
 

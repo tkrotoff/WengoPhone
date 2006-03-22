@@ -18,7 +18,7 @@
  */
 #include "QtEmoticon.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 QtEmoticon::QtEmoticon()
 {

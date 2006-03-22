@@ -20,7 +20,7 @@
 #ifndef SOUNDMIXEREXCEPTION_H
 #define SOUNDMIXEREXCEPTION_H
 
-#include <exception/Exception.h>
+#include <util/exception/Exception.h>
 
 /**
  * A problem occured in while manipulating an audio mixer device under Windows.

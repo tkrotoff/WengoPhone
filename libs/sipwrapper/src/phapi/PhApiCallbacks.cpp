@@ -29,8 +29,8 @@
 #include <imwrapper/EnumPresenceState.h>
 #include <imwrapper/IMChatSession.h>
 
-#include <StringList.h>
-#include <Logger.h>
+#include <util/StringList.h>
+#include <util/Logger.h>
 
 #ifdef ENABLE_VIDEO
 	#include <pixertool.h>
@@ -74,15 +74,13 @@ public:
 PhApiCallbacks::PhApiCallbacks() {
 }
 
-#include <StringList.h>
-
 void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 	int status = info->event;
 	std::string from;
 
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
     LOG_DEBUG(p->phapiCallStateToString(info->event));
- 
+
 	switch (status) {
 	case phDIALING:
 		from = info->u.remoteUri;

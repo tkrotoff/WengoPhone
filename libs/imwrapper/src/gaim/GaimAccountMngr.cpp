@@ -19,7 +19,7 @@
 
 #include "GaimAccountMngr.h"
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 GaimAccountMngr *GaimAccountMngr::_staticInstance = NULL;
 std::list<IMAccount *> GaimAccountMngr::_gaimIMAccountList;
@@ -40,7 +40,7 @@ static void C_RequestAddCbk(GaimAccount *account, const char *remote_user,
 }
 
 
-GaimAccountUiOps acc_wg_ops = 
+GaimAccountUiOps acc_wg_ops =
 {
 	C_NotifyAddedCbk,
 	NULL,
@@ -95,7 +95,7 @@ IMAccount *GaimAccountMngr::FindIMAccount(const char *login, EnumIMProtocol::IMP
 	GaimIMAccountIterator i;
 	for (i = _gaimIMAccountList.begin(); i != _gaimIMAccountList.end(); i++)
 	{
-		if ((*i)->getLogin().compare(login) == 0 
+		if ((*i)->getLogin().compare(login) == 0
 			&& (*i)->getProtocol() == protocol)
 		{
 			return (*i);
@@ -120,7 +120,7 @@ void GaimAccountMngr::RemoveIMAccount(IMAccount &account)
 	GaimIMAccountIterator i;
 	for (i = _gaimIMAccountList.begin(); i != _gaimIMAccountList.end(); i++)
 	{
-		if ((*i)->getLogin().compare(account.getLogin()) == 0 
+		if ((*i)->getLogin().compare(account.getLogin()) == 0
 			&& (*i)->getProtocol() == account.getProtocol())
 		{
 			_gaimIMAccountList.erase(i);

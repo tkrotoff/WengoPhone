@@ -24,7 +24,7 @@
 
 #include <imwrapper/EnumPresenceState.h>
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <string>
 

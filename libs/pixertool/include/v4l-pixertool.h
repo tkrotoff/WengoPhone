@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef V4L_PIXERTOOL_H
 #define V4L_PIXERTOOL_H
 
@@ -27,7 +28,7 @@ extern "C" {
 
 /**
  * Palette identifier conversion.
- * 
+ *
  * Converts from v4l palette identifier to
  * pixer palette identifier
  *
@@ -36,10 +37,9 @@ extern "C" {
  */
 pixosi pix_v4l_to_pix_osi(int pix);
 
-
 /**
  * Palette identifier conversion.
- * 
+ *
  * Converts from pixer palette identifier to
  * v4l palette identifier
  *
@@ -48,10 +48,8 @@ pixosi pix_v4l_to_pix_osi(int pix);
  */
 int pix_v4l_from_pix_osi(pixosi pix);
 
-
 #ifdef __cplusplus
 }
 #endif
 
-	
-#endif //V4L_PIXERTOOL_H
+#endif	//V4L_PIXERTOOL_H

@@ -23,7 +23,7 @@
 #include <model/config/Config.h>
 
 #include <Sound.h>
-#include <Logger.h>
+#include <util/Logger.h>
 
 Sound * PhoneCallState::_soundRingin = NULL;
 

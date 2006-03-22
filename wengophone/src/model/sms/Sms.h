@@ -20,8 +20,8 @@
 #ifndef SMS_H
 #define SMS_H
 
-#include <NonCopyable.h>
-#include <Event.h>
+#include <util/NonCopyable.h>
+#include <util/Event.h>
 #include <http/HttpRequest.h>
 
 #include <string>

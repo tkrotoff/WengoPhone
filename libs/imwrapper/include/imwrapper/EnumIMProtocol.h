@@ -20,7 +20,7 @@
 #ifndef ENUMIMPROTOCOL_H
 #define ENUMIMPROTOCOL_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <string>
 #include <map>
@@ -46,14 +46,14 @@ public:
 	};
 
 	/**
-	 * Get a protocol in string.
+	 * Gets a protocol in string.
 	 *
 	 * @return the string
 	 */
 	std::string toString(IMProtocol protocol);
 
 	/**
-	 * Get a string in protocol.
+	 * Gets a string in protocol.
 	 *
 	 * @return the protocol
 	 */

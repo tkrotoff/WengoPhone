@@ -20,7 +20,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 #include <QString>
 #include <QObject>

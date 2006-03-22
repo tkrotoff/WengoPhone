@@ -20,14 +20,14 @@
 #ifndef GAIMCONNECTMNGR_H
 #define GAIMCONNECTMNGR_H
 
-#include <list>
-
 extern "C" {
 #include "gaim/connection.h"
 }
 
 #include "GaimIMConnect.h"
 #include "GaimAccountMngr.h"
+
+#include <list>
 
 class IMAccount;
 
@@ -45,9 +45,9 @@ public:
 	GaimIMConnect *AddIMConnect(IMAccount &account);
 	void RemoveIMConnect(IMAccount &account);
 	static GaimIMConnect *FindIMConnect(IMAccount &account);
-	
+
 	/* ********** GaimConnectionsCallback *********** */
-	static void ConnProgressCbk(GaimConnection *gc, const char *text, 
+	static void ConnProgressCbk(GaimConnection *gc, const char *text,
 								size_t step, size_t step_count);
 	static void ConnConnectedCbk(GaimConnection *gc);
 	static void ConnDisconnectedCbk(GaimConnection *gc);

@@ -25,7 +25,7 @@
 
 #include <control/CWengoPhone.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #include <cassert>
 

@@ -35,8 +35,8 @@
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactGroup.h>
 
-#include <StringList.h>
-#include <Logger.h>
+#include <util/StringList.h>
+#include <util/Logger.h>
 
 #include <Object.h>
 #include <WidgetFactory.h>

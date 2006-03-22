@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef DIRECTXWEBCAMDRIVERFACTORY_H
 #define DIRECTXWEBCAMDRIVERFACTORY_H
 
@@ -23,9 +24,9 @@
 #include <DirectXWebcamDriver.h>
 
 /**
- * Webcam driver factory for Direct X
+ * Webcam driver factory for Direct X.
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class DirectXWebcamDriverFactory : public WebcamDriverFactory {
 public:
@@ -34,5 +35,4 @@ public:
 	}
 };
 
-#endif //DIRECTXWEBCAMDRIVERFACTORY_H
-
+#endif	//DIRECTXWEBCAMDRIVERFACTORY_H

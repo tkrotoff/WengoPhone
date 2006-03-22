@@ -28,7 +28,7 @@
 #include <model/contactlist/ContactList.h>
 #include <model/presence/PresenceHandler.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #include <WidgetFactory.h>
 #include <Object.h>

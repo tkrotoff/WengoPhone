@@ -16,51 +16,49 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #include <quicktime-pixertool.h>
 
 #include <QuicktimeWebcamDriver.h>
 #include <WebcamDriver.h>
-#include <Logger.h>
-#include <String.h>
+
+#include <util/Logger.h>
 
 #include <iostream>
 using namespace std;
 
-
 QuicktimeWebcamDriver::QuicktimeWebcamDriver(WebcamDriver *driver, int flags)
 : IWebcamDriver(flags) {
 	EnterMovies();
-	
+
 	_webcamDriver = driver;
 	_timer.timeoutEvent += boost::bind(&QuicktimeWebcamDriver::idleSeqGrab, this);
-	
+
 	_seqGrab = NULL;
 	_PGWorld = NULL;
 	_SGChanVideo = NULL;
 	_decomSeq = 0;
 	_isOpened = false;
-	
+
 	getDeviceList();
 	getDefaultDevice();
 }
 
-
 QuicktimeWebcamDriver::~QuicktimeWebcamDriver() {
 }
-
 
 void QuicktimeWebcamDriver::cleanup() {
 	_timer.stop();
 
 	if (_decomSeq)
 		CDSequenceEnd(_decomSeq);
-	
+
 	if (_SGChanVideo)
 		SGDisposeChannel(_seqGrab, _SGChanVideo);
-	
+
 	if (_seqGrab)
 		CloseComponent(_seqGrab);
-	
+
 	if (_PGWorld)
 		DisposeGWorld(_PGWorld);
 
@@ -68,7 +66,7 @@ void QuicktimeWebcamDriver::cleanup() {
 	_boundsRect.left = 0;
 	_boundsRect.right = 176;
 	_boundsRect.bottom = 144;
-	
+
 	_seqGrab = NULL;
 	_PGWorld = NULL;
 	_SGChanVideo = NULL;
@@ -77,32 +75,30 @@ void QuicktimeWebcamDriver::cleanup() {
 	_palette = PIX_OSI_UNSUPPORTED;
 }
 
-
-
 void QuicktimeWebcamDriver::initializeCommonComponents() {
 	OSErr err = noErr;
-	
+
 	LOG_DEBUG("Opening component");
 	_seqGrab = OpenDefaultComponent(SeqGrabComponentType, 0);
 	if (_seqGrab == NULL) {
 		LOG_ERROR("can't get default sequence grabber component");
 		return;
 	}
-	
+
 	LOG_DEBUG("Initializing component");
 	err = SGInitialize(_seqGrab);
 	if (err != noErr) {
 		LOG_ERROR("can't initialize sequence grabber component");
 		return;
 	}
-	
+
 	LOG_DEBUG("SetDataRef");
 	err = SGSetDataRef(_seqGrab, 0, 0, seqGrabDontMakeMovie);
 	if (err != noErr) {
 		LOG_ERROR("can't set the destination data reference");
 		return;
 	}
-	
+
 	LOG_DEBUG("Creating new channel");
 	err = SGNewChannel(_seqGrab, VideoMediaType, &_SGChanVideo);
 	if (err != noErr) {
@@ -111,26 +107,25 @@ void QuicktimeWebcamDriver::initializeCommonComponents() {
 	}
 }
 
-
 StringList QuicktimeWebcamDriver::getDeviceList() {
 	SGDeviceList sgDeviceList;
 	OSErr err = noErr;
 	StringList deviceList;
-	
+
 	if (!isOpened()) {
 		cleanup();
 		initializeCommonComponents();
-	
+
 		err = SGGetChannelDeviceList(_SGChanVideo, sgDeviceListIncludeInputs, &sgDeviceList);
 		if (err != noErr) {
 			LOG_ERROR("can't get device list");
 			return deviceList;
 		}
-		
+
 		for (register short i = 0 ; i < (*sgDeviceList)->count ; i++) {
 			if (!((*sgDeviceList)->entry[i].flags & sgDeviceNameFlagDeviceUnavailable)) {
 				SGDeviceInputList inputs = (*sgDeviceList)->entry[i].inputs;
-				
+
 				for (register short j = 0 ; j < (*inputs)->count ; j++) {
 					if (!((*inputs)->entry[j].flags & sgDeviceInputNameFlagInputUnavailable)) {
 						deviceList += genDeviceName((*sgDeviceList)->entry[i].name,
@@ -140,66 +135,64 @@ StringList QuicktimeWebcamDriver::getDeviceList() {
 				}
 			}
 		}
-		
+
 		SGDisposeDeviceList(_seqGrab, sgDeviceList);
-		
+
 		_deviceList = deviceList;
 	}
-		
+
 	return _deviceList;
 }
-
 
 string QuicktimeWebcamDriver::getDefaultDevice() {
 	SGDeviceList sgDeviceList;
 	OSErr err = noErr;
 	SGChannel channel;
-	
+
 	if (!isOpened()) {
 		cleanup();
 		initializeCommonComponents();
-		
+
 		err = SGGetChannelDeviceList(_SGChanVideo, sgDeviceListIncludeInputs, &sgDeviceList);
 		if (err != noErr) {
 			LOG_ERROR("can't get device list");
 			return WEBCAM_NULL;
 		}
-	
+
 		if ((*sgDeviceList)->count) {
 			short i = (*sgDeviceList)->selectedIndex;
-	
+
 			SGDeviceInputList inputs = (*sgDeviceList)->entry[i].inputs;
-				
+
 			if ((*inputs)->count) {
 				short j = (*inputs)->selectedIndex;
-				
+
 				string dev = genDeviceName((*sgDeviceList)->entry[i].name,
 					(*inputs)->selectedIndex,
 					(*inputs)->entry[j].name);
-				
+
 				_defaultDevice = dev;
 			}
 		}
-	
+
 		SGDisposeDeviceList(_seqGrab, sgDeviceList);
 	}
-	
+
 	cleanup();
-	
+
 	return _defaultDevice;
 }
-
 
 webcamerrorcode QuicktimeWebcamDriver::setDevice(const std::string &deviceName) {
 	OSErr err = noErr;
 	unsigned colonPos = deviceName.find(":", 0);
 	string device = deviceName.substr(0, colonPos);
 	short input = atoi(deviceName.substr(colonPos + 1).c_str());
-	
+
 	LOG_DEBUG("Opening device: " + deviceName);
-	
+
 	initializeCommonComponents();
-	
+
 	err = SGSetChannelDevice(_SGChanVideo, stdToPascalString(device));
 	if (err != noErr) {
 		LOG_ERROR("can't set channel device");
@@ -211,12 +204,12 @@ webcamerrorcode QuicktimeWebcamDriver::setDevice(const std::string &deviceName) 
 		LOG_ERROR("can't set channel device input");
 		return WEBCAM_NOK;
 	}
-	
+
 	LOG_DEBUG("Creating GWorld");
 	if (!createGWorld()) {
 		return WEBCAM_NOK;
 	}
-	
+
 	LOG_DEBUG("SGSetDataProc");
 	err = SGSetDataProc(_seqGrab, NewSGDataUPP(mySGDataProc), (long)this);
 	if (err != noErr) {
@@ -237,18 +230,17 @@ webcamerrorcode QuicktimeWebcamDriver::setDevice(const std::string &deviceName) 
 		LOG_ERROR("can't prepare sequence grabber component");
 		return WEBCAM_NOK;
 	}
-	
+
 	setupDecompressor();
-	
+
 	_isOpened = true;
-	
+
 	return WEBCAM_OK;
 }
 
-
 bool QuicktimeWebcamDriver::createGWorld() {
 	OSErr err = noErr;
-	
+
 	pixosi pixTable[] = {
 		PIX_OSI_RGBA32,
 		PIX_OSI_RGB32,
@@ -257,7 +249,7 @@ bool QuicktimeWebcamDriver::createGWorld() {
 	};
 	/* FIXME: These formats are not supported because of offset suppressor in
 	 * mySGDataProc.
-	 
+
 		PIX_OSI_YUV420P,
 		PIX_OSI_I420,
 		PIX_OSI_YUV422,
@@ -279,7 +271,7 @@ bool QuicktimeWebcamDriver::createGWorld() {
 		PIX_OSI_RGB1
 	};
 	*/
-	
+
 	for (register unsigned i = 0 ; i < sizeof(pixTable) / sizeof(pixosi) ; i++) {
 		LOG_DEBUG("Attempting to create a GWorld with palette #" + String::fromNumber(pixTable[i]));
 		err = QTNewGWorld(&_PGWorld, //Does'nt work with planar format
@@ -293,55 +285,50 @@ bool QuicktimeWebcamDriver::createGWorld() {
 			break;
 		}
 	}
-	
+
 	if (err != noErr) {
 		LOG_ERROR("can't create GWorld");
 		return false;
 	}
-	
+
 	if (!LockPixels(GetPortPixMap(_PGWorld))) {
 		LOG_ERROR("can't lock pixmap for decompression");
 		return false;
 	}
-	
+
 	err = SGSetGWorld(_seqGrab, _PGWorld, GetMainDevice());
 	if (err != noErr) {
 		LOG_ERROR("can't set GWorld");
 		return false;
 	}
-	
+
 	return true;
 }
-
 
 bool QuicktimeWebcamDriver::isOpened() const {
 	return _isOpened;
 }
 
-
 void QuicktimeWebcamDriver::startCapture() {
 	OSErr err = noErr;
-	
+
 	err = SGStartRecord(_seqGrab);
 	if (err != noErr) {
 		LOG_ERROR("can't start capture");
 		return;
 	}
-	
+
 	_timer.start(100, 100);
 }
-
 
 void QuicktimeWebcamDriver::pauseCapture() {
 }
 
-
 void QuicktimeWebcamDriver::stopCapture() {
 	SGStop(_seqGrab);
-	
+
 	_timer.stop();
 }
-
 
 webcamerrorcode QuicktimeWebcamDriver::setPalette(pixosi palette) {
 	if (_PGWorld) {
@@ -359,12 +346,12 @@ webcamerrorcode QuicktimeWebcamDriver::setPalette(pixosi palette) {
 		}
 
 		_palette = palette;
-		
+
 		if (_decomSeq)
 			CDSequenceEnd(_decomSeq);
 
 		setupDecompressor();
-		
+
 		return WEBCAM_OK;
 	} else {
 		LOG_ERROR("can't set palette when no device were specified before");
@@ -372,55 +359,51 @@ webcamerrorcode QuicktimeWebcamDriver::setPalette(pixosi palette) {
 	}
 }
 
-
 pixosi QuicktimeWebcamDriver::getPalette() const {
 	return _palette;
 }
 
-
 webcamerrorcode QuicktimeWebcamDriver::setFPS(unsigned fps) {
 	OSErr err = noErr;
-	
+
 	err = SGSetFrameRate(_SGChanVideo, fps);
 	if (err != noErr) {
 		return WEBCAM_NOK;
 	}
-	
+
 	return WEBCAM_OK;
 }
-
 
 unsigned QuicktimeWebcamDriver::getFPS() const {
 	Fixed framerate;
 	OSErr err = noErr;
-	
+
 	err = SGGetFrameRate(
 		_SGChanVideo,
 		&framerate);
 	if (err != noErr) {
 		return 0;
 	}
-	
+
 	return (unsigned)framerate;
 }
-
 
 webcamerrorcode QuicktimeWebcamDriver::setResolution(unsigned width, unsigned height) {
 	OSErr err = noErr;
 	Rect newBounds;
-	
+
 	newBounds.top = 0;
 	newBounds.left = 0;
 	newBounds.right = width;
 	newBounds.bottom = height;
-	
+
 	err = SGSetChannelBounds(_SGChanVideo, &newBounds);
 	if (err != noErr) {
 		err = SGGetSrcVideoBounds(_SGChanVideo, &_boundsRect);
 		if (err != noErr) {
 			LOG_WARN("can't get source video bounds");
 		}
-		
+
 		return WEBCAM_NOK;
 	} else {
 		_boundsRect.top = newBounds.top;
@@ -428,52 +411,44 @@ webcamerrorcode QuicktimeWebcamDriver::setResolution(unsigned width, unsigned he
 		_boundsRect.right = newBounds.right;
 		_boundsRect.bottom = newBounds.bottom;
 	}
-	
-	if (_decomSeq)
+
+	if (_decomSeq) {
 		CDSequenceEnd(_decomSeq);
+	}
 
 	setupDecompressor();
-	
+
 	return WEBCAM_OK;
 }
-
 
 unsigned QuicktimeWebcamDriver::getWidth() const {
 	return _boundsRect.right - _boundsRect.left;
 }
 
-
 unsigned QuicktimeWebcamDriver::getHeight() const {
 	return _boundsRect.bottom - _boundsRect.top;
 }
 
-
 void QuicktimeWebcamDriver::setBrightness(int brightness) {
 }
-
 
 int QuicktimeWebcamDriver::getBrightness() const {
 	return 0;
 }
 
-
 void QuicktimeWebcamDriver::setContrast(int contrast) {
 }
-
 
 int QuicktimeWebcamDriver::getContrast() const {
 	return 0;
 }
 
-
 void QuicktimeWebcamDriver::flipHorizontally(bool flip) {
 }
-
 
 void QuicktimeWebcamDriver::frameBufferAvailable(piximage *image) {
 	_webcamDriver->frameBufferAvailable(image);
 }
-
 
 void QuicktimeWebcamDriver::logPixMap(PixMap *pm) {
 	LOG_DEBUG(string("\nPixMap:")
@@ -497,21 +472,20 @@ void QuicktimeWebcamDriver::logPixMap(PixMap *pm) {
 		+ "\n\tpmExt: " + String::fromNumber((unsigned)pm->pmExt));
 }
 
-
-OSErr mySGDataProc(SGChannel c, 
+OSErr mySGDataProc(SGChannel c,
 	Ptr p,
 	long len,
 	long *offset,
 	long chRefCon,
 	TimeValue time,
-	short writeType, 
+	short writeType,
 	long refCon) {
-		 
+
 	CodecFlags ignore;
 	ComponentResult err = noErr;
 	QuicktimeWebcamDriver *webcamDriver = (QuicktimeWebcamDriver *)refCon;
 	piximage *image;
-	
+
 	if(webcamDriver->_PGWorld) {
 		LOG_DEBUG("decompressing");
 		err = DecompressSequenceFrameS(webcamDriver->_decomSeq,
@@ -525,10 +499,10 @@ OSErr mySGDataProc(SGChannel c,
 			return err;
 		}
 	}
-	
+
 	// Shifting data. MacOS X introduces an offset on each picture line
 	// FIXME: This shift does work only with RGB format
-	image = pix_alloc(webcamDriver->_palette, webcamDriver->getWidth(), webcamDriver->getHeight()); 
+	image = pix_alloc(webcamDriver->_palette, webcamDriver->getWidth(), webcamDriver->getHeight());
 
 	PixMap *pixmap = *GetGWorldPixMap(webcamDriver->_PGWorld);
 	uint8_t *data;
@@ -538,7 +512,7 @@ OSErr mySGDataProc(SGChannel c,
 	LOG_DEBUG("rowBytes: " + String::fromNumber(rowBytes)
 		+ ", pixelSize: " + String::fromNumber(pixelSize)
 		+ ", lineOffset: " + String::fromNumber(lineOffset));
-	
+
 	QuicktimeWebcamDriver::logPixMap(pixmap);
 
 	data = (uint8_t *)GetPixBaseAddr(GetGWorldPixMap(webcamDriver->_PGWorld));
@@ -547,19 +521,18 @@ OSErr mySGDataProc(SGChannel c,
 		unsigned offset = line * (image->width * pixelSize + lineOffset);
 		memcpy(image->data + ((line * image->width) * pixelSize), data + offset, (rowBytes - lineOffset));
 	}
-	
+
 	webcamDriver->frameBufferAvailable(image);
 
 	pix_free(image);
-	
+
 	return noErr;
 }
-
 
 void QuicktimeWebcamDriver::setupDecompressor() {
 	ComponentResult	err = noErr;
 	Rect sourceRect = { 0, 0, getWidth(), getHeight() };
-	MatrixRecord scaleMatrix;	
+	MatrixRecord scaleMatrix;
 	ImageDescriptionHandle imageDesc = (ImageDescriptionHandle)NewHandle(0);
 
 	err = SGGetChannelSampleDescription(_SGChanVideo, (Handle)imageDesc);
@@ -567,11 +540,11 @@ void QuicktimeWebcamDriver::setupDecompressor() {
 		LOG_ERROR("can't get channel sample description");
 		return;
 	}
-	
+
 	sourceRect.right = (**imageDesc).width;
 	sourceRect.bottom = (**imageDesc).height;
 	RectMatrix(&scaleMatrix, &sourceRect, &_boundsRect);
-	
+
 	err = DecompressSequenceBegin(&_decomSeq,
 				      imageDesc,
 				      _PGWorld,
@@ -587,14 +560,13 @@ void QuicktimeWebcamDriver::setupDecompressor() {
 		LOG_ERROR("can't begin decompress sequences");
 		return;
 	}
-	
+
 	DisposeHandle((Handle)imageDesc);
 }
 
-
 void QuicktimeWebcamDriver::idleSeqGrab() {
 	OSErr err;
-	
+
 	LOG_DEBUG("idle");
 	err = SGIdle(_seqGrab);
 	if (err != noErr) {
@@ -603,45 +575,40 @@ void QuicktimeWebcamDriver::idleSeqGrab() {
 	}
 }
 
-
-
 string QuicktimeWebcamDriver::pascalToStdString(Str255 pStr) {
 	unsigned size = pStr[0];
 	char buffer[255]; // A pascal string is not longer than 255 bytes
-	
+
 	memcpy(buffer, pStr + 1, size);
 	buffer[size] = 0;
-	
+
 	return buffer;
 }
-
 
 unsigned char *QuicktimeWebcamDriver::stdToPascalString(const std::string &str) {
 	if (str.size() <= 255) {
 		static Str255 buffer;
 		buffer[0] = str.size();
-		
+
 		memcpy(buffer + 1, str.c_str(), str.size());
-		
+
 		return buffer;
 	} else {
 		return NULL;
 	}
 }
 
-
-string QuicktimeWebcamDriver::genDeviceName(unsigned char *device, 
+string QuicktimeWebcamDriver::genDeviceName(unsigned char *device,
 	short inputIndex, unsigned char *input) {
-	
+
 	char buffer[32];
 	sprintf(buffer, "%d", inputIndex);
-	
-	string devName = pascalToStdString(device) + 
+
+	string devName = pascalToStdString(device) +
 		":" +
 		buffer +
 		":" +
 		pascalToStdString(input);
-	
+
 	return devName;
 }
-

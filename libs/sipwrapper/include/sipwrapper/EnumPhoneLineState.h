@@ -20,7 +20,7 @@
 #ifndef ENUMPHONELINESTATE_H
 #define ENUMPHONELINESTATE_H
 
-#include <NonCopyable.h>
+#include <util/NonCopyable.h>
 
 /**
  * Phone line states (server error, timeout, closed...).

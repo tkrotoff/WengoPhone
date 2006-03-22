@@ -1,48 +1,13 @@
-env = WengoGetEnvironment()
-
-libs = [
-	'boost',
-	'wengocurl',
-	'global',
-	'tinyxml',
-]
-lib_path = []
-include_path = ['include']
-link_flags = []
-headers = []
-sources = [
-	'src/Startup.cpp',
-	'src/WebBrowser.cpp',
-	'src/StringList.cpp',
-	'src/StringListXMLSerializer.cpp',
-	'src/File.cpp',
-	'src/Settings.cpp',
-	'src/Base64.cpp',
-	'src/Timer.cpp',
-	'src/Logger.cpp',
-	'src/Settings.cpp',
-	'src/SettingsXMLSerializer.cpp',
-	'src/http/HttpRequest.cpp',
-	'src/http/NullHttpRequest.cpp',
-	'src/http/CurlHttpRequest.cpp',
-	'src/IdGenerator.cpp',
+projects = [
+	'cutil',
+	'core',
+	'thread',
+	'memorydump',
+	'http',
+	'serialization',
+	'shlibloader',
+	'settings',
+	'system',
 ]
 
-if WengoOSWindows():
-	libs += ['advapi32', 'shell32']
-
-elif WengoOSMacOSX():	
-	link_flags += ['-framework CoreFoundation']
-
-if WengoCCMSVC():
-	sources += ['src/win32/MemoryDump.cpp']
-	libs += ['shlwapi']
-
-env.WengoAddLinkFlags(link_flags)
-env.WengoAddIncludePath(include_path)
-env.WengoUseLibraries(libs)
-env.WengoAddDoxyfile()
-
-env.WengoStaticLibrary('wengoutil', sources)
-
-env.SConscript('tests/SConscript')
+SConscript(dirs = projects)
