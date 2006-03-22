@@ -6,10 +6,12 @@ libs = [
 	'qtutil',
 	'webcam',
 	'qt4',
-	'owmemorydump',
 	'owbrowser',
 	'trayicon'
 ]
+if WengoCCMSVC():
+	libs.append('owmemorydump')
+
 if WengoOSMacOSX():
 	libs += ['glib-2.0', 'gthread-2.0']
 lib_path = []
