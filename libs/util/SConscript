@@ -2,12 +2,14 @@ projects = [
 	'cutil',
 	'util',
 	'thread',
-	'memorydump',
 	'http',
 	'serialization',
 	'shlibloader',
 	'settings',
 	'system',
 ]
+
+if WengoCCMSVC():
+	projects.append('memorydump')
 
 SConscript(dirs = projects)
