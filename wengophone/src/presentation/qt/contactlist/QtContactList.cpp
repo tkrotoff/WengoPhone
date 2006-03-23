@@ -38,9 +38,9 @@
 #include <util/StringList.h>
 #include <util/Logger.h>
 
-#include <Object.h>
-#include <WidgetFactory.h>
-#include <MouseEventFilter.h>
+#include <qtutil/Object.h>
+#include <qtutil/WidgetFactory.h>
+#include <qtutil/MouseEventFilter.h>
 
 #include <QtGui>
 #include <QDebug>

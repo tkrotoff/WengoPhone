@@ -26,7 +26,7 @@ if not, write to the Free Software
 
 #include <QtGui>
 #include <QGridLayout>
-#include <Object.h>
+#include <qtutil/Object.h>
 #include "QtNotificationSettings.h"
 
 /**

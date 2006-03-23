@@ -17,14 +17,14 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <WidgetFactory.h>
+#include <qtutil/WidgetFactory.h>
 #include <QtGui>
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
 #include <util/Logger.h>
-#include <Object.h>
+#include <qtutil/Object.h>
 
 #include "QtProtocolSettings.h"
 

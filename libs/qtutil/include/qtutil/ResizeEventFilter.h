@@ -17,24 +17,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENABLEDCHANGEEVENTFILTER_H
-#define ENABLEDCHANGEEVENTFILTER_H
+#ifndef RESIZEEVENTFILTER_H
+#define RESIZEEVENTFILTER_H
 
-#include <EventFilter.h>
+#include <qtutil/EventFilter.h>
 
 /**
- * Catch EnabledChange.
+ * Catch Resize.
  *
  * @author Tanguy Krotoff
  */
-class EnabledChangeEventFilter : public EventFilter {
+class ResizeEventFilter : public EventFilter {
 public:
 
-	EnabledChangeEventFilter(QObject * receiver, const char * member);
+	ResizeEventFilter(QObject * receiver, const char * member);
 
 protected:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
 
-#endif	//ENABLEDCHANGEEVENTFILTER_H
+#endif	//RESIZEEVENTFILTER_H

@@ -23,7 +23,7 @@
 #include "control/contactlist/CContactList.h"
 #include "presentation/PContactList.h"
 
-#include <QObjectThreadSafe.h>
+#include <qtutil/QObjectThreadSafe.h>
 
 #include <map>
 
@@ -75,7 +75,7 @@ private:
 	QTreeWidget * _treeWidget;
 
 	QTreeWidgetItem * _previous;
-	
+
 	QTreeWidgetItem * _lastClicked;
 
 };

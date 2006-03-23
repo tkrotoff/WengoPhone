@@ -17,41 +17,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef KEYEVENTFILTER_H
-#define KEYEVENTFILTER_H
+#ifndef PAINTEVENTFILTER_H
+#define PAINTEVENTFILTER_H
 
-#include <EventFilter.h>
+#include <qtutil/EventFilter.h>
 
 /**
- * Catch KeyPress.
+ * Catch Paint.
  *
- * @author Philippe Bernery
+ * @author Tanguy Krotoff
  */
-class KeyPressEventFilter : public EventFilter {
+class PaintEventFilter : public EventFilter {
 public:
 
-	KeyPressEventFilter(QObject * receiver, const char * member);
+	PaintEventFilter(QObject * receiver, const char * member);
 
 protected:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
 
-
-/**
- * Catch KeyRelease.
- *
- * @author Philippe Bernery
- */
-class KeyReleaseEventFilter : public EventFilter {
-public:
-
-	KeyReleaseEventFilter(QObject * receiver, const char * member);
-
-protected:
-
-	virtual bool eventFilter(QObject * watched, QEvent * event);
-};
-
-
-#endif	//KEYEVENTFILTER_H
+#endif	//PAINTEVENTFILTER_H

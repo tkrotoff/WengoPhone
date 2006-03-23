@@ -24,8 +24,8 @@
 #include <control/CWengoPhone.h>
 #include <control/wenbox/CWenboxPlugin.h>
 
-#include <WidgetFactory.h>
-#include <Object.h>
+#include <qtutil/WidgetFactory.h>
+#include <qtutil/Object.h>
 
 #include <thread/Timer.h>
 

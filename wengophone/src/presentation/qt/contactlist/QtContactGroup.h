@@ -25,7 +25,7 @@
 
 #include <control/contactlist/CContactGroup.h>
 
-#include <QObjectThreadSafe.h>
+#include <qtutil/QObjectThreadSafe.h>
 
 class QtContactList;
 

@@ -21,11 +21,11 @@
 
 #include "SkinInfoReader.h"
 
-#include <PaintEventFilter.h>
-#include <MouseEventFilter.h>
-#include <EnabledChangeEventFilter.h>
+#include <qtutil/PaintEventFilter.h>
+#include <qtutil/MouseEventFilter.h>
+#include <qtutil/EnabledChangeEventFilter.h>
 
-#include <Object.h>
+#include <qtutil/Object.h>
 
 #include <QWidget>
 #include <QPixmap>
@@ -84,26 +84,26 @@ void SkinWidget::setPixmaps(QPixmap * regular, QPixmap * active, QPixmap * hover
 	enabledChangeEvent();
 
 	//Mouse event filters
-	_widget->installEventFilter(new MouseReleaseEventFilter(this, SLOT(mouseReleaseEvent()), _widget));
-	_widget->installEventFilter(new MousePressEventFilter(this, SLOT(mousePressEvent()), _widget));
+	_widget->installEventFilter(new MouseReleaseEventFilter(this, SLOT(mouseReleaseEvent())));
+	_widget->installEventFilter(new MousePressEventFilter(this, SLOT(mousePressEvent())));
 
 	//Enable mouse hover event
 	_widget->setAttribute(Qt::WA_Hover, true);
 
 	//Mouse hover filters
-	_widget->installEventFilter(new MouseHoverLeaveEventFilter(this, SLOT(mouseHoverLeaveEvent()), _widget));
+	_widget->installEventFilter(new MouseHoverLeaveEventFilter(this, SLOT(mouseHoverLeaveEvent())));
 	if (!_hoverPix->isNull()) {
-		_widget->installEventFilter(new MouseHoverEnterEventFilter(this, SLOT(mouseHoverEnterEvent()), _widget));
+		_widget->installEventFilter(new MouseHoverEnterEventFilter(this, SLOT(mouseHoverEnterEvent())));
 	}
 
 	if (!_disablePix->isNull()) {
 		//Enabled event filter
-		_widget->installEventFilter(new EnabledChangeEventFilter(this, SLOT(enabledChangeEvent()), _widget));
+		_widget->installEventFilter(new EnabledChangeEventFilter(this, SLOT(enabledChangeEvent())));
 	}
 
 	if (!_regularPix->isNull()) {
 		//Paint event filter
-		_widget->installEventFilter(new PaintEventFilter(this, SLOT(paintEvent()), _widget));
+		_widget->installEventFilter(new PaintEventFilter(this, SLOT(paintEvent())));
 	}
 
 	if (_xPos != SkinInfoReader::VALUE_ERROR && _yPos != SkinInfoReader::VALUE_ERROR &&

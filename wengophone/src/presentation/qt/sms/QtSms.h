@@ -23,7 +23,7 @@
 #include <presentation/PSms.h>
 #include <control/sms/CSms.h>
 
-#include <QObjectThreadSafe.h>
+#include <qtutil/QObjectThreadSafe.h>
 
 class QtWengoPhone;
 

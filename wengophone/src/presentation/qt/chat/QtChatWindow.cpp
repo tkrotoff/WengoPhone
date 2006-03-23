@@ -20,19 +20,19 @@
 #include "QtChatWindow.h"
 #include "QtChatWidget.h"
 
-#include <Object.h>
+#include <qtutil/Object.h>
 #include <util/Logger.h>
 
 ChatWindow::ChatWindow(IMChatSession & imChatSession) : QObjectThreadSafe() //, _imChatSession(imChatSession)
 {
     LOG_DEBUG("ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(), _imChatSession(imChatSession)");
 	_imChatSession = &imChatSession;
-	
+
     _imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1, _2, _3);
 
     typedef PostEvent0<void ()> MyPostEvent;
-    MyPostEvent * event = 
+    MyPostEvent * event =
         new MyPostEvent(boost::bind(&ChatWindow::initThreadSafe, this));
 	postEvent(event);
 }
@@ -40,7 +40,7 @@ ChatWindow::ChatWindow(IMChatSession & imChatSession) : QObjectThreadSafe() //, 
 void ChatWindow::messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message) {
     typedef PostEvent3<void (IMChatSession & sender, const IMContact & from, const std::string message),
         IMChatSession &, const IMContact&, const std::string> MyPostEvent;
-	MyPostEvent * event = 
+	MyPostEvent * event =
 		new MyPostEvent(boost::bind(&ChatWindow::messageReceivedEventHandlerThreadSafe, this, _1, _2, _3), sender, from, message);
 	postEvent(event);
 }
@@ -50,7 +50,7 @@ void ChatWindow::newMessage(IMChatSession *session,const QString & msg)
     LOG_DEBUG("ChatWindow::newMessage : sending message");
 	// session->sendMessage(msg.toStdString());
 	std::string message(msg.toUtf8().constData());
-	
+
 	session->sendMessage(message);
 }
 
@@ -61,14 +61,14 @@ void ChatWindow::show()
 
 void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string message)
 {
-	
+
 	LOG_DEBUG("message received: " + message);
     QString senderName = QString::fromStdString(from.getContactId());
     // QString msg = QString::fromStdString(message);
 	QString msg = QString::fromUtf8(message.c_str());
     _dialog.show();
 	int tabs=_tabWidget->count();
-	
+
 	qDebug() << "Sender : " << senderName;
 	for (int i=0; i<tabs;i++)
 	{
@@ -87,7 +87,7 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession)
 {
 	imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1, _2, _3);
-	
+
 	if ( imChatSession->getIMContactSet().size() != 0 ) {
 		IMContact from = *imChatSession->getIMContactSet().begin();
 		addChat(imChatSession,from);
@@ -103,7 +103,7 @@ void ChatWindow::initThreadSafe() {
 	layout->addWidget(_widget);
 	layout->setMargin(0);
 	_dialog.setLayout(layout);
-	
+
 	_tabWidget = _seeker.getTabWidget(_widget,"tabWidget");
 	_tabWidget->removeTab(0);
 	_dialog.resize(384,464);
@@ -121,7 +121,7 @@ void ChatWindow::addChat(IMChatSession * session,const IMContact & from )
 	QString senderName = QString::fromStdString(from.getContactId());
     _chatWidget = new ChatWidget(_tabWidget);
 	_chatWidget->setIMChatSession(session);
-    
+
 	if (_tabWidget->count()>0)
 		_tabWidget->insertTab(_tabWidget->count(),_chatWidget,senderName);
 	else

@@ -17,24 +17,41 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef RESIZEEVENTFILTER_H
-#define RESIZEEVENTFILTER_H
+#ifndef KEYEVENTFILTER_H
+#define KEYEVENTFILTER_H
 
-#include <EventFilter.h>
+#include <qtutil/EventFilter.h>
 
 /**
- * Catch Resize.
+ * Catch KeyPress.
  *
- * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
-class ResizeEventFilter : public EventFilter {
+class KeyPressEventFilter : public EventFilter {
 public:
 
-	ResizeEventFilter(QObject * receiver, const char * member);
+	KeyPressEventFilter(QObject * receiver, const char * member);
 
 protected:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
 
-#endif	//RESIZEEVENTFILTER_H
+
+/**
+ * Catch KeyRelease.
+ *
+ * @author Philippe Bernery
+ */
+class KeyReleaseEventFilter : public EventFilter {
+public:
+
+	KeyReleaseEventFilter(QObject * receiver, const char * member);
+
+protected:
+
+	virtual bool eventFilter(QObject * watched, QEvent * event);
+};
+
+
+#endif	//KEYEVENTFILTER_H

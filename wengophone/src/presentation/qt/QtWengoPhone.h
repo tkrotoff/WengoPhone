@@ -23,7 +23,7 @@
 #include <presentation/PWengoPhone.h>
 #include <model/account/SipAccount.h>
 
-#include <QObjectThreadSafe.h>
+#include <qtutil/QObjectThreadSafe.h>
 
 #include <QMainWindow>
 #include <QMenu>
@@ -171,23 +171,23 @@ private:
 	QMenu * _trayMenu;
 
 	QtSms * _qtSms;
-    
+
 	QtBrowser *_browser;
 
 	static const std::string ANCHOR_CONTACTLIST;
-	
+
 	static const std::string ANCHOR_HISTORY;
-	
+
 	static const std::string ANCHOR_CONFIGURATION;
-	
+
 	static const std::string ANCHOR_DIALPAD;
-	
+
 	static const std::string ANCHOR_ADDCONTACT;
-	
+
 	static const std::string ANCHOR_SELFCARE;
 
 	static const std::string ANCHOR_FORUM;
-    
+
 	static const std::string URL_WENGO_MINI_HOME;
 
 	static const std::string LOCAL_WEB_DIR;

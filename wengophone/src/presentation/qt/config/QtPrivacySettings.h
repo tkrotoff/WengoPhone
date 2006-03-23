@@ -22,7 +22,7 @@
 
 
 #include <QtGui>
-#include <WidgetFactory.h>
+#include <qtutil/WidgetFactory.h>
 
 class QtPrivacySettings : public QWidget
 {

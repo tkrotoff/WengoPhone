@@ -19,7 +19,7 @@
 
 #include "QtAdvancedSettings.h"
 
-#include <Object.h>
+#include <qtutil/Object.h>
 
 QtAdvancedSettings::QtAdvancedSettings( QWidget * parent, Qt::WFlags f ) : QWidget ( parent, f ) {
 	_widget = WidgetFactory::create( ":/forms/config/AdvancedSettings.ui", this );

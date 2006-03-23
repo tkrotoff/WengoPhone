@@ -22,7 +22,7 @@
 
 #include "presentation/PPhoneCall.h"
 
-#include <QObjectThreadSafe.h>
+#include <qtutil/QObjectThreadSafe.h>
 
 class WebcamVideoFrame;
 class CPhoneCall;

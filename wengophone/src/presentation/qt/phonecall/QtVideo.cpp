@@ -23,9 +23,9 @@
 
 #include <webcam/WebcamDriver.h>
 
-#include <PaintEventFilter.h>
-#include <WidgetFactory.h>
-#include <Object.h>
+#include <qtutil/PaintEventFilter.h>
+#include <qtutil/WidgetFactory.h>
+#include <qtutil/Object.h>
 
 #include <QtGui>
 

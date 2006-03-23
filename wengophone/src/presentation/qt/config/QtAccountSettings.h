@@ -5,7 +5,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 
-#include <WidgetFactory.h>
+#include <qtutil/WidgetFactory.h>
 #include "QtProtocolSettings.h"
 
 class QtAccountSettings : public QWidget {

@@ -45,8 +45,8 @@
 #include "config/QtWengoConfigDialog.h"
 #include "statusbar/QtStatusBar.h"
 
-#include <WidgetFactory.h>
-#include <Object.h>
+#include <qtutil/WidgetFactory.h>
+#include <qtutil/Object.h>
 #include <thread/Thread.h>
 #include <util/Logger.h>
 #include <QtBrowser.h>

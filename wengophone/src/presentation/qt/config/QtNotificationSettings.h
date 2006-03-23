@@ -2,7 +2,7 @@
 #define NOTIFICATIONSETTINGS_H
 
 #include <QtGui>
-#include <WidgetFactory.h>
+#include <qtutil/WidgetFactory.h>
 
 
 class QtNotificationSettings : public QWidget {

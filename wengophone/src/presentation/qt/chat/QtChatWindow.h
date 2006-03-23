@@ -22,12 +22,12 @@
 
 #include <QtGui>
 #include <string>
-#include <WidgetFactory.h>
+#include <qtutil/WidgetFactory.h>
 #include "widgetseeker.h"
 #include "QtChatWidget.h"
 #include <imwrapper/IMContact.h>
 #include <imwrapper/IMChatSession.h>
-#include <QObjectThreadSafe.h>
+#include <qtutil/QObjectThreadSafe.h>
 // class IMChatSession;
 // class IMContact;
 

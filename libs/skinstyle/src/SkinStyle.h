@@ -22,7 +22,7 @@
 
 #include "SkinInfoReader.h"
 
-#include <global.h>
+#include <cutil/global.h>
 
 #ifdef OS_WINDOWS
 	#include <QWindowsXPStyle>

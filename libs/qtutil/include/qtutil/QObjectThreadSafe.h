@@ -20,7 +20,7 @@
 #ifndef QOBJECTTHREADSAFE_H
 #define QOBJECTTHREADSAFE_H
 
-#include <PostEvent.h>
+#include <qtutil/PostEvent.h>
 
 #include <QObject>
 

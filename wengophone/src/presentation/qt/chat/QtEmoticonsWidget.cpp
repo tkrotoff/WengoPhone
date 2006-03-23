@@ -20,12 +20,12 @@
 #include "QtEmoticonsWidget.h"
 #include "QtEmoticonButton.h"
 
-#include <WidgetFactory.h>
+#include <qtutil/WidgetFactory.h>
 #include <QtXml>
 #include <util/Logger.h>
 
 EmoticonsWidget::EmoticonsWidget(QWidget * parent, Qt::WFlags f) : QWidget(parent,f){
-    
+
     _layout = new QGridLayout(this);
     _layout->setMargin(0);
     loadConfig("emoticons/icondef.xml");
@@ -34,7 +34,7 @@ EmoticonsWidget::EmoticonsWidget(QWidget * parent, Qt::WFlags f) : QWidget(paren
 	_stat=Popup;
 
 //    QPushButton * exitButton = _seeker.getPushButton(_widget, "emoticonCloseButton");
-    
+
 //    connect(exitButton,SIGNAL(clicked()),this,SLOT(changeStat()));
 
 }
@@ -68,10 +68,10 @@ void EmoticonsWidget::loadConfig(const QString & path)
 	//regexp = QString("(\\b(%1))|((%2)\\b)").arg(regexp).arg(regexp);
 	_buttonX = 0;
 	_buttonY = 0;
-	
+
 	QFile file(path);
 	QDomDocument doc("wengoIcons");
-	
+
     if (!file.open(QIODevice::ReadOnly))
         return;
     if (!doc.setContent(&file)) {
@@ -79,17 +79,17 @@ void EmoticonsWidget::loadConfig(const QString & path)
         return;
     }
     file.close();
-	
+
 	QDomElement docElem = doc.documentElement();
 
 	QDomNode n = docElem.firstChild();
-	
+
 	QtEmoticon emoticon;
-	
+
 	QStringList textList;
 
 	while(!n.isNull()) {
-        QDomElement e = n.toElement(); 
+        QDomElement e = n.toElement();
         if(!e.isNull()) {
 			if (e.tagName() == "icon")
 			{
@@ -125,7 +125,7 @@ void EmoticonsWidget::loadConfig(const QString & path)
 }
 
 void EmoticonsWidget::addButton(QtEmoticon emoticon){
-	
+
 	if ( _buttonX == 3 ){
 		_buttonX=0;
 		_buttonY+=1;

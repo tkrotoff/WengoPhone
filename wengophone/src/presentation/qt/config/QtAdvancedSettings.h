@@ -3,7 +3,7 @@
 
 #include <QtGui>
 
-#include <WidgetFactory.h>
+#include <qtutil/WidgetFactory.h>
 
 
 class QtAdvancedSettings : public QWidget {

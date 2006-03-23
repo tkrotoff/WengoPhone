@@ -21,8 +21,8 @@
 
 #include <util/Logger.h>
 
-#include <WidgetFactory.h>
-#include <Object.h>
+#include <qtutil/WidgetFactory.h>
+#include <qtutil/Object.h>
 
 #include <QtGui>
 

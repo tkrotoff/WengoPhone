@@ -31,8 +31,8 @@
 #include <util/Logger.h>
 #include <util/StringList.h>
 
-#include <Object.h>
-#include <WidgetFactory.h>
+#include <qtutil/Object.h>
+#include <qtutil/WidgetFactory.h>
 
 #include <QtGui>
 

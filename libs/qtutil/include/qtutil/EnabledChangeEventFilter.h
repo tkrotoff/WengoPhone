@@ -17,24 +17,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PAINTEVENTFILTER_H
-#define PAINTEVENTFILTER_H
+#ifndef ENABLEDCHANGEEVENTFILTER_H
+#define ENABLEDCHANGEEVENTFILTER_H
 
-#include <EventFilter.h>
+#include <qtutil/EventFilter.h>
 
 /**
- * Catch Paint.
+ * Catch EnabledChange.
  *
  * @author Tanguy Krotoff
  */
-class PaintEventFilter : public EventFilter {
+class EnabledChangeEventFilter : public EventFilter {
 public:
 
-	PaintEventFilter(QObject * receiver, const char * member);
+	EnabledChangeEventFilter(QObject * receiver, const char * member);
 
 protected:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
 
-#endif	//PAINTEVENTFILTER_H
+#endif	//ENABLEDCHANGEEVENTFILTER_H

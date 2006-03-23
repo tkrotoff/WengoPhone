@@ -23,8 +23,8 @@
 #include "SkinWindow.h"
 #include "SkinButton.h"
 
-#include <Object.h>
-#include <NonResizeableWidget.h>
+#include <qtutil/Object.h>
+#include <qtutil/NonResizeableWidget.h>
 
 #include <QtGui>
 
@@ -250,7 +250,7 @@ void SkinStyle::skinButton(QWidget * widget, const QString & objectName) {
 	SkinButton * button = new SkinButton(widget);
 
 	cout << "object name: " << objectName.toStdString() << endl;
-	
+
 	setWidgetPosition(button, objectName);
 	setWidgetSize(button, objectName);
 	setMask(button, objectName);

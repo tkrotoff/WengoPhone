@@ -22,7 +22,7 @@
 
 #include "presentation/PPhoneLine.h"
 
-#include <QObjectThreadSafe.h>
+#include <qtutil/QObjectThreadSafe.h>
 
 class CPhoneLine;
 class CWengoPhone;

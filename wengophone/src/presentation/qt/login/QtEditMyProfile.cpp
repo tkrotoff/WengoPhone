@@ -17,9 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Object.h>
+#include <qtutil/Object.h>
 #include <util/Logger.h>
-#include <WidgetFactory.h>
+#include <qtutil/WidgetFactory.h>
 
 #include "QtEditMyProfile.h"
 

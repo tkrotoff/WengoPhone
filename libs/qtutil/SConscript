@@ -7,18 +7,18 @@ libs = [
 lib_path = []
 include_path = ['include']
 headers = [
-	'include/EventFilter.h',
-	'include/KeyEventFilter.h',
-	'include/MouseEventFilter.h',
-	'include/PaintEventFilter.h',
-	'include/EnabledChangeEventFilter.h',
-	'include/PostEvent.h',
-	'include/WidgetFactory.h',
-	'include/Object.h',
-	'include/QObjectThreadSafe.h',
-	'include/ResizeEventFilter.h',
-	'include/NonResizeableWidget.h',
-	'include/StringListConvert.h'
+	'include/qtutil/EventFilter.h',
+	'include/qtutil/KeyEventFilter.h',
+	'include/qtutil/MouseEventFilter.h',
+	'include/qtutil/PaintEventFilter.h',
+	'include/qtutil/EnabledChangeEventFilter.h',
+	'include/qtutil/PostEvent.h',
+	'include/qtutil/WidgetFactory.h',
+	'include/qtutil/Object.h',
+	'include/qtutil/QObjectThreadSafe.h',
+	'include/qtutil/ResizeEventFilter.h',
+	'include/qtutil/NonResizeableWidget.h',
+	'include/qtutil/StringListConvert.h'
 ]
 sources = [
 	'src/EventFilter.cpp',

@@ -19,7 +19,7 @@
 
 #include "SkinWindow.h"
 
-#include <MouseEventFilter.h>
+#include <qtutil/MouseEventFilter.h>
 
 #include <QWidget>
 #include <QPalette>
@@ -40,8 +40,8 @@ SkinWindow::SkinWindow(QWidget * window) : SkinWidget(window) {
 	//_window->setWindowFlags(Qt::FramelessWindowHint);
 
 	//Mouse event filters
-	_window->installEventFilter(new MouseMoveEventFilter(this, SLOT(mouseMoveEvent(QEvent *)), _window));
-	_window->installEventFilter(new MousePressEventFilter(this, SLOT(mousePressEvent(QEvent *)), _window));
+	_window->installEventFilter(new MouseMoveEventFilter(this, SLOT(mouseMoveEvent(QEvent *))));
+	_window->installEventFilter(new MousePressEventFilter(this, SLOT(mousePressEvent(QEvent *))));
 }
 
 void SkinWindow::setBackgroundPixmap(QPixmap * pixmap) {

@@ -17,9 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <NonResizeableWidget.h>
+#include <qtutil/NonResizeableWidget.h>
 
-#include <ResizeEventFilter.h>
+#include <qtutil/ResizeEventFilter.h>
 
 #include <QWidget>
 

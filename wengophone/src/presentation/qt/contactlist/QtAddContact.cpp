@@ -30,9 +30,9 @@
 
 #include <util/Logger.h>
 
-#include <WidgetFactory.h>
-#include <Object.h>
-#include <StringListConvert.h>
+#include <qtutil/WidgetFactory.h>
+#include <qtutil/Object.h>
+#include <qtutil/StringListConvert.h>
 
 #include <QtGui>
 

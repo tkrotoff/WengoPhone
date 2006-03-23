@@ -20,7 +20,7 @@
 #ifndef QTLOGGER_H
 #define QTLOGGER_H
 
-#include <QObjectThreadSafe.h>
+#include <qtutil/QObjectThreadSafe.h>
 
 class QWidget;
 

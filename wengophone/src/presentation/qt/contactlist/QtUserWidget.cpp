@@ -21,7 +21,7 @@
 
 #include "QtUserWidgetAvatarManager.h"
 
-#include <WidgetFactory.h>
+#include <qtutil/WidgetFactory.h>
 
 #include <QtGui>
 

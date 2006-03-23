@@ -4,7 +4,7 @@
 
 #include <QtGui>
 
-#include <WidgetFactory.h>
+#include <qtutil/WidgetFactory.h>
 
 
 class QtAudioSettings : public QWidget

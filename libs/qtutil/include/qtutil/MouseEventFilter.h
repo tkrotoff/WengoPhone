@@ -20,7 +20,7 @@
 #ifndef MOUSEEVENTFILTER_H
 #define MOUSEEVENTFILTER_H
 
-#include <EventFilter.h>
+#include <qtutil/EventFilter.h>
 
 /**
  * Catch MouseMove.

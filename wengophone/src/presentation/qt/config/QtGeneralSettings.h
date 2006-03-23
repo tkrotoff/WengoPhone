@@ -21,7 +21,7 @@
 #define QTGENERALSETTINGS_H
 
 #include <QtGui>
-#include <WidgetFactory.h>
+#include <qtutil/WidgetFactory.h>
 
 
 class QtGeneralSettings : public QWidget {

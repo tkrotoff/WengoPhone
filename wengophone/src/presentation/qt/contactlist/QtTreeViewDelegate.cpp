@@ -27,7 +27,7 @@
 #include <util/Logger.h>
 #include <util/StringList.h>
 
-#include <Object.h>
+#include <qtutil/Object.h>
 
 #include <QtGui>
 #include <QSize>
