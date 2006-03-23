@@ -40,7 +40,7 @@ Wenbox::Wenbox() {
 #ifndef OS_MACOSX
 	typedef IWenbox * (*GetInstanceFunction)();
 
-	std::string dllPath = File::getApplicationDirPath() + wenboxDll;
+	std::string dllPath = Path::getApplicationDirPath() + wenboxDll;
 
 	GetInstanceFunction getInstance = (GetInstanceFunction) SharedLibLoader::resolve(dllPath, "getInstance");
 
