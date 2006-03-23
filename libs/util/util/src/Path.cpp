@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ string Path::getConfigurationDirPath() {
 
 	return result;
 }
- 
+
 string Path::getHomeDirPath() {
 	string result;
 
@@ -94,7 +94,7 @@ string Path::getHomeDirPath() {
 	char * homeDrive = getenv("HOMEDRIVE");
 	char * homeDir = getenv("HOMEPATH");
 	if (homeDrive && homeDir) {
-		result = string(homePath) + File::getPathSeparator() + string(homeDir);
+		result = string(homeDrive) + File::getPathSeparator() + string(homeDir);
 	}
 
 #elif defined(OS_MACOSX)
