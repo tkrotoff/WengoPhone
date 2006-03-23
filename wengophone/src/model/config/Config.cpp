@@ -131,7 +131,7 @@ Config::Config(const std::string & name) {
 
 #else
 
-	configPath = Path::getConfigurationDirPath() + File::convertpathSeparators(".openwengo/");
+	configPath = Path::getConfigurationDirPath() + File::convertPathSeparators(".openwengo/");
 
 #endif
 
