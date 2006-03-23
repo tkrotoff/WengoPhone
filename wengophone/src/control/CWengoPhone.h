@@ -135,6 +135,11 @@ public:
 	void showWengoSmartDirectory();
 	
 	/**
+	 * Opens a web browser and shows the Wengo faq page.
+	 */
+	void showWengoFAQ();
+	
+	/**
 	 * Entry point of the application, equivalent to main().
 	 *
 	 * Starts the object WengoPhone thus almost everything.
@@ -211,6 +216,8 @@ private:
 	static const std::string URL_WENGO_HELP;
 	
 	static const std::string URL_WENGO_FORUM;
+	
+	static const std::string URL_WENGO_FAQ;
 	
 	static const std::string URL_WENGO_SEARCH_EXT;
 	

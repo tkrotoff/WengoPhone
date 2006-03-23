@@ -47,6 +47,7 @@ const std::string CWengoPhone::URL_WENGO_HELP = "http://www.wengo.fr/public/publ
 const std::string CWengoPhone::URL_WENGO_FORUM = "http://www.wengo.fr/public/public.php?page=forum";
 const std::string CWengoPhone::URL_WENGO_SEARCH_EXT = "http://www.wengo.fr/public/public.php?page=main_smart_directory";
 const std::string CWengoPhone::URL_WENGO_SEARCH_INT = "http://www.wengo.fr/public/public.php?page=smart_directory";
+const std::string CWengoPhone::URL_WENGO_FAQ = "";
 
 CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
@@ -201,3 +202,8 @@ void CWengoPhone::showWengoSmartDirectory() {
 void CWengoPhone::showWengoAccountCreation() {
 	openWengoUrlWithoutAuth(URL_WENGO_ACCOUNTCREATION);
 }
+
+void CWengoPhone::showWengoFAQ() {
+	openWengoUrlWithoutAuth(URL_WENGO_FAQ);
+}
+
