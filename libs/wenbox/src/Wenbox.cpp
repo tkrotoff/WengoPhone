@@ -21,6 +21,7 @@
 
 #include <util/Logger.h>
 #include <util/File.h>
+#include <util/Path.h>
 #include <util/StringList.h>
 
 #include <cutil/global.h>
