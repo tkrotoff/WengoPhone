@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,11 +25,17 @@
 
 #include <stddef.h>
 #include <sys/types.h>
+#ifdef CC_MSVC
+	#include <direct.h>
+#endif
+
 #include <sys/stat.h>
 
 #if defined(OS_WINDOWS)
 	#ifndef S_ISDIR
 		#define S_ISDIR(x) ((x) & _S_IFDIR)
+	#endif
+	#ifndef S_ISREG
 		#define S_ISREG(x) ((x) & _S_IFREG)
 	#endif
 #endif
@@ -138,7 +144,11 @@ std::string File::getPathSeparator() {
 void File::createPath(const std::string & path) {
 	string::size_type index = path.find(File::getPathSeparator(), 0);
 	while (index != string::npos) {
+#ifdef CC_MSVC
+		mkdir(path.substr(0, index).c_str());
+#else
 		mkdir(path.substr(0, index).c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+#endif
 		index = path.find(File::getPathSeparator(), index + 1);
 	}
 }
