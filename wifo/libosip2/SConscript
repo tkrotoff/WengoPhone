@@ -83,7 +83,7 @@ if WengoOSWindows():
 	libs += ['advapi32']
 	defines['WIN32'] = 1
 
-if WengoOSLinux():
+if WengoOSLinux() or WengoOSBSD():
 	defines.update({
 		'HAVE_PTHREAD' : 1,
 		'HAVE_SEMAPHORE_H' : 1
