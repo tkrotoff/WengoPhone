@@ -21,7 +21,7 @@
 #define LOGGER_H
 
 #include <util/NonCopyable.h>
-#include <util/StringList.h>
+#include <util/String.h>
 #include <util/Event.h>
 
 #include <cutil/global.h>

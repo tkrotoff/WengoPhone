@@ -20,7 +20,7 @@
 #include <serializer/DateXMLSerializer.h>
 
 #include <util/Date.h>
-#include <util/StringList.h>
+#include <util/String.h>
 
 #include <tinyxml.h>
 
@@ -46,20 +46,20 @@ string DateXMLSerializer::serialize() {
 
 bool DateXMLSerializer::unserialize(const std::string & data) {
 	TiXmlDocument doc;
-	
+
 	doc.Parse(data.c_str());
-	
+
 	TiXmlHandle docHandle(&doc);
 	TiXmlHandle date = docHandle.FirstChild("date");
-	
+
 	// Retrieving day
 	_date._day = String(date.FirstChild("day").FirstChild().Text()->Value()).toInteger();
-	
+
 	// Retrieving month
 	_date._month = String(date.FirstChild("month").FirstChild().Text()->Value()).toInteger();
 
 	// Retrieving year
 	_date._year = String(date.FirstChild("year").FirstChild().Text()->Value()).toInteger();
-	
+
 	return true;
 }

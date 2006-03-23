@@ -20,8 +20,8 @@
 #include <settings/Settings.h>
 
 #include <settings/StringListXMLSerializer.h>
-#include <util/StringList.h>
 
+#include <util/StringList.h>
 #include <util/Logger.h>
 
 using namespace std;

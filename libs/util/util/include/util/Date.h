@@ -24,26 +24,26 @@
 #include <string>
 
 /**
- * Represent a Date.
+ * Represents a Date.
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class Date {
 	friend class DateXMLSerializer;
 public:
 
 	/**
-	 * Create a date with the current time.
+	 * Creates a date with the current time.
 	 */
 	Date();
 
 	/**
 	 * Copy constructor.
 	 */
-	Date(const Date &d);
+	Date(const Date & date);
 
 	/**
-	 * Create a date from a day a month and a year.
+	 * Creates a date from a day a month and a year.
 	 *
 	 * @param day day of the date
 	 * @param month month of the date
@@ -53,7 +53,7 @@ public:
 
 	~Date();
 
-	bool operator == (const Date & date) const;
+	bool operator==(const Date & date) const;
 
 	/**
 	 * @return the day number of the date. Day range: 1-31.
@@ -63,7 +63,9 @@ public:
 	}
 
 	/**
-	 * Set the date day. @see getDay
+	 * Sets the date day.
+	 *
+	 * @see getDay()
 	 */
 	void setDay(unsigned day) {
 		if (day < 1) {
@@ -71,9 +73,9 @@ public:
 		} else if (day > 31) {
 			day = 31;
 		}
-		
+
 		_day = day;
-	}		
+	}
 
 	/**
 	 * @return the month number of the date. Month range: 1-12.
@@ -83,7 +85,9 @@ public:
 	}
 
 	/**
-	 * Set the date month. @see getMonth
+	 * Sets the date month.
+	 *
+	 * @see getMonth()
 	 */
 	void setMonth(unsigned month) {
 		if (month < 1) {
@@ -91,19 +95,21 @@ public:
 		} else if (month > 12) {
 			month = 12;
 		}
-		
+
 		_month = month;
 	}
 
 	/**
-	 * Get the date year. Year range: 0-infinite.
+	 * Gets the date year. Year range: 0-infinite.
 	 */
 	unsigned getYear() const {
 		return _year;
 	}
 
 	/**
-	 * Set date year. @see getYear
+	 * Sets date year.
+	 *
+	 * @see getYear()
 	 */
 	void setYear(unsigned year) {
 		_year = year;
@@ -120,4 +126,4 @@ private:
 	unsigned _year;
 };
 
-#endif //DATE_H
+#endif	//DATE_H

@@ -19,7 +19,6 @@
 
 #include <util/IdGenerator.h>
 
-#include <util/StringList.h>
 #include <util/Logger.h>
 
 #include <ctime>

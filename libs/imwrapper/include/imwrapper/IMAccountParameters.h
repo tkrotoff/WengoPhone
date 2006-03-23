@@ -22,6 +22,8 @@
 
 #include <settings/Settings.h>
 
+#include <util/String.h>
+
 /**
  * Contains specific parameters needed by some protocols for connection.
  *
@@ -33,7 +35,7 @@ public:
 
 	IMAccountParameters(const IMAccountParameters & imAccountParameters);
 
-	IMAccountParameters & operator = (const IMAccountParameters & imAccountParameters);
+	IMAccountParameters & operator=(const IMAccountParameters & imAccountParameters);
 
 	virtual ~IMAccountParameters();
 

@@ -20,7 +20,6 @@
 #include "Win32SharedLibLoader.h"
 
 #include <util/Logger.h>
-#include <util/StringList.h>
 
 Win32SharedLibLoader::Win32SharedLibLoader(const std::string & fileName) {
 	_fileName = fileName;

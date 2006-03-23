@@ -19,7 +19,7 @@
 
 #include <shlibloader/SharedLibLoader.h>
 
-#include <util/StringList.h>
+#include <util/String.h>
 
 #include <cutil/global.h>
 

@@ -19,7 +19,6 @@
 
 #include <util/File.h>
 
-#include <util/StringList.h>
 #include <util/Logger.h>
 
 #include <cutil/global.h>

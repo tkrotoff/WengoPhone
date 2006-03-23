@@ -19,7 +19,7 @@
 
 #include <util/Date.h>
 
-#include <util/StringList.h>
+#include <util/String.h>
 
 Date::Date() {
 	std::time_t curTime = time(NULL);
@@ -29,10 +29,10 @@ Date::Date() {
 	_year = timeinfo->tm_year + 1900;
 }
 
-Date::Date(const Date &d) {
-	_day = d._day;
-	_month = d._month;
-	_year = d._year;
+Date::Date(const Date & date) {
+	_day = date._day;
+	_month = date._month;
+	_year = date._year;
 }
 
 Date::Date(unsigned day, unsigned month, unsigned year) {
@@ -44,7 +44,7 @@ Date::Date(unsigned day, unsigned month, unsigned year) {
 Date::~Date() {
 }
 
-bool Date::operator == (const Date & date) const {
+bool Date::operator==(const Date & date) const {
 	return ((_day == date._day)
 		&& (_month == date._month)
 		&& (_year == date._year));

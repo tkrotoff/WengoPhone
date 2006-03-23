@@ -24,7 +24,6 @@
 #include <memorydump/MemoryDump.h>
 
 #include <util/Logger.h>
-#include <util/StringList.h>
 
 #include <shlwapi.h>
 

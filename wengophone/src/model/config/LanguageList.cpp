@@ -21,6 +21,8 @@
 
 #include "Languages.h"
 
+#include <util/String.h>
+
 #include <boost/regex.hpp>
 
 std::string LanguageList::getLanguageName(const std::string & iso639Code) {

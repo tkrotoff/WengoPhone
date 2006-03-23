@@ -22,6 +22,8 @@
 #include <settings/StringListXMLSerializer.h>
 #include <settings/Settings.h>
 
+#include <util/String.h>
+
 #include <tinyxml.h>
 
 using namespace std;
@@ -47,7 +49,7 @@ std::string SettingsXMLSerializer::serialize() {
 			StringListXMLSerializer serializer(list);
 			value = serializer.serialize();
 		} else if (Settings::isBoolean((*it).second)) {
-			value = "<bool>" + String::fromBool(boost::any_cast<bool>((*it).second)) + "</bool>";
+			value = "<bool>" + String::fromBoolean(boost::any_cast<bool>((*it).second)) + "</bool>";
 		} else if (Settings::isInteger((*it).second)) {
 			value = "<int>" + String::fromNumber(boost::any_cast<int>((*it).second)) + "</int>";
 		}

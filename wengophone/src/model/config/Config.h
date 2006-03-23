@@ -22,6 +22,8 @@
 
 #include <settings/Settings.h>
 
+#include <util/String.h>
+
 /**
  * Stores the configuration options of WengoPhone.
  *

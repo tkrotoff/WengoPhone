@@ -22,6 +22,7 @@
 #include <http/DefaultHttpRequestFactory.h>
 #include <http/HttpRequestFactory.h>
 
+#include <util/String.h>
 #include <util/StringList.h>
 
 #include <iostream>

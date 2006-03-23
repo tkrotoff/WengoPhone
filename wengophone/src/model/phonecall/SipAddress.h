@@ -20,7 +20,7 @@
 #ifndef SIPADDRESS_H
 #define SIPADDRESS_H
 
-#include <util/StringList.h>
+#include <util/String.h>
 
 /**
  * SIP address parsing.

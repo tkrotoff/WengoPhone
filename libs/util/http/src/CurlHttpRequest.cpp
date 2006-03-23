@@ -20,7 +20,7 @@
 #include <http/CurlHttpRequest.h>
 #include <http/HttpRequest.h>
 
-#include <util/StringList.h>
+#include <util/String.h>
 #include <util/IdGenerator.h>
 
 #include <iostream>

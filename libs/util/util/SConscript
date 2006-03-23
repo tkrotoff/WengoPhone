@@ -12,6 +12,7 @@ headers = []
 sources = [
 	'src/Date.cpp',
 	'src/StringList.cpp',
+	'src/String.cpp',
 	'src/File.cpp',
 	'src/Base64.cpp',
 	'src/Logger.cpp',
