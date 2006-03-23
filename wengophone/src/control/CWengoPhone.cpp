@@ -43,11 +43,13 @@
 using namespace std;
 
 const std::string CWengoPhone::URL_WENGO_ACCOUNTCREATION = "https://www.wengo.fr/public/public.php?page=subscribe_wengos";
-const std::string CWengoPhone::URL_WENGO_HELP = "http://www.wengo.fr/public/public.php?page=helpcenter";
 const std::string CWengoPhone::URL_WENGO_FORUM = "http://www.wengo.fr/public/public.php?page=forum";
+const std::string CWengoPhone::URL_WENGO_CALLOUT = "http://www.wengo.fr/public/public.php?page=product_callout";
+const std::string CWengoPhone::URL_WENGO_SMS = "http://www.wengo.fr/public/public.php?page=product_sms";
+const std::string CWengoPhone::URL_WENGO_VOICEMAIL = "http://www.wengo.fr/public/public.php?page=product_voicemail";
 const std::string CWengoPhone::URL_WENGO_SEARCH_EXT = "http://www.wengo.fr/public/public.php?page=main_smart_directory";
 const std::string CWengoPhone::URL_WENGO_SEARCH_INT = "http://www.wengo.fr/public/public.php?page=smart_directory";
-const std::string CWengoPhone::URL_WENGO_FAQ = "";
+const std::string CWengoPhone::URL_WENGO_FAQ = "http://www.wengo.fr/public/public.php?page=helpcenter";
 
 CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
@@ -187,8 +189,8 @@ void CWengoPhone::openWengoUrlWithoutAuth(std::string url) {
 	LOG_DEBUG("url opened: " + finalUrl);
 }
 
-void CWengoPhone::showWengoHelpCenter() {
-	openWengoUrlWithoutAuth(URL_WENGO_HELP);
+void CWengoPhone::showWengoFAQ() {
+	openWengoUrlWithoutAuth(URL_WENGO_FAQ);
 }
 
 void CWengoPhone::showWengoForum() {
@@ -203,7 +205,14 @@ void CWengoPhone::showWengoAccountCreation() {
 	openWengoUrlWithoutAuth(URL_WENGO_ACCOUNTCREATION);
 }
 
-void CWengoPhone::showWengoFAQ() {
-	openWengoUrlWithoutAuth(URL_WENGO_FAQ);
+void CWengoPhone::showWengoCallOut() {
+	openWengoUrlWithoutAuth(URL_WENGO_CALLOUT);
 }
 
+void CWengoPhone::showWengoSMS() {
+	openWengoUrlWithoutAuth(URL_WENGO_SMS);
+}
+
+void CWengoPhone::showWengoVoiceMail() {
+	openWengoUrlWithoutAuth(URL_WENGO_VOICEMAIL);
+}

@@ -122,7 +122,7 @@ public:
 	/**
 	 * Opens a web browser and shows the Wengo help center page.
 	 */
-	void showWengoHelpCenter();
+	void showWengoFAQ();
 
 	/**
 	 * Opens a web browser and shows the Wengo forum page.
@@ -135,9 +135,19 @@ public:
 	void showWengoSmartDirectory();
 	
 	/**
-	 * Opens a web browser and shows the Wengo faq page.
+	 * Opens a web browser and shows the Wengo callout page.
 	 */
-	void showWengoFAQ();
+	void showWengoCallOut();
+	
+	/**
+	 * Opens a web browser and shows the Wengo SMS page.
+	 */
+	void showWengoSMS();
+
+	/**
+	 * Opens a web browser and shows the Wengo voice mail page.
+	 */
+	void showWengoVoiceMail();
 	
 	/**
 	 * Entry point of the application, equivalent to main().
@@ -213,8 +223,6 @@ private:
 
 	static const std::string URL_WENGO_ACCOUNTCREATION;
 	
-	static const std::string URL_WENGO_HELP;
-	
 	static const std::string URL_WENGO_FORUM;
 	
 	static const std::string URL_WENGO_FAQ;
@@ -222,6 +230,12 @@ private:
 	static const std::string URL_WENGO_SEARCH_EXT;
 	
 	static const std::string URL_WENGO_SEARCH_INT;
+	
+	static const std::string URL_WENGO_CALLOUT;
+	
+	static const std::string URL_WENGO_SMS;
+	
+	static const std::string URL_WENGO_VOICEMAIL;
 };
 
 #endif	//CWENGOPHONE_H
