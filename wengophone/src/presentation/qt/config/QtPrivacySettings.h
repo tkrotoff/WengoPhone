@@ -30,11 +30,16 @@ class QtPrivacySettings : public QWidget
 
 public:
     QtPrivacySettings (QWidget * parent = 0, Qt::WFlags f=0);
+
+    void saveData();
+
 protected:
 
     QWidget     *   _widget;
 
 	void setupChilds();
+
+	void readConfigData();
 
     QRadioButton * _allowCallFromAnyoneRadioButton;
 

@@ -115,6 +115,10 @@ private Q_SLOTS:
 
 	void showCreateConferenceCall();
 
+	void showFaq();
+
+	void showByOut();
+
 	void setTrayMenu();
 
 private:

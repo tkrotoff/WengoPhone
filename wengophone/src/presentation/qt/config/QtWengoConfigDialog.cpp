@@ -98,3 +98,15 @@ void QtWengoConfigDialog::itemActivated ( ) {
 	if ( itemText == "Call Forward" )
 		_stackedWidget->setCurrentWidget( _callForwardWidget );
 }
+
+void QtWengoConfigDialog::accept(){
+
+	_generalSettingsWidget->saveData();
+	_notificationWidget->saveData();
+	_privacySettingsWidget->saveData();
+	_audioSettingsWidget->saveData();
+	_callForwardWidget->saveData();
+	_videoSettingsWidget->saveData();
+
+	QDialog::accept();
+}

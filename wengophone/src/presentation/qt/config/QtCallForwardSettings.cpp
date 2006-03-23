@@ -33,6 +33,7 @@ QtCallForwardSettings::QtCallForwardSettings( QWidget * parent, Qt::WFlags f ) :
 	layout->setMargin( 0 );
 	setLayout( layout );
 	setupChilds();
+	readConfigData();
 }
 
 void QtCallForwardSettings::setupChilds() {

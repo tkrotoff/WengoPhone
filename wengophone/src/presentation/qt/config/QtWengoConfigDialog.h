@@ -43,6 +43,8 @@ class QtWengoConfigDialog : public QDialog {
 
 		void itemActivated ( );
 
+		void accept();
+
 	protected:
 		QWidget * _widget;
 

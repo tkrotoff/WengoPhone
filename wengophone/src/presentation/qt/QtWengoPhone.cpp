@@ -169,6 +169,12 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionAdvancedConfiguration = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAdvancedConfiguration");
 	connect(actionAdvancedConfiguration, SIGNAL(triggered()), SLOT(showAdvancedConfig()));
 
+	// actionfaq
+	QAction * actionFaq = Object::findChild<QAction *>(_wengoPhoneWindow, "actionFaq");
+	connect (actionFaq, SIGNAL (triggered()), SLOT(showFaq()));
+	// actionBuy_call_out_credits
+	QAction * actionBuy_call_out_credits = Object::findChild<QAction *>(_wengoPhoneWindow, "actionBuy_call_out_credits");
+	connect (actionBuy_call_out_credits, SIGNAL(triggered()), SLOT(showByOut()));
 
 	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
 	connect(actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
@@ -430,9 +436,18 @@ void QtWengoPhone::showConfig() {
 }
 
 void QtWengoPhone::showForum() {
+	_cWengoPhone.showWengoForum();
 }
 
 void QtWengoPhone::showHelp() {
+}
+
+void QtWengoPhone::showFaq() {
+
+}
+
+void QtWengoPhone::showByOut(){
+
 }
 
 void QtWengoPhone::showAbout() {

@@ -12,9 +12,13 @@ class QtVideoSettings : public QWidget {
 	public:
 		QtVideoSettings ( QWidget * parent = 0, Qt::WFlags f = 0 );
 
+		void saveData();
+
 	protected:
 
 		void setupChilds();
+
+		void readConfigData();
 
 		QWidget * _widget;
 
@@ -25,6 +29,8 @@ class QtVideoSettings : public QWidget {
 		QFrame * _webcamPreviewFrame;
 
 		QTreeWidget * _videoQualityTreeWidget;
+
+		QGroupBox * _videoEnabled;
 
 		QPushButton * _makeTestVideoCallPushButton;
 

@@ -412,6 +412,134 @@ public:
 	 * @}
 	 */
 
+	/**
+	 * @name Notification settings Methods
+	 * @{
+	 */
+
+	/** Show related window on top of other applications for incoming calls & incoming chats */
+	static const std::string NOTIFICATION_SHOW_WINDOWONTOP_KEY;
+	bool getNotificationShowWindowOnTop() const;
+
+	/** Show minimized blinking window in taskbar for incoming calls & incoming chats */
+	static const std::string NOTIFICATION_SHOW_BLINKINGWINDOW_KEY;
+	bool getNotificationShowBlinkingWindow() const;
+
+	/** Show toaster only for incomin calls & incoming chats */
+	static const std::string NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY;
+	bool getNotificationShowToasterOnIncomingCall() const;
+
+	/** Show toaster when contact is turning online */
+	static const std::string NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY;
+	bool getNotificationShowToasterOnContactOnline() const;
+
+	/** Show window pop-up for authorizations */
+	static const std::string NOTIFICATION_SHOW_WINDOWPOPUP_AUTHORIZATION_KEY;
+	bool getNotificationShowWindowPopupAuthorization() const;
+
+	/** Do not show any toaster or window */
+	static const std::string NOTIFICATION_SHOW_NO_TOASTER_KEY;
+	bool getNotificationShowNoToaster() const;
+
+	/** Switch off audio notifications */
+	static const std::string NOTIFICATION_SWITCH_OFF_AUDIO_NOFITICATION_KEY;
+	bool getNotificationSwithOffAudioNotification() const;
+
+	/** Do not show any call toaster or chat window */
+	static const std::string NOTIFICATION_NOT_SHOW_AWAY_TOASTER_AND_CHAT_KEY;
+	bool getNotificationNotShowAwayToasterAndChat() const;
+
+	/** Switch off audio notifications */
+	static const std::string NOTIFICATION_SWITCH_OFF_AWAY_AUDIO_KEY;
+	bool getNotificationSwitchOffAwayAudio() const;
+
+	/** Incoming chat */
+	static const std::string NOTIFICATION_INCOMING_CHAT_KEY;
+	bool getNotificationIncomingChat() const;
+
+	/** Incoming calls */
+	static const std::string NOTIFICATION_INCOMING_CALLS_KEY;
+	bool getNotificationIncomingCalls() const;
+
+	/** Wengophone opens */
+	static const std::string NOTIFICATION_WENGOPHONE_OPENS_KEY;
+	bool getNotificationWengophoneOpens() const;
+
+	/** Wengophone connects */
+	static const std::string NOTIFICATION_WENGOPHONE_CONNECTS_KEY;
+	bool getNotificationWengophoneConnects() const;
+
+	/** Wengophone doesn't succeed to connect */
+	static const std::string NOTIFICATION_WENGOPHONE_NOT_SUCCED_CONNECT_KEY;
+	bool getNotificationWengophoneNotSuccedConnect() const;
+
+	/** Alternative IM account connects */
+	static const std::string NOTIFICATION_ALTERNATIVE_IMACCOUNT_KEY;
+	bool getNotificationAlternativeIMAccount() const;
+
+	/** Contact is turning online */
+	static const std::string NOTIFICATION_CONTACT_TURNING_ONLINE_KEY;
+	bool getNotificationContactTurningOnline() const;
+
+	/** Authorization (contact, file transfer...) */
+	static const std::string NOTIFICATION_AUTHORIZATION_KEY;
+	bool getNotificationAuthorization() const;
+
+	/** Error message */
+	static const std::string NOTIFICATION_ERROR_MESSAGE_KEY;
+	bool getNotificationErrorMessage() const;
+
+	/**
+	 * @}
+	 */
+
+	/**
+	 * @name PrivacySettings Methods
+	 * @{
+	 */
+
+
+	/** Allow calls from : anyone */
+	static const std::string PRIVACY_ALLOW_CALL_FROM_ANYONE_KEY;
+	bool getPrivacyAllowCallFromAnyone() const;
+
+	/** Allow calls from : only people from my contact list */
+	static const std::string PRIVACY_ALLOW_CALL_ONLY_FROM_CONTACT_LIST_KEY;
+	bool getPrivacyAllowCallOnlyFromContactList() const;
+
+	/** Allow chats from : anyone */
+	static const std::string PRIVACY_ALLOW_CHAT_FROM_ANYONE_KEY;
+	bool getPrivacyAllowChatsFromAnyone() const;
+
+	/** Allow chats from : only people from my contact list */
+	static const std::string PRIVACY_ALLOW_CHAT_ONLY_FROM_CONTACT_LIST_KEY;
+	bool getPrivacyAllowChatOnlyFromContactList() const;
+
+	/** When I sign into Wengo : Always sign in as invisible */
+	static const std::string PRIVACY_ALLWAYS_SIGN_AS_INVISIBLE_KEY;
+	bool getPrivacyAlwaysSigneAsInvisible() const;
+
+	/**
+	 * @}
+	 */
+
+	/**
+	 * @name PrivacySettings Methods
+	 * @{
+	 */
+
+	static const std::string VIDEO_ENABLE_KEY;
+	bool getVideoEnable() const;
+
+	static const std::string VIDEO_WEBCAM_DEVICE_KEY;
+	std::string getVideoWebCamDevice() const;
+
+	static const std::string VIDEO_QUALITY_KEY;
+	std::string getVideoQuality() const;
+
+	/**
+	 * @}
+	 */
 
 	/**
 	 * @name Path Methods

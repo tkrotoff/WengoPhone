@@ -295,17 +295,9 @@
      <x>0</x>
      <y>0</y>
      <width>271</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuHelp" >
-    <property name="title" >
-     <string>Help</string>
-    </property>
-    <addaction name="actionShowForum" />
-    <addaction name="actionShowHelp" />
-    <addaction name="actionShowAbout" />
-   </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>Wengo</string>
@@ -323,6 +315,16 @@
     <addaction name="actionAddContact" />
     <addaction name="actionSetLogin" />
    </widget>
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
+     <string>Help</string>
+    </property>
+    <addaction name="actionShowForum" />
+    <addaction name="actionFaq" />
+    <addaction name="actionBuy_call_out_credits" />
+    <addaction name="actionShowHelp" />
+    <addaction name="actionShowAbout" />
+   </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
      <string>Tools</string>
@@ -332,6 +334,10 @@
     <addaction name="separator" />
     <addaction name="actionConfiguration" />
     <addaction name="actionAdvancedConfiguration" />
+    <addaction name="separator" />
+    <addaction name="actionCall_out_service" />
+    <addaction name="actionSms" />
+    <addaction name="actionVoicemail" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -365,7 +371,7 @@
   </action>
   <action name="actionShowForum" >
    <property name="text" >
-    <string>Forum Access</string>
+    <string>Forum</string>
    </property>
   </action>
   <action name="actionShowHelp" >
@@ -411,6 +417,31 @@
   <action name="actionCreateConferenceCall" >
    <property name="text" >
     <string>Create Conference Call</string>
+   </property>
+  </action>
+  <action name="actionFaq" >
+   <property name="text" >
+    <string>Faq</string>
+   </property>
+  </action>
+  <action name="actionBuy_call_out_credits" >
+   <property name="text" >
+    <string>Buy call-out credits</string>
+   </property>
+  </action>
+  <action name="actionCall_out_service" >
+   <property name="text" >
+    <string>Call-out service</string>
+   </property>
+  </action>
+  <action name="actionSms" >
+   <property name="text" >
+    <string>Sms</string>
+   </property>
+  </action>
+  <action name="actionVoicemail" >
+   <property name="text" >
+    <string>Voicemail </string>
    </property>
   </action>
  </widget>

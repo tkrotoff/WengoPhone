@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>618</width>
-    <height>663</height>
+    <height>604</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -23,7 +23,7 @@
     <number>6</number>
    </property>
    <item row="1" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
+    <widget class="QGroupBox" name="enableVideoGroupBox" >
      <property name="title" >
       <string>Enable Video</string>
      </property>

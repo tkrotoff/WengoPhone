@@ -44,6 +44,7 @@ QtGeneralSettings::QtGeneralSettings( QWidget * parent, Qt::WFlags f ) : QWidget
 	_notAvailableSpinBox = Object::findChild<QSpinBox *>(_widget,"notAvailableSpinBox" );
 	_editProfilePushButton = Object::findChild<QPushButton *>(_widget,"editProfilePushButton" );
 
+	readConfigData();
 }
 
 void QtGeneralSettings::readConfigData(){
@@ -83,9 +84,9 @@ void QtGeneralSettings::readConfigData(){
 	if ( config.getGeneralSettingsShowNotAvailable() )
 		_showNotAvailableCheckBox->setCheckState(Qt::Checked);
 	else
-		_showNotAvailableCheckBox->setCheckState(Qt::Checked);
+		_showNotAvailableCheckBox->setCheckState(Qt::Unchecked);
 
-	_notAvailableSpinBox->setValue(config.getGeneralSettingsGetAwayTimer());
+	_notAvailableSpinBox->setValue(config.getGeneralSettingsNotAvailableTimer());
 
 	_awaySpinBox->setValue(config.getGeneralSettingsGetAwayTimer());
 

@@ -34,6 +34,7 @@ QtAudioSettings::QtAudioSettings(QWidget * parent, Qt::WFlags f) : QWidget (pare
     layout->addWidget(_widget);
     layout->setMargin(0);
     setLayout(layout);
+    setupChilds();
 }
 
 void QtAudioSettings::setupChilds(){
@@ -47,15 +48,18 @@ void QtAudioSettings::setupChilds(){
 
 	_personalAudioConfig = Object::findChild<QGroupBox *> (_widget,"personalAudioConfig");
 
+	readConfigData();
 }
 
 void QtAudioSettings::saveData() {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+
 	config.set(config.AUDIO_INPUT_DEVICENAME_KEY, _inputDeviceComboBox->currentText().toStdString() );
-	config.set(config.AUDIO_INPUT_DEVICENAME_KEY,_inputDeviceComboBox->currentText().toStdString() );
+
 	config.set(config.AUDIO_OUTPUT_DEVICENAME_KEY,_outputDeviceComboBox->currentText().toStdString() );
+
 	config.set(config.AUDIO_RINGER_DEVICENAME_KEY,_ringingDeviceComboBox->currentText().toStdString() );
 
 	if (_personalAudioConfig->isChecked())

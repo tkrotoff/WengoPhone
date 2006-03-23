@@ -111,6 +111,35 @@ const std::string Config::GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY = "general.sett
 const std::string Config::GENERAL_SETTINGS_AWAY_TIMER_KEY = "general.settings.away.timer";
 const std::string Config::GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY = "general.settings.notavailable.timer";
 
+const std::string Config::NOTIFICATION_SHOW_WINDOWONTOP_KEY = "notification.show.windowontop";
+const std::string Config::NOTIFICATION_SHOW_BLINKINGWINDOW_KEY = "notification.show.blinkingwindow";
+const std::string Config::NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY = "notification.show.toaster.on.incoming.call";
+const std::string Config::NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY = "notification.show.toaster.on.contact";
+const std::string Config::NOTIFICATION_SHOW_WINDOWPOPUP_AUTHORIZATION_KEY = "notification.show.windowpopup.authorization";
+const std::string Config::NOTIFICATION_SHOW_NO_TOASTER_KEY = "notification.show.no.toaster";
+const std::string Config::NOTIFICATION_SWITCH_OFF_AUDIO_NOFITICATION_KEY = "notification.switch.off.audio.notifiaction";
+const std::string Config::NOTIFICATION_NOT_SHOW_AWAY_TOASTER_AND_CHAT_KEY = "notification.not.show.away.toaster.and.chat";
+const std::string Config::NOTIFICATION_SWITCH_OFF_AWAY_AUDIO_KEY = "notification.switch.off.away";
+const std::string Config::NOTIFICATION_INCOMING_CHAT_KEY = "notification.incoming.chat";
+const std::string Config::NOTIFICATION_INCOMING_CALLS_KEY = "notification.incoming.calls";
+const std::string Config::NOTIFICATION_WENGOPHONE_OPENS_KEY = "notification.wengophone.opens";
+const std::string Config::NOTIFICATION_WENGOPHONE_CONNECTS_KEY = "notifiaction.wengophone.connects";
+const std::string Config::NOTIFICATION_WENGOPHONE_NOT_SUCCED_CONNECT_KEY="notification.wengophone.not.succed.connect";
+const std::string Config::NOTIFICATION_ALTERNATIVE_IMACCOUNT_KEY = "notification.alternative.imaccount";
+const std::string Config::NOTIFICATION_CONTACT_TURNING_ONLINE_KEY = "notification.contact.turning.online";
+const std::string Config::NOTIFICATION_AUTHORIZATION_KEY = "notification.authorization";
+const std::string Config::NOTIFICATION_ERROR_MESSAGE_KEY = "notification.error.message";
+
+const std::string Config::PRIVACY_ALLOW_CALL_FROM_ANYONE_KEY = "privacy.allow.call.from.anyone";
+const std::string Config::PRIVACY_ALLOW_CALL_ONLY_FROM_CONTACT_LIST_KEY = "privacy.allow.call.only.from.contact.list";
+const std::string Config::PRIVACY_ALLOW_CHAT_FROM_ANYONE_KEY = "privacy.allow.chat.from.anyone";
+const std::string Config::PRIVACY_ALLOW_CHAT_ONLY_FROM_CONTACT_LIST_KEY = "privacy.allow.chat.only.from.contact.list";
+const std::string Config::PRIVACY_ALLWAYS_SIGN_AS_INVISIBLE_KEY = "privacy.sign.as.invisible";
+
+const std::string Config::VIDEO_ENABLE_KEY = "video.enable";
+const std::string Config::VIDEO_WEBCAM_DEVICE_KEY = "video.webcam.device";
+const std::string Config::VIDEO_QUALITY_KEY = "video.quality";
+
 const std::string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
 const std::string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
 const std::string Config::WENGO_SSO_PATH_KEY = "wengo.sso.path";
@@ -240,6 +269,35 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY] = false;
 	_keyDefaultValueMap[GENERAL_SETTINGS_AWAY_TIMER_KEY] = 0;
 	_keyDefaultValueMap[GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY] = 0;
+
+	_keyDefaultValueMap[NOTIFICATION_SHOW_WINDOWONTOP_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_SHOW_BLINKINGWINDOW_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_SHOW_WINDOWPOPUP_AUTHORIZATION_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_SHOW_NO_TOASTER_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_SWITCH_OFF_AUDIO_NOFITICATION_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_NOT_SHOW_AWAY_TOASTER_AND_CHAT_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_SWITCH_OFF_AWAY_AUDIO_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_INCOMING_CHAT_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_INCOMING_CALLS_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_WENGOPHONE_OPENS_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_WENGOPHONE_CONNECTS_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_WENGOPHONE_NOT_SUCCED_CONNECT_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_ALTERNATIVE_IMACCOUNT_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_CONTACT_TURNING_ONLINE_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_AUTHORIZATION_KEY] = false;
+	_keyDefaultValueMap[NOTIFICATION_ERROR_MESSAGE_KEY] = false;
+
+	_keyDefaultValueMap[PRIVACY_ALLOW_CALL_FROM_ANYONE_KEY] = false;
+	_keyDefaultValueMap[PRIVACY_ALLOW_CALL_ONLY_FROM_CONTACT_LIST_KEY] = false;
+	_keyDefaultValueMap[PRIVACY_ALLOW_CHAT_FROM_ANYONE_KEY] = false;
+	_keyDefaultValueMap[PRIVACY_ALLOW_CHAT_ONLY_FROM_CONTACT_LIST_KEY] = false;
+	_keyDefaultValueMap[PRIVACY_ALLWAYS_SIGN_AS_INVISIBLE_KEY] = false;
+
+	_keyDefaultValueMap[VIDEO_ENABLE_KEY] = false;
+	_keyDefaultValueMap[VIDEO_WEBCAM_DEVICE_KEY] = empty;
+	_keyDefaultValueMap[VIDEO_QUALITY_KEY] = empty;
 
 	_keyDefaultValueMap[WENGO_SERVER_HOSTNAME_KEY] = std::string("ws.wengo.fr");
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
@@ -527,11 +585,11 @@ int Config::getProfilePoxY() const {
 }
 
 bool Config::getCallForwardAllUndelivredToVm() const {
-		return getBooleanKeyValue(CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY);
+	return getBooleanKeyValue(CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY);
 }
 
 bool Config::getCallForwardAllUndelivredTo() const {
-		return getBooleanKeyValue(CALL_FORWARD_ALL_UNDELIVREDTO_KEY);
+	return getBooleanKeyValue(CALL_FORWARD_ALL_UNDELIVREDTO_KEY);
 }
 
 std::string Config::getCallForwardPhoneNumber1() const {
@@ -584,6 +642,110 @@ int Config::getGeneralSettingsGetAwayTimer() const {
 
 int Config::getGeneralSettingsNotAvailableTimer() const {
 	return getIntegerKeyValue(GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY);
+}
+
+bool Config::getNotificationShowWindowOnTop() const {
+	return getBooleanKeyValue(NOTIFICATION_SHOW_WINDOWONTOP_KEY);
+}
+
+bool Config::getNotificationShowBlinkingWindow() const {
+	return getBooleanKeyValue(NOTIFICATION_SHOW_BLINKINGWINDOW_KEY);
+}
+
+bool Config::getNotificationShowToasterOnIncomingCall() const {
+	return getBooleanKeyValue(NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY);
+}
+
+bool Config::getNotificationShowToasterOnContactOnline() const {
+	return getBooleanKeyValue(NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY);
+}
+
+bool Config::getNotificationShowWindowPopupAuthorization() const {
+	return getBooleanKeyValue(NOTIFICATION_SHOW_WINDOWPOPUP_AUTHORIZATION_KEY);
+}
+
+bool Config::getNotificationShowNoToaster() const {
+	return getBooleanKeyValue(NOTIFICATION_SHOW_NO_TOASTER_KEY);
+}
+
+bool Config::getNotificationSwithOffAudioNotification() const {
+	return getBooleanKeyValue(NOTIFICATION_SWITCH_OFF_AUDIO_NOFITICATION_KEY);
+}
+
+bool Config::getNotificationNotShowAwayToasterAndChat() const {
+	return getBooleanKeyValue(NOTIFICATION_NOT_SHOW_AWAY_TOASTER_AND_CHAT_KEY);
+}
+
+bool Config::getNotificationSwitchOffAwayAudio() const {
+	return getBooleanKeyValue(NOTIFICATION_SWITCH_OFF_AWAY_AUDIO_KEY);
+}
+
+bool Config::getNotificationIncomingChat() const {
+	return getBooleanKeyValue(NOTIFICATION_INCOMING_CHAT_KEY);
+}
+
+bool Config::getNotificationIncomingCalls() const {
+	return getBooleanKeyValue(NOTIFICATION_INCOMING_CALLS_KEY);
+}
+
+bool Config::getNotificationWengophoneOpens() const {
+	return getBooleanKeyValue(NOTIFICATION_WENGOPHONE_OPENS_KEY);
+}
+
+bool Config::getNotificationWengophoneConnects() const {
+	return getBooleanKeyValue(NOTIFICATION_WENGOPHONE_CONNECTS_KEY);
+}
+
+bool Config::getNotificationWengophoneNotSuccedConnect() const {
+	return getBooleanKeyValue(NOTIFICATION_WENGOPHONE_NOT_SUCCED_CONNECT_KEY);
+}
+
+bool Config::getNotificationAlternativeIMAccount() const {
+	return getBooleanKeyValue(NOTIFICATION_ALTERNATIVE_IMACCOUNT_KEY);
+}
+
+bool Config::getNotificationContactTurningOnline() const {
+	return getBooleanKeyValue(NOTIFICATION_CONTACT_TURNING_ONLINE_KEY);
+}
+
+bool Config::getNotificationAuthorization() const {
+	return getBooleanKeyValue(NOTIFICATION_AUTHORIZATION_KEY);
+}
+
+bool Config::getNotificationErrorMessage() const {
+	return getBooleanKeyValue(NOTIFICATION_ERROR_MESSAGE_KEY);
+}
+
+bool Config::getPrivacyAllowCallFromAnyone() const {
+	return getBooleanKeyValue(PRIVACY_ALLOW_CALL_FROM_ANYONE_KEY);
+}
+
+bool Config::getPrivacyAllowCallOnlyFromContactList() const {
+	return getBooleanKeyValue(PRIVACY_ALLOW_CALL_ONLY_FROM_CONTACT_LIST_KEY);
+}
+
+bool Config::getPrivacyAllowChatsFromAnyone() const {
+	return getBooleanKeyValue(PRIVACY_ALLOW_CHAT_FROM_ANYONE_KEY);
+}
+
+bool Config::getPrivacyAllowChatOnlyFromContactList() const {
+	return getBooleanKeyValue(PRIVACY_ALLOW_CHAT_ONLY_FROM_CONTACT_LIST_KEY);
+}
+
+bool Config::getPrivacyAlwaysSigneAsInvisible() const {
+	return getBooleanKeyValue(PRIVACY_ALLWAYS_SIGN_AS_INVISIBLE_KEY);
+}
+
+bool Config::getVideoEnable() const {
+	return getBooleanKeyValue(VIDEO_ENABLE_KEY);
+}
+
+std::string Config::getVideoWebCamDevice() const {
+	return getStringKeyValue(VIDEO_WEBCAM_DEVICE_KEY);
+}
+
+std::string Config::getVideoQuality() const {
+	return getStringKeyValue(VIDEO_QUALITY_KEY);
 }
 
 

@@ -12,10 +12,18 @@ class QtNotificationSettings : public QWidget {
 	public:
 		QtNotificationSettings( QWidget * parent = 0, Qt::WFlags f = 0 );
 
+		void saveData();
+
 	protected:
 		QWidget * _widget;
 
 		void setupChilds();
+
+		void readConfigData();
+
+		void setChecked(QCheckBox * chk, bool value);
+
+		bool isChecked(QCheckBox * chk);
 
 		// Standard notifications
 		QCheckBox * _snShowWindowOnTopCheckBox;
@@ -34,13 +42,13 @@ class QtNotificationSettings : public QWidget {
 
 		QCheckBox * _asNotShowAwayToasterAndChatWindow;
 
-		QCheckBox * asSwitchOffAwayAudioNotifications;
+		QCheckBox * _asSwitchOffAwayAudio;
 
 		QCheckBox * _acIncomingChat;
 
 		QCheckBox * _acIncomingCalls;
 
-		QCheckBox * _acWengophoneOpen;
+		QCheckBox * _acWengophoneOpens;
 
 		QCheckBox * _acWengophoneConnects;
 

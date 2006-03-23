@@ -19,6 +19,9 @@
 
 #include <qtutil/Object.h>
 
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
 #include "QtPrivacySettings.h"
 
 QtPrivacySettings::QtPrivacySettings ( QWidget * parent, Qt::WFlags f ) : QWidget ( parent, f ) {
@@ -28,6 +31,7 @@ QtPrivacySettings::QtPrivacySettings ( QWidget * parent, Qt::WFlags f ) : QWidge
 	layout->setMargin( 0 );
 	setLayout( layout );
 	setupChilds();
+	readConfigData();
 }
 
 void QtPrivacySettings::setupChilds() {
@@ -44,3 +48,26 @@ void QtPrivacySettings::setupChilds() {
 
 	_manageBlockedUserPushButton = Object::findChild<QPushButton *>(_widget,"manageBlockedUserPushButton" );
 }
+
+void QtPrivacySettings::saveData(){
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	config.set( config.PRIVACY_ALLOW_CALL_FROM_ANYONE_KEY, _allowCallFromAnyoneRadioButton->isChecked() );
+	config.set( config.PRIVACY_ALLOW_CALL_ONLY_FROM_CONTACT_LIST_KEY, _allowCallOnlyFromContactListRadioButton->isChecked() );
+	config.set( config.PRIVACY_ALLOW_CHAT_FROM_ANYONE_KEY, _allowChatsFromAnyoneRadioButton->isChecked() );
+	config.set( config.PRIVACY_ALLOW_CHAT_ONLY_FROM_CONTACT_LIST_KEY, _allowChatFromOnlyContactListRadioButton->isChecked() );
+	config.set( config.PRIVACY_ALLWAYS_SIGN_AS_INVISIBLE_KEY, _alwaysSignAsInvisible->isChecked() );
+}
+
+void QtPrivacySettings::readConfigData(){
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	_allowCallFromAnyoneRadioButton->setChecked( config.getPrivacyAllowCallFromAnyone() );
+	_allowCallOnlyFromContactListRadioButton->setChecked( config.getPrivacyAllowCallOnlyFromContactList() );
+	_allowChatsFromAnyoneRadioButton->setChecked( config.getPrivacyAllowChatsFromAnyone() );
+	_allowChatFromOnlyContactListRadioButton->setChecked( config.getPrivacyAllowChatOnlyFromContactList() );
+	_alwaysSignAsInvisible->setChecked( config.getPrivacyAlwaysSigneAsInvisible() );
+
+}
+
