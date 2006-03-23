@@ -42,6 +42,12 @@
 
 using namespace std;
 
+const std::string CWengoPhone::URL_WENGO_ACCOUNTCREATION = "https://www.wengo.fr/public/public.php?page=subscribe_wengos";
+const std::string CWengoPhone::URL_WENGO_HELP = "http://www.wengo.fr/public/public.php?page=helpcenter";
+const std::string CWengoPhone::URL_WENGO_FORUM = "http://www.wengo.fr/public/public.php?page=forum";
+const std::string CWengoPhone::URL_WENGO_SEARCH_EXT = "http://www.wengo.fr/public/public.php?page=main_smart_directory";
+const std::string CWengoPhone::URL_WENGO_SEARCH_INT = "http://www.wengo.fr/public/public.php?page=smart_directory";
+
 CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
 
@@ -73,14 +79,15 @@ void CWengoPhone::addWengoAccount(const std::string & login, const std::string &
 
 void CWengoPhone::showWengoAccount() const {
 	static const string URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php";
-	//TODO
+	//TODO	
 	static const string langCode = "fra";
 
 	IPhoneLine * activePhoneLine = _wengoPhone.getActivePhoneLine();
 	if (activePhoneLine) {
 		const SipAccount & account = activePhoneLine->getSipAccount();
-		const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(account);
-		{
+		try {
+			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(account);
+		
 			string url = URL_WENGO_ACCOUNT +
 					"?login=" + wengoAccount.getWengoLogin() +
 					"&password=" + wengoAccount.getWengoPassword() +
@@ -89,6 +96,8 @@ void CWengoPhone::showWengoAccount() const {
 					"&page=homepage";
 			WebBrowser::openUrl(url);
 			LOG_DEBUG("url opened: " + url);
+		} catch ( bad_cast ) {
+			LOG_DEBUG("Bad cast: from \"const SipAccount &\" to \"const WengoAccount &\"");
 		}
 	}
 }
@@ -163,4 +172,32 @@ void CWengoPhone::addIMAccount(const std::string & login, const std::string & pa
 
 void CWengoPhone::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
 	//_wengoPhone.getConnectHandler().connect(imAccount);
+}
+
+void CWengoPhone::openWengoUrlWithoutAuth(std::string url) {
+	static const std::string langCode = "fra";
+
+	//tune the url for Wengo
+	std::string finalUrl = url;
+	url += "&wl=" + string(WengoPhoneBuildId::SOFTPHONE_NAME);
+	url += "&lang=" + langCode;
+	
+	WebBrowser::openUrl(finalUrl);
+	LOG_DEBUG("url opened: " + finalUrl);
+}
+
+void CWengoPhone::showWengoHelpCenter() {
+	openWengoUrlWithoutAuth(URL_WENGO_HELP);
+}
+
+void CWengoPhone::showWengoForum() {
+	openWengoUrlWithoutAuth(URL_WENGO_FORUM);
+}
+
+void CWengoPhone::showWengoSmartDirectory() {
+	openWengoUrlWithoutAuth(URL_WENGO_SEARCH_EXT);
+}
+
+void CWengoPhone::showWengoAccountCreation() {
+	openWengoUrlWithoutAuth(URL_WENGO_ACCOUNTCREATION);
 }

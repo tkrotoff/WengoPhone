@@ -113,7 +113,27 @@ public:
 	 * Opens a web browser and shows the Wengo account informations inside.
 	 */
 	void showWengoAccount() const;
+	
+	/**
+	 * Opens a web browser and shows the Wengo account creation page.
+	 */
+	void showWengoAccountCreation();
+	
+	/**
+	 * Opens a web browser and shows the Wengo help center page.
+	 */
+	void showWengoHelpCenter();
 
+	/**
+	 * Opens a web browser and shows the Wengo forum page.
+	 */
+	void showWengoForum();
+	
+	/**
+	 * Opens a web browser and shows the Wengo smart directory page.
+	 */
+	void showWengoSmartDirectory();
+	
 	/**
 	 * Entry point of the application, equivalent to main().
 	 *
@@ -154,6 +174,12 @@ public:
 
 private:
 
+	/**
+	 * Opens a web browser with the given url
+	 * @param url the url to open
+	 */
+	void openWengoUrlWithoutAuth(std::string url);
+
 	void presenceHandlerCreatedEventHandler(WengoPhone & sender, PresenceHandler & presenceHandler);
 
 	void chatHandlerCreatedEventHandler(WengoPhone & sender, ChatHandler & chatHandler);
@@ -180,6 +206,15 @@ private:
 
 	CContactList * _cContactList;
 
+	static const std::string URL_WENGO_ACCOUNTCREATION;
+	
+	static const std::string URL_WENGO_HELP;
+	
+	static const std::string URL_WENGO_FORUM;
+	
+	static const std::string URL_WENGO_SEARCH_EXT;
+	
+	static const std::string URL_WENGO_SEARCH_INT;
 };
 
 #endif	//CWENGOPHONE_H
