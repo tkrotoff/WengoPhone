@@ -117,6 +117,11 @@ public:
 		return os;
 	}
 
+	/**
+	 * Flushes the logger.
+	 */
+	void flush();
+
 private:
 
 	Logger();

@@ -57,7 +57,7 @@ void Logger::error(const std::string & className, const std::string & message) {
 
 void Logger::fatal(const std::string & className, const std::string & message) {
 	log(Fatal, className, message);
-	_file->close();
+	flush();
 	assert(NULL && "Fatal error");
 }
 
@@ -105,4 +105,8 @@ void Logger::log(Level level, const std::string & className, const std::string &
 
 	messageAddedEvent(tmp);
 	_file->write(tmp + "\n");
+}
+
+void Logger::flush() {
+	_file->close();
 }

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -114,7 +114,7 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 
 	MINIDUMPWRITEDUMP pDump = loadMiniDumpWriteDumpFunction();
 	if (pDump) {
-		//Wait a bit because several minidump can be created
+		//Waits a bit because several minidump can be created
 		Sleep(1000);
 
 		//Name of the memory dump
@@ -132,7 +132,7 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 		PathAddBackslashA(memoryDumpFile);
 		strcat(memoryDumpFile, memoryDumpName);
 
-		//Create the file
+		//Creates the file
 		HANDLE hFile = ::CreateFileA(memoryDumpFile, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS,
 						FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -143,7 +143,7 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 			ExInfo.ExceptionPointers = pExceptionInfo;
 			ExInfo.ClientPointers = NULL;
 
-			//Write the dump
+			//Writes the dump
 			BOOL ok = pDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, MiniDumpNormal, &ExInfo, NULL, NULL);
 			if (ok) {
 				LOG_DEBUG("dump file saved to: " + String(memoryDumpName));
@@ -156,7 +156,7 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 			LOG_ERROR("failed to create dump file: " + String(memoryDumpName) + " " + String::fromNumber(GetLastError()));
 		}
 
-		//Launch memorydump.exe
+		//Launches memorydump.exe
 		char commandLine[_MAX_PATH];
 		strcpy(commandLine, "memorydump");
 		if (_styleName != NULL) {
@@ -176,6 +176,8 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 		executeProcess(commandLine);
 	}
 
+	//Flushes the logger file
+	Logger::logger.flush();
 	return ret;
 }
 
