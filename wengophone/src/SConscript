@@ -13,7 +13,6 @@ libs = [
 	'owhttp',
 	'owserialization',
 	'owserializer',
-	'owsystem',
 	'imwrapper',
 	'sipwrapper',
 	'wenbox',

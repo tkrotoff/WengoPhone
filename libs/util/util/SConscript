@@ -10,6 +10,9 @@ include_path = ['include']
 link_flags = []
 headers = []
 sources = [
+	'src/Path.cpp',
+	'src/Startup.cpp',
+	'src/WebBrowser.cpp',
 	'src/Date.cpp',
 	'src/StringList.cpp',
 	'src/String.cpp',
@@ -24,6 +27,9 @@ if WengoOSWindows():
 
 elif WengoOSMacOSX():
 	link_flags += ['-framework CoreFoundation']
+
+if WengoCCMSVC():
+	libs += ['shlwapi']
 
 env.WengoAddLinkFlags(link_flags)
 env.WengoAddIncludePath(include_path)

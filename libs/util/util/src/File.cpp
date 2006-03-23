@@ -32,14 +32,9 @@
 		#define S_ISDIR(x) ((x) & _S_IFDIR)
 		#define S_ISREG(x) ((x) & _S_IFREG)
 	#endif
-#elif defined(OS_MACOSX)
-	#include <CoreFoundation/CoreFoundation.h>
 #endif
 
-
 #include <dirent.h>
-
-
 
 #include <string>
 #include <iostream>
@@ -123,40 +118,6 @@ StringList File::getFileList() const {
 	return fileList;
 }
 
-std::string File::getApplicationDirPath() {
-	std::string result;
-
-#if defined(OS_WINDOWS)
-
-	char moduleName[256];
-	GetModuleFileNameA(0, moduleName, sizeof(moduleName));
-
-	File file(moduleName);
-	result = file.getPath();
-	result += File::getPathSeparator();
-
-#elif defined(OS_MACOSX)
-
-	CFBundleRef mainBundle = CFBundleGetMainBundle();
-	if (mainBundle) {
-		CFURLRef execUrl = CFBundleCopyExecutableURL(mainBundle);
-		CFURLRef url = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, execUrl);
-
-		char applicationPath[1024];
-
-		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)applicationPath, sizeof(applicationPath))) {
-			result = (std::string(applicationPath) + File::getPathSeparator());
-		}
-
-		CFRelease(execUrl);
-		CFRelease(url);
-	}
-
-#endif //OS_MACOSX
-
-	return result;
-}
-
 std::string File::convertPathSeparators(const std::string & path) {
 	String tmp = path;
 	tmp.replace("\\", getPathSeparator());
@@ -174,6 +135,13 @@ std::string File::getPathSeparator() {
 #endif	//OS_WINDOWS
 }
 
+void File::createPath(const std::string & path) {
+	string::size_type index = path.find(File::getPathSeparator(), 0);
+	while (index != string::npos) {
+		mkdir(path.substr(0, index).c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+		index = path.find(File::getPathSeparator(), index + 1);
+	}
+}
 
 FileReader::FileReader(const std::string & filename)
 	: File(filename) {

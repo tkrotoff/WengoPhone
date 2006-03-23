@@ -1,0 +1,116 @@
+/*
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2005  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+#include <util/Path.h>
+
+#include <util/File.h>
+#include <cutil/global.h>
+
+
+#if defined(OS_MACOSX)
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
+using namespace std;
+
+string Path::getApplicationDirPath() {
+	string result;
+
+#if defined(OS_WINDOWS)
+
+	char moduleName[256];
+	GetModuleFileNameA(0, moduleName, sizeof(moduleName));
+
+	File file(moduleName);
+	result = file.getPath();
+	result += File::getPathSeparator();
+
+#elif defined(OS_MACOSX)
+
+	CFBundleRef mainBundle = CFBundleGetMainBundle();
+	if (mainBundle) {
+		CFURLRef execUrl = CFBundleCopyExecutableURL(mainBundle);
+		CFURLRef url = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, execUrl);
+
+		char applicationPath[1024];
+
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)applicationPath, sizeof(applicationPath))) {
+			result = (string(applicationPath) + File::getPathSeparator());
+		}
+
+		CFRelease(execUrl);
+		CFRelease(url);
+	}
+
+#endif //OS_MACOSX
+
+	return result;
+}
+
+string Path::getConfigurationDirPath() {
+	string result;
+
+#if defined(OS_WINDOWS)
+
+	result = getHomeDirPath() + File::convertPathSeparators("Application Data/");
+
+#elif defined(OS_MACOSX)
+
+	result = getHomeDirPath() + File::convertPathSeparators("Library/Application Support/");
+
+#elif defined(OS_POSIX)
+
+	result = getHomeDirPath();
+
+#endif
+
+	return result;
+}
+ 
+string Path::getHomeDirPath() {
+	string result;
+
+#if defined(OS_WINDOWS)
+
+	char * homeDrive = getenv("HOMEDRIVE");
+	char * homeDir = getenv("HOMEPATH");
+	if (homeDrive && homeDir) {
+		result = string(homePath) + File::getPathSeparator() + string(homeDir);
+	}
+
+#elif defined(OS_MACOSX)
+
+	char * homeDir = getenv("HOME");
+	if (homeDir) {
+		result = homeDir;
+	}
+
+#elif defined(OS_POSIX)
+
+	char * homeDir = getenv("HOME");
+	if (homeDir) {
+		result = homeDir;
+	}
+
+#endif
+
+	result += File::getPathSeparator();
+
+	return result;
+}

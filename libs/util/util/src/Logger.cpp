@@ -20,6 +20,7 @@
 #include <util/Logger.h>
 
 #include <util/File.h>
+#include <util/Path.h>
 
 #include <iostream>
 #include <sstream>
@@ -31,7 +32,7 @@ using namespace std;
 Logger Logger::logger;
 
 Logger::Logger() {
-	_file = new FileWriter(File::getApplicationDirPath() + "log.txt");
+	_file = new FileWriter(Path::getApplicationDirPath() + "log.txt");
 }
 
 Logger::~Logger() {

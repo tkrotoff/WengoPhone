@@ -22,6 +22,7 @@
 #include "Contact.h"
 
 #include <model/profile/StreetAddressXMLSerializer.h>
+#include <model/profile/StreetAddress.h>
 
 #include <imwrapper/IMContactXMLSerializer.h>
 #include <imwrapper/IMContactSet.h>
@@ -200,12 +201,32 @@ bool ContactXMLSerializer::unserialize(const string & data) {
 	////
 
 	// Retrieving birthday
+	TiXmlNode * birthday = wgCard.FirstChild("birthday").Node();
+	if (birthday) {
+		TiXmlElement * birthdayElt = birthday->FirstChild("date")->ToElement();
+		string birthdayData;
+		birthdayData << *birthdayElt;
+		Date date;
+		DateXMLSerializer dateSerializer(date);
+		dateSerializer.unserialize(birthdayData);
+		_contact.setBirthdate(date);
+	}	
 	/////
 
 	// Retrieving organization
 	////
 
 	// Retrieving address
+	TiXmlNode * address = wgCard.FirstChild("address").Node();
+	if (address) {
+		TiXmlElement* addressElt = address->ToElement();
+		string addressData;
+		addressData << *addressElt;
+		StreetAddress streetAddress;
+		StreetAddressXMLSerializer addressSerializer(streetAddress);
+		addressSerializer.unserialize(addressData);
+		_contact.setStreetAddress(streetAddress);
+	}
 	////
 
 	// Retrieving phone numbers

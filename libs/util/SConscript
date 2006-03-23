@@ -7,7 +7,6 @@ projects = [
 	'serializer',
 	'shlibloader',
 	'settings',
-	'system',
 ]
 
 if WengoCCMSVC():

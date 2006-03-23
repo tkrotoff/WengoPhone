@@ -20,6 +20,7 @@
 #include <sound/AudioDevice.h>
 
 #include <util/StringList.h>
+#include <util/String.h>
 
 std::list<std::string> AudioDevice::getInputMixerDeviceList() {
 	return StringList();

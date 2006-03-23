@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <system/WebBrowser.h>
+#include <util/WebBrowser.h>
 
 #include <cutil/global.h>
 

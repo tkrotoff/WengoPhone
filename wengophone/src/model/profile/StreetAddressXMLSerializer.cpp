@@ -63,15 +63,36 @@ std::string StreetAddressXMLSerializer::serialize() {
 bool StreetAddressXMLSerializer::unserialize(const std::string & data) {
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
-	/*
+	
 	TiXmlHandle docHandle(& doc);
-	TiXmlNode * stringlist = docHandle.FirstChild("stringlist").Node();
-	
-	
-	TiXmlNode * lastChild = NULL;
-	while ((lastChild = stringlist->IterateChildren("elt", lastChild))) {
-		_stringList += lastChild->FirstChild()->Value();
+	TiXmlNode * address = docHandle.FirstChild("address").Node();
+
+	if (address) {
+		TiXmlNode * street = address->FirstChild("street");
+		if (street) {
+			_streetAddress._street = street->FirstChild()->Value();
+		}
+
+		TiXmlNode * locality = address->FirstChild("locality");
+		if (locality) {
+			_streetAddress._city = locality->FirstChild()->Value();
+		}
+
+		TiXmlNode * region = address->FirstChild("region");
+		if (region) {
+			_streetAddress._stateProvince = region->FirstChild()->Value();
+		}
+
+		TiXmlNode * postcode = address->FirstChild("postcode");
+		if (postcode) {
+			_streetAddress._zipCode = postcode->FirstChild()->Value();
+		}
+
+		TiXmlNode * country = address->FirstChild("country");
+		if (country) {
+			_streetAddress._country = country->FirstChild()->Value();
+		}
 	}
-	*/
-	return true;	
+
+	return true;
 }

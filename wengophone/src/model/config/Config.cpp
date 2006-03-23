@@ -22,6 +22,7 @@
 #include <sound/AudioDevice.h>
 
 #include <util/File.h>
+#include <util/Path.h>
 #include <util/Logger.h>
 #include <cutil/global.h>
 
@@ -110,8 +111,6 @@ const std::string Config::GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY = "general.sett
 const std::string Config::GENERAL_SETTINGS_AWAY_TIMER_KEY = "general.settings.away.timer";
 const std::string Config::GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY = "general.settings.notavailable.timer";
 
-
-
 const std::string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
 const std::string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
 const std::string Config::WENGO_SSO_PATH_KEY = "wengo.sso.path";
@@ -122,13 +121,29 @@ const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
 Config::Config(const std::string & name) {
 	static const std::string empty("");
 	std::string resourcesPath;
+	std::string configPath;
+
 	_name = name;
 
-	_keyDefaultValueMap[CONFIG_DIR_KEY] = std::string("");
+#if defined(OS_MACOSX) || defined(OS_WINDOWS)
+
+	configPath = Path::getConfigurationDirPath() + File::convertPathSeparators("OpenWengo/");
+
+#else
+
+	configPath = Path::getConfigurationDirPath() + File::convertpathSeparators(".openwengo/");
+
+#endif
+
+	File::createPath(configPath);
+ 	_keyDefaultValueMap[CONFIG_DIR_KEY] = configPath;
 
 #if defined(OS_WINDOWS)
-	resourcesPath = File::getApplicationDirPath();
+
+	resourcesPath = Path::getApplicationDirPath();
+
 #elif defined(OS_MACOSX)
+
 	CFBundleRef mainBundle = CFBundleGetMainBundle();
 	if (mainBundle) {
 		CFURLRef url = CFBundleCopyResourcesDirectoryURL(mainBundle);
@@ -140,7 +155,9 @@ Config::Config(const std::string & name) {
 
 		CFRelease(url);
 	}
+
 #endif
+
 	_keyDefaultValueMap[RESOURCES_DIR_KEY] = resourcesPath;
 
 	_keyDefaultValueMap[NETWORK_SSO_SSL_KEY] = true;

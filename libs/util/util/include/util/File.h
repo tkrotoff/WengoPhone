@@ -69,15 +69,6 @@ public:
 	StringList getFileList() const;
 
 	/**
-	 * Gets the directory that contains the application executable.
-	 *
-	 * The executable path returned always finished by "/" or "\".
-	 *
-	 * @param application executable path
-	 */
-	static std::string getApplicationDirPath();
-
-	/**
 	 * Gets pathName with the '/' separators converted to separators that are appropriate for the underlying operating system.
 	 *
 	 * On Windows, convertPathSeparators("c:/winnt/system32") returns "c:\winnt\system32".
@@ -93,6 +84,15 @@ public:
 	 * @return native system path separator
 	 */
 	static std::string getPathSeparator();
+
+	/**
+	 * Creates directories recursively if the path does not exist.
+	 *
+	 * If path exists, nothing happends.
+	 *
+	 * @param path the path to create
+	 */
+	static void createPath(const std::string & path);
 
 protected:
 

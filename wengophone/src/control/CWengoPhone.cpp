@@ -36,7 +36,7 @@
 #include <model/sms/Sms.h>
 #include <control/sms/CSms.h>
 
-#include <system/WebBrowser.h>
+#include <util/WebBrowser.h>
 #include <util/StringList.h>
 #include <util/Logger.h>
 
