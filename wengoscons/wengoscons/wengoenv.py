@@ -413,7 +413,11 @@ class WengoSConsEnvironment(SConsEnvironment):
 			if os.environ.has_key('LDFLAGS'):
 				ldflags = os.environ['LDFLAGS'].split(' ')
 			self.__linkFlags = ldflags
-
+			import re
+			if re.match('3\.\d\.\d', self.WengoCCGCCVersion()):
+				self.__CCFlags += ['-pthread']
+				self.__linkFlags += ['-pthread']
+		
 		def setDebugMode(self):
 			self.__setDefaultFlags()
 			self.__CCFlags += ['-g']
@@ -441,6 +445,28 @@ class WengoSConsEnvironment(SConsEnvironment):
 		def getLinkFlags(self):
 			return self.__linkFlags
 
+		def WengoCCGCCVersion(self):
+			"""
+			Get GCC version number.
+		
+			@return GCC's version number, or UnknownGCCVersion if
+			it can't be found.
+			"""
+		
+			gcc_command_name = "gcc"
+			if os.environ.has_key('CC'):
+				gcc_command_name = os.environ['CC']
+			(gcc_version_stdin, gcc_version_stdout) = os.popen2(gcc_command_name +
+									" --version", "r")
+			first_output_line = gcc_version_stdout.readline()
+			matched_version = re.match('^gcc.*?\s+\(GCC\)\s+(\d\.\d\.\d)',
+						first_output_line)
+			gcc_version_stdin.close()
+			gcc_version_stdout.close()
+			if matched_version:
+				return matched_version.group(1)
+			else:
+				return "UnknownGCCVersion"
 
 	class CCMSVC:
 		"""
@@ -1486,29 +1512,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 		fd.write(fileTemplate % fileData)
 		fd.close()
 		return filename
-
-	def WengoCCGCCVersion(self):
-		"""
-		Get GCC version number.
-		
-		@return GCC's version number, or UnknownGCCVersion if
-		it can't be found.
-		"""
-		
-		gcc_command_name = "gcc"
-		if os.environ.has_key('CC'):
-			gcc_command_name = os.environ['CC']
-		(gcc_version_stdin, gcc_version_stdout) = os.popen2(gcc_command_name +
-								    " --version", "r")
-		first_output_line = gcc_version_stdout.readline()
-		matched_version = re.match('^gcc.*?\s+\(GCC\)\s+(\d\.\d\.\d)',
-					   first_output_line)
-		gcc_version_stdin.close()
-		gcc_version_stdout.close()
-		if matched_version:
-			return matched_version.group(1)
-		else:
-			return "UnknownGCCVersion"
 
 #FIXME ugly?
 WengoSConsEnvironment._globalEnv = None
