@@ -25,7 +25,10 @@
 
 #if defined(OS_MACOSX)
 #include <CoreFoundation/CoreFoundation.h>
+#elif defined(OS_WINDOWS)
+#include <windows.h>
 #endif
+
 
 using namespace std;
 
