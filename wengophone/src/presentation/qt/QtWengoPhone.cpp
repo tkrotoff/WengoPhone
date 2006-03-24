@@ -416,6 +416,7 @@ void QtWengoPhone::editMyProfile(){
 void QtWengoPhone::exitApplication() {
 	_wengoPhoneWindow->hide();
 	_cWengoPhone.terminate();
+	_trayIcon->hide();
 	QCoreApplication::exit(EXIT_SUCCESS);
 }
 
@@ -469,7 +470,7 @@ void QtWengoPhone::showFaq() {
 }
 
 void QtWengoPhone::showByOut(){
-
+	_cWengoPhone.showWengoBuyWengos();
 }
 void QtWengoPhone::showCallOut(){
 	_cWengoPhone.showWengoCallOut();
@@ -538,17 +539,27 @@ void QtWengoPhone::showCreateConferenceCall() {
 
 
 void QtWengoPhone::setTrayMenu() {
+	QAction * action;
+
 	if (!_trayMenu) {
 		_trayMenu = new QMenu(_wengoPhoneWindow);
 	}
 	_trayMenu->clear();
+	// Open the wengophone window
 	_trayMenu->addAction(tr("Open Wengophone"));
+	// Change status
 	_trayMenu->addAction(tr("Status"));
+	// Start a call session
 	_trayMenu->addAction(tr("Call"));
-	_trayMenu->addAction(tr("Send a SMS"));
+	// Send  SMS
+	action = _trayMenu->addAction(tr("Send a SMS"));
+	connect (action,SIGNAL(triggered()),this,SLOT(sendSms()));
+	// Start a chat
 	_trayMenu->addAction(tr("Start a chat"));
-	QAction * exitAction = _trayMenu->addAction(tr("Quit Wengophone"));
-	connect (exitAction,SIGNAL(triggered()),this,SLOT(exitApplication()));
+	// Exit
+	action = _trayMenu->addAction(tr("Quit Wengophone"));
+	connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
+
 	_trayIcon->setPopup(_trayMenu);
 }
 
