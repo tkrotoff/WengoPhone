@@ -129,6 +129,9 @@
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="echoMode" >
+                   <enum>QLineEdit::Password</enum>
+                  </property>
                  </widget>
                 </item>
                 <item row="5" column="0" colspan="2" >
@@ -226,6 +229,9 @@
                     <width>250</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="echoMode" >
+                   <enum>QLineEdit::Password</enum>
                   </property>
                  </widget>
                 </item>
@@ -375,6 +381,9 @@
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="echoMode" >
+                   <enum>QLineEdit::Password</enum>
+                  </property>
                  </widget>
                 </item>
                 <item row="3" column="0" >
@@ -482,6 +491,9 @@
                     <width>250</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="echoMode" >
+                   <enum>QLineEdit::Password</enum>
                   </property>
                  </widget>
                 </item>
@@ -653,6 +665,9 @@
                     <width>250</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="echoMode" >
+                   <enum>QLineEdit::Password</enum>
                   </property>
                  </widget>
                 </item>
@@ -845,6 +860,9 @@
                       <height>16777215</height>
                      </size>
                     </property>
+                    <property name="echoMode" >
+                     <enum>QLineEdit::Password</enum>
+                    </property>
                    </widget>
                   </item>
                  </layout>
@@ -998,7 +1016,11 @@
                      <widget class="QLineEdit" name="silcNetworkEdit" />
                     </item>
                     <item row="2" column="1" >
-                     <widget class="QLineEdit" name="silcPasswordEdit" />
+                     <widget class="QLineEdit" name="silcPasswordEdit" >
+                      <property name="echoMode" >
+                       <enum>QLineEdit::Password</enum>
+                      </property>
+                     </widget>
                     </item>
                     <item row="0" column="1" >
                      <widget class="QLineEdit" name="silcSreenNameEdit" />
@@ -1076,7 +1098,11 @@
                    <widget class="QLineEdit" name="simpleServerEdit" />
                   </item>
                   <item row="2" column="1" >
-                   <widget class="QLineEdit" name="simplePasswordEdit" />
+                   <widget class="QLineEdit" name="simplePasswordEdit" >
+                    <property name="echoMode" >
+                     <enum>QLineEdit::Password</enum>
+                    </property>
+                   </widget>
                   </item>
                   <item row="3" column="0" >
                    <widget class="QLabel" name="label_81" >
@@ -1180,7 +1206,11 @@
                    </widget>
                   </item>
                   <item row="1" column="1" >
-                   <widget class="QLineEdit" name="sametimePasswordEdit" />
+                   <widget class="QLineEdit" name="sametimePasswordEdit" >
+                    <property name="echoMode" >
+                     <enum>QLineEdit::Password</enum>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
@@ -1339,7 +1369,11 @@
                    </widget>
                   </item>
                   <item row="1" column="1" >
-                   <widget class="QLineEdit" name="yahooPasswordEdit" />
+                   <widget class="QLineEdit" name="yahooPasswordEdit" >
+                    <property name="echoMode" >
+                     <enum>QLineEdit::Password</enum>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
