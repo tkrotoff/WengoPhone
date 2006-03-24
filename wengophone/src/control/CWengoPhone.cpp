@@ -165,8 +165,8 @@ void CWengoPhone::openWengoUrlWithoutAuth(std::string url) {
 
 	//tune the url for Wengo
 	std::string finalUrl = url;
-	url += "&wl=" + string(WengoPhoneBuildId::SOFTPHONE_NAME);
-	url += "&lang=" + langCode;
+	finalUrl += "&wl=" + string(WengoPhoneBuildId::SOFTPHONE_NAME);
+	finalUrl += "&lang=" + langCode;
 	
 	WebBrowser::openUrl(finalUrl);
 	LOG_DEBUG("url opened: " + finalUrl);
@@ -183,10 +183,10 @@ void CWengoPhone::openWengoUrlWithAuth(std::string url) {
 
 			//tune the url for Wengo, with authentication
 			std::string finalUrl = url;
-			url += "&wl=" + string(WengoPhoneBuildId::SOFTPHONE_NAME);
-			url += "&lang=" + langCode;
-			url += "&login=" + wengoAccount.getWengoLogin();
-			url += "&password=" + wengoAccount.getWengoPassword();
+			finalUrl += "&wl=" + string(WengoPhoneBuildId::SOFTPHONE_NAME);
+			finalUrl += "&lang=" + langCode;
+			finalUrl += "&login=" + wengoAccount.getWengoLogin();
+			finalUrl += "&password=" + wengoAccount.getWengoPassword();
 			
 			WebBrowser::openUrl(finalUrl);
 			LOG_DEBUG("url opened: " + finalUrl);
