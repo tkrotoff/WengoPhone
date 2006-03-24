@@ -187,7 +187,19 @@ public:
 		return _duration;
 	}
 
+	/** Sets if PhoneCall is a ConferenceCall. */
+	void setConference(bool conference) {
+		_conference = conference;
+	}
+
+	/** If PhoneCall is a ConferenceCall. */
+	bool belongsToConference() const {
+		return _conference;
+	}
+
 private:
+
+	void applyState(EnumPhoneCallState::PhoneCallState state);
 
 	/** PhoneLine associated with this PhoneCall. */
 	IPhoneLine & _phoneLine;
@@ -215,6 +227,12 @@ private:
 
 	/** If the PhoneCall should be resumed. */
 	bool _resume;
+
+	/** If this PhoneCall belongs to a ConferenceCall or not. */
+	bool _conference;
+
+	/** If this PhoneCall has been rejected as an incoming call. */
+	bool _callRejected;
 };
 
 #endif	//PHONECALL_H

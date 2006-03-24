@@ -128,7 +128,7 @@ std::string getPath(const std::string & url) {
 	String tmp = url;
 	eraseProtocol(tmp);
 
-	StringList tmp2 = StringList::split(tmp, HttpRequest::HTTP_PATH_SEPARATOR);
+	StringList tmp2 = tmp.split(HttpRequest::HTTP_PATH_SEPARATOR);
 	//tmp2[0] == "wengo.fr:8080"
 
 	if (!tmp2[0].empty()) {

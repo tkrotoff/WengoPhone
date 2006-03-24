@@ -268,7 +268,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	std::map<const std::string, IMChatSession *> & contactChatMap = p->getContactChatMap();
 
 	// Finding associated session
-	string from = StringList::split(string(info->from))[0];
+	string from = String(info->from).split(" ")[0];
 	std::map<const std::string, IMChatSession *>::const_iterator sessionIt = contactChatMap.find(from);
 
 	if (sessionIt != contactChatMap.end()) {

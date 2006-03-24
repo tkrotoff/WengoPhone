@@ -36,7 +36,6 @@
 
 #include <sipwrapper/SipWrapper.h>
 
-#include <util/StringList.h>
 #include <util/Logger.h>
 
 #include <ctime>
@@ -47,6 +46,8 @@ PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 	_duration = -1;
 	_hold = false;
 	_resume = false;
+	_conference = false;
+	_callRejected = false;
 
 	_sipAddress = sipAddress;
 
@@ -90,17 +91,16 @@ PhoneCall::~PhoneCall() {
 
 void PhoneCall::accept() {
 	_phoneLine.getSipWrapper().acceptCall(_callId);
-	if (_state->getCode() == PhoneCallStateIncoming::CODE) {
-		setState(PhoneCallStateTalking::CODE);
-	}
 	LOG_DEBUG("call accepted");
 }
 
 void PhoneCall::resume() {
 	if (_state->getCode() == PhoneCallStateHold::CODE) {
-		_phoneLine.getSipWrapper().resumeCall(_callId);
-		LOG_DEBUG("call resumed");
-		_resume = false;
+		if (!_resume) {
+			_phoneLine.getSipWrapper().resumeCall(_callId);
+			LOG_DEBUG("call resumed");
+			_resume = false;
+		}
 	} else {
 		_resume = true;
 	}
@@ -110,9 +110,11 @@ void PhoneCall::hold() {
 	if (_state->getCode() == PhoneCallStateTalking::CODE ||
 		_state->getCode() == PhoneCallStateResumed::CODE) {
 
-		_phoneLine.getSipWrapper().holdCall(_callId);
-		LOG_DEBUG("call hold");
-		_hold = false;
+		if (!_hold) {
+			_phoneLine.getSipWrapper().holdCall(_callId);
+			LOG_DEBUG("call hold");
+			_hold = false;
+		}
 	} else {
 		_hold = true;
 	}
@@ -131,7 +133,7 @@ void PhoneCall::blindTransfer(const std::string & phoneNumber) {
 }
 
 void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
-	static int timeStart = -1;
+	LOG_DEBUG("PhoneCallState=" + String::fromNumber(state));
 
 	for (unsigned i = 0; i < _phoneCallStateList.size(); i++) {
 		PhoneCallState * callState = _phoneCallStateList[i];
@@ -140,11 +142,16 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 				_state = callState;
 				_state->execute(*this);
 				LOG_DEBUG("call state changed callId=" + String::fromNumber(_callId) + " state=" + _state->toString());
+				applyState(state);
 				stateChangedEvent(*this, state);
 				break;
 			}
 		}
 	}
+}
+
+void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
+	static int timeStart = -1;
 
 	//This should not replace the state machine pattern PhoneCallState
 	switch(state) {
@@ -156,10 +163,12 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
+		_hold = false;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateTalking:
 		if (_hold) {
+			_hold = false;
 			hold();
 		} else {
 			//Start of the call, computes duration
@@ -178,6 +187,9 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 		if (timeStart != -1) {
 			_duration = time(NULL) - timeStart;
 		}
+		if (!_callRejected) {
+			setState(EnumPhoneCallState::PhoneCallStateMissed);
+		}
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming:
@@ -185,6 +197,7 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 
 	case EnumPhoneCallState::PhoneCallStateHold:
 		if (_resume) {
+			_resume = false;
 			resume();
 		}
 		break;
@@ -203,6 +216,7 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 void PhoneCall::close() {
 	if (_state->getCode() != PhoneCallStateClosed::CODE) {
 		if (_state->getCode() == PhoneCallStateIncoming::CODE) {
+			_callRejected = true;
 			_phoneLine.getSipWrapper().rejectCall(_callId);
 		} else {
 			_phoneLine.getSipWrapper().closeCall(_callId);

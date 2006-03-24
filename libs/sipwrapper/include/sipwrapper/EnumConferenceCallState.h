@@ -17,43 +17,32 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHONELINESTATE_H
-#define PHONELINESTATE_H
+#ifndef ENUMCONFERENCECALLSTATE_H
+#define ENUMCONFERENCECALLSTATE_H
 
 #include <util/NonCopyable.h>
 
-#include <sipwrapper/EnumPhoneLineState.h>
-
-#include <string>
-
-class IPhoneLine;
-
 /**
- * Represents the state of a PhoneLine.
+ * Conference call states (started, stopped, user join...).
  *
  * @author Tanguy Krotoff
  */
-class PhoneLineState : NonCopyable {
+class EnumConferenceCallState : NonCopyable {
 public:
 
-	virtual ~PhoneLineState() {
-	}
+	enum ConferenceCallState {
+		/** Default state. */
+		ConferenceCallStateDefault,
 
-	virtual void execute(IPhoneLine & phoneLine) = 0;
+		/** An error occured. */
+		ConferenceCallStateError,
 
-	/**
-	 * Gets the status code corresponding to this PhoneLine state.
-	 *
-	 * @return status code of this state
-	 */
-	virtual EnumPhoneLineState::PhoneLineState getCode() const = 0;
+		/** Conference has been started. */
+		ConferenceCallStateStarted,
 
-	/**
-	 * Gets the string representation of this PhoneLine state.
-	 *
-	 * @return string representation of this state
-	 */
-	virtual std::string toString() const = 0;
+		/** Conference has been stopped. */
+		ConferenceCallStateStopped,
+	};
 };
 
-#endif	//PHONELINESTATE_H
+#endif	//ENUMCONFERENCECALLSTATE_H

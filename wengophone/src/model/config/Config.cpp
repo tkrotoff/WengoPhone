@@ -130,25 +130,19 @@ Config::Config(const std::string & name) {
 
 	_name = name;
 
+	//Default config path
 #if defined(OS_MACOSX) || defined(OS_WINDOWS)
-
-	configPath = Path::getConfigurationDirPath() + File::convertPathSeparators("OpenWengo/");
-
+	configPath = Path::getConfigurationDirPath() + File::convertPathSeparators("WengoPhone/");
 #else
-
-	configPath = Path::getConfigurationDirPath() + File::convertPathSeparators(".openwengo/");
-
+	configPath = Path::getConfigurationDirPath() + File::convertPathSeparators(".wengophone/");
 #endif
-
 	File::createPath(configPath);
- 	_keyDefaultValueMap[CONFIG_DIR_KEY] = configPath;
+	_keyDefaultValueMap[CONFIG_DIR_KEY] = configPath;
 
+	//Default resources path
 #if defined(OS_WINDOWS)
-
 	resourcesPath = Path::getApplicationDirPath();
-
 #elif defined(OS_MACOSX)
-
 	CFBundleRef mainBundle = CFBundleGetMainBundle();
 	if (mainBundle) {
 		CFURLRef url = CFBundleCopyResourcesDirectoryURL(mainBundle);
@@ -160,9 +154,7 @@ Config::Config(const std::string & name) {
 
 		CFRelease(url);
 	}
-
 #endif
-
 	_keyDefaultValueMap[RESOURCES_DIR_KEY] = resourcesPath;
 
 	_keyDefaultValueMap[NETWORK_SSO_SSL_KEY] = true;

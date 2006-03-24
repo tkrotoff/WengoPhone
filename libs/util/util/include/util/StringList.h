@@ -88,19 +88,12 @@ public:
 	unsigned contains(const std::string & str, bool caseSensitive = true) const;
 
 	/**
-	 * Tokenizes a string with a delimiter of your choice.
+	 * Joins the string list into a single string given a separator.
 	 *
-	 * Example:
-	 * <pre>
-	 * StringList tokens = StringList::split("four", "");	//tokens = "four"
-	 * tokens = StringList::split("four roses");	//tokens = "four", "roses"
-	 * </pre>
-	 *
-	 * @param str string to tokenize/split
-	 * @param separator string delimiter (default is a whitespace)
-	 * @return tokens, strings created by splitting the input string
+	 * @param separator string delimiter
+	 * @return the joined string with each element separated by the separator
 	 */
-	static StringList split(const std::string & str, const std::string & separator = " ");
+	std::string join(const std::string & separator);
 
 	enum SortingOrder {
 		Ascendant,

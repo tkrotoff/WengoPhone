@@ -17,43 +17,42 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHONELINESTATE_H
-#define PHONELINESTATE_H
+#ifndef CONFERENCECALLPARTICIPANT_H
+#define CONFERENCECALLPARTICIPANT_H
 
 #include <util/NonCopyable.h>
 
-#include <sipwrapper/EnumPhoneLineState.h>
+#include <sipwrapper/EnumPhoneCallState.h>
 
-#include <string>
-
-class IPhoneLine;
+class ConferenceCall;
+class PhoneCall;
 
 /**
- * Represents the state of a PhoneLine.
+ * Participant to a ConferenceCall.
  *
+ * @ingroup model
  * @author Tanguy Krotoff
  */
-class PhoneLineState : NonCopyable {
+class ConferenceCallParticipant : NonCopyable {
 public:
 
-	virtual ~PhoneLineState() {
-	}
+	ConferenceCallParticipant(ConferenceCall & conferenceCall, PhoneCall & phoneCall, bool nohold);
 
-	virtual void execute(IPhoneLine & phoneLine) = 0;
+private:
 
-	/**
-	 * Gets the status code corresponding to this PhoneLine state.
-	 *
-	 * @return status code of this state
-	 */
-	virtual EnumPhoneLineState::PhoneLineState getCode() const = 0;
+	void joinConference();
 
-	/**
-	 * Gets the string representation of this PhoneLine state.
-	 *
-	 * @return string representation of this state
-	 */
-	virtual std::string toString() const = 0;
+	void phoneCallStateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state);
+
+	ConferenceCall & _conferenceCall;
+
+	PhoneCall & _phoneCall;
+
+	bool _waitForHoldState;
+
+	bool _waitForTalkingState;
+
+	bool _nohold;
 };
 
-#endif	//PHONELINESTATE_H
+#endif	//CONFERENCECALLPARTICIPANT_H

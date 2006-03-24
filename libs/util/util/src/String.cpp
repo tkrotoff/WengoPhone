@@ -19,6 +19,7 @@
 
 #include <util/String.h>
 
+#include <util/StringList.h>
 #include <util/Logger.h>
 
 #include <cctype>
@@ -189,4 +190,28 @@ std::string String::encodeUrl(const std::string & url) {
 	}
 
 	return newUrl;
+}
+
+StringList String::split(const std::string & separator) const {
+	string str(c_str());
+
+	//Skip separator at beginning.
+	string::size_type lastPos = str.find_first_not_of(separator, 0);
+
+	//Find first "non-separator".
+	string::size_type pos = str.find_first_of(separator, lastPos);
+
+	StringList tokens;
+	while (string::npos != pos || string::npos != lastPos) {
+
+		//Found a token, add it to the vector.
+		tokens.add(str.substr(lastPos, pos - lastPos));
+
+		//Skip delimiters. Note the "not_of"
+		lastPos = str.find_first_not_of(separator, pos);
+
+		//Find next "non-delimiter"
+		pos = str.find_first_of(separator, lastPos);
+	}
+	return tokens;
 }

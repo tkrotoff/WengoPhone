@@ -19,7 +19,6 @@
 
 #include <util/StringList.h>
 
-#include <util/String.h>
 #include <util/Logger.h>
 
 using namespace std;
@@ -41,28 +40,6 @@ StringList::operator std::list<std::string>() {
 		strList.push_back((*this)[i]);
 	}
 	return strList;
-}
-
-StringList StringList::split(const std::string & str, const std::string & separator) {
-	//Skip separator at beginning.
-	string::size_type lastPos = str.find_first_not_of(separator, 0);
-
-	//Find first "non-separator".
-	string::size_type pos = str.find_first_of(separator, lastPos);
-
-	StringList tokens;
-	while (string::npos != pos || string::npos != lastPos) {
-
-		//Found a token, add it to the vector.
-		tokens.add(str.substr(lastPos, pos - lastPos));
-
-		//Skip delimiters. Note the "not_of"
-		lastPos = str.find_first_not_of(separator, pos);
-
-		//Find next "non-delimiter"
-		pos = str.find_first_of(separator, lastPos);
-	}
-	return tokens;
 }
 
 std::string StringList::operator[](unsigned i) const {
@@ -107,4 +84,12 @@ void StringList::sort(SortingOrder order) {
 	default:
 		LOG_FATAL("unknown sorting order");
 	}
+}
+
+std::string StringList::join(const std::string & separator) {
+	std::string joinedString;
+	for (unsigned i = 0; i < size(); i++) {
+		joinedString += get(i);
+	}
+	return joinedString;
 }

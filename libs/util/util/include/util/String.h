@@ -22,6 +22,8 @@
 
 #include <string>
 
+class StringList;
+
 /**
  * std::string wrapper/helper.
  *
@@ -183,6 +185,22 @@ public:
 	 *         ASCII equivalent
 	 */
 	static std::string decodeUrl(const std::string & url);
+
+	/**
+	 * Tokenizes the string with a delimiter of your choice.
+	 *
+	 * Example:
+	 * <pre>
+	 * String str("four");
+	 * StringList tokens = str.split("");	//tokens = "four"
+	 * String str("four roses");
+	 * StringList tokens = str.split(" ");	//tokens = "four", "roses"
+	 * </pre>
+	 *
+	 * @param separator string delimiter
+	 * @return tokens, strings created by splitting the input string
+	 */
+	StringList split(const std::string & separator) const;
 };
 
 #endif	//STRING_H

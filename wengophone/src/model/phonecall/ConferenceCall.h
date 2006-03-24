@@ -20,15 +20,19 @@
 #ifndef CONFERENCECALL_H
 #define CONFERENCECALL_H
 
+#include <sipwrapper/EnumConferenceCallState.h>
+#include <sipwrapper/EnumPhoneCallState.h>
+
+#include <util/NonCopyable.h>
 #include <util/Event.h>
 #include <util/List.h>
-#include <thread/Mutex.h>
 
 #include <string>
-#include <vector>
+#include <map>
 
 class IPhoneLine;
 class PhoneCall;
+class ConferenceCallParticipant;
 
 /**
  * Handles a conference call.
@@ -42,16 +46,16 @@ class PhoneCall;
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class ConferenceCall {
+class ConferenceCall : NonCopyable {
 public:
 
 	/**
 	 * The state of the ConferenceCall has changed.
 	 *
 	 * @param sender this class
-	 * @param status new status
+	 * @param state new state
 	 */
-	Event<void (ConferenceCall & sender, int status)> stateChangedEvent;
+	Event<void (ConferenceCall & sender, EnumConferenceCallState::ConferenceCallState state)> stateChangedEvent;
 
 	/**
 	 * Creates a new ConferenceCall given a PhoneLine.
@@ -78,24 +82,36 @@ public:
 	 */
 	void stop();
 
+	bool isStarted() const {
+		return (_confId != -1);
+	}
+
+	/** Should only be used by ConferenceCallParticipant. */
+	void join(int callId);
+
 private:
 
 	/** Checks if the PhoneCall is not already created. */
 	PhoneCall * getPhoneCall(const std::string & phoneNumber) const;
 
+	void phoneCallStateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state);
+
+
 	/** PhoneLine associated with the ConferenceCall. */
 	IPhoneLine & _phoneLine;
 
-	/** Defines the vector of PhoneCall. */
-	typedef std::vector < PhoneCall * > PhoneCalls;
+	/** Defines the vector of PhoneCall participant. */
+	typedef std::map < std::string, PhoneCall * > PhoneCalls;
 
 	/** List of PhoneCall. */
-	PhoneCalls _phoneCallList;
+	PhoneCalls _phoneCallMap;
 
-	/** Conference id of this ConferenceCall. */
+	/**
+	 * Conference id of this ConferenceCall.
+	 *
+	 * -1 means that the conference has not been started yet.
+	 */
 	int _confId;
-
-	static Mutex _mutex;
 };
 
 #endif	//CONFERENCECALL_H

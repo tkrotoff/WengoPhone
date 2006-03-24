@@ -95,17 +95,22 @@ std::string PhoneLine::getMySipAddress() const {
 
 int PhoneLine::makeCall(const std::string & phoneNumber) {
 	if (phoneNumber.empty()) {
+		LOG_ERROR("empty phone number");
 		return -1;
 	}
 
-	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _sipAccount.getRealm());
-
 	for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
 		PhoneCall * phoneCall = (*it).second;
-		while (phoneCall->getState().getCode() != EnumPhoneCallState::PhoneCallStateTalking) {
-			Thread::msleep(100);
+		EnumPhoneCallState::PhoneCallState state = phoneCall->getState().getCode();
+		if (state != EnumPhoneCallState::PhoneCallStateTalking &&
+			state != EnumPhoneCallState::PhoneCallStateHold) {
+
+			LOG_ERROR("cannot place the call=" + phoneNumber + ", at least another phone call is not in talking state");
+			return -1;
 		}
 	}
+
+	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _sipAccount.getRealm());
 
 	//Puts all the PhoneCall in the hold state before to create a new PhoneCall
 	holdCallsExcept(-1);
@@ -171,7 +176,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
-		holdCallsExcept(callId);
+		//holdCallsExcept(callId);
 		_activePhoneCall = _phoneCallHash[callId];
 		break;
 
@@ -233,7 +238,8 @@ void PhoneLine::holdCallsExcept(int callId) {
 	for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
 		PhoneCall * phoneCall = (*it).second;
 		if (phoneCall) {
-			if (phoneCall->getCallId() != callId) {
+			if (phoneCall->getCallId() != callId /*&&
+				!phoneCall->belongsToConference()*/) {
 				phoneCall->hold();
 			}
 		}
