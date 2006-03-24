@@ -127,9 +127,9 @@ public:
 	virtual const PhoneLineState & getState() const = 0;
 
 	/**
-	 * Gets the WengoPhone instance.
+	 * Gets the UserProfile instance.
 	 *
-	 * @return WengoPhone instance
+	 * @return UserProfile instance
 	 */
 	virtual WengoPhone & getWengoPhone() const = 0;
 

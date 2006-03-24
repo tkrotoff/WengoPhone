@@ -19,14 +19,14 @@
 
 #include "IMContactListHandler.h"
 
-#include <model/WengoPhone.h>
+#include <model/profile/UserProfile.h>
 #include <imwrapper/IMContactList.h>
 #include <imwrapper/IMWrapperFactory.h>
 
 #include <util/Logger.h>
 
-IMContactListHandler::IMContactListHandler(WengoPhone & wengoPhone) {
-	wengoPhone.newIMAccountAddedEvent +=
+IMContactListHandler::IMContactListHandler(UserProfile & userProfile) {
+	userProfile.newIMAccountAddedEvent +=
 		boost::bind(&IMContactListHandler::newIMAccountAddedEventHandler, this, _1, _2);
 }
 
@@ -79,7 +79,7 @@ void IMContactListHandler::contactRemovedEventHandler(IMContactList & sender,
 	_imContactSet.erase(it);
 }
 
-void IMContactListHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
+void IMContactListHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
 	IMContactListMap::const_iterator it = _imContactListMap.find(imAccount);
 
 	if (it == _imContactListMap.end()) {

@@ -101,6 +101,8 @@ public:
 
 	SipAccount();
 
+	SipAccount(const SipAccount & sipAccount);
+
 	virtual ~SipAccount();
 
 	/**
@@ -240,6 +242,13 @@ public:
 	 */
 	void setProxySettings(const std::string & proxyAddress, unsigned proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword);
+
+	enum SipAccountType {
+		SipAccountTypeBasic,
+		SipAccountTypeWengo
+	};
+
+	virtual SipAccountType getType() const = 0;
 
 protected:
 

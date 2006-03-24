@@ -27,6 +27,7 @@
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactList.h>
 #include <model/presence/PresenceHandler.h>
+#include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
 
@@ -64,7 +65,7 @@ void QtAddContact::showContactGroups() {
 }
 
 void QtAddContact::addContact() {
-	Contact & contact = _cWengoPhone.getWengoPhone().getContactList().createContact();
+	Contact & contact = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getContactList().createContact();
 	if (!_contactPhoneNumber.empty()) {
 		contact.setWengoPhoneId(_contactPhoneNumber);
 	}

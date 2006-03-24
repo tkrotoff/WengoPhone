@@ -83,7 +83,7 @@ protected:
 
 	QList<QString> _imAccountsPicPath;
 
-	QLineEdit * _cellphone;
+	QLineEdit * _cellPhone;
 
 	QLineEdit * _wengoPhone;
 

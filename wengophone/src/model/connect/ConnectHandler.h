@@ -34,7 +34,7 @@ class Connect;
 class PresenceHandler;
 class WengoPhone;
 class IMAccount;
-class WengoPhone;
+class UserProfile;
 
 /**
  *
@@ -68,13 +68,13 @@ public:
 
 	void disconnect(const IMAccount & imAccount);
 
-	ConnectHandler(WengoPhone & wengoPhone);
+	ConnectHandler(UserProfile & userProfile);
 
 	~ConnectHandler();
 
 private:
 
-	void newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount);
+	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
 	void loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status);
 

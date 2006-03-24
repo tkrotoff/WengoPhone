@@ -28,7 +28,7 @@
 #include <set>
 #include <string>
 
-class WengoPhone;
+class UserProfile;
 class IMAccount;
 class IMContactList;
 
@@ -79,7 +79,7 @@ public:
 	 */
 	Event< void (IMContactList & sender, const std::string & groupName) > contactGroupRemovedEvent;
 
-	IMContactListHandler(WengoPhone & wengoPhone);
+	IMContactListHandler(UserProfile & userProfile);
 
 	~IMContactListHandler();
 
@@ -124,7 +124,7 @@ private:
 	void contactMovedEventHandler(IMContactList & sender,
 		const std::string & groupName, const std::string & contactId);
 
-	void newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount);
+	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
 	typedef std::map<IMAccount, IMContactList *> IMContactListMap;
 

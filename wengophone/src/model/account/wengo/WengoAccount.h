@@ -67,6 +67,10 @@ public:
 		return "WengoAccount";
 	}
 
+	SipAccountType getType() const {
+		return SipAccountTypeWengo;
+	}
+
 private:
 
 	bool discoverForSSO();

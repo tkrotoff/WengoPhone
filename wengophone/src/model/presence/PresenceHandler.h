@@ -32,7 +32,7 @@
 
 #include <map>
 
-class WengoPhone;
+class UserProfile;
 class ContactList;
 class Connect;
 class Presence;
@@ -68,7 +68,7 @@ public:
 	Event<void (PresenceHandler & sender, const IMContact & imContact,
 		IMPresence::SubscribeStatus status)> subscribeStatusEvent;
 
-	PresenceHandler(WengoPhone & wengoPhone);
+	PresenceHandler(UserProfile & userProfile);
 
 	~PresenceHandler();
 
@@ -116,7 +116,7 @@ private:
 
 	void subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status);
 
-	void newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount);
+	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
 	/**
 	 * Find the Presence related to the given protocol.

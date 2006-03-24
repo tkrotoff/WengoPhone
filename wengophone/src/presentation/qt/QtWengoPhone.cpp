@@ -21,8 +21,10 @@
 
 #include <model/account/SipAccount.h>
 #include <model/account/wengo/WengoAccount.h>
-#include <model/phonecall/PhoneCall.h>
 #include <model/connect/ConnectHandler.h>
+#include <model/phonecall/PhoneCall.h>
+#include <model/profile/UserProfile.h>
+
 #include <control/CWengoPhone.h>
 
 #include <imwrapper/EnumIMProtocol.h>
@@ -357,13 +359,13 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 
 }
 
-void QtWengoPhone::noAccountAvailableEventHandler(WengoPhone & sender) {
-	typedef PostEvent1<void (WengoPhone & sender), WengoPhone &> MyPostEvent;
+void QtWengoPhone::noAccountAvailableEventHandler(UserProfile & sender) {
+	typedef PostEvent1<void (UserProfile & sender), UserProfile &> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::noAccountAvailableEventHandlerThreadSafe, this, _1), sender);
 	postEvent(event);
 }
 
-void QtWengoPhone::noAccountAvailableEventHandlerThreadSafe(WengoPhone & sender) {
+void QtWengoPhone::noAccountAvailableEventHandlerThreadSafe(UserProfile & sender) {
 	showLoginWindow();
 }
 
@@ -407,7 +409,7 @@ void QtWengoPhone::openWengoAccount() {
 }
 
 void QtWengoPhone::editMyProfile(){
-	QtEditMyProfile profile(_tabWidget);
+	QtEditMyProfile profile(_cWengoPhone.getWengoPhone(), _tabWidget);
 	profile.exec();
 }
 
@@ -445,7 +447,7 @@ void QtWengoPhone::actionSetLogin() {
 		}
 
 		_cWengoPhone.addIMAccount(login, password, protocol);
-		_cWengoPhone.getWengoPhone().getConnectHandler().connect(IMAccount(login, password, protocol));
+		_cWengoPhone.getWengoPhone().getCurrentUserProfile().getConnectHandler().connect(IMAccount(login, password, protocol));
 		LOG_DEBUG("set login");
 	}
 }
@@ -519,7 +521,7 @@ void QtWengoPhone::showCreateConferenceCall() {
 	int ret = conferenceDialog->exec();
 
 	if (ret == QDialog::Accepted) {
-		IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getActivePhoneLine();
+		IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
 
 		if (phoneLine != NULL) {
 			ConferenceCall * confCall = new ConferenceCall(*phoneLine);

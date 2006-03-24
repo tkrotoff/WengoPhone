@@ -32,7 +32,7 @@ class IMAccount;
 class IMChatSession;
 class IMContactSet;
 class ConnectHandler;
-class WengoPhone;
+class UserProfile;
 
 /**
  *
@@ -43,7 +43,7 @@ class WengoPhone;
 class ChatHandler : NonCopyable {
 public:
 
-	ChatHandler(WengoPhone & wengoPhone);
+	ChatHandler(UserProfile & userProfile);
 
 	~ChatHandler();
 
@@ -73,13 +73,11 @@ private:
 
 	void newIMChatSessionCreatedEventHandler(IMChat & sender, IMChatSession & imChatSession);
 
-	void newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount);
+	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
 	IMChatMap _imChatMap;
 
 	IMChatSessionList _imChatSessionList;
-
-	WengoPhone & _wengoPhone;
 };
 
 #endif	//CHATHANDLER_H

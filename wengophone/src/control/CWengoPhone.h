@@ -37,7 +37,12 @@ class StringList;
 class WenboxPlugin;
 class IMHandler;
 class PresenceHandler;
+class ConnectHandler;
 class ChatHandler;
+class PhoneCall;
+class Sms;
+class IMAccount;
+class UserProfile;
 
 /**
  * @defgroup control Control Component
@@ -74,7 +79,7 @@ public:
 	/**
 	 * @see WengoPhone::noAccountAvailableEvent
 	 */
-	Event<void (WengoPhone & sender)> noAccountAvailableEvent;
+	Event<void (UserProfile & sender)> noAccountAvailableEvent;
 
 	/**
 	 * @see WengoPhone::proxyNeedsAuthenticationEvent
@@ -195,23 +200,23 @@ private:
 	 */
 	void openWengoUrlWithoutAuth(std::string url);
 
-	void presenceHandlerCreatedEventHandler(WengoPhone & sender, PresenceHandler & presenceHandler);
+	void presenceHandlerCreatedEventHandler(UserProfile & sender, PresenceHandler & presenceHandler);
 
-	void chatHandlerCreatedEventHandler(WengoPhone & sender, ChatHandler & chatHandler);
+	void chatHandlerCreatedEventHandler(UserProfile & sender, ChatHandler & chatHandler);
 
-	void phoneLineCreatedEventHandler(WengoPhone & sender, IPhoneLine & phoneLine);
+	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
 
-	void contactListCreatedEventHandler(WengoPhone & sender, ContactList & contactList);
+	void contactListCreatedEventHandler(UserProfile & sender, ContactList & contactList);
 
 	void wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin);
 
-	void smsCreatedEventHandler(WengoPhone & sender, Sms & sms);
+	void smsCreatedEventHandler(UserProfile & sender, Sms & sms);
 
-	void connectHandlerCreatedEventHandler(WengoPhone & sender, ConnectHandler & connectHandler);
+	void connectHandlerCreatedEventHandler(UserProfile & sender, ConnectHandler & connectHandler);
 
 	void initFinishedEventHandler(WengoPhone & sender);
 
-	void newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount);
+	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
 	/** Direct link to the model. */
 	WengoPhone & _wengoPhone;

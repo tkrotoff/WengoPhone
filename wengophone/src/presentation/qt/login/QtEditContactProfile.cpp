@@ -17,16 +17,18 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <model/profile/StreetAddress.h>
+
 #include <qtutil/Object.h>
-#include <util/Logger.h>
 #include <qtutil/WidgetFactory.h>
+
+#include <util/Logger.h>
 #include <util/Date.h>
 
 #include "QtEditContactProfile.h"
 
-
-QtEditContactProfile::QtEditContactProfile( const PContact & contact, QWidget * parent, Qt::WFlags f ) : QDialog( parent, f ), _contact( contact ) {
-
+QtEditContactProfile::QtEditContactProfile(const PContact & contact, QWidget * parent, Qt::WFlags f ) 
+: QDialog( parent, f ), _contact( contact ) {
 	_widget = qobject_cast<QWidget *>( WidgetFactory::create( ":/forms/login/contactWindow.ui", this ) );
 	layout = new QGridLayout( this );
 	layout->addWidget( _widget );
@@ -51,46 +53,126 @@ void QtEditContactProfile::cancelClicked() {
 
 void QtEditContactProfile::hideAccountWidgets() {
 	for ( int i = 1; i < _imAccountLineEdit.size(); i++ ) {
-			_imAccountLineEdit[ i ] ->setVisible( false );
-			_imAccountLineEdit[ i ] ->setReadOnly( true );
-		}
+		_imAccountLineEdit[ i ] ->setVisible( false );
+		_imAccountLineEdit[ i ] ->setReadOnly( true );
+	}
 
 	for ( int i = 1; i < _imAccountsPic.size(); i++ ) {
-			_imAccountsPic[ i ] ->setVisible( false );
-		}
+		_imAccountsPic[ i ] ->setVisible( false );
+	}
 }
 
 void QtEditContactProfile::writeToConfig() {
-
 	Contact & c = _contact.getContact();
+
+	// Setting wengo id
+	c.setWengoPhoneId(_alias->text().toStdString());
+	////
+
+	// Setting name
 	c.setFirstName( _firstName->text().toStdString() );
 	c.setLastName( _lastName->text().toStdString() );
+	////
+
+	// Setting sex
 	c.setSex((EnumSex::Sex) _gender->currentIndex());
+	////
+
+	// Setting birthday
 	QDate qdate = _birthDate->date();
 	Date date;
 	date.setDay( qdate.day() );
 	date.setMonth( qdate.month() );
 	date.setYear( qdate.year() );
 	c.setBirthdate( date );
+	////
+
+	// Setting address
+	StreetAddress address;
+	//address.setStateProvince(_state->text().toStdString());
+	//address.setCountry(_country->text().toStdString());
+	address.setCity(_city->text().toStdString());
+	c.setStreetAddress(address);
+	////
+
+	// Setting IMAccounts
+	////
+
+	// Setting phone numbers
+	c.setMobilePhone(_cellPhone->text().toStdString());
+	c.setWorkPhone(_workPhone->text().toStdString());
+	c.setHomePhone(_homePhone->text().toStdString());
+	c.setWengoPhoneNumber(_wengoPhone->text().toStdString());
+	////
+
+	// Setting emails
+	c.setPersonalEmail(_email->text().toStdString());
+	////
+
+	// Settings websites
+	c.setWebsite(_web->text().toStdString());
+	////
 }
 
 void QtEditContactProfile::readFromConfig() {
 	Contact & c = _contact.getContact();
+
+	// Setting wengo id
+	_alias->setText(QString::fromStdString(c.getWengoPhoneId()));
+	////
+
+	// Setting name
+	_firstName->setText(QString::fromStdString(c.getFirstName()));
+	_lastName->setText(QString::fromStdString(c.getLastName()));
+	////
+
+	// Setting sex
+	_gender->setCurrentIndex((int) c.getSex());
+	////
+
+	// Setting birthday
+	Date date = c.getBirthdate();
+	_birthDate->setDate(QDate(date.getYear(), date.getMonth(), date.getDay()));
+	////
+
+	// Setting address
+	StreetAddress address = c.getStreetAddress();
+	//_state->setText(QString::fromStdString(address.getStateProvince()));
+	//_country->setText(QString::fromStdString(address.getCountry()));
+	_city->setText(QString::fromStdString(address.getCity()));
+	////
+
+	// Setting IMAccounts
+	////
+
+	// Setting phone numbers
+	_cellPhone->setText(QString::fromStdString(c.getMobilePhone()));
+	_workPhone->setText(QString::fromStdString(c.getWorkPhone()));
+	_homePhone->setText(QString::fromStdString(c.getHomePhone()));
+	_wengoPhone->setText(QString::fromStdString(c.getWengoPhoneNumber()));
+	////
+
+	// Setting emails
+	_email->setText(QString::fromStdString(c.getPersonalEmail()));
+	////
+
+	// Settings websites
+	_web->setText(QString::fromStdString(c.getWebsite()));
+	////
 }
 
 void QtEditContactProfile::init() {
-
 	_alias = Object::findChild<QLineEdit *>( _widget, "alias" );
 	_firstName = Object::findChild<QLineEdit *>( _widget, "firstName" );
 	_lastName = Object::findChild<QLineEdit *>( _widget, "lastName" );
 	_birthDate = Object::findChild<QDateEdit *>( _widget, "birthDate" );
-	_city = Object::findChild<QLineEdit *>( _widget, "city" );
-
 	_gender = Object::findChild<QComboBox *>( _widget, "gender" );
+
 	_country = Object::findChild<QComboBox *>( _widget, "country" );
 	_state = Object::findChild<QComboBox *>( _widget, "state" );
+	_city = Object::findChild<QLineEdit *>( _widget, "city" );
 
-	_cellphone = Object::findChild<QLineEdit *>( _widget, "cellPhone" );
+	_cellPhone = Object::findChild<QLineEdit *>( _widget, "cellPhone" );
 	_wengoPhone = Object::findChild<QLineEdit *>( _widget, "wengoPhone" );
 	_homePhone = Object::findChild<QLineEdit *>( _widget, "homePhone" );
 	_workPhone = Object::findChild<QLineEdit *>( _widget, "workPhone" );
@@ -133,14 +215,13 @@ void QtEditContactProfile::init() {
 	_imAccountLineEdit << imAccountData;
 
 	_avatar = Object::findChild<QLabel *>( _widget, "avatar" );
-
 }
 
 void QtEditContactProfile::changeGroupBoxStat( QGroupBox * box, bool stat ) {
 	QList<QWidget *> allWidgets = box->findChildren<QWidget *>();
 
 	for ( int i = 0;i < allWidgets.size();i++ ) {
-			allWidgets[ i ] ->setEnabled( stat );
-		}
+		allWidgets[ i ] ->setEnabled( stat );
+	}
 }
 

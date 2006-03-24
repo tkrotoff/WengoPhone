@@ -19,9 +19,9 @@
 
 #include "Contact.h"
 
-#include <model/WengoPhone.h>
 #include <model/contactlist/ContactList.h>
 #include <model/presence/PresenceHandler.h>
+#include <model/profile/UserProfile.h>
 
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMContact.h>
@@ -32,15 +32,15 @@
 #include <iostream>
 using namespace std;
 
-Contact::Contact(WengoPhone & wengoPhone)
-	: _wengoPhone(wengoPhone), _contactList(wengoPhone.getContactList()) {
+Contact::Contact(UserProfile & userProfile)
+	: _userProfile(userProfile), _contactList(userProfile.getContactList()) {
 	_sex = EnumSex::SexUnknown;
 	_blocked = false;
 	_preferredIMContact = NULL;
 }
 
 Contact::Contact(const Contact & contact)
-	: _wengoPhone(contact._wengoPhone), _contactList(contact._contactList) {
+	: _userProfile(contact._userProfile), _contactList(contact._contactList) {
 	initialize(contact);
 }
 
@@ -120,7 +120,7 @@ void Contact::_addIMContact(const IMContact & imContact) {
 		((IMContact &)(*result.first)).imContactRemovedFromGroupEvent +=
 			boost::bind(&Contact::imContactRemovedFromGroupEventHandler, this, _1, _2);
 
-		_wengoPhone.getPresenceHandler().subscribeToPresenceOf(*result.first);
+		_userProfile.getPresenceHandler().subscribeToPresenceOf(*result.first);
 		contactModifiedEvent(*this);
 	}
 }
@@ -135,12 +135,14 @@ void Contact::_removeIMContact(const IMContact & imContact) {
 }
 
 void Contact::setWengoPhoneId(const string & wengoId) {
-	_wengoPhoneId = wengoId;
+	if (!wengoId.empty()) {
+		_wengoPhoneId = wengoId;
 
-	set<IMAccount *> list;
-	list = _wengoPhone.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
-	if (list.begin() != list.end()) {
-		addIMContact(IMContact(*(*list.begin()), _wengoPhoneId));
+		set<IMAccount *> list;
+		list = _userProfile.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		if (list.begin() != list.end()) {
+			addIMContact(IMContact(*(*list.begin()), _wengoPhoneId));
+		}
 	}
 }
 
@@ -200,7 +202,7 @@ bool Contact::isInContactGroup(const std::string & groupName) {
 
 void Contact::block() {
 	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; it++) {
-		_wengoPhone.getPresenceHandler().blockContact(*it);
+		_userProfile.getPresenceHandler().blockContact(*it);
 	}
 
 	_blocked = true;
@@ -208,7 +210,7 @@ void Contact::block() {
 
 void Contact::unblock() {
 	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; it++) {
-		_wengoPhone.getPresenceHandler().unblockContact(*it);
+		_userProfile.getPresenceHandler().unblockContact(*it);
 	}
 
 	_blocked = false;

@@ -36,7 +36,7 @@ class IMContact;
 class IMPresence;
 class PresenceHandler;
 class StringList;
-class WengoPhone;
+class UserProfile;
 
 /**
  * Contact list.
@@ -55,7 +55,7 @@ public:
 	/** Set of ContactGroup. */
 	typedef std::set<ContactGroup> ContactGroupSet;
 
-	ContactList(WengoPhone & wengoPhone);
+	ContactList(UserProfile & userProfile);
 
 	~ContactList();
 
@@ -283,7 +283,7 @@ private:
 	/** Vector of Contact. */
 	Contacts _contacts;
 
-	WengoPhone & _wengoPhone;
+	UserProfile & _userProfile;
 
 	IMContactListHandler & _imContactListHandler;
 };

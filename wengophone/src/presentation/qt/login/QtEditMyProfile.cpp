@@ -17,13 +17,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <model/profile/UserProfile.h>
+#include <model/WengoPhone.h>
+
 #include <qtutil/Object.h>
-#include <util/Logger.h>
 #include <qtutil/WidgetFactory.h>
+
+#include <util/Date.h>
+#include <util/Logger.h>
 
 #include "QtEditMyProfile.h"
 
-QtEditMyProfile::QtEditMyProfile( QWidget * parent, Qt::WFlags f ) : QDialog( parent, f ) {
+QtEditMyProfile::QtEditMyProfile(WengoPhone & wengoPhone, QWidget * parent, Qt::WFlags f ) 
+: QDialog( parent, f ), _wengoPhone(wengoPhone) {
 
 	_widget = qobject_cast<QWidget *>( WidgetFactory::create( ":/forms/login/profileWindow.ui", this ) );
 	layout = new QGridLayout( this );
@@ -79,59 +85,96 @@ void QtEditMyProfile::hideAccountWidgets() {
 }
 
 void QtEditMyProfile::writeToConfig() {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	UserProfile & userProfile = _wengoPhone.getCurrentUserProfile();
 
-	config.set( config.PROFILE_NICKNAME, _wengoNickName->text().toStdString() );
-	config.set( config.PROFILE_FIRSTNAME, _firstName->text().toStdString() );
-	config.set( config.PROFILE_LASTNAME, _lastName->text().toStdString() );
-	config.set( config.PROFILE_BIRTHDATE, _birthDate->date().toString().toStdString() );
-	config.set( config.PROFILE_CITY, _city->text().toStdString() );
+	// Setting name and wengo id
+	userProfile.setWengoPhoneId(_wengoNickName->text().toStdString());
+	userProfile.setFirstName(_firstName->text().toStdString());
+	userProfile.setLastName(_lastName->text().toStdString());
+	////
 
-	config.set( config.PROFILE_GENDER, _gender->currentText().toStdString() );
-	config.set( config.PROFILE_COUNTRY, _country->currentText().toStdString() );
-	config.set( config.PROFILE_STATE, _state->currentText().toStdString() );
+	// Setting birthday
+	QDate date = _birthDate->date();
+	userProfile.setBirthdate(Date(date.day(), date.month(), date.year()));
+	////
 
+	// Setting sex
+	userProfile.setSex((EnumSex::Sex) _gender->currentIndex());
+	////
+
+	// Setting address
+	StreetAddress streetAddress;
+	//streetAddress.setCountry(_country->currentText().toStdString());
+	streetAddress.setCity(_city->text().toStdString());
+	//streetAdress.setStateProvince(_state->currentText().toStdString());
+	userProfile.setStreetAddress(streetAddress);
+	////
+
+	// Setting IMAccount
+	/*
 	config.set( config.PROFILE_IMEMAIL1, _imAccountLineEdit[ 0 ] ->text().toStdString() );
 	config.set( config.PROFILE_IMEMAIL2, _imAccountLineEdit[ 1 ] ->text().toStdString() );
 	config.set( config.PROFILE_IMEMAIL3, _imAccountLineEdit[ 2 ] ->text().toStdString() );
 	config.set( config.PROFILE_IMEMAIL4, _imAccountLineEdit[ 3 ] ->text().toStdString() );
 	config.set( config.PROFILE_IMEMAIL5, _imAccountLineEdit[ 4 ] ->text().toStdString() );
 	config.set( config.PROFILE_IMEMAIL6, _imAccountLineEdit[ 5 ] ->text().toStdString() );
-
+	
 	config.set( config.PROFILE_IMPIC1, _imAccountsPicPath[ 0 ].toStdString() );
 	config.set( config.PROFILE_IMPIC2, _imAccountsPicPath[ 1 ].toStdString() );
 	config.set( config.PROFILE_IMPIC3, _imAccountsPicPath[ 2 ].toStdString() );
 	config.set( config.PROFILE_IMPIC4, _imAccountsPicPath[ 3 ].toStdString() );
 	config.set( config.PROFILE_IMPIC5, _imAccountsPicPath[ 4 ].toStdString() );
 	config.set( config.PROFILE_IMPIC6, _imAccountsPicPath[ 5 ].toStdString() );
+	*/
+	////
+	
+	// Setting Phone numbers
+	userProfile.setMobilePhone(_cellphone->text().toStdString());
+	userProfile.setHomePhone(_homePhone->text().toStdString());
+	userProfile.setWengoPhoneNumber(_wengoPhoneNumber->text().toStdString());
+	userProfile.setWorkPhone(_workPhone->text().toStdString());
+	////
 
-	config.set( config.PROFILE_CELLPHONE, _cellphone->text().toStdString() );
-	config.set( config.PROFILE_HOMEPHONE, _homePhone->text().toStdString() );
-	config.set( config.PROFILE_WENGOPHONE, _wengoPhone->text().toStdString() );
-	config.set( config.PROFILE_WORKPHONE, _workPhone->text().toStdString() );
+	// Setting emails
+	userProfile.setPersonalEmail(_email->text().toStdString());
+	////
 
-	config.set( config.PROFILE_EMAIL, _email->text().toStdString() );
-	config.set( config.PROFILE_BLOG, _blog->text().toStdString() );
-	config.set( config.PROFILE_WEB, _web->text().toStdString() );
+	// Setting websites
+	userProfile.setWebsite(_web->text().toStdString());
+	//config.set( config.PROFILE_BLOG, _blog->text().toStdString() );
+	////
 
-	config.set( config.PROFILE_AVATAR, _avatarPath.toStdString() );
-
+	// Setting avatar
+	//config.set( config.PROFILE_AVATAR, _avatarPath.toStdString() );
+	////
 }
 
 void QtEditMyProfile::readFromConfig() {
+	UserProfile & userProfile = _wengoPhone.getCurrentUserProfile();
 
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	// Setting wengo id
+	_wengoNickName->setText(QString::fromStdString(userProfile.getWengoPhoneId()));
+	////
 
-	_wengoNickName->setText( QString().fromStdString( config.getProfileNickName() ) );
-	_firstName->setText( QString().fromStdString( config.getProfileFirstName() ) );
-	_lastName->setText( QString().fromStdString( config.getProfileLastName() ) );
-	_birthDate->setDate( QDate::fromString( QString().fromStdString( config.getProfileBirthDate() ) ) );
-	_city->setText( QString().fromStdString( config.getProfileCity() ) );
+	// Setting name
+	_firstName->setText(QString::fromStdString(userProfile.getFirstName()));
+	_lastName->setText(QString::fromStdString(userProfile.getLastName()));
+	_gender->setCurrentIndex((int) userProfile.getSex());
+	////
 
-	_gender->setCurrentIndex( _gender->findText( QString().fromStdString( config.getProfileGender() ) ) );
-	_country->setCurrentIndex( _country->findText( QString().fromStdString( config.getProfileCountry() ) ) );
-	_state->setCurrentIndex( _state->findText( QString().fromStdString( config.getProfileState() ) ) );
+	// Setting birthday
+	//_birthDate->setDate(QDate::fromString( QString().fromStdString( config.getProfileBirthDate() ) ) );
+	////
 
+	// Setting address
+	StreetAddress address = userProfile.getStreetAddress();
+	_city->setText(QString::fromStdString(address.getCity()));
+	//_country->setCurrentIndex(_country->findText( QString().fromStdString( config.getProfileCountry() ) ) );
+	//_state->setCurrentIndex( _state->findText( QString().fromStdString( config.getProfileState() ) ) );
+	////
+
+	// Setting IMAccounts
+	/*
 	_imAccountLineEdit[ 0 ] ->setText( QString().fromStdString( config.getProfileIMEmail1() ) );
 	_imAccountLineEdit[ 1 ] ->setText( QString().fromStdString( config.getProfileIMEmail2() ) );
 	_imAccountLineEdit[ 2 ] ->setText( QString().fromStdString( config.getProfileIMEmail3() ) );
@@ -151,24 +194,32 @@ void QtEditMyProfile::readFromConfig() {
 	_imAccountsPicPath << QString().fromStdString( config.getProfileIMPic5() );
 	_imAccountsPic[ 5 ] ->setPixmap( QPixmap( QString().fromStdString( config.getProfileIMPic6() ) ) );
 	_imAccountsPicPath << QString().fromStdString( config.getProfileIMPic6() );
+	*/
+	////
 
-	_cellphone->setText( QString().fromStdString( config.getProfileCellPhone() ) );
-	_homePhone->setText( QString().fromStdString( config.getProfileHomePhone() ) );
-	_wengoPhone->setText( QString().fromStdString( config.getProfileWengoPhone() ) );
-	_workPhone->setText( QString().fromStdString( config.getProfileWorkPhone() ) );
+	// Setting phone numbers
+	_cellphone->setText(QString::fromStdString(userProfile.getMobilePhone()));
+	_homePhone->setText(QString::fromStdString(userProfile.getHomePhone()));
+	_wengoPhoneNumber->setText(QString::fromStdString(userProfile.getWengoPhoneNumber()));
+	_workPhone->setText(QString::fromStdString(userProfile.getWorkPhone()));
+	////
 
-	_email->setText( QString().fromStdString( config.getProfileEmail() ) );
-	_blog->setText( QString().fromStdString( config.getProfileBlog() ) );
-	_web->setText( QString().fromStdString( config.getProfileWeb() ) );
+	// Setting email
+	_email->setText(QString::fromStdString(userProfile.getPersonalEmail()));
+	////
 
-	_avatarPath = QString().fromStdString( config.getProfileAvatar() );
-	_avatar->setPixmap( QPixmap( _avatarPath ) );
+	// Setting websites
+	//_blog->setText( QString().fromStdString( config.getProfileBlog() ) );
+	_web->setText(QString::fromStdString(userProfile.getWebsite()));
+	////
 
-
+	// Setting avatar
+	//_avatarPath = QString().fromStdString( config.getProfileAvatar() );
+	//_avatar->setPixmap( QPixmap( _avatarPath ) );
+	////
 }
 
 void QtEditMyProfile::init() {
-
 	_wengoNickName = Object::findChild<QLineEdit *>( _widget, "wengoNickName" );
 	_changePassword = Object::findChild<QPushButton *>( _widget, "changePassword" );
 	_firstName = Object::findChild<QLineEdit *>( _widget, "firstName" );
@@ -181,7 +232,7 @@ void QtEditMyProfile::init() {
 	_state = Object::findChild<QComboBox *>( _widget, "state" );
 
 	_cellphone = Object::findChild<QLineEdit *>( _widget, "cellPhone" );
-	_wengoPhone = Object::findChild<QLineEdit *>( _widget, "wengoPhone" );
+	_wengoPhoneNumber = Object::findChild<QLineEdit *>( _widget, "wengoPhone" );
 	_homePhone = Object::findChild<QLineEdit *>( _widget, "homePhone" );
 	_workPhone = Object::findChild<QLineEdit *>( _widget, "workPhone" );
 
@@ -227,7 +278,6 @@ void QtEditMyProfile::init() {
 	_modifyIMAccount = Object::findChild<QPushButton *>( _widget, "modityIMAccount" );
 
 	_avatar = Object::findChild<QLabel *>( _widget, "avatar" );
-
 }
 
 void QtEditMyProfile::changeGroupBoxStat( QGroupBox * box, bool stat ) {

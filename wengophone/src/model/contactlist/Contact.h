@@ -33,7 +33,7 @@
 #include <string>
 #include <set>
 
-class WengoPhone;
+class UserProfile;
 class ContactList;
 
 /**
@@ -55,7 +55,7 @@ public:
 	 */
 	Event<void (Contact & sender)> contactModifiedEvent;
 
-	Contact(WengoPhone & wengoPhone);
+	Contact(UserProfile & userProfile);
 
 	Contact(const Contact & contact);
 
@@ -221,8 +221,8 @@ public:
 		return display;
 	}
 
-	WengoPhone & getWengoPhone() const {
-			return _wengoPhone;
+	UserProfile & getUserProfile() const {
+			return _userProfile;
 	}
 
 	void setWengoPhoneId(const std::string & wengoId);
@@ -298,7 +298,7 @@ private:
 
 	ContactGroupSet _contactGroupSet;
 
-	WengoPhone & _wengoPhone;
+	UserProfile & _userProfile;
 
 	ContactList & _contactList;
 };

@@ -25,12 +25,14 @@
 #include "PhoneLineStateTimeout.h"
 #include "PhoneLineStateServerError.h"
 
+#include <model/WengoPhone.h>
 #include <model/SipCallbacks.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/phonecall/PhoneCallStateClosed.h>
 #include <model/phonecall/PhoneCallStateError.h>
 #include <model/phonecall/PhoneCallStateTalking.h>
 #include <model/phonecall/PhoneCallStateIncoming.h>
+#include <model/profile/UserProfile.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
@@ -51,7 +53,7 @@ PhoneLine::PhoneLine(SipAccount & sipAccount, WengoPhone & wengoPhone)
 
 	_sipWrapper = SipWrapperFactory::getFactory().createSipWrapper();
 
-	static SipCallbacks callbacks(*_sipWrapper, wengoPhone);
+	static SipCallbacks callbacks(*_sipWrapper, wengoPhone.getCurrentUserProfile());
 
 	initSipWrapper();
 

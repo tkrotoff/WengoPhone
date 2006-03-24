@@ -22,16 +22,16 @@
 #include "Contact.h"
 #include "IMContactListHandler.h"
 
-#include <model/WengoPhone.h>
 #include <model/presence/PresenceHandler.h>
+#include <model/profile/UserProfile.h>
 
 #include <util/StringList.h>
 #include <util/Logger.h>
 
 using namespace std;
 
-ContactList::ContactList(WengoPhone & wengoPhone)
-	: _wengoPhone(wengoPhone), _imContactListHandler(wengoPhone.getIMContactListHandler()) {
+ContactList::ContactList(UserProfile & userProfile)
+	: _userProfile(userProfile), _imContactListHandler(userProfile.getIMContactListHandler()) {
 
 	_imContactListHandler.newIMContactAddedEvent +=
 		boost::bind(&ContactList::newIMContactAddedEventHandler, this, _1, _2, _3);
@@ -43,7 +43,7 @@ ContactList::ContactList(WengoPhone & wengoPhone)
 		boost::bind(&ContactList::contactGroupRemovedEventHandler, this, _1, _2);
 	_imContactListHandler.imContactMovedEvent +=
 		boost::bind(&ContactList::imContactMovedEventHandler, this, _1, _2, _3);
-	_wengoPhone.getPresenceHandler().presenceStateChangedEvent +=
+	_userProfile.getPresenceHandler().presenceStateChangedEvent +=
 		boost::bind(&ContactList::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
 }
 
@@ -61,7 +61,7 @@ void ContactList::removeContactGroup(const string & groupName) {
 }
 
 Contact & ContactList::createContact() {
-	Contact contact(_wengoPhone);
+	Contact contact(_userProfile);
 	Contacts::const_iterator it;
 
 	_contacts.push_back(contact);

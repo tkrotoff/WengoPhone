@@ -23,9 +23,10 @@
 #include <model/account/wengo/WengoAccount.h>
 #include <model/contactlist/Contact.h>
 #include <model/connect/ConnectHandler.h>
+#include <model/profile/UserProfile.h>
+#include <model/phoneline/IPhoneLine.h>
 #include <presentation/PFactory.h>
 #include <presentation/PWengoPhone.h>
-#include <model/phoneline/IPhoneLine.h>
 #include "phoneline/CPhoneLine.h"
 #include "contactlist/CContactList.h"
 #include "wenbox/CWenboxPlugin.h"
@@ -56,28 +57,28 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 
 	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
 
-	_wengoPhone.phoneLineCreatedEvent += boost::bind(&CWengoPhone::phoneLineCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().phoneLineCreatedEvent += boost::bind(&CWengoPhone::phoneLineCreatedEventHandler, this, _1, _2);
 	_wengoPhone.wenboxPluginCreatedEvent += boost::bind(&CWengoPhone::wenboxPluginCreatedEventHandler, this, _1, _2);
-	_wengoPhone.loginStateChangedEvent += loginStateChangedEvent;
-	_wengoPhone.noAccountAvailableEvent += noAccountAvailableEvent;
+	_wengoPhone.getCurrentUserProfile().loginStateChangedEvent += loginStateChangedEvent;
+	_wengoPhone.getCurrentUserProfile().noAccountAvailableEvent += noAccountAvailableEvent;
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
-	_wengoPhone.contactListCreatedEvent += boost::bind(&CWengoPhone::contactListCreatedEventHandler, this, _1, _2);
-	_wengoPhone.connectHandlerCreatedEvent += boost::bind(&CWengoPhone::connectHandlerCreatedEventHandler, this, _1, _2);
-	_wengoPhone.presenceHandlerCreatedEvent += boost::bind(&CWengoPhone::presenceHandlerCreatedEventHandler, this, _1, _2);
-	_wengoPhone.chatHandlerCreatedEvent += boost::bind(&CWengoPhone::chatHandlerCreatedEventHandler, this, _1, _2);
-	_wengoPhone.smsCreatedEvent += boost::bind(&CWengoPhone::smsCreatedEventHandler, this, _1, _2);
-	_wengoPhone.proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
-	_wengoPhone.wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
-	_wengoPhone.newIMAccountAddedEvent +=
+	_wengoPhone.getCurrentUserProfile().contactListCreatedEvent += boost::bind(&CWengoPhone::contactListCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().connectHandlerCreatedEvent += boost::bind(&CWengoPhone::connectHandlerCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().presenceHandlerCreatedEvent += boost::bind(&CWengoPhone::presenceHandlerCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().chatHandlerCreatedEvent += boost::bind(&CWengoPhone::chatHandlerCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().smsCreatedEvent += boost::bind(&CWengoPhone::smsCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
+	_wengoPhone.getCurrentUserProfile().wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
+	_wengoPhone.getCurrentUserProfile().newIMAccountAddedEvent +=
 		boost::bind(&CWengoPhone::newIMAccountAddedEventHandler, this, _1, _2);
 }
 
 void CWengoPhone::makeCall(const std::string & phoneNumber) {
-	_wengoPhone.makeCall(phoneNumber);
+	_wengoPhone.getCurrentUserProfile().makeCall(phoneNumber);
 }
 
 void CWengoPhone::addWengoAccount(const std::string & login, const std::string & password, bool autoLogin) {
-	_wengoPhone.addSipAccount(login, password, autoLogin);
+	_wengoPhone.getCurrentUserProfile().addSipAccount(login, password, autoLogin);
 }
 
 void CWengoPhone::showWengoAccount() const {
@@ -85,7 +86,7 @@ void CWengoPhone::showWengoAccount() const {
 	//TODO	
 	static const string langCode = "fra";
 
-	IPhoneLine * activePhoneLine = _wengoPhone.getActivePhoneLine();
+	IPhoneLine * activePhoneLine = _wengoPhone.getCurrentUserProfile().getActivePhoneLine();
 	if (activePhoneLine) {
 		const SipAccount & account = activePhoneLine->getSipAccount();
 		try {
@@ -114,20 +115,20 @@ void CWengoPhone::terminate() {
 	_wengoPhone.terminate();
 }
 
-void CWengoPhone::phoneLineCreatedEventHandler(WengoPhone & sender, IPhoneLine & phoneLine) {
+void CWengoPhone::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine) {
 	CPhoneLine * cPhoneLine = new CPhoneLine(phoneLine, *this);
 
 	LOG_DEBUG("CPhoneLine created");
 	_pWengoPhone->addPhoneLine(cPhoneLine->getPresentation());
 }
 
-void CWengoPhone::contactListCreatedEventHandler(WengoPhone & sender, ContactList & contactList) {
+void CWengoPhone::contactListCreatedEventHandler(UserProfile & sender, ContactList & contactList) {
 	_cContactList = new CContactList(contactList, *this);
 
 	LOG_DEBUG("CContactList created");
 }
 
-void CWengoPhone::connectHandlerCreatedEventHandler(WengoPhone & sender, ConnectHandler & connectHandler) {
+void CWengoPhone::connectHandlerCreatedEventHandler(UserProfile & sender, ConnectHandler & connectHandler) {
 	static CConnectHandler cConnectHandler(connectHandler);
 
 	LOG_DEBUG("CConnectHandler created");
@@ -143,26 +144,26 @@ void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 	LOG_DEBUG("WengoPhone::init() finished");
 }
 
-void CWengoPhone::presenceHandlerCreatedEventHandler(WengoPhone & sender, PresenceHandler & presenceHandler) {
+void CWengoPhone::presenceHandlerCreatedEventHandler(UserProfile & sender, PresenceHandler & presenceHandler) {
 	CPresenceHandler * cPresenceHandler = new CPresenceHandler(presenceHandler);
 
 	LOG_DEBUG("CPresenceHandler created");
 }
 
-void CWengoPhone::chatHandlerCreatedEventHandler(WengoPhone & sender, ChatHandler & chatHandler) {
+void CWengoPhone::chatHandlerCreatedEventHandler(UserProfile & sender, ChatHandler & chatHandler) {
 	CChatHandler * cChatHandler = new CChatHandler(chatHandler);
 
 	LOG_DEBUG("CChatHandler created");
 }
 
-void CWengoPhone::smsCreatedEventHandler(WengoPhone & sender, Sms & sms) {
+void CWengoPhone::smsCreatedEventHandler(UserProfile & sender, Sms & sms) {
 	static CSms cSms(sms, *this);
 
 	LOG_DEBUG("CSms created");
 }
 
 PhoneCall * CWengoPhone::getActivePhoneCall() const {
-	IPhoneLine * phoneLine = _wengoPhone.getActivePhoneLine();
+	IPhoneLine * phoneLine = _wengoPhone.getCurrentUserProfile().getActivePhoneLine();
 	if (phoneLine) {
 		return phoneLine->getActivePhoneCall();
 	}
@@ -170,11 +171,11 @@ PhoneCall * CWengoPhone::getActivePhoneCall() const {
 }
 
 void CWengoPhone::addIMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol) {
-	_wengoPhone.addIMAccount(IMAccount(login, password, protocol));
+	_wengoPhone.getCurrentUserProfile().addIMAccount(IMAccount(login, password, protocol));
 }
 
-void CWengoPhone::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
-	//_wengoPhone.getConnectHandler().connect(imAccount);
+void CWengoPhone::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
+	//_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(imAccount);
 }
 
 void CWengoPhone::openWengoUrlWithoutAuth(std::string url) {

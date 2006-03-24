@@ -36,6 +36,25 @@ SipAccount::SipAccount() {
 		boost::bind(&SipAccount::wrongProxyAuthenticationEventHandler, this, _1, _2, _3, _4, _5);
 }
 
+SipAccount::SipAccount(const SipAccount & sipAccount) {
+	_registerServerHostname = sipAccount._registerServerHostname;
+	_registerServerPort = sipAccount._registerServerPort;
+	_sipProxyServerHostname = sipAccount._sipProxyServerHostname;
+	_sipProxyServerPort = sipAccount._sipProxyServerPort;
+	_httpTunnelServerHostname = sipAccount._httpTunnelServerHostname;
+	_httpTunnelServerPort = sipAccount._httpTunnelServerPort;
+	_needsHttpTunnel = sipAccount._needsHttpTunnel;
+	_httpTunnelWithSSL = sipAccount._httpTunnelWithSSL;
+	_localSIPPort = sipAccount._localSIPPort;
+	_isConnected = sipAccount._isConnected;
+	_autoLogin = sipAccount._autoLogin;
+	_displayName = sipAccount._displayName;
+	_identity = sipAccount._identity;
+	_username = sipAccount._username;
+	_password = sipAccount._password;
+	_realm = sipAccount._realm;
+}
+
 SipAccount::~SipAccount() {
 }
 

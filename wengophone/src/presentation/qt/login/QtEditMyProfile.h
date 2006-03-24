@@ -27,6 +27,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
+class WengoPhone;
 
 class QtEditMyProfile : public QDialog
 {
@@ -34,7 +35,7 @@ class QtEditMyProfile : public QDialog
 
 public:
 
-	QtEditMyProfile (QWidget * parent =0, Qt::WFlags f=0);
+	QtEditMyProfile (WengoPhone & wengoPhone, QWidget * parent =0, Qt::WFlags f=0);
 
 protected:
 
@@ -53,6 +54,8 @@ public Q_SLOTS:
 	void cancelClicked();
 	void imAccountAdded();
 protected:
+
+	WengoPhone & _wengoPhone;
 
 	QWidget * _widget;
 
@@ -88,7 +91,7 @@ protected:
 
 	QLineEdit * _cellphone;
 
-	QLineEdit * _wengoPhone;
+	QLineEdit * _wengoPhoneNumber;
 
 	QLineEdit * _homePhone;
 

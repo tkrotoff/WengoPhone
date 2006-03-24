@@ -30,6 +30,7 @@
 #include <trayicon.h>
 
 class SipAccount;
+class UserProfile;
 class CWengoPhone;
 class PPhoneLine;
 class QtPhoneCall;
@@ -143,9 +144,9 @@ private:
 
 	void updatePresentationThreadSafe();
 
-	void noAccountAvailableEventHandler(WengoPhone & sender);
+	void noAccountAvailableEventHandler(UserProfile & sender);
 
-	void noAccountAvailableEventHandlerThreadSafe(WengoPhone & sender);
+	void noAccountAvailableEventHandlerThreadSafe(UserProfile & sender);
 
 	void loginStateChangedEventHandler(SipAccount & sipAccount, SipAccount::LoginState state);
 

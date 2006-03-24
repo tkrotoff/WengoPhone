@@ -24,6 +24,7 @@
 #include <model/phonecall/PhoneCall.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/profile/UserProfile.h>
 
 #include <sound/AudioDevice.h>
 
@@ -127,7 +128,7 @@ void WenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
 }
 
 PhoneCall * WenboxPlugin::getActivePhoneCall() const {
-	IPhoneLine * phoneLine = _wengoPhone.getActivePhoneLine();
+	IPhoneLine * phoneLine = _wengoPhone.getCurrentUserProfile().getActivePhoneLine();
 	PhoneCall * phoneCall = NULL;
 	if (phoneLine) {
 		phoneCall = phoneLine->getActivePhoneCall();

@@ -27,7 +27,7 @@
 
 #include <string>
 
-class WengoPhone;
+class UserProfile;
 class SipWrapper;
 class WebcamVideoFrame;
 
@@ -49,7 +49,7 @@ class WebcamVideoFrame;
 class SipCallbacks : NonCopyable {
 public:
 
-	SipCallbacks(SipWrapper & sipWrapper, WengoPhone & wengoPhone);
+	SipCallbacks(SipWrapper & sipWrapper, UserProfile & userProfile);
 
 private:
 
@@ -63,7 +63,7 @@ private:
 		const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame);
 
 	/** WengoPhone instance in order to access the phone lines and the phone calls. */
-	WengoPhone & _wengoPhone;
+	UserProfile & _userProfile;
 
 	SipWrapper & _sipWrapper;
 };

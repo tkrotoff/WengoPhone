@@ -19,10 +19,10 @@
 
 #include "ConnectHandler.h"
 
-#include <model/WengoPhone.h>
 #include <model/connect/Connect.h>
 #include <model/presence/Presence.h>
 #include <model/presence/PresenceHandler.h>
+#include <model/profile/UserProfile.h>
 
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumIMProtocol.h>
@@ -31,8 +31,8 @@
 
 using namespace std;
 
-ConnectHandler::ConnectHandler(WengoPhone & wengoPhone) {
-	wengoPhone.newIMAccountAddedEvent +=
+ConnectHandler::ConnectHandler(UserProfile & userProfile) {
+	userProfile.newIMAccountAddedEvent +=
 		boost::bind(&ConnectHandler::newIMAccountAddedEventHandler, this, _1, _2);
 }
 
@@ -91,7 +91,7 @@ void ConnectHandler::loginStatusEventHandler(IMConnect & sender,
 	}
 }
 
-void ConnectHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
+void ConnectHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
 	IMAccountSet::iterator it = _pendingConnections.find(imAccount);
 	if (it != _pendingConnections.end()) {
 		LOG_DEBUG("A connection was pending for this IMAccount. Releasing connection.");

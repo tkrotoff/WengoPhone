@@ -22,6 +22,7 @@
 #include <presentation/PContact.h>
 
 #include <model/WengoPhone.h>
+#include <model/profile/UserProfile.h>
 
 QtUser::QtUser(PContact & pContact, WengoPhone & wengoPhone, QObject * parent)
 	: QObject (parent), _pContact(pContact), _wengoPhone(wengoPhone)
@@ -169,7 +170,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			_wengoPhone.makeCall(_pContact.getContact());
+			_wengoPhone.getCurrentUserProfile().makeCall(_pContact.getContact());
 		}
 	}
 	else
@@ -181,7 +182,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			_wengoPhone.makeCall(_pContact.getContact());
+			_wengoPhone.getCurrentUserProfile().makeCall(_pContact.getContact());
 		}
 	}
 	else
@@ -192,7 +193,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			_wengoPhone.startIM(_pContact.getContact());
+			_wengoPhone.getCurrentUserProfile().startIM(_pContact.getContact());
 		}
 	}
 	else

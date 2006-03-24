@@ -22,7 +22,7 @@
 #include <model/presence/Presence.h>
 #include <model/contactlist/ContactList.h>
 #include <model/connect/ConnectHandler.h>
-#include <model/WengoPhone.h>
+#include <model/profile/UserProfile.h>
 
 #include <imwrapper/IMContact.h>
 
@@ -30,12 +30,12 @@
 
 using namespace std;
 
-PresenceHandler::PresenceHandler(WengoPhone & wengoPhone) {
-	wengoPhone.newIMAccountAddedEvent +=
+PresenceHandler::PresenceHandler(UserProfile & userProfile) {
+	userProfile.newIMAccountAddedEvent +=
 		boost::bind(&PresenceHandler::newIMAccountAddedEventHandler, this, _1, _2);
-	wengoPhone.getConnectHandler().connectedEvent +=
+	userProfile.getConnectHandler().connectedEvent +=
 		boost::bind(&PresenceHandler::connectedEventHandler, this, _1, _2);
-	wengoPhone.getConnectHandler().disconnectedEvent +=
+	userProfile.getConnectHandler().disconnectedEvent +=
 		boost::bind(&PresenceHandler::disconnectedEventHandler, this, _1, _2);
 }
 
@@ -166,7 +166,7 @@ PresenceHandler::PresenceMap::iterator PresenceHandler::findPresence(PresenceMap
 	return it;
 }
 
-void PresenceHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
+void PresenceHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
 	PresenceMap::const_iterator i = _presenceMap.find(imAccount);
 
 	//Presence for this IMAccount has not yet been created

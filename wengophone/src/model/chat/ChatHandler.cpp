@@ -19,8 +19,8 @@
 
 #include "ChatHandler.h"
 
-#include <model/WengoPhone.h>
 #include <model/connect/ConnectHandler.h>
+#include <model/profile/UserProfile.h>
 
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMChatSession.h>
@@ -30,13 +30,12 @@
 
 using namespace std;
 
-ChatHandler::ChatHandler(WengoPhone & wengoPhone)
-	: _wengoPhone(wengoPhone) {
-	_wengoPhone.newIMAccountAddedEvent +=
+ChatHandler::ChatHandler(UserProfile & userProfile) {
+	userProfile.newIMAccountAddedEvent +=
 		boost::bind(&ChatHandler::newIMAccountAddedEventHandler, this, _1, _2);
-	_wengoPhone.getConnectHandler().connectedEvent +=
+	userProfile.getConnectHandler().connectedEvent +=
 		boost::bind(&ChatHandler::connectedEventHandler, this, _1, _2);
-	_wengoPhone.getConnectHandler().disconnectedEvent +=
+	userProfile.getConnectHandler().disconnectedEvent +=
 		boost::bind(&ChatHandler::disconnectedEventHandler, this, _1, _2);
 }
 
@@ -69,7 +68,7 @@ void ChatHandler::newIMChatSessionCreatedEventHandler(IMChat & sender, IMChatSes
 	newIMChatSessionCreatedEvent(*this, imChatSession);
 }
 
-void ChatHandler::newIMAccountAddedEventHandler(WengoPhone & sender, IMAccount & imAccount) {
+void ChatHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
 	IMChatMap::iterator it = _imChatMap.find(imAccount);
 
 	LOG_DEBUG("new account added: login: " + imAccount.getLogin()

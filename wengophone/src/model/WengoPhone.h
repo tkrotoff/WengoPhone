@@ -20,30 +20,15 @@
 #ifndef WENGOPHONE_H
 #define WENGOPHONE_H
 
-#include <imwrapper/IMAccountHandler.h>
 #include <model/account/SipAccount.h>
+#include <model/profile/UserProfile.h>
 
 #include <util/Event.h>
-#include <util/List.h>
 #include <thread/Thread.h>
 
 #include <string>
-#include <vector>
 
-class Contact;
-class IPhoneLine;
-class PhoneCall;
-class SipAccount;
-class WengoAccountDataLayer;
 class WenboxPlugin;
-class ContactList;
-class Contact;
-class StringList;
-class ConnectHandler;
-class PresenceHandler;
-class ChatHandler;
-class IMContactListHandler;
-class Sms;
 
 /**
  * @defgroup model Model Component
@@ -88,14 +73,6 @@ public:
 	Event< void (SipAccount & sender, SipAccount::NetworkDiscoveryState networkDiscoveryState) > networkDiscoveryStateEvent;
 
 	/**
-	 * A PhoneLine has been created.
-	 *
-	 * @param sender this class
-	 * @param phoneLine PhoneLine created
-	 */
-	Event<void (WengoPhone & sender, IPhoneLine & phoneLine)> phoneLineCreatedEvent;
-
-	/**
 	 * WenboxPlugin has been created.
 	 *
 	 * @param sender this class
@@ -104,139 +81,15 @@ public:
 	Event<void (WengoPhone & sender, WenboxPlugin & wenboxPlugin)> wenboxPluginCreatedEvent;
 
 	/**
-	 * Sms has been created.
-	 *
-	 * @param sender this class
-	 * @param sms Sms created
-	 */
-	Event<void (WengoPhone & sender, Sms & sms)> smsCreatedEvent;
-
-	/**
-	 * ConnectHandler has been created.
-	 *
-	 * @param sender this class
-	 * @param imHandler ConnectHandler created
-	 */
-	Event<void (WengoPhone & sender, ConnectHandler & connectHandler)> connectHandlerCreatedEvent;
-
-	/**
 	 * Initialization step is finished (i.e we exit the init() method.
 	 *
 	 * @param sender this class
 	 */
 	Event<void (WengoPhone & sender)> initFinishedEvent;
 
-	/**
-	 * The ContactList has been created.
-	 *
-	 * @param sender this class
-	 * @param contactList ContactList created
-	 */
-	Event<void (WengoPhone & sender, ContactList & contactList)> contactListCreatedEvent;
-
-	/**
-	 * PresenceHandler has been created.
-	 *
-	 * @param sender this class
-	 * @param imHandler ConnectHandler created
-	 */
-	Event<void (WengoPhone & sender, PresenceHandler & presenceHandler)> presenceHandlerCreatedEvent;
-
-	/**
-	 * ChatHandler has been created.
-	 *
-	 * @param sender this class
-	 * @param imHandler ConnectHandler created
-	 */
-	Event<void (WengoPhone & sender, ChatHandler & chatHandler)> chatHandlerCreatedEvent;
-
-	/**
-	 * @see SipAccount::proxyNeedsAuthenticationEvent
-	 */
-	Event<void(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort)> proxyNeedsAuthenticationEvent;
-
-	/**
-	 * @see SipAccount::wrongProxyAuthenticationEvent
-	 */
-	Event<void(SipAccount & sender,
-		const std::string & proxyAddress, unsigned proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
-
-	/**
-	 * Emitted when no account exists.
-	 */
-	Event<void (WengoPhone & sender)> noAccountAvailableEvent;
-
-	/**
-	 * A new IMAccount has been added.
-	 */
-	Event< void (WengoPhone & sender, IMAccount & imAccount) > newIMAccountAddedEvent;
-
-	/** Defines the vector of IPhoneLine. */
-	typedef List < IPhoneLine * > PhoneLines;
-
 	WengoPhone();
 
 	~WengoPhone();
-
-	/**
-	 * Adds a SipAccount.
-	 *
-	 * @param login Wengo account login
-	 * @param password Wengo account password
-	 * @param autoLogin if true login the user automatically (save it to the file)
-	 */
-	void addSipAccount(const std::string & login, const std::string & password, bool autoLogin);
-
-	/**
-	 * Add an IMAccount.
-	 * The IMAccount is copied internally.
-	 * @param imAccount the IMAccount to add
-	 */
-	void addIMAccount(const IMAccount & imAccount);
-
-	/**
-	 * Gets the list of PhoneLine.
-	 *
-	 * Only one PhoneLine is active at a time.
-	 *
-	 * @return the list of PhoneLine
-	 */
-	const PhoneLines & getPhoneLineList() const {
-		return _phoneLineList;
-	}
-
-	/**
-	 * Makes a call given a Contact.
-	 *
-	 * @param contact the Contact to call
-	 */
-	void makeCall(Contact & contact);
-
-	/**
-	 * Makes a call given a phone number.
-	 *
-	 * @param phoneNumber the phone number to call
-	 */
-	void makeCall(const std::string & phoneNumber);
-
-	/**
-	 * Start a instant messaging with a Contact.
-	 *
-	 * @param contact the Contact to talk to
-	 */
-	void startIM(Contact & contact);
-
-	/**
-	 * Gets the active/current PhoneLine.
-	 *
-	 * Only one PhoneLine is active at a time.
-	 *
-	 * @return the active PhoneLine
-	 */
-	IPhoneLine * getActivePhoneLine() const {
-		return _activePhoneLine;
-	}
 
 	/**
 	 * Gets the Wenbox (USB phone device).
@@ -253,32 +106,14 @@ public:
 	 */
 	void terminate();
 
-	ConnectHandler & getConnectHandler() const {
-		return *_connectHandler;
+	/**
+	 * Gets the current UserProfile.
+	 *
+	 * @return the current UserProfile
+	 */
+	UserProfile & getCurrentUserProfile() const {
+		return (UserProfile &)_userProfile;
 	}
-
-	PresenceHandler & getPresenceHandler() const {
-		return *_presenceHandler;
-	}
-
-	ChatHandler & getChatHandler() const {
-		return *_chatHandler;
-	}
-
-	IMAccountHandler & getIMAccountHandler() {
-		return _imAccountHandler;
-	}
-
-	IMContactListHandler & getIMContactListHandler() const {
-		return *_imContactListHandler;
-	}
-
-	ContactList & getContactList() const {
-		return *_contactList;
-	}
-
-	void setProxySettings(const std::string & proxyAddress, int proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword);
 
 	/**
 	 * Starts the thread of the model component.
@@ -288,76 +123,17 @@ public:
 private:
 
 	/**
-	 * Login the WengoAccount.
-	 */
-	void wengoAccountLogin();
-
-	/**
 	 * Entry point of the application, equivalent to main().
 	 */
 	void init();
-
-	/**
-	 * Handle SipAccount::loginStateEvent.
-	 */
-	void loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState loginState);
-
-	/**
-	 * @see addSipAccount()
-	 */
-	void addSipAccountThreadSafe(const std::string & login, const std::string & password, bool autoLogin);
-
-	/**
-	 * Creates and adds a new PhoneLine given a SipAccount.
-	 *
-	 * This is a helper method.
-	 *
-	 * @param account SipAccount associated with the newly created PhoneLine
-	 */
-	void addPhoneLine(SipAccount & account);
 
 	/**
 	 * @see terminate()
 	 */
 	void terminateThreadSafe();
 
-	/**
-	 * find the wengo phone line
-	 */
-	IPhoneLine * findWengoPhoneLine();
-
-	/** The active/current PhoneLine. */
-	IPhoneLine * _activePhoneLine;
-
-	/** The active PhoneCall. */
-	PhoneCall * _activePhoneCall;
-
-	/** List of PhoneLine. */
-	PhoneLines _phoneLineList;
-
-	/** List of Contact. */
-	ContactList * _contactList;
-
 	/** Wenbox. */
 	WenboxPlugin * _wenboxPlugin;
-
-	/** SMS. */
-	Sms * _sms;
-
-	ConnectHandler * _connectHandler;
-
-	PresenceHandler * _presenceHandler;
-
-	ChatHandler * _chatHandler;
-
-	IMContactListHandler * _imContactListHandler;
-
-	IMAccountHandler _imAccountHandler;
-
-	SipAccount * _wengoAccount;
-
-	/** The data layer of this WengoAccount. Used to unserialize. */
-	WengoAccountDataLayer * _wengoAccountDataLayer;
 
 	/**
 	 * If this thread should be terminate or not.
@@ -366,6 +142,10 @@ private:
 	 * @see terminate()
 	 */
 	bool _terminate;
+
+	//FIXME: currently only one UserProfile exists
+	UserProfile _userProfile;
+
 };
 
 #endif	//WENGOPHONE_H

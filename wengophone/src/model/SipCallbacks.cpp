@@ -19,18 +19,19 @@
 
 #include "SipCallbacks.h"
 
-#include <model/WengoPhone.h>
+#include <model/profile/UserProfile.h>
 #include <model/phoneline/IPhoneLine.h>
 #include <model/phonecall/PhoneCall.h>
+#include <model/profile/UserProfile.h>
 
 #include <sipwrapper/SipWrapper.h>
 
 #include <util/StringList.h>
 #include <util/Logger.h>
 
-SipCallbacks::SipCallbacks(SipWrapper & sipWrapper, WengoPhone & wengoPhone)
+SipCallbacks::SipCallbacks(SipWrapper & sipWrapper, UserProfile & userProfile)
 	: _sipWrapper(sipWrapper),
-	_wengoPhone(wengoPhone) {
+	_userProfile(userProfile) {
 
 	_sipWrapper.phoneCallStateChangedEvent +=
 		boost::bind(&SipCallbacks::phoneCallStateChangedEventHandler, this, _1, _2, _3, _4);
@@ -47,7 +48,7 @@ void SipCallbacks::phoneCallStateChangedEventHandler(SipWrapper & sender, int ca
 		" state=" + String::fromNumber(state) +
 		" from=" + from);
 
-	const WengoPhone::PhoneLines & lines = _wengoPhone.getPhoneLineList();
+	const UserProfile::PhoneLines & lines = _userProfile.getPhoneLineList();
 	for (unsigned i = 0; i < lines.size(); i++) {
 		IPhoneLine * line = lines[i];
 		line->setPhoneCallState(callId, state, SipAddress(from));
@@ -60,7 +61,7 @@ void SipCallbacks::phoneLineStateChangedEventHandler(SipWrapper & sender, int li
 	LOG_DEBUG("registerProgress: lineId=" + String::fromNumber(lineId) +
 		" state=" + String::fromNumber(state));
 
-	const WengoPhone::PhoneLines & lines = _wengoPhone.getPhoneLineList();
+	const UserProfile::PhoneLines & lines = _userProfile.getPhoneLineList();
 	for (unsigned i = 0; i < lines.size(); i++) {
 		IPhoneLine * line = lines[i];
 		LOG_DEBUG("lineId=" + String::fromNumber(line->getLineId()));
@@ -76,7 +77,7 @@ void SipCallbacks::videoFrameReceivedEventHandler(SipWrapper & sender, int callI
 
 	//LOG_DEBUG("videoFrameReceived: callId=" + String::fromNumber(callId));
 
-	const WengoPhone::PhoneLines & lines = _wengoPhone.getPhoneLineList();
+	const UserProfile::PhoneLines & lines = _userProfile.getPhoneLineList();
 	for (unsigned i = 0; i < lines.size(); i++) {
 		IPhoneLine * line = lines[i];
 
