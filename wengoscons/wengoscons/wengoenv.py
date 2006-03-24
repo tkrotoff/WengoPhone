@@ -414,10 +414,15 @@ class WengoSConsEnvironment(SConsEnvironment):
 				ldflags = os.environ['LDFLAGS'].split(' ')
 			self.__linkFlags = ldflags
 			import re
-			if WengoOSLinux() and re.match('3\.\d\.\d',
-										   self.WengoCCGCCVersion()):
-				self.__CCFlags += ['-pthread']
-				self.__linkFlags += ['-pthread']
+
+			if re.match('3\.\d\.\d', self.WengoCCGCCVersion()):
+				if WengoSConsEnvironment.OS.isLinux():
+					self.__CCFlags += ['-pthread']
+					self.__linkFlags += ['-pthread']
+				elif WengoSConsEnvironment.OS.isWindows():
+					#We're using MinGW
+					self.__CCFlags += ['-mthreads']
+					self.__linkFlags += ['-mthreads']
 		
 		def setDebugMode(self):
 			self.__setDefaultFlags()
@@ -1595,8 +1600,7 @@ def WengoAddDefines(defines):
 
 	@see WengoSConsEnvironment.WengoAddDefines()
 	"""
-
-	env = getGlobalEnvironment()
+	env = getGlobalEnvironment() 
 	env.WengoAddDefines(defines)
 
 def WengoAddIncludePath(paths):
@@ -1606,7 +1610,7 @@ def WengoAddIncludePath(paths):
 	@see WengoSConsEnvironment.WengoAddIncludePath()
 	"""
 
-	env = getGlobalEnvironment()
+	env = getGlobalEnvironment() 
 	env.WengoAddIncludePath(paths)
 
 def WengoCCMinGW():
