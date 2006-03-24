@@ -2525,6 +2525,7 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
   phastream_t *stream2 = (phastream_t *) msp2->streamerData;
   
 
+
   if (s1->confflags || s2->confflags)
     return -PH_NORESOURCES;
   
@@ -2534,6 +2535,7 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
   
   if (stream1->ms.running)
    {
+     DBG1_MEDIA_ENGINE("msession_adio_conf_start: s1=MASTER\n");
      
      CONF_LOCK(stream1);
      stream1->to_mix = stream2;
@@ -2545,6 +2547,8 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
   
   if (stream2->ms.running)
     {
+     DBG1_MEDIA_ENGINE("msession_adio_conf_start: s2=MASTER\n");
+
       CONF_LOCK(stream2);
       stream2->to_mix = stream1;
       s2->confflags = PH_MSESSION_CONF_MASTER;
@@ -2554,13 +2558,15 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
     }
   
   
+
+  DBG1_MEDIA_ENGINE("msession_adio_conf_start: both streams uncative: s1=MASTER\n");
   
   CONF_LOCK(stream1);
   stream1->to_mix = stream2;
   s1->confflags = PH_MSESSION_CONF_MASTER;
   s2->confflags = PH_MSESSION_CONF_MEMBER;
   CONF_UNLOCK(stream1);
-  ph_msession_audio_start(s1, deviceId);
+  //  ph_msession_audio_start(s1, deviceId);
   return 0;
  
 
