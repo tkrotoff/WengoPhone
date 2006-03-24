@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <pixertool.h>
+#include <pixertool/pixertool.h>
 
 piximage * pix_alloc(pixosi pix, unsigned width, unsigned height) {
 	return (piximage *)0;
