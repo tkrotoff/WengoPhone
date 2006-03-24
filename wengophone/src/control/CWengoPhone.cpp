@@ -51,6 +51,8 @@ const std::string CWengoPhone::URL_WENGO_VOICEMAIL = "http://www.wengo.fr/public
 const std::string CWengoPhone::URL_WENGO_SEARCH_EXT = "http://www.wengo.fr/public/public.php?page=main_smart_directory";
 const std::string CWengoPhone::URL_WENGO_SEARCH_INT = "http://www.wengo.fr/public/public.php?page=smart_directory";
 const std::string CWengoPhone::URL_WENGO_FAQ = "http://www.wengo.fr/public/public.php?page=helpcenter";
+const std::string CWengoPhone::URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php?page=homepage";
+const std::string CWengoPhone::URL_WENGO_BUYWENGOS = "https://www.wengo.fr/auth/auth.php?page=reload";
 
 CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
@@ -81,29 +83,8 @@ void CWengoPhone::addWengoAccount(const std::string & login, const std::string &
 	_wengoPhone.getCurrentUserProfile().addSipAccount(login, password, autoLogin);
 }
 
-void CWengoPhone::showWengoAccount() const {
-	static const string URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php";
-	//TODO	
-	static const string langCode = "fra";
-
-	IPhoneLine * activePhoneLine = _wengoPhone.getCurrentUserProfile().getActivePhoneLine();
-	if (activePhoneLine) {
-		const SipAccount & account = activePhoneLine->getSipAccount();
-		try {
-			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(account);
-		
-			string url = URL_WENGO_ACCOUNT +
-					"?login=" + wengoAccount.getWengoLogin() +
-					"&password=" + wengoAccount.getWengoPassword() +
-					"&lang=" + langCode +
-					"&wl=" + WengoPhoneBuildId::SOFTPHONE_NAME +
-					"&page=homepage";
-			WebBrowser::openUrl(url);
-			LOG_DEBUG("url opened: " + url);
-		} catch ( bad_cast ) {
-			LOG_DEBUG("Bad cast: from \"const SipAccount &\" to \"const WengoAccount &\"");
-		}
-	}
+void CWengoPhone::showWengoAccount() {
+	openWengoUrlWithAuth(URL_WENGO_ACCOUNT);
 }
 
 void CWengoPhone::start() {
@@ -179,6 +160,7 @@ void CWengoPhone::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount 
 }
 
 void CWengoPhone::openWengoUrlWithoutAuth(std::string url) {
+	//TODO: retrive the language from the configuration
 	static const std::string langCode = "fra";
 
 	//tune the url for Wengo
@@ -188,6 +170,31 @@ void CWengoPhone::openWengoUrlWithoutAuth(std::string url) {
 	
 	WebBrowser::openUrl(finalUrl);
 	LOG_DEBUG("url opened: " + finalUrl);
+}
+
+void CWengoPhone::openWengoUrlWithAuth(std::string url) {
+	static const std::string langCode = "fra";
+
+	IPhoneLine * activePhoneLine = _wengoPhone.getCurrentUserProfile().getActivePhoneLine();
+	if (activePhoneLine) {
+		const SipAccount & account = activePhoneLine->getSipAccount();
+		try {
+			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(account);
+
+			//tune the url for Wengo, with authentication
+			std::string finalUrl = url;
+			url += "&wl=" + string(WengoPhoneBuildId::SOFTPHONE_NAME);
+			url += "&lang=" + langCode;
+			url += "&login=" + wengoAccount.getWengoLogin();
+			url += "&password=" + wengoAccount.getWengoPassword();
+			
+			WebBrowser::openUrl(finalUrl);
+			LOG_DEBUG("url opened: " + finalUrl);
+			
+		} catch ( bad_cast) {
+			LOG_DEBUG("Bad cast: from \"const SipAccount &\" to \"const WengoAccount &\"");
+		}
+	}
 }
 
 void CWengoPhone::showWengoFAQ() {
@@ -216,4 +223,8 @@ void CWengoPhone::showWengoSMS() {
 
 void CWengoPhone::showWengoVoiceMail() {
 	openWengoUrlWithoutAuth(URL_WENGO_VOICEMAIL);
+}
+
+void CWengoPhone::showWengoBuyWengos() {
+	openWengoUrlWithAuth(URL_WENGO_BUYWENGOS);
 }
