@@ -147,8 +147,18 @@ const std::string Config::WENGO_SSO_PATH_KEY = "wengo.sso.path";
 const std::string Config::CONFIG_DIR_KEY = "config.dir";
 const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
 
+const std::string Config::AVAILABLE_PROTOCOLS_KEY = "available.protocols";
+
 Config::Config(const std::string & name) {
 	static const std::string empty("");
+	static const StringList emptyStrList;
+	StringList DefaultProtocols;
+
+	DefaultProtocols += "MSN";
+	DefaultProtocols += "AIM / ICQ";
+	DefaultProtocols += "Jabber";
+	DefaultProtocols += "Yahoo";
+
 	std::string resourcesPath;
 	std::string configPath;
 
@@ -303,6 +313,7 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
 	_keyDefaultValueMap[WENGO_SSO_PATH_KEY] = std::string("/softphone-sso/sso.php");
 
+	_keyDefaultValueMap[AVAILABLE_PROTOCOLS_KEY] = DefaultProtocols;
 }
 
 Config::~Config() {
@@ -748,6 +759,9 @@ std::string Config::getVideoQuality() const {
 	return getStringKeyValue(VIDEO_QUALITY_KEY);
 }
 
+StringList Config::getAvailableProtocols() const {
+	return getStringListKeyValue(AVAILABLE_PROTOCOLS_KEY);
+}
 
 boost::any Config::getAny(const std::string & key) const {
 	Keys::const_iterator it = _keyDefaultValueMap.find(key);

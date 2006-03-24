@@ -289,6 +289,9 @@ protected:
 
 	QComboBox * _yahooProxyComboBox;
 
+public Q_SLOTS:
+
+	void setCurrentPage(int index);
 };
 
 #endif

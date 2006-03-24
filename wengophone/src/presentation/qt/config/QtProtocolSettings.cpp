@@ -53,13 +53,52 @@ void QtProtocolSettings::setupGui() {
 	/* Cancel button */
 	connect ( _cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
 	/* Protocol selection combo */
-	connect( _protocolComboBox, SIGNAL( currentIndexChanged ( int ) ), _basicStackedWidget, SLOT( setCurrentIndex ( int ) ) );
-	connect( _protocolComboBox, SIGNAL( currentIndexChanged ( int ) ), _advancedStackedWidget, SLOT( setCurrentIndex ( int ) ) );
+
+	connect( _protocolComboBox, SIGNAL( currentIndexChanged ( int ) ), this, SLOT( setCurrentPage ( int ) ) );
+
+	setCurrentPage(0);
+
 }
 
 void QtProtocolSettings::accept() {
 	/* Default dialog action */
 	QDialog::accept();
+}
+
+void QtProtocolSettings::setCurrentPage(int index){
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	QWidget * widget;
+
+	StringList defaultProtocols = config.getAvailableProtocols();
+
+	QString selectedProtocol = QString::fromStdString( defaultProtocols[index] );
+
+	if ( selectedProtocol == "AIM / ICQ" ){
+		widget = Object::findChild<QWidget *>(_basicStackedWidget ,"aimPage" );
+		_basicStackedWidget->setCurrentWidget(widget);
+		widget = Object::findChild<QWidget *>(_advancedStackedWidget, "aimAdvancedSettings");
+		_advancedStackedWidget->setCurrentWidget(widget);
+	}
+
+	if ( selectedProtocol == "MSN" ){
+		widget = Object::findChild<QWidget *>(_basicStackedWidget ,"msnPage" );
+		_basicStackedWidget->setCurrentWidget(widget);
+		widget = Object::findChild<QWidget *>(_advancedStackedWidget, "msnAdvancedSettings");
+		_advancedStackedWidget->setCurrentWidget(widget);
+	}
+	if ( selectedProtocol == "Jabber" ){
+		widget = Object::findChild<QWidget *>(_basicStackedWidget ,"jabberPage" );
+		_basicStackedWidget->setCurrentWidget(widget);
+		widget = Object::findChild<QWidget *>(_advancedStackedWidget, "jabberAdvancedSettings");
+		_advancedStackedWidget->setCurrentWidget(widget);
+	}
+	if ( selectedProtocol == "Yahoo" ){
+		widget = Object::findChild<QWidget *>(_basicStackedWidget ,"yahooPage" );
+		_basicStackedWidget->setCurrentWidget(widget);
+		widget = Object::findChild<QWidget *>(_advancedStackedWidget, "yahooAdvancedSettings");
+		_advancedStackedWidget->setCurrentWidget(widget);
+	}
 }
 
 void QtProtocolSettings::readFromConfig() {
@@ -68,6 +107,21 @@ void QtProtocolSettings::readFromConfig() {
 }
 
 void QtProtocolSettings::setupChilds() {
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	StringList defaultProtocols = config.getAvailableProtocols();
+
+	QStringList qlist;
+
+	/* StringList to QStringList */
+
+	for (unsigned int i = 0; i < defaultProtocols.size(); i++){
+
+		qlist << QString::fromStdString(defaultProtocols[i]);
+	}
+	_protocolComboBox->clear();
+	_protocolComboBox->addItems(qlist);
 
 	// AIM /ICQ Options
 

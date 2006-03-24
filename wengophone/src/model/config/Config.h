@@ -23,6 +23,7 @@
 #include <settings/Settings.h>
 
 #include <util/String.h>
+#include <util/StringList.h>
 
 /**
  * Stores the configuration options of WengoPhone.
@@ -553,6 +554,18 @@ public:
 	/** Resources directory. */
 	static const std::string RESOURCES_DIR_KEY;
 	std::string getResourcesDir() const;
+
+	/**
+	 * @}
+	 */
+
+	/**
+	 * @name Protocols Methods
+	 * @{
+	 */
+
+	static const std::string AVAILABLE_PROTOCOLS_KEY;
+	StringList getAvailableProtocols() const;
 
 	/**
 	 * @}
