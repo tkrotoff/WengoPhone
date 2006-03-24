@@ -45,7 +45,7 @@
 
 using namespace std;
 
-UserProfile::UserProfile(WengoPhone & wengoPhone) 
+UserProfile::UserProfile(WengoPhone & wengoPhone)
 : _wengoPhone(wengoPhone) {
 	_sms = NULL;
 	_activePhoneLine = NULL;
@@ -116,7 +116,7 @@ void UserProfile::init() {
 
 	ContactListStorage * contactListStorage = new ContactListFileStorage(*_contactList, _imAccountHandler);
 	contactListStorage->load(config.getConfigDir() + "contactlist.xml");
-	delete contactListStorage;	
+	delete contactListStorage;
 	////
 }
 
@@ -149,7 +149,11 @@ void UserProfile::connectSipAccounts() {
 void UserProfile::disconnect() {
 	if (_activePhoneLine) {
 		_activePhoneLine->disconnect();
-		sleep(5);
+#ifdef OS_WINDOWS
+		_sleep(5);
+#else
+        sleep(5);
+#endif
 		_activePhoneLine->getSipWrapper().terminate();
 	}
 }
