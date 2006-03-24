@@ -414,7 +414,8 @@ class WengoSConsEnvironment(SConsEnvironment):
 				ldflags = os.environ['LDFLAGS'].split(' ')
 			self.__linkFlags = ldflags
 			import re
-			if re.match('3\.\d\.\d', self.WengoCCGCCVersion()):
+			if WengoOSLinux() and re.match('3\.\d\.\d',
+										   self.WengoCCGCCVersion()):
 				self.__CCFlags += ['-pthread']
 				self.__linkFlags += ['-pthread']
 		
@@ -457,7 +458,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 			if os.environ.has_key('CC'):
 				gcc_command_name = os.environ['CC']
 			(gcc_version_stdin, gcc_version_stdout) = os.popen2(gcc_command_name +
-									" --version", "r")
+																" --version", "t")
 			first_output_line = gcc_version_stdout.readline()
 			matched_version = re.match('^gcc.*?\s+\(GCC\)\s+(\d\.\d\.\d)',
 						first_output_line)
@@ -1595,7 +1596,7 @@ def WengoAddDefines(defines):
 	@see WengoSConsEnvironment.WengoAddDefines()
 	"""
 
-	env = environments.getGlobalEnvironment()
+	env = getGlobalEnvironment()
 	env.WengoAddDefines(defines)
 
 def WengoAddIncludePath(paths):
@@ -1605,7 +1606,7 @@ def WengoAddIncludePath(paths):
 	@see WengoSConsEnvironment.WengoAddIncludePath()
 	"""
 
-	env = environments.getGlobalEnvironment()
+	env = getGlobalEnvironment()
 	env.WengoAddIncludePath(paths)
 
 def WengoCCMinGW():
