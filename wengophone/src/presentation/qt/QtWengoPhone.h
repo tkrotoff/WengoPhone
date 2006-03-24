@@ -119,6 +119,12 @@ private Q_SLOTS:
 
 	void showByOut();
 
+	void showCallOut();
+
+	void showSms();
+
+	void showVoiceMail();
+
 	void setTrayMenu();
 
 private:

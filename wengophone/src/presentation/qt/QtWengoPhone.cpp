@@ -44,6 +44,7 @@
 #include "config/QtAdvancedConfig.h"
 #include "config/QtWengoConfigDialog.h"
 #include "statusbar/QtStatusBar.h"
+#include "history/QtHistoryWidget.h"
 
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
@@ -109,6 +110,11 @@ void QtWengoPhone::initThreadSafe() {
 	QWidget * tabDialpad = Object::findChild<QWidget *>(_tabWidget, "tabDialpad");
 	createLayout(tabDialpad)->addWidget(qtDialpad->getWidget());
 
+	// History
+	QWidget * tabHistory = Object::findChild<QWidget *>(_tabWidget,"tabCallHistory");
+	QtHistoryWidget * qtHistory = new QtHistoryWidget(tabHistory);
+	createLayout(tabHistory)->addWidget(qtHistory);
+
 	// systray
 	_trayMenu = NULL;
 	_trayIcon = new TrayIcon( QPixmap(":pics/systray_icon.png"),QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
@@ -172,9 +178,23 @@ void QtWengoPhone::initThreadSafe() {
 	// actionfaq
 	QAction * actionFaq = Object::findChild<QAction *>(_wengoPhoneWindow, "actionFaq");
 	connect (actionFaq, SIGNAL (triggered()), SLOT(showFaq()));
+
 	// actionBuy_call_out_credits
 	QAction * actionBuy_call_out_credits = Object::findChild<QAction *>(_wengoPhoneWindow, "actionBuy_call_out_credits");
 	connect (actionBuy_call_out_credits, SIGNAL(triggered()), SLOT(showByOut()));
+
+	// actionCall_out_service
+	QAction * actionCall_out_service = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCall_out_service");
+	connect (actionCall_out_service, SIGNAL(triggered()), SLOT (showCallOut()));
+
+	// actionSms
+	QAction * actionSms = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSms");
+	connect (actionSms, SIGNAL(triggered()), SLOT (showSms()));
+
+	// actionVoicemail
+	QAction * actionVoicemail = Object::findChild<QAction *>(_wengoPhoneWindow, "actionVoicemail");
+	connect (actionVoicemail, SIGNAL(triggered()), SLOT (showVoiceMail()));
+
 
 	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
 	connect(actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
@@ -443,17 +463,27 @@ void QtWengoPhone::showHelp() {
 }
 
 void QtWengoPhone::showFaq() {
-
+	_cWengoPhone.showWengoFAQ();
 }
 
 void QtWengoPhone::showByOut(){
 
 }
+void QtWengoPhone::showCallOut(){
+	_cWengoPhone.showWengoCallOut();
+}
+
+void QtWengoPhone::showSms() {
+	_cWengoPhone.showWengoSMS();
+}
 
 void QtWengoPhone::showAbout() {
 	static QtAbout * aboutWindow = new QtAbout(_wengoPhoneWindow);
-
 	aboutWindow->getWidget()->show();
+}
+
+void QtWengoPhone::showVoiceMail(){
+	_cWengoPhone.showWengoVoiceMail();
 }
 
 void QtWengoPhone::showHome() {
