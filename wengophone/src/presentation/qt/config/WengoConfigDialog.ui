@@ -143,14 +143,6 @@
        <string>Call Forward</string>
       </property>
      </item>
-     <item>
-      <property name="text" >
-       <string>Advanced</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config_advanced.png</iconset>
-      </property>
-     </item>
     </widget>
    </item>
   </layout>
