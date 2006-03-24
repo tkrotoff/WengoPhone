@@ -3401,9 +3401,12 @@ ph_call_answered(eXosip_event_t *je)
         rca = ph_locate_call_by_cid(ca->rcid);
     }
     
-    ph_call_retrieve_payloads(ca, je, -1);
-    ph_call_media_start(ca, je, -1, ca->localresume);
-    
+    if (!ca->localhold)
+      {
+	ph_call_retrieve_payloads(ca, je, -1);
+	ph_call_media_start(ca, je, -1, ca->localresume);
+      }
+
     info.localUri = je->local_uri;
     info.userData = je->external_reference;
     if (ca->localhold)
