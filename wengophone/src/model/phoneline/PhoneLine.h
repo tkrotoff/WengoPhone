@@ -58,7 +58,7 @@ public:
 
 	void disconnect();
 
-	void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState state, const SipAddress & sipAddress);
+	void setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState state, const SipAddress & sipAddress);
 
 	int getLineId() const {
 		return _lineId;
