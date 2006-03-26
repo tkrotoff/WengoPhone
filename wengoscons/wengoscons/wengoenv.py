@@ -22,6 +22,7 @@ import SCons.Defaults
 from SCons.Script import SConscript
 from SCons.Script.SConscript import SConsEnvironment
 import os, time, sys, re, types, shutil, stat
+import platform
 
 try:
 	ARGUMENTS = SCons.Script.ARGUMENTS
@@ -31,6 +32,8 @@ except AttributeError:
 
 #FIXME Is this a good idea to put this here?
 _libs = {}
+
+GCCVersion = (0 > 1)
 
 class WengoSConsEnvironment(SConsEnvironment):
 	"""
@@ -413,7 +416,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 			if os.environ.has_key('LDFLAGS'):
 				ldflags = os.environ['LDFLAGS'].split(' ')
 			self.__linkFlags = ldflags
-			import re
 
 			if re.match('3\.\d\.\d', self.WengoCCGCCVersion()):
 				if WengoSConsEnvironment.OS.isLinux():
@@ -458,7 +460,11 @@ class WengoSConsEnvironment(SConsEnvironment):
 			@return GCC's version number, or UnknownGCCVersion if
 			it can't be found.
 			"""
-		
+			global GCCVersion
+
+			if GCCVersion:
+				return GCCVersion
+ 
 			gcc_command_name = "gcc"
 			if os.environ.has_key('CC'):
 				gcc_command_name = os.environ['CC']
@@ -470,9 +476,11 @@ class WengoSConsEnvironment(SConsEnvironment):
 			gcc_version_stdin.close()
 			gcc_version_stdout.close()
 			if matched_version:
-				return matched_version.group(1)
+				GCCVersion = matched_version.group(1)
 			else:
-				return "UnknownGCCVersion"
+				GCCVersion = "UnknownGCCVersion"
+
+			return GCCVersion
 
 	class CCMSVC:
 		"""
@@ -1436,7 +1444,6 @@ class WengoSConsEnvironment(SConsEnvironment):
             Get edition name of Qt setup.
             """
 
-            import re
             matched = False
             try:
                 if WengoOSPosix():
@@ -1703,7 +1710,6 @@ def WengoArchX86():
 	@return true if the architecture used is compatible with x86, false otherwise
 	"""
 
-	import platform
 	return platform.machine() == "i386"
 
 def WengoArchPPCMacintosh():
@@ -1714,7 +1720,6 @@ def WengoArchPPCMacintosh():
 	@return true if the architecture used is compatible with PPC as used on Macintosh computers, false otherwise
 	"""
 
-	import platform
 	return platform.machine() == "Power Macintosh"
 
 def WengoSetDebugMode():
