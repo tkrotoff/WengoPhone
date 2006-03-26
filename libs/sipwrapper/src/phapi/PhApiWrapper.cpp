@@ -234,9 +234,6 @@ void PhApiWrapper::resumeCall(int callId) {
 	phResumeCall(callId);
 }
 
-void PhApiWrapper::muteCall(int callId) {
-}
-
 void PhApiWrapper::blindTransfer(int callId, const std::string & sipAddress) {
 	phBlindTransferCall(callId, sipAddress.c_str());
 }

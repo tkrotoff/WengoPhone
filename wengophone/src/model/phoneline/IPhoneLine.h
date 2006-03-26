@@ -73,6 +73,46 @@ public:
 	virtual int makeCall(const std::string & phoneNumber) = 0;
 
 	/**
+	 * @see SipWrapper::acceptCall()
+	 */
+	virtual void acceptCall(int callId) = 0;
+
+	/**
+	 * @see SipWrapper::rejectCall()
+	 */
+	virtual void rejectCall(int callId) = 0;
+
+	/**
+	 * @see SipWrapper::closeCall()
+	 */
+	virtual void closeCall(int callId) = 0;
+
+	/**
+	 * @see SipWrapper::holdCall()
+	 */
+	virtual void holdCall(int callId) = 0;
+
+	/**
+	 * @see SipWrapper::resumeCall()
+	 */
+	virtual void resumeCall(int callId) = 0;
+
+	/**
+	 * @see SipWrapper::blindTransfer()
+	 */
+	virtual void blindTransfer(int callId, const std::string & sipAddress) = 0;
+
+	/**
+	 * @see SipWrapper::playTone()
+	 */
+	virtual void playTone(int callId, EnumTone::Tone tone) = 0;
+
+	/**
+	 * @see SipWrapper::playSoundFile()
+	 */
+	virtual void playSoundFile(int callId, const std::string & soundFile) = 0;
+
+	/**
 	 * Gets the SIP account associated with this PhoneLine.
 	 *
 	 * @return SIP account associated with this PhoneLine or NULL

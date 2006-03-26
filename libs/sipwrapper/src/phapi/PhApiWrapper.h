@@ -105,8 +105,6 @@ public:
 
 	void resumeCall(int callId);
 
-	void muteCall(int callId);
-
 	void blindTransfer(int callId, const std::string & sipAddress);
 
 	void playTone(int callId, EnumTone::Tone tone);

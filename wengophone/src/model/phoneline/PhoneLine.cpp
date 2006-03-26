@@ -155,6 +155,60 @@ void PhoneLine::disconnect() {
 		_sipWrapper->removeVirtualLine(_lineId);
 	}
 }
+void PhoneLine::acceptCall(int callId) {
+	_sipWrapper->acceptCall(callId);
+	LOG_DEBUG("call accepted callId=" + String::fromNumber(callId));
+}
+
+void PhoneLine::rejectCall(int callId) {
+	_sipWrapper->rejectCall(callId);
+	LOG_DEBUG("call rejected callId=" + String::fromNumber(callId));
+}
+
+void PhoneLine::closeCall(int callId) {
+	PhoneCall * phoneCall = _phoneCallHash[callId];
+	if (!phoneCall) {
+		LOG_FATAL("closing an unknow phone call");
+	}
+
+	if (_activePhoneCall == phoneCall) {
+		_activePhoneCall = NULL;
+	}
+
+	//Deletes the PhoneCall that is closed now
+	//delete _phoneCallHash[callId];
+
+	//Removes it from the list of PhoneCall
+	_phoneCallHash.erase(callId);
+
+	_sipWrapper->closeCall(callId);
+	LOG_DEBUG("call closed callId=" + String::fromNumber(callId));
+}
+
+void PhoneLine::holdCall(int callId) {
+	_sipWrapper->holdCall(callId);
+	LOG_DEBUG("call hold callId=" + String::fromNumber(callId));
+}
+
+void PhoneLine::resumeCall(int callId) {
+	_sipWrapper->resumeCall(callId);
+	LOG_DEBUG("call resumed callId=" + String::fromNumber(callId));
+}
+
+void PhoneLine::blindTransfer(int callId, const std::string & sipAddress) {
+	SipAddress sipUri = SipAddress::fromString(sipAddress, getSipAccount().getRealm());
+
+	_sipWrapper->blindTransfer(callId, sipUri.getRawSipAddress());
+	LOG_DEBUG("call transfered to=" + sipAddress);
+}
+
+void PhoneLine::playTone(int callId, EnumTone::Tone tone) {
+	_sipWrapper->playTone(callId, tone);
+}
+
+void PhoneLine::playSoundFile(int callId, const std::string & soundFile) {
+	_sipWrapper->playSoundFile(callId, soundFile);
+}
 
 void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState state, const SipAddress & sipAddress) {
 	LOG_DEBUG("call state changed callId=" + String::fromNumber(callId) +
@@ -172,7 +226,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:
-		closeCall(callId);
+		//closeCall(callId);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
@@ -191,7 +245,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
-		closeCall(callId);
+		//closeCall(callId);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming: {
@@ -244,18 +298,6 @@ void PhoneLine::holdCallsExcept(int callId) {
 			}
 		}
 	}
-}
-
-void PhoneLine::closeCall(int callId) {
-	if (_activePhoneCall == _phoneCallHash[callId]) {
-		_activePhoneCall = NULL;
-	}
-
-	//Deletes the PhoneCall that is closed now
-	//delete _phoneCallHash[callId];
-
-	//Removes it from the list of PhoneCall
-	_phoneCallHash.erase(callId);
 }
 
 void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {

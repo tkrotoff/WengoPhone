@@ -46,6 +46,22 @@ public:
 
 	int makeCall(const std::string & phoneNumber);
 
+	void acceptCall(int callId);
+
+	void rejectCall(int callId);
+
+	void closeCall(int callId);
+
+	void holdCall(int callId);
+
+	void resumeCall(int callId);
+
+	void blindTransfer(int callId, const std::string & sipAddress);
+
+	void playTone(int callId, EnumTone::Tone tone);
+
+	void playSoundFile(int callId, const std::string & soundFile);
+
 	SipWrapper & getSipWrapper() const {
 		return *_sipWrapper;
 	}
@@ -97,15 +113,6 @@ private:
 	 * @param callId phone call that won't be put in hold state
 	 */
 	void holdCallsExcept(int callId);
-
-	/**
-	 * Closes a given phone call.
-	 *
-	 * Code factorization.
-	 *
-	 * @param callId phone call to close
-	 */
-	void closeCall(int callId);
 
 	/** SIP implementation. */
 	SipWrapper * _sipWrapper;

@@ -75,42 +75,37 @@ public:
 	~PhoneCall();
 
 	/**
-	 * @see SipWrapper::acceptCall()
+	 * @see IPhoneLine::acceptCall()
 	 */
 	void accept();
 
 	/**
-	 * @see SipWrapper::resumeCall()
+	 * @see IPhoneLine::resumeCall()
 	 */
 	void resume();
 
 	/**
-	 * @see SipWrapper::holdCall()
+	 * @see IPhoneLine::holdCall()
 	 */
 	void hold();
 
 	/**
-	 * @see SipWrapper::closeCall()
+	 * @see IPhoneLine::closeCall()
 	 */
 	void close();
 
 	/**
-	 * @see SipWrapper::mute()
+	 * @see IPhoneLine::blindTransfer()
 	 */
-	void mute();
+	void blindTransfer(const std::string & sipAddress);
 
 	/**
-	 * @see SipWrapper::blindTransfer()
-	 */
-	void blindTransfer(const std::string & phoneNumber);
-
-	/**
-	 * @see SipWrapper::playTone()
+	 * @see IPhoneLine::playTone()
 	 */
 	void playTone(EnumTone::Tone tone);
 
 	/**
-	 * @see SipWrapper::playSoundFile()
+	 * @see IPhoneLine::playSoundFile()
 	 */
 	void playSoundFile(const std::string & soundFile);
 

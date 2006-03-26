@@ -31,10 +31,7 @@
 
 #include <model/phoneline/IPhoneLine.h>
 #include <model/wenbox/WenboxPlugin.h>
-#include <model/SipCallbacks.h>
 #include <model/WengoPhone.h>
-
-#include <sipwrapper/SipWrapper.h>
 
 #include <util/Logger.h>
 
@@ -90,15 +87,13 @@ PhoneCall::~PhoneCall() {
 }
 
 void PhoneCall::accept() {
-	_phoneLine.getSipWrapper().acceptCall(_callId);
-	LOG_DEBUG("call accepted");
+	_phoneLine.acceptCall(_callId);
 }
 
 void PhoneCall::resume() {
 	if (_state->getCode() == PhoneCallStateHold::CODE) {
 		if (!_resume) {
-			_phoneLine.getSipWrapper().resumeCall(_callId);
-			LOG_DEBUG("call resumed");
+			_phoneLine.resumeCall(_callId);
 			_resume = false;
 		}
 	} else {
@@ -111,8 +106,7 @@ void PhoneCall::hold() {
 		_state->getCode() == PhoneCallStateResumed::CODE) {
 
 		if (!_hold) {
-			_phoneLine.getSipWrapper().holdCall(_callId);
-			LOG_DEBUG("call hold");
+			_phoneLine.holdCall(_callId);
 			_hold = false;
 		}
 	} else {
@@ -120,16 +114,8 @@ void PhoneCall::hold() {
 	}
 }
 
-void PhoneCall::mute() {
-	_phoneLine.getSipWrapper().muteCall(_callId);
-	LOG_DEBUG("call muted");
-}
-
-void PhoneCall::blindTransfer(const std::string & phoneNumber) {
-	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _phoneLine.getSipAccount().getRealm());
-
-	_phoneLine.getSipWrapper().blindTransfer(_callId, sipAddress.getRawSipAddress());
-	LOG_DEBUG("call transfered to=" + phoneNumber);
+void PhoneCall::blindTransfer(const std::string & sipAddress) {
+	_phoneLine.blindTransfer(_callId, sipAddress);
 }
 
 void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
@@ -217,13 +203,11 @@ void PhoneCall::close() {
 	if (_state->getCode() != PhoneCallStateClosed::CODE) {
 		if (_state->getCode() == PhoneCallStateIncoming::CODE) {
 			_callRejected = true;
-			_phoneLine.getSipWrapper().rejectCall(_callId);
+			_phoneLine.rejectCall(_callId);
 		} else {
-			_phoneLine.getSipWrapper().closeCall(_callId);
+			_phoneLine.closeCall(_callId);
 		}
 		setState(PhoneCallStateClosed::CODE);
-
-		LOG_DEBUG("call closed");
 	}
 }
 
@@ -237,9 +221,9 @@ void PhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, co
 }
 
 void PhoneCall::playTone(EnumTone::Tone tone) {
-	_phoneLine.getSipWrapper().playTone(_callId, tone);
+	_phoneLine.playTone(_callId, tone);
 }
 
 void PhoneCall::playSoundFile(const std::string & soundFile) {
-	_phoneLine.getSipWrapper().playSoundFile(_callId, soundFile);
+	_phoneLine.playSoundFile(_callId, soundFile);
 }

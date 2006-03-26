@@ -219,13 +219,6 @@ public:
 	virtual void resumeCall(int callId) = 0;
 
 	/**
-	 * Mutes a given phone call.
-	 *
-	 * @param callId id of the phone call to mute
-	 */
-	virtual void muteCall(int callId) = 0;
-
-	/**
 	 * Blind transfer the specified call to another party.
 	 *
 	 * @param callId id of the phone call to transfer
