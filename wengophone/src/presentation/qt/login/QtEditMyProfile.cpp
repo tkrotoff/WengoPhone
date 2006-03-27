@@ -27,7 +27,8 @@
 #include <util/Logger.h>
 
 #include "QtEditMyProfile.h"
-#include "QtProtocolSettings.h"
+#include "QtAccountManager.h"
+
 
 QtEditMyProfile::QtEditMyProfile(WengoPhone & wengoPhone, QWidget * parent, Qt::WFlags f )
 : QDialog( parent, f ), _wengoPhone(wengoPhone) {
@@ -56,6 +57,15 @@ void QtEditMyProfile::cancelClicked() {
 
 // FIXME : Just a test
 void QtEditMyProfile::imAccountAdded() {
+
+// open the protocols settings dialog
+/*
+_protocolSettings = new QtProtocolSettings(_wengoPhone,QtProtocolSettings::ADD,this);
+_protocolSettings->exec();
+*/
+	QtAccountManager  amanager(_wengoPhone,this);
+	amanager.exec();
+
 
 	for ( int i = 0; i < _imAccountLineEdit.size(); i++ ) {
 			if ( _imAccountLineEdit[ i ] ->isVisible() == false ) {

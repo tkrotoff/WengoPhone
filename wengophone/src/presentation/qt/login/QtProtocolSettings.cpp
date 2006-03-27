@@ -26,27 +26,42 @@
 #include <util/Logger.h>
 #include <qtutil/Object.h>
 
+
+
 #include "QtProtocolSettings.h"
 
-QtProtocolSettings::QtProtocolSettings ( WengoPhone & wengoPhone, QWidget * parent, Qt::WFlags f ) : QDialog ( parent, f ),
+QtProtocolSettings::QtProtocolSettings ( WengoPhone & wengoPhone, EditMode mode,QWidget * parent, Qt::WFlags f ) : QDialog ( parent, f ),
 _wengoPhone(wengoPhone) {
 
-	_widget = WidgetFactory::create( ":/forms/config/ProtocolSettings.ui", this );
+	_widget = WidgetFactory::create( ":/forms/login/ProtocolSettings.ui", this );
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget( _widget );
 	layout->setMargin( 0 );
 	setLayout( layout );
 
+	_mode = mode;
+	_imAccount = NULL;
 	_protocolComboBox = Object::findChild<QComboBox *>(_widget,"protocolComboBox" );
+
 	_basicStackedWidget = Object::findChild<QStackedWidget *>(_widget,"basicStackedWidget" );
 	_advancedStackedWidget = Object::findChild<QStackedWidget *>(_widget,"advancedStackedWidget" );
 	_okButton = Object::findChild<QPushButton *>(_widget,"okButton" );
 	_cancelButton = Object::findChild<QPushButton *>(_widget,"cancelButton" );
+
 	setupChilds();
 	//readFromConfig();
-	setupGui();
-
+	if ( _mode != MODIFY)
+		setupGui();
 }
+
+void QtProtocolSettings::setImAccount(IMAccount * imaccount) {
+	if ( ! _imAccount ){
+	 _imAccount = imaccount;
+	 setupGui();
+	}
+ };
+
+
 
 void QtProtocolSettings::setupGui() {
 	/* Ok button */
@@ -55,25 +70,174 @@ void QtProtocolSettings::setupGui() {
 	connect ( _cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
 	/* Protocol selection combo */
 
-	connect( _protocolComboBox, SIGNAL( currentIndexChanged ( int ) ), this, SLOT( setCurrentPage ( int ) ) );
+	connect( _protocolComboBox, SIGNAL( currentIndexChanged ( int ) ), this, SLOT( setCurrentPageProxy ( int ) ) );
 
-	setCurrentPage(0);
+	EnumIMProtocol::IMProtocol improto;
+
+
+	QString protoStr;
+	if ( _mode == MODIFY ){
+		improto = _imAccount->getProtocol();
+		switch ( improto ){
+			case EnumIMProtocol::IMProtocolMSN:
+				protoStr = QString("MSN");
+				setCurrentPage(ProtocolMsn);
+				initMsnPage();
+			break;
+
+			case EnumIMProtocol::IMProtocolYahoo:
+				protoStr = QString("Yahoo");
+				setCurrentPage(ProtocolYahoo);
+			break;
+
+			case EnumIMProtocol::IMProtocolAIM:
+				protoStr = QString("AIM / ICQ");
+				setCurrentPage(ProtocolAim);
+			break;
+
+			case EnumIMProtocol::IMProtocolJabber:
+				protoStr = QString("Jabber");
+				setCurrentPage(ProtocolJabber);
+			break;
+
+			default:{
+				// FIXME: What to do when protocol is unknow ?
+				qDebug() << "Unknow protocol, setting to MSN";
+				protoStr = QString("MSN");
+				setCurrentPage(ProtocolMsn);
+			}
+		}
+
+		_protocolComboBox->setCurrentIndex(_protocolComboBox->findText(protoStr));
+		_protocolComboBox->setEnabled(false);
+		qDebug() << "Combobox disabled";
+
+	}
+	else
+		setCurrentPage(ProtocolAim);
+
 
 }
+
+void QtProtocolSettings::initMsnPage(){
+
+	_msnAliasEdit->setText(QString::fromStdString(_imAccount->getLogin()));
+	_msnPasswordEdit->setText(QString::fromStdString(_imAccount->getPassword()));
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
+
+	_msnLoginServerEdit->setText(QString::fromStdString(param.getMSNServer()));
+	_msnPortEdit->setText(QString("%1").arg(param.getMSNServerPort()));
+
+	if (param.isMSNHttpUsed())
+		_msnUseHttpCheckBox->setCheckState(Qt::Checked);
+	else
+		_msnUseHttpCheckBox->setCheckState(Qt::Unchecked);
+
+	// Remember password ?
+	if (param.isPasswordRemembered())
+		_msnRememberPasswordCheckBox->setCheckState(Qt::Checked);
+	else
+		_msnRememberPasswordCheckBox->setCheckState(Qt::Unchecked);
+
+	// New mail notification ?
+	if (param.isMailNotified())
+		_msnNewMailNotificationCheckBox->setCheckState(Qt::Checked);
+	else
+		_msnNewMailNotificationCheckBox->setCheckState(Qt::Unchecked);
+
+}
+
+void QtProtocolSettings::initAimPage(){
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
+
+	_aimAliasEdit->setText(QString::fromStdString(_imAccount->getLogin()));
+	_aimPasswordEdit->setText(QString::fromStdString(_imAccount->getPassword()));
+
+	_aimAuthHostEdit->setText(QString::fromStdString(param.getOscarServer()));
+	_aimAuthEdit->setText(QString("%1").arg(param.getOscarServerPort()));
+	_aimEncodingEdit->setText(QString::fromStdString(param.getOscarEncoding()));
+
+	// Remember password ?
+	if (param.isPasswordRemembered())
+		_aimRememberPasswordCheckBox->setCheckState(Qt::Checked);
+	else
+		_aimRememberPasswordCheckBox->setCheckState(Qt::Unchecked);
+
+	// New mail notification ?
+	if (param.isMailNotified())
+		_aimNewMailNotificationCheckBox->setCheckState(Qt::Checked);
+	else
+		_aimNewMailNotificationCheckBox->setCheckState(Qt::Unchecked);
+}
+
+void QtProtocolSettings::initYahooPage(){
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
+
+	_yahooScreenNameEdit->setText(QString::fromStdString(_imAccount->getLogin()));
+	_yahooPasswordEdit->setText(QString::fromStdString(_imAccount->getPassword()));
+
+
+	// Is yahoo japan ?
+	if ( param.isYahooJapan() )
+		_yahooJapanCheckBox->setCheckState(Qt::Checked);
+	else
+		_yahooJapanCheckBox->setCheckState(Qt::Unchecked);
+
+	_yahooPagerHostEdit->setText(QString::fromStdString(param.getYahooServer()));
+	_yahooPagerPortEdit->setText(QString("%1").arg(param.getYahooServerPort()));
+
+	_yahooFileTransferHostEdit->setText(QString::fromStdString(param.getYahooXferHost()));
+	_yahooFileTransferPortEdit->setText(QString("%1").arg(param.getYahooXferPort()));
+
+	_yahooJapanFileTransferHostEdit->setText(QString::fromStdString(param.getYahooJapanXferHost()));
+
+	_yahooChatRoomLocalEdit->setText(QString::fromStdString(param.getYahooRoomListLocale()));
+
+	// Remember password ?
+	if (param.isPasswordRemembered())
+		_yahooRememberPasswordCheckBox->setCheckState(Qt::Checked);
+	else
+		_yahooRememberPasswordCheckBox->setCheckState(Qt::Unchecked);
+
+	// New mail notification ?
+	if (param.isMailNotified())
+		_yahooNewMailNotificationCheckBox->setCheckState(Qt::Checked);
+	else
+		_yahooNewMailNotificationCheckBox->setCheckState(Qt::Unchecked);
+
+}
+
 
 void QtProtocolSettings::accept() {
 	/* Default dialog action */
 	QDialog::accept();
 }
 
-void QtProtocolSettings::setCurrentPage(int index){
+void QtProtocolSettings::saveConfig(){
+
+
+}
+
+void QtProtocolSettings::setCurrentPageProxy(int index){
+	qDebug() << "Combobox index changed";
+	setCurrentPage( (AvailableProtocols) index);
+}
+
+
+void QtProtocolSettings::setCurrentPage(AvailableProtocols index){
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QWidget * widget;
 
 	StringList defaultProtocols = config.getAvailableProtocols();
 
-	QString selectedProtocol = QString::fromStdString( defaultProtocols[index] );
+	QString selectedProtocol = QString::fromStdString( defaultProtocols[(int)index] );
+
+	qDebug() << "Selected protocol : " << selectedProtocol;
+	qDebug() << "Selected protocol : " << (int) index;
 
 	if ( selectedProtocol == "AIM / ICQ" ){
 		widget = Object::findChild<QWidget *>(_basicStackedWidget ,"aimPage" );

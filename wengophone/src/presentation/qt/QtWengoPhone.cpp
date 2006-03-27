@@ -35,7 +35,7 @@
 #include "login/QtLogin.h"
 #include "login/QtSetLogin.h"
 #include "login/QtEditMyProfile.h"
-
+#include "login/QtAccountManager.h"
 
 #include "contactlist/QtContactList.h"
 #include "contactlist/QtAddContact.h"
@@ -197,6 +197,9 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionVoicemail = Object::findChild<QAction *>(_wengoPhoneWindow, "actionVoicemail");
 	connect (actionVoicemail, SIGNAL(triggered()), SLOT (showVoiceMail()));
 
+	// actionIM_Account_Settings
+	QAction * actionIM_Account_Settings = Object::findChild<QAction *>(_wengoPhoneWindow,"actionIM_Account_Settings");
+	connect (actionIM_Account_Settings,SIGNAL(triggered()), SLOT(showAccountSettings()));
 
 	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
 	connect(actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
@@ -511,6 +514,11 @@ void QtWengoPhone::showAdvancedConfig() {
 	configWindow->getWidget()->show();
 }
 
+void QtWengoPhone::showAccountSettings(){
+	QtAccountManager accountManager(_cWengoPhone.getWengoPhone(),_wengoPhoneWindow);
+
+	accountManager.exec();
+}
 
 //FIXME
 #include <model/phonecall/ConferenceCall.h>

@@ -298,16 +298,6 @@
      <height>19</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>Wengo</string>
-    </property>
-    <addaction name="actionShowWengoAccount" />
-    <addaction name="actionOpenWengoAccount" />
-    <addaction name="actionEditMyProfile" />
-    <addaction name="separator" />
-    <addaction name="actionExit" />
-   </widget>
    <widget class="QMenu" name="menuContacts" >
     <property name="title" >
      <string>Contacts</string>
@@ -338,6 +328,31 @@
     <addaction name="actionCall_out_service" />
     <addaction name="actionSms" />
     <addaction name="actionVoicemail" />
+   </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>Wengo</string>
+    </property>
+    <widget class="QMenu" name="menuHide_Show" >
+     <property name="title" >
+      <string>Hide / Show</string>
+     </property>
+     <addaction name="actionView_toolbar" />
+     <addaction name="actionView_addressbar" />
+     <addaction name="actionView_dialpad" />
+     <addaction name="separator" />
+     <addaction name="actionShow_Hide_contacts_offline" />
+     <addaction name="actionShow_contact_groups" />
+     <addaction name="separator" />
+     <addaction name="actionSort_contacts" />
+    </widget>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionOpenWengoAccount" />
+    <addaction name="actionEditMyProfile" />
+    <addaction name="actionIM_Account_Settings" />
+    <addaction name="menuHide_Show" />
+    <addaction name="separator" />
+    <addaction name="actionExit" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -442,6 +457,41 @@
   <action name="actionVoicemail" >
    <property name="text" >
     <string>Voicemail </string>
+   </property>
+  </action>
+  <action name="actionView_toolbar" >
+   <property name="text" >
+    <string>View toolbar</string>
+   </property>
+  </action>
+  <action name="actionView_addressbar" >
+   <property name="text" >
+    <string>View addressbar</string>
+   </property>
+  </action>
+  <action name="actionView_dialpad" >
+   <property name="text" >
+    <string>View dialpad</string>
+   </property>
+  </action>
+  <action name="actionShow_Hide_contacts_offline" >
+   <property name="text" >
+    <string>Show / Hide contacts offline</string>
+   </property>
+  </action>
+  <action name="actionShow_contact_groups" >
+   <property name="text" >
+    <string>Show contact groups</string>
+   </property>
+  </action>
+  <action name="actionSort_contacts" >
+   <property name="text" >
+    <string>Sort contacts</string>
+   </property>
+  </action>
+  <action name="actionIM_Account_Settings" >
+   <property name="text" >
+    <string>IM Account Settings</string>
    </property>
   </action>
  </widget>

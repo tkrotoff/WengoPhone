@@ -14,11 +14,17 @@ class QtProtocolSettings : public QDialog
 public:
     enum ProtocolPage {AIM,GADU,GROUPWISE,JABBER,MSN,NAPSTER,SILC,SIMPLE,SAMETIME,YAHOO};
 
-    QtProtocolSettings (WengoPhone & wengoPhone,QWidget * parent=0, Qt::WFlags f=0);
+    enum EditMode{ADD,MODIFY};
+
+    enum AvailableProtocols { ProtocolMsn=0, ProtocolAim , ProtocolJabber, ProtocolYahoo };
+
+    QtProtocolSettings (WengoPhone & wengoPhone, EditMode mode, QWidget * parent=0, Qt::WFlags f=0);
 
     public Q_SLOTS:
 
     virtual void accept();
+
+    void setImAccount(IMAccount * imaccount);
 
 protected:
 
@@ -27,6 +33,18 @@ protected:
     void setupChilds();
 
     void readFromConfig();
+
+    void saveConfig();
+
+	void initMsnPage();
+
+	void initAimPage();
+
+	void initYahooPage();
+
+	EditMode _mode;
+
+	IMAccount * _imAccount;
 
 	WengoPhone & _wengoPhone;
 
@@ -296,7 +314,9 @@ protected:
 
 public Q_SLOTS:
 
-	void setCurrentPage(int index);
+	void setCurrentPage(AvailableProtocols index);
+
+	void setCurrentPageProxy(int index);
 };
 
 #endif

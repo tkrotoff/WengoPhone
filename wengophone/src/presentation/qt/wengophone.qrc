@@ -128,7 +128,6 @@
         <file>config/ManageBlockedUsersSettings.ui</file>
         <file>config/NotificationSettings.ui</file>
         <file>config/PrivacySettings.ui</file>
-        <file>config/ProtocolSettings.ui</file>
         <file>config/VideoSettings.ui</file>
         <file>config/WengoConfigDialog.ui</file>
         <file>contactlist/AddContactWindow.ui</file>
@@ -140,6 +139,8 @@
         <file>login/contactWindow.ui</file>
         <file>login/profileWindow.ui</file>
         <file>login/setLoginWindow.ui</file>
+        <file>login/ProtocolSettings.ui</file>		
+		<file>login/accountManager.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
         <file>phonecall/VideoWindow.ui</file>

@@ -126,6 +126,8 @@ private Q_SLOTS:
 
 	void showVoiceMail();
 
+	void showAccountSettings();
+
 	void setTrayMenu();
 
 private:

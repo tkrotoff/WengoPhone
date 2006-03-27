@@ -27,6 +27,8 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
+#include "QtProtocolSettings.h"
+
 class WengoPhone;
 
 class QtEditMyProfile : public QDialog
@@ -56,6 +58,8 @@ public Q_SLOTS:
 protected:
 
 	WengoPhone & _wengoPhone;
+
+	QtProtocolSettings * _protocolSettings;
 
 	QWidget * _widget;
 
@@ -112,7 +116,6 @@ protected:
 	QPushButton * _saveChange;
 
 	QPushButton * _cancelChange;
-
 
 	QMap<QString,QVariant> _data;
 
