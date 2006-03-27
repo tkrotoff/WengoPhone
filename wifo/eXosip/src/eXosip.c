@@ -2725,6 +2725,7 @@ int eXosip_register      (int rid, int registration_period)
   else if (jr->r_reg_period<200) /* too low */
     jr->r_reg_period = 200;
 
+  /* */
   reg = NULL;
   if (jr->r_last_tr!=NULL)
     {
@@ -2736,7 +2737,7 @@ int eXosip_register      (int rid, int registration_period)
 	}
       else
 	{
-	  osip_message_t *last_response;
+	  osip_message_t *last_response = 0;
 
 	  reg = jr->r_last_tr->orig_request;
 	  last_response = jr->r_last_tr->last_response;

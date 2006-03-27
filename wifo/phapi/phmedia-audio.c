@@ -1031,7 +1031,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 	{
 	  CONF_LOCK(stream);
 
-	  if (stream->to_mix)
+	  if (stream->to_mix && !stream->to_mix->ms.suspended)
 	    {
 	      int len2;
 	  
@@ -2301,6 +2301,7 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
 {
   struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
   phastream_t *stream = (phastream_t *) msp->streamerData;
+  phastream_t *master = (phastream_t *) stream->master;
 
 
   if (!stream || !stream->ms.running)
@@ -2315,6 +2316,13 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
       osip_free(stream->ms.media_io_thread);
       stream->ms.media_io_thread = 0;
     }
+
+  if (master)
+    {
+      CONF_LOCK(master);
+      master->to_mix = 0;
+    }
+
 
 #ifdef PH_USE_RESAMPLE
   if (stream->actual_rate != stream->clock_rate)
@@ -2537,6 +2545,7 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
      
      CONF_LOCK(stream1);
      stream1->to_mix = stream2;
+     stream2->master = stream1;
      s1->confflags = PH_MSESSION_CONF_MASTER;
      s2->confflags = PH_MSESSION_CONF_MEMBER;
      CONF_UNLOCK(stream1);
@@ -2549,6 +2558,7 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
 
       CONF_LOCK(stream2);
       stream2->to_mix = stream1;
+      stream1->master = stream2;
       s2->confflags = PH_MSESSION_CONF_MASTER;
       s1->confflags = PH_MSESSION_CONF_MEMBER;
       CONF_UNLOCK(stream2);
@@ -2561,6 +2571,7 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
   
   CONF_LOCK(stream1);
   stream1->to_mix = stream2;
+  stream2->master = stream1;
   s1->confflags = PH_MSESSION_CONF_MASTER;
   s2->confflags = PH_MSESSION_CONF_MEMBER;
   CONF_UNLOCK(stream1);
@@ -2580,7 +2591,11 @@ int ph_msession_audio_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *
 
   CONF_LOCK(stream1);
   if (stream1->to_mix)
-    stream1->to_mix = 0;
+    {
+      stream1->to_mix->master = 0;
+      stream1->to_mix = 0;
+    }
+
   CONF_UNLOCK(stream1);
   
   s1->confflags = 0;
@@ -2588,7 +2603,10 @@ int ph_msession_audio_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *
 
   CONF_LOCK(stream2);
   if (stream2->to_mix)
-    stream2->to_mix = 0;
+    {
+      stream2->to_mix->master = 0;
+      stream2->to_mix = 0;
+    }
   CONF_UNLOCK(stream2);
 
 

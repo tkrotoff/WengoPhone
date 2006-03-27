@@ -123,6 +123,7 @@ struct ph_audio_stream
   void   *drvinfo;
   
   struct ph_audio_stream *to_mix;
+  struct ph_audio_stream *master;
   ph_mediabuf_t   data_in;
   ph_mediabuf_t   data_out;
 
