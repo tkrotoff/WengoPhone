@@ -14,6 +14,7 @@ sources = [
 	'src/Startup.cpp',
 	'src/WebBrowser.cpp',
 	'src/Date.cpp',
+	'src/Time.cpp',
 	'src/StringList.cpp',
 	'src/String.cpp',
 	'src/File.cpp',
