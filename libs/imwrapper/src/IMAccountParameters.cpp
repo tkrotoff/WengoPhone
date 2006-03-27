@@ -125,8 +125,8 @@ string IMAccountParameters::getYahooJapanXferHost() const {
 	return getStringKeyValue(YAHOO_JAPAN_XFER_HOST_KEY);
 }
 
-string IMAccountParameters::getYahooXferPort() const {
-	return getStringKeyValue(YAHOO_XFER_PORT_KEY);
+int IMAccountParameters::getYahooXferPort() const {
+	return getIntegerKeyValue(YAHOO_XFER_PORT_KEY);
 }
 
 string IMAccountParameters::getYahooRoomListLocale() const {

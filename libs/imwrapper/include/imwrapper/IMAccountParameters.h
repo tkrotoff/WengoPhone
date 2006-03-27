@@ -74,7 +74,7 @@ public:
 	std::string getYahooJapanXferHost() const;
 
 	static const std::string YAHOO_XFER_PORT_KEY;
-	std::string getYahooXferPort() const;
+	int getYahooXferPort() const;
 
 	static const std::string YAHOO_ROOM_LIST_LOCALE_KEY;
 	std::string getYahooRoomListLocale() const;
