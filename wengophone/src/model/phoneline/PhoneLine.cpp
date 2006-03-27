@@ -103,6 +103,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 		PhoneCall * phoneCall = (*it).second;
 		EnumPhoneCallState::PhoneCallState state = phoneCall->getState().getCode();
 		if (state != EnumPhoneCallState::PhoneCallStateTalking &&
+			state != EnumPhoneCallState::PhoneCallStateResumed &&
 			state != EnumPhoneCallState::PhoneCallStateHold) {
 
 			LOG_ERROR("cannot place the call=" + phoneNumber + ", at least another phone call is not in talking state");
@@ -155,6 +156,7 @@ void PhoneLine::disconnect() {
 		_sipWrapper->removeVirtualLine(_lineId);
 	}
 }
+
 void PhoneLine::acceptCall(int callId) {
 	_sipWrapper->acceptCall(callId);
 	LOG_DEBUG("call accepted callId=" + String::fromNumber(callId));
@@ -226,7 +228,11 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:
-		//closeCall(callId);
+		//Deletes the PhoneCall that is closed now
+		//delete _phoneCallHash[callId];
+
+		//Removes it from the list of PhoneCall
+		_phoneCallHash.erase(callId);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
@@ -245,7 +251,11 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
-		//closeCall(callId);
+		//Deletes the PhoneCall that is closed now
+		//delete _phoneCallHash[callId];
+
+		//Removes it from the list of PhoneCall
+		_phoneCallHash.erase(callId);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming: {
