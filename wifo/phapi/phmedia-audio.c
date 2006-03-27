@@ -1320,7 +1320,7 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 	{
 	  CONF_LOCK(stream);
 
-	  if (stream->to_mix) /* we're in conference mode */
+	  if (stream->to_mix && !stream->to_mix->ms.suspended) /* we're in conference mode */
 	    {
 	      phastream_t *other = stream->to_mix;
 
@@ -1988,7 +1988,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
       return -PH_NORESOURCES;
     }
 
-
+      
 
   codecpt = sp->ipayloads[0].number;
 
@@ -2301,13 +2301,15 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
 {
   struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
   phastream_t *stream = (phastream_t *) msp->streamerData;
-  phastream_t *master = (phastream_t *) stream->master;
+  phastream_t *master;
 
 
   if (!stream || !stream->ms.running)
     return;
 
   stream->ms.running = 0;
+
+  master = stream->master;
 
 
   if (stream->ms.media_io_thread)
@@ -2321,6 +2323,7 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
     {
       CONF_LOCK(master);
       master->to_mix = 0;
+      CONF_UNLOCK(master);
     }
 
 
@@ -2431,6 +2434,9 @@ void ph_msession_audio_stop(struct ph_msession_s *s, const char *deviceId)
     ph_msession_audio_conf_stop(s->confsession, s);
 
   ph_msession_audio_stream_stop(s, confflags != PH_MSESSION_CONF_MEMBER);
+  msp->streamerData = 0;
+
+
   if (confflags == PH_MSESSION_CONF_MASTER)
     {
       struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
@@ -2439,6 +2445,7 @@ void ph_msession_audio_stop(struct ph_msession_s *s, const char *deviceId)
       DBG1_MEDIA_ENGINE("audio_stop: removeing conf master\n");
 
       s2->confflags = 0;
+      stream2->master = 0;
 
       /* if the slave stream is not suspended,  start audio streaming for it */
       if (stream2 && !stream2->ms.suspended)
@@ -2452,7 +2459,6 @@ void ph_msession_audio_stop(struct ph_msession_s *s, const char *deviceId)
 
     }
 
-  msp->streamerData = 0;
   osip_free(stream);
 
   PH_MSESSION_AUDIO_UNLOCK();
@@ -2518,6 +2524,12 @@ void ph_msession_audio_resume(struct ph_msession_s *s, int resumewhat, const cha
   ph_msession_audio_start(s, deviceId);
   stream->ms.suspended = 0;
 
+  if (s->confsession)
+    {
+      struct ph_mstream_params_s *msp2 = &s->confsession->streams[PH_MSTREAM_AUDIO1];
+      phastream_t *stream2 = (phastream_t *) msp2->streamerData;     
+    }
+
   DBG4_MEDIA_ENGINE("audio_resume: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
 
 }
@@ -2545,7 +2557,8 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
      
      CONF_LOCK(stream1);
      stream1->to_mix = stream2;
-     stream2->master = stream1;
+     if (stream2)
+       stream2->master = stream1;
      s1->confflags = PH_MSESSION_CONF_MASTER;
      s2->confflags = PH_MSESSION_CONF_MEMBER;
      CONF_UNLOCK(stream1);
@@ -2558,7 +2571,8 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
 
       CONF_LOCK(stream2);
       stream2->to_mix = stream1;
-      stream1->master = stream2;
+      if (stream1)
+	stream1->master = stream2;
       s2->confflags = PH_MSESSION_CONF_MASTER;
       s1->confflags = PH_MSESSION_CONF_MEMBER;
       CONF_UNLOCK(stream2);
@@ -2571,7 +2585,8 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
   
   CONF_LOCK(stream1);
   stream1->to_mix = stream2;
-  stream2->master = stream1;
+  if (stream2)
+    stream2->master = stream1;
   s1->confflags = PH_MSESSION_CONF_MASTER;
   s2->confflags = PH_MSESSION_CONF_MEMBER;
   CONF_UNLOCK(stream1);
