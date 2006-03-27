@@ -3587,7 +3587,7 @@ int eXosip_notify_accept_subscribe(int nid, int code,
 void eXosip_guess_contact_uri(const char *url, char *strbuf, int bufsize, int public_net)
 {
   int i;
-  osip_from_t *a_from;
+  osip_from_t *a_from = 0;
   char *contact = strbuf;
   char locip[50];
 
@@ -3635,8 +3635,10 @@ void eXosip_guess_contact_uri(const char *url, char *strbuf, int bufsize, int pu
 		    eXosip.localport);
 	}
 	  
-      osip_from_free(a_from);
     }
+
+  osip_from_free(a_from);
+
 } 
 
 void eXosip_set_answer_contact(const char *contacturl)
