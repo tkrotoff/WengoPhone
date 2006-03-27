@@ -88,7 +88,7 @@ void QtAccountManager::loadImAccounts() {
 	_treeWidget->clear();
 
 	for (i=imh.begin(); i != imh.end(); i++) {
-			IMAccount * im = &(*i);
+			IMAccount * im = (IMAccount *)&(*i);
 			l << QString::fromStdString(im->getLogin());
 			l << "";
 			improto = im->getProtocol();
