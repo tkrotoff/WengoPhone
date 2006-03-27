@@ -1971,13 +1971,11 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
   if (!(newstreams & (1 << PH_MSTREAM_AUDIO1)))
     {
-      PH_MSESSION_AUDIO_UNLOCK();
       return 0;
     }
 
   if (!sp->localport || !sp->remoteport)
     {
-      PH_MSESSION_AUDIO_UNLOCK();
       return 0;
     }
 

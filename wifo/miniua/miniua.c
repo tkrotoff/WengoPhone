@@ -38,10 +38,15 @@
 #include <assert.h>
 #include <signal.h>
 
+
+
 #ifdef WIN32
 #define snprintf _snprintf
 #define strncasecmp strnicmp
 #define sleep(x) Sleep(x*1000)
+typedef unsigned_int pthread_t;
+#else
+#include <pthread.h>
 #endif
 
 
@@ -71,6 +76,14 @@ int proxy_port, tunnel_port = 80;
 static char phapi_server[32] = "127.0.0.1";
 
 
+char cnfuri1[256], cnfuri2[256];
+int cnfcid1, cnfcid2;
+int cnfvlid;
+int cnfstate;
+
+enum CnfStates { NOCONF, WAITCALL1, WAITCALL2, WAITHOLD1, HALFCONF, CONFREADY };
+
+
 
 #if defined(__DATE__) && defined(__TIME__)
 static const char server_built[] = __DATE__ " " __TIME__;
@@ -98,6 +111,49 @@ static char default_sip_target[128] = "nowhere";
 static char currentid[512];  /* current sip identity */
 
 static int callbackStatus;
+
+
+
+#ifndef _WIN32
+pthread_t 
+mua_thread_create (int stacksize, void *(*func) (void *), void *arg)
+{
+  int i;
+  pthread_t thread;
+
+  i = pthread_create (&thread, NULL, func, (void *) arg);
+  if (i != 0)
+    {
+      perror("phapi_client error creating thread:");
+      exit(2);
+      return 0;
+    }
+  return thread;
+}
+#else
+
+pthread_t
+mua_thread_create (int stacksize, void *(*func) (void *), void *arg)
+{
+  pthread_t thread;
+  typedef void (*thrfun)(void *);
+  
+
+  thread = (pthread_t) _beginthread ((thrfun)func, 0, arg);
+
+  if (thread == 0)
+    {
+      fprintf(stderr, "phapi_client: error creating thread");
+      exit(2);
+      return NULL;
+    }
+  return thread;
+}
+#endif
+
+
+
+
 
 
 void
@@ -438,6 +494,28 @@ int main(int argc, const char *const *argv)
 
 
 
+static void do_holdit(void *arg)
+{
+ 
+  sleep(1);
+  printf("Holding this call : %d\n", cnfcid1);
+  cnfstate = WAITHOLD1;
+  phHoldCall(cnfcid1);
+
+}
+
+
+static void do_confit(void *arg)
+{
+  sleep(1);
+  printf("Creating the conf\n");
+  phConf(cnfcid2, cnfcid1);
+  cnfstate = HALFCONF;
+  printf("Resuming %d\n", cnfcid1);
+  phResumeCall(cnfcid1);
+
+}
+
 static void 
 callProgress(int cid, const phCallStateInfo_t *info) 
 {
@@ -486,6 +564,15 @@ callProgress(int cid, const phCallStateInfo_t *info)
       case phCALLOK:
 	printf("CALLOK cid=%d uri=%s\n", cid, info->u.remoteUri);
 	callbackStatus = 0;
+	if (cnfstate == WAITCALL1)
+	  {
+	    mua_thread_create(20000, do_holdit, 0);
+	  }
+	else if (cnfstate == WAITCALL2)
+	  {
+	     mua_thread_create(20000, do_confit, 0);
+	  }
+
 	break;
 
       case phCALLHELD: 
@@ -499,11 +586,21 @@ callProgress(int cid, const phCallStateInfo_t *info)
 
       case phHOLDOK:
 	printf("HOLDOK cid=%d  status=%d\n", cid, info->u.errorCode);
+	if (cnfstate == WAITHOLD1)
+	  {
+	    cnfstate = WAITCALL2;
+	    cnfcid2 = phLinePlaceCall(cnfvlid, cnfuri2, 0, 0);
+	  }
 	break;
 
       case phRESUMEOK:
 	printf("RESUMEOK cid=%d  status=%d\n", cid, info->u.errorCode);
 	callbackStatus = info->u.errorCode;
+	if (cnfstate == HALFCONF)
+	  {
+	    cnfstate = CONFREADY;
+	    printf("CONFERENCE ready\n");
+	  }
 	break;
 
       case phINCALL:
@@ -656,7 +753,7 @@ enum CMDS {
   CMD_DTMF, CMD_BTXFER, CMD_ATXFER, CMD_XFERCNF, CMD_OPT, CMD_UNREG, CMD_VLADD, CMD_VLDEL, 
   CMD_DTMFMODE, CMD_AUTOANS, CMD_AUTOREJ, CMD_AUTORING, CMD_SENDSF,
   CMD_AUTHADD, CMD_AUTHADD_2, CMD_SETID, CMD_EXIT, CMD_QUIT, CMD_LCALL, CMD_FOLLOW, CMD_SENDF, CMD_SLEEP, CMD_COMMENT, 
-  CMD_EBREAK, CMD_SETV, CMD_NATINFO, CMD_ECHO, CMD_CONF, CMD_NOCONF, CMD_CONTACT, CMD_TUNPROXY, 
+  CMD_EBREAK, CMD_SETV, CMD_NATINFO, CMD_ECHO, CMD_CONF, CMD_NOCONF, CMD_LCONF, CMD_CONTACT, CMD_TUNPROXY, 
   CMD_TUNSERVER, CMD_TUNCONF, CMD_SIPPX, CMD_PHINIT, CMD_SUBSCRIBE, CMD_HELP 
 };
 
@@ -705,6 +802,7 @@ const struct cmd cmdtab[] =
   { "fl", "vlid uri\t set followme address for given vlid to given uri. If vlid==0 do global setting. Mising URI means reset it", CMD_FOLLOW },
   { "k", "cid1 cid2", CMD_CONF },
   { "nk", "cid1 cid2", CMD_NOCONF },
+  { "lk", "vlid uri1 uri2\t-  make confcall between ur1 and uri2", CMD_LCONF },
   { "vlc", "vlid contact", CMD_CONTACT },
   { "tp",  "addres port\t - set http proxy server and port", CMD_TUNPROXY },
   { "ts",  "server port\t - set tunnel server and port", CMD_TUNSERVER },
@@ -795,6 +893,28 @@ static void dobreak(int x)
 {
   exit(x);
 }
+
+
+int mkconf(int vlid, const char *uri1, const char *uri2)
+{
+  cnfvlid = vlid;
+  
+  geturi(uri1, cnfuri1, sizeof(cnfuri1));
+  geturi(uri2, cnfuri2, sizeof(cnfuri2));
+
+  printf("Making conf between <%s> and <%s>\n", uri1, uri2);
+
+  cnfcid1 = phLinePlaceCall(vlid, cnfuri1, 0, 0);
+  
+  if (cnfcid1 > 0)
+    {
+      cnfstate = WAITCALL1;
+      return 0;
+    }
+  return cnfcid1;
+
+};
+  
 
   
 
@@ -929,6 +1049,25 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	    
 	    break;
 	  }
+
+	case CMD_LCONF:
+	  {
+	    char *uri1, *uri2;
+	    p = args;
+
+
+	    p = strtok(args, " ");
+	    vlid = atoi(p);
+
+	    uri1 = strtok(NULL, " ");
+	    uri2 = strtok(NULL, " ");
+
+	    ret = mkconf(vlid, uri1, uri2);
+
+	    break;
+
+	  }  
+
 #endif
 
 	case CMD_CONTACT:
