@@ -28,7 +28,8 @@
 
 #include "QtProtocolSettings.h"
 
-QtProtocolSettings::QtProtocolSettings ( QWidget * parent, Qt::WFlags f ) : QDialog ( parent, f ) {
+QtProtocolSettings::QtProtocolSettings ( WengoPhone & wengoPhone, QWidget * parent, Qt::WFlags f ) : QDialog ( parent, f ),
+_wengoPhone(wengoPhone) {
 
 	_widget = WidgetFactory::create( ":/forms/config/ProtocolSettings.ui", this );
 	QGridLayout * layout = new QGridLayout();

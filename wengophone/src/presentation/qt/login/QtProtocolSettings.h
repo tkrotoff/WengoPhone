@@ -1,6 +1,9 @@
 #ifndef QTPROTOCOLSETTINGS_H
 #define QTPROTOCOLSETTINGS_H
 
+#include <model/profile/UserProfile.h>
+#include <model/WengoPhone.h>
+#include <util/Logger.h>
 
 #include <QtGui>
 
@@ -11,7 +14,7 @@ class QtProtocolSettings : public QDialog
 public:
     enum ProtocolPage {AIM,GADU,GROUPWISE,JABBER,MSN,NAPSTER,SILC,SIMPLE,SAMETIME,YAHOO};
 
-    QtProtocolSettings (QWidget * parent=0, Qt::WFlags f=0);
+    QtProtocolSettings (WengoPhone & wengoPhone,QWidget * parent=0, Qt::WFlags f=0);
 
     public Q_SLOTS:
 
@@ -24,6 +27,8 @@ protected:
     void setupChilds();
 
     void readFromConfig();
+
+	WengoPhone & _wengoPhone;
 
     QWidget *   _widget;
 

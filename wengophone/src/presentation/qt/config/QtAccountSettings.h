@@ -6,7 +6,7 @@
 #include <QGridLayout>
 
 #include <qtutil/WidgetFactory.h>
-#include "QtProtocolSettings.h"
+// #include "QtProtocolSettings.h"
 
 class QtAccountSettings : public QWidget {
 		Q_OBJECT

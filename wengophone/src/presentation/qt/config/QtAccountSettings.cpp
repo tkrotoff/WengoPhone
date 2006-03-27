@@ -40,6 +40,6 @@ QtAccountSettings::QtAccountSettings ( QWidget * parent, Qt::WFlags f ) : QWidge
 }
 
 void QtAccountSettings::editProfileClicked() {
-	QtProtocolSettings protocolDialog ( this );
-	protocolDialog.exec();
+//	QtProtocolSettings protocolDialog ( this );
+//	protocolDialog.exec();
 }

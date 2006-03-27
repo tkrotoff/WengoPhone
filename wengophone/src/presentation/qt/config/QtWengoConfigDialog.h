@@ -31,7 +31,7 @@
 #include "QtVideoSettings.h"
 #include "QtAdvancedSettings.h"
 #include "QtCallForwardSettings.h"
-#include "QtProtocolSettings.h"
+
 
 class QtWengoConfigDialog : public QDialog {
 		Q_OBJECT

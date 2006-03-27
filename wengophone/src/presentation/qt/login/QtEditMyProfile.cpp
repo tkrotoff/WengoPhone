@@ -27,8 +27,9 @@
 #include <util/Logger.h>
 
 #include "QtEditMyProfile.h"
+#include "QtProtocolSettings.h"
 
-QtEditMyProfile::QtEditMyProfile(WengoPhone & wengoPhone, QWidget * parent, Qt::WFlags f ) 
+QtEditMyProfile::QtEditMyProfile(WengoPhone & wengoPhone, QWidget * parent, Qt::WFlags f )
 : QDialog( parent, f ), _wengoPhone(wengoPhone) {
 
 	_widget = qobject_cast<QWidget *>( WidgetFactory::create( ":/forms/login/profileWindow.ui", this ) );
@@ -118,7 +119,7 @@ void QtEditMyProfile::writeToConfig() {
 	config.set( config.PROFILE_IMEMAIL4, _imAccountLineEdit[ 3 ] ->text().toStdString() );
 	config.set( config.PROFILE_IMEMAIL5, _imAccountLineEdit[ 4 ] ->text().toStdString() );
 	config.set( config.PROFILE_IMEMAIL6, _imAccountLineEdit[ 5 ] ->text().toStdString() );
-	
+
 	config.set( config.PROFILE_IMPIC1, _imAccountsPicPath[ 0 ].toStdString() );
 	config.set( config.PROFILE_IMPIC2, _imAccountsPicPath[ 1 ].toStdString() );
 	config.set( config.PROFILE_IMPIC3, _imAccountsPicPath[ 2 ].toStdString() );
@@ -127,7 +128,7 @@ void QtEditMyProfile::writeToConfig() {
 	config.set( config.PROFILE_IMPIC6, _imAccountsPicPath[ 5 ].toStdString() );
 	*/
 	////
-	
+
 	// Setting Phone numbers
 	userProfile.setMobilePhone(_cellphone->text().toStdString());
 	userProfile.setHomePhone(_homePhone->text().toStdString());
