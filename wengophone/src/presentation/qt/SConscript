@@ -178,7 +178,7 @@ if WengoOSLinux():
         link_flags += [
             '-L' + x11_lib_dir,
         ]	
-        libs += ['SM', 'ICE', 'Xi', 'Xinerama', 'Xext', 'X11']
+        libs += ['SM', 'ICE', 'Xi', 'Xinerama', 'Xext', 'X11', 'Xrandr',]
 
 env.WengoCopyToBuildDir('chat/emoticons', 'emoticons')
 env.WengoCopyToBuildDir('webpages', 'webpages')
