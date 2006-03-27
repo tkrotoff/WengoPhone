@@ -79,6 +79,10 @@ void ConferenceCall::addPhoneNumber(const std::string & phoneNumber) {
 	}
 }
 
+void ConferenceCall::addPhoneCall(int callId) {
+	join(callId);
+}
+
 void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state) {
 	switch(state) {
 

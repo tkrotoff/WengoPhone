@@ -66,6 +66,8 @@ public:
 
 	void addPhoneCall(PhoneCall & phoneCall);
 
+	void addPhoneCall(int callId);
+
 	void removePhoneCall(PhoneCall & phoneCall);
 
 	void addPhoneNumber(const std::string & phoneNumber);

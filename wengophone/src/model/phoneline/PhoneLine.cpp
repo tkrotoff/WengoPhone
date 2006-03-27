@@ -101,6 +101,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 
 	for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
 		PhoneCall * phoneCall = (*it).second;
+
 		EnumPhoneCallState::PhoneCallState state = phoneCall->getState().getCode();
 		if (state != EnumPhoneCallState::PhoneCallStateTalking &&
 			state != EnumPhoneCallState::PhoneCallStateResumed &&
@@ -170,7 +171,7 @@ void PhoneLine::rejectCall(int callId) {
 void PhoneLine::closeCall(int callId) {
 	PhoneCall * phoneCall = _phoneCallHash[callId];
 	if (!phoneCall) {
-		LOG_FATAL("closing an unknow phone call");
+		LOG_FATAL("closing an unknow phone call callId=" + String::fromNumber(callId));
 	}
 
 	if (_activePhoneCall == phoneCall) {

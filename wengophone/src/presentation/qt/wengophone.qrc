@@ -40,17 +40,15 @@
         <file>pics/help.png</file>
         <file>pics/home.png</file>
         <file>pics/homepage.png</file>
-        <file>pics/iconbar_cal.png</file>
-        <file>pics/iconbar_chat.png</file>
-        <file>pics/iconbar_search.png</file>
-        <file>pics/iconbar_sendfile.png</file>
+        <file>pics/chat.png</file>
         <file>pics/logo-mini.png</file>
         <file>pics/logo-spiral.png</file>
         <file>pics/logo.png</file>
         <file>pics/microphone.png</file>
+        <file>pics/conference.png</file>
         <file>pics/no.png</file>
         <file>pics/point.gif</file>
-        <file>pics/sms_send.png</file>
+        <file>pics/sms.png</file>
         <file>pics/status/away.png</file>
         <file>pics/status/berightback.png</file>
         <file>pics/status/donotdisturb.png</file>
@@ -139,7 +137,7 @@
         <file>login/contactWindow.ui</file>
         <file>login/profileWindow.ui</file>
         <file>login/setLoginWindow.ui</file>
-        <file>login/ProtocolSettings.ui</file>		
+        <file>login/ProtocolSettings.ui</file>
 		<file>login/accountManager.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>

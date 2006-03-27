@@ -49,7 +49,7 @@
         <string>Send</string>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/pics/sms_send.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/pics/sms.png</iconset>
        </property>
       </widget>
      </item>
