@@ -1,3 +1,5 @@
+import os
+
 env = WengoGetQt4Environment()
 
 libs = [
@@ -168,6 +170,15 @@ if WengoOSMacOSX():
 	]
 
 	env.WengoDeclareMacOSXAppTemplate('./macosx/template.app')
+
+if WengoOSLinux():
+        x11_lib_dir = '/usr/X11R6/lib'
+        if os.environ.has_key('X11R6LIBDIR'):
+            x11_lib_dir = os.environ['X11R6LIBDIR']
+        link_flags += [
+            '-L' + x11_lib_dir,
+        ]	
+        libs += ['SM', 'ICE', 'Xi', 'Xinerama', 'Xext', 'X11']
 
 env.WengoCopyToBuildDir('chat/emoticons', 'emoticons')
 env.WengoCopyToBuildDir('webpages', 'webpages')
