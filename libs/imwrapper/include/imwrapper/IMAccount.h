@@ -48,14 +48,26 @@ public:
 		return _login;
 	}
 
+	void setLogin(const std::string & login) {
+		_login = login;
+	}
+	
 	const std::string & getPassword() const {
 		return _password;
 	}
 
+	void setPassword(const std::string & password) {
+		_password = password;
+	}
+	
 	EnumIMProtocol::IMProtocol getProtocol() const {
 		return _protocol;
 	}
-
+ 
+	bool isEnabled() { return true;}
+	
+	void setEnabled(bool enabled) {/*FIXME Enable me !! */};
+	
 	IMAccountParameters & getIMAccountParameters() {
 		return _imAccountParameters;
 	}
