@@ -2507,8 +2507,8 @@ void ph_msession_audio_resume(struct ph_msession_s *s, int resumewhat, const cha
   DBG4_MEDIA_ENGINE("audio_resume: enter ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
 
   msp->traffictype |= resumewhat;
-  stream->ms.suspended = 0;
   ph_msession_audio_start(s, deviceId);
+  stream->ms.suspended = 0;
 
   DBG4_MEDIA_ENGINE("audio_resume: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
 
