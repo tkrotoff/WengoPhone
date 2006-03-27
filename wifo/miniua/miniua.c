@@ -44,7 +44,7 @@
 #define snprintf _snprintf
 #define strncasecmp strnicmp
 #define sleep(x) Sleep(x*1000)
-typedef unsigned_int pthread_t;
+typedef unsigned int pthread_t;
 #else
 #include <pthread.h>
 #endif
@@ -115,7 +115,7 @@ static int callbackStatus;
 
 
 #ifndef _WIN32
-pthread_t 
+pthread_t
 mua_thread_create (int stacksize, void *(*func) (void *), void *arg)
 {
   int i;
@@ -137,7 +137,7 @@ mua_thread_create (int stacksize, void *(*func) (void *), void *arg)
 {
   pthread_t thread;
   typedef void (*thrfun)(void *);
-  
+
 
   thread = (pthread_t) _beginthread ((thrfun)func, 0, arg);
 
@@ -236,9 +236,9 @@ fixsipid(char *str, int size)
 }
 
 
-  
 
-int main(int argc, const char *const *argv) 
+
+int main(int argc, const char *const *argv)
 {
 
   /* deal with options */
@@ -277,13 +277,13 @@ int main(int argc, const char *const *argv)
 
 	  strncpy(phcfg.identity, argv[++i], sizeof(phcfg.identity));
 	  strncpy(currentid, argv[i], sizeof(currentid));
-	  
+
 	}
       else if (!strcmp(arg, "-d"))
 	{
 	  if (i == argc - 1)
 	    usage(0);
-	     
+
 	  phDebugLevel = atoi(argv[++i]);
 	}
       else if (!strcmp(arg, "-s"))
@@ -291,7 +291,7 @@ int main(int argc, const char *const *argv)
 	  char *colon;
 	  if (i == argc - 1)
 	    usage(0);
-	  
+
 	  strncpy(phapi_server, argv[++i], sizeof(phapi_server));
 	  if (colon = strstr(phapi_server,":"))
 	    {
@@ -449,8 +449,8 @@ int main(int argc, const char *const *argv)
     }
 
 
-  /*  
-   * we've got -r parameters so we need to prepare for autentication and 
+  /*
+   * we've got -r parameters so we need to prepare for autentication and
    * register ourselves with the registration server
    */
   if (!noinit && needreg)
@@ -476,11 +476,11 @@ int main(int argc, const char *const *argv)
     }
 
 
-      
+
 
   printf("Welcome To Miniua\n");
   fflush(stdout);
-  
+
 
   cmdloop(userid, regserver, stdin, 0);
   phTerminate();
@@ -496,7 +496,7 @@ int main(int argc, const char *const *argv)
 
 static void do_holdit(void *arg)
 {
- 
+
   sleep(1);
   printf("Holding this call : %d\n", cnfcid1);
   cnfstate = WAITHOLD1;
@@ -516,8 +516,8 @@ static void do_confit(void *arg)
 
 }
 
-static void 
-callProgress(int cid, const phCallStateInfo_t *info) 
+static void
+callProgress(int cid, const phCallStateInfo_t *info)
 {
   int ncid;
   int r;
@@ -532,17 +532,17 @@ callProgress(int cid, const phCallStateInfo_t *info)
 
       case phRINGING:
 	printf("RINGING cid=%d uri=%s\n", cid, info->u.remoteUri);
-	callbackStatus = 0;	
+	callbackStatus = 0;
 	break;
 
       case phRINGandSTART:
 	printf("RINGINGandSTART cid=%d uri=%s\n", cid, info->u.remoteUri);
-	callbackStatus = 0;	
+	callbackStatus = 0;
 	break;
 
       case phRINGandSTOP:
 	printf("RINGandSTOP cid=%d uri=%s\n", cid, info->u.remoteUri);
-	callbackStatus = 0;	
+	callbackStatus = 0;
 	break;
 
 
@@ -551,13 +551,13 @@ callProgress(int cid, const phCallStateInfo_t *info)
 	callbackStatus = phNOANSWER;
 	break;
 
-      case phCALLBUSY:	
+      case phCALLBUSY:
 	printf("BUSY cid=%d uri=%s\n", cid, info->u.remoteUri);
 	callbackStatus = phCALLBUSY;
 	break;
 
       case phCALLREDIRECTED:
-	printf("REDIRECTED cid=%d newcid=%d to=%s\n", cid, info->newcid, info->u.remoteUri);	
+	printf("REDIRECTED cid=%d newcid=%d to=%s\n", cid, info->newcid, info->u.remoteUri);
 	callbackStatus = 0;
 	break;
 
@@ -575,7 +575,7 @@ callProgress(int cid, const phCallStateInfo_t *info)
 
 	break;
 
-      case phCALLHELD: 
+      case phCALLHELD:
 	printf("CALLHELD cid=%d  status=%d\n", cid, info->u.errorCode);
 	callbackStatus = info->u.errorCode;
 	break;
@@ -648,7 +648,7 @@ callProgress(int cid, const phCallStateInfo_t *info)
 	printf("XFERREQ line=%d cid=%d newcid=%d to=%s", info->vlid, cid, info->newcid, info->u.remoteUri);
 	//	ncid = phPlaceCall2(phcfg.identity, info->u.remoteUri, 0, cid);
 	//	printf("New Call %d to %s\n", ncid, info->u.remoteUri);
-	  
+
 	xfervlid = info->vlid;
 	callbackStatus = 0;
 	break;
@@ -673,7 +673,7 @@ callProgress(int cid, const phCallStateInfo_t *info)
       case phCALLREPLACED:
 	printf("CALLREPLACED cid=%d newcid=%d uri=%s\n", cid, info->newcid, info->u.remoteUri);
 	phCloseCall(cid);
-	callbackStatus = 0;	
+	callbackStatus = 0;
 	break;
 
     }
@@ -686,9 +686,9 @@ callProgress(int cid, const phCallStateInfo_t *info)
  * @param cid    transfer id
  * @param info   transfer state information
  */
-static void  
-transferProgress(int cid, const phTransferStateInfo_t *info) 
-{ 
+static void
+transferProgress(int cid, const phTransferStateInfo_t *info)
+{
 }
 
 
@@ -697,14 +697,14 @@ transferProgress(int cid, const phTransferStateInfo_t *info)
  * @param cfid   conference id
  * @param info   conference state information
  */
-static void  
-confProgress(int cfid, const phConfStateInfo_t *info) 
-{ 
+static void
+confProgress(int cfid, const phConfStateInfo_t *info)
+{
 }
 
 
 
-static void  
+static void
 regProgress(int regid, int status)
 {
   char *cmd = (status & PH_UNREG_MASK) ? "UNREG" : "REG";
@@ -722,10 +722,10 @@ regProgress(int regid, int status)
  * @param uri   input
  * @param size  size of the output buffer
  */
-static int 
+static int
 geturi(char *buf, char* uri, int size)
 {
-  while(buf && isspace(*buf)) 
+  while(buf && isspace(*buf))
     buf++;
 
   uri[0] = 0;
@@ -748,13 +748,13 @@ geturi(char *buf, char* uri, int size)
 
 }
 
-enum CMDS {  
+enum CMDS {
   CMD_CALL=1, CMD_HANGUP, CMD_ACCEPT, CMD_REJECT, CMD_RING, CMD_HOLD, CMD_RESUME, CMD_BUSY,
-  CMD_DTMF, CMD_BTXFER, CMD_ATXFER, CMD_XFERCNF, CMD_OPT, CMD_UNREG, CMD_VLADD, CMD_VLDEL, 
+  CMD_DTMF, CMD_BTXFER, CMD_ATXFER, CMD_XFERCNF, CMD_OPT, CMD_UNREG, CMD_VLADD, CMD_VLDEL,
   CMD_DTMFMODE, CMD_AUTOANS, CMD_AUTOREJ, CMD_AUTORING, CMD_SENDSF,
-  CMD_AUTHADD, CMD_AUTHADD_2, CMD_SETID, CMD_EXIT, CMD_QUIT, CMD_LCALL, CMD_FOLLOW, CMD_SENDF, CMD_SLEEP, CMD_COMMENT, 
-  CMD_EBREAK, CMD_SETV, CMD_NATINFO, CMD_ECHO, CMD_CONF, CMD_NOCONF, CMD_LCONF, CMD_CONTACT, CMD_TUNPROXY, 
-  CMD_TUNSERVER, CMD_TUNCONF, CMD_SIPPX, CMD_PHINIT, CMD_SUBSCRIBE, CMD_HELP 
+  CMD_AUTHADD, CMD_AUTHADD_2, CMD_SETID, CMD_EXIT, CMD_QUIT, CMD_LCALL, CMD_FOLLOW, CMD_SENDF, CMD_SLEEP, CMD_COMMENT,
+  CMD_EBREAK, CMD_SETV, CMD_NATINFO, CMD_ECHO, CMD_CONF, CMD_NOCONF, CMD_LCONF, CMD_CONTACT, CMD_TUNPROXY,
+  CMD_TUNSERVER, CMD_TUNCONF, CMD_SIPPX, CMD_PHINIT, CMD_SUBSCRIBE, CMD_HELP
 };
 
 struct cmd
@@ -779,16 +779,16 @@ const struct cmd cmdtab[] =
   { "bx", "callid target\t- Blind Xfer call to target", CMD_BTXFER },
   { "ax", "callid callid2\t- Assisted Xfer call to callid2", CMD_ATXFER },
   { "xp", "callid target\t- Place call in response to XferReq", CMD_XFERCNF },
-  { "op", "callid\t- send OPtions", CMD_OPT }, 
+  { "op", "callid\t- send OPtions", CMD_OPT },
   { "ur", "vlid\t- unregister", CMD_UNREG },
   { "vla", "username server [p=proxy t=timeout]\t- Add Virtual Line", CMD_VLADD },
   { "vld", "vlid\t- delete virtual line", CMD_VLDEL },
-  { "auta","username userid  pass realm\t- Add authenitcation info", CMD_AUTHADD }, 
-  { "auta2","username userid  pass\t- Add authenitcation info with realm empty", CMD_AUTHADD_2 }, 
-  { "id", "userid\t- set current identity (ex: user@192.168.10.13)", CMD_SETID }, 
-  { "sleep", "seconds\t- sleep number of seconds", CMD_SLEEP }, 
+  { "auta","username userid  pass realm\t- Add authenitcation info", CMD_AUTHADD },
+  { "auta2","username userid  pass\t- Add authenitcation info with realm empty", CMD_AUTHADD_2 },
+  { "id", "userid\t- set current identity (ex: user@192.168.10.13)", CMD_SETID },
+  { "sleep", "seconds\t- sleep number of seconds", CMD_SLEEP },
   { "dtmfmode"," 1/2/3/0\t- dtmf mode mask (1 - INBAND, 2 - OUTBABAND 3 or 0 - BOTH)", CMD_DTMFMODE },
-  { "sf", "cid filname\t-  send sound file", CMD_SENDSF }, 
+  { "sf", "cid filname\t-  send sound file", CMD_SENDSF },
   { "q", "- Quit",  CMD_QUIT },
   { "ebreak", "code\t- exit if previous command returned error(code is the program exit code)",  CMD_EBREAK },
   { "exit", "code\t- exit with the specified error code",  CMD_EXIT },
@@ -815,7 +815,7 @@ const struct cmd cmdtab[] =
 
 #define NCMDS (sizeof(cmdtab)/sizeof(cmdtab[0]))
 
-static int 
+static int
 parseCmd(char *buf,  char **args)
 {
   char *space;
@@ -844,7 +844,7 @@ parseCmd(char *buf,  char **args)
     }
 
   return CMD_HELP;
-  
+
 
 }
 
@@ -874,7 +874,7 @@ static int doinclude(const char *userid, const char *server, char *buf)
       perror(buf);
       return 0;
     }
-  
+
   printf("Including: %s\n", buf);
   fflush(stdout);
 
@@ -888,7 +888,7 @@ static int doinclude(const char *userid, const char *server, char *buf)
   return doexit;
 }
 
-  
+
 static void dobreak(int x)
 {
   exit(x);
@@ -898,14 +898,14 @@ static void dobreak(int x)
 int mkconf(int vlid, const char *uri1, const char *uri2)
 {
   cnfvlid = vlid;
-  
+
   geturi(uri1, cnfuri1, sizeof(cnfuri1));
   geturi(uri2, cnfuri2, sizeof(cnfuri2));
 
   printf("Making conf between <%s> and <%s>\n", uri1, uri2);
 
   cnfcid1 = phLinePlaceCall(vlid, cnfuri1, 0, 0);
-  
+
   if (cnfcid1 > 0)
     {
       cnfstate = WAITCALL1;
@@ -914,9 +914,9 @@ int mkconf(int vlid, const char *uri1, const char *uri2)
   return cnfcid1;
 
 };
-  
 
-  
+
+
 
 static int cmdloop(const char* userid, const char *regserver, FILE *file, int doecho)
 {
@@ -941,7 +941,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
       if (!rd)
 	return 0;
-      
+
 
       if (doecho || verboseFlag)
 	{
@@ -957,7 +957,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
       if (buf[0] == '!')
 	{
 	int doexit = doinclude(userid, regserver, buf+1);
-	
+
 	if (!doexit)
 	  {
 	    skipresult = 1;
@@ -984,7 +984,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 	    if (!geturi(p, uri, 256))
 	      ret = phBlindTransferCall(cid, uri);
-	    
+
 	    break;
 	  }
 
@@ -1005,7 +1005,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 	    cid2 = atoi(p);
 	    ret = phTransferCall(cid, cid2);
-	    
+
 	    break;
 	  }
 
@@ -1026,7 +1026,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 	    cid2 = atoi(p);
 	    ret = phConf(cid, cid2);
-	    
+
 	    break;
 	  }
 
@@ -1046,7 +1046,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 	    cid2 = atoi(p);
 	    ret = phStopConf(cid, cid2);
-	    
+
 	    break;
 	  }
 
@@ -1066,14 +1066,14 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 	    break;
 
-	  }  
+	  }
 
 #endif
 
 	case CMD_CONTACT:
 	  {
 	    vlid = atoi(args);
-	    
+
 	    p = args;
 
 	    while(*p && isdigit(*p))
@@ -1083,7 +1083,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	      p++;
 
 	    ret = phSetContact(vlid, p);
-	    
+
 	    break;
 	  }
 	case CMD_XFERCNF:
@@ -1104,7 +1104,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 		printf("Call %d to %s\n", cid, uri);   fflush(stdout);
 		skipresult = 1;
 	      }
-	    
+
 	    break;
 	  }
 
@@ -1145,7 +1145,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 	    vlid = atoi(args);
 	    tok = strstr(args, " ");
-	    
+
 	    if (!vlid)
 	      ret = phSetBusy(atoi(tok));
 	    else
@@ -1203,9 +1203,9 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	case CMD_LCALL:
 	  {
 	    char *tok;
-	    
+
 	    vlid = atoi(args);
-	    
+
 	    tok = strtok(args, " ");
 	    tok = strtok(NULL, " ");
 
@@ -1214,7 +1214,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 		ret = cid = phLinePlaceCall(vlid, uri, 0, 0);
 		printf("Call %d to %s\n", cid, uri);   fflush(stdout);
 		skipresult = 1;
-	      } 
+	      }
 
 	    break;
 	  }
@@ -1226,7 +1226,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	    int sid;
 
 	    vlid = atoi(args);
-	    
+
 	    tok = strtok(args, " ");
 	    tok = strtok(NULL, " ");
 
@@ -1239,7 +1239,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 		ret = sid = phLineSubscribe(vlid, uri, winfo);
 		printf("Subscribe %d to %s\n", sid, uri);   fflush(stdout);
 		skipresult = 1;
-	      } 
+	      }
 
 	    break;
 	  }
@@ -1250,9 +1250,9 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	case CMD_SENDSF:
 	  {
 	    char *tok;
-	    
+
 	    cid = atoi(args);
-	    
+
 	    tok = strtok(args, " ");
 	    tok = strtok(NULL, " ");
 
@@ -1309,7 +1309,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 	    while(*p && isspace(*p))
 	      p++;
-	   
+
 	    username = p;
 
 	    /* find timeout parameter */
@@ -1340,7 +1340,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 		*p++ = 0;
 		while(*p && isspace(*p))
 		  p++;
-	       
+
 		server = p;
 		while(*p && !isspace(*p))
 		  p++;
@@ -1351,7 +1351,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	    p = username;
 	    while(*p && !isspace(*p))
 	      p++;
-		
+
 	    *p = 0;
 
 	    ret = phAddVline(username, server, proxy, timeout);
@@ -1360,7 +1360,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 	case CMD_DTMFMODE:
 	  {
-	    static const char *modestr[] = { "INBAND", "OUTBAND", "IN+OUT BAND" }; 
+	    static const char *modestr[] = { "INBAND", "OUTBAND", "IN+OUT BAND" };
 	    dtmf_mode = atoi(args);
 	    dtmf_mode &= 3;
 	    if (!dtmf_mode)
@@ -1375,7 +1375,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	    int secs;
 
 	    secs = atoi(args);
-	    
+
 	    if (!secs)
 	      secs = 1;
 
@@ -1385,7 +1385,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 	    break;
 	  }
-	  
+
 
         case CMD_EBREAK:
 	  if (prevret < 0 || callbackStatus != 0)
@@ -1445,7 +1445,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	  ret = prevret;
 	  skipresult = 1;
 	  printf("%s\n", args);   fflush(stdout);
- 
+
 
 	case CMD_TUNPROXY:
 	  {
@@ -1490,7 +1490,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 	    while(*p && isspace(*p))
 	      p++;
-	   
+
 	    strncpy(phcfg.proxy, p, sizeof(phcfg.proxy));
 	    ret = prevret;
 	    skipresult = 1;
@@ -1511,7 +1511,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	  showhelp();
 	  break;
 
-	
+
 
 	}
 
@@ -1526,5 +1526,5 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
   return 0;
 }
 
-	  
-  
+
+
