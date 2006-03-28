@@ -60,6 +60,14 @@ public:
 	Event< void (IMContact & sender, const std::string & groupName)> imContactRemovedFromGroupEvent;
 
 	/**
+	 * Emitted when this IMContact has changed (e.g. its presence state
+	 * could have changed or its alias).
+	 *
+	 * @param sender this class
+	 */
+	Event< void (IMContact & sender) > imContactChangedEvent;
+
+	/**
 	 * Constructs a new IMContact.
 	 *
 	 * @param imAccount the imAccount that the IMContact is associated with
@@ -114,6 +122,7 @@ public:
 
 	void setPresenceState(EnumPresenceState::PresenceState presenceState) {
 		_presenceState = presenceState;
+		imContactChangedEvent(*this);
 	}
 
 	void setBlocked(bool blocked) {
@@ -125,6 +134,18 @@ public:
 	}
 
 private:
+
+	/**
+	 * Used to get a cleaned contact id.
+	 *
+	 * When chatting with a Jabber contact, its id changed to 
+	 * our_contact_id/something wich made some strange behaviour
+	 * in our model. So we strip everything after the '/'.
+	 *
+	 * @return the clean contact id
+	 */
+	std::string cleanContactId() const;
+
 	//FIXME: should be a reference to the associated IMAccount.
 	IMAccount _imAccount;
 

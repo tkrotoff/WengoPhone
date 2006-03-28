@@ -21,6 +21,7 @@ sources = [
 	'src/Base64.cpp',
 	'src/Logger.cpp',
 	'src/IdGenerator.cpp',
+	'src/Picture.cpp',
 ]
 
 if WengoOSWindows():

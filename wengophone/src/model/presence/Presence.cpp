@@ -50,6 +50,14 @@ void Presence::changeMyPresence(EnumPresenceState::PresenceState state, const st
 	_imPresence->changeMyPresence(state, note);
 }
 
+void Presence::changeMyAlias(const std::string & alias) {
+	_imPresence->changeMyAlias(alias);
+}
+
+void Presence::changeMyIcon(const Picture & picture) {
+	_imPresence->changeMyIcon(picture);
+}
+
 void Presence::subscribeToPresenceOf(const std::string & contactId) {
 	_imPresence->subscribeToPresenceOf(contactId);
 }

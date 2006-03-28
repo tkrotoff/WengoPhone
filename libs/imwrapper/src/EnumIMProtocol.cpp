@@ -26,8 +26,7 @@ EnumIMProtocol::EnumIMProtocol() {
 	_protocolMap[IMProtocolAll] = "All";
 	_protocolMap[IMProtocolMSN] = "MSN";
 	_protocolMap[IMProtocolYahoo] = "Yahoo";
-	_protocolMap[IMProtocolAIM] = "AIM";
-	_protocolMap[IMProtocolICQ] = "ICQ";
+	_protocolMap[IMProtocolAIMICQ] = "AIM/ICQ";
 	_protocolMap[IMProtocolJabber] = "Jabber";
 	_protocolMap[IMProtocolSIPSIMPLE] = "SIP/SIMPLE";
 }

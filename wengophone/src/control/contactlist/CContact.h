@@ -39,11 +39,6 @@ class PContact;
 class CContact {
 public:
 
-	/**
-	 * @see Contact::contactModifiedEvent
-	 */
-	Event<void (Contact & sender)> contactModifiedEvent;
-
 	CContact(Contact & contact, CContactGroup & cContactGroup, CWengoPhone & cWengoPhone);
 
 	void call();
@@ -69,6 +64,11 @@ public:
 	EnumPresenceState::PresenceState getPresenceState() const;
 
 private:
+
+	/**
+	 * @see Contact::contactChangedEvent
+	 */
+	void contactChangedEventHandler(Contact & contact);
 
 	Contact & _contact;
 

@@ -249,8 +249,8 @@ Contact * ContactList::findContactThatOwns(const IMContact & imContact) const {
 }
 
 void ContactList::moveContactToGroup(Contact & contact, const std::string & to, const std::string & from) {
-	contact.removeFromContactGroup(from);
 	contact.addToContactGroup(to);
+	contact.removeFromContactGroup(from);
 }
 
 void ContactList::_addContactGroup(const std::string & groupName) {

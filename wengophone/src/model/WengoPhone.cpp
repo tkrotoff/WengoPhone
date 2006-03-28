@@ -19,8 +19,10 @@
 
 #include "WengoPhone.h"
 
+#include "config/ConfigManagerFileStorage.h"
 #include "config/ConfigManager.h"
 #include "config/Config.h"
+#include "profile/UserProfileFileStorage.h"
 #include "profile/UserProfile.h"
 #include "wenbox/WenboxPlugin.h"
 
@@ -35,17 +37,27 @@ WengoPhone::WengoPhone()
 WengoPhone::~WengoPhone() {
 	delete _wenboxPlugin;
 
-	//UserProfileXMLSerializer serializer(_userProfile);
-	//serializer.serialize(_userProfile);
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	
+	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
+	configManagerStorage.save(config.getConfigDir());
+
+	_userProfile.disconnect();
+
+	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
+	userProfileStorage->save(config.getConfigDir());
+	delete userProfileStorage;
 }
 
 void WengoPhone::init() {
 	// Get a config instance to create the config instance in the model thread.
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
+	configManagerStorage.load(config.getConfigDir());
+
 	//Creates the history
 	//historyCreatedEvent
-
 
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
@@ -55,10 +67,13 @@ void WengoPhone::init() {
 	localAccount->init();
 	addPhoneLine(localAccount);*/
 
-	//UserProfileXMLSerializer serializer(_userProfile);
-	//serializer.unserialize(_userProfile);
-	_userProfile.init();
+	// Loading the UserProfile
+	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
+	userProfileStorage->load(config.getConfigDir());
+	delete userProfileStorage;
+
 	_userProfile.connect();
+	////
 
 	//initFinishedEvent
 	initFinishedEvent(*this);

@@ -121,8 +121,8 @@ void PresenceHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccoun
 	}
 }
 
-void PresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,
-	const std::string & note, IMAccount * imAccount) {
+void PresenceHandler::changeMyPresenceState(EnumPresenceState::PresenceState state,
+	const string & note, IMAccount * imAccount) {
 
 	LOG_DEBUG("changing MyPresenceState for "
 		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol " + String::fromNumber(imAccount->getProtocol()))
@@ -138,6 +138,43 @@ void PresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,
 
 		if (it != _presenceMap.end()) {
 			(*it).second->changeMyPresence(state, note);
+		}
+	}
+}
+
+void PresenceHandler::changeMyAlias(const string & alias, IMAccount * imAccount) {
+	LOG_DEBUG("changing alias for "
+		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol " + String::fromNumber(imAccount->getProtocol()))
+		+ " with alias " + alias);
+
+	if (!imAccount) {
+		for (PresenceMap::const_iterator it = _presenceMap.begin(); it != _presenceMap.end(); it++) {
+			(*it).second->changeMyAlias(alias);
+		}
+	} else {
+		//Find the desired Protocol
+		PresenceMap::iterator it = findPresence(_presenceMap, *imAccount);
+
+		if (it != _presenceMap.end()) {
+			(*it).second->changeMyAlias(alias);
+		}
+	}
+}
+
+void PresenceHandler::changeMyIcon(const Picture & picture, IMAccount * imAccount) {
+	LOG_DEBUG("changing icon for "
+		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol " + String::fromNumber(imAccount->getProtocol())));
+
+	if (!imAccount) {
+		for (PresenceMap::const_iterator it = _presenceMap.begin(); it != _presenceMap.end(); it++) {
+			(*it).second->changeMyIcon(picture);
+		}
+	} else {
+		//Find the desired Protocol
+		PresenceMap::iterator it = findPresence(_presenceMap, *imAccount);
+
+		if (it != _presenceMap.end()) {
+			(*it).second->changeMyIcon(picture);
 		}
 	}
 }

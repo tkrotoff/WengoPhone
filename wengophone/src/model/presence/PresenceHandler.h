@@ -77,10 +77,29 @@ public:
 	 *
 	 * @param state my state
 	 * @param note used by PresenceStateUserDefined
-	 * @param imAccount the IMAccount that we want the presence changed
+	 * @param imAccount the IMAccount that we want the presence changed. If NULL
+	 * presence state of all accounts is changed.
 	 */
-	void changeMyPresence(EnumPresenceState::PresenceState state,	
+	void changeMyPresenceState(EnumPresenceState::PresenceState state,	
 		const std::string & note, IMAccount * imAccount = NULL);
+
+	/**
+	 * Change my alias.
+	 *
+	 * @param alias the desired alias
+	 * @param imAccount the IMAccount that we want the alias changed. If NULL
+	 * alias of all accounts is changed.
+	 */
+	void changeMyAlias(const std::string & alias, IMAccount * imAccount = NULL);
+
+	/**
+	 * Change my icon.
+	 *
+	 * @param picture the desired icon
+	 * @param imAccount the IMAccount that we want the icon changed. If NULL
+	 * icon of all accounts is changed.
+	 */
+	void changeMyIcon(const Picture & picture, IMAccount * imAccount = NULL);
 
 	/**
 	 * Subscribe to presence of a IMContact.

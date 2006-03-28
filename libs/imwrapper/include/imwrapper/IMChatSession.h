@@ -79,13 +79,46 @@ class IMContact;
 class IMChatSession {
 public:
 
+	/**
+	 * Emitted when a message has been received.
+	 *
+	 * @param sender this class
+	 * @param from the person who sent the message
+	 * @param message the received message
+	 */
 	Event<void (IMChatSession & sender, const IMContact & from, const std::string & message)> messageReceivedEvent;
 
+	/**
+	 * Emitted when a status message has been received. (e.g "Joe is connected")
+	 *
+	 * @param sender this class
+	 * @param status the type of status message
+	 * @param message a message describing the status
+	 */
 	Event<void (IMChatSession & sender, IMChat::StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
 
+	/**
+	 * Emitted when an IMContact has been added in this IMChatSession.
+	 *
+	 * @param sender this class
+	 * @param imContact the added IMContact
+	 */
 	Event<void (IMChatSession & sender, const IMContact & imContact)> contactAddedEvent;
 
+	/**
+	 * Emitted when an IMContact has been removed.
+	 *
+	 * @param sender this class
+	 * @param imContact the removed IMContact
+	 */
 	Event<void (IMChatSession & sender, const IMContact & imContact)> contactRemovedEvent;
+
+	/**
+	 * Emitted when this IMChatSession will be closed and destroyed.
+	 *
+	 * @param sender this class
+	 */
+	Event<void (IMChatSession & sender) > imChatSessionWillDieEvent;
 
 	/**
 	 * Constructs a chat session given a IMChat.
@@ -95,6 +128,14 @@ public:
 	IMChatSession(IMChat & imChat);
 
 	~IMChatSession();
+
+	/**
+	 * Close the IMChatSession.
+	 *
+	 * An imChatSessionWillDieEvent is sendt then the IMChatSession object is
+	 * destroyed.
+	 */
+	void close();
 
 	/**
 	 * Adds a contact to the chat session.

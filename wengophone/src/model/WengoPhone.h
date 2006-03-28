@@ -111,8 +111,8 @@ public:
 	 *
 	 * @return the current UserProfile
 	 */
-	UserProfile & getCurrentUserProfile() const {
-		return (UserProfile &)_userProfile;
+	UserProfile & getCurrentUserProfile() {
+		return _userProfile;
 	}
 
 	/**

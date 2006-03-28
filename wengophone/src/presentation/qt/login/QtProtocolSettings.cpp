@@ -94,7 +94,7 @@ void QtProtocolSettings::setupGui() {
 						initYahooPage();
 						break;
 
-						case EnumIMProtocol::IMProtocolAIM:
+						case EnumIMProtocol::IMProtocolAIMICQ:
 						protoStr = QString("AIM / ICQ");
 						setCurrentPage(ProtocolAim);
 						initAimPage();
@@ -305,7 +305,7 @@ void QtProtocolSettings::saveAim() {
 	std::string password = _aimPasswordEdit->text().toStdString();
 
 	if ( ! _imAccount )
-		_imAccount = new IMAccount(login,password,EnumIMProtocol::IMProtocolAIM);
+		_imAccount = new IMAccount(login,password,EnumIMProtocol::IMProtocolAIMICQ);
 
 	_imAccount->setLogin( login );
 	_imAccount->setPassword( password );

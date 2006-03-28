@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2005  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,50 +17,36 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENUMIMPROTOCOL_H
-#define ENUMIMPROTOCOL_H
+#ifndef USERPROFILEFILESTORAGE_H
+#define USERPROFILEFILESTORAGE_H
 
-#include <util/NonCopyable.h>
+#include "UserProfileStorage.h"
 
-#include <string>
-#include <map>
+class UserProfileStorage;
 
 /**
- * Instant Messaging protocols.
+ * UserProfile file storage.
  *
+ * @ingroup model
  * @author Philippe Bernery
  */
-class EnumIMProtocol : NonCopyable {
+class UserProfileFileStorage : public UserProfileStorage {
 public:
-	EnumIMProtocol();
 
-	enum IMProtocol {
-		IMProtocolUnknown,
-		IMProtocolAll,
-		IMProtocolMSN,
-		IMProtocolYahoo,
-		IMProtocolAIMICQ,
-		IMProtocolJabber,
-		IMProtocolSIPSIMPLE
-	};
+	UserProfileFileStorage(UserProfile & userProfile);
 
-	/**
-	 * Gets a protocol in string.
-	 *
-	 * @return the string
-	 */
-	std::string toString(IMProtocol protocol);
+	virtual ~UserProfileFileStorage();
 
-	/**
-	 * Gets a string in protocol.
-	 *
-	 * @return the protocol
-	 */
-	IMProtocol toIMProtocol(const std::string & protocol);
+	virtual bool load(const std::string & url);
+
+	virtual bool save(const std::string & url);
 
 private:
-	typedef std::map<IMProtocol, std::string> ProtocolMap;
-	ProtocolMap _protocolMap;
+
+	bool saveProfile(const std::string & url);
+
+	bool loadProfile(const std::string & url);
+
 };
 
-#endif	//ENUMIMPROTOCOL_H
+#endif //USERPROFILEFILESTORAGE_H

@@ -38,7 +38,9 @@ public:
 
 	void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note = String::null);
 
-	void changeMyNickname(const std::string & nickname);
+	void changeMyAlias(const std::string & nickname);
+
+	void changeMyIcon(const Picture & picture);
 
 	void subscribeToPresenceOf(const std::string & contactId);
 

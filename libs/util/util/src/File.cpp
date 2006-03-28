@@ -23,6 +23,7 @@
 
 #include <cutil/global.h>
 
+#include <stdio.h>
 #include <stddef.h>
 #include <sys/types.h>
 #ifdef CC_MSVC
@@ -52,6 +53,10 @@ using namespace std;
 
 File::File(const std::string & filename)
 	: _filename(filename) {
+}
+
+File::File(const File & file) 
+: _filename(file._filename) {
 }
 
 std::string File::getPath() {
@@ -153,8 +158,20 @@ void File::createPath(const std::string & path) {
 	}
 }
 
+File File::createTemporaryFile() {
+	return File(tempnam(NULL, NULL));
+}
+
 FileReader::FileReader(const std::string & filename)
 	: File(filename) {
+}
+
+FileReader::FileReader(const File & file) 
+: File(file) {
+}
+
+FileReader::FileReader(const FileReader & fileReader) 
+: File(fileReader) {
 }
 
 FileReader::~FileReader() {
@@ -193,6 +210,14 @@ void FileReader::close() {
 
 FileWriter::FileWriter(const std::string & filename)
 	: File(filename) {
+}
+
+FileWriter::FileWriter(const File & file) 
+: File(file) {
+}
+
+FileWriter::FileWriter(const FileWriter & fileWriter) 
+: File(fileWriter) {
 }
 
 FileWriter::~FileWriter() {

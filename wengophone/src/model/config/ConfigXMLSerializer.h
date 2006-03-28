@@ -17,50 +17,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENUMIMPROTOCOL_H
-#define ENUMIMPROTOCOL_H
+#ifndef CONFIGXMLSERIALIZER_H
+#define CONFIGXMLSERIALIZER_H
 
-#include <util/NonCopyable.h>
+#include <settings/SettingsXMLSerializer.h>
 
-#include <string>
-#include <map>
+class Config;
 
 /**
- * Instant Messaging protocols.
+ * Serialize a Config object.
  *
  * @author Philippe Bernery
  */
-class EnumIMProtocol : NonCopyable {
+class ConfigXMLSerializer : public SettingsXMLSerializer {
 public:
-	EnumIMProtocol();
+	
+	ConfigXMLSerializer(Config & config);
 
-	enum IMProtocol {
-		IMProtocolUnknown,
-		IMProtocolAll,
-		IMProtocolMSN,
-		IMProtocolYahoo,
-		IMProtocolAIMICQ,
-		IMProtocolJabber,
-		IMProtocolSIPSIMPLE
-	};
-
-	/**
-	 * Gets a protocol in string.
-	 *
-	 * @return the string
-	 */
-	std::string toString(IMProtocol protocol);
-
-	/**
-	 * Gets a string in protocol.
-	 *
-	 * @return the protocol
-	 */
-	IMProtocol toIMProtocol(const std::string & protocol);
-
-private:
-	typedef std::map<IMProtocol, std::string> ProtocolMap;
-	ProtocolMap _protocolMap;
 };
 
-#endif	//ENUMIMPROTOCOL_H
+#endif //CONFIGXMLSERIALIZER_H

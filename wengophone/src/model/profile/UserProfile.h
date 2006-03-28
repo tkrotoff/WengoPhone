@@ -26,6 +26,10 @@
 #include <imwrapper/IMAccountHandler.h>
 
 #include <model/account/SipAccount.h>
+#include <model/connect/ConnectHandler.h>
+#include <model/contactlist/ContactList.h>
+#include <model/contactlist/IMContactListHandler.h>
+#include <model/presence/PresenceHandler.h>
 
 #include <util/Event.h>
 
@@ -33,19 +37,13 @@
 
 class SipAccount;
 class WengoAccount;
-class SipAccountHandler;
 class IMAccount;
 class WengoPhone;
 class Contact;
 class ContactList;
 class IPhoneLine;
 class PhoneCall;
-class ConnectHandler;
-class PresenceHandler;
-class ChatHandler;
-class IMContactListHandler;
 class Sms;
-class WengoAccountDataLayer;
 
 /**
  * Handle the profile of a User.
@@ -53,6 +51,7 @@ class WengoAccountDataLayer;
  * @author Philippe Bernery
  */
 class UserProfile : public Profile {
+	friend class UserProfileFileStorage;
 public:
 
 	/**
@@ -82,38 +81,6 @@ public:
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
 	/**
-	 * ConnectHandler has been created.
-	 *
-	 * @param sender this class
-	 * @param imHandler ConnectHandler created
-	 */
-	Event<void (UserProfile & sender, ConnectHandler & connectHandler)> connectHandlerCreatedEvent;
-
-	/**
-	 * The ContactList has been created.
-	 *
-	 * @param sender this class
-	 * @param contactList ContactList created
-	 */
-	Event<void (UserProfile & sender, ContactList & contactList)> contactListCreatedEvent;
-
-	/**
-	 * PresenceHandler has been created.
-	 *
-	 * @param sender this class
-	 * @param imHandler ConnectHandler created
-	 */
-	Event<void (UserProfile & sender, PresenceHandler & presenceHandler)> presenceHandlerCreatedEvent;
-
-	/**
-	 * ChatHandler has been created.
-	 *
-	 * @param sender this class
-	 * @param imHandler ConnectHandler created
-	 */
-	Event<void (UserProfile & sender, ChatHandler & chatHandler)> chatHandlerCreatedEvent;
-
-	/**
 	 * Emitted when no account exists.
 	 */
 	Event<void (UserProfile & sender)> noAccountAvailableEvent;
@@ -130,13 +97,6 @@ public:
 	 * @param phoneLine PhoneLine created
 	 */
 	Event<void (UserProfile & sender, IPhoneLine & phoneLine)> phoneLineCreatedEvent;
-
-	/**
-	 * Initialization step is finished (i.e we exit the init() method.
-	 *
-	 * @param sender this class
-	 */
-	Event<void (UserProfile & sender)> initFinishedEvent;
 
 	/**
 	 * Sms has been created.
@@ -200,28 +160,28 @@ public:
 	 */
 	PhoneCall * getActivePhoneCall() const;
 
-	ConnectHandler & getConnectHandler() const {
-		return *_connectHandler;
+	ConnectHandler & getConnectHandler() {
+		return _connectHandler;
 	}
 
-	PresenceHandler & getPresenceHandler() const {
-		return *_presenceHandler;
+	PresenceHandler & getPresenceHandler() {
+		return _presenceHandler;
 	}
 
-	ChatHandler & getChatHandler() const {
-		return *_chatHandler;
+	ChatHandler & getChatHandler() {
+		return _chatHandler;
 	}
 
 	IMAccountHandler & getIMAccountHandler() {
 		return _imAccountHandler;
 	}
 
-	IMContactListHandler & getIMContactListHandler() const {
-		return *_imContactListHandler;
+	IMContactListHandler & getIMContactListHandler() {
+		return _imContactListHandler;
 	}
 
-	ContactList & getContactList() const {
-		return *_contactList;
+	ContactList & getContactList() {
+		return _contactList;
 	}
 
 	void addSipAccount(const std::string & login, const std::string & password, bool autoLogin);
@@ -262,13 +222,6 @@ public:
 	 */
 	void setAlias(const std::string & alias);
 
-	/**
-	 * Get the alias of this user.
-	 *
-	 * @return the alias
-	 */
-	std::string getAlias() const;
-
 private:
 
 	/**
@@ -307,11 +260,6 @@ private:
 
 	WengoPhone & _wengoPhone;
 
-	IMAccountHandler _imAccountHandler;
-
-	//TODO: create a list of SipAccount
-	WengoAccount * _wengoAccount;
-
 	/**
 	 * find the wengo phone line
 	 */
@@ -329,19 +277,21 @@ private:
 	/** SMS. */
 	Sms * _sms;
 
+	//TODO: create a list of SipAccount
+	WengoAccount * _wengoAccount;
+
+	IMAccountHandler _imAccountHandler;
+
 	/** List of Contact. */
-	ContactList * _contactList;
+	IMContactListHandler _imContactListHandler;
 
-	ConnectHandler * _connectHandler;
+	ConnectHandler _connectHandler;
 
-	PresenceHandler * _presenceHandler;
+	PresenceHandler _presenceHandler;
 
-	ChatHandler * _chatHandler;
+	ChatHandler _chatHandler;
 
-	IMContactListHandler * _imContactListHandler;
-
-	/** The data layer of this WengoAccount. Used to unserialize. */
-	WengoAccountDataLayer * _wengoAccountDataLayer;
+	ContactList _contactList;
 
 };
 

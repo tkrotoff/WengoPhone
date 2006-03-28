@@ -17,50 +17,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENUMIMPROTOCOL_H
-#define ENUMIMPROTOCOL_H
+#include "UserProfileXMLSerializer.h"
 
-#include <util/NonCopyable.h>
+#include "UserProfile.h"
 
-#include <string>
-#include <map>
+#include <tinyxml.h>
 
-/**
- * Instant Messaging protocols.
- *
- * @author Philippe Bernery
- */
-class EnumIMProtocol : NonCopyable {
-public:
-	EnumIMProtocol();
+using namespace std;
 
-	enum IMProtocol {
-		IMProtocolUnknown,
-		IMProtocolAll,
-		IMProtocolMSN,
-		IMProtocolYahoo,
-		IMProtocolAIMICQ,
-		IMProtocolJabber,
-		IMProtocolSIPSIMPLE
-	};
+UserProfileXMLSerializer::UserProfileXMLSerializer(UserProfile & userProfile) 
+: ProfileXMLSerializer(userProfile), _userProfile(userProfile) {
+}
 
-	/**
-	 * Gets a protocol in string.
-	 *
-	 * @return the string
-	 */
-	std::string toString(IMProtocol protocol);
+string UserProfileXMLSerializer::serialize() {
+	string result;
 
-	/**
-	 * Gets a string in protocol.
-	 *
-	 * @return the protocol
-	 */
-	IMProtocol toIMProtocol(const std::string & protocol);
+	result += "<userprofile>\n";
 
-private:
-	typedef std::map<IMProtocol, std::string> ProtocolMap;
-	ProtocolMap _protocolMap;
-};
+	result += ProfileXMLSerializer::serialize();
 
-#endif	//ENUMIMPROTOCOL_H
+	result += "</userprofile>\n";
+
+	return result;
+}
+
+bool UserProfileXMLSerializer::unserialize(const string & data) {
+	TiXmlDocument doc;
+
+	doc.Parse(data.c_str());
+
+	TiXmlHandle docHandle(&doc);
+	TiXmlHandle userprofile = docHandle.FirstChild("userprofile");
+
+	ProfileXMLSerializer::unserializeContent(userprofile);
+
+	return true;
+}

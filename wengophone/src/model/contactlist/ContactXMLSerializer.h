@@ -20,7 +20,7 @@
 #ifndef CONTACTXMLSERIALIZER_H
 #define CONTACTXMLSERIALIZER_H
 
-#include <serialization/Serializable.h>
+#include <model/profile/ProfileXMLSerializer.h>
 
 #include <string>
 
@@ -32,7 +32,7 @@ class IMAccountHandler;
  *
  * @author Philippe Bernery
  */
-class ContactXMLSerializer : public Serializable {
+class ContactXMLSerializer : public ProfileXMLSerializer {
 public:
 
 	ContactXMLSerializer(Contact & contact, IMAccountHandler & imAccountHandler);

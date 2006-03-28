@@ -24,17 +24,13 @@
 #include <model/chat/ChatHandler.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
-#include <model/connect/ConnectHandler.h>
 #include <model/contactlist/ContactListFileStorage.h>
-#include <model/contactlist/ContactList.h>
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactGroup.h>
-#include <model/contactlist/IMContactListHandler.h>
 #include <model/contactlist/ContactListStorage.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
 #include <model/phoneline/IPhoneLine.h>
-#include <model/presence/PresenceHandler.h>
 #include <model/sms/Sms.h>
 
 #include <imwrapper/IMAccountHandlerFileStorage.h>
@@ -46,28 +42,19 @@
 using namespace std;
 
 UserProfile::UserProfile(WengoPhone & wengoPhone)
-: _wengoPhone(wengoPhone) {
+: _wengoPhone(wengoPhone)
+, _imContactListHandler(*this) 
+, _connectHandler(*this)
+, _presenceHandler(*this)
+, _chatHandler(*this)
+, _contactList(*this) {
 	_sms = NULL;
 	_activePhoneLine = NULL;
 	_activePhoneCall = NULL;
-	_contactList = NULL;
 	_wengoAccount = NULL;
-	_wengoAccountDataLayer = NULL;
 }
 
 UserProfile::~UserProfile() {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-
-	IMAccountHandlerStorage * imAccountHandlerStorage = new IMAccountHandlerFileStorage(_imAccountHandler);
-	imAccountHandlerStorage->save(config.getConfigDir() + "imaccounts.xml");
-	delete imAccountHandlerStorage;
-
-	if (_contactList) {
-		ContactListStorage * contactListStorage = new ContactListFileStorage(*_contactList, _imAccountHandler);
-		contactListStorage->save(config.getConfigDir() + "contactlist.xml");
-		delete contactListStorage;
-	}
-
 	if (_sms) {
 		delete _sms;
 	}
@@ -79,52 +66,12 @@ UserProfile::~UserProfile() {
 	if (_activePhoneCall) {
 		delete _activePhoneCall;
 	}
-
-	if (_contactList) {
-		delete _contactList;
-	}
-}
-
-void UserProfile::init() {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-
-	//Creates ConnectHandler, PresenceHandler, ChatHandler and IMContactListHandler
-	_connectHandler = new ConnectHandler(*this);
-	connectHandlerCreatedEvent(*this, *_connectHandler);
-
-	_presenceHandler = new PresenceHandler(*this);
-	presenceHandlerCreatedEvent(*this, *_presenceHandler);
-
-	_chatHandler = new ChatHandler(*this);
-	chatHandlerCreatedEvent(*this, *_chatHandler);
-
-	_imContactListHandler = new IMContactListHandler(*this);
-	////
-
-	//Loads IMAccounts
-	IMAccountHandlerStorage * imAccountHandlerStorage = new IMAccountHandlerFileStorage(_imAccountHandler);
-	imAccountHandlerStorage->load(config.getConfigDir() + "imaccounts.xml");
-	delete imAccountHandlerStorage;
-	////
-
-	// Loads SipAccounts
-	////
-
-	//Creates and loads the contact list
-	_contactList = new ContactList(*this);
-	contactListCreatedEvent(*this, *_contactList);
-
-	ContactListStorage * contactListStorage = new ContactListFileStorage(*_contactList, _imAccountHandler);
-	contactListStorage->load(config.getConfigDir() + "contactlist.xml");
-	delete contactListStorage;
-	////
 }
 
 void UserProfile::connect() {
 	connectIMAccounts();
 	connectSipAccounts();
 }
-
 
 void UserProfile::connectIMAccounts() {
 	//Connects all IMAccounts
@@ -134,7 +81,7 @@ void UserProfile::connectIMAccounts() {
 		newIMAccountAddedEvent(*this, (IMAccount &)*it);
 		//FIXME: hack for phApi connection
 		if ((*it).getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
-			_connectHandler->connect(*it);
+			_connectHandler.connect(*it);
 		}
 	}
 	////
@@ -176,7 +123,7 @@ void UserProfile::startIM(Contact & contact) {
 
 	//FIXME: we should give a set of pointer to IMContacts
 	imContactSet.insert(*imContact);
-	_chatHandler->createSession(imContact->getIMAccount(), imContactSet);
+	_chatHandler.createSession(imContact->getIMAccount(), imContactSet);
 }
 
 
@@ -266,21 +213,17 @@ EnumPresenceState::PresenceState UserProfile::getPresenceState() const {
 }
 
 void UserProfile::setPresenceState(EnumPresenceState::PresenceState presenceState) {
-
+	_presenceHandler.changeMyPresenceState(presenceState, "");
 }
 
 void UserProfile::setAlias(const string & alias) {
-
-}
-
-string UserProfile::getAlias() const {
-	return "User";
+	_alias = alias;
+	_presenceHandler.changeMyAlias(_alias);
 }
 
 void UserProfile::addPhoneLine(SipAccount & account) {
 	//Creates new a PhoneLine associated with the account just added
-	PhoneLine * phoneLine = new PhoneLine(account, _wengoPhone
-	);
+	PhoneLine * phoneLine = new PhoneLine(account, _wengoPhone);
 
 	//Adds the PhoneLine to the list of PhoneLine
 	_phoneLineList += phoneLine;
@@ -307,15 +250,16 @@ void UserProfile::wengoAccountLogin() {
 	_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 	_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 
-	_wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *)_wengoAccount);
+	WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *)_wengoAccount);
 	bool noAccount = true;
-	if (_wengoAccountDataLayer->load()) {
+	if (wengoAccountDataLayer->load()) {
 		if (_wengoAccount->hasAutoLogin()) {
 			//Sends the HTTP request to the SSO
 			_wengoAccount->init();
 			noAccount = false;
 		}
 	}
+	delete wengoAccountDataLayer;
 
 	if (noAccount) {
 		noAccountAvailableEvent(*this);
@@ -332,16 +276,13 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 
 		addPhoneLine(sender);
 
-		if (_wengoAccountDataLayer) {
-			delete _wengoAccountDataLayer;
-		}
-
-		_wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *) _wengoAccount);
-		_wengoAccountDataLayer->save();
+		WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *) _wengoAccount);
+		wengoAccountDataLayer->save();
+		delete wengoAccountDataLayer;
 
 		IMAccount imAccount(_wengoAccount->getIdentity(), _wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 		addIMAccount(imAccount);
-		_connectHandler->connect(*_imAccountHandler.find(imAccount));
+		_connectHandler.connect(*_imAccountHandler.find(imAccount));
 
 		break;
 	}

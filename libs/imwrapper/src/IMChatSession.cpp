@@ -39,7 +39,13 @@ IMChatSession::IMChatSession(IMChat & imChat)
 }
 
 IMChatSession::~IMChatSession() {
+}
+
+void IMChatSession::close() {
+	LOG_DEBUG("closing IMChatSession");
+	imChatSessionWillDieEvent(*this);
 	_imChat.closeSession(*this);
+	delete this;
 }
 
 void IMChatSession::addIMContact(const IMContact & imContact) {

@@ -211,19 +211,11 @@ private:
 	 */
 	void openWengoUrlWithAuth(std::string url);
 
-	void presenceHandlerCreatedEventHandler(UserProfile & sender, PresenceHandler & presenceHandler);
-
-	void chatHandlerCreatedEventHandler(UserProfile & sender, ChatHandler & chatHandler);
-
 	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
-
-	void contactListCreatedEventHandler(UserProfile & sender, ContactList & contactList);
 
 	void wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin);
 
 	void smsCreatedEventHandler(UserProfile & sender, Sms & sms);
-
-	void connectHandlerCreatedEventHandler(UserProfile & sender, ConnectHandler & connectHandler);
 
 	void initFinishedEventHandler(WengoPhone & sender);
 

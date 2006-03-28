@@ -441,10 +441,8 @@ void QtWengoPhone::actionSetLogin() {
 			protocol = EnumIMProtocol::IMProtocolMSN;
 		} else if (selProtocol == "Yahoo") {
 			protocol = EnumIMProtocol::IMProtocolYahoo;
-		} else if (selProtocol == "AIM") {
-			protocol = EnumIMProtocol::IMProtocolAIM;
-		} else if (selProtocol == "ICQ") {
-			protocol = EnumIMProtocol::IMProtocolICQ;
+		} else if ((selProtocol == "AIM") || (selProtocol == "ICQ")) {
+			protocol = EnumIMProtocol::IMProtocolAIMICQ;
 		} else if (selProtocol == "Jabber") {
 			protocol = EnumIMProtocol::IMProtocolJabber;
 			login += "/WengoPhone";

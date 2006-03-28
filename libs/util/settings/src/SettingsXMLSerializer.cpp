@@ -73,22 +73,27 @@ bool SettingsXMLSerializer::unserialize(const std::string & data) {
 	while ((lastChild = settings->IterateChildren(lastChild))) {
 		string key = lastChild->Value();
 		TiXmlNode * value = lastChild->FirstChild();
-		string valueNode;
-		valueNode << *value;
-		string valueType = value->Value();
-		string valueData = value->FirstChild()->Value();
+		if (value) {
+			string valueNode;
+			valueNode << *value;
+			string valueType = value->Value();
+			TiXmlNode * valueDataNode = value->FirstChild();
+			if (valueDataNode) {
+				string valueData = valueDataNode->Value();
 
-		if (valueType == "stringlist") {
-			StringList list;
-			StringListXMLSerializer serializer(list);
-			serializer.unserialize(valueNode);
-			_settings.set(key, list);
-		} else if (valueType == "string") {
-			_settings.set(key, valueData);
-		} else if (valueType == "bool") {
-			_settings.set(key, String(valueData).toBoolean());
-		} else if (valueType == "int") {
-			_settings.set(key, String(valueData).toInteger());
+				if (valueType == "stringlist") {
+					StringList list;
+					StringListXMLSerializer serializer(list);
+					serializer.unserialize(valueNode);
+					_settings.set(key, list);
+				} else if (valueType == "string") {
+					_settings.set(key, valueData);
+				} else if (valueType == "bool") {
+					_settings.set(key, String(valueData).toBoolean());
+				} else if (valueType == "int") {
+					_settings.set(key, String(valueData).toInteger());
+				}
+			}
 		}
 	}
 

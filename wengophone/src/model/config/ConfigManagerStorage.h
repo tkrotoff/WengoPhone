@@ -17,46 +17,35 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "ContactListXMLLayer.h"
+#ifndef CONFIGMANAGERSTORAGE_H
+#define CONFIGMANAGERSTORAGE_H
 
-#include "ContactList.h"
-#include "ContactGroup.h"
-#include "Contact.h"
+#include <serialization/Storage.h>
 
-#include <util/File.h>
-#include <util/Logger.h>
+class ConfigManager;
 
-#include <string>
-using namespace std;
+/**
+ * Storage interface for ConfigManager.
+ *
+ * @ingroup model
+ * @author Philippe Bernery
+ */
+class ConfigManagerStorage : public Storage {
+public:
 
-ContactListXMLLayer::ContactListXMLLayer(ContactList & contactList)
-	: ContactListDataLayer(contactList) {
-	load();
-}
+	ConfigManagerStorage(ConfigManager & configManager)
+		: _configManager(configManager) { }
 
-ContactListXMLLayer::~ContactListXMLLayer() {
-	save();
-}
+	virtual ~ConfigManagerStorage() { }
 
-bool ContactListXMLLayer::load() {
-	FileReader file("contactlist.xml");
-	if (file.open()) {
-		string data = file.read();
-		file.close();
+	virtual bool load(const std::string & url) = 0;
 
-		_contactList.unserialize(data);
+	virtual bool save(const std::string & url) = 0;
 
-		LOG_DEBUG("file contactlist.xml loaded");
-		return true;
-	}
+protected:
 
-	return false;
-}
+	ConfigManager & _configManager;
 
-bool ContactListXMLLayer::save() {
-	FileWriter file("contactlist.xml");
-	file.write(_contactList.serialize());
-	file.close();
-	
-	return true;
-}
+};
+
+#endif //CONFIGMANAGERSTORAGE_H

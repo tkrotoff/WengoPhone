@@ -27,7 +27,6 @@ const char *GaimIMPrcl::_GaimIMProtocol[] = {
 	"prpl-msn",
 	"prpl-yahoo",
 	"prpl-oscar",
-	"prpl-oscar",
 	"prpl-jabber",
 	"prpl-simple",
 	NULL

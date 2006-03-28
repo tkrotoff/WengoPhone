@@ -34,7 +34,7 @@ CPresenceHandler::CPresenceHandler(PresenceHandler & presenceHandler)
 
 void CPresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,	
 	const std::string & note, IMAccount * imAccount) {
-	_presenceHandler.changeMyPresence(state, note, imAccount);
+	_presenceHandler.changeMyPresenceState(state, note, imAccount);
 }
 
 void CPresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {

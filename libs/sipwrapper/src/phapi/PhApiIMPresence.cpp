@@ -34,7 +34,10 @@ void PhApiIMPresence::changeMyPresence(EnumPresenceState::PresenceState state, c
 	_phApiWrapper.changeMyPresence(state, note);
 }
 
-void PhApiIMPresence::changeMyNickname(const std::string & nickname) {
+void PhApiIMPresence::changeMyAlias(const std::string & nickname) {
+}
+
+void PhApiIMPresence::changeMyIcon(const Picture & picture) {
 }
 
 void PhApiIMPresence::subscribeToPresenceOf(const std::string & contactId) {

@@ -53,7 +53,7 @@ public:
 	 *
 	 * @param sender the Contact modified/updated
 	 */
-	Event<void (Contact & sender)> contactModifiedEvent;
+	Event<void (Contact & sender)> contactChangedEvent;
 
 	Contact(UserProfile & userProfile);
 
@@ -70,7 +70,7 @@ public:
 	 *
 	 * @param number the preferred phone number
 	 */
-	void setPreferredPhoneNumber(const std::string & number) { _preferredNumber = number; contactModifiedEvent(*this); }
+	void setPreferredPhoneNumber(const std::string & number) { _preferredNumber = number; contactChangedEvent(*this); }
 
 	/**
 	 * Get the preferred phone number.
@@ -88,7 +88,7 @@ public:
 	 * @param the imContact to set. The given reference must stay valid during
 	 * the execution (this must be a reference to an IMContact of this Contact).
 	 */
-	void setPreferredIMContact(const IMContact & imContact) { _preferredIMContact = (IMContact *)&imContact; contactModifiedEvent(*this); }
+	void setPreferredIMContact(const IMContact & imContact) { _preferredIMContact = (IMContact *)&imContact; contactChangedEvent(*this); }
 
 	/**
 	 * Get the preferred IMContact.
@@ -230,6 +230,11 @@ public:
 private:
 
 	/**
+	 * @see Profile::profileChangedEvent
+	 */
+	void profileChangedEventHandler(Profile & profile);
+
+	/**
 	 * @see IMContact::imContactAddedToGroupEvent
 	 */
 	void imContactAddedToGroupEventHandler(IMContact & sender, const std::string & groupName);
@@ -238,6 +243,11 @@ private:
 	 * @see IMContact::imContactRemovedFromGroupEvent
 	 */
 	void imContactRemovedFromGroupEventHandler(IMContact & sender, const std::string & groupName);
+
+	/**
+	 * @see IMContact::imContactChangedEvent
+	 */
+	void imContactChangedEventHandler(IMContact & sender);
 
 	/**
 	 * Actually add the Contact to a ContactGroup.

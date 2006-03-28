@@ -25,9 +25,10 @@
 
 #include <imwrapper/EnumPresenceState.h>
 
-#include <util/Interface.h>
 #include <util/Date.h>
 #include <util/Event.h>
+#include <util/Interface.h>
+#include <util/Picture.h>
 
 /**
  * Handle common data between a Contact a UserProfile.
@@ -35,6 +36,7 @@
  * @author Philippe BERNERY
  */
 class Profile : Interface {
+	friend class ProfileXMLSerializer;
 public:
 
 	/**
@@ -47,10 +49,10 @@ public:
 	virtual ~Profile() {}
 
 	void setFirstName(const std::string & firstName) { _firstName = firstName; profileChangedEvent(*this); }
-	const std::string & getFirstName() const { return _firstName; }
+	std::string getFirstName() const { return _firstName; }
 
 	void setLastName(const std::string & lastName) { _lastName = lastName; profileChangedEvent(*this); }
-	const std::string & getLastName() const { return _lastName; }
+	std::string getLastName() const { return _lastName; }
 
 	void setSex(EnumSex::Sex sex) { _sex = sex; profileChangedEvent(*this); }
 	EnumSex::Sex getSex() const { return _sex; }
@@ -58,50 +60,53 @@ public:
 	void setBirthdate(const Date & birthdate) { _birthdate = birthdate; profileChangedEvent(*this); }
 	Date getBirthdate() const { return _birthdate; }
 
-	void setPicture(const std::string & picture) { _picture = picture; profileChangedEvent(*this); }
-	const std::string & getPicture() const { return _picture; }
-
 	void setWebsite(const std::string & website) { _website = website; profileChangedEvent(*this); }
-	const std::string & getWebsite() const { return _website; }
+	std::string getWebsite() const { return _website; }
 
 	void setCompany(const std::string & company) { _company = company; profileChangedEvent(*this); }
-	const std::string & getCompany() const { return _company; }
+	std::string getCompany() const { return _company; }
 
 	void setWengoPhoneId(const std::string & wengoPhoneId) { _wengoPhoneId = wengoPhoneId; profileChangedEvent(*this); }
-	const std::string & getWengoPhoneId() const { return _wengoPhoneId; }
+	std::string getWengoPhoneId() const { return _wengoPhoneId; }
 
 	void setMobilePhone(const std::string & mobilePhone) { _mobilePhone = mobilePhone; profileChangedEvent(*this); }
-	const std::string & getMobilePhone() const { return _mobilePhone; }
+	std::string getMobilePhone() const { return _mobilePhone; }
 
 	void setHomePhone(const std::string & homePhone) { _homePhone = homePhone; profileChangedEvent(*this); }
-	const std::string & getHomePhone() const { return _homePhone; }
+	std::string getHomePhone() const { return _homePhone; }
 
 	void setWorkPhone(const std::string & workPhone) { _workPhone = workPhone; profileChangedEvent(*this); }
-	const std::string & getWorkPhone() const { return _workPhone; }
+	std::string getWorkPhone() const { return _workPhone; }
 
 	void setOtherPhone(const std::string & otherPhone) { _otherPhone = otherPhone; profileChangedEvent(*this); }
-	const std::string & getOtherPhone() const { return _otherPhone; }
+	std::string getOtherPhone() const { return _otherPhone; }
 
 	void setWengoPhoneNumber(const std::string & wengoPhoneNumber) { _wengoPhoneNumber = wengoPhoneNumber; profileChangedEvent(*this); }
-	const std::string & getWengoPhoneNumber() const { return _wengoPhoneNumber; }
+	std::string getWengoPhoneNumber() const { return _wengoPhoneNumber; }
 
 	void setFax(const std::string & fax) { _fax = fax; profileChangedEvent(*this); }
-	const std::string & getFax() const { return _fax; }
+	std::string getFax() const { return _fax; }
 
 	void setPersonalEmail(const std::string & personalEmail) { _personalEmail = personalEmail; profileChangedEvent(*this); }
-	const std::string & getPersonalEmail() const { return _personalEmail; }
+	std::string getPersonalEmail() const { return _personalEmail; }
 
 	void setWorkEmail(const std::string & workEmail) { _workEmail = workEmail; profileChangedEvent(*this); }
-	const std::string & getWorkEmail() const { return _workEmail; }
+	std::string getWorkEmail() const { return _workEmail; }
 
 	void setOtherEmail(const std::string & otherEmail) { _otherEmail = otherEmail; profileChangedEvent(*this); }
-	const std::string & getOtherEmail() const { return _otherEmail; }
+	std::string getOtherEmail() const { return _otherEmail; }
 
 	void setStreetAddress(const StreetAddress & streetAddress) { _streetAddress = streetAddress; profileChangedEvent(*this); }
-	const StreetAddress & getStreetAddress() const { return _streetAddress; }
+	StreetAddress getStreetAddress() const { return _streetAddress; }
 
 	void setNotes(const std::string & notes) { _notes = notes; profileChangedEvent(*this); }
-	const std::string & getNotes() const { return _notes; }
+	std::string getNotes() const { return _notes; }
+
+	virtual void setAlias(const std::string & alias) { _alias = alias; profileChangedEvent(*this); }
+	virtual std::string getAlias() const { return _alias; }
+
+	virtual void setIcon(const Picture & icon) { _icon = icon; profileChangedEvent(*this); }
+	virtual Picture getIcon() const { return _icon; }
 
 	/**
 	 * Return the PresenceState of this Profile.
@@ -130,8 +135,6 @@ protected:
 	EnumSex::Sex _sex;
 
 	Date _birthdate;
-
-	std::string _picture;
 
 	std::string _website;
 
@@ -162,6 +165,10 @@ protected:
 	std::string _notes;
 
 	EnumPresenceState::PresenceState _presenceState;
+
+	std::string _alias;
+
+	Picture _icon;
 
 };
 

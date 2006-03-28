@@ -37,6 +37,9 @@ Contact::Contact(UserProfile & userProfile)
 	_sex = EnumSex::SexUnknown;
 	_blocked = false;
 	_preferredIMContact = NULL;
+
+	profileChangedEvent += 
+		boost::bind(&Contact::profileChangedEventHandler, this, _1);
 }
 
 Contact::Contact(const Contact & contact)
@@ -59,7 +62,6 @@ void Contact::initialize(const Contact & contact) {
 	_lastName = contact._lastName;
 	_sex = contact._sex;
 	_birthdate = contact._birthdate;
-	_picture = contact._picture;
 	_website = contact._website;
 	_company = contact._company;
 	_wengoPhoneId = contact._wengoPhoneId;
@@ -83,7 +85,6 @@ bool Contact::operator == (const Contact & contact) const {
 		&& (_lastName == contact._lastName)
 		&& (_sex == contact._sex)
 		&& (_birthdate == contact._birthdate)
-		&& (_picture == contact._picture)
 		&& (_website == contact._website)
 		&& (_company == contact._company)
 		&& (_wengoPhoneId == contact._wengoPhoneId)
@@ -115,13 +116,16 @@ void Contact::_addIMContact(const IMContact & imContact) {
 	pair<IMContactSet::const_iterator, bool> result = _imContactSet.insert(imContact);
 
 	if (result.second) {
-		((IMContact &)(*result.first)).imContactAddedToGroupEvent +=
+		IMContact & newIMContact = (IMContact &)(*result.first);
+		newIMContact.imContactAddedToGroupEvent +=
 			boost::bind(&Contact::imContactAddedToGroupEventHandler, this, _1, _2);
-		((IMContact &)(*result.first)).imContactRemovedFromGroupEvent +=
+		newIMContact.imContactRemovedFromGroupEvent +=
 			boost::bind(&Contact::imContactRemovedFromGroupEventHandler, this, _1, _2);
+		newIMContact.imContactChangedEvent += 
+			boost::bind(&Contact::imContactChangedEventHandler, this, _1);
 
 		_userProfile.getPresenceHandler().subscribeToPresenceOf(*result.first);
-		contactModifiedEvent(*this);
+		contactChangedEvent(*this);
 	}
 }
 
@@ -129,7 +133,7 @@ void Contact::_removeIMContact(const IMContact & imContact) {
 	IMContactSet::iterator it = _imContactSet.find(imContact);
 
 	if (it != _imContactSet.end()) {
-		contactModifiedEvent(*this);
+		contactChangedEvent(*this);
 		_imContactSet.erase(it);
 	}
 }
@@ -168,6 +172,10 @@ void Contact::imContactRemovedFromGroupEventHandler(IMContact & sender, const st
 //	if (_contactGroupSet.size() > 1) {
 		_contactList._removeFromContactGroup(groupName, *this);
 //	}
+}
+
+void Contact::imContactChangedEventHandler(IMContact & sender) {
+	contactChangedEvent(*this);
 }
 
 void Contact::addToContactGroup(const std::string & groupName) {
@@ -315,3 +323,6 @@ void Contact::moveToGroup(const std::string & to, const std::string & from) {
 	_contactList.moveContactToGroup(*this, to, from);
 }
 
+void Contact::profileChangedEventHandler(Profile & profile) {
+	contactChangedEvent(*this);
+}

@@ -79,7 +79,6 @@ void QtContactWidget::setContact(Contact * contact, const QStringList & listCont
 	Date date = contact->getBirthdate();
 	setBirthdate(QDateTime(QDate(date.getYear(), date.getMonth(), date.getDay())));
 
-	setPicture(QString::fromStdString(contact->getPicture()));
 	setWebsite(QString::fromStdString(contact->getWebsite()));
 	setCompany(QString::fromStdString(contact->getCompany()));
 	setWengoPhone(QString::fromStdString(contact->getWengoPhoneId()));
@@ -109,7 +108,6 @@ void QtContactWidget::createContact(Contact & contact) {
 	QDateTime dateTime = getBirthdate();
 	contact.setBirthdate(Date(dateTime.date().day(), dateTime.date().month(), dateTime.date().year()));
 	
-	contact.setPicture(getPicture().toStdString());
 	contact.setWebsite(getWebsite().toStdString());
 	contact.setCompany(getCompany().toStdString());
 	contact.setWengoPhoneId(getWengoPhone().toStdString());

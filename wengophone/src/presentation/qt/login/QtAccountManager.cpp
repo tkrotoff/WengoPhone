@@ -119,7 +119,7 @@ void QtAccountManager::loadImAccounts() {
 						case EnumIMProtocol::IMProtocolYahoo:
 						l << "Yahoo";
 						break;
-						case EnumIMProtocol::IMProtocolAIM:
+						case EnumIMProtocol::IMProtocolAIMICQ:
 						l << "AIM/ICQ";
 						break;
 						case EnumIMProtocol::IMProtocolJabber:

@@ -64,6 +64,16 @@ public:
 	void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
 
 	/**
+	 * @see IMPresence::changeMyAlias
+	 */
+	void changeMyAlias(const std::string & alias);
+
+	/**
+	 * @see IMPresence::changeMyIcon
+	 */
+	void changeMyIcon(const Picture & picture);
+
+	/**
 	 * @see IMPresence::subscribeToPresenceOf
 	 */
 	void subscribeToPresenceOf(const std::string & contactId);

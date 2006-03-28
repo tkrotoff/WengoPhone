@@ -44,12 +44,12 @@ IMContact::~IMContact() {
 
 bool IMContact::operator == (const IMContact & imContact) const {
 	return ((_imAccount == imContact._imAccount)
-		&& (_contactId == imContact._contactId));
+		&& (cleanContactId() == imContact.cleanContactId()));
 }
 
 bool IMContact::operator < (const IMContact & imContact) const {
 	return ((_imAccount < imContact._imAccount)
-		|| ((_imAccount == imContact._imAccount) && (_contactId < imContact._contactId)));
+		|| ((_imAccount == imContact._imAccount) && (cleanContactId() < imContact.cleanContactId())));
 }
 
 void IMContact::addToGroup(const std::string & groupName) {
@@ -71,4 +71,17 @@ void IMContact::removeFromAllGroup() {
 	}
 
 	_groupSet.clear();
+}
+
+string IMContact::cleanContactId() const {
+	string result;
+	string::size_type index = _contactId.find('/');
+
+	if (index != string::npos) {
+		result = _contactId.substr(0, index - 1);
+	} else {
+		result = _contactId;
+	}
+
+	return result;
 }

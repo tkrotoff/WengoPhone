@@ -25,7 +25,9 @@ extern "C" {
 #include "gaim/privacy.h"
 }
 
+#include <util/File.h>
 #include <util/Logger.h>
+#include <util/Picture.h>
 
 GaimIMPresence::GaimIMPresence(IMAccount & account)
 	: IMPresence(account)
@@ -59,9 +61,17 @@ void GaimIMPresence::changeMyPresence(EnumPresenceState::PresenceState state,
 	}
 }
 
-void GaimIMPresence::changeMyNickname(const std::string & nickname)
+void GaimIMPresence::changeMyAlias(const std::string & nickname)
 {
 
+}
+
+void GaimIMPresence::changeMyIcon(const Picture & picture) {
+	FileWriter file = File::createTemporaryFile();
+	file.write(picture.getData());
+	file.close();
+
+	//changeIcon(file.getPath());
 }
 
 void GaimIMPresence::subscribeToPresenceOf(const std::string & contactId)

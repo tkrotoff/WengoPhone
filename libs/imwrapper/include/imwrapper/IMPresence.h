@@ -23,9 +23,11 @@
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumPresenceState.h>
 
-#include <util/Interface.h>
 #include <util/Event.h>
+#include <util/Interface.h>
 #include <util/StringList.h>
+
+class Picture;
 
 /**
  * Wrapper for Instant Messaging presence.
@@ -58,12 +60,12 @@ public:
 		const std::string & note)> myPresenceStatusEvent;
 
 	/**
-	 * Emitted when my nickname changed.
+	 * Emitted when my alias changed.
 	 *
 	 * @param sender this class
 	 * @param nickname the new nickname
 	 */
-	Event< void (IMPresence & sender, const std::string & nickname) > myNicknameChangedEvent;
+	//Event< void (IMPresence & sender, const std::string & nickname) > myNicknameChangedEvent;
 
 	enum SubscribeStatus {
 		/** Subscription to contact id has been successful */
@@ -116,11 +118,18 @@ public:
 		const std::string & note = String::null) = 0;
 
 	/**
-	 * Changes my nickname.
+	 * Changes my alias (e.g: 'Joe... at the beach!').
 	 *
-	 * @param nickname the new nickname
+	 * @param alias the desired alias.
 	 */
-	virtual void changeMyNickname(const std::string & nickname) = 0;
+	virtual void changeMyAlias(const std::string & alias) = 0;
+
+	/**
+	 * Change my icon.
+	 *
+	 * @param picture the desired icon
+	 */
+	virtual void changeMyIcon(const Picture & picture) = 0;
 
 	/**
 	 * Subscribe to the presence of a contact.

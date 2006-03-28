@@ -40,7 +40,8 @@ CContact::CContact(Contact & contact, CContactGroup & cContactGroup, CWengoPhone
 
 	_pContact = PFactory::getFactory().createPresentationContact(*this);
 
-	_contact.contactModifiedEvent += contactModifiedEvent;
+	_contact.contactChangedEvent += 
+		boost::bind(&CContact::contactChangedEventHandler, this, _1);
 
 }
 
@@ -87,4 +88,8 @@ bool CContact::hasVideo() const {
 
 EnumPresenceState::PresenceState CContact::getPresenceState() const {
 	return _contact.getPresenceState();
+}
+
+void CContact::contactChangedEventHandler(Contact & contact) {
+	_pContact->updatePresentation();
 }

@@ -17,50 +17,51 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENUMIMPROTOCOL_H
-#define ENUMIMPROTOCOL_H
-
-#include <util/NonCopyable.h>
+#ifndef PICTURE_H
+#define PICTURE_H
 
 #include <string>
-#include <map>
 
 /**
- * Instant Messaging protocols.
+ * Represents a picture.
+ *
+ * TODO:
+ *	- Detect the picture format from header.
+ *	- Return the format of the loaded picture and its size
  *
  * @author Philippe Bernery
  */
-class EnumIMProtocol : NonCopyable {
+class Picture {
 public:
-	EnumIMProtocol();
-
-	enum IMProtocol {
-		IMProtocolUnknown,
-		IMProtocolAll,
-		IMProtocolMSN,
-		IMProtocolYahoo,
-		IMProtocolAIMICQ,
-		IMProtocolJabber,
-		IMProtocolSIPSIMPLE
-	};
 
 	/**
-	 * Gets a protocol in string.
-	 *
-	 * @return the string
+	 * Constructs an empty Picture.
 	 */
-	std::string toString(IMProtocol protocol);
+	Picture();
+
+	Picture(const Picture & picture);
 
 	/**
-	 * Gets a string in protocol.
+	 * Constructs a Picture from data in memory.
+	 * These data must include the header available in the file from where
+	 * it has been extracted. The construtor will then guess the picture format
+	 * from this header.
 	 *
-	 * @return the protocol
+	 * @param data Picture data
 	 */
-	IMProtocol toIMProtocol(const std::string & protocol);
+	Picture(const std::string & data);
+
+	/**
+	 * Gets the data with format header.
+	 *
+	 * @return the data
+	 */
+	std::string getData() const;
 
 private:
-	typedef std::map<IMProtocol, std::string> ProtocolMap;
-	ProtocolMap _protocolMap;
+
+	std::string _pictureData;
+
 };
 
-#endif	//ENUMIMPROTOCOL_H
+#endif	//PICTURE_H

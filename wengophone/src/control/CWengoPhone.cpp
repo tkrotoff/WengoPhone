@@ -59,20 +59,15 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 
 	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
 
-	_wengoPhone.getCurrentUserProfile().phoneLineCreatedEvent += boost::bind(&CWengoPhone::phoneLineCreatedEventHandler, this, _1, _2);
 	_wengoPhone.wenboxPluginCreatedEvent += boost::bind(&CWengoPhone::wenboxPluginCreatedEventHandler, this, _1, _2);
+	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
+	_wengoPhone.getCurrentUserProfile().phoneLineCreatedEvent += boost::bind(&CWengoPhone::phoneLineCreatedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().loginStateChangedEvent += loginStateChangedEvent;
 	_wengoPhone.getCurrentUserProfile().noAccountAvailableEvent += noAccountAvailableEvent;
-	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
-	_wengoPhone.getCurrentUserProfile().contactListCreatedEvent += boost::bind(&CWengoPhone::contactListCreatedEventHandler, this, _1, _2);
-	_wengoPhone.getCurrentUserProfile().connectHandlerCreatedEvent += boost::bind(&CWengoPhone::connectHandlerCreatedEventHandler, this, _1, _2);
-	_wengoPhone.getCurrentUserProfile().presenceHandlerCreatedEvent += boost::bind(&CWengoPhone::presenceHandlerCreatedEventHandler, this, _1, _2);
-	_wengoPhone.getCurrentUserProfile().chatHandlerCreatedEvent += boost::bind(&CWengoPhone::chatHandlerCreatedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().smsCreatedEvent += boost::bind(&CWengoPhone::smsCreatedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 	_wengoPhone.getCurrentUserProfile().wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
-	_wengoPhone.getCurrentUserProfile().newIMAccountAddedEvent +=
-		boost::bind(&CWengoPhone::newIMAccountAddedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().newIMAccountAddedEvent += boost::bind(&CWengoPhone::newIMAccountAddedEventHandler, this, _1, _2);
 }
 
 void CWengoPhone::makeCall(const std::string & phoneNumber) {
@@ -88,6 +83,9 @@ void CWengoPhone::showWengoAccount() {
 }
 
 void CWengoPhone::start() {
+	_cContactList = new CContactList(_wengoPhone.getCurrentUserProfile().getContactList(), *this);
+	LOG_DEBUG("CContactList created");
+
 	_wengoPhone.start();
 	//_wengoPhone.run();
 }
@@ -103,18 +101,6 @@ void CWengoPhone::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine 
 	_pWengoPhone->addPhoneLine(cPhoneLine->getPresentation());
 }
 
-void CWengoPhone::contactListCreatedEventHandler(UserProfile & sender, ContactList & contactList) {
-	_cContactList = new CContactList(contactList, *this);
-
-	LOG_DEBUG("CContactList created");
-}
-
-void CWengoPhone::connectHandlerCreatedEventHandler(UserProfile & sender, ConnectHandler & connectHandler) {
-	static CConnectHandler cConnectHandler(connectHandler);
-
-	LOG_DEBUG("CConnectHandler created");
-}
-
 void CWengoPhone::wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin) {
 	static CWenboxPlugin cWenboxPlugin(wenboxPlugin, *this);
 
@@ -122,19 +108,10 @@ void CWengoPhone::wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlu
 }
 
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
+	static CConnectHandler cConnectHandler(sender.getCurrentUserProfile().getConnectHandler()); LOG_DEBUG("CConnectHandler created");
+	static CPresenceHandler cPresenceHandler(sender.getCurrentUserProfile().getPresenceHandler()); LOG_DEBUG("CPresenceHandler created");
+	static CChatHandler cChatHandler(sender.getCurrentUserProfile().getChatHandler()); LOG_DEBUG("CChatHandler created");
 	LOG_DEBUG("WengoPhone::init() finished");
-}
-
-void CWengoPhone::presenceHandlerCreatedEventHandler(UserProfile & sender, PresenceHandler & presenceHandler) {
-	CPresenceHandler * cPresenceHandler = new CPresenceHandler(presenceHandler);
-
-	LOG_DEBUG("CPresenceHandler created");
-}
-
-void CWengoPhone::chatHandlerCreatedEventHandler(UserProfile & sender, ChatHandler & chatHandler) {
-	CChatHandler * cChatHandler = new CChatHandler(chatHandler);
-
-	LOG_DEBUG("CChatHandler created");
 }
 
 void CWengoPhone::smsCreatedEventHandler(UserProfile & sender, Sms & sms) {

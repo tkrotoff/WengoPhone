@@ -17,23 +17,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "ContactListRPCLayer.h"
+#ifndef CONFIGMANAGERFILESTORAGE_H
+#define CONFIGMANAGERFILESTORAGE_H
 
-#include "ContactList.h"
+#include "ConfigManagerStorage.h"
 
-ContactListRPCLayer::ContactListRPCLayer(ContactList & contactList)
-	: ContactListDataLayer(contactList) {
-	load();
-}
+class ConfigManagerStorage;
 
-ContactListRPCLayer::~ContactListRPCLayer() {
-	save();
-}
+/**
+ * Storage class for ConfigManager. File implementation.
+ *
+ * @ingroup model
+ * @author Philippe Bernery
+ */
+class ConfigManagerFileStorage : public ConfigManagerStorage {
+public:
 
-bool ContactListRPCLayer::load() {
-	return false;
-}
+	ConfigManagerFileStorage(ConfigManager & configManager);
 
-bool ContactListRPCLayer::save() {
-	return true;
-}
+	virtual ~ConfigManagerFileStorage();
+
+	bool load(const std::string & url);
+
+	bool save(const std::string & url);
+
+};
+
+#endif //CONFIGMANAGERFILESTORAGE_H

@@ -42,6 +42,8 @@ public:
 
 	File(const std::string & filename);
 
+	File(const File & file);
+
 	virtual ~File() {
 	}
 
@@ -94,6 +96,13 @@ public:
 	 */
 	static void createPath(const std::string & path);
 
+	/**
+	 * Creates a temporary file.
+	 *
+	 * @return the temporary file
+	 */
+	static File createTemporaryFile();
+
 protected:
 
 	std::string _filename;
@@ -109,6 +118,10 @@ class FileReader : public File {
 public:
 
 	FileReader(const std::string & filename);
+
+	FileReader(const FileReader & fileReader);
+
+	FileReader(const File & file);
 
 	~FileReader();
 
@@ -133,6 +146,10 @@ class FileWriter : public File {
 public:
 
 	FileWriter(const std::string & filename);
+
+	FileWriter(const FileWriter & fileWriter);
+
+	FileWriter(const File & file);
 
 	~FileWriter();
 
