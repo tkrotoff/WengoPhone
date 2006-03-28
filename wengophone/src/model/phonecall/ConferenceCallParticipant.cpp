@@ -33,7 +33,6 @@ ConferenceCallParticipant::ConferenceCallParticipant(ConferenceCall & conference
 	_phoneCall(phoneCall) {
 
 	_waitForHoldState = false;
-	_waitForTalkingState = false;
 
 	_phoneCall.stateChangedEvent += boost::bind(&ConferenceCallParticipant::phoneCallStateChangedEventHandler, this, _1, _2);
 
