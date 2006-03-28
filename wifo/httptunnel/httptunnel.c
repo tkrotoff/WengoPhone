@@ -120,7 +120,7 @@ void http_tunnel_init_host(const char *hostname, int port, int ssl)
 	UseSSL = ssl;
 	memset(hostIP, 0, sizeof(hostIP));
 
-#if HT_USE_SLL
+#if HT_USE_SSL
 	if (UseSSL)
 	{
 		SSL_load_error_strings();
