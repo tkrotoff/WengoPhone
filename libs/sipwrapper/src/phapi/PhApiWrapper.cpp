@@ -681,29 +681,22 @@ int PhApiWrapper::createConference() {
 	return 1;
 }
 
-void PhApiWrapper::destroyConference(int confId) {
-	//FIXME phConfClose(confId);
-
-	if (callId1 != -1 && callId2 != -1) {
-		phStopConf(callId1, callId2);
-	}
-
-	callId1 = -1;
-	callId2 = -1;
-
-	LOG_DEBUG("conference call destroyed");
-}
-
 void PhApiWrapper::phoneCallStateChangedEventHandler(SipWrapper & sender, int callId,
 	EnumPhoneCallState::PhoneCallState state, const std::string & from) {
 
-	/*if (callId == callId1 &&
-		callId2 != -1 &&
-		state == EnumPhoneCallState::PhoneCallStateResumed) {
+	if (callId == callId1 &&
+		(state == EnumPhoneCallState::PhoneCallStateClosed ||
+		state == EnumPhoneCallState::PhoneCallStateError)) {
 
-		resumeCall(callId2);
-		LOG_DEBUG("conference call started");
-	}*/
+		callId1 = -1;
+	}
+
+	else if (callId == callId2 &&
+		(state == EnumPhoneCallState::PhoneCallStateClosed ||
+		state == EnumPhoneCallState::PhoneCallStateError)) {
+
+		callId2 = -1;
+	}
 }
 
 void PhApiWrapper::joinConference(int confId, int callId) {
@@ -720,17 +713,20 @@ void PhApiWrapper::joinConference(int confId, int callId) {
 	if (callId1 != -1 && callId2 != -1) {
 		phConf(callId1, callId2);
 		LOG_DEBUG("conference call started");
-		//resumeCall(callId1);
+		resumeCall(callId1);
+		resumeCall(callId2);
 	}
 }
 
 void PhApiWrapper::splitConference(int confId, int callId) {
 	//FIXME phConfRemoveMember(confId, callId);
 
+	//FIXME phConfClose(confId);
 	if (callId1 != -1 && callId2 != -1) {
 		phStopConf(callId1, callId2);
 		callId1 = -1;
 		callId2 = -1;
+		LOG_DEBUG("conference call destroyed");
 	}
 }
 

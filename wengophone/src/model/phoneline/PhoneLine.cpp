@@ -99,7 +99,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 		return -1;
 	}
 
-	for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
+	for (PhoneCalls::iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
 		PhoneCall * phoneCall = (*it).second;
 
 		EnumPhoneCallState::PhoneCallState state = phoneCall->getState().getCode();
@@ -122,7 +122,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 	phoneCall->setCallId(callId);
 
 	//Adds the PhoneCall to the list of PhoneCall
-	_phoneCallHash[callId] = phoneCall;
+	_phoneCallMap[callId] = phoneCall;
 
 	//Sends the event a new PhoneCall has been created
 	phoneCallCreatedEvent(*this, *phoneCall);
@@ -169,7 +169,7 @@ void PhoneLine::rejectCall(int callId) {
 }
 
 void PhoneLine::closeCall(int callId) {
-	PhoneCall * phoneCall = _phoneCallHash[callId];
+	PhoneCall * phoneCall = _phoneCallMap[callId];
 	if (!phoneCall) {
 		LOG_FATAL("closing an unknow phone call callId=" + String::fromNumber(callId));
 	}
@@ -179,10 +179,10 @@ void PhoneLine::closeCall(int callId) {
 	}
 
 	//Deletes the PhoneCall that is closed now
-	//delete _phoneCallHash[callId];
+	//delete _phoneCallMap[callId];
 
 	//Removes it from the list of PhoneCall
-	_phoneCallHash.erase(callId);
+	_phoneCallMap.erase(callId);
 
 	_sipWrapper->closeCall(callId);
 	LOG_DEBUG("call closed callId=" + String::fromNumber(callId));
@@ -218,8 +218,8 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		" state=" + String::fromNumber(state) +
 		" from=" + sipAddress.getSipAddress());
 
-	if (_phoneCallHash[callId]) {
-		_phoneCallHash[callId]->setState(state);
+	if (_phoneCallMap[callId]) {
+		_phoneCallMap[callId]->setState(state);
 	}
 
 	//This should not replace the state machine pattern PhoneCallState or PhoneLineState
@@ -230,19 +230,19 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 
 	case EnumPhoneCallState::PhoneCallStateError:
 		//Deletes the PhoneCall that is closed now
-		//delete _phoneCallHash[callId];
+		//delete _phoneCallMap[callId];
 
 		//Removes it from the list of PhoneCall
-		_phoneCallHash.erase(callId);
+		_phoneCallMap.erase(callId);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
 		//holdCallsExcept(callId);
-		_activePhoneCall = _phoneCallHash[callId];
+		_activePhoneCall = _phoneCallMap[callId];
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateTalking:
-		_activePhoneCall = _phoneCallHash[callId];
+		_activePhoneCall = _phoneCallMap[callId];
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateDialing:
@@ -253,10 +253,10 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
 		//Deletes the PhoneCall that is closed now
-		//delete _phoneCallHash[callId];
+		//delete _phoneCallMap[callId];
 
 		//Removes it from the list of PhoneCall
-		_phoneCallHash.erase(callId);
+		_phoneCallMap.erase(callId);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming: {
@@ -270,7 +270,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		phoneCall->setCallId(callId);
 
 		//Adds the PhoneCall to the list of PhoneCall
-		_phoneCallHash[callId] = phoneCall;
+		_phoneCallMap[callId] = phoneCall;
 
 		//Sends the event a new PhoneCall has been created
 		phoneCallCreatedEvent(*this, *phoneCall);
@@ -300,7 +300,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 }
 
 void PhoneLine::holdCallsExcept(int callId) {
-	for (PhoneCalls::iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
+	for (PhoneCalls::iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
 		PhoneCall * phoneCall = (*it).second;
 		if (phoneCall) {
 			if (phoneCall->getCallId() != callId /*&&
@@ -327,12 +327,12 @@ void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
 }
 
 PhoneCall * PhoneLine::getPhoneCall(int callId) {
-	return _phoneCallHash[callId];
+	return _phoneCallMap[callId];
 }
 
 List<PhoneCall *> PhoneLine::getPhoneCallList() const {
 	List<PhoneCall *> calls;
-	for (PhoneCalls::const_iterator it = _phoneCallHash.begin(); it != _phoneCallHash.end(); ++it) {
+	for (PhoneCalls::const_iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
 		calls += (*it).second;
 	}
 	return calls;

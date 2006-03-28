@@ -173,7 +173,9 @@ void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
 		if (timeStart != -1) {
 			_duration = time(NULL) - timeStart;
 		}
+
 		if (!_callRejected) {
+			//Call missed if incoming state + closed state without being rejected
 			setState(EnumPhoneCallState::PhoneCallStateMissed);
 		}
 		break;

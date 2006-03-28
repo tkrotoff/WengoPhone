@@ -39,7 +39,6 @@ ConferenceCall::ConferenceCall(IPhoneLine & phoneLine)
 }
 
 ConferenceCall::~ConferenceCall() {
-	stop();
 	/*for (unsigned i = 0; i < _phoneCallList.size(); i++) {
 		//PhoneCall * phoneCall = _phoneCallList[i];
 		//delete phoneCall;
@@ -48,39 +47,82 @@ ConferenceCall::~ConferenceCall() {
 }
 
 void ConferenceCall::addPhoneCall(PhoneCall & phoneCall) {
-	if (_phoneCallMap.size() == 2) {
-		ConferenceCallParticipant * participant = new ConferenceCallParticipant(*this, phoneCall, true);
-	} else {
-		ConferenceCallParticipant * participant = new ConferenceCallParticipant(*this, phoneCall, false);
+	if (_confId == -1) {
+		_confId = _phoneLine.getSipWrapper().createConference();
+		phoneCallAddedEvent(*this, phoneCall);
 	}
+
+	ConferenceCallParticipant * participant = new ConferenceCallParticipant(*this, phoneCall);
+
+	std::string phoneNumber = phoneCall.getPeerSipAddress().getUserName();
+	_phoneCallMap[phoneNumber] = &phoneCall;
 }
 
 void ConferenceCall::removePhoneCall(PhoneCall & phoneCall) {
 	int callId = phoneCall.getCallId();
 
-	if (isStarted()) {
+	if (_confId == -1) {
 		_phoneLine.getSipWrapper().splitConference(_confId, callId);
+		phoneCallRemovedEvent(*this, phoneCall);
 	}
 
-	//_phoneCallList -= &phoneCall;
-	//delete &phoneCall;
+	std::string phoneNumber = phoneCall.getPeerSipAddress().getUserName();
+	_phoneCallMap.erase(phoneNumber);
 }
 
 void ConferenceCall::addPhoneNumber(const std::string & phoneNumber) {
-	int callId = _phoneLine.makeCall(phoneNumber);
-	if (callId == -1) {
-		_phoneCallMap[phoneNumber] = NULL;
-	} else {
-		PhoneCall * phoneCall = _phoneLine.getPhoneCall(callId);
-		_phoneCallMap[phoneNumber] = phoneCall;
+	//Searches for a already existing PhoneCall associated with this phone number
+	PhoneCall * phoneCall = getPhoneCall(phoneNumber);
+	if (!phoneCall) {
+		phoneCall = _phoneCallMap[phoneNumber];
+		if (!phoneCall) {
+			int callId = _phoneLine.makeCall(phoneNumber);
+			if (callId == -1) {
+				//NULL => puts the phone number in the queue
+				phoneCall = NULL;
+			} else {
+				phoneCall = _phoneLine.getPhoneCall(callId);
+			}
+		}
+	}
+
+	_phoneCallMap[phoneNumber] = phoneCall;
+	if (phoneCall) {
 		phoneCall->stateChangedEvent += boost::bind(&ConferenceCall::phoneCallStateChangedEventHandler, this, _1, _2);
 		addPhoneCall(*phoneCall);
-		LOG_DEBUG("phone number added=" + phoneNumber);
+	}
+	LOG_DEBUG("phone number added=" + phoneNumber);
+}
+
+void ConferenceCall::removePhoneNumber(const std::string & phoneNumber) {
+	for (PhoneCalls::iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
+		PhoneCall * phoneCall = (*it).second;
+		if (phoneCall) {
+			SipAddress sipAddress = phoneCall->getPeerSipAddress();
+			if (sipAddress.getUserName() == phoneNumber) {
+				removePhoneCall(*phoneCall);
+			}
+		}
+	}
+
+	if (_phoneCallMap.empty()) {
+		stateChangedEvent(*this, EnumConferenceCallState::ConferenceCallStateStopped);
 	}
 }
 
-void ConferenceCall::addPhoneCall(int callId) {
-	join(callId);
+PhoneCall * ConferenceCall::getPhoneCall(const std::string & phoneNumber) const {
+	PhoneCall * phoneCall = NULL;
+
+	List<PhoneCall *> calls = _phoneLine.getPhoneCallList();
+
+	for (unsigned i = 0; i < calls.size(); i++) {
+		SipAddress sipAddress = calls[i]->getPeerSipAddress();
+		if (sipAddress.getUserName() == phoneNumber) {
+			return calls[i];
+		}
+	}
+
+	return phoneCall;
 }
 
 void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state) {
@@ -98,10 +140,11 @@ void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumP
 	case EnumPhoneCallState::PhoneCallStateTalking: {
 		//Takes randomly a phoneNumber that has no PhoneCall associated
 		//and creates a PhoneCall
-		PhoneCalls::iterator it;
-		for (it = _phoneCallMap.begin(); it != _phoneCallMap.end(); it++) {
-			if (!(*it).second) {
-				addPhoneNumber((*it).first);
+		for (PhoneCalls::iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
+			PhoneCall * phoneCall = (*it).second;
+			if (!phoneCall) {
+				std::string phoneNumber = (*it).first;
+				addPhoneNumber(phoneNumber);
 				break;
 			}
 		}
@@ -135,55 +178,6 @@ void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumP
 	}
 }
 
-PhoneCall * ConferenceCall::getPhoneCall(const std::string & phoneNumber) const {
-	/*PhoneCall * phoneCall = NULL;
-
-	List<PhoneCall *> calls = _phoneLine.getPhoneCallList();
-
-	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _phoneLine.getSipAccount().getRealm());
-	for (unsigned i = 0; i < calls.size(); i++) {
-		SipAddress tmp = calls[i]->getPeerSipAddress();
-		if (tmp.toString() == sipAddress.toString()) {
-			return calls[i];
-		}
-	}
-
-	return phoneCall;*/
-	return NULL;
-}
-
-void ConferenceCall::removePhoneNumber(const std::string & phoneNumber) {
-	/*SipAddress sipAddress = SipAddress::fromString(phoneNumber, _phoneLine.getSipAccount().getRealm());
-	for (unsigned i = 0; i < _phoneCallList.size(); i++) {
-		SipAddress tmp = _phoneCallList[i]->getPeerSipAddress();
-		if (tmp.toString() == sipAddress.toString()) {
-			PhoneCall * phoneCall = _phoneCallList[i];
-			removePhoneCall(*phoneCall);
-		}
-	}*/
-}
-
-void ConferenceCall::start() {
-	if (!isStarted()) {
-		_confId = _phoneLine.getSipWrapper().createConference();
-		stateChangedEvent(*this, EnumConferenceCallState::ConferenceCallStateStarted);
-		/*for (unsigned i = 0; i < _phoneCallList.size(); i++) {
-			PhoneCall * phoneCall = _phoneCallList[i];
-			_phoneLine.getSipWrapper().joinConference(_confId, phoneCall->getCallId());
-		}*/
-	}
-}
-
-void ConferenceCall::stop() {
-	if (isStarted()) {
-		_phoneLine.getSipWrapper().destroyConference(_confId);
-		stateChangedEvent(*this, EnumConferenceCallState::ConferenceCallStateStopped);
-	}
-	_confId = -1;
-}
-
 void ConferenceCall::join(int callId) {
-	//if (isStarted()) {
-		_phoneLine.getSipWrapper().joinConference(_confId, callId);
-	//}
+	_phoneLine.getSipWrapper().joinConference(_confId, callId);
 }

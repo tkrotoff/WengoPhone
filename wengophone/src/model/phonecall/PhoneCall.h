@@ -171,6 +171,13 @@ public:
 		return _phoneLine;
 	}
 
+	/**
+	 * Gets the Wenbox.
+	 *
+	 * Used by PhoneCallState (code factorization).
+	 *
+	 * @return Wenbox
+	 */
 	WenboxPlugin & getWenboxPlugin() const;
 
 	/**

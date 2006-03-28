@@ -58,6 +58,22 @@ public:
 	Event<void (ConferenceCall & sender, EnumConferenceCallState::ConferenceCallState state)> stateChangedEvent;
 
 	/**
+	 * A PhoneCall has been added to the ConferenceCall.
+	 *
+	 * @param sender this class
+	 * @param phoneCall PhoneCall added to the ConferenceCall
+	 */
+	Event<void (ConferenceCall & sender, PhoneCall & phoneCall)> phoneCallAddedEvent;
+
+	/**
+	 * A PhoneCall has been removed to the ConferenceCall.
+	 *
+	 * @param sender this class
+	 * @param phoneCall PhoneCall removed to the ConferenceCall
+	 */
+	Event<void (ConferenceCall & sender, PhoneCall & phoneCall)> phoneCallRemovedEvent;
+
+	/**
 	 * Creates a new ConferenceCall given a PhoneLine.
 	 */
 	ConferenceCall(IPhoneLine & phoneLine);
@@ -66,38 +82,21 @@ public:
 
 	void addPhoneCall(PhoneCall & phoneCall);
 
-	void addPhoneCall(int callId);
-
 	void removePhoneCall(PhoneCall & phoneCall);
 
 	void addPhoneNumber(const std::string & phoneNumber);
 
 	void removePhoneNumber(const std::string & phoneNumber);
 
-	/**
-	 * Starts the conference call using the added phone calls and phone numbers.
-	 */
-	void start();
-
-	/**
-	 * Stops the conference call.
-	 */
-	void stop();
-
-	bool isStarted() const {
-		return (_confId != -1);
-	}
-
 	/** Should only be used by ConferenceCallParticipant. */
 	void join(int callId);
 
 private:
 
-	/** Checks if the PhoneCall is not already created. */
-	PhoneCall * getPhoneCall(const std::string & phoneNumber) const;
-
+	/** Waits for a phone call to be in talking state before to create another one. */
 	void phoneCallStateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state);
 
+	PhoneCall * getPhoneCall(const std::string & phoneNumber) const;
 
 	/** PhoneLine associated with the ConferenceCall. */
 	IPhoneLine & _phoneLine;

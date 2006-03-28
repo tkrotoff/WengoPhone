@@ -21,20 +21,19 @@
 
 #include "ConferenceCall.h"
 #include "PhoneCall.h"
-#include "PhoneCallStateHold.h"
+#include "PhoneCallState.h"
 
 #include <model/phoneline/IPhoneLine.h>
 #include <sipwrapper/SipWrapper.h>
 
 #include <util/Logger.h>
 
-ConferenceCallParticipant::ConferenceCallParticipant(ConferenceCall & conferenceCall, PhoneCall & phoneCall, bool nohold)
+ConferenceCallParticipant::ConferenceCallParticipant(ConferenceCall & conferenceCall, PhoneCall & phoneCall)
 	: _conferenceCall(conferenceCall),
 	_phoneCall(phoneCall) {
 
 	_waitForHoldState = false;
 	_waitForTalkingState = false;
-	_nohold = nohold;
 
 	_phoneCall.stateChangedEvent += boost::bind(&ConferenceCallParticipant::phoneCallStateChangedEventHandler, this, _1, _2);
 
@@ -44,15 +43,6 @@ ConferenceCallParticipant::ConferenceCallParticipant(ConferenceCall & conference
 void ConferenceCallParticipant::joinConference() {
 	SipWrapper & sipWrapper = _phoneCall.getPhoneLine().getSipWrapper();
 	int callId = _phoneCall.getCallId();
-
-	if (_nohold) {
-		if (_phoneCall.getState().getCode() == EnumPhoneCallState::PhoneCallStateTalking) {
-			_conferenceCall.join(callId);
-		} else {
-			_waitForTalkingState = true;
-		}
-		return;
-	}
 
 	if (_phoneCall.getState().getCode() == EnumPhoneCallState::PhoneCallStateHold) {
 		_conferenceCall.join(callId);
@@ -71,16 +61,13 @@ void ConferenceCallParticipant::phoneCallStateChangedEventHandler(PhoneCall & se
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:
+		_conferenceCall.removePhoneCall(sender);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateTalking:
-		if (_waitForTalkingState) {
-			_waitForTalkingState = false;
-			joinConference();
-		}
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateDialing:
@@ -90,14 +77,17 @@ void ConferenceCallParticipant::phoneCallStateChangedEventHandler(PhoneCall & se
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
+		_conferenceCall.removePhoneCall(sender);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming:
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateHold:
-		_waitForHoldState = false;
-		joinConference();
+		if (_waitForHoldState) {
+			_waitForHoldState = false;
+			joinConference();
+		}
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateMissed:

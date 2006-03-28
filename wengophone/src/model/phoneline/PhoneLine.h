@@ -120,7 +120,7 @@ private:
 	typedef std::map < int, PhoneCall * > PhoneCalls;
 
 	/** Map of PhoneCall. */
-	PhoneCalls _phoneCallHash;
+	PhoneCalls _phoneCallMap;
 
 	/** Active PhoneCall. */
 	PhoneCall * _activePhoneCall;

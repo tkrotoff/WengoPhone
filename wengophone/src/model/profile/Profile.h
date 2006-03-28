@@ -33,18 +33,23 @@
 /**
  * Handle common data between a Contact a UserProfile.
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class Profile : Interface {
 	friend class ProfileXMLSerializer;
 public:
 
 	/**
-	 * Emitted when a properties has been changed.
+	 * Emitted when a property has been changed.
 	 *
 	 * @param sender this class
 	 */
 	Event< void(Profile & sender) > profileChangedEvent;
+
+	Profile() {
+		_sex = EnumSex::SexUnknown;
+		_presenceState = EnumPresenceState::PresenceStateUnknown;
+	}
 
 	virtual ~Profile() {}
 
@@ -169,7 +174,6 @@ protected:
 	std::string _alias;
 
 	Picture _icon;
-
 };
 
 #endif //PROFILE_H

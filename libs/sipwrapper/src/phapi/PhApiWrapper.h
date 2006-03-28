@@ -135,11 +135,7 @@ public:
 
 	int createConference();
 
-	void destroyConference(int confId);
-
 	void joinConference(int confId, int callId);
-
-	int joinConference(int confId, int lineId, const std::string & sipAddress);
 
 	void splitConference(int confId, int callId);
 

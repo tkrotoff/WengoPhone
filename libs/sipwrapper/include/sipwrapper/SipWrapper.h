@@ -293,15 +293,6 @@ public:
 	virtual int createConference() = 0;
 
 	/**
-	 * Stops a conference call.
-	 *
-	 * All participants within a conference are dropped.
-	 *
-	 * @param confIf conference to close
-	 */
-	virtual void destroyConference(int confId) = 0;
-
-	/**
 	 * Joins (adds) an existing call into a conference.
 	 *
 	 * @param confId conference id

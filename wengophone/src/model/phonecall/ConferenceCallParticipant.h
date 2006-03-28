@@ -36,7 +36,7 @@ class PhoneCall;
 class ConferenceCallParticipant : NonCopyable {
 public:
 
-	ConferenceCallParticipant(ConferenceCall & conferenceCall, PhoneCall & phoneCall, bool nohold);
+	ConferenceCallParticipant(ConferenceCall & conferenceCall, PhoneCall & phoneCall);
 
 private:
 
@@ -49,10 +49,6 @@ private:
 	PhoneCall & _phoneCall;
 
 	bool _waitForHoldState;
-
-	bool _waitForTalkingState;
-
-	bool _nohold;
 };
 
 #endif	//CONFERENCECALLPARTICIPANT_H

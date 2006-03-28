@@ -533,15 +533,7 @@ void QtWengoPhone::showCreateConferenceCall() {
 		if (phoneLine != NULL) {
 			ConferenceCall * confCall = new ConferenceCall(*phoneLine);
 			confCall->addPhoneNumber(phoneNumber1LineEdit->text().toStdString());
-
 			confCall->addPhoneNumber(phoneNumber2LineEdit->text().toStdString());
-			confCall->start();
-
-			/*ConferenceCall * confCall = new ConferenceCall(*phoneLine);
-			confCall->addPhoneCall(phoneNumber1LineEdit->text().toInt());
-
-			confCall->addPhoneCall(phoneNumber2LineEdit->text().toInt());
-			confCall->start();*/
 		} else {
 			LOG_DEBUG("phoneLine is NULL");
 		}
