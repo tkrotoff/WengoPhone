@@ -26,12 +26,6 @@
 #include "control/phonecall/CPhoneCall.h"
 #include "control/CWengoPhone.h"
 
-#include "model/phoneline/PhoneLineStateDefault.h"
-#include "model/phoneline/PhoneLineStateOk.h"
-#include "model/phoneline/PhoneLineStateClosed.h"
-#include "model/phoneline/PhoneLineStateTimeout.h"
-#include "model/phoneline/PhoneLineStateServerError.h"
-
 #include <util/Logger.h>
 
 CPhoneLine::CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone)
@@ -51,7 +45,7 @@ int CPhoneLine::makeCall(const std::string & phoneNumber) {
 void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender) {
 	int lineId = sender.getLineId();
 
-	switch (sender.getState().getCode()) {
+	/*switch (sender.getState().getCode()) {
 	case PhoneLineStateDefault::CODE:
 		break;
 
@@ -73,7 +67,7 @@ void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender) {
 
 	default:
 		LOG_FATAL("unknown PhoneLine state=" + String::fromNumber(sender.getState().getCode()));
-	};
+	};*/
 }
 
 void CPhoneLine::phoneCallCreatedEventHandler(IPhoneLine & sender, PhoneCall & phoneCall) {

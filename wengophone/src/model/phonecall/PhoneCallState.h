@@ -50,13 +50,6 @@ public:
 	 */
 	virtual EnumPhoneCallState::PhoneCallState getCode() const = 0;
 
-	/**
-	 * Gets the string representation of this PhoneCall state.
-	 *
-	 * @return string representation of this state
-	 */
-	virtual std::string toString() const = 0;
-
 protected:
 
 	static std::string getRingerAudioDeviceName();

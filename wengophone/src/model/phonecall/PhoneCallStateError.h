@@ -31,14 +31,8 @@
 class PhoneCallStateError : public PhoneCallState {
 public:
 
-	static const EnumPhoneCallState::PhoneCallState CODE = EnumPhoneCallState::PhoneCallStateError;
-
 	EnumPhoneCallState::PhoneCallState getCode() const {
-		return CODE;
-	}
-
-	std::string toString() const {
-		return "PhoneCallStateError";
+		return EnumPhoneCallState::PhoneCallStateError;
 	}
 
 	void execute(PhoneCall & phoneCall);

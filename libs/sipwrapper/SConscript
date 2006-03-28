@@ -18,6 +18,9 @@ headers = [
 
 sources = [
 	'src/SipWrapperFactory.cpp',
+	'src/EnumPhoneCallState.cpp',
+	'src/EnumPhoneLineState.cpp',
+	'src/EnumNatType.cpp',
 ]
 
 env.WengoUseLibraries(libs)

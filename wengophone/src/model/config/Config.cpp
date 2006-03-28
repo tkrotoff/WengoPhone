@@ -19,6 +19,8 @@
 
 #include "Config.h"
 
+#include <sipwrapper/EnumNatType.h>
+
 #include <sound/AudioDevice.h>
 
 #include <util/File.h>
@@ -158,7 +160,7 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[RESOURCES_DIR_KEY] = resourcesPath;
 
 	_keyDefaultValueMap[NETWORK_SSO_SSL_KEY] = true;
-	_keyDefaultValueMap[NETWORK_NAT_TYPE_KEY] = std::string("NatTypeSymmetric");
+	_keyDefaultValueMap[NETWORK_NAT_TYPE_KEY] = EnumNatType::toString(EnumNatType::NatTypeSymmetric);
 	_keyDefaultValueMap[NETWORK_SIP_SERVER_KEY] = 5060;
 	_keyDefaultValueMap[NETWORK_SIP_LOCAL_PORT_KEY] = empty;
 	_keyDefaultValueMap[NETWORK_TUNNEL_NEEDED_KEY] = false;

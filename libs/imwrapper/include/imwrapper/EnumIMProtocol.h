@@ -23,7 +23,6 @@
 #include <util/NonCopyable.h>
 
 #include <string>
-#include <map>
 
 /**
  * Instant Messaging protocols.
@@ -32,7 +31,6 @@
  */
 class EnumIMProtocol : NonCopyable {
 public:
-	EnumIMProtocol();
 
 	enum IMProtocol {
 		IMProtocolUnknown,
@@ -45,22 +43,18 @@ public:
 	};
 
 	/**
-	 * Gets a protocol in string.
+	 * Converts a protocol into a string.
 	 *
 	 * @return the string
 	 */
-	std::string toString(IMProtocol protocol);
+	static std::string toString(IMProtocol protocol);
 
 	/**
-	 * Gets a string in protocol.
+	 * Converts a string into a protocol.
 	 *
 	 * @return the protocol
 	 */
-	IMProtocol toIMProtocol(const std::string & protocol);
-
-private:
-	typedef std::map<IMProtocol, std::string> ProtocolMap;
-	ProtocolMap _protocolMap;
+	static IMProtocol toIMProtocol(const std::string & protocol);
 };
 
 #endif	//ENUMIMPROTOCOL_H

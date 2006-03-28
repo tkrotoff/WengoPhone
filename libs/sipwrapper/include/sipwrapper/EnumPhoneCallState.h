@@ -22,6 +22,8 @@
 
 #include <util/NonCopyable.h>
 
+#include <string>
+
 /**
  * Phone call states (error, dialing, talking...).
  *
@@ -64,6 +66,13 @@ public:
 		/** Phone call redirected */
 		PhoneCallStateRedirected,
 	};
+
+	/**
+	 * Converts a state into a string.
+	 *
+	 * @return the string
+	 */
+	static std::string toString(PhoneCallState state);
 };
 
 #endif	//ENUMPHONECALLSTATE_H

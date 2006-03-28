@@ -47,13 +47,6 @@ public:
 	 * @return status code of this state
 	 */
 	virtual EnumPhoneLineState::PhoneLineState getCode() const = 0;
-
-	/**
-	 * Gets the string representation of this PhoneLine state.
-	 *
-	 * @return string representation of this state
-	 */
-	virtual std::string toString() const = 0;
 };
 
 #endif	//PHONELINESTATE_H

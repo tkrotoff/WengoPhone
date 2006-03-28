@@ -22,6 +22,8 @@
 
 #include <util/NonCopyable.h>
 
+#include <string>
+
 /**
  * Phone line states (server error, timeout, closed...).
  *
@@ -46,6 +48,13 @@ public:
 		/** Line unregistered. */
 		PhoneLineStateClosed
 	};
+
+	/**
+	 * Converts a state into a string.
+	 *
+	 * @return the string
+	 */
+	static std::string toString(PhoneLineState state);
 };
 
 #endif	//ENUMPHONELINESTATE_H

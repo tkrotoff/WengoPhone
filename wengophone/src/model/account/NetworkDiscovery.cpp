@@ -113,7 +113,7 @@ bool NetworkDiscovery::testUDP(const string & stunServer) {
 			nat = EnumNatType::NatTypeFailure;
 			break;
 		default:
-			LOG_FATAL("unknown NAT type");
+			LOG_FATAL("unknown NAT type=" + String::fromNumber(natType));
 		}
 
 		setNatConfig(nat);
@@ -271,49 +271,7 @@ void NetworkDiscovery::setProxySettings(const std::string & proxyServer, unsigne
 void NetworkDiscovery::setNatConfig(EnumNatType::NatType natType) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	string nat;
-
-	switch(natType) {
-	case EnumNatType::NatTypeOpen:
-		nat = "NatTypeOpen";
-		break;
-
-	case EnumNatType::NatTypeFullCone:
-		nat = "NatTypeFullCone";
-		break;
-
-	case EnumNatType::NatTypeRestrictedCone:
-		nat = "NatTypeRestrictedCone";
-		break;
-
-	case EnumNatType::NatTypePortRestrictedCone:
-		nat = "NatTypePortRestrictedCone";
-		break;
-
-	case EnumNatType::NatTypeSymmetric:
-		nat = "NatTypeSymmetric";
-		break;
-
-	case EnumNatType::NatTypeSymmetricFirewall:
-		nat = "NatTypeSymmetricFirewall";
-		break;
-
-	case EnumNatType::NatTypeBlocked:
-		nat = "NatTypeBlocked";
-		break;
-
-	case EnumNatType::NatTypeFailure:
-		nat = "NatTypeFailure";
-		break;
-
-	case EnumNatType::NatTypeUnknown:
-		nat = "NatTypeUnknown";
-		break;
-
-	default:
-		LOG_FATAL("unknown NAT type");
-	}
-
-	LOG_DEBUG("NAT type=" + nat);
-	config.set(Config::NETWORK_NAT_TYPE_KEY, nat);
+	std::string tmp = EnumNatType::toString(natType);
+	LOG_DEBUG("NAT type=" + tmp);
+	config.set(Config::NETWORK_NAT_TYPE_KEY, tmp);
 }

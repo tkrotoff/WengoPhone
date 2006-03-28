@@ -91,7 +91,7 @@ void PhoneCall::accept() {
 }
 
 void PhoneCall::resume() {
-	if (_state->getCode() == PhoneCallStateHold::CODE) {
+	if (_state->getCode() == EnumPhoneCallState::PhoneCallStateHold) {
 		if (!_resume) {
 			_phoneLine.resumeCall(_callId);
 			_resume = false;
@@ -102,8 +102,8 @@ void PhoneCall::resume() {
 }
 
 void PhoneCall::hold() {
-	if (_state->getCode() == PhoneCallStateTalking::CODE ||
-		_state->getCode() == PhoneCallStateResumed::CODE) {
+	if (_state->getCode() == EnumPhoneCallState::PhoneCallStateTalking ||
+		_state->getCode() == EnumPhoneCallState::PhoneCallStateResumed) {
 
 		if (!_hold) {
 			_phoneLine.holdCall(_callId);
@@ -127,7 +127,8 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 			if (_state->getCode() != callState->getCode()) {
 				_state = callState;
 				_state->execute(*this);
-				LOG_DEBUG("call state changed callId=" + String::fromNumber(_callId) + " state=" + _state->toString());
+				LOG_DEBUG("call state changed callId=" + String::fromNumber(_callId) +
+					" state=" + EnumPhoneCallState::toString(_state->getCode()));
 				applyState(state);
 				stateChangedEvent(*this, state);
 				break;
@@ -202,14 +203,14 @@ void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
 }
 
 void PhoneCall::close() {
-	if (_state->getCode() != PhoneCallStateClosed::CODE) {
-		if (_state->getCode() == PhoneCallStateIncoming::CODE) {
+	if (_state->getCode() != EnumPhoneCallState::PhoneCallStateClosed) {
+		if (_state->getCode() == EnumPhoneCallState::PhoneCallStateIncoming) {
 			_callRejected = true;
 			_phoneLine.rejectCall(_callId);
 		} else {
 			_phoneLine.closeCall(_callId);
 		}
-		setState(PhoneCallStateClosed::CODE);
+		setState(EnumPhoneCallState::PhoneCallStateClosed);
 	}
 }
 

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,28 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHONECALLSTATECLOSED_H
-#define PHONECALLSTATECLOSED_H
+#include <sipwrapper/EnumPhoneLineState.h>
 
-#include "PhoneCallState.h"
-#include "PhoneCall.h"
+#include <util/Logger.h>
 
-/**
- *
- * @ingroup model
- * @author Tanguy Krotoff
- */
-class PhoneCallStateClosed : public PhoneCallState {
-public:
+std::string EnumPhoneLineState::toString(PhoneLineState state) {
+	switch(state) {
+	case PhoneLineStateDefault:
+		return "PhoneLineStateDefault";
 
-	EnumPhoneCallState::PhoneCallState getCode() const {
-		return EnumPhoneCallState::PhoneCallStateClosed;
+	case PhoneLineStateServerError:
+		return "PhoneLineStateServerError";
+
+	case PhoneLineStateTimeout:
+		return "PhoneLineStateTimeout";
+
+	case PhoneLineStateOk:
+		return "PhoneLineStateOk";
+
+	case PhoneLineStateClosed:
+		return "PhoneLineStateClosed";
+
+	default:
+		LOG_FATAL("unknown PhoneLineState=" + String::fromNumber(state));
 	}
-
-	void execute(PhoneCall & phoneCall);
-};
-
-#endif	//PHONECALLSTATECLOSED_H
+}

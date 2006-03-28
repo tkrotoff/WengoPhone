@@ -32,14 +32,8 @@
 class PhoneCallStateIncoming : public PhoneCallState {
 public:
 
-	static const EnumPhoneCallState::PhoneCallState CODE = EnumPhoneCallState::PhoneCallStateIncoming;
-
 	EnumPhoneCallState::PhoneCallState getCode() const {
-		return CODE;
-	}
-
-	std::string toString() const {
-		return "PhoneCallStateIncoming";
+		return EnumPhoneCallState::PhoneCallStateIncoming;
 	}
 
 	void execute(PhoneCall & phoneCall);

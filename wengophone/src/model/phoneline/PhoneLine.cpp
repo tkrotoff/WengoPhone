@@ -318,7 +318,8 @@ void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
 			if (_state->getCode() != callState->getCode()) {
 				_state = callState;
 				_state->execute(*this);
-				LOG_DEBUG("line state changed lineId=" + String::fromNumber(_lineId) + " state=" + _state->toString());
+				LOG_DEBUG("line state changed lineId=" + String::fromNumber(_lineId) +
+					" state=" + EnumPhoneLineState::toString(_state->getCode()));
 				stateChangedEvent(*this);
 				break;
 			}
@@ -365,30 +366,8 @@ void PhoneLine::initSipWrapper() {
 	_sipWrapper->setSIP(_sipAccount.getSIPProxyServerHostname(), _sipAccount.getSIPProxyServerPort(), _sipAccount.getLocalSIPPort());
 
 	//Setting NAT
-	string nat = config.getNetworkNatType();
-	EnumNatType::NatType natType;
-	if (nat == "NatTypeOpen") {
-		natType = EnumNatType::NatTypeOpen;
-	} else if (nat == "NatTypeFullCone") {
-		natType = EnumNatType::NatTypeFullCone;
-	} else if (nat == "NatTypeRestrictedCone") {
-		natType = EnumNatType::NatTypeRestrictedCone;
-	} else if (nat == "NatTypePortRestrictedCone") {
-		natType = EnumNatType::NatTypePortRestrictedCone;
-	} else if (nat == "NatTypeSymmetric") {
-		natType = EnumNatType::NatTypeSymmetric;
-	} else if (nat == "NatTypeSymmetricFirewall") {
-		natType = EnumNatType::NatTypeSymmetricFirewall;
-	} else if (nat == "NatTypeBlocked") {
-		natType = EnumNatType::NatTypeBlocked;
-	} else if (nat == "NatTypeFailure") {
-		natType = EnumNatType::NatTypeFailure;
-	} else if (nat == "NatTypeUnknown") {
-		natType = EnumNatType::NatTypeUnknown;
-	} else {
-		LOG_FATAL("unknown NAT type=" + String::fromNumber(natType));
-	}
-	_sipWrapper->setNatType(natType);
+	string natType = config.getNetworkNatType();
+	_sipWrapper->setNatType(EnumNatType::toNatType(natType));
 
 	//Setting audio devices
 	_sipWrapper->setCallOutputAudioDevice(config.getAudioOutputDeviceName());

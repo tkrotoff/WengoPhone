@@ -32,7 +32,7 @@ public:
 	 * Build id is the WengoPhone compilation date/time (e.g 2005/12/07 - 18:18:09)
 	 *
 	 * This is a unique id for each release.
-	 * It permits WengoPhone to check if a more recent version of itselft exist.
+	 * It permits WengoPhone to check if a more recent version of itself exist.
 	 * Format: year/month/day hour:minutes:seconds
 	 */
 	static const unsigned long long BUILDID;

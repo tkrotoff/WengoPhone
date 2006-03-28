@@ -19,31 +19,43 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 
-using namespace std;
+#include <util/Logger.h>
 
-EnumIMProtocol::EnumIMProtocol() {
-	_protocolMap[IMProtocolUnknown] = "Unknown";
-	_protocolMap[IMProtocolAll] = "All";
-	_protocolMap[IMProtocolMSN] = "MSN";
-	_protocolMap[IMProtocolYahoo] = "Yahoo";
-	_protocolMap[IMProtocolAIMICQ] = "AIM/ICQ";
-	_protocolMap[IMProtocolJabber] = "Jabber";
-	_protocolMap[IMProtocolSIPSIMPLE] = "SIP/SIMPLE";
+#include <map>
+
+typedef std::map<EnumIMProtocol::IMProtocol, std::string> ProtocolMap;
+static ProtocolMap _protocolMap;
+
+static void init() {
+	_protocolMap[EnumIMProtocol::IMProtocolUnknown] = "Unknown";
+	_protocolMap[EnumIMProtocol::IMProtocolAll] = "All";
+	_protocolMap[EnumIMProtocol::IMProtocolMSN] = "MSN";
+	_protocolMap[EnumIMProtocol::IMProtocolYahoo] = "Yahoo";
+	_protocolMap[EnumIMProtocol::IMProtocolAIMICQ] = "AIM/ICQ";
+	_protocolMap[EnumIMProtocol::IMProtocolJabber] = "Jabber";
+	_protocolMap[EnumIMProtocol::IMProtocolSIPSIMPLE] = "SIP/SIMPLE";
 }
 
-string EnumIMProtocol::toString(IMProtocol protocol) {
-	return _protocolMap[protocol];
+std::string EnumIMProtocol::toString(IMProtocol protocol) {
+	init();
+	std::string tmp = _protocolMap[protocol];
+	if (tmp.empty()) {
+		LOG_FATAL("unknown IMProtocol=" + String::fromNumber(protocol));
+	}
+	return tmp;
 }
 
 EnumIMProtocol::IMProtocol EnumIMProtocol::toIMProtocol(const std::string & protocol) {
+	init();
 	for (ProtocolMap::const_iterator it = _protocolMap.begin();
 		it != _protocolMap.end();
 		++it) {
-		
+
 		if ((*it).second == protocol) {
 			return (*it).first;
 		}
 	}
 
+	LOG_FATAL("unknown protocol=" + protocol);
 	return IMProtocolUnknown;
 }

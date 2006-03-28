@@ -22,6 +22,8 @@
 
 #include <util/NonCopyable.h>
 
+#include <string>
+
 /**
  * NAT types from STUN protocol.
  *
@@ -99,6 +101,20 @@ public:
 		/** Failed to detect the NAT type. */
 		NatTypeFailure
 	};
+
+	/**
+	 * Converts a NatType into a string.
+	 *
+	 * @return the string
+	 */
+	static std::string toString(NatType natType);
+
+	/**
+	 * Converts a string into a NatType.
+	 *
+	 * @return the NatType
+	 */
+	static NatType toNatType(const std::string & natType);
 };
 
 #endif	//ENUMNATTYPE_H

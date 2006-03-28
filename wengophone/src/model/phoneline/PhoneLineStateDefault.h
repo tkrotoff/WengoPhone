@@ -27,14 +27,8 @@ public:
 
 	void execute(IPhoneLine & phoneLine);
 
-	static const EnumPhoneLineState::PhoneLineState CODE = EnumPhoneLineState::PhoneLineStateDefault;
-
 	EnumPhoneLineState::PhoneLineState getCode() const {
-		return CODE;
-	}
-
-	std::string toString() const {
-		return "PhoneLineStateDefault";
+		return EnumPhoneLineState::PhoneLineStateDefault;
 	}
 };
 
