@@ -32,7 +32,7 @@ UserTreeEventManager::UserTreeEventManager(QObject * parent, QTreeWidget * targe
 }
 
 bool UserTreeEventManager::eventFilter(QObject *obj, QEvent *event){
-    
+
     switch (event->type())
     {
         case QEvent::MouseButtonPress:
@@ -65,7 +65,7 @@ void UserTreeEventManager::mousePressEvent(QMouseEvent *event)
 	QtUserList * ul = QtUserList::getInstance();
 	if (_timer.isActive())
 		_timer.stop();
-	
+
     if (item){
 		ul->setButton(item->text(0),event->button());
         _selectedItem = item;
@@ -76,7 +76,7 @@ void UserTreeEventManager::mousePressEvent(QMouseEvent *event)
 
 void UserTreeEventManager::mouseMoveEvent(QMouseEvent *event)
 {
-	
+
     QTreeWidgetItem * item = _selectedItem;
 
     if ( ! _selectedItem )
@@ -97,27 +97,27 @@ void UserTreeEventManager::mouseMoveEvent(QMouseEvent *event)
 			}
 		 }
 	}
-	
+
 	item = _selectedItem;
-    
+
 	if (!(event->buttons() & Qt::LeftButton))
         return;
-        
+
     if ((event->pos() - _dstart).manhattanLength() < QApplication::startDragDistance())
         return;
-        
-    
-    
+
+
+
     if ( ! item )
         return;
-        
-    /* 
-		If item->parent() == NULL then the item is a group (parent item for contact), a group cannot be moved 
+
+    /*
+		If item->parent() == NULL then the item is a group (parent item for contact), a group cannot be moved
 	*/
     if ( !item->parent())
         return;
 
-    QByteArray custom;  // Define a new empty custom data    
+    QByteArray custom;  // Define a new empty custom data
     QDrag *drag = new QDrag(_tree);
     QMimeData *mimeData = new QMimeData;
     mimeData->setText(item->text(0));
@@ -125,16 +125,16 @@ void UserTreeEventManager::mouseMoveEvent(QMouseEvent *event)
     drag->setMimeData(mimeData);
     _inDrag = true;
 	drag->start(Qt::MoveAction);
-	
+
 }
 
 void UserTreeEventManager::dragEnterEvent(QDragEnterEvent *event)
 {
-    
+
     if (event->mimeData()->hasFormat("application/x-wengo-user-data")){
         event->acceptProposedAction();
     }
-    
+
 }
 void UserTreeEventManager::dropEvent(QDropEvent *event)
 {
@@ -149,19 +149,24 @@ void UserTreeEventManager::dropEvent(QDropEvent *event)
         {
             if ( _selectedItem == item )
                 return;
+			if ( _selectedItem->parent() == item->parent() ) //Same group
+				return;
 
             p = _selectedItem->parent();
+
             p->takeChild(p->indexOfChild ( _selectedItem));
 
             if ( ! item->parent()){ // GROUP
                 p = item;
-                p->insertChild(0,_selectedItem);
+                // p->insertChild(0,_selectedItem);
+                p->insertChild( p->childCount(),_selectedItem );
                 _selectedItem = NULL;
             }
             else
             {
                 p = item->parent();
-                p->insertChild(p->indexOfChild ( item),_selectedItem);
+                // p->insertChild(p->indexOfChild (item),_selectedItem);
+                p->insertChild(p->childCount(),_selectedItem);
                 _selectedItem = NULL;
             }
         }
@@ -183,16 +188,16 @@ void UserTreeEventManager::dragMoveEvent(QDragMoveEvent *event)
 }
 
 /*
-	
+
 	SLOTS
-	
+
 */
 void UserTreeEventManager::timerTimeout()
 {
 
 	if (_inDrag)
 		return;
-		
+
 	QTreeWidgetItem * item = _tree->itemAt(_tree->mapFromGlobal(QCursor::pos()));
 	if (item)
 	{
