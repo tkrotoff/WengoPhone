@@ -33,7 +33,7 @@ UserProfileFileStorage::UserProfileFileStorage(UserProfile & userProfile)
 : UserProfileStorage(userProfile) {
 }
 
-UserProfileFileStorage::~UserProfileStorage() {
+UserProfileFileStorage::~UserProfileFileStorage() {
 }
 
 bool UserProfileFileStorage::load(const std::string & url) {
