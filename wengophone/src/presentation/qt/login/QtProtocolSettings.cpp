@@ -296,8 +296,6 @@ void QtProtocolSettings::saveConfig() {
 
 void QtProtocolSettings::saveAim() {
 
-	IMAccountParameters & param = _imAccount->getIMAccountParameters();
-
 	if ( _aimScreenNameEdit->text().isEmpty() )
 		return;
 
@@ -306,6 +304,8 @@ void QtProtocolSettings::saveAim() {
 
 	if ( ! _imAccount )
 		_imAccount = new IMAccount(login,password,EnumIMProtocol::IMProtocolAIMICQ);
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
 
 	_imAccount->setLogin( login );
 	_imAccount->setPassword( password );
@@ -324,14 +324,16 @@ void QtProtocolSettings::saveAim() {
 	else
 		param.set(param.MAIL_NOTIFICATION_KEY,false);
 
+	_wengoPhone.getCurrentUserProfile().addIMAccount(*_imAccount);
+	_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(*_imAccount);
 }
 
 void QtProtocolSettings::saveJabber() {
 
-	IMAccountParameters & param = _imAccount->getIMAccountParameters();
-
 	if ( _jabberSreenNameEdit->text().isEmpty() )
 		return;
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
 
 	std::string login = _jabberSreenNameEdit->text().toStdString();
 	std::string password = _jabberPasswordEdit->text().toStdString();
@@ -375,6 +377,8 @@ void QtProtocolSettings::saveJabber() {
 
 	param.set(param.JABBER_CONNECTION_SERVER_KEY,_jabberConnectServerEdit->text().toStdString() );
 
+	_wengoPhone.getCurrentUserProfile().addIMAccount(*_imAccount);
+	_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(*_imAccount);
 }
 
 void QtProtocolSettings::saveMsn() {
@@ -382,13 +386,13 @@ void QtProtocolSettings::saveMsn() {
 	if ( _msnScreenNameEdit->text().isEmpty() )
 		return;
 
-	IMAccountParameters & param = _imAccount->getIMAccountParameters();
-
 	std::string login = _msnScreenNameEdit->text().toStdString();
 	std::string password = _msnPasswordEdit->text().toStdString();
 
 	if ( ! _imAccount )
 		_imAccount = new IMAccount(login,password,EnumIMProtocol::IMProtocolMSN);
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
 
 	_imAccount->setLogin( login );
 	_imAccount->setPassword( password );
@@ -412,6 +416,8 @@ void QtProtocolSettings::saveMsn() {
 	else
 		param.set(param.MAIL_NOTIFICATION_KEY,false);
 
+	_wengoPhone.getCurrentUserProfile().addIMAccount(*_imAccount);
+	_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(*_imAccount);
 }
 
 void QtProtocolSettings::saveYahoo() {
@@ -420,13 +426,13 @@ void QtProtocolSettings::saveYahoo() {
 		return;
 
 
-	IMAccountParameters & param = _imAccount->getIMAccountParameters();
-
 	std::string login = _yahooScreenNameEdit->text().toStdString();
 	std::string password = _yahooPasswordEdit->text().toStdString();
 
 	if ( ! _imAccount )
 		_imAccount = new IMAccount(login,password,EnumIMProtocol::IMProtocolYahoo);
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
 
 	_imAccount->setLogin( login );
 	_imAccount->setPassword( password );
@@ -460,6 +466,8 @@ void QtProtocolSettings::saveYahoo() {
 	else
 		param.set(param.MAIL_NOTIFICATION_KEY,false);
 
+	_wengoPhone.getCurrentUserProfile().addIMAccount(*_imAccount);
+	_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(*_imAccount);
 }
 
 
