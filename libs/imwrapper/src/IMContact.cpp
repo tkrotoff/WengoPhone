@@ -78,7 +78,7 @@ string IMContact::cleanContactId() const {
 	string::size_type index = _contactId.find('/');
 
 	if (index != string::npos) {
-		result = _contactId.substr(0, index - 1);
+		result = _contactId.substr(0, index);
 	} else {
 		result = _contactId;
 	}

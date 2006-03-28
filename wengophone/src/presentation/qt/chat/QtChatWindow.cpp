@@ -20,6 +20,8 @@
 #include "QtChatWindow.h"
 #include "QtChatWidget.h"
 
+#include <imwrapper/IMChatSession.h>
+
 #include <qtutil/Object.h>
 #include <util/Logger.h>
 
@@ -115,18 +117,28 @@ void ChatWindow::initThreadSafe() {
 
 }
 
-void ChatWindow::addChat(IMChatSession * session,const IMContact & from )
-{
+void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	QString nickName = QString().fromStdString(session->getIMChat().getIMAccount().getLogin());
 	QString senderName = QString::fromStdString(from.getContactId());
     _chatWidget = new ChatWidget(_tabWidget);
 	_chatWidget->setIMChatSession(session);
 
-	if (_tabWidget->count()>0)
+	if (_tabWidget->count() > 0)
 		_tabWidget->insertTab(_tabWidget->count(),_chatWidget,senderName);
 	else
 		_tabWidget->insertTab(0,_chatWidget,senderName);
+
     _chatWidget->setNickName(nickName);
+
+	// Adding probably missed message
+	for (IMChatSession::IMChatMessageList::const_iterator it = session->getReceivedIMChatMessageList().begin();
+		it != session->getReceivedIMChatMessageList().end();
+		++it) {
+		_chatWidget->addToHistory(QString::fromStdString((*it).getIMContact().getContactId()),
+			QString::fromUtf8((*it).getMessage().c_str()));
+	}
+	////
+
     connect (_chatWidget,SIGNAL(newMessage(IMChatSession *,const QString & )),SLOT(newMessage(IMChatSession *,const QString &)));
 	_dialog.show();
 }

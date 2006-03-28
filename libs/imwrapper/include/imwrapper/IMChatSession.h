@@ -120,6 +120,29 @@ public:
 	 */
 	Event<void (IMChatSession & sender) > imChatSessionWillDieEvent;
 
+	class IMChatMessage {
+	public:
+
+		IMChatMessage(const IMContact & imContact, const std::string & message);
+
+		const IMContact & getIMContact() const { return _imContact; }
+
+		std::string getMessage() const { return _message; }
+
+	private:
+	
+		const IMContact & _imContact;
+
+		std::string _message;
+
+	};
+
+	typedef std::list<IMChatMessage> IMChatMessageList;
+
+	IMChatMessageList & getReceivedIMChatMessageList() {
+		return _receivedIMChatMessageList;
+	}
+
 	/**
 	 * Constructs a chat session given a IMChat.
 	 *
@@ -178,6 +201,9 @@ private:
 	IMContactSet _imContactSet;
 
 	IMChat & _imChat;
+
+	IMChatMessageList _receivedIMChatMessageList;
+
 };
 
 #endif //IMCHATSESSION_H

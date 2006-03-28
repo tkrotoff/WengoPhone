@@ -72,13 +72,19 @@ void IMChatSession::sendMessage(const std::string & message) {
 	_imChat.sendMessage(*this, message);
 }
 
+IMChatSession::IMChatMessage::IMChatMessage(const IMContact & imContact, const string & message)
+: _imContact(imContact), _message(message) {
+}
+
 void IMChatSession::messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, const std::string & message) {
 	LOG_DEBUG("message received: " + message);
 
 	if (imChatSession == *this) {
 		IMContact imContact(_imChat.getIMAccount(), contactId);
 		if (_imContactSet.find(imContact) != _imContactSet.end()) {
-			messageReceivedEvent(*this, *_imContactSet.find(imContact), message);
+			const IMContact & foundIMContact = *_imContactSet.find(imContact);
+			_receivedIMChatMessageList.push_back(IMChatMessage(foundIMContact, message));
+			messageReceivedEvent(*this, foundIMContact, message);
 		} else {
 			LOG_ERROR("this session does not know " + contactId);
 		}
