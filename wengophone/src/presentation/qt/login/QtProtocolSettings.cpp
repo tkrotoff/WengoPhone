@@ -50,16 +50,17 @@ _wengoPhone(wengoPhone) {
 
 	setupChilds();
 	//readFromConfig();
+
 	if ( _mode != MODIFY)
 		setupGui();
 }
 
 void QtProtocolSettings::setImAccount(IMAccount * imaccount) {
-	if ( ! _imAccount ){
-	 _imAccount = imaccount;
-	 setupGui();
-	}
- };
+	if ( ! _imAccount ) {
+			_imAccount = imaccount;
+			setupGui();
+		}
+};
 
 
 
@@ -76,50 +77,52 @@ void QtProtocolSettings::setupGui() {
 
 
 	QString protoStr;
-	if ( _mode == MODIFY ){
-		improto = _imAccount->getProtocol();
-		switch ( improto ){
-			case EnumIMProtocol::IMProtocolMSN:
-				protoStr = QString("MSN");
-				setCurrentPage(ProtocolMsn);
-				initMsnPage();
-			break;
 
-			case EnumIMProtocol::IMProtocolYahoo:
-				protoStr = QString("Yahoo");
-				setCurrentPage(ProtocolYahoo);
-			break;
+	if ( _mode == MODIFY ) {
+			improto = _imAccount->getProtocol();
 
-			case EnumIMProtocol::IMProtocolAIM:
-				protoStr = QString("AIM / ICQ");
-				setCurrentPage(ProtocolAim);
-			break;
+			switch ( improto ) {
+						case EnumIMProtocol::IMProtocolMSN:
+						protoStr = QString("MSN");
+						setCurrentPage(ProtocolMsn);
+						initMsnPage();
+						break;
 
-			case EnumIMProtocol::IMProtocolJabber:
-				protoStr = QString("Jabber");
-				setCurrentPage(ProtocolJabber);
-			break;
+						case EnumIMProtocol::IMProtocolYahoo:
+						protoStr = QString("Yahoo");
+						setCurrentPage(ProtocolYahoo);
+						initYahooPage();
+						break;
 
-			default:{
-				// FIXME: What to do when protocol is unknow ?
-				qDebug() << "Unknow protocol, setting to MSN";
-				protoStr = QString("MSN");
-				setCurrentPage(ProtocolMsn);
-			}
+						case EnumIMProtocol::IMProtocolAIM:
+						protoStr = QString("AIM / ICQ");
+						setCurrentPage(ProtocolAim);
+						initAimPage();
+						break;
+
+						case EnumIMProtocol::IMProtocolJabber:
+						protoStr = QString("Jabber");
+						setCurrentPage(ProtocolJabber);
+						initJabberPage();
+						break;
+
+						default: {
+							// FIXME: What to do when protocol is unknow ?
+							protoStr = QString("MSN");
+							setCurrentPage(ProtocolMsn);
+						}
+				}
+
+			_protocolComboBox->setCurrentIndex(_protocolComboBox->findText(protoStr));
+			_protocolComboBox->setEnabled(false);
+
 		}
 
-		_protocolComboBox->setCurrentIndex(_protocolComboBox->findText(protoStr));
-		_protocolComboBox->setEnabled(false);
-		qDebug() << "Combobox disabled";
-
-	}
 	else
 		setCurrentPage(ProtocolAim);
-
-
 }
 
-void QtProtocolSettings::initMsnPage(){
+void QtProtocolSettings::initMsnPage() {
 
 	_msnAliasEdit->setText(QString::fromStdString(_imAccount->getLogin()));
 	_msnPasswordEdit->setText(QString::fromStdString(_imAccount->getPassword()));
@@ -145,10 +148,9 @@ void QtProtocolSettings::initMsnPage(){
 		_msnNewMailNotificationCheckBox->setCheckState(Qt::Checked);
 	else
 		_msnNewMailNotificationCheckBox->setCheckState(Qt::Unchecked);
-
 }
 
-void QtProtocolSettings::initAimPage(){
+void QtProtocolSettings::initAimPage() {
 
 	IMAccountParameters & param = _imAccount->getIMAccountParameters();
 
@@ -160,6 +162,7 @@ void QtProtocolSettings::initAimPage(){
 	_aimEncodingEdit->setText(QString::fromStdString(param.getOscarEncoding()));
 
 	// Remember password ?
+
 	if (param.isPasswordRemembered())
 		_aimRememberPasswordCheckBox->setCheckState(Qt::Checked);
 	else
@@ -172,7 +175,44 @@ void QtProtocolSettings::initAimPage(){
 		_aimNewMailNotificationCheckBox->setCheckState(Qt::Unchecked);
 }
 
-void QtProtocolSettings::initYahooPage(){
+void QtProtocolSettings::initJabberPage() {
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
+
+	_jabberSreenNameEdit->setText(QString::fromStdString(_imAccount->getLogin()));
+	_jabberPasswordEdit->setText(QString::fromStdString(_imAccount->getPassword()));
+	_jabberServerEdit->setText(QString::fromStdString(param.getJabberServer()));
+	_jabberConnectPortEdit->setText(QString("%1").arg(param.getJabberServerPort()));
+	_jabberResourceEdit->setText(QString::fromStdString(param.getJabberResource()));
+
+	if ( param.isJabberTLSUsed() )
+		_jabberUseTLSCheckBox->setCheckState(Qt::Checked);
+	else
+		_jabberUseTLSCheckBox->setCheckState(Qt::Unchecked);
+
+	if ( param.isJabberTLSRequired() )
+		_jabberRequireTLSCheckBox->setCheckState(Qt::Checked);
+	else
+		_jabberRequireTLSCheckBox->setCheckState(Qt::Unchecked);
+
+	if ( param.isJabberOldSSLUsed() )
+		_jabberForceOldSSLCheckBox->setCheckState(Qt::Checked);
+	else
+		_jabberForceOldSSLCheckBox->setCheckState(Qt::Unchecked);
+
+	if ( param.isJabberAuthPlainInClearUsed() )
+		_jabberAllowPlainTextAuthCheckBox->setCheckState(Qt::Checked);
+	else
+		_jabberAllowPlainTextAuthCheckBox->setCheckState(Qt::Unchecked);
+
+	_jabberConnectServerEdit->setText(QString::fromStdString(param.getJabberConnectionServer()));
+
+	if (param.isPasswordRemembered())
+		_jabberRememberPasswordCheckBox->setCheckState(Qt::Checked);
+	else
+		_jabberRememberPasswordCheckBox->setCheckState(Qt::Unchecked);
+}
+
+void QtProtocolSettings::initYahooPage() {
 
 	IMAccountParameters & param = _imAccount->getIMAccountParameters();
 
@@ -181,15 +221,18 @@ void QtProtocolSettings::initYahooPage(){
 
 
 	// Is yahoo japan ?
+
 	if ( param.isYahooJapan() )
 		_yahooJapanCheckBox->setCheckState(Qt::Checked);
 	else
 		_yahooJapanCheckBox->setCheckState(Qt::Unchecked);
 
 	_yahooPagerHostEdit->setText(QString::fromStdString(param.getYahooServer()));
+
 	_yahooPagerPortEdit->setText(QString("%1").arg(param.getYahooServerPort()));
 
 	_yahooFileTransferHostEdit->setText(QString::fromStdString(param.getYahooXferHost()));
+
 	_yahooFileTransferPortEdit->setText(QString("%1").arg(param.getYahooXferPort()));
 
 	_yahooJapanFileTransferHostEdit->setText(QString::fromStdString(param.getYahooJapanXferHost()));
@@ -207,27 +250,226 @@ void QtProtocolSettings::initYahooPage(){
 		_yahooNewMailNotificationCheckBox->setCheckState(Qt::Checked);
 	else
 		_yahooNewMailNotificationCheckBox->setCheckState(Qt::Unchecked);
-
 }
 
 
 void QtProtocolSettings::accept() {
+
+	saveConfig();
+
 	/* Default dialog action */
+
 	QDialog::accept();
 }
 
-void QtProtocolSettings::saveConfig(){
+void QtProtocolSettings::saveConfig() {
 
+	if ( _mode == MODIFY ) {
+			// Get the current page
+			QWidget * widget = _basicStackedWidget->currentWidget();
+
+			if ( ! widget )
+				return;
+
+			if ( widget->objectName() == "aimPage" )
+				saveAim();
+
+			if ( widget->objectName() == "jabberPage" )
+				saveJabber();
+
+			if ( widget->objectName() == "msnPage" )
+				saveMsn();
+
+			if ( widget->objectName() == "yahooPage" )
+				saveYahoo();
+
+			return;
+		}
+		else{
+			saveAim();
+			saveJabber();
+			saveMsn();
+			saveYahoo();
+		}
 
 }
 
-void QtProtocolSettings::setCurrentPageProxy(int index){
-	qDebug() << "Combobox index changed";
+void QtProtocolSettings::saveAim() {
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
+
+	if ( _aimScreenNameEdit->text().isEmpty() )
+		return;
+
+	std::string login = _aimScreenNameEdit->text().toStdString();
+	std::string password = _aimPasswordEdit->text().toStdString();
+
+	if ( ! _imAccount )
+		_imAccount = new IMAccount(login,password,EnumIMProtocol::IMProtocolAIM);
+
+	_imAccount->setLogin( login );
+	_imAccount->setPassword( password );
+
+	param.set(param.OSCAR_SERVER_KEY,_aimAuthEdit->text().toStdString());
+	param.set(param.OSCAR_PORT_KEY,_aimAuthEdit->text().toInt());
+	param.set(param.OSCAR_ENCODING_KEY,_aimEncodingEdit->text().toStdString());
+
+	if ( _aimRememberPasswordCheckBox->checkState() == Qt::Checked )
+		param.set(param.REMEMBER_PASSWORD_KEY,true);
+	else
+		param.set(param.REMEMBER_PASSWORD_KEY,false);
+
+	if ( _aimNewMailNotificationCheckBox->checkState() == Qt::Checked )
+		param.set(param.MAIL_NOTIFICATION_KEY,true);
+	else
+		param.set(param.MAIL_NOTIFICATION_KEY,false);
+
+}
+
+void QtProtocolSettings::saveJabber() {
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
+
+	if ( _jabberSreenNameEdit->text().isEmpty() )
+		return;
+
+	std::string login = _jabberSreenNameEdit->text().toStdString();
+	std::string password = _jabberPasswordEdit->text().toStdString();
+
+	if ( ! _imAccount )
+		_imAccount = new IMAccount(login,password,EnumIMProtocol::IMProtocolJabber);
+
+	_imAccount->setLogin( login );
+	_imAccount->setPassword( password );
+
+	if ( _jabberRememberPasswordCheckBox->checkState() == Qt::Checked )
+		param.set(param.REMEMBER_PASSWORD_KEY,true);
+	else
+		param.set(param.REMEMBER_PASSWORD_KEY,false);
+
+	param.set(param.JABBER_SERVER_KEY,_jabberServerEdit->text().toStdString());
+
+	param.set(param.JABBER_PORT_KEY,_jabberConnectPortEdit->text().toInt());
+
+	param.set(param.JABBER_RESOURCE_KEY,_jabberResourceEdit->text().toStdString());
+
+	if ( _jabberUseTLSCheckBox->checkState() == Qt::Checked )
+		param.set(param.JABBER_USE_TLS_KEY,true);
+	else
+		param.set(param.JABBER_USE_TLS_KEY,false);
+
+	if ( _jabberRequireTLSCheckBox->checkState() == Qt::Checked )
+		param.set(param.JABBER_REQUIRE_TLS_KEY,true);
+	else
+		param.set(param.JABBER_REQUIRE_TLS_KEY,false);
+
+	if ( _jabberForceOldSSLCheckBox->checkState() == Qt::Checked )
+		param.set(param.JABBER_USE_OLD_SSL_KEY,true);
+	else
+		param.set(param.JABBER_USE_OLD_SSL_KEY,false);
+
+	if ( _jabberAllowPlainTextAuthCheckBox->checkState() == Qt::Checked )
+		param.set(param.JABBER_AUTH_PLAIN_IN_CLEAR_KEY,true);
+	else
+		param.set(param.JABBER_AUTH_PLAIN_IN_CLEAR_KEY,false);
+
+	param.set(param.JABBER_CONNECTION_SERVER_KEY,_jabberConnectServerEdit->text().toStdString() );
+
+}
+
+void QtProtocolSettings::saveMsn() {
+
+	if ( _msnScreenNameEdit->text().isEmpty() )
+		return;
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
+
+	std::string login = _msnScreenNameEdit->text().toStdString();
+	std::string password = _msnPasswordEdit->text().toStdString();
+
+	if ( ! _imAccount )
+		_imAccount = new IMAccount(login,password,EnumIMProtocol::IMProtocolMSN);
+
+	_imAccount->setLogin( login );
+	_imAccount->setPassword( password );
+
+	param.set(param.MSN_SERVER_KEY,_msnLoginServerEdit->text().toStdString() );
+	param.set(param.MSN_PORT_KEY,_msnPortEdit->text().toInt());
+
+	if ( _msnUseHttpCheckBox->checkState() == Qt::Checked )
+		param.set(param.MSN_USE_HTTP_KEY,true);
+	else
+		param.set(param.MSN_USE_HTTP_KEY,false);
+
+	if ( _msnRememberPasswordCheckBox->checkState() == Qt::Checked )
+		param.set(param.REMEMBER_PASSWORD_KEY,true);
+	else
+		param.set(param.REMEMBER_PASSWORD_KEY,false);
+
+
+	if ( _msnNewMailNotificationCheckBox->checkState() == Qt::Checked )
+		param.set(param.MAIL_NOTIFICATION_KEY,true);
+	else
+		param.set(param.MAIL_NOTIFICATION_KEY,false);
+
+}
+
+void QtProtocolSettings::saveYahoo() {
+
+	if ( _yahooScreenNameEdit->text().isEmpty() )
+		return;
+
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
+
+	std::string login = _yahooScreenNameEdit->text().toStdString();
+	std::string password = _yahooPasswordEdit->text().toStdString();
+
+	if ( ! _imAccount )
+		_imAccount = new IMAccount(login,password,EnumIMProtocol::IMProtocolYahoo);
+
+	_imAccount->setLogin( login );
+	_imAccount->setPassword( password );
+
+	if ( _yahooJapanCheckBox->checkState() == Qt::Checked )
+		param.set(param.YAHOO_IS_JAPAN_KEY,true);
+	else
+		param.set(param.YAHOO_IS_JAPAN_KEY,false);
+
+	param.set( param.YAHOO_SERVER_KEY,_yahooPagerHostEdit->text().toStdString() );
+
+	param.set( param.YAHOO_JAPAN_SERVER_KEY,_yahooJapanPagerHostEdit->text().toStdString());
+
+	param.set( param.YAHOO_PORT_KEY,_yahooPagerPortEdit->text().toInt());
+
+	param.set( param.YAHOO_XFER_HOST_KEY, _yahooFileTransferHostEdit->text().toStdString());
+
+	param.set( param.YAHOO_JAPAN_XFER_HOST_KEY, _yahooJapanFileTransferHostEdit->text().toStdString());
+
+	param.set( param.YAHOO_XFER_PORT_KEY, _yahooFileTransferPortEdit->text().toInt());
+
+	param.set( param.YAHOO_ROOM_LIST_LOCALE_KEY,_yahooChatRoomLocalEdit->text().toInt());
+
+	if ( _yahooRememberPasswordCheckBox->checkState() == Qt::Checked )
+		param.set(param.REMEMBER_PASSWORD_KEY,true);
+	else
+		param.set(param.REMEMBER_PASSWORD_KEY,false);
+
+	if ( _yahooNewMailNotificationCheckBox->checkState() == Qt::Checked )
+		param.set(param.MAIL_NOTIFICATION_KEY,true);
+	else
+		param.set(param.MAIL_NOTIFICATION_KEY,false);
+
+}
+
+
+void QtProtocolSettings::setCurrentPageProxy(int index) {
+
 	setCurrentPage( (AvailableProtocols) index);
 }
 
 
-void QtProtocolSettings::setCurrentPage(AvailableProtocols index){
+void QtProtocolSettings::setCurrentPage(AvailableProtocols index) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QWidget * widget;
@@ -236,38 +478,36 @@ void QtProtocolSettings::setCurrentPage(AvailableProtocols index){
 
 	QString selectedProtocol = QString::fromStdString( defaultProtocols[(int)index] );
 
-	qDebug() << "Selected protocol : " << selectedProtocol;
-	qDebug() << "Selected protocol : " << (int) index;
+	if ( selectedProtocol == "AIM / ICQ" ) {
+			widget = Object::findChild<QWidget *>(_basicStackedWidget ,"aimPage" );
+			_basicStackedWidget->setCurrentWidget(widget);
+			widget = Object::findChild<QWidget *>(_advancedStackedWidget, "aimAdvancedSettings");
+			_advancedStackedWidget->setCurrentWidget(widget);
+		}
 
-	if ( selectedProtocol == "AIM / ICQ" ){
-		widget = Object::findChild<QWidget *>(_basicStackedWidget ,"aimPage" );
-		_basicStackedWidget->setCurrentWidget(widget);
-		widget = Object::findChild<QWidget *>(_advancedStackedWidget, "aimAdvancedSettings");
-		_advancedStackedWidget->setCurrentWidget(widget);
-	}
+	if ( selectedProtocol == "MSN" ) {
+			widget = Object::findChild<QWidget *>(_basicStackedWidget ,"msnPage" );
+			_basicStackedWidget->setCurrentWidget(widget);
+			widget = Object::findChild<QWidget *>(_advancedStackedWidget, "msnAdvancedSettings");
+			_advancedStackedWidget->setCurrentWidget(widget);
+		}
 
-	if ( selectedProtocol == "MSN" ){
-		widget = Object::findChild<QWidget *>(_basicStackedWidget ,"msnPage" );
-		_basicStackedWidget->setCurrentWidget(widget);
-		widget = Object::findChild<QWidget *>(_advancedStackedWidget, "msnAdvancedSettings");
-		_advancedStackedWidget->setCurrentWidget(widget);
-	}
-	if ( selectedProtocol == "Jabber" ){
-		widget = Object::findChild<QWidget *>(_basicStackedWidget ,"jabberPage" );
-		_basicStackedWidget->setCurrentWidget(widget);
-		widget = Object::findChild<QWidget *>(_advancedStackedWidget, "jabberAdvancedSettings");
-		_advancedStackedWidget->setCurrentWidget(widget);
-	}
-	if ( selectedProtocol == "Yahoo" ){
-		widget = Object::findChild<QWidget *>(_basicStackedWidget ,"yahooPage" );
-		_basicStackedWidget->setCurrentWidget(widget);
-		widget = Object::findChild<QWidget *>(_advancedStackedWidget, "yahooAdvancedSettings");
-		_advancedStackedWidget->setCurrentWidget(widget);
-	}
+	if ( selectedProtocol == "Jabber" ) {
+			widget = Object::findChild<QWidget *>(_basicStackedWidget ,"jabberPage" );
+			_basicStackedWidget->setCurrentWidget(widget);
+			widget = Object::findChild<QWidget *>(_advancedStackedWidget, "jabberAdvancedSettings");
+			_advancedStackedWidget->setCurrentWidget(widget);
+		}
+
+	if ( selectedProtocol == "Yahoo" ) {
+			widget = Object::findChild<QWidget *>(_basicStackedWidget ,"yahooPage" );
+			_basicStackedWidget->setCurrentWidget(widget);
+			widget = Object::findChild<QWidget *>(_advancedStackedWidget, "yahooAdvancedSettings");
+			_advancedStackedWidget->setCurrentWidget(widget);
+		}
 }
 
 void QtProtocolSettings::readFromConfig() {
-
 
 }
 
@@ -281,10 +521,11 @@ void QtProtocolSettings::setupChilds() {
 
 	/* StringList to QStringList */
 
-	for (unsigned int i = 0; i < defaultProtocols.size(); i++){
+	for (unsigned int i = 0; i < defaultProtocols.size(); i++) {
 
-		qlist << QString::fromStdString(defaultProtocols[i]);
-	}
+			qlist << QString::fromStdString(defaultProtocols[i]);
+		}
+
 	_protocolComboBox->clear();
 	_protocolComboBox->addItems(qlist);
 
