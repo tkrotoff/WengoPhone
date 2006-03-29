@@ -139,6 +139,13 @@ public:
 	void updateCallDuration(int callId, int duration);
 	
 	/**
+	 * update a memento state (for incoming/outgoing calls)
+	 * @param callId callId associated to the memento
+	 * @param state the new state
+	 */
+	void updateCallState(int callId, HistoryMemento::State state);
+
+	/**
 	 * update a memento internal state (for SMS)
 	 * @param callId callId associated to the memento
 	 * @param state new state

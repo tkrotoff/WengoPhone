@@ -70,6 +70,15 @@ void History::updateSMSState(int callId, HistoryMemento::State state) {
 	}
 }
 
+void History::updateCallState(int callId, HistoryMemento::State state) {
+	int id = _collection->getMementoByCallId(callId);
+	HistoryMemento * memento = getMemento(id);
+	if( memento ) {
+		memento->updateState(state);
+		mementoUpdatedEvent(*this, id);
+	}
+}
+
 int History::size() {
 	return _collection->size();
 }
