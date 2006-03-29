@@ -28,7 +28,17 @@ extern "C" {
 
 #include <util/Logger.h>
 
-#define DEFAULT_GROUP_NAME	"Default"
+const char *DefaultGroupName[] = {	
+									"Default",
+									"MSN",
+									"Yahoo",
+									"AIM",
+									"ICQ",
+									"Jabber",
+									"Simple"	
+								};
+
+#define DEFAULT_GROUP_NAME(i)	DefaultGroupName[i]
 
 /* ***************** GAIM CALLBACK ***************** */
 static void C_NewListCbk(GaimBuddyList *blist)
@@ -127,11 +137,13 @@ void GaimContactListMngr::NewListCbk(GaimBuddyList *blist)
 const char *GaimContactListMngr::FindBuddyGroup(GaimBuddy *gBuddy)
 {
 	GaimGroup *gGroup = gaim_buddy_get_group(gBuddy);
-
+	GaimAccount	*gAccount = gaim_buddy_get_account(gBuddy);
+	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
+	
 	if (gGroup)
 		return gGroup->name;
 	else
-		return DEFAULT_GROUP_NAME;
+		return DEFAULT_GROUP_NAME(GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 }
 
 void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
@@ -139,8 +151,8 @@ void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
 	GaimAccount *gAccount = gaim_buddy_get_account(gBuddy);
 	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
 	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
-												GaimIMPrcl::GetEnumIMProtocol(gPrclId));
-
+													GaimIMPrcl::GetEnumIMProtocol(gPrclId));
+	
 	GaimIMContactList *mIMContactList = FindIMContactList(*account);
 	if (mIMContactList)
 	{
@@ -155,7 +167,7 @@ void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
 void GaimContactListMngr::NewGroupAdded(GaimGroup *gGroup)
 {
 	// GAIM CONTACT LIST GROUPS ARE NOT ASSOCIATED WITH ANY ACCOUNTS
-	// THAT'S WHY WE TAKE THE FIRST FOUND IM_CONTACTLIST
+	// THAT'S WHY WE TAKE THE FIRST FOUND IM_CONTACTLIST 
 	// TO SEND NEW_GROUP_ADDDED EVENT
 
 	IMAccount *account = _accountMngr->GetFirstIMAccount();
@@ -166,16 +178,14 @@ void GaimContactListMngr::NewGroupAdded(GaimGroup *gGroup)
 	GaimIMContactList *gIMContactList = FindIMContactList(*account);
 	if (gIMContactList)
 	{
-		const char *groupName = (gGroup->name ? gGroup->name : DEFAULT_GROUP_NAME);
-
-		gIMContactList->newContactGroupAddedEvent(*gIMContactList, groupName);
+		gIMContactList->newContactGroupAddedEvent(*gIMContactList, gGroup->name);
 	}
 }
 
 void GaimContactListMngr::NewNodeCbk(GaimBlistNode *node)
 {
 	fprintf(stderr, "GaimContactListMngr : NewNodeCbk()\n");
-
+	
 	switch (node->type)
 	{
 		case GAIM_BLIST_BUDDY_NODE:
@@ -203,38 +213,38 @@ void GaimContactListMngr::ShowCbk(GaimBuddyList *list)
 	fprintf(stderr, "GaimContactListMngr : ShowCbk()\n");
 }
 
-void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
+const char *GetGaimPresenceId(GaimPresence *gPresence)
 {
-	GaimIMPresence *mIMPresence = NULL;
-	GaimIMContactList *mIMBList = NULL;
-	GaimAccount	*gAccount = NULL;
-	GaimPresence *gPresence;
 	GaimStatus *gStatus;
 	GaimStatusType *gStatusType;
 	GaimStatusPrimitive gStatusPrim;
-	IMAccount *account = NULL;
-	const char *gPrclId;
-	const char *gPresenceId;
 
-	GaimGroup *gGroup = gaim_buddy_get_group(gBuddy);
-
-	gPresence = gaim_buddy_get_presence(gBuddy);
 	gStatus = gaim_presence_get_active_status(gPresence);
 	gStatusType = gaim_status_get_type(gStatus);
 	gStatusPrim = gaim_status_type_get_primitive(gStatusType);
-	gPresenceId = gaim_primitive_get_id_from_type(gStatusPrim);
-	gAccount = gaim_buddy_get_account(gBuddy);
-	gPrclId = gaim_account_get_protocol_id(gAccount);
+
+	return gaim_primitive_get_id_from_type(gStatusPrim);
+}
+
+void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
+{
+	IMAccount *account = NULL;
+	GaimAccount	*gAccount = gaim_buddy_get_account(gBuddy);
+	GaimGroup *gGroup = gaim_buddy_get_group(gBuddy);
+	GaimPresence *gPresence = gaim_buddy_get_presence(gBuddy);
+	const char *gPresenceId = GetGaimPresenceId(gPresence);
+	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
+	
 	account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
 											GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 	if (account)
 	{
-		mIMBList = FindIMContactList(*account);
-		mIMPresence = _presenceMngr->FindIMPresence(*account);
-
+		GaimIMContactList *mIMBList = FindIMContactList(*account);
+		GaimIMPresence *mIMPresence = _presenceMngr->FindIMPresence(*account);
+	
 		if (mIMBList)
 		{
-			mIMBList->contactMovedEvent(*mIMBList,
+			mIMBList->contactMovedEvent(*mIMBList, 
 										FindBuddyGroup(gBuddy),
 										gaim_buddy_get_name(gBuddy));
 		}
@@ -242,20 +252,20 @@ void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 
 		if (mIMPresence)
 		{
-			mIMPresence->presenceStateChangedEvent(*mIMPresence,
+			mIMPresence->presenceStateChangedEvent(*mIMPresence, 
 													GaimPreState::GetPresenceState(gPresenceId),
-													"",
+													gaim_buddy_get_alias_only(gBuddy),
 													gaim_buddy_get_name(gBuddy)
 													);
 		}
 
-	}
+	}											
 }
 
 void GaimContactListMngr::UpdateCbk(GaimBuddyList *list, GaimBlistNode *node)
 {
 	fprintf(stderr, "GaimContactListMngr : UpdateCbk()\n");
-
+	
 	switch (node->type)
 	{
 		case GAIM_BLIST_BUDDY_NODE:
