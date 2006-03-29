@@ -206,6 +206,7 @@ void QtContactList::updatePresentation() {
 
 void QtContactList::updatePresentationThreadSafe() {
 	//TODO: Add code to manage hiden users
+	_usermanager->userStateChanged();
 	_treeWidget->viewport()->update();
 }
 
