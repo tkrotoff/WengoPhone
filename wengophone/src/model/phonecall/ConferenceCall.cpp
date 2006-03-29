@@ -49,10 +49,10 @@ ConferenceCall::~ConferenceCall() {
 void ConferenceCall::addPhoneCall(PhoneCall & phoneCall) {
 	if (_confId == -1) {
 		_confId = _phoneLine.getSipWrapper().createConference();
-		phoneCallAddedEvent(*this, phoneCall);
 	}
 
 	ConferenceCallParticipant * participant = new ConferenceCallParticipant(*this, phoneCall);
+	phoneCallAddedEvent(*this, phoneCall);
 
 	std::string phoneNumber = phoneCall.getPeerSipAddress().getUserName();
 	_phoneCallMap[phoneNumber] = &phoneCall;
@@ -63,9 +63,9 @@ void ConferenceCall::removePhoneCall(PhoneCall & phoneCall) {
 
 	if (_confId == -1) {
 		_phoneLine.getSipWrapper().splitConference(_confId, callId);
-		phoneCallRemovedEvent(*this, phoneCall);
 	}
 
+	phoneCallRemovedEvent(*this, phoneCall);
 	std::string phoneNumber = phoneCall.getPeerSipAddress().getUserName();
 	_phoneCallMap.erase(phoneNumber);
 }
