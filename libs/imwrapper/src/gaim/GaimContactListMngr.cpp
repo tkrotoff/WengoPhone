@@ -252,9 +252,11 @@ void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 
 		if (mIMPresence)
 		{
+			const char *buddy_alias = gaim_buddy_get_alias_only(gBuddy);
+
 			mIMPresence->presenceStateChangedEvent(*mIMPresence, 
 													GaimPreState::GetPresenceState(gPresenceId),
-													gaim_buddy_get_alias_only(gBuddy),
+													buddy_alias == NULL ? "" : buddy_alias,
 													gaim_buddy_get_name(gBuddy)
 													);
 		}
