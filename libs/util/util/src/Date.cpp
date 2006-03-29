@@ -51,5 +51,16 @@ bool Date::operator==(const Date & date) const {
 }
 
 std::string Date::toString() const {
-	return String::fromNumber(_day) + "/" + String::fromNumber(_month) + "/" + String::fromNumber(_year);
+	std::string month = String::fromNumber(_month);
+	std::string day = String::fromNumber(_day);
+	
+	if( month.size() == 1 ) {
+		month = "0" + month;
+	}
+	
+	if( day.size() == 1 ) {
+		day = "0" + day;
+	}
+	
+	return String::fromNumber(_year) + "-" + month + "-" + day;
 }
