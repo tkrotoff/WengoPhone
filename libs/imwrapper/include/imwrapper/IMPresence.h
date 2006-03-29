@@ -43,11 +43,11 @@ public:
 	 *
 	 * @param sender this class
 	 * @param state new buddy presence status
-	 * @param note user presence defined (state = PresenceUserDefined)
+	 * @param alias buddy alias (Joe @ the beach)
 	 * @param from buddy who changed its presence status
 	 */
 	Event<void (IMPresence & sender, EnumPresenceState::PresenceState state,
-		const std::string & note, const std::string & from)> presenceStateChangedEvent;
+		const std::string & alias, const std::string & from)> presenceStateChangedEvent;
 
 	/**
 	 * Status changed.
