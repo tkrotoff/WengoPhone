@@ -310,7 +310,7 @@ void QtProtocolSettings::saveAim() {
 	_imAccount->setLogin( login );
 	_imAccount->setPassword( password );
 
-	param.set(param.OSCAR_SERVER_KEY,_aimAuthEdit->text().toStdString());
+	param.set(param.OSCAR_SERVER_KEY,_aimAuthHostEdit->text().toStdString());
 	param.set(param.OSCAR_PORT_KEY,_aimAuthEdit->text().toInt());
 	param.set(param.OSCAR_ENCODING_KEY,_aimEncodingEdit->text().toStdString());
 
