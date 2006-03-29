@@ -122,7 +122,10 @@ void GaimConnectMngr::ConnDisconnectedCbk(GaimConnection *gc)
 
 void GaimConnectMngr::ConnNoticeCbk(GaimConnection *gc, const char *text)
 {
-  	fprintf(stderr, "GaimConnectMngr : ConnNoticeCbk()\n");
+	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
+
+	if (mIMConnect != NULL)
+		mIMConnect->connectionStatusEvent(*mIMConnect, 0, 0, text == NULL ? "" : text);
 }
 
 void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *text)
@@ -130,7 +133,7 @@ void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *te
 	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
 	if (mIMConnect != NULL)
-		mIMConnect->loginStatusEvent(*mIMConnect, mIMConnect->LoginStatusDisconnected);
+		mIMConnect->connectionStatusEvent(*mIMConnect, 0, 0, text == NULL ? "" : text);
 }
 
 /* **************** MANAGE CONNECT_LIST ****************** */
