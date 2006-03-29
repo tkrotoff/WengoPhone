@@ -35,6 +35,7 @@
 #include <model/profile/UserProfile.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/history/History.h>
 
 #include <sipwrapper/SipWrapper.h>
 #include <sipwrapper/SipWrapperFactory.h>
@@ -126,6 +127,11 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 
 	//Sends the event a new PhoneCall has been created
 	phoneCallCreatedEvent(*this, *phoneCall);
+			
+	//History: create a HistoryMemento for this outgoing call
+	HistoryMemento * memento = new HistoryMemento(
+		HistoryMemento::Outgoing, sipAddress.getSipAddress(), callId);
+	History::getInstance().addMemento(memento);
 
 	return callId;
 }
@@ -165,6 +171,8 @@ void PhoneLine::acceptCall(int callId) {
 
 void PhoneLine::rejectCall(int callId) {
 	_sipWrapper->rejectCall(callId);
+	//History: retrive the memento and change its state to rejected
+	History::getInstance().updateCallState(callId, HistoryMemento::Rejected);
 	LOG_DEBUG("call rejected callId=" + String::fromNumber(callId));
 }
 
@@ -173,6 +181,9 @@ void PhoneLine::closeCall(int callId) {
 	if (!phoneCall) {
 		LOG_FATAL("closing an unknow phone call callId=" + String::fromNumber(callId));
 	}
+
+	//History: update the duration of the memento associated to this phonecall
+	History::getInstance().updateCallDuration(callId, phoneCall->getDuration());
 
 	if (_activePhoneCall == phoneCall) {
 		_activePhoneCall = NULL;
@@ -255,6 +266,9 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		//Deletes the PhoneCall that is closed now
 		//delete _phoneCallMap[callId];
 
+		//History: update the duration of the memento associated to this phonecall
+		//History::getInstance().updateCallDuration(callId, _phoneCallHash[callId]->getDuration());
+		
 		//Removes it from the list of PhoneCall
 		_phoneCallMap.erase(callId);
 		break;
@@ -279,9 +293,11 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 
 		_activePhoneCall = phoneCall;
 
-		//Adds the PhoneCall to the history
-		//phoneCall.type = "Appel entrant";
-		//this._softphone.history.addMemento(phoneCall);
+		//History: create a HistoryMemento for this incoming call
+		HistoryMemento * memento = new HistoryMemento(
+			HistoryMemento::Incoming, sipAddress.getSipAddress(), callId);
+		History::getInstance().addMemento(memento);
+		
 		break;
 	}
 
@@ -289,6 +305,9 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateMissed:
+		//History: retrive the memento and change its state to missed
+		History::getInstance().updateCallState(callId, HistoryMemento::Missed);
+		LOG_DEBUG("call rejected callId=" + String::fromNumber(callId));
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateRedirected:
