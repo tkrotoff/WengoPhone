@@ -45,6 +45,7 @@ PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 	_resume = false;
 	_conference = false;
 	_callRejected = false;
+	_timeStart = -1;
 
 	_sipAddress = sipAddress;
 
@@ -138,8 +139,6 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 }
 
 void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
-	static int timeStart = -1;
-
 	//This should not replace the state machine pattern PhoneCallState
 	switch(state) {
 
@@ -159,7 +158,7 @@ void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
 			hold();
 		} else {
 			//Start of the call, computes duration
-			timeStart = time(NULL);
+			_timeStart = time(NULL);
 		}
 		break;
 
@@ -171,8 +170,8 @@ void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
 		//End of the call, computes duration
-		if (timeStart != -1) {
-			_duration = time(NULL) - timeStart;
+		if (_timeStart != -1) {
+			_duration = time(NULL) - _timeStart;
 		}
 
 		if (!_callRejected) {

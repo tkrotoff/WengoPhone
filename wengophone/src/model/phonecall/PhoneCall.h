@@ -235,6 +235,9 @@ private:
 
 	/** If this PhoneCall has been rejected as an incoming call. */
 	bool _callRejected;
+
+	/** Computes the PhoneCall duration. */
+	int _timeStart;
 };
 
 #endif	//PHONECALL_H
