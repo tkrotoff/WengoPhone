@@ -104,6 +104,26 @@ public:
 	 */
 	Event<void (int requestId, const std::string & answer, Error error)> answerReceivedEvent;
 
+	/**
+	 * Indicates the current progress of the download.
+	 *
+	 * @see QHttp::dataReadProgress()
+	 * @param requestId HTTP request ID
+	 * @param bytesDone specifies how many bytes have been transfered
+	 * @param bytesTotal total size of the HTTP transfer, if 0 then the total number of bytes is not known
+	 */
+	Event<void (int requestId, int bytesDone, int bytesTotal)> dataReadProgressEvent;
+
+	/**
+	 * Indicates the current progress of the upload.
+	 *
+	 * @see QHttp::dataSendProgress()
+	 * @param requestId HTTP request ID
+	 * @param bytesDone specifies how many bytes have been transfered
+	 * @param bytesTotal total size of the HTTP transfer, if 0 then the total number of bytes is not known
+	 */
+	Event<void (int requestId, int bytesDone, int bytesTotal)> dataSendProgressEvent;
+
 	virtual ~IHttpRequest() { }
 
 	/**
