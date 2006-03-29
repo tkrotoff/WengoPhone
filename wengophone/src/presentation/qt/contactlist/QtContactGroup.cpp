@@ -74,19 +74,15 @@ void QtContactGroup::addContactThreadSafe(PContact * pContact) {
 	QtUser * user;
 
 	LOG_DEBUG("display name: " + pContact->getDisplayName());
-	contactName = QString::fromStdString(pContact->getDisplayName());
 
 	QUuid uid = QUuid::createUuid (); // Unique user identifier
 
 	newContact = new QTreeWidgetItem(list[0]);
-	// newContact->setText(0, QString::fromStdString(pContact->getId()));
 	newContact->setText(0, uid.toString());
 	newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
 
 	user = new QtUser(*pContact, _cContactGroup.getCWengoPhone().getWengoPhone());
-	// user->setId(QString::fromStdString(pContact->getId()));
 	user->setId(uid.toString());
-	user->setUserName(contactName);
 
 	ul->addUser(user);
 }

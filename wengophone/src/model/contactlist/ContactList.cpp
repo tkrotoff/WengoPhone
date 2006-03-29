@@ -215,7 +215,7 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 	}
 
 	contact->getIMContact(imContact).setPresenceState(state);
-	//contact->getIMContact(imContact).setAlias(alias);
+	contact->getIMContact(imContact).setAlias(alias);
 }
 
 void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,

@@ -44,8 +44,6 @@ public:
 
 	QString getUserName() const;
 
-	void setUserName(const QString & uname);
-
 	bool hasIM() const { return _pContact.hasIM();}
 
 	bool hasCall() const { return _pContact.hasCall();}

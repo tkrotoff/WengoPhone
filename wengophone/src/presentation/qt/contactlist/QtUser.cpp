@@ -78,7 +78,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	textRect.setTop(_centeredText_y+textRect.top());
 	// Draw the text
 
-	painter->drawText(textRect,Qt::AlignLeft,_userName,0);
+	painter->drawText(textRect, Qt::AlignLeft, QString::fromStdString(_pContact.getDisplayName()), 0);
 
     /*
             Draw Functions icons
@@ -126,10 +126,6 @@ void	QtUser::setId(const QString & id)
 	_userId = id;
 }
 
-void QtUser::setUserName(const QString & uname)
-{
-	_userName = uname;
-}
 QString	QtUser::getUserName() const
 {
 	return _userName;
