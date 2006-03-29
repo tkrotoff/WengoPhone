@@ -77,21 +77,21 @@ void QtHistory::updatePresentationThreadSafe() {
 
 void QtHistory::addHistoryMemento(std::string type,
 	std::string date, std::string time, std::string name, unsigned id) {
-	QDate qDate = QDate::fromString(QString::fromStdString(date));
+	QDate qDate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
 	QTime qTime = QTime::fromString(QString::fromStdString(time));
 	
 	if( type == HistoryMemento::StateIncomingCall ) {
 		_historyWidget->addIncomingCallItem(QString::fromStdString(type),
-			qDate, QString::fromStdString(name), id);
+			qDate, qTime, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateOutgoingCall ) {
 		_historyWidget->addOutGoingCallItem(QString::fromStdString(type),
-			qDate, QString::fromStdString(name), id);
+			qDate, qTime, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateMissedCall ) {
 		//_historyWidget->addSMSItem(QString::fromStdString(type), qDate, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateRejectedCall) {
 		//_historyWidget->addSMSItem(QString::fromStdString(type), qDate, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateOutgoingSMSOK) {
-		_historyWidget->addSMSItem(QString::fromStdString(type), qDate, QString::fromStdString(name), id);
+		_historyWidget->addSMSItem(QString::fromStdString(type), qDate, qTime, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateOutgoingSMSNOK) {
 		//do not show unsent SMS for now
 	} else if ( type == HistoryMemento::StateNone) {
