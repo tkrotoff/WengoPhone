@@ -36,7 +36,6 @@
 #include "login/QtSetLogin.h"
 #include "login/QtEditMyProfile.h"
 #include "login/QtAccountManager.h"
-
 #include "contactlist/QtContactList.h"
 #include "contactlist/QtAddContact.h"
 #include "QtDialpad.h"
@@ -113,11 +112,6 @@ void QtWengoPhone::initThreadSafe() {
 	QtDialpad * qtDialpad = new QtDialpad(this);
 	QWidget * tabDialpad = Object::findChild<QWidget *>(_tabWidget, "tabDialpad");
 	createLayout(tabDialpad)->addWidget(qtDialpad->getWidget());
-
-	//History
-	QWidget * tabHistory = Object::findChild<QWidget *>(_tabWidget,"tabHistory");
-	QtHistoryWidget * qtHistory = new QtHistoryWidget(tabHistory);
-	createLayout(tabHistory)->addWidget(qtHistory);
 
 	//Systray
 	_trayMenu = NULL;
@@ -286,6 +280,12 @@ void QtWengoPhone::setContactList(QtContactList * qtContactList) {
 	QWidget * tabContactList = Object::findChild<QWidget *>(_tabWidget, "tabContactList");
 	createLayout(tabContactList)->addWidget(qtContactList->getWidget());
 	LOG_DEBUG("QtContactList added");
+}
+
+void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
+	QWidget * tabHistory = Object::findChild<QWidget *>(_tabWidget,"tabCallHistory");
+	//QtHistoryWidget * qtHistoryWidget = new QtHistoryWidget(qtHistory->getWidget());
+	createLayout(tabHistory)->addWidget(qtHistoryWidget);
 }
 
 void QtWengoPhone::setSms(QtSms * qtSms) {

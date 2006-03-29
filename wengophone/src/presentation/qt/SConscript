@@ -77,7 +77,8 @@ headers = [
 	'statusbar/QtClickableLabel.h',
 	'statusbar/QtCreditWidget.h',
 	'history/QtHistoryWidget.h',
-	'history/QtHistoryItem.h'
+	'history/QtHistoryItem.h',
+	'history/QtHistory.h',
 ]
 
 sources = [
@@ -141,7 +142,7 @@ sources = [
 	'statusbar/QtCreditWidget.cpp',
 	'history/QtHistoryWidget.cpp',
 	'history/QtHistoryItem.cpp',
-
+	'history/QtHistory.cpp',
 
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]

@@ -40,6 +40,11 @@
 #include "control/sms/CSms.h"
 #include "sms/QtSms.h"
 
+#include "control/history/CHistory.h"
+#include "history/QtHistory.h"
+
+#include <util/Logger.h>
+
 #include <QApplication>
 
 PFactory * PFactory::_factory = 0;
@@ -115,6 +120,11 @@ public:
 	PSms * createPresentationSms(CSms & cSms) {
 		static QtSms * qtSms = new QtSms(cSms);
 		return qtSms;
+	}
+
+	PHistory * createPresentationHistory(CHistory & cHistory) {
+		static QtHistory * qtHistory = new QtHistory(cHistory);
+		return qtHistory;
 	}
 
 private:

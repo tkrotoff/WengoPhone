@@ -37,6 +37,7 @@ class QtPhoneCall;
 class QtContactList;
 class QtSms;
 class QtBrowser;
+class QtHistoryWidget;
 
 class QPushButton;
 class QComboBox;
@@ -58,6 +59,8 @@ public:
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
 	void setContactList(QtContactList * qtContactList);
+
+	void setHistory(QtHistoryWidget * qtHistoryWidget);
 
 	void setSms(QtSms * qtSms);
 
@@ -123,6 +126,8 @@ private Q_SLOTS:
 
 	void showCreateConferenceCall();
 
+	void showAccountSettings();
+
 	void showFaq();
 
 	void showByOut();
@@ -132,8 +137,6 @@ private Q_SLOTS:
 	void showSms();
 
 	void showVoiceMail();
-
-	void showAccountSettings();
 
 	void setTrayMenu();
 
