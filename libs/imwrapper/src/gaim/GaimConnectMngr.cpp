@@ -86,6 +86,8 @@ GaimIMConnect *FindIMConnnectByGaimConnection(GaimConnection *gc)
 	EnumIMProtocol::IMProtocol protocol = EnumIMProtocol::IMProtocolAll;
 
 	gAccount = gaim_connection_get_account(gc);
+	if (gAccount == NULL)
+		return NULL;
 
 	protocol = GaimIMPrcl::GetEnumIMProtocol(gAccount->protocol_id);
 	account = GaimAccountMngr::FindIMAccount(gAccount->username, protocol);
@@ -96,29 +98,26 @@ GaimIMConnect *FindIMConnnectByGaimConnection(GaimConnection *gc)
 void GaimConnectMngr::ConnProgressCbk(GaimConnection *gc, const char *text,
 									  size_t step, size_t step_count)
 {
-  fprintf(stderr, "GaimConnectMngr : ConnProgressCbk()\n");
+	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
+
+	if (mIMConnect != NULL)
+		mIMConnect->connectionStatusEvent(*mIMConnect, step_count, step, text == NULL ? "" : text);
 }
 
 void GaimConnectMngr::ConnConnectedCbk(GaimConnection *gc)
 {
-	GaimIMConnect *gIMConnect = NULL;
+	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
-	fprintf(stderr, "GaimConnectMngr : ConnConnectedCbk()\n");
-
-	gIMConnect = FindIMConnnectByGaimConnection(gc);
-	if (gIMConnect != NULL)
-		gIMConnect->loginStatusEvent(*gIMConnect, gIMConnect->LoginStatusConnected);
+	if (mIMConnect != NULL)
+		mIMConnect->loginStatusEvent(*mIMConnect, mIMConnect->LoginStatusConnected);
 }
 
 void GaimConnectMngr::ConnDisconnectedCbk(GaimConnection *gc)
 {
-	GaimIMConnect *gIMConnect = NULL;
+	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
-	fprintf(stderr, "GaimConnectMngr : ConnDisconnectedCbk()\n");
-
-	gIMConnect = FindIMConnnectByGaimConnection(gc);
-	if (gIMConnect != NULL)
-		gIMConnect->loginStatusEvent(*gIMConnect, gIMConnect->LoginStatusDisconnected);
+	if (mIMConnect != NULL)
+		mIMConnect->loginStatusEvent(*mIMConnect, mIMConnect->LoginStatusDisconnected);
 }
 
 void GaimConnectMngr::ConnNoticeCbk(GaimConnection *gc, const char *text)
@@ -128,19 +127,20 @@ void GaimConnectMngr::ConnNoticeCbk(GaimConnection *gc, const char *text)
 
 void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *text)
 {
-	GaimIMConnect *gIMConnect = NULL;
+	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
-  	fprintf(stderr, "GaimConnectMngr : ConnReportDisconnectCbk()\n");
-
-	gIMConnect = FindIMConnnectByGaimConnection(gc);
-	if (gIMConnect != NULL)
-		gIMConnect->loginStatusEvent(*gIMConnect, gIMConnect->LoginStatusDisconnected);
+	if (mIMConnect != NULL)
+		mIMConnect->loginStatusEvent(*mIMConnect, mIMConnect->LoginStatusDisconnected);
 }
 
 /* **************** MANAGE CONNECT_LIST ****************** */
 GaimIMConnect *GaimConnectMngr::FindIMConnect(IMAccount &account)
 {
 	GaimIMConnectIterator i;
+
+	if (account.getLogin().empty())
+		return NULL;
+
 	for (i = _gaimIMConnectList.begin(); i != _gaimIMConnectList.end(); i++)
 	{
 		if ((*i)->equalsTo(account.getLogin(), account.getProtocol()))
@@ -170,6 +170,10 @@ GaimIMConnect *GaimConnectMngr::AddIMConnect(IMAccount &account)
 void GaimConnectMngr::RemoveIMConnect(IMAccount &account)
 {
 	GaimIMConnectIterator i;
+
+	if (account.getLogin().empty())
+		return;
+
 	for (i = _gaimIMConnectList.begin(); i != _gaimIMConnectList.end(); i++)
 	{
 		if ((*i)->equalsTo(account.getLogin(), account.getProtocol()))

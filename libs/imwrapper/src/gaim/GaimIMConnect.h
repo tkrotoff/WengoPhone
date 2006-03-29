@@ -48,6 +48,12 @@ private:
 
 	void *CreateAccount(void);
 	void InitConn(void);
+
+	void GaimIMConnect::AddAccountParams(void *gaimAccount);
+	void AddMSNAccountParams(void *gaimAccount);
+	void AddYahooAccountParams(void *gaimAccount);
+	void AddOscarAccountParams(void *gaimAccount);
+	void AddJabberAccountParams(void *gaimAccount);
 };
 
 #endif	//GAIMIMCONNECT_H

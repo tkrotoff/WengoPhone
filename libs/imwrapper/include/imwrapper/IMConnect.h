@@ -53,6 +53,17 @@ public:
 	 */
 	Event<void (IMConnect & sender, LoginStatus status)> loginStatusEvent;
 
+
+	/**
+	 * Status changed.
+	 *
+	 * @param sender this class
+	 * @param totalSteps number of steps during the connection
+	 * @param curStep the connection current step
+	 * @param infoMsg description of the current step
+	 */
+	Event<void (IMConnect & sender, int totalSteps, int curStep, const std::string & infoMsg)> connectionStatusEvent;
+
 	virtual ~IMConnect() { }
 
 	virtual void connect() = 0;
