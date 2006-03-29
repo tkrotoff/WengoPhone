@@ -283,7 +283,7 @@ void QtWengoPhone::setContactList(QtContactList * qtContactList) {
 }
 
 void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
-	QWidget * tabHistory = Object::findChild<QWidget *>(_tabWidget,"tabCallHistory");
+	QWidget * tabHistory = Object::findChild<QWidget *>(_tabWidget,"tabHistory");
 	//QtHistoryWidget * qtHistoryWidget = new QtHistoryWidget(qtHistory->getWidget());
 	createLayout(tabHistory)->addWidget(qtHistoryWidget);
 }
