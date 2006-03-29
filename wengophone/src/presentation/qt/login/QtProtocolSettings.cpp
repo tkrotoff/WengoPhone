@@ -119,7 +119,7 @@ void QtProtocolSettings::setupGui() {
 		}
 
 	else
-		setCurrentPage(ProtocolAim);
+		setCurrentPage(ProtocolMsn);
 }
 
 void QtProtocolSettings::initMsnPage() {
@@ -333,13 +333,13 @@ void QtProtocolSettings::saveJabber() {
 	if ( _jabberSreenNameEdit->text().isEmpty() )
 		return;
 
-	IMAccountParameters & param = _imAccount->getIMAccountParameters();
-
 	std::string login = _jabberSreenNameEdit->text().toStdString();
 	std::string password = _jabberPasswordEdit->text().toStdString();
 
 	if ( ! _imAccount )
 		_imAccount = new IMAccount(login,password,EnumIMProtocol::IMProtocolJabber);
+
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
 
 	_imAccount->setLogin( login );
 	_imAccount->setPassword( password );
