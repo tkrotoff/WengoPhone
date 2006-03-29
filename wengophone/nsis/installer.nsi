@@ -3,10 +3,10 @@
  *
  * If you add a global variable, declare it here as commented.
  */
+;!define PRODUCT_NAME "WengoPhone"
 ;!define PRODUCT_VERSION "0.13"
 ;!define DEBUG
 ;!define BUILD_DIR "..\..\release-symbols\"
-;!define PRODUCT_NAME "WengoPhone"
 ;!define INSTALLER_NAME "WengoPhone-setup-0.13.exe"
 ;!define QTDIR "C:\Qt\4.1.1\"
 
@@ -14,6 +14,19 @@
 !define PRODUCT_WEB_SITE "http://www.wengo.com"
 !define PRODUCT_REGKEY "Software\${PRODUCT_NAME}"
 !define PRODUCT_UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+
+; Version information for the installer executable
+VIAddVersionKey ProductName "${PRODUCT_NAME}"
+VIAddVersionKey ProductVersion "${PRODUCT_VERSION}"
+VIAddVersionKey Comments "WengoPhone, a voice over Internet phone"
+VIAddVersionKey CompanyName "${PRODUCT_PUBLISHER}"
+VIAddVersionKey LegalCopyright "Copyright (C) 2004-2006 Wengo"
+VIAddVersionKey LegalTrademarks "Wengo"
+VIAddVersionKey FileDescription "${PRODUCT_NAME}"
+VIAddVersionKey FileVersion "${PRODUCT_VERSION}"
+VIAddVersionKey InternalName "${PRODUCT_NAME}"
+VIAddVersionKey OriginalFilename "${INSTALLER_NAME}"
+VIProductVersion "0.0.0.0"
 
 SetCompressor lzma
 

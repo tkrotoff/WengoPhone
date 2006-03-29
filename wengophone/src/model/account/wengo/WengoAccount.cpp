@@ -62,7 +62,7 @@ bool WengoAccount::init() {
 
 	if (!discoverForSSO()) {
 		LOG_DEBUG("error while discovering network for SSO");
-		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateHTTPError);
+		networkDiscoveryStateChangedEvent(*this, NetworkDiscoveryStateHTTPError);
 		return false;
 	}
 
@@ -74,7 +74,7 @@ bool WengoAccount::init() {
 
 	if (!_ssoRequestOk) {
 		LOG_DEBUG("error while doing SSO request");
-		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateError);
+		networkDiscoveryStateChangedEvent(*this, NetworkDiscoveryStateError);
 		return false;
 	} else if (_ssoRequestOk && !_wengoLoginOk) {
 		LOG_DEBUG("SSO request Ok but login/password are invalid");
@@ -84,7 +84,7 @@ bool WengoAccount::init() {
 
 	if (!discoverForSIP()) {
 		LOG_DEBUG("error while discovering network for SIP");
-		networkDiscoveryStateEvent(*this, NetworkDiscoveryStateSIPError);
+		networkDiscoveryStateChangedEvent(*this, NetworkDiscoveryStateSIPError);
 		return false;
 	}
 

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 
 #ifndef CPHONELINE_H
 #define CPHONELINE_H
+
+#include <sipwrapper/EnumPhoneLineState.h>
 
 #include <string>
 
@@ -41,11 +43,15 @@ public:
 		return _pPhoneLine;
 	}
 
+	CWengoPhone & getCWengoPhone() const {
+		return _cWengoPhone;
+	}
+
 	int makeCall(const std::string & phoneNumber);
 
 private:
 
-	void stateChangedEventHandler(IPhoneLine & sender);
+	void stateChangedEventHandler(IPhoneLine & sender, EnumPhoneLineState::PhoneLineState state);
 
 	void phoneCallCreatedEventHandler(IPhoneLine & sender, PhoneCall & phoneCall);
 

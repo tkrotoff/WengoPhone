@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
 #ifndef QTPHONELINE_H
 #define QTPHONELINE_H
 
-#include "presentation/PPhoneLine.h"
+#include <presentation/PPhoneLine.h>
 
 #include <qtutil/QObjectThreadSafe.h>
 
 class CPhoneLine;
 class CWengoPhone;
 class QtPhoneCall;
-class QWidget;
+
 class QLabel;
 
 class QtPhoneLine : public QObjectThreadSafe, public PPhoneLine {
@@ -40,25 +40,19 @@ public:
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
-	void phoneLineStateChangedEvent(PhoneLineState state, int lineId);
-
-	QWidget * getWidget() const {
-		return _phoneLineWidget;
-	}
-
 private:
 
 	void initThreadSafe();
 
 	void updatePresentationThreadSafe();
 
-	void phoneLineStateChangedEventThreadSafe(PhoneLineState state, int lineId);
+	void stateChangedEventHandler(EnumPhoneLineState::PhoneLineState state);
+
+	void stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLineState state);
 
 	CPhoneLine & _cPhoneLine;
 
-	QWidget * _phoneLineWidget;
-
-	QLabel * _stateLabel;
+	QLabel * _phoneLineStateLabel;
 };
 
 #endif	//QTPHONELINE_H

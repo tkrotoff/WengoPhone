@@ -45,7 +45,7 @@ public:
 	 * @param proxyAddress the url of the detected proxy
 	 * @param proxyPort the port of the detected proxy
 	 */
-	Event< void(NetworkDiscovery & sender,
+	Event< void (NetworkDiscovery & sender,
 		const std::string & proxyAddress, unsigned proxyPort) > proxyNeedsAuthenticationEvent;
 
 	/**
@@ -57,7 +57,7 @@ public:
 	 * @param proxyLogin the maybe wrong login
 	 * @param proxyPassword the maybe wrong password
 	 */
-	Event< void(NetworkDiscovery & sender,
+	Event< void (NetworkDiscovery & sender,
 		const std::string & proxyAddress, unsigned proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 

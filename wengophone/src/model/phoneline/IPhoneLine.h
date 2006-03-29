@@ -52,7 +52,7 @@ public:
 	/**
 	 * @see SipWrapper::phoneLineStateChangedEvent
 	 */
-	Event<void (IPhoneLine & sender)> stateChangedEvent;
+	Event<void (IPhoneLine & sender, EnumPhoneLineState::PhoneLineState state)> stateChangedEvent;
 
 	/**
 	 * A PhoneCall has been created.

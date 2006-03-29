@@ -59,18 +59,11 @@ class WengoPhone : public Thread {
 public:
 
 	/**
-	 * Login procedure is done, event with the procedure result.
+	 * Initialization step is finished (i.e we exit the init() method.
 	 *
-	 * @see SipAccount::loginStateChangedEvent
+	 * @param sender this class
 	 */
-	Event<void (SipAccount & sender, SipAccount::LoginState state)> loginStateChangedEvent;
-
-	/**
-	 * Network event while trying to connect a SipAccount.
-	 *
-	 * @see SipAccount::networkDiscoveryStateEvent
-	 */
-	Event< void (SipAccount & sender, SipAccount::NetworkDiscoveryState networkDiscoveryState) > networkDiscoveryStateEvent;
+	Event<void (WengoPhone & sender)> initFinishedEvent;
 
 	/**
 	 * WenboxPlugin has been created.
@@ -79,13 +72,6 @@ public:
 	 * @param wenboxPlugin WenboxPlugin created
 	 */
 	Event<void (WengoPhone & sender, WenboxPlugin & wenboxPlugin)> wenboxPluginCreatedEvent;
-
-	/**
-	 * Initialization step is finished (i.e we exit the init() method.
-	 *
-	 * @param sender this class
-	 */
-	Event<void (WengoPhone & sender)> initFinishedEvent;
 
 	WengoPhone();
 
@@ -145,7 +131,6 @@ private:
 
 	//FIXME: currently only one UserProfile exists
 	UserProfile _userProfile;
-
 };
 
 #endif	//WENGOPHONE_H

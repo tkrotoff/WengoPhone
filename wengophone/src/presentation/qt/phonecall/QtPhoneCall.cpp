@@ -23,7 +23,6 @@
 
 #include <presentation/qt/contactlist/QtAddContact.h>
 #include <presentation/qt/QtWengoPhone.h>
-
 #include <control/phonecall/CPhoneCall.h>
 #include <control/CWengoPhone.h>
 

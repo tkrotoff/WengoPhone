@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,12 +19,11 @@
 
 #include "CPhoneLine.h"
 
-#include "model/phoneline/IPhoneLine.h"
-#include "presentation/PPhoneLine.h"
-#include "presentation/PFactory.h"
-#include "model/phoneline/PhoneLineState.h"
-#include "control/phonecall/CPhoneCall.h"
-#include "control/CWengoPhone.h"
+#include <presentation/PPhoneLine.h>
+#include <presentation/PFactory.h>
+#include <control/phonecall/CPhoneCall.h>
+#include <control/CWengoPhone.h>
+#include <model/phoneline/IPhoneLine.h>
 
 #include <util/Logger.h>
 
@@ -34,7 +33,7 @@ CPhoneLine::CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone)
 
 	_pPhoneLine = PFactory::getFactory().createPresentationPhoneLine(*this);
 
-	_phoneLine.stateChangedEvent += boost::bind(&CPhoneLine::stateChangedEventHandler, this, _1);
+	_phoneLine.stateChangedEvent += boost::bind(&CPhoneLine::stateChangedEventHandler, this, _1, _2);
 	_phoneLine.phoneCallCreatedEvent += boost::bind(&CPhoneLine::phoneCallCreatedEventHandler, this, _1, _2);
 }
 
@@ -42,32 +41,8 @@ int CPhoneLine::makeCall(const std::string & phoneNumber) {
 	return _phoneLine.makeCall(phoneNumber);
 }
 
-void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender) {
-	int lineId = sender.getLineId();
-
-	/*switch (sender.getState().getCode()) {
-	case PhoneLineStateDefault::CODE:
-		break;
-
-	case PhoneLineStateOk::CODE:
-		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineOk, lineId);
-		break;
-
-	case PhoneLineStateTimeout::CODE:
-		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineTimeout, lineId);
-		break;
-
-	case PhoneLineStateServerError::CODE:
-		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineServerError, lineId);
-		break;
-
-	case PhoneLineStateClosed::CODE:
-		_pPhoneLine->phoneLineStateChangedEvent(PPhoneLine::LineClosed, lineId);
-		break;
-
-	default:
-		LOG_FATAL("unknown PhoneLine state=" + String::fromNumber(sender.getState().getCode()));
-	};*/
+void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender, EnumPhoneLineState::PhoneLineState state) {
+	_pPhoneLine->stateChangedEvent(state);
 }
 
 void CPhoneLine::phoneCallCreatedEventHandler(IPhoneLine & sender, PhoneCall & phoneCall) {

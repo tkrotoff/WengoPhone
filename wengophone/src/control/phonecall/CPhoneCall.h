@@ -20,9 +20,9 @@
 #ifndef CPHONECALL_H
 #define CPHONECALL_H
 
-#include <string>
-
 #include <sipwrapper/EnumPhoneCallState.h>
+
+#include <string>
 
 class PhoneCall;
 class PPhoneCall;
@@ -42,6 +42,10 @@ public:
 
 	PPhoneCall * getPresentation() const {
 		return _pPhoneCall;
+	}
+
+	CWengoPhone & getCWengoPhone() const {
+		return _cWengoPhone;
 	}
 
 	/**
@@ -95,10 +99,6 @@ public:
 	 * @return peer display name
 	 */
 	std::string getPeerDisplayName() const;
-
-	CWengoPhone & getCWengoPhone() const {
-		return _cWengoPhone;
-	}
 
 private:
 

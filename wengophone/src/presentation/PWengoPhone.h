@@ -37,8 +37,6 @@ class PPhoneLine;
 class PWengoPhone : public Presentation {
 public:
 
-	virtual void addPhoneLine(PPhoneLine * pPhoneLine) = 0;
-
 	/*virtual void addCommand(PCommand * command) = 0;
 
 	virtual void addContactList(PContactList * pContactList) = 0;
@@ -46,8 +44,6 @@ public:
 	virtual void addHistory(PHistory * pHistory) = 0;*/
 
 protected:
-
-	virtual void addPhoneLineThreadSafe(PPhoneLine * pPhoneLine) = 0;
 };
 
 #endif	//PWENGOPHONE_H

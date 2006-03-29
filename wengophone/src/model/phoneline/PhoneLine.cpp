@@ -320,7 +320,7 @@ void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
 				_state->execute(*this);
 				LOG_DEBUG("line state changed lineId=" + String::fromNumber(_lineId) +
 					" state=" + EnumPhoneLineState::toString(_state->getCode()));
-				stateChangedEvent(*this);
+				stateChangedEvent(*this, state);
 				break;
 			}
 		}

@@ -50,7 +50,7 @@ WengoPhone::~WengoPhone() {
 }
 
 void WengoPhone::init() {
-	// Get a config instance to create the config instance in the model thread.
+	//Get a config instance to create the config instance in the model thread.
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());

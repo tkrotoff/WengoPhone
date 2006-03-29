@@ -80,6 +80,8 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 
 	_cWengoPhone.loginStateChangedEvent +=
 		boost::bind(&QtWengoPhone::loginStateChangedEventHandler, this, _1, _2);
+	_cWengoPhone.networkDiscoveryStateChangedEvent +=
+		boost::bind(&QtWengoPhone::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 	_cWengoPhone.noAccountAvailableEvent +=
 		boost::bind(&QtWengoPhone::noAccountAvailableEventHandler, this, _1);
 	_cWengoPhone.proxyNeedsAuthenticationEvent +=
@@ -107,19 +109,19 @@ void QtWengoPhone::initThreadSafe() {
 	//tabWidget
 	_tabWidget = Object::findChild<QTabWidget *>(_wengoPhoneWindow, "tabWidget");
 
-	//dialpad
+	//Dialpad
 	QtDialpad * qtDialpad = new QtDialpad(this);
 	QWidget * tabDialpad = Object::findChild<QWidget *>(_tabWidget, "tabDialpad");
 	createLayout(tabDialpad)->addWidget(qtDialpad->getWidget());
 
-	// History
-	QWidget * tabHistory = Object::findChild<QWidget *>(_tabWidget,"tabCallHistory");
+	//History
+	QWidget * tabHistory = Object::findChild<QWidget *>(_tabWidget,"tabHistory");
 	QtHistoryWidget * qtHistory = new QtHistoryWidget(tabHistory);
 	createLayout(tabHistory)->addWidget(qtHistory);
 
-	// systray
+	//Systray
 	_trayMenu = NULL;
-	_trayIcon = new TrayIcon( QPixmap(":pics/systray_icon.png"),QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
+	_trayIcon = new TrayIcon(QPixmap(":pics/systray_icon.png"),QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
 	setTrayMenu();
 	_trayIcon->show();
 
@@ -177,70 +179,64 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionAdvancedConfiguration = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAdvancedConfiguration");
 	connect(actionAdvancedConfiguration, SIGNAL(triggered()), SLOT(showAdvancedConfig()));
 
-	// actionfaq
+	//actionFaq
 	QAction * actionFaq = Object::findChild<QAction *>(_wengoPhoneWindow, "actionFaq");
 	connect (actionFaq, SIGNAL (triggered()), SLOT(showFaq()));
 
-	// actionBuy_call_out_credits
-	QAction * actionBuy_call_out_credits = Object::findChild<QAction *>(_wengoPhoneWindow, "actionBuy_call_out_credits");
-	connect (actionBuy_call_out_credits, SIGNAL(triggered()), SLOT(showByOut()));
+	//actionBuyCallOutCredits
+	QAction * actionBuyCallOutCredits = Object::findChild<QAction *>(_wengoPhoneWindow, "actionBuyCallOutCredits");
+	connect(actionBuyCallOutCredits, SIGNAL(triggered()), SLOT(showByOut()));
 
-	// actionCall_out_service
-	QAction * actionCall_out_service = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCall_out_service");
-	connect (actionCall_out_service, SIGNAL(triggered()), SLOT (showCallOut()));
+	//actionCallOutService
+	QAction * actionCallOutService = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCallOutService");
+	connect(actionCallOutService, SIGNAL(triggered()), SLOT (showCallOut()));
 
-	// actionSms
+	//actionSms
 	QAction * actionSms = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSms");
-	connect (actionSms, SIGNAL(triggered()), SLOT (showSms()));
+	connect(actionSms, SIGNAL(triggered()), SLOT (showSms()));
 
-	// actionVoicemail
-	QAction * actionVoicemail = Object::findChild<QAction *>(_wengoPhoneWindow, "actionVoicemail");
-	connect (actionVoicemail, SIGNAL(triggered()), SLOT (showVoiceMail()));
+	//actionVoiceMail
+	QAction * actionVoiceMail = Object::findChild<QAction *>(_wengoPhoneWindow, "actionVoiceMail");
+	connect(actionVoiceMail, SIGNAL(triggered()), SLOT (showVoiceMail()));
 
 	// actionIM_Account_Settings
 	QAction * actionIM_Account_Settings = Object::findChild<QAction *>(_wengoPhoneWindow,"actionIM_Account_Settings");
 	connect (actionIM_Account_Settings,SIGNAL(triggered()), SLOT(showAccountSettings()));
 
+	//actionCreateConferenceCall
 	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
 	connect(actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
 
-#if QT_VERSION == 0x040100
-	//FIXME
-	//QT 4.1.1 correctly creates following stuff from QTDesigner specs
-	//QT 4.1.0 obliges us to create them explicitly
-
-	//centralwidget
-	QWidget * centralwidget = Object::findChild<QWidget *>(_wengoPhoneWindow, "centralwidget");
-	_wengoPhoneWindow->setCentralWidget(centralwidget);
-
-	//menubar
-	QMenuBar * menubar = Object::findChild<QMenuBar *>(_wengoPhoneWindow, "menubar");
-	_wengoPhoneWindow->setMenuBar(menubar);
-
-	//statusbar
-	QStatusBar * statusbar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusbar");
-	_wengoPhoneWindow->setStatusBar(statusbar);
-#endif
-
-	//embedded Browser
+	//Embedded Browser
 	_browser = new QtBrowser(NULL);
-	_browser->urlClickedEvent +=  boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
-	QWidget * tabWeb = Object::findChild<QWidget *>(_tabWidget, "tabHome");
-	createLayout(tabWeb)->addWidget((QWidget*)_browser->getWidget());
+	_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
+	QWidget * tabHome = Object::findChild<QWidget *>(_tabWidget, "tabHome");
+	createLayout(tabHome)->addWidget((QWidget*) _browser->getWidget());
 #ifdef OS_WINDOWS
 	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
 #endif
 
-	// Add the status bar
-	QWidget * cw = Object::findChild<QWidget *>(_wengoPhoneWindow, "centralwidget");
-
-	QFrame * dummyframe = Object::findChild<QFrame *>(_wengoPhoneWindow, "statusbar");
+	//Add the profile bar
+	QFrame * profileBar = Object::findChild<QFrame *>(_wengoPhoneWindow, "profileBar");
+	QWidget * centralWidget = Object::findChild<QWidget *>(_wengoPhoneWindow, "centralWidget");
 
 	QGridLayout * gridlayout;
-	gridlayout = (QGridLayout *) cw->layout();
-	gridlayout->removeWidget(dummyframe);
+	gridlayout = (QGridLayout *) centralWidget->layout();
+	gridlayout->removeWidget(profileBar);
+	gridlayout->addWidget(new QtStatusBar(centralWidget), 1, 0);
 
-	gridlayout->addWidget(new QtStatusBar(cw),1,0);
+	//Status bar
+	QStatusBar * statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");
+
+	_internetConnectionStateLabel = new QLabel(statusBar);
+	_internetConnectionStateLabel->setPixmap(QPixmap(":/pics/statusbar_connect_error.png"));
+	_internetConnectionStateLabel->setToolTip(tr("Not connected"));
+	statusBar->addPermanentWidget(_internetConnectionStateLabel);
+
+	_phoneLineStateLabel = new QLabel(statusBar);
+	_phoneLineStateLabel->setPixmap(QPixmap(":/pics/statusbar_sip_error.png"));
+	_phoneLineStateLabel->setToolTip(tr("Not connected"));
+	statusBar->addPermanentWidget(_phoneLineStateLabel);
 
 	_wengoPhoneWindow->show();
 }
@@ -260,20 +256,6 @@ void QtWengoPhone::initButtons() {
 void QtWengoPhone::enableCallButton() {
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	_callButton->setEnabled(!phoneNumber.empty());
-}
-
-void QtWengoPhone::addPhoneLine(PPhoneLine * pPhoneLine) {
-	typedef PostEvent1<void (PPhoneLine *), PPhoneLine *> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::addPhoneLineThreadSafe, this, _1), pPhoneLine);
-	postEvent(event);
-}
-
-void QtWengoPhone::addPhoneLineThreadSafe(PPhoneLine * pPhoneLine) {
-	QStackedWidget * stack = Object::findChild<QStackedWidget *>(_wengoPhoneWindow, "phoneLineStackedWidget");
-	QWidget * widget = ((QtPhoneLine *) pPhoneLine)->getWidget();
-	stack->addWidget(widget);
-	stack->setCurrentWidget(widget);
-	LOG_DEBUG("QtPhoneLine added" + widget->objectName().toStdString());
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
@@ -359,7 +341,6 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 	default:
 		LOG_FATAL("Unknown state");
 	};
-
 }
 
 void QtWengoPhone::noAccountAvailableEventHandler(UserProfile & sender) {
@@ -370,6 +351,50 @@ void QtWengoPhone::noAccountAvailableEventHandler(UserProfile & sender) {
 
 void QtWengoPhone::noAccountAvailableEventHandlerThreadSafe(UserProfile & sender) {
 	showLoginWindow();
+}
+
+void QtWengoPhone::networkDiscoveryStateChangedEventHandler(SipAccount & sender, SipAccount::NetworkDiscoveryState state) {
+	typedef PostEvent2<void (SipAccount &, SipAccount::NetworkDiscoveryState), SipAccount &, SipAccount::NetworkDiscoveryState> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::networkDiscoveryStateChangedEventHandlerThreadSafe, this, _1, _2), sender, state);
+	postEvent(event);
+}
+
+void QtWengoPhone::networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::NetworkDiscoveryState state) {
+	QString tooltip;
+	QString pixmap;
+
+	switch (state) {
+	case SipAccount::NetworkDiscoveryStateOk:
+		tooltip = tr("Internet connection OK");
+		pixmap = ":/pics/statusbar_connect.png";
+		break;
+
+	case SipAccount::NetworkDiscoveryStateHTTPError:
+		tooltip = tr("Internet connection error");
+		pixmap = ":/pics/statusbar_connect_error.png";
+		break;
+
+	case SipAccount::NetworkDiscoveryStateSIPError:
+		tooltip = tr("Internet connection error");
+		pixmap = ":/pics/statusbar_connect_error.png";
+		break;
+
+	case SipAccount::NetworkDiscoveryStateProxyNeedsAuthentication:
+		tooltip = tr("Internet connection error");
+		pixmap = ":/pics/statusbar_connect_error.png";
+		break;
+
+	case SipAccount::NetworkDiscoveryStateError:
+		tooltip = tr("Internet connection error");
+		pixmap = ":/pics/statusbar_connect_error.png";
+		break;
+
+	default:
+		LOG_FATAL("unknown state=" + String::fromNumber(state));
+	};
+
+	_internetConnectionStateLabel->setPixmap(pixmap);
+	_internetConnectionStateLabel->setToolTip(tooltip);
 }
 
 void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFile) {
@@ -517,6 +542,7 @@ void QtWengoPhone::showAccountSettings(){
 
 	accountManager.exec();
 }
+
 
 //FIXME
 #include <model/phonecall/ConferenceCall.h>

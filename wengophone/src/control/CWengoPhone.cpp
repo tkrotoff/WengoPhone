@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,6 +63,7 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.getCurrentUserProfile().phoneLineCreatedEvent += boost::bind(&CWengoPhone::phoneLineCreatedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().loginStateChangedEvent += loginStateChangedEvent;
+	_wengoPhone.getCurrentUserProfile().networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
 	_wengoPhone.getCurrentUserProfile().noAccountAvailableEvent += noAccountAvailableEvent;
 	_wengoPhone.getCurrentUserProfile().smsCreatedEvent += boost::bind(&CWengoPhone::smsCreatedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
@@ -87,7 +88,6 @@ void CWengoPhone::start() {
 	LOG_DEBUG("CContactList created");
 
 	_wengoPhone.start();
-	//_wengoPhone.run();
 }
 
 void CWengoPhone::terminate() {
@@ -98,7 +98,6 @@ void CWengoPhone::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine 
 	CPhoneLine * cPhoneLine = new CPhoneLine(phoneLine, *this);
 
 	LOG_DEBUG("CPhoneLine created");
-	_pWengoPhone->addPhoneLine(cPhoneLine->getPresentation());
 }
 
 void CWengoPhone::wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin) {
@@ -137,14 +136,14 @@ void CWengoPhone::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount 
 }
 
 void CWengoPhone::openWengoUrlWithoutAuth(std::string url) {
-	//TODO: retrive the language from the configuration
+	//TODO: retrieve the language from the configuration
 	static const std::string langCode = "fra";
 
 	//tune the url for Wengo
 	std::string finalUrl = url;
 	finalUrl += "&wl=" + string(WengoPhoneBuildId::SOFTPHONE_NAME);
 	finalUrl += "&lang=" + langCode;
-	
+
 	WebBrowser::openUrl(finalUrl);
 	LOG_DEBUG("url opened: " + finalUrl);
 }
@@ -164,11 +163,11 @@ void CWengoPhone::openWengoUrlWithAuth(std::string url) {
 			finalUrl += "&lang=" + langCode;
 			finalUrl += "&login=" + wengoAccount.getWengoLogin();
 			finalUrl += "&password=" + wengoAccount.getWengoPassword();
-			
+
 			WebBrowser::openUrl(finalUrl);
 			LOG_DEBUG("url opened: " + finalUrl);
-			
-		} catch ( bad_cast) {
+
+		} catch (bad_cast) {
 			LOG_DEBUG("Bad cast: from \"const SipAccount &\" to \"const WengoAccount &\"");
 		}
 	}

@@ -42,6 +42,7 @@ class QPushButton;
 class QComboBox;
 class QTabWidget;
 class QLayout;
+class QLabel;
 
 /**
  * Qt Presentation component for WengoPhone.
@@ -53,8 +54,6 @@ class QtWengoPhone : public QObjectThreadSafe, public PWengoPhone {
 public:
 
 	QtWengoPhone(CWengoPhone & cWengoPhone);
-
-	void addPhoneLine(PPhoneLine * pPhoneLine);
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
@@ -68,6 +67,14 @@ public:
 
 	QWidget * getWidget() const {
 		return _wengoPhoneWindow;
+	}
+
+	QLabel * getInternetConnectionStateLabel() const {
+		return _internetConnectionStateLabel;
+	}
+
+	QLabel * getPhoneLineStateLabel() const {
+		return _phoneLineStateLabel;
 	}
 
 	QPushButton * getCallButton() const {
@@ -142,8 +149,6 @@ private:
 	 */
 	void initButtons();
 
-	void addPhoneLineThreadSafe(PPhoneLine * pPhoneLine);
-
 	void updatePresentationThreadSafe();
 
 	void noAccountAvailableEventHandler(UserProfile & sender);
@@ -153,6 +158,10 @@ private:
 	void loginStateChangedEventHandler(SipAccount & sipAccount, SipAccount::LoginState state);
 
 	void loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state);
+
+	void networkDiscoveryStateChangedEventHandler(SipAccount & sender, SipAccount::NetworkDiscoveryState state);
+
+	void networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::NetworkDiscoveryState state);
 
 	void wrongProxyAuthenticationEventHandler(SipAccount & sender,
 		const std::string & proxyAddress, unsigned proxyPort,
@@ -164,7 +173,7 @@ private:
 
 	void showLoginWindow();
 
-    void urlClickedEventHandler(std::string url);
+	void urlClickedEventHandler(std::string url);
 
 	static QLayout * createLayout(QWidget * parent);
 
@@ -185,7 +194,11 @@ private:
 
 	QtSms * _qtSms;
 
-	QtBrowser *_browser;
+	QtBrowser * _browser;
+
+	QLabel * _phoneLineStateLabel;
+
+	QLabel * _internetConnectionStateLabel;
 
 	static const std::string ANCHOR_CONTACTLIST;
 
@@ -204,7 +217,6 @@ private:
 	static const std::string URL_WENGO_MINI_HOME;
 
 	static const std::string LOCAL_WEB_DIR;
-
 };
 
 #endif	//QTWENGOPHONE_H

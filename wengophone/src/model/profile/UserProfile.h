@@ -64,19 +64,19 @@ public:
 	/**
 	 * Network event while trying to connect a SipAccount.
 	 *
-	 * @see SipAccount::networkDiscoveryStateEvent
+	 * @see SipAccount::networkDiscoveryStateChangedEvent
 	 */
-	Event< void (SipAccount & sender, SipAccount::NetworkDiscoveryState networkDiscoveryState) > networkDiscoveryStateEvent;
+	Event< void (SipAccount & sender, SipAccount::NetworkDiscoveryState state) > networkDiscoveryStateChangedEvent;
 
 	/**
 	 * @see SipAccount::proxyNeedsAuthenticationEvent
 	 */
-	Event<void(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort)> proxyNeedsAuthenticationEvent;
+	Event<void (SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort)> proxyNeedsAuthenticationEvent;
 
 	/**
 	 * @see SipAccount::wrongProxyAuthenticationEvent
 	 */
-	Event<void(SipAccount & sender,
+	Event<void (SipAccount & sender,
 		const std::string & proxyAddress, unsigned proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 

@@ -20,7 +20,7 @@
 #ifndef QTPHONECALL_H
 #define QTPHONECALL_H
 
-#include "presentation/PPhoneCall.h"
+#include <presentation/PPhoneCall.h>
 
 #include <qtutil/QObjectThreadSafe.h>
 

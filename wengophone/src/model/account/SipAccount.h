@@ -83,19 +83,19 @@ public:
 	 * Emitted when an event occured while detecting network configuration.
 	 *
 	 * @param sender this class
-	 * @param networkDiscoveryState state of the network discovery
+	 * @param state state of the network discovery
 	 */
-	Event< void (SipAccount & sender, NetworkDiscoveryState networkDiscoveryState) > networkDiscoveryStateEvent;
+	Event< void (SipAccount & sender, NetworkDiscoveryState state) > networkDiscoveryStateChangedEvent;
 
 	/**
 	 * @see NetworkDiscovery::proxyNeedsAuthenticationEvent
 	 */
-	Event< void(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort) > proxyNeedsAuthenticationEvent;
+	Event< void (SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort) > proxyNeedsAuthenticationEvent;
 
 	/**
 	 * @see NetworkDiscovery::wrongProxyAuthenticationEvent
 	 */
-	Event< void(SipAccount & sender,
+	Event< void (SipAccount & sender,
 		const std::string & proxyAddress, unsigned proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
@@ -106,7 +106,7 @@ public:
 	virtual ~SipAccount();
 
 	/**
-	 * Initialize the SIP account.
+	 * Initializes the SIP account.
 	 *
 	 * Discover network and set configuration.
 	 *
@@ -115,7 +115,7 @@ public:
 	virtual bool init() = 0;
 
 	/**
-	 * @return the user identity.
+	 * @return the user identity
 	 */
 	const std::string & getIdentity() const {
 		return _identity;
@@ -123,7 +123,7 @@ public:
 
 	/**
 	 * @return the user name. Will be sent in the "From: " header
-	 * of a SIP transaction. Usually same as Identity.
+	 *         of a SIP transaction. Usually same as Identity
 	 */
 	const std::string & getUsername() const {
 		return _username;
@@ -146,35 +146,35 @@ public:
 	}
 
 	/**
-	 * @return the display name.
+	 * @return the display name
 	 */
 	const std::string & getDisplayName() const {
 		return _displayName;
 	}
 
 	/**
-	 * @return the register server address.
+	 * @return the register server address
 	 */
 	const std::string & getRegisterServerHostname() const {
 		return _registerServerHostname;
 	}
 
 	/**
-	 * @return the register server port.
+	 * @return the register server port
 	 */
 	unsigned getRegisterServerPort() const {
 		return _registerServerPort;
 	}
 
 	/**
-	 * @return the SIP proxy server address.
+	 * @return the SIP proxy server address
 	 */
 	const std::string & getSIPProxyServerHostname() const {
 		return _sipProxyServerHostname;
 	}
 
 	/**
-	 * @return the SIP proxy server port.
+	 * @return the SIP proxy server port
 	 */
 	unsigned getSIPProxyServerPort() const {
 		return _sipProxyServerPort;
@@ -195,21 +195,21 @@ public:
 	}
 
 	/**
-	 * True if HttpTunnel must use with SSL.
+	 * @return true if HttpTunnel must be used with SSL
 	 */
 	bool httpTunnelHasSSL() const {
 		return _httpTunnelWithSSL;
 	}
 
 	/**
-	 * @return true if the SIP connection needs a HttpTunnel.
+	 * @return true if the SIP connection needs a HttpTunnel
 	 */
 	bool isHttpTunnelNeeded() const {
 		return _needsHttpTunnel;
 	}
 
 	/**
-	 * @return the local SIP port to use.
+	 * @return the local SIP port to use
 	 */
 	unsigned getLocalSIPPort() const {
 		return _localSIPPort;
@@ -220,19 +220,19 @@ public:
 	}
 
 	/**
-	 * @return true if this SipAccount is connected.
+	 * @return true if this SipAccount is connected
 	 */
 	bool isConnected() const {
 		return _isConnected;
 	}
 
 	/**
-	 * Set connection state.
+	 * Sets connection state.
 	 */
 	void setConnected(bool connected);
 
 	/**
-	 * Set proxy settings and unblock the NetworkDiscovery if it was waiting for
+	 * Sets proxy settings and unblock the NetworkDiscovery if it was waiting for
 	 * proxy authentication parameters.
 	 *
 	 * @param proxyAddress the proxy server

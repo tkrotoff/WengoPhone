@@ -22,6 +22,10 @@
 
 #include "Presentation.h"
 
+#include <sipwrapper/EnumPhoneLineState.h>
+
+#include <util/Event.h>
+
 #include <string>
 
 /**
@@ -32,19 +36,7 @@
 class PPhoneLine : public Presentation {
 public:
 
-	enum PhoneLineState {
-		LineProxyError,
-		LineServerError,
-		LineTimeout,
-		LineOk,
-		LineClosed
-	};
-
-	virtual void phoneLineStateChangedEvent(PhoneLineState state, int lineId) = 0;
-
-protected:
-
-	virtual void phoneLineStateChangedEventThreadSafe(PhoneLineState state, int lineId) = 0;
+	Event<void (EnumPhoneLineState::PhoneLineState state)> stateChangedEvent;
 };
 
 #endif	//PPHONELINE_H

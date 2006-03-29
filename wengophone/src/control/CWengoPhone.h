@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,22 +72,27 @@ class CWengoPhone {
 public:
 
 	/**
-	 * @see WengoPhone::loginStateChangedEvent
+	 * @see UserProfile::loginStateChangedEvent
 	 */
 	Event<void (SipAccount & sender, SipAccount::LoginState state)> loginStateChangedEvent;
 
 	/**
-	 * @see WengoPhone::noAccountAvailableEvent
+	 * @see UserProfile::networkDiscoveryStateChangedEvent
+	 */
+	Event<void (SipAccount & sender, SipAccount::NetworkDiscoveryState state) > networkDiscoveryStateChangedEvent;
+
+	/**
+	 * @see UserProfile::noAccountAvailableEvent
 	 */
 	Event<void (UserProfile & sender)> noAccountAvailableEvent;
 
 	/**
-	 * @see WengoPhone::proxyNeedsAuthenticationEvent
+	 * @see UserProfile::proxyNeedsAuthenticationEvent
 	 */
 	Event<void(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort)> proxyNeedsAuthenticationEvent;
 
 	/**
-	 * @see WengoPhone::wrongProxyAuthenticationEvent
+	 * @see UserProfile::wrongProxyAuthenticationEvent
 	 */
 	Event<void(SipAccount & sender,
 		const std::string & proxyAddress, unsigned proxyPort,
@@ -97,6 +102,10 @@ public:
 
 	PWengoPhone * getPresentation() const {
 		return _pWengoPhone;
+	}
+
+	WengoPhone & getWengoPhone() const {
+		return _wengoPhone;
 	}
 
 	/**
@@ -118,12 +127,12 @@ public:
 	 * Opens a web browser and shows the Wengo account informations inside.
 	 */
 	void showWengoAccount();
-	
+
 	/**
 	 * Opens a web browser and shows the Wengo account creation page.
 	 */
 	void showWengoAccountCreation();
-	
+
 	/**
 	 * Opens a web browser and shows the Wengo help center page.
 	 */
@@ -133,17 +142,17 @@ public:
 	 * Opens a web browser and shows the Wengo forum page.
 	 */
 	void showWengoForum();
-	
+
 	/**
 	 * Opens a web browser and shows the Wengo smart directory page.
 	 */
 	void showWengoSmartDirectory();
-	
+
 	/**
 	 * Opens a web browser and shows the Wengo callout page.
 	 */
 	void showWengoCallOut();
-	
+
 	/**
 	 * Opens a web browser and shows the Wengo SMS page.
 	 */
@@ -153,7 +162,7 @@ public:
 	 * Opens a web browser and shows the Wengo voice mail page.
 	 */
 	void showWengoVoiceMail();
-	
+
 	/**
 	 * Opens a web browser and shows the Wengo buy page.
 	 */
@@ -175,10 +184,6 @@ public:
 	 */
 	void terminate();
 
-	WengoPhone & getWengoPhone() const {
-		return _wengoPhone;
-	}
-
 	/**
 	 * Gets the active phone call.
 	 *
@@ -190,7 +195,7 @@ public:
 
 	/**
 	 * Get the CContactList.
-	 * 
+	 *
 	 * @return the CContactList
 	 */
 	CContactList & getCContactList() const {
@@ -230,23 +235,23 @@ private:
 	CContactList * _cContactList;
 
 	static const std::string URL_WENGO_ACCOUNTCREATION;
-	
+
 	static const std::string URL_WENGO_FORUM;
-	
+
 	static const std::string URL_WENGO_FAQ;
-	
+
 	static const std::string URL_WENGO_SEARCH_EXT;
-	
+
 	static const std::string URL_WENGO_SEARCH_INT;
-	
+
 	static const std::string URL_WENGO_CALLOUT;
-	
+
 	static const std::string URL_WENGO_SMS;
-	
+
 	static const std::string URL_WENGO_VOICEMAIL;
-	
+
 	static const std::string URL_WENGO_ACCOUNT;
-	
+
 	static const std::string URL_WENGO_BUYWENGOS;
 };
 

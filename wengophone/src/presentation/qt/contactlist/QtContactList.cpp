@@ -45,7 +45,7 @@
 #include <QtGui>
 #include <QDebug>
 
-static inline QPixmap scalePixmap(const char *name) {
+static inline QPixmap scalePixmap(const char * name) {
 	return QPixmap(name).scaled(QSize(16, 16), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 

@@ -43,7 +43,7 @@ using namespace std;
 
 UserProfile::UserProfile(WengoPhone & wengoPhone)
 : _wengoPhone(wengoPhone)
-, _imContactListHandler(*this) 
+, _imContactListHandler(*this)
 , _connectHandler(*this)
 , _presenceHandler(*this)
 , _chatHandler(*this)
@@ -152,7 +152,7 @@ void UserProfile::addSipAccount(const std::string & login, const std::string & p
 	}
 
 	_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
-	_wengoAccount->networkDiscoveryStateEvent += networkDiscoveryStateEvent;
+	_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
 	_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
 	_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 	_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
@@ -182,7 +182,7 @@ void UserProfile::addSipAccountThreadSafe(const std::string & login, const std::
 	}
 
 	_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
-	_wengoAccount->networkDiscoveryStateEvent += networkDiscoveryStateEvent;
+	_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
 	_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
 	_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 	_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
@@ -245,7 +245,7 @@ void UserProfile::addPhoneLine(SipAccount & account) {
 void UserProfile::wengoAccountLogin() {
 	_wengoAccount = new WengoAccount(String::null, String::null, true);
 	_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
-	_wengoAccount->networkDiscoveryStateEvent += networkDiscoveryStateEvent;
+	_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
 	_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
 	_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 	_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;

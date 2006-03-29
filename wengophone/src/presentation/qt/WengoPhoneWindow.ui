@@ -8,14 +8,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>271</width>
-    <height>485</height>
+    <width>274</width>
+    <height>489</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>WengoPhone</string>
   </property>
-  <widget class="QWidget" name="centralwidget" >
+  <widget class="QWidget" name="centralWidget" >
    <layout class="QGridLayout" >
     <property name="margin" >
      <number>0</number>
@@ -23,16 +23,6 @@
     <property name="spacing" >
      <number>1</number>
     </property>
-    <item row="1" column="0" >
-     <widget class="QFrame" name="statusbar" >
-      <property name="frameShape" >
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow" >
-       <enum>QFrame::Raised</enum>
-      </property>
-     </widget>
-    </item>
     <item row="2" column="0" >
      <widget class="QTabWidget" name="tabWidget" >
       <widget class="QWidget" name="tabContactList" >
@@ -40,7 +30,7 @@
         <string>Contacts</string>
        </attribute>
       </widget>
-      <widget class="QWidget" name="tabCallHistory" >
+      <widget class="QWidget" name="tabHistory" >
        <attribute name="title" >
         <string>History</string>
        </attribute>
@@ -77,24 +67,86 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0" >
-     <widget class="QStackedWidget" name="phoneLineStackedWidget" >
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>5</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="1" column="0" >
+     <widget class="QFrame" name="profileBar" >
+      <property name="frameShape" >
+       <enum>QFrame::StyledPanel</enum>
       </property>
-      <property name="currentIndex" >
-       <number>0</number>
+      <property name="frameShadow" >
+       <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QWidget" name="page" />
      </widget>
     </item>
+    <item row="4" column="0" >
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>0</number>
+      </property>
+      <item>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="callButton" >
+        <property name="icon" >
+         <iconset resource="wengophone.qrc" >:/pics/call_button.png</iconset>
+        </property>
+        <property name="iconSize" >
+         <size>
+          <width>42</width>
+          <height>42</height>
+         </size>
+        </property>
+        <property name="flat" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="hangUpButton" >
+        <property name="icon" >
+         <iconset resource="wengophone.qrc" >:/pics/hangup_button.png</iconset>
+        </property>
+        <property name="iconSize" >
+         <size>
+          <width>42</width>
+          <height>42</height>
+         </size>
+        </property>
+        <property name="flat" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
     <item row="0" column="0" >
-     <widget class="QFrame" name="iconbar" >
+     <widget class="QFrame" name="iconBar" >
       <property name="frameShape" >
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -232,95 +284,17 @@
       </layout>
      </widget>
     </item>
-    <item row="5" column="0" >
-     <layout class="QHBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="callButton" >
-        <property name="icon" >
-         <iconset resource="wengophone.qrc" >:/pics/call_button.png</iconset>
-        </property>
-        <property name="iconSize" >
-         <size>
-          <width>48</width>
-          <height>48</height>
-         </size>
-        </property>
-        <property name="flat" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="hangUpButton" >
-        <property name="icon" >
-         <iconset resource="wengophone.qrc" >:/pics/hangup_button.png</iconset>
-        </property>
-        <property name="iconSize" >
-         <size>
-          <width>48</width>
-          <height>48</height>
-         </size>
-        </property>
-        <property name="flat" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar" >
+  <widget class="QMenuBar" name="menuBar" >
    <property name="geometry" >
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>271</width>
+     <width>274</width>
      <height>19</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuHelp" >
-    <property name="title" >
-     <string>Help</string>
-    </property>
-    <addaction name="actionShowForum" />
-    <addaction name="actionFaq" />
-    <addaction name="actionBuy_call_out_credits" />
-    <addaction name="actionShowHelp" />
-    <addaction name="actionShowAbout" />
-   </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
      <string>Tools</string>
@@ -331,9 +305,26 @@
     <addaction name="actionConfiguration" />
     <addaction name="actionAdvancedConfiguration" />
     <addaction name="separator" />
-    <addaction name="actionCall_out_service" />
+    <addaction name="actionCallOutService" />
     <addaction name="actionSms" />
-    <addaction name="actionVoicemail" />
+    <addaction name="actionVoiceMail" />
+   </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>Contacts</string>
+    </property>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSetLogin" />
+   </widget>
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
+     <string>Help</string>
+    </property>
+    <addaction name="actionShowForum" />
+    <addaction name="actionFaq" />
+    <addaction name="actionBuyCallOutCredits" />
+    <addaction name="actionShowHelp" />
+    <addaction name="actionShowAbout" />
    </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
@@ -360,24 +351,17 @@
     <addaction name="separator" />
     <addaction name="actionExit" />
    </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>Contacts</string>
-    </property>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSetLogin" />
-   </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
    <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
-  <widget class="QStatusBar" name="statusbar" >
+  <widget class="QStatusBar" name="statusBar" >
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>466</y>
-     <width>271</width>
+     <y>470</y>
+     <width>274</width>
      <height>19</height>
     </rect>
    </property>
@@ -452,12 +436,12 @@
     <string>Faq</string>
    </property>
   </action>
-  <action name="actionBuy_call_out_credits" >
+  <action name="actionBuyCallOutCredits" >
    <property name="text" >
     <string>Buy call-out credits</string>
    </property>
   </action>
-  <action name="actionCall_out_service" >
+  <action name="actionCallOutService" >
    <property name="text" >
     <string>Call-out service</string>
    </property>
@@ -467,7 +451,7 @@
     <string>Sms</string>
    </property>
   </action>
-  <action name="actionVoicemail" >
+  <action name="actionVoiceMail" >
    <property name="text" >
     <string>Voicemail </string>
    </property>

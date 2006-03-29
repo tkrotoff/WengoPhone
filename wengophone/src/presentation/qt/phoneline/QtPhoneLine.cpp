@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,11 +19,15 @@
 
 #include "QtPhoneLine.h"
 
-#include "presentation/qt/phonecall/QtPhoneCall.h"
-#include "control/phoneline/CPhoneLine.h"
+#include <presentation/qt/phonecall/QtPhoneCall.h>
+#include <presentation/qt/QtWengoPhone.h>
+#include <control/phoneline/CPhoneLine.h>
+#include <control/CWengoPhone.h>
 
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
+
+#include <util/Logger.h>
 
 #include <QtGui>
 
@@ -31,15 +35,17 @@ QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
 	: QObjectThreadSafe(),
 	_cPhoneLine(cPhoneLine) {
 
+	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cPhoneLine.getCWengoPhone().getPresentation();
+	_phoneLineStateLabel = qtWengoPhone->getPhoneLineStateLabel();
+
+	stateChangedEvent += boost::bind(&QtPhoneLine::stateChangedEventHandler, this, _1);
+
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneLine::initThreadSafe, this));
 	postEvent(event);
 }
 
 void QtPhoneLine::initThreadSafe() {
-	_phoneLineWidget = WidgetFactory::create(":/forms/phoneline/PhoneLineWidget.ui", NULL);
-
-	_stateLabel = Object::findChild<QLabel *>(_phoneLineWidget, "stateLabel");
 }
 
 void QtPhoneLine::updatePresentation() {
@@ -52,12 +58,46 @@ void QtPhoneLine::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	//_stateLabel->setText(qtPhoneCall->);
 }
 
-void QtPhoneLine::phoneLineStateChangedEvent(PhoneLineState state, int lineId) {
-	typedef PostEvent2<void (PhoneLineState, int), PhoneLineState, int> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneLine::phoneLineStateChangedEventThreadSafe, this, _1, _2), state, lineId);
+void QtPhoneLine::stateChangedEventHandler(EnumPhoneLineState::PhoneLineState state) {
+	typedef PostEvent1<void (EnumPhoneLineState::PhoneLineState), EnumPhoneLineState::PhoneLineState> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneLine::stateChangedEventHandlerThreadSafe, this, _1), state);
 	postEvent(event);
 }
 
-void QtPhoneLine::phoneLineStateChangedEventThreadSafe(PhoneLineState state, int lineId) {
-	_stateLabel->setText(QString::number(state));
+void QtPhoneLine::stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLineState state) {
+	QString tooltip;
+	QString pixmap;
+
+	switch (state) {
+	case EnumPhoneLineState::PhoneLineStateDefault:
+		tooltip = tr("Not connected");
+		pixmap = ":/pics/statusbar_sip_error.png";
+		break;
+
+	case EnumPhoneLineState::PhoneLineStateServerError:
+		tooltip = tr("An error occured");
+		pixmap = ":/pics/statusbar_sip_error.png";
+		break;
+
+	case EnumPhoneLineState::PhoneLineStateTimeout:
+		tooltip = tr("An error occured");
+		pixmap = ":/pics/statusbar_sip_error.png";
+		break;
+
+	case EnumPhoneLineState::PhoneLineStateOk:
+		tooltip = tr("Register done");
+		pixmap = ":/pics/statusbar_sip.png";
+		break;
+
+	case EnumPhoneLineState::PhoneLineStateClosed:
+		tooltip = tr("Unregister done");
+		pixmap = ":/pics/statusbar_sip_error.png";
+		break;
+
+	default:
+		LOG_FATAL("unknown state=" + String::fromNumber(state));
+	};
+
+	_phoneLineStateLabel->setPixmap(pixmap);
+	_phoneLineStateLabel->setToolTip(tooltip);
 }
