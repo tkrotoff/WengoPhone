@@ -49,13 +49,13 @@ public:
 	}
 
 	/**
-	 * @see PhoneCall::accept()
+	 * @see PhoneCall::close()
+	 * @see PhoneCall::reject()
 	 */
 	void hangUp();
 
 	/**
-	 * @see PhoneCall::close()
-	 * @see PhoneCall::reject()
+	 * @see PhoneCall::accept()
 	 */
 	void pickUp();
 

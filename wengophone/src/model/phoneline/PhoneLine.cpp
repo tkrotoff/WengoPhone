@@ -127,7 +127,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 
 	//Sends the event a new PhoneCall has been created
 	phoneCallCreatedEvent(*this, *phoneCall);
-			
+
 	//History: create a HistoryMemento for this outgoing call
 	HistoryMemento * memento = new HistoryMemento(
 		HistoryMemento::Outgoing, sipAddress.getSipAddress(), callId);
@@ -164,63 +164,61 @@ void PhoneLine::disconnect() {
 	}
 }
 
+void PhoneLine::checkCallId(int callId) {
+	PhoneCall * phoneCall = getPhoneCall(callId);
+	if (!phoneCall) {
+		LOG_FATAL("unknow phone call callId=" + String::fromNumber(callId));
+	}
+}
+
 void PhoneLine::acceptCall(int callId) {
+	checkCallId(callId);
 	_sipWrapper->acceptCall(callId);
 	LOG_DEBUG("call accepted callId=" + String::fromNumber(callId));
 }
 
 void PhoneLine::rejectCall(int callId) {
+	checkCallId(callId);
 	_sipWrapper->rejectCall(callId);
-	//History: retrive the memento and change its state to rejected
+	//History: retreive the memento and change its state to rejected
 	History::getInstance().updateCallState(callId, HistoryMemento::Rejected);
 	LOG_DEBUG("call rejected callId=" + String::fromNumber(callId));
 }
 
 void PhoneLine::closeCall(int callId) {
-	PhoneCall * phoneCall = _phoneCallMap[callId];
-	if (!phoneCall) {
-		LOG_FATAL("closing an unknow phone call callId=" + String::fromNumber(callId));
-	}
-
-	//History: update the duration of the memento associated to this phonecall
-	History::getInstance().updateCallDuration(callId, phoneCall->getDuration());
-
-	if (_activePhoneCall == phoneCall) {
-		_activePhoneCall = NULL;
-	}
-
-	//Deletes the PhoneCall that is closed now
-	//delete _phoneCallMap[callId];
-
-	//Removes it from the list of PhoneCall
-	_phoneCallMap.erase(callId);
-
+	checkCallId(callId);
 	_sipWrapper->closeCall(callId);
 	LOG_DEBUG("call closed callId=" + String::fromNumber(callId));
 }
 
 void PhoneLine::holdCall(int callId) {
+	checkCallId(callId);
 	_sipWrapper->holdCall(callId);
 	LOG_DEBUG("call hold callId=" + String::fromNumber(callId));
 }
 
 void PhoneLine::resumeCall(int callId) {
+	checkCallId(callId);
 	_sipWrapper->resumeCall(callId);
 	LOG_DEBUG("call resumed callId=" + String::fromNumber(callId));
 }
 
 void PhoneLine::blindTransfer(int callId, const std::string & sipAddress) {
+	checkCallId(callId);
 	SipAddress sipUri = SipAddress::fromString(sipAddress, getSipAccount().getRealm());
-
 	_sipWrapper->blindTransfer(callId, sipUri.getRawSipAddress());
 	LOG_DEBUG("call transfered to=" + sipAddress);
 }
 
 void PhoneLine::playTone(int callId, EnumTone::Tone tone) {
+	//No check
+	//checkCallId(callId);
 	_sipWrapper->playTone(callId, tone);
 }
 
 void PhoneLine::playSoundFile(int callId, const std::string & soundFile) {
+	//No check
+	//checkCallId(callId);
 	_sipWrapper->playSoundFile(callId, soundFile);
 }
 
@@ -229,8 +227,15 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		" state=" + String::fromNumber(state) +
 		" from=" + sipAddress.getSipAddress());
 
-	if (_phoneCallMap[callId]) {
-		_phoneCallMap[callId]->setState(state);
+	PhoneCall * phoneCall = getPhoneCall(callId);
+	if (phoneCall) {
+		if (phoneCall->getState().getCode() == state) {
+			//We are already in this state
+			//Prevents the state to be applied 2 times in a row
+			return;
+		}
+
+		phoneCall->setState(state);
 	}
 
 	//This should not replace the state machine pattern PhoneCallState or PhoneLineState
@@ -240,20 +245,16 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:
-		//Deletes the PhoneCall that is closed now
-		//delete _phoneCallMap[callId];
-
-		//Removes it from the list of PhoneCall
-		_phoneCallMap.erase(callId);
+		callClosed(callId);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
 		//holdCallsExcept(callId);
-		_activePhoneCall = _phoneCallMap[callId];
+		_activePhoneCall = getPhoneCall(callId);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateTalking:
-		_activePhoneCall = _phoneCallMap[callId];
+		_activePhoneCall = getPhoneCall(callId);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateDialing:
@@ -263,14 +264,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
-		//Deletes the PhoneCall that is closed now
-		//delete _phoneCallMap[callId];
-
-		//History: update the duration of the memento associated to this phonecall
-		//History::getInstance().updateCallDuration(callId, _phoneCallHash[callId]->getDuration());
-		
-		//Removes it from the list of PhoneCall
-		_phoneCallMap.erase(callId);
+		callClosed(callId);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming: {
@@ -297,7 +291,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		HistoryMemento * memento = new HistoryMemento(
 			HistoryMemento::Incoming, sipAddress.getSipAddress(), callId);
 		History::getInstance().addMemento(memento);
-		
+
 		break;
 	}
 
@@ -316,6 +310,25 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 	default:
 		LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
 	}
+}
+
+void PhoneLine::callClosed(int callId) {
+	checkCallId(callId);
+	PhoneCall * phoneCall = getPhoneCall(callId);
+	if (_activePhoneCall == phoneCall) {
+		_activePhoneCall = NULL;
+	}
+
+	//Deletes the PhoneCall that is closed now
+	//delete phoneCall;
+
+	//History: update the duration of the memento associated to this phonecall
+	//History::getInstance().updateCallDuration(callId, _phoneCallHash[callId]->getDuration());
+
+	//Removes it from the list of PhoneCall
+	_phoneCallMap.erase(callId);
+
+	phoneCallClosedEvent(*this, *phoneCall);
 }
 
 void PhoneLine::holdCallsExcept(int callId) {

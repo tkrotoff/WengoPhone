@@ -99,10 +99,13 @@ void QtWengoPhone::initThreadSafe() {
 	//callButton
 	_callButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "callButton");
 
+	//hangUpButton
+	_hangUpButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "hangUpButton");
+
 	//phoneComboBox
 	_phoneComboBox = Object::findChild<QComboBox *>(_wengoPhoneWindow, "phoneComboBox");
 
-	//Button initialization
+	//Buttons initialization
 	initButtons();
 
 	//tabWidget
@@ -175,7 +178,7 @@ void QtWengoPhone::initThreadSafe() {
 
 	//actionFaq
 	QAction * actionFaq = Object::findChild<QAction *>(_wengoPhoneWindow, "actionFaq");
-	connect (actionFaq, SIGNAL (triggered()), SLOT(showFaq()));
+	connect(actionFaq, SIGNAL (triggered()), SLOT(showFaq()));
 
 	//actionBuyCallOutCredits
 	QAction * actionBuyCallOutCredits = Object::findChild<QAction *>(_wengoPhoneWindow, "actionBuyCallOutCredits");
@@ -193,15 +196,13 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionVoiceMail = Object::findChild<QAction *>(_wengoPhoneWindow, "actionVoiceMail");
 	connect(actionVoiceMail, SIGNAL(triggered()), SLOT (showVoiceMail()));
 
-	// actionIM_Account_Settings
+	//actionIM_Account_Settings
 	QAction * actionIM_Account_Settings = Object::findChild<QAction *>(_wengoPhoneWindow,"actionIM_Account_Settings");
-	connect (actionIM_Account_Settings,SIGNAL(triggered()), SLOT(showAccountSettings()));
+	connect(actionIM_Account_Settings, SIGNAL(triggered()), SLOT(showAccountSettings()));
 
-	// actionShow_Hide_contacts_offline
+	//actionShow_Hide_contacts_offline
 	QAction * actionShow_Hide_contacts_offline = Object::findChild<QAction *>(_wengoPhoneWindow,"actionShow_Hide_contacts_offline");
-	connect (actionShow_Hide_contacts_offline,SIGNAL(triggered()),SLOT(showHideOffLineContacts()));
-
-
+	connect(actionShow_Hide_contacts_offline, SIGNAL(triggered()), SLOT(showHideOffLineContacts()));
 
 	//actionCreateConferenceCall
 	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
@@ -247,6 +248,9 @@ void QtWengoPhone::initButtons() {
 	connect(_callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
 	enableCallButton();
 
+	//hangUpButton
+	_hangUpButton->setEnabled(false);
+
 	//phoneComboBox
 	_phoneComboBox->disconnect();
 	connect(_phoneComboBox, SIGNAL(activated(int)), SLOT(callButtonClicked()));
@@ -256,6 +260,13 @@ void QtWengoPhone::initButtons() {
 void QtWengoPhone::enableCallButton() {
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	_callButton->setEnabled(!phoneNumber.empty());
+}
+
+void QtWengoPhone::callButtonClicked() {
+	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
+	if (!phoneNumber.empty()) {
+		_cWengoPhone.makeCall(phoneNumber);
+	}
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
@@ -425,13 +436,6 @@ void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFi
 		}
 	} else {
 		_phoneComboBox->setEditText(_phoneComboBox->currentText() + QString::fromStdString(tone));
-	}
-}
-
-void QtWengoPhone::callButtonClicked() {
-	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
-	if (!phoneNumber.empty()) {
-		_cWengoPhone.makeCall(phoneNumber);
 	}
 }
 

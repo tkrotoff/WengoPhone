@@ -28,6 +28,8 @@
 
 #include <string>
 
+class CPhoneCall;
+
 /**
  *
  * @ingroup presentation
@@ -36,7 +38,20 @@
 class PPhoneLine : public Presentation {
 public:
 
+	/**
+	 * @see PhoneLine::stateChangedEvent
+	 */
 	Event<void (EnumPhoneLineState::PhoneLineState state)> stateChangedEvent;
+
+	/**
+	 * @see PhoneLine::phoneCallCreatedEvent
+	 */
+	Event<void (CPhoneCall & cPhoneCall)> phoneCallCreatedEvent;
+
+	/**
+	 * @see PhoneLine::phoneCallClosedEvent
+	 */
+	Event<void (CPhoneCall & cPhoneCall)> phoneCallClosedEvent;
 };
 
 #endif	//PPHONELINE_H

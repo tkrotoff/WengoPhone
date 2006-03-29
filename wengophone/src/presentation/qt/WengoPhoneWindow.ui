@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>274</width>
-    <height>489</height>
+    <width>303</width>
+    <height>574</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -23,6 +23,37 @@
     <property name="spacing" >
      <number>1</number>
     </property>
+    <item row="4" column="0" >
+     <spacer>
+      <property name="orientation" >
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType" >
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" >
+       <size>
+        <width>20</width>
+        <height>5</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="3" column="0" >
+     <widget class="QComboBox" name="phoneComboBox" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>0</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="editable" >
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
     <item row="2" column="0" >
      <widget class="QTabWidget" name="tabWidget" >
       <widget class="QWidget" name="tabContactList" >
@@ -52,21 +83,6 @@
       </widget>
      </widget>
     </item>
-    <item row="3" column="0" >
-     <widget class="QComboBox" name="phoneComboBox" >
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="editable" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="0" >
      <widget class="QFrame" name="profileBar" >
       <property name="frameShape" >
@@ -77,44 +93,15 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0" >
-     <layout class="QHBoxLayout" >
+    <item row="5" column="0" >
+     <layout class="QGridLayout" >
       <property name="margin" >
        <number>0</number>
       </property>
       <property name="spacing" >
-       <number>0</number>
+       <number>6</number>
       </property>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="callButton" >
-        <property name="icon" >
-         <iconset resource="wengophone.qrc" >:/pics/call_button.png</iconset>
-        </property>
-        <property name="iconSize" >
-         <size>
-          <width>42</width>
-          <height>42</height>
-         </size>
-        </property>
-        <property name="flat" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
+      <item row="0" column="2" >
        <widget class="QPushButton" name="hangUpButton" >
         <property name="icon" >
          <iconset resource="wengophone.qrc" >:/pics/hangup_button.png</iconset>
@@ -130,7 +117,7 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="0" >
        <spacer>
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
@@ -142,6 +129,35 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="0" column="3" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QPushButton" name="callButton" >
+        <property name="icon" >
+         <iconset resource="wengophone.qrc" >:/pics/call_button.png</iconset>
+        </property>
+        <property name="iconSize" >
+         <size>
+          <width>42</width>
+          <height>42</height>
+         </size>
+        </property>
+        <property name="flat" >
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -291,7 +307,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>274</width>
+     <width>303</width>
      <height>19</height>
     </rect>
    </property>
@@ -360,8 +376,8 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>470</y>
-     <width>274</width>
+     <y>555</y>
+     <width>303</width>
      <height>19</height>
     </rect>
    </property>

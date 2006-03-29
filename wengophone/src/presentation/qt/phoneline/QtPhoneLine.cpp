@@ -22,6 +22,7 @@
 #include <presentation/qt/phonecall/QtPhoneCall.h>
 #include <presentation/qt/QtWengoPhone.h>
 #include <control/phoneline/CPhoneLine.h>
+#include <control/phonecall/CPhoneCall.h>
 #include <control/CWengoPhone.h>
 
 #include <qtutil/WidgetFactory.h>
@@ -35,10 +36,12 @@ QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
 	: QObjectThreadSafe(),
 	_cPhoneLine(cPhoneLine) {
 
-	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cPhoneLine.getCWengoPhone().getPresentation();
-	_phoneLineStateLabel = qtWengoPhone->getPhoneLineStateLabel();
+	_activeCPhoneCall = NULL;
+	_qtWengoPhone = (QtWengoPhone *) _cPhoneLine.getCWengoPhone().getPresentation();
 
 	stateChangedEvent += boost::bind(&QtPhoneLine::stateChangedEventHandler, this, _1);
+	phoneCallCreatedEvent += boost::bind(&QtPhoneLine::phoneCallCreatedEventHandler, this, _1);
+	phoneCallClosedEvent += boost::bind(&QtPhoneLine::phoneCallClosedEventHandler, this, _1);
 
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneLine::initThreadSafe, this));
@@ -46,6 +49,9 @@ QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
 }
 
 void QtPhoneLine::initThreadSafe() {
+	//hangUpButton
+	_hangUpButton = _qtWengoPhone->getHangUpButton();
+	connect(_hangUpButton, SIGNAL(clicked()), SLOT(hangUpButtonClicked()));
 }
 
 void QtPhoneLine::updatePresentation() {
@@ -65,6 +71,8 @@ void QtPhoneLine::stateChangedEventHandler(EnumPhoneLineState::PhoneLineState st
 }
 
 void QtPhoneLine::stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLineState state) {
+	static QLabel * phoneLineStateLabel = _qtWengoPhone->getPhoneLineStateLabel();
+
 	QString tooltip;
 	QString pixmap;
 
@@ -98,6 +106,33 @@ void QtPhoneLine::stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLi
 		LOG_FATAL("unknown state=" + String::fromNumber(state));
 	};
 
-	_phoneLineStateLabel->setPixmap(pixmap);
-	_phoneLineStateLabel->setToolTip(tooltip);
+	phoneLineStateLabel->setPixmap(pixmap);
+	phoneLineStateLabel->setToolTip(tooltip);
+}
+
+void QtPhoneLine::phoneCallCreatedEventHandler(CPhoneCall & cPhoneCall) {
+	typedef PostEvent1<void (CPhoneCall &), CPhoneCall &> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneLine::phoneCallCreatedEventHandlerThreadSafe, this, _1), cPhoneCall);
+	postEvent(event);
+}
+
+void QtPhoneLine::phoneCallCreatedEventHandlerThreadSafe(CPhoneCall & cPhoneCall) {
+	_activeCPhoneCall = &cPhoneCall;
+	_hangUpButton->setEnabled(true);
+}
+
+void QtPhoneLine::phoneCallClosedEventHandler(CPhoneCall & cPhoneCall) {
+	typedef PostEvent1<void (CPhoneCall &), CPhoneCall &> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneLine::phoneCallClosedEventHandlerThreadSafe, this, _1), cPhoneCall);
+	postEvent(event);
+}
+
+void QtPhoneLine::phoneCallClosedEventHandlerThreadSafe(CPhoneCall & cPhoneCall) {
+	_hangUpButton->setEnabled(false);
+}
+
+void QtPhoneLine::hangUpButtonClicked() {
+	if (_activeCPhoneCall) {
+		_activeCPhoneCall->hangUp();
+	}
 }

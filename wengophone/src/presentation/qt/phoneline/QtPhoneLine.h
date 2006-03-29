@@ -26,9 +26,11 @@
 
 class CPhoneLine;
 class CWengoPhone;
+class CPhoneCall;
 class QtPhoneCall;
+class QtWengoPhone;
 
-class QLabel;
+class QPushButton;
 
 class QtPhoneLine : public QObjectThreadSafe, public PPhoneLine {
 	Q_OBJECT
@@ -40,6 +42,10 @@ public:
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
+private Q_SLOTS:
+
+	void hangUpButtonClicked();
+
 private:
 
 	void initThreadSafe();
@@ -50,9 +56,21 @@ private:
 
 	void stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLineState state);
 
+	void phoneCallCreatedEventHandler(CPhoneCall & cPhoneCall);
+
+	void phoneCallCreatedEventHandlerThreadSafe(CPhoneCall & cPhoneCall);
+
+	void phoneCallClosedEventHandler(CPhoneCall & cPhoneCall);
+
+	void phoneCallClosedEventHandlerThreadSafe(CPhoneCall & cPhoneCall);
+
 	CPhoneLine & _cPhoneLine;
 
-	QLabel * _phoneLineStateLabel;
+	QtWengoPhone * _qtWengoPhone;
+
+	QPushButton * _hangUpButton;
+
+	CPhoneCall * _activeCPhoneCall;
 };
 
 #endif	//QTPHONELINE_H

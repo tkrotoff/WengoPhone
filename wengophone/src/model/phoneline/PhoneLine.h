@@ -114,6 +114,24 @@ private:
 	 */
 	void holdCallsExcept(int callId);
 
+	/**
+	 * A call has been closed.
+	 *
+	 * Code factorization.
+	 *
+	 * @param callId phone call being closed
+	 */
+	void callClosed(int callId);
+
+	/**
+	 * Checks if a callId is valid.
+	 *
+	 * Makes an assertion if the callId is not valid.
+	 *
+	 * @param callId to check
+	 */
+	void checkCallId(int callId);
+
 	/** SIP implementation. */
 	SipWrapper * _sipWrapper;
 

@@ -23,11 +23,13 @@
 #include <sipwrapper/EnumPhoneLineState.h>
 
 #include <string>
+#include <map>
 
 class IPhoneLine;
 class PPhoneLine;
 class PhoneCall;
 class CWengoPhone;
+class CPhoneCall;
 
 /**
  *
@@ -55,11 +57,17 @@ private:
 
 	void phoneCallCreatedEventHandler(IPhoneLine & sender, PhoneCall & phoneCall);
 
+	void phoneCallClosedEventHandler(IPhoneLine & sender, PhoneCall & phoneCall);
+
 	IPhoneLine & _phoneLine;
 
 	PPhoneLine * _pPhoneLine;
 
 	CWengoPhone & _cWengoPhone;
+
+	typedef std::map<PhoneCall *, CPhoneCall *> CPhoneCallMap;
+
+	CPhoneCallMap _cPhoneCallMap;
 };
 
 #endif	//CPHONELINE_H

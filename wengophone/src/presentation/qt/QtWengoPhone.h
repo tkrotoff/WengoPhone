@@ -84,6 +84,10 @@ public:
 		return _callButton;
 	}
 
+	QPushButton * getHangUpButton() const {
+		return _hangUpButton;
+	}
+
 	QComboBox * getPhoneComboBox() const {
 		return _phoneComboBox;
 	}
@@ -188,6 +192,8 @@ private:
 	QMainWindow * _wengoPhoneWindow;
 
 	QPushButton * _callButton;
+
+	QPushButton * _hangUpButton;
 
 	QComboBox * _phoneComboBox;
 

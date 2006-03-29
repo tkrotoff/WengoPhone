@@ -62,6 +62,14 @@ public:
 	 */
 	Event<void (IPhoneLine & sender, PhoneCall & phoneCall)> phoneCallCreatedEvent;
 
+	/**
+	 * A PhoneCall has been closed.
+	 *
+	 * @param sender this class
+	 * @param phoneCall phoneCall closed
+	 */
+	Event<void (IPhoneLine & sender, PhoneCall & phoneCall)> phoneCallClosedEvent;
+
 	virtual ~IPhoneLine() {
 	}
 

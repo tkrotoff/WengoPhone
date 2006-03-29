@@ -35,6 +35,7 @@ CPhoneLine::CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone)
 
 	_phoneLine.stateChangedEvent += boost::bind(&CPhoneLine::stateChangedEventHandler, this, _1, _2);
 	_phoneLine.phoneCallCreatedEvent += boost::bind(&CPhoneLine::phoneCallCreatedEventHandler, this, _1, _2);
+	_phoneLine.phoneCallClosedEvent += boost::bind(&CPhoneLine::phoneCallClosedEventHandler, this, _1, _2);
 }
 
 int CPhoneLine::makeCall(const std::string & phoneNumber) {
@@ -47,6 +48,16 @@ void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender, EnumPhoneLineStat
 
 void CPhoneLine::phoneCallCreatedEventHandler(IPhoneLine & sender, PhoneCall & phoneCall) {
 	CPhoneCall * cPhoneCall = new CPhoneCall(phoneCall, _cWengoPhone);
+	_cPhoneCallMap[&phoneCall] = cPhoneCall;
+	_pPhoneLine->phoneCallCreatedEvent(*cPhoneCall);
 
 	LOG_DEBUG("CPhoneCall created");
+}
+
+void CPhoneLine::phoneCallClosedEventHandler(IPhoneLine & sender, PhoneCall & phoneCall) {
+	CPhoneCall * cPhoneCall = _cPhoneCallMap[&phoneCall];
+	if (!cPhoneCall) {
+		LOG_FATAL("cPhoneCall cannot be NULL");
+	}
+	_pPhoneLine->phoneCallClosedEvent(*cPhoneCall);
 }
