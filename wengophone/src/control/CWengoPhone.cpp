@@ -25,6 +25,7 @@
 #include <model/connect/ConnectHandler.h>
 #include <model/profile/UserProfile.h>
 #include <model/phoneline/IPhoneLine.h>
+#include <model/history/History.h>
 #include <presentation/PFactory.h>
 #include <presentation/PWengoPhone.h>
 #include "phoneline/CPhoneLine.h"

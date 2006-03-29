@@ -42,6 +42,7 @@ class ConnectHandler;
 class ChatHandler;
 class PhoneCall;
 class Sms;
+class History;
 class IMAccount;
 class UserProfile;
 
