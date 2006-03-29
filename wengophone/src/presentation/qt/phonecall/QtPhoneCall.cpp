@@ -146,6 +146,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 	case EnumPhoneCallState::PhoneCallStateClosed:
 		_acceptButton->setEnabled(false);
 		_rejectButton->setEnabled(false);
+		_phoneCallWidget->hide();
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming:
