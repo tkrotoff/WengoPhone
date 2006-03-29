@@ -42,6 +42,8 @@ std::string IMContactXMLSerializer::serialize() {
 
 	result += ("<id>" + _imContact.getContactId() + "</id>\n");
 
+	result += ("<alias>" + _imContact.getAlias() + "</alias>\n");
+
 	result += ("<account>" + _imContact.getIMAccount().getLogin() + "</account>\n");
 
 	result += "<groups>\n";
@@ -90,7 +92,18 @@ bool IMContactXMLSerializer::unserialize(const std::string & data) {
 	////
 
 	//Retrieving contactId
-	_imContact._contactId = im.FirstChild("id").FirstChild().Text()->Value();
+	TiXmlNode * contactId = im.FirstChild("id").Node();
+	if (contactId && contactId->FirstChild()) {
+		_imContact._contactId = contactId->FirstChild()->Value();
+	}
+	////
+
+	// Retrieving alias
+	TiXmlNode * alias = im.FirstChild("alias").Node();
+	if (alias && alias->FirstChild()) {
+		_imContact._alias = alias->FirstChild()->Value();
+	}
+	////
 
 	//Retrieving Groups
 	TiXmlNode * groups = im.FirstChild("groups").Node();

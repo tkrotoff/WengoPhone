@@ -4,13 +4,15 @@
 #include <QtGui>
 #include "QtClickableLabel.h"
 
+class UserProfile;
+
 class QtNickNameWidget : public QWidget
 {
 	Q_OBJECT
 
 public:
 
-	QtNickNameWidget (QWidget * parent = 0, Qt::WFlags f = 0);
+	QtNickNameWidget (UserProfile & userProfile, QWidget * parent = 0, Qt::WFlags f = 0);
 
 protected:
 
@@ -42,6 +44,7 @@ protected:
 
 	QMenu * _jabberIMAccountMenu;
 
+	UserProfile & _userProfile;
 
 	void showMsnMenu();
 
@@ -67,6 +70,7 @@ public Q_SLOTS:
 
 	void avatarClicked();
 
+	void nicknameChanged();
 
 	// Menus actions
 

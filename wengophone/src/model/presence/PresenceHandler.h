@@ -50,10 +50,10 @@ public:
 
 	/**
 	 * @see IMPresence::presenceStateChangedEvent
-	 * @param imAccount the IMAccount that posses
+	 * @param imContact the IMContact for wich the state has changed
 	 */
 	Event<void (PresenceHandler & sender, EnumPresenceState::PresenceState state, 
-		const std::string & note, const IMContact & imContact)> presenceStateChangedEvent;
+		const std::string & alias, const IMContact & imContact)> presenceStateChangedEvent;
 
 	/**
 	 * @see IMPresence::presenceStatusEvent

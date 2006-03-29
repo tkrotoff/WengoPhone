@@ -42,7 +42,7 @@ public:
 	 * @see IMPresence::presenceStateChangedEvent
 	 */
 	Event<void (IMPresence & sender, EnumPresenceState::PresenceState state,
-		const std::string & note, const std::string & from)> presenceStateChangedEvent;
+		const std::string & alias, const std::string & from)> presenceStateChangedEvent;
 
 	/**
 	 * @see IMPresence::presenceStatusEvent

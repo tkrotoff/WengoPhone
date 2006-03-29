@@ -180,9 +180,9 @@ void PresenceHandler::changeMyIcon(const Picture & picture, IMAccount * imAccoun
 }
 
 void PresenceHandler::presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
-	const std::string & note, const std::string & from) {
+	const std::string & alias, const std::string & from) {
 
-	presenceStateChangedEvent(*this, state, note, IMContact(sender.getIMAccount(), from));
+	presenceStateChangedEvent(*this, state, alias, IMContact(sender.getIMAccount(), from));
 }
 
 void PresenceHandler::myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status) {

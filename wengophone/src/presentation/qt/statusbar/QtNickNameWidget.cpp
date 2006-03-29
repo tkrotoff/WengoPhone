@@ -1,13 +1,33 @@
+/*
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2006  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 #include "QtNickNameWidget.h"
 
-QtNickNameWidget::QtNickNameWidget(QWidget * parent , Qt::WFlags f ) : QWidget(parent,f){
+#include <model/profile/UserProfile.h>
 
+QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent , Qt::WFlags f )
+: QWidget(parent,f), _userProfile(userProfile) {
 
 	QPalette p = palette();
 	p.setColor(QPalette::Active,QPalette::Window,Qt::white);
 	setPalette(p);
 	setAutoFillBackground(true);
-
 
 	_msnIMAccountMenu = NULL;
 	_yahooIMAccountMenu = NULL;
@@ -91,6 +111,9 @@ void QtNickNameWidget::avatarClicked(){
 	qDebug() << "Avatar Clicked";
 }
 
+void QtNickNameWidget::nicknameChanged() {
+	_userProfile.setAlias(_nickNameEdit->text().toStdString());
+}
 
 // Menus
 
@@ -155,19 +178,19 @@ void QtNickNameWidget::showYahooMenu(){
 	action = yahooMenu->addAction( tr ("Disponible") );
 	connect ( action, SIGNAL( triggered(bool) ), SLOT ( yahooAvailableClicked(bool) ) );
 
-	action = yahooMenu->addAction( tr ("Occupé") );
+	action = yahooMenu->addAction( tr ("OccupÃˆ") );
 	connect ( action, SIGNAL( triggered(bool) ), SLOT ( yahooBusyClicked(bool) ) );
 
-	action = yahooMenu->addAction( tr ("Pas là") );
+	action = yahooMenu->addAction( tr ("Pas lâ€¡") );
 	connect ( action, SIGNAL( triggered(bool) ), SLOT ( yahooAwayClicked(bool) ) );
 
 	action = yahooMenu->addAction( tr ("De retour dans 5 minutes") );
 	connect ( action, SIGNAL( triggered(bool) ), SLOT ( yahooBRBClicked(bool) ) );
 
-	action = yahooMenu->addAction( tr ("Pas devant l'écran") );
+	action = yahooMenu->addAction( tr ("Pas devant l'Ãˆcran") );
 	connect ( action, SIGNAL( triggered(bool) ), SLOT ( yahooNotHereClicked(bool) ) );
 
-	action = yahooMenu->addAction( tr ("Au téléphone") );
+	action = yahooMenu->addAction( tr ("Au tÃˆlÃˆphone") );
 	connect ( action, SIGNAL( triggered(bool) ), SLOT ( yahooOnPhoneClicked(bool) ) );
 
 	action = yahooMenu->addAction( tr ("Insisible pour tous") );
@@ -175,7 +198,7 @@ void QtNickNameWidget::showYahooMenu(){
 
 	yahooMenu->addSeparator ();
 
-	action = yahooMenu->addAction( tr ("Déconnecter") );
+	action = yahooMenu->addAction( tr ("DÃˆconnecter") );
 	connect ( action, SIGNAL( triggered(bool) ), SLOT ( yahooDisconnectClicked(bool) ) );
 
 	action = yahooMenu->addAction( tr ("Re-connecter") );

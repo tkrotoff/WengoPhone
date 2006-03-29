@@ -171,7 +171,7 @@ private:
 	 */
 	void presenceStateChangedEventHandler(PresenceHandler & sender,
 		EnumPresenceState::PresenceState state, 
-		const std::string & note, const IMContact & imContact);
+		const std::string & alias, const IMContact & imContact);
 
 	/**
 	 * @see IMContactListHandler::imContactMovedEvent

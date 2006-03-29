@@ -202,8 +202,7 @@ void ContactList::contactGroupRemovedEventHandler(IMContactList & sender,
 
 void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 	EnumPresenceState::PresenceState state,
-	const std::string & note, const IMContact & imContact) {
-
+	const std::string & alias, const IMContact & imContact) {
 
 	// Find the Contact that owns the IMContact. Creating a new one if needed
 	Contact * contact = findContactThatOwns(imContact);
@@ -216,6 +215,7 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 	}
 
 	contact->getIMContact(imContact).setPresenceState(state);
+	//contact->getIMContact(imContact).setAlias(alias);
 }
 
 void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,

@@ -125,6 +125,15 @@ public:
 		imContactChangedEvent(*this);
 	}
 
+	const std::string & getAlias() const {
+		return _alias;
+	}
+
+	void setAlias(const std::string & alias) {
+		_alias = alias;
+		imContactChangedEvent(*this);
+	}
+
 	void setBlocked(bool blocked) {
 		_blocked = blocked;
 	}
@@ -150,6 +159,8 @@ private:
 	IMAccount _imAccount;
 
 	std::string _contactId;
+
+	std::string _alias;
 
 	/** True if this IMContact is blocked. */
 	bool _blocked;

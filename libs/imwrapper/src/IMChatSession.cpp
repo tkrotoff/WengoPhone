@@ -23,6 +23,8 @@
 
 #include <util/Logger.h>
 
+#include <boost/regex.hpp>
+
 using namespace std;
 
 IMChatSession::IMChatSession(IMChat & imChat)
@@ -68,7 +70,7 @@ void IMChatSession::removeAllIMContact() {
 }
 
 void IMChatSession::sendMessage(const std::string & message) {
-	LOG_DEBUG("sending message: " + message);
+	LOG_DEBUG("sending a message. Raw message: " + message);
 	_imChat.sendMessage(*this, message);
 }
 
@@ -133,4 +135,18 @@ void IMChatSession::contactRemovedEventHandler(IMChat & sender, IMChatSession & 
 			LOG_DEBUG("IMContact " + contactId + " removed from IMContactList");
 		}
 	}
+}
+
+string IMChatSession::cleanMessage(const string & message) {
+	boost::regex e("<html[^>]*>[^<]*<head[^>]*>.*</head>(.*)</html>");
+	boost::match_results<std::string::const_iterator> what;
+	string result;
+
+	if (boost::regex_search(message, what, e)) {
+		result = string(what[1].first, what[1].second);
+	} else {
+		return message;
+	}
+
+	return result;
 }

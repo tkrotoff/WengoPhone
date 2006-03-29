@@ -62,7 +62,11 @@ string CContact::getDisplayName() const {
 		// Take the contact id of the first IMContact
 		IMContactSet::const_iterator it = _contact.getIMContactSet().begin();
 		if (it != _contact.getIMContactSet().end()) {
-			result = (*it).getContactId();
+			if (!(*it).getAlias().empty()) {
+				result = (*it).getAlias();
+			} else {
+				result = (*it).getContactId();
+			}
 		}
 	}
 

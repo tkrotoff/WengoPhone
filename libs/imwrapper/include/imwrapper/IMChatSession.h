@@ -189,6 +189,17 @@ public:
 	int getId() const;
 
 private:
+	
+	/**
+	 * Cleans the message up.
+	 *
+	 * This method removes html tags that are supported by some protocols.
+	 * The sent message must not contain <html> and <head> tags.
+	 *
+	 * @param the dirty message
+	 * @return the clean message
+	 */
+	std::string cleanMessage(const std::string & message);
 
 	void messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, const std::string & message);
 

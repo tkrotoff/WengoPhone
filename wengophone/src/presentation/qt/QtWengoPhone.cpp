@@ -223,7 +223,7 @@ void QtWengoPhone::initThreadSafe() {
 	QGridLayout * gridlayout;
 	gridlayout = (QGridLayout *) centralWidget->layout();
 	gridlayout->removeWidget(profileBar);
-	gridlayout->addWidget(new QtStatusBar(centralWidget), 1, 0);
+	gridlayout->addWidget(new QtStatusBar(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), centralWidget), 1, 0);
 
 	//Status bar
 	QStatusBar * statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");
