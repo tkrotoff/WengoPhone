@@ -341,11 +341,16 @@ void eXosip_quit(void)
 
   osip_free(eXosip.j_transactions);
 
-  eXosip_kill_transaction (eXosip.j_osip->osip_ict_transactions);
-  eXosip_kill_transaction (eXosip.j_osip->osip_nict_transactions);
-  eXosip_kill_transaction (eXosip.j_osip->osip_ist_transactions);
-  eXosip_kill_transaction (eXosip.j_osip->osip_nist_transactions);
-  osip_release (eXosip.j_osip);
+  if (eXosip.j_osip)
+    {
+      eXosip_kill_transaction (eXosip.j_osip->osip_ict_transactions);
+      eXosip_kill_transaction (eXosip.j_osip->osip_nict_transactions);
+      eXosip_kill_transaction (eXosip.j_osip->osip_ist_transactions);
+      eXosip_kill_transaction (eXosip.j_osip->osip_nist_transactions);
+      osip_release (eXosip.j_osip);
+      eXosip.j_osip = 0;
+    }
+
 
   {
     eXosip_event_t *ev;
