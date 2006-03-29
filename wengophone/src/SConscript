@@ -112,6 +112,9 @@ sources = [
 	'model/profile/StreetAddress.cpp',
 	'model/profile/StreetAddressXMLSerializer.cpp',
 	'model/sms/Sms.cpp',
+	'model/history/History.cpp',
+	'model/history/HistoryMemento.cpp',
+	'model/history/HistoryMementoCollection.cpp',
 
 	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
@@ -124,6 +127,7 @@ sources = [
 	'control/contactlist/CContactList.cpp',
 	'control/contactlist/CContactGroup.cpp',
 	'control/sms/CSms.cpp',
+	'control/history/CHistory.cpp',
 
 	'presentation/PFactory.cpp'
 ]
