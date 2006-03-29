@@ -775,7 +775,7 @@ const struct cmd cmdtab[] =
   { "o", "callid\t- hOld the call", CMD_HOLD },
   { "u", "callid\t- resUme the call", CMD_RESUME },
   { "b", "0/1\t- set Busy flag (when 1 all incoming calls are automatically rejected)", CMD_BUSY },
-  { "m", "callid dtmfchar\t- send dtMf signal", CMD_DTMF },
+  { "m", "callid dtmfchars\t- send dtMf signal", CMD_DTMF },
   { "bx", "callid target\t- Blind Xfer call to target", CMD_BTXFER },
   { "ax", "callid callid2\t- Assisted Xfer call to callid2", CMD_ATXFER },
   { "xp", "callid target\t- Place call in response to XferReq", CMD_XFERCNF },
@@ -1157,9 +1157,15 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	  }
 
 	case CMD_DTMF:
-	  sscanf(args, "%d %s", &cid, tmp);
-	  ret = phSendDtmf(cid, tmp[0], dtmf_mode);
-	  break;
+	  {
+	    sscanf(args, "%d %s", &cid, tmp);
+	    p = tmp;
+	    ret = 0;
+	    while(!ret && *p)
+	      ret = phSendDtmf(cid, *p++, dtmf_mode);
+	    
+	    break;
+	  }
 
 	case CMD_OPT:
 	  ret = phSendOptions(currentid, "sip:nobody@nobody.com");
