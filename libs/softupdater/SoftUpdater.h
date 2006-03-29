@@ -20,56 +20,41 @@
 #ifndef SOFTUPDATER_H
 #define SOFTUPDATER_H
 
-#include <qobject.h>
-#include <qnetworkprotocol.h>
-#include <qptrlist.h>
-#include <qprogressdialog.h>
-#include <qdialog.h>
+#include <string>
 
-class QString;
-class QUrlOperator;
+#include <util/NonCopyable.h>
+#include <util/http/HttpRequest.h>
 
 /**
- * Downloads a file from an URL to another and shows a progress dialog.
+ * Downloads a file from an URL.
  *
  * @author Tanguy Krotoff
  */
-class SoftUpdater : public QObject {
-	Q_OBJECT
+class SoftUpdater : NonCopyable {
 public:
+
+	/**
+	 * @see IHttpRequest::dataReadProgressEvent
+	 */
+	Event<void (int bytesDone, int bytesTotal)> dataReadProgressEvent;
 
 	/**
 	 * Downloads a file from an URL to a destination.
 	 *
-	 * @param sourceUrl absolute URL of the source file (ex: http://login:password@www.website.com/file.txt)
-	 * @param destinationUrl absolute URL of the destination file (ex: file:/C:/Program Files/file.txt)
+	 * @param url URL of the source file (http://login:password@www.website.com/file.txt)
+	 * @param fileName destination file (C:/Program Files/file.txt)
 	 */
-	SoftUpdater(const QString & sourceUrl, const QString & destinationUrl);
+	SoftUpdater(const std::string & url, const std::string & fileName);
 
 	~SoftUpdater();
 
-	QDialog * getWidget() const {
-		return _progress;
-	}
-
-private Q_SLOTS:
-
-	void transferProgress(int bytesDone, int bytesTotal, QNetworkOperation * op);
-
-	void commandFinished(QNetworkOperation * op);
-
-	void stop();
-
 private:
 
-	void downloadFile(const QString & url, const QString & filename);
+	void downloadFile();
 
-	QUrlOperator * _operator;
+	void answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error);
 
-	QProgressDialog * _progress;
-
-	typedef QPtrList<QNetworkOperation> OperationList;
-	OperationList * _operationList;
+	std::string _fileName;
 };
 
 #endif	//SOFTUPDATER_H
