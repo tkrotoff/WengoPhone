@@ -22,6 +22,7 @@
 #include <model/account/wengo/WengoAccount.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/history/History.h>
 #include <WengoPhoneBuildId.h>
 
 #include <util/Logger.h>
@@ -67,7 +68,14 @@ int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
 
 	//First parameter: true = HTTPS, false = HTTP
 	//Last parameter: true = POST method, false = GET method
-	return httpRequest.sendRequest(true, config.getWengoServerHostname(), 443, config.getWengoSMSPath(), data, true);
+	int id = httpRequest.sendRequest(true, config.getWengoServerHostname(), 443, config.getWengoSMSPath(), data, true);
+	
+	//History: create a History Memento for this outgoing SMS
+	HistoryMemento * memento = new HistoryMemento(
+		HistoryMemento::SMSERROR, phoneNumber, id, message2);
+	History::getInstance().addMemento(memento);
+
+	return id;
 }
 
 void Sms::answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error) {
@@ -86,10 +94,16 @@ void Sms::answerReceivedEventHandler(int requestId, const std::string & answer, 
 		if (tmp.contains(STATUS_OK) && !tmp.contains(STATUS_UNAUTHORIZED)) {
 			LOG_DEBUG("SMS sent");
 			smsStatusEvent(*this, requestId, SmsStatusOk);
+			
+			//History: retrieve the HistoryMemento & update its state to OK
+			History::getInstance().updateSMSState(requestId, HistoryMemento::SMSOK);
 			return;
 		}
 	}
 
 	LOG_DEBUG("SMS unsent");
 	smsStatusEvent(*this, requestId, SmsStatusError);
+	
+	//TODO: retrieve the HistoryMemento & update it
+	History::getInstance().updateSMSState(requestId, HistoryMemento::SMSERROR);
 }
