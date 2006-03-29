@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef DOWNLOAD_H
-#define DOWNLOAD_H
+#ifndef SOFTUPDATER_H
+#define SOFTUPDATER_H
 
 #include <qobject.h>
 #include <qnetworkprotocol.h>
@@ -34,7 +34,7 @@ class QUrlOperator;
  *
  * @author Tanguy Krotoff
  */
-class Download : public QObject {
+class SoftUpdater : public QObject {
 	Q_OBJECT
 public:
 
@@ -42,17 +42,17 @@ public:
 	 * Downloads a file from an URL to a destination.
 	 *
 	 * @param sourceUrl absolute URL of the source file (ex: http://login:password@www.website.com/file.txt)
-	 * @param destinationUrl absolute URL of the destination file (ex: file:/C:/Program Files/file.txt) 
+	 * @param destinationUrl absolute URL of the destination file (ex: file:/C:/Program Files/file.txt)
 	 */
-	Download(const QString & sourceUrl, const QString & destinationUrl);
+	SoftUpdater(const QString & sourceUrl, const QString & destinationUrl);
 
-	~Download();
+	~SoftUpdater();
 
 	QDialog * getWidget() const {
 		return _progress;
 	}
 
-private slots:
+private Q_SLOTS:
 
 	void transferProgress(int bytesDone, int bytesTotal, QNetworkOperation * op);
 
@@ -72,4 +72,4 @@ private:
 	OperationList * _operationList;
 };
 
-#endif	//DOWNLOAD_H
+#endif	//SOFTUPDATER_H

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "Download.h"
+#include "SoftUpdater.h"
 
 #include <qapplication.h>
 #include <qptrlist.h>
@@ -29,34 +29,31 @@
 
 #include <cstdlib>
 
-Download::Download(const QString & sourceUrl, const QString & destinationUrl) {
+SoftUpdater::SoftUpdater(const QString & sourceUrl, const QString & destinationUrl) {
 	downloadFile(sourceUrl, destinationUrl);
 }
 
-Download::~Download() {
+SoftUpdater::~SoftUpdater() {
 	delete _operationList;
 	delete _operator;
 	delete _progress;
 }
 
-void Download::downloadFile(const QString & sourceUrl, const QString & destinationUrl) {
+void SoftUpdater::downloadFile(const QString & sourceUrl, const QString & destinationUrl) {
 	_progress = new QProgressDialog(tr("From: %1\nTo: %2").arg(sourceUrl).arg(destinationUrl),
 						tr("Cancel"),
 						0,
 						NULL,
 						"download progress dialog",
 						true);
-	_progress->setCaption(tr("Download"));
+	_progress->setCaption(tr("SoftUpdater"));
 
 	qInitNetworkProtocols();
 	_operator = new QUrlOperator();
 
-	connect(_operator, SIGNAL(dataTransferProgress(int, int, QNetworkOperation *)),
-			this, SLOT(transferProgress(int, int, QNetworkOperation *)));
-	connect(_operator, SIGNAL(finished(QNetworkOperation *)),
-			this, SLOT(commandFinished(QNetworkOperation *)));
-	connect(_progress, SIGNAL(cancelled()),
-			this, SLOT(stop()));
+	connect(_operator, SIGNAL(dataTransferProgress(int, int, QNetworkOperation *)), SLOT(transferProgress(int, int, QNetworkOperation *)));
+	connect(_operator, SIGNAL(finished(QNetworkOperation *)), SLOT(commandFinished(QNetworkOperation *)));
+	connect(_progress, SIGNAL(cancelled()), SLOT(stop()));
 
 	_operationList = new OperationList(_operator->copy(sourceUrl, destinationUrl, false, false));
 
@@ -64,11 +61,11 @@ void Download::downloadFile(const QString & sourceUrl, const QString & destinati
 	_progress->exec();
 }
 
-void Download::transferProgress(int bytesDone, int bytesTotal, QNetworkOperation *) {
+void SoftUpdater::transferProgress(int bytesDone, int bytesTotal, QNetworkOperation *) {
 	_progress->setProgress(bytesDone, bytesTotal);
 }
 
-void Download::commandFinished(QNetworkOperation * op) {
+void SoftUpdater::commandFinished(QNetworkOperation * op) {
 	//Removes the progress dialog
 	_progress->reset();
 
@@ -94,6 +91,6 @@ void Download::commandFinished(QNetworkOperation * op) {
 	}
 }
 
-void Download::stop() {
+void SoftUpdater::stop() {
 	_operator->stop();
 }
