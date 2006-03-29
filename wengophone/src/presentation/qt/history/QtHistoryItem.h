@@ -28,7 +28,7 @@ class QtHistoryItem : public QTreeWidgetItem
 
 	public:
 
-		enum HistoryType{ Sms, OutGoingCall, IncomingCall,MissedCall, Chat };
+		enum HistoryType{ Sms, OutGoingCall, IncomingCall,MissedCall, RejectedCall, Chat,  };
 
 		QtHistoryItem(int type = Type);
 		QtHistoryItem ( const QStringList & strings, int type = Type );
