@@ -645,6 +645,8 @@ int eXosip_ping(char * toaddr, int port, int ttl);
 int eXosip_retry_with_auth_info(osip_transaction_t *tr,osip_message_t *response_received);
 
 
+int eXosip_retrieve_from(int jid, char **fromstr);
+
 
 /**
  * Update a subscription (SUBSCRIBE request).

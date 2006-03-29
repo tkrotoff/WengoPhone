@@ -1184,6 +1184,7 @@ phAcceptCall3(int cid, void *userData, int streams)
     char  public_voice_port[16];
     char  public_video_port[16];
 #endif
+    phCallStateInfo_t info;
 
     DBG4_SIP_NEGO("SIP NEGO: phAcceptCall3\n", 0, 0, 0);
     if (!ca) {
@@ -1240,12 +1241,20 @@ phAcceptCall3(int cid, void *userData, int streams)
   
     eXosip_unlock();
 
-    if (i == 0)
-    {
-        i = ph_call_media_start(ca, NULL, streams, 0);
-    }
+    if (!i)
+      i = ph_call_media_start(ca, NULL, streams, 0);
 
-    return i;
+    if (i)
+      return i;
+
+
+    clear(info);
+
+    eXosip_retrieve_from(ca->did, &info.u.remoteUri);
+    info.event = phCALLOK;
+    phcb->callProgress(cid, &info);
+
+    return 0;
 }
 
   
@@ -1267,11 +1276,19 @@ phRejectCall(int cid, int reason)
 {
   int i;
   phcall_t *ca = ph_locate_call_by_cid(cid);
+  phCallStateInfo_t info;
   
   if (!ca)
     return -PH_BADCID;
 
   i = ph_answer_request(ca->did, reason, ph_get_call_contact(ca));
+
+  ph_release_call(ca);
+
+  clear(info);
+  info.event = phCALLCLOSED;
+  phcb->callProgress(cid, &info);
+
 
   return i;
 
@@ -1300,7 +1317,7 @@ phCloseCall(int cid)
 {
   int i;
   phcall_t *ca = ph_locate_call_by_cid(cid);
-	phCallStateInfo_t info;
+  phCallStateInfo_t info;
   int did;
   
   DBG4_SIP_NEGO("phCloseCall %d\n", cid,0,0);

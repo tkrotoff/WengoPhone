@@ -1499,6 +1499,30 @@ int eXosip2_answer_send(int jid, osip_message_t *answer){
   return 0;
 }
 
+int eXosip_retrieve_from(int jid, char **fromstr)
+{
+  eXosip_dialog_t *jd = NULL;
+  eXosip_call_t *jc = NULL;
+
+  *fromstr = 0;
+
+  if (jid>0)
+    {
+      eXosip_call_dialog_find(jid, &jc, &jd);
+      if (!jd->d_dialog)
+	return -1;
+      if (!jd->d_dialog->remote_uri)
+	return -1;
+
+      return osip_from_to_str(jd->d_dialog->remote_uri, fromstr);
+    }
+
+
+  return -1;
+
+}
+
+
 int eXosip_answer_call_with_body(int jid, int status, const char *bodytype, const char *body){
   int i = -1;
   eXosip_dialog_t *jd = NULL;
