@@ -1,0 +1,17 @@
+env = WengoGetEnvironment()
+
+lib_path = []
+include_path = ['include']
+
+libs = [
+	'wengoutil',
+]
+
+sources = [
+	'QtBrowser.cpp',
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+
+env.WengoStaticLibrary('softupdate', sources)
