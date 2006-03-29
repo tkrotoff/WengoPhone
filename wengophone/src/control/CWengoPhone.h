@@ -33,6 +33,7 @@ class IPhoneLine;
 class CPhoneLine;
 class ContactList;
 class CContactList;
+class CHistory;
 class StringList;
 class WenboxPlugin;
 class IMHandler;
@@ -202,6 +203,15 @@ public:
 		return *_cContactList;
 	}
 
+	/**
+	 * Get the CHistory.
+	 * 
+	 * @return the CHistory
+	 */
+	CHistory & getCHistrory() const {
+		return *_cHistory;
+	}
+
 private:
 
 	/**
@@ -215,6 +225,11 @@ private:
 	 * @param url the url to open
 	 */
 	void openWengoUrlWithAuth(std::string url);
+
+	/**
+	 * Handle History::historyLoadedEvent
+	 */
+	void historyLoadedEventHandler(History & sender);
 
 	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
 
@@ -233,6 +248,8 @@ private:
 	PWengoPhone * _pWengoPhone;
 
 	CContactList * _cContactList;
+
+	CHistory * _cHistory;
 
 	static const std::string URL_WENGO_ACCOUNTCREATION;
 

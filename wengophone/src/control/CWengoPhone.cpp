@@ -29,6 +29,7 @@
 #include <presentation/PWengoPhone.h>
 #include "phoneline/CPhoneLine.h"
 #include "contactlist/CContactList.h"
+#include "history/CHistory.h"
 #include "wenbox/CWenboxPlugin.h"
 #include "WengoPhoneBuildId.h"
 #include "connect/CConnectHandler.h"
@@ -69,6 +70,8 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.getCurrentUserProfile().proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 	_wengoPhone.getCurrentUserProfile().wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 	_wengoPhone.getCurrentUserProfile().newIMAccountAddedEvent += boost::bind(&CWengoPhone::newIMAccountAddedEventHandler, this, _1, _2);
+		
+	History::getInstance().historyLoadedEvent += boost::bind(&CWengoPhone::historyLoadedEventHandler, this, _1);
 }
 
 void CWengoPhone::makeCall(const std::string & phoneNumber) {
@@ -203,4 +206,8 @@ void CWengoPhone::showWengoVoiceMail() {
 
 void CWengoPhone::showWengoBuyWengos() {
 	openWengoUrlWithAuth(URL_WENGO_BUYWENGOS);
+}
+
+void CWengoPhone::historyLoadedEventHandler(History & history) {
+	_cHistory = new CHistory(history, *this);
 }
