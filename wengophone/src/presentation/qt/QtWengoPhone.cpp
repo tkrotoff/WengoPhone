@@ -197,6 +197,12 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionIM_Account_Settings = Object::findChild<QAction *>(_wengoPhoneWindow,"actionIM_Account_Settings");
 	connect (actionIM_Account_Settings,SIGNAL(triggered()), SLOT(showAccountSettings()));
 
+	// actionShow_Hide_contacts_offline
+	QAction * actionShow_Hide_contacts_offline = Object::findChild<QAction *>(_wengoPhoneWindow,"actionShow_Hide_contacts_offline");
+	connect (actionShow_Hide_contacts_offline,SIGNAL(triggered()),SLOT(showHideOffLineContacts()));
+
+
+
 	//actionCreateConferenceCall
 	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
 	connect(actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
@@ -279,6 +285,7 @@ QLayout * QtWengoPhone::createLayout(QWidget * parent) {
 void QtWengoPhone::setContactList(QtContactList * qtContactList) {
 	QWidget * tabContactList = Object::findChild<QWidget *>(_tabWidget, "tabContactList");
 	createLayout(tabContactList)->addWidget(qtContactList->getWidget());
+	_contactList = qtContactList;
 	LOG_DEBUG("QtContactList added");
 }
 
@@ -513,6 +520,19 @@ void QtWengoPhone::showAbout() {
 
 void QtWengoPhone::showVoiceMail(){
 	_cWengoPhone.showWengoVoiceMail();
+}
+
+void QtWengoPhone::showHideOffLineContacts(){
+	static bool hiden = false;
+
+	if ( ! hiden ){
+		_contactList->hideOffLineUser();
+		hiden=true;
+	}
+	else{
+		_contactList->showAllUsers();
+		hiden = false;
+	}
 }
 
 void QtWengoPhone::showHome() {

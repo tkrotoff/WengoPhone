@@ -138,6 +138,8 @@ private Q_SLOTS:
 
 	void showVoiceMail();
 
+	void showHideOffLineContacts();
+
 	void setTrayMenu();
 
 private:
@@ -199,6 +201,7 @@ private:
 
 	QtBrowser * _browser;
 
+	QtContactList *_contactList;
 	QLabel * _phoneLineStateLabel;
 
 	QLabel * _internetConnectionStateLabel;

@@ -51,6 +51,7 @@ headers = [
 	'contactlist/QtContactPixmap.h',
 	'contactlist/QtUserWidgetEventFilter.h',
 	'contactlist/QtUserWidgetAvatarManager.h',
+	'contactlist/QtHidenContact.h',
 	'presence/QtPresenceHandler.h',
 	'chat/QtChatHandler.h',
 	'chat/QtChatWidget.h',
@@ -115,6 +116,7 @@ sources = [
 	'contactlist/QtContactPixmap.cpp',
 	'contactlist/QtUserWidgetEventFilter.cpp',
 	'contactlist/QtUserWidgetAvatarManager.cpp',
+	'contactlist/QtHidenContact.cpp',
 	'presence/QtPresenceHandler.cpp',
 	'chat/QtChatHandler.cpp',
 	'chat/QtChatWidget.cpp',
@@ -178,7 +180,7 @@ if WengoOSLinux():
             x11_lib_dir = os.environ['X11R6LIBDIR']
         link_flags += [
             '-L' + x11_lib_dir,
-        ]	
+        ]
         libs += ['SM', 'ICE', 'Xi', 'Xinerama', 'Xext', 'X11', 'Xrandr',]
 
 env.WengoCopyToBuildDir('chat/emoticons', 'emoticons')

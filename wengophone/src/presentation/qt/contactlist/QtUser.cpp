@@ -143,7 +143,8 @@ QtContactPixmap::contactPixmap QtUser::getStatus() const {
 		status = QtContactPixmap::ContactOnline;
 		break;
 	case EnumPresenceState::PresenceStateOffline:
-		status = QtContactPixmap::ContactInvisible;
+		// status = QtContactPixmap::ContactInvisible;
+		status = QtContactPixmap::ContactNotAvailable;
 		break;
 	default:
 		status = QtContactPixmap::ContactNotAvailable;

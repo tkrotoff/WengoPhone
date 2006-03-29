@@ -17,9 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 #include <presentation/PContact.h>
+
 #include "QtUserManager.h"
 #include "UserTreeEventManager.h"
 #include "QtUserList.h"
+#include "QtHidenContact.h"
+#include "QtContactPixmap.h"
 #include "../login/QtEditContactProfile.h"
 
 QtUserManager::QtUserManager(QObject * parent, QTreeWidget * target) : QObject(parent)
@@ -130,7 +133,6 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
     QRect widgetSize = _tree->rect();
     QPoint  mousepos = _tree->mapFromGlobal(QCursor::pos());
 
-
 	if (  ! item->parent() )
 	{
 		if (_tree->isItemExpanded(item) )
@@ -170,3 +172,82 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
 }
 
 
+void QtUserManager::userStateChanged(){
+
+	QtHidenContact * hidenContact;
+	QList<QtHidenContact *>::iterator iter;
+
+	QList<QtHidenContact *> newHidenList;
+
+	for ( iter = _hidenContacts.begin(); iter != _hidenContacts.end(); iter++ ){
+
+		hidenContact = (QtHidenContact *)(*iter);
+
+		if ( hidenContact->getUser()->getStatus() != QtContactPixmap::ContactNotAvailable ){
+
+			if ( hidenContact->getIndex() > hidenContact->getParentItem()->childCount() )
+				hidenContact->getParentItem()->insertChild(hidenContact->getParentItem()->childCount(),
+				                                            hidenContact->getItem());
+			else
+				hidenContact->getParentItem()->insertChild(hidenContact->getIndex(),hidenContact->getItem());
+		}
+		else{
+			newHidenList.append(hidenContact);
+		}
+	}
+	_hidenContacts = newHidenList;
+}
+
+void QtUserManager::hideOffLineUsers(){
+//TODO: Add the code to manage hidden groups
+
+	QtUserList * ul = QtUserList::getInstance();
+	QtUser * user;
+	QList<QTreeWidgetItem *> itemList = _tree->findItems("*",Qt::MatchWildcard);
+	QList<QTreeWidgetItem *>::iterator i;
+
+	for ( i = itemList.begin(); i != itemList.end(); i++ ){
+
+		QTreeWidgetItem * item;
+
+		QTreeWidgetItem * group = (QTreeWidgetItem *) (*i);
+
+		if ( group->parent() == 0 ){
+			// We have all parents (if groups are not hiden)
+			int count = group->childCount ();
+
+			for ( int t = 0; t < count; t++ ){
+				item = group->child(t);
+				user = ul->getUser(item->text(0));
+
+				if ( user->getStatus() == QtContactPixmap::ContactNotAvailable )
+				{
+					// Take the widget and put it in _hidenContacts
+					int index = group->indexOfChild ( item );
+					QtHidenContact * hiden = new QtHidenContact(item,item->parent(),user,index,this);
+					_hidenContacts.append(hiden);
+					group->takeChild(index);
+				}
+			}
+		}
+	}
+}
+
+void QtUserManager::showAllUsers(){
+
+	QtHidenContact * hidenContact;
+	QList<QtHidenContact *>::iterator iter;
+
+
+	for ( iter = _hidenContacts.begin(); iter != _hidenContacts.end(); iter++ ){
+
+		hidenContact = (QtHidenContact *)(*iter);
+
+		if ( hidenContact->getIndex() > hidenContact->getParentItem()->childCount() )
+			hidenContact->getParentItem()->insertChild(hidenContact->getParentItem()->childCount(),
+														hidenContact->getItem());
+		else
+			hidenContact->getParentItem()->insertChild(hidenContact->getIndex(),hidenContact->getItem());
+		}
+	_hidenContacts.clear();
+}

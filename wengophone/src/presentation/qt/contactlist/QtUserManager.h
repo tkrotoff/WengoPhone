@@ -26,6 +26,7 @@
 #define MIN_ITEM_SIZE 28
 
 class PContact;
+class QtHidenContact;
 
 class QtUserManager : public QObject {
 		Q_OBJECT
@@ -36,19 +37,34 @@ class QtUserManager : public QObject {
 		void setContact(PContact * contact) { _pcontact = contact;};
 
 	public Q_SLOTS:
+
 		void treeViewSelectionChanged();
+
 		void itemClicked ( QTreeWidgetItem * item, int column );
+
 		void itemEntered ( QTreeWidgetItem * item );
+
 		void openUserInfo( QTreeWidgetItem * i );
+
 		void closeUserInfo();
+
 		void editContact(bool checked);
 
+		void userStateChanged();
+
+		void hideOffLineUsers();
+
+		void showAllUsers();
+
 	protected:
+
 		QTreeWidget * _tree;
 
 		QTreeWidgetItem * _previous;
 
 		QTreeWidgetItem * _lastClicked;
+
+		QList<QtHidenContact *> _hidenContacts;
 
 		QSize * _itemSize;
 

@@ -35,6 +35,7 @@ class ContactGroupPopupMenu;
 class QTreeWidget;
 class QMouseEvent;
 class QtContactGroup;
+class QtUserManager;
 
 /**
  * Qt Presentation component for ContactList.
@@ -56,6 +57,11 @@ public:
 
 	void addContactGroup(PContactGroup * pContactGroup);
 
+public Q_SLOTS:
+	void showAllUsers();
+
+	void hideOffLineUser();
+
 private:
 
 	void initThreadSafe();
@@ -63,6 +69,8 @@ private:
 	void updatePresentationThreadSafe();
 
 	void addContactGroupThreadSafe(PContactGroup * pContactGroup);
+
+	QtUserManager * _usermanager;
 
 	CContactList & _cContactList;
 

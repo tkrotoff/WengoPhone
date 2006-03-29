@@ -80,10 +80,10 @@ void QtContactList::initThreadSafe() {
 
 	spx->setPixmap (QtContactPixmap::ContactOnline, scalePixmap(":/pics/status/online.png"));
 	spx->setPixmap (QtContactPixmap::ContactDND, scalePixmap(":/pics/status/donotdisturb.png"));
-	spx->setPixmap (QtContactPixmap::ContactInvisible, scalePixmap(":/pics/status/offline.png"));
+	spx->setPixmap (QtContactPixmap::ContactInvisible, scalePixmap(":/pics/status/notavailable.png"));
 	spx->setPixmap (QtContactPixmap::ContactBRB, scalePixmap(":/pics/status/donotdisturb.png"));
 	spx->setPixmap (QtContactPixmap::ContactAway, scalePixmap(":/pics/status/away.png"));
-	spx->setPixmap (QtContactPixmap::ContactNotAvailable, scalePixmap(":/pics/status/notavailable.png"));
+	spx->setPixmap (QtContactPixmap::ContactNotAvailable, scalePixmap(":/pics/status/offline.png"));
 	spx->setPixmap (QtContactPixmap::ContactForward, scalePixmap(":/pics/status/forward.png"));
 
 	// Fonctions icons
@@ -95,7 +95,7 @@ void QtContactList::initThreadSafe() {
 	spx->setPixmap (QtContactPixmap::ContactGroupOpen,QPixmap(":/pics/group_open.png"));
 	spx->setPixmap (QtContactPixmap::ContactGroupClose,QPixmap(":/pics/group_close.png"));
 
-	new QtUserManager(_treeWidget,_treeWidget);
+	_usermanager = new QtUserManager(_treeWidget,_treeWidget);
 
 	_previous = NULL;
 	_lastClicked = NULL;
@@ -220,4 +220,12 @@ void QtContactList::addContactGroupThreadSafe(PContactGroup * pContactGroup) {
 
 	QTreeWidgetItem *group = new QTreeWidgetItem(_treeWidget);
 	group->setText(0, QString::fromStdString(pContactGroup->getDisplayName()));
+}
+
+void QtContactList::showAllUsers(){
+	_usermanager->showAllUsers();
+}
+
+void QtContactList::hideOffLineUser(){
+	_usermanager->hideOffLineUsers();
 }
