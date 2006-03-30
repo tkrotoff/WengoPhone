@@ -173,7 +173,7 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
 
 
 void QtUserManager::userStateChanged(){
-
+	QMutexLocker lock(&_mutex);
 	QtHidenContact * hidenContact;
 	QList<QtHidenContact *>::iterator iter;
 
@@ -200,10 +200,11 @@ void QtUserManager::userStateChanged(){
 
 void QtUserManager::hideOffLineUsers(){
 //TODO: Add the code to manage hidden groups
-
+	QMutexLocker lock(&_mutex);
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 	QList<QTreeWidgetItem *> itemList = _tree->findItems("*",Qt::MatchWildcard);
+	QList<QTreeWidgetItem *> deleteList;
 	QList<QTreeWidgetItem *>::iterator i;
 
 	for ( i = itemList.begin(); i != itemList.end(); i++ ){
@@ -214,6 +215,7 @@ void QtUserManager::hideOffLineUsers(){
 
 		if ( group->parent() == 0 ){
 			// We have all parents (if groups are not hiden)
+			deleteList.clear();
 			int count = group->childCount ();
 
 			for ( int t = 0; t < count; t++ ){
@@ -226,15 +228,23 @@ void QtUserManager::hideOffLineUsers(){
 					int index = group->indexOfChild ( item );
 					QtHidenContact * hiden = new QtHidenContact(item,item->parent(),user,index,this);
 					_hidenContacts.append(hiden);
-					group->takeChild(index);
+					//group->takeChild(index);
+					deleteList.append(item);
 				}
+			}
+			// Delete the childs
+			QList<QTreeWidgetItem *>::iterator deleteIterator;
+			for ( deleteIterator = deleteList.begin(); deleteIterator != deleteList.end(); deleteIterator++)
+			{
+				qDebug() << "Deleting " << (*deleteIterator);
+				group->takeChild( group->indexOfChild( (*deleteIterator) ) );
 			}
 		}
 	}
 }
 
 void QtUserManager::showAllUsers(){
-
+	QMutexLocker lock(&_mutex);
 	QtHidenContact * hidenContact;
 	QList<QtHidenContact *>::iterator iter;
 

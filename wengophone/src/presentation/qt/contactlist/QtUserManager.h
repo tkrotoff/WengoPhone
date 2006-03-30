@@ -70,6 +70,8 @@ class QtUserManager : public QObject {
 
 		QMenu * _menu;
 
+		QMutex  _mutex;
+
 		PContact * _pcontact;
 };
 
