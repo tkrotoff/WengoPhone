@@ -20,6 +20,7 @@
 #include "QtPhoneCall.h"
 #include "QtContactCallList.h"
 
+
 QtContactCallList::QtContactCallList ( QWidget * parent ):
 QScrollArea(parent)
 {
