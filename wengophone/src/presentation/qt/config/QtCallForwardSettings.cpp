@@ -49,12 +49,14 @@ void QtCallForwardSettings::setupChilds() {
 	_phoneNumber3Edit = Object::findChild<QLineEdit *>( _widget,"phoneNumber3Edit" );
 
 	_forwardCallMobilCheckBox = Object::findChild<QCheckBox *>(_widget, "forwardCallMobilCheckBox" );
-
+/*
 	connect ( _forwardCallCheckBox, SIGNAL( stateChanged( int ) ), this,
 			  SLOT( forwardCallStateChanged( int ) ) );
 
 	connect ( _forwardAllCallCheckBox, SIGNAL( stateChanged( int ) ), this,
 			  SLOT( forwardAllCallToStateChanged( int ) ) );
+
+			  */
 
 }
 
@@ -76,7 +78,10 @@ void QtCallForwardSettings::saveData(){
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	if ( _forwardCallCheckBox->checkState() == Qt::Checked )
+	{
 		config.set(config.CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY, true );
+		qDebug() << "_forwardCallCheckBox is checked, save it !";
+	}
 	else
 		config.set(config.CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY, false );
 
@@ -108,7 +113,7 @@ void QtCallForwardSettings::readConfigData(){
 	if ( config.getCallForwardAllUndelivredTo() )
 		_forwardAllCallCheckBox->setCheckState(Qt::Checked);
 	else
-		_forwardCallCheckBox->setCheckState(Qt::Unchecked);
+		_forwardAllCallCheckBox->setCheckState(Qt::Unchecked);
 
 	if ( config.getCallForwardToMobile() )
 		_forwardCallMobilCheckBox->setCheckState(Qt::Checked);

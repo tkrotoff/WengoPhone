@@ -132,6 +132,6 @@ void QtGeneralSettings::saveData(){
 		config.set(config.GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY,false);
 
 	config.set(config.GENERAL_SETTINGS_AWAY_TIMER_KEY,_awaySpinBox->value());
-	config.set(config.GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY,_awaySpinBox->value());
+	config.set(config.GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY,_notAvailableSpinBox->value());
 
 }
