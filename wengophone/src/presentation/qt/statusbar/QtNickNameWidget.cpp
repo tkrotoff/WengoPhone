@@ -85,6 +85,8 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent ,
 	connect ( _avatarLabel, SIGNAL ( clicked() ), SLOT ( avatarClicked() ) );
 	connect ( _jabberLabel, SIGNAL ( clicked() ), SLOT ( jabberClicked() ) );
 
+	connect ( _nickNameEdit, SIGNAL(returnPressed ()), SLOT(nicknameChanged()));
+
 }
 
 void QtNickNameWidget::msnClicked(){
