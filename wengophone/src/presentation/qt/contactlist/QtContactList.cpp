@@ -230,3 +230,7 @@ void QtContactList::showAllUsers(){
 void QtContactList::hideOffLineUser(){
 	_usermanager->hideOffLineUsers();
 }
+
+void QtContactList::sortUsers(){
+	_usermanager->sortUsers();
+}

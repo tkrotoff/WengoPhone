@@ -56,7 +56,13 @@ class QtUserManager : public QObject {
 
 		void showAllUsers();
 
+		void sortUsers();
+
+
 	protected:
+
+
+		QList<QtHidenContact *>  clearList(QList<QtHidenContact *> list);
 
 		QTreeWidget * _tree;
 

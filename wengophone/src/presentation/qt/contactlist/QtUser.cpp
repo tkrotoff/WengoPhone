@@ -128,7 +128,9 @@ void	QtUser::setId(const QString & id)
 
 QString	QtUser::getUserName() const
 {
-	return _userName;
+	// return _userName;
+
+	return QString::fromStdString(_pContact.getDisplayName());
 }
 
 QtContactPixmap::contactPixmap QtUser::getStatus() const {

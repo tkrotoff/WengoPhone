@@ -62,6 +62,8 @@ public Q_SLOTS:
 
 	void hideOffLineUser();
 
+	void sortUsers();
+
 private:
 
 	void initThreadSafe();
