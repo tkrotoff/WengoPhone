@@ -20,22 +20,21 @@
 #include "Sms.h"
 
 #include <model/history/History.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 #include <util/Logger.h>
 
-std::string hostname = "ws.wengo.fr";
-std::string servicePath = "/sms/sendsms.php";
-int port = 443;
-bool https = true;
-bool get = true;
-
 Sms::Sms(WengoAccount & wengoAccount) : WengoWebService(wengoAccount) {
+	
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	
 	//setup sms web service
-	setHostname(hostname);
-	setGet(get);
-	setHttps(https);
-	setServicePath(servicePath);
-	setPort(port);
+	setHostname(config.getWengoServerHostname());
+	setGet(true);
+	setHttps(true);
+	setServicePath(config.getWengoSMSPath());
+	setPort(443);
 	setWengoAuthentication(true);
 }
 
