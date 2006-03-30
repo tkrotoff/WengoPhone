@@ -72,7 +72,7 @@ int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
 	
 	//History: create a History Memento for this outgoing SMS
 	HistoryMemento * memento = new HistoryMemento(
-		HistoryMemento::SMSERROR, phoneNumber, id, message2);
+		HistoryMemento::OutgoingSmsNok, phoneNumber, id, message2);
 	History::getInstance().addMemento(memento);
 
 	return id;
@@ -93,10 +93,10 @@ void Sms::answerReceivedEventHandler(int requestId, const std::string & answer, 
 	if (error == HttpRequest::NoError && !tmp.empty()) {
 		if (tmp.contains(STATUS_OK) && !tmp.contains(STATUS_UNAUTHORIZED)) {
 			LOG_DEBUG("SMS sent");
-			smsStatusEvent(*this, requestId, SmsStatusOk);
+			//smsStatusEvent(*this, requestId, HistoryMemento::OutgoingSmsOk);
 			
 			//History: retrieve the HistoryMemento & update its state to OK
-			History::getInstance().updateSMSState(requestId, HistoryMemento::SMSOK);
+			History::getInstance().updateSMSState(requestId, HistoryMemento::OutgoingSmsOk);
 			return;
 		}
 	}
@@ -105,5 +105,5 @@ void Sms::answerReceivedEventHandler(int requestId, const std::string & answer, 
 	smsStatusEvent(*this, requestId, SmsStatusError);
 	
 	//TODO: retrieve the HistoryMemento & update it
-	History::getInstance().updateSMSState(requestId, HistoryMemento::SMSERROR);
+	History::getInstance().updateSMSState(requestId, HistoryMemento::OutgoingSmsNok);
 }

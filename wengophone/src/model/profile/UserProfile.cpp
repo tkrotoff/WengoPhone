@@ -31,8 +31,7 @@
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
 #include <model/phoneline/IPhoneLine.h>
-//#include <model/sms/Sms.h>
-#include <model/webservices/wengo/sms/Sms.h>
+#include <model/sms/Sms.h>
 
 #include <imwrapper/IMAccountHandlerFileStorage.h>
 
