@@ -30,10 +30,10 @@ extern "C" {
 
 const char *DefaultGroupName[] = {	
 									"Default",
+									"Default",
 									"MSN",
 									"Yahoo",
-									"AIM",
-									"ICQ",
+									"AIM/ICQ",
 									"Jabber",
 									"Simple"	
 								};
