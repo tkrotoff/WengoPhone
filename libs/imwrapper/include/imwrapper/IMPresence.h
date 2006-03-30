@@ -132,6 +132,14 @@ public:
 	virtual void changeMyIcon(const Picture & picture) = 0;
 
 	/**
+	 * Get contact icon.
+	 *
+	 * @param contactId id of the contact
+	 * @return the icon
+	 */
+	virtual Picture getContactIcon(const std::string & contactId) = 0;
+
+	/**
 	 * Subscribe to the presence of a contact.
 	 *
 	 * @param contactId id of the contact

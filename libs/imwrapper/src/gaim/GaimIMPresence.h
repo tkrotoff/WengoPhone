@@ -45,6 +45,7 @@ public:
 	virtual void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
 	virtual void changeMyAlias(const std::string & nickname);
 	virtual void changeMyIcon(const Picture & picture);
+	virtual Picture getContactIcon(const std::string & contactId);
 	virtual void subscribeToPresenceOf(const std::string & contactId);
 	virtual void blockContact(const std::string & contactId);
 	virtual void unblockContact(const std::string & contactId);

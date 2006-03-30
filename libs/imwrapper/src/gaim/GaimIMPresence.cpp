@@ -23,6 +23,7 @@
 extern "C" {
 #include "gaim/account.h"
 #include "gaim/privacy.h"
+#include "gaim/buddyicon.h"
 }
 
 #include <util/File.h>
@@ -72,6 +73,24 @@ void GaimIMPresence::changeMyIcon(const Picture & picture) {
 	file.close();
 
 	//changeIcon(file.getPath());
+}
+
+Picture GaimIMPresence::getContactIcon(const std::string & contactId)
+{
+	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
+											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
+	GaimBuddy *gBuddy = gaim_find_buddy(gAccount, contactId.c_str());
+
+	if (gBuddy)
+	{
+		size_t size;
+		const char *data = (const char *)gaim_buddy_icon_get_data(gBuddy->icon, &size);
+		
+		if (size > 0)
+			return Picture(data);
+	}
+
+	return Picture();
 }
 
 void GaimIMPresence::subscribeToPresenceOf(const std::string & contactId)
