@@ -179,7 +179,6 @@ void QtHistoryWidget::showSMSCall(bool ){
 void QtHistoryWidget::showOutGoingCall(bool){
 	QAbstractItemModel * model = _header->model();
 	model->setHeaderData(0,Qt::Horizontal,QVariant( tr("Outgoing call") ),Qt::DisplayRole);
-
 }
 void QtHistoryWidget::showIncoming(bool){
 	QAbstractItemModel * model = _header->model();

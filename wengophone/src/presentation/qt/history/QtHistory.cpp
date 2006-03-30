@@ -87,9 +87,11 @@ void QtHistory::addHistoryMemento(std::string type,
 		_historyWidget->addOutGoingCallItem(QString::fromStdString(type),
 			qDate, qTime, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateMissedCall ) {
-		//_historyWidget->addSMSItem(QString::fromStdString(type), qDate, QString::fromStdString(name), id);
+		_historyWidget->addMissedCallItem(QString::fromStdString(type),
+			qDate, qTime, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateRejectedCall) {
-		//_historyWidget->addSMSItem(QString::fromStdString(type), qDate, QString::fromStdString(name), id);
+		_historyWidget->addRejectedCallItem(QString::fromStdString(type),
+			qDate, qTime, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateOutgoingSMSOK) {
 		_historyWidget->addSMSItem(QString::fromStdString(type), qDate, qTime, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateOutgoingSMSNOK) {

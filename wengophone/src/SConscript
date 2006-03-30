@@ -112,10 +112,11 @@ sources = [
 	'model/profile/EnumSex.cpp',
 	'model/profile/StreetAddress.cpp',
 	'model/profile/StreetAddressXMLSerializer.cpp',
-	'model/sms/Sms.cpp',
 	'model/history/History.cpp',
 	'model/history/HistoryMemento.cpp',
 	'model/history/HistoryMementoCollection.cpp',
+	'model/webservices/WengoWebService.cpp',
+	'model/webservices/sms/Sms.cpp',
 
 	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
