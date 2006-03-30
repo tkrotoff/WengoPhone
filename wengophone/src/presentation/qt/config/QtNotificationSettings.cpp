@@ -34,14 +34,6 @@ if not, write to the Free Software
 
 #include "QtNotificationSettings.h"
 
-/**
- * Load and display the notification settings configuration page
- *
- * Creates widgets dynamically (from a XML file .ui).
- *
- * @author Kavoos Bojnourdi
- */
-
 QtNotificationSettings::QtNotificationSettings( QWidget * parent, Qt::WFlags f )
 		: QWidget( parent, f ) {
 	QStringList strlist;

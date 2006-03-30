@@ -77,6 +77,13 @@ int main(int argc, char * argv[]) {
 #endif
 	PFactory::setFactory(pFactory);
 
+	//CWengoPhone creates PWengoPhone (QtWengoPhone, GtkWengoPhone...)
+	//thus creating CWengoPhone at the very beginning makes the gui
+	//to be shown before everything is fully loaded
+	WengoPhone wengoPhone;
+	CWengoPhone cWengoPhone(wengoPhone);
+	pFactory->processEvents();
+
 	//IM implementation
 	IMWrapperFactory * imFactory = NULL;
 
@@ -101,9 +108,6 @@ int main(int argc, char * argv[]) {
 #endif
 	SipWrapperFactory::setFactory(sipFactory);
 	IMWrapperFactory::setFactory(imFactory);
-
-	WengoPhone wengoPhone;
-	CWengoPhone cWengoPhone(wengoPhone);
 
 	//Starts the model component thread
 	cWengoPhone.start();

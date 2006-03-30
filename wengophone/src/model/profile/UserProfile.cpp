@@ -38,16 +38,18 @@
 #include <sipwrapper/SipWrapper.h>
 
 #include <util/Logger.h>
+#include <thread/Thread.h>
 
 using namespace std;
 
 UserProfile::UserProfile(WengoPhone & wengoPhone)
-: _wengoPhone(wengoPhone)
-, _imContactListHandler(*this)
-, _connectHandler(*this)
-, _presenceHandler(*this)
-, _chatHandler(*this)
-, _contactList(*this) {
+	: _wengoPhone(wengoPhone),
+	_imContactListHandler(*this),
+	_connectHandler(*this),
+	_presenceHandler(*this),
+	_chatHandler(*this),
+	_contactList(*this) {
+
 	_sms = NULL;
 	_activePhoneLine = NULL;
 	_activePhoneCall = NULL;
@@ -96,11 +98,7 @@ void UserProfile::connectSipAccounts() {
 void UserProfile::disconnect() {
 	if (_activePhoneLine) {
 		_activePhoneLine->disconnect();
-#ifdef OS_WINDOWS
-		_sleep(5);
-#else
-        sleep(5);
-#endif
+		Thread::sleep(5);
 		_activePhoneLine->getSipWrapper().terminate();
 	}
 }

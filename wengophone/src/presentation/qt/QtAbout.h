@@ -20,12 +20,16 @@
 #ifndef QTABOUT_H
 #define QTABOUT_H
 
-#include <QObject>
+#include <util/NonCopyable.h>
 
 class QWidget;
 
-class QtAbout : public QObject {
-	Q_OBJECT
+/**
+ * About dialog window: shows copyright, license, authors...
+ *
+ * @author Tanguy Krotoff
+ */
+class QtAbout : NonCopyable {
 public:
 
 	QtAbout(QWidget * parent);

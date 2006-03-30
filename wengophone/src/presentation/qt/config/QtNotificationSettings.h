@@ -4,7 +4,13 @@
 #include <QtGui>
 #include <qtutil/WidgetFactory.h>
 
-
+/**
+ * Load and display the notification settings configuration page
+ *
+ * Creates widgets dynamically (from a XML file .ui).
+ *
+ * @author Kavoos Bojnourdi
+ */
 class QtNotificationSettings : public QWidget {
 
 		Q_OBJECT

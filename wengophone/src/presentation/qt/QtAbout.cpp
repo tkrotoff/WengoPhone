@@ -26,7 +26,7 @@
 
 #include <QtGui>
 
-QtAbout::QtAbout(QWidget * parent) : QObject() {
+QtAbout::QtAbout(QWidget * parent) {
 	_aboutWindow = WidgetFactory::create(":/forms/AboutWindow.ui", parent);
 
 	QLabel * wengoPhoneBuildIdStringLabel = Object::findChild<QLabel *>(_aboutWindow, "wengoPhoneBuildIdStringLabel");

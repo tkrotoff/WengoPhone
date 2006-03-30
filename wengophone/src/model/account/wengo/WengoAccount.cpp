@@ -90,6 +90,7 @@ bool WengoAccount::init() {
 
 	LOG_DEBUG("initialization Ok");
 	loginStateChangedEvent(*this, LoginStateReady);
+	networkDiscoveryStateChangedEvent(*this, NetworkDiscoveryStateOk);
 	return true;
 }
 

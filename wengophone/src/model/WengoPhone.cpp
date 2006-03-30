@@ -39,7 +39,7 @@ WengoPhone::~WengoPhone() {
 	delete _wenboxPlugin;
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	
+
 	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
 	configManagerStorage.save(config.getConfigDir());
 
@@ -54,7 +54,7 @@ void WengoPhone::init() {
 	//Get a config instance to create the config instance in the model thread.
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	// Import the Config from WengoPhone Classic.
+	//Import the Config from WengoPhone Classic.
 	ClassicConfigImporter::importConfig(config.getConfigDir());
 
 	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
@@ -71,7 +71,7 @@ void WengoPhone::init() {
 	localAccount->init();
 	addPhoneLine(localAccount);*/
 
-	// Loading the UserProfile
+	//Loading the UserProfile
 	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
 	userProfileStorage->load(config.getConfigDir());
 	delete userProfileStorage;

@@ -62,6 +62,10 @@ public:
 		delete _qtContactList;
 	}
 
+	void processEvents() {
+		_app->processEvents();
+	}
+
 	int exec() {
 		return _app->exec();
 	}
