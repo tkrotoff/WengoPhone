@@ -1,6 +1,6 @@
 /*
 * WengoPhone, a voice over Internet phone
-* Copyright (C) 2004-2005  Wengo
+* Copyright (C) 2004-2006  Wengo
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,69 +17,64 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <qtutil/Object.h>
+#include "QtAudioSettings.h"
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
+#include <sound/AudioDevice.h>
 
-#include "QtAudioSettings.h"
+#include <qtutil/WidgetFactory.h>
+#include <qtutil/Object.h>
+#include <qtutil/StringListConvert.h>
 
-
-
-QtAudioSettings::QtAudioSettings(QWidget * parent, Qt::WFlags f) : QWidget (parent,f)
-{
-    _widget =WidgetFactory::create(":/forms/config/AudioSettings.ui", this);
-    QGridLayout * layout = new QGridLayout();
-    layout->addWidget(_widget);
-    layout->setMargin(0);
-    setLayout(layout);
-    setupChilds();
+QtAudioSettings::QtAudioSettings(QWidget * parent, Qt::WFlags f) : QWidget (parent, f) {
+	_widget = WidgetFactory::create(":/forms/config/AudioSettings.ui", this);
+	QGridLayout * layout = new QGridLayout();
+	layout->addWidget(_widget);
+	layout->setMargin(0);
+	setLayout(layout);
+	setupChilds();
 }
 
-void QtAudioSettings::setupChilds(){
-	_inputDeviceComboBox = Object::findChild<QComboBox *>(_widget,"inputDeviceComboBox");
+void QtAudioSettings::setupChilds() {
+	//inputDeviceList
+	_inputDeviceComboBox = Object::findChild<QComboBox *>(_widget, "inputDeviceComboBox");
+	StringList inputDeviceList = AudioDevice::getInputMixerDeviceList();
+	_inputDeviceComboBox->addItems(StringListConvert::toQStringList(inputDeviceList));
 
-	_outputDeviceComboBox = Object::findChild<QComboBox *>(_widget,"outputDeviceComboBox");
+	//outputDeviceList
+	_outputDeviceComboBox = Object::findChild<QComboBox *>(_widget, "outputDeviceComboBox");
+	StringList outputDeviceList = AudioDevice::getOutputMixerDeviceList();
+	_outputDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
 
-	_ringingDeviceComboBox = Object::findChild<QComboBox *>(_widget,"ringingDeviceComboBox");
+	//ringingDeviceList = outputDeviceList
+	_ringingDeviceComboBox = Object::findChild<QComboBox *>(_widget, "ringingDeviceComboBox");
+	_ringingDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
 
-	_makeTestCallPushButton = Object::findChild<QPushButton *>(_widget,"makeTestCallPushButton");
+	_makeTestCallPushButton = Object::findChild<QPushButton *>(_widget, "makeTestCallPushButton");
 
-	_personalAudioConfig = Object::findChild<QGroupBox *> (_widget,"personalAudioConfig");
+	_personalAudioConfig = Object::findChild<QGroupBox *>(_widget, "personalAudioConfig");
 
 	readConfigData();
 }
 
 void QtAudioSettings::saveData() {
-
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, _inputDeviceComboBox->currentText().toStdString());
+	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, _outputDeviceComboBox->currentText().toStdString());
+	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, _ringingDeviceComboBox->currentText().toStdString());
 
-	config.set(config.AUDIO_INPUT_DEVICENAME_KEY, _inputDeviceComboBox->currentText().toStdString() );
-
-	config.set(config.AUDIO_OUTPUT_DEVICENAME_KEY,_outputDeviceComboBox->currentText().toStdString() );
-
-	config.set(config.AUDIO_RINGER_DEVICENAME_KEY,_ringingDeviceComboBox->currentText().toStdString() );
-
-	if (_personalAudioConfig->isChecked())
-		config.set(config.AUDIO_PERSONAL_CONFIGURATION_KEY,true);
-	else
-		config.set(config.AUDIO_PERSONAL_CONFIGURATION_KEY,false);
-
+	config.set(Config::AUDIO_PERSONAL_CONFIGURATION_KEY, _personalAudioConfig->isChecked());
 }
 
-void QtAudioSettings::readConfigData(){
-
+void QtAudioSettings::readConfigData() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	_inputDeviceComboBox->setCurrentIndex ( _inputDeviceComboBox->findText(QString().fromStdString(config.getAudioInputDeviceName())));
-	_outputDeviceComboBox->setCurrentIndex ( _outputDeviceComboBox->findText(QString().fromStdString(config.getAudioOutputDeviceName())));
-	_ringingDeviceComboBox->setCurrentIndex ( _ringingDeviceComboBox->findText(QString().fromStdString(config.getAudioRingerDeviceName())));
+	_inputDeviceComboBox->setCurrentIndex(_inputDeviceComboBox->findText(QString::fromStdString(config.getAudioInputDeviceName())));
+	_outputDeviceComboBox->setCurrentIndex(_outputDeviceComboBox->findText(QString::fromStdString(config.getAudioOutputDeviceName())));
+	_ringingDeviceComboBox->setCurrentIndex(_ringingDeviceComboBox->findText(QString::fromStdString(config.getAudioRingerDeviceName())));
 
-	if ( config.getAudioPersonalConfiguration() )
-		_personalAudioConfig->setChecked(true);
-	else
-		_personalAudioConfig->setChecked(false);
-
+	_personalAudioConfig->setChecked(config.getAudioPersonalConfiguration());
 }

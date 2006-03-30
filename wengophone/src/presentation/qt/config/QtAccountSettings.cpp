@@ -22,7 +22,7 @@
 #include "QtAccountSettings.h"
 
 QtAccountSettings::QtAccountSettings ( QWidget * parent, Qt::WFlags f ) : QWidget ( parent, f ) {
-	_widget = WidgetFactory::create( ":/forms/config/AcountSettings.ui", this );
+	_widget = WidgetFactory::create( ":/forms/config/AccountSettings.ui", this );
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget( _widget );
 	layout->setMargin( 0 );
