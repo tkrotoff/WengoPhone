@@ -41,6 +41,7 @@ QtWengoConfigDialog::QtWengoConfigDialog( QWidget * parent, Qt::WFlags f ) : QDi
 	_videoSettingsWidget = new QtVideoSettings();
 	_advancedSettingsWidget = new QtAdvancedSettings();
 	_callForwardWidget = new QtCallForwardSettings();
+	_languagesWidget = new QtLanguagesSettings(this);
 
 	_stackedWidget = Object::findChild<QStackedWidget *>( _widget, "stackedWidget" );
 	_treeWidget = Object::findChild<QTreeWidget *>( _widget, "treeWidget" );
@@ -56,6 +57,7 @@ QtWengoConfigDialog::QtWengoConfigDialog( QWidget * parent, Qt::WFlags f ) : QDi
 	_stackedWidget->addWidget( _videoSettingsWidget );
 	_stackedWidget->addWidget( _callForwardWidget );
 	_stackedWidget->addWidget( _advancedSettingsWidget );
+	_stackedWidget->addWidget( _languagesWidget->getWidget() );
 
 	_stackedWidget->setCurrentWidget( _generalSettingsWidget );
 
@@ -76,6 +78,9 @@ void QtWengoConfigDialog::itemActivated ( ) {
 
 	if ( itemText == "General" )
 		_stackedWidget->setCurrentWidget( _generalSettingsWidget );
+
+	if ( itemText == "Languages" )
+		_stackedWidget->setCurrentWidget( _languagesWidget->getWidget() );
 
 	if ( itemText == "Notifications & Sounds" )
 		_stackedWidget->setCurrentWidget( _notificationWidget );
@@ -102,6 +107,7 @@ void QtWengoConfigDialog::itemActivated ( ) {
 void QtWengoConfigDialog::accept(){
 
 	_generalSettingsWidget->saveData();
+	_languagesWidget->saveData();
 	_notificationWidget->saveData();
 	_privacySettingsWidget->saveData();
 	_audioSettingsWidget->saveData();

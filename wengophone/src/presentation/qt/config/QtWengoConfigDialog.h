@@ -31,6 +31,7 @@
 #include "QtVideoSettings.h"
 #include "QtAdvancedSettings.h"
 #include "QtCallForwardSettings.h"
+#include "QtLanguagesSettings.h"
 
 
 class QtWengoConfigDialog : public QDialog {
@@ -67,6 +68,8 @@ class QtWengoConfigDialog : public QDialog {
 		QtAdvancedSettings * _advancedSettingsWidget;
 
 		QtCallForwardSettings * _callForwardWidget;
+
+		QtLanguagesSettings * _languagesWidget;
 	};
 
 #endif

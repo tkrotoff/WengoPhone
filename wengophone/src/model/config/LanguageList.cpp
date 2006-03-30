@@ -42,7 +42,7 @@ std::string LanguageList::getResultRegex(const std::string & iso639Code, const s
 
 		//en... -> en
 		boost::regex e("^" + iso639Code + "\\t");
-		if (boost::regex_match(line, e)) {
+		if (boost::regex_search(line, e)) {
 			//en	English... -> English
 
 			boost::regex eLangName(regex);
