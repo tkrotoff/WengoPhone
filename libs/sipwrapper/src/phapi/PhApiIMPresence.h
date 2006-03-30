@@ -48,6 +48,8 @@ public:
 
 	void unblockContact(const std::string & contactId);
 
+	Picture getContactIcon(const std::string &);
+
 private:
 
 	PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrapper);

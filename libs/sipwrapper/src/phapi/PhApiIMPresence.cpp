@@ -21,6 +21,8 @@
 
 #include "PhApiWrapper.h"
 
+#include <util/Picture.h>
+
 PhApiIMPresence::PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrapper)
 	: IMPresence(account),
 	_phApiWrapper(phApiWrapper) {
@@ -62,4 +64,8 @@ void PhApiIMPresence::myPresenceStatusEventHandler(PhApiWrapper & sender, EnumPr
 
 void PhApiIMPresence::subscribeStatusEventHandler(PhApiWrapper & sender, const std::string & contactId, IMPresence::SubscribeStatus status) {
 	subscribeStatusEvent(*this, contactId, status);
+}
+
+Picture PhApiIMPresence::getContactIcon(const std::string &) {
+	return Picture();
 }
