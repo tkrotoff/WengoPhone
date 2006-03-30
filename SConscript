@@ -34,6 +34,7 @@ projects = [
 	'libs/imwrapper/src/null',
 	'wengophone',
 	'wengophone/nsis',
+	'wengophone/src/presentation/qt/lang',
 ]
 
 SConscript(dirs = projects)
