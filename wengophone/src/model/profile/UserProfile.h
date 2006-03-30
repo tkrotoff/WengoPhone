@@ -26,6 +26,7 @@
 #include <imwrapper/IMAccountHandler.h>
 
 #include <model/account/SipAccount.h>
+#include <model/history/History.h>
 #include <model/connect/ConnectHandler.h>
 #include <model/contactlist/ContactList.h>
 #include <model/contactlist/IMContactListHandler.h>
@@ -41,6 +42,7 @@ class IMAccount;
 class WengoPhone;
 class Contact;
 class ContactList;
+class History;
 class IPhoneLine;
 class PhoneCall;
 class Sms;
@@ -89,6 +91,15 @@ public:
 	 * A new IMAccount has been added.
 	 */
 	Event< void (UserProfile & sender, IMAccount & imAccount) > newIMAccountAddedEvent;
+
+	/**
+	 * The history has been loaded.
+	 *
+	 * @param sender this class
+	 * @param History History loaded
+	 */
+	Event<void (UserProfile & sender, History & history)> historyLoadedEvent;
+
 
 	/**
 	 * A PhoneLine has been created.
@@ -258,6 +269,11 @@ private:
 	 */
 	void addPhoneLine(SipAccount & account);
 
+	/**
+	 * Handle History::mementoUpdatedEvent & History::mementoAddedEvent
+	 */
+	void historyChangedEventHandler(History & sender, int id);
+
 	WengoPhone & _wengoPhone;
 
 	/**
@@ -290,7 +306,6 @@ private:
 	PresenceHandler _presenceHandler;
 
 	ChatHandler _chatHandler;
-
 	ContactList _contactList;
 
 };

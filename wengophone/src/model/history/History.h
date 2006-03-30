@@ -132,6 +132,25 @@ public:
 	int size();
 
 	/**
+	 * add a history memento to the history
+	 * @param memento the memento to add
+	 * @return the id of the memento
+	 */
+	int addMemento(HistoryMemento * memento);
+
+	/**
+	 * Return a string representing this object
+	 * @return a string representing this object
+	 */
+	std::string toString();
+
+	/**
+	 * return a pointer to the HistoryMementoCollection
+	 * @return a pointer to the HistoryMementoCollection
+	 */
+	HistoryMementoCollection * getHistoryMementoCollection();
+
+	/**
 	 * update a memento duration (for incoming/outgoing calls)
 	 * @param callId callId associated to the memento
 	 * @param duration duration
@@ -151,25 +170,6 @@ public:
 	 * @param state new state
 	 */
 	void updateSMSState(int callId, HistoryMemento::State state);
-
-	/**
-	 * add a history memento to the history
-	 * @param memento the memento to add
-	 * @return the id of the memento
-	 */
-	int addMemento(HistoryMemento * memento);
-
-	/**
-	 * Return a string representing this object
-	 * @return a string representing this object
-	 */
-	std::string toString();
-
-	/**
-	 * return a pointer to the HistoryMementoCollection
-	 * @return a pointer to the HistoryMementoCollection
-	 */
-	HistoryMementoCollection * getHistoryMementoCollection();
 
 private:
 

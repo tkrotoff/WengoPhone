@@ -54,8 +54,9 @@ public:
 		Outgoing,
 		Missed,
 		Rejected,
-		SMSOK,
-		SMSERROR,
+		OutgoingSmsOk,
+		OutgoingSmsNok,
+		ChatSession,
 		None,
 		Any,
 	};

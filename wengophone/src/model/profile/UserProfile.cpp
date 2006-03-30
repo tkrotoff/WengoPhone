@@ -31,7 +31,8 @@
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
 #include <model/phoneline/IPhoneLine.h>
-#include <model/sms/Sms.h>
+//#include <model/sms/Sms.h>
+#include <model/webservices/wengo/sms/Sms.h>
 
 #include <imwrapper/IMAccountHandlerFileStorage.h>
 
@@ -54,6 +55,9 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_activePhoneLine = NULL;
 	_activePhoneCall = NULL;
 	_wengoAccount = NULL;
+
+	History::getInstance().mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
+	History::getInstance().mementoAddedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
 }
 
 UserProfile::~UserProfile() {
@@ -123,7 +127,6 @@ void UserProfile::startIM(Contact & contact) {
 	imContactSet.insert(*imContact);
 	_chatHandler.createSession(imContact->getIMAccount(), imContactSet);
 }
-
 
 void UserProfile::addSipAccount(const std::string & login, const std::string & password, bool autoLogin) {
 /*
@@ -282,6 +285,11 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		addIMAccount(imAccount);
 		_connectHandler.connect(*_imAccountHandler.find(imAccount));
 
+		//History: load the user history
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		std::string filename = config.getConfigDir() + _wengoAccount->getIdentity() + "_history";
+		History::getInstance().load(filename);
+		
 		break;
 	}
 
@@ -301,4 +309,11 @@ IPhoneLine * UserProfile::findWengoPhoneLine() {
 		}
 	}
     return NULL;
+}
+
+void UserProfile::historyChangedEventHandler(History & sender, int id) {
+	//History: save the history
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string filename = config.getConfigDir() + _wengoAccount->getIdentity() + "_history";
+	History::getInstance().save(filename);
 }

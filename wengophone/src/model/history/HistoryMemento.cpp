@@ -92,7 +92,7 @@ void HistoryMemento::updateState(State state) {
 }
 
 bool HistoryMemento::canReplay() {
-	if( ( _state == Outgoing ) || ( _state == SMSOK ) ) {
+	if( ( _state == Outgoing ) || ( _state == OutgoingSmsOk ) ) {
 		return true;
 	} else {
 		return false;
@@ -104,7 +104,7 @@ bool HistoryMemento::isCallMemento() {
 }
 
 bool HistoryMemento::isSMSMemento() {
-	return ( (_state == SMSOK) || (_state == SMSERROR) );
+	return ( (_state == OutgoingSmsOk) || (_state == OutgoingSmsNok) );
 }
 
 void HistoryMemento::replay() {
@@ -112,9 +112,9 @@ void HistoryMemento::replay() {
 	switch(_state) {
 	case Outgoing:
 		break;
-	case SMSOK:
+	case OutgoingSmsOk:
 		break;
-	case SMSERROR:
+	case OutgoingSmsNok:
 		//can't replay
 		break;
 	case Incoming:
@@ -160,10 +160,10 @@ std::string HistoryMemento::stateToString(State state) {
 	case Incoming:
 		return StateIncomingCall;
 		break;
-	case SMSOK:
+	case OutgoingSmsOk:
 		return StateOutgoingSMSOK;
 		break;
-	case SMSERROR:
+	case OutgoingSmsNok:
 		return StateOutgoingSMSNOK;
 		break;
 	case Rejected:

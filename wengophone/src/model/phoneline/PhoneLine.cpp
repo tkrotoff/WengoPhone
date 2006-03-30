@@ -301,7 +301,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 	case EnumPhoneCallState::PhoneCallStateMissed:
 		//History: retrive the memento and change its state to missed
 		History::getInstance().updateCallState(callId, HistoryMemento::Missed);
-		LOG_DEBUG("call rejected callId=" + String::fromNumber(callId));
+		LOG_DEBUG("call missed callId=" + String::fromNumber(callId));
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateRedirected:
