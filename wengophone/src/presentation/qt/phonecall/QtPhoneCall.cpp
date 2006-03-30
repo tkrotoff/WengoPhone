@@ -53,6 +53,7 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 
 void QtPhoneCall::initThreadSafe() {
 	_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/PhoneCallWidget.ui", _qtWengoPhone->getWidget());
+	//_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/QtCallContactWidget.ui", _qtWengoPhone->getWidget());
 
 	QString sipAddress = QString::fromStdString(_cPhoneCall.getPeerSipAddress());
 	QString callAddress = QString::fromStdString(_cPhoneCall.getPeerDisplayName());

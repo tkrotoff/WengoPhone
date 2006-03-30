@@ -31,6 +31,7 @@
 
 #include "phoneline/QtPhoneLine.h"
 #include "phonecall/QtPhoneCall.h"
+#include "phonecall/QtContactCallListWidget.h"
 #include "QtLogger.h"
 #include "login/QtLogin.h"
 #include "login/QtSetLogin.h"
@@ -239,6 +240,9 @@ void QtWengoPhone::initThreadSafe() {
 	_phoneLineStateLabel->setToolTip(tr("Not connected"));
 	statusBar->addPermanentWidget(_phoneLineStateLabel);
 
+	//FIXME: can i create the widget here ?
+	setPhoneCall(new QtContactCallListWidget((_wengoPhoneWindow)));
+
 	_wengoPhoneWindow->show();
 }
 
@@ -271,9 +275,10 @@ void QtWengoPhone::callButtonClicked() {
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	static QWidget * tabPhoneCall = Object::findChild<QWidget *>(_tabWidget, "tabPhoneCall");
-	static QGridLayout * layout = new QGridLayout(tabPhoneCall);
+	//static QGridLayout * layout = new QGridLayout(tabPhoneCall);
 
-	layout->addWidget(qtPhoneCall->getWidget());
+	//layout->addWidget(qtPhoneCall->getWidget());
+	_contactCallListWidget->addPhoneCall(qtPhoneCall);
 }
 
 void QtWengoPhone::showLoginWindow() {
@@ -304,6 +309,13 @@ void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
 	QWidget * tabHistory = Object::findChild<QWidget *>(_tabWidget,"tabHistory");
 	//QtHistoryWidget * qtHistoryWidget = new QtHistoryWidget(qtHistory->getWidget());
 	createLayout(tabHistory)->addWidget(qtHistoryWidget);
+}
+
+void QtWengoPhone::setPhoneCall(QtContactCallListWidget * qtContactCallListWidget) {
+	QWidget * tabPhoneCall = Object::findChild<QWidget *>(_tabWidget,"tabPhoneCall");
+
+	createLayout(tabPhoneCall)->addWidget(qtContactCallListWidget);
+	_contactCallListWidget = qtContactCallListWidget;
 }
 
 void QtWengoPhone::setSms(QtSms * qtSms) {

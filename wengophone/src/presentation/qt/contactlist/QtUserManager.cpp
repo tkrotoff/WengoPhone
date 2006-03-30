@@ -236,7 +236,6 @@ void QtUserManager::hideOffLineUsers(){
 			QList<QTreeWidgetItem *>::iterator deleteIterator;
 			for ( deleteIterator = deleteList.begin(); deleteIterator != deleteList.end(); deleteIterator++)
 			{
-				qDebug() << "Deleting " << (*deleteIterator);
 				group->takeChild( group->indexOfChild( (*deleteIterator) ) );
 			}
 		}

@@ -35,6 +35,7 @@ class CWengoPhone;
 class PPhoneLine;
 class QtPhoneCall;
 class QtContactList;
+class QtContactCallListWidget;
 class QtSms;
 class QtBrowser;
 class QtHistoryWidget;
@@ -61,6 +62,8 @@ public:
 	void setContactList(QtContactList * qtContactList);
 
 	void setHistory(QtHistoryWidget * qtHistoryWidget);
+
+	void setPhoneCall(QtContactCallListWidget * qtContactCallListWidget);
 
 	void setSms(QtSms * qtSms);
 
@@ -208,6 +211,9 @@ private:
 	QtBrowser * _browser;
 
 	QtContactList *_contactList;
+
+	QtContactCallListWidget * _contactCallListWidget;
+
 	QLabel * _phoneLineStateLabel;
 
 	QLabel * _internetConnectionStateLabel;
