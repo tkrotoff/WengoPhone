@@ -21,7 +21,7 @@
 import SCons.Defaults
 from SCons.Script import SConscript
 from SCons.Script.SConscript import SConsEnvironment
-import os, time, sys, re, types, shutil, stat
+import os, time, sys, re, types, shutil, stat, popen2
 import platform
 
 try:
@@ -29,6 +29,7 @@ try:
 except AttributeError:
 	from SCons.Script.SConscript import Arguments
 	ARGUMENTS = Arguments
+
 
 #FIXME Is this a good idea to put this here?
 _libs = {}
@@ -416,7 +417,11 @@ class WengoSConsEnvironment(SConsEnvironment):
 			if os.environ.has_key('LDFLAGS'):
 				ldflags = os.environ['LDFLAGS'].split(' ')
 			self.__linkFlags = ldflags
-
+			import re
+			if re.match('3\.\d\.\d', self.WengoCCGCCVersion()):
+				env.WengoAddCCFlags(['-pthread'])
+				env.WengoAddLinkFlags(['-pthread'])
+		
 			if re.match('3\.\d\.\d', self.WengoCCGCCVersion()):
 				if WengoSConsEnvironment.OS.isLinux():
 					self.__CCFlags += ['-pthread']
@@ -574,7 +579,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 			self.__consoleArguments[arg] = value
 
 		#Aliases, see Scons.Alias()
-		#self.__aliases = {}
+		self.__aliases = {}
 
 		#By default warnings are activated
 		self.__activeWarnings()
@@ -1525,6 +1530,31 @@ class WengoSConsEnvironment(SConsEnvironment):
 		fd.write(fileTemplate % fileData)
 		fd.close()
 		return filename
+
+	def __language_release(self, target, source, env):
+		lrelease_path = os.path.join(os.environ["QTDIR"], 'bin', 'lrelease')
+		for a_target, a_source in zip(target, source):
+			out, infd = popen2.popen4(lrelease_path + " " + str(a_source) + " -qm " + str(a_target))
+		print "wengophone-lrelease-target: Updated " + str(a_target)
+
+	def WengoQtLanguageRelease(self, source, target):
+		return self.Command(target, source, self.__language_release)
+
+	def WengoQtUpdateTranslations(self, source_translations):
+		qmake_path = os.path.join(os.environ["QTDIR"], 'bin', 'qmake')
+		lupdate_path = os.path.join(os.environ["QTDIR"], 'bin', 'lupdate')
+		lrelease_path = os.path.join(os.environ["QTDIR"], 'bin', 'lrelease')
+		
+		os.system(qmake_path + " -project -o lang.pro")		
+		os.system(lupdate_path + " lang.pro")	
+	
+	def WengoAlias(self, target_name, target):
+		self.Alias(target_name, target)
+		self.__aliases[target_name] = target
+
+	def WengoGetAlias(self, target_name):
+		return self.__aliases.get(target_name, None)
+
 
 #FIXME ugly?
 WengoSConsEnvironment._globalEnv = None
