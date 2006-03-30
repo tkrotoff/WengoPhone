@@ -31,6 +31,8 @@ extern "C" {
 
 #include <util/Logger.h>
 
+#define MAIL_NOTIFICATION_KEY			"check-mail"
+
 #define YAHOO_IS_JAPAN_KEY				"yahoojp"
 #define YAHOO_SERVER_KEY				"server"
 #define YAHOO_JAPAN_SERVER_KEY			"serverjp"
@@ -83,20 +85,18 @@ bool GaimIMConnect::equalsTo(std::string login, EnumIMProtocol::IMProtocol proto
 		return false;
 }
 
-void GaimIMConnect::AddMSNAccountParams(void *gaimAccount)
+void GaimIMConnect::AddMSNAccountParams(void *gaimAccount, IMAccountParameters &mParams)
 {
 	GaimAccount *gAccount = (GaimAccount *)gaimAccount;
-	IMAccountParameters mParams = _imAccount.getIMAccountParameters();
 
 	gaim_account_set_string(gAccount, MSN_SERVER_KEY, mParams.getMSNServer().c_str());
 	gaim_account_set_int(gAccount, MSN_PORT_KEY, mParams.getMSNServerPort());
 	gaim_account_set_bool(gAccount, MSN_USE_HTTP_KEY, mParams.isMSNHttpUsed());	
 }
 
-void GaimIMConnect::AddYahooAccountParams(void *gaimAccount)
+void GaimIMConnect::AddYahooAccountParams(void *gaimAccount, IMAccountParameters &mParams)
 {
 	GaimAccount *gAccount = (GaimAccount *)gaimAccount;
-	IMAccountParameters mParams = _imAccount.getIMAccountParameters();
 	
 	gaim_account_set_bool(gAccount, YAHOO_IS_JAPAN_KEY, mParams.isYahooJapan());
 	gaim_account_set_string(gAccount, YAHOO_SERVER_KEY, mParams.getYahooServer().c_str());
@@ -108,21 +108,18 @@ void GaimIMConnect::AddYahooAccountParams(void *gaimAccount)
 	gaim_account_set_string(gAccount, YAHOO_ROOM_LIST_LOCALE_KEY, mParams.getYahooRoomListLocale().c_str());
 }
 
-void GaimIMConnect::AddOscarAccountParams(void *gaimAccount)
+void GaimIMConnect::AddOscarAccountParams(void *gaimAccount, IMAccountParameters &mParams)
 {
 	GaimAccount *gAccount = (GaimAccount *)gaimAccount;
-	IMAccountParameters mParams = _imAccount.getIMAccountParameters();
-	std::string tmp = mParams.getOscarServer();
 
 	gaim_account_set_string(gAccount, OSCAR_SERVER_KEY, mParams.getOscarServer().c_str());
 	gaim_account_set_int(gAccount, OSCAR_PORT_KEY, mParams.getOscarServerPort());
 	gaim_account_set_string(gAccount, OSCAR_ENCODING_KEY, mParams.getOscarEncoding().c_str());
 }
 
-void GaimIMConnect::AddJabberAccountParams(void *gaimAccount)
+void GaimIMConnect::AddJabberAccountParams(void *gaimAccount, IMAccountParameters &mParams)
 {
 	GaimAccount *gAccount = (GaimAccount *)gaimAccount;
-	IMAccountParameters mParams = _imAccount.getIMAccountParameters();
 
 	gaim_account_set_string(gAccount, JABBER_SERVER_KEY, mParams.getJabberServer().c_str());
 	gaim_account_set_int(gAccount, JABBER_PORT_KEY, mParams.getJabberServerPort());
@@ -153,23 +150,26 @@ void *GaimIMConnect::CreateAccount()
 void GaimIMConnect::AddAccountParams(void *gaimAccount)
 {		
 	GaimAccount *gAccount = (GaimAccount *)gaimAccount;
+	IMAccountParameters &mParams = _imAccount.getIMAccountParameters();
+
+	gaim_account_set_bool(gAccount, MAIL_NOTIFICATION_KEY, mParams.isMailNotified());
 
 	switch (_imAccount.getProtocol())
 	{
 		case EnumIMProtocol::IMProtocolMSN:
-			AddMSNAccountParams(gAccount);
+			AddMSNAccountParams(gAccount, mParams);
 			break;
 
 		case EnumIMProtocol::IMProtocolYahoo:
-			AddYahooAccountParams(gAccount);
+			AddYahooAccountParams(gAccount, mParams);
 			break;
 
 		case EnumIMProtocol::IMProtocolAIMICQ:
-			AddOscarAccountParams(gAccount);
+			AddOscarAccountParams(gAccount, mParams);
 			break;
 
 		case EnumIMProtocol::IMProtocolJabber:
-			AddJabberAccountParams(gAccount);
+			AddJabberAccountParams(gAccount, mParams);
 			break;
 
 		default:

@@ -24,6 +24,7 @@
 
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMConnect.h>
+class IMAccountParameters;
 
 /**
  * Gaim IM connection.
@@ -50,10 +51,10 @@ private:
 	void InitConn(void);
 
 	void GaimIMConnect::AddAccountParams(void *gaimAccount);
-	void AddMSNAccountParams(void *gaimAccount);
-	void AddYahooAccountParams(void *gaimAccount);
-	void AddOscarAccountParams(void *gaimAccount);
-	void AddJabberAccountParams(void *gaimAccount);
+	void AddMSNAccountParams(void *gaimAccount, IMAccountParameters & mParams);
+	void AddYahooAccountParams(void *gaimAccount, IMAccountParameters & mParams);
+	void AddOscarAccountParams(void *gaimAccount, IMAccountParameters & mParams);
+	void AddJabberAccountParams(void *gaimAccount, IMAccountParameters & mParams);
 };
 
 #endif	//GAIMIMCONNECT_H
