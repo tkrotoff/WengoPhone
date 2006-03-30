@@ -20,7 +20,7 @@
 #ifndef CSMS_H
 #define CSMS_H
 
-#include <model/sms/Sms.h>
+#include <model/webservices/sms/Sms.h>
 
 #include <string>
 
@@ -31,6 +31,7 @@ class PSms;
  *
  * @ingroup control
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
  */
 class CSms {
 public:

@@ -36,7 +36,7 @@
 #include "connect/CConnectHandler.h"
 #include <control/chat/CChatHandler.h>
 #include <control/presence/CPresenceHandler.h>
-#include <model/sms/Sms.h>
+#include <model/webservices/sms/Sms.h>
 #include <control/sms/CSms.h>
 
 #include <util/WebBrowser.h>
