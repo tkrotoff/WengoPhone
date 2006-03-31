@@ -419,10 +419,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 			self.__linkFlags = ldflags
 			import re
 			if re.match('3\.\d\.\d', self.WengoCCGCCVersion()):
-				env.WengoAddCCFlags(['-pthread'])
-				env.WengoAddLinkFlags(['-pthread'])
-		
-			if re.match('3\.\d\.\d', self.WengoCCGCCVersion()):
 				if WengoSConsEnvironment.OS.isLinux():
 					self.__CCFlags += ['-pthread']
 					self.__linkFlags += ['-pthread']
