@@ -82,7 +82,7 @@ GaimConnectMngr *GaimConnectMngr::getInstance()
 GaimIMConnect *FindIMConnnectByGaimConnection(GaimConnection *gc)
 {
 	GaimAccount *gAccount = NULL;
-	IMAccount	*account = NULL;
+	IMAccount	*mAccount = NULL;
 	EnumIMProtocol::IMProtocol protocol = EnumIMProtocol::IMProtocolAll;
 
 	gAccount = gaim_connection_get_account(gc);
@@ -90,9 +90,11 @@ GaimIMConnect *FindIMConnnectByGaimConnection(GaimConnection *gc)
 		return NULL;
 
 	protocol = GaimIMPrcl::GetEnumIMProtocol(gAccount->protocol_id);
-	account = GaimAccountMngr::FindIMAccount(gAccount->username, protocol);
+	mAccount = GaimAccountMngr::FindIMAccount(gAccount->username, protocol);
+	if (mAccount == NULL)
+		return NULL;
 
-	return GaimConnectMngr::FindIMConnect(*account);
+	return GaimConnectMngr::FindIMConnect(*mAccount);
 }
 
 void GaimConnectMngr::ConnProgressCbk(GaimConnection *gc, const char *text,
