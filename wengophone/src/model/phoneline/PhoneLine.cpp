@@ -323,7 +323,7 @@ void PhoneLine::callClosed(int callId) {
 	//delete phoneCall;
 
 	//History: update the duration of the memento associated to this phonecall
-	//History::getInstance().updateCallDuration(callId, _phoneCallHash[callId]->getDuration());
+	History::getInstance().updateCallDuration(callId, phoneCall->getDuration());
 
 	//Removes it from the list of PhoneCall
 	_phoneCallMap.erase(callId);
