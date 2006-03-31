@@ -272,7 +272,7 @@ void QtUserManager::hideOffLineUsers(){
 }
 
 void QtUserManager::safeSortUsers(){
-
+//FIXME: only use sortList or deleteList
 	if (!  _sortUsers )
 		return;
 
@@ -292,6 +292,8 @@ void QtUserManager::safeSortUsers(){
 		if ( group->parent() == 0 ){
 			// We have all parents (if groups are not hiden)
 			deleteList.clear();
+			sortList.clear();
+
 			int count = group->childCount ();
 
 			for ( int t = 0; t < count; t++ ){
