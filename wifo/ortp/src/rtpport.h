@@ -33,7 +33,7 @@
 #include <process.h>
 #ifdef __MINGW32__
 #include <stdint.h>
-#elif
+#else
 typedef unsigned __int64 uint64_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
