@@ -32,11 +32,13 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f  ) : QWidget(
 	_header = _treeWidget->header();
 	_header->setClickable ( true );
 
-	headerLabels << "Type";
-	headerLabels << "Date";
-	headerLabels << "Name/ID";
+	headerLabels << tr("Type");
+	headerLabels << tr("Date");
+	headerLabels << tr("Duration");
+	headerLabels << tr("Name/ID");
 
 	_treeWidget->setHeaderLabels(headerLabels);
+	_treeWidget->setSortingEnabled ( false );
 
 	_header->resizeSection ( 0,200);
 
@@ -48,7 +50,6 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f  ) : QWidget(
 
 	action = _menu->addAction( tr ("Outgoing SMS") );
 	connect (action, SIGNAL( triggered(bool) ),SLOT( showSMSCall(bool) ));
-
 
 	action = _menu->addAction( tr ("Outgoing call") );
 	connect (action, SIGNAL( triggered(bool) ),SLOT( showOutGoingCall(bool) ));
@@ -70,8 +71,8 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f  ) : QWidget(
 	connect (_header,SIGNAL(sectionClicked (int)),SLOT(headerClicked(int)) );
 }
 
-void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date,const QTime & time, const QString & name, int id)
-{
+void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
+
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
 	item->setText(0,text);
@@ -82,61 +83,67 @@ void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date,const Q
 
 }
 
-void QtHistoryWidget::addOutGoingCallItem(const QString & text,const QDate & date,const QTime & time, const QString & name, int id){
+
+void QtHistoryWidget::addOutGoingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText(0,text);
-	item->setText(1,date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(2,name);
-	item->setId(id);
-	item->setItemType(QtHistoryItem::OutGoingCall);
+	item->setText( 0, text );
+	item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+	item->setText( 2, duration.toString(Qt::TextDate) );
+	item->setText( 3, name);
+	item->setId( id );
+	item->setItemType( QtHistoryItem::OutGoingCall);
 }
 
-void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & date,const QTime & time, const QString & name, int id){
+void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id){
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText(0,text);
-	item->setText(1,date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(2,name);
-	item->setId(id);
+	item->setText( 0, text );
+	item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+	item->setText( 2, duration.toString(Qt::TextDate) );
+	item->setText( 3, name);
+	item->setId( id );
 	item->setItemType(QtHistoryItem::IncomingCall);
 }
 
-void QtHistoryWidget::addChatItem(const QString & text,const QDate & date,const QTime & time, const QString & name, int id){
+void QtHistoryWidget::addChatItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText(0,text);
-	item->setText(1,date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(2,name);
-	item->setId(id);
+	item->setText( 0, text );
+	item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+	item->setText( 2, duration.toString(Qt::TextDate) );
+	item->setText( 3, name);
+	item->setId( id );
 	item->setItemType(QtHistoryItem::Chat);
 }
 
-void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id){
+void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText(0,text);
-	item->setText(1,date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(2,name);
-	item->setId(id);
+	item->setText( 0, text );
+	item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+	item->setText( 2, duration.toString(Qt::TextDate) );
+	item->setText( 3, name);
+	item->setId( id );
 	item->setItemType(QtHistoryItem::MissedCall);
 }
 
 
-void QtHistoryWidget::addRejectedCallItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id){
+void QtHistoryWidget::addRejectedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText(0,text);
-	item->setText(1,date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(2,name);
-	item->setId(id);
+	item->setText( 0, text );
+	item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+	item->setText( 2, duration.toString(Qt::TextDate) );
+	item->setText( 3, name);
+	item->setId( id );
 	item->setItemType(QtHistoryItem::RejectedCall);
 }
 
-void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id){
+void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
 
 	QList<QTreeWidgetItem *>  itemList = _treeWidget->findItems("*", Qt::MatchWildcard);
 
@@ -145,10 +152,10 @@ void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QT
 	for ( iter = itemList.begin(); iter != itemList.end(); iter++){
 		QtHistoryItem * item = dynamic_cast<QtHistoryItem *> ( (*iter) );
 		if ( item->getId() == id ){
-			item->setText(0,text);
-			item->setText(1,date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-			item->setText(2,name);
-			item->setId(id);
+			item->setText( 0, text );
+			item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+			item->setText( 2, duration.toString(Qt::TextDate) );
+			item->setText( 3, name);
 			break;
 		}
 	}
@@ -213,4 +220,7 @@ void QtHistoryWidget::showAll(bool){
 void QtHistoryWidget::showMissedCall(bool){
 	QAbstractItemModel * model = _header->model();
 	model->setHeaderData(0,Qt::Horizontal,QVariant( tr("Missed call") ),Qt::DisplayRole);
+}
+void QtHistoryWidget::clearHistory(){
+	_treeWidget->clear();
 }

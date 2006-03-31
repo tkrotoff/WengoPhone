@@ -33,19 +33,21 @@ public:
 
 	QtHistoryWidget ( QWidget * parent = 0, Qt::WFlags f = 0 );
 
-	void addSMSItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id);
+	void clearHistory();
 
-	void addOutGoingCallItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id);
+	void addSMSItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
 
-	void addIncomingCallItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id);
+	void addOutGoingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
 
-	void addChatItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id);
+	void addIncomingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
 
-	void addMissedCallItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id);
+	void addChatItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
 
-	void addRejectedCallItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id);
+	void addMissedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
 
-	void editItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id);
+	void addRejectedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
+
+	void editItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
 
 public Q_SLOTS:
 
