@@ -1185,6 +1185,7 @@ phAcceptCall3(int cid, void *userData, int streams)
     char  public_video_port[16];
 #endif
     phCallStateInfo_t info;
+    char *remoteUri;
 
     DBG4_SIP_NEGO("SIP NEGO: phAcceptCall3\n", 0, 0, 0);
     if (!ca) {
@@ -1248,12 +1249,20 @@ phAcceptCall3(int cid, void *userData, int streams)
       return i;
 
 
-    clear(info);
 
-    eXosip_retrieve_from(ca->did, &info.u.remoteUri);
+    eXosip_lock();
+    eXosip_retrieve_from(ca->did, remoteUri);
+    eXosip_unlock();
+
+    clear(info);
+    info.u.remoteUri = remoteUri;
     info.event = phCALLOK;
     phcb->callProgress(cid, &info);
 
+    if (remoteUri)
+      osip_free(remoteUri);
+
+    
     return 0;
 }
 
