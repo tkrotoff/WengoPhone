@@ -24,6 +24,7 @@
 
 #include <util/String.h>
 #include <util/StringList.h>
+#include <util/Logger.h>
 
 #include <iostream>
 using namespace std;
@@ -53,6 +54,8 @@ HttpRequest::HttpRequest() {
 	}
 	_httpRequestPrivate = _factory->create(this);
 	_httpRequestPrivate->answerReceivedEvent += answerReceivedEvent;
+	/*_httpRequestPrivate->dataReadProgressEvent += dataReadProgressEvent;
+	_httpRequestPrivate->dataSendProgressEvent += dataSendProgressEvent;*/
 }
 
 HttpRequest::~HttpRequest() {
@@ -65,6 +68,13 @@ int HttpRequest::sendRequest(bool sslProtocol,
 			const std::string & path,
 			const std::string & data,
 			bool postMethod) {
+
+	std::string protocol = "http://";
+	if (sslProtocol) {
+		protocol = "https://";
+	}
+
+	LOG_DEBUG(protocol + hostname + ":" + String::fromNumber(hostPort) + path);
 
 	return _httpRequestPrivate->sendRequest(sslProtocol, hostname, hostPort, path, data, postMethod);
 }
@@ -132,7 +142,7 @@ std::string getPath(const std::string & url) {
 	//tmp2[0] == "wengo.fr:8080"
 
 	if (!tmp2[0].empty()) {
-		tmp += HttpRequest::HTTP_PATH_SEPARATOR;
+		//tmp += HttpRequest::HTTP_PATH_SEPARATOR;
 		tmp.replace(tmp2[0], String::null);
 	}
 
@@ -144,8 +154,6 @@ int HttpRequest::sendRequest(const std::string & url, const std::string & data, 
 	string hostname = getHostname(url);
 	unsigned int hostPort = getHostPort(url);
 	string path = getPath(url);
-
-	//cerr << "HttpRequest: " << "HTTPS:" << sslProtocol << " " << hostname << ":" << hostPort << path << endl;
 
 	return sendRequest(sslProtocol, hostname, hostPort, path, data, postMethod);
 }

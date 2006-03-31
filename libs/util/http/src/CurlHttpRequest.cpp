@@ -131,14 +131,16 @@ void CurlHttpRequest::setUrl(bool sslProtocol, const std::string & hostname, uns
 		url.append(path);
 	}
 
-	if (!postMethod) {
-		curl_easy_setopt(_curl, CURLOPT_POST, 0);
-		url.append("?");
-		url.append(data);
-	} else {
-		curl_easy_setopt(_curl, CURLOPT_POST, 1);
-		if (!data.empty()) {
-			setPostData(data);
+	if (!data.empty()) {
+		if (!postMethod) {
+			curl_easy_setopt(_curl, CURLOPT_POST, 0);
+			url.append("?");
+			url.append(data);
+		} else {
+			curl_easy_setopt(_curl, CURLOPT_POST, 1);
+			if (!data.empty()) {
+				setPostData(data);
+			}
 		}
 	}
 

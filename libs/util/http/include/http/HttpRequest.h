@@ -112,7 +112,7 @@ public:
 	 * @param bytesDone specifies how many bytes have been transfered
 	 * @param bytesTotal total size of the HTTP transfer, if 0 then the total number of bytes is not known
 	 */
-	Event<void (int requestId, int bytesDone, int bytesTotal)> dataReadProgressEvent;
+	Event<void (int requestId, double bytesDone, double bytesTotal)> dataReadProgressEvent;
 
 	/**
 	 * Indicates the current progress of the upload.
@@ -122,7 +122,7 @@ public:
 	 * @param bytesDone specifies how many bytes have been transfered
 	 * @param bytesTotal total size of the HTTP transfer, if 0 then the total number of bytes is not known
 	 */
-	Event<void (int requestId, int bytesDone, int bytesTotal)> dataSendProgressEvent;
+	Event<void (int requestId, double bytesDone, double bytesTotal)> dataSendProgressEvent;
 
 	virtual ~IHttpRequest() { }
 
