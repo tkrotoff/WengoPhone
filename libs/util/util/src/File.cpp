@@ -149,7 +149,7 @@ std::string File::getPathSeparator() {
 void File::createPath(const std::string & path) {
 	string::size_type index = path.find(File::getPathSeparator(), 0);
 	while (index != string::npos) {
-#ifdef CC_MSVC
+#if defined CC_MSVC || defined CC_MINGW
 		mkdir(path.substr(0, index).c_str());
 #else
 		mkdir(path.substr(0, index).c_str(), S_IRUSR | S_IWUSR | S_IXUSR);

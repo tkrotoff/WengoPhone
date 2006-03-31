@@ -160,10 +160,6 @@ sources = [
 	'spxecfft.c'
 ]
 
-if WengoGetConsoleArgument('enable_netlib'):
-    defines['PH_USE_NETLIB'] = 1
-
-
 if WengoOSLinux() or WengoOSBSD():
 	sources += ['phmedia-oss.c']
 
@@ -232,9 +228,6 @@ if WengoGetConsoleArgument('enable-samplerate'):
 if WengoGetConsoleArgument('enable-phapi-video-hack'):
 	defines['PHAPI_VIDEO_LOCAL_HACK'] = 1
 
-if WengoGetConsoleArgument('enable-netlib'):
-	libs += ['netlib']
-
 if not WengoOSMacOSX():
 	libs += ['portaudio']
 	defines['ENABLE_PORTAUDIO'] = 1
@@ -266,10 +259,19 @@ if WengoOSWindows():
 		'advapi32',
 		'wininet',
 		'iphlpapi',
-        'strmiids',
-        'comsupp',
-        'ole32',
+       	'strmiids',
+       	'ole32',
 	]
+
+	if WengoCCMinGW():
+		libs += [
+			'gdi32',
+		]
+	
+	if WengoCCMSVC():
+		libs += [
+			'comsupp',
+		]
 
 if WengoOSMacOSX():
 	sources += ['phmedia-coreaudio.c']

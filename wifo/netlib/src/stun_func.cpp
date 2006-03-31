@@ -655,7 +655,7 @@ stunRand()
 		
       UInt64 tick;
 		
-#if defined(WIN32) 
+#if defined(WIN32) && defined(CC_MSVC) 
       volatile unsigned int lowtick=0,hightick=0;
       __asm
          {

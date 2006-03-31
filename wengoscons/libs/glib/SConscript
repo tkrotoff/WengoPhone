@@ -6,7 +6,7 @@ include_path = []
 lib_files = []
 
 if WengoOSWindows():
-	if WengoCCMSVC():
+	if WengoCCMSVC() or WengoCCMinGW():
 		include_path += [
 			'include',
 		]

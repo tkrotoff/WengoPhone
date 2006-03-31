@@ -1,4 +1,4 @@
-import os
+import os, ConfigParser
 
 env = WengoGetEnvironment()
 
@@ -14,65 +14,85 @@ libs = [
 lib_path = []
 
 include_path = [
-	'include'
+	'include',
 ]
 
 libs_file = []
 
 
-if WengoOSWindows():
-	if WengoCCMSVC():
-		lib_path += [
-			'binary-lib/msvc',
+if WengoCCMinGW():
+	#get external dependencies and uncompress include files
+
+	include_path += [
+		'include/gaim/win32',
+
+		'D:\cygwin\home\jbossart\win32-dev\gtk_2_0\include',
+
 		]
 
-		libs_file += [
-			'binary-lib/msvc/gaim.lib',
-			'binary-lib/msvc/gaim.dll',
-			'binary-lib/msvc/iconv.dll',
-			'binary-lib/msvc/intl.dll',
-			'binary-lib/msvc/nspr4.dll',
-			'binary-lib/msvc/nss3.dll',
-			'binary-lib/msvc/nssckbi.dll',
-			'binary-lib/msvc/plc4.dll',
-			'binary-lib/msvc/plds4.dll',
-			'binary-lib/msvc/softokn3.dll',
-			'binary-lib/msvc/ssl3.dll',
-			'binary-lib/msvc/zlib1.dll',
-		]
+	if WengoGetConsoleArgument('prepare-for-mingw'):
+		if not os.path.exists(os.path.join(WengoGetSourcePath(), 'mingw',
+										   'mingw.properties'))	and\
+		not os.path.exists(os.path.join(WengoGetSourcePath(), './mingw')):
+				os.mkdir(os.path.join(WengoGetSourcePath(), 'mingw'))
+		info_file = open(os.path.join(WengoGetSourcePath(), 'mingw', 'mingw.properties'), 'w')
+		info_file.write('[include_paths]\n')
+		external_packages_list = [
+			('ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_9_RTM/WIN954.0_OPT.OBJ/nss-3.9.zip',
+			 '.+\.h'),
+			('ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v4.4.1/WIN954.0_OPT.OBJ/nspr-4.4.1.zip',
+			 '.+\.h'),
+			#TODO: tarball seems to be corrupted, needs to notice tarball creator before commenting out the following line
+	# 		('http://easynews.dl.sourceforge.net/sourceforge/gaim/gtk-dev-2.6.10-rev-a.tar.gz', 'gtk_2_0/include'),
+			]
+		i = 0
+		for (external_package, pattern_to_extract) in external_packages_list:
+			for tmp_include_path in env.WengoGetExternalPackage(external_package,
+															pattern_to_extract):
+				info_file.write(str(i) + '=' + tmp_include_path + '\n')
+				i += 1
+		info_file.close()
+
+if os.path.exists(os.path.join(WengoGetSourcePath(), 'mingw/mingw.properties')):
+	config = ConfigParser.ConfigParser()
+	config.readfp(open(os.path.join(WengoGetSourcePath(), 'mingw/mingw.properties')))
+	for (index, tmp_include_path) in config.items('include_paths'):
+		include_path.append(tmp_include_path)
+
+if WengoOSWindows() and WengoCCMSVC():
+	lib_path += [
+		'binary-lib/msvc',
+	]
+
+	libs_file += [
+		'binary-lib/msvc/gaim.lib',
+		'binary-lib/msvc/gaim.dll',
+		'binary-lib/msvc/iconv.dll',
+		'binary-lib/msvc/intl.dll',
+		'binary-lib/msvc/nspr4.dll',
+		'binary-lib/msvc/nss3.dll',
+		'binary-lib/msvc/nssckbi.dll',
+		'binary-lib/msvc/plc4.dll',
+		'binary-lib/msvc/plds4.dll',
+		'binary-lib/msvc/softokn3.dll',
+		'binary-lib/msvc/ssl3.dll',
+		'binary-lib/msvc/zlib1.dll',
+	]
 
 	env.WengoCopyToBuildDir('binary-lib/msvc/')
-
 	env.WengoAddLibPath(lib_path)
 	env.WengoAddIncludePath(include_path)
 	env.WengoUseLibraries(libs)
-
 	env.WengoDeclareLibrary('gaim', libs_file)
-	
-elif WengoOSMacOSX():
+
+if WengoOSMacOSX():
 	include_path += [
 		'/sw/include', # for gnutls
 	]
 
 	env.WengoCopyToBuildDir('binary-lib/macosx', 'plugins')
 
-if WengoOSPosix():
-	include_path += [
-		'src',
-		'src/src',
-		'src/src/protocols/oscar/'
-	]
-
-	libs += [
-		'gnutls',
-		'resolv',
-	]
-
-	defines['HAVE_CONFIG_H'] = 1
-	defines['HAVE_GLIB'] = 1
-	defines['GAIM_STATIC_PRPL'] = 1
-	defines['HAVE_SSL'] = 1
-	defines['HAVE_GNUTLS'] = 1
+if WengoCCGCC() or WengoCCMinGW():
 
 	sources += [
 		'src/src/account.c',
@@ -103,7 +123,6 @@ if WengoOSPosix():
 		'src/src/plugin.c',
 		'src/src/pluginpref.c',
 		'src/src/pounce.c',
-		'src/src/prefix.c',
 		'src/src/prefs.c',
 		'src/src/privacy.c',
 		'src/src/proxy.c',
@@ -124,8 +143,6 @@ if WengoOSPosix():
 		'src/src/whiteboard.c',
 		'src/src/xmlnode.c',
 		'src/plugins/ssl/ssl.c',
-	#	'src/plugins/ssl/ssl-nss.c',
-		'src/plugins/ssl/ssl-gnutls.c',
 	#	'src/plugins/tcl/tcl.c',
 	#	'src/plugins/tcl/tcl_cmds.c',
 	#	'src/plugins/tcl/tcl_signals.c',
@@ -235,6 +252,76 @@ if WengoOSPosix():
 		'src/src/protocols/yahoo/yahoochat.c',
 		'src/src/protocols/yahoo/ycht.c',
 	]
+
+	
+	include_path += [
+		'src',
+		'src/src',
+		'src/src/protocols/oscar/',
+	]
+	
+	lib_path += [
+		'binary-lib/msvc',
+	]
+	
+	defines['HAVE_CONFIG_H'] = 1
+	defines['HAVE_GLIB'] = 1
+	defines['GAIM_STATIC_PRPL'] = 1
+	defines['HAVE_SSL'] = 1
+	
+	if WengoCCMinGW():
+		libs_file += [
+			'binary-lib/msvc/iconv.dll',
+			'binary-lib/msvc/intl.dll',
+			'binary-lib/msvc/nspr4.dll',
+			'binary-lib/msvc/nss3.dll',
+			'binary-lib/msvc/nssckbi.dll',
+			'binary-lib/msvc/plc4.dll',
+			'binary-lib/msvc/plds4.dll',
+			'binary-lib/msvc/softokn3.dll',
+			'binary-lib/msvc/ssl3.dll',
+			'binary-lib/msvc/zlib1.dll',
+		]
+		
+		for lib_file in libs_file:
+			env.WengoCopyToBuildDir(lib_file, 'binary-lib/msvc/')
+		libs += [
+			'nspr4',
+			'nss3',
+			'intl',
+			'nssckbi',
+			'plc4',
+			'plds4',
+			'softokn3',
+			'ssl3',
+			'zlib1',
+		]
+
+	
+		include_path += [
+			'src/src/protocols/jabber/win32',
+			'src/src/win32',
+		]
+		
+		sources += [
+			'src/plugins/ssl/ssl-nss.c',
+			'src/src/win32/libc_interface.c',
+			'src/src/win32/win32dep.c',
+			'src/src/win32/untar.c',
+		]
+		
+	else:
+		defines['HAVE_GNUTLS'] = 1
+		sources += [
+			'src/src/prefix.c',
+			'src/plugins/ssl/ssl-gnutls.c',
+		]
+		
+		libs += [
+			'gnutls',
+			'resolv',
+		]
+
 
 	env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
 	env.ParseConfig('pkg-config --cflags --libs gmodule-2.0')

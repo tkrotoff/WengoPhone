@@ -31,10 +31,14 @@
 #include "ortp-config-win32.h"
 #include <windows.h>
 #include <process.h>
+#ifdef __MINGW32__
+#include <stdint.h>
+#elif
 typedef unsigned __int64 uint64_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 typedef int int32_t;
+#endif
 #ifdef _MSC_VER
 #define inline _inline
 #endif

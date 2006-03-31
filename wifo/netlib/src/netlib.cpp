@@ -22,10 +22,12 @@
 #include <iostream>
 #include <cstdlib>
 
-#ifdef WIN32
+#include <cutil/global.h>
 
+#ifdef OS_WIN32 
 #include <winsock2.h>
 #include <windows.h>
+#ifndef CC_MINGW
 #include <wininet.h>
 #include <urlmon.h>
 #include <stdio.h>
@@ -77,6 +79,7 @@ typedef BOOL(CALLBACK * pfnInternetGetProxyInfo) (
 
 inline int strncasecmp(const char *str1, const char *str2, int size) {return strnicmp(str1, str2, size);}
 
+#endif // CC_MINGW
 #else
 
 #include <sys/time.h>
@@ -168,7 +171,7 @@ int _parseProxyUrl(char *url)
 
 int _getProxyAddress() 
 {
-#ifdef WIN32
+#if defined OS_WIN32 && defined CC_MSVC
 	long ret;
 	HKEY result;
 	char url[1024];

@@ -2,6 +2,7 @@ env = WengoGetEnvironment()
 
 libs = [
 	'owcurl',
+	'owcutil',
 	'httptunnel'
 ]
 lib_path = []
@@ -19,9 +20,8 @@ sources = [
 	'src/bugfix.cpp',
 ]
 
-if WengoOSWindows():
+if WengoOSWindows() and WengoCCMSVC():
 	libs += ['user32', 'shell32', 'ws2_32', 'advapi32', 'wininet', 'urlmon']
-	defines['WIN32'] = 1
 
 env.WengoAddIncludePath(include_path)
 env['CPPPATH'] += ['../netlib']

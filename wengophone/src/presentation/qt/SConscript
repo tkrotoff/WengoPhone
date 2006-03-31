@@ -154,7 +154,7 @@ sources = [
 
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]
-if WengoOSWindows():
+if WengoOSWindows() and WengoCCMSVC():
 	sources.append(WengoGetEnvironment().WengoCompileWindowsResource('win32/wengophone.rc'))
 
 if WengoGetConsoleArgument('sipxwrapper'):

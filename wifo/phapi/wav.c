@@ -4,7 +4,9 @@
 #define OPENMODE O_RDONLY
 #else
 #include <io.h>
+#ifndef __MINGW32__
 typedef long off_t;
+#endif
 #define SEEK_END 2
 #define SEEK_SET 0
 #define SEEK_CUR 1

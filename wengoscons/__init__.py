@@ -63,3 +63,9 @@ gdict['WengoReleaseSymbolsMode'] = wengoenv.WengoReleaseSymbolsMode
 gdict['WengoGetSubversionRevision'] = wengoenv.WengoGetSubversionRevision
 gdict['WengoGetCurrentDateTime'] = wengoenv.WengoGetCurrentDateTime
 
+gdict['WengoAddCCFlags'] = wengoenv.WengoAddCCFlags
+gdict['WengoAddDefines'] = wengoenv.WengoAddDefines
+gdict['WengoAddIncludePath'] = wengoenv.WengoAddIncludePath
+gdict['WengoAddLibPath'] = wengoenv.WengoAddLibPath
+
+gdict['WengoGetSourcePath'] = wengoenv.WengoGetSourcePath

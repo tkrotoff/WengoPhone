@@ -21,7 +21,8 @@
 import SCons.Defaults
 from SCons.Script import SConscript
 from SCons.Script.SConscript import SConsEnvironment
-import os, time, sys, re, types, shutil, stat, popen2
+import os, time, sys, re, types, shutil, stat, httplib, ftplib, urllib, urllib2, zipfile, errno, tarfile, popen2
+
 import platform
 
 try:
@@ -1277,6 +1278,8 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		return os.path.abspath(os.path.join(self['ROOT_BUILD_DIR'], self.__getMode()))
 
+
+	
 	def __getBuildDirAbsPath(self, subpath):
 		"""
 		Concats a subpath to the current Environment root build directory.
@@ -1319,6 +1322,9 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		self['SOURCE_PATH'] = self.Dir('.').srcnode().path
 
+	def saveCurrentSourcePath(self):
+		self.__saveCurrentSourcePath()
+
 	def __getSourcePath(self):
 		"""
 		Gets the source code path.
@@ -1332,7 +1338,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		"""
 
 		return os.path.abspath(os.path.join(self['ROOT_BUILD_DIR'], self['SOURCE_PATH']))
-
+	
 	def __linkWithLibrary(self, libEnv):
 		"""
 		Links with a library given its Environment.
@@ -1526,7 +1532,67 @@ class WengoSConsEnvironment(SConsEnvironment):
 		fd.write(fileTemplate % fileData)
 		fd.close()
 		return filename
+	
+	def WengoGetExternalPackage(self, package_url, files_pattern):
+		"""
+		Get an external source package from a URL passed as parameter.
+		
+		@param package_url
+		@param files_pattern
+		@returns filename of the downloaded file, empty string if it failed to download file.
+		"""
 
+		self.__saveCurrentSourcePath()
+		directories_list = []
+		destination_file_name = os.path.join(self.__getSourcePath(),\
+						os.path.basename(urllib.url2pathname(package_url)))
+		if not os.path.exists(destination_file_name):
+			output_file = open(destination_file_name,
+							   'wb')
+			print 'Downloading file: ' + destination_file_name + '...'
+			downloaded_package = urllib2.urlopen(package_url)
+			print 'Done'
+			output_file.write( downloaded_package.read())
+			output_file.close()
+			downloaded_package.close()
+			
+		#got the external package, unarchiving file
+		if destination_file_name.endswith('.zip'):
+			zip_file = zipfile.ZipFile(destination_file_name)
+			for file_name in zip_file.namelist():
+				if re.match(files_pattern, file_name):
+					if file_name.endswith('/'):
+						# got a directory
+						if not make_directory(os.path.join(self.__getSourcePath(),
+														   re.sub('/', r"\\", file_name))):
+							sys.exit(1)
+					else:
+						# got a file
+						if not make_directory(os.path.join(self.__getSourcePath(),
+														   re.sub('/', r"\\", os.path.dirname(file_name)))):
+							print 'Error creating directory: ' + os.path.dirname(file_name) + ', aborting!'
+							sys.exit(1)	
+						output_file = open(os.path.join(self.__getSourcePath(), re.sub('/', r"\\", file_name)), 'wb')
+						output_file.write(zip_file.read(file_name))
+						try:
+							directories_list.index(os.path.dirname(file_name))
+						except ValueError:
+							directories_list.append(os.path.dirname(file_name))
+						output_file.close()
+		else:
+			if destination_file_name.endswith('.tar.gz') or destination_file_name.endswith('.tar.bz2'):
+				tar_archive = tarfile.open(destination_file_name, 'r:' + destination_file_name.split('.')[-1])
+				for member in tar_archive:
+					if re.match(files_pattern, member.name):
+						tar_archive.extract(member, self.__getSourcePath())
+						try:
+							directories_list.index(os.path.dirname(member.name))
+						except ValueError:
+							directories_list.append(os.path.dirname(member.name))
+		
+		# Testing
+		return directories_list
+		
 	def __language_release(self, target, source, env):
 		lrelease_path = os.path.join(os.environ["QTDIR"], 'bin', 'lrelease')
 		for a_target, a_source in zip(target, source):
@@ -1551,9 +1617,19 @@ class WengoSConsEnvironment(SConsEnvironment):
 	def WengoGetAlias(self, target_name):
 		return self.__aliases.get(target_name, None)
 
-
 #FIXME ugly?
 WengoSConsEnvironment._globalEnv = None
+
+def make_directory(directory_path):
+	cur_dir_path = ''
+	for directory in directory_path.split('\\'):
+		try:
+			os.mkdir(cur_dir_path + directory)
+		except OSError, error:
+			if error.errno != errno.EEXIST:
+				return False
+		cur_dir_path += directory + '\\'
+	return True
 
 def getGlobalEnvironment(*args, **kwargs):
 	"""
@@ -1645,6 +1721,16 @@ def WengoAddIncludePath(paths):
 
 	env = getGlobalEnvironment() 
 	env.WengoAddIncludePath(paths)
+
+def WengoAddLibPath(paths):
+	"""
+	Adds lib paths to the global Environment.
+
+	@see WengoSConsEnvironment.WengoAddLibPath()
+	"""
+
+	env = getGlobalEnvironment() 
+	env.WengoAddLibPath(paths)
 
 def WengoCCMinGW():
 	"""
@@ -1899,3 +1985,7 @@ def WengoGetCurrentDateTime():
 	"""
 
 	return eval(time.strftime('%Y%m%d%H%M%S', time.gmtime()))
+
+def WengoGetSourcePath():
+	env = getGlobalEnvironment()
+	return os.path.abspath(os.path.join(env['ROOT_BUILD_DIR'], env.Dir('.').srcnode().path))

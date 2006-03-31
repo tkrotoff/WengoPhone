@@ -29,8 +29,8 @@
 
 #include <QtGui>
 
-#ifdef OS_WINDOWS
-	#include <windows.h>
+#if defined OS_WINDOWS && defined CC_MSVC 
+#include <windows.h>
 #endif
 
 #include <iostream>
@@ -98,7 +98,7 @@ void QtVideo::fullScreen() {
 
 	_frame->setParent(NULL);
 
-#ifdef OS_WINDOWS
+#if defined OS_WINDOWS && defined CC_MSVC
 	//TODO put inside LibUtil
 
 	int nModeExist;
@@ -131,7 +131,7 @@ void QtVideo::unFullScreen() {
 	QLayout * layout = _videoWindow->layout();
 	layout->addWidget(_frame);
 
-#ifdef OS_WINDOWS
+#if defined OS_WINDOWS && defined CC_MSVC
 	//Restores previous resolution
 	ChangeDisplaySettings(NULL, 0);
 #endif
