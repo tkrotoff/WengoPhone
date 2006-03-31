@@ -40,7 +40,8 @@ public:
 
 	void updatePresentation ();
 	
-	void addHistoryMemento(std::string type, std::string date, std::string time, std::string name, unsigned id);
+	void addHistoryMemento(std::string type, std::string date,
+		std::string time, int duration, std::string name, unsigned id);
 
 	void removeHistoryMemento(int id);
 	
@@ -56,6 +57,10 @@ private:
 	
 	void historyLoadedEventHandler(CHistory &);
 	
+	void mementoAddedEventHandler(CHistory &, int id);
+
+	void mementoUpdatedEventHandler(CHistory &, int id);
+
 	QtHistoryWidget * _historyWidget;
 	
 	CHistory & _cHistory;

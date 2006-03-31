@@ -29,8 +29,13 @@
 #include <QDate>
 #include <QTime>
 
+//TODO: there's a pb with QTime for the duration
+// the toString() method always return an empty string
+
 QtHistory::QtHistory( CHistory & cHistory ) : _cHistory(cHistory) {
 	_cHistory.historyLoadedEvent += boost::bind(&QtHistory::historyLoadedEventHandler, this, _1);
+	_cHistory.mementoAddedEvent += boost::bind(&QtHistory::mementoAddedEventHandler, this, _1, _2);
+	_cHistory.mementoUpdatedEvent += boost::bind(&QtHistory::mementoUpdatedEventHandler, this, _1, _2);
 
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtHistory::initThreadSafe, this));
@@ -60,6 +65,7 @@ void QtHistory::updatePresentation () {
 
 void QtHistory::updatePresentationThreadSafe() {
 	//TODO: clear the widget
+	_historyWidget->clearHistory();
 	
 	HistoryMementoCollection * collection = _cHistory.getHistory().getHistoryMementoCollection();
 	for(HistoryMap::iterator it = collection->begin(); it != collection->end(); it++ ) {
@@ -69,31 +75,37 @@ void QtHistory::updatePresentationThreadSafe() {
 			HistoryMemento::stateToString(memento->getState()),
 			memento->getDate().toString(),
 			memento->getTime().toString(),
+			memento->getDuration(),
 			memento->getPeer(),
 			(*it).first
 		);
 	}
 }
 
-void QtHistory::addHistoryMemento(std::string type,
-	std::string date, std::string time, std::string name, unsigned id) {
-	QDate qDate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
-	QTime qTime = QTime::fromString(QString::fromStdString(time));
+void QtHistory::addHistoryMemento(std::string type,	std::string date, 
+		std::string time, int duration, std::string name, unsigned id) {
+	QDate qdate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
+	QTime qtime = QTime::fromString(QString::fromStdString(time));
+	QTime qduration = QTime();
+	if( duration != -1) {
+		qduration.addSecs(duration);
+	}
 	
 	if( type == HistoryMemento::StateIncomingCall ) {
 		_historyWidget->addIncomingCallItem(QString::fromStdString(type),
-			qDate, qTime, QString::fromStdString(name), id);
+			qdate, qtime, qduration, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateOutgoingCall ) {
 		_historyWidget->addOutGoingCallItem(QString::fromStdString(type),
-			qDate, qTime, QString::fromStdString(name), id);
+			qdate, qtime, qduration, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateMissedCall ) {
 		_historyWidget->addMissedCallItem(QString::fromStdString(type),
-			qDate, qTime, QString::fromStdString(name), id);
+			qdate, qtime, qduration, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateRejectedCall) {
 		_historyWidget->addRejectedCallItem(QString::fromStdString(type),
-			qDate, qTime, QString::fromStdString(name), id);
+			qdate, qtime, qduration, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateOutgoingSMSOK) {
-		_historyWidget->addSMSItem(QString::fromStdString(type), qDate, qTime, QString::fromStdString(name), id);
+		_historyWidget->addSMSItem(QString::fromStdString(type),
+			qdate, qtime, qduration, QString::fromStdString(name), id);
 	} else if ( type == HistoryMemento::StateOutgoingSMSNOK) {
 		//do not show unsent SMS for now
 	} else if ( type == HistoryMemento::StateNone) {
@@ -109,4 +121,35 @@ void QtHistory::clear() {
 
 void QtHistory::removeHistoryMemento(int id) {
 	_cHistory.removeHistoryMemento(id);
+}
+
+void QtHistory::mementoAddedEventHandler(CHistory &, int id) {
+	HistoryMemento * memento = _cHistory.getHistory().getMemento(id);
+	if( memento ) {
+		addHistoryMemento(
+			HistoryMemento::stateToString(memento->getState()),
+			memento->getDate().toString(),
+			memento->getTime().toString(),
+			memento->getDuration(),
+			memento->getPeer(),
+			id
+		);
+	}
+}
+
+void QtHistory::mementoUpdatedEventHandler(CHistory &, int id) {
+	HistoryMemento * memento = _cHistory.getHistory().getMemento(id);
+	if( memento ) {
+		QString type = QString::fromStdString(HistoryMemento::stateToString(memento->getState()));
+		std::string date = memento->getDate().toString();
+		std::string time = memento->getTime().toString();
+		QDate qdate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
+		QTime qtime = QTime::fromString(QString::fromStdString(time));
+		QString peer = QString::fromStdString(memento->getPeer());
+		QTime qduration = QTime();
+		if( memento->getDuration() != -1) {
+			qduration.addSecs(memento->getDuration());
+		}
+		_historyWidget->editItem(type, qdate, qtime, qduration, peer, id);
+	}
 }

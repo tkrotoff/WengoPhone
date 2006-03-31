@@ -77,7 +77,8 @@ void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const 
 
 	item->setText(0,text);
 	item->setText(1,date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(2,name);
+	item->setText( 2, duration.toString(Qt::TextDate) );
+	item->setText( 3, name);
 	item->setId(id);
 	item->setItemType(QtHistoryItem::Sms);
 

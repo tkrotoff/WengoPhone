@@ -35,19 +35,26 @@ public:
 
 	void clearHistory();
 
-	void addSMSItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
+	void addSMSItem(const QString & text,const QDate & date, 
+		const QTime & time, const QTime & duration, const QString & name, int id);
 
-	void addOutGoingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
+	void addOutGoingCallItem(const QString & text,const QDate & date,
+		const QTime & time, const QTime & duration, const QString & name, int id);
 
-	void addIncomingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
+	void addIncomingCallItem(const QString & text,const QDate & date, 
+		const QTime & time, const QTime & duration, const QString & name, int id);
 
-	void addChatItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
+	void addChatItem(const QString & text,const QDate & date, 
+		const QTime & time, const QTime & duration, const QString & name, int id);
 
-	void addMissedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
+	void addMissedCallItem(const QString & text,const QDate & date, 
+		const QTime & time, const QTime & duration, const QString & name, int id);
 
-	void addRejectedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
+	void addRejectedCallItem(const QString & text,const QDate & date, 
+		const QTime & time, const QTime & duration, const QString & name, int id);
 
-	void editItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id);
+	void editItem(const QString & text,const QDate & date, 
+		const QTime & time, const QTime & duration, const QString & name, int id);
 
 public Q_SLOTS:
 
