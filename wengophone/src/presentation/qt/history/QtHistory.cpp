@@ -29,8 +29,7 @@
 #include <QDate>
 #include <QTime>
 
-//TODO: there's a pb with QTime for the duration
-// the toString() method always return an empty string
+QTime fromSeconds(int second);
 
 QtHistory::QtHistory( CHistory & cHistory ) : _cHistory(cHistory) {
 	_cHistory.historyLoadedEvent += boost::bind(&QtHistory::historyLoadedEventHandler, this, _1);
@@ -64,7 +63,6 @@ void QtHistory::updatePresentation () {
 }
 
 void QtHistory::updatePresentationThreadSafe() {
-	//TODO: clear the widget
 	_historyWidget->clearHistory();
 	
 	HistoryMementoCollection * collection = _cHistory.getHistory().getHistoryMementoCollection();
@@ -86,9 +84,11 @@ void QtHistory::addHistoryMemento(std::string type,	std::string date,
 		std::string time, int duration, std::string name, unsigned id) {
 	QDate qdate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
 	QTime qtime = QTime::fromString(QString::fromStdString(time));
-	QTime qduration = QTime();
-	if( duration != -1) {
-		qduration.addSecs(duration);
+	QTime qduration;
+	if( duration == -1 ) {
+		qduration = fromSeconds(0);
+	} else {
+		qduration = fromSeconds(duration);
 	}
 	
 	if( type == HistoryMemento::StateIncomingCall ) {
@@ -124,8 +124,10 @@ void QtHistory::removeHistoryMemento(int id) {
 }
 
 void QtHistory::mementoAddedEventHandler(CHistory &, int id) {
+		
 	HistoryMemento * memento = _cHistory.getHistory().getMemento(id);
 	if( memento ) {
+	
 		addHistoryMemento(
 			HistoryMemento::stateToString(memento->getState()),
 			memento->getDate().toString(),
@@ -146,10 +148,29 @@ void QtHistory::mementoUpdatedEventHandler(CHistory &, int id) {
 		QDate qdate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
 		QTime qtime = QTime::fromString(QString::fromStdString(time));
 		QString peer = QString::fromStdString(memento->getPeer());
-		QTime qduration = QTime();
-		if( memento->getDuration() != -1) {
-			qduration.addSecs(memento->getDuration());
-		}
+		QTime qduration = fromSeconds(memento->getDuration());
+		
 		_historyWidget->editItem(type, qdate, qtime, qduration, peer, id);
 	}
+}
+
+QTime fromSeconds(int second) {
+
+	int hours = 0;
+	int minutes = 0;
+	int seconds = 0;
+	
+	if( second / 3600 > 0) {
+		hours = second / 3600;
+		second = second % 3600;
+	}
+	
+	if( second / 60 > 0) {
+		minutes = second / 60;
+		second = second % 60;
+	}
+	
+	seconds = second;
+		
+	return QTime(hours, minutes, seconds);
 }
