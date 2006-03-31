@@ -136,6 +136,24 @@ void QtHistoryWidget::addRejectedCallItem(const QString & text,const QDate & dat
 	item->setItemType(QtHistoryItem::RejectedCall);
 }
 
+void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id){
+
+	QList<QTreeWidgetItem *>  itemList = _treeWidget->findItems("*", Qt::MatchWildcard);
+
+	QList<QTreeWidgetItem *>::iterator iter;
+
+	for ( iter = itemList.begin(); iter != itemList.end(); iter++){
+		QtHistoryItem * item = dynamic_cast<QtHistoryItem *> ( (*iter) );
+		if ( item->getId() == id ){
+			item->setText(0,text);
+			item->setText(1,date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+			item->setText(2,name);
+			item->setId(id);
+			break;
+		}
+	}
+	_treeWidget->viewport()->update();
+}
 
 void QtHistoryWidget::itemDoubleClicked ( QTreeWidgetItem * item, int column ){
 

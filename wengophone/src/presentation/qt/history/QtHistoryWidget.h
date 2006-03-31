@@ -45,6 +45,8 @@ public:
 
 	void addRejectedCallItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id);
 
+	void editItem(const QString & text,const QDate & date, const QTime & time, const QString & name, int id);
+
 public Q_SLOTS:
 
 	void showSMSCall(bool checked);
