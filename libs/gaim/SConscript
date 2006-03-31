@@ -7,6 +7,7 @@ defines = {}
 sources = []
 
 libs = [
+	'gmodule-2.0',
 	'glib-2.0',
 	'gthread-2.0',
 ]
@@ -305,6 +306,7 @@ if WengoCCGCC() or WengoCCMinGW():
 		include_path += [
 			'src/src/protocols/jabber/win32',
 			'src/src/win32',
+			'src/src/protocols/jabber/win32',
 		]
 		
 		sources += [
@@ -312,6 +314,7 @@ if WengoCCGCC() or WengoCCMinGW():
 			'src/src/win32/libc_interface.c',
 			'src/src/win32/win32dep.c',
 			'src/src/win32/untar.c',
+			'src/src/protocols/jabber/win32/posix.uname.c',
 		]
 		
 	else:

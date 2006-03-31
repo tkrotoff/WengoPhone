@@ -96,12 +96,12 @@ elif WengoCCGCC():
 if WengoOSWindows():
 	if WengoDebugMode():
 		libs += [
+			'QtUiToolsd',
 			'QtCored4',
 			'QtGuid4',
 			'QtNetworkd4',
 			'QtXmld4',
 			'QtSvgd4',
-			'QtUiToolsd',
 			'qtmaind',
 
 			'gdi32',
@@ -127,12 +127,12 @@ if WengoOSWindows():
 
 	else:
 		libs += [
+			'QtUiTools',
 			'QtCore4',
 			'QtGui4',
 			'QtNetwork4',
 			'QtXml4',
 			'QtSvg4',
-			'QtUiTools',
 			'qtmain',
 
 			'gdi32',
