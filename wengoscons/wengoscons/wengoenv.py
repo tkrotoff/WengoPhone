@@ -427,7 +427,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 					#We're using MinGW
 					self.__CCFlags += ['-mthreads']
 					self.__linkFlags += ['-mthreads']
-		
+
 		def setDebugMode(self):
 			self.__setDefaultFlags()
 			self.__CCFlags += ['-g']
@@ -458,7 +458,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		def WengoCCGCCVersion(self):
 			"""
 			Get GCC version number.
-		
+
 			@return GCC's version number, or UnknownGCCVersion if
 			it can't be found.
 			"""
@@ -466,12 +466,12 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 			if GCCVersion:
 				return GCCVersion
- 
+
 			gcc_command_name = "gcc"
 			if os.environ.has_key('CC'):
 				gcc_command_name = os.environ['CC']
 			(gcc_version_stdin, gcc_version_stdout) = os.popen2(gcc_command_name +
-																" --version", "t")
+										" --version", "t")
 			first_output_line = gcc_version_stdout.readline()
 			matched_version = re.match('^gcc.*?\s+\(GCC\)\s+(\d\.\d\.\d)',
 						first_output_line)
@@ -588,7 +588,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		#MacOS X app template path
 		self.__macOSXTemplatePath = None
 
-		if self['PLATFORM'] == 'win32':
+		if self.CC.isMinGW(self):
 			import win32file
 			import win32event
 			import win32process
@@ -598,7 +598,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 			def my_spawn(sh, escape, cmd, args, spawnenv):
 				for var in spawnenv:
 					spawnenv[var] = spawnenv[var].encode('ascii', 'replace')
-					
+
 				sAttrs = win32security.SECURITY_ATTRIBUTES()
 				StartupInfo = win32process.STARTUPINFO()
 				newargs = string.join(map(escape, args[1:]), ' ')
@@ -618,9 +618,9 @@ class WengoSConsEnvironment(SConsEnvironment):
 					win32file.CloseHandle(hThread);
 				print 'Exit code: ' + str(exit_code)
 				return exit_code
-						
+
 			self['SPAWN'] = my_spawn
-	
+
 
 	def isReleaseMode(self):
 		"""
@@ -1313,7 +1313,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		return os.path.abspath(os.path.join(self['ROOT_BUILD_DIR'], self.__getMode()))
 
 
-	
+
 	def __getBuildDirAbsPath(self, subpath):
 		"""
 		Concats a subpath to the current Environment root build directory.
@@ -1372,7 +1372,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		"""
 
 		return os.path.abspath(os.path.join(self['ROOT_BUILD_DIR'], self['SOURCE_PATH']))
-	
+
 	def __linkWithLibrary(self, libEnv):
 		"""
 		Links with a library given its Environment.
@@ -1478,7 +1478,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		#Visual C++ does not have this limitation
 		if self.OS.isWindows():
 			return self.RES(rcFile)
-		return None 
+		return None
 
         def WengoQtEdition(self):
             """
@@ -1504,7 +1504,7 @@ class WengoSConsEnvironment(SConsEnvironment):
                 return match.group(1)
             else:
                 raise 'QtEditionNotFound'
-            
+
 	def WengoCompileQt4Resource(self, qrcFile):
 		"""
 		Compiles the Qt4 resource file .qrc.
@@ -1566,11 +1566,11 @@ class WengoSConsEnvironment(SConsEnvironment):
 		fd.write(fileTemplate % fileData)
 		fd.close()
 		return filename
-	
+
 	def WengoGetExternalPackage(self, package_url, files_pattern):
 		"""
 		Get an external source package from a URL passed as parameter.
-		
+
 		@param package_url
 		@param files_pattern
 		@returns filename of the downloaded file, empty string if it failed to download file.
@@ -1589,7 +1589,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 			output_file.write( downloaded_package.read())
 			output_file.close()
 			downloaded_package.close()
-			
+
 		#got the external package, unarchiving file
 		if destination_file_name.endswith('.zip'):
 			zip_file = zipfile.ZipFile(destination_file_name)
@@ -1605,7 +1605,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 						if not make_directory(os.path.join(self.__getSourcePath(),
 														   re.sub('/', r"\\", os.path.dirname(file_name)))):
 							print 'Error creating directory: ' + os.path.dirname(file_name) + ', aborting!'
-							sys.exit(1)	
+							sys.exit(1)
 						output_file = open(os.path.join(self.__getSourcePath(), re.sub('/', r"\\", file_name)), 'wb')
 						output_file.write(zip_file.read(file_name))
 						try:
@@ -1623,10 +1623,10 @@ class WengoSConsEnvironment(SConsEnvironment):
 							directories_list.index(os.path.dirname(member.name))
 						except ValueError:
 							directories_list.append(os.path.dirname(member.name))
-		
+
 		# Testing
 		return directories_list
-		
+
 	def __language_release(self, target, source, env):
 		lrelease_path = os.path.join(os.environ["QTDIR"], 'bin', 'lrelease')
 		for a_target, a_source in zip(target, source):
@@ -1640,10 +1640,10 @@ class WengoSConsEnvironment(SConsEnvironment):
 		qmake_path = os.path.join(os.environ["QTDIR"], 'bin', 'qmake')
 		lupdate_path = os.path.join(os.environ["QTDIR"], 'bin', 'lupdate')
 		lrelease_path = os.path.join(os.environ["QTDIR"], 'bin', 'lrelease')
-		
-		os.system(qmake_path + " -project -o lang.pro")		
-		os.system(lupdate_path + " lang.pro")	
-	
+
+		os.system(qmake_path + " -project -o lang.pro")
+		os.system(lupdate_path + " lang.pro")
+
 	def WengoAlias(self, target_name, target):
 		self.Alias(target_name, target)
 		self.__aliases[target_name] = target
@@ -1743,7 +1743,7 @@ def WengoAddDefines(defines):
 
 	@see WengoSConsEnvironment.WengoAddDefines()
 	"""
-	env = getGlobalEnvironment() 
+	env = getGlobalEnvironment()
 	env.WengoAddDefines(defines)
 
 def WengoAddIncludePath(paths):
@@ -1753,7 +1753,7 @@ def WengoAddIncludePath(paths):
 	@see WengoSConsEnvironment.WengoAddIncludePath()
 	"""
 
-	env = getGlobalEnvironment() 
+	env = getGlobalEnvironment()
 	env.WengoAddIncludePath(paths)
 
 def WengoAddLibPath(paths):
@@ -1763,7 +1763,7 @@ def WengoAddLibPath(paths):
 	@see WengoSConsEnvironment.WengoAddLibPath()
 	"""
 
-	env = getGlobalEnvironment() 
+	env = getGlobalEnvironment()
 	env.WengoAddLibPath(paths)
 
 def WengoCCMinGW():
@@ -1912,7 +1912,7 @@ def WengoReleaseSymbolsMode():
 	"""
 	@see WengoSConsEnvironment.isReleaseModeWithSymbols()
 	"""
-	
+
 	env = getGlobalEnvironment()
 	return env.isReleaseModeWithSymbols()
 
