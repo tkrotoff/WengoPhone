@@ -100,6 +100,14 @@ public:
 	 */
 	std::string getPeerDisplayName() const;
 
+	/**
+	 * Gets duration of the current call.
+	 *
+	 * @return duration
+	 */
+	int getDuration() const;
+
+	
 private:
 
 	void stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state);

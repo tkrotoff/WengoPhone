@@ -62,6 +62,10 @@ std::string CPhoneCall::getPeerDisplayName() const {
 	return _phoneCall.getPeerSipAddress().getDisplayName();
 }
 
+int CPhoneCall::getDuration() const {
+	return _phoneCall.getDuration();
+}
+
 void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state) {
 	_pPhoneCall->stateChangedEvent(state);
 }
