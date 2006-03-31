@@ -25,41 +25,21 @@
 
 #include <QtGui>
 
-QtUserWidget::QtUserWidget(QWidget * parent, Qt::WFlags f) : QWidget( parent, f)
-{
+QtUserWidget::QtUserWidget(CContact & cContact, QWidget * parent, Qt::WFlags f)
+: QWidget(parent, f), _cContact(cContact) {
 	_widget = WidgetFactory::create(":/forms/contactlist/userWidget.ui", NULL);
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget(_widget);
 	layout->setMargin(0);
 	setLayout(layout);
 
-	_frame = findChild<QFrame *>("avatarFrame");
-	_avatarManager = new QtUserWidgetAvatarManager(this,_frame);
-	_frame->installEventFilter(_avatarManager);
-}
-
-void QtUserWidget::setText(const QString & text){
-	_text = text;
-}
-
-const QString & QtUserWidget::text() const {
-	return _text;
+	_avatarLabel = findChild<QLabel *>("avatarLabel");
+	_avatarManager = new QtUserWidgetAvatarManager(this, _avatarLabel);
+	_avatarLabel->installEventFilter(_avatarManager);
 }
 
 void QtUserWidget::paintEvent(QPaintEvent * event){
 	QPalette  p = palette();
     QPainter painter(this);
 	painter.fillRect(rect(),QBrush(QColor(255,255,128)));
-}
-
-QFrame * QtUserWidget::getFrame() const {
-	return _frame;
-}
-
-QPixmap * QtUserWidget::getTux() const {
-	return _tux;
-}
-void QtUserWidget::setAvatar(QString path)
-{
-	_avatarManager->loadAvatar(path);
 }

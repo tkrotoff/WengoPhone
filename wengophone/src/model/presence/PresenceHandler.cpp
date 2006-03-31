@@ -27,6 +27,7 @@
 #include <imwrapper/IMContact.h>
 
 #include <util/Logger.h>
+#include <util/Picture.h>
 
 using namespace std;
 
@@ -233,5 +234,18 @@ void PresenceHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAcco
 		i = _presenceMap.find(imAccount);
 	} else {
 		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());
+	}
+}
+
+Picture PresenceHandler::getContactIcon(const IMContact & imContact) {
+	LOG_DEBUG("Getting icon of " + imContact.getContactId());
+
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imContact.getIMAccount());
+
+	if (it != _presenceMap.end()) {
+		return (*it).second->getContactIcon(imContact.getContactId());
+	} else {
+		LOG_FATAL("Unknown IMAccount");
+		return Picture();
 	}
 }

@@ -49,6 +49,8 @@ public:
 	 */
 	WengoWebService(WengoAccount & wengoAccount);
 
+	virtual ~WengoWebService() {}
+
 	/**
 	 * Set/unset https mode
 	 * @param https if true https else http

@@ -19,13 +19,13 @@
 
 #include "QtUser.h"
 
-#include <presentation/PContact.h>
-
 #include <model/WengoPhone.h>
 #include <model/profile/UserProfile.h>
 
-QtUser::QtUser(PContact & pContact, WengoPhone & wengoPhone, QObject * parent)
-	: QObject (parent), _pContact(pContact), _wengoPhone(wengoPhone)
+#include <util/Logger.h>
+
+QtUser::QtUser(CContact & cContact, WengoPhone & wengoPhone, QObject * parent)
+	: QObject (parent), _cContact(cContact), _wengoPhone(wengoPhone)
 {
 	_mouseOn = false;
 	_openStatus = false;
@@ -57,6 +57,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
     {
         painter->setPen(option.palette.text().color() );
     }
+
 	// Draw the status pixmap
 	QtContactPixmap::contactPixmap status = getStatus();
 
@@ -78,7 +79,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	textRect.setTop(_centeredText_y+textRect.top());
 	// Draw the text
 
-	painter->drawText(textRect, Qt::AlignLeft, QString::fromStdString(_pContact.getDisplayName()), 0);
+	painter->drawText(textRect, Qt::AlignLeft, QString::fromStdString(_cContact.getDisplayName()), 0);
 
     /*
             Draw Functions icons
@@ -117,35 +118,46 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 
 }
 
-QString  QtUser::getId() const
+QString QtUser::getId() const
 {
 	return _userId;
 }
-void	QtUser::setId(const QString & id)
+
+void QtUser::setId(const QString & id)
 {
 	_userId = id;
 }
 
 QString	QtUser::getUserName() const
 {
-	// return _userName;
-
-	return QString::fromStdString(_pContact.getDisplayName());
+	return QString::fromStdString(_cContact.getDisplayName());
 }
 
 QtContactPixmap::contactPixmap QtUser::getStatus() const {
 	QtContactPixmap::contactPixmap status;
 
-	switch (_pContact.getPresenceState()) {
+	switch (_cContact.getPresenceState()) {
 	case EnumPresenceState::PresenceStateOnline:
 		status = QtContactPixmap::ContactOnline;
 		break;
 	case EnumPresenceState::PresenceStateOffline:
-		// status = QtContactPixmap::ContactInvisible;
-		status = QtContactPixmap::ContactNotAvailable;
+		status = QtContactPixmap::ContactOffline;
+		break;
+	case EnumPresenceState::PresenceStateDoNotDisturb:
+		status = QtContactPixmap::ContactDND;
+		break;
+	case EnumPresenceState::PresenceStateAway:
+		status = QtContactPixmap::ContactAway;
+		break;
+	case EnumPresenceState::PresenceStateInvisible:
+		status = QtContactPixmap::ContactInvisible;
+		break;
+	case EnumPresenceState::PresenceStateForward:
+		status = QtContactPixmap::ContactForward;
 		break;
 	default:
-		status = QtContactPixmap::ContactNotAvailable;
+		LOG_FATAL("Unknown state");
+
 	}
 
 	return status;
@@ -165,11 +177,11 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 
 
 	px = spx->getPixmap(QtContactPixmap::ContactVideo);
-	if (_pContact.hasVideo())
+	if (_cContact.hasVideo())
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			_wengoPhone.getCurrentUserProfile().makeCall(_pContact.getContact());
+			_wengoPhone.getCurrentUserProfile().makeCall(_cContact.getContact());
 		}
 	}
 	else
@@ -177,22 +189,22 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 
 
 	px = spx->getPixmap(QtContactPixmap::ContactCall);
-	if (_pContact.hasCall())
+	if (_cContact.hasCall())
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			_wengoPhone.getCurrentUserProfile().makeCall(_pContact.getContact());
+			_wengoPhone.getCurrentUserProfile().makeCall(_cContact.getContact());
 		}
 	}
 	else
 		x-=px.width();
 
 	px = spx->getPixmap(QtContactPixmap::ContactIM);
-	if (_pContact.hasIM())
+	if (_cContact.hasIM())
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			_wengoPhone.getCurrentUserProfile().startIM(_pContact.getContact());
+			_wengoPhone.getCurrentUserProfile().startIM(_cContact.getContact());
 		}
 	}
 	else

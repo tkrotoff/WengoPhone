@@ -145,11 +145,11 @@ int	QtUserList::getHeight(const QString & userid) const {
  	else return 0;
 }
 
-PContact & QtUserList::getPContact(const QString & userid) const {
+CContact & QtUserList::getCContact(const QString & userid) const {
 
 	QtUser * user = _userList[userid];
 	if (! user )
 		LOG_FATAL("User lookup failed !!!");
 
-	return user->getPContact();
+	return user->getCContact();
 }

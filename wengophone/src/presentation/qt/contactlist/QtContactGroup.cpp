@@ -73,7 +73,7 @@ void QtContactGroup::addContactThreadSafe(PContact * pContact) {
 	QString contactId;
 	QtUser * user;
 
-	LOG_DEBUG("display name: " + pContact->getDisplayName());
+	LOG_DEBUG("display name: " + pContact->getCContact().getDisplayName());
 
 	QUuid uid = QUuid::createUuid (); // Unique user identifier
 
@@ -81,7 +81,7 @@ void QtContactGroup::addContactThreadSafe(PContact * pContact) {
 	newContact->setText(0, uid.toString());
 	newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
 
-	user = new QtUser(*pContact, _cContactGroup.getCWengoPhone().getWengoPhone());
+	user = new QtUser(pContact->getCContact(), _cContactGroup.getCWengoPhone().getWengoPhone());
 	user->setId(uid.toString());
 
 	ul->addUser(user);
@@ -95,7 +95,7 @@ void QtContactGroup::removeContact(PContact * pContact) {
 
 void QtContactGroup::removeContactThreadSafe(PContact * pContact) {
 	//TODO: remove the contact from the GUI
-	LOG_DEBUG("removing contact " + pContact->getDisplayName() + " from group " + getDisplayName());
+	LOG_DEBUG("removing contact " + pContact->getCContact().getDisplayName() + " from group " + getDisplayName());
 }
 
 void QtContactGroup::updatePresentation() {

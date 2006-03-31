@@ -74,6 +74,11 @@ public:
 	void changeMyIcon(const Picture & picture);
 
 	/**
+	 * @see IMPresence::getContactIcon
+	 */
+	Picture getContactIcon(const std::string & contactId);
+
+	/**
 	 * @see IMPresence::subscribeToPresenceOf
 	 */
 	void subscribeToPresenceOf(const std::string & contactId);

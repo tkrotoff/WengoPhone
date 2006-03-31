@@ -24,10 +24,10 @@
 const char *GaimPreState::_GaimPresenceStatus[] = {
 		"available",
 		"offline",
+		"invisible",
 		"away",
 		"unavailable",
 		"extended_away",
-		"invisible",
 		NULL
 };
 

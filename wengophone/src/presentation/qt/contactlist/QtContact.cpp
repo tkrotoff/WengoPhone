@@ -28,7 +28,7 @@
 using namespace std;
 
 QtContact::QtContact(CContact & cContact, QtContactList * qtContactList) 
-	: QObjectThreadSafe(), PContact(cContact.getContact()), _cContact(cContact) {
+	: QObjectThreadSafe(), PContact(cContact) {
 
 	_qtContactList = qtContactList;
 	

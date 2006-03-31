@@ -62,8 +62,6 @@ private:
 
 	void updatePresentationThreadSafe();
 
-	CContact & _cContact;
-
 	QtContactList * _qtContactList;
 
 };

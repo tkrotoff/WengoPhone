@@ -20,11 +20,12 @@
 #ifndef QTUSER_H
 #define QTUSER_H
 
-#include <QtGui>
 #include "QtContactPixmap.h"
-#include <presentation/PContact.h>
 
-class PContact;
+#include <control/contactlist/CContact.h>
+
+#include <QtGui>
+
 class WengoPhone;
 
 class QtUser : QObject
@@ -34,7 +35,7 @@ public:
 
 	enum SizeHint { UserSize = 22};
 
-	QtUser (PContact & pContact, WengoPhone & wengoPhone, QObject * parent = 0);
+	QtUser (CContact & cContact, WengoPhone & wengoPhone, QObject * parent = 0);
 
 	virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 
@@ -44,15 +45,13 @@ public:
 
 	QString getUserName() const;
 
-	bool hasIM() const { return _pContact.hasIM();}
+	bool hasIM() const { return _cContact.hasIM();}
 
-	bool hasCall() const { return _pContact.hasCall();}
+	bool hasCall() const { return _cContact.hasCall();}
 
-	bool hasVideo() const { return _pContact.hasVideo();}
+	bool hasVideo() const { return _cContact.hasVideo();}
 
 	void setMouseOn(bool value) { _mouseOn = value;}
-
-	//QtContactPixmap::contactPixmap getStatus() {return _status;}
 
 	void mouseClicked(const QPoint & pos,const QRect & rec);
 
@@ -80,14 +79,17 @@ public:
 
 	QString getAvatar() const { return _avatarPath;}
 
-	PContact & getPContact() const { return _pContact;}
+	CContact & getCContact() const { return _cContact;}
 
 
 public Q_SLOTS:
 
 Q_SIGNALS:
+
 	void clicked(QtUser * user,int prt);
+	
 protected:
+
 	QString	_userId;
 
 	QString	_userName;
@@ -116,7 +118,7 @@ protected:
 
 	QString _avatarPath;
 
-	PContact & _pContact;
+	CContact & _cContact;
 
 	WengoPhone & _wengoPhone;
 

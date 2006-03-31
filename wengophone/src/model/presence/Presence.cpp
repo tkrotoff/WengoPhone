@@ -58,6 +58,10 @@ void Presence::changeMyIcon(const Picture & picture) {
 	_imPresence->changeMyIcon(picture);
 }
 
+Picture Presence::getContactIcon(const std::string & contactId) {
+	return _imPresence->getContactIcon(contactId);
+}
+
 void Presence::subscribeToPresenceOf(const std::string & contactId) {
 	_imPresence->subscribeToPresenceOf(contactId);
 }

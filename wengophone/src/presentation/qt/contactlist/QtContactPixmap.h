@@ -24,7 +24,7 @@
 class QtContactPixmap
 {
 public:
-	enum contactPixmap { ContactOnline=1, ContactDND, ContactInvisible, ContactBRB, ContactAway, ContactNotAvailable, ContactForward,
+	enum contactPixmap { ContactOnline = 1, ContactOffline, ContactDND, ContactInvisible, ContactAway, ContactForward,
 						 ContactIM, ContactCall, ContactVideo,
 						 ContactGroupOpen, ContactGroupClose
 						};

@@ -67,7 +67,7 @@ void QtUserManager::editContact(bool ){
     QTreeWidgetItem * item = _tree->currentItem();
 
 	// The edit contact window
-	QtEditContactProfile editContactDialog(ul->getPContact(item->text(0)));
+	QtEditContactProfile editContactDialog(ul->getCContact(item->text(0)));
 	//editContact->set
 
 	editContactDialog.exec();
@@ -200,7 +200,7 @@ void QtUserManager::safeUserStateChanged(){
 
 		hidenContact = (QtHidenContact *)(*iter);
 
-		if ( hidenContact->getUser()->getStatus() != QtContactPixmap::ContactNotAvailable ){
+		if ( hidenContact->getUser()->getStatus() != QtContactPixmap::ContactOffline ){
 
 			if ( hidenContact->getIndex() > hidenContact->getParentItem()->childCount() )
 				hidenContact->getParentItem()->insertChild(hidenContact->getParentItem()->childCount(),
@@ -245,7 +245,7 @@ void QtUserManager::safeHideOffLineUsers(){
 			for ( int t = 0; t < count; t++ ){
 				item = group->child(t);
 				user = ul->getUser(item->text(0));
-				if ( user->getStatus() == QtContactPixmap::ContactNotAvailable )
+				if ( user->getStatus() == QtContactPixmap::ContactOffline )
 				{
 					// Take the widget and put it in _hidenContacts
 					int index = group->indexOfChild ( item );

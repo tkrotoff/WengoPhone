@@ -79,7 +79,7 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter,QRect rect)
 	int _iconsStartPosition;
 
 	x=rect.width()-1;
-	if ( _user->getStatus() != QtContactPixmap::ContactNotAvailable)
+	if ( _user->getStatus() != QtContactPixmap::ContactOffline)
 	{
 		px = spx->getPixmap(QtContactPixmap::ContactVideo);
 		if (_user->hasVideo())

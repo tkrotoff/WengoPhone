@@ -79,11 +79,10 @@ void QtContactList::initThreadSafe() {
 	QtContactPixmap * spx = QtContactPixmap::getInstance();
 
 	spx->setPixmap (QtContactPixmap::ContactOnline, scalePixmap(":/pics/status/online.png"));
+	spx->setPixmap (QtContactPixmap::ContactOffline, scalePixmap(":/pics/status/offline.png"));
 	spx->setPixmap (QtContactPixmap::ContactDND, scalePixmap(":/pics/status/donotdisturb.png"));
-	spx->setPixmap (QtContactPixmap::ContactInvisible, scalePixmap(":/pics/status/notavailable.png"));
-	spx->setPixmap (QtContactPixmap::ContactBRB, scalePixmap(":/pics/status/donotdisturb.png"));
+	spx->setPixmap (QtContactPixmap::ContactInvisible, scalePixmap(":/pics/status/invisible.png"));
 	spx->setPixmap (QtContactPixmap::ContactAway, scalePixmap(":/pics/status/away.png"));
-	spx->setPixmap (QtContactPixmap::ContactNotAvailable, scalePixmap(":/pics/status/offline.png"));
 	spx->setPixmap (QtContactPixmap::ContactForward, scalePixmap(":/pics/status/forward.png"));
 
 	// Fonctions icons

@@ -17,6 +17,9 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include <control/contactlist/CContact.h>
+
+#include <model/contactlist/Contact.h>
 #include <model/profile/StreetAddress.h>
 
 #include <qtutil/Object.h>
@@ -27,8 +30,8 @@
 
 #include "QtEditContactProfile.h"
 
-QtEditContactProfile::QtEditContactProfile(const PContact & contact, QWidget * parent, Qt::WFlags f ) 
-: QDialog( parent, f ), _contact( contact ) {
+QtEditContactProfile::QtEditContactProfile(CContact & cContact, QWidget * parent, Qt::WFlags f ) 
+: QDialog( parent, f ), _cContact(cContact) {
 	_widget = qobject_cast<QWidget *>( WidgetFactory::create( ":/forms/login/contactWindow.ui", this ) );
 	layout = new QGridLayout( this );
 	layout->addWidget( _widget );
@@ -63,7 +66,7 @@ void QtEditContactProfile::hideAccountWidgets() {
 }
 
 void QtEditContactProfile::writeToConfig() {
-	Contact & c = _contact.getContact();
+	Contact & c = _cContact.getContact();
 
 	// Setting wengo id
 	c.setWengoPhoneId(_alias->text().toStdString());
@@ -115,7 +118,7 @@ void QtEditContactProfile::writeToConfig() {
 }
 
 void QtEditContactProfile::readFromConfig() {
-	Contact & c = _contact.getContact();
+	Contact & c = _cContact.getContact();
 
 	// Setting wengo id
 	_alias->setText(QString::fromStdString(c.getWengoPhoneId()));

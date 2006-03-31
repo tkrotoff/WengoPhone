@@ -97,3 +97,7 @@ EnumPresenceState::PresenceState CContact::getPresenceState() const {
 void CContact::contactChangedEventHandler(Contact & contact) {
 	_pContact->updatePresentation();
 }
+
+Picture CContact::getIcon() const {
+	return _contact.getIcon();
+}

@@ -23,6 +23,7 @@
 #include <imwrapper/EnumPresenceState.h>
 
 #include <util/Event.h>
+#include <util/Picture.h>
 
 #include <string>
 
@@ -62,6 +63,8 @@ public:
 	bool hasVideo() const;
 
 	EnumPresenceState::PresenceState getPresenceState() const;
+
+	Picture getIcon() const;
 
 private:
 

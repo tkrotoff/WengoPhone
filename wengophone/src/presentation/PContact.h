@@ -20,37 +20,28 @@
 #ifndef PCONTACT_H
 #define PCONTACT_H
 
-#include <imwrapper/EnumPresenceState.h>
-
 #include "Presentation.h"
 
-#include <string>
-
-class Contact;
+class CContact;
 
 /**
+ * Presentation of a Contact.
  *
  * @ingroup presentation
  * @author Tanguy Krotoff
  */
 class PContact : public Presentation {
 public:
-	PContact(Contact & contact) : _contact(contact) {}
 
-	virtual std::string getDisplayName() const = 0;
-	virtual std::string getId() const = 0;
-	virtual bool hasIM() const = 0;
-	virtual bool hasCall() const = 0;
-	virtual bool hasVideo() const = 0;
-	virtual EnumPresenceState::PresenceState getPresenceState() const = 0;
+	PContact(CContact & cContact) : _cContact(cContact) {}
 
-	Contact & getContact() const {
-		return _contact;
+	CContact & getCContact() const {
+		return _cContact;
 	}
 
-private:
+protected:
 
-	Contact & _contact;
+	CContact & _cContact;
 
 };
 

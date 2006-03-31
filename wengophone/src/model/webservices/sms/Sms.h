@@ -46,6 +46,8 @@ public:
 	 */
 	Sms(WengoAccount & wengoAccount);
 
+	virtual ~Sms() {}
+
 	/**
 	 * Callback to check if the SMS was received or not.
 	 *

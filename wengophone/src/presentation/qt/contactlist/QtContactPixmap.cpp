@@ -38,6 +38,7 @@ void QtContactPixmap::setPixmap (contactPixmap status,const  QPixmap & px)
 {
 	_contactPixmap[status] = px;
 }
+
 QPixmap & QtContactPixmap::getPixmap(contactPixmap status) 
 {
 	return _contactPixmap[status];

@@ -102,6 +102,16 @@ public:
 	void changeMyIcon(const Picture & picture, IMAccount * imAccount = NULL);
 
 	/**
+	 * Gets the icon of the given IMContact.
+	 *
+	 * If no icon has been set, an empty Picture is returned.
+	 *
+	 * @param imContact the IMContact to get the icon of
+	 * @return the icon
+	 */
+	Picture getContactIcon(const IMContact & imContact);
+
+	/**
 	 * Subscribe to presence of a IMContact.
 	 *
 	 * @param imContact the IMContact

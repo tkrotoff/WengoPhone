@@ -225,7 +225,11 @@ public:
 			return _userProfile;
 	}
 
+	// Inherited from Profile
 	void setWengoPhoneId(const std::string & wengoId);
+
+	Picture getIcon() const;
+	////
 
 private:
 
@@ -295,6 +299,9 @@ private:
 	 * id is online.
 	 */
 	bool wengoIsAvailable() const;
+
+	/** Can't be used on a Contact.*/
+	void setIcon(const Picture & icon);
 
 	std::string _preferredNumber;
 

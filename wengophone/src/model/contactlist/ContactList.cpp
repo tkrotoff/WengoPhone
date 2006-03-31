@@ -214,7 +214,11 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 		_addToContactGroup(groupName, *contact);
 	}
 
-	contact->getIMContact(imContact).setPresenceState(state);
+	// The PresenceState must not be changed if the PresenceState is
+	// UserDefined (used by PhApi to set the alias)
+	if (state != EnumPresenceState::PresenceStateUserDefined) {
+		contact->getIMContact(imContact).setPresenceState(state);
+	}
 	contact->getIMContact(imContact).setAlias(alias);
 }
 

@@ -28,6 +28,7 @@
 
 #include <util/StringList.h>
 #include <util/Logger.h>
+#include <util/Picture.h>
 
 #include <iostream>
 using namespace std;
@@ -286,6 +287,7 @@ IMContact * Contact::getPreferredIMContact() const {
 EnumPresenceState::PresenceState Contact::getPresenceState() const {
 	unsigned onlineIMContact = 0;
 	unsigned offlineIMContact = 0;
+	unsigned dndIMContact = 0;
 
 	for (IMContactSet::const_iterator it = _imContactSet.begin() ;
 		it != _imContactSet.end() ;
@@ -294,11 +296,15 @@ EnumPresenceState::PresenceState Contact::getPresenceState() const {
 			offlineIMContact++;
 		} else if ((*it).getPresenceState() == EnumPresenceState::PresenceStateOnline) {
 			onlineIMContact++;
+		} else if ((*it).getPresenceState() == EnumPresenceState::PresenceStateDoNotDisturb) {
+			dndIMContact++;
 		}
 	}
 
 	if (onlineIMContact > 0) {
 		return EnumPresenceState::PresenceStateOnline;
+	} else if (dndIMContact == _imContactSet.size()) {
+		return EnumPresenceState::PresenceStateDoNotDisturb;
 	} else if (offlineIMContact == _imContactSet.size()) {
 		return EnumPresenceState::PresenceStateOffline;
 	} else {
@@ -325,4 +331,22 @@ void Contact::moveToGroup(const std::string & to, const std::string & from) {
 
 void Contact::profileChangedEventHandler(Profile & profile) {
 	contactChangedEvent(*this);
+}
+
+void Contact::setIcon(const Picture & icon) {
+}
+
+Picture Contact::getIcon() const {
+	Picture result;
+
+	for (IMContactSet::const_iterator it = _imContactSet.begin() ;
+		it != _imContactSet.end() ;
+		it++) {
+		if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
+			result = _userProfile.getPresenceHandler().getContactIcon((*it));
+			break;
+		}
+	}
+
+	return result;
 }

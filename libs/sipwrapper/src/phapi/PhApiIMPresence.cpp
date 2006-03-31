@@ -37,6 +37,8 @@ void PhApiIMPresence::changeMyPresence(EnumPresenceState::PresenceState state, c
 }
 
 void PhApiIMPresence::changeMyAlias(const std::string & nickname) {
+	// Hack: we use the user defined presence state of phApi to set the alias
+	_phApiWrapper.changeMyPresence(EnumPresenceState::PresenceStateUserDefined, nickname);
 }
 
 void PhApiIMPresence::changeMyIcon(const Picture & picture) {

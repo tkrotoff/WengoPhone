@@ -44,9 +44,11 @@ static int USER_WIDGET_FRAME_HEIGHT = 0;
 static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 
 QtTreeViewDelegate::QtTreeViewDelegate( QObject *parent ) : QItemDelegate( parent ) {
+/*
 	QtUserWidget * widget = new QtUserWidget( NULL );
 	QWidget * userWidget = Object::findChild<QWidget *>( widget, "UserWidget" );
 	QFrame * userTitleFrame = Object::findChild<QFrame *>( userWidget, "userTitleFrame" );
+*/
 //	USER_TITLE_FRAME_HEIGHT = userTitleFrame->height();
 //	USER_WIDGET_FRAME_HEIGHT = userWidget->height();
 }
@@ -56,19 +58,25 @@ void QtTreeViewDelegate::setParent( QWidget * parent ) {
 }
 
 QWidget * QtTreeViewDelegate::createEditor( QWidget *parent,
-		const QStyleOptionViewItem & ,
-		const QModelIndex &index ) const {
-		QtUserWidget * widget = new QtUserWidget( parent );
-		QWidget * userWidget = Object::findChild<QWidget *>( widget, "UserWidget" );
-		QFrame * userTitleFrame = Object::findChild<QFrame *>( userWidget, "userTitleFrame" );
-		// USER_TITLE_FRAME_HEIGHT = userTitleFrame->height();
-		//LOG_DEBUG( "height= " + String::fromNumber( USER_TITLE_FRAME_HEIGHT ) );
+	const QStyleOptionViewItem & ,
+	const QModelIndex &index ) const {
 
-		QtUserList * ul = QtUserList::getInstance();
-		userWidget->installEventFilter( new QtUserWidgetEventFilter( ( QObject * ) this, userWidget, ul->getUser( index.data().toString() ) ) );
-		//widget->setAvatar("emoticons/cat.svg");
-		return ( QWidget * ) widget;
-	}
+	// USER_TITLE_FRAME_HEIGHT = userTitleFrame->height();
+	//LOG_DEBUG( "height= " + String::fromNumber( USER_TITLE_FRAME_HEIGHT ) );
+
+	QtUserList * ul = QtUserList::getInstance();
+	QtUser * user = ul->getUser(index.data().toString());
+
+	QtUserWidget * widget = new QtUserWidget(user->getCContact(), parent);
+	QWidget * userWidget = Object::findChild<QWidget *>(widget, "UserWidget");
+	QFrame * userTitleFrame = Object::findChild<QFrame *>(userWidget, "userTitleFrame");
+
+	userWidget->installEventFilter(new QtUserWidgetEventFilter((QObject *) this, userWidget, user));
+
+	//widget->setAvatar("emoticons/cat.svg");
+
+	return ( QWidget * ) widget;
+}
 
 void QtTreeViewDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) const {
 		QtUserWidget * widget = qobject_cast<QtUserWidget *>( editor );

@@ -21,41 +21,50 @@
 #define QTUSERWIDGET_H
 
 #include <QWidget>
-
+#include <QString>
+ 
 class QtUserWidgetAvatarManager;
 
-class QFrame;
-class QPixmap;
+class QLabel;
+class CContact;
 
 class QtUserWidget : public QWidget
 {
     Q_OBJECT
 public:
-    QtUserWidget(QWidget * parent = 0, Qt::WFlags f=0);
 
-	void setText(const QString & text);
-
-	const QString & text() const;
+    QtUserWidget(CContact & cContact, QWidget * parent = 0, Qt::WFlags f=0);
 
 	virtual void paintEvent(QPaintEvent * event);
 
-	void setAvatar(QString path);
+	void setText(QString text) {
+		_text = text;
+	}
 
-	QFrame *    getFrame() const;
+	QString text() const {
+		return _text;
+	}
 
-	QPixmap *   getTux() const;
+	CContact & getCContact() const {
+		return _cContact;
+	}
+
+	QLabel * getAvatarLabel() const {
+		return _avatarLabel;
+	}
 
 protected:
 
-	QString     _text;
-
-	QPixmap  *  _tux;
-
-	QFrame   *  _frame;
+	QLabel * _avatarLabel;
 
 	QWidget * _widget;
 
+	QString _text;
+
 	QtUserWidgetAvatarManager * _avatarManager;
+
+	CContact & _cContact;
+
 };
 
 #endif
