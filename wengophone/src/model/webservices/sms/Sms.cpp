@@ -52,6 +52,8 @@ int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
 	HistoryMemento * memento = new HistoryMemento(
 		HistoryMemento::OutgoingSmsNok, phoneNumber, id, message2);
 	History::getInstance().addMemento(memento);
+	
+	return id;
 }
 
 void Sms::answerReceived(std::string answer, int id) {
