@@ -24,6 +24,8 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
+#include <QMenu>
+
 class WebcamVideoFrame;
 class CPhoneCall;
 class QtWengoPhone;
@@ -32,6 +34,7 @@ class QtVideo;
 class QPushButton;
 class QImage;
 class QWidget;
+class QLabel;
 
 /**
  * Qt Presentation component for PhoneCall.
@@ -52,15 +55,17 @@ public:
 
 private Q_SLOTS:
 
-	void acceptButtonClicked();
+	void acceptActionTriggered ( bool checked );
 
-	void rejectButtonClicked();
+	void rejectActionTriggered ( bool checked );
 
-	void holdResumeButtonClicked();
+	void holdResumeActionTriggered ( bool checked );
 
-	void addContactButtonClicked();
+	void addContactActionTriggered ( bool checked );
 
 	void transferButtonClicked();
+
+	void openPopup( const QPoint & pos);
 
 private:
 
@@ -76,23 +81,49 @@ private:
 
 	void videoFrameReceivedEventHandlerThreadSafe(QImage * image);
 
+	QMenu _popup;
+
 	CPhoneCall & _cPhoneCall;
 
 	QtWengoPhone * _qtWengoPhone;
 
 	QWidget * _phoneCallWidget;
 
-	QPushButton * _acceptButton;
-
-	QPushButton * _rejectButton;
-
-	QPushButton * _holdResumeButton;
-
-	QPushButton * _addContactButton;
-
 	QtVideo * _videoWindow;
 
+	QLabel * _nickNameLabel;
+
+	QLabel * _statusLabel;
+
+	QLabel * _durationLabel;
+
+	QAction * _actionAcceptCall;
+
+	QAction * _actionHangupCall;
+
+	QAction * _actionHold;
+
+	QAction * _actionResume;
+
+	QAction * _actionInvite;
+
+	QAction * _actionStartVideo;
+
+	QAction * _actionStopVideo;
+
+	QAction * _actionAddContact;
+
+	QAction * _actionBlockContact;
+
+	int _timerId;
+
+	int _duration;
+
 	bool _hold;
+
+protected:
+
+	void timerEvent(QTimerEvent *event);
 };
 
 #endif	//QTPHONECALL_H

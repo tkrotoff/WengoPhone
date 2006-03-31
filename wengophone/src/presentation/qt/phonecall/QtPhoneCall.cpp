@@ -20,6 +20,7 @@
 #include "QtPhoneCall.h"
 
 #include "QtVideo.h"
+#include "QtPhoneCallEventFilter.h"
 
 #include <presentation/qt/contactlist/QtAddContact.h>
 #include <presentation/qt/QtWengoPhone.h>
@@ -52,8 +53,15 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 }
 
 void QtPhoneCall::initThreadSafe() {
-	_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/PhoneCallWidget.ui", _qtWengoPhone->getWidget());
-	//_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/QtCallContactWidget.ui", _qtWengoPhone->getWidget());
+	// _phoneCallWidget = WidgetFactory::create(":/forms/phonecall/PhoneCallWidget.ui", _qtWengoPhone->getWidget());
+	_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/QtCallContactWidget.ui", _qtWengoPhone->getWidget());
+
+	QtPhoneCallEventFilter * filter = new QtPhoneCallEventFilter(this);
+
+	_phoneCallWidget->installEventFilter(filter);
+
+	connect (filter, SIGNAL( openPopup( const QPoint & ) ), SLOT(openPopup( const QPoint & ) ) );
+
 
 	QString sipAddress = QString::fromStdString(_cPhoneCall.getPeerSipAddress());
 	QString callAddress = QString::fromStdString(_cPhoneCall.getPeerDisplayName());
@@ -61,6 +69,56 @@ void QtPhoneCall::initThreadSafe() {
 		callAddress = QString::fromStdString(_cPhoneCall.getPeerUserName());
 	}
 
+	//phoneNumberLabel
+	_nickNameLabel = Object::findChild<QLabel *>(_phoneCallWidget, "nickNameLabel");
+	_nickNameLabel->setText(callAddress);
+	_nickNameLabel->setToolTip(sipAddress);
+
+	_statusLabel = Object::findChild<QLabel *>(_phoneCallWidget, "statusLabel");
+	_statusLabel->setText("");
+	_statusLabel->setToolTip("Status");
+
+	_durationLabel = Object::findChild<QLabel *>(_phoneCallWidget, "durationLabel");
+	_durationLabel->setText("00:00:00");
+	_durationLabel->setToolTip("Status");
+
+
+	QAction * action;
+
+	// Accept call
+	_actionAcceptCall = _popup.addAction( tr ("Accept") );
+	connect (_actionAcceptCall,SIGNAL ( triggered(bool) ), SLOT( acceptActionTriggered(bool) ) );
+
+	// Hang-up call
+	_actionHangupCall = _popup.addAction( tr ("Hang-up") );
+	connect (_actionHangupCall,SIGNAL ( triggered(bool) ), SLOT ( rejectActionTriggered(bool) ) );
+
+	// Hold
+	_actionHold = _popup.addAction( tr ("Hold") );
+	connect (_actionHold,SIGNAL ( triggered(bool) ), SLOT ( holdResumeActionTriggered(bool) ) );
+
+	// Resume
+	_actionResume = _popup.addAction( tr ("Resume") );
+	connect (_actionResume ,SIGNAL ( triggered(bool) ), SLOT ( holdResumeActionTriggered(bool) ) );
+	_actionResume->setEnabled(false);
+
+	// Separator
+	_popup.addSeparator();
+
+	// Invite to conference
+	_actionInvite = _popup.addAction( tr ("Invite to conference") );
+	_popup.addSeparator();
+	_actionStartVideo = _popup.addAction( tr ("Start video") );
+	_actionStopVideo  = _popup.addAction( tr ("Stop video") );
+	_popup.addSeparator();
+
+	// Add the contact
+	_actionAddContact = _popup.addAction( tr ("Add contact") );
+	connect (_actionAddContact,SIGNAL ( triggered(bool) ), SLOT ( addContactActionTriggered(bool) ) );
+
+	_actionBlockContact = _popup.addAction( tr ("Block contact") );
+
+/*
 	//acceptButton
 	_acceptButton = Object::findChild<QPushButton *>(_phoneCallWidget, "acceptButton");
 	_acceptButton->setEnabled(true);
@@ -92,7 +150,7 @@ void QtPhoneCall::initThreadSafe() {
 	QPushButton * transferButton = Object::findChild<QPushButton *>(_phoneCallWidget, "transferButton");
 	transferButton->disconnect();
 	connect(transferButton, SIGNAL(clicked()), SLOT(transferButtonClicked()));
-
+*/
 	_qtWengoPhone->addPhoneCall(this);
 }
 
@@ -112,7 +170,7 @@ void QtPhoneCall::stateChangedEventHandler(EnumPhoneCallState::PhoneCallState st
 }
 
 void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state) {
-	static const QString originalHoldText = _holdResumeButton->text();
+	// static const QString originalHoldText = _holdResumeButton->text();
 
 	switch(state) {
 
@@ -120,50 +178,109 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:
+
+		_statusLabel->setText( tr ("error") );
+
+/*
 		_acceptButton->setEnabled(false);
 		_rejectButton->setEnabled(false);
+
+*/
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
-		_holdResumeButton->setText(originalHoldText);
+		// _holdResumeButton->setText(originalHoldText);
 		_hold = true;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateTalking:
+
+		_duration = 0;
+		_timerId = startTimer(1000);
+		if ( _timerId == 0)
+			qDebug() << "TIMER ID == 0 ************************************************";
+		_actionAcceptCall->setEnabled( false );
+		_actionHangupCall->setEnabled( true );
+
+		_statusLabel->setText( tr ("talking") );
+
+/*
 		_acceptButton->setEnabled(false);
 		_rejectButton->setEnabled(true);
+*/
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateDialing:
+
+		_actionAcceptCall->setEnabled( false );
+		_actionHangupCall->setEnabled( true );
+
+		_statusLabel->setText( tr ("dialing") );
+/*
 		_acceptButton->setEnabled(false);
 		_rejectButton->setEnabled(true);
+*/
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateRinging:
+
+		_actionAcceptCall->setEnabled( false );
+		_actionHangupCall->setEnabled( true );
+
+		_statusLabel->setText( tr ("ringing") );
+
+/*
 		_acceptButton->setEnabled(false);
 		_rejectButton->setEnabled(true);
+*/
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
+
+		killTimer(_timerId);
+		_actionAcceptCall->setEnabled( false );
+		_actionHangupCall->setEnabled( false );
+
+		_statusLabel->setText( tr ("closed") );
+
+/*
 		_acceptButton->setEnabled(false);
 		_rejectButton->setEnabled(false);
-		_phoneCallWidget->hide();
+*/
+		// _phoneCallWidget->hide();
+		delete _phoneCallWidget;
+		deleteLater();
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming:
+
+		_actionAcceptCall->setEnabled( true );
+		_actionHangupCall->setEnabled( true );
+
+		_statusLabel->setText( tr ("incoming call") );
+
+/*
 		_acceptButton->setEnabled(true);
 		_rejectButton->setEnabled(true);
+*/
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateHold:
-		_holdResumeButton->setText(tr("Resume"));
+
+//		_holdResumeButton->setText(tr("Resume"));
+
+		_statusLabel->setText( tr ("hold") );
+
+		_actionResume->setEnabled(true);
 		_hold = false;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateMissed:
+		_statusLabel->setText( tr ("missed") );
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateRedirected:
+		_statusLabel->setText( tr ("redirected") );
 		break;
 
 	default:
@@ -194,15 +311,15 @@ void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(QImage * image) {
 	delete image;
 }
 
-void QtPhoneCall::acceptButtonClicked() {
+void QtPhoneCall::acceptActionTriggered ( bool  ) {
 	_cPhoneCall.pickUp();
 }
 
-void QtPhoneCall::rejectButtonClicked() {
+void QtPhoneCall::rejectActionTriggered ( bool ) {
 	_cPhoneCall.hangUp();
 }
 
-void QtPhoneCall::holdResumeButtonClicked() {
+void QtPhoneCall::holdResumeActionTriggered ( bool ){
 	if (_hold) {
 		_cPhoneCall.hold();
 	} else {
@@ -210,7 +327,7 @@ void QtPhoneCall::holdResumeButtonClicked() {
 	}
 }
 
-void QtPhoneCall::addContactButtonClicked() {
+void QtPhoneCall::addContactActionTriggered ( bool  ){
 	std::string callAddress = _cPhoneCall.getPeerDisplayName();
 	if (callAddress.empty()) {
 		callAddress = _cPhoneCall.getPeerUserName();
@@ -224,3 +341,20 @@ void QtPhoneCall::transferButtonClicked() {
 
 	_cPhoneCall.blindTransfer(transferPhoneNumberLineEdit->text().toStdString());
 }
+
+void QtPhoneCall::openPopup( const QPoint & pos){
+	_popup.popup(pos);
+}
+
+void QtPhoneCall::timerEvent(QTimerEvent *event){
+
+	// int duration = _cPhoneCall.getDuration();
+	_duration++;
+	QTime time;
+
+	time = time.addSecs(_duration);
+
+	_durationLabel->setText(time.toString(Qt::TextDate));
+
+}
+
