@@ -6,7 +6,7 @@ include_path = []
 libs_file = []
 
 if WengoOSWindows():
-	if WengoCCMSVC():
+	if WengoCCMSVC() or WengoCCMinGW():
 		libs += [
 			'glib-2.0',
 		]

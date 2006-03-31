@@ -1,4 +1,4 @@
-import os, ConfigParser
+import os, ConfigParser, shutil
 
 env = WengoGetEnvironment()
 
@@ -27,7 +27,6 @@ if WengoCCMinGW():
 		'include/gaim/win32',
 
 		'D:\cygwin\home\jbossart\win32-dev\gtk_2_0\include',
-
 		]
 
 	if WengoGetConsoleArgument('prepare-for-mingw'):
@@ -52,6 +51,11 @@ if WengoCCMinGW():
 				info_file.write(str(i) + '=' + tmp_include_path + '\n')
 				i += 1
 		info_file.close()
+		
+	shutil.copyfile(os.path.join(WengoGetSourcePath(), 'src/config.h.mingw'), os.path.join(WengoGetSourcePath(), 'src/config.h'))
+else:
+	shutil.copyfile(os.path.join(WengoGetSourcePath(), 'src/config.h.unix'), os.path.join(WengoGetSourcePath(), 'src/config.h'))
+
 
 if os.path.exists(os.path.join(WengoGetSourcePath(), 'mingw/mingw.properties')):
 	config = ConfigParser.ConfigParser()
