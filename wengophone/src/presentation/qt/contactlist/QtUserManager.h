@@ -61,6 +61,17 @@ class QtUserManager : public QObject {
 
 	protected:
 
+		void safeUserStateChanged();
+
+		void safeHideOffLineUsers();
+
+		void safeSortUsers();
+
+		void safeShowAllUsers();
+
+		bool _hideUsers;
+
+		bool _sortUsers;
 
 		QList<QtHidenContact *>  clearList(QList<QtHidenContact *> list);
 
@@ -76,7 +87,7 @@ class QtUserManager : public QObject {
 
 		QMenu * _menu;
 
-		QMutex  _mutex;
+		QMutex _mutex;
 
 		PContact * _pcontact;
 };

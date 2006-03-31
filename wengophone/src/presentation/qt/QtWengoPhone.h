@@ -149,6 +149,8 @@ private Q_SLOTS:
 
 	void setTrayMenu();
 
+	void sortContacts();
+
 private:
 
 	void initThreadSafe();

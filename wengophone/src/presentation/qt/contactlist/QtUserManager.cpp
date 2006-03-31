@@ -30,6 +30,8 @@ QtUserManager::QtUserManager(QObject * parent, QTreeWidget * target) : QObject(p
     _tree = target;
     _previous = NULL;
     _lastClicked=NULL;
+	_hideUsers = false;
+	_sortUsers = false;
 
 	QtUserList::getInstance()->setTreeWidget(target);
 	target->setMouseTracking(true);
@@ -184,8 +186,11 @@ QList<QtHidenContact *> QtUserManager::clearList(QList<QtHidenContact *> list){
 	return tmp;
 }
 
-void QtUserManager::userStateChanged(){
-	QMutexLocker lock(&_mutex);
+
+void QtUserManager::safeUserStateChanged(){
+
+	safeHideOffLineUsers();
+
 	QtHidenContact * hidenContact;
 	QList<QtHidenContact *>::iterator iter;
 
@@ -208,11 +213,19 @@ void QtUserManager::userStateChanged(){
 		}
 	}
 	_hidenContacts = newHidenList;
+
+	safeSortUsers();
+}
+void QtUserManager::userStateChanged(){
+	QMutexLocker lock(&_mutex);
+	safeUserStateChanged();
 }
 
-void QtUserManager::hideOffLineUsers(){
-//TODO: Add the code to manage hidden groups
-	QMutexLocker lock(&_mutex);
+void QtUserManager::safeHideOffLineUsers(){
+	//TODO: Add the code to manage hidden groups
+
+	if (! _hideUsers)
+		return;
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 	QList<QTreeWidgetItem *> itemList = _tree->findItems("*",Qt::MatchWildcard);
@@ -232,7 +245,6 @@ void QtUserManager::hideOffLineUsers(){
 			for ( int t = 0; t < count; t++ ){
 				item = group->child(t);
 				user = ul->getUser(item->text(0));
-
 				if ( user->getStatus() == QtContactPixmap::ContactNotAvailable )
 				{
 					// Take the widget and put it in _hidenContacts
@@ -251,8 +263,19 @@ void QtUserManager::hideOffLineUsers(){
 		}
 	}
 }
-void QtUserManager::sortUsers(){
+
+void QtUserManager::hideOffLineUsers(){
+
 	QMutexLocker lock(&_mutex);
+	_hideUsers = true;
+	safeHideOffLineUsers();
+}
+
+void QtUserManager::safeSortUsers(){
+
+	if (!  _sortUsers )
+		return;
+
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
@@ -279,7 +302,6 @@ void QtUserManager::sortUsers(){
 				QtHidenContact hiden = QtHidenContact(item,item->parent(),user,index,this);
 				sortList.append(hiden);
 				deleteList.append(item);
-
 			}
 			// Delete the childs
 			QList<QTreeWidgetItem *>::iterator deleteIterator;
@@ -298,10 +320,14 @@ void QtUserManager::sortUsers(){
 		}
 	}
 
-}
 
-void QtUserManager::showAllUsers(){
+}
+void QtUserManager::sortUsers(){
 	QMutexLocker lock(&_mutex);
+	_sortUsers = true;
+	safeSortUsers();
+}
+void QtUserManager::safeShowAllUsers(){
 	QtHidenContact * hidenContact;
 	QList<QtHidenContact *>::iterator iter;
 
@@ -318,4 +344,10 @@ void QtUserManager::showAllUsers(){
 		delete hidenContact;
 		}
 	_hidenContacts.clear();
+}
+
+void QtUserManager::showAllUsers(){
+	QMutexLocker lock(&_mutex);
+	_hideUsers = false;
+	safeShowAllUsers();
 }

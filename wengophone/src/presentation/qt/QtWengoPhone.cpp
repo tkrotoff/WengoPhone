@@ -205,6 +205,11 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionShow_Hide_contacts_offline = Object::findChild<QAction *>(_wengoPhoneWindow,"actionShow_Hide_contacts_offline");
 	connect(actionShow_Hide_contacts_offline, SIGNAL(triggered()), SLOT(showHideOffLineContacts()));
 
+	// actionSort_contacts
+	QAction * actionSort_contacts = Object::findChild<QAction *>(_wengoPhoneWindow,"actionSort_contacts");
+	connect(actionSort_contacts, SIGNAL(triggered()), SLOT(sortContacts()));
+
+
 	//actionCreateConferenceCall
 	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
 	connect(actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
@@ -626,6 +631,10 @@ void QtWengoPhone::setTrayMenu() {
 	connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
 
 	_trayIcon->setPopup(_trayMenu);
+}
+
+void QtWengoPhone::sortContacts(){
+   _contactList->sortUsers();
 }
 
 void QtWengoPhone::wrongProxyAuthenticationEventHandler(SipAccount & sender,

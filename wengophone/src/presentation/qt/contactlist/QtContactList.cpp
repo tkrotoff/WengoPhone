@@ -221,6 +221,7 @@ void QtContactList::addContactGroupThreadSafe(PContactGroup * pContactGroup) {
 
 	QTreeWidgetItem *group = new QTreeWidgetItem(_treeWidget);
 	group->setText(0, QString::fromStdString(pContactGroup->getDisplayName()));
+	_treeWidget->setItemExpanded ( group, true);
 }
 
 void QtContactList::showAllUsers(){
