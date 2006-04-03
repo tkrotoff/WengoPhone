@@ -29,7 +29,7 @@
 
 #include <QtGui>
 
-#if defined OS_WINDOWS && defined CC_MSVC 
+#if defined OS_WINDOWS && defined CC_MSVC
 #include <windows.h>
 #endif
 
@@ -37,7 +37,7 @@
 using namespace std;
 
 QtVideo::QtVideo(QWidget * parent) {
-	_videoWindow = WidgetFactory::create(":/forms/phonecall/VideoWindow.ui", parent);
+	_videoWindow = WidgetFactory::create(":/forms/phonecall/VideoWindow2.ui", parent);
 
 	//frame
 	_frame = Object::findChild<QFrame *>(_videoWindow, "frame");
@@ -63,7 +63,7 @@ void QtVideo::showImage(const QImage & image) {
 void QtVideo::paintEvent() {
 	if (!_image.isNull()) {
 		QPainter painter(_frame);
-		painter.drawImage(0, 0, _image.scaled(_frame->frameRect().size()));
+		painter.drawImage(0, 0, _image.scaled(_frame->frameRect().size(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
 	}
 }
 

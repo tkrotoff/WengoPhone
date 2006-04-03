@@ -40,10 +40,11 @@
 QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	: QObjectThreadSafe(),
 	_cPhoneCall(cPhoneCall) {
-	LOG_DEBUG("Creating QtPhoneCall object");
+
 	_qtWengoPhone = (QtWengoPhone *) _cPhoneCall.getCWengoPhone().getPresentation();
 	_videoWindow = NULL;
 	_hold = true;
+	_showVideo = false;
 
 	stateChangedEvent += boost::bind(&QtPhoneCall::stateChangedEventHandler, this, _1);
 	videoFrameReceivedEvent += boost::bind(&QtPhoneCall::videoFrameReceivedEventHandler, this, _1, _2);
@@ -54,9 +55,9 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 }
 
 void QtPhoneCall::initThreadSafe() {
-	// _phoneCallWidget = WidgetFactory::create(":/forms/phonecall/PhoneCallWidget.ui", _qtWengoPhone->getWidget());
-	LOG_DEBUG("Creating the widget");
+
 	_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/QtCallContactWidget.ui", _qtWengoPhone->getWidget());
+	_phoneCallWidget->setAutoFillBackground ( true );
 
 	QtPhoneCallEventFilter * filter = new QtPhoneCallEventFilter(_phoneCallWidget);
 
@@ -116,8 +117,12 @@ void QtPhoneCall::initThreadSafe() {
 	// Invite to conference
 	_actionInvite = _popup->addAction( tr ("Invite to conference") );
 	_popup->addSeparator();
-	_actionStartVideo = _popup->addAction( tr ("Start video") );
-	_actionStopVideo  = _popup->addAction( tr ("Stop video") );
+
+	// Show / Hide video
+	_actionSwitchVideo = _popup->addAction( tr ("Stop video") );
+	connect (_actionSwitchVideo ,SIGNAL ( triggered(bool) ), SLOT ( switchVideo(bool) ) );
+
+
 	_popup->addSeparator();
 
 	// Add the contact
@@ -126,9 +131,7 @@ void QtPhoneCall::initThreadSafe() {
 
 	_actionBlockContact = _popup->addAction( tr ("Block contact") );
 
-
 	_phoneCallWidget->installEventFilter(filter);
-
 
 	connect (filter, SIGNAL( openPopup( int, int ) ), SLOT(openPopup( int, int ) ) );
 
@@ -185,7 +188,6 @@ void QtPhoneCall::stateChangedEventHandler(EnumPhoneCallState::PhoneCallState st
 }
 
 void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state) {
-	// static const QString originalHoldText = _holdResumeButton->text();
 
 	switch(state) {
 
@@ -195,8 +197,6 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 	case EnumPhoneCallState::PhoneCallStateError:
 
 		_statusLabel->setText( tr ("error") );
-
-
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
@@ -211,7 +211,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_duration = 0;
 		_timerId = startTimer(1000);
 		if ( _timerId == 0)
-			qDebug() << "TIMER ID == 0 ************************************************";
+			LOG_DEBUG("TIMERID == 0 ?!!!");
 		_actionAcceptCall->setEnabled( false );
 		_actionHangupCall->setEnabled( true );
 
@@ -294,13 +294,11 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 
 void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(QImage * image) {
 	if (!_videoWindow) {
+		_showVideo = true;
 		_videoWindow = new QtVideo(_phoneCallWidget);
-		_videoWindow->getWidget()->show();
+		showVideoWidget();
 	}
-
-	//_videoWindow->getWidget()->resize(image.size());
 	_videoWindow->showImage(*image);
-
 	//image was created in videoFrameReceived
 	delete image;
 }
@@ -342,7 +340,6 @@ void QtPhoneCall::openPopup( int x , int y ){
 
 void QtPhoneCall::timerEvent(QTimerEvent *event){
 
-	// int duration = _cPhoneCall.getDuration();
 	_duration++;
 	QTime time;
 
@@ -352,3 +349,55 @@ void QtPhoneCall::timerEvent(QTimerEvent *event){
 
 }
 
+void QtPhoneCall::showVideoWidget(){
+
+
+
+	QGridLayout * layout = dynamic_cast<QGridLayout *> ( _phoneCallWidget->layout() );
+
+
+	// Remove the avatar from the widget
+	layout->removeWidget ( _avatarLabel );
+	_avatarLabel->hide();
+
+	// insert the video widget
+	_videoWindow->getWidget()->setParent(_phoneCallWidget);
+	_videoWindow->getWidget()->setMaximumSize( QSize( 210,160 ) );
+	_videoWindow->getWidget()->setMinimumSize( QSize( 210,160 ) );
+
+	layout->addWidget( _videoWindow->getWidget(), 0 , 0 );
+	_videoWindow->getWidget()->show();
+
+}
+
+void QtPhoneCall::showAvatar(){
+
+
+	QGridLayout * layout = dynamic_cast<QGridLayout *> ( _phoneCallWidget->layout() );
+
+	// Remove the video widget
+	layout->removeWidget ( _videoWindow->getWidget() );
+	_videoWindow->getWidget()->hide();
+
+	// insert the avatar label
+	layout->addWidget( _avatarLabel, 0 , 0 );
+	_avatarLabel->show();
+
+
+}
+
+void QtPhoneCall::switchVideo(bool ){
+
+	if ( _showVideo ){
+		showAvatar();
+		_showVideo = false;
+		_actionSwitchVideo->setText ( tr("Start video") );
+	}
+	else
+	{
+		_showVideo = true;
+		_actionSwitchVideo->setText ( tr("Stop video") );
+		showVideoWidget();
+	}
+
+}

@@ -65,6 +65,8 @@ private Q_SLOTS:
 
 	void transferButtonClicked();
 
+	void switchVideo(bool checked);
+
 	void openPopup( int x, int y);
 
 private:
@@ -80,6 +82,10 @@ private:
 	void videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame);
 
 	void videoFrameReceivedEventHandlerThreadSafe(QImage * image);
+
+	void showVideoWidget();
+
+	void showAvatar();
 
 	QMenu * _popup;
 
@@ -109,9 +115,7 @@ private:
 
 	QAction * _actionInvite;
 
-	QAction * _actionStartVideo;
-
-	QAction * _actionStopVideo;
+	QAction * _actionSwitchVideo;
 
 	QAction * _actionAddContact;
 
@@ -122,6 +126,8 @@ private:
 	int _duration;
 
 	bool _hold;
+
+	bool _showVideo;
 
 protected:
 

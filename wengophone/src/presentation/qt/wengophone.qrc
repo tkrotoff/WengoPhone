@@ -141,6 +141,7 @@
         <file>phonecall/ConferenceCallWidget.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
         <file>phonecall/VideoWindow.ui</file>
+        <file>phonecall/VideoWindow2.ui</file>
         <file>phonecall/QtCallContactWidget.ui</file>
         <file>phoneline/PhoneLineWidget.ui</file>
         <file>sms/SmsWindow.ui</file>
