@@ -179,7 +179,7 @@ FileReader::~FileReader() {
 }
 
 bool FileReader::open() {
-	_file.open(_filename.c_str());
+	_file.open(_filename.c_str(), ios::binary);
 	return _file.is_open();
 }
 
@@ -225,7 +225,7 @@ FileWriter::~FileWriter() {
 }
 
 bool FileWriter::open() {
-	_file.open(_filename.c_str());
+	_file.open(_filename.c_str(), ios::binary);
 	return _file.is_open();
 }
 
