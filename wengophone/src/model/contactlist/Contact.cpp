@@ -350,3 +350,24 @@ Picture Contact::getIcon() const {
 
 	return result;
 }
+
+string Contact::getDisplayName() const {
+
+	string result;
+
+	if (!_firstName.empty() || !_lastName.empty()) {
+		result = _firstName + " " + _lastName;
+	} else {
+		// Take the contact id of the first IMContact
+		IMContactSet::const_iterator it = _imContactSet.begin();
+		if (it != _imContactSet.end()) {
+			if (!(*it).getAlias().empty()) {
+				result = (*it).getAlias();
+			} else {
+				result = (*it).getContactId();
+			}
+		}
+	}
+
+	return result;
+}

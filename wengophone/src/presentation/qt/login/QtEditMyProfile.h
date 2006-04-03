@@ -29,7 +29,7 @@
 
 #include "QtProtocolSettings.h"
 
-class WengoPhone;
+class UserProfile;
 
 class QtEditMyProfile : public QDialog
 {
@@ -37,7 +37,7 @@ class QtEditMyProfile : public QDialog
 
 public:
 
-	QtEditMyProfile (WengoPhone & wengoPhone, QWidget * parent =0, Qt::WFlags f=0);
+	QtEditMyProfile (UserProfile & userProfile, QWidget * parent = 0, Qt::WFlags f = 0);
 
 protected:
 
@@ -52,12 +52,18 @@ protected:
 	void hideAccountWidgets();
 
 public Q_SLOTS:
+
 	void saveClicked();
+
 	void cancelClicked();
+
 	void imAccountAdded();
+
+	void changeAvatarClicked();
+
 protected:
 
-	WengoPhone & _wengoPhone;
+	UserProfile & _userProfile;
 
 	QtProtocolSettings * _protocolSettings;
 
@@ -111,7 +117,7 @@ protected:
 
 	QString  _avatarPath;
 
-	QComboBox * _changeAvatarButton;
+	QPushButton * _changeAvatarButton;
 
 	QPushButton * _saveChange;
 

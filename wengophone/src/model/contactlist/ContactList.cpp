@@ -218,8 +218,13 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 	// UserDefined (used by PhApi to set the alias)
 	if (state != EnumPresenceState::PresenceStateUserDefined) {
 		contact->getIMContact(imContact).setPresenceState(state);
+		if (imContact.getIMAccount().getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
+			contact->getIMContact(imContact).setAlias(alias);
+		}
+	} else {
+		contact->getIMContact(imContact).setPresenceState(EnumPresenceState::PresenceStateOnline);
+		contact->getIMContact(imContact).setAlias(alias);
 	}
-	contact->getIMContact(imContact).setAlias(alias);
 }
 
 void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,

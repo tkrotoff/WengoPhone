@@ -17,21 +17,21 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <qtutil/WidgetFactory.h>
-#include <QtGui>
+#include "QtProtocolSettings.h"
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
+
 #include <qtutil/Object.h>
+#include <qtutil/WidgetFactory.h>
 
+#include <QtGui>
 
-
-#include "QtProtocolSettings.h"
-
-QtProtocolSettings::QtProtocolSettings ( WengoPhone & wengoPhone, EditMode mode,QWidget * parent, Qt::WFlags f ) : QDialog ( parent, f ),
-_wengoPhone(wengoPhone) {
+QtProtocolSettings::QtProtocolSettings(UserProfile & userProfile, EditMode mode,QWidget * parent, Qt::WFlags f ) 
+: QDialog ( parent, f ), _userProfile(userProfile) {
 
 	_widget = WidgetFactory::create( ":/forms/login/ProtocolSettings.ui", this );
 	QGridLayout * layout = new QGridLayout();
@@ -324,8 +324,8 @@ void QtProtocolSettings::saveAim() {
 	else
 		param.set(param.MAIL_NOTIFICATION_KEY,false);
 
-	_wengoPhone.getCurrentUserProfile().addIMAccount(*_imAccount);
-	_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(*_imAccount);
+	_userProfile.addIMAccount(*_imAccount);
+	_userProfile.getConnectHandler().connect(*_imAccount);
 }
 
 void QtProtocolSettings::saveJabber() {
@@ -377,8 +377,8 @@ void QtProtocolSettings::saveJabber() {
 
 	param.set(param.JABBER_CONNECTION_SERVER_KEY,_jabberConnectServerEdit->text().toStdString() );
 
-	_wengoPhone.getCurrentUserProfile().addIMAccount(*_imAccount);
-	_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(*_imAccount);
+	_userProfile.addIMAccount(*_imAccount);
+	_userProfile.getConnectHandler().connect(*_imAccount);
 }
 
 void QtProtocolSettings::saveMsn() {
@@ -416,8 +416,8 @@ void QtProtocolSettings::saveMsn() {
 	else
 		param.set(param.MAIL_NOTIFICATION_KEY,false);
 
-	_wengoPhone.getCurrentUserProfile().addIMAccount(*_imAccount);
-	_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(*_imAccount);
+	_userProfile.addIMAccount(*_imAccount);
+	_userProfile.getConnectHandler().connect(*_imAccount);
 }
 
 void QtProtocolSettings::saveYahoo() {
@@ -466,8 +466,8 @@ void QtProtocolSettings::saveYahoo() {
 	else
 		param.set(param.MAIL_NOTIFICATION_KEY,false);
 
-	_wengoPhone.getCurrentUserProfile().addIMAccount(*_imAccount);
-	_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(*_imAccount);
+	_userProfile.addIMAccount(*_imAccount);
+	_userProfile.getConnectHandler().connect(*_imAccount);
 }
 
 

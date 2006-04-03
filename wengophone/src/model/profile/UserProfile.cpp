@@ -316,3 +316,8 @@ void UserProfile::historyChangedEventHandler(History & sender, int id) {
 	std::string filename = config.getConfigDir() + _wengoAccount->getIdentity() + "_history";
 	History::getInstance().save(filename);
 }
+
+void UserProfile::setIcon(const Picture & icon) {
+	Profile::setIcon(icon);
+	_presenceHandler.changeMyIcon(icon, NULL);
+}

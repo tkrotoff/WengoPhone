@@ -56,6 +56,13 @@ protected:
 
 	void showJabberMenu();
 
+	/**
+	 * Initializes the widgets.
+	 *
+	 * Full the widgets with information container in UserProfile.
+	 */
+	void init();
+
 public Q_SLOTS:
 
 	void msnClicked();

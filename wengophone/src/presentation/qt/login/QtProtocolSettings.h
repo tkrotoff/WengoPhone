@@ -21,10 +21,11 @@
 #define QTPROTOCOLSETTINGS_H
 
 #include <model/profile/UserProfile.h>
-#include <model/WengoPhone.h>
 #include <util/Logger.h>
 
 #include <QtGui>
+
+class UserProfile;
 
 class QtProtocolSettings : public QDialog
 {
@@ -37,7 +38,7 @@ public:
 
     enum AvailableProtocols { ProtocolMsn=0, ProtocolAim , ProtocolJabber, ProtocolYahoo };
 
-    QtProtocolSettings (WengoPhone & wengoPhone, EditMode mode, QWidget * parent=0, Qt::WFlags f=0);
+    QtProtocolSettings (UserProfile & userProfile, EditMode mode, QWidget * parent=0, Qt::WFlags f=0);
 
     public Q_SLOTS:
 
@@ -75,7 +76,7 @@ protected:
 
 	IMAccount * _imAccount;
 
-	WengoPhone & _wengoPhone;
+	UserProfile & _userProfile;
 
     QWidget *   _widget;
 

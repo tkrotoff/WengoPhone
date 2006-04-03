@@ -52,25 +52,7 @@ void CContact::call() {
 }
 
 string CContact::getDisplayName() const {
-	string result;
-
-	if (!_contact.getFirstName().empty() || !_contact.getLastName().empty()) {
-		result = _contact.getFirstName() + " " + _contact.getLastName();
-	} else if (!_contact.getWengoPhoneId().empty()) {
-		result = _contact.getWengoPhoneId();
-	} else {
-		// Take the contact id of the first IMContact
-		IMContactSet::const_iterator it = _contact.getIMContactSet().begin();
-		if (it != _contact.getIMContactSet().end()) {
-			if (!(*it).getAlias().empty()) {
-				result = (*it).getAlias();
-			} else {
-				result = (*it).getContactId();
-			}
-		}
-	}
-
-	return result;
+	return _contact.getDisplayName();
 }
 
 string CContact::getId() const {

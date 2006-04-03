@@ -130,7 +130,7 @@ string ProfileXMLSerializer::serialize() {
 
 	// Serializing photo
 	if (!_profile._icon.getData().empty()) {
-		result += ("<photo>" + Base64::encode(_profile._icon.getData()) + "</photo>");
+		result += ("<photo><![CDATA[" + Base64::encode(_profile._icon.getData()) + "]]></photo>");
 	}
 	////
 

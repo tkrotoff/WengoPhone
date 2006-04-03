@@ -24,7 +24,6 @@
 
 #include <model/profile/UserProfile.h>
 #include <imwrapper/IMAccount.h>
-#include <model/WengoPhone.h>
 
 class QtImAccountItem : public QTreeWidgetItem
 {
@@ -51,17 +50,12 @@ public:
 
 	UserProfile * getUserProfile(){ return _userProfile;};
 
-	void setWengoPhone(WengoPhone * wengophone) {_wengoPhone = wengophone;};
-
-	WengoPhone * getWengoPhone() { return _wengoPhone;};
-
 protected:
 
 protected:
 
 	IMAccount * _imAccount;
 	UserProfile * _userProfile;
-	WengoPhone * _wengoPhone;
 
 };
 

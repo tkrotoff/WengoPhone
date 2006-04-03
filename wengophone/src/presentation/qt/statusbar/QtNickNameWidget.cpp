@@ -19,7 +19,15 @@
 
 #include "QtNickNameWidget.h"
 
+#include <presentation/qt/login/QtEditMyProfile.h>
+
 #include <model/profile/UserProfile.h>
+
+#include <QFileDialog>
+
+#include <string>
+
+using namespace std;
 
 QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent , Qt::WFlags f )
 : QWidget(parent,f), _userProfile(userProfile) {
@@ -84,9 +92,10 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent ,
 	connect ( _aimLabel, SIGNAL ( clicked() ), SLOT ( aimClicked() ) );
 	connect ( _avatarLabel, SIGNAL ( clicked() ), SLOT ( avatarClicked() ) );
 	connect ( _jabberLabel, SIGNAL ( clicked() ), SLOT ( jabberClicked() ) );
-
 	connect ( _nickNameEdit, SIGNAL(returnPressed ()), SLOT(nicknameChanged()));
 
+	// Widget initialization
+	init();
 }
 
 void QtNickNameWidget::msnClicked(){
@@ -110,7 +119,10 @@ void QtNickNameWidget::jabberClicked(){
 }
 
 void QtNickNameWidget::avatarClicked(){
-	qDebug() << "Avatar Clicked";
+	QtEditMyProfile profile(_userProfile, this);
+	if (profile.exec()) {
+		init();
+	}
 }
 
 void QtNickNameWidget::nicknameChanged() {
@@ -432,4 +444,15 @@ void QtNickNameWidget::jabberNAClicked(bool ){
 void QtNickNameWidget::jabberDisconnectClicked(bool ){
 }
 void QtNickNameWidget::jabberReconnectClicked(bool ){
+}
+
+void QtNickNameWidget::init() {
+	_nickNameEdit->setText(QString::fromStdString(_userProfile.getAlias()));
+
+	// Setting avatar
+	QPixmap pixmap;
+	string myData = _userProfile.getIcon().getData();
+	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
+	_avatarLabel->setPixmap(pixmap.scaled(_avatarLabel->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+	////
 }

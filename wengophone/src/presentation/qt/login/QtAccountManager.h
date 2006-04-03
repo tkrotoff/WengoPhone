@@ -22,7 +22,7 @@
 
 #include <QtGui>
 
-class WengoPhone;
+class UserProfile;
 
 class QtAccountManager : public QDialog
 {
@@ -30,13 +30,13 @@ class QtAccountManager : public QDialog
 	Q_OBJECT
 public:
 
-	QtAccountManager(WengoPhone & wengoPhone, QWidget * parent=0);
+	QtAccountManager(UserProfile & userProfile, QWidget * parent=0);
 
 protected:
 
 	void loadImAccounts();
 
-	WengoPhone & _wengoPhone;
+	UserProfile & _userProfile;
 
 	QWidget * _widget;
 

@@ -18,7 +18,6 @@
 */
 
 #include <model/profile/UserProfile.h>
-#include <model/WengoPhone.h>
 
 #include <qtutil/WidgetFactory.h>
 
@@ -33,15 +32,14 @@
 #include "QtImAccountItem.h"
 
 
-QtAccountManager::QtAccountManager(WengoPhone & wengoPhone, QWidget * parent) : QDialog(parent),
-_wengoPhone(wengoPhone) {
+QtAccountManager::QtAccountManager(UserProfile & userProfile, QWidget * parent) 
+: QDialog(parent), _userProfile(userProfile) {
 
 	_widget = WidgetFactory::create( ":/forms/login/accountManager.ui", this );
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget( _widget );
 	layout->setMargin( 0 );
 	setLayout( layout );
-
 
 	_imAddPushButton = Object::findChild<QPushButton *>( _widget, "imAddPushButton" );
 	_imDeletePushButton = Object::findChild<QPushButton *>( _widget, "imDeletePushButton" );
@@ -56,7 +54,6 @@ _wengoPhone(wengoPhone) {
 	connect (_imModifyPushButton, SIGNAL (clicked()), SLOT(modifyImAccount()));
 	connect (_closePushButton, SIGNAL(clicked()),SLOT(accept()));
 
-
 	connect ( _treeWidget, SIGNAL(itemDoubleClicked ( QTreeWidgetItem *, int )),
 	          SLOT(itemDoubleClicked ( QTreeWidgetItem *, int )));
 }
@@ -67,16 +64,14 @@ void QtAccountManager::itemDoubleClicked ( QTreeWidgetItem * item, int column ){
 
 	IMAccount * account = imItem->getImAccount();
 
-	QtProtocolSettings ps(_wengoPhone,QtProtocolSettings::MODIFY,this);
+	QtProtocolSettings ps(_userProfile, QtProtocolSettings::MODIFY,this);
 	ps.setImAccount(account);
 	ps.exec();
 }
 
 void QtAccountManager::addImAccount() {
 
-	UserProfile & userProfile = _wengoPhone.getCurrentUserProfile();
-
-	QtProtocolSettings ps(_wengoPhone,QtProtocolSettings::ADD,this);
+	QtProtocolSettings ps(_userProfile, QtProtocolSettings::ADD,this);
 	if (ps.exec()){
 		/*
 		 ok, now the new imaccount (if any) is saved, reload all imaccount in the
@@ -93,12 +88,10 @@ void QtAccountManager::modifyImAccount() {
 }
 
 void QtAccountManager::loadImAccounts() {
-
 	QString protocol;
 	EnumIMProtocol::IMProtocol improto;
-	UserProfile & userProfile = _wengoPhone.getCurrentUserProfile();
 
-	IMAccountHandler & imh = userProfile.getIMAccountHandler();
+	IMAccountHandler & imh = _userProfile.getIMAccountHandler();
 
 	QStringList l;
 
@@ -137,8 +130,7 @@ void QtAccountManager::loadImAccounts() {
 			QtImAccountItem * item = new QtImAccountItem(_treeWidget,l);
 			item->setCheckState(1,Qt::Checked);
 			item->setImAccount(im);
-			item->setUserProfile(&userProfile);
-			item->setWengoPhone(&_wengoPhone);
+			item->setUserProfile(&_userProfile);
 		}
 
 	//getIMAccountHandler

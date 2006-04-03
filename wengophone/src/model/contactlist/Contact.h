@@ -181,6 +181,11 @@ public:
 	bool hasVideo() const;
 
 	/**
+	 * @return a display name computed from available Contact information.
+	 */
+	std::string getDisplayName() const;
+
+	/**
 	 * Move the Contact from a group to another one.
 	 *
 	 * @param to the new group

@@ -17,21 +17,28 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include "QtEditMyProfile.h"
+#include "QtAccountManager.h"
+
 #include <model/profile/UserProfile.h>
-#include <model/WengoPhone.h>
 
 #include <qtutil/Object.h>
 #include <qtutil/WidgetFactory.h>
 
 #include <util/Date.h>
+#include <util/File.h>
 #include <util/Logger.h>
+#include <util/Picture.h>
 
-#include "QtEditMyProfile.h"
-#include "QtAccountManager.h"
+#include <QFileDialog>
+#include <QPixmap>
 
+#include <string>
 
-QtEditMyProfile::QtEditMyProfile(WengoPhone & wengoPhone, QWidget * parent, Qt::WFlags f )
-: QDialog( parent, f ), _wengoPhone(wengoPhone) {
+using namespace std;
+
+QtEditMyProfile::QtEditMyProfile(UserProfile & userProfile, QWidget * parent, Qt::WFlags f )
+: QDialog( parent, f ), _userProfile(userProfile) {
 
 	_widget = qobject_cast<QWidget *>( WidgetFactory::create( ":/forms/login/profileWindow.ui", this ) );
 	layout = new QGridLayout( this );
@@ -41,9 +48,11 @@ QtEditMyProfile::QtEditMyProfile(WengoPhone & wengoPhone, QWidget * parent, Qt::
 	init();
 	hideAccountWidgets();
 	readFromConfig();
+
 	connect( _addIMAccount, SIGNAL( clicked() ), this, SLOT( imAccountAdded() ) );
 	connect( _saveChange, SIGNAL( clicked() ), this, SLOT( saveClicked() ) );
 	connect( _cancelChange, SIGNAL( clicked() ), this, SLOT( cancelClicked() ) );
+	connect(_changeAvatarButton, SIGNAL(clicked()), this, SLOT(changeAvatarClicked()));
 }
 
 void QtEditMyProfile::saveClicked() {
@@ -55,6 +64,34 @@ void QtEditMyProfile::cancelClicked() {
 	reject();
 }
 
+void QtEditMyProfile::changeAvatarClicked() {
+	QString s = QFileDialog::getOpenFileName(
+		this,
+		tr("Choose a picture"),
+		"",
+		tr("Images (*.png *.xpm *.jpg)"));
+
+	if (!s.isEmpty()) {
+		//TODO: check the size of the file!!
+		// QPixmap pixmap(s);
+		QImage image = QImage(s).scaled(90, 90, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		QBuffer buffer;
+		buffer.open(QIODevice::ReadWrite);
+		image.save(&buffer,"png");
+		buffer.close();
+
+		QByteArray byteArray = buffer.data();
+		string myData(byteArray.data(), byteArray.size());
+
+		Picture picture(myData);
+
+		_userProfile.setIcon(picture);
+
+		writeToConfig();
+		readFromConfig();
+	}
+}
+
 // FIXME : Just a test
 void QtEditMyProfile::imAccountAdded() {
 
@@ -63,7 +100,7 @@ void QtEditMyProfile::imAccountAdded() {
 _protocolSettings = new QtProtocolSettings(_wengoPhone,QtProtocolSettings::ADD,this);
 _protocolSettings->exec();
 */
-	QtAccountManager  amanager(_wengoPhone,this);
+	QtAccountManager  amanager(_userProfile, this);
 	amanager.exec();
 
 
@@ -96,21 +133,19 @@ void QtEditMyProfile::hideAccountWidgets() {
 }
 
 void QtEditMyProfile::writeToConfig() {
-	UserProfile & userProfile = _wengoPhone.getCurrentUserProfile();
-
 	// Setting name and wengo id
-	userProfile.setWengoPhoneId(_wengoNickName->text().toStdString());
-	userProfile.setFirstName(_firstName->text().toStdString());
-	userProfile.setLastName(_lastName->text().toStdString());
+	_userProfile.setWengoPhoneId(_wengoNickName->text().toStdString());
+	_userProfile.setFirstName(_firstName->text().toStdString());
+	_userProfile.setLastName(_lastName->text().toStdString());
 	////
 
 	// Setting birthday
 	QDate date = _birthDate->date();
-	userProfile.setBirthdate(Date(date.day(), date.month(), date.year()));
+	_userProfile.setBirthdate(Date(date.day(), date.month(), date.year()));
 	////
 
 	// Setting sex
-	userProfile.setSex((EnumSex::Sex) _gender->currentIndex());
+	_userProfile.setSex((EnumSex::Sex) _gender->currentIndex());
 	////
 
 	// Setting address
@@ -118,7 +153,7 @@ void QtEditMyProfile::writeToConfig() {
 	//streetAddress.setCountry(_country->currentText().toStdString());
 	streetAddress.setCity(_city->text().toStdString());
 	//streetAdress.setStateProvince(_state->currentText().toStdString());
-	userProfile.setStreetAddress(streetAddress);
+	_userProfile.setStreetAddress(streetAddress);
 	////
 
 	// Setting IMAccount
@@ -140,18 +175,18 @@ void QtEditMyProfile::writeToConfig() {
 	////
 
 	// Setting Phone numbers
-	userProfile.setMobilePhone(_cellphone->text().toStdString());
-	userProfile.setHomePhone(_homePhone->text().toStdString());
-	userProfile.setWengoPhoneNumber(_wengoPhoneNumber->text().toStdString());
-	userProfile.setWorkPhone(_workPhone->text().toStdString());
+	_userProfile.setMobilePhone(_cellphone->text().toStdString());
+	_userProfile.setHomePhone(_homePhone->text().toStdString());
+	_userProfile.setWengoPhoneNumber(_wengoPhoneNumber->text().toStdString());
+	_userProfile.setWorkPhone(_workPhone->text().toStdString());
 	////
 
 	// Setting emails
-	userProfile.setPersonalEmail(_email->text().toStdString());
+	_userProfile.setPersonalEmail(_email->text().toStdString());
 	////
 
 	// Setting websites
-	userProfile.setWebsite(_web->text().toStdString());
+	_userProfile.setWebsite(_web->text().toStdString());
 	//config.set( config.PROFILE_BLOG, _blog->text().toStdString() );
 	////
 
@@ -161,16 +196,14 @@ void QtEditMyProfile::writeToConfig() {
 }
 
 void QtEditMyProfile::readFromConfig() {
-	UserProfile & userProfile = _wengoPhone.getCurrentUserProfile();
-
 	// Setting wengo id
-	_wengoNickName->setText(QString::fromStdString(userProfile.getWengoPhoneId()));
+	_wengoNickName->setText(QString::fromStdString(_userProfile.getWengoPhoneId()));
 	////
 
 	// Setting name
-	_firstName->setText(QString::fromStdString(userProfile.getFirstName()));
-	_lastName->setText(QString::fromStdString(userProfile.getLastName()));
-	_gender->setCurrentIndex((int) userProfile.getSex());
+	_firstName->setText(QString::fromStdString(_userProfile.getFirstName()));
+	_lastName->setText(QString::fromStdString(_userProfile.getLastName()));
+	_gender->setCurrentIndex((int) _userProfile.getSex());
 	////
 
 	// Setting birthday
@@ -178,7 +211,7 @@ void QtEditMyProfile::readFromConfig() {
 	////
 
 	// Setting address
-	StreetAddress address = userProfile.getStreetAddress();
+	StreetAddress address = _userProfile.getStreetAddress();
 	_city->setText(QString::fromStdString(address.getCity()));
 	//_country->setCurrentIndex(_country->findText( QString().fromStdString( config.getProfileCountry() ) ) );
 	//_state->setCurrentIndex( _state->findText( QString().fromStdString( config.getProfileState() ) ) );
@@ -209,24 +242,26 @@ void QtEditMyProfile::readFromConfig() {
 	////
 
 	// Setting phone numbers
-	_cellphone->setText(QString::fromStdString(userProfile.getMobilePhone()));
-	_homePhone->setText(QString::fromStdString(userProfile.getHomePhone()));
-	_wengoPhoneNumber->setText(QString::fromStdString(userProfile.getWengoPhoneNumber()));
-	_workPhone->setText(QString::fromStdString(userProfile.getWorkPhone()));
+	_cellphone->setText(QString::fromStdString(_userProfile.getMobilePhone()));
+	_homePhone->setText(QString::fromStdString(_userProfile.getHomePhone()));
+	_wengoPhoneNumber->setText(QString::fromStdString(_userProfile.getWengoPhoneNumber()));
+	_workPhone->setText(QString::fromStdString(_userProfile.getWorkPhone()));
 	////
 
 	// Setting email
-	_email->setText(QString::fromStdString(userProfile.getPersonalEmail()));
+	_email->setText(QString::fromStdString(_userProfile.getPersonalEmail()));
 	////
 
 	// Setting websites
 	//_blog->setText( QString().fromStdString( config.getProfileBlog() ) );
-	_web->setText(QString::fromStdString(userProfile.getWebsite()));
+	_web->setText(QString::fromStdString(_userProfile.getWebsite()));
 	////
 
 	// Setting avatar
-	//_avatarPath = QString().fromStdString( config.getProfileAvatar() );
-	//_avatar->setPixmap( QPixmap( _avatarPath ) );
+	QPixmap pixmap;
+	string myData = _userProfile.getIcon().getData();
+	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
+	_avatar->setPixmap(pixmap.scaled(_avatar->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 	////
 }
 
@@ -289,6 +324,7 @@ void QtEditMyProfile::init() {
 	_modifyIMAccount = Object::findChild<QPushButton *>( _widget, "modityIMAccount" );
 
 	_avatar = Object::findChild<QLabel *>( _widget, "avatar" );
+	_changeAvatarButton = Object::findChild<QPushButton *>(_widget, "changeAvatar");
 }
 
 void QtEditMyProfile::changeGroupBoxStat( QGroupBox * box, bool stat ) {

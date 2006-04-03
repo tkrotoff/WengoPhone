@@ -233,6 +233,10 @@ public:
 	 */
 	void setAlias(const std::string & alias);
 
+	// Inherited from Profile
+	void setIcon(const Picture & icon);
+	////
+
 private:
 
 	/**
