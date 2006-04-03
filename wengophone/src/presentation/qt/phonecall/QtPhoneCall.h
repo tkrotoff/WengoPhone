@@ -65,7 +65,7 @@ private Q_SLOTS:
 
 	void transferButtonClicked();
 
-	void openPopup( const QPoint & pos);
+	void openPopup( const QPoint * pos);
 
 private:
 
@@ -81,7 +81,7 @@ private:
 
 	void videoFrameReceivedEventHandlerThreadSafe(QImage * image);
 
-	QMenu _popup;
+	QMenu * _popup;
 
 	CPhoneCall & _cPhoneCall;
 
@@ -96,6 +96,8 @@ private:
 	QLabel * _statusLabel;
 
 	QLabel * _durationLabel;
+
+	QLabel * _avatarLabel;
 
 	QAction * _actionAcceptCall;
 

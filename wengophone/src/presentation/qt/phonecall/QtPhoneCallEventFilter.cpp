@@ -23,6 +23,7 @@ bool QtPhoneCallEventFilter::eventFilter(QObject *obj, QEvent *event){
 void QtPhoneCallEventFilter::mouseEvent(QMouseEvent * e){
 
 	if ( e->button() == Qt::RightButton ){
-		openPopup( QPoint( e-> globalPos() ) );
+		QPoint * p = new QPoint(e-> globalPos());
+		openPopup( p );
 	}
 }
