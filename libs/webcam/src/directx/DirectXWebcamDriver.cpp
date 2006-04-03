@@ -76,37 +76,37 @@ StringList DirectXWebcamDriver::getDeviceList() {
 	string dev_name = "";
 	HRESULT hr;
 
-        // create an enumerator
+	// create an enumerator
 	CComPtr< ICreateDevEnum > pCreateDevEnum;
-	pCreateDevEnum.CoCreateInstance( CLSID_SystemDeviceEnum );
-	if( !pCreateDevEnum ) {
+	pCreateDevEnum.CoCreateInstance(CLSID_SystemDeviceEnum);
+	if (!pCreateDevEnum) {
 		return toReturn;
 	}
 
-        // enumerate video capture devices
+	// enumerate video capture devices
 	CComPtr< IEnumMoniker > pEnumMoniker;
-	pCreateDevEnum->CreateClassEnumerator( CLSID_VideoInputDeviceCategory, &pEnumMoniker, 0 );
-	if( !pEnumMoniker ) {
+	pCreateDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEnumMoniker, 0);
+	if (!pEnumMoniker) {
 		return toReturn;
 	}
 
 	pEnumMoniker->Reset( );
-        // go through and find all video capture device(s)
-	while(1) {
+	// go through and find all video capture device(s)
+	while (true) {
 		CComPtr< IMoniker > pMoniker;
-		hr = pEnumMoniker->Next( 1, &pMoniker, 0);
-		if( hr != S_OK ) {
+		hr = pEnumMoniker->Next(1, &pMoniker, 0);
+		if (hr != S_OK) {
 			break;
 		}
 
-                // get the property bag for this moniker
+		// get the property bag for this moniker
 		CComPtr< IPropertyBag > pPropertyBag;
-		hr = pMoniker->BindToStorage( 0, 0, IID_IPropertyBag, (void**) &pPropertyBag );
-		if( hr != S_OK ) {
+		hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void**) &pPropertyBag);
+		if (hr != S_OK) {
 			continue;
 		}
 
-                // ask for the english-readable name
+		// ask for the english-readable name
 		CComVariant FriendlyName;
 		CComVariant DevicePath;
 		hr = pPropertyBag->Read( L"FriendlyName", &FriendlyName, NULL);
@@ -140,14 +140,14 @@ string DirectXWebcamDriver::getDefaultDevice() {
 	CComPtr< ICreateDevEnum > pCreateDevEnum;
 	pCreateDevEnum.CoCreateInstance(CLSID_SystemDeviceEnum);
 
-	_ASSERTE(pCreateDevEnum);
+	//_ASSERTE(pCreateDevEnum);
 	if (!pCreateDevEnum) {
 		return WEBCAM_NULL;
 	}
 
 	// enumerate video capture devices
 	CComPtr< IEnumMoniker > pEm;
-	pCreateDevEnum->CreateClassEnumerator( CLSID_VideoInputDeviceCategory, &pEm, 0 );
+	pCreateDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEm, 0);
 
 	//_ASSERTE(pEm);
 	if (!pEm) {
@@ -168,7 +168,7 @@ string DirectXWebcamDriver::getDefaultDevice() {
 
 		// get the property bag
 		CComPtr< IPropertyBag > pBag;
-		hr = pM->BindToStorage(0, 0, IID_IPropertyBag, (void**) &pBag );
+		hr = pM->BindToStorage(0, 0, IID_IPropertyBag, (void**) &pBag);
 		if (hr != S_OK) {
 			continue;
 		}
@@ -194,19 +194,19 @@ string DirectXWebcamDriver::getDefaultDevice() {
 }
 
 webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
-	//TODO: test i a webcam is already opened
+	//TODO: test if a webcam is already opened
 
 	HRESULT hr;
 
 	_pBuild.CoCreateInstance(CLSID_CaptureGraphBuilder2);
 	if (!_pBuild) {
-		LOG_ERROR("Failed to create Capture Graph builder");
+		LOG_ERROR("failed to create Capture Graph builder");
 		return WEBCAM_NOK;
 	}
 
 	_pGraph.CoCreateInstance(CLSID_FilterGraph);
 	if (!_pGraph) {
-		LOG_ERROR("Failed to create Graph builder");
+		LOG_ERROR("failed to create Graph builder");
 		return WEBCAM_NOK;
 	}
 
@@ -214,14 +214,14 @@ webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 	//Create the Sample Grabber
 	hr = CoCreateInstance(CLSID_SampleGrabber, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&(_pGrabberF));
 	if (hr != S_OK) {
-		LOG_ERROR("Failed to create COM instance");
+		LOG_ERROR("failed to create COM instance");
 		return WEBCAM_NOK;
 	}
 
 	//Add the filter to the graph
 	hr = (_pGraph)->AddFilter(_pGrabberF, L"Sample Grabber");
 	if (hr != S_OK) {
-		LOG_ERROR("Failed to add filter");
+		LOG_ERROR("failed to add filter");
 		return WEBCAM_NOK;
 	}
 
@@ -233,8 +233,8 @@ webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 	//Set the Sample Grabber callback
 	// 0: SampleCB (the buffer is the original buffer, not a copy)
 	// 1: BufferCB (the buffer is a copy of the original buffer)
-	if(_pGrabber->SetCallback(this, 0) != S_OK) {
-		LOG_ERROR("Failed to assign callback");
+	if (_pGrabber->SetCallback(this, 0) != S_OK) {
+		LOG_ERROR("failed to assign callback");
 		return WEBCAM_NOK;
 	}
 
@@ -252,8 +252,8 @@ webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 
 	// add the capture filter to the graph
 	hr = (_pGraph)->AddFilter(_pCap, L"");
-	if(hr!=S_OK) {
-		LOG_ERROR("Failed to add filter");
+	if (hr != S_OK) {
+		LOG_ERROR("failed to add filter");
 		return WEBCAM_NOK;
 	}
 
@@ -395,8 +395,12 @@ webcamerrorcode DirectXWebcamDriver::setCaps(pixosi palette, unsigned fps, unsig
 		return WEBCAM_NOK;
 	}
 
-	assert(_pCap && "webcam not initialized");
-	assert(_iam && "webcam not initialized");
+	if (!_pCap) {
+		LOG_FATAL("webcam not initialized");
+	}
+	if (!_iam) {
+		LOG_FATAL("webcam not initialized");
+	}
 
 	hr = _iam->GetNumberOfCapabilities(&iCount, &iSize);
 
@@ -418,7 +422,7 @@ webcamerrorcode DirectXWebcamDriver::setCaps(pixosi palette, unsigned fps, unsig
 			pvi->bmiHeader.biHeight = resolutionHeight;
 			pvi->AvgTimePerFrame = (LONGLONG)(10000000. / (double)fps);
 			hr = _iam->SetFormat(pmt);
-			if( hr != S_OK) {
+			if (hr != S_OK) {
 				hr = E_FAIL;
 				continue;
 			} else {
@@ -468,7 +472,7 @@ void DirectXWebcamDriver::readCaps() {
 STDMETHODIMP DirectXWebcamDriver::QueryInterface(REFIID riid, void ** ppv) {
 	LOG_DEBUG("CSampleGrabberCB::QueryInterface");
 
-	if(riid == IID_ISampleGrabberCB || riid == IID_IUnknown) {
+	if (riid == IID_ISampleGrabberCB || riid == IID_IUnknown) {
 		*ppv = (void *) static_cast<ISampleGrabberCB*> ( this );
 		return NOERROR;
 	}
@@ -478,12 +482,12 @@ STDMETHODIMP DirectXWebcamDriver::QueryInterface(REFIID riid, void ** ppv) {
 
 STDMETHODIMP DirectXWebcamDriver::BufferCB(double dblSampleTime, BYTE * pBuffer, long lBufferSize) {
 	// This method is not used but must be implemented
-	LOG_ERROR("This method should not be called");
+	LOG_ERROR("this method should not be called");
 	return 0;
 }
 
 STDMETHODIMP DirectXWebcamDriver::SampleCB(double SampleTime, IMediaSample * pSample) {
-	BYTE *pBuffer;
+	BYTE * pBuffer;
 	long lBufferSize;
 
 	if (!pSample) {
