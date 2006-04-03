@@ -9,8 +9,273 @@
     <x>0</x>
     <y>0</y>
     <width>126</width>
-    <height>156</height>
+    <height>148</height>
    </rect>
+  </property>
+  <property name="palette" >
+   <palette>
+    <active>
+     <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+     </color>
+     <color>
+      <red>212</red>
+      <green>208</green>
+      <blue>200</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>234</red>
+      <green>229</green>
+      <blue>220</blue>
+     </color>
+     <color>
+      <red>128</red>
+      <green>128</green>
+      <blue>128</blue>
+     </color>
+     <color>
+      <red>141</red>
+      <green>139</green>
+      <blue>133</blue>
+     </color>
+     <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>64</red>
+      <green>64</green>
+      <blue>64</blue>
+     </color>
+     <color>
+      <red>10</red>
+      <green>36</green>
+      <blue>106</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>0</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>232</red>
+      <green>232</green>
+      <blue>232</blue>
+     </color>
+    </active>
+    <inactive>
+     <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+     </color>
+     <color>
+      <red>212</red>
+      <green>208</green>
+      <blue>200</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>234</red>
+      <green>229</green>
+      <blue>220</blue>
+     </color>
+     <color>
+      <red>128</red>
+      <green>128</green>
+      <blue>128</blue>
+     </color>
+     <color>
+      <red>141</red>
+      <green>139</green>
+      <blue>133</blue>
+     </color>
+     <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>64</red>
+      <green>64</green>
+      <blue>64</blue>
+     </color>
+     <color>
+      <red>212</red>
+      <green>208</green>
+      <blue>200</blue>
+     </color>
+     <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+     </color>
+     <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>0</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>232</red>
+      <green>232</green>
+      <blue>232</blue>
+     </color>
+    </inactive>
+    <disabled>
+     <color>
+      <red>106</red>
+      <green>104</green>
+      <blue>100</blue>
+     </color>
+     <color>
+      <red>212</red>
+      <green>208</green>
+      <blue>200</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>233</red>
+      <green>231</green>
+      <blue>227</blue>
+     </color>
+     <color>
+      <red>128</red>
+      <green>128</green>
+      <blue>128</blue>
+     </color>
+     <color>
+      <red>141</red>
+      <green>139</green>
+      <blue>133</blue>
+     </color>
+     <color>
+      <red>106</red>
+      <green>104</green>
+      <blue>100</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>106</red>
+      <green>104</green>
+      <blue>100</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+     </color>
+     <color>
+      <red>10</red>
+      <green>36</green>
+      <blue>106</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>0</red>
+      <green>0</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>255</red>
+      <green>0</green>
+      <blue>255</blue>
+     </color>
+     <color>
+      <red>232</red>
+      <green>232</green>
+      <blue>232</blue>
+     </color>
+    </disabled>
+   </palette>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
@@ -23,34 +288,320 @@
     <number>6</number>
    </property>
    <item row="2" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
+    <widget class="QFrame" name="frame" >
+     <property name="palette" >
+      <palette>
+       <active>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>234</red>
+         <green>229</green>
+         <blue>220</blue>
+        </color>
+        <color>
+         <red>128</red>
+         <green>128</green>
+         <blue>128</blue>
+        </color>
+        <color>
+         <red>141</red>
+         <green>139</green>
+         <blue>133</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>243</green>
+         <blue>181</blue>
+        </color>
+        <color>
+         <red>64</red>
+         <green>64</green>
+         <blue>64</blue>
+        </color>
+        <color>
+         <red>10</red>
+         <green>36</green>
+         <blue>106</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>232</red>
+         <green>232</green>
+         <blue>232</blue>
+        </color>
+       </active>
+       <inactive>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>234</red>
+         <green>229</green>
+         <blue>220</blue>
+        </color>
+        <color>
+         <red>128</red>
+         <green>128</green>
+         <blue>128</blue>
+        </color>
+        <color>
+         <red>141</red>
+         <green>139</green>
+         <blue>133</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>243</green>
+         <blue>181</blue>
+        </color>
+        <color>
+         <red>64</red>
+         <green>64</green>
+         <blue>64</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>232</red>
+         <green>232</green>
+         <blue>232</blue>
+        </color>
+       </inactive>
+       <disabled>
+        <color>
+         <red>106</red>
+         <green>104</green>
+         <blue>100</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>233</red>
+         <green>231</green>
+         <blue>227</blue>
+        </color>
+        <color>
+         <red>128</red>
+         <green>128</green>
+         <blue>128</blue>
+        </color>
+        <color>
+         <red>141</red>
+         <green>139</green>
+         <blue>133</blue>
+        </color>
+        <color>
+         <red>106</red>
+         <green>104</green>
+         <blue>100</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>106</red>
+         <green>104</green>
+         <blue>100</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>243</green>
+         <blue>181</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>243</green>
+         <blue>181</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>10</red>
+         <green>36</green>
+         <blue>106</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>232</red>
+         <green>232</green>
+         <blue>232</blue>
+        </color>
+       </disabled>
+      </palette>
      </property>
-     <property name="spacing" >
-      <number>6</number>
+     <property name="autoFillBackground" >
+      <bool>true</bool>
      </property>
-     <item>
-      <widget class="QLabel" name="statusLabel" >
-       <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">Status&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="alignment" >
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="durationLabel" >
-       <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">Duration&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="alignment" >
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     <property name="frameShape" >
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>0</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="statusLabel" >
+        <property name="text" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">Status&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QLabel" name="durationLabel" >
+        <property name="text" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">Duration&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="nickNameLabel" >
+     <property name="text" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">NickName or number&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </item>
    <item row="0" column="0" >
     <widget class="QLabel" name="avatarLabel" >
@@ -59,16 +610,6 @@
      </property>
      <property name="pixmap" >
       <pixmap resource="../wengophone.qrc" >:/pics/contact_picture.png</pixmap>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="nickNameLabel" >
-     <property name="text" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">NickName or number&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="alignment" >
       <set>Qt::AlignCenter</set>

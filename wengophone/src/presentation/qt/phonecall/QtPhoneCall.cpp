@@ -126,11 +126,11 @@ void QtPhoneCall::initThreadSafe() {
 
 	_actionBlockContact = _popup->addAction( tr ("Block contact") );
 
-	LOG_DEBUG (" Installing the event filter ");
+
 	_phoneCallWidget->installEventFilter(filter);
 
-	LOG_DEBUG (" Connecting the filter ");
-	connect (filter, SIGNAL( openPopup( const QPoint * ) ), SLOT(openPopup( const QPoint * ) ) );
+
+	connect (filter, SIGNAL( openPopup( int, int ) ), SLOT(openPopup( int, int ) ) );
 
 
 /*
@@ -336,9 +336,8 @@ void QtPhoneCall::transferButtonClicked() {
 	_cPhoneCall.blindTransfer(transferPhoneNumberLineEdit->text().toStdString());
 }
 
-void QtPhoneCall::openPopup( const QPoint * pos){
-	_popup->popup(*pos);
-	delete pos;
+void QtPhoneCall::openPopup( int x , int y ){
+	_popup->popup(QPoint(x,y));
 }
 
 void QtPhoneCall::timerEvent(QTimerEvent *event){

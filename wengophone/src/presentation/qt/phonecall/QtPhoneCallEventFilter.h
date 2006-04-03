@@ -13,7 +13,7 @@ public:
 
 Q_SIGNALS:
 
-	void openPopup( const QPoint * pos );
+	void openPopup( int x, int y );
 
 
 protected:

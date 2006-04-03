@@ -65,7 +65,7 @@ private Q_SLOTS:
 
 	void transferButtonClicked();
 
-	void openPopup( const QPoint * pos);
+	void openPopup( int x, int y);
 
 private:
 
