@@ -30,7 +30,7 @@ IMAccount::IMAccount() {
 }
 
 IMAccount::IMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol) {
-	_login = login;
+	_login = correctedLogin(login, protocol);
 	_password = password;
 	_protocol = protocol;
 }
@@ -50,4 +50,22 @@ bool IMAccount::operator == (const IMAccount & imAccount) const {
 bool IMAccount::operator < (const IMAccount & imAccount) const {
 	return ((_login < imAccount._login)
 			|| ((_login == imAccount._login) && (_protocol < imAccount._protocol)));
+}
+
+void IMAccount::setLogin(const std::string & login) {
+	_login = correctedLogin(login, _protocol);
+}
+
+string IMAccount::correctedLogin(const string & login, EnumIMProtocol::IMProtocol protocol) {
+	string result = login;
+
+	if (protocol == EnumIMProtocol::IMProtocolJabber) {
+		string::size_type index = login.find('/');
+
+		if (index == string::npos) {
+			result += "/WengoPhone";
+		}
+	}
+
+	return result;
 }

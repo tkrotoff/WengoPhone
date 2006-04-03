@@ -48,9 +48,7 @@ public:
 		return _login;
 	}
 
-	void setLogin(const std::string & login) {
-		_login = login;
-	}
+	void setLogin(const std::string & login);
 	
 	const std::string & getPassword() const {
 		return _password;
@@ -77,6 +75,18 @@ public:
 	bool operator < (const IMAccount & imAccount) const;
 
 private:
+
+	/**
+	 * This method exists because of Jabber that uses conatctId with a 'Resource'
+	 * e.g.: 'blabla@jabber.org/Resource'.
+	 *
+	 * It will add '/WengoPhone' to the login id if the login does not contain
+	 * a Resource.
+	 *
+	 * @param login the old login
+	 * @return the corrected login
+	 */
+	static std::string correctedLogin(const std::string & login, EnumIMProtocol::IMProtocol protocol);
 
 	std::string _login;
 
