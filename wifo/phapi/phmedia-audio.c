@@ -44,7 +44,6 @@
 #include "phastream.h"
 #include "phaudiodriver.h"
 
-#define PH_FORCE_16KHZ 1
 
 #define DO_CONF 1
 
@@ -1323,6 +1322,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 	{
 	  ph_downsample(recordbuf, framesize);
 	  enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize/2, data_out_enc, sizeof(data_out_enc));
+	  framesize /= 2;
 	}
 #else
        enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));

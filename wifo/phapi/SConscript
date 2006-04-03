@@ -146,7 +146,7 @@ defines = {
 
 #
 # To activate FORCED 16 KHZ SAMPLING
-# defines['PH_FORCE_16KHZ'] = 1
+defines['PH_FORCE_16KHZ'] = 1
 #
 
 
