@@ -117,6 +117,7 @@ sources = [
 	'model/history/HistoryMementoCollection.cpp',
 	'model/webservices/WengoWebService.cpp',
 	'model/webservices/sms/Sms.cpp',
+	'model/webservices/info/WsInfo.cpp',
 
 	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
