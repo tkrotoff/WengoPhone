@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "SoftUpdater.h"
+#include <softupdater/SoftUpdater.h>
 
-#include <qapplication.h>
-#include <qtranslator.h>
-#include <qdialog.h>
+#include <QtGui>
 
 #include <iostream>
 using namespace std;
@@ -29,7 +27,7 @@ using namespace std;
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 
-	if (argc < 3) {
+	/*if (argc < 3) {
 		cout << "Usage: " << argv[0]
 			<< " URL" << " output_filename" << endl;
 		return EXIT_FAILURE;
@@ -44,9 +42,12 @@ int main(int argc, char *argv[]) {
 	}
 
 	QString input = argv[1];
-	QString output = argv[2];
-	Download * downloadWindow = new Download(input, output);
-	app.setMainWidget(downloadWindow->getWidget());
+	QString output = argv[2];*/
+
+	SoftUpdater * softUpdater = new SoftUpdater();
+	softUpdater->download(
+			"http://wengofiles.wengo.fr/nightlybuilds/installer/NG/win32/WengoPhoneNG-setup-release-symbols-20060326160934.exe",
+			"setup.exe");
 
 	return app.exec();
 }

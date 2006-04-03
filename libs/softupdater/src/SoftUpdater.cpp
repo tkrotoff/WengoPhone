@@ -17,21 +17,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "SoftUpdater.h"
+#include <softupdater/SoftUpdater.h>
 
-#include <util/String.h>
+#include <util/Logger.h>
 #include <util/File.h>
 
-SoftUpdater::SoftUpdater(const std::string & url, const std::string & fileName) {
-	_fileName = fileName;
-	HttpRequest * httpRequest = new HttpRequest();
-	httpRequest.dataReadProgressEvent += boost::bind(&SoftUpdater::dataReadProgressEventHandler, this, _1, _2, _3);
-	httpRequest.answerReceivedEvent += boost::bind(&SoftUpdater::answerReceivedEventHandler, this, _1, _2, _3);
-
-	httpRequest->sendRequest(url, String::null);
+SoftUpdater::SoftUpdater() {
 }
 
 SoftUpdater::~SoftUpdater() {
+}
+
+void SoftUpdater::download(const std::string & url, const std::string & fileName) {
+	_fileName = fileName;
+	HttpRequest * httpRequest = new HttpRequest();
+	httpRequest->dataReadProgressEvent += boost::bind(&SoftUpdater::dataReadProgressEventHandler, this, _1, _2, _3);
+	httpRequest->answerReceivedEvent += boost::bind(&SoftUpdater::answerReceivedEventHandler, this, _1, _2, _3);
+
+	httpRequest->sendRequest(url, String::null);
 }
 
 void SoftUpdater::dataReadProgressEventHandler(int requestId, int bytesDone, int bytesTotal) {
@@ -39,8 +42,10 @@ void SoftUpdater::dataReadProgressEventHandler(int requestId, int bytesDone, int
 }
 
 void SoftUpdater::answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error) {
-	if (error == HttpRequest::NoError && !answer.empty()) {
+	LOG_DEBUG("requestId=" + String::fromNumber(requestId) + " error=" + String::fromNumber(error));
+	//if (error == HttpRequest::NoError && !answer.empty()) {
 		FileWriter file(_fileName);
 		file.write(answer);
-	}
+	//}
+	downloadFinishedEvent(error);
 }

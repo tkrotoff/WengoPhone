@@ -1,21 +1,20 @@
 env = WengoGetQt4Environment()
 
 lib_path = []
-include_path = ['include']
+include_path = []
 
 libs = [
-	'owhttp',
+	'qt4',
+	'softupdater',
 ]
 
 headers = []
 
 sources = [
-	'src/SoftUpdater.cpp',
+	'main.cpp',
 ]
 
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 
-env.WengoStaticLibrary('softupdater', sources, headers)
-
-env.SConscript('tests/SConscript');
+env.WengoProgram('softupdater-test', sources, headers)

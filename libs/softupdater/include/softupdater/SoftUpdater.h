@@ -23,7 +23,7 @@
 #include <string>
 
 #include <util/NonCopyable.h>
-#include <util/http/HttpRequest.h>
+#include <http/HttpRequest.h>
 
 /**
  * Downloads a file from an URL.
@@ -39,18 +39,27 @@ public:
 	Event<void (int bytesDone, int bytesTotal)> dataReadProgressEvent;
 
 	/**
+	 * @see IHttpRequest::answerReceivedEvent
+	 */
+	Event<void (HttpRequest::Error error)> downloadFinishedEvent;
+
+	SoftUpdater();
+
+	~SoftUpdater();
+
+	/**
 	 * Downloads a file from an URL to a destination.
 	 *
 	 * @param url URL of the source file (http://login:password@www.website.com/file.txt)
 	 * @param fileName destination file (C:/Program Files/file.txt)
 	 */
-	SoftUpdater(const std::string & url, const std::string & fileName);
-
-	~SoftUpdater();
+	void download(const std::string & url, const std::string & fileName);
 
 private:
 
 	void downloadFile();
+
+	void dataReadProgressEventHandler(int requestId, int bytesDone, int bytesTotal);
 
 	void answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error);
 
