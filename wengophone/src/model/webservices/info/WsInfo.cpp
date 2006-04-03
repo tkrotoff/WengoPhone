@@ -27,7 +27,7 @@
 #include <tinyxml.h>
 #include <sstream>
 
-const char * getValueFromKey(TiXmlElement * element, std::string key);
+const char * getValueFromKey(TiXmlElement * element, const std::string key);
 
 const std::string WsWengoInfo::WENGOSCOUNT_TAG = "contract.counter.wengos";
 const std::string WsWengoInfo::SMSCOUNT_TAG = "contract.counter.sms";
@@ -113,22 +113,26 @@ void WsWengoInfo::answerReceived(std::string answer, int id) {
 				
 				if( std::string(key) == WENGOSCOUNT_TAG ) {
 					float wengos  = 0.0;
-					std::stringstream(getValueFromKey(element, WENGOSCOUNT_TAG)) >> wengos;
+					std::stringstream ss((getValueFromKey(element, WENGOSCOUNT_TAG)));
+					ss >> wengos;
 					wsInfoWengosEvent(*this, id, WsWengoInfoStatusOk, wengos);
 					
 				} else if( key == SMSCOUNT_TAG ) {
 					int sms  = 0;
-					std::stringstream(getValueFromKey(element, SMSCOUNT_TAG)) >> sms;
+					std::stringstream ss(getValueFromKey(element, SMSCOUNT_TAG));
+					ss >> sms;
 					wsInfoSmsCountEvent(*this, id, WsWengoInfoStatusOk, sms);
 					
 				} else if( key == ACTIVEMAIL_TAG ) {
 					int activeMail = 0;
-					std::stringstream(getValueFromKey(element, ACTIVEMAIL_TAG)) >> activeMail;
+					std::stringstream ss(getValueFromKey(element, ACTIVEMAIL_TAG));
+					ss >> activeMail;
 					wsInfoActiveMailEvent(*this, id, WsWengoInfoStatusOk, activeMail);
 					
 				} else if( key == UNREADVOICEMAILCOUNT_TAG ) {
 					int voiceMail = 0;
-					std::stringstream(getValueFromKey(element, UNREADVOICEMAILCOUNT_TAG)) >> voiceMail;
+					std::stringstream ss(getValueFromKey(element, UNREADVOICEMAILCOUNT_TAG));
+					ss >> voiceMail;
 					wsInfoVoiceMailEvent(*this, id, WsWengoInfoStatusOk, voiceMail);
 					
 				}
