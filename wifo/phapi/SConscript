@@ -141,7 +141,15 @@ defines = {
 	'ENABLE_TRACE' : 0,
 	'VIDEO_IOTHREAD_TIMERS' : 1,
 	'USE_SPXEC' : 1,
+
 }
+
+#
+# To activate FORCED 16 KHZ SAMPLING
+# defines['PH_FORCE_16KHZ'] = 1
+#
+
+
 headers = []
 sources = [
 	'phcodec.c',

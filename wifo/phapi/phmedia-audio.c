@@ -44,6 +44,7 @@
 #include "phastream.h"
 #include "phaudiodriver.h"
 
+#define PH_FORCE_16KHZ 1
 
 #define DO_CONF 1
 
@@ -713,7 +714,13 @@ ph_generate_comfort_noice(phastream_t *stream, void *buf)
 {
     struct timeval now, diff;
     phcodec_t *codec = stream->ms.codec;
-    
+    int framesize = codec->decoded_framesize;
+
+#ifdef PH_FORCE_16KHZ
+    if (stream->clock_rate == 8000)
+      framesize *= 2;
+#endif
+ 
     gettimeofday(&now, 0);
     ph_tvdiff(&diff, &now, &stream->last_rtp_recv_time);
     if (diff.tv_usec > NOISE_START_DELAY)
@@ -728,11 +735,11 @@ ph_generate_comfort_noice(phastream_t *stream, void *buf)
             return 0;
            }
         /* if less than 200ms of voice, send noise */
-        if (used < codec->decoded_framesize * 10)
+        if (used < framesize * 10)
             {
             /* leave place for 2 voice frame */
             //		lg = info.bytes - 2*codec->decoded_framesize;
-            lg = 2*codec->decoded_framesize;
+	      lg = 2*framesize;
             if (ret < lg)
                 lg = used;
 
@@ -865,6 +872,44 @@ void ph_audio_resample(void *ctx, void *inbuf, int inbsize, void *outbuf, int *o
 
 #define SATURATE(x) ((x > 0x7fff) ? 0x7fff : ((x < ~0x7fff) ? ~0x7fff : x))
 
+
+#ifdef PH_FORCE_16KHZ
+static void ph_downsample(void *buf, int framesize)
+{
+  short *sp = (short *) buf;
+  short *dp = (short *) buf;
+  
+  framesize = framesize / ( sizeof(short)*2 );
+
+  while( framesize-- )
+    {
+      *dp++ = *sp++;
+      sp++;
+    }
+}
+
+static void ph_upsample(void *dbuf, void *sbuf, int framesize)
+{
+  short *sp = (short *) sbuf;
+  short *dp = (short *) dbuf;
+  int tmp;
+
+  framesize = framesize / sizeof(short);
+
+  while(framesize--)
+    {
+      *dp++ = *sp;
+      tmp = ((int)sp[0] + (int)sp[1]) >> 1;
+      *dp++ = (short) SATURATE(tmp);
+      sp++;
+    }
+}
+
+#endif
+
+
+
+
 static void ph_mixmedia2(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1, ph_mediabuf_t *smb2, int framesize)
 {
   int tmp;
@@ -924,8 +969,9 @@ static void ph_mixmedia(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1)
 
 
 
+
 static int
-ph_media_retreive_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf)
+ph_media_retreive_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf, int clockrate)
 {
   int len;
   mblk_t *mp;
@@ -933,7 +979,7 @@ ph_media_retreive_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf)
   phcodec_t *codec = stream->ms.codec;
   int framesize = codec->decoded_framesize;
 
-
+  
   if (stream->ms.suspended)
     return 0;
 
@@ -959,15 +1005,37 @@ ph_media_retreive_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf)
       return 0;
     }
 
-    
+#ifdef PH_FORCE_16KHZ
+  if (len)
+    {
+      if (stream->clock_rate == 16000)
+	{
+	  len = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, len, mbf->buf, framesize);
+	  mbf->next = len/2;
+	  stream->ms.rxts_inc += mbf->next;
+	}
+      else
+	{
+	  char *tmp = alloca(framesize);
+	  len = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, len, tmp, framesize);
+	  ph_upsample(mbf->buf, tmp, framesize);
+	  mbf->next = len;
+	  stream->ms.rxts_inc += len/2;
+	  len *= 2;
+	}
+    }
+#else    
   if (len)
     len = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, len, mbf->buf, framesize);
-
-  freemsg(mp);
 
   mbf->next = len/2;
 
   stream->ms.rxts_inc += mbf->next;
+#endif
+
+  freemsg(mp);
+
+
 
   if (len)
     {
@@ -992,6 +1060,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
   struct timeval now;
   int iter = 0;
   int played = 0;
+  int targetRate = stream->clock_rate;
 
 #ifdef PH_USE_RESAMPLE
   unsigned char resampleBuf[2000];
@@ -1000,7 +1069,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
   int savedBufSize = playbufsize;
   int needResample;
   int resampledLen;
-  
+
   if ((needResample = (stream->clock_rate != stream->actual_rate)))
     {
       playbuf = resampleBuf;
@@ -1009,6 +1078,13 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
     }
 #endif
 
+#ifdef PH_FORCE_16KHZ
+  if (targetRate == 8000)
+    {
+      framesize *= 2;
+      targetRate = 16000;
+    }
+#endif
 
   // while start :
   //		read packets from the network
@@ -1035,8 +1111,8 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 	    {
 	      int len2;
 	  
-	      len = ph_media_retreive_decoded_frame(stream, &stream->data_in);
-	      len2 = ph_media_retreive_decoded_frame(stream->to_mix, &stream->to_mix->data_in);
+	      len = ph_media_retreive_decoded_frame(stream, &stream->data_in, targetRate);
+	      len2 = ph_media_retreive_decoded_frame(stream->to_mix, &stream->to_mix->data_in, targetRate);
 	      ph_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, framesize/2);
 	  
 	      len = spkrbuf.next * 2;
@@ -1045,7 +1121,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 	}
       else
 #endif
-	len = ph_media_retreive_decoded_frame(stream, &spkrbuf);
+	len = ph_media_retreive_decoded_frame(stream, &spkrbuf, targetRate);
 
 
       if (!len)
@@ -1078,7 +1154,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
       if (stream->hdxmode == PH_HDX_MODE_SPK)
 	{
 	  stream->spksilence = ph_vad_update0(&stream->cngo, playbuf, len);
-	    }
+	}
 
 	
       /* save played data */    
@@ -1091,7 +1167,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 
       
       /* exit loop if we've played 4 full size packets */
-      if (played >= codec->decoded_framesize * 4)
+      if (played >= framesize * 4)
 	break;
 
 #ifdef PH_USE_RESAMPLE
@@ -1178,6 +1254,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 
 
 
+
 void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int framesize)
 {
   int silok = 0;
@@ -1235,7 +1312,21 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
   
   if (!silok)
     {
-      int enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
+      int enclen;
+
+#ifdef PH_FORCE_16KHZ
+      if (stream->clock_rate == 16000)
+	{
+	  enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
+	}
+      else
+	{
+	  ph_downsample(recordbuf, framesize);
+	  enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize/2, data_out_enc, sizeof(data_out_enc));
+	}
+#else
+       enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
+#endif      
 
       if (stream->record_send_stream)
 	ph_media_payload_record(&stream->send_stream_recorder, data_out_enc, enclen);
@@ -1292,6 +1383,14 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
       recordbuf = resampleBuf;
     }
 #endif
+
+#ifdef PH_FORCE_16KHZ
+  if (stream->clock_rate == 8000)
+    {
+      framesize *= 2;
+    }
+#endif
+
 
   while(recbufsize >= framesize)
     {
@@ -1464,6 +1563,10 @@ void ph_generate_out_dtmf(phastream_t *stream, short *signal, int siglen, long t
 
 
   rate = stream->clock_rate;
+#ifdef PH_FORCE_16KHZ
+  rate = 16000;
+#endif
+
   samples = rate/1000;
 dtmf_again:      
   switch (dtmfp->dtmfg_phase)
@@ -1626,6 +1729,10 @@ void ph_audio_init_ivad(phastream_t *stream)
   int samples = (stream->clock_rate)/1000;
   struct vadcng_info *cngp = &stream->cngi;
 
+#ifdef PH_FORCE_16KHZ
+  samples = 16000/1000;
+#endif
+
   ph_audio_init_vad0(cngp, samples);
   
 }
@@ -1634,6 +1741,10 @@ void ph_audio_init_ovad(phastream_t *stream)
 {
   int samples = (stream->clock_rate)/1000;
   struct vadcng_info *cngp = &stream->cngo;
+
+#ifdef PH_FORCE_16KHZ
+  samples = 16000/1000;
+#endif
 
   ph_audio_init_vad0(cngp, samples);
   
@@ -1821,10 +1932,21 @@ static int
 open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *deviceId)
 {
   int fd;
+  int clockrate = stream->clock_rate;
+  int framesize = stream->ms.codec->decoded_framesize;
+
+#ifdef PH_FORCE_16KHZ
+  if (clockrate == 8000)
+    {
+      clockrate = 16000;
+      framesize *= 2;
+    }
+
+#endif
 
   if (s->confflags != PH_MSESSION_CONF_MEMBER)
     {
-      fd = audio_stream_open(stream, deviceId, stream->clock_rate, stream->ms.codec->decoded_framesize, ph_audio_callback); 
+      fd = audio_stream_open(stream, deviceId, clockrate, framesize, ph_audio_callback); 
       if (fd < 0)
 	{
 	  //	  phcb->errorNotify(PH_NOMEDIA);
@@ -1920,7 +2042,17 @@ setup_aec(struct ph_msession_s *s, phastream_t *stream)
     }
   else
     {
-      stream->ec = ph_ec_init(stream->ms.codec->decoded_framesize, stream->clock_rate);
+      int framesize = stream->ms.codec->decoded_framesize;
+      int clockrate = stream->clock_rate;
+
+#ifdef PH_FORCE_16KHZ
+      if (clockrate == 8000)
+	{
+	  clockrate = 16000;
+	  framesize *= 2;
+	}
+#endif
+      stream->ec = ph_ec_init(framesize, clockrate);
       if (stream->ec)
 	{
 	  const char *lat = getenv("PH_ECHO_LATENCY");
@@ -1933,14 +2065,14 @@ setup_aec(struct ph_msession_s *s, phastream_t *stream)
 	  stream->audio_loop_latency = 0;
       
 	  if (lat)
-	    stream->audio_loop_latency = atoi(lat) * 2 * stream->clock_rate/1000;
+	    stream->audio_loop_latency = atoi(lat) * 2 * clockrate/1000;
 
         
 	  /* 
 	     circular buffer must be able to accomodate MAX_OUTPUT_LATENCY millisecs in output direction
 	     and the same amount in input direction 
 	  */
-	  cb_init(&stream->pcmoutbuf, 2 * sizeof(short) * MAX_OUTPUT_LATENCY * stream->clock_rate/1000);
+	  cb_init(&stream->pcmoutbuf, 2 * sizeof(short) * MAX_OUTPUT_LATENCY * clockrate/1000);
 	  stream->sent_cnt = stream->recv_cnt = 0;
 	  stream->ecmux = g_mutex_new();
           
@@ -2228,7 +2360,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
 
   // SPIKE_HDX: init the voice activity detection on the local input stream (MIC)
-  if (stream->cngi.vad || stream->hdxmode == PH_HDX_MODE_SPK)
+  if (stream->cngi.vad || stream->hdxmode == PH_HDX_MODE_MIC)
     {
       ph_audio_init_ivad(stream);
     }
@@ -2764,6 +2896,7 @@ int ph_msession_send_sound_file(struct ph_msession_s *s, const char *filename)
 {
   phastream_t *stream = (phastream_t *)(s->streams[PH_MSTREAM_AUDIO1].streamerData);
   ph_mediabuf_t *mb;
+  int clock_rate = stream->clock_rate;
 
   if (!stream)
     return -PH_NOMEDIA;
@@ -2771,7 +2904,11 @@ int ph_msession_send_sound_file(struct ph_msession_s *s, const char *filename)
   if (stream->mixbuf)  /* we're already mixing a something? */
     return -PH_NORESOURCES;
 
-  mb = ph_mediabuf_load(filename, stream->clock_rate);
+#if PH_FORCE_16KHZ
+  clock_rate = 16000;
+#endif
+
+  mb = ph_mediabuf_load(filename, clock_rate);
   if (!mb)
     return -PH_NORESOURCES;
 
