@@ -195,8 +195,8 @@ std::string FileReader::read() {
 	if (_file.is_open()) {
 		char tmp[BUFFER_SIZE];
 		while (!_file.eof()) {
-			_file.getline(tmp, BUFFER_SIZE);
-			data += tmp;
+			_file.read(tmp, BUFFER_SIZE);
+			data.append(tmp, _file.gcount());
 		}
 	}
 
