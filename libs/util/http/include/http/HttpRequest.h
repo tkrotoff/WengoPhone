@@ -99,7 +99,7 @@ public:
 	 * The HTTP answer to the request has been received.
 	 *
 	 * @param requestId HTTP request ID
-	 * @param answer HTTP answer
+	 * @param answer HTTP answer (std::string is used as a byte array)
 	 * @param error Error code
 	 */
 	Event<void (int requestId, const std::string & answer, Error error)> answerReceivedEvent;

@@ -19,7 +19,7 @@
 
 #include <http/QtHttpRequest.h>
 
-#include <util/StringList.h>
+#include <util/Logger.h>
 
 #include <QHttp>
 
@@ -39,18 +39,17 @@ QtHttpRequest::~QtHttpRequest() {
 	_requestList.clear();
 }
 
-void QtHttpRequest::sendRequest(const std::string & url, const std::string & data, bool postMethod) {
-	_httpRequest->sendRequest(url, data, postMethod);
+int QtHttpRequest::sendRequest(const std::string & url, const std::string & data, bool postMethod) {
+	return _httpRequest->sendRequest(url, data, postMethod);
 }
 
-void QtHttpRequest::sendRequest(bool /*sslProtocol*/, const std::string & hostname, unsigned int hostPort,
+int QtHttpRequest::sendRequest(bool /*sslProtocol*/, const std::string & hostname, unsigned int hostPort,
 	const std::string & path, const std::string & data, bool postMethod) {
 
 	QHttp * http = new QHttp(hostname.c_str(), hostPort);
 	_requestList.push_back(http);
 
-	connect(http, SIGNAL(done(bool)),
-		this, SLOT(transferDone(bool)));
+	connect(http, SIGNAL(done(bool)), SLOT(transferDone(bool)));
 
 	string url;
 	if (postMethod) {
@@ -74,7 +73,9 @@ void QtHttpRequest::sendRequest(bool /*sslProtocol*/, const std::string & hostna
 		http->request(header);
 	}
 
-	cerr << "QtHttpRequest: HTTP URL: " << hostname << url << endl;
+	LOG_DEBUG("HTTP URL=" + hostname + url);
+
+	return http->currentId();
 }
 
 void QtHttpRequest::transferDone(bool) {
@@ -114,11 +115,12 @@ void QtHttpRequest::transferDone(bool) {
 		break;
 
 	default:
-		error = UnknownError;
-		break;
+		LOG_FATAL("unknown error=" + String::fromNumber(error));
 	}
 
-	answerReceivedEvent(QString(http->readAll()).toStdString(), error);
+	LOG_DEBUG("error=" + http->errorString().toStdString());
+	QByteArray byteArray = http->readAll();
+	answerReceivedEvent(http->currentId(), std::string(byteArray.constData(), byteArray.size()), error);
 }
 
 void QtHttpRequest::run() {

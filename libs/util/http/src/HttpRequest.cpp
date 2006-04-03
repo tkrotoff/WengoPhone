@@ -54,8 +54,8 @@ HttpRequest::HttpRequest() {
 	}
 	_httpRequestPrivate = _factory->create(this);
 	_httpRequestPrivate->answerReceivedEvent += answerReceivedEvent;
-	/*_httpRequestPrivate->dataReadProgressEvent += dataReadProgressEvent;
-	_httpRequestPrivate->dataSendProgressEvent += dataSendProgressEvent;*/
+	_httpRequestPrivate->dataReadProgressEvent += dataReadProgressEvent;
+	_httpRequestPrivate->dataSendProgressEvent += dataSendProgressEvent;
 }
 
 HttpRequest::~HttpRequest() {

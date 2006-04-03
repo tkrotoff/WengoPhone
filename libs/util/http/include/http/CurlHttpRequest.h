@@ -63,21 +63,30 @@ public:
 	 */
 	CurlHttpRequest(HttpRequest * httpRequest);
 
-	virtual int sendRequest(bool sslProtocol,
+	int sendRequest(bool sslProtocol,
 			const std::string & hostname,
 			unsigned int hostPort,
 			const std::string & path,
 			const std::string & data,
 			bool postMethod = false);
 
-	virtual int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
+	int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
 
 	/** Libcurl component. */
 	CURL * _curl;
 
+	/** Current progress of the download. */
+	double downloadDone;
+
+	/** Total amount of data to download. */
+	double downloadTotal;
+
+	/** Entire response content. */
+	std::string entireResponse;
+
 protected:
 
-	virtual void run();
+	void run();
 
 private:
 
@@ -98,7 +107,7 @@ private:
 	void setProxyUserParam();
 
 	/** Sets libCurl SSL parameters. */
-	void setSslParam();
+	void setSSLParam();
 
 	/**
 	 * Sets curl post options and data.
@@ -116,7 +125,7 @@ private:
 	HttpRequest::Error getReturnCode(int curlcode);
 
 	/**
-	 * Determine the proxy authentication method.
+	 * Determines the proxy authentication method.
 	 *
 	 * @return a long representing one of following authentication method:
 	 *         BASIC, DIGEST & NTLM
@@ -124,23 +133,14 @@ private:
 	long getProxyAuthenticationType();
 
 	/**
-	 * Sets Curl url
+	 * Sets Curl url.
 	 *
 	 */
-	void setUrl(Request r);
+	void setUrl(Request request);
 
-	bool useProxy();
-	bool useProxyAuthentication();
+	bool useProxy() const;
 
-	/**
-	 * A debugging function to print a representation of a "Request".
-	 *
-	 * @param the Request to be print
-	 */
-	void printRequest(Request r);
-
-	/** A debugging function to print a representation of the private member "_requestList". */
-	void printRequestList();
+	bool useProxyAuthentication() const;
 
 	/**
 	 * Callback for answerReceived() and run() methods.
@@ -168,10 +168,4 @@ private:
 	int _lastRequestId;
 };
 
-
-size_t curlHTTPWrite(void * ptr, size_t size, size_t nmemb, void * stream);
-size_t curlHTTPRead(void * ptr, size_t size, size_t nmemb, void * userp);
-char * getstr(std::string str);
-
 #endif	//CURLHTTPREQUEST_H
-

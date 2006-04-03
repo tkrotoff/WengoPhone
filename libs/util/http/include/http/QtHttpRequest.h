@@ -42,20 +42,20 @@ public:
 
 	virtual ~QtHttpRequest();
 
-	virtual void sendRequest(bool sslProtocol,
-				const std::string & hostname,
-				unsigned int hostPort,
-				const std::string & path,
-				const std::string & data,
-				bool postMethod = false);
+	int sendRequest(bool sslProtocol,
+			const std::string & hostname,
+			unsigned int hostPort,
+			const std::string & path,
+			const std::string & data,
+			bool postMethod = false);
 
-	virtual void sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
+	int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
 
 protected:
 
-	virtual void run();
+	void run();
 
-private slots:
+private Q_SLOTS:
 
 	/**
 	 * The HTTP transfer is done.

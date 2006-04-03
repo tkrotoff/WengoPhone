@@ -20,13 +20,20 @@
 #include <http/CurlHttpRequest.h>
 #include <http/HttpRequest.h>
 
-#include <util/String.h>
+#include <util/Logger.h>
 #include <util/IdGenerator.h>
 
 #include <iostream>
 using namespace std;
 
-size_t curlHttpHeaderWrite(void * ptr, size_t size, size_t nmemb, void * stream);
+size_t curlHttpHeaderWrite(void * ptr, size_t size, size_t nmemb, void * curlHttpRequestInstance);
+int curlHTTPProgress(void * curlHttpRequestInstance, double dltotal, double dlnow, double ultotal, double ulnow);
+size_t curlHTTPWrite(void * ptr, size_t size, size_t nmemb, void * curlHttpRequestInstance);
+size_t curlHTTPRead(void * ptr, size_t size, size_t nmemb, void * curlHttpRequestInstance);
+
+char * getstr(std::string str) {
+	return strdup(str.c_str());
+}
 
 RequestList CurlHttpRequest::_requestList;
 POST_DATA CurlHttpRequest::pooh;
@@ -39,6 +46,8 @@ CurlHttpRequest::CurlHttpRequest(HttpRequest * httpRequest) {
 	_proxyAuthenticationDetermine = false;
 	_verbose = true;
 	_httpRequest = httpRequest;
+	downloadDone = 0;
+	downloadTotal = 0;
 }
 
 int CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname, unsigned int hostPort,
@@ -69,7 +78,7 @@ void CurlHttpRequest::run() {
 			setCurlParam();
 			setProxyParam();
 			setProxyUserParam();
-			setSslParam();
+			setSSLParam();
 			setUrl(_requestList.front());
 			curl_easy_setopt(_curl, CURLOPT_PRIVATE, _lastRequestId);
 
@@ -80,17 +89,15 @@ void CurlHttpRequest::run() {
 			}
 
 			curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, & response);
-			if (_verbose) {
-				if (!response) {
-					cerr << "CurlHttpRequest: no server response code has been received" << endl;
-				}
-				else {
-					cout << "CurlHttpRequest: server response code: " << response << endl;
-				}
+			if (!response) {
+				LOG_DEBUG("no server response code has been received");
+			}
+			else {
+				LOG_DEBUG("server response code=" + String::fromNumber(response));
 			}
 		}
 		else {
-			cerr << "CurlHttpRequest: cURL initialization failed" << endl;
+			LOG_DEBUG("cURL initialization failed");
 			return;
 		}
 		_requestList.pop_front();
@@ -103,8 +110,10 @@ int CurlHttpRequest::sendRequest(const std::string & url, const std::string & da
 	return _httpRequest->sendRequest(url, data, postMethod);
 }
 
-void CurlHttpRequest::setUrl(Request r) {
-	setUrl(r.sslProtocol, r.hostname, r.hostPort, r.path, r.data, r.postMethod);
+void CurlHttpRequest::setUrl(Request request) {
+	setUrl(request.sslProtocol, request.hostname,
+		request.hostPort, request.path,
+		request.data, request.postMethod);
 }
 
 void CurlHttpRequest::setUrl(bool sslProtocol, const std::string & hostname, unsigned int hostPort,
@@ -149,16 +158,19 @@ void CurlHttpRequest::setUrl(bool sslProtocol, const std::string & hostname, uns
 
 void CurlHttpRequest::setCurlParam() {
 	curl_easy_setopt(_curl, CURLOPT_VERBOSE, _verbose);
+	curl_easy_setopt(_curl, CURLOPT_NOPROGRESS, false);
 	curl_easy_setopt(_curl, CURLOPT_READFUNCTION, curlHTTPRead);
 	curl_easy_setopt(_curl, CURLOPT_WRITEFUNCTION, curlHTTPWrite);
+	curl_easy_setopt(_curl, CURLOPT_PROGRESSFUNCTION, curlHTTPProgress);
 	//curl_easy_setopt(_curl, CURLOPT_HEADERFUNCTION, curlHttpHeaderWrite);
 	//curl_easy_setopt(_curl, CURLOPT_WRITEHEADER, this);
-	curl_easy_setopt(_curl, CURLOPT_FILE, this);
+	curl_easy_setopt(_curl, CURLOPT_WRITEDATA, this);
+	curl_easy_setopt(_curl, CURLOPT_PROGRESSDATA, this);
 	curl_easy_setopt(_curl, CURLOPT_NOSIGNAL, 0);
 	curl_easy_setopt(_curl, CURLOPT_TIMEOUT, 15);
 }
 
-void CurlHttpRequest::setSslParam() {
+void CurlHttpRequest::setSSLParam() {
 	curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYPEER, 0);
 	curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYHOST, 0);
 	curl_easy_setopt(_curl, CURLOPT_SSLVERSION, 3);
@@ -180,21 +192,15 @@ void CurlHttpRequest::setPostData(std::string _data) {
 void CurlHttpRequest::setProxyUserParam() {
 	if (useProxyAuthentication() && _proxyAuthentication) {
 		if ((_proxyAuthentication | CURLAUTH_BASIC) == CURLAUTH_BASIC) {
-			if (_verbose) {
-				cerr << "CurlHttpRequest: set proxy authentication: BASIC" << endl;
-			}
+			LOG_DEBUG("set proxy authentication: BASIC");
 			curl_easy_setopt(_curl, CURLOPT_PROXYAUTH, CURLAUTH_BASIC);
 		}
 		else if ((_proxyAuthentication | CURLAUTH_DIGEST) == CURLAUTH_DIGEST) {
-			if (_verbose) {
-				cerr << "CurlHttpRequest: set proxy authentication: DIGEST" << endl;
-			}
+			LOG_DEBUG("set proxy authentication: DIGEST");
 			curl_easy_setopt(_curl, CURLOPT_PROXYAUTH, CURLAUTH_DIGEST);
 		}
 		else if ((_proxyAuthentication | CURLAUTH_NTLM) == CURLAUTH_NTLM) {
-			if (_verbose) {
-				cerr << "CurlHttpRequest: set proxy authentication: NTLM" << endl;
-			}
+			LOG_DEBUG("set proxy authentication: NTLM");
 			curl_easy_setopt(_curl, CURLOPT_PROXYAUTH, CURLAUTH_NTLM);
 		}
 		string proxyUserIDPassword = HttpRequest::getProxyUsername() + ":" + HttpRequest::getProxyPassword();
@@ -233,29 +239,28 @@ long CurlHttpRequest::getProxyAuthenticationType() {
 		curl_easy_perform(curl_tmp);
 		curl_easy_getinfo(curl_tmp, CURLINFO_PROXYAUTH_AVAIL, & AuthMask);
 		curl_easy_cleanup(curl_tmp);
-		if (_verbose) {
-			if ((AuthMask | CURLAUTH_BASIC) == CURLAUTH_BASIC) {
-				cerr << "CurlHttpRequest: proxy authentication find: BASIC" << endl;
-			}
-			else if ((AuthMask | CURLAUTH_DIGEST) == CURLAUTH_DIGEST) {
-				cerr << "CurlHttpRequest: proxy authentication find: DIGEST" << endl;
-			}
-			else if ((AuthMask | CURLAUTH_NTLM) == CURLAUTH_NTLM) {
-				cerr << "CurlHttpRequest: proxy authentication find: NTLM" << endl;
-			}
+
+		if ((AuthMask | CURLAUTH_BASIC) == CURLAUTH_BASIC) {
+			LOG_DEBUG("proxy authentication find: BASIC");
+		}
+		else if ((AuthMask | CURLAUTH_DIGEST) == CURLAUTH_DIGEST) {
+			LOG_DEBUG("proxy authentication find: DIGEST");
+		}
+		else if ((AuthMask | CURLAUTH_NTLM) == CURLAUTH_NTLM) {
+			LOG_DEBUG("proxy authentication find: NTLM");
 		}
 	}
 	return AuthMask;
 }
 
-bool CurlHttpRequest::useProxy() {
+bool CurlHttpRequest::useProxy() const {
 	if (!HttpRequest::getProxyHost().empty() && HttpRequest::getProxyPort() != 0) {
 		return true;
 	}
 	return false;
 }
 
-bool CurlHttpRequest::useProxyAuthentication() {
+bool CurlHttpRequest::useProxyAuthentication() const {
 	if (!HttpRequest::getProxyUsername().empty() && !HttpRequest::getProxyPassword().empty()) {
 		return true;
 	}
@@ -263,37 +268,47 @@ bool CurlHttpRequest::useProxyAuthentication() {
 }
 
 HttpRequest::Error CurlHttpRequest::getReturnCode(int curlcode) {
+	Error error;
+
 	switch (curlcode) {
 	case CURLE_OK:
-		return HttpRequest::NoError;
+		error = HttpRequest::NoError;
 		break;
 	case CURLE_COULDNT_RESOLVE_HOST:
-		return HttpRequest::HostNotFound;
+		error = HttpRequest::HostNotFound;
 		break;
 	case CURLE_COULDNT_CONNECT:
-		return HttpRequest::ConnectionRefused;
+		error = HttpRequest::ConnectionRefused;
 		break;
 	case CURLE_COULDNT_RESOLVE_PROXY:
-		return HttpRequest::ProxyConnectionError;
+		error = HttpRequest::ProxyConnectionError;
 		break;
 	case CURLE_LOGIN_DENIED:
-		return HttpRequest::ProxyAuthenticationError;
+		error = HttpRequest::ProxyAuthenticationError;
 		break;
 	case CURLE_OPERATION_TIMEOUTED:
-		return HttpRequest::TimeOut;
+		error = HttpRequest::TimeOut;
 		break;
 	default:
-		return HttpRequest::UnknownError;
+		error = HttpRequest::UnknownError;
+		break;
 	}
+
+	return error;
 }
 
-size_t curlHTTPWrite(void * ptr, size_t size, size_t nmemb, void * stream) {
-	if (stream && ptr) {
-		CurlHttpRequest * instance = (CurlHttpRequest *) stream;
+size_t curlHTTPWrite(void * ptr, size_t size, size_t nmemb, void * curlHttpRequestInstance) {
+	if (curlHttpRequestInstance && ptr) {
+		CurlHttpRequest * instance = (CurlHttpRequest *) curlHttpRequestInstance;
 
 		int requestId;
-		curl_easy_getinfo(instance->_curl, CURLINFO_PRIVATE, & requestId);
-		instance->answerReceivedEvent(requestId, string((const char *) ptr, nmemb), HttpRequest::NoError);
+		curl_easy_getinfo(instance->_curl, CURLINFO_PRIVATE, &requestId);
+
+		//Appends the data received to the entire response content
+		instance->entireResponse.append((const char *) ptr, nmemb);
+		/*LOG_DEBUG("download done=" + String::fromNumber(instance->downloadDone) +
+			" download total=" + String::fromNumber(instance->downloadTotal));*/
+
 		return nmemb;
 	}
 	else {
@@ -326,28 +341,30 @@ size_t curlHTTPRead(void * ptr, size_t size, size_t nmemb, void * userp) {
 	return -1;
 }
 
-size_t curlHttpHeaderWrite(void * ptr, size_t size, size_t nmemb, void * stream) {
-	if (stream && ptr) {
-		CurlHttpRequest * instance = (CurlHttpRequest *) stream;
+size_t curlHttpHeaderWrite(void * ptr, size_t size, size_t nmemb, void * curlHttpRequestInstance) {
+	if (curlHttpRequestInstance && ptr) {
+		CurlHttpRequest * instance = (CurlHttpRequest *) curlHttpRequestInstance;
 		return nmemb;
 	} else {
 		return 0;
 	}
 }
 
-void CurlHttpRequest::printRequestList() {
-	RequestList::iterator it;
+int curlHTTPProgress(void * curlHttpRequestInstance, double dltotal, double dlnow, double ultotal, double ulnow) {
+	if (curlHttpRequestInstance) {
+		CurlHttpRequest * instance = (CurlHttpRequest *) curlHttpRequestInstance;
+		instance->downloadDone = dlnow;
+		instance->downloadTotal = dltotal;
+		int requestId;
+		curl_easy_getinfo(instance->_curl, CURLINFO_PRIVATE, &requestId);
+		instance->dataReadProgressEvent(requestId, dlnow, dltotal);
+		instance->dataSendProgressEvent(requestId, ulnow, ultotal);
 
-	for (it = _requestList.begin(); it != _requestList.end(); it++) {
-		printRequest(* it);
+		//Launches answerReceivedEvent only if the entire response content has been received
+		if ((dlnow >= dltotal) && (dlnow != 0 && dltotal != 0)) {
+			instance->answerReceivedEvent(requestId, instance->entireResponse, HttpRequest::NoError);
+		}
+
 	}
-}
-
-void CurlHttpRequest::printRequest(Request r) {
-	cout << "CurlHttpRequest: ssl: " << r.sslProtocol << endl << "hostname: " << r.hostname << endl << "hostport: " << r.hostPort << endl;
-	cout << "CurlHttpRequest: path: " << r.path << endl << "data: " << r.data << endl << "post: " << r.postMethod << endl;
-}
-
-char * getstr(std::string str) {
-	return strdup(str.c_str());
+	return 0;
 }
