@@ -55,8 +55,8 @@ File::File(const std::string & filename)
 	: _filename(filename) {
 }
 
-File::File(const File & file) 
-: _filename(file._filename) {
+File::File(const File & file)
+	: _filename(file._filename) {
 }
 
 std::string File::getPath() {
@@ -166,12 +166,12 @@ FileReader::FileReader(const std::string & filename)
 	: File(filename) {
 }
 
-FileReader::FileReader(const File & file) 
-: File(file) {
+FileReader::FileReader(const File & file)
+	: File(file) {
 }
 
-FileReader::FileReader(const FileReader & fileReader) 
-: File(fileReader) {
+FileReader::FileReader(const FileReader & fileReader)
+	: File(fileReader) {
 }
 
 FileReader::~FileReader() {
@@ -212,12 +212,12 @@ FileWriter::FileWriter(const std::string & filename)
 	: File(filename) {
 }
 
-FileWriter::FileWriter(const File & file) 
-: File(file) {
+FileWriter::FileWriter(const File & file)
+	: File(file) {
 }
 
-FileWriter::FileWriter(const FileWriter & fileWriter) 
-: File(fileWriter) {
+FileWriter::FileWriter(const FileWriter & fileWriter)
+	: File(fileWriter) {
 }
 
 FileWriter::~FileWriter() {
@@ -230,13 +230,15 @@ bool FileWriter::open() {
 }
 
 void FileWriter::write(const std::string & data) {
+	//see http://www.cplusplus.com/doc/tutorial/files.html
+
 	if (!_file.is_open()) {
 		//Tries to open the file if not already done
 		open();
 	}
 
 	if (_file.is_open() && !data.empty()) {
-		_file << data;
+		_file.write(data.c_str(), data.size());
 	}
 }
 
