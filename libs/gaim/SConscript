@@ -15,6 +15,7 @@ libs = [
 lib_path = []
 
 include_path = [
+	'src/src',
 	'include',
 ]
 
@@ -26,8 +27,6 @@ if WengoCCMinGW():
 
 	include_path += [
 		'include/gaim/win32',
-
-		'D:\cygwin\home\jbossart\win32-dev\gtk_2_0\include',
 		]
 
 	if WengoGetConsoleArgument('prepare-for-mingw'):
@@ -43,7 +42,7 @@ if WengoCCMinGW():
 			('ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v4.4.1/WIN954.0_OPT.OBJ/nspr-4.4.1.zip',
 			 '.+\.h'),
 			#TODO: tarball seems to be corrupted, needs to notice tarball creator before commenting out the following line
-	# 		('http://easynews.dl.sourceforge.net/sourceforge/gaim/gtk-dev-2.6.10-rev-a.tar.gz', 'gtk_2_0/include'),
+			('http://wengofiles.wengo.fr/gtk-dev-2.6.10-rev-a.tar.gz', 'gtk_2_0/include'),
 			]
 		i = 0
 		for (external_package, pattern_to_extract) in external_packages_list:
@@ -53,9 +52,7 @@ if WengoCCMinGW():
 				i += 1
 		info_file.close()
 		
-	shutil.copyfile(os.path.join(WengoGetSourcePath(), 'src/config.h.mingw'), os.path.join(WengoGetSourcePath(), 'src/config.h'))
-else:
-	shutil.copyfile(os.path.join(WengoGetSourcePath(), 'src/config.h.unix'), os.path.join(WengoGetSourcePath(), 'src/config.h'))
+		shutil.copyfile(os.path.join(WengoGetSourcePath(), 'src/config.h.mingw'), os.path.join(WengoGetSourcePath(), 'src/config.h'))
 
 
 if os.path.exists(os.path.join(WengoGetSourcePath(), 'mingw/mingw.properties')):
