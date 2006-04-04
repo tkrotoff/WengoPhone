@@ -122,12 +122,17 @@ private:
 	WenboxPlugin * _wenboxPlugin;
 
 	/**
-	 * If this thread should be terminate or not.
+	 * True if this thread should be terminate or not.
 	 *
 	 * By default _terminate == false.
 	 * @see terminate()
 	 */
 	bool _terminate;
+
+	/**
+	 * True if the thread is running.
+	 */
+	bool _running;
 
 	//FIXME: currently only one UserProfile exists
 	UserProfile _userProfile;
