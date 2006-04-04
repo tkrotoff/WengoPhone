@@ -47,7 +47,7 @@ public:
 	WsWengoInfo(WengoAccount & wengoAccount);
 
 	/**
-	 * A anwser about wengo's has been received.
+	 * An anwser about wengo's has been received.
 	 *
 	 * @param sender this class
 	 * @param id unique identifier of the request
@@ -57,7 +57,7 @@ public:
 	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status, float wengos)> wsInfoWengosEvent;
 
 	/**
-	 * A anwser about sms count has been received.
+	 * An anwser about sms count has been received.
 	 *
 	 * @param sender this class
 	 * @param id unique identifier of the request
@@ -67,7 +67,7 @@ public:
 	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status, int sms)> wsInfoSmsCountEvent;
 
 	/**
-	 * A anwser about active mail has been received.
+	 * An anwser about active mail has been received.
 	 *
 	 * @param sender this class
 	 * @param id unique identifier of the request
@@ -77,7 +77,7 @@ public:
 	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status, int activeMail)> wsInfoActiveMailEvent;
 
 	/**
-	 * A anwser about unread voice mail has been received.
+	 * An anwser about unread voice mail has been received.
 	 *
 	 * @param sender this class
 	 * @param id unique identifier of the request
@@ -87,7 +87,7 @@ public:
 	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status, int voicemail)> wsInfoVoiceMailEvent;
 
 	/**
-	 * A anwser about unread voice mail has been received.
+	 * An anwser about unread voice mail has been received.
 	 *
 	 * @param sender this class
 	 * @param id unique identifier of the request
@@ -97,7 +97,7 @@ public:
 	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status, std::string number)> wsInfoPtsnNumberEvent;
 
 	/**
-	 * A anwser about unread voice mail has been received.
+	 * An anwser about unread voice mail has been received.
 	 *
 	 * @param sender this class
 	 * @param id unique identifier of the request
