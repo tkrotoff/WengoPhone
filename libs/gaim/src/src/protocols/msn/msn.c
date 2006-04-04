@@ -1999,6 +1999,7 @@ static GaimPluginProtocolInfo prpl_info =
 	msn_accept_add_cb,		/* accept_buddy_add */
 	msn_cancel_add_cb,		/* deny_buddy_add */
 	msn_create_chat,		/* create_chat */
+	msn_act_id,				/* set_alias */
 };
 
 static GaimPluginInfo info =

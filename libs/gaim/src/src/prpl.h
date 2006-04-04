@@ -308,6 +308,8 @@ struct _GaimPluginProtocolInfo
 						   const char *friendly, const char *message);
 
 	void (*create_chat)(GaimConnection *gc, GList *buddies);
+	
+	void (*set_alias)(GaimConnection *gc, const char *alias);
 };
 
 #define GAIM_IS_PROTOCOL_PLUGIN(plugin) \

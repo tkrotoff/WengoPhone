@@ -3688,7 +3688,8 @@ static GaimPluginProtocolInfo prpl_info =
 	NULL, /* media_prpl_ops */
 	yahoo_buddy_add_authorize_cb, /* accept_buddy_add */
 	yahoo_buddy_add_deny_cb,  /* deny_buddy_add */
-	NULL,
+	NULL, /* create_chat */
+	yahoo_act_id, /* set_alias */
 };
 
 static GaimPluginInfo info =

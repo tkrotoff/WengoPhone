@@ -719,7 +719,7 @@ parse_account(xmlnode *node)
 	if ((child != NULL) && ((data = xmlnode_get_data(child)) != NULL))
 	{
 		if (*data != '\0')
-			gaim_account_set_alias(ret, data);
+			gaim_account_set_alias(ret, data, FALSE);
 		g_free(data);
 	}
 
@@ -1219,12 +1219,26 @@ gaim_account_set_password(GaimAccount *account, const char *password)
 }
 
 void
-gaim_account_set_alias(GaimAccount *account, const char *alias)
+gaim_account_set_alias(GaimAccount *account, const char *alias, 
+					   gboolean remote_update)
 {
+	GaimPluginProtocolInfo *prpl_info = NULL;
+	GaimConnection *gc = gaim_account_get_connection(account);
+
 	g_return_if_fail(account != NULL);
 
 	g_free(account->alias);
 	account->alias = (alias == NULL ? NULL : g_strdup(alias));
+
+	if (remote_update && alias != NULL)
+	{
+		if (gc != NULL && gc->prpl != NULL)
+			prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(gc->prpl);
+		
+		if (prpl_info != NULL && g_list_find(gaim_connections_get_all(), gc) &&
+			prpl_info->add_buddy != NULL)
+			prpl_info->set_alias(gc, alias);
+	}
 
 	schedule_accounts_save();
 }

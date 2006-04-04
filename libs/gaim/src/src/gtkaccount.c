@@ -1476,9 +1476,9 @@ ok_account_prefs_cb(GtkWidget *w, AccountPrefsDialog *dialog)
 	value = gtk_entry_get_text(GTK_ENTRY(dialog->alias_entry));
 
 	if (*value != '\0')
-		gaim_account_set_alias(account, value);
+		gaim_account_set_alias(account, value, FALSE);
 	else
-		gaim_account_set_alias(account, NULL);
+		gaim_account_set_alias(account, NULL, FALSE);
 
 	/* Buddy Icon */
 	gaim_account_set_buddy_icon(account, dialog->icon_path);

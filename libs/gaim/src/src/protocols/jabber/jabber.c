@@ -1800,7 +1800,8 @@ static GaimPluginProtocolInfo prpl_info =
 	NULL,							/* media_prpl_ops */
 	jabber_accept_buddy_add,		/* accept_buddy_add */	
 	jabber_deny_buddy_add,			/* deny_buddy_add */
-	NULL,
+	NULL,						    /* create_chat */
+	NULL,						    /* set_alias */
 };
 
 static GaimPluginInfo info =

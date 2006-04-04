@@ -107,7 +107,7 @@ _login_resp_cb(NMUser * user, NMERR_T ret_code,
 			alias = nm_user_record_get_full_name(user->user_record);
 
 			if (alias)
-				gaim_account_set_alias(user->client_data, alias);
+				gaim_account_set_alias(user->client_data, alias, FALSE);
 		}
 
 		/* Tell Gaim that we are connected */

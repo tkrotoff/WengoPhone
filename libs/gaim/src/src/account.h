@@ -229,10 +229,12 @@ void gaim_account_set_password(GaimAccount *account, const char *password);
 /**
  * Sets the account's alias.
  *
- * @param account The account.
- * @param alias   The alias.
+ * @param account		The account.
+ * @param alias			The alias.
+ * @param remote_update If TRUE, the alias is also set remotely
  */
-void gaim_account_set_alias(GaimAccount *account, const char *alias);
+void gaim_account_set_alias(GaimAccount *account, const char *alias, 
+							gboolean remote_update);
 
 /**
  * Sets the account's user information

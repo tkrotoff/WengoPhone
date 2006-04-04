@@ -8716,7 +8716,8 @@ static GaimPluginProtocolInfo prpl_info =
 	NULL,					/* media_prpl_ops */
 	gaim_auth_grant,		/* accept_buddy_add */
 	gaim_auth_dontgrant,	/* deny_buddy_add */
-	NULL,
+	NULL,					/* create_chat */
+	oscar_format_screenname,	/* set_alias */
 };
 
 static GaimPluginUiInfo prefs_info = {
