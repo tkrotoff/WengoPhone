@@ -25,8 +25,6 @@
 
 #include <util/Logger.h>
 
-#include <model/webservices/info/WsInfo.h>
-
 Sms::Sms(WengoAccount & wengoAccount) : WengoWebService(wengoAccount) {
 	
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -38,15 +36,6 @@ Sms::Sms(WengoAccount & wengoAccount) : WengoWebService(wengoAccount) {
 	setServicePath(config.getWengoSMSPath());
 	setPort(443);
 	setWengoAuthentication(true);
-	
-	//TODO: this is a test, remove it
-	WsWengoInfo * ws = new WsWengoInfo(wengoAccount);
-	ws->getWengosCount(true);
-	ws->getSmsCount(true);
-	ws->getActiveMail(true);
-	ws->getUnreadVoiceMail(true);
-	ws->getCallForwardInfo(true);
-	ws->execute();
 }
 
 int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
