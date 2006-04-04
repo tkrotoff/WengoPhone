@@ -112,6 +112,7 @@ const std::string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.ws.server.hostname"
 const std::string Config::WENGO_SMS_PATH_KEY = "wengo.ws.sms.path";
 const std::string Config::WENGO_SSO_PATH_KEY = "wengo.ws.sso.path";
 const std::string Config::WENGO_WS_INFO_PATH_KEY = "wengo.ws.info.path";
+const std::string Config::WENGO_WS_SUBSCRIBE_PATH_KEY = "wengo.ws.subscribe.path";
 
 const std::string Config::CONFIG_DIR_KEY = "config.dir";
 const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
@@ -238,8 +239,9 @@ Config::Config(const std::string & name) {
 
 	_keyDefaultValueMap[WENGO_SERVER_HOSTNAME_KEY] = std::string("ws.wengo.fr");
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
-	_keyDefaultValueMap[WENGO_SSO_PATH_KEY] = std::string("/softphone-sso/sso.php");
+	_keyDefaultValueMap[WENGO_SSO_PATH_KEY] = std::string("/softphone-sso/sso2.php");
 	_keyDefaultValueMap[WENGO_WS_INFO_PATH_KEY] = std::string("/info/info.php");
+	_keyDefaultValueMap[WENGO_WS_SUBSCRIBE_PATH_KEY] = std::string("/softphone-subscription");
 
 	_keyDefaultValueMap[AVAILABLE_PROTOCOLS_KEY] = DefaultProtocols;
 }
@@ -369,6 +371,10 @@ std::string Config::getWengoSSOPath() const {
 
 std::string Config::getWengoSMSPath() const {
 	return getStringKeyValue(WENGO_SMS_PATH_KEY);
+}
+
+std::string Config::getWengoSubscribePath() const {
+	return getStringKeyValue(WENGO_WS_SUBSCRIBE_PATH_KEY);
 }
 
 std::string Config::getWengoWsInfoPath() const {
