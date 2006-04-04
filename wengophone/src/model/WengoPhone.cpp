@@ -33,15 +33,14 @@ WengoPhone::WengoPhone()
 	: _userProfile(*this) {
 	_wenboxPlugin = new WenboxPlugin(*this);
 	_terminate = false;
+	_startupSettingListener = new StartupSettingListener();
 	_running = false;
 }
 
 WengoPhone::~WengoPhone() {
-
 	while (_running) {
 		Thread::msleep(100);
 	}
-
 	delete _wenboxPlugin;
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -94,13 +93,9 @@ void WengoPhone::run() {
 	LOG_DEBUG("The model thread is ready for events");
 
 	//Keeps the thread running until terminate() is called
-	_running = true;
-
 	while (!_terminate) {
 		runEvents();
 	}
-
-	_running = false;
 }
 
 void WengoPhone::terminate() {

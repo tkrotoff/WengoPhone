@@ -22,6 +22,7 @@
 
 #include <model/account/SipAccount.h>
 #include <model/profile/UserProfile.h>
+#include <model/config/StartupSettingListener.h>
 
 #include <util/Event.h>
 #include <thread/Thread.h>
@@ -122,20 +123,21 @@ private:
 	WenboxPlugin * _wenboxPlugin;
 
 	/**
-	 * True if this thread should be terminate or not.
+	 * If this thread should be terminate or not.
 	 *
 	 * By default _terminate == false.
 	 * @see terminate()
 	 */
 	bool _terminate;
-
 	/**
-	 * True if the thread is running.
-	 */
-	bool _running;
-
+ 	 * True if the thread is running.
+ 	 */
+ 	 bool _running;
+	
 	//FIXME: currently only one UserProfile exists
 	UserProfile _userProfile;
+	
+	StartupSettingListener* _startupSettingListener;
 };
 
 #endif	//WENGOPHONE_H

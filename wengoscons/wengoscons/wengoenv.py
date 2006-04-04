@@ -1312,8 +1312,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		return os.path.abspath(os.path.join(self['ROOT_BUILD_DIR'], self.__getMode()))
 
-
-
 	def __getBuildDirAbsPath(self, subpath):
 		"""
 		Concats a subpath to the current Environment root build directory.
@@ -1355,9 +1353,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 		"""
 
 		self['SOURCE_PATH'] = self.Dir('.').srcnode().path
-
-	def saveCurrentSourcePath(self):
-		self.__saveCurrentSourcePath()
 
 	def __getSourcePath(self):
 		"""
@@ -1640,16 +1635,20 @@ class WengoSConsEnvironment(SConsEnvironment):
 		qmake_path = os.path.join(os.environ["QTDIR"], 'bin', 'qmake')
 		lupdate_path = os.path.join(os.environ["QTDIR"], 'bin', 'lupdate')
 		lrelease_path = os.path.join(os.environ["QTDIR"], 'bin', 'lrelease')
-
-		os.system(qmake_path + " -project -o lang.pro")
-		os.system(lupdate_path + " lang.pro")
-
+		
+		for source_translation in source_translations:
+			print 'lreleasing ' + source_translation
+			os.system(lrelease_path + " " + source_translation)
+		os.system(qmake_path + " -project -o lang.pro")		
+		os.system(lupdate_path + " lang.pro")	
+	
 	def WengoAlias(self, target_name, target):
 		self.Alias(target_name, target)
 		self.__aliases[target_name] = target
 
 	def WengoGetAlias(self, target_name):
 		return self.__aliases.get(target_name, None)
+
 
 #FIXME ugly?
 WengoSConsEnvironment._globalEnv = None

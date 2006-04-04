@@ -1,0 +1,14 @@
+env = WengoGetEnvironment()
+
+libs = ['owutil']
+lib_path = []
+include_path = ['include']
+headers = []
+sources = [
+	'src/Startup.cpp'
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+env.WengoStaticLibrary('owstartup', sources)

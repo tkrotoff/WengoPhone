@@ -131,7 +131,7 @@ of the License, or (at your option) any later version.</source>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fermer</translation>
     </message>
     <message>
         <source>Save</source>
@@ -1292,6 +1292,58 @@ nécessitent un crédit de Wengo’s. L’activation du transfert nécessite de 
         <source>Mo&amp;dify IM accounts</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Languages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IM accounts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DOWN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Modify</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished">Fermer</translation>
+    </message>
+    <message>
+        <source>Nikename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protocol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Status / Duration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GeneralSettingsWidget</name>
@@ -1474,7 +1526,7 @@ Please enter your login and password in order to use the local HTTP proxy.</sour
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fermer</translation>
     </message>
     <message>
         <source>Manage blocked users</source>
@@ -1650,6 +1702,13 @@ Please enter your login and password in order to use the local HTTP proxy.</sour
     </message>
 </context>
 <context>
+    <name>QtAbout</name>
+    <message>
+        <source>bla</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QtCreditWidget</name>
     <message>
         <source>Buy call-out credits</source>
@@ -1753,31 +1812,11 @@ Please enter your login and password in order to use the local HTTP proxy.</sour
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Occup&#xe9;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pas l&#xe0;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>De retour dans 5 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pas devant l&apos;&#xe9;cran</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Au t&#xe9;l&#xe9;phone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Insisible pour tous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>D&#xe9;connecter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1820,11 +1859,50 @@ Please enter your login and password in order to use the local HTTP proxy.</sour
         <source>Chat</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Occup&#xc3;&#x88;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pas l&#xe2;&#x80;&#xa1;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pas devant l&apos;&#xc3;&#x88;cran</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Au t&#xc3;&#x88;l&#xc3;&#x88;phone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>D&#xc3;&#x88;connecter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtPhoneCall</name>
     <message>
         <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QtPhoneLine</name>
+    <message>
+        <source>Not connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Register done</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unregister done</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1856,6 +1934,10 @@ Please enter your login and password in order to use the local HTTP proxy.</sour
     </message>
     <message>
         <source>Forward to cellphone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AAAAAAAAAAAAAAAAAAAAAAH</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1941,6 +2023,18 @@ Please enter your login and password in order to use the local HTTP proxy.</sour
     </message>
     <message>
         <source>Quit Wengophone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internet connection OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internet connection error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2321,6 +2415,38 @@ Please enter your login and password in order to use the local HTTP proxy.</sour
     </message>
     <message>
         <source>Voicemail </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide / Show</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View addressbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View dialpad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show / Hide contacts offline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show contact groups</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort contacts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IM Account Settings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

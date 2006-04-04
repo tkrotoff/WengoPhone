@@ -86,23 +86,23 @@ bool Settings::contains(const std::string & key) {
 }
 
 void Settings::set(const std::string & key, const std::string & value) {
-	valueChangedEvent(*this, key);
 	_keyMap[key] = value;
+	valueChangedEvent(*this, key);
 }
 
 void Settings::set(const std::string & key, const StringList & value) {
-	valueChangedEvent(*this, key);
 	_keyMap[key] = value;
+	valueChangedEvent(*this, key);
 }
 
 void Settings::set(const std::string & key, bool value) {
-	valueChangedEvent(*this, key);
 	_keyMap[key] = value;
+	valueChangedEvent(*this, key);	
 }
 
-void Settings::set(const std::string & key, int value) {
-	valueChangedEvent(*this, key);
+void Settings::set(const std::string & key, int value) {	
 	_keyMap[key] = value;
+	valueChangedEvent(*this, key);
 }
 
 std::string Settings::get(const std::string & key, const std::string & defaultValue) const {
