@@ -27,6 +27,7 @@ projects = [
 	'libs/wenbox',
 	'libs/webcam',
 	'libs/owbrowser',
+	'libs/softupdater',
 	'wifo',
 	'libs/sipwrapper',
 	'libs/imwrapper/src/gaim',

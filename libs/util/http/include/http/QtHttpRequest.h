@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 class QHttp;
 
 /**
- * HttpRequest implementation using the library Qt.
+ * HttpRequest implementation using the Qt library.
  *
  * @see HttpRequest
  * @author Tanguy Krotoff
@@ -50,6 +50,8 @@ public:
 			bool postMethod = false);
 
 	int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
+
+	void abort();
 
 protected:
 

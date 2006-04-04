@@ -22,30 +22,47 @@
 #include <util/Logger.h>
 #include <util/File.h>
 
+#include <ctime>
+
 SoftUpdater::SoftUpdater() {
+	_httpRequest = NULL;
 }
 
 SoftUpdater::~SoftUpdater() {
+	if (_httpRequest) {
+		delete _httpRequest;
+	}
 }
 
 void SoftUpdater::download(const std::string & url, const std::string & fileName) {
 	_fileName = fileName;
-	HttpRequest * httpRequest = new HttpRequest();
-	httpRequest->dataReadProgressEvent += boost::bind(&SoftUpdater::dataReadProgressEventHandler, this, _1, _2, _3);
-	httpRequest->answerReceivedEvent += boost::bind(&SoftUpdater::answerReceivedEventHandler, this, _1, _2, _3);
+	_httpRequest = new HttpRequest();
+	_httpRequest->dataReadProgressEvent += boost::bind(&SoftUpdater::dataReadProgressEventHandler, this, _1, _2, _3);
+	_httpRequest->answerReceivedEvent += boost::bind(&SoftUpdater::answerReceivedEventHandler, this, _1, _2, _3);
 
-	httpRequest->sendRequest(url, String::null);
+	_httpRequest->sendRequest(url, String::null);
 }
 
-void SoftUpdater::dataReadProgressEventHandler(int requestId, int bytesDone, int bytesTotal) {
-	dataReadProgressEvent(bytesDone, bytesTotal);
+void SoftUpdater::abort() {
+	if (_httpRequest) {
+		_httpRequest->abort();
+	}
+}
+
+void SoftUpdater::dataReadProgressEventHandler(int requestId, double bytesDone, double bytesTotal) {
+	static const int startTime = time(NULL);
+
+	int currentTime = time(NULL);
+
+	unsigned downloadSpeed = bytesDone / (currentTime - startTime) / 1000;
+	dataReadProgressEvent(bytesDone, bytesTotal, downloadSpeed);
 }
 
 void SoftUpdater::answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error) {
 	LOG_DEBUG("requestId=" + String::fromNumber(requestId) + " error=" + String::fromNumber(error));
-	//if (error == HttpRequest::NoError && !answer.empty()) {
+	if (error == HttpRequest::NoError && !answer.empty()) {
 		FileWriter file(_fileName);
 		file.write(answer);
-	//}
+	}
 	downloadFinishedEvent(error);
 }

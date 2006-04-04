@@ -9,7 +9,8 @@ libs = [
 	'webcam',
 	'qt4',
 	'owbrowser',
-	'trayicon'
+	'trayicon',
+	'softupdater',
 ]
 if WengoCCMSVC():
 	libs.append('owmemorydump')
@@ -84,6 +85,7 @@ headers = [
 	'history/QtHistoryWidget.h',
 	'history/QtHistoryItem.h',
 	'history/QtHistory.h',
+	'softupdater/QtSoftUpdaterWindow.h',
 ]
 
 sources = [
@@ -153,6 +155,7 @@ sources = [
 	'history/QtHistoryWidget.cpp',
 	'history/QtHistoryItem.cpp',
 	'history/QtHistory.cpp',
+	'softupdater/QtSoftUpdaterWindow.cpp',
 
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]
@@ -183,13 +186,13 @@ if WengoOSMacOSX():
 	env.WengoDeclareMacOSXAppTemplate('./macosx/template.app')
 
 if WengoOSLinux():
-        x11_lib_dir = '/usr/X11R6/lib'
-        if os.environ.has_key('X11R6LIBDIR'):
-            x11_lib_dir = os.environ['X11R6LIBDIR']
-        link_flags += [
-            '-L' + x11_lib_dir,
-        ]
-        libs += ['SM', 'ICE', 'Xi', 'Xinerama', 'Xext', 'X11', 'Xrandr',]
+	x11_lib_dir = '/usr/X11R6/lib'
+	if os.environ.has_key('X11R6LIBDIR'):
+		x11_lib_dir = os.environ['X11R6LIBDIR']
+	link_flags += [
+		'-L' + x11_lib_dir,
+	]
+	libs += ['SM', 'ICE', 'Xi', 'Xinerama', 'Xext', 'X11', 'Xrandr',]
 
 env.WengoCopyToBuildDir('chat/emoticons', 'emoticons')
 env.WengoCopyToBuildDir('webpages', 'webpages')

@@ -46,6 +46,7 @@ CurlHttpRequest::CurlHttpRequest(HttpRequest * httpRequest) {
 	_proxyAuthenticationDetermine = false;
 	_verbose = true;
 	_httpRequest = httpRequest;
+	abortTransfer = false;
 	downloadDone = 0;
 	downloadTotal = 0;
 }
@@ -309,7 +310,11 @@ size_t curlHTTPWrite(void * ptr, size_t size, size_t nmemb, void * curlHttpReque
 		/*LOG_DEBUG("download done=" + String::fromNumber(instance->downloadDone) +
 			" download total=" + String::fromNumber(instance->downloadTotal));*/
 
-		return nmemb;
+		if (instance->abortTransfer) {
+			return 0;
+		} else {
+			return nmemb;
+		}
 	}
 	else {
 		return 0;
@@ -344,7 +349,11 @@ size_t curlHTTPRead(void * ptr, size_t size, size_t nmemb, void * userp) {
 size_t curlHttpHeaderWrite(void * ptr, size_t size, size_t nmemb, void * curlHttpRequestInstance) {
 	if (curlHttpRequestInstance && ptr) {
 		CurlHttpRequest * instance = (CurlHttpRequest *) curlHttpRequestInstance;
-		return nmemb;
+		if (instance->abortTransfer) {
+			return 0;
+		} else {
+			return nmemb;
+		}
 	} else {
 		return 0;
 	}
@@ -365,6 +374,13 @@ int curlHTTPProgress(void * curlHttpRequestInstance, double dltotal, double dlno
 			instance->answerReceivedEvent(requestId, instance->entireResponse, HttpRequest::NoError);
 		}
 
+		if (instance->abortTransfer) {
+			return 1;
+		} else {
+			return 0;
+		}
+
+	} else {
+		return 1;
 	}
-	return 0;
 }

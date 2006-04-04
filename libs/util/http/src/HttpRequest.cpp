@@ -22,7 +22,6 @@
 #include <http/DefaultHttpRequestFactory.h>
 #include <http/HttpRequestFactory.h>
 
-#include <util/String.h>
 #include <util/StringList.h>
 #include <util/Logger.h>
 
@@ -88,7 +87,7 @@ bool usesSSLProtocol(const std::string & url) {
 		//http://wengo.fr:8080/softphone-sso/sso.php
 		sslProtocol = false;
 	} else {
-		assert(NULL && "HttpRequest: incorrect HTTP URL");
+		LOG_FATAL("incorrect HTTP URL=" + url);
 	}
 
 	return sslProtocol;
@@ -156,6 +155,11 @@ int HttpRequest::sendRequest(const std::string & url, const std::string & data, 
 	string path = getPath(url);
 
 	return sendRequest(sslProtocol, hostname, hostPort, path, data, postMethod);
+}
+
+void HttpRequest::abort() {
+	LOG_DEBUG("HTTP request aborted");
+	_httpRequestPrivate->abort();
 }
 
 void HttpRequest::run() {

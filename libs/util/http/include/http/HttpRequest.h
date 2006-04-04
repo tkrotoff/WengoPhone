@@ -20,7 +20,6 @@
 #ifndef HTTPREQUEST_H
 #define HTTPREQUEST_H
 
-#include <util/NonCopyable.h>
 #include <util/Event.h>
 
 #include <thread/Thread.h>
@@ -34,7 +33,7 @@
  *
  * A proxy can be set and an error code is returned.
  *
- * Example:
+ * Example **OBSOLETE**:
  * <pre>
  * class MyHttpRequest : public HttpRequest {
  * public:
@@ -163,6 +162,13 @@ public:
 	 */
 	virtual int sendRequest(const std::string & url, const std::string & data, bool postMethod = false) = 0;
 
+	/**
+	 * Aborts the current request and deletes all scheduled requests.
+	 *
+	 * Throws answerReceivedEvent with error=Aborted
+	 */
+	virtual void abort() = 0;
+
 	virtual void run() = 0;
 };
 
@@ -198,14 +204,14 @@ public:
 
 	virtual ~HttpRequest();
 
-	virtual int sendRequest(bool sslProtocol,
+	int sendRequest(bool sslProtocol,
 			const std::string & hostname,
 			unsigned int hostPort,
 			const std::string & path,
 			const std::string & data,
 			bool postMethod = false);
 
-	virtual int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
+	int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
 
 	/**
 	 * Sets the local proxy settings.
@@ -265,7 +271,9 @@ public:
 		return _proxyPassword;
 	}
 
-	virtual void run();
+	void abort();
+
+	void run();
 
 private:
 

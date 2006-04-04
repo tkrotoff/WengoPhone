@@ -72,6 +72,10 @@ public:
 
 	int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
 
+	void abort() {
+		abortTransfer = true;
+	}
+
 	/** Libcurl component. */
 	CURL * _curl;
 
@@ -83,6 +87,9 @@ public:
 
 	/** Entire response content. */
 	std::string entireResponse;
+
+	/** Abort or not the current HTTP transfer. */
+	bool abortTransfer;
 
 protected:
 

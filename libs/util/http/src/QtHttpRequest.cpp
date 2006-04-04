@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,9 +47,8 @@ int QtHttpRequest::sendRequest(bool /*sslProtocol*/, const std::string & hostnam
 	const std::string & path, const std::string & data, bool postMethod) {
 
 	QHttp * http = new QHttp(hostname.c_str(), hostPort);
-	_requestList.push_back(http);
-
 	connect(http, SIGNAL(done(bool)), SLOT(transferDone(bool)));
+	_requestList.push_back(http);
 
 	string url;
 	if (postMethod) {
@@ -121,6 +120,12 @@ void QtHttpRequest::transferDone(bool) {
 	LOG_DEBUG("error=" + http->errorString().toStdString());
 	QByteArray byteArray = http->readAll();
 	answerReceivedEvent(http->currentId(), std::string(byteArray.constData(), byteArray.size()), error);
+}
+
+void QtHttpRequest::abort() {
+	for (unsigned int i = 0; i < _requestList.size(); i++) {
+		_requestList[i]->abort();
+	}
 }
 
 void QtHttpRequest::run() {

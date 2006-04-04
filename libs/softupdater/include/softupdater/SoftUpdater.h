@@ -35,8 +35,10 @@ public:
 
 	/**
 	 * @see IHttpRequest::dataReadProgressEvent
+	 *
+	 * @param downloadSpeed download speed in kilo bytes per second
 	 */
-	Event<void (int bytesDone, int bytesTotal)> dataReadProgressEvent;
+	Event<void (double bytesDone, double bytesTotal, unsigned downloadSpeed)> dataReadProgressEvent;
 
 	/**
 	 * @see IHttpRequest::answerReceivedEvent
@@ -55,15 +57,22 @@ public:
 	 */
 	void download(const std::string & url, const std::string & fileName);
 
+	/**
+	 * @see IHttpRequest::abort()
+	 */
+	void abort();
+
 private:
 
 	void downloadFile();
 
-	void dataReadProgressEventHandler(int requestId, int bytesDone, int bytesTotal);
+	void dataReadProgressEventHandler(int requestId, double bytesDone, double bytesTotal);
 
 	void answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error);
 
 	std::string _fileName;
+
+	HttpRequest * _httpRequest;
 };
 
 #endif	//SOFTUPDATER_H
