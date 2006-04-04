@@ -454,7 +454,7 @@ void QtProtocolSettings::saveYahoo() {
 
 	param.set( param.YAHOO_XFER_PORT_KEY, _yahooFileTransferPortEdit->text().toInt());
 
-	param.set( param.YAHOO_ROOM_LIST_LOCALE_KEY,_yahooChatRoomLocalEdit->text().toInt());
+	param.set( param.YAHOO_ROOM_LIST_LOCALE_KEY,_yahooChatRoomLocalEdit->text().toStdString());
 
 	if ( _yahooRememberPasswordCheckBox->checkState() == Qt::Checked )
 		param.set(param.REMEMBER_PASSWORD_KEY,true);
