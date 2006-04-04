@@ -24,29 +24,23 @@
 
 #include <tinyxml.h>
 
+#include <stdlib.h>
+
 #include <iostream>
 using namespace std;
 
 static const std::string STATUS_CODE_OK = "200";
 
 WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string & data) {
-	/*_identity = "robobob1534";
-	_username = "robobob1534";
-	_realm = "voip.wengo.fr";
-	_displayName = "robobob1534";
-	_registerServerHostname = "voip.wengo.fr";
-	_registerServerPort = 5060;
-	_proxyServerHostname = "proxy1.host.wengo.fr";
-	_proxyServerPort = 5060;
-	_password = "XXXXXXX";*/
-
+	
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
 
 	TiXmlHandle docHandle(& doc);
 
 	TiXmlHandle sso = docHandle.FirstChild("sso");
-
+	
+	//sso status code
 	TiXmlElement * elem = sso.FirstChild("status").Element();
 	if (elem) {
 		std::string statusCode = elem->Attribute("code");
@@ -58,62 +52,80 @@ WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string
 			_loginPasswordOk = true;
 		}
 	}
-
-	TiXmlText * text = sso.FirstChild("user").FirstChild().Text();
-	if (text) {
-		account._username = text->Value();
+	
+	//iterate over "d" element
+	TiXmlElement * element = sso.FirstChild("d").Element();
+	while ( element ) {
+		
+		std::string key = std::string(element->Attribute("k"));
+		std::string value = "";
+		const char * tmp = element->Attribute("v");
+		if( tmp ) {
+			value = std::string(tmp);
+		}
+		
+		if( key == "sip.auth.userid") {
+			account._identity = value;
+		} else if( key == "sip.auth.password") {
+			account._password = value;
+		} else if( key == "sip.auth.realm") {
+			account._realm = value;
+		} else if( key == "sip.address.name") {
+			account._username = value;
+		} else if( key == "sip.address.displayname") {
+			account._displayName = value;
+		} else if( key == "sip.address.server.host") {
+			account._registerServerHostname = value;
+		} else if( key == "sip.address.server.port") {
+			account._registerServerPort = String(value).toInteger();
+		} else if( key == "sip.outbound") {
+			//TODO: pass this parameter to phapi by phconfig
+		} else if( key == "sip.outbound.proxy.host") {
+			account._sipProxyServerHostname = value;
+		} else if( key == "sip.outbound.proxy.port") {
+			account._sipProxyServerPort = String(value).toInteger();
+		} else if( key == "netlib.stun.host") {
+			account._stunServer = value;
+		}
+		
+		else if( key == "netlib.tunnel.http") {
+			std::vector<std::string> httpTunnels;
+			TiXmlElement * elt = element->FirstChildElement("l");
+			while(elt) {
+				
+				const char * tmp = elt->Attribute("v");
+				if( tmp ) {
+					httpTunnels.push_back(std::string(tmp));
+				}
+				
+				elt = elt->NextSiblingElement("l");
+			}
+			account._httpTunnelServerHostname = chooseHttpTunnel(httpTunnels);
+			
+		} else if( key == "netlib.tunnel.https") {
+			std::vector<std::string> httpsTunnels;
+			TiXmlElement * elt = element->FirstChildElement("l");
+			while(elt) {
+				
+				const char * tmp = elt->Attribute("v");
+				if( tmp ) {
+					httpsTunnels.push_back(std::string(tmp));
+				}
+				
+				elt = elt->NextSiblingElement("l");
+			}
+			
+			//if https tunnel is activated
+			if( account.httpTunnelHasSSL() ) {
+				account._httpTunnelServerHostname = chooseHttpTunnel(httpsTunnels);
+			}
+		}
+		
+		element = element->NextSiblingElement("d");
 	}
+}
 
-	text = sso.FirstChild("userid").FirstChild().Text();
-	if (text) {
-		account._identity = text->Value();
-	}
-
-	text = sso.FirstChild("displayname").FirstChild().Text();
-	if (text) {
-		account._displayName = text->Value();
-	}
-
-	text = sso.FirstChild("password").FirstChild().Text();
-	if (text) {
-		account._password = text->Value();
-	}
-
-	text = sso.FirstChild("realm").FirstChild().Text();
-	if (text) {
-		account._realm = text->Value();
-	}
-
-	text = sso.FirstChild("proxy").FirstChild("host").FirstChild().Text();
-	if (text) {
-		account._sipProxyServerHostname = text->Value();
-	}
-
-	text = sso.FirstChild("proxy").FirstChild("port").FirstChild().Text();
-	if (text) {
-		String tmp(text->Value());
-		account._sipProxyServerPort = tmp.toInteger();
-	}
-
-	text = sso.FirstChild("server").FirstChild("host").FirstChild().Text();
-	if (text) {
-		account._registerServerHostname = text->Value();
-	}
-
-	text = sso.FirstChild("server").FirstChild("port").FirstChild().Text();
-	if (text) {
-		String tmp(text->Value());
-		account._registerServerPort = tmp.toInteger();
-	}
-
-	text = sso.FirstChild("httptunnel").FirstChild("host").FirstChild().Text();
-	if (text) {
-		account._httpTunnelServerHostname = text->Value();
-	}
-
-	text = sso.FirstChild("httptunnel").FirstChild("port").FirstChild().Text();
-	if (text) {
-		String tmp(text->Value());
-		account._httpTunnelServerPort = tmp.toInteger();
-	}
+std::string WengoAccountParser::chooseHttpTunnel(std::vector<std::string> httpTunnels) {
+	srand(time(NULL));
+	return httpTunnels[rand() % httpTunnels.size()];
 }

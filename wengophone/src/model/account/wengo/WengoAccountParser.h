@@ -46,42 +46,57 @@
  *
  * If the login/password are correct it will return:
  * <pre>
- * <?xml version="1.0" ?>
- * <sso vapi="1">
- *     <status code="200">OK</status>
- *     <user>xxxx</user>
- *     <userid>xxxx</userid>
- *     <displayname>xxxx</displayname>
- *     <password>xxxx</password>
- *     <outbound>1</outbound>
- *     <realm>voip.wengo.fr</realm>
- *     <proxy>
- *         <host>213.91.9.210</host>
- *         <port>5060</port>
- *     </proxy>
- *     <server>
- *         <host>voip.wengo.fr</host>
- *         <port>5060</port>
- *     </server>
- *     <httptunnel>
- *         <host>80.118.99.31</host>
- *     </httptunnel>
- * </sso>
+ * <?xml version="1.0" encoding="UTF-8" ?>
+ * <sso mib="1">
+ * 	<notice><![CDATA[DEPRECATED on 12/01/2006]]></notice>
+ * 	<status code="200"><![CDATA[OK]]></status>
+ * 	<d k="sip.auth.userid" v="toto"/>
+ * 	<d k="sip.auth.password" v="secret"/>
+ * 	<d k="sip.auth.realm" v="192.168.1.1"/>
+ * 	<d k="sip.address.name" v="toto"/>
+ * 	<d k="sip.address.displayname" v="pseudo"/>
+ * 	<d k="sip.address.server.host" v="192.168.1.1"/>
+ * 	<d k="sip.address.server.port" v="5060"/>
+ * 	<d k="sip.outbound" v="1"/>
+ * 	<d k="sip.outbound.proxy.host" v="192.168.1.1"/>
+ * 	<d k="sip.outbound.proxy.port" v="5060"/>
+ * 	<d k="netlib.stun.host" v="192.168.1.1"/>
+ * 	<d k="netlib.stun.port" v="5060"/>
+ * 	<d k="netlib.tunnel.http.1" v="80.118.132.75"/>
+ * 	<d k="netlib.tunnel.http.2" v="192.168.1.1"/>
+ * 	<d k="netlib.tunnel.http.3" v="192.168.1.1"/>
+ * 	<d k="netlib.tunnel.https.1" v="192.168.1.1"/>
+ * 	<d k="netlib.tunnel.https.2" v="192.168.1.1"/>
+ * </sso> 
  * </pre>
  *
  * @ingroup model
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
  */
 class WengoAccountParser {
 public:
 
 	WengoAccountParser(WengoAccount & account, const std::string & data);
 
+	/**
+	 * Check if password is correct
+	 * 
+	 * @return true if login ok
+	 */
 	bool isLoginPasswordOk() const {
 		return _loginPasswordOk;
 	}
 
 private:
+
+	/**
+	 * Choose a random http tunnel
+	 * 
+	 * @param httpTunnels a list of http tunnel ip
+	 * @return a http tunnel ip
+	 */
+	std::string chooseHttpTunnel(std::vector<std::string> httpTunnels);
 
 	bool _loginPasswordOk;
 };
