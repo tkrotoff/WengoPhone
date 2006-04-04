@@ -38,6 +38,7 @@ elif WengoOSMacOSX():
 		'src/mac/SoundMixer.cpp',
 		'src/mac/SoundMixerException.cpp',
 		'src/mac/CoreAudioUtilities.cpp',
+		'src/mac/Volume.cpp',
 	]
 	link_flags += ['framework CoreAudio']
 

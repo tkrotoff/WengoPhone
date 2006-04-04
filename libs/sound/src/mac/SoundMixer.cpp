@@ -27,19 +27,68 @@ using namespace std;
 
 SoundMixer::SoundMixer(const std::string & inputDeviceName, const std::string & outputDeviceName)
 	throw (NoSoundCardException, SoundMixerException) {
+
+	_outputVolume = NULL;
+	_inputVolume = NULL;
+
+	// Looking for input device
+	std::map<AudioDeviceID, std::string> deviceMap = CoreAudioUtilities::audioDeviceMap(true);
+	for (std::map<AudioDeviceID, std::string>::const_iterator it = deviceMap.begin();
+		it != deviceMap.end();
+		++it) {
+		if ((*it).second == inputDeviceName) {
+			Volume
+			_inputVolume = new Volume((*it).first, true);
+			break;
+		}
+	}
+	////
+
+	// Looking for output device
+	std::map<AudioDeviceID, std::string> deviceMap = CoreAudioUtilities::audioDeviceMap(false);
+	for (std::map<AudioDeviceID, std::string>::const_iterator it = deviceMap.begin();
+		it != deviceMap.end();
+		++it) {
+		if ((*it).second == outputDeviceName) {
+			Volume
+			_outputVolume = new Volume((*it).first, false);
+			break;
+		}
+	}
+	////
+
+	if (!_outputVolume || !_inputVolume) {
+		throw NoSoundCardException();
+	}
 }
 
 void SoundMixer::closeMixers() {
 }
 
 int SoundMixer::getOutputVolume() {
+	if (_outputVolume) {
+		return _outputVolume->getVolume();
+	}
+
+	return 0;
 }
 
 int SoundMixer::getInputVolume() {
+	if (_inputVolume) {
+		return _inputVolume->getVolume();
+	}
+
+	return 0;
 }
 
 void SoundMixer::setOutputVolume(int volume) {
+	if (_outputVolume) {
+		_outputVolume->setVolume(volume);
+	}
 }
 
 void SoundMixer::setInputVolume(int volume) {
+	if (_inputVolume) {
+		_inputVolume->setVolume(volume);
+	}
 }

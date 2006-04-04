@@ -20,16 +20,44 @@
 #ifndef VOLUME_H
 #define VOLUME_H
 
-#include <sound/SoundMixerException.h>
+#include <CoreAudio/CoreAudio.h>
 
 /**
- * Get and change the volume of a UNIX sound mixer.
+ * Get and change the volume of a MacOS X audio device.
  *
- * @author Mathieu Stute
+ * @author Philippe Bernery
  */
 class Volume {
+
 public:
-	Volume();
+
+	Volume(AudioDeviceID deviceId, bool isInput);
+
+	/**
+	 * Gets the current volume of the audio device.
+	 *
+	 * On MacOS X, the volume of the output can't be gotten.
+	 *
+	 * @return volume of the audio mixer, or -1 if it failed
+	 */
+	int getVolume();
+
+	/**
+	 * Sets the current volume of the audio device.
+	 *
+	 * @param volume sound volume of the audio mixer
+	 * @return true if the volume has been changed, false otherwise
+	 */
+	bool setVolume(unsigned volume);
+
+private:
+
+	/** ID of the device. */
+	AudioDeviceID _deviceId;
+
+	/** Channel to use (input or output) */
+	Boolean _isInput;
+
 };
 
 #endif	//VOLUME_H
