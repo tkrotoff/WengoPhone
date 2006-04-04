@@ -27,12 +27,17 @@
 
 using namespace std;
 
-#define SAFE_RELEASE(x) { if (x) x->Release(); x = NULL; }
+#define SAFE_RELEASE_POINTER(x) { if (x) x->Release(); x = NULL; }
+#define SAFE_RELEASE(x) { if (x) x.Release(); x = NULL; }
 
 DirectXWebcamDriver::DirectXWebcamDriver(WebcamDriver *driver, int flags)
 : IWebcamDriver(flags) {
 	CoInitialize(NULL);
 	_webcamDriver = driver;
+	_pGrabberF = NULL;
+	_pGrabber = NULL;
+	_pNull = NULL;
+	_iam = NULL;
 }
 
 DirectXWebcamDriver::~DirectXWebcamDriver() {
@@ -46,29 +51,13 @@ void DirectXWebcamDriver::cleanup() {
 	_cachedHeight = 0;
 	_cachedFPS = 15;
 	_cachedPalette = PIX_OSI_UNSUPPORTED;
-	_pGrabberF = NULL;
-	_pGrabber = NULL;
-	_pNull = NULL;
-	_iam = NULL;
-	SAFE_RELEASE(_pGrabberF);
-	SAFE_RELEASE(_pGrabber);
-	SAFE_RELEASE(_pNull);
-	SAFE_RELEASE(_iam);
-	if (_pGraph) {
-		_pGraph.Release();
-		delete _pGraph;
-		_pGraph = NULL;
-	}
-	if (_pCap) {
-		_pCap.Release();
-		delete _pCap;
-		_pCap = NULL;
-	}
-	if (_pBuild) {
-		_pBuild.Release();
-		delete _pBuild;
-		_pBuild = NULL;
-	}
+	SAFE_RELEASE_POINTER(_pGrabberF);
+	SAFE_RELEASE_POINTER(_pGrabber);
+	SAFE_RELEASE_POINTER(_pNull);
+	SAFE_RELEASE_POINTER(_iam);
+	SAFE_RELEASE(_pGraph);
+	SAFE_RELEASE(_pCap);
+	SAFE_RELEASE(_pBuild);
 }
 
 StringList DirectXWebcamDriver::getDeviceList() {
@@ -90,7 +79,7 @@ StringList DirectXWebcamDriver::getDeviceList() {
 		return toReturn;
 	}
 
-	pEnumMoniker->Reset( );
+	pEnumMoniker->Reset();
 	// go through and find all video capture device(s)
 	while (true) {
 		CComPtr< IMoniker > pMoniker;
@@ -109,8 +98,8 @@ StringList DirectXWebcamDriver::getDeviceList() {
 		// ask for the english-readable name
 		CComVariant FriendlyName;
 		CComVariant DevicePath;
-		hr = pPropertyBag->Read( L"FriendlyName", &FriendlyName, NULL);
-		hr = pPropertyBag->Read( L"DevicePath", &DevicePath, NULL);
+		hr = pPropertyBag->Read(L"FriendlyName", &FriendlyName, NULL);
+		hr = pPropertyBag->Read(L"DevicePath", &DevicePath, NULL);
 		if (hr != S_OK) {
 			continue;
 		}

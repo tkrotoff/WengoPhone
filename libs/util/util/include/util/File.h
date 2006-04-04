@@ -50,6 +50,8 @@ public:
 	/**
 	 * Gets the path to the file.
 	 *
+	 * The path does not contain the filename, it stops at the last /
+	 *
 	 * @return path to the file
 	 */
 	std::string getPath();
