@@ -40,7 +40,7 @@ WengoPhone::~WengoPhone() {
 	terminateThreadSafe();
 
 	while (_running) {
-		Thread::sleep(100);
+		Thread::msleep(100);
 	}
 
 	delete _wenboxPlugin;
