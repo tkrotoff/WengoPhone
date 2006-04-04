@@ -55,6 +55,13 @@ public:
 	std::string getPath();
 
 	/**
+	 * Gets the full path to the file.
+	 *
+	 * @return path to the file
+	 */
+	std::string getFullPath();
+
+	/**
 	 * Gets directory list.
 	 *
 	 * @return a list of directories contained in 'this' directory

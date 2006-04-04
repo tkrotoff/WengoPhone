@@ -64,15 +64,19 @@ void GaimIMPresence::changeMyPresence(EnumPresenceState::PresenceState state,
 
 void GaimIMPresence::changeMyAlias(const std::string & nickname)
 {
-
+	
 }
 
-void GaimIMPresence::changeMyIcon(const Picture & picture) {
+void GaimIMPresence::changeMyIcon(const Picture & picture) 
+{
+	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
+											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
+
 	FileWriter file = File::createTemporaryFile();
 	file.write(picture.getData());
 	file.close();
-
-	//changeIcon(file.getPath());
+	
+	gaim_account_set_buddy_icon(gAccount, file.getFullPath().c_str());
 }
 
 Picture GaimIMPresence::getContactIcon(const std::string & contactId)

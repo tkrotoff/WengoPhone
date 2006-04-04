@@ -73,6 +73,10 @@ std::string File::getPath() {
 	}
 }
 
+std::string File::getFullPath() {
+	return _filename;
+}
+
 StringList File::getDirectoryList() const {
 	//Same code as File::getFileList()
 
