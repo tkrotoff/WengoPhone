@@ -332,16 +332,6 @@
     <addaction name="actionAddContact" />
     <addaction name="actionSetLogin" />
    </widget>
-   <widget class="QMenu" name="menuHelp" >
-    <property name="title" >
-     <string>Help</string>
-    </property>
-    <addaction name="actionShowForum" />
-    <addaction name="actionFaq" />
-    <addaction name="actionBuyCallOutCredits" />
-    <addaction name="actionShowHelp" />
-    <addaction name="actionShowAbout" />
-   </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>Wengo</string>
@@ -366,6 +356,17 @@
     <addaction name="menuHide_Show" />
     <addaction name="separator" />
     <addaction name="actionExit" />
+   </widget>
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
+     <string>Help</string>
+    </property>
+    <addaction name="actionShowForum" />
+    <addaction name="actionFaq" />
+    <addaction name="separator" />
+    <addaction name="actionBuyCallOutCredits" />
+    <addaction name="separator" />
+    <addaction name="actionShowAbout" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />

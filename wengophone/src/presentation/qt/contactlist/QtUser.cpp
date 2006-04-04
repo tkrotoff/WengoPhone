@@ -21,8 +21,13 @@
 
 #include <model/WengoPhone.h>
 #include <model/profile/UserProfile.h>
+#include <model/contactlist/Contact.h>
+
+#include <control/CWengoPhone.h>
 
 #include <util/Logger.h>
+#include "../QtWengoPhone.h"
+#include "../sms/QtSms.h"
 
 QtUser::QtUser(CContact & cContact, WengoPhone & wengoPhone, QObject * parent)
 	: QObject (parent), _cContact(cContact), _wengoPhone(wengoPhone)
@@ -161,6 +166,20 @@ QtContactPixmap::contactPixmap QtUser::getStatus() const {
 	}
 
 	return status;
+}
+void QtUser::startChat(){
+	_wengoPhone.getCurrentUserProfile().startIM(_cContact.getContact());
+}
+
+void QtUser::startSMS(){
+	// _wengoPhone.
+	QtWengoPhone * qwengophone = dynamic_cast<QtWengoPhone *>( _cContact.getCWengoPhone().getPresentation());
+	if ( qwengophone->getSms() ){
+
+		QString mobilePhone = QString::fromStdString( _cContact.getContact().getMobilePhone() );
+		qwengophone->getSms()->setPhoneNumber(mobilePhone);
+		qwengophone->getSms()->getWidget()->show();
+	}
 }
 
 void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)

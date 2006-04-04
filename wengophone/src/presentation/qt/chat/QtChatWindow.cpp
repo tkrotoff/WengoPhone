@@ -74,8 +74,13 @@ void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, c
 	qDebug() << "Sender : " << senderName;
 	for (int i=0; i<tabs;i++)
 	{
-		if (_tabWidget->tabText(i) == senderName)
+		ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
+		if ( widget->getSessionId() == sender.getId() )
+		//if (_tabWidget->tabText(i) == senderName)
 		{
+			qDebug() << "Session id " << sender.getId();
+			qDebug() << "Widget  id " << widget->getSessionId();
+
 			_chatWidget = qobject_cast<ChatWidget *>(_tabWidget->widget(i));
 			_chatWidget->addToHistory(senderName,msg);
 			return;
@@ -120,7 +125,7 @@ void ChatWindow::initThreadSafe() {
 void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	QString nickName = QString().fromStdString(session->getIMChat().getIMAccount().getLogin());
 	QString senderName = QString::fromStdString(from.getContactId());
-    _chatWidget = new ChatWidget(_tabWidget);
+    _chatWidget = new ChatWidget(session->getId(), _tabWidget);
 	_chatWidget->setIMChatSession(session);
 
 	if (_tabWidget->count() > 0)

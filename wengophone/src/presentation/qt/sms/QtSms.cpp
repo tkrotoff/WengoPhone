@@ -77,3 +77,9 @@ void QtSms::smsStatusEventHandler(Sms & sender, int smsId, Sms::SmsStatus status
 void QtSms::enableSendButton() {
 	_sendButton->setEnabled(true);
 }
+
+void QtSms::setPhoneNumber(const QString & phone){
+	QComboBox * phoneComboBox = Object::findChild<QComboBox *>(_smsWindow, "phoneComboBox");
+	phoneComboBox->addItem ( phone );
+	phoneComboBox->setCurrentIndex ( 0 );
+}

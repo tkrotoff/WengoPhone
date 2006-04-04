@@ -1,3 +1,5 @@
+#include <control/CWengoPhone.h>
+
 #include "QtCreditWidget.h"
 
 QtCreditWidget::QtCreditWidget(QWidget * parent , Qt::WFlags f ) : QWidget(parent,f){
@@ -18,4 +20,14 @@ QtCreditWidget::QtCreditWidget(QWidget * parent , Qt::WFlags f ) : QWidget(paren
 	gridLayout->addWidget(buy,0,0);
 	gridLayout->addWidget(subscribe,1,0);
 
+	connect ( buy, SIGNAL ( clicked() ), SLOT ( buyOutClicked() ) );
+
+}
+
+void QtCreditWidget::buyOutClicked(){
+	_cWengoPhone->showWengoBuyWengos();
+}
+
+void QtCreditWidget::setCWengoPhone(CWengoPhone * cwengophone){
+	_cWengoPhone = cwengophone;
 }

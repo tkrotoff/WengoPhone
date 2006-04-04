@@ -52,6 +52,10 @@ public:
 		return _contact;
 	}
 
+	CWengoPhone & getCWengoPhone() const {
+		return _cWengoPhone;
+	}
+
 	std::string getDisplayName() const;
 
 	std::string getId() const;

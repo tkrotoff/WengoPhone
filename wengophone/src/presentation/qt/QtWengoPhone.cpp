@@ -106,6 +106,13 @@ void QtWengoPhone::initThreadSafe() {
 	//phoneComboBox
 	_phoneComboBox = Object::findChild<QComboBox *>(_wengoPhoneWindow, "phoneComboBox");
 
+	// IconBar
+	_iconBar = Object::findChild<QFrame *>(_wengoPhoneWindow,"iconBar");
+
+	// Add contact button
+	_addContactButton = Object::findChild<QPushButton *>(_iconBar,"addContactButton");
+	connect ( _addContactButton, SIGNAL(clicked()), SLOT(addContact()));
+
 	//Buttons initialization
 	initButtons();
 
@@ -162,8 +169,10 @@ void QtWengoPhone::initThreadSafe() {
 	connect(actionShowForum, SIGNAL(triggered()), SLOT(showForum()));
 
 	//actionShowHelp
+	/*
 	QAction * actionShowHelp = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowHelp");
 	connect(actionShowHelp, SIGNAL(triggered()), SLOT(showHelp()));
+	*/
 
 	//actionShowAbout
 	QAction * actionShowAbout = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowAbout");
@@ -183,7 +192,7 @@ void QtWengoPhone::initThreadSafe() {
 
 	//actionBuyCallOutCredits
 	QAction * actionBuyCallOutCredits = Object::findChild<QAction *>(_wengoPhoneWindow, "actionBuyCallOutCredits");
-	connect(actionBuyCallOutCredits, SIGNAL(triggered()), SLOT(showByOut()));
+	connect(actionBuyCallOutCredits, SIGNAL(triggered()), SLOT(showBuyOut()));
 
 	//actionCallOutService
 	QAction * actionCallOutService = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCallOutService");
@@ -230,7 +239,7 @@ void QtWengoPhone::initThreadSafe() {
 	QGridLayout * gridlayout;
 	gridlayout = (QGridLayout *) centralWidget->layout();
 	gridlayout->removeWidget(profileBar);
-	gridlayout->addWidget(new QtStatusBar(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), centralWidget), 1, 0);
+	gridlayout->addWidget(new QtStatusBar(_cWengoPhone,_cWengoPhone.getWengoPhone().getCurrentUserProfile(), centralWidget), 1, 0);
 
 	//Status bar
 	QStatusBar * statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");
@@ -324,6 +333,10 @@ void QtWengoPhone::setPhoneCall(QtContactCallListWidget * qtContactCallListWidge
 
 void QtWengoPhone::setSms(QtSms * qtSms) {
 	_qtSms = qtSms;
+}
+
+QtSms * QtWengoPhone::getSms() const{
+	return _qtSms;
 }
 
 void QtWengoPhone::updatePresentation() {
@@ -522,7 +535,7 @@ void QtWengoPhone::showFaq() {
 	_cWengoPhone.showWengoFAQ();
 }
 
-void QtWengoPhone::showByOut(){
+void QtWengoPhone::showBuyOut(){
 	_cWengoPhone.showWengoBuyWengos();
 }
 void QtWengoPhone::showCallOut(){

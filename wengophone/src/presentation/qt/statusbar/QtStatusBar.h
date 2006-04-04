@@ -28,13 +28,14 @@
 #include "QtCreditWidget.h"
 
 class UserProfile;
+class CWengoPhone;
 
 class QtStatusBar : public QWidget
 {
 	Q_OBJECT
 
 public:
-	QtStatusBar (UserProfile & userProfile, QWidget * parent = 0, Qt::WFlags f = 0 );
+	QtStatusBar (CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent = 0, Qt::WFlags f = 0 );
 
 protected:
 
@@ -67,7 +68,9 @@ protected:
 	QMenu * _statusMenu;
 
 	UserProfile & _userProfile;
-	
+
+	CWengoPhone & _cWengoPhone;
+
 	void createStatusMenu();
 
 	void showNickNameWidget();

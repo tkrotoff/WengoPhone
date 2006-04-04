@@ -339,22 +339,15 @@ void QtPhoneCall::openPopup( int x , int y ){
 }
 
 void QtPhoneCall::timerEvent(QTimerEvent *event){
-
 	_duration++;
 	QTime time;
-
 	time = time.addSecs(_duration);
-
 	_durationLabel->setText(time.toString(Qt::TextDate));
-
 }
 
 void QtPhoneCall::showVideoWidget(){
 
-
-
 	QGridLayout * layout = dynamic_cast<QGridLayout *> ( _phoneCallWidget->layout() );
-
 
 	// Remove the avatar from the widget
 	layout->removeWidget ( _avatarLabel );

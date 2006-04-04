@@ -23,7 +23,7 @@
 
 #include <util/Logger.h>
 
-ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
+ChatWidget::ChatWidget (int sessionId, QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
 
 {
 
@@ -32,7 +32,9 @@ ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
     layout->addWidget(_widget);
     layout->setMargin(0);
     setLayout(layout);
-    
+
+	_sessionId = sessionId;
+
     /* Defaults fonts and colors */
     _nickFont = QFont("Helvetica", 12);
     _nickTextColor = "'#000000'"; // Black
@@ -45,18 +47,18 @@ ChatWidget::ChatWidget (QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
     _emoticonsButton = _seeker.getPushButton(_widget,"emoticonsButton");
     _sendButton = _seeker.getPushButton(_widget,"sendButton");
     _chatEdit = _seeker.getTextEdit(_widget,"chatEdit");
-    
+
     ChatWidgetManager * cwm = new ChatWidgetManager(this,_chatEdit);
-    
+
     connect (cwm,SIGNAL(enterPressed()),this, SLOT (enterPressed()));
     connect (_fontButton,SIGNAL(clicked()), this, SLOT (chooseFont()));
     connect (_chatHistory,SIGNAL(anchorClicked(const QUrl &)),this,SLOT(urlClicked(const QUrl & )));
     connect (_emoticonsButton,SIGNAL(clicked()),this,SLOT(chooseEmoticon()));
     connect (_sendButton,SIGNAL(clicked()),this,SLOT(enterPressed()));
     _chatHistory->setHtml ("<qt type=detail>");
-    
+
     _emoticonsWidget = new EmoticonsWidget(this,Qt::Popup);
-    
+
     connect(_emoticonsWidget,SIGNAL(emoticonClicked(QtEmoticon)),this,SLOT(emoticonSelected(QtEmoticon)));
 	connect(_emoticonsWidget,SIGNAL(closed()),_chatEdit,SLOT(setFocus()));
 }
@@ -104,7 +106,7 @@ void ChatWidget::addToHistory(const QString & senderName,const QString & str)
 		bgColor = _nickBgColor;
 	else
 		bgColor = _nickBgColorAlt;
-	
+
     QString text= QString("<table border=0 width=100% cellspacing=0 "
     "cellpadding=0><tr><td BGCOLOR=%1> <font color=%2> %3 </font></td><td BGCOLOR=%4 align=right>"
     "<font color=%5> %6 </font></td></tr></table>").
@@ -114,7 +116,7 @@ void ChatWidget::addToHistory(const QString & senderName,const QString & str)
 	arg(_nickBgColorAlt).
     arg(_nickTextColor).
     arg(QTime::currentTime().toString());
-    
+
     LOG_DEBUG("Chat histor : "  + text.toStdString());
 	_chatHistory->insertHtml (text);
     _chatHistory->insertHtml (text2Emoticon(str));
@@ -144,19 +146,17 @@ void ChatWidget::enterPressed()
     arg(_nickBgColor).
     arg(_nickTextColor).
     arg(QTime::currentTime().toString());
-    
+
     _chatHistory->setTextCursor(curs);
     _chatHistory->insertHtml (text);
     _chatHistory->insertHtml (text2Emoticon(replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>")));
     _chatHistory->ensureCursorVisible();
-    
+
     newMessage(_imChatSession,Emoticon2Text(_chatEdit->toHtml()));
-    
+
     _chatEdit->clear();
     _chatEdit->setFocus();
-    
 
-    
 }
 
 void ChatWidget::chooseFont()
@@ -171,7 +171,7 @@ const QString ChatWidget::Emoticon2Text(const QString &htmlstr)
 {
 	QVector<QtEmoticon> emoticons = _emoticonsWidget->getEmoticonsVector();
 	QString tmp = htmlstr;
-	
+
 	for (int i = 0; i < emoticons.size(); i++)
 	{
 		tmp.replace(QRegExp(emoticons[i].getHtmlRegExp(),Qt::CaseInsensitive),emoticons[i].getDefaultText());
@@ -183,7 +183,7 @@ const QString ChatWidget::text2Emoticon(const QString &htmlstr)
 {
 	QVector<QtEmoticon> emoticons = _emoticonsWidget->getEmoticonsVector();
 	QString tmp = htmlstr;
-	
+
 	for (int i = 0; i < emoticons.size(); i++)
 	{
 		tmp.replace(QRegExp(emoticons[i].getRegExp(),Qt::CaseInsensitive),emoticons[i].getHtml());
@@ -196,7 +196,7 @@ const QString  ChatWidget::replaceUrls(const QString & str, const QString & html
     QString tmp=htmlstr;
     int endPos;
     int repCount=0;
-    
+
     QStringList urls;
     QStringList reps;
     while(1)
@@ -217,7 +217,7 @@ const QString  ChatWidget::replaceUrls(const QString & str, const QString & html
         repCount++;
         tmp.replace(url,r);
         beginPos = endPos;
-        
+
     }
     for (int i = 0; i < reps.size(); i++)
     {
@@ -232,7 +232,7 @@ void ChatWidget::chooseEmoticon()
 	QPoint p = _emoticonsButton->pos();
 	p.setY(p.y() + _emoticonsButton->rect().bottom());
 	_emoticonsWidget->move(mapToGlobal(p));
-	_emoticonsWidget->setWindowOpacity(0.95);	
+	_emoticonsWidget->setWindowOpacity(0.95);
     _emoticonsWidget->show();
 }
 

@@ -19,10 +19,11 @@
 
 #include "QtStatusBar.h"
 
+#include <control/CWengoPhone.h>
 #include <model/profile/UserProfile.h>
 
-QtStatusBar::QtStatusBar(UserProfile & userProfile, QWidget * parent , Qt::WFlags f )
-: QWidget (parent,f), _userProfile(userProfile) {
+QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent , Qt::WFlags f )
+: QWidget (parent,f), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
 
 	_statusMenu = NULL;
 
@@ -166,6 +167,7 @@ void QtStatusBar::showCreditWidget(){
 	removeEventsWidget();
 	if ( ! _crediWidgetVisible ){
 		_creditWidget = new QtCreditWidget(this);
+		_creditWidget->setCWengoPhone(&_cWengoPhone);
 		_widgetLayout->addWidget(_creditWidget, 1, 0);
 		_crediWidgetVisible=true;
 	}

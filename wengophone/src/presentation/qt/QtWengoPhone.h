@@ -45,6 +45,7 @@ class QComboBox;
 class QTabWidget;
 class QLayout;
 class QLabel;
+class QFrame;
 
 /**
  * Qt Presentation component for WengoPhone.
@@ -66,6 +67,8 @@ public:
 	void setPhoneCall(QtContactCallListWidget * qtContactCallListWidget);
 
 	void setSms(QtSms * qtSms);
+
+	QtSms * getSms() const;
 
 	void updatePresentation();
 
@@ -137,7 +140,7 @@ private Q_SLOTS:
 
 	void showFaq();
 
-	void showByOut();
+	void showBuyOut();
 
 	void showCallOut();
 
@@ -219,6 +222,10 @@ private:
 	QLabel * _phoneLineStateLabel;
 
 	QLabel * _internetConnectionStateLabel;
+
+	QFrame * _iconBar;
+
+	QPushButton * _addContactButton;
 
 	static const std::string ANCHOR_CONTACTLIST;
 

@@ -42,24 +42,58 @@ QtUserManager::QtUserManager(QObject * parent, QTreeWidget * target) : QObject(p
 	connect (dnd,SIGNAL(itemEntered ( QTreeWidgetItem *)),this,SLOT(itemEntered ( QTreeWidgetItem * )));
 	connect (dnd,SIGNAL(itemTimeout(QTreeWidgetItem *)),this,SLOT(openUserInfo(QTreeWidgetItem *)));
 
+	QAction * action;
+
     _menu = new QMenu(dynamic_cast<QWidget *>(parent));
-    _menu->addAction(tr("Call"));
-    _menu->addAction(tr("Start Chat"));
-    _menu->addAction(tr("Send SMS"));
-    _menu->addAction(tr("Send a file"));
+    _callAction = _menu->addAction(tr("Call"));
+
+    action = _menu->addAction(tr("Start Chat"));
+    connect (action,SIGNAL(triggered(bool)),SLOT(startChat(bool)));
+
+    action = _menu->addAction(tr("Send SMS"));
+    connect (action,SIGNAL(triggered(bool)),SLOT(startSMS(bool)));
+
     _menu->addAction(tr("Invite to conference"));
     _menu->addSeparator();
 
-    QAction * action = _menu->addAction(tr("Edit contact"));
+    action = _menu->addAction(tr("Edit contact"));
     connect(action,SIGNAL(triggered(bool)),this,SLOT(editContact(bool)));
 
     _menu->addAction(tr("Delete contact"));
     _menu->addSeparator();
 
     _menu->addAction(tr("Block contact"));
+
     _menu->addAction(tr("Forward to Cell phone"));
+
     _menu->setWindowOpacity(0.97);
 }
+
+void QtUserManager::startSMS(bool checked){
+
+	QtUserList * ul = QtUserList::getInstance();
+	QtUser * user;
+
+    // The current selected item
+    QTreeWidgetItem * item = _tree->currentItem();
+
+	user = ul->getUser(item->text(0));
+
+	user->startSMS();
+}
+
+void QtUserManager::startChat(bool){
+	QtUserList * ul = QtUserList::getInstance();
+	QtUser * user;
+
+    // The current selected item
+    QTreeWidgetItem * item = _tree->currentItem();
+
+	user = ul->getUser(item->text(0));
+
+	user->startChat();
+}
+
 void QtUserManager::editContact(bool ){
     QtUserList * ul = QtUserList::getInstance();
 
@@ -76,7 +110,7 @@ void QtUserManager::treeViewSelectionChanged(){
 	closeUserInfo();
 }
 
-void QtUserManager::itemEntered ( QTreeWidgetItem * item)
+void QtUserManager::itemEntered ( QTreeWidgetItem * item )
 {
 	QtUserList * ul = QtUserList::getInstance();
 
@@ -321,9 +355,8 @@ void QtUserManager::safeSortUsers(){
 			}
 		}
 	}
-
-
 }
+
 void QtUserManager::sortUsers(){
 	QMutexLocker lock(&_mutex);
 	_sortUsers = true;
@@ -352,4 +385,50 @@ void QtUserManager::showAllUsers(){
 	QMutexLocker lock(&_mutex);
 	_hideUsers = false;
 	safeShowAllUsers();
+}
+
+QMenu * QtUserManager::createMenu(){
+
+
+	QtUserList * ul = QtUserList::getInstance();
+	QtUser * user;
+
+    // The current selected item
+    QTreeWidgetItem * item = _tree->currentItem();
+
+	user = ul->getUser(item->text(0));
+
+
+	QAction * action;
+
+	QMenu * menu;
+
+    menu = new QMenu(dynamic_cast<QWidget *>(parent()));
+    _callAction = menu->addAction(tr("Call"));
+
+    action = menu->addAction(tr("Start Chat"));
+    connect (action,SIGNAL(triggered(bool)),SLOT(startChat(bool)));
+
+    action = menu->addAction(tr("Send SMS"));
+    connect (action,SIGNAL(triggered(bool)),SLOT(startSMS(bool)));
+
+    _menu->addAction(tr("Invite to conference"));
+
+    _menu->addSeparator();
+
+    action = menu->addAction(tr("Edit contact"));
+    connect(action,SIGNAL(triggered(bool)),this,SLOT(editContact(bool)));
+
+    menu->addAction(tr("Delete contact"));
+
+    menu->addSeparator();
+
+    menu->addAction(tr("Block contact"));
+
+    menu->addAction(tr("Forward to Cell phone"));
+
+    menu->setWindowOpacity(0.97);
+
+    return menu;
+
 }

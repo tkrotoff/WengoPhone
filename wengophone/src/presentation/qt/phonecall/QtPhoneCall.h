@@ -132,6 +132,7 @@ private:
 protected:
 
 	void timerEvent(QTimerEvent *event);
+
 };
 
 #endif	//QTPHONECALL_H

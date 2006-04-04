@@ -37,7 +37,7 @@ class ChatWidget : public QWidget //, Ui::ChatWidget
 
 public:
 
-    ChatWidget(QWidget * parent =0, Qt::WFlags f = 0);
+    ChatWidget(int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
 
     void setNickBgColor(const QString &color);
 
@@ -48,6 +48,8 @@ public:
     void setNickName(const QString & nickname);
 
 	void setIMChatSession(IMChatSession * imChatSession);
+
+	int getSessionId() const { return _sessionId;};
 
 	IMChatSession * getIMChatSession() {return _imChatSession;};
 
@@ -64,6 +66,8 @@ public:
 protected:
 
     QWidget *       _widget;
+
+	int _sessionId;
 
 	WidgetSeeker    _seeker;
 

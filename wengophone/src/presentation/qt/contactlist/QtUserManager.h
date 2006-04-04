@@ -58,6 +58,9 @@ class QtUserManager : public QObject {
 
 		void sortUsers();
 
+		void startChat(bool checked);
+
+		void startSMS(bool checked);
 
 	protected:
 
@@ -73,6 +76,8 @@ class QtUserManager : public QObject {
 
 		bool _sortUsers;
 
+		QMenu * createMenu();
+
 		QList<QtHidenContact *>  clearList(QList<QtHidenContact *> list);
 
 		QTreeWidget * _tree;
@@ -86,6 +91,8 @@ class QtUserManager : public QObject {
 		QSize * _itemSize;
 
 		QMenu * _menu;
+
+		QAction * _callAction;
 
 		QMutex _mutex;
 

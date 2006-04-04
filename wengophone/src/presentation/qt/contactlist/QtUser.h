@@ -81,13 +81,16 @@ public:
 
 	CContact & getCContact() const { return _cContact;}
 
+	void startChat();
+
+	void startSMS();
 
 public Q_SLOTS:
 
 Q_SIGNALS:
 
 	void clicked(QtUser * user,int prt);
-	
+
 protected:
 
 	QString	_userId;

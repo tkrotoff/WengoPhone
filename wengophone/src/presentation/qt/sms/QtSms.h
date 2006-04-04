@@ -47,6 +47,8 @@ public:
 
 	void updatePresentation();
 
+	void setPhoneNumber(const QString & phone);
+
 private Q_SLOTS:
 
 	void sendButtonClicked();
