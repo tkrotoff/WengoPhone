@@ -37,7 +37,6 @@ WengoPhone::WengoPhone()
 }
 
 WengoPhone::~WengoPhone() {
-	terminateThreadSafe();
 
 	while (_running) {
 		Thread::msleep(100);
