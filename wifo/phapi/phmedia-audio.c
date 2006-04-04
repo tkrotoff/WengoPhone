@@ -873,10 +873,14 @@ void ph_audio_resample(void *ctx, void *inbuf, int inbsize, void *outbuf, int *o
 
 
 #ifdef PH_FORCE_16KHZ
-static void ph_downsample(void *buf, int framesize)
+
+/**
+ * @brief in-place downsample of a buffer by a factor of 2
+ */
+static void ph_downsample(void *framebuf, int framesize)
 {
-  short *sp = (short *) buf;
-  short *dp = (short *) buf;
+  short *sp = (short *) framebuf; // 'narrow' buffer
+  short *dp = (short *) framebuf; // 'wide' buffer
   
   framesize = framesize / ( sizeof(short)*2 );
 
@@ -887,14 +891,26 @@ static void ph_downsample(void *buf, int framesize)
     }
 }
 
+/**
+ * @brief upsample of a buffer into another buffer by a factor of 2
+ */
 static void ph_upsample(void *dbuf, void *sbuf, int framesize)
 {
-  short *sp = (short *) sbuf;
-  short *dp = (short *) dbuf;
+  short *sp = (short *) sbuf; // 'narrow' - original buffer
+  short *dp = (short *) dbuf; // 'wide' - target buffer
   int tmp;
 
   framesize = framesize / sizeof(short);
 
+  if (framesize<=0)
+  {
+      return;
+  }
+  
+  // prepare for the last perequation on the right border of the sbuf
+  framesize--;
+
+  // loop and upsample the sbuf into the dbuf with a linear perequation
   while(framesize--)
     {
       *dp++ = *sp;
@@ -902,6 +918,11 @@ static void ph_upsample(void *dbuf, void *sbuf, int framesize)
       *dp++ = (short) SATURATE(tmp);
       sp++;
     }
+    
+  // do the last perequation on the right border of the sbuf
+  *dp++ = *sp;
+  *dp++ = *sp;
+    
 }
 
 #endif
