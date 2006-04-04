@@ -339,6 +339,18 @@ void serv_reject_chat(GaimConnection *g, GHashTable *data)
 		prpl_info->reject_chat(g, data);
 }
 
+void serv_chat_create(GaimConnection *g, GList *buddies)
+{
+  	GaimPluginProtocolInfo *prpl_info = NULL;
+
+	if (g != NULL && g->prpl != NULL)
+		prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(g->prpl);
+
+	if (prpl_info && g_list_find(gaim_connections_get_all(), g) 
+		&& prpl_info->create_chat)
+		prpl_info->create_chat(g, buddies);
+}
+
 void serv_chat_invite(GaimConnection *g, int id, const char *message, const char *name)
 {
 	GaimPluginProtocolInfo *prpl_info = NULL;

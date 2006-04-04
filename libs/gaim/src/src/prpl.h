@@ -300,6 +300,14 @@ struct _GaimPluginProtocolInfo
 
 	GaimWhiteboardPrplOps *whiteboard_prpl_ops;
 	GaimMediaPrplOps *media_prpl_ops;
+
+	/* Authorization request callbacks */
+	void (*accept_buddy_add)(GaimConnection *gc, const char *who, 
+							 const char *friendly, const char *message);
+	void (*deny_buddy_add)(GaimConnection *gc, const char *who, 
+						   const char *friendly, const char *message);
+
+	void (*create_chat)(GaimConnection *gc, GList *buddies);
 };
 
 #define GAIM_IS_PROTOCOL_PLUGIN(plugin) \

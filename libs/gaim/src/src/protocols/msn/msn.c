@@ -388,6 +388,43 @@ initiate_chat_cb(GaimBlistNode *node, gpointer data)
 }
 
 static void
+msn_accept_add_cb(GaimConnection *gc, const char *who,
+				  const char *friendly, const char *message)
+{
+  	if (g_list_find(gaim_connections_get_all(), gc) != NULL)
+	{
+		MsnSession *session = gc->proto_data;
+		MsnUserList *userlist = session->userlist;
+		GaimBuddy *buddy;
+
+		msn_userlist_add_buddy(userlist, who, MSN_LIST_AL, NULL);
+
+		buddy = gaim_find_buddy(gc->account, who);
+
+		if (buddy != NULL)
+			gaim_account_notify_added(gc->account, who,
+									  NULL, friendly, NULL);
+		else
+			gaim_account_request_add(gc->account, who,
+									 NULL, friendly, NULL);
+	}
+}
+
+static void
+msn_cancel_add_cb(GaimConnection *gc, const char *who,
+				  const char *friendly, const char *message)
+{
+	if (g_list_find(gaim_connections_get_all(), gc) != NULL)
+	{
+		MsnSession *session = gc->proto_data;
+		MsnUserList *userlist = session->userlist;
+
+		msn_userlist_add_buddy(userlist, who, MSN_LIST_BL, NULL);
+	}
+}
+
+
+static void
 t_msn_xfer_init(GaimXfer *xfer)
 {
 	MsnSlpLink *slplink;
@@ -1147,6 +1184,36 @@ msn_chat_invite(GaimConnection *gc, int id, const char *msg,
 	swboard->flag |= MSN_SB_FLAG_IM;
 
 	msn_switchboard_request_add_user(swboard, who);
+}
+
+static void
+msn_create_chat(GaimConnection *gc, GList *buddies)
+{
+	MsnSession *session;
+	MsnSwitchBoard *swboard;
+	GList *bl = buddies;
+	const char *user;
+	
+	g_return_if_fail(buddies != NULL);
+
+	session = gc->proto_data;
+	user = bl->data;
+	swboard = msn_switchboard_new(session);
+	msn_switchboard_request(swboard);
+	msn_switchboard_request_add_user(swboard, user);
+
+	swboard->chat_id = session->conv_seq++;
+	swboard->conv = serv_got_joined_chat(gc, swboard->chat_id, "MSN Chat");
+	swboard->flag = MSN_SB_FLAG_IM;
+	
+	gaim_conv_chat_add_user(GAIM_CONV_CHAT(swboard->conv),
+							gaim_account_get_username(gc->account), NULL, GAIM_CBFLAGS_NONE, TRUE);
+
+	for (bl = bl->next; bl != NULL; bl = bl->next)
+	{
+		user = bl->data;
+		msn_chat_invite(gc, swboard->chat_id, NULL, user);
+	}
 }
 
 static void
@@ -1929,6 +1996,9 @@ static GaimPluginProtocolInfo prpl_info =
 	NULL,					/* offline_message */
 	NULL,					/* whiteboard_prpl_ops */
 	NULL,					/* media_prpl_ops */
+	msn_accept_add_cb,		/* accept_buddy_add */
+	msn_cancel_add_cb,		/* deny_buddy_add */
+	msn_create_chat,		/* create_chat */
 };
 
 static GaimPluginInfo info =

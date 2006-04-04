@@ -1061,6 +1061,24 @@ gaim_account_request_add(GaimAccount *account, const char *remote_user,
 		ui_ops->request_add(account, remote_user, id, alias, message);
 }
 
+void
+gaim_account_auth_request(GaimAccount *account, const char *remote_user,
+			  const char *id, const char *alias,
+			  const char *message, gboolean response)
+{
+	GaimAccountUiOps *ui_ops;
+
+	g_return_if_fail(account     != NULL);
+	g_return_if_fail(remote_user != NULL);
+
+	ui_ops = gaim_accounts_get_ui_ops();
+
+	if (ui_ops != NULL && ui_ops->auth_request != NULL)
+		ui_ops->auth_request(account, remote_user, 
+							 id, alias, 
+							 message, response);
+}
+
 static void
 change_password_cb(GaimAccount *account, GaimRequestFields *fields)
 {
@@ -2081,6 +2099,49 @@ gboolean gaim_account_supports_offline_message(GaimAccount *account, GaimBuddy *
 	if (!prpl_info || !prpl_info->offline_message)
 		return FALSE;
 	return prpl_info->offline_message(buddy);
+}
+
+void gaim_account_accept_auth_request(GaimAccount *account, const char *who, 
+				      const char *friendly, const char *msg)
+{
+	GaimConnection *gc;
+	GaimPluginProtocolInfo *prpl_info;
+
+	g_return_if_fail(account);
+	g_return_if_fail(who != NULL);
+	
+	gc = gaim_account_get_connection(account);
+	if (!gc)
+		return;
+
+	prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(gc->prpl);
+
+	if (!prpl_info || !prpl_info->accept_buddy_add)
+		return;
+
+	prpl_info->accept_buddy_add(gc, who, friendly, msg);
+
+}
+
+void gaim_account_deny_auth_request(GaimAccount *account, const char *who,
+				    const char *friendly, const char *msg)
+{
+  	GaimConnection *gc;
+	GaimPluginProtocolInfo *prpl_info;
+
+	g_return_if_fail(account);
+	g_return_if_fail(who != NULL);
+	
+	gc = gaim_account_get_connection(account);
+	if (!gc)
+		return;
+
+	prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(gc->prpl);
+
+	if (!prpl_info || !prpl_info->deny_buddy_add)
+		return;
+
+	prpl_info->deny_buddy_add(gc, who, friendly, msg);
 }
 
 void

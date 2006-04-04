@@ -37,81 +37,121 @@ typedef struct
 /**************************************************************************
  * Callbacks
  **************************************************************************/
-static void
-msn_accept_add_cb(MsnPermitAdd *pa)
-{
-	if (g_list_find(gaim_connections_get_all(), pa->gc) != NULL)
-	{
-		MsnSession *session = pa->gc->proto_data;
-		MsnUserList *userlist = session->userlist;
-		GaimBuddy *buddy;
+/* static void */
+/* msn_accept_add_cb(MsnPermitAdd *pa) */
+/* { */
+/* 	if (g_list_find(gaim_connections_get_all(), pa->gc) != NULL) */
+/* 	{ */
+/* 		MsnSession *session = pa->gc->proto_data; */
+/* 		MsnUserList *userlist = session->userlist; */
+/* 		GaimBuddy *buddy; */
 
-		msn_userlist_add_buddy(userlist, pa->who, MSN_LIST_AL, NULL);
+/* 		msn_userlist_add_buddy(userlist, pa->who, MSN_LIST_AL, NULL); */
 
-		buddy = gaim_find_buddy(pa->gc->account, pa->who);
+/* 		buddy = gaim_find_buddy(pa->gc->account, pa->who); */
 
-		if (buddy != NULL)
-			gaim_account_notify_added(pa->gc->account, pa->who,
-				NULL, pa->friendly, NULL);
-		else
-			gaim_account_request_add(pa->gc->account, pa->who,
-				NULL, pa->friendly, NULL);
-	}
+/* 		if (buddy != NULL) */
+/* 			gaim_account_notify_added(pa->gc->account, pa->who, */
+/* 				NULL, pa->friendly, NULL); */
+/* 		else */
+/* 			gaim_account_request_add(pa->gc->account, pa->who, */
+/* 				NULL, pa->friendly, NULL); */
+/* 	} */
 
-	g_free(pa->who);
-	g_free(pa->friendly);
-	g_free(pa);
-}
+/* 	g_free(pa->who); */
+/* 	g_free(pa->friendly); */
+/* 	g_free(pa); */
+/* } */
 
-static void
-msn_cancel_add_cb(MsnPermitAdd *pa)
-{
-	if (g_list_find(gaim_connections_get_all(), pa->gc) != NULL)
-	{
-		MsnSession *session = pa->gc->proto_data;
-		MsnUserList *userlist = session->userlist;
+/* static void */
+/* msn_cancel_add_cb(MsnPermitAdd *pa) */
+/* { */
+/* 	if (g_list_find(gaim_connections_get_all(), pa->gc) != NULL) */
+/* 	{ */
+/* 		MsnSession *session = pa->gc->proto_data; */
+/* 		MsnUserList *userlist = session->userlist; */
 
-		msn_userlist_add_buddy(userlist, pa->who, MSN_LIST_BL, NULL);
-	}
+/* 		msn_userlist_add_buddy(userlist, pa->who, MSN_LIST_BL, NULL); */
+/* 	} */
 
-	g_free(pa->who);
-	g_free(pa->friendly);
-	g_free(pa);
-}
+/* 	g_free(pa->who); */
+/* 	g_free(pa->friendly); */
+/* 	g_free(pa); */
+/* } */
+
+/* static void */
+/* msn_accept_add_cb(GaimConnection *gc, const char *who,  */
+/* 		  const char *friendly, const char *message) */
+/* { */
+/*   	if (g_list_find(gaim_connections_get_all(), gc) != NULL) */
+/* 	{ */
+/* 		MsnSession *session = gc->proto_data; */
+/* 		MsnUserList *userlist = session->userlist; */
+/* 		GaimBuddy *buddy; */
+
+/* 		msn_userlist_add_buddy(userlist, who, MSN_LIST_AL, NULL); */
+
+/* 		buddy = gaim_find_buddy(gc->account, who); */
+
+/* 		if (buddy != NULL) */
+/* 			gaim_account_notify_added(gc->account, who, */
+/* 				NULL, friendly, NULL); */
+/* 		else */
+/* 			gaim_account_request_add(gc->account, who, */
+/* 				NULL, friendly, NULL); */
+/* 	} */
+/* } */
+
+/* static void */
+/* msn_cancel_add_cb(GaimConnection *gc, const char *who,  */
+/* 		  const char *friendly, const char *message) */
+/* { */
+/* 	if (g_list_find(gaim_connections_get_all(), gc) != NULL) */
+/* 	{ */
+/* 		MsnSession *session = gc->proto_data; */
+/* 		MsnUserList *userlist = session->userlist; */
+
+/* 		msn_userlist_add_buddy(userlist, who, MSN_LIST_BL, NULL); */
+/* 	} */
+/* } */
+
 
 static void
 got_new_entry(GaimConnection *gc, const char *passport, const char *friendly)
 {
-	MsnPermitAdd *pa;
-	char *msg;
+	gaim_account_auth_request(gc->account, passport, NULL,
+							  friendly, NULL, FALSE);
 
-	pa = g_new0(MsnPermitAdd, 1);
-	pa->who = g_strdup(passport);
-	pa->friendly = g_strdup(friendly);
-	pa->gc = gc;
+/* 	MsnPermitAdd *pa; */
+/* 	char *msg; */
 
-	if (friendly != NULL)
-	{
-		msg = g_strdup_printf(
-				   _("The user %s (%s) wants to add %s to his or her "
-					 "buddy list."),
-				   passport, friendly,
-				   gaim_account_get_username(gc->account));
-	}
-	else
-	{
-		msg = g_strdup_printf(
-				   _("The user %s wants to add %s to his or "
-					 "her buddy list."),
-				   passport, gaim_account_get_username(gc->account));
-	}
+/* 	pa = g_new0(MsnPermitAdd, 1); */
+/* 	pa->who = g_strdup(passport); */
+/* 	pa->friendly = g_strdup(friendly); */
+/* 	pa->gc = gc; */
 
-	gaim_request_action(gc, NULL, msg, NULL,
-						GAIM_DEFAULT_ACTION_NONE, pa, 2,
-						_("Authorize"), G_CALLBACK(msn_accept_add_cb),
-						_("Deny"), G_CALLBACK(msn_cancel_add_cb));
+/* 	if (friendly != NULL) */
+/* 	{ */
+/* 		msg = g_strdup_printf( */
+/* 				   _("The user %s (%s) wants to add %s to his or her " */
+/* 					 "buddy list."), */
+/* 				   passport, friendly, */
+/* 				   gaim_account_get_username(gc->account)); */
+/* 	} */
+/* 	else */
+/* 	{ */
+/* 		msg = g_strdup_printf( */
+/* 				   _("The user %s wants to add %s to his or " */
+/* 					 "her buddy list."), */
+/* 				   passport, gaim_account_get_username(gc->account)); */
+/* 	} */
 
-	g_free(msg);
+/* 	gaim_request_action(gc, NULL, msg, NULL, */
+/* 						GAIM_DEFAULT_ACTION_NONE, pa, 2, */
+/* 						_("Authorize"), G_CALLBACK(msn_accept_add_cb), */
+/* 						_("Deny"), G_CALLBACK(msn_cancel_add_cb)); */
+
+/* 	g_free(msg); */
 }
 
 /**************************************************************************

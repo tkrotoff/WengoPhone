@@ -67,6 +67,16 @@ typedef struct
 
 typedef struct
 {
+	GaimAccount *account;
+	char *remote_user;
+	char *id;
+	char *alias;
+	char *msg;
+
+} GaimGtkAccountAuthReqData;
+
+typedef struct
+{
 	GtkWidget *window;
 	GtkWidget *treeview;
 
@@ -2638,11 +2648,100 @@ gaim_gtk_accounts_request_add(GaimAccount *account, const char *remote_user,
 	g_free(buffer);
 }
 
+static void
+accept_buddy_add_with_msg_cb(GaimGtkAccountAuthReqData *data, const char *msg)
+{
+	gaim_account_accept_auth_request(data->account, data->remote_user,
+									 data->alias, msg);
+	
+	g_free(data);
+}
+
+static void
+deny_buddy_add_with_msg_cb(GaimGtkAccountAuthReqData *data, const char *msg)
+{
+	gaim_account_deny_auth_request(data->account, data->remote_user,
+								   data->alias, msg);
+	
+	g_free(data);
+}
+
+static void
+accept_buddy_add_cb(GaimGtkAccountAuthReqData *data)
+{
+	accept_buddy_add_with_msg_cb(data, NULL);
+}
+
+static void
+deny_buddy_add_cb(GaimGtkAccountAuthReqData *data)
+{
+	deny_buddy_add_with_msg_cb(data, NULL);
+}
+
+static void
+gaim_gtk_accounts_auth_request(GaimAccount *account, const char *remote_user,
+							   const char *id, const char *alias,
+							   const char *msg, gboolean response)
+{
+	char *buffer;
+	const char *name;
+	GaimConnection *gc;
+	GaimGtkAccountAuthReqData *data;
+
+	gc = gaim_account_get_connection(account);
+
+	data = g_new0(GaimGtkAccountAuthReqData, 1);
+	data->account = account;
+	data->remote_user = remote_user;
+	data->id = id;
+	data->alias = alias;
+	data->msg = msg;
+
+	if (id != NULL)
+		name = id;
+	else 
+	{
+		name = gaim_connection_get_display_name(gc);
+
+		if (name == NULL)
+			name = gaim_account_get_username(account);
+	}
+
+	buffer = g_strdup_printf(_("The user %s%s%s%s wants to add %s to "
+	                           "his or her buddy list%s%s."),
+	                         remote_user,
+	                         (alias != NULL ? " ("  : ""),
+	                         (alias != NULL ? alias : ""),
+	                         (alias != NULL ? ")"   : ""),
+	                         name,
+	                         msg ? ": " : "",
+	                         msg ? msg : "");
+	
+	if (response)
+	{
+		gaim_request_input(gc, NULL, buffer, _("Message (optional):"),
+						   NULL, TRUE, FALSE, NULL,
+						   _("Authorize"), G_CALLBACK(accept_buddy_add_with_msg_cb), 
+						   _("Deny"), G_CALLBACK(deny_buddy_add_with_msg_cb),
+						   data);
+	}
+	else
+	{
+		gaim_request_action(gc, NULL, buffer, NULL,
+		                    GAIM_DEFAULT_ACTION_NONE, data, 2,
+		                    _("Authorize"), G_CALLBACK(accept_buddy_add_cb),
+		                    _("Deny"), G_CALLBACK(deny_buddy_add_cb));
+	}
+	
+	g_free(buffer);
+}
+
 static GaimAccountUiOps ui_ops =
 {
 	gaim_gtk_accounts_notify_added,
 	NULL,
-	gaim_gtk_accounts_request_add
+	gaim_gtk_accounts_request_add,
+	gaim_gtk_accounts_auth_request
 };
 
 GaimAccountUiOps *

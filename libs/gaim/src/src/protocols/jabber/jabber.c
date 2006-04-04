@@ -1614,6 +1614,59 @@ static gboolean jabber_offline_message(const GaimBuddy *buddy)
 	return TRUE;
 }
 
+static void jabber_accept_buddy_add(GaimConnection *gc, const char *who,
+									const char *friendly, const char *message)
+{
+	if (g_list_find(gaim_connections_get_all(), gc)) 
+	{
+		JabberStream *js = gc->proto_data;
+		GaimBuddy *buddy = NULL;
+
+		jabber_presence_subscription_set(js, who,
+										 "subscribed");
+	
+		buddy = gaim_find_buddy(gc->account, who);
+
+		if (buddy) 
+		{
+			JabberBuddy *jb = NULL;
+
+			jb = jabber_buddy_find(js, who, TRUE);
+
+			if ((jb->subscription & JABBER_SUB_TO) == 0) 
+			{
+				gaim_account_request_add(gc->account,
+				                         who, NULL,
+				                         NULL, NULL);
+			} 
+			else 
+			{
+				gaim_account_notify_added(gc->account,
+				                          who, NULL,
+				                          NULL, NULL);
+			}
+		} 
+		else 
+		{
+			gaim_account_request_add(gc->account, who,
+			                         NULL, NULL, NULL);
+		}
+	}
+	
+}
+
+static void jabber_deny_buddy_add(GaimConnection *gc, const char *who,
+								  const char *friendly, const char *message)
+{
+	if(g_list_find(gaim_connections_get_all(), gc))
+	{
+		JabberStream *js = gc->proto_data;
+		
+		jabber_presence_subscription_set(js, who, "unsubscribed");
+	}
+}
+
+
 static void jabber_register_commands(void)
 {
 	gaim_cmd_register("config", "", GAIM_CMD_P_PRPL,
@@ -1745,6 +1798,9 @@ static GaimPluginProtocolInfo prpl_info =
 	jabber_offline_message,			/* offline_message */
 	NULL,							/* whiteboard_prpl_ops */
 	NULL,							/* media_prpl_ops */
+	jabber_accept_buddy_add,		/* accept_buddy_add */	
+	jabber_deny_buddy_add,			/* deny_buddy_add */
+	NULL,
 };
 
 static GaimPluginInfo info =

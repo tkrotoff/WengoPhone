@@ -4563,26 +4563,45 @@ static void gaim_auth_sendrequest_menu(GaimBlistNode *node, gpointer ignored) {
 }
 
 /* When other people ask you for authorization */
-static void gaim_auth_grant(struct name_data *data) {
-	GaimConnection *gc = data->gc;
-
+static void gaim_auth_grant(GaimConnection *gc, const char *who,
+							const char *friendly, const char *message)
+{
 	if (g_list_find(gaim_connections_get_all(), gc)) {
 		OscarData *od = gc->proto_data;
-		aim_ssi_sendauthreply(od->sess, data->name, 0x01, NULL);
+		aim_ssi_sendauthreply(od->sess, (gchar *) who, 0x01, (gchar *) message);
 	}
-
-	oscar_free_name_data(data);
 }
+
+/* static void gaim_auth_grant(struct name_data *data) { */
+/* 	GaimConnection *gc = data->gc; */
+
+/* 	if (g_list_find(gaim_connections_get_all(), gc)) { */
+/* 		OscarData *od = gc->proto_data; */
+/* 		aim_ssi_sendauthreply(od->sess, data->name, 0x01, NULL); */
+/* 	} */
+
+/* 	oscar_free_name_data(data); */
+/* } */
 
 /* When other people ask you for authorization */
-static void gaim_auth_dontgrant(struct name_data *data, char *msg) {
-	GaimConnection *gc = data->gc;
-
+static void gaim_auth_dontgrant(GaimConnection *gc, const char *who,
+								const char *friendly, const char *message)
+{
 	if (g_list_find(gaim_connections_get_all(), gc)) {
 		OscarData *od = gc->proto_data;
-		aim_ssi_sendauthreply(od->sess, data->name, 0x00, msg ? msg : _("No reason given."));
+		aim_ssi_sendauthreply(od->sess, (gchar *) who, 0x00, 
+							  message ? (gchar *) message : _("No reason given."));
 	}
 }
+
+/* static void gaim_auth_dontgrant(struct name_data *data, char *msg) { */
+/* 	GaimConnection *gc = data->gc; */
+
+/* 	if (g_list_find(gaim_connections_get_all(), gc)) { */
+/* 		OscarData *od = gc->proto_data; */
+/* 		aim_ssi_sendauthreply(od->sess, data->name, 0x00, msg ? msg : _("No reason given.")); */
+/* 	} */
+/* } */
 
 static void gaim_auth_dontgrant_msgprompt(struct name_data *data) {
 	gaim_request_input(data->gc, NULL, _("Authorization Denied Message:"),
@@ -4682,33 +4701,39 @@ static int incomingim_chan4(aim_session_t *sess, aim_conn_t *conn, aim_userinfo_
 
 		case 0x06: { /* Someone requested authorization */
 			if (i >= 6) {
-				struct name_data *data = g_new(struct name_data, 1);
+/* 				struct name_data *data = g_new(struct name_data, 1); */
 				gchar *sn = g_strdup_printf("%u", args->uin);
 				gchar *reason;
-				gchar *dialog_msg;
+/* 				gchar *dialog_msg; */
 
 				if (msg2[5] != NULL)
 					reason = gaim_plugin_oscar_decode_im_part(account, sn, AIM_CHARSET_CUSTOM, 0x0000, msg2[5], strlen(msg2[5]));
 				else
 					reason = g_strdup(_("No reason given."));
 
-				dialog_msg = g_strdup_printf(_("The user %u wants to add %s to their buddy list for the following reason:\n%s"),
-					args->uin, gaim_account_get_username(gc->account), reason);
-				g_free(reason);
+/* 				dialog_msg = g_strdup_printf(_("The user %u wants to add %s to their buddy list for the following reason:\n%s"), */
+/* 					args->uin, gaim_account_get_username(gc->account), reason); */
+/* 				g_free(reason); */
 				gaim_debug_info("oscar",
-						   "Received an authorization request from UIN %u\n",
-						   args->uin);
-				data->gc = gc;
-				data->name = sn;
-				data->nick = NULL;
+								"Received an authorization request from UIN %u\n",
+								args->uin);
+/* 				data->gc = gc; */
+/* 				data->name = sn; */
+/* 				data->nick = NULL; */
 
-				gaim_request_action(gc, NULL, _("Authorization Request"),
-									dialog_msg, GAIM_DEFAULT_ACTION_NONE, data,
-									2, _("_Authorize"),
-									G_CALLBACK(gaim_auth_grant),
-									_("_Deny"),
-									G_CALLBACK(gaim_auth_dontgrant_msgprompt));
-				g_free(dialog_msg);
+/* 				gaim_request_action(gc, NULL, _("Authorization Request"), */
+/* 									dialog_msg, GAIM_DEFAULT_ACTION_NONE, data, */
+/* 									2, _("_Authorize"), */
+/* 									G_CALLBACK(gaim_auth_grant), */
+/* 									_("_Deny"), */
+/* 									G_CALLBACK(gaim_auth_dontgrant_msgprompt)); */
+/* 				g_free(dialog_msg); */
+
+				gaim_account_auth_request(gc->account, sn, NULL, NULL, reason, TRUE);
+				
+/* 				g_free(reason); */
+/* 				g_free(sn); */
+					
 			}
 		} break;
 
@@ -7388,11 +7413,12 @@ static int gaim_ssi_authrequest(aim_session_t *sess, aim_frame_t *fr, ...) {
 	char *sn;
 	char *msg;
 	GaimAccount *account = gaim_connection_get_account(gc);
-	gchar *nombre;
+/* 	gchar *nombre; */
 	gchar *reason = NULL;
-	gchar *dialog_msg;
-	struct name_data *data;
+/* 	gchar *dialog_msg; */
+/* 	struct name_data *data; */
 	GaimBuddy *buddy;
+	const char *buddy_alias = NULL;
 
 	va_start(ap, fr);
 	sn = va_arg(ap, char *);
@@ -7403,10 +7429,13 @@ static int gaim_ssi_authrequest(aim_session_t *sess, aim_frame_t *fr, ...) {
 			   "ssi: received authorization request from %s\n", sn);
 
 	buddy = gaim_find_buddy(account, sn);
-	if (buddy && (gaim_buddy_get_alias_only(buddy)))
-		nombre = g_strdup_printf("%s (%s)", sn, gaim_buddy_get_alias_only(buddy));
-	else
-		nombre = g_strdup(sn);
+	if (buddy)
+		buddy_alias = gaim_buddy_get_alias_only(buddy);
+
+/* 	if (buddy && (gaim_buddy_get_alias_only(buddy))) */
+/* 		nombre = g_strdup_printf("%s (%s)", sn, gaim_buddy_get_alias_only(buddy)); */
+/* 	else */
+/* 		nombre = g_strdup(sn); */
 
 	if (msg != NULL)
 		reason = gaim_plugin_oscar_decode_im_part(account, sn, AIM_CHARSET_CUSTOM, 0x0000, msg, strlen(msg));
@@ -7414,23 +7443,26 @@ static int gaim_ssi_authrequest(aim_session_t *sess, aim_frame_t *fr, ...) {
 	if (reason == NULL)
 		reason = g_strdup(_("No reason given."));
 
-	dialog_msg = g_strdup_printf(
-								 _("The user %s wants to add %s to their buddy list for the following reason:\n%s"), 
-								 nombre, gaim_account_get_username(account), reason);
-	g_free(reason);
+/* 	dialog_msg = g_strdup_printf( */
+/* 								 _("The user %s wants to add %s to their buddy list for the following reason:\n%s"),  */
+/* 								 nombre, gaim_account_get_username(account), reason); */
+/* 	g_free(reason); */
 
-	data = g_new(struct name_data, 1);
-	data->gc = gc;
-	data->name = g_strdup(sn);
-	data->nick = NULL;
+/* 	data = g_new(struct name_data, 1); */
+/* 	data->gc = gc; */
+/* 	data->name = g_strdup(sn); */
+/* 	data->nick = NULL; */
 
-	gaim_request_action(gc, NULL, _("Authorization Request"), dialog_msg,
-						GAIM_DEFAULT_ACTION_NONE, data, 2,
-						_("_Authorize"), G_CALLBACK(gaim_auth_grant),
-						_("_Deny"), G_CALLBACK(gaim_auth_dontgrant_msgprompt));
+/* 	gaim_request_action(gc, NULL, _("Authorization Request"), dialog_msg, */
+/* 						GAIM_DEFAULT_ACTION_NONE, data, 2, */
+/* 						_("_Authorize"), G_CALLBACK(gaim_auth_grant), */
+/* 						_("_Deny"), G_CALLBACK(gaim_auth_dontgrant_msgprompt)); */
 
-	g_free(dialog_msg);
-	g_free(nombre);
+/* 	g_free(dialog_msg); */
+/* 	g_free(nombre); */
+
+	
+	gaim_account_auth_request(gc->account, sn, NULL, buddy_alias, reason, TRUE);
 
 	return 1;
 }
@@ -8682,6 +8714,9 @@ static GaimPluginProtocolInfo prpl_info =
 	oscar_offline_message,	/* offline_message */
 	NULL,					/* whiteboard_prpl_ops */
 	NULL,					/* media_prpl_ops */
+	gaim_auth_grant,		/* accept_buddy_add */
+	gaim_auth_dontgrant,	/* deny_buddy_add */
+	NULL,
 };
 
 static GaimPluginUiInfo prefs_info = {

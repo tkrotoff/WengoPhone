@@ -51,6 +51,11 @@ struct _GaimAccountUiOps
 	void (*request_add)(GaimAccount *account, const char *remote_user,
 	                    const char *id, const char *alias,
 	                    const char *message);
+
+	/* Someone wants to add us to his buddy list. */
+	void (*auth_request)(GaimAccount *account, const char *rmote_user,
+						 const char *id, const char *alias,
+						 const char *message, gboolean response);
 };
 
 struct _GaimAccount
@@ -170,6 +175,26 @@ void gaim_account_notify_added(GaimAccount *account, const char *remote_user,
 void gaim_account_request_add(GaimAccount *account, const char *remote_user,
                               const char *id, const char *alias,
                               const char *message);
+
+/**
+ * Notifies the user that the remote user wants to add the account in his
+ * buddy list.
+ *
+ * This will present a dialog informing the local user that the remote user
+ * wants to add him in his buddy list and will ask if the local user authorize
+ * this request.
+ *
+ * @param account     The account that was added.
+ * @param remote_user The name of the user that wants to add this account.
+ * @param id          The optional ID of the local account. Rarely used.
+ * @param alias       The optional alias of the user.
+ * @param message     The optional message sent from the user adding you.
+ * @param response    @c TRUE if a answer is wished.
+ */
+void gaim_account_auth_request(GaimAccount *account, const char *remote_user,
+							   const char *id, const char *alias,
+							   const char *message, gboolean response);
+
 /**
  * Requests information from the user to change the account's password.
  *
@@ -784,6 +809,28 @@ void gaim_account_change_password(GaimAccount *account, const char *orig_pw,
  * @param buddy   The buddy
  */
 gboolean gaim_account_supports_offline_message(GaimAccount *account, GaimBuddy *buddy);
+
+/**
+ * Accepts an authorization request to add an account in someone's buddy list.
+ *
+ * @param account	The account
+ * @param who		The person who wants to add the account
+ * @param friendly	The friendly name of this person
+ * @param msg		The response (optional)
+ */
+void gaim_account_accept_auth_request(GaimAccount *account, const char *who, 
+									  const char *friendly, const char *msg);
+
+/**
+ * Refuses an authorization request to add an account in someone's buddy list.
+ *
+ * @param account	The account
+ * @param who		The person who wants to add the account
+ * @param friendly	The friendly name of this person
+ * @param msg		The response (optional)
+ */
+void gaim_account_deny_auth_request(GaimAccount *account, const char *who,
+									const char *friendly, const char *msg);
 
 /*@}*/
 
