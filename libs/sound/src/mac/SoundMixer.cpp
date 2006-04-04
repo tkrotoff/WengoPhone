@@ -19,10 +19,13 @@
 
 #include <sound/SoundMixer.h>
 
+#include "CoreAudioUtilities.h"
+
 #include <iostream>
+
 using namespace std;
 
-SoundMixer::SoundMixer(const std::string & /*inputDeviceName*/, const std::string & /*outputDeviceName*/)
+SoundMixer::SoundMixer(const std::string & inputDeviceName, const std::string & outputDeviceName)
 	throw (NoSoundCardException, SoundMixerException) {
 }
 

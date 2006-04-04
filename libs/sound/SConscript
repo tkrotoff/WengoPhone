@@ -36,9 +36,10 @@ elif WengoOSMacOSX():
 		'src/mac/AudioDevice.cpp',
 		'src/mac/Sound.cpp',
 		'src/mac/SoundMixer.cpp',
-		'src/mac/SoundMixerException.cpp'
+		'src/mac/SoundMixerException.cpp',
+		'src/mac/CoreAudioUtilities.cpp',
 	]
-	link_flags += ['framework CoreAudio', '-framework AudioToolbox', '-framework AudioUnit']
+	link_flags += ['framework CoreAudio']
 
 if WengoGetConsoleArgument('enable-libsound-portaudio'):
 	sources += ['src/portaudio/AudioDevice.cpp']

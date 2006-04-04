@@ -19,41 +19,110 @@
 
 #include <sound/AudioDevice.h>
 
-#include <util/StringList.h>
-#include <util/String.h>
+#include "CoreAudioUtilities.h"
+
+#include <util/Logger.h>
 
 std::list<std::string> AudioDevice::getInputMixerDeviceList() {
-	return StringList();
+	std::list<std::string> result;
+
+	std::map<AudioDeviceID, std::string> deviceMap = CoreAudioUtilities::audioDeviceMap(true);
+	for (std::map<AudioDeviceID, std::string>::const_iterator it = deviceMap.begin();
+		it != deviceMap.end();
+		++it) {
+		result.push_back((*it).second);
+	}
+
+	return result;
 }
 
 std::list<std::string> AudioDevice::getOutputMixerDeviceList() {
-	return StringList();
+	std::list<std::string> result;
+
+	std::map<AudioDeviceID, std::string> deviceMap = CoreAudioUtilities::audioDeviceMap(false);
+	for (std::map<AudioDeviceID, std::string>::const_iterator it = deviceMap.begin();
+		it != deviceMap.end();
+		++it) {
+		result.push_back((*it).second);
+	}
+
+	return result;
 }
 
 std::string AudioDevice::getDefaultPlaybackDevice() {
-	return String::null;
+	OSStatus status = noErr;
+	AudioDeviceID device;
+	UInt32 size = sizeof(AudioDeviceID);
+	std::string result;
+
+	status = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size, &device);
+	if (status) {
+		LOG_ERROR("can't get default output device");
+		return result;
+	}
+
+	result = CoreAudioUtilities::audioDeviceName(device, false);
+
+	return result;
 }
 
 bool AudioDevice::setDefaultPlaybackDevice(const std::string & /*deviceName*/) {
 	return false;
 }
 
+std::string AudioDevice::getDefaultRecordDevice() {
+	OSStatus status = noErr;
+	AudioDeviceID device;
+	UInt32 size = sizeof(AudioDeviceID);
+	std::string result;
+
+	status = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &size, &device);
+	if (status) {
+		LOG_ERROR("can't get default input device");
+		return result;
+	}
+
+	result = CoreAudioUtilities::audioDeviceName(device, true);
+
+	return result;
+}
+
 bool AudioDevice::setDefaultRecordDevice(const std::string & /*deviceName*/) {
 	return false;
 }
 
-std::string AudioDevice::getDefaultRecordDevice() {
-	return std::string("");
+int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {
+	int result = 0;
+
+	std::map<AudioDeviceID, std::string> deviceMap = CoreAudioUtilities::audioDeviceMap(false);
+	for (std::map<AudioDeviceID, std::string>::const_iterator it = deviceMap.begin();
+		it != deviceMap.end();
+		++it) {
+		if ((*it).second == deviceName) {
+			result = (*it).first;
+			break;
+		}
+	}
+
+	return result;
 }
 
-int AudioDevice::getWaveOutDeviceId(const std::string & /*deviceName*/) {
-	return 0;
+int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
+	int result = 0;
+
+	std::map<AudioDeviceID, std::string> deviceMap = CoreAudioUtilities::audioDeviceMap(true);
+	for (std::map<AudioDeviceID, std::string>::const_iterator it = deviceMap.begin();
+		it != deviceMap.end();
+		++it) {
+		if ((*it).second == deviceName) {
+			result = (*it).first;
+			break;
+		}
+	}
+
+	return result;
 }
 
-int AudioDevice::getWaveInDeviceId(const std::string & /*deviceName*/) {
-	return 0;
-}
-
-int AudioDevice::getMixerDeviceId(const std::string & /*mixerName*/) {
+int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
 	return 0;
 }
