@@ -102,7 +102,7 @@ void UserProfile::disconnect() {
 	if (_activePhoneLine) {
 		_activePhoneLine->disconnect();
 		Thread::sleep(5);
-		_activePhoneLine->getSipWrapper().terminate();
+		//_activePhoneLine->getSipWrapper().terminate();
 	}
 }
 
@@ -320,4 +320,9 @@ void UserProfile::historyChangedEventHandler(History & sender, int id) {
 void UserProfile::setIcon(const Picture & icon) {
 	Profile::setIcon(icon);
 	_presenceHandler.changeMyIcon(icon, NULL);
+}
+
+void UserProfile::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
+	_presenceHandler.changeMyAlias(_alias, NULL);
+	_presenceHandler.changeMyIcon(_icon, NULL);
 }

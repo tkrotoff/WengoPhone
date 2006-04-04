@@ -240,6 +240,11 @@ public:
 private:
 
 	/**
+	 * @see ConnectHandler::connectedEvent
+	 */
+	void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
+
+	/**
 	 * Connect all IMAccounts.
 	 */
 	void connectIMAccounts();
