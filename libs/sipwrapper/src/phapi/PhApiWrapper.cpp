@@ -436,19 +436,34 @@ void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & 
 }
 
 void PhApiWrapper::createSession(IMChat & imChat, IMContactSet & imContactSet) {
-	IMChatSession * imChatSession = new IMChatSession(imChat);
+	IMChatSession * imChatSession;
 
 	//FIXME: Currently, phApi supports chat with only one person
 	if (imContactSet.size() > 0) {
-		addContact(*imChatSession, (*imContactSet.begin()).getContactId());
-		//FIXME: this map is never emptied
-		//_contactChatMap[(*imContactSet.begin()).getContactId()] = imChatSession;
+		//Check if a session already exists with the contact (phApi can manage only
+		// one contact) given in parameter
+		const IMContact & imContact = *imContactSet.begin();
+		if (_contactChatMap.find(imContact.getContactId()) != _contactChatMap.end()) {
+			//A Session with this contact already exists
+			imChatSession = _contactChatMap[imContact.getContactId()];
+		} else {
+			imChatSession = new IMChatSession(imChat);
+			addContact(*imChatSession, (*imContactSet.begin()).getContactId());
+		}
 	}
 
 	newIMChatSessionCreatedEvent(*this, *imChatSession);
 }
 
-void PhApiWrapper::closeSession(IMChatSession & chatSession) {
+void PhApiWrapper::closeSession(IMChatSession & sender) {
+	std::map<const std::string, IMChatSession *>::iterator it =
+		_contactChatMap.find((*sender.getIMContactSet().begin()).getContactId());
+
+	if (it != _contactChatMap.end()) {
+		_contactChatMap.erase(it);
+	} else {
+		LOG_ERROR("Session not registered");
+	}
 }
 
 void PhApiWrapper::addContact(IMChatSession & chatSession, const std::string & contactId) {
