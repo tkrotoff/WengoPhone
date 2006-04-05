@@ -108,7 +108,7 @@ void UserProfile::disconnect() {
 	if (_activePhoneLine) {
 		_activePhoneLine->disconnect();
 		Thread::sleep(5);
-		//_activePhoneLine->getSipWrapper().terminate();
+		_activePhoneLine->getSipWrapper().terminate();
 	}
 }
 
