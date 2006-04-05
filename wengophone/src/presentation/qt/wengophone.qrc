@@ -146,5 +146,6 @@
         <file>phonecall/QtCallContactWidget.ui</file>
         <file>phoneline/PhoneLineWidget.ui</file>
         <file>webservices/sms/SmsWindow.ui</file>
+        <file>webservices/softupdate/SoftUpdateWindow.ui</file>
     </qresource>
 </RCC>

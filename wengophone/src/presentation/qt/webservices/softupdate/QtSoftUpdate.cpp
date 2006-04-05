@@ -26,9 +26,12 @@
 
 #include <softupdater/SoftUpdater.h>
 
-#include <QtGui>
-
 #include <util/Logger.h>
+
+#include <qtutil/Object.h>
+#include <qtutil/WidgetFactory.h>
+
+#include <QtGui>
 
 static const char * UPDATE_PROGRAM = "update.exe";
 
@@ -36,7 +39,6 @@ QtSoftUpdate::QtSoftUpdate(CSoftUpdate & cSoftUpdate)
 	: QObjectThreadSafe(),
 	_cSoftUpdate(cSoftUpdate) {
 
-	_progressDialog = NULL;
 	_qtWengoPhone = (QtWengoPhone *) _cSoftUpdate.getCWengoPhone().getPresentation();
 
 	updateWengoPhoneEvent += boost::bind(&QtSoftUpdate::updateWengoPhoneEventHandler, this, _1, _2, _3, _4);
@@ -70,22 +72,18 @@ void QtSoftUpdate::updateWengoPhoneEventHandlerThreadSafe(const std::string & do
 				const std::string & version,
 				unsigned fileSize) {
 
-	_progressDialog = new QProgressDialog(_qtWengoPhone->getWidget());
-	connect(_progressDialog, SIGNAL(canceled()), SLOT(abortDownload()));
+	_softUpdateWindow = qobject_cast<QDialog *>(
+					WidgetFactory::create(":/forms/webservices/softupdate/SoftUpdateWindow.ui",
+							_qtWengoPhone->getWidget()));
+	connect(_softUpdateWindow, SIGNAL(rejected()), SLOT(abortDownload()));
 
-	_originalLabelText = tr("Downloading WengoPhone update...\n") +
-				tr("\nurl=") + QString::fromStdString(downloadUrl) +
-				tr("\nversion=") + QString::fromStdString(version) +
-				tr("\nfile size=%1").arg(fileSize);
-
-	QLabel * label = new QLabel();
-	label->setAlignment(Qt::AlignLeft);
-	label->setPixmap(QPixmap(":pics/update.png"));
-	_progressDialog->setLabel(label);
-	_progressDialog->setLabelText(_originalLabelText);
-	_progressDialog->setWindowTitle(tr("WengoPhone - Downloading update"));
-	_progressDialog->setAutoClose(false);
-	_progressDialog->setAutoReset(false);
+	//updateTextLabel
+	_updateTextLabel = Object::findChild<QLabel *>(_softUpdateWindow, "updateTextLabel");
+	_originalLabelText = _updateTextLabel->text()
+				.arg(QString::fromStdString(version))
+				.arg(QString::fromStdString(downloadUrl))
+				.arg(fileSize);
+	_updateTextLabel->setText(_originalLabelText);
 
 	//Deletes previous update program
 	QFile file(UPDATE_PROGRAM);
@@ -97,7 +95,7 @@ void QtSoftUpdate::updateWengoPhoneEventHandlerThreadSafe(const std::string & do
 	_softUpdater->downloadFinishedEvent += boost::bind(&QtSoftUpdate::downloadFinishedEventHandler, this, _1);
 	_softUpdater->download(downloadUrl, UPDATE_PROGRAM);
 
-	_progressDialog->exec();
+	_softUpdateWindow->exec();
 }
 
 void QtSoftUpdate::dataReadProgressEventHandler(double bytesDone, double bytesTotal, unsigned downloadSpeed) {
@@ -108,13 +106,14 @@ void QtSoftUpdate::dataReadProgressEventHandler(double bytesDone, double bytesTo
 
 void QtSoftUpdate::dataReadProgressEventHandlerThreadSafe(double bytesDone, double bytesTotal, unsigned downloadSpeed) {
 	LOG_DEBUG("progress=" + String::fromNumber(bytesDone));
-	if (_progressDialog->wasCanceled()) {
-		return;
-	}
 
-	_progressDialog->setLabelText(_originalLabelText + QString(" (%1").arg(downloadSpeed) + tr(" kB/s)"));
-	_progressDialog->setRange(0, bytesTotal);
-	_progressDialog->setValue(bytesDone);
+	//progressBar
+	static QProgressBar * progressBar = Object::findChild<QProgressBar *>(_softUpdateWindow, "progressBar");
+	progressBar->setRange(0, bytesTotal);
+	progressBar->setValue(bytesDone);
+
+	_updateTextLabel->setText(_originalLabelText.arg(downloadSpeed));
+
 	QApplication::processEvents();
 }
 
@@ -133,7 +132,7 @@ void QtSoftUpdate::downloadFinishedEventHandlerThreadSafe(HttpRequest::Error err
 
 		launchUpdateProcess();
 	} else {
-		_progressDialog->cancel();
+		_softUpdateWindow->reject();
 	}
 }
 

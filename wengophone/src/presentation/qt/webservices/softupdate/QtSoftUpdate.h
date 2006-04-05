@@ -34,7 +34,8 @@ class SoftUpdater;
 class CSoftUpdate;
 class QtWengoPhone;
 
-class QProgressDialog;
+class QDialog;
+class QLabel;
 
 /**
  * Shows a Qt progress dialog when downloading a WengoPhone update.
@@ -99,11 +100,6 @@ private:
 	 */
 	void launchUpdateProcess();
 
-	/**
-	 * Progress dialog.
-	 */
-	QProgressDialog * _progressDialog;
-
 	QtWengoPhone * _qtWengoPhone;
 
 	CSoftUpdate & _cSoftUpdate;
@@ -113,6 +109,13 @@ private:
 
 	/** Original progress dialog label text. */
 	QString _originalLabelText;
+
+	/**
+	 * Progress dialog.
+	 */
+	QDialog * _softUpdateWindow;
+
+	QLabel * _updateTextLabel;
 };
 
 #endif	//QTSOFTUPDATE_H
