@@ -10,6 +10,7 @@ include_path = [
 defines = {}
 headers = []
 sources = []
+cc_flags = []
 
 if WengoOSWindows():
 	sources += [
@@ -22,6 +23,7 @@ if WengoOSWindows():
 		'src/win32/playsound/PlaySoundFile.cpp'
 	]
 	libs += ['winmm', 'advapi32']
+
 elif WengoOSLinux():
 	sources += [
 		'src/unix/Sound.cpp',
@@ -35,12 +37,23 @@ elif WengoOSMacOSX():
 	sources += [
 		'src/mac/AudioDevice.cpp',
 		'src/mac/Sound.cpp',
+		'src/mac/SoundPrivateMac.cpp',
 		'src/mac/SoundMixer.cpp',
 		'src/mac/SoundMixerException.cpp',
 		'src/mac/CoreAudioUtilities.cpp',
 		'src/mac/Volume.cpp',
 	]
-	link_flags += ['framework CoreAudio']
+
+	link_flags += [
+		'-framework CoreAudio',
+		'-framework Cocoa',
+	]
+
+	cc_flags += ['-x objective-c++']
+
+	libs += [
+		'objc'
+	]
 
 if WengoGetConsoleArgument('enable-libsound-portaudio'):
 	sources += ['src/portaudio/AudioDevice.cpp']
@@ -53,6 +66,7 @@ elif WengoOSLinux():
 
 env.WengoAddIncludePath(include_path)
 env.WengoAddDefines(defines)
+env.WengoAddCCFlags(cc_flags)
 env.WengoAddLinkFlags(link_flags)
 env.WengoUseLibraries(libs)
 
