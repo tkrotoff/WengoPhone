@@ -1236,7 +1236,7 @@ gaim_account_set_alias(GaimAccount *account, const char *alias,
 			prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(gc->prpl);
 		
 		if (prpl_info != NULL && g_list_find(gaim_connections_get_all(), gc) &&
-			prpl_info->add_buddy != NULL)
+			prpl_info->set_alias != NULL)
 			prpl_info->set_alias(gc, alias);
 	}
 
