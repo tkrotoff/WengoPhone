@@ -49,9 +49,9 @@ void SoftUpdate::checkForUpdate() {
 
 #ifdef OS_WINDOWS
 	operatingSystem = "windows";
-#elif OS_MACOSX
+#elif defined (OS_MACOSX)
 	operatingSystem = "macosx";
-#elif OS_LINUX
+#elif defined (OS_LINUX)
 	operatingSystem = "linux";
 #endif
 
