@@ -28,6 +28,7 @@
  * Opens the default web browser of the Operating System.
  *
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
  */
 class WebBrowser : NonCopyable {
 public:

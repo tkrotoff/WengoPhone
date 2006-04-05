@@ -2,7 +2,6 @@ env = WengoGetEnvironment()
 
 libs = [
 	'boost',
-	'owcurl',
 	'owcutil',
 ]
 lib_path = []

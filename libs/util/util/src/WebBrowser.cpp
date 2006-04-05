@@ -23,6 +23,61 @@
 
 #ifdef OS_WINDOWS
 	#include <windows.h>
+#elif defined (OS_LINUX)
+
+#include <unistd.h>
+#include <stdio.h>
+
+void tux_open_url(const char * url) {
+	if( !fork() ) {
+		
+		//use $BROWSER if it exists
+		char * browser = getenv("BROWSER");
+		if( browser ) {
+			printf("Use browser: %s\n", browser);
+			execlp(browser, browser, url, NULL);
+		}
+			
+		//sensible-browser script
+		execlp("sensible-browser", "sensible-browser", url, NULL);
+
+		//firefox
+		execlp("firefox", "firefox", url, NULL);
+
+		//kfmclient from KDE
+		execlp("kfmclient", "kfmclient" , "openURL", url, NULL);
+
+		//gnome-open
+		execlp("gnome-open", "gnome-open" , url, NULL);
+
+		//mozilla
+		execlp("mozilla", "mozilla", url, NULL);
+
+		//galeon
+		execlp("galeon", "galeon", url, NULL);
+
+		//epiphany
+		execlp("epiphany", "epiphany", url, NULL);
+
+		//lynx
+		execlp("lynx", "lynx", url, NULL);
+
+		perror(NULL);
+		exit(1);
+	}
+}
+
+#elif defined OS_MACOSX
+
+#include <Carbon/Carbon.h>
+
+bool mac_open_url(const char * curl) {
+	
+	CFStringRef urlString = CFStringCreateWithCString(NULL, curl, 0);
+	CFURLRef url = CFURLCreateWithString(NULL, urlString, NULL);
+	return (LSOpenCFURLRef(url, NULL) == noErr);
+}
+
 #endif
 
 bool WebBrowser::openUrl(const std::string & url) {
@@ -39,6 +94,11 @@ bool WebBrowser::openUrl(const std::string & url) {
 	}
 
 	return false;
+
+#elif defined OS_LINUX
+	tux_open_url(url.c_str());
+#elif defined OS_MACOSX
+	return mac_open_url(url.c_str());
 #else
 	return false;
 #endif	//OS_WINDOWS
