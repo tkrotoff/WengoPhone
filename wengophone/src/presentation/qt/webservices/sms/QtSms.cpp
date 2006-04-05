@@ -41,7 +41,7 @@ QtSms::QtSms(CSms & cSms)
 }
 
 void QtSms::initThreadSafe() {
-	_smsWindow = WidgetFactory::create(":/forms/sms/SmsWindow.ui", _qtWengoPhone->getWidget());
+	_smsWindow = WidgetFactory::create(":/forms/webservices/sms/SmsWindow.ui", _qtWengoPhone->getWidget());
 
 	_sendButton = Object::findChild<QPushButton *>(_smsWindow, "sendButton");
 	connect(_sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));

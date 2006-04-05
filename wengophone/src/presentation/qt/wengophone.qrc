@@ -144,6 +144,6 @@
         <file>phonecall/VideoWindow2.ui</file>
         <file>phonecall/QtCallContactWidget.ui</file>
         <file>phoneline/PhoneLineWidget.ui</file>
-        <file>sms/SmsWindow.ui</file>
+        <file>webservices/sms/SmsWindow.ui</file>
     </qresource>
 </RCC>
