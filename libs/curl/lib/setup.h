@@ -76,6 +76,20 @@
  * to any other further and independant block.
  */
 
+//tanguy_k
+#if defined(__APPLE__) && (defined(__GNUC__) || defined(__xlC__) || defined(__xlc__))
+/* hand-modified MacOSX config.h! */
+#include "config-macosx.h"
+#endif
+
+#if defined(__linux__) || defined(__linux)
+/* hand-modified Linux config.h! */
+#include "config-linux.h"
+#elif defined(__FreeBSD__)
+#include "config-freebsd.h"
+#endif
+//!tanguy_k
+
 #ifdef HAVE_WINDOWS_H
 #  ifndef WIN32_LEAN_AND_MEAN
 #    define WIN32_LEAN_AND_MEAN
