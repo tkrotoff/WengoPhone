@@ -219,7 +219,7 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 
 	// Retrieving phone numbers
 	TiXmlNode * tel = NULL;
-	while ((tel = rootElt.Node()->IterateChildren("tel", url))) {
+	while ((tel = rootElt.Node()->IterateChildren("tel", tel))) {
 		TiXmlElement * telElt = tel->ToElement();
 		string typeAttr = string(telElt->Attribute("type"));
 		if (typeAttr == "home") {
@@ -236,7 +236,7 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 
 	// Retrieving emails
 	TiXmlNode * email = NULL;
-	while ((email = rootElt.Node()->IterateChildren("email", url))) {
+	while ((email = rootElt.Node()->IterateChildren("email", email))) {
 		TiXmlElement * emailElt = email->ToElement();
 		string typeAttr = string(emailElt->Attribute("type"));
 		if (typeAttr == "home") {
