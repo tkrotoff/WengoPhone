@@ -11,7 +11,7 @@ WengoSetVariable('WengoPhoneBuildId', WengoPhoneBuildId)
 
 libs = [
 	'owsettings',
-	'owstartup',
+	'owsystem',
 	'owhttp',
 	'owserialization',
 	'owserializer',

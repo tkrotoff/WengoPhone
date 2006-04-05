@@ -16,22 +16,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include <util/NonCopyable.h>
-
-#include <Startup.h>
-#include <settings/Settings.h>
 
 #ifndef STARTUPSETTINGLISTENER_H
-# define STARTUPSETTINGLISTENER_H
-class StartupSettingListener {
-	public:
-		StartupSettingListener();
-		~StartupSettingListener() {
-			if (_startup)
-				delete _startup;
-		}
-		void startupSettingChanged(Settings& sender, const std::string& key) const;
-	private:
-		Startup* _startup;
-};	
-#endif
+#define STARTUPSETTINGLISTENER_H
+
+#include <util/NonCopyable.h>
+
+#include <string>
+
+class Startup;
+class Settings;
+
+class StartupSettingListener : NonCopyable {
+public:
+
+	StartupSettingListener();
+
+	~StartupSettingListener();
+
+	void startupSettingChanged(Settings & sender, const std::string & key) const;
+
+private:
+
+	Startup * _startup;
+};
+
+#endif	//STARTUPSETTINGLISTENER_H
