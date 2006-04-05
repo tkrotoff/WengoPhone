@@ -124,7 +124,7 @@ void QtProtocolSettings::setupGui() {
 
 void QtProtocolSettings::initMsnPage() {
 
-	_msnAliasEdit->setText(QString::fromStdString(_imAccount->getLogin()));
+	_msnScreenNameEdit->setText(QString::fromStdString(_imAccount->getLogin()));
 	_msnPasswordEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 
 	IMAccountParameters & param = _imAccount->getIMAccountParameters();
@@ -154,7 +154,7 @@ void QtProtocolSettings::initAimPage() {
 
 	IMAccountParameters & param = _imAccount->getIMAccountParameters();
 
-	_aimAliasEdit->setText(QString::fromStdString(_imAccount->getLogin()));
+	_aimScreenNameEdit->setText(QString::fromStdString(_imAccount->getLogin()));
 	_aimPasswordEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 
 	_aimAuthHostEdit->setText(QString::fromStdString(param.getOscarServer()));
@@ -218,7 +218,6 @@ void QtProtocolSettings::initYahooPage() {
 
 	_yahooScreenNameEdit->setText(QString::fromStdString(_imAccount->getLogin()));
 	_yahooPasswordEdit->setText(QString::fromStdString(_imAccount->getPassword()));
-
 
 	// Is yahoo japan ?
 
