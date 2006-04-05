@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtSoftUpdaterWindow.h"
+#include "QtSoftUpdate.h"
 
 #include <presentation/qt/QtWengoPhone.h>
 
@@ -32,40 +32,40 @@
 
 static const char * UPDATE_PROGRAM = "update.exe";
 
-QtSoftUpdaterWindow::QtSoftUpdaterWindow(CSoftUpdate & cSoftUpdate)
+QtSoftUpdate::QtSoftUpdate(CSoftUpdate & cSoftUpdate)
 	: QObjectThreadSafe(),
 	_cSoftUpdate(cSoftUpdate) {
 
 	_progressDialog = NULL;
 	_qtWengoPhone = (QtWengoPhone *) _cSoftUpdate.getCWengoPhone().getPresentation();
 
-	updateWengoPhoneEvent += boost::bind(&QtSoftUpdaterWindow::updateWengoPhoneEventHandler, this, _1, _2, _3, _4);
+	updateWengoPhoneEvent += boost::bind(&QtSoftUpdate::updateWengoPhoneEventHandler, this, _1, _2, _3, _4);
 
 	typedef PostEvent0<void ()> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSoftUpdaterWindow::initThreadSafe, this));
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSoftUpdate::initThreadSafe, this));
 	postEvent(event);
 }
 
-void QtSoftUpdaterWindow::initThreadSafe() {
+void QtSoftUpdate::initThreadSafe() {
 }
 
-QtSoftUpdaterWindow::~QtSoftUpdaterWindow() {
+QtSoftUpdate::~QtSoftUpdate() {
 	delete _softUpdater;
 }
 
-void QtSoftUpdaterWindow::updateWengoPhoneEventHandler(const std::string & downloadUrl,
+void QtSoftUpdate::updateWengoPhoneEventHandler(const std::string & downloadUrl,
 				unsigned long long buildId,
 				const std::string & version,
 				unsigned fileSize) {
 
 	typedef PostEvent4<void (std::string, unsigned long long, std::string, unsigned),
 					std::string, unsigned long long, std::string, unsigned> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSoftUpdaterWindow::updateWengoPhoneEventHandlerThreadSafe,
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSoftUpdate::updateWengoPhoneEventHandlerThreadSafe,
 					this, _1, _2, _3, _4), downloadUrl, buildId, version, fileSize);
 	postEvent(event);
 }
 
-void QtSoftUpdaterWindow::updateWengoPhoneEventHandlerThreadSafe(const std::string & downloadUrl,
+void QtSoftUpdate::updateWengoPhoneEventHandlerThreadSafe(const std::string & downloadUrl,
 				unsigned long long buildId,
 				const std::string & version,
 				unsigned fileSize) {
@@ -73,11 +73,15 @@ void QtSoftUpdaterWindow::updateWengoPhoneEventHandlerThreadSafe(const std::stri
 	_progressDialog = new QProgressDialog(_qtWengoPhone->getWidget());
 	connect(_progressDialog, SIGNAL(canceled()), SLOT(abortDownload()));
 
-	_originalLabelText = tr("Downloading WengoPhone update...") +
+	_originalLabelText = tr("Downloading WengoPhone update...\n") +
 				tr("\nurl=") + QString::fromStdString(downloadUrl) +
 				tr("\nversion=") + QString::fromStdString(version) +
 				tr("\nfile size=%1").arg(fileSize);
 
+	QLabel * label = new QLabel();
+	label->setAlignment(Qt::AlignLeft);
+	label->setPixmap(QPixmap(":pics/update.png"));
+	_progressDialog->setLabel(label);
 	_progressDialog->setLabelText(_originalLabelText);
 	_progressDialog->setWindowTitle(tr("WengoPhone - Downloading update"));
 	_progressDialog->setAutoClose(false);
@@ -89,20 +93,20 @@ void QtSoftUpdaterWindow::updateWengoPhoneEventHandlerThreadSafe(const std::stri
 	file.close();
 
 	_softUpdater = new SoftUpdater();
-	_softUpdater->dataReadProgressEvent += boost::bind(&QtSoftUpdaterWindow::dataReadProgressEventHandler, this, _1, _2, _3);
-	_softUpdater->downloadFinishedEvent += boost::bind(&QtSoftUpdaterWindow::downloadFinishedEventHandler, this, _1);
+	_softUpdater->dataReadProgressEvent += boost::bind(&QtSoftUpdate::dataReadProgressEventHandler, this, _1, _2, _3);
+	_softUpdater->downloadFinishedEvent += boost::bind(&QtSoftUpdate::downloadFinishedEventHandler, this, _1);
 	_softUpdater->download(downloadUrl, UPDATE_PROGRAM);
 
 	_progressDialog->exec();
 }
 
-void QtSoftUpdaterWindow::dataReadProgressEventHandler(double bytesDone, double bytesTotal, unsigned downloadSpeed) {
+void QtSoftUpdate::dataReadProgressEventHandler(double bytesDone, double bytesTotal, unsigned downloadSpeed) {
 	typedef PostEvent3<void (double, double, unsigned), double, double, unsigned> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSoftUpdaterWindow::dataReadProgressEventHandlerThreadSafe, this, _1, _2, _3), bytesDone, bytesTotal, downloadSpeed);
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSoftUpdate::dataReadProgressEventHandlerThreadSafe, this, _1, _2, _3), bytesDone, bytesTotal, downloadSpeed);
 	postEvent(event);
 }
 
-void QtSoftUpdaterWindow::dataReadProgressEventHandlerThreadSafe(double bytesDone, double bytesTotal, unsigned downloadSpeed) {
+void QtSoftUpdate::dataReadProgressEventHandlerThreadSafe(double bytesDone, double bytesTotal, unsigned downloadSpeed) {
 	LOG_DEBUG("progress=" + String::fromNumber(bytesDone));
 	if (_progressDialog->wasCanceled()) {
 		return;
@@ -114,13 +118,13 @@ void QtSoftUpdaterWindow::dataReadProgressEventHandlerThreadSafe(double bytesDon
 	QApplication::processEvents();
 }
 
-void QtSoftUpdaterWindow::downloadFinishedEventHandler(HttpRequest::Error error) {
+void QtSoftUpdate::downloadFinishedEventHandler(HttpRequest::Error error) {
 	typedef PostEvent1<void (HttpRequest::Error), HttpRequest::Error> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSoftUpdaterWindow::downloadFinishedEventHandlerThreadSafe, this, _1), error);
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSoftUpdate::downloadFinishedEventHandlerThreadSafe, this, _1), error);
 	postEvent(event);
 }
 
-void QtSoftUpdaterWindow::downloadFinishedEventHandlerThreadSafe(HttpRequest::Error error) {
+void QtSoftUpdate::downloadFinishedEventHandlerThreadSafe(HttpRequest::Error error) {
 	LOG_DEBUG("download finished");
 
 	if (error == HttpRequest::NoError) {
@@ -133,17 +137,17 @@ void QtSoftUpdaterWindow::downloadFinishedEventHandlerThreadSafe(HttpRequest::Er
 	}
 }
 
-void QtSoftUpdaterWindow::abortDownload() {
+void QtSoftUpdate::abortDownload() {
 	_softUpdater->abort();
 }
 
-void QtSoftUpdaterWindow::launchUpdateProcess() {
+void QtSoftUpdate::launchUpdateProcess() {
 	QProcess * updateProcess = new QProcess();
 	connect(updateProcess, SIGNAL(error(QProcess::ProcessError)), SLOT(updateProcessError(QProcess::ProcessError)));
 	updateProcess->start(UPDATE_PROGRAM);
 }
 
-void QtSoftUpdaterWindow::updateProcessError(QProcess::ProcessError error) {
+void QtSoftUpdate::updateProcessError(QProcess::ProcessError error) {
 	QMessageBox::critical(_qtWengoPhone->getWidget(),
 			tr("WengoPhone - Update failed"),
 			tr("WengoPhone update failed to start: try to update WengoPhone manually"));

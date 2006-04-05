@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTSOFTUPDATERWINDOW_H
-#define QTSOFTUPDATERWINDOW_H
+#ifndef QTSOFTUPDATE_H
+#define QTSOFTUPDATE_H
 
 #include <presentation/PSoftUpdate.h>
 
@@ -43,13 +43,13 @@ class QProgressDialog;
  *
  * @author Tanguy Krotoff
  */
-class QtSoftUpdaterWindow : public QObjectThreadSafe, public PSoftUpdate {
+class QtSoftUpdate : public QObjectThreadSafe, public PSoftUpdate {
 	Q_OBJECT
 public:
 
-	QtSoftUpdaterWindow(CSoftUpdate & cSoftUpdate);
+	QtSoftUpdate(CSoftUpdate & cSoftUpdate);
 
-	~QtSoftUpdaterWindow();
+	~QtSoftUpdate();
 
 	void updatePresentation() { }
 
@@ -115,4 +115,4 @@ private:
 	QString _originalLabelText;
 };
 
-#endif	//QTSOFTUPDATERWINDOW_H
+#endif	//QTSOFTUPDATE_H

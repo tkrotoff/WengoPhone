@@ -49,7 +49,7 @@
 #include "webservices/sms/QtSms.h"
 #include <control/webservices/sms/CSms.h>
 
-#include "webservices/softupdate/QtSoftUpdaterWindow.h"
+#include "webservices/softupdate/QtSoftUpdate.h"
 #include <control/webservices/softupdate/CSoftUpdate.h>
 
 #include "history/QtHistory.h"
@@ -139,8 +139,8 @@ public:
 	}
 
 	PSoftUpdate * createPresentationSoftUpdate(CSoftUpdate & cSoftUpdate) {
-		static QtSoftUpdaterWindow * qtSoftUpdaterWindow = new QtSoftUpdaterWindow(cSoftUpdate);
-		return qtSoftUpdaterWindow;
+		static QtSoftUpdate * qtSoftUpdate = new QtSoftUpdate(cSoftUpdate);
+		return qtSoftUpdate;
 	}
 
 	PHistory * createPresentationHistory(CHistory & cHistory) {
