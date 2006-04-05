@@ -135,8 +135,12 @@ void UserProfile::startIM(Contact & contact) {
 	IMContact * imContact = contact.getPreferredIMContact();
 
 	//FIXME: we should give a set of pointer to IMContacts
-	imContactSet.insert(*imContact);
-	_chatHandler.createSession(imContact->getIMAccount(), imContactSet);
+	if (imContact) {
+		imContactSet.insert(*imContact);
+		_chatHandler.createSession(imContact->getIMAccount(), imContactSet);
+	} else {
+		LOG_ERROR("There is no IMContact available");
+	}
 }
 
 void UserProfile::addSipAccount(const std::string & login, const std::string & password, bool autoLogin) {
