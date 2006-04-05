@@ -37,9 +37,9 @@
 #include <control/chat/CChatHandler.h>
 #include <control/presence/CPresenceHandler.h>
 #include <model/webservices/sms/Sms.h>
-#include <control/sms/CSms.h>
+#include <control/webservices/sms/CSms.h>
 #include <model/webservices/softupdate/SoftUpdate.h>
-#include <control/softupdate/CSoftUpdate.h>
+#include <control/webservices/softupdate/CSoftUpdate.h>
 
 #include <util/WebBrowser.h>
 #include <util/StringList.h>

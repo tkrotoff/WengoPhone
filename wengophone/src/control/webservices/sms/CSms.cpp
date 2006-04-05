@@ -19,8 +19,8 @@
 
 #include "CSms.h"
 
-#include "presentation/PFactory.h"
-#include "presentation/PSms.h"
+#include <presentation/PFactory.h>
+#include <presentation/PSms.h>
 
 CSms::CSms(Sms & sms, CWengoPhone & cWengoPhone)
 	: _sms(sms),
