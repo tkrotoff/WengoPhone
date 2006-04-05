@@ -531,6 +531,10 @@ SOURCE=.\tftp.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\sockaddr.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\config-win32.h
 # End Source File
 # End Group

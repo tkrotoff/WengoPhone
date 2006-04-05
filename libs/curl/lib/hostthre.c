@@ -18,7 +18,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: hostthre.c,v 1.30 2005/10/02 16:52:07 giva Exp $
+ * $Id: hostthre.c,v 1.33 2005/11/24 20:39:00 bagder Exp $
  ***************************************************************************/
 
 #include "setup.h"
@@ -181,6 +181,7 @@ struct thread_sync_data {
 };
 
 /* Destroy resolver thread synchronization data */
+static
 void destroy_thread_sync_data(struct thread_sync_data * tsd)
 {
   if (tsd->hostname) {
@@ -202,6 +203,7 @@ void destroy_thread_sync_data(struct thread_sync_data * tsd)
 }
 
 /* Initialize resolver thread synchronization data */
+static
 BOOL init_thread_sync_data(struct thread_data * td,
                            char * hostname,
                            struct thread_sync_data * tsd)
@@ -243,6 +245,7 @@ BOOL init_thread_sync_data(struct thread_data * td,
 }
 
 /* acquire resolver thread synchronization */
+static
 BOOL acquire_thread_sync(struct thread_sync_data * tsd)
 {
   /* is the thread initiator still waiting for us ? */
@@ -269,6 +272,7 @@ BOOL acquire_thread_sync(struct thread_sync_data * tsd)
 }
 
 /* release resolver thread synchronization */
+static
 void release_thread_sync(struct thread_sync_data * tsd)
 {
   ReleaseMutex(tsd->mutex_terminate);
@@ -660,14 +664,21 @@ CURLcode Curl_wait_for_resolv(struct connectdata *conn,
       rc = CURLE_OUT_OF_MEMORY;
       failf(data, "Could not resolve host: %s", curl_easy_strerror(rc));
     }
+    else if(conn->async.done) {
+      if(conn->bits.httpproxy) {
+        failf(data, "Could not resolve proxy: %s; %s",
+              conn->proxy.dispname, Curl_strerror(conn, conn->async.status));
+        rc = CURLE_COULDNT_RESOLVE_PROXY;
+      }
+      else {
+        failf(data, "Could not resolve host: %s; %s",
+              conn->host.name, Curl_strerror(conn, conn->async.status));
+        rc = CURLE_COULDNT_RESOLVE_HOST;
+      }
+    }
     else if (td->thread_status == (DWORD)-1 || conn->async.status == NO_DATA) {
       failf(data, "Resolving host timed out: %s", conn->host.name);
       rc = CURLE_OPERATION_TIMEDOUT;
-    }
-    else if(conn->async.done) {
-      failf(data, "Could not resolve host: %s; %s",
-            conn->host.name, Curl_strerror(conn,conn->async.status));
-      rc = CURLE_COULDNT_RESOLVE_HOST;
     }
     else
       rc = CURLE_OPERATION_TIMEDOUT;
@@ -812,7 +823,9 @@ Curl_addrinfo *Curl_getaddrinfo(struct connectdata *conn,
   memset(&hints, 0, sizeof(hints));
   hints.ai_family = pf;
   hints.ai_socktype = conn->socktype;
+#if 0 /* removed nov 8 2005 before 7.15.1 */
   hints.ai_flags = AI_CANONNAME;
+#endif
   itoa(port, sbuf, 10);
 
   /* fire up a new resolver thread! */

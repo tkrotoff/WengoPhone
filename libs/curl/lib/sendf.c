@@ -62,13 +62,6 @@
 /* The last #include file should be: */
 #include "memdebug.h"
 
-
-/* ///////////// <JULIEN> ///////////// */
-int get_httpresponse(int fd, char *buff, int buffsize);
-int get_httpbody(int fd, char *buff, int buffsize, int bodysize);
-int get_httpbodysize(char *buff);
-/* ************************************ */
-
 /* returns last node in linked list */
 static struct curl_slist *slist_get_last(struct curl_slist *list)
 {
@@ -359,11 +352,8 @@ int Curl_read(struct connectdata *conn, /* connection data */
     if(conn->sec_complete)
       nread = Curl_sec_read(conn, sockfd, buf, buffersize);
     else
-      /* /////////// <JULIEN> /////////// */
-      //nread = sread(sockfd, buf, buffersize); // libcurl
-      nread = get_httpresponse(sockfd, buf, buffersize);
-      /* ********************************* */
-    
+      nread = sread(sockfd, buf, buffersize);
+
     if(-1 == nread) {
       int err = Curl_ourerrno();
 #ifdef WIN32
@@ -439,139 +429,3 @@ int Curl_debug(struct SessionHandle *data, curl_infotype type,
   rc = showit(data, type, ptr, size);
   return rc;
 }
-
-/* //////////////////// <JULIEN> //////////////////// */
-int	get_httpresponse(int fd, char *buff, int buffsize)
-{
-	struct timeval	timeout;
-	fd_set	rfds;
-	int ret;
-	int nbytes = 0;
-
-	timeout.tv_sec = 2;
-	timeout.tv_usec = 0;
-
-	while (1)
-	{
-		FD_ZERO(&rfds);
-		FD_SET(fd, &rfds);
-
-		ret = select(fd + 1, &rfds, 0, 0, &timeout);
-		
-		if (ret <= 0)
-			return -1;
-
-		if (FD_ISSET(fd, &rfds))
-		{
-			ret = recv(fd, buff + nbytes, 1, 0);
-			
-			if (ret < 0)
-				return -1;
-			else if (ret == 0)
-				return nbytes;
-			else
-				nbytes += ret;
-
-			if (nbytes == buffsize)
-				return nbytes;
-			
-			if (nbytes > 3 && strncmp("\r\n\r\n", buff + nbytes - 4, 4) == 0)
-				break;
-		}
-	}
-
-	if ((ret = get_httpbody(fd, buff + nbytes, buffsize - nbytes, get_httpbodysize(buff))) > 0)
-		nbytes += ret;
-
-	return nbytes;
-}
-
-int	get_httpbody(int fd, char *buff, int buffsize, int bodysize)
-{
-	struct timeval	timeout;
-	fd_set	rfds;
-	int ret;
-	int nbytes = 0;
-	int tmpsize = bodysize;
-
-	timeout.tv_sec = 2;
-	timeout.tv_usec = 0;
-
-	while (1)
-	{
-		FD_ZERO(&rfds);
-		FD_SET(fd, &rfds);
-
-		ret = select(fd + 1, &rfds, 0, 0, &timeout);
-		
-		if (ret < 0)
-			return -1;
-		else if (ret == 0)
-			break;
-
-		if (FD_ISSET(fd, &rfds))
-		{
-			ret = recv(fd, buff + nbytes, tmpsize, 0);
-			if (ret > 0)
-			{
-				nbytes += ret;
-				tmpsize -= ret;
-			}
-
-			if (nbytes == bodysize || nbytes == buffsize)
-				break;
-		}
-	}
-
-	return nbytes;
-}
-
-#if defined(WIN32) || defined(__APPLE__) || defined(__FreeBSD__)
-
-char	*strndup(char *str, int nbytes)
-{
-	char	*newstr;
-	int		i;
-
-	if (!str || nbytes < 1)
-		return 0;
-
-	newstr = (char *) malloc(nbytes + 1);
-
-	for (i = 0; *str && i < nbytes; i++)
-		newstr[i] = *str++;
-
-	newstr[i] = 0;
-
-	return newstr;
-}
-#endif
-
-#ifndef _MSC_VER
-#define strnicmp strncasecmp
-#endif
-
-int get_httpbodysize(char *buff)
-{
-	int i = 0;
-	char *tmp = 0;
-
-	while (*buff)
-	{
-		if (strnicmp("content-length:", buff, 15) == 0)
-		{
-			while (*buff && (*buff < '0' || *buff > '9'))
-				buff++;
-
-			for (i = 0; buff[i] && buff[i] >= '0' && buff[i] <= '9'; i++)
-				;
-
-			tmp = strndup(buff, i);
-			return atoi(tmp);
-		}
-		buff++;
-	}
-
-	return 0;
-}
-/* ************************************************** */

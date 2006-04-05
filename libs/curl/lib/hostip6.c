@@ -18,7 +18,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: hostip6.c,v 1.17 2005/10/10 18:28:05 bagder Exp $
+ * $Id: hostip6.c,v 1.24 2005-12-13 13:50:22 yangtse Exp $
  ***************************************************************************/
 
 #include "setup.h"
@@ -73,6 +73,7 @@
 #include "strerror.h"
 #include "url.h"
 #include "inet_pton.h"
+#include "connect.h"
 
 #define _MPRINTF_REPLACE /* use our functions only */
 #include <curl/mprintf.h>
@@ -142,7 +143,10 @@ int curl_dogetnameinfo(const struct sockaddr *sa, socklen_t salen,
                        char *serv, size_t servlen, int flags,
                        int line, const char *source)
 {
-  int res=(getnameinfo)(sa, salen, host, hostlen, serv, servlen, flags);
+  int res = (getnameinfo)(sa, salen, 
+                          host, hostlen, 
+                          serv, servlen, 
+                          flags); 
   if(0 == res) {
     /* success */
     if(logfile)
@@ -186,6 +190,26 @@ bool Curl_ipvalid(struct SessionHandle *data)
 }
 
 #ifndef USE_THREADING_GETADDRINFO
+
+#ifdef DEBUG_ADDRINFO
+static void dump_addrinfo(struct connectdata *conn, const struct addrinfo *ai)
+{
+  printf("dump_addrinfo:\n");
+  for ( ; ai; ai = ai->ai_next) {
+    char  buf[INET6_ADDRSTRLEN];
+
+    printf("    fam %2d, CNAME %s, ",
+           ai->ai_family, ai->ai_canonname ? ai->ai_canonname : "<none>");
+    if (Curl_printable_address(ai, buf, sizeof(buf)))
+      printf("%s\n", buf);
+    else
+      printf("failed; %s\n", Curl_strerror(conn, Curl_ourerrno()));
+  }
+}
+#else
+#define dump_addrinfo(x,y)
+#endif
+
 /*
  * Curl_getaddrinfo() when built ipv6-enabled (non-threading version).
  *
@@ -207,7 +231,6 @@ Curl_addrinfo *Curl_getaddrinfo(struct connectdata *conn,
   curl_socket_t s;
   int pf;
   struct SessionHandle *data = conn->data;
-  int ai_flags;
 
   *waitp=0; /* don't wait, we have the response now */
 
@@ -242,20 +265,20 @@ Curl_addrinfo *Curl_getaddrinfo(struct connectdata *conn,
     }
   }
 
+  memset(&hints, 0, sizeof(hints));
+  hints.ai_family = pf;
+  hints.ai_socktype = conn->socktype;
+
   if((1 == Curl_inet_pton(AF_INET, hostname, addrbuf)) ||
      (1 == Curl_inet_pton(AF_INET6, hostname, addrbuf))) {
     /* the given address is numerical only, prevent a reverse lookup */
-    ai_flags = AI_NUMERICHOST;
+    hints.ai_flags = AI_NUMERICHOST;
   }
+#if 0 /* removed nov 8 2005 before 7.15.1 */
   else
-    ai_flags = AI_CANONNAME;
+    hints.ai_flags = AI_CANONNAME;
+#endif
 
-  memset(&hints, 0, sizeof(hints));
-  hints.ai_family = pf;
-
-  hints.ai_socktype = conn->socktype;
-
-  hints.ai_flags = ai_flags;
   if(port) {
     snprintf(sbuf, sizeof(sbuf), "%d", port);
     sbufptr=sbuf;
@@ -265,6 +288,8 @@ Curl_addrinfo *Curl_getaddrinfo(struct connectdata *conn,
     infof(data, "getaddrinfo(3) failed for %s:%d\n", hostname, port);
     return NULL;
   }
+
+  dump_addrinfo(conn, res);
 
   return res;
 }

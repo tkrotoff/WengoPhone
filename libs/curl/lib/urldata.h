@@ -7,7 +7,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2005, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2006, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -20,7 +20,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: urldata.h,v 1.273 2005/09/16 21:30:08 bagder Exp $
+ * $Id: urldata.h,v 1.281 2006-03-07 23:11:42 bagder Exp $
  ***************************************************************************/
 
 /* This file is for lib internal stuff */
@@ -30,7 +30,6 @@
 #define PORT_FTP 21
 #define PORT_FTPS 990
 #define PORT_TELNET 23
-#define PORT_GOPHER 70
 #define PORT_HTTP 80
 #define PORT_HTTPS 443
 #define PORT_DICT 2628
@@ -310,6 +309,12 @@ typedef enum {
   FTP_LAST  /* never used */
 } ftpstate;
 
+typedef enum {
+  FTPFILE_MULTICWD  = 1, /* as defined by RFC1738 */
+  FTPFILE_NOCWD     = 2, /* use SIZE / RETR / STOR on the full path */
+  FTPFILE_SINGLECWD = 3  /* make one CWD, then SIZE / RETR / STOR on the file */
+} curl_ftpfile;
+
 struct FTP {
   curl_off_t *bytecountp;
   char *user;    /* user name string */
@@ -337,6 +342,8 @@ struct FTP {
                        should be FALSE when it gets to Curl_ftp_quit() */
   bool cwddone;     /* if it has been determined that the proper CWD combo
                        already has been done */
+  bool cwdfail;     /* set TRUE if a CWD command fails, as then we must prevent
+                       caching the current directory */
   char *prevpath;   /* conn->path from the previous transfer */
 
   size_t nread_resp; /* number of bytes currently read of a server response */
@@ -420,14 +427,15 @@ struct ConnectBits {
   bool ftp_use_eprt;  /* As set with CURLOPT_FTP_USE_EPRT, but if we find out
                          EPRT doesn't work we disable it for the forthcoming
                          requests */
-  bool ftp_use_lprt;  /* As set with CURLOPT_FTP_USE_EPRT, but if we find out
-                         LPRT doesn't work we disable it for the forthcoming
-                         requests */
   bool netrc;         /* name+password provided by netrc */
-  
+
   bool trailerHdrPresent; /* Set when Trailer: header found in HTTP response.
-                             Required to determine whether to look for trailers 
-                             in case of Transfer-Encoding: chunking */ 
+                             Required to determine whether to look for trailers
+                             in case of Transfer-Encoding: chunking */
+  bool done;          /* set to FALSE when Curl_do() is called and set to TRUE
+                         when Curl_done() is called, to prevent Curl_done() to
+                         get invoked twice when the multi interface is
+                         used. */
 };
 
 struct hostname {
@@ -533,7 +541,6 @@ struct connectdata {
 
   long protocol; /* PROT_* flags concerning the protocol set */
 #define PROT_MISSING (1<<0)
-#define PROT_GOPHER  (1<<1)
 #define PROT_HTTP    (1<<2)
 #define PROT_HTTPS   (1<<3)
 #define PROT_FTP     (1<<4)
@@ -695,7 +702,6 @@ struct connectdata {
   /* previously this was in the urldata struct */
   union {
     struct HTTP *http;
-    struct HTTP *gopher; /* alias, just for the sake of being more readable */
     struct HTTP *https;  /* alias, just for the sake of being more readable */
     struct FTP *ftp;
     void *tftp;        /* private for tftp.c-eyes only */
@@ -854,6 +860,7 @@ struct UrlState {
      set, it holds an allocated connection. */
   struct connectdata **connects;
   long numconnects; /* size of the 'connects' array */
+  int lastconnect;  /* index of most recent connect or -1 if undefined */
 
   char *headerbuff; /* allocated buffer to store headers in */
   size_t headersize;   /* size of the allocation */
@@ -956,7 +963,8 @@ struct UserDefined {
   char *set_range;   /* range, if used. See README for detailed specification
                         on this syntax. */
   long followlocation; /* as in HTTP Location: */
-  long maxredirs;    /* maximum no. of http(s) redirects to follow */
+  long maxredirs;    /* maximum no. of http(s) redirects to follow, set to -1
+                        for infinity */
   char *set_referer; /* custom string */
   bool free_referer; /* set TRUE if 'referer' points to a string we
                         allocated */
@@ -967,7 +975,10 @@ struct UserDefined {
                                of strlen(), and then the data *may* be binary
                                (contain zero bytes) */
   char *ftpport;     /* port to send with the FTP PORT command */
-  char *device;      /* network interface to use */
+  char *device;      /* local network interface/address to use */
+  unsigned short localport; /* local port number to bind to */
+  int localportrange; /* number of additional port numbers to test in case the
+                         'localport' one can't be bind()ed */
   curl_write_callback fwrite;        /* function that stores the output */
   curl_write_callback fwrite_header; /* function that stores headers */
   curl_read_callback fread;          /* function that reads the input */
@@ -1034,6 +1045,8 @@ struct UserDefined {
   char *source_url;     /* for 3rd party transfer */
   char *source_userpwd;  /* for 3rd party transfer */
 
+  curl_ftpfile ftp_filemethod; /* how to get to a file when FTP is used  */
+
 /* Here follows boolean settings that define how to behave during
    this session. They are STATIC, set by libcurl users or at least initially
    and they don't change during operations. */
@@ -1067,7 +1080,6 @@ struct UserDefined {
   bool expect100header;  /* TRUE if we added Expect: 100-continue */
   bool ftp_use_epsv;     /* if EPSV is to be attempted or not */
   bool ftp_use_eprt;     /* if EPRT is to be attempted or not */
-  bool ftp_use_lprt;     /* if LPRT is to be attempted or not */
   curl_ftpssl ftp_ssl;   /* if AUTH TLS is to be attempted etc */
   curl_ftpauth ftpsslauth; /* what AUTH XXX to be attempted */
   bool no_signal;        /* do not use any signal/alarm handler */
@@ -1076,6 +1088,7 @@ struct UserDefined {
   bool ignorecl;         /* ignore content length */
   bool ftp_skip_ip;      /* skip the IP address the FTP server passes on to
                             us */
+  bool connect_only;     /* make connection, let application use the socket */
 };
 
 /*

@@ -1,4 +1,25 @@
-dnl $Id: configure.ac,v 1.164 2005/10/04 20:32:17 bagder Exp $
+#***************************************************************************
+#                                  _   _ ____  _
+#  Project                     ___| | | |  _ \| |
+#                             / __| | | | |_) | |
+#                            | (__| |_| |  _ <| |___
+#                             \___|\___/|_| \_\_____|
+#
+# Copyright (C) 1998 - 2006, Daniel Stenberg, <daniel@haxx.se>, et al.
+#
+# This software is licensed as described in the file COPYING, which
+# you should have received as part of this distribution. The terms
+# are also available at http://curl.haxx.se/docs/copyright.html.
+#
+# You may opt to use, copy, modify, merge, publish, distribute and/or sell
+# copies of the Software, and permit persons to whom the Software is
+# furnished to do so, under the terms of the COPYING file.
+#
+# This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
+# KIND, either express or implied.
+#
+# $Id: configure.ac,v 1.189 2006-03-02 11:37:06 bagder Exp $
+###########################################################################
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
@@ -140,6 +161,19 @@ dnl The install stuff has already been taken care of by the automake stuff
 dnl AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
+dnl **********************************************************************
+dnl Make sure that our checks for headers windows.h winsock.h winsock2.h 
+dnl and ws2tcpip.h take precedence over any other further checks which 
+dnl could be done later using AC_CHECK_HEADER or AC_CHECK_HEADERS for
+dnl this specific header files. And do them before its results are used.
+dnl **********************************************************************
+
+CURL_CHECK_HEADER_WINDOWS
+CURL_CHECK_HEADER_WINSOCK
+CURL_CHECK_HEADER_WINSOCK2
+CURL_CHECK_HEADER_WS2TCPIP
+
+
 dnl ************************************************************
 dnl switch off particular protocols
 dnl
@@ -151,10 +185,8 @@ AC_HELP_STRING([--disable-http],[Disable HTTP support]),
   no)
        AC_MSG_RESULT(no)
        AC_DEFINE(CURL_DISABLE_HTTP, 1, [to disable HTTP])
-       AC_MSG_WARN([disable HTTP disables FTP over proxy and GOPHER too])
-       AC_DEFINE(CURL_DISABLE_GOPHER, 1, [to disable GOPHER])
+       AC_MSG_WARN([disable HTTP disables FTP over proxy])
        AC_SUBST(CURL_DISABLE_HTTP, [1])
-       AC_SUBST(CURL_DISABLE_GOPHER, [1])
        ;;
   *)   AC_MSG_RESULT(yes)
        ;;
@@ -170,21 +202,6 @@ AC_HELP_STRING([--disable-ftp],[Disable FTP support]),
        AC_MSG_RESULT(no)
        AC_DEFINE(CURL_DISABLE_FTP, 1, [to disable FTP])
        AC_SUBST(CURL_DISABLE_FTP, [1])
-       ;;
-  *)   AC_MSG_RESULT(yes)
-       ;;
-  esac ],
-       AC_MSG_RESULT(yes)
-)
-AC_MSG_CHECKING([whether to support gopher])
-AC_ARG_ENABLE(gopher,
-AC_HELP_STRING([--enable-gopher],[Enable GOPHER support])
-AC_HELP_STRING([--disable-gopher],[Disable GOPHER support]),
-[ case "$enableval" in
-  no)
-       AC_MSG_RESULT(no)
-       AC_DEFINE(CURL_DISABLE_GOPHER, 1, [to disable GOPHER])
-       AC_SUBST(CURL_DISABLE_GOPHER, [1])
        ;;
   *)   AC_MSG_RESULT(yes)
        ;;
@@ -288,7 +305,6 @@ AC_HELP_STRING([--disable-manual],[Disable built-in manual]),
 )
 dnl The actual use of the USE_MANUAL variable is done much later in this
 dnl script to allow other actions to disable it as well.
-
 
 dnl **********************************************************************
 dnl Checks for libraries.
@@ -795,7 +811,7 @@ OPT_SSL=off
 dnl Default to no CA bundle
 ca="no"
 AC_ARG_WITH(ssl,dnl
-AC_HELP_STRING([--with-ssl=PATH],[where to look for SSL, PATH points to the SSL installation (default: /usr/local/ssl)])
+AC_HELP_STRING([--with-ssl=PATH],[Where to look for OpenSSL, PATH points to the SSL installation (default: /usr/local/ssl); when possible, set the PKG_CONFIG_PATH environment variable instead of using this option])
 AC_HELP_STRING([--without-ssl], [disable SSL]),
   OPT_SSL=$withval)
 
@@ -1047,10 +1063,10 @@ if test "$OPENSSL_ENABLED" != "1"; then
     fi
     if test -n "$addlib"; then
 
-      CLEANLDFLAGS="$LDFLAGS"
+      CLEANLIBS="$LIBS"
       CLEANCPPFLAGS="$CPPFLAGS"
   
-      LDFLAGS="$LDFLAGS $addlib"
+      LIBS="$LIBS $addlib"
       if test "$addcflags" != "-I/usr/include"; then
          CPPFLAGS="$CPPFLAGS $addcflags"
       fi
@@ -1063,7 +1079,7 @@ if test "$OPENSSL_ENABLED" != "1"; then
        curl_ssl_msg="enabled (GnuTLS)"
        ],
        [
-         LDFLAGS="$CLEANLDFLAGS"
+         LIBS="$CLEANLIBS"
          CPPFLAGS="$CLEANCPPFLAGS"
        ])
   
@@ -1288,8 +1304,8 @@ AC_HELP_STRING([--enable-thread],[look for thread-safe functions]),
 
 if test X"$OPT_THREAD" = Xoff
 then
-  AC_DEFINE(DISABLED_THREADSAFE, 1, \
-Set to explicitly specify we don't want to use thread-safe functions)
+  AC_DEFINE(DISABLED_THREADSAFE, 1,
+    [Set to explicitly specify we don't want to use thread-safe functions])
 else
   if test "$ipv6" != "yes"; then
     dnl dig around for gethostbyname_r()
@@ -1395,7 +1411,8 @@ dnl **********************************************************************
 dnl Checks for header files.
 AC_HEADER_STDC
 
-dnl First check for the very most basic headers. Then we can use these
+
+dnl Now check for the very most basic headers. Then we can use these
 dnl ones as default-headers when checking for the rest!
 AC_CHECK_HEADERS(
         sys/types.h \
@@ -1422,8 +1439,6 @@ AC_CHECK_HEADERS(
         fcntl.h \
         dlfcn.h \
         alloca.h \
-        winsock.h \
-        winsock2.h \
         time.h \
         io.h \
         pwd.h \
@@ -1493,7 +1508,9 @@ fi
 AC_CHECK_TYPE(ssize_t, ,
    AC_DEFINE(ssize_t, int, [the signed version of size_t]))
 
-TYPE_SOCKLEN_T
+# Check for socklen_t or equivalent
+CURL_CHECK_TYPE_SOCKLEN_T
+
 TYPE_IN_ADDR_T
 
 TYPE_SOCKADDR_STORAGE
@@ -1504,6 +1521,13 @@ dnl Checks for library functions.
 dnl AC_PROG_GCC_TRADITIONAL
 AC_TYPE_SIGNAL
 dnl AC_FUNC_VPRINTF
+case $host in
+  *msdosdjgpp)
+     ac_cv_func_pipe=no
+     skipcheck_pipe=yes
+     AC_MSG_NOTICE([skip check for pipe on msdosdjgpp])
+    ;;
+esac
 AC_CHECK_FUNCS( strtoll \
                 socket \
                 select \
@@ -1536,12 +1560,15 @@ AC_CHECK_FUNCS( strtoll \
                 ftruncate \
                 pipe \
                 poll \
+                getprotobyname \
                 getrlimit \
                 setrlimit,
 dnl if found
 [],
 dnl if not found, $ac_func is the name we check for
-  func="$ac_func"
+func="$ac_func"
+eval skipcheck=\$skipcheck_$func
+if test "x$skipcheck" != "xyes"; then
   AC_MSG_CHECKING([deeper for $func])
   AC_TRY_LINK( [],
                [ $func ();],
@@ -1551,21 +1578,38 @@ dnl if not found, $ac_func is the name we check for
                AC_DEFINE_UNQUOTED($def, 1, [If you have $func]),
                AC_MSG_RESULT(but still no)
                )
-
+fi
 )
 
 dnl For some reason, the check above doesn't properly detect select() with
 dnl Msys/Mingw
-if test "$ac_cv_func_select" != "yes"; then
+if test "$ac_cv_func_select" = "no"; then
   AC_MSG_CHECKING([for select in ws2_32])
-  AC_TRY_LINK([#include <winsock2.h>],
-               [select(0,(fd_set *)NULL,(fd_set *)NULL,(fd_set *)NULL,(struct timeval *)NULL);],
-               [ dnl worked!
-               AC_MSG_RESULT([yes])
-               HAVE_SELECT="1"
-               AC_DEFINE_UNQUOTED(HAVE_SELECT,1)],
-               [AC_MSG_ERROR(You can't compile without a select)]
-             )
+  AC_TRY_LINK([
+#undef inline
+#ifdef HAVE_WINDOWS_H
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#ifdef HAVE_WINSOCK2_H
+#include <winsock2.h>
+#else
+#ifdef HAVE_WINSOCK_H
+#include <winsock.h>
+#endif
+#endif
+#endif
+    ],[
+      select(0,(fd_set *)NULL,(fd_set *)NULL,(fd_set *)NULL,(struct timeval *)NULL);
+    ],[ 
+      AC_MSG_RESULT([yes])
+      HAVE_SELECT="1"
+      AC_DEFINE_UNQUOTED(HAVE_SELECT, 1,
+        [Define to 1 if you have the select function.])
+    ],[
+      AC_MSG_ERROR([You can't compile without a select])
+  ])
 fi
 
 dnl sigsetjmp() might be a macro and no function so if it isn't found already
@@ -1589,7 +1633,24 @@ AC_CHECK_DECL(basename, ,
 #ifdef HAVE_LIBGEN_H
 #include <libgen.h>
 #endif
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 )
+
+AC_CHECK_DECL(inet_pton, ,
+              AC_DEFINE(HAVE_NO_INET_PTON_PROTO, 1,
+                        [Defined if no inet_pton() prototype available]),
+[
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
+#endif
+]
+)
+
+dnl Check if the getnameinfo function is available
+dnl and get the types of five of its arguments.
+CURL_CHECK_FUNC_GETNAMEINFO
 
 AC_MSG_CHECKING([if we are Mac OS X (to disable poll)])
 disable_poll=no
@@ -1784,7 +1845,6 @@ AC_HELP_STRING([--disable-sspi],[Disable SSPI]),
        AC_MSG_RESULT(yes)
        AC_DEFINE(USE_WINDOWS_SSPI, 1, [to enable SSPI support])
        AC_SUBST(USE_WINDOWS_SSPI)
-       LIBS="$LIBS -lsecur32"
        curl_sspi_msg="yes"
        ;;
   *)
@@ -1894,6 +1954,8 @@ AC_CONFIG_FILES([Makefile \
            packages/EPM/curl.list \
            packages/EPM/Makefile \
            packages/vms/Makefile \
+           packages/AIX/Makefile \
+           packages/AIX/RPM/Makefile \
            curl-config \
            libcurl.pc
 ])

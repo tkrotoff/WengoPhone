@@ -18,7 +18,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: easy.c,v 1.73 2005/07/17 12:44:11 bagder Exp $
+ * $Id: easy.c,v 1.75 2006/02/11 22:35:17 bagder Exp $
  ***************************************************************************/
 
 #include "setup.h"
@@ -89,13 +89,6 @@
 
 /* The last #include file should be: */
 #include "memdebug.h"
-
-/* //////////// <JULIEN> //////////// */
-#ifdef USE_SSL
-extern curl_socket_t gl_sockfd;
-extern void *gl_ssl_handle;
-/* ********************************** */
-#endif
 
 #if defined(WIN32) && !defined(__GNUC__) || defined(__MINGW32__)
 /* win32_cleanup() is for win32 socket cleanup functionality, the opposite
@@ -197,7 +190,7 @@ curl_calloc_callback Curl_ccalloc = (curl_calloc_callback)calloc;
  */
 CURLcode curl_global_init(long flags)
 {
-  if (initialized)
+  if (initialized++)
     return CURLE_OK;
 
   /* Setup the default memory functions here (again) */
@@ -224,7 +217,6 @@ CURLcode curl_global_init(long flags)
   idna_init();
 #endif
 
-  initialized = 1;
   init_flags  = flags;
 
   return CURLE_OK;
@@ -270,6 +262,9 @@ void curl_global_cleanup(void)
   if (!initialized)
     return;
 
+  if (--initialized)
+    return;
+
   Curl_global_host_cache_dtor();
 
   if (init_flags & CURL_GLOBAL_SSL)
@@ -282,7 +277,6 @@ void curl_global_cleanup(void)
   amiga_cleanup();
 #endif
 
-  initialized = 0;
   init_flags  = 0;
 }
 
@@ -290,7 +284,7 @@ void curl_global_cleanup(void)
  * curl_easy_init() is the external interface to alloc, setup and init an
  * easy handle that is returned. If anything goes wrong, NULL is returned.
  */
-CURL_EXTERN CURL *curl_easy_init(void)
+CURL *curl_easy_init(void)
 {
   CURLcode res;
   struct SessionHandle *data;
@@ -316,7 +310,7 @@ CURL_EXTERN CURL *curl_easy_init(void)
  * easy handle.
  */
 
-CURL_EXTERN CURLcode curl_easy_setopt(CURL *curl, CURLoption tag, ...)
+CURLcode curl_easy_setopt(CURL *curl, CURLoption tag, ...)
 {
   va_list arg;
   struct SessionHandle *data = curl;
@@ -420,7 +414,7 @@ CURLcode curl_easy_perform(CURL *easy)
  * curl_easy_perform() is the external interface that performs a transfer
  * previously setup.
  */
-CURL_EXTERN CURLcode curl_easy_perform(CURL *curl)
+CURLcode curl_easy_perform(CURL *curl)
 {
   struct SessionHandle *data = (struct SessionHandle *)curl;
 
@@ -456,7 +450,7 @@ CURL_EXTERN CURLcode curl_easy_perform(CURL *curl)
  * curl_easy_cleanup() is the external interface to cleaning/freeing the given
  * easy handle.
  */
-CURL_EXTERN void curl_easy_cleanup(CURL *curl)
+void curl_easy_cleanup(CURL *curl)
 {
   struct SessionHandle *data = (struct SessionHandle *)curl;
 
@@ -479,7 +473,7 @@ void Curl_easy_addmulti(struct SessionHandle *data,
  * curl_easy_getinfo() is an external interface that allows an app to retrieve
  * information from a performed transfer and similar.
  */
-CURL_EXTERN CURLcode curl_easy_getinfo(CURL *curl, CURLINFO info, ...)
+CURLcode curl_easy_getinfo(CURL *curl, CURLINFO info, ...)
 {
   va_list arg;
   void *paramp;
@@ -496,7 +490,7 @@ CURL_EXTERN CURLcode curl_easy_getinfo(CURL *curl, CURLINFO info, ...)
  * given input easy handle. The returned handle will be a new working handle
  * with all options set exactly as the input source handle.
  */
-CURL_EXTERN CURL *curl_easy_duphandle(CURL *incurl)
+CURL *curl_easy_duphandle(CURL *incurl)
 {
   bool fail = TRUE;
   struct SessionHandle *data=(struct SessionHandle *)incurl;
@@ -532,6 +526,8 @@ CURL_EXTERN CURL *curl_easy_duphandle(CURL *incurl)
 
     memset(outcurl->state.connects, 0,
            sizeof(struct connectdata *)*outcurl->state.numconnects);
+
+    outcurl->state.lastconnect = -1;
 
     outcurl->progress.flags    = data->progress.flags;
     outcurl->progress.callback = data->progress.callback;
@@ -604,7 +600,7 @@ CURL_EXTERN CURL *curl_easy_duphandle(CURL *incurl)
  * curl_easy_reset() is an external interface that allows an app to re-
  * initialize a session handle to the default values.
  */
-CURL_EXTERN void curl_easy_reset(CURL *curl)
+void curl_easy_reset(CURL *curl)
 {
   struct SessionHandle *data = (struct SessionHandle *)curl;
 
@@ -660,40 +656,3 @@ CURL_EXTERN void curl_easy_reset(CURL *curl)
   data->set.ssl.CAfile = (char *)CURL_CA_BUNDLE;
 #endif
 }
-
-
-/* //////////// <JULIEN> //////////// */
-
-/*
- * curl_easy_get_SSl_handle() is an external interface that allows an app to get
- * the SSL handle of a CURL session.
- */
-CURL_EXTERN void *curl_easy_get_SSL_handle()
-{
-#ifdef USE_SSL
-	return gl_ssl_handle;
-#else
-    return 0;
-#endif
-}
-
-
-/*
- * curl_easy_get_sock() is an external interface that allows an app to get
- * the socket of a session handle.
- */
-#ifndef WIN32
-typedef int SOCKET;
-#endif
-
-CURL_EXTERN SOCKET curl_easy_get_sock(CURL *curl)
-{
-  struct SessionHandle *data = (struct SessionHandle *)curl;
-
-  if (data->info.httpproxycode != 200)
-	return -1;
-  
-  return (SOCKET) data->state.connects[0]->sockfd;
-}
-
-/* ********************************* */

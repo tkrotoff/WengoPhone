@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2005, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2006, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -18,7 +18,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: getinfo.c,v 1.46 2005/07/27 22:17:15 bagder Exp $
+ * $Id: getinfo.c,v 1.47 2006/02/11 22:35:17 bagder Exp $
  ***************************************************************************/
 
 #include "setup.h"
@@ -187,37 +187,21 @@ CURLcode Curl_getinfo(struct SessionHandle *data, CURLINFO info, ...)
   case CURLINFO_COOKIELIST:
     *param_slistp = Curl_cookie_list(data);
     break;
-  case CURLINFO_HTTP_SOCKET:
-    {
-      int i;
-      struct connectdata *conn;
-      struct timeval now;
-      long lowscore, score;
-      int winner = -1;
-
-      now = Curl_tvnow();
-
-      for(i=0; i< data->state.numconnects; i++) {
-	conn = data->state.connects[i];
-
-	if(!conn)
-	  continue;
-
-	if (!(conn->protocol & PROT_HTTP))
-	  continue;
-
-	score = Curl_tvdiff(now, conn->now);
-	if ((winner == -1) || (score < lowscore)) {
-	  lowscore = score;
-	  winner = i;
-	}
-      }
-      if (winner == -1)
-	return CURLE_GOT_NOTHING;
-
-      *param_longp = data->state.connects[winner]->sock[FIRSTSOCKET];
-      break;
-    }
+  case CURLINFO_LASTSOCKET:
+    if((data->state.lastconnect != -1) &&
+       (data->state.connects[data->state.lastconnect] != NULL))
+      *param_longp = data->state.connects[data->state.lastconnect]->
+        sock[FIRSTSOCKET];
+    else
+      *param_longp = -1;
+    break;
+  case CURLINFO_LASTSSLHANDLE:
+	  if ((data->state.lastconnect != -1) &&
+		  (data->state.connects[data->state.lastconnect] != NULL))
+		  *param_longp = data->state.connects[data->state.lastconnect]->
+			  ssl[FIRSTSOCKET].handle;
+	  else
+		  *param_longp = NULL;
   default:
     return CURLE_BAD_FUNCTION_ARGUMENT;
   }

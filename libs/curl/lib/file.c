@@ -18,7 +18,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: file.c,v 1.71 2005/02/11 00:03:49 bagder Exp $
+ * $Id: file.c,v 1.74 2005/12/30 00:20:46 curlvms Exp $
  ***************************************************************************/
 
 #include "setup.h"
@@ -158,12 +158,12 @@ CURLcode Curl_file_connect(struct connectdata *conn)
 #endif
   file->freepath = real_path; /* free this when done */
 
+  file->fd = fd;
   if(!conn->data->set.upload && (fd == -1)) {
     failf(conn->data, "Couldn't open file %s", conn->path);
     Curl_file_done(conn, CURLE_FILE_COULDNT_READ_FILE);
     return CURLE_FILE_COULDNT_READ_FILE;
   }
-  file->fd = fd;
 
   return CURLE_OK;
 }
@@ -230,10 +230,10 @@ static CURLcode file_upload(struct connectdata *conn)
     if(res)
       break;
 
-    nread = (size_t)readcount;
-
-    if (nread <= 0)
+    if (readcount <= 0)  /* fix questionable compare error. curlvms */
       break;
+
+    nread = (size_t)readcount;
 
     /* write the data to the target */
     nwrite = fwrite(buf, 1, nread, fp);

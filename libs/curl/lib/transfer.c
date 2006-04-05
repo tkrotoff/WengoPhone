@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2005, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2006, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -18,7 +18,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: transfer.c,v 1.286 2005/09/27 09:13:39 bagder Exp $
+ * $Id: transfer.c,v 1.294 2006-02-19 23:16:48 bagder Exp $
  ***************************************************************************/
 
 #include "setup.h"
@@ -214,7 +214,7 @@ CURLcode Curl_readrewind(struct connectdata *conn)
     if(data->set.ioctl) {
       curlioerr err;
 
-      err = data->set.ioctl(data, CURLIOCMD_RESTARTREAD,
+      err = (data->set.ioctl) (data, CURLIOCMD_RESTARTREAD,
                             data->set.ioctl_client);
       infof(data, "the ioctl callback returned %d\n", (int)err);
 
@@ -1158,12 +1158,14 @@ CURLcode Curl_readwrite(struct connectdata *conn,
 
               case DEFLATE:
                 /* Assume CLIENTWRITE_BODY; headers are not encoded. */
-                result = Curl_unencode_deflate_write(data, k, nread);
+                if(!k->ignorebody)
+                  result = Curl_unencode_deflate_write(data, k, nread);
                 break;
 
               case GZIP:
                 /* Assume CLIENTWRITE_BODY; headers are not encoded. */
-                result = Curl_unencode_gzip_write(data, k, nread);
+                if(!k->ignorebody)
+                  result = Curl_unencode_gzip_write(data, k, nread);
                 break;
 
               case COMPRESS:
@@ -1765,17 +1767,18 @@ CURLcode Curl_follow(struct SessionHandle *data,
   size_t newlen;
   char *newest;
 
-  if (data->set.maxredirs &&
-      (data->set.followlocation >= data->set.maxredirs)) {
-    failf(data,"Maximum (%d) redirects followed", data->set.maxredirs);
-    return CURLE_TOO_MANY_REDIRECTS;
-  }
+  if(!retry) {
+    if ((data->set.maxredirs != -1) &&
+        (data->set.followlocation >= data->set.maxredirs)) {
+      failf(data,"Maximum (%d) redirects followed", data->set.maxredirs);
+      return CURLE_TOO_MANY_REDIRECTS;
+    }
 
-  if(!retry)
     /* mark the next request as a followed location: */
     data->state.this_is_a_follow = TRUE;
 
-  data->set.followlocation++; /* count location-followers */
+    data->set.followlocation++; /* count location-followers */
+  }
 
   if(data->set.http_auto_referer) {
     /* We are asked to automatically set the previous URL as the
@@ -2099,11 +2102,12 @@ bool Curl_retry_request(struct connectdata *conn,
   bool retry = FALSE;
 
   if((conn->keep.bytecount+conn->headerbytecount == 0) &&
-     conn->bits.reuse) {
-    /* We got no data and we attempted to re-use a connection. This might
-       happen if the connection was left alive when we were done using it
-       before, but that was closed when we wanted to read from it again. Bad
-       luck. Retry the same request on a fresh connect! */
+     conn->bits.reuse &&
+     !conn->bits.no_body) {
+    /* We got no data, we attempted to re-use a connection and yet we want a
+       "body". This might happen if the connection was left alive when we were
+       done using it before, but that was closed when we wanted to read from
+       it again. Bad luck. Retry the same request on a fresh connect! */
     infof(conn->data, "Connection died, retrying a fresh connect\n");
     *url = strdup(conn->data->change.url);
 
@@ -2157,6 +2161,12 @@ CURLcode Curl_perform(struct SessionHandle *data)
 
     if(res == CURLE_OK) {
       bool do_done;
+      if(data->set.connect_only) {
+        /* keep connection open for application to use the socket */
+        conn->bits.close = FALSE;
+        res = Curl_done(&conn, CURLE_OK);
+        break;
+      }
       res = Curl_do(&conn, &do_done);
 
       /* for non 3rd party transfer only */
@@ -2216,6 +2226,19 @@ CURLcode Curl_perform(struct SessionHandle *data)
 
   if(newurl)
     free(newurl);
+
+  if(res && !data->state.errorbuf) {
+    /*
+     * As an extra precaution: if no error string has been set and there was
+     * an error, use the strerror() string or if things are so bad that not
+     * even that is good, set a bad string that mentions the error code.
+     */
+    const char *str = curl_easy_strerror(res);
+    if(!str)
+      failf(data, "unspecified error %d", (int)res);
+    else
+      failf(data, "%s", str);
+  }
 
   /* run post-transfer uncondionally, but don't clobber the return code if
      we already have an error code recorder */

@@ -6,7 +6,7 @@
 #                            | (__| |_| |  _ <| |___
 #                             \___|\___/|_| \_\_____|
 #
-# Copyright (C) 1998 - 2005, Daniel Stenberg, <daniel@haxx.se>, et al.
+# Copyright (C) 1998 - 2006, Daniel Stenberg, <daniel@haxx.se>, et al.
 #
 # This software is licensed as described in the file COPYING, which
 # you should have received as part of this distribution. The terms
@@ -19,7 +19,7 @@
 # This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
 # KIND, either express or implied.
 #
-# $Id: runtests.pl,v 1.195 2005/09/30 14:25:50 bagder Exp $
+# $Id: runtests.pl,v 1.201 2006-03-03 14:37:44 bagder Exp $
 ###########################################################################
 # These should be the only variables that might be needed to get edited:
 
@@ -85,6 +85,7 @@ my $perl="perl -I$srcdir";
 
 # this gets set if curl is compiled with debugging:
 my $curl_debug=0;
+my $libtool;
 
 # name of the file that the memory debugging creates:
 my $memdump="$LOGDIR/memdump";
@@ -204,7 +205,7 @@ $SIG{KILL} = \&catch_zap;
 # to prevent them to interfere with our testing!
 
 my $protocol;
-foreach $protocol (('ftp', 'http', 'ftps', 'https', 'gopher', 'no')) {
+foreach $protocol (('ftp', 'http', 'ftps', 'https', 'no')) {
     my $proxy = "${protocol}_proxy";
     # clear lowercase version
     $ENV{$proxy}=undef;
@@ -249,9 +250,10 @@ sub startnew {
             open(PID, "<$pidfile");
             $pid2 = 0 + <PID>;
             close(PID);
-            if(kill(0, $pid2)) {
-                # make sure this pid is alive, as otherwise it is just likely
-                # to be the _previous_ pidfile or similar!
+            if($pid2 && kill(0, $pid2)) {
+                # if $pid2 is valid, then make sure this pid is alive, as
+                # otherwise it is just likely to be the _previous_ pidfile or
+                # similar!
                 last;
             }
         }
@@ -843,7 +845,24 @@ sub checksystem {
     my $feat;
     my $curl;
     my $libcurl;
-    my @version=`$CURL --version 2>/dev/null`;
+    my $versretval;
+    my $versnoexec;
+    my @version=();
+
+    my $curlverout="$LOGDIR/curlverout.log";
+    my $curlvererr="$LOGDIR/curlvererr.log";
+    my $versioncmd="$CURL --version 1>$curlverout 2>$curlvererr";
+
+    unlink($curlverout);
+    unlink($curlvererr);
+
+    $versretval = system($versioncmd);
+    $versnoexec = $!;
+
+    open(VERSOUT, $curlverout);
+    @version = <VERSOUT>;
+    close(VERSOUT);
+
     for(@version) {
         chomp;
 
@@ -953,7 +972,25 @@ sub checksystem {
         }
     }
     if(!$curl) {
-        die "couldn't run '$CURL'"
+        logmsg "unable to get curl's version! further details are:\n";
+        logmsg "issued command: \n";
+        logmsg "$versioncmd \n";
+        if ($versretval == -1) {
+            logmsg "command failed with: \n";
+            logmsg "$versnoexec \n";
+        }
+        elsif ($versretval & 127) {
+            logmsg sprintf("command died with signal %d, and %s coredump. \n", 
+                           ($versretval & 127), ($versretval & 128)?"a":"no");
+        }
+        else {
+            logmsg sprintf("command exited with value %d \n", $versretval >> 8);
+        }
+        logmsg "contents of $curlverout: \n";
+        displaylogcontent("$curlverout");
+        logmsg "contents of $curlvererr: \n";
+        displaylogcontent("$curlvererr");
+        die "couldn't get curl's version!";
     }
 
     if(-r "../lib/config.h") {
@@ -1030,6 +1067,7 @@ sub checksystem {
 
     $has_textaware = ($^O eq 'MSWin32') || ($^O eq 'msys');
 
+    logmsg sprintf("* Libtool lib:    %s\n", $libtool?"ON":"OFF");
     logmsg "***************************************** \n";
 }
 
@@ -1377,10 +1415,10 @@ sub singletest {
     # run the command line we built
     if ($torture) {
         return torture($CMDLINE,
-                       "gdb --directory libtest $DBGCURL -x log/gdbcmd");
+                       "$gdb --directory libtest $DBGCURL -x log/gdbcmd");
     }
     elsif($gdbthis) {
-        system("gdb --directory libtest $DBGCURL -x log/gdbcmd");
+        system("$gdb --directory libtest $DBGCURL -x log/gdbcmd");
         $cmdres=0; # makes it always continue after a debugged run
     }
     else {
@@ -1409,7 +1447,7 @@ sub singletest {
             open(GDBCMD, ">log/gdbcmd2");
             print GDBCMD "bt\n";
             close(GDBCMD);
-            system("gdb --directory libtest -x log/gdbcmd2 -batch $DBGCURL core ");
+            system("$gdb --directory libtest -x log/gdbcmd2 -batch $DBGCURL core ");
      #       unlink("log/gdbcmd2");
         }
     }
@@ -2010,6 +2048,17 @@ if($valgrind) {
     }
 }
 
+# open the executable curl and read the first 4 bytes of it
+open(CHECK, "<$CURL");
+my $c;
+sysread CHECK, $c, 4;
+close(CHECK);
+if($c eq "#! /") {
+    # A shell script. This is typically when built with libtool,
+    $libtool = 1;
+    $gdb = "libtool --mode=execute gdb";
+}
+
 $HTTPPORT =  $base + 0; # HTTP server port
 $HTTPSPORT = $base + 1; # HTTPS server port
 $FTPPORT =   $base + 2; # FTP server port
@@ -2022,18 +2071,19 @@ $TFTPPORT =  $base + 7; # TFTP (UDP) port
 $TFTP6PORT =  $base + 8; # TFTP IPv6 (UDP) port
 
 #######################################################################
+# clear and create logging directory:
+#
+
+cleardir($LOGDIR);
+mkdir($LOGDIR, 0777);
+
+#######################################################################
 # Output curl version and host info being tested
 #
 
 if(!$listonly) {
     checksystem();
 }
-
-#######################################################################
-# clear and create logging directory:
-#
-cleardir($LOGDIR);
-mkdir($LOGDIR, 0777);
 
 #######################################################################
 # If 'all' tests are requested, find out all test numbers

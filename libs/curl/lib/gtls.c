@@ -18,7 +18,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: gtls.c,v 1.8 2005/08/24 07:40:14 bagder Exp $
+ * $Id: gtls.c,v 1.11 2005/11/13 23:04:28 bagder Exp $
  ***************************************************************************/
 
 /*
@@ -110,6 +110,84 @@ static void showtime(struct SessionHandle *data,
   infof(data, "%s", data->state.buffer);
 }
 
+/* this function does a BLOCKING SSL/TLS (re-)handshake */
+static CURLcode handshake(struct connectdata *conn,
+                          gnutls_session session,
+                          int sockindex,
+                          bool duringconnect)
+{
+  struct SessionHandle *data = conn->data;
+  int rc;
+
+  do {
+    rc = gnutls_handshake(session);
+
+    if((rc == GNUTLS_E_AGAIN) || (rc == GNUTLS_E_INTERRUPTED)) {
+      long timeout_ms = DEFAULT_CONNECT_TIMEOUT;
+      long has_passed;
+
+      if(duringconnect && data->set.connecttimeout)
+        timeout_ms = data->set.connecttimeout*1000;
+
+      if(data->set.timeout) {
+        /* get the strictest timeout of the ones converted to milliseconds */
+        if((data->set.timeout*1000) < timeout_ms)
+          timeout_ms = data->set.timeout*1000;
+      }
+
+      /* Evaluate in milliseconds how much time that has passed */
+      has_passed = Curl_tvdiff(Curl_tvnow(), data->progress.t_startsingle);
+
+      /* subtract the passed time */
+      timeout_ms -= has_passed;
+
+      if(timeout_ms < 0) {
+        /* a precaution, no need to continue if time already is up */
+        failf(data, "SSL connection timeout");
+        return CURLE_OPERATION_TIMEOUTED;
+      }
+
+      rc = Curl_select(conn->sock[sockindex],
+                       conn->sock[sockindex], (int)timeout_ms);
+      if(rc > 0)
+        /* reabable or writable, go loop*/
+        continue;
+      else if(0 == rc) {
+        /* timeout */
+        failf(data, "SSL connection timeout");
+        return CURLE_OPERATION_TIMEDOUT;
+      }
+      else {
+        /* anything that gets here is fatally bad */
+        failf(data, "select on SSL socket, errno: %d", Curl_ourerrno());
+        return CURLE_SSL_CONNECT_ERROR;
+      }
+    }
+    else
+      break;
+  } while(1);
+
+  if (rc < 0) {
+    failf(data, "gnutls_handshake() failed: %d", rc);
+    /* gnutls_perror(ret); */
+    return CURLE_SSL_CONNECT_ERROR;
+  }
+
+  return CURLE_OK;
+}
+
+static gnutls_x509_crt_fmt do_file_type(const char *type)
+{
+  if(!type || !type[0])
+    return GNUTLS_X509_FMT_PEM;
+  if(curl_strequal(type, "PEM"))
+    return GNUTLS_X509_FMT_PEM;
+  if(curl_strequal(type, "DER"))
+    return GNUTLS_X509_FMT_DER;
+  return -1;
+}
+
+
 /*
  * This function is called after the TCP connect has completed. Setup the TLS
  * layer and do all necessary magic.
@@ -187,7 +265,17 @@ Curl_gtls_connect(struct connectdata *conn,
   if(rc < 0)
     return CURLE_SSL_CONNECT_ERROR;
 
-  /* put the anonymous credentials to the current session */
+  if(data->set.cert) {
+    if( gnutls_certificate_set_x509_key_file(
+          conn->ssl[sockindex].cred, data->set.cert,
+          data->set.key != 0 ? data->set.key : data->set.cert,
+          do_file_type(data->set.cert_type) ) ) {
+      failf(data, "error reading X.509 key or certificate file");
+      return CURLE_SSL_CONNECT_ERROR;
+    }
+  }
+
+  /* put the credentials to the current session */
   rc = gnutls_credentials_set(session, GNUTLS_CRD_CERTIFICATE,
                               conn->ssl[sockindex].cred);
 
@@ -206,61 +294,10 @@ Curl_gtls_connect(struct connectdata *conn,
     infof (data, "SSL re-using session ID\n");
   }
 
-  do {
-    rc = gnutls_handshake(session);
-
-    if((rc == GNUTLS_E_AGAIN) || (rc == GNUTLS_E_INTERRUPTED)) {
-      long timeout_ms;
-      long has_passed;
-
-      if(data->set.timeout || data->set.connecttimeout) {
-        /* get the most strict timeout of the ones converted to milliseconds */
-        if(data->set.timeout &&
-           (data->set.timeout>data->set.connecttimeout))
-          timeout_ms = data->set.timeout*1000;
-        else
-          timeout_ms = data->set.connecttimeout*1000;
-      }
-      else
-        timeout_ms = DEFAULT_CONNECT_TIMEOUT;
-
-      /* Evaluate in milliseconds how much time that has passed */
-      has_passed = Curl_tvdiff(Curl_tvnow(), data->progress.t_startsingle);
-
-      /* subtract the passed time */
-      timeout_ms -= has_passed;
-
-      if(timeout_ms < 0) {
-        /* a precaution, no need to continue if time already is up */
-        failf(data, "SSL connection timeout");
-        return CURLE_OPERATION_TIMEOUTED;
-      }
-
-      rc = Curl_select(conn->sock[sockindex],
-                         conn->sock[sockindex], (int)timeout_ms);
-      if(rc > 0)
-        /* reabable or writable, go loop*/
-        continue;
-      else if(0 == rc) {
-        /* timeout */
-        failf(data, "SSL connection timeout");
-        return CURLE_OPERATION_TIMEDOUT;
-      }
-      else {
-        /* anything that gets here is fatally bad */
-        failf(data, "select on SSL socket, errno: %d", Curl_ourerrno());
-        return CURLE_SSL_CONNECT_ERROR;
-      }
-    }
-    else
-      break;
-  } while(1);
-
-  if (rc < 0) {
-    failf(data, "gnutls_handshake() failed: %d", rc);
-    /* gnutls_perror(ret); */
-    return CURLE_SSL_CONNECT_ERROR;
-  }
+  rc = handshake(conn, session, sockindex, TRUE);
+  if(rc)
+    /* handshake() sets its own error message with failf() */
+    return rc;
 
   /* This function will return the peer's raw certificate (chain) as sent by
      the peer. These certificates are in raw format (DER encoded for
@@ -464,6 +501,17 @@ ssize_t Curl_gtls_recv(struct connectdata *conn, /* connection data */
   ret = gnutls_record_recv(conn->ssl[num].session, buf, buffersize);
   if((ret == GNUTLS_E_AGAIN) || (ret == GNUTLS_E_INTERRUPTED)) {
     *wouldblock = TRUE;
+    return -1;
+  }
+
+  if(ret == GNUTLS_E_REHANDSHAKE) {
+    /* BLOCKING call, this is bad but a work-around for now. Fixing this "the
+       proper way" takes a whole lot of work. */
+    CURLcode rc = handshake(conn, conn->ssl[num].session, num, FALSE);
+    if(rc)
+      /* handshake() writes error message on its own */
+      return rc;
+    *wouldblock = TRUE; /* then return as if this was a wouldblock */
     return -1;
   }
 

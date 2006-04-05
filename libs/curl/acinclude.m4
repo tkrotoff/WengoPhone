@@ -1,3 +1,393 @@
+#***************************************************************************
+#                                  _   _ ____  _
+#  Project                     ___| | | |  _ \| |
+#                             / __| | | | |_) | |
+#                            | (__| |_| |  _ <| |___
+#                             \___|\___/|_| \_\_____|
+#
+# Copyright (C) 1998 - 2005, Daniel Stenberg, <daniel@haxx.se>, et al.
+#
+# This software is licensed as described in the file COPYING, which
+# you should have received as part of this distribution. The terms
+# are also available at http://curl.haxx.se/docs/copyright.html.
+#
+# You may opt to use, copy, modify, merge, publish, distribute and/or sell
+# copies of the Software, and permit persons to whom the Software is
+# furnished to do so, under the terms of the COPYING file.
+#
+# This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
+# KIND, either express or implied.
+#
+# $Id: acinclude.m4,v 1.85 2006/01/18 10:00:36 bagder Exp $
+###########################################################################
+
+dnl CURL_CHECK_HEADER_WINDOWS
+dnl -------------------------------------------------
+dnl Check for compilable and valid windows.h header 
+
+AC_DEFUN([CURL_CHECK_HEADER_WINDOWS], [
+  AC_CACHE_CHECK([for windows.h], [ac_cv_header_windows_h], [
+    AC_COMPILE_IFELSE([
+      AC_LANG_PROGRAM([
+#undef inline
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+      ],[
+        int dummy=2*WINVER;
+      ])
+    ],[
+      ac_cv_header_windows_h="yes"
+    ],[
+      ac_cv_header_windows_h="no"
+    ])
+  ])
+  if test "x$ac_cv_header_windows_h" = "xyes"; then
+    AC_DEFINE_UNQUOTED(HAVE_WINDOWS_H, 1,
+      [Define to 1 if you have the windows.h header file.])
+    AC_DEFINE_UNQUOTED(WIN32_LEAN_AND_MEAN, 1,
+      [Define to avoid automatic inclusion of winsock.h])
+  fi
+])
+
+
+dnl CURL_CHECK_HEADER_WINSOCK
+dnl -------------------------------------------------
+dnl Check for compilable and valid winsock.h header 
+
+AC_DEFUN([CURL_CHECK_HEADER_WINSOCK], [
+  AC_REQUIRE([CURL_CHECK_HEADER_WINDOWS])dnl
+  AC_CACHE_CHECK([for winsock.h], [ac_cv_header_winsock_h], [
+    AC_COMPILE_IFELSE([
+      AC_LANG_PROGRAM([
+#undef inline
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#include <winsock.h>
+      ],[
+        int dummy=WSACleanup();
+      ])
+    ],[
+      ac_cv_header_winsock_h="yes"
+    ],[
+      ac_cv_header_winsock_h="no"
+    ])
+  ])
+  if test "x$ac_cv_header_winsock_h" = "xyes"; then
+    AC_DEFINE_UNQUOTED(HAVE_WINSOCK_H, 1,
+      [Define to 1 if you have the winsock.h header file.])
+  fi
+])
+
+
+dnl CURL_CHECK_HEADER_WINSOCK2
+dnl -------------------------------------------------
+dnl Check for compilable and valid winsock2.h header 
+
+AC_DEFUN([CURL_CHECK_HEADER_WINSOCK2], [
+  AC_REQUIRE([CURL_CHECK_HEADER_WINDOWS])dnl
+  AC_CACHE_CHECK([for winsock2.h], [ac_cv_header_winsock2_h], [
+    AC_COMPILE_IFELSE([
+      AC_LANG_PROGRAM([
+#undef inline
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#include <winsock2.h>
+      ],[
+        int dummy=2*IPPROTO_ESP;
+      ])
+    ],[
+      ac_cv_header_winsock2_h="yes"
+    ],[
+      ac_cv_header_winsock2_h="no"
+    ])
+  ])
+  if test "x$ac_cv_header_winsock2_h" = "xyes"; then
+    AC_DEFINE_UNQUOTED(HAVE_WINSOCK2_H, 1,
+      [Define to 1 if you have the winsock2.h header file.])
+  fi
+])
+
+
+dnl CURL_CHECK_HEADER_WS2TCPIP
+dnl -------------------------------------------------
+dnl Check for compilable and valid ws2tcpip.h header
+
+AC_DEFUN([CURL_CHECK_HEADER_WS2TCPIP], [
+  AC_REQUIRE([CURL_CHECK_HEADER_WINSOCK2])dnl
+  AC_CACHE_CHECK([for ws2tcpip.h], [ac_cv_header_ws2tcpip_h], [
+    AC_COMPILE_IFELSE([
+      AC_LANG_PROGRAM([
+#undef inline
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+      ],[
+        int dummy=2*IP_PKTINFO;
+      ])
+    ],[
+      ac_cv_header_ws2tcpip_h="yes"
+    ],[
+      ac_cv_header_ws2tcpip_h="no"
+    ])
+  ])
+  if test "x$ac_cv_header_ws2tcpip_h" = "xyes"; then
+    AC_DEFINE_UNQUOTED(HAVE_WS2TCPIP_H, 1,
+      [Define to 1 if you have the ws2tcpip.h header file.])
+  fi
+])
+
+
+dnl CURL_CHECK_TYPE_SOCKLEN_T
+dnl -------------------------------------------------
+dnl Check for existing socklen_t type, and provide
+dnl an equivalent type if socklen_t not available
+
+AC_DEFUN([CURL_CHECK_TYPE_SOCKLEN_T], [
+  AC_REQUIRE([CURL_CHECK_HEADER_WS2TCPIP])dnl
+  AC_CHECK_TYPE([socklen_t], ,[
+    AC_CACHE_CHECK([for socklen_t equivalent], 
+      [curl_cv_socklen_t_equiv], [
+      curl_cv_socklen_t_equiv="unknown"
+      for arg2 in "struct sockaddr" void; do
+        for t in int size_t unsigned long "unsigned long"; do
+          AC_COMPILE_IFELSE([
+            AC_LANG_PROGRAM([
+#undef inline
+#ifdef HAVE_WINDOWS_H
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#ifdef HAVE_WINSOCK2_H
+#include <winsock2.h>
+#else
+#ifdef HAVE_WINSOCK_H
+#include <winsock.h>
+#endif
+#endif
+#else
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+#endif
+              int getpeername (int, $arg2 *, $t *);
+            ],[
+              $t len=0;
+              getpeername(0,0,&len);
+            ])
+          ],[
+             curl_cv_socklen_t_equiv="$t"
+             break 2
+          ])
+        done
+      done
+    ])
+    if test "$curl_cv_socklen_t_equiv" = "unknown"; then
+      AC_MSG_ERROR([Cannot find a type to use in place of socklen_t])
+    else
+      AC_DEFINE_UNQUOTED(socklen_t, $curl_cv_socklen_t_equiv,
+        [type to use in place of socklen_t if not defined])
+    fi
+  ],[
+#undef inline
+#ifdef HAVE_WINDOWS_H
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#ifdef HAVE_WINSOCK2_H
+#include <winsock2.h>
+#ifdef HAVE_WS2TCPIP_H
+#include <ws2tcpip.h>
+#endif
+#endif
+#else
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+#endif
+  ])
+])
+
+
+dnl CURL_CHECK_FUNC_GETNAMEINFO
+dnl -------------------------------------------------
+dnl Test if the getnameinfo function is available, 
+dnl and check the types of five of its arguments.
+dnl If the function succeeds HAVE_GETNAMEINFO will be
+dnl defined, defining the types of the arguments in
+dnl GETNAMEINFO_TYPE_ARG1, GETNAMEINFO_TYPE_ARG2,
+dnl GETNAMEINFO_TYPE_ARG46 and GETNAMEINFO_TYPE_ARG7.
+dnl This function is experimental and its results shall
+dnl not be trusted while this notice is in place ------
+
+AC_DEFUN([CURL_CHECK_FUNC_GETNAMEINFO], [
+  AC_REQUIRE([CURL_CHECK_HEADER_WS2TCPIP])dnl
+  AC_REQUIRE([CURL_CHECK_TYPE_SOCKLEN_T])dnl
+  AC_CHECK_HEADERS(sys/types.h sys/socket.h netdb.h)
+  #
+  AC_MSG_CHECKING([for getnameinfo])
+  AC_LINK_IFELSE([
+      AC_LANG_FUNC_LINK_TRY([getnameinfo])
+    ],[
+      AC_MSG_RESULT([yes])
+      curl_cv_getnameinfo="yes"
+    ],[
+      AC_MSG_RESULT([no])
+      curl_cv_getnameinfo="no"
+  ])
+  #
+  if test "$curl_cv_getnameinfo" != "yes"; then
+    AC_MSG_CHECKING([deeper for getnameinfo])
+    AC_TRY_LINK([
+      ],[
+        getnameinfo();
+      ],[
+        AC_MSG_RESULT([yes])
+        curl_cv_getnameinfo="yes"
+      ],[
+        AC_MSG_RESULT([but still no])
+        curl_cv_getnameinfo="no"
+    ])
+  fi
+  #
+  if test "$curl_cv_getnameinfo" != "yes"; then
+    AC_MSG_CHECKING([deeper and deeper for getnameinfo])
+    AC_TRY_LINK([
+#undef inline
+#ifdef HAVE_WINDOWS_H
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#ifdef HAVE_WINSOCK2_H
+#include <winsock2.h>
+#ifdef HAVE_WS2TCPIP_H
+#include <ws2tcpip.h>
+#endif
+#endif
+#else
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+#ifdef HAVE_NETDB_H
+#include <netdb.h>
+#endif
+#endif
+      ],[
+        getnameinfo(0, 0, 0, 0, 0, 0, 0);
+      ],[ 
+        AC_MSG_RESULT([yes])
+        curl_cv_getnameinfo="yes"
+      ],[
+        AC_MSG_RESULT([but still no])
+        curl_cv_getnameinfo="no"
+    ])
+  fi
+  #
+  if test "$curl_cv_getnameinfo" = "yes"; then
+    AC_CACHE_CHECK([types of arguments for getnameinfo],
+      [curl_cv_func_getnameinfo_args], [
+      curl_cv_func_getnameinfo_args="unknown"
+      for gni_arg1 in 'struct sockaddr *' 'const struct sockaddr *' 'void *'; do
+        for gni_arg2 in 'socklen_t' 'size_t' 'int'; do
+          for gni_arg46 in 'size_t' 'int' 'socklen_t' 'unsigned int' 'DWORD'; do
+            for gni_arg7 in 'int' 'unsigned int'; do
+              AC_COMPILE_IFELSE([
+                AC_LANG_PROGRAM([
+#undef inline 
+#ifdef HAVE_WINDOWS_H
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#if (!defined(_WIN32_WINNT)) || (_WIN32_WINNT < 0x0501)
+#undef _WIN32_WINNT
+#define _WIN32_WINNT 0x0501
+#endif
+#include <windows.h>
+#ifdef HAVE_WINSOCK2_H
+#include <winsock2.h> 
+#ifdef HAVE_WS2TCPIP_H
+#include <ws2tcpip.h>
+#endif
+#endif
+#define GNICALLCONV WSAAPI
+#else
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+#ifdef HAVE_NETDB_H
+#include <netdb.h>
+#endif
+#define GNICALLCONV
+#endif
+                  extern int GNICALLCONV getnameinfo($gni_arg1, $gni_arg2,
+                                         char *, $gni_arg46,
+                                         char *, $gni_arg46,
+                                         $gni_arg7);
+                ],[
+                  $gni_arg2 salen=0;
+                  $gni_arg46 hostlen=0;
+                  $gni_arg46 servlen=0;
+                  $gni_arg7 flags=0;
+                  int res = getnameinfo(0, salen, 0, hostlen, 0, servlen, flags);
+                ])
+              ],[
+                 curl_cv_func_getnameinfo_args="$gni_arg1,$gni_arg2,$gni_arg46,$gni_arg7"
+                 break 4
+              ])
+            done
+          done
+        done
+      done
+    ]) # AC_CACHE_CHECK
+    if test "$curl_cv_func_getnameinfo_args" = "unknown"; then
+      AC_MSG_WARN([Cannot find proper types to use for getnameinfo args])
+      AC_MSG_WARN([HAVE_GETNAMEINFO will not be defined])
+    else
+      gni_prev_IFS=$IFS; IFS=','
+      set dummy `echo "$curl_cv_func_getnameinfo_args" | sed 's/\*/\*/g'`
+      IFS=$gni_prev_IFS
+      shift
+      AC_DEFINE_UNQUOTED(GETNAMEINFO_TYPE_ARG1, $[1],
+        [Define to the type of arg 1 for getnameinfo.])
+      AC_DEFINE_UNQUOTED(GETNAMEINFO_TYPE_ARG2, $[2],
+        [Define to the type of arg 2 for getnameinfo.])
+      AC_DEFINE_UNQUOTED(GETNAMEINFO_TYPE_ARG46, $[3],
+        [Define to the type of args 4 and 6 for getnameinfo.])
+      AC_DEFINE_UNQUOTED(GETNAMEINFO_TYPE_ARG7, $[4],
+        [Define to the type of arg 7 for getnameinfo.])
+      AC_DEFINE_UNQUOTED(HAVE_GETNAMEINFO, 1,
+        [Define to 1 if you have the getnameinfo function.])
+      ac_cv_func_getnameinfo="yes"
+    fi
+  fi
+]) # AC_DEFUN
+
+
+dnl CURL_CHECK_NONBLOCKING_SOCKET
+dnl -------------------------------------------------
 dnl Check for how to set a socket to non-blocking state. There seems to exist
 dnl four known different ways, with the one used almost everywhere being POSIX
 dnl and XPG3, while the other different ways for different systems (old BSD,
@@ -59,12 +449,27 @@ dnl FIONBIO test was also bad
 dnl the code was bad, try a different program now, test 3
 
   AC_TRY_COMPILE([
-/* headers for ioctlsocket test (cygwin?) */
+/* headers for ioctlsocket test (Windows) */
+#undef inline
+#ifdef HAVE_WINDOWS_H
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
+#ifdef HAVE_WINSOCK2_H
+#include <winsock2.h>
+#else
+#ifdef HAVE_WINSOCK_H
+#include <winsock.h>
+#endif
+#endif
+#endif
 ],[
 /* ioctlsocket source code */
- int socket;
- unsigned long flags = ioctlsocket(socket, FIONBIO, &flags);
+ SOCKET sd;
+ unsigned long flags = 0;
+ sd = socket(0, 0, 0);
+ ioctlsocket(sd, FIONBIO, &flags);
 ],[
 dnl ioctlsocket test was good
 nonblock="ioctlsocket"
@@ -122,6 +527,9 @@ dnl end of non-blocking try-compile test
   fi
 ])
 
+
+dnl TYPE_SOCKADDR_STORAGE
+dnl -------------------------------------------------
 dnl Check for struct sockaddr_storage. Most IPv6-enabled hosts have it, but
 dnl AIX 4.3 is one known exception.
 AC_DEFUN([TYPE_SOCKADDR_STORAGE],
@@ -130,6 +538,16 @@ AC_DEFUN([TYPE_SOCKADDR_STORAGE],
         AC_DEFINE(HAVE_STRUCT_SOCKADDR_STORAGE, 1,
                   [if struct sockaddr_storage is defined]), ,
    [
+#undef inline
+#ifdef HAVE_WINDOWS_H
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#ifdef HAVE_WINSOCK2_H
+#include <winsock2.h>
+#endif
+#else
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
@@ -142,55 +560,13 @@ AC_DEFUN([TYPE_SOCKADDR_STORAGE],
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
 #endif
+#endif
    ])
-
 ])
 
-dnl Check for socklen_t: historically on BSD it is an int, and in
-dnl POSIX 1g it is a type of its own, but some platforms use different
-dnl types for the argument to getsockopt, getpeername, etc.  So we
-dnl have to test to find something that will work.
-AC_DEFUN([TYPE_SOCKLEN_T],
-[
-   AC_CHECK_TYPE([socklen_t], ,[
-      AC_MSG_CHECKING([for socklen_t equivalent])
-      AC_CACHE_VAL([curl_cv_socklen_t_equiv],
-      [
-         # Systems have either "struct sockaddr *" or
-         # "void *" as the second argument to getpeername
-         curl_cv_socklen_t_equiv=
-         for arg2 in "struct sockaddr" void; do
-            for t in int size_t unsigned long "unsigned long"; do
-               AC_TRY_COMPILE([
-                  #ifdef HAVE_SYS_TYPES_H
-                  #include <sys/types.h>
-                  #endif
-                  #ifdef HAVE_SYS_SOCKET_H
-                  #include <sys/socket.h>
-                  #endif
 
-                  int getpeername (int, $arg2 *, $t *);
-               ],[
-                  $t len;
-                  getpeername(0,0,&len);
-               ],[
-                  curl_cv_socklen_t_equiv="$t"
-                  break
-               ])
-            done
-         done
-
-         if test "x$curl_cv_socklen_t_equiv" = x; then
-            AC_MSG_ERROR([Cannot find a type to use in place of socklen_t])
-         fi
-      ])
-      AC_MSG_RESULT($curl_cv_socklen_t_equiv)
-      AC_DEFINE_UNQUOTED(socklen_t, $curl_cv_socklen_t_equiv,
-			[type to use in place of socklen_t if not defined])],
-      [#include <sys/types.h>
-#include <sys/socket.h>])
-])
-
+dnl TYPE_IN_ADDR_T
+dnl -------------------------------------------------
 dnl Check for in_addr_t: it is used to receive the return code of inet_addr()
 dnl and a few other things.
 AC_DEFUN([TYPE_IN_ADDR_T],
@@ -202,15 +578,33 @@ AC_DEFUN([TYPE_IN_ADDR_T],
          curl_cv_in_addr_t_equiv=
          for t in "unsigned long" int size_t unsigned long; do
             AC_TRY_COMPILE([
-               #ifdef HAVE_SYS_TYPES_H
-               #include <sys/types.h>
-               #endif
-               #ifdef HAVE_SYS_SOCKET_H
-               #include <sys/socket.h>
-               #endif
-               #ifdef HAVE_ARPA_INET_H
-               #include <arpa/inet.h>
-               #endif
+#undef inline
+#ifdef HAVE_WINDOWS_H
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#ifdef HAVE_WINSOCK2_H
+#include <winsock2.h>
+#else
+#ifdef HAVE_WINSOCK_H
+#include <winsock.h>
+#endif
+#endif
+#else
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>
+#endif
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
+#endif
+#endif
             ],[
                $t data = inet_addr ("1.2.3.4");
             ],[
@@ -226,10 +620,36 @@ AC_DEFUN([TYPE_IN_ADDR_T],
       AC_MSG_RESULT($curl_cv_in_addr_t_equiv)
       AC_DEFINE_UNQUOTED(in_addr_t, $curl_cv_in_addr_t_equiv,
 			[type to use in place of in_addr_t if not defined])],
-      [#include <sys/types.h>
+      [
+#undef inline
+#ifdef HAVE_WINDOWS_H
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#ifdef HAVE_WINSOCK2_H
+#include <winsock2.h>
+#else
+#ifdef HAVE_WINSOCK_H
+#include <winsock.h>
+#endif
+#endif
+#else
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
-#include <arpa/inet.h>])
-])
+#endif
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>
+#endif
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
+#endif
+#endif
+  ]) dnl AC_CHECK_TYPE
+]) dnl AC_DEFUN
 
 dnl ************************************************************
 dnl check for "localhost", if it doesn't exist, we can't do the
@@ -684,6 +1104,7 @@ if test "$ac_cv_func_gethostbyname_r" = "yes"; then
 fi
 ])
 
+
 dnl We create a function for detecting which compiler we use and then set as
 dnl pendantic compiler options as possible for that particular compiler. The
 dnl options are only used for debug-builds.
@@ -879,5 +1300,21 @@ else
 
   AC_DEFINE_UNQUOTED($1, "$DLFOUNDFILE", [$2 dynamic library file])
   AC_MSG_RESULT($DLFOUNDFILE)
+fi
+])
+
+# This is only a temporary fix. This macro is here to replace the broken one
+# delivered by the automake project (including the 1.9.6 release). As soon as
+# they ship a working version we SHOULD remove this work-around.
+
+AC_DEFUN([AM_MISSING_HAS_RUN],
+[AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+test x"${MISSING+set}" = xset || MISSING="\${SHELL} \"$am_aux_dir/missing\""
+# Use eval to expand $SHELL
+if eval "$MISSING --run true"; then
+  am_missing_run="$MISSING --run "
+else
+  am_missing_run=
+  AC_MSG_WARN([`missing' script is too old or missing])
 fi
 ])

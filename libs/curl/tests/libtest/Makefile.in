@@ -43,7 +43,7 @@ noinst_PROGRAMS = lib500$(EXEEXT) lib501$(EXEEXT) lib502$(EXEEXT) \
 	lib512$(EXEEXT) lib513$(EXEEXT) lib514$(EXEEXT) \
 	lib515$(EXEEXT) lib516$(EXEEXT) lib517$(EXEEXT) \
 	lib518$(EXEEXT) lib519$(EXEEXT) lib520$(EXEEXT) \
-	lib521$(EXEEXT) lib523$(EXEEXT)
+	lib521$(EXEEXT) lib523$(EXEEXT) lib524$(EXEEXT)
 subdir = tests/libtest
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -103,6 +103,8 @@ am_lib521_OBJECTS = lib521.$(OBJEXT) $(am__objects_1)
 lib521_OBJECTS = $(am_lib521_OBJECTS)
 am_lib523_OBJECTS = lib523.$(OBJEXT) $(am__objects_1)
 lib523_OBJECTS = $(am_lib523_OBJECTS)
+am_lib524_OBJECTS = lib524.$(OBJEXT) $(am__objects_1)
+lib524_OBJECTS = $(am_lib524_OBJECTS)
 DEFAULT_INCLUDES = 
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -121,7 +123,7 @@ SOURCES = $(lib500_SOURCES) $(lib501_SOURCES) $(lib502_SOURCES) \
 	$(lib512_SOURCES) $(lib513_SOURCES) $(lib514_SOURCES) \
 	$(lib515_SOURCES) $(lib516_SOURCES) $(lib517_SOURCES) \
 	$(lib518_SOURCES) $(lib519_SOURCES) $(lib520_SOURCES) \
-	$(lib521_SOURCES) $(lib523_SOURCES)
+	$(lib521_SOURCES) $(lib523_SOURCES) $(lib524_SOURCES)
 DIST_SOURCES = $(lib500_SOURCES) $(lib501_SOURCES) $(lib502_SOURCES) \
 	$(lib503_SOURCES) $(lib504_SOURCES) $(lib505_SOURCES) \
 	$(lib506_SOURCES) $(lib507_SOURCES) $(lib508_SOURCES) \
@@ -129,7 +131,7 @@ DIST_SOURCES = $(lib500_SOURCES) $(lib501_SOURCES) $(lib502_SOURCES) \
 	$(lib512_SOURCES) $(lib513_SOURCES) $(lib514_SOURCES) \
 	$(lib515_SOURCES) $(lib516_SOURCES) $(lib517_SOURCES) \
 	$(lib518_SOURCES) $(lib519_SOURCES) $(lib520_SOURCES) \
-	$(lib521_SOURCES) $(lib523_SOURCES)
+	$(lib521_SOURCES) $(lib523_SOURCES) $(lib524_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -158,7 +160,6 @@ CURL_DISABLE_CRYPTO_AUTH = @CURL_DISABLE_CRYPTO_AUTH@
 CURL_DISABLE_DICT = @CURL_DISABLE_DICT@
 CURL_DISABLE_FILE = @CURL_DISABLE_FILE@
 CURL_DISABLE_FTP = @CURL_DISABLE_FTP@
-CURL_DISABLE_GOPHER = @CURL_DISABLE_GOPHER@
 CURL_DISABLE_HTTP = @CURL_DISABLE_HTTP@
 CURL_DISABLE_LDAP = @CURL_DISABLE_LDAP@
 CURL_DISABLE_TELNET = @CURL_DISABLE_TELNET@
@@ -289,7 +290,7 @@ target_alias = @target_alias@
 #                            | (__| |_| |  _ <| |___
 #                             \___|\___/|_| \_\_____|
 #
-# Copyright (C) 1998 - 2005, Daniel Stenberg, <daniel@haxx.se>, et al.
+# Copyright (C) 1998 - 2006, Daniel Stenberg, <daniel@haxx.se>, et al.
 #
 # This software is licensed as described in the file COPYING, which
 # you should have received as part of this distribution. The terms
@@ -302,7 +303,7 @@ target_alias = @target_alias@
 # This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
 # KIND, either express or implied.
 #
-# $Id: Makefile.am,v 1.29 2005/04/18 19:41:05 bagder Exp $
+# $Id: Makefile.am,v 1.30 2006-03-03 13:09:32 bagder Exp $
 ###########################################################################
 AUTOMAKE_OPTIONS = foreign nostdinc
 
@@ -389,6 +390,9 @@ lib521_DEPENDENCIES = $(LIBDIR)/libcurl.la
 lib523_SOURCES = lib523.c $(SUPPORTFILES)
 lib523_LDADD = $(LIBDIR)/libcurl.la
 lib523_DEPENDENCIES = $(LIBDIR)/libcurl.la
+lib524_SOURCES = lib524.c $(SUPPORTFILES)
+lib524_LDADD = $(LIBDIR)/libcurl.la
+lib524_DEPENDENCIES = $(LIBDIR)/libcurl.la
 all: all-am
 
 .SUFFIXES:
@@ -498,6 +502,9 @@ lib521$(EXEEXT): $(lib521_OBJECTS) $(lib521_DEPENDENCIES)
 lib523$(EXEEXT): $(lib523_OBJECTS) $(lib523_DEPENDENCIES) 
 	@rm -f lib523$(EXEEXT)
 	$(LINK) $(lib523_LDFLAGS) $(lib523_OBJECTS) $(lib523_LDADD) $(LIBS)
+lib524$(EXEEXT): $(lib524_OBJECTS) $(lib524_DEPENDENCIES) 
+	@rm -f lib524$(EXEEXT)
+	$(LINK) $(lib524_LDFLAGS) $(lib524_OBJECTS) $(lib524_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -529,6 +536,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib520.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib521.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib523.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib524.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

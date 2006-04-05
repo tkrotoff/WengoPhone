@@ -7,7 +7,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2005, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2006, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -20,7 +20,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: curl.h,v 1.286 2005/09/04 05:16:06 bagder Exp $
+ * $Id: curl.h,v 1.292 2006-03-14 00:05:15 bagder Exp $
  ***************************************************************************/
 
 /* If you have problems, all libcurl docs and details are found here:
@@ -65,9 +65,11 @@ extern "C" {
  * We want the typedef curl_off_t setup for large file support on all
  * platforms. We also provide a CURL_FORMAT_OFF_T define to use in *printf
  * format strings when outputting a variable of type curl_off_t.
+ *
+ * Note: "pocc -Ze" is MSVC compatibily mode and this sets _MSC_VER!
  */
 
-#if defined(_MSC_VER) || defined(__LCC__)
+#if (defined(_MSC_VER) && !defined(__POCC__)) || (defined(__LCC__) && defined(WIN32))
 /* MSVC */
 #ifdef _WIN32_WCE
   typedef long curl_off_t;
@@ -76,7 +78,7 @@ extern "C" {
   typedef signed __int64 curl_off_t;
 #define CURL_FORMAT_OFF_T "%I64d"
 #endif
-#else /* _MSC_VER || __LCC__ */
+#else /* (_MSC_VER && !__POCC__) || (__LCC__ && WIN32) */
 #if (defined(__GNUC__) && defined(WIN32)) || defined(__WATCOMC__)
 /* gcc on windows or Watcom */
   typedef long long curl_off_t;
@@ -108,7 +110,7 @@ extern "C" {
 #define CURL_FORMAT_OFF_T "%ld"
 #endif
 #endif /* GCC or Watcom on Windows */
-#endif /* _MSC_VER || __LCC__ */
+#endif /* (_MSC_VER && !__POCC__) || (__LCC__ && WIN32) */
 
 #ifdef UNDEF_FILE_OFFSET_BITS
 /* this was defined above for our checks, undefine it again */
@@ -379,6 +381,15 @@ typedef enum {
   CURLFTPAUTH_LAST /* not an option, never use */
 } curl_ftpauth;
 
+/* parameter for the CURLOPT_FTP_FILEMETHOD option */
+typedef enum {
+  CURLFTPMETHOD_DEFAULT,   /* let libcurl pick */
+  CURLFTPMETHOD_MULTICWD,  /* single CWD operation for each path part */
+  CURLFTPMETHOD_NOCWD,     /* no CWD at all */
+  CURLFTPMETHOD_SINGLECWD, /* one CWD to full dir, then work on file */
+  CURLFTPMETHOD_LAST       /* not an option, never use */
+} curl_ftpmethod;
+
 /* long may be 32 or 64 bits, but we should never depend on anything else
    but 32 */
 #define CURLOPTTYPE_LONG          0
@@ -400,7 +411,8 @@ typedef enum {
  * platforms.
  */
 #if defined(__STDC__) || defined(_MSC_VER) || defined(__cplusplus) || \
-  defined(__HP_aCC) || defined(__BORLANDC__) || defined(__LCC__)
+  defined(__HP_aCC) || defined(__BORLANDC__) || defined(__LCC__) || \
+  defined(__POCC__)
   /* This compiler is believed to have an ISO compatible preprocessor */
 #define CURL_ISOCPP
 #else
@@ -909,6 +921,22 @@ typedef enum {
      control connection. */
   CINIT(FTP_SKIP_PASV_IP, LONG, 137),
 
+  /* Select "file method" to use when doing FTP, see the curl_ftpmethod
+     above. */
+  CINIT(FTP_FILEMETHOD, LONG, 138),
+
+  /* Local port number to bind the socket to */
+  CINIT(LOCALPORT, LONG, 139),
+
+  /* Number of ports to try, including the first one set with LOCALPORT.
+     Thus, setting it to 1 will make no additional attempts but the first.
+  */
+  CINIT(LOCALPORTRANGE, LONG, 140),
+
+  /* no transfer, set up connection and let application use the socket by
+     extracting it with CURLINFO_LASTSOCKET */
+  CINIT(CONNECT_ONLY, LONG, 141),
+
   CURLOPT_LASTENTRY /* the last unused */
 } CURLoption;
 
@@ -1263,10 +1291,11 @@ typedef enum {
   CURLINFO_NUM_CONNECTS     = CURLINFO_LONG   + 26,
   CURLINFO_SSL_ENGINES      = CURLINFO_SLIST  + 27,
   CURLINFO_COOKIELIST       = CURLINFO_SLIST  + 28,
-  CURLINFO_HTTP_SOCKET   =    CURLINFO_LONG   + 29,
-  /* Fill in new entries below here! */
+  CURLINFO_LASTSOCKET       = CURLINFO_LONG   + 29,
+  CURLINFO_LASTSSLHANDLE	= CURLINFO_LONG   + 30,
+/* Fill in new entries below here! */
 
-  CURLINFO_LASTONE          = 29
+  CURLINFO_LASTONE          = 30
 } CURLINFO;
 
 /* CURLINFO_RESPONSE_CODE is the new name for the option previously known as

@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2005, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2006, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -18,7 +18,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: ssluse.c,v 1.135 2005/08/10 22:57:14 bagder Exp $
+ * $Id: ssluse.c,v 1.142 2006-03-13 23:34:25 bagder Exp $
  ***************************************************************************/
 
 /*
@@ -72,10 +72,6 @@
 /* The last #include file should be: */
 #include "memdebug.h"
 
-/* //////////// <JULIEN> //////////// */
-void *gl_ssl_handle = 0;
-/* ********************************** */
-
 #ifndef min
 #define min(a, b)   ((a) < (b) ? (a) : (b))
 #endif
@@ -108,9 +104,14 @@ void *gl_ssl_handle = 0;
 #undef HAVE_PKCS12_SUPPORT
 #endif
 
-
 #if OPENSSL_VERSION_NUMBER >= 0x00906001L
 #define HAVE_ERR_ERROR_STRING_N 1
+#endif
+
+#if OPENSSL_VERSION_NUMBER >= 0x00909000L
+#define SSL_METHOD_QUAL const
+#else
+#define SSL_METHOD_QUAL
 #endif
 
 /*
@@ -801,12 +802,13 @@ static int hostmatch(const char *hostname, const char *pattern)
         if (hostmatch(hostname++,pattern) == HOST_MATCH)
           return HOST_MATCH;
       }
-      return HOST_NOMATCH;
+      break;
     }
 
     if (toupper(c) != toupper(*hostname++))
-      return HOST_NOMATCH;
+      break;
   }
+  return HOST_NOMATCH;
 }
 
 static int
@@ -1125,7 +1127,7 @@ Curl_ossl_connect(struct connectdata *conn,
   long lerr;
   int what;
   char * str;
-  SSL_METHOD *req_method;
+  SSL_METHOD_QUAL SSL_METHOD *req_method=NULL;
   void *ssl_sessionid=NULL;
   ASN1_TIME *certdate;
   curl_socket_t sockfd = conn->sock[sockindex];
@@ -1165,15 +1167,15 @@ Curl_ossl_connect(struct connectdata *conn,
 
 #ifdef SSL_CTRL_SET_MSG_CALLBACK
   if (data->set.fdebug) {
+    /* the SSL trace callback is only used for verbose logging so we only
+       inform about failures of setting it */
     if (!SSL_CTX_callback_ctrl(connssl->ctx, SSL_CTRL_SET_MSG_CALLBACK,
-                               ssl_tls_trace)) {
-      failf(data, "SSL: couldn't set callback!");
-      return CURLE_SSL_CONNECT_ERROR;
+                               (void (*)(void))ssl_tls_trace)) {
+      infof(data, "SSL: couldn't set callback!");
     }
-
-    if (!SSL_CTX_ctrl(connssl->ctx, SSL_CTRL_SET_MSG_CALLBACK_ARG, 0, conn)) {
-      failf(data, "SSL: couldn't set callback argument!");
-      return CURLE_SSL_CONNECT_ERROR;
+    else if (!SSL_CTX_ctrl(connssl->ctx, SSL_CTRL_SET_MSG_CALLBACK_ARG, 0,
+                           conn)) {
+      infof(data, "SSL: couldn't set callback argument!");
     }
   }
 #endif
@@ -1294,8 +1296,6 @@ Curl_ossl_connect(struct connectdata *conn,
            ERR_error_string(ERR_get_error(),NULL));
      return CURLE_SSL_CONNECT_ERROR;
   }
-
-  gl_ssl_handle = connssl->handle;
 
   while(1) {
     int writefd;
@@ -1521,7 +1521,7 @@ Curl_ossl_connect(struct connectdata *conn,
       else
         infof(data, "SSL certificate verify result: %s (%ld),"
               " continuing anyway.\n",
-              X509_verify_cert_error_string(err), lerr);
+              X509_verify_cert_error_string(lerr), lerr);
     }
     else
       infof(data, "SSL certificate verify ok.\n");

@@ -2,21 +2,19 @@
 README
 
 	We have tuned Curl in order to have 2 usefull fonctions :
-		* get the internal socket use by curl
-		* set the internal socket use by curl
+		* get the internal SSL handle use by curl
 
 CONTACT
 
 	If you have problems, questions, ideas or suggestions, please contact us
-	by posting to a suitable mailing list. 
+	by posting to a suitable mailing list.
 	http://dev.openwengo.com/mailman/listinfo/wengophone-devel
-	
+
 WEB SITE
 
 	http://www.openwengo.com
-	
+
 COMPILATION
 
-	scons wengocurl
-	
+	scons owcurl
 

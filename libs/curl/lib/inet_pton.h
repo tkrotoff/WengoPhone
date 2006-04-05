@@ -20,18 +20,23 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: inet_pton.h,v 1.5 2005/03/31 07:02:03 bagder Exp $
+ * $Id: inet_pton.h,v 1.7 2005/11/28 20:21:36 bagder Exp $
  ***************************************************************************/
 
 #include "setup.h"
 
+int Curl_inet_pton(int, const char *, void *);
+
 #ifdef HAVE_INET_PTON
-#define Curl_inet_pton(x,y,z) inet_pton(x,y,z)
+
+#if defined(HAVE_NO_INET_PTON_PROTO)
+int inet_pton(int af, const char *src, void *dst);
+#endif
+
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
 #endif
-#else
-int Curl_inet_pton(int, const char *, void *);
+#define Curl_inet_pton(x,y,z) inet_pton(x,y,z)
 #endif
 
 #endif /* __INET_PTON_H */

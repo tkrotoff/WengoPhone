@@ -1,6 +1,5 @@
-#ifndef __ESCAPE_H
-#define __ESCAPE_H
-
+#ifndef __SOCKADDR_H
+#define __SOCKADDR_H
 /***************************************************************************
  *                                  _   _ ____  _
  *  Project                     ___| | | |  _ \| |
@@ -21,12 +20,19 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: escape.h,v 1.13 2006/01/09 13:17:14 bagder Exp $
+ * $Id: sockaddr.h,v 1.4 2005/11/12 22:13:20 bagder Exp $
  ***************************************************************************/
-/* Escape and unescape URL encoding in strings. The functions return a new
- * allocated string or NULL if an error occurred.  */
 
-char *curl_escape(const char *string, int length);
-char *curl_unescape(const char *string, int length);
+#include "setup.h"
 
+#ifdef HAVE_STRUCT_SOCKADDR_STORAGE
+struct Curl_sockaddr_storage {
+  struct sockaddr_storage buffer;
+};
+#else
+struct Curl_sockaddr_storage {
+  char buffer[256];   /* this should be big enough to fit a lot */
+};
 #endif
+
+#endif /* __SOCKADDR_H */

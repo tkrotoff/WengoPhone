@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * $Id: tftpd.c,v 1.8 2005/09/19 22:03:16 bagder Exp $
+ * $Id: tftpd.c,v 1.15 2006/01/03 22:44:58 bagder Exp $
  *
  * Trivial file transfer protocol server.
  *
@@ -72,6 +72,8 @@
 #endif
 #ifdef HAVE_ARPA_TFTP_H
 #include <arpa/tftp.h>
+#else
+#include "tftp.h"
 #endif
 #ifdef HAVE_NETDB_H
 #include <netdb.h>
@@ -88,8 +90,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#ifdef HAVE_PWD_H
 #include <pwd.h>
-#include <grp.h>
+#endif
 
 #define ENABLE_CURLX_PRINTF
 /* make the curlx header define all printf() functions to use the curlx_*
@@ -111,7 +114,7 @@ struct testcase {
   FILE *server;   /* write input "protocol" there for client verification */
 };
 
-static int synchnet(int);
+static int synchnet(curl_socket_t);
 static struct tftphdr *r_init(void);
 static struct tftphdr *w_init(void);
 static int readit(struct testcase *test, struct tftphdr **dpp, int convert);
@@ -159,7 +162,7 @@ int prevchar = -1;      /* putbuf: previous char (cr check) */
 
 static void read_ahead(struct testcase *test,
                        int convert /* if true, convert to ascii */);
-static int write_behind(struct testcase *test, int convert);
+static ssize_t write_behind(struct testcase *test, int convert);
 static struct tftphdr *rw_init(int);
 static struct tftphdr *w_init(void) { return rw_init(0); } /* write-behind */
 static struct tftphdr *r_init(void) { return rw_init(1); } /* read-ahead */
@@ -222,13 +225,13 @@ static void read_ahead(struct testcase *test,
   if (convert == 0) {
     /* The former file reading code did this:
        b->counter = read(fileno(file), dp->th_data, SEGSIZE); */
-    int copy_n = MIN(SEGSIZE, test->rcount);
+    size_t copy_n = MIN(SEGSIZE, test->rcount);
     memcpy(dp->th_data, test->rptr, copy_n);
 
     /* decrease amount, advance pointer */
     test->rcount -= copy_n;
     test->rptr += copy_n;
-    b->counter = copy_n;
+    b->counter = (int)copy_n;
     return;
   }
 
@@ -281,7 +284,7 @@ static int writeit(struct testcase *test, struct tftphdr **dpp,
  * Note spec is undefined if we get CR as last byte of file or a
  * CR followed by anything else.  In this case we leave it alone.
  */
-static int write_behind(struct testcase *test, int convert)
+static ssize_t write_behind(struct testcase *test, int convert)
 {
   char *buf;
   int count;
@@ -352,13 +355,23 @@ static int write_behind(struct testcase *test, int convert)
 
 static int synchnet(curl_socket_t f /* socket to flush */)
 {
-  int i, j = 0;
+
+#if defined(HAVE_IOCTLSOCKET)
+  unsigned long i;
+#else
+  int i;
+#endif
+  int j = 0;
   char rbuf[PKTSIZE];
   struct sockaddr_in from;
   socklen_t fromlen;
 
   while (1) {
+#if defined(HAVE_IOCTLSOCKET)
+    (void) ioctlsocket(f, FIONREAD, &i);
+#else
     (void) ioctl(f, FIONREAD, &i);
+#endif
     if (i) {
       j++;
       fromlen = sizeof from;
@@ -366,10 +379,12 @@ static int synchnet(curl_socket_t f /* socket to flush */)
                       (struct sockaddr *)&from, &fromlen);
     }
     else
-      return j;
+      break;
   }
+  return j;
 }
 
+#if defined(HAVE_ALARM) && defined(SIGALRM)
 /*
  * Like signal(), but with well-defined semantics.
  */
@@ -380,7 +395,7 @@ static void mysignal(int sig, void (*handler)(int))
   sa.sa_handler = handler;
   sigaction(sig, &sa, NULL);
 }
-
+#endif
 
 #ifndef DEFAULT_LOGFILE
 #define DEFAULT_LOGFILE "log/tftpd.log"
@@ -697,7 +712,9 @@ static int validate_access(struct testcase *test,
 }
 
 int timeout;
+#ifdef HAVE_SIGSETJMP
 sigjmp_buf timeoutbuf;
+#endif
 
 static void timer(int signum)
 {
@@ -708,7 +725,9 @@ static void timer(int signum)
   timeout += rexmtval;
   if (timeout >= maxtimeout)
     exit(1);
+#ifdef HAVE_SIGSETJMP
   siglongjmp(timeoutbuf, 1);
+#endif
 }
 
 /*
@@ -720,8 +739,9 @@ static void sendtftp(struct testcase *test, struct formats *pf)
   struct tftphdr *ap;    /* ack packet */
   unsigned short block = 1;
   int size, n;
-
+#if defined(HAVE_ALARM) && defined(SIGALRM)
   mysignal(SIGALRM, timer);
+#endif
   dp = r_init();
   ap = (struct tftphdr *)ackbuf;
   do {
@@ -733,8 +753,9 @@ static void sendtftp(struct testcase *test, struct formats *pf)
     dp->th_opcode = htons((u_short)DATA);
     dp->th_block = htons((u_short)block);
     timeout = 0;
+#ifdef HAVE_SIGSETJMP
     (void) sigsetjmp(timeoutbuf, 1);
-
+#endif
     send_data:
     if (send(peer, dp, size + 4, 0) != size + 4) {
       logmsg("write\n");
@@ -742,9 +763,13 @@ static void sendtftp(struct testcase *test, struct formats *pf)
     }
     read_ahead(test, pf->f_convert);
     for ( ; ; ) {
+#ifdef HAVE_ALARM
       alarm(rexmtval);        /* read the ack */
+#endif
       n = recv(peer, ackbuf, sizeof (ackbuf), 0);
+#ifdef HAVE_ALARM
       alarm(0);
+#endif
       if (n < 0) {
         logmsg("read: fail\n");
         return;
@@ -789,8 +814,9 @@ static void recvtftp(struct testcase *test, struct formats *pf)
   struct tftphdr *ap;    /* ack buffer */
   unsigned short block = 0;
   int n, size;
-
+#if defined(HAVE_ALARM) && defined(SIGALRM)
   mysignal(SIGALRM, timer);
+#endif
   dp = w_init();
   ap = (struct tftphdr *)ackbuf;
   do {
@@ -798,7 +824,9 @@ static void recvtftp(struct testcase *test, struct formats *pf)
     ap->th_opcode = htons((u_short)ACK);
     ap->th_block = htons((u_short)block);
     block++;
+#ifdef HAVE_SIGSETJMP
     (void) sigsetjmp(timeoutbuf, 1);
+#endif
 send_ack:
     if (send(peer, ackbuf, 4, 0) != 4) {
       logmsg("write: fail\n");
@@ -806,9 +834,13 @@ send_ack:
     }
     write_behind(test, pf->f_convert);
     for ( ; ; ) {
+#ifdef HAVE_ALARM
       alarm(rexmtval);
+#endif
       n = recv(peer, dp, PKTSIZE, 0);
+#ifdef HAVE_ALARM
       alarm(0);
+#endif
       if (n < 0) {                       /* really? */
         logmsg("read: fail\n");
         goto abort;
@@ -842,11 +874,14 @@ send_ack:
   ap->th_opcode = htons((u_short)ACK);   /* send the "final" ack */
   ap->th_block = htons((u_short)(block));
   (void) send(peer, ackbuf, 4, 0);
-
+#if defined(HAVE_ALARM) && defined(SIGALRM)
   mysignal(SIGALRM, justquit);           /* just quit on timeout */
   alarm(rexmtval);
+#endif
   n = recv(peer, buf, sizeof (buf), 0);  /* normally times out and quits */
+#ifdef HAVE_ALARM
   alarm(0);
+#endif
   if (n >= 4 &&                          /* if read some data */
       dp->th_opcode == DATA &&           /* and got a data block */
       block == dp->th_block) {           /* then my last ack was lost */
@@ -892,7 +927,7 @@ static void nak(int error)
     tp->th_code = EUNDEF;   /* set 'undef' errorcode */
   }
   strcpy(tp->th_msg, pe->e_msg);
-  length = strlen(pe->e_msg);
+  length = (int)strlen(pe->e_msg);
   tp->th_msg[length] = '\0';
   length += 5;
   if (send(peer, buf, length, 0) != length)

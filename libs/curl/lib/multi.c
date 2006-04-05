@@ -5,7 +5,7 @@
  *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
- * Copyright (C) 1998 - 2005, Daniel Stenberg, <daniel@haxx.se>, et al.
+ * Copyright (C) 1998 - 2006, Daniel Stenberg, <daniel@haxx.se>, et al.
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
@@ -18,7 +18,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: multi.c,v 1.68 2005/03/08 22:21:59 bagder Exp $
+ * $Id: multi.c,v 1.71 2006-02-23 21:29:48 bagder Exp $
  ***************************************************************************/
 
 #include "setup.h"
@@ -92,10 +92,10 @@ struct Curl_one_easy {
   int msg_num; /* number of messages left in 'msg' to return */
 };
 
-
 #define CURL_MULTI_HANDLE 0x000bab1e
 
-#define GOOD_MULTI_HANDLE(x) ((x)&&(((struct Curl_multi *)x)->type == CURL_MULTI_HANDLE))
+#define GOOD_MULTI_HANDLE(x) \
+  ((x)&&(((struct Curl_multi *)x)->type == CURL_MULTI_HANDLE))
 #define GOOD_EASY_HANDLE(x) (x)
 
 /* This is the struct known as CURLM on the outside */
@@ -244,6 +244,11 @@ CURLMcode curl_multi_remove_handle(CURLM *multi_handle,
     easy->easy_handle->hostcache = NULL;
     Curl_easy_addmulti(easy->easy_handle, NULL); /* clear the association
                                                     to this multi handle */
+
+    /* if we have a connection we must call Curl_done() here so that we
+       don't leave a half-baked one around */
+    if(easy->easy_conn)
+      Curl_done(&easy->easy_conn, easy->result);
 
     /* make the previous node point to our next */
     if(easy->prev)
@@ -522,40 +527,49 @@ CURLMcode curl_multi_perform(CURLM *multi_handle, int *running_handles)
         break;
 
       case CURLM_STATE_DO:
-        /* Perform the protocol's DO action */
-        easy->result = Curl_do(&easy->easy_conn, &dophase_done);
-
-        if(CURLE_OK == easy->result) {
-
-          if(!dophase_done) {
-            /* DO was not completed in one function call, we must continue
-               DOING... */
-            multistate(easy, CURLM_STATE_DOING);
-            result = CURLM_OK;
-          }
-
-          /* after DO, go PERFORM... or DO_MORE */
-          else if(easy->easy_conn->bits.do_more) {
-            /* we're supposed to do more, but we need to sit down, relax
-               and wait a little while first */
-            multistate(easy, CURLM_STATE_DO_MORE);
-            result = CURLM_OK;
-          }
-          else {
-            /* we're done with the DO, now PERFORM */
-            easy->result = Curl_readwrite_init(easy->easy_conn);
-            if(CURLE_OK == easy->result) {
-              multistate(easy, CURLM_STATE_PERFORM);
-              result = CURLM_CALL_MULTI_PERFORM;
-            }
-          }
+        if(easy->easy_handle->set.connect_only) {
+          /* keep connection open for application to use the socket */
+          easy->easy_conn->bits.close = FALSE;
+          multistate(easy, CURLM_STATE_DONE);
+          easy->result = CURLE_OK;
+          result = CURLM_OK;
         }
         else {
-          /* failure detected */
-          Curl_posttransfer(easy->easy_handle);
-          Curl_done(&easy->easy_conn, easy->result);
-          Curl_disconnect(easy->easy_conn); /* close the connection */
-          easy->easy_conn = NULL;           /* no more connection */
+          /* Perform the protocol's DO action */
+          easy->result = Curl_do(&easy->easy_conn, &dophase_done);
+
+          if(CURLE_OK == easy->result) {
+
+            if(!dophase_done) {
+              /* DO was not completed in one function call, we must continue
+                 DOING... */
+              multistate(easy, CURLM_STATE_DOING);
+              result = CURLM_OK;
+            }
+
+            /* after DO, go PERFORM... or DO_MORE */
+            else if(easy->easy_conn->bits.do_more) {
+              /* we're supposed to do more, but we need to sit down, relax
+                 and wait a little while first */
+              multistate(easy, CURLM_STATE_DO_MORE);
+              result = CURLM_OK;
+            }
+            else {
+              /* we're done with the DO, now PERFORM */
+              easy->result = Curl_readwrite_init(easy->easy_conn);
+              if(CURLE_OK == easy->result) {
+                multistate(easy, CURLM_STATE_PERFORM);
+                result = CURLM_CALL_MULTI_PERFORM;
+              }
+            }
+          }
+          else {
+            /* failure detected */
+            Curl_posttransfer(easy->easy_handle);
+            Curl_done(&easy->easy_conn, easy->result);
+            Curl_disconnect(easy->easy_conn); /* close the connection */
+            easy->easy_conn = NULL;           /* no more connection */
+          }
         }
         break;
 

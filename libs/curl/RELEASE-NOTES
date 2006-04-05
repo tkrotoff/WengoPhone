@@ -1,46 +1,40 @@
-Curl and libcurl 7.15.0
+Curl and libcurl 7.15.3
 
- Public curl release number:               90
- Releases counted from the very beginning: 117
- Available command line options:           109
- Available curl_easy_setopt() options:     124
+ Public curl release number:               93
+ Releases counted from the very beginning: 120
+ Available command line options:           112
+ Available curl_easy_setopt() options:     129
  Number of public functions in libcurl:    46
- Amount of public web site mirrors:        24
+ Amount of public web site mirrors:        31
  Number of known libcurl bindings:         32
- Number of contributors:                   451
+ Number of contributors:                   487
 
 This release includes the following changes:
 
- o --ftp-skip-pasv-ip / CURLOPT_FTP_SKIP_PASV_IP (sponsored by CU*Answers)
- o TFTP support added
+ o added docs for --ftp-method and CURLOPT_FTP_FILEMETHOD
 
 This release includes the following bugfixes:
 
- o user+domain name buffer overflow in the NTLM code (security flaw)
- o -z over FTP now considers equal timestamps "not modified since"
- o Weird characters removed from the configure script
- o Fixed time zone offsets for MEST and CEST for the time parser
- o HTTP Content-Range header parser crash
- o FTPS negotiation timeouts/errors
- o SSPI works even for Windows 9x
- o crash in --dump-header on FTP
- o test 56 runs better
+ o TFTP Packet Buffer Overflow Vulnerability:
+   http://curl.haxx.se/docs/adv_20060320.html
+ o properly detecting problems with sending the FTP command USER
+ o wrong error message shown when certificate verification failed
+ o multi-part formpost with multi interface crash
+ o the CURLFTPSSL_CONTROL setting for CURLOPT_FTP_SSL is acknowledged
+ o "SSL: couldn't set callback" is now treated as a less serious problem
+ o Interix build fix
+ o fixed curl "hang" when out of file handles at start
+ o prevent FTP uploads to URLs with trailing slash
 
 Other curl-related news since the previous public release:
 
- o http://curl.freemirror.de/ is a new German mirror
- o All curl relatd mailing list information and subscribers on cool.haxx.se
-   were lost due to a malicious user exploiting a security hole on the
-   server. Attempts have been made to put back susbcribers on the lists, but
-   many have been lost: http://curl.haxx.se/mail/lost.html
- o New S-Lang binding: http://curl.haxx.se/libcurl/slang/
- o TclCurl 0.14.1: http://personal1.iddeo.es/andresgarci/tclcurl/english/
- o pycurl 7.14.1: http://pycurl.sf.net/
+ o pycurl-7.15.2 has been released: http://pycurl.sf.net
+ o http://curl.download.nextag.com/ is a new US curl web mirror!
 
 This release would not have looked like this without help, code, reports and
 advice from friends like these:
 
- o John Kelly, Nicolas François, Scott Davis, Ben Madsen, Dmitry Bartsevich,
-   David Yan, Michael Wallner, Domenico Andreoli, Darryl House
+ Gisle Vanem, Dan Fandrich, Thomas Klausner, Todd Vierling, Peter Heuchert,
+ Markus Koetter, David McCreedy, Tor Arntsen
 
         Thanks! (and sorry if I forgot to mention someone)

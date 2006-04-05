@@ -18,7 +18,7 @@
  * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
  * KIND, either express or implied.
  *
- * $Id: http_ntlm.c,v 1.47 2005/10/13 07:57:51 bagder Exp $
+ * $Id: http_ntlm.c,v 1.49 2005/11/14 22:10:52 bagder Exp $
  ***************************************************************************/
 #include "setup.h"
 
@@ -75,6 +75,11 @@
 #else
 
 #include <rpc.h>
+
+/* Handle of security.dll or secur32.dll, depending on Windows version */
+static HMODULE s_hSecDll = NULL;
+/* Pointer to SSPI dispatch table */
+static PSecurityFunctionTable s_pSecFn = NULL;
 
 #endif
 
@@ -305,8 +310,8 @@ ntlm_sspi_cleanup(struct ntlmdata *ntlm)
     ntlm->type_2 = NULL;
   }
   if (ntlm->has_handles) {
-    DeleteSecurityContext(&ntlm->c_handle);
-    FreeCredentialsHandle(&ntlm->handle);
+    s_pSecFn->DeleteSecurityContext(&ntlm->c_handle);
+    s_pSecFn->FreeCredentialsHandle(&ntlm->handle);
     ntlm->has_handles = 0;
   }
   if (ntlm->p_identity) {
@@ -337,7 +342,7 @@ CURLcode Curl_output_ntlm(struct connectdata *conn,
 #endif
   size_t size;
   char *base64=NULL;
-  unsigned char ntlmbuf[256]; /* enough, unless the host/domain is very long */
+  unsigned char ntlmbuf[512]; /* enough, unless the host/domain is very long */
 
   /* point to the address of the pointer that holds the string to sent to the
      server, which is for a plain host or for a HTTP proxy */
@@ -375,6 +380,35 @@ CURLcode Curl_output_ntlm(struct connectdata *conn,
 
   if(!passwdp)
     passwdp=(char *)"";
+
+#ifdef USE_WINDOWS_SSPI
+  /* If security interface is not yet initialized try to do this */
+  if (s_hSecDll == NULL) {
+    /* Determine Windows version. Security functions are located in
+     * security.dll on WinNT 4.0 and in secur32.dll on Win9x. Win2K and XP
+     * contain both these DLLs (security.dll just forwards calls to
+     * secur32.dll)
+     */
+    OSVERSIONINFO osver;
+    osver.dwOSVersionInfoSize = sizeof(osver);
+    GetVersionEx(&osver);
+    if (osver.dwPlatformId == VER_PLATFORM_WIN32_NT
+      && osver.dwMajorVersion == 4)
+      s_hSecDll = LoadLibrary("security.dll");
+    else
+      s_hSecDll = LoadLibrary("secur32.dll");
+    if (s_hSecDll != NULL) {
+      INIT_SECURITY_INTERFACE pInitSecurityInterface;
+  	pInitSecurityInterface =
+  	  (INIT_SECURITY_INTERFACE)GetProcAddress(s_hSecDll,
+                                                  "InitSecurityInterfaceA");
+  	if (pInitSecurityInterface != NULL)
+  	  s_pSecFn = pInitSecurityInterface();
+    }
+  }
+  if (s_pSecFn == NULL)
+    return CURLE_RECV_ERROR;
+#endif
 
   switch(ntlm->state) {
   case NTLMSTATE_TYPE1:
@@ -429,7 +463,7 @@ CURLcode Curl_output_ntlm(struct connectdata *conn,
       ntlm->p_identity = NULL;
     }
 
-    if (AcquireCredentialsHandle(
+    if (s_pSecFn->AcquireCredentialsHandle(
           NULL, (char *)"NTLM", SECPKG_CRED_OUTBOUND, NULL, ntlm->p_identity,
           NULL, NULL, &ntlm->handle, &tsDummy
           ) != SEC_E_OK) {
@@ -443,31 +477,22 @@ CURLcode Curl_output_ntlm(struct connectdata *conn,
     buf.BufferType = SECBUFFER_TOKEN;
     buf.pvBuffer   = ntlmbuf;
 
-    status = InitializeSecurityContext(&ntlm->handle, NULL, (char *) host,
-                                       ISC_REQ_CONFIDENTIALITY |
-                                       ISC_REQ_REPLAY_DETECT |
-                                       ISC_REQ_CONNECTION,
-                                       0, SECURITY_NETWORK_DREP, NULL, 0,
-                                       &ntlm->c_handle, &desc, &attrs, &tsDummy
-      );
+    status = s_pSecFn->InitializeSecurityContext(&ntlm->handle, NULL,
+                                                 (char *) host,
+                                                 ISC_REQ_CONFIDENTIALITY |
+                                                 ISC_REQ_REPLAY_DETECT |
+                                                 ISC_REQ_CONNECTION,
+                                                 0, SECURITY_NETWORK_DREP,
+                                                 NULL, 0,
+                                                 &ntlm->c_handle, &desc,
+                                                 &attrs, &tsDummy);
 
     if (status == SEC_I_COMPLETE_AND_CONTINUE ||
         status == SEC_I_CONTINUE_NEEDED) {
-      /* CompleteAuthToken() is not present in Win9x, so load it dynamically */
-      SECURITY_STATUS (__stdcall * pCompleteAuthToken)
-        (PCtxtHandle,PSecBufferDesc);
-      HMODULE hSecur32 = GetModuleHandle("secur32.dll");
-      if (hSecur32 != NULL) {
-        pCompleteAuthToken =
-          (SECURITY_STATUS (__stdcall *)(PCtxtHandle,PSecBufferDesc))
-            GetProcAddress(hSecur32, "CompleteAuthToken");
-        if( pCompleteAuthToken != NULL ) {
-          pCompleteAuthToken(&ntlm->c_handle, &desc);
-        }
-      }
+      s_pSecFn->CompleteAuthToken(&ntlm->c_handle, &desc);
     }
     else if (status != SEC_E_OK) {
-      FreeCredentialsHandle(&ntlm->handle);
+      s_pSecFn->FreeCredentialsHandle(&ntlm->handle);
       return CURLE_RECV_ERROR;
     }
 
@@ -579,7 +604,7 @@ CURLcode Curl_output_ntlm(struct connectdata *conn,
     type_3.pvBuffer   = ntlmbuf;
     type_3.cbBuffer   = sizeof(ntlmbuf);
 
-    status = InitializeSecurityContext(&ntlm->handle, &ntlm->c_handle,
+    status = s_pSecFn->InitializeSecurityContext(&ntlm->handle, &ntlm->c_handle,
                                        (char *) host,
                                        ISC_REQ_CONFIDENTIALITY |
                                        ISC_REQ_REPLAY_DETECT |
@@ -783,6 +808,11 @@ Curl_ntlm_cleanup(struct connectdata *conn)
 #ifdef USE_WINDOWS_SSPI
   ntlm_sspi_cleanup(&conn->ntlm);
   ntlm_sspi_cleanup(&conn->proxyntlm);
+  if (s_hSecDll != NULL) {
+    FreeLibrary(s_hSecDll);
+	s_hSecDll = NULL;
+	s_pSecFn = NULL;
+  }
 #else
   (void)conn;
 #endif
