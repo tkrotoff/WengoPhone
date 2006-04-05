@@ -189,11 +189,11 @@ void GaimIMConnect::connect()
 			return;
 	}
 
+	AddAccountParams(gAccount);
+
 	gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
 	if (!gaim_account_get_enabled(gAccount, gaim_core_get_ui()))
 		gaim_account_set_enabled(gAccount, gaim_core_get_ui(), TRUE);
-
-	AddAccountParams(gAccount);
 
 	gaim_account_connect(gAccount);
 }
