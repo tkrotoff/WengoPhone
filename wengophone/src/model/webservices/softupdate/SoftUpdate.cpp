@@ -101,8 +101,12 @@ void SoftUpdate::answerReceived(const std::string & answer, int requestId) {
 		ss >> fileSize;
 	}
 
+	/*FIXME to uncomment when update system is ready on the Wengo platform
 	if (buildId > WengoPhoneBuildId::BUILDID) {
 		//A new version of WengoPhone is available
+		LOG_DEBUG("new WengoPhone version=" + String::fromNumber(version));
 		updateWengoPhoneEvent(*this, downloadUrl, buildId, version, fileSize);
+	} else */{
+		LOG_DEBUG("WengoPhone is up-to-date");
 	}
 }
