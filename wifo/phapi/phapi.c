@@ -2944,6 +2944,7 @@ phTerminate()
   if (phTunnel)
     {
       http_tunnel_close(phTunnel->h_tunnel);
+	  http_tunnel_clean_up();
       free(phTunnel);
       phTunnel = 0;
     }
