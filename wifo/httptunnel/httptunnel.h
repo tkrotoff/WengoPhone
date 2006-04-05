@@ -59,6 +59,7 @@ void* http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 int http_tunnel_close(void *h_tunnel);
 void http_tunnel_init_host(const char *hostname, int port, int ssl);
 void http_tunnel_init_proxy(const char *hostname, int port, const char *username, const char *password);
+void http_tunnel_clean_up();
 #ifdef __cplusplus
 }
 #endif

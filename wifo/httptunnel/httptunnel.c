@@ -116,7 +116,10 @@ int get_ip_addr(char * outbuf, int size, const char * hostname)
 void http_tunnel_init_host(const char *hostname, int port, int ssl)
 {
 	char hostIP[20];
-	
+
+	httpServerIP = 0;
+	httpServerPort = 0;
+
 	UseSSL = ssl;
 	memset(hostIP, 0, sizeof(hostIP));
 
@@ -145,11 +148,14 @@ void http_tunnel_init_proxy(const char *hostname, int port, const char *username
 {
 	char hostIP[20];
 
-	memset(hostIP, 0, sizeof(hostIP));
 	proxyServerIP = 0;
 	proxyServerPort = 0;
+	proxyUsername = 0;
+	proxyPassword = 0;
 	proxyAuthType = 0;
 	UseProxy = 0;
+
+	memset(hostIP, 0, sizeof(hostIP));
 
 	if (hostname && *hostname != 0) 
 	{
@@ -169,6 +175,18 @@ void http_tunnel_init_proxy(const char *hostname, int port, const char *username
 		proxyPassword = strdup(password);
 }
 
+void http_tunnel_clean_up()
+{
+	if (httpServerIP)
+		free(httpServerIP);
+	if (proxyServerIP)
+		free(proxyServerIP);
+	if (proxyUsername)
+		free(proxyUsername);
+	if (proxyPassword)
+		free(proxyPassword);
+}
+
 int http_tunnel_get_socket(void *h_tunnel)
 {
 	struct http_sock *hs;
@@ -181,13 +199,23 @@ int http_tunnel_get_socket(void *h_tunnel)
 
 static SOCKET easy_get_sock(CURL *curl)
 {
-  SOCKET   fd = (SOCKET) -1;
+	SOCKET   fd = (SOCKET) -1;
 
-  curl_easy_getinfo(curl, CURLINFO_HTTP_SOCKET, &fd);
+	curl_easy_getinfo(curl, CURLINFO_LASTSOCKET, &fd);
 
-  return fd;
+	return fd;
 }
 
+#ifdef HT_USE_SSL
+static SSL *easy_get_ssl_handle(CURL *curl)
+{
+	SSL	*handle = NULL;
+
+	curl_easy_getinfo(curl, CURLINFO_LASTSSLHANDLE, &handle);
+
+	return handle;
+}
+#endif
 
 int get_https_response(http_sock_t *hs, char *buff, int buffsize)
 {
@@ -238,7 +266,7 @@ int get_https_response(http_sock_t *hs, char *buff, int buffsize)
 #endif
 }
 
-int	get_http_response2(http_sock_t *hs, char *buff, int buffsize)
+int	get_http_response(http_sock_t *hs, char *buff, int buffsize)
 {
 	struct timeval	timeout;
 	fd_set	rfds;
@@ -282,17 +310,18 @@ int	get_http_response2(http_sock_t *hs, char *buff, int buffsize)
 void get_proxy_auth_type()
 {
 		CURL *curl_tmp;
-		char buff[2048];
+		char url_buff[1024];
+		char proxy_buff[1024];
 		int ret;
 
 		ret = 0;
 		curl_tmp = curl_easy_init();
 
-		snprintf(buff, sizeof(buff), "http://%s:%d", httpServerIP, httpServerPort);
-		curl_easy_setopt(curl_tmp, CURLOPT_URL, strdup(buff));
+		snprintf(url_buff, sizeof(url_buff), "http://%s:%d", httpServerIP, httpServerPort);
+		curl_easy_setopt(curl_tmp, CURLOPT_URL, url_buff);
 
-		snprintf(buff, sizeof(buff), "%s:%d", proxyServerIP, proxyServerPort);
-		curl_easy_setopt(curl_tmp, CURLOPT_PROXY, strdup(buff));
+		snprintf(proxy_buff, sizeof(proxy_buff), "%s:%d", proxyServerIP, proxyServerPort);
+		curl_easy_setopt(curl_tmp, CURLOPT_PROXY, proxy_buff);
 
 		curl_easy_setopt(curl_tmp, CURLOPT_HTTPPROXYTUNNEL, 1);
 		ret = curl_easy_perform(curl_tmp);
@@ -308,6 +337,10 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 	struct sockaddr_in	addr;
 	char query[512];
 	char buff[2048];
+	char url_buff[1024];
+	char proxy_buff[1024];
+	char login_buff[1024];
+	char header_buff[1024];
 	char ipaddr[20];
 	int nbytes, ret;
 	http_sock_t *hs;
@@ -354,26 +387,26 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 				curl_easy_setopt(hs->curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_SSLv3);
 				curl_easy_setopt(hs->curl, CURLOPT_SSL_VERIFYPEER, 0);
 				curl_easy_setopt(hs->curl, CURLOPT_SSL_VERIFYHOST, 0);
-				snprintf(buff, sizeof(buff), "https://%s:%d", httpServerIP, httpServerPort);
+				snprintf(url_buff, sizeof(url_buff), "https://%s:%d", httpServerIP, httpServerPort);
 			}
 			/* *********************** */
 			else
 			{
-				snprintf(buff, sizeof(buff), "http://%s:%d", httpServerIP, httpServerPort);
+				snprintf(url_buff, sizeof(url_buff), "http://%s:%d", httpServerIP, httpServerPort);
 			}
 
-			curl_easy_setopt(hs->curl, CURLOPT_URL, strdup(buff));
+			curl_easy_setopt(hs->curl, CURLOPT_URL, url_buff);
 
-			snprintf(buff, sizeof(buff), "%s:%d", proxyServerIP, proxyServerPort);
-			curl_easy_setopt(hs->curl, CURLOPT_PROXY, strdup(buff));
+			snprintf(proxy_buff, sizeof(proxy_buff), "%s:%d", proxyServerIP, proxyServerPort);
+			curl_easy_setopt(hs->curl, CURLOPT_PROXY, proxy_buff);
 
 			if (timeout > 0)
 			  curl_easy_setopt(hs->curl, CURLOPT_CONNECTTIMEOUT, timeout);
 
 			if (proxyAuthType)
 			{
-				snprintf(buff, sizeof(buff), "%s:%s", proxyUsername, proxyPassword);
-				curl_easy_setopt(hs->curl, CURLOPT_PROXYUSERPWD, strdup(buff));
+				snprintf(login_buff, sizeof(login_buff), "%s:%s", proxyUsername, proxyPassword);
+				curl_easy_setopt(hs->curl, CURLOPT_PROXYUSERPWD, login_buff);
 				
 				if ((proxyAuthType & CURLAUTH_BASIC) == CURLAUTH_BASIC)
 					curl_easy_setopt(hs->curl, CURLOPT_PROXYAUTH, CURLAUTH_BASIC);
@@ -385,8 +418,8 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 
 			curl_easy_setopt(hs->curl, CURLOPT_HTTPPROXYTUNNEL, 1);
 
-			snprintf(buff, sizeof(buff), "UdpHost: %s:%d", ipaddr, port);
-			slist = curl_slist_append(slist, strdup(buff));
+			snprintf(header_buff, sizeof(header_buff), "UdpHost: %s:%d", ipaddr, port);
+			slist = curl_slist_append(slist, header_buff);
 			
 			slist = curl_slist_append(slist, "Connection: Keep-Alive");  
 			slist = curl_slist_append(slist, "Pragma: no-cache");
@@ -406,7 +439,7 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 
 #ifdef HT_USE_SSL
 			if (UseSSL)
-				hs->s_ssl = (SSL *) curl_easy_get_SSL_handle();
+				hs->s_ssl = easy_get_ssl_handle(hs->curl);
 #endif
             
 			curl_slist_free_all(slist);
@@ -490,7 +523,7 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 			nbytes = get_https_response(hs, buff, 511);
 		else
 #endif
-			nbytes = get_http_response2(hs, buff, 511);
+			nbytes = get_http_response(hs, buff, 511);
 
 		if (nbytes > 0)
 			buff[nbytes] = 0;
