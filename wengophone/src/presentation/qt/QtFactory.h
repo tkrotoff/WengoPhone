@@ -20,29 +20,39 @@
 #ifndef QTFACTORY_H
 #define QTFACTORY_H
 
-#include "presentation/PFactory.h"
+#include <presentation/PFactory.h>
+
 #include "QtWengoPhone.h"
-#include "control/CWengoPhone.h"
+#include <control/CWengoPhone.h>
+
 #include "phoneline/QtPhoneLine.h"
-#include "control/phoneline/CPhoneLine.h"
+#include <control/phoneline/CPhoneLine.h>
+
 #include "phonecall/QtPhoneCall.h"
-#include "control/phonecall/CPhoneCall.h"
+#include <control/phonecall/CPhoneCall.h>
+
 #include "contactlist/QtContactList.h"
-#include "control/contactlist/CContactList.h"
+#include <control/contactlist/CContactList.h>
+
 #include "contactlist/QtContact.h"
-#include "control/contactlist/CContact.h"
+#include <control/contactlist/CContact.h>
+
 #include "contactlist/QtContactGroup.h"
-#include "control/contactlist/CContactGroup.h"
+#include <control/contactlist/CContactGroup.h>
+
 #include "wenbox/QtWenboxPlugin.h"
-#include "control/wenbox/CWenboxPlugin.h"
+#include <control/wenbox/CWenboxPlugin.h>
+
 #include "presence/QtPresenceHandler.h"
 #include "chat/QtChatHandler.h"
-#include "control/sms/CSms.h"
-#include "sms/QtSms.h"
-#include "control/softupdate/CSoftUpdate.h"
-#include "softupdater/QtSoftUpdaterWindow.h"
 
-#include "control/history/CHistory.h"
+#include <control/webservices/sms/CSms.h>
+#include "webservices/sms/QtSms.h"
+
+#include <control/webservices/softupdate/CSoftUpdate.h>
+#include "webservices/softupdater/QtSoftUpdaterWindow.h"
+
+#include <control/history/CHistory.h>
 #include "history/QtHistory.h"
 
 #include <util/Logger.h>

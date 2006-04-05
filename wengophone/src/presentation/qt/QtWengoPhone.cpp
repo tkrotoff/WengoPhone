@@ -41,7 +41,7 @@
 #include "contactlist/QtAddContact.h"
 #include "QtDialpad.h"
 #include "QtAbout.h"
-#include "sms/QtSms.h"
+#include "webservices/sms/QtSms.h"
 #include "QtHttpProxyLogin.h"
 #include "config/QtAdvancedConfig.h"
 #include "config/QtWengoConfigDialog.h"

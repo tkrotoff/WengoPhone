@@ -27,7 +27,7 @@
 
 #include <util/Logger.h>
 #include "../QtWengoPhone.h"
-#include "../sms/QtSms.h"
+#include "../webservices/sms/QtSms.h"
 
 QtUser::QtUser(CContact & cContact, WengoPhone & wengoPhone, QObject * parent)
 	: QObject (parent), _cContact(cContact), _wengoPhone(wengoPhone)

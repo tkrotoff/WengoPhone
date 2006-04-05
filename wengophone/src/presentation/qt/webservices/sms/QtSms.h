@@ -21,9 +21,12 @@
 #define QTSMS_H
 
 #include <presentation/PSms.h>
-#include <control/sms/CSms.h>
+
+#include <control/webservices/sms/CSms.h>
 
 #include <qtutil/QObjectThreadSafe.h>
+
+#include <QString>
 
 class QtWengoPhone;
 

@@ -65,7 +65,8 @@ headers = [
 	'chat/QtEmoticon.h',
 	'chat/QtEmoticonButton.h',
 	'chat/chatwidgetmanager.h',
-	'sms/QtSms.h',
+	'webservices/sms/QtSms.h',
+	'webservices/softupdater/QtSoftUpdaterWindow.h',
 	'config/QtAdvancedConfig.h',
 	'config/QtAccountSettings.h',
 	'config/QtAdvancedSettings.h',
@@ -85,7 +86,6 @@ headers = [
 	'history/QtHistoryWidget.h',
 	'history/QtHistoryItem.h',
 	'history/QtHistory.h',
-	'softupdater/QtSoftUpdaterWindow.h',
 ]
 
 sources = [
@@ -135,7 +135,8 @@ sources = [
 	'chat/widgetseeker.cpp',
 	'chat/QtEmoticon.cpp',
 	'chat/QtEmoticonButton.cpp',
-	'sms/QtSms.cpp',
+	'webservices/sms/QtSms.cpp',
+	'webservices/softupdater/QtSoftUpdaterWindow.cpp',
 	'config/QtAdvancedConfig.cpp',
 	'config/QtAccountSettings.cpp',
 	'config/QtAdvancedSettings.cpp',
@@ -155,7 +156,6 @@ sources = [
 	'history/QtHistoryWidget.cpp',
 	'history/QtHistoryItem.cpp',
 	'history/QtHistory.cpp',
-	'softupdater/QtSoftUpdaterWindow.cpp',
 
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]

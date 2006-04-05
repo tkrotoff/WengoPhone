@@ -22,7 +22,7 @@
 #include <presentation/qt/QtWengoPhone.h>
 
 #include <control/CWengoPhone.h>
-#include <control/softupdate/CSoftUpdate.h>
+#include <control/webservices/softupdate/CSoftUpdate.h>
 
 #include <softupdater/SoftUpdater.h>
 
