@@ -38,6 +38,8 @@
 #include <control/presence/CPresenceHandler.h>
 #include <model/webservices/sms/Sms.h>
 #include <control/sms/CSms.h>
+#include <model/webservices/softupdate/SoftUpdate.h>
+#include <control/softupdate/CSoftUpdate.h>
 
 #include <util/WebBrowser.h>
 #include <util/StringList.h>
@@ -68,6 +70,7 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.getCurrentUserProfile().networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
 	_wengoPhone.getCurrentUserProfile().noAccountAvailableEvent += noAccountAvailableEvent;
 	_wengoPhone.getCurrentUserProfile().smsCreatedEvent += boost::bind(&CWengoPhone::smsCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().softUpdateCreatedEvent += boost::bind(&CWengoPhone::softUpdateCreatedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 	_wengoPhone.getCurrentUserProfile().wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 	_wengoPhone.getCurrentUserProfile().newIMAccountAddedEvent += boost::bind(&CWengoPhone::newIMAccountAddedEventHandler, this, _1, _2);
@@ -121,6 +124,12 @@ void CWengoPhone::smsCreatedEventHandler(UserProfile & sender, Sms & sms) {
 	static CSms cSms(sms, *this);
 
 	LOG_DEBUG("CSms created");
+}
+
+void CWengoPhone::softUpdateCreatedEventHandler(UserProfile & sender, SoftUpdate & softUpdate) {
+	static CSoftUpdate cSoftUpdate(softUpdate, *this);
+
+	LOG_DEBUG("CSoftUpdate created");
 }
 
 PhoneCall * CWengoPhone::getActivePhoneCall() const {

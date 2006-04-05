@@ -56,10 +56,10 @@ WengoPhone::~WengoPhone() {
 }
 
 void WengoPhone::init() {
-	//Get a config instance to create the config instance in the model thread.
+	//Gets a config instance to create the config instance in the model thread.
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	//Import the Config from WengoPhone Classic.
+	//Imports the Config from WengoPhone Classic.
 	ClassicConfigImporter::importConfig(config.getConfigDir());
 
 	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());

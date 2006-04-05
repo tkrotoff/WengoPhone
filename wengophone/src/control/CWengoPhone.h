@@ -42,6 +42,7 @@ class ConnectHandler;
 class ChatHandler;
 class PhoneCall;
 class Sms;
+class SoftUpdate;
 class History;
 class IMAccount;
 class UserProfile;
@@ -196,7 +197,7 @@ public:
 	PhoneCall * getActivePhoneCall() const;
 
 	/**
-	 * Get the CContactList.
+	 * Gets the CContactList.
 	 *
 	 * @return the CContactList
 	 */
@@ -205,8 +206,8 @@ public:
 	}
 
 	/**
-	 * Get the CHistory.
-	 * 
+	 * Gets the CHistory.
+	 *
 	 * @return the CHistory
 	 */
 	CHistory & getCHistrory() const {
@@ -237,6 +238,8 @@ private:
 	void wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin);
 
 	void smsCreatedEventHandler(UserProfile & sender, Sms & sms);
+
+	void softUpdateCreatedEventHandler(UserProfile & sender, SoftUpdate & softUpdate);
 
 	void initFinishedEventHandler(WengoPhone & sender);
 

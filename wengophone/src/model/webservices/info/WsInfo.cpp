@@ -25,6 +25,7 @@
 #include <util/Logger.h>
 
 #include <tinyxml.h>
+
 #include <sstream>
 
 const char * getValueFromKey(TiXmlElement * element, const std::string key);
@@ -86,7 +87,7 @@ void WsWengoInfo::getPstnNumber(bool pstnNumber) {
 }
 
 int WsWengoInfo::execute() {
-	
+
 	//build the query
 	std::string query = "query=";
 	if(_wengosCount) {
@@ -107,40 +108,40 @@ int WsWengoInfo::execute() {
 	if(_callForward) {
 		query += CALLFORWARD_TAG + "|";
 	}
-	
+
 	//remove the last pipe if any
-	if(	query != "query=" ) {
+	if(query != "query=") {
 		query = query.substr(0, query.length() - 1);
 	}
-	
+
 	setParameters(query);
-	
+
 	return call(this);
 }
 
-void WsWengoInfo::answerReceived(std::string answer, int id) {
-	
+void WsWengoInfo::answerReceived(const std::string & answer, int id) {
+
 	const char * value = NULL;
 	std::string voiceMailNumber = "";
 	std::string dest1 = "";
 	std::string dest2 = "";
 	std::string dest3 = "";
 	bool forward2VoiceMail = false;
-	
+
 	TiXmlDocument document;
 	document.Parse(answer.c_str());
 
 	TiXmlElement * root = document.FirstChildElement("output");
 	if ( root ) {
-		
+
 		//iterate over "o" element
 		TiXmlElement * element = root->FirstChildElement("o");
 		while ( element ) {
-			
+
 			//find the key
 			const char * key = element->Attribute("k");
 			if( key ) {
-				
+
 				// wengos count
 				if( std::string(key) == WENGOSCOUNT_TAG ) {
 					float wengos  = 0.0;
@@ -150,7 +151,7 @@ void WsWengoInfo::answerReceived(std::string answer, int id) {
 						ss >> wengos;
 						wsInfoWengosEvent(*this, id, WsWengoInfoStatusOk, wengos);
 					}
-					
+
 				// sms count
 				} else if( key == SMSCOUNT_TAG ) {
 					int sms  = 0;
@@ -160,7 +161,7 @@ void WsWengoInfo::answerReceived(std::string answer, int id) {
 						ss >> sms;
 						wsInfoSmsCountEvent(*this, id, WsWengoInfoStatusOk, sms);
 					}
-					
+
 				// active mail
 				} else if( key == ACTIVEMAIL_TAG ) {
 					int activeMail = 0;
@@ -170,7 +171,7 @@ void WsWengoInfo::answerReceived(std::string answer, int id) {
 						ss >> activeMail;
 						wsInfoActiveMailEvent(*this, id, WsWengoInfoStatusOk, activeMail);
 					}
-				
+
 				// unread voice mail
 				} else if( key == UNREADVOICEMAILCOUNT_TAG ) {
 					int voiceMail = 0;
@@ -180,7 +181,7 @@ void WsWengoInfo::answerReceived(std::string answer, int id) {
 						ss >> voiceMail;
 						wsInfoVoiceMailEvent(*this, id, WsWengoInfoStatusOk, voiceMail);
 					}
-				
+
 				// call forward
 				} else if( key == CALLFORWARD_TOVOICEMAIL_ENABLE_TAG ) {
 					int enabled = 0;
@@ -192,14 +193,14 @@ void WsWengoInfo::answerReceived(std::string answer, int id) {
 							forward2VoiceMail = true;
 						}
 					}
-					
+
 				// call forward
 				} else if( key == CALLFORWARD_TOVOICEMAIL_DEST_TAG ) {
 					value = getValueFromKey(element, CALLFORWARD_TOVOICEMAIL_DEST_TAG);
 					if( value ) {
 						voiceMailNumber = std::string(value);
 					}
-					
+
 				// call forward
 				} else if( key == CALLFORWARD_TOPSTN_ENABLE_TAG ) {
 					int enabled = 0;
@@ -211,41 +212,41 @@ void WsWengoInfo::answerReceived(std::string answer, int id) {
 							forward2VoiceMail = false;
 						}
 					}
-					
+
 				// call forward
 				} else if( key == CALLFORWARD_TOPSTN_DEST1_TAG ) {
 					value = getValueFromKey(element, CALLFORWARD_TOPSTN_DEST1_TAG);
 					if( value ) {
 						dest1 = std::string(value);
 					}
-					
+
 				// call forward
 				} else if( key == CALLFORWARD_TOPSTN_DEST2_TAG ) {
 					value = getValueFromKey(element, CALLFORWARD_TOPSTN_DEST2_TAG);
 					if( value ) {
 						dest2 = std::string(value);
 					}
-					
+
 				// call forward
 				} else if( key == CALLFORWARD_TOPSTN_DEST3_TAG ) {
 					value = getValueFromKey(element, CALLFORWARD_TOPSTN_DEST3_TAG);
 					if( value ) {
 						dest3 = std::string(value);
 					}
-				
+
 				//pstn number
 				} else if( key == PSTNNUMBER_TAG ) {
 					value = getValueFromKey(element, PSTNNUMBER_TAG);
 					if( value ) {
 						wsInfoPtsnNumberEvent(*this, id, WsWengoInfoStatusOk, std::string(value));
 					}
-					
+
 				}
 			}
 			element = element->NextSiblingElement("o");
 		}
 	}
-	
+
 	//emit call forward event
 	if( _callForward ) {
 		if( forward2VoiceMail ) {
@@ -257,12 +258,12 @@ void WsWengoInfo::answerReceived(std::string answer, int id) {
 }
 
 const char * getValueFromKey(TiXmlElement * element, std::string key) {
-	
+
 	//find value
 	TiXmlElement * elt = element->FirstChildElement("v");
 	if( elt) {
 		const char * type = elt->Attribute("t");
-		
+
 		//check for error
 		if( ( type ) && (std::string(type) != "e" ) ) {
 

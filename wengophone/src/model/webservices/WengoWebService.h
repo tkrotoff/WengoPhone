@@ -25,12 +25,11 @@
 class WengoAccount;
 
 /**
- * @class WengoWebService
+ * WengoWebService.
  *
  * @author Mathieu Stute
  */
 class WengoWebService {
-
 public:
 
 	/**
@@ -38,9 +37,9 @@ public:
 	 *
 	 * @param sender this class
 	 * @param requestId request unique identifier
-	 * @param response the response returned by the web service
+	 * @param answer the response returned by the web service
 	 */
-	Event<void (WengoWebService & sender, int requestId, std::string response)> answerReceivedEvent;
+	Event<void (WengoWebService & sender, int requestId, const std::string & answer)> answerReceivedEvent;
 
 	/**
 	 * default constructor
@@ -52,50 +51,52 @@ public:
 	virtual ~WengoWebService() {}
 
 	/**
-	 * Set/unset https mode
+	 * Set/unset https mode.
+	 *
 	 * @param https if true https else http
 	 */
 	void setHttps(bool https);
-	
+
 	/**
 	 * Set/unset get mode
 	 * @param get if true GET else POST
 	 */
 	void setGet(bool get);
-	
+
 	/**
 	 * Set hostname
 	 * @param hostname hostname
 	 */
-	void setHostname(std::string hostname);
-	
+	void setHostname(const std::string & hostname);
+
 	/**
 	 * Set port
 	 * @param port port
 	 */
 	void setPort(int port);
-	
+
 	/**
 	 * Set service path
 	 * @param servicePath the path to the service
 	 */
-	void setServicePath(std::string servicePath);
-	
+	void setServicePath(const std::string & servicePath);
+
 	/**
-	 * Set additionnal parameter
-	 * a string like : "name=toto&city=paris",
+	 * Sets additionnal parameter.
+	 *
+	 * A string like : "name=toto&city=paris",
 	 * no '?' at the begining of the string
-	 * 
+	 *
 	 * @param servicePath the path to the service
 	 */
-	void setParameters(std::string param);
-	
+	void setParameters(const std::string & param);
+
 	/**
 	 * Set/unset wengi authentication
 	 * @param auth activate authentication if true
 	 */
 	void setWengoAuthentication(bool auth);
-	
+
 	/**
 	 * call the web service
 	 * @param caller caller
@@ -110,7 +111,7 @@ protected:
 	 * @param https if true this is a https request
 	 * @param get if true this is a get request
 	 * @param hostname hostname of the webservice
-	 * @param port port 
+	 * @param port port
 	 * @param servicePath path to the service
 	 * @param additionalParameters additional parameters to the request
 	 * @return unique request ID
@@ -125,38 +126,39 @@ protected:
 	void answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error);
 
 private:
-	
+
 	/**
-	 * Answer received callback
+	 * Answer received callback.
+	 *
 	 * @param answer the answer to the request
-	 * @param id the request id
+	 * @param requestId the request id
 	 */
-	virtual void answerReceived(std::string answer, int id) = 0;
+	virtual void answerReceived(const std::string & answer, int requestId) = 0;
 
 	/** WengoAccount: to get login & password */
 	WengoAccount & _wengoAccount;
-	
+
 	/** https/http mode */
 	bool _https;
-	
+
 	/** GET/POST mode */
 	bool _get;
-	
+
 	/** use authentication mode */
 	bool _auth;
-	
+
 	/** hostname of the web service */
 	std::string _hostname;
-	
+
 	/** port of the web service */
 	int _port;
-	
+
 	/** path of the web service */
 	std::string _servicePath;
-	
+
 	/** parameters of the web service */
 	std::string _parameters;
-	
+
 	/** caller */
 	WengoWebService * _caller;
 };

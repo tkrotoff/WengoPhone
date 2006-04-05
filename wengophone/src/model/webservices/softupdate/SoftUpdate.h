@@ -17,57 +17,54 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_SMSWEBSERVICE_H
-#define OW_SMSWEBSERVICE_H
+#ifndef SOFTUPDATE_H
+#define SOFTUPDATE_H
 
 #include <model/webservices/WengoWebService.h>
 
 /**
- * Wengo SMS web service.
+ * WengoPhone update web service.
  *
- * @author Mathieu Stute
+ * @author Tanguy Krotoff
  */
-class Sms : public WengoWebService {
+class SoftUpdate : public WengoWebService {
 public:
-
-	enum SmsStatus {
-		/** The SMS was not sent. */
-		SmsStatusError,
-
-		/** The SMS was sent. */
-		SmsStatusOk
-	};
 
 	/**
 	 * Default constructor.
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	Sms(WengoAccount & wengoAccount);
+	SoftUpdate(WengoAccount & wengoAccount);
 
-	virtual ~Sms() {}
+	virtual ~SoftUpdate() {}
 
 	/**
-	 * Callback to check if the SMS was received or not.
+	 * Event WengoPhone should be updated.
 	 *
 	 * @param sender this class
-	 * @param smsId SMS unique identifier
-	 * @param status SMS status (ok or error)
+	 * @param downloadUrl WengoPhone update download URL
+	 * @param buildId WengoPhone update build ID
+	 * @param version WengoPhone update version number
+	 * @param fileSize WengoPhone update file size in kil bytes
 	 */
-	Event<void (Sms & sender, int smsId, SmsStatus status)> smsStatusEvent;
+	Event<void (SoftUpdate & sender,
+			const std::string & downloadUrl,
+			unsigned long long buildId,
+			const std::string & version,
+			unsigned fileSize)> updateWengoPhoneEvent;
 
 	/**
-	 * Sends a SMS given a destination phone number and a message.
-	 *
-	 * @param phoneNumber phone that will receive the SMS
-	 * @param message SMS message
-	 * @return unique SMS ID
+	 * Checks if a WengoPhone update is available.
 	 */
-	int sendSMS(const std::string & phoneNumber, const std::string & message);
+	void checkForUpdate();
 
 private:
 
-	void answerReceived(const std::string & answer, int requestId);
+	/**
+	 * @see WengoWebService
+	 */
+	void answerReceived(const std::string & answer, int id);
 };
 
-#endif //OW_SMSWEBSERVICE_H
+#endif //SOFTUPDATE_H

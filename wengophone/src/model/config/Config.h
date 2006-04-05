@@ -170,13 +170,17 @@ public:
 	static const std::string WENGO_SMS_PATH_KEY;
 	std::string getWengoSMSPath() const;
 
-	/** Wengo info web service path on the server */
+	/** Wengo info web service path on the server. */
 	static const std::string WENGO_WS_INFO_PATH_KEY;
 	std::string getWengoWsInfoPath() const;
 
-	/** Wengo subscription web service path on the server */
+	/** Wengo subscription web service path on the server. */
 	static const std::string WENGO_WS_SUBSCRIBE_PATH_KEY;
 	std::string getWengoSubscribePath() const;
+
+	/** WengoPhone update path on the Wengo server. */
+	static const std::string WENGO_SOFTUPDATE_PATH_KEY;
+	std::string getWengoSoftUpdatePath() const;
 
 	/** @} */
 

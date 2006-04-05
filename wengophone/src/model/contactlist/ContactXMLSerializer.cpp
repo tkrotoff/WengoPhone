@@ -30,7 +30,7 @@
 
 using namespace std;
 
-ContactXMLSerializer::ContactXMLSerializer(Contact & contact, IMAccountHandler & imAccountHandler) 
+ContactXMLSerializer::ContactXMLSerializer(Contact & contact, IMAccountHandler & imAccountHandler)
 : ProfileXMLSerializer(contact), _contact(contact), _imAccountHandler(imAccountHandler) {
 }
 
@@ -76,20 +76,20 @@ bool ContactXMLSerializer::unserialize(const string & data) {
 
 	ProfileXMLSerializer::unserializeContent(wgCard);
 
-	// Retrieving IMContacts
+	//Retrieving IMContacts
 	TiXmlNode * imLastChild = NULL;
 	while ((imLastChild = wgCard.Node()->IterateChildren("im", imLastChild))) {
 		string imData;
-		//FIXME: constructing an IMContact tlike this is not very good
+		//FIXME: constructing an IMContact like this is not very good
 		IMAccount fakeAccount;
 		IMContact imContact(fakeAccount, "");
 		IMContactXMLSerializer imContactSerializer(imContact, _imAccountHandler);
-		
+
 		imData << *imLastChild;
 		imContactSerializer.unserialize(imData);
 
 		_contact.addIMContact(imContact);
-	}	
+	}
 	////
 
 	//Retrieving Groups

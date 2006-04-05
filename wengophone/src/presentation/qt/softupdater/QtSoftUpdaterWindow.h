@@ -20,6 +20,8 @@
 #ifndef QTSOFTUPDATERWINDOW_H
 #define QTSOFTUPDATERWINDOW_H
 
+#include <presentation/PSoftUpdate.h>
+
 #include <http/HttpRequest.h>
 
 #include <qtutil/QObjectThreadSafe.h>
@@ -29,8 +31,10 @@
 
 class CWengoPhone;
 class SoftUpdater;
+class CSoftUpdate;
+class QtWengoPhone;
+
 class QProgressDialog;
-class QWidget;
 
 /**
  * Shows a Qt progress dialog when downloading a WengoPhone update.
@@ -39,13 +43,15 @@ class QWidget;
  *
  * @author Tanguy Krotoff
  */
-class QtSoftUpdaterWindow : public QObjectThreadSafe {
+class QtSoftUpdaterWindow : public QObjectThreadSafe, public PSoftUpdate {
 	Q_OBJECT
 public:
 
-	QtSoftUpdaterWindow(CWengoPhone & cWengoPhone, QWidget * parent);
+	QtSoftUpdaterWindow(CSoftUpdate & cSoftUpdate);
 
 	~QtSoftUpdaterWindow();
+
+	void updatePresentation() { }
 
 private Q_SLOTS:
 
@@ -61,6 +67,18 @@ private Q_SLOTS:
 private:
 
 	void initThreadSafe();
+
+	void updatePresentationThreadSafe() { }
+
+	void updateWengoPhoneEventHandler(const std::string & downloadUrl,
+				unsigned long long buildId,
+				const std::string & version,
+				unsigned fileSize);
+
+	void updateWengoPhoneEventHandlerThreadSafe(const std::string & downloadUrl,
+				unsigned long long buildId,
+				const std::string & version,
+				unsigned fileSize);
 
 	/**
 	 * @see SoftUpdater::dataReadProgressEvent
@@ -86,12 +104,9 @@ private:
 	 */
 	QProgressDialog * _progressDialog;
 
-	QWidget * _parent;
+	QtWengoPhone * _qtWengoPhone;
 
-	/**
-	 * So QtSoftUpdaterWindow can terminate the thread from the model.
-	 */
-	CWengoPhone & _cWengoPhone;
+	CSoftUpdate & _cSoftUpdate;
 
 	/** SoftUpdater. */
 	SoftUpdater * _softUpdater;

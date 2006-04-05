@@ -47,7 +47,6 @@
 #include "config/QtWengoConfigDialog.h"
 #include "statusbar/QtStatusBar.h"
 #include "history/QtHistoryWidget.h"
-#include "softupdater/QtSoftUpdaterWindow.h"
 
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
@@ -259,8 +258,6 @@ void QtWengoPhone::initThreadSafe() {
 	setPhoneCall(new QtContactCallListWidget((_wengoPhoneWindow)));
 
 	_wengoPhoneWindow->show();
-
-	QtSoftUpdaterWindow * qtSoftUpdaterWindow = new QtSoftUpdaterWindow(_cWengoPhone, _wengoPhoneWindow);
 }
 
 void QtWengoPhone::initButtons() {

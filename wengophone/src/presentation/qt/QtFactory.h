@@ -39,6 +39,8 @@
 #include "chat/QtChatHandler.h"
 #include "control/sms/CSms.h"
 #include "sms/QtSms.h"
+#include "control/softupdate/CSoftUpdate.h"
+#include "softupdater/QtSoftUpdaterWindow.h"
 
 #include "control/history/CHistory.h"
 #include "history/QtHistory.h"
@@ -124,6 +126,11 @@ public:
 	PSms * createPresentationSms(CSms & cSms) {
 		static QtSms * qtSms = new QtSms(cSms);
 		return qtSms;
+	}
+
+	PSoftUpdate * createPresentationSoftUpdate(CSoftUpdate & cSoftUpdate) {
+		static QtSoftUpdaterWindow * qtSoftUpdaterWindow = new QtSoftUpdaterWindow(cSoftUpdate);
+		return qtSoftUpdaterWindow;
 	}
 
 	PHistory * createPresentationHistory(CHistory & cHistory) {

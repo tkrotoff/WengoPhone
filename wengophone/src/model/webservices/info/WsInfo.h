@@ -30,7 +30,7 @@
 class WsWengoInfo : public WengoWebService {
 
 public:
-	
+
 	enum WsWengoInfoStatus {
 		/** The information could not be retrieved. */
 		WsWengoInfoStatusError,
@@ -38,7 +38,7 @@ public:
 		/** Retrive information successfully */
 		WsWengoInfoStatusOk
 	};
-	
+
 	/**
 	 * default constructor
 	 *
@@ -107,7 +107,7 @@ public:
 	 * @param dest2	second forward number (meaningfull only if voicemail is true)
 	 * @param dest3	third forward number (meaningfull only if voicemail is true)
 	 */
-	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status, 
+	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status,
 		bool voicemail, std::string dest1, std::string dest2, std::string dest3)> wsCallForwardInfoEvent;
 
 	/**
@@ -164,7 +164,7 @@ private:
 	/**
 	 * @see WengoWebService
 	 */
-	void answerReceived(std::string answer, int id);
+	void answerReceived(const std::string & answer, int id);
 
 	/** activate wengos count */
 	bool _wengosCount;
@@ -180,7 +180,7 @@ private:
 
 	/** activate unread voice mail count */
 	bool _callForward;
-	
+
 	/** activate pstn number request*/
 	bool _pstnNumber;
 
@@ -199,9 +199,9 @@ private:
 	static const std::string CALLFORWARD_TOVOICEMAIL_ENABLE_TAG;
 
 	static const std::string CALLFORWARD_TOVOICEMAIL_DEST_TAG;
-	
+
 	static const std::string CALLFORWARD_TOPSTN_ENABLE_TAG;
-	
+
 	static const std::string CALLFORWARD_TOPSTN_DEST1_TAG;
 
 	static const std::string CALLFORWARD_TOPSTN_DEST2_TAG;

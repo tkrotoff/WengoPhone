@@ -39,7 +39,7 @@ Contact::Contact(UserProfile & userProfile)
 	_blocked = false;
 	_preferredIMContact = NULL;
 
-	profileChangedEvent += 
+	profileChangedEvent +=
 		boost::bind(&Contact::profileChangedEventHandler, this, _1);
 }
 
@@ -82,7 +82,7 @@ void Contact::initialize(const Contact & contact) {
 }
 
 bool Contact::operator == (const Contact & contact) const {
-	return 	((_firstName == contact._firstName)
+	return ((_firstName == contact._firstName)
 		&& (_lastName == contact._lastName)
 		&& (_sex == contact._sex)
 		&& (_birthdate == contact._birthdate)
@@ -122,7 +122,7 @@ void Contact::_addIMContact(const IMContact & imContact) {
 			boost::bind(&Contact::imContactAddedToGroupEventHandler, this, _1, _2);
 		newIMContact.imContactRemovedFromGroupEvent +=
 			boost::bind(&Contact::imContactRemovedFromGroupEventHandler, this, _1, _2);
-		newIMContact.imContactChangedEvent += 
+		newIMContact.imContactChangedEvent +=
 			boost::bind(&Contact::imContactChangedEventHandler, this, _1);
 
 		_userProfile.getPresenceHandler().subscribeToPresenceOf(*result.first);

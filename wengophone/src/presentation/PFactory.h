@@ -44,6 +44,8 @@ class PSms;
 class CSms;
 class PHistory;
 class CHistory;
+class PSoftUpdate;
+class CSoftUpdate;
 
 /**
  * Factories for the presentation component.
@@ -95,6 +97,8 @@ public:
 	virtual PChatHandler * createPresentationChatHandler(CChatHandler & cChatHandler) = 0;
 
 	virtual PSms * createPresentationSms(CSms & cSms) = 0;
+
+	virtual PSoftUpdate * createPresentationSoftUpdate(CSoftUpdate & cSoftUpdate) = 0;
 
 	virtual PHistory * createPresentationHistory(CHistory & cHistory) = 0;
 

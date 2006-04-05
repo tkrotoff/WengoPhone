@@ -42,7 +42,7 @@ void WengoWebService::setGet(bool get) {
 	_get = get;
 }
 
-void WengoWebService::setHostname(std::string hostname) {
+void WengoWebService::setHostname(const std::string & hostname) {
 	_hostname= hostname;
 }
 
@@ -50,11 +50,11 @@ void WengoWebService::setPort(int port) {
 	_port = port;
 }
 
-void WengoWebService::setServicePath(std::string servicePath) {
+void WengoWebService::setServicePath(const std::string & servicePath) {
 	_servicePath = servicePath;
 }
 
-void WengoWebService::setParameters(std::string parameters) {
+void WengoWebService::setParameters(const std::string & parameters) {
 	_parameters = parameters;
 }
 
@@ -72,11 +72,11 @@ int WengoWebService::sendRequest() {
 int WengoWebService::call(WengoWebService * caller) {
 	//set caller
 	_caller = caller;
-	
+
 	//add wengo parameters
 	std::string data = "?lang=fr";
 	data += "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME);
-	
+
 	//add authentication parameters
 	if( _auth ) {
 		String login = String::encodeUrl(_wengoAccount.getWengoLogin());
@@ -85,9 +85,9 @@ int WengoWebService::call(WengoWebService * caller) {
 		password.replace("%2e", ".", false);
 		data += "&login=" + login + "&password=" + password;
 	}
-	
+
 	_parameters = data + "&" + _parameters;
-	
+
 	return sendRequest();
 }
 

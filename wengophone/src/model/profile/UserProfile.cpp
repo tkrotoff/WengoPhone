@@ -32,6 +32,7 @@
 #include <model/phoneline/PhoneLine.h>
 #include <model/phoneline/IPhoneLine.h>
 #include <model/webservices/sms/Sms.h>
+#include <model/webservices/softupdate/SoftUpdate.h>
 
 #include <imwrapper/IMAccountHandlerFileStorage.h>
 
@@ -54,6 +55,7 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_activePhoneLine = NULL;
 	_activePhoneCall = NULL;
 	_wengoAccount = NULL;
+	_softUpdate = NULL;
 
 	History::getInstance().mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
 	History::getInstance().mementoAddedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
@@ -70,6 +72,10 @@ UserProfile::~UserProfile() {
 
 	if (_activePhoneCall) {
 		delete _activePhoneCall;
+	}
+
+	if (_softUpdate) {
+		delete _softUpdate;
 	}
 }
 
@@ -269,10 +275,16 @@ void UserProfile::wengoAccountLogin() {
 void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
 	switch (state) {
 	case SipAccount::LoginStateReady: {
-		LOG_DEBUG("SMS created");
 		//Creates SMS, SMS needs a WengoAccount
+		LOG_DEBUG("SMS created");
 		_sms = new Sms(*(WengoAccount *) _wengoAccount);
 		smsCreatedEvent(*this, *_sms);
+
+		//Creates SoftUpdate, SoftUpdate needs a WengoAccount
+		LOG_DEBUG("SoftUpdate created");
+		_softUpdate = new SoftUpdate(*(WengoAccount *) _wengoAccount);
+		softUpdateCreatedEvent(*this, *_softUpdate);
+		_softUpdate->checkForUpdate();
 
 		addPhoneLine(sender);
 
@@ -288,7 +300,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
 		std::string filename = config.getConfigDir() + _wengoAccount->getIdentity() + "_history";
 		History::getInstance().load(filename);
-		
+
 		break;
 	}
 

@@ -26,10 +26,10 @@
 #include <util/Logger.h>
 
 Sms::Sms(WengoAccount & wengoAccount) : WengoWebService(wengoAccount) {
-	
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	
-	//setup sms web service
+
+	//setup SMS web service
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
 	setHttps(true);
@@ -40,45 +40,44 @@ Sms::Sms(WengoAccount & wengoAccount) : WengoWebService(wengoAccount) {
 
 int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
 	setParameters("message=" + message + "&target=" + phoneNumber);
-	
+
 	//encode the message
 	String message2 = String::encodeUrl(message);
 	message2.replace("%2e", ".", false);
-	
+
 	//call the web service
-	int id = call(this);
+	int requestId = call(this);
 
 	//History: create a History Memento for this outgoing SMS
 	HistoryMemento * memento = new HistoryMemento(
-		HistoryMemento::OutgoingSmsNok, phoneNumber, id, message2);
+		HistoryMemento::OutgoingSmsNok, phoneNumber, requestId, message2);
 	History::getInstance().addMemento(memento);
-	
-	
-	return id;
+
+	return requestId;
 }
 
-void Sms::answerReceived(std::string answer, int id) {
+void Sms::answerReceived(const std::string & answer, int requestId) {
 	//TODO: replace this ugly "parsing" with a real Xml parsing
 	static const std::string STATUS_UNAUTHORIZED = "401";
 	static const std::string STATUS_OK = "200";
-	
+
 	String tmp(answer);
 
 	if (!tmp.empty()) {
 		if (tmp.contains(STATUS_OK) && !tmp.contains(STATUS_UNAUTHORIZED)) {
-			
-			//smssent
-			smsStatusEvent(*this, id, SmsStatusOk);
-			
+
+			//SMS sent
+			smsStatusEvent(*this, requestId, SmsStatusOk);
+
 			//History: retrieve the HistoryMemento & update its state to Ok
-			History::getInstance().updateSMSState(id, HistoryMemento::OutgoingSmsOk);
+			History::getInstance().updateSMSState(requestId, HistoryMemento::OutgoingSmsOk);
 			return;
 		}
 	}
-	
-	//sms unsent
-	smsStatusEvent(*this, id, SmsStatusError);
-	
+
+	//SMS unsent
+	smsStatusEvent(*this, requestId, SmsStatusError);
+
 	//History: retrieve the HistoryMemento & update its state to Nok
-	History::getInstance().updateSMSState(id, HistoryMemento::OutgoingSmsNok);
+	History::getInstance().updateSMSState(requestId, HistoryMemento::OutgoingSmsNok);
 }

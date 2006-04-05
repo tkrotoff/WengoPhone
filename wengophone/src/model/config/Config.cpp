@@ -113,6 +113,7 @@ const std::string Config::WENGO_SMS_PATH_KEY = "wengo.ws.sms.path";
 const std::string Config::WENGO_SSO_PATH_KEY = "wengo.ws.sso.path";
 const std::string Config::WENGO_WS_INFO_PATH_KEY = "wengo.ws.info.path";
 const std::string Config::WENGO_WS_SUBSCRIBE_PATH_KEY = "wengo.ws.subscribe.path";
+const std::string Config::WENGO_SOFTUPDATE_PATH_KEY = "wengo.ws.softupdate.path";
 
 const std::string Config::CONFIG_DIR_KEY = "config.dir";
 const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
@@ -242,6 +243,7 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[WENGO_SSO_PATH_KEY] = std::string("/softphone-sso/sso2.php");
 	_keyDefaultValueMap[WENGO_WS_INFO_PATH_KEY] = std::string("/info/info.php");
 	_keyDefaultValueMap[WENGO_WS_SUBSCRIBE_PATH_KEY] = std::string("/softphone-subscription");
+	_keyDefaultValueMap[WENGO_SOFTUPDATE_PATH_KEY] = std::string("/softphone-version/version.php");
 
 	_keyDefaultValueMap[AVAILABLE_PROTOCOLS_KEY] = DefaultProtocols;
 }
@@ -381,6 +383,9 @@ std::string Config::getWengoWsInfoPath() const {
 	return getStringKeyValue(WENGO_WS_INFO_PATH_KEY);
 }
 
+std::string Config::getWengoSoftUpdatePath() const {
+	return getStringKeyValue(WENGO_SOFTUPDATE_PATH_KEY);
+}
 
 int Config::getProfileWidth() const {
 	return getIntegerKeyValue(PROFILE_WIDTH);

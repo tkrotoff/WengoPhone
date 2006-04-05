@@ -46,6 +46,7 @@ class History;
 class IPhoneLine;
 class PhoneCall;
 class Sms;
+class SoftUpdate;
 
 /**
  * Handle the profile of a User.
@@ -116,6 +117,14 @@ public:
 	 * @param sms Sms created
 	 */
 	Event<void (UserProfile & sender, Sms & sms)> smsCreatedEvent;
+
+	/**
+	 * SoftUpdate has been created.
+	 *
+	 * @param sender this class
+	 * @param sms Sms created
+	 */
+	Event<void (UserProfile & sender, SoftUpdate & softUpdate)> softUpdateCreatedEvent;
 
 	UserProfile(WengoPhone & wengoPhone);
 
@@ -301,6 +310,9 @@ private:
 
 	/** SMS. */
 	Sms * _sms;
+
+	/** WengoPhone update system. */
+	SoftUpdate * _softUpdate;
 
 	//TODO: create a list of SipAccount
 	WengoAccount * _wengoAccount;
