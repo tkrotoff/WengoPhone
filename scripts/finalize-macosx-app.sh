@@ -52,8 +52,10 @@ fi
 ##
 WENGO_BUILD_PATH=$1/$MODE
 WENGO_PATH=$WENGO_BUILD_PATH/wengophone/src/presentation/qt
-WENGO_FRAMEWORK_PATH=$WENGO_PATH/qtwengophone.app/Contents/Frameworks
-WENGO_EXE=$WENGO_PATH/qtwengophone.app/Contents/MacOS/qtwengophone
+WENGO_APP_PATH=$WENGO_PATH/qtwengophone.app
+WENGO_RESOURCES_PATH=$WENGO_APP_PATH/Contents/Resources
+WENGO_FRAMEWORK_PATH=$WENGO_APP_PATH/Contents/Frameworks
+WENGO_EXE=$WENGO_APP_PATH/Contents/MacOS/qtwengophone
 WENGO_FRAMEWORK_PREFIX=@executable_path/../Frameworks
 
 ##
@@ -91,6 +93,8 @@ testAndMkdir $WENGO_FRAMEWORK_PATH/QtCore.framework/Versions/4.0
 testAndMkdir $WENGO_FRAMEWORK_PATH/QtGui.framework/Versions/4.0
 testAndMkdir $WENGO_FRAMEWORK_PATH/QtXml.framework/Versions/4.0
 testAndMkdir $WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0
+
+testAndMkdir $WENGO_RESOURCES_PATH
 
 ##
 # Copy needed frameworks
@@ -160,3 +164,9 @@ changeInstallName "/sw/lib/libpth.14.dylib" "$WENGO_FRAMEWORK_PATH/libgcrypt.11.
 changeInstallName "/sw/lib/libgpg-error.0.dylib" "$WENGO_FRAMEWORK_PATH/libgcrypt.11.dylib"
 changeInstallName "/sw/lib/libintl.1.dylib" "$WENGO_FRAMEWORK_PATH/libgcrypt.11.dylib"
 changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgcrypt.11.dylib"
+
+##
+# Copy resources files
+##
+cp -r $WENGO_BUILD_PATH/sounds $WENGO_RESOURCES_PATH/
+cp -r $WENGO_BUILD_PATH/emoticons $WENGO_RESOURCES_PATH/
