@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Startup.h>
+#include <system/Startup.h>
 
 #include <util/StringList.h>
-#include <util/String.h>
-#include <util/Logger.h>
 
-#ifdef WIN32
-#include <windows.h>
-#include <winreg.h>
-#endif	//WIN32
+#include <cutil/global.h>
+
+#ifdef OS_WINDOWS
+	#include <windows.h>
+	#include <winreg.h>
+#endif
 
 #include <iostream>
 using namespace std;
 
+#ifdef OS_WINDOWS
 static const char * STARTUP_REGISTRY_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\";
+#endif
 
-Startup::Startup(const std::string & applicationName, const std::string & executablePath) {
-	_applicationName = applicationName;
-	_executablePath = executablePath;
+Startup::Startup(const std::string & applicationName, const std::string & executablePath)
+	: _applicationName(applicationName),
+	_executablePath(executablePath) {
 }
 
 Startup::~Startup() {
 }
 
 bool Startup::setStartup(bool startup) {
-#ifdef WIN32
-	char *completeKeyPath = NULL;
+#ifdef OS_WINDOWS
 	HKEY hKey;
 	::RegOpenKeyExA(HKEY_CURRENT_USER, STARTUP_REGISTRY_KEY,
 				0, KEY_WRITE, &hKey);
@@ -70,29 +71,27 @@ bool Startup::setStartup(bool startup) {
 #else
 	startup = false;
 	return startup;
-#endif	//WIN32
+#endif	//OS_WINDOWS
 }
 
 bool Startup::isStartup() {
-#ifdef WIN32
+#ifdef OS_WINDOWS
 	HKEY hKey;
 
 	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_CURRENT_USER, STARTUP_REGISTRY_KEY,
 					0, KEY_QUERY_VALUE, &hKey)) {
 
 		DWORD dwDataType = REG_SZ;
-		DWORD dwSize = 512;
-		char executablePathKeyValue[512];
+		DWORD dwSize = 255;
+		char * executablePathKeyValue = new char[dwSize];
 
 		if (ERROR_SUCCESS == ::RegQueryValueExA(hKey, _applicationName.c_str(), 0, &dwDataType,
 					(BYTE *) executablePathKeyValue, &dwSize)) {
 
 			::RegCloseKey(hKey);
 
-			if (!dwSize)
-				return false;
-			
 			String regKey(executablePathKeyValue);
+			delete[] executablePathKeyValue;
 			String exePath(_executablePath);
 			String appName(_applicationName);
 			regKey = regKey.toLowerCase();
@@ -111,5 +110,5 @@ bool Startup::isStartup() {
 	return false;
 #else
 	return false;
-#endif	//WIN32
+#endif	//OS_WINDOWS
 }
