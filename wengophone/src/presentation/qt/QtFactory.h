@@ -46,14 +46,14 @@
 #include "presence/QtPresenceHandler.h"
 #include "chat/QtChatHandler.h"
 
-#include <control/webservices/sms/CSms.h>
 #include "webservices/sms/QtSms.h"
+#include <control/webservices/sms/CSms.h>
 
+#include "webservices/softupdate/QtSoftUpdaterWindow.h"
 #include <control/webservices/softupdate/CSoftUpdate.h>
-#include "webservices/softupdater/QtSoftUpdaterWindow.h"
 
-#include <control/history/CHistory.h>
 #include "history/QtHistory.h"
+#include <control/history/CHistory.h>
 
 #include <util/Logger.h>
 
