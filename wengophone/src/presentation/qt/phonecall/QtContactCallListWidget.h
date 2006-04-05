@@ -20,10 +20,14 @@
 #ifndef QTCONTACTCALLLISTWIDGET_H
 #define QTCONTACTCALLLISTWIDGET_H
 
+#include <control/CWengoPhone.h>
+
+
 #include <QtGui>
 
 class QtContactCallList;
 class QtPhoneCall;
+class ConferenceCall;
 
 class QtContactCallListWidget : public QWidget
 {
@@ -31,15 +35,27 @@ class QtContactCallListWidget : public QWidget
 
 public:
 
-	QtContactCallListWidget (QWidget * parent = 0, Qt::WFlags f = 0);
+	QtContactCallListWidget (CWengoPhone & cWengoPhone,QWidget * parent = 0, Qt::WFlags f = 0);
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
+
+public Q_SLOTS:
+
+	void startConference();
+
+	void stopConference();
+
+
 
 protected:
 
 	QGridLayout * _layout;
 
 	QtContactCallList * _listWidget;
+
+	ConferenceCall * _conferenceCall;
+
+	CWengoPhone & _cWengoPhone;
 
 };
 

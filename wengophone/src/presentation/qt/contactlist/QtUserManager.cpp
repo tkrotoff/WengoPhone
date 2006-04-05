@@ -32,6 +32,7 @@ QtUserManager::QtUserManager(QObject * parent, QTreeWidget * target) : QObject(p
     _lastClicked=NULL;
 	_hideUsers = false;
 	_sortUsers = false;
+	_menu = NULL;
 
 	QtUserList::getInstance()->setTreeWidget(target);
 	target->setMouseTracking(true);
@@ -41,7 +42,7 @@ QtUserManager::QtUserManager(QObject * parent, QTreeWidget * target) : QObject(p
 	connect (target,SIGNAL(itemClicked (QTreeWidgetItem *,int )),this,SLOT(itemClicked(QTreeWidgetItem *,int)));
 	connect (dnd,SIGNAL(itemEntered ( QTreeWidgetItem *)),this,SLOT(itemEntered ( QTreeWidgetItem * )));
 	connect (dnd,SIGNAL(itemTimeout(QTreeWidgetItem *)),this,SLOT(openUserInfo(QTreeWidgetItem *)));
-
+/*
 	QAction * action;
 
     _menu = new QMenu(dynamic_cast<QWidget *>(parent));
@@ -67,6 +68,7 @@ QtUserManager::QtUserManager(QObject * parent, QTreeWidget * target) : QObject(p
     _menu->addAction(tr("Forward to Cell phone"));
 
     _menu->setWindowOpacity(0.97);
+*/
 }
 
 void QtUserManager::startSMS(bool checked){
@@ -184,7 +186,16 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
 
 	if ( ul->getButton(item->text(0)) == Qt::RightButton)
 	{
-		_menu->popup(QCursor::pos());
+		if ( ! _menu ){
+			_menu = createMenu();
+			_menu->popup(QCursor::pos());
+		}
+		else
+		{
+			delete _menu;
+			_menu = createMenu();
+			_menu->popup(QCursor::pos());
+		}
 		return;
 	}
 
@@ -404,7 +415,32 @@ QMenu * QtUserManager::createMenu(){
 	QMenu * menu;
 
     menu = new QMenu(dynamic_cast<QWidget *>(parent()));
-    _callAction = menu->addAction(tr("Call"));
+    // _callAction = menu->addAction(tr("Call"));
+    // Call menu
+    if ( user->havePhoneNumber()){
+
+		QMenu * callMenu = menu->addMenu( tr("Call") );
+		if ( ! user->getMobilePhone().isEmpty() ){
+			action = callMenu->addAction(tr ("Mobile phone") );
+			connect(action,SIGNAL(triggered(bool)),SLOT(startMobileCall(bool)));
+		}
+
+		if ( ! user->getHomePhone().isEmpty() ){
+			action = callMenu->addAction(tr ("Home phone") );
+			connect(action,SIGNAL(triggered(bool)),SLOT(startHomeCall(bool)));
+		}
+
+		if ( ! user->getWorkPhone().isEmpty() ){
+			action = callMenu->addAction(tr ("Work phone") );
+			connect(action,SIGNAL(triggered(bool)),SLOT(startWorkCall(bool)));
+		}
+
+		if ( ! user->getWengoPhoneNumber().isEmpty() ){
+			action = callMenu->addAction(tr ("Wengophone") );
+			connect(action,SIGNAL(triggered(bool)),SLOT(startWengoCall(bool)));
+		}
+    }
+
 
     action = menu->addAction(tr("Start Chat"));
     connect (action,SIGNAL(triggered(bool)),SLOT(startChat(bool)));
@@ -412,9 +448,9 @@ QMenu * QtUserManager::createMenu(){
     action = menu->addAction(tr("Send SMS"));
     connect (action,SIGNAL(triggered(bool)),SLOT(startSMS(bool)));
 
-    _menu->addAction(tr("Invite to conference"));
+    menu->addAction(tr("Invite to conference"));
 
-    _menu->addSeparator();
+    menu->addSeparator();
 
     action = menu->addAction(tr("Edit contact"));
     connect(action,SIGNAL(triggered(bool)),this,SLOT(editContact(bool)));
@@ -431,4 +467,51 @@ QMenu * QtUserManager::createMenu(){
 
     return menu;
 
+}
+void QtUserManager::startMobileCall(bool checked){
+
+	QtUserList * ul = QtUserList::getInstance();
+	QtUser * user;
+
+    // The current selected item
+    QTreeWidgetItem * item = _tree->currentItem();
+
+	user = ul->getUser(item->text(0));
+	user->startCall(user->getMobilePhone());
+}
+
+void QtUserManager::startHomeCall(bool checked){
+	QtUserList * ul = QtUserList::getInstance();
+	QtUser * user;
+
+    // The current selected item
+    QTreeWidgetItem * item = _tree->currentItem();
+
+	user = ul->getUser(item->text(0));
+	user->startCall(user->getHomePhone());
+
+}
+
+void QtUserManager::startWorkCall(bool checked){
+
+	QtUserList * ul = QtUserList::getInstance();
+	QtUser * user;
+
+    // The current selected item
+    QTreeWidgetItem * item = _tree->currentItem();
+
+	user = ul->getUser(item->text(0));
+	user->startCall(user->getWorkPhone());
+}
+
+void QtUserManager::startWengoCall(bool checked){
+
+	QtUserList * ul = QtUserList::getInstance();
+	QtUser * user;
+
+    // The current selected item
+    QTreeWidgetItem * item = _tree->currentItem();
+
+	user = ul->getUser(item->text(0));
+	user->startCall(user->getWengoPhoneNumber());
 }

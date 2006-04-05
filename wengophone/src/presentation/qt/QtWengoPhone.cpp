@@ -255,7 +255,7 @@ void QtWengoPhone::initThreadSafe() {
 	statusBar->addPermanentWidget(_phoneLineStateLabel);
 
 	//FIXME: can i create the widget here ?
-	setPhoneCall(new QtContactCallListWidget((_wengoPhoneWindow)));
+	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
 
 	_wengoPhoneWindow->show();
 }

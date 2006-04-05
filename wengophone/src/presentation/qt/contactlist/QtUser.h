@@ -85,6 +85,18 @@ public:
 
 	void startSMS();
 
+	QString getMobilePhone() const;
+
+	QString getHomePhone() const;
+
+	QString getWorkPhone() const;
+
+	QString getWengoPhoneNumber() const;
+
+	void startCall(const QString & number);
+
+	bool havePhoneNumber();
+
 public Q_SLOTS:
 
 Q_SIGNALS:

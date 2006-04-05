@@ -30,15 +30,24 @@ class QtContactCallList : public QScrollArea
 
 public:
 
+	typedef QList<QtPhoneCall *> QtPhoneCallList;
+
 	QtContactCallList ( QWidget * parent = 0 );
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
+
+	QtPhoneCallList & getPhoneCallList();
+
+public Q_SLOTS:
+	void deleteQtPhoneCall(QtPhoneCall * qtPhoneCall);
 
 protected:
 
 	QWidget * _widget;
 
 	QVBoxLayout * _widgetLayout;
+
+	QtPhoneCallList  _phoneCallList;
 
 };
 

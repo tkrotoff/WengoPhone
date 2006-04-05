@@ -34,5 +34,26 @@ QScrollArea(parent)
 }
 
 void QtContactCallList::addPhoneCall(QtPhoneCall * qtPhoneCall){
+
 	_widgetLayout->addWidget( qtPhoneCall->getWidget() );
+	connect(qtPhoneCall,SIGNAL(deleteMe(qtPhoneCall *)), SLOT(deleteQtPhoneCall(qtPhoneCall *)));
+	_phoneCallList.append(qtPhoneCall);
+}
+
+QtContactCallList::QtPhoneCallList & QtContactCallList::getPhoneCallList(){
+	return _phoneCallList;
+}
+
+void QtContactCallList::deleteQtPhoneCall(QtPhoneCall * qtPhoneCall){
+
+	QtPhoneCallList::iterator iter;
+	QtPhoneCall * tmp = NULL;
+	for (iter = _phoneCallList.begin(); iter!=_phoneCallList.end(); iter++){
+		tmp = (*iter);
+		if ( tmp == qtPhoneCall ){
+			_phoneCallList.erase(iter);
+			break;
+		}
+	}
+	qtPhoneCall->deleteLater();
 }

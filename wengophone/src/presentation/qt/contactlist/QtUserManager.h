@@ -62,6 +62,14 @@ class QtUserManager : public QObject {
 
 		void startSMS(bool checked);
 
+		void startMobileCall(bool checked);
+
+		void startHomeCall(bool checked);
+
+		void startWorkCall(bool checked);
+
+		void startWengoCall(bool checked);
+
 	protected:
 
 		void safeUserStateChanged();

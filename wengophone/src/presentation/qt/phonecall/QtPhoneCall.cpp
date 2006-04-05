@@ -116,12 +116,12 @@ void QtPhoneCall::initThreadSafe() {
 
 	// Invite to conference
 	_actionInvite = _popup->addAction( tr ("Invite to conference") );
+	connect (_actionInvite ,SIGNAL ( triggered(bool) ), SLOT ( inviteToConference(bool) ) );
 	_popup->addSeparator();
 
 	// Show / Hide video
 	_actionSwitchVideo = _popup->addAction( tr ("Stop video") );
 	connect (_actionSwitchVideo ,SIGNAL ( triggered(bool) ), SLOT ( switchVideo(bool) ) );
-
 
 	_popup->addSeparator();
 
@@ -135,40 +135,6 @@ void QtPhoneCall::initThreadSafe() {
 
 	connect (filter, SIGNAL( openPopup( int, int ) ), SLOT(openPopup( int, int ) ) );
 
-
-/*
-	//acceptButton
-	_acceptButton = Object::findChild<QPushButton *>(_phoneCallWidget, "acceptButton");
-	_acceptButton->setEnabled(true);
-	_acceptButton->disconnect();
-	connect(_acceptButton, SIGNAL(clicked()), SLOT(acceptButtonClicked()));
-
-	//phoneNumberLabel
-	QLabel * phoneNumberLabel = Object::findChild<QLabel *>(_phoneCallWidget, "phoneNumberLabel");
-	phoneNumberLabel->setText(callAddress);
-	phoneNumberLabel->setToolTip(sipAddress);
-
-	//rejectButton
-	_rejectButton = Object::findChild<QPushButton *>(_phoneCallWidget, "rejectButton");
-	_rejectButton->setEnabled(true);
-	_rejectButton->disconnect();
-	connect(_rejectButton, SIGNAL(clicked()), SLOT(rejectButtonClicked()));
-
-	//holdResumeButton
-	_holdResumeButton = Object::findChild<QPushButton *>(_phoneCallWidget, "holdResumeButton");
-	_holdResumeButton->disconnect();
-	connect(_holdResumeButton, SIGNAL(clicked()), SLOT(holdResumeButtonClicked()));
-
-	//addContactButton
-	_addContactButton = Object::findChild<QPushButton *>(_phoneCallWidget, "addContactButton");
-	_addContactButton->disconnect();
-	connect(_addContactButton, SIGNAL(clicked()), SLOT(addContactButtonClicked()));
-
-	//transferButton
-	QPushButton * transferButton = Object::findChild<QPushButton *>(_phoneCallWidget, "transferButton");
-	transferButton->disconnect();
-	connect(transferButton, SIGNAL(clicked()), SLOT(transferButtonClicked()));
-*/
 	_qtWengoPhone->addPhoneCall(this);
 }
 
@@ -203,7 +169,8 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 
 		_actionResume->setEnabled( false );
 		_actionHold->setEnabled( true );
-		_hold = true;
+		_statusLabel->setText( tr ("talking") );
+		_hold = false;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateTalking:
@@ -246,9 +213,8 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 
 		delete _phoneCallWidget;
 
-		// This object will be deleted later by the Qt event manager
-		deleteLater();
-
+		stopConference();
+		deleteMe(this);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming:
@@ -359,6 +325,7 @@ void QtPhoneCall::showVideoWidget(){
 	_videoWindow->getWidget()->setMinimumSize( QSize( 210,160 ) );
 
 	layout->addWidget( _videoWindow->getWidget(), 0 , 0 );
+
 	_videoWindow->getWidget()->show();
 
 }
@@ -393,4 +360,12 @@ void QtPhoneCall::switchVideo(bool ){
 		showVideoWidget();
 	}
 
+}
+
+CPhoneCall & QtPhoneCall::getCPhoneCall(){
+	return _cPhoneCall;
+}
+
+void QtPhoneCall::inviteToConference(bool ){
+	startConference();
 }

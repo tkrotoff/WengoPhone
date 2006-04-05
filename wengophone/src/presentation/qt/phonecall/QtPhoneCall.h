@@ -28,6 +28,7 @@
 
 class WebcamVideoFrame;
 class CPhoneCall;
+class PhoneCall;
 class QtWengoPhone;
 class QtVideo;
 
@@ -53,6 +54,16 @@ public:
 		return _phoneCallWidget;
 	}
 
+	CPhoneCall & getCPhoneCall();
+
+Q_SIGNALS:
+
+	void startConference();
+
+	void stopConference();
+
+	void deleteMe(QtPhoneCall * qtPhoneCall);
+
 private Q_SLOTS:
 
 	void acceptActionTriggered ( bool checked );
@@ -63,11 +74,14 @@ private Q_SLOTS:
 
 	void addContactActionTriggered ( bool checked );
 
+	void inviteToConference(bool checked);
+
 	void transferButtonClicked();
 
 	void switchVideo(bool checked);
 
 	void openPopup( int x, int y);
+
 
 private:
 

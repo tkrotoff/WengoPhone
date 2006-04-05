@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>ContactWindowForm</string>
+   <string>Add Contact</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >

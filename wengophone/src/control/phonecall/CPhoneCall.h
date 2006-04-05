@@ -47,6 +47,10 @@ public:
 	CWengoPhone & getCWengoPhone() const {
 		return _cWengoPhone;
 	}
+	
+	PhoneCall & getPhoneCall() const {
+		return _phoneCall;
+	}
 
 	/**
 	 * @see PhoneCall::close()

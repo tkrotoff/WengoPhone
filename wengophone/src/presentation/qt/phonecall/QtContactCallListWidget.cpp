@@ -21,17 +21,69 @@
 #include "QtContactCallList.h"
 #include "QtPhoneCall.h"
 
-QtContactCallListWidget::QtContactCallListWidget (QWidget * parent, Qt::WFlags f) :
-QWidget (parent,f)
+#include <model/phonecall/ConferenceCall.h>
+#include <control/phonecall/CPhoneCall.h>
+
+QtContactCallListWidget::QtContactCallListWidget (CWengoPhone & cWengoPhone,QWidget * parent, Qt::WFlags f) :
+QWidget (parent,f), _cWengoPhone(cWengoPhone)
 {
 	_layout = new QGridLayout(this);
+	_conferenceCall = NULL;
 	_listWidget = new QtContactCallList(this);
 
 	// Setup the list widget
 	_layout->addWidget(_listWidget,0,0);
+
 }
 
 
 void QtContactCallListWidget::addPhoneCall(QtPhoneCall * qtPhoneCall){
+	connect (qtPhoneCall,SIGNAL(startConference()),SLOT(startConference()));
+	connect (qtPhoneCall,SIGNAL(stopConference() ),SLOT(stopConference()));
 	_listWidget->addPhoneCall(qtPhoneCall);
 }
+
+void QtContactCallListWidget::startConference(){
+
+	if ( _conferenceCall )
+		return;
+
+	IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
+
+	if (phoneLine == NULL)
+		return;
+
+	if ( _listWidget->getPhoneCallList().size() != 2 ){
+		return;
+	}
+
+	_conferenceCall = new ConferenceCall(*phoneLine);
+
+	QtPhoneCall * phone;
+
+	phone = _listWidget->getPhoneCallList()[0];
+	_conferenceCall->addPhoneCall(phone->getCPhoneCall().getPhoneCall() );
+
+	phone = _listWidget->getPhoneCallList()[1];
+	_conferenceCall->addPhoneCall(phone->getCPhoneCall().getPhoneCall() );
+
+}
+
+void QtContactCallListWidget::stopConference(){
+
+	if ( ! _conferenceCall )
+		return;
+
+	QtPhoneCall * phone;
+
+	phone = _listWidget->getPhoneCallList()[0];
+	_conferenceCall->removePhoneCall(phone->getCPhoneCall().getPhoneCall() );
+
+	phone = _listWidget->getPhoneCallList()[1];
+	_conferenceCall->removePhoneCall(phone->getCPhoneCall().getPhoneCall() );
+
+	// delete _conferenceCall;
+	_conferenceCall = NULL;
+
+}
+

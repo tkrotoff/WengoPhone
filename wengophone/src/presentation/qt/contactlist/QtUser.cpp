@@ -190,10 +190,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 
 	spx = QtContactPixmap::getInstance();
 
-
 	x = _painterRect.width();
-
-
 
 	px = spx->getPixmap(QtContactPixmap::ContactVideo);
 	if (_cContact.hasVideo())
@@ -250,4 +247,41 @@ int QtUser::getHeight() const
 	if (_openStatus)
 		return 90;
 	return UserSize;
+}
+
+QString QtUser::getMobilePhone() const {
+	QString mphone = QString::fromStdString(_cContact.getContact().getMobilePhone());
+	return mphone;
+}
+
+QString QtUser::getHomePhone() const {
+	QString hphone = QString::fromStdString( _cContact.getContact().getHomePhone() );
+	return hphone;
+}
+
+QString QtUser::getWorkPhone() const {
+	QString wphone = QString::fromStdString( _cContact.getContact().getWorkPhone() );
+	return wphone;
+}
+
+QString QtUser::getWengoPhoneNumber() const {
+	QString wphone = QString::fromStdString( _cContact.getContact().getWengoPhoneId() );
+	return wphone;
+}
+
+bool QtUser::havePhoneNumber(){
+
+	if ( ! getMobilePhone().isEmpty() )
+		return true;
+	if ( ! getHomePhone().isEmpty() )
+		return true;
+	if ( ! getWorkPhone().isEmpty() )
+		return true;
+	if ( ! getWengoPhoneNumber().isEmpty() )
+		return true;
+
+}
+
+void QtUser::startCall(const QString & number){
+	_wengoPhone.getCurrentUserProfile().makeCall(number.toStdString());
 }
