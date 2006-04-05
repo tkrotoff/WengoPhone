@@ -20,6 +20,7 @@
 #include <sound/SoundMixer.h>
 
 #include "CoreAudioUtilities.h"
+#include "Volume.h"
 
 #include <iostream>
 
@@ -37,7 +38,6 @@ SoundMixer::SoundMixer(const std::string & inputDeviceName, const std::string & 
 		it != deviceMap.end();
 		++it) {
 		if ((*it).second == inputDeviceName) {
-			Volume
 			_inputVolume = new Volume((*it).first, true);
 			break;
 		}
@@ -45,12 +45,11 @@ SoundMixer::SoundMixer(const std::string & inputDeviceName, const std::string & 
 	////
 
 	// Looking for output device
-	std::map<AudioDeviceID, std::string> deviceMap = CoreAudioUtilities::audioDeviceMap(false);
+	deviceMap = CoreAudioUtilities::audioDeviceMap(false);
 	for (std::map<AudioDeviceID, std::string>::const_iterator it = deviceMap.begin();
 		it != deviceMap.end();
 		++it) {
 		if ((*it).second == outputDeviceName) {
-			Volume
 			_outputVolume = new Volume((*it).first, false);
 			break;
 		}

@@ -19,6 +19,8 @@
 
 #include "Volume.h"
 
+#include "CoreAudioUtilities.h"
+
 #include <util/Logger.h>
 
 Volume::Volume(AudioDeviceID deviceId, bool isInput) 
@@ -33,7 +35,7 @@ int Volume::getVolume() {
 	size = sizeof(volume);
 	status = AudioDeviceGetProperty(_deviceId, 0, _isInput, kAudioDevicePropertyVolumeScalar, &size, &volume);
 	if (status) {
-		LOG_ERROR(stderr, "Can't get device property: kAudioDevicePropertyVolumeScalar\n");
+		LOG_ERROR("Can't get device property: kAudioDevicePropertyVolumeScalar\n");
 		return -1;
 	} else {
 		return (int)(volume * 100.0);
@@ -43,12 +45,12 @@ int Volume::getVolume() {
 bool Volume::setVolume(unsigned volume) {
 	OSStatus status = noErr;
 	UInt32 size = 0;
-	Float32 volume = volume / 100.0;
+	Float32 fVolume = volume / 100.0;
 
-	size = sizeof(volume);
-	status = AudioDeviceSetProperty(_deviceId, 0, 0, _isInput, kAudioDevicePropertyVolumeScalar, size, &volume);
+	size = sizeof(fVolume);
+	status = AudioDeviceSetProperty(_deviceId, 0, 0, _isInput, kAudioDevicePropertyVolumeScalar, size, &fVolume);
 	if (status) {
-		LOG_ERROR(stderr, "Can't set device property: kAudioDevicePropertyVolumeScalar\n");
+		LOG_ERROR("Can't set device property: kAudioDevicePropertyVolumeScalar\n");
 		return false;
 	} else {
 		return true;
