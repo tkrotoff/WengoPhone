@@ -110,6 +110,12 @@ void UserProfile::disconnect() {
 		Thread::sleep(5);
 		_activePhoneLine->getSipWrapper().terminate();
 	}
+
+	for (IMAccountHandler::const_iterator it = _imAccountHandler.begin();
+		it != _imAccountHandler.end();
+		++it) {
+		_connectHandler.disconnect(*it);
+	}
 }
 
 void UserProfile::makeCall(Contact & contact) {
