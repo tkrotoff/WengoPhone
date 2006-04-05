@@ -172,6 +172,12 @@ public:
 	void removeAllIMContact();
 
 	/**
+	 * @return true if this IMChatSession can do multi chat.
+	 * A session can do multi chat if it is on a particular protocol.
+	 */
+	bool canDoMultiChat();
+
+	/**
 	 * Sends a chat message to all the contacts from this chat session.
 	 *
 	 * @param message chat message to send
@@ -190,17 +196,6 @@ public:
 
 private:
 	
-	/**
-	 * Cleans the message up.
-	 *
-	 * This method removes html tags that are supported by some protocols.
-	 * The sent message must not contain <html> and <head> tags.
-	 *
-	 * @param the dirty message
-	 * @return the clean message
-	 */
-	std::string cleanMessage(const std::string & message);
-
 	void messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, const std::string & message);
 
 	void statusMessageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, IMChat::StatusMessage status, const std::string & message);

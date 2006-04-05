@@ -19,11 +19,10 @@
 
 #include <imwrapper/IMChatSession.h>
 
+#include <imwrapper/EnumIMProtocol.h>
 #include <imwrapper/IMContact.h>
 
 #include <util/Logger.h>
-
-#include <boost/regex.hpp>
 
 using namespace std;
 
@@ -137,16 +136,10 @@ void IMChatSession::contactRemovedEventHandler(IMChat & sender, IMChatSession & 
 	}
 }
 
-string IMChatSession::cleanMessage(const string & message) {
-	boost::regex e("<html[^>]*>[^<]*<head[^>]*>.*</head>(.*)</html>");
-	boost::match_results<std::string::const_iterator> what;
-	string result;
-
-	if (boost::regex_search(message, what, e)) {
-		result = string(what[1].first, what[1].second);
+bool IMChatSession::canDoMultiChat() {
+	if (_imChat.getIMAccount().getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
+		return true;
 	} else {
-		return message;
+		return false;
 	}
-
-	return result;
 }
