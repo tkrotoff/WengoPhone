@@ -180,7 +180,8 @@ if WengoOSMacOSX():
 	link_flags += [
 		'-framework CoreAudio',
 		'-framework AudioToolbox',
-		'-framework AudioUnit'
+		'-framework AudioUnit',
+		'-framework Cocoa',
 	]
 
 	env.WengoDeclareMacOSXAppTemplate('./macosx/template.app')
