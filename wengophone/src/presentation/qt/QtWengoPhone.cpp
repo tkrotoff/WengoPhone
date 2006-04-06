@@ -261,12 +261,13 @@ void QtWengoPhone::initThreadSafe() {
 	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
 
 	_wengoPhoneWindow->show();
-
+/*
 	QtToaster  * toaster = new QtToaster();
 	toaster->setTitle("Example toaster");
 	toaster->setMessage("Hello kavous !!!");
 	toaster->showToaster();
 	connect ( toaster, SIGNAL (closed(QtToaster *)), SLOT(toasterClosed(QtToaster *)));
+*/
 }
 
 void QtWengoPhone::initButtons() {
