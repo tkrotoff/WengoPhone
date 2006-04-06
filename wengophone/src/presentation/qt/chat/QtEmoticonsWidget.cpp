@@ -20,15 +20,19 @@
 #include "QtEmoticonsWidget.h"
 #include "QtEmoticonButton.h"
 
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
 #include <qtutil/WidgetFactory.h>
 #include <QtXml>
 #include <util/Logger.h>
 
 EmoticonsWidget::EmoticonsWidget(QWidget * parent, Qt::WFlags f) : QWidget(parent,f){
-
     _layout = new QGridLayout(this);
     _layout->setMargin(0);
-    loadConfig("emoticons/icondef.xml");
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+    loadConfig(QString::fromStdString(config.getResourcesDir() + "emoticons/icondef.xml"));
 
 	// Default stat is popup
 	_stat=Popup;
@@ -88,6 +92,8 @@ void EmoticonsWidget::loadConfig(const QString & path)
 
 	QStringList textList;
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 	while(!n.isNull()) {
         QDomElement e = n.toElement();
         if(!e.isNull()) {
@@ -99,18 +105,20 @@ void EmoticonsWidget::loadConfig(const QString & path)
 				{
 					QDomElement e1 = n1.toElement();
 					if ( !e1.isNull()){
+						QString emoticonPath = QString::fromStdString(config.getResourcesDir() + "emoticons/") + e1.text();
+
 						if (e1.tagName() == "text"){
 							textList << e1.text();
 						}
 						if (e1.tagName() == "object"){
-							emoticon.setPath("emoticons/"+e1.text());
-							emoticon.setPixmap(QPixmap("emoticons/"+e1.text()));
+							emoticon.setPath(emoticonPath);
+							emoticon.setPixmap(QPixmap(emoticonPath));
 						}
 						if (e1.tagName() == "regexp"){
 							emoticon.setRegExp(e1.text());
 						}
 						if (e1.tagName() == "button"){
-							emoticon.setButtonPixmap(QPixmap("emoticons/"+e1.text()));
+							emoticon.setButtonPixmap(QPixmap(emoticonPath));
 						}
 					}
 					n1 = n1.nextSibling();
