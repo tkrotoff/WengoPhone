@@ -1,0 +1,153 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>JabberSettings</class>
+ <widget class="QWidget" name="JabberSettings" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>305</width>
+    <height>255</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>WengoPhone - Jabber Settings</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="2" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="0" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="passwordLabel" >
+       <property name="text" >
+        <string>Password:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QLineEdit" name="passwordLineEdit" />
+     </item>
+     <item row="0" column="1" >
+      <widget class="QLineEdit" name="loginLineEdit" />
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="loginLabel" >
+       <property name="text" >
+        <string>Login:</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="5" column="0" >
+      <widget class="QLabel" name="connectlabel" >
+       <property name="text" >
+        <string>Server:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2" >
+      <widget class="QLabel" name="advancedOptionsLabel" >
+       <property name="font" >
+        <font>
+         <family>MS Shell Dlg</family>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+         <underline>false</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Advanced Options</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QCheckBox" name="requireTLSCheckBox" >
+       <property name="text" >
+        <string>Require TLS</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0" >
+      <widget class="QLabel" name="portLabel" >
+       <property name="text" >
+        <string>Port:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1" >
+      <widget class="QLineEdit" name="serverLineEdit" />
+     </item>
+     <item row="1" column="0" colspan="2" >
+      <widget class="QCheckBox" name="useTLSCheckBox" >
+       <property name="text" >
+        <string>Use TLS if available</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2" >
+      <widget class="QCheckBox" name="allowPlainTextAuthenticationCheckBox" >
+       <property name="text" >
+        <string>Allow plaintext authentication over unencrypted streams</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1" >
+      <widget class="QLineEdit" name="portLineEdit" >
+       <property name="text" >
+        <string>5222</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="2" >
+      <widget class="QCheckBox" name="forceOldSSLCheckBox" >
+       <property name="text" >
+        <string>Force old (port 5223) SSL</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>
