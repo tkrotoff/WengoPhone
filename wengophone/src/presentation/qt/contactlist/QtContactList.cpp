@@ -217,9 +217,10 @@ void QtContactList::addContactGroup(PContactGroup * pContactGroup) {
 
 void QtContactList::addContactGroupThreadSafe(PContactGroup * pContactGroup) {
 	//LOG_DEBUG("contact group added:" + pContactGroup->getName());
-
+	//QString displayName = QString::fromStdString(pContactGroup->getDisplayName();
+	QString displayName = QString::fromUtf8(pContactGroup->getDisplayName().c_str());
 	QTreeWidgetItem *group = new QTreeWidgetItem(_treeWidget);
-	group->setText(0, QString::fromStdString(pContactGroup->getDisplayName()));
+	group->setText(0, displayName );
 	_treeWidget->setItemExpanded ( group, true);
 }
 
