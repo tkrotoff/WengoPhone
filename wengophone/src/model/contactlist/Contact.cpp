@@ -303,10 +303,10 @@ EnumPresenceState::PresenceState Contact::getPresenceState() const {
 
 	if (onlineIMContact > 0) {
 		return EnumPresenceState::PresenceStateOnline;
-	} else if (dndIMContact == _imContactSet.size()) {
-		return EnumPresenceState::PresenceStateDoNotDisturb;
 	} else if (offlineIMContact == _imContactSet.size()) {
 		return EnumPresenceState::PresenceStateOffline;
+	} else if (dndIMContact == _imContactSet.size()) {
+		return EnumPresenceState::PresenceStateDoNotDisturb;
 	} else {
 		return EnumPresenceState::PresenceStateAway;
 	}
