@@ -26,8 +26,6 @@
 
 #include <util/Logger.h>
 
-#include <model/webservices/subscribe/Subscribe.h>
-
 Sms::Sms(WengoAccount & wengoAccount, UserProfile & userProfile) 
 	: WengoWebService(wengoAccount), _userProfile(userProfile) {
 
