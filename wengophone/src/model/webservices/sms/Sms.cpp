@@ -26,7 +26,7 @@
 
 #include <util/Logger.h>
 
-Sms::Sms(WengoAccount & wengoAccount, UserProfile & userProfile) 
+Sms::Sms(WengoAccount & wengoAccount, UserProfile & userProfile)
 	: WengoWebService(wengoAccount), _userProfile(userProfile) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -41,11 +41,12 @@ Sms::Sms(WengoAccount & wengoAccount, UserProfile & userProfile)
 }
 
 int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
-	setParameters("message=" + message + "&target=" + phoneNumber);
 
 	//encode the message
 	String message2 = String::encodeUrl(message);
 	message2.replace("%2e", ".", false);
+	
+	setParameters("message=" + message2 + "&target=" + phoneNumber);
 
 	//call the web service
 	int requestId = call(this);
