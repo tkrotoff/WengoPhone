@@ -185,13 +185,13 @@ void QtHistory::clearRejectedCallEntries() {
 void QtHistory::replayItem ( QtHistoryItem * item ) {
 	QString text = "";
 	QString phoneNumber = "";
+	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 	switch ( item->getItemType() ) {
 	
 		case QtHistoryItem::Sms:
 			//retrive info & configure the Sms widget
 			text = QString::fromStdString(_cHistory.getMementoData(item->getId()));
 			phoneNumber = QString::fromStdString(_cHistory.getMementoPeer(item->getId()));
-			QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 			qtWengoPhone->getSms()->setText(text);
 			qtWengoPhone->getSms()->setPhoneNumber(phoneNumber);
 			qtWengoPhone->getSms()->getWidget()->show();
