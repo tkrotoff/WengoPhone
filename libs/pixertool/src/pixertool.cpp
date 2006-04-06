@@ -64,14 +64,14 @@ unsigned pix_size(pixosi pix, unsigned width, unsigned height) {
 	return avpicture_get_size(pix_ffmpeg_from_pix_osi(pix), width, height);
 }
 
-//TODO implement picture resize
 pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
-	AVPicture avp_source, avp_target;
-	int len_target;
+	AVPicture avp_source, avp_target, avp_tmp_target;
+	int len_target = 0;
 	int pix_fmt_source;
 	int pix_fmt_target;
 	int need_avfree = 0;
-
+	int need_resize = 0;
+	ImgReSampleContext *resample_context = NULL;
 	pixosi pix_osi_source = img_src->palette;
 	unsigned width = img_src->width;
 	unsigned height = img_src->height;
@@ -81,6 +81,10 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 		buf_source = _nv12_to_yuv420p(buf_source, width, height);
 		need_avfree = 1;
 		pix_osi_source = PIX_OSI_YUV420P;
+	}
+
+	if ((width != img_dst->width) || (height != img_dst->height)) {
+		need_resize = 1;
 	}
 
 	len_target = pix_size(img_dst->palette, width, height);
@@ -94,7 +98,6 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 	/* Only flip other planes if the destination palette is YUV420
 	 * FIXME DUDE
 	 */
-
 	if ((flags & PIX_FLIP_HORIZONTALLY) && (pix_osi_source == PIX_OSI_YUV420P)) {
 		avp_source.data[0] += avp_source.linesize[0] * (height - 1);
 		avp_source.linesize[0] *= -1;
@@ -107,11 +110,34 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 		}
 	}
 
+	// Resizing picture if needed. Needs test
+	/*
+	if (need_resize) {
+		avpicture_fill(&avp_tmp_target, img_dst->data, pix_fmt_target, width, height);
+		//TODO: optimize this part
+		resample_context = img_resample_init(img_dst->width, img_dst->height,
+			img_src->width, img_src->height);
+		if (resample_context);
+			img_resample(resample_context, avp_tmp_target, avp_source);
+			img_resample_close(resample_context);
+		}
+
+		if (img_convert(&avp_target, pix_fmt_target,
+			&avp_tmp_target, pix_fmt_source,
+			width, height) == -1) {
+			return PIX_NOK;
+		}
+	}
+	*/
+	////
+
+	// Converting palette
 	if (img_convert(&avp_target, pix_fmt_target,
 		&avp_source, pix_fmt_source,
 		width, height) == -1) {
 		return PIX_NOK;
 	}
+	////
 
 	if (need_avfree) {
 		av_free(buf_source);
