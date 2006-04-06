@@ -43,7 +43,10 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 
 	_qtWengoPhone = (QtWengoPhone *) _cPhoneCall.getCWengoPhone().getPresentation();
 	_videoWindow = NULL;
+
 	_hold = true;
+
+
 	_showVideo = false;
 
 	stateChangedEvent += boost::bind(&QtPhoneCall::stateChangedEventHandler, this, _1);
@@ -163,6 +166,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 	case EnumPhoneCallState::PhoneCallStateError:
 
 		_statusLabel->setText( tr ("error") );
+		_status = Error;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
@@ -171,6 +175,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionHold->setEnabled( true );
 		_statusLabel->setText( tr ("talking") );
 		_hold = false;
+		_status = Resumed;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateTalking:
@@ -183,7 +188,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionHangupCall->setEnabled( true );
 
 		_statusLabel->setText( tr ("talking") );
-
+		_status = Talking;
 
 		break;
 
@@ -191,16 +196,16 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 
 		_actionAcceptCall->setEnabled( false );
 		_actionHangupCall->setEnabled( true );
-
 		_statusLabel->setText( tr ("dialing") );
+		_status = Dialing;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateRinging:
 
 		_actionAcceptCall->setEnabled( false );
 		_actionHangupCall->setEnabled( true );
-
 		_statusLabel->setText( tr ("ringing") );
+		_status = Ringing;
 
 		break;
 
@@ -210,7 +215,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionAcceptCall->setEnabled( false );
 		_actionHangupCall->setEnabled( false );
 		_statusLabel->setText( tr ("closed") );
-
+		_status = Closed;
 		delete _phoneCallWidget;
 
 		stopConference();
@@ -221,22 +226,23 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 
 		_actionAcceptCall->setEnabled( true );
 		_actionHangupCall->setEnabled( true );
-
 		_statusLabel->setText( tr ("incoming call") );
+		_status = Incoming;
 
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateHold:
 
 		_statusLabel->setText( tr ("hold") );
-
 		_actionHold->setEnabled( false );
 		_actionResume->setEnabled( true );
 		_hold = false;
+		_status = Hold;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateMissed:
 		_statusLabel->setText( tr ("missed") );
+		_status = Missed;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateRedirected:
@@ -314,7 +320,6 @@ void QtPhoneCall::timerEvent(QTimerEvent *event){
 void QtPhoneCall::showVideoWidget(){
 
 	QGridLayout * layout = dynamic_cast<QGridLayout *> ( _phoneCallWidget->layout() );
-
 	// Remove the avatar from the widget
 	layout->removeWidget ( _avatarLabel );
 	_avatarLabel->hide();
@@ -331,7 +336,6 @@ void QtPhoneCall::showVideoWidget(){
 }
 
 void QtPhoneCall::showAvatar(){
-
 
 	QGridLayout * layout = dynamic_cast<QGridLayout *> ( _phoneCallWidget->layout() );
 
@@ -359,7 +363,6 @@ void QtPhoneCall::switchVideo(bool ){
 		_actionSwitchVideo->setText ( tr("Stop video") );
 		showVideoWidget();
 	}
-
 }
 
 CPhoneCall & QtPhoneCall::getCPhoneCall(){
@@ -367,5 +370,5 @@ CPhoneCall & QtPhoneCall::getCPhoneCall(){
 }
 
 void QtPhoneCall::inviteToConference(bool ){
-	startConference();
+	startConference(this);
 }

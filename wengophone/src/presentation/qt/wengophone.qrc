@@ -116,6 +116,7 @@
         <file>chat/ChatWidget.ui</file>
         <file>chat/chat.ui</file>
         <file>chat/emoticonswidget.ui</file>
+        <file>toaster/QtToaster.ui</file>
         <file>config/AccountSettings.ui</file>
         <file>config/AdvancedConfigWindow.ui</file>
         <file>config/AdvancedSettings.ui</file>

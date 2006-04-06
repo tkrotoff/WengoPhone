@@ -41,7 +41,7 @@ public:
 
 public Q_SLOTS:
 
-	void startConference();
+	void startConference(QtPhoneCall * qtPhoneCall);
 
 	void stopConference();
 

@@ -46,6 +46,8 @@ class QtPhoneCall : public QObjectThreadSafe, public PPhoneCall {
 	Q_OBJECT
 public:
 
+	enum QtPhoneCallStatus { Error, Resumed, Talking, Dialing, Ringing, Closed, Incoming, Hold, Missed };
+
 	QtPhoneCall(CPhoneCall & cPhoneCall);
 
 	void updatePresentation();
@@ -58,7 +60,7 @@ public:
 
 Q_SIGNALS:
 
-	void startConference();
+	void startConference(QtPhoneCall * phonCall);
 
 	void stopConference();
 
@@ -142,6 +144,8 @@ private:
 	bool _hold;
 
 	bool _showVideo;
+
+	QtPhoneCallStatus _status;
 
 protected:
 

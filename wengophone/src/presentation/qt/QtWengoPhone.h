@@ -46,6 +46,7 @@ class QTabWidget;
 class QLayout;
 class QLabel;
 class QFrame;
+class QtToaster;
 
 /**
  * Qt Presentation component for WengoPhone.
@@ -153,6 +154,8 @@ private Q_SLOTS:
 	void setTrayMenu();
 
 	void sortContacts();
+
+	void toasterClosed(QtToaster * toaster);
 
 private:
 

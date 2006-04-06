@@ -38,12 +38,12 @@ QWidget (parent,f), _cWengoPhone(cWengoPhone)
 
 
 void QtContactCallListWidget::addPhoneCall(QtPhoneCall * qtPhoneCall){
-	connect (qtPhoneCall,SIGNAL(startConference()),SLOT(startConference()));
+	connect (qtPhoneCall,SIGNAL(startConference(QtPhoneCall *)),SLOT(startConference(QtPhoneCall *)));
 	connect (qtPhoneCall,SIGNAL(stopConference() ),SLOT(stopConference()));
 	_listWidget->addPhoneCall(qtPhoneCall);
 }
 
-void QtContactCallListWidget::startConference(){
+void QtContactCallListWidget::startConference(QtPhoneCall * qtPhoneCall){
 
 	if ( _conferenceCall )
 		return;
@@ -56,7 +56,6 @@ void QtContactCallListWidget::startConference(){
 	if ( _listWidget->getPhoneCallList().size() != 2 ){
 		return;
 	}
-
 	_conferenceCall = new ConferenceCall(*phoneLine);
 
 	QtPhoneCall * phone;

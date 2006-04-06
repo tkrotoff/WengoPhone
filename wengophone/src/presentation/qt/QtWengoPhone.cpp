@@ -59,6 +59,8 @@
 #include <QtGui>
 #include <trayicon.h>
 
+#include "toaster/QtToaster.h"
+
 using namespace std;
 
 const std::string QtWengoPhone::ANCHOR_CONTACTLIST = "openwengo_phonebook";
@@ -129,6 +131,7 @@ void QtWengoPhone::initThreadSafe() {
 	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"),QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
 	setTrayMenu();
 	_trayIcon->show();
+
 
 	//logger
 	//FIXME no more logger tab widget
@@ -258,6 +261,12 @@ void QtWengoPhone::initThreadSafe() {
 	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
 
 	_wengoPhoneWindow->show();
+
+	QtToaster  * toaster = new QtToaster();
+	toaster->setTitle("Example toaster");
+	toaster->setMessage("Hello kavous !!!");
+	toaster->showToaster();
+	connect ( toaster, SIGNAL (closed(QtToaster *)), SLOT(toasterClosed(QtToaster *)));
 }
 
 void QtWengoPhone::initButtons() {
@@ -713,4 +722,8 @@ void QtWengoPhone::urlClickedEventHandler(std::string url) {
 	else if( anchor == ANCHOR_FORUM ) {
 		showForum();
 	}
+}
+
+void QtWengoPhone::toasterClosed(QtToaster * toaster){
+	delete toaster;
 }
