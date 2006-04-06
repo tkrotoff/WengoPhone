@@ -46,6 +46,8 @@ void QtSms::initThreadSafe() {
 	_sendButton = Object::findChild<QPushButton *>(_smsWindow, "sendButton");
 	connect(_sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
 
+	_smsText = Object::findChild<QTextEdit *>(_smsWindow, "smsText");
+
 	_qtWengoPhone->setSms(this);
 }
 
@@ -56,14 +58,13 @@ void QtSms::updatePresentationThreadSafe() {
 }
 
 void QtSms::sendButtonClicked() {
-	static QTextEdit * smsText = Object::findChild<QTextEdit *>(_smsWindow, "smsText");
 	static QComboBox * phoneComboBox = Object::findChild<QComboBox *>(_smsWindow, "phoneComboBox");
 
 	_sendButton->setEnabled(false);
 
 	//Converts to UTF-8
 	std::string phoneNumber(phoneComboBox->currentText().toUtf8().constData());
-	std::string sms(smsText->toPlainText().toUtf8().constData());
+	std::string sms(_smsText->toPlainText().toUtf8().constData());
 
 	_cSms.sendSMS(phoneNumber, sms);
 }
@@ -82,4 +83,8 @@ void QtSms::setPhoneNumber(const QString & phone) {
 	QComboBox * phoneComboBox = Object::findChild<QComboBox *>(_smsWindow, "phoneComboBox");
 	phoneComboBox->addItem(phone);
 	phoneComboBox->setCurrentIndex(0);
+}
+
+void QtSms::setText(const QString & text) {
+	_smsText->setPlainText(text);
 }

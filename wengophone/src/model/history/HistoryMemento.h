@@ -72,65 +72,81 @@ public:
 	HistoryMemento(State state, std::string peer, int callId = -1, std::string data = "");
 	
 	/**
-	 * Default destructor
+	 * Default destructor.
 	 */
 	~HistoryMemento();
 	
 	/**
-	 * return the state
+	 * return the state.
+	 * 
 	 * @return the state
 	 */
 	HistoryMemento::State getState();
 	
 	/**
-	 * return the peer
+	 * return the peer.
+	 * 
 	 * @return the peer
 	 */
 	std::string getPeer();
 	
 	/**
-	 * return the duration
+	 * return the duration.
+	 * 
 	 * @return the duration
 	 */
 	int getDuration();
 	
 	/**
-	 * return the date
+	 * return the date.
+	 * 
 	 * @return the date
 	 */
 	Date getDate();
 	
 	/**
-	 * return the time
+	 * return the time.
+	 * 
 	 * @return the time
 	 */
 	Time getTime();
 
 	/**
-	 * return true if the Memento can be replayed
+	 * return data.
+	 * 
+	 * @return data
+	 */
+	std::string getData();
+
+	/**
+	 * return true if the Memento can be replayed.
+	 * 
 	 * @return true if the Memento can be replayed
 	 */
 	bool canReplay();
 
 	/**
-	 * update the duration
+	 * update the duration.
+	 * 
 	 * @param duration the duration of the call
 	 */
 	void updateDuration(int duration);
 
 	/**
-	 * return a string representing the memento
+	 * return a string representing the memento.
+	 * 
 	 * @return return a string representing the memento
 	 */
 	std::string toString();
 	
 	/**
-	 * replay the Memento
+	 * replay the Memento.
 	 */
 	void replay();
 
 	/**
-	 * return a string representing a memento state
+	 * return a string representing a memento state.
+	 * 
 	 * @return return a string representing a memento state
 	 */
 	static std::string stateToString(State state);
@@ -147,62 +163,67 @@ public:
 private:
 
 	/**
-	 * return true if the memento is for a call
+	 * return true if the memento is for a call.
+	 * 
 	 * @return true if the memento is for a call
 	 */
 	bool isCallMemento();
 	
 	/**
-	 * return true if the memento is for a SMS
+	 * return true if the memento is for a SMS.
+	 * 
 	 * @return true if the memento is for a SMS
 	 */
 	bool isSMSMemento();
 
 	/**
-	 * return true if the memento is for a chat session
+	 * return true if the memento is for a chat session.
+	 * 
 	 * @return true if the memento is for a chat session
 	 */
 	bool isChatSessionMemento();
 	
 	/**
-	 * update state
+	 * update state.
+	 * 
 	 * @param state new state
 	 */
 	void updateState(State state);
 	
 	/**
-	 * return the callId associated to the memento
+	 * return the callId associated to the memento.
+	 * 
 	 * @return return the callId associated to the memento
 	 */
 	int getCallId();
 	
 	/**
-	 * the peer
+	 * the peer.
 	 * TODO: replace by a set of peers (multi SMS, audio conf)
 	 */
 	std::string _peer;
 	
-	/** State of the Memento */
+	/** State of the Memento. */
 	State _state;
 	
-	/** Date associated to the memento */
+	/** Date associated to the memento. */
 	Date _date;
 	
-	/** Time associated to the memento */
+	/** Time associated to the memento. */
 	Time _time;
 	
-	/** data: meaningfull only for SMS */
+	/** data: meaningfull only for SMS. */
 	std::string _data;
 	
-	/** data: meaningfull only for calls */
+	/** data: meaningfull only for calls. */
 	int _duration;
 	
-	/** data: meaningfull only for calls from this instance of the application */
+	/** data: meaningfull only for calls from this instance of the application. */
 	int _callId;
 	
 	friend class boost::serialization::access;
 
-	/**	 serialialization load method */
+	/**	 serialialization load method. */
 	template < class Archive >
 	void load(Archive & ar, const unsigned int version) {
 		if( version == SERIALIZATION_VERSION ) {
@@ -223,7 +244,7 @@ private:
 		}
 	}
 
-	/**	 serialialization save method */
+	/**	 serialialization save method. */
 	template < class Archive >
 	void save(Archive & ar, const unsigned int version) const {
 		ar << BOOST_SERIALIZATION_NVP(_peer);

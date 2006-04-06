@@ -21,17 +21,25 @@
 #define QTHISTORYWIDGET_H
 
 #include <QtGui>
+#include <QObject>
 
 #include "QtHistoryItem.h"
 
+#include <control/history/CHistory.h>
+
+/**
+ * History Widget.
+ *
+ * @author Mr K
+ * @author Mathieu Stute
+ */
 class QtHistoryWidget : public QWidget {
 
-		Q_OBJECT
+	Q_OBJECT
 
 public:
 
-
-	QtHistoryWidget ( QWidget * parent = 0, Qt::WFlags f = 0 );
+	QtHistoryWidget ( QWidget * parent = 0, Qt::WFlags f = 0);
 
 	void clearHistory();
 
@@ -55,7 +63,7 @@ public:
 
 	void editItem(const QString & text,const QDate & date, 
 		const QTime & time, const QTime & duration, const QString & name, int id);
-
+		
 public Q_SLOTS:
 
 	void showSMSCall(bool checked);
@@ -74,6 +82,10 @@ public Q_SLOTS:
 
 	void headerClicked(int logicalIndex);
 
+Q_SIGNALS:
+	
+	void replayItem ( QtHistoryItem * item );
+	
 protected:
 
 	QTreeWidget * _treeWidget;
@@ -81,6 +93,7 @@ protected:
 	QHeaderView * _header;
 
 	QMenu * _menu;
+
 };
 
 #endif

@@ -45,60 +45,67 @@ public:
 	static const unsigned int SERIALIZATION_VERSION = 1;
 	
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	HistoryMementoCollection();
 	
 	/**
-	 * Default destructor
+	 * Default destructor.
 	 */
 	~HistoryMementoCollection();
 	
 	/**
-	 * Add a HistoryMemento
+	 * Add a HistoryMemento.
+	 * 
 	 * @param memento the HistoryMemento to add
 	 * @return the id of the memento
 	 */
 	int addMemento(HistoryMemento * memento);
 	
 	/**
-	 * get a HistoryMemento by its id
+	 * get a HistoryMemento by its id.
+	 * 
 	 * @param id the id
 	 * @return the HistoryMemento with the given id
 	 */
 	HistoryMemento * getMemento(int id);
 	
 	/**
-	 * remove a memento by its id
+	 * remove a memento by its id.
+	 * 
 	 * @param id the id
 	 */
 	void removeMemento(int id);
 	
 	/**
-	 * Clear all mementos
+	 * Clear all mementos.
 	 */
 	void clear(HistoryMemento::State state);
 
 	/**
-	 * Return the number of entries
+	 * Return the number of entries.
+	 * 
 	 * @return the number of entries
 	 */
 	int size();
 	
 	/**
-	 * Return a string representing this object
+	 * Return a string representing this object.
+	 * 
 	 * @return a string representing this object
 	 */
 	std::string toString();
 
 	/**
 	 * Returns an iterator pointing to the beginning of the map.
+	 * 
 	 * @return an iterator pointing to the beginning of the map.
 	 */
 	HistoryMap::iterator begin();
 	
 	/**
 	 * Returns an iterator pointing to the end of the map.
+	 * 
 	 * @return an iterator pointing to the end of the map.
 	 */
 	HistoryMap::iterator end();
@@ -107,7 +114,8 @@ private:
 
 	/**
 	 * get a HistoryMementoCollection containing all mementos
-	 * that match state
+	 * that match state.
+	 * 
 	 * @param state filter memento by State
 	 * @param count specify number of mementos to be returned
 	 * @return a pointer to a HistoryMementoCollection
@@ -115,28 +123,32 @@ private:
 	HistoryMementoCollection * getMementos(HistoryMemento::State state, int count = -1);
 
 	/**
-	 * Return the HistoryMemento associated to the given callId
+	 * Return the HistoryMemento associated to the given callId.
+	 * 
 	 * @param callId the callId
 	 * @return the HistoryMemento associated to callId
 	 */
 	int getMementoByCallId(int callId);
 
 	/**
-	 * Return the HistoryMemento associated to the given SMS id
+	 * Return the HistoryMemento associated to the given SMS id.
+	 * 
 	 * @param callId the SMS id
 	 * @return the HistoryMemento associated to SMS id
 	 */
 	int getMementoBySMSId(int callId);
 
 	/**
-	 * Add a HistoryMemento & do not increment the static int _historyId
+	 * Add a HistoryMemento & do not increment the static int _historyId.
+	 * 
 	 * @param memento the HistoryMemento to add
 	 * @param id the id of the memento
 	 */
 	void privateAdd(int id, HistoryMemento * memento);
 	
 	/**
-	 * Set the max entries
+	 * Set the max entries.
+	 * 
 	 * @param max max entries
 	 */
 	void setMaxEntries(int max);

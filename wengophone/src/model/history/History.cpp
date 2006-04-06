@@ -157,3 +157,7 @@ void History::save(std::string filename) {
 	historySavedEvent(*this);
 	//LOG_DEBUG(toString());
 }
+
+void History::replay(int id) {
+	getMemento(id)->replay();
+}

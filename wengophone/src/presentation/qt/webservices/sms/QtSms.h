@@ -32,11 +32,13 @@ class QtWengoPhone;
 
 class QWidget;
 class QPushButton;
+class QTextEdit;
 
 /**
  * Qt Presentation component for SMS.
  *
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
  */
 class QtSms : public QObjectThreadSafe, public PSms {
 	Q_OBJECT
@@ -51,6 +53,8 @@ public:
 	void updatePresentation();
 
 	void setPhoneNumber(const QString & phone);
+
+	void setText(const QString & text);
 
 private Q_SLOTS:
 
@@ -73,6 +77,8 @@ private:
 	QWidget * _smsWindow;
 
 	QPushButton * _sendButton;
+	
+	QTextEdit * _smsText;
 };
 
 #endif	//QTSMS_H

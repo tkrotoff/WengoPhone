@@ -26,6 +26,8 @@ class History;
 class CWengoPhone;
 class PHistory;
 
+#include <string>
+
 /**
  * @class CHistory, control for History
  * @ingroup control
@@ -35,27 +37,27 @@ class CHistory {
 public:
 
 	/**
-	 * The history has been loaded
+	 * The history has been loaded.
 	 */
 	Event<void (CHistory &)> historyLoadedEvent;
 	
 	/**
-	 * A memento has been added
+	 * A memento has been added.
 	 */
 	Event<void (CHistory &, int id)> mementoAddedEvent;
 	
 	/**
-	 * A memento has been updated
+	 * A memento has been updated.
 	 */
 	Event<void (CHistory &, int id)> mementoUpdatedEvent;
 
 	/**
-	 * A memento has been removed
+	 * A memento has been removed.
 	 */
 	Event<void (CHistory &, int id)> mementoRemovedEvent;
 
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	CHistory(History & history, CWengoPhone & cWengoPhone);
 
@@ -99,15 +101,37 @@ public:
 	 */
 	void clearRejectedCallEntries();
 
+	/**
+	 * @see History::replay
+	 */
+	void replay(int id);
 
 	/**
-	 * retrive the CWengoPhone
+	 * Get the memento data.
+	 *
+	 * @param id the memento id
+	 * @return the memento data (the sms text)
+	 */
+	std::string getMementoData(int id);
+	
+	/**
+	 * Get the memento peer.
+	 *
+	 * @param id the memento id
+	 * @return the memento peer
+	 */
+	std::string getMementoPeer(int id);
+
+	/**
+	 * retrive the CWengoPhone.
+	 *
 	 * @return the CWengoPhone
 	 */
 	CWengoPhone & getCWengoPhone() const;
 
 	/**
-	 * retrive the History
+	 * retrive the History.
+	 *
 	 * @return the History
 	 */
 	History & getHistory();

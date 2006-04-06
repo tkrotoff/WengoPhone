@@ -22,9 +22,13 @@
 
 #include <QtGui>
 
+/**
+ * History item widget.
+ *
+ * @author Mr K
+ */
 class QtHistoryItem : public QTreeWidgetItem
 {
-
 
 	public:
 
@@ -48,8 +52,6 @@ class QtHistoryItem : public QTreeWidgetItem
 		void setItemType(QtHistoryItem::HistoryType type);
 
 		QtHistoryItem::HistoryType getItemType() const;
-
-
 
 	protected:
 

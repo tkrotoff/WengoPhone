@@ -83,6 +83,10 @@ int HistoryMemento::getCallId() {
 	return _callId;
 }
 
+std::string HistoryMemento::getData() {
+	return _data;
+}
+
 void HistoryMemento::updateDuration(int duration) {
 	_duration = duration;
 }

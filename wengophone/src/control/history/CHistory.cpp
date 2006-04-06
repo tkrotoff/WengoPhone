@@ -92,3 +92,15 @@ void CHistory::clearMissedCallEntries() {
 void CHistory::clearRejectedCallEntries() {
 	_history.clear(HistoryMemento::RejectedCall);
 }
+
+std::string CHistory::getMementoData(int id) {
+	return _history.getMemento(id)->getData();
+}
+
+std::string CHistory::getMementoPeer(int id) {
+	return _history.getMemento(id)->getPeer();
+}
+
+void CHistory::replay(int id) {
+	_history.replay(id);
+}

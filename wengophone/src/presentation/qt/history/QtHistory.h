@@ -23,9 +23,10 @@
 #include <presentation/PHistory.h>
 #include <control/history/CHistory.h>
 
-class QtHistoryWidget;
-
 #include <qtutil/QObjectThreadSafe.h>
+
+class QtHistoryWidget;
+class QtHistoryItem;
 
 /**
  * Qt Presentation component for history.
@@ -33,7 +34,9 @@ class QtHistoryWidget;
  * @author Mathieu Stute
  */
 class QtHistory : public QObjectThreadSafe, public PHistory {
+
 	Q_OBJECT
+
 public:
 
 	QtHistory ( CHistory & cHistory );
@@ -60,6 +63,11 @@ public:
 	void clearRejectedCallEntries();
 
 	QWidget * getWidget();
+
+	
+public Q_SLOTS:
+
+	void replayItem ( QtHistoryItem * item );
 
 private:
 	

@@ -19,7 +19,7 @@
 
 #include "QtHistoryWidget.h"
 
-QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f  ) : QWidget(parent,f)
+QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(parent,f)
 {
 	QGridLayout * gridLayout = new QGridLayout(this);
 
@@ -40,7 +40,7 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f  ) : QWidget(
 	_treeWidget->setHeaderLabels(headerLabels);
 	_treeWidget->setSortingEnabled ( false );
 
-	_header->resizeSection ( 0,200);
+	_header->resizeSection (0,200);
 
 	gridLayout->addWidget(_treeWidget,0,0);
 
@@ -164,29 +164,8 @@ void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QT
 }
 
 void QtHistoryWidget::itemDoubleClicked ( QTreeWidgetItem * item, int column ){
-
 	QtHistoryItem * hItem = dynamic_cast<QtHistoryItem *>(item);
-
-	switch ( hItem->getItemType() )
-	{
-		case QtHistoryItem::Sms:
-			break;
-
-		case QtHistoryItem::OutGoingCall:
-			break;
-
-		case QtHistoryItem::IncomingCall:
-			break;
-
-		case QtHistoryItem::MissedCall:
-			break;
-
-		case QtHistoryItem::Chat:
-			break;
-
-		default:
-			break;
-	}
+	replayItem(hItem);
 }
 
 void QtHistoryWidget::headerClicked(int logicalIndex){

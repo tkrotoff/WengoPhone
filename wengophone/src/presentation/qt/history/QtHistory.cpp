@@ -19,8 +19,10 @@
 
 #include "QtHistory.h"
 #include "QtHistoryWidget.h"
+#include "QtHistoryItem.h"
 
 #include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/webservices/sms/QtSms.h>
 #include <control/CWengoPhone.h>
 #include <model/history/History.h>
 
@@ -45,6 +47,8 @@ QWidget * QtHistory::getWidget() {
 
 void QtHistory::initThreadSafe() {
 	_historyWidget = new QtHistoryWidget();
+	
+	connect (_historyWidget, SIGNAL( replayItem(QtHistoryItem *) ),SLOT( replayItem(QtHistoryItem *) ));
 	
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 	qtWengoPhone->setHistory(_historyWidget);
@@ -176,4 +180,39 @@ void QtHistory::clearMissedCallEntries() {
 
 void QtHistory::clearRejectedCallEntries() {
 	_cHistory.clearRejectedCallEntries();
+}
+
+void QtHistory::replayItem ( QtHistoryItem * item ) {
+	QString text = "";
+	QString phoneNumber = "";
+	switch ( item->getItemType() ) {
+	
+		case QtHistoryItem::Sms:
+			//retrive info & configure the Sms widget
+			text = QString::fromStdString(_cHistory.getMementoData(item->getId()));
+			phoneNumber = QString::fromStdString(_cHistory.getMementoPeer(item->getId()));
+			QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
+			qtWengoPhone->getSms()->setText(text);
+			qtWengoPhone->getSms()->setPhoneNumber(phoneNumber);
+			qtWengoPhone->getSms()->getWidget()->show();
+			break;
+
+		case QtHistoryItem::OutGoingCall:
+			_cHistory.replay(item->getId());
+			break;
+
+		case QtHistoryItem::IncomingCall:
+			//can't replay
+			break;
+
+		case QtHistoryItem::MissedCall:
+			//can't replay
+			break;
+
+		case QtHistoryItem::Chat:
+			break;
+
+		default:
+			break;
+	}
 }
