@@ -41,6 +41,9 @@ WengoPhone::~WengoPhone() {
 	while (_running) {
 		Thread::msleep(100);
 	}
+
+	_userProfile.disconnect();
+
 	delete _wenboxPlugin;
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -109,7 +112,6 @@ void WengoPhone::terminate() {
 }
 
 void WengoPhone::terminateThreadSafe() {
-	_userProfile.disconnect();
 	_terminate = true;
 }
 
