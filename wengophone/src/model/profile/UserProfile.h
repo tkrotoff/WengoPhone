@@ -47,6 +47,7 @@ class IPhoneLine;
 class PhoneCall;
 class Sms;
 class SoftUpdate;
+class History;
 
 /**
  * Handle the profile of a User.
@@ -204,6 +205,20 @@ public:
 		return _contactList;
 	}
 
+	History & getHistory() {
+		return *_history;
+	}
+
+	/**
+	 * Load the history.
+	 */
+	void loadHistory();
+	
+	/**
+	 * Save the history.
+	 */
+	void saveHistory();
+	
 	void addSipAccount(const std::string & login, const std::string & password, bool autoLogin);
 
 	void addIMAccount(const IMAccount & imAccount);
@@ -311,6 +326,9 @@ private:
 	/** SMS. */
 	Sms * _sms;
 
+	/** History. */
+	History * _history;
+	
 	/** WengoPhone update system. */
 	SoftUpdate * _softUpdate;
 

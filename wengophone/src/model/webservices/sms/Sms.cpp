@@ -22,10 +22,14 @@
 #include <model/history/History.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
 
-Sms::Sms(WengoAccount & wengoAccount) : WengoWebService(wengoAccount) {
+#include <model/webservices/subscribe/Subscribe.h>
+
+Sms::Sms(WengoAccount & wengoAccount, UserProfile & userProfile) 
+	: WengoWebService(wengoAccount), _userProfile(userProfile) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
@@ -51,7 +55,7 @@ int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
 	//History: create a History Memento for this outgoing SMS
 	HistoryMemento * memento = new HistoryMemento(
 		HistoryMemento::OutgoingSmsNok, phoneNumber, requestId, message2);
-	History::getInstance().addMemento(memento);
+	_userProfile.getHistory().addMemento(memento);
 
 	return requestId;
 }
@@ -70,7 +74,7 @@ void Sms::answerReceived(const std::string & answer, int requestId) {
 			smsStatusEvent(*this, requestId, SmsStatusOk);
 
 			//History: retrieve the HistoryMemento & update its state to Ok
-			History::getInstance().updateSMSState(requestId, HistoryMemento::OutgoingSmsOk);
+			_userProfile.getHistory().updateSMSState(requestId, HistoryMemento::OutgoingSmsOk);
 			return;
 		}
 	}
@@ -79,5 +83,5 @@ void Sms::answerReceived(const std::string & answer, int requestId) {
 	smsStatusEvent(*this, requestId, SmsStatusError);
 
 	//History: retrieve the HistoryMemento & update its state to Nok
-	History::getInstance().updateSMSState(requestId, HistoryMemento::OutgoingSmsNok);
+	_userProfile.getHistory().updateSMSState(requestId, HistoryMemento::OutgoingSmsNok);
 }

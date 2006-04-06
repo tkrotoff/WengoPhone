@@ -128,11 +128,12 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 	//Sends the event a new PhoneCall has been created
 	phoneCallCreatedEvent(*this, *phoneCall);
 
+
 	//History: create a HistoryMemento for this outgoing call
 	HistoryMemento * memento = new HistoryMemento(
 		HistoryMemento::OutgoingCall, sipAddress.getSipAddress(), callId);
-	History::getInstance().addMemento(memento);
-
+	_wengoPhone.getCurrentUserProfile().getHistory().addMemento(memento);
+	
 	return callId;
 }
 
@@ -181,7 +182,7 @@ void PhoneLine::rejectCall(int callId) {
 	checkCallId(callId);
 	_sipWrapper->rejectCall(callId);
 	//History: retreive the memento and change its state to rejected
-	History::getInstance().updateCallState(callId, HistoryMemento::RejectedCall);
+	_wengoPhone.getCurrentUserProfile().getHistory().updateCallState(callId, HistoryMemento::RejectedCall);
 	LOG_DEBUG("call rejected callId=" + String::fromNumber(callId));
 }
 
@@ -290,7 +291,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		//History: create a HistoryMemento for this incoming call
 		HistoryMemento * memento = new HistoryMemento(
 			HistoryMemento::IncomingCall, sipAddress.getSipAddress(), callId);
-		History::getInstance().addMemento(memento);
+		_wengoPhone.getCurrentUserProfile().getHistory().addMemento(memento);
 
 		break;
 	}
@@ -300,7 +301,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 
 	case EnumPhoneCallState::PhoneCallStateMissed:
 		//History: retrive the memento and change its state to missed
-		History::getInstance().updateCallState(callId, HistoryMemento::MissedCall);
+		_wengoPhone.getCurrentUserProfile().getHistory().updateCallState(callId, HistoryMemento::MissedCall);
 		LOG_DEBUG("call missed callId=" + String::fromNumber(callId));
 		break;
 
@@ -323,7 +324,7 @@ void PhoneLine::callClosed(int callId) {
 	//delete phoneCall;
 
 	//History: update the duration of the memento associated to this phonecall
-	History::getInstance().updateCallDuration(callId, phoneCall->getDuration());
+	_wengoPhone.getCurrentUserProfile().getHistory().updateCallDuration(callId, phoneCall->getDuration());
 
 	//Removes it from the list of PhoneCall
 	_phoneCallMap.erase(callId);

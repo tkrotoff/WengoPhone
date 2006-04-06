@@ -22,6 +22,8 @@
 
 #include <model/webservices/WengoWebService.h>
 
+class UserProfile;
+
 /**
  * Wengo SMS web service.
  *
@@ -43,7 +45,7 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	Sms(WengoAccount & wengoAccount);
+	Sms(WengoAccount & wengoAccount, UserProfile & userProfile);
 
 	virtual ~Sms() {}
 
@@ -68,6 +70,8 @@ public:
 private:
 
 	void answerReceived(const std::string & answer, int requestId);
+	
+	UserProfile & _userProfile;
 };
 
 #endif //OW_SMSWEBSERVICE_H

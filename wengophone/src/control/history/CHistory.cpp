@@ -30,11 +30,11 @@ CHistory::CHistory(History & history, CWengoPhone & cWengoPhone)
 	: _history(history), _cWengoPhone(cWengoPhone) {
 
 	_pHistory = PFactory::getFactory().createPresentationHistory(*this);
-
-	History::getInstance().historyLoadedEvent += boost::bind(&CHistory::historyLoadedEventHandler, this, _1);
-	History::getInstance().mementoAddedEvent += boost::bind(&CHistory::historyMementoAddedEventHandler, this, _1, _2);
-	History::getInstance().mementoUpdatedEvent += boost::bind(&CHistory::historyMementoUpdatedEventHandler, this, _1, _2);
-	History::getInstance().mementoRemovedEvent += boost::bind(&CHistory::historyMementoRemovedEventHandler, this, _1, _2);
+	
+	_history.historyLoadedEvent += boost::bind(&CHistory::historyLoadedEventHandler, this, _1);
+	_history.mementoAddedEvent += boost::bind(&CHistory::historyMementoAddedEventHandler, this, _1, _2);
+	_history.mementoUpdatedEvent += boost::bind(&CHistory::historyMementoUpdatedEventHandler, this, _1, _2);
+	_history.mementoRemovedEvent += boost::bind(&CHistory::historyMementoRemovedEventHandler, this, _1, _2);
 }
 
 CWengoPhone & CHistory::getCWengoPhone() const {

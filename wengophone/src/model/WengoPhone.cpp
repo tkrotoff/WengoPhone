@@ -68,9 +68,6 @@ void WengoPhone::init() {
 	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
 	configManagerStorage.load(config.getConfigDir());
 
-	//Creates the history
-	//historyCreatedEvent
-
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
 

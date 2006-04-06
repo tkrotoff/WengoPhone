@@ -33,6 +33,7 @@
 #include <model/phoneline/IPhoneLine.h>
 #include <model/webservices/sms/Sms.h>
 #include <model/webservices/softupdate/SoftUpdate.h>
+#include <model/history/History.h>
 
 #include <imwrapper/IMAccountHandlerFileStorage.h>
 
@@ -56,9 +57,10 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_activePhoneCall = NULL;
 	_wengoAccount = NULL;
 	_softUpdate = NULL;
-
-	History::getInstance().mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
-	History::getInstance().mementoAddedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
+	
+	_history = new History(*this);
+	_history->mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
+	_history->mementoAddedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
 }
 
 UserProfile::~UserProfile() {
@@ -76,6 +78,10 @@ UserProfile::~UserProfile() {
 
 	if (_softUpdate) {
 		delete _softUpdate;
+	}
+	
+	if (_history) {
+		delete _history;
 	}
 }
 
@@ -287,7 +293,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 	case SipAccount::LoginStateReady: {
 		//Creates SMS, SMS needs a WengoAccount
 		LOG_DEBUG("SMS created");
-		_sms = new Sms(*(WengoAccount *) _wengoAccount);
+		_sms = new Sms(*(WengoAccount *) _wengoAccount, *this);
 		smsCreatedEvent(*this, *_sms);
 
 		//Creates SoftUpdate, SoftUpdate needs a WengoAccount
@@ -305,12 +311,9 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		IMAccount imAccount(_wengoAccount->getIdentity(), _wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 		addIMAccount(imAccount);
 		_connectHandler.connect(*_imAccountHandler.find(imAccount));
-
-		//History: load the user history
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		std::string filename = config.getConfigDir() + _wengoAccount->getIdentity() + "_history";
-		History::getInstance().load(filename);
-
+		
+		loadHistory();
+		
 		break;
 	}
 
@@ -333,10 +336,7 @@ IPhoneLine * UserProfile::findWengoPhoneLine() {
 }
 
 void UserProfile::historyChangedEventHandler(History & sender, int id) {
-	//History: save the history
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	std::string filename = config.getConfigDir() + _wengoAccount->getIdentity() + "_history";
-	History::getInstance().save(filename);
+	saveHistory();
 }
 
 void UserProfile::setIcon(const Picture & icon) {
@@ -347,4 +347,19 @@ void UserProfile::setIcon(const Picture & icon) {
 void UserProfile::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
 	_presenceHandler.changeMyAlias(_alias, NULL);
 	_presenceHandler.changeMyIcon(_icon, NULL);
+}
+
+
+void UserProfile::loadHistory() {
+	//History: load the user history
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string filename = config.getConfigDir() + _wengoAccount->getIdentity() + "_history";
+	_history->load(filename);
+}
+
+void UserProfile::saveHistory() {
+	//History: save the history
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string filename = config.getConfigDir() + _wengoAccount->getIdentity() + "_history";
+	_history->save(filename);
 }

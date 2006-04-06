@@ -27,6 +27,8 @@
 #include <thread/Mutex.h>
 #include <serialization/Serializable.h>
 
+class UserProfile;
+
 /**
  * History (Care Taker in the Memento pattern)
  *
@@ -53,9 +55,6 @@
 class History : public Serializable {
 public:
 
-	/** Singleton. */
-	static History & getInstance();
-	
 	/**
 	 * The history has been loaded.
 	 */
@@ -80,6 +79,13 @@ public:
 	 * A memento has been removed.
 	 */
 	Event<void (History &, int id)> mementoRemovedEvent;
+
+	/**
+	 * Default constructor
+	 *
+	 * @param wengophone a pointer to WengoPhone
+	 */
+	History(UserProfile & userProfile);
 
 	/**
 	 * destructor.
@@ -194,11 +200,6 @@ public:
 private:
 
 	/**
-	 * Default constructor.
-	 */
-	History();
-
-	/**
 	 * Serialize the history.
 	 */
 	std::string serialize();
@@ -214,7 +215,7 @@ private:
 	 */
 	HistoryMementoCollection *_collection;
 	
-	/**	 global static mutex for singleton access */
-	static Mutex _mutex;
+	/**	  a ref  to UserProfile */
+	UserProfile & _userProfile;
 };
 #endif //OW_HISTORY_H

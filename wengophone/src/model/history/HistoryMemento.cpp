@@ -116,38 +116,6 @@ bool HistoryMemento::isChatSessionMemento() {
 	return (_state == ChatSession);
 }
 
-void HistoryMemento::replay() {
-	//TODO: replay outgoing call & outgoing sms
-	switch(_state) {
-	case OutgoingCall:
-		break;
-	case OutgoingSmsOk:
-		break;
-	case OutgoingSmsNok:
-		//can't replay
-		break;
-	case IncomingCall:
-		//can't replay
-		break;
-	case RejectedCall:
-		//can't replay
-		break;
-	case MissedCall:
-		//can't replay
-		break;
-	case ChatSession:
-		break;
-	case None:
-		//can't replay
-		break;
-	case Any:
-		//can't replay
-		break;
-	default:
-		LOG_FATAL("Unknown state");
-	}
-}
-
 std::string HistoryMemento::toString() {
 	std::string toReturn = "";
 	static std::string separator = "\n\t- ";

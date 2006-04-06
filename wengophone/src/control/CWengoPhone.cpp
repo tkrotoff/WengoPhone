@@ -75,7 +75,7 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.getCurrentUserProfile().wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 	_wengoPhone.getCurrentUserProfile().newIMAccountAddedEvent += boost::bind(&CWengoPhone::newIMAccountAddedEventHandler, this, _1, _2);
 
-	History::getInstance().historyLoadedEvent += boost::bind(&CWengoPhone::historyLoadedEventHandler, this, _1);
+	_wengoPhone.getCurrentUserProfile().getHistory().historyLoadedEvent += boost::bind(&CWengoPhone::historyLoadedEventHandler, this, _1);
 }
 
 void CWengoPhone::makeCall(const std::string & phoneNumber) {

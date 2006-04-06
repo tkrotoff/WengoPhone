@@ -19,6 +19,9 @@
 
 #include "History.h"
 
+#include <model/profile/UserProfile.h>
+#include <model/phoneline/IPhoneLine.h>
+
 #include <util/Logger.h>
 #include <util/String.h>
 
@@ -26,20 +29,11 @@
 #include <sstream>
 #include <exception>
 
-Mutex History::_mutex;
-
-History::History() {
+History::History(UserProfile & userProfile) : _userProfile(userProfile) {
 	_collection = new HistoryMementoCollection();
 }
 
 History::~History() {
-}
-
-History & History::getInstance() {
-	Mutex::ScopedLock scopedLock(_mutex);
-
-	static History history;
-	return history;
 }
 
 HistoryMementoCollection * History::getHistoryMementoCollection() {
@@ -159,5 +153,10 @@ void History::save(std::string filename) {
 }
 
 void History::replay(int id) {
-	getMemento(id)->replay();
+	
+	//replay only outgoing call
+	if( getMemento(id)->getState() == HistoryMemento::OutgoingCall ) {
+		std::string phoneNumber = getMemento(id)->getPeer();
+		_userProfile.getActivePhoneLine()->makeCall(phoneNumber);
+	}
 }

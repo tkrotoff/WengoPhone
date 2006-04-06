@@ -138,11 +138,6 @@ public:
 	 * @return return a string representing the memento
 	 */
 	std::string toString();
-	
-	/**
-	 * replay the Memento.
-	 */
-	void replay();
 
 	/**
 	 * return a string representing a memento state.
