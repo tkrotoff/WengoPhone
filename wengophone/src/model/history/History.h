@@ -57,49 +57,52 @@ public:
 	static History & getInstance();
 	
 	/**
-	 * The history has been loaded
+	 * The history has been loaded.
 	 */
 	Event<void (History &)> historyLoadedEvent;
 
 	/**
-	 * The history has been saved
+	 * The history has been saved.
 	 */
 	Event<void (History &)> historySavedEvent;
 	
 	/**
-	 * A memento has been added
+	 * A memento has been added.
 	 */
 	Event<void (History &, int id)> mementoAddedEvent;
 	
 	/**
-	 * A memento has been updated
+	 * A memento has been updated.
 	 */
 	Event<void (History &, int id)> mementoUpdatedEvent;
 	
 	/**
-	 * A memento has been removed
+	 * A memento has been removed.
 	 */
 	Event<void (History &, int id)> mementoRemovedEvent;
 
 	/**
-	 * destructor
+	 * destructor.
 	 */
 	~History();
 	
 	/**
-	 * load the history from a file
+	 * load the history from a file.
+	 *
 	 * @param filename filename to load
 	 */
 	void load(std::string filename);
 	
 	/**
-	 * save the history to a file
+	 * save the history to a file.
+	 *
 	 * @param filename filename
 	 */
 	void save(std::string filename);
 
 	/**
-	 * get a HistoryMemento by its id
+	 * get a HistoryMemento by its id.
+	 *
 	 * @param id the id
 	 * @return the HistoryMemento with the given id
 	 */
@@ -107,7 +110,8 @@ public:
 
 	/**
 	 * get a HistoryMementoCollection containing all mementos
-	 * that match state
+	 * that match state.
+	 *
 	 * @param state filter memento by State
 	 * @param count specify number of mementos to be returned
 	 * @return a pointer to a HistoryMementoCollection
@@ -115,7 +119,8 @@ public:
 	HistoryMementoCollection * getMementos(HistoryMemento::State state, int count = -1);
 
 	/**
-	 * remove a memento by its id
+	 * remove a memento by its id.
+	 *
 	 * @param id the id
 	 */
 	void removeMemento(int id);
@@ -127,65 +132,79 @@ public:
 	void clear(HistoryMemento::State state = HistoryMemento::Any);
 
 	/**
-	 * return the number of HistoryMemento's
+	 * return the number of HistoryMemento's.
+	 *
 	 * @return the number of HistoryMemento's
 	 */
 	int size();
 
 	/**
-	 * add a history memento to the history
+	 * add a history memento to the history.
+	 *
 	 * @param memento the memento to add
 	 * @return the id of the memento
 	 */
 	int addMemento(HistoryMemento * memento);
 
 	/**
-	 * Return a string representing this object
+	 * Return a string representing this object.
+	 *
 	 * @return a string representing this object
 	 */
 	std::string toString();
 
 	/**
-	 * return a pointer to the HistoryMementoCollection
+	 * return a pointer to the HistoryMementoCollection.
+	 *
 	 * @return a pointer to the HistoryMementoCollection
 	 */
 	HistoryMementoCollection * getHistoryMementoCollection();
 
 	/**
-	 * update a memento duration (for incoming/outgoing calls)
+	 * update a memento duration (for incoming/outgoing calls).
+	 *
 	 * @param callId callId associated to the memento
 	 * @param duration duration
 	 */
 	void updateCallDuration(int callId, int duration);
 	
 	/**
-	 * update a memento state (for incoming/outgoing calls)
+	 * update a memento state (for incoming/outgoing calls).
+	 *
 	 * @param callId callId associated to the memento
 	 * @param state the new state
 	 */
 	void updateCallState(int callId, HistoryMemento::State state);
 
 	/**
-	 * update a memento internal state (for SMS)
+	 * update a memento internal state (for SMS).
+	 *
 	 * @param callId callId associated to the memento
 	 * @param state new state
 	 */
 	void updateSMSState(int callId, HistoryMemento::State state);
 
+	/**
+	 * update a memento internal state (for SMS).
+	 *
+	 * @param id memento to replay
+	 */
+	void replay(int id);
+
 private:
 
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	History();
 
 	/**
-	 * Serialize the history
+	 * Serialize the history.
 	 */
 	std::string serialize();
 	
 	/**
-	 * Serialize the history
+	 * Serialize the history.
 	 */
 	bool unserialize(const std::string & data);
 	
