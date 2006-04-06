@@ -65,6 +65,30 @@ void CHistory::removeHistoryMemento(int id) {
 	_history.removeMemento(id);
 }
 
-void CHistory::clear() {
-	_history.clear();
+void CHistory::clearAllEntries() {
+	_history.clear(HistoryMemento::Any);
+}
+
+void CHistory::clearSmsEntries() {
+	_history.clear(HistoryMemento::OutgoingSmsOk);
+}
+	
+void CHistory::clearChatEntries() {
+	LOG_WARN("Not implemented yet");
+}
+	
+void CHistory::clearIncomingCallEntries() {
+	_history.clear(HistoryMemento::IncomingCall);
+}
+	
+void CHistory::clearOutgoingCallEntries() {
+	_history.clear(HistoryMemento::OutgoingCall);
+}
+
+void CHistory::clearMissedCallEntries() {
+	_history.clear(HistoryMemento::MissedCall);
+}
+
+void CHistory::clearRejectedCallEntries() {
+	_history.clear(HistoryMemento::RejectedCall);
 }

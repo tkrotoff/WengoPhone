@@ -34,7 +34,7 @@ public:
 	
 	virtual void removeHistoryMemento(int id) = 0;
 		
-	virtual void clear() = 0;
+	virtual void clearAllEntries() = 0;
 };
 
 #endif	//OW_PHISTORY_H

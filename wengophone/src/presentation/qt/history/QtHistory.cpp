@@ -29,8 +29,6 @@
 #include <QDate>
 #include <QTime>
 
-QTime fromSeconds(int second);
-
 QtHistory::QtHistory( CHistory & cHistory ) : _cHistory(cHistory) {
 	_cHistory.historyLoadedEvent += boost::bind(&QtHistory::historyLoadedEventHandler, this, _1);
 	_cHistory.mementoAddedEvent += boost::bind(&QtHistory::mementoAddedEventHandler, this, _1, _2);
@@ -86,9 +84,9 @@ void QtHistory::addHistoryMemento(std::string type,	std::string date,
 	QTime qtime = QTime::fromString(QString::fromStdString(time));
 	QTime qduration;
 	if( duration == -1 ) {
-		qduration = fromSeconds(0);
+		qduration = qduration.addSecs(0);
 	} else {
-		qduration = fromSeconds(duration);
+		qduration = qduration.addSecs(duration);
 	}
 	
 	if( type == HistoryMemento::StateIncomingCall ) {
@@ -113,10 +111,6 @@ void QtHistory::addHistoryMemento(std::string type,	std::string date,
 	} else if ( type == HistoryMemento::StateAny) {
 		//nothing to add
 	}
-}
-
-void QtHistory::clear() {
-	_cHistory.clear();
 }
 
 void QtHistory::removeHistoryMemento(int id) {
@@ -148,29 +142,38 @@ void QtHistory::mementoUpdatedEventHandler(CHistory &, int id) {
 		QDate qdate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
 		QTime qtime = QTime::fromString(QString::fromStdString(time));
 		QString peer = QString::fromStdString(memento->getPeer());
-		QTime qduration = fromSeconds(memento->getDuration());
+		QTime qduration = QTime();
+		qduration = qduration.addSecs(memento->getDuration());
 		
 		_historyWidget->editItem(type, qdate, qtime, qduration, peer, id);
 	}
 }
 
-QTime fromSeconds(int second) {
 
-	int hours = 0;
-	int minutes = 0;
-	int seconds = 0;
-	
-	if( second / 3600 > 0) {
-		hours = second / 3600;
-		second = second % 3600;
-	}
-	
-	if( second / 60 > 0) {
-		minutes = second / 60;
-		second = second % 60;
-	}
-	
-	seconds = second;
-		
-	return QTime(hours, minutes, seconds);
+void QtHistory::clearAllEntries() {
+	_cHistory.clearAllEntries();
+}
+
+void QtHistory::clearSmsEntries() {
+	_cHistory.clearSmsEntries();
+}
+
+void QtHistory::clearChatEntries() {
+	_cHistory.clearChatEntries();
+}
+
+void QtHistory::clearIncomingCallEntries() {
+	_cHistory.clearIncomingCallEntries();
+}
+
+void QtHistory::clearOutgoingCallEntries() {
+	_cHistory.clearOutgoingCallEntries();
+}
+
+void QtHistory::clearMissedCallEntries() {
+	_cHistory.clearMissedCallEntries();
+}
+
+void QtHistory::clearRejectedCallEntries() {
+	_cHistory.clearRejectedCallEntries();
 }

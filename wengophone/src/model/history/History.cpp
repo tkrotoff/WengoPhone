@@ -107,8 +107,8 @@ bool History::unserialize(const std::string & data) {
 	return true;
 }
 
-void History::clear() {
-	_collection->clear();
+void History::clear(HistoryMemento::State state) {
+	_collection->clear(state);
 }
 
 std::string History::toString() {
@@ -147,7 +147,7 @@ void History::load(std::string filename) {
 	clear();
 	unserialize(lines);
 	historyLoadedEvent(*this);
-	LOG_DEBUG(toString());
+	//LOG_DEBUG(toString());
 }
 
 void History::save(std::string filename) {
@@ -155,5 +155,5 @@ void History::save(std::string filename) {
 	ofs << serialize();
 	ofs.close();
 	historySavedEvent(*this);
-	LOG_DEBUG(toString());
+	//LOG_DEBUG(toString());
 }

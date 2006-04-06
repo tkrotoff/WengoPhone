@@ -50,10 +50,10 @@ public:
 	 * State of a memento
 	 */
 	enum State {
-		Incoming,
-		Outgoing,
-		Missed,
-		Rejected,
+		IncomingCall,
+		OutgoingCall,
+		MissedCall,
+		RejectedCall,
 		OutgoingSmsOk,
 		OutgoingSmsNok,
 		ChatSession,
@@ -158,6 +158,12 @@ private:
 	 */
 	bool isSMSMemento();
 
+	/**
+	 * return true if the memento is for a chat session
+	 * @return true if the memento is for a chat session
+	 */
+	bool isChatSessionMemento();
+	
 	/**
 	 * update state
 	 * @param state new state

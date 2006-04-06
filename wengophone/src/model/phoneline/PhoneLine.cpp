@@ -130,7 +130,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 
 	//History: create a HistoryMemento for this outgoing call
 	HistoryMemento * memento = new HistoryMemento(
-		HistoryMemento::Outgoing, sipAddress.getSipAddress(), callId);
+		HistoryMemento::OutgoingCall, sipAddress.getSipAddress(), callId);
 	History::getInstance().addMemento(memento);
 
 	return callId;
@@ -181,7 +181,7 @@ void PhoneLine::rejectCall(int callId) {
 	checkCallId(callId);
 	_sipWrapper->rejectCall(callId);
 	//History: retreive the memento and change its state to rejected
-	History::getInstance().updateCallState(callId, HistoryMemento::Rejected);
+	History::getInstance().updateCallState(callId, HistoryMemento::RejectedCall);
 	LOG_DEBUG("call rejected callId=" + String::fromNumber(callId));
 }
 
@@ -289,7 +289,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 
 		//History: create a HistoryMemento for this incoming call
 		HistoryMemento * memento = new HistoryMemento(
-			HistoryMemento::Incoming, sipAddress.getSipAddress(), callId);
+			HistoryMemento::IncomingCall, sipAddress.getSipAddress(), callId);
 		History::getInstance().addMemento(memento);
 
 		break;
@@ -300,7 +300,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 
 	case EnumPhoneCallState::PhoneCallStateMissed:
 		//History: retrive the memento and change its state to missed
-		History::getInstance().updateCallState(callId, HistoryMemento::Missed);
+		History::getInstance().updateCallState(callId, HistoryMemento::MissedCall);
 		LOG_DEBUG("call missed callId=" + String::fromNumber(callId));
 		break;
 

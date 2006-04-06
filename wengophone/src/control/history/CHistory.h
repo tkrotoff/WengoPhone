@@ -67,7 +67,38 @@ public:
 	/**
 	 * @see History::clear
 	 */
-	void clear();
+	void clearAllEntries();
+
+	/**
+	 * @see History::clear
+	 */
+	void clearSmsEntries();
+	
+	/**
+	 * @see History::clear
+	 */
+	void clearChatEntries();
+	
+	/**
+	 * @see History::clear
+	 */
+	void clearIncomingCallEntries();
+	
+	/**
+	 * @see History::clear
+	 */
+	void clearOutgoingCallEntries();
+
+	/**
+	 * @see History::clear
+	 */
+	void clearMissedCallEntries();
+	
+	/**
+	 * @see History::clear
+	 */
+	void clearRejectedCallEntries();
+
 
 	/**
 	 * retrive the CWengoPhone

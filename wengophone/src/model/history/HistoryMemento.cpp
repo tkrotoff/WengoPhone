@@ -92,7 +92,7 @@ void HistoryMemento::updateState(State state) {
 }
 
 bool HistoryMemento::canReplay() {
-	if( ( _state == Outgoing ) || ( _state == OutgoingSmsOk ) ) {
+	if( ( _state == OutgoingCall ) || ( _state == OutgoingSmsOk ) ) {
 		return true;
 	} else {
 		return false;
@@ -100,31 +100,38 @@ bool HistoryMemento::canReplay() {
 }
 
 bool HistoryMemento::isCallMemento() {
-	return ((_state == Outgoing) || (_state == Incoming) || (_state == Missed));
+	return ((_state == OutgoingCall) || (_state == IncomingCall) || 
+			(_state == MissedCall) || (_state == MissedCall) || (_state == RejectedCall));
 }
 
 bool HistoryMemento::isSMSMemento() {
 	return ( (_state == OutgoingSmsOk) || (_state == OutgoingSmsNok) );
 }
 
+bool HistoryMemento::isChatSessionMemento() {
+	return (_state == ChatSession);
+}
+
 void HistoryMemento::replay() {
 	//TODO: replay outgoing call & outgoing sms
 	switch(_state) {
-	case Outgoing:
+	case OutgoingCall:
 		break;
 	case OutgoingSmsOk:
 		break;
 	case OutgoingSmsNok:
 		//can't replay
 		break;
-	case Incoming:
+	case IncomingCall:
 		//can't replay
 		break;
-	case Rejected:
+	case RejectedCall:
 		//can't replay
 		break;
-	case Missed:
+	case MissedCall:
 		//can't replay
+		break;
+	case ChatSession:
 		break;
 	case None:
 		//can't replay
@@ -154,10 +161,10 @@ std::string HistoryMemento::toString() {
 
 std::string HistoryMemento::stateToString(State state) {
 	switch(state) {
-	case Outgoing:
+	case OutgoingCall:
 		return StateOutgoingCall;
 		break;
-	case Incoming:
+	case IncomingCall:
 		return StateIncomingCall;
 		break;
 	case OutgoingSmsOk:
@@ -166,10 +173,10 @@ std::string HistoryMemento::stateToString(State state) {
 	case OutgoingSmsNok:
 		return StateOutgoingSMSNOK;
 		break;
-	case Rejected:
+	case RejectedCall:
 		return StateRejectedCall;
 		break;
-	case Missed:
+	case MissedCall:
 		return StateMissedCall;
 		break;
 	case None:

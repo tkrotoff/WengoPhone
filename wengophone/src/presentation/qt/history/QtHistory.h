@@ -45,8 +45,20 @@ public:
 
 	void removeHistoryMemento(int id);
 	
-	void clear();
+	void clearAllEntries();
 	
+	void clearSmsEntries();
+	
+	void clearChatEntries();
+	
+	void clearIncomingCallEntries();
+	
+	void clearOutgoingCallEntries();
+
+	void clearMissedCallEntries();
+	
+	void clearRejectedCallEntries();
+
 	QWidget * getWidget();
 
 private:

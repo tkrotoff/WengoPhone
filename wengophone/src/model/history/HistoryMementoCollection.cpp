@@ -75,8 +75,15 @@ void HistoryMementoCollection::removeMemento(int id) {
 	_privateCollection.erase(_privateCollection.find(id));
 }
 
-void HistoryMementoCollection::clear() {
-	_privateCollection.clear();
+void HistoryMementoCollection::clear(HistoryMemento::State state) {
+	
+	HistoryMap::iterator it;
+	for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
+		
+		if( ((*it).second->getState() == state) || (state == HistoryMemento::Any)) {
+			_privateCollection.erase(it);
+		}
+	}
 }
 
 void HistoryMementoCollection::setMaxEntries(int max) {

@@ -77,7 +77,7 @@ public:
 	/**
 	 * Clear all mementos
 	 */
-	void clear();
+	void clear(HistoryMemento::State state);
 
 	/**
 	 * Return the number of entries

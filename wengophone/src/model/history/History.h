@@ -121,9 +121,10 @@ public:
 	void removeMemento(int id);
 	
 	/**
-	 * Clear all entries of the history
+	 * Clear entries of the history
+	 * @param state type of entries to remove
 	 */
-	void clear();
+	void clear(HistoryMemento::State state = HistoryMemento::Any);
 
 	/**
 	 * return the number of HistoryMemento's
