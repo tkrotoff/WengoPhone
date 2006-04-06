@@ -25,6 +25,9 @@
 #include <model/phonecall/PhoneCall.h>
 #include <model/profile/UserProfile.h>
 
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
 #include <control/CWengoPhone.h>
 
 #include <imwrapper/EnumIMProtocol.h>
@@ -298,11 +301,19 @@ void QtWengoPhone::callButtonClicked() {
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 	static QWidget * tabPhoneCall = Object::findChild<QWidget *>(_tabWidget, "tabPhoneCall");
 	//static QGridLayout * layout = new QGridLayout(tabPhoneCall);
 
 	//layout->addWidget(qtPhoneCall->getWidget());
+	if ( config.getNotificationShowWindowOnTop()){
+		_wengoPhoneWindow->raise();
+		QApplication::setActiveWindow ( _wengoPhoneWindow );
+	}
+
 	_contactCallListWidget->addPhoneCall(qtPhoneCall);
+
 }
 
 void QtWengoPhone::showLoginWindow() {

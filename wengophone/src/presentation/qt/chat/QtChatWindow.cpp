@@ -20,6 +20,9 @@
 #include "QtChatWindow.h"
 #include "QtChatWidget.h"
 
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
 #include <imwrapper/IMChatSession.h>
 
 #include <qtutil/Object.h>
@@ -58,12 +61,14 @@ void ChatWindow::newMessage(IMChatSession *session,const QString & msg)
 
 void ChatWindow::show()
 {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	_dialog.show();
+	_dialog.activateWindow();
 }
 
 void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string message)
 {
-
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	LOG_DEBUG("message received: " + message);
     QString senderName = QString::fromStdString(from.getContactId());
     // QString msg = QString::fromStdString(message);
@@ -78,14 +83,25 @@ void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, c
 		if ( widget->getSessionId() == sender.getId() )
 		//if (_tabWidget->tabText(i) == senderName)
 		{
-			qDebug() << "Session id " << sender.getId();
-			qDebug() << "Widget  id " << widget->getSessionId();
-
+//			qDebug() << "Session id " << sender.getId();
+//			qDebug() << "Widget  id " << widget->getSessionId();
 			_chatWidget = qobject_cast<ChatWidget *>(_tabWidget->widget(i));
 			_chatWidget->addToHistory(senderName,msg);
+
+			if ( config.getNotificationShowBlinkingWindow()){
+				_dialog.activateWindow();
+			}
+			if ( config.getNotificationShowWindowOnTop()){
+				_dialog.show();
+				_dialog.raise();
+				QApplication::setActiveWindow ( &_dialog );
+			}
+
 			return;
 		}
 	}
+
+
 	// New tab
 	// addChat(&sender,from );
 }
@@ -114,6 +130,7 @@ void ChatWindow::initThreadSafe() {
 	_tabWidget = _seeker.getTabWidget(_widget,"tabWidget");
 	_tabWidget->removeTab(0);
 	_dialog.resize(384,464);
+	_dialog.setWindowTitle(tr("Wengophone Chat"));
 	_dialog.show();
 	IMContact from = *_imChatSession->getIMContactSet().begin();
 	addChat(_imChatSession,from);

@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Form</string>
+   <string>Wengophone Account manager</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
