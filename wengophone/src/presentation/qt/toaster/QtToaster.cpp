@@ -30,6 +30,7 @@ QWidget(parent, Qt::Window | Qt::FramelessWindowHint)
 	_widget->setAutoFillBackground(true);
 	_closeTimerId = -1 ;
 	_closeTimer = 5000;
+	_show =   true; ;
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget( _widget );
 	layout->setMargin( 0 );
@@ -93,18 +94,33 @@ void QtToaster::setButton3Pixmap(const QPixmap & pixmap){
 void QtToaster::timerEvent(QTimerEvent *event){
 
 	if ( event->timerId() == _timerId ){
-		QPoint p = pos();
+		if ( _show ){
+			QPoint p = pos();
 
-		move(p.x(),p.y()-1);
+			move(p.x(),p.y()-1);
 
-		if ( p.y() < (_startPosition.y() - size().height() - 5 ) ){
-			killTimer(_timerId);
-			_closeTimerId = startTimer(_closeTimer);
+			if ( p.y() < (_startPosition.y() - size().height() - 5 ) ){
+				killTimer(_timerId);
+				_closeTimerId = startTimer(_closeTimer);
+			}
+		}
+		else{
+			QPoint p = pos();
+
+			move(p.x(),p.y()+2);
+
+			if ( p.y() > (_startPosition.y())){
+				killTimer(_timerId);
+				closeToaster();
+				//_closeTimerId = startTimer(_closeTimer);
+			}
 		}
 	}
 
 	if ( event->timerId() == _closeTimerId ){
-		closeToaster();
+		_show = false;
+		_timerId = startTimer(20);
+
 	}
 }
 

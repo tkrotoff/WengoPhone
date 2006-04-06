@@ -89,6 +89,8 @@ protected:
 
 	int _closeTimer;
 
+	bool _show;
+
 protected:
 
         void timerEvent(QTimerEvent *event);
