@@ -66,6 +66,11 @@ typedef enum
  *
  * This is used in the version 2.0 API and up.
  */
+/* TODO We need to figure out exactly what parts of this are required. The
+ * dependent plugin unloading stuff was causing crashes with perl and tcl
+ * plugins because they didn't set ids and the dependency code was requiring
+ * them. Then we need to actually make sure that plugins have all the right
+ * parts before loading them. */
 struct _GaimPluginInfo
 {
 	unsigned int magic;
@@ -126,6 +131,7 @@ struct _GaimPlugin
 	void *ipc_data;                        /**< IPC data.                 */
 	void *extra;                           /**< Plugin-specific data.     */
 	gboolean unloadable;                   /**< Unloadable                */
+	GList *dependent_plugins;              /**< Plugins depending on this */
 };
 
 #define GAIM_PLUGIN_LOADER_INFO(plugin) \

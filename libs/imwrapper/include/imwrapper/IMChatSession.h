@@ -97,6 +97,15 @@ public:
 	 */
 	Event<void (IMChatSession & sender, IMChat::StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
 
+		/**
+	 * Typing state event.
+	 *
+	 * @param sender this class
+	 * @param contactId contact who typing state has changed
+	 * @param state @see TypingState
+	 */
+	Event<void (IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state)> typingStateChangedEvent;
+
 	/**
 	 * Emitted when an IMContact has been added in this IMChatSession.
 	 *
@@ -184,6 +193,14 @@ public:
 	 */
 	void sendMessage(const std::string & message);
 
+	/**
+	 * Changes my typing state to inform all IMContact linked to the chat session.
+	 *
+	 * @param state my current typing state
+	 */
+	void changeTypingState(IMChat::TypingState state);
+
+
 	const IMContactSet & getIMContactSet() const {
 		return _imContactSet;
 	}
@@ -199,6 +216,8 @@ private:
 	void messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, const std::string & message);
 
 	void statusMessageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, IMChat::StatusMessage status, const std::string & message);
+
+	void typingStateChangedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, IMChat::TypingState state);
 
 	void contactAddedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId);
 

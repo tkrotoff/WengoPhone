@@ -33,6 +33,8 @@ IMChatSession::IMChatSession(IMChat & imChat)
 		boost::bind(&IMChatSession::messageReceivedEventHandler, this, _1, _2, _3, _4);
 	_imChat.statusMessageReceivedEvent +=
 		boost::bind(&IMChatSession::statusMessageReceivedEventHandler, this, _1, _2, _3, _4);
+	_imChat.typingStateChangedEvent +=
+		boost::bind(&IMChatSession::typingStateChangedEventHandler, this, _1, _2, _3, _4);
 	_imChat.contactAddedEvent +=
 		boost::bind(&IMChatSession::contactAddedEventHandler, this, _1, _2, _3);
 	_imChat.contactRemovedEvent +=
@@ -73,6 +75,11 @@ void IMChatSession::sendMessage(const std::string & message) {
 	_imChat.sendMessage(*this, message);
 }
 
+void IMChatSession::changeTypingState(IMChat::TypingState state) {
+	LOG_DEBUG("changing my typing state");
+	_imChat.changeTypingState(*this, state);
+}
+
 IMChatSession::IMChatMessage::IMChatMessage(const IMContact & imContact, const string & message)
 : _imContact(imContact), _message(message) {
 }
@@ -97,6 +104,20 @@ void IMChatSession::statusMessageReceivedEventHandler(IMChat & sender, IMChatSes
 
 	if (imChatSession == *this) {
 		statusMessageReceivedEvent(*this, status, message);
+	}
+}
+
+void IMChatSession::typingStateChangedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, IMChat::TypingState state) {
+	LOG_DEBUG("typing state changed: " + contactId);
+
+	if (imChatSession == *this) {
+		IMContact imContact(_imChat.getIMAccount(), contactId);
+		if (_imContactSet.find(imContact) != _imContactSet.end()) {
+			const IMContact & foundIMContact = *_imContactSet.find(imContact);
+			typingStateChangedEvent(*this, foundIMContact, state);
+		} else {
+			LOG_ERROR("this session does not know " + contactId);
+		}
 	}
 }
 

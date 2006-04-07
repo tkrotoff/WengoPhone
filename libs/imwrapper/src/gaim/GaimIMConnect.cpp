@@ -204,6 +204,11 @@ void GaimIMConnect::disconnect()
 
 	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
-	if (gAccount)
-		gaim_account_disconnect(gAccount);
+	if (!gAccount)
+		return;
+
+	if (gaim_account_get_enabled(gAccount, gaim_core_get_ui()))
+		gaim_account_set_enabled(gAccount, gaim_core_get_ui(), FALSE);
+	gaim_account_disconnect(gAccount);
+	
 }

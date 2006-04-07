@@ -28,6 +28,35 @@ extern "C" {
 #include "gaim/util.h"
 }
 
+void *gaim_wg_conversations_get_handle()
+{
+	static int handle;
+
+	return &handle;
+}
+
+
+/* **************** TYPING STATE MANAGEMENT****************** */
+void update_buddy_typing(GaimAccount *account, const char *who)
+{
+	GaimConversation *gConv = NULL;
+
+	gConv = gaim_find_conversation_with_account(GAIM_CONV_TYPE_IM, who, account);
+	if (!gConv)
+		return;
+
+	GaimChatMngr::UpdateBuddyTyping(gConv, gaim_conv_im_get_typing_state(GAIM_CONV_IM(gConv)));
+}
+
+void init_typing_state_event()
+{
+	void *handle = gaim_wg_conversations_get_handle();
+	
+	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing",
+						handle, GAIM_CALLBACK(update_buddy_typing), NULL);
+	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing-stopped",
+						handle, GAIM_CALLBACK(update_buddy_typing), NULL);
+}
 
 /* ***************** GAIM CALLBACK ***************** */
 void C_CreateConversationCbk(GaimConversation *conv)
@@ -72,11 +101,6 @@ static void C_ChatRenameUserCbk(GaimConversation *conv, const char *old_name,
 	GaimChatMngr::ChatRenameUserCbk(conv, old_name, new_name, new_alias);
 }
 
-static void C_ChatRemoveUserCbk(GaimConversation *conv, const char *user)
-{
-	GaimChatMngr::ChatRemoveUserCbk(conv, user);
-}
-
 static void C_ChatRemoveUsersCbk(GaimConversation *conv, GList *users)
 {
 	GaimChatMngr::ChatRemoveUsersCbk(conv, users);
@@ -113,11 +137,6 @@ static void C_CustomSmileyCloseCbk(GaimConversation *conv, const char *smile)
 	GaimChatMngr::CustomSmileyCloseCbk(conv, smile);
 }
 
-static void C_UpdatedCbk(GaimConversation *conv, GaimConvUpdateType type)
-{
-  	GaimChatMngr::UpdatedCbk(conv, type);
-}
-
 GaimConversationUiOps chat_wg_ops =	{
 												C_CreateConversationCbk,
 												C_DestroyConversationCbk,	/* destroy_conversation */
@@ -126,7 +145,6 @@ GaimConversationUiOps chat_wg_ops =	{
 												C_WriteConvCbk,				/* write_conv           */
 												C_ChatAddUsersCbk,			/* chat_add_users       */
 												C_ChatRenameUserCbk,		/* chat_rename_user     */
-												C_ChatRemoveUserCbk,		/* chat_remove_user     */
 												C_ChatRemoveUsersCbk,		/* chat_remove_users    */
 												C_ChatUpdateUserCbk,		/* chat_update_user     */
 												C_PresentConvCbk,			/* present				*/
@@ -134,7 +152,6 @@ GaimConversationUiOps chat_wg_ops =	{
 												C_CustomSmileyAddCbk,		/* custom_smiley_add    */
 												C_CustomSmileyWriteCbk,		/* custom_smiley_write	*/
 												C_CustomSmileyCloseCbk,		/* custom_smiley_close	*/
-												C_UpdatedCbk				/* updated              */
 											};
 
 /* ************************************************** */
@@ -151,8 +168,10 @@ GaimChatMngr::GaimChatMngr()
 GaimChatMngr *GaimChatMngr::getInstance()
 {
 	if (!_staticInstance)
+	{
 		_staticInstance = new GaimChatMngr();
-
+		init_typing_state_event();
+	}
 	return _staticInstance;
 }
 
@@ -256,6 +275,7 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 
 void GaimChatMngr::DestroyConversationCbk(GaimConversation *conv)
 {
+	// TODO: free (mConvInfo_t *) conv->ui_data;
 	fprintf(stderr, "wgconv : gaim_wgconv_destroy()\n");
 
 }
@@ -281,8 +301,8 @@ void GaimChatMngr::WriteConvCbk(GaimConversation *conv, const char *name, const 
 	if ((flags & GAIM_MESSAGE_RECV))
 	{
 		mConvInfo_t *mConv = (mConvInfo_t *)conv->ui_data;
-		GaimIMChat *gIMChat = FindIMChatByGaimConv(conv);
-		gIMChat->messageReceivedEvent(*gIMChat, *((IMChatSession *)(mConv->conv_session)),
+		GaimIMChat *mIMChat = FindIMChatByGaimConv(conv);
+		mIMChat->messageReceivedEvent(*mIMChat, *((IMChatSession *)(mConv->conv_session)),
 										std::string(name), std::string(message));
 	}
 }
@@ -294,10 +314,6 @@ void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
 
 void GaimChatMngr::ChatRenameUserCbk(GaimConversation *conv, const char *old_name,
 									const char *new_name, const char *new_alias)
-{
-}
-
-void GaimChatMngr::ChatRemoveUserCbk(GaimConversation *conv, const char *user)
 {
 }
 
@@ -333,8 +349,35 @@ void GaimChatMngr::CustomSmileyCloseCbk(GaimConversation *conv, const char *smil
 {
 }
 
-void GaimChatMngr::UpdatedCbk(GaimConversation *conv, GaimConvUpdateType type)
+
+void GaimChatMngr::UpdateBuddyTyping(GaimConversation *conv, GaimTypingState state)
 {
+	IMChat::TypingState mState;
+
+	mConvInfo_t *mConv = (mConvInfo_t *)conv->ui_data;
+	GaimIMChat *mIMChat = FindIMChatByGaimConv(conv);
+	
+	if (!mIMChat)
+		return;
+
+	switch (state)
+	{
+		case GAIM_TYPING:
+			mState = IMChat::TypingStateTyping;
+			break;
+
+		case GAIM_TYPED:
+			mState = IMChat::TypingStateStopTyping;
+			break;
+
+		default:
+			mState = IMChat::TypingStateNotTyping;
+			break;
+	}
+
+	mIMChat->typingStateChangedEvent(*mIMChat, *((IMChatSession *)(mConv->conv_session)), 
+									gaim_conversation_get_name(conv), mState);
+
 }
 
 /* **************** IMWRAPPER/GAIM INTERFACE ****************** */
@@ -348,7 +391,6 @@ GaimIMChat *GaimChatMngr::FindIMChatByGaimConv(void *gConv)
 
 	return mChat;
 }
-
 
 /* **************** MANAGE CHAT_LIST ****************** */
 GaimIMChat *GaimChatMngr::FindIMChat(IMAccount &account)

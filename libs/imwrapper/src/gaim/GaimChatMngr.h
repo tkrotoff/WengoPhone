@@ -56,7 +56,6 @@ public:
 							GList *flags, GList *aliases, gboolean new_arrivals);
 	static void ChatRenameUserCbk(GaimConversation *conv, const char *old_name,
 								const char *new_name, const char *new_alias);
-	static void ChatRemoveUserCbk(GaimConversation *conv, const char *user);
 	static void ChatRemoveUsersCbk(GaimConversation *conv, GList *users);
 	static void ChatUpdateUserCbk(GaimConversation *conv, const char *user);
 	static void PresentConvCbk(GaimConversation *conv);
@@ -66,8 +65,9 @@ public:
 	static void CustomSmileyWriteCbk(GaimConversation *conv, const char *smile,
 									const guchar *data, gsize size);
 	static void CustomSmileyCloseCbk(GaimConversation *conv, const char *smile);
-	static void UpdatedCbk(GaimConversation *conv, GaimConvUpdateType type);
 	/* ************************************************** */
+
+	static void UpdateBuddyTyping(GaimConversation *conv, GaimTypingState state);
 
 private:
 

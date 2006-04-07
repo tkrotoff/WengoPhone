@@ -189,9 +189,9 @@ struct _GaimPluginProtocolInfo
 	char *(*status_text)(GaimBuddy *buddy);
 
 	/**
-	 * Gets a string to put in the buddy list tooltip.
+	 * Allows the prpl to add text to a buddy's tooltip.
 	 */
-	char *(*tooltip_text)(GaimBuddy *buddy);
+	void (*tooltip_text)(GaimBuddy *buddy, GString *str, gboolean full);
 
 	/**
 	 * This must be implemented, and must add at least the offline
@@ -300,6 +300,16 @@ struct _GaimPluginProtocolInfo
 
 	GaimWhiteboardPrplOps *whiteboard_prpl_ops;
 	GaimMediaPrplOps *media_prpl_ops;
+
+	/* Authorization request callbacks */
+	void (*accept_buddy_add)(GaimConnection *gc, const char *who, 
+							 const char *friendly, const char *message);
+	void (*deny_buddy_add)(GaimConnection *gc, const char *who, 
+						   const char *friendly, const char *message);
+
+	void (*create_chat)(GaimConnection *gc, GList *buddies);
+	
+	void (*set_alias)(GaimConnection *gc, const char *alias);
 };
 
 #define GAIM_IS_PROTOCOL_PLUGIN(plugin) \

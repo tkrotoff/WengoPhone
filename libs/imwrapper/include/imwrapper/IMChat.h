@@ -54,6 +54,17 @@ public:
 		StatusMessageInfo
 	};
 
+	enum TypingState {
+		/** No action is done from the contact. */
+		TypingStateNotTyping,
+
+		/** The contact is typing. */
+		TypingStateTyping,
+
+		/** The contact stops typing momentarily. */
+		TypingStateStopTyping
+	};
+
 	/**
 	 * Emitted when a new IMChatSession has been created.
 	 *
@@ -101,6 +112,16 @@ public:
 	Event<void (IMChat & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
 
 	/**
+	 * Typing state event.
+	 *
+	 * @param sender this class
+	 * @param chatSession the associated IMChatSession
+	 * @param contactId contact who typing state has changed
+	 * @param state @see TypingState
+	 */
+	Event<void (IMChat & sender, IMChatSession & chatSession, const std::string & contactId, TypingState state)> typingStateChangedEvent;
+
+	/**
 	 * Creates a new IMChatSession.
 	 *
 	 * The new IMChatSession is returned by the Event newIMChatSessionCreatedEvent
@@ -127,6 +148,14 @@ protected:
 	 * @param message the message to send
 	 */
 	virtual void sendMessage(IMChatSession & chatSession, const std::string & message) = 0;
+
+	/**
+	 * Changes my typing state to inform all IMContact linked to the chat session.
+	 *
+	 * @param chatSession the session to send the message to
+	 * @param state my current typing state
+	 */
+	virtual void changeTypingState(IMChatSession & chatSession, TypingState state) = 0;
 
 	/**
 	 * Adds a contact to the session.

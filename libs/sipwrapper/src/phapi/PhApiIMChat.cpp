@@ -62,6 +62,9 @@ void PhApiIMChat::sendMessage(IMChatSession & chatSession, const std::string & m
 	_phApiWrapper.sendMessage(chatSession, message);
 }
 
+void PhApiIMChat::changeTypingState(IMChatSession & chatSession, IMChat::TypingState state) {
+}
+
 void PhApiIMChat::createSession(IMContactSet & imContactSet) {
 	_phApiWrapper.createSession(*this, imContactSet);
 }

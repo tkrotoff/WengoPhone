@@ -47,11 +47,14 @@ class GaimIMChat : public IMChat
 public:
 
 	GaimIMChat(IMAccount &account);
-	void createSession(IMContactSet & imContactList);
-	void closeSession(IMChatSession & chatSession);
-	void sendMessage(IMChatSession & chatSession, const std::string & message);
-	void addContact(IMChatSession & chatSession, const std::string & contactId);
-	void removeContact(IMChatSession & chatSession, const std::string & contactId);
+
+	virtual void createSession(IMContactSet & imContactList);
+	virtual void closeSession(IMChatSession & chatSession);
+	virtual void sendMessage(IMChatSession & chatSession, const std::string & message);
+	virtual void changeTypingState(IMChatSession & chatSession, TypingState state);
+	virtual void addContact(IMChatSession & chatSession, const std::string & contactId);
+	virtual void removeContact(IMChatSession & chatSession, const std::string & contactId);
+
 	bool equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol);
 	void AddChatSessionInList(mConvInfo_t *conv);
 

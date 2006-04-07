@@ -40,6 +40,7 @@ class PhApiIMChat : public IMChat {
 public:
 
 	void sendMessage(IMChatSession & chatSession, const std::string & message);
+	void changeTypingState(IMChatSession & chatSession, TypingState state);
 	void createSession(IMContactSet & imContactSet);
 	void closeSession(IMChatSession & chatSession);
 	void addContact(IMChatSession & chatSession, const std::string & contactId);
