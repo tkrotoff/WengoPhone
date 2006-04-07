@@ -33,6 +33,8 @@
 #include <windows.h>
 #endif
 
+#include <Cocoa/Cocoa.h>
+
 #include <iostream>
 using namespace std;
 
@@ -63,12 +65,35 @@ void QtVideo::showImage(const QImage & image) {
 void QtVideo::paintEvent() {
 	if (!_image.isNull()) {
 		QPainter painter(_frame);
-		painter.drawImage(0, 0, _image.scaled(_frame->frameRect().size(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
+		QSize frameSize = _frame->frameRect().size();
+		QSize size = frameSize;
+		int xpos = 0, ypos = 0;
+
+#if defined(OS_MACOSX)
+		if (frameSize.width() > 640) {
+			size.setWidth(640);
+		}
+		if (frameSize.height() > 480) {
+			size.setHeight(480);
+		}
+
+		painter.fillRect(QRect(QPoint(0, 0), frameSize), Qt::black);
+
+		xpos = (frameSize.width() - size.width()) / 2;
+		ypos = (frameSize.height() - size.height()) / 2;
+#endif
+
+		painter.drawImage(xpos, ypos, _image.scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
 	}
 }
 
 void QtVideo::flipWebcam() {
 	static bool flip = true;
+
+    if ([NSApp respondsToSelector:@selector(requestUserAttention:)]) {
+        int currentAttentionRequest = [NSApp requestUserAttention:NSInformationalRequest];
+    }
 
 	IWebcamDriver * driver = WebcamDriver::getInstance();
 	driver->flipHorizontally(flip);
