@@ -48,6 +48,7 @@ class PhoneCall;
 class Sms;
 class SoftUpdate;
 class History;
+class WsInfo;
 
 /**
  * Handle the profile of a User.
@@ -126,6 +127,15 @@ public:
 	 * @param sms Sms created
 	 */
 	Event<void (UserProfile & sender, SoftUpdate & softUpdate)> softUpdateCreatedEvent;
+
+	/**
+	 * WsInfo has been created.
+	 *
+	 * @param sender this class
+	 * @param wsInfo WsInfo created
+	 */
+	Event<void (UserProfile & sender, WsInfo & wsInfo)> wsInfoCreatedEvent;
+
 
 	UserProfile(WengoPhone & wengoPhone);
 
@@ -226,7 +236,7 @@ public:
 	virtual EnumPresenceState::PresenceState getPresenceState() const;
 
 	virtual void setPresenceState(EnumPresenceState::PresenceState presenceState);
-
+	
 	/**
 	 * Makes a call given a Contact.
 	 *
@@ -332,6 +342,9 @@ private:
 	/** WengoPhone update system. */
 	SoftUpdate * _softUpdate;
 
+	/** WsInfo */
+	WsInfo * _wsInfo;
+	
 	//TODO: create a list of SipAccount
 	WengoAccount * _wengoAccount;
 

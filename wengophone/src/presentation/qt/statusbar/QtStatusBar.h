@@ -27,6 +27,8 @@
 #include "QtEventWidget.h"
 #include "QtCreditWidget.h"
 
+#include <model/webservices/info/WsInfo.h>
+
 class UserProfile;
 class CWengoPhone;
 
@@ -111,6 +113,12 @@ public Q_SLOTS:
 	void notAvailableClicked(bool checked);
 
 	void forwardClicked(bool checked);
+	
+private:
+	
+	void wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsInfo);
+
+	void wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, float wengos);
 };
 
 #endif

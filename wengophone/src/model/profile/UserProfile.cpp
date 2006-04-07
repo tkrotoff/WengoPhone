@@ -33,6 +33,7 @@
 #include <model/phoneline/IPhoneLine.h>
 #include <model/webservices/sms/Sms.h>
 #include <model/webservices/softupdate/SoftUpdate.h>
+#include <model/webservices/info/WsInfo.h>
 #include <model/history/History.h>
 
 #include <imwrapper/IMAccountHandlerFileStorage.h>
@@ -292,16 +293,20 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 	switch (state) {
 	case SipAccount::LoginStateReady: {
 		//Creates SMS, SMS needs a WengoAccount
-		LOG_DEBUG("SMS created");
 		_sms = new Sms(*(WengoAccount *) _wengoAccount, *this);
 		smsCreatedEvent(*this, *_sms);
+		LOG_DEBUG("SMS created");
 
 		//Creates SoftUpdate, SoftUpdate needs a WengoAccount
-		LOG_DEBUG("SoftUpdate created");
 		_softUpdate = new SoftUpdate(*(WengoAccount *) _wengoAccount);
 		softUpdateCreatedEvent(*this, *_softUpdate);
 		_softUpdate->checkForUpdate();
-
+		LOG_DEBUG("SoftUpdate created");
+		
+		_wsInfo = new WsInfo(*(WengoAccount *) _wengoAccount);
+		wsInfoCreatedEvent(*this, *_wsInfo);
+		LOG_DEBUG("WsInfo created");
+		
 		addPhoneLine(sender);
 
 		WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *) _wengoAccount);

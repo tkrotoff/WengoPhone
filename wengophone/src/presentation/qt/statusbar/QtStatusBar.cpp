@@ -71,7 +71,8 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, UserProfile & userProfile, Q
 	connect(_nicknameLabel,SIGNAL(clicked()),SLOT(nicknameClicked()));
 	connect(_eventsLabel,SIGNAL(clicked()),SLOT(eventsClicked()));
 	connect(_creditLabel,SIGNAL(clicked()),SLOT(creditClicked()));
-
+	
+	_userProfile.wsInfoCreatedEvent += boost::bind(&QtStatusBar::wsInfoCreatedEventHandler, this, _1, _2);
 }
 
 
@@ -234,7 +235,7 @@ void QtStatusBar::dndClicked(bool){
 }
 
 void QtStatusBar::invisibleClicked(bool){
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateOffline);
+	_userProfile.setPresenceState(EnumPresenceState::PresenceStateInvisible);
 }
 
 void QtStatusBar::brbClicked(bool){
@@ -250,9 +251,18 @@ void QtStatusBar::notAvailableClicked(bool){
 }
 
 void QtStatusBar::forwardClicked(bool){
-
 }
 
 void QtStatusBar::setWengos ( float wengos ){
 	_creditLabel->setText(QString("%1").arg(wengos)+QString(" Euros"));
+}
+
+void QtStatusBar::wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsInfo) {
+	wsInfo.wsInfoWengosEvent += boost::bind(&QtStatusBar::wsInfoWengosEventHandler, this, _1, _2, _3, _4);
+	wsInfo.getWengosCount(true);
+	wsInfo.execute();
+}
+
+void QtStatusBar::wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, float wengos) {
+	setWengos(wengos);
 }
