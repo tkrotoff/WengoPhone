@@ -121,8 +121,8 @@ sources = [
 	'model/webservices/WengoWebService.cpp',
 	'model/webservices/sms/Sms.cpp',
 	'model/webservices/info/WsInfo.cpp',
+	'model/webservices/subscribe/Subscribe.cpp',
 	'model/webservices/softupdate/SoftUpdate.cpp',
-
 	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
 	'control/connect/CConnectHandler.cpp',
@@ -135,6 +135,7 @@ sources = [
 	'control/contactlist/CContactGroup.cpp',
 	'control/webservices/sms/CSms.cpp',
 	'control/webservices/softupdate/CSoftUpdate.cpp',
+	'control/webservices/info/CWsInfo.cpp',
 	'control/history/CHistory.cpp',
 
 	'presentation/PFactory.cpp'
