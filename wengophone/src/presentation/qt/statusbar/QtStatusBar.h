@@ -32,6 +32,11 @@
 class UserProfile;
 class CWengoPhone;
 
+/**
+ *
+ * @author Mr K
+ * @author Mathieu Stute
+ */
 class QtStatusBar : public QWidget
 {
 	Q_OBJECT
@@ -119,6 +124,8 @@ private:
 	void wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsInfo);
 
 	void wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, float wengos);
+	
+	void wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail);
 };
 
 #endif

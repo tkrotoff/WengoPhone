@@ -254,15 +254,23 @@ void QtStatusBar::forwardClicked(bool){
 }
 
 void QtStatusBar::setWengos ( float wengos ){
-	_creditLabel->setText(QString("%1").arg(wengos)+QString(" Euros"));
+	_creditLabel->setText(QString("%1").arg(wengos) + QString(" Euros"));
 }
 
 void QtStatusBar::wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsInfo) {
 	wsInfo.wsInfoWengosEvent += boost::bind(&QtStatusBar::wsInfoWengosEventHandler, this, _1, _2, _3, _4);
+	wsInfo.wsInfoVoiceMailEvent+= boost::bind(&QtStatusBar::wsInfoVoiceMailEventHandler, this, _1, _2, _3, _4);
 	wsInfo.getWengosCount(true);
+	wsInfo.getUnreadVoiceMail(true);
 	wsInfo.execute();
 }
 
 void QtStatusBar::wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, float wengos) {
+	//TODO: add error check
 	setWengos(wengos);
+}
+
+void QtStatusBar::wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail) {
+	//TODO: add error check
+	_eventWidget->setNewMessages(voicemail);
 }
