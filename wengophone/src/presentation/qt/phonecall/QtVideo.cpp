@@ -33,8 +33,6 @@
 #include <windows.h>
 #endif
 
-#include <Cocoa/Cocoa.h>
-
 #include <iostream>
 using namespace std;
 
@@ -90,10 +88,6 @@ void QtVideo::paintEvent() {
 
 void QtVideo::flipWebcam() {
 	static bool flip = true;
-
-    if ([NSApp respondsToSelector:@selector(requestUserAttention:)]) {
-        int currentAttentionRequest = [NSApp requestUserAttention:NSInformationalRequest];
-    }
 
 	IWebcamDriver * driver = WebcamDriver::getInstance();
 	driver->flipHorizontally(flip);
