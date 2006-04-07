@@ -30,20 +30,20 @@
 
 const char * getValueFromKey(TiXmlElement * element, const std::string key);
 
-const std::string WsWengoInfo::WENGOSCOUNT_TAG = "contract.counter.wengos";
-const std::string WsWengoInfo::SMSCOUNT_TAG = "contract.counter.sms";
-const std::string WsWengoInfo::ACTIVEMAIL_TAG = "ucf.email.isactif";
-const std::string WsWengoInfo::UNREADVOICEMAILCOUNT_TAG = "tph.mbox.unseencount";
-const std::string WsWengoInfo::CALLFORWARD_TAG = "tph.callforward";
-const std::string WsWengoInfo::PSTNNUMBER_TAG = "contract.option.pstnnum";
-const std::string WsWengoInfo::CALLFORWARD_TOVOICEMAIL_ENABLE_TAG = "tph.callforward.cfb.enabled";
-const std::string WsWengoInfo::CALLFORWARD_TOVOICEMAIL_DEST_TAG = "tph.callforward.cfb.destination";
-const std::string WsWengoInfo::CALLFORWARD_TOPSTN_ENABLE_TAG = "tph.callforward.cffl.enabled";
-const std::string WsWengoInfo::CALLFORWARD_TOPSTN_DEST1_TAG = "tph.callforward.cffl.destination1";
-const std::string WsWengoInfo::CALLFORWARD_TOPSTN_DEST2_TAG = "tph.callforward.cffl.destination2";
-const std::string WsWengoInfo::CALLFORWARD_TOPSTN_DEST3_TAG = "tph.callforward.cffl.destination3";
+const std::string WsInfo::WENGOSCOUNT_TAG = "contract.counter.wengos";
+const std::string WsInfo::SMSCOUNT_TAG = "contract.counter.sms";
+const std::string WsInfo::ACTIVEMAIL_TAG = "ucf.email.isactif";
+const std::string WsInfo::UNREADVOICEMAILCOUNT_TAG = "tph.mbox.unseencount";
+const std::string WsInfo::CALLFORWARD_TAG = "tph.callforward";
+const std::string WsInfo::PSTNNUMBER_TAG = "contract.option.pstnnum";
+const std::string WsInfo::CALLFORWARD_TOVOICEMAIL_ENABLE_TAG = "tph.callforward.cfb.enabled";
+const std::string WsInfo::CALLFORWARD_TOVOICEMAIL_DEST_TAG = "tph.callforward.cfb.destination";
+const std::string WsInfo::CALLFORWARD_TOPSTN_ENABLE_TAG = "tph.callforward.cffl.enabled";
+const std::string WsInfo::CALLFORWARD_TOPSTN_DEST1_TAG = "tph.callforward.cffl.destination1";
+const std::string WsInfo::CALLFORWARD_TOPSTN_DEST2_TAG = "tph.callforward.cffl.destination2";
+const std::string WsInfo::CALLFORWARD_TOPSTN_DEST3_TAG = "tph.callforward.cffl.destination3";
 
-WsWengoInfo::WsWengoInfo(WengoAccount & wengoAccount) : WengoWebService(wengoAccount) {
+WsInfo::WsInfo(WengoAccount & wengoAccount) : WengoWebService(wengoAccount) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	_wengosCount = false;
@@ -62,31 +62,31 @@ WsWengoInfo::WsWengoInfo(WengoAccount & wengoAccount) : WengoWebService(wengoAcc
 	setWengoAuthentication(true);
 }
 
-void WsWengoInfo::getWengosCount(bool wengosCount) {
+void WsInfo::getWengosCount(bool wengosCount) {
 	_wengosCount = wengosCount;
 }
 
-void WsWengoInfo::getSmsCount(bool smsCount) {
+void WsInfo::getSmsCount(bool smsCount) {
 	_smsCount = smsCount;
 }
 
-void WsWengoInfo::getActiveMail(bool activeMail) {
+void WsInfo::getActiveMail(bool activeMail) {
 	_activeMail = activeMail;
 }
 
-void WsWengoInfo::getUnreadVoiceMail(bool unreadVoiceMail) {
+void WsInfo::getUnreadVoiceMail(bool unreadVoiceMail) {
 	_unreadVoiceMail = unreadVoiceMail;
 }
 
-void WsWengoInfo::getCallForwardInfo(bool callForward) {
+void WsInfo::getCallForwardInfo(bool callForward) {
 	_callForward = callForward;
 }
 
-void WsWengoInfo::getPstnNumber(bool pstnNumber) {
+void WsInfo::getPstnNumber(bool pstnNumber) {
 	_pstnNumber = pstnNumber;
 }
 
-int WsWengoInfo::execute() {
+int WsInfo::execute() {
 
 	//build the query
 	std::string query = "query=";
@@ -119,7 +119,7 @@ int WsWengoInfo::execute() {
 	return call(this);
 }
 
-void WsWengoInfo::answerReceived(const std::string & answer, int id) {
+void WsInfo::answerReceived(const std::string & answer, int id) {
 
 	const char * value = NULL;
 	std::string voiceMailNumber = "";
@@ -149,7 +149,7 @@ void WsWengoInfo::answerReceived(const std::string & answer, int id) {
 					if( value ) {
 						std::stringstream ss(value);
 						ss >> wengos;
-						wsInfoWengosEvent(*this, id, WsWengoInfoStatusOk, wengos);
+						wsInfoWengosEvent(*this, id, WsInfoStatusOk, wengos);
 					}
 
 				// sms count
@@ -159,7 +159,7 @@ void WsWengoInfo::answerReceived(const std::string & answer, int id) {
 					if( value ) {
 						std::stringstream ss( value );
 						ss >> sms;
-						wsInfoSmsCountEvent(*this, id, WsWengoInfoStatusOk, sms);
+						wsInfoSmsCountEvent(*this, id, WsInfoStatusOk, sms);
 					}
 
 				// active mail
@@ -169,7 +169,7 @@ void WsWengoInfo::answerReceived(const std::string & answer, int id) {
 					if( value ) {
 						std::stringstream ss(value);
 						ss >> activeMail;
-						wsInfoActiveMailEvent(*this, id, WsWengoInfoStatusOk, activeMail);
+						wsInfoActiveMailEvent(*this, id, WsInfoStatusOk, activeMail);
 					}
 
 				// unread voice mail
@@ -179,7 +179,7 @@ void WsWengoInfo::answerReceived(const std::string & answer, int id) {
 					if( value ) {
 						std::stringstream ss(value);
 						ss >> voiceMail;
-						wsInfoVoiceMailEvent(*this, id, WsWengoInfoStatusOk, voiceMail);
+						wsInfoVoiceMailEvent(*this, id, WsInfoStatusOk, voiceMail);
 					}
 
 				// call forward
@@ -238,7 +238,7 @@ void WsWengoInfo::answerReceived(const std::string & answer, int id) {
 				} else if( key == PSTNNUMBER_TAG ) {
 					value = getValueFromKey(element, PSTNNUMBER_TAG);
 					if( value ) {
-						wsInfoPtsnNumberEvent(*this, id, WsWengoInfoStatusOk, std::string(value));
+						wsInfoPtsnNumberEvent(*this, id, WsInfoStatusOk, std::string(value));
 					}
 
 				}
@@ -250,9 +250,9 @@ void WsWengoInfo::answerReceived(const std::string & answer, int id) {
 	//emit call forward event
 	if( _callForward ) {
 		if( forward2VoiceMail ) {
-			wsCallForwardInfoEvent(*this, id, WsWengoInfoStatusOk, forward2VoiceMail, voiceMailNumber, "", "");
+			wsCallForwardInfoEvent(*this, id, WsInfoStatusOk, forward2VoiceMail, voiceMailNumber, "", "");
 		} else {
-			wsCallForwardInfoEvent(*this, id, WsWengoInfoStatusOk, forward2VoiceMail, dest1, dest2, dest3);
+			wsCallForwardInfoEvent(*this, id, WsInfoStatusOk, forward2VoiceMail, dest1, dest2, dest3);
 		}
 	}
 }

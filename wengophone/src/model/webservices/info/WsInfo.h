@@ -27,16 +27,16 @@
  *
  * @author Mathieu Stute
  */
-class WsWengoInfo : public WengoWebService {
+class WsInfo : public WengoWebService {
 
 public:
 
-	enum WsWengoInfoStatus {
+	enum WsInfoStatus {
 		/** The information could not be retrieved. */
-		WsWengoInfoStatusError,
+		WsInfoStatusError,
 
 		/** Retrive information successfully */
-		WsWengoInfoStatusOk
+		WsInfoStatusOk
 	};
 
 	/**
@@ -44,7 +44,7 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	WsWengoInfo(WengoAccount & wengoAccount);
+	WsInfo(WengoAccount & wengoAccount);
 
 	/**
 	 * An anwser about wengo's has been received.
@@ -54,7 +54,7 @@ public:
 	 * @param status the request status (ok or error)
 	 * @param wengos wengo's count
 	 */
-	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status, float wengos)> wsInfoWengosEvent;
+	Event<void (WsInfo & sender, int id, WsInfoStatus status, float wengos)> wsInfoWengosEvent;
 
 	/**
 	 * An anwser about sms count has been received.
@@ -64,7 +64,7 @@ public:
 	 * @param status the request status (ok or error)
 	 * @param sms sms count
 	 */
-	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status, int sms)> wsInfoSmsCountEvent;
+	Event<void (WsInfo & sender, int id, WsInfoStatus status, int sms)> wsInfoSmsCountEvent;
 
 	/**
 	 * An anwser about active mail has been received.
@@ -74,7 +74,7 @@ public:
 	 * @param status the request status (ok or error)
 	 * @param activeMail 1 if active, 0 if not
 	 */
-	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status, int activeMail)> wsInfoActiveMailEvent;
+	Event<void (WsInfo & sender, int id, WsInfoStatus status, int activeMail)> wsInfoActiveMailEvent;
 
 	/**
 	 * An anwser about unread voice mail has been received.
@@ -84,7 +84,7 @@ public:
 	 * @param status the request status (ok or error)
 	 * @param voicemail unread voice mail count
 	 */
-	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status, int voicemail)> wsInfoVoiceMailEvent;
+	Event<void (WsInfo & sender, int id, WsInfoStatus status, int voicemail)> wsInfoVoiceMailEvent;
 
 	/**
 	 * An anwser about unread voice mail has been received.
@@ -94,7 +94,7 @@ public:
 	 * @param status the request status (ok or error)
 	 * @param number unread voice mail count
 	 */
-	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status, std::string number)> wsInfoPtsnNumberEvent;
+	Event<void (WsInfo & sender, int id, WsInfoStatus status, std::string number)> wsInfoPtsnNumberEvent;
 
 	/**
 	 * An anwser about unread voice mail has been received.
@@ -107,7 +107,7 @@ public:
 	 * @param dest2	second forward number (meaningfull only if voicemail is true)
 	 * @param dest3	third forward number (meaningfull only if voicemail is true)
 	 */
-	Event<void (WsWengoInfo & sender, int id, WsWengoInfoStatus status,
+	Event<void (WsInfo & sender, int id, WsInfoStatus status,
 		bool voicemail, std::string dest1, std::string dest2, std::string dest3)> wsCallForwardInfoEvent;
 
 	/**
