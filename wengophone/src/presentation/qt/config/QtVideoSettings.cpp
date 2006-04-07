@@ -17,33 +17,47 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
-
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
+#include <webcam/WebcamDriver.h>
+
+#include <qtutil/Object.h>
+#include <qtutil/StringListConvert.h>
+#include <qtutil/WidgetFactory.h>
 
 #include "QtVideoSettings.h"
 
 
 QtVideoSettings::QtVideoSettings( QWidget * parent, Qt::WFlags f ) : QWidget( parent, f ) {
 	_widget = WidgetFactory::create( ":/forms/config/VideoSettings.ui", this );
+
+	_webcamDriver = WebcamDriver::getInstance();
+	_webcamDriver->frameCapturedEvent +=
+		boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);
+	_openedByMe = false;
+	_rgbImage = NULL;
+
 	QGridLayout * layout = new QGridLayout();
-	layout->addWidget( _widget );
-	layout->setMargin( 0 );
-	setLayout( layout );
+	layout->addWidget(_widget);
+	layout->setMargin(0);
+	setLayout(layout);
+
 	setupChilds();
+
 	readConfigData();
+
+	connect(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
+	connect(_webcamPreviewPushButton, SIGNAL(clicked()), SLOT(webcamPreviewButtonPressed()));
 }
 
 void QtVideoSettings::setupChilds() {
-
 	_webcamDeviceComboBox = Object::findChild<QComboBox *>(_widget,"webcamDeviceComboBox" );
-
+	_webcamDeviceComboBox->addItems(StringListConvert::toQStringList(_webcamDriver->getDeviceList()));
+	
 	_webcamPreviewPushButton = Object::findChild<QPushButton *>(_widget,"webcamPreviewPushButton" );
 
-	_webcamPreviewFrame = Object::findChild<QFrame *>(_widget,"webcamPreviewFrame" );
+	_webcamPreviewLabel = Object::findChild<QLabel *>(_widget,"webcamPreviewLabel" );
 
 	_videoQualityTreeWidget = Object::findChild<QTreeWidget *>(_widget,"videoQualityTreeWidget" );
 
@@ -98,3 +112,39 @@ void QtVideoSettings::readConfigData(){
 
 }
 
+void QtVideoSettings::frameCapturedEventHandler(IWebcamDriver *sender, piximage *image) {
+	//TODO: optimize: free and alloc a new piximage only if the size changed
+	if (_rgbImage) {
+		pix_free(_rgbImage);
+	}
+	_rgbImage = pix_alloc(PIX_OSI_RGB32, image->width, image->height);
+
+	pix_convert(PIX_NO_FLAG, _rgbImage, image);
+
+	QImage *qImage = new QImage(_rgbImage->data, _rgbImage->width, _rgbImage->height, QImage::Format_RGB32);
+	newWebcamImage(qImage);
+}
+
+void QtVideoSettings::newWebcamImageCaptured(QImage *image) {
+	_webcamPreviewLabel->setPixmap(QPixmap::fromImage(*image));
+	delete image;
+}
+
+void QtVideoSettings::webcamPreviewButtonPressed() {
+	// If the Webcam is currently in used, we cannot launch a capture and
+	// we cannot set any parameters as it is already launched
+	if (_webcamDeviceComboBox->count() > 0 && !_webcamDriver->isOpened()) {
+		_openedByMe = true;
+		//_webcamDriver->setDevice(_webcamDeviceComboBox->currentText().toStdString());
+		_webcamDriver->setDevice("");
+		//_webcamDriver->setPalette(PIX_OSI_RGB32);
+
+		_webcamDriver->startCapture();
+	}
+}
+
+void QtVideoSettings::widgetHidden() {
+	if (_openedByMe) {
+		_webcamDriver->stopCapture();
+	}
+}

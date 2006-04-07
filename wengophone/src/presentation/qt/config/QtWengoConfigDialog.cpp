@@ -76,32 +76,48 @@ void QtWengoConfigDialog::itemActivated ( ) {
 	const QList<QTreeWidgetItem *> itemList = _treeWidget->selectedItems();
 	itemText = itemList[ 0 ] ->text( 0 );
 
-	if ( itemText == "General" )
+	if ( itemText == "General" ) {
 		_stackedWidget->setCurrentWidget( _generalSettingsWidget );
+		_videoSettingsWidget->widgetHidden();
+	}
 
-	if ( itemText == "Languages" )
+	if ( itemText == "Languages" ) {
 		_stackedWidget->setCurrentWidget( _languagesWidget->getWidget() );
+		_videoSettingsWidget->widgetHidden();
+	}
 
-	if ( itemText == "Notifications & Sounds" )
+	if ( itemText == "Notifications & Sounds" ) {
 		_stackedWidget->setCurrentWidget( _notificationWidget );
+		_videoSettingsWidget->widgetHidden();
+	}
 
-	if ( itemText == "Accounts" )
+	if ( itemText == "Accounts" ) {
 		_stackedWidget->setCurrentWidget( _accountSettingsWidget );
+		_videoSettingsWidget->widgetHidden();
+	}
 
-	if ( itemText == "Privacy" )
+	if ( itemText == "Privacy" ) {
 		_stackedWidget->setCurrentWidget( _privacySettingsWidget );
+		_videoSettingsWidget->widgetHidden();
+	}
 
-	if ( itemText == "Audio" )
+	if ( itemText == "Audio" ) {
 		_stackedWidget->setCurrentWidget( _audioSettingsWidget );
+		_videoSettingsWidget->widgetHidden();
+	}
 
 	if ( itemText == "Video" )
 		_stackedWidget->setCurrentWidget( _videoSettingsWidget );
 
-	if ( itemText == "Advanced" )
+	if ( itemText == "Advanced" ) {
 		_stackedWidget->setCurrentWidget( _advancedSettingsWidget );
+		_videoSettingsWidget->widgetHidden();
+	}
 
-	if ( itemText == "Call Forward" )
+	if ( itemText == "Call Forward" ) {
 		_stackedWidget->setCurrentWidget( _callForwardWidget );
+		_videoSettingsWidget->widgetHidden();
+	}
 }
 
 void QtWengoConfigDialog::accept(){

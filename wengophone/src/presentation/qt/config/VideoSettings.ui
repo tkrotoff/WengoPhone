@@ -198,14 +198,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="webcamPreviewPushButton" >
-             <property name="text" >
-              <string>Webcam preview</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QFrame" name="webcamPreviewFrame" >
+            <widget class="QLabel" name="webcamPreviewLabel" >
              <property name="minimumSize" >
               <size>
                <width>128</width>
@@ -218,11 +211,15 @@
                <height>128</height>
               </size>
              </property>
-             <property name="frameShape" >
-              <enum>QFrame::StyledPanel</enum>
+             <property name="text" >
+              <string/>
              </property>
-             <property name="frameShadow" >
-              <enum>QFrame::Plain</enum>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="webcamPreviewPushButton" >
+             <property name="text" >
+              <string>Webcam preview</string>
              </property>
             </widget>
            </item>
