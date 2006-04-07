@@ -31,6 +31,8 @@ class QtMSNSettings : public QtIMAccountPlugin {
 	Q_OBJECT
 public:
 
+	QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
+
 	QWidget * getWidget() const {
 		return _MSNSettingsWidget;
 	}

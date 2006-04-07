@@ -28,6 +28,11 @@
 
 #include <QtGui>
 
+QtMSNSettings::QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+	: QtIMAccountPlugin(userProfile, imAccount, parent) {
+
+}
+
 void QtMSNSettings::init() {
 	static _MSNSettingsWidget = WidgetFactory::create(":/forms/imaccount/MSNSettings.ui", _parentWidget);
 	_MSNSettingsWidget->setWindowTitle("MSN " + tr("Settings"));

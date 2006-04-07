@@ -84,7 +84,7 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, EnumIMProtoco
 
 	//cancel button
 	QPushButton * cancelButton = Object::findChild<QPushButton *>(_imAccountTemplateWidget, "cancelButton");
-	connect(cancelButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(reject()));
+	connect(cancelButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(()));
 
 	QtIMAccountPlugin * imAccountPlugin = NULL;
 	switch (imProtocol) {
@@ -115,8 +115,8 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, EnumIMProtoco
 		LOG_FATAL("unknown IM protocol=" + String::fromNumber(imProtocol));
 	}
 
-
-	createLayout2(settingsGroupBox)->addWidget(imAccountPlugin->getWidget());
+	QWidget * imProtocolWidget = imAccountPlugin->getWidget();
+	createLayout2(settingsGroupBox)->addWidget(imProtocolWidget);
 	settingsGroupBox->setTitle(imProtocolWidget->windowTitle());
 	imAccountTemplateWindow->setWindowTitle(imProtocolWidget->windowTitle());
 	imAccountTemplateWindow->exec();
