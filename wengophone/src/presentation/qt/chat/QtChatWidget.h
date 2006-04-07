@@ -26,7 +26,7 @@
 #include "widgetseeker.h"
 #include "QtEmoticon.h"
 
-#include <qtutil/WidgetFactory.h>
+
 #include <imwrapper/IMContact.h>
 #include <imwrapper/IMChatSession.h>
 
@@ -73,6 +73,8 @@ protected:
 
     QPushButton  *   _fontButton;
 
+    QPushButton  *   _inviteButton;
+
 	QTextBrowser *   _chatHistory;
 
 	QTextEdit    *   _chatEdit;
@@ -80,6 +82,12 @@ protected:
 	QPushButton  *   _emoticonsButton;
 
 	QPushButton  *   _sendButton;
+
+	QScrollArea  *  _scrollArea;
+
+	QWidget * _contactViewport;
+
+	QFrame * _contactListFrame;
 
 	IMChatSession* _imChatSession;
 
@@ -114,6 +122,8 @@ public Q_SLOTS:
     void emoticonSelected(QtEmoticon emoticon);
 
     void urlClicked(const QUrl & link);
+
+    void inviteContact();
 
 Q_SIGNALS:
 

@@ -31,6 +31,8 @@
 // class IMChatSession;
 // class IMContact;
 
+class QtChatTabWidget;
+
 class ChatWindow : public QObjectThreadSafe
 {
 
@@ -52,7 +54,7 @@ protected:
 
     ChatWidget  *   _chatWidget;
 
-    QTabWidget  *   _tabWidget;
+    QtChatTabWidget *   _tabWidget;
 
     IMChatSession * _imChatSession;
 
@@ -61,6 +63,8 @@ protected:
 public Q_SLOTS:
 
 	void newMessage(IMChatSession* session,const QString & msg);
+
+	void tabSelectionChanged ( int index );
 
 	void show();
 

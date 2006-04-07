@@ -23,11 +23,14 @@
 
 #include <util/Logger.h>
 
+#include <qtutil/WidgetFactory.h>
+#include <qtutil/Object.h>
+
 ChatWidget::ChatWidget (int sessionId, QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
 
 {
 
-    _widget =WidgetFactory::create(":/forms/chat/ChatWidget.ui", this);
+    _widget =WidgetFactory::create(":/forms/chat/ChatRoomWidget.ui", this);
     QGridLayout * layout = new QGridLayout();
     layout->addWidget(_widget);
     layout->setMargin(0);
@@ -42,11 +45,17 @@ ChatWidget::ChatWidget (int sessionId, QWidget * parent, Qt::WFlags f) : QWidget
 	_nickBgColorAlt = "'#B0FFB3'";
     _nickName = "Wengo";
 
-    _fontButton  = _seeker.getPushButton(_widget,"fontButton");
-    _chatHistory = _seeker.getTextBrowser(_widget,"chatHistory");
-    _emoticonsButton = _seeker.getPushButton(_widget,"emoticonsButton");
-    _sendButton = _seeker.getPushButton(_widget,"sendButton");
-    _chatEdit = _seeker.getTextEdit(_widget,"chatEdit");
+    _fontButton  = Object::findChild<QPushButton *>(_widget,"fontButton");
+    _chatHistory = Object::findChild<QTextBrowser *>(_widget,"chatHistory");
+    _emoticonsButton = Object::findChild<QPushButton *>(_widget,"emoticonsButton");
+    _sendButton = Object::findChild<QPushButton *>(_widget,"sendButton");
+    _chatEdit = Object::findChild<QTextEdit *>(_widget,"chatEdit");
+	_contactListFrame = Object::findChild<QFrame *>(_widget,"contactListFrame");
+
+
+	_inviteButton = Object::findChild<QPushButton *>(_widget,"inviteButton");
+	connect ( _inviteButton,SIGNAL(clicked()), SLOT(inviteContact()));
+
 
     ChatWidgetManager * cwm = new ChatWidgetManager(this,_chatEdit);
 
@@ -61,6 +70,17 @@ ChatWidget::ChatWidget (int sessionId, QWidget * parent, Qt::WFlags f) : QWidget
 
     connect(_emoticonsWidget,SIGNAL(emoticonClicked(QtEmoticon)),this,SLOT(emoticonSelected(QtEmoticon)));
 	connect(_emoticonsWidget,SIGNAL(closed()),_chatEdit,SLOT(setFocus()));
+
+	QGridLayout * frameLayout = new QGridLayout(_contactListFrame);
+	_contactListFrame->setVisible(false);
+	_scrollArea = new QScrollArea(_contactListFrame);
+	frameLayout->addWidget(_scrollArea);
+
+	_contactViewport = new QWidget(_scrollArea);
+	_scrollArea->setWidget(_contactViewport);
+	new QVBoxLayout(_contactViewport);
+	_scrollArea->setWidgetResizable(true);
+
 }
 
 
@@ -116,8 +136,6 @@ void ChatWidget::addToHistory(const QString & senderName,const QString & str)
 	arg(_nickBgColorAlt).
     arg(_nickTextColor).
     arg(QTime::currentTime().toString());
-
-    LOG_DEBUG("Chat histor : "  + text.toStdString());
 	_chatHistory->insertHtml (text);
     _chatHistory->insertHtml (text2Emoticon(str));
     _chatHistory->ensureCursorVisible();
@@ -238,12 +256,6 @@ void ChatWidget::chooseEmoticon()
 
 void ChatWidget::emoticonSelected(QtEmoticon emoticon)
 {
- /*
-    QString path = QString("emoticons/") + emoticonName;
-    QString image = QString("<img src='%1' />").arg(path);
-    _chatEdit->insertHtml (image);
-    _chatEdit->ensureCursorVisible();
-*/
 	_chatEdit->insertHtml(emoticon.getHtml());
 	_chatEdit->ensureCursorVisible();
 }
@@ -251,4 +263,8 @@ void ChatWidget::emoticonSelected(QtEmoticon emoticon)
 void ChatWidget::setIMChatSession(IMChatSession * imChatSession)
 {
 	_imChatSession = imChatSession;
+}
+
+void ChatWidget::inviteContact(){
+
 }

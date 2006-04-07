@@ -23,26 +23,24 @@
 #include <util/Logger.h>
 #include <QWidget>
 
-QtChatHandler::QtChatHandler(CChatHandler & cChatHandler) 
+QtChatHandler::QtChatHandler(CChatHandler & cChatHandler)
 	: QObjectThreadSafe(), _cChatHandler(cChatHandler) {
 
-	LOG_DEBUG("QtChatHandler created");
-	
 	_qtChatWidget = NULL;
-	
+
 	_cChatHandler.newIMChatSessionCreatedEvent +=
 		boost::bind(&QtChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
 
 QtChatHandler::~QtChatHandler() {
-	LOG_DEBUG("QtChatHandler destroyed");
+
 }
 
 void QtChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession) {
-	LOG_DEBUG("new ChatSession created");
+
 
 	typedef PostEvent2<void (ChatHandler & sender, IMChatSession & imChatSession), ChatHandler &, IMChatSession &> MyPostEvent;
-	MyPostEvent * event = 
+	MyPostEvent * event =
 		new MyPostEvent(boost::bind(&QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe, this, _1, _2), sender, imChatSession);
 	postEvent(event);
 }
@@ -50,13 +48,13 @@ void QtChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IM
 void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(ChatHandler & sender, IMChatSession & imChatSession) {
 	if (!_qtChatWidget)
 	{
-		LOG_DEBUG("Creating new Chat window");
+
 		_qtChatWidget =  new ChatWindow(imChatSession);
 	}
 	else
-	{	
-		LOG_DEBUG("Reusing chat window");
-		_qtChatWidget->addChatSession(&imChatSession); 
+	{
+
+		_qtChatWidget->addChatSession(&imChatSession);
 	}
 }
 
@@ -65,7 +63,7 @@ void QtChatHandler::createSession(const IMAccount & imAccount, IMContactSet & im
 }
 
 void QtChatHandler::updatePresentation() {
-	
+
 }
 
 void QtChatHandler::updatePresentationThreadSafe() {

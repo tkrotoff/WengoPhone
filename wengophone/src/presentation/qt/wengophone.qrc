@@ -114,6 +114,7 @@
         <file>LoggerWidget.ui</file>
         <file>WengoPhoneWindow.ui</file>
         <file>chat/ChatWidget.ui</file>
+        <file>chat/ChatRoomWidget.ui</file>
         <file>chat/chat.ui</file>
         <file>chat/emoticonswidget.ui</file>
         <file>toaster/QtToaster.ui</file>
