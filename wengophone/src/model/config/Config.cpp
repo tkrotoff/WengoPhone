@@ -242,7 +242,7 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
 	_keyDefaultValueMap[WENGO_SSO_PATH_KEY] = std::string("/softphone-sso/sso2.php");
 	_keyDefaultValueMap[WENGO_WS_INFO_PATH_KEY] = std::string("/info/info.php");
-	_keyDefaultValueMap[WENGO_WS_SUBSCRIBE_PATH_KEY] = std::string("/softphone-subscription");
+	_keyDefaultValueMap[WENGO_WS_SUBSCRIBE_PATH_KEY] = std::string("/softphone-subscription/index.php");
 	_keyDefaultValueMap[WENGO_SOFTUPDATE_PATH_KEY] = std::string("/softphone-version/version.php");
 
 	_keyDefaultValueMap[AVAILABLE_PROTOCOLS_KEY] = DefaultProtocols;
