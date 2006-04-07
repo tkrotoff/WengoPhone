@@ -17,58 +17,43 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTIMACCOUNTMANAGER_H
-#define QTIMACCOUNTMANAGER_H
+#ifndef QTIMACCOUNTPLUGIN_H
+#define QTIMACCOUNTPLUGIN_H
 
 #include <QObject>
 
-#include <string>
+#include <util/Interface.h>
 
+class IMAccount;
 class UserProfile;
 class QWidget;
-class QDialog;
-class QAction;
-class QTreeWidget;
-class QTreeWidgetItem;
 
 /**
- * Manages IM accounts: add/delete/modify IM accounts.
+ * Interface for IM accounts (MSN, AIM, Yahoo, Jabber...).
  *
  * @author Tanguy Krotoff
  */
-class QtIMAccountManager : public QObject {
+class QtIMAccountPlugin : Interface, public QObject {
 	Q_OBJECT
 public:
 
-	QtIMAccountManager(UserProfile & userProfile, QWidget * parent);
+	QtIMAccountPlugin(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
 
-	QWidget * getWidget() const {
-		return _imAccountManagerWidget;
-	}
+	virtual QWidget * getWidget() const = 0;
 
-	void show();
+public Q_SLOTS:
 
-private Q_SLOTS:
+	virtual void save() = 0;
 
-	void addIMAccount(QAction * action);
+protected:
 
-	void deleteIMAccount();
+	virtual void init() = 0;
 
-	void modifyIMAccount();
-
-	void itemDoubleClicked(QTreeWidgetItem * item, int column);
-
-private:
-
-	void loadIMAccounts();
+	IMAccount * _imAccount;
 
 	UserProfile & _userProfile;
 
-	QWidget * _imAccountManagerWidget;
-
-	QDialog * _imAccountManagerWindow;
-
-	QTreeWidget * _treeWidget;
+	QWidget * _parentWidget;
 };
 
-#endif	//QTIMACCOUNTMANAGER_H
+#endif	//QTIMACCOUNTPLUGIN_H

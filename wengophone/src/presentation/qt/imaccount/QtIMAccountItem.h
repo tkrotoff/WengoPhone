@@ -22,9 +22,7 @@
 
 #include <QTreeWidgetItem>
 
-class UserProfile;
 class IMAccount;
-class WengoPhone;
 
 class QtIMAccountItem : public QTreeWidgetItem {
 public:
@@ -39,29 +37,9 @@ public:
 		return _imAccount;
 	}
 
-	void setUserProfile(UserProfile * profile) {
-		_userProfile = profile;
-	}
-
-	UserProfile * getUserProfile() const {
-		return _userProfile;
-	}
-
-	void setWengoPhone(WengoPhone * wengophone) {
-		_wengoPhone = wengophone;
-	}
-
-	WengoPhone * getWengoPhone() const {
-		return _wengoPhone;
-	}
-
 private:
 
 	IMAccount * _imAccount;
-
-	UserProfile * _userProfile;
-
-	WengoPhone * _wengoPhone;
 };
 
 #endif	//QTIMACCOUNTITEM_H

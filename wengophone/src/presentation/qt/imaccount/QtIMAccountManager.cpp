@@ -22,7 +22,6 @@
 #include "QtIMAccountItem.h"
 #include "QtIMAccountSettings.h"
 
-#include <model/WengoPhone.h>
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
@@ -53,9 +52,9 @@ QDialog * createWindowFromWidget(QWidget * widget) {
 }
 
 
-QtIMAccountManager::QtIMAccountManager(WengoPhone & wengoPhone, QWidget * parent)
+QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * parent)
 	: QObject(parent),
-	_wengoPhone(wengoPhone) {
+	_userProfile(userProfile) {
 
 	_imAccountManagerWidget = WidgetFactory::create(":/forms/imaccount/IMAccountManager.ui", parent);
 	_imAccountManagerWindow = createWindowFromWidget(_imAccountManagerWidget);
@@ -65,10 +64,10 @@ QtIMAccountManager::QtIMAccountManager(WengoPhone & wengoPhone, QWidget * parent
 	QMenu * addIMAccountMenu = new QMenu();
 	connect(addIMAccountMenu, SIGNAL(triggered(QAction *)), SLOT(addIMAccount(QAction *)));
 
-	addIMAccountMenu->addAction(QIcon(":pics/msn_protocol.png"), PROTOCOL_MSN_NAME);
-	addIMAccountMenu->addAction(QIcon(":pics/aim_protocol.png"), PROTOCOL_AIMICQ_NAME);
-	addIMAccountMenu->addAction(QIcon(":pics/yahoo_protocol.png"), PROTOCOL_YAHOO_NAME);
-	addIMAccountMenu->addAction(QIcon(":pics/jabber_protocol.png"), PROTOCOL_JABBER_NAME);
+	addIMAccountMenu->addAction(QIcon(":pics/protocol_msn.png"), PROTOCOL_MSN_NAME);
+	addIMAccountMenu->addAction(QIcon(":pics/protocol_aim.png"), PROTOCOL_AIMICQ_NAME);
+	addIMAccountMenu->addAction(QIcon(":pics/protocol_yahoo.png"), PROTOCOL_YAHOO_NAME);
+	addIMAccountMenu->addAction(QIcon(":pics/protocol_jabber.png"), PROTOCOL_JABBER_NAME);
 	addIMAccountButton->setMenu(addIMAccountMenu);
 
 	QPushButton * modifyIMAccountButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "modifyIMAccountButton");
@@ -78,9 +77,11 @@ QtIMAccountManager::QtIMAccountManager(WengoPhone & wengoPhone, QWidget * parent
 	connect(modifyIMAccountButton, SIGNAL(clicked()), SLOT(deleteIMAccount()));
 
 	QPushButton * closeButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "closeButton");
-	connect(closeButton, SIGNAL(clicked()), SLOT(closeWindow()));
+	connect(closeButton, SIGNAL(clicked()), _imAccountManagerWindow, SLOT(accept()));
 
 	_treeWidget = Object::findChild<QTreeWidget *>(_imAccountManagerWidget, "treeWidget");
+	connect(_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
+			SLOT(itemDoubleClicked(QTreeWidgetItem *, int)));
 
 	loadIMAccounts();
 }
@@ -92,11 +93,10 @@ void QtIMAccountManager::show() {
 void QtIMAccountManager::loadIMAccounts() {
 	_treeWidget->clear();
 
-	UserProfile & userProfile = _wengoPhone.getCurrentUserProfile();
-	IMAccountHandler & imAccountHandler = userProfile.getIMAccountHandler();
+	IMAccountHandler & imAccountHandler = _userProfile.getIMAccountHandler();
 
 	for (IMAccountHandler::iterator it = imAccountHandler.begin(); it != imAccountHandler.end(); it++) {
-		IMAccount * imAccount = (IMAccount *)&(*it);
+		IMAccount * imAccount = (IMAccount *) &(*it);
 		QStringList accountStrList;
 		accountStrList << QString::fromStdString(imAccount->getLogin());
 		EnumIMProtocol::IMProtocol imProtocol = imAccount->getProtocol();
@@ -126,8 +126,6 @@ void QtIMAccountManager::loadIMAccounts() {
 		QtIMAccountItem * item = new QtIMAccountItem(_treeWidget, accountStrList);
 		item->setCheckState(2, Qt::Checked);
 		item->setIMAccount(imAccount);
-		item->setUserProfile(&userProfile);
-		item->setWengoPhone(&_wengoPhone);
 	}
 }
 
@@ -135,26 +133,23 @@ void QtIMAccountManager::addIMAccount(QAction * action) {
 	QString protocolName = action->text();
 	LOG_DEBUG(protocolName.toStdString());
 
-	QtIMAccountSettings * qtIMAccountSettings = NULL;
+	EnumIMProtocol::IMProtocol imProtocol;
 	if (protocolName == PROTOCOL_MSN_NAME) {
-		qtIMAccountSettings = new QtIMAccountSettings(_imAccountManagerWindow,
-					EnumIMProtocol::IMProtocolMSN,
-					QtIMAccountSettings::EditModeAdd);
+		imProtocol = EnumIMProtocol::IMProtocolMSN;
 	}
 	else if (protocolName == PROTOCOL_AIMICQ_NAME) {
-		qtIMAccountSettings = new QtIMAccountSettings(_imAccountManagerWindow,
-					EnumIMProtocol::IMProtocolAIMICQ,
-					QtIMAccountSettings::EditModeAdd);
+		imProtocol = EnumIMProtocol::IMProtocolAIMICQ;
 	}
 	else if (protocolName == PROTOCOL_YAHOO_NAME) {
-		qtIMAccountSettings = new QtIMAccountSettings(_imAccountManagerWindow,
-					EnumIMProtocol::IMProtocolYahoo,
-					QtIMAccountSettings::EditModeAdd);
+		imProtocol = EnumIMProtocol::IMProtocolYahoo;
 	}
 	else if (protocolName == PROTOCOL_JABBER_NAME) {
-		qtIMAccountSettings = new QtIMAccountSettings(_imAccountManagerWindow, EnumIMProtocol::IMProtocolJabber,
-					QtIMAccountSettings::EditModeAdd);
+		imProtocol = EnumIMProtocol::IMProtocolJabber;
 	}
+	else {
+		LOG_FATAL("unknown IM protocol=" + protocolName.toStdString());
+	}
+	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imProtocol, _imAccountManagerWindow);
 }
 
 void QtIMAccountManager::deleteIMAccount() {
@@ -166,9 +161,7 @@ void QtIMAccountManager::modifyIMAccount() {
 void QtIMAccountManager::itemDoubleClicked(QTreeWidgetItem * item, int column) {
 	QtIMAccountItem * imAccountItem = dynamic_cast<QtIMAccountItem *>(item);
 
-	IMAccount * account = imAccountItem->getIMAccount();
+	IMAccount * imAccount = imAccountItem->getIMAccount();
 
-	QtIMAccountSettings qtIMAccountSettings(_wengoPhone, QtProtocolSettings::MODIFY,this);
-	ps.setImAccount(account);
-	ps.exec();
+	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imAccount, _imAccountManagerWindow);
 }

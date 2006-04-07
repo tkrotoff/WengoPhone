@@ -19,6 +19,8 @@
 
 #include "QtMSNSettings.h"
 
+#include <model/profile/UserProfile.h>
+
 #include <util/Logger.h>
 
 #include <qtutil/WidgetFactory.h>
@@ -26,21 +28,16 @@
 
 #include <QtGui>
 
-QtMSNSettings::QtMSNSettings(IMAccount * imAccount, QWidget * parent)
-	: QObject(parent) {
-
-	_imAccount = imAccount;
-
-	parent->setTitle("MSN " + tr("Settings"));
-
-	_MSNSettingsWidget = WidgetFactory::create(":/forms/imaccount/MSNSettings.ui", parent);
-	_loginLineEdit = Object::findChild<QLineEdit *>(_MSNSettingsWidget, "loginLineEdit");
-	_passwordLineEdit = Object::findChild<QLineEdit *>(_MSNSettingsWidget, "passwordLineEdit");
-
-	init();
-}
-
 void QtMSNSettings::init() {
+	static _MSNSettingsWidget = WidgetFactory::create(":/forms/imaccount/MSNSettings.ui", _parentWidget);
+	_MSNSettingsWidget->setWindowTitle("MSN " + tr("Settings"));
+
+	//loginLineEdit
+	static _loginLineEdit = Object::findChild<QLineEdit *>(_MSNSettingsWidget, "loginLineEdit");
+
+	//passwordLineEdit
+	static _passwordLineEdit = Object::findChild<QLineEdit *>(_MSNSettingsWidget, "passwordLineEdit");
+
 	if (!_imAccount) {
 		return;
 	}
@@ -65,6 +62,6 @@ void QtMSNSettings::save() {
 	_imAccount->setLogin(login);
 	_imAccount->setPassword(password);
 
-	_wengoPhone.getCurrentUserProfile().addIMAccount(*_imAccount);
-	_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(*_imAccount);
+	_userProfile.addIMAccount(*_imAccount);
+	_userProfile.getConnectHandler().connect(*_imAccount);
 }

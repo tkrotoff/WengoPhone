@@ -24,22 +24,32 @@
 
 #include <QObject>
 
+class UserProfile;
+class IMAccount;
 class QWidget;
 
+/**
+ * Handles QtIMAccountPlugin: IM accounts (MSN, Yahoo, Jabber, AIM...).
+ *
+ * @author Tanguy Krotoff
+ */
 class QtIMAccountSettings : public QObject {
 	Q_OBJECT
 public:
 
-	enum EditMode {
-		EditModeAdd,
-		EditModeModify
-	};
+	QtIMAccountSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
 
-	QtIMAccountSettings(QWidget * parent, EnumIMProtocol::IMProtocol imProtocol, EditMode mode);
+	QtIMAccountSettings(UserProfile & userProfile, EnumIMProtocol::IMProtocol imProtocol, QWidget * parent);
 
 private:
 
+	void createIMProtocolWidget(QWidget * parent, EnumIMProtocol::IMProtocol imProtocol);
+
 	QWidget * _imAccountTemplateWidget;
+
+	IMAccount * _imAccount;
+
+	UserProfile & _userProfile;
 };
 
 #endif	//QTIMACCOUNTSETTINGS_H

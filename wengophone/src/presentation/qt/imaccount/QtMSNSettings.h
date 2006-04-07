@@ -20,29 +20,28 @@
 #ifndef QTMSNSETTINGS_H
 #define QTMSNSETTINGS_H
 
-#include <QObject>
+#include "QtIMAccountPlugin.h"
 
 class IMAccount;
-class QLineEdit;
+class UserProfile;
 class QWidget;
+class QLineEdit;
 
-class QtMSNSettings : public QObject
+class QtMSNSettings : public QtIMAccountPlugin {
 	Q_OBJECT
 public:
-
-	QtMSNSettings(IMAccount * imAccount, QWidget * parent);
 
 	QWidget * getWidget() const {
 		return _MSNSettingsWidget;
 	}
 
-private:
-
-	void init();
+public Q_SLOTS:
 
 	void save();
 
-	IMAccount * _imAccount;
+private:
+
+	void init();
 
 	QWidget * _MSNSettingsWidget;
 

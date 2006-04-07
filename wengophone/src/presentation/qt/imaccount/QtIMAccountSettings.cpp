@@ -19,7 +19,13 @@
 
 #include "QtIMAccountSettings.h"
 
+#include "QtIMAccountPlugin.h"
 #include "QtMSNSettings.h"
+/*#include "QtAIMSettings.h"
+#include "QtYahooSettings.h"
+#include "QtJabberSettings.h"*/
+
+#include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
 
@@ -43,36 +49,75 @@ QDialog * createWindowFromWidget2(QWidget * widget) {
 }
 
 
-QtIMAccountSettings::QtIMAccountSettings(QWidget * parent, EnumIMProtocol::IMProtocol imProtocol, EditMode mode)
-	: QObject(parent) {
+QtIMAccountSettings::QtIMAccountSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+	: QObject(parent),
+	_userProfile(userProfile) {
 
+	if (!imAccount) {
+		LOG_FATAL("imAccount cannot be NULL");
+	}
+
+	_imAccount = imAccount;
+	createIMProtocolWidget(parent, imAccount->getProtocol());
+}
+
+QtIMAccountSettings::QtIMAccountSettings(UserProfile & userProfile, EnumIMProtocol::IMProtocol imProtocol, QWidget * parent)
+	: QObject(parent),
+	_userProfile(userProfile) {
+
+	_imAccount = NULL;
+	createIMProtocolWidget(parent, imProtocol);
+}
+
+void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, EnumIMProtocol::IMProtocol imProtocol) {
 	_imAccountTemplateWidget = WidgetFactory::create(":/forms/imaccount/IMAccountTemplate.ui", parent);
+
+	//settingsGroupBox
 	QGroupBox * settingsGroupBox = Object::findChild<QGroupBox *>(_imAccountTemplateWidget, "settingsGroupBox");
+
+	//imAccountTemplateWindow
 	QDialog * imAccountTemplateWindow = createWindowFromWidget2(_imAccountTemplateWidget);
 
-	QWidget * imProtocolWidget = NULL;
+	//save button
+	QPushButton * saveButton = Object::findChild<QPushButton *>(_imAccountTemplateWidget, "saveButton");
+	connect(saveButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(accept()));
+
+	//cancel button
+	QPushButton * cancelButton = Object::findChild<QPushButton *>(_imAccountTemplateWidget, "cancelButton");
+	connect(cancelButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(reject()));
+
+	QtIMAccountPlugin * imAccountPlugin = NULL;
 	switch (imProtocol) {
-	case EnumIMProtocol::IMProtocolMSN:
-		QtMSNSettings(settingsGroupBox);
-		imProtocolWidget = WidgetFactory::create(":/forms/imaccount/MSNSettings.ui", settingsGroupBox);
+	case EnumIMProtocol::IMProtocolMSN: {
+		imAccountPlugin = new QtMSNSettings(_userProfile, _imAccount, settingsGroupBox);
 		break;
-	case EnumIMProtocol::IMProtocolYahoo:
-		settingsGroupBox->setTitle("Yahoo " + tr("Settings"));
-		imProtocolWidget = WidgetFactory::create(":/forms/imaccount/YahooSettings.ui", settingsGroupBox);
+	}
+
+	case EnumIMProtocol::IMProtocolYahoo: {
+		/*QtYahooSettings * yahooSettings = new QtYahooSettings(_userProfile, _imAccount, settingsGroupBox);
+		imProtocolWidget = yahooSettings->getWidget();*/
 		break;
-	case EnumIMProtocol::IMProtocolAIMICQ:
-		settingsGroupBox->setTitle("AIM/ICQ " + tr("Settings"));
-		imProtocolWidget = WidgetFactory::create(":/forms/imaccount/AIMICQSettings.ui", settingsGroupBox);
+	}
+
+	case EnumIMProtocol::IMProtocolAIMICQ: {
+		/*QtAIMSettings * aimSettings = new QtAIMSettings(_userProfile, _imAccount, settingsGroupBox);
+		imProtocolWidget = aimSettings->getWidget();*/
 		break;
-	case EnumIMProtocol::IMProtocolJabber:
-		settingsGroupBox->setTitle("Jabber " + tr("Settings"));
-		imProtocolWidget = WidgetFactory::create(":/forms/imaccount/JabberSettings.ui", settingsGroupBox);
+	}
+
+	case EnumIMProtocol::IMProtocolJabber: {
+		/*QtJabberSettings * jabberSettings = new QtJabberSettings(_userProfile, _imAccount, settingsGroupBox);
+		imProtocolWidget = jabberSettings->getWidget();*/
 		break;
+	}
+
 	default:
 		LOG_FATAL("unknown IM protocol=" + String::fromNumber(imProtocol));
 	}
 
-	createLayout2(settingsGroupBox)->addWidget(imProtocolWidget);
+
+	createLayout2(settingsGroupBox)->addWidget(imAccountPlugin->getWidget());
+	settingsGroupBox->setTitle(imProtocolWidget->windowTitle());
 	imAccountTemplateWindow->setWindowTitle(imProtocolWidget->windowTitle());
 	imAccountTemplateWindow->exec();
 }

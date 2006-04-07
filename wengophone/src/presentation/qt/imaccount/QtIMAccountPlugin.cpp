@@ -17,14 +17,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtIMAccountItem.h"
+#include "QtIMAccountPlugin.h"
 
-#include <imwrapper/IMAccount.h>
+#include <model/profile/UserProfile.h>
 
 #include <QtGui>
 
-QtIMAccountItem::QtIMAccountItem(QTreeWidget * parent, const QStringList & strings)
-	: QTreeWidgetItem(parent, strings) {
+QtIMAccountPlugin::QtIMAccountPlugin(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+	: QObject(parent),
+	_userProfile(userProfile) {
 
-	_imAccount = NULL;
+	_parentWidget = parent;
+	_imAccount = imAccount;
+
+	init();
 }
