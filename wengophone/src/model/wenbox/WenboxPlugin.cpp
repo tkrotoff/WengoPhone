@@ -192,9 +192,9 @@ bool WenboxPlugin::switchCurrentAudioDeviceToWenbox() const {
 
 	//Changes audio settings
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, outputDeviceName);
-	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, intputDeviceName);
-	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, ringerDeviceName);
+	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, outputDeviceName, false);
+	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, intputDeviceName, false);
+	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, ringerDeviceName, false);
 
 	return true;
 }

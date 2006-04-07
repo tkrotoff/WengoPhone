@@ -23,8 +23,9 @@
 #include <string>
 
 /**
+ * Sex: male or female.
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class EnumSex {
 public:
@@ -36,7 +37,7 @@ public:
 	};
 
 	/**
-	 * Get a string represencation of the sex.
+	 * Gets a string represencation of the sex.
 	 *
 	 * @param sex the sex to transform
 	 * @result the string representing the sex
@@ -44,7 +45,7 @@ public:
 	static std::string toString(Sex sex);
 
 	/**
-	 * Get the sex from a string representation.
+	 * Gets the sex from a string representation.
 	 *
 	 * @param sex the string to transform.
 	 * @return the sex represented by the string

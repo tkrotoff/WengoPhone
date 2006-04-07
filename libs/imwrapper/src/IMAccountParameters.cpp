@@ -48,7 +48,7 @@ const string IMAccountParameters::JABBER_USE_OLD_SSL_KEY = "jabber.old_ssl";
 const string IMAccountParameters::JABBER_AUTH_PLAIN_IN_CLEAR_KEY = "jabber.auth_plain_in_clear";
 const string IMAccountParameters::JABBER_CONNECTION_SERVER_KEY = "jabber.connect_server";
 
-IMAccountParameters::IMAccountParameters() {
+IMAccountParameters::IMAccountParameters() : AutomaticSettings() {
 	_keyDefaultValueMap[MAIL_NOTIFICATION_KEY] = false;
 	_keyDefaultValueMap[REMEMBER_PASSWORD_KEY] = true;
 	_keyDefaultValueMap[YAHOO_IS_JAPAN_KEY] = false;
@@ -90,7 +90,6 @@ void IMAccountParameters::copy(const IMAccountParameters & imAccountParameters) 
 }
 
 IMAccountParameters::~IMAccountParameters() {
-
 }
 
 bool IMAccountParameters::isMailNotified() const {
@@ -188,45 +187,3 @@ bool IMAccountParameters::isJabberAuthPlainInClearUsed() const {
 string IMAccountParameters::getJabberConnectionServer() const {
 	return getStringKeyValue(JABBER_CONNECTION_SERVER_KEY);
 }
-
-boost::any IMAccountParameters::getAny(const std::string & key) const {
-	Keys::const_iterator it = _keyDefaultValueMap.find(key);
-	if (it == _keyDefaultValueMap.end()) {
-		LOG_FATAL("key=" + key + " not found, add it inside the Config constructor");
-	}
-
-	boost::any defaultValue = it->second;
-	if (defaultValue.empty()) {
-		LOG_FATAL("default value for key=" + key + " not defined, add it inside the Config constructor");
-	}
-
-	return Settings::getAny(key, defaultValue);
-}
-
-bool IMAccountParameters::getBooleanKeyValue(const std::string & key) const {
-	boost::any value = getAny(key);
-	if (!Settings::isBoolean(value)) {
-		LOG_FATAL("value for key=" + key + " is not a boolean");
-	}
-
-	return boost::any_cast<bool>(value);
-}
-
-int IMAccountParameters::getIntegerKeyValue(const std::string & key) const {
-	boost::any value = getAny(key);
-	if (!Settings::isInteger(value)) {
-		LOG_FATAL("value for key=" + key + " is not an integer");
-	}
-
-	return boost::any_cast<int>(value);
-}
-
-std::string IMAccountParameters::getStringKeyValue(const std::string & key) const {
-	boost::any value = getAny(key);
-	if (!Settings::isString(value)) {
-		LOG_FATAL("value for key=" + key + " is not a string");
-	}
-
-	return boost::any_cast<std::string>(value);
-}
-

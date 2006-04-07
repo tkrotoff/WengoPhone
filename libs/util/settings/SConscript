@@ -10,6 +10,7 @@ link_flags = []
 headers = []
 sources = [
 	'src/Settings.cpp',
+	'src/AutomaticSettings.cpp',
 	'src/StringListXMLSerializer.cpp',
 	'src/SettingsXMLSerializer.cpp',
 ]

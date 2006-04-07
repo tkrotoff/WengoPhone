@@ -129,15 +129,16 @@ private:
 	 * @see terminate()
 	 */
 	bool _terminate;
+
 	/**
  	 * True if the thread is running.
  	 */
- 	 bool _running;
-	
+	bool _running;
+
 	//FIXME: currently only one UserProfile exists
 	UserProfile _userProfile;
-	
-	StartupSettingListener* _startupSettingListener;
+
+	StartupSettingListener * _startupSettingListener;
 };
 
 #endif	//WENGOPHONE_H

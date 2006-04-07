@@ -20,7 +20,6 @@
 #include "QtAdvancedConfig.h"
 
 #include <model/config/ConfigManager.h>
-#include <model/config/Config.h>
 
 #include <util/Logger.h>
 
@@ -33,6 +32,8 @@ static const int KEY_NAME_COLUMN = 0;
 static const int STATUS_COLUMN = 1;
 static const int TYPE_COLUMN = 2;
 static const int VALUE_COLUMN = 3;
+static const int DEFAULT_VALUE_COLUMN = 4;
+static const int SAVE_KEY_COLUMN = 5;
 
 static const QString TYPE_STRING = "string";
 static const QString TYPE_STRINGLIST = "stringlist";
@@ -59,43 +60,60 @@ void QtAdvancedConfig::populate() {
 			_tableWidget->insertRow(i);
 		}
 
-		QTableWidgetItem * itemKey = new QTableWidgetItem(QString::fromStdString(keys[i]));
+		std::string key = keys[i];
+		QTableWidgetItem * itemKey = new QTableWidgetItem(QString::fromStdString(key));
 		_tableWidget->setItem(i, KEY_NAME_COLUMN, itemKey);
 
-		boost::any value = config.getAny(keys[i]);
-		if (value.empty()) {
-			continue;
+		boost::any value = config.getAny(key);
+		if (!value.empty()) {
+			setItem(value, config.keyValueToBeSaved(key), i, VALUE_COLUMN);
 		}
 
-		QTableWidgetItem * itemValue = NULL;
-		QTableWidgetItem * itemType = NULL;
-		if (Settings::isBoolean(value)) {
-			itemType = new QTableWidgetItem(TYPE_BOOLEAN);
-			bool tmp = boost::any_cast<bool>(value);
-			if (tmp) {
-				itemValue = new QTableWidgetItem("true");
-			} else {
-				itemValue = new QTableWidgetItem("false");
-			}
-		} else if (Settings::isInteger(value)) {
-			itemType = new QTableWidgetItem(TYPE_INTEGER);
-			int tmp = boost::any_cast<int>(value);
-			itemValue = new QTableWidgetItem(QString::fromStdString(String::fromNumber(tmp)));
-		} else if (Settings::isString(value)) {
-			itemType = new QTableWidgetItem(TYPE_STRING);
-			std::string tmp = boost::any_cast<std::string>(value);
-			itemValue = new QTableWidgetItem(QString::fromStdString(tmp));
-		} else if (Settings::isStringList(value)) {
-			itemType = new QTableWidgetItem(TYPE_STRINGLIST);
-			StringList tmp = boost::any_cast<StringList>(value);
-			//itemValue = new QTableWidgetItem(QString::fromStdString(tmp));
-		} else {
-			LOG_FATAL("unknown type");
+		boost::any defaultValue = config.getDefaultValue(key);
+		if (!defaultValue.empty()) {
+			setItem(defaultValue, config.keyValueToBeSaved(key), i, DEFAULT_VALUE_COLUMN);
 		}
 
-		_tableWidget->setItem(i, VALUE_COLUMN, itemValue);
-		_tableWidget->setItem(i, TYPE_COLUMN, itemType);
 	}
+}
+
+void QtAdvancedConfig::setItem(boost::any value, bool saveKeyValue, int row, int column) {
+	QTableWidgetItem * itemValue = NULL;
+	QTableWidgetItem * itemType = NULL;
+	if (Settings::isBoolean(value)) {
+		itemType = new QTableWidgetItem(TYPE_BOOLEAN);
+		bool tmp = boost::any_cast<bool>(value);
+		if (tmp) {
+			itemValue = new QTableWidgetItem("true");
+		} else {
+			itemValue = new QTableWidgetItem("false");
+		}
+	} else if (Settings::isInteger(value)) {
+		itemType = new QTableWidgetItem(TYPE_INTEGER);
+		int tmp = boost::any_cast<int>(value);
+		itemValue = new QTableWidgetItem(QString::fromStdString(String::fromNumber(tmp)));
+	} else if (Settings::isString(value)) {
+		itemType = new QTableWidgetItem(TYPE_STRING);
+		std::string tmp = boost::any_cast<std::string>(value);
+		itemValue = new QTableWidgetItem(QString::fromStdString(tmp));
+	} else if (Settings::isStringList(value)) {
+		itemType = new QTableWidgetItem(TYPE_STRINGLIST);
+		StringList tmp = boost::any_cast<StringList>(value);
+		//itemValue = new QTableWidgetItem(QString::fromStdString(tmp));
+	} else {
+		LOG_FATAL("unknown type");
+	}
+
+	_tableWidget->setItem(row, column, itemValue);
+	_tableWidget->setItem(row, TYPE_COLUMN, itemType);
+
+	QTableWidgetItem * itemSaveKeyValue = NULL;
+	if (saveKeyValue) {
+		itemSaveKeyValue = new QTableWidgetItem("true");
+	} else {
+		itemSaveKeyValue = new QTableWidgetItem("false");
+	}
+	_tableWidget->setItem(row, SAVE_KEY_COLUMN, itemSaveKeyValue);
 }
 
 void QtAdvancedConfig::saveConfig() {

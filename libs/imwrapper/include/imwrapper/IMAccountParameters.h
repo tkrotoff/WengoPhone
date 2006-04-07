@@ -20,7 +20,7 @@
 #ifndef IMACCOUNTPARAMETER_H
 #define IMACCOUNTPARAMETER_H
 
-#include <settings/Settings.h>
+#include <settings/AutomaticSettings.h>
 
 #include <util/String.h>
 
@@ -29,8 +29,9 @@
  *
  * @author Philippe Bernery
  */
-class IMAccountParameters : public Settings {
+class IMAccountParameters : public AutomaticSettings {
 public:
+
 	IMAccountParameters();
 
 	IMAccountParameters(const IMAccountParameters & imAccountParameters);
@@ -140,63 +141,6 @@ public:
 private:
 
 	virtual void copy(const IMAccountParameters & imAccountParameters);
-
-	/**
-	 * Makes it impossible to use get() directly.
-	 *
-	 * @see Settings::get()
-	 */
-	std::string get(const std::string &, const std::string &) const { return String::null; }
-
-	/**
-	 * @see get()
-	 */
-	StringList get(const std::string &, const StringList &) const {
-		static const StringList empty;
-		return empty;
-	}
-
-	/**
-	 * @see get()
-	 */
-	bool get(const std::string &, bool) const { return false; }
-
-	/**
-	 * @see get()
-	 */
-	int get(const std::string &, int) const { return 0; }
-
-	/**
-	 * @see get()
-	 */
-	boost::any getAny(const std::string &, const boost::any &) const {
-		static const boost::any empty;
-		return empty;
-	}
-
-	/*
-	 * @see Settings::getAny()
-	 */
-	boost::any getAny(const std::string & key) const;
-
-	/**
-	 * @see get()
-	 */
-	bool getBooleanKeyValue(const std::string & key) const;
-
-	/**
-	 * @see get()
-	 */
-	int getIntegerKeyValue(const std::string & key) const;
-
-	/**
-	 * @see get()
-	 */
-	std::string getStringKeyValue(const std::string & key) const;
-
-	/** Associates a key to a default value. */
-	Keys _keyDefaultValueMap;
-
 };
 
 #endif //IMACCOUNTPARAMETER_H

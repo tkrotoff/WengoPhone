@@ -120,15 +120,17 @@ const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
 
 const std::string Config::AVAILABLE_PROTOCOLS_KEY = "available.protocols";
 
-Config::Config(const std::string & name) {
+Config::Config(const std::string & name)
+	: AutomaticSettings() {
+
 	static const std::string empty("");
 	static const StringList emptyStrList;
-	StringList DefaultProtocols;
+	StringList defaultProtocols;
 
-	DefaultProtocols += "MSN";
-	DefaultProtocols += "AIM / ICQ";
-	DefaultProtocols += "Jabber";
-	DefaultProtocols += "Yahoo";
+	defaultProtocols += "MSN";
+	defaultProtocols += "AIM / ICQ";
+	defaultProtocols += "Jabber";
+	defaultProtocols += "Yahoo";
 
 	std::string resourcesPath;
 	std::string configPath;
@@ -245,7 +247,7 @@ Config::Config(const std::string & name) {
 	_keyDefaultValueMap[WENGO_WS_SUBSCRIBE_PATH_KEY] = std::string("/softphone-subscription/index.php");
 	_keyDefaultValueMap[WENGO_SOFTUPDATE_PATH_KEY] = std::string("/softphone-version/version.php");
 
-	_keyDefaultValueMap[AVAILABLE_PROTOCOLS_KEY] = DefaultProtocols;
+	_keyDefaultValueMap[AVAILABLE_PROTOCOLS_KEY] = defaultProtocols;
 }
 
 Config::~Config() {
@@ -253,14 +255,6 @@ Config::~Config() {
 
 std::string Config::getName() const {
 	return _name;
-}
-
-StringList Config::getAllKeys() const {
-	StringList tmp;
-	for (Keys::const_iterator it = _keyDefaultValueMap.begin(); it != _keyDefaultValueMap.end(); ++it) {
-		tmp += it->first;
-	}
-	return tmp;
 }
 
 bool Config::getNetworkSSOSSL() const {
@@ -569,54 +563,4 @@ std::string Config::getVideoQuality() const {
 
 StringList Config::getAvailableProtocols() const {
 	return getStringListKeyValue(AVAILABLE_PROTOCOLS_KEY);
-}
-
-boost::any Config::getAny(const std::string & key) const {
-	Keys::const_iterator it = _keyDefaultValueMap.find(key);
-	if (it == _keyDefaultValueMap.end()) {
-		LOG_FATAL("key=" + key + " not found, add it inside the Config constructor");
-	}
-
-	boost::any defaultValue = it->second;
-	if (defaultValue.empty()) {
-		LOG_FATAL("default value for key=" + key + " not defined, add it inside the Config constructor");
-	}
-
-	return Settings::getAny(key, defaultValue);
-}
-
-bool Config::getBooleanKeyValue(const std::string & key) const {
-	boost::any value = getAny(key);
-	if (!Settings::isBoolean(value)) {
-		LOG_FATAL("value for key=" + key + " is not a boolean");
-	}
-
-	return boost::any_cast<bool>(value);
-}
-
-int Config::getIntegerKeyValue(const std::string & key) const {
-	boost::any value = getAny(key);
-	if (!Settings::isInteger(value)) {
-		LOG_FATAL("value for key=" + key + " is not an integer");
-	}
-
-	return boost::any_cast<int>(value);
-}
-
-std::string Config::getStringKeyValue(const std::string & key) const {
-	boost::any value = getAny(key);
-	if (!Settings::isString(value)) {
-		LOG_FATAL("value for key=" + key + " is not a string");
-	}
-
-	return boost::any_cast<std::string>(value);
-}
-
-StringList Config::getStringListKeyValue(const std::string & key) const {
-	boost::any value = getAny(key);
-	if (!Settings::isStringList(value)) {
-		LOG_FATAL("value for key=" + key + " is not a string list");
-	}
-
-	return boost::any_cast<StringList>(value);
 }

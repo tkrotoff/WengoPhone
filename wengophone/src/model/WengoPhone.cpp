@@ -31,10 +31,10 @@
 
 WengoPhone::WengoPhone()
 	: _userProfile(*this) {
-	_wenboxPlugin = new WenboxPlugin(*this);
 	_terminate = false;
 	_startupSettingListener = new StartupSettingListener();
 	_running = false;
+	_wenboxPlugin = NULL;
 }
 
 WengoPhone::~WengoPhone() {
@@ -48,6 +48,7 @@ WengoPhone::~WengoPhone() {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+	//Saves the configuration
 	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
 	configManagerStorage.save(config.getConfigDir());
 
@@ -56,6 +57,8 @@ WengoPhone::~WengoPhone() {
 	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
 	userProfileStorage->save(config.getConfigDir());
 	delete userProfileStorage;
+
+	delete _startupSettingListener;
 }
 
 void WengoPhone::init() {
@@ -65,9 +68,11 @@ void WengoPhone::init() {
 	//Imports the Config from WengoPhone Classic.
 	ClassicConfigImporter::importConfig(config.getConfigDir());
 
+	//Loads the configuration: this is the first thing to do before anything else
 	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
 	configManagerStorage.load(config.getConfigDir());
 
+	_wenboxPlugin = new WenboxPlugin(*this);
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
 

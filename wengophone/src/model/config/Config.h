@@ -20,7 +20,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <settings/Settings.h>
+#include <settings/AutomaticSettings.h>
 
 #include <util/String.h>
 #include <util/StringList.h>
@@ -28,26 +28,26 @@
 /**
  * Stores the configuration options of WengoPhone.
  *
- * High component above Settings, tries to make it impossible to make a mistake.
+ * Tries to make it impossible to make a mistake.
  *
  * @see Settings
  * @ingroup model
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class Config : public Settings {
+class Config : public AutomaticSettings {
 public:
 
 	Config(const std::string & name);
 
 	~Config();
 
-	std::string getName() const;
-
 	/**
-	 * @see Settings::getAllKeys()
+	 * Gets the name associated with the Config.
+	 *
+	 * @return Config name
 	 */
-	StringList getAllKeys() const;
+	std::string getName() const;
 
 	/** True if SSL connection to SSO is available. */
 	static const std::string NETWORK_SSO_SSL_KEY;
@@ -277,10 +277,8 @@ public:
 	static const std::string GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY;
 	bool getGeneralSettingsShowNotAvailable() const;
 
-
 	static const std::string GENERAL_SETTINGS_AWAY_TIMER_KEY;
 	int getGeneralSettingsGetAwayTimer() const;
-
 
 	static const std::string GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY;
 	int getGeneralSettingsNotAvailableTimer() const;
@@ -375,7 +373,6 @@ public:
 	 * @{
 	 */
 
-
 	/** Allow calls from : anyone */
 	static const std::string PRIVACY_ALLOW_CALL_FROM_ANYONE_KEY;
 	bool getPrivacyAllowCallFromAnyone() const;
@@ -447,77 +444,10 @@ public:
 	 * @}
 	 */
 
-	/**
-	 * @see Settings::getAny()
-	 */
-	boost::any getAny(const std::string & key) const;
-
 private:
-
-	/**
-	 * Makes it impossible to use get() directly.
-	 *
-	 * @see Settings::get()
-	 */
-	std::string get(const std::string &, const std::string &) const {
-		return String::null;
-	}
-
-	/**
-	 * @see get()
-	 */
-	StringList get(const std::string &, const StringList &) const {
-		static const StringList empty;
-		return empty;
-	}
-
-	/**
-	 * @see get()
-	 */
-	bool get(const std::string &, bool) const {
-		return false;
-	}
-
-	/**
-	 * @see get()
-	 */
-	int get(const std::string &, int) const {
-		return 0;
-	}
-
-	/**
-	 * @see get()
-	 */
-	boost::any getAny(const std::string &, const boost::any &) const {
-		static const boost::any empty;
-		return empty;
-	}
-
-	/**
-	 * @see get()
-	 */
-	bool getBooleanKeyValue(const std::string & key) const;
-
-	/**
-	 * @see get()
-	 */
-	int getIntegerKeyValue(const std::string & key) const;
-
-	/**
-	 * @see get()
-	 */
-	std::string getStringKeyValue(const std::string & key) const;
-
-	/**
-	 * @see get()
-	 */
-	StringList Config::getStringListKeyValue(const std::string & key) const;
 
 	/** Name of this configuration. */
 	std::string _name;
-
-	/** Associates a key to a default value. */
-	Keys _keyDefaultValueMap;
 };
 
 #endif	//CONFIG_H

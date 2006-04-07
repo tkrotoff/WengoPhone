@@ -20,6 +20,8 @@
 #ifndef QTADVANCEDCONFIG_H
 #define QTADVANCEDCONFIG_H
 
+#include <model/config/Config.h>
+
 #include <QObject>
 
 class QWidget;
@@ -42,6 +44,8 @@ private Q_SLOTS:
 	void saveConfig();
 
 private:
+
+	void QtAdvancedConfig::setItem(boost::any value, bool saveKeyValue, int row, int column);
 
 	QWidget * _advancedConfigWindow;
 
