@@ -50,7 +50,7 @@ private:
 	void *CreateAccount(void);
 	void InitConn(void);
 
-	void GaimIMConnect::AddAccountParams(void *gaimAccount);
+	void AddAccountParams(void *gaimAccount);
 	void AddMSNAccountParams(void *gaimAccount, IMAccountParameters & mParams);
 	void AddYahooAccountParams(void *gaimAccount, IMAccountParameters & mParams);
 	void AddOscarAccountParams(void *gaimAccount, IMAccountParameters & mParams);
