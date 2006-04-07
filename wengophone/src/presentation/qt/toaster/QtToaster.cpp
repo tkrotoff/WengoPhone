@@ -24,17 +24,19 @@
 #include <qtutil/Object.h>
 
 QtToaster::QtToaster(QWidget * parent , Qt::WFlags f ):
-QWidget(parent, Qt::Window | Qt::FramelessWindowHint)
+QWidget(parent, Qt::Window | Qt::Popup)
 {
 	_widget = WidgetFactory::create( ":/forms/toaster/QtToaster.ui", this );
 	_widget->setAutoFillBackground(true);
 	_closeTimerId = -1 ;
 	_closeTimer = 5000;
-	_show =   true; ;
+	_show =   true;
+
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget( _widget );
 	layout->setMargin( 0 );
 	setLayout( layout );
+
 	setupGui();
 }
 
@@ -52,7 +54,13 @@ void QtToaster::setupGui(){
 
 	_button3 = Object::findChild<QPushButton *>( _widget,"actionButton3" );
 
+	_pixmapLabel = Object::findChild<QLabel *>( _widget,"pixmapLabel");
+
 	connect ( _closeButton, SIGNAL(clicked()), SLOT(closeToaster()) );
+}
+
+void QtToaster::setPixmap(const QPixmap &pixmap){
+	_pixmapLabel->setPixmap(pixmap);
 }
 
 void QtToaster::setCloseButtonPixmap(const QPixmap & pixmap){
@@ -92,14 +100,17 @@ void QtToaster::setButton3Pixmap(const QPixmap & pixmap){
 }
 
 void QtToaster::timerEvent(QTimerEvent *event){
+	QDesktopWidget * desktop = QApplication::desktop();
+	QRect desktopGeometry = desktop->availableGeometry(desktop->primaryScreen());
+	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
 
 	if ( event->timerId() == _timerId ){
 		if ( _show ){
 			QPoint p = pos();
 
-			move(p.x(),p.y()-1);
+			move(p.x(),p.y()-3);
 
-			if ( p.y() < (_startPosition.y() - size().height() - 5 ) ){
+			if ( p.y() < ( desktopGeometry.bottom()  - size().height() - 5 ) ){
 				killTimer(_timerId);
 				_closeTimerId = startTimer(_closeTimer);
 			}
@@ -107,12 +118,10 @@ void QtToaster::timerEvent(QTimerEvent *event){
 		else{
 			QPoint p = pos();
 
-			move(p.x(),p.y()+2);
+			move(p.x(),p.y()+3);
 
-			if ( p.y() > (_startPosition.y())){
-				killTimer(_timerId);
+			if ( p.y() > (screenGeometry.bottom())){
 				closeToaster();
-				//_closeTimerId = startTimer(_closeTimer);
 			}
 		}
 	}
@@ -120,17 +129,18 @@ void QtToaster::timerEvent(QTimerEvent *event){
 	if ( event->timerId() == _closeTimerId ){
 		_show = false;
 		_timerId = startTimer(20);
-
 	}
 }
 
 void QtToaster::showToaster(){
 	QDesktopWidget * desktop = QApplication::desktop();
 
-	QRect screenGeometry = desktop->availableGeometry(desktop->primaryScreen());
+
+	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
 
 	_startPosition.setY( screenGeometry.bottom() );
 	_startPosition.setX( screenGeometry.right() - size().width() );
+
 	move(_startPosition);
 
 	show();
@@ -160,6 +170,8 @@ void QtToaster::hideButton(int num){
 }
 
 void QtToaster::closeToaster(){
+	killTimer(_timerId);
+	killTimer(_closeTimerId);
 	close();
 	closed(this);
 }

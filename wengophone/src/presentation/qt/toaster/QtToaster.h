@@ -56,12 +56,17 @@ public:
 
 	void setCloseTimer(int timer);
 
+	void setPixmap(const QPixmap &pixmap);
+
 public Q_SLOTS:
+
 	void closeToaster();
 
 Q_SIGNALS:
 
+	// Used to delete the toaster object
 	void closed(QtToaster * toaster);
+
 
 protected:
 
@@ -72,6 +77,8 @@ protected:
 	QLabel * _title;
 
 	QLabel * _message;
+
+	QLabel * _pixmapLabel;
 
 	QPushButton * _button1;
 
@@ -90,6 +97,7 @@ protected:
 	int _closeTimer;
 
 	bool _show;
+
 
 protected:
 
