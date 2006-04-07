@@ -504,8 +504,8 @@ void QtWengoPhone::editMyProfile(){
 
 void QtWengoPhone::exitApplication() {
 	_wengoPhoneWindow->hide();
-	_trayIcon->hide();
 	_cWengoPhone.terminate();
+	_trayIcon->hide();
 	QCoreApplication::exit(EXIT_SUCCESS);
 }
 
