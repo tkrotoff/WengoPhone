@@ -37,6 +37,8 @@ class QtStatusBar : public QWidget
 public:
 	QtStatusBar (CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent = 0, Qt::WFlags f = 0 );
 
+	void setWengos(float wengos);
+
 protected:
 
 	QGridLayout * _gridlayout;

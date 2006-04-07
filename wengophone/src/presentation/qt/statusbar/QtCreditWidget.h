@@ -16,6 +16,7 @@ class QtCreditWidget : public QWidget
 
 	void setCWengoPhone(CWengoPhone * cwengophone);
 
+
 public Q_SLOTS:
 
 	void buyOutClicked();

@@ -71,6 +71,7 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, UserProfile & userProfile, Q
 	connect(_nicknameLabel,SIGNAL(clicked()),SLOT(nicknameClicked()));
 	connect(_eventsLabel,SIGNAL(clicked()),SLOT(eventsClicked()));
 	connect(_creditLabel,SIGNAL(clicked()),SLOT(creditClicked()));
+
 }
 
 
@@ -250,4 +251,8 @@ void QtStatusBar::notAvailableClicked(bool){
 
 void QtStatusBar::forwardClicked(bool){
 
+}
+
+void QtStatusBar::setWengos ( float wengos ){
+	_creditLabel->setText(QString("%1").arg(wengos)+QString(" Euros"));
 }
