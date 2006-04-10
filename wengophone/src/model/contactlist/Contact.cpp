@@ -371,3 +371,7 @@ string Contact::getDisplayName() const {
 
 	return result;
 }
+
+IMContact * Contact::getAvailableIMContact(const IMChatSession & imChatSession) const {
+	return NULL;
+}

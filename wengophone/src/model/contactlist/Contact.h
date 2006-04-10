@@ -35,6 +35,7 @@
 
 class UserProfile;
 class ContactList;
+class IMChatSession;
 
 /**
  * Contact inside an address book.
@@ -97,6 +98,16 @@ public:
 	 * IMContact is online, return NULL.
 	 */
 	IMContact * getPreferredIMContact() const;
+
+	/**
+	 * Get an available IMContact.
+	 *
+	 * An available IMContact is a connected IMContact of protocol used in
+	 * the imChatSession.
+	 *
+	 * @return an available IMContact. If no IMContact has been found,  return NULL.
+	 */
+	IMContact * getAvailableIMContact(const IMChatSession & imChatSession) const;
 
 	/**
 	 * Add the Contact to the given ContactGroup.
