@@ -107,7 +107,7 @@ public:
 	 *
 	 * @return an available IMContact. If no IMContact has been found,  return NULL.
 	 */
-	IMContact * getAvailableIMContact(const IMChatSession & imChatSession) const;
+	IMContact * getAvailableIMContact(IMChatSession & imChatSession) const;
 
 	/**
 	 * Add the Contact to the given ContactGroup.

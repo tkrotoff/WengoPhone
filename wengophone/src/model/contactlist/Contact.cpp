@@ -25,6 +25,8 @@
 
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMContact.h>
+#include <imwrapper/IMChatSession.h>
+#include <imwrapper/IMChat.h>
 
 #include <util/StringList.h>
 #include <util/Logger.h>
@@ -372,6 +374,16 @@ string Contact::getDisplayName() const {
 	return result;
 }
 
-IMContact * Contact::getAvailableIMContact(const IMChatSession & imChatSession) const {
-	return NULL;
+IMContact * Contact::getAvailableIMContact(IMChatSession & imChatSession) const {
+	IMContact * result = NULL;
+
+	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; ++it) {
+		if (((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline)
+			&& ((*it).getIMAccount() == imChatSession.getIMChat().getIMAccount())) {
+			result = (IMContact *)&(*it);
+			break;
+		}
+	}
+
+	return result;
 }
