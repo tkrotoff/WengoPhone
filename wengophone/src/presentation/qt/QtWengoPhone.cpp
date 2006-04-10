@@ -269,8 +269,8 @@ void QtWengoPhone::initThreadSafe() {
 	toaster->setTitle("Example toaster");
 	toaster->setMessage("Hello kavous !!!");
 	toaster->showToaster();
-	connect ( toaster, SIGNAL (closed(QtToaster *)), SLOT(toasterClosed(QtToaster *)));
 */
+
 }
 
 void QtWengoPhone::initButtons() {

@@ -36,7 +36,7 @@ QWidget(parent, Qt::Window | Qt::Popup)
 	layout->addWidget( _widget );
 	layout->setMargin( 0 );
 	setLayout( layout );
-
+	setAttribute (Qt::WA_DeleteOnClose,true);
 	setupGui();
 }
 
