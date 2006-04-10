@@ -40,4 +40,4 @@ if not WengoOSMacOSX():
 	args['enable-libsound-portaudio'] = 1
 
 WengoAddConsoleArguments(args)
-WengoShowWindowsConsole(True)
+WengoShowWindowsConsole(False)
