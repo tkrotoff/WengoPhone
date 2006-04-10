@@ -18,7 +18,7 @@
  */
 
 #include "QtEditMyProfile.h"
-#include "QtAccountManager.h"
+#include <presentation/qt/imaccount/QtIMAccountManager.h>
 
 #include <model/profile/UserProfile.h>
 
@@ -100,8 +100,8 @@ void QtEditMyProfile::imAccountAdded() {
 _protocolSettings = new QtProtocolSettings(_wengoPhone,QtProtocolSettings::ADD,this);
 _protocolSettings->exec();
 */
-	QtAccountManager  amanager(_userProfile, this);
-	amanager.exec();
+	QtIMAccountManager imAccountManager(_userProfile, this);
+	imAccountManager.show();
 
 
 	for ( int i = 0; i < _imAccountLineEdit.size(); i++ ) {

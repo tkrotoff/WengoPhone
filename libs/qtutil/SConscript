@@ -18,7 +18,8 @@ headers = [
 	'include/qtutil/QObjectThreadSafe.h',
 	'include/qtutil/ResizeEventFilter.h',
 	'include/qtutil/NonResizeableWidget.h',
-	'include/qtutil/StringListConvert.h'
+	'include/qtutil/StringListConvert.h',
+	'include/qtutil/Widget.h',
 ]
 sources = [
 	'src/EventFilter.cpp',
@@ -31,7 +32,8 @@ sources = [
 	'src/QObjectThreadSafe.cpp',
 	'src/ResizeEventFilter.cpp',
 	'src/NonResizeableWidget.cpp',
-	'src/StringListConvert.cpp'
+	'src/StringListConvert.cpp',
+	'src/Widget.cpp',
 ]
 
 def moc(env, headers):

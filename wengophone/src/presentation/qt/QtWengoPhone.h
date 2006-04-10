@@ -115,8 +115,6 @@ private Q_SLOTS:
 
 	void addContact();
 
-	void actionSetLogin();
-
 	void showConfig();
 
 	void showForum();
@@ -194,8 +192,6 @@ private:
 	void showLoginWindow();
 
 	void urlClickedEventHandler(std::string url);
-
-	static QLayout * createLayout(QWidget * parent);
 
 	/** Direct link to the control. */
 	CWengoPhone & _cWengoPhone;

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,47 +17,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTSETLOGIN_H
-#define QTSETLOGIN_H
+#include <qtutil/Widget.h>
 
-#include <QObject>
+#include <QtGui>
 
-#include <string>
+QLayout * Widget::createLayout(QWidget * parent) {
+	QGridLayout * layout = new QGridLayout(parent);
+	layout->setSpacing(0);
+	layout->setMargin(0);
+	return layout;
+}
 
-class QWidget;
-class QDialog;
-
-/**
- * Qt login window for other protocols.
- *
- * @author Kavous Bojnourdi
- */
- 
- // Only for testing, will be removed later 
- 
-class QtSetLogin : public QObject {
-	Q_OBJECT
-public:
-
-	QtSetLogin(QWidget * parent);
-
-	QDialog * getWidget() const {
-		return _loginWindow;
-	}
-
-	std::string getLogin() const;
-
-	std::string getPassword() const;
-
-	std::string getProtocol() const;
-
-public Q_SLOTS:
-
-	int exec();
-
-private:
-
-	QDialog * _loginWindow;
-};
-
-#endif	//QTSETLOGIN_H
+QDialog * Widget::transformToWindow(QWidget * widget) {
+	QDialog * dialog = new QDialog(widget->parentWidget());
+	dialog->setWindowTitle(widget->windowTitle());
+	widget->setParent(NULL);
+	createLayout(dialog)->addWidget(widget);
+	return dialog;
+}

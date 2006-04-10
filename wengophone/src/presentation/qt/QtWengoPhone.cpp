@@ -37,9 +37,8 @@
 #include "phonecall/QtContactCallListWidget.h"
 #include "QtLogger.h"
 #include "login/QtLogin.h"
-#include "login/QtSetLogin.h"
 #include "login/QtEditMyProfile.h"
-#include "login/QtAccountManager.h"
+#include "imaccount/QtIMAccountManager.h"
 #include "contactlist/QtContactList.h"
 #include "contactlist/QtAddContact.h"
 #include "QtDialpad.h"
@@ -53,10 +52,10 @@
 
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
+#include <qtutil/Widget.h>
 #include <thread/Thread.h>
 #include <util/Logger.h>
 #include <QtBrowser.h>
-
 #include <cutil/global.h>
 
 #include <QtGui>
@@ -127,7 +126,7 @@ void QtWengoPhone::initThreadSafe() {
 	//Dialpad
 	QtDialpad * qtDialpad = new QtDialpad(this);
 	QWidget * tabDialpad = Object::findChild<QWidget *>(_tabWidget, "tabDialpad");
-	createLayout(tabDialpad)->addWidget(qtDialpad->getWidget());
+	Widget::createLayout(tabDialpad)->addWidget(qtDialpad->getWidget());
 
 	//Systray
 	_trayMenu = NULL;
@@ -140,7 +139,7 @@ void QtWengoPhone::initThreadSafe() {
 	//FIXME no more logger tab widget
 	/*QtLogger * qtLogger = new QtLogger(_wengoPhoneWindow);
 	QWidget * tabLogger = Object::findChild<QWidget *>(_tabWidget, "tabLogger");
-	createLayout(tabLogger)->addWidget(qtLogger->getWidget());*/
+	Widget::createLayout(tabLogger)->addWidget(qtLogger->getWidget());*/
 
 	//actionShowWengoAccount
 	QAction * actionShowWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowWengoAccount");
@@ -161,10 +160,6 @@ void QtWengoPhone::initThreadSafe() {
 	//actionAddContact
 	QAction * actionAddContact = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAddContact");
 	connect(actionAddContact, SIGNAL(triggered()), SLOT(addContact()));
-
-	//actionSetLogin
-	QAction * actionSetLogin = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSetLogin");
-	connect(actionSetLogin, SIGNAL(triggered()), SLOT(actionSetLogin()));
 
 	//actionConfiguration
 	QAction * actionConfiguration = Object::findChild<QAction *>(_wengoPhoneWindow, "actionConfiguration");
@@ -233,7 +228,7 @@ void QtWengoPhone::initThreadSafe() {
 	_browser = new QtBrowser(NULL);
 	_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
 	QWidget * tabHome = Object::findChild<QWidget *>(_tabWidget, "tabHome");
-	createLayout(tabHome)->addWidget((QWidget*) _browser->getWidget());
+	Widget::createLayout(tabHome)->addWidget((QWidget*) _browser->getWidget());
 #ifdef OS_WINDOWS
 	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
 #endif
@@ -326,29 +321,22 @@ void QtWengoPhone::showLoginWindow() {
 	}
 }
 
-QLayout * QtWengoPhone::createLayout(QWidget * parent) {
-	QGridLayout * layout = new QGridLayout(parent);
-	layout->setSpacing(0);
-	layout->setMargin(0);
-	return layout;
-}
-
 void QtWengoPhone::setContactList(QtContactList * qtContactList) {
 	QWidget * tabContactList = Object::findChild<QWidget *>(_tabWidget, "tabContactList");
-	createLayout(tabContactList)->addWidget(qtContactList->getWidget());
+	Widget::createLayout(tabContactList)->addWidget(qtContactList->getWidget());
 	_contactList = qtContactList;
 	LOG_DEBUG("QtContactList added");
 }
 
 void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
 	QWidget * tabHistory = Object::findChild<QWidget *>(_tabWidget,"tabHistory");
-	createLayout(tabHistory)->addWidget(qtHistoryWidget);
+	Widget::createLayout(tabHistory)->addWidget(qtHistoryWidget);
 }
 
 void QtWengoPhone::setPhoneCall(QtContactCallListWidget * qtContactCallListWidget) {
 	QWidget * tabPhoneCall = Object::findChild<QWidget *>(_tabWidget,"tabPhoneCall");
 
-	createLayout(tabPhoneCall)->addWidget(qtContactCallListWidget);
+	Widget::createLayout(tabPhoneCall)->addWidget(qtContactCallListWidget);
 	_contactCallListWidget = qtContactCallListWidget;
 }
 
@@ -514,32 +502,6 @@ void QtWengoPhone::addContact() {
 	LOG_DEBUG("add contact");
 }
 
-void QtWengoPhone::actionSetLogin() {
-	QtSetLogin * qtSetLogin = new QtSetLogin(_wengoPhoneWindow);
-
-	if (qtSetLogin->exec()) {
-		EnumIMProtocol::IMProtocol protocol;
-		string selProtocol = qtSetLogin->getProtocol();
-		string login = qtSetLogin->getLogin();
-		string password = qtSetLogin->getPassword();
-
-		if (selProtocol == "MSN") {
-			protocol = EnumIMProtocol::IMProtocolMSN;
-		} else if (selProtocol == "Yahoo") {
-			protocol = EnumIMProtocol::IMProtocolYahoo;
-		} else if ((selProtocol == "AIM") || (selProtocol == "ICQ")) {
-			protocol = EnumIMProtocol::IMProtocolAIMICQ;
-		} else if (selProtocol == "Jabber") {
-			protocol = EnumIMProtocol::IMProtocolJabber;
-			login += "/WengoPhone";
-		}
-
-		_cWengoPhone.addIMAccount(login, password, protocol);
-		_cWengoPhone.getWengoPhone().getCurrentUserProfile().getConnectHandler().connect(IMAccount(login, password, protocol));
-		LOG_DEBUG("set login");
-	}
-}
-
 void QtWengoPhone::showConfig() {
 	QtWengoConfigDialog dialog(_wengoPhoneWindow);
 	dialog.exec();
@@ -611,10 +573,10 @@ void QtWengoPhone::showAdvancedConfig() {
 	configWindow->getWidget()->show();
 }
 
-void QtWengoPhone::showAccountSettings(){
-	QtAccountManager accountManager(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _wengoPhoneWindow);
+void QtWengoPhone::showAccountSettings() {
+	QtIMAccountManager imAccountManager(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _wengoPhoneWindow);
 
-	accountManager.exec();
+	imAccountManager.show();
 }
 
 

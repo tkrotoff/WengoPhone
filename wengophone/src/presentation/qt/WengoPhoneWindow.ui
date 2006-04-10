@@ -325,13 +325,6 @@
     <addaction name="actionSms" />
     <addaction name="actionVoiceMail" />
    </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>Contacts</string>
-    </property>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSetLogin" />
-   </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>Wengo</string>
@@ -367,6 +360,12 @@
     <addaction name="actionBuyCallOutCredits" />
     <addaction name="separator" />
     <addaction name="actionShowAbout" />
+   </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>Contacts</string>
+    </property>
+    <addaction name="actionAddContact" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />

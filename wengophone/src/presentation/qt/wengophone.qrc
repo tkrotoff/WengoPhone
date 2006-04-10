@@ -70,6 +70,10 @@
         <file>pics/video_flip.png</file>
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
+        <file>pics/protocol_msn.png</file>
+        <file>pics/protocol_aim.png</file>
+        <file>pics/protocol_yahoo.png</file>
+        <file>pics/protocol_jabber.png</file>
     </qresource>
     <qresource prefix="/emoticons" >
         <file>chat/emoticons/emblem-unreadable.png</file>
@@ -136,11 +140,14 @@
         <file>contactlist/contactList.ui</file>
         <file>contactlist/userWidget.ui</file>
         <file>login/LoginWindow.ui</file>
-        <file>login/ProtocolSettings.ui</file>
-        <file>login/accountManager.ui</file>
         <file>login/contactWindow.ui</file>
         <file>login/profileWindow.ui</file>
-        <file>login/setLoginWindow.ui</file>
+        <file>imaccount/IMAccountManager.ui</file>
+        <file>imaccount/IMAccountTemplate.ui</file>
+        <file>imaccount/AIMSettings.ui</file>
+        <file>imaccount/MSNSettings.ui</file>
+        <file>imaccount/YahooSettings.ui</file>
+        <file>imaccount/JabberSettings.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
         <file>phonecall/QtCallContactWidget.ui</file>
