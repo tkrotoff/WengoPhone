@@ -29,7 +29,7 @@ class QtChatTabWidget : public QTabWidget
 
 public:
 
-	typedef QList<int> BlinkingTabIndex;
+	typedef QSet<int> BlinkingTabIndex;
 
 	QtChatTabWidget( QWidget * parent = 0 );
 

@@ -127,7 +127,7 @@ void ChatWidget::addToHistory(const QString & senderName,const QString & str)
 	else
 		bgColor = _nickBgColorAlt;
 
-    QString text= QString("<table border=0 width=100% cellspacing=0 "
+    QString header = QString("<table border=0 width=100% cellspacing=0 "
     "cellpadding=0><tr><td BGCOLOR=%1> <font color=%2> %3 </font></td><td BGCOLOR=%4 align=right>"
     "<font color=%5> %6 </font></td></tr></table>").
     arg(_nickBgColorAlt).
@@ -136,7 +136,7 @@ void ChatWidget::addToHistory(const QString & senderName,const QString & str)
 	arg(_nickBgColorAlt).
     arg(_nickTextColor).
     arg(QTime::currentTime().toString());
-	_chatHistory->insertHtml (text);
+	_chatHistory->insertHtml (header);
     _chatHistory->insertHtml (text2Emoticon(str));
     _chatHistory->ensureCursorVisible();
 }

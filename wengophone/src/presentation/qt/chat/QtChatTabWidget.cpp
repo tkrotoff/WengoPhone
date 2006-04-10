@@ -28,35 +28,24 @@ QtChatTabWidget::QtChatTabWidget(QWidget * parent) : QTabWidget (parent){
 
 
 void QtChatTabWidget::setBlinkingTab(int index){
-	_blinkingTabIndex.append(index);
+	_blinkingTabIndex.insert(index);
 }
 
 void QtChatTabWidget::stopBlinkingTab(int index){
-	BlinkingTabIndex::iterator iter;
 
-	for (iter = _blinkingTabIndex.begin(); iter != _blinkingTabIndex.end(); iter++){
-		if ( (*iter) ==  index ){
-			_blinkingTabIndex.erase(iter);
-			tabBar()->setTabTextColor((*iter),Qt::black);
-			return;
-		}
-	}
+	_blinkingTabIndex.remove(index);
 }
 
 bool QtChatTabWidget::isBlinkingTab(int index){
 
-	BlinkingTabIndex::iterator iter;
-	for (iter = _blinkingTabIndex.begin(); iter != _blinkingTabIndex.end(); iter++){
-		if ( (*iter) ==  index ){
-			return true;
-		}
-	}
+	if (_blinkingTabIndex.contains(index))
+		return true;
 	return false;
 }
 
 void QtChatTabWidget::timerEvent ( QTimerEvent * event ){
 
-	BlinkingTabIndex::iterator iter;
+	BlinkingTabIndex::const_iterator iter;
 
 	if ( _currentColor == Qt::black )
 		_currentColor = Qt::red;
