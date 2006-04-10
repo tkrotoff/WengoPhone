@@ -28,6 +28,7 @@
 
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
+#include <qtutil/Widget.h>
 
 #include <QtGui>
 
@@ -35,30 +36,13 @@ static const QString PROTOCOL_MSN_NAME = "MSN";
 static const QString PROTOCOL_AIMICQ_NAME = "AIM/ICQ";
 static const QString PROTOCOL_YAHOO_NAME = "Yahoo";
 static const QString PROTOCOL_JABBER_NAME = "Jabber";
-static const QString PROTOCOL_SIPSIMPLE_NAME = "SIP/SIMPLE";
-
-QLayout * createLayout(QWidget * parent) {
-	QGridLayout * layout = new QGridLayout(parent);
-	layout->setSpacing(0);
-	layout->setMargin(0);
-	return layout;
-}
-
-QDialog * createWindowFromWidget(QWidget * widget) {
-	QDialog * dialog = new QDialog(widget->parentWidget());
-	widget->setParent(NULL);
-	createLayout(dialog)->addWidget(widget);
-	return dialog;
-}
-
 
 QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * parent)
 	: QObject(parent),
 	_userProfile(userProfile) {
 
 	_imAccountManagerWidget = WidgetFactory::create(":/forms/imaccount/IMAccountManager.ui", parent);
-	_imAccountManagerWindow = createWindowFromWidget(_imAccountManagerWidget);
-	_imAccountManagerWindow->setWindowTitle(_imAccountManagerWidget->windowTitle());
+	_imAccountManagerWindow = Widget::transformToWindow(_imAccountManagerWidget);
 
 	QPushButton * addIMAccountButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "addIMAccountButton");
 	QMenu * addIMAccountMenu = new QMenu();
@@ -115,8 +99,8 @@ void QtIMAccountManager::loadIMAccounts() {
 			accountStrList << PROTOCOL_JABBER_NAME;
 			break;
 		case EnumIMProtocol::IMProtocolSIPSIMPLE:
-			accountStrList << PROTOCOL_SIPSIMPLE_NAME;
-			break;
+			//This protocol is internal to WengoPhone, should not be show to the user
+			continue;
 		default:
 			LOG_FATAL("unknown IM protocol=" + String::fromNumber(imProtocol));
 		}
@@ -150,12 +134,15 @@ void QtIMAccountManager::addIMAccount(QAction * action) {
 		LOG_FATAL("unknown IM protocol=" + protocolName.toStdString());
 	}
 	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imProtocol, _imAccountManagerWindow);
+	loadIMAccounts();
 }
 
 void QtIMAccountManager::deleteIMAccount() {
+	loadIMAccounts();
 }
 
 void QtIMAccountManager::modifyIMAccount() {
+	loadIMAccounts();
 }
 
 void QtIMAccountManager::itemDoubleClicked(QTreeWidgetItem * item, int column) {

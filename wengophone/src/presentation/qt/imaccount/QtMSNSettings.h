@@ -34,7 +34,7 @@ public:
 	QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
 
 	QWidget * getWidget() const {
-		return _MSNSettingsWidget;
+		return _IMSettingsWidget;
 	}
 
 public Q_SLOTS:
@@ -45,7 +45,7 @@ private:
 
 	void init();
 
-	QWidget * _MSNSettingsWidget;
+	QWidget * _IMSettingsWidget;
 
 	QLineEdit * _loginLineEdit;
 

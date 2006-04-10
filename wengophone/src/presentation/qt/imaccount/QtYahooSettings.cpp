@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtMSNSettings.h"
+#include "QtYahooSettings.h"
 
 #include <model/profile/UserProfile.h>
 
@@ -28,15 +28,15 @@
 
 #include <QtGui>
 
-QtMSNSettings::QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+QtYahooSettings::QtYahooSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
 
 	init();
 }
 
-void QtMSNSettings::init() {
-	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/MSNSettings.ui", _parentWidget);
-	_IMSettingsWidget->setWindowTitle("MSN " + tr("Settings"));
+void QtYahooSettings::init() {
+	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/YahooSettings.ui", _parentWidget);
+	_IMSettingsWidget->setWindowTitle("Yahoo " + tr("Settings"));
 
 	//loginLineEdit
 	_loginLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "loginLineEdit");
@@ -48,18 +48,18 @@ void QtMSNSettings::init() {
 		return;
 	}
 
-	IMAccountParameters & params = _imAccount->getIMAccountParameters();
+	IMAccountParameters & param = _imAccount->getIMAccountParameters();
 
 	_loginLineEdit->setText(QString::fromStdString(_imAccount->getLogin()));
 	_passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 }
 
-void QtMSNSettings::save() {
+void QtYahooSettings::save() {
 	std::string login = _loginLineEdit->text().toStdString();
 	std::string password = _passwordLineEdit->text().toStdString();
 
 	if (!_imAccount) {
-		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolMSN);
+		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolYahoo);
 	}
 
 	IMAccountParameters & params = _imAccount->getIMAccountParameters();
@@ -67,7 +67,7 @@ void QtMSNSettings::save() {
 	_imAccount->setLogin(login);
 	_imAccount->setPassword(password);
 	//FIXME to remove, must be done inside model
-	params.set(IMAccountParameters::MSN_USE_HTTP_KEY, true);
+	params.set(IMAccountParameters::YAHOO_PORT_KEY, 23);
 
 	_userProfile.addIMAccount(*_imAccount);
 	_userProfile.getConnectHandler().connect(*_imAccount);

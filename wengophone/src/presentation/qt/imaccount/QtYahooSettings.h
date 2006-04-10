@@ -17,42 +17,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTIMACCOUNTSETTINGS_H
-#define QTIMACCOUNTSETTINGS_H
+#ifndef QTYAHOOSETTINGS_H
+#define QTYAHOOSETTINGS_H
 
-#include <imwrapper/EnumIMProtocol.h>
+#include "QtIMAccountPlugin.h"
 
-#include <QObject>
-
-class QtIMAccountPlugin;
-class UserProfile;
 class IMAccount;
+class UserProfile;
 class QWidget;
+class QLineEdit;
 
-/**
- * Handles QtIMAccountPlugin: IM accounts (MSN, Yahoo, Jabber, AIM...).
- *
- * @author Tanguy Krotoff
- */
-class QtIMAccountSettings : public QObject {
+class QtYahooSettings : public QtIMAccountPlugin {
 	Q_OBJECT
 public:
 
-	QtIMAccountSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
+	QtYahooSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
 
-	QtIMAccountSettings(UserProfile & userProfile, EnumIMProtocol::IMProtocol imProtocol, QWidget * parent);
+	QWidget * getWidget() const {
+		return _IMSettingsWidget;
+	}
+
+public Q_SLOTS:
+
+	void save();
 
 private:
 
-	void createIMProtocolWidget(QWidget * parent, EnumIMProtocol::IMProtocol imProtocol);
+	void init();
 
-	QWidget * _imAccountTemplateWidget;
+	QWidget * _IMSettingsWidget;
 
-	IMAccount * _imAccount;
+	QLineEdit * _loginLineEdit;
 
-	UserProfile & _userProfile;
-
-	QtIMAccountPlugin * _imAccountPlugin;
+	QLineEdit * _passwordLineEdit;
 };
 
-#endif	//QTIMACCOUNTSETTINGS_H
+#endif	//QTYAHOOSETTINGS_H

@@ -17,42 +17,52 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTIMACCOUNTSETTINGS_H
-#define QTIMACCOUNTSETTINGS_H
+#ifndef QTJABBERSETTINGS_H
+#define QTJABBERSETTINGS_H
 
-#include <imwrapper/EnumIMProtocol.h>
+#include "QtIMAccountPlugin.h"
 
-#include <QObject>
-
-class QtIMAccountPlugin;
-class UserProfile;
 class IMAccount;
+class UserProfile;
 class QWidget;
+class QLineEdit;
+class QCheckBox;
 
-/**
- * Handles QtIMAccountPlugin: IM accounts (MSN, Yahoo, Jabber, AIM...).
- *
- * @author Tanguy Krotoff
- */
-class QtIMAccountSettings : public QObject {
+class QtJabberSettings : public QtIMAccountPlugin {
 	Q_OBJECT
 public:
 
-	QtIMAccountSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
+	QtJabberSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
 
-	QtIMAccountSettings(UserProfile & userProfile, EnumIMProtocol::IMProtocol imProtocol, QWidget * parent);
+	QWidget * getWidget() const {
+		return _IMSettingsWidget;
+	}
+
+public Q_SLOTS:
+
+	void save();
 
 private:
 
-	void createIMProtocolWidget(QWidget * parent, EnumIMProtocol::IMProtocol imProtocol);
+	void init();
 
-	QWidget * _imAccountTemplateWidget;
+	QWidget * _IMSettingsWidget;
 
-	IMAccount * _imAccount;
+	QLineEdit * _loginLineEdit;
 
-	UserProfile & _userProfile;
+	QLineEdit * _passwordLineEdit;
 
-	QtIMAccountPlugin * _imAccountPlugin;
+	QCheckBox * _useTLSCheckBox;
+
+	QCheckBox * _requireTLSCheckBox;
+
+	QCheckBox * _forceOldSSLCheckBox;
+
+	QCheckBox * _allowPlainTextAuthenticationCheckBox;
+
+	QLineEdit * _connectServerLineEdit;
+
+	QLineEdit * _portLineEdit;
 };
 
-#endif	//QTIMACCOUNTSETTINGS_H
+#endif	//QTJABBERSETTINGS_H

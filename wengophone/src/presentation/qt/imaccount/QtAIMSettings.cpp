@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtMSNSettings.h"
+#include "QtAIMSettings.h"
 
 #include <model/profile/UserProfile.h>
 
@@ -28,15 +28,15 @@
 
 #include <QtGui>
 
-QtMSNSettings::QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+QtAIMSettings::QtAIMSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
 
 	init();
 }
 
-void QtMSNSettings::init() {
-	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/MSNSettings.ui", _parentWidget);
-	_IMSettingsWidget->setWindowTitle("MSN " + tr("Settings"));
+void QtAIMSettings::init() {
+	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/AIMSettings.ui", _parentWidget);
+	_IMSettingsWidget->setWindowTitle("AIM " + tr("Settings"));
 
 	//loginLineEdit
 	_loginLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "loginLineEdit");
@@ -54,12 +54,12 @@ void QtMSNSettings::init() {
 	_passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 }
 
-void QtMSNSettings::save() {
+void QtAIMSettings::save() {
 	std::string login = _loginLineEdit->text().toStdString();
 	std::string password = _passwordLineEdit->text().toStdString();
 
 	if (!_imAccount) {
-		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolMSN);
+		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolAIMICQ);
 	}
 
 	IMAccountParameters & params = _imAccount->getIMAccountParameters();
@@ -67,7 +67,7 @@ void QtMSNSettings::save() {
 	_imAccount->setLogin(login);
 	_imAccount->setPassword(password);
 	//FIXME to remove, must be done inside model
-	params.set(IMAccountParameters::MSN_USE_HTTP_KEY, true);
+	params.set(IMAccountParameters::OSCAR_PORT_KEY, 443);
 
 	_userProfile.addIMAccount(*_imAccount);
 	_userProfile.getConnectHandler().connect(*_imAccount);
