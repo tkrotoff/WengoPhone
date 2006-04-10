@@ -307,9 +307,7 @@ void QtUserManager::safeHideOffLineUsers(){
 			}
 			// Work around Qt bug ...
 			_tree->setItemExpanded ( group, false );
-			QCoreApplication::processEvents();
 			_tree->setItemExpanded ( group, true );
-			QCoreApplication::processEvents();
 		}
 
 	}
