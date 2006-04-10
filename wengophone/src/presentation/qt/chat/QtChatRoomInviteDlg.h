@@ -51,7 +51,7 @@ protected:
 
 	void fillContact();
 
-	void fillGroup(QTreeWidgetItem * group, ContactGroup * cgroup);
+	void fillGroup(QTreeWidgetItem * group, const ContactGroup * cgroup);
 
 protected Q_SLOTS:
 

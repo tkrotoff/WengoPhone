@@ -104,7 +104,7 @@ void QtChatRoomInviteDlg::fillContact(){
 	}
 }
 
-void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, ContactGroup * cgroup){
+void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const ContactGroup * cgroup){
 	int size = cgroup->size();
 	QtContactPixmap::contactPixmap status;
 
