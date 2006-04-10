@@ -127,6 +127,10 @@ void History::load(std::string filename) {
 	std::string line = "";
 	std::string lines = "";
 	
+	if( filename == "" ) {
+		return;
+	}
+	
 	//open the file & read all its content
 	std::ifstream myfile (filename.c_str());
 	if (myfile.is_open()) {
