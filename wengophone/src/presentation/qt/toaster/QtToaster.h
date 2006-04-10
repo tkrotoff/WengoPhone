@@ -62,12 +62,6 @@ public Q_SLOTS:
 
 	void closeToaster();
 
-Q_SIGNALS:
-
-	// Used to delete the toaster object
-	void closed(QtToaster * toaster);
-
-
 protected:
 
 	void setupGui();

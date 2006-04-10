@@ -173,7 +173,6 @@ void QtToaster::closeToaster(){
 	killTimer(_timerId);
 	killTimer(_closeTimerId);
 	close();
-	closed(this);
 }
 
 void QtToaster::setCloseTimer(int timer){
