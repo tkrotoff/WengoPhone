@@ -31,17 +31,18 @@
 QtMSNSettings::QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
 
+	init();
 }
 
 void QtMSNSettings::init() {
-	static _MSNSettingsWidget = WidgetFactory::create(":/forms/imaccount/MSNSettings.ui", _parentWidget);
+	_MSNSettingsWidget = WidgetFactory::create(":/forms/imaccount/MSNSettings.ui", _parentWidget);
 	_MSNSettingsWidget->setWindowTitle("MSN " + tr("Settings"));
 
 	//loginLineEdit
-	static _loginLineEdit = Object::findChild<QLineEdit *>(_MSNSettingsWidget, "loginLineEdit");
+	_loginLineEdit = Object::findChild<QLineEdit *>(_MSNSettingsWidget, "loginLineEdit");
 
 	//passwordLineEdit
-	static _passwordLineEdit = Object::findChild<QLineEdit *>(_MSNSettingsWidget, "passwordLineEdit");
+	_passwordLineEdit = Object::findChild<QLineEdit *>(_MSNSettingsWidget, "passwordLineEdit");
 
 	if (!_imAccount) {
 		return;

@@ -33,7 +33,7 @@ class QWidget;
  *
  * @author Tanguy Krotoff
  */
-class QtIMAccountPlugin : Interface, public QObject {
+class QtIMAccountPlugin : public QObject, Interface {
 	Q_OBJECT
 public:
 

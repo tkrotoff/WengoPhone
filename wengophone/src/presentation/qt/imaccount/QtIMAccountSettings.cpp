@@ -57,6 +57,7 @@ QtIMAccountSettings::QtIMAccountSettings(UserProfile & userProfile, IMAccount * 
 		LOG_FATAL("imAccount cannot be NULL");
 	}
 
+	_imAccountPlugin = NULL;
 	_imAccount = imAccount;
 	createIMProtocolWidget(parent, imAccount->getProtocol());
 }
@@ -65,6 +66,7 @@ QtIMAccountSettings::QtIMAccountSettings(UserProfile & userProfile, EnumIMProtoc
 	: QObject(parent),
 	_userProfile(userProfile) {
 
+	_imAccountPlugin = NULL;
 	_imAccount = NULL;
 	createIMProtocolWidget(parent, imProtocol);
 }
@@ -77,19 +79,19 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, EnumIMProtoco
 
 	//imAccountTemplateWindow
 	QDialog * imAccountTemplateWindow = createWindowFromWidget2(_imAccountTemplateWidget);
+	connect(imAccountTemplateWindow, SIGNAL(accepted()), SLOT(saveIMAccountSettings()));
 
-	//save button
+	//saveButton
 	QPushButton * saveButton = Object::findChild<QPushButton *>(_imAccountTemplateWidget, "saveButton");
 	connect(saveButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(accept()));
 
-	//cancel button
+	//cancelButton
 	QPushButton * cancelButton = Object::findChild<QPushButton *>(_imAccountTemplateWidget, "cancelButton");
-	connect(cancelButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(()));
+	connect(cancelButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(reject()));
 
-	QtIMAccountPlugin * imAccountPlugin = NULL;
 	switch (imProtocol) {
 	case EnumIMProtocol::IMProtocolMSN: {
-		imAccountPlugin = new QtMSNSettings(_userProfile, _imAccount, settingsGroupBox);
+		_imAccountPlugin = new QtMSNSettings(_userProfile, _imAccount, settingsGroupBox);
 		break;
 	}
 
@@ -115,9 +117,17 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, EnumIMProtoco
 		LOG_FATAL("unknown IM protocol=" + String::fromNumber(imProtocol));
 	}
 
-	QWidget * imProtocolWidget = imAccountPlugin->getWidget();
+	QWidget * imProtocolWidget = _imAccountPlugin->getWidget();
 	createLayout2(settingsGroupBox)->addWidget(imProtocolWidget);
 	settingsGroupBox->setTitle(imProtocolWidget->windowTitle());
 	imAccountTemplateWindow->setWindowTitle(imProtocolWidget->windowTitle());
 	imAccountTemplateWindow->exec();
+}
+
+void QtIMAccountSettings::saveIMAccountSettings() {
+	if (!_imAccountPlugin) {
+		LOG_FATAL("_imAccountPlugin cannot be NULL");
+	}
+
+	_imAccountPlugin->save();
 }

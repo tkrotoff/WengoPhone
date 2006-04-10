@@ -24,6 +24,7 @@
 
 #include <QObject>
 
+class QtIMAccountPlugin;
 class UserProfile;
 class IMAccount;
 class QWidget;
@@ -41,6 +42,10 @@ public:
 
 	QtIMAccountSettings(UserProfile & userProfile, EnumIMProtocol::IMProtocol imProtocol, QWidget * parent);
 
+private Q_SLOTS:
+
+	void saveIMAccountSettings();
+
 private:
 
 	void createIMProtocolWidget(QWidget * parent, EnumIMProtocol::IMProtocol imProtocol);
@@ -50,6 +55,8 @@ private:
 	IMAccount * _imAccount;
 
 	UserProfile & _userProfile;
+
+	QtIMAccountPlugin * _imAccountPlugin;
 };
 
 #endif	//QTIMACCOUNTSETTINGS_H

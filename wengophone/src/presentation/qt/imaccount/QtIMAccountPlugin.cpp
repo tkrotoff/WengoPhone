@@ -29,6 +29,4 @@ QtIMAccountPlugin::QtIMAccountPlugin(UserProfile & userProfile, IMAccount * imAc
 
 	_parentWidget = parent;
 	_imAccount = imAccount;
-
-	init();
 }
