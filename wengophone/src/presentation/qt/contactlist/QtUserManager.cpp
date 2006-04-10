@@ -305,8 +305,15 @@ void QtUserManager::safeHideOffLineUsers(){
 			{
 				group->takeChild( group->indexOfChild( (*deleteIterator) ) );
 			}
+			// Work around Qt bug ...
+			_tree->setItemExpanded ( group, false );
+			QCoreApplication::processEvents();
+			_tree->setItemExpanded ( group, true );
+			QCoreApplication::processEvents();
 		}
+
 	}
+
 }
 
 void QtUserManager::hideOffLineUsers(){
