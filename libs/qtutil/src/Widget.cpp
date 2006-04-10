@@ -30,7 +30,6 @@ QLayout * Widget::createLayout(QWidget * parent) {
 
 QDialog * Widget::transformToWindow(QWidget * widget) {
 	QDialog * dialog = new QDialog(widget->parentWidget());
-	dialog->setWindowTitle(widget->windowTitle());
 	widget->setParent(NULL);
 	createLayout(dialog)->addWidget(widget);
 	return dialog;

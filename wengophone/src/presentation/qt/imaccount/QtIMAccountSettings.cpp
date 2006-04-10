@@ -104,5 +104,6 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, EnumIMProtoco
 	settingsGroupBox->setTitle(imProtocolWidget->windowTitle());
 
 	connect(imAccountTemplateWindow, SIGNAL(accepted()), _imAccountPlugin, SLOT(save()));
+	imAccountTemplateWindow->setWindowTitle(imProtocolWidget->windowTitle());
 	imAccountTemplateWindow->exec();
 }
