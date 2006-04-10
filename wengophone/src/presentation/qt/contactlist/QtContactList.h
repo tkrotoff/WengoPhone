@@ -57,6 +57,8 @@ public:
 
 	void addContactGroup(PContactGroup * pContactGroup);
 
+	CContactList & getContactList() const;
+
 public Q_SLOTS:
 	void showAllUsers();
 

@@ -30,7 +30,8 @@
 #include <qtutil/Object.h>
 #include <util/Logger.h>
 
-ChatWindow::ChatWindow(IMChatSession & imChatSession) : QObjectThreadSafe() //, _imChatSession(imChatSession)
+ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession) : QObjectThreadSafe(),
+_cChatHandler(cChatHandler)
 {
     LOG_DEBUG("ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(), _imChatSession(imChatSession)");
 	_imChatSession = &imChatSession;
@@ -142,7 +143,7 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	QString nickName = QString().fromStdString(session->getIMChat().getIMAccount().getLogin());
 	QString senderName = QString::fromStdString(from.getContactId());
 	int tabNumber;
-    _chatWidget = new ChatWidget(session->getId(), _tabWidget);
+    _chatWidget = new ChatWidget(_cChatHandler,session->getId(), _tabWidget);
 	_chatWidget->setIMChatSession(session);
 
 	if (_tabWidget->count() > 0)

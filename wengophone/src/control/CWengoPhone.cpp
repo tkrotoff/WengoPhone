@@ -116,7 +116,7 @@ void CWengoPhone::wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlu
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 	static CConnectHandler cConnectHandler(sender.getCurrentUserProfile().getConnectHandler()); LOG_DEBUG("CConnectHandler created");
 	static CPresenceHandler cPresenceHandler(sender.getCurrentUserProfile().getPresenceHandler()); LOG_DEBUG("CPresenceHandler created");
-	static CChatHandler cChatHandler(sender.getCurrentUserProfile().getChatHandler()); LOG_DEBUG("CChatHandler created");
+	static CChatHandler cChatHandler(sender.getCurrentUserProfile().getChatHandler(), sender.getCurrentUserProfile()); LOG_DEBUG("CChatHandler created");
 	LOG_DEBUG("WengoPhone::init() finished");
 }
 

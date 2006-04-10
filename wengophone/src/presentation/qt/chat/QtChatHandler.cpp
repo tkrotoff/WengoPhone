@@ -49,7 +49,7 @@ void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(ChatHandler & 
 	if (!_qtChatWidget)
 	{
 
-		_qtChatWidget =  new ChatWindow(imChatSession);
+		_qtChatWidget =  new ChatWindow(_cChatHandler,imChatSession);
 	}
 	else
 	{

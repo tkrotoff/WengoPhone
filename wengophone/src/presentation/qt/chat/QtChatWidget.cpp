@@ -26,8 +26,12 @@
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
 
-ChatWidget::ChatWidget (int sessionId, QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
+#include "QtChatRoomInviteDlg.h"
 
+#include <model/profile/UserProfile.h>
+
+ChatWidget::ChatWidget (CChatHandler & cChatHandler, int sessionId, QWidget * parent, Qt::WFlags f) :
+QWidget(parent, f), _cChatHandler(cChatHandler)
 {
 
     _widget =WidgetFactory::create(":/forms/chat/ChatRoomWidget.ui", this);
@@ -35,6 +39,11 @@ ChatWidget::ChatWidget (int sessionId, QWidget * parent, Qt::WFlags f) : QWidget
     layout->addWidget(_widget);
     layout->setMargin(0);
     setLayout(layout);
+
+	_stoppedTypingDelay=5000;
+	_notTypingDelay=5000;
+	_stoppedTypingTimerId = -1;
+	_notTypingTimerId = -1;
 
 	_sessionId = sessionId;
 
@@ -70,7 +79,7 @@ ChatWidget::ChatWidget (int sessionId, QWidget * parent, Qt::WFlags f) : QWidget
 
     connect(_emoticonsWidget,SIGNAL(emoticonClicked(QtEmoticon)),this,SLOT(emoticonSelected(QtEmoticon)));
 	connect(_emoticonsWidget,SIGNAL(closed()),_chatEdit,SLOT(setFocus()));
-
+	connect(_chatEdit,SIGNAL(textChanged ()),SLOT(chatEditChanged()));
 	QGridLayout * frameLayout = new QGridLayout(_contactListFrame);
 	_contactListFrame->setVisible(false);
 	_scrollArea = new QScrollArea(_contactListFrame);
@@ -83,6 +92,37 @@ ChatWidget::ChatWidget (int sessionId, QWidget * parent, Qt::WFlags f) : QWidget
 
 }
 
+void ChatWidget::chatEditChanged(){
+	_imChatSession->changeTypingState(IMChat::TypingStateTyping);
+
+	if ( _notTypingTimerId != -1 )
+	{
+		killTimer(_notTypingTimerId);
+		_notTypingTimerId = -1;
+	}
+
+	if ( _stoppedTypingTimerId == -1 ){
+		_stoppedTypingTimerId = startTimer(_stoppedTypingDelay);
+	}
+	else {
+		killTimer(_stoppedTypingTimerId);
+		_stoppedTypingTimerId = startTimer(_stoppedTypingDelay);
+	}
+}
+
+void ChatWidget::timerEvent ( QTimerEvent * event ){
+	if ( event->timerId() == _stoppedTypingTimerId ){
+		killTimer(_stoppedTypingTimerId);
+		_stoppedTypingTimerId = -1;
+		_imChatSession->changeTypingState(IMChat::TypingStateStopTyping);
+		_notTypingTimerId = startTimer(_notTypingDelay);
+	}
+	if ( event->timerId() == _notTypingTimerId){
+		killTimer(_notTypingTimerId);
+		_notTypingTimerId = -1;
+		_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
+	}
+}
 
 void  ChatWidget::setNickName(const QString & nickname)
 {
@@ -152,6 +192,18 @@ void ChatWidget::urlClicked(const QUrl & link){
 
 void ChatWidget::enterPressed()
 {
+
+	if ( _notTypingTimerId != -1 )
+	{
+		killTimer(_notTypingTimerId);
+		_notTypingTimerId = -1;
+	}
+
+	if ( _stoppedTypingTimerId != -1 ){
+		killTimer(_stoppedTypingTimerId);
+		_stoppedTypingTimerId = -1;
+	}
+
     QTextCursor curs(_chatHistory->document());
     curs.movePosition(QTextCursor::End);
 
@@ -266,5 +318,6 @@ void ChatWidget::setIMChatSession(IMChatSession * imChatSession)
 }
 
 void ChatWidget::inviteContact(){
-
+	QtChatRoomInviteDlg	dlg(_cChatHandler.getUserProfile().getContactList(),this);
+	dlg.exec();
 }

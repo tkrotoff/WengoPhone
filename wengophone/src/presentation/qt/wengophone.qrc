@@ -9,14 +9,16 @@
         <file>pics/call_missed.png</file>
         <file>pics/call_outgoing.png</file>
         <file>pics/call_video_button.png</file>
+        <file>pics/chat.png</file>
         <file>pics/chat_send_message.png</file>
+        <file>pics/conference.png</file>
         <file>pics/config.png</file>
+        <file>pics/config_advanced.png</file>
         <file>pics/config_appearance.png</file>
         <file>pics/config_audio.png</file>
-        <file>pics/config_video.png</file>
-        <file>pics/config_advanced.png</file>
         <file>pics/config_general.png</file>
         <file>pics/config_languages.png</file>
+        <file>pics/config_video.png</file>
         <file>pics/contact_add.png</file>
         <file>pics/contact_block.png</file>
         <file>pics/contact_call.png</file>
@@ -40,16 +42,13 @@
         <file>pics/help.png</file>
         <file>pics/home.png</file>
         <file>pics/homepage.png</file>
-        <file>pics/chat.png</file>
         <file>pics/logo-mini.png</file>
         <file>pics/logo-spiral.png</file>
         <file>pics/logo.png</file>
         <file>pics/microphone.png</file>
-        <file>pics/conference.png</file>
         <file>pics/no.png</file>
         <file>pics/point.gif</file>
         <file>pics/sms.png</file>
-        <file>pics/update.png</file>
         <file>pics/status/away.png</file>
         <file>pics/status/donotdisturb.png</file>
         <file>pics/status/forward.png</file>
@@ -67,6 +66,7 @@
         <file>pics/systray_icon.png</file>
         <file>pics/systray_icon_error.png</file>
         <file>pics/systray_popup_window.png</file>
+        <file>pics/update.png</file>
         <file>pics/video_flip.png</file>
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
@@ -113,22 +113,22 @@
         <file>HttpProxyLoginWindow.ui</file>
         <file>LoggerWidget.ui</file>
         <file>WengoPhoneWindow.ui</file>
-        <file>chat/ChatWidget.ui</file>
         <file>chat/ChatRoomWidget.ui</file>
+        <file>chat/ChatWidget.ui</file>
         <file>chat/chat.ui</file>
         <file>chat/emoticonswidget.ui</file>
-        <file>toaster/QtToaster.ui</file>
+        <file>chat/ChatRoomInviteWidget.ui</file>
         <file>config/AccountSettings.ui</file>
         <file>config/AdvancedConfigWindow.ui</file>
         <file>config/AdvancedSettings.ui</file>
         <file>config/AudioSettings.ui</file>
         <file>config/CallForwardSettings.ui</file>
         <file>config/GeneralSettings.ui</file>
+        <file>config/LanguagesSettings.ui</file>
         <file>config/ManageBlockedUsersSettings.ui</file>
         <file>config/NotificationSettings.ui</file>
         <file>config/PrivacySettings.ui</file>
         <file>config/VideoSettings.ui</file>
-        <file>config/LanguagesSettings.ui</file>
         <file>config/WengoConfigDialog.ui</file>
         <file>contactlist/AddContactWindow.ui</file>
         <file>contactlist/ContactListWidget.ui</file>
@@ -136,17 +136,18 @@
         <file>contactlist/contactList.ui</file>
         <file>contactlist/userWidget.ui</file>
         <file>login/LoginWindow.ui</file>
+        <file>login/ProtocolSettings.ui</file>
+        <file>login/accountManager.ui</file>
         <file>login/contactWindow.ui</file>
         <file>login/profileWindow.ui</file>
         <file>login/setLoginWindow.ui</file>
-        <file>login/ProtocolSettings.ui</file>
-        <file>login/accountManager.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
+        <file>phonecall/QtCallContactWidget.ui</file>
         <file>phonecall/VideoWindow.ui</file>
         <file>phonecall/VideoWindow2.ui</file>
-        <file>phonecall/QtCallContactWidget.ui</file>
         <file>phoneline/PhoneLineWidget.ui</file>
+        <file>toaster/QtToaster.ui</file>
         <file>webservices/sms/SmsWindow.ui</file>
         <file>webservices/softupdate/SoftUpdateWindow.ui</file>
     </qresource>

@@ -235,3 +235,6 @@ void QtContactList::hideOffLineUser(){
 void QtContactList::sortUsers(){
 	_usermanager->sortUsers();
 }
+CContactList & QtContactList::getContactList() const{
+	return _cContactList;
+}

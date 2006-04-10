@@ -24,13 +24,13 @@
 
 #include <util/Logger.h>
 
-CChatHandler::CChatHandler(ChatHandler & chatHandler)
-	: _chatHandler(chatHandler) {
+CChatHandler::CChatHandler(ChatHandler & chatHandler,UserProfile & userProfile)
+	: _chatHandler(chatHandler), _userProfile(userProfile) {
 
 	_pChatHandler = PFactory::getFactory().createPresentationChatHandler(*this);
 
 	_chatHandler.newIMChatSessionCreatedEvent += newIMChatSessionCreatedEvent;
-	_chatHandler.newIMChatSessionCreatedEvent += 
+	_chatHandler.newIMChatSessionCreatedEvent +=
 		boost::bind(&CChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
 

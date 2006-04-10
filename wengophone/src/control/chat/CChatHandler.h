@@ -29,6 +29,7 @@ class IMAccount;
 class IMContactSet;
 class ChatHandler;
 class PChatHandler;
+class UserProfile;
 
 /**
  *
@@ -41,7 +42,7 @@ public:
 
 	/**
 	 * Emitted when a new IMChatSession has been created.
-	 * 
+	 *
 	 * @param sender this class
 	 * @param imChatSession the new IMChatSession
 	 */
@@ -49,7 +50,9 @@ public:
 
 	void createSession(const IMAccount & imAccount, IMContactSet & imContactSet);
 
-	CChatHandler(ChatHandler & chatHandler);
+	UserProfile & getUserProfile() const { return _userProfile;}
+
+	CChatHandler(ChatHandler & chatHandler, UserProfile & userProfile);
 
 	~CChatHandler();
 
@@ -60,6 +63,8 @@ private:
 	ChatHandler & _chatHandler;
 
 	PChatHandler * _pChatHandler;
+
+	UserProfile & _userProfile;
 
 };
 

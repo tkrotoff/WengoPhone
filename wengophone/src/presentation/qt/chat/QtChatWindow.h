@@ -28,11 +28,12 @@
 #include <imwrapper/IMContact.h>
 #include <imwrapper/IMChatSession.h>
 #include <qtutil/QObjectThreadSafe.h>
+#include <control/chat/CChatHandler.h>
 // class IMChatSession;
 // class IMContact;
 
 class QtChatTabWidget;
-
+//class CChatHandler;
 class ChatWindow : public QObjectThreadSafe
 {
 
@@ -40,7 +41,7 @@ class ChatWindow : public QObjectThreadSafe
 
 public:
 
-    ChatWindow(IMChatSession & imChatSession);
+    ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession);
 
 	void addChat(IMChatSession * session,const IMContact & from );
 
@@ -59,6 +60,8 @@ protected:
     IMChatSession * _imChatSession;
 
     QWidget			_dialog;
+
+	CChatHandler & _cChatHandler;
 
 public Q_SLOTS:
 

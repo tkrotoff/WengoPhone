@@ -29,6 +29,9 @@
 
 #include <imwrapper/IMContact.h>
 #include <imwrapper/IMChatSession.h>
+#include <imwrapper/IMChat.h>
+
+#include <control/chat/CChatHandler.h>
 
 
 class ChatWidget : public QWidget //, Ui::ChatWidget
@@ -37,7 +40,7 @@ class ChatWidget : public QWidget //, Ui::ChatWidget
 
 public:
 
-    ChatWidget(int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
+    ChatWidget(CChatHandler & cChatHandler, int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
 
     void setNickBgColor(const QString &color);
 
@@ -61,13 +64,27 @@ public:
 
     const QString&   nickTextColor();
 
-    void             addToHistory(const QString & senderName,const QString & str);
+    void  addToHistory(const QString & senderName,const QString & str);
+
+    void setStoppedTypingDelay(int sec) { _stoppedTypingDelay = sec*1000; };
+
+    void setNotTypingDelay(int sec) { _notTypingDelay = sec * 1000;};
 
 protected:
 
     QWidget *       _widget;
 
+	CChatHandler & _cChatHandler;
+
 	int _sessionId;
+
+	int _stoppedTypingTimerId;
+
+	int _notTypingTimerId;
+
+	int _stoppedTypingDelay;
+
+	int _notTypingDelay;
 
 	WidgetSeeker    _seeker;
 
@@ -111,6 +128,8 @@ protected:
 
 	const QString Emoticon2Text(const QString &htmlstr);
 
+	virtual void timerEvent ( QTimerEvent * event );
+
 public Q_SLOTS:
 
     void enterPressed();
@@ -124,6 +143,8 @@ public Q_SLOTS:
     void urlClicked(const QUrl & link);
 
     void inviteContact();
+
+    void chatEditChanged();
 
 Q_SIGNALS:
 
