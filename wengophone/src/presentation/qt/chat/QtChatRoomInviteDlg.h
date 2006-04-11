@@ -25,11 +25,15 @@
 
 #include <control/contactlist/CContactList.h>
 
+#include <imwrapper/IMContact.h>
+#include <imwrapper/IMChatSession.h>
+#include <imwrapper/IMChat.h>
+
 class QtChatRoomInviteDlg : public QDialog
 {
 	Q_OBJECT
 public:
-	QtChatRoomInviteDlg(ContactList & contactList, QWidget * parent = 0, Qt::WFlags f = 0);
+	QtChatRoomInviteDlg(IMChatSession & chatSession,ContactList & contactList, QWidget * parent = 0, Qt::WFlags f = 0);
 
 protected:
 
@@ -48,6 +52,8 @@ protected:
 	QPushButton * _startPushButton;
 
 	ContactList & _contactList;
+
+	IMChatSession & _chatSession;
 
 	void fillContact();
 

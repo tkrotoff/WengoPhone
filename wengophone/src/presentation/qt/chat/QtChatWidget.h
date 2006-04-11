@@ -70,6 +70,8 @@ public:
 
     void setNotTypingDelay(int sec) { _notTypingDelay = sec * 1000;};
 
+    void setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state);
+
 protected:
 
     QWidget *       _widget;
@@ -105,6 +107,8 @@ protected:
 	QWidget * _contactViewport;
 
 	QFrame * _contactListFrame;
+
+	QLabel * _typingStateLabel;
 
 	IMChatSession* _imChatSession;
 

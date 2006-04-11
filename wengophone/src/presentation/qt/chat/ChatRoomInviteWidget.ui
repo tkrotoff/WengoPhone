@@ -23,7 +23,11 @@
     <number>6</number>
    </property>
    <item row="1" column="1" >
-    <widget class="QListWidget" name="inviteListWidget" />
+    <widget class="QListWidget" name="inviteListWidget" >
+     <property name="selectionMode" >
+      <enum>QAbstractItemView::MultiSelection</enum>
+     </property>
+    </widget>
    </item>
    <item row="0" column="0" colspan="2" >
     <layout class="QHBoxLayout" >
@@ -56,7 +60,7 @@
      <item>
       <widget class="QLabel" name="label_2" >
        <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">(Conference participants 5 + host)&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">( Conference participants )&lt;/p>&lt;/body>&lt;/html></string>
        </property>
       </widget>
      </item>

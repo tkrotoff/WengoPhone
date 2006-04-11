@@ -39,10 +39,39 @@ _cChatHandler(cChatHandler)
     _imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1, _2, _3);
 
+    _imChatSession->typingStateChangedEvent +=
+		boost::bind(&ChatWindow::typingStateChangedEventHandler, this, _1, _2, _3);
+
     typedef PostEvent0<void ()> MyPostEvent;
     MyPostEvent * event =
         new MyPostEvent(boost::bind(&ChatWindow::initThreadSafe, this));
 	postEvent(event);
+
+	connect (this,SIGNAL(typingStateChangedSignal(const IMChatSession *,const IMContact *,const  IMChat::TypingState *)),
+	              SLOT(typingStateChangedThreadSafe(const IMChatSession *,const IMContact *,const IMChat::TypingState *)),
+	              Qt::QueuedConnection);
+}
+void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state){
+
+	IMChat::TypingState * tmpState = new IMChat::TypingState;
+	*tmpState = state;
+	qDebug() << "TYPINGGGGGGGGGGGGGGGGGGGG ***************************";
+	typingStateChangedSignal(&sender,&imContact,tmpState);
+}
+
+void ChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state){
+	IMChat::TypingState	tmpState = *state;
+	qDebug() << "****: STATE" << *state;
+	delete state;
+
+	int tabs=_tabWidget->count();
+	for (int i=0; i<tabs;i++){
+		ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
+		if ( widget->getSessionId() == sender->getId() )
+		{
+			widget->setRemoteTypingState(*sender,*state);
+		}
+	}
 }
 
 void ChatWindow::messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message) {

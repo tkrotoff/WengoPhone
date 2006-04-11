@@ -71,6 +71,14 @@ public Q_SLOTS:
 
 	void show();
 
+protected Q_SLOTS:
+
+	void typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
+
+Q_SIGNALS:
+
+	void typingStateChangedSignal(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
+
 private:
 
 	void initThreadSafe();
@@ -78,6 +86,8 @@ private:
 	void messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message);
 
 	void messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string  message);
+
+	void typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state);
 
 };
 

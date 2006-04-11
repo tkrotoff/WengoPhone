@@ -60,7 +60,7 @@ QWidget(parent, f), _cChatHandler(cChatHandler)
     _sendButton = Object::findChild<QPushButton *>(_widget,"sendButton");
     _chatEdit = Object::findChild<QTextEdit *>(_widget,"chatEdit");
 	_contactListFrame = Object::findChild<QFrame *>(_widget,"contactListFrame");
-
+	_typingStateLabel = Object::findChild<QLabel *>(_widget,"typingStateLabel");
 
 	_inviteButton = Object::findChild<QPushButton *>(_widget,"inviteButton");
 	connect ( _inviteButton,SIGNAL(clicked()), SLOT(inviteContact()));
@@ -315,9 +315,32 @@ void ChatWidget::emoticonSelected(QtEmoticon emoticon)
 void ChatWidget::setIMChatSession(IMChatSession * imChatSession)
 {
 	_imChatSession = imChatSession;
+	if ( ! _imChatSession->canDoMultiChat() )
+		_inviteButton->setEnabled(false);
 }
 
 void ChatWidget::inviteContact(){
-	QtChatRoomInviteDlg	dlg(_cChatHandler.getUserProfile().getContactList(),this);
+	QtChatRoomInviteDlg	dlg(*_imChatSession, _cChatHandler.getUserProfile().getContactList(),this);
 	dlg.exec();
+}
+
+void ChatWidget::setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state){
+
+	IMContact from = * sender.getIMContactSet().begin();
+	QString remoteName = QString::fromUtf8(from.getContactId().c_str());
+	switch (state){
+		case IMChat::TypingStateNotTyping:
+			_typingStateLabel->setText("");
+			break;
+
+		case IMChat::TypingStateTyping:
+			_typingStateLabel->setText(remoteName + tr(" is typing"));
+			break;
+
+		case IMChat::TypingStateStopTyping:
+			_typingStateLabel->setText("");
+			break;
+		default:
+			break;
+	}
 }
