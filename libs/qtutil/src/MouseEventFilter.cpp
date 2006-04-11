@@ -20,6 +20,9 @@
 #include <qtutil/MouseEventFilter.h>
 
 #include <QEvent>
+#include <QMouseEvent>
+
+#include <exception>
 
 MouseMoveEventFilter::MouseMoveEventFilter(QObject * receiver, const char * member)
 : EventFilter(receiver, member) {
@@ -33,26 +36,39 @@ bool MouseMoveEventFilter::eventFilter(QObject * watched, QEvent * event) {
 	return EventFilter::eventFilter(watched, event);
 }
 
-MousePressEventFilter::MousePressEventFilter(QObject * receiver, const char * member)
-: EventFilter(receiver, member) {
+MousePressEventFilter::MousePressEventFilter(QObject * receiver, const char * member, Qt::MouseButton button)
+	: EventFilter(receiver, member), _button(button) {
 }
 
 bool MousePressEventFilter::eventFilter(QObject * watched, QEvent * event) {
 	if (event->type() == QEvent::MouseButtonPress) {
-		filter(event);
-		return false;
+		try {
+			QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent *>(event);
+			
+			if( (_button == Qt::NoButton) || (mouseEvent->button() == _button) ) {
+				filter(event);
+				return false;
+			}
+		} catch( std::bad_cast ) {
+		}
 	}
 	return EventFilter::eventFilter(watched, event);
 }
 
-MouseReleaseEventFilter::MouseReleaseEventFilter(QObject * receiver, const char * member)
-: EventFilter(receiver, member) {
+MouseReleaseEventFilter::MouseReleaseEventFilter(QObject * receiver, const char * member, Qt::MouseButton button) : EventFilter(receiver, member), _button(button) {
 }
 
 bool MouseReleaseEventFilter::eventFilter(QObject * watched, QEvent * event) {
 	if (event->type() == QEvent::MouseButtonRelease) {
-		filter(event);
-		return false;
+		try {
+			QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent *>(event);
+			
+			if( (_button == Qt::NoButton) || (mouseEvent->button() == _button) ) {
+				filter(event);
+				return false;
+			}
+		} catch( std::bad_cast ) {
+		}
 	}
 	return EventFilter::eventFilter(watched, event);
 }

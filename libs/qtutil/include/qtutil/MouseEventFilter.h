@@ -46,11 +46,14 @@ protected:
 class MousePressEventFilter : public EventFilter {
 public:
 
-	MousePressEventFilter(QObject * receiver, const char * member);
+	MousePressEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
 
 protected:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
+
+private:
+	Qt::MouseButton _button;
 };
 
 
@@ -62,11 +65,14 @@ protected:
 class MouseReleaseEventFilter : public EventFilter {
 public:
 
-	MouseReleaseEventFilter(QObject * receiver, const char * member);
+	MouseReleaseEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
 
 protected:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
+
+private:
+	Qt::MouseButton _button;
 };
 
 
