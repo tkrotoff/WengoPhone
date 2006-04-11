@@ -79,11 +79,11 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent ,
 	_protocolLayout->addWidget(_aimLabel     ,0 , 3 );
 	_protocolLayout->addWidget(_jabberLabel  ,0 , 4 );
 
-	_msnLabel->setText("msn");
-	_yahooLabel->setText("yahoo");
-	_wengoLabel->setText("wengo");
-	_aimLabel->setText("aim");
-	_jabberLabel->setText("jabber");
+	_msnLabel->setPixmap(QPixmap(":pics/protocol_msn.png"));
+	_yahooLabel->setPixmap(QPixmap(":pics/protocol_yahoo.png"));
+	_wengoLabel->setPixmap(QPixmap(":pics/protocol_wengo.png"));
+	_aimLabel->setPixmap(QPixmap(":pics/protocol_aim.png"));
+	_jabberLabel->setPixmap(QPixmap(":pics/protocol_jabber.png"));
 
 	// Widget connections
 	connect ( _msnLabel,SIGNAL( clicked() ),SLOT( msnClicked() ) );

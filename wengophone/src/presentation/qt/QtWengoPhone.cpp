@@ -130,7 +130,7 @@ void QtWengoPhone::initThreadSafe() {
 
 	//Systray
 	_trayMenu = NULL;
-	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"),QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
+	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
 	setTrayMenu();
 	_trayIcon->show();
 

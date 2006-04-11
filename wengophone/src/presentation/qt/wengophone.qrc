@@ -74,6 +74,7 @@
         <file>pics/protocol_aim.png</file>
         <file>pics/protocol_yahoo.png</file>
         <file>pics/protocol_jabber.png</file>
+        <file>pics/protocol_wengo.png</file>
     </qresource>
     <qresource prefix="/emoticons" >
         <file>chat/emoticons/emblem-unreadable.png</file>
