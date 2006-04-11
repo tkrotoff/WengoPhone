@@ -40,6 +40,7 @@ std::string HttpRequest::_proxyHost;
 unsigned int HttpRequest::_proxyPort = 80;
 std::string HttpRequest::_proxyUsername;
 std::string HttpRequest::_proxyPassword;
+std::string HttpRequest::_userAgent;
 
 HttpRequestFactory * HttpRequest::_factory = NULL;
 

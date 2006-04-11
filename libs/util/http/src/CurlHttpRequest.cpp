@@ -169,6 +169,7 @@ void CurlHttpRequest::setCurlParam() {
 	curl_easy_setopt(_curl, CURLOPT_PROGRESSDATA, this);
 	curl_easy_setopt(_curl, CURLOPT_NOSIGNAL, 0);
 	curl_easy_setopt(_curl, CURLOPT_TIMEOUT, 15);
+	curl_easy_setopt(_curl, CURLOPT_USERAGENT, HttpRequest::getUserAgent().c_str());
 }
 
 void CurlHttpRequest::setSSLParam() {

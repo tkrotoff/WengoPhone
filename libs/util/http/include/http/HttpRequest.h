@@ -271,6 +271,24 @@ public:
 		return _proxyPassword;
 	}
 
+	/**
+	 * Set the User Agent.
+	 *
+	 * @param userAgent the user agent.
+	 */
+	static void setUserAgent(std::string userAgent) {
+		_userAgent = userAgent;
+	}
+	
+	/**
+	 * Set the User Agent.
+	 *
+	 * @param userAgent the user agent.
+	 */
+	static const std::string & getUserAgent() {
+		return _userAgent;
+	}
+	
 	void abort();
 
 	void run();
@@ -293,6 +311,8 @@ private:
 
 	/** HTTP proxy password. */
 	static std::string _proxyPassword;
+	
+	static std::string _userAgent;
 };
 
 #endif	//HTTPREQUEST_H
