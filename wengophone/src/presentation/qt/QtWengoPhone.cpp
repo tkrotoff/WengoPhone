@@ -47,7 +47,7 @@
 #include "QtHttpProxyLogin.h"
 #include "config/QtAdvancedConfig.h"
 #include "config/QtWengoConfigDialog.h"
-#include "statusbar/QtStatusBar.h"
+#include "profilebar/QtStatusBar.h"
 #include "history/QtHistoryWidget.h"
 
 #include <qtutil/WidgetFactory.h>
