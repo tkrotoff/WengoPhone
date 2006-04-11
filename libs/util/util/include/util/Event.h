@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,14 +17,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef __EVENT_H
-#define __EVENT_H
+#ifndef OWEVENT_H
+#define OWEVENT_H
 
 #include <util/NonCopyable.h>
 
 #include <boost/signal.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+
+#include <list>
 
 /**
  * Delegates/Design Pattern Observer.
@@ -100,14 +102,61 @@ public:
 	/**
 	 * Connects a slot to this signal.
 	 *
-	 * @param slot to connect
+	 * Provides unicity when connecting a slot to a signal.
+	 * Two identical slots cannot be connected, only one will be:
+	 * this method checks first if the same slot was not connected already.
+	 *
+	 * @param slot callback function
+	 * @return connection
 	 */
-	template<typename T>
-	void operator+=(const T & slot) {
-		connect(slot);
+	template<typename Slot>
+	boost::signals::connection operator+=(const Slot & slot) {
+		boost::signals::connection c;
+		if (!alreadyConnected(slot)) {
+			//The slot is not connected to the signal
+			_slotList.push_back(slot);
+			c = connect(slot);
+		}
+		//The slot is already connected to the signal
+		return c;
+	}
+
+	/**
+	 * Connects a signal to another signal.
+	 *
+	 * @param event signal to connect
+	 * @return connection
+	 */
+	boost::signals::connection operator+=(const Event & event) {
+		return connect(event);
 	}
 
 private:
+
+	/**
+	 * Checks if a slot is already present inside the slot list.
+	 *
+	 * @param observer callback function
+	 * @return true if the slot is present inside the slot list; false otherwise
+	 */
+	template<typename Slot>
+	bool alreadyConnected(const Slot & slot) {
+		typename SlotList::iterator it = std::find(_slotList.begin(), _slotList.end(), slot);
+		if (it != _slotList.end()) {
+			return true;
+		}
+		return false;
+	}
+
+	/** Type list of slot. */
+	typedef std::list<boost::function<Signature> > SlotList;
+
+	/**
+	 * The vector/collection/list of slot.
+	 *
+	 * Permits to provide unicity when connecting a slot to a signal.
+	 */
+	SlotList _slotList;
 };
 
-#endif	//__EVENT_H
+#endif	//OWEVENT_H
