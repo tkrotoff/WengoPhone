@@ -42,6 +42,21 @@ GaimIMChat::GaimIMChat(IMAccount & account)
 
 }
 
+mConvInfo_t *GaimIMChat::CreateChatSession()
+{
+	mConvInfo_t *mConv = new mConvInfo_t();
+	IMChatSession *chatSession = new IMChatSession(*this);
+	
+	mConv->conv_session = chatSession;
+	mConv->conv_id = chatSession->getId();
+	
+	AddChatSessionInList(mConv);
+	
+	newIMChatSessionCreatedEvent(*this, *chatSession);
+
+	return mConv;
+}
+
 void GaimIMChat::createSession(IMContactSet & imContactSet)
 {
 	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
@@ -66,16 +81,15 @@ void GaimIMChat::createSession(IMContactSet & imContactSet)
 	}
 	else
 	{
-		//TODO : creation du chat (cf. patch)
-		//snprintf(chatName, sizeof(ChatName), "Chat_%d", chatSession.getId());
-		gConv = gaim_conversation_new(GAIM_CONV_TYPE_CHAT, gAccount, "ChatName");
+		GList *mlist = NULL;
+		GaimConnection *gGC = gaim_account_get_connection(gAccount);
 		
 		for (it = imContactSet.begin(); it != imContactSet.end(); it++)
 		{
-			gaim_conv_chat_add_user(GAIM_CONV_CHAT(gConv), it->getContactId().c_str(), 
-									NULL, GAIM_CBFLAGS_NONE, false);
-			
+			mlist = g_list_append(mlist, (char *) it->getContactId().c_str());
 		}
+
+		serv_chat_create(gGC, "0", mlist);
 	}
 
 	//mConvInfo_t	*conv = new mConvInfo_t();
@@ -126,20 +140,20 @@ void GaimIMChat::changeTypingState(IMChatSession & chatSession, IMChat::TypingSt
 {
 	GaimTypingState gState = GAIM_NOT_TYPING;
 	mConvInfo_t *mConv = FindChatStructById(chatSession.getId());
-	GaimConvIm *gIM = NULL;
+	GaimConversation *gConv = NULL;
 	
 	if (!mConv)
 		return;
 
-	gIM = GAIM_CONV_IM((GaimConversation *)mConv->gaim_conv_session);
+	gConv = (GaimConversation *)mConv->gaim_conv_session;
 
 	switch (state)
 	{
-		case IMChat::TypingStateNotTyping:
+		case IMChat::TypingStateTyping:
 			gState = GAIM_TYPING;
 			break;
 		
-		case IMChat::TypingStateTyping:
+		case IMChat::TypingStateStopTyping:
 			gState = GAIM_TYPED;
 			break;
 
@@ -148,7 +162,9 @@ void GaimIMChat::changeTypingState(IMChatSession & chatSession, IMChat::TypingSt
 			break;
 	}
 
-	gaim_conv_im_set_typing_state(gIM, gState);
+	serv_send_typing(gaim_conversation_get_gc(gConv),
+					 gaim_conversation_get_name(gConv),
+					 gState);
 }
 
 void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & contactId)
@@ -171,19 +187,20 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 	}
 	else if (BuddyNbr == 1)
 	{
+		GList *mlist = NULL;
 		char chatName[100];
 		const IMContactSet &chatContact = chatSession.getIMContactSet();
 		IMContactSet::const_iterator it = chatContact.begin();
 		std::string firstContactId = it->getContactId();
+		GaimConnection *gGC;
 
 		gConv = (GaimConversation *) mConv->gaim_conv_session;
+		gGC = gaim_conversation_get_gc(gConv);
 		gaim_conversation_destroy(gConv);
-		snprintf(chatName, sizeof(chatName), "Chat_%d", chatSession.getId());
-		gConv = gaim_conversation_new(GAIM_CONV_TYPE_CHAT, gAccount, chatName);
-		mConv->gaim_conv_session = gConv;
-		gConv->ui_data = mConv;
-		gaim_conv_chat_add_user(GAIM_CONV_CHAT(gConv), firstContactId.c_str(), NULL, GAIM_CBFLAGS_NONE, false);
-		gaim_conv_chat_add_user(GAIM_CONV_CHAT(gConv), contactId.c_str(), NULL, GAIM_CBFLAGS_NONE, true);
+		snprintf(chatName, sizeof(chatName), "%d", chatSession.getId());
+		mlist = g_list_append(mlist, (char *) firstContactId.c_str());
+		mlist = g_list_append(mlist, (char *) contactId.c_str());
+		serv_chat_create(gGC, chatName, mlist);
 	}	
 	else
 	{
@@ -243,7 +260,7 @@ mConvInfo_t *GaimIMChat::FindChatStructById(int convId)
 	{
 		if ((*i)->conv_id == convId)
 		{
-			return (*i);;
+			return (*i);
 		}
 	}
 

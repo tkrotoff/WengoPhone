@@ -154,7 +154,7 @@ msn_cmdproc_send_quick(MsnCmdProc *cmdproc, const char *command,
 
 	servconn = cmdproc->servconn;
 
-	if (!servconn->connected || !servconn->session->connected)
+	if (!servconn->connected)
 		return;
 
 	if (format != NULL)

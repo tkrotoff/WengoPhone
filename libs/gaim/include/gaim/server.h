@@ -45,7 +45,7 @@ void serv_rem_deny(GaimConnection *, const char *);
 void serv_set_permit_deny(GaimConnection *);
 void serv_join_chat(GaimConnection *, GHashTable *);
 void serv_reject_chat(GaimConnection *, GHashTable *);
-void serv_chat_create(GaimConnection *g, GList *buddies);
+void serv_chat_create(GaimConnection *g, const char *name, GList *buddies);
 void serv_chat_invite(GaimConnection *, int, const char *, const char *);
 void serv_chat_leave(GaimConnection *, int);
 void serv_chat_whisper(GaimConnection *, int, const char *, const char *);

@@ -183,27 +183,38 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
 								GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 	GaimIMChat *mChat = FindIMChat(*account);
-
-	mConvInfo_t *mConv = new mConvInfo_t();
-	IMChatSession *chatSession = new IMChatSession(*mChat);
-
-	mConv->conv_session = chatSession;
-	mConv->conv_id = chatSession->getId();
-	mConv->gaim_conv_session = conv;
-	conv->ui_data = mConv;
-
-	mChat->AddChatSessionInList(mConv);
-
-	mChat->newIMChatSessionCreatedEvent(*mChat, *chatSession);
+	mConvInfo_t *mConv;
 
 	if (chatType == GAIM_CONV_TYPE_IM)
 	{
-		mChat->contactAddedEvent(*mChat, *chatSession, gaim_conversation_get_name(conv));
-		//mChat->sendMessage(*chatSession, std::string("I'm joining the chat (^_^) !"));
+		mConv = mChat->CreateChatSession();
+		mConv->gaim_conv_session = conv;
+ 		conv->ui_data = mConv;	
+
+		mChat->contactAddedEvent(*mChat, 
+								 *((IMChatSession *)(mConv->conv_session)), 
+								 gaim_conversation_get_name(conv));
 	}
 	else if (chatType == GAIM_CONV_TYPE_CHAT)
 	{
-		;
+		mConvInfo_t *mConv;
+		int id = strtol(gaim_conversation_get_name(conv), (char **) NULL, 10);
+		
+		if (id && (mConv = mChat->FindChatStructById(id)) != NULL)
+		{
+			mConv->gaim_conv_session = conv;
+			conv->ui_data = mConv;
+		}
+		else
+		{
+			char name[100];
+
+			mConv = mChat->CreateChatSession();
+			snprintf(name, sizeof(name), "%d", mConv->conv_id); 
+			gaim_conversation_set_name(conv, strdup(name));
+			mConv->gaim_conv_session = conv;
+			conv->ui_data = mConv; 		
+		}
 	}
 
 
@@ -308,7 +319,7 @@ void GaimChatMngr::WriteConvCbk(GaimConversation *conv, const char *name, const 
 }
 
 void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
-								GList *flags, GList *aliases, gboolean new_arrivals)
+								   GList *flags, GList *aliases, gboolean new_arrivals)
 {
 }
 

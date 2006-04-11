@@ -1187,7 +1187,7 @@ msn_chat_invite(GaimConnection *gc, int id, const char *msg,
 }
 
 static void
-msn_create_chat(GaimConnection *gc, GList *buddies)
+msn_create_chat(GaimConnection *gc, const char *name, GList *buddies)
 {
 	MsnSession *session;
 	MsnSwitchBoard *swboard;
@@ -1203,7 +1203,7 @@ msn_create_chat(GaimConnection *gc, GList *buddies)
 	msn_switchboard_request_add_user(swboard, user);
 
 	swboard->chat_id = session->conv_seq++;
-	swboard->conv = serv_got_joined_chat(gc, swboard->chat_id, "MSN Chat");
+	swboard->conv = serv_got_joined_chat(gc, swboard->chat_id, name);
 	swboard->flag = MSN_SB_FLAG_IM;
 	
 	gaim_conv_chat_add_user(GAIM_CONV_CHAT(swboard->conv),

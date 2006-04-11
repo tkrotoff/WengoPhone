@@ -76,7 +76,25 @@ void IMChatSession::sendMessage(const std::string & message) {
 }
 
 void IMChatSession::changeTypingState(IMChat::TypingState state) {
-	LOG_DEBUG("changing my typing state");
+	const char *message;
+	
+	switch (state)
+	{
+		case IMChat::TypingStateTyping:
+			message = "typing";
+			break;
+
+		case IMChat::TypingStateStopTyping:
+			message = "stop typing";
+			break;
+
+		default:
+			message = "not typing";
+			break;
+	}
+
+	std::string messageState(message);
+	LOG_DEBUG("changing my typing state: " + messageState);
 	_imChat.changeTypingState(*this, state);
 }
 

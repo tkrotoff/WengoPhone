@@ -48,6 +48,8 @@ public:
 
 	GaimIMChat(IMAccount &account);
 
+	mConvInfo_t *CreateChatSession();
+
 	virtual void createSession(IMContactSet & imContactList);
 	virtual void closeSession(IMChatSession & chatSession);
 	virtual void sendMessage(IMChatSession & chatSession, const std::string & message);
@@ -57,6 +59,7 @@ public:
 
 	bool equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol);
 	void AddChatSessionInList(mConvInfo_t *conv);
+	static mConvInfo_t *FindChatStructById(int convId);
 
 private:
 
@@ -65,7 +68,6 @@ private:
 	typedef std::list<mConvInfo_t *>::iterator GaimChatSessionIterator;
 	void RemoveChatSessionFromList(int convId);
 	bool IsChatSessionInList(int convId);
-	static mConvInfo_t *FindChatStructById(int convId);
 	/* ************************************************** */
 };
 

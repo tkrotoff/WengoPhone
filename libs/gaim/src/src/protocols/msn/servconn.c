@@ -292,16 +292,16 @@ msn_servconn_write(MsnServConn *servconn, const char *buf, size_t len)
 		{
 			case MSN_SERVCONN_NS:
 			case MSN_SERVCONN_SB:
-				ret = write(servconn->fd, buf, len);
+				ret = send(servconn->fd, buf, len, MSG_NOSIGNAL);
 				break;
 #if 0
 			case MSN_SERVCONN_DC:
-				ret = write(servconn->fd, &buf, sizeof(len));
-				ret = write(servconn->fd, buf, len);
+				ret = send(servconn->fd, &buf, sizeof(len), MSG_NOSIGNAL);
+				ret = send(servconn->fd, buf, len, MSG_NOSIGNAL);
 				break;
 #endif
 			default:
-				ret = write(servconn->fd, buf, len);
+				ret = send(servconn->fd, buf, len, MSG_NOSIGNAL);
 				break;
 		}
 	}

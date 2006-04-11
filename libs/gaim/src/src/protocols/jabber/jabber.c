@@ -244,7 +244,7 @@ void jabber_send_raw(JabberStream *js, const char *data, int len)
 	} else {
 		if(js->fd < 0)
 			return;
-		ret = write(js->fd, data, len == -1 ? strlen(data) : len);
+		ret = send(js->fd, data, len == -1 ? strlen(data) : len, MSG_NOSIGNAL);
 	}
 
 	if(ret < 0)
