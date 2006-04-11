@@ -1209,7 +1209,7 @@ msn_create_chat(GaimConnection *gc, const char *name, GList *buddies)
 	gaim_conv_chat_add_user(GAIM_CONV_CHAT(swboard->conv),
 							gaim_account_get_username(gc->account), NULL, GAIM_CBFLAGS_NONE, TRUE);
 
-	for (bl = bl->next; bl != NULL; bl = bl->next)
+	for (bl = bl; bl != NULL; bl = bl->next)
 	{
 		user = bl->data;
 		msn_chat_invite(gc, swboard->chat_id, NULL, user);
