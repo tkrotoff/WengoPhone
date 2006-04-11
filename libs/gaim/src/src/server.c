@@ -348,7 +348,7 @@ void serv_chat_create(GaimConnection *g, const char *name, GList *buddies)
 
 	if (prpl_info && g_list_find(gaim_connections_get_all(), g) 
 		&& prpl_info->create_chat)
-		prpl_info->create_chat(g, buddies);
+		prpl_info->create_chat(g, name, buddies);
 }
 
 void serv_chat_invite(GaimConnection *g, int id, const char *message, const char *name)

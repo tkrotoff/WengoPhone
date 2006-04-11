@@ -307,7 +307,7 @@ struct _GaimPluginProtocolInfo
 	void (*deny_buddy_add)(GaimConnection *gc, const char *who, 
 						   const char *friendly, const char *message);
 
-	void (*create_chat)(GaimConnection *gc, GList *buddies);
+	void (*create_chat)(GaimConnection *gc, const char *name, GList *buddies);
 	
 	void (*set_alias)(GaimConnection *gc, const char *alias);
 };
