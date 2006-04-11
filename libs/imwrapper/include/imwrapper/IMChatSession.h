@@ -97,7 +97,7 @@ public:
 	 */
 	Event<void (IMChatSession & sender, IMChat::StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
 
-		/**
+	/**
 	 * Typing state event.
 	 *
 	 * @param sender this class

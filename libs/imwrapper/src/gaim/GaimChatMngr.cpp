@@ -28,6 +28,10 @@ extern "C" {
 #include "gaim/util.h"
 }
 
+#ifdef OS_WIN32
+#define snprintf _snprintf
+#endif
+
 void *gaim_wg_conversations_get_handle()
 {
 	static int handle;
@@ -321,6 +325,26 @@ void GaimChatMngr::WriteConvCbk(GaimConversation *conv, const char *name, const 
 void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
 								   GList *flags, GList *aliases, gboolean new_arrivals)
 {
+	GList *l;
+	GaimAccount *gAccount = gaim_conversation_get_account(conv);
+	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
+	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
+								GaimIMPrcl::GetEnumIMProtocol(gPrclId));
+	mConvInfo_t *mConv = NULL;
+	GaimIMChat *mChat = FindIMChat(*account);
+
+
+	if (!mChat)
+		return;
+
+	mConv = (mConvInfo_t *) conv->ui_data;
+
+	for (l = users; l != NULL; l = l->next)
+	{
+		mChat->contactAddedEvent(*mChat, 
+								 *((IMChatSession *)(mConv->conv_session)), 
+								 (char *) l->data);
+	}
 }
 
 void GaimChatMngr::ChatRenameUserCbk(GaimConversation *conv, const char *old_name,

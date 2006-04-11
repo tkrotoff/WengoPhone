@@ -178,9 +178,6 @@ void GaimIMFactory::GaimIMInit()
 	wgaim_init(GetModuleHandle(0));
 #endif
 
-	gaim_build_dir("/home/jbossart/.wengophone/gaim", S_IRUSR | S_IWUSR | S_IXUSR);
-	gaim_util_set_user_dir("/home/jbossart/.wengophone/gaim");
-
 	gaim_core_set_ui_ops(&core_wg_ops);
 	gaim_eventloop_set_ui_ops(&eventloop_wg_ops);
 	gaim_connections_set_ui_ops(&conn_wg_ops);
