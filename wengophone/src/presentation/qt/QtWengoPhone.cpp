@@ -47,7 +47,7 @@
 #include "QtHttpProxyLogin.h"
 #include "config/QtAdvancedConfig.h"
 #include "config/QtWengoConfigDialog.h"
-#include "profilebar/QtStatusBar.h"
+#include "profilebar/QtProfileBar.h"
 #include "history/QtHistoryWidget.h"
 
 #include <qtutil/WidgetFactory.h>
@@ -240,7 +240,7 @@ void QtWengoPhone::initThreadSafe() {
 	QGridLayout * gridlayout;
 	gridlayout = (QGridLayout *) centralWidget->layout();
 	gridlayout->removeWidget(profileBar);
-	gridlayout->addWidget(new QtStatusBar(_cWengoPhone,_cWengoPhone.getWengoPhone().getCurrentUserProfile(), centralWidget), 1, 0);
+	gridlayout->addWidget(new QtProfileBar(_cWengoPhone,_cWengoPhone.getWengoPhone().getCurrentUserProfile(), centralWidget), 1, 0);
 
 	//Status bar
 	QStatusBar * statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");

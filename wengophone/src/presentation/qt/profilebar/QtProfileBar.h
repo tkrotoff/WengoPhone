@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTSTATUSBAR_H
-#define QTSTATUSBAR_H
+#ifndef QTPROFILEBAR_H
+#define QTPROFILEBAR_H
 
 #include <QtGui>
 
@@ -32,17 +32,12 @@
 class UserProfile;
 class CWengoPhone;
 
-/**
- *
- * @author Mr K
- * @author Mathieu Stute
- */
-class QtStatusBar : public QWidget
+class QtProfileBar : public QWidget
 {
 	Q_OBJECT
 
 public:
-	QtStatusBar (CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent = 0, Qt::WFlags f = 0 );
+	QtProfileBar (CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent = 0, Qt::WFlags f = 0 );
 
 	void setWengos(float wengos);
 
@@ -118,14 +113,14 @@ public Q_SLOTS:
 	void notAvailableClicked(bool checked);
 
 	void forwardClicked(bool checked);
-	
+
 private:
-	
+
 	void wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsInfo);
 
 	void wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, float wengos);
-	
+
 	void wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail);
 };
 
-#endif
+#endif	//QTPROFILEBAR_H
