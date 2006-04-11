@@ -202,6 +202,7 @@ CURLcode Curl_getinfo(struct SessionHandle *data, CURLINFO info, ...)
 			  ssl[FIRSTSOCKET].handle;
 	  else
 		  *param_longp = NULL;
+	  break;
   default:
     return CURLE_BAD_FUNCTION_ARGUMENT;
   }
