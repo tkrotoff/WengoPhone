@@ -64,14 +64,14 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, UserProfile & userProfile, Q
 	_statusLabel->setText("S");
 	_nicknameLabel->setText("NickName");
 	_eventsLabel->setText("events");
-	_creditLabel->setText("E X,XX");
+	_creditLabel->setText(	QString() + QChar(0x20ac)+ QString(" 0.00"));
 
 	// Objects connection
 	connect(_statusLabel,SIGNAL(clicked()),SLOT(statusClicked()));
 	connect(_nicknameLabel,SIGNAL(clicked()),SLOT(nicknameClicked()));
 	connect(_eventsLabel,SIGNAL(clicked()),SLOT(eventsClicked()));
 	connect(_creditLabel,SIGNAL(clicked()),SLOT(creditClicked()));
-	
+
 	_userProfile.wsInfoCreatedEvent += boost::bind(&QtStatusBar::wsInfoCreatedEventHandler, this, _1, _2);
 }
 
@@ -254,7 +254,8 @@ void QtStatusBar::forwardClicked(bool){
 }
 
 void QtStatusBar::setWengos ( float wengos ){
-	_creditLabel->setText(QString("%1").arg(wengos) + QString(" Euros"));
+	// 0x20ac is the unicode code for the euros currency symbol
+	_creditLabel->setText(QString() + QChar(0x20ac) + QString(" %1").arg(wengos) );
 }
 
 void QtStatusBar::wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsInfo) {
