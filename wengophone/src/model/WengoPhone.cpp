@@ -26,8 +26,13 @@
 #include "profile/UserProfileFileStorage.h"
 #include "profile/UserProfile.h"
 #include "wenbox/WenboxPlugin.h"
+#include "webservices/subscribe/Subscribe.h"
+#include "WengoPhoneBuildId.h"
 
 #include <util/Logger.h>
+#include <http/HttpRequest.h>
+
+#include <sstream>
 
 WengoPhone::WengoPhone()
 	: _userProfile(*this) {
@@ -35,6 +40,17 @@ WengoPhone::WengoPhone()
 	_startupSettingListener = new StartupSettingListener();
 	_running = false;
 	_wenboxPlugin = NULL;
+	
+	//set HttpRequest User Agent
+	std::stringstream ss;
+	ss << WengoPhoneBuildId::SOFTPHONE_NAME;
+	ss << "-";
+	ss << WengoPhoneBuildId::VERSION;
+	ss << "-";
+	ss << WengoPhoneBuildId::BUILDID;
+	ss << "-";
+	ss << WengoPhoneBuildId::REVISION;
+	HttpRequest::setUserAgent(ss.str());
 }
 
 WengoPhone::~WengoPhone() {
