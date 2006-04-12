@@ -35,8 +35,6 @@
 #include <windows.h>
 #endif
 
-#include <Carbon/Carbon.h>
-
 #include <iostream>
 using namespace std;
 
@@ -114,15 +112,6 @@ void QtVideo::flipWebcam() {
 	driver->flipHorizontally(flip);
 
 	flip = !flip;
-
-	NMRec nmRec;
-	memset(&nmRec, 0, sizeof(NMRec));
-	nmRec.qType = nmType;
-	nmRec.nmMark = 1;
-	OSErr status = NMInstall(&nmRec);
-	if (status != noErr) {
-		LOG_ERROR("error while notificate");
-	}
 }
 
 void QtVideo::fullScreenButtonClicked() {
