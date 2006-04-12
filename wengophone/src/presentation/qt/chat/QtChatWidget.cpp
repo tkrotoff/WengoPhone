@@ -40,8 +40,8 @@ QWidget(parent, f), _cChatHandler(cChatHandler)
     layout->setMargin(0);
     setLayout(layout);
 
-	_stoppedTypingDelay=5000;
-	_notTypingDelay=5000;
+	_stoppedTypingDelay=1000;
+	_notTypingDelay=1000;
 	_stoppedTypingTimerId = -1;
 	_notTypingTimerId = -1;
 
@@ -203,6 +203,7 @@ void ChatWidget::enterPressed()
 		killTimer(_stoppedTypingTimerId);
 		_stoppedTypingTimerId = -1;
 	}
+	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
 
     QTextCursor curs(_chatHistory->document());
     curs.movePosition(QTextCursor::End);
@@ -317,6 +318,9 @@ void ChatWidget::setIMChatSession(IMChatSession * imChatSession)
 	_imChatSession = imChatSession;
 	if ( ! _imChatSession->canDoMultiChat() )
 		_inviteButton->setEnabled(false);
+
+	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
+
 }
 
 void ChatWidget::inviteContact(){
@@ -325,7 +329,6 @@ void ChatWidget::inviteContact(){
 }
 
 void ChatWidget::setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state){
-
 	IMContact from = * sender.getIMContactSet().begin();
 	QString remoteName = QString::fromUtf8(from.getContactId().c_str());
 	switch (state){

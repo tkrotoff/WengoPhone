@@ -55,14 +55,11 @@ void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IM
 
 	IMChat::TypingState * tmpState = new IMChat::TypingState;
 	*tmpState = state;
-	qDebug() << "TYPINGGGGGGGGGGGGGGGGGGGG ***************************";
 	typingStateChangedSignal(&sender,&imContact,tmpState);
 }
 
 void ChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state){
 	IMChat::TypingState	tmpState = *state;
-	qDebug() << "****: STATE" << *state;
-	delete state;
 
 	int tabs=_tabWidget->count();
 	for (int i=0; i<tabs;i++){
@@ -72,6 +69,7 @@ void ChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, cons
 			widget->setRemoteTypingState(*sender,*state);
 		}
 	}
+	delete state;
 }
 
 void ChatWindow::messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message) {
