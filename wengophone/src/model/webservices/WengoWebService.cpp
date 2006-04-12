@@ -74,7 +74,7 @@ int WengoWebService::call(WengoWebService * caller) {
 
 	//add wengo parameters
 	//TODO: retrive the language from Config
-	std::string data = "?lang=fra";
+	std::string data = "lang=fra";
 	data += "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME);
 
 	//add authentication parameters
@@ -87,7 +87,7 @@ int WengoWebService::call(WengoWebService * caller) {
 	}
 
 	_parameters = data + "&" + _parameters;
-
+	
 	return sendRequest();
 }
 
@@ -99,5 +99,5 @@ void WengoWebService::answerReceivedEventHandler(IHttpRequest * sender, int requ
 			_caller->answerReceived("", requestId);
 		}
 	}
-	delete sender;
+	//delete sender;
 }
