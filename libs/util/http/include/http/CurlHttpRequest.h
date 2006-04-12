@@ -27,23 +27,10 @@
 #include <string>
 #include <list>
 
-struct Request {
-	bool sslProtocol;
-	const std::string hostname;
-	unsigned int hostPort;
-	const std::string path;
-	const std::string data;
-	bool postMethod;
-};
-
-
-typedef std::list < Request > RequestList;
-
 struct POST_DATA {
 	const char * readptr;
 	size_t sizeleft;
 };
-
 
 /**
  * HttpRequest implementation using libcurl.
@@ -96,6 +83,15 @@ protected:
 	void run();
 
 private:
+
+	struct Request {
+		bool sslProtocol;
+		const std::string hostname;
+		unsigned int hostPort;
+		const std::string path;
+		const std::string data;
+		bool postMethod;
+	};
 
 	/** Sets libcurl global parameters. */
 	void setCurlParam();
@@ -166,11 +162,13 @@ private:
 	/** Proxy authentication mask. */
 	static long _proxyAuthentication;
 
+	typedef std::list < Request > RequestList;
+
 	/** Requests fifo. */
-	static RequestList _requestList;
+	RequestList _requestList;
 
 	/** Post data structure. */
-	static struct POST_DATA pooh;
+	struct POST_DATA pooh;
 
 	int _lastRequestId;
 };

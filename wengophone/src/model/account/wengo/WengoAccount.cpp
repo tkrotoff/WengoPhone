@@ -23,8 +23,6 @@
 #include "WengoAccountParser.h"
 #include "WengoAccountSerializer.h"
 
-#include <http/HttpRequestFactory.h>
-#include <http/CurlHttpRequestFactory.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
@@ -42,7 +40,6 @@ WengoAccount::WengoAccount(const std::string & login, const std::string & passwo
 	_wengoLogin = login;
 	_wengoPassword = password;
 	_autoLogin = autoLogin;
-	_answerReceivedAlready = false;
 	_ssoRequestOk = false;
 	_wengoLoginOk = false;
 	_stunServer = "stun.wengo.fr";
@@ -176,15 +173,13 @@ void WengoAccount::timeoutEventHandler() {
 	//Url::encode(_wengoPassword);
 	std::string data = "login=" + _wengoLogin + "&password=" + _wengoPassword + "&wl=" + WengoPhoneBuildId::SOFTPHONE_NAME;
 
-	//FIXME if not static it crashes inside boost::thread, do not know why
-	static HttpRequest httpRequest;
+	HttpRequest * httpRequest = new HttpRequest();
 
-	httpRequest.answerReceivedEvent += boost::bind(&WengoAccount::answerReceivedEventHandler, this, _1, _2, _3);
-	httpRequest.setFactory(new CurlHttpRequestFactory());
+	httpRequest->answerReceivedEvent += boost::bind(&WengoAccount::answerReceivedEventHandler, this, _1, _2, _3, _4);
 
 	LOG_DEBUG("setting proxy settings for SSO request");
-	httpRequest.setProxy(_networkDiscovery.getProxyServer(), _networkDiscovery.getProxyServerPort(),
-		_networkDiscovery.getProxyLogin(), _networkDiscovery.getProxyPassword());
+	httpRequest->setProxy(_networkDiscovery.getProxyServer(), _networkDiscovery.getProxyServerPort(),
+			_networkDiscovery.getProxyLogin(), _networkDiscovery.getProxyPassword());
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
@@ -192,10 +187,10 @@ void WengoAccount::timeoutEventHandler() {
 	//Last parameter: true = POST method, false = GET method
 	if (_SSOWithSSL) {
 		LOG_DEBUG("sending SSO request with SSL");
-		httpRequest.sendRequest(true, config.getWengoServerHostname(), 443, config.getWengoSSOPath(), data, true);
+		httpRequest->sendRequest(true, config.getWengoServerHostname(), 443, config.getWengoSSOPath(), data, true);
 	} else {
 		LOG_DEBUG("sending SSO request without SSL");
-		httpRequest.sendRequest(false, config.getWengoServerHostname(), 80, config.getWengoSSOPath(), data, true);
+		httpRequest->sendRequest(false, config.getWengoServerHostname(), 80, config.getWengoSSOPath(), data, true);
 	}
 }
 
@@ -203,12 +198,7 @@ void WengoAccount::lastTimeoutEventHandler() {
 	_timerFinished = true;
 }
 
-void WengoAccount::answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error) {
-	if (_answerReceivedAlready) {
-		return;
-	}
-
-	_answerReceivedAlready = true;
+void WengoAccount::answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error) {
 	if (error == HttpRequest::NoError && !answer.empty()) {
 		LOG_DEBUG("SSO request has been processed successfully");
 		_ssoRequestOk = true;
@@ -225,6 +215,7 @@ void WengoAccount::answerReceivedEventHandler(int requestId, const std::string &
 			_timerFinished = true;
 		}
 	}
+	delete sender;
 }
 
 std::string WengoAccount::serialize() {

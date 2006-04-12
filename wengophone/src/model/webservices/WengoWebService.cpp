@@ -63,10 +63,9 @@ void WengoWebService::setWengoAuthentication(bool auth) {
 }
 
 int WengoWebService::sendRequest() {
-	//FIXME if not static it crashes inside boost::thread, do not know why
-	static HttpRequest httpRequest;
-	httpRequest.answerReceivedEvent += boost::bind(&WengoWebService::answerReceivedEventHandler, this, _1, _2, _3);
-	return httpRequest.sendRequest(_https, _hostname, _port, _servicePath, _parameters, _get);
+	HttpRequest * httpRequest = new HttpRequest();
+	httpRequest->answerReceivedEvent += boost::bind(&WengoWebService::answerReceivedEventHandler, this, _1, _2, _3, _4);
+	return httpRequest->sendRequest(_https, _hostname, _port, _servicePath, _parameters, _get);
 }
 
 int WengoWebService::call(WengoWebService * caller) {
@@ -78,7 +77,7 @@ int WengoWebService::call(WengoWebService * caller) {
 	data += "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME);
 
 	//add authentication parameters
-	if( _auth ) {
+	if (_auth) {
 		String login = String::encodeUrl(_wengoAccount.getWengoLogin());
 		login.replace("%2e", ".", false);
 		String password = String::encodeUrl(_wengoAccount.getWengoPassword());
@@ -91,12 +90,13 @@ int WengoWebService::call(WengoWebService * caller) {
 	return sendRequest();
 }
 
-void WengoWebService::answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error) {
-	if( _caller ) {
-		if( error == HttpRequest::NoError ) {
+void WengoWebService::answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error) {
+	if (_caller) {
+		if (error == HttpRequest::NoError) {
 			_caller->answerReceived(answer, requestId);
 		} else {
 			_caller->answerReceived("", requestId);
 		}
 	}
+	delete sender;
 }

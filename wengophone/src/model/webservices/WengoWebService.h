@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_WENGOWEBSERVICE_H
-#define OW_WENGOWEBSERVICE_H
+#ifndef WENGOWEBSERVICE_H
+#define WENGOWEBSERVICE_H
 
 #include <http/HttpRequest.h>
 
@@ -42,7 +42,7 @@ public:
 	Event<void (WengoWebService & sender, int requestId, const std::string & answer)> answerReceivedEvent;
 
 	/**
-	 * default constructor
+	 * Default constructor.
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
@@ -92,13 +92,15 @@ public:
 	void setParameters(const std::string & param);
 
 	/**
-	 * Set/unset wengi authentication
+	 * Set/unset wengo authentication.
+	 *
 	 * @param auth activate authentication if true
 	 */
 	void setWengoAuthentication(bool auth);
 
 	/**
-	 * call the web service
+	 * Calls the web service.
+	 *
 	 * @param caller caller
 	 */
 	int call(WengoWebService * caller);
@@ -116,14 +118,12 @@ protected:
 	 * @param additionalParameters additional parameters to the request
 	 * @return unique request ID
 	 */
-	 int sendRequest();
+	int sendRequest();
 
 	/**
-	 * Answer received callback
-	 * @param answer the answer to the request
-	 * @param id the request id
+	 * @see IHttpRequest::answerReceivedEvent
 	 */
-	void answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error);
+	void answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error);
 
 private:
 
@@ -163,4 +163,4 @@ private:
 	WengoWebService * _caller;
 };
 
-#endif //OW_WENGOWEBSERVICE_H
+#endif	//WENGOWEBSERVICE_H

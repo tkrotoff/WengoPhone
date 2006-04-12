@@ -53,7 +53,7 @@ HttpRequest::HttpRequest() {
 		_factory = new DefaultHttpRequestFactory();
 	}
 	_httpRequestPrivate = _factory->create(this);
-	_httpRequestPrivate->answerReceivedEvent += answerReceivedEvent;
+	_httpRequestPrivate->answerReceivedEvent += boost::bind(&HttpRequest::answerReceivedEventHandler, this, _1, _2, _3, _4);
 	_httpRequestPrivate->dataReadProgressEvent += dataReadProgressEvent;
 	_httpRequestPrivate->dataSendProgressEvent += dataSendProgressEvent;
 }
@@ -165,4 +165,11 @@ void HttpRequest::abort() {
 
 void HttpRequest::run() {
 	_httpRequestPrivate->run();
+}
+
+void HttpRequest::answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, Error error) {
+	//sender = _httpRequestPrivate
+	//sender now is HttpRequest that will delete _httpRequestPrivate
+	//if a delete HttpRequest is made
+	answerReceivedEvent(this, requestId, answer, error);
 }

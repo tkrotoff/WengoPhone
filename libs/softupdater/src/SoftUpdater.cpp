@@ -38,7 +38,7 @@ void SoftUpdater::download(const std::string & url, const std::string & fileName
 	_fileName = fileName;
 	_httpRequest = new HttpRequest();
 	_httpRequest->dataReadProgressEvent += boost::bind(&SoftUpdater::dataReadProgressEventHandler, this, _1, _2, _3);
-	_httpRequest->answerReceivedEvent += boost::bind(&SoftUpdater::answerReceivedEventHandler, this, _1, _2, _3);
+	_httpRequest->answerReceivedEvent += boost::bind(&SoftUpdater::answerReceivedEventHandler, this, _1, _2, _3, _4);
 
 	_httpRequest->sendRequest(url, String::null);
 }
@@ -58,11 +58,13 @@ void SoftUpdater::dataReadProgressEventHandler(int requestId, double bytesDone, 
 	dataReadProgressEvent(bytesDone, bytesTotal, downloadSpeed);
 }
 
-void SoftUpdater::answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error) {
+void SoftUpdater::answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error) {
 	LOG_DEBUG("requestId=" + String::fromNumber(requestId) + " error=" + String::fromNumber(error));
 	if (error == HttpRequest::NoError && !answer.empty()) {
 		FileWriter file(_fileName);
 		file.write(answer);
 	}
 	downloadFinishedEvent(error);
+	delete sender;
+	sender = NULL;
 }

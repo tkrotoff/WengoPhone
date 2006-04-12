@@ -21,6 +21,7 @@
 #define DEFAULTHTTPREQUESTFACTORY_H
 
 #include <http/HttpRequestFactory.h>
+#include <http/QtHttpRequestFactory.h>
 #include <http/CurlHttpRequestFactory.h>
 
 /**
@@ -50,6 +51,7 @@ private:
 	/**
 	 * Default factory to use to create Thread.
 	 */
+	//QtHttpRequestFactory defaultFactory;
 	CurlHttpRequestFactory defaultFactory;
 };
 

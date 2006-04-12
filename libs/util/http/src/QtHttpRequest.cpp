@@ -119,7 +119,7 @@ void QtHttpRequest::transferDone(bool) {
 
 	LOG_DEBUG("error=" + http->errorString().toStdString());
 	QByteArray byteArray = http->readAll();
-	answerReceivedEvent(http->currentId(), std::string(byteArray.constData(), byteArray.size()), error);
+	answerReceivedEvent(NULL, http->currentId(), std::string(byteArray.constData(), byteArray.size()), error);
 }
 
 void QtHttpRequest::abort() {

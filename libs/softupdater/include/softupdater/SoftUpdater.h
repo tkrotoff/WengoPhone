@@ -68,7 +68,7 @@ private:
 
 	void dataReadProgressEventHandler(int requestId, double bytesDone, double bytesTotal);
 
-	void answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error);
+	void answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error);
 
 	std::string _fileName;
 

@@ -35,8 +35,6 @@ char * getstr(std::string str) {
 	return strdup(str.c_str());
 }
 
-RequestList CurlHttpRequest::_requestList;
-POST_DATA CurlHttpRequest::pooh;
 bool CurlHttpRequest::_verbose;
 bool CurlHttpRequest::_proxyAuthenticationDetermine;
 long CurlHttpRequest::_proxyAuthentication;
@@ -86,7 +84,7 @@ void CurlHttpRequest::run() {
 			res = curl_easy_perform(_curl);
 			if (res != CURLE_OK) {
 				cerr << curl_easy_strerror(res) << endl;
-				answerReceivedEvent(_lastRequestId, String::null, getReturnCode(res));
+				answerReceivedEvent(NULL, _lastRequestId, String::null, getReturnCode(res));
 			}
 
 			curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, & response);
@@ -372,7 +370,7 @@ int curlHTTPProgress(void * curlHttpRequestInstance, double dltotal, double dlno
 
 		//Launches answerReceivedEvent only if the entire response content has been received
 		if ((dlnow >= dltotal) && (dlnow != 0 && dltotal != 0)) {
-			instance->answerReceivedEvent(requestId, instance->entireResponse, HttpRequest::NoError);
+			instance->answerReceivedEvent(NULL, requestId, instance->entireResponse, HttpRequest::NoError);
 		}
 
 		if (instance->abortTransfer) {

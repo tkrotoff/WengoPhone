@@ -79,13 +79,11 @@ private:
 
 	void wengoLoginEventHandler();
 
-	void answerReceivedEventHandler(int requestId, const std::string & answer, HttpRequest::Error error);
+	void answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error);
 
 	void timeoutEventHandler();
 
 	void lastTimeoutEventHandler();
-
-	bool _answerReceivedAlready;
 
 	std::string _wengoLogin;
 

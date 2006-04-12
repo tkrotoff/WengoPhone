@@ -97,11 +97,12 @@ public:
 	/**
 	 * The HTTP answer to the request has been received.
 	 *
+	 * @param sender this class
 	 * @param requestId HTTP request ID
 	 * @param answer HTTP answer (std::string is used as a byte array)
 	 * @param error Error code
 	 */
-	Event<void (int requestId, const std::string & answer, Error error)> answerReceivedEvent;
+	Event<void (IHttpRequest * sender, int requestId, const std::string & answer, Error error)> answerReceivedEvent;
 
 	/**
 	 * Indicates the current progress of the download.
@@ -272,28 +273,30 @@ public:
 	}
 
 	/**
-	 * Set the User Agent.
+	 * Sets the User Agent.
 	 *
-	 * @param userAgent the user agent.
+	 * @param userAgent the user agent
 	 */
-	static void setUserAgent(std::string userAgent) {
+	static void setUserAgent(const std::string & userAgent) {
 		_userAgent = userAgent;
 	}
-	
+
 	/**
-	 * Set the User Agent.
+	 * Sets the User Agent.
 	 *
-	 * @param userAgent the user agent.
+	 * @param userAgent the user agent
 	 */
 	static const std::string & getUserAgent() {
 		return _userAgent;
 	}
-	
+
 	void abort();
 
 	void run();
 
 private:
+
+	void answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, Error error);
 
 	static HttpRequestFactory * _factory;
 
@@ -311,7 +314,8 @@ private:
 
 	/** HTTP proxy password. */
 	static std::string _proxyPassword;
-	
+
+	/** HTTP user agent. */
 	static std::string _userAgent;
 };
 
