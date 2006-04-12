@@ -361,6 +361,7 @@ gaim_network_get_port_from_fd(int fd)
 }
 
 #ifdef __APPLE__
+#include <sys/syscall.h>
 int
 gaim_socket_setsockopt(int domain, int type, int protocol) 
 {
@@ -368,7 +369,7 @@ gaim_socket_setsockopt(int domain, int type, int protocol)
 	int ret = 0;
 	int ret_socket = 0;
 	
-	ret_socket = socket(domain, type, protocol); 	
+	ret_socket = syscall(SYS_socket, domain, type, protocol); 	
 	if (ret_socket == -1)
 		return ret_socket;
 	ret = setsockopt(domain, SOL_SOCKET, SO_NOSIGPIPE, &val, sizeof(val));
