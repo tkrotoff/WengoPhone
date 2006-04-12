@@ -79,7 +79,10 @@ bool IMContactXMLSerializer::unserialize(const std::string & data) {
 		return false;
 	}
 
-	login = im.FirstChild("account").FirstChild().Text()->Value();
+	TiXmlText * loginText = im.FirstChild("account").FirstChild().Text();
+	if( loginText ) {
+		login = loginText->Value();
+	}
 
 	IMAccount account(login, "", protocol);
 	//Find this IMAccount in IMAccountHandler
@@ -87,7 +90,8 @@ bool IMContactXMLSerializer::unserialize(const std::string & data) {
 	if (it != _imAccountHandler.end()) {
 		_imContact._imAccount = (IMAccount &)(*it);
 	} else {
-		LOG_FATAL("this IMAccount does not exist in IMAccountHandler: " + account.getLogin());
+		LOG_WARN("this IMAccount does not exist in IMAccountHandler: " + account.getLogin());
+		return false;
 	}
 	////
 
