@@ -317,6 +317,11 @@ void GaimChatMngr::WriteConvCbk(GaimConversation *conv, const char *name, const 
 	{
 		mConvInfo_t *mConv = (mConvInfo_t *)conv->ui_data;
 		GaimIMChat *mIMChat = FindIMChatByGaimConv(conv);
+
+		// Prevent from double message during a chat session
+		if (strcmp(gaim_account_get_username(conv->account), name) == 0)
+			return;
+
 		mIMChat->messageReceivedEvent(*mIMChat, *((IMChatSession *)(mConv->conv_session)),
 										std::string(name), std::string(message));
 	}

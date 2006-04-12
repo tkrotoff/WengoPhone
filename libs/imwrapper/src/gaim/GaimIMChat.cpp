@@ -198,8 +198,8 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 		gGC = gaim_conversation_get_gc(gConv);
 		gaim_conversation_destroy(gConv);
 		snprintf(chatName, sizeof(chatName), "%d", chatSession.getId());
-		mlist = g_list_append(mlist, (char *) firstContactId.c_str());
 		mlist = g_list_append(mlist, (char *) contactId.c_str());
+		mlist = g_list_append(mlist, (char *) firstContactId.c_str());
 		serv_chat_create(gGC, chatName, mlist);
 	}	
 	else

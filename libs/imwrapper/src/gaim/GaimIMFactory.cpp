@@ -170,12 +170,20 @@ GaimIMFactory::GaimIMFactory()
 void GaimIMFactory::GaimIMInit()
 {
 	char *search_path;
+	char *home_dir;
 
 	if (!g_thread_supported())
 		g_thread_init(NULL);
 
 #ifdef OS_WIN32
 	wgaim_init(GetModuleHandle(0));
+#endif
+
+
+#ifndef OS_WIN32
+	home_dir = g_build_filename(gaim_home_dir(), ".wengophone", "gaim", NULL);
+	gaim_build_dir(home_dir, S_IRUSR|S_IWUSR|S_IXUSR);
+	gaim_util_set_user_dir(home_dir);
 #endif
 
 	gaim_core_set_ui_ops(&core_wg_ops);
