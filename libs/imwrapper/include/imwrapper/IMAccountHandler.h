@@ -40,8 +40,6 @@ public:
 	 */
 	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
 
-	void removeIMAccount( const IMAccount & imaccount) {};
-
 };
 
 #endif	//IMACCOUNTHANDLER_H

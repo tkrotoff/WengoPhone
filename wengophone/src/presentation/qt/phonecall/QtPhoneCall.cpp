@@ -34,6 +34,8 @@
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
 
+#include <pixertool/pixertool.h>
+
 #include <QtGui>
 #include <QSvgRenderer>
 
@@ -46,7 +48,7 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 
 	_hold = true;
 
-
+	_encrustLocalWebcam = true;
 	_showVideo = false;
 
 	stateChangedEvent += boost::bind(&QtPhoneCall::stateChangedEventHandler, this, _1);
@@ -256,8 +258,45 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 
 void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
 	//image will be deleted in videoFrameReceivedThreadSafe
+	// If we want to encrust the local webcam picture, we do it
 	QImage * image = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
-			remoteVideoFrame.getHeight(), QImage::Format_RGB32);
+		remoteVideoFrame.getHeight(), QImage::Format_RGB32);
+
+	if (_encrustLocalWebcam) {
+		const unsigned marge = 5;
+		const unsigned ratio = 3;
+		unsigned width = remoteVideoFrame.getWidth() / ratio;
+		unsigned height = remoteVideoFrame.getHeight() / ratio;
+		unsigned posx = remoteVideoFrame.getWidth() - width - marge;
+		unsigned posy = remoteVideoFrame.getHeight() - height - marge;
+
+/*
+		piximage originalImage;
+		originalImage.palette = PIX_OSI_RGB32;
+		originalImage.width = localVideoFrame.getWidth();
+		originalImage.height = localVideoFrame.getHeight();
+		originalImage.data = localVideoFrame.getFrame();
+
+		piximage * resizedImage = pix_alloc(PIX_OSI_RGB32, width, height);
+
+		pix_convert(PIX_NO_FLAG, resizedImage, &originalImage);
+
+		QImage resizedQImage = QImage(resizedImage->data, resizedImage->width,
+			resizedImage->height, QImage::Format_RGB32);
+		
+		QPainter painter(image);
+		painter.drawImage(posx, posy, resizedQImage);
+
+		pix_free(resizedImage);
+
+*/
+		QImage localImage = QImage(localVideoFrame.getFrame(), localVideoFrame.getWidth(),
+			localVideoFrame.getHeight(),
+			QImage::Format_RGB32).scaledToWidth(width, Qt::SmoothTransformation);
+
+		QPainter painter(image);
+		painter.drawImage(posx, posy, localImage);
+	}
 
 	typedef PostEvent1<void (QImage *), QImage *> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe, this, _1), image);

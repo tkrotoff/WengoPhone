@@ -99,5 +99,5 @@ void WengoWebService::answerReceivedEventHandler(IHttpRequest * sender, int requ
 			_caller->answerReceived("", requestId);
 		}
 	}
-	//delete sender;
+	//FIXME (crashes on Linux/MacOS X): delete sender;
 }

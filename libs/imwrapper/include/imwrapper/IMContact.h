@@ -24,6 +24,7 @@
 #include <imwrapper/EnumPresenceState.h>
 
 #include <util/Event.h>
+#include <util/Picture.h>
 
 #include <string>
 #include <set>
@@ -70,11 +71,20 @@ public:
 	/**
 	 * Constructs a new IMContact.
 	 *
-	 * @param imAccount the imAccount that the IMContact is associated with
+	 * @param imAccount the imAccount that the IMContact is associated with.
 	 * @param contactId id of the IMContact to create
 	 * @param presenceHandler the PresenceHandler that will receive presence message
 	 */
-	IMContact(IMAccount & imAccount, const std::string & contactId);
+	IMContact(const IMAccount & imAccount, const std::string & contactId);
+
+	/**
+	 * Constructs a new IMContact.
+	 *
+	 * @param protocol the protocol of the IMContact
+	 * @param contactId id of the IMContact to create
+	 * @param presenceHandler the PresenceHandler that will receive presence message
+	 */
+	IMContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId);
 
 	IMContact(const IMContact & imContact);
 
@@ -85,17 +95,21 @@ public:
 	 *
 	 * @param imContact the IMContact to test
 	 */
-	bool operator==(const IMContact & imContact) const;
+	bool operator == (const IMContact & imContact) const;
 
-	bool operator<(const IMContact & imContact) const;
+	bool operator < (const IMContact & imContact) const;
 
-	const IMAccount & getIMAccount() const {
+	const IMAccount * getIMAccount() const {
 		return _imAccount;
 	}
+
+	void setIMAccount(const IMAccount * imAccount);
 
 	const std::string & getContactId() const {
 		return _contactId;
 	}
+
+	EnumIMProtocol::IMProtocol getProtocol() const;
 
 	/**
 	 * Add this IMContact to a group.
@@ -134,6 +148,15 @@ public:
 		imContactChangedEvent(*this);
 	}
 
+	void setIcon(const Picture & icon) {
+		_icon = icon;
+		imContactChangedEvent(*this);
+	}
+
+	const Picture & getIcon() const {
+		return _icon;
+	}
+
 	void setBlocked(bool blocked) {
 		_blocked = blocked;
 	}
@@ -155,12 +178,19 @@ private:
 	 */
 	std::string cleanContactId() const;
 
-	//FIXME: should be a reference to the associated IMAccount.
-	IMAccount _imAccount;
+	/**
+	 * Pointer to the associated IMAccount.
+	 * If NULL, no IMAccount is currently associated with this IMAccount
+	 */
+	const IMAccount  * _imAccount;
 
 	std::string _contactId;
 
+	EnumIMProtocol::IMProtocol _protocol;
+
 	std::string _alias;
+
+	Picture _icon;
 
 	/** True if this IMContact is blocked. */
 	bool _blocked;

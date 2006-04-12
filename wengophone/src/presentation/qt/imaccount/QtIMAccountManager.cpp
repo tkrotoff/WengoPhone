@@ -58,7 +58,7 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * pare
 	connect(modifyIMAccountButton, SIGNAL(clicked()), SLOT(modifyIMAccount()));
 
 	QPushButton * deleteIMAccountButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "deleteIMAccountButton");
-	connect(modifyIMAccountButton, SIGNAL(clicked()), SLOT(deleteIMAccount()));
+	connect(deleteIMAccountButton, SIGNAL(clicked()), SLOT(deleteIMAccount()));
 
 	QPushButton * closeButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "closeButton");
 	connect(closeButton, SIGNAL(clicked()), _imAccountManagerWindow, SLOT(accept()));
@@ -66,6 +66,9 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * pare
 	_treeWidget = Object::findChild<QTreeWidget *>(_imAccountManagerWidget, "treeWidget");
 	connect(_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
 			SLOT(itemDoubleClicked(QTreeWidgetItem *, int)));
+
+	connect(_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)),
+			SLOT(itemClicked(QTreeWidgetItem *, int)));
 
 	loadIMAccounts();
 }
@@ -108,7 +111,8 @@ void QtIMAccountManager::loadIMAccounts() {
 		accountStrList << "";
 
 		QtIMAccountItem * item = new QtIMAccountItem(_treeWidget, accountStrList);
-		item->setCheckState(2, Qt::Checked);
+		item->setCheckState(2,
+			(imAccount->getPresenceState() == EnumPresenceState::PresenceStateOnline) ? Qt::Checked : Qt::Unchecked);
 		item->setIMAccount(imAccount);
 	}
 }
@@ -138,11 +142,33 @@ void QtIMAccountManager::addIMAccount(QAction * action) {
 }
 
 void QtIMAccountManager::deleteIMAccount() {
+	QtIMAccountItem * imAccountItem = (QtIMAccountItem *)_treeWidget->currentItem();
+	if (imAccountItem) {
+		IMAccount * imAccount = imAccountItem->getIMAccount();
+		_userProfile.removeIMAccount(*imAccount);
+	}
+
 	loadIMAccounts();
 }
 
 void QtIMAccountManager::modifyIMAccount() {
 	loadIMAccounts();
+}
+
+void QtIMAccountManager::itemClicked(QTreeWidgetItem * item, int column) {
+	if (column == 2) {
+		QtIMAccountItem * imAccountItem = dynamic_cast<QtIMAccountItem *>(item);
+		IMAccount * imAccount = imAccountItem->getIMAccount();
+
+		if (item->checkState(column) == Qt::Checked) {
+			item->setCheckState(column, Qt::Unchecked);
+			_userProfile.setPresenceState(EnumPresenceState::PresenceStateOffline, imAccount);
+			_userProfile.getConnectHandler().disconnect(*imAccount);
+		} else {
+			item->setCheckState(column, Qt::Checked);
+			_userProfile.getConnectHandler().connect(*imAccount);
+		}
+	}
 }
 
 void QtIMAccountManager::itemDoubleClicked(QTreeWidgetItem * item, int column) {

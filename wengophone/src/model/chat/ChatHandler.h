@@ -20,15 +20,14 @@
 #ifndef CHATHANDLER_H
 #define CHATHANDLER_H
 
-#include <imwrapper/IMChat.h>
-#include <imwrapper/IMChatMap.h>
-
 #include <util/NonCopyable.h>
 #include <util/Event.h>
 
 #include <map>
+#include <set>
 
 class IMAccount;
+class IMChat;
 class IMChatSession;
 class IMContactSet;
 class ConnectHandler;
@@ -61,23 +60,47 @@ public:
 	 *
 	 * @param imAccount the IMAccount for which we want to create the new IMChatSession
 	 */
-	void createSession(const IMAccount & imAccount, IMContactSet & imContactSet);
+	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
 
 private:
 
-	typedef std::vector<IMChatSession *> IMChatSessionList;
-
+	/**
+	 * @see ConnectHandler::connectedEvent
+	 */
 	void connectedEventHandler(ConnectHandler & sender, IMAccount & account);
 
+	/**
+	 * @see ConnectHandler::disconnectedEvent
+	 */
 	void disconnectedEventHandler(ConnectHandler & sender, IMAccount & account);
 
+	/**
+	 * @see IMChat::newIMChatSessionCreatedEvent
+	 */
 	void newIMChatSessionCreatedEventHandler(IMChat & sender, IMChatSession & imChatSession);
 
+	/**
+	 * @see UserProfile::newIMAccountAddedEvent
+	 */
 	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
+
+	/**
+	 * @see UserProfile::imAccountRemovedEvent
+	 */
+	void imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount);
+
+	/**
+	 * @see IMChatSession::imChatSessionWillDieEvent
+	 */
+	void imChatSesssionWillDieEventHandler(IMChatSession & sender);
+
+	typedef std::map<IMAccount *, IMChat *> IMChatMap;
 
 	IMChatMap _imChatMap;
 
-	IMChatSessionList _imChatSessionList;
+	typedef std::set<IMChatSession *> IMChatSessionSet;
+
+	IMChatSessionSet _imChatSessionSet;
 };
 
 #endif	//CHATHANDLER_H

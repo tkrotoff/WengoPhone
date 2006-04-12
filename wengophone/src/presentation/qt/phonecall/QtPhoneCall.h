@@ -147,6 +147,8 @@ private:
 
 	QtPhoneCallStatus _status;
 
+	bool _encrustLocalWebcam;
+
 protected:
 
 	void timerEvent(QTimerEvent *event);

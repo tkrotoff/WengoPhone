@@ -60,6 +60,8 @@ void GaimIMPresence::changeMyPresence(EnumPresenceState::PresenceState state,
 			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state),
 									TRUE, "message", note.c_str(), NULL);
 	}
+
+	IMPresence::changeMyPresence(state, note);
 }
 
 void GaimIMPresence::changeMyAlias(const std::string & nickname)

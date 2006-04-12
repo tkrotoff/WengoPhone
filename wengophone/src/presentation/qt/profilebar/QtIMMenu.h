@@ -17,60 +17,55 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTIMACCOUNTMANAGER_H
-#define QTIMACCOUNTMANAGER_H
+#ifndef QTIMMENU_H
+#define QTIMMENU_H
 
-#include <QObject>
+#include <QtGui>
 
-#include <string>
-
+class IMAccount;
 class UserProfile;
-class QWidget;
-class QDialog;
-class QAction;
-class QTreeWidget;
-class QTreeWidgetItem;
 
 /**
- * Manages IM accounts: add/delete/modify IM accounts.
+ * Menu for IMAccounts. This menu displays entries to set the PresenceState
+ * of an IMAccount
  *
- * @author Tanguy Krotoff
+ * @author Philippe BERNERY
  */
-class QtIMAccountManager : public QObject {
+class QtIMMenu : public QMenu
+{
 	Q_OBJECT
+
 public:
 
-	QtIMAccountManager(UserProfile & userProfile, QWidget * parent);
-
-	QWidget * getWidget() const {
-		return _imAccountManagerWidget;
-	}
-
-	void show();
+	/**
+	 * @param userProfile the UserProfile to interact with
+	 * @param imAccount the IMAccount to change the PresenceState of
+	 * @param parent the parent QWidget
+	 */
+	QtIMMenu(UserProfile & userProfile, IMAccount & imAccount, QWidget * parent = NULL);
 
 private Q_SLOTS:
 
-	void addIMAccount(QAction * action);
+	void onlineClicked(bool checked);
 
-	void deleteIMAccount();
+	void dndClicked(bool checked);
 
-	void modifyIMAccount();
+	void invisibleClicked(bool checked);
 
-	void itemClicked(QTreeWidgetItem * item, int column);
+	void awayClicked(bool checked);
 
-	void itemDoubleClicked(QTreeWidgetItem * item, int column);
+	void forwardClicked(bool checked);
+
+	void disconnectClicked(bool checked);
+
+	void connectClicked(bool checked);
 
 private:
 
-	void loadIMAccounts();
+	IMAccount & _imAccount;
 
 	UserProfile & _userProfile;
 
-	QWidget * _imAccountManagerWidget;
-
-	QDialog * _imAccountManagerWindow;
-
-	QTreeWidget * _treeWidget;
 };
 
-#endif	//QTIMACCOUNTMANAGER_H
+#endif //QTIMMENU_H

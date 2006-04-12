@@ -85,7 +85,7 @@ void QtEditMyProfile::changeAvatarClicked() {
 
 		Picture picture(myData);
 
-		_userProfile.setIcon(picture);
+		_userProfile.setIcon(picture, NULL);
 
 		writeToConfig();
 		readFromConfig();

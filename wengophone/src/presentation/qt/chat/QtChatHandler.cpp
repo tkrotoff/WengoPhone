@@ -58,7 +58,7 @@ void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(ChatHandler & 
 	}
 }
 
-void QtChatHandler::createSession(const IMAccount & imAccount, IMContactSet & imContactSet) {
+void QtChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContactSet) {
 	_cChatHandler.createSession(imAccount, imContactSet);
 }
 

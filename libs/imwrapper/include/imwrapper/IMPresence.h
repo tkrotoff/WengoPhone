@@ -115,7 +115,9 @@ public:
 	 *        used only with PresenceUserDefined
 	 */
 	virtual void changeMyPresence(EnumPresenceState::PresenceState state,
-		const std::string & note = String::null) = 0;
+		const std::string & note = String::null) {
+		_imAccount.setPresenceState(state);
+	}
 
 	/**
 	 * Changes my alias (e.g: 'Joe... at the beach!').

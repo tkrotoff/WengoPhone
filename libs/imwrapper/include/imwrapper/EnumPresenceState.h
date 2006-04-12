@@ -22,6 +22,8 @@
 
 #include <util/NonCopyable.h>
 
+#include <string>
+
 /**
  * Presence states (online, offline, away...).
  *
@@ -63,6 +65,17 @@ public:
 		/** An eror occured while changing my presence. */
 		MyPresenceStatusError
 	};
+
+	/**
+	 * Get a string representation of the presence state.
+	 */
+	static std::string toString(PresenceState presenceState);
+
+	/**
+	 * Get a presence state from a string representation.
+	 */
+	static PresenceState fromString(const std::string & presenceState);
+
 };
 
 #endif	//ENUMPRESENCESTATE_H

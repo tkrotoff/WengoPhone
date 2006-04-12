@@ -142,24 +142,50 @@ public:
 
 private:
 
-	typedef std::map<IMAccount, Presence *> PresenceMap;
+	typedef std::map<IMAccount *, Presence *> PresenceMap;
 
-	typedef	std::multimap<IMAccount, const IMContact *> IMContactMultiMap;
+	typedef	std::multimap<IMAccount *, const IMContact *> IMContactMultiMap;
 
+	/**
+	 * @see ConnectHandler::connectedEvent
+	 */
 	void connectedEventHandler(ConnectHandler & sender, IMAccount & account);
 
+	/**
+	 * @see ConnectHandler::disconnectedEvent
+	 */
 	void disconnectedEventHandler(ConnectHandler & sender, IMAccount & account);
 
+	/**
+	 * @see IMPresence::presenceStateChangedEvent
+	 */
 	void presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
 		const std::string & note, const std::string & from);
 
+	/**
+	 * @see IMPresence::myPresenceStatusEvent
+	 */
 	void myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status);
 
+	/**
+	 * @see IMPresence::subscribeStatusEvent
+	 */
+	void subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status);
+	
+	/**
+	 * @see IMPresence::authorizationRequestEvent
+	 */
 	void authorizationRequestEventHandler(IMPresence & sender, const std::string & contactId, const std::string & message);
 
-	void subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status);
-
+	/**
+	 * @see UserProfile::newIMAccountAddedEvent
+	 */
 	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
+
+	/**
+	 * @see UserProfile::imAccountRemovedEvent
+	 */
+	void imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
 	/**
 	 * Find the Presence related to the given protocol.
@@ -168,7 +194,7 @@ private:
 	 * @param protocol the protocol
 	 * @return an iterator to the desired Presence or 'end' of the given PresenceMap
 	 */
-	static PresenceMap::iterator findPresence(PresenceMap & presenceMap, IMAccount & imAccount);
+	static PresenceMap::iterator findPresence(PresenceMap & presenceMap, IMAccount * imAccount);
 
 	PresenceMap _presenceMap;
 

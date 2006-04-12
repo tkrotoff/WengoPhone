@@ -51,10 +51,6 @@ elif WengoOSMacOSX():
 
 	cc_flags += ['-x objective-c++']
 
-	libs += [
-		'objc'
-	]
-
 if WengoGetConsoleArgument('enable-libsound-portaudio'):
 	sources += ['src/portaudio/AudioDevice.cpp']
 	libs += ['portaudio']

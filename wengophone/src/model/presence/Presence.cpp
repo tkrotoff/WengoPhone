@@ -93,14 +93,12 @@ void Presence::setState(EnumPresenceState::PresenceState state) {
 	case EnumPresenceState::PresenceStateDoNotDisturb:
 		_state = _state->doNotDisturb();
 		break;
-	case EnumPresenceState::PresenceStateUserDefined:
-		_state = _state->userDefined();
+	case EnumPresenceState::PresenceStateInvisible:
+		_state = _state->invisible();
 		break;
-	/*
-	case EnumPresenceState::PresenceStateUnknown:
-		_state = _state->unknown();
+	case EnumPresenceState::PresenceStateForward:
+		_state = _state->forward();
 		break;
-	*/
 	default:
 		LOG_FATAL("EnumPresenceState::PresenceState unknown state");
 	}

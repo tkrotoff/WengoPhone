@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef MYPRESENCESTATEUSERDEFINED_H
-#define MYPRESENCESTATEUSERDEFINED_H
+#ifndef MYPRESENCESTATEFORWARD_H
+#define MYPRESENCESTATEFORWARD_H
 
 #include "MyPresenceState.h"
 
@@ -28,7 +28,7 @@
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class MyPresenceStateUserDefined : public MyPresenceState {
+class MyPresenceStateForward : public MyPresenceState {
 public:
 
 	MyPresenceState * online() throw(MyPresenceStateException);
@@ -39,26 +39,29 @@ public:
 
 	MyPresenceState * away() throw(MyPresenceStateException);
 	
-	MyPresenceState * userDefined() throw(MyPresenceStateException);
+	MyPresenceState * invisible() throw(MyPresenceStateException);
+
+	MyPresenceState * forward() throw(MyPresenceStateException);
 
 	std::string toString() const {
 		return toString_static();
 	}
 
 	static MyPresenceState * getInstance() {
-		static MyPresenceStateUserDefined presenceState;
+		static MyPresenceStateForward presenceState;
 		
 		return &presenceState;
 	}
 
 private:
 
-	MyPresenceStateUserDefined() {
+	MyPresenceStateForward() {
 	}
 
 	static std::string toString_static() {
-		return "UserDefined";
+		return "Forward";
 	}
+
 };
 
-#endif	//MYPRESENCESTATEUSERDEFINED_H
+#endif //MYPRESENCESTATEFORWARD_H

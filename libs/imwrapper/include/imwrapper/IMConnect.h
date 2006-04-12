@@ -20,10 +20,10 @@
 #ifndef IMCONNECT_H
 #define IMCONNECT_H
 
+#include "IMAccount.h"
+
 #include <util/Interface.h>
 #include <util/Event.h>
-
-class IMAccount;
 
 /**
  * Wrapper for Instant Messaging connection.
@@ -76,7 +76,14 @@ public:
 
 protected:
 
-	IMConnect(IMAccount & account) : _imAccount(account) {}
+	IMConnect(IMAccount & account) : _imAccount(account) {
+		loginStatusEvent +=
+			boost::bind(&IMConnect::loginStatusEventHandler, this, _1, _2);
+	}
+
+	void loginStatusEventHandler(IMConnect & sender, LoginStatus status) {
+		_imAccount.setConnected(status == LoginStatusConnected);
+	}
 
 	IMAccount & _imAccount;
 };

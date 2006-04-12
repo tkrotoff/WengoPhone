@@ -30,9 +30,10 @@
 #include <list>
 
 class Contact;
-class IMContactListHandler;
-class IMContactList;
+class IMAccount;
 class IMContact;
+class IMContactList;
+class IMContactListHandler;
 class IMPresence;
 class PresenceHandler;
 class StringList;
@@ -141,6 +142,16 @@ public:
 	}
 
 private:
+
+	/**
+	 * @see UserProfile::newIMAccountAddedEvent
+	 */
+	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
+
+	/**
+	 * @see UserProfile::imAccountRemovedEvent
+	 */
+	void imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
 	/**
 	 * @see IMContactListHandler::newIMContactAddedEvent

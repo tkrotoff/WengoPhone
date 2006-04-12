@@ -1,0 +1,23 @@
+env = WengoGetEnvironment()
+
+libs = []
+
+include_path = [
+	'include'
+]
+
+headers = [
+	'include/vcard/VCardParser.h'
+]
+
+sources = [
+	'src/VCardParser.cpp'
+]
+
+defines = {}
+
+env.WengoAddDefines(defines)
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+
+env.WengoStaticLibrary('vcardparser', sources, headers)

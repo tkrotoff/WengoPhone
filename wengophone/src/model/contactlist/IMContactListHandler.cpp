@@ -38,30 +38,30 @@ IMContactListHandler::~IMContactListHandler() {
 }
 
 void IMContactListHandler::addIMContact(const std::string & groupName, const IMContact & imContact) {
-	IMContactListMap::const_iterator it = _imContactListMap.find(imContact.getIMAccount());
+	IMContactListMap::const_iterator it = _imContactListMap.find((IMAccount *)imContact.getIMAccount());
 
 	if (it != _imContactListMap.end()) {
 		(*it).second->addContact(groupName, imContact.getContactId());
 	} else {
 		LOG_ERROR("this IMAccount is not registered: "
-			+ imContact.getIMAccount().getLogin());
+			+ imContact.getIMAccount()->getLogin());
 	}
 }
 
 void IMContactListHandler::removeIMContact(const std::string & groupName, const IMContact & imContact) {
-	IMContactListMap::const_iterator it = _imContactListMap.find(imContact.getIMAccount());
+	IMContactListMap::const_iterator it = _imContactListMap.find((IMAccount *)imContact.getIMAccount());
 
 	if (it != _imContactListMap.end()) {
 		(*it).second->removeContact(groupName, imContact.getContactId());
 	} else {
 		LOG_ERROR("this IMAccount is not registered: "
-			+ imContact.getIMAccount().getLogin());
+			+ imContact.getIMAccount()->getLogin());
 	}
 }
 
 void IMContactListHandler::newContactAddedEventHandler(IMContactList & sender,
 	const std::string & groupName, const std::string & contactId) {
-	IMContact imContact((IMAccount &)sender.getIMAccount(), contactId);
+	IMContact imContact(sender.getIMAccount(), contactId);
 
 	_imContactSet.insert(imContact);
 
@@ -70,7 +70,7 @@ void IMContactListHandler::newContactAddedEventHandler(IMContactList & sender,
 
 void IMContactListHandler::contactRemovedEventHandler(IMContactList & sender,
 	const std::string & groupName, const std::string & contactId) {
-	IMContact imContact((IMAccount &)sender.getIMAccount(), contactId);
+	IMContact imContact(sender.getIMAccount(), contactId);
 
 	IMContactSet::iterator it = _imContactSet.find(imContact);
 
@@ -80,7 +80,7 @@ void IMContactListHandler::contactRemovedEventHandler(IMContactList & sender,
 }
 
 void IMContactListHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	IMContactListMap::const_iterator it = _imContactListMap.find(imAccount);
+	IMContactListMap::const_iterator it = _imContactListMap.find(&imAccount);
 
 	if (it == _imContactListMap.end()) {
 		IMContactList * imContactList = IMWrapperFactory::getFactory().createIMContactList(imAccount);
@@ -95,7 +95,7 @@ void IMContactListHandler::newIMAccountAddedEventHandler(UserProfile & sender, I
 			imContactList->contactMovedEvent += 
 				boost::bind(&IMContactListHandler::contactMovedEventHandler, this, _1, _2, _3);
 
-			_imContactListMap[imAccount] = imContactList;
+			_imContactListMap[&imAccount] = imContactList;
 		} else {
 			LOG_DEBUG("cannot create an IMContactList");
 		}
@@ -104,10 +104,21 @@ void IMContactListHandler::newIMAccountAddedEventHandler(UserProfile & sender, I
 	}
 }
 
+void IMContactListHandler::imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount) {
+	IMContactListMap::iterator it = _imContactListMap.find(&imAccount);
+
+	if (it != _imContactListMap.end()) {
+		delete (*it).second;
+		_imContactListMap.erase(it);
+	} else {
+		LOG_ERROR("this IMAccount has not been added " + imAccount.getLogin());
+	}
+}
+
 void IMContactListHandler::contactMovedEventHandler(IMContactList & sender,
 	const std::string & groupName, const std::string & contactId) {
 
-	IMContact imContact((IMAccount &)sender.getIMAccount(), contactId);
+	IMContact imContact(sender.getIMAccount(), contactId);
 	IMContactSet::const_iterator it = _imContactSet.find(imContact);
 
 	if (it != _imContactSet.end()) {

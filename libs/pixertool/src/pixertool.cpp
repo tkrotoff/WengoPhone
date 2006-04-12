@@ -71,71 +71,68 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 	int pix_fmt_target;
 	int need_avfree = 0;
 	int need_resize = 0;
+	uint8_t * buf_source = img_src->data;
 	ImgReSampleContext *resample_context = NULL;
-	pixosi pix_osi_source = img_src->palette;
-	unsigned width = img_src->width;
-	unsigned height = img_src->height;
-	uint8_t *buf_source = img_src->data;
 
-	if (pix_osi_source == PIX_OSI_NV12) {
-		buf_source = _nv12_to_yuv420p(buf_source, width, height);
+	// If the format is NV12, transforming it
+	if (img_src->palette == PIX_OSI_NV12) {
+		buf_source = _nv12_to_yuv420p(img_src->data, img_src->width, img_src->height);
 		need_avfree = 1;
-		pix_osi_source = PIX_OSI_YUV420P;
+		img_src->palette = PIX_OSI_YUV420P;
 	}
+	////
 
-	if ((width != img_dst->width) || (height != img_dst->height)) {
+	// Check if the piximage needs to be resized
+	if ((img_src->width != img_dst->width) || (img_src->height != img_dst->height)) {
 		need_resize = 1;
 	}
+	////
 
-	len_target = pix_size(img_dst->palette, width, height);
+	len_target = pix_size(img_dst->palette, img_src->width, img_src->height);
 
-	pix_fmt_source = pix_ffmpeg_from_pix_osi(pix_osi_source);
+	pix_fmt_source = pix_ffmpeg_from_pix_osi(img_src->palette);
 	pix_fmt_target = pix_ffmpeg_from_pix_osi(img_dst->palette);
 
-	avpicture_fill(&avp_source,  buf_source, pix_fmt_source, width, height);
-	avpicture_fill(&avp_target, img_dst->data, pix_fmt_target, width, height);
+	avpicture_fill(&avp_source,  buf_source, pix_fmt_source, img_src->width, img_src->height);
+	avpicture_fill(&avp_target, img_dst->data, pix_fmt_target, img_dst->width, img_dst->height);
 
 	/* Only flip other planes if the destination palette is YUV420
 	 * FIXME DUDE
 	 */
-	if ((flags & PIX_FLIP_HORIZONTALLY) && (pix_osi_source == PIX_OSI_YUV420P)) {
-		avp_source.data[0] += avp_source.linesize[0] * (height - 1);
+	if ((flags & PIX_FLIP_HORIZONTALLY) && (img_src->palette == PIX_OSI_YUV420P)) {
+		avp_source.data[0] += avp_source.linesize[0] * (img_src->height - 1);
 		avp_source.linesize[0] *= -1;
 
 		if (pix_fmt_source == PIX_FMT_YUV420P) {
-			avp_source.data[1] += avp_source.linesize[1] * (height / 2 - 1);
+			avp_source.data[1] += avp_source.linesize[1] * (img_src->height / 2 - 1);
 			avp_source.linesize[1] *= -1;
-			avp_source.data[2] += avp_source.linesize[2] * (height / 2 - 1);
+			avp_source.data[2] += avp_source.linesize[2] * (img_src->height / 2 - 1);
 			avp_source.linesize[2] *= -1;
 		}
 	}
 
 	// Resizing picture if needed. Needs test
-	/*
 	if (need_resize) {
-		avpicture_fill(&avp_tmp_target, img_dst->data, pix_fmt_target, width, height);
+		avpicture_fill(&avp_tmp_target, img_dst->data, pix_fmt_target, img_dst->width, img_dst->height);
 		//TODO: optimize this part
 		resample_context = img_resample_init(img_dst->width, img_dst->height,
 			img_src->width, img_src->height);
-		if (resample_context);
-			img_resample(resample_context, avp_tmp_target, avp_source);
+		if (resample_context) {
+			img_resample(resample_context, &avp_tmp_target, &avp_source);
 			img_resample_close(resample_context);
 		}
 
 		if (img_convert(&avp_target, pix_fmt_target,
 			&avp_tmp_target, pix_fmt_source,
-			width, height) == -1) {
+			img_src->width, img_src->height) == -1) {
 			return PIX_NOK;
 		}
-	}
-	*/
-	////
-
-	// Converting palette
-	if (img_convert(&avp_target, pix_fmt_target,
-		&avp_source, pix_fmt_source,
-		width, height) == -1) {
-		return PIX_NOK;
+	} else {
+		if (img_convert(&avp_target, pix_fmt_target,
+			&avp_source, pix_fmt_source,
+			img_src->width, img_src->height) == -1) {
+			return PIX_NOK;
+		}
 	}
 	////
 

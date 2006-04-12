@@ -218,12 +218,13 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 	// UserDefined (used by PhApi to set the alias)
 	if (state != EnumPresenceState::PresenceStateUserDefined) {
 		contact->getIMContact(imContact).setPresenceState(state);
-		if (imContact.getIMAccount().getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
+		if (imContact.getIMAccount()->getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
 			contact->getIMContact(imContact).setAlias(alias);
 		}
 	} else {
 		contact->getIMContact(imContact).setPresenceState(EnumPresenceState::PresenceStateOnline);
 		contact->getIMContact(imContact).setAlias(alias);
+		//contact->getIMContact(imContact).setIcon();
 	}
 }
 
@@ -312,5 +313,23 @@ void ContactList::_removeFromContactGroup(const std::string & groupName, Contact
 
 		LOG_DEBUG("removing a Contact from group " + groupName);
 		((ContactGroup &)(*_contactGroupSet.find(ContactGroup(groupName)))).removeContact(contact);
+	}
+}
+
+void ContactList::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
+	//TODO: link IMContact of protocol imAccount._protocol that are not linked
+}
+
+void ContactList::imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount) {
+	for (Contacts::const_iterator it = _contacts.begin();
+		it != _contacts.end();
+		++it) {
+		for (IMContactSet::const_iterator imContactIt = ((Contact &)*it).getIMContactSet().begin();
+			imContactIt != ((Contact &)*it).getIMContactSet().end();
+			++imContactIt) {
+			if ((*(*imContactIt).getIMAccount()) == imAccount) {
+				((IMContact &)*imContactIt).setIMAccount(NULL); 
+			}
+		}
 	}
 }

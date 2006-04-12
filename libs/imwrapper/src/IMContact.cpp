@@ -19,23 +19,29 @@
 
 #include <imwrapper/IMContact.h>
 
-#include <imwrapper/IMAccount.h>
-#include <imwrapper/EnumIMProtocol.h>
-
 #include <util/Logger.h>
 
 using namespace std;
 
-IMContact::IMContact(IMAccount & imAccount, const std::string & contactId)
-	: _imAccount(imAccount) {
+IMContact::IMContact(const IMAccount & imAccount, const std::string & contactId)
+	: _imAccount(&imAccount) {
 	_contactId = contactId;
 	_presenceState = EnumPresenceState::PresenceStateOffline;
+	_protocol = EnumIMProtocol::IMProtocolUnknown;
+}
+
+IMContact::IMContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId) {
+	_imAccount = NULL;
+	_contactId = contactId;
+	_presenceState = EnumPresenceState::PresenceStateOffline;
+	_protocol = protocol;
 }
 
 IMContact::IMContact(const IMContact & imContact)
 	: _imAccount(imContact._imAccount) {
 	_contactId = imContact._contactId;
 	_presenceState = imContact._presenceState;
+	_protocol = imContact._protocol;
 	_groupSet = imContact._groupSet;
 }
 
@@ -43,13 +49,22 @@ IMContact::~IMContact() {
 }
 
 bool IMContact::operator == (const IMContact & imContact) const {
-	return ((_imAccount == imContact._imAccount)
+	return (((_imAccount && imContact._imAccount) ? (*_imAccount == *(imContact._imAccount)) : (_protocol == imContact._protocol))
 		&& (cleanContactId() == imContact.cleanContactId()));
 }
 
 bool IMContact::operator < (const IMContact & imContact) const {
-	return ((_imAccount < imContact._imAccount)
-		|| ((_imAccount == imContact._imAccount) && (cleanContactId() < imContact.cleanContactId())));
+	bool result = false;
+
+	if (_imAccount && imContact._imAccount) {
+		result = ((*_imAccount < *(imContact._imAccount))
+			|| ((_imAccount == imContact._imAccount) && (cleanContactId() < imContact.cleanContactId())));
+	} else {
+		result = ((_protocol < imContact._protocol)
+			|| ((_protocol == imContact._protocol) && (cleanContactId() < imContact.cleanContactId())));
+	}
+
+	return result;
 }
 
 void IMContact::addToGroup(const std::string & groupName) {
@@ -84,4 +99,23 @@ string IMContact::cleanContactId() const {
 	}
 
 	return result;
+}
+
+EnumIMProtocol::IMProtocol IMContact::getProtocol() const {
+	EnumIMProtocol::IMProtocol result;
+
+	if (_imAccount) {
+		result = _imAccount->getProtocol();
+	} else {
+		result = _protocol;
+	}
+
+	return result;
+}
+
+void IMContact::setIMAccount(const IMAccount * imAccount) {
+	if (imAccount == NULL) {
+		_protocol = _imAccount->getProtocol();
+	}
+	_imAccount = imAccount;
 }

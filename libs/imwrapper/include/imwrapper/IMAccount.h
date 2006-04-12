@@ -21,7 +21,10 @@
 #define IMACCOUNT_H
 
 #include <imwrapper/EnumIMProtocol.h>
+#include <imwrapper/EnumPresenceState.h>
 #include <imwrapper/IMAccountParameters.h>
+
+#include <util/Event.h>
 
 #include <string>
 
@@ -36,13 +39,31 @@
  */
 class IMAccount {
 	friend class IMAccountXMLSerializer;
+	friend class IMConnect;
+	friend class IMPresence;
 public:
+
+	/**
+	 * Emitted when the IMAccount has been changed.
+	 *
+	 * @param sender this class
+	 */
+	Event< void (IMAccount & sender) > imAccountChangedEvent;
+
+	/**
+	 * Emitted when the IMAccount will be deleted.
+	 *
+	 * @param sender this class
+	 */
+	Event< void (IMAccount & sender) > imAccountWillDieEvent;
 
 	IMAccount();
 
 	IMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol);
 
 	IMAccount(const IMAccount & imAccount);
+
+	~IMAccount();
 
 	const std::string & getLogin() const {
 		return _login;
@@ -54,18 +75,20 @@ public:
 		return _password;
 	}
 
-	void setPassword(const std::string & password) {
-		_password = password;
-	}
-	
+	void setPassword(const std::string & password);
+
 	EnumIMProtocol::IMProtocol getProtocol() const {
 		return _protocol;
 	}
  
-	bool isEnabled() { return true;}
-	
-	void setEnabled(bool enabled) {/*FIXME Enable me !! */};
-	
+	EnumPresenceState::PresenceState getPresenceState() const {	
+		return _presenceState;
+	}
+
+	bool isConnected() {
+		return _connected;
+	}
+
 	IMAccountParameters & getIMAccountParameters() {
 		return _imAccountParameters;
 	}
@@ -75,6 +98,20 @@ public:
 	bool operator < (const IMAccount & imAccount) const;
 
 private:
+
+	/**
+	 * Used by IMPresence to set the PresenceState.
+	 */
+	void setPresenceState(EnumPresenceState::PresenceState presenceState) {
+		_presenceState = presenceState;
+	}
+ 
+	/**
+	 * Used by IMConnect to set the connection state.
+	 */
+	void setConnected(bool connected) {
+		_connected = connected;
+	}
 
 	/**
 	 * This method exists because of Jabber that uses conatctId with a 'Resource'
@@ -88,6 +125,11 @@ private:
 	 */
 	static std::string correctedLogin(const std::string & login, EnumIMProtocol::IMProtocol protocol);
 
+	/**
+	 * @see Settings::valueChangedEvent
+	 */
+	void valueChangedEventHandler(Settings & sender, const std::string & key);
+
 	std::string _login;
 
 	std::string _password;
@@ -97,6 +139,14 @@ private:
 	/** This Settings is used to contain more parameters (eg.: "use_http => true" for MSN protocol). */
 	IMAccountParameters _imAccountParameters;
 
+	/**
+	 * Desired PresenceState for this IMAccount.
+	 * If PresenceState is Offline, the IMAccount will not connect automatically.
+	 */
+	EnumPresenceState::PresenceState _presenceState;
+
+	/** Connection state. */
+	bool _connected;
 };
 
 

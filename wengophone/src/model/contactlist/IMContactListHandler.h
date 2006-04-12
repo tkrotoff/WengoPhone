@@ -115,18 +115,35 @@ public:
 
 private:
 
+	/**
+	 * @see IMContactList::newContactAddedEvent
+	 */
 	void newContactAddedEventHandler(IMContactList & sender,
 		const std::string & groupName, const std::string & contactId);
 
+	/**
+	 * @see IMContactList::contactRemovedEvent
+	 */
 	void contactRemovedEventHandler(IMContactList & sender,
 		const std::string & groupName, const std::string & contactId);
 
+	/**
+	 * @see IMContactList::contactMovedEvent
+	 */
 	void contactMovedEventHandler(IMContactList & sender,
 		const std::string & groupName, const std::string & contactId);
 
+	/**
+	 * @see UserProfile::newIMAccountAddedEvent
+	 */
 	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
-	typedef std::map<IMAccount, IMContactList *> IMContactListMap;
+	/**
+	 * @see UserProfile::imAccountRemovedEvent
+	 */
+	void imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount);
+	
+	typedef std::map<IMAccount *, IMContactList *> IMContactListMap;
 
 	typedef std::set<IMContact> IMContactSet;
 

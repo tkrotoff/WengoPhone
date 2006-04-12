@@ -34,6 +34,7 @@ PhApiIMPresence::PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrappe
 
 void PhApiIMPresence::changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {
 	_phApiWrapper.changeMyPresence(state, note);
+	IMPresence::changeMyPresence(state, note);
 }
 
 void PhApiIMPresence::changeMyAlias(const std::string & nickname) {

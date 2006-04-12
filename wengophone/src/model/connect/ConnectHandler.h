@@ -64,9 +64,9 @@ public:
 	 */
 	Event<void (ConnectHandler & sender, IMAccount & imAccount)> disconnectedEvent;
 
-	void connect(const IMAccount & imAccount);
+	void connect(IMAccount & imAccount);
 
-	void disconnect(const IMAccount & imAccount);
+	void disconnect(IMAccount & imAccount);
 
 	ConnectHandler(UserProfile & userProfile);
 
@@ -74,13 +74,31 @@ public:
 
 private:
 
+	/**
+	 * @see UserProfile::newIMAccountAddedEvent
+	 */
 	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
+	/**
+	 * @see UserProfile::imAccountRemovedEvent
+	 */
+	void imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount);
+
+	/**
+	 * @see IMConnect::loginStatusEvent
+	 */
 	void loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status);
 
-	typedef std::map<IMAccount, Connect *> ConnectMap;
+	typedef std::map<IMAccount *, Connect *> ConnectMap;
 
 	typedef std::set<IMAccount> IMAccountSet;
+
+	typedef std::set<IMAccount *> IMAccountPtrSet;
+
+	/**
+	 * Find an IMAccount. Testing by value (rather by pointer).
+	 */
+	static IMAccount * findIMAccount(const IMAccountPtrSet & set, const IMAccount & imAccount);
 
 	ConnectMap _connectMap;
 
@@ -97,7 +115,7 @@ private:
 	 * IMAccount actually added to WengoPhone. connect could be called
 	 * before adding IMAccount. This could leads some problem.
 	 */
-	IMAccountSet _actualIMAccount;
+	IMAccountPtrSet _actualIMAccount;
 };
 
 #endif	//CONNECTHANDLER_H

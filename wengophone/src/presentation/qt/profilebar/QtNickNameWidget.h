@@ -1,3 +1,22 @@
+/*
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2006  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 #ifndef QTNICKNAMEWIDGET_H
 #define QTNICKNAMEWIDGET_H
 
@@ -78,52 +97,6 @@ public Q_SLOTS:
 	void avatarClicked();
 
 	void nicknameChanged();
-
-	// Menus actions
-
-	void wengoOnlineClicked(bool checked);
-	void wengoDNDClicked(bool checked);
-	void wengoInvisibleClicked(bool checked);
-	void wengoBRBClicked(bool checked);
-	void wengoAwayClicked(bool checked);
-	void wengoNotAvailableClicked(bool checked);
-	void wengoForwardClicked(bool checked);
-
-	void yahooAvailableClicked(bool checked);
-	void yahooBusyClicked(bool checked);
-	void yahooAwayClicked(bool checked);
-	void yahooNotHereClicked(bool checked);
-	void yahooOnPhoneClicked(bool checked);
-	void yahooHiddenClicked(bool checked);
-	void yahooDisconnectClicked(bool checked);
-	void yahooReconnectClicked(bool checked);
-	void yahooBRBClicked(bool checked);
-
-	void msnOnlineClicked(bool checked);
-	void msnDNDClicked(bool checked);
-	void msnBRBClicked(bool checked);
-	void msnAwayClicked(bool checked);
-	void msnOnPhoneClicked(bool checked);
-	void msnLunchClicked(bool checked);
-	void msnOffLineClicked(bool checked);
-	void msnDisconnectClicked(bool checked);
-	void msnReconnectClicked(bool checked);
-
-	void aimAvailableClicked(bool checked);
-	void aimAwayClicked(bool checked);
-	void aimNAClicked(bool checked);
-	void aimPrivacyClicked(bool checked);
-	void aimOffLineClicked(bool checked);
-	void aimDisconnectClicked(bool checked);
-	void aimReconnectClicked(bool checked);
-
-	void jabberAvailableClicked(bool checked);
-	void jabberAwayClicked(bool checked);
-	void jabberChatClicked(bool checked);
-	void jabberDNDClicked(bool checked);
-	void jabberNAClicked(bool checked);
-	void jabberDisconnectClicked(bool checked);
-	void jabberReconnectClicked(bool checked);
 
 };
 

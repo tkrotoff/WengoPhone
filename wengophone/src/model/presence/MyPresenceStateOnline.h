@@ -38,7 +38,9 @@ public:
 
 	MyPresenceState * away() throw(MyPresenceStateException);
 	
-	MyPresenceState * userDefined() throw(MyPresenceStateException);
+	MyPresenceState * invisible() throw(MyPresenceStateException);
+
+	MyPresenceState * forward() throw(MyPresenceStateException);
 
 	std::string toString() const {
 		return toString_static();

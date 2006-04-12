@@ -75,8 +75,15 @@ public:
 	 * @exception MyPresenceStateException if the switch cannot be done
 	 * @return the new MyPresenceState that corresponds to the away presence status
 	 */
-	virtual MyPresenceState * userDefined() throw (MyPresenceStateException) = 0;
+	virtual MyPresenceState * invisible() throw (MyPresenceStateException) = 0;
 
+	/**
+	 * Switchs the presence status to away.
+	 *
+	 * @exception MyPresenceStateException if the switch cannot be done
+	 * @return the new MyPresenceState that corresponds to the away presence status
+	 */
+	virtual MyPresenceState * forward() throw (MyPresenceStateException) = 0;
 
  	/**
  	 * @return the string identifying the state.

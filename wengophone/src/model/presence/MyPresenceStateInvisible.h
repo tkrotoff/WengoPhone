@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef MYPRESENCESTATEOFFLINE_H
-#define MYPRESENCESTATEOFFLINE_H
+#ifndef MYPRESENCESTATEINVISIBLE_H
+#define MYPRESENCESTATEINVISIBLE_H
 
 #include "MyPresenceState.h"
 
@@ -26,8 +26,9 @@
  *
  * @ingroup model
  * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
-class MyPresenceStateOffline : public MyPresenceState {
+class MyPresenceStateInvisible : public MyPresenceState {
 public:
 
 	MyPresenceState * online() throw(MyPresenceStateException);
@@ -47,20 +48,20 @@ public:
 	}
 
 	static MyPresenceState * getInstance() {
-		static MyPresenceStateOffline presenceState;
+		static MyPresenceStateInvisible presenceState;
 		
 		return &presenceState;
 	}
 
 private:
 
-	MyPresenceStateOffline() {
+	MyPresenceStateInvisible() {
 	}
 
 	static std::string toString_static() {
-		return "Offline";
+		return "Invisible";
 	}
 
 };
 
-#endif	//MYPRESENCESTATEOFFLINE_H
+#endif //MYPRESENCESTATEINVISIBLE_H

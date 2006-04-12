@@ -80,9 +80,7 @@ bool ContactXMLSerializer::unserialize(const string & data) {
 	TiXmlNode * imLastChild = NULL;
 	while ((imLastChild = wgCard.Node()->IterateChildren("im", imLastChild))) {
 		string imData;
-		//FIXME: constructing an IMContact like this is not very good
-		IMAccount fakeAccount;
-		IMContact imContact(fakeAccount, "");
+		IMContact imContact(EnumIMProtocol::IMProtocolUnknown, "");
 		IMContactXMLSerializer imContactSerializer(imContact, _imAccountHandler);
 
 		imData << *imLastChild;

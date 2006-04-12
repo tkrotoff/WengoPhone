@@ -27,11 +27,15 @@
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
 
+#include <util/Logger.h>
+
 #include <QtGui>
 
 #if defined OS_WINDOWS && defined CC_MSVC
 #include <windows.h>
 #endif
+
+#include <Carbon/Carbon.h>
 
 #include <iostream>
 using namespace std;
@@ -80,9 +84,26 @@ void QtVideo::paintEvent() {
 		xpos = (frameSize.width() - size.width()) / 2;
 		ypos = (frameSize.height() - size.height()) / 2;
 #endif
+		/*
+		piximage originalImage;
+		originalImage.palette = PIX_OSI_RGB32;
+		originalImage.width = _image.width();
+		originalImage.height = _image.height();
+		originalImage.data = _image.bits();
 
-		painter.drawImage(xpos, ypos, _image.scaled(size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+		piximage * resizedImage = pix_alloc(PIX_OSI_RGB32, size.width(), size.height());
 
+		pix_convert(PIX_NO_FLAG, resizedImage, &originalImage);
+
+		QImage resizedQImage = QImage(resizedImage->data, resizedImage->width,
+			resizedImage->height, QImage::Format_RGB32);
+		
+		painter.drawImage(xpos, ypos, resizedQImage);
+
+		pix_free(resizedImage);
+		*/
+		painter.drawImage(xpos, ypos, _image.scaled(size, Qt::KeepAspectRatioByExpanding,
+			Qt::SmoothTransformation));
 	}
 }
 
@@ -93,6 +114,15 @@ void QtVideo::flipWebcam() {
 	driver->flipHorizontally(flip);
 
 	flip = !flip;
+
+	NMRec nmRec;
+	memset(&nmRec, 0, sizeof(NMRec));
+	nmRec.qType = nmType;
+	nmRec.nmMark = 1;
+	OSErr status = NMInstall(&nmRec);
+	if (status != noErr) {
+		LOG_ERROR("error while notificate");
+	}
 }
 
 void QtVideo::fullScreenButtonClicked() {

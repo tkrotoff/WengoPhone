@@ -53,7 +53,7 @@ void IMChatSession::close() {
 
 void IMChatSession::addIMContact(const IMContact & imContact) {
 	//The IMContact must be of the same protocol of the IMAccount
-	if (_imChat.getIMAccount() == imContact.getIMAccount()) {
+	if (_imChat.getIMAccount() == *imContact.getIMAccount()) {
 		LOG_DEBUG("adding a new IMContact: " + imContact.getContactId());
 		_imChat.addContact(*this, imContact.getContactId());
 	}

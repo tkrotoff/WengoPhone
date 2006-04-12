@@ -166,6 +166,16 @@ File File::createTemporaryFile() {
 	return File(tempnam(NULL, NULL));
 }
 
+bool File::exists(const std::string & path) {
+	struct stat statinfo;
+
+	if (stat(path.c_str(), &statinfo) == 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 FileReader::FileReader(const std::string & filename)
 	: File(filename) {
 }

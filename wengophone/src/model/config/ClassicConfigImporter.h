@@ -41,6 +41,10 @@ public:
 	 */
 	static bool importConfig(const std::string & import);
 
+private:
+
+	static std::string getWengoClassicConfigPath();
+
 };
 
 #endif	//CLASSICCONFIGIMPORTER_H

@@ -134,6 +134,8 @@ void GaimAccountMngr::AddIMAccount(IMAccount &account)
 
 	if (mIMAccount == NULL)
 	{
+		account.imAccountWillDieEvent +=
+			boost::bind(&GaimAccountMngr::imAccountWillDieEventHandler, this, _1);
 		_gaimIMAccountList.push_back(&account);
 	}
 }
@@ -151,4 +153,9 @@ void GaimAccountMngr::RemoveIMAccount(IMAccount &account)
 		}
 	}
 }
+
+void GaimAccountMngr::imAccountWillDieEventHandler(IMAccount & imAccount) {
+	RemoveIMAccount(imAccount);
+}
+
 /* ******************************************************************** */

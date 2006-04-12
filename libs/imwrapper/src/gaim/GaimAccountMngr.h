@@ -62,6 +62,8 @@ public:
 
 private:
 
+	void imAccountWillDieEventHandler(IMAccount & imAccount);
+
 	GaimAccountMngr();
 	static GaimAccountMngr *_staticInstance;
 	static GaimPresenceMngr *_presenceMngr;

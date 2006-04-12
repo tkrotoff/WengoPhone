@@ -92,8 +92,21 @@ public:
 
 	/**
 	 * A new IMAccount has been added.
+	 *
+	 * @param sender this class
+	 * @param imAccount the added IMAccount. The reference remains valid during
+	 * runtime or until the IMAccount has been removed.
 	 */
 	Event< void (UserProfile & sender, IMAccount & imAccount) > newIMAccountAddedEvent;
+
+	/**
+	 * An IMAccount has been removed.
+	 *
+	 * @param sender this class
+	 * @param imAccount the removed IMAccount. The reference will be invalidated
+	 * at the end of the event.
+	 */
+	Event< void (UserProfile & sender, IMAccount & imAccount) > imAccountRemovedEvent;
 
 	/**
 	 * The history has been loaded.
@@ -231,12 +244,22 @@ public:
 	
 	void addSipAccount(const std::string & login, const std::string & password, bool autoLogin);
 
+	/**
+	 * Adds an IMAccount to this UserProfile.
+	 *
+	 * The IMAccount is copied internally.
+	 *
+	 * @param imAccount the IMAccount to add
+	 */
 	void addIMAccount(const IMAccount & imAccount);
 
-	virtual EnumPresenceState::PresenceState getPresenceState() const;
+	/**
+	 * Removes an IMAccount from this UserProfile.
+	 *
+	 * @param imAccount the IMAccount to remove
+	 */
+	void removeIMAccount(const IMAccount & imAccount);
 
-	virtual void setPresenceState(EnumPresenceState::PresenceState presenceState);
-	
 	/**
 	 * Makes a call given a Contact.
 	 *
@@ -259,21 +282,45 @@ public:
 	void startIM(Contact & contact);
 
 	/**
-	 * Change alias of this user.
-	 *
-	 * The alias is seen in every IM protocols.
+	 * Changes alias of this user.
 	 *
 	 * @param alias the alias to set.
+	 * @param imAccount the IMAccount to apply the alias to.
+	 * Pass NULL to set the alias to all IMAccount.
 	 */
-	void setAlias(const std::string & alias);
+	void setAlias(const std::string & alias, IMAccount * imAccount);
 
-	// Inherited from Profile
-	void setIcon(const Picture & icon);
-	////
+	/**
+	 * Changes icon of this user.
+	 *
+	 * @param icon the icon to set
+	 * @param imAccount the IMAccount to apply the icon to. 
+	 * Pass NULL to set the icon to all IMAccount.
+	 */
+	void setIcon(const Picture & icon, IMAccount * account);
+
+	EnumPresenceState::PresenceState getPresenceState() const;
+
+	/**
+	 * Changes the PresenceState of this user.
+	 *
+	 * @param presenceState the PresenceState to set
+	 * @param imAccount the IMAccount to apply the PresenceState to.
+	 * Pass NULL to set the alias to all IMAccount.
+	 */
+	void setPresenceState(EnumPresenceState::PresenceState presenceState, IMAccount * imAccount);
 
 private:
 
-	/**
+	/* Inherited from Profile */
+	void setAlias(const std::string & alias) { _alias = alias; };
+
+	void setIcon(const Picture & icon) { setIcon(icon, NULL); };
+
+	void setPresenceState(EnumPresenceState::PresenceState presenceState) {};
+	/**/
+
+	/*
 	 * @see ConnectHandler::connectedEvent
 	 */
 	void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);

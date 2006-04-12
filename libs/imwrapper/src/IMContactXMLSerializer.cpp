@@ -23,6 +23,7 @@
 #include <imwrapper/IMAccountHandler.h>
 
 #include <util/Logger.h>
+#include <util/Base64.h>
 
 #include <tinyxml.h>
 
@@ -34,17 +35,23 @@ IMContactXMLSerializer::IMContactXMLSerializer(IMContact & imContact, IMAccountH
 
 std::string IMContactXMLSerializer::serialize() {
 	string result;
-	EnumIMProtocol enumIMProtocol;
+	EnumIMProtocol::IMProtocol protocol;
 
 	result += ("<im protocol=\"" 
-		+ enumIMProtocol.toString(_imContact.getIMAccount().getProtocol())
+		+ EnumIMProtocol::toString(_imContact.getProtocol())
 		+ "\">\n");
 
 	result += ("<id>" + _imContact.getContactId() + "</id>\n");
 
 	result += ("<alias>" + _imContact.getAlias() + "</alias>\n");
 
-	result += ("<account>" + _imContact.getIMAccount().getLogin() + "</account>\n");
+	if (_imContact.getIMAccount()) {
+		result += ("<account>" + _imContact.getIMAccount()->getLogin() + "</account>\n");	
+	}
+
+	if (!_imContact._icon.getData().empty()) {
+		result += ("<photo><![CDATA[" + Base64::encode(_imContact._icon.getData()) + "]]></photo>");
+	}
 
 	result += "<groups>\n";
 	for (IMContact::GroupSet::const_iterator it = _imContact._groupSet.begin();
@@ -61,7 +68,6 @@ std::string IMContactXMLSerializer::serialize() {
 
 bool IMContactXMLSerializer::unserialize(const std::string & data) {
 	TiXmlDocument doc;
-	EnumIMProtocol imProtocol;
 
 	doc.Parse(data.c_str());
 
@@ -70,42 +76,50 @@ bool IMContactXMLSerializer::unserialize(const std::string & data) {
 
 	// Retrieving associated account
 	EnumIMProtocol::IMProtocol protocol;
-	string login;
 
 	TiXmlElement * lastChildElt = im.Element();
 	if (lastChildElt) {
-		protocol = imProtocol.toIMProtocol(lastChildElt->Attribute("protocol"));
+		protocol = EnumIMProtocol::toIMProtocol(lastChildElt->Attribute("protocol"));
 	} else {
 		return false;
 	}
 
-	TiXmlText * loginText = im.FirstChild("account").FirstChild().Text();
-	if( loginText ) {
-		login = loginText->Value();
-	}
-
-	IMAccount account(login, "", protocol);
-	//Find this IMAccount in IMAccountHandler
-	IMAccountHandler::const_iterator it = _imAccountHandler.find(account);
-	if (it != _imAccountHandler.end()) {
-		_imContact._imAccount = (IMAccount &)(*it);
+	TiXmlText * login = im.FirstChild("account").FirstChild().Text();
+	if (login) {
+		IMAccount account(login->Value(), "", protocol);
+		//Find this IMAccount in IMAccountHandler
+		IMAccountHandler::const_iterator it = _imAccountHandler.find(account);
+		if (it != _imAccountHandler.end()) {
+			_imContact._imAccount = (IMAccount *)&(*it);
+		} else {
+			LOG_FATAL("this IMAccount does not exist in IMAccountHandler: " + account.getLogin());
+		}
+		////
 	} else {
-		LOG_WARN("this IMAccount does not exist in IMAccountHandler: " + account.getLogin());
-		return false;
+		_imContact._imAccount = NULL;
+		_imContact._protocol = protocol;
 	}
 	////
 
 	//Retrieving contactId
-	TiXmlNode * contactId = im.FirstChild("id").Node();
-	if (contactId && contactId->FirstChild()) {
-		_imContact._contactId = contactId->FirstChild()->Value();
+	TiXmlText * contactId = im.FirstChild("id").FirstChild().Text();
+	if (contactId) {
+		_imContact._contactId = contactId->Value();
 	}
 	////
 
 	// Retrieving alias
-	TiXmlNode * alias = im.FirstChild("alias").Node();
-	if (alias && alias->FirstChild()) {
-		_imContact._alias = alias->FirstChild()->Value();
+	TiXmlText * alias = im.FirstChild("alias").FirstChild().Text();
+	if (alias) {
+		_imContact._alias = alias->Value();
+	}
+	////
+
+	// Retrieving icon
+	TiXmlText * photo = im.FirstChild("photo").FirstChild().Text();
+	if (photo) {
+		Picture picture(Base64::decode(photo->Value()));
+		_imContact.setIcon(picture);
 	}
 	////
 

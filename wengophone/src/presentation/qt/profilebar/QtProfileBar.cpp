@@ -205,14 +205,8 @@ void QtProfileBar::createStatusMenu(){
 	action = _statusMenu->addAction( tr( "Invisible" ) );
 	connect(action,SIGNAL( triggered (bool) ),SLOT( invisibleClicked(bool) ) );
 
-	action = _statusMenu->addAction( tr( "Be right back" ) );
-	connect(action,SIGNAL( triggered (bool) ),SLOT( brbClicked(bool) ) );
-
 	action = _statusMenu->addAction( tr( "Away" ) );
 	connect(action,SIGNAL( triggered (bool) ),SLOT( awayClicked(bool) ) );
-
-	action = _statusMenu->addAction( tr( "Not available" ) );
-	connect(action,SIGNAL( triggered (bool) ),SLOT( notAvailableClicked(bool) ) );
 
 	action = _statusMenu->addAction( tr( "Forward to cellphone" ) );
 	connect(action,SIGNAL( triggered (bool) ),SLOT( forwardClicked(bool) ) );
@@ -227,30 +221,24 @@ void QtProfileBar::createStatusMenu(){
 }
 
 void QtProfileBar::onlineClicked(bool){
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateOnline);
+	_userProfile.setPresenceState(EnumPresenceState::PresenceStateOnline, NULL);
 }
 
 void QtProfileBar::dndClicked(bool){
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateDoNotDisturb);
+	_userProfile.setPresenceState(EnumPresenceState::PresenceStateDoNotDisturb, NULL);
 }
 
 void QtProfileBar::invisibleClicked(bool){
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateInvisible);
-}
-
-void QtProfileBar::brbClicked(bool){
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway);
+	_userProfile.setPresenceState(EnumPresenceState::PresenceStateInvisible, NULL);
 }
 
 void QtProfileBar::awayClicked(bool){
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway);
-}
-
-void QtProfileBar::notAvailableClicked(bool){
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway);
+	_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway, NULL);
 }
 
 void QtProfileBar::forwardClicked(bool){
+	// We should switch to forward only on a Wengo account
+	//_userProfile.setPresenceState(EnumPresenceState::PresenceStateForward, NULL);
 }
 
 void QtProfileBar::setWengos ( float wengos ){

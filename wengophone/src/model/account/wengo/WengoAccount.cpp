@@ -215,7 +215,7 @@ void WengoAccount::answerReceivedEventHandler(IHttpRequest * sender, int request
 			_timerFinished = true;
 		}
 	}
-	//delete sender;
+	//FIXME (crashes on Linux/MacOS X): delete sender;
 }
 
 std::string WengoAccount::serialize() {

@@ -41,7 +41,7 @@ public:
 	/**
 	 * @see ChatHandler::createSession
 	 */
-	virtual void createSession(const IMAccount & imAccount, IMContactSet & imContactSet) = 0;
+	virtual void createSession(IMAccount & imAccount, IMContactSet & imContactSet) = 0;
 };
 
 #endif	//PCHATHANDLER_H

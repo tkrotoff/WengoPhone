@@ -33,6 +33,8 @@ using namespace std;
 ChatHandler::ChatHandler(UserProfile & userProfile) {
 	userProfile.newIMAccountAddedEvent +=
 		boost::bind(&ChatHandler::newIMAccountAddedEventHandler, this, _1, _2);
+	userProfile.imAccountRemovedEvent +=
+		boost::bind(&ChatHandler::imAccountRemovedEventHandler, this, _1, _2);
 	userProfile.getConnectHandler().connectedEvent +=
 		boost::bind(&ChatHandler::connectedEventHandler, this, _1, _2);
 	userProfile.getConnectHandler().disconnectedEvent +=
@@ -44,14 +46,14 @@ ChatHandler::~ChatHandler() {
 		delete (*it).second;
 	}
 
-	for (IMChatSessionList::iterator it = _imChatSessionList.begin(); it != _imChatSessionList.end(); it++) {
+	for (IMChatSessionSet::iterator it = _imChatSessionSet.begin(); it != _imChatSessionSet.end(); it++) {
 		delete (*it);
 	}
 }
 
-void ChatHandler::createSession(const IMAccount & imAccount, IMContactSet & imContactSet) {
+void ChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContactSet) {
 	LOG_DEBUG("creating new IMChatSession for: " + imAccount.getLogin());
-	_imChatMap[(IMAccount &)imAccount]->createSession(imContactSet);
+	_imChatMap[&imAccount]->createSession(imContactSet);
 }
 
 void ChatHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & account) {
@@ -64,12 +66,22 @@ void ChatHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & 
 
 void ChatHandler::newIMChatSessionCreatedEventHandler(IMChat & sender, IMChatSession & imChatSession) {
 	LOG_DEBUG("a new IMChatSession has been created");
-	_imChatSessionList.push_back(&imChatSession);
+	_imChatSessionSet.insert(&imChatSession);
 	newIMChatSessionCreatedEvent(*this, imChatSession);
 }
 
+void ChatHandler::imChatSesssionWillDieEventHandler(IMChatSession & sender) {
+	IMChatSessionSet::iterator it = _imChatSessionSet.find(&sender);
+
+	if (it != _imChatSessionSet.end()) {
+		_imChatSessionSet.erase(it);
+	} else {
+		LOG_ERROR("IMChatSession not in ChatHandler");
+	}
+}
+
 void ChatHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	IMChatMap::iterator it = _imChatMap.find(imAccount);
+	IMChatMap::const_iterator it = _imChatMap.find(&imAccount);
 
 	LOG_DEBUG("new account added: login: " + imAccount.getLogin()
 		+ " protocol: " + String::fromNumber(imAccount.getProtocol()));
@@ -79,8 +91,20 @@ void ChatHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount 
 		imChat->newIMChatSessionCreatedEvent +=
 			boost::bind(&ChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 
-		_imChatMap[imAccount] = imChat;
+		_imChatMap[&imAccount] = imChat;
 	} else {
 		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());
+	}
+}
+
+void ChatHandler::imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount) {
+	IMChatMap::iterator it = _imChatMap.find(&imAccount);
+
+	if (it != _imChatMap.end()) {
+		//TODO: close all IMChatSession opened with this IMAccount
+		delete (*it).second;
+		_imChatMap.erase(it);
+	} else {
+		LOG_ERROR("this IMAccount has not been added " + imAccount.getLogin());
 	}
 }

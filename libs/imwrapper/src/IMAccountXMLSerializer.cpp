@@ -39,6 +39,7 @@ std::string IMAccountXMLSerializer::serialize() {
 	result += "<account protocol=\"" + enumIMProtocol.toString(_imAccount._protocol) + "\">\n";
 	result += ("<login>" + _imAccount._login + "</login>\n");
 	result += ("<password>" + Base64::encode(_imAccount._password) + "</password>\n");
+	result += ("<presence>" + EnumPresenceState::toString(_imAccount._presenceState) + "</presence>\n");
 	IMAccountParametersXMLSerializer serializer(_imAccount._imAccountParameters);
 	result += serializer.serialize();
 	result += "</account>\n";
@@ -64,11 +65,24 @@ bool IMAccountXMLSerializer::unserialize(const std::string & data) {
 	}
 
 	//Retrieving login
-	_imAccount._login = account.FirstChild("login").FirstChild().Text()->Value();
+	TiXmlText * login = account.FirstChild("login").FirstChild().Text();
+	if (login) {
+		_imAccount._login = login->Value();
+	} else {
+		return false;
+	}
 
 	//Retrieving password
-	std::string password = account.FirstChild("password").FirstChild().Text()->Value();
-	_imAccount._password = Base64::decode(password);
+	TiXmlText * password = account.FirstChild("password").FirstChild().Text();
+	if (password) {
+		_imAccount._password = Base64::decode(password->Value());
+	}
+
+	//Retireving Presence state
+	TiXmlText * presence = account.FirstChild("presence").FirstChild().Text();
+	if (presence) {
+		_imAccount._presenceState = EnumPresenceState::fromString(presence->Value());
+	}
 
 	//Retrieving IMAccountParameters
 	IMAccountParameters imAccountParameters;

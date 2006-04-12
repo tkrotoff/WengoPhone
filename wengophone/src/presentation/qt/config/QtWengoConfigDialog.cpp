@@ -129,6 +129,7 @@ void QtWengoConfigDialog::accept(){
 	_audioSettingsWidget->saveData();
 	_callForwardWidget->saveData();
 	_videoSettingsWidget->saveData();
+	_videoSettingsWidget->widgetHidden();
 
 	QDialog::accept();
 }

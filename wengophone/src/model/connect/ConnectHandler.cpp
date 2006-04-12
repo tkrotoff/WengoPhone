@@ -34,40 +34,45 @@ using namespace std;
 ConnectHandler::ConnectHandler(UserProfile & userProfile) {
 	userProfile.newIMAccountAddedEvent +=
 		boost::bind(&ConnectHandler::newIMAccountAddedEventHandler, this, _1, _2);
+	userProfile.imAccountRemovedEvent +=
+		boost::bind(&ConnectHandler::imAccountRemovedEventHandler, this, _1, _2);
 }
 
 ConnectHandler::~ConnectHandler() {
 }
 
-void ConnectHandler::connect(const IMAccount & imAccount) {
-	IMAccountSet::const_iterator actIt = _actualIMAccount.find(imAccount);
-	if (actIt == _actualIMAccount.end()) {
+void ConnectHandler::connect(IMAccount & imAccount) {
+	IMAccount * actIMAccount = findIMAccount(_actualIMAccount, imAccount);
+	if (!actIMAccount) {
 		LOG_DEBUG("This IMAccount has not yet been added. Pending connection.");
 		_pendingConnections.insert(imAccount);
 		return;
 	}
 
-	IMAccount & account = (IMAccount &)(*actIt);
 	Connect * connect = NULL;
-	ConnectMap::const_iterator it = _connectMap.find(account);
+	ConnectMap::const_iterator it = _connectMap.find(actIMAccount);
 
 	if (it == _connectMap.end()) {
-		connect = new Connect(account);
+		connect = new Connect(*actIMAccount);
 		connect->loginStatusEvent +=
 			boost::bind(&ConnectHandler::loginStatusEventHandler, this, _1, _2);
-		_connectMap.insert(pair<IMAccount, Connect *>(account, connect));
+		_connectMap.insert(pair<IMAccount *, Connect *>(actIMAccount, connect));
 	} else {
 		connect = (*it).second;
 	}
 
-	connect->connect();
+	if (!imAccount.isConnected()) {
+		connect->connect();
+	}
 }
 
-void ConnectHandler::disconnect(const IMAccount & imAccount) {
-	ConnectMap::const_iterator it = _connectMap.find(imAccount);
+void ConnectHandler::disconnect(IMAccount & imAccount) {
+	ConnectMap::const_iterator it = _connectMap.find(&imAccount);
 
 	if (it != _connectMap.end()) {
-		(*it).second->disconnect();
+		if (imAccount.isConnected()) {
+			(*it).second->disconnect();
+		}
 	}
 }
 
@@ -92,14 +97,39 @@ void ConnectHandler::loginStatusEventHandler(IMConnect & sender,
 }
 
 void ConnectHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	IMAccountSet::iterator it = _pendingConnections.find(imAccount);
+	IMAccountSet::const_iterator it = _pendingConnections.find(imAccount);
 	if (it != _pendingConnections.end()) {
 		LOG_DEBUG("A connection was pending for this IMAccount. Releasing connection.");
-		_actualIMAccount.insert(imAccount);
+		_actualIMAccount.insert(&imAccount);
 		connect(imAccount);
 		_pendingConnections.erase(it);
 	} else {
-		_actualIMAccount.insert(imAccount);
+		_actualIMAccount.insert(&imAccount);
 	}
 }
 
+void ConnectHandler::imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount) {
+	ConnectMap::iterator it = _connectMap.find(&imAccount);
+
+	if (it != _connectMap.end()) {
+		delete (*it).second;
+		_connectMap.erase(it);
+	} else {
+		LOG_DEBUG("IMAccount not in ConnectHandler");
+	}
+}
+
+IMAccount * ConnectHandler::findIMAccount(const IMAccountPtrSet & set, const IMAccount & imAccount) {
+	IMAccount * result = NULL;
+
+	for (IMAccountPtrSet::const_iterator it = set.begin();
+		it != set.end();
+		++it) {
+		if (*(*it) == imAccount) {
+			result = *it;
+			break;
+		}
+	}
+
+	return result;
+}

@@ -106,11 +106,8 @@ public Q_SLOTS:
 
 	void invisibleClicked(bool checked);
 
-	void brbClicked(bool checked);
-
 	void awayClicked(bool checked);
 
-	void notAvailableClicked(bool checked);
 
 	void forwardClicked(bool checked);
 

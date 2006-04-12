@@ -48,7 +48,7 @@ public:
 	 */
 	Event<void (ChatHandler & sender, IMChatSession & imChatSession)> newIMChatSessionCreatedEvent;
 
-	void createSession(const IMAccount & imAccount, IMContactSet & imContactSet);
+	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
 
 	UserProfile & getUserProfile() const { return _userProfile;}
 

@@ -23,7 +23,6 @@
 #include <pixertool/pixertool.h>
 
 #include <QtGui>
-#include <QImage>
 
 class IWebcamDriver;
 
@@ -38,7 +37,7 @@ public:
 
 Q_SIGNALS:
 
-	void newWebcamImage(QImage *image);
+	void newWebcamImage(QPixmap pixmap);
 
 public Q_SLOTS:
 
@@ -46,7 +45,7 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
 
-	void newWebcamImageCaptured(QImage *image);
+	void newWebcamImageCaptured(QPixmap pixmap);
 
 	void webcamPreviewButtonPressed();
 
@@ -79,7 +78,6 @@ protected:
 
 	/** Contains the converted picture from the Webcam. */
 	piximage * _rgbImage;
-
 };
 
 #endif

@@ -23,7 +23,6 @@ headers = [
 	'include/imwrapper/IMAccountHandlerStorage.h',
 	'include/imwrapper/IMAccountHandlerFileStorage.h',
 	'include/imwrapper/IMChat.h',
-	'include/imwrapper/IMChatMap.h',
 	'include/imwrapper/IMChatSession.h',
 	'include/imwrapper/IMConnect.h',
 	'include/imwrapper/IMContact.h',
@@ -42,13 +41,13 @@ sources = [
 	'src/IMAccountHandler.cpp',
 	'src/IMAccountHandlerXMLSerializer.cpp',
 	'src/IMAccountHandlerFileStorage.cpp',
-	'src/IMChatMap.cpp',
 	'src/IMChatSession.cpp',
 	'src/IMContact.cpp',
 	'src/IMContactXMLSerializer.cpp',
 	'src/IMContactSet.cpp',
 	'src/IMWrapperFactory.cpp',
 	'src/EnumIMProtocol.cpp',
+	'src/EnumPresenceState.cpp',
 ]
 
 env.WengoAddIncludePath(include_path)

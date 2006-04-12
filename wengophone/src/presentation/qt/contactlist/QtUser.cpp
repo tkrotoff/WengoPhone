@@ -280,6 +280,7 @@ bool QtUser::havePhoneNumber(){
 	if ( ! getWengoPhoneNumber().isEmpty() )
 		return true;
 
+	return false;
 }
 
 void QtUser::startCall(const QString & number){

@@ -379,7 +379,7 @@ IMContact * Contact::getAvailableIMContact(IMChatSession & imChatSession) const 
 
 	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; ++it) {
 		if (((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline)
-			&& ((*it).getIMAccount() == imChatSession.getIMChat().getIMAccount())) {
+			&& ((*(*it).getIMAccount()) == imChatSession.getIMChat().getIMAccount())) {
 			result = (IMContact *)&(*it);
 			break;
 		}

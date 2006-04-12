@@ -112,6 +112,11 @@ public:
 	 */
 	static File createTemporaryFile();
 
+	/**
+	 * @return true if the given path exists.
+	 */
+	static bool exists(const std::string & path);
+
 protected:
 
 	std::string _filename;

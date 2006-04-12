@@ -121,13 +121,11 @@ void QtVideoSettings::frameCapturedEventHandler(IWebcamDriver *sender, piximage 
 
 	pix_convert(PIX_NO_FLAG, _rgbImage, image);
 
-	QImage *qImage = new QImage(_rgbImage->data, _rgbImage->width, _rgbImage->height, QImage::Format_RGB32);
-	newWebcamImage(qImage);
+	newWebcamImage(QPixmap::fromImage(QImage(_rgbImage->data, _rgbImage->width, _rgbImage->height, QImage::Format_RGB32)));
 }
 
-void QtVideoSettings::newWebcamImageCaptured(QImage *image) {
-	_webcamPreviewLabel->setPixmap(QPixmap::fromImage(*image));
-	delete image;
+void QtVideoSettings::newWebcamImageCaptured(QPixmap pixmap) {
+	_webcamPreviewLabel->setPixmap(pixmap);
 }
 
 void QtVideoSettings::webcamPreviewButtonPressed() {
@@ -144,6 +142,10 @@ void QtVideoSettings::webcamPreviewButtonPressed() {
 }
 
 void QtVideoSettings::widgetHidden() {
+	/*FIXME: we should unregister ourself from the event
+	_webcamDriver->frameCapturedEvent -=
+		boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);	
+	*/
 	if (_openedByMe) {
 		_webcamDriver->stopCapture();
 	}

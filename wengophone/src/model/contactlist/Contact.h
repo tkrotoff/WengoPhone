@@ -172,7 +172,7 @@ public:
 	/**
 	 * @return Set of IMContact
 	 */
-	const IMContactSet & getIMContactSet() const {
+	const IMContactSet & getIMContactSet() {
 		return _imContactSet;
 	}
 

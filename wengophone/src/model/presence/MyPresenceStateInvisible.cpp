@@ -17,34 +17,35 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include "MyPresenceStateInvisible.h"
+
 #include "MyPresenceStateAway.h"
 #include "MyPresenceStateOnline.h"
-#include "MyPresenceStateOffline.h"
 #include "MyPresenceStateDoNotDisturb.h"
-#include "MyPresenceStateInvisible.h"
+#include "MyPresenceStateOffline.h"
 #include "MyPresenceStateForward.h"
 #include "MyPresenceStateException.h"
 
-MyPresenceState * MyPresenceStateAway::offline() throw(MyPresenceStateException) {
+MyPresenceState * MyPresenceStateInvisible::offline() throw(MyPresenceStateException) {
 	return MyPresenceStateOffline::getInstance();
 }
 
-MyPresenceState * MyPresenceStateAway::online() throw(MyPresenceStateException) {
+MyPresenceState * MyPresenceStateInvisible::online() throw(MyPresenceStateException) {
 	return MyPresenceStateOnline::getInstance();
 }
 
-MyPresenceState * MyPresenceStateAway::doNotDisturb() throw(MyPresenceStateException) {
+MyPresenceState * MyPresenceStateInvisible::doNotDisturb() throw(MyPresenceStateException) {
 	return MyPresenceStateDoNotDisturb::getInstance();
 }
 
-MyPresenceState * MyPresenceStateAway::away() throw(MyPresenceStateException) {
+MyPresenceState * MyPresenceStateInvisible::away() throw(MyPresenceStateException) {
+	return MyPresenceStateAway::getInstance();
+}
+
+MyPresenceState * MyPresenceStateInvisible::invisible() throw(MyPresenceStateException) {
 	return this;
 }
 
-MyPresenceState * MyPresenceStateAway::invisible() throw(MyPresenceStateException) {
-	return MyPresenceStateInvisible::getInstance();
-}
-
-MyPresenceState * MyPresenceStateAway::forward() throw(MyPresenceStateException) {
+MyPresenceState * MyPresenceStateInvisible::forward() throw(MyPresenceStateException) {
 	return MyPresenceStateForward::getInstance();
 }

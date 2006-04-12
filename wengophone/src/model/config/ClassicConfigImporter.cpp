@@ -17,8 +17,44 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
  
- #include "ClassicConfigImporter.h"
+#include "ClassicConfigImporter.h"
+
+#include "ConfigManager.h"
+#include "Config.h"
+
+#include <cutil/global.h>
+#include <util/Path.h>
+#include <util/File.h>
+
+using namespace std;
  
 bool ClassicConfigImporter::importConfig(const std::string & import) {
+
+#if (defined(OS_WINDOWS) || defined(OS_LINUX))
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	if (!File::exists(config.getConfigDir()) && File::exists(getWengoClassicConfigPath())) {
+		return true;
+	}
+
+#endif
+
 	return false;
+}
+
+string ClassicConfigImporter::getWengoClassicConfigPath() {
+	string result;
+
+#if defined(OS_WINDOWS)
+
+	result = File::convertPathSeparators(Path::getHomeDirPath() + "wengo/");
+
+#elif defined(OS_LINUX)
+
+	result = File::convertPathSeparators(Path::getHomeDirPath() + ".wengo/");
+
+#endif
+
+	return result;
 }

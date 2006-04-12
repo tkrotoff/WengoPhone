@@ -99,7 +99,9 @@ void UserProfile::connectIMAccounts() {
 		newIMAccountAddedEvent(*this, (IMAccount &)*it);
 		//FIXME: hack for phApi connection
 		if ((*it).getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
-			_connectHandler.connect(*it);
+			if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
+				_connectHandler.connect((IMAccount &)*it);
+			}
 		}
 	}
 	////
@@ -121,7 +123,7 @@ void UserProfile::disconnect() {
 	for (IMAccountHandler::const_iterator it = _imAccountHandler.begin();
 		it != _imAccountHandler.end();
 		++it) {
-		_connectHandler.disconnect(*it);
+		_connectHandler.disconnect((IMAccount &)*it);
 	}
 }
 
@@ -144,7 +146,7 @@ void UserProfile::startIM(Contact & contact) {
 	//FIXME: we should give a set of pointer to IMContacts
 	if (imContact) {
 		imContactSet.insert(*imContact);
-		_chatHandler.createSession(imContact->getIMAccount(), imContactSet);
+		_chatHandler.createSession((IMAccount &)*imContact->getIMAccount(), imContactSet);
 	} else {
 		LOG_ERROR("There is no IMContact available");
 	}
@@ -231,17 +233,31 @@ void UserProfile::addIMAccount(const IMAccount & imAccount) {
 	}
 }
 
+void UserProfile::removeIMAccount(const IMAccount & imAccount) {
+	LOG_DEBUG("removing an IMAccount");
+
+	IMAccountHandler::iterator it = _imAccountHandler.find(imAccount);
+	if (it != _imAccountHandler.end()) {
+		_connectHandler.disconnect((IMAccount &)*it);
+		imAccountRemovedEvent(*this, (IMAccount &)*it);
+		_imAccountHandler.erase(it);
+	} else {
+		LOG_ERROR("IMAccount not in IMAccountHandler");
+	}
+}
+
 EnumPresenceState::PresenceState UserProfile::getPresenceState() const {
 	return EnumPresenceState::PresenceStateOnline;
 }
 
-void UserProfile::setPresenceState(EnumPresenceState::PresenceState presenceState) {
-	_presenceHandler.changeMyPresenceState(presenceState, "");
+void UserProfile::setPresenceState(EnumPresenceState::PresenceState presenceState,
+	IMAccount * imAccount) {
+	_presenceHandler.changeMyPresenceState(presenceState, "", imAccount);
 }
 
-void UserProfile::setAlias(const string & alias) {
+void UserProfile::setAlias(const string & alias, IMAccount * imAccount) {
 	_alias = alias;
-	_presenceHandler.changeMyAlias(_alias);
+	_presenceHandler.changeMyAlias(_alias, imAccount);
 }
 
 void UserProfile::addPhoneLine(SipAccount & account) {
@@ -315,7 +331,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 
 		IMAccount imAccount(_wengoAccount->getIdentity(), _wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 		addIMAccount(imAccount);
-		_connectHandler.connect(*_imAccountHandler.find(imAccount));
+		_connectHandler.connect((IMAccount &)*_imAccountHandler.find(imAccount));
 		
 		loadHistory();
 		
@@ -344,16 +360,16 @@ void UserProfile::historyChangedEventHandler(History & sender, int id) {
 	saveHistory();
 }
 
-void UserProfile::setIcon(const Picture & icon) {
+void UserProfile::setIcon(const Picture & icon, IMAccount * imAccount) {
 	Profile::setIcon(icon);
-	_presenceHandler.changeMyIcon(icon, NULL);
+	_presenceHandler.changeMyIcon(icon, imAccount);
 }
 
 void UserProfile::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
+	_presenceHandler.changeMyPresenceState(imAccount.getPresenceState(), "", &imAccount);
 	_presenceHandler.changeMyAlias(_alias, NULL);
 	_presenceHandler.changeMyIcon(_icon, NULL);
 }
-
 
 void UserProfile::loadHistory() {
 	//History: load the user history
