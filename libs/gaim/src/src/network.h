@@ -179,7 +179,9 @@ unsigned short gaim_network_get_port_from_fd(int fd);
  * Parameters are identical to the socket (3) function.	
  * @return The return values of the implicit call to the socket (3) function call.
  */
+#ifdef __APPLE__
 int gaim_socket_setsockopt(int domain, int type, int protocol); 
+#endif
 
 /**
  * Initializes the network subsystem.

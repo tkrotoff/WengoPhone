@@ -360,6 +360,7 @@ gaim_network_get_port_from_fd(int fd)
 	return ntohs(addr.sin_port);
 }
 
+#ifdef __APPLE__
 int
 gaim_socket_setsockopt(int domain, int type, int protocol) 
 {
@@ -375,6 +376,7 @@ gaim_socket_setsockopt(int domain, int type, int protocol)
 		return ret;
 	return ret_socket;
 }
+#endif /* __APPLE__ */
 
 void
 gaim_network_init(void)
