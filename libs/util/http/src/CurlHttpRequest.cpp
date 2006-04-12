@@ -57,7 +57,7 @@ int CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname,
 		_proxyAuthentication = getProxyAuthenticationType();
 	}
 
-	Request r = {sslProtocol, hostname, hostPort, path, data, postMethod};
+	Request r = {sslProtocol, hostname.c_str(), hostPort, path.c_str(), data.c_str(), postMethod};
 	_requestList.push_back(r);
 
 	_lastRequestId = IdGenerator::generate();

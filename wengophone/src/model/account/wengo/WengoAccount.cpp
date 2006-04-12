@@ -215,6 +215,7 @@ void WengoAccount::answerReceivedEventHandler(IHttpRequest * sender, int request
 			_timerFinished = true;
 		}
 	}
+	delete sender;
 }
 
 std::string WengoAccount::serialize() {

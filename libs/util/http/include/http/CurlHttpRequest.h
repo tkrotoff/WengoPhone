@@ -49,7 +49,7 @@ public:
 	 * @param httpRequest callback for answerReceived() and run() methods
 	 */
 	CurlHttpRequest(HttpRequest * httpRequest);
-
+	
 	int sendRequest(bool sslProtocol,
 			const std::string & hostname,
 			unsigned int hostPort,
@@ -86,10 +86,10 @@ private:
 
 	struct Request {
 		bool sslProtocol;
-		const std::string hostname;
+		const char * hostname;
 		unsigned int hostPort;
-		const std::string path;
-		const std::string data;
+		const char * path;
+		const char * data;
 		bool postMethod;
 	};
 

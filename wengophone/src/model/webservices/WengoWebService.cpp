@@ -99,4 +99,5 @@ void WengoWebService::answerReceivedEventHandler(IHttpRequest * sender, int requ
 			_caller->answerReceived("", requestId);
 		}
 	}
+	delete sender;
 }
