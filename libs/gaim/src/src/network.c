@@ -360,6 +360,22 @@ gaim_network_get_port_from_fd(int fd)
 	return ntohs(addr.sin_port);
 }
 
+int
+gaim_socket_setsockopt(int domain, int type, int protocol) 
+{
+	int val = 1; 
+	int ret = 0;
+	int ret_socket = 0;
+	
+	ret_socket = socket(domain, type, protocol); 	
+	if (ret_socket == -1)
+		return ret_socket;
+	ret = setsockopt(domain, SOL_SOCKET, SO_NOSIGPIPE, &val, sizeof(val));
+	if (ret == -1)
+		return ret;
+	return ret_socket;
+}
+
 void
 gaim_network_init(void)
 {

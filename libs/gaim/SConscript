@@ -91,6 +91,7 @@ if WengoOSMacOSX():
 	include_path += [
 		'/sw/include', # for gnutls
 	]
+	defines['MSG_NOSIGNAL'] = 0
 
 	env.WengoCopyToBuildDir('binary-lib/macosx', 'plugins')
 

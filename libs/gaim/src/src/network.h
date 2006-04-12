@@ -173,6 +173,15 @@ gboolean gaim_network_listen_range(unsigned short start, unsigned short end,
 unsigned short gaim_network_get_port_from_fd(int fd);
 
 /**
+ * Utility function that performs a setsockopt call to active the SO_NOSIGPIPE flag
+ * on platforms where MSG_NOSIGNAL send function's flag is no supported.
+ *
+ * Parameters are identical to the socket (3) function.	
+ * @return The return values of the implicit call to the socket (3) function call.
+ */
+int gaim_socket_setsockopt(int domain, int type, int protocol); 
+
+/**
  * Initializes the network subsystem.
  */
 void gaim_network_init(void);

@@ -170,4 +170,8 @@
 #include "prefix.h"
 #endif /* _WIN32 */
 
+#ifdef __APPLE__
+#define socket( ns, style, protocol ) \
+	gaim_socket_setsockopt(ns, style, protocol) 
+#endif /* OSX */
 #endif /* _GAIM_INTERNAL_H_ */
