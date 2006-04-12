@@ -44,7 +44,7 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	WsInfo(WengoAccount & wengoAccount);
+	WsInfo(WengoAccount * wengoAccount);
 
 	/**
 	 * An anwser about wengo's has been received.

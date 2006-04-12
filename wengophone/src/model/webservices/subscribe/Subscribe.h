@@ -59,7 +59,7 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	WsWengoSubscribe(WengoAccount & wengoAccount);
+	WsWengoSubscribe();
 
 	virtual ~WsWengoSubscribe() {}
 

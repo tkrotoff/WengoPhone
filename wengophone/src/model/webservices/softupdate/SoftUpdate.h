@@ -35,7 +35,7 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	SoftUpdate(WengoAccount & wengoAccount);
+	SoftUpdate(WengoAccount * wengoAccount);
 
 	virtual ~SoftUpdate() {}
 

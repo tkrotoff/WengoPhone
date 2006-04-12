@@ -26,7 +26,7 @@
 
 #include <util/Logger.h>
 
-Sms::Sms(WengoAccount & wengoAccount, UserProfile & userProfile)
+Sms::Sms(WengoAccount * wengoAccount, UserProfile & userProfile)
 	: WengoWebService(wengoAccount), _userProfile(userProfile) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -55,7 +55,7 @@ int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
 	HistoryMemento * memento = new HistoryMemento(
 		HistoryMemento::OutgoingSmsNok, phoneNumber, requestId, message2);
 	_userProfile.getHistory().addMemento(memento);
-
+	
 	return requestId;
 }
 
@@ -74,6 +74,7 @@ void Sms::answerReceived(const std::string & answer, int requestId) {
 
 			//History: retrieve the HistoryMemento & update its state to Ok
 			_userProfile.getHistory().updateSMSState(requestId, HistoryMemento::OutgoingSmsOk);
+			
 			return;
 		}
 	}

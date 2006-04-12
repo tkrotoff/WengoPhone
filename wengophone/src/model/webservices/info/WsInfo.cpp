@@ -43,7 +43,7 @@ const std::string WsInfo::CALLFORWARD_TOPSTN_DEST1_TAG = "tph.callforward.cffl.d
 const std::string WsInfo::CALLFORWARD_TOPSTN_DEST2_TAG = "tph.callforward.cffl.destination2";
 const std::string WsInfo::CALLFORWARD_TOPSTN_DEST3_TAG = "tph.callforward.cffl.destination3";
 
-WsInfo::WsInfo(WengoAccount & wengoAccount) : WengoWebService(wengoAccount) {
+WsInfo::WsInfo(WengoAccount * wengoAccount) : WengoWebService(wengoAccount) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	_wengosCount = false;

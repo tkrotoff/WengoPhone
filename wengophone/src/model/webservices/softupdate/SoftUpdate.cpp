@@ -31,7 +31,7 @@
 
 #include <sstream>
 
-SoftUpdate::SoftUpdate(WengoAccount & wengoAccount) : WengoWebService(wengoAccount) {
+SoftUpdate::SoftUpdate(WengoAccount * wengoAccount) : WengoWebService(wengoAccount) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 

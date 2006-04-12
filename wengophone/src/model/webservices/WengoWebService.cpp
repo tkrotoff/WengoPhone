@@ -24,7 +24,7 @@
 
 #include <util/Logger.h>
 
-WengoWebService::WengoWebService(WengoAccount & wengoAccount) : _wengoAccount(wengoAccount) {
+WengoWebService::WengoWebService(WengoAccount * wengoAccount) : _wengoAccount(wengoAccount) {
 	_https = false;
 	_get = false;
 	_auth = false;
@@ -73,14 +73,15 @@ int WengoWebService::call(WengoWebService * caller) {
 	_caller = caller;
 
 	//add wengo parameters
-	std::string data = "?lang=fr";
+	//TODO: retrive the language from Config
+	std::string data = "?lang=fra";
 	data += "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME);
 
 	//add authentication parameters
-	if (_auth) {
-		String login = String::encodeUrl(_wengoAccount.getWengoLogin());
+	if( (_auth) && (_wengoAccount) ) {
+		String login = String::encodeUrl(_wengoAccount->getWengoLogin());
 		login.replace("%2e", ".", false);
-		String password = String::encodeUrl(_wengoAccount.getWengoPassword());
+		String password = String::encodeUrl(_wengoAccount->getWengoPassword());
 		password.replace("%2e", ".", false);
 		data += "&login=" + login + "&password=" + password;
 	}
@@ -98,5 +99,4 @@ void WengoWebService::answerReceivedEventHandler(IHttpRequest * sender, int requ
 			_caller->answerReceived("", requestId);
 		}
 	}
-	delete sender;
 }

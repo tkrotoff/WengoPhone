@@ -26,14 +26,14 @@
 
 #include <tinyxml.h>
 
-WsWengoSubscribe::WsWengoSubscribe(WengoAccount & wengoAccount) : WengoWebService(wengoAccount) {
+WsWengoSubscribe::WsWengoSubscribe() {
 	
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	
 	//setup subscribe web service
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
-	setHttps(true);
+	setHttps(false);
 	setServicePath(config.getWengoSubscribePath());
 	setPort(80);
 	setWengoAuthentication(false);
@@ -46,16 +46,16 @@ int WsWengoSubscribe::subscribe(const std::string & email, const std::string & n
 
 	query += "&email=" + email;
 	query += "&pseudo=" + nickname;
-	query += "&lang=" + lang;
+	//query += "&lang=" + lang;
 	query += "&password=" + password;
 
 	setParameters(query);
-	
+
 	return call(this);
 }
 
 void WsWengoSubscribe::answerReceived(const std::string & answer, int id) {
-
+	
 	std::string statusCode = "";
 	std::string statusMessage = "";
 	std::string password = "";
@@ -75,7 +75,7 @@ void WsWengoSubscribe::answerReceived(const std::string & answer, int id) {
 	//retrieve the status code
 	text = response.FirstChild("answer").FirstChild("status").FirstChild("code").FirstChild().Text();
 	if( text ) {
-		LOG_DEBUG("\n status code:" + std::string(text->Value()));
+		
 		statusCode = std::string(text->Value());
 		if( statusCode == "OK" ) {
 			status = SubscriptioOk;

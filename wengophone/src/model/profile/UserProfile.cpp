@@ -293,17 +293,17 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 	switch (state) {
 	case SipAccount::LoginStateReady: {
 		//Creates SMS, SMS needs a WengoAccount
-		_sms = new Sms(*(WengoAccount *) _wengoAccount, *this);
+		_sms = new Sms(_wengoAccount, *this);
 		smsCreatedEvent(*this, *_sms);
 		LOG_DEBUG("SMS created");
 
 		//Creates SoftUpdate, SoftUpdate needs a WengoAccount
-		_softUpdate = new SoftUpdate(*(WengoAccount *) _wengoAccount);
+		_softUpdate = new SoftUpdate(_wengoAccount);
 		softUpdateCreatedEvent(*this, *_softUpdate);
 		_softUpdate->checkForUpdate();
 		LOG_DEBUG("SoftUpdate created");
 		
-		_wsInfo = new WsInfo(*(WengoAccount *) _wengoAccount);
+		_wsInfo = new WsInfo(_wengoAccount);
 		wsInfoCreatedEvent(*this, *_wsInfo);
 		LOG_DEBUG("WsInfo created");
 		

@@ -46,7 +46,7 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	WengoWebService(WengoAccount & wengoAccount);
+	WengoWebService(WengoAccount * wengoAccount = 0);
 
 	virtual ~WengoWebService() {}
 
@@ -134,9 +134,9 @@ private:
 	 * @param requestId the request id
 	 */
 	virtual void answerReceived(const std::string & answer, int requestId) = 0;
-
+	
 	/** WengoAccount: to get login & password */
-	WengoAccount & _wengoAccount;
+	WengoAccount * _wengoAccount;
 
 	/** https/http mode */
 	bool _https;

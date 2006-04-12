@@ -45,7 +45,7 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	Sms(WengoAccount & wengoAccount, UserProfile & userProfile);
+	Sms(WengoAccount * wengoAccount, UserProfile & userProfile);
 
 	virtual ~Sms() {}
 
