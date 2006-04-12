@@ -68,7 +68,7 @@ private:
 
 	void smsStatusEventHandler(Sms & sender, int smsId, Sms::SmsStatus status);
 
-	void enableSendButton();
+	void smsStatusEventHandlerThreadSafe(Sms::SmsStatus status);
 
 	CSms & _cSms;
 

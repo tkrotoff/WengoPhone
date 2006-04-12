@@ -27,6 +27,9 @@
 #include <qtutil/WidgetFactory.h>
 
 #include <QtGui>
+#include <QMessageBox>
+
+#include <util/Logger.h>
 
 QtSms::QtSms(CSms & cSms)
 	: QObjectThreadSafe(),
@@ -71,12 +74,25 @@ void QtSms::sendButtonClicked() {
 
 void QtSms::smsStatusEventHandler(Sms & sender, int smsId, Sms::SmsStatus status) {
 	typedef PostEvent0<void ()> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSms::enableSendButton, this));
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSms::smsStatusEventHandlerThreadSafe, this, status));
 	postEvent(event);
 }
 
-void QtSms::enableSendButton() {
+void QtSms::smsStatusEventHandlerThreadSafe(Sms::SmsStatus status) {
+	QString smsStatus = "";
+	switch(status) {
+		case Sms::SmsStatusError:
+			smsStatus = tr("SmsStatusError");
+			break;
+		case Sms::SmsStatusOk:
+			smsStatus = tr("SmsStatusOk");
+			break;
+		default:
+			LOG_FATAL("Unknown SmsStatus");
+	}
+	
 	_sendButton->setEnabled(true);
+	QMessageBox::information(_smsWindow, tr("Sms"), smsStatus);
 }
 
 void QtSms::setPhoneNumber(const QString & phone) {
