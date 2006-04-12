@@ -56,6 +56,8 @@ private:
 
 	void statusMessageReceivedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, StatusMessage status, const std::string & message);
 
+	void typingStateChangedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, const std::string & contactId, IMChat::TypingState state);
+
 	void newIMChatSessionCreatedEventHandler(PhApiWrapper & sender, IMChatSession & imChatSession);
 
 	void contactAddedEventHandler(PhApiWrapper & sender, IMChatSession & imChatSession, const std::string & contactId);

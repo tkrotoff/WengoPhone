@@ -160,6 +160,16 @@ public:
 	 */
 	virtual void unblockContact(const std::string & contactId) = 0;
 
+	/**
+	 * Authorize a contact to add me in his contact list.
+	 *
+	 * @param contactId contact id
+ 	 * @param authorized TRUE if we agree
+	 */
+	virtual void authorizeContact(const std::string & contactId, bool auhorized, 
+		const std::string message) = 0;
+
+
 	IMAccount & getIMAccount() const {
 		return _imAccount;
 	}

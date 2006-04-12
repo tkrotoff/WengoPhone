@@ -61,6 +61,8 @@ public:
 
 	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, PhApiIMChat::StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
 
+	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, const std::string & contactId, IMChat::TypingState state)> typingStateChangedEvent;
+
 	Event<void (PhApiWrapper & sender, IMConnect::LoginStatus status)> loginStatusEvent;
 
 	Event<void (PhApiWrapper & sender, EnumPresenceState::PresenceState state, const std::string & note, const std::string & from)> presenceStateChangedEvent;
@@ -178,6 +180,7 @@ public:
 	 */
 
 	void sendMessage(IMChatSession & chatSession, const std::string & message);
+	void changeTypingState(IMChatSession & chatSession, IMChat::TypingState state);
 	void createSession(IMChat & imChat, IMContactSet & imContactSet);
 	void closeSession(IMChatSession & chatSession);
 	void addContact(IMChatSession & chatSession, const std::string & contactId);

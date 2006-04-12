@@ -49,6 +49,7 @@ public:
 	virtual void subscribeToPresenceOf(const std::string & contactId);
 	virtual void blockContact(const std::string & contactId);
 	virtual void unblockContact(const std::string & contactId);
+	virtual void authorizeContact(const std::string & contactId, bool authorized, const std::string message);
 
 	bool equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol);
 

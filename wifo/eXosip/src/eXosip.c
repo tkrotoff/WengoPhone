@@ -841,7 +841,7 @@ eXosip_update()
 
 }
 
-int eXosip_message    (char *to, char *from, char *route, char *buff)
+int eXosip_message    (char *to, char *from, char *route, char *buff, char *mime)
 {
   osip_message_t *message;
   osip_transaction_t *transaction;
@@ -850,7 +850,7 @@ int eXosip_message    (char *to, char *from, char *route, char *buff)
 
   int i;
 
-  i = generating_message(&message, to, from, route, buff);
+  i = generating_message(&message, to, from, route, buff, mime);
   if (i!=0)
     {
       OSIP_TRACE (osip_trace

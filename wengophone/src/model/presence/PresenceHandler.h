@@ -63,10 +63,16 @@ public:
 
 	/**
 	 * @see IMPresence::subscribeStatusEvent
-	 * @param protocol protocol of the contact
 	 */
 	Event<void (PresenceHandler & sender, const IMContact & imContact,
 		IMPresence::SubscribeStatus status)> subscribeStatusEvent;
+
+	/**
+	 * @see IMPresence::subscribeStatusEvent
+	 */
+	Event<void (PresenceHandler & sender, const IMContact & imContact,
+		const std::string & message)> authorizationRequestEvent;
+
 
 	PresenceHandler(UserProfile & userProfile);
 
@@ -128,6 +134,12 @@ public:
 	 */
 	void unblockContact(const IMContact & imContact);
 
+	/**
+	 * @see IMPresence::authorizeContact
+	 */
+	void authorizeContact(const IMContact & imContact, bool authorized, 
+		const std::string message);
+
 private:
 
 	typedef std::map<IMAccount, Presence *> PresenceMap;
@@ -142,6 +154,8 @@ private:
 		const std::string & note, const std::string & from);
 
 	void myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status);
+
+	void authorizationRequestEventHandler(IMPresence & sender, const std::string & contactId, const std::string & message);
 
 	void subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status);
 

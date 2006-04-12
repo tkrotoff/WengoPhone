@@ -19,11 +19,13 @@
 
 #ifndef GAIMPRESENCEMNGR_H
 #define GAIMPRESENCEMNGR_H
+#include <list>
 
 #include "GaimIMPresence.h"
-#include "GaimAccountMngr.h"
 
-#include <list>
+extern "C" {
+#include <gaim/account.h>
+}
 
 /**
  *

@@ -190,6 +190,10 @@ void PresenceHandler::myPresenceStatusEventHandler(IMPresence & sender, EnumPres
 	myPresenceStatusEvent(*this, sender.getIMAccount(), status);
 }
 
+void PresenceHandler::authorizationRequestEventHandler(IMPresence & sender, const std::string & contactId, const std::string & message) {
+	authorizationRequestEvent(*this, IMContact(sender.getIMAccount(), contactId), message);
+}
+
 void PresenceHandler::subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status) {
 	subscribeStatusEvent(*this, IMContact(sender.getIMAccount(), contactId), status);
 }
@@ -218,6 +222,8 @@ void PresenceHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAcco
 			boost::bind(&PresenceHandler::myPresenceStatusEventHandler, this, _1, _2);
 		presence->subscribeStatusEvent +=
 			boost::bind(&PresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3);
+		presence->authorizationRequestEvent +=
+			boost::bind(&PresenceHandler::authorizationRequestEventHandler, this, _1, _2, _3);
 
 		//Launch all pending subscriptions
 		/*
@@ -247,5 +253,15 @@ Picture PresenceHandler::getContactIcon(const IMContact & imContact) {
 	} else {
 		LOG_FATAL("Unknown IMAccount");
 		return Picture();
+	}
+}
+
+void PresenceHandler::authorizeContact(const IMContact & imContact, bool authorized, const std::string message) {
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imContact.getIMAccount());
+
+	if (it != _presenceMap.end()) {
+		return (*it).second->authorizeContact(imContact.getContactId(), authorized, message);
+	} else {
+		LOG_FATAL("Unknown IMAccount");
 	}
 }

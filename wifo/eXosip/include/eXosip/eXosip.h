@@ -614,7 +614,8 @@ int   eXosip_register      (int rid, int expires);
  * 
  * @return  id of the request, to be used  in eXosip_retry_message
  */
-int  eXosip_message    (char *to, char *from, char *route, char *buff);
+int  eXosip_message    (char *to, char *from, char *route, 
+						char *buff, char *mime);
 
 
 /**

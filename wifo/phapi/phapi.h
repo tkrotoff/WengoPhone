@@ -308,9 +308,11 @@ MY_DLLEXPORT int phLineSetBusy(int vlid, int busyFlag);
  * @param vlid    virtual line id
  * @param to      uri to put in the To: header
  * @param message  message to send
+ * @param mime	message mime type
  * @return  if positive msgid
 */
-MY_DLLEXPORT int phLineSendMessage(int vlid, const char *uri, const char *buff);
+MY_DLLEXPORT int phLineSendMessage(int vlid, const char *uri, 
+								   const char *buff, const char *mime);
 
 /* 
    winfo = 0 -> subscribe with event = presence

@@ -412,7 +412,7 @@ int  eXosip_msg_init(eXosip_msg_t **jm);
 void eXosip_msg_free(eXosip_msg_t *jm);
 int  eXosip_msg_find(int mid, eXosip_msg_t **jm);
 int  generating_message(osip_message_t **message, char *to, char *from,
-		       char *route, char *buff);
+		       char *route, char *buff, char *mime);
 int  generating_cancel(osip_message_t **dest, osip_message_t *request_cancelled);
 int  generating_options_within_dialog(osip_message_t **info, osip_dialog_t *dialog);
 int  generating_info_within_dialog(osip_message_t **info, osip_dialog_t *dialog);

@@ -28,6 +28,8 @@ extern "C" {
 #include <gaim/account.h>
 }
 
+class GaimPresenceMngr;
+
 /**
  *
  * @ingroup model
@@ -53,12 +55,16 @@ public:
 								const char *id, const char *alias,
 								const char *message);
 
+	static void AuthRequestCbk(GaimAccount *account, const char *remote_user,
+								const char *id, const char *alias,
+								const char *message, gboolean response);
 	/* ****************************************** */
 
 private:
 
 	GaimAccountMngr();
 	static GaimAccountMngr *_staticInstance;
+	static GaimPresenceMngr *_presenceMngr;
 
 	static std::list<IMAccount *> _gaimIMAccountList;
 	typedef std::list<IMAccount *>::iterator GaimIMAccountIterator;

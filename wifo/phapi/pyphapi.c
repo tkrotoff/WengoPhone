@@ -330,7 +330,7 @@ static PyObject * PyPhLineSendMessage(PyObject *self, PyObject *params) {
     const char *buff;
 
     if (PyArg_ParseTuple(params, "iss", &vlid, &to, &buff)) {
-        ret = phLineSendMessage(vlid, to, buff);
+        ret = phLineSendMessage(vlid, to, buff, "text/plain");
     }
 
     return Py_BuildValue("i", ret);

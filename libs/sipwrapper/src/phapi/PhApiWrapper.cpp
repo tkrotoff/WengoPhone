@@ -430,8 +430,38 @@ void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & 
 	IMContactSet::const_iterator it;
 	for (it = buddies.begin(); it != buddies.end(); it++) {
 		std::string sipAddress = "sip:" + (*it).getContactId() + "@" + _wengoRealm;
-		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message.c_str());
+		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message.c_str(), "text/plain");
 		//_messageIdChatSessionMap[messageId] = &chatSession;
+	}
+}
+
+void PhApiWrapper::changeTypingState(IMChatSession & chatSession, IMChat::TypingState state) {
+	const char *mime;
+	const char *message;
+	const IMContactSet & buddies = chatSession.getIMContactSet();
+	IMContactSet::const_iterator it;	
+
+	switch (state)
+	{
+		case IMChat::TypingStateTyping:
+			mime = "typingstate/typing";
+			message = "is typing";
+			break;
+
+		case IMChat::TypingStateStopTyping:
+			mime = "typingstate/stoptyping";
+			message = "stops typing";
+			break;
+
+		default:
+			mime = "typingstate/nottyping";
+			message = "is not typing";
+			break;
+	}
+
+	for (it = buddies.begin(); it != buddies.end(); it++) {
+		std::string sipAddress = "sip:" + (*it).getContactId() + "@" + _wengoRealm;
+		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message, mime);
 	}
 }
 

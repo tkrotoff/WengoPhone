@@ -985,7 +985,7 @@ phLinePlaceCall(int vlid, const char *uri, void *userdata, int rcid)
 
 
 MY_DLLEXPORT int
-phLineSendMessage(int vlid, const char *uri, const char *buff)
+phLineSendMessage(int vlid, const char *uri, const char *buff, const char *mime)
 {
     int i;
     struct vline *vl;
@@ -1003,14 +1003,15 @@ phLineSendMessage(int vlid, const char *uri, const char *buff)
     }
     
     eXosip_lock();
-    i = eXosip_message((char *)uri, from, vl->proxy, buff);
+    i = eXosip_message((char *)uri, from, vl->proxy, buff, mime);
     eXosip_unlock();  
     return i;
 }
 
 
 MY_DLLEXPORT int 
-phSendMessage(const char *from, const char *uri, const char *buff)
+phSendMessage(const char *from, const char *uri, 
+			  const char *buff, const char *mime)
 {
   int i;
 
@@ -1018,7 +1019,8 @@ if (!nonempty(from) || !nonempty(uri))
     return -PH_BADARG;
 
   eXosip_lock();
-  i = eXosip_message((char *)uri, (char*) from, ph_get_proxy(from), buff);
+  i = eXosip_message((char *)uri, (char*) from, ph_get_proxy(from), 
+					 buff, mime);
   eXosip_unlock();
   return i;
 }

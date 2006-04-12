@@ -18,6 +18,7 @@
  */
 
 #include "GaimAccountMngr.h"
+#include "GaimPresenceMngr.h"
 
 #include <util/Logger.h>
 
@@ -39,20 +40,27 @@ static void C_RequestAddCbk(GaimAccount *account, const char *remote_user,
 	GaimAccountMngr::RequestAddCbk(account, remote_user, id, alias, message);
 }
 
+static void C_AuthRequestCbk(GaimAccount *account, const char *remote_user,
+							const char *id, const char *alias,
+							const char *message, gboolean response)
+{
+	GaimAccountMngr::AuthRequestCbk(account, remote_user, id, alias, message, response);
+}
 
 GaimAccountUiOps acc_wg_ops =
 {
 	C_NotifyAddedCbk,
 	NULL,
 	C_RequestAddCbk,
+	C_AuthRequestCbk,
 };
 
 /* ************************************************* */
-
+GaimPresenceMngr *GaimAccountMngr::_presenceMngr = NULL;
 
 GaimAccountMngr::GaimAccountMngr()
 {
-
+	_presenceMngr = GaimPresenceMngr::getInstance();
 }
 
 GaimAccountMngr *GaimAccountMngr::getInstance()
@@ -77,6 +85,21 @@ void GaimAccountMngr::RequestAddCbk(GaimAccount *account, const char *remote_use
 	fprintf(stderr, "GaimAccountMngr : RequestAddCbk()\n");
 }
 
+void GaimAccountMngr::AuthRequestCbk(GaimAccount *account, const char *remote_user,
+									const char *id, const char *alias,
+									const char *message, gboolean response)
+{
+	const char *gPrclId = gaim_account_get_protocol_id(account);
+	IMAccount *mAccount = FindIMAccount(gaim_account_get_username(account),
+									GaimIMPrcl::GetEnumIMProtocol(gPrclId));
+	GaimIMPresence *mPresence = NULL;
+	
+	if (!mAccount)
+		return;
+
+	mPresence = _presenceMngr->FindIMPresence(*mAccount);
+	mPresence->authorizationRequestEvent(*mPresence, remote_user, message != NULL ? message : "");
+}
 
 /* **************** MANAGE ACCOUNT LIST (Buddy list) ****************** */
 

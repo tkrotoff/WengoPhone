@@ -56,6 +56,10 @@ void PhApiIMPresence::unblockContact(const std::string & contactId) {
 	_phApiWrapper.unblockContact(contactId);
 }
 
+void PhApiIMPresence::authorizeContact(const std::string & contactId, bool auhorized, 
+									   const std::string message) {
+}
+
 void PhApiIMPresence::presenceStateChangedEventHandler(PhApiWrapper & sender, EnumPresenceState::PresenceState state, const std::string & note, const std::string & from) {
 	presenceStateChangedEvent(*this, state, note, from);
 }

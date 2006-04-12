@@ -130,3 +130,24 @@ void GaimIMPresence::unblockContact(const std::string & contactId)
 		gaim_privacy_permit_add(gAccount, contactId.c_str(), FALSE);
 	}
 }
+
+void GaimIMPresence::authorizeContact(const std::string & contactId, bool authorized, 
+									  const std::string message)
+{
+	GaimAccount *gAccount;
+
+	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
+								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
+	
+	if (!gAccount)
+		return;
+
+	if (authorized == true)
+	{
+		gaim_account_accept_auth_request(gAccount, contactId.c_str(), NULL,	message.c_str());
+	}
+	else
+	{
+		gaim_account_deny_auth_request(gAccount, contactId.c_str(), NULL, message.c_str());
+	}
+}

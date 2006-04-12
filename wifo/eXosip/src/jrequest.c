@@ -689,7 +689,7 @@ int generating_initial_subscribe(osip_message_t **subscribe, char *to,
 /* this method can't be called unless the previous
    INVITE transaction is over. */
 int generating_message(osip_message_t **message, char *to, char *from,
-		       char *route, char *buff)
+		       char *route, char *buff, char *mime)
 {
   int i;
 
@@ -711,7 +711,7 @@ int generating_message(osip_message_t **message, char *to, char *from,
   
   osip_message_set_expires(*message, "120");
   osip_message_set_body(*message, buff, strlen(buff));
-  osip_message_set_content_type(*message, "text/plain");
+  osip_message_set_content_type(*message, mime);
 
   /* osip_message_set_organization(*message, "Jack's Org"); */
 

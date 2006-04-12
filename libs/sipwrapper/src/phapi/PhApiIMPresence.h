@@ -48,6 +48,9 @@ public:
 
 	void unblockContact(const std::string & contactId);
 
+	void authorizeContact(const std::string & contactId, bool auhorized, const std::string message);
+
+
 	Picture getContactIcon(const std::string &);
 
 private:

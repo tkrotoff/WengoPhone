@@ -54,6 +54,12 @@ public:
 	 */
 	Event<void (IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status)> subscribeStatusEvent;
 
+	/**
+	 * @see IMPresence::subscribeStatusEvent
+	 */
+	Event<void (IMPresence & sender, const std::string & contactId, const std::string & message)> authorizationRequestEvent;
+
+
 	Presence(IMAccount & imAccount);
 
 	~Presence();
@@ -92,6 +98,11 @@ public:
 	 * @see IMPresence::unblockContact
 	 */
 	void unblockContact(const std::string & contactId);
+
+	/**
+	 * @see IMPresence::authorizeContact
+	 */
+	void authorizeContact(const std::string & contactId, bool authorized, const std::string message);
 
 	IMAccount & getIMAccount() const {
 		return _imPresence->getIMAccount();

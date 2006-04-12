@@ -21,7 +21,6 @@
 #define GAIMCONTACTLISTMNGR_H
 
 #include <imwrapper/IMContactList.h>
-#include "GaimPresenceMngr.h"
 #include "GaimIMContactList.h"
 
 #include <list>
@@ -29,6 +28,9 @@
 extern "C" {
 #include "gaim/blist.h"
 }
+
+class GaimPresenceMngr;
+class GaimAccountMngr;
 
 /**
  *

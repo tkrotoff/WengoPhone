@@ -36,6 +36,7 @@ Presence::Presence(IMAccount & imAccount)
 	_imPresence->presenceStateChangedEvent += presenceStateChangedEvent;
 	_imPresence->myPresenceStatusEvent += myPresenceStatusEvent;
 	_imPresence->subscribeStatusEvent += subscribeStatusEvent;
+	_imPresence->authorizationRequestEvent += authorizationRequestEvent;
 
 	_state = MyPresenceStateOffline::getInstance();
 }
@@ -72,6 +73,10 @@ void Presence::blockContact(const std::string & contactId) {
 
 void Presence::unblockContact(const std::string & contactId) {
 	_imPresence->unblockContact(contactId);
+}
+
+void Presence::authorizeContact(const std::string & contactId, bool authorized, const std::string message) {
+	_imPresence->authorizeContact(contactId, authorized, message);
 }
 
 void Presence::setState(EnumPresenceState::PresenceState state) {

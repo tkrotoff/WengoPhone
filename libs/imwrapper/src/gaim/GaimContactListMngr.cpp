@@ -18,6 +18,8 @@
  */
 
 #include "GaimContactListMngr.h"
+#include "GaimPresenceMngr.h"
+#include "GaimAccountMngr.h"
 #include "GaimEnumIMProtocol.h"
 #include "GaimEnumPresenceState.h"
 

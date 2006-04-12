@@ -280,6 +280,22 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		p->newIMChatSessionCreatedEvent(*p, *imChatSession);
 	}
 
+	/* Julien : typing state support */
+	if (strcmp(info->ctype, "typingstate") == 0)
+	{
+		IMChat::TypingState state;
+
+		if (strcmp(info->subtype, "typing") == 0)
+			state = IMChat::TypingStateTyping;
+		else if (strcmp(info->subtype, "stoptyping") == 0)
+			state = IMChat::TypingStateStopTyping;
+		else
+			state = IMChat::TypingStateNotTyping;
+
+		p->typingStateChangedEvent(*p, *imChatSession, from, state);
+		return;
+	}
+
 	switch(info->event) {
 	case phMsgNew: {
 		string content = info->content;
