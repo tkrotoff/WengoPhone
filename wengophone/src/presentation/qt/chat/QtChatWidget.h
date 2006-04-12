@@ -33,6 +33,7 @@
 
 #include <control/chat/CChatHandler.h>
 
+#include "QtChatRoomInviteDlg.h"
 
 class ChatWidget : public QWidget //, Ui::ChatWidget
 {
@@ -71,6 +72,8 @@ public:
     void setNotTypingDelay(int sec) { _notTypingDelay = sec * 1000;};
 
     void setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state);
+
+    void openContactListFrame();
 
 protected:
 
@@ -133,6 +136,8 @@ protected:
 	const QString Emoticon2Text(const QString &htmlstr);
 
 	virtual void timerEvent ( QTimerEvent * event );
+
+	void addContactToContactListFrame(const Contact & contact);
 
 public Q_SLOTS:
 

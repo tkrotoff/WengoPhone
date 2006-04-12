@@ -25,7 +25,6 @@
 #include <qtutil/Object.h>
 
 #include <model/contactlist/ContactList.h>
-#include <model/contactlist/Contact.h>
 
 #include <model/contactlist/ContactGroup.h>
 
@@ -74,6 +73,7 @@ void QtChatRoomInviteDlg::startConference(){
 	for (iter = selectList.begin(); iter != selectList.end(); iter ++ ){
 		QtChatRoomListWidgetItem * item = dynamic_cast<QtChatRoomListWidgetItem *> (*iter);
 		_chatSession.addIMContact(*(item->getContact().getAvailableIMContact(_chatSession)));
+		_selectedContact.append( (item->getContact()) );
 	}
 	accept();
  }
@@ -89,6 +89,7 @@ void QtChatRoomInviteDlg::addToConference(){
 			QtChatRoomTreeWidgetItem * item = dynamic_cast<QtChatRoomTreeWidgetItem *>( (*iter) );
 			_contactListTreeWidget->setItemSelected(item,false);
 			if ( _inviteListWidget->findItems(item->text(0),Qt::MatchExactly).isEmpty() ){
+
 				QtChatRoomListWidgetItem * listItem = new QtChatRoomListWidgetItem(item->getContact(), _inviteListWidget);
 				listItem->setText( item->text(0) );
 				listItem->setIcon( item->icon(0) );
@@ -151,4 +152,9 @@ void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const ContactGroup 
 		item->setIcon(0,QIcon(QtContactPixmap::getInstance()->getPixmap(status)));
 		}
 	}
+}
+
+QtChatRoomInviteDlg::SelectedContact QtChatRoomInviteDlg::getSelectedContact() const{
+
+	return _selectedContact;
 }

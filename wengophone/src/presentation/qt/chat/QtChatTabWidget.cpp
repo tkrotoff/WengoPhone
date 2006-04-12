@@ -34,6 +34,7 @@ void QtChatTabWidget::setBlinkingTab(int index){
 void QtChatTabWidget::stopBlinkingTab(int index){
 
 	_blinkingTabIndex.remove(index);
+	tabBar()->setTabTextColor(index,Qt::black);
 }
 
 bool QtChatTabWidget::isBlinkingTab(int index){

@@ -26,7 +26,7 @@
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
 
-#include "QtChatRoomInviteDlg.h"
+
 
 #include <model/profile/UserProfile.h>
 
@@ -80,6 +80,7 @@ QWidget(parent, f), _cChatHandler(cChatHandler)
     connect(_emoticonsWidget,SIGNAL(emoticonClicked(QtEmoticon)),this,SLOT(emoticonSelected(QtEmoticon)));
 	connect(_emoticonsWidget,SIGNAL(closed()),_chatEdit,SLOT(setFocus()));
 	connect(_chatEdit,SIGNAL(textChanged ()),SLOT(chatEditChanged()));
+
 	QGridLayout * frameLayout = new QGridLayout(_contactListFrame);
 	_contactListFrame->setVisible(false);
 	_scrollArea = new QScrollArea(_contactListFrame);
@@ -87,7 +88,8 @@ QWidget(parent, f), _cChatHandler(cChatHandler)
 
 	_contactViewport = new QWidget(_scrollArea);
 	_scrollArea->setWidget(_contactViewport);
-	new QVBoxLayout(_contactViewport);
+	new QHBoxLayout(_contactViewport);
+	_contactViewport->layout()->setMargin(0);
 	_scrollArea->setWidgetResizable(true);
 
 }
@@ -326,6 +328,13 @@ void ChatWidget::setIMChatSession(IMChatSession * imChatSession)
 void ChatWidget::inviteContact(){
 	QtChatRoomInviteDlg	dlg(*_imChatSession, _cChatHandler.getUserProfile().getContactList(),this);
 	dlg.exec();
+	openContactListFrame();
+	QtChatRoomInviteDlg::SelectedContact selectedContact = dlg.getSelectedContact();
+	QtChatRoomInviteDlg::SelectedContact::iterator iter;
+
+	for (iter = selectedContact.begin(); iter != selectedContact.end(); iter++){
+		addContactToContactListFrame( (*iter) );
+	}
 }
 
 void ChatWidget::setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state){
@@ -346,4 +355,47 @@ void ChatWidget::setRemoteTypingState(const IMChatSession & sender,const IMChat:
 		default:
 			break;
 	}
+}
+void ChatWidget::openContactListFrame(){
+	QSize size = _contactListFrame->minimumSize();
+	size.setHeight(96);
+	_contactListFrame->setMinimumSize(size);
+	size = _contactListFrame->maximumSize();
+	size.setHeight(96);
+	_contactListFrame->setMaximumSize(size);
+	_contactListFrame->setVisible(true);
+	_contactListFrame->setFrameShape(QFrame::NoFrame);
+	_contactListFrame->setFrameShadow(QFrame::Plain);
+	_contactListFrame->setAutoFillBackground(true);
+
+	_scrollArea->setFrameShape(QFrame::NoFrame);
+	_scrollArea->setFrameShadow(QFrame::Plain);
+	_scrollArea->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
+
+}
+
+void ChatWidget::addContactToContactListFrame(const Contact & contact){
+	QLabel * contactLabel = new QLabel();
+	_contactViewport->layout()->addWidget(contactLabel);
+	contactLabel->setMaximumSize(85,85);
+	contactLabel->setMinimumSize(85,85);
+
+	Picture picture = contact.getIcon();
+	std::string data = picture.getData();
+	QPixmap pixmap;
+	if ( ! data.empty() ){
+		pixmap.loadFromData((uchar *)data.c_str(), data.size());
+	}else{
+			pixmap.load(":pics/contact_picture.png");
+	}
+
+	pixmap = pixmap.scaled(80,80);
+
+	QPixmap border;
+	border.load(":pics/contact_border.png");
+
+	QPainter painter(&pixmap);
+	painter.drawPixmap(0,0,border);
+	painter.end();
+	contactLabel->setPixmap(pixmap);
 }

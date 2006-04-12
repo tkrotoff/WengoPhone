@@ -24,16 +24,24 @@
 #include <QtGui>
 
 #include <control/contactlist/CContactList.h>
+#include <model/contactlist/Contact.h>
 
 #include <imwrapper/IMContact.h>
 #include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMChat.h>
 
+class Contact;
+
 class QtChatRoomInviteDlg : public QDialog
 {
 	Q_OBJECT
 public:
+
+	typedef QList<Contact > SelectedContact;
+
 	QtChatRoomInviteDlg(IMChatSession & chatSession,ContactList & contactList, QWidget * parent = 0, Qt::WFlags f = 0);
+
+	SelectedContact getSelectedContact() const;
 
 protected:
 
@@ -59,6 +67,8 @@ protected:
 
 	void fillGroup(QTreeWidgetItem * group, const ContactGroup * cgroup);
 
+	SelectedContact _selectedContact;
+
 protected Q_SLOTS:
 
 	void startConference();
@@ -66,8 +76,6 @@ protected Q_SLOTS:
 	void addToConference();
 
 	void removeFromConference();
-
-
 
 };
 

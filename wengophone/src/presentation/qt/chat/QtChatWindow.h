@@ -57,6 +57,8 @@ protected:
 
     QtChatTabWidget *   _tabWidget;
 
+    QMenuBar * _menuBar;
+
     IMChatSession * _imChatSession;
 
     QWidget			_dialog;

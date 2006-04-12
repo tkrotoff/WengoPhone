@@ -143,27 +143,37 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession)
 
 void ChatWindow::initThreadSafe() {
 	_widget = WidgetFactory::create(":/forms/chat/chat.ui", &_dialog);
+
+	// Add menubar
+	_menuBar = new QMenuBar(&_dialog);
+	QMenu * WengoMenu = new QMenu("Wengo");
+	WengoMenu->addAction("Exit");
+	_menuBar->addMenu(WengoMenu);
+
+	// Add dialog layout
 	QGridLayout * layout = new QGridLayout();
+	layout->addWidget(_menuBar);
 	layout->addWidget(_widget);
 	layout->setMargin(0);
+	layout->setSpacing(0);
 	_dialog.setLayout(layout);
 
-
+	// Add widget layout
 	new QGridLayout(_widget);
 	_tabWidget = new QtChatTabWidget ( _widget );
 	_widget->layout()->addWidget(_tabWidget);
-
+	_widget->layout()->setMargin(0);
 	connect ( _tabWidget,SIGNAL(currentChanged (int)), SLOT(tabSelectionChanged(int)));
 
-	// _tabWidget = _seeker.getTabWidget(_widget,"tabWidget");
 	_tabWidget->removeTab(0);
 	_dialog.resize(384,464);
 	_dialog.setWindowTitle(tr("Wengophone Chat"));
 	_dialog.show();
 	IMContact from = *_imChatSession->getIMContactSet().begin();
 
-
 	addChat(_imChatSession,from);
+
+
 }
 
 void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
