@@ -97,7 +97,7 @@ void ConnectHandler::loginStatusEventHandler(IMConnect & sender,
 }
 
 void ConnectHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	IMAccountSet::const_iterator it = _pendingConnections.find(imAccount);
+	IMAccountSet::iterator it = _pendingConnections.find(imAccount);
 	if (it != _pendingConnections.end()) {
 		LOG_DEBUG("A connection was pending for this IMAccount. Releasing connection.");
 		_actualIMAccount.insert(&imAccount);
