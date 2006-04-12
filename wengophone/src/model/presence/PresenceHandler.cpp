@@ -263,7 +263,7 @@ Picture PresenceHandler::getContactIcon(const IMContact & imContact) {
 }
 
 void PresenceHandler::authorizeContact(const IMContact & imContact, bool authorized, const std::string message) {
-	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount &)imContact.getIMAccount());
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
 		return (*it).second->authorizeContact(imContact.getContactId(), authorized, message);
