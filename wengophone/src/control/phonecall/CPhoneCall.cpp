@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,15 +28,6 @@
 #include <model/SipCallbacks.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
-#include <model/phonecall/PhoneCallStateDefault.h>
-#include <model/phonecall/PhoneCallStateClosed.h>
-#include <model/phonecall/PhoneCallStateDialing.h>
-#include <model/phonecall/PhoneCallStateError.h>
-#include <model/phonecall/PhoneCallStateHold.h>
-#include <model/phonecall/PhoneCallStateIncoming.h>
-#include <model/phonecall/PhoneCallStateTalking.h>
-#include <model/phonecall/PhoneCallStateResumed.h>
-#include <model/phonecall/PhoneCallStateRinging.h>
 
 #include <util/Logger.h>
 
@@ -94,4 +85,8 @@ void CPhoneCall::resume() {
 
 void CPhoneCall::blindTransfer(const std::string & phoneNumber) {
 	_phoneCall.blindTransfer(phoneNumber);
+}
+
+EnumPhoneCallState::PhoneCallState CPhoneCall::getState() const {
+	return _phoneCall.getState();
 }

@@ -43,6 +43,7 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * pare
 
 	_imAccountManagerWidget = WidgetFactory::create(":/forms/imaccount/IMAccountManager.ui", parent);
 	_imAccountManagerWindow = Widget::transformToWindow(_imAccountManagerWidget);
+	_imAccountManagerWindow->setWindowTitle(_imAccountManagerWidget->windowTitle());
 
 	QPushButton * addIMAccountButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "addIMAccountButton");
 	QMenu * addIMAccountMenu = new QMenu();
@@ -78,6 +79,8 @@ void QtIMAccountManager::show() {
 }
 
 void QtIMAccountManager::loadIMAccounts() {
+	static const int COLUMN_ENABLE_BUTTON = 2;
+
 	_treeWidget->clear();
 
 	IMAccountHandler & imAccountHandler = _userProfile.getIMAccountHandler();
@@ -111,8 +114,8 @@ void QtIMAccountManager::loadIMAccounts() {
 		accountStrList << "";
 
 		QtIMAccountItem * item = new QtIMAccountItem(_treeWidget, accountStrList);
-		item->setCheckState(2,
-			(imAccount->getPresenceState() == EnumPresenceState::PresenceStateOnline) ? Qt::Checked : Qt::Unchecked);
+		item->setCheckState(COLUMN_ENABLE_BUTTON,
+				(imAccount->getPresenceState() == EnumPresenceState::PresenceStateOnline) ? Qt::Checked : Qt::Unchecked);
 		item->setIMAccount(imAccount);
 	}
 }
@@ -142,10 +145,19 @@ void QtIMAccountManager::addIMAccount(QAction * action) {
 }
 
 void QtIMAccountManager::deleteIMAccount() {
-	QtIMAccountItem * imAccountItem = (QtIMAccountItem *)_treeWidget->currentItem();
+	QtIMAccountItem * imAccountItem = (QtIMAccountItem *) _treeWidget->currentItem();
 	if (imAccountItem) {
 		IMAccount * imAccount = imAccountItem->getIMAccount();
-		_userProfile.removeIMAccount(*imAccount);
+
+		int buttonClicked = QMessageBox::question(_imAccountManagerWindow,
+					"WengoPhone",
+					tr("Are sure you want to delete this account?\n") + QString::fromStdString(imAccount->getLogin()),
+					tr("&Delete"), tr("Cancel"));
+
+		//Button delete clicked
+		if (buttonClicked == 0) {
+			_userProfile.removeIMAccount(*imAccount);
+		}
 	}
 
 	loadIMAccounts();

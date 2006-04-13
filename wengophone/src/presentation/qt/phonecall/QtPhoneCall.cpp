@@ -62,9 +62,7 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 void QtPhoneCall::initThreadSafe() {
 
 	_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/QtCallContactWidget.ui", _qtWengoPhone->getWidget());
-	_phoneCallWidget->setAutoFillBackground ( true );
-
-	QtPhoneCallEventFilter * filter = new QtPhoneCallEventFilter(_phoneCallWidget);
+	_phoneCallWidget->setAutoFillBackground(true);
 
 	QString sipAddress = QString::fromStdString(_cPhoneCall.getPeerSipAddress());
 	QString callAddress = QString::fromStdString(_cPhoneCall.getPeerDisplayName());
@@ -87,9 +85,8 @@ void QtPhoneCall::initThreadSafe() {
 
 	_avatarLabel = Object::findChild<QLabel *>(_phoneCallWidget, "avatarLabel");
 
-
 	/*
-	QPixmap testPixmap( QSize(140,140) );
+	QPixmap testPixmap(QSize(140,140));
 	QSvgRenderer svgRenderer(this);
 	svgRenderer.load(QString("images/w_dark.svg"));
 	QPainter painter(&testPixmap);
@@ -99,46 +96,47 @@ void QtPhoneCall::initThreadSafe() {
 
 	QAction * action;
 	_popup = new QMenu(_phoneCallWidget);
-	// Accept call
-	_actionAcceptCall = _popup->addAction( tr ("Accept") );
-	connect (_actionAcceptCall,SIGNAL ( triggered(bool) ), SLOT( acceptActionTriggered(bool) ) );
+	//Accept call
+	_actionAcceptCall = _popup->addAction(tr("Accept"));
+	connect(_actionAcceptCall, SIGNAL(triggered(bool)), SLOT(acceptActionTriggered(bool)));
 
-	// Hang-up call
-	_actionHangupCall = _popup->addAction( tr ("Hang-up") );
-	connect (_actionHangupCall,SIGNAL ( triggered(bool) ), SLOT ( rejectActionTriggered(bool) ) );
+	//Hang-up call
+	_actionHangupCall = _popup->addAction(tr("Hang-up"));
+	connect(_actionHangupCall, SIGNAL(triggered(bool)), SLOT(rejectActionTriggered(bool)));
 
-	// Hold
-	_actionHold = _popup->addAction( tr ("Hold") );
-	connect (_actionHold,SIGNAL ( triggered(bool) ), SLOT ( holdResumeActionTriggered(bool) ) );
+	//Hold
+	_actionHold = _popup->addAction(tr("Hold"));
+	connect(_actionHold, SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
 
-	// Resume
-	_actionResume = _popup->addAction( tr ("Resume") );
-	connect (_actionResume ,SIGNAL ( triggered(bool) ), SLOT ( holdResumeActionTriggered(bool) ) );
+	//Resume
+	_actionResume = _popup->addAction(tr("Resume"));
+	connect(_actionResume, SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
 	_actionResume->setEnabled(false);
 
-	// Separator
+	//Separator
 	_popup->addSeparator();
 
-	// Invite to conference
-	_actionInvite = _popup->addAction( tr ("Invite to conference") );
-	connect (_actionInvite ,SIGNAL ( triggered(bool) ), SLOT ( inviteToConference(bool) ) );
+	//Invite to conference
+	_actionInvite = _popup->addAction(tr("Invite to conference"));
+	connect(_actionInvite, SIGNAL(triggered(bool)), SLOT(inviteToConference(bool)));
 	_popup->addSeparator();
 
-	// Show / Hide video
-	_actionSwitchVideo = _popup->addAction( tr ("Stop video") );
-	connect (_actionSwitchVideo ,SIGNAL ( triggered(bool) ), SLOT ( switchVideo(bool) ) );
+	//Show / Hide video
+	_actionSwitchVideo = _popup->addAction(tr("Stop video"));
+	connect(_actionSwitchVideo, SIGNAL(triggered(bool)), SLOT(switchVideo(bool)));
 
 	_popup->addSeparator();
 
-	// Add the contact
-	_actionAddContact = _popup->addAction( tr ("Add contact") );
-	connect (_actionAddContact,SIGNAL ( triggered(bool) ), SLOT ( addContactActionTriggered(bool) ) );
+	//Add the contact
+	_actionAddContact = _popup->addAction(tr("Add contact"));
+	connect(_actionAddContact, SIGNAL(triggered(bool)), SLOT(addContactActionTriggered(bool)));
 
-	_actionBlockContact = _popup->addAction( tr ("Block contact") );
+	_actionBlockContact = _popup->addAction(tr("Block contact"));
 
+	QtPhoneCallEventFilter * filter = new QtPhoneCallEventFilter(_phoneCallWidget);
 	_phoneCallWidget->installEventFilter(filter);
 
-	connect (filter, SIGNAL( openPopup( int, int ) ), SLOT(openPopup( int, int ) ) );
+	connect(filter, SIGNAL(openPopup(int, int)), SLOT(openPopup(int, int)));
 
 	_qtWengoPhone->addPhoneCall(this);
 }
@@ -166,58 +164,44 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:
-
-		_statusLabel->setText( tr ("error") );
-		_status = Error;
+		_statusLabel->setText(tr("Error"));
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
-
-		_actionResume->setEnabled( false );
-		_actionHold->setEnabled( true );
-		_statusLabel->setText( tr ("talking") );
+		_actionResume->setEnabled(false);
+		_actionHold->setEnabled(true);
+		_statusLabel->setText(tr("talking"));
 		_hold = false;
-		_status = Resumed;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateTalking:
-
 		_duration = 0;
 		_timerId = startTimer(1000);
-		if ( _timerId == 0)
-			LOG_DEBUG("TIMERID == 0 ?!!!");
-		_actionAcceptCall->setEnabled( false );
-		_actionHangupCall->setEnabled( true );
-
-		_statusLabel->setText( tr ("talking") );
-		_status = Talking;
-
+		if (_timerId == 0) {
+			LOG_DEBUG("_timerId == 0");
+		}
+		_actionAcceptCall->setEnabled(false);
+		_actionHangupCall->setEnabled(true);
+		_statusLabel->setText(tr("Talking"));
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateDialing:
-
-		_actionAcceptCall->setEnabled( false );
-		_actionHangupCall->setEnabled( true );
-		_statusLabel->setText( tr ("dialing") );
-		_status = Dialing;
+		_actionAcceptCall->setEnabled(false);
+		_actionHangupCall->setEnabled(true);
+		_statusLabel->setText(tr("Dialing"));
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateRinging:
-
-		_actionAcceptCall->setEnabled( false );
-		_actionHangupCall->setEnabled( true );
-		_statusLabel->setText( tr ("ringing") );
-		_status = Ringing;
-
+		_actionAcceptCall->setEnabled(false);
+		_actionHangupCall->setEnabled(true);
+		_statusLabel->setText(tr("Ringing"));
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
-
 		killTimer(_timerId);
-		_actionAcceptCall->setEnabled( false );
-		_actionHangupCall->setEnabled( false );
-		_statusLabel->setText( tr ("closed") );
-		_status = Closed;
+		_actionAcceptCall->setEnabled(false);
+		_actionHangupCall->setEnabled(false);
+		_statusLabel->setText(tr("Closed"));
 		delete _phoneCallWidget;
 
 		stopConference();
@@ -225,43 +209,37 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming:
-
-		_actionAcceptCall->setEnabled( true );
-		_actionHangupCall->setEnabled( true );
-		_statusLabel->setText( tr ("incoming call") );
-		_status = Incoming;
-
+		_actionAcceptCall->setEnabled(true);
+		_actionHangupCall->setEnabled(true);
+		_statusLabel->setText(tr("Incoming Call"));
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateHold:
-
-		_statusLabel->setText( tr ("hold") );
-		_actionHold->setEnabled( false );
-		_actionResume->setEnabled( true );
+		_statusLabel->setText(tr("Hold"));
+		_actionHold->setEnabled(false);
+		_actionResume->setEnabled(true);
 		_hold = false;
-		_status = Hold;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateMissed:
-		_statusLabel->setText( tr ("missed") );
-		_status = Missed;
+		_statusLabel->setText(tr("Missed"));
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateRedirected:
-		_statusLabel->setText( tr ("redirected") );
+		_statusLabel->setText(tr("Redirected"));
 		break;
 
 	default:
-		LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
+		LOG_FATAL("unknown PhoneCallState=" + EnumPhoneCallState::toString(state));
 	}
 }
 
 void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
-	//image will be deleted in videoFrameReceivedThreadSafe
-	// If we want to encrust the local webcam picture, we do it
+	//Image will be deleted in videoFrameReceivedThreadSafe
 	QImage * image = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
-		remoteVideoFrame.getHeight(), QImage::Format_RGB32);
+			remoteVideoFrame.getHeight(), QImage::Format_RGB32);
 
+	//If we want to encrust the local webcam picture, we do it here
 	if (_encrustLocalWebcam) {
 		const unsigned marge = 5;
 		const unsigned ratio = 3;
@@ -283,16 +261,16 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 
 		QImage resizedQImage = QImage(resizedImage->data, resizedImage->width,
 			resizedImage->height, QImage::Format_RGB32);
-		
+
 		QPainter painter(image);
 		painter.drawImage(posx, posy, resizedQImage);
 
 		pix_free(resizedImage);
-
 */
+
 		QImage localImage = QImage(localVideoFrame.getFrame(), localVideoFrame.getWidth(),
-			localVideoFrame.getHeight(),
-			QImage::Format_RGB32).scaledToWidth(width, Qt::SmoothTransformation);
+				localVideoFrame.getHeight(),
+				QImage::Format_RGB32).scaledToWidth(width, Qt::SmoothTransformation);
 
 		QPainter painter(image);
 		painter.drawImage(posx, posy, localImage);
@@ -310,19 +288,19 @@ void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(QImage * image) {
 		showVideoWidget();
 	}
 	_videoWindow->showImage(*image);
-	//image was created in videoFrameReceived
+	//Image was created in videoFrameReceived
 	delete image;
 }
 
-void QtPhoneCall::acceptActionTriggered ( bool  ) {
+void QtPhoneCall::acceptActionTriggered(bool) {
 	_cPhoneCall.pickUp();
 }
 
-void QtPhoneCall::rejectActionTriggered ( bool ) {
+void QtPhoneCall::rejectActionTriggered(bool) {
 	_cPhoneCall.hangUp();
 }
 
-void QtPhoneCall::holdResumeActionTriggered ( bool ){
+void QtPhoneCall::holdResumeActionTriggered(bool) {
 	if (_hold) {
 		_cPhoneCall.hold();
 	} else {
@@ -330,9 +308,9 @@ void QtPhoneCall::holdResumeActionTriggered ( bool ){
 	}
 }
 
-void QtPhoneCall::addContactActionTriggered ( bool  ){
+void QtPhoneCall::addContactActionTriggered(bool) {
 	std::string callAddress = _cPhoneCall.getPeerDisplayName();
-	if (callAddress.empty()) {
+	if(callAddress.empty()) {
 		callAddress = _cPhoneCall.getPeerUserName();
 	}
 	QtAddContact * qtAddContact = new QtAddContact(_cPhoneCall.getCWengoPhone(), _phoneCallWidget, callAddress);
@@ -345,69 +323,62 @@ void QtPhoneCall::transferButtonClicked() {
 	_cPhoneCall.blindTransfer(transferPhoneNumberLineEdit->text().toStdString());
 }
 
-void QtPhoneCall::openPopup( int x , int y ){
-	_popup->popup(QPoint(x,y));
+void QtPhoneCall::openPopup(int x , int y) {
+	_popup->popup(QPoint(x, y));
 }
 
-void QtPhoneCall::timerEvent(QTimerEvent *event){
+void QtPhoneCall::timerEvent(QTimerEvent * event) {
 	_duration++;
 	QTime time;
 	time = time.addSecs(_duration);
 	_durationLabel->setText(time.toString(Qt::TextDate));
 }
 
-void QtPhoneCall::showVideoWidget(){
+void QtPhoneCall::showVideoWidget() {
+	QGridLayout * layout = qobject_cast<QGridLayout *>(_phoneCallWidget->layout());
 
-	QGridLayout * layout = dynamic_cast<QGridLayout *> ( _phoneCallWidget->layout() );
-	// Remove the avatar from the widget
-	layout->removeWidget ( _avatarLabel );
+	//Remove the avatar from the widget
+	layout->removeWidget(_avatarLabel);
 	_avatarLabel->hide();
 
-	// insert the video widget
+	//Insert the video widget
 	_videoWindow->getWidget()->setParent(_phoneCallWidget);
-	_videoWindow->getWidget()->setMaximumSize( QSize( 210,160 ) );
-	_videoWindow->getWidget()->setMinimumSize( QSize( 210,160 ) );
+	_videoWindow->getWidget()->setMaximumSize(QSize(210, 160));
+	_videoWindow->getWidget()->setMinimumSize(QSize(210, 160));
 
-	layout->addWidget( _videoWindow->getWidget(), 0 , 0 );
+	layout->addWidget(_videoWindow->getWidget(), 0 , 0);
 
 	_videoWindow->getWidget()->show();
-
 }
 
-void QtPhoneCall::showAvatar(){
+void QtPhoneCall::showAvatar() {
+	QGridLayout * layout = dynamic_cast<QGridLayout *>(_phoneCallWidget->layout());
 
-	QGridLayout * layout = dynamic_cast<QGridLayout *> ( _phoneCallWidget->layout() );
-
-	// Remove the video widget
-	layout->removeWidget ( _videoWindow->getWidget() );
+	//Remove the video widget
+	layout->removeWidget(_videoWindow->getWidget());
 	_videoWindow->getWidget()->hide();
 
-	// insert the avatar label
-	layout->addWidget( _avatarLabel, 0 , 0 );
+	//Insert the avatar label
+	layout->addWidget(_avatarLabel, 0 , 0);
 	_avatarLabel->show();
-
-
 }
 
-void QtPhoneCall::switchVideo(bool ){
-
-	if ( _showVideo ){
+void QtPhoneCall::switchVideo(bool) {
+	if (_showVideo) {
 		showAvatar();
 		_showVideo = false;
-		_actionSwitchVideo->setText ( tr("Start video") );
-	}
-	else
-	{
+		_actionSwitchVideo->setText(tr("Start video"));
+	} else {
 		_showVideo = true;
-		_actionSwitchVideo->setText ( tr("Stop video") );
+		_actionSwitchVideo->setText(tr("Stop video"));
 		showVideoWidget();
 	}
 }
 
-CPhoneCall & QtPhoneCall::getCPhoneCall(){
+CPhoneCall & QtPhoneCall::getCPhoneCall() {
 	return _cPhoneCall;
 }
 
-void QtPhoneCall::inviteToConference(bool ){
+void QtPhoneCall::inviteToConference(bool) {
 	startConference(this);
 }

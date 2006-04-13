@@ -28,10 +28,6 @@
 #include <model/WengoPhone.h>
 #include <model/SipCallbacks.h>
 #include <model/phonecall/PhoneCall.h>
-#include <model/phonecall/PhoneCallStateClosed.h>
-#include <model/phonecall/PhoneCallStateError.h>
-#include <model/phonecall/PhoneCallStateTalking.h>
-#include <model/phonecall/PhoneCallStateIncoming.h>
 #include <model/profile/UserProfile.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -103,7 +99,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 	for (PhoneCalls::iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
 		PhoneCall * phoneCall = (*it).second;
 
-		EnumPhoneCallState::PhoneCallState state = phoneCall->getState().getCode();
+		EnumPhoneCallState::PhoneCallState state = phoneCall->getState();
 		if (state != EnumPhoneCallState::PhoneCallStateTalking &&
 			state != EnumPhoneCallState::PhoneCallStateResumed &&
 			state != EnumPhoneCallState::PhoneCallStateHold) {
@@ -128,12 +124,11 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 	//Sends the event a new PhoneCall has been created
 	phoneCallCreatedEvent(*this, *phoneCall);
 
-
 	//History: create a HistoryMemento for this outgoing call
 	HistoryMemento * memento = new HistoryMemento(
 		HistoryMemento::OutgoingCall, sipAddress.getSipAddress(), callId);
 	_wengoPhone.getCurrentUserProfile().getHistory().addMemento(memento);
-	
+
 	return callId;
 }
 
@@ -230,7 +225,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 
 	PhoneCall * phoneCall = getPhoneCall(callId);
 	if (phoneCall) {
-		if (phoneCall->getState().getCode() == state) {
+		if (phoneCall->getState() == state) {
 			//We are already in this state
 			//Prevents the state to be applied 2 times in a row
 			return;
@@ -281,12 +276,12 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		//Adds the PhoneCall to the list of PhoneCall
 		_phoneCallMap[callId] = phoneCall;
 
-		//Sends the event a new PhoneCall has been created
-		phoneCallCreatedEvent(*this, *phoneCall);
-
 		phoneCall->setState(state);
 
 		_activePhoneCall = phoneCall;
+
+		//Sends the event a new PhoneCall has been created
+		phoneCallCreatedEvent(*this, *phoneCall);
 
 		//History: create a HistoryMemento for this incoming call
 		HistoryMemento * memento = new HistoryMemento(
@@ -309,7 +304,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	default:
-		LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
+		LOG_FATAL("unknown PhoneCallState=" + EnumPhoneCallState::toString(state));
 	}
 }
 

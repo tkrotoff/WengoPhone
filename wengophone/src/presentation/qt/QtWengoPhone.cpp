@@ -104,6 +104,9 @@ void QtWengoPhone::initThreadSafe() {
 	//callButton
 	_callButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "callButton");
 
+	//videoCallButton
+	_videoCallButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "videoCallButton");
+
 	//hangUpButton
 	_hangUpButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "hangUpButton");
 
@@ -270,15 +273,17 @@ void QtWengoPhone::initThreadSafe() {
 
 void QtWengoPhone::initButtons() {
 	//callButton
-	_callButton->disconnect();
 	connect(_callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
+	enableCallButton();
+
+	//videoCallButton
+	connect(_videoCallButton, SIGNAL(clicked()), SLOT(videoCallButtonClicked()));
 	enableCallButton();
 
 	//hangUpButton
 	_hangUpButton->setEnabled(false);
 
 	//phoneComboBox
-	_phoneComboBox->disconnect();
 	connect(_phoneComboBox, SIGNAL(activated(int)), SLOT(callButtonClicked()));
 	connect(_phoneComboBox, SIGNAL(editTextChanged(const QString &)), SLOT(enableCallButton()));
 }
@@ -286,9 +291,17 @@ void QtWengoPhone::initButtons() {
 void QtWengoPhone::enableCallButton() {
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	_callButton->setEnabled(!phoneNumber.empty());
+	_videoCallButton->setEnabled(!phoneNumber.empty());
 }
 
 void QtWengoPhone::callButtonClicked() {
+	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
+	if (!phoneNumber.empty()) {
+		_cWengoPhone.makeCall(phoneNumber);
+	}
+}
+
+void QtWengoPhone::videoCallButtonClicked() {
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	if (!phoneNumber.empty()) {
 		_cWengoPhone.makeCall(phoneNumber);
@@ -308,7 +321,6 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	}
 
 	_contactCallListWidget->addPhoneCall(qtPhoneCall);
-
 }
 
 void QtWengoPhone::showLoginWindow() {
@@ -344,7 +356,7 @@ void QtWengoPhone::setSms(QtSms * qtSms) {
 	_qtSms = qtSms;
 }
 
-QtSms * QtWengoPhone::getSms() const{
+QtSms * QtWengoPhone::getSms() const {
 	return _qtSms;
 }
 
@@ -369,7 +381,7 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 	switch (state) {
 	case SipAccount::LoginStateReady:
 #ifdef OS_WINDOWS
-		if( wengoAccount ) {
+		if (wengoAccount) {
 			std::string data = "?login=" + wengoAccount->getWengoLogin() + "&password=" + wengoAccount->getWengoPassword()
 				+ "&lang=" + "fr" + "&wl=" + "wengo" + "&page=softphone-web";
 			_browser->setUrl(URL_WENGO_MINI_HOME + data);
@@ -518,10 +530,10 @@ void QtWengoPhone::showFaq() {
 	_cWengoPhone.showWengoFAQ();
 }
 
-void QtWengoPhone::showBuyOut(){
+void QtWengoPhone::showBuyOut() {
 	_cWengoPhone.showWengoBuyWengos();
 }
-void QtWengoPhone::showCallOut(){
+void QtWengoPhone::showCallOut() {
 	_cWengoPhone.showWengoCallOut();
 }
 
@@ -534,11 +546,11 @@ void QtWengoPhone::showAbout() {
 	aboutWindow->getWidget()->show();
 }
 
-void QtWengoPhone::showVoiceMail(){
+void QtWengoPhone::showVoiceMail() {
 	_cWengoPhone.showWengoVoiceMail();
 }
 
-void QtWengoPhone::showHideOffLineContacts(){
+void QtWengoPhone::showHideOffLineContacts() {
 	static bool hiden = false;
 
 	if ( ! hiden ){
@@ -629,8 +641,8 @@ void QtWengoPhone::setTrayMenu() {
 	_trayIcon->setPopup(_trayMenu);
 }
 
-void QtWengoPhone::sortContacts(){
-   _contactList->sortUsers();
+void QtWengoPhone::sortContacts() {
+	_contactList->sortUsers();
 }
 
 void QtWengoPhone::wrongProxyAuthenticationEventHandler(SipAccount & sender,

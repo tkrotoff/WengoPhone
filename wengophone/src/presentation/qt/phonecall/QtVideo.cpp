@@ -95,7 +95,7 @@ void QtVideo::paintEvent() {
 
 		QImage resizedQImage = QImage(resizedImage->data, resizedImage->width,
 			resizedImage->height, QImage::Format_RGB32);
-		
+
 		painter.drawImage(xpos, ypos, resizedQImage);
 
 		pix_free(resizedImage);

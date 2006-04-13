@@ -43,7 +43,7 @@ void ConferenceCallParticipant::joinConference() {
 	SipWrapper & sipWrapper = _phoneCall.getPhoneLine().getSipWrapper();
 	int callId = _phoneCall.getCallId();
 
-	if (_phoneCall.getState().getCode() == EnumPhoneCallState::PhoneCallStateHold) {
+	if (_phoneCall.getState() == EnumPhoneCallState::PhoneCallStateHold) {
 		_conferenceCall.join(callId);
 	} else {
 		if (!_waitForHoldState) {
@@ -96,6 +96,6 @@ void ConferenceCallParticipant::phoneCallStateChangedEventHandler(PhoneCall & se
 		break;
 
 	default:
-		LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
+		LOG_FATAL("unknown PhoneCallState=" + EnumPhoneCallState::toString(state));
 	}
 }

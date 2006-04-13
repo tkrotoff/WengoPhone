@@ -52,6 +52,14 @@ void QtPhoneLine::initThreadSafe() {
 	//hangUpButton
 	_hangUpButton = _qtWengoPhone->getHangUpButton();
 	connect(_hangUpButton, SIGNAL(clicked()), SLOT(hangUpButtonClicked()));
+
+	//callButton
+	_callButton = _qtWengoPhone->getCallButton();
+	connect(_callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
+
+	//videoCallButton
+	_videoCallButton = _qtWengoPhone->getVideoCallButton();
+	connect(_videoCallButton, SIGNAL(clicked()), SLOT(videoCallButtonClicked()));
 }
 
 void QtPhoneLine::updatePresentation() {
@@ -103,7 +111,7 @@ void QtPhoneLine::stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLi
 		break;
 
 	default:
-		LOG_FATAL("unknown state=" + String::fromNumber(state));
+		LOG_FATAL("unknown state=" + EnumPhoneLineState::toString(state));
 	};
 
 	phoneLineStateLabel->setPixmap(pixmap);
@@ -118,7 +126,20 @@ void QtPhoneLine::phoneCallCreatedEventHandler(CPhoneCall & cPhoneCall) {
 
 void QtPhoneLine::phoneCallCreatedEventHandlerThreadSafe(CPhoneCall & cPhoneCall) {
 	_activeCPhoneCall = &cPhoneCall;
-	_hangUpButton->setEnabled(true);
+	EnumPhoneCallState::PhoneCallState state = cPhoneCall.getState();
+	if (state == EnumPhoneCallState::PhoneCallStateIncoming) {
+		_hangUpButton->setEnabled(true);
+		_callButton->setEnabled(true);
+		_videoCallButton->setEnabled(true);
+	}
+	else if (state == EnumPhoneCallState::PhoneCallStateDialing) {
+		_hangUpButton->setEnabled(true);
+		_callButton->setEnabled(false);
+		_videoCallButton->setEnabled(false);
+	}
+	else {
+		LOG_FATAL("cannot be in this state=" + EnumPhoneCallState::toString(state));
+	}
 }
 
 void QtPhoneLine::phoneCallClosedEventHandler(CPhoneCall & cPhoneCall) {
@@ -129,10 +150,24 @@ void QtPhoneLine::phoneCallClosedEventHandler(CPhoneCall & cPhoneCall) {
 
 void QtPhoneLine::phoneCallClosedEventHandlerThreadSafe(CPhoneCall & cPhoneCall) {
 	_hangUpButton->setEnabled(false);
+	_callButton->setEnabled(false);
+	_videoCallButton->setEnabled(false);
 }
 
 void QtPhoneLine::hangUpButtonClicked() {
 	if (_activeCPhoneCall) {
 		_activeCPhoneCall->hangUp();
+	}
+}
+
+void QtPhoneLine::callButtonClicked() {
+	if (_activeCPhoneCall) {
+		_activeCPhoneCall->pickUp();
+	}
+}
+
+void QtPhoneLine::videoCallButtonClicked() {
+	if (_activeCPhoneCall) {
+		_activeCPhoneCall->pickUp();
 	}
 }

@@ -24,8 +24,6 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
-#include <QMenu>
-
 class WebcamVideoFrame;
 class CPhoneCall;
 class PhoneCall;
@@ -36,6 +34,8 @@ class QPushButton;
 class QImage;
 class QWidget;
 class QLabel;
+class QMenu;
+class QAction;
 
 /**
  * Qt Presentation component for PhoneCall.
@@ -45,8 +45,6 @@ class QLabel;
 class QtPhoneCall : public QObjectThreadSafe, public PPhoneCall {
 	Q_OBJECT
 public:
-
-	enum QtPhoneCallStatus { Error, Resumed, Talking, Dialing, Ringing, Closed, Incoming, Hold, Missed };
 
 	QtPhoneCall(CPhoneCall & cPhoneCall);
 
@@ -68,13 +66,13 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-	void acceptActionTriggered ( bool checked );
+	void acceptActionTriggered(bool checked);
 
-	void rejectActionTriggered ( bool checked );
+	void rejectActionTriggered(bool checked);
 
-	void holdResumeActionTriggered ( bool checked );
+	void holdResumeActionTriggered(bool checked);
 
-	void addContactActionTriggered ( bool checked );
+	void addContactActionTriggered(bool checked);
 
 	void inviteToConference(bool checked);
 
@@ -82,8 +80,7 @@ private Q_SLOTS:
 
 	void switchVideo(bool checked);
 
-	void openPopup( int x, int y);
-
+	void openPopup(int x, int y);
 
 private:
 
@@ -145,14 +142,11 @@ private:
 
 	bool _showVideo;
 
-	QtPhoneCallStatus _status;
-
 	bool _encrustLocalWebcam;
 
 protected:
 
-	void timerEvent(QTimerEvent *event);
-
+	void timerEvent(QTimerEvent * event);
 };
 
 #endif	//QTPHONECALL_H

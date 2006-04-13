@@ -46,6 +46,10 @@ private Q_SLOTS:
 
 	void hangUpButtonClicked();
 
+	void callButtonClicked();
+
+	void videoCallButtonClicked();
+
 private:
 
 	void initThreadSafe();
@@ -69,6 +73,10 @@ private:
 	QtWengoPhone * _qtWengoPhone;
 
 	QPushButton * _hangUpButton;
+
+	QPushButton * _callButton;
+
+	QPushButton * _videoCallButton;
 
 	CPhoneCall * _activeCPhoneCall;
 };

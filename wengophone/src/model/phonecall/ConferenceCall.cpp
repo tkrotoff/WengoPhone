@@ -174,7 +174,7 @@ void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumP
 		break;
 
 	default:
-		LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
+		LOG_FATAL("unknown PhoneCallState=" + EnumPhoneCallState::toString(state));
 	}
 }
 

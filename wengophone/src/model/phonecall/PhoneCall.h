@@ -129,9 +129,7 @@ public:
 	 *
 	 * @return state of this PhoneCall
 	 */
-	const PhoneCallState & getState() const {
-		return *_state;
-	}
+	EnumPhoneCallState::PhoneCallState getState() const;
 
 	/**
 	 * Sets the call id associated with this PhoneCall.

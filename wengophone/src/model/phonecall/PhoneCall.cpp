@@ -119,6 +119,10 @@ void PhoneCall::blindTransfer(const std::string & sipAddress) {
 	_phoneLine.blindTransfer(_callId, sipAddress);
 }
 
+EnumPhoneCallState::PhoneCallState PhoneCall::getState() const {
+	return _state->getCode();
+}
+
 void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 	LOG_DEBUG("PhoneCallState=" + String::fromNumber(state));
 
@@ -197,7 +201,7 @@ void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
 		break;
 
 	default:
-		LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
+		LOG_FATAL("unknown PhoneCallState=" + EnumPhoneCallState::toString(state));
 	}
 }
 

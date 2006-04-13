@@ -91,6 +91,10 @@ public:
 		return _callButton;
 	}
 
+	QPushButton * getVideoCallButton() const {
+		return _videoCallButton;
+	}
+
 	QPushButton * getHangUpButton() const {
 		return _hangUpButton;
 	}
@@ -102,6 +106,8 @@ public:
 private Q_SLOTS:
 
 	void callButtonClicked();
+
+	void videoCallButtonClicked();
 
 	void enableCallButton();
 
@@ -199,6 +205,8 @@ private:
 	QMainWindow * _wengoPhoneWindow;
 
 	QPushButton * _callButton;
+
+	QPushButton * _videoCallButton;
 
 	QPushButton * _hangUpButton;
 

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,10 +47,21 @@ public:
 	CWengoPhone & getCWengoPhone() const {
 		return _cWengoPhone;
 	}
-	
+
+	/**
+	 * FIXME this breaks the control layer.
+	 * Used inside QtContactCallListWidget in order to create a ConferenceCall.
+	 */
 	PhoneCall & getPhoneCall() const {
 		return _phoneCall;
 	}
+
+	/**
+	 * Gets the current state of this phone call.
+	 *
+	 * @return phone call state
+	 */
+	EnumPhoneCallState::PhoneCallState getState() const;
 
 	/**
 	 * @see PhoneCall::close()
@@ -111,7 +122,6 @@ public:
 	 */
 	int getDuration() const;
 
-	
 private:
 
 	void stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state);
