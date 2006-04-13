@@ -19,7 +19,6 @@
 
 #include "QtWengoPhone.h"
 
-#include <model/account/SipAccount.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/connect/ConnectHandler.h>
 #include <model/phonecall/PhoneCall.h>
@@ -49,10 +48,12 @@
 #include "config/QtWengoConfigDialog.h"
 #include "profilebar/QtProfileBar.h"
 #include "history/QtHistoryWidget.h"
+#include "toaster/QtToaster.h"
 
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
 #include <qtutil/Widget.h>
+#include <qtutil/MouseEventFilter.h>
 #include <thread/Thread.h>
 #include <util/Logger.h>
 #include <QtBrowser.h>
@@ -60,8 +61,6 @@
 
 #include <QtGui>
 #include <trayicon.h>
-
-#include "toaster/QtToaster.h"
 
 using namespace std;
 
@@ -222,7 +221,6 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionSort_contacts = Object::findChild<QAction *>(_wengoPhoneWindow,"actionSort_contacts");
 	connect(actionSort_contacts, SIGNAL(triggered()), SLOT(sortContacts()));
 
-
 	//actionCreateConferenceCall
 	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
 	connect(actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
@@ -237,13 +235,21 @@ void QtWengoPhone::initThreadSafe() {
 #endif
 
 	//Add the profile bar
-	QFrame * profileBar = Object::findChild<QFrame *>(_wengoPhoneWindow, "profileBar");
-	QWidget * centralWidget = Object::findChild<QWidget *>(_wengoPhoneWindow, "centralWidget");
+	QStackedWidget * profileBar = Object::findChild<QStackedWidget *>(_wengoPhoneWindow, "profileBar");
+	int profileBarIndex = profileBar->addWidget(new QtProfileBar(_cWengoPhone, _cWengoPhone.getWengoPhone().getCurrentUserProfile()));
+	profileBar->setCurrentIndex(profileBarIndex);
 
-	QGridLayout * gridlayout;
-	gridlayout = (QGridLayout *) centralWidget->layout();
-	gridlayout->removeWidget(profileBar);
-	gridlayout->addWidget(new QtProfileBar(_cWengoPhone,_cWengoPhone.getWengoPhone().getCurrentUserProfile(), centralWidget), 1, 0);
+	//configPanel
+	_configPanelWidget = WidgetFactory::create(":/forms/WengoPhoneWindowConfigPanel.ui", _wengoPhoneWindow);
+	_configPanel = Object::findChild<QStackedWidget *>(_wengoPhoneWindow, "configPanel");
+	int configPanelIndex = _configPanel->addWidget(_configPanelWidget);
+	_configPanel->setCurrentIndex(configPanelIndex);
+	_configPanel->hide();
+
+	QLabel * configPanelLabel = Object::findChild<QLabel *>(_wengoPhoneWindow, "configPanelLabel");
+	MousePressEventFilter * mousePressEventFilter = new MousePressEventFilter(this, SLOT(expandConfigPanel()));
+	configPanelLabel->installEventFilter(mousePressEventFilter);
+
 
 	//Status bar
 	QStatusBar * statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");
@@ -268,7 +274,6 @@ void QtWengoPhone::initThreadSafe() {
 	toaster->setMessage("Hello kavous !!!");
 	toaster->showToaster();
 */
-
 }
 
 void QtWengoPhone::initButtons() {
@@ -347,7 +352,6 @@ void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
 
 void QtWengoPhone::setPhoneCall(QtContactCallListWidget * qtContactCallListWidget) {
 	QWidget * tabPhoneCall = Object::findChild<QWidget *>(_tabWidget,"tabPhoneCall");
-
 	Widget::createLayout(tabPhoneCall)->addWidget(qtContactCallListWidget);
 	_contactCallListWidget = qtContactCallListWidget;
 }
@@ -551,16 +555,14 @@ void QtWengoPhone::showVoiceMail() {
 }
 
 void QtWengoPhone::showHideOffLineContacts() {
-	static bool hiden = false;
+	static bool hidden = false;
 
-	if ( ! hiden ){
-		_contactList->hideOffLineUser();
-		hiden=true;
-	}
-	else{
+	if (hidden) {
 		_contactList->showAllUsers();
-		hiden = false;
+	} else {
+		_contactList->hideOffLineUser();
 	}
+	hidden = !hidden;
 }
 
 void QtWengoPhone::showHome() {
@@ -710,6 +712,19 @@ void QtWengoPhone::urlClickedEventHandler(std::string url) {
 	}
 }
 
-void QtWengoPhone::toasterClosed(QtToaster * toaster){
+void QtWengoPhone::toasterClosed(QtToaster * toaster) {
 	delete toaster;
+}
+
+void QtWengoPhone::expandConfigPanel() {
+	static bool expand = true;
+
+	if (expand) {
+		_wengoPhoneWindow->resize(_wengoPhoneWindow->width(), _wengoPhoneWindow->height() + _configPanelWidget->height());
+		_configPanel->show();
+	} else {
+		_configPanel->hide();
+		_wengoPhoneWindow->resize(_wengoPhoneWindow->width(), _wengoPhoneWindow->height() - _configPanelWidget->height());
+	}
+	expand = !expand;
 }

@@ -26,10 +26,7 @@
 #include <qtutil/QObjectThreadSafe.h>
 
 #include <QMainWindow>
-#include <QMenu>
-#include <trayicon.h>
 
-class SipAccount;
 class UserProfile;
 class CWengoPhone;
 class PPhoneLine;
@@ -39,6 +36,8 @@ class QtContactCallListWidget;
 class QtSms;
 class QtBrowser;
 class QtHistoryWidget;
+class QtToaster;
+class TrayIcon;
 
 class QPushButton;
 class QComboBox;
@@ -46,7 +45,9 @@ class QTabWidget;
 class QLayout;
 class QLabel;
 class QFrame;
-class QtToaster;
+class QStackedWidget;
+class QWidget;
+class QMenu;
 
 /**
  * Qt Presentation component for WengoPhone.
@@ -161,6 +162,8 @@ private Q_SLOTS:
 
 	void toasterClosed(QtToaster * toaster);
 
+	void expandConfigPanel();
+
 private:
 
 	void initThreadSafe();
@@ -233,6 +236,10 @@ private:
 	QFrame * _iconBar;
 
 	QPushButton * _addContactButton;
+
+	QWidget * _configPanelWidget;
+
+	QStackedWidget * _configPanel;
 
 	static const std::string ANCHOR_CONTACTLIST;
 

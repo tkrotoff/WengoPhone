@@ -119,6 +119,7 @@
         <file>HttpProxyLoginWindow.ui</file>
         <file>LoggerWidget.ui</file>
         <file>WengoPhoneWindow.ui</file>
+        <file>WengoPhoneWindowConfigPanel.ui</file>
         <file>chat/ChatRoomWidget.ui</file>
         <file>chat/ChatWidget.ui</file>
         <file>chat/chat.ui</file>

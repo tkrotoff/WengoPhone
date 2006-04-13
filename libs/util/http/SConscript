@@ -1,7 +1,8 @@
-env = WengoGetQt4Environment()
+#env = WengoGetQt4Environment()
+env = WengoGetEnvironment()
 
 libs = [
-	'qt4',
+	#'qt4',
 	'owcurl',
 	'owthread',
 ]
@@ -9,13 +10,13 @@ lib_path = []
 include_path = ['include']
 link_flags = []
 headers = [
-	'include/http/QtHttpRequest.h',
+	#'include/http/QtHttpRequest.h',
 ]
 sources = [
 	'src/HttpRequest.cpp',
 	'src/NullHttpRequest.cpp',
 	'src/CurlHttpRequest.cpp',
-	'src/QtHttpRequest.cpp',
+	#'src/QtHttpRequest.cpp',
 ]
 
 if WengoOSWindows():
@@ -34,8 +35,8 @@ def moc(env, headers):
 	for header in headers:
 		moced += [ env.Moc(header) ]
 	return moced
-moced = moc(env, headers)
+#moced = moc(env, headers)
 
-env.WengoStaticLibrary('owhttp', sources + moced, headers)
+env.WengoStaticLibrary('owhttp', sources, headers)
 
 env.SConscript('tests/SConscript')

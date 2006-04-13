@@ -19,13 +19,15 @@
 
 #include <qtutil/MouseEventFilter.h>
 
+#include <util/Logger.h>
+
 #include <QEvent>
 #include <QMouseEvent>
 
 #include <exception>
 
 MouseMoveEventFilter::MouseMoveEventFilter(QObject * receiver, const char * member)
-: EventFilter(receiver, member) {
+	: EventFilter(receiver, member) {
 }
 
 bool MouseMoveEventFilter::eventFilter(QObject * watched, QEvent * event) {
@@ -37,44 +39,49 @@ bool MouseMoveEventFilter::eventFilter(QObject * watched, QEvent * event) {
 }
 
 MousePressEventFilter::MousePressEventFilter(QObject * receiver, const char * member, Qt::MouseButton button)
-	: EventFilter(receiver, member), _button(button) {
+	: EventFilter(receiver, member),
+	_button(button) {
 }
 
 bool MousePressEventFilter::eventFilter(QObject * watched, QEvent * event) {
 	if (event->type() == QEvent::MouseButtonPress) {
 		try {
 			QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent *>(event);
-			
-			if( (_button == Qt::NoButton) || (mouseEvent->button() == _button) ) {
+
+			if ((_button == Qt::NoButton) || (mouseEvent->button() == _button)) {
 				filter(event);
 				return false;
 			}
-		} catch( std::bad_cast ) {
+		} catch (std::bad_cast) {
+			LOG_FATAL("exception when casting a QEvent to a QMouseEvent");
 		}
 	}
 	return EventFilter::eventFilter(watched, event);
 }
 
-MouseReleaseEventFilter::MouseReleaseEventFilter(QObject * receiver, const char * member, Qt::MouseButton button) : EventFilter(receiver, member), _button(button) {
+MouseReleaseEventFilter::MouseReleaseEventFilter(QObject * receiver, const char * member, Qt::MouseButton button)
+	: EventFilter(receiver, member),
+	_button(button) {
 }
 
 bool MouseReleaseEventFilter::eventFilter(QObject * watched, QEvent * event) {
 	if (event->type() == QEvent::MouseButtonRelease) {
 		try {
 			QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent *>(event);
-			
-			if( (_button == Qt::NoButton) || (mouseEvent->button() == _button) ) {
+
+			if ((_button == Qt::NoButton) || (mouseEvent->button() == _button)) {
 				filter(event);
 				return false;
 			}
-		} catch( std::bad_cast ) {
+		} catch (std::bad_cast) {
+			LOG_FATAL("exception when casting a QEvent to a QMouseEvent");
 		}
 	}
 	return EventFilter::eventFilter(watched, event);
 }
 
 MouseHoverEnterEventFilter::MouseHoverEnterEventFilter(QObject * receiver, const char * member)
-: EventFilter(receiver, member) {
+	: EventFilter(receiver, member) {
 }
 
 bool MouseHoverEnterEventFilter::eventFilter(QObject * watched, QEvent * event) {
@@ -86,7 +93,7 @@ bool MouseHoverEnterEventFilter::eventFilter(QObject * watched, QEvent * event) 
 }
 
 MouseHoverLeaveEventFilter::MouseHoverLeaveEventFilter(QObject * receiver, const char * member)
-: EventFilter(receiver, member) {
+	: EventFilter(receiver, member) {
 }
 
 bool MouseHoverLeaveEventFilter::eventFilter(QObject * watched, QEvent * event) {

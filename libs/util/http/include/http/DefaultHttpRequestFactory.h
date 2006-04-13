@@ -21,7 +21,7 @@
 #define DEFAULTHTTPREQUESTFACTORY_H
 
 #include <http/HttpRequestFactory.h>
-#include <http/QtHttpRequestFactory.h>
+//#include <http/QtHttpRequestFactory.h>
 #include <http/CurlHttpRequestFactory.h>
 
 /**
