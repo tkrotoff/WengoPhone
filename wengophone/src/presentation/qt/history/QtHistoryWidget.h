@@ -63,7 +63,9 @@ public:
 
 	void editItem(const QString & text,const QDate & date, 
 		const QTime & time, const QTime & duration, const QString & name, int id);
-		
+	
+	void showPopupMenu(const QPoint & point);
+	
 public Q_SLOTS:
 
 	void showSMSCall(bool checked);
@@ -81,11 +83,17 @@ public Q_SLOTS:
 	void itemDoubleClicked ( QTreeWidgetItem * item, int column );
 
 	void headerClicked(int logicalIndex);
+	
+	void eraseEntry();
+	
+	void replayEntry();
 
 Q_SIGNALS:
 	
-	void replayItem ( QtHistoryItem * item );
+	void replayItem( QtHistoryItem * item );
 	
+	void removeItem( int id );
+
 protected:
 
 	QTreeWidget * _treeWidget;
@@ -94,6 +102,22 @@ protected:
 
 	QMenu * _menu;
 
+	QMenu * _popupMenu;
+	
+	QtHistoryItem * _currentItem;
+};
+
+
+class HistoryTreeEventManager : public QObject {
+	Q_OBJECT
+public:
+	HistoryTreeEventManager(QTreeWidget * target, QtHistoryWidget * historyWidget);
+	
+protected:
+	bool eventFilter(QObject *obj, QEvent *event);
+	
+private:
+	QtHistoryWidget * _historyWidget;
 };
 
 #endif

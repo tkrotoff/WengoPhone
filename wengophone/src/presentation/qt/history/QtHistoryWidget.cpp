@@ -19,6 +19,25 @@
 
 #include "QtHistoryWidget.h"
 
+#include <util/Logger.h>
+
+HistoryTreeEventManager::HistoryTreeEventManager(QTreeWidget * target, QtHistoryWidget * historyWidget) 
+	: QObject(target), _historyWidget(historyWidget) {
+	target->viewport()->installEventFilter(this);
+}
+
+bool HistoryTreeEventManager::eventFilter(QObject *obj, QEvent *event) {
+	if (event->type() == QEvent::MouseButtonPress) {
+		QMouseEvent * mouseEvent = static_cast<QMouseEvent *>(event);
+		
+		if( mouseEvent->button() == Qt::RightButton) {
+			_historyWidget->showPopupMenu(mouseEvent->pos());
+			return true;
+		}
+	}
+	return QObject::eventFilter(obj, event);
+}
+
 QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(parent,f)
 {
 	QGridLayout * gridLayout = new QGridLayout(this);
@@ -26,7 +45,9 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 	_treeWidget = new QTreeWidget(this);
 	_treeWidget->setRootIsDecorated ( false );
 	_treeWidget->setIndentation(0);
-
+	
+	HistoryTreeEventManager * htem = new HistoryTreeEventManager(_treeWidget, this);
+	
 	QStringList headerLabels;
 
 	_header = _treeWidget->header();
@@ -69,6 +90,16 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 	connect (_treeWidget, SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),SLOT (itemDoubleClicked ( QTreeWidgetItem *, int) ) );
 
 	connect (_header,SIGNAL(sectionClicked (int)),SLOT(headerClicked(int)) );
+	
+		
+	_popupMenu = new QMenu();
+		
+	action = _popupMenu->addAction( tr ("Erase entry") );
+	connect (action, SIGNAL( triggered(bool) ),SLOT( eraseEntry() ));
+
+	action = _popupMenu->addAction( tr ("Replay entry") );
+	connect (action, SIGNAL( triggered(bool) ),SLOT( replayEntry() ));
+
 }
 
 void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
@@ -203,4 +234,26 @@ void QtHistoryWidget::showMissedCall(bool){
 }
 void QtHistoryWidget::clearHistory(){
 	_treeWidget->clear();
+}
+
+void QtHistoryWidget::showPopupMenu(const QPoint & pos) {
+	QTreeWidgetItem * item = _treeWidget->itemAt(pos);
+	QtHistoryItem * hItem = dynamic_cast<QtHistoryItem *>(item);
+	if( hItem ) {
+		_currentItem = hItem;
+		QCursor cursor;
+		_popupMenu->popup(cursor.pos());
+	}
+}
+
+void QtHistoryWidget::eraseEntry() {
+	if( _currentItem ) {
+		removeItem(_currentItem->getId());
+	}
+}
+
+void QtHistoryWidget::replayEntry() {
+	if( _currentItem ) {
+		replayItem(_currentItem);
+	}
 }

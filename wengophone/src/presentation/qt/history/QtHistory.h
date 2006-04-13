@@ -69,20 +69,24 @@ public Q_SLOTS:
 
 	void replayItem ( QtHistoryItem * item );
 
+	void removeItem( int id);
+
 private:
-	
+
 	void initThreadSafe();
 
 	void updatePresentationThreadSafe();
-	
+
 	void historyLoadedEventHandler(CHistory &);
-	
+
 	void mementoAddedEventHandler(CHistory &, int id);
 
 	void mementoUpdatedEventHandler(CHistory &, int id);
 
+	void mementoRemovedEventHandler(CHistory &, int id);
+
 	QtHistoryWidget * _historyWidget;
-	
+
 	CHistory & _cHistory;
 };
 
