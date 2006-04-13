@@ -54,10 +54,10 @@ void GaimIMPresence::changeMyPresence(EnumPresenceState::PresenceState state,
 	if (gAccount)
 	{
 		if (note.length() == 0)
-			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state),
+			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state, _imAccount.getProtocol()),
 									TRUE, NULL);
 		else
-			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state),
+			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state, _imAccount.getProtocol()),
 									TRUE, "message", note.c_str(), NULL);
 	}
 

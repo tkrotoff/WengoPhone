@@ -21,29 +21,66 @@
 
 #include <cstring>
 
-const char *GaimPreState::_GaimPresenceStatus[] = {
-		"available",
-		"offline",
-		"invisible",
-		"away",
-		"unavailable",
-		"extended_away",
-		NULL
-};
 
+#define ST_AVAILABLE	"available"
+#define ST_OFFLINE		"offline"
+#define ST_INVISIBLE	"invisible"
+#define ST_AWAY			"away"
+#define ST_UNAVAILABLE	"unavailable"
+#define ST_EXT_AWAY		"extended_away"
+#define ST_BUSY			"busy"
+#define ST_DND			"dnd"
 
-const char *GaimPreState::GetStatusId(EnumPresenceState::PresenceState status)
+const char *GaimPreState::GetStatusId(EnumPresenceState::PresenceState status, 
+									  EnumIMProtocol::IMProtocol proto)
 {
-	return _GaimPresenceStatus[status];
+	switch (status)
+	{
+		case EnumPresenceState::PresenceStateOnline:
+			return ST_AVAILABLE;
+
+		case EnumPresenceState::PresenceStateOffline:
+			return ST_OFFLINE;
+
+		case EnumPresenceState::PresenceStateInvisible:
+			return ST_INVISIBLE;
+
+		case EnumPresenceState::PresenceStateAway:
+			return ST_AWAY;
+
+		case EnumPresenceState::PresenceStateDoNotDisturb:
+			if (proto == EnumIMProtocol::IMProtocolMSN
+				|| proto == EnumIMProtocol::IMProtocolYahoo)
+				return ST_BUSY;
+			else if (proto == EnumIMProtocol::IMProtocolAIMICQ
+					|| proto == EnumIMProtocol::IMProtocolJabber)
+				return ST_DND;
+			else
+				return ST_UNAVAILABLE;
+		
+		default:
+			return ST_AWAY;
+	}
 }
 
 EnumPresenceState::PresenceState GaimPreState::GetPresenceState(const char *StatusId)
 {
-	int i;
+	if (!strcmp(StatusId, ST_AVAILABLE))
+		return EnumPresenceState::PresenceStateOnline;
 
-	for (i = 0; _GaimPresenceStatus[i]; i++)
-		if (strcmp(_GaimPresenceStatus[i], StatusId) == 0)
-			break;
+	else if (!strcmp(StatusId, ST_OFFLINE))
+		return EnumPresenceState::PresenceStateOffline;
 
-	return (PresenceState)i;
+	else if (!strcmp(StatusId, ST_INVISIBLE))
+		return EnumPresenceState::PresenceStateInvisible;
+
+	else if (!strcmp(StatusId, ST_AWAY))
+		return EnumPresenceState::PresenceStateAway;
+
+	else if (!strcmp(StatusId, ST_UNAVAILABLE))
+		return EnumPresenceState::PresenceStateDoNotDisturb;
+
+	else
+		return EnumPresenceState::PresenceStateAway;
+
 }

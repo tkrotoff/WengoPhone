@@ -30,10 +30,6 @@ public:
 	static const char *GetPrclId(IMProtocol protocol);
 
 	static IMProtocol GetEnumIMProtocol(const char *GaimPrclId);
-
-private:
-
-	static const char *_GaimIMProtocol[];
 };
 
 #endif	//GAIMENUMIMPROTOCOL_H

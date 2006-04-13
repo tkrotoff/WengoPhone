@@ -21,19 +21,21 @@
 #define GAIMENUMPRESENCESTATE_H
 
 #include <imwrapper/EnumPresenceState.h>
+#include <imwrapper/EnumIMProtocol.h>
+
 
 class GaimPreState : EnumPresenceState
 {
 
 public:
 
-	static const char *GetStatusId(PresenceState status);
+	static const char *GetStatusId(PresenceState status,
+								   EnumIMProtocol::IMProtocol proto);
 
 	static PresenceState GetPresenceState(const char *StatusId);
 
 private:
 
-	static const char *_GaimPresenceStatus[];
 };
 
 #endif	//GAIMENUMPRESENCESTATE_H

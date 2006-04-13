@@ -21,30 +21,62 @@
 
 #include "GaimEnumIMProtocol.h"
 
-const char *GaimIMPrcl::_GaimIMProtocol[] = {
-	"prpl-unknown",
-	"prpl-all",
-	"prpl-msn",
-	"prpl-yahoo",
-	"prpl-oscar",
-	"prpl-jabber",
-	"prpl-simple",
-	NULL
-};
+#define PRPL_ALL	"prpl-all"
+#define PRPL_MSN	"prpl-msn"
+#define PRPL_YAHOO	"prpl-yahoo"
+#define PRPL_OSCAR	"prpl-oscar"
+#define PRPL_JABBER	"prpl-jabber"
+#define PRPL_SIMPLE	"prpl-simple"
+#define PRPL_UNK	"prpl-unknown"
 
 
 const char *GaimIMPrcl::GetPrclId(EnumIMProtocol::IMProtocol protocol) 
 {
-		return _GaimIMProtocol[protocol];
+	switch (protocol)
+	{
+		case EnumIMProtocol::IMProtocolAll:
+			return PRPL_ALL;
+
+		case EnumIMProtocol::IMProtocolMSN:
+			return PRPL_MSN;
+
+		case EnumIMProtocol::IMProtocolYahoo:
+			return PRPL_YAHOO;
+
+		case EnumIMProtocol::IMProtocolAIMICQ:
+			return PRPL_OSCAR;
+
+		case EnumIMProtocol::IMProtocolJabber:
+			return PRPL_JABBER;
+
+		case EnumIMProtocol::IMProtocolSIPSIMPLE:
+			return PRPL_SIMPLE;
+
+		default:
+			return PRPL_UNK;
+	}
 }
 
 EnumIMProtocol::IMProtocol GaimIMPrcl::GetEnumIMProtocol(const char *GaimPrclId) 
 {
-	int i;
+	if (!strcmp(GaimPrclId, PRPL_ALL))
+		return EnumIMProtocol::IMProtocolAll;
 
-	for (i = 0; _GaimIMProtocol[i]; i++)
-		if (strcmp(_GaimIMProtocol[i], GaimPrclId) == 0)
-			break;
+	else if (!strcmp(GaimPrclId, PRPL_MSN))
+		return EnumIMProtocol::IMProtocolMSN;
 
-	return (IMProtocol)i;
+	else if (!strcmp(GaimPrclId, PRPL_YAHOO))
+		return EnumIMProtocol::IMProtocolYahoo;
+
+	else if (!strcmp(GaimPrclId, PRPL_OSCAR))
+		return EnumIMProtocol::IMProtocolAIMICQ;
+
+	else if (!strcmp(GaimPrclId, PRPL_JABBER))
+		return EnumIMProtocol::IMProtocolJabber;
+
+	else if (!strcmp(GaimPrclId, PRPL_SIMPLE))
+		return EnumIMProtocol::IMProtocolSIPSIMPLE;
+
+	else
+		return EnumIMProtocol::IMProtocolUnknown;
 }
