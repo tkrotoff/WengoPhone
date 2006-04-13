@@ -23,6 +23,7 @@ defines = {}
 link_flags = []
 headers = [
 	'QtWengoPhone.h',
+	'QtConfigPanel.h',
 	'QtLogger.h',
 	'QtDialpad.h',
 	'QtAbout.h',
@@ -101,6 +102,7 @@ headers = [
 sources = [
 	'../main.cpp',
 	'QtWengoPhone.cpp',
+	'QtConfigPanel.cpp',
 	'QtDialpad.cpp',
 	'QtAbout.cpp',
 	'QtLogger.cpp',

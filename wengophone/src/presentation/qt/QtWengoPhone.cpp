@@ -42,6 +42,7 @@
 #include "contactlist/QtAddContact.h"
 #include "QtDialpad.h"
 #include "QtAbout.h"
+#include "QtConfigPanel.h"
 #include "webservices/sms/QtSms.h"
 #include "QtHttpProxyLogin.h"
 #include "config/QtAdvancedConfig.h"
@@ -240,7 +241,8 @@ void QtWengoPhone::initThreadSafe() {
 	profileBar->setCurrentIndex(profileBarIndex);
 
 	//configPanel
-	_configPanelWidget = WidgetFactory::create(":/forms/WengoPhoneWindowConfigPanel.ui", _wengoPhoneWindow);
+	QtConfigPanel * qtConfigPanel = new QtConfigPanel(_wengoPhoneWindow);
+	_configPanelWidget = qtConfigPanel->getWidget();
 	_configPanel = Object::findChild<QStackedWidget *>(_wengoPhoneWindow, "configPanel");
 	int configPanelIndex = _configPanel->addWidget(_configPanelWidget);
 	_configPanel->setCurrentIndex(configPanelIndex);
