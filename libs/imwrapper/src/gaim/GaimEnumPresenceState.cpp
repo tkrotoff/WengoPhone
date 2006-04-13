@@ -77,7 +77,9 @@ EnumPresenceState::PresenceState GaimPreState::GetPresenceState(const char *Stat
 	else if (!strcmp(StatusId, ST_AWAY))
 		return EnumPresenceState::PresenceStateAway;
 
-	else if (!strcmp(StatusId, ST_UNAVAILABLE))
+	else if (!strcmp(StatusId, ST_UNAVAILABLE)
+			|| !strcmp(StatusId, ST_BUSY)
+			|| !strcmp(StatusId, ST_DND))
 		return EnumPresenceState::PresenceStateDoNotDisturb;
 
 	else
