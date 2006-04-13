@@ -84,15 +84,6 @@ protected:
 
 private:
 
-	struct Request {
-		bool sslProtocol;
-		const char * hostname;
-		unsigned int hostPort;
-		const char * path;
-		const char * data;
-		bool postMethod;
-	};
-
 	/** Sets libcurl global parameters. */
 	void setCurlParam();
 
@@ -100,8 +91,7 @@ private:
 	 * Sets libCurl URL.
 	 *
 	 */
-	void setUrl(bool sslProtocol, const std::string & hostname, unsigned int hostPort,
-		const std::string & path, const std::string & data, bool postMethod);
+	void setUrl();
 
 	/** Sets libCurl proxy parameters. */
 	void setProxyParam();
@@ -135,12 +125,6 @@ private:
 	 */
 	long getProxyAuthenticationType();
 
-	/**
-	 * Sets Curl url.
-	 *
-	 */
-	void setUrl(Request request);
-
 	bool useProxy() const;
 
 	bool useProxyAuthentication() const;
@@ -162,15 +146,22 @@ private:
 	/** Proxy authentication mask. */
 	static long _proxyAuthentication;
 
-	typedef std::list < Request > RequestList;
-
-	/** Requests fifo. */
-	RequestList _requestList;
-
 	/** Post data structure. */
 	struct POST_DATA pooh;
 
 	int _lastRequestId;
+	
+	bool _sslProtocol;
+
+	std::string _hostname;
+	
+	unsigned int _hostPort;
+	
+	std::string _path;
+	
+	std::string _data;
+	
+	bool _postMethod;
 };
 
 #endif	//CURLHTTPREQUEST_H

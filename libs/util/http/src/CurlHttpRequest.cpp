@@ -31,8 +31,14 @@ int curlHTTPProgress(void * curlHttpRequestInstance, double dltotal, double dlno
 size_t curlHTTPWrite(void * ptr, size_t size, size_t nmemb, void * curlHttpRequestInstance);
 size_t curlHTTPRead(void * ptr, size_t size, size_t nmemb, void * curlHttpRequestInstance);
 
+#include <stdio.h>
+
 char * getstr(std::string str) {
-	return strdup(str.c_str());
+	char * tmp = (char *) malloc((sizeof(char) * str.size()) + 1);
+	strcpy(tmp, str.data());
+	strncat(tmp, "\0", 1 );
+	return tmp;
+	//return strdup(str.c_str());
 }
 
 bool CurlHttpRequest::_verbose;
@@ -47,23 +53,34 @@ CurlHttpRequest::CurlHttpRequest(HttpRequest * httpRequest) {
 	abortTransfer = false;
 	downloadDone = 0;
 	downloadTotal = 0;
+
+	_sslProtocol = false;
+	_hostname = "";
+	_hostPort = 0;
+	_path = "";
+	_data = "";
+	_postMethod = false;
 }
 
 int CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname, unsigned int hostPort,
 	const std::string & path, const std::string & data, bool postMethod) {
 
+	//TODO: do not call this when running
+	
 	if (!_proxyAuthenticationDetermine) {
 		_proxyAuthenticationDetermine = true;
 		_proxyAuthentication = getProxyAuthenticationType();
 	}
 
-	Request r = {sslProtocol, hostname.c_str(), hostPort, path.c_str(), data.c_str(), postMethod};
-	_requestList.push_back(r);
-
+	_sslProtocol = sslProtocol;
+	_hostname = hostname;
+	_hostPort = hostPort;
+	_path = path;
+	_data = data;
+	_postMethod = postMethod;
+	
 	_lastRequestId = IdGenerator::generate();
-	if (_requestList.size() <= 1) {
-		start();
-	}
+	start();
 
 	return _lastRequestId;
 }
@@ -72,36 +89,32 @@ void CurlHttpRequest::run() {
 	CURLcode res;
 	long response;
 	_curl = curl_easy_init();
-	do {
-		if (_curl) {
-			setCurlParam();
-			setProxyParam();
-			setProxyUserParam();
-			setSSLParam();
-			setUrl(_requestList.front());
-			curl_easy_setopt(_curl, CURLOPT_PRIVATE, _lastRequestId);
+	if (_curl) {
+		setCurlParam();
+		setProxyParam();
+		setProxyUserParam();
+		setSSLParam();
+		setUrl();
+		curl_easy_setopt(_curl, CURLOPT_PRIVATE, _lastRequestId);
 
-			res = curl_easy_perform(_curl);
-			if (res != CURLE_OK) {
-				cerr << curl_easy_strerror(res) << endl;
-				answerReceivedEvent(NULL, _lastRequestId, String::null, getReturnCode(res));
-			}
+		res = curl_easy_perform(_curl);
+		if (res != CURLE_OK) {
+			LOG_WARN(std::string(curl_easy_strerror(res)));
+			answerReceivedEvent(NULL, _lastRequestId, String::null, getReturnCode(res));
+		}
 
-			curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, & response);
-			if (!response) {
-				LOG_DEBUG("no server response code has been received");
-			}
-			else {
-				LOG_DEBUG("server response code=" + String::fromNumber(response));
-			}
+		curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, & response);
+		if (!response) {
+			LOG_DEBUG("no server response code has been received");
 		}
 		else {
-			LOG_DEBUG("cURL initialization failed");
-			return;
+			LOG_DEBUG("server response code=" + String::fromNumber(response));
 		}
-		_requestList.pop_front();
 	}
-	while (!_requestList.empty());
+	else {
+		LOG_WARN("Curl initialization failed");
+		return;
+	}
 	curl_easy_cleanup(_curl);
 }
 
@@ -109,45 +122,38 @@ int CurlHttpRequest::sendRequest(const std::string & url, const std::string & da
 	return _httpRequest->sendRequest(url, data, postMethod);
 }
 
-void CurlHttpRequest::setUrl(Request request) {
-	setUrl(request.sslProtocol, request.hostname,
-		request.hostPort, request.path,
-		request.data, request.postMethod);
-}
-
-void CurlHttpRequest::setUrl(bool sslProtocol, const std::string & hostname, unsigned int hostPort,
-	const std::string & path, const std::string & data, bool postMethod) {
+void CurlHttpRequest::setUrl() {
 
 	string url;
 
-	if (sslProtocol) {
+	if (_sslProtocol) {
 		url = HttpRequest::HTTPS_PROTOCOL;
 	} else {
 		url = HttpRequest::HTTP_PROTOCOL;
 	}
 
-	if (!hostname.empty()) {
-		url.append(hostname);
+	if (!_hostname.empty()) {
+		url.append(_hostname);
 	}
 
-	if (hostPort > 0) {
+	if (_hostPort > 0) {
 		url.append(HttpRequest::HTTP_PORT_SEPARATOR);
-		url.append(String::fromNumber(hostPort));
+		url.append(String::fromNumber(_hostPort));
 	}
 
-	if (!path.empty()) {
-		url.append(path);
+	if (!_path.empty()) {
+		url.append(_path);
 	}
 
-	if (!data.empty()) {
-		if (!postMethod) {
+	if (!_data.empty()) {
+		if (!_postMethod) {
 			curl_easy_setopt(_curl, CURLOPT_POST, 0);
 			url.append("?");
-			url.append(data);
+			url.append(_data);
 		} else {
 			curl_easy_setopt(_curl, CURLOPT_POST, 1);
-			if (!data.empty()) {
-				setPostData(data);
+			if (!_data.empty()) {
+				setPostData(_data);
 			}
 		}
 	}
@@ -166,7 +172,7 @@ void CurlHttpRequest::setCurlParam() {
 	curl_easy_setopt(_curl, CURLOPT_WRITEDATA, this);
 	curl_easy_setopt(_curl, CURLOPT_PROGRESSDATA, this);
 	curl_easy_setopt(_curl, CURLOPT_NOSIGNAL, 0);
-	curl_easy_setopt(_curl, CURLOPT_TIMEOUT, 15);
+	curl_easy_setopt(_curl, CURLOPT_TIMEOUT, 10);
 	curl_easy_setopt(_curl, CURLOPT_USERAGENT, HttpRequest::getUserAgent().c_str());
 }
 
@@ -342,7 +348,7 @@ size_t curlHTTPRead(void * ptr, size_t size, size_t nmemb, void * userp) {
 	}
 
 	//No more data left to deliver
-	return -1;
+	return 0;
 }
 
 size_t curlHttpHeaderWrite(void * ptr, size_t size, size_t nmemb, void * curlHttpRequestInstance) {
