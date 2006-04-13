@@ -26,13 +26,10 @@
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
 
-
-
 #include <model/profile/UserProfile.h>
 
 ChatWidget::ChatWidget (CChatHandler & cChatHandler, int sessionId, QWidget * parent, Qt::WFlags f) :
-QWidget(parent, f), _cChatHandler(cChatHandler)
-{
+QWidget(parent, f), _cChatHandler(cChatHandler){
 
     _widget =WidgetFactory::create(":/forms/chat/ChatRoomWidget.ui", this);
     QGridLayout * layout = new QGridLayout();
@@ -126,15 +123,13 @@ void ChatWidget::timerEvent ( QTimerEvent * event ){
 	}
 }
 
-void  ChatWidget::setNickName(const QString & nickname)
-{
+void  ChatWidget::setNickName(const QString & nickname){
     _nickName = nickname;
 }
-const QString & ChatWidget::nickName()
-{
+
+const QString & ChatWidget::nickName(){
     return _nickName;
 }
-
 
 void ChatWidget::setNickBgColor(const QString &color){
     _nickBgColor = color;
@@ -147,19 +142,20 @@ void ChatWidget::setNickTextColor(const QString  &color){
 void ChatWidget::setNickFont(QFont &font){
     _nickFont = font;
 }
+
 const QFont&    ChatWidget::nickFont(){
     return _nickFont;
 }
+
 const QString &   ChatWidget::nickBgColor(){
     return _nickBgColor;
 }
+
 const QString &   ChatWidget::nickTextColor(){
     return _nickTextColor;
 }
 
-
-void ChatWidget::addToHistory(const QString & senderName,const QString & str)
-{
+void ChatWidget::addToHistory(const QString & senderName,const QString & str){
 	QString bgColor;
     QTextCursor curs(_chatHistory->document());
     curs.movePosition(QTextCursor::End);
@@ -182,7 +178,6 @@ void ChatWidget::addToHistory(const QString & senderName,const QString & str)
     _chatHistory->insertHtml (text2Emoticon(str));
     _chatHistory->ensureCursorVisible();
 }
-
     /* SLOTS */
 void ChatWidget::urlClicked(const QUrl & link){
     _chatHistory->setSource(QUrl(""));
@@ -192,9 +187,7 @@ void ChatWidget::urlClicked(const QUrl & link){
     _chatHistory->ensureCursorVisible();
 }
 
-void ChatWidget::enterPressed()
-{
-
+void ChatWidget::enterPressed(){
 	if ( _notTypingTimerId != -1 )
 	{
 		killTimer(_notTypingTimerId);
@@ -232,16 +225,14 @@ void ChatWidget::enterPressed()
 
 }
 
-void ChatWidget::chooseFont()
-{
+void ChatWidget::chooseFont(){
     bool ok;
     _currentFont = QFontDialog::getFont(&ok,_currentFont,this);
     _chatEdit->setCurrentFont(_currentFont);
     _chatEdit->setFocus();
 }
 
-const QString ChatWidget::Emoticon2Text(const QString &htmlstr)
-{
+const QString ChatWidget::Emoticon2Text(const QString &htmlstr){
 	QVector<QtEmoticon> emoticons = _emoticonsWidget->getEmoticonsVector();
 	QString tmp = htmlstr;
 
@@ -252,8 +243,7 @@ const QString ChatWidget::Emoticon2Text(const QString &htmlstr)
 	return tmp;
 }
 
-const QString ChatWidget::text2Emoticon(const QString &htmlstr)
-{
+const QString ChatWidget::text2Emoticon(const QString &htmlstr){
 	QVector<QtEmoticon> emoticons = _emoticonsWidget->getEmoticonsVector();
 	QString tmp = htmlstr;
 
@@ -263,8 +253,8 @@ const QString ChatWidget::text2Emoticon(const QString &htmlstr)
 	}
 	return tmp;
 }
-const QString  ChatWidget::replaceUrls(const QString & str, const QString & htmlstr)
-{
+
+const QString  ChatWidget::replaceUrls(const QString & str, const QString & htmlstr){
     int beginPos = 0;
     QString tmp=htmlstr;
     int endPos;
@@ -300,8 +290,7 @@ const QString  ChatWidget::replaceUrls(const QString & str, const QString & html
     return tmp;
 }
 
-void ChatWidget::chooseEmoticon()
-{
+void ChatWidget::chooseEmoticon(){
 	QPoint p = _emoticonsButton->pos();
 	p.setY(p.y() + _emoticonsButton->rect().bottom());
 	_emoticonsWidget->move(mapToGlobal(p));
@@ -309,14 +298,12 @@ void ChatWidget::chooseEmoticon()
     _emoticonsWidget->show();
 }
 
-void ChatWidget::emoticonSelected(QtEmoticon emoticon)
-{
+void ChatWidget::emoticonSelected(QtEmoticon emoticon){
 	_chatEdit->insertHtml(emoticon.getHtml());
 	_chatEdit->ensureCursorVisible();
 }
 
-void ChatWidget::setIMChatSession(IMChatSession * imChatSession)
-{
+void ChatWidget::setIMChatSession(IMChatSession * imChatSession){
 	_imChatSession = imChatSession;
 	if ( ! _imChatSession->canDoMultiChat() )
 		_inviteButton->setEnabled(false);
@@ -328,12 +315,15 @@ void ChatWidget::setIMChatSession(IMChatSession * imChatSession)
 void ChatWidget::inviteContact(){
 	QtChatRoomInviteDlg	dlg(*_imChatSession, _cChatHandler.getUserProfile().getContactList(),this);
 	dlg.exec();
-	openContactListFrame();
-	QtChatRoomInviteDlg::SelectedContact selectedContact = dlg.getSelectedContact();
-	QtChatRoomInviteDlg::SelectedContact::iterator iter;
+	if ( dlg.result() == QDialog::Accepted ){
+		QtChatRoomInviteDlg::SelectedContact selectedContact = dlg.getSelectedContact();
+		QtChatRoomInviteDlg::SelectedContact::iterator iter;
 
-	for (iter = selectedContact.begin(); iter != selectedContact.end(); iter++){
-		addContactToContactListFrame( (*iter) );
+		for (iter = selectedContact.begin(); iter != selectedContact.end(); iter++){
+			addContactToContactListFrame( (*iter) );
+		}
+
+		contactAdded();
 	}
 }
 
@@ -356,6 +346,7 @@ void ChatWidget::setRemoteTypingState(const IMChatSession & sender,const IMChat:
 			break;
 	}
 }
+
 void ChatWidget::openContactListFrame(){
 	QSize size = _contactListFrame->minimumSize();
 	size.setHeight(96);
@@ -375,6 +366,9 @@ void ChatWidget::openContactListFrame(){
 }
 
 void ChatWidget::addContactToContactListFrame(const Contact & contact){
+
+	newContact(contact);
+	/*
 	QLabel * contactLabel = new QLabel();
 	_contactViewport->layout()->addWidget(contactLabel);
 	contactLabel->setMaximumSize(85,85);
@@ -398,4 +392,5 @@ void ChatWidget::addContactToContactListFrame(const Contact & contact){
 	painter.drawPixmap(0,0,border);
 	painter.end();
 	contactLabel->setPixmap(pixmap);
+	*/
 }

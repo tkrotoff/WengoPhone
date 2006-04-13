@@ -158,6 +158,10 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void newMessage(IMChatSession* session,const QString & msg);
+
+    void newContact(const Contact & contact);
+
+    void contactAdded();
 };
 
 #endif

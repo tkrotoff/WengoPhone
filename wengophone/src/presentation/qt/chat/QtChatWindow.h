@@ -23,7 +23,6 @@
 #include <QtGui>
 #include <string>
 #include <qtutil/WidgetFactory.h>
-#include "widgetseeker.h"
 #include "QtChatWidget.h"
 #include <imwrapper/IMContact.h>
 #include <imwrapper/IMChatSession.h>
@@ -49,9 +48,7 @@ public:
 
 protected:
 
-    QWidget     *   _widget;
-
-    WidgetSeeker    _seeker;
+//    QWidget     *   _widget;
 
     ChatWidget  *   _chatWidget;
 
@@ -59,19 +56,35 @@ protected:
 
     QMenuBar * _menuBar;
 
+    /*
+		New widget
+    */
+	QScrollArea  *  _scrollArea;
+
+	QWidget * _contactViewport;
+
+	QFrame * _contactListFrame;
+	/*
+		end new widget
+	*/
     IMChatSession * _imChatSession;
 
-    QWidget			_dialog;
+    QWidget	* _dialog;
 
 	CChatHandler & _cChatHandler;
 
 public Q_SLOTS:
+	void addContactToContactListFrame(const Contact & contact);
 
 	void newMessage(IMChatSession* session,const QString & msg);
 
 	void tabSelectionChanged ( int index );
 
 	void show();
+
+	void openContactListFrame();
+
+	void closeContactListFrame();
 
 protected Q_SLOTS:
 

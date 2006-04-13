@@ -21,7 +21,11 @@
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
 
+#include <model/contactlist/ContactList.h>
 
+#include <model/contactlist/ContactGroup.h>
+
+#include <model/profile/UserProfile.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
@@ -31,8 +35,7 @@
 #include <util/Logger.h>
 
 ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession) : QObjectThreadSafe(),
-_cChatHandler(cChatHandler)
-{
+_cChatHandler(cChatHandler){
     LOG_DEBUG("ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(), _imChatSession(imChatSession)");
 	_imChatSession = &imChatSession;
 
@@ -50,7 +53,60 @@ _cChatHandler(cChatHandler)
 	connect (this,SIGNAL(typingStateChangedSignal(const IMChatSession *,const IMContact *,const  IMChat::TypingState *)),
 	              SLOT(typingStateChangedThreadSafe(const IMChatSession *,const IMContact *,const IMChat::TypingState *)),
 	              Qt::QueuedConnection);
+
+
 }
+
+void ChatWindow::initThreadSafe(){
+
+	QGridLayout * glayout;
+
+	_dialog = new QDialog();
+	LOG_DEBUG("************ Creating Chat window ************* ");
+	// Create the menu bar
+	_menuBar = new QMenuBar(_dialog);
+	QMenu * WengoMenu = new QMenu("Wengo");
+	WengoMenu->addAction("Exit");
+	_menuBar->addMenu(WengoMenu);
+
+	_contactListFrame = new QFrame();
+
+	glayout = new QGridLayout();
+	glayout->setMargin(0);
+	glayout->setSpacing(0);
+	_dialog->setLayout(glayout);
+
+	_tabWidget = new QtChatTabWidget ( _dialog );
+
+	glayout->addWidget(_menuBar);
+	glayout->addWidget(_contactListFrame);
+	glayout->addWidget(_tabWidget);
+
+	connect ( _tabWidget,SIGNAL(currentChanged (int)), SLOT(tabSelectionChanged(int)) );
+
+	_tabWidget->removeTab(0);
+	_dialog->resize(384,464);
+	_dialog->setWindowTitle(tr("Wengophone chat window"));
+	_dialog->show();
+
+	// Create the contact list scroll area
+	QGridLayout * frameLayout = new QGridLayout(_contactListFrame);
+	_contactListFrame->setVisible(false);
+	_scrollArea = new QScrollArea(_contactListFrame);
+	frameLayout->addWidget(_scrollArea);
+
+	_contactViewport = new QWidget(_scrollArea);
+	_scrollArea->setWidget(_contactViewport);
+	new QHBoxLayout(_contactViewport);
+	_contactViewport->layout()->setMargin(0);
+	_scrollArea->setWidgetResizable(true);
+
+	IMContact from = *_imChatSession->getIMContactSet().begin();
+	addChat(_imChatSession,from);
+
+	openContactListFrame();
+}
+
 void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state){
 
 	IMChat::TypingState * tmpState = new IMChat::TypingState;
@@ -80,28 +136,25 @@ void ChatWindow::messageReceivedEventHandler(IMChatSession & sender, const IMCon
 	postEvent(event);
 }
 
-void ChatWindow::newMessage(IMChatSession *session,const QString & msg)
-{
+void ChatWindow::newMessage(IMChatSession *session,const QString & msg){
 	std::string message(msg.toUtf8().constData());
 	session->sendMessage(message);
 }
 
-void ChatWindow::show()
-{
+void ChatWindow::show(){
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	_dialog.show();
-	_dialog.activateWindow();
+	_dialog->show();
+	_dialog->activateWindow();
 }
 
-void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string message)
-{
+void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string message){
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
     QString senderName = QString::fromStdString(from.getContactId());
 
 	QString msg = QString::fromUtf8(message.c_str());
 
-    _dialog.show();
+    _dialog->show();
 	int tabs=_tabWidget->count();
 
 	for (int i=0; i<tabs;i++)
@@ -115,73 +168,41 @@ void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, c
 				_tabWidget->setBlinkingTab(i);
 
 			if ( config.getNotificationShowBlinkingWindow()){
-				_dialog.activateWindow();
+				_dialog->activateWindow();
 			}
 			if ( config.getNotificationShowWindowOnTop()){
-				_dialog.show();
-				_dialog.raise();
-				QApplication::setActiveWindow ( &_dialog );
+				_dialog->show();
+				_dialog->raise();
+				QApplication::setActiveWindow ( _dialog );
 			}
 			return;
 		}
 	}
 }
 
-void ChatWindow::addChatSession(IMChatSession * imChatSession)
-{
+void ChatWindow::addChatSession(IMChatSession * imChatSession){
 	imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1, _2, _3);
 
 	if ( imChatSession->getIMContactSet().size() != 0 ) {
 		IMContact from = *imChatSession->getIMContactSet().begin();
 		addChat(imChatSession,from);
-		_dialog.show();
+		_dialog->show();
 	}
 	else
 		LOG_FATAL("New chat session is empty !!!!!");
 }
 
-void ChatWindow::initThreadSafe() {
-	_widget = WidgetFactory::create(":/forms/chat/chat.ui", &_dialog);
-
-	// Add menubar
-	_menuBar = new QMenuBar(&_dialog);
-	QMenu * WengoMenu = new QMenu("Wengo");
-	WengoMenu->addAction("Exit");
-	_menuBar->addMenu(WengoMenu);
-
-	// Add dialog layout
-	QGridLayout * layout = new QGridLayout();
-	layout->addWidget(_menuBar);
-	layout->addWidget(_widget);
-	layout->setMargin(0);
-	layout->setSpacing(0);
-	_dialog.setLayout(layout);
-
-	// Add widget layout
-	new QGridLayout(_widget);
-	_tabWidget = new QtChatTabWidget ( _widget );
-	_widget->layout()->addWidget(_tabWidget);
-	_widget->layout()->setMargin(0);
-	connect ( _tabWidget,SIGNAL(currentChanged (int)), SLOT(tabSelectionChanged(int)));
-
-	_tabWidget->removeTab(0);
-	_dialog.resize(384,464);
-	_dialog.setWindowTitle(tr("Wengophone Chat"));
-	_dialog.show();
-	IMContact from = *_imChatSession->getIMContactSet().begin();
-
-	addChat(_imChatSession,from);
-
-
-}
-
 void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
+
+
+
 	QString nickName = QString().fromStdString(session->getIMChat().getIMAccount().getLogin());
 	QString senderName = QString::fromStdString(from.getContactId());
 	int tabNumber;
     _chatWidget = new ChatWidget(_cChatHandler,session->getId(), _tabWidget);
 	_chatWidget->setIMChatSession(session);
+	connect ( _chatWidget, SIGNAL( newContact(const Contact & ) ), SLOT ( addContactToContactListFrame(const Contact &)));
 
 	if (_tabWidget->count() > 0)
 		tabNumber = _tabWidget->insertTab(_tabWidget->count(),_chatWidget,senderName);
@@ -198,11 +219,66 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 			QString::fromUtf8((*it).getMessage().c_str()));
 	}
 
-
     connect (_chatWidget,SIGNAL(newMessage(IMChatSession *,const QString & )),SLOT(newMessage(IMChatSession *,const QString &)));
 	_tabWidget->setCurrentIndex(tabNumber);
-	_dialog.show();
+	Contact * contact = _cChatHandler.getUserProfile().getContactList().findContactThatOwns(from);
+	if ( contact ){
+		addContactToContactListFrame(*contact);
+	}else{
+		//
+		// Contact * contact = _cChatHandler.getUserProfile().getPresenceHandler().getContactIcon(from);
+		// TODO: Add code here :)
+	}
+	_dialog->show();
 }
+
 void ChatWindow::tabSelectionChanged ( int index ){
 	_tabWidget->stopBlinkingTab(index);
+}
+
+void ChatWindow::addContactToContactListFrame(const Contact & contact){
+
+	QLabel * contactLabel = new QLabel();
+	_contactViewport->layout()->addWidget(contactLabel);
+	contactLabel->setMaximumSize(85,85);
+	contactLabel->setMinimumSize(85,85);
+
+	Picture picture = contact.getIcon();
+	std::string data = picture.getData();
+	QPixmap pixmap;
+	if ( ! data.empty() ){
+		pixmap.loadFromData((uchar *)data.c_str(), data.size());
+	}else{
+			pixmap.load(":pics/contact_picture.png");
+	}
+	pixmap = pixmap.scaled(80,80);
+
+	QPixmap border;
+	border.load(":pics/contact_border.png");
+
+	QPainter painter(&pixmap);
+	painter.drawPixmap(0,0,border);
+	painter.end();
+	contactLabel->setPixmap(pixmap);
+}
+
+void ChatWindow::openContactListFrame(){
+	QSize size = _contactListFrame->minimumSize();
+	size.setHeight(96);
+	_contactListFrame->setMinimumSize(size);
+	size = _contactListFrame->maximumSize();
+	size.setHeight(96);
+	_contactListFrame->setMaximumSize(size);
+	_contactListFrame->setVisible(true);
+	_contactListFrame->setFrameShape(QFrame::NoFrame);
+	_contactListFrame->setFrameShadow(QFrame::Plain);
+	_contactListFrame->setAutoFillBackground(true);
+
+	_scrollArea->setFrameShape(QFrame::NoFrame);
+	_scrollArea->setFrameShadow(QFrame::Plain);
+	_scrollArea->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
+}
+
+void ChatWindow::closeContactListFrame(){
+	_contactListFrame->setVisible(false);
 }

@@ -96,39 +96,39 @@ public:
 
 	/**
 	 * Add a ContactGroup.
-	 * 
+	 *
 	 * If a ContactGroup with the given name exists, no ContactGroup is created
-	 * 
+	 *
 	 * @param name of the ContactGroup to add.
 	 */
 	void addContactGroup(const std::string & name);
 
 	/**
 	 * Remove a ContactGroup.
-	 * 
+	 *
 	 * If no ContactGroup with the given name exists, nothing happens
-	 * 
+	 *
 	 * @param name of the ContactGroup to remove.
 	 */
 	void removeContactGroup(const std::string & name);
 
 	/**
 	 * Create and add a Contact to the ContactList.
-	 * 
+	 *
 	 * @return a reference to the new Contact
 	 */
 	Contact & createContact();
 
 	/**
 	 * Remove a Contact.
-	 * 
+	 *
 	 * @param the contact to remove
 	 */
 	void removeContact(const Contact & contact);
 
 	/**
 	 * Get a ContactGroup.
-	 * 
+	 *
 	 * @param groupName the name of the desired ContactGroup
 	 * @return a pointer to the ContactGroup, NULL if not found
 	 */
@@ -140,6 +140,14 @@ public:
 	ContactGroupSet getContactGroupSet() const {
 		return ContactGroupSet(_contactGroupSet);
 	}
+
+	/**
+	 * Find the first Contact that owns an IMContact.
+	 *
+	 * @param imContact the IMContact to look for
+	 * @return the Contact or NULL if not found
+	 */
+	Contact * findContactThatOwns(const IMContact & imContact) const;
 
 private:
 
@@ -181,7 +189,7 @@ private:
 	 * @see PresenceHandler::presenceStateChangedEventHandler
 	 */
 	void presenceStateChangedEventHandler(PresenceHandler & sender,
-		EnumPresenceState::PresenceState state, 
+		EnumPresenceState::PresenceState state,
 		const std::string & alias, const IMContact & imContact);
 
 	/**
@@ -192,11 +200,11 @@ private:
 
 	/**
 	 * Add an IMContact to a Contact.
-	 * 
+	 *
 	 * It sends an asynchronous command to IMContactListHandler.
-	 * 
+	 *
 	 * Must only be called by Contact
-	 * 
+	 *
 	 * @param contact the Contact that wants to add an IMContact
 	 * @param imContact the IMContact to add
 	 */
@@ -206,9 +214,9 @@ private:
 	 * Remove an IMContact from a Contact.
 	 *
 	 * It sends an asynchronous command to IMContactListHandler.
-	 *  
+	 *
 	 * Must only be called by Contact
-	 * 
+	 *
 	 * @param contact the Contact that wants to remove an IMContact
 	 * @param imContact the IMContact to remove
 	 */
@@ -218,9 +226,9 @@ private:
 	 * Add a Contact to a ContactGroup.
 	 *
 	 * It sends an asynchronous command to IMContactListHandler.
-	 * 
+	 *
 	 * This method must be called only by Contact
-	 * 
+	 *
 	 * @param groupName the group name
 	 * @param contact the Contact to add
 	 */
@@ -228,11 +236,11 @@ private:
 
 	/**
 	 * Remove a Contact from a ContactGroup.
-	 * 
+	 *
 	 * It sends an asynchronous command to IMContactListHandler.
-	 * 
+	 *
 	 * This method must be called only by Contact
-	 * 
+	 *
 	 * @param groupName the group name to remove from
 	 * @param contact the Contact that wants to be removed from the ContactGroup
 	 */
@@ -240,7 +248,7 @@ private:
 
 	/**
 	 * Move a Contact to another ContactGroup.
-	 * 
+	 *
 	 * @param contact the Contact to move
 	 * @param to the group where we want to move in the Contact
 	 * @param from the group where we want to move out the Contact
@@ -249,21 +257,21 @@ private:
 
 	/**
 	 * Actually add a ContactGroup.
-	 * 
+	 *
 	 * @param groupName the group name
 	 */
 	void _addContactGroup(const std::string & groupName);
 
 	/**
 	 * Actually remove a ContactGroup.
-	 * 
+	 *
 	 * @param groupName the group name
 	 */
 	void _removeContactGroup(const std::string & groupName);
 
 	/**
 	 * Actually add the Contact to a ContactGroup.
-	 * 
+	 *
 	 * @param contact the Contact
 	 * @param groupName the ContactGroup
 	 */
@@ -271,19 +279,11 @@ private:
 
 	/**
 	 * Actually remove the Contact to a ContactGroup.
-	 * 
+	 *
 	 * @param contact the Contact
 	 * @param groupName the ContactGroup
 	 */
 	void _removeFromContactGroup(const std::string & groupName, Contact & contact);
-
-	/**
-	 * Find the first Contact that owns an IMContact.
-	 * 
-	 * @param imContact the IMContact to look for
-	 * @return the Contact or NULL if not found
-	 */
-	Contact * findContactThatOwns(const IMContact & imContact) const;
 
 	/** List of Contact. */
 	typedef std::list<Contact> Contacts;
