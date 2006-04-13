@@ -2024,6 +2024,8 @@ vline_free(struct vline *vl)
 	osip_free(vl->displayname);
       if (vl->followme)
 	osip_free(vl->followme);
+      if (vl->contact)
+	osip_free(vl->contact);
       vl->used = 0;
     }
 }
