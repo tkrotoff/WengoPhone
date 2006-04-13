@@ -40,6 +40,7 @@ WengoPhone::WengoPhone()
 	_startupSettingListener = new StartupSettingListener();
 	_running = false;
 	_wenboxPlugin = NULL;
+	_wsWengoSubscribe = NULL;
 	
 	//set HttpRequest User Agent
 	std::stringstream ss;
@@ -92,6 +93,9 @@ void WengoPhone::init() {
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
 
+	_wsWengoSubscribe = new WsWengoSubscribe();
+	wsWengoSubscribeCreatedEvent(*this, *_wsWengoSubscribe);
+	
 	//LocalNetworkAccount always created and added by default
 	/*LocalNetworkAccount * localAccount = new LocalNetworkAccount();
 	localAccount->init();
@@ -104,7 +108,7 @@ void WengoPhone::init() {
 
 	_userProfile.connect();
 	////
-
+	
 	//initFinishedEvent
 	initFinishedEvent(*this);
 }

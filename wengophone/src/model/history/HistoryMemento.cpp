@@ -39,7 +39,7 @@ HistoryMemento::HistoryMemento() {
 	_state = None;
 	_peer = "";
 	_callId = -1;
-	_duration = -1;
+	_duration = 0;
 	_date = Date();
 	_time = Time();
 	_data = "";
@@ -50,7 +50,7 @@ HistoryMemento::HistoryMemento(State state, std::string peer, int callId, std::s
 	_state = state;
 	_peer = peer;
 	_callId = callId;
-	_duration = -1;
+	_duration = 0;
 	_date = Date();
 	_time = Time();
 	_data = data;

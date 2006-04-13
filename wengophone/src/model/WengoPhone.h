@@ -30,6 +30,7 @@
 #include <string>
 
 class WenboxPlugin;
+class WsWengoSubscribe;
 
 /**
  * @defgroup model Model Component
@@ -73,6 +74,15 @@ public:
 	 * @param wenboxPlugin WenboxPlugin created
 	 */
 	Event<void (WengoPhone & sender, WenboxPlugin & wenboxPlugin)> wenboxPluginCreatedEvent;
+
+	/**
+	 * WsWengoSubscribe has been created.
+	 *
+	 * @param sender this class
+	 * @param wsWengoSubscribe WsWengoSubscribe created
+	 */
+	Event<void (WengoPhone & sender, WsWengoSubscribe & wsWengoSubscribe)> wsWengoSubscribeCreatedEvent;
+
 
 	WengoPhone();
 
@@ -121,6 +131,9 @@ private:
 
 	/** Wenbox. */
 	WenboxPlugin * _wenboxPlugin;
+
+	/** Wenbox. */
+	WsWengoSubscribe * _wsWengoSubscribe;
 
 	/**
 	 * If this thread should be terminate or not.

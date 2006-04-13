@@ -103,6 +103,7 @@ bool History::unserialize(const std::string & data) {
 
 void History::clear(HistoryMemento::State state) {
 	_collection->clear(state);
+	mementoRemovedEvent(*this, -1);
 }
 
 std::string History::toString() {
