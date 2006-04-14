@@ -28,7 +28,7 @@ QLabel (parent,f),_cChatHandler(cChatHandler){
 	updateDisplay();
 }
 
-QtChatContactWidget::getId(){
+int QtChatContactWidget::getId(){
 	return _imChatSession->getId();
 }
 
