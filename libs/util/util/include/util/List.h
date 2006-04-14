@@ -21,6 +21,7 @@
 #define LIST_H
 
 #include <vector>
+#include <algorithm>
 
 /**
  * List.
@@ -51,7 +52,7 @@ public:
 	 * @return true if the element was removed; false otherwise
 	 */
 	bool remove(const T & element) {
-		iterator it = std::find(this->begin(), this->end(), element);
+		typename std::vector<T>::iterator it = std::find(this->begin(), this->end(), element);
 		if (it != this->end()) {
 			this->erase(it);
 			return true;
