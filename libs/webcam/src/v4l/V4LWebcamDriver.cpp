@@ -57,7 +57,7 @@ StringList V4LWebcamDriver::getDeviceList() {
 	DevNameArray::const_iterator i = devName.begin();
 
 	while (i != devName.end()) {
-		deviceList.add((*i).second);
+		deviceList+=((*i).second);
 		i++;
 	}
 
