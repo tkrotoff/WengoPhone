@@ -137,6 +137,7 @@ sources = [
 	'control/webservices/sms/CSms.cpp',
 	'control/webservices/softupdate/CSoftUpdate.cpp',
 	'control/webservices/info/CWsInfo.cpp',
+	'control/webservices/subscribe/CSubscribe.cpp',
 	'control/history/CHistory.cpp',
 
 	'presentation/PFactory.cpp'
