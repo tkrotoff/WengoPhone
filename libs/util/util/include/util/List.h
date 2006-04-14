@@ -39,21 +39,7 @@ public:
 	 * @param element element to be appended to this list
 	 */
 	void operator+=(const T & element) {
-		push_back(element);
-	}
-
-	/**
-	 * Removes the element at the specified position in this list.
-	 *
-	 * Shifts any subsequent elements to the left (subtracts one from their indices).
-	 *
-	 * @param index position of the element to removed
-	 * @return element removed at position index
-	 */
-	T & remove(unsigned index) {
-		T & t = (*this)[index];
-		erase(begin() + index);
-		return t;
+		this->push_back(element);
 	}
 
 	/**
@@ -65,25 +51,12 @@ public:
 	 * @return true if the element was removed; false otherwise
 	 */
 	bool remove(const T & element) {
-		int count = size();
-		int i;
-		for (i = 0; i < count; i++) {
-			if ((*this)[i] == element) {
-				break;
-			}
-		}
-		if (i < count) {
-			erase(begin() + i);
+		iterator it = std::find(this->begin(), this->end(), element);
+		if (it != this->end()) {
+			this->erase(it);
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * @see remove()
-	 */
-	T & operator-=(unsigned index) {
-		return remove(index);
 	}
 
 	/**
@@ -101,7 +74,7 @@ public:
 	 */
 	unsigned contains(const T & element) const {
 		unsigned j = 0;
-		for (unsigned i = 0; i < size(); i++) {
+		for (unsigned i = 0; i < this->size(); i++) {
 			if ((*this)[i] == element) {
 				j++;
 			}
