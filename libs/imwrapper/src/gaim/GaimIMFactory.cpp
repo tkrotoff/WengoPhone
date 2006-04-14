@@ -171,9 +171,9 @@ GaimIMFactory::GaimIMFactory()
 	ChatMngr = GaimChatMngr::getInstance();
 	ContactListMngr = GaimContactListMngr::getInstance();
 
-	GaimWrapperInit();
-
 	GaimIMInit();
+
+	GaimWrapperInit();
 }
 
 void GaimIMFactory::GaimWrapperInit()
