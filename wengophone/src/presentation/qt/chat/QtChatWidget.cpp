@@ -198,6 +198,7 @@ void ChatWidget::enterPressed(){
 		killTimer(_stoppedTypingTimerId);
 		_stoppedTypingTimerId = -1;
 	}
+
 	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
 
     QTextCursor curs(_chatHistory->document());
@@ -366,31 +367,5 @@ void ChatWidget::openContactListFrame(){
 }
 
 void ChatWidget::addContactToContactListFrame(const Contact & contact){
-
 	newContact(contact);
-	/*
-	QLabel * contactLabel = new QLabel();
-	_contactViewport->layout()->addWidget(contactLabel);
-	contactLabel->setMaximumSize(85,85);
-	contactLabel->setMinimumSize(85,85);
-
-	Picture picture = contact.getIcon();
-	std::string data = picture.getData();
-	QPixmap pixmap;
-	if ( ! data.empty() ){
-		pixmap.loadFromData((uchar *)data.c_str(), data.size());
-	}else{
-			pixmap.load(":pics/contact_picture.png");
-	}
-
-	pixmap = pixmap.scaled(80,80);
-
-	QPixmap border;
-	border.load(":pics/contact_border.png");
-
-	QPainter painter(&pixmap);
-	painter.drawPixmap(0,0,border);
-	painter.end();
-	contactLabel->setPixmap(pixmap);
-	*/
 }

@@ -22,7 +22,6 @@
 #include "QtChatTabWidget.h"
 
 #include <model/contactlist/ContactList.h>
-
 #include <model/contactlist/ContactGroup.h>
 
 #include <model/profile/UserProfile.h>
@@ -45,6 +44,9 @@ _cChatHandler(cChatHandler){
     _imChatSession->typingStateChangedEvent +=
 		boost::bind(&ChatWindow::typingStateChangedEventHandler, this, _1, _2, _3);
 
+	_imChatSession->contactAddedEvent +=
+		boost::bind(&ChatWindow::contactAddedEventHandler, this, _1, _2);
+
     typedef PostEvent0<void ()> MyPostEvent;
     MyPostEvent * event =
         new MyPostEvent(boost::bind(&ChatWindow::initThreadSafe, this));
@@ -54,13 +56,17 @@ _cChatHandler(cChatHandler){
 	              SLOT(typingStateChangedThreadSafe(const IMChatSession *,const IMContact *,const IMChat::TypingState *)),
 	              Qt::QueuedConnection);
 
+	connect (this,SIGNAL(contactAddedSignal(IMChatSession *,const IMContact *)),
+	              SLOT(contactAddedThreadSafe(IMChatSession *,const IMContact *)),
+	              Qt::QueuedConnection);
+
 
 }
 
 void ChatWindow::initThreadSafe(){
 
 	QGridLayout * glayout;
-
+	_chatContactWidgets = new ChatContactWidgets();
 	_dialog = new QDialog();
 	LOG_DEBUG("************ Creating Chat window ************* ");
 	// Create the menu bar
@@ -72,7 +78,7 @@ void ChatWindow::initThreadSafe(){
 	_contactListFrame = new QFrame();
 
 	glayout = new QGridLayout();
-	glayout->setMargin(0);
+	glayout->setMargin(5);
 	glayout->setSpacing(0);
 	_dialog->setLayout(glayout);
 
@@ -96,11 +102,20 @@ void ChatWindow::initThreadSafe(){
 	frameLayout->addWidget(_scrollArea);
 
 	_contactViewport = new QWidget(_scrollArea);
+
 	_scrollArea->setWidget(_contactViewport);
 	new QHBoxLayout(_contactViewport);
 	_contactViewport->layout()->setMargin(0);
+	_contactViewport->layout()->setSpacing(5);
+	dynamic_cast <QHBoxLayout *> (_contactViewport->layout())->addStretch ( 1 );
 	_scrollArea->setWidgetResizable(true);
 
+	QPalette palette = _contactViewport->palette();
+	palette.setColor(QPalette::Active,QPalette::Window,Qt::white);
+	_contactViewport->setPalette(palette);
+	_contactViewport->setAutoFillBackground ( true );
+
+	// *****
 	IMContact from = *_imChatSession->getIMContactSet().begin();
 	addChat(_imChatSession,from);
 
@@ -180,6 +195,35 @@ void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, c
 	}
 }
 
+void ChatWindow::contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact) {
+	// Send message to the GUI thread
+	qDebug() << "************** ChatWindow::contactAddedEventHandler *********************";
+	contactAddedSignal(&sender, &imContact );
+}
+
+void ChatWindow::contactAddedThreadSafe(IMChatSession * session, const IMContact * imContact ){
+
+	int sessionid = session->getId();
+
+	ChatContactWidgets::iterator it;
+
+	it = _chatContactWidgets->find(sessionid);
+	if (  it == _chatContactWidgets->end() ){
+
+		// Create the contact widget
+		QtChatContactWidget * widget = new QtChatContactWidget(session,_cChatHandler,_contactViewport);
+		dynamic_cast <QHBoxLayout *>(_contactViewport->layout())->insertWidget ( _contactViewport->layout()->count()-1,widget);
+		_chatContactWidgets->insert(sessionid,widget);
+	}
+	else
+	{
+		// Update the Contact widget
+		QtChatContactWidget * widget;
+		widget = (*it);
+		widget->updateDisplay();
+	}
+}
+
 void ChatWindow::addChatSession(IMChatSession * imChatSession){
 	imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1, _2, _3);
@@ -195,14 +239,12 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 
 void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 
-
-
 	QString nickName = QString().fromStdString(session->getIMChat().getIMAccount().getLogin());
 	QString senderName = QString::fromStdString(from.getContactId());
 	int tabNumber;
     _chatWidget = new ChatWidget(_cChatHandler,session->getId(), _tabWidget);
 	_chatWidget->setIMChatSession(session);
-	connect ( _chatWidget, SIGNAL( newContact(const Contact & ) ), SLOT ( addContactToContactListFrame(const Contact &)));
+//	connect ( _chatWidget, SIGNAL( newContact(const Contact & ) ), SLOT ( addContactToContactListFrame(const Contact &)));
 
 	if (_tabWidget->count() > 0)
 		tabNumber = _tabWidget->insertTab(_tabWidget->count(),_chatWidget,senderName);
@@ -223,11 +265,11 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	_tabWidget->setCurrentIndex(tabNumber);
 	Contact * contact = _cChatHandler.getUserProfile().getContactList().findContactThatOwns(from);
 	if ( contact ){
-		addContactToContactListFrame(*contact);
+		contactAddedSignal(session, &from );
+		// addContactToContactListFrame(*contact);
 	}else{
 		//
 		// Contact * contact = _cChatHandler.getUserProfile().getPresenceHandler().getContactIcon(from);
-		// TODO: Add code here :)
 	}
 	_dialog->show();
 }
@@ -237,7 +279,7 @@ void ChatWindow::tabSelectionChanged ( int index ){
 }
 
 void ChatWindow::addContactToContactListFrame(const Contact & contact){
-
+/*
 	QLabel * contactLabel = new QLabel();
 	_contactViewport->layout()->addWidget(contactLabel);
 	contactLabel->setMaximumSize(85,85);
@@ -260,14 +302,15 @@ void ChatWindow::addContactToContactListFrame(const Contact & contact){
 	painter.drawPixmap(0,0,border);
 	painter.end();
 	contactLabel->setPixmap(pixmap);
+*/
 }
 
 void ChatWindow::openContactListFrame(){
 	QSize size = _contactListFrame->minimumSize();
-	size.setHeight(96);
+	size.setHeight(120);
 	_contactListFrame->setMinimumSize(size);
 	size = _contactListFrame->maximumSize();
-	size.setHeight(96);
+	size.setHeight(120);
 	_contactListFrame->setMaximumSize(size);
 	_contactListFrame->setVisible(true);
 	_contactListFrame->setFrameShape(QFrame::NoFrame);
@@ -276,7 +319,7 @@ void ChatWindow::openContactListFrame(){
 
 	_scrollArea->setFrameShape(QFrame::NoFrame);
 	_scrollArea->setFrameShadow(QFrame::Plain);
-	_scrollArea->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
+	// _scrollArea->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
 }
 
 void ChatWindow::closeContactListFrame(){

@@ -28,6 +28,10 @@
 #include <imwrapper/IMChatSession.h>
 #include <qtutil/QObjectThreadSafe.h>
 #include <control/chat/CChatHandler.h>
+
+#include "QtChatContactWidget.h"
+
+
 // class IMChatSession;
 // class IMContact;
 
@@ -48,7 +52,7 @@ public:
 
 protected:
 
-//    QWidget     *   _widget;
+	typedef QMap <int, QtChatContactWidget *> ChatContactWidgets;
 
     ChatWidget  *   _chatWidget;
 
@@ -73,6 +77,8 @@ protected:
 
 	CChatHandler & _cChatHandler;
 
+	ChatContactWidgets * _chatContactWidgets;
+
 public Q_SLOTS:
 	void addContactToContactListFrame(const Contact & contact);
 
@@ -90,9 +96,13 @@ protected Q_SLOTS:
 
 	void typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
 
+	void contactAddedThreadSafe(IMChatSession * session, const IMContact * imContact );
+
 Q_SIGNALS:
 
 	void typingStateChangedSignal(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
+
+	void contactAddedSignal(IMChatSession * session, const IMContact * imContact );
 
 private:
 
@@ -103,6 +113,8 @@ private:
 	void messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string  message);
 
 	void typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state);
+
+	void contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact);
 
 };
 

@@ -139,7 +139,7 @@ public:
 		std::string getMessage() const { return _message; }
 
 	private:
-	
+
 		const IMContact & _imContact;
 
 		std::string _message;
@@ -164,7 +164,7 @@ public:
 	/**
 	 * Close the IMChatSession.
 	 *
-	 * An imChatSessionWillDieEvent is sendt then the IMChatSession object is
+	 * An imChatSessionWillDieEvent is sent then the IMChatSession object is
 	 * destroyed.
 	 */
 	void close();
@@ -212,7 +212,7 @@ public:
 	int getId() const;
 
 private:
-	
+
 	void messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, const std::string & message);
 
 	void statusMessageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, IMChat::StatusMessage status, const std::string & message);

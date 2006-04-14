@@ -113,7 +113,7 @@ protected:
 
 	QLabel * _typingStateLabel;
 
-	IMChatSession* _imChatSession;
+	IMChatSession * _imChatSession;
 
 	QFont _currentFont;
 

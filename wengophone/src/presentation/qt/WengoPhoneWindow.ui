@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>282</width>
-    <height>450</height>
+    <width>290</width>
+    <height>484</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -23,59 +23,51 @@
     <property name="spacing" >
      <number>0</number>
     </property>
-    <item row="5" column="0" >
-     <widget class="QStackedWidget" name="configPanel" >
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>5</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="currentIndex" >
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="page" />
-     </widget>
-    </item>
-    <item row="4" column="0" >
-     <widget class="QLabel" name="configPanelLabel" >
-      <property name="text" >
-       <string>Audio and Video Settings</string>
-      </property>
-      <property name="indent" >
-       <number>15</number>
-      </property>
-     </widget>
-    </item>
     <item row="2" column="0" >
-     <widget class="QTabWidget" name="tabWidget" >
-      <widget class="QWidget" name="tabContactList" >
-       <attribute name="title" >
-        <string>Contacts</string>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tabHistory" >
-       <attribute name="title" >
-        <string>History</string>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tabDialpad" >
-       <attribute name="title" >
-        <string>Dialpad</string>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tabPhoneCall" >
-       <attribute name="title" >
-        <string>Call</string>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tabHome" >
-       <attribute name="title" >
-        <string>Home</string>
-       </attribute>
-      </widget>
+     <widget class="QFrame" name="frame" >
+      <property name="frameShape" >
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow" >
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QTabWidget" name="tabWidget" >
+         <widget class="QWidget" name="tabContactList" >
+          <attribute name="title" >
+           <string>Contacts</string>
+          </attribute>
+         </widget>
+         <widget class="QWidget" name="tabHistory" >
+          <attribute name="title" >
+           <string>History</string>
+          </attribute>
+         </widget>
+         <widget class="QWidget" name="tabDialpad" >
+          <attribute name="title" >
+           <string>Dialpad</string>
+          </attribute>
+         </widget>
+         <widget class="QWidget" name="tabPhoneCall" >
+          <attribute name="title" >
+           <string>Call</string>
+          </attribute>
+         </widget>
+         <widget class="QWidget" name="tabHome" >
+          <attribute name="title" >
+           <string>Home</string>
+          </attribute>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
     <item row="1" column="0" >
@@ -93,6 +85,85 @@
       </property>
       <widget class="QWidget" name="page" />
      </widget>
+    </item>
+    <item row="3" column="0" >
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>4</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QComboBox" name="phoneComboBox" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="editable" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QPushButton" name="videoCallButton" >
+        <property name="maximumSize" >
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="icon" >
+         <iconset resource="wengophone.qrc" >:/pics/call_video_button.png</iconset>
+        </property>
+        <property name="flat" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QPushButton" name="hangUpButton" >
+        <property name="maximumSize" >
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="icon" >
+         <iconset resource="wengophone.qrc" >:/pics/hangup_button.png</iconset>
+        </property>
+        <property name="flat" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3" >
+       <widget class="QPushButton" name="callButton" >
+        <property name="maximumSize" >
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="icon" >
+         <iconset resource="wengophone.qrc" >:/pics/call_button.png</iconset>
+        </property>
+        <property name="iconSize" >
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="flat" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item row="0" column="0" >
      <widget class="QFrame" name="iconBar" >
@@ -257,84 +328,31 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="0" >
-     <layout class="QGridLayout" >
-      <property name="margin" >
+    <item row="4" column="0" >
+     <widget class="QLabel" name="configPanelLabel" >
+      <property name="text" >
+       <string>Audio and Video Settings</string>
+      </property>
+      <property name="indent" >
+       <number>15</number>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0" >
+     <widget class="QStackedWidget" name="configPanel" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>5</hsizetype>
+        <vsizetype>0</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentIndex" >
        <number>0</number>
       </property>
-      <property name="spacing" >
-       <number>4</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QComboBox" name="phoneComboBox" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="editable" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="QPushButton" name="videoCallButton" >
-        <property name="maximumSize" >
-         <size>
-          <width>16</width>
-          <height>16</height>
-         </size>
-        </property>
-        <property name="icon" >
-         <iconset resource="wengophone.qrc" >:/pics/call_video_button.png</iconset>
-        </property>
-        <property name="flat" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2" >
-       <widget class="QPushButton" name="hangUpButton" >
-        <property name="maximumSize" >
-         <size>
-          <width>16</width>
-          <height>16</height>
-         </size>
-        </property>
-        <property name="icon" >
-         <iconset resource="wengophone.qrc" >:/pics/hangup_button.png</iconset>
-        </property>
-        <property name="flat" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3" >
-       <widget class="QPushButton" name="callButton" >
-        <property name="maximumSize" >
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="icon" >
-         <iconset resource="wengophone.qrc" >:/pics/call_button.png</iconset>
-        </property>
-        <property name="iconSize" >
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="flat" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
+      <widget class="QWidget" name="page" />
+     </widget>
     </item>
    </layout>
   </widget>
@@ -343,8 +361,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>282</width>
-     <height>19</height>
+     <width>290</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuTools" >
@@ -412,8 +430,8 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>431</y>
-     <width>282</width>
+     <y>465</y>
+     <width>290</width>
      <height>19</height>
     </rect>
    </property>
