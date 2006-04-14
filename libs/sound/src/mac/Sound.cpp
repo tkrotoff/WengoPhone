@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,22 +19,10 @@
 
 #include <sound/Sound.h>
 
-#include "SoundPrivateMac.h"
-
-/**
- *
- * @author Philippe Bernery
- */
-class Sound::SoundPrivate : public SoundPrivateMac {
-public:
-
-	SoundPrivate(const std::string & filename) : SoundPrivateMac(filename) {
-	}
-};
-
+#include "MacSound.h"
 
 Sound::Sound(const std::string & filename) {
-	_soundPrivate = new SoundPrivate(filename);
+	_soundPrivate = new MacSound(filename);
 }
 
 Sound::~Sound() {

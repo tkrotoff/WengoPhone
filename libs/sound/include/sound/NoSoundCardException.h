@@ -30,7 +30,8 @@
 class NoSoundCardException : public Exception {
 public:
 
-	NoSoundCardException() : Exception("No sound card available on the system") {
+	NoSoundCardException(const std::string & deviceName)
+		: Exception("No sound card available on the system, device name=" + deviceName) {
 	}
 
 private:

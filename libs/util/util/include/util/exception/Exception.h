@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,35 +35,29 @@
 class Exception {
 public:
 
-	Exception() {
-	}
+	Exception();
 
-	virtual ~Exception() {
-	}
+	virtual ~Exception();
 
 	/**
 	 * Constructs a new Exception with the specified detail message.
 	 *
 	 * @param message the detail message
 	 */
-	Exception(const std::string & message) {
-		_message = message;
-	}
+	Exception(const std::string & message);
 
 	/**
 	 * Gets the detail message string.
 	 *
 	 * @return the detail message
 	 */
-	virtual std::string what() const {
-		return _message;
-	}
+	virtual std::string what() const;
 
 private:
 
 	Exception & operator=(const Exception &);
 
-	/** Detail message of this Exception. */
+	/** Detail message for this Exception. */
 	std::string _message;
 };
 

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,6 @@
 
 #include <util/Logger.h>
 
-/**
- * Get all available audio devices.
- *
- * @return the device list
- */
 std::vector<AudioDeviceID> CoreAudioUtilities::allAudioDeviceList() {
 	OSStatus status = noErr;
 	UInt32 numberOfDevices = 0;
@@ -62,20 +57,13 @@ std::vector<AudioDeviceID> CoreAudioUtilities::allAudioDeviceList() {
 	return result;
 }
 
-/**
- * Get an audio device name.
- *
- * @param id the AudioDeviceID to get the name of
- * @param isInput true if we want the name of the input part of the device, false
- * if we want the output part
- */
 std::string CoreAudioUtilities::audioDeviceName(AudioDeviceID id, bool isInput) {
 	OSStatus status = noErr;
 	char deviceName[1024];
 	UInt32 size = sizeof(deviceName);
 	memset(deviceName, 0, sizeof(deviceName));
 	std::string result;
-	
+
 	status = AudioDeviceGetProperty(id, 0, (isInput ? TRUE : FALSE), kAudioDevicePropertyDeviceName, &size, deviceName);
 	if (status) {
 		LOG_ERROR("Can't get device property: kAudioDevicePropertyDeviceName");
@@ -87,15 +75,9 @@ std::string CoreAudioUtilities::audioDeviceName(AudioDeviceID id, bool isInput) 
 	return result;
 }
 
-/**
- * Get all available devices.
- *
- * @param isInput true if we want to get input devices, false to get output devices
- * @return a map containing the AudioDeviceID and the name of the device
- */
 std::map<AudioDeviceID, std::string> CoreAudioUtilities::audioDeviceMap(bool isInput) {
 	std::map<AudioDeviceID, std::string> result;
-	
+
 	std::vector<AudioDeviceID> deviceId = allAudioDeviceList();
 	for (std::vector<AudioDeviceID>::const_iterator it = deviceId.begin();
 		it != deviceId.end();

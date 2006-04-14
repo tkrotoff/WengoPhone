@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,22 +21,8 @@
 
 #include "SoundThread.h"
 
-/**
- * SoundPrivate is a thread under Windows
- * so that the sound is non-blocking (asynchronous).
- *
- * @author Tanguy Krotoff
- */
-class Sound::SoundPrivate : public SoundThread {
-public:
-
-	SoundPrivate(const std::string & filename) : SoundThread(filename) {
-	}
-};
-
-
 Sound::Sound(const std::string & filename) {
-	_soundPrivate = new SoundPrivate(filename);
+	_soundPrivate = new SoundThread(filename);
 }
 
 Sound::~Sound() {
@@ -57,11 +43,11 @@ void Sound::stop() {
 }
 
 void Sound::play() {
-	_soundPrivate->start();
+	_soundPrivate->play();
 }
 
 void Sound::play(const std::string & filename, const std::string & deviceName) {
 	SoundThread * soundThread = new SoundThread(filename);
 	soundThread->setWaveOutDevice(deviceName);
-	soundThread->start();
+	soundThread->play();
 }

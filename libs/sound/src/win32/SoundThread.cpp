@@ -24,10 +24,6 @@
 #include <windows.h>
 #include <process.h>
 
-#include <iostream>
-using namespace std;
-#include <cassert>
-
 SoundThread::SoundThread(const std::string & filename) {
 	_filename = filename;
 	_stop = false;
@@ -46,6 +42,10 @@ bool SoundThread::setWaveOutDevice(const std::string & deviceName) {
 
 void SoundThread::setLoops(int loops) {
 	_loops = loops;
+}
+
+void SoundThread::play() {
+	start();
 }
 
 void SoundThread::run() {

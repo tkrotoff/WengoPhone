@@ -19,7 +19,7 @@ libs = [
 	'sipwrapper',
 	'wenbox',
 	'tinyxml',
-	'sound',
+	'owsound',
 	'netlib',
 	'qt4',
 ]

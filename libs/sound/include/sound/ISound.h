@@ -17,76 +17,53 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SOUNDTHREAD_H
-#define SOUNDTHREAD_H
+#ifndef ISOUND_H
+#define ISOUND_H
 
-#include <sound/ISound.h>
-
-#include <thread/Thread.h>
-
-#include "playsound/PlaySoundFile.h"
+#include <util/Interface.h>
 
 #include <string>
 
 /**
- * Plays a sound in a threaded way.
+ * Reimplementation of QSound from Qt.
  *
- * Helper for the Sound class.
+ * The big difference is that you can choose the wave out audio device.
+ * Currently it only plays wave audio files.
  *
+ * Different backends are implemented: UNIX, PortAudio, Windows...
+ *
+ * @see QSound
  * @see Sound
- * @see Thread
  * @author Tanguy Krotoff
  */
-class SoundThread : public ISound, public Thread {
+class ISound : Interface {
 public:
 
 	/**
-	 * Plays a sound file given its filename.
+	 * Sets the sound to repeat loops times when it is played.
+	 * Passing the value -1 will cause the sound to loop indefinitely.
 	 *
-	 * @param filename sound file to play
+	 * @param loops number of time the sound has to be played; -1 for infinite
 	 */
-	SoundThread(const std::string & filename);
-
-	virtual ~SoundThread();
-
-	void setLoops(int loops);
-
-	bool setWaveOutDevice(const std::string & deviceName);
-
-	void play();
-
-	void stop();
-
-protected:
+	virtual void setLoops(int loops) = 0;
 
 	/**
-	 * Starts the thread.
+	 * Sets the wave out audio device given its name.
+	 *
+	 * @param deviceName wave out audio device name
+	 * @return true if the device was changed; false otherwise
 	 */
-	void run();
-
-private:
+	virtual bool setWaveOutDevice(const std::string & deviceName) = 0;
 
 	/**
-	 * Sound filename.
+	 * Plays the sound.
 	 */
-	std::string _filename;
+	virtual void play() = 0;
 
 	/**
-	 * Wave out audio device name.
+	 * Stops playing the sound.
 	 */
-	std::string _deviceName;
-
-	/**
-	 * Number of time the sound has to be played, -1 for infinite
-	 */
-	int _loops;
-
-	/**
-	 * Stops or continues playing the sound.
-	 */
-	bool _stop;
-
-	PlaySoundFile _soundFile;
+	virtual void stop() = 0;
 };
 
-#endif	//SOUNDTHREAD_H
+#endif	//ISOUND_H

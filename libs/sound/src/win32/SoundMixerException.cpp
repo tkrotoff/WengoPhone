@@ -28,6 +28,9 @@ SoundMixerException::SoundMixerException(const std::string & soundComponent, uns
 	_soundComponent = soundComponent + ": ";
 }
 
+SoundMixerException::~SoundMixerException() {
+}
+
 std::string SoundMixerException::what() const {
 	switch (_errorNumber) {
 	case MMSYSERR_NOERROR:

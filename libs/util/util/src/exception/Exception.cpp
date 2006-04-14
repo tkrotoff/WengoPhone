@@ -17,43 +17,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCONFIGPANEL_H
-#define QTCONFIGPANEL_H
+#include <util/exception/Exception.h>
 
-#include <util/NonCopyable.h>
+#include <util/Logger.h>
 
-#include <QObject>
+Exception::Exception() {
+}
 
-class QWidget;
+Exception::~Exception() {
+}
 
-/**
- * Audio and video configuration panel.
- *
- * @author Tanguy Krotoff
- */
-class QtConfigPanel : public QObject, NonCopyable {
-	Q_OBJECT
-public:
+Exception::Exception(const std::string & message) {
+	_message = message;
+	LOG_DEBUG(message);
+}
 
-	QtConfigPanel(QWidget * parent);
-
-	QWidget * getWidget() const {
-		return _configPanelWidget;
-	}
-
-private Q_SLOTS:
-
-	void inputSoundSliderValueChanged(int value);
-
-	void outputSoundSliderValueChanged(int value);
-
-	void enableVideoCheckBoxToggled(bool checked);
-
-	void enableWenboxCheckBoxToggled(bool checked);
-
-private:
-
-	QWidget * _configPanelWidget;
-};
-
-#endif	//QTCONFIGPANEL_H
+std::string Exception::what() const {
+	return _message;
+}

@@ -22,7 +22,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <sound/SoundMixer.h>
+#include <sound/VolumeControl.h>
 
 #include <util/Logger.h>
 
@@ -37,16 +37,17 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 	_configPanelWidget = WidgetFactory::create(":/forms/WengoPhoneWindowConfigPanel.ui", parent);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	_soundMixer = new SoundMixer(config.getAudioInputDeviceName(), config.getAudioOutputDeviceName());
 
 	//inputSoundSlider
 	QSlider * inputSoundSlider = Object::findChild<QSlider *>(_configPanelWidget, "inputSoundSlider");
-	inputSoundSlider->setValue(_soundMixer->getInputVolume());
+	VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
+	inputSoundSlider->setValue(inputVolumeControl.getLevel());
 	connect(inputSoundSlider, SIGNAL(valueChanged(int)), SLOT(inputSoundSliderValueChanged(int)));
 
 	//outputSoundSlider
 	QSlider * outputSoundSlider = Object::findChild<QSlider *>(_configPanelWidget, "outputSoundSlider");
-	outputSoundSlider->setValue(_soundMixer->getOutputVolume());
+	VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
+	outputSoundSlider->setValue(outputVolumeControl.getLevel());
 	connect(outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputSoundSliderValueChanged(int)));
 
 	//enableVideoCheckBox
@@ -65,11 +66,15 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 }
 
 void QtConfigPanel::inputSoundSliderValueChanged(int value) {
-	_soundMixer->setInputVolume(value);
+	static Config & config = ConfigManager::getInstance().getCurrentConfig();
+	static VolumeControl volumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
+	volumeControl.setLevel(value);
 }
 
 void QtConfigPanel::outputSoundSliderValueChanged(int value) {
-	_soundMixer->setOutputVolume(value);
+	static Config & config = ConfigManager::getInstance().getCurrentConfig();
+	static VolumeControl volumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
+	volumeControl.setLevel(value);
 }
 
 void QtConfigPanel::enableVideoCheckBoxToggled(bool checked) {

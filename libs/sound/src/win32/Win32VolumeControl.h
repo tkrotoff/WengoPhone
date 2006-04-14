@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,76 +17,74 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef VOLUME_H
-#define VOLUME_H
+#ifndef WIN32VOLUMECONTROL_H
+#define WIN32VOLUMECONTROL_H
+
+#include <sound/IVolumeControl.h>
 
 #include <sound/SoundMixerException.h>
-
-#include <util/NonCopyable.h>
 
 #include <windows.h>
 
 /**
  * Gets and changes the volume of a Windows sound mixer.
  *
+ * Inspired from Win32Volume class from the Zinf
+ * (former FreeAmp) project.
+ *
+ * @see http://www.zinf.org/
+ * @see http://www.codeproject.com/audio/admixer.asp
+ * @see http://www.codeproject.com/audio/mixerSetControlDetails.asp
  * @author Tanguy Krotoff
  */
-class Volume : NonCopyable {
+class Win32VolumeControl : public IVolumeControl {
 public:
 
 	/**
 	 * Kind of audio mixer device to deal with.
 	 */
-	enum DeviceType {
+	enum Win32DeviceType {
 		//MIXERLINE_COMPONENTTYPE_DST_SPEAKERS
-		MasterVolume,
+		Win32DeviceTypeMasterVolume,
 
 		//MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT
-		WaveOut,
+		Win32DeviceTypeWaveOut,
 
 		//MIXERLINE_COMPONENTTYPE_DST_WAVEIN
-		WaveIn,
+		Win32DeviceTypeWaveIn,
 
 		//MIXERLINE_COMPONENTTYPE_SRC_COMPACTDISC
-		CDOut,
+		Win32DeviceTypeCDOut,
 
 		//MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE
-		MicrophoneOut,
+		Win32DeviceTypeMicrophoneOut,
 
 		//MIXERLINE_COMPONENTTYPE_DST_WAVEIN + MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE
-		MicrophoneIn
+		Win32DeviceTypeMicrophoneIn
 	};
 
 	/**
-	 * Constructs a Volume object.
+	 * Constructs a Win32VolumeControl object.
 	 *
 	 * @param deviceId Windows audio device id, id of a sound card
 	 * @param deviceType the kind of audio mixer device to manipulate
 	 * @throw SoundMixerException if a error occured while trying to configure the audio mixer device
 	 */
-	Volume(unsigned int deviceId, DeviceType deviceType) throw (SoundMixerException);
+	Win32VolumeControl(unsigned deviceId, Win32DeviceType deviceType) throw (SoundMixerException);
 
-	virtual ~Volume();
+	virtual ~Win32VolumeControl();
 
-	/**
-	 * Gets the current volume of the audio mixer.
-	 *
-	 * @return volume of the audio mixer, or -1 if it failed
-	 */
-	int getVolume();
+	bool setLevel(unsigned level);
 
-	/**
-	 * Sets the current volume of the audio mixer.
-	 *
-	 * @param volume sound volume of the audio mixer
-	 * @return true if the volume has been changed, false otherwise
-	 */
-	bool setVolume(unsigned int volume);
+	int getLevel();
 
-	/**
-	 * Closes the audio mixer.
-	 */
-	void closeMixer();
+	bool setMute(bool mute);
+
+	bool isMuted();
+
+	bool selectAsRecordDevice();
+
+	bool close();
 
 private:
 
@@ -97,7 +95,7 @@ private:
 	 * @param deviceType the kind of audio mixer device to manipulate
 	 * @return the win32 error code
 	 */
-	MMRESULT initVolumeControl(unsigned int deviceId, DeviceType deviceType);
+	MMRESULT initVolumeControl(unsigned int deviceId, Win32DeviceType deviceType);
 
 	/**
 	 * Creates the mixer line.
@@ -141,22 +139,6 @@ private:
 	 * The MIXERLINECONTROLS structure contains information about the controls of an audio line.
 	 */
 	MIXERLINECONTROLSA _mxlc;
-
-	/**
-	 * Minimum volume of the audio mixer device.
-	 */
-	DWORD _dwMinimum;
-
-	/**
-	 * Maximum volume of the audio mixer device.
-	 */
-	DWORD _dwMaximum;
-
-	/**
-	 * Audio mixer-defined identifier that uniquely refers to the control
-	 * described by the MIXERCONTROL structure.
-	 */
-	DWORD _dwVolumeControlID;
 };
 
-#endif	//VOLUME_H
+#endif	//WIN32VOLUMECONTROL_H

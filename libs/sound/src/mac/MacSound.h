@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SOUNDPRIVATEMAC_H
-#define SOUNDPRIVATEMAC_H
+#ifndef MACSOUND_H
+#define MACSOUND_H
 
 #include <util/NonCopyable.h>
 
@@ -29,7 +29,7 @@
 /**
  * @author Philippe Bernery
  */
-@interface SoundPrivateMacObjC : NSObject
+@interface MacSoundObjC : NSObject
 {
 	/** The NSSound object that will play the file. */
 	NSSound * _sound;
@@ -37,7 +37,7 @@
 	/** Times that the sound must be played. */
 	int _loops;
 
-	/** 
+	/**
 	 * True when stop has been called to avoid the sound to loop
 	 * infinitely.
 	 */
@@ -47,7 +47,7 @@
 	 * Autorelease pool.
 	 * FIXME: The autorelease pool is created here because
 	 * Cocoa is currently used only in this class (2006/04/05).
-	 */  
+	 */
 	NSAutoreleasePool *_pool;
 }
 
@@ -65,7 +65,7 @@
  *
  * @author Philippe Bernery
  */
-class SoundPrivateMac : NonCopyable {
+class MacSound : public ISound {
 public:
 
 	/**
@@ -73,42 +73,22 @@ public:
 	 *
 	 * @param filename sound file
 	 */
-	SoundPrivateMac(const std::string & filename);
+	MacSound(const std::string & filename);
 
-	~SoundPrivateMac();
+	~MacSound();
 
-	/**
-	 * Sets the sound to repeat loops times when it is played.
-	 * Passing the value -1 will cause the sound to loop indefinitely.
-	 *
-	 * @param loops number of time the sound has to be played, -1 for infinite
-	 */
 	void setLoops(int loops);
 
-	/**
-	 * Sets the wave out audio device given its name.
-	 *
-	 * @param deviceName wave out audio device name
-	 * @return true if the device was changed, false otherwise (not implemented yet)
-	 */
 	bool setWaveOutDevice(const std::string & deviceName);
 
-	/**
-	 * Plays the sound.
-	 */
 	void play();
 
-	/**
-	 * Stops playing the sound.
-	 */
 	void stop();
 
 private:
 
-	/**
-	 * SoundPrivateMacObjC object
-	 */
-	SoundPrivateMacObjC * _soundPrivateObjC;
+	/** MacSoundObjC object. */
+	MacSoundObjC * _macSoundObjCPrivate;
 };
 
-#endif //SOUNDPRIVATEMAC_H
+#endif	//MACSOUND_H

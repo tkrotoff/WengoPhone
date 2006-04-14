@@ -7,7 +7,7 @@ libs = [
 	'stun',
 	'httptunnel',
 	'tinyxml',
-	'sound',
+	'owsound',
 	'imwrapper',
 	'sipwrapper',
 ]

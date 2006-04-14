@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #include <util/exception/Exception.h>
 
 /**
- * A problem occured in while manipulating an audio mixer device under Windows.
+ * A problem occured while manipulating an audio mixer device.
  *
  * @author Tanguy Krotoff
  */
@@ -33,27 +33,26 @@ public:
 	/**
 	 * Constructs a SoundMixerException object.
 	 *
-	 * @param errorNumber MMRESULT from win32 sound API
 	 * @param soundComponent sound component that generated the error
+	 * @param errorNumber MMRESULT for the win32 sound API
 	 */
-	SoundMixerException(const std::string & soundComponent, unsigned int errorNumber);
+	SoundMixerException(const std::string & soundComponent, unsigned errorNumber);
 
-	virtual ~SoundMixerException() {
-	}
+	~SoundMixerException();
 
 	/**
-	 * Gets the string corresponding to the win32 sound API error.
+	 * Gets the string corresponding to the sound API error.
 	 *
-	 * @return the explanation for the a specific win32 sound API error
+	 * @return the explanation for the sound API error
 	 */
-	virtual std::string what() const;
+	std::string what() const;
 
 private:
 
 	/**
-	 * win32 sound API error code MMRESULT.
+	 * Sound API error code (MMRESULT under win32).
 	 */
-	unsigned int _errorNumber;
+	unsigned _errorNumber;
 
 	/**
 	 * Name of the sound component that has generated the error.

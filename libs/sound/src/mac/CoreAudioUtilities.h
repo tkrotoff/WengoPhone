@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,32 +20,35 @@
 #ifndef COREAUDIOUTILITIES_H
 #define COREAUDIOUTILITIES_H
 
+#include <util/NonCopyable.h>
+
 #include <CoreAudio/CoreAudio.h>
 
 #include <vector>
 #include <string>
 #include <map>
 
-class CoreAudioUtilities {
+class CoreAudioUtilities : NonCopyable {
 public:
+
 	/**
-	 * Get all available audio devices.
+	 * Gets all available audio devices.
 	 *
 	 * @return the device list
 	 */
 	static std::vector<AudioDeviceID> allAudioDeviceList();
 
 	/**
-	 * Get an audio device name.
+	 * Gets an audio device name.
 	 *
 	 * @param id the AudioDeviceID to get the name of
 	 * @param isInput true if we want the name of the input part of the device, false
-	 * if we want the output part
+	 *        if we want the output part
 	 */
 	static std::string audioDeviceName(AudioDeviceID id, bool isInput);
 
 	/**
-	 * Get all available devices.
+	 * Gets all available devices.
 	 *
 	 * @param isInput true if we want to get input devices, false to get output devices
 	 * @return a map containing the AudioDeviceID and the name of the device

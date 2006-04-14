@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,42 +17,58 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "Volume.h"
+#include "MacVolumeControl.h"
 
 #include "CoreAudioUtilities.h"
 
 #include <util/Logger.h>
 
-Volume::Volume(AudioDeviceID deviceId, bool isInput) 
-: _deviceId(deviceId), _isInput((isInput ? TRUE : FALSE)) {
+MacVolumeControl::MacVolumeControl(AudioDeviceID deviceId, bool isInput)
+	: _deviceId(deviceId), _isInput((isInput ? TRUE : FALSE)) {
 }
 
-int Volume::getVolume() {
+int MacVolumeControl::getLevel() {
 	OSStatus status = noErr;
 	UInt32 size = 0;
-	Float32 volume = 0.0;
+	Float32 level = 0.0;
 
-	size = sizeof(volume);
-	status = AudioDeviceGetProperty(_deviceId, 0, _isInput, kAudioDevicePropertyVolumeScalar, &size, &volume);
+	size = sizeof(level);
+	status = AudioDeviceGetProperty(_deviceId, 0, _isInput, kAudioDevicePropertyVolumeScalar, &size, &level);
 	if (status) {
-		LOG_ERROR("Can't get device property: kAudioDevicePropertyVolumeScalar\n");
+		LOG_ERROR("can't get device property: kAudioDevicePropertyVolumeScalar\n");
 		return -1;
 	} else {
-		return (int)(volume * 100.0);
+		return (int) (level * 100.0);
 	}
 }
 
-bool Volume::setVolume(unsigned volume) {
+bool MacVolumeControl::setLevel(unsigned level) {
 	OSStatus status = noErr;
 	UInt32 size = 0;
-	Float32 fVolume = volume / 100.0;
+	Float32 fVolume = level / 100.0;
 
 	size = sizeof(fVolume);
 	status = AudioDeviceSetProperty(_deviceId, 0, 0, _isInput, kAudioDevicePropertyVolumeScalar, size, &fVolume);
 	if (status) {
-		LOG_ERROR("Can't set device property: kAudioDevicePropertyVolumeScalar\n");
+		LOG_ERROR("can't set device property: kAudioDevicePropertyVolumeScalar\n");
 		return false;
 	} else {
 		return true;
 	}
+}
+
+bool MacVolumeControl::setMute(bool mute) {
+	return false;
+}
+
+bool MacVolumeControl::isMuted() {
+	return false;
+}
+
+bool MacVolumeControl::selectAsRecordDevice() {
+	return false;
+}
+
+bool MacVolumeControl::close() {
+	return false;
 }

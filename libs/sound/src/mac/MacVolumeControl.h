@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,38 +17,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef VOLUME_H
-#define VOLUME_H
+#ifndef MACVOLUMECONTROL_H
+#define MACVOLUMECONTROL_H
+
+#include <sound/IControlVolume.h>
 
 #include <CoreAudio/CoreAudio.h>
 
 /**
- * Get and change the volume of a MacOS X audio device.
+ * Gets and change the volume of a MacOS X audio device.
  *
  * @author Philippe Bernery
  */
-class Volume {
-
+class MacVolumeControl : public IControlVolume {
 public:
 
-	Volume(AudioDeviceID deviceId, bool isInput);
+	MacVolumeControl(AudioDeviceID deviceId, bool isInput);
 
-	/**
-	 * Gets the current volume of the audio device.
-	 *
-	 * On MacOS X, the volume of the output can't be gotten.
-	 *
-	 * @return volume of the audio mixer, or -1 if it failed
-	 */
-	int getVolume();
+	bool setLevel(unsigned level);
 
-	/**
-	 * Sets the current volume of the audio device.
-	 *
-	 * @param volume sound volume of the audio mixer
-	 * @return true if the volume has been changed, false otherwise
-	 */
-	bool setVolume(unsigned volume);
+	int getLevel() const;
+
+	bool setMute(bool mute);
+
+	bool isMuted() const;
+
+	bool selectAsRecordDevice();
+
+	bool close();
 
 private:
 
@@ -57,7 +53,6 @@ private:
 
 	/** Channel to use (input or output) */
 	Boolean _isInput;
-
 };
 
-#endif	//VOLUME_H
+#endif	//MACVOLUMECONTROL_H

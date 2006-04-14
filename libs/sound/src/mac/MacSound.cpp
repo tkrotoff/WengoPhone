@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "SoundPrivateMac.h"
+#include "MacSound.h"
 
-@implementation SoundPrivateMacObjC
+@implementation MacSoundObjC
 
 - (id)initWithFilename:(NSString *)filename
 {
@@ -74,30 +74,30 @@
 
 @end
 
-SoundPrivateMac::SoundPrivateMac(const std::string & filename) {
+MacSound::MacSound(const std::string & filename) {
 	NSString * pathName = NULL;
 	const char * fname = filename.c_str();
 
 	pathName = [NSString stringWithCString:fname];
-	_soundPrivateObjC = [[SoundPrivateMacObjC alloc] initWithFilename:pathName];
+	_macSoundObjCPrivate = [[MacSoundObjC alloc] initWithFilename:pathName];
 }
 
-SoundPrivateMac::~SoundPrivateMac() {
-	[_soundPrivateObjC release];
+MacSound::~MacSound() {
+	[_macSoundObjCPrivate release];
 }
 
-void SoundPrivateMac::setLoops(int loops) {
-	[_soundPrivateObjC setLoops:loops];
+void MacSound::setLoops(int loops) {
+	[_macSoundObjCPrivate setLoops:loops];
 }
 
-bool SoundPrivateMac::setWaveOutDevice(const std::string & deviceName) {
+bool MacSound::setWaveOutDevice(const std::string & deviceName) {
 	return true;
 }
 
-void SoundPrivateMac::play() {
-	[_soundPrivateObjC play];
+void MacSound::play() {
+	[_macSoundObjCPrivate play];
 }
 
-void SoundPrivateMac::stop() {
-	[_soundPrivateObjC stop];
+void MacSound::stop() {
+	[_macSoundObjCPrivate stop];
 }

@@ -30,7 +30,7 @@
 	#include <windows.h>
 #endif
 
-#include <stdio.h>
+#include <cstdio>
 
 /**
  * Retrieves the number of audio device found.
@@ -229,8 +229,8 @@ int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
 }
 
 int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
-#ifdef WIN32
-	unsigned int nbMixers = ::mixerGetNumDevs();
+#ifdef OS_WINDOWS
+	unsigned nbMixers = ::mixerGetNumDevs();
 	if (nbMixers == 0) {
 		//No audio mixer device are present
 		return -1;
@@ -238,7 +238,7 @@ int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
 
 	MIXERCAPSA mixcaps;
 
-	for (unsigned int mixerId = 0; mixerId < nbMixers; mixerId++) {
+	for (unsigned mixerId = 0; mixerId < nbMixers; mixerId++) {
 		if (MMSYSERR_NOERROR == ::mixerGetDevCapsA(mixerId, & mixcaps, sizeof(MIXERCAPSA))) {
 			if (mixerName == mixcaps.szPname) {
 				return mixerId;

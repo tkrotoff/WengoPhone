@@ -9,6 +9,7 @@ include_path = ['include']
 link_flags = []
 headers = []
 sources = [
+	'src/exception/Exception.cpp',
 	'src/Path.cpp',
 	'src/Startup.cpp',
 	'src/WebBrowser.cpp',

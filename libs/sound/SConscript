@@ -15,9 +15,9 @@ cc_flags = []
 if WengoOSWindows():
 	sources += [
 		'src/win32/Sound.cpp',
-		'src/win32/SoundMixer.cpp',
+		'src/win32/VolumeControl.cpp',
 		'src/win32/SoundMixerException.cpp',
-		'src/win32/Volume.cpp',
+		'src/win32/Win32VolumeControl.cpp',
 		'src/win32/SoundThread.cpp',
 		'src/win32/playsound/SoundFile.cpp',
 		'src/win32/playsound/PlaySoundFile.cpp'
@@ -66,4 +66,4 @@ env.WengoAddCCFlags(cc_flags)
 env.WengoAddLinkFlags(link_flags)
 env.WengoUseLibraries(libs)
 
-env.WengoStaticLibrary('sound', sources)
+env.WengoStaticLibrary('owsound', sources)

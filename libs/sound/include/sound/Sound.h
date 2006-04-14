@@ -20,22 +20,17 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#include <util/NonCopyable.h>
+#include <sound/ISound.h>
 
 #include <string>
 
 /**
- * Reimplementation of QSound from Qt.
+ * Sound implementation.
  *
- * The big difference is that you can choose the wave out audio device.
- * Currently it only plays wave audio files.
- *
- * Different backends are implemented: UNIX, PortAudio, Windows...
- *
- * @see QSound
+ * @see ISound
  * @author Tanguy Krotoff
  */
-class Sound : NonCopyable {
+class Sound : public ISound {
 public:
 
 	/**
@@ -45,22 +40,10 @@ public:
 	 */
 	Sound(const std::string & filename);
 
-	~Sound();
+	virtual ~Sound();
 
-	/**
-	 * Sets the sound to repeat loops times when it is played.
-	 * Passing the value -1 will cause the sound to loop indefinitely.
-	 *
-	 * @param loops number of time the sound has to be played, -1 for infinite
-	 */
 	void setLoops(int loops);
 
-	/**
-	 * Sets the wave out audio device given its name.
-	 *
-	 * @param deviceName wave out audio device name
-	 * @return true if the device was changed, false otherwise (not implemented yet)
-	 */
 	bool setWaveOutDevice(const std::string & deviceName);
 
 	/**
@@ -69,26 +52,16 @@ public:
 	 * @param filename sound file
 	 * @param deviceName wave out audio device name
 	 */
-	static void play(const std::string & filename, const std::string & deviceName = NULL);
+	static void play(const std::string & filename, const std::string & deviceName = "");
 
-	/**
-	 * Plays the sound.
-	 */
 	void play();
 
-	/**
-	 * Stops playing the sound.
-	 */
 	void stop();
 
 private:
 
-	class SoundPrivate;
-
-	/**
-	 * System-dependant implementation.
-	 */
-	SoundPrivate * _soundPrivate;
+	/** System-dependant implementation. */
+	ISound * _soundPrivate;
 };
 
 #endif	//SOUND_H
