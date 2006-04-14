@@ -157,7 +157,7 @@ void CurlHttpRequest::setUrl() {
 }
 
 void CurlHttpRequest::setCurlParam() {
-	curl_easy_setopt(_curl, CURLOPT_VERBOSE, _verbose);
+	curl_easy_setopt(_curl, CURLOPT_VERBOSE, 0);
 	curl_easy_setopt(_curl, CURLOPT_NOPROGRESS, false);
 	curl_easy_setopt(_curl, CURLOPT_READFUNCTION, curlHTTPRead);
 	curl_easy_setopt(_curl, CURLOPT_WRITEFUNCTION, curlHTTPWrite);

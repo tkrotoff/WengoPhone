@@ -45,6 +45,9 @@
 /* Define with if sys/select.h is present */
 #undef CURL_HAVE_SYS_SELECT_H
 
+#undef HAVE_SIGSETJMP
+
+
 /* The size of a `curl_off_t', as computed by sizeof. */
 #define CURL_SIZEOF_CURL_OFF_T 0
 
