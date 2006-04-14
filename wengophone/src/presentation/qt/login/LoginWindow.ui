@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>351</width>
-    <height>250</height>
+    <width>333</width>
+    <height>276</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -17,29 +17,49 @@
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>8</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
    </property>
    <item row="7" column="0" colspan="2" >
-    <widget class="QLabel" name="linkWengoAccountLabel" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:MS Shell Dlg;">You don't have a Wengo account?&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="linkWengoAccountLabel" >
+       <property name="text" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-family:MS Shell Dlg; text-decoration: underline; color:#0000ff;">Click here&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QLineEdit" name="passwordLineEdit" >
+     <property name="echoMode" >
+      <enum>QLineEdit::Password</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <widget class="QCheckBox" name="autoLoginCheckBox" >
+     <property name="toolTip" >
+      <string>Check it if you want to use this Wengo account automatically</string>
+     </property>
      <property name="text" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">You don't have a Wengo account? &lt;span style=" text-decoration: underline; color:#0000ff;">Click here&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" >
-    <widget class="QComboBox" name="loginComboBox" >
-     <property name="editable" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2" >
-    <widget class="Line" name="line1" >
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
+      <string>Open my session automatically</string>
      </property>
     </widget>
    </item>
@@ -53,13 +73,24 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="pictureLabel" >
-     <property name="text" >
-      <string/>
+   <item row="2" column="1" >
+    <widget class="QComboBox" name="loginComboBox" >
+     <property name="editable" >
+      <bool>true</bool>
      </property>
-     <property name="pixmap" >
-      <pixmap resource="..\wengophone.qrc" >:/pics/contact_picture.png</pixmap>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="emailAddressLabel" >
+     <property name="text" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Email Address:&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QLabel" name="passwordLabel" >
+     <property name="text" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Password:&lt;/p>&lt;/body>&lt;/html></string>
      </property>
     </widget>
    </item>
@@ -126,34 +157,20 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="1" >
-    <widget class="QLineEdit" name="passwordLineEdit" >
-     <property name="echoMode" >
-      <enum>QLineEdit::Password</enum>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="pictureLabel" >
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="pixmap" >
+      <pixmap/>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="emailAddressLabel" >
-     <property name="text" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Email Address:&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="passwordLabel" >
-     <property name="text" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Password:&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1" >
-    <widget class="QCheckBox" name="autoLoginCheckBox" >
-     <property name="toolTip" >
-      <string>Check it if you want to use this Wengo account automatically</string>
-     </property>
-     <property name="text" >
-      <string>Open my session automatically</string>
+   <item row="1" column="0" colspan="2" >
+    <widget class="Line" name="line1" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>

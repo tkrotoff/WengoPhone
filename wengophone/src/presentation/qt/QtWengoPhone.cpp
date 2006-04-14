@@ -101,6 +101,8 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 void QtWengoPhone::initThreadSafe() {
 	_wengoPhoneWindow = qobject_cast<QMainWindow *>(WidgetFactory::create(":/forms/WengoPhoneWindow.ui", NULL));
 
+	_qtLogin = new QtLogin(_wengoPhoneWindow, *this);
+
 	//callButton
 	_callButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "callButton");
 
@@ -265,7 +267,7 @@ void QtWengoPhone::initThreadSafe() {
 	_phoneLineStateLabel->setPixmap(QPixmap(":/pics/statusbar_sip_error.png"));
 	_phoneLineStateLabel->setToolTip(tr("Not connected"));
 	statusBar->addPermanentWidget(_phoneLineStateLabel);
-
+	
 	//FIXME: can i create the widget here ?
 	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
 
@@ -331,12 +333,11 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 }
 
 void QtWengoPhone::showLoginWindow() {
-	static QtLogin * login = new QtLogin(_wengoPhoneWindow);
 
-	int ret = login->exec();
+	int ret = _qtLogin->exec();
 
 	if (ret == QDialog::Accepted) {
-		_cWengoPhone.addWengoAccount(login->getLogin(), login->getPassword(), login->hasAutoLogin());
+		_cWengoPhone.addWengoAccount(_qtLogin->getLogin(), _qtLogin->getPassword(), _qtLogin->hasAutoLogin());
 	}
 }
 
@@ -364,6 +365,18 @@ void QtWengoPhone::setSms(QtSms * qtSms) {
 
 QtSms * QtWengoPhone::getSms() const {
 	return _qtSms;
+}
+
+QtLogin * QtWengoPhone::getLogin() const {
+	return _qtLogin;
+}
+
+void QtWengoPhone::setSubscribe(QtSubscribe * qtSubscribe) {
+	_qtSubscribe = qtSubscribe;
+}
+
+QtSubscribe * QtWengoPhone::getSubscribe() const {
+	return _qtSubscribe;
 }
 
 void QtWengoPhone::updatePresentation() {

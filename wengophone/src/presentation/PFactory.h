@@ -46,6 +46,8 @@ class PHistory;
 class CHistory;
 class PSoftUpdate;
 class CSoftUpdate;
+class PSubscribe;
+class CSubscribe;
 
 /**
  * Factories for the presentation component.
@@ -101,6 +103,8 @@ public:
 	virtual PSoftUpdate * createPresentationSoftUpdate(CSoftUpdate & cSoftUpdate) = 0;
 
 	virtual PHistory * createPresentationHistory(CHistory & cHistory) = 0;
+
+	virtual PSubscribe * createPresentationSubscribe(CSubscribe & cSubscribe) = 0;
 
 	/** Because of the presentation event loop (QApplication::exec()). */
 	virtual int exec() = 0;

@@ -34,8 +34,10 @@ class QtPhoneCall;
 class QtContactList;
 class QtContactCallListWidget;
 class QtSms;
+class QtSubscribe;
 class QtBrowser;
 class QtHistoryWidget;
+class QtLogin;
 class QtToaster;
 class TrayIcon;
 
@@ -71,6 +73,12 @@ public:
 	void setSms(QtSms * qtSms);
 
 	QtSms * getSms() const;
+
+	void setSubscribe(QtSubscribe * qtSubscribe);
+
+	QtSubscribe * getSubscribe() const;
+
+	QtLogin * getLogin() const;
 
 	void updatePresentation();
 
@@ -223,6 +231,10 @@ private:
 
 	QtSms * _qtSms;
 
+	QtSubscribe * _qtSubscribe;
+	
+	QtLogin * _qtLogin;
+	
 	QtBrowser * _browser;
 
 	QtContactList *_contactList;

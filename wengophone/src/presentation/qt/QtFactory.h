@@ -55,6 +55,9 @@
 #include "history/QtHistory.h"
 #include <control/history/CHistory.h>
 
+#include "webservices/subscribe/QtSubscribe.h"
+#include <control/webservices/subscribe/CSubscribe.h>
+
 #include <util/Logger.h>
 
 #include <QApplication>
@@ -136,6 +139,11 @@ public:
 	PSms * createPresentationSms(CSms & cSms) {
 		static QtSms * qtSms = new QtSms(cSms);
 		return qtSms;
+	}
+
+	PSubscribe * createPresentationSubscribe(CSubscribe & cSubscribe) {
+		static QtSubscribe * qtSubscribe = new QtSubscribe(cSubscribe);
+		return qtSubscribe;
 	}
 
 	PSoftUpdate * createPresentationSoftUpdate(CSoftUpdate & cSoftUpdate) {

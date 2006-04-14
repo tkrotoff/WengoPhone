@@ -160,5 +160,6 @@
         <file>toaster/QtToaster.ui</file>
         <file>webservices/sms/SmsWindow.ui</file>
         <file>webservices/softupdate/SoftUpdateWindow.ui</file>
+		<file>webservices/subscribe/Subscribe.ui</file>
     </qresource>
 </RCC>

@@ -93,10 +93,10 @@ headers = [
 	'profilebar/QtProfileBar.h',
 	'profilebar/QtClickableLabel.h',
 	'profilebar/QtCreditWidget.h',
-	'profilebar/QtIMMenu.h',
 	'history/QtHistoryWidget.h',
 	'history/QtHistoryItem.h',
 	'history/QtHistory.h',
+	'webservices/subscribe/QtSubscribe.h',
 ]
 
 sources = [
@@ -178,6 +178,8 @@ sources = [
 	'history/QtHistoryWidget.cpp',
 	'history/QtHistoryItem.cpp',
 	'history/QtHistory.cpp',
+	'webservices/subscribe/QtSubscribe.cpp',
+
 
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]

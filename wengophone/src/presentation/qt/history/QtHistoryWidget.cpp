@@ -232,7 +232,7 @@ void QtHistoryWidget::showMissedCall(bool){
 	QAbstractItemModel * model = _header->model();
 	model->setHeaderData(0,Qt::Horizontal,QVariant( tr("Missed call") ),Qt::DisplayRole);
 }
-void QtHistoryWidget::clearHistory(){
+void QtHistoryWidget::clearHistory() {
 	_treeWidget->clear();
 }
 

@@ -19,13 +19,28 @@
 
 #include "QtLogin.h"
 
+#include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/webservices/subscribe/QtSubscribe.h>
+
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
+#include <qtutil/MouseEventFilter.h>
 
 #include <QtGui>
 
-QtLogin::QtLogin(QWidget * parent) {
+QtLogin::QtLogin(QWidget * parent, QtWengoPhone & qtWengoPhone) 
+	: _qtWengoPhone(qtWengoPhone) {
+	
 	_loginWindow = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/login/LoginWindow.ui", parent));
+	_createAccountLabel = Object::findChild<QLabel *>(_loginWindow, "linkWengoAccountLabel");
+	
+	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
+		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);
+	_createAccountLabel->installEventFilter(mouseFilter);
+}
+
+QDialog * QtLogin::getWidget() const {
+	return _loginWindow;
 }
 
 std::string QtLogin::getLogin() const {
@@ -45,4 +60,29 @@ bool QtLogin::hasAutoLogin() const {
 
 int QtLogin::exec() {
 	return _loginWindow->exec();
+}
+
+void QtLogin::createAccountLabelClicked() {
+	if( _qtWengoPhone.getSubscribe() ) {
+		_qtWengoPhone.getSubscribe()->exec();
+	}
+}
+
+void QtLogin::setLogin(const QString & login) {
+	QComboBox * loginComboBox = Object::findChild<QComboBox *>(_loginWindow, "loginComboBox");
+	loginComboBox->setEditText(login);
+}
+	
+void QtLogin::setPassword(const QString & password) {
+	QLineEdit * passwordLineEdit = Object::findChild<QLineEdit *>(_loginWindow, "passwordLineEdit");
+	passwordLineEdit->setText(password);
+}
+
+void QtLogin::setAutoLogin(bool autoLogin) {
+	QCheckBox * autoLoginCheckBox = Object::findChild<QCheckBox *>(_loginWindow, "autoLoginCheckBox");
+	if( autoLogin ) {
+		autoLoginCheckBox->setCheckState(Qt::Checked);
+	} else {
+		autoLoginCheckBox->setCheckState(Qt::Unchecked);
+	}
 }

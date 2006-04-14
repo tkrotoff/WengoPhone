@@ -46,6 +46,7 @@ class SoftUpdate;
 class History;
 class IMAccount;
 class UserProfile;
+class WsWengoSubscribe;
 
 /**
  * @defgroup control Control Component
@@ -70,6 +71,8 @@ class UserProfile;
 /**
  * @ingroup control
  * @author Tanguy Krotoff
+ * @author Philippe Bernery
+ * @author Mathieu Stute
  */
 class CWengoPhone {
 public:
@@ -236,6 +239,8 @@ private:
 	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
 
 	void wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin);
+
+	void wsWengoSubscribeCreatedEventHandler(WengoPhone & sender, WsWengoSubscribe & wsWengoSubscribe);
 
 	void smsCreatedEventHandler(UserProfile & sender, Sms & sms);
 

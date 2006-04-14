@@ -40,6 +40,8 @@
 #include <control/webservices/sms/CSms.h>
 #include <model/webservices/softupdate/SoftUpdate.h>
 #include <control/webservices/softupdate/CSoftUpdate.h>
+#include <model/webservices/subscribe/Subscribe.h>
+#include <control/webservices/subscribe/CSubscribe.h>
 
 #include <util/WebBrowser.h>
 #include <util/StringList.h>
@@ -64,6 +66,7 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
 
 	_wengoPhone.wenboxPluginCreatedEvent += boost::bind(&CWengoPhone::wenboxPluginCreatedEventHandler, this, _1, _2);
+	_wengoPhone.wsWengoSubscribeCreatedEvent += boost::bind(&CWengoPhone::wsWengoSubscribeCreatedEventHandler, this, _1, _2);
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.getCurrentUserProfile().phoneLineCreatedEvent += boost::bind(&CWengoPhone::phoneLineCreatedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().loginStateChangedEvent += loginStateChangedEvent;
@@ -109,6 +112,12 @@ void CWengoPhone::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine 
 
 void CWengoPhone::wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin) {
 	static CWenboxPlugin cWenboxPlugin(wenboxPlugin, *this);
+
+	LOG_DEBUG("CWenboxPlugin created");
+}
+
+void CWengoPhone::wsWengoSubscribeCreatedEventHandler(WengoPhone & sender, WsWengoSubscribe & wsWengoSubscribe) {
+	static CSubscribe cSubscribe(wsWengoSubscribe, *this);
 
 	LOG_DEBUG("CWenboxPlugin created");
 }
