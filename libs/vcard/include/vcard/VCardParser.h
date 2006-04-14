@@ -30,12 +30,13 @@
  * Parse a VCard.
  *
  * Usage:
- *    VCardParser parser(file);
- *    parser.tagFoundEvent += boost::bind(&MyClass::tagFoundEventHandler, this,
- *        _1, _2);
- *    parser.parse;
+ * <pre>
+ * VCardParser parser(file);
+ * parser.tagFoundEvent += boost::bind(&MyClass::tagFoundEventHandler, this, _1, _2);
+ * parser.parse;
+ * </pre>
  *
- * @author Philippe BERNERY
+ * @author Philippe Bernery
  */
 class VCardParser {
 public:
@@ -71,7 +72,7 @@ public:
 	/**
 	 * Returns the type of a tag (e.g.: 'TEL;TYPE=home;TYPE=cell' will return
 	 * a vector with ('home', 'cell').
-	 * 
+	 *
 	 * @param tagLine the tag line to analyse
 	 * @return a vector of string containing the found types
 	 */
@@ -108,7 +109,7 @@ private:
 	 * space.
 	 *
 	 * @param line the line to test
-	 * @return true if there is at least one LWSP 	 
+	 * @return true if there is at least one LWSP
 	 */
 	bool beginWithLinearWhiteSpace(const std::string & line);
 
@@ -128,4 +129,4 @@ private:
 
 };
 
-#endif //VCARDPARSER_H
+#endif	//VCARDPARSER_H

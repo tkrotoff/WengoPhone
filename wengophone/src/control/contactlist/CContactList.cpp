@@ -19,16 +19,16 @@
 
 #include "CContactList.h"
 
-#include <presentation/PFactory.h>
-#include <presentation/PContactList.h>
-
-#include <control/CWengoPhone.h>
+#include "CContactGroup.h"
 
 #include <model/contactlist/ContactList.h>
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactGroup.h>
 
-#include "CContactGroup.h"
+#include <control/CWengoPhone.h>
+
+#include <presentation/PFactory.h>
+#include <presentation/PContactList.h>
 
 #include <util/Logger.h>
 
@@ -45,12 +45,12 @@ CContactList::CContactList(ContactList & contactList, CWengoPhone & cWengoPhone)
 }
 
 void CContactList::contactAddedEventHandler(ContactList & sender, Contact & contact) {
-	
+
 	//_pContactList->addContact(
 }
 
 void CContactList::contactRemovedEventHandler(ContactList & sender, Contact & contact) {
-	
+
 }
 
 void CContactList::contactGroupAddedEventHandler(ContactList & sender, ContactGroup & contactGroup) {
@@ -74,7 +74,7 @@ StringList CContactList::getContactGroupStringList() const {
 	for (ContactList::ContactGroupSet::const_iterator it = contactGroupSet.begin();
 		it != contactGroupSet.end();
 		++it) {
-		result.add((*it).getName());
+		result += ((*it).getName());
 	}
 
 	return result;

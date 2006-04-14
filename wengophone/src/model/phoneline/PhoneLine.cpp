@@ -120,6 +120,9 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 
 	//Adds the PhoneCall to the list of PhoneCall
 	_phoneCallMap[callId] = phoneCall;
+	_phoneCallList += phoneCall;
+
+	phoneCall->setState(EnumPhoneCallState::PhoneCallStateDialing);
 
 	//Sends the event a new PhoneCall has been created
 	phoneCallCreatedEvent(*this, *phoneCall);
@@ -275,6 +278,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 
 		//Adds the PhoneCall to the list of PhoneCall
 		_phoneCallMap[callId] = phoneCall;
+		_phoneCallList += phoneCall;
 
 		phoneCall->setState(state);
 
@@ -285,7 +289,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 
 		//History: create a HistoryMemento for this incoming call
 		HistoryMemento * memento = new HistoryMemento(
-			HistoryMemento::IncomingCall, sipAddress.getSipAddress(), callId);
+				HistoryMemento::IncomingCall, sipAddress.getSipAddress(), callId);
 		_wengoPhone.getCurrentUserProfile().getHistory().addMemento(memento);
 
 		break;
@@ -323,6 +327,7 @@ void PhoneLine::callClosed(int callId) {
 
 	//Removes it from the list of PhoneCall
 	_phoneCallMap.erase(callId);
+	_phoneCallList -= phoneCall;
 
 	phoneCallClosedEvent(*this, *phoneCall);
 }
@@ -359,12 +364,8 @@ PhoneCall * PhoneLine::getPhoneCall(int callId) {
 	return _phoneCallMap[callId];
 }
 
-List<PhoneCall *> PhoneLine::getPhoneCallList() const {
-	List<PhoneCall *> calls;
-	for (PhoneCalls::const_iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
-		calls += (*it).second;
-	}
-	return calls;
+IPhoneLine::PhoneCallList PhoneLine::getPhoneCallList() const {
+	return _phoneCallList;
 }
 
 void PhoneLine::initSipWrapper() {

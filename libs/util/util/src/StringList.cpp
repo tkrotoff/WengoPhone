@@ -27,7 +27,7 @@ StringList::StringList(const std::list<std::string> & strList) {
 	for (std::list<string>::const_iterator it = strList.begin();
 		it != strList.end(); ++it) {
 
-		this->add(*it);
+		push_back(*it);
 	}
 }
 
@@ -43,21 +43,18 @@ StringList::operator std::list<std::string>() {
 }
 
 std::string StringList::operator[](unsigned i) const {
-	std::string tmp;
-	try {
-		tmp = get(i);
-	} catch (OutOfRangeException & e) {
-		LOG_DEBUG(e.what());
+	if (i >= size()) {
 		return String::null;
 	}
-	return tmp;
+
+	return (*this)[i];
 }
 
 unsigned StringList::contains(const std::string & str, bool caseSensitive) const {
 	unsigned result = 0;
 	for (unsigned i = 0; i < size(); i++) {
 		String tmp1 = str;
-		String tmp2 = get(i);
+		String tmp2 = (*this)[i];
 		if (!caseSensitive) {
 			tmp1 = tmp1.toLowerCase();
 			tmp2 = tmp2.toLowerCase();
@@ -74,11 +71,11 @@ unsigned StringList::contains(const std::string & str, bool caseSensitive) const
 void StringList::sort(SortingOrder order) {
 	switch(order) {
 	case Ascendant:
-		std::sort(_list.begin(), _list.end());
+		std::sort(begin(), end());
 		break;
 
 	case Descendant:
-		std::sort(_list.begin(), _list.end(), StringCompareDescendant());
+		std::sort(begin(), end(), StringCompareDescendant());
 		break;
 
 	default:
@@ -89,7 +86,7 @@ void StringList::sort(SortingOrder order) {
 std::string StringList::join(const std::string & separator) {
 	std::string joinedString;
 	for (unsigned i = 0; i < size(); i++) {
-		joinedString += get(i);
+		joinedString += (*this)[i];
 	}
 	return joinedString;
 }

@@ -20,8 +20,6 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include <util/exception/OutOfRangeException.h>
-
 #include <vector>
 
 /**
@@ -32,30 +30,16 @@
  * @author Tanguy Krotoff
  */
 template<typename T>
-class List {
+class List : public std::vector<T> {
 public:
-
-	List() {
-	}
-
-	virtual ~List() {
-		clear();
-	}
 
 	/**
 	 * Appends the specified element to the end of this list.
 	 *
 	 * @param element element to be appended to this list
 	 */
-	void add(const T & element) {
-		_list.push_back(element);
-	}
-
-	/**
-	 * @see add()
-	 */
 	void operator+=(const T & element) {
-		add(element);
+		push_back(element);
 	}
 
 	/**
@@ -67,8 +51,8 @@ public:
 	 * @return element removed at position index
 	 */
 	T & remove(unsigned index) {
-		T & t = get(index);
-		_list.erase(_list.begin() + index);
+		T & t = (*this)[index];
+		erase(begin() + index);
 		return t;
 	}
 
@@ -81,15 +65,15 @@ public:
 	 * @return true if the element was removed; false otherwise
 	 */
 	bool remove(const T & element) {
-		int count = _list.size();
+		int count = size();
 		int i;
 		for (i = 0; i < count; i++) {
-			if (_list[i] == element) {
+			if ((*this)[i] == element) {
 				break;
 			}
 		}
 		if (i < count) {
-			_list.erase(_list.begin() + i);
+			erase(begin() + i);
 			return true;
 		}
 		return false;
@@ -99,7 +83,7 @@ public:
 	 * @see remove()
 	 */
 	T & operator-=(unsigned index) {
-		remove(index);
+		return remove(index);
 	}
 
 	/**
@@ -110,24 +94,6 @@ public:
 	}
 
 	/**
-	 * Removes all of the elements from this list.
-	 *
-	 * This list will be empty after this call returns.
-	 */
-	void clear() {
-		_list.clear();
-	}
-
-	/**
-	 * Returns true if this list contains no elements.
-	 *
-	 * @return true if this list contains no elements
-	 */
-	bool isEmpty() const {
-		return _list.empty();
-	}
-
-	/**
 	 * Gets the number of occurrences of an element contained in this list.
 	 *
 	 * @param element element to find inside this list
@@ -135,79 +101,14 @@ public:
 	 */
 	unsigned contains(const T & element) const {
 		unsigned j = 0;
-		for (unsigned i = 0; i < _list.size(); i++) {
-			if (_list[i] == element) {
+		for (unsigned i = 0; i < size(); i++) {
+			if ((*this)[i] == element) {
 				j++;
 			}
 		}
 
 		return j;
 	}
-
-	/**
-	 * Returns the number of elements in this list.
-	 *
-	 * @return the number of elements in this list
-	 */
-	unsigned size() const {
-		return _list.size();
-	}
-
-	/**
-	 * Returns the element at the specified position in this list.
-	 *
-	 * Permits to use List as an array.
-	 * <pre>
-	 * for (unsigned i = 0; i  list.size(); i++) {
-	 *     tmp = list[i];
-	 * }
-	 * </pre>
-	 *
-	 * Warning: slow operation.
-	 *
-	 * @param index index of element to return
-	 * @return the element at the specified position in this list
-	 * @throw OutOfRangeException if index >= size()
-	 */
-	T & operator[](unsigned index) throw (OutOfRangeException) {
-		return get(index);
-	}
-
-	/**
-	 * @see operator[]
-	 */
-	T & get(unsigned index) throw (OutOfRangeException) {
-		if (index >= _list.size()) {
-			throw OutOfRangeException("index out of range");
-		} else {
-			return _list[index];
-		}
-	}
-
-	/**
-	 * @see operator[]
-	 */
-	const T & get(unsigned index) const throw (OutOfRangeException) {
-		if (index >= _list.size()) {
-			throw OutOfRangeException("index out of range");
-		} else {
-			return _list[index];
-		}
-	}
-
-	/**
-	 * @see operator[]
-	 */
-	const T & operator[](unsigned index) const throw (OutOfRangeException) {
-		return get(index);
-	}
-
-protected:
-
-	/**
-	 * The list itself.
-	 */
-	std::vector<T> _list;
 };
 
 #endif	//LIST_H

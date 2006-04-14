@@ -113,7 +113,7 @@ void ConferenceCall::removePhoneNumber(const std::string & phoneNumber) {
 PhoneCall * ConferenceCall::getPhoneCall(const std::string & phoneNumber) const {
 	PhoneCall * phoneCall = NULL;
 
-	List<PhoneCall *> calls = _phoneLine.getPhoneCallList();
+	IPhoneLine::PhoneCallList calls = _phoneLine.getPhoneCallList();
 
 	for (unsigned i = 0; i < calls.size(); i++) {
 		SipAddress sipAddress = calls[i]->getPeerSipAddress();

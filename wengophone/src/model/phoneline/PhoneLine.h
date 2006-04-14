@@ -24,8 +24,6 @@
 
 #include <model/account/SipAccount.h>
 
-#include <util/List.h>
-
 #include <map>
 
 class PhoneLineState;
@@ -96,7 +94,7 @@ public:
 		return _activePhoneCall;
 	}
 
-	List<PhoneCall *> getPhoneCallList() const;
+	PhoneCallList getPhoneCallList() const;
 
 private:
 
@@ -153,10 +151,13 @@ private:
 	PhoneLineState * _state;
 
 	/** Defines the vector of PhoneLineState. */
-	typedef List < PhoneLineState * > PhoneLineStates;
+	typedef List < PhoneLineState * > PhoneLineStateList;
 
 	/** List of PhoneLineState. */
-	PhoneLineStates _phoneLineStateList;
+	PhoneLineStateList _phoneLineStateList;
+
+	/** List of PhoneCall. */
+	PhoneCallList _phoneCallList;
 
 	WengoPhone & _wengoPhone;
 };

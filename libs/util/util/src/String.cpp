@@ -205,7 +205,7 @@ StringList String::split(const std::string & separator) const {
 	while (string::npos != pos || string::npos != lastPos) {
 
 		//Found a token, add it to the vector.
-		tokens.add(str.substr(lastPos, pos - lastPos));
+		tokens += str.substr(lastPos, pos - lastPos);
 
 		//Skip delimiters. Note the "not_of"
 		lastPos = str.find_first_not_of(separator, pos);

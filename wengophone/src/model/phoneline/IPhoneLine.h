@@ -195,12 +195,14 @@ public:
 	 */
 	virtual PhoneCall * getActivePhoneCall() const = 0;
 
+	typedef List<PhoneCall *> PhoneCallList;
+
 	/**
 	 * Gets the list of PhoneCall associated with this PhoneLine.
 	 *
 	 * @return the list of PhoneCall
 	 */
-	virtual List<PhoneCall *> getPhoneCallList() const = 0;
+	virtual PhoneCallList getPhoneCallList() const = 0;
 };
 
 #endif	//IPHONELINE_H
