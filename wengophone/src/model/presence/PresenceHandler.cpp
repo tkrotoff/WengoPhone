@@ -34,8 +34,6 @@ using namespace std;
 PresenceHandler::PresenceHandler(UserProfile & userProfile) {
 	userProfile.newIMAccountAddedEvent +=
 		boost::bind(&PresenceHandler::newIMAccountAddedEventHandler, this, _1, _2);
-	userProfile.imAccountRemovedEvent +=
-		boost::bind(&PresenceHandler::imAccountRemovedEventHandler, this, _1, _2);
 	userProfile.getConnectHandler().connectedEvent +=
 		boost::bind(&PresenceHandler::connectedEventHandler, this, _1, _2);
 	userProfile.getConnectHandler().disconnectedEvent +=
@@ -233,19 +231,23 @@ void PresenceHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAcco
 			boost::bind(&PresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3);
 		presence->authorizationRequestEvent +=
 			boost::bind(&PresenceHandler::authorizationRequestEventHandler, this, _1, _2, _3);
+
+		imAccount.imAccountDeadEvent +=
+			boost::bind(&PresenceHandler::imAccountDeadEventHandler, this, _1);
+	
 	} else {
 		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());
 	}
 }
 
-void PresenceHandler::imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	PresenceMap::iterator it = _presenceMap.find(&imAccount);
+void PresenceHandler::imAccountDeadEventHandler(IMAccount & sender) {
+	PresenceMap::iterator it = _presenceMap.find(&sender);
 
 	if (it != _presenceMap.end()) {
 		delete (*it).second;
 		_presenceMap.erase(it);
 	} else {
-		LOG_ERROR("this IMAccount has not been added " + imAccount.getLogin());
+		LOG_ERROR("this IMAccount has not been added " + sender.getLogin());
 	}
 }
 

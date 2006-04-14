@@ -51,7 +51,7 @@ public:
 
 	Connect(IMAccount & account);
 
-	virtual ~Connect() { }
+	virtual ~Connect();
 
 	void connect();
 

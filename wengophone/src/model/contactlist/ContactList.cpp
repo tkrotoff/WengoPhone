@@ -45,6 +45,8 @@ ContactList::ContactList(UserProfile & userProfile)
 		boost::bind(&ContactList::imContactMovedEventHandler, this, _1, _2, _3);
 	_userProfile.getPresenceHandler().presenceStateChangedEvent +=
 		boost::bind(&ContactList::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
+	_userProfile.newIMAccountAddedEvent +=
+		boost::bind(&ContactList::newIMAccountAddedEventHandler, this, _1, _2);
 }
 
 ContactList::~ContactList() {
@@ -318,16 +320,18 @@ void ContactList::_removeFromContactGroup(const std::string & groupName, Contact
 
 void ContactList::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
 	//TODO: link IMContact of protocol imAccount._protocol that are not linked
+	imAccount.imAccountDeadEvent +=
+		boost::bind(&ContactList::imAccountDeadEventHandler, this, _1);
 }
 
-void ContactList::imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount) {
+void ContactList::imAccountDeadEventHandler(IMAccount & sender) {
 	for (Contacts::const_iterator it = _contacts.begin();
 		it != _contacts.end();
 		++it) {
 		for (IMContactSet::const_iterator imContactIt = ((Contact &)*it).getIMContactSet().begin();
 			imContactIt != ((Contact &)*it).getIMContactSet().end();
 			++imContactIt) {
-			if ((*(*imContactIt).getIMAccount()) == imAccount) {
+			if ((*(*imContactIt).getIMAccount()) == sender) {
 				((IMContact &)*imContactIt).setIMAccount(NULL); 
 			}
 		}

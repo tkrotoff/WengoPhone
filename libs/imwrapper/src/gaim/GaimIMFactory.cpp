@@ -40,6 +40,12 @@ extern "C" {
 
 #include "GaimIMFactory.h"
 
+#include "GaimAccountMngr.h"
+#include "GaimChatMngr.h"
+#include "GaimConnectMngr.h"
+#include "GaimContactListMngr.h"
+#include "GaimPresenceMngr.h"
+
 extern GaimConversationUiOps chat_wg_ops;
 extern GaimBlistUiOps blist_wg_ops;
 extern GaimConnectionUiOps conn_wg_ops;
@@ -159,12 +165,24 @@ static GaimEventLoopUiOps eventloop_wg_ops =
 
 GaimIMFactory::GaimIMFactory()
 {
-	GaimIMInit();
-
+	AccountMngr = GaimAccountMngr::getInstance();
 	ConnectMngr = GaimConnectMngr::getInstance();
 	PresenceMngr = GaimPresenceMngr::getInstance();
 	ChatMngr = GaimChatMngr::getInstance();
 	ContactListMngr = GaimContactListMngr::getInstance();
+
+	GaimWrapperInit();
+
+	GaimIMInit();
+}
+
+void GaimIMFactory::GaimWrapperInit()
+{
+	AccountMngr->Init();
+	ConnectMngr->Init();
+	PresenceMngr->Init();
+	ChatMngr->Init();
+	ContactListMngr->Init();
 }
 
 void GaimIMFactory::GaimIMInit()

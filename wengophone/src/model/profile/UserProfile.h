@@ -100,15 +100,6 @@ public:
 	Event< void (UserProfile & sender, IMAccount & imAccount) > newIMAccountAddedEvent;
 
 	/**
-	 * An IMAccount has been removed.
-	 *
-	 * @param sender this class
-	 * @param imAccount the removed IMAccount. The reference will be invalidated
-	 * at the end of the event.
-	 */
-	Event< void (UserProfile & sender, IMAccount & imAccount) > imAccountRemovedEvent;
-
-	/**
 	 * The history has been loaded.
 	 *
 	 * @param sender this class

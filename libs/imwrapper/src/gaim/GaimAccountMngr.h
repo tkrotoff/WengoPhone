@@ -29,6 +29,9 @@ extern "C" {
 }
 
 class GaimPresenceMngr;
+class GaimChatMngr;
+class GaimConnectMngr;
+class GaimContactListMngr;
 
 /**
  *
@@ -40,6 +43,7 @@ class GaimAccountMngr
 public:
 
 	static GaimAccountMngr *getInstance();
+	void Init();
 
 	void AddIMAccount(IMAccount &account);
 	void RemoveIMAccount(IMAccount &account);
@@ -67,6 +71,9 @@ private:
 	GaimAccountMngr();
 	static GaimAccountMngr *_staticInstance;
 	static GaimPresenceMngr *_presenceMngr;
+	static GaimChatMngr *_chatMngr;
+	static GaimConnectMngr *_connectMngr;
+	static GaimContactListMngr *_clistMngr;
 
 	static std::list<IMAccount *> _gaimIMAccountList;
 	typedef std::list<IMAccount *>::iterator GaimIMAccountIterator;

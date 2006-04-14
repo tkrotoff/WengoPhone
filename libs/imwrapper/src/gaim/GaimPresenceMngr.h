@@ -37,6 +37,7 @@ class GaimPresenceMngr
 public:
 
 	static GaimPresenceMngr *getInstance();
+	void Init();
 
 	static GaimIMPresence *AddIMPresence(IMAccount &account);
 	void RemoveIMPresence(IMAccount &account);

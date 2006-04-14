@@ -22,10 +22,12 @@
 
 #include <imwrapper/IMWrapperFactory.h>
 #include <imwrapper/IMAccount.h>
-#include "GaimChatMngr.h"
-#include "GaimConnectMngr.h"
-#include "GaimPresenceMngr.h"
-#include "GaimContactListMngr.h"
+
+class GaimAccountMngr;
+class GaimConnectMngr;
+class GaimPresenceMngr;
+class GaimChatMngr;
+class GaimContactListMngr;
 
 /**
  *
@@ -47,12 +49,14 @@ public:
 
 private:
 
+	GaimAccountMngr *AccountMngr;
 	GaimConnectMngr *ConnectMngr;
 	GaimPresenceMngr *PresenceMngr;
 	GaimChatMngr *ChatMngr;
 	GaimContactListMngr *ContactListMngr;
 
 	static void GaimIMInit();
+	void GaimWrapperInit();
 };
 
 #endif	//GAIMIMFACTORY_H

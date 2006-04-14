@@ -116,6 +116,10 @@ std::list<GaimIMContactList *> GaimContactListMngr::_gaimIMContactListList;
 
 GaimContactListMngr::GaimContactListMngr()
 {
+}
+
+void GaimContactListMngr::Init()
+{
 	_presenceMngr = GaimPresenceMngr::getInstance();
 	_accountMngr = GaimAccountMngr::getInstance();
 	gaim_set_blist(gaim_blist_new());
@@ -351,7 +355,6 @@ void GaimContactListMngr::RemoveIMContactList(IMAccount &account)
 		if ((*i)->equalsTo(account.getLogin(), account.getProtocol()))
 		{
 			_gaimIMContactListList.erase(i);
-			delete (*i);
 			break;
 		}
 	}

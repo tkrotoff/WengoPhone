@@ -39,6 +39,7 @@ class GaimChatMngr
 public:
 
 	static GaimChatMngr *getInstance();
+	void Init();
 
 	GaimIMChat *AddIMChat(IMAccount &account);
 	void RemoveIMChat(IMAccount &account);

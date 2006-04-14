@@ -166,6 +166,10 @@ std::list<GaimIMChat *> GaimChatMngr::_gaimIMChatList;
 
 GaimChatMngr::GaimChatMngr()
 {
+}
+
+void GaimChatMngr::Init()
+{
 	_accountMngr = GaimAccountMngr::getInstance();
 }
 
@@ -469,7 +473,6 @@ void GaimChatMngr::RemoveIMChat(IMAccount &account)
 		if ((*i)->equalsTo(account.getLogin(), account.getProtocol()))
 		{
 			_gaimIMChatList.erase(i);
-			delete (*i);
 			break;
 		}
 	}

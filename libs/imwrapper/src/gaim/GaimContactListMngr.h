@@ -42,6 +42,7 @@ class GaimContactListMngr
 public:
 
 	static GaimContactListMngr *getInstance();
+	void Init();
 
 	GaimIMContactList *AddIMContactList(IMAccount &account);
 	void RemoveIMContactList(IMAccount &account);

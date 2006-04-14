@@ -19,11 +19,12 @@
 
 #include "GaimAccountMngr.h"
 #include "GaimPresenceMngr.h"
+#include "GaimChatMngr.h"
+#include "GaimConnectMngr.h"
+#include "GaimContactListMngr.h"
 
 #include <util/Logger.h>
 
-GaimAccountMngr *GaimAccountMngr::_staticInstance = NULL;
-std::list<IMAccount *> GaimAccountMngr::_gaimIMAccountList;
 
 /* ***************** GAIM CALLBACK ***************** */
 static void C_NotifyAddedCbk(GaimAccount *account, const char *remote_user,
@@ -56,11 +57,15 @@ GaimAccountUiOps acc_wg_ops =
 };
 
 /* ************************************************* */
+GaimAccountMngr *GaimAccountMngr::_staticInstance = NULL;
+std::list<IMAccount *> GaimAccountMngr::_gaimIMAccountList;
 GaimPresenceMngr *GaimAccountMngr::_presenceMngr = NULL;
+GaimChatMngr *GaimAccountMngr::_chatMngr = NULL;
+GaimConnectMngr *GaimAccountMngr::_connectMngr = NULL;
+GaimContactListMngr *GaimAccountMngr::_clistMngr = NULL;
 
 GaimAccountMngr::GaimAccountMngr()
 {
-	_presenceMngr = GaimPresenceMngr::getInstance();
 }
 
 GaimAccountMngr *GaimAccountMngr::getInstance()
@@ -69,6 +74,14 @@ GaimAccountMngr *GaimAccountMngr::getInstance()
 		_staticInstance = new GaimAccountMngr();
 
 	return _staticInstance;
+}
+
+void GaimAccountMngr::Init()
+{
+	_presenceMngr = GaimPresenceMngr::getInstance();
+	_chatMngr = GaimChatMngr::getInstance();
+	_connectMngr = GaimConnectMngr::getInstance();
+	_clistMngr = GaimContactListMngr::getInstance();
 }
 
 void GaimAccountMngr::NotifyAddedCbk(GaimAccount *account, const char *remote_user,
@@ -154,7 +167,25 @@ void GaimAccountMngr::RemoveIMAccount(IMAccount &account)
 	}
 }
 
-void GaimAccountMngr::imAccountWillDieEventHandler(IMAccount & imAccount) {
+void GaimAccountMngr::imAccountWillDieEventHandler(IMAccount & imAccount) 
+{
+	GaimAccount	*gAccount;
+	GaimIMConnect *mConnect = NULL;
+
+	gAccount = gaim_accounts_find(imAccount.getLogin().c_str(),
+								GaimIMPrcl::GetPrclId(imAccount.getProtocol()));
+	if (!gAccount)
+		return;
+
+	mConnect = _connectMngr->FindIMConnect(imAccount);
+	mConnect->disconnect();
+	gaim_accounts_delete(gAccount);
+
+	_presenceMngr->RemoveIMPresence(imAccount);
+	_chatMngr->RemoveIMChat(imAccount);
+	_clistMngr->RemoveIMContactList(imAccount);
+	_connectMngr->RemoveIMConnect(imAccount);
+
 	RemoveIMAccount(imAccount);
 }
 

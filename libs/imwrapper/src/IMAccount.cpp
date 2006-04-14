@@ -55,6 +55,7 @@ IMAccount::IMAccount(const IMAccount & imAccount) {
 
 IMAccount::~IMAccount() {
 	imAccountWillDieEvent(*this);
+	imAccountDeadEvent(*this);
 }
 
 bool IMAccount::operator == (const IMAccount & imAccount) const {

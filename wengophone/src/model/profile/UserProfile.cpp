@@ -240,7 +240,6 @@ void UserProfile::removeIMAccount(const IMAccount & imAccount) {
 	IMAccountHandler::iterator it = _imAccountHandler.find(imAccount);
 	if (it != _imAccountHandler.end()) {
 		_connectHandler.disconnect((IMAccount &)*it);
-		imAccountRemovedEvent(*this, (IMAccount &)*it);
 		_imAccountHandler.erase(it);
 	} else {
 		LOG_ERROR("IMAccount not in IMAccountHandler");

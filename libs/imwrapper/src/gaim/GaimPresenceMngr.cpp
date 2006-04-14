@@ -65,6 +65,10 @@ GaimPresenceMngr::GaimPresenceMngr()
 {
 }
 
+void GaimPresenceMngr::Init()
+{
+}
+
 GaimPresenceMngr *GaimPresenceMngr::getInstance()
 {
 	if (!_staticInstance)
@@ -133,7 +137,6 @@ void GaimPresenceMngr::RemoveIMPresence(IMAccount &account)
 		if ((*i)->equalsTo(account.getLogin(), account.getProtocol()))
 		{
 			_gaimIMPresenceList.erase(i);
-			delete (*i);
 			break;
 		}
 	}

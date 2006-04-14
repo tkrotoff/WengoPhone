@@ -34,8 +34,6 @@ using namespace std;
 ConnectHandler::ConnectHandler(UserProfile & userProfile) {
 	userProfile.newIMAccountAddedEvent +=
 		boost::bind(&ConnectHandler::newIMAccountAddedEventHandler, this, _1, _2);
-	userProfile.imAccountRemovedEvent +=
-		boost::bind(&ConnectHandler::imAccountRemovedEventHandler, this, _1, _2);
 }
 
 ConnectHandler::~ConnectHandler() {
@@ -106,10 +104,13 @@ void ConnectHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccou
 	} else {
 		_actualIMAccount.insert(&imAccount);
 	}
+
+	imAccount.imAccountDeadEvent +=
+		boost::bind(&ConnectHandler::imAccountDeadEventHandler, this, _1);
 }
 
-void ConnectHandler::imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	ConnectMap::iterator it = _connectMap.find(&imAccount);
+void ConnectHandler::imAccountDeadEventHandler(IMAccount & sender) {
+	ConnectMap::iterator it = _connectMap.find(&sender);
 
 	if (it != _connectMap.end()) {
 		delete (*it).second;

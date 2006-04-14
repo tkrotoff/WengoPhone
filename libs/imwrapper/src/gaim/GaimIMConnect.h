@@ -37,6 +37,7 @@ class GaimIMConnect : public IMConnect {
 public:
 
 	GaimIMConnect(IMAccount &account);
+	~GaimIMConnect();
 
 	void connect();
 

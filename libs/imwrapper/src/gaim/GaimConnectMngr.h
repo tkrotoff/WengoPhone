@@ -41,6 +41,7 @@ class GaimConnectMngr
 public:
 
 	static GaimConnectMngr *getInstance();
+	void Init();
 
 	GaimIMConnect *AddIMConnect(IMAccount &account);
 	void RemoveIMConnect(IMAccount &account);

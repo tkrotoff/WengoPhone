@@ -33,6 +33,10 @@ Connect::Connect(IMAccount & account)
 	_imConnect->loginStatusEvent += loginStatusEvent;
 }
 
+Connect::~Connect() {
+	delete _imConnect;
+}
+
 void Connect::loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status) {
 	switch (status) {
 	case IMConnect::LoginStatusConnected:

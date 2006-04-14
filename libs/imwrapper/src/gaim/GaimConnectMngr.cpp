@@ -67,6 +67,10 @@ std::list<GaimIMConnect *> GaimConnectMngr::_gaimIMConnectList;
 
 GaimConnectMngr::GaimConnectMngr()
 {
+}
+
+void GaimConnectMngr::Init()
+{
 	_accountMngr = GaimAccountMngr::getInstance();
 }
 
@@ -183,8 +187,8 @@ void GaimConnectMngr::RemoveIMConnect(IMAccount &account)
 	{
 		if ((*i)->equalsTo(account.getLogin(), account.getProtocol()))
 		{
-			_gaimIMConnectList.erase(i);
-			delete (*i);
+
+			_gaimIMConnectList.erase(i);	
 			break;
 		}
 	}

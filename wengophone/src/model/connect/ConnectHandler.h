@@ -80,9 +80,9 @@ private:
 	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
 	/**
-	 * @see UserProfile::imAccountRemovedEvent
+	 * @see IMAccount::imAccountDeadEvent
 	 */
-	void imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount);
+	void imAccountDeadEventHandler(IMAccount & sender);
 
 	/**
 	 * @see IMConnect::loginStatusEvent

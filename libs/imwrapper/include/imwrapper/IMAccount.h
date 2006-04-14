@@ -57,6 +57,13 @@ public:
 	 */
 	Event< void (IMAccount & sender) > imAccountWillDieEvent;
 
+	/**
+	 * Emitted when the IMAccount has been destroyed.
+	 *
+	 * @param sender this class
+	 */
+	Event< void (IMAccount & sender) > imAccountDeadEvent;
+
 	IMAccount();
 
 	IMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol);

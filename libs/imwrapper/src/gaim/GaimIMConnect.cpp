@@ -75,6 +75,10 @@ GaimIMConnect::GaimIMConnect(IMAccount & account)
 {
 }
 
+GaimIMConnect::~GaimIMConnect()
+{
+}
+
 bool GaimIMConnect::equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol)
 {
 	IMAccount imAccount(login, "", protocol);

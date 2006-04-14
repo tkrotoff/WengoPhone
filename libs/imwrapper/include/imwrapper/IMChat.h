@@ -121,6 +121,8 @@ public:
 	 */
 	Event<void (IMChat & sender, IMChatSession & chatSession, const std::string & contactId, TypingState state)> typingStateChangedEvent;
 
+	virtual ~IMChat() { }
+
 	/**
 	 * Creates a new IMChatSession.
 	 *

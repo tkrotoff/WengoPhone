@@ -43,8 +43,8 @@ void IMContactListHandler::addIMContact(const std::string & groupName, const IMC
 	if (it != _imContactListMap.end()) {
 		(*it).second->addContact(groupName, imContact.getContactId());
 	} else {
-		LOG_ERROR("this IMAccount is not registered: "
-			+ imContact.getIMAccount()->getLogin());
+		LOG_DEBUG("this IMAccount is not registered: "
+			+ (imContact.getIMAccount() ? imContact.getIMAccount()->getLogin() : "(null)"));
 	}
 }
 
@@ -54,8 +54,8 @@ void IMContactListHandler::removeIMContact(const std::string & groupName, const 
 	if (it != _imContactListMap.end()) {
 		(*it).second->removeContact(groupName, imContact.getContactId());
 	} else {
-		LOG_ERROR("this IMAccount is not registered: "
-			+ imContact.getIMAccount()->getLogin());
+		LOG_DEBUG("this IMAccount is not registered: "
+			+ (imContact.getIMAccount() ? imContact.getIMAccount()->getLogin() : "(null)"));
 	}
 }
 
@@ -96,6 +96,9 @@ void IMContactListHandler::newIMAccountAddedEventHandler(UserProfile & sender, I
 				boost::bind(&IMContactListHandler::contactMovedEventHandler, this, _1, _2, _3);
 
 			_imContactListMap[&imAccount] = imContactList;
+
+			imAccount.imAccountDeadEvent +=
+				boost::bind(&IMContactListHandler::imAccountDeadEventHandler, this, _1);
 		} else {
 			LOG_DEBUG("cannot create an IMContactList");
 		}
@@ -104,14 +107,14 @@ void IMContactListHandler::newIMAccountAddedEventHandler(UserProfile & sender, I
 	}
 }
 
-void IMContactListHandler::imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	IMContactListMap::iterator it = _imContactListMap.find(&imAccount);
+void IMContactListHandler::imAccountDeadEventHandler(IMAccount & sender) {
+	IMContactListMap::iterator it = _imContactListMap.find(&sender);
 
 	if (it != _imContactListMap.end()) {
 		delete (*it).second;
 		_imContactListMap.erase(it);
 	} else {
-		LOG_ERROR("this IMAccount has not been added " + imAccount.getLogin());
+		LOG_ERROR("this IMAccount has not been added " + sender.getLogin());
 	}
 }
 
