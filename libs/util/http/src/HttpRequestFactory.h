@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTHTTPREQUESTFACTORY_H
-#define QTHTTPREQUESTFACTORY_H
+#ifndef HTTPREQUESTFACTORY_H
+#define HTTPREQUESTFACTORY_H
 
-#include <http/HttpRequestFactory.h>
-#include <http/QtHttpRequest.h>
+#include <util/NonCopyable.h>
+
+#include "curl/CurlHttpRequest.h"
+#include "qt/QtHttpRequest.h"
+#include "null/NullHttpRequest.h"
 
 /**
- * Creates QtHttpRequest.
+ * Creates an instance of HttpRequest.
+ *
+ * By default a CurlHttpRequest is created.
  *
  * @author Tanguy Krotoff
  */
-class QtHttpRequestFactory : public HttpRequestFactory {
+class HttpRequestFactory : NonCopyable {
 public:
 
-	/**
-	 * Constructs a new QtHttpRequestFactory.
-	 */
-	QtHttpRequestFactory() { }
-
-	virtual ~QtHttpRequestFactory() { }
-
-	virtual IHttpRequest * create(HttpRequest * httpRequest) const {
-		return new QtHttpRequest(httpRequest);
+	static IHttpRequest * create() {
+		new QtHttpRequest();
+		new NullHttpRequest();
+		return new CurlHttpRequest();
 	}
 };
 
-#endif	//QTHTTPREQUESTFACTORY_H
+#endif	//HTTPREQUESTFACTORY_H

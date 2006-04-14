@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef HTTPREQUESTFACTORY_H
-#define HTTPREQUESTFACTORY_H
+#ifndef NULLHTTPREQUEST_H
+#define NULLHTTPREQUEST_H
 
-#include <util/NonCopyable.h>
-
-class IHttpRequest;
-class HttpRequest;
+#include <http/IHttpRequest.h>
 
 /**
- * HttpRequestFactory interface in order to create HttpRequest.
+ * Empty (null) HttpRequest implementation.
  *
+ * @see HttpRequest
  * @author Tanguy Krotoff
  */
-class HttpRequestFactory : NonCopyable {
+class NullHttpRequest : public IHttpRequest {
 public:
 
-	/**
-	 * Constructs a new HttpRequestFactory.
-	 */
-	HttpRequestFactory() { }
+	NullHttpRequest();
 
-	virtual ~HttpRequestFactory() { }
+	int sendRequest(bool sslProtocol,
+				const std::string & hostname,
+				unsigned int hostPort,
+				const std::string & path,
+				const std::string & data,
+				bool postMethod = false);
 
-	virtual IHttpRequest * create(HttpRequest * httpRequest) const = 0;
+	void abort();
+
+	void run();
+
+private:
 };
 
-#endif	//HTTPREQUESTFACTORY_H
+#endif	//NULLHTTPREQUEST_H

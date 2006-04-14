@@ -17,7 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <http/CurlHttpRequest.h>
+#include "CurlHttpRequest.h"
+
 #include <http/HttpRequest.h>
 
 #include <util/Logger.h>
@@ -45,11 +46,10 @@ bool CurlHttpRequest::_verbose;
 bool CurlHttpRequest::_proxyAuthenticationDetermine;
 long CurlHttpRequest::_proxyAuthentication;
 
-CurlHttpRequest::CurlHttpRequest(HttpRequest * httpRequest) {
+CurlHttpRequest::CurlHttpRequest() {
 	_curl = NULL;
 	_proxyAuthenticationDetermine = false;
 	_verbose = true;
-	_httpRequest = httpRequest;
 	abortTransfer = false;
 	downloadDone = 0;
 	downloadTotal = 0;
@@ -66,7 +66,7 @@ int CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname,
 	const std::string & path, const std::string & data, bool postMethod) {
 
 	//TODO: do not call this when running
-	
+
 	if (!_proxyAuthenticationDetermine) {
 		_proxyAuthenticationDetermine = true;
 		_proxyAuthentication = getProxyAuthenticationType();
@@ -78,7 +78,7 @@ int CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname,
 	_path = path;
 	_data = data;
 	_postMethod = postMethod;
-	
+
 	_lastRequestId = IdGenerator::generate();
 	start();
 
@@ -118,12 +118,7 @@ void CurlHttpRequest::run() {
 	curl_easy_cleanup(_curl);
 }
 
-int CurlHttpRequest::sendRequest(const std::string & url, const std::string & data, bool postMethod) {
-	return _httpRequest->sendRequest(url, data, postMethod);
-}
-
 void CurlHttpRequest::setUrl() {
-
 	string url;
 
 	if (_sslProtocol) {
@@ -273,30 +268,30 @@ bool CurlHttpRequest::useProxyAuthentication() const {
 	return false;
 }
 
-HttpRequest::Error CurlHttpRequest::getReturnCode(int curlcode) {
+IHttpRequest::Error CurlHttpRequest::getReturnCode(int curlcode) {
 	Error error;
 
 	switch (curlcode) {
 	case CURLE_OK:
-		error = HttpRequest::NoError;
+		error = IHttpRequest::NoError;
 		break;
 	case CURLE_COULDNT_RESOLVE_HOST:
-		error = HttpRequest::HostNotFound;
+		error = IHttpRequest::HostNotFound;
 		break;
 	case CURLE_COULDNT_CONNECT:
-		error = HttpRequest::ConnectionRefused;
+		error = IHttpRequest::ConnectionRefused;
 		break;
 	case CURLE_COULDNT_RESOLVE_PROXY:
-		error = HttpRequest::ProxyConnectionError;
+		error = IHttpRequest::ProxyConnectionError;
 		break;
 	case CURLE_LOGIN_DENIED:
-		error = HttpRequest::ProxyAuthenticationError;
+		error = IHttpRequest::ProxyAuthenticationError;
 		break;
 	case CURLE_OPERATION_TIMEOUTED:
-		error = HttpRequest::TimeOut;
+		error = IHttpRequest::TimeOut;
 		break;
 	default:
-		error = HttpRequest::UnknownError;
+		error = IHttpRequest::UnknownError;
 		break;
 	}
 

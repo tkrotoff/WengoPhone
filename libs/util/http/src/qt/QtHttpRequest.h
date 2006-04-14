@@ -20,7 +20,7 @@
 #ifndef QTHTTPREQUEST_H
 #define QTHTTPREQUEST_H
 
-#include <http/HttpRequest.h>
+#include <http/IHttpRequest.h>
 
 #include <QObject>
 
@@ -38,7 +38,7 @@ class QtHttpRequest : public QObject, public IHttpRequest {
 	Q_OBJECT
 public:
 
-	QtHttpRequest(HttpRequest * httpRequest);
+	QtHttpRequest();
 
 	virtual ~QtHttpRequest();
 
@@ -49,11 +49,7 @@ public:
 			const std::string & data,
 			bool postMethod = false);
 
-	int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
-
 	void abort();
-
-protected:
 
 	void run();
 
@@ -74,14 +70,6 @@ private:
 	 * List of QHttp components.
 	 */
 	Requests _requestList;
-
-	/**
-	 * Callback for answerReceived() and run() methods.
-	 *
-	 * QtHttpRequest::run() calls _httpRequest->run().
-	 * QtHttpRequest::answerReceived() calls _httpRequest->run().
-	 */
-	HttpRequest * _httpRequest;
 };
 
 #endif	//QTHTTPREQUEST_H

@@ -17,7 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <http/QtHttpRequest.h>
+#include "QtHttpRequest.h"
+
+#include <http/HttpRequest.h>
 
 #include <util/Logger.h>
 
@@ -26,8 +28,7 @@
 #include <iostream>
 using namespace std;
 
-QtHttpRequest::QtHttpRequest(HttpRequest * httpRequest) {
-	_httpRequest = httpRequest;
+QtHttpRequest::QtHttpRequest() {
 }
 
 QtHttpRequest::~QtHttpRequest() {
@@ -37,10 +38,6 @@ QtHttpRequest::~QtHttpRequest() {
 	}
 
 	_requestList.clear();
-}
-
-int QtHttpRequest::sendRequest(const std::string & url, const std::string & data, bool postMethod) {
-	return _httpRequest->sendRequest(url, data, postMethod);
 }
 
 int QtHttpRequest::sendRequest(bool /*sslProtocol*/, const std::string & hostname, unsigned int hostPort,
@@ -114,7 +111,7 @@ void QtHttpRequest::transferDone(bool) {
 		break;
 
 	default:
-		LOG_FATAL("unknown error=" + String::fromNumber(error));
+		LOG_FATAL("unknown error=" + String::fromNumber(http->error()));
 	}
 
 	LOG_DEBUG("error=" + http->errorString().toStdString());

@@ -20,158 +20,7 @@
 #ifndef HTTPREQUEST_H
 #define HTTPREQUEST_H
 
-#include <util/Event.h>
-
-#include <thread/Thread.h>
-
-#include <http/HttpRequestFactory.h>
-
-#include <string>
-
-/**
- * Sends a HTTP request on a HTTP server then gets and reads the answer from the server.
- *
- * A proxy can be set and an error code is returned.
- *
- * Example **OBSOLETE**:
- * <pre>
- * class MyHttpRequest : public HttpRequest {
- * public:
- *    //Callback called when the server answer to the HTTP request.
- *    virtual void answerReceived(const std::string & answer, Error error) {
- *        if (error == NoError && !answer.empty()) {
- *            std::cout << "HTTP server anwser: " << answer << std::endl;
- *        }
- *    }
- * };
- *
- * HttpRequest::setFactory(new CurlHttpRequestFactory());
- * HttpRequest::setProxy("proxy.wengo.fr", 8080, "myProxyUsername", "myProxyPassword");
- * MyHttpRequest * http = new MyHttpRequest();
- * http->sendRequest("https://wengo.fr:8080/login.php", "login=mylogin&password=mypassword");
- * </pre>
- *
- * @author Tanguy Krotoff
- */
-class IHttpRequest : public Thread {
-public:
-
-	enum Error {
-		/** No error. */
-		NoError,
-
-		/** The hostname lookup failed. */
-		HostNotFound,
-
-		/** The server refused the connection. */
-		ConnectionRefused,
-
-		/** The server closed the connection unexpectedly. */
-		UnexpectedClose,
-
-		/** The server sent an invalid response header. */
-		InvalidResponseHeader,
-
-		/**
-		 * The client could not read the content correctly because
-		 * an error with respect to the content length occurred.
-		 */
-		WrongContentLength,
-
-		/** The request was aborted. */
-		Aborted,
-
-		/** The proxy authentication failed. */
-		ProxyAuthenticationError,
-
-		/** The connection with the proxy failed. */
-		ProxyConnectionError,
-
-		/** operation timeouted. */
-		TimeOut,
-
-		/** Unknow error. */
-		UnknownError
-	};
-
-	/**
-	 * The HTTP answer to the request has been received.
-	 *
-	 * @param sender this class
-	 * @param requestId HTTP request ID
-	 * @param answer HTTP answer (std::string is used as a byte array)
-	 * @param error Error code
-	 */
-	Event<void (IHttpRequest * sender, int requestId, const std::string & answer, Error error)> answerReceivedEvent;
-
-	/**
-	 * Indicates the current progress of the download.
-	 *
-	 * @see QHttp::dataReadProgress()
-	 * @param requestId HTTP request ID
-	 * @param bytesDone specifies how many bytes have been transfered
-	 * @param bytesTotal total size of the HTTP transfer, if 0 then the total number of bytes is not known
-	 */
-	Event<void (int requestId, double bytesDone, double bytesTotal)> dataReadProgressEvent;
-
-	/**
-	 * Indicates the current progress of the upload.
-	 *
-	 * @see QHttp::dataSendProgress()
-	 * @param requestId HTTP request ID
-	 * @param bytesDone specifies how many bytes have been transfered
-	 * @param bytesTotal total size of the HTTP transfer, if 0 then the total number of bytes is not known
-	 */
-	Event<void (int requestId, double bytesDone, double bytesTotal)> dataSendProgressEvent;
-
-	virtual ~IHttpRequest() { }
-
-	/**
-	 * Sends a HTTP request given a HTTP URL.
-	 *
-	 * A complete HTTP URL is something like:
-	 * https://wengo.fr:8080/login.php?login=mylogin&password=mypassword
-	 *
-	 * @param sslProtocol true if HTTPS protocol (https://), false if HTTP protocol (http://)
-	 * @param hostname HTTP server hostname (e.g wengo.fr, yahoo.fr)
-	 * @param hostPort HTTP server port number (e.g 80, 8080)
-	 * @param path path on the server (e.g login.php)
-	 * @param data HTTP data (e.g login=mylogin&password=mypassword)
-	 * @param postMethod HTTP POST method if true, HTTP GET method if false
-	 * @return HTTP request ID
-	 */
-	virtual int sendRequest(bool sslProtocol,
-			const std::string & hostname,
-			unsigned int hostPort,
-			const std::string & path,
-			const std::string & data,
-			bool postMethod = false) = 0;
-
-	/**
-	 * Sends a HTTP request given a HTTP URL.
-	 *
-	 * A complete HTTP URL is something like:
-	 * https://wengo.fr:8080/login.php?login=mylogin&password=mypassword
-	 * This is an overloaded member function, provided for convenience.
-	 * It behaves essentially like the above function.
-	 *
-	 * @param url HTTP URL (e.g https://wengo.fr:8080/login.php)
-	 * @param data HTTP data (e.g login=mylogin&password=mypassword)
-	 * @param postMethod HTTP POST method if true, HTTP GET method if false
-	 * @see sendRequest(bool, const std::string &, unsigned int, const std::string &, const std::string &, bool)
-	 * @return HTTP request ID
-	 */
-	virtual int sendRequest(const std::string & url, const std::string & data, bool postMethod = false) = 0;
-
-	/**
-	 * Aborts the current request and deletes all scheduled requests.
-	 *
-	 * Throws answerReceivedEvent with error=Aborted
-	 */
-	virtual void abort() = 0;
-
-	virtual void run() = 0;
-};
+#include <http/IHttpRequest.h>
 
 /**
  * HttpRequest implementation.
@@ -199,8 +48,6 @@ public:
 	/** HTTP GET method separator tag (e.g ? in wengo.fr/login.php?login=mylogin&password=mypassword). */
 	static const std::string HTTP_GET_SEPARATOR;
 
-	static void setFactory(HttpRequestFactory * factory);
-
 	HttpRequest();
 
 	virtual ~HttpRequest();
@@ -212,6 +59,20 @@ public:
 			const std::string & data,
 			bool postMethod = false);
 
+	/**
+	 * Sends a HTTP request given a HTTP URL.
+	 *
+	 * A complete HTTP URL is something like:
+	 * https://wengo.fr:8080/login.php?login=mylogin&password=mypassword
+	 * This is an overloaded member function, provided for convenience.
+	 * It behaves essentially like the above function.
+	 *
+	 * @param url HTTP URL (e.g https://wengo.fr:8080/login.php)
+	 * @param data HTTP data (e.g login=mylogin&password=mypassword)
+	 * @param postMethod HTTP POST method if true, HTTP GET method if false
+	 * @see sendRequest(bool, const std::string &, unsigned int, const std::string &, const std::string &, bool)
+	 * @return HTTP request ID
+	 */
 	int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
 
 	/**
@@ -297,8 +158,6 @@ public:
 private:
 
 	void answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, Error error);
-
-	static HttpRequestFactory * _factory;
 
 	/** System-dependant implementation. */
 	IHttpRequest * _httpRequestPrivate;

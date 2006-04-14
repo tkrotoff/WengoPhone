@@ -19,15 +19,13 @@
 
 #include <http/HttpRequest.h>
 
-#include <http/DefaultHttpRequestFactory.h>
-#include <http/HttpRequestFactory.h>
+#include "HttpRequestFactory.h"
 
 #include <util/StringList.h>
 #include <util/Logger.h>
 
 #include <iostream>
 using namespace std;
-#include <cassert>
 
 const std::string HttpRequest::HTTP_PORT_SEPARATOR = ":";
 const std::string HttpRequest::HTTP_PATH_SEPARATOR = "/";
@@ -42,17 +40,8 @@ std::string HttpRequest::_proxyUsername;
 std::string HttpRequest::_proxyPassword;
 std::string HttpRequest::_userAgent;
 
-HttpRequestFactory * HttpRequest::_factory = NULL;
-
-void HttpRequest::setFactory(HttpRequestFactory * factory) {
-	_factory = factory;
-}
-
 HttpRequest::HttpRequest() {
-	if (!_factory) {
-		_factory = new DefaultHttpRequestFactory();
-	}
-	_httpRequestPrivate = _factory->create(this);
+	_httpRequestPrivate = HttpRequestFactory::create();
 	_httpRequestPrivate->answerReceivedEvent += boost::bind(&HttpRequest::answerReceivedEventHandler, this, _1, _2, _3, _4);
 	_httpRequestPrivate->dataReadProgressEvent += dataReadProgressEvent;
 	_httpRequestPrivate->dataSendProgressEvent += dataSendProgressEvent;

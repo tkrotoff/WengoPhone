@@ -20,7 +20,7 @@
 #ifndef CURLHTTPREQUEST_H
 #define CURLHTTPREQUEST_H
 
-#include <http/HttpRequest.h>
+#include <http/IHttpRequest.h>
 
 #include <curl/curl.h>
 
@@ -43,21 +43,14 @@ struct POST_DATA {
 class CurlHttpRequest : public IHttpRequest {
 public:
 
-	/**
-	 * Constructs a new CurlHttpRequest.
-	 *
-	 * @param httpRequest callback for answerReceived() and run() methods
-	 */
-	CurlHttpRequest(HttpRequest * httpRequest);
-	
+	CurlHttpRequest();
+
 	int sendRequest(bool sslProtocol,
 			const std::string & hostname,
 			unsigned int hostPort,
 			const std::string & path,
 			const std::string & data,
 			bool postMethod = false);
-
-	int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
 
 	void abort() {
 		abortTransfer = true;
@@ -77,8 +70,6 @@ public:
 
 	/** Abort or not the current HTTP transfer. */
 	bool abortTransfer;
-
-protected:
 
 	void run();
 
@@ -115,7 +106,7 @@ private:
 	 * @param CurlCode
 	 * @return the equivalent HttpRequest error code
 	 */
-	HttpRequest::Error getReturnCode(int curlcode);
+	IHttpRequest::Error getReturnCode(int curlcode);
 
 	/**
 	 * Determines the proxy authentication method.
@@ -128,14 +119,6 @@ private:
 	bool useProxy() const;
 
 	bool useProxyAuthentication() const;
-
-	/**
-	 * Callback for answerReceived() and run() methods.
-	 *
-	 * CurlHttpRequest::run() calls _httpRequest->run().
-	 * CurlHttpRequest::answerReceived() calls _httpRequest->run().
-	 */
-	HttpRequest * _httpRequest;
 
 	/** Tells curl to be verbose + additionnal information. */
 	static bool _verbose;
@@ -150,17 +133,17 @@ private:
 	struct POST_DATA pooh;
 
 	int _lastRequestId;
-	
+
 	bool _sslProtocol;
 
 	std::string _hostname;
-	
+
 	unsigned int _hostPort;
-	
+
 	std::string _path;
-	
+
 	std::string _data;
-	
+
 	bool _postMethod;
 };
 
