@@ -1,7 +1,7 @@
 /*
  * phmedia -  Phone Api media streamer (video part)
  *
- * Copyright (C) 2005 Wengo SAS
+ * Copyright (C) 2005-2006 Wengo SAS
  * Copyright (C) 2004 Vadim Lebedev <vadim@mbdsys.com>
  *
  * This is free software; you can redistribute it and/or modify
@@ -20,6 +20,7 @@
  */
 
 /**
+ * @author Jerome Wagner <jerome.wagner@wengo.fr>
  * @author David Ferlier <david.ferlier@wengo.fr>
  */
 
@@ -39,6 +40,7 @@
 #include <pixertool/ffmpeg-pixertool.h>
 #include <pixertool/pixertool.h>
 
+#include "phdebug.h"
 #include "phcodec.h"
 #include "phapi.h"
 // #include "phcall.h"
@@ -62,7 +64,7 @@ void tvsub_phapi(register struct timeval *out, register struct timeval *in);
  *
  * This is called by ffmpeg in SLICE_STRUCT mode. When a fragment of data
  * is ready to be sent, it calls this function. What we just do is send
- * the fuckin' frame on RTP :)
+ * the frame on RTP :)
  *
  * @param ctx		The video stream
  * @param data		The packet's data
@@ -279,14 +281,20 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   FILE *f_local;
   ph_mstream_params_t *sp = &s->streams[PH_MSTREAM_VIDEO1];
 
+    
+ 
+  DBG2_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_video_start devid=%s\n", deviceid);
 
-  if ((s->newstreams & (1 << PH_MSTREAM_VIDEO1)))
-    return 0;
+    if ((s->newstreams & (1 << PH_MSTREAM_VIDEO1)))
+    {
+        return 0;
+    }
 
-  if (!sp->localport || !sp->remoteport)
-    return 0;
-
-
+    if (!sp->localport || !sp->remoteport)
+    {
+        return 0;
+    }
+  
   printf("Starting video stream from port: %d to %s:%d\n",
 	 sp->localport, sp->remoteaddr, sp->remoteport);
 
@@ -294,71 +302,71 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   //   - branch1: video stream is already open (RE-INVITE for example)
   //   - branch2: video stream is not already open
 
-  // begin branch1
-  if (sp->streamerData)
+    // begin branch1
+    if (sp->streamerData)
     {
-      video_stream = (phvstream_t*) sp->streamerData;
+        DBG1_MEDIA_ENGINE("ph_msession_video_start: reuse a current media stream\n");
+        video_stream = (phvstream_t*) sp->streamerData;
+        if (video_stream->ms.remote_port == sp->remoteport)
+        {
+            if (!strcmp(video_stream->ms.remote_ip, sp->remoteaddr))
+            {
+                return 0;
+            }
+        }
 
-      if (video_stream->ms.remote_port == sp->remoteport)
-	{
-	  if (!strcmp(video_stream->ms.remote_ip, sp->remoteaddr))
-	    {
-	      return 0;
-	    }
-	}
-
-      strcpy(video_stream->ms.remote_ip, sp->remoteaddr);
-      video_stream->ms.remote_port = sp->remoteport;
-      rtp_session_reset(video_stream->ms.rtp_session);
+        strcpy(video_stream->ms.remote_ip, sp->remoteaddr);
+        video_stream->ms.remote_port = sp->remoteport;
+        rtp_session_reset(video_stream->ms.rtp_session);
 
 #if USE_HTTP_TUNNEL
-      if (video_stream->ms.tunRtp)
-	{
-	  RtpTunnel *newTun, *old;
+        if (video_stream->ms.tunRtp)
+        {
+            RtpTunnel *newTun, *old;
 
-	  printf("Replacing video tunnel\n"),
-	    newTun = rtptun_connect(video_stream->ms.remote_ip, video_stream->ms.remote_port);
+            printf("Replacing video tunnel\n"),
+            newTun = rtptun_connect(video_stream->ms.remote_ip, video_stream->ms.remote_port);
 
+            if (!newTun)
+            {
+                printf("Video tunnel replacement failed\n"),
+                ph_msession_video_stop(s);
+                
+                return -PH_NORESOURCES;
+            }
 
-	  if (!newTun)
-	    {
-	      printf("Video tunnel replacement failed\n"),
-		ph_msession_video_stop(s);
+            rtp_session_set_tunnels(video_stream->ms.rtp_session, newTun, NULL);
 
-	      return -PH_NORESOURCES;
-	    }
+            old = video_stream->ms.tunRtp;
+            video_stream->ms.tunRtp = newTun;
 
-	  rtp_session_set_tunnels(video_stream->ms.rtp_session, newTun, NULL);
-
-	  old = video_stream->ms.tunRtp;
-	  video_stream->ms.tunRtp = newTun;
-
-	  TUNNEL_CLOSE(old);
-	  rtptun_free(old);
-	}
-      else
+            TUNNEL_CLOSE(old);
+            rtptun_free(old);
+        }
+        else
 #endif
 	rtp_session_set_remote_addr(video_stream->ms.rtp_session,
 				    video_stream->ms.remote_ip,
 				    video_stream->ms.remote_port);
 
-      return 0;
+    return 0;
 
     }
   // end branch1
 
+  DBG1_MEDIA_ENGINE("ph_msession_video_start: create/init a new media stream\n");
   // begin branch2
   profile = get_av_profile();
 
   // we should be able to find a codec structure based on the negociated video payload
-  if (!sp->ipayloads[0].number)
+    if (!sp->ipayloads[0].number)
     {
-      return -1;
+        return -1;
     }
 
   codec = ph_media_lookup_codec(sp->ipayloads[0].number);
     if (!codec) {
-      return -1;
+        return -1;
     }
 
   // init phase : a stream structure is created and initialized
@@ -394,16 +402,16 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   video_session = rtp_session_new(RTP_SESSION_SENDRECV);
 
 #ifdef USE_HTTP_TUNNEL
-  if (sp->flags & PH_MSTREAM_FLAG_TUNNEL)
+    if (sp->flags & PH_MSTREAM_FLAG_TUNNEL)
     {
-      video_stream->ms.tunRtp = rtptun_connect(sp->remoteaddr, sp->remoteport);
-      if (!video_stream->ms.tunRtp)
-	{
-	  rtp_session_destroy(video_session);
-	  return -PH_NORESOURCES;
-	}
+        video_stream->ms.tunRtp = rtptun_connect(sp->remoteaddr, sp->remoteport);
+        if (!video_stream->ms.tunRtp)
+        {
+            rtp_session_destroy(video_session);
+            return -PH_NORESOURCES;
+        }
 
-      rtp_session_set_tunnels(video_session, video_stream->ms.tunRtp, NULL);
+        rtp_session_set_tunnels(video_session, video_stream->ms.tunRtp, NULL);
     }
 #endif
 

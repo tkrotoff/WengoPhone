@@ -2122,23 +2122,23 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   newstreams = s->newstreams;
   s->newstreams = 0;
 
-  if (!(newstreams & (1 << PH_MSTREAM_AUDIO1)))
+    if (!(newstreams & (1 << PH_MSTREAM_AUDIO1)))
     {
-      return 0;
+        return 0;
     }
 
-  if (!sp->localport || !sp->remoteport)
+    if (!sp->localport || !sp->remoteport)
     {
-      return 0;
+        return 0;
     }
 
 
 
-  PH_MSESSION_AUDIO_LOCK();
-  if (select_audio_device(deviceId))
+    PH_MSESSION_AUDIO_LOCK();
+    if (select_audio_device(deviceId))
     {
-      PH_MSESSION_AUDIO_UNLOCK();
-      return -PH_NORESOURCES;
+        PH_MSESSION_AUDIO_UNLOCK();
+        return -PH_NORESOURCES;
     }
 
       
@@ -2169,15 +2169,15 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 			stream, stream->ms.remote_ip, stream->ms.remote_port, stream->ms.payload,
 			sp->remoteaddr, sp->remoteport, sp->ipayloads[0].number);
       
-      if (stream->ms.remote_port == sp->remoteport)
-	{
-	  if ((stream->ms.payload ==  sp->ipayloads[0].number) &&  !strcmp(stream->ms.remote_ip, sp->remoteaddr))
-	    {
-	      DBG1_MEDIA_ENGINE("ph_msession_audio_start: reusing current stream\n");
-	      PH_MSESSION_AUDIO_UNLOCK();
-	      return 0;
-	    }
-	}
+        if (stream->ms.remote_port == sp->remoteport)
+        {
+            if ((stream->ms.payload ==  sp->ipayloads[0].number) &&  !strcmp(stream->ms.remote_ip, sp->remoteaddr))
+            {
+                DBG1_MEDIA_ENGINE("ph_msession_audio_start: reusing current stream\n");
+                PH_MSESSION_AUDIO_UNLOCK();
+                return 0;
+            }
+        }
       
       /* either IP's or payloads are different */ 
       if (stream->ms.payload ==  sp->ipayloads[0].number)
@@ -2196,13 +2196,13 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	      DBG1_MEDIA_ENGINE("ph_msession_audio_start: Replacing audio tunnel\n");
 	      newTun = rtptun_connect(stream->ms.remote_ip, stream->ms.remote_port);
 	      
-	      if (!newTun)
-		{
-		  DBG1_MEDIA_ENGINE("ph_msession_audio_start: Audio tunnel replacement failed\n");
-		  sp->flags |= ~PH_MSTREAM_FLAG_RUNNING;
-		  PH_MSESSION_AUDIO_UNLOCK();
-		  return -PH_NORESOURCES;
-		}
+            if (!newTun)
+            {
+                DBG1_MEDIA_ENGINE("ph_msession_audio_start: Audio tunnel replacement failed\n");
+                sp->flags |= ~PH_MSTREAM_FLAG_RUNNING;
+                PH_MSESSION_AUDIO_UNLOCK();
+                return -PH_NORESOURCES;
+            }
 	      
 	      newTun2 = rtptun_connect(stream->ms.remote_ip, stream->ms.remote_port+1);
 	      rtp_session_set_tunnels(stream->ms.rtp_session, newTun, newTun2);
@@ -2241,11 +2241,11 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   // begin branch 2
   DBG2_MEDIA_ENGINE("audio start branch 2 - looking for codec with payload = %d\n", codecpt);
   codec = ph_media_lookup_codec(codecpt);
-  if (!codec)
+    if (!codec)
     {
-      DBG1_MEDIA_ENGINE("audio start branch 2: found NO codec\n");
-      PH_MSESSION_AUDIO_UNLOCK();
-      return -1;
+        DBG1_MEDIA_ENGINE("audio start branch 2: found NO codec\n");
+        PH_MSESSION_AUDIO_UNLOCK();
+        return -1;
     }
 
   if (!sp->streamerData)
@@ -2282,12 +2282,12 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   DBG2_MEDIA_ENGINE("ph_msession_audio_start: CNG %s\n", stream->cngi.cng ? "activating" : "desactivating");
   DBG2_MEDIA_ENGINE("ph_msession_audio_start: opening AUDIO device %s\n", deviceId);
 
-  if (open_audio_device(s, stream, deviceId))
+    if (open_audio_device(s, stream, deviceId))
     {
-      //	  phcb->errorNotify(PH_NOMEDIA);
-      free(stream);
-      PH_MSESSION_AUDIO_UNLOCK();
-      return -PH_NORESOURCES;
+        //	  phcb->errorNotify(PH_NOMEDIA);
+        free(stream);
+        PH_MSESSION_AUDIO_UNLOCK();
+        return -PH_NORESOURCES;
     }
 
 
@@ -2323,11 +2323,11 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 		
       tun = rtptun_connect(sp->remoteaddr, sp->remoteport);
 
-      if (!tun)
-	{
-	  PH_MSESSION_AUDIO_UNLOCK();
-	  return -PH_NORESOURCES;
-	}
+    if (!tun)
+    {
+        PH_MSESSION_AUDIO_UNLOCK();
+        return -PH_NORESOURCES;
+    }
 
       tun2 = rtptun_connect(sp->remoteaddr, sp->remoteport+1);
 	 
@@ -2338,8 +2338,6 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
     }
 #endif  
-
-
   
   rtp_session_set_scheduling_mode(session, SCHEDULING_MODE); /* yes */
   rtp_session_set_blocking_mode(session, BLOCKING_MODE);
@@ -2417,9 +2415,6 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
   return 0;
   // end branch 2
-
-
-
 
 }
 
