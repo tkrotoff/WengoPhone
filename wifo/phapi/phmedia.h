@@ -1,8 +1,9 @@
 /*
  * phmedia -  Phone Api media streamer
  *
+ * Copyright (C) 2006 WENGO SAS
+ * Copyright (C) 2005 WENGO SAS
  * Copyright (C) 2004 Vadim Lebedev <vadim@mbdsys.com>
- * Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -123,7 +124,12 @@ enum ph_mession_conf_flags
   };
 
 
-/*  session englobes up to 2 aduio and 2 video streams */
+/**
+ * @brief session englobes up to 2 audio and 2 video streams
+ * allocation sequence : 
+ *   - fill with 0
+ *   - g_mutex_new on the critsec_mstream_init
+ */
 struct ph_msession_s
 {
   int    activestreams;   /* bit mask of active streams */
@@ -132,12 +138,14 @@ struct ph_msession_s
   struct ph_msession_s *confsession;
   struct ph_mstream_params_s streams[PH_MSESSION_MAX_STREAMS];
 
+  GMutex *critsec_mstream_init; /* mutex used to avoid threading issue when an INVITE
+                                        is received for a session/stream that is currently being started */
+
   void (*dtmfCallback)(void *info, int event);
   void (*endCallback)(void  *info, int event);
   void (*frameDisplayCbk)(void *info, void *event);
 
   void *cbkInfo;
-
 
 };
 
@@ -158,8 +166,13 @@ int ph_media_supported_payload(ph_media_payload_t *pt, const char *ptstring);
 int ph_media_can_handle_payload(const char *mime);
 
 
-
+/**
+ * @brief start or (modify and restart) the necessary device/streaming engines of the session
+ */
 int ph_msession_start(struct ph_msession_s *s, const char *adeviceId);
+/**
+ * @brief stop the necessary device/streaming engines of the session
+ */
 void ph_msession_stop(struct ph_msession_s *s, const char *adeviceId);
 #define ph_msession_stopped(s)  (s->activestreams == 0)
 #define ph_msession_stream_active(s, n)  (s->activestreams & (1 << n))

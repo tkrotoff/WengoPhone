@@ -60,6 +60,7 @@
 #endif
 
 #include <osip2/osip_mt.h>
+#include <rtpport.h> // only for GMutex
 #include <eXosip/eXosip.h>
 #include <eXosip/eXosip_cfg.h>
 
@@ -640,6 +641,8 @@ ph_locate_call(eXosip_event_t *je, int creatit)
 
 void ph_release_call(phcall_t *ca)
 {
+
+  DBG4_SIP_NEGO("SIP_NEGO: ph_release_call\n", 0, 0, 0);
 
   if (ph_call_hasaudio(ca))
     {
@@ -1522,6 +1525,7 @@ phHoldCall(int cid)
   phcall_t *ca = ph_locate_call_by_cid(cid);
   int i;
 
+  DBG4_SIP_NEGO("SIP_NEGO: phHoldCall\n", 0, 0, 0);
 
   if (!ca)
     return -PH_BADCID;
@@ -3096,12 +3100,20 @@ ph_parse_payload_mime(struct ph_media_payload_s *pt, const char *mime, int rate,
 static int 
 ph_call_media_stop(phcall_t *ca)
 {
-  if (ca->mses)
+    DBG4_SIP_NEGO("SIP_NEGO: ph_call_media_stop\n", 0, 0, 0);
+
+    if (ca->mses)
     {
-      if (!ph_msession_stopped(ca->mses))
-	ph_msession_stop(ca->mses, phcfg.audio_dev);
-      free(ca->mses);
-      ca->mses = 0;
+        if (!ph_msession_stopped(ca->mses))
+        {
+            ph_msession_stop(ca->mses, phcfg.audio_dev);
+        }
+        
+        // cf allocation sequence for the ph_msession_s in phmedia.h
+        g_mutex_free(ca->mses->critsec_mstream_init);
+        free(ca->mses);
+        
+        ca->mses = 0;
     }
 
 }
@@ -3151,8 +3163,11 @@ ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags, int resumeflag)
 
   s = ca->mses;
 
-  if (!s)
-   s = ca->mses = (struct ph_msession_s *)calloc(sizeof(struct ph_msession_s), 1);
+    if (!s)
+    {
+        s = ca->mses = (struct ph_msession_s *)calloc(sizeof(struct ph_msession_s), 1);
+        s->critsec_mstream_init = g_mutex_new();
+    }
 
   if (!s)
     return -PH_NORESOURCES;
@@ -3381,6 +3396,8 @@ ph_call_replaces(eXosip_event_t *je)
 {
   phCallStateInfo_t info;
   phcall_t *ca, *oldca;
+
+  DBG4_SIP_NEGO("SIP_NEGO: ph_call_replaces\n", 0, 0, 0);
 
   clear(info);
 
@@ -3823,6 +3840,8 @@ ph_call_onhold(eXosip_event_t *je)
   phCallStateInfo_t info;
   phcall_t *ca;
 
+  DBG4_SIP_NEGO("SIP_NEGO: ph_call_onhold\n", 0, 0, 0);
+
   clear(info);
 
   ca = ph_locate_call(je, 0);
@@ -3969,6 +3988,8 @@ void ph_call_refered(eXosip_event_t *je)
   phCallStateInfo_t info;
   int nCid;
   struct vline *vl = 0;
+
+  DBG4_SIP_NEGO("SIP_NEGO: ph_call_refered\n", 0, 0, 0);
 
   ca = ph_locate_call_by_cid(je->cid);
   

@@ -1,6 +1,7 @@
 /*
  * phmedia -  Phone Api media streamer
  *
+ * Copyright (C) 2005-2006 WENGO SAS
  * Copyright (C) 2004 Vadim Lebedev <vadim@mbdsys.com>
  * Copyright (C) 2002,2003   Aymeric Moizard <jack@atosc.org>
  *
@@ -44,7 +45,6 @@
 #include <httptunnel.h>
 #endif
 
-
 #ifdef _MSC_VER
 #define strncasecmp strnicmp
 #endif
@@ -68,11 +68,16 @@ int ph_msession_start(struct ph_msession_s *s, const char *deviceid)
 {
   int ret1,ret2 = -1;
 
-  ret1 = ph_msession_audio_start(s, deviceid);
+  DBG1_MEDIA_ENGINE("MEDIA_ENGINE: entering ph_msession_start\n");
 
+  g_mutex_lock(s->critsec_mstream_init);
+
+  ret1 = ph_msession_audio_start(s, deviceid);
 #ifdef PHAPI_VIDEO_SUPPORT
   ret2 = ph_msession_video_start(s, deviceid);
 #endif
+
+  g_mutex_unlock(s->critsec_mstream_init);
 
   if (!ret1 && !ret2)
     return 0;
@@ -84,55 +89,76 @@ int ph_msession_start(struct ph_msession_s *s, const char *deviceid)
 
 int ph_msession_conf_start(struct ph_msession_s *s1, struct ph_msession_s *s2, const char *device)
 {
-  return ph_msession_audio_conf_start(s1, s2, device);
-
+  int ret;
+  DBG1_MEDIA_ENGINE("MEDIA_ENGINE: entering ph_msession_conf_start\n");
+  g_mutex_lock(s1->critsec_mstream_init);
+  g_mutex_lock(s2->critsec_mstream_init);
+  ret = ph_msession_audio_conf_start(s1, s2, device);
+  g_mutex_unlock(s2->critsec_mstream_init);
+  g_mutex_unlock(s1->critsec_mstream_init);
+  return ret;
 }
 int ph_msession_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2)
 {
- return ph_msession_audio_conf_stop(s1, s2);
+  int ret;
+  DBG1_MEDIA_ENGINE("MEDIA_ENGINE: entering ph_msession_conf_stop\n");
+  g_mutex_lock(s1->critsec_mstream_init);
+  g_mutex_lock(s2->critsec_mstream_init);
+  ret = ph_msession_audio_conf_stop(s1, s2);
+  g_mutex_unlock(s2->critsec_mstream_init);
+  g_mutex_unlock(s1->critsec_mstream_init);
+  return ret;
 }
 
 
 int ph_msession_suspend(struct ph_msession_s *s,  int traffictype, const char *device)
 {
+  DBG1_MEDIA_ENGINE("MEDIA_ENGINE: entering ph_msession_suspend\n");
+  g_mutex_lock(s->critsec_mstream_init);
 #ifdef PHAPI_VIDEO_SUPPORT
    ph_msession_video_stop(s);
 #endif
    ph_msession_audio_suspend(s, traffictype, device);
+   g_mutex_unlock(s->critsec_mstream_init);
    return (0);
 }
 
 int ph_msession_resume(struct ph_msession_s *s, int traffictype, const char *device)
 {
-  int ret;
+  int ret = 0;
+
+  DBG1_MEDIA_ENGINE("MEDIA_ENGINE: entering ph_msession_resume\n");
+  g_mutex_lock(s->critsec_mstream_init);
 
   ph_msession_audio_resume(s, traffictype, device);
 #ifdef PHAPI_VIDEO_SUPPORT
   ret = ph_msession_video_start(s, "");
-  return ret;
-#else
-  return 0;
 #endif
 
-  
+  g_mutex_unlock(s->critsec_mstream_init);
+  return ret;  
 
 }
-
-
 
 
 void ph_msession_stop(struct ph_msession_s *s, const char *adevid)
 {
 
+  DBG1_MEDIA_ENGINE("MEDIA_ENGINE: entering ph_msession_stop\n");
+  g_mutex_lock(s->critsec_mstream_init);
+
 #ifdef PHAPI_VIDEO_SUPPORT
   ph_msession_video_stop(s);
 #endif
   ph_msession_audio_stop(s, adevid);
+
+  g_mutex_unlock(s->critsec_mstream_init);
+
 }
 
 
 
-
+// deprecated branch of code (before msession & conf addition)
 #if 0
 int ph_media_start(phcall_t *ca, int port, int videoport, 
 				   void (*dtmfCallback)(phcall_t *ca, int event), 

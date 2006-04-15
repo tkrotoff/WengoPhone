@@ -14,6 +14,7 @@
 
 #endif
 
+#include "rtpport.h" // only for GMutex <- phmedia.h <- phcodec-h263.h
 #include "phcodec.h"
 
 //#include "gsm/gsm.h"
