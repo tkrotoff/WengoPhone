@@ -76,8 +76,8 @@ void QtUserManager::startSMS(bool checked){
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
-    // The current selected item
-    QTreeWidgetItem * item = _tree->currentItem();
+	// The current selected item
+	QTreeWidgetItem * item = _tree->currentItem();
 
 	user = ul->getUser(item->text(0));
 
@@ -88,8 +88,8 @@ void QtUserManager::startChat(bool){
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
-    // The current selected item
-    QTreeWidgetItem * item = _tree->currentItem();
+	// The current selected item
+	QTreeWidgetItem * item = _tree->currentItem();
 
 	user = ul->getUser(item->text(0));
 
@@ -99,8 +99,8 @@ void QtUserManager::startChat(bool){
 void QtUserManager::editContact(bool ){
     QtUserList * ul = QtUserList::getInstance();
 
-    // The current selected item
-    QTreeWidgetItem * item = _tree->currentItem();
+	// The current selected item
+	QTreeWidgetItem * item = _tree->currentItem();
 
 	// The edit contact window
 	QtEditContactProfile editContactDialog(ul->getCContact(item->text(0)));
@@ -108,6 +108,7 @@ void QtUserManager::editContact(bool ){
 
 	editContactDialog.exec();
 }
+
 void QtUserManager::treeViewSelectionChanged(){
 	closeUserInfo();
 }
@@ -141,35 +142,35 @@ void QtUserManager::openUserInfo( QTreeWidgetItem * i)
 {
 	QTreeWidgetItem * item = i;
 	QtUserList * ul = QtUserList::getInstance();
-    if ( _previous != NULL )
-    {
-        closeUserInfo();
-        _previous = item;
-        if ( item->parent() ){
+	if ( _previous != NULL )
+	{
+		closeUserInfo();
+		_previous = item;
+		if ( item->parent() ) {
 			ul->setOpenStatus(_previous->text(0),true);
 			item->setSizeHint(0,QSize(-1,ul->getHeight(item->text(0))));
-            _tree->openPersistentEditor(item);
-        }
-    }
-    else
-    {
-        _previous = item;
-        if ( item->parent() ){
+			_tree->openPersistentEditor(item);
+		}
+	}
+	else
+	{
+		_previous = item;
+		if ( item->parent() ){
 			ul->setOpenStatus(_previous->text(0),true);
 			item->setSizeHint(0,QSize(-1,ul->getHeight(item->text(0))));
-            _tree->openPersistentEditor(item);
-           }
-    }
+			_tree->openPersistentEditor(item);
+		}
+	}
     _tree->viewport()->update();
 }
 
 void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
 
-    QtUserList * ul = QtUserList::getInstance();
-    QTreeWidgetItem * item = _tree->currentItem();
-
-    QRect widgetSize = _tree->rect();
-    QPoint  mousepos = _tree->mapFromGlobal(QCursor::pos());
+	QtUserList * ul = QtUserList::getInstance();
+	QTreeWidgetItem * item = _tree->currentItem();
+	
+	QRect widgetSize = _tree->rect();
+	QPoint  mousepos = _tree->mapFromGlobal(QCursor::pos());
 
 	if (  ! item->parent() )
 	{
@@ -404,73 +405,73 @@ void QtUserManager::showAllUsers(){
 }
 
 QMenu * QtUserManager::createMenu(){
-
-
+	
+	
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
-
-    // The current selected item
-    QTreeWidgetItem * item = _tree->currentItem();
-
+	
+	// The current selected item
+	QTreeWidgetItem * item = _tree->currentItem();
+	
 	user = ul->getUser(item->text(0));
-
-
+	
+	
 	QAction * action;
-
+	
 	QMenu * menu;
-
-    menu = new QMenu(dynamic_cast<QWidget *>(parent()));
-    // _callAction = menu->addAction(tr("Call"));
-    // Call menu
-    if ( user->havePhoneNumber()){
-
+	
+	menu = new QMenu(dynamic_cast<QWidget *>(parent()));
+	// _callAction = menu->addAction(tr("Call"));
+	// Call menu
+	if ( user->havePhoneNumber()){
+	
 		QMenu * callMenu = menu->addMenu( tr("Call") );
 		if ( ! user->getMobilePhone().isEmpty() ){
 			action = callMenu->addAction(tr ("Mobile phone") );
 			connect(action,SIGNAL(triggered(bool)),SLOT(startMobileCall(bool)));
 		}
-
+	
 		if ( ! user->getHomePhone().isEmpty() ){
 			action = callMenu->addAction(tr ("Home phone") );
 			connect(action,SIGNAL(triggered(bool)),SLOT(startHomeCall(bool)));
 		}
-
+	
 		if ( ! user->getWorkPhone().isEmpty() ){
 			action = callMenu->addAction(tr ("Work phone") );
 			connect(action,SIGNAL(triggered(bool)),SLOT(startWorkCall(bool)));
 		}
-
+	
 		if ( ! user->getWengoPhoneNumber().isEmpty() ){
 			action = callMenu->addAction(tr ("Wengophone") );
 			connect(action,SIGNAL(triggered(bool)),SLOT(startWengoCall(bool)));
 		}
-    }
+	}
 
 
-    action = menu->addAction(tr("Start Chat"));
-    connect (action,SIGNAL(triggered(bool)),SLOT(startChat(bool)));
-
-    action = menu->addAction(tr("Send SMS"));
-    connect (action,SIGNAL(triggered(bool)),SLOT(startSMS(bool)));
-
-    menu->addAction(tr("Invite to conference"));
-
-    menu->addSeparator();
-
-    action = menu->addAction(tr("Edit contact"));
-    connect(action,SIGNAL(triggered(bool)),this,SLOT(editContact(bool)));
-
-    menu->addAction(tr("Delete contact"));
-
-    menu->addSeparator();
-
-    menu->addAction(tr("Block contact"));
-
-    menu->addAction(tr("Forward to Cell phone"));
-
-    menu->setWindowOpacity(0.97);
-
-    return menu;
+	action = menu->addAction(tr("Start Chat"));
+	connect (action,SIGNAL(triggered(bool)),SLOT(startChat(bool)));
+	
+	action = menu->addAction(tr("Send SMS"));
+	connect (action,SIGNAL(triggered(bool)),SLOT(startSMS(bool)));
+	
+	menu->addAction(tr("Invite to conference"));
+	
+	menu->addSeparator();
+	
+	action = menu->addAction(tr("Edit contact"));
+	connect(action,SIGNAL(triggered(bool)),this,SLOT(editContact(bool)));
+	
+	menu->addAction(tr("Delete contact"));
+	
+	menu->addSeparator();
+	
+	menu->addAction(tr("Block contact"));
+	
+	menu->addAction(tr("Forward to Cell phone"));
+	
+	menu->setWindowOpacity(0.97);
+	
+	return menu;
 
 }
 void QtUserManager::startMobileCall(bool checked){
@@ -478,8 +479,8 @@ void QtUserManager::startMobileCall(bool checked){
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
-    // The current selected item
-    QTreeWidgetItem * item = _tree->currentItem();
+	// The current selected item
+	QTreeWidgetItem * item = _tree->currentItem();
 
 	user = ul->getUser(item->text(0));
 	user->startCall(user->getMobilePhone());
@@ -489,8 +490,8 @@ void QtUserManager::startHomeCall(bool checked){
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
-    // The current selected item
-    QTreeWidgetItem * item = _tree->currentItem();
+	// The current selected item
+	QTreeWidgetItem * item = _tree->currentItem();
 
 	user = ul->getUser(item->text(0));
 	user->startCall(user->getHomePhone());
@@ -502,8 +503,8 @@ void QtUserManager::startWorkCall(bool checked){
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
-    // The current selected item
-    QTreeWidgetItem * item = _tree->currentItem();
+	// The current selected item
+	QTreeWidgetItem * item = _tree->currentItem();
 
 	user = ul->getUser(item->text(0));
 	user->startCall(user->getWorkPhone());
@@ -514,9 +515,42 @@ void QtUserManager::startWengoCall(bool checked){
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
-    // The current selected item
-    QTreeWidgetItem * item = _tree->currentItem();
+	// The current selected item
+	QTreeWidgetItem * item = _tree->currentItem();
 
 	user = ul->getUser(item->text(0));
 	user->startCall(user->getWengoPhoneNumber());
+}
+
+void QtUserManager::removeContact(CContact & cContact) {
+	QMutexLocker lock(&_mutex);
+	safeRemoveContact(cContact);
+}
+
+void QtUserManager::safeRemoveContact(CContact & cContact) {
+	QtUserList * ul = QtUserList::getInstance();
+	QtUser * user;
+	bool found = false;
+
+	QList<QTreeWidgetItem *> itemList = _tree->findItems("*", Qt::MatchWildcard);
+	QList<QTreeWidgetItem *>::iterator i;
+
+	for (i = itemList.begin(); (i != itemList.end()) && !found; i++) {
+		QTreeWidgetItem * item;
+		QTreeWidgetItem * group = (QTreeWidgetItem *) (*i);
+
+		if (group->parent() == 0) {
+			int count = group->childCount ();
+
+			for (int t = 0; (t < count) && !found; t++) {
+				item = group->child(t);
+				user = ul->getUser(item->text(0));
+				if (user->getCContact() == cContact) {
+					group->takeChild(t);
+					ul->removeUser(user);
+					found = true;
+				}
+			}
+		}
+	}
 }

@@ -23,6 +23,7 @@
 #include "QtContactList.h"
 #include "QtUserList.h"
 #include "QtUser.h"
+#include "QtUserManager.h"
 
 #include <control/CWengoPhone.h>
 
@@ -94,8 +95,9 @@ void QtContactGroup::removeContact(PContact * pContact) {
 }
 
 void QtContactGroup::removeContactThreadSafe(PContact * pContact) {
-	//TODO: remove the contact from the GUI
-	LOG_DEBUG("removing contact " + pContact->getCContact().getDisplayName() + " from group " + getDisplayName());
+	_qtContactList->getUserManager()->removeContact(pContact->getCContact());
+	_cContactGroup.contactReleased(pContact);
+	updatePresentation();
 }
 
 void QtContactGroup::updatePresentation() {
@@ -104,4 +106,3 @@ void QtContactGroup::updatePresentation() {
 
 void QtContactGroup::updatePresentationThreadSafe() {
 }
-

@@ -33,7 +33,7 @@ public:
 
 	void addUser(QtUser * user);
 
-	void removeUser(const QString & userid);
+	void removeUser(QtUser * user);
 
 	void paintUser(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 
@@ -74,7 +74,12 @@ protected:
 	QTreeWidget * _tree;
 
 private:
+
 	static QtUserList * _instance;
-	QString			    _lastMouseOn;
+
+	QString	_lastMouseOn;
+
+	QMutex _mutex;
+
 };
 #endif

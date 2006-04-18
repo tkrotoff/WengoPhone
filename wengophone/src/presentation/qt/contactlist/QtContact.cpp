@@ -54,10 +54,6 @@ string QtContact::getDisplayName() const {
 	return _cContact.getDisplayName();
 }
 
-string QtContact::getId() const {
-	return _cContact.getId();
-}
-
 bool QtContact::hasIM() const {
 	return _cContact.hasIM();
 }
@@ -75,5 +71,5 @@ EnumPresenceState::PresenceState QtContact::getPresenceState() const {
 }
 
 void QtContact::contactModifiedEventHandler(Contact & sender) {
-		updatePresentation();
+	updatePresentation();
 }

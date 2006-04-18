@@ -27,6 +27,8 @@
 
 #include <string>
 
+#include <QMutex>
+
 class Contact;
 class CContactGroup;
 class CWengoPhone;
@@ -41,6 +43,10 @@ class CContact {
 public:
 
 	CContact(Contact & contact, CContactGroup & cContactGroup, CWengoPhone & cWengoPhone);
+
+	~CContact();
+
+	bool operator == (const CContact & cContact);
 
 	void call();
 
@@ -57,8 +63,6 @@ public:
 	}
 
 	std::string getDisplayName() const;
-
-	std::string getId() const;
 
 	bool hasIM() const;
 
@@ -84,6 +88,10 @@ private:
 	CWengoPhone & _cWengoPhone;
 
 	PContact * _pContact;
+
+	boost::signals::connection _connection;
+
+	QMutex _mutex;
 };
 
 #endif	//CCONTACT_H

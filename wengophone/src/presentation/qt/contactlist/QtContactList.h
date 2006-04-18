@@ -53,6 +53,10 @@ public:
 		return _contactListWidget;
 	}
 
+	QtUserManager * getUserManager() {
+		return _usermanager;
+	}
+
 	void updatePresentation ();
 
 	void addContactGroup(PContactGroup * pContactGroup);

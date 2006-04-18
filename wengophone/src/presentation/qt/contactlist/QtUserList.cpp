@@ -46,15 +46,24 @@ void QtUserList::paintUser(QPainter * painter, const QStyleOptionViewItem & opti
 
 void QtUserList::addUser(QtUser * user)
 {
+	QMutexLocker locker(&_mutex);
+
 	if (user)
 	{
 		_userList[user->getId()] = user;
 	}
 }
 
-void QtUserList::removeUser(const QString & userid)
+void QtUserList::removeUser(QtUser * user)
 {
-	_userList.remove(userid);
+	QMutexLocker locker(&_mutex);
+
+	if (user) {
+		QString key = _userList.key(user);
+		QtUser * tmp = _userList[key];
+		_userList.remove(key);
+		delete tmp;
+	}
 }
 
 void QtUserList::mouseOn(const QString & userid)

@@ -171,6 +171,10 @@ void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 		_addToContactGroup(groupName, *contact);
 
 		LOG_DEBUG("IMContact added in group " + groupName + ": " + newIMContact.getContactId());
+	} else {
+		//This event can be received although the IMContact is already present
+		// in the ContactList. We assume that this is a move event.
+		imContactMovedEventHandler(sender, groupName, newIMContact);
 	}
 }
 
@@ -310,7 +314,7 @@ void ContactList::_addToContactGroup(const std::string & groupName, Contact & co
 }
 
 void ContactList::_removeFromContactGroup(const std::string & groupName, Contact & contact) {
-	if (!contact.isInContactGroup(groupName)) {
+	if (contact.isInContactGroup(groupName)) {
 		contact._removeFromContactGroup(groupName);
 
 		LOG_DEBUG("removing a Contact from group " + groupName);

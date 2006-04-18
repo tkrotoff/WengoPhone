@@ -20,6 +20,8 @@
 #ifndef CCONTACTGROUP_H
 #define CCONTACTGROUP_H
 
+#include <thread/Mutex.h>
+
 #include <string>
 #include <vector>
 
@@ -29,6 +31,7 @@ class CWengoPhone;
 class PContactGroup;
 class Contact;
 class CContact;
+class PContact;
 
 /**
  *
@@ -53,6 +56,8 @@ public:
 		return _cWengoPhone;
 	}
 
+	void contactReleased(PContact * pContact);
+
 private:
 
 	void contactAddedEventHandler(ContactGroup & sender, Contact & contact);
@@ -71,6 +76,9 @@ private:
 
 	typedef std::vector<CContact *> CContactVector;
 	CContactVector _cContactVector;
+
+	Mutex _mutex;
+
 };
 
 #endif	//CCONTACTGROUP_H

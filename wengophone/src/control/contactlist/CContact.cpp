@@ -40,9 +40,18 @@ CContact::CContact(Contact & contact, CContactGroup & cContactGroup, CWengoPhone
 
 	_pContact = PFactory::getFactory().createPresentationContact(*this);
 
-	_contact.contactChangedEvent += 
-		boost::bind(&CContact::contactChangedEventHandler, this, _1);
+	_connection = (_contact.contactChangedEvent += 
+		boost::bind(&CContact::contactChangedEventHandler, this, _1));
+}
 
+CContact::~CContact() {
+	_connection.disconnect();
+	delete _pContact;
+}
+
+bool CContact::operator == (const CContact & cContact) {
+	QMutexLocker locker(&_mutex);
+	return (_pContact == cContact._pContact);
 }
 
 void CContact::call() {
@@ -53,11 +62,6 @@ void CContact::call() {
 
 string CContact::getDisplayName() const {
 	return _contact.getDisplayName();
-}
-
-string CContact::getId() const {
-	//FIXME: this id may be not unique
-	return getDisplayName();
 }
 
 bool CContact::hasIM() const {

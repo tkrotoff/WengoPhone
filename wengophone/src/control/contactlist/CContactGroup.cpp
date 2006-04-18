@@ -19,13 +19,17 @@
 
 #include "CContactGroup.h"
 
-#include "model/contactlist/Contact.h"
-#include "model/contactlist/ContactGroup.h"
-#include "presentation/PFactory.h"
-#include "control/CWengoPhone.h"
+#include "presentation/PContact.h"
 #include "presentation/PContactGroup.h"
+#include "presentation/PFactory.h"
+
+#include "control/CWengoPhone.h"
 #include "control/contactlist/CContactList.h"
 #include "control/contactlist/CContact.h"
+
+#include "model/contactlist/Contact.h"
+#include "model/contactlist/ContactGroup.h"
+
 #include "CContactList.h"
 
 CContactGroup::CContactGroup(ContactGroup & contactGroup, CContactList & cContactList, CWengoPhone & cWengoPhone)
@@ -35,9 +39,12 @@ CContactGroup::CContactGroup(ContactGroup & contactGroup, CContactList & cContac
 
 	_pContactGroup = PFactory::getFactory().createPresentationContactGroup(*this);
 
-	_contactGroup.contactAddedEvent += boost::bind(&CContactGroup::contactAddedEventHandler, this, _1, _2);
-	_contactGroup.contactRemovedEvent += boost::bind(&CContactGroup::contactRemovedEventHandler, this, _1, _2);
-	_contactGroup.contactGroupModifiedEvent += boost::bind(&CContactGroup::contactGroupModifiedEventHandler, this, _1);
+	_contactGroup.contactAddedEvent +=
+		boost::bind(&CContactGroup::contactAddedEventHandler, this, _1, _2);
+	_contactGroup.contactRemovedEvent +=
+		boost::bind(&CContactGroup::contactRemovedEventHandler, this, _1, _2);
+	_contactGroup.contactGroupModifiedEvent +=
+		boost::bind(&CContactGroup::contactGroupModifiedEventHandler, this, _1);
 }
 
 std::string CContactGroup::getContactGroupName() const {
@@ -45,6 +52,8 @@ std::string CContactGroup::getContactGroupName() const {
 }
 
 void CContactGroup::contactAddedEventHandler(ContactGroup & sender, Contact & contact) {
+	Mutex::ScopedLock lock(_mutex);
+
 	CContact * cContact = new CContact(contact, *this, _cWengoPhone);
 
 	_cContactVector.push_back(cContact);
@@ -54,15 +63,22 @@ void CContactGroup::contactAddedEventHandler(ContactGroup & sender, Contact & co
 }
 
 void CContactGroup::contactRemovedEventHandler(ContactGroup & sender, Contact & contact) {
+	Mutex::ScopedLock lock(_mutex);
+
 	for (CContactVector::iterator it = _cContactVector.begin() ; it != _cContactVector.end() ; it++) {
 		if ((*it)->getContact() == contact) {
 			_pContactGroup->removeContact((*it)->getPresentation());
-			_pContactGroup->updatePresentation();
 			_cContactVector.erase(it);
-			return;
+			break;
 		}
 	}
 }
 
 void CContactGroup::contactGroupModifiedEventHandler(ContactGroup & sender) {
+}
+
+void CContactGroup::contactReleased(PContact * pContact) {
+	Mutex::ScopedLock lock(_mutex);
+
+	delete &(pContact->getCContact());
 }

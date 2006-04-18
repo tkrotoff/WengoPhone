@@ -21,6 +21,7 @@
 
 #include <QtGui>
 
+class CContact;
 
 #define MAX_ITEM_SIZE 100
 #define MIN_ITEM_SIZE 28
@@ -29,82 +30,86 @@ class PContact;
 class QtHidenContact;
 
 class QtUserManager : public QObject {
-		Q_OBJECT
+	Q_OBJECT
 
-	public:
-		QtUserManager( QObject * parent = 0, QTreeWidget * target = 0 );
+public:
+	QtUserManager( QObject * parent = 0, QTreeWidget * target = 0 );
 
-		void setContact(PContact * contact) { _pcontact = contact;};
+	void setContact(PContact * contact) { _pcontact = contact;};
 
-	public Q_SLOTS:
+	void removeContact(CContact & cContact);
 
-		void treeViewSelectionChanged();
+public Q_SLOTS:
 
-		void itemClicked ( QTreeWidgetItem * item, int column );
+	void treeViewSelectionChanged();
 
-		void itemEntered ( QTreeWidgetItem * item );
+	void itemClicked ( QTreeWidgetItem * item, int column );
 
-		void openUserInfo( QTreeWidgetItem * i );
+	void itemEntered ( QTreeWidgetItem * item );
 
-		void closeUserInfo();
+	void openUserInfo( QTreeWidgetItem * i );
 
-		void editContact(bool checked);
+	void closeUserInfo();
 
-		void userStateChanged();
+	void editContact(bool checked);
 
-		void hideOffLineUsers();
+	void userStateChanged();
 
-		void showAllUsers();
+	void hideOffLineUsers();
 
-		void sortUsers();
+	void showAllUsers();
 
-		void startChat(bool checked);
+	void sortUsers();
 
-		void startSMS(bool checked);
+	void startChat(bool checked);
 
-		void startMobileCall(bool checked);
+	void startSMS(bool checked);
 
-		void startHomeCall(bool checked);
+	void startMobileCall(bool checked);
 
-		void startWorkCall(bool checked);
+	void startHomeCall(bool checked);
 
-		void startWengoCall(bool checked);
+	void startWorkCall(bool checked);
 
-	protected:
+	void startWengoCall(bool checked);
 
-		void safeUserStateChanged();
+protected:
 
-		void safeHideOffLineUsers();
+	void safeRemoveContact(CContact & cContact);
 
-		void safeSortUsers();
+	void safeUserStateChanged();
 
-		void safeShowAllUsers();
+	void safeHideOffLineUsers();
 
-		bool _hideUsers;
+	void safeSortUsers();
 
-		bool _sortUsers;
+	void safeShowAllUsers();
 
-		QMenu * createMenu();
+	bool _hideUsers;
 
-		QList<QtHidenContact *>  clearList(QList<QtHidenContact *> list);
+	bool _sortUsers;
 
-		QTreeWidget * _tree;
+	QMenu * createMenu();
 
-		QTreeWidgetItem * _previous;
+	QList<QtHidenContact *>  clearList(QList<QtHidenContact *> list);
 
-		QTreeWidgetItem * _lastClicked;
+	QTreeWidget * _tree;
 
-		QList<QtHidenContact *> _hidenContacts;
+	QTreeWidgetItem * _previous;
 
-		QSize * _itemSize;
+	QTreeWidgetItem * _lastClicked;
 
-		QMenu * _menu;
+	QList<QtHidenContact *> _hidenContacts;
 
-		QAction * _callAction;
+	QSize * _itemSize;
 
-		QMutex _mutex;
+	QMenu * _menu;
 
-		PContact * _pcontact;
+	QAction * _callAction;
+
+	QMutex _mutex;
+
+	PContact * _pcontact;
 };
 
 #endif

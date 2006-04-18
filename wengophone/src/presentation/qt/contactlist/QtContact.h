@@ -44,8 +44,6 @@ public:
 
 	std::string getDisplayName() const;
 
-	std::string getId() const;
-
 	bool hasIM() const;
 
 	bool hasCall() const;
