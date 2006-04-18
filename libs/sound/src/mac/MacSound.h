@@ -20,6 +20,8 @@
 #ifndef MACSOUND_H
 #define MACSOUND_H
 
+#include <sound/ISound.h>
+
 #include <util/NonCopyable.h>
 
 #include <string>

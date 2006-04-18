@@ -38,11 +38,11 @@ elif WengoOSMacOSX():
 	sources += [
 		'src/mac/AudioDevice.cpp',
 		'src/mac/Sound.cpp',
-		'src/mac/SoundPrivateMac.cpp',
-		'src/mac/SoundMixer.cpp',
+		'src/mac/MacSound.cpp',
+		'src/mac/VolumeControl.cpp',
+		'src/mac/MacVolumeControl.cpp',
 		'src/mac/SoundMixerException.cpp',
 		'src/mac/CoreAudioUtilities.cpp',
-		'src/mac/Volume.cpp',
 	]
 
 	link_flags += [

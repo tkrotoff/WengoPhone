@@ -19,7 +19,11 @@
 
 #include <sound/SoundMixerException.h>
 
-SoundMixerException::SoundMixerException(const std::string & /*soundComponent*/, unsigned /*errorNumber*/) {
+SoundMixerException::SoundMixerException(const std::string & /*soundComponent*/, unsigned /*errorNumber*/) 
+: Exception() {
+}
+
+SoundMixerException::~SoundMixerException() {
 }
 
 std::string SoundMixerException::what() const {

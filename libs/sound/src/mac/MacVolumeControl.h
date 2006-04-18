@@ -20,7 +20,7 @@
 #ifndef MACVOLUMECONTROL_H
 #define MACVOLUMECONTROL_H
 
-#include <sound/IControlVolume.h>
+#include <sound/IVolumeControl.h>
 
 #include <CoreAudio/CoreAudio.h>
 
@@ -29,18 +29,18 @@
  *
  * @author Philippe Bernery
  */
-class MacVolumeControl : public IControlVolume {
+class MacVolumeControl : public IVolumeControl {
 public:
 
 	MacVolumeControl(AudioDeviceID deviceId, bool isInput);
 
 	bool setLevel(unsigned level);
 
-	int getLevel() const;
+	int getLevel();
 
 	bool setMute(bool mute);
 
-	bool isMuted() const;
+	bool isMuted();
 
 	bool selectAsRecordDevice();
 
