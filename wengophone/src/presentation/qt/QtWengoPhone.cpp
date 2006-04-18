@@ -228,6 +228,32 @@ void QtWengoPhone::initThreadSafe() {
 	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
 	connect(actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
 
+
+	//actionOutgoing_Calls
+	QAction * actionOutgoingCalls = Object::findChild<QAction *>(_wengoPhoneWindow, "actionOutgoing_Calls");
+	connect(actionOutgoingCalls, SIGNAL(triggered()), SLOT(eraseHistoryOutgoingCalls()));
+	
+	//actionIncoming_Calls
+	QAction * actionIncomingCalls = Object::findChild<QAction *>(_wengoPhoneWindow, "actionIncoming_Calls");
+	connect(actionIncomingCalls, SIGNAL(triggered()), SLOT(eraseHistoryIncomingCalls()));
+	
+	//actionMissed_Calls
+	QAction * actionMissedCalls = Object::findChild<QAction *>(_wengoPhoneWindow, "actionMissed_Calls");
+	connect(actionMissedCalls, SIGNAL(triggered()), SLOT(eraseHistoryMissedCalls()));
+	
+	//actionChat_Sessions
+	QAction * actionChatSessions = Object::findChild<QAction *>(_wengoPhoneWindow, "actionChat_Sessions");
+	connect(actionChatSessions, SIGNAL(triggered()), SLOT(eraseHistoryChatSessions()));
+	
+	//actionSMS
+	QAction * actionSMS = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSMS");
+	connect(actionSMS, SIGNAL(triggered()), SLOT(eraseHistorySms()));
+	
+	//actionAll
+	QAction * actionAll = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAll");
+	connect(actionAll, SIGNAL(triggered()), SLOT(eraseHistory()));
+	
+	
 	//Embedded Browser
 	_browser = new QtBrowser(NULL);
 	_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
@@ -742,4 +768,28 @@ void QtWengoPhone::expandConfigPanel() {
 		_wengoPhoneWindow->resize(_wengoPhoneWindow->width(), _wengoPhoneWindow->height() - _configPanelWidget->height());
 	}
 	expand = !expand;
+}
+
+void QtWengoPhone::eraseHistoryOutgoingCalls() {
+	_cWengoPhone.getCHistory().clearOutgoingCallEntries();
+}
+
+void QtWengoPhone::eraseHistoryIncomingCalls() {
+	_cWengoPhone.getCHistory().clearIncomingCallEntries();
+}
+
+void QtWengoPhone::eraseHistoryMissedCalls() {
+	_cWengoPhone.getCHistory().clearMissedCallEntries();
+}
+
+void QtWengoPhone::eraseHistoryChatSessions() {
+	_cWengoPhone.getCHistory().clearChatEntries();
+}
+
+void QtWengoPhone::eraseHistorySms() {
+	_cWengoPhone.getCHistory().clearSmsEntries();
+}
+
+void QtWengoPhone::eraseHistory() {
+	_cWengoPhone.getCHistory().clearAllEntries();
 }

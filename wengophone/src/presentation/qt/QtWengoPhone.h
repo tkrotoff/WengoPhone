@@ -172,6 +172,19 @@ private Q_SLOTS:
 
 	void expandConfigPanel();
 
+	void eraseHistoryOutgoingCalls();
+	
+	void eraseHistoryIncomingCalls();
+	
+	void eraseHistoryMissedCalls();
+	
+	void eraseHistoryChatSessions();
+	
+	void eraseHistorySms();
+	
+	void eraseHistory();
+
+
 private:
 
 	void initThreadSafe();
@@ -232,9 +245,9 @@ private:
 	QtSms * _qtSms;
 
 	QtSubscribe * _qtSubscribe;
-	
+
 	QtLogin * _qtLogin;
-	
+
 	QtBrowser * _browser;
 
 	QtContactList *_contactList;
