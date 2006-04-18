@@ -91,6 +91,8 @@ protected:
 
 	int _notTypingDelay;
 
+	bool _isTyping;
+
 	WidgetSeeker    _seeker;
 
     QPushButton  *   _fontButton;

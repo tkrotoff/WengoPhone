@@ -41,7 +41,7 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 	_notTypingDelay=1000;
 	_stoppedTypingTimerId = -1;
 	_notTypingTimerId = -1;
-
+	_isTyping = false;
 	_sessionId = sessionId;
 
     /* Defaults fonts and colors */
@@ -92,7 +92,10 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 }
 
 void ChatWidget::chatEditChanged(){
-	_imChatSession->changeTypingState(IMChat::TypingStateTyping);
+	if ( ! _isTyping ){
+		_imChatSession->changeTypingState(IMChat::TypingStateTyping);
+		_isTyping = true;
+	}
 
 	if ( _notTypingTimerId != -1 )
 	{
@@ -100,10 +103,12 @@ void ChatWidget::chatEditChanged(){
 		_notTypingTimerId = -1;
 	}
 
-	if ( _stoppedTypingTimerId == -1 ){
+	if ( _stoppedTypingTimerId == -1 )
+	{
 		_stoppedTypingTimerId = startTimer(_stoppedTypingDelay);
 	}
-	else {
+	else
+	{
 		killTimer(_stoppedTypingTimerId);
 		_stoppedTypingTimerId = startTimer(_stoppedTypingDelay);
 	}
@@ -115,11 +120,13 @@ void ChatWidget::timerEvent ( QTimerEvent * event ){
 		_stoppedTypingTimerId = -1;
 		_imChatSession->changeTypingState(IMChat::TypingStateStopTyping);
 		_notTypingTimerId = startTimer(_notTypingDelay);
+		_isTyping = false;
 	}
 	if ( event->timerId() == _notTypingTimerId){
 		killTimer(_notTypingTimerId);
 		_notTypingTimerId = -1;
 		_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
+		_isTyping = false;
 	}
 }
 
