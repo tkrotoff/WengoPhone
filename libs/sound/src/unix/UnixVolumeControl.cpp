@@ -21,9 +21,6 @@
 
 #include <util/Logger.h>
 
-
-#include <sound/VolumeControl.h>
-
 #include <cutil/global.h>
 
 #include <sys/ioctl.h>
@@ -102,4 +99,12 @@ bool UnixVolumeControl::isMuted() {
 	level = level >> 8;
 	::close(fd);
 	return (level == 0);
+}
+
+/* FIXME: implementation needs to be written.*/
+bool UnixVolumeControl::setMute(bool mute) {
+}
+
+/* FIXME: implementation needs to be written.*/
+bool UnixVolumeControl::selectAsRecordDevice() {
 }
