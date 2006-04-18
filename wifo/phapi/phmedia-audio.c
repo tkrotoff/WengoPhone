@@ -894,7 +894,7 @@ static void ph_downsample(void *framebuf, int framesize)
 /**
  * @brief upsample of a buffer into another buffer by a factor of 2
  */
-static void ph_upsample(void *dbuf, void *sbuf, int framesize)
+static void ph_upsample(void *dbuf, void *sbuf, int framesize, short *last)
 {
   short *sp = (short *) sbuf; // 'narrow' - original buffer
   short *dp = (short *) dbuf; // 'wide' - target buffer
@@ -907,21 +907,34 @@ static void ph_upsample(void *dbuf, void *sbuf, int framesize)
       return;
   }
   
+  
+#if 1
+
+  tmp = ((int) *last + (int) *sp) >> 1;
+  *dp++ = (short) SATURATE(tmp);
+  *dp++ = *sp;
+
   // prepare for the last perequation on the right border of the sbuf
   framesize--;
 
-  // loop and upsample the sbuf into the dbuf with a linear perequation
+  // loop and upsample the sbuf into the dbuf with a linear interpolation
   while(framesize--)
     {
-      *dp++ = *sp;
       tmp = ((int)sp[0] + (int)sp[1]) >> 1;
       *dp++ = (short) SATURATE(tmp);
       sp++;
+      *dp++ = *sp;
     }
-    
-  // do the last perequation on the right border of the sbuf
-  *dp++ = *sp;
-  *dp++ = *sp;
+
+  *last = *sp;
+
+#else
+  while(framesize--)
+    {
+      *dp++ = *sp;
+      *dp++ = *sp++;
+    }
+#endif
     
 }
 
@@ -1038,7 +1051,7 @@ ph_media_retreive_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf, int clo
 	{
 	  char *tmp = alloca(framesize);
 	  len = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, len, tmp, framesize);
-	  ph_upsample(mbf->buf, tmp, framesize);
+	  ph_upsample(mbf->buf, tmp, framesize, &stream->lastsample);
 	  mbf->next = len;
 	  stream->ms.rxts_inc += len/2;
 	  len *= 2;

@@ -175,6 +175,7 @@ struct ph_audio_stream
 
   int using_out_callback; /** used to choose the location where network data is recorded in the echo canceller circular buffer */
   void *lastframe;   /** last played frame to be reused in the case of underflow */
+  short lastsample;  /*  used in upsampling algo */
 
 };
 
