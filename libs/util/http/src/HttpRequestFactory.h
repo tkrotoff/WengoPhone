@@ -23,7 +23,7 @@
 #include <util/NonCopyable.h>
 
 #include "curl/CurlHttpRequest.h"
-#include "qt/QtHttpRequest.h"
+//#include "qt/QtHttpRequest.h"
 #include "null/NullHttpRequest.h"
 
 /**
@@ -37,7 +37,7 @@ class HttpRequestFactory : NonCopyable {
 public:
 
 	static IHttpRequest * create() {
-		new QtHttpRequest();
+		//new QtHttpRequest();
 		new NullHttpRequest();
 		return new CurlHttpRequest();
 	}
