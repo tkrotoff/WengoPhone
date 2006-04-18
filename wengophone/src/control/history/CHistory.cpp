@@ -45,15 +45,15 @@ History & CHistory::getHistory() {
 	return _history;
 }
 
-void CHistory::historyMementoAddedEventHandler(History & history, int id) {
+void CHistory::historyMementoAddedEventHandler(History & history, unsigned int id) {
 	mementoAddedEvent(*this, id);
 }
 
-void CHistory::historyMementoUpdatedEventHandler(History & history, int id) {
+void CHistory::historyMementoUpdatedEventHandler(History & history, unsigned int id) {
 	mementoUpdatedEvent(*this, id);
 }
 
-void CHistory::historyMementoRemovedEventHandler(History & history, int id) {
+void CHistory::historyMementoRemovedEventHandler(History & history, unsigned int id) {
 	mementoRemovedEvent(*this, id);
 }
 
@@ -61,7 +61,7 @@ void CHistory::historyLoadedEventHandler(History & history) {
 	historyLoadedEvent(*this);
 }
 
-void CHistory::removeHistoryMemento(int id) {
+void CHistory::removeHistoryMemento(unsigned int id) {
 	_history.removeMemento(id);
 }
 
@@ -93,14 +93,14 @@ void CHistory::clearRejectedCallEntries() {
 	_history.clear(HistoryMemento::RejectedCall);
 }
 
-std::string CHistory::getMementoData(int id) {
+std::string CHistory::getMementoData(unsigned int id) {
 	return _history.getMemento(id)->getData();
 }
 
-std::string CHistory::getMementoPeer(int id) {
+std::string CHistory::getMementoPeer(unsigned int id) {
 	return _history.getMemento(id)->getPeer();
 }
 
-void CHistory::replay(int id) {
+void CHistory::replay(unsigned int id) {
 	_history.replay(id);
 }

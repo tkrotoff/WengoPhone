@@ -213,7 +213,7 @@ public:
 	 *
 	 * @return the CHistory
 	 */
-	CHistory & getCHistrory() const {
+	CHistory & getCHistory() const {
 		return *_cHistory;
 	}
 

@@ -40,14 +40,14 @@ HistoryMementoCollection * History::getHistoryMementoCollection() {
 	return _collection;
 }
 
-int History::addMemento(HistoryMemento * memento) {
-	int id = _collection->addMemento(memento);
+unsigned int History::addMemento(HistoryMemento * memento) {
+	unsigned int id = _collection->addMemento(memento);
 	mementoAddedEvent(*this, id);
 	return id;
 }
 
 void History::updateCallDuration(int callId, int duration) {
-	int id = _collection->getMementoByCallId(callId);
+	unsigned int id = _collection->getMementoByCallId(callId);
 	HistoryMemento * memento = getMemento(id);
 	if( memento ) {
 		memento->updateDuration(duration);
@@ -56,7 +56,7 @@ void History::updateCallDuration(int callId, int duration) {
 }
 
 void History::updateSMSState(int callId, HistoryMemento::State state) {
-	int id = _collection->getMementoBySMSId(callId);
+	unsigned int id = _collection->getMementoBySMSId(callId);
 	HistoryMemento * memento = getMemento(id);
 	if( memento ) {
 		memento->updateState(state);
@@ -65,7 +65,7 @@ void History::updateSMSState(int callId, HistoryMemento::State state) {
 }
 
 void History::updateCallState(int callId, HistoryMemento::State state) {
-	int id = _collection->getMementoByCallId(callId);
+	unsigned int id = _collection->getMementoByCallId(callId);
 	HistoryMemento * memento = getMemento(id);
 	if( memento ) {
 		memento->updateState(state);
@@ -73,7 +73,7 @@ void History::updateCallState(int callId, HistoryMemento::State state) {
 	}
 }
 
-int History::size() {
+unsigned int History::size() {
 	return _collection->size();
 }
 
@@ -110,13 +110,13 @@ std::string History::toString() {
 	return _collection->toString();
 }
 
-void History::removeMemento(int id) {
+void History::removeMemento(unsigned int id) {
 	//TODO: verify that the memento is really removed
 	_collection->removeMemento(id);
 	mementoRemovedEvent(*this, id);
 }
 
-HistoryMemento * History::getMemento(int id) {
+HistoryMemento * History::getMemento(unsigned int id) {
 	return _collection->getMemento(id);
 }
 
@@ -157,7 +157,7 @@ void History::save(std::string filename) {
 	//LOG_DEBUG(toString());
 }
 
-void History::replay(int id) {
+void History::replay(unsigned int id) {
 	
 	//replay only outgoing call
 	if( getMemento(id)->getState() == HistoryMemento::OutgoingCall ) {

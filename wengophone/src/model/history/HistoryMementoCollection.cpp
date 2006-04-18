@@ -30,13 +30,13 @@ HistoryMementoCollection::HistoryMementoCollection() {
 HistoryMementoCollection::~HistoryMementoCollection() {
 }
 
-int HistoryMementoCollection::addMemento(HistoryMemento * memento) {
+unsigned int HistoryMementoCollection::addMemento(HistoryMemento * memento) {
 	_privateCollection[_historyId] = memento;
 	_historyId++;
 	return _historyId - 1;
 }
 
-int HistoryMementoCollection::getMementoByCallId(int callId) {
+unsigned int HistoryMementoCollection::getMementoByCallId(int callId) {
 	if( callId != -1 ) {
 		HistoryMap::iterator it;
 		for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
@@ -49,7 +49,7 @@ int HistoryMementoCollection::getMementoByCallId(int callId) {
 	return -1;
 }
 
-int HistoryMementoCollection::getMementoBySMSId(int callId) {
+unsigned int HistoryMementoCollection::getMementoBySMSId(int callId) {
 		if( callId != -1 ) {
 		HistoryMap::iterator it;
 		for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
@@ -62,35 +62,55 @@ int HistoryMementoCollection::getMementoBySMSId(int callId) {
 	return -1;
 }
 
-int HistoryMementoCollection::size() {
+unsigned int HistoryMementoCollection::size() {
 	return _privateCollection.size();
 }
 
-HistoryMemento * HistoryMementoCollection::getMemento(int id) {
+HistoryMemento * HistoryMementoCollection::getMemento(unsigned int id) {
 	HistoryMemento * memento = (*(_privateCollection.find(id))).second;
 	return memento;
 }
 
-void HistoryMementoCollection::removeMemento(int id) {
+void HistoryMementoCollection::removeMemento(unsigned int id) {
 	_privateCollection.erase(_privateCollection.find(id));
 }
 
+#include <stdio.h>
+
 void HistoryMementoCollection::clear(HistoryMemento::State state) {
+	
+	int id = -1;
+	HistoryMemento * ref = NULL;
 	
 	HistoryMap::iterator it;
 	for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
 		
 		if( ((*it).second->getState() == state) || (state == HistoryMemento::Any)) {
-			_privateCollection.erase(it);
+			
+			if( ref ) {
+				delete ref;
+				_privateCollection.erase(id);
+			}
+			
+			id = (*it).first;
+			ref = (*it).second;
+			
+		} else {
+			ref = NULL;
 		}
+	}
+	
+	if(ref) {
+		delete ref;
+		_privateCollection.erase(id);
 	}
 }
 
-void HistoryMementoCollection::setMaxEntries(int max) {
+void HistoryMementoCollection::setMaxEntries(unsigned int max) {
 	LOG_WARN("Not implemented yet");
 }
 
-void HistoryMementoCollection::privateAdd(int id, HistoryMemento * memento) {
+void HistoryMementoCollection::privateAdd(unsigned int id, HistoryMemento * memento) {
 	_privateCollection[id] = memento;
 }
 
@@ -116,7 +136,7 @@ HistoryMementoCollection * HistoryMementoCollection::getMementos(HistoryMemento:
 HistoryMap::iterator HistoryMementoCollection::begin() {
 	return _privateCollection.begin();
 }
-	
+
 HistoryMap::iterator HistoryMementoCollection::end() {
 	return _privateCollection.end();
 }
@@ -126,7 +146,7 @@ std::string HistoryMementoCollection::toString() {
 	
 	HistoryMap::iterator it;
 	for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
-		toReturn += (*it).second->toString() + "\n";
+		toReturn += ( "id: " + String::fromNumber((*it).first) + "/" + (*it).second->toString() + "\n");
 	}
 	return toReturn;
 }

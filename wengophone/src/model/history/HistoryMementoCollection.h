@@ -30,7 +30,7 @@
 #include <boost/archive/archive_exception.hpp>
 #include <boost/serialization/map.hpp>
 
-typedef std::map<int, HistoryMemento *> HistoryMap;
+typedef std::map<unsigned int, HistoryMemento *> HistoryMap;
 
 /**
  * HistoryMementoCollection stores a set of HistoryMemento
@@ -60,7 +60,7 @@ public:
 	 * @param memento the HistoryMemento to add
 	 * @return the id of the memento
 	 */
-	int addMemento(HistoryMemento * memento);
+	unsigned int addMemento(HistoryMemento * memento);
 	
 	/**
 	 * get a HistoryMemento by its id.
@@ -68,14 +68,14 @@ public:
 	 * @param id the id
 	 * @return the HistoryMemento with the given id
 	 */
-	HistoryMemento * getMemento(int id);
+	HistoryMemento * getMemento(unsigned int id);
 	
 	/**
 	 * remove a memento by its id.
 	 * 
 	 * @param id the id
 	 */
-	void removeMemento(int id);
+	void removeMemento(unsigned int id);
 	
 	/**
 	 * Clear all mementos.
@@ -87,7 +87,7 @@ public:
 	 * 
 	 * @return the number of entries
 	 */
-	int size();
+	unsigned int size();
 	
 	/**
 	 * Return a string representing this object.
@@ -123,20 +123,20 @@ private:
 	HistoryMementoCollection * getMementos(HistoryMemento::State state, int count = -1);
 
 	/**
-	 * Return the HistoryMemento associated to the given callId.
+	 * Return the HistoryMemento's id associated to the given callId.
 	 * 
 	 * @param callId the callId
 	 * @return the HistoryMemento associated to callId
 	 */
-	int getMementoByCallId(int callId);
+	unsigned int getMementoByCallId(int callId);
 
 	/**
-	 * Return the HistoryMemento associated to the given SMS id.
+	 * Return the HistoryMemento's id associated to the given SMS id.
 	 * 
 	 * @param callId the SMS id
 	 * @return the HistoryMemento associated to SMS id
 	 */
-	int getMementoBySMSId(int callId);
+	unsigned int getMementoBySMSId(int callId);
 
 	/**
 	 * Add a HistoryMemento & do not increment the static int _historyId.
@@ -144,20 +144,20 @@ private:
 	 * @param memento the HistoryMemento to add
 	 * @param id the id of the memento
 	 */
-	void privateAdd(int id, HistoryMemento * memento);
+	void privateAdd(unsigned int id, HistoryMemento * memento);
 	
 	/**
 	 * Set the max entries.
 	 * 
 	 * @param max max entries
 	 */
-	void setMaxEntries(int max);
+	void setMaxEntries(unsigned int max);
 	
 	/**	 global static history id for mementos */
 	static unsigned int _historyId;
 
 	/**	 max entries of the history */
-	int _maxEntries;
+	unsigned int _maxEntries;
 
 	/**	 private collection, handle a (id, memento) pair map */
 	HistoryMap _privateCollection;

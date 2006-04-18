@@ -44,17 +44,17 @@ public:
 	/**
 	 * A memento has been added.
 	 */
-	Event<void (CHistory &, int id)> mementoAddedEvent;
+	Event<void (CHistory &, unsigned int id)> mementoAddedEvent;
 	
 	/**
 	 * A memento has been updated.
 	 */
-	Event<void (CHistory &, int id)> mementoUpdatedEvent;
+	Event<void (CHistory &, unsigned int id)> mementoUpdatedEvent;
 
 	/**
 	 * A memento has been removed.
 	 */
-	Event<void (CHistory &, int id)> mementoRemovedEvent;
+	Event<void (CHistory &, unsigned int id)> mementoRemovedEvent;
 
 	/**
 	 * Default constructor.
@@ -64,7 +64,7 @@ public:
 	/**
 	 * @see History::removeMemento
 	 */
-	void removeHistoryMemento(int id);
+	void removeHistoryMemento(unsigned int id);
 
 	/**
 	 * @see History::clear
@@ -104,7 +104,7 @@ public:
 	/**
 	 * @see History::replay
 	 */
-	void replay(int id);
+	void replay(unsigned int id);
 
 	/**
 	 * Get the memento data.
@@ -112,7 +112,7 @@ public:
 	 * @param id the memento id
 	 * @return the memento data (the sms text)
 	 */
-	std::string getMementoData(int id);
+	std::string getMementoData(unsigned int id);
 	
 	/**
 	 * Get the memento peer.
@@ -120,7 +120,7 @@ public:
 	 * @param id the memento id
 	 * @return the memento peer
 	 */
-	std::string getMementoPeer(int id);
+	std::string getMementoPeer(unsigned int id);
 
 	/**
 	 * retrive the CWengoPhone.
@@ -138,11 +138,11 @@ public:
 
 private:
 
-	void historyMementoAddedEventHandler(History &, int id);
+	void historyMementoAddedEventHandler(History &, unsigned int id);
 	
-	void historyMementoUpdatedEventHandler(History &, int id);
+	void historyMementoUpdatedEventHandler(History &, unsigned int id);
 
-	void historyMementoRemovedEventHandler(History &, int id);
+	void historyMementoRemovedEventHandler(History &, unsigned int id);
 
 	void historyLoadedEventHandler(History &);
 

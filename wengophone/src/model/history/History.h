@@ -68,17 +68,17 @@ public:
 	/**
 	 * A memento has been added.
 	 */
-	Event<void (History &, int id)> mementoAddedEvent;
+	Event<void (History &, unsigned int id)> mementoAddedEvent;
 	
 	/**
 	 * A memento has been updated.
 	 */
-	Event<void (History &, int id)> mementoUpdatedEvent;
+	Event<void (History &, unsigned int id)> mementoUpdatedEvent;
 	
 	/**
 	 * A memento has been removed.
 	 */
-	Event<void (History &, int id)> mementoRemovedEvent;
+	Event<void (History &, unsigned int id)> mementoRemovedEvent;
 
 	/**
 	 * Default constructor
@@ -112,7 +112,7 @@ public:
 	 * @param id the id
 	 * @return the HistoryMemento with the given id
 	 */
-	HistoryMemento * getMemento(int id);
+	HistoryMemento * getMemento(unsigned int id);
 
 	/**
 	 * get a HistoryMementoCollection containing all mementos
@@ -129,7 +129,7 @@ public:
 	 *
 	 * @param id the id
 	 */
-	void removeMemento(int id);
+	void removeMemento(unsigned int id);
 	
 	/**
 	 * Clear entries of the history
@@ -142,7 +142,7 @@ public:
 	 *
 	 * @return the number of HistoryMemento's
 	 */
-	int size();
+	unsigned int size();
 
 	/**
 	 * add a history memento to the history.
@@ -150,7 +150,7 @@ public:
 	 * @param memento the memento to add
 	 * @return the id of the memento
 	 */
-	int addMemento(HistoryMemento * memento);
+	unsigned int addMemento(HistoryMemento * memento);
 
 	/**
 	 * Return a string representing this object.
@@ -195,7 +195,7 @@ public:
 	 *
 	 * @param id memento to replay
 	 */
-	void replay(int id);
+	void replay(unsigned int id);
 
 private:
 
