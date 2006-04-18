@@ -111,10 +111,16 @@
       </item>
       <item row="0" column="1" >
        <widget class="QPushButton" name="videoCallButton" >
+        <property name="minimumSize" >
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="maximumSize" >
          <size>
-          <width>16</width>
-          <height>16</height>
+          <width>22</width>
+          <height>22</height>
          </size>
         </property>
         <property name="icon" >
@@ -127,10 +133,16 @@
       </item>
       <item row="0" column="2" >
        <widget class="QPushButton" name="hangUpButton" >
+        <property name="minimumSize" >
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="maximumSize" >
          <size>
-          <width>16</width>
-          <height>16</height>
+          <width>22</width>
+          <height>22</height>
          </size>
         </property>
         <property name="icon" >
@@ -143,10 +155,16 @@
       </item>
       <item row="0" column="3" >
        <widget class="QPushButton" name="callButton" >
+        <property name="minimumSize" >
+         <size>
+          <width>38</width>
+          <height>38</height>
+         </size>
+        </property>
         <property name="maximumSize" >
          <size>
-          <width>32</width>
-          <height>32</height>
+          <width>38</width>
+          <height>38</height>
          </size>
         </property>
         <property name="icon" >
@@ -176,10 +194,16 @@
        </property>
        <item row="0" column="4" >
         <widget class="QPushButton" name="startChatButton" >
+         <property name="minimumSize" >
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
          <property name="maximumSize" >
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>38</width>
+           <height>38</height>
           </size>
          </property>
          <property name="text" >
@@ -201,10 +225,16 @@
        </item>
        <item row="0" column="5" >
         <widget class="QPushButton" name="sendSmsButton" >
+         <property name="minimumSize" >
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
          <property name="maximumSize" >
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>38</width>
+           <height>38</height>
           </size>
          </property>
          <property name="text" >
@@ -226,10 +256,16 @@
        </item>
        <item row="0" column="3" >
         <widget class="QPushButton" name="startConferenceButton" >
+         <property name="minimumSize" >
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
          <property name="maximumSize" >
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>38</width>
+           <height>38</height>
           </size>
          </property>
          <property name="text" >
@@ -251,10 +287,16 @@
        </item>
        <item row="0" column="2" >
         <widget class="QPushButton" name="findContactButton" >
+         <property name="minimumSize" >
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
          <property name="maximumSize" >
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>38</width>
+           <height>38</height>
           </size>
          </property>
          <property name="text" >
@@ -276,10 +318,16 @@
        </item>
        <item row="0" column="1" >
         <widget class="QPushButton" name="addContactButton" >
+         <property name="minimumSize" >
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
          <property name="maximumSize" >
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>38</width>
+           <height>38</height>
           </size>
          </property>
          <property name="text" >
@@ -362,7 +410,7 @@
      <x>0</x>
      <y>0</y>
      <width>290</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuTools" >
@@ -430,9 +478,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>465</y>
+     <y>462</y>
      <width>290</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
