@@ -38,7 +38,7 @@ using namespace std;
 
 const char * sound_device_names[] = SOUND_DEVICE_NAMES;
 
-UnixVolumeControl::UnixVolumeControl(int deviceId, UnixDeviceType deviceType)
+UnixVolumeControl::UnixVolumeControl(int deviceId, UnixDeviceType deviceType) 
 	throw(NoSoundCardException, SoundMixerException) {
 }
 
