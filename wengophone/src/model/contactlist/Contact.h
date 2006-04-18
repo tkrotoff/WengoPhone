@@ -162,6 +162,20 @@ public:
 	bool hasIMContact(const IMContact & imContact) const;
 
 	/**
+	 * Check if an IMContact of the Contact is equivalent to the given
+	 * IMContact.
+	 *
+	 * Equivalent IMContacts are of the same protocol. If an equivalent 
+	 * IMContact has been found and if it has no associated IMAccount,
+	 * the IMAccount of the given IMContact is linked to the found
+	 * IMContact.
+	 *
+	 * @param imContact the IMContact to check
+	 * @return true if an equivalent IMContact has been found.
+	 */
+	bool checkAndSetIMContact(const IMContact & imContact);
+
+	/**
 	 * Return the IMContact equals to given IMContact.
 	 *
 	 * @param imContact the desired IMContact

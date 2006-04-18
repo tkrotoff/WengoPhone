@@ -255,16 +255,19 @@ void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,
 }
 
 Contact * ContactList::findContactThatOwns(const IMContact & imContact) const {
+	Contact * result = NULL;
+
 	for (Contacts::const_iterator it = _contacts.begin();
 		it != _contacts.end();
 		++it) {
 		Contact & contact = (Contact &)*it;
-		if (contact.hasIMContact(imContact)) {
-			return &contact;
+		if (contact.checkAndSetIMContact(imContact)) {
+			result = &contact;
+			break;
 		}
 	}
 
-	return NULL;
+	return result;
 }
 
 void ContactList::moveContactToGroup(Contact & contact, const std::string & to, const std::string & from) {

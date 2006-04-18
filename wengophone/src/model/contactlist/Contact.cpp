@@ -161,6 +161,21 @@ bool Contact::hasIMContact(const IMContact & imContact) const {
 	}
 }
 
+bool Contact::checkAndSetIMContact(const IMContact & imContact) {
+	for (IMContactSet::const_iterator it = _imContactSet.begin();
+		it != _imContactSet.end();
+		++it) {
+		if ((*it) == imContact) {
+			if (!(*it).getIMAccount()) {
+				((IMContact &)(*it)).setIMAccount(imContact.getIMAccount());
+			}
+			return true;
+		}
+	}
+
+	return false;
+}
+
 IMContact & Contact::getIMContact(const IMContact & imContact) const {
 	return (IMContact &)*_imContactSet.find(imContact);
 }
