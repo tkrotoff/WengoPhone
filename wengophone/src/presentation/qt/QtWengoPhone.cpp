@@ -267,7 +267,7 @@ void QtWengoPhone::initThreadSafe() {
 	_phoneLineStateLabel->setPixmap(QPixmap(":/pics/statusbar_sip_error.png"));
 	_phoneLineStateLabel->setToolTip(tr("Not connected"));
 	statusBar->addPermanentWidget(_phoneLineStateLabel);
-	
+
 	//FIXME: can i create the widget here ?
 	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
 
@@ -534,8 +534,8 @@ void QtWengoPhone::addContact() {
 }
 
 void QtWengoPhone::showConfig() {
-	QtWengoConfigDialog dialog(_wengoPhoneWindow);
-	dialog.exec();
+	QtWengoConfigDialog dialog(_cWengoPhone, _wengoPhoneWindow);
+	dialog.show();
 }
 
 void QtWengoPhone::showForum() {

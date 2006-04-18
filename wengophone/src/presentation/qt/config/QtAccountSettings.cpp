@@ -1,45 +1,44 @@
 /*
-* WengoPhone, a voice over Internet phone
-* Copyright (C) 2004-2005  Wengo
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-#include <qtutil/Object.h>
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2006  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
 #include "QtAccountSettings.h"
 
-QtAccountSettings::QtAccountSettings ( QWidget * parent, Qt::WFlags f ) : QWidget ( parent, f ) {
-	_widget = WidgetFactory::create( ":/forms/config/AccountSettings.ui", this );
-	QGridLayout * layout = new QGridLayout();
-	layout->addWidget( _widget );
-	layout->setMargin( 0 );
-	setLayout( layout );
+#include <presentation/qt/imaccount/QtIMAccountManager.h>
 
-	_imAddPushButton = Object::findChild<QPushButton *>( _widget,"imAddPushButton" );
-	_imModifyPushButton = Object::findChild<QPushButton *>( _widget,"imModifyPushButton" );
-	_imDeletePushButton = Object::findChild<QPushButton *>( _widget,"imDeletePushButton" );
+#include <model/WengoPhone.h>
+#include <model/profile/UserProfile.h>
+#include <control/CWengoPhone.h>
 
-	_sipAddPushButton = Object::findChild<QPushButton *>( _widget,"sipAddPushButton" );
-	_sipModifyPushButton = Object::findChild<QPushButton *>( _widget,"sipModifyPushButton" );
-	_sipDeletePushButton = Object::findChild<QPushButton *>( _widget,"sipDeletePushButton" );
+#include <qtutil/Object.h>
+#include <qtutil/Widget.h>
+#include <qtutil/WidgetFactory.h>
 
-	connect ( _imAddPushButton, SIGNAL( clicked() ), this, SLOT( editProfileClicked() ) );
-}
+#include <QtGui>
 
-void QtAccountSettings::editProfileClicked() {
-//	QtProtocolSettings protocolDialog ( this );
-//	protocolDialog.exec();
+QtAccountSettings::QtAccountSettings(CWengoPhone & cWengoPhone, QWidget * parent)
+	: QObject(parent) {
+
+	_accountSettingsWidget = WidgetFactory::create(":/forms/config/AccountSettings.ui", parent);
+
+	QStackedWidget * imAccountStackedWidget = Object::findChild<QStackedWidget *>(_accountSettingsWidget, "imAccountStackedWidget");
+
+	QtIMAccountManager imAccountManager(cWengoPhone.getWengoPhone().getCurrentUserProfile(), _accountSettingsWidget);
+	int index = imAccountStackedWidget->addWidget(imAccountManager.getWidget());
+	imAccountStackedWidget->setCurrentIndex(index);
 }

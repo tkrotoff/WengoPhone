@@ -23,7 +23,7 @@
 #include <util/NonCopyable.h>
 
 class QWidget;
-class QLayout;
+class QGridLayout;
 class QDialog;
 
 /**
@@ -40,7 +40,7 @@ public:
 	 * @param parent QWidget where to create the layout
 	 * @return QGridLayout
 	 */
-	static QLayout * createLayout(QWidget * parent);
+	static QGridLayout * createLayout(QWidget * parent);
 
 	/**
 	 * Transforms a QWidget into a QDialog.

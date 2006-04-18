@@ -1,21 +1,21 @@
 /*
-* WengoPhone, a voice over Internet phone
-* Copyright (C) 2004-2005  Wengo
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2006  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
 #ifndef QTWENGOCONFIGDIALOG_H
 #define QTWENGOCONFIGDIALOG_H
@@ -33,43 +33,52 @@
 #include "QtCallForwardSettings.h"
 #include "QtLanguagesSettings.h"
 
+class CWengoPhone;
 
-class QtWengoConfigDialog : public QDialog {
-		Q_OBJECT
+/**
+ * Main window for the configuration.
+ *
+ * @author Tanguy Krotoff
+ */
+class QtWengoConfigDialog : public QObject {
+	Q_OBJECT
+public:
 
-	public:
-		QtWengoConfigDialog ( QWidget *parent = 0, Qt::WFlags f = 0 );
+	QtWengoConfigDialog(CWengoPhone & cWengoPhone, QWidget * parent);
 
-	public Q_SLOTS:
+public Q_SLOTS:
 
-		void itemActivated ( );
+	void itemActivated();
 
-		void accept();
+	void save();
 
-	protected:
-		QWidget * _widget;
+	void show();
 
-		QTreeWidget * _treeWidget;
+protected:
 
-		QStackedWidget * _stackedWidget;
+	QDialog * _configDialog;
 
-		QtNotificationSettings * _notificationWidget;
+	QTreeWidget * _treeWidget;
 
-		QtGeneralSettings * _generalSettingsWidget;
+	QStackedWidget * _stackedWidget;
 
-		QtAccountSettings * _accountSettingsWidget;
+	QtNotificationSettings * _notificationWidget;
 
-		QtPrivacySettings * _privacySettingsWidget;
+	QtGeneralSettings * _generalSettingsWidget;
 
-		QtAudioSettings * _audioSettingsWidget;
+	QtAccountSettings * _accountSettingsWidget;
 
-		QtVideoSettings * _videoSettingsWidget;
+	QtPrivacySettings * _privacySettingsWidget;
 
-		QtAdvancedSettings * _advancedSettingsWidget;
+	QtAudioSettings * _audioSettingsWidget;
 
-		QtCallForwardSettings * _callForwardWidget;
+	QtVideoSettings * _videoSettingsWidget;
 
-		QtLanguagesSettings * _languagesWidget;
-	};
+	QtAdvancedSettings * _advancedSettingsWidget;
 
-#endif
+	QtCallForwardSettings * _callForwardWidget;
+
+	QtLanguagesSettings * _languagesWidget;
+};
+
+#endif	//QTWENGOCONFIGDIALOG_H

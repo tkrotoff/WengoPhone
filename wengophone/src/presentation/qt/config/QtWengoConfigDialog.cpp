@@ -1,127 +1,129 @@
 /*
-* WengoPhone, a voice over Internet phone
-* Copyright (C) 2004-2005  Wengo
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-#include <QtGui>
-#include <qtutil/Object.h>
-#include <qtutil/WidgetFactory.h>
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2006  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
 #include "QtWengoConfigDialog.h"
 
+#include <qtutil/Object.h>
+#include <qtutil/WidgetFactory.h>
+#include <qtutil/Widget.h>
 
+#include <util/Logger.h>
 
-QtWengoConfigDialog::QtWengoConfigDialog( QWidget * parent, Qt::WFlags f ) : QDialog ( parent, f ) {
-	_widget = WidgetFactory::create( ":/forms/config/WengoConfigDialog.ui", this );
+#include <QtGui>
 
-	QGridLayout * layout = new QGridLayout();
-	layout->addWidget( _widget );
-	layout->setMargin( 0 );
-	setLayout( layout );
+QtWengoConfigDialog::QtWengoConfigDialog(CWengoPhone & cWengoPhone, QWidget * parent)
+	: QObject(parent) {
+
+	_configDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/config/WengoConfigDialog.ui", parent));
 
 	_notificationWidget = new QtNotificationSettings();
 	_generalSettingsWidget = new QtGeneralSettings();
-	_accountSettingsWidget = new QtAccountSettings();
+	_accountSettingsWidget = new QtAccountSettings(cWengoPhone, _configDialog);
 	_privacySettingsWidget = new QtPrivacySettings();
 	_audioSettingsWidget = new QtAudioSettings();
 	_videoSettingsWidget = new QtVideoSettings();
 	_advancedSettingsWidget = new QtAdvancedSettings();
 	_callForwardWidget = new QtCallForwardSettings();
-	_languagesWidget = new QtLanguagesSettings(this);
+	_languagesWidget = new QtLanguagesSettings(_configDialog);
 
-	_stackedWidget = Object::findChild<QStackedWidget *>( _widget, "stackedWidget" );
-	_treeWidget = Object::findChild<QTreeWidget *>( _widget, "treeWidget" );
+	//treeWidget
+	_treeWidget = Object::findChild<QTreeWidget *>(_configDialog, "treeWidget");
+	connect(_treeWidget, SIGNAL(itemSelectionChanged()), SLOT(itemActivated()));
+	//Hides the header of the tree view
+	_treeWidget->header()->hide();
 
-	// Hide the header of the tree view
-	_treeWidget->header() ->hide();
+	//stackedWidget
+	_stackedWidget = Object::findChild<QStackedWidget *>(_configDialog, "stackedWidget");
+	_stackedWidget->addWidget(_notificationWidget);
+	_stackedWidget->addWidget(_generalSettingsWidget);
+	_stackedWidget->addWidget(_accountSettingsWidget->getWidget());
+	_stackedWidget->addWidget(_privacySettingsWidget);
+	_stackedWidget->addWidget(_audioSettingsWidget);
+	_stackedWidget->addWidget(_videoSettingsWidget);
+	_stackedWidget->addWidget(_callForwardWidget);
+	_stackedWidget->addWidget(_advancedSettingsWidget);
+	_stackedWidget->addWidget(_languagesWidget->getWidget());
+	_stackedWidget->setCurrentWidget(_generalSettingsWidget);
 
-	_stackedWidget->addWidget( _notificationWidget );
-	_stackedWidget->addWidget( _generalSettingsWidget );
-	_stackedWidget->addWidget( _accountSettingsWidget );
-	_stackedWidget->addWidget( _privacySettingsWidget );
-	_stackedWidget->addWidget( _audioSettingsWidget );
-	_stackedWidget->addWidget( _videoSettingsWidget );
-	_stackedWidget->addWidget( _callForwardWidget );
-	_stackedWidget->addWidget( _advancedSettingsWidget );
-	_stackedWidget->addWidget( _languagesWidget->getWidget() );
-
-	_stackedWidget->setCurrentWidget( _generalSettingsWidget );
-
-	QPushButton * pb;
-
-	pb = Object::findChild<QPushButton *>( _widget, "okButton" );
-	connect ( pb, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	pb = Object::findChild<QPushButton *>( _widget, "cancelButton" );
-	connect ( pb, SIGNAL( clicked() ), this, SLOT( reject() ) );
-
-	connect ( _treeWidget, SIGNAL( itemSelectionChanged() ), this, SLOT( itemActivated ( ) ) );
+	//saveButton
+	QPushButton * saveButton = Object::findChild<QPushButton *>(_configDialog, "saveButton");
+	connect(saveButton, SIGNAL(clicked()), SLOT(save()));
 }
 
-void QtWengoConfigDialog::itemActivated ( ) {
-	QString itemText;
+void QtWengoConfigDialog::itemActivated() {
 	const QList<QTreeWidgetItem *> itemList = _treeWidget->selectedItems();
-	itemText = itemList[ 0 ] ->text( 0 );
+	QString itemText = itemList[0]->text(0);
 
-	if ( itemText == "General" ) {
-		_stackedWidget->setCurrentWidget( _generalSettingsWidget );
+	if (itemText == tr("General")) {
+		_stackedWidget->setCurrentWidget(_generalSettingsWidget);
 		_videoSettingsWidget->widgetHidden();
 	}
 
-	if ( itemText == "Languages" ) {
-		_stackedWidget->setCurrentWidget( _languagesWidget->getWidget() );
+	else if (itemText == tr("Languages")) {
+		_stackedWidget->setCurrentWidget(_languagesWidget->getWidget());
 		_videoSettingsWidget->widgetHidden();
 	}
 
-	if ( itemText == "Notifications & Sounds" ) {
-		_stackedWidget->setCurrentWidget( _notificationWidget );
+	else if (itemText == tr("Notifications & Sounds")) {
+		_stackedWidget->setCurrentWidget(_notificationWidget);
 		_videoSettingsWidget->widgetHidden();
 	}
 
-	if ( itemText == "Accounts" ) {
-		_stackedWidget->setCurrentWidget( _accountSettingsWidget );
+	else if (itemText == tr("Accounts")) {
+		_stackedWidget->setCurrentWidget(_accountSettingsWidget->getWidget());
 		_videoSettingsWidget->widgetHidden();
 	}
 
-	if ( itemText == "Privacy" ) {
-		_stackedWidget->setCurrentWidget( _privacySettingsWidget );
+	else if (itemText == tr("Privacy")) {
+		_stackedWidget->setCurrentWidget(_privacySettingsWidget);
 		_videoSettingsWidget->widgetHidden();
 	}
 
-	if ( itemText == "Audio" ) {
-		_stackedWidget->setCurrentWidget( _audioSettingsWidget );
+	else if (itemText == tr("Audio")) {
+		_stackedWidget->setCurrentWidget(_audioSettingsWidget);
 		_videoSettingsWidget->widgetHidden();
 	}
 
-	if ( itemText == "Video" )
-		_stackedWidget->setCurrentWidget( _videoSettingsWidget );
+	else if (itemText == tr("Video")) {
+		_stackedWidget->setCurrentWidget(_videoSettingsWidget);
+	}
 
-	if ( itemText == "Advanced" ) {
-		_stackedWidget->setCurrentWidget( _advancedSettingsWidget );
+	else if (itemText == tr("Advanced")) {
+		_stackedWidget->setCurrentWidget(_advancedSettingsWidget);
 		_videoSettingsWidget->widgetHidden();
 	}
 
-	if ( itemText == "Call Forward" ) {
-		_stackedWidget->setCurrentWidget( _callForwardWidget );
+	else if (itemText == tr("Call Forward")) {
+		_stackedWidget->setCurrentWidget(_callForwardWidget);
 		_videoSettingsWidget->widgetHidden();
+	}
+
+	else {
+		LOG_FATAL("unknown item text=" + itemText.toStdString());
 	}
 }
 
-void QtWengoConfigDialog::accept(){
+void QtWengoConfigDialog::show() {
+	_configDialog->exec();
+}
 
+void QtWengoConfigDialog::save() {
 	_generalSettingsWidget->saveData();
 	_languagesWidget->saveData();
 	_notificationWidget->saveData();
@@ -130,6 +132,4 @@ void QtWengoConfigDialog::accept(){
 	_callForwardWidget->saveData();
 	_videoSettingsWidget->saveData();
 	_videoSettingsWidget->widgetHidden();
-
-	QDialog::accept();
 }

@@ -21,7 +21,7 @@
 
 #include <QtGui>
 
-QLayout * Widget::createLayout(QWidget * parent) {
+QGridLayout * Widget::createLayout(QWidget * parent) {
 	QGridLayout * layout = new QGridLayout(parent);
 	layout->setSpacing(0);
 	layout->setMargin(0);
