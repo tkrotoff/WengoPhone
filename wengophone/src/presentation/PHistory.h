@@ -32,7 +32,7 @@
 class PHistory : public Presentation {
 public:
 	
-	virtual void removeHistoryMemento(int id) = 0;
+	virtual void removeHistoryMemento(unsigned int id) = 0;
 		
 	virtual void clearAllEntries() = 0;
 };

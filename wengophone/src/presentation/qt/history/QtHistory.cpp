@@ -84,7 +84,7 @@ void QtHistory::updatePresentationThreadSafe() {
 	}
 }
 
-void QtHistory::addHistoryMemento(std::string type,	std::string date, 
+void QtHistory::addHistoryMemento(std::string type, std::string date, 
 		std::string time, int duration, std::string name, unsigned id) {
 	QDate qdate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
 	QTime qtime = QTime::fromString(QString::fromStdString(time));
@@ -119,11 +119,11 @@ void QtHistory::addHistoryMemento(std::string type,	std::string date,
 	}
 }
 
-void QtHistory::removeHistoryMemento(int id) {
+void QtHistory::removeHistoryMemento(unsigned int id) {
 	_cHistory.removeHistoryMemento(id);
 }
 
-void QtHistory::mementoAddedEventHandler(CHistory &, int id) {
+void QtHistory::mementoAddedEventHandler(CHistory &, unsigned int id) {
 		
 	HistoryMemento * memento = _cHistory.getHistory().getMemento(id);
 	if( memento ) {
@@ -139,7 +139,7 @@ void QtHistory::mementoAddedEventHandler(CHistory &, int id) {
 	}
 }
 
-void QtHistory::mementoUpdatedEventHandler(CHistory &, int id) {
+void QtHistory::mementoUpdatedEventHandler(CHistory &, unsigned int id) {
 	HistoryMemento * memento = _cHistory.getHistory().getMemento(id);
 	if( memento ) {
 		QString type = QString::fromStdString(HistoryMemento::stateToString(memento->getState()));
@@ -222,11 +222,11 @@ void QtHistory::replayItem ( QtHistoryItem * item ) {
 	}
 }
 
-void QtHistory::removeItem(int id) {
+void QtHistory::removeItem(unsigned int id) {
 	LOG_DEBUG("QtHistory::removeItem");
 	_cHistory.removeHistoryMemento(id);
 }
 
-void QtHistory::mementoRemovedEventHandler(CHistory &, int id) {
+void QtHistory::mementoRemovedEventHandler(CHistory &, unsigned int id) {
 	updatePresentation();
 }

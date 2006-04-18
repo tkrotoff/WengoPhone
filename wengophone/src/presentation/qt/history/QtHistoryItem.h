@@ -27,38 +27,36 @@
  *
  * @author Mr K
  */
-class QtHistoryItem : public QTreeWidgetItem
-{
+class QtHistoryItem : public QTreeWidgetItem {
 
-	public:
+public:
 
-		enum HistoryType{ Sms, OutGoingCall, IncomingCall,MissedCall, RejectedCall, Chat,  };
+	enum HistoryType{ Sms, OutGoingCall, IncomingCall,MissedCall, RejectedCall, Chat,  };
 
-		QtHistoryItem(int type = Type);
-		QtHistoryItem ( const QStringList & strings, int type = Type );
-		QtHistoryItem ( QTreeWidget * parent, int type = Type );
-		QtHistoryItem ( QTreeWidget * parent, const QStringList & strings, int type = Type );
-		QtHistoryItem ( QTreeWidget * parent, QtHistoryItem * preceding, int type = Type );
-		QtHistoryItem ( QtHistoryItem * parent, int type = Type );
-		QtHistoryItem ( QtHistoryItem * parent, const QStringList & strings, int type = Type );
-		QtHistoryItem ( QtHistoryItem * parent, QtHistoryItem * preceding, int type = Type );
-		QtHistoryItem ( const QtHistoryItem & other );
-		virtual ~QtHistoryItem();
+	QtHistoryItem(int type = Type);
+	QtHistoryItem ( const QStringList & strings, int type = Type );
+	QtHistoryItem ( QTreeWidget * parent, int type = Type );
+	QtHistoryItem ( QTreeWidget * parent, const QStringList & strings, int type = Type );
+	QtHistoryItem ( QTreeWidget * parent, QtHistoryItem * preceding, int type = Type );
+	QtHistoryItem ( QtHistoryItem * parent, int type = Type );
+	QtHistoryItem ( QtHistoryItem * parent, const QStringList & strings, int type = Type );
+	QtHistoryItem ( QtHistoryItem * parent, QtHistoryItem * preceding, int type = Type );
+	QtHistoryItem ( const QtHistoryItem & other );
+	virtual ~QtHistoryItem();
 
-		int getId() const;
+	unsigned int getId() const;
 
-		void setId(int id);
+	void setId(unsigned int id);
 
-		void setItemType(QtHistoryItem::HistoryType type);
+	void setItemType(QtHistoryItem::HistoryType type);
 
-		QtHistoryItem::HistoryType getItemType() const;
+	QtHistoryItem::HistoryType getItemType() const;
 
-	protected:
+protected:
 
-		int _id;
-		HistoryType _type;
+	unsigned int _id;
 
-	private:
+	HistoryType _type;
 };
 
 #endif // QTHISTORYITEM_H

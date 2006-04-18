@@ -44,25 +44,25 @@ public:
 	void clearHistory();
 
 	void addSMSItem(const QString & text,const QDate & date, 
-		const QTime & time, const QTime & duration, const QString & name, int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
 
 	void addOutGoingCallItem(const QString & text,const QDate & date,
-		const QTime & time, const QTime & duration, const QString & name, int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
 
 	void addIncomingCallItem(const QString & text,const QDate & date, 
-		const QTime & time, const QTime & duration, const QString & name, int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
 
 	void addChatItem(const QString & text,const QDate & date, 
-		const QTime & time, const QTime & duration, const QString & name, int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
 
 	void addMissedCallItem(const QString & text,const QDate & date, 
-		const QTime & time, const QTime & duration, const QString & name, int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
 
 	void addRejectedCallItem(const QString & text,const QDate & date, 
-		const QTime & time, const QTime & duration, const QString & name, int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
 
 	void editItem(const QString & text,const QDate & date, 
-		const QTime & time, const QTime & duration, const QString & name, int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
 	
 	void showPopupMenu(const QPoint & point);
 	

@@ -102,7 +102,7 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 
 }
 
-void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
+void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
@@ -116,7 +116,7 @@ void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const 
 }
 
 
-void QtHistoryWidget::addOutGoingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
+void QtHistoryWidget::addOutGoingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
@@ -128,7 +128,7 @@ void QtHistoryWidget::addOutGoingCallItem(const QString & text,const QDate & dat
 	item->setItemType( QtHistoryItem::OutGoingCall);
 }
 
-void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id){
+void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id){
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
@@ -140,7 +140,7 @@ void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & dat
 	item->setItemType(QtHistoryItem::IncomingCall);
 }
 
-void QtHistoryWidget::addChatItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
+void QtHistoryWidget::addChatItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
@@ -152,7 +152,7 @@ void QtHistoryWidget::addChatItem(const QString & text,const QDate & date, const
 	item->setItemType(QtHistoryItem::Chat);
 }
 
-void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
+void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
 	item->setText( 0, text );
@@ -164,7 +164,7 @@ void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date,
 }
 
 
-void QtHistoryWidget::addRejectedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
+void QtHistoryWidget::addRejectedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int unsigned id) {
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
 	item->setText( 0, text );
@@ -175,7 +175,7 @@ void QtHistoryWidget::addRejectedCallItem(const QString & text,const QDate & dat
 	item->setItemType(QtHistoryItem::RejectedCall);
 }
 
-void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int id) {
+void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
 
 	QList<QTreeWidgetItem *>  itemList = _treeWidget->findItems("*", Qt::MatchWildcard);
 

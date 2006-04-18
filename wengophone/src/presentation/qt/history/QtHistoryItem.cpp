@@ -38,10 +38,10 @@ QtHistoryItem::QtHistoryItem ( QtHistoryItem * parent, QtHistoryItem * preceding
 QtHistoryItem::QtHistoryItem ( const QtHistoryItem & other ) : QTreeWidgetItem(other){
 }
 
-int QtHistoryItem::getId() const{
+unsigned int QtHistoryItem::getId() const{
 	return _id;
 }
-void QtHistoryItem::setId(int id){
+void QtHistoryItem::setId(unsigned int id){
 	_id = id;
 }
 
@@ -53,8 +53,5 @@ QtHistoryItem::HistoryType QtHistoryItem::getItemType() const{
 	return _type;
 }
 
-
-
-QtHistoryItem::~QtHistoryItem()
-{
+QtHistoryItem::~QtHistoryItem() {
 }
