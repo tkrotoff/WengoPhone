@@ -47,7 +47,7 @@ std::string StringList::operator[](unsigned i) const {
 		return String::null;
 	}
 
-	return (*this)[i];
+	return List<std::string>::operator[](i);
 }
 
 unsigned StringList::contains(const std::string & str, bool caseSensitive) const {
