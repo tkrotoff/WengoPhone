@@ -413,6 +413,23 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
+     <string>Help</string>
+    </property>
+    <addaction name="actionShowForum" />
+    <addaction name="actionFaq" />
+    <addaction name="separator" />
+    <addaction name="actionBuyCallOutCredits" />
+    <addaction name="separator" />
+    <addaction name="actionShowAbout" />
+   </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>Contacts</string>
+    </property>
+    <addaction name="actionAddContact" />
+   </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
      <string>Tools</string>
@@ -444,30 +461,26 @@
      <addaction name="separator" />
      <addaction name="actionSort_contacts" />
     </widget>
+    <widget class="QMenu" name="menuClear_History" >
+     <property name="title" >
+      <string>Clear History</string>
+     </property>
+     <addaction name="actionOutgoing_Calls" />
+     <addaction name="actionIncoming_Calls" />
+     <addaction name="actionMissed_Calls" />
+     <addaction name="actionChat_Sessions" />
+     <addaction name="actionSMS" />
+     <addaction name="actionAll" />
+    </widget>
     <addaction name="actionShowWengoAccount" />
     <addaction name="actionOpenWengoAccount" />
     <addaction name="actionEditMyProfile" />
     <addaction name="actionIM_Account_Settings" />
     <addaction name="menuHide_Show" />
     <addaction name="separator" />
+    <addaction name="menuClear_History" />
+    <addaction name="separator" />
     <addaction name="actionExit" />
-   </widget>
-   <widget class="QMenu" name="menuHelp" >
-    <property name="title" >
-     <string>Help</string>
-    </property>
-    <addaction name="actionShowForum" />
-    <addaction name="actionFaq" />
-    <addaction name="separator" />
-    <addaction name="actionBuyCallOutCredits" />
-    <addaction name="separator" />
-    <addaction name="actionShowAbout" />
-   </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>Contacts</string>
-    </property>
-    <addaction name="actionAddContact" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -607,6 +620,36 @@
   <action name="actionIM_Account_Settings" >
    <property name="text" >
     <string>IM Account Settings</string>
+   </property>
+  </action>
+  <action name="actionOutgoing_Calls" >
+   <property name="text" >
+    <string>Outgoing Calls</string>
+   </property>
+  </action>
+  <action name="actionIncoming_Calls" >
+   <property name="text" >
+    <string>Incoming Calls</string>
+   </property>
+  </action>
+  <action name="actionMissed_Calls" >
+   <property name="text" >
+    <string>Missed Calls</string>
+   </property>
+  </action>
+  <action name="actionChat_Sessions" >
+   <property name="text" >
+    <string>Chat Sessions</string>
+   </property>
+  </action>
+  <action name="actionSMS" >
+   <property name="text" >
+    <string>SMS</string>
+   </property>
+  </action>
+  <action name="actionAll" >
+   <property name="text" >
+    <string>All</string>
    </property>
   </action>
  </widget>
