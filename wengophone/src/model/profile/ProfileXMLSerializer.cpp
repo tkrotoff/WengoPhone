@@ -130,7 +130,8 @@ string ProfileXMLSerializer::serialize() {
 
 	// Serializing photo
 	if (!_profile._icon.getData().empty()) {
-		result += ("<photo><![CDATA[" + Base64::encode(_profile._icon.getData()) + "]]></photo>");
+		result += ("<photo filename=\"" + _profile._icon.getFilename()
+			+ "\"><![CDATA[" + Base64::encode(_profile._icon.getData()) + "]]></photo>");
 	}
 	////
 
@@ -252,7 +253,16 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 	// Retrieving icon
 	TiXmlNode * photo = rootElt.FirstChild("photo").Node();
 	if (photo) {
-		Picture picture(Base64::decode(photo->FirstChild()->Value()));
+		TiXmlElement * photoElt = photo->ToElement();
+		string filename;
+		const char * filenameAttr = photoElt->Attribute("filename");
+		if (filenameAttr) {
+			filename = string(filenameAttr); 
+		}
+
+		Picture picture = Picture::pictureFromData(Base64::decode(photo->FirstChild()->Value()));
+		picture.setFilename(filename);
+
 		_profile.setIcon(picture);
 	}
 	////

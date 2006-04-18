@@ -157,9 +157,9 @@ private:
 	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
 	/**
-	 * @see IMAccount::imAccountDeadEvent
+	 * @see UserProfile::imAccountRemovedEvent
 	 */
-	void imAccountDeadEventHandler(IMAccount & sender);
+	void imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
 	/**
 	 * @see IMContactListHandler::newIMContactAddedEvent

@@ -250,6 +250,13 @@ private:
 
 	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
+
+	/**
+	 * @see IMPresence::authorizationRequestEvent
+	 */
+	void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
+		const std::string & message);
+
 	/** Direct link to the model. */
 	WengoPhone & _wengoPhone;
 

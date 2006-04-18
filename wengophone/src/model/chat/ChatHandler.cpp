@@ -40,10 +40,6 @@ ChatHandler::ChatHandler(UserProfile & userProfile) {
 }
 
 ChatHandler::~ChatHandler() {
-	for (IMChatMap::iterator it = _imChatMap.begin(); it != _imChatMap.end(); it++) {
-		delete (*it).second;
-	}
-
 	for (IMChatSessionSet::iterator it = _imChatSessionSet.begin(); it != _imChatSessionSet.end(); it++) {
 		delete (*it);
 	}

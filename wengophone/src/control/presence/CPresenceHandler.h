@@ -60,6 +60,12 @@ public:
 	 */
 	Event<void (PresenceHandler & sender, const IMContact & imContact,
 		IMPresence::SubscribeStatus status)> subscribeStatusEvent;
+		
+	/**
+	 * @see IMPresence::authorizationRequestEvent
+	 */
+	Event<void (PresenceHandler & sender, const IMContact & imContact,
+		const std::string & message)> authorizationRequestEvent;
 
 	/**
 	 * Change my presence on desired protocol.

@@ -19,6 +19,8 @@
 
 #include <util/Picture.h>
 
+#include <util/File.h>
+
 using namespace std;
 
 Picture::Picture() {
@@ -28,10 +30,42 @@ Picture::Picture(const Picture & picture)
 : _pictureData(picture._pictureData) {
 }
 
-Picture::Picture(const std::string & data) 
-: _pictureData(data) {
+Picture Picture::pictureFromData(const std::string & data) 
+{
+	Picture result;
+
+	result._pictureData = data;
+
+	return result;
+}
+
+Picture Picture::pictureFromFile(const std::string & filename) 
+{
+	string data;
+	FileReader file(filename);
+	if (file.open()) {
+		data = file.read();
+		file.close();
+	}
+
+	Picture result = pictureFromData(data);
+	result.setFilename(filename);
+
+	return result;
 }
 
 string Picture::getData() const {
 	return _pictureData;
+}
+
+string Picture::getFilename() const {
+	return _filename;
+}
+
+void Picture::setFilename(const string & filename) {
+	string path = filename;
+	path = File::convertPathSeparators(path);
+	string::size_type pos = path.rfind(File::getPathSeparator());
+
+	_filename = path.substr(pos + 1);
 }

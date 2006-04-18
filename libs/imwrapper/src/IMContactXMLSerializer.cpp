@@ -118,7 +118,7 @@ bool IMContactXMLSerializer::unserialize(const std::string & data) {
 	// Retrieving icon
 	TiXmlText * photo = im.FirstChild("photo").FirstChild().Text();
 	if (photo) {
-		Picture picture(Base64::decode(photo->Value()));
+		Picture picture = Picture::pictureFromData(Base64::decode(photo->Value()));
 		_imContact.setIcon(picture);
 	}
 	////

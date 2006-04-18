@@ -41,10 +41,10 @@ bool UserProfileFileStorage::load(const std::string & url) {
 		return false;
 	}
 
-	IMAccountHandlerFileStorage imAccountHandlerFileStorage(_userProfile._imAccountHandler);
+	IMAccountHandlerFileStorage imAccountHandlerFileStorage(*(_userProfile._imAccountHandler));
 	imAccountHandlerFileStorage.load(url + "imaccounts.xml");
 
-	ContactListFileStorage contactListFileStorage(_userProfile._contactList, _userProfile._imAccountHandler);
+	ContactListFileStorage contactListFileStorage(_userProfile._contactList, *(_userProfile._imAccountHandler));
 	contactListFileStorage.load(url + "contactlist.xml");
 
 	return true;
@@ -55,10 +55,10 @@ bool UserProfileFileStorage::save(const std::string & url) {
 		return false;
 	}
 
-	IMAccountHandlerFileStorage imAccountHandlerFileStorage(_userProfile._imAccountHandler);
+	IMAccountHandlerFileStorage imAccountHandlerFileStorage(*(_userProfile._imAccountHandler));
 	imAccountHandlerFileStorage.save(url + "imaccounts.xml");
 
-	ContactListFileStorage contactListFileStorage(_userProfile._contactList, _userProfile._imAccountHandler);
+	ContactListFileStorage contactListFileStorage(_userProfile._contactList, *(_userProfile._imAccountHandler));
 	contactListFileStorage.save(url + "contactlist.xml");
 
 	return true;

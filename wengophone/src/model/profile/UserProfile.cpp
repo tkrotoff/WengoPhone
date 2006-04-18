@@ -58,7 +58,8 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_activePhoneCall = NULL;
 	_wengoAccount = NULL;
 	_softUpdate = NULL;
-	
+	_imAccountHandler = new IMAccountHandler();
+
 	_history = new History(*this);
 	_history->mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
 	_history->mementoAddedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
@@ -85,6 +86,10 @@ UserProfile::~UserProfile() {
 	if (_history) {
 		delete _history;
 	}
+
+	if (_imAccountHandler) {
+		delete _imAccountHandler;
+	}
 }
 
 void UserProfile::connect() {
@@ -94,8 +99,8 @@ void UserProfile::connect() {
 
 void UserProfile::connectIMAccounts() {
 	//Connects all IMAccounts
-	for (IMAccountHandler::const_iterator it = _imAccountHandler.begin();
-		it != _imAccountHandler.end();
+	for (IMAccountHandler::const_iterator it = _imAccountHandler->begin();
+		it != _imAccountHandler->end();
 		++it) {
 		newIMAccountAddedEvent(*this, (IMAccount &)*it);
 		//FIXME: hack for phApi connection
@@ -121,8 +126,8 @@ void UserProfile::disconnect() {
 		_activePhoneLine->getSipWrapper().terminate();
 	}
 
-	for (IMAccountHandler::const_iterator it = _imAccountHandler.begin();
-		it != _imAccountHandler.end();
+	for (IMAccountHandler::const_iterator it = _imAccountHandler->begin();
+		it != _imAccountHandler->end();
 		++it) {
 		_connectHandler.disconnect((IMAccount &)*it);
 	}
@@ -221,11 +226,11 @@ void UserProfile::addSipAccountThreadSafe(const std::string & login, const std::
 void UserProfile::addIMAccount(const IMAccount & imAccount) {
 	LOG_DEBUG("adding an IMAccount");
 
-	pair<IMAccountHandler::const_iterator, bool> result = _imAccountHandler.insert(imAccount);
+	pair<IMAccountHandler::const_iterator, bool> result = _imAccountHandler->insert(imAccount);
 
-	IMAccountHandler::const_iterator it = _imAccountHandler.find(imAccount);
+	IMAccountHandler::const_iterator it = _imAccountHandler->find(imAccount);
 
-	if (it == _imAccountHandler.end()) {
+	if (it == _imAccountHandler->end()) {
 		LOG_FATAL("Error while inserting this IMAccount: " + imAccount.getLogin());
 	}
 
@@ -237,10 +242,11 @@ void UserProfile::addIMAccount(const IMAccount & imAccount) {
 void UserProfile::removeIMAccount(const IMAccount & imAccount) {
 	LOG_DEBUG("removing an IMAccount");
 
-	IMAccountHandler::iterator it = _imAccountHandler.find(imAccount);
-	if (it != _imAccountHandler.end()) {
+	IMAccountHandler::iterator it = _imAccountHandler->find(imAccount);
+	if (it != _imAccountHandler->end()) {
 		_connectHandler.disconnect((IMAccount &)*it);
-		_imAccountHandler.erase(it);
+		imAccountRemovedEvent(*this, (IMAccount &)*it);
+		_imAccountHandler->erase(it);
 	} else {
 		LOG_ERROR("IMAccount not in IMAccountHandler");
 	}
@@ -331,7 +337,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 
 		IMAccount imAccount(_wengoAccount->getIdentity(), _wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 		addIMAccount(imAccount);
-		_connectHandler.connect((IMAccount &)*_imAccountHandler.find(imAccount));
+		_connectHandler.connect((IMAccount &)*_imAccountHandler->find(imAccount));
 		
 		loadHistory();
 		

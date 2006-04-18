@@ -97,7 +97,7 @@ Picture GaimIMPresence::getContactIcon(const std::string & contactId)
 		const char *data = (const char *)gaim_buddy_icon_get_data(gBuddy->icon, &size);
 		
 		if (data && size > 0)
-			return Picture(std::string(data, size));
+			return Picture::pictureFromData(std::string(data, size));
 	}
 
 	return Picture();

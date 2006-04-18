@@ -30,6 +30,7 @@ CPresenceHandler::CPresenceHandler(PresenceHandler & presenceHandler)
 	_presenceHandler.presenceStateChangedEvent += presenceStateChangedEvent;
 	_presenceHandler.myPresenceStatusEvent += myPresenceStatusEvent;
 	_presenceHandler.subscribeStatusEvent += subscribeStatusEvent;
+	_presenceHandler.authorizationRequestEvent += authorizationRequestEvent;
 }
 
 void CPresenceHandler::changeMyPresence(EnumPresenceState::PresenceState state,	

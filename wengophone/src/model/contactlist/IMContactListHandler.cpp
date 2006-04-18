@@ -31,10 +31,6 @@ IMContactListHandler::IMContactListHandler(UserProfile & userProfile) {
 }
 
 IMContactListHandler::~IMContactListHandler() {
-	for (IMContactListMap::const_iterator it = _imContactListMap.begin();
-		it != _imContactListMap.end(); it++) {
-		delete (*it).second;
-	}
 }
 
 void IMContactListHandler::addIMContact(const std::string & groupName, const IMContact & imContact) {

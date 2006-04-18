@@ -100,6 +100,14 @@ public:
 	Event< void (UserProfile & sender, IMAccount & imAccount) > newIMAccountAddedEvent;
 
 	/**
+	 * An IMAccount has been removed.
+	 *
+	 * @param sender this class
+	 * @param imAccount the removed IMAccount.
+	 */
+	Event< void (UserProfile & sender, IMAccount & imAccount) > imAccountRemovedEvent;
+
+	/**
 	 * The history has been loaded.
 	 *
 	 * @param sender this class
@@ -142,11 +150,6 @@ public:
 
 
 	UserProfile(WengoPhone & wengoPhone);
-
-	/**
-	 * Initializes this UserProfile.
-	 */
-	void init();
 
 	/**
 	 * Connects all this UserProfile accounts (SipAccount and IMAccount) set
@@ -208,7 +211,7 @@ public:
 	}
 
 	IMAccountHandler & getIMAccountHandler() {
-		return _imAccountHandler;
+		return *_imAccountHandler;
 	}
 
 	IMContactListHandler & getIMContactListHandler() {
@@ -386,7 +389,7 @@ private:
 	//TODO: create a list of SipAccount
 	WengoAccount * _wengoAccount;
 
-	IMAccountHandler _imAccountHandler;
+	IMAccountHandler * _imAccountHandler;
 
 	/** List of Contact. */
 	IMContactListHandler _imContactListHandler;

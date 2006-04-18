@@ -69,7 +69,7 @@ void QtEditMyProfile::changeAvatarClicked() {
 		this,
 		tr("Choose a picture"),
 		"",
-		tr("Images (*.png *.xpm *.jpg)"));
+		tr("Images (*.png *.xpm *.jpg *.gif)"));
 
 	if (!s.isEmpty()) {
 		//TODO: check the size of the file!!
@@ -83,7 +83,8 @@ void QtEditMyProfile::changeAvatarClicked() {
 		QByteArray byteArray = buffer.data();
 		string myData(byteArray.data(), byteArray.size());
 
-		Picture picture(myData);
+		Picture picture = Picture::pictureFromData(myData);
+		picture.setFilename(s.toStdString());
 
 		_userProfile.setIcon(picture, NULL);
 

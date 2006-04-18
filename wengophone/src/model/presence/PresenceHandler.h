@@ -68,7 +68,7 @@ public:
 		IMPresence::SubscribeStatus status)> subscribeStatusEvent;
 
 	/**
-	 * @see IMPresence::subscribeStatusEvent
+	 * @see IMPresence::authorizationRequestEvent
 	 */
 	Event<void (PresenceHandler & sender, const IMContact & imContact,
 		const std::string & message)> authorizationRequestEvent;

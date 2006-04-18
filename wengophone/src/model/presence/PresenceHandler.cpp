@@ -41,9 +41,6 @@ PresenceHandler::PresenceHandler(UserProfile & userProfile) {
 }
 
 PresenceHandler::~PresenceHandler() {
-	for (PresenceMap::iterator it = _presenceMap.begin(); it != _presenceMap.end(); it++) {
-		delete (*it).second;
-	}
 }
 
 void PresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {

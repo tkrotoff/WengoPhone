@@ -123,11 +123,20 @@ void CWengoPhone::wsWengoSubscribeCreatedEventHandler(WengoPhone & sender, WsWen
 }
 
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
-	static CConnectHandler cConnectHandler(sender.getCurrentUserProfile().getConnectHandler()); LOG_DEBUG("CConnectHandler created");
-	static CPresenceHandler cPresenceHandler(sender.getCurrentUserProfile().getPresenceHandler()); LOG_DEBUG("CPresenceHandler created");
-	static CChatHandler cChatHandler(sender.getCurrentUserProfile().getChatHandler(), sender.getCurrentUserProfile()); LOG_DEBUG("CChatHandler created");
+	static CConnectHandler cConnectHandler(sender.getCurrentUserProfile().getConnectHandler());
+	LOG_DEBUG("CConnectHandler created");
+
+	static CPresenceHandler cPresenceHandler(sender.getCurrentUserProfile().getPresenceHandler());
+	cPresenceHandler.authorizationRequestEvent +=
+		boost::bind(&CWengoPhone::authorizationRequestEventHandler, this, _1, _2, _3);
+	LOG_DEBUG("CPresenceHandler created");
+
+	static CChatHandler cChatHandler(sender.getCurrentUserProfile().getChatHandler(), sender.getCurrentUserProfile());
+	LOG_DEBUG("CChatHandler created");
+
 	LOG_DEBUG("WengoPhone::init() finished");
 }
+
 
 void CWengoPhone::smsCreatedEventHandler(UserProfile & sender, Sms & sms) {
 	static CSms cSms(sms, *this);
@@ -229,4 +238,9 @@ void CWengoPhone::showWengoBuyWengos() {
 
 void CWengoPhone::historyLoadedEventHandler(History & history) {
 	_cHistory = new CHistory(history, *this);
+}
+
+void CWengoPhone::authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
+	const std::string & message) {
+	//_pWengophone->something();
 }
