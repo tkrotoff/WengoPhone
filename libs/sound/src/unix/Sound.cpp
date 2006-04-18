@@ -19,6 +19,8 @@
 
 #include <sound/Sound.h>
 
+#include <util/NonCopyable.h>
+
 #include <QSound>
 
 /**
@@ -26,13 +28,6 @@
  *
  * @author Tanguy Krotoff
  */
-class Sound::SoundPrivate : NonCopyable, public QSound {
-public:
-
-	SoundPrivate(const std::string & filename) : QSound(filename.c_str()) {
-	}
-};
-
 
 Sound::Sound(const std::string & filename) {
 	//_soundPrivate = new SoundPrivate(filename);

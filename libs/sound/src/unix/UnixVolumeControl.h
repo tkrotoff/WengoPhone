@@ -17,39 +17,43 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTADVANCEDCONFIG_H
-#define QTADVANCEDCONFIG_H
+#ifndef UNIXVOLUMECONTROL_H
+#define UNIXVOLUMECONTROL_H
 
-#include <model/config/Config.h>
+#include <sound/IVolumeControl.h>
 
-#include <QObject>
+#include <sound/SoundMixerException.h>
+#include <sound/NoSoundCardException.h>
 
-class QWidget;
-class QTableWidget;
-
-class QtAdvancedConfig : public QObject {
-	Q_OBJECT
+/**
+ * Gets and change the volume of a Unix audio device.
+ *
+ */
+class UnixVolumeControl : public IVolumeControl {
 public:
+	/* FIXME: dummy enum to make it build. */
+	enum UnixDeviceType {
+	  UnixDeviceTypeDummy,
+	};
+	
+	UnixVolumeControl(int deviceId, UnixDeviceType deviceType) throw(NoSoundCardException, SoundMixerException);
 
-	QtAdvancedConfig(QWidget * parent);
+	bool setLevel(unsigned level);
 
-	void populate();
+	int getLevel();
 
-	QWidget * getWidget() const {
-		return _advancedConfigWindow;
-	}
+	bool setMute(bool mute);
 
-private Q_SLOTS:
+	bool isMuted();
 
-	void saveConfig();
+	bool selectAsRecordDevice();
+
+	bool close();
 
 private:
 
-	void setItem(boost::any value, bool saveKeyValue, int row, int column);
-
-	QWidget * _advancedConfigWindow;
-
-	QTableWidget * _tableWidget;
+	/** Channel to use (input or output) */
+	bool _isInput;
 };
 
-#endif	//QTADVANCEDCONFIG_H
+#endif	//UNIXVOLUMECONTROL_H

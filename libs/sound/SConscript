@@ -27,7 +27,8 @@ if WengoOSWindows():
 elif WengoOSLinux():
 	sources += [
 		'src/unix/Sound.cpp',
-		'src/unix/SoundMixer.cpp',
+		'src/unix/VolumeControl.cpp',
+		'src/unix/UnixVolumeControl.cpp',
 		'src/unix/SoundMixerException.cpp',
 		'src/unix/Volume.cpp'
 	]
