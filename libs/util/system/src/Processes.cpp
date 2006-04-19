@@ -44,5 +44,8 @@ bool Processes::isRunning(const std::string & processName) {
 	    return true;
     }
     return false;
+#else
+    /* FIXME: Need implementation on other platforms */
+    return false;
 #endif /* WIN32 */
 }
