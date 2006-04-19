@@ -27,7 +27,9 @@ if WengoOSLinux():
 
 
 if WengoOSWindows():
-	defines['WIN32'] = 1
+    defines['WIN32'] = 1
+    env.LinkFlags.removeLinkFlags(env, ['/subsystem:windows'])
+    env.WengoAddLinkFlags(['/subsystem:console'])
 
 env.WengoAddLinkFlags(lib_flags)
 env.WengoAddDefines(defines)
