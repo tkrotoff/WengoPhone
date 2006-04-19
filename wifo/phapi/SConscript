@@ -165,7 +165,8 @@ sources = [
 	'aec2.cpp',
 	'fidlib.c',
 	'spxec.c',
-	'spxecfft.c'
+	'spxecfft.c',
+	'phresample.c',
 ]
 
 if WengoOSLinux() or WengoOSBSD():

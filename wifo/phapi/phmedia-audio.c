@@ -874,6 +874,15 @@ void ph_audio_resample(void *ctx, void *inbuf, int inbsize, void *outbuf, int *o
 
 #ifdef PH_FORCE_16KHZ
 
+#if 1
+
+void ph_downsample(void *rctx, void *framebuf, int framesize);
+void ph_upsample(void *rctx, void *dbuf, void *framebuf, int framesize);
+void *ph_resample_init();
+void ph_resample_cleanup(void *ctx);
+
+#else
+
 /**
  * @brief in-place downsample of a buffer by a factor of 2
  */
@@ -909,6 +918,30 @@ static void ph_upsample(void *dbuf, void *sbuf, int framesize, short *last)
   
   
 #if 1
+#if 1  /* try to use classic upsamling algo */ 
+  tmp = framesize - 1;
+  *dp++ = *last;
+  *dp++ = 0;
+  while( tmp--)
+    {
+      *dp++ = *sp++;
+      *dp++ = 0;
+    }
+
+  dp = (short *) dbuf;
+  
+  framesize *= 2;
+  framesize -= 1;
+  while( framesize--)
+    {
+      tmp = ((int)dp[0] + (int)dp[1]) >> 1;
+      *dp++ = (short) SATURATE(tmp);
+    }
+
+  *dp++ = tmp;
+  *last = *sp;
+#else
+      
 
   tmp = ((int) *last + (int) *sp) >> 1;
   *dp++ = (short) SATURATE(tmp);
@@ -927,6 +960,7 @@ static void ph_upsample(void *dbuf, void *sbuf, int framesize, short *last)
     }
 
   *last = *sp;
+#endif
 
 #else
   while(framesize--)
@@ -937,6 +971,7 @@ static void ph_upsample(void *dbuf, void *sbuf, int framesize, short *last)
 #endif
     
 }
+#endif
 
 #endif
 
@@ -1051,7 +1086,8 @@ ph_media_retreive_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf, int clo
 	{
 	  char *tmp = alloca(framesize);
 	  len = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, len, tmp, framesize);
-	  ph_upsample(mbf->buf, tmp, framesize, &stream->lastsample);
+	  //	  ph_upsample(mbf->buf, tmp, framesize, &stream->lastsample);
+	  ph_upsample(stream->resamplectx, mbf->buf, tmp, framesize);
 	  mbf->next = len;
 	  stream->ms.rxts_inc += len/2;
 	  len *= 2;
@@ -1354,7 +1390,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 	}
       else
 	{
-	  ph_downsample(recordbuf, framesize);
+	  ph_downsample(stream->resamplectx, recordbuf, framesize);
 	  enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize/2, data_out_enc, sizeof(data_out_enc));
 	  framesize /= 2;
 	}
@@ -1813,7 +1849,7 @@ void ph_audio_init_cng(phastream_t *stream)
 
 #ifdef PH_USE_RESAMPLE
 
-void ph_resample_init(phastream_t *stream)
+void ph_resample_init0(phastream_t *stream)
 {
   SRC_DATA *resCtx = calloc(sizeof(SRC_DATA), 1);
   double playRatio, recRatio;
@@ -2295,7 +2331,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   DBG2_MEDIA_ENGINE("ph_msession_audio_start: CNG %s\n", stream->cngi.cng ? "activating" : "desactivating");
   DBG2_MEDIA_ENGINE("ph_msession_audio_start: opening AUDIO device %s\n", deviceId);
 
-    if (open_audio_device(s, stream, deviceId))
+  if (open_audio_device(s, stream, deviceId))
     {
         //	  phcb->errorNotify(PH_NOMEDIA);
         free(stream);
@@ -2306,8 +2342,15 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
 #ifdef PH_USE_RESAMPLE
   if (stream->clock_rate != stream->actual_rate)
-    ph_resample_init(stream);
+    ph_resample_init0(stream);
 #endif
+
+
+#ifdef PH_FORCE_16KHZ
+  if (stream->clock_rate != stream->actual_rate)
+    stream->resamplectx = ph_resample_init();
+#endif
+
 
   if (codec->encoder_init)
     stream->ms.encoder_ctx = codec->encoder_init(0);
@@ -2493,6 +2536,7 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
     ph_resample_clean(stream);
 #endif
 
+
   msp->flags &= ~PH_MSTREAM_FLAG_RUNNING;
 
   if (stopdevice)
@@ -2572,8 +2616,12 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
   DBG1_MEDIA_ENGINE("\naudio stream closed\n");
 
   if (stream->lastframe)
-    free(stream->lastframe);
+      free(stream->lastframe);
 
+#ifdef PH_FORCE_16KHZ
+  if (stream->resamplectx)
+      ph_resample_cleanup(stream->resamplectx);
+#endif      
 
 
 
@@ -2933,7 +2981,7 @@ int ph_msession_send_sound_file(struct ph_msession_s *s, const char *filename)
   if (stream->mixbuf)  /* we're already mixing a something? */
     return -PH_NORESOURCES;
 
-#if PH_FORCE_16KHZ
+#ifdef PH_FORCE_16KHZ
   clock_rate = 16000;
 #endif
 

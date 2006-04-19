@@ -417,7 +417,8 @@ public:
   ~FidlibFilter()
   {
     fid_run_freebuf(fbuf);
-    fid_run_free(filt);
+    fid_run_free(run);
+    free(filt);
   }
 
 };
