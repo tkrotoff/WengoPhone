@@ -150,7 +150,7 @@ changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libintl.3.dy
 
 changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libintl.1.dylib"
 
-changeInstallName "/sw/lib/libintl.3.dylib" "$WENGO_FRAMEWORK_PATH/libgpg-error.0.dylib"
+changeInstallName "/sw/lib/libintl.1.dylib" "$WENGO_FRAMEWORK_PATH/libgpg-error.0.dylib"
 changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgpg-error.0.dylib"
 
 changeInstallName "/sw/lib/libtasn1.2.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
