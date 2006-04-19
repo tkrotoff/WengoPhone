@@ -5,7 +5,8 @@ lib_path = []
 include_path = ['include']
 headers = []
 sources = [
-	'src/Startup.cpp'
+	'src/Startup.cpp',
+    'src/Processes.cpp',
 ]
 
 env.WengoAddIncludePath(include_path)
