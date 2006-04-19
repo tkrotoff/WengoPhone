@@ -53,7 +53,7 @@ void QtChatContactWidget::updateDisplay(){
 		}else{
 			pixmap.load(":pics/contact_picture.png");
 		}
-		// Scale the pixmap to 48x48
+		// Scale the pixmap to 48x64
 
 		pixmap = createContactPixmap(contactId,pixmap);
 

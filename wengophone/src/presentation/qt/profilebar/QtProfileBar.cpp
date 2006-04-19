@@ -37,23 +37,58 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 
 	_gridlayout = new QGridLayout();
 	_gridlayout->setMargin(0);
-	_gridlayout->setSpacing(10);
+	_gridlayout->setSpacing(0);
 
 	_widgetLayout->addLayout(_gridlayout,0,0);
 
 	// The status widget
-	_statusLabel = new QtClickableLabel(this);
-	_statusLabel->setMinimumSize(QSize(16,16));
-	_statusLabel->setMaximumSize(QSize(16,16));
+	_statusLabel = new QtProfileLabel(this);
+	_statusLabel->setMinimumSize(QSize(46,65));
+	_statusLabel->setMaximumSize(QSize(46,65));
+	_statusLabel->setPixmaps(QPixmap(":/pics/profilebar/bar_start_status_green.png"),
+	                QPixmap(), // no end
+	                QPixmap(), // no fill
+	                QPixmap(":/pics/profilebar/bar_start_status_green.png"),
+	                QPixmap(),  // no end
+	                QPixmap()
+	                ); // no fill
 
 	// Nickname label
-	_nicknameLabel = new QtClickableLabel(this);
+	_nicknameLabel = new QtProfileLabel(this);
+	_nicknameLabel->setMinimumSize(QSize(46,65));
+	_nicknameLabel->setMaximumSize(QSize(1000,65));
+	_nicknameLabel->setPixmaps(QPixmap(), // no start
+	                QPixmap(), // no end
+	                QPixmap(":/pics/profilebar/bar_fill.png"),
+	                QPixmap(),  // no start
+	                QPixmap(),  // no end
+	                QPixmap(":/pics/profilebar/bar_fill.png")
+	                );
+
 
 	// The events label
-	_eventsLabel = new QtClickableLabel(this);
+	_eventsLabel = new QtProfileLabel(this);
+	_eventsLabel->setMinimumSize(QSize(46,65));
+	_eventsLabel->setMaximumSize(QSize(1000,65));
+	_eventsLabel->setPixmaps(QPixmap(), // no start
+	                QPixmap(), // no end
+	                QPixmap(":/pics/profilebar/bar_fill.png"),
+	                QPixmap(),  // no start
+	                QPixmap(),  // no end
+	                QPixmap(":/pics/profilebar/bar_fill.png")
+	                );
 
 	// The credit label
-	_creditLabel = new QtClickableLabel(this);
+	_creditLabel = new QtProfileLabel(this);
+	_creditLabel->setMinimumSize(QSize(46,65));
+	_creditLabel->setMaximumSize(QSize(1000,65));
+	_creditLabel->setPixmaps(QPixmap(), // no start
+	                QPixmap(":/pics/profilebar/bar_end.png"),
+	                QPixmap(":/pics/profilebar/bar_fill.png"),
+	                QPixmap(),  // no start
+	                QPixmap(":/pics/profilebar/bar_end.png"),
+	                QPixmap(":/pics/profilebar/bar_fill.png")
+	                );
 
 	// Add the labels to the gridlayout
 	_gridlayout->addWidget( _statusLabel   , 0, 0 );
@@ -61,16 +96,26 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	_gridlayout->addWidget( _eventsLabel   , 0, 2 );
 	_gridlayout->addWidget( _creditLabel   , 0, 3 );
 
-	_statusLabel->setText("S");
+	//_statusLabel->setText("S");
 	_nicknameLabel->setText("NickName");
+	_nicknameLabel->setTextColor(Qt::white);
+
 	_eventsLabel->setText("events");
+	_eventsLabel->setTextColor(Qt::white);
+
+
 	_creditLabel->setText(	QString() + QChar(0x20ac)+ QString(" 0.00"));
+	_creditLabel->setTextColor(Qt::white);
 
 	// Objects connection
 	connect(_statusLabel,SIGNAL(clicked()),SLOT(statusClicked()));
 	connect(_nicknameLabel,SIGNAL(clicked()),SLOT(nicknameClicked()));
 	connect(_eventsLabel,SIGNAL(clicked()),SLOT(eventsClicked()));
 	connect(_creditLabel,SIGNAL(clicked()),SLOT(creditClicked()));
+
+	// resize
+
+	setMinimumSize(QSize(120,65));
 
 	_userProfile.wsInfoCreatedEvent += boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
 }

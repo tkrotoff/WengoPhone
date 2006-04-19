@@ -23,6 +23,7 @@
 #include <QtGui>
 
 #include "QtClickableLabel.h"
+#include "QtProfileLabel.h"
 #include "QtNickNameWidget.h"
 #include "QtEventWidget.h"
 #include "QtCreditWidget.h"
@@ -47,6 +48,7 @@ protected:
 
 	QGridLayout * _widgetLayout;
 
+/*
 	QtClickableLabel * _statusLabel;
 
 	QtClickableLabel * _nicknameLabel;
@@ -54,6 +56,16 @@ protected:
 	QtClickableLabel * _eventsLabel;
 
 	QtClickableLabel * _creditLabel;
+
+*/
+
+	QtProfileLabel * _statusLabel;
+
+	QtProfileLabel * _nicknameLabel;
+
+	QtProfileLabel * _eventsLabel;
+
+	QtProfileLabel * _creditLabel;
 
 	QtNickNameWidget * _nickNameWidget;
 

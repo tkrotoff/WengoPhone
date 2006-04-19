@@ -76,6 +76,13 @@
         <file>pics/protocol_yahoo.png</file>
         <file>pics/protocol_jabber.png</file>
         <file>pics/protocol_wengo.png</file>
+        <file>pics/profilebar/bar_end.png</file>
+        <file>pics/profilebar/bar_start.png</file>
+        <file>pics/profilebar/bar_start_status_gray.png</file>
+        <file>pics/profilebar/bar_start_status_green.png</file>
+        <file>pics/profilebar/bar_start_status_orange.png</file>
+        <file>pics/profilebar/bar_start_status_red.png</file>
+        <file>pics/profilebar/bar_fill.png</file>
     </qresource>
     <qresource prefix="/emoticons" >
         <file>chat/emoticons/emblem-unreadable.png</file>

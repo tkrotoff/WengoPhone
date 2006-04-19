@@ -267,6 +267,7 @@ void QtWengoPhone::initThreadSafe() {
 	QStackedWidget * profileBar = Object::findChild<QStackedWidget *>(_wengoPhoneWindow, "profileBar");
 	int profileBarIndex = profileBar->addWidget(new QtProfileBar(_cWengoPhone, _cWengoPhone.getWengoPhone().getCurrentUserProfile()));
 	profileBar->setCurrentIndex(profileBarIndex);
+	profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
 
 	//configPanel
 	QtConfigPanel * qtConfigPanel = new QtConfigPanel(_wengoPhoneWindow);
