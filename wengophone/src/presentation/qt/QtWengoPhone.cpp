@@ -763,6 +763,45 @@ void QtWengoPhone::expandConfigPanel() {
 	expand = !expand;
 }
 
+void QtWengoPhone::authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
+	const std::string & message) {
+
+	typedef PostEvent3<void (PresenceHandler & sender, const IMContact & imContact, const std::string & message),
+		PresenceHandler &, IMContact, std::string> MyPostEvent;
+
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::authorizationRequestEventHandlerThreadSafe, this, _1, _2, _3),
+		sender, imContact, message);
+
+	postEvent(event);
+}
+
+void QtWengoPhone::authorizationRequestEventHandlerThreadSafe(PresenceHandler & sender, const IMContact & imContact,
+	const std::string & message) {
+
+	QString request = QString("%1 (from %2) wants to see the presence state of %3.\n")
+		.arg(QString::fromStdString(imContact.getContactId()))
+		.arg(QString::fromStdString(EnumIMProtocol::toString(imContact.getProtocol())))
+		.arg(QString::fromStdString(imContact.getIMAccount()->getLogin()));
+
+	if (!message.empty()) {
+		request += QString("<i>%1</i>\n").arg(QString::fromStdString(message));
+	}
+
+	int buttonClicked = QMessageBox::question(_wengoPhoneWindow,
+		tr("WengoPhone - Authorization request"), request,
+		tr("&Authorize"), tr("&Block"));
+
+	if (buttonClicked == 0) {
+		//TODO: give a personal message
+		sender.authorizeContact(imContact, true, "");
+	} else {
+		//TODO: give a personal message
+		sender.authorizeContact(imContact, false, "");
+	}
+
+	//TODO: Ask if the user wants to add this contact to his contact list
+}
+
 void QtWengoPhone::eraseHistoryOutgoingCalls() {
 	_cWengoPhone.getCHistory().clearOutgoingCallEntries();
 }

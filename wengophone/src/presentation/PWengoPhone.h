@@ -43,6 +43,12 @@ public:
 
 	virtual void addHistory(PHistory * pHistory) = 0;*/
 
+	/**
+	 * @see IMPresence::authorizationRequestEvent
+	 */
+	virtual void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
+		const std::string & message) = 0;
+
 protected:
 };
 

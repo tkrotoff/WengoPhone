@@ -27,6 +27,10 @@
 
 #include <QMainWindow>
 
+#include <string>
+
+class PresenceHandler;
+class IMContact;
 class UserProfile;
 class CWengoPhone;
 class PPhoneLine;
@@ -83,6 +87,9 @@ public:
 	void updatePresentation();
 
 	void dialpad(const std::string & tone, const std::string & soundFile);
+
+	void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
+		const std::string & message);
 
 	QWidget * getWidget() const {
 		return _wengoPhoneWindow;
@@ -218,6 +225,9 @@ private:
 	void proxyNeedsAuthenticationEventHandler(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort);
 
 	void proxyNeedsAuthenticationEventHandlerThreadSafe(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort);
+
+	void authorizationRequestEventHandlerThreadSafe(PresenceHandler & sender, const IMContact & imContact,
+		const std::string & message);
 
 	void showLoginWindow();
 

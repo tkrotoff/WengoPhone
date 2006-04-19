@@ -242,5 +242,5 @@ void CWengoPhone::historyLoadedEventHandler(History & history) {
 
 void CWengoPhone::authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
 	const std::string & message) {
-	//_pWengophone->something();
+	_pWengoPhone->authorizationRequestEventHandler(sender, imContact, message);
 }
