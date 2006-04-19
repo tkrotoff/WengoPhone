@@ -40,12 +40,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	_gridlayout->setSpacing(0);
 
 	_widgetLayout->addLayout(_gridlayout,0,0);
-/*
-	QPalette palette = this->palette();
-	palette.setColor(QPalette::Window,QColor(188,188,188,221));
-	this->setPalette(palette);
-	setAutoFillBackground(true);
-*/
+
 	// The status widget
 	_statusLabel = new QtProfileLabel(this);
 	_statusLabel->setMinimumSize(QSize(46,65));
@@ -119,8 +114,20 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	connect(_creditLabel,SIGNAL(clicked()),SLOT(creditClicked()));
 
 	// resize
-
 	setMinimumSize(QSize(120,65));
+
+
+	// create internal widgets
+	_nickNameWidget = new QtNickNameWidget(_userProfile, this);
+	_nickNameWidget->setVisible(false);
+
+	_eventWidget = new QtEventWidget(this);
+	_eventWidget->setVisible(false);
+
+	_creditWidget = new QtCreditWidget(this);
+	_creditWidget->setCWengoPhone(&_cWengoPhone);
+	_creditWidget->setVisible(false);
+
 
 	_userProfile.wsInfoCreatedEvent += boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
 }
@@ -149,8 +156,9 @@ void QtProfileBar::showNickNameWidget(){
 
 	if ( ! _nickNameWidgetVisible )
 	{
-		_nickNameWidget = new QtNickNameWidget(_userProfile, this);
+//		_nickNameWidget = new QtNickNameWidget(_userProfile, this);
 		_widgetLayout->addWidget(_nickNameWidget, 1, 0 );
+		_nickNameWidget->setVisible(true);
 		_nickNameWidgetVisible=true;
 	}
 }
@@ -158,17 +166,19 @@ void QtProfileBar::showNickNameWidget(){
 void QtProfileBar::removeNickNameWidget(){
 
 	if ( _nickNameWidgetVisible ){
-		_widgetLayout->removeWidget ( _nickNameWidget );
 		_nickNameWidget->setVisible(false);
+		_widgetLayout->removeWidget ( _nickNameWidget );
+
 		setMinimumSize(QSize(0,0));
 		resize(QSize(0,0));
-		delete _nickNameWidget;
+//		delete _nickNameWidget;
 		_nickNameWidgetVisible=false;
 		_nicknameLabel->setSelected(false);
 	}
 }
 
 void QtProfileBar::eventsClicked(){
+
 	if ( _eventsWidgetVisible )
 		removeEventsWidget();
 	else
@@ -185,19 +195,20 @@ void QtProfileBar::showEventsWidget(){
 	removeNickNameWidget();
 	removeCreditWidget();
 	if ( !_eventsWidgetVisible ){
-		_eventWidget = new QtEventWidget(this);
+//		_eventWidget = new QtEventWidget(this);
 		_widgetLayout->addWidget(_eventWidget, 1, 0);
+		_eventWidget->setVisible(true);
 		_eventsWidgetVisible=true;
 	}
 }
 
 void QtProfileBar::removeEventsWidget(){
 	if ( _eventsWidgetVisible ){
-		_widgetLayout->removeWidget( _eventWidget );
 		_eventWidget->setVisible(false);
+		_widgetLayout->removeWidget( _eventWidget );
 		setMinimumSize(QSize(0,0));
 		resize(QSize(0,0));
-		delete _eventWidget;
+//		delete _eventWidget;
 		_eventsWidgetVisible=false;
 		_eventsLabel->setSelected(false);
 	}
@@ -218,9 +229,10 @@ void QtProfileBar::showCreditWidget(){
 	removeNickNameWidget();
 	removeEventsWidget();
 	if ( ! _crediWidgetVisible ){
-		_creditWidget = new QtCreditWidget(this);
-		_creditWidget->setCWengoPhone(&_cWengoPhone);
+//		_creditWidget = new QtCreditWidget(this);
+//		_creditWidget->setCWengoPhone(&_cWengoPhone);
 		_widgetLayout->addWidget(_creditWidget, 1, 0);
+		_creditWidget->setVisible(true);
 		_crediWidgetVisible=true;
 	}
 }
@@ -228,11 +240,11 @@ void QtProfileBar::showCreditWidget(){
 void QtProfileBar::removeCreditWidget(){
 
 	if ( _crediWidgetVisible ){
-		_widgetLayout->removeWidget( _creditWidget );
 		_creditWidget->setVisible(false);
+		_widgetLayout->removeWidget( _creditWidget );
 		setMinimumSize(QSize(0,0));
 		resize(QSize(0,0));
-		delete _creditWidget;
+//		delete _creditWidget;
 		_crediWidgetVisible=false;
 		_creditLabel->setSelected(false);
 	}

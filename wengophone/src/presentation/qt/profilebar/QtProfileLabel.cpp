@@ -92,7 +92,7 @@ void QtProfileLabel::paintEvent(QPaintEvent * event){
 		}
 		// Draw the right side
 		if ( ! _pressedRightPixmap.isNull() ){
-			painter.drawPixmap( rect.width() - _pressedRightPixmap.rect().width(),0,_pressedRightPixmap);
+			painter.drawPixmap( (rect.width()-1) - _pressedRightPixmap.rect().width(),0,_pressedRightPixmap);
 		}
 	}
 

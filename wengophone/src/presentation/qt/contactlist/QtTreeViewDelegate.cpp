@@ -148,12 +148,12 @@ void QtTreeViewDelegate::drawGroup( QPainter * painter, const QStyleOptionViewIt
 		spx = QtContactPixmap::getInstance();
 		painter->setPen( option.palette.text().color() );
 		r = option.rect;
-
+/*
 		QLinearGradient lg( QPointF( 1, option.rect.top() ), QPointF( 1, option.rect.bottom() ) );
 		lg.setColorAt ( .8, QColor( 212, 208, 200 ) );
 		lg.setColorAt ( 0, QColor( 255, 255, 255 ) );
 		painter->fillRect( option.rect, QBrush( lg ) );
-
+*/
 		QFont f = option.font;
 		f.setBold( true );
 		painter->setFont( f );
@@ -165,8 +165,8 @@ void QtTreeViewDelegate::drawGroup( QPainter * painter, const QStyleOptionViewIt
 
 		x = option.rect.left();
 
-		//painter->drawPixmap (x,r.top(),px);
-		//x+=px.width()+5;
+		painter->drawPixmap (x,r.top()+5,px);
+		x+=px.width()+3;
 		r.setLeft( x );
 
 		QFont font = painter->font();
@@ -177,8 +177,25 @@ void QtTreeViewDelegate::drawGroup( QPainter * painter, const QStyleOptionViewIt
 
 		r.setLeft( r.left() + 10 );
 
-		painter->drawText( r, Qt::AlignLeft, index.data().toString(), 0 );
+		// Number of child
 
-		/*painter->drawLine(option.rect.left(),option.rect.bottom(),
-						  option.rect.width(),option.rect.bottom()); */
+		int nbchild = index.model()->rowCount(index);
+
+		QString str= QString("%1 (%2)").arg(index.data().toString()).arg(nbchild);
+
+		// painter->drawText( r, Qt::AlignLeft, index.data().toString(), 0 );
+		painter->drawText( r, Qt::AlignLeft, str , 0 );
+
+		painter->setPen(QColor(210,210,210));
+		painter->drawLine(option.rect.left(),option.rect.bottom(),
+						  option.rect.width(),option.rect.bottom());
+
+		painter->setPen(QColor(128,128,128));
+		painter->drawLine(option.rect.left(),option.rect.bottom()-1,
+						  option.rect.width(),option.rect.bottom()-1);
+
+		painter->setPen(Qt::black);
+		painter->drawLine(option.rect.left(),option.rect.bottom()-2,
+						  option.rect.width(),option.rect.bottom()-2);
+
 	}

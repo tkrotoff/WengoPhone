@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>290</width>
-    <height>484</height>
+    <width>310</width>
+    <height>552</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -26,7 +26,7 @@
     <item row="2" column="0" >
      <widget class="QFrame" name="frame" >
       <property name="frameShape" >
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow" >
        <enum>QFrame::Raised</enum>
@@ -185,6 +185,9 @@
     </item>
     <item row="0" column="0" >
      <widget class="QFrame" name="iconBar" >
+      <property name="autoFillBackground" >
+       <bool>false</bool>
+      </property>
       <layout class="QGridLayout" >
        <property name="margin" >
         <number>2</number>
@@ -378,8 +381,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>290</width>
-     <height>19</height>
+     <width>310</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -460,8 +463,8 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>465</y>
-     <width>290</width>
+     <y>533</y>
+     <width>310</width>
      <height>19</height>
     </rect>
    </property>
