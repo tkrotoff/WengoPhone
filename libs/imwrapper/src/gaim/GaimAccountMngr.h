@@ -28,6 +28,8 @@ extern "C" {
 #include <gaim/account.h>
 }
 
+void *gaim_wg_get_handle();
+
 class GaimPresenceMngr;
 class GaimChatMngr;
 class GaimConnectMngr;

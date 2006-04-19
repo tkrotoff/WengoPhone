@@ -30,17 +30,46 @@ extern "C" {
 
 #include <util/Logger.h>
 
-const char *DefaultGroupName[] = {	
-									"Default",
-									"Default",
-									"MSN",
-									"Yahoo",
-									"AIM/ICQ",
-									"Jabber",
-									"Simple"	
-								};
+const char *find_default_group_name(EnumIMProtocol::IMProtocol protocol)
+{
+	switch (protocol)
+	{
+		case EnumIMProtocol::IMProtocolMSN:
+			return "MSN";
 
-#define DEFAULT_GROUP_NAME(i)	DefaultGroupName[i]
+		case EnumIMProtocol::IMProtocolYahoo:
+			return "Yahoo";
+
+		case EnumIMProtocol::IMProtocolAIMICQ:
+			return "AIM/ICQ";
+
+		case EnumIMProtocol::IMProtocolJabber:
+			return "Jabber";
+
+		case EnumIMProtocol::IMProtocolSIPSIMPLE:
+			return "Simple";
+
+		default:
+			return "Default";
+	}
+}
+
+#define DEFAULT_GROUP_NAME(i)	find_default_group_name(i)
+
+/* ************ BUDDY ICON MANAGEMENT ************** */
+
+void update_buddy_icon(GaimBuddy *buddy)
+{
+}
+
+void init_buddy_icon_changed_event()
+{
+	void *handle = gaim_wg_get_handle();
+
+	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-icon-changed",
+						handle, GAIM_CALLBACK(update_buddy_icon), NULL);
+}
+
 
 /* ***************** GAIM CALLBACK ***************** */
 static void C_NewListCbk(GaimBuddyList *blist)
@@ -124,6 +153,7 @@ void GaimContactListMngr::Init()
 	_accountMngr = GaimAccountMngr::getInstance();
 	gaim_set_blist(gaim_blist_new());
 	gaim_blist_load();
+	init_buddy_icon_changed_event();
 }
 
 GaimContactListMngr *GaimContactListMngr::getInstance()

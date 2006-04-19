@@ -25,6 +25,12 @@
 
 #include <util/Logger.h>
 
+void *gaim_wg_get_handle()
+{
+	static int handle;
+
+	return &handle;
+}
 
 /* ***************** GAIM CALLBACK ***************** */
 static void C_NotifyAddedCbk(GaimAccount *account, const char *remote_user,

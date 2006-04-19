@@ -32,15 +32,9 @@ extern "C" {
 #define snprintf _snprintf
 #endif
 
-void *gaim_wg_conversations_get_handle()
-{
-	static int handle;
 
-	return &handle;
-}
+/* **************** TYPING STATE MANAGEMENT ****************** */
 
-
-/* **************** TYPING STATE MANAGEMENT****************** */
 void update_buddy_typing(GaimAccount *account, const char *who)
 {
 	GaimConversation *gConv = NULL;
@@ -54,7 +48,7 @@ void update_buddy_typing(GaimAccount *account, const char *who)
 
 void init_typing_state_event()
 {
-	void *handle = gaim_wg_conversations_get_handle();
+	void *handle = gaim_wg_get_handle();
 	
 	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing",
 						handle, GAIM_CALLBACK(update_buddy_typing), NULL);
@@ -171,6 +165,7 @@ GaimChatMngr::GaimChatMngr()
 void GaimChatMngr::Init()
 {
 	_accountMngr = GaimAccountMngr::getInstance();
+	init_typing_state_event();
 }
 
 GaimChatMngr *GaimChatMngr::getInstance()
@@ -178,7 +173,6 @@ GaimChatMngr *GaimChatMngr::getInstance()
 	if (!_staticInstance)
 	{
 		_staticInstance = new GaimChatMngr();
-		init_typing_state_event();
 	}
 	return _staticInstance;
 }
@@ -350,9 +344,10 @@ void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
 
 	for (l = users; l != NULL; l = l->next)
 	{
-		mChat->contactAddedEvent(*mChat, 
-								 *((IMChatSession *)(mConv->conv_session)), 
-								 (char *) l->data);
+		//if (strcmp(gaim_account_get_username(gAccount), (char *) l->data))
+			mChat->contactAddedEvent(*mChat, 
+									*((IMChatSession *)(mConv->conv_session)), 
+									(char *) l->data);
 	}
 }
 
