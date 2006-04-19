@@ -226,11 +226,74 @@ void ChatWidget::enterPressed(){
     _chatHistory->insertHtml (text2Emoticon(replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>")));
     _chatHistory->ensureCursorVisible();
 
-    newMessage(_imChatSession,Emoticon2Text(_chatEdit->toHtml()));
+    newMessage(_imChatSession, prepareMessageForSending(_chatEdit->toPlainText()));
 
     _chatEdit->clear();
     _chatEdit->setFocus();
 
+}
+
+QString ChatWidget::prepareMessageForSending(const QString & message) {
+	QString result;
+
+	// Replace HTML emoticons by text emoticons
+	//result = Emoticon2Text(message);
+	////
+
+	// Replace URLs with HTML based URLs
+	result = replaceTextURLs(message);
+	////
+
+	// Insert font tag
+	result = insertFontTag(result);
+	////
+
+	return result;
+}
+
+QString ChatWidget::replaceTextURLs(const QString & message) {
+	QString result = message;
+	QRegExp regExp("(http://|https://|ftp://)(\\S*) ", Qt::CaseInsensitive);
+
+	result.replace(regExp, "<a href=\"\\1\\2\">\\1\\2</a>");
+
+	return result;
+}
+
+QString ChatWidget::insertFontTag(const QString & message) {
+	QString result = "<font color=\"%1\"><font face=\"%2\">";
+	result = result.arg("#000000");
+	result = result.arg(_currentFont.defaultFamily());
+
+	if (_currentFont.bold()) {
+		result += "<b>";
+	}
+
+	if (_currentFont.italic()) {
+		result += "<i>";
+	}
+	
+	if (_currentFont.underline()) {
+		result += "<u>";
+	}
+
+	result += message;
+
+	if (_currentFont.underline()) {
+		result += "</u>";
+	}
+
+	if (_currentFont.italic()) {
+		result += "</i>";
+	}
+
+	if (_currentFont.bold()) {
+		result += "</b>";
+	}
+
+	result += "</font></font>";
+
+	return result;
 }
 
 void ChatWidget::chooseFont(){

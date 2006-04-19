@@ -141,6 +141,30 @@ protected:
 
 	void addContactToContactListFrame(const Contact & contact);
 
+	/**
+	 * Prepares a message to be sent to the network.
+	 *
+	 * @param message the message to prepare
+	 * @return the prepared message
+	 */
+	QString prepareMessageForSending(const QString & message);
+
+	/**
+	 * Replaces text URLs with HTML URLs.
+	 *
+	 * @param message the message to change
+	 * @return the changed message
+	 */ 
+	QString replaceTextURLs(const QString & message);
+
+	/**
+	 * Inserts a font tag based on _currentFont.
+	 *
+	 * @param message the message to change
+	 * @return the changed message
+	 */
+	QString insertFontTag(const QString & message);
+
 public Q_SLOTS:
 
     void enterPressed();
