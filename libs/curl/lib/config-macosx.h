@@ -356,7 +356,7 @@
 #define HAVE_SIGNAL 1
 
 /* If you have sigsetjmp */
-#define HAVE_SIGSETJMP 1
+/* #define HAVE_SIGSETJMP 1 */
 
 /* Define to 1 if you have the `socket' function. */
 #define HAVE_SOCKET 1
