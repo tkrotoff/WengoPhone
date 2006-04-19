@@ -154,7 +154,8 @@ void GaimIMChat::changeTypingState(IMChatSession & chatSession, IMChat::TypingSt
 			break;
 		
 		case IMChat::TypingStateStopTyping:
-			gState = GAIM_TYPED;
+//			gState = GAIM_TYPED;
+			gState = GAIM_NOT_TYPING;
 			break;
 
 		default:
