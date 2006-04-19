@@ -17,6 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <system/Processes.h>
+
 #include <model/WengoPhone.h>
 #include <control/CWengoPhone.h>
 
@@ -67,7 +69,7 @@ int main(int argc, char * argv[]) {
 #if defined(CC_MSVC)
 	new MemoryDump("WengoPhoneNG");
 #endif
-
+    
 	//Graphical interface implementation
 	PFactory * pFactory = NULL;
 #ifdef GTKINTERFACE
@@ -77,6 +79,10 @@ int main(int argc, char * argv[]) {
 #endif
 	PFactory::setFactory(pFactory);
 
+    if (Processes::isRunning("qtwengophone.exe")) {
+        QMessageBox::warning(0, QObject::tr("WengoPhone"), QObject::tr("WengoPhone is already running."), QMessageBox::Ok, 0);
+        exit(0);
+    }
 	//CWengoPhone creates PWengoPhone (QtWengoPhone, GtkWengoPhone...)
 	//thus creating CWengoPhone at the very beginning makes the gui
 	//to be shown before everything is fully loaded
