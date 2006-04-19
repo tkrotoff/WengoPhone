@@ -34,7 +34,6 @@
 #include "phoneline/QtPhoneLine.h"
 #include "phonecall/QtPhoneCall.h"
 #include "phonecall/QtContactCallListWidget.h"
-#include "QtLogger.h"
 #include "login/QtLogin.h"
 #include "login/QtEditMyProfile.h"
 #include "imaccount/QtIMAccountManager.h"
@@ -138,13 +137,6 @@ void QtWengoPhone::initThreadSafe() {
 	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
 	setTrayMenu();
 	_trayIcon->show();
-
-
-	//logger
-	//FIXME no more logger tab widget
-	/*QtLogger * qtLogger = new QtLogger(_wengoPhoneWindow);
-	QWidget * tabLogger = Object::findChild<QWidget *>(_tabWidget, "tabLogger");
-	Widget::createLayout(tabLogger)->addWidget(qtLogger->getWidget());*/
 
 	//actionShowWengoAccount
 	QAction * actionShowWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowWengoAccount");

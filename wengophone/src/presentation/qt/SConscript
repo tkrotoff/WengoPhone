@@ -24,7 +24,6 @@ link_flags = []
 headers = [
 	'QtWengoPhone.h',
 	'QtConfigPanel.h',
-	'QtLogger.h',
 	'QtDialpad.h',
 	'QtAbout.h',
 	'QtLogger.h',
@@ -107,7 +106,6 @@ sources = [
 	'QtConfigPanel.cpp',
 	'QtDialpad.cpp',
 	'QtAbout.cpp',
-	'QtLogger.cpp',
 	'QtHttpProxyLogin.cpp',
 	'phoneline/QtPhoneLine.cpp',
 	'phonecall/QtPhoneCall.cpp',

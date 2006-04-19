@@ -124,7 +124,6 @@
         <file>AboutWindow.ui</file>
         <file>DialpadWidget.ui</file>
         <file>HttpProxyLoginWindow.ui</file>
-        <file>LoggerWidget.ui</file>
         <file>WengoPhoneWindow.ui</file>
         <file>WengoPhoneWindowConfigPanel.ui</file>
         <file>chat/ChatRoomWidget.ui</file>
