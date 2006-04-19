@@ -177,7 +177,7 @@ private:
 	 * @return true if the memento is for a chat session
 	 */
 	bool isChatSessionMemento();
-	
+
 	/**
 	 * update state.
 	 * 

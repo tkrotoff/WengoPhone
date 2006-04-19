@@ -36,30 +36,30 @@ unsigned int HistoryMementoCollection::addMemento(HistoryMemento * memento) {
 	return _historyId - 1;
 }
 
-unsigned int HistoryMementoCollection::getMementoByCallId(int callId) {
+HistoryMemento * HistoryMementoCollection::getMementoByCallId(int callId) {
 	if( callId != -1 ) {
 		HistoryMap::iterator it;
 		for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
 			if( ((*it).second->isCallMemento()) &&
 				((*it).second->getCallId() == callId) ) {
-				return (*it).first;
+				return (*it).second;
 				}
 		}
 	}
-	return -1;
+	return NULL;
 }
 
-unsigned int HistoryMementoCollection::getMementoBySMSId(int callId) {
+HistoryMemento * HistoryMementoCollection::getMementoBySMSId(int callId) {
 		if( callId != -1 ) {
 		HistoryMap::iterator it;
 		for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
 			if( ((*it).second->isSMSMemento()) &&
 				((*it).second->getCallId() == callId)) {
-				return (*it).first;
+				return (*it).second;
 			}
 		}
 	}
-	return -1;
+	return NULL;
 }
 
 unsigned int HistoryMementoCollection::size() {
@@ -75,31 +75,29 @@ void HistoryMementoCollection::removeMemento(unsigned int id) {
 	_privateCollection.erase(_privateCollection.find(id));
 }
 
-#include <stdio.h>
-
 void HistoryMementoCollection::clear(HistoryMemento::State state) {
-	
+
 	int id = -1;
 	HistoryMemento * ref = NULL;
-	
+
 	HistoryMap::iterator it;
 	for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
-		
+
+		if( ref ) {
+			delete ref;
+			_privateCollection.erase(id);
+		}
+
 		if( ((*it).second->getState() == state) || (state == HistoryMemento::Any)) {
-			
-			if( ref ) {
-				delete ref;
-				_privateCollection.erase(id);
-			}
-			
+
 			id = (*it).first;
 			ref = (*it).second;
-			
+
 		} else {
 			ref = NULL;
 		}
 	}
-	
+
 	if(ref) {
 		delete ref;
 		_privateCollection.erase(id);
@@ -117,15 +115,15 @@ void HistoryMementoCollection::privateAdd(unsigned int id, HistoryMemento * meme
 HistoryMementoCollection * HistoryMementoCollection::getMementos(HistoryMemento::State state, int count) {
 	int c = 0;
 	HistoryMementoCollection * toReturn = new HistoryMementoCollection();
-	
+
 	HistoryMap::iterator it;
 	for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
-		
+
 		if( (state == HistoryMemento::Any) || ((*it).second->getState() == state) ) {
 			toReturn->privateAdd((*it).first, (*it).second);
 			c++;
 		}
-		
+
 		if( c > count ) {
 			break;
 		}
@@ -143,10 +141,20 @@ HistoryMap::iterator HistoryMementoCollection::end() {
 
 std::string HistoryMementoCollection::toString() {
 	std::string toReturn = "_historyId: " + String::fromNumber(_historyId) + "\n";
-	
+
 	HistoryMap::iterator it;
 	for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
 		toReturn += ( "id: " + String::fromNumber((*it).first) + "/" + (*it).second->toString() + "\n");
 	}
 	return toReturn;
+}
+
+unsigned int HistoryMementoCollection::getMementoId(HistoryMemento * memento) {
+	HistoryMap::iterator it;
+	for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
+		if( (*it).second == memento ) {
+			return (*it).first;
+		}
+	}
+	return 0;
 }

@@ -125,7 +125,7 @@ void QtHistoryWidget::addOutGoingCallItem(const QString & text,const QDate & dat
 	item->setText( 2, duration.toString(Qt::TextDate) );
 	item->setText( 3, name);
 	item->setId( id );
-	item->setItemType( QtHistoryItem::OutGoingCall);
+	item->setItemType(QtHistoryItem::OutGoingCall);
 }
 
 void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id){
@@ -196,6 +196,7 @@ void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QT
 
 void QtHistoryWidget::itemDoubleClicked ( QTreeWidgetItem * item, int column ){
 	QtHistoryItem * hItem = dynamic_cast<QtHistoryItem *>(item);
+	//TODO: add a popup window question
 	replayItem(hItem);
 }
 

@@ -41,42 +41,42 @@ class HistoryMementoCollection {
 	friend class History;
 public:
 
-	
+
 	static const unsigned int SERIALIZATION_VERSION = 1;
-	
+
 	/**
 	 * Default constructor.
 	 */
 	HistoryMementoCollection();
-	
+
 	/**
 	 * Default destructor.
 	 */
 	~HistoryMementoCollection();
-	
+
 	/**
 	 * Add a HistoryMemento.
-	 * 
+	 *
 	 * @param memento the HistoryMemento to add
 	 * @return the id of the memento
 	 */
 	unsigned int addMemento(HistoryMemento * memento);
-	
+
 	/**
 	 * get a HistoryMemento by its id.
-	 * 
+	 *
 	 * @param id the id
 	 * @return the HistoryMemento with the given id
 	 */
 	HistoryMemento * getMemento(unsigned int id);
-	
+
 	/**
 	 * remove a memento by its id.
-	 * 
+	 *
 	 * @param id the id
 	 */
 	void removeMemento(unsigned int id);
-	
+
 	/**
 	 * Clear all mementos.
 	 */
@@ -84,28 +84,28 @@ public:
 
 	/**
 	 * Return the number of entries.
-	 * 
+	 *
 	 * @return the number of entries
 	 */
 	unsigned int size();
-	
+
 	/**
 	 * Return a string representing this object.
-	 * 
+	 *
 	 * @return a string representing this object
 	 */
 	std::string toString();
 
 	/**
 	 * Returns an iterator pointing to the beginning of the map.
-	 * 
+	 *
 	 * @return an iterator pointing to the beginning of the map.
 	 */
 	HistoryMap::iterator begin();
-	
+
 	/**
 	 * Returns an iterator pointing to the end of the map.
-	 * 
+	 *
 	 * @return an iterator pointing to the end of the map.
 	 */
 	HistoryMap::iterator end();
@@ -115,7 +115,7 @@ private:
 	/**
 	 * get a HistoryMementoCollection containing all mementos
 	 * that match state.
-	 * 
+	 *
 	 * @param state filter memento by State
 	 * @param count specify number of mementos to be returned
 	 * @return a pointer to a HistoryMementoCollection
@@ -124,35 +124,43 @@ private:
 
 	/**
 	 * Return the HistoryMemento's id associated to the given callId.
-	 * 
+	 *
 	 * @param callId the callId
 	 * @return the HistoryMemento associated to callId
 	 */
-	unsigned int getMementoByCallId(int callId);
+	HistoryMemento * getMementoByCallId(int callId);
 
 	/**
 	 * Return the HistoryMemento's id associated to the given SMS id.
-	 * 
+	 *
 	 * @param callId the SMS id
 	 * @return the HistoryMemento associated to SMS id
 	 */
-	unsigned int getMementoBySMSId(int callId);
+	HistoryMemento * getMementoBySMSId(int callId);
 
 	/**
 	 * Add a HistoryMemento & do not increment the static int _historyId.
-	 * 
+	 *
 	 * @param memento the HistoryMemento to add
 	 * @param id the id of the memento
 	 */
 	void privateAdd(unsigned int id, HistoryMemento * memento);
-	
+
+	/**
+	 * Get the id of the memento
+	 *
+	 * @param memento the memento
+	 * @return the id of the memento
+	 */
+	unsigned int getMementoId(HistoryMemento * memento);
+
 	/**
 	 * Set the max entries.
-	 * 
+	 *
 	 * @param max max entries
 	 */
 	void setMaxEntries(unsigned int max);
-	
+
 	/**	 global static history id for mementos */
 	static unsigned int _historyId;
 
@@ -161,9 +169,9 @@ private:
 
 	/**	 private collection, handle a (id, memento) pair map */
 	HistoryMap _privateCollection;
-	
+
 	friend class boost::serialization::access;
-	
+
 	/**	 serialialization method */
 	template < class Archive >
 	void serialize(Archive & ar, const unsigned int version) {

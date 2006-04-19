@@ -50,7 +50,7 @@ void QtHistory::initThreadSafe() {
 	_historyWidget = new QtHistoryWidget();
 	
 	connect (_historyWidget, SIGNAL( replayItem(QtHistoryItem *) ),SLOT( replayItem(QtHistoryItem *) ));
-	connect (_historyWidget, SIGNAL( removeItem(int) ),SLOT( removeItem(int) ));
+	connect (_historyWidget, SIGNAL( removeItem(unsigned int) ),SLOT( removeItem(unsigned int) ));
 	
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 	qtWengoPhone->setHistory(_historyWidget);
@@ -124,35 +124,11 @@ void QtHistory::removeHistoryMemento(unsigned int id) {
 }
 
 void QtHistory::mementoAddedEventHandler(CHistory &, unsigned int id) {
-		
-	HistoryMemento * memento = _cHistory.getHistory().getMemento(id);
-	if( memento ) {
-	
-		addHistoryMemento(
-			HistoryMemento::stateToString(memento->getState()),
-			memento->getDate().toString(),
-			memento->getTime().toString(),
-			memento->getDuration(),
-			memento->getPeer(),
-			id
-		);
-	}
+	updatePresentation();
 }
 
 void QtHistory::mementoUpdatedEventHandler(CHistory &, unsigned int id) {
-	HistoryMemento * memento = _cHistory.getHistory().getMemento(id);
-	if( memento ) {
-		QString type = QString::fromStdString(HistoryMemento::stateToString(memento->getState()));
-		std::string date = memento->getDate().toString();
-		std::string time = memento->getTime().toString();
-		QDate qdate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
-		QTime qtime = QTime::fromString(QString::fromStdString(time));
-		QString peer = QString::fromStdString(memento->getPeer());
-		QTime qduration = QTime();
-		qduration = qduration.addSecs(memento->getDuration());
-		
-		_historyWidget->editItem(type, qdate, qtime, qduration, peer, id);
-	}
+	updatePresentation();
 }
 
 void QtHistory::clearAllEntries() {

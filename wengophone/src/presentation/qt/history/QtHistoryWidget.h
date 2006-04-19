@@ -92,7 +92,7 @@ Q_SIGNALS:
 	
 	void replayItem( QtHistoryItem * item );
 	
-	void removeItem( int id );
+	void removeItem( unsigned int id );
 
 protected:
 

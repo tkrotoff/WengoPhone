@@ -35,7 +35,6 @@ const std::string HistoryMemento::StateNone = "StateNone";
 const std::string HistoryMemento::StateAny = "StateAny";
 
 HistoryMemento::HistoryMemento() {
-	//set internal data
 	_state = None;
 	_peer = "";
 	_callId = -1;
@@ -46,7 +45,6 @@ HistoryMemento::HistoryMemento() {
 }
 
 HistoryMemento::HistoryMemento(State state, std::string peer, int callId, std::string data) {
-	//set internal data
 	_state = state;
 	_peer = peer;
 	_callId = callId;
@@ -96,7 +94,7 @@ void HistoryMemento::updateState(State state) {
 }
 
 bool HistoryMemento::canReplay() {
-	if( ( _state == OutgoingCall ) || ( _state == OutgoingSmsOk ) ) {
+	if( ( _state == OutgoingCall ) || ( _state == OutgoingSmsOk )) {
 		return true;
 	} else {
 		return false;
@@ -104,8 +102,8 @@ bool HistoryMemento::canReplay() {
 }
 
 bool HistoryMemento::isCallMemento() {
-	return ((_state == OutgoingCall) || (_state == IncomingCall) || 
-			(_state == MissedCall) || (_state == MissedCall) || (_state == RejectedCall));
+	return ((_state == OutgoingCall) || (_state == IncomingCall) ||
+			(_state == MissedCall)  || (_state == RejectedCall));
 }
 
 bool HistoryMemento::isSMSMemento() {

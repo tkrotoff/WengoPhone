@@ -47,28 +47,28 @@ unsigned int History::addMemento(HistoryMemento * memento) {
 }
 
 void History::updateCallDuration(int callId, int duration) {
-	unsigned int id = _collection->getMementoByCallId(callId);
-	HistoryMemento * memento = getMemento(id);
+	HistoryMemento * memento = _collection->getMementoByCallId(callId);
 	if( memento ) {
 		memento->updateDuration(duration);
+		unsigned int id = _collection->getMementoId(memento);
 		mementoUpdatedEvent(*this, id);
 	}
 }
 
 void History::updateSMSState(int callId, HistoryMemento::State state) {
-	unsigned int id = _collection->getMementoBySMSId(callId);
-	HistoryMemento * memento = getMemento(id);
+	HistoryMemento * memento = _collection->getMementoBySMSId(callId);
 	if( memento ) {
 		memento->updateState(state);
+		unsigned int id = _collection->getMementoId(memento);
 		mementoUpdatedEvent(*this, id);
 	}
 }
 
 void History::updateCallState(int callId, HistoryMemento::State state) {
-	unsigned int id = _collection->getMementoByCallId(callId);
-	HistoryMemento * memento = getMemento(id);
+	HistoryMemento * memento = _collection->getMementoByCallId(callId);
 	if( memento ) {
 		memento->updateState(state);
+		unsigned int id = _collection->getMementoId(memento);
 		mementoUpdatedEvent(*this, id);
 	}
 }
