@@ -40,7 +40,12 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	_gridlayout->setSpacing(0);
 
 	_widgetLayout->addLayout(_gridlayout,0,0);
-
+/*
+	QPalette palette = this->palette();
+	palette.setColor(QPalette::Window,QColor(188,188,188,221));
+	this->setPalette(palette);
+	setAutoFillBackground(true);
+*/
 	// The status widget
 	_statusLabel = new QtProfileLabel(this);
 	_statusLabel->setMinimumSize(QSize(46,65));
@@ -239,6 +244,7 @@ void QtProfileBar::createStatusMenu(){
 		delete _statusMenu;
 	_statusMenu = new QMenu(this);
 
+
 	QAction * action;
 
 	action = _statusMenu->addAction( tr( "Online" ) );
@@ -258,7 +264,7 @@ void QtProfileBar::createStatusMenu(){
 
 	QPoint p = _statusLabel->pos();
 
-	p.setY( p.y() + _statusLabel->rect().bottom() );
+	p.setY( p.y() + _statusLabel->rect().bottom() - 18 );
 
 	_statusMenu->setWindowOpacity(0.95);
 

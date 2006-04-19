@@ -232,28 +232,28 @@ void QtWengoPhone::initThreadSafe() {
 	//actionOutgoing_Calls
 	QAction * actionOutgoingCalls = Object::findChild<QAction *>(_wengoPhoneWindow, "actionOutgoing_Calls");
 	connect(actionOutgoingCalls, SIGNAL(triggered()), SLOT(eraseHistoryOutgoingCalls()));
-	
+
 	//actionIncoming_Calls
 	QAction * actionIncomingCalls = Object::findChild<QAction *>(_wengoPhoneWindow, "actionIncoming_Calls");
 	connect(actionIncomingCalls, SIGNAL(triggered()), SLOT(eraseHistoryIncomingCalls()));
-	
+
 	//actionMissed_Calls
 	QAction * actionMissedCalls = Object::findChild<QAction *>(_wengoPhoneWindow, "actionMissed_Calls");
 	connect(actionMissedCalls, SIGNAL(triggered()), SLOT(eraseHistoryMissedCalls()));
-	
+
 	//actionChat_Sessions
 	QAction * actionChatSessions = Object::findChild<QAction *>(_wengoPhoneWindow, "actionChat_Sessions");
 	connect(actionChatSessions, SIGNAL(triggered()), SLOT(eraseHistoryChatSessions()));
-	
+
 	//actionSMS
 	QAction * actionSMS = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSMS");
 	connect(actionSMS, SIGNAL(triggered()), SLOT(eraseHistorySms()));
-	
+
 	//actionAll
 	QAction * actionAll = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAll");
 	connect(actionAll, SIGNAL(triggered()), SLOT(eraseHistory()));
-	
-	
+
+
 	//Embedded Browser
 	_browser = new QtBrowser(NULL);
 	_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
@@ -265,7 +265,7 @@ void QtWengoPhone::initThreadSafe() {
 
 	//Add the profile bar
 	QStackedWidget * profileBar = Object::findChild<QStackedWidget *>(_wengoPhoneWindow, "profileBar");
-	int profileBarIndex = profileBar->addWidget(new QtProfileBar(_cWengoPhone, _cWengoPhone.getWengoPhone().getCurrentUserProfile()));
+	int profileBarIndex = profileBar->addWidget(new QtProfileBar(_cWengoPhone, _cWengoPhone.getWengoPhone().getCurrentUserProfile(),profileBar));
 	profileBar->setCurrentIndex(profileBarIndex);
 	profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
 

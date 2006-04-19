@@ -89,9 +89,7 @@ void QtProfileLabel::paintEvent(QPaintEvent * event){
 			if ( ! _pressedRightPixmap.isNull() )
 				fillRect.adjust(0,0,0-_pressedRightPixmap.rect().width(),0);
 			painter.fillRect(fillRect,brush);
-
 		}
-
 		// Draw the right side
 		if ( ! _pressedRightPixmap.isNull() ){
 			painter.drawPixmap( rect.width() - _pressedRightPixmap.rect().width(),0,_pressedRightPixmap);
@@ -100,11 +98,9 @@ void QtProfileLabel::paintEvent(QPaintEvent * event){
 
 	painter.end();
 
-
 	QPainter p ( this );
 	p.drawPixmap(0,0,_pixmap );
 	drawText(&p);
-
 	p.end();
 }
 
@@ -114,6 +110,7 @@ void QtProfileLabel::drawText(QPainter * painter){
 	painter->save();
 
 	painter->setPen(_textColor);
+
 	painter->drawText ( rect, Qt::AlignCenter, this->text(), &rect );
 
 	painter->restore();
