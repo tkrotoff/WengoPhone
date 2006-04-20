@@ -1521,7 +1521,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 		outputFile = os.path.basename(qrcFile) + '.cpp'
 
 		os.system(rcc + ' ' + os.path.basename(qrcFile) + ' -o ' + outputFile)
-
 		return os.path.join(dir, outputFile)
 
 	def WengoCompileQt4UiFile(self, uiFile):
@@ -1540,13 +1539,10 @@ class WengoSConsEnvironment(SConsEnvironment):
 		self.__saveCurrentSourcePath()
 		dir = os.path.dirname(os.path.join(self.__getSourcePath(), uiFile))
 		os.chdir(dir)
-		print 'WengoCompileQt4UiFile dir=' + dir
 
 		outputFile = 'ui_' + os.path.basename(uiFile[:-3]) + '.h'
-		print 'WengoCompileQt4UiFile outputFile=' + outputFile
 
 		os.system(uic + ' ' + os.path.basename(uiFile) + ' -o ' + outputFile)
-
 		return os.path.join(dir, outputFile)
 
 	def WengoCreateFile(self, filename, fileTemplate, fileData):
