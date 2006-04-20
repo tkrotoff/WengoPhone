@@ -596,6 +596,7 @@ void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, cons
 		publishOnline(note);
 		break;
 
+	case EnumPresenceState::PresenceStateInvisible:
 	case EnumPresenceState::PresenceStateOffline:
 		publishOffline(note);
 		break;
