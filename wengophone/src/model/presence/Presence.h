@@ -60,6 +60,12 @@ public:
 	Event<void (IMPresence & sender, const std::string & contactId, const std::string & message)> authorizationRequestEvent;
 
 
+	/**
+	 * @see IMPresence::contactIconChangedEvent
+	 */
+	Event< void (IMPresence & sender, const std::string & contactId, Picture icon) > contactIconChangedEvent;
+
+
 	Presence(IMAccount & imAccount);
 
 	~Presence();
@@ -78,11 +84,6 @@ public:
 	 * @see IMPresence::changeMyIcon
 	 */
 	void changeMyIcon(const Picture & picture);
-
-	/**
-	 * @see IMPresence::getContactIcon
-	 */
-	Picture getContactIcon(const std::string & contactId);
 
 	/**
 	 * @see IMPresence::subscribeToPresenceOf

@@ -85,24 +85,6 @@ void GaimIMPresence::changeMyIcon(const Picture & picture)
 	gaim_account_set_buddy_icon(gAccount, file.getFullPath().c_str());
 }
 
-Picture GaimIMPresence::getContactIcon(const std::string & contactId)
-{
-	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
-											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
-	GaimBuddy *gBuddy = gaim_find_buddy(gAccount, contactId.c_str());
-
-	if (gBuddy)
-	{
-		size_t size;
-		const char *data = (const char *)gaim_buddy_icon_get_data(gBuddy->icon, &size);
-		
-		if (data && size > 0)
-			return Picture::pictureFromData(std::string(data, size));
-	}
-
-	return Picture();
-}
-
 void GaimIMPresence::subscribeToPresenceOf(const std::string & contactId)
 {
 }

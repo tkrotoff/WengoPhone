@@ -50,9 +50,6 @@ public:
 
 	void authorizeContact(const std::string & contactId, bool auhorized, const std::string message);
 
-
-	Picture getContactIcon(const std::string &);
-
 private:
 
 	PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrapper);
@@ -63,6 +60,9 @@ private:
 
 	void subscribeStatusEventHandler(PhApiWrapper & sender, const std::string & contactId, IMPresence::SubscribeStatus status);
 
+	void contactIconChangedEventHandler(PhApiWrapper & sender, const std::string & contactId, const std::string & filename);
+
+	const std::string getRessourcePath();
 
 	PhApiWrapper & _phApiWrapper;
 };

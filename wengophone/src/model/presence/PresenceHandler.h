@@ -73,6 +73,12 @@ public:
 	Event<void (PresenceHandler & sender, const IMContact & imContact,
 		const std::string & message)> authorizationRequestEvent;
 
+	/**
+	 * @see IMPresence::contactIconChangedEvent
+	 */
+	Event< void (PresenceHandler & sender, const IMContact & imContact, 
+		Picture icon) > contactIconChangedEvent;
+
 
 	PresenceHandler(UserProfile & userProfile);
 
@@ -186,6 +192,11 @@ private:
 	 * @see IMAccount::imAccountDeadEvent
 	 */
 	void imAccountDeadEventHandler(IMAccount & sender);
+
+	/**
+	 * @see IMPresence::contactIconChangedEvent
+	 */
+	void contactIconChangedEventHandler(IMPresence & sender, const std::string & contactId, Picture icon);
 
 	/**
 	 * Find the Presence related to the given protocol.

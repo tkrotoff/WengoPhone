@@ -33,6 +33,7 @@
 #include <imwrapper/IMChatSession.h>
 
 #include <util/Event.h>
+#include <thread/Mutex.h>
 
 #include <phapi.h>
 
@@ -70,6 +71,8 @@ public:
 	Event<void (PhApiWrapper & sender, EnumPresenceState::MyPresenceStatus status, const std::string & note)> myPresenceStatusEvent;
 
 	Event<void (PhApiWrapper & sender, const std::string & contactId, IMPresence::SubscribeStatus status)> subscribeStatusEvent;
+
+	Event<void (PhApiWrapper & sender, const std::string & contactId, const std::string filename)> contactIconChangedEvent;
 
 
 	/** Value when phApi returns an error message. */
@@ -199,6 +202,9 @@ public:
 
 	void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
 
+	void changeMyIcon(const std::string & iconFilename);
+	void sendMyIcon(IMChatSession & chatSession, const std::string & iconFilename);
+
 	void subscribeToPresenceOf(const std::string & contactId);
 
 	void blockContact(const std::string & contactId);
@@ -321,6 +327,11 @@ private:
 	unsigned _sipLocalPort;
 
 	std::string _pluginPath;
+
+	/** Current icon filename. */
+	std::string _iconFilename;
+
+	Mutex _mutex;
 };
 
 #endif	//PHAPIWRAPPER_H

@@ -336,7 +336,6 @@ void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
 	mConvInfo_t *mConv = NULL;
 	GaimIMChat *mChat = FindIMChat(*account);
 
-
 	if (!mChat)
 		return;
 
@@ -344,7 +343,7 @@ void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
 
 	for (l = users; l != NULL; l = l->next)
 	{
-		//if (strcmp(gaim_account_get_username(gAccount), (char *) l->data))
+		if (strcmp(gaim_account_get_username(gAccount), (char *) l->data))
 			mChat->contactAddedEvent(*mChat, 
 									*((IMChatSession *)(mConv->conv_session)), 
 									(char *) l->data);

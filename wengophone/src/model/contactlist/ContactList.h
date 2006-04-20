@@ -25,6 +25,7 @@
 #include <imwrapper/EnumPresenceState.h>
 
 #include <util/Event.h>
+#include <util/Picture.h>
 
 #include <set>
 #include <list>
@@ -218,6 +219,12 @@ private:
 	 */
 	void imContactMovedEventHandler(IMContactListHandler & sender,
 		const std::string & groupName, IMContact & imContact);
+
+	/**
+	 * @see PresenceHandler::contactIconChangedEvent
+	 */
+	void contactIconChangedEventHandler(PresenceHandler & sender, 
+		const IMContact & imContact, Picture icon);
 
 	/**
 	 * Add an IMContact to a Contact.

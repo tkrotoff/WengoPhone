@@ -359,8 +359,8 @@ Picture Contact::getIcon() const {
 	for (IMContactSet::const_iterator it = _imContactSet.begin() ;
 		it != _imContactSet.end() ;
 		it++) {
-		if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
-			result = _userProfile.getPresenceHandler().getContactIcon((*it));
+		if (!(*it).getIcon().getData().empty()) {
+			result = (*it).getIcon();
 			break;
 		}
 	}

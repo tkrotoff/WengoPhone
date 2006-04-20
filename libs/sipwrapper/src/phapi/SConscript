@@ -2,6 +2,7 @@ env = WengoGetEnvironment()
 
 libs = [
 	'owthread',
+	'owutil',
 	'phapi',
 	'ortp',
 	'stun',
@@ -17,6 +18,12 @@ lib_path = []
 include_path = [
 	'../phapi'
 ]
+link_flags = []
+
+if WengoOSMacOSX():
+	link_flags += [
+		'-framework CoreFoundation',
+	]
 
 if WengoGetConsoleArgument('enable-video'):
 	defines['ENABLE_VIDEO'] = 1
@@ -39,6 +46,7 @@ sources = [
 ]
 
 env.WengoAddIncludePath(include_path)
+env.WengoAddLinkFlags(link_flags)
 env.WengoAddDefines(defines)
 env.WengoUseLibraries(libs)
 env.WengoStaticLibrary('phapiwrapper', sources)

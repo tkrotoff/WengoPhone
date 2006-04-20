@@ -22,6 +22,13 @@
 #include "PhApiWrapper.h"
 
 #include <util/Picture.h>
+#include <util/Path.h>
+#include <util/File.h>
+#include <cutil/global.h>
+
+#ifdef OS_MACOSX
+#include <CoreFoundation/CoreFoundation.h>
+#endif
 
 PhApiIMPresence::PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrapper)
 	: IMPresence(account),
@@ -30,6 +37,7 @@ PhApiIMPresence::PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrappe
 	_phApiWrapper.presenceStateChangedEvent += boost::bind(&PhApiIMPresence::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
 	_phApiWrapper.myPresenceStatusEvent += boost::bind(&PhApiIMPresence::myPresenceStatusEventHandler, this, _1, _2, _3);
 	_phApiWrapper.subscribeStatusEvent += boost::bind(&PhApiIMPresence::subscribeStatusEventHandler, this, _1, _2, _3);
+	_phApiWrapper.contactIconChangedEvent += boost::bind(&PhApiIMPresence::contactIconChangedEventHandler, this, _1, _2, _3);
 }
 
 void PhApiIMPresence::changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {
@@ -43,6 +51,7 @@ void PhApiIMPresence::changeMyAlias(const std::string & nickname) {
 }
 
 void PhApiIMPresence::changeMyIcon(const Picture & picture) {
+	_phApiWrapper.changeMyIcon(picture.getFilename().c_str());
 }
 
 void PhApiIMPresence::subscribeToPresenceOf(const std::string & contactId) {
@@ -73,6 +82,30 @@ void PhApiIMPresence::subscribeStatusEventHandler(PhApiWrapper & sender, const s
 	subscribeStatusEvent(*this, contactId, status);
 }
 
-Picture PhApiIMPresence::getContactIcon(const std::string &) {
-	return Picture();
+const std::string PhApiIMPresence::getRessourcePath() {
+	std::string resourcesPath;
+
+#if defined(OS_WINDOWS)
+	resourcesPath = Path::getApplicationDirPath();
+#elif defined(OS_MACOSX)
+	CFBundleRef mainBundle = CFBundleGetMainBundle();
+	if (mainBundle) {
+		CFURLRef url = CFBundleCopyResourcesDirectoryURL(mainBundle);
+		char applicationPath[1024];
+
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)applicationPath, sizeof(applicationPath))) {
+			resourcesPath = (std::string(applicationPath) + File::getPathSeparator());
+		}
+
+		CFRelease(url);
+	}
+#endif
+	//TODO: do linux code
+	return resourcesPath;
 }
+
+void PhApiIMPresence::contactIconChangedEventHandler(PhApiWrapper & sender, const std::string & contactId, const std::string & filename) {
+	Picture picture = Picture::pictureFromFile(getRessourcePath() + filename);
+	contactIconChangedEvent(*this, contactId, picture);
+}
+

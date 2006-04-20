@@ -105,6 +105,17 @@ public:
 	Event< void (IMPresence & sender, const std::string & contactId,
 		bool blocked) > contactBlockingStateChangedEvent;
 
+	/**
+	 * Emitted when a contact changes his icon.
+	 *
+	 * @param sender this class
+	 * @param contactId the contact that changes his icon
+	 * @param icon the new icon
+	 */
+	Event< void (IMPresence & sender, const std::string & contactId,
+		Picture icon) > contactIconChangedEvent;
+
+
 	virtual ~IMPresence() { }
 
 	/**
@@ -132,14 +143,6 @@ public:
 	 * @param picture the desired icon
 	 */
 	virtual void changeMyIcon(const Picture & picture) = 0;
-
-	/**
-	 * Get contact icon.
-	 *
-	 * @param contactId id of the contact
-	 * @return the icon
-	 */
-	virtual Picture getContactIcon(const std::string & contactId) = 0;
 
 	/**
 	 * Subscribe to the presence of a contact.

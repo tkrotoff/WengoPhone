@@ -61,6 +61,7 @@ public:
 	static void RequestAddChatCbk(GaimAccount *account, GaimGroup *group,
 									const char *alias, const char *name);
 	static void RequestAddGroupCbk(void);
+	static void UpdateBuddyIcon(GaimBuddy *gBuddy);
 	/* ******************************************** */
 
 private:

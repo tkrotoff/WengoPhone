@@ -45,6 +45,8 @@ ContactList::ContactList(UserProfile & userProfile)
 		boost::bind(&ContactList::imContactMovedEventHandler, this, _1, _2, _3);
 	_userProfile.getPresenceHandler().presenceStateChangedEvent +=
 		boost::bind(&ContactList::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
+	_userProfile.getPresenceHandler().contactIconChangedEvent +=
+		boost::bind(&ContactList::contactIconChangedEventHandler, this, _1, _2, _3);
 	_userProfile.newIMAccountAddedEvent +=
 		boost::bind(&ContactList::newIMAccountAddedEventHandler, this, _1, _2);
 	_userProfile.imAccountRemovedEvent +=
@@ -354,7 +356,6 @@ void ContactList::_removeFromContactGroup(const std::string & groupName, Contact
 }
 
 void ContactList::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	//TODO: link IMContact of protocol imAccount._protocol that are not linked
 }
 
 void ContactList::imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount) {
@@ -369,6 +370,17 @@ void ContactList::imAccountRemovedEventHandler(UserProfile & sender, IMAccount &
 				((IMContact &)*imContactIt).setIMAccount(NULL);
 			}
 		}
+	}
+}
+
+void ContactList::contactIconChangedEventHandler(PresenceHandler & sender, 
+	const IMContact & imContact, Picture icon) {
+
+	Contact * contact = findContactThatOwns(imContact);
+	if (contact) {
+		contact->getIMContact(imContact).setIcon(icon);
+	} else {
+		LOG_DEBUG("IMContact not found: " + imContact.getContactId());
 	}
 }
 
@@ -400,3 +412,4 @@ void ContactList::moveContact(Contact & contact, const string & dst, const strin
 		removeFromContactGroup(src, contact);
 	}
 }
+

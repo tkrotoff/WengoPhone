@@ -29,6 +29,7 @@ extern "C" {
 }
 
 #include <util/Logger.h>
+#include <util/Picture.h>
 
 const char *find_default_group_name(EnumIMProtocol::IMProtocol protocol)
 {
@@ -60,13 +61,14 @@ const char *find_default_group_name(EnumIMProtocol::IMProtocol protocol)
 
 void update_buddy_icon(GaimBuddy *buddy)
 {
+	GaimContactListMngr::UpdateBuddyIcon(buddy);
 }
 
 void init_buddy_icon_changed_event()
 {
 	void *handle = gaim_wg_get_handle();
 
-	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-icon-changed",
+	gaim_signal_connect(gaim_blist_get_handle(), "buddy-icon-changed",
 						handle, GAIM_CALLBACK(update_buddy_icon), NULL);
 }
 
@@ -153,6 +155,7 @@ void GaimContactListMngr::Init()
 	_accountMngr = GaimAccountMngr::getInstance();
 	gaim_set_blist(gaim_blist_new());
 	gaim_blist_load();
+	gaim_blist_init();
 	init_buddy_icon_changed_event();
 }
 
@@ -298,6 +301,37 @@ void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 		}
 
 	}											
+}
+
+void GaimContactListMngr::UpdateBuddyIcon(GaimBuddy *buddy)
+{
+	IMAccount *account = NULL;
+	GaimIMPresence *mIMPresence = NULL;
+	GaimAccount	*gAccount = gaim_buddy_get_account(buddy);
+	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
+	
+	account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
+		GaimIMPrcl::GetEnumIMProtocol(gPrclId));
+
+	if (!account)
+		return;
+
+	mIMPresence = _presenceMngr->FindIMPresence(*account);
+
+	if (!mIMPresence)
+	{
+		LOG_FATAL("IMPresence not found!");
+		return;
+	}
+	
+	size_t size;
+	Picture picture;
+	const char *data = (const char *)gaim_buddy_icon_get_data(buddy->icon, &size);
+		
+	if (data && size > 0)
+		picture = Picture::pictureFromData(std::string(data, size));
+
+	mIMPresence->contactIconChangedEvent(*mIMPresence, gaim_buddy_get_name(buddy), picture);
 }
 
 void GaimContactListMngr::UpdateCbk(GaimBuddyList *list, GaimBlistNode *node)

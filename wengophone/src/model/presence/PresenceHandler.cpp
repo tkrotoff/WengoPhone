@@ -228,6 +228,8 @@ void PresenceHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAcco
 			boost::bind(&PresenceHandler::subscribeStatusEventHandler, this, _1, _2, _3);
 		presence->authorizationRequestEvent +=
 			boost::bind(&PresenceHandler::authorizationRequestEventHandler, this, _1, _2, _3);
+		presence->contactIconChangedEvent +=
+			boost::bind(&PresenceHandler::contactIconChangedEventHandler, this, _1, _2, _3);
 
 		imAccount.imAccountDeadEvent +=
 			boost::bind(&PresenceHandler::imAccountDeadEventHandler, this, _1);
@@ -249,16 +251,17 @@ void PresenceHandler::imAccountDeadEventHandler(IMAccount & sender) {
 }
 
 Picture PresenceHandler::getContactIcon(const IMContact & imContact) {
-	LOG_DEBUG("Getting icon of " + imContact.getContactId());
+	//LOG_DEBUG("Getting icon of " + imContact.getContactId());
 
-	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
+	//PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
 
-	if (it != _presenceMap.end()) {
-		return (*it).second->getContactIcon(imContact.getContactId());
-	} else {
-		LOG_FATAL("Unknown IMAccount");
-		return Picture();
-	}
+	//if (it != _presenceMap.end()) {
+	//	return (*it).second->getContactIcon(imContact.getContactId());
+	//} else {
+	//	LOG_FATAL("Unknown IMAccount");
+	//	return Picture();
+	//}
+	return Picture();
 }
 
 void PresenceHandler::authorizeContact(const IMContact & imContact, bool authorized, const std::string message) {
@@ -269,4 +272,10 @@ void PresenceHandler::authorizeContact(const IMContact & imContact, bool authori
 	} else {
 		LOG_FATAL("Unknown IMAccount");
 	}
+}
+
+void PresenceHandler::contactIconChangedEventHandler(IMPresence & sender, 
+	const std::string & contactId, Picture icon) {
+	
+	contactIconChangedEvent(*this, IMContact(sender.getIMAccount(), contactId), icon);
 }

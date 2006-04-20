@@ -532,6 +532,8 @@ void PhApiWrapper::changeTypingState(IMChatSession & chatSession, IMChat::Typing
 }
 
 void PhApiWrapper::createSession(IMChat & imChat, IMContactSet & imContactSet) {
+	Mutex::ScopedLock lock(_mutex);
+
 	IMChatSession * imChatSession;
 
 	//FIXME: Currently, phApi supports chat with only one person
@@ -545,6 +547,7 @@ void PhApiWrapper::createSession(IMChat & imChat, IMContactSet & imContactSet) {
 		} else {
 			imChatSession = new IMChatSession(imChat);
 			addContact(*imChatSession, (*imContactSet.begin()).getContactId());
+			sendMyIcon(*imChatSession, _iconFilename);
 		}
 	}
 
@@ -552,6 +555,8 @@ void PhApiWrapper::createSession(IMChat & imChat, IMContactSet & imContactSet) {
 }
 
 void PhApiWrapper::closeSession(IMChatSession & sender) {
+	Mutex::ScopedLock lock(_mutex);
+
 	std::map<const std::string, IMChatSession *>::iterator it =
 		_contactChatMap.find((*sender.getIMContactSet().begin()).getContactId());
 
@@ -601,6 +606,37 @@ void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, cons
 
 	default:
 		LOG_FATAL("unknown presence state");
+	}
+}
+
+void PhApiWrapper::changeMyIcon(const std::string &iconFilename)
+{
+	std::map<const std::string, IMChatSession *> & contactChatMap = getContactChatMap();
+	std::map<const std::string, IMChatSession *>::const_iterator sessionIt;
+	IMChatSession *imChatSession;
+
+	_iconFilename = iconFilename;
+	
+	for (sessionIt = contactChatMap.begin(); sessionIt != contactChatMap.end(); sessionIt++)
+	{
+		imChatSession = (*sessionIt).second;
+		sendMyIcon(*imChatSession, iconFilename);
+	}
+}
+
+void PhApiWrapper::sendMyIcon(IMChatSession & chatSession, const std::string & iconFilename)
+{
+	if (iconFilename.length() == 0)
+		return;
+
+	const std::string mime = "buddyicon/" + iconFilename;
+	const char *message("has changed his icon");
+	const IMContactSet & buddies = chatSession.getIMContactSet();
+	IMContactSet::const_iterator it;	
+
+	for (it = buddies.begin(); it != buddies.end(); it++) {
+		std::string sipAddress = "sip:" + (*it).getContactId() + "@" + _wengoRealm;
+		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message, mime.c_str());
 	}
 }
 

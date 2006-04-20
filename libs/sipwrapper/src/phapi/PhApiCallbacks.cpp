@@ -295,6 +295,13 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		p->typingStateChangedEvent(*p, *imChatSession, from, state);
 		return;
 	}
+	else if (strcmp(info->ctype, "buddyicon") == 0)
+	{
+		if (info->subtype && *info->subtype)
+			p->contactIconChangedEvent(*p, from, info->subtype);
+
+		return;
+	}
 
 	switch(info->event) {
 	case phMsgNew: {

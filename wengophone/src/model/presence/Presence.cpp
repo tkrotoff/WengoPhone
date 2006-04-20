@@ -37,6 +37,7 @@ Presence::Presence(IMAccount & imAccount)
 	_imPresence->myPresenceStatusEvent += myPresenceStatusEvent;
 	_imPresence->subscribeStatusEvent += subscribeStatusEvent;
 	_imPresence->authorizationRequestEvent += authorizationRequestEvent;
+	_imPresence->contactIconChangedEvent += contactIconChangedEvent;
 
 	_state = MyPresenceStateOffline::getInstance();
 }
@@ -57,10 +58,6 @@ void Presence::changeMyAlias(const std::string & alias) {
 
 void Presence::changeMyIcon(const Picture & picture) {
 	_imPresence->changeMyIcon(picture);
-}
-
-Picture Presence::getContactIcon(const std::string & contactId) {
-	return _imPresence->getContactIcon(contactId);
 }
 
 void Presence::subscribeToPresenceOf(const std::string & contactId) {
