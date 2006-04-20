@@ -85,9 +85,6 @@
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
     </qresource>
-    <qresource prefix="/data" >
-        <file>../../../AUTHORS</file>
-    </qresource>
     <qresource prefix="/emoticons" >
         <file>chat/emoticons/emblem-unreadable.png</file>
         <file>chat/emoticons/face-angel16.png</file>
@@ -125,7 +122,6 @@
         <file>chat/emoticons/face-wink48.png</file>
     </qresource>
     <qresource prefix="/forms" >
-        <file>AboutWindow.ui</file>
         <file>DialpadWidget.ui</file>
         <file>HttpProxyLoginWindow.ui</file>
         <file>WengoPhoneWindow.ui</file>
@@ -155,7 +151,6 @@
         <file>imaccount/AIMSettings.ui</file>
         <file>imaccount/GoogleTalkSettings.ui</file>
         <file>imaccount/IMAccountManager.ui</file>
-        <file>imaccount/IMAccountTemplate.ui</file>
         <file>imaccount/JabberSettings.ui</file>
         <file>imaccount/MSNSettings.ui</file>
         <file>imaccount/YahooSettings.ui</file>

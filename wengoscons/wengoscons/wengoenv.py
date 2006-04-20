@@ -1515,12 +1515,14 @@ class WengoSConsEnvironment(SConsEnvironment):
 		rcc = os.path.join(qtdir, 'bin', 'rcc')
 
 		self.__saveCurrentSourcePath()
-		os.chdir(self.__getSourcePath())
+		dir = os.path.dirname(os.path.join(self.__getSourcePath(), qrcFile))
+		os.chdir(dir)
 
-		outputCppFile = qrcFile + '.cpp'
+		outputFile = os.path.basename(qrcFile) + '.cpp'
 
-		os.system(rcc + ' ' + qrcFile + ' -o ' + outputCppFile)
-		return outputCppFile
+		os.system(rcc + ' ' + os.path.basename(qrcFile) + ' -o ' + outputFile)
+
+		return os.path.join(dir, outputFile)
 
 	def WengoCompileQt4UiFile(self, uiFile):
 		"""
@@ -1536,12 +1538,16 @@ class WengoSConsEnvironment(SConsEnvironment):
 		uic = os.path.join(qtdir, 'bin', 'uic')
 
 		self.__saveCurrentSourcePath()
-		os.chdir(self.__getSourcePath())
+		dir = os.path.dirname(os.path.join(self.__getSourcePath(), uiFile))
+		os.chdir(dir)
+		print 'WengoCompileQt4UiFile dir=' + dir
 
-		outputHeaderFile = 'ui_' + uiFile[:-3] + '.h'
+		outputFile = 'ui_' + os.path.basename(uiFile[:-3]) + '.h'
+		print 'WengoCompileQt4UiFile outputFile=' + outputFile
 
-		os.system(uic + ' ' + uiFile + ' -o ' + outputHeaderFile)
-		return outputHeaderFile
+		os.system(uic + ' ' + os.path.basename(uiFile) + ' -o ' + outputFile)
+
+		return os.path.join(dir, outputFile)
 
 	def WengoCreateFile(self, filename, fileTemplate, fileData):
 		"""

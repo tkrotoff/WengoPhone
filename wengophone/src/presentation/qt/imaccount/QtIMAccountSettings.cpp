@@ -19,6 +19,8 @@
 
 #include "QtIMAccountSettings.h"
 
+#include "ui_IMAccountTemplate.h"
+
 #include "QtIMAccountPlugin.h"
 #include "QtMSNSettings.h"
 #include "QtAIMSettings.h"
@@ -30,8 +32,6 @@
 
 #include <util/Logger.h>
 
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
 #include <qtutil/Widget.h>
 
 #include <QtGui>
@@ -59,45 +59,40 @@ QtIMAccountSettings::QtIMAccountSettings(UserProfile & userProfile, EnumIMProtoc
 }
 
 void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, EnumIMProtocol::IMProtocol imProtocol) {
-	_imAccountTemplateWidget = WidgetFactory::create(":/forms/imaccount/IMAccountTemplate.ui", parent);
+	QDialog * imAccountTemplateWindow = new QDialog(parent);
 
-	//settingsGroupBox
-	QGroupBox * settingsGroupBox = Object::findChild<QGroupBox *>(_imAccountTemplateWidget, "settingsGroupBox");
-
-	//imAccountTemplateWindow
-	QDialog * imAccountTemplateWindow = Widget::transformToWindow(_imAccountTemplateWidget);
+	_ui = new Ui::IMAccountTemplate();
+	_ui->setupUi(imAccountTemplateWindow);
 
 	//saveButton
-	QPushButton * saveButton = Object::findChild<QPushButton *>(_imAccountTemplateWidget, "saveButton");
-	connect(saveButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(accept()));
+	connect(_ui->saveButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(accept()));
 
 	//cancelButton
-	QPushButton * cancelButton = Object::findChild<QPushButton *>(_imAccountTemplateWidget, "cancelButton");
-	connect(cancelButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(reject()));
+	connect(_ui->cancelButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(reject()));
 
 	switch (imProtocol) {
 	case EnumIMProtocol::IMProtocolMSN: {
-		_imAccountPlugin = new QtMSNSettings(_userProfile, _imAccount, settingsGroupBox);
+		_imAccountPlugin = new QtMSNSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
 		break;
 	}
 
 	case EnumIMProtocol::IMProtocolYahoo: {
-		_imAccountPlugin = new QtYahooSettings(_userProfile, _imAccount, settingsGroupBox);
+		_imAccountPlugin = new QtYahooSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
 		break;
 	}
 
 	case EnumIMProtocol::IMProtocolAIMICQ: {
-		_imAccountPlugin = new QtAIMSettings(_userProfile, _imAccount, settingsGroupBox);
+		_imAccountPlugin = new QtAIMSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
 		break;
 	}
 
 	case EnumIMProtocol::IMProtocolJabber: {
-		_imAccountPlugin = new QtJabberSettings(_userProfile, _imAccount, settingsGroupBox);
+		_imAccountPlugin = new QtJabberSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
 		break;
 	}
 
 	case EnumIMProtocol::IMProtocolGoogleTalk: {
-		_imAccountPlugin = new QtGoogleTalkSettings(_userProfile, _imAccount, settingsGroupBox);
+		_imAccountPlugin = new QtGoogleTalkSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
 		break;
 	}
 
@@ -106,8 +101,8 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, EnumIMProtoco
 	}
 
 	QWidget * imProtocolWidget = _imAccountPlugin->getWidget();
-	Widget::createLayout(settingsGroupBox)->addWidget(imProtocolWidget);
-	settingsGroupBox->setTitle(imProtocolWidget->windowTitle());
+	Widget::createLayout(_ui->settingsGroupBox)->addWidget(imProtocolWidget);
+	_ui->settingsGroupBox->setTitle(imProtocolWidget->windowTitle());
 
 	connect(imAccountTemplateWindow, SIGNAL(accepted()), _imAccountPlugin, SLOT(save()));
 	imAccountTemplateWindow->setWindowTitle(imProtocolWidget->windowTitle());

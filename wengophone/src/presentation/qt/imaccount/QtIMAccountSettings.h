@@ -24,6 +24,8 @@
 
 #include <QObject>
 
+namespace Ui { class IMAccountTemplate; }
+
 class QtIMAccountPlugin;
 class UserProfile;
 class IMAccount;
@@ -46,7 +48,7 @@ private:
 
 	void createIMProtocolWidget(QWidget * parent, EnumIMProtocol::IMProtocol imProtocol);
 
-	QWidget * _imAccountTemplateWidget;
+	Ui::IMAccountTemplate * _ui;
 
 	IMAccount * _imAccount;
 
