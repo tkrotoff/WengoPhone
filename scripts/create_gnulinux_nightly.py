@@ -119,7 +119,7 @@ X11_dependencies = {
     }
 
 for library in X11_dependencies.keys():
-    filename = 'lib' + library + '.so.' + dependencies[library]
+    filename = 'lib' + library + '.so.' + X11_dependencies[library]
     shutil.copyfile('/usr/X11R6/lib/' + filename, os.path.join(str(temp_directory), filename))
 
 #Creating tarball and adding files to it
