@@ -109,9 +109,18 @@ dependencies = {
     'gnutls':'11',
     'tasn1':'2',
     }
+
 for library in dependencies.keys():
     filename = 'lib' + library + '.so.' + dependencies[library]
     shutil.copyfile('/usr/lib/' + filename, os.path.join(str(temp_directory), filename))
+
+X11_dependencies = {
+    'Xinerama':'1.0',
+    }
+
+for library in X11_dependencies.keys():
+    filename = 'lib' + library + '.so.' + dependencies[library]
+    shutil.copyfile('/usr/X11R6/lib/' + filename, os.path.join(str(temp_directory), filename))
 
 #Creating tarball and adding files to it
 zip_file = tarfile.open('wengophone-ng-GNULinux-binary-latest.tar.bz2', 'w:bz2')
