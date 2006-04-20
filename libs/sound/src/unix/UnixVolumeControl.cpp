@@ -40,6 +40,21 @@ const char * sound_device_names[] = SOUND_DEVICE_NAMES;
 
 UnixVolumeControl::UnixVolumeControl(int deviceId, UnixDeviceType deviceType) 
 	throw(NoSoundCardException, SoundMixerException) {
+
+    switch (deviceType) {
+        case UnixDeviceTypeMic:
+            _strDeviceType = "mic";
+            break;
+        case UnixDeviceTypePcm:
+            _strDeviceType = "pcm";
+            break;
+        case UnixDeviceTypeIgain:
+            _strDeviceType = "igain";
+            break;
+        default:
+            LOG_FATAL("Unknwon audio device type");
+    }
+        
 }
 
 bool UnixVolumeControl::close() {
@@ -53,7 +68,7 @@ int UnixVolumeControl::getLevel() {
 
 	//Find device
 	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
-		if (((1 << i) & devmask) && !strcmp("pcm", sound_device_names[i])) {
+		if (((1 << i) & devmask) && !strcmp(_strDeviceType.c_str(), sound_device_names[i])) {
 			break;
 		}
 	}
@@ -72,7 +87,7 @@ bool UnixVolumeControl::setLevel(unsigned level) {
 
 	//Find device
 	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
-		if (((1 << i) & devmask) && !strcmp("pcm", sound_device_names[i])) {
+		if (((1 << i) & devmask) && !strcmp(_strDeviceType.c_str(), sound_device_names[i])) {
 			break;
 		}
 	}
@@ -90,7 +105,7 @@ bool UnixVolumeControl::isMuted() {
 
 	//Find device
 	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
-		if (((1 << i) & devmask) && !strcmp("mic", sound_device_names[i])) {
+		if (((1 << i) & devmask) && !strcmp(_strDeviceType.c_str(), sound_device_names[i])) {
 			break;
 		}
 	}

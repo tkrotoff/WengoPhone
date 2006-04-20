@@ -43,7 +43,7 @@ VolumeControl::VolumeControl(const std::string & deviceName, DeviceType deviceTy
 	//Output device
 	if (deviceType == DeviceTypeOutput) {
 		try {
-			_volumeControlPrivate = new UnixVolumeControl(deviceId, UnixVolumeControl::UnixDeviceTypeDummy);
+			_volumeControlPrivate = new UnixVolumeControl(deviceId, UnixVolumeControl::UnixDeviceTypePcm);
 		} catch (const SoundMixerException &) {
 			_volumeControlPrivate = NULL;
 		}
@@ -52,11 +52,11 @@ VolumeControl::VolumeControl(const std::string & deviceName, DeviceType deviceTy
 	//Input device
 	else if (deviceType == DeviceTypeInput) {
 		try {
-			_volumeControlPrivate = new UnixVolumeControl(deviceId, UnixVolumeControl::UnixDeviceTypeDummy);
+			_volumeControlPrivate = new UnixVolumeControl(deviceId, UnixVolumeControl::UnixDeviceTypeMic);
 		} catch (const SoundMixerException &) {
 			_volumeControlPrivate = NULL;
 			try {
-				_volumeControlPrivate = new UnixVolumeControl(deviceId, UnixVolumeControl::UnixDeviceTypeDummy);
+				_volumeControlPrivate = new UnixVolumeControl(deviceId, UnixVolumeControl::UnixDeviceTypeMic);
 			} catch (const SoundMixerException &) {
 				_volumeControlPrivate = NULL;
 			}

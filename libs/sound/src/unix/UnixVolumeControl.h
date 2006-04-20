@@ -33,8 +33,10 @@ class UnixVolumeControl : public IVolumeControl {
 public:
 	/* FIXME: dummy enum to make it build. */
 	enum UnixDeviceType {
-	  UnixDeviceTypeDummy,
-	};
+        UnixDeviceTypePcm,
+        UnixDeviceTypeMic,
+        UnixDeviceTypeIgain,
+    };
 	
 	UnixVolumeControl(int deviceId, UnixDeviceType deviceType) throw(NoSoundCardException, SoundMixerException);
 
@@ -54,6 +56,13 @@ private:
 
 	/** Channel to use (input or output) */
 	bool _isInput;
+    
+    /* Name of device type. Can be either:
+        - mic
+        - igain
+        - pcm
+    */
+    std::string _strDeviceType;
 };
 
 #endif	//UNIXVOLUMECONTROL_H
