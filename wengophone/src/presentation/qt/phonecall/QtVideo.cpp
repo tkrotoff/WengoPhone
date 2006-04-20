@@ -100,7 +100,7 @@ void QtVideo::paintEvent() {
 
 		pix_free(resizedImage);
 		*/
-		painter.drawImage(xpos, ypos, _image.scaled(size, Qt::KeepAspectRatioByExpanding,
+		painter.drawImage(xpos, ypos, _image.scaled(size, Qt::IgnoreAspectRatio,
 			Qt::SmoothTransformation));
 	}
 }

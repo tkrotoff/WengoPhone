@@ -240,14 +240,19 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 	QImage * image = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
 			remoteVideoFrame.getHeight(), QImage::Format_RGB32);
 
-	//If we want to encrust the local webcam picture, we do it here
+	//If we want to embed the local webcam picture, we do it here
 	if (_encrustLocalWebcam) {
-		const unsigned marge = 5;
-		const unsigned ratio = 3;
+		const unsigned offset_x = 10;
+		const unsigned offset_y = 10;
+		const unsigned ratio = 5;
+		const unsigned border_size = 1;
+		const QBrush border_color = Qt::black;
+        
+        // we force the ratio of the remote frame on the webcam frame (ignoring the webcam's aspect ratio)
 		unsigned width = remoteVideoFrame.getWidth() / ratio;
 		unsigned height = remoteVideoFrame.getHeight() / ratio;
-		unsigned posx = remoteVideoFrame.getWidth() - width - marge;
-		unsigned posy = remoteVideoFrame.getHeight() - height - marge;
+		unsigned posx = remoteVideoFrame.getWidth() - width - offset_x;
+		unsigned posy = remoteVideoFrame.getHeight() - height - offset_y;
 
 /*
 		piximage originalImage;
@@ -269,11 +274,15 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 		pix_free(resizedImage);
 */
 
+        // prepare the embedded image
 		QImage localImage = QImage(localVideoFrame.getFrame(), localVideoFrame.getWidth(),
 				localVideoFrame.getHeight(),
-				QImage::Format_RGB32).scaledToWidth(width, Qt::SmoothTransformation);
+				QImage::Format_RGB32).scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 		QPainter painter(image);
+        // draw a 1-pixel border around the local embedded frame
+        painter.fillRect(posx - border_size, posy - border_size, width + 2*border_size, height + 2*border_size, border_color);
+        // embed the image
 		painter.drawImage(posx, posy, localImage);
 	}
 
