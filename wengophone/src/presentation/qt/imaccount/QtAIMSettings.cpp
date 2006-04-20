@@ -36,7 +36,6 @@ QtAIMSettings::QtAIMSettings(UserProfile & userProfile, IMAccount * imAccount, Q
 
 void QtAIMSettings::init() {
 	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/AIMSettings.ui", _parentWidget);
-	_IMSettingsWidget->setWindowTitle("AIM " + tr("Settings"));
 
 	//loginLineEdit
 	_loginLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "loginLineEdit");

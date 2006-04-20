@@ -113,6 +113,13 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>treeWidget</tabstop>
+  <tabstop>addIMAccountButton</tabstop>
+  <tabstop>modifyIMAccountButton</tabstop>
+  <tabstop>deleteIMAccountButton</tabstop>
+  <tabstop>closeButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

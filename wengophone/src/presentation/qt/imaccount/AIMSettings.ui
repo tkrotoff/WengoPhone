@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>WengoPhone - AIM/ICQ Settings</string>
+   <string>AIM/ICQ Settings</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -69,6 +69,10 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>loginLineEdit</tabstop>
+  <tabstop>passwordLineEdit</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>

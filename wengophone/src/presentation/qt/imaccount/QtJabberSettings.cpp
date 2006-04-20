@@ -36,7 +36,6 @@ QtJabberSettings::QtJabberSettings(UserProfile & userProfile, IMAccount * imAcco
 
 void QtJabberSettings::init() {
 	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/JabberSettings.ui", _parentWidget);
-	_IMSettingsWidget->setWindowTitle("Jabber " + tr("Settings"));
 
 	//loginLineEdit
 	_loginLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "loginLineEdit");

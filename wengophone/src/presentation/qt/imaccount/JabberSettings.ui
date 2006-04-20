@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>WengoPhone - Jabber Settings</string>
+   <string>Jabber Settings</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -162,6 +162,16 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>loginLineEdit</tabstop>
+  <tabstop>passwordLineEdit</tabstop>
+  <tabstop>useTLSCheckBox</tabstop>
+  <tabstop>requireTLSCheckBox</tabstop>
+  <tabstop>forceOldSSLCheckBox</tabstop>
+  <tabstop>allowPlainTextAuthenticationCheckBox</tabstop>
+  <tabstop>connectServerLineEdit</tabstop>
+  <tabstop>portLineEdit</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>

@@ -24,6 +24,7 @@
 #include "QtAIMSettings.h"
 #include "QtYahooSettings.h"
 #include "QtJabberSettings.h"
+#include "QtGoogleTalkSettings.h"
 
 #include <model/profile/UserProfile.h>
 
@@ -92,6 +93,11 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, EnumIMProtoco
 
 	case EnumIMProtocol::IMProtocolJabber: {
 		_imAccountPlugin = new QtJabberSettings(_userProfile, _imAccount, settingsGroupBox);
+		break;
+	}
+
+	case EnumIMProtocol::IMProtocolGoogleTalk: {
+		_imAccountPlugin = new QtGoogleTalkSettings(_userProfile, _imAccount, settingsGroupBox);
 		break;
 	}
 

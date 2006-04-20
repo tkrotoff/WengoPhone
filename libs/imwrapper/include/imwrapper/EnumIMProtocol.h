@@ -39,6 +39,7 @@ public:
 		IMProtocolYahoo,
 		IMProtocolAIMICQ,
 		IMProtocolJabber,
+		IMProtocolGoogleTalk,
 		IMProtocolSIPSIMPLE
 	};
 

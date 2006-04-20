@@ -33,6 +33,7 @@ static void init() {
 	_protocolMap[EnumIMProtocol::IMProtocolYahoo] = "Yahoo";
 	_protocolMap[EnumIMProtocol::IMProtocolAIMICQ] = "AIM/ICQ";
 	_protocolMap[EnumIMProtocol::IMProtocolJabber] = "Jabber";
+	_protocolMap[EnumIMProtocol::IMProtocolGoogleTalk] = "GoogleTalk";
 	_protocolMap[EnumIMProtocol::IMProtocolSIPSIMPLE] = "SIP/SIMPLE";
 }
 

@@ -32,11 +32,6 @@
 
 #include <QtGui>
 
-static const QString PROTOCOL_MSN_NAME = "MSN";
-static const QString PROTOCOL_AIMICQ_NAME = "AIM/ICQ";
-static const QString PROTOCOL_YAHOO_NAME = "Yahoo";
-static const QString PROTOCOL_JABBER_NAME = "Jabber";
-
 QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * parent)
 	: QObject(parent),
 	_userProfile(userProfile) {
@@ -49,10 +44,16 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * pare
 	QMenu * addIMAccountMenu = new QMenu();
 	connect(addIMAccountMenu, SIGNAL(triggered(QAction *)), SLOT(addIMAccount(QAction *)));
 
-	addIMAccountMenu->addAction(QIcon(":pics/protocol_msn.png"), PROTOCOL_MSN_NAME);
-	addIMAccountMenu->addAction(QIcon(":pics/protocol_aim.png"), PROTOCOL_AIMICQ_NAME);
-	addIMAccountMenu->addAction(QIcon(":pics/protocol_yahoo.png"), PROTOCOL_YAHOO_NAME);
-	addIMAccountMenu->addAction(QIcon(":pics/protocol_jabber.png"), PROTOCOL_JABBER_NAME);
+	addIMAccountMenu->addAction(QIcon(":pics/protocol_msn.png"),
+				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolMSN)));
+	addIMAccountMenu->addAction(QIcon(":pics/protocol_aim.png"),
+				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolAIMICQ)));
+	addIMAccountMenu->addAction(QIcon(":pics/protocol_yahoo.png"),
+				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolYahoo)));
+	addIMAccountMenu->addAction(QIcon(":pics/protocol_jabber.png"),
+				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolJabber)));
+	addIMAccountMenu->addAction(QIcon(":pics/protocol_googletalk.png"),
+				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolGoogleTalk)));
 	addIMAccountButton->setMenu(addIMAccountMenu);
 
 	QPushButton * modifyIMAccountButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "modifyIMAccountButton");
@@ -91,27 +92,13 @@ void QtIMAccountManager::loadIMAccounts() {
 		accountStrList << QString::fromStdString(imAccount->getLogin());
 		EnumIMProtocol::IMProtocol imProtocol = imAccount->getProtocol();
 
-		switch (imProtocol) {
-		case EnumIMProtocol::IMProtocolMSN:
-			accountStrList << PROTOCOL_MSN_NAME;
-			break;
-		case EnumIMProtocol::IMProtocolYahoo:
-			accountStrList << PROTOCOL_YAHOO_NAME;
-			break;
-		case EnumIMProtocol::IMProtocolAIMICQ:
-			accountStrList << PROTOCOL_AIMICQ_NAME;
-			break;
-		case EnumIMProtocol::IMProtocolJabber:
-			accountStrList << PROTOCOL_JABBER_NAME;
-			break;
-		case EnumIMProtocol::IMProtocolSIPSIMPLE:
-			//This protocol is internal to WengoPhone, should not be show to the user
+		if (imProtocol == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+			//This protocol is internal to WengoPhone, should not be shown to the user
 			continue;
-		default:
-			LOG_FATAL("unknown IM protocol=" + String::fromNumber(imProtocol));
 		}
 
-		accountStrList << "";
+		accountStrList << QString::fromStdString(EnumIMProtocol::toString(imProtocol));
+		accountStrList << QString::null;
 
 		QtIMAccountItem * item = new QtIMAccountItem(_treeWidget, accountStrList);
 		item->setCheckState(COLUMN_ENABLE_BUTTON,
@@ -124,22 +111,7 @@ void QtIMAccountManager::addIMAccount(QAction * action) {
 	QString protocolName = action->text();
 	LOG_DEBUG(protocolName.toStdString());
 
-	EnumIMProtocol::IMProtocol imProtocol;
-	if (protocolName == PROTOCOL_MSN_NAME) {
-		imProtocol = EnumIMProtocol::IMProtocolMSN;
-	}
-	else if (protocolName == PROTOCOL_AIMICQ_NAME) {
-		imProtocol = EnumIMProtocol::IMProtocolAIMICQ;
-	}
-	else if (protocolName == PROTOCOL_YAHOO_NAME) {
-		imProtocol = EnumIMProtocol::IMProtocolYahoo;
-	}
-	else if (protocolName == PROTOCOL_JABBER_NAME) {
-		imProtocol = EnumIMProtocol::IMProtocolJabber;
-	}
-	else {
-		LOG_FATAL("unknown IM protocol=" + protocolName.toStdString());
-	}
+	EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
 	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imProtocol, _imAccountManagerWindow);
 	loadIMAccounts();
 }

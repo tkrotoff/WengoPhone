@@ -30,7 +30,7 @@
 #define PRPL_UNK	"prpl-unknown"
 
 
-const char *GaimIMPrcl::GetPrclId(EnumIMProtocol::IMProtocol protocol) 
+const char *GaimIMPrcl::GetPrclId(EnumIMProtocol::IMProtocol protocol)
 {
 	switch (protocol)
 	{
@@ -49,6 +49,9 @@ const char *GaimIMPrcl::GetPrclId(EnumIMProtocol::IMProtocol protocol)
 		case EnumIMProtocol::IMProtocolJabber:
 			return PRPL_JABBER;
 
+		case EnumIMProtocol::IMProtocolGoogleTalk:
+			return PRPL_JABBER;
+
 		case EnumIMProtocol::IMProtocolSIPSIMPLE:
 			return PRPL_SIMPLE;
 
@@ -57,7 +60,7 @@ const char *GaimIMPrcl::GetPrclId(EnumIMProtocol::IMProtocol protocol)
 	}
 }
 
-EnumIMProtocol::IMProtocol GaimIMPrcl::GetEnumIMProtocol(const char *GaimPrclId) 
+EnumIMProtocol::IMProtocol GaimIMPrcl::GetEnumIMProtocol(const char *GaimPrclId)
 {
 	if (!strcmp(GaimPrclId, PRPL_ALL))
 		return EnumIMProtocol::IMProtocolAll;

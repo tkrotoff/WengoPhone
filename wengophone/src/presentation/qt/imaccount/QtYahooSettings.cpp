@@ -36,7 +36,6 @@ QtYahooSettings::QtYahooSettings(UserProfile & userProfile, IMAccount * imAccoun
 
 void QtYahooSettings::init() {
 	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/YahooSettings.ui", _parentWidget);
-	_IMSettingsWidget->setWindowTitle("Yahoo " + tr("Settings"));
 
 	//loginLineEdit
 	_loginLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "loginLineEdit");

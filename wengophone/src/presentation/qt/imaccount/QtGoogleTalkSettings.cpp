@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtMSNSettings.h"
+#include "QtGoogleTalkSettings.h"
 
 #include <model/profile/UserProfile.h>
 
@@ -28,16 +28,18 @@
 
 #include <QtGui>
 
-static const std::string MSN_LOGIN_DEFAULT_EXTENSION = "hotmail.com";
+static const std::string GOOGLETALK_SERVER = "talk.google.com";
+static const std::string GOOGLETALK_LOGIN_EXTENSION = "gmail.com";
+static const int GOOGLETALK_PORT = 80;
 
-QtMSNSettings::QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+QtGoogleTalkSettings::QtGoogleTalkSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
 
 	init();
 }
 
-void QtMSNSettings::init() {
-	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/MSNSettings.ui", _parentWidget);
+void QtGoogleTalkSettings::init() {
+	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/GoogleTalkSettings.ui", _parentWidget);
 
 	//loginLineEdit
 	_loginLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "loginLineEdit");
@@ -55,26 +57,27 @@ void QtMSNSettings::init() {
 	_passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 }
 
-void QtMSNSettings::save() {
+void QtGoogleTalkSettings::save() {
 	String login = _loginLineEdit->text().toStdString();
 	String password = _passwordLineEdit->text().toStdString();
 	static const String AT = "@";
 
-	//Test if login ends with @hotmail.com
+	//Test if login ends with @gmail.com
 	if (!login.contains(AT)) {
-		login = login + AT + MSN_LOGIN_DEFAULT_EXTENSION;
+		login = login + AT + GOOGLETALK_LOGIN_EXTENSION;
 	}
 
 	if (!_imAccount) {
-		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolMSN);
+		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolGoogleTalk);
 	}
 
 	IMAccountParameters & params = _imAccount->getIMAccountParameters();
 
 	_imAccount->setLogin(login);
 	_imAccount->setPassword(password);
-	//FIXME to remove, must be done inside model
-	params.set(IMAccountParameters::MSN_USE_HTTP_KEY, true);
+	params.set(IMAccountParameters::JABBER_USE_TLS_KEY, true);
+	params.set(IMAccountParameters::JABBER_CONNECTION_SERVER_KEY, GOOGLETALK_SERVER);
+	params.set(IMAccountParameters::JABBER_PORT_KEY, GOOGLETALK_PORT);
 
 	_userProfile.addIMAccount(*_imAccount);
 	_userProfile.getConnectHandler().connect(*_imAccount);

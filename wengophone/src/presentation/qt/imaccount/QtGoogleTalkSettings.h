@@ -17,19 +17,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GAIMENUMIMPROTOCOL_H
-#define GAIMENUMIMPROTOCOL_H
+#ifndef QTGOOGLETALKSETTINGS_H
+#define QTGOOGLETALKSETTINGS_H
 
-#include <imwrapper/EnumIMProtocol.h>
+#include "QtIMAccountPlugin.h"
 
-class GaimIMPrcl : EnumIMProtocol
-{
+class IMAccount;
+class UserProfile;
+class QWidget;
+class QLineEdit;
 
+class QtGoogleTalkSettings : public QtIMAccountPlugin {
+	Q_OBJECT
 public:
 
-	static const char *GetPrclId(IMProtocol protocol);
+	QtGoogleTalkSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
 
-	static IMProtocol GetEnumIMProtocol(const char *GaimPrclId);
+	QWidget * getWidget() const {
+		return _IMSettingsWidget;
+	}
+
+public Q_SLOTS:
+
+	void save();
+
+private:
+
+	void init();
+
+	QWidget * _IMSettingsWidget;
+
+	QLineEdit * _loginLineEdit;
+
+	QLineEdit * _passwordLineEdit;
 };
 
-#endif	//GAIMENUMIMPROTOCOL_H
+#endif	//QTGOOGLETALKSETTINGS_H

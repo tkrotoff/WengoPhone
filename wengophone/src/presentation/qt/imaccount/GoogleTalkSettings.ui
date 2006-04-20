@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>MSNSettings</class>
- <widget class="QWidget" name="MSNSettings" >
+ <class>GoogleTalkSettings</class>
+ <widget class="QWidget" name="GoogleTalkSettings" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>MSN Settings</string>
+   <string>GoogleTalk Settings</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -28,7 +28,7 @@
       <string/>
      </property>
      <property name="pixmap" >
-      <pixmap resource="../wengophone.qrc" >:/pics/protocol_msn.png</pixmap>
+      <pixmap resource="../wengophone.qrc" >:/pics/protocol_googletalk.png</pixmap>
      </property>
     </widget>
    </item>
