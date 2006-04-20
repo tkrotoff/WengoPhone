@@ -82,7 +82,7 @@ UserProfile::~UserProfile() {
 	if (_softUpdate) {
 		delete _softUpdate;
 	}
-	
+
 	if (_history) {
 		delete _history;
 	}
@@ -133,15 +133,15 @@ void UserProfile::disconnect() {
 	}
 }
 
-void UserProfile::makeCall(Contact & contact) {
+void UserProfile::makeCall(Contact & contact, bool enableVideo) {
 	if (_activePhoneLine) {
-		_activePhoneLine->makeCall(contact.getPreferredNumber());
+		_activePhoneLine->makeCall(contact.getPreferredNumber(), enableVideo);
 	}
 }
 
-void UserProfile::makeCall(const std::string & phoneNumber) {
+void UserProfile::makeCall(const std::string & phoneNumber, bool enableVideo) {
 	if (_activePhoneLine) {
-		_activePhoneLine->makeCall(phoneNumber);
+		_activePhoneLine->makeCall(phoneNumber, enableVideo);
 	}
 }
 
@@ -324,11 +324,11 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		softUpdateCreatedEvent(*this, *_softUpdate);
 		_softUpdate->checkForUpdate();
 		LOG_DEBUG("SoftUpdate created");
-		
+
 		_wsInfo = new WsInfo(_wengoAccount);
 		wsInfoCreatedEvent(*this, *_wsInfo);
 		LOG_DEBUG("WsInfo created");
-		
+
 		addPhoneLine(sender);
 
 		WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *) _wengoAccount);
@@ -338,9 +338,9 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		IMAccount imAccount(_wengoAccount->getIdentity(), _wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 		addIMAccount(imAccount);
 		_connectHandler.connect((IMAccount &)*_imAccountHandler->find(imAccount));
-		
+
 		loadHistory();
-		
+
 		break;
 	}
 

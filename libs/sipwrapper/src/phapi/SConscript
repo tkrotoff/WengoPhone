@@ -35,6 +35,7 @@ sources = [
 	'PhApiIMChat.cpp',
 	'PhApiIMConnect.cpp',
 	'PhApiIMPresence.cpp',
+	'PhApiCodecList.cpp',
 ]
 
 env.WengoAddIncludePath(include_path)

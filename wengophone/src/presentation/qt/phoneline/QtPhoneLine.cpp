@@ -162,7 +162,7 @@ void QtPhoneLine::hangUpButtonClicked() {
 
 void QtPhoneLine::callButtonClicked() {
 	if (_activeCPhoneCall) {
-		_activeCPhoneCall->pickUp();
+		_activeCPhoneCall->accept(false);
 		_callButton->setEnabled(false);
 		_videoCallButton->setEnabled(false);
 	}
@@ -170,7 +170,7 @@ void QtPhoneLine::callButtonClicked() {
 
 void QtPhoneLine::videoCallButtonClicked() {
 	if (_activeCPhoneCall) {
-		_activeCPhoneCall->pickUp();
+		_activeCPhoneCall->accept(true);
 		_callButton->setEnabled(false);
 		_videoCallButton->setEnabled(false);
 	}

@@ -127,11 +127,11 @@ HistoryMementoCollection * History::getMementos(HistoryMemento::State state, int
 void History::load(std::string filename) {
 	std::string line = "";
 	std::string lines = "";
-	
+
 	if( filename == "" ) {
 		return;
 	}
-	
+
 	//open the file & read all its content
 	std::ifstream myfile (filename.c_str());
 	if (myfile.is_open()) {
@@ -141,7 +141,7 @@ void History::load(std::string filename) {
 		}
 		myfile.close();
 	}
-	
+
 	//clear & unserialize the history
 	clear();
 	unserialize(lines);
@@ -158,10 +158,10 @@ void History::save(std::string filename) {
 }
 
 void History::replay(unsigned int id) {
-	
+
 	//replay only outgoing call
 	if( getMemento(id)->getState() == HistoryMemento::OutgoingCall ) {
 		std::string phoneNumber = getMemento(id)->getPeer();
-		_userProfile.getActivePhoneLine()->makeCall(phoneNumber);
+		_userProfile.getActivePhoneLine()->makeCall(phoneNumber, false);
 	}
 }

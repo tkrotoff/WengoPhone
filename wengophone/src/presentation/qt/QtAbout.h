@@ -23,6 +23,8 @@
 #include <util/NonCopyable.h>
 
 class QWidget;
+class QDialog;
+namespace Ui { class AboutWindow; }
 
 /**
  * About dialog window: shows copyright, license, authors...
@@ -34,13 +36,13 @@ public:
 
 	QtAbout(QWidget * parent);
 
-	QWidget * getWidget() const {
-		return _aboutWindow;
-	}
+	QWidget * getWidget() const;
 
 private:
 
-	QWidget * _aboutWindow;
+	Ui::AboutWindow * _ui;
+
+	QDialog * _aboutDialog;
 };
 
 #endif	//QTABOUT_H

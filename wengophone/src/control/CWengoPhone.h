@@ -117,7 +117,7 @@ public:
 	/**
 	 * @see WengoPhone::makeCall()
 	 */
-	void makeCall(const std::string & phoneNumber);
+	void makeCall(const std::string & phoneNumber, bool enableVideo);
 
 	/**
 	 * @see WengoPhone::addWengoAccount()

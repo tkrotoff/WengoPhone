@@ -19,6 +19,8 @@
 
 #include "QtWengoPhone.h"
 
+#include "ui_WengoPhoneWindow.h"
+
 #include <model/account/wengo/WengoAccount.h>
 #include <model/connect/ConnectHandler.h>
 #include <model/phonecall/PhoneCall.h>
@@ -275,17 +277,17 @@ void QtWengoPhone::initThreadSafe() {
 
 
 	//Status bar
-	QStatusBar * statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");
+	_statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");
 
-	_internetConnectionStateLabel = new QLabel(statusBar);
+	_internetConnectionStateLabel = new QLabel(_statusBar);
 	_internetConnectionStateLabel->setPixmap(QPixmap(":/pics/statusbar_connect_error.png"));
 	_internetConnectionStateLabel->setToolTip(tr("Not connected"));
-	statusBar->addPermanentWidget(_internetConnectionStateLabel);
+	_statusBar->addPermanentWidget(_internetConnectionStateLabel);
 
-	_phoneLineStateLabel = new QLabel(statusBar);
+	_phoneLineStateLabel = new QLabel(_statusBar);
 	_phoneLineStateLabel->setPixmap(QPixmap(":/pics/statusbar_sip_error.png"));
 	_phoneLineStateLabel->setToolTip(tr("Not connected"));
-	statusBar->addPermanentWidget(_phoneLineStateLabel);
+	_statusBar->addPermanentWidget(_phoneLineStateLabel);
 
 	//FIXME: can i create the widget here ?
 	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
@@ -325,21 +327,24 @@ void QtWengoPhone::enableCallButton() {
 void QtWengoPhone::callButtonClicked() {
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	if (!phoneNumber.empty()) {
-		_cWengoPhone.makeCall(phoneNumber);
+		_cWengoPhone.makeCall(phoneNumber, false);
 	}
+	_phoneComboBox->clearEditText();
 }
 
 void QtWengoPhone::videoCallButtonClicked() {
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	if (!phoneNumber.empty()) {
-		_cWengoPhone.makeCall(phoneNumber);
+		_cWengoPhone.makeCall(phoneNumber, true);
 	}
+	_phoneComboBox->clearEditText();
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	static QWidget * tabPhoneCall = Object::findChild<QWidget *>(_tabWidget, "tabPhoneCall");
+	_tabWidget->setCurrentWidget(tabPhoneCall);
 	//static QGridLayout * layout = new QGridLayout(tabPhoneCall);
 
 	//layout->addWidget(qtPhoneCall->getWidget());
@@ -525,6 +530,10 @@ void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFi
 	} else {
 		_phoneComboBox->setEditText(_phoneComboBox->currentText() + QString::fromStdString(tone));
 	}
+}
+
+void QtWengoPhone::showStatusBarMessage(const std::string & message) {
+	_statusBar->showMessage(QString::fromStdString(message));
 }
 
 void QtWengoPhone::showWengoAccount() {

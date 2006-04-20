@@ -71,8 +71,8 @@ void CPhoneCall::hangUp() {
 	_phoneCall.close();
 }
 
-void CPhoneCall::pickUp() {
-	_phoneCall.accept();
+void CPhoneCall::accept(bool enableVideo) {
+	_phoneCall.accept(enableVideo);
 }
 
 void CPhoneCall::hold() {
@@ -85,6 +85,14 @@ void CPhoneCall::resume() {
 
 void CPhoneCall::blindTransfer(const std::string & phoneNumber) {
 	_phoneCall.blindTransfer(phoneNumber);
+}
+
+CodecList::AudioCodec CPhoneCall::getAudioCodecUsed() {
+	return _phoneCall.getAudioCodecUsed();
+}
+
+CodecList::VideoCodec CPhoneCall::getVideoCodecUsed() {
+	return _phoneCall.getVideoCodecUsed();
 }
 
 EnumPhoneCallState::PhoneCallState CPhoneCall::getState() const {

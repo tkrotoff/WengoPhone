@@ -24,6 +24,7 @@
 #include <sipwrapper/EnumPhoneLineState.h>
 #include <sipwrapper/EnumTone.h>
 #include <sipwrapper/EnumNatType.h>
+#include <sipwrapper/CodecList.h>
 
 #include <util/Interface.h>
 #include <util/Event.h>
@@ -170,9 +171,10 @@ public:
 	 *
 	 * @param lineId line to use to dial the phone number
 	 * @param sipAddress SIP address to call (e.g phone number to dial)
+	 * @param enableVideo enable/disable video usage
 	 * @return the phone call id (callId)
 	 */
-	virtual int makeCall(int lineId, const std::string & sipAddress) = 0;
+	virtual int makeCall(int lineId, const std::string & sipAddress, bool enableVideo) = 0;
 
 	/**
 	 * Notifies the remote side (the caller) that this phone is ringing.
@@ -187,8 +189,9 @@ public:
 	 * Accepts a given phone call.
 	 *
 	 * @param callId id of the phone call to accept
+	 * @param enableVideo enable/disable video usage
 	 */
-	virtual void acceptCall(int callId) = 0;
+	virtual void acceptCall(int callId, bool enableVideo) = 0;
 
 	/**
 	 * Rejects a given phone call.
@@ -241,6 +244,22 @@ public:
 	 * @param soundFile sound file to play
 	 */
 	virtual void playSoundFile(int callId, const std::string & soundFile) = 0;
+
+	/**
+	 * Gets the audio codec in use by a given phone call.
+	 *
+	 * @param callId phone call id
+	 * @return audio codec in use
+	 */
+	virtual CodecList::AudioCodec getAudioCodecUsed(int callId) = 0;
+
+	/**
+	 * Gets the video codec in use by a given phone call.
+	 *
+	 * @param callId phone call id
+	 * @return video codec in use
+	 */
+	virtual CodecList::VideoCodec getVideoCodecUsed(int callId) = 0;
 
 	/** @} */
 
@@ -375,14 +394,14 @@ public:
 	 *
 	 * @return current codec list supported by the SIP stack
 	 */
-	//virtual StringList getCodecList() const = 0;
+	//virtual List<AudioCodec> getCodecList() const = 0;
 
 	/**
 	 * Sets current codec preference setting.
 	 *
 	 * @param codecList new codec list
 	 */
-	//virtual void setCodecList(const StringList & codecList) = 0;
+	//virtual void setCodecList(const List<AudioCodec> & codecList) = 0;
 
 	/** @} */
 

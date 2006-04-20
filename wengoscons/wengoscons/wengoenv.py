@@ -1,7 +1,7 @@
 #
 # WengoSCons, a high-level library for SCons
 #
-# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2004-2006  Wengo
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -778,6 +778,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		self.__setProjectName(programName)
 		prog = self.Program(tmp, sources)
+		self.Depends(prog, headers)
 		self.__createVCProj(prog, sources, headers)
 		self.__installProject(prog)
 		self.__useChildLibraries()
@@ -1475,30 +1476,30 @@ class WengoSConsEnvironment(SConsEnvironment):
 			return self.RES(rcFile)
 		return None
 
-        def WengoQtEdition(self):
-            """
-            Get edition name of Qt setup.
-            """
+	def WengoQtEdition(self):
+		"""
+		Gets the Qt edition name (desktop, opensource...).
+		"""
 
-            matched = False
-            try:
-                if WengoOSPosix():
-                    qconfig_file = open(os.path.join(os.environ['QTDIR'], 'include', 'QtCore', 'qconfig.h'))
-                else :
-                    qconfig_file = open(os.path.join(os.environ['QTDIR'], 'src', 'corelib', 'global', 'qconfig.h'))
-            except os.IOError:
-                pass
-            regexp = re.compile('^#\s*define\s+qt_edition\s+(\w+)', re.IGNORECASE)
-            for line in qconfig_file.readlines():
-                match = regexp.match(line)
-                if match:
-                    matched = True
-                    print 'Found Qt Edition : %s' % match.group(1)
-                    break
-            if matched:
-                return match.group(1)
-            else:
-                raise 'QtEditionNotFound'
+		matched = False
+		try:
+			if WengoOSPosix():
+				qconfig_file = open(os.path.join(os.environ['QTDIR'], 'include', 'QtCore', 'qconfig.h'))
+			else:
+				qconfig_file = open(os.path.join(os.environ['QTDIR'], 'src', 'corelib', 'global', 'qconfig.h'))
+		except os.IOError:
+			pass
+		regexp = re.compile('^#\s*define\s+qt_edition\s+(\w+)', re.IGNORECASE)
+		for line in qconfig_file.readlines():
+			match = regexp.match(line)
+			if match:
+				matched = True
+				print 'Found Qt Edition : %s' % match.group(1)
+				break
+		if matched:
+			return match.group(1)
+		else:
+			raise 'QtEditionNotFound'
 
 	def WengoCompileQt4Resource(self, qrcFile):
 		"""
@@ -1520,6 +1521,27 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		os.system(rcc + ' ' + qrcFile + ' -o ' + outputCppFile)
 		return outputCppFile
+
+	def WengoCompileQt4UiFile(self, uiFile):
+		"""
+		Compiles the Qt4 resource file .ui.
+
+		@type uiFile string
+		@param uiFile Qt Designer file .ui
+		@rtype string
+		@return C++ header corresponding to the Qt Designer file (.h)
+		"""
+
+		qtdir = os.environ['QTDIR']
+		uic = os.path.join(qtdir, 'bin', 'uic')
+
+		self.__saveCurrentSourcePath()
+		os.chdir(self.__getSourcePath())
+
+		outputHeaderFile = 'ui_' + uiFile[:-3] + '.h'
+
+		os.system(uic + ' ' + uiFile + ' -o ' + outputHeaderFile)
+		return outputHeaderFile
 
 	def WengoCreateFile(self, filename, fileTemplate, fileData):
 		"""
@@ -1576,8 +1598,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		destination_file_name = os.path.join(self.__getSourcePath(),\
 						os.path.basename(urllib.url2pathname(package_url)))
 		if not os.path.exists(destination_file_name):
-			output_file = open(destination_file_name,
-							   'wb')
+			output_file = open(destination_file_name, 'wb')
 			print 'Downloading file: ' + destination_file_name + '...'
 			downloaded_package = urllib2.urlopen(package_url)
 			print 'Done'
@@ -1592,13 +1613,11 @@ class WengoSConsEnvironment(SConsEnvironment):
 				if re.match(files_pattern, file_name):
 					if file_name.endswith('/'):
 						# got a directory
-						if not make_directory(os.path.join(self.__getSourcePath(),
-														   re.sub('/', r"\\", file_name))):
+						if not make_directory(os.path.join(self.__getSourcePath(), re.sub('/', r"\\", file_name))):
 							sys.exit(1)
 					else:
 						# got a file
-						if not make_directory(os.path.join(self.__getSourcePath(),
-														   re.sub('/', r"\\", os.path.dirname(file_name)))):
+						if not make_directory(os.path.join(self.__getSourcePath(), re.sub('/', r"\\", os.path.dirname(file_name)))):
 							print 'Error creating directory: ' + os.path.dirname(file_name) + ', aborting!'
 							sys.exit(1)
 						output_file = open(os.path.join(self.__getSourcePath(), re.sub('/', r"\\", file_name)), 'wb')
@@ -1635,13 +1654,13 @@ class WengoSConsEnvironment(SConsEnvironment):
 		qmake_path = os.path.join(os.environ["QTDIR"], 'bin', 'qmake')
 		lupdate_path = os.path.join(os.environ["QTDIR"], 'bin', 'lupdate')
 		lrelease_path = os.path.join(os.environ["QTDIR"], 'bin', 'lrelease')
-		
+
 		for source_translation in source_translations:
 			print 'lreleasing ' + source_translation
 			os.system(lrelease_path + " " + source_translation)
-		os.system(qmake_path + " -project -o lang.pro")		
-		os.system(lupdate_path + " lang.pro")	
-	
+		os.system(qmake_path + " -project -o lang.pro")
+		os.system(lupdate_path + " lang.pro")
+
 	def WengoAlias(self, target_name, target):
 		self.Alias(target_name, target)
 		self.__aliases[target_name] = target

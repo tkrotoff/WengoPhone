@@ -55,7 +55,7 @@ void WenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
 	switch (key) {
 	case IWenbox::KeyPickUp:
 		if (phoneCall) {
-			phoneCall->accept();
+			phoneCall->accept(false);
 		}
 		break;
 

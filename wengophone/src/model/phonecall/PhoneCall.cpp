@@ -46,6 +46,7 @@ PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 	_conference = false;
 	_callRejected = false;
 	_timeStart = -1;
+	_videoEnabled = false;
 
 	_sipAddress = sipAddress;
 
@@ -87,8 +88,8 @@ PhoneCall::~PhoneCall() {
 	_state = NULL;
 }
 
-void PhoneCall::accept() {
-	_phoneLine.acceptCall(_callId);
+void PhoneCall::accept(bool enableVideo) {
+	_phoneLine.acceptCall(_callId, enableVideo);
 }
 
 void PhoneCall::resume() {
@@ -143,6 +144,12 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 }
 
 void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
+	if (getVideoCodecUsed() == CodecList::VideoCodecError) {
+		_videoEnabled = true;
+	} else {
+		_videoEnabled = false;
+	}
+
 	//This should not replace the state machine pattern PhoneCallState
 	switch(state) {
 
@@ -232,4 +239,12 @@ void PhoneCall::playTone(EnumTone::Tone tone) {
 
 void PhoneCall::playSoundFile(const std::string & soundFile) {
 	_phoneLine.playSoundFile(_callId, soundFile);
+}
+
+CodecList::AudioCodec PhoneCall::getAudioCodecUsed() {
+	return _phoneLine.getAudioCodecUsed(_callId);
+}
+
+CodecList::VideoCodec PhoneCall::getVideoCodecUsed() {
+	return _phoneLine.getVideoCodecUsed(_callId);
 }

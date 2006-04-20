@@ -21,7 +21,7 @@
 
 #include <util/Logger.h>
 
-HistoryTreeEventManager::HistoryTreeEventManager(QTreeWidget * target, QtHistoryWidget * historyWidget) 
+HistoryTreeEventManager::HistoryTreeEventManager(QTreeWidget * target, QtHistoryWidget * historyWidget)
 	: QObject(target), _historyWidget(historyWidget) {
 	target->viewport()->installEventFilter(this);
 }
@@ -29,7 +29,7 @@ HistoryTreeEventManager::HistoryTreeEventManager(QTreeWidget * target, QtHistory
 bool HistoryTreeEventManager::eventFilter(QObject *obj, QEvent *event) {
 	if (event->type() == QEvent::MouseButtonPress) {
 		QMouseEvent * mouseEvent = static_cast<QMouseEvent *>(event);
-		
+
 		if( mouseEvent->button() == Qt::RightButton) {
 			_historyWidget->showPopupMenu(mouseEvent->pos());
 			return true;
@@ -45,9 +45,9 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 	_treeWidget = new QTreeWidget(this);
 	_treeWidget->setRootIsDecorated ( false );
 	_treeWidget->setIndentation(0);
-	
+
 	HistoryTreeEventManager * htem = new HistoryTreeEventManager(_treeWidget, this);
-	
+
 	QStringList headerLabels;
 
 	_header = _treeWidget->header();
@@ -90,22 +90,21 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 	connect (_treeWidget, SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),SLOT (itemDoubleClicked ( QTreeWidgetItem *, int) ) );
 
 	connect (_header,SIGNAL(sectionClicked (int)),SLOT(headerClicked(int)) );
-	
-		
+
+
 	_popupMenu = new QMenu();
-		
+
 	action = _popupMenu->addAction( tr ("Erase entry") );
 	connect (action, SIGNAL( triggered(bool) ),SLOT( eraseEntry() ));
 
 	action = _popupMenu->addAction( tr ("Replay entry") );
 	connect (action, SIGNAL( triggered(bool) ),SLOT( replayEntry() ));
-
 }
 
 void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
-		
+
 	item->setText(QtHistoryItem::COLUMN_TYPE, text);
 	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
 	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
@@ -113,6 +112,7 @@ void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const 
 	item->setId(id);
 	item->setItemType(QtHistoryItem::Sms);
 
+	sortHistory();
 }
 
 
@@ -126,6 +126,8 @@ void QtHistoryWidget::addOutGoingCallItem(const QString & text,const QDate & dat
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::OutGoingCall);
+
+	sortHistory();
 }
 
 void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id){
@@ -138,6 +140,8 @@ void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & dat
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::IncomingCall);
+
+	sortHistory();
 }
 
 void QtHistoryWidget::addChatItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
@@ -150,6 +154,8 @@ void QtHistoryWidget::addChatItem(const QString & text,const QDate & date, const
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::Chat);
+
+	sortHistory();
 }
 
 void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
@@ -161,6 +167,8 @@ void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date,
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::MissedCall);
+
+	sortHistory();
 }
 
 
@@ -173,6 +181,8 @@ void QtHistoryWidget::addRejectedCallItem(const QString & text,const QDate & dat
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::RejectedCall);
+
+	sortHistory();
 }
 
 void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
@@ -256,4 +266,8 @@ void QtHistoryWidget::replayEntry() {
 	if( _currentItem ) {
 		replayItem(_currentItem);
 	}
+}
+
+void QtHistoryWidget::sortHistory() {
+	_treeWidget->sortItems(QtHistoryItem::COLUMN_DATE, Qt::DescendingOrder);
 }

@@ -38,8 +38,8 @@ CPhoneLine::CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone)
 	_phoneLine.phoneCallClosedEvent += boost::bind(&CPhoneLine::phoneCallClosedEventHandler, this, _1, _2);
 }
 
-int CPhoneLine::makeCall(const std::string & phoneNumber) {
-	return _phoneLine.makeCall(phoneNumber);
+int CPhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
+	return _phoneLine.makeCall(phoneNumber, enableVideo);
 }
 
 void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender, EnumPhoneLineState::PhoneLineState state) {

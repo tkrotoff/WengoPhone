@@ -76,7 +76,7 @@ void ConferenceCall::addPhoneNumber(const std::string & phoneNumber) {
 	if (!phoneCall) {
 		phoneCall = _phoneCallMap[phoneNumber];
 		if (!phoneCall) {
-			int callId = _phoneLine.makeCall(phoneNumber);
+			int callId = _phoneLine.makeCall(phoneNumber, false);
 			if (callId == -1) {
 				//NULL => puts the phone number in the queue
 				phoneCall = NULL;

@@ -54,6 +54,7 @@ class QFrame;
 class QStackedWidget;
 class QWidget;
 class QMenu;
+class QStatusBar;
 
 /**
  * Qt Presentation component for WengoPhone.
@@ -87,6 +88,8 @@ public:
 	void updatePresentation();
 
 	void dialpad(const std::string & tone, const std::string & soundFile);
+
+	void showStatusBarMessage(const std::string & message);
 
 	void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
 		const std::string & message);
@@ -180,15 +183,15 @@ private Q_SLOTS:
 	void expandConfigPanel();
 
 	void eraseHistoryOutgoingCalls();
-	
+
 	void eraseHistoryIncomingCalls();
-	
+
 	void eraseHistoryMissedCalls();
-	
+
 	void eraseHistoryChatSessions();
-	
+
 	void eraseHistorySms();
-	
+
 	void eraseHistory();
 
 
@@ -275,6 +278,8 @@ private:
 	QWidget * _configPanelWidget;
 
 	QStackedWidget * _configPanel;
+
+	QStatusBar * _statusBar;
 
 	static const std::string ANCHOR_CONTACTLIST;
 

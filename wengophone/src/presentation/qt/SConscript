@@ -26,7 +26,6 @@ headers = [
 	'QtConfigPanel.h',
 	'QtDialpad.h',
 	'QtAbout.h',
-	'QtLogger.h',
 	'QtHttpProxyLogin.h',
 	'phoneline/QtPhoneLine.h',
 	'phonecall/QtPhoneCall.h',
@@ -47,7 +46,6 @@ headers = [
 	'imaccount/QtAIMSettings.h',
 	'imaccount/QtJabberSettings.h',
 	'imaccount/QtGoogleTalkSettings.h',
-	'contactlist/TreeModel.h',
 	'contactlist/QtContactWidget.h',
 	'contactlist/QtContactList.h',
 	'contactlist/QtAddContact.h',
@@ -183,24 +181,43 @@ sources = [
 	'history/QtHistoryItem.cpp',
 	'history/QtHistory.cpp',
 	'webservices/subscribe/QtSubscribe.cpp',
-
-
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]
+
+forms = [
+	'WengoPhoneWindow.ui',
+	'AboutWindow.ui',
+]
+
+for form in forms:
+	header = env.WengoCompileQt4UiFile(form)
+
+	#(header, uicCode, mocCode) = env.Uic(form)
+	#env.Depends(header, 'qtwengophone')
+	#env.Depends(uicCode, 'qtwengophone')
+	#env.Depends(mocCode, 'qtwengophone')
+	#sources.append(mocCode)
+	#sources.append(uicCode)
+	headers += [ header ]
+
+
 if WengoOSWindows() and WengoCCMSVC():
 	sources.append(WengoGetEnvironment().WengoCompileWindowsResource('win32/wengophone.rc'))
 
 if WengoGetConsoleArgument('sipxwrapper'):
 	defines['SIPXWRAPPER'] = 1
 	libs += ['sipxwrapper']
+
 elif WengoGetConsoleArgument('phapiwrapper'):
 	defines['PHAPIWRAPPER'] = 1
 	libs += ['phapiwrapper']
+
 elif WengoGetConsoleArgument('multiimwrapper'):
 	defines['MULTIIMWRAPPER'] = 1
 	libs += [
 		'multiimwrapper',
 	]
+
 else:
 	libs += ['nullsipwrapper']
 

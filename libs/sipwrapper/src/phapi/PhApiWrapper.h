@@ -93,11 +93,11 @@ public:
 
 	void removeVirtualLine(int lineId);
 
-	int makeCall(int lineId, const std::string & sipAddress);
+	int makeCall(int lineId, const std::string & sipAddress, bool enableVideo);
 
 	void sendRingingNotification(int callId);
 
-	void acceptCall(int callId);
+	void acceptCall(int callId, bool enableVideo);
 
 	void rejectCall(int callId);
 
@@ -112,6 +112,10 @@ public:
 	void playTone(int callId, EnumTone::Tone tone);
 
 	void playSoundFile(int callId, const std::string & soundFile);
+
+	CodecList::AudioCodec getAudioCodecUsed(int callId);
+
+	CodecList::VideoCodec getVideoCodecUsed(int callId);
 
 	bool setCallInputAudioDevice(const std::string & deviceName);
 

@@ -24,6 +24,7 @@
 
 #include <sipwrapper/EnumTone.h>
 #include <sipwrapper/EnumPhoneCallState.h>
+#include <sipwrapper/CodecList.h>
 
 #include <util/Event.h>
 #include <util/List.h>
@@ -77,7 +78,7 @@ public:
 	/**
 	 * @see IPhoneLine::acceptCall()
 	 */
-	void accept();
+	void accept(bool enableVideo);
 
 	/**
 	 * @see IPhoneLine::resumeCall()
@@ -108,6 +109,16 @@ public:
 	 * @see IPhoneLine::playSoundFile()
 	 */
 	void playSoundFile(const std::string & soundFile);
+
+	/**
+	 * @see IPhoneLine::getAudioCodecUsed()
+	 */
+	CodecList::AudioCodec getAudioCodecUsed();
+
+	/**
+	 * @see IPhoneLine::getVideoCodecUsed()
+	 */
+	CodecList::VideoCodec getVideoCodecUsed();
 
 	/**
 	 * Video frame received.
@@ -197,6 +208,15 @@ public:
 		return _conference;
 	}
 
+	/**
+	 * Gets the phone call type (audio or video).
+	 *
+	 * @return true if this call is a video call; false otherwise
+	 */
+	bool isVideoEnabled() const {
+		return _videoEnabled;
+	}
+
 private:
 
 	void applyState(EnumPhoneCallState::PhoneCallState state);
@@ -236,6 +256,9 @@ private:
 
 	/** Computes the PhoneCall duration. */
 	int _timeStart;
+
+	/** If this call is a video call or an audio call. */
+	bool _videoEnabled;
 };
 
 #endif	//PHONECALL_H

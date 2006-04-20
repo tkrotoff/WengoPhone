@@ -66,14 +66,14 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 }
 
 void QtConfigPanel::inputSoundSliderValueChanged(int value) {
-	static Config & config = ConfigManager::getInstance().getCurrentConfig();
-	static VolumeControl volumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	VolumeControl volumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
 	volumeControl.setLevel(value);
 }
 
 void QtConfigPanel::outputSoundSliderValueChanged(int value) {
-	static Config & config = ConfigManager::getInstance().getCurrentConfig();
-	static VolumeControl volumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	VolumeControl volumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
 	volumeControl.setLevel(value);
 }
 

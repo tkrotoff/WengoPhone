@@ -21,6 +21,7 @@
 #define CPHONECALL_H
 
 #include <sipwrapper/EnumPhoneCallState.h>
+#include <sipwrapper/CodecList.h>
 
 #include <string>
 
@@ -72,7 +73,7 @@ public:
 	/**
 	 * @see PhoneCall::accept()
 	 */
-	void pickUp();
+	void accept(bool enableVideo);
 
 	/**
 	 * @see PhoneCall::mute()
@@ -93,6 +94,16 @@ public:
 	 * @see PhoneCall::blindTransfer()
 	 */
 	void blindTransfer(const std::string & phoneNumber);
+
+	/**
+	 * @see PhoneCall::getAudioCodecUsed()
+	 */
+	CodecList::AudioCodec getAudioCodecUsed();
+
+	/**
+	 * @see PhoneCall::getVideoCodecUsed()
+	 */
+	CodecList::VideoCodec getVideoCodecUsed();
 
 	/**
 	 * Gets the peer SIP address (phone number) of the current call.

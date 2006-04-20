@@ -28,6 +28,7 @@
 #include <control/CWengoPhone.h>
 
 #include <sipwrapper/WebcamVideoFrame.h>
+#include <sipwrapper/CodecList.h>
 
 #include <util/Logger.h>
 
@@ -60,7 +61,6 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 }
 
 void QtPhoneCall::initThreadSafe() {
-
 	_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/QtCallContactWidget.ui", _qtWengoPhone->getWidget());
 	_phoneCallWidget->setAutoFillBackground(true);
 
@@ -94,7 +94,6 @@ void QtPhoneCall::initThreadSafe() {
 	_avatarLabel->setPixmap(testPixmap);
 	*/
 
-	QAction * action;
 	_popup = new QMenu(_phoneCallWidget);
 	//Accept call
 	_actionAcceptCall = _popup->addAction(tr("Accept"));
@@ -157,6 +156,8 @@ void QtPhoneCall::stateChangedEventHandler(EnumPhoneCallState::PhoneCallState st
 }
 
 void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state) {
+	_qtWengoPhone->showStatusBarMessage(CodecList::toString(_cPhoneCall.getAudioCodecUsed()) + "/" +
+					CodecList::toString(_cPhoneCall.getVideoCodecUsed()));
 
 	switch(state) {
 
@@ -293,7 +294,7 @@ void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(QImage * image) {
 }
 
 void QtPhoneCall::acceptActionTriggered(bool) {
-	_cPhoneCall.pickUp();
+	_cPhoneCall.accept(false);
 }
 
 void QtPhoneCall::rejectActionTriggered(bool) {

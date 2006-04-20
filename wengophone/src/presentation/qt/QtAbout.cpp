@@ -19,19 +19,35 @@
 
 #include "QtAbout.h"
 
+#include "ui_AboutWindow.h"
+
 #include <WengoPhoneBuildId.h>
 
-#include <qtutil/Object.h>
-#include <qtutil/WidgetFactory.h>
+#include <util/Logger.h>
 
 #include <QtGui>
 
 QtAbout::QtAbout(QWidget * parent) {
-	_aboutWindow = WidgetFactory::create(":/forms/AboutWindow.ui", parent);
+	_aboutDialog = new QDialog(parent);
 
-	QLabel * wengoPhoneBuildIdStringLabel = Object::findChild<QLabel *>(_aboutWindow, "wengoPhoneBuildIdStringLabel");
-	wengoPhoneBuildIdStringLabel->setText(WengoPhoneBuildId::SOFTPHONE_NAME + QString(" ") +
+	_ui = new Ui::AboutWindow();
+	_ui->setupUi(_aboutDialog);
+
+	_ui->wengoPhoneBuildIdStringLabel->setText(WengoPhoneBuildId::SOFTPHONE_NAME + QString(" ") +
 					WengoPhoneBuildId::VERSION +
 					QString(" rev") + QString::number(WengoPhoneBuildId::REVISION) +
 					QString("-") + QString::number(WengoPhoneBuildId::BUILDID));
+
+	QFile file(":/data/AUTHORS");
+	if (file.open(QFile::ReadOnly)) {
+		QString authors = file.readAll();
+		file.close();
+		_ui->authorsTextEdit->setPlainText(authors);
+	} else {
+		LOG_ERROR("couldn't locate file=" + file.fileName().toStdString());
+	}
+}
+
+QWidget * QtAbout::getWidget() const {
+	return _aboutDialog;
 }

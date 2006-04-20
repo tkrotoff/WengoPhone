@@ -49,7 +49,7 @@ public:
 		return _cWengoPhone;
 	}
 
-	int makeCall(const std::string & phoneNumber);
+	int makeCall(const std::string & phoneNumber, bool enableVideo);
 
 private:
 

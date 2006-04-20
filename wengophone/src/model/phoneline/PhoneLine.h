@@ -42,9 +42,9 @@ public:
 
 	std::string getMySipAddress() const;
 
-	int makeCall(const std::string & phoneNumber);
+	int makeCall(const std::string & phoneNumber, bool enableVideo);
 
-	void acceptCall(int callId);
+	void acceptCall(int callId, bool enableVideo);
 
 	void rejectCall(int callId);
 
@@ -59,6 +59,10 @@ public:
 	void playTone(int callId, EnumTone::Tone tone);
 
 	void playSoundFile(int callId, const std::string & soundFile);
+
+	CodecList::AudioCodec getAudioCodecUsed(int callId);
+
+	CodecList::VideoCodec getVideoCodecUsed(int callId);
 
 	SipWrapper & getSipWrapper() const {
 		return *_sipWrapper;
@@ -102,6 +106,13 @@ private:
 	 * Creates and sets the SIP stack.
 	 */
 	void initSipWrapper();
+
+	/**
+	 * Configures the SIP stack.
+	 *
+	 * Configures Audio devices, AEC, half-duplex ect...
+	 */
+	void configureSipWrapper();
 
 	/**
 	 * Puts all the PhoneCall in the hold state except one.

@@ -197,7 +197,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			_wengoPhone.getCurrentUserProfile().makeCall(_cContact.getContact());
+			_wengoPhone.getCurrentUserProfile().makeCall(_cContact.getContact(), false);
 		}
 	}
 	else
@@ -209,7 +209,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	{
 		x-=px.width();
 		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			_wengoPhone.getCurrentUserProfile().makeCall(_cContact.getContact());
+			_wengoPhone.getCurrentUserProfile().makeCall(_cContact.getContact(), false);
 		}
 	}
 	else
@@ -284,5 +284,5 @@ bool QtUser::havePhoneNumber(){
 }
 
 void QtUser::startCall(const QString & number){
-	_wengoPhone.getCurrentUserProfile().makeCall(number.toStdString());
+	_wengoPhone.getCurrentUserProfile().makeCall(number.toStdString(), false);
 }

@@ -46,7 +46,8 @@ using namespace std;
 #include <cstring>
 
 PhoneLine::PhoneLine(SipAccount & sipAccount, WengoPhone & wengoPhone)
-	: _sipAccount(sipAccount), _wengoPhone(wengoPhone) {
+	: _sipAccount(sipAccount),
+	_wengoPhone(wengoPhone) {
 
 	_sipWrapper = SipWrapperFactory::getFactory().createSipWrapper();
 
@@ -73,6 +74,9 @@ PhoneLine::PhoneLine(SipAccount & sipAccount, WengoPhone & wengoPhone)
 	_phoneLineStateList += &stateServerError;
 
 	_activePhoneCall = NULL;
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.valueChangedEvent += boost::bind(&PhoneLine::configureSipWrapper, this);
 }
 
 PhoneLine::~PhoneLine() {
@@ -90,7 +94,7 @@ std::string PhoneLine::getMySipAddress() const {
 	return "sip:" + _sipAccount.getIdentity() + "@" + _sipAccount.getRealm();
 }
 
-int PhoneLine::makeCall(const std::string & phoneNumber) {
+int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 	if (phoneNumber.empty()) {
 		LOG_ERROR("empty phone number");
 		return -1;
@@ -115,7 +119,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 	holdCallsExcept(-1);
 
 	PhoneCall * phoneCall = new PhoneCall(*this, sipAddress);
-	int callId = _sipWrapper->makeCall(_lineId, sipAddress.getRawSipAddress());
+	int callId = _sipWrapper->makeCall(_lineId, sipAddress.getRawSipAddress(), enableVideo);
 	phoneCall->setCallId(callId);
 
 	//Adds the PhoneCall to the list of PhoneCall
@@ -170,9 +174,9 @@ void PhoneLine::checkCallId(int callId) {
 	}
 }
 
-void PhoneLine::acceptCall(int callId) {
+void PhoneLine::acceptCall(int callId, bool enableVideo) {
 	checkCallId(callId);
-	_sipWrapper->acceptCall(callId);
+	_sipWrapper->acceptCall(callId, enableVideo);
 	LOG_DEBUG("call accepted callId=" + String::fromNumber(callId));
 }
 
@@ -219,6 +223,14 @@ void PhoneLine::playSoundFile(int callId, const std::string & soundFile) {
 	//No check
 	//checkCallId(callId);
 	_sipWrapper->playSoundFile(callId, soundFile);
+}
+
+CodecList::AudioCodec PhoneLine::getAudioCodecUsed(int callId) {
+	return _sipWrapper->getAudioCodecUsed(callId);
+}
+
+CodecList::VideoCodec PhoneLine::getVideoCodecUsed(int callId) {
+	return _sipWrapper->getVideoCodecUsed(callId);
 }
 
 void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState state, const SipAddress & sipAddress) {
@@ -299,7 +311,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateMissed:
-		//History: retrive the memento and change its state to missed
+		//History: retrieve the memento and change its state to missed
 		_wengoPhone.getCurrentUserProfile().getHistory().updateCallState(callId, HistoryMemento::MissedCall);
 		LOG_DEBUG("call missed callId=" + String::fromNumber(callId));
 		break;
@@ -369,6 +381,11 @@ IPhoneLine::PhoneCallList PhoneLine::getPhoneCallList() const {
 }
 
 void PhoneLine::initSipWrapper() {
+	configureSipWrapper();
+	_sipWrapper->init();
+}
+
+void PhoneLine::configureSipWrapper() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//Setting plugin path
@@ -392,7 +409,9 @@ void PhoneLine::initSipWrapper() {
 	}
 
 	//Setting SIP proxy
-	_sipWrapper->setSIP(_sipAccount.getSIPProxyServerHostname(), _sipAccount.getSIPProxyServerPort(), _sipAccount.getLocalSIPPort());
+	_sipWrapper->setSIP(_sipAccount.getSIPProxyServerHostname(),
+				_sipAccount.getSIPProxyServerPort(),
+				_sipAccount.getLocalSIPPort());
 
 	//Setting NAT
 	string natType = config.getNetworkNatType();
@@ -406,6 +425,4 @@ void PhoneLine::initSipWrapper() {
 	//AEC + half duplex
 	_sipWrapper->enableAEC(config.getAudioAEC());
 	_sipWrapper->enableHalfDuplex(config.getAudioHalfDuplex());
-
-	_sipWrapper->init();
 }

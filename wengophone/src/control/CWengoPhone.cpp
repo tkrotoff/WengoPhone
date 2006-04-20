@@ -81,8 +81,8 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.getCurrentUserProfile().getHistory().historyLoadedEvent += boost::bind(&CWengoPhone::historyLoadedEventHandler, this, _1);
 }
 
-void CWengoPhone::makeCall(const std::string & phoneNumber) {
-	_wengoPhone.getCurrentUserProfile().makeCall(phoneNumber);
+void CWengoPhone::makeCall(const std::string & phoneNumber, bool enableVideo) {
+	_wengoPhone.getCurrentUserProfile().makeCall(phoneNumber, enableVideo);
 }
 
 void CWengoPhone::addWengoAccount(const std::string & login, const std::string & password, bool autoLogin) {

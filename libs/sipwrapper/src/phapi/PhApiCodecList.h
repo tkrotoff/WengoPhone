@@ -17,40 +17,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CODECLIST_H
-#define CODECLIST_H
+#ifndef PHAPICODECLIST_H
+#define PHAPICODECLIST_H
 
-#include <util/List.h>
 #include <util/NonCopyable.h>
 
 #include <string>
 
 /**
- * Audio and video codec list for the SIP stack.
+ * Audio and video codec list for PhApi.
  *
- * FIXME NOT FINISHED YET
- *
- * @ingroup model
  * @author Tanguy Krotoff
  */
-class CodecList : NonCopyable, public List<std::string> {
+class PhApiCodecList : NonCopyable {
 public:
 
 	/** Audio codecs. */
-	static const std::string AUDIO_CODEC_ULAW = "PCMU";
-	static const std::string AUDIO_CODEC_ALAW = "PCMA";
-	static const std::string AUDIO_CODEC_ILBC = "ILBC";
-	static const std::string AUDIO_CODEC_GSM = "GSM";
-	static const std::string AUDIO_CODEC_AMR_NB = "AMR";
-	static const std::string AUDIO_CODEC_AMR_WB = "AMR-WB";
-	static const std::string AUDIO_CODEC_SPEEX = "SPEEX";
+	static const std::string AUDIO_CODEC_PCMU;
+	static const std::string AUDIO_CODEC_PCMA;
+	static const std::string AUDIO_CODEC_ILBC;
+	static const std::string AUDIO_CODEC_GSM;
+	static const std::string AUDIO_CODEC_AMRNB;
+	static const std::string AUDIO_CODEC_AMRWB;
+	static const std::string AUDIO_CODEC_SPEEXWB;
 
 	/** Video codecs. */
-	static const std::string VIDEO_CODEC_H263 = "H263";
-	static const std::string VIDEO_CODEC_H264 = "H264";
-	static const std::string VIDEO_CODEC_MPEG4 = "MPEG4";
-
-
+	static const std::string VIDEO_CODEC_H263;
+	static const std::string VIDEO_CODEC_H264;
+	static const std::string VIDEO_CODEC_MPEG4;
 };
 
-#endif	//CODECLIST_H
+#endif	//PHAPICODECLIST_H

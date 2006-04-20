@@ -230,12 +230,12 @@ public:
 	 * Load the history.
 	 */
 	void loadHistory();
-	
+
 	/**
 	 * Save the history.
 	 */
 	void saveHistory();
-	
+
 	void addSipAccount(const std::string & login, const std::string & password, bool autoLogin);
 
 	/**
@@ -255,18 +255,14 @@ public:
 	void removeIMAccount(const IMAccount & imAccount);
 
 	/**
-	 * Makes a call given a Contact.
-	 *
-	 * @param contact the Contact to call
+	 * @see IPhoneLine::makeCall()
 	 */
-	void makeCall(Contact & contact);
+	void makeCall(Contact & contact, bool enableVideo);
 
 	/**
-	 * Makes a call given a phone number.
-	 *
-	 * @param phoneNumber the phone number to call
+	 * @see IPhoneLine::makeCall()
 	 */
-	void makeCall(const std::string & phoneNumber);
+	void makeCall(const std::string & phoneNumber, bool enableVideo);
 
 	/**
 	 * Start a instant messaging with a Contact.
@@ -288,7 +284,7 @@ public:
 	 * Changes icon of this user.
 	 *
 	 * @param icon the icon to set
-	 * @param imAccount the IMAccount to apply the icon to. 
+	 * @param imAccount the IMAccount to apply the icon to.
 	 * Pass NULL to set the icon to all IMAccount.
 	 */
 	void setIcon(const Picture & icon, IMAccount * account);
@@ -379,13 +375,13 @@ private:
 
 	/** History. */
 	History * _history;
-	
+
 	/** WengoPhone update system. */
 	SoftUpdate * _softUpdate;
 
 	/** WsInfo */
 	WsInfo * _wsInfo;
-	
+
 	//TODO: create a list of SipAccount
 	WengoAccount * _wengoAccount;
 
@@ -400,7 +396,6 @@ private:
 
 	ChatHandler _chatHandler;
 	ContactList _contactList;
-
 };
 
 #endif //USERPROFILE_H

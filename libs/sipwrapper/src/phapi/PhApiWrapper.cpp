@@ -19,6 +19,8 @@
 
 #include "PhApiWrapper.h"
 
+#include "PhApiCodecList.h"
+
 #include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMContact.h>
 
@@ -42,10 +44,11 @@ const std::string PhApiWrapper::PresenceStateDoNotDisturb = "Do Not Disturb";
 PhApiWrapper * PhApiWrapper::PhApiWrapperHack = NULL;
 PhApiCallbacks * PhApiWrapper::_callbacks = NULL;
 
+static const int AUDIO_FLAGS = PH_STREAM_AUDIO;
 #ifdef ENABLE_VIDEO
-static const int MEDIA_FLAGS = PH_STREAM_AUDIO | PH_STREAM_VIDEO_RX | PH_STREAM_VIDEO_TX;
+static const int VIDEO_FLAGS = PH_STREAM_AUDIO | PH_STREAM_VIDEO_RX | PH_STREAM_VIDEO_TX;
 #else
-static const int MEDIA_FLAGS = PH_STREAM_AUDIO;
+static const int VIDEO_FLAGS = PH_STREAM_AUDIO;
 #endif
 
 extern "C" {
@@ -203,17 +206,25 @@ void PhApiWrapper::removeVirtualLine(int lineId) {
 	}
 }
 
-int PhApiWrapper::makeCall(int lineId, const std::string & sipAddress) {
+int PhApiWrapper::makeCall(int lineId, const std::string & sipAddress, bool enableVideo) {
 	LOG_DEBUG("call=" + sipAddress);
-	return phLinePlaceCall2(lineId, sipAddress.c_str(), NULL, 0, MEDIA_FLAGS);
+	int mediaFlags = AUDIO_FLAGS;
+	if (enableVideo) {
+		mediaFlags = VIDEO_FLAGS;
+	}
+	return phLinePlaceCall2(lineId, sipAddress.c_str(), NULL, 0, mediaFlags);
 }
 
 void PhApiWrapper::sendRingingNotification(int callId) {
 	phRingingCall(callId);
 }
 
-void PhApiWrapper::acceptCall(int callId) {
-	phAcceptCall3(callId, 0, MEDIA_FLAGS);
+void PhApiWrapper::acceptCall(int callId, bool enableVideo) {
+	int mediaFlags = AUDIO_FLAGS;
+	if (enableVideo) {
+		mediaFlags = VIDEO_FLAGS;
+	}
+	phAcceptCall3(callId, 0, mediaFlags);
 }
 
 void PhApiWrapper::rejectCall(int callId) {
@@ -335,6 +346,62 @@ void PhApiWrapper::playSoundFile(int callId, const std::string & soundFile) {
 	phSendSoundFile(callId, soundFile.c_str());
 }
 
+CodecList::AudioCodec PhApiWrapper::getAudioCodecUsed(int callId) {
+	static const int LENGTH = 255;
+	static char audioCodec[LENGTH];
+	static char videoCodec[LENGTH];
+
+	phCallGetCodecs(callId, audioCodec, LENGTH, videoCodec, LENGTH);
+	String tmp(audioCodec);
+	if (tmp.contains(PhApiCodecList::AUDIO_CODEC_PCMU)) {
+		return CodecList::AudioCodecPCMU;
+	}
+	else if (tmp.contains(PhApiCodecList::AUDIO_CODEC_PCMA)) {
+		return CodecList::AudioCodecPCMA;
+	}
+	else if (tmp.contains(PhApiCodecList::AUDIO_CODEC_ILBC)) {
+		return CodecList::AudioCodecILBC;
+	}
+	else if (tmp.contains(PhApiCodecList::AUDIO_CODEC_GSM)) {
+		return CodecList::AudioCodecGSM;
+	}
+	else if (tmp.contains(PhApiCodecList::AUDIO_CODEC_AMRNB)) {
+		return CodecList::AudioCodecAMRNB;
+	}
+	else if (tmp.contains(PhApiCodecList::AUDIO_CODEC_AMRWB)) {
+		return CodecList::AudioCodecAMRWB;
+	}
+	else if (tmp.contains(PhApiCodecList::AUDIO_CODEC_SPEEXWB)) {
+		return CodecList::AudioCodecSPEEXWB;
+	}
+	else {
+		LOG_ERROR("unknown codec=" + tmp);
+		return CodecList::AudioCodecError;
+	}
+}
+
+CodecList::VideoCodec PhApiWrapper::getVideoCodecUsed(int callId) {
+	static const int LENGTH = 255;
+	static char audioCodec[LENGTH];
+	static char videoCodec[LENGTH];
+
+	phCallGetCodecs(callId, audioCodec, LENGTH, videoCodec, LENGTH);
+	String tmp(videoCodec);
+	if (tmp.contains(PhApiCodecList::VIDEO_CODEC_H263)) {
+		return CodecList::VideoCodecH263;
+	}
+	else if (tmp.contains(PhApiCodecList::VIDEO_CODEC_H264)) {
+		return CodecList::VideoCodecH264;
+	}
+	else if (tmp.contains(PhApiCodecList::VIDEO_CODEC_MPEG4)) {
+		return CodecList::VideoCodecMPEG4;
+	}
+	else {
+		LOG_ERROR("unknown codec=" + tmp);
+		return CodecList::VideoCodecError;
+	}
+}
+
 void PhApiWrapper::callProgress(int callId, const phCallStateInfo_t * info) {
 	_callbacks->callProgress(callId, info);
 }
@@ -436,29 +503,28 @@ void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & 
 }
 
 void PhApiWrapper::changeTypingState(IMChatSession & chatSession, IMChat::TypingState state) {
-	const char *mime;
-	const char *message;
-	const IMContactSet & buddies = chatSession.getIMContactSet();
-	IMContactSet::const_iterator it;	
+	const char * mime;
+	const char * message;
 
-	switch (state)
-	{
-		case IMChat::TypingStateTyping:
-			mime = "typingstate/typing";
-			message = "is typing";
-			break;
+	switch (state) {
+	case IMChat::TypingStateTyping:
+		mime = "typingstate/typing";
+		message = "is typing";
+		break;
 
-		case IMChat::TypingStateStopTyping:
-			mime = "typingstate/stoptyping";
-			message = "stops typing";
-			break;
+	case IMChat::TypingStateStopTyping:
+		mime = "typingstate/stoptyping";
+		message = "stops typing";
+		break;
 
-		default:
-			mime = "typingstate/nottyping";
-			message = "is not typing";
-			break;
+	default:
+		mime = "typingstate/nottyping";
+		message = "is not typing";
+		break;
 	}
 
+	const IMContactSet & buddies = chatSession.getIMContactSet();
+	IMContactSet::const_iterator it;
 	for (it = buddies.begin(); it != buddies.end(); it++) {
 		std::string sipAddress = "sip:" + (*it).getContactId() + "@" + _wengoRealm;
 		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message, mime);
@@ -782,9 +848,21 @@ void PhApiWrapper::init() {
 	//Plugin path
 	strncpy(phcfg.plugin_path, _pluginPath.c_str(), sizeof(phcfg.plugin_path));
 
+	std::string audioCodecList = PhApiCodecList::AUDIO_CODEC_SPEEXWB + "," +
+					PhApiCodecList::AUDIO_CODEC_AMRWB + "," +
+					PhApiCodecList::AUDIO_CODEC_AMRNB + "," +
+					PhApiCodecList::AUDIO_CODEC_ILBC + "," +
+					PhApiCodecList::AUDIO_CODEC_PCMU + "," +
+					PhApiCodecList::AUDIO_CODEC_PCMA + "," +
+					PhApiCodecList::AUDIO_CODEC_GSM;
+
+	std::string videoCodecList = PhApiCodecList::VIDEO_CODEC_H263 + "," +
+					PhApiCodecList::VIDEO_CODEC_H264 + "," +
+					PhApiCodecList::VIDEO_CODEC_MPEG4;
+
 	//Codec list
-	strncpy(phcfg.audio_codecs, "G726-64wb/16000,ILBC/8000,PCMU/8000,PCMA/8000,GSM/8000", sizeof(phcfg.audio_codecs));
-	strncpy(phcfg.video_codecs, "H263,H264,MPEG4", sizeof(phcfg.video_codecs));
+	strncpy(phcfg.audio_codecs, audioCodecList.c_str(), sizeof(phcfg.audio_codecs));
+	strncpy(phcfg.video_codecs, videoCodecList.c_str(), sizeof(phcfg.video_codecs));
 
 	strncpy(phcfg.proxy, _sipServer.c_str(), sizeof(phcfg.proxy));
 
@@ -811,7 +889,7 @@ void PhApiWrapper::setPluginPath(const string & path) {
 	_pluginPath = path;
 }
 
-std::string PhApiWrapper::phapiCallStateToString(enum  phCallStateEvent event) {
+std::string PhApiWrapper::phapiCallStateToString(enum phCallStateEvent event) {
 	std::string toReturn = "";
 	switch(event) {
 	case phDIALING:
@@ -881,7 +959,7 @@ std::string PhApiWrapper::phapiCallStateToString(enum  phCallStateEvent event) {
 		toReturn = "phCALLCLOSEDandSTOPRING";
 		break;
 	default:
-		toReturn = "Unknown phapi state: " + String::fromNumber(event);
+		LOG_FATAL("unknown phapi state=" + String::fromNumber(event));
 	}
 	return toReturn;
 }

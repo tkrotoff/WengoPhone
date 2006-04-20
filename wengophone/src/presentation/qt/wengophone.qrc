@@ -49,6 +49,19 @@
         <file>pics/microphone.png</file>
         <file>pics/no.png</file>
         <file>pics/point.gif</file>
+        <file>pics/profilebar/bar_end.png</file>
+        <file>pics/profilebar/bar_fill.png</file>
+        <file>pics/profilebar/bar_start.png</file>
+        <file>pics/profilebar/bar_start_status_gray.png</file>
+        <file>pics/profilebar/bar_start_status_green.png</file>
+        <file>pics/profilebar/bar_start_status_orange.png</file>
+        <file>pics/profilebar/bar_start_status_red.png</file>
+        <file>pics/protocol_aim.png</file>
+        <file>pics/protocol_googletalk.png</file>
+        <file>pics/protocol_jabber.png</file>
+        <file>pics/protocol_msn.png</file>
+        <file>pics/protocol_wengo.png</file>
+        <file>pics/protocol_yahoo.png</file>
         <file>pics/sms.png</file>
         <file>pics/status/away.png</file>
         <file>pics/status/donotdisturb.png</file>
@@ -71,19 +84,9 @@
         <file>pics/video_flip.png</file>
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
-        <file>pics/protocol_msn.png</file>
-        <file>pics/protocol_aim.png</file>
-        <file>pics/protocol_yahoo.png</file>
-        <file>pics/protocol_jabber.png</file>
-        <file>pics/protocol_wengo.png</file>
-        <file>pics/protocol_googletalk.png</file>
-        <file>pics/profilebar/bar_end.png</file>
-        <file>pics/profilebar/bar_start.png</file>
-        <file>pics/profilebar/bar_start_status_gray.png</file>
-        <file>pics/profilebar/bar_start_status_green.png</file>
-        <file>pics/profilebar/bar_start_status_orange.png</file>
-        <file>pics/profilebar/bar_start_status_red.png</file>
-        <file>pics/profilebar/bar_fill.png</file>
+    </qresource>
+    <qresource prefix="/data" >
+        <file>../../../AUTHORS</file>
     </qresource>
     <qresource prefix="/emoticons" >
         <file>chat/emoticons/emblem-unreadable.png</file>
@@ -127,11 +130,11 @@
         <file>HttpProxyLoginWindow.ui</file>
         <file>WengoPhoneWindow.ui</file>
         <file>WengoPhoneWindowConfigPanel.ui</file>
+        <file>chat/ChatRoomInviteWidget.ui</file>
         <file>chat/ChatRoomWidget.ui</file>
         <file>chat/ChatWidget.ui</file>
         <file>chat/chat.ui</file>
         <file>chat/emoticonswidget.ui</file>
-        <file>chat/ChatRoomInviteWidget.ui</file>
         <file>config/AccountSettings.ui</file>
         <file>config/AdvancedConfigWindow.ui</file>
         <file>config/AdvancedSettings.ui</file>
@@ -149,16 +152,16 @@
         <file>contactlist/ContactWidget.ui</file>
         <file>contactlist/contactList.ui</file>
         <file>contactlist/userWidget.ui</file>
+        <file>imaccount/AIMSettings.ui</file>
+        <file>imaccount/GoogleTalkSettings.ui</file>
+        <file>imaccount/IMAccountManager.ui</file>
+        <file>imaccount/IMAccountTemplate.ui</file>
+        <file>imaccount/JabberSettings.ui</file>
+        <file>imaccount/MSNSettings.ui</file>
+        <file>imaccount/YahooSettings.ui</file>
         <file>login/LoginWindow.ui</file>
         <file>login/contactWindow.ui</file>
         <file>login/profileWindow.ui</file>
-        <file>imaccount/IMAccountManager.ui</file>
-        <file>imaccount/IMAccountTemplate.ui</file>
-        <file>imaccount/AIMSettings.ui</file>
-        <file>imaccount/MSNSettings.ui</file>
-        <file>imaccount/YahooSettings.ui</file>
-        <file>imaccount/JabberSettings.ui</file>
-        <file>imaccount/GoogleTalkSettings.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
         <file>phonecall/QtCallContactWidget.ui</file>
@@ -168,5 +171,8 @@
         <file>webservices/sms/SmsWindow.ui</file>
         <file>webservices/softupdate/SoftUpdateWindow.ui</file>
         <file>webservices/subscribe/Subscribe.ui</file>
+    </qresource>
+    <qresource prefix="/data" >
+        <file>AUTHORS</file>
     </qresource>
 </RCC>
