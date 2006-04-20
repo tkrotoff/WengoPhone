@@ -28,24 +28,24 @@
  * Graphical representation of a Contact: permits to the user
  * to enter the name, phone numbers, address... of a Contact.
  *
- * 
+ *
  * @author Kavoos Bojnourdi
  */
- 
+
 class UserTreeEventManager : public QObject
 {
     Q_OBJECT
-    
+
 public:
 
     UserTreeEventManager(QObject * parent = 0,QTreeWidget * target = 0);
 
-public Q_SLOTS: 
+public Q_SLOTS:
 	void timerTimeout();
 Q_SIGNALS:
 	void itemEntered ( QTreeWidgetItem * item);
 	void itemTimeout(QTreeWidgetItem * item);
-	
+
 protected:
 
     bool eventFilter(QObject *obj, QEvent *event);
@@ -54,18 +54,18 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent *event);
     virtual void dragMoveEvent(QDragMoveEvent *event);
-    
+
     /* The QTreeWidget */
     QTreeWidget     *   _tree;
     /* Start position for drag action */
     QPoint              _dstart;
     /* The selected item in the QTreeWidget */
     QTreeWidgetItem *   _selectedItem;
-	
+
 	QTreeWidgetItem *	_entered;
-	
+
 	QTimer				_timer;
- 
+
 	bool				_inDrag;
 };
 

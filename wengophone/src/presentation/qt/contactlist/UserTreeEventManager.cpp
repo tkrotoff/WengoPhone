@@ -26,7 +26,7 @@ UserTreeEventManager::UserTreeEventManager(QObject * parent, QTreeWidget * targe
     /* We need to install the event filter in the viewport of the QTreeWidget */
     target->viewport()->installEventFilter(this);
 	_timer.setSingleShot(true);
-    connect (&_timer,SIGNAL(timeout()),this,SLOT(timerTimeout()));
+//    connect (&_timer,SIGNAL(timeout()),this,SLOT(timerTimeout()));
 	_inDrag = false;
 	_selectedItem = NULL;
 }
@@ -67,6 +67,7 @@ void UserTreeEventManager::mousePressEvent(QMouseEvent *event)
 		_timer.stop();
 
     if (item){
+    	ul->resetMouseStatus();
 		ul->setButton(item->text(0),event->button());
         _selectedItem = item;
         if (event->button() == Qt::LeftButton)
@@ -106,8 +107,6 @@ void UserTreeEventManager::mouseMoveEvent(QMouseEvent *event)
     if ((event->pos() - _dstart).manhattanLength() < QApplication::startDragDistance())
         return;
 
-
-
     if ( ! item )
         return;
 
@@ -143,6 +142,7 @@ void UserTreeEventManager::dropEvent(QDropEvent *event)
 	_inDrag = false;
     if ( ! event->mimeData()->hasFormat("application/x-wengo-user-data") )
         return;
+
     if (  item )
     {
         if ( _selectedItem)

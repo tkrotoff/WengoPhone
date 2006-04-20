@@ -65,6 +65,7 @@ public:
 
 	QTreeWidget * getTreeWidget() const {return _tree;}
 
+	void resetMouseStatus();
 protected:
 	QtUserList ( );
 	QtUserList (const QtUserList& other) : _tree(other._tree), _userList(other._userList) {}

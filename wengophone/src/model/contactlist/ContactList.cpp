@@ -246,9 +246,11 @@ void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,
 		// moved (because of Gaim limitation). So we are removing the found
 		// IMContact from all its groups (although the IMContact should be in only
 		// one group).
-		LOG_DEBUG("IMContact moved to " + groupName);
-		contact->getIMContact(imContact).removeFromAllGroup();
-		contact->getIMContact(imContact).addToGroup(groupName);
+		if (!contact->isInContactGroup(groupName)) {
+			LOG_DEBUG("IMContact moved to " + groupName);
+			contact->getIMContact(imContact).removeFromAllGroup();
+			contact->getIMContact(imContact).addToGroup(groupName);
+		}
 	} else {
 		LOG_DEBUG("IMContact not found: " + imContact.getContactId());
 	}
@@ -271,8 +273,10 @@ Contact * ContactList::findContactThatOwns(const IMContact & imContact) const {
 }
 
 void ContactList::moveContactToGroup(Contact & contact, const std::string & to, const std::string & from) {
-	contact.addToContactGroup(to);
-	contact.removeFromContactGroup(from);
+	if ( to != from ){
+		contact.addToContactGroup(to);
+		contact.removeFromContactGroup(from);
+	}
 }
 
 void ContactList::_addContactGroup(const std::string & groupName) {
@@ -341,7 +345,7 @@ void ContactList::imAccountRemovedEventHandler(UserProfile & sender, IMAccount &
 			++imContactIt) {
 			if ((*imContactIt).getIMAccount() &&
 					((*(*imContactIt).getIMAccount()) == imAccount)) {
-				((IMContact &)*imContactIt).setIMAccount(NULL); 
+				((IMContact &)*imContactIt).setIMAccount(NULL);
 			}
 		}
 	}

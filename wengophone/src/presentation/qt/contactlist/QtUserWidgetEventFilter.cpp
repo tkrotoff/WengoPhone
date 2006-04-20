@@ -77,7 +77,7 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter,QRect rect)
 	painter->drawText(textRect,Qt::AlignLeft,_user->getUserName(),0);
 
 	int _iconsStartPosition;
-
+/*
 	x=rect.width()-1;
 	if ( _user->getStatus() != QtContactPixmap::ContactOffline)
 	{
@@ -111,4 +111,7 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter,QRect rect)
 	}
 	else
 		_iconsStartPosition = x;
+
+*/
+	_iconsStartPosition = 10000;
 }

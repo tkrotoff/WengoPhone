@@ -110,6 +110,8 @@ void QtUserManager::editContact(bool ){
 }
 
 void QtUserManager::treeViewSelectionChanged(){
+
+	qDebug() << "Selection changed";
 	closeUserInfo();
 }
 
@@ -120,7 +122,7 @@ void QtUserManager::itemEntered ( QTreeWidgetItem * item )
 	if (ul)
 	{
 		ul->mouseOn(item->text(0));
-		closeUserInfo();
+//		closeUserInfo();
 
 	}
 	_tree->viewport()->update();
@@ -168,7 +170,7 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
 
 	QtUserList * ul = QtUserList::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
-	
+
 	QRect widgetSize = _tree->rect();
 	QPoint  mousepos = _tree->mapFromGlobal(QCursor::pos());
 
@@ -208,6 +210,7 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
 		if ( item->parent()){
 			openUserInfo(item);
 		}
+
 	}
 	else
 	{
@@ -405,42 +408,42 @@ void QtUserManager::showAllUsers(){
 }
 
 QMenu * QtUserManager::createMenu(){
-	
-	
+
+
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
-	
+
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-	
+
 	user = ul->getUser(item->text(0));
-	
-	
+
+
 	QAction * action;
-	
+
 	QMenu * menu;
-	
+
 	menu = new QMenu(dynamic_cast<QWidget *>(parent()));
 	// _callAction = menu->addAction(tr("Call"));
 	// Call menu
 	if ( user->havePhoneNumber()){
-	
+
 		QMenu * callMenu = menu->addMenu( tr("Call") );
 		if ( ! user->getMobilePhone().isEmpty() ){
 			action = callMenu->addAction(tr ("Mobile phone") );
 			connect(action,SIGNAL(triggered(bool)),SLOT(startMobileCall(bool)));
 		}
-	
+
 		if ( ! user->getHomePhone().isEmpty() ){
 			action = callMenu->addAction(tr ("Home phone") );
 			connect(action,SIGNAL(triggered(bool)),SLOT(startHomeCall(bool)));
 		}
-	
+
 		if ( ! user->getWorkPhone().isEmpty() ){
 			action = callMenu->addAction(tr ("Work phone") );
 			connect(action,SIGNAL(triggered(bool)),SLOT(startWorkCall(bool)));
 		}
-	
+
 		if ( ! user->getWengoPhoneNumber().isEmpty() ){
 			action = callMenu->addAction(tr ("Wengophone") );
 			connect(action,SIGNAL(triggered(bool)),SLOT(startWengoCall(bool)));
@@ -450,27 +453,27 @@ QMenu * QtUserManager::createMenu(){
 
 	action = menu->addAction(tr("Start Chat"));
 	connect (action,SIGNAL(triggered(bool)),SLOT(startChat(bool)));
-	
+
 	action = menu->addAction(tr("Send SMS"));
 	connect (action,SIGNAL(triggered(bool)),SLOT(startSMS(bool)));
-	
+
 	menu->addAction(tr("Invite to conference"));
-	
+
 	menu->addSeparator();
-	
+
 	action = menu->addAction(tr("Edit contact"));
 	connect(action,SIGNAL(triggered(bool)),this,SLOT(editContact(bool)));
-	
+
 	menu->addAction(tr("Delete contact"));
-	
+
 	menu->addSeparator();
-	
+
 	menu->addAction(tr("Block contact"));
-	
+
 	menu->addAction(tr("Forward to Cell phone"));
-	
+
 	menu->setWindowOpacity(0.97);
-	
+
 	return menu;
 
 }
@@ -551,6 +554,19 @@ void QtUserManager::safeRemoveContact(CContact & cContact) {
 					found = true;
 				}
 			}
+		}
+	}
+	removeFromHidenContact( cContact );
+}
+
+void QtUserManager::removeFromHidenContact(const CContact & cContact){
+
+	QList<QtHidenContact *>::iterator iter;
+
+	for (iter = _hidenContacts.begin(); iter != _hidenContacts.end(); iter ++ ){
+		if ( (*iter)->getUser()->getCContact() == cContact ){
+			_hidenContacts.erase(iter);
+			break;
 		}
 	}
 }

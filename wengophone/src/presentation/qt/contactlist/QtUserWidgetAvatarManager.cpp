@@ -25,7 +25,7 @@
 
 #include <util/Picture.h>
 
-QtUserWidgetAvatarManager::QtUserWidgetAvatarManager(QtUserWidget * userWidget, QFrame * target) 
+QtUserWidgetAvatarManager::QtUserWidgetAvatarManager(QtUserWidget * userWidget, QFrame * target)
 : QObject(userWidget), _userWidget(userWidget)
 {
 	_target = target;

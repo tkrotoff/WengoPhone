@@ -85,9 +85,12 @@ protected:
 
 	void safeShowAllUsers();
 
+	void removeFromHidenContact(const CContact & cContact);
+
 	bool _hideUsers;
 
 	bool _sortUsers;
+
 
 	QMenu * createMenu();
 

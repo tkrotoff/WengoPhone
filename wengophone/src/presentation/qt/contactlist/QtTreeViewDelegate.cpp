@@ -111,8 +111,6 @@ void QtTreeViewDelegate::paint ( QPainter * painter, const QStyleOptionViewItem 
 	}
 
 QSize QtTreeViewDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const {
-		// LOG_DEBUG( "height= " + String::fromNumber( USER_TITLE_FRAME_HEIGHT ) );
-
 		QSize orig = QItemDelegate::sizeHint( option, index );
 
 		QtUserList * ul = QtUserList::getInstance();
@@ -120,15 +118,6 @@ QSize QtTreeViewDelegate::sizeHint ( const QStyleOptionViewItem & option, const 
 
 		if ( user ) {
 				return QSize( orig.width(), ul->getUser( index.data().toString() ) ->getHeight() );
-/*
-				if ( user->isOpen() ) {
-						return QSize( orig.width(), USER_WIDGET_FRAME_HEIGHT );
-					}
-
-				else {
-						return QSize( orig.width(), USER_TITLE_FRAME_HEIGHT );
-					}
-*/
 			}
 
 		else {

@@ -21,6 +21,9 @@
 
 #include "QtUserWidgetAvatarManager.h"
 
+#include <control/contactlist/CContact.h>
+#include <model/contactlist/Contact.h>
+
 #include <qtutil/WidgetFactory.h>
 
 #include <QtGui>
@@ -34,12 +37,58 @@ QtUserWidget::QtUserWidget(CContact & cContact, QWidget * parent, Qt::WFlags f)
 	setLayout(layout);
 
 	_avatarLabel = findChild<QLabel *>("avatarLabel");
+	_homePhoneLabel = findChild<QLabel *>("homePhoneLabel");
+	_cellPhoneLabel = findChild<QLabel *>("cellPhoneLabel");
+
+	_homePhoneLabel->setText( QString::fromUtf8(_cContact.getContact().getHomePhone().c_str() ) );
+	_cellPhoneLabel->setText( QString::fromUtf8(_cContact.getContact().getMobilePhone().c_str() ) );
+
 	_avatarManager = new QtUserWidgetAvatarManager(this, _avatarLabel);
 	_avatarLabel->installEventFilter(_avatarManager);
 }
 
 void QtUserWidget::paintEvent(QPaintEvent * event){
+
 	QPalette  p = palette();
     QPainter painter(this);
 	painter.fillRect(rect(),QBrush(QColor(255,255,128)));
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -22,7 +22,7 @@
 
 #include <QWidget>
 #include <QString>
- 
+
 class QtUserWidgetAvatarManager;
 
 class QLabel;
@@ -58,6 +58,10 @@ protected:
 	QLabel * _avatarLabel;
 
 	QWidget * _widget;
+
+	QLabel * _homePhoneLabel;
+
+	QLabel * _cellPhoneLabel;
 
 	QString _text;
 
