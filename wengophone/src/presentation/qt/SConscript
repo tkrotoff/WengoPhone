@@ -191,15 +191,7 @@ forms = [
 
 for form in forms:
 	header = env.WengoCompileQt4UiFile(form)
-
-	#(header, uicCode, mocCode) = env.Uic(form)
-	#env.Depends(header, 'qtwengophone')
-	#env.Depends(uicCode, 'qtwengophone')
-	#env.Depends(mocCode, 'qtwengophone')
-	#sources.append(mocCode)
-	#sources.append(uicCode)
 	headers += [ header ]
-
 
 if WengoOSWindows() and WengoCCMSVC():
 	sources.append(WengoGetEnvironment().WengoCompileWindowsResource('win32/wengophone.rc'))
