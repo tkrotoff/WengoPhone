@@ -28,7 +28,8 @@
  * @author Mr K
  */
 class QtHistoryItem : public QTreeWidgetItem {
-
+    friend class QtHistory;
+    friend class QtHistoryWidget;
 public:
 
 	enum HistoryType{ Sms, OutGoingCall, IncomingCall,MissedCall, RejectedCall, Chat,  };
@@ -57,6 +58,16 @@ protected:
 	unsigned int _id;
 
 	HistoryType _type;
+
+private:
+    
+    static const int COLUMN_TYPE;
+
+    static const int COLUMN_DATE;
+
+    static const int COLUMN_DURATION;
+
+    static const int COLUMN_PEERS;
 };
 
 #endif // QTHISTORYITEM_H

@@ -25,6 +25,7 @@
 #include <presentation/qt/webservices/sms/QtSms.h>
 #include <control/CWengoPhone.h>
 #include <model/history/History.h>
+#include <model/phonecall/SipAddress.h>
 
 #include <util/Logger.h>
 
@@ -95,21 +96,24 @@ void QtHistory::addHistoryMemento(std::string type, std::string date,
 		qduration = qduration.addSecs(duration);
 	}
 	
+	SipAddress sipAddress(name);
+	QString formattedName = QString::fromStdString(sipAddress.getUserName());
+	
 	if( type == HistoryMemento::StateIncomingCall ) {
 		_historyWidget->addIncomingCallItem(QString::fromStdString(type),
-			qdate, qtime, qduration, QString::fromStdString(name), id);
+			qdate, qtime, qduration, formattedName, id);
 	} else if ( type == HistoryMemento::StateOutgoingCall ) {
 		_historyWidget->addOutGoingCallItem(QString::fromStdString(type),
-			qdate, qtime, qduration, QString::fromStdString(name), id);
+			qdate, qtime, qduration, formattedName, id);
 	} else if ( type == HistoryMemento::StateMissedCall ) {
 		_historyWidget->addMissedCallItem(QString::fromStdString(type),
-			qdate, qtime, qduration, QString::fromStdString(name), id);
+			qdate, qtime, qduration, formattedName, id);
 	} else if ( type == HistoryMemento::StateRejectedCall) {
 		_historyWidget->addRejectedCallItem(QString::fromStdString(type),
-			qdate, qtime, qduration, QString::fromStdString(name), id);
+			qdate, qtime, qduration, formattedName, id);
 	} else if ( type == HistoryMemento::StateOutgoingSMSOK) {
 		_historyWidget->addSMSItem(QString::fromStdString(type),
-			qdate, qtime, qduration, QString::fromStdString(name), id);
+			qdate, qtime, qduration, formattedName, id);
 	} else if ( type == HistoryMemento::StateOutgoingSMSNOK) {
 		//do not show unsent SMS for now
 	} else if ( type == HistoryMemento::StateNone) {
@@ -179,7 +183,15 @@ void QtHistory::replayItem ( QtHistoryItem * item ) {
 			break;
 
 		case QtHistoryItem::OutGoingCall:
-			_cHistory.replay(item->getId());
+			
+			if( QMessageBox::question(
+				_historyWidget,
+				tr("Replay call"),
+				tr("Do you want to call %1?").arg(item->text(QtHistoryItem::COLUMN_PEERS)),
+				tr("&No"), tr("&Yes"),
+				QString(), 0, 1) ) {
+					_cHistory.replay(item->getId());
+				}
 			break;
 
 		case QtHistoryItem::IncomingCall:

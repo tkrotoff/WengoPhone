@@ -105,11 +105,11 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
-
-	item->setText(0,text);
-	item->setText(1,date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText( 2, duration.toString(Qt::TextDate) );
-	item->setText( 3, name);
+		
+	item->setText(QtHistoryItem::COLUMN_TYPE, text);
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId(id);
 	item->setItemType(QtHistoryItem::Sms);
 
@@ -120,10 +120,10 @@ void QtHistoryWidget::addOutGoingCallItem(const QString & text,const QDate & dat
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText( 0, text );
-	item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText( 2, duration.toString(Qt::TextDate) );
-	item->setText( 3, name);
+	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::OutGoingCall);
 }
@@ -132,10 +132,10 @@ void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & dat
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText( 0, text );
-	item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText( 2, duration.toString(Qt::TextDate) );
-	item->setText( 3, name);
+	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::IncomingCall);
 }
@@ -144,10 +144,10 @@ void QtHistoryWidget::addChatItem(const QString & text,const QDate & date, const
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText( 0, text );
-	item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText( 2, duration.toString(Qt::TextDate) );
-	item->setText( 3, name);
+	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::Chat);
 }
@@ -155,10 +155,10 @@ void QtHistoryWidget::addChatItem(const QString & text,const QDate & date, const
 void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText( 0, text );
-	item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText( 2, duration.toString(Qt::TextDate) );
-	item->setText( 3, name);
+	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::MissedCall);
 }
@@ -167,10 +167,10 @@ void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date,
 void QtHistoryWidget::addRejectedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int unsigned id) {
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText( 0, text );
-	item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText( 2, duration.toString(Qt::TextDate) );
-	item->setText( 3, name);
+	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::RejectedCall);
 }
@@ -184,10 +184,10 @@ void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QT
 	for ( iter = itemList.begin(); iter != itemList.end(); iter++){
 		QtHistoryItem * item = dynamic_cast<QtHistoryItem *> ( (*iter) );
 		if ( item->getId() == id ){
-			item->setText( 0, text );
-			item->setText( 1, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-			item->setText( 2, duration.toString(Qt::TextDate) );
-			item->setText( 3, name);
+			item->setText(QtHistoryItem::COLUMN_TYPE, text );
+			item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
+			item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+			item->setText(QtHistoryItem::COLUMN_PEERS, name);
 			break;
 		}
 	}
@@ -196,7 +196,6 @@ void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QT
 
 void QtHistoryWidget::itemDoubleClicked ( QTreeWidgetItem * item, int column ){
 	QtHistoryItem * hItem = dynamic_cast<QtHistoryItem *>(item);
-	//TODO: add a popup window question
 	replayItem(hItem);
 }
 
