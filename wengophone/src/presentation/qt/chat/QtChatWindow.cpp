@@ -39,7 +39,7 @@ _cChatHandler(cChatHandler){
 	_imChatSession = &imChatSession;
 
     _imChatSession->messageReceivedEvent +=
-		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1, _2, _3);
+		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1);
 
     _imChatSession->typingStateChangedEvent +=
 		boost::bind(&ChatWindow::typingStateChangedEventHandler, this, _1, _2, _3);
@@ -143,11 +143,10 @@ void ChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, cons
 	delete state;
 }
 
-void ChatWindow::messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message) {
-    typedef PostEvent3<void (IMChatSession & sender, const IMContact & from, const std::string message),
-        IMChatSession &, const IMContact&, const std::string> MyPostEvent;
+void ChatWindow::messageReceivedEventHandler(IMChatSession & sender) {
+    typedef PostEvent1<void (IMChatSession & sender), IMChatSession &> MyPostEvent;
 	MyPostEvent * event =
-		new MyPostEvent(boost::bind(&ChatWindow::messageReceivedEventHandlerThreadSafe, this, _1, _2, _3), sender, from, message);
+		new MyPostEvent(boost::bind(&ChatWindow::messageReceivedEventHandlerThreadSafe, this, _1), sender);
 	postEvent(event);
 }
 
@@ -162,8 +161,13 @@ void ChatWindow::show(){
 	_dialog->activateWindow();
 }
 
-void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string message){
+void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	IMChatSession::IMChatMessage * imChatMessage = sender.getReceivedMessage();
+	const IMContact & from = imChatMessage->getIMContact();
+	std::string message = imChatMessage->getMessage();
+	delete imChatMessage;
 
     QString senderName = QString::fromStdString(from.getContactId());
 
@@ -226,7 +230,7 @@ void ChatWindow::contactAddedThreadSafe(IMChatSession * session, const IMContact
 
 void ChatWindow::addChatSession(IMChatSession * imChatSession){
 	imChatSession->messageReceivedEvent +=
-		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1, _2, _3);
+		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1);
 
 	if ( imChatSession->getIMContactSet().size() != 0 ) {
 		IMContact from = *imChatSession->getIMContactSet().begin();
@@ -254,15 +258,19 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
     _chatWidget->setNickName(nickName);
 
 	// Adding probably missed message
-	for (IMChatSession::IMChatMessageList::const_iterator it = session->getReceivedIMChatMessageList().begin();
-		it != session->getReceivedIMChatMessageList().end();
-		++it) {
-		_chatWidget->addToHistory(QString::fromStdString((*it).getIMContact().getContactId()),
-			QString::fromUtf8((*it).getMessage().c_str()));
+	IMChatSession::IMChatMessage * imChatMessage = session->getReceivedMessage();
+	while (imChatMessage) {
+		_chatWidget->addToHistory(QString::fromStdString(imChatMessage->getIMContact().getContactId()),
+			QString::fromUtf8(imChatMessage->getMessage().c_str()));
+
+		imChatMessage = session->getReceivedMessage();
 	}
+	////
 
     connect (_chatWidget,SIGNAL(newMessage(IMChatSession *,const QString & )),SLOT(newMessage(IMChatSession *,const QString &)));
+
 	_tabWidget->setCurrentIndex(tabNumber);
+
 	Contact * contact = _cChatHandler.getUserProfile().getContactList().findContactThatOwns(from);
 	if ( contact ){
 		contactAddedSignal(session, &from );

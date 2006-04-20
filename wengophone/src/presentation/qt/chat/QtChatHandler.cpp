@@ -19,8 +19,12 @@
 
 #include "QtChatHandler.h"
 
+#include <presentation/qt/toaster/QtToaster.h>
+
 #include <control/chat/CChatHandler.h>
+
 #include <util/Logger.h>
+
 #include <QWidget>
 
 QtChatHandler::QtChatHandler(CChatHandler & cChatHandler)
@@ -33,12 +37,9 @@ QtChatHandler::QtChatHandler(CChatHandler & cChatHandler)
 }
 
 QtChatHandler::~QtChatHandler() {
-
 }
 
 void QtChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession) {
-
-
 	typedef PostEvent2<void (ChatHandler & sender, IMChatSession & imChatSession), ChatHandler &, IMChatSession &> MyPostEvent;
 	MyPostEvent * event =
 		new MyPostEvent(boost::bind(&QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe, this, _1, _2), sender, imChatSession);
@@ -48,14 +49,29 @@ void QtChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IM
 void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(ChatHandler & sender, IMChatSession & imChatSession) {
 	if (!_qtChatWidget)
 	{
-
-		_qtChatWidget =  new ChatWindow(_cChatHandler,imChatSession);
+		_qtChatWidget =  new ChatWindow(_cChatHandler, imChatSession);
 	}
 	else
 	{
-
 		_qtChatWidget->addChatSession(&imChatSession);
 	}
+
+	QtToaster  * toaster = new QtToaster();
+	toaster->setTitle(tr("New chat session:"));
+	if (imChatSession.getIMContactSet().size() > 0) {
+		QString message;
+		for (IMContactSet::const_iterator it = imChatSession.getIMContactSet().begin();
+			it != imChatSession.getIMContactSet().end();
+			++it) {
+			if (it != imChatSession.getIMContactSet().begin()) {
+				message += ", ";
+			}
+			message += QString::fromStdString((*it).getContactId());
+		}
+		toaster->setMessage(message);
+	}
+	toaster->hideButton(1); toaster->hideButton(2); toaster->hideButton(3);
+	toaster->showToaster();
 }
 
 void QtChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContactSet) {

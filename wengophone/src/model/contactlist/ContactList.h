@@ -124,7 +124,28 @@ public:
 	 *
 	 * @param the contact to remove
 	 */
-	void removeContact(const Contact & contact);
+	void removeContact(Contact & contact);
+
+	/**
+	 * Merges two Contact.
+	 *
+	 * Merging two Contact will result in a deletation of the source Contact
+	 * after fulling the destination Contact with missing information that
+	 * come from the source Contact.
+	 *
+	 * @param src the source Contact
+	 * @param dst the destination Contact
+	 */
+	void mergeContacts(Contact & dst, Contact & src);
+
+	/**
+	 * Moves a Contact from a group to another one.
+	 *
+	 * @param contact the Contact to move
+	 * @param dst the destination group
+	 * @param src the source group
+	 */
+	void moveContact(Contact & contact, const std::string & dst, const std::string & src);
 
 	/**
 	 * Get a ContactGroup.

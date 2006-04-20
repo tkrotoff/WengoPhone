@@ -236,10 +236,6 @@ void ChatWidget::enterPressed(){
 QString ChatWidget::prepareMessageForSending(const QString & message) {
 	QString result;
 
-	// Replace HTML emoticons by text emoticons
-	//result = Emoticon2Text(message);
-	////
-
 	// Replace URLs with HTML based URLs
 	result = replaceTextURLs(message);
 	////

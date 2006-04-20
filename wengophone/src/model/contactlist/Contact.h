@@ -333,6 +333,14 @@ private:
 	/** Can't be used on a Contact.*/
 	void setIcon(const Picture & icon);
 
+
+	/**
+	 * Merges this Contact with another.
+	 *
+	 * @param contact the Contact to merge with
+	 */
+	void merge(const Contact & contact);
+
 	std::string _preferredNumber;
 
 	IMContact * _preferredIMContact;

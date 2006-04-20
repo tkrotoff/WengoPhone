@@ -108,9 +108,9 @@ private:
 
 	void initThreadSafe();
 
-	void messageReceivedEventHandler(IMChatSession & sender, const IMContact & from, const std::string & message);
+	void messageReceivedEventHandler(IMChatSession & sender);
 
-	void messageReceivedEventHandlerThreadSafe(IMChatSession & sender, const IMContact & from, const std::string  message);
+	void messageReceivedEventHandlerThreadSafe(IMChatSession & sender);
 
 	void typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state);
 

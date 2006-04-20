@@ -402,3 +402,91 @@ IMContact * Contact::getAvailableIMContact(IMChatSession & imChatSession) const 
 
 	return result;
 }
+
+void Contact::merge(const Contact & contact) {
+	if (_firstName.empty()) {
+		_firstName = contact._firstName;
+	}
+
+	if (_lastName.empty()) {
+		_lastName = contact._lastName;
+	}
+
+	if (_sex == EnumSex::SexUnknown) {
+		_sex = contact._sex;
+	}
+
+	//TODO: how can we detect that birthdate is not fulled
+	//_birthdate = contact._birthdate;
+
+	if (_website.empty()) {
+		_website = contact._website;
+	}
+
+	if (_company.empty()) {
+		_company= contact._company;
+	}
+
+	if (_wengoPhoneId.empty()) {
+		_wengoPhoneId = contact._wengoPhoneId;
+	}
+
+	if (_mobilePhone.empty()) {
+		_mobilePhone = contact._mobilePhone;
+	}
+
+	if (_homePhone.empty()) {
+		_homePhone = contact._homePhone;
+	}
+
+	if (_workPhone.empty()) {
+		_workPhone = contact._workPhone;
+	}
+
+	if (_otherPhone.empty()) {
+		_otherPhone = contact._otherPhone;
+	}
+
+	if (_fax.empty()) {
+		_fax = contact._fax;
+	}
+
+	if (_personalEmail.empty()) {
+		_personalEmail = contact._personalEmail;
+	}
+
+	if (_workEmail.empty()) {
+		_workEmail = contact._workEmail;
+	}
+
+	if (_otherEmail.empty()) {
+		_otherEmail = contact._otherEmail;
+	}
+
+	// TODO: how can we detect that streetAddress is not fulled
+	//_streetAddress = contact._streetAddress;
+
+	if (_notes.empty()) {
+		_notes = contact._notes;
+	}
+
+	if (!_preferredIMContact) {
+		_preferredIMContact = contact._preferredIMContact;
+	}
+
+	for (IMContactSet::const_iterator it = contact._imContactSet.begin();
+		it != contact._imContactSet.end();
+		++it) {
+		if (!hasIMContact(*it)) {
+			_imContactSet.insert(*it);
+		}
+	}
+
+	for (ContactGroupSet::const_iterator it = contact._contactGroupSet.begin();
+		it != contact._contactGroupSet.end();
+		++it) {
+		if (!isInContactGroup(*it)) {
+			addToContactGroup(*it);
+		}
+	}
+}

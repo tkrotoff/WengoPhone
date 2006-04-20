@@ -83,8 +83,28 @@ Contact & ContactList::createContact() {
 	return (Contact &)*it;
 }
 
-void ContactList::removeContact(const Contact & contact) {
-	//TODO: Remove the contact from all its groups
+void ContactList::removeContact(Contact & contact) {
+	// Remove the Contact from all its groups
+	for (Contact::ContactGroupSet::const_iterator it = contact._contactGroupSet.begin();
+		it != contact._contactGroupSet.end();
+		++it) {
+		_removeFromContactGroup(*it, contact);
+	}
+	////
+
+	// Remove all IMContacts
+
+	// We get a copy of the IMContactSet as it will modified while browsing it
+	IMContactSet imContactSet = contact.getIMContactSet();
+
+	for (IMContactSet::const_iterator it = imContactSet.begin();
+		it != imContactSet.end();
+		++it) {
+		removeIMContact(contact, contact.getIMContact(*it));
+	}
+	////
+
+	// Remove the Conatct from the ContactList
 	for (Contacts::iterator it = _contacts.begin();
 		it != _contacts.end();
 		++it) {
@@ -94,6 +114,7 @@ void ContactList::removeContact(const Contact & contact) {
 			break;
 		}
 	}
+	/////
 }
 
 void ContactList::addIMContact(Contact & contact, const IMContact & imContact) {
@@ -148,7 +169,7 @@ void ContactList::removeFromContactGroup(const std::string & groupName, Contact 
 	// due to cascading events.
 	IMContactSet imContactSet = contact.getIMContactSet();
 
-	// Add all IMContact of the Contact to the group
+	// Remove all IMContact of the Contact from the group
 	for (IMContactSet::const_iterator it = imContactSet.begin();
 		it != imContactSet.end();
 		++it) {
@@ -348,5 +369,34 @@ void ContactList::imAccountRemovedEventHandler(UserProfile & sender, IMAccount &
 				((IMContact &)*imContactIt).setIMAccount(NULL);
 			}
 		}
+	}
+}
+
+void ContactList::mergeContacts(Contact & dst, Contact & src) {
+	dst.merge(src);
+
+	// Remove the source Contact without removing it from linked IMContactLists
+	for (Contact::ContactGroupSet::const_iterator it = src._contactGroupSet.begin();
+		it != src._contactGroupSet.end();
+		++it) {
+		_removeFromContactGroup(*it, src);
+	}
+
+	for (Contacts::iterator it = _contacts.begin();
+		it != _contacts.end();
+		++it) {
+		if (src == (*it)) {
+			contactRemovedEvent(*this, (Contact &)*it);
+			_contacts.erase(it);
+			break;
+		}
+	}
+	////
+}
+
+void ContactList::moveContact(Contact & contact, const string & dst, const string & src) {
+	if (contact.isInContactGroup(src) && !contact.isInContactGroup(dst)) {
+		addToContactGroup(dst, contact);
+		removeFromContactGroup(src, contact);
 	}
 }

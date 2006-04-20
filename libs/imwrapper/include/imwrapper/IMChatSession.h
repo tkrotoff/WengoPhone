@@ -80,13 +80,12 @@ class IMChatSession {
 public:
 
 	/**
-	 * Emitted when a message has been received.
+	 * Emitted when a message has been received. The message is queued and must
+	 * be taken with getReceivedMessage()
 	 *
 	 * @param sender this class
-	 * @param from the person who sent the message
-	 * @param message the received message
 	 */
-	Event<void (IMChatSession & sender, const IMContact & from, const std::string & message)> messageReceivedEvent;
+	Event<void (IMChatSession & sender)> messageReceivedEvent;
 
 	/**
 	 * Emitted when a status message has been received. (e.g "Joe is connected")
@@ -146,11 +145,13 @@ public:
 
 	};
 
-	typedef std::list<IMChatMessage> IMChatMessageList;
-
-	IMChatMessageList & getReceivedIMChatMessageList() {
-		return _receivedIMChatMessageList;
-	}
+	/**
+	 * Gets the first message queued in IMChatSession. Delete it from the queue.
+	 *
+	 * @return the first message of the queue. NULL if no message in the queue.
+	 * The returned IMChatMessage must be freed by the called.
+	 */
+	IMChatMessage * getReceivedMessage();
 
 	/**
 	 * Constructs a chat session given a IMChat.
@@ -226,6 +227,8 @@ private:
 	IMContactSet _imContactSet;
 
 	IMChat & _imChat;
+
+	typedef std::list<IMChatMessage *> IMChatMessageList;
 
 	IMChatMessageList _receivedIMChatMessageList;
 

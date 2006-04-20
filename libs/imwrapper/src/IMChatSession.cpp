@@ -42,6 +42,11 @@ IMChatSession::IMChatSession(IMChat & imChat)
 }
 
 IMChatSession::~IMChatSession() {
+	for (IMChatMessageList::const_iterator it = _receivedIMChatMessageList.begin();
+		it != _receivedIMChatMessageList.end();
+		++it) {
+		delete (*it);
+	}
 }
 
 void IMChatSession::close() {
@@ -109,8 +114,8 @@ void IMChatSession::messageReceivedEventHandler(IMChat & sender, IMChatSession &
 		IMContact imContact(_imChat.getIMAccount(), contactId);
 		if (_imContactSet.find(imContact) != _imContactSet.end()) {
 			const IMContact & foundIMContact = *_imContactSet.find(imContact);
-			_receivedIMChatMessageList.push_back(IMChatMessage(foundIMContact, message));
-			messageReceivedEvent(*this, foundIMContact, message);
+			_receivedIMChatMessageList.push_back(new IMChatMessage(foundIMContact, message));
+			messageReceivedEvent(*this);
 		} else {
 			LOG_ERROR("this session does not know " + contactId);
 		}
@@ -181,4 +186,15 @@ bool IMChatSession::canDoMultiChat() {
 	} else {
 		return false;
 	}
+}
+
+IMChatSession::IMChatMessage * IMChatSession::getReceivedMessage() {
+	IMChatMessage * result = NULL;
+
+	if (_receivedIMChatMessageList.size() > 0) {
+		result = *_receivedIMChatMessageList.begin();
+		_receivedIMChatMessageList.pop_front();
+	}
+
+	return result;
 }
