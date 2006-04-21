@@ -71,6 +71,10 @@ public Q_SLOTS:
 
 	void sortUsers();
 
+private Q_SLOTS:
+
+	void groupRightClickedSlot(const QString & groupName);
+
 private:
 
 	void initThreadSafe();

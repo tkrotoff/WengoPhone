@@ -373,6 +373,17 @@ void ContactList::imAccountRemovedEventHandler(UserProfile & sender, IMAccount &
 	}
 }
 
+ContactGroup * ContactList::getContactGroup(const std::string & groupName) const {
+	ContactGroupSet::const_iterator it = _contactGroupSet.find(groupName);
+	if (it != _contactGroupSet.end()) {
+		ContactGroup group = (*it);
+		return &group;
+	} else {
+		LOG_DEBUG("this ContactGroup does not exist: " + groupName);
+		return NULL;
+	}
+}
+
 void ContactList::contactIconChangedEventHandler(PresenceHandler & sender, 
 	const IMContact & imContact, Picture icon) {
 

@@ -25,6 +25,8 @@
 #include <model/connect/ConnectHandler.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/profile/UserProfile.h>
+#include <model/history/History.h>
+#include <model/phonecall/SipAddress.h>
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -62,6 +64,7 @@
 #include <util/Logger.h>
 #include <QtBrowser.h>
 #include <cutil/global.h>
+#include <qtutil/QtWengoStyleLabel.h>
 
 #include <QtGui>
 #include <trayicon.h>
@@ -115,7 +118,7 @@ void QtWengoPhone::initThreadSafe() {
 	_callButton = _qtCallBar->getCallButton();
 
 	//hangUpButton
-	_hangUpButton = _qtCallBar->getHangUpButton();
+	_hangUpButton = _qtCallBar->getHangButton();
 
 /*
 	//callButton
@@ -124,10 +127,12 @@ void QtWengoPhone::initThreadSafe() {
 	//hangUpButton
 	_hangUpButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "hangUpButton");
 
-	//phoneComboBox
-	_phoneComboBox = Object::findChild<QComboBox *>(_wengoPhoneWindow, "phoneComboBox");
 */
+	//phoneComboBox
 	_phoneComboBox=_qtCallBar->getComboBox();
+	MousePressEventFilter * leftMouseFilter = new MousePressEventFilter(
+		this, SLOT(phoneComboBoxClicked()), Qt::LeftButton);
+	_phoneComboBox->installEventFilter(leftMouseFilter);
 
 	// IconBar
 	_iconBar = Object::findChild<QFrame *>(_wengoPhoneWindow,"iconBar");
@@ -273,6 +278,8 @@ void QtWengoPhone::initThreadSafe() {
 	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
 #endif
 
+	_qtHistoryWidget = NULL;
+
 	//Add the profile bar
 	QStackedWidget * profileBar = Object::findChild<QStackedWidget *>(_wengoPhoneWindow, "profileBar");
 	int profileBarIndex = profileBar->addWidget(new QtProfileBar(_cWengoPhone, _cWengoPhone.getWengoPhone().getCurrentUserProfile(),profileBar));
@@ -309,11 +316,12 @@ void QtWengoPhone::initThreadSafe() {
 
 void QtWengoPhone::initButtons() {
 	//callButton
-	connect(_qtCallBar, SIGNAL(callBarButtonClicked()), SLOT(callButtonClicked()));
+	connect(_qtCallBar, SIGNAL(ButtonClicked()), SLOT(callButtonClicked()));
+	connect(_qtCallBar, SIGNAL(OffClicked()), SLOT(callButtonClicked()));
 	enableCallButton();
 
 	//hangUpButton
-	//_hangUpButton->setEnabled(false);
+	_hangUpButton->setEnabled(false);
 
 	//phoneComboBox
 	connect(_phoneComboBox, SIGNAL(activated(int)), SLOT(callButtonClicked()));
@@ -321,10 +329,9 @@ void QtWengoPhone::initButtons() {
 }
 
 void QtWengoPhone::enableCallButton() {
-	/*
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	_callButton->setEnabled(!phoneNumber.empty());
-	*/
+	//_videoCallButton->setEnabled(!phoneNumber.empty());
 }
 
 void QtWengoPhone::callButtonClicked() {
@@ -369,6 +376,7 @@ void QtWengoPhone::setContactList(QtContactList * qtContactList) {
 void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
 	QWidget * tabHistory = Object::findChild<QWidget *>(_tabWidget,"tabHistory");
 	Widget::createLayout(tabHistory)->addWidget(qtHistoryWidget);
+	_qtHistoryWidget = qtHistoryWidget;
 }
 
 void QtWengoPhone::setPhoneCall(QtContactCallListWidget * qtContactCallListWidget) {
@@ -783,4 +791,18 @@ void QtWengoPhone::eraseHistorySms() {
 
 void QtWengoPhone::eraseHistory() {
 	_cWengoPhone.getCHistory().clearAllEntries();
+}
+
+void QtWengoPhone::phoneComboBoxClicked() {
+	//if _qtHistoryWidget is set it means that History has been created
+	if( _qtHistoryWidget ) {
+		HistoryMementoCollection * mementos = _cWengoPhone.getCHistory().getMementos(HistoryMemento::OutgoingCall, 10);
+		_phoneComboBox->clear();
+		_phoneComboBox->clearEditText();
+		for(HistoryMap::iterator it = mementos->begin(); it != mementos->end(); it++ ) {
+			HistoryMemento * memento = (*it).second;
+			SipAddress sipAddress(memento->getPeer());
+			_phoneComboBox->addItem(QString::fromStdString(sipAddress.getUserName()));
+		}
+	}
 }

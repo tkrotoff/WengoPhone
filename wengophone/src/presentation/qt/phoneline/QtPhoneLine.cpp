@@ -28,6 +28,7 @@
 #include <control/CWengoPhone.h>
 
 #include <util/Logger.h>
+#include <qtutil/QtWengoStyleLabel.h>
 
 #include <QtGui>
 

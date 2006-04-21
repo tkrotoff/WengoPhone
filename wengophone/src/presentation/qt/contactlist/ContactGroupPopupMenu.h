@@ -71,6 +71,13 @@ private Q_SLOTS:
 	 */
 	void renameContactGroup() const;
 
+	/**
+	 * Sends a SMS to a contact group.
+	 *
+	 * The user clicks on "Send SMS" in the menu.
+	 */
+	void sendSms();
+
 private:
 
 	const ContactGroup * _contactGroup;

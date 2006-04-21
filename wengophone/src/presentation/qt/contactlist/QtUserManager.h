@@ -75,6 +75,12 @@ public Q_SLOTS:
 
 	void startWengoCall(bool checked);
 
+	void setMouseButton(int button);
+
+Q_SIGNALS:
+
+	void groupRightClicked(const QString & groupName);
+	
 protected:
 
 	void safeRemoveContact(CContact & cContact);
@@ -89,14 +95,13 @@ protected:
 
 	void removeFromHidenContact(const CContact & cContact);
 
-	bool _hideUsers;
-
-	bool _sortUsers;
-
-
 	QMenu * createMenu();
 
 	QList<QtHidenContact *>  clearList(QList<QtHidenContact *> list);
+
+	bool _hideUsers;
+
+	bool _sortUsers;
 
 	QTreeWidget * _tree;
 
@@ -118,7 +123,19 @@ protected:
 
 	CWengoPhone & _cWengoPhone;
 
+	int _button;
+};
+
+class UserManagerEventManager : public QObject {
+	Q_OBJECT
+public:
+	UserManagerEventManager(QTreeWidget * target, QtUserManager * userManager);
+	
+protected:
+	bool eventFilter(QObject *obj, QEvent *event);
+	
+private:
+	QtUserManager * _userManager;
 };
 
 #endif
-

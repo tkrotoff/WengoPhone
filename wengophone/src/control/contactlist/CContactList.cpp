@@ -79,3 +79,7 @@ StringList CContactList::getContactGroupStringList() const {
 
 	return result;
 }
+
+ContactGroup * CContactList::getContactGroup(const std::string & groupName) const {
+	return _contactList.getContactGroup(groupName);
+}

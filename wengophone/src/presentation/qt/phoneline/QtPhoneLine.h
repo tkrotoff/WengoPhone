@@ -29,8 +29,7 @@ class CWengoPhone;
 class CPhoneCall;
 class QtPhoneCall;
 class QtWengoPhone;
-
-class QPushButton;
+class QtWengoStyleLabel;
 
 class QtPhoneLine : public QObjectThreadSafe, public PPhoneLine {
 	Q_OBJECT
@@ -70,9 +69,9 @@ private:
 
 	QtWengoPhone * _qtWengoPhone;
 
-	QPushButton * _hangUpButton;
+	QtWengoStyleLabel * _hangUpButton;
 
-	QPushButton * _callButton;
+	QtWengoStyleLabel * _callButton;
 
 	CPhoneCall * _activeCPhoneCall;
 };

@@ -17,8 +17,8 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-#ifndef QTPROFILELABEL_H
-#define QTPROFILELABEL_H
+#ifndef QTWENGOSTYLELABEL_H
+#define QTWENGOSTYLELABEL_H
 
 #include <QtGui>
 

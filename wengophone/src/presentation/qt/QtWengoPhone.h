@@ -45,6 +45,7 @@ class QtLogin;
 class QtToaster;
 class QtStatusBar;
 class QtCallBar;
+class QtWengoStyleLabel;
 
 class TrayIcon;
 
@@ -100,11 +101,11 @@ public:
 
 	QtStatusBar & getStatusBar() const;
 
-	QPushButton * getCallButton() const {
+	QtWengoStyleLabel * getCallButton() const {
 		return _callButton;
 	}
 
-	QPushButton * getHangUpButton() const {
+	QtWengoStyleLabel * getHangUpButton() const {
 		return _hangUpButton;
 	}
 
@@ -182,6 +183,8 @@ private Q_SLOTS:
 
 	void eraseHistory();
 
+	void phoneComboBoxClicked();
+
 private:
 
 	void initThreadSafe();
@@ -224,9 +227,9 @@ private:
 
 	QMainWindow * _wengoPhoneWindow;
 
-	QPushButton * _callButton;
+	QtWengoStyleLabel * _callButton;
 
-	QPushButton * _hangUpButton;
+	QtWengoStyleLabel * _hangUpButton;
 
 	QComboBox * _phoneComboBox;
 
@@ -246,6 +249,8 @@ private:
 
 	QtContactList *_contactList;
 
+	QtHistoryWidget * _qtHistoryWidget;
+	
 	QtContactCallListWidget * _contactCallListWidget;
 
 	QFrame * _iconBar;

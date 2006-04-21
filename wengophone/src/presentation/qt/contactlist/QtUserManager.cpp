@@ -25,6 +25,20 @@
 #include "QtContactPixmap.h"
 #include "../login/QtEditContactProfile.h"
 
+UserManagerEventManager::UserManagerEventManager(QTreeWidget * target, QtUserManager * userManager) 
+	: QObject(target), _userManager(userManager) {
+	target->viewport()->installEventFilter(this);
+}
+
+bool UserManagerEventManager::eventFilter(QObject *obj, QEvent *event) {
+	if (event->type() == QEvent::MouseButtonPress) {
+		QMouseEvent * mouseEvent = static_cast<QMouseEvent *>(event);
+		_userManager->setMouseButton((int)(mouseEvent->button()));
+		return QObject::eventFilter(obj, event);
+	}
+	return QObject::eventFilter(obj, event);
+}
+
 QtUserManager::QtUserManager(CWengoPhone & cWengoPhone, QObject * parent, QTreeWidget * target)
 : QObject(parent), _cWengoPhone(cWengoPhone)
 {
@@ -38,6 +52,8 @@ QtUserManager::QtUserManager(CWengoPhone & cWengoPhone, QObject * parent, QTreeW
 	QtUserList::getInstance()->setTreeWidget(target);
 	target->setMouseTracking(true);
 	UserTreeEventManager * dnd = new UserTreeEventManager(this,target);
+
+	UserManagerEventManager * userManagerEventManager = new UserManagerEventManager(target, this);
 
 	connect (target,SIGNAL(itemSelectionChanged ()),this,SLOT(treeViewSelectionChanged()));
 	connect (target,SIGNAL(itemClicked (QTreeWidgetItem *,int )),this,SLOT(itemClicked(QTreeWidgetItem *,int)));
@@ -175,52 +191,61 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
 	QRect widgetSize = _tree->rect();
 	QPoint  mousepos = _tree->mapFromGlobal(QCursor::pos());
 
-	if (  ! item->parent() )
-	{
-		if (_tree->isItemExpanded(item) )
-			_tree->collapseItem ( item );
-		else
-			_tree->expandItem ( item );
-	}
+	if(_button == (int)Qt::LeftButton ) {	
 
-	ul->mouseClicked(item->text(0),mousepos,widgetSize);
+		if (  ! item->parent() )
+		{
+			if (_tree->isItemExpanded(item) )
+				_tree->collapseItem ( item );
+			else
+				_tree->expandItem ( item );
+		}
 
-	if (mousepos.x() > ul->getIconsStartPosition(item->text(0)) )
-		return;
+		ul->mouseClicked(item->text(0),mousepos,widgetSize);
 
-	if ( ul->getButton(item->text(0)) == Qt::RightButton)
-	{
-		if ( ! _menu ){
-			_menu = createMenu();
-			_menu->popup(QCursor::pos());
+		if (mousepos.x() > ul->getIconsStartPosition(item->text(0)) )
+			return;
+
+		if ( ul->getButton(item->text(0)) == Qt::RightButton)
+		{
+			if ( ! _menu ){
+				_menu = createMenu();
+				_menu->popup(QCursor::pos());
+			}
+			else
+			{
+				delete _menu;
+				_menu = createMenu();
+				_menu->popup(QCursor::pos());
+			}
+			return;
+		}
+
+		if ( _previous != NULL )
+		{
+			closeUserInfo();
+			_previous = item;
+
+			if ( item->parent()){
+				openUserInfo(item);
+			}
+
 		}
 		else
 		{
-			delete _menu;
-			_menu = createMenu();
-			_menu->popup(QCursor::pos());
+			_previous = item;
+			if ( item->parent() ){
+				openUserInfo( item);
+			}
 		}
-		return;
-	}
-
-	if ( _previous != NULL )
-	{
-		closeUserInfo();
-		_previous = item;
-
-		if ( item->parent()){
-			openUserInfo(item);
-		}
-
-	}
-	else
-	{
-		_previous = item;
-		if ( item->parent() ){
-			openUserInfo( item);
+		_tree->viewport()->update();
+	} else if( _button == (int)Qt::RightButton ) {
+		
+		//item is a group
+		if ( ! item->parent() ) {
+			groupRightClicked(item->text(0));
 		}
 	}
-	_tree->viewport()->update();
 }
 
 QList<QtHidenContact *> QtUserManager::clearList(QList<QtHidenContact *> list){
@@ -570,4 +595,8 @@ void QtUserManager::removeFromHidenContact(const CContact & cContact){
 			break;
 		}
 	}
+}
+
+void QtUserManager::setMouseButton(int button) {
+	_button = button;
 }

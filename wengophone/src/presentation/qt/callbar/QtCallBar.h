@@ -20,14 +20,12 @@
 #ifndef QTCALLBAR_H
 #define QTCALLBAR_H
 
-#include <qtutil/QtWengoStyleLabel.h>
+class QtWengoStyleLabel;
 
 #include <QtGui>
 
-class QtCallBar : public QFrame
-{
+class QtCallBar : public QFrame {
 	Q_OBJECT
-
 public:
 
 	QtCallBar(QWidget * parent  = 0, Qt::WFlags f = 0);
@@ -45,7 +43,9 @@ public:
 Q_SIGNALS:
 
 	void VideoClicked();
+
 	void OffClicked();
+
 	void ButtonClicked();
 
 protected:
@@ -60,13 +60,12 @@ protected:
 
 	QComboBox * _phoneComboBox;
 
-
-
 protected Q_SLOTS:
 
+	void callBarButtonVideoClicked();
+
 	void callBarButtonOffClicked();
+
 	void callBarButtonClicked();
-
 };
-
 #endif

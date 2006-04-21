@@ -20,9 +20,11 @@
 //#include "QtProfileLabel.h"
 #include "QtCallBar.h"
 
-QtCallBar::QtCallBar(QWidget * parent , Qt::WFlags f) :
-QFrame(parent,f)
-{
+#include <qtutil/QtWengoStyleLabel.h>
+#include <qtutil/MouseEventFilter.h>
+
+QtCallBar::QtCallBar(QWidget * parent , Qt::WFlags f) : QFrame(parent,f) {
+	
 	setFrameShape(QFrame::NoFrame);
 	_callBarButton = new QtWengoStyleLabel(this);
 	_callBarButton->setPixmaps(
@@ -88,16 +90,21 @@ QFrame(parent,f)
 
 	connect (_callBarButton, SIGNAL(clicked()),SLOT(callBarButtonClicked()));
 	connect (_callBarButtonOff, SIGNAL(clicked()),SLOT(callBarButtonOffClicked()));
+	connect (_callBarButtonVideo, SIGNAL(clicked()),SLOT(callBarButtonVideoClicked()));
+}
+
+void QtCallBar::callBarButtonVideoClicked() {
+	VideoClicked();
 }
 
 void QtCallBar::callBarButtonOffClicked(){
 	OffClicked();
 }
 
-void QtCallBar::callBarButtonClicked(){
+void QtCallBar::callBarButtonClicked() {
 	ButtonClicked();
 }
 
-QComboBox * QtCallBar::getComboBox(){
+QComboBox * QtCallBar::getComboBox() {
 	return _phoneComboBox;
 }

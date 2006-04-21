@@ -44,6 +44,8 @@ public:
 
 	StringList getContactGroupStringList() const;
 
+	ContactGroup * getContactGroup(const std::string & groupName) const;
+
 private:
 
 	void contactAddedEventHandler(ContactList & sender, Contact & contact);

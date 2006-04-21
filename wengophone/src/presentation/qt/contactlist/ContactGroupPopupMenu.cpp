@@ -23,6 +23,9 @@
 
 #include <QtGui>
 
+#include <util/Logger.h>
+#include <util/StringList.h>
+
 #include <iostream>
 using namespace std;
 
@@ -31,6 +34,7 @@ ContactGroupPopupMenu::ContactGroupPopupMenu(QWidget * parent) : QMenu(parent) {
 
 	addAction(QIcon(":/pics/contact_remove.png"), tr("Remove Contact Group"), this, SLOT(removeContactGroup()));
 	addAction(tr("Rename Contact Group"), this, SLOT(renameContactGroup()));
+	addAction(tr("Send SMS to group"), this, SLOT(sendSms()));
 }
 
 void ContactGroupPopupMenu::showMenu(const ContactGroup * contactGroup) {
@@ -48,4 +52,13 @@ void ContactGroupPopupMenu::removeContactGroup() const {
 
 void ContactGroupPopupMenu::renameContactGroup() const {
 	
+}
+
+void ContactGroupPopupMenu::sendSms() {
+/*
+	StringList list = _contactGroup->getMobilePhoneList();
+	for(unsigned int i = 0; i < list.size(); i++) {
+		LOG_DEBUG("mobile number: " + list[i] + "\n");
+	}
+*/
 }

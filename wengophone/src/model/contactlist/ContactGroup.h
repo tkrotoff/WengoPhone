@@ -24,6 +24,7 @@
 #include <thread/Mutex.h>
 
 #include <string>
+#include <list>
 
 class Contact;
 class ContactList;
@@ -93,7 +94,13 @@ public:
 	unsigned size() const {
 		return _contactList.size();
 	}
-
+	
+	/**
+	 * @return a list containing all mobile phone number
+	 */
+	std::list<std::string> getMobilePhoneList() const;
+	
+	
 	/**
 	 * Compare two groups.
 	 *

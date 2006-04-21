@@ -97,5 +97,6 @@ void QtConfigPanel::configChangedEventHandler() {
 
 void QtConfigPanel::configChangedEventHandlerThreadSafe() {
 	//enableVideoCheckBox
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	_ui->enableVideoCheckBox->setChecked(config.getVideoEnable());
 }

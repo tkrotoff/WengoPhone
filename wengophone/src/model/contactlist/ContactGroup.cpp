@@ -76,3 +76,17 @@ void ContactGroup::setName(const std::string & groupName) {
 	_groupName = groupName;
 	contactGroupModifiedEvent(*this);
 }
+
+std::list<std::string> ContactGroup::getMobilePhoneList() const {
+	std::list<std::string> list;
+	for (ContactVector::const_iterator it = _contactList.begin();
+		it != _contactList.end(); ++it) {
+		
+		std::string getMobilePhone = (*it)->getMobilePhone();
+		if( getMobilePhone != "" ) {
+			list.push_front(getMobilePhone);
+		}
+	}
+	return list;
+}
+

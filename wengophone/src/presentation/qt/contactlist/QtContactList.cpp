@@ -112,6 +112,8 @@ void QtContactList::initThreadSafe() {
 	_contactPopupMenu = new ContactPopupMenu(_treeWidget, _cContactList.getCWengoPhone().getWengoPhone());
 	_contactGroupPopupMenu = new ContactGroupPopupMenu(_treeWidget);
 
+	connect(_usermanager, SIGNAL(groupRightClicked(const QString &)), SLOT(groupRightClickedSlot(const QString &)));
+
 	//Connect events
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cContactList.getCWengoPhone().getPresentation();
 	qtWengoPhone->setContactList(this);
@@ -238,4 +240,8 @@ void QtContactList::sortUsers(){
 }
 CContactList & QtContactList::getContactList() const{
 	return _cContactList;
+}
+
+void QtContactList::groupRightClickedSlot(const QString & groupName) {
+	_contactGroupPopupMenu->showMenu(_cContactList.getContactGroup(groupName.toStdString()));
 }
