@@ -280,34 +280,34 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		p->newIMChatSessionCreatedEvent(*p, *imChatSession);
 	}
 
-	/* Julien : typing state support */
-	if (strcmp(info->ctype, "typingstate") == 0)
-	{
-		IMChat::TypingState state;
-
-		if (strcmp(info->subtype, "typing") == 0)
-			state = IMChat::TypingStateTyping;
-		else if (strcmp(info->subtype, "stoptyping") == 0)
-			state = IMChat::TypingStateStopTyping;
-		else
-			state = IMChat::TypingStateNotTyping;
-
-		p->typingStateChangedEvent(*p, *imChatSession, from, state);
-		return;
-	}
-	else if (strcmp(info->ctype, "buddyicon") == 0)
-	{
-		if (info->subtype && *info->subtype)
-			p->contactIconChangedEvent(*p, from, info->subtype);
-
-		return;
-	}
-
 	switch(info->event) {
 	case phMsgNew: {
 		string content = info->content;
 		p->contactAddedEvent(*p, *imChatSession, from);
-		p->messageReceivedEvent(*p, *imChatSession, from, content);
+
+		if (strcmp(info->ctype, "typingstate") == 0)
+		{
+			IMChat::TypingState state;
+
+			if (strcmp(info->subtype, "typing") == 0)
+				state = IMChat::TypingStateTyping;
+			else if (strcmp(info->subtype, "stoptyping") == 0)
+				state = IMChat::TypingStateStopTyping;
+			else
+				state = IMChat::TypingStateNotTyping;
+
+			p->typingStateChangedEvent(*p, *imChatSession, from, state);
+		}
+		else if (strcmp(info->ctype, "buddyicon") == 0)
+		{
+			if (info->subtype && *info->subtype)
+				p->contactIconChangedEvent(*p, from, info->subtype);
+		}
+		else
+		{
+			p->messageReceivedEvent(*p, *imChatSession, from, content);
+		}
+		
 		break;
 	}
 
