@@ -43,6 +43,8 @@ public:
 
 	void setBackgroundColor(const QColor & color);
 
+	void setTextAlignment(int alignment) {_alignment = alignment;};
+
 Q_SIGNALS:
 
 	void clicked();
@@ -87,6 +89,8 @@ protected:
 	bool _pressed;
 
 	QWidget * _parent;
+
+	int _alignment;
 
 };
 

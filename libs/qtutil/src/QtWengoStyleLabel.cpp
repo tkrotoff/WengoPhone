@@ -30,6 +30,8 @@ QLabel(parent,f){
 	_backgroundColor = _parent->palette().color( QPalette::Window);
 	// Default text color
 	_textColor = _parent->palette().color(QPalette::Text);
+
+	_alignment = Qt::AlignCenter;
 }
 
 QtWengoStyleLabel::~QtWengoStyleLabel ( ){
@@ -114,7 +116,7 @@ void QtWengoStyleLabel::drawText(QPainter * painter){
 	painter->save();
 
 	painter->setPen(_textColor);
-	painter->drawText ( rect, Qt::AlignCenter, this->text(), &rect );
+	painter->drawText ( rect, _alignment , this->text(), &rect );
 
 	painter->restore();
 
