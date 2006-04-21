@@ -33,13 +33,14 @@
  *
  * This class helps to implement the subject part of the observer design pattern.
  *
- * Uses boost::function in order to simplify the use of the pattern.
+ * Uses boost::function and boost::signal in order to simplify the use of the pattern.
  * Works a bit like the C# observer pattern that uses delegates and events.
  *
- * Same syntax as boost::signal. boost::signal cannot be used directly since
- * there is an incompatible issue with the Qt library version 3.3.4.
- *
  * You can also connect an Event to another.
+ *
+ * An class Trackable is available for automatic disconnection when an object is being destroyed.
+ * boost::signal are not thread safe:
+ * http://boost.org/doc/html/signals/s04.html#id2738867
  *
  * Example (the boost::signal syntax is commented so that one can compare both):
  * <pre>
@@ -93,6 +94,7 @@
  *
  * A good pratice is to always have the sender as the first parameter of the Event.
  *
+ * @see Trackable
  * @author Tanguy Krotoff
  */
 template<typename Signature>
@@ -100,35 +102,61 @@ class Event : NonCopyable, public boost::signal<Signature> {
 public:
 
 	/**
-	 * Connects a slot to this signal.
+	 * Connects a slot to this signal (=event).
 	 *
 	 * Provides unicity when connecting a slot to a signal.
 	 * Two identical slots cannot be connected, only one will be:
 	 * this method checks first if the same slot was not connected already.
 	 *
 	 * @param slot callback function
-	 * @return connection
+	 * @return connection object
 	 */
 	template<typename Slot>
 	boost::signals::connection operator+=(const Slot & slot) {
 		boost::signals::connection c;
 		if (!alreadyConnected(slot)) {
 			//The slot is not connected to the signal
-			_slotList.push_back(slot);
 			c = connect(slot);
+			SlotConnection sc;
+			sc.connection = c;
+			sc.slot = slot;
+			_slotList.push_back(sc);
 		}
 		//The slot is already connected to the signal
 		return c;
 	}
 
 	/**
-	 * Connects a signal to another signal.
+	 * Connects a signal to another signal (=event).
+	 *
+	 * Does not check if the signal is already connected, does not
+	 * provide unicity connection.
 	 *
 	 * @param event signal to connect
-	 * @return connection
+	 * @return connection object
 	 */
 	boost::signals::connection operator+=(const Event & event) {
 		return connect(event);
+	}
+
+	/**
+	 * Disconnects a slot from a signal (=event).
+	 *
+	 * Slot comparison does not always work properly,
+	 * check http://boost.org/doc/html/function/faq.html#id2699084
+	 *
+	 * @param slot callback function to disconnect from the signal
+	 */
+	template<typename Slot>
+	void operator-=(const Slot & slot) {
+		for (typename SlotList::iterator it = _slotList.begin(); it != _slotList.end(); it++) {
+			if ((*it).slot == slot)
+				break;
+		}
+		if (it != _slotList.end()) {
+			(*it).connection.disconnect();
+			_slotList.erase(it);
+		}
 	}
 
 private:
@@ -136,20 +164,30 @@ private:
 	/**
 	 * Checks if a slot is already present inside the slot list.
 	 *
-	 * @param observer callback function
+	 * If a slot is already present inside the slot list this means the slot
+	 * is already connected to the signal.
+	 *
+	 * @param slot callback function
 	 * @return true if the slot is present inside the slot list; false otherwise
 	 */
 	template<typename Slot>
 	bool alreadyConnected(const Slot & slot) {
-		typename SlotList::iterator it = std::find(_slotList.begin(), _slotList.end(), slot);
-		if (it != _slotList.end()) {
-			return true;
+		for (typename SlotList::iterator it = _slotList.begin(); it != _slotList.end(); it++) {
+			if ((*it).slot == slot) {
+				return true;
+			}
 		}
 		return false;
 	}
 
+	/** Associates a slot with a connection. */
+	struct SlotConnection {
+		boost::function<Signature> slot;
+		boost::signals::connection connection;
+	};
+
 	/** Type list of slot. */
-	typedef std::list<boost::function<Signature> > SlotList;
+	typedef std::list<SlotConnection> SlotList;
 
 	/**
 	 * The vector/collection/list of slot.

@@ -72,13 +72,13 @@ int main(void) {
 
 	timer.tick();
 
-	delete clock;
+	//delete clock;
 
 	//Print: Second Event
 	//       Clock: Second Event
 	//       Clock: Minute Event
 
-	//timer.minuteEvent -= boost::bind(&Clock::showTime, clock, _1, _2);
+	timer.minuteEvent -= boost::bind(&Clock::showTime, clock, _1, _2);
 	//timer.minuteEvent.disconnect(&Clock::showTime);
 	timer.tick();
 	//Print: Second Event
