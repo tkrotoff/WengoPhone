@@ -19,7 +19,7 @@
 
 #include <sound/AudioDevice.h>
 
-#include "../win32/Win32VolumeCOntrol.h"
+#include "../win32/Win32VolumeControl.h"
 
 #include <util/StringList.h>
 #include <util/Logger.h>
