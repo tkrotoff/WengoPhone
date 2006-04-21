@@ -165,36 +165,38 @@ void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	IMChatSession::IMChatMessage * imChatMessage = sender.getReceivedMessage();
-	const IMContact & from = imChatMessage->getIMContact();
-	std::string message = imChatMessage->getMessage();
-	delete imChatMessage;
+	if (imChatMessage) {
+		const IMContact & from = imChatMessage->getIMContact();
+		std::string message = imChatMessage->getMessage();
+		delete imChatMessage;
 
-    QString senderName = QString::fromStdString(from.getContactId());
+		QString senderName = QString::fromStdString(from.getContactId());
 
-	QString msg = QString::fromUtf8(message.c_str());
+		QString msg = QString::fromUtf8(message.c_str());
 
-    _dialog->show();
-	int tabs=_tabWidget->count();
+		_dialog->show();
+		int tabs=_tabWidget->count();
 
-	for (int i=0; i<tabs;i++)
-	{
-		ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
-		if ( widget->getSessionId() == sender.getId() )
+		for (int i=0; i<tabs;i++)
 		{
-			_chatWidget = qobject_cast<ChatWidget *>(_tabWidget->widget(i));
-			_chatWidget->addToHistory(senderName,msg);
-			if ( _tabWidget->currentWidget() != _chatWidget )
-				_tabWidget->setBlinkingTab(i);
+			ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
+			if ( widget->getSessionId() == sender.getId() )
+			{
+				_chatWidget = qobject_cast<ChatWidget *>(_tabWidget->widget(i));
+				_chatWidget->addToHistory(senderName,msg);
+				if ( _tabWidget->currentWidget() != _chatWidget )
+					_tabWidget->setBlinkingTab(i);
 
-			if ( config.getNotificationShowBlinkingWindow()){
-				_dialog->activateWindow();
+				if ( config.getNotificationShowBlinkingWindow()){
+					_dialog->activateWindow();
+				}
+				if ( config.getNotificationShowWindowOnTop()){
+					_dialog->show();
+					_dialog->raise();
+					QApplication::setActiveWindow ( _dialog );
+				}
+				return;
 			}
-			if ( config.getNotificationShowWindowOnTop()){
-				_dialog->show();
-				_dialog->raise();
-				QApplication::setActiveWindow ( _dialog );
-			}
-			return;
 		}
 	}
 }
