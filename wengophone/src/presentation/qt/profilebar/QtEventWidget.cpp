@@ -60,5 +60,9 @@ void QtEventWidget::addMessage(const QString & nickName){
 }
 
 void QtEventWidget::setNewMessages(int count) {
-	//TODO: set _newMessagesLabel text
+	if( count ) {
+		_newMessagesLabel->setText( QString("%1").arg(count) + tr(" new Voice Mail") );
+	} else {
+		_newMessagesLabel->setText( tr("No new Voice Mail") );
+	}
 }
