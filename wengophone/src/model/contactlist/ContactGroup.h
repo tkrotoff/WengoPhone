@@ -137,8 +137,7 @@ private:
 	/** Name of the ContactGroup. */
 	std::string _groupName;
 
-	Mutex _mutex;
-
+	mutable Mutex _mutex;
 };
 
 #endif	//CONTACTGROUP_H
