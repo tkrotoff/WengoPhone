@@ -33,6 +33,7 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 
+#include "statusbar/QtStatusBar.h"
 #include "phoneline/QtPhoneLine.h"
 #include "phonecall/QtPhoneCall.h"
 #include "phonecall/QtContactCallListWidget.h"
@@ -52,6 +53,7 @@
 #include "history/QtHistoryWidget.h"
 #include "toaster/QtToaster.h"
 #include "callbar/QtCallBar.h"
+
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
 #include <qtutil/Widget.h>
@@ -85,8 +87,6 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 
 	_cWengoPhone.loginStateChangedEvent +=
 		boost::bind(&QtWengoPhone::loginStateChangedEventHandler, this, _1, _2);
-	_cWengoPhone.networkDiscoveryStateChangedEvent +=
-		boost::bind(&QtWengoPhone::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 	_cWengoPhone.noAccountAvailableEvent +=
 		boost::bind(&QtWengoPhone::noAccountAvailableEventHandler, this, _1);
 	_cWengoPhone.proxyNeedsAuthenticationEvent +=
@@ -110,6 +110,12 @@ void QtWengoPhone::initThreadSafe() {
 	callBarLayout->addWidget(_qtCallBar);
 	callBarLayout->setMargin(0);
 	callBarLayout->setSpacing(0);
+
+	//callButton
+	_callButton = _qtCallBar->getCallButton();
+
+	//hangUpButton
+	_hangUpButton = _qtCallBar->getHangUpButton();
 
 /*
 	//callButton
@@ -285,24 +291,9 @@ void QtWengoPhone::initThreadSafe() {
 	MousePressEventFilter * mousePressEventFilter = new MousePressEventFilter(this, SLOT(expandConfigPanel()));
 	configPanelLabel->installEventFilter(mousePressEventFilter);
 
-
 	//Status bar
-	_statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");
-/*
-	QPalette statusBarPalette = _statusBar->palette();
-	statusBarPalette.setColor(QPalette::Window,QColor(60,60,60));
-	_statusBar->setPalette(statusBarPalette);
-	_statusBar->setAutoFillBackground(true);
-*/
-	_internetConnectionStateLabel = new QLabel(_statusBar);
-	_internetConnectionStateLabel->setPixmap(QPixmap(":/pics/statusbar_connect_error.png"));
-	_internetConnectionStateLabel->setToolTip(tr("Not connected"));
-	_statusBar->addPermanentWidget(_internetConnectionStateLabel);
-
-	_phoneLineStateLabel = new QLabel(_statusBar);
-	_phoneLineStateLabel->setPixmap(QPixmap(":/pics/statusbar_sip_error.png"));
-	_phoneLineStateLabel->setToolTip(tr("Not connected"));
-	_statusBar->addPermanentWidget(_phoneLineStateLabel);
+	QStatusBar * statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");
+	_statusBar = new QtStatusBar(_cWengoPhone, statusBar);
 
 	//FIXME: can i create the widget here ?
 	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
@@ -337,13 +328,11 @@ void QtWengoPhone::enableCallButton() {
 }
 
 void QtWengoPhone::callButtonClicked() {
-
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	if (!phoneNumber.empty()) {
 		_cWengoPhone.makeCall(phoneNumber);
 	}
 	_phoneComboBox->clearEditText();
-
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
@@ -363,7 +352,6 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 }
 
 void QtWengoPhone::showLoginWindow() {
-
 	int ret = _qtLogin->exec();
 
 	if (ret == QDialog::Accepted) {
@@ -399,6 +387,10 @@ QtSms * QtWengoPhone::getSms() const {
 
 QtLogin * QtWengoPhone::getLogin() const {
 	return _qtLogin;
+}
+
+QtStatusBar & QtWengoPhone::getStatusBar() const {
+	return *_statusBar;
 }
 
 void QtWengoPhone::setSubscribe(QtSubscribe * qtSubscribe) {
@@ -470,50 +462,6 @@ void QtWengoPhone::noAccountAvailableEventHandlerThreadSafe(UserProfile & sender
 	showLoginWindow();
 }
 
-void QtWengoPhone::networkDiscoveryStateChangedEventHandler(SipAccount & sender, SipAccount::NetworkDiscoveryState state) {
-	typedef PostEvent2<void (SipAccount &, SipAccount::NetworkDiscoveryState), SipAccount &, SipAccount::NetworkDiscoveryState> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::networkDiscoveryStateChangedEventHandlerThreadSafe, this, _1, _2), sender, state);
-	postEvent(event);
-}
-
-void QtWengoPhone::networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::NetworkDiscoveryState state) {
-	QString tooltip;
-	QString pixmap;
-
-	switch (state) {
-	case SipAccount::NetworkDiscoveryStateOk:
-		tooltip = tr("Internet connection OK");
-		pixmap = ":/pics/statusbar_connect.png";
-		break;
-
-	case SipAccount::NetworkDiscoveryStateHTTPError:
-		tooltip = tr("Internet connection error");
-		pixmap = ":/pics/statusbar_connect_error.png";
-		break;
-
-	case SipAccount::NetworkDiscoveryStateSIPError:
-		tooltip = tr("Internet connection error");
-		pixmap = ":/pics/statusbar_connect_error.png";
-		break;
-
-	case SipAccount::NetworkDiscoveryStateProxyNeedsAuthentication:
-		tooltip = tr("Internet connection error");
-		pixmap = ":/pics/statusbar_connect_error.png";
-		break;
-
-	case SipAccount::NetworkDiscoveryStateError:
-		tooltip = tr("Internet connection error");
-		pixmap = ":/pics/statusbar_connect_error.png";
-		break;
-
-	default:
-		LOG_FATAL("unknown state=" + String::fromNumber(state));
-	};
-
-	_internetConnectionStateLabel->setPixmap(pixmap);
-	_internetConnectionStateLabel->setToolTip(tooltip);
-}
-
 void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFile) {
 	PhoneCall * phoneCall = _cWengoPhone.getActivePhoneCall();
 	if (phoneCall) {
@@ -536,10 +484,6 @@ void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFi
 	} else {
 		_phoneComboBox->setEditText(_phoneComboBox->currentText() + QString::fromStdString(tone));
 	}
-}
-
-void QtWengoPhone::showStatusBarMessage(const std::string & message) {
-	_statusBar->showMessage(QString::fromStdString(message));
 }
 
 void QtWengoPhone::showWengoAccount() {

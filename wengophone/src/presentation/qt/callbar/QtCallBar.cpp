@@ -20,8 +20,6 @@
 //#include "QtProfileLabel.h"
 #include "QtCallBar.h"
 
-#include <qtutil/QtWengoStyleLabel.h>
-
 QtCallBar::QtCallBar(QWidget * parent , Qt::WFlags f) :
 QFrame(parent,f)
 {

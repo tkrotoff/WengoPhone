@@ -21,12 +21,11 @@
 
 #include <presentation/qt/phonecall/QtPhoneCall.h>
 #include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/statusbar/QtStatusBar.h>
+
 #include <control/phoneline/CPhoneLine.h>
 #include <control/phonecall/CPhoneCall.h>
 #include <control/CWengoPhone.h>
-
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
 
 #include <util/Logger.h>
 
@@ -75,7 +74,7 @@ void QtPhoneLine::stateChangedEventHandler(EnumPhoneLineState::PhoneLineState st
 }
 
 void QtPhoneLine::stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLineState state) {
-	static QLabel * phoneLineStateLabel = _qtWengoPhone->getPhoneLineStateLabel();
+	static QLabel * phoneLineStateLabel = _qtWengoPhone->getStatusBar().getPhoneLineStateLabel();
 
 	QString tooltip;
 	QString pixmap;

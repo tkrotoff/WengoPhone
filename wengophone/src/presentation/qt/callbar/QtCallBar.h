@@ -20,10 +20,9 @@
 #ifndef QTCALLBAR_H
 #define QTCALLBAR_H
 
+#include <qtutil/QtWengoStyleLabel.h>
+
 #include <QtGui>
-
-class QtWengoStyleLabel;
-
 
 class QtCallBar : public QFrame
 {
@@ -34,6 +33,14 @@ public:
 	QtCallBar(QWidget * parent  = 0, Qt::WFlags f = 0);
 
 	QComboBox * getComboBox();
+
+	QtWengoStyleLabel * getCallButton() const {
+		return _callBarButton;
+	}
+
+	QtWengoStyleLabel * getHangButton() const {
+		return _callBarButtonOff;
+	}
 
 Q_SIGNALS:
 

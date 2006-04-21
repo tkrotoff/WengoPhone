@@ -42,8 +42,6 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtConfigPanel::configChangedEventHandler, this);
 
-	AudioDevice::selectAsRecordDevice(config.getAudioInputDeviceName(), AudioDevice::TypeInputMicrophone);
-
 	//inputSoundSlider
 	VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
 	_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());

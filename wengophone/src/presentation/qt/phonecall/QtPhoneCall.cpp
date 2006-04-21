@@ -24,6 +24,8 @@
 
 #include <presentation/qt/contactlist/QtAddContact.h>
 #include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/statusbar/QtStatusBar.h>
+
 #include <control/phonecall/CPhoneCall.h>
 #include <control/CWengoPhone.h>
 
@@ -156,8 +158,9 @@ void QtPhoneCall::stateChangedEventHandler(EnumPhoneCallState::PhoneCallState st
 }
 
 void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state) {
-	_qtWengoPhone->showStatusBarMessage(CodecList::toString(_cPhoneCall.getAudioCodecUsed()) + "/" +
-					CodecList::toString(_cPhoneCall.getVideoCodecUsed()));
+	_qtWengoPhone->getStatusBar().showMessage(QString::fromStdString(
+					CodecList::toString(_cPhoneCall.getAudioCodecUsed()) + "/" +
+					CodecList::toString(_cPhoneCall.getVideoCodecUsed())));
 
 	switch(state) {
 
@@ -247,7 +250,7 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 		const unsigned ratio = 5;
 		const unsigned border_size = 1;
 		const QBrush border_color = Qt::black;
-        
+
         // we force the ratio of the remote frame on the webcam frame (ignoring the webcam's aspect ratio)
 		unsigned width = remoteVideoFrame.getWidth() / ratio;
 		unsigned height = remoteVideoFrame.getHeight() / ratio;

@@ -43,6 +43,9 @@ class QtBrowser;
 class QtHistoryWidget;
 class QtLogin;
 class QtToaster;
+class QtStatusBar;
+class QtCallBar;
+
 class TrayIcon;
 
 class QPushButton;
@@ -54,8 +57,6 @@ class QFrame;
 class QStackedWidget;
 class QWidget;
 class QMenu;
-class QStatusBar;
-class QtCallBar;
 
 /**
  * Qt Presentation component for WengoPhone.
@@ -90,8 +91,6 @@ public:
 
 	void dialpad(const std::string & tone, const std::string & soundFile);
 
-	void showStatusBarMessage(const std::string & message);
-
 	void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
 		const std::string & message);
 
@@ -99,13 +98,7 @@ public:
 		return _wengoPhoneWindow;
 	}
 
-	QLabel * getInternetConnectionStateLabel() const {
-		return _internetConnectionStateLabel;
-	}
-
-	QLabel * getPhoneLineStateLabel() const {
-		return _phoneLineStateLabel;
-	}
+	QtStatusBar & getStatusBar() const;
 
 	QPushButton * getCallButton() const {
 		return _callButton;
@@ -189,7 +182,6 @@ private Q_SLOTS:
 
 	void eraseHistory();
 
-
 private:
 
 	void initThreadSafe();
@@ -211,10 +203,6 @@ private:
 	void loginStateChangedEventHandler(SipAccount & sipAccount, SipAccount::LoginState state);
 
 	void loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state);
-
-	void networkDiscoveryStateChangedEventHandler(SipAccount & sender, SipAccount::NetworkDiscoveryState state);
-
-	void networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::NetworkDiscoveryState state);
 
 	void wrongProxyAuthenticationEventHandler(SipAccount & sender,
 		const std::string & proxyAddress, unsigned proxyPort,
@@ -260,10 +248,6 @@ private:
 
 	QtContactCallListWidget * _contactCallListWidget;
 
-	QLabel * _phoneLineStateLabel;
-
-	QLabel * _internetConnectionStateLabel;
-
 	QFrame * _iconBar;
 
 	QFrame * _callBar;
@@ -276,7 +260,7 @@ private:
 
 	QStackedWidget * _configPanel;
 
-	QStatusBar * _statusBar;
+	QtStatusBar * _statusBar;
 
 	static const std::string ANCHOR_CONTACTLIST;
 
