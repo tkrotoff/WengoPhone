@@ -19,43 +19,41 @@
 
 #include "QtHttpProxyLogin.h"
 
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
+#include "ui_HttpProxyLoginWindow.h"
 
 #include <QtGui>
 
 QtHttpProxyLogin::QtHttpProxyLogin(QWidget * parent, const std::string & proxyAddress, unsigned proxyPort)
 	: QObject() {
 
-	_httpProxyLoginWindow = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/HttpProxyLoginWindow.ui", parent));
+	_httpProxyLoginWindow = new QDialog(parent);
+
+	_ui = new Ui::HttpProxyLoginWindow();
+	_ui->setupUi(_httpProxyLoginWindow);
 
 	//addressLineEdit
-	_addressLineEdit = Object::findChild<QLineEdit *>(_httpProxyLoginWindow, "addressLineEdit");
-	_addressLineEdit->setText(QString::fromStdString(proxyAddress));
+	_ui->addressLineEdit->setText(QString::fromStdString(proxyAddress));
 
 	//portLineEdit
-	_portLineEdit = Object::findChild<QLineEdit *>(_httpProxyLoginWindow, "portLineEdit");
-	_portLineEdit->setText(QString::number(proxyPort));
+	_ui->portLineEdit->setText(QString::number(proxyPort));
 }
 
 std::string QtHttpProxyLogin::getLogin() const {
-	QLineEdit * loginLineEdit = Object::findChild<QLineEdit *>(_httpProxyLoginWindow, "loginLineEdit");
-	return loginLineEdit->text().toStdString();
+	return _ui->loginLineEdit->text().toStdString();
 }
 
 std::string QtHttpProxyLogin::getPassword() const {
-	QLineEdit * passwordLineEdit = Object::findChild<QLineEdit *>(_httpProxyLoginWindow, "passwordLineEdit");
-	return passwordLineEdit->text().toStdString();
+	return _ui->passwordLineEdit->text().toStdString();
 }
 
 std::string QtHttpProxyLogin::getProxyAddress() const {
-	return _addressLineEdit->text().toStdString();
+	return _ui->addressLineEdit->text().toStdString();
 }
 
 unsigned QtHttpProxyLogin::getProxyPort() const {
-	return _portLineEdit->text().toUInt();
+	return _ui->portLineEdit->text().toUInt();
 }
 
-int QtHttpProxyLogin::exec() {
+int QtHttpProxyLogin::show() {
 	return _httpProxyLoginWindow->exec();
 }

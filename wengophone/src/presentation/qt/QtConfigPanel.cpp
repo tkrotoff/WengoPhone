@@ -23,6 +23,7 @@
 #include <model/config/Config.h>
 
 #include <sound/VolumeControl.h>
+#include <sound/AudioDevice.h>
 
 #include <util/Logger.h>
 
@@ -37,6 +38,8 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 	_configPanelWidget = WidgetFactory::create(":/forms/WengoPhoneWindowConfigPanel.ui", parent);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	AudioDevice::selectAsRecordDevice(config.getAudioInputDeviceName(), AudioDevice::TypeInputMicrophone);
 
 	//inputSoundSlider
 	QSlider * inputSoundSlider = Object::findChild<QSlider *>(_configPanelWidget, "inputSoundSlider");

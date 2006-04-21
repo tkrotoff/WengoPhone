@@ -47,7 +47,3 @@ QtAbout::QtAbout(QWidget * parent) {
 		LOG_ERROR("couldn't locate file=" + file.fileName().toStdString());
 	}
 }
-
-QWidget * QtAbout::getWidget() const {
-	return _aboutDialog;
-}

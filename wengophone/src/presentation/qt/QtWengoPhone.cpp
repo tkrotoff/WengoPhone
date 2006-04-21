@@ -714,7 +714,7 @@ void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(SipAccount & s
 
 	static QtHttpProxyLogin * httpProxy = new QtHttpProxyLogin(_wengoPhoneWindow, proxyAddress, proxyPort);
 
-	int ret = httpProxy->exec();
+	int ret = httpProxy->show();
 
 	if (ret == QDialog::Accepted) {
 		sender.setProxySettings(httpProxy->getProxyAddress(), httpProxy->getProxyPort(),

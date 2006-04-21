@@ -36,7 +36,9 @@ public:
 
 	QtAbout(QWidget * parent);
 
-	QWidget * getWidget() const;
+	QDialog * getWidget() const {
+		return _aboutDialog;
+	}
 
 private:
 

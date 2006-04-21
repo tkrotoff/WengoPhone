@@ -25,8 +25,8 @@
 #include <string>
 
 class QWidget;
-class QLineEdit;
 class QDialog;
+namespace Ui { class HttpProxyLoginWindow; }
 
 /**
  * Window for entering the local HTTP proxy login/password.
@@ -53,15 +53,13 @@ public:
 
 public Q_SLOTS:
 
-	int exec();
+	int show();
 
 private:
 
+	Ui::HttpProxyLoginWindow * _ui;
+
 	QDialog * _httpProxyLoginWindow;
-
-	QLineEdit * _addressLineEdit;
-
-	QLineEdit * _portLineEdit;
 };
 
 #endif	//QTHTTPPROXYLOGIN_H
