@@ -40,7 +40,7 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 	_ui->setupUi(_configPanelWidget);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	//config
+	config.valueChangedEvent += boost::bind(&QtConfigPanel::configChangedEventHandler, this);
 
 	AudioDevice::selectAsRecordDevice(config.getAudioInputDeviceName(), AudioDevice::TypeInputMicrophone);
 
@@ -55,7 +55,6 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 	connect(_ui->outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputSoundSliderValueChanged(int)));
 
 	//enableVideoCheckBox
-	_ui->enableVideoCheckBox->setChecked(config.getVideoEnable());
 	connect(_ui->enableVideoCheckBox, SIGNAL(toggled(bool)), SLOT(enableVideoCheckBoxToggled(bool)));
 
 	//enableWenboxCheckBox
@@ -64,6 +63,8 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 	//videoSettingsLabel
 
 	//audioSettingsLabel
+
+	configChangedEventHandlerThreadSafe();
 }
 
 QtConfigPanel::~QtConfigPanel() {
@@ -88,4 +89,15 @@ void QtConfigPanel::enableVideoCheckBoxToggled(bool checked) {
 }
 
 void QtConfigPanel::enableWenboxCheckBoxToggled(bool checked) {
+}
+
+void QtConfigPanel::configChangedEventHandler() {
+	/*typedef PostEvent0<void ()> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtConfigPanel::configChangedEventHandlerThreadSafe, this));
+	postEvent(event);*/
+}
+
+void QtConfigPanel::configChangedEventHandlerThreadSafe() {
+	//enableVideoCheckBox
+	_ui->enableVideoCheckBox->setChecked(config.getVideoEnable());
 }

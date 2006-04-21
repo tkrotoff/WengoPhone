@@ -56,6 +56,10 @@ private Q_SLOTS:
 
 private:
 
+	void configChangedEventHandler();
+
+	void configChangedEventHandlerThreadSafe();
+
 	Ui::WengoPhoneWindowConfigPanel * _ui;
 
 	QWidget * _configPanelWidget;
