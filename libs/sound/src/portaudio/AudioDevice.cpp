@@ -19,7 +19,11 @@
 
 #include <sound/AudioDevice.h>
 
-#include "../win32/Win32VolumeControl.h"
+#include <cutil/global.h>
+
+#ifdef OS_WINDOWS
+	#include "../win32/Win32VolumeControl.h"
+#endif
 
 #include <util/StringList.h>
 #include <util/Logger.h>
@@ -253,6 +257,7 @@ int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
 }
 
 bool AudioDevice::selectAsRecordDevice(const std::string & deviceName, TypeInput typeInput) {
+#ifdef OS_WINDOWS
 	int deviceId = getMixerDeviceId(deviceName);
 	Win32VolumeControl * volumeControl = NULL;
 	if (typeInput == TypeInputMicrophone) {
@@ -268,8 +273,13 @@ bool AudioDevice::selectAsRecordDevice(const std::string & deviceName, TypeInput
 		}
 	}
 	return volumeControl->selectAsRecordDevice();
+#endif
+
+	return false;
 }
 
 AudioDevice::TypeInput AudioDevice::getSelectedRecordDevice(const std::string & deviceName) {
+#ifdef OS_WINDOWS
+#endif
 	return TypeInputError;
 }
