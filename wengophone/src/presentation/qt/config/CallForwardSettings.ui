@@ -166,6 +166,14 @@ nécessitent un crédit de Wengo’s. L’activation du transfert nécessite de 
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>forwardCallCheckBox</tabstop>
+  <tabstop>forwardAllCallCheckBox</tabstop>
+  <tabstop>phoneNumber1Edit</tabstop>
+  <tabstop>phoneNumber2Edit</tabstop>
+  <tabstop>phoneNumber3Edit</tabstop>
+  <tabstop>forwardCallMobilCheckBox</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

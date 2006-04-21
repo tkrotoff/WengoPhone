@@ -49,7 +49,7 @@
         <string>Send</string>
        </property>
        <property name="icon" >
-        <iconset resource="../wengophone.qrc" >:/pics/sms.png</iconset>
+        <iconset/>
        </property>
       </widget>
      </item>
@@ -87,6 +87,11 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>phoneComboBox</tabstop>
+  <tabstop>smsText</tabstop>
+  <tabstop>sendButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>

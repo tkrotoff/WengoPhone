@@ -181,6 +181,13 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>contactListTreeWidget</tabstop>
+  <tabstop>addPushButton</tabstop>
+  <tabstop>inviteListWidget</tabstop>
+  <tabstop>removePushButton</tabstop>
+  <tabstop>startPushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

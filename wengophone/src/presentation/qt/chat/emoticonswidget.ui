@@ -48,7 +48,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/face-glasses48.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/face-glasses48.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -67,7 +67,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/face-smile-big48.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/face-smile-big48.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -86,7 +86,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/face-wink48.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/face-wink48.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -105,7 +105,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/face-devil-grin48.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/face-devil-grin48.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -124,7 +124,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/face-crying48.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/face-crying48.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -143,7 +143,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/face-surprise48.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/face-surprise48.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -162,7 +162,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/face-kiss48.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/face-kiss48.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -181,7 +181,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/face-plain48.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/face-plain48.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -200,7 +200,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/face-smile48.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/face-smile48.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -219,7 +219,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/face-sad48.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/face-sad48.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -238,7 +238,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/face-angel48.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/face-angel48.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -263,7 +263,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="..\wengophone.qrc" >:/emoticons/chat/emoticons/emblem-unreadable.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/emoticons/chat/emoticons/emblem-unreadable.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -281,6 +281,20 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>emoticonButton1</tabstop>
+  <tabstop>emoticonButton2</tabstop>
+  <tabstop>emoticonButton3</tabstop>
+  <tabstop>emoticonButton4</tabstop>
+  <tabstop>emoticonButton5</tabstop>
+  <tabstop>emoticonButton6</tabstop>
+  <tabstop>emoticonButton7</tabstop>
+  <tabstop>emoticonButton8</tabstop>
+  <tabstop>emoticonButton9</tabstop>
+  <tabstop>emoticonButton10</tabstop>
+  <tabstop>emoticonButton11</tabstop>
+  <tabstop>emoticonCloseButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>

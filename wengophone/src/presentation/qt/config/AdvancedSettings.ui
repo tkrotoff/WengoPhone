@@ -152,6 +152,12 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>callAutomaticallyAnswerCheckBox</tabstop>
+  <tabstop>callAnswerDelaySpinBox</tabstop>
+  <tabstop>chatPopUpCheckBox</tabstop>
+  <tabstop>forwardAllCallsToCellPhoneCheckBox</tabstop>
+ </tabstops>
  <resources>
   <include location="wengoconfigdata.qrc" />
  </resources>

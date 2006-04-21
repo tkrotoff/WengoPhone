@@ -157,6 +157,12 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>inputDeviceComboBox</tabstop>
+  <tabstop>outputDeviceComboBox</tabstop>
+  <tabstop>ringingDeviceComboBox</tabstop>
+  <tabstop>makeTestCallPushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -609,31 +609,37 @@
     <addaction name="separator" />
     <addaction name="actionShowAbout" />
    </widget>
-   <widget class="QMenu" name="menuTools" >
+   <widget class="QMenu" name="menuFile" >
     <property name="title" >
-     <string>Tools</string>
+     <string>Wengo</string>
     </property>
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="actionSendSms" />
-    <addaction name="separator" />
-    <addaction name="actionConfiguration" />
-    <addaction name="actionAdvancedConfiguration" />
+    <widget class="QMenu" name="menuClear_History2" >
+     <property name="title" >
+      <string>Clear History</string>
+     </property>
+    </widget>
+    <widget class="QMenu" name="menuHide_Show2" >
+     <property name="title" >
+      <string>Hide / Show</string>
+     </property>
+     <addaction name="separator" />
+     <addaction name="separator" />
+    </widget>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionEditMyProfile" />
     <addaction name="separator" />
     <addaction name="actionCallOutService" />
     <addaction name="actionSms" />
     <addaction name="actionVoiceMail" />
+    <addaction name="separator" />
+    <addaction name="actionOpenWengoAccount" />
+    <addaction name="actionExit" />
    </widget>
    <widget class="QMenu" name="menuContacts" >
     <property name="title" >
      <string>Contacts</string>
     </property>
-    <addaction name="actionAddContact" />
-   </widget>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>Wengo</string>
-    </property>
-    <widget class="QMenu" name="menuHide_Show" >
+    <widget class="QMenu" name="menuHide_Show_2" >
      <property name="title" >
       <string>Hide / Show</string>
      </property>
@@ -646,7 +652,23 @@
      <addaction name="separator" />
      <addaction name="actionSort_contacts" />
     </widget>
-    <widget class="QMenu" name="menuClear_History" >
+    <addaction name="actionAddContact" />
+    <addaction name="separator" />
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="actionSendSms" />
+    <addaction name="separator" />
+    <addaction name="menuHide_Show_2" />
+   </widget>
+   <widget class="QMenu" name="menuTools" >
+    <property name="title" >
+     <string>Tools</string>
+    </property>
+    <widget class="QMenu" name="menuType_Here" >
+     <property name="title" >
+      <string>Type Here</string>
+     </property>
+    </widget>
+    <widget class="QMenu" name="menuClear_History_2" >
      <property name="title" >
       <string>Clear History</string>
      </property>
@@ -655,17 +677,15 @@
      <addaction name="actionMissed_Calls" />
      <addaction name="actionChat_Sessions" />
      <addaction name="actionSMS" />
+     <addaction name="separator" />
      <addaction name="actionAll" />
     </widget>
-    <addaction name="actionShowWengoAccount" />
-    <addaction name="actionOpenWengoAccount" />
-    <addaction name="actionEditMyProfile" />
     <addaction name="actionIM_Account_Settings" />
-    <addaction name="menuHide_Show" />
     <addaction name="separator" />
-    <addaction name="menuClear_History" />
+    <addaction name="actionConfiguration" />
+    <addaction name="actionAdvancedConfiguration" />
     <addaction name="separator" />
-    <addaction name="actionExit" />
+    <addaction name="menuClear_History_2" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -839,6 +859,17 @@
   </action>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>phoneComboBox</tabstop>
+  <tabstop>videoCallButton</tabstop>
+  <tabstop>hangUpButton</tabstop>
+  <tabstop>callButton</tabstop>
+  <tabstop>addContactButton</tabstop>
+  <tabstop>findContactButton</tabstop>
+  <tabstop>startConferenceButton</tabstop>
+  <tabstop>sendSmsButton</tabstop>
+ </tabstops>
  <resources>
   <include location="wengophone.qrc" />
  </resources>

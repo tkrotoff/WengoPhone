@@ -284,6 +284,12 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>webcamDeviceComboBox</tabstop>
+  <tabstop>webcamPreviewPushButton</tabstop>
+  <tabstop>videoQualityTreeWidget</tabstop>
+  <tabstop>makeTestVideoCallPushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -463,18 +463,20 @@
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction></pixmapfunction>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>contactGroupComboBox</tabstop>
   <tabstop>wengoPhoneLineEdit</tabstop>
   <tabstop>firstNameLineEdit</tabstop>
   <tabstop>lastNameLineEdit</tabstop>
   <tabstop>websiteLineEdit</tabstop>
   <tabstop>companyLineEdit</tabstop>
   <tabstop>sexComboBox</tabstop>
+  <tabstop>birthdateEdit</tabstop>
   <tabstop>mobilePhoneLineEdit</tabstop>
   <tabstop>homePhoneLineEdit</tabstop>
   <tabstop>workPhoneLineEdit</tabstop>
   <tabstop>otherPhoneLineEdit</tabstop>
   <tabstop>faxLineEdit</tabstop>
-  <tabstop>tabWidget</tabstop>
   <tabstop>personalEmailLineEdit</tabstop>
   <tabstop>workEmailLineEdit</tabstop>
   <tabstop>otherEmailLineEdit</tabstop>

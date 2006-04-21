@@ -194,6 +194,18 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>startWengoCheckBox</tabstop>
+  <tabstop>checkForUpdateCheckBox</tabstop>
+  <tabstop>startFreeCallRadioButton</tabstop>
+  <tabstop>callCellPhoneCheckBox</tabstop>
+  <tabstop>startChatOnlyRadioButton</tabstop>
+  <tabstop>showAwayCheckBox</tabstop>
+  <tabstop>showNotAvailableCheckBox</tabstop>
+  <tabstop>awaySpinBox</tabstop>
+  <tabstop>notAvailableSpinBox</tabstop>
+  <tabstop>editProfilePushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

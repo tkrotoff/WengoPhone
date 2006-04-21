@@ -182,6 +182,14 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>holdResumeButton</tabstop>
+  <tabstop>addContactButton</tabstop>
+  <tabstop>transferButton</tabstop>
+  <tabstop>transferPhoneNumberLineEdit</tabstop>
+  <tabstop>acceptButton</tabstop>
+  <tabstop>rejectButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>

@@ -210,6 +210,26 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>snShowWindowOnTopCheckBox</tabstop>
+  <tabstop>snShowBlinkingWindow</tabstop>
+  <tabstop>snShowToasterOnIncomingCall</tabstop>
+  <tabstop>snShowToasterOnContactOnLine</tabstop>
+  <tabstop>snShowWindowpopUpAuthorisations</tabstop>
+  <tabstop>asShowNoToaster</tabstop>
+  <tabstop>asSwitchOffAudioNotifications</tabstop>
+  <tabstop>asNotShowAwayToasterAndChatWindow</tabstop>
+  <tabstop>asSwitchOffAwayAudioNotifications</tabstop>
+  <tabstop>acIncomingChat</tabstop>
+  <tabstop>acIncomingCalls</tabstop>
+  <tabstop>acWengophoneOpen</tabstop>
+  <tabstop>acWengophoneConnects</tabstop>
+  <tabstop>acWengophoneNotSuccedConnect</tabstop>
+  <tabstop>acAlternativeIMAcount</tabstop>
+  <tabstop>acContactTurningOnline</tabstop>
+  <tabstop>acAuthorization</tabstop>
+  <tabstop>acErrorMessage</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

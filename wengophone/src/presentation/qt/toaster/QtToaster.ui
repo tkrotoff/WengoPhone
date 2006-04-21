@@ -372,6 +372,12 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>actionButton1</tabstop>
+  <tabstop>actionButton2</tabstop>
+  <tabstop>actionButton3</tabstop>
+  <tabstop>closeButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>

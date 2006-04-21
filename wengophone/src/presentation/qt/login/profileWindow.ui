@@ -798,6 +798,35 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>wengoNickName</tabstop>
+  <tabstop>firstName</tabstop>
+  <tabstop>lastName</tabstop>
+  <tabstop>birthDate</tabstop>
+  <tabstop>changePassword</tabstop>
+  <tabstop>gender</tabstop>
+  <tabstop>country</tabstop>
+  <tabstop>state</tabstop>
+  <tabstop>city</tabstop>
+  <tabstop>imAccount1</tabstop>
+  <tabstop>imAccount4</tabstop>
+  <tabstop>imAccount2</tabstop>
+  <tabstop>imAccount5</tabstop>
+  <tabstop>imAccount3</tabstop>
+  <tabstop>imAccount6</tabstop>
+  <tabstop>addIMAccount</tabstop>
+  <tabstop>modityIMAccount</tabstop>
+  <tabstop>cellPhone</tabstop>
+  <tabstop>wengoPhone</tabstop>
+  <tabstop>homePhone</tabstop>
+  <tabstop>workPhone</tabstop>
+  <tabstop>email</tabstop>
+  <tabstop>blog</tabstop>
+  <tabstop>web</tabstop>
+  <tabstop>changeAvatar</tabstop>
+  <tabstop>saveChange</tabstop>
+  <tabstop>cancelChange</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

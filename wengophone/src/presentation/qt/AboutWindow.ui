@@ -152,6 +152,11 @@ of the License, or (at your option) any later version.</string>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>closeButton</tabstop>
+  <tabstop>authorsTextEdit</tabstop>
+ </tabstops>
  <resources>
   <include location="wengophone.qrc" />
  </resources>

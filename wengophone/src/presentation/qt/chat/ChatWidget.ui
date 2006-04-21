@@ -137,6 +137,15 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>pushButton</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>chatHistory</tabstop>
+  <tabstop>emoticonsButton</tabstop>
+  <tabstop>fontButton</tabstop>
+  <tabstop>chatEdit</tabstop>
+  <tabstop>sendButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>

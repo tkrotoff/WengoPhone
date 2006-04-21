@@ -169,6 +169,14 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>allowCallFromAnyoneRadioButton</tabstop>
+  <tabstop>allowCallOnlyFromContactListRadioButton</tabstop>
+  <tabstop>allowChatsFromAnyoneRadioButton</tabstop>
+  <tabstop>allowChatFromOnlyContactListRadioButton</tabstop>
+  <tabstop>alwaysSignAsInvisible</tabstop>
+  <tabstop>manageBlockedUserPushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
