@@ -55,7 +55,7 @@ void ContactGroup::removeContact(Contact & contact) {
 }
 
 Contact * ContactGroup::operator[](unsigned i) const {
-	Mutex::ScopedLock lock(const_cast<Mutex &>(_mutex));
+	Mutex::ScopedLock lock(_mutex);
 
 	if ((i >= 0) || (i <= size())) {
 		return _contactList[i];
@@ -76,4 +76,3 @@ void ContactGroup::setName(const std::string & groupName) {
 	_groupName = groupName;
 	contactGroupModifiedEvent(*this);
 }
-
