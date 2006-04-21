@@ -51,7 +51,7 @@
 #include "profilebar/QtProfileBar.h"
 #include "history/QtHistoryWidget.h"
 #include "toaster/QtToaster.h"
-#include "callBar/QtCallBar.h"
+#include "callbar/QtCallBar.h"
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
 #include <qtutil/Widget.h>
