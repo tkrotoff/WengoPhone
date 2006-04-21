@@ -610,6 +610,11 @@ void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, cons
 	}
 }
 
+const std::string PhApiWrapper::getMyIconFilename()
+{
+	return _iconFilename;
+}
+
 void PhApiWrapper::changeMyIcon(const std::string &iconFilename)
 {
 	std::map<const std::string, IMChatSession *> & contactChatMap = getContactChatMap();

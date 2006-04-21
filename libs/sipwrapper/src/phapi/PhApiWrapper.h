@@ -202,6 +202,7 @@ public:
 
 	void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
 
+	const std::string getMyIconFilename();
 	void changeMyIcon(const std::string & iconFilename);
 	void sendMyIcon(IMChatSession & chatSession, const std::string & iconFilename);
 

@@ -278,6 +278,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
 		contactChatMap[from] = imChatSession;
 		p->newIMChatSessionCreatedEvent(*p, *imChatSession);
+		p->sendMyIcon(*imChatSession, p->getMyIconFilename());
 	}
 
 	switch(info->event) {
