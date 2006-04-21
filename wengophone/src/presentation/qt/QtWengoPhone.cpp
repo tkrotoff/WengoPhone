@@ -291,11 +291,12 @@ void QtWengoPhone::initThreadSafe() {
 
 	//Status bar
 	_statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");
+/*
 	QPalette statusBarPalette = _statusBar->palette();
 	statusBarPalette.setColor(QPalette::Window,QColor(60,60,60));
 	_statusBar->setPalette(statusBarPalette);
 	_statusBar->setAutoFillBackground(true);
-
+*/
 	_internetConnectionStateLabel = new QLabel(_statusBar);
 	_internetConnectionStateLabel->setPixmap(QPixmap(":/pics/statusbar_connect_error.png"));
 	_internetConnectionStateLabel->setToolTip(tr("Not connected"));
