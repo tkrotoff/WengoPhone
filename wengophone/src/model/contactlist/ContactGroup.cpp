@@ -33,12 +33,16 @@ ContactGroup::ContactGroup(const ContactGroup & contactGroup)
 }
 
 void ContactGroup::addContact(Contact & contact) {
+	Mutex::ScopedLock lock(_mutex);
+
 	_contactList.push_back(&contact);
 	contactAddedEvent(*this, contact);
 	LOG_DEBUG("Contact added to group " + _groupName);
 }
 
 void ContactGroup::removeContact(Contact & contact) {
+	Mutex::ScopedLock lock(_mutex);
+
 	for (ContactVector::iterator it = _contactList.begin();
 		it != _contactList.end();
 		++it) {
@@ -51,6 +55,8 @@ void ContactGroup::removeContact(Contact & contact) {
 }
 
 Contact * ContactGroup::operator[](unsigned i) const {
+	Mutex::ScopedLock lock(_mutex);
+
 	if ((i >= 0) || (i <= size())) {
 		return _contactList[i];
 	} else {

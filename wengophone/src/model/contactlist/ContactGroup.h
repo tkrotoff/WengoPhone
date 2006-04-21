@@ -21,6 +21,7 @@
 #define CONTACTGROUP_H
 
 #include <util/Event.h>
+#include <thread/Mutex.h>
 
 #include <string>
 
@@ -135,6 +136,8 @@ private:
 
 	/** Name of the ContactGroup. */
 	std::string _groupName;
+
+	Mutex _mutex;
 
 };
 
