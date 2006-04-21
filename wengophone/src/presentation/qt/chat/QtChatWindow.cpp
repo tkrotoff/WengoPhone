@@ -30,6 +30,8 @@
 
 #include <imwrapper/IMChatSession.h>
 
+#include <qtutil/QtWengoStyleLabel.h>
+
 #include <qtutil/Object.h>
 #include <util/Logger.h>
 
@@ -78,13 +80,21 @@ void ChatWindow::initThreadSafe(){
 	_contactListFrame = new QFrame();
 
 	glayout = new QGridLayout();
-	glayout->setMargin(5);
+	glayout->setMargin(0);
 	glayout->setSpacing(0);
 	_dialog->setLayout(glayout);
 
 	_tabWidget = new QtChatTabWidget ( _dialog );
+/*
+	QPalette dialogPalette = _dialog->palette();
+	dialogPalette.setColor(QPalette::Window, QColor(60,60,60));
+	_dialog->setPalette(dialogPalette);
+*/
+	_inviteFrame = new QFrame(_dialog);
+	createInviteFrame();
 
 	glayout->addWidget(_menuBar);
+	glayout->addWidget(_inviteFrame);
 	glayout->addWidget(_contactListFrame);
 	glayout->addWidget(_tabWidget);
 
@@ -121,7 +131,43 @@ void ChatWindow::initThreadSafe(){
 
 	openContactListFrame();
 }
+void ChatWindow::createInviteFrame(){
 
+	QGridLayout * layout = new QGridLayout(_inviteFrame);
+	_callLabel = new QtWengoStyleLabel(_inviteFrame);
+	_inviteLabel = new QtWengoStyleLabel(_inviteFrame);
+	_callLabel->setPixmaps(
+						QPixmap(":/pics/chat/chat_call_bar_button.png"),
+						QPixmap(":/pics/profilebar/bar_separator.png"),
+						QPixmap(), // Fill
+						QPixmap(":/pics/chat/chat_call_bar_button.png"),
+						QPixmap(":/pics/profilebar/bar_separator.png"),
+						QPixmap()  // Fill
+	                      );
+	_callLabel->setMaximumSize(QSize(46,65));
+	_callLabel->setMinimumSize(QSize(46,46));
+
+	_inviteLabel->setPixmaps(
+						QPixmap(),
+						QPixmap(":/pics/profilebar/bar_end.png"), //
+						QPixmap(":/pics/profilebar/bar_fill.png"), // Fill
+						QPixmap(),
+						QPixmap(":/pics/profilebar/bar_end.png"),
+						QPixmap(":/pics/profilebar/bar_fill.png") // Fill
+	                      );
+	_inviteLabel->setMinimumSize(QSize(120,65));
+	_inviteLabel->setText("invite");
+	_inviteLabel->setTextColor(Qt::white);
+
+	_inviteLabel->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
+	layout->addWidget(_callLabel,0,0);
+	layout->addWidget(_inviteLabel,0,1);
+
+	layout->setMargin(0);
+	layout->setSpacing(0);
+
+}
 void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state){
 
 	IMChat::TypingState * tmpState = new IMChat::TypingState;

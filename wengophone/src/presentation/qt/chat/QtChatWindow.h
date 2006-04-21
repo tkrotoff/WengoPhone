@@ -68,6 +68,14 @@ protected:
 	QWidget * _contactViewport;
 
 	QFrame * _contactListFrame;
+
+	QFrame * _inviteFrame;
+
+	QtWengoStyleLabel * _callLabel;
+
+	QtWengoStyleLabel * _inviteLabel;
+
+
 	/*
 		end new widget
 	*/
@@ -107,6 +115,8 @@ Q_SIGNALS:
 private:
 
 	void initThreadSafe();
+
+	void createInviteFrame();
 
 	void messageReceivedEventHandler(IMChatSession & sender);
 

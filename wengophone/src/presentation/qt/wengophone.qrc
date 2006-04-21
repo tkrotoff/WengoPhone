@@ -89,6 +89,8 @@
         <file>pics/callbar/call_bar_button_video.png</file>
         <file>pics/callbar/call_bar_fill.png</file>
         <file>pics/callbar/call_bar_button.png</file>
+        <file>pics/chat/chat_call_bar_button.png</file>
+        <file>pics/chat/chat_emoticon_button.png</file>
     </qresource>
     <qresource prefix="/emoticons" >
         <file>chat/emoticons/emblem-unreadable.png</file>

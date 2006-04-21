@@ -59,9 +59,8 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 	_contactListFrame = Object::findChild<QFrame *>(_widget,"contactListFrame");
 	_typingStateLabel = Object::findChild<QLabel *>(_widget,"typingStateLabel");
 
-	_inviteButton = Object::findChild<QPushButton *>(_widget,"inviteButton");
-	connect ( _inviteButton,SIGNAL(clicked()), SLOT(inviteContact()));
-
+	// _inviteButton = Object::findChild<QPushButton *>(_widget,"inviteButton");
+	// connect ( _inviteButton,SIGNAL(clicked()), SLOT(inviteContact()));
 
     ChatWidgetManager * cwm = new ChatWidgetManager(this,_chatEdit);
 
@@ -88,7 +87,6 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 	new QHBoxLayout(_contactViewport);
 	_contactViewport->layout()->setMargin(0);
 	_scrollArea->setWidgetResizable(true);
-
 }
 
 void ChatWidget::chatEditChanged(){
@@ -268,7 +266,7 @@ QString ChatWidget::insertFontTag(const QString & message) {
 	if (_currentFont.italic()) {
 		result += "<i>";
 	}
-	
+
 	if (_currentFont.underline()) {
 		result += "<u>";
 	}
@@ -373,10 +371,14 @@ void ChatWidget::emoticonSelected(QtEmoticon emoticon){
 void ChatWidget::setIMChatSession(IMChatSession * imChatSession){
 	_imChatSession = imChatSession;
 	if ( ! _imChatSession->canDoMultiChat() )
-		_inviteButton->setEnabled(false);
+		//_inviteButton->setEnabled(false);
 
 	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
 
+}
+
+bool ChatWidget::canDoMultiChat(){
+	return _imChatSession->canDoMultiChat();
 }
 
 void ChatWidget::inviteContact(){
@@ -389,7 +391,6 @@ void ChatWidget::inviteContact(){
 		for (iter = selectedContact.begin(); iter != selectedContact.end(); iter++){
 			addContactToContactListFrame( (*iter) );
 		}
-
 		contactAdded();
 	}
 }

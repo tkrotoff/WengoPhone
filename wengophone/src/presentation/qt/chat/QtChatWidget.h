@@ -35,6 +35,8 @@
 
 #include "QtChatRoomInviteDlg.h"
 
+class QtWengoStyleLabel;
+
 class ChatWidget : public QWidget //, Ui::ChatWidget
 {
     Q_OBJECT
@@ -74,6 +76,8 @@ public:
     void setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state);
 
     void openContactListFrame();
+
+    bool canDoMultiChat();
 
 protected:
 
@@ -141,6 +145,8 @@ protected:
 
 	void addContactToContactListFrame(const Contact & contact);
 
+
+
 	/**
 	 * Prepares a message to be sent to the network.
 	 *
@@ -154,7 +160,7 @@ protected:
 	 *
 	 * @param message the message to change
 	 * @return the changed message
-	 */ 
+	 */
 	QString replaceTextURLs(const QString & message);
 
 	/**
