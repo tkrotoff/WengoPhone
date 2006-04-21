@@ -28,5 +28,5 @@ public Q_SLOTS:
 };
 
 
-#endif;
+#endif
 

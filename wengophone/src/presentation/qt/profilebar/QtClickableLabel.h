@@ -35,4 +35,4 @@ class QtClickableLabel : public QLabel {
 
 	};
 
-#endif;
+#endif

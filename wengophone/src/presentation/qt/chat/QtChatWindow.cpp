@@ -316,6 +316,9 @@ void ChatWindow::addContactToContactListFrame(const Contact & contact){
 }
 
 void ChatWindow::openContactListFrame(){
+
+	_contactListFrame->setVisible(false);
+	/*
 	QSize size = _contactListFrame->minimumSize();
 	size.setHeight(120);
 	_contactListFrame->setMinimumSize(size);
@@ -329,7 +332,7 @@ void ChatWindow::openContactListFrame(){
 
 	_scrollArea->setFrameShape(QFrame::NoFrame);
 	_scrollArea->setFrameShadow(QFrame::Plain);
-	// _scrollArea->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
+	*/
 }
 
 void ChatWindow::closeContactListFrame(){

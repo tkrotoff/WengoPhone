@@ -33,12 +33,12 @@ using namespace std;
 
 QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent , Qt::WFlags f )
 : QWidget(parent,f), _userProfile(userProfile) {
-
+/*
 	QPalette p = palette();
 	p.setColor(QPalette::Active,QPalette::Window,Qt::white);
 	setPalette(p);
 	setAutoFillBackground(true);
-
+*/
 	_msnIMAccountMenu = NULL;
 	_yahooIMAccountMenu = NULL;
 	_jabberIMAccountMenu = NULL;

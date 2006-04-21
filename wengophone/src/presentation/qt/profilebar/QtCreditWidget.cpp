@@ -4,11 +4,12 @@
 
 QtCreditWidget::QtCreditWidget(QWidget * parent , Qt::WFlags f ) : QWidget(parent,f){
 
+/*
 	QPalette p = palette();
 	p.setColor(QPalette::Active,QPalette::Window,Qt::white);
 	setPalette(p);
 	setAutoFillBackground(true);
-
+*/
 	QGridLayout * gridLayout = new QGridLayout(this);
 
 	QtClickableLabel * buy = new QtClickableLabel(this);
