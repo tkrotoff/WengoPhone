@@ -43,8 +43,8 @@ void SipAddress::parseSipAddress(const std::string & rawSipAddress) {
 	_sipAddress = rawSipAddress;
 	if (!tmp.empty()) {
 		string::size_type posSipAddressBegin = tmp.find(LOWER);
-		posSipAddressBegin += LOWER.length();
 		if (posSipAddressBegin != string::npos) {
+			posSipAddressBegin += LOWER.length();
 			string::size_type posSipAddressEnd = tmp.find(UPPER);
 			if (posSipAddressEnd != string::npos) {
 				_sipAddress = tmp.substr(posSipAddressBegin, posSipAddressEnd - posSipAddressBegin);
@@ -57,8 +57,8 @@ void SipAddress::parseSipAddress(const std::string & rawSipAddress) {
 	_userName = rawSipAddress;
 	if (!tmp.empty()) {
 		string::size_type posUserNameBegin = tmp.find(SIP);
-		posUserNameBegin += SIP.length();
 		if (posUserNameBegin != string::npos) {
+			posUserNameBegin += SIP.length();
 			string::size_type posUserNameEnd = tmp.find(AT);
 			if (posUserNameEnd != string::npos) {
 				_userName = tmp.substr(posUserNameBegin, posUserNameEnd - posUserNameBegin);
