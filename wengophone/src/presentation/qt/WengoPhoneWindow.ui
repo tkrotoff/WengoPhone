@@ -1085,9 +1085,9 @@
          <palette>
           <active>
            <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
            </color>
            <color>
             <red>212</red>
@@ -1115,9 +1115,9 @@
             <blue>133</blue>
            </color>
            <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
            </color>
            <color>
             <red>255</red>
@@ -1125,9 +1125,9 @@
             <blue>255</blue>
            </color>
            <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
            </color>
            <color>
             <red>191</red>
@@ -1172,9 +1172,9 @@
           </active>
           <inactive>
            <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
            </color>
            <color>
             <red>212</red>
@@ -1202,9 +1202,9 @@
             <blue>133</blue>
            </color>
            <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
            </color>
            <color>
             <red>255</red>
@@ -1212,9 +1212,9 @@
             <blue>255</blue>
            </color>
            <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
            </color>
            <color>
             <red>191</red>
