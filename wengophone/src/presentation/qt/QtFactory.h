@@ -70,6 +70,7 @@ public:
 	QtFactory(int argc, char * argv[]) {
 		_app = new QApplication(argc, argv);
 		_qtContactList = NULL;
+		_cWengoPhone = NULL;
 	}
 
 	~QtFactory() {
@@ -86,6 +87,7 @@ public:
 	}
 
 	PWengoPhone * createPresentationWengoPhone(CWengoPhone & cWengoPhone) {
+		_cWengoPhone = &cWengoPhone;
 		static QtWengoPhone qtWengoPhone(cWengoPhone);
 		return &qtWengoPhone;
 	}
@@ -102,7 +104,10 @@ public:
 
 	PContactList * createPresentationContactList(CContactList & cContactList) {
 		if (!_qtContactList) {
-			_qtContactList = new QtContactList(cContactList);
+			if (!_cWengoPhone) {
+				LOG_FATAL("PWengoPhone must be created before PContactList");
+			}
+			_qtContactList = new QtContactList(cContactList, *_cWengoPhone);
 		}
 		return _qtContactList;
 	}
@@ -161,6 +166,9 @@ private:
 	QApplication * _app;
 
 	QtContactList * _qtContactList;
+
+	CWengoPhone * _cWengoPhone;
+
 };
 
 #endif	//QTFACTORY_H

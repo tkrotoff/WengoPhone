@@ -32,6 +32,7 @@
 class Contact;
 class ContactPopupMenu;
 class ContactGroupPopupMenu;
+class CWengoPhone;
 class QTreeWidget;
 class QMouseEvent;
 class QtContactGroup;
@@ -47,7 +48,7 @@ class QtContactList : public QObjectThreadSafe, public PContactList {
 	friend class QtContactGroup;
 public:
 
-	QtContactList(CContactList & cContactList);
+	QtContactList(CContactList & cContactList, CWengoPhone & cWenghoPhone);
 
 	QWidget * getWidget() const {
 		return _contactListWidget;
@@ -93,6 +94,8 @@ private:
 	QTreeWidgetItem * _previous;
 
 	QTreeWidgetItem * _lastClicked;
+
+	CWengoPhone & _cWengoPhone;
 
 };
 

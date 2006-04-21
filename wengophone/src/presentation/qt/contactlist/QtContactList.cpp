@@ -49,8 +49,8 @@ static inline QPixmap scalePixmap(const char * name) {
 	return QPixmap(name).scaled(QSize(16, 16), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
-QtContactList::QtContactList(CContactList & cContactList)
-	: QObjectThreadSafe(), _cContactList(cContactList) {
+QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPhone)
+	: QObjectThreadSafe(), _cContactList(cContactList), _cWengoPhone(cWengoPhone) {
 
 	_treeWidget = NULL;
 
@@ -95,7 +95,7 @@ void QtContactList::initThreadSafe() {
 	spx->setPixmap (QtContactPixmap::ContactGroupOpen,QPixmap(":/pics/group_open.png"));
 	spx->setPixmap (QtContactPixmap::ContactGroupClose,QPixmap(":/pics/group_close.png"));
 
-	_usermanager = new QtUserManager(_treeWidget,_treeWidget);
+	_usermanager = new QtUserManager(_cWengoPhone, _treeWidget,_treeWidget);
 
 	_previous = NULL;
 	_lastClicked = NULL;

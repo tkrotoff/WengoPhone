@@ -41,7 +41,7 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * pare
 	_imAccountManagerWindow->setWindowTitle(_imAccountManagerWidget->windowTitle());
 
 	QPushButton * addIMAccountButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "addIMAccountButton");
-	QMenu * addIMAccountMenu = new QMenu();
+	QMenu * addIMAccountMenu = new QMenu(addIMAccountButton);
 	connect(addIMAccountMenu, SIGNAL(triggered(QAction *)), SLOT(addIMAccount(QAction *)));
 
 	addIMAccountMenu->addAction(QIcon(":pics/protocol_msn.png"),

@@ -27,13 +27,15 @@ class CContact;
 #define MIN_ITEM_SIZE 28
 
 class PContact;
+class CWengoPhone;
 class QtHidenContact;
 
 class QtUserManager : public QObject {
 	Q_OBJECT
 
 public:
-	QtUserManager( QObject * parent = 0, QTreeWidget * target = 0 );
+
+	QtUserManager(CWengoPhone & cWengoPhone, QObject * parent = 0, QTreeWidget * target = 0 );
 
 	void setContact(PContact * contact) { _pcontact = contact;};
 
@@ -113,6 +115,9 @@ protected:
 	QMutex _mutex;
 
 	PContact * _pcontact;
+
+	CWengoPhone & _cWengoPhone;
+
 };
 
 #endif

@@ -244,3 +244,7 @@ void CWengoPhone::authorizationRequestEventHandler(PresenceHandler & sender, con
 	const std::string & message) {
 	_pWengoPhone->authorizationRequestEventHandler(sender, imContact, message);
 }
+
+UserProfile & CWengoPhone::getCurrentUserProfile() {
+	return _wengoPhone.getCurrentUserProfile();
+}

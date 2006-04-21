@@ -217,6 +217,8 @@ public:
 		return *_cHistory;
 	}
 
+	UserProfile & getCurrentUserProfile();
+
 private:
 
 	/**

@@ -26,6 +26,7 @@
 
 #include <util/Event.h>
 #include <util/Picture.h>
+#include <thread/Mutex.h>
 
 #include <set>
 #include <list>
@@ -325,6 +326,9 @@ private:
 	UserProfile & _userProfile;
 
 	IMContactListHandler & _imContactListHandler;
+
+	Mutex _mutex;
+
 };
 
 #endif	//CONTACTLIST_H

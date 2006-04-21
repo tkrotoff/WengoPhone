@@ -117,6 +117,8 @@ sources = [
 	'login/QtLogin.cpp',
 	'login/QtEditMyProfile.cpp',
 	'login/QtEditContactProfile.cpp',
+	'login/QtIMContactDetails.cpp',
+	'login/QtAddIMContact.cpp',
 	'imaccount/QtIMAccountItem.cpp',
 	'imaccount/QtIMAccountManager.cpp',
 	'imaccount/QtIMAccountSettings.cpp',
@@ -191,6 +193,9 @@ forms = [
 	'AboutWindow.ui',
 	'HttpProxyLoginWindow.ui',
 	'imaccount/IMAccountTemplate.ui',
+	'login/ContactDetails.ui',
+	'login/IMContactDetails.ui',
+	'login/AddIMContactDialog.ui',
 ]
 
 for form in forms:

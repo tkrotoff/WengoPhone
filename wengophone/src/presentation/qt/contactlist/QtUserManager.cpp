@@ -25,7 +25,8 @@
 #include "QtContactPixmap.h"
 #include "../login/QtEditContactProfile.h"
 
-QtUserManager::QtUserManager(QObject * parent, QTreeWidget * target) : QObject(parent)
+QtUserManager::QtUserManager(CWengoPhone & cWengoPhone, QObject * parent, QTreeWidget * target)
+: QObject(parent), _cWengoPhone(cWengoPhone)
 {
     _tree = target;
     _previous = NULL;
@@ -103,7 +104,7 @@ void QtUserManager::editContact(bool ){
 	QTreeWidgetItem * item = _tree->currentItem();
 
 	// The edit contact window
-	QtEditContactProfile editContactDialog(ul->getCContact(item->text(0)));
+	QtEditContactProfile editContactDialog(ul->getCContact(item->text(0)), _cWengoPhone);
 	//editContact->set
 
 	editContactDialog.exec();

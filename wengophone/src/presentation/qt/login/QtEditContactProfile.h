@@ -20,9 +20,19 @@
 #ifndef QTEDITCONTACTPROFILE_H
 #define QTEDITCONTACTPROFILE_H
 
-#include <QtGui>
+#include <imwrapper/EnumIMProtocol.h>
+
+#include <QDialog>
 
 class CContact;
+class CWengoPhone;
+class QWidget;
+class QtIMContactDetails;
+class QMenu;
+
+namespace Ui {
+	class ContactDetails;
+}
 
 // FIXME:Ui, cpp and h files should be moved from login dir to another dir (contact ?)
 class QtEditContactProfile : public QDialog
@@ -31,77 +41,57 @@ class QtEditContactProfile : public QDialog
 
 public:
 
-	QtEditContactProfile (CContact & cContact, QWidget * parent = 0, Qt::WFlags f = 0);
+	QtEditContactProfile (CContact & cContact, CWengoPhone & cWengoPhone, QWidget * parent = 0);
 
-protected:
+private Q_SLOTS:
 
-	void init();
+	void saveButtonClicked();
 
-	void changeGroupBoxStat(QGroupBox * box, bool stat);
+	void cancelButtonClicked();
+
+	void addIMContact(EnumIMProtocol::IMProtocol protocol);
+
+	void removeButtonClicked(QtIMContactDetails * qtIMContactDetails);
+
+	void addIMContactButtonClicked();
+
+	//FIXME: wa have a lot of action because of a strange bug on MacOS X.
+	void actionClickedMSN() {
+		addIMContact(EnumIMProtocol::IMProtocolMSN);
+	}
+
+	void actionClickedYahoo() {
+		addIMContact(EnumIMProtocol::IMProtocolYahoo);
+	}
+
+	void actionClickedAIMICQ() {
+		addIMContact(EnumIMProtocol::IMProtocolAIMICQ);
+	}
+
+	void actionClickedJabber() {
+		addIMContact(EnumIMProtocol::IMProtocolJabber);
+	}
+
+private:
 
 	void readFromConfig();
 
 	void writeToConfig();
 
-	void hideAccountWidgets();
+	void addIMContactDetails(QtIMContactDetails * qtIMContactDetails);
 
-public Q_SLOTS:
-	void saveClicked();
-	void cancelClicked();
+	void removeIMContactDetails(QtIMContactDetails * qtIMContactDetails);
 
-protected:
+	/**
+	 * Qt Designer file.
+	 */
+	Ui::ContactDetails * _ui;
 
 	CContact & _cContact;
 
-	QWidget * _widget;
+	CWengoPhone & _cWengoPhone;
 
-	QGridLayout * layout;
-
-	QLineEdit * _alias;
-
-	QLineEdit * _firstName;
-
-	QLineEdit * _lastName;
-
-	QDateEdit * _birthDate;
-
-	QLineEdit * _city;
-
-	QComboBox * _gender;
-
-	QComboBox * _country;
-
-	QComboBox * _state;
-
-	QList<QLabel *> _imAccountsPic;
-
-	QList<QLineEdit *> _imAccountLineEdit;
-
-	QList<QString> _imAccountsPicPath;
-
-	QLineEdit * _cellPhone;
-
-	QLineEdit * _wengoPhone;
-
-	QLineEdit * _homePhone;
-
-	QLineEdit * _workPhone;
-
-	QLineEdit * _email;
-
-	QLineEdit * _blog;
-
-	QLineEdit * _web;
-
-	QLabel * _avatar;
-
-	QString  _avatarPath;
-
-	QComboBox * _changeAvatarButton;
-
-	QPushButton * _saveChange;
-
-	QPushButton * _cancelChange;
+	QMenu * _addIMContactMenu;
 
 };
 

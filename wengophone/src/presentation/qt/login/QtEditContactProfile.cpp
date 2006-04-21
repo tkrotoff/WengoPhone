@@ -18,83 +18,94 @@
 */
 
 #include <control/contactlist/CContact.h>
+#include <control/CWengoPhone.h>
 
 #include <model/contactlist/Contact.h>
 #include <model/profile/StreetAddress.h>
+#include <model/profile/UserProfile.h>
 
-#include <qtutil/Object.h>
-#include <qtutil/WidgetFactory.h>
+#include <imwrapper/IMAccountHandler.h>
 
 #include <util/Logger.h>
 #include <util/Date.h>
 
+#include <QtGui>
+
 #include "QtEditContactProfile.h"
+#include "QtIMContactDetails.h"
+#include "QtAddIMContact.h"
 
-QtEditContactProfile::QtEditContactProfile(CContact & cContact, QWidget * parent, Qt::WFlags f ) 
-: QDialog( parent, f ), _cContact(cContact) {
-	_widget = qobject_cast<QWidget *>( WidgetFactory::create( ":/forms/login/contactWindow.ui", this ) );
-	layout = new QGridLayout( this );
-	layout->addWidget( _widget );
+#include "ui_ContactDetails.h"
 
-	resize( QSize( 619, 572 ) );
-	init();
-	hideAccountWidgets();
+using namespace std;
+
+QtEditContactProfile::QtEditContactProfile(CContact & cContact, CWengoPhone & cWengoPhone, QWidget * parent) 
+: QDialog(parent), _cContact(cContact), _cWengoPhone(cWengoPhone) {
+
+	_ui = new Ui::ContactDetails();
+	_ui->setupUi(this);
+
+	_addIMContactMenu = new QMenu(_ui->addIMContactButton);
+	QAction * actionMSN = _addIMContactMenu->addAction(QIcon(":pics/protocol_msn.png"),
+				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolMSN)));
+	QAction * actionAIMICQ = _addIMContactMenu->addAction(QIcon(":pics/protocol_aim.png"),
+				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolAIMICQ)));
+	QAction * actionYahoo = _addIMContactMenu->addAction(QIcon(":pics/protocol_yahoo.png"),
+				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolYahoo)));
+	QAction * actionJabber = _addIMContactMenu->addAction(QIcon(":pics/protocol_jabber.png"),
+				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolJabber)));
+
+	connect(actionMSN, SIGNAL(triggered()), this, SLOT(actionClickedMSN()));
+	connect(actionAIMICQ, SIGNAL(triggered()), this, SLOT(actionClickedAIMICQ()));
+	connect(actionYahoo, SIGNAL(triggered()), this, SLOT(actionClickedYahoo()));
+	connect(actionJabber, SIGNAL(triggered()), this, SLOT(actionClickedJabber()));
+
+	connect(_ui->addIMContactButton, SIGNAL(clicked()), this, SLOT(addIMContactButtonClicked()));
+	connect(_ui->saveButton, SIGNAL(clicked()), this, SLOT(saveButtonClicked()));
+	connect(_ui->cancelButton, SIGNAL(clicked()), this, SLOT(cancelButtonClicked()));
+
 	readFromConfig();
-
-	connect( _saveChange, SIGNAL( clicked() ), this, SLOT( saveClicked() ) );
-	connect( _cancelChange, SIGNAL( clicked() ), this, SLOT( cancelClicked() ) );
 }
 
-void QtEditContactProfile::saveClicked() {
+void QtEditContactProfile::saveButtonClicked() {
 	writeToConfig();
 	accept();
 }
 
-void QtEditContactProfile::cancelClicked() {
+void QtEditContactProfile::cancelButtonClicked() {
 	reject();
-}
-
-void QtEditContactProfile::hideAccountWidgets() {
-	for ( int i = 1; i < _imAccountLineEdit.size(); i++ ) {
-		_imAccountLineEdit[ i ] ->setVisible( false );
-		_imAccountLineEdit[ i ] ->setReadOnly( true );
-	}
-
-	for ( int i = 1; i < _imAccountsPic.size(); i++ ) {
-		_imAccountsPic[ i ] ->setVisible( false );
-	}
 }
 
 void QtEditContactProfile::writeToConfig() {
 	Contact & c = _cContact.getContact();
 
 	// Setting wengo id
-	c.setWengoPhoneId(_alias->text().toStdString());
+	c.setWengoPhoneId(_ui->alias->text().toStdString());
 	////
 
 	// Setting name
-	c.setFirstName( _firstName->text().toStdString() );
-	c.setLastName( _lastName->text().toStdString() );
+	c.setFirstName(_ui->firstName->text().toStdString());
+	c.setLastName(_ui->lastName->text().toStdString());
 	////
 
 	// Setting sex
-	c.setSex((EnumSex::Sex) _gender->currentIndex());
+	c.setSex((EnumSex::Sex) _ui->gender->currentIndex());
 	////
 
 	// Setting birthday
-	QDate qdate = _birthDate->date();
+	QDate qdate = _ui->birthDate->date();
 	Date date;
-	date.setDay( qdate.day() );
-	date.setMonth( qdate.month() );
-	date.setYear( qdate.year() );
-	c.setBirthdate( date );
+	date.setDay(qdate.day());
+	date.setMonth(qdate.month());
+	date.setYear(qdate.year());
+	c.setBirthdate(date);
 	////
 
 	// Setting address
 	StreetAddress address;
 	//address.setStateProvince(_state->text().toStdString());
 	//address.setCountry(_country->text().toStdString());
-	address.setCity(_city->text().toStdString());
+	address.setCity(_ui->city->text().toStdString());
 	c.setStreetAddress(address);
 	////
 
@@ -102,18 +113,18 @@ void QtEditContactProfile::writeToConfig() {
 	////
 
 	// Setting phone numbers
-	c.setMobilePhone(_cellPhone->text().toStdString());
-	c.setWorkPhone(_workPhone->text().toStdString());
-	c.setHomePhone(_homePhone->text().toStdString());
-	c.setWengoPhoneNumber(_wengoPhone->text().toStdString());
+	c.setMobilePhone(_ui->cellPhone->text().toStdString());
+	c.setWorkPhone(_ui->workPhone->text().toStdString());
+	c.setHomePhone(_ui->homePhone->text().toStdString());
+	c.setWengoPhoneNumber(_ui->wengoPhone->text().toStdString());
 	////
 
 	// Setting emails
-	c.setPersonalEmail(_email->text().toStdString());
+	c.setPersonalEmail(_ui->email->text().toStdString());
 	////
 
 	// Settings websites
-	c.setWebsite(_web->text().toStdString());
+	c.setWebsite(_ui->web->text().toStdString());
 	////
 }
 
@@ -121,110 +132,112 @@ void QtEditContactProfile::readFromConfig() {
 	Contact & c = _cContact.getContact();
 
 	// Setting wengo id
-	_alias->setText(QString::fromStdString(c.getWengoPhoneId()));
+	_ui->alias->setText(QString::fromStdString(c.getWengoPhoneId()));
 	////
 
 	// Setting name
-	_firstName->setText(QString::fromStdString(c.getFirstName()));
-	_lastName->setText(QString::fromStdString(c.getLastName()));
+	_ui->firstName->setText(QString::fromStdString(c.getFirstName()));
+	_ui->lastName->setText(QString::fromStdString(c.getLastName()));
 	////
 
 	// Setting sex
-	_gender->setCurrentIndex((int) c.getSex());
+	_ui->gender->setCurrentIndex((int) c.getSex());
 	////
 
 	// Setting birthday
 	Date date = c.getBirthdate();
-	_birthDate->setDate(QDate(date.getYear(), date.getMonth(), date.getDay()));
+	_ui->birthDate->setDate(QDate(date.getYear(), date.getMonth(), date.getDay()));
 	////
 
 	// Setting address
 	StreetAddress address = c.getStreetAddress();
-	//_state->setText(QString::fromStdString(address.getStateProvince()));
-	//_country->setText(QString::fromStdString(address.getCountry()));
-	_city->setText(QString::fromStdString(address.getCity()));
+	//_ui->state->setText(QString::fromStdString(address.getStateProvince()));
+	//_ui->country->setText(QString::fromStdString(address.getCountry()));
+	_ui->city->setText(QString::fromStdString(address.getCity()));
 	////
 
 	// Setting IMAccounts
+	unsigned j = 0;
+	for (IMContactSet::const_iterator it = c.getIMContactSet().begin();
+		it != c.getIMContactSet().end();
+		++it, ++j) {
+
+		QtIMContactDetails * qtIMContactDetails = new QtIMContactDetails((IMContact &)*it, _ui->IMAccountGroup);
+		addIMContactDetails(qtIMContactDetails);
+	}
 	////
 
 	// Setting phone numbers
-	_cellPhone->setText(QString::fromStdString(c.getMobilePhone()));
-	_workPhone->setText(QString::fromStdString(c.getWorkPhone()));
-	_homePhone->setText(QString::fromStdString(c.getHomePhone()));
-	_wengoPhone->setText(QString::fromStdString(c.getWengoPhoneNumber()));
+	_ui->cellPhone->setText(QString::fromStdString(c.getMobilePhone()));
+	_ui->workPhone->setText(QString::fromStdString(c.getWorkPhone()));
+	_ui->homePhone->setText(QString::fromStdString(c.getHomePhone()));
+	_ui->wengoPhone->setText(QString::fromStdString(c.getWengoPhoneNumber()));
 	////
 
 	// Setting emails
-	_email->setText(QString::fromStdString(c.getPersonalEmail()));
+	_ui->email->setText(QString::fromStdString(c.getPersonalEmail()));
 	////
 
 	// Settings websites
-	_web->setText(QString::fromStdString(c.getWebsite()));
+	_ui->web->setText(QString::fromStdString(c.getWebsite()));
+	////
+
+	// Setting icon
+	QPixmap pixmap;
+	string myData = c.getIcon().getData();
+	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
+	_ui->avatarPixmap->setPixmap(pixmap.scaled(_ui->avatarPixmap->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 	////
 }
 
-void QtEditContactProfile::init() {
-	_alias = Object::findChild<QLineEdit *>( _widget, "alias" );
-	_firstName = Object::findChild<QLineEdit *>( _widget, "firstName" );
-	_lastName = Object::findChild<QLineEdit *>( _widget, "lastName" );
-	_birthDate = Object::findChild<QDateEdit *>( _widget, "birthDate" );
-	_gender = Object::findChild<QComboBox *>( _widget, "gender" );
+void QtEditContactProfile::addIMContactDetails(QtIMContactDetails * qtIMContactDetails) {
+	QLayout * layout =  _ui->IMAccountGroup->layout();
 
-	_country = Object::findChild<QComboBox *>( _widget, "country" );
-	_state = Object::findChild<QComboBox *>( _widget, "state" );
-	_city = Object::findChild<QLineEdit *>( _widget, "city" );
+	if (layout) {
+		layout->addWidget(qtIMContactDetails);
 
-	_cellPhone = Object::findChild<QLineEdit *>( _widget, "cellPhone" );
-	_wengoPhone = Object::findChild<QLineEdit *>( _widget, "wengoPhone" );
-	_homePhone = Object::findChild<QLineEdit *>( _widget, "homePhone" );
-	_workPhone = Object::findChild<QLineEdit *>( _widget, "workPhone" );
-
-	// Advanced details
-	_email = Object::findChild<QLineEdit *>( _widget, "email" );
-	_blog = Object::findChild<QLineEdit *>( _widget, "blog" );
-	_web = Object::findChild<QLineEdit *>( _widget, "web" );
-
-	_saveChange = Object::findChild<QPushButton *>( _widget, "saveChange" );
-	_cancelChange = Object::findChild<QPushButton *>( _widget, "cancelChange" );
-
-	// IM accounts pics
-	QLabel * imAccountsPic;
-	imAccountsPic = Object::findChild<QLabel *>( _widget, "imPic1" );
-	_imAccountsPic << imAccountsPic;
-	imAccountsPic = Object::findChild<QLabel *>( _widget, "imPic2" );
-	_imAccountsPic << imAccountsPic;
-	imAccountsPic = Object::findChild<QLabel *>( _widget, "imPic3" );
-	_imAccountsPic << imAccountsPic;
-	imAccountsPic = Object::findChild<QLabel *>( _widget, "imPic4" );
-	_imAccountsPic << imAccountsPic;
-	imAccountsPic = Object::findChild<QLabel *>( _widget, "imPic5" );
-	_imAccountsPic << imAccountsPic;
-	imAccountsPic = Object::findChild<QLabel *>( _widget, "imPic6" );
-	_imAccountsPic << imAccountsPic;
-	// IM accounts data
-	QLineEdit * imAccountData;
-	imAccountData = Object::findChild<QLineEdit *>( _widget, "imAccount1" );
-	_imAccountLineEdit << imAccountData;
-	imAccountData = Object::findChild<QLineEdit *>( _widget, "imAccount2" );
-	_imAccountLineEdit << imAccountData;
-	imAccountData = Object::findChild<QLineEdit *>( _widget, "imAccount3" );
-	_imAccountLineEdit << imAccountData;
-	imAccountData = Object::findChild<QLineEdit *>( _widget, "imAccount4" );
-	_imAccountLineEdit << imAccountData;
-	imAccountData = Object::findChild<QLineEdit *>( _widget, "imAccount5" );
-	_imAccountLineEdit << imAccountData;
-	imAccountData = Object::findChild<QLineEdit *>( _widget, "imAccount6" );
-	_imAccountLineEdit << imAccountData;
-
-	_avatar = Object::findChild<QLabel *>( _widget, "avatar" );
-}
-
-void QtEditContactProfile::changeGroupBoxStat( QGroupBox * box, bool stat ) {
-	QList<QWidget *> allWidgets = box->findChildren<QWidget *>();
-
-	for ( int i = 0;i < allWidgets.size();i++ ) {
-		allWidgets[ i ] ->setEnabled( stat );
+		connect(qtIMContactDetails, SIGNAL(removeButtonClicked(QtIMContactDetails *)),
+			this, SLOT(removeButtonClicked(QtIMContactDetails *)));
 	}
 }
 
+void QtEditContactProfile::removeIMContactDetails(QtIMContactDetails * qtIMContactDetails) {
+	QLayout * layout =  _ui->IMAccountGroup->layout();
+
+	if (layout) {
+		_cContact.removeIMContact(qtIMContactDetails->getIMContact());
+		layout->removeWidget(qtIMContactDetails);
+		delete qtIMContactDetails;
+	}
+}
+
+void QtEditContactProfile::addIMContact(EnumIMProtocol::IMProtocol imProtocol) {
+	/*
+	QString protocolName = action->text();
+	EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
+	*/
+
+	std::set<IMAccount *> imAccounts = _cWengoPhone.getCurrentUserProfile().getIMAccountHandler().getIMAccountsOfProtocol(imProtocol);
+
+	QtAddIMContact qtAddIMContact(imProtocol, imAccounts, this);
+
+	if (qtAddIMContact.exec()) {
+		IMContact imContact(imProtocol, qtAddIMContact.contactId().toStdString());
+		for (std::set<IMAccount *>::const_iterator it = imAccounts.begin();
+			it != imAccounts.end();
+			++it) {
+			imContact.setIMAccount(*it);
+			_cContact.addIMContact(imContact);
+		}
+
+		readFromConfig();
+	}
+}
+
+void QtEditContactProfile::removeButtonClicked(QtIMContactDetails * qtIMContactDetails) {
+	removeIMContactDetails(qtIMContactDetails);
+}
+
+void QtEditContactProfile::addIMContactButtonClicked() {
+	_addIMContactMenu->popup(_ui->addIMContactButton->mapToGlobal(_ui->addIMContactButton->pos()));
+}

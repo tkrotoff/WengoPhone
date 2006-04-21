@@ -135,8 +135,6 @@ void ContactList::addIMContact(Contact & contact, const IMContact & imContact) {
 }
 
 void ContactList::removeIMContact(Contact & contact, const IMContact & imContact) {
-	contact._removeIMContact(imContact);
-
 	// We get a copy of the ContactGroupSet because the set can be modified
 	// due to cascading events.
 	Contact::ContactGroupSet contactGroupSet = contact._contactGroupSet;
@@ -147,6 +145,8 @@ void ContactList::removeIMContact(Contact & contact, const IMContact & imContact
 		++it) {
 		_imContactListHandler.removeIMContact(*it, imContact);
 	}
+
+	contact._removeIMContact(imContact);
 }
 
 void ContactList::addToContactGroup(const std::string & groupName, Contact & contact) {

@@ -30,9 +30,11 @@
 #include <QMutex>
 
 class Contact;
+class PContact;
+class IMContact;
 class CContactGroup;
 class CWengoPhone;
-class PContact;
+
 
 /**
  *
@@ -73,6 +75,10 @@ public:
 	EnumPresenceState::PresenceState getPresenceState() const;
 
 	Picture getIcon() const;
+
+	void addIMContact(const IMContact & imContact);
+
+	void removeIMContact(const IMContact & imContact);
 
 private:
 

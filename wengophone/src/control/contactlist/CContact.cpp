@@ -87,3 +87,11 @@ void CContact::contactChangedEventHandler(Contact & contact) {
 Picture CContact::getIcon() const {
 	return _contact.getIcon();
 }
+
+void CContact::addIMContact(const IMContact & imContact) {
+	_contact.addIMContact(imContact);
+}
+
+void CContact::removeIMContact(const IMContact & imContact) {
+	_contact.removeIMContact(imContact);
+}
