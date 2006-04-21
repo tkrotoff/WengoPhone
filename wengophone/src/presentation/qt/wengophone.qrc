@@ -56,6 +56,7 @@
         <file>pics/profilebar/bar_start_status_green.png</file>
         <file>pics/profilebar/bar_start_status_orange.png</file>
         <file>pics/profilebar/bar_start_status_red.png</file>
+        <file>pics/profilebar/bar_separator.png</file>
         <file>pics/protocol_aim.png</file>
         <file>pics/protocol_googletalk.png</file>
         <file>pics/protocol_jabber.png</file>
@@ -84,6 +85,10 @@
         <file>pics/video_flip.png</file>
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
+        <file>pics/callbar/call_bar_button_off.png</file>
+        <file>pics/callbar/call_bar_button_video.png</file>
+        <file>pics/callbar/call_bar_fill.png</file>
+        <file>pics/callbar/call_bar_button.png</file>
     </qresource>
     <qresource prefix="/emoticons" >
         <file>chat/emoticons/emblem-unreadable.png</file>

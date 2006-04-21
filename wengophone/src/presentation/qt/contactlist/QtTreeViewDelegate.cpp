@@ -137,12 +137,12 @@ void QtTreeViewDelegate::drawGroup( QPainter * painter, const QStyleOptionViewIt
 		spx = QtContactPixmap::getInstance();
 		painter->setPen( option.palette.text().color() );
 		r = option.rect;
-/*
+
 		QLinearGradient lg( QPointF( 1, option.rect.top() ), QPointF( 1, option.rect.bottom() ) );
 		lg.setColorAt ( .8, QColor( 212, 208, 200 ) );
 		lg.setColorAt ( 0, QColor( 255, 255, 255 ) );
 		painter->fillRect( option.rect, QBrush( lg ) );
-*/
+
 		QFont f = option.font;
 		f.setBold( true );
 		painter->setFont( f );
@@ -182,9 +182,9 @@ void QtTreeViewDelegate::drawGroup( QPainter * painter, const QStyleOptionViewIt
 		painter->setPen(QColor(128,128,128));
 		painter->drawLine(option.rect.left(),option.rect.bottom()-1,
 						  option.rect.width(),option.rect.bottom()-1);
-
+/*
 		painter->setPen(Qt::black);
 		painter->drawLine(option.rect.left(),option.rect.bottom()-2,
 						  option.rect.width(),option.rect.bottom()-2);
-
+*/
 	}

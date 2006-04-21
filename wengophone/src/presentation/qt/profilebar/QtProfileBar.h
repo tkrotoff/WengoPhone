@@ -48,17 +48,6 @@ protected:
 
 	QGridLayout * _widgetLayout;
 
-/*
-	QtClickableLabel * _statusLabel;
-
-	QtClickableLabel * _nicknameLabel;
-
-	QtClickableLabel * _eventsLabel;
-
-	QtClickableLabel * _creditLabel;
-
-*/
-
 	QtProfileLabel * _statusLabel;
 
 	QtProfileLabel * _nicknameLabel;

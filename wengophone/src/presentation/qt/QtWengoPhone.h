@@ -55,6 +55,7 @@ class QStackedWidget;
 class QWidget;
 class QMenu;
 class QStatusBar;
+class QtCallBar;
 
 /**
  * Qt Presentation component for WengoPhone.
@@ -272,6 +273,10 @@ private:
 	QLabel * _internetConnectionStateLabel;
 
 	QFrame * _iconBar;
+
+	QFrame * _callBar;
+
+	QtCallBar * _qtCallBar;
 
 	QPushButton * _addContactButton;
 

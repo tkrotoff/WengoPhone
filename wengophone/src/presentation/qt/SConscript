@@ -76,6 +76,7 @@ headers = [
 	'chat/QtChatContactWidget.h',
 	'webservices/sms/QtSms.h',
 	'webservices/softupdate/QtSoftUpdate.h',
+	'callbar/QtCallBar.h',
 	'config/QtAdvancedConfig.h',
 	'config/QtAccountSettings.h',
 	'config/QtAdvancedSettings.h',
@@ -97,6 +98,7 @@ headers = [
 	'history/QtHistoryItem.h',
 	'history/QtHistory.h',
 	'webservices/subscribe/QtSubscribe.h',
+	'hack/QtTabWidgetHack.h'
 ]
 
 sources = [
@@ -159,6 +161,7 @@ sources = [
 	'chat/QtChatContactWidget.cpp',
 	'webservices/sms/QtSms.cpp',
 	'webservices/softupdate/QtSoftUpdate.cpp',
+	'callbar/QtCallBar.cpp',
 	'config/QtAdvancedConfig.cpp',
 	'config/QtAccountSettings.cpp',
 	'config/QtAdvancedSettings.cpp',

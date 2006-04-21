@@ -57,11 +57,12 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	_nicknameLabel = new QtProfileLabel(this);
 	_nicknameLabel->setMinimumSize(QSize(46,65));
 	_nicknameLabel->setMaximumSize(QSize(1000,65));
-	_nicknameLabel->setPixmaps(QPixmap(), // no start
-	                QPixmap(), // no end
+	_nicknameLabel->setPixmaps(
+					QPixmap(), // no start
+	                QPixmap(":/pics/profilebar/bar_separator.png"), //  end
 	                QPixmap(":/pics/profilebar/bar_fill.png"),
 	                QPixmap(),  // no start
-	                QPixmap(),  // no end
+	                QPixmap(":/pics/profilebar/bar_separator.png"),  // end
 	                QPixmap(":/pics/profilebar/bar_fill.png")
 	                );
 
@@ -71,10 +72,10 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	_eventsLabel->setMinimumSize(QSize(46,65));
 	_eventsLabel->setMaximumSize(QSize(1000,65));
 	_eventsLabel->setPixmaps(QPixmap(), // no start
-	                QPixmap(), // no end
+	                QPixmap(":/pics/profilebar/bar_separator.png"), //  end
 	                QPixmap(":/pics/profilebar/bar_fill.png"),
 	                QPixmap(),  // no start
-	                QPixmap(),  // no end
+	                QPixmap(":/pics/profilebar/bar_separator.png"),  // end
 	                QPixmap(":/pics/profilebar/bar_fill.png")
 	                );
 

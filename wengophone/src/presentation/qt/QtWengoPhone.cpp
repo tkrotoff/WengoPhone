@@ -51,7 +51,7 @@
 #include "profilebar/QtProfileBar.h"
 #include "history/QtHistoryWidget.h"
 #include "toaster/QtToaster.h"
-
+#include "callBar/QtCallBar.h"
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
 #include <qtutil/Widget.h>
@@ -104,6 +104,14 @@ void QtWengoPhone::initThreadSafe() {
 
 	_qtLogin = new QtLogin(_wengoPhoneWindow, *this);
 
+	_callBar = Object::findChild<QFrame *>(_wengoPhoneWindow, "callBarFrame");
+	QGridLayout * callBarLayout = new QGridLayout(_callBar);
+	_qtCallBar = new QtCallBar(_callBar);
+	callBarLayout->addWidget(_qtCallBar);
+	callBarLayout->setMargin(0);
+	callBarLayout->setSpacing(0);
+
+/*
 	//callButton
 	_callButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "callButton");
 
@@ -115,9 +123,13 @@ void QtWengoPhone::initThreadSafe() {
 
 	//phoneComboBox
 	_phoneComboBox = Object::findChild<QComboBox *>(_wengoPhoneWindow, "phoneComboBox");
+*/
+	_phoneComboBox=_qtCallBar->getComboBox();
 
 	// IconBar
 	_iconBar = Object::findChild<QFrame *>(_wengoPhoneWindow,"iconBar");
+	//FIXME:
+	_iconBar->setVisible(false);
 
 	// Add contact button
 	_addContactButton = Object::findChild<QPushButton *>(_iconBar,"addContactButton");
@@ -128,6 +140,7 @@ void QtWengoPhone::initThreadSafe() {
 
 	//tabWidget
 	_tabWidget = Object::findChild<QTabWidget *>(_wengoPhoneWindow, "tabWidget");
+
 
 	//Dialpad
 	QtDialpad * qtDialpad = new QtDialpad(this);
@@ -278,6 +291,10 @@ void QtWengoPhone::initThreadSafe() {
 
 	//Status bar
 	_statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");
+	QPalette statusBarPalette = _statusBar->palette();
+	statusBarPalette.setColor(QPalette::Window,QColor(60,60,60));
+	_statusBar->setPalette(statusBarPalette);
+	_statusBar->setAutoFillBackground(true);
 
 	_internetConnectionStateLabel = new QLabel(_statusBar);
 	_internetConnectionStateLabel->setPixmap(QPixmap(":/pics/statusbar_connect_error.png"));
@@ -303,15 +320,15 @@ void QtWengoPhone::initThreadSafe() {
 
 void QtWengoPhone::initButtons() {
 	//callButton
-	connect(_callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
+	connect(_qtCallBar, SIGNAL(callBarButtonClicked()), SLOT(callButtonClicked()));
 	enableCallButton();
 
 	//videoCallButton
-	connect(_videoCallButton, SIGNAL(clicked()), SLOT(videoCallButtonClicked()));
-	enableCallButton();
+	connect(_qtCallBar, SIGNAL(callBarButtonVideoClicked()), SLOT(videoCallButtonClicked()));
+	//enableCallButton();
 
 	//hangUpButton
-	_hangUpButton->setEnabled(false);
+	//_hangUpButton->setEnabled(false);
 
 	//phoneComboBox
 	connect(_phoneComboBox, SIGNAL(activated(int)), SLOT(callButtonClicked()));
@@ -319,17 +336,21 @@ void QtWengoPhone::initButtons() {
 }
 
 void QtWengoPhone::enableCallButton() {
+	/*
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	_callButton->setEnabled(!phoneNumber.empty());
 	_videoCallButton->setEnabled(!phoneNumber.empty());
+	*/
 }
 
 void QtWengoPhone::callButtonClicked() {
+
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	if (!phoneNumber.empty()) {
 		_cWengoPhone.makeCall(phoneNumber, false);
 	}
 	_phoneComboBox->clearEditText();
+
 }
 
 void QtWengoPhone::videoCallButtonClicked() {
