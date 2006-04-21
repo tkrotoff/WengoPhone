@@ -32,7 +32,7 @@ bool HistoryTreeEventManager::eventFilter(QObject *obj, QEvent *event) {
 
 		if( mouseEvent->button() == Qt::RightButton) {
 			_historyWidget->showPopupMenu(mouseEvent->pos());
-			return true;
+			return QObject::eventFilter(obj, event);
 		}
 	}
 	return QObject::eventFilter(obj, event);
