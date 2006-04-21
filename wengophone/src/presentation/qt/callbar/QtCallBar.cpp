@@ -71,6 +71,7 @@ QFrame(parent,f)
 
 	QGridLayout * comboContLayout = new QGridLayout(_callBarComboContainer);
 	_phoneComboBox = new QComboBox(_callBarComboContainer);
+	_phoneComboBox->setEditable(true);
 	_phoneComboBox->setMaximumSize(QSize(10000,22));
 	comboContLayout->addWidget(_phoneComboBox);
 

@@ -46,9 +46,9 @@
       <blue>133</blue>
      </color>
      <color>
-      <red>255</red>
-      <green>255</green>
-      <blue>255</blue>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
      </color>
      <color>
       <red>255</red>
@@ -56,9 +56,9 @@
       <blue>255</blue>
      </color>
      <color>
-      <red>255</red>
-      <green>255</green>
-      <blue>255</blue>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
      </color>
      <color>
       <red>255</red>
@@ -133,9 +133,9 @@
       <blue>133</blue>
      </color>
      <color>
-      <red>255</red>
-      <green>255</green>
-      <blue>255</blue>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
      </color>
      <color>
       <red>255</red>
@@ -143,9 +143,9 @@
       <blue>255</blue>
      </color>
      <color>
-      <red>255</red>
-      <green>255</green>
-      <blue>255</blue>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
      </color>
      <color>
       <red>255</red>
@@ -190,9 +190,9 @@
     </inactive>
     <disabled>
      <color>
-      <red>106</red>
-      <green>104</green>
-      <blue>100</blue>
+      <red>118</red>
+      <green>116</green>
+      <blue>108</blue>
      </color>
      <color>
       <red>212</red>
