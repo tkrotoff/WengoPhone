@@ -64,7 +64,7 @@ QFrame(parent,f)
 					  QPixmap(":/pics/callbar/call_bar_fill.png"), // Fill
 					  QPixmap(), // Start
 					  QPixmap(), // End
-					  QPixmap() // Fill
+					  QPixmap(":/pics/callbar/call_bar_fill.png") // Fill
 					  );
 
 
