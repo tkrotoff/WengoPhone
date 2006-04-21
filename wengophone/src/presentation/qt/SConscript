@@ -97,8 +97,7 @@ headers = [
 	'history/QtHistoryWidget.h',
 	'history/QtHistoryItem.h',
 	'history/QtHistory.h',
-	'webservices/subscribe/QtSubscribe.h',
-	'hack/QtTabWidgetHack.h'
+	'webservices/subscribe/QtSubscribe.h'
 ]
 
 sources = [
