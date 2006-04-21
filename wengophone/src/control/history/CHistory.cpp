@@ -19,7 +19,6 @@
 
 #include "CHistory.h"
 
-#include <model/history/History.h>
 #include <control/CWengoPhone.h>
 #include <presentation/PFactory.h>
 #include <presentation/PHistory.h>
@@ -103,4 +102,8 @@ std::string CHistory::getMementoPeer(unsigned int id) {
 
 void CHistory::replay(unsigned int id) {
 	_history.replay(id);
+}
+
+HistoryMementoCollection * CHistory::getMementos(HistoryMemento::State state, int count) {
+	return _history.getMementos(state, count);
 }

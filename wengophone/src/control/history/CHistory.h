@@ -21,8 +21,8 @@
 #define OW_CHISTORY_H
 
 #include <util/Event.h>
+#include <model/history/History.h>
 
-class History;
 class CWengoPhone;
 class PHistory;
 
@@ -105,6 +105,11 @@ public:
 	 * @see History::replay
 	 */
 	void replay(unsigned int id);
+
+	/**
+	 * @see History::getMementos
+	 */
+	 HistoryMementoCollection * getMementos(HistoryMemento::State state, int count = -1);
 
 	/**
 	 * Get the memento data.
