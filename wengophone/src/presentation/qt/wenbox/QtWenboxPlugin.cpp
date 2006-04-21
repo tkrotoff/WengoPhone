@@ -73,5 +73,5 @@ void QtWenboxPlugin::timeoutEventHandler() {
 	_timer->stop();
 
 	CWengoPhone & cWengoPhone = _cWenboxPlugin.getCWengoPhone();
-	cWengoPhone.makeCall(_phoneComboBox->currentText().toStdString(), false);
+	cWengoPhone.makeCall(_phoneComboBox->currentText().toStdString());
 }

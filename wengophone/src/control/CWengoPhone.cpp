@@ -26,21 +26,25 @@
 #include <model/profile/UserProfile.h>
 #include <model/phoneline/IPhoneLine.h>
 #include <model/history/History.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+#include <model/webservices/sms/Sms.h>
+#include <model/webservices/softupdate/SoftUpdate.h>
+#include <WengoPhoneBuildId.h>
+#include <model/webservices/subscribe/Subscribe.h>
+
 #include <presentation/PFactory.h>
 #include <presentation/PWengoPhone.h>
-#include "phoneline/CPhoneLine.h"
-#include "contactlist/CContactList.h"
-#include "history/CHistory.h"
-#include "wenbox/CWenboxPlugin.h"
-#include "WengoPhoneBuildId.h"
-#include "connect/CConnectHandler.h"
+
+#include <control/phoneline/CPhoneLine.h>
+#include <control/contactlist/CContactList.h>
+#include <control/history/CHistory.h>
+#include <control/wenbox/CWenboxPlugin.h>
+#include <control/connect/CConnectHandler.h>
 #include <control/chat/CChatHandler.h>
 #include <control/presence/CPresenceHandler.h>
-#include <model/webservices/sms/Sms.h>
 #include <control/webservices/sms/CSms.h>
-#include <model/webservices/softupdate/SoftUpdate.h>
 #include <control/webservices/softupdate/CSoftUpdate.h>
-#include <model/webservices/subscribe/Subscribe.h>
 #include <control/webservices/subscribe/CSubscribe.h>
 
 #include <util/WebBrowser.h>
@@ -81,8 +85,9 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.getCurrentUserProfile().getHistory().historyLoadedEvent += boost::bind(&CWengoPhone::historyLoadedEventHandler, this, _1);
 }
 
-void CWengoPhone::makeCall(const std::string & phoneNumber, bool enableVideo) {
-	_wengoPhone.getCurrentUserProfile().makeCall(phoneNumber, enableVideo);
+void CWengoPhone::makeCall(const std::string & phoneNumber) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	_wengoPhone.getCurrentUserProfile().makeCall(phoneNumber, config.getVideoEnable());
 }
 
 void CWengoPhone::addWengoAccount(const std::string & login, const std::string & password, bool autoLogin) {
@@ -166,7 +171,7 @@ void CWengoPhone::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount 
 	//_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(imAccount);
 }
 
-void CWengoPhone::openWengoUrlWithoutAuth(std::string url) {
+void CWengoPhone::openWengoUrlWithoutAuth(const std::string & url) {
 	//TODO: retrieve the language from the configuration
 	static const std::string langCode = "fra";
 
@@ -179,7 +184,7 @@ void CWengoPhone::openWengoUrlWithoutAuth(std::string url) {
 	LOG_DEBUG("url opened: " + finalUrl);
 }
 
-void CWengoPhone::openWengoUrlWithAuth(std::string url) {
+void CWengoPhone::openWengoUrlWithAuth(const std::string & url) {
 	static const std::string langCode = "fra";
 
 	IPhoneLine * activePhoneLine = _wengoPhone.getCurrentUserProfile().getActivePhoneLine();

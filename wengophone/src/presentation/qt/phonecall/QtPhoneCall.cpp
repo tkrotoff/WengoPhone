@@ -303,7 +303,7 @@ void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(QImage * image) {
 }
 
 void QtPhoneCall::acceptActionTriggered(bool) {
-	_cPhoneCall.accept(false);
+	_cPhoneCall.accept();
 }
 
 void QtPhoneCall::rejectActionTriggered(bool) {

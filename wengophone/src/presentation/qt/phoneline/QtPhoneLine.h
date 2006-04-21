@@ -48,8 +48,6 @@ private Q_SLOTS:
 
 	void callButtonClicked();
 
-	void videoCallButtonClicked();
-
 private:
 
 	void initThreadSafe();
@@ -75,8 +73,6 @@ private:
 	QPushButton * _hangUpButton;
 
 	QPushButton * _callButton;
-
-	QPushButton * _videoCallButton;
 
 	CPhoneCall * _activeCPhoneCall;
 };

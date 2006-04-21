@@ -73,7 +73,7 @@ public:
 	/**
 	 * @see PhoneCall::accept()
 	 */
-	void accept(bool enableVideo);
+	void accept();
 
 	/**
 	 * @see PhoneCall::mute()

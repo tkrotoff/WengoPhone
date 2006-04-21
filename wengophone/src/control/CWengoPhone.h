@@ -117,7 +117,7 @@ public:
 	/**
 	 * @see WengoPhone::makeCall()
 	 */
-	void makeCall(const std::string & phoneNumber, bool enableVideo);
+	void makeCall(const std::string & phoneNumber);
 
 	/**
 	 * @see WengoPhone::addWengoAccount()
@@ -222,16 +222,18 @@ public:
 private:
 
 	/**
-	 * Opens a web browser with the given url
+	 * Opens a web browser with the given url.
+	 *
 	 * @param url the url to open
 	 */
-	void openWengoUrlWithoutAuth(std::string url);
+	void openWengoUrlWithoutAuth(const std::string & url);
 
 	/**
-	 * Opens a web browser with the given url
+	 * Opens a web browser with the given url.
+	 *
 	 * @param url the url to open
 	 */
-	void openWengoUrlWithAuth(std::string url);
+	void openWengoUrlWithAuth(const std::string & url);
 
 	/**
 	 * Handle History::historyLoadedEvent

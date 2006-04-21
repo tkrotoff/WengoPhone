@@ -56,10 +56,6 @@ void QtPhoneLine::initThreadSafe() {
 	//callButton
 	_callButton = _qtWengoPhone->getCallButton();
 	connect(_callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
-
-	//videoCallButton
-	_videoCallButton = _qtWengoPhone->getVideoCallButton();
-	connect(_videoCallButton, SIGNAL(clicked()), SLOT(videoCallButtonClicked()));
 }
 
 void QtPhoneLine::updatePresentation() {
@@ -130,12 +126,10 @@ void QtPhoneLine::phoneCallCreatedEventHandlerThreadSafe(CPhoneCall & cPhoneCall
 	if (state == EnumPhoneCallState::PhoneCallStateIncoming) {
 		_hangUpButton->setEnabled(true);
 		_callButton->setEnabled(true);
-		_videoCallButton->setEnabled(true);
 	}
 	else if (state == EnumPhoneCallState::PhoneCallStateDialing) {
 		_hangUpButton->setEnabled(true);
 		_callButton->setEnabled(false);
-		_videoCallButton->setEnabled(false);
 	}
 	else {
 		LOG_FATAL("cannot be in this state=" + EnumPhoneCallState::toString(state));
@@ -151,7 +145,6 @@ void QtPhoneLine::phoneCallClosedEventHandler(CPhoneCall & cPhoneCall) {
 void QtPhoneLine::phoneCallClosedEventHandlerThreadSafe(CPhoneCall & cPhoneCall) {
 	_hangUpButton->setEnabled(false);
 	_callButton->setEnabled(false);
-	_videoCallButton->setEnabled(false);
 }
 
 void QtPhoneLine::hangUpButtonClicked() {
@@ -162,16 +155,7 @@ void QtPhoneLine::hangUpButtonClicked() {
 
 void QtPhoneLine::callButtonClicked() {
 	if (_activeCPhoneCall) {
-		_activeCPhoneCall->accept(false);
+		_activeCPhoneCall->accept();
 		_callButton->setEnabled(false);
-		_videoCallButton->setEnabled(false);
-	}
-}
-
-void QtPhoneLine::videoCallButtonClicked() {
-	if (_activeCPhoneCall) {
-		_activeCPhoneCall->accept(true);
-		_callButton->setEnabled(false);
-		_videoCallButton->setEnabled(false);
 	}
 }

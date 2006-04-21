@@ -28,6 +28,8 @@
 #include <model/SipCallbacks.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 #include <util/Logger.h>
 
@@ -71,8 +73,9 @@ void CPhoneCall::hangUp() {
 	_phoneCall.close();
 }
 
-void CPhoneCall::accept(bool enableVideo) {
-	_phoneCall.accept(enableVideo);
+void CPhoneCall::accept() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	_phoneCall.accept(config.getVideoEnable());
 }
 
 void CPhoneCall::hold() {

@@ -25,6 +25,7 @@
 #include <QObject>
 
 class QWidget;
+namespace Ui { class WengoPhoneWindowConfigPanel; }
 
 /**
  * Audio and video configuration panel.
@@ -36,6 +37,8 @@ class QtConfigPanel : public QObject, NonCopyable {
 public:
 
 	QtConfigPanel(QWidget * parent);
+
+	~QtConfigPanel();
 
 	QWidget * getWidget() const {
 		return _configPanelWidget;
@@ -52,6 +55,8 @@ private Q_SLOTS:
 	void enableWenboxCheckBoxToggled(bool checked);
 
 private:
+
+	Ui::WengoPhoneWindowConfigPanel * _ui;
 
 	QWidget * _configPanelWidget;
 };

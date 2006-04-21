@@ -19,6 +19,8 @@
 
 #include "QtConfigPanel.h"
 
+#include "ui_WengoPhoneWindowConfigPanel.h"
+
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
@@ -27,45 +29,45 @@
 
 #include <util/Logger.h>
 
-#include <qtutil/Object.h>
-#include <qtutil/WidgetFactory.h>
-
 #include <QtGui>
 
 QtConfigPanel::QtConfigPanel(QWidget * parent)
 	: QObject(parent) {
 
-	_configPanelWidget = WidgetFactory::create(":/forms/WengoPhoneWindowConfigPanel.ui", parent);
+	_configPanelWidget = new QWidget(parent);
+
+	_ui = new Ui::WengoPhoneWindowConfigPanel();
+	_ui->setupUi(_configPanelWidget);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	//config
 
 	AudioDevice::selectAsRecordDevice(config.getAudioInputDeviceName(), AudioDevice::TypeInputMicrophone);
 
 	//inputSoundSlider
-	QSlider * inputSoundSlider = Object::findChild<QSlider *>(_configPanelWidget, "inputSoundSlider");
 	VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
-	inputSoundSlider->setValue(inputVolumeControl.getLevel());
-	connect(inputSoundSlider, SIGNAL(valueChanged(int)), SLOT(inputSoundSliderValueChanged(int)));
+	_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());
+	connect(_ui->inputSoundSlider, SIGNAL(valueChanged(int)), SLOT(inputSoundSliderValueChanged(int)));
 
 	//outputSoundSlider
-	QSlider * outputSoundSlider = Object::findChild<QSlider *>(_configPanelWidget, "outputSoundSlider");
 	VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
-	outputSoundSlider->setValue(outputVolumeControl.getLevel());
-	connect(outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputSoundSliderValueChanged(int)));
+	_ui->outputSoundSlider->setValue(outputVolumeControl.getLevel());
+	connect(_ui->outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputSoundSliderValueChanged(int)));
 
 	//enableVideoCheckBox
-	QCheckBox * enableVideoCheckBox = Object::findChild<QCheckBox *>(_configPanelWidget, "enableVideoCheckBox");
-	connect(enableVideoCheckBox, SIGNAL(toggled(bool)), SLOT(enableVideoCheckBoxToggled(bool)));
+	_ui->enableVideoCheckBox->setChecked(config.getVideoEnable());
+	connect(_ui->enableVideoCheckBox, SIGNAL(toggled(bool)), SLOT(enableVideoCheckBoxToggled(bool)));
 
 	//enableWenboxCheckBox
-	QCheckBox * enableWenboxCheckBox = Object::findChild<QCheckBox *>(_configPanelWidget, "enableWenboxCheckBox");
-	connect(enableWenboxCheckBox, SIGNAL(toggled(bool)), SLOT(enableWenboxCheckBoxToggled(bool)));
+	connect(_ui->enableWenboxCheckBox, SIGNAL(toggled(bool)), SLOT(enableWenboxCheckBoxToggled(bool)));
 
 	//videoSettingsLabel
-	QLabel * videoSettingsLabel = Object::findChild<QLabel *>(_configPanelWidget, "videoSettingsLabel");
 
 	//audioSettingsLabel
-	QLabel * audioSettingsLabel = Object::findChild<QLabel *>(_configPanelWidget, "audioSettingsLabel");
+}
+
+QtConfigPanel::~QtConfigPanel() {
+	delete _ui;
 }
 
 void QtConfigPanel::inputSoundSliderValueChanged(int value) {
@@ -81,6 +83,8 @@ void QtConfigPanel::outputSoundSliderValueChanged(int value) {
 }
 
 void QtConfigPanel::enableVideoCheckBoxToggled(bool checked) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.set(Config::VIDEO_ENABLE_KEY, checked);
 }
 
 void QtConfigPanel::enableWenboxCheckBoxToggled(bool checked) {

@@ -115,9 +115,6 @@ void QtWengoPhone::initThreadSafe() {
 	//callButton
 	_callButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "callButton");
 
-	//videoCallButton
-	_videoCallButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "videoCallButton");
-
 	//hangUpButton
 	_hangUpButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "hangUpButton");
 
@@ -324,10 +321,6 @@ void QtWengoPhone::initButtons() {
 	connect(_qtCallBar, SIGNAL(callBarButtonClicked()), SLOT(callButtonClicked()));
 	enableCallButton();
 
-	//videoCallButton
-	connect(_qtCallBar, SIGNAL(callBarButtonVideoClicked()), SLOT(videoCallButtonClicked()));
-	//enableCallButton();
-
 	//hangUpButton
 	//_hangUpButton->setEnabled(false);
 
@@ -340,7 +333,6 @@ void QtWengoPhone::enableCallButton() {
 	/*
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	_callButton->setEnabled(!phoneNumber.empty());
-	_videoCallButton->setEnabled(!phoneNumber.empty());
 	*/
 }
 
@@ -348,18 +340,10 @@ void QtWengoPhone::callButtonClicked() {
 
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	if (!phoneNumber.empty()) {
-		_cWengoPhone.makeCall(phoneNumber, false);
+		_cWengoPhone.makeCall(phoneNumber);
 	}
 	_phoneComboBox->clearEditText();
 
-}
-
-void QtWengoPhone::videoCallButtonClicked() {
-	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
-	if (!phoneNumber.empty()) {
-		_cWengoPhone.makeCall(phoneNumber, true);
-	}
-	_phoneComboBox->clearEditText();
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {

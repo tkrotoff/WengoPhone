@@ -190,6 +190,7 @@ sources = [
 
 forms = [
 	'WengoPhoneWindow.ui',
+	'WengoPhoneWindowConfigPanel.ui',
 	'AboutWindow.ui',
 	'HttpProxyLoginWindow.ui',
 	'imaccount/IMAccountTemplate.ui',

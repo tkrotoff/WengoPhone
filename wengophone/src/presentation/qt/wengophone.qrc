@@ -131,7 +131,6 @@
     <qresource prefix="/forms" >
         <file>DialpadWidget.ui</file>
         <file>WengoPhoneWindow.ui</file>
-        <file>WengoPhoneWindowConfigPanel.ui</file>
         <file>chat/ChatRoomInviteWidget.ui</file>
         <file>chat/ChatRoomWidget.ui</file>
         <file>chat/ChatWidget.ui</file>

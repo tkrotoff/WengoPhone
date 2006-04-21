@@ -21,9 +21,13 @@
 
 #include <presentation/PPhoneLine.h>
 #include <presentation/PFactory.h>
+
 #include <control/phonecall/CPhoneCall.h>
 #include <control/CWengoPhone.h>
+
 #include <model/phoneline/IPhoneLine.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 #include <util/Logger.h>
 
@@ -38,8 +42,9 @@ CPhoneLine::CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone)
 	_phoneLine.phoneCallClosedEvent += boost::bind(&CPhoneLine::phoneCallClosedEventHandler, this, _1, _2);
 }
 
-int CPhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
-	return _phoneLine.makeCall(phoneNumber, enableVideo);
+int CPhoneLine::makeCall(const std::string & phoneNumber) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	return _phoneLine.makeCall(phoneNumber, config.getVideoEnable());
 }
 
 void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender, EnumPhoneLineState::PhoneLineState state) {
