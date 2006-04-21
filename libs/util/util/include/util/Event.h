@@ -149,7 +149,8 @@ public:
 	 */
 	template<typename Slot>
 	void operator-=(const Slot & slot) {
-		for (typename SlotList::iterator it = _slotList.begin(); it != _slotList.end(); it++) {
+		typename SlotList::iterator it;
+		for (it = _slotList.begin(); it != _slotList.end(); it++) {
 			if ((*it).slot == slot)
 				break;
 		}
