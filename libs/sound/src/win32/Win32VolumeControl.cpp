@@ -170,6 +170,31 @@ bool Win32VolumeControl::selectAsRecordDevice() {
 	return true;
 }
 
+bool Win32VolumeControl::isSelectedAsRecordDevice() {
+	MMRESULT mr = createMixerControl(MIXERCONTROL_CONTROLTYPE_MUX);
+	if (mr != MMSYSERR_NOERROR) {
+		return false;
+	}
+
+	MIXERCONTROLDETAILS_BOOLEAN mxcbSelect;
+
+	MIXERCONTROLDETAILS mxcd;
+	mxcd.cbStruct = sizeof(MIXERCONTROLDETAILS);
+	mxcd.dwControlID = _mxc.dwControlID;
+	mxcd.cChannels = 1;
+	mxcd.cMultipleItems = 0;
+	mxcd.cbDetails = sizeof(MIXERCONTROLDETAILS_BOOLEAN);
+	mxcd.paDetails = &mxcbSelect;
+
+	mr = ::mixerGetControlDetailsA((HMIXEROBJ) _hMixer, &mxcd,
+				MIXER_OBJECTF_HMIXER | MIXER_SETCONTROLDETAILSF_VALUE);
+	if (mr != MMSYSERR_NOERROR) {
+		LOG_ERROR("couldn't select the audio device as the record device, mixerSetControlDetails() failed");
+		return false;
+	}
+	return mxcbSelect.fValue;
+}
+
 bool Win32VolumeControl::close() {
 	if (_hMixer) {
 		MMRESULT mr = ::mixerClose(_hMixer);
@@ -252,7 +277,7 @@ MMRESULT Win32VolumeControl::initVolumeControl(unsigned deviceId, Win32DeviceTyp
 	}
 
 	LOG_DEBUG("destination line name=" + std::string(_mxl.szName) +
-		" volume controller name=" + std::string(_mxc.szName));
+			" volume controller name=" + std::string(_mxc.szName));
 
 	//Everything went fine
 	return mr;

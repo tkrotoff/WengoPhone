@@ -76,24 +76,6 @@ public:
 	 */
 	virtual bool isMuted() = 0;
 
-	/**
-	 * Selects this audio device to be the record device.
-	 *
-	 * Works only the audio device is a DeviceTypeInput (input device/record device).
-	 *
-	 * @return true if the audio device is now selected; false otherwise
-	 */
-	virtual bool selectAsRecordDevice() = 0;
-
-	/**
-	 * Gets the selected state of the audio device as a record device.
-	 *
-	 * Works only the audio device is a DeviceTypeInput (input device/record device).
-	 *
-	 * @return true if the audio device is a selected record device; false otherwise
-	 */
-	//virtual bool isSelectedAsRecordDevice() = 0;
-
 	//MIXERCONTROL_CONTROLTYPE_PEAKMETER
 	//virtual unsigned getPeakMeterLevel() = 0;
 

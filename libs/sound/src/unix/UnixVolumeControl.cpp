@@ -38,7 +38,7 @@ using namespace std;
 
 const char * sound_device_names[] = SOUND_DEVICE_NAMES;
 
-UnixVolumeControl::UnixVolumeControl(int deviceId, UnixDeviceType deviceType) 
+UnixVolumeControl::UnixVolumeControl(int deviceId, UnixDeviceType deviceType)
 	throw(NoSoundCardException, SoundMixerException) {
 
     switch (deviceType) {
@@ -54,7 +54,7 @@ UnixVolumeControl::UnixVolumeControl(int deviceId, UnixDeviceType deviceType)
         default:
             LOG_FATAL("Unknwon audio device type");
     }
-        
+
 }
 
 bool UnixVolumeControl::close() {
@@ -118,8 +118,4 @@ bool UnixVolumeControl::isMuted() {
 
 /* FIXME: implementation needs to be written.*/
 bool UnixVolumeControl::setMute(bool mute) {
-}
-
-/* FIXME: implementation needs to be written.*/
-bool UnixVolumeControl::selectAsRecordDevice() {
 }

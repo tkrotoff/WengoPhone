@@ -30,7 +30,6 @@ elif WengoOSLinux():
 		'src/unix/VolumeControl.cpp',
 		'src/unix/UnixVolumeControl.cpp',
 		'src/unix/SoundMixerException.cpp',
-		'src/unix/Volume.cpp'
 	]
 	libs += ['qt4']
 

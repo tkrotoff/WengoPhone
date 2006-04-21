@@ -82,9 +82,21 @@ public:
 
 	bool isMuted();
 
+	bool close();
+
+	/**
+	 * Selects the audio device + input type as the record device.
+	 *
+	 * @return true if no error; false otherwise
+	 */
 	bool selectAsRecordDevice();
 
-	bool close();
+	/**
+	 * Gets if the audio device + input type is the record device.
+	 *
+	 * @return true if audio device + input type is the record device; false otherwise
+	 */
+	bool isSelectedAsRecordDevice();
 
 private:
 

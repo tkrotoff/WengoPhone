@@ -19,6 +19,8 @@
 
 #include <sound/AudioDevice.h>
 
+#include "../win32/Win32VolumeCOntrol.h"
+
 #include <util/StringList.h>
 #include <util/Logger.h>
 
@@ -248,4 +250,26 @@ int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
 #endif
 	//Default deviceId is 0
 	return 0;
+}
+
+bool AudioDevice::selectAsRecordDevice(const std::string & deviceName, TypeInput typeInput) {
+	int deviceId = getMixerDeviceId(deviceName);
+	Win32VolumeControl * volumeControl = NULL;
+	if (typeInput == TypeInputMicrophone) {
+		try {
+			volumeControl = new Win32VolumeControl(deviceId, Win32VolumeControl::Win32DeviceTypeWaveIn);
+		} catch (const SoundMixerException &) {
+			volumeControl = NULL;
+			try {
+				volumeControl = new Win32VolumeControl(deviceId, Win32VolumeControl::Win32DeviceTypeMicrophoneIn);
+			} catch (const SoundMixerException &) {
+				volumeControl = NULL;
+			}
+		}
+	}
+	return volumeControl->selectAsRecordDevice();
+}
+
+AudioDevice::TypeInput AudioDevice::getSelectedRecordDevice(const std::string & deviceName) {
+	return TypeInputError;
 }

@@ -93,13 +93,6 @@ bool VolumeControl::isMuted() {
 	return false;
 }
 
-bool VolumeControl::selectAsRecordDevice() {
-	if (_volumeControlPrivate) {
-		return _volumeControlPrivate->selectAsRecordDevice();
-	}
-	return false;
-}
-
 bool VolumeControl::close() {
 	if (_volumeControlPrivate) {
 		return _volumeControlPrivate->close();

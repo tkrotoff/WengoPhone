@@ -65,10 +65,6 @@ bool MacVolumeControl::isMuted() {
 	return false;
 }
 
-bool MacVolumeControl::selectAsRecordDevice() {
-	return false;
-}
-
 bool MacVolumeControl::close() {
 	return false;
 }

@@ -37,7 +37,7 @@ public:
         UnixDeviceTypeMic,
         UnixDeviceTypeIgain,
     };
-	
+
 	UnixVolumeControl(int deviceId, UnixDeviceType deviceType) throw(NoSoundCardException, SoundMixerException);
 
 	bool setLevel(unsigned level);
@@ -48,15 +48,13 @@ public:
 
 	bool isMuted();
 
-	bool selectAsRecordDevice();
-
 	bool close();
 
 private:
 
 	/** Channel to use (input or output) */
 	bool _isInput;
-    
+
     /* Name of device type. Can be either:
         - mic
         - igain

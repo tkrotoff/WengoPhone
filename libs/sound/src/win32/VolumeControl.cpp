@@ -28,9 +28,7 @@
 VolumeControl::VolumeControl(const std::string & deviceName, DeviceType deviceType) throw (NoSoundCardException, SoundMixerException) {
 	int deviceId = AudioDevice::getMixerDeviceId(deviceName);
 
-	if (!deviceName.empty()) {
-		LOG_DEBUG("audio device=" + deviceName + String::fromNumber(deviceId));
-	}
+	LOG_DEBUG("audio device=" + deviceName + String::fromNumber(deviceId));
 
 	if (deviceId == -1) {
 		throw NoSoundCardException(deviceName);
@@ -92,13 +90,6 @@ bool VolumeControl::setMute(bool mute) {
 bool VolumeControl::isMuted() {
 	if (_volumeControlPrivate) {
 		return _volumeControlPrivate->isMuted();
-	}
-	return false;
-}
-
-bool VolumeControl::selectAsRecordDevice() {
-	if (_volumeControlPrivate) {
-		return _volumeControlPrivate->selectAsRecordDevice();
 	}
 	return false;
 }

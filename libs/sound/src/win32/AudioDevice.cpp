@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
  */
 
 #include <sound/AudioDevice.h>
+
+#include "Win32VolumeControl.h"
 
 #include <util/StringList.h>
 
@@ -208,18 +210,18 @@ bool AudioDevice::setDefaultRecordDevice(const std::string & deviceName) {
 }
 
 StringList getMixerDeviceList(DWORD targetType) {
-	unsigned int nbDevices = ::mixerGetNumDevs();
+	unsigned nbDevices = ::mixerGetNumDevs();
 	StringList listDevices;
 	MIXERCAPSA mixercaps;
 
 	//For all the mixer devices
-	for (unsigned int deviceId = 0; deviceId < nbDevices; deviceId++) {
+	for (unsigned deviceId = 0; deviceId < nbDevices; deviceId++) {
 
 		//Gets the capacities of the mixer device
 		if (MMSYSERR_NOERROR == ::mixerGetDevCapsA(deviceId, &mixercaps, sizeof(MIXERCAPSA))) {
 
 			//For all the destinations available through the mixer device
-			for (unsigned int i = 0; i < mixercaps.cDestinations; i++) {
+			for (unsigned i = 0; i < mixercaps.cDestinations; i++) {
 				MIXERLINEA mixerline;
 				mixerline.cbStruct = sizeof(MIXERLINEA);
 				mixerline.dwDestination = i;
@@ -258,7 +260,7 @@ std::list<std::string> AudioDevice::getInputMixerDeviceList() {
 }
 
 int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {
-	unsigned int nbDevices = ::waveOutGetNumDevs();
+	unsigned nbDevices = ::waveOutGetNumDevs();
 	if (nbDevices == 0) {
 		//No audio device are present
 		return -1;
@@ -266,7 +268,7 @@ int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {
 
 	WAVEOUTCAPSA outcaps;
 
-	for (unsigned int deviceId = 0; deviceId < nbDevices; deviceId++) {
+	for (unsigned deviceId = 0; deviceId < nbDevices; deviceId++) {
 		if (MMSYSERR_NOERROR == ::waveOutGetDevCapsA(deviceId, &outcaps, sizeof(WAVEOUTCAPSA))) {
 			if (deviceName == outcaps.szPname) {
 				return deviceId;
@@ -279,7 +281,7 @@ int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {
 }
 
 int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
-	unsigned int nbDevices = ::waveInGetNumDevs();
+	unsigned nbDevices = ::waveInGetNumDevs();
 	if (nbDevices == 0) {
 		//No audio device are present
 		return -1;
@@ -287,7 +289,7 @@ int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
 
 	WAVEINCAPSA incaps;
 
-	for (unsigned int deviceId = 0; deviceId < nbDevices; deviceId++) {
+	for (unsigned deviceId = 0; deviceId < nbDevices; deviceId++) {
 		if (MMSYSERR_NOERROR == ::waveInGetDevCapsA(deviceId, &incaps, sizeof(WAVEINCAPSA))) {
 			if (deviceName == incaps.szPname) {
 				return deviceId;
@@ -300,7 +302,7 @@ int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
 }
 
 int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
-	unsigned int nbMixers = ::mixerGetNumDevs();
+	unsigned nbMixers = ::mixerGetNumDevs();
 	if (nbMixers == 0) {
 		//No audio mixer device are present
 		return -1;
@@ -308,7 +310,7 @@ int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
 
 	MIXERCAPSA mixcaps;
 
-	for (unsigned int mixerId = 0; mixerId < nbMixers; mixerId++) {
+	for (unsigned mixerId = 0; mixerId < nbMixers; mixerId++) {
 		if (MMSYSERR_NOERROR == ::mixerGetDevCapsA(mixerId, &mixcaps, sizeof(MIXERCAPSA))) {
 			if (mixerName == mixcaps.szPname) {
 				return mixerId;
@@ -318,4 +320,26 @@ int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
 
 	//Default deviceId is 0
 	return 0;
+}
+
+bool AudioDevice::selectAsRecordDevice(const std::string & deviceName, TypeInput typeInput) {
+	int deviceId = getMixerDeviceId(deviceName);
+	Win32VolumeControl * volumeControl = NULL;
+	if (typeInput == TypeInputMicrophone) {
+		try {
+			volumeControl = new Win32VolumeControl(deviceId, Win32VolumeControl::Win32DeviceTypeWaveIn);
+		} catch (const SoundMixerException &) {
+			volumeControl = NULL;
+			try {
+				volumeControl = new Win32VolumeControl(deviceId, Win32VolumeControl::Win32DeviceTypeMicrophoneIn);
+			} catch (const SoundMixerException &) {
+				volumeControl = NULL;
+			}
+		}
+	}
+	return volumeControl->selectAsRecordDevice();
+}
+
+AudioDevice::TypeInput AudioDevice::getSelectedRecordDevice(const std::string & deviceName) {
+	return TypeInputError;
 }

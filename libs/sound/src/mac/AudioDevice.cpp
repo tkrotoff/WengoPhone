@@ -126,3 +126,11 @@ int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
 int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
 	return 0;
 }
+
+bool AudioDevice::selectAsRecordDevice(const std::string & deviceName, TypeInput typeInput) {
+	return false;
+}
+
+AudioDevice::TypeInput AudioDevice::getSelectedRecordDevice(const std::string & deviceName) {
+	return TypeInputError;
+}

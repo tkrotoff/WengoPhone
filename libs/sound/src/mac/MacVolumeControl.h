@@ -42,8 +42,6 @@ public:
 
 	bool isMuted();
 
-	bool selectAsRecordDevice();
-
 	bool close();
 
 private:

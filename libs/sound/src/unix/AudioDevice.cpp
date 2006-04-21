@@ -191,3 +191,11 @@ int AudioDevice::getMixerDeviceId(const std::string & /*mixerName*/) {
 std::string AudioDevice::getDefaultRecordDevice() {
 	return "";
 }
+
+bool AudioDevice::selectAsRecordDevice(const std::string & deviceName, TypeInput typeInput) {
+	return false;
+}
+
+AudioDevice::TypeInput AudioDevice::getSelectedRecordDevice(const std::string & deviceName) {
+	return TypeInputError;
+}
