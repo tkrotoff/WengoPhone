@@ -89,8 +89,10 @@ void GaimIMContactList::removeContact(const std::string & groupName, const std::
 		gBuddy = gaim_find_buddy(gAccount, contactId.c_str());
 	}
 
-	gaim_account_remove_buddy(gAccount, gBuddy, gGroup);
-	gaim_blist_remove_buddy(gBuddy);
+	if (gBuddy) {
+		gaim_account_remove_buddy(gAccount, gBuddy, gGroup);
+		gaim_blist_remove_buddy(gBuddy);
+	}
 }
 
 void GaimIMContactList::addGroup(const std::string & groupName)
