@@ -93,7 +93,8 @@ StringList File::getDirectoryList() const {
 			}
 
 			struct stat statinfo;
-			if (stat(dir.c_str(), &statinfo) == 0) {
+			std::string absPath = _filename + dir;
+			if (stat(absPath.c_str(), &statinfo) == 0) {
 				if (S_ISDIR(statinfo.st_mode)) {
 					//ep->d_name is a directory
 					dirList += dir;
@@ -119,7 +120,8 @@ StringList File::getFileList() const {
 			String file(ep->d_name);
 
 			struct stat statinfo;
-			if (stat(file.c_str(), &statinfo) == 0) {
+			std::string absPath = _filename + file;
+			if (stat(absPath.c_str(), &statinfo) == 0) {
 				if (S_ISREG(statinfo.st_mode)) {
 					//ep->d_name is a file
 					fileList += file;
