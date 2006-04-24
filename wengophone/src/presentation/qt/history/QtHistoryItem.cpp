@@ -20,9 +20,9 @@
 #include "QtHistoryItem.h"
 
 const int QtHistoryItem::COLUMN_TYPE = 0;
-const int QtHistoryItem::COLUMN_DATE = 1;
-const int QtHistoryItem::COLUMN_DURATION = 2;
-const int QtHistoryItem::COLUMN_PEERS = 3;
+const int QtHistoryItem::COLUMN_PEERS = 1;
+const int QtHistoryItem::COLUMN_DATE = 2;
+const int QtHistoryItem::COLUMN_DURATION = 3;
 
 QtHistoryItem::QtHistoryItem(int type ) : QTreeWidgetItem(type){
 }

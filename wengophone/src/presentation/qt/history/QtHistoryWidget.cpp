@@ -54,9 +54,9 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 	_header->setClickable ( true );
 
 	headerLabels << tr("Type");
+	headerLabels << tr("Name/ID");
 	headerLabels << tr("Date");
 	headerLabels << tr("Duration");
-	headerLabels << tr("Name/ID");
 
 	_treeWidget->setHeaderLabels(headerLabels);
 	_treeWidget->setSortingEnabled ( false );
