@@ -138,7 +138,7 @@ void ChatWindow::createInviteFrame(){
 	_inviteLabel = new QtWengoStyleLabel(_inviteFrame);
 	_callLabel->setPixmaps(
 						QPixmap(":/pics/chat/chat_call_bar_button.png"),
-						QPixmap(":/pics/profilebar/bar_separator.png"),
+						QPixmap(),
 						QPixmap(), // Fill
 						QPixmap(":/pics/chat/chat_call_bar_button.png"),
 						QPixmap(":/pics/profilebar/bar_separator.png"),

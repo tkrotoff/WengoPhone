@@ -28,6 +28,8 @@
 
 #include <model/profile/UserProfile.h>
 
+#include <qtutil/QtWengoStyleLabel.h>
+
 ChatWidget::ChatWidget (CChatHandler & cChatHandler, int sessionId, QWidget * parent, Qt::WFlags f) :
 QWidget(parent, f), _cChatHandler(cChatHandler){
 
@@ -51,13 +53,16 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 	_nickBgColorAlt = "'#B0FFB3'";
     _nickName = "Wengo";
 
-    _fontButton  = Object::findChild<QPushButton *>(_widget,"fontButton");
+//    _fontButton  = Object::findChild<QPushButton *>(_widget,"fontButton");
+
     _chatHistory = Object::findChild<QTextBrowser *>(_widget,"chatHistory");
-    _emoticonsButton = Object::findChild<QPushButton *>(_widget,"emoticonsButton");
+//    _emoticonsButton = Object::findChild<QPushButton *>(_widget,"emoticonsButton");
     _sendButton = Object::findChild<QPushButton *>(_widget,"sendButton");
     _chatEdit = Object::findChild<QTextEdit *>(_widget,"chatEdit");
 	_contactListFrame = Object::findChild<QFrame *>(_widget,"contactListFrame");
 	_typingStateLabel = Object::findChild<QLabel *>(_widget,"typingStateLabel");
+	_actionFrame = Object::findChild<QFrame *>(_widget,"actionFrame");
+	createActionFrame();
 
 	// _inviteButton = Object::findChild<QPushButton *>(_widget,"inviteButton");
 	// connect ( _inviteButton,SIGNAL(clicked()), SLOT(inviteContact()));
@@ -65,9 +70,9 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
     ChatWidgetManager * cwm = new ChatWidgetManager(this,_chatEdit);
 
     connect (cwm,SIGNAL(enterPressed()),this, SLOT (enterPressed()));
-    connect (_fontButton,SIGNAL(clicked()), this, SLOT (chooseFont()));
+    connect (_fontLabel,SIGNAL(clicked()), this, SLOT (chooseFont()));
     connect (_chatHistory,SIGNAL(anchorClicked(const QUrl &)),this,SLOT(urlClicked(const QUrl & )));
-    connect (_emoticonsButton,SIGNAL(clicked()),this,SLOT(chooseEmoticon()));
+    connect (_emoticonsLabel,SIGNAL(clicked()),this,SLOT(chooseEmoticon()));
     connect (_sendButton,SIGNAL(clicked()),this,SLOT(enterPressed()));
     _chatHistory->setHtml ("<qt type=detail>");
 
@@ -219,6 +224,8 @@ void ChatWidget::enterPressed(){
     arg(_nickTextColor).
     arg(QTime::currentTime().toString());
 
+//    QString text = generateHtmlHeader("#dced80","#b9db01","#3d7c00",_nickName);
+
     _chatHistory->setTextCursor(curs);
     _chatHistory->insertHtml (text);
     _chatHistory->insertHtml (text2Emoticon(replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>")));
@@ -356,8 +363,8 @@ const QString  ChatWidget::replaceUrls(const QString & str, const QString & html
 }
 
 void ChatWidget::chooseEmoticon(){
-	QPoint p = _emoticonsButton->pos();
-	p.setY(p.y() + _emoticonsButton->rect().bottom());
+	QPoint p = _actionFrame->pos();
+	p.setY(p.y() + _actionFrame->rect().bottom());
 	_emoticonsWidget->move(mapToGlobal(p));
 	_emoticonsWidget->setWindowOpacity(0.95);
     _emoticonsWidget->show();
@@ -435,4 +442,72 @@ void ChatWidget::openContactListFrame(){
 
 void ChatWidget::addContactToContactListFrame(const Contact & contact){
 	newContact(contact);
+}
+
+void ChatWidget::createActionFrame(){
+    QGridLayout * layout = new QGridLayout(_actionFrame);
+   	_emoticonsLabel = new QtWengoStyleLabel(_actionFrame);
+
+	_fontLabel = new QtWengoStyleLabel(_actionFrame);
+
+
+    _emoticonsLabel->setPixmaps(
+						QPixmap(":/pics/chat/chat_emoticon_button.png"),
+						QPixmap(":/pics/profilebar/bar_separator.png"),
+						QPixmap(":/pics/profilebar/bar_fill.png"), // Fill
+						QPixmap(":/pics/chat/chat_emoticon_button.png"),
+						QPixmap(":/pics/profilebar/bar_separator.png"),
+						QPixmap(":/pics/profilebar/bar_fill.png")  // Fill
+	                      );
+
+    _emoticonsLabel->setMaximumSize(QSize(120,65));
+    _emoticonsLabel->setMinimumSize(QSize(120,65));
+
+    _fontLabel->setPixmaps(
+						QPixmap(),
+						QPixmap(":/pics/profilebar/bar_end.png"),  //
+						QPixmap(":/pics/profilebar/bar_fill.png"), // Fill
+						QPixmap(),
+						QPixmap(":/pics/profilebar/bar_end.png"),
+						QPixmap(":/pics/profilebar/bar_fill.png")  // Fill
+                        );
+
+    _emoticonsLabel->setText("emoticons   ");
+	_emoticonsLabel->setTextColor(Qt::white);
+	_emoticonsLabel->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+
+	_fontLabel->setText("    fonts");
+	_fontLabel->setTextColor(Qt::white);
+    _fontLabel->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
+	layout->addWidget(_emoticonsLabel,0,0);
+	layout->addWidget(_fontLabel,0,1);
+	layout->setMargin(0);
+	layout->setSpacing(0);
+
+}
+QString ChatWidget::generateHtmlHeader(const QString & bgColor,
+                                       const QString & barColor,
+                                       const QString & stringColor,
+                                       const QString & nickName){
+
+    QString html = ("<table border=0 width=100% cellspacing=0 cellpading=0 height=30>");
+    html+=QString("<tr>");
+    html+=QString("<td bgcolor='%1'>").arg(bgColor);
+    html+=QString("<font color = '%1'>").arg(stringColor);
+    html+=QString("<b>%1</b></font>").arg(nickName);
+    html+=QString("</td>");
+    html+=QString("<td bgcolor='%1' align=right>").arg(bgColor);
+    html+=QString("<font color = '%1'>").arg(stringColor);
+    html+=QString("<b>%1</b></font>").arg(QTime::currentTime().toString());
+    html+=QString("</td>");
+    html+=QString("</tr>");
+    html+=QString("<tr>");
+    html+=QString("<td bgcolor='%1' height=4>").arg(barColor);
+    html+=QString("</td>");
+    html+=QString("</tr>");
+    html+=QString("</table>");
+    return html;
+
 }

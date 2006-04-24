@@ -74,7 +74,7 @@ void QtContactList::initThreadSafe() {
 	_treeWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
 	_treeWidget->setIndentation(0);
 	_treeWidget->setRootIsDecorated(false);
-	_treeWidget->setAlternatingRowColors ( true );
+	// _treeWidget->setAlternatingRowColors ( true );
 
 	// icons
 	QtContactPixmap * spx = QtContactPixmap::getInstance();

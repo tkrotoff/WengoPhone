@@ -99,15 +99,15 @@ protected:
 
 	WidgetSeeker    _seeker;
 
-    QPushButton  *   _fontButton;
+    QFrame * _actionFrame;
 
-    QPushButton  *   _inviteButton;
+   	QtWengoStyleLabel *_emoticonsLabel;
+
+	QtWengoStyleLabel *_fontLabel;
 
 	QTextBrowser *   _chatHistory;
 
 	QTextEdit    *   _chatEdit;
-
-	QPushButton  *   _emoticonsButton;
 
 	QPushButton  *   _sendButton;
 
@@ -145,7 +145,12 @@ protected:
 
 	void addContactToContactListFrame(const Contact & contact);
 
+    void createActionFrame();
 
+    QString generateHtmlHeader(const QString & bgColor,
+                                       const QString & barColor,
+                                       const QString & stringColor,
+                                       const QString & nickName);
 
 	/**
 	 * Prepares a message to be sent to the network.

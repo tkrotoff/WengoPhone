@@ -209,4 +209,17 @@ void QtUserList::resetMouseStatus(){
 		}
 	}
 }
+/*
+int QtUserList::getClickCount(){
+	QMutexLocker locker(const_cast<QMutex *>(&_mutex));
+	QtUser * user = _userList[userid];
+	if (user)
+		return user->getClickCount();
+ 	else return 0;
 
+}
+
+void QtUserList::addClick(){
+
+}
+*/
