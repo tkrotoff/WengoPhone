@@ -160,7 +160,6 @@
         <file>imaccount/MSNSettings.ui</file>
         <file>imaccount/YahooSettings.ui</file>
         <file>login/LoginWindow.ui</file>
-        <file>login/contactWindow.ui</file>
         <file>login/profileWindow.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
