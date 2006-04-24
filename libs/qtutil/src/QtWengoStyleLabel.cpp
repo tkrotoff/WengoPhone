@@ -91,15 +91,12 @@ void QtWengoStyleLabel::paintEvent(QPaintEvent * event){
 			if ( ! _pressedRightPixmap.isNull() )
 				fillRect.adjust(0,0,0-_pressedRightPixmap.rect().width(),0);
 			painter.fillRect(fillRect,brush);
-
 		}
-
 		// Draw the right side
 		if ( ! _pressedRightPixmap.isNull() ){
-			painter.drawPixmap( rect.width() - _pressedRightPixmap.rect().width(),0,_pressedRightPixmap);
+			painter.drawPixmap( (rect.width()-1) - _pressedRightPixmap.rect().width(),0,_pressedRightPixmap);
 		}
 	}
-
 	painter.end();
 
 
