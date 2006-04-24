@@ -43,8 +43,8 @@
 
 #include <strings.h>
 
-#define ph_printf  printf
-//#define ph_printf
+//#define ph_printf  printf
+#define ph_printf
 
 /**
  * Declare the driver to phmedia-audio and initialize it.
