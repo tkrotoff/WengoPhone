@@ -5,6 +5,12 @@
 
 #define PH_OPTIMIZE_RESAMPLE 1
 
+#ifdef _MSC_VER
+#define INLINE __inline
+#else
+#define INLINE __inline__
+#endif
+
 #if defined(PH_OPTIMIZE_RESAMPLE)
 struct phresamplectx
 {
@@ -18,7 +24,7 @@ struct phresamplectx
 //   LpBu4/3600 == Lowpass Butterworth filter, order 4, -3.01dB frequency
 //     3600
 //
-static __inline__ double
+static INLINE double
 dofilter(register double val, double buf[4]) {
    register double tmp, fir, iir;
    tmp= buf[0]; memmove(buf, buf+1, 3*sizeof(double));
