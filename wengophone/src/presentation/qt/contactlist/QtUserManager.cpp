@@ -128,9 +128,8 @@ void QtUserManager::editContact(bool ){
 }
 
 void QtUserManager::treeViewSelectionChanged(){
-
-	qDebug() << "Selection changed";
-	closeUserInfo();
+	if ( _button == Qt::NoButton )
+        closeUserInfo();
 }
 
 void QtUserManager::itemEntered ( QTreeWidgetItem * item )
@@ -154,6 +153,7 @@ void QtUserManager::closeUserInfo()
 		_tree->closePersistentEditor(_previous,0);
 		ul->setOpenStatus(_previous->text(0),false);
 		_previous->setSizeHint(0,QSize(-1,ul->getHeight(_previous->text(0))));
+		_previous = NULL;
 	}
 	_tree->viewport()->update();
 }
@@ -161,6 +161,7 @@ void QtUserManager::closeUserInfo()
 void QtUserManager::openUserInfo( QTreeWidgetItem * i)
 {
 	QTreeWidgetItem * item = i;
+
 	QtUserList * ul = QtUserList::getInstance();
 	if ( _previous != NULL )
 	{
@@ -191,69 +192,61 @@ void QtUserManager::itemClicked ( QTreeWidgetItem * , int ){
 
 	QRect widgetSize = _tree->rect();
 	QPoint  mousepos = _tree->mapFromGlobal(QCursor::pos());
+    if (  ! item->parent() )
+    {
+        if ( _button == Qt::RightButton){
+            groupRightClicked(item->text(0));
+            return;
+        }
 
+        if (_tree->isItemExpanded(item) )
+            _tree->collapseItem ( item );
+        else
+            _tree->expandItem ( item );
+    }
 
-//	if(_button == Qt::LeftButton ) {
+    ul->mouseClicked(item->text(0),mousepos,widgetSize);
 
-		if (  ! item->parent() )
-		{
-		    if ( _button == Qt::RightButton){
-                groupRightClicked(item->text(0));
-                return;
-		    }
+    if (mousepos.x() > ul->getIconsStartPosition(item->text(0)) )
+        return;
 
-			if (_tree->isItemExpanded(item) )
-				_tree->collapseItem ( item );
-			else
-				_tree->expandItem ( item );
-		}
+    if ( ul->getButton(item->text(0)) == Qt::RightButton)
+    {
+        if ( ! _menu ){
+            _menu = createMenu();
+            _menu->popup(QCursor::pos());
+        }
+        else
+        {
+            delete _menu;
+            _menu = createMenu();
+            _menu->popup(QCursor::pos());
+        }
+        return;
+    }
 
-		ul->mouseClicked(item->text(0),mousepos,widgetSize);
+    if ( _previous == item){
+        closeUserInfo();
+    }
+    else
+        if ( _previous != NULL )
+        {
+            closeUserInfo();
+            _previous = item;
 
-		if (mousepos.x() > ul->getIconsStartPosition(item->text(0)) )
-			return;
+            if ( item->parent()){
+                openUserInfo(item);
+            }
 
-		if ( ul->getButton(item->text(0)) == Qt::RightButton)
-		{
-			if ( ! _menu ){
-				_menu = createMenu();
-				_menu->popup(QCursor::pos());
-			}
-			else
-			{
-				delete _menu;
-				_menu = createMenu();
-				_menu->popup(QCursor::pos());
-			}
-			return;
-		}
-
-		if ( _previous != NULL )
-		{
-			closeUserInfo();
-			_previous = item;
-
-			if ( item->parent()){
-				openUserInfo(item);
-			}
-
-		}
-		else
-		{
-			_previous = item;
-			if ( item->parent() ){
-				openUserInfo( item);
-			}
-		}
-		_tree->viewport()->update();
-/*	} else if( _button == Qt::RightButton ) {
-
-		//item is a group
-		if ( ! item->parent() ) {
-			groupRightClicked(item->text(0));
-		}
-	}
-	*/
+        }
+        else
+        {
+            _previous = item;
+            if ( item->parent() ){
+                openUserInfo( item);
+            }
+        }
+    _tree->viewport()->update();
 }
 
 QList<QtHidenContact *> QtUserManager::clearList(QList<QtHidenContact *> list){

@@ -38,6 +38,9 @@ bool UserTreeEventManager::eventFilter(QObject *obj, QEvent *event){
         case QEvent::MouseButtonPress:
             mousePressEvent(dynamic_cast<QMouseEvent *>(event));
             return false;
+        case QEvent::MouseButtonRelease:
+            mouseReleaseEvent(dynamic_cast<QMouseEvent *>(event));
+            return false;
         case QEvent::MouseMove:
             mouseMoveEvent(dynamic_cast<QMouseEvent *>(event));
             event->accept();
@@ -76,7 +79,9 @@ void UserTreeEventManager::mousePressEvent(QMouseEvent *event)
             _dstart = event->pos();
     }
 }
-
+void UserTreeEventManager::mouseReleaseEvent(QMouseEvent *event){
+        mouseClicked(Qt::NoButton);
+}
 void UserTreeEventManager::mouseMoveEvent(QMouseEvent *event)
 {
 

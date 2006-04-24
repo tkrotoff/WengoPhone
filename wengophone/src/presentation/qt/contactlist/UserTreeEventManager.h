@@ -57,7 +57,7 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent *event);
     virtual void dragMoveEvent(QDragMoveEvent *event);
-
+    virtual void mouseReleaseEvent(QMouseEvent *event);
     /* The QTreeWidget */
     QTreeWidget     *   _tree;
     /* Start position for drag action */

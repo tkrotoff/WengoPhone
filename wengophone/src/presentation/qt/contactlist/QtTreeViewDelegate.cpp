@@ -154,7 +154,7 @@ void QtTreeViewDelegate::drawGroup( QPainter * painter, const QStyleOptionViewIt
 
 		x = option.rect.left();
 
-		painter->drawPixmap (x,r.top()+5,px);
+		painter->drawPixmap (x,r.top()+3,px);
 		x+=px.width()+3;
 		r.setLeft( x );
 
