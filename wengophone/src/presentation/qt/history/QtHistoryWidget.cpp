@@ -46,12 +46,12 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 	_treeWidget->setRootIsDecorated ( false );
 	_treeWidget->setIndentation(0);
 
-	HistoryTreeEventManager * htem = new HistoryTreeEventManager(_treeWidget, this);
+	_historyTreeEventManager = new HistoryTreeEventManager(_treeWidget, this);
 
 	QStringList headerLabels;
 
 	_header = _treeWidget->header();
-	_header->setClickable ( true );
+	_header->setClickable(true);
 
 	headerLabels << tr("Type");
 	headerLabels << tr("Name/ID");
@@ -62,6 +62,7 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 	_treeWidget->setSortingEnabled ( false );
 
 	_header->resizeSection (0,200);
+	_header->setStretchLastSection(true);
 
 	gridLayout->addWidget(_treeWidget,0,0);
 
@@ -101,11 +102,16 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 	connect (action, SIGNAL( triggered(bool) ),SLOT( replayEntry() ));
 }
 
+QtHistoryWidget::~QtHistoryWidget() {
+	delete _historyTreeEventManager;
+}
+
 void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
 	item->setText(QtHistoryItem::COLUMN_TYPE, text);
+	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/sms_send.png")));
 	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
 	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
@@ -121,6 +127,7 @@ void QtHistoryWidget::addOutGoingCallItem(const QString & text,const QDate & dat
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
 	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/call_outgoing.png")));
 	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
 	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
@@ -135,6 +142,7 @@ void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & dat
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
 	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/call_incoming.png")));
 	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
 	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
@@ -162,6 +170,7 @@ void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date,
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
 	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/call_missed.png")));
 	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
 	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
@@ -176,6 +185,7 @@ void QtHistoryWidget::addRejectedCallItem(const QString & text,const QDate & dat
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
 	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/call_missed.png")));
 	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
 	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);

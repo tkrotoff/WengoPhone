@@ -27,6 +27,8 @@
 
 #include <control/history/CHistory.h>
 
+class HistoryTreeEventManager;
+
 /**
  * History Widget.
  *
@@ -40,6 +42,8 @@ class QtHistoryWidget : public QWidget {
 public:
 
 	QtHistoryWidget ( QWidget * parent = 0, Qt::WFlags f = 0);
+	
+	~QtHistoryWidget();
 
 	void clearHistory();
 
@@ -107,6 +111,8 @@ protected:
 	QMenu * _popupMenu;
 
 	QtHistoryItem * _currentItem;
+	
+	HistoryTreeEventManager * _historyTreeEventManager;
 };
 
 
