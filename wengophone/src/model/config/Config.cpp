@@ -120,6 +120,8 @@ const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
 
 const std::string Config::AVAILABLE_PROTOCOLS_KEY = "available.protocols";
 
+const std::string Config::WENBOX_ENABLE_KEY = "wenbox.enable";
+
 Config::Config(const std::string & name)
 	: AutomaticSettings() {
 
@@ -236,7 +238,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[PRIVACY_ALLOW_CHAT_ONLY_FROM_CONTACT_LIST_KEY] = false;
 	_keyDefaultValueMap[PRIVACY_ALLWAYS_SIGN_AS_INVISIBLE_KEY] = false;
 
-	_keyDefaultValueMap[VIDEO_ENABLE_KEY] = false;
+	_keyDefaultValueMap[VIDEO_ENABLE_KEY] = true;
 	_keyDefaultValueMap[VIDEO_WEBCAM_DEVICE_KEY] = empty;
 	_keyDefaultValueMap[VIDEO_QUALITY_KEY] = empty;
 
@@ -248,6 +250,8 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[WENGO_SOFTUPDATE_PATH_KEY] = std::string("/softphone-version/version.php");
 
 	_keyDefaultValueMap[AVAILABLE_PROTOCOLS_KEY] = defaultProtocols;
+
+	_keyDefaultValueMap[WENBOX_ENABLE_KEY] = true;
 }
 
 Config::~Config() {
@@ -563,4 +567,8 @@ std::string Config::getVideoQuality() const {
 
 StringList Config::getAvailableProtocols() const {
 	return getStringListKeyValue(AVAILABLE_PROTOCOLS_KEY);
+}
+
+bool Config::getWenboxEnable() const {
+	return getBooleanKeyValue(WENBOX_ENABLE_KEY);
 }

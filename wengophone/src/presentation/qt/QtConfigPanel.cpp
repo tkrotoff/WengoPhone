@@ -32,7 +32,7 @@
 #include <QtGui>
 
 QtConfigPanel::QtConfigPanel(QWidget * parent)
-	: QObject(parent) {
+	: QObjectThreadSafe() {
 
 	_configPanelWidget = new QWidget(parent);
 
@@ -43,13 +43,9 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 	config.valueChangedEvent += boost::bind(&QtConfigPanel::configChangedEventHandler, this);
 
 	//inputSoundSlider
-	VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
-	_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());
 	connect(_ui->inputSoundSlider, SIGNAL(valueChanged(int)), SLOT(inputSoundSliderValueChanged(int)));
 
 	//outputSoundSlider
-	VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
-	_ui->outputSoundSlider->setValue(outputVolumeControl.getLevel());
 	connect(_ui->outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputSoundSliderValueChanged(int)));
 
 	//enableVideoCheckBox
@@ -87,16 +83,30 @@ void QtConfigPanel::enableVideoCheckBoxToggled(bool checked) {
 }
 
 void QtConfigPanel::enableWenboxCheckBoxToggled(bool checked) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.set(Config::WENBOX_ENABLE_KEY, checked);
 }
 
 void QtConfigPanel::configChangedEventHandler() {
-	/*typedef PostEvent0<void ()> MyPostEvent;
+	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtConfigPanel::configChangedEventHandlerThreadSafe, this));
-	postEvent(event);*/
+	postEvent(event);
 }
 
 void QtConfigPanel::configChangedEventHandlerThreadSafe() {
-	//enableVideoCheckBox
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	//inputSoundSlider
+	VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
+	_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());
+
+	//outputSoundSlider
+	VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
+	_ui->outputSoundSlider->setValue(outputVolumeControl.getLevel());
+
+	//enableVideoCheckBox
 	_ui->enableVideoCheckBox->setChecked(config.getVideoEnable());
+
+	//enableWenboxCheckBox
+	_ui->enableWenboxCheckBox->setChecked(config.getWenboxEnable());
 }

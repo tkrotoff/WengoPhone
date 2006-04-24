@@ -35,13 +35,11 @@ using namespace std;
 WenboxPlugin::WenboxPlugin(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.valueChangedEvent += boost::bind(&WenboxPlugin::wenboxConfigChangedEventHandler, this, _1, _2);
+
 	_wenbox = new Wenbox();
-	if (_wenbox->open()) {
-		switchCurrentAudioDeviceToWenbox();
-		_wenbox->setDefaultMode(Wenbox::ModeUSB);
-		_wenbox->switchMode(Wenbox::ModeUSB);
-		_wenbox->keyPressedEvent += boost::bind(&WenboxPlugin::keyPressedEventHandler, this, _1, _2);
-	}
+	openWenbox();
 }
 
 WenboxPlugin::~WenboxPlugin() {
@@ -49,13 +47,46 @@ WenboxPlugin::~WenboxPlugin() {
 	delete _wenbox;
 }
 
+void WenboxPlugin::openWenbox() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	if (_wenbox->open()) {
+		if (config.getWenboxEnable()) {
+			switchCurrentAudioDeviceToWenbox();
+			_wenbox->setDefaultMode(Wenbox::ModeUSB);
+			_wenbox->switchMode(Wenbox::ModeUSB);
+			_wenbox->keyPressedEvent += boost::bind(&WenboxPlugin::keyPressedEventHandler, this, _1, _2);
+		} else {
+			_wenbox->close();
+		}
+	} else {
+		config.set(Config::WENBOX_ENABLE_KEY, false);
+	}
+}
+
+void WenboxPlugin::closeWenbox() {
+	switchCurrentAudioDeviceToSoundCard();
+	_wenbox->close();
+}
+
+void WenboxPlugin::wenboxConfigChangedEventHandler(Settings & sender, const std::string & key) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	if (key == Config::WENBOX_ENABLE_KEY) {
+		if (config.getWenboxEnable()) {
+			openWenbox();
+		} else {
+			closeWenbox();
+		}
+	}
+}
+
 void WenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	PhoneCall * phoneCall = getActivePhoneCall();
 
 	switch (key) {
 	case IWenbox::KeyPickUp:
 		if (phoneCall) {
-			phoneCall->accept(false);
+			phoneCall->accept(config.getVideoEnable());
 		}
 		break;
 
@@ -123,7 +154,7 @@ void WenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
 		break;
 
 	default:
-		LOG_FATAL("unknown key pressed");
+		LOG_FATAL("unknown key pressed=" + String::fromNumber(key));
 	}
 }
 
@@ -164,12 +195,12 @@ std::string WenboxPlugin::getWenboxAudioDeviceName() const {
 	}
 
 	//We didn't find the real name of the Wenbox audio device
-	LOG_DEBUG("wenbox audio device not found");
+	LOG_DEBUG("Wenbox audio device not found");
 	//Empty string
 	return String::null;
 }
 
-bool WenboxPlugin::switchCurrentAudioDeviceToWenbox() const {
+void WenboxPlugin::switchCurrentAudioDeviceToWenbox() {
 	string defaultPlaybackDevice = AudioDevice::getDefaultPlaybackDevice();
 	string intputDeviceName = defaultPlaybackDevice;
 	string outputDeviceName = defaultPlaybackDevice;
@@ -183,18 +214,31 @@ bool WenboxPlugin::switchCurrentAudioDeviceToWenbox() const {
 		ringerDeviceName = wenboxAudioDeviceName;
 	}
 
+	//Windows default playback is the Wenbox
 	if (outputDeviceName == defaultPlaybackDevice ||
 		intputDeviceName == defaultPlaybackDevice ||
 		ringerDeviceName == defaultPlaybackDevice) {
 
-		return false;
+		return;
 	}
 
-	//Changes audio settings
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, outputDeviceName, false);
-	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, intputDeviceName, false);
-	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, ringerDeviceName, false);
 
-	return true;
+	//Saves previous audio settings
+	_soundCardOutputDeviceName = config.getAudioOutputDeviceName();
+	_soundCardInputDeviceName = config.getAudioInputDeviceName();
+	_soundCardRingerDeviceName = config.getAudioRingerDeviceName();
+
+	//Changes audio settings
+	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, outputDeviceName);
+	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, intputDeviceName);
+	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, ringerDeviceName);
+}
+
+void WenboxPlugin::switchCurrentAudioDeviceToSoundCard() {
+	//Back to the previous audio settings
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, _soundCardOutputDeviceName);
+	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, _soundCardInputDeviceName);
+	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, _soundCardRingerDeviceName);
 }

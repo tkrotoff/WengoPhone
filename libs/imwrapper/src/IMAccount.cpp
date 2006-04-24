@@ -81,7 +81,7 @@ void IMAccount::setPassword(const string & password) {
 string IMAccount::correctedLogin(const string & login, EnumIMProtocol::IMProtocol protocol) {
 	string result = login;
 
-	if (protocol == EnumIMProtocol::IMProtocolJabber) {
+	if (protocol == EnumIMProtocol::IMProtocolJabber || protocol == EnumIMProtocol::IMProtocolGoogleTalk) {
 		string::size_type index = login.find('/');
 
 		if (index == string::npos) {

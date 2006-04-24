@@ -26,6 +26,7 @@
 
 class WengoPhone;
 class PhoneCall;
+class Settings;
 
 /**
  * Handles the Wenbox.
@@ -53,6 +54,12 @@ public:
 
 private:
 
+	void openWenbox();
+
+	void closeWenbox();
+
+	void wenboxConfigChangedEventHandler(Settings & sender, const std::string & key);
+
 	void keyPressedEventHandler(IWenbox & sender, IWenbox::Key key);
 
 	/** Code factorization. */
@@ -60,13 +67,21 @@ private:
 
 	std::string getWenboxAudioDeviceName() const;
 
-	bool switchCurrentAudioDeviceToWenbox() const;
+	void switchCurrentAudioDeviceToWenbox();
+
+	void switchCurrentAudioDeviceToSoundCard();
 
 	Wenbox * _wenbox;
 
 	WengoPhone & _wengoPhone;
 
 	std::string _phoneNumberBuffer;
+
+	std::string _soundCardOutputDeviceName;
+
+	std::string _soundCardInputDeviceName;
+
+	std::string _soundCardRingerDeviceName;
 };
 
 #endif	//WENBOXPLUGIN_H

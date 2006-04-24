@@ -20,7 +20,7 @@
 #ifndef QTCONFIGPANEL_H
 #define QTCONFIGPANEL_H
 
-#include <util/NonCopyable.h>
+#include <qtutil/QObjectThreadSafe.h>
 
 #include <QObject>
 
@@ -32,7 +32,7 @@ namespace Ui { class WengoPhoneWindowConfigPanel; }
  *
  * @author Tanguy Krotoff
  */
-class QtConfigPanel : public QObject, NonCopyable {
+class QtConfigPanel : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
@@ -55,6 +55,8 @@ private Q_SLOTS:
 	void enableWenboxCheckBoxToggled(bool checked);
 
 private:
+
+	void initThreadSafe() { }
 
 	void configChangedEventHandler();
 
