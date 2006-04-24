@@ -61,6 +61,8 @@ bool UserTreeEventManager::eventFilter(QObject *obj, QEvent *event){
 
 void UserTreeEventManager::mousePressEvent(QMouseEvent *event)
 {
+
+    mouseClicked(event->button());
     QTreeWidgetItem * item = _tree->itemAt(event->pos());
 	QtUserList * ul = QtUserList::getInstance();
 	if (_timer.isActive())

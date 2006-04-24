@@ -75,12 +75,12 @@ public Q_SLOTS:
 
 	void startWengoCall(bool checked);
 
-	void setMouseButton(int button);
+	void setMouseButton(Qt::MouseButton button);
 
 Q_SIGNALS:
 
 	void groupRightClicked(const QString & groupName);
-	
+
 protected:
 
 	void safeRemoveContact(CContact & cContact);
@@ -123,19 +123,19 @@ protected:
 
 	CWengoPhone & _cWengoPhone;
 
-	int _button;
+	Qt::MouseButton _button;
 };
-
+/*
 class UserManagerEventManager : public QObject {
 	Q_OBJECT
 public:
 	UserManagerEventManager(QTreeWidget * target, QtUserManager * userManager);
-	
+
 protected:
 	bool eventFilter(QObject *obj, QEvent *event);
-	
+
 private:
 	QtUserManager * _userManager;
 };
-
+*/
 #endif

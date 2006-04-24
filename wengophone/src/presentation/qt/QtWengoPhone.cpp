@@ -354,7 +354,6 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 		_wengoPhoneWindow->raise();
 		QApplication::setActiveWindow ( _wengoPhoneWindow );
 	}
-
 	_contactCallListWidget->addPhoneCall(qtPhoneCall);
 }
 

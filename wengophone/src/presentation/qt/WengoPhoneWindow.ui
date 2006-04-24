@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>305</width>
-    <height>536</height>
+    <height>537</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -286,271 +286,6 @@
           <height>65</height>
          </size>
         </property>
-        <property name="palette" >
-         <palette>
-          <active>
-           <color>
-            <red>0</red>
-            <green>0</green>
-            <blue>0</blue>
-           </color>
-           <color>
-            <red>212</red>
-            <green>208</green>
-            <blue>200</blue>
-           </color>
-           <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>234</red>
-            <green>229</green>
-            <blue>220</blue>
-           </color>
-           <color>
-            <red>128</red>
-            <green>128</green>
-            <blue>128</blue>
-           </color>
-           <color>
-            <red>141</red>
-            <green>139</green>
-            <blue>133</blue>
-           </color>
-           <color>
-            <red>0</red>
-            <green>0</green>
-            <blue>0</blue>
-           </color>
-           <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>0</red>
-            <green>0</green>
-            <blue>0</blue>
-           </color>
-           <color>
-            <red>191</red>
-            <green>191</green>
-            <blue>191</blue>
-           </color>
-           <color>
-            <red>212</red>
-            <green>208</green>
-            <blue>200</blue>
-           </color>
-           <color>
-            <red>64</red>
-            <green>64</green>
-            <blue>64</blue>
-           </color>
-           <color>
-            <red>10</red>
-            <green>36</green>
-            <blue>106</blue>
-           </color>
-           <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>0</red>
-            <green>0</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>255</red>
-            <green>0</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>232</red>
-            <green>232</green>
-            <blue>232</blue>
-           </color>
-          </active>
-          <inactive>
-           <color>
-            <red>0</red>
-            <green>0</green>
-            <blue>0</blue>
-           </color>
-           <color>
-            <red>212</red>
-            <green>208</green>
-            <blue>200</blue>
-           </color>
-           <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>234</red>
-            <green>229</green>
-            <blue>220</blue>
-           </color>
-           <color>
-            <red>128</red>
-            <green>128</green>
-            <blue>128</blue>
-           </color>
-           <color>
-            <red>141</red>
-            <green>139</green>
-            <blue>133</blue>
-           </color>
-           <color>
-            <red>0</red>
-            <green>0</green>
-            <blue>0</blue>
-           </color>
-           <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>0</red>
-            <green>0</green>
-            <blue>0</blue>
-           </color>
-           <color>
-            <red>191</red>
-            <green>191</green>
-            <blue>191</blue>
-           </color>
-           <color>
-            <red>212</red>
-            <green>208</green>
-            <blue>200</blue>
-           </color>
-           <color>
-            <red>64</red>
-            <green>64</green>
-            <blue>64</blue>
-           </color>
-           <color>
-            <red>212</red>
-            <green>208</green>
-            <blue>200</blue>
-           </color>
-           <color>
-            <red>0</red>
-            <green>0</green>
-            <blue>0</blue>
-           </color>
-           <color>
-            <red>0</red>
-            <green>0</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>255</red>
-            <green>0</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>232</red>
-            <green>232</green>
-            <blue>232</blue>
-           </color>
-          </inactive>
-          <disabled>
-           <color>
-            <red>106</red>
-            <green>104</green>
-            <blue>100</blue>
-           </color>
-           <color>
-            <red>212</red>
-            <green>208</green>
-            <blue>200</blue>
-           </color>
-           <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>233</red>
-            <green>231</green>
-            <blue>227</blue>
-           </color>
-           <color>
-            <red>128</red>
-            <green>128</green>
-            <blue>128</blue>
-           </color>
-           <color>
-            <red>141</red>
-            <green>139</green>
-            <blue>133</blue>
-           </color>
-           <color>
-            <red>106</red>
-            <green>104</green>
-            <blue>100</blue>
-           </color>
-           <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>106</red>
-            <green>104</green>
-            <blue>100</blue>
-           </color>
-           <color>
-            <red>60</red>
-            <green>60</green>
-            <blue>60</blue>
-           </color>
-           <color>
-            <red>212</red>
-            <green>208</green>
-            <blue>200</blue>
-           </color>
-           <color>
-            <red>0</red>
-            <green>0</green>
-            <blue>0</blue>
-           </color>
-           <color>
-            <red>10</red>
-            <green>36</green>
-            <blue>106</blue>
-           </color>
-           <color>
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>0</red>
-            <green>0</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>255</red>
-            <green>0</green>
-            <blue>255</blue>
-           </color>
-           <color>
-            <red>232</red>
-            <green>232</green>
-            <blue>232</blue>
-           </color>
-          </disabled>
-         </palette>
-        </property>
         <property name="frameShape" >
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -598,33 +333,46 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile" >
+   <widget class="QMenu" name="menuHelp" >
     <property name="title" >
-     <string>&amp;Wengo</string>
+     <string>&amp;Help</string>
     </property>
-    <widget class="QMenu" name="menuClear_History2" >
+    <addaction name="actionShowForum" />
+    <addaction name="actionFaq" />
+    <addaction name="separator" />
+    <addaction name="actionShowAbout" />
+   </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>&amp;Contacts</string>
+    </property>
+    <widget class="QMenu" name="menuHide_Show_2" >
      <property name="title" >
-      <string>Clear History</string>
+      <string>&amp;Contact List Options</string>
      </property>
-    </widget>
-    <widget class="QMenu" name="menuHide_Show2" >
-     <property name="title" >
-      <string>Hide / Show</string>
-     </property>
+     <addaction name="actionView_toolbar" />
+     <addaction name="actionView_addressbar" />
+     <addaction name="actionView_dialpad" />
      <addaction name="separator" />
+     <addaction name="actionShow_Hide_contacts_offline" />
+     <addaction name="actionShow_contact_groups" />
      <addaction name="separator" />
+     <addaction name="actionSort_contacts" />
     </widget>
-    <addaction name="actionShowWengoAccount" />
-    <addaction name="actionEditMyProfile" />
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearch_for_Wengo_users" />
+    <addaction name="actionCreate_Group" />
     <addaction name="separator" />
-    <addaction name="actionCallOutService" />
-    <addaction name="actionSms" />
-    <addaction name="actionVoiceMail" />
+    <addaction name="menuHide_Show_2" />
+   </widget>
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="actionSendSms" />
     <addaction name="separator" />
-    <addaction name="actionOpenWengoAccount" />
-    <addaction name="actionLog_off" />
-    <addaction name="separator" />
-    <addaction name="actionExit" />
+    <addaction name="actionCreate_Chat_Connference" />
    </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
@@ -654,46 +402,33 @@
     <addaction name="separator" />
     <addaction name="menuClear_History_2" />
    </widget>
-   <widget class="QMenu" name="menuHelp" >
+   <widget class="QMenu" name="menuFile" >
     <property name="title" >
-     <string>&amp;Help</string>
+     <string>&amp;Wengo</string>
     </property>
-    <addaction name="actionShowForum" />
-    <addaction name="actionFaq" />
-    <addaction name="separator" />
-    <addaction name="actionShowAbout" />
-   </widget>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="actionSendSms" />
-    <addaction name="separator" />
-    <addaction name="actionCreate_Chat_Connference" />
-   </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>&amp;Contacts</string>
-    </property>
-    <widget class="QMenu" name="menuHide_Show_2" >
+    <widget class="QMenu" name="menuClear_History2" >
      <property name="title" >
-      <string>&amp;Contact List Options</string>
+      <string>Clear History</string>
      </property>
-     <addaction name="actionView_toolbar" />
-     <addaction name="actionView_addressbar" />
-     <addaction name="actionView_dialpad" />
-     <addaction name="separator" />
-     <addaction name="actionShow_Hide_contacts_offline" />
-     <addaction name="actionShow_contact_groups" />
-     <addaction name="separator" />
-     <addaction name="actionSort_contacts" />
     </widget>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSearch_for_Wengo_users" />
-    <addaction name="actionCreate_Group" />
+    <widget class="QMenu" name="menuHide_Show2" >
+     <property name="title" >
+      <string>Hide / Show</string>
+     </property>
+     <addaction name="separator" />
+     <addaction name="separator" />
+    </widget>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionEditMyProfile" />
     <addaction name="separator" />
-    <addaction name="menuHide_Show_2" />
+    <addaction name="actionCallOutService" />
+    <addaction name="actionSms" />
+    <addaction name="actionVoiceMail" />
+    <addaction name="separator" />
+    <addaction name="actionOpenWengoAccount" />
+    <addaction name="actionLog_off" />
+    <addaction name="separator" />
+    <addaction name="actionExit" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -705,7 +440,7 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>517</y>
+     <y>518</y>
      <width>305</width>
      <height>19</height>
     </rect>

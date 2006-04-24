@@ -43,9 +43,12 @@ public:
 public Q_SLOTS:
 	void timerTimeout();
 Q_SIGNALS:
+
 	void itemEntered ( QTreeWidgetItem * item);
+
 	void itemTimeout(QTreeWidgetItem * item);
 
+    void mouseClicked(Qt::MouseButton button);
 protected:
 
     bool eventFilter(QObject *obj, QEvent *event);
