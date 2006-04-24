@@ -14,23 +14,27 @@ sources = [
 ]
 
 lib_flags = []
+cc_flags = [
+]
 
 if WengoOSMacOSX():
    lib_flags = [
 	'-framework CoreAudio',
-	'-framework AudioToolbox'
-]
+	'-framework AudioToolbox',
+	'-framework AudioUnit',
+	'-framework Cocoa',
+	'-framework Quicktime',
+   ]	
 
 if WengoOSLinux():
    libs += ["z", "owcurl", "portaudio"]
-
-
 
 if WengoOSWindows():
     defines['WIN32'] = 1
     env.LinkFlags.removeLinkFlags(env, ['/subsystem:windows'])
     env.WengoAddLinkFlags(['/subsystem:console'])
 
+env.WengoAddCCFlags(cc_flags)
 env.WengoAddLinkFlags(lib_flags)
 env.WengoAddDefines(defines)
 env.WengoAddIncludePath(include_path)
