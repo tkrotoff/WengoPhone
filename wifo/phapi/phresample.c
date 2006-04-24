@@ -101,9 +101,9 @@ void ph_upsample(void *rctx, void *dbuf, void *framebuf, int framesize)
   while( framesize-- )
     {
       tmp = dofilter((double) *sp++, fbuf);
-      *dp++ = (short) (tmp + 0.5);
+      *dp++ = (short) (tmp*2.0 + 0.5);
       tmp = dofilter(0.0, fbuf);
-      *dp++ = (short) (tmp + 0.5);
+      *dp++ = (short) (tmp*2.0 + 0.5);
     }
 }
 
