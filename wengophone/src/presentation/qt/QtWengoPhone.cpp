@@ -305,6 +305,7 @@ void QtWengoPhone::initThreadSafe() {
 	//FIXME: can i create the widget here ?
 	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
 
+	updatePresentation();
 	_wengoPhoneWindow->show();
 /*
 	QtToaster  * toaster = new QtToaster();
@@ -415,6 +416,18 @@ void QtWengoPhone::updatePresentation() {
 }
 
 void QtWengoPhone::updatePresentationThreadSafe() {
+	
+	//disabled some actions if no WengoAccount is used
+	bool hasWengoAccount = _cWengoPhone.getCurrentUserProfile().hasWengoAccount();
+	
+	QAction * actionShowWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowWengoAccount");
+	actionShowWengoAccount->setEnabled(hasWengoAccount);
+	
+	QAction * actionSendSms = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSendSms");
+	actionSendSms->setEnabled(hasWengoAccount);
+	
+	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
+	actionCreateConferenceCall->setEnabled(hasWengoAccount);
 }
 
 void QtWengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
@@ -457,6 +470,8 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 	default:
 		LOG_FATAL("Unknown state");
 	};
+	
+	updatePresentation();
 }
 
 void QtWengoPhone::noAccountAvailableEventHandler(UserProfile & sender) {
@@ -801,7 +816,39 @@ void QtWengoPhone::phoneComboBoxClicked() {
 		for(HistoryMap::iterator it = mementos->begin(); it != mementos->end(); it++ ) {
 			HistoryMemento * memento = (*it).second;
 			SipAddress sipAddress(memento->getPeer());
-			_phoneComboBox->addItem(QString::fromStdString(sipAddress.getUserName()));
+			
+			switch(memento->getState()) {
+				case HistoryMemento::IncomingCall:
+					_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/call_incoming.png")),
+						QString::fromStdString(sipAddress.getUserName()));
+					break;
+				case HistoryMemento::OutgoingCall:
+					_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/call_outgoing.png")),
+						QString::fromStdString(sipAddress.getUserName()));
+					break;
+				case HistoryMemento::MissedCall:
+					_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/call_missed.png")),
+						QString::fromStdString(sipAddress.getUserName()));
+					break;
+				case HistoryMemento::RejectedCall:
+					_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/call_missed.png")),
+						QString::fromStdString(sipAddress.getUserName()));
+					break;
+				case HistoryMemento::OutgoingSmsOk:
+					_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/sms_send.png")),
+						QString::fromStdString(sipAddress.getUserName()));
+					break;
+				case HistoryMemento::OutgoingSmsNok:
+					break;
+				case HistoryMemento::ChatSession:
+					break;
+				case HistoryMemento::None:
+					break;
+				case HistoryMemento::Any:
+					break;
+				default:
+					LOG_FATAL("Unknown HistoryMemento::state");
+			}
 		}
 	}
 }
