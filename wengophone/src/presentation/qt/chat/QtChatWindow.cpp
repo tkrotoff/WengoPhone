@@ -280,6 +280,9 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 	imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1);
 
+	imChatSession->typingStateChangedEvent +=
+		boost::bind(&ChatWindow::typingStateChangedEventHandler, this, _1, _2, _3);
+
 	if ( imChatSession->getIMContactSet().size() != 0 ) {
 		IMContact from = *imChatSession->getIMContactSet().begin();
 		addChat(imChatSession,from);
