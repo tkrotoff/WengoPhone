@@ -2024,6 +2024,10 @@ open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *devi
 	  return -1;
 	}
     }
+  else
+    stream->actual_rate = clockrate;
+
+
 
   return 0;
 }
