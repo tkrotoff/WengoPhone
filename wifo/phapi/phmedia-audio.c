@@ -715,10 +715,9 @@ ph_generate_comfort_noice(phastream_t *stream, void *buf)
     phcodec_t *codec = stream->ms.codec;
     int framesize = codec->decoded_framesize;
 
-#ifdef PH_FORCE_16KHZ
-    if (stream->clock_rate == 8000)
+    if (stream->clock_rate ==  stream->actual_rate)
       framesize *= 2;
-#endif
+
  
     gettimeofday(&now, 0);
     ph_tvdiff(&diff, &now, &stream->last_rtp_recv_time);
@@ -2977,7 +2976,6 @@ int ph_msession_send_sound_file(struct ph_msession_s *s, const char *filename)
 {
   phastream_t *stream = (phastream_t *)(s->streams[PH_MSTREAM_AUDIO1].streamerData);
   ph_mediabuf_t *mb;
-  int clock_rate = stream->clock_rate;
 
   if (!stream)
     return -PH_NOMEDIA;
@@ -2985,11 +2983,9 @@ int ph_msession_send_sound_file(struct ph_msession_s *s, const char *filename)
   if (stream->mixbuf)  /* we're already mixing a something? */
     return -PH_NORESOURCES;
 
-#ifdef PH_FORCE_16KHZ
-  clock_rate = 16000;
-#endif
 
-  mb = ph_mediabuf_load(filename, clock_rate);
+
+  mb = ph_mediabuf_load(filename, stream->actual_rate);
   if (!mb)
     return -PH_NORESOURCES;
 
