@@ -43,8 +43,8 @@
 
 #include <strings.h>
 
-//#define ph_printf  printf
-#define ph_printf
+#define ph_printf  printf
+//#define ph_printf
 
 /**
  * Declare the driver to phmedia-audio and initialize it.
@@ -266,6 +266,11 @@ static OSStatus output_renderer(void *inRefCon,
 	int needMore;
 	int outCount = inNumberFrames * sizeof(short);
 	char *playBuf = (char *) ioData->mBuffers[0].mData;
+	unsigned decodedFrameSize = as->ms.codec->decoded_framesize;
+
+	if (as->actual_rate != as->clock_rate) {
+		decodedFrameSize *= 2;
+	}
 
 	/* do we have some data left from previous callback? */
 	if (cadev->tmpOutputCount) {
@@ -290,19 +295,19 @@ static OSStatus output_renderer(void *inRefCon,
 		return noErr;
 	
 	needMore = outCount;
-	while (needMore > as->ms.codec->decoded_framesize) {
-		int chunkSize = as->ms.codec->decoded_framesize;
+	while (needMore > decodedFrameSize) {
+		int chunkSize = decodedFrameSize;
 		
 		cadev->cbk(as, (void *) 0, 0,  playBuf, &chunkSize);
 		
 		needMore -= chunkSize;
 		playBuf += chunkSize;
 		
-		if (chunkSize != as->ms.codec->decoded_framesize)
+		if (chunkSize != decodedFrameSize)
 			break;
 	}
 	
-	if (needMore >= as->ms.codec->decoded_framesize) {
+	if (needMore >= decodedFrameSize) {
 		memset(playBuf, 0, needMore);
 	} 
 	else if (needMore) {
@@ -310,7 +315,7 @@ static OSStatus output_renderer(void *inRefCon,
 		we still need some data to fill the buffer, but the amount needed 
 		 is LESS than complete decoded audio frame 
 		 */
-		int chunkSize = as->ms.codec->decoded_framesize;
+		int chunkSize = decodedFrameSize;
 		
 		cadev->cbk(as, (void *) 0, 0,  cadev->tmpOutputBuffer,  &chunkSize);
 		cadev->tmpOutputCount = chunkSize;
@@ -354,6 +359,11 @@ static OSStatus input_proc(AudioDeviceID device,
 	OSStatus err = noErr;
 	phastream_t *as = ((phastream_t *) context);
 	ca_dev *cadev = (ca_dev *) as->drvinfo;
+	unsigned decodedFrameSize = as->ms.codec->decoded_framesize;
+
+	if (as->actual_rate != as->clock_rate) {
+		decodedFrameSize *= 2;
+	}
 
 	cadev->recordBuffer = inputData->mBuffers[0].mData;
 	cadev->recordBufferCount = inputData->mBuffers[0].mDataByteSize;
@@ -362,13 +372,13 @@ static OSStatus input_proc(AudioDeviceID device,
 		  inputData->mBuffers[0].mDataByteSize);
 
 	ph_printf("**CoreAudio: phapi framesize:%d, input converter buffer size: %d\n",
-		as->ms.codec->decoded_framesize, cadev->inputConverterBufferSize);
+		decodedFrameSize, cadev->inputConverterBufferSize);
 	
 	memcpy(cadev->tmpInputBuffer + cadev->tmpInputCount, cadev->recordBuffer, cadev->recordBufferCount);
 	cadev->tmpInputCount += cadev->recordBufferCount;
 	
 	if (cadev->tmpInputCount >= cadev->inputConverterBufferSize) {
-		cadev->convertedInputCount = as->ms.codec->decoded_framesize; //FIXME: sizeof will not work if convertedInputBuffer is set dynamically
+		cadev->convertedInputCount = decodedFrameSize;
 		unsigned savedtmpInputCount = cadev->tmpInputCount;
 		cadev->currentInputBuffer = cadev->tmpInputBuffer;
 		cadev->sumDataSize = 0;
@@ -563,8 +573,16 @@ static void init_input_device(phastream_t *as, float rate, unsigned channels, un
 static void set_recorded_format(phastream_t *as, float rate, unsigned channels, unsigned format) {
 	ca_dev *cadev = (ca_dev *) as->drvinfo;
 	OSStatus err = noErr;
+	unsigned decodedFrameSize = as->ms.codec->decoded_framesize;
 	AudioStreamBasicDescription imgFmt, devFmt;
 	UInt32 propsize = sizeof(devFmt);
+	UInt32 formatFlags = kLinearPCMFormatFlagIsSignedInteger |
+		kLinearPCMFormatFlagIsPacked |
+		kLinearPCMFormatFlagIsNonInterleaved;
+
+#if defined(__BIG_ENDIAN__)
+	formatFlags |= kLinearPCMFormatFlagIsBigEndian;
+#endif
 	
 	err = AudioDeviceGetProperty(cadev->inputID, 0, 1, kAudioDevicePropertyStreamFormat, &propsize, &devFmt);
 	if (err != noErr) {
@@ -582,10 +600,7 @@ static void set_recorded_format(phastream_t *as, float rate, unsigned channels, 
 	
 	imgFmt.mSampleRate = rate;
 	imgFmt.mFormatID = kAudioFormatLinearPCM;
-	imgFmt.mFormatFlags = kLinearPCMFormatFlagIsBigEndian |
-		kLinearPCMFormatFlagIsSignedInteger |
-		kLinearPCMFormatFlagIsPacked |
-		kLinearPCMFormatFlagIsNonInterleaved;
+	imgFmt.mFormatFlags = formatFlags;
 	imgFmt.mBytesPerPacket = 2;
 	imgFmt.mFramesPerPacket = 1;
 	imgFmt.mBytesPerFrame = 2;
@@ -598,9 +613,13 @@ static void set_recorded_format(phastream_t *as, float rate, unsigned channels, 
 		return;
 	}
 	
+	if (as->actual_rate != as->clock_rate) {
+		decodedFrameSize *= 2;
+	}
+
 	propsize = sizeof(unsigned);
-	cadev->inputConverterBufferSize = as->ms.codec->decoded_framesize;
-	if ((cadev->convertedInputBuffer = malloc(sizeof(char) * as->ms.codec->decoded_framesize)) == NULL) {
+	cadev->inputConverterBufferSize = decodedFrameSize;
+	if ((cadev->convertedInputBuffer = malloc(sizeof(char) * decodedFrameSize)) == NULL) {
 		ph_printf("!!CoreAudio: can't allocate enough memory for cadev->convertedInputBuffer\n");
 		return;
 	}
@@ -616,16 +635,18 @@ static void set_recorded_format(phastream_t *as, float rate, unsigned channels, 
 
 static void set_played_format(AudioUnit au, float rate, unsigned channels, unsigned format) {
 	OSStatus err = noErr;
+	UInt32 formatFlags = kLinearPCMFormatFlagIsSignedInteger | //FIXME: need to be tested for more portability
+		kLinearPCMFormatFlagIsPacked |
+		kLinearPCMFormatFlagIsNonInterleaved;
+
+#if defined(__BIG_ENDIAN__)
+	formatFlags |= kLinearPCMFormatFlagIsBigEndian;
+#endif
 	
 	AudioStreamBasicDescription streamFormat;
 	streamFormat.mSampleRate = rate;
 	streamFormat.mFormatID = kAudioFormatLinearPCM;
-	streamFormat.mFormatFlags = 
-		// Defaults to Little endian, otherwise specify kLinearPCMFormatFlagIsBigEndian
-		kLinearPCMFormatFlagIsBigEndian |
-		kLinearPCMFormatFlagIsSignedInteger | //FIXME: need to be tested for more portability
-		//kLinearPCMFormatFlagIsPacked |
-		kLinearPCMFormatFlagIsNonInterleaved;
+	streamFormat.mFormatFlags = formatFlags;
 	streamFormat.mBytesPerPacket = 2;
 	streamFormat.mBytesPerFrame = 2;
 	streamFormat.mFramesPerPacket = 1;
@@ -680,8 +701,11 @@ int ca_open(phastream_t *as, char *name, int rate, int framesize, ph_audio_cbk c
 	
 	parse_device(cadev, name);
 	
+	as->actual_rate = rate;
 	init_input_device(as, rate, 1, 16); //FIXME: channels and format should be given by phapi
 	init_output_device(as, rate, 1, 16);
+
+	ph_printf("**CoreAudio: actual_rate: %d, clock_rate: %d\n", as->actual_rate, as->clock_rate);
 
 	return 0;
 }
@@ -714,12 +738,15 @@ void ca_close(phastream_t *as) {
 	
 	verify_noerr(AudioOutputUnitStop(cadev->outputAU));
 	verify_noerr(AudioUnitUninitialize (cadev->outputAU));
-	if (cadev)
-		{
-			if (cadev->convertedInputBuffer)
-				free(cadev->convertedInputBuffer);
-			cadev->convertedInputBuffer = NULL;
-			free(cadev);
+	if (cadev) {
+		if (cadev->convertedInputBuffer)
+			free(cadev->convertedInputBuffer);
+		cadev->convertedInputBuffer = NULL;
+		if (cadev->inputConverter) {
+			AudioConverterDispose(cadev->inputConverter);
+			cadev->inputConverter = NULL;
 		}
+		free(cadev);
+	}
 }
 
