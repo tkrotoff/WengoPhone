@@ -190,6 +190,13 @@ public:
 	}
 
 	/**
+	 * Return true if a WengoAccount is active.
+	 *
+	 * @return true if a WengoAccount is active.
+	 */
+	bool hasWengoAccount() const;
+
+	/**
 	 * Gets the active phone call.
 	 *
 	 * Used for playing DTMF.

@@ -35,6 +35,7 @@
 #include <model/webservices/softupdate/SoftUpdate.h>
 #include <model/webservices/info/WsInfo.h>
 #include <model/history/History.h>
+//#include <model/webservices/callforward/WsCallForward.h>
 
 #include <imwrapper/IMAccountHandlerFileStorage.h>
 
@@ -42,6 +43,8 @@
 
 #include <util/Logger.h>
 #include <thread/Thread.h>
+
+#include <exception>
 
 using namespace std;
 
@@ -329,6 +332,10 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		wsInfoCreatedEvent(*this, *_wsInfo);
 		LOG_DEBUG("WsInfo created");
 
+		//TODO: callforward
+		//WsCallForward * w = new WsCallForward(_wengoAccount);
+		//w->disableCallForward();
+		
 		addPhoneLine(sender);
 
 		WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *) _wengoAccount);
@@ -389,4 +396,8 @@ void UserProfile::saveHistory() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string filename = config.getConfigDir() + _wengoAccount->getIdentity() + "_history";
 	_history->save(filename);
+}
+
+bool UserProfile::hasWengoAccount() const {
+	return ( _wengoAccount != NULL );
 }
