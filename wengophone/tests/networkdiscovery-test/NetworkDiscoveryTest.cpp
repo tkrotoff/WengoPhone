@@ -27,7 +27,7 @@
 #include <util/Logger.h>
 
 #if defined(CC_MSVC)
-	#include <win32/MemoryDump.h>
+	#include <MemoryDump/MemoryDump.h>
 #endif
 
 #include <string>
@@ -58,7 +58,7 @@ void loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState s
 	}
 }
 
-void noAccountAvailableEventHandler(WengoPhone & sender) {
+void noAccountAvailableEventHandler(UserProfile & sender) {
 	sender.addSipAccount("jerome.leleu@wengo.fr", "b1234b", true);	
 }
 
@@ -123,7 +123,6 @@ int main(int argc, char * argv[]) {
 	//SIP implementation
 	SipWrapperFactory * sipFactory = NULL;
 
-
 	PhApiFactory * phApiFactory = new PhApiFactory();
 	sipFactory = phApiFactory;
 	imFactory = phApiFactory;
@@ -133,10 +132,11 @@ int main(int argc, char * argv[]) {
 
 	wengoPhone = new WengoPhone();
 
-	wengoPhone->loginStateChangedEvent += &loginStateChangedEventHandler;
-	wengoPhone->noAccountAvailableEvent += &noAccountAvailableEventHandler;
-	wengoPhone->proxyNeedsAuthenticationEvent += &proxyNeedsAuthenticationEventHandler;
-	wengoPhone->wrongProxyAuthenticationEvent += &wrongProxyAuthenticationEventHandler;
+	UserProfile & mProfile = wengoPhone->getCurrentUserProfile();
+	mProfile.loginStateChangedEvent += &loginStateChangedEventHandler;
+	mProfile.noAccountAvailableEvent += &noAccountAvailableEventHandler;
+	mProfile.proxyNeedsAuthenticationEvent += &proxyNeedsAuthenticationEventHandler;
+	mProfile.wrongProxyAuthenticationEvent += &wrongProxyAuthenticationEventHandler;
 
 	wengoPhone->start();
 

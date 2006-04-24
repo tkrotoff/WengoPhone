@@ -3,6 +3,8 @@ env = WengoGetEnvironment()
 libs = [
 	'wengophone',
 	'phapiwrapper',
+	'buildId',
+	'owmemorydump',
 ]
 
 headers = [
