@@ -43,7 +43,7 @@
 #include <QSvgRenderer>
 
 QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
-	: QObjectThreadSafe(),
+	: QObjectThreadSafe(NULL),
 	_cPhoneCall(cPhoneCall) {
 
 	_qtWengoPhone = (QtWengoPhone *) _cPhoneCall.getCWengoPhone().getPresentation();

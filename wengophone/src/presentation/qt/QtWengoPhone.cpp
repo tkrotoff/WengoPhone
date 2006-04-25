@@ -83,7 +83,7 @@ const std::string QtWengoPhone::LOCAL_WEB_DIR = "webpages/windows";
 
 
 QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
-	: QObjectThreadSafe(),
+	: QObjectThreadSafe(NULL),
 	_cWengoPhone(cWengoPhone) {
 
 	_qtSms = NULL;

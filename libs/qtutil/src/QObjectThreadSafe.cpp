@@ -21,7 +21,9 @@
 
 #include <QCoreApplication>
 
-QObjectThreadSafe::QObjectThreadSafe() : QObject() {
+QObjectThreadSafe::QObjectThreadSafe(QObject * parent)
+	: QObject(parent) {
+
 	_blockEvents = false;
 }
 

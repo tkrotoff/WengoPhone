@@ -50,7 +50,9 @@ static inline QPixmap scalePixmap(const char * name) {
 }
 
 QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPhone)
-	: QObjectThreadSafe(), _cContactList(cContactList), _cWengoPhone(cWengoPhone) {
+	: QObjectThreadSafe(((QtWengoPhone *) cWengoPhone.getPresentation())->getWidget()),
+	_cContactList(cContactList),
+	_cWengoPhone(cWengoPhone) {
 
 	_treeWidget = NULL;
 

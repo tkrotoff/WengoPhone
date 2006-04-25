@@ -28,7 +28,8 @@
 #include <QWidget>
 
 QtChatHandler::QtChatHandler(CChatHandler & cChatHandler)
-	: QObjectThreadSafe(), _cChatHandler(cChatHandler) {
+	: QObjectThreadSafe(NULL),
+	_cChatHandler(cChatHandler) {
 
 	_qtChatWidget = NULL;
 

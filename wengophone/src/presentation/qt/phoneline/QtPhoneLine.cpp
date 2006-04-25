@@ -33,7 +33,7 @@
 #include <QtGui>
 
 QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
-	: QObjectThreadSafe(),
+	: QObjectThreadSafe(NULL),
 	_cPhoneLine(cPhoneLine) {
 
 	_activeCPhoneCall = NULL;

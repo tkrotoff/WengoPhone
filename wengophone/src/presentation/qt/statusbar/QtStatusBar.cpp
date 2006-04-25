@@ -32,7 +32,7 @@
 #include <QtGui>
 
 QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
-	: QObjectThreadSafe(),
+	: QObjectThreadSafe(statusBar),
 	_cWengoPhone(cWengoPhone) {
 
 	_statusBar = statusBar;
@@ -40,61 +40,58 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_cWengoPhone.networkDiscoveryStateChangedEvent +=
 		boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 
-	//FIXME Ugly code to be removed
-	//inside a QStyle class?
-	/*QPalette statusBarPalette = _statusBar->palette();
-	statusBarPalette.setColor(QPalette::Window, QColor(60, 60, 60));
-	_statusBar->setPalette(statusBarPalette);
-	_statusBar->setAutoFillBackground(true);*/
-	//
-
 	_internetConnectionStateLabel = new QLabel(_statusBar);
 	_internetConnectionStateLabel->setPixmap(QPixmap(":/pics/statusbar_connect_error.png"));
-	_internetConnectionStateLabel->setToolTip(tr("Not connected"));
+	_internetConnectionStateLabel->setToolTip(tr("Not Connected"));
 	_statusBar->addPermanentWidget(_internetConnectionStateLabel);
 
 	_phoneLineStateLabel = new QLabel(_statusBar);
 	_phoneLineStateLabel->setPixmap(QPixmap(":/pics/statusbar_sip_error.png"));
-	_phoneLineStateLabel->setToolTip(tr("Not connected"));
+	_phoneLineStateLabel->setToolTip(tr("Not Connected"));
 	_statusBar->addPermanentWidget(_phoneLineStateLabel);
 
 	_soundStateLabel = new QLabel(_statusBar);
-	_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar_sound_error.png"));
-	_phoneLineStateLabel->setToolTip(tr("Sound configuration error"));
+	_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar_audio_error.png"));
+	_phoneLineStateLabel->setToolTip(tr("Audio Configuration Error"));
 	_statusBar->addPermanentWidget(_soundStateLabel);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this);
-	checkSoundConfigThreadSafe();
+	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this, _1, _2);
+	checkSoundConfigThreadSafe(config, Config::AUDIO_OUTPUT_DEVICENAME_KEY);
 }
 
 void QtStatusBar::showMessage(const QString & message) {
 	_statusBar->showMessage(message);
 }
 
-void QtStatusBar::checkSoundConfig() {
-	typedef PostEvent0<void ()> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtStatusBar::checkSoundConfigThreadSafe, this));
+void QtStatusBar::checkSoundConfig(Settings & sender, const std::string & key) {
+	typedef PostEvent2<void (Settings & sender, const std::string &), Settings &, std::string> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtStatusBar::checkSoundConfigThreadSafe, this, _1, _2), sender, key);
 	postEvent(event);
 }
 
-void QtStatusBar::checkSoundConfigThreadSafe() {
+void QtStatusBar::checkSoundConfigThreadSafe(Settings & sender, const std::string & key) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	AudioDevice::selectAsRecordDevice(config.getAudioInputDeviceName(), AudioDevice::TypeInputMicrophone);
-	VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
-	outputVolumeControl.setMute(false);
-	VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
-	inputVolumeControl.setMute(false);
+	if (key == Config::AUDIO_OUTPUT_DEVICENAME_KEY ||
+		key == Config::AUDIO_INPUT_DEVICENAME_KEY ||
+		key == Config::AUDIO_RINGER_DEVICENAME_KEY) {
 
-	if (!outputVolumeControl.isMuted() &&
-		outputVolumeControl.getLevel() > 0 &&
-		!inputVolumeControl.isMuted() &&
-		inputVolumeControl.getLevel() > 0 &&
-		AudioDevice::TypeInputMicrophone == AudioDevice::getSelectedRecordDevice(config.getAudioInputDeviceName())) {
+		AudioDevice::selectAsRecordDevice(config.getAudioInputDeviceName(), AudioDevice::TypeInputMicrophone);
+		VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
+		outputVolumeControl.setMute(false);
+		VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
+		inputVolumeControl.setMute(false);
 
-		_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar_sound.png"));
-		_phoneLineStateLabel->setToolTip(tr("Sound configuration ok"));
+		if (!outputVolumeControl.isMuted() &&
+			outputVolumeControl.getLevel() > 0 &&
+			!inputVolumeControl.isMuted() &&
+			inputVolumeControl.getLevel() > 0 &&
+			AudioDevice::TypeInputMicrophone == AudioDevice::getSelectedRecordDevice(config.getAudioInputDeviceName())) {
+
+			_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar_audio.png"));
+			_phoneLineStateLabel->setToolTip(tr("Audio Configuration OK"));
+		}
 	}
 }
 
@@ -110,27 +107,27 @@ void QtStatusBar::networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount 
 
 	switch (state) {
 	case SipAccount::NetworkDiscoveryStateOk:
-		tooltip = tr("Internet connection OK");
+		tooltip = tr("Internet Connection OK");
 		pixmap = ":/pics/statusbar_connect.png";
 		break;
 
 	case SipAccount::NetworkDiscoveryStateHTTPError:
-		tooltip = tr("Internet connection error");
+		tooltip = tr("Internet Connection Error");
 		pixmap = ":/pics/statusbar_connect_error.png";
 		break;
 
 	case SipAccount::NetworkDiscoveryStateSIPError:
-		tooltip = tr("Internet connection error");
+		tooltip = tr("Internet Connection Error");
 		pixmap = ":/pics/statusbar_connect_error.png";
 		break;
 
 	case SipAccount::NetworkDiscoveryStateProxyNeedsAuthentication:
-		tooltip = tr("Internet connection error");
+		tooltip = tr("Internet Connection Error");
 		pixmap = ":/pics/statusbar_connect_error.png";
 		break;
 
 	case SipAccount::NetworkDiscoveryStateError:
-		tooltip = tr("Internet connection error");
+		tooltip = tr("Internet Connection Error");
 		pixmap = ":/pics/statusbar_connect_error.png";
 		break;
 

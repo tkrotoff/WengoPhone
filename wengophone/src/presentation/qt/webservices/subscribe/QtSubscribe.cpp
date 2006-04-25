@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,9 @@
 #include <QtGui>
 
 QtSubscribe::QtSubscribe(CSubscribe & cSubscribe)
-	: _cSubscribe(cSubscribe) {
-	
+	: QObjectThreadSafe(NULL),
+	_cSubscribe(cSubscribe) {
+
 	_sendRequestButtonEnabled = true;
 	_errorMessage = "";
 	_mailResult = "";
@@ -47,7 +48,7 @@ QtSubscribe::QtSubscribe(CSubscribe & cSubscribe)
 	_qtWengoPhone = (QtWengoPhone *) _cSubscribe.getCWengoPhone().getPresentation();
 
 	_cSubscribe.wengoSubscriptionEvent += boost::bind(&QtSubscribe::wengoSubscriptionEventHandler, this, _1, _2, _3, _4, _5);
-	
+
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSubscribe::initThreadSafe, this));
 	postEvent(event);
@@ -55,33 +56,33 @@ QtSubscribe::QtSubscribe(CSubscribe & cSubscribe)
 
 void QtSubscribe::initThreadSafe() {
 	_subscribeWindow = Widget::transformToWindow(qobject_cast<QWidget *>(WidgetFactory::create(":/forms/webservices/subscribe/Subscribe.ui", 0)));
-	
+
 	QPushButton * button = Object::findChild<QPushButton *>(_subscribeWindow, "SendRequestPushButton");
 	connect(button, SIGNAL(pressed()), SLOT(sendRequest()));
-	
+
 	QPushButton * goToWengoPhoneButton = Object::findChild<QPushButton *>(_subscribeWindow, "GoToWengoPhoneButton");
 	connect(goToWengoPhoneButton, SIGNAL(pressed()), SLOT(configureLogin()));
-	
+
 	static QString termsOfServiceLink = "www.wengo.fr";
 	static QString termsOfServicePdfLink = "www.wengo.fr";
-	
+
 	QTextBrowser * textBrowser = Object::findChild<QTextBrowser *>(_subscribeWindow, "AcceptTermsBrowser");
 	QString acceptTermsMessage = tr("I read and accept the Terms of Service");
 	acceptTermsMessage += "<br>&raquo;&nbsp;<a href=\"" + termsOfServiceLink + "\">";
-	acceptTermsMessage += tr("Read the Terms ofService");
+	acceptTermsMessage += tr("Read the Terms of Service");
 	acceptTermsMessage += "</a><br>";
 	acceptTermsMessage += "&raquo;&nbsp;<a href=\">" + termsOfServicePdfLink + "\">";
 	acceptTermsMessage += tr("Download the Terms of Service in PDF format");
 	acceptTermsMessage += "</a>";
-	
+
 	textBrowser->insertHtml(acceptTermsMessage);
 
 	_firstPage = Object::findChild<QWidget *>(_subscribeWindow, "FirstPageWidget");
 	_secondPage = Object::findChild<QWidget *>(_subscribeWindow, "SecondPageWidget");
 	_currentPage = _firstPage;
-	
+
 	updatePresentation();
-	
+
 	_qtWengoPhone->setSubscribe(this);
 }
 
@@ -95,7 +96,7 @@ void QtSubscribe::updatePresentationThreadSafe() {
 		palette.setColor(QPalette::Active, QPalette::Window, QColor(255, 0, 0));
 		errorLabel->setPalette(palette);
 		errorLabel->setText(_errorMessage);
-		
+
 	} else {
 		QPalette palette = QPalette(errorLabel->palette());
 		palette.setColor(QPalette::Active, QPalette::Window, QColor(239, 239, 239));
@@ -129,7 +130,7 @@ QWidget * QtSubscribe::getWidget() const {
 }
 
 void QtSubscribe::sendRequest() {
-	
+
 	_sendRequestButtonEnabled = false;
 	updatePresentation();
 
@@ -137,7 +138,7 @@ void QtSubscribe::sendRequest() {
 	QLineEdit * passwordLineEdit = Object::findChild<QLineEdit *>(_subscribeWindow, "PasswordLineEdit");
 	QLineEdit * password2LineEdit = Object::findChild<QLineEdit *>(_subscribeWindow, "ConfirmPasswordLineEdit");
 	QLineEdit * emailLineEdit = Object::findChild<QLineEdit *>(_subscribeWindow, "EmailLineEdit");
-	
+
 	std::string nickname = nicknameLineEdit->text().toStdString();
 	std::string password1 = passwordLineEdit->text().toStdString();
 	std::string password2 = password2LineEdit->text().toStdString();
@@ -148,7 +149,7 @@ void QtSubscribe::sendRequest() {
 		QMessageBox::critical(_subscribeWindow, "Subsciption error", "Password must be the same");
 		return;
 	}
-	
+
 	//call the ws
 	_cSubscribe.subscribe(mail, nickname, "", password1);
 }
@@ -156,56 +157,56 @@ void QtSubscribe::sendRequest() {
 void QtSubscribe::wengoSubscriptionEventHandler(
 	WsWengoSubscribe & sender, int id, WsWengoSubscribe::SubscriptionStatus status,
 	const std::string & errorMessage, const std::string & password) {
-		
+
 	_sendRequestButtonEnabled = true;
-	
+
 	_errorMessage = "";
 	if( status != WsWengoSubscribe::SubscriptioOk ) {
-		
+
 		switch( status ) {
-			case WsWengoSubscribe::SubscriptioOk:
-				break;
+		case WsWengoSubscribe::SubscriptioOk:
+			break;
 
-			case WsWengoSubscribe::SubscriptionBadQuery:
-				_errorMessage = "SubscriptionBadQuery";
-				break;
+		case WsWengoSubscribe::SubscriptionBadQuery:
+			_errorMessage = "SubscriptionBadQuery";
+			break;
 
-			case WsWengoSubscribe::SubscriptionBadVersion:
-				_errorMessage = "SubscriptionBadVersion";
-				break;
+		case WsWengoSubscribe::SubscriptionBadVersion:
+			_errorMessage = "SubscriptionBadVersion";
+			break;
 
-			case WsWengoSubscribe::SubscriptionUnknownError:
-				_errorMessage = "SubscriptionUnknownError";
-				break;
+		case WsWengoSubscribe::SubscriptionUnknownError:
+			_errorMessage = "SubscriptionUnknownError";
+			break;
 
-			case WsWengoSubscribe::SubscriptionMailError:
-				_errorMessage = "SubscriptionMailError";
-				break;
+		case WsWengoSubscribe::SubscriptionMailError:
+			_errorMessage = "SubscriptionMailError";
+			break;
 
-			case WsWengoSubscribe::SubscriptionNicknameError:
-				_errorMessage = "SubscriptionNicknameError";
-				break;
+		case WsWengoSubscribe::SubscriptionNicknameError:
+			_errorMessage = "SubscriptionNicknameError";
+			break;
 
-			case WsWengoSubscribe::SubscriptionFailed:
-				_errorMessage = "SubscriptionFailed";
-				break;
+		case WsWengoSubscribe::SubscriptionFailed:
+			_errorMessage = "SubscriptionFailed";
+			break;
 
-			default:
-				LOG_FATAL("Unknow WsWengoSubscribe::SubscriptionStatus");
+		default:
+			LOG_FATAL("Unknow WsWengoSubscribe::SubscriptionStatus");
 		}
 	} else {
-		
+
 		//retrieve mail, nick & pwd for the second page
 		QLineEdit * nicknameLineEdit = Object::findChild<QLineEdit *>(_subscribeWindow, "NicknameLineEdit");
 		QLineEdit * emailLineEdit = Object::findChild<QLineEdit *>(_subscribeWindow, "EmailLineEdit");
-		
+
 		_mailResult = emailLineEdit->text();
 		_passwordResult = QString::fromStdString(password);
 		_nicknameResult = nicknameLineEdit->text();
-		
+
 		_currentPage = _secondPage;
 	}
-	
+
 	updatePresentation();
 }
 

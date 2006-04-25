@@ -40,7 +40,7 @@ class QObjectThreadSafe : public QObject {
 	Q_OBJECT
 public:
 
-	QObjectThreadSafe();
+	QObjectThreadSafe(QObject * parent);
 
 	/**
 	 * Initialization of the QObjectThreadSafe subclass object.

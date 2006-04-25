@@ -32,7 +32,7 @@
 #include <QtGui>
 
 QtWenboxPlugin::QtWenboxPlugin(CWenboxPlugin & cWenboxPlugin)
-	: QObjectThreadSafe(),
+	: QObjectThreadSafe(NULL),
 	_cWenboxPlugin(cWenboxPlugin) {
 
 	_timer = new Timer();

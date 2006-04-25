@@ -32,7 +32,10 @@
 #include <QDate>
 #include <QTime>
 
-QtHistory::QtHistory( CHistory & cHistory ) : _cHistory(cHistory) {
+QtHistory::QtHistory( CHistory & cHistory )
+	: QObjectThreadSafe(NULL),
+	_cHistory(cHistory) {
+
 	_cHistory.historyLoadedEvent += boost::bind(&QtHistory::historyLoadedEventHandler, this, _1);
 	_cHistory.mementoAddedEvent += boost::bind(&QtHistory::mementoAddedEventHandler, this, _1, _2);
 	_cHistory.mementoUpdatedEvent += boost::bind(&QtHistory::mementoUpdatedEventHandler, this, _1, _2);
@@ -49,10 +52,10 @@ QWidget * QtHistory::getWidget() {
 
 void QtHistory::initThreadSafe() {
 	_historyWidget = new QtHistoryWidget();
-	
+
 	connect (_historyWidget, SIGNAL( replayItem(QtHistoryItem *) ),SLOT( replayItem(QtHistoryItem *) ));
 	connect (_historyWidget, SIGNAL( removeItem(unsigned int) ),SLOT( removeItem(unsigned int) ));
-	
+
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 	qtWengoPhone->setHistory(_historyWidget);
 }
@@ -69,11 +72,11 @@ void QtHistory::updatePresentation () {
 
 void QtHistory::updatePresentationThreadSafe() {
 	_historyWidget->clearHistory();
-	
+
 	HistoryMementoCollection * collection = _cHistory.getHistory().getHistoryMementoCollection();
 	for(HistoryMap::iterator it = collection->begin(); it != collection->end(); it++ ) {
 		HistoryMemento * memento = (*it).second;
-		
+
 		addHistoryMemento(
 			HistoryMemento::stateToString(memento->getState()),
 			memento->getDate().toString(),
@@ -85,8 +88,9 @@ void QtHistory::updatePresentationThreadSafe() {
 	}
 }
 
-void QtHistory::addHistoryMemento(std::string type, std::string date, 
-		std::string time, int duration, std::string name, unsigned id) {
+void QtHistory::addHistoryMemento(const std::string & type, const std::string & date,
+		const std::string & time, int duration, const std::string & name, unsigned id) {
+
 	QDate qdate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
 	QTime qtime = QTime::fromString(QString::fromStdString(time));
 	QTime qduration;
@@ -95,10 +99,10 @@ void QtHistory::addHistoryMemento(std::string type, std::string date,
 	} else {
 		qduration = qduration.addSecs(duration);
 	}
-	
+
 	SipAddress sipAddress(name);
 	QString formattedName = QString::fromStdString(sipAddress.getUserName());
-	
+
 	if( type == HistoryMemento::StateIncomingCall ) {
 		_historyWidget->addIncomingCallItem(QString::fromStdString(type),
 			qdate, qtime, qduration, formattedName, id);
@@ -123,15 +127,15 @@ void QtHistory::addHistoryMemento(std::string type, std::string date,
 	}
 }
 
-void QtHistory::removeHistoryMemento(unsigned int id) {
+void QtHistory::removeHistoryMemento(unsigned id) {
 	_cHistory.removeHistoryMemento(id);
 }
 
-void QtHistory::mementoAddedEventHandler(CHistory &, unsigned int id) {
+void QtHistory::mementoAddedEventHandler(CHistory &, unsigned id) {
 	updatePresentation();
 }
 
-void QtHistory::mementoUpdatedEventHandler(CHistory &, unsigned int id) {
+void QtHistory::mementoUpdatedEventHandler(CHistory &, unsigned id) {
 	updatePresentation();
 }
 
@@ -168,12 +172,12 @@ void QtHistory::replayItem ( QtHistoryItem * item ) {
 	QString phoneNumber = "";
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 	switch ( item->getItemType() ) {
-	
+
 		case QtHistoryItem::Sms:
-			//retrive info & configure the Sms widget
+			//retrieve info & configure the Sms widget
 			text = QString::fromStdString(_cHistory.getMementoData(item->getId()));
 			phoneNumber = QString::fromStdString(_cHistory.getMementoPeer(item->getId()));
-			
+
 			//test existance of Sms (available only if a WengoAccount has been created)
 			if( qtWengoPhone->getSms() ) {
 				qtWengoPhone->getSms()->setText(text);
@@ -183,7 +187,7 @@ void QtHistory::replayItem ( QtHistoryItem * item ) {
 			break;
 
 		case QtHistoryItem::OutGoingCall:
-			
+
 			if( QMessageBox::question(
 				_historyWidget,
 				tr("Replay call"),
@@ -210,11 +214,11 @@ void QtHistory::replayItem ( QtHistoryItem * item ) {
 	}
 }
 
-void QtHistory::removeItem(unsigned int id) {
+void QtHistory::removeItem(unsigned id) {
 	LOG_DEBUG("QtHistory::removeItem");
 	_cHistory.removeHistoryMemento(id);
 }
 
-void QtHistory::mementoRemovedEventHandler(CHistory &, unsigned int id) {
+void QtHistory::mementoRemovedEventHandler(CHistory &, unsigned id) {
 	updatePresentation();
 }

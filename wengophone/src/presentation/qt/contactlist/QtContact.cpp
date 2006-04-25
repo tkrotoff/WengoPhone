@@ -27,11 +27,12 @@
 
 using namespace std;
 
-QtContact::QtContact(CContact & cContact, QtContactList * qtContactList) 
-	: QObjectThreadSafe(), PContact(cContact) {
+QtContact::QtContact(CContact & cContact, QtContactList * qtContactList)
+	: QObjectThreadSafe(qtContactList->getWidget()),
+	PContact(cContact) {
 
 	_qtContactList = qtContactList;
-	
+
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtContact::initThreadSafe, this));
 	postEvent(event);

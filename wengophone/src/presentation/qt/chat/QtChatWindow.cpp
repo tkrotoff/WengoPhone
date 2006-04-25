@@ -35,7 +35,7 @@
 #include <qtutil/Object.h>
 #include <util/Logger.h>
 
-ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession) : QObjectThreadSafe(),
+ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession) : QObjectThreadSafe(NULL),
 _cChatHandler(cChatHandler){
     LOG_DEBUG("ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(), _imChatSession(imChatSession)");
 	_imChatSession = &imChatSession;

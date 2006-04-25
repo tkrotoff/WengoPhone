@@ -36,7 +36,7 @@
 static const char * UPDATE_PROGRAM = "update.exe";
 
 QtSoftUpdate::QtSoftUpdate(CSoftUpdate & cSoftUpdate)
-	: QObjectThreadSafe(),
+	: QObjectThreadSafe(NULL),
 	_cSoftUpdate(cSoftUpdate) {
 
 	_qtWengoPhone = (QtWengoPhone *) _cSoftUpdate.getCWengoPhone().getPresentation();

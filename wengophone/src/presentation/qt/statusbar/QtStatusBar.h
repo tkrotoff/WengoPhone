@@ -25,6 +25,7 @@
 #include <qtutil/QObjectThreadSafe.h>
 
 class CWengoPhone;
+class Settings;
 
 class QStatusBar;
 class QLabel;
@@ -64,9 +65,9 @@ private:
 
 	void networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::NetworkDiscoveryState state);
 
-	void checkSoundConfig();
+	void checkSoundConfig(Settings & sender, const std::string & key);
 
-	void checkSoundConfigThreadSafe();
+	void checkSoundConfigThreadSafe(Settings & sender, const std::string & key);
 
 	CWengoPhone & _cWengoPhone;
 

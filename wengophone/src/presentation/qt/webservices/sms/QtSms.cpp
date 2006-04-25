@@ -32,7 +32,7 @@
 #include <util/Logger.h>
 
 QtSms::QtSms(CSms & cSms)
-	: QObjectThreadSafe(),
+	: QObjectThreadSafe(NULL),
 	_cSms(cSms) {
 
 	_cSms.smsStatusEvent += boost::bind(&QtSms::smsStatusEventHandler, this, _1, _2, _3);
@@ -90,7 +90,7 @@ void QtSms::smsStatusEventHandlerThreadSafe(Sms::SmsStatus status) {
 		default:
 			LOG_FATAL("Unknown SmsStatus");
 	}
-	
+
 	_sendButton->setEnabled(true);
 	QMessageBox::information(_smsWindow, tr("Sms"), smsStatus);
 }

@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_QTHISTORY_H
-#define OW_QTHISTORY_H
+#ifndef QTHISTORY_H
+#define QTHISTORY_H
 
 #include <presentation/PHistory.h>
 #include <control/history/CHistory.h>
@@ -34,42 +34,39 @@ class QtHistoryItem;
  * @author Mathieu Stute
  */
 class QtHistory : public QObjectThreadSafe, public PHistory {
-
 	Q_OBJECT
-
 public:
 
 	QtHistory ( CHistory & cHistory );
 
 	void updatePresentation ();
-	
-	void addHistoryMemento(std::string type, std::string date,
-		std::string time, int duration, std::string name, unsigned id);
 
-	void removeHistoryMemento(unsigned int id);
-	
+	void addHistoryMemento(const std::string & type, const std::string & date,
+		const std::string & time, int duration, const std::string & name, unsigned id);
+
+	void removeHistoryMemento(unsigned id);
+
 	void clearAllEntries();
-	
+
 	void clearSmsEntries();
-	
+
 	void clearChatEntries();
-	
+
 	void clearIncomingCallEntries();
-	
+
 	void clearOutgoingCallEntries();
 
 	void clearMissedCallEntries();
-	
+
 	void clearRejectedCallEntries();
 
 	QWidget * getWidget();
 
-	
 public Q_SLOTS:
 
 	void replayItem ( QtHistoryItem * item );
 
-	void removeItem( unsigned int id);
+	void removeItem( unsigned id);
 
 private:
 
@@ -79,15 +76,15 @@ private:
 
 	void historyLoadedEventHandler(CHistory &);
 
-	void mementoAddedEventHandler(CHistory &, unsigned int id);
+	void mementoAddedEventHandler(CHistory &, unsigned id);
 
-	void mementoUpdatedEventHandler(CHistory &, unsigned int id);
+	void mementoUpdatedEventHandler(CHistory &, unsigned id);
 
-	void mementoRemovedEventHandler(CHistory &, unsigned int id);
+	void mementoRemovedEventHandler(CHistory &, unsigned id);
 
 	QtHistoryWidget * _historyWidget;
 
 	CHistory & _cHistory;
 };
 
-#endif	//OW_QTHISTORY_H
+#endif	//QTHISTORY_H

@@ -24,7 +24,7 @@
 #include <QtGui>
 
 QtHttpProxyLogin::QtHttpProxyLogin(QWidget * parent, const std::string & proxyAddress, unsigned proxyPort)
-	: QObject() {
+	: QObject(parent) {
 
 	_httpProxyLoginWindow = new QDialog(parent);
 

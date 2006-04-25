@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_QTSUBSCRIBE_H
-#define OW_QTSUBSCRIBE_H
+#ifndef QTSUBSCRIBE_H
+#define QTSUBSCRIBE_H
 
 #include <presentation/PSubscribe.h>
 #include <control/webservices/subscribe/CSubscribe.h>
@@ -43,15 +43,15 @@ public:
 	QtSubscribe(CSubscribe & cSubscribe);
 
 	QWidget * getWidget() const;
-	
+
 	void updatePresentation();
-	
+
 	void exec();
 
 private Q_SLOTS:
 
 	void sendRequest();
-	
+
 	void configureLogin();
 
 private:
@@ -64,26 +64,26 @@ private:
 		const std::string & errorMessage, const std::string & password);
 
 	QDialog * _subscribeWindow;
-	
+
 	CSubscribe & _cSubscribe;
-	
+
 	QtWengoPhone * _qtWengoPhone;
 
 	bool _sendRequestButtonEnabled;
-	
+
 	QString _errorMessage;
-	
+
 	QString _mailResult;
-	
+
 	QString _passwordResult;
-	
+
 	QString _nicknameResult;
-	
+
 	QWidget * _firstPage;
 
 	QWidget * _secondPage;
-	
+
 	QWidget * _currentPage;
 };
 
-#endif	//OW_QTSUBSCRIBE_H
+#endif	//QTSUBSCRIBE_H
