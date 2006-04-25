@@ -32,7 +32,8 @@
 
 using namespace std;
 
-QtContactWidget::QtContactWidget(Contact * contact, const QStringList & listContactGroup, QWidget * parent) : QObject(parent) {
+QtContactWidget::QtContactWidget(Contact * contact, const QStringList & listContactGroup, QWidget * parent)
+	: QObject(parent) {
 	_contactWidget = WidgetFactory::create(":/forms/contactlist/ContactWidget.ui", parent);
 
 	_contactGroupComboBox = Object::findChild<QComboBox *>(_contactWidget, "contactGroupComboBox");
@@ -104,10 +105,10 @@ void QtContactWidget::createContact(Contact & contact) {
 	contact.setFirstName(getFirstName().toStdString());
 	contact.setLastName(getLastName().toStdString());
 	contact.setSex(getSex());
-	
+
 	QDateTime dateTime = getBirthdate();
 	contact.setBirthdate(Date(dateTime.date().day(), dateTime.date().month(), dateTime.date().year()));
-	
+
 	contact.setWebsite(getWebsite().toStdString());
 	contact.setCompany(getCompany().toStdString());
 	contact.setWengoPhoneId(getWengoPhone().toStdString());

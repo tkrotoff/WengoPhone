@@ -35,7 +35,7 @@
 using namespace std;
 
 QtContactGroup::QtContactGroup(CContactGroup & cContactGroup, QtContactList * qtContactList)
-	: QObjectThreadSafe(qtContactList->getWidget()),
+	: QObjectThreadSafe(NULL),
 	_cContactGroup(cContactGroup) {
 
 	_qtContactList = qtContactList;
