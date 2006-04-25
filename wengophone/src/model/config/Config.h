@@ -189,6 +189,10 @@ public:
 	 * @{
 	 */
 
+	/** Gets the name of the last used UserProfile. */
+	static const std::string PROFILE_LAST_USED_NAME_KEY;
+	std::string getProfileLastUsedName() const;
+
 	/** Profile all widget enabled. */
 	static const std::string PROFILE_ALL;
 	bool getProfileAll() const;

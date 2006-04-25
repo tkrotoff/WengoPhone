@@ -57,6 +57,7 @@ const std::string Config::AUDIO_SMILEYS_DIR_KEY = "audio.smileys.dir";
 const std::string Config::AUDIO_AEC_KEY = "audio.aec";
 const std::string Config::AUDIO_HALFDUPLEX_KEY = "audio.halfduplex";
 
+const std::string Config::PROFILE_LAST_USED_NAME_KEY = "profile.last_used_name";
 const std::string Config::PROFILE_WIDTH = "profile.width";
 const std::string Config::PROFILE_HEIGHT = "profile.height";
 const std::string Config::PROFILE_POSX = "profile.posx";
@@ -127,15 +128,15 @@ Config::Config(const std::string & name)
 
 	static const std::string empty("");
 	static const StringList emptyStrList;
+	std::string resourcesPath;
+	std::string configPath;
+	std::string pluginsPath;
 	StringList defaultProtocols;
 
 	defaultProtocols += "MSN";
 	defaultProtocols += "AIM / ICQ";
 	defaultProtocols += "Jabber";
 	defaultProtocols += "Yahoo";
-
-	std::string resourcesPath;
-	std::string configPath;
 
 	_name = name;
 
@@ -150,19 +151,23 @@ Config::Config(const std::string & name)
 
 	//Default resources path
 #if defined(OS_WINDOWS)
+
 	resourcesPath = Path::getApplicationDirPath();
+
 #elif defined(OS_MACOSX)
+
 	CFBundleRef mainBundle = CFBundleGetMainBundle();
 	if (mainBundle) {
 		CFURLRef url = CFBundleCopyResourcesDirectoryURL(mainBundle);
-		char applicationPath[1024];
+		char resPath[1024];
 
-		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)applicationPath, sizeof(applicationPath))) {
-			resourcesPath = (std::string(applicationPath) + File::getPathSeparator());
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)resPath, sizeof(resPath))) {
+			resourcesPath = (std::string(resPath) + File::getPathSeparator());
 		}
 
 		CFRelease(url);
 	}
+
 #endif
 	_keyDefaultValueMap[RESOURCES_DIR_KEY] = resourcesPath;
 
@@ -180,7 +185,27 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[NETWORK_PROXY_LOGIN_KEY] = empty;
 	_keyDefaultValueMap[NETWORK_PROXY_PASSWORD_KEY] = empty;
 
-	_keyDefaultValueMap[CODEC_PLUGIN_PATH_KEY] = empty;
+#if defined(OS_MACOSX)
+
+	if (mainBundle) {
+		CFURLRef url = CFBundleCopyPrivateFrameworksURL(mainBundle);
+		char frameworkPath[1024];
+
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)frameworkPath, sizeof(frameworkPath))) {
+			pluginsPath = (std::string(frameworkPath) + File::getPathSeparator() 
+				+ "phapi-plugins" + File::getPathSeparator());
+		}
+
+		CFRelease(url);
+	}
+
+#else
+
+	pluginsPath = empty;
+
+#endif // !OS_MACOSX
+	_keyDefaultValueMap[CODEC_PLUGIN_PATH_KEY] = pluginsPath;
+
 	_keyDefaultValueMap[AUDIO_OUTPUT_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
 	_keyDefaultValueMap[AUDIO_INPUT_DEVICENAME_KEY] = AudioDevice::getDefaultRecordDevice();
 	_keyDefaultValueMap[AUDIO_RINGER_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
@@ -191,6 +216,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[AUDIO_AEC_KEY] = false;
 	_keyDefaultValueMap[AUDIO_HALFDUPLEX_KEY] = true;
 
+	_keyDefaultValueMap[PROFILE_LAST_USED_NAME_KEY] = empty;
 	_keyDefaultValueMap[PROFILE_WIDTH] = 786;
 	_keyDefaultValueMap[PROFILE_HEIGHT] = 758;
 	_keyDefaultValueMap[PROFILE_POSX] = 100;
@@ -383,6 +409,10 @@ std::string Config::getWengoWsInfoPath() const {
 
 std::string Config::getWengoSoftUpdatePath() const {
 	return getStringKeyValue(WENGO_SOFTUPDATE_PATH_KEY);
+}
+
+std::string Config::getProfileLastUsedName() const {
+	return getStringKeyValue(PROFILE_LAST_USED_NAME_KEY);
 }
 
 int Config::getProfileWidth() const {
