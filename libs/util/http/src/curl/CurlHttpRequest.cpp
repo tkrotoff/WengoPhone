@@ -39,7 +39,6 @@ char * getstr(std::string str) {
 	strcpy(tmp, str.data());
 	strncat(tmp, "\0", 1 );
 	return tmp;
-	//return strdup(str.c_str());
 }
 
 bool CurlHttpRequest::_verbose;
@@ -49,7 +48,7 @@ long CurlHttpRequest::_proxyAuthentication;
 CurlHttpRequest::CurlHttpRequest() {
 	_curl = NULL;
 	_proxyAuthenticationDetermine = false;
-	_verbose = true;
+	_verbose = false;
 	abortTransfer = false;
 	downloadDone = 0;
 	downloadTotal = 0;
@@ -101,14 +100,46 @@ void CurlHttpRequest::run() {
 		if (res != CURLE_OK) {
 			LOG_WARN(std::string(curl_easy_strerror(res)));
 			answerReceivedEvent(NULL, _lastRequestId, String::null, getReturnCode(res));
+		} else {
+			answerReceivedEvent(NULL, _lastRequestId, entireResponse, HttpRequest::NoError);
 		}
 
-		curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, & response);
+		curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, &response);
 		if (!response) {
 			LOG_DEBUG("no server response code has been received");
 		}
 		else {
 			LOG_DEBUG("server response code=" + String::fromNumber(response));
+		}
+
+		if( _verbose ) {
+			char * effectiveUrl = "";
+			curl_easy_getinfo(_curl, CURLINFO_EFFECTIVE_URL, &effectiveUrl);
+			if( effectiveUrl ) {
+				LOG_DEBUG("CURLINFO_EFFECTIVE_URL: " + std::string(effectiveUrl));
+			}
+
+			long temp = -1;
+
+			curl_easy_getinfo(_curl, CURLINFO_HEADER_SIZE, &temp);
+			if( temp >= 0 ) {
+				LOG_DEBUG("CURLINFO_HEADER_SIZE: " + String::fromNumber(temp));
+			}
+
+			curl_easy_getinfo(_curl, CURLINFO_REQUEST_SIZE, &temp);
+			if( temp >= 0 ) {
+				LOG_DEBUG("CURLINFO_REQUEST_SIZE: " + String::fromNumber(temp));
+			}
+
+			curl_easy_getinfo(_curl, CURLINFO_SSL_VERIFYRESULT, &temp);
+			if( temp >= 0 ) {
+				LOG_DEBUG("CURLINFO_SSL_VERIFYRESULT: " + String::fromNumber(temp));
+			}
+
+			curl_easy_getinfo(_curl, CURLINFO_SIZE_DOWNLOAD, &temp);
+			if( temp >= 0 ) {
+				LOG_DEBUG("CURLINFO_SIZE_DOWNLOAD: " + String::fromNumber(temp));
+			}
 		}
 	}
 	else {
@@ -157,7 +188,7 @@ void CurlHttpRequest::setUrl() {
 }
 
 void CurlHttpRequest::setCurlParam() {
-	curl_easy_setopt(_curl, CURLOPT_VERBOSE, 0);
+	curl_easy_setopt(_curl, CURLOPT_VERBOSE, _verbose);
 	curl_easy_setopt(_curl, CURLOPT_NOPROGRESS, false);
 	curl_easy_setopt(_curl, CURLOPT_READFUNCTION, curlHTTPRead);
 	curl_easy_setopt(_curl, CURLOPT_WRITEFUNCTION, curlHTTPWrite);
@@ -371,7 +402,7 @@ int curlHTTPProgress(void * curlHttpRequestInstance, double dltotal, double dlno
 
 		//Launches answerReceivedEvent only if the entire response content has been received
 		if ((dlnow >= dltotal) && (dlnow != 0 && dltotal != 0)) {
-			instance->answerReceivedEvent(NULL, requestId, instance->entireResponse, HttpRequest::NoError);
+			//instance->answerReceivedEvent(NULL, requestId, instance->entireResponse, HttpRequest::NoError);
 		}
 
 		if (instance->abortTransfer) {
