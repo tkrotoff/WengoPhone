@@ -108,6 +108,8 @@ protected Q_SLOTS:
 
 	void inviteContact();
 
+	void closeTab();
+
 Q_SIGNALS:
 
 	void typingStateChangedSignal(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);

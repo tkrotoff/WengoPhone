@@ -258,8 +258,19 @@ void QtNickNameWidget::init() {
 
 	// Setting avatar
 	QPixmap pixmap;
+	QPixmap background = QPixmap(":/pics/fond_avatar.png");
 	string myData = _userProfile.getIcon().getData();
 	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
-	_avatarLabel->setPixmap(pixmap.scaled(_avatarLabel->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+	if ( pixmap.isNull())
+        return;
+
+	QPainter painter( & background );
+	painter.drawPixmap(2,2,pixmap.scaled(66,66));
+	painter.end;
+
+	// _avatarLabel->setPixmap(pixmap.scaled(_avatarLabel->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+	_avatarLabel->setPixmap(background.scaled(_avatarLabel->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
 	////
 }

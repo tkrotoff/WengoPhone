@@ -252,7 +252,6 @@ void QtProfileBar::removeCreditWidget(){
 	}
 }
 
-
 void QtProfileBar::createStatusMenu(){
 	if (_statusMenu)
 		delete _statusMenu;
@@ -329,8 +328,6 @@ void QtProfileBar::wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::
 	_eventWidget->setNewMessages(voicemail);
 }
 void QtProfileBar::setOpen(bool status){
-    qDebug() << "setOpen status : "<< status;
-
     if (status)
     {
         QColor background = QColor(189,189,189);

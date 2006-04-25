@@ -110,6 +110,7 @@
         <file>pics/video_flip.png</file>
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
+        <file>pics/fond_avatar.png</file>
     </qresource>
     <qresource prefix="/data" >
         <file>AUTHORS</file>

@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
-    <height>108</height>
+    <width>403</width>
+    <height>129</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -20,13 +20,13 @@
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>0</number>
    </property>
    <item row="1" column="0" >
-    <layout class="QHBoxLayout" >
+    <layout class="QVBoxLayout" >
      <property name="margin" >
       <number>0</number>
      </property>
@@ -145,6 +145,9 @@
          <property name="icon" >
           <iconset resource="../wengophone.qrc" >:/pics/chat.png</iconset>
          </property>
+         <property name="flat" >
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -160,6 +163,9 @@
          </property>
          <property name="icon" >
           <iconset resource="../wengophone.qrc" >:/pics/call_button.png</iconset>
+         </property>
+         <property name="flat" >
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -177,38 +183,39 @@
          <property name="icon" >
           <iconset resource="../wengophone.qrc" >:/pics/sms.png</iconset>
          </property>
+         <property name="flat" >
+          <bool>true</bool>
+         </property>
         </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </item>
-     <item>
-      <widget class="QLabel" name="avatarLabel" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>7</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize" >
-        <size>
-         <width>60</width>
-         <height>60</height>
-        </size>
-       </property>
-       <property name="text" >
-        <string>Avatar</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
-   <item row="0" column="0" >
+   <item row="0" column="0" colspan="2" >
     <widget class="QFrame" name="userTitleFrame" >
      <property name="minimumSize" >
       <size>
        <width>16</width>
+       <height>21</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>16777215</width>
        <height>21</height>
       </size>
      </property>
@@ -217,6 +224,27 @@
      </property>
      <property name="frameShadow" >
       <enum>QFrame::Plain</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QLabel" name="avatarLabel" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>7</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>70</width>
+       <height>70</height>
+      </size>
+     </property>
+     <property name="text" >
+      <string>Avatar</string>
      </property>
     </widget>
    </item>

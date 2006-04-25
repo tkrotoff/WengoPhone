@@ -85,6 +85,17 @@ void ChatWindow::initThreadSafe(){
 	_dialog->setLayout(glayout);
 
 	_tabWidget = new QtChatTabWidget ( _dialog );
+	QPushButton * closeTabButton = new QPushButton(_tabWidget);
+	closeTabButton->setMaximumSize(QSize(16,16));
+	closeTabButton->setMinimumSize(QSize(16,16));
+	closeTabButton->resize(QSize(16,16));
+	closeTabButton->setToolTip(tr("close chat"));
+	closeTabButton->setFlat ( true );
+
+	_tabWidget->setCornerWidget ( closeTabButton,Qt::TopRightCorner);
+
+	connect ( closeTabButton, SIGNAL(clicked() ), SLOT(closeTab()));
+
 /*
 	QPalette dialogPalette = _dialog->palette();
 	dialogPalette.setColor(QPalette::Window, QColor(60,60,60));
@@ -178,12 +189,23 @@ void ChatWindow::inviteContact(){
 
     ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(_tabWidget->currentIndex() ) );
     if ( widget){
-    if (widget->canDoMultiChat()){
-        widget->inviteContact();
-    }
+        if (widget->canDoMultiChat()){
+            widget->inviteContact();
+        }
     }
 }
 
+void ChatWindow::closeTab(){
+    ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(_tabWidget->currentIndex() ) );
+
+    if ( widget){
+        if (widget->canDoMultiChat()){
+            widget->getIMChatSession()->close();
+        }
+    }
+    delete widget;
+    //_tabWidget->removeTab ( _tabWidget->currentIndex() );
+}
 void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state){
 
 	IMChat::TypingState * tmpState = new IMChat::TypingState;
