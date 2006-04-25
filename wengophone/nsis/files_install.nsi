@@ -88,6 +88,10 @@ File "${BUILD_DIR}\sounds\tones\jungle\*"
 SetOutPath "$INSTDIR\emoticons\*"
 File "${BUILD_DIR}\emoticons\*"
 
+/** Avatars. */
+SetOutPath "$INSTDIR\pics\avatars\*"
+File "${BUILD_DIR}\pics\avatars\*"
+
 /*
 SetOutPath "$INSTDIR\lang\"
 File "${BUILD_DIR}\softphone\gui\lang\wengo_fr.qm"

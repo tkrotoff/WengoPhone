@@ -30,6 +30,9 @@ debug_print('Using temporary directory: ' + temp_directory + '...')
 emoticons_path = release_mode + '/emoticons'
 debug_print('Using emoticons path: ' + emoticons_path + '...')
 
+avatars_path = release_mode + '/pics/avatars'
+debug_print('Using avatars path: ' + avatars_path + '...')
+
 sounds_path = release_mode + '/sounds'
 debug_print('Using sounds path: ' + sounds_path + '...')
 
@@ -52,6 +55,11 @@ debug_print('Done copying dependent dynamic libraries!')
 debug_print('Copying emoticons...')
 shutil.copytree(emoticons_path, temp_directory + '/emoticons')
 debug_print('Done copying emoticons!')
+
+#copy avatars
+debug_print('Copying avatars...')
+shutil.copytree(avatars_path, temp_directory + '/pics/avatars')
+debug_print('Done copying avatars!')
 
 #copy sounds
 debug_print('Copying sounds...')
@@ -115,7 +123,7 @@ for library in dependencies.keys():
     shutil.copyfile('/usr/lib/' + filename, os.path.join(str(temp_directory), filename))
 
 X11_dependencies = {
-    'Xinerama':'1.0',
+    'Xinerama':'1',
     }
 
 for library in X11_dependencies.keys():

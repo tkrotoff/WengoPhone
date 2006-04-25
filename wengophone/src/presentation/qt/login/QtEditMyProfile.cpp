@@ -68,7 +68,7 @@ void QtEditMyProfile::changeAvatarClicked() {
 	QString s = QFileDialog::getOpenFileName(
 		this,
 		tr("Choose a picture"),
-		"",
+		"pics/avatars",
 		tr("Images (*.png *.xpm *.jpg *.gif)"));
 
 	if (!s.isEmpty()) {

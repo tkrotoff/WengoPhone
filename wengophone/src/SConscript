@@ -141,11 +141,12 @@ sources = [
 	'control/webservices/info/CWsInfo.cpp',
 	'control/webservices/subscribe/CSubscribe.cpp',
 	'control/history/CHistory.cpp',
-
 	'presentation/PFactory.cpp'
 ]
 
 env.WengoCopyToBuildDir('../sounds', 'sounds')
+env.WengoCopyToBuildDir('../pics', 'pics')
+
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 env.WengoStaticLibrary('wengophone', sources)
