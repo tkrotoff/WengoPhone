@@ -1,4 +1,4 @@
-#include <webcam.h>
+#include <webcam/webcam.h>
 
 #include <QApplication>
 #include <QImage>

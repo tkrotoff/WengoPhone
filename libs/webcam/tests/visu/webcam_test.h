@@ -1,4 +1,4 @@
-#include <WebcamDriver.h>
+#include <webcam/WebcamDriver.h>
 
 #include <QApplication>
 #include <QImage>

@@ -18,7 +18,7 @@
  */
 #include <webcam_test.h>
 
-#include <Logger.h>
+#include <util/Logger.h>
 
 #include <iostream>
 #include <fstream>
