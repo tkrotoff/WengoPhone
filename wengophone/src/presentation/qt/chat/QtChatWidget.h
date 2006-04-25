@@ -147,10 +147,14 @@ protected:
 
     void createActionFrame();
 
+    void setupSendButton();
+
     QString generateHtmlHeader(const QString & bgColor,
                                        const QString & barColor,
                                        const QString & stringColor,
                                        const QString & nickName);
+
+
 
 	/**
 	 * Prepares a message to be sent to the network.

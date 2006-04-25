@@ -106,6 +106,8 @@ protected Q_SLOTS:
 
 	void contactAddedThreadSafe(IMChatSession * session, const IMContact * imContact );
 
+	void inviteContact();
+
 Q_SIGNALS:
 
 	void typingStateChangedSignal(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);

@@ -21,6 +21,7 @@
 
 #include <control/CWengoPhone.h>
 #include <model/profile/UserProfile.h>
+#include <qtutil/QtWengoStyleLabel.h>
 
 QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent , Qt::WFlags f )
 : QWidget (parent,f), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
@@ -42,19 +43,20 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	_widgetLayout->addLayout(_gridlayout,0,0);
 
 	// The status widget
-	_statusLabel = new QtProfileLabel(this);
+	_statusLabel = new QtWengoStyleLabel(this);
 	_statusLabel->setMinimumSize(QSize(46,65));
 	_statusLabel->setMaximumSize(QSize(46,65));
 	_statusLabel->setPixmaps(QPixmap(":/pics/profilebar/bar_start_status_green.png"),
 	                QPixmap(), // no end
 	                QPixmap(), // no fill
-	                QPixmap(":/pics/profilebar/bar_start_status_green.png"),
+
+	                QPixmap(":/pics/profilebar/bar_on_start_status_green.png"),
 	                QPixmap(),  // no end
 	                QPixmap()
 	                ); // no fill
 
 	// Nickname label
-	_nicknameLabel = new QtProfileLabel(this);
+	_nicknameLabel = new QtWengoStyleLabel(this);
 	_nicknameLabel->setMinimumSize(QSize(46,65));
 	_nicknameLabel->setMaximumSize(QSize(1000,65));
 	_nicknameLabel->setPixmaps(
@@ -62,33 +64,33 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	                QPixmap(":/pics/profilebar/bar_separator.png"), //  end
 	                QPixmap(":/pics/profilebar/bar_fill.png"),
 	                QPixmap(),  // no start
-	                QPixmap(":/pics/profilebar/bar_separator.png"),  // end
-	                QPixmap(":/pics/profilebar/bar_fill.png")
+	                QPixmap(":/pics/profilebar/bar_on_separator_left.png"),  // end
+	                QPixmap(":/pics/profilebar/bar_on_fill.png") // fill
 	                );
 
 
 	// The events label
-	_eventsLabel = new QtProfileLabel(this);
+	_eventsLabel = new QtWengoStyleLabel(this);
 	_eventsLabel->setMinimumSize(QSize(46,65));
 	_eventsLabel->setMaximumSize(QSize(1000,65));
 	_eventsLabel->setPixmaps(QPixmap(), // no start
 	                QPixmap(":/pics/profilebar/bar_separator.png"), //  end
 	                QPixmap(":/pics/profilebar/bar_fill.png"),
 	                QPixmap(),  // no start
-	                QPixmap(":/pics/profilebar/bar_separator.png"),  // end
-	                QPixmap(":/pics/profilebar/bar_fill.png")
+	                QPixmap(":/pics/profilebar/bar_on_separator_left.png"),  // end
+	                QPixmap(":/pics/profilebar/bar_on_fill.png")
 	                );
 
 	// The credit label
-	_creditLabel = new QtProfileLabel(this);
+	_creditLabel = new QtWengoStyleLabel(this);
 	_creditLabel->setMinimumSize(QSize(46,65));
 	_creditLabel->setMaximumSize(QSize(1000,65));
 	_creditLabel->setPixmaps(QPixmap(), // no start
 	                QPixmap(":/pics/profilebar/bar_end.png"),
 	                QPixmap(":/pics/profilebar/bar_fill.png"),
 	                QPixmap(),  // no start
-	                QPixmap(":/pics/profilebar/bar_end.png"),
-	                QPixmap(":/pics/profilebar/bar_fill.png")
+	                QPixmap(":/pics/profilebar/bar_on_end.png"),
+	                QPixmap(":/pics/profilebar/bar_on_fill.png")
 	                );
 
 	// Add the labels to the gridlayout
@@ -157,10 +159,10 @@ void QtProfileBar::showNickNameWidget(){
 
 	if ( ! _nickNameWidgetVisible )
 	{
-//		_nickNameWidget = new QtNickNameWidget(_userProfile, this);
 		_widgetLayout->addWidget(_nickNameWidget, 1, 0 );
 		_nickNameWidget->setVisible(true);
 		_nickNameWidgetVisible=true;
+		setOpen(true);
 	}
 }
 
@@ -172,9 +174,9 @@ void QtProfileBar::removeNickNameWidget(){
 
 		setMinimumSize(QSize(0,0));
 		resize(QSize(0,0));
-//		delete _nickNameWidget;
 		_nickNameWidgetVisible=false;
 		_nicknameLabel->setSelected(false);
+		setOpen(false);
 	}
 }
 
@@ -196,10 +198,10 @@ void QtProfileBar::showEventsWidget(){
 	removeNickNameWidget();
 	removeCreditWidget();
 	if ( !_eventsWidgetVisible ){
-//		_eventWidget = new QtEventWidget(this);
 		_widgetLayout->addWidget(_eventWidget, 1, 0);
 		_eventWidget->setVisible(true);
 		_eventsWidgetVisible=true;
+		setOpen(true);
 	}
 }
 
@@ -209,9 +211,9 @@ void QtProfileBar::removeEventsWidget(){
 		_widgetLayout->removeWidget( _eventWidget );
 		setMinimumSize(QSize(0,0));
 		resize(QSize(0,0));
-//		delete _eventWidget;
 		_eventsWidgetVisible=false;
 		_eventsLabel->setSelected(false);
+		setOpen(false);
 	}
 }
 
@@ -230,11 +232,10 @@ void QtProfileBar::showCreditWidget(){
 	removeNickNameWidget();
 	removeEventsWidget();
 	if ( ! _crediWidgetVisible ){
-//		_creditWidget = new QtCreditWidget(this);
-//		_creditWidget->setCWengoPhone(&_cWengoPhone);
 		_widgetLayout->addWidget(_creditWidget, 1, 0);
 		_creditWidget->setVisible(true);
 		_crediWidgetVisible=true;
+		setOpen(true);
 	}
 }
 
@@ -245,9 +246,9 @@ void QtProfileBar::removeCreditWidget(){
 		_widgetLayout->removeWidget( _creditWidget );
 		setMinimumSize(QSize(0,0));
 		resize(QSize(0,0));
-//		delete _creditWidget;
 		_crediWidgetVisible=false;
 		_creditLabel->setSelected(false);
+		setOpen(false);
 	}
 }
 
@@ -326,4 +327,32 @@ void QtProfileBar::wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsI
 void QtProfileBar::wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail) {
 	//TODO: add error check
 	_eventWidget->setNewMessages(voicemail);
+}
+void QtProfileBar::setOpen(bool status){
+    qDebug() << "setOpen status : "<< status;
+
+    if (status)
+    {
+        QColor background = QColor(189,189,189);
+        QPalette p = palette();
+        p.setColor(QPalette::Window, background );
+        _statusLabel->setBackgroundColor(background);
+        _nicknameLabel->setBackgroundColor(background);
+        _eventsLabel->setBackgroundColor(background);
+        _creditLabel->setBackgroundColor(background);
+        setAutoFillBackground(true);
+        setPalette(p);
+        // update();
+    }
+    else{
+        QPalette p = (dynamic_cast<QWidget *>( parent()))->palette();
+        setPalette(p);
+        QColor background = p.color(QPalette::Window);
+        _statusLabel->setBackgroundColor(background);
+        _nicknameLabel->setBackgroundColor(background);
+        _eventsLabel->setBackgroundColor(background);
+        _creditLabel->setBackgroundColor(background);
+        setAutoFillBackground(false);
+        // update();
+    }
 }

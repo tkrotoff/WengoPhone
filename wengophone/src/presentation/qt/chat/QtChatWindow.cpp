@@ -37,7 +37,7 @@
 
 ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession) : QObjectThreadSafe(NULL),
 _cChatHandler(cChatHandler){
-    LOG_DEBUG("ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(), _imChatSession(imChatSession)");
+    // LOG_DEBUG("ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(), _imChatSession(imChatSession)");
 	_imChatSession = &imChatSession;
 
     _imChatSession->messageReceivedEvent +=
@@ -74,7 +74,7 @@ void ChatWindow::initThreadSafe(){
 	// Create the menu bar
 	_menuBar = new QMenuBar(_dialog);
 	QMenu * WengoMenu = new QMenu("Wengo");
-	WengoMenu->addAction("Exit");
+	WengoMenu->addAction(tr("Exit"));
 	_menuBar->addMenu(WengoMenu);
 
 	_contactListFrame = new QFrame();
@@ -133,6 +133,8 @@ void ChatWindow::initThreadSafe(){
 }
 void ChatWindow::createInviteFrame(){
 
+    _inviteFrame->setMaximumSize(QSize(10000,80));
+    _inviteFrame->setMinimumSize(QSize(16,80));
 	QGridLayout * layout = new QGridLayout(_inviteFrame);
 	_callLabel = new QtWengoStyleLabel(_inviteFrame);
 	_inviteLabel = new QtWengoStyleLabel(_inviteFrame);
@@ -140,7 +142,8 @@ void ChatWindow::createInviteFrame(){
 						QPixmap(":/pics/chat/chat_call_bar_button.png"),
 						QPixmap(),
 						QPixmap(), // Fill
-						QPixmap(":/pics/chat/chat_call_bar_button.png"),
+
+						QPixmap(":/pics/chat/chat_call_bar_button_on.png"),
 						QPixmap(":/pics/profilebar/bar_separator.png"),
 						QPixmap()  // Fill
 	                      );
@@ -152,14 +155,16 @@ void ChatWindow::createInviteFrame(){
 						QPixmap(":/pics/profilebar/bar_end.png"), //
 						QPixmap(":/pics/profilebar/bar_fill.png"), // Fill
 						QPixmap(),
-						QPixmap(":/pics/profilebar/bar_end.png"),
-						QPixmap(":/pics/profilebar/bar_fill.png") // Fill
+						QPixmap(":/pics/profilebar/bar_on_end.png"),
+						QPixmap(":/pics/profilebar/bar_on_fill.png") // Fill
 	                      );
 	_inviteLabel->setMinimumSize(QSize(120,65));
-	_inviteLabel->setText("invite");
+	_inviteLabel->setText(tr("   invite"));
 	_inviteLabel->setTextColor(Qt::white);
 
 	_inviteLabel->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
+    connect(_inviteLabel,SIGNAL(clicked()), SLOT(inviteContact()));
 
 	layout->addWidget(_callLabel,0,0);
 	layout->addWidget(_inviteLabel,0,1);
@@ -168,6 +173,17 @@ void ChatWindow::createInviteFrame(){
 	layout->setSpacing(0);
 
 }
+
+void ChatWindow::inviteContact(){
+
+    ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(_tabWidget->currentIndex() ) );
+    if ( widget){
+    if (widget->canDoMultiChat()){
+        widget->inviteContact();
+    }
+    }
+}
+
 void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state){
 
 	IMChat::TypingState * tmpState = new IMChat::TypingState;

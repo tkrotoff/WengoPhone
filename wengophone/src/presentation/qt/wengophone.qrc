@@ -9,7 +9,16 @@
         <file>pics/call_missed.png</file>
         <file>pics/call_outgoing.png</file>
         <file>pics/call_video_button.png</file>
+        <file>pics/callbar/call_bar_button.png</file>
+        <file>pics/callbar/call_bar_button_off.png</file>
+        <file>pics/callbar/call_bar_button_video.png</file>
+        <file>pics/callbar/call_bar_fill.png</file>
         <file>pics/chat.png</file>
+        <file>pics/chat/chat_call_bar_button.png</file>
+        <file>pics/chat/chat_call_bar_button_on.png</file>
+        <file>pics/chat/chat_emoticon_button.png</file>
+        <file>pics/chat/chat_emoticon_button_on.png</file>
+        <file>pics/chat/chat_send.png</file>
         <file>pics/chat_send_message.png</file>
         <file>pics/conference.png</file>
         <file>pics/config.png</file>
@@ -50,13 +59,29 @@
         <file>pics/no.png</file>
         <file>pics/point.gif</file>
         <file>pics/profilebar/bar_end.png</file>
+        <file>pics/profilebar/bar_end.png</file>
         <file>pics/profilebar/bar_fill.png</file>
+        <file>pics/profilebar/bar_on_end.png</file>
+        <file>pics/profilebar/bar_on_fill.png</file>
+        <file>pics/profilebar/bar_on_separator_left.png</file>
+        <file>pics/profilebar/bar_on_separator_right.png</file>
+        <file>pics/profilebar/bar_on_start.png</file>
+        <file>pics/profilebar/bar_on_start_status_gray.png</file>
+        <file>pics/profilebar/bar_on_start_status_green.png</file>
+        <file>pics/profilebar/bar_on_start_status_orange.png</file>
+        <file>pics/profilebar/bar_on_start_status_red.png</file>
+        <file>pics/profilebar/bar_open_end.png</file>
+        <file>pics/profilebar/bar_open_fill.png</file>
+        <file>pics/profilebar/bar_open_start_status_gray.png</file>
+        <file>pics/profilebar/bar_open_start_status_green.png</file>
+        <file>pics/profilebar/bar_open_start_status_orange.png</file>
+        <file>pics/profilebar/bar_open_start_status_red.png</file>
+        <file>pics/profilebar/bar_separator.png</file>
         <file>pics/profilebar/bar_start.png</file>
         <file>pics/profilebar/bar_start_status_gray.png</file>
         <file>pics/profilebar/bar_start_status_green.png</file>
         <file>pics/profilebar/bar_start_status_orange.png</file>
         <file>pics/profilebar/bar_start_status_red.png</file>
-        <file>pics/profilebar/bar_separator.png</file>
         <file>pics/protocol_aim.png</file>
         <file>pics/protocol_googletalk.png</file>
         <file>pics/protocol_jabber.png</file>
@@ -85,16 +110,9 @@
         <file>pics/video_flip.png</file>
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
-        <file>pics/callbar/call_bar_button_off.png</file>
-        <file>pics/callbar/call_bar_button_video.png</file>
-        <file>pics/callbar/call_bar_fill.png</file>
-        <file>pics/callbar/call_bar_button.png</file>
-        <file>pics/chat/chat_call_bar_button.png</file>
-        <file>pics/chat/chat_emoticon_button.png</file>
-        <file>pics/history/call_incoming.png</file>
-        <file>pics/history/call_missed.png</file>
-        <file>pics/history/call_outgoing.png</file>
-        <file>pics/history/sms_send.png</file>
+    </qresource>
+    <qresource prefix="/data" >
+        <file>AUTHORS</file>
     </qresource>
     <qresource prefix="/emoticons" >
         <file>chat/emoticons/emblem-unreadable.png</file>
@@ -164,6 +182,7 @@
         <file>imaccount/MSNSettings.ui</file>
         <file>imaccount/YahooSettings.ui</file>
         <file>login/LoginWindow.ui</file>
+        <file>login/contactWindow.ui</file>
         <file>login/profileWindow.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
@@ -174,8 +193,5 @@
         <file>webservices/sms/SmsWindow.ui</file>
         <file>webservices/softupdate/SoftUpdateWindow.ui</file>
         <file>webservices/subscribe/Subscribe.ui</file>
-    </qresource>
-    <qresource prefix="/data" >
-        <file>AUTHORS</file>
     </qresource>
 </RCC>

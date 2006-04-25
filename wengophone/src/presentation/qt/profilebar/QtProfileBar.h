@@ -22,8 +22,8 @@
 
 #include <QtGui>
 
-#include "QtClickableLabel.h"
-#include "QtProfileLabel.h"
+// #include "QtClickableLabel.h"
+// #include "QtProfileLabel.h"
 #include "QtNickNameWidget.h"
 #include "QtEventWidget.h"
 #include "QtCreditWidget.h"
@@ -32,6 +32,7 @@
 
 class UserProfile;
 class CWengoPhone;
+class QtWengoStyleLabel;
 
 class QtProfileBar : public QWidget
 {
@@ -48,13 +49,13 @@ protected:
 
 	QGridLayout * _widgetLayout;
 
-	QtProfileLabel * _statusLabel;
+	QtWengoStyleLabel * _statusLabel;
 
-	QtProfileLabel * _nicknameLabel;
+	QtWengoStyleLabel * _nicknameLabel;
 
-	QtProfileLabel * _eventsLabel;
+	QtWengoStyleLabel * _eventsLabel;
 
-	QtProfileLabel * _creditLabel;
+	QtWengoStyleLabel * _creditLabel;
 
 	QtNickNameWidget * _nickNameWidget;
 
@@ -90,6 +91,8 @@ protected:
 
 	void removeCreditWidget();
 
+    void setOpen(bool opened);
+
 public Q_SLOTS:
 
 	void statusClicked();
@@ -108,7 +111,6 @@ public Q_SLOTS:
 	void invisibleClicked(bool checked);
 
 	void awayClicked(bool checked);
-
 
 	void forwardClicked(bool checked);
 

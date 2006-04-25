@@ -37,11 +37,6 @@ QtProfileLabel::~QtProfileLabel ( ){
 
 
 void QtProfileLabel::paintEvent(QPaintEvent * event){
-/*
-	qDebug() << "Paint event";
-	QLabel::paintEvent( event );
-	return;
-*/
 	QRect rect = this->rect();
 	_pixmap = QPixmap(QSize(rect.width(),rect.height()));
 

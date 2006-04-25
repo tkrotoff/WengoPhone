@@ -53,17 +53,14 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 	_nickBgColorAlt = "'#B0FFB3'";
     _nickName = "Wengo";
 
-//    _fontButton  = Object::findChild<QPushButton *>(_widget,"fontButton");
-
     _chatHistory = Object::findChild<QTextBrowser *>(_widget,"chatHistory");
-//    _emoticonsButton = Object::findChild<QPushButton *>(_widget,"emoticonsButton");
     _sendButton = Object::findChild<QPushButton *>(_widget,"sendButton");
     _chatEdit = Object::findChild<QTextEdit *>(_widget,"chatEdit");
 	_contactListFrame = Object::findChild<QFrame *>(_widget,"contactListFrame");
 	_typingStateLabel = Object::findChild<QLabel *>(_widget,"typingStateLabel");
 	_actionFrame = Object::findChild<QFrame *>(_widget,"actionFrame");
 	createActionFrame();
-
+    setupSendButton();
 	// _inviteButton = Object::findChild<QPushButton *>(_widget,"inviteButton");
 	// connect ( _inviteButton,SIGNAL(clicked()), SLOT(inviteContact()));
 
@@ -455,9 +452,10 @@ void ChatWidget::createActionFrame(){
 						QPixmap(":/pics/chat/chat_emoticon_button.png"),
 						QPixmap(":/pics/profilebar/bar_separator.png"),
 						QPixmap(":/pics/profilebar/bar_fill.png"), // Fill
-						QPixmap(":/pics/chat/chat_emoticon_button.png"),
+
+						QPixmap(":/pics/chat/chat_emoticon_button_on.png"),
 						QPixmap(":/pics/profilebar/bar_separator.png"),
-						QPixmap(":/pics/profilebar/bar_fill.png")  // Fill
+						QPixmap(":/pics/profilebar/bar_on_fill.png")  // Fill
 	                      );
 
     _emoticonsLabel->setMaximumSize(QSize(120,65));
@@ -468,16 +466,16 @@ void ChatWidget::createActionFrame(){
 						QPixmap(":/pics/profilebar/bar_end.png"),  //
 						QPixmap(":/pics/profilebar/bar_fill.png"), // Fill
 						QPixmap(),
-						QPixmap(":/pics/profilebar/bar_end.png"),
-						QPixmap(":/pics/profilebar/bar_fill.png")  // Fill
+						QPixmap(":/pics/profilebar/bar_on_end.png"),
+						QPixmap(":/pics/profilebar/bar_on_fill.png")  // Fill
                         );
 
-    _emoticonsLabel->setText("emoticons   ");
+    _emoticonsLabel->setText(tr("emoticons   "));
 	_emoticonsLabel->setTextColor(Qt::white);
 	_emoticonsLabel->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
 
-	_fontLabel->setText("    fonts");
+	_fontLabel->setText(tr("    fonts"));
 	_fontLabel->setTextColor(Qt::white);
     _fontLabel->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
@@ -510,4 +508,12 @@ QString ChatWidget::generateHtmlHeader(const QString & bgColor,
     html+=QString("</table>");
     return html;
 
+}
+void ChatWidget::setupSendButton(){
+    QPixmap pix = _sendButton->icon().pixmap(50,50);
+    QPainter painter ( &pix );
+    painter.setPen(Qt::white);
+    painter.drawText(pix.rect(),Qt::AlignCenter,tr("send"));
+    painter.end();
+    _sendButton->setIcon(QIcon(pix));
 }
