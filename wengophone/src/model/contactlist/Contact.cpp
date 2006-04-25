@@ -61,47 +61,15 @@ Contact & Contact::operator = (const Contact & contact) {
 }
 
 void Contact::initialize(const Contact & contact) {
-	_firstName = contact._firstName;
-	_lastName = contact._lastName;
-	_sex = contact._sex;
-	_birthdate = contact._birthdate;
-	_website = contact._website;
-	_company = contact._company;
-	_wengoPhoneId = contact._wengoPhoneId;
-	_mobilePhone = contact._mobilePhone;
-	_homePhone = contact._homePhone;
-	_workPhone = contact._workPhone;
-	_otherPhone = contact._otherPhone;
-	_fax = contact._fax;
-	_personalEmail = contact._personalEmail;
-	_workEmail = contact._workEmail;
-	_otherEmail = contact._otherEmail;
-	_streetAddress = contact._streetAddress;
-	_notes = contact._notes;
+	//Profile::Profile(contact);
 	_blocked = contact._blocked;
 	_preferredIMContact = contact._preferredIMContact;
 	_imContactSet = contact._imContactSet;
 }
 
 bool Contact::operator == (const Contact & contact) const {
-	return ((_firstName == contact._firstName)
-		&& (_lastName == contact._lastName)
-		&& (_sex == contact._sex)
-		&& (_birthdate == contact._birthdate)
-		&& (_website == contact._website)
-		&& (_company == contact._company)
-		&& (_wengoPhoneId == contact._wengoPhoneId)
-		&& (_mobilePhone == contact._mobilePhone)
-		&& (_homePhone == contact._homePhone)
-		&& (_workPhone == contact._workPhone)
-		&& (_otherPhone == contact._otherPhone)
+	return (Profile::operator==(contact)
 		&& (_preferredNumber == contact._preferredNumber)
-		&& (_fax == contact._fax)
-		&& (_personalEmail == contact._personalEmail)
-		&& (_workEmail == contact._workEmail)
-		&& (_otherEmail == contact._otherEmail)
-		&& (_streetAddress == contact._streetAddress)
-		&& (_notes == contact._notes)
 		&& (_blocked == contact._blocked)
 		&& (_preferredIMContact == contact._preferredIMContact)
 		&& (_imContactSet == contact._imContactSet));
@@ -369,21 +337,45 @@ Picture Contact::getIcon() const {
 }
 
 string Contact::getDisplayName() const {
-
 	string result;
+	string pseudo;
+	string contactId;
 
 	if (!_firstName.empty() || !_lastName.empty()) {
-		result = _firstName + " " + _lastName;
-	} else {
-		// Take the contact id of the first IMContact
+		result += _firstName;
+
+		if (!result.empty() && !_lastName.empty()) {
+			result += " ";
+		}
+
+		result += _lastName;
+	}
+
+	// Take the alias of the first IMContact
+	for (IMContactSet::const_iterator it = _imContactSet.begin();
+		it != _imContactSet.end();
+		++it) {
+		if (!(*it).getAlias().empty()) {
+			pseudo = (*it).getAlias();
+			contactId = (*it).getContactId();
+			break;
+		}
+	}
+
+	// If no alias set, we take the first contact id:
+	if (contactId.empty()) {
 		IMContactSet::const_iterator it = _imContactSet.begin();
 		if (it != _imContactSet.end()) {
-			if (!(*it).getAlias().empty()) {
-				result = (*it).getAlias();
-			} else {
-				result = (*it).getContactId();
-			}
+			contactId = (*it).getContactId();
 		}
+	}
+
+	if (result.empty()) {
+		result = contactId;
+	}
+
+	if (!pseudo.empty()) {
+		result += " - (" + pseudo + ")";
 	}
 
 	return result;
