@@ -32,7 +32,7 @@
 #include <QtGui>
 
 QtConfigPanel::QtConfigPanel(QWidget * parent)
-	: QObjectThreadSafe() {
+	: QObjectThreadSafe(parent) {
 
 	_configPanelWidget = new QWidget(parent);
 
