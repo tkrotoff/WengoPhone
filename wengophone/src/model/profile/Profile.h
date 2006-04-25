@@ -46,26 +46,11 @@ public:
 	 */
 	Event< void(Profile & sender) > profileChangedEvent;
 
-	Profile() {
-		_sex = EnumSex::SexUnknown;
-		_presenceState = EnumPresenceState::PresenceStateUnknown;
-	    _firstName = "";
-        _lastName = "";
-        _website = "";
-        _company = "";
-        _wengoPhoneId = "";
-        _mobilePhone = "";
-        _homePhone = "";
-        _workPhone = "";
-        _wengoPhoneNumber = "";
-        _otherPhone = "";
-        _fax = "";
-        _personalEmail = "";
-        _workEmail = "";
-        _otherEmail = "";
-        _notes = "";
-        _alias = "";
-	}
+	Profile();
+
+	Profile(const Profile & profile);
+
+	bool operator == (const Profile & profile) const;
 
 	virtual ~Profile() {}
 
