@@ -14,7 +14,6 @@ defines = {
 	'CURL_DISABLE_LDAP' : 1,
 	'CURL_DISABLE_DICT' : 1,
 	'CURL_DISABLE_TELNET' : 1,
-	'CURL_DISABLE_FTP' : 1,
 	'CURL_DISABLE_TFTP' : 1,
 }
 if WengoDebugMode():
@@ -36,7 +35,7 @@ sources = [
 	'lib/escape.c',
 #	'lib/file.c',
 	'lib/formdata.c',
-#	'lib/ftp.c',
+	'lib/ftp.c',
 	'lib/getenv.c',
 	'lib/getinfo.c',
 	'lib/gtls.c',
