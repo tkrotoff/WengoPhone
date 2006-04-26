@@ -474,7 +474,10 @@ void ChatWidget::createActionFrame(){
 	_emoticonsLabel->setTextColor(Qt::white);
 	_emoticonsLabel->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-
+/*
+    _emoticonsLabel->setBackgroundColor(palette().color(QPalette::Base));
+    _fontLabel->setBackgroundColor(palette().color(QPalette::Base));
+*/
 	_fontLabel->setText(tr("    fonts"));
 	_fontLabel->setTextColor(Qt::white);
     _fontLabel->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);

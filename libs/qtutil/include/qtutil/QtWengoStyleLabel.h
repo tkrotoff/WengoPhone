@@ -70,8 +70,6 @@ protected:
 
 	virtual void mouseReleaseEvent ( QMouseEvent * event );
 
-	QPixmap  _pixmap;
-
 	QPixmap  _normalFillPixmap;
 
 	QPixmap  _normalLeftPixmap;
