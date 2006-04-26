@@ -65,18 +65,32 @@ void QtUserWidgetAvatarManager::paintEvent(QPaintEvent * event)
 		_svgRenderer.render(&painter);
 	}
 	*/
-	QPainter painter(_target);
+
+	QPixmap background = QPixmap(":/pics/fond_avatar.png");
+	QPixmap pixmap;
 
 	Picture picture = _userWidget->getCContact().getIcon();
 
-	QPixmap pixmap, scaledPixmap;
+
 	std::string data = picture.getData();
 	pixmap.loadFromData((uchar *)data.c_str(), data.size());
 
-	QRect rect = _userWidget->getAvatarLabel()->rect();
-	scaledPixmap = pixmap.scaled(rect.size());
-
-	painter.drawPixmap(rect, scaledPixmap, rect);
+	if ( ! pixmap.isNull())
+        {
+            QRect rect = _userWidget->getAvatarLabel()->rect();
+            QPainter painter(_target);
+            QPainter pixpainter( & background );
+            pixpainter.drawPixmap(5,5,pixmap.scaled(60,60));
+            pixpainter.end();
+            painter.drawPixmap(rect, background, rect);
+            painter.end();
+        }
+        else
+        {
+            QPainter painter(_target);
+            painter.drawPixmap(0,0,background);
+            painter.end();
+        }
 }
 
 void QtUserWidgetAvatarManager::loadAvatar(QString path)

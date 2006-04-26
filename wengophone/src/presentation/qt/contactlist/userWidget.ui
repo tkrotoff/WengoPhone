@@ -55,7 +55,7 @@
             <string/>
            </property>
            <property name="pixmap" >
-            <pixmap resource="../wengophone.qrc" >:/pics/contact_phone_home.png</pixmap>
+            <pixmap resource="../wengophone.qrc" >:/pics/contact/mobile.png</pixmap>
            </property>
           </widget>
          </item>
@@ -95,7 +95,7 @@
             <string/>
            </property>
            <property name="pixmap" >
-            <pixmap resource="../wengophone.qrc" >:/pics/contact_phone_mobile.png</pixmap>
+            <pixmap resource="../wengophone.qrc" >:/pics/contact/fixe.png</pixmap>
            </property>
           </widget>
          </item>
@@ -143,7 +143,7 @@
           <string>PushButton</string>
          </property>
          <property name="icon" >
-          <iconset resource="../wengophone.qrc" >:/pics/chat.png</iconset>
+          <iconset resource="../wengophone.qrc" >:/pics/contact/hangup.png</iconset>
          </property>
          <property name="flat" >
           <bool>true</bool>
@@ -162,7 +162,7 @@
           <string>PushButton</string>
          </property>
          <property name="icon" >
-          <iconset resource="../wengophone.qrc" >:/pics/call_button.png</iconset>
+          <iconset resource="../wengophone.qrc" >:/pics/contact/chat.png</iconset>
          </property>
          <property name="flat" >
           <bool>true</bool>
@@ -181,7 +181,7 @@
           <string>PushButton</string>
          </property>
          <property name="icon" >
-          <iconset resource="../wengophone.qrc" >:/pics/sms.png</iconset>
+          <iconset resource="../wengophone.qrc" >:/pics/contact/sms.png</iconset>
          </property>
          <property name="flat" >
           <bool>true</bool>

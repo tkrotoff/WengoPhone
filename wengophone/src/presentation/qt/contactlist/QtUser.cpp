@@ -48,12 +48,13 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 
 	spx = QtContactPixmap::getInstance();
 
-
+/*
 	QLinearGradient lg( QPointF(1,1), QPointF(option.rect.width(),1));
 	lg.setSpread(QGradient::RepeatSpread);
 	lg.setColorAt ( 0, option.palette.midlight().color());
 	lg.setColorAt ( .8, QColor(210, 216, 234));
-
+*/
+    QColor lg(201,201,201);
 	/*
 
 	if (_mouseOn)

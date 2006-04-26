@@ -52,7 +52,6 @@ protected:
 
 	QtWengoStyleLabel * _callBarButton;
 
-	QtWengoStyleLabel * _callBarButtonVideo;
 
 	QtWengoStyleLabel * _callBarButtonOff;
 
@@ -61,8 +60,6 @@ protected:
 	QComboBox * _phoneComboBox;
 
 protected Q_SLOTS:
-
-	void callBarButtonVideoClicked();
 
 	void callBarButtonOffClicked();
 

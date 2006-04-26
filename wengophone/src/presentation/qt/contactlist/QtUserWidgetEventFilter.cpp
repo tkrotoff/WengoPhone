@@ -38,11 +38,14 @@ bool QtUserWidgetEventFilter::eventFilter(QObject *obj, QEvent *event){
 
 void QtUserWidgetEventFilter::paintEvent(QPaintEvent * event){
 	QPalette  p = _target->palette();
+/*
 	QLinearGradient lg( QPointF(1,1), QPointF(_target->rect().width(),1));
-
 	lg.setSpread(QGradient::RepeatSpread);
 	lg.setColorAt ( 0, p.midlight().color());
 	lg.setColorAt ( .8, QColor(210, 216, 234));
+*/
+    QColor lg(201,201,201);
+
     QPainter painter(_target);
     painter.fillRect(event->rect(),QBrush(lg));
 	paintUser (&painter,_target->rect());

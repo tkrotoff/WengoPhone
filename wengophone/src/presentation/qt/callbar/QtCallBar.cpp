@@ -24,7 +24,7 @@
 #include <qtutil/MouseEventFilter.h>
 
 QtCallBar::QtCallBar(QWidget * parent , Qt::WFlags f) : QFrame(parent,f) {
-	
+
 	setFrameShape(QFrame::NoFrame);
 	_callBarButton = new QtWengoStyleLabel(this);
 	_callBarButton->setPixmaps(
@@ -33,36 +33,28 @@ QtCallBar::QtCallBar(QWidget * parent , Qt::WFlags f) : QFrame(parent,f) {
 					  QPixmap(), // Fill
 
 					  QPixmap(), // Start
-					  QPixmap(":/pics/callbar/call_bar_button.png"), // End
-					  QPixmap() // Fill
-					  );
-
-	_callBarButtonVideo= new QtWengoStyleLabel(this);
-	_callBarButtonVideo->setPixmaps(
-	                  QPixmap(":/pics/callbar/call_bar_button_video.png"), // Start
-					  QPixmap(), // End
-					  QPixmap(), // Fill
-					  QPixmap(":/pics/callbar/call_bar_button_video.png"), // Start
-					  QPixmap(), // End
+					  QPixmap(":/pics/callbar/call_bar_button_on.png"), // End
 					  QPixmap() // Fill
 					  );
 
 	_callBarButtonOff = new QtWengoStyleLabel (this);
 	_callBarButtonOff->setPixmaps(
-					  QPixmap(":/pics/callbar/call_bar_button_off.png"), // Start
+					  QPixmap(":/pics/callbar/call_bar_button_hangup.png"), // Start
 					  QPixmap(), // End
 					  QPixmap(), // Fill
-					  QPixmap(":/pics/callbar/call_bar_button_off.png"), // Start
+
+					  QPixmap(":/pics/callbar/call_bar_button_hangup_on.png"), // Start
 					  QPixmap(), // End
 					  QPixmap() // Fill
 					  );
 
 	_callBarComboContainer = new QtWengoStyleLabel (this);
 	_callBarComboContainer->setPixmaps(
-					  QPixmap(), // Start
+					  QPixmap(":/pics/callbar/call_bar_start.png"), // Start
 					  QPixmap(), // End
 					  QPixmap(":/pics/callbar/call_bar_fill.png"), // Fill
-					  QPixmap(), // Start
+
+					  QPixmap(":/pics/callbar/call_bar_start.png"), // Start
 					  QPixmap(), // End
 					  QPixmap(":/pics/callbar/call_bar_fill.png") // Fill
 					  );
@@ -80,21 +72,17 @@ QtCallBar::QtCallBar(QWidget * parent , Qt::WFlags f) : QFrame(parent,f) {
 	layout->setSpacing(0);
 
 	layout->addWidget(_callBarComboContainer,0,0);
-	layout->addWidget(_callBarButtonVideo,0,1);
-	layout->addWidget(_callBarButtonOff,0,2);
-	layout->addWidget(_callBarButton,0,3);
+	layout->addWidget(_callBarButtonOff,0,1);
+	layout->addWidget(_callBarButton,0,2);
 
 	_callBarButton->setMaximumSize(QSize(45,65));
-	_callBarButtonOff->setMaximumSize(QSize(20,65));
-	_callBarButtonVideo->setMaximumSize(QSize(27,65));
+
+	_callBarButtonOff->setMaximumSize(QSize(25,65));
+    _callBarButtonOff->setMinimumSize(QSize(25,65));
 
 	connect (_callBarButton, SIGNAL(clicked()),SLOT(callBarButtonClicked()));
 	connect (_callBarButtonOff, SIGNAL(clicked()),SLOT(callBarButtonOffClicked()));
-	connect (_callBarButtonVideo, SIGNAL(clicked()),SLOT(callBarButtonVideoClicked()));
-}
 
-void QtCallBar::callBarButtonVideoClicked() {
-	VideoClicked();
 }
 
 void QtCallBar::callBarButtonOffClicked(){

@@ -13,6 +13,11 @@
         <file>pics/callbar/call_bar_button_off.png</file>
         <file>pics/callbar/call_bar_button_video.png</file>
         <file>pics/callbar/call_bar_fill.png</file>
+        <file>pics/callbar/call_bar_start.png</file>
+        <file>pics/callbar/call_bar_button_hangup.png</file>
+        <file>pics/callbar/call_bar_button_hangup_on.png</file>
+        <file>pics/callbar/call_bar_start.png</file>
+        <file>pics/callbar/call_bar_button_on.png</file>
         <file>pics/chat.png</file>
         <file>pics/chat/chat_call_bar_button.png</file>
         <file>pics/chat/chat_call_bar_button_on.png</file>
@@ -44,6 +49,11 @@
         <file>pics/contact_remove.png</file>
         <file>pics/contact_video.png</file>
         <file>pics/contact_view.png</file>
+        <file>pics/contact/chat.png</file>
+        <file>pics/contact/hangup.png</file>
+        <file>pics/contact/sms.png</file>
+        <file>pics/contact/mobile.png</file>
+        <file>pics/contact/fixe.png</file>
         <file>pics/dialpad.png</file>
         <file>pics/group_close.png</file>
         <file>pics/group_open.png</file>
