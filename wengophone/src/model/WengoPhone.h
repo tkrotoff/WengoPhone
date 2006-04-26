@@ -143,7 +143,13 @@ private:
 	 */
 	bool _terminate;
 
-	/**
+    /** 
+     *  Emergency timeout handler called when SIP unregistering 
+     *  is not quick enough, or timed out
+     */
+    void shutdownTimeoutHandler();
+	
+    /**
  	 * True if the thread is running.
  	 */
 	bool _running;

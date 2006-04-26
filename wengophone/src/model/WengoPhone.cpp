@@ -30,6 +30,7 @@
 #include "WengoPhoneBuildId.h"
 
 #include <util/Logger.h>
+#include <thread/Timer.h>
 #include <http/HttpRequest.h>
 
 #include <sstream>
@@ -54,12 +55,15 @@ WengoPhone::WengoPhone()
 	HttpRequest::setUserAgent(ss.str());
 }
 
+void WengoPhone::shutdownTimeoutHandler() {
+    LOG_DEBUG("Shutdown triggered because of timeout");
+    exit(0);
+}
+
 WengoPhone::~WengoPhone() {
 	while (_running) {
 		Thread::msleep(100);
 	}
-
-	_userProfile.disconnect();
 
 	delete _wenboxPlugin;
 
@@ -69,7 +73,15 @@ WengoPhone::~WengoPhone() {
 	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
 	configManagerStorage.save(config.getConfigDir());
 
-	_userProfile.disconnect();
+    /**
+     *  Set up a timeout triggered if SIP registering is too long 
+     *  so that closing WengoPhone NG is not too long.
+    */
+	static Timer shutdownTimeout;
+    shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownTimeoutHandler, this);
+    shutdownTimeout.start(3000, 3000);
+    
+    _userProfile.disconnect();
 
 	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
 	userProfileStorage->save(config.getConfigDir());
