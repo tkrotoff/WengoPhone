@@ -36,6 +36,7 @@ projects = [
 	'wengophone',
 	'wengophone/nsis',
 	'wengophone/src/presentation/qt/lang',
+	'crashreport',
 ]
 
 SConscript(dirs = projects)
