@@ -27,6 +27,8 @@ class QtUserWidgetAvatarManager;
 
 class QLabel;
 class CContact;
+class QPushButton;
+
 
 class QtUserWidget : public QWidget
 {
@@ -35,7 +37,7 @@ public:
 
     QtUserWidget(CContact & cContact, QWidget * parent = 0, Qt::WFlags f=0);
 
-	virtual void paintEvent(QPaintEvent * event);
+//	virtual void paintEvent(QPaintEvent * event);
 
 	void setText(QString text) {
 		_text = text;
@@ -53,6 +55,10 @@ public:
 		return _avatarLabel;
 	}
 
+	void setUserId(const QString & userId){
+        _userId = userId;
+	}
+
 protected:
 
 	QLabel * _avatarLabel;
@@ -63,11 +69,27 @@ protected:
 
 	QLabel * _cellPhoneLabel;
 
+	QPushButton * _callButton;
+
+	QPushButton * _smsButton;
+
+	QPushButton * _chatButton;
+
 	QString _text;
+
+	QString _userId;
 
 	QtUserWidgetAvatarManager * _avatarManager;
 
 	CContact & _cContact;
+
+protected Q_SLOTS:
+
+    void callButtonClicked();
+
+    void smsButtonClicked();
+
+    void chatButtonClicked();
 
 };
 

@@ -68,7 +68,10 @@ QWidget * QtTreeViewDelegate::createEditor( QWidget *parent,
 	QtUser * user = ul->getUser(index.data().toString());
 
 	QtUserWidget * widget = new QtUserWidget(user->getCContact(), parent);
+	widget->setUserId(index.data().toString());
+
 	QWidget * userWidget = Object::findChild<QWidget *>(widget, "UserWidget");
+
 	QFrame * userTitleFrame = Object::findChild<QFrame *>(userWidget, "userTitleFrame");
 
 	userWidget->installEventFilter(new QtUserWidgetEventFilter((QObject *) this, userWidget, user));

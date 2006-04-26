@@ -262,15 +262,16 @@ void QtNickNameWidget::init() {
 	string myData = _userProfile.getIcon().getData();
 	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
 
-	if ( pixmap.isNull())
-        return;
+	if ( !pixmap.isNull()){
+        QPainter painter( & background );
+        painter.drawPixmap(5,5,pixmap.scaled(60,60));
+        painter.end();
 
-	QPainter painter( & background );
-	painter.drawPixmap(2,2,pixmap.scaled(66,66));
-	painter.end();
-
-	// _avatarLabel->setPixmap(pixmap.scaled(_avatarLabel->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-	_avatarLabel->setPixmap(background.scaled(_avatarLabel->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
+        // _avatarLabel->setPixmap(pixmap.scaled(_avatarLabel->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        _avatarLabel->setPixmap(background);
+	}
+	else{
+	    _avatarLabel->setPixmap(background);
+	}
 	////
 }

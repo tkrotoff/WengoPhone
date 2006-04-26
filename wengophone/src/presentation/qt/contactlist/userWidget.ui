@@ -132,7 +132,7 @@
         <number>2</number>
        </property>
        <item>
-        <widget class="QPushButton" name="pushButton" >
+        <widget class="QPushButton" name="callButton" >
          <property name="maximumSize" >
           <size>
            <width>22</width>
@@ -151,7 +151,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3" >
+        <widget class="QPushButton" name="chatButton" >
          <property name="maximumSize" >
           <size>
            <width>22</width>
@@ -170,7 +170,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2" >
+        <widget class="QPushButton" name="smsButton" >
          <property name="maximumSize" >
           <size>
            <width>22</width>

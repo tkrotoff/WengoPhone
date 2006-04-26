@@ -211,8 +211,12 @@ void QtUser::startChat(){
 }
 
 void QtUser::startSMS(){
-	// _wengoPhone.
+
 	QtWengoPhone * qwengophone = dynamic_cast<QtWengoPhone *>( _cContact.getCWengoPhone().getPresentation());
+
+	if ( ! qwengophone )
+        return;
+
 	if ( qwengophone->getSms() ){
 
 		QString mobilePhone = QString::fromStdString( _cContact.getContact().getMobilePhone() );
@@ -223,6 +227,7 @@ void QtUser::startSMS(){
 
 void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 {
+/*
 	QPixmap px;
 	QtContactPixmap * spx;
 	int x;
@@ -264,6 +269,7 @@ void QtUser::mouseClicked(const QPoint & pos, const QRect & rect)
 	}
 	else
 		x-=px.width();
+*/
 }
 
 void QtUser::setButton(const Qt::MouseButton button)
@@ -324,4 +330,8 @@ bool QtUser::havePhoneNumber(){
 
 void QtUser::startCall(const QString & number){
 	_wengoPhone.getCurrentUserProfile().makeCall(number.toStdString(), false);
+}
+
+void QtUser::startCall(){
+    _wengoPhone.getCurrentUserProfile().makeCall(_cContact.getContact(), false);
 }

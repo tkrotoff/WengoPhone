@@ -85,6 +85,10 @@ public:
 
 	void startSMS();
 
+	void startCall(const QString & number);
+
+	void startCall();
+
 	QString getMobilePhone() const;
 
 	QString getHomePhone() const;
@@ -92,8 +96,6 @@ public:
 	QString getWorkPhone() const;
 
 	QString getWengoPhoneNumber() const;
-
-	void startCall(const QString & number);
 
 	bool havePhoneNumber();
 

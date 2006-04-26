@@ -20,7 +20,7 @@
 #include "QtUserWidget.h"
 
 #include "QtUserWidgetAvatarManager.h"
-
+#include "QtUserList.h"
 #include <control/contactlist/CContact.h>
 #include <model/contactlist/Contact.h>
 
@@ -43,52 +43,38 @@ QtUserWidget::QtUserWidget(CContact & cContact, QWidget * parent, Qt::WFlags f)
 	_homePhoneLabel->setText( QString::fromUtf8(_cContact.getContact().getHomePhone().c_str() ) );
 	_cellPhoneLabel->setText( QString::fromUtf8(_cContact.getContact().getMobilePhone().c_str() ) );
 
-	_avatarManager = new QtUserWidgetAvatarManager(this, _avatarLabel);
+	_avatarManager = new QtUserWidgetAvatarManager(this,_avatarLabel);
 	_avatarLabel->installEventFilter(_avatarManager);
-}
 
+
+    _smsButton = findChild<QPushButton *>("smsButton");
+    _callButton= findChild<QPushButton *>("callButton");
+    _chatButton= findChild<QPushButton *>("chatButton");
+
+
+    connect ( _callButton, SIGNAL(clicked()), SLOT ( callButtonClicked() ));
+    connect ( _chatButton, SIGNAL(clicked()), SLOT ( chatButtonClicked() ));
+    connect ( _smsButton,  SIGNAL(clicked()), SLOT ( smsButtonClicked() ));
+}
+/*
 void QtUserWidget::paintEvent(QPaintEvent * event){
 
 	QPalette  p = palette();
     QPainter painter(this);
 	painter.fillRect(rect(),QBrush(QColor(255,255,128)));
 }
+*/
+void QtUserWidget::callButtonClicked(){
+    QtUserList * ul = QtUserList::getInstance();
+	ul->startCall(_userId);
+}
 
+void QtUserWidget::smsButtonClicked(){
+    QtUserList * ul = QtUserList::getInstance();
+    ul->startSMS(_userId);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void QtUserWidget::chatButtonClicked(){
+    QtUserList * ul = QtUserList::getInstance();
+    ul->startChat(_userId);
+}

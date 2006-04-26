@@ -209,6 +209,47 @@ void QtUserList::resetMouseStatus(){
 		}
 	}
 }
+
+void QtUserList::startChat(const QString & userid){
+
+    _mutex.lock();
+    QtUser * user = _userList[userid];
+    if ( ! user )
+        LOG_FATAL("User lookup failed !!!");
+    _mutex.unlock();
+    user->startChat();
+}
+
+void QtUserList::startSMS(const QString & userid){
+    _mutex.lock();
+    QtUser * user = _userList[userid];
+    if ( ! user )
+        LOG_FATAL("User lookup failed !!!");
+    _mutex.unlock();
+    user->startSMS();
+
+}
+
+void QtUserList::startCall(const QString & userid,const QString & number){
+    _mutex.lock();
+    QtUser * user = _userList[userid];
+    if ( ! user )
+        LOG_FATAL("User lookup failed !!!");
+    _mutex.unlock();
+    user->startCall(number);
+}
+
+
+void QtUserList::startCall(const QString & userid){
+    _mutex.lock();
+    QtUser * user = _userList[userid];
+    if ( ! user )
+        LOG_FATAL("User lookup failed !!!");
+    _mutex.unlock();
+    user->startCall();
+}
+
+
 /*
 int QtUserList::getClickCount(){
 	QMutexLocker locker(const_cast<QMutex *>(&_mutex));

@@ -66,6 +66,15 @@ public:
 	QTreeWidget * getTreeWidget() const {return _tree;}
 
 	void resetMouseStatus();
+
+    void startChat(const QString & userid);
+
+	void startSMS(const QString & userid);
+
+	void startCall(const QString & userid, const QString & number);
+
+	void startCall(const QString & userid);
+
 /*
 	int getClickCount();
 

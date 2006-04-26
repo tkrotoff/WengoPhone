@@ -71,7 +71,6 @@ void QtUserWidgetAvatarManager::paintEvent(QPaintEvent * event)
 
 	Picture picture = _userWidget->getCContact().getIcon();
 
-
 	std::string data = picture.getData();
 	pixmap.loadFromData((uchar *)data.c_str(), data.size());
 
