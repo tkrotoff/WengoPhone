@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +17,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include "FtpUpload.h"
+
 #include <sys/stat.h> 
 #include "curl/curl.h"
 #include "cutil/global.h"
 
 #define WENGO_FTP		"ftp.wengo.fr"
-#define WENGO_USER		"wengo"
-#define WENGO_PASSWD	"wengo"
+#define WENGO_USER		"wengophone"
+#define WENGO_PASSWD	"coredump"
 
 #ifdef OS_WIN32
 #define snprintf	_snprintf
 #define stat		_stat
+#else
+#include <string.h>
 #endif
+
+int curlFTPProgress(void * instance, double dltotal, double dlnow, double ultotal, double ulnow) {
+	
+	if( instance ) {
+		FtpUpload * ftpUpload = (FtpUpload*)instance;
+		ftpUpload->setProgress(ultotal, ulnow);
+	}
+	return 0;
+}
 
 char *get_filename(const char *full)
 {
@@ -49,27 +62,33 @@ char *get_filename(const char *full)
 		return ++filename;
 }
 
-int ftp_upload(const char * host, const char * path, const char *fullfilename, 
-			   int (*progress_cb)(void *, double, double, double, double))
+int ftp_upload(const char * path, const char *fullfilename, void * ftpUploadInstance)
 {
 	CURL *handle;
 	char url_buff[1024];
 	char auth_passwd[1024];
+	char tmp[1024];
 	const char *filename;
 	FILE *lfile;
-	struct _stat buf;
+	struct stat buf;
 	int res;
-
+	
+	memset(url_buff, 0, sizeof(url_buff));
+	memset(auth_passwd, 0, sizeof(auth_passwd));
+	memset(tmp, 0, sizeof(tmp));
+	
 	if (!fullfilename)
 		return -1;
 
 	stat(fullfilename, &buf);
 	filename = get_filename(fullfilename);
-
-	if (host && *host)
-		snprintf(url_buff, sizeof(url_buff), "ftp://%s/%s/%s", host, path, filename);
-	else
-		snprintf(url_buff, sizeof(url_buff), "ftp://%s/%s", WENGO_FTP, filename);
+	
+	snprintf(url_buff, sizeof(url_buff), "ftp://%s", WENGO_FTP);
+	
+	if (path && *path)
+		snprintf(tmp, sizeof(tmp), "%s/%s", url_buff, path);
+	
+	snprintf(url_buff, sizeof(url_buff), "%s/%s", tmp, filename);
 
 	snprintf(auth_passwd, sizeof(auth_passwd), "%s:%s", WENGO_USER, WENGO_PASSWD);
 
@@ -82,22 +101,23 @@ int ftp_upload(const char * host, const char * path, const char *fullfilename,
 	curl_easy_setopt(handle, CURLOPT_URL, url_buff);
 	curl_easy_setopt(handle, CURLOPT_USERPWD, auth_passwd);
 	curl_easy_setopt(handle, CURLOPT_READDATA, lfile);
-	curl_easy_setopt(handle, CURLOPT_INFILESIZE, buf.st_size); 
-	curl_easy_setopt(handle, CURLOPT_UPLOAD, TRUE);
+	curl_easy_setopt(handle, CURLOPT_INFILESIZE, buf.st_size);
+	curl_easy_setopt(handle, CURLOPT_UPLOAD, 1);
+	curl_easy_setopt(handle, CURLOPT_VERBOSE, 1);
+	curl_easy_setopt(handle, CURLOPT_FTP_USE_EPSV, 0);
+	curl_easy_setopt(handle, CURLOPT_FTP_SKIP_PASV_IP, 1);
 
-	if (progress_cb != NULL)
-	{
-		curl_easy_setopt(handle, CURLOPT_NOPROGRESS, FALSE);
-		curl_easy_setopt(handle, CURLOPT_PROGRESSFUNCTION, progress_cb);
-	}
-
+	curl_easy_setopt(handle, CURLOPT_NOPROGRESS, 0);
+	curl_easy_setopt(handle, CURLOPT_PROGRESSFUNCTION, curlFTPProgress);
+	curl_easy_setopt(handle, CURLOPT_PROGRESSDATA, ftpUploadInstance);
+	
 	res = curl_easy_perform(handle);
 
-	curl_easy_cleanup(handle); 
+	curl_easy_cleanup(handle);
 
 	fclose(lfile);
 
 	curl_global_cleanup();
-	
+
 	return res;
 }

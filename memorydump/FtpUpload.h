@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,5 +18,75 @@
  */
 
 
-int ftp_upload(const char * host, const char * path, const char *filename, 
-			   int (*progress_cb)(void *, double, double, double, double));
+#ifndef OW_FTPUPLOAD_H
+#define OW_FTPUPLOAD_H
+
+#include <string>
+#include <thread/Thread.h>
+#include <util/Event.h>
+
+int ftp_upload(const char * path, const char *fullfilename, void * instance);
+
+/**
+ * FtpUpload upload a file to a ftp server.
+ * 
+ * @author Julien Bossart
+ * @author Mathieu Stute
+ */
+class FtpUpload : public Thread {
+
+public:
+	
+	enum Status {
+		Ok,
+		Error,
+		None,
+	};
+	
+	/**
+	 * Progression event.
+	 *
+	 * @param sender this class
+	 * @param requestId HTTP request ID
+	 * @param answer HTTP answer (std::string is used as a byte array)
+	 * @param error Error code
+	 */
+	Event<void (FtpUpload * sender, Status status)> statusEvent;
+	
+	/**
+	 * Progression event.
+	 *
+	 * @param sender this class
+	 * @param ultotal total
+	 * @param ulnow current
+	 */
+	Event<void (FtpUpload * sender, double ultotal, double ulnow)> progressionEvent;
+
+	FtpUpload(const std::string & host, const std::string & path, const std::string & filename)
+	: _host(host), _path(path), _filename(filename) {
+	}
+	
+	void setProgress(double ultotal, double ulnow) {
+		progressionEvent(this, ultotal, ulnow);
+	}
+	
+	void run() {
+		int res = ftp_upload(_path.c_str(), _filename.c_str(), this);
+		
+		if( res == 0) {
+			statusEvent(this, Ok);
+		} else {
+			statusEvent(this, Error);
+		}
+	}
+
+private:
+	
+	std::string _host;
+	
+	std::string _path;
+	
+	std::string _filename;
+};
+
+#endif //OW_FTPUPLOAD_H
