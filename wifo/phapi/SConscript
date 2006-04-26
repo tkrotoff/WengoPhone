@@ -303,6 +303,8 @@ if shphapi:
 else:
     phapi = env.WengoStaticLibrary('phapi', sources)
 
+env.WengoAlias("phapi_alias", phapi)
+
 Depends(phapi, [amr, speex])
 
 #pyphapi

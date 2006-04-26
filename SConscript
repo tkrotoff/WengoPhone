@@ -39,3 +39,4 @@ projects = [
 ]
 
 SConscript(dirs = projects)
+SConscript('wengophone/src/presentation/qt/QtWengoPhoneInstall')
