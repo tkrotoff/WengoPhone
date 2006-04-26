@@ -121,6 +121,8 @@
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
         <file>pics/fond_avatar.png</file>
+        <file>pics/close_normal.png</file>
+        <file>pics/close_on.png</file>
     </qresource>
     <qresource prefix="/data" >
         <file>AUTHORS</file>

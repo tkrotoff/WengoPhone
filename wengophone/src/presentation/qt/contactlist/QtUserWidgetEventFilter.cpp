@@ -45,10 +45,37 @@ void QtUserWidgetEventFilter::paintEvent(QPaintEvent * event){
 	lg.setColorAt ( .8, QColor(210, 216, 234));
 */
     QColor lg(201,201,201);
-
+    QRect rect = _target->rect(); // = event->rect();
     QPainter painter(_target);
-    painter.fillRect(event->rect(),QBrush(lg));
+/*
+    painter.setPen(QColor(233,233,233));
+    painter.drawLine(rect.left(),rect.top(),rect.right(),rect.top());
+    rect.adjust(0,1,0,0);
+    painter.setPen(QColor(215,215,215));
+    painter.drawLine(rect.left(),rect.top(),rect.right(),rect.top());
+    rect.adjust(0,1,0,0);
+    painter.setPen(QColor(255,255,255));
+    painter.drawLine(rect.left(),rect.top(),rect.right(),rect.top());
+    rect.adjust(0,1,0,0);
+    painter.setPen(QColor(255,255,255));
+    painter.drawLine(rect.left(),rect.top(),rect.right(),rect.top());
+*/
+    painter.fillRect(rect,QBrush(lg));
+
+    painter.setPen(QColor(233,233,233));
+    painter.drawLine(rect.left(),rect.bottom(),rect.right(),rect.bottom());
+    rect.adjust(0,0,0,-1);
+    painter.setPen(QColor(215,215,215));
+    painter.drawLine(rect.left(),rect.bottom(),rect.right(),rect.bottom());
+    rect.adjust(0,0,0,-1);
+    painter.setPen(QColor(255,255,255));
+    painter.drawLine(rect.left(),rect.top(),rect.right(),rect.top());
+    rect.adjust(0,0,0,-1);
+    painter.setPen(QColor(255,255,255));
+    painter.drawLine(rect.left(),rect.top(),rect.right(),rect.top());
 	paintUser (&painter,_target->rect());
+
+	painter.end();
 }
 
 void QtUserWidgetEventFilter::paintUser(QPainter * painter,QRect rect)

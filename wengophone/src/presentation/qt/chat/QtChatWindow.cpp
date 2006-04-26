@@ -86,6 +86,9 @@ void ChatWindow::initThreadSafe(){
 
 	_tabWidget = new QtChatTabWidget ( _dialog );
 	QPushButton * closeTabButton = new QPushButton(_tabWidget);
+	QIcon closeIcon(QPixmap(":/pics/close_normal.png"));
+	closeIcon.addPixmap(QPixmap(":/pics/close_on.png"),QIcon::Normal,QIcon::On);
+	closeTabButton->setIcon(closeIcon);
 	closeTabButton->setMaximumSize(QSize(16,16));
 	closeTabButton->setMinimumSize(QSize(16,16));
 	closeTabButton->resize(QSize(16,16));
