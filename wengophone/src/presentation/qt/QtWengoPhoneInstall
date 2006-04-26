@@ -1,7 +1,10 @@
 import os.path
 
 env = WengoGetEnvironment()
+
 base_install_dir = WengoGetConsoleArgument("prefix")
+if base_install_dir == None:
+    base_install_dir = "/tmp"
 lib_install_dir  = os.path.join(base_install_dir, "lib", "qtwengophone")
 bin_install_dir = os.path.join(base_install_dir, "bin")
 wrapper_path = os.path.join(bin_install_dir, "qtwengophone")
