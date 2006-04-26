@@ -136,8 +136,6 @@ void QtWengoPhone::initThreadSafe() {
 
 	// IconBar
 	_iconBar = Object::findChild<QFrame *>(_wengoPhoneWindow,"iconBar");
-	//FIXME:
-	_iconBar->setVisible(false);
 
 	// Add contact button
 	_addContactButton = Object::findChild<QPushButton *>(_iconBar,"addContactButton");
@@ -416,16 +414,16 @@ void QtWengoPhone::updatePresentation() {
 }
 
 void QtWengoPhone::updatePresentationThreadSafe() {
-	
+
 	//disabled some actions if no WengoAccount is used
 	bool hasWengoAccount = _cWengoPhone.getCurrentUserProfile().hasWengoAccount();
-	
+
 	QAction * actionShowWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowWengoAccount");
 	actionShowWengoAccount->setEnabled(hasWengoAccount);
-	
+
 	QAction * actionSendSms = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSendSms");
 	actionSendSms->setEnabled(hasWengoAccount);
-	
+
 	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
 	actionCreateConferenceCall->setEnabled(hasWengoAccount);
 }
@@ -470,7 +468,7 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 	default:
 		LOG_FATAL("Unknown state");
 	};
-	
+
 	updatePresentation();
 }
 
@@ -816,7 +814,7 @@ void QtWengoPhone::phoneComboBoxClicked() {
 		for(HistoryMap::iterator it = mementos->begin(); it != mementos->end(); it++ ) {
 			HistoryMemento * memento = (*it).second;
 			SipAddress sipAddress(memento->getPeer());
-			
+
 			switch(memento->getState()) {
 				case HistoryMemento::IncomingCall:
 					_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/call_incoming.png")),

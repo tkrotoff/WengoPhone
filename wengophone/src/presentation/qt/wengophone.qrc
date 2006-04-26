@@ -123,6 +123,11 @@
         <file>pics/fond_avatar.png</file>
         <file>pics/close_normal.png</file>
         <file>pics/close_on.png</file>
+        <file>pics/iconbar/add_contact.png</file>
+        <file>pics/iconbar/chat.png</file>
+        <file>pics/iconbar/conference2.png</file>
+        <file>pics/iconbar/search_contact.png</file>
+        <file>pics/iconbar/sms2.png</file>
     </qresource>
     <qresource prefix="/data" >
         <file>AUTHORS</file>

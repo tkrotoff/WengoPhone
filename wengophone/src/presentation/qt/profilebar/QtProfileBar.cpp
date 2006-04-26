@@ -337,7 +337,7 @@ void QtProfileBar::setOpen(bool status){
         _nicknameLabel->setBackgroundColor(background);
         _eventsLabel->setBackgroundColor(background);
         _creditLabel->setBackgroundColor(background);
-        setAutoFillBackground(true);
+        //setAutoFillBackground(true);
         setPalette(p);
         // update();
     }
@@ -349,7 +349,7 @@ void QtProfileBar::setOpen(bool status){
         _nicknameLabel->setBackgroundColor(background);
         _eventsLabel->setBackgroundColor(background);
         _creditLabel->setBackgroundColor(background);
-        setAutoFillBackground(false);
+        // setAutoFillBackground(false);
         // update();
     }
 }

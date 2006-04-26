@@ -71,7 +71,7 @@
             <string/>
            </property>
            <property name="icon" >
-            <iconset resource="wengophone.qrc" >:/pics/sms.png</iconset>
+            <iconset resource="wengophone.qrc" >:/pics/iconbar/sms2.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -102,7 +102,7 @@
             <string/>
            </property>
            <property name="icon" >
-            <iconset resource="wengophone.qrc" >:/pics/conference.png</iconset>
+            <iconset resource="wengophone.qrc" >:/pics/iconbar/conference2.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -133,7 +133,7 @@
             <string/>
            </property>
            <property name="icon" >
-            <iconset resource="wengophone.qrc" >:/pics/contact_find.png</iconset>
+            <iconset resource="wengophone.qrc" >:/pics/iconbar/search_contact.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -164,7 +164,7 @@
             <string/>
            </property>
            <property name="icon" >
-            <iconset resource="wengophone.qrc" >:/pics/contact_add.png</iconset>
+            <iconset resource="wengophone.qrc" >:/pics/iconbar/add_contact.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -330,7 +330,7 @@
      <x>0</x>
      <y>0</y>
      <width>305</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >

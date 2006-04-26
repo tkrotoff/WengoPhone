@@ -2,7 +2,7 @@
 
 QtClickableLabel::QtClickableLabel( QWidget * parent , Qt::WFlags f ) : QLabel( parent, f ) {
 	_mousePressed = false;
-	setAutoFillBackground(true);
+//	setAutoFillBackground(true);
 	_bgcolor = Qt::white;
 }
 

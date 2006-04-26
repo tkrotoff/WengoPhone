@@ -65,8 +65,8 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent ,
 
 	_nickNameEdit = new QLineEdit ( this );
 
-	_avatarLabel->setMinimumSize( QSize( 80,80 ) );
-	_avatarLabel->setMaximumSize( QSize( 80,80 ) );
+	_avatarLabel->setMinimumSize( QSize( 70,70 ) );
+	_avatarLabel->setMaximumSize( QSize( 70,70 ) );
 
 	// Add widgets to the layouts
 
