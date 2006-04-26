@@ -14,4 +14,4 @@ for form in forms:
 
 
 env.WengoUseLibraries(libs)
-env.WengoProgram('crashreport', sources, headers)
+env.WengoProgram('owcrashreport', sources, headers)
