@@ -58,6 +58,7 @@ void ph_resample_cleanup(void *p)
 
 }
 
+#define SATURATE(x) ((x > 0x7fff) ? 0x7fff : ((x < ~0x7fff) ? ~0x7fff : x))
 
 /**
  * @brief in-place downsample of a buffer by a factor of 2
@@ -77,8 +78,10 @@ void ph_downsample(void *rctx, void *framebuf, int framesize)
 
   while( framesize-- )
     {
+      int itmp;
       tmp = dofilter((double) *sp++, fbuf);
-      *dp++ = (short) (tmp + 0.5);
+      itmp =   (int) (tmp + 0.5);
+      *dp++ = SATURATE(itmp);
       dofilter((double) *sp++, fbuf);
     }
 }
@@ -100,10 +103,13 @@ void ph_upsample(void *rctx, void *dbuf, void *framebuf, int framesize)
 
   while( framesize-- )
     {
+      int itmp;
       tmp = dofilter((double) *sp++, fbuf);
-      *dp++ = (short) (tmp*2.0 + 0.5);
+      itmp = (int) (tmp*2.0 + 0.5);
+      *dp++ = SATURATE(itmp);
       tmp = dofilter(0.0, fbuf);
-      *dp++ = (short) (tmp*2.0 + 0.5);
+      itmp = (int) (tmp*2.0 + 0.5);
+      *dp++ = SATURATE(itmp);
     }
 }
 
