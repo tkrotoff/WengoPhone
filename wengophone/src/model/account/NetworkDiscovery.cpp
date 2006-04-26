@@ -41,30 +41,44 @@ bool NetworkDiscovery::testHTTP(const std::string & url, bool ssl) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	NETLIB_BOOLEAN sslActivated = ((ssl) ? NETLIB_TRUE : NETLIB_FALSE);
 	bool isProxyDetected = config.getNetworkProxyDetected();
+	unsigned retryCount = 2;
 
-	if (!isProxyDetected) {
-		LOG_DEBUG("proxy not yet detected. Testing http connection without proxy");
-		if (is_http_conn_allowed(url.c_str(),
-			NULL, 0, NULL, NULL, sslActivated, HTTP_TIMEOUT) == HTTP_OK) {
+	while (retryCount != 0) {
+		--retryCount;
 
-			setProxySettings(String::null, 0, String::null, String::null);
-			return true;
-		} else {
-			discoverProxySettings();
+		if (!isProxyDetected) {
+			LOG_DEBUG("proxy not yet detected. Testing http connection without proxy");
+			if (is_http_conn_allowed(url.c_str(),
+				NULL, 0, NULL, NULL, sslActivated, HTTP_TIMEOUT) == HTTP_OK) {
+
+				setProxySettings(String::null, 0, String::null, String::null);
+				return true;
+			} else {
+				discoverProxySettings();
+			}
 		}
-	}
 
-	string proxyAddress = config.getNetworkProxyServer();
-	int proxyPort = config.getNetworkProxyPort();
-	string proxyLogin = config.getNetworkProxyLogin();
-	string proxyPassword = config.getNetworkProxyPassword();
+		string proxyAddress = config.getNetworkProxyServer();
+		int proxyPort = config.getNetworkProxyPort();
+		string proxyLogin = config.getNetworkProxyLogin();
+		string proxyPassword = config.getNetworkProxyPassword();
 
-	LOG_DEBUG("proxy detected. Testing http connection");
-	if (is_http_conn_allowed(url.c_str(),
-		proxyAddress.c_str(), proxyPort,
-		proxyLogin.c_str(), proxyPassword.c_str(), sslActivated, HTTP_TIMEOUT) == HTTP_OK) {
+		LOG_DEBUG("proxy detected. Testing http connection");
+		if (is_http_conn_allowed(url.c_str(),
+			proxyAddress.c_str(), proxyPort,
+			proxyLogin.c_str(), proxyPassword.c_str(), sslActivated, HTTP_TIMEOUT) == HTTP_OK) {
 
-		return true;
+			return true;
+		}
+
+		// If we cannot connect, we try again one time.
+		// We try again because at first launch of the software,
+		// the proxy has maybe been detected (and no proxy has been found)
+		// the last time the application was running however
+		// the software should maybe connect through a proxy this time.
+		if (isProxyDetected && (retryCount != 0)) {
+			config.set(Config::NETWORK_PROXY_DETECTED_KEY, false);
+		}
 	}
 
 	LOG_DEBUG("cannot connect to " + url + (ssl ? " with" : " without") + " ssl");
