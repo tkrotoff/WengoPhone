@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Dialog</string>
+   <string>WengoPhone - Crash report</string>
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
@@ -206,7 +206,7 @@ The WengoPhone Development Team.</string>
   <connection>
    <sender>cancelButton</sender>
    <signal>clicked()</signal>
-   <receiver>CrashReportForm</receiver>
+   <receiver>CrashReport</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
