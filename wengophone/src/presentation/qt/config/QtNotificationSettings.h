@@ -1,73 +1,58 @@
-#ifndef NOTIFICATIONSETTINGS_H
-#define NOTIFICATIONSETTINGS_H
+/*
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2006  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
-#include <QtGui>
-#include <qtutil/WidgetFactory.h>
+#ifndef QTNOTIFICATIONSETTINGS_H
+#define QTNOTIFICATIONSETTINGS_H
+
+#include <util/NonCopyable.h>
+
+#include <QObject>
+
+class QWidget;
+namespace Ui { class NotificationSettings; }
 
 /**
- * Load and display the notification settings configuration page
+ * Loads and display the notification settings configuration page.
  *
- * Creates widgets dynamically (from a XML file .ui).
- *
- * @author Kavoos Bojnourdi
+ * @author Tanguy Krotoff
  */
-class QtNotificationSettings : public QWidget {
+class QtNotificationSettings : public QObject, NonCopyable {
+	Q_OBJECT
+public:
 
-		Q_OBJECT
+	QtNotificationSettings(QWidget * parent);
 
-	public:
-		QtNotificationSettings( QWidget * parent = 0, Qt::WFlags f = 0 );
+	~QtNotificationSettings();
 
-		void saveData();
+	QWidget * getWidget() const {
+		return _notificationSettingsWidget;
+	}
 
-	protected:
-		QWidget * _widget;
+	void saveConfig();
 
-		void setupChilds();
+private:
 
-		void readConfigData();
+	void readConfig();
 
-		void setChecked(QCheckBox * chk, bool value);
+	Ui::NotificationSettings * _ui;
 
-		bool isChecked(QCheckBox * chk);
+	QWidget * _notificationSettingsWidget;
+};
 
-		// Standard notifications
-		QCheckBox * _snShowWindowOnTopCheckBox;
-
-		QCheckBox * _snShowBlinkingWindow;
-
-		QCheckBox * _snShowToasterOnIncomingCall;
-
-		QCheckBox * _snShowToasterOnContactOnLine;
-
-		QCheckBox * _snShowWindowpopUpAuthorisations;
-
-		QCheckBox * _asShowNoToaster;
-
-		QCheckBox * _asSwitchOffAudioNotifications;
-
-		QCheckBox * _asNotShowAwayToasterAndChatWindow;
-
-		QCheckBox * _asSwitchOffAwayAudio;
-
-		QCheckBox * _acIncomingChat;
-
-		QCheckBox * _acIncomingCalls;
-
-		QCheckBox * _acWengophoneOpens;
-
-		QCheckBox * _acWengophoneConnects;
-
-		QCheckBox * _acWengophoneNotSuccedConnect;
-
-		QCheckBox * _acAlternativeIMAcount;
-
-		QCheckBox * _acContactTurningOnline;
-
-		QCheckBox * _acAuthorization;
-
-		QCheckBox * _acErrorMessage;
-
-	};
-
-#endif
+#endif	//QTNOTIFICATIONSETTINGS_H

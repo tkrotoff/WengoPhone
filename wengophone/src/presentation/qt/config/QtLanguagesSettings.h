@@ -20,23 +20,32 @@
 #ifndef QTLANGUAGESSETTINGS_H
 #define QTLANGUAGESSETTINGS_H
 
+#include <util/NonCopyable.h>
+
 #include <QObject>
 
 class QWidget;
+namespace Ui { class LanguagesSettings; }
 
-class QtLanguagesSettings : public QObject {
+class QtLanguagesSettings : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
 	QtLanguagesSettings(QWidget * parent);
 
+	~QtLanguagesSettings();
+
 	QWidget * getWidget() const {
 		return _languagesSettingsWidget;
 	}
 
-	void saveData();
+	void saveConfig();
 
 private:
+
+	void readConfig();
+
+	Ui::LanguagesSettings * _ui;
 
 	QWidget * _languagesSettingsWidget;
 };

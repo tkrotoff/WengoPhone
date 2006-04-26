@@ -349,10 +349,6 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	//static QGridLayout * layout = new QGridLayout(tabPhoneCall);
 
 	//layout->addWidget(qtPhoneCall->getWidget());
-	if ( config.getNotificationShowWindowOnTop()){
-		_wengoPhoneWindow->raise();
-		QApplication::setActiveWindow ( _wengoPhoneWindow );
-	}
 	_contactCallListWidget->addPhoneCall(qtPhoneCall);
 }
 

@@ -22,22 +22,34 @@
 
 #include <model/config/Config.h>
 
+#include <util/NonCopyable.h>
+
 #include <QObject>
 
 class QWidget;
-class QTableWidget;
+class QDialog;
+namespace Ui { class AdvancedConfigWindow; }
 
-class QtAdvancedConfig : public QObject {
+/**
+ * Firefox' about:config like window.
+ *
+ * Shows the key/value settings.
+ *
+ * @author Tanguy Krotoff
+ */
+class QtAdvancedConfig : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
 	QtAdvancedConfig(QWidget * parent);
 
-	void populate();
+	~QtAdvancedConfig();
 
-	QWidget * getWidget() const {
+	QDialog * getWidget() const {
 		return _advancedConfigWindow;
 	}
+
+	void populate();
 
 private Q_SLOTS:
 
@@ -47,9 +59,9 @@ private:
 
 	void setItem(boost::any value, bool saveKeyValue, int row, int column);
 
-	QWidget * _advancedConfigWindow;
+	Ui::AdvancedConfigWindow * _ui;
 
-	QTableWidget * _tableWidget;
+	QDialog * _advancedConfigWindow;
 };
 
 #endif	//QTADVANCEDCONFIG_H

@@ -152,7 +152,6 @@ public:
 
 	/** @} */
 
-
 	/**
 	 * @name Wengo Specific Methods
 	 * @{
@@ -171,11 +170,11 @@ public:
 	std::string getWengoSMSPath() const;
 
 	/** Wengo info web service path on the server. */
-	static const std::string WENGO_WS_INFO_PATH_KEY;
-	std::string getWengoWsInfoPath() const;
+	static const std::string WENGO_INFO_PATH_KEY;
+	std::string getWengoInfoPath() const;
 
 	/** Wengo subscription web service path on the server. */
-	static const std::string WENGO_WS_SUBSCRIBE_PATH_KEY;
+	static const std::string WENGO_SUBSCRIBE_PATH_KEY;
 	std::string getWengoSubscribePath() const;
 
 	/** WengoPhone update path on the Wengo server. */
@@ -247,122 +246,60 @@ public:
 	/** @} */
 
 	/**
-	 * @name General settings Methods
+	 * @name General Settings Methods
 	 * @{
 	 */
 
-	/** Automatically start Wengo. */
-	static const std::string GENERAL_SETTINGS_AUTOSTART_WENGO_KEY;
-	bool getGeneralSettingsAutoStartWengo() const;
-
-	/** Check for updates automatically. */
-	static const std::string GENERAL_SETTINGS_CHECK_UPDATE_KEY;
-	bool getGeneralSettingsCheckUpdate() const;
+	/** Automatically start WengoPhone when computer starts. */
+	static const std::string GENERAL_AUTOSTART_KEY;
+	bool getGeneralAutoStart() const;
 
 	/** Start a free call if applicable. */
-	static const std::string GENERAL_SETTINGS_START_FREECALL_KEY;
-	bool getGeneralSettingsStartFreeCall() const;
+	static const std::string GENERAL_CLICK_START_FREECALL_KEY;
+	bool getGeneralClickStartFreeCall() const;
 
 	/** Start a chat-only when applicable. */
-	static const std::string GENERAL_SETTINGS_START_CHATONLY_KEY;
-	bool getGeneralSettingsStartChatOnly() const;
+	static const std::string GENERAL_CLICK_START_CHAT_KEY;
+	bool getGeneralClickStartChat() const;
 
 	/** Call cell phone or land line if contact not available. */
-	static const std::string GENERAL_SETTINGS_CALL_CELLPHONE_KEY;
-	bool getGeneralSettingsCallCellPhone() const;
-
-	/** Show me as away when I am inactive for. */
-	static const std::string GENERAL_SETTINGS_SHOW_AWAY_KEY;
-	bool getGeneralSettingsShowAway() const;
+	static const std::string GENERAL_CLICK_CALL_CELLPHONE_KEY;
+	bool getGeneralClickCallCellPhone() const;
 
 	/** Show me as not available when I am inactive for. */
-	static const std::string GENERAL_SETTINGS_SHOW_NOTAVAILABLE_KEY;
-	bool getGeneralSettingsShowNotAvailable() const;
-
-	static const std::string GENERAL_SETTINGS_AWAY_TIMER_KEY;
-	int getGeneralSettingsGetAwayTimer() const;
-
-	static const std::string GENERAL_SETTINGS_NOTAVAILABLE_TIMER_KEY;
-	int getGeneralSettingsNotAvailableTimer() const;
+	static const std::string GENERAL_NOTAVAILABLE_TIMER_KEY;
+	int getGeneralNotAvailableTimer() const;
 
 	/** @} */
 
 	/**
-	 * @name Notification settings Methods
+	 * @name Notification Settings Methods
 	 * @{
 	 */
 
-	/** Show related window on top of other applications for incoming calls & incoming chats. */
-	static const std::string NOTIFICATION_SHOW_WINDOWONTOP_KEY;
-	bool getNotificationShowWindowOnTop() const;
-
-	/** Show minimized blinking window in taskbar for incoming calls & incoming chats. */
-	static const std::string NOTIFICATION_SHOW_BLINKINGWINDOW_KEY;
-	bool getNotificationShowBlinkingWindow() const;
-
-	/** Show toaster only for incomin calls & incoming chats. */
+	/** Shows toaster for incoming calls & incoming chats. */
 	static const std::string NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY;
 	bool getNotificationShowToasterOnIncomingCall() const;
 
-	/** Show toaster when contact is turning online. */
+	/** Shows toaster when a contact is turning online. */
 	static const std::string NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY;
 	bool getNotificationShowToasterOnContactOnline() const;
 
-	/** Show window pop-up for authorizations. */
-	static const std::string NOTIFICATION_SHOW_WINDOWPOPUP_AUTHORIZATION_KEY;
-	bool getNotificationShowWindowPopupAuthorization() const;
+	/** Do not show any toaster or window when in do not disturb mode. */
+	static const std::string NOTIFICATION_DONOTDISTURB_NO_WINDOW_KEY;
+	bool getNotificationDoNotDisturbNoWindow() const;
 
-	/** Do not show any toaster or window. */
-	static const std::string NOTIFICATION_SHOW_NO_TOASTER_KEY;
-	bool getNotificationShowNoToaster() const;
+	/** Switch off audio notifications when in do not disturb mode mode. */
+	static const std::string NOTIFICATION_DONOTDISTURB_NO_AUDIO_KEY;
+	bool getNotificationDoNotDisturbNoAudio() const;
 
-	/** Switch off audio notifications. */
-	static const std::string NOTIFICATION_SWITCH_OFF_AUDIO_NOFITICATION_KEY;
-	bool getNotificationSwithOffAudioNotification() const;
+	/** Do not show any call toaster when in away mode. */
+	static const std::string NOTIFICATION_AWAY_NO_WINDOW_KEY;
+	bool getNotificationAwayNoWindow() const;
 
-	/** Do not show any call toaster or chat window. */
-	static const std::string NOTIFICATION_NOT_SHOW_AWAY_TOASTER_AND_CHAT_KEY;
-	bool getNotificationNotShowAwayToasterAndChat() const;
-
-	/** Switch off audio notifications. */
-	static const std::string NOTIFICATION_SWITCH_OFF_AWAY_AUDIO_KEY;
-	bool getNotificationSwitchOffAwayAudio() const;
-
-	/** Incoming chat. */
-	static const std::string NOTIFICATION_INCOMING_CHAT_KEY;
-	bool getNotificationIncomingChat() const;
-
-	/** Incoming calls. */
-	static const std::string NOTIFICATION_INCOMING_CALLS_KEY;
-	bool getNotificationIncomingCalls() const;
-
-	/** Wengophone opens. */
-	static const std::string NOTIFICATION_WENGOPHONE_OPENS_KEY;
-	bool getNotificationWengophoneOpens() const;
-
-	/** Wengophone connects. */
-	static const std::string NOTIFICATION_WENGOPHONE_CONNECTS_KEY;
-	bool getNotificationWengophoneConnects() const;
-
-	/** Wengophone doesn't succeed to connect. */
-	static const std::string NOTIFICATION_WENGOPHONE_NOT_SUCCED_CONNECT_KEY;
-	bool getNotificationWengophoneNotSuccedConnect() const;
-
-	/** Alternative IM account connects. */
-	static const std::string NOTIFICATION_ALTERNATIVE_IMACCOUNT_KEY;
-	bool getNotificationAlternativeIMAccount() const;
-
-	/** Contact is turning online. */
-	static const std::string NOTIFICATION_CONTACT_TURNING_ONLINE_KEY;
-	bool getNotificationContactTurningOnline() const;
-
-	/** Authorization (contact, file transfer...). */
-	static const std::string NOTIFICATION_AUTHORIZATION_KEY;
-	bool getNotificationAuthorization() const;
-
-	/** Error message. */
-	static const std::string NOTIFICATION_ERROR_MESSAGE_KEY;
-	bool getNotificationErrorMessage() const;
+	/** Switch off audio notifications when in away mode. */
+	static const std::string NOTIFICATION_AWAY_NO_AUDIO_KEY;
+	bool getNotificationAwayNoAudio() const;
 
 	/** @} */
 
@@ -388,8 +325,8 @@ public:
 	bool getPrivacyAllowChatOnlyFromContactList() const;
 
 	/** When I sign into Wengo: always sign in as invisible. */
-	static const std::string PRIVACY_ALLWAYS_SIGN_AS_INVISIBLE_KEY;
-	bool getPrivacyAlwaysSigneAsInvisible() const;
+	static const std::string PRIVACY_SIGN_AS_INVISIBLE_KEY;
+	bool getPrivacySignAsInvisible() const;
 
 	/** @} */
 
@@ -405,7 +342,7 @@ public:
 	std::string getVideoWebCamDevice() const;
 
 	static const std::string VIDEO_QUALITY_KEY;
-	std::string getVideoQuality() const;
+	int getVideoQuality() const;
 
 	/** @} */
 

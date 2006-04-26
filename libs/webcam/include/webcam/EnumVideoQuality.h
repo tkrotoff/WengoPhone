@@ -17,29 +17,35 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtAdvancedSettings.h"
+#ifndef ENUMVIDEOQUALITY_H
+#define ENUMVIDEOQUALITY_H
 
-#include "ui_AdvancedSettings.h"
+#include <util/NonCopyable.h>
 
-#include <QtGui>
+/**
+ * Video quality.
+ *
+ * Video quality depends on your Internet connection bandwidth.
+ *
+ * @author Tanguy Krotoff
+ */
+class EnumVideoQuality : NonCopyable {
+public:
 
-QtAdvancedSettings::QtAdvancedSettings(QWidget * parent)
-	: QObject(parent) {
+	enum VideoQuality {
 
-	_advancedSettingsWidget = new QWidget(parent);
+		/** Down=0-512kbit/s up=0-128kbit/s. */
+		VideoQualityNormal,
 
-	_ui = new Ui::AdvancedSettings();
-	_ui->setupUi(_advancedSettingsWidget);
+		/** Down=512-2048kbit/s up=128-256kbit/s. */
+		VideoQualityGood,
 
-	readConfig();
-}
+		/** Down=+2048kbit/s up=+256kbit/s. */
+		VideoQualityVeryGood,
 
-QtAdvancedSettings::~QtAdvancedSettings() {
-	delete _ui;
-}
+		/** Down=+8192kbit/s up=+1024kbit/s. */
+		VideoQualityExcellent
+	};
+};
 
-void QtAdvancedSettings::readConfig() {
-}
-
-void QtAdvancedSettings::saveConfig() {
-}
+#endif	//ENUMVIDEOQUALITY_H

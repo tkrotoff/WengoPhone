@@ -2,14 +2,14 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>WengoPhoneConfig</class>
- <widget class="QDialog" name="WengoPhoneConfig" >
+ <class>WengoConfigDialog</class>
+ <widget class="QDialog" name="WengoConfigDialog" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>587</width>
-    <height>471</height>
+    <width>433</width>
+    <height>337</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -29,10 +29,10 @@
    </item>
    <item rowspan="2" row="0" column="0" >
     <widget class="QTreeWidget" name="treeWidget" >
-     <property name="maximumSize" >
+     <property name="minimumSize" >
       <size>
-       <width>192</width>
-       <height>16777215</height>
+       <width>150</width>
+       <height>0</height>
       </size>
      </property>
      <property name="iconSize" >
@@ -49,7 +49,7 @@
      </property>
      <column>
       <property name="text" >
-       <string>New Column</string>
+       <string/>
       </property>
      </column>
      <item>
@@ -104,6 +104,11 @@
        <string>Call Forward</string>
       </property>
      </item>
+     <item>
+      <property name="text" >
+       <string>Advanced</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="1" column="1" >
@@ -154,7 +159,7 @@
   <connection>
    <sender>saveButton</sender>
    <signal>clicked()</signal>
-   <receiver>WengoPhoneConfig</receiver>
+   <receiver>WengoConfigDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -170,7 +175,7 @@
   <connection>
    <sender>cancelButton</sender>
    <signal>clicked()</signal>
-   <receiver>WengoPhoneConfig</receiver>
+   <receiver>WengoConfigDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >

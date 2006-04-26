@@ -26,7 +26,7 @@
 /**
  * Parses Languages.h
  *
- * @see LANGUAGES
+ * @see Languages.h
  * @author Tanguy Krotoff
  */
 class LanguageList : NonCopyable {

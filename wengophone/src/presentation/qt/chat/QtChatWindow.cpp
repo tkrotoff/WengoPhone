@@ -115,7 +115,7 @@ void ChatWindow::initThreadSafe(){
 
 	_tabWidget->removeTab(0);
 	_dialog->resize(300,464);
-	_dialog->setWindowTitle(tr("Wengophone chat window"));
+	_dialog->setWindowTitle(tr("WengoPhone chat window"));
 	_dialog->show();
 
 	// Create the contact list scroll area
@@ -275,14 +275,7 @@ void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender) {
 				if ( _tabWidget->currentWidget() != _chatWidget )
 					_tabWidget->setBlinkingTab(i);
 
-				if ( config.getNotificationShowBlinkingWindow()){
-					_dialog->activateWindow();
-				}
-				if ( config.getNotificationShowWindowOnTop()){
-					_dialog->show();
-					_dialog->raise();
-					QApplication::setActiveWindow ( _dialog );
-				}
+				_dialog->activateWindow();
 				return;
 			}
 		}

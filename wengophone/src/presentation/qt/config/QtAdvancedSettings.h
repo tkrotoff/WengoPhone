@@ -1,33 +1,58 @@
-#ifndef ADVANCEDSETTINGS_H
-#define ADVANCEDSETTINGS_H
+/*
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2006  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
-#include <QtGui>
+#ifndef QTADVANCEDSETTINGS_H
+#define QTADVANCEDSETTINGS_H
 
-#include <qtutil/WidgetFactory.h>
+#include <util/NonCopyable.h>
 
+#include <QObject>
 
-class QtAdvancedSettings : public QWidget {
-		Q_OBJECT
+class QWidget;
+namespace Ui { class AdvancedSettings; }
 
-	public:
-		QtAdvancedSettings ( QWidget * parent = 0, Qt::WFlags f = 0 );
+/**
+ * Advanced configuration panel.
+ *
+ * @author Tanguy Krotoff
+ */
+class QtAdvancedSettings : public QObject, NonCopyable {
+	Q_OBJECT
+public:
 
-	protected:
+	QtAdvancedSettings(QWidget * parent);
 
-		void setupChild();
+	~QtAdvancedSettings();
 
-		QWidget * _widget;
+	QWidget * getWidget() const {
+		return _advancedSettingsWidget;
+	}
 
-		QCheckBox * _callAutomaticallyAnswerCheckBox;
+	void saveConfig();
 
-		QSpinBox * _callAnswerDelaySpinBox;
+private:
 
-		QCheckBox * _chatPopUpCheckBox;
+	void readConfig();
 
-		QCheckBox * _forwardAllCallsToCellPhoneCheckBox;
+	Ui::AdvancedSettings * _ui;
 
+	QWidget * _advancedSettingsWidget;
+};
 
-
-	};
-
-#endif
+#endif	//QTADVANCEDSETTINGS_H

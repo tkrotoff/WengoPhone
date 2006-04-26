@@ -40,7 +40,7 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 	_ui->setupUi(_configPanelWidget);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.valueChangedEvent += boost::bind(&QtConfigPanel::configChangedEventHandler, this);
+	config.valueChangedEvent += boost::bind(&QtConfigPanel::configChangedEventHandler, this, _1, _2);
 
 	//inputSoundSlider
 	connect(_ui->inputSoundSlider, SIGNAL(valueChanged(int)), SLOT(inputSoundSliderValueChanged(int)));
@@ -53,12 +53,6 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 
 	//enableWenboxCheckBox
 	connect(_ui->enableWenboxCheckBox, SIGNAL(toggled(bool)), SLOT(enableWenboxCheckBoxToggled(bool)));
-
-	//videoSettingsLabel
-
-	//audioSettingsLabel
-
-	configChangedEventHandlerThreadSafe();
 }
 
 QtConfigPanel::~QtConfigPanel() {
@@ -87,26 +81,34 @@ void QtConfigPanel::enableWenboxCheckBoxToggled(bool checked) {
 	config.set(Config::WENBOX_ENABLE_KEY, checked);
 }
 
-void QtConfigPanel::configChangedEventHandler() {
-	typedef PostEvent0<void ()> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtConfigPanel::configChangedEventHandlerThreadSafe, this));
+void QtConfigPanel::configChangedEventHandler(Settings & sender, const std::string & key) {
+	typedef PostEvent2<void (Settings & sender, const std::string &), Settings &, std::string> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtConfigPanel::configChangedEventHandlerThreadSafe, this, _1, _2), sender, key);
 	postEvent(event);
 }
 
-void QtConfigPanel::configChangedEventHandlerThreadSafe() {
+void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const std::string & key) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	//inputSoundSlider
-	VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
-	_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());
+	if (key == Config::AUDIO_OUTPUT_DEVICENAME_KEY ||
+		key == Config::AUDIO_INPUT_DEVICENAME_KEY) {
 
-	//outputSoundSlider
-	VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
-	_ui->outputSoundSlider->setValue(outputVolumeControl.getLevel());
+		//inputSoundSlider
+		VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
+		_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());
 
-	//enableVideoCheckBox
-	_ui->enableVideoCheckBox->setChecked(config.getVideoEnable());
+		//outputSoundSlider
+		VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
+		_ui->outputSoundSlider->setValue(outputVolumeControl.getLevel());
+	}
 
-	//enableWenboxCheckBox
-	_ui->enableWenboxCheckBox->setChecked(config.getWenboxEnable());
+	if (key == Config::VIDEO_ENABLE_KEY) {
+		//enableVideoCheckBox
+		_ui->enableVideoCheckBox->setChecked(config.getVideoEnable());
+	}
+
+	if (key == Config::WENBOX_ENABLE_KEY) {
+		//enableWenboxCheckBox
+		_ui->enableWenboxCheckBox->setChecked(config.getWenboxEnable());
+	}
 }

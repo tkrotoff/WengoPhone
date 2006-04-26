@@ -68,6 +68,8 @@
         <file>pics/microphone.png</file>
         <file>pics/no.png</file>
         <file>pics/point.gif</file>
+        <file>pics/browse.png</file>
+        <file>pics/play.png</file>
         <file>pics/profilebar/bar_end.png</file>
         <file>pics/profilebar/bar_end.png</file>
         <file>pics/profilebar/bar_fill.png</file>
@@ -176,12 +178,9 @@
         <file>chat/ChatWidget.ui</file>
         <file>chat/chat.ui</file>
         <file>chat/emoticonswidget.ui</file>
-        <file>config/AccountSettings.ui</file>
-        <file>config/AdvancedConfigWindow.ui</file>
         <file>config/AdvancedSettings.ui</file>
         <file>config/AudioSettings.ui</file>
         <file>config/CallForwardSettings.ui</file>
-        <file>config/GeneralSettings.ui</file>
         <file>config/LanguagesSettings.ui</file>
         <file>config/ManageBlockedUsersSettings.ui</file>
         <file>config/NotificationSettings.ui</file>

@@ -18,6 +18,7 @@ libs = [
 	'imwrapper',
 	'sipwrapper',
 	'wenbox',
+	'webcam',
 	'tinyxml',
 	'owsound',
 	'netlib',

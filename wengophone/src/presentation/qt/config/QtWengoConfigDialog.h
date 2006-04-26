@@ -20,31 +20,38 @@
 #ifndef QTWENGOCONFIGDIALOG_H
 #define QTWENGOCONFIGDIALOG_H
 
-#include <QtGui>
+#include <util/NonCopyable.h>
 
-// TODO: Change include files to class
-#include "QtNotificationSettings.h"
-#include "QtGeneralSettings.h"
-#include "QtAccountSettings.h"
-#include "QtPrivacySettings.h"
-#include "QtAudioSettings.h"
-#include "QtVideoSettings.h"
-#include "QtAdvancedSettings.h"
-#include "QtCallForwardSettings.h"
-#include "QtLanguagesSettings.h"
+#include <QObject>
 
 class CWengoPhone;
 
+class QtNotificationSettings;
+class QtGeneralSettings;
+class QtAccountSettings;
+class QtPrivacySettings;
+class QtAudioSettings;
+class QtVideoSettings;
+class QtAdvancedSettings;
+class QtCallForwardSettings;
+class QtLanguagesSettings;
+
+class QDialog;
+class QWidget;
+namespace Ui { class WengoConfigDialog; }
+
 /**
- * Main window for the configuration.
+ * Main configuration window.
  *
  * @author Tanguy Krotoff
  */
-class QtWengoConfigDialog : public QObject {
+class QtWengoConfigDialog : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
 	QtWengoConfigDialog(CWengoPhone & cWengoPhone, QWidget * parent);
+
+	~QtWengoConfigDialog();
 
 public Q_SLOTS:
 
@@ -54,15 +61,13 @@ public Q_SLOTS:
 
 	void show();
 
-protected:
+private:
+
+	Ui::WengoConfigDialog * _ui;
 
 	QDialog * _configDialog;
 
-	QTreeWidget * _treeWidget;
-
-	QStackedWidget * _stackedWidget;
-
-	QtNotificationSettings * _notificationWidget;
+	QtNotificationSettings * _notificationSettingsWidget;
 
 	QtGeneralSettings * _generalSettingsWidget;
 
@@ -76,9 +81,9 @@ protected:
 
 	QtAdvancedSettings * _advancedSettingsWidget;
 
-	QtCallForwardSettings * _callForwardWidget;
+	QtCallForwardSettings * _callForwardSettingsWidget;
 
-	QtLanguagesSettings * _languagesWidget;
+	QtLanguagesSettings * _languagesSettingsWidget;
 };
 
 #endif	//QTWENGOCONFIGDIALOG_H

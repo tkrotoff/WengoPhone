@@ -19,6 +19,8 @@
 
 #include "QtIMAccountManager.h"
 
+#include "ui_IMAccountManager.h"
+
 #include "QtIMAccountItem.h"
 #include "QtIMAccountSettings.h"
 
@@ -26,22 +28,18 @@
 
 #include <util/Logger.h>
 
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
-#include <qtutil/Widget.h>
-
 #include <QtGui>
 
 QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * parent)
 	: QObject(parent),
 	_userProfile(userProfile) {
 
-	_imAccountManagerWidget = WidgetFactory::create(":/forms/imaccount/IMAccountManager.ui", parent);
-	_imAccountManagerWindow = Widget::transformToWindow(_imAccountManagerWidget);
-	_imAccountManagerWindow->setWindowTitle(_imAccountManagerWidget->windowTitle());
+	_imAccountManagerWindow = new QDialog(parent);
 
-	QPushButton * addIMAccountButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "addIMAccountButton");
-	QMenu * addIMAccountMenu = new QMenu(addIMAccountButton);
+	_ui = new Ui::IMAccountManager();
+	_ui->setupUi(_imAccountManagerWindow);
+
+	QMenu * addIMAccountMenu = new QMenu(_ui->addIMAccountButton);
 	connect(addIMAccountMenu, SIGNAL(triggered(QAction *)), SLOT(addIMAccount(QAction *)));
 
 	addIMAccountMenu->addAction(QIcon(":pics/protocol_msn.png"),
@@ -54,25 +52,25 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * pare
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolJabber)));
 	addIMAccountMenu->addAction(QIcon(":pics/protocol_googletalk.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolGoogleTalk)));
-	addIMAccountButton->setMenu(addIMAccountMenu);
+	_ui->addIMAccountButton->setMenu(addIMAccountMenu);
 
-	QPushButton * modifyIMAccountButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "modifyIMAccountButton");
-	connect(modifyIMAccountButton, SIGNAL(clicked()), SLOT(modifyIMAccount()));
+	connect(_ui->modifyIMAccountButton, SIGNAL(clicked()), SLOT(modifyIMAccount()));
 
-	QPushButton * deleteIMAccountButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "deleteIMAccountButton");
-	connect(deleteIMAccountButton, SIGNAL(clicked()), SLOT(deleteIMAccount()));
+	connect(_ui->deleteIMAccountButton, SIGNAL(clicked()), SLOT(deleteIMAccount()));
 
-	QPushButton * closeButton = Object::findChild<QPushButton *>(_imAccountManagerWidget, "closeButton");
-	connect(closeButton, SIGNAL(clicked()), _imAccountManagerWindow, SLOT(accept()));
+	connect(_ui->closeButton, SIGNAL(clicked()), _imAccountManagerWindow, SLOT(accept()));
 
-	_treeWidget = Object::findChild<QTreeWidget *>(_imAccountManagerWidget, "treeWidget");
-	connect(_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
+	connect(_ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
 			SLOT(itemDoubleClicked(QTreeWidgetItem *, int)));
 
-	connect(_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)),
+	connect(_ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)),
 			SLOT(itemClicked(QTreeWidgetItem *, int)));
 
 	loadIMAccounts();
+}
+
+QtIMAccountManager::~QtIMAccountManager() {
+	delete _ui;
 }
 
 void QtIMAccountManager::show() {
@@ -82,7 +80,7 @@ void QtIMAccountManager::show() {
 void QtIMAccountManager::loadIMAccounts() {
 	static const int COLUMN_ENABLE_BUTTON = 2;
 
-	_treeWidget->clear();
+	_ui->treeWidget->clear();
 
 	IMAccountHandler & imAccountHandler = _userProfile.getIMAccountHandler();
 
@@ -100,7 +98,7 @@ void QtIMAccountManager::loadIMAccounts() {
 		accountStrList << QString::fromStdString(EnumIMProtocol::toString(imProtocol));
 		accountStrList << QString::null;
 
-		QtIMAccountItem * item = new QtIMAccountItem(_treeWidget, accountStrList);
+		QtIMAccountItem * item = new QtIMAccountItem(_ui->treeWidget, accountStrList);
 		item->setCheckState(COLUMN_ENABLE_BUTTON,
 				(imAccount->getPresenceState() == EnumPresenceState::PresenceStateOnline) ? Qt::Checked : Qt::Unchecked);
 		item->setIMAccount(imAccount);
@@ -117,7 +115,7 @@ void QtIMAccountManager::addIMAccount(QAction * action) {
 }
 
 void QtIMAccountManager::deleteIMAccount() {
-	QtIMAccountItem * imAccountItem = (QtIMAccountItem *) _treeWidget->currentItem();
+	QtIMAccountItem * imAccountItem = (QtIMAccountItem *) _ui->treeWidget->currentItem();
 	if (imAccountItem) {
 		IMAccount * imAccount = imAccountItem->getIMAccount();
 

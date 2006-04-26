@@ -20,6 +20,8 @@
 #ifndef QTIMACCOUNTMANAGER_H
 #define QTIMACCOUNTMANAGER_H
 
+#include <util/NonCopyable.h>
+
 #include <QObject>
 
 #include <string>
@@ -30,20 +32,23 @@ class QDialog;
 class QAction;
 class QTreeWidget;
 class QTreeWidgetItem;
+namespace Ui { class IMAccountManager; }
 
 /**
  * Manages IM accounts: add/delete/modify IM accounts.
  *
  * @author Tanguy Krotoff
  */
-class QtIMAccountManager : public QObject {
+class QtIMAccountManager : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
 	QtIMAccountManager(UserProfile & userProfile, QWidget * parent);
 
-	QWidget * getWidget() const {
-		return _imAccountManagerWidget;
+	~QtIMAccountManager();
+
+	QDialog * getWidget() const {
+		return _imAccountManagerWindow;
 	}
 
 	void show();
@@ -66,11 +71,9 @@ private:
 
 	UserProfile & _userProfile;
 
-	QWidget * _imAccountManagerWidget;
+	Ui::IMAccountManager * _ui;
 
 	QDialog * _imAccountManagerWindow;
-
-	QTreeWidget * _treeWidget;
 };
 
 #endif	//QTIMACCOUNTMANAGER_H

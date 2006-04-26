@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>AccountSettingsWidget</class>
- <widget class="QWidget" name="AccountSettingsWidget" >
+ <class>AccountSettings</class>
+ <widget class="QWidget" name="AccountSettings" >
   <property name="geometry" >
    <rect>
     <x>0</x>

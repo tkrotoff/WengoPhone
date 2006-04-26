@@ -2,25 +2,22 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>GeneralSettingsWidget</class>
- <widget class="QWidget" name="GeneralSettingsWidget" >
+ <class>GeneralSettings</class>
+ <widget class="QWidget" name="GeneralSettings" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>598</width>
-    <height>543</height>
+    <width>396</width>
+    <height>351</height>
    </rect>
-  </property>
-  <property name="windowTitle" >
-   <string>Form</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>0</number>
    </property>
    <item row="2" column="1" >
     <spacer>
@@ -30,10 +27,23 @@
      <property name="sizeHint" >
       <size>
        <width>20</width>
-       <height>171</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QPushButton" name="editProfileButton" >
+     <property name="maximumSize" >
+      <size>
+       <width>77</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text" >
+      <string>&amp;Edit my profile</string>
+     </property>
+    </widget>
    </item>
    <item row="0" column="0" colspan="2" >
     <widget class="QGroupBox" name="groupBox" >
@@ -47,46 +57,10 @@
       <property name="spacing" >
        <number>6</number>
       </property>
-      <item row="1" column="0" >
-       <widget class="QGroupBox" name="groupBox_3" >
-        <property name="title" >
-         <string>When I double-click on a Contact </string>
-        </property>
-        <layout class="QGridLayout" >
-         <property name="margin" >
-          <number>9</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item row="1" column="0" >
-          <widget class="QCheckBox" name="callCellPhoneCheckBox" >
-           <property name="text" >
-            <string>Call cell phone or land line if contact not available</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0" >
-          <widget class="QRadioButton" name="startFreeCallRadioButton" >
-           <property name="text" >
-            <string>Start a free call if applicable</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0" >
-          <widget class="QRadioButton" name="startChatOnlyRadioButton" >
-           <property name="text" >
-            <string>Start a chat-only when applicable</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
       <item row="2" column="0" >
        <widget class="QGroupBox" name="groupBox_4" >
         <property name="title" >
-         <string>Idle Status</string>
+         <string>Idle status</string>
         </property>
         <layout class="QGridLayout" >
          <property name="margin" >
@@ -95,14 +69,14 @@
          <property name="spacing" >
           <number>6</number>
          </property>
-         <item row="1" column="2" >
-          <widget class="QLabel" name="label_2" >
+         <item row="0" column="2" >
+          <widget class="QLabel" name="label" >
            <property name="text" >
             <string>minutes</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1" >
+         <item row="0" column="1" >
           <widget class="QSpinBox" name="notAvailableSpinBox" >
            <property name="maximumSize" >
             <size>
@@ -112,34 +86,62 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0" >
+         <item row="0" column="0" >
           <widget class="QCheckBox" name="showNotAvailableCheckBox" >
            <property name="text" >
-            <string>Show me as "not available" when I am inactive for</string>
+            <string>Show me as "not available" when I am inactive for:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="2" >
-          <widget class="QLabel" name="label" >
-           <property name="text" >
-            <string>minutes</string>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QGroupBox" name="groupBox_3" >
+        <property name="title" >
+         <string>When I double-click on a contact </string>
+        </property>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>9</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item row="1" column="0" >
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
            </property>
-          </widget>
-         </item>
-         <item row="0" column="1" >
-          <widget class="QSpinBox" name="awaySpinBox" >
-           <property name="maximumSize" >
+           <property name="sizeType" >
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" >
             <size>
-             <width>40</width>
-             <height>16777215</height>
+             <width>20</width>
+             <height>40</height>
             </size>
            </property>
+          </spacer>
+         </item>
+         <item row="1" column="1" >
+          <widget class="QCheckBox" name="callCellPhoneCheckBox" >
+           <property name="text" >
+            <string>Call cell phone or land line if contact not available</string>
+           </property>
           </widget>
          </item>
-         <item row="0" column="0" >
-          <widget class="QCheckBox" name="showAwayCheckBox" >
+         <item row="0" column="0" colspan="2" >
+          <widget class="QRadioButton" name="startFreeCallRadioButton" >
            <property name="text" >
-            <string>Show me as "away" when I am inactive for</string>
+            <string>Start a free call if applicable</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" colspan="2" >
+          <widget class="QRadioButton" name="startChatOnlyRadioButton" >
+           <property name="text" >
+            <string>Start a chat if applicable</string>
            </property>
           </widget>
          </item>
@@ -158,17 +160,10 @@
          <property name="spacing" >
           <number>6</number>
          </property>
-         <item row="1" column="0" >
-          <widget class="QCheckBox" name="checkForUpdateCheckBox" >
-           <property name="text" >
-            <string>Check for updates automatically</string>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="0" >
-          <widget class="QCheckBox" name="startWengoCheckBox" >
+          <widget class="QCheckBox" name="startWengoPhoneCheckBox" >
            <property name="text" >
-            <string>Automatically start Wengo</string>
+            <string>Automatically start WengoPhone</string>
            </property>
           </widget>
          </item>
@@ -178,33 +173,17 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QPushButton" name="editProfilePushButton" >
-     <property name="maximumSize" >
-      <size>
-       <width>77</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text" >
-      <string>&amp;Edit my profile</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
-  <tabstop>startWengoCheckBox</tabstop>
-  <tabstop>checkForUpdateCheckBox</tabstop>
+  <tabstop>startWengoPhoneCheckBox</tabstop>
   <tabstop>startFreeCallRadioButton</tabstop>
   <tabstop>callCellPhoneCheckBox</tabstop>
   <tabstop>startChatOnlyRadioButton</tabstop>
-  <tabstop>showAwayCheckBox</tabstop>
   <tabstop>showNotAvailableCheckBox</tabstop>
-  <tabstop>awaySpinBox</tabstop>
   <tabstop>notAvailableSpinBox</tabstop>
-  <tabstop>editProfilePushButton</tabstop>
+  <tabstop>editProfileButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

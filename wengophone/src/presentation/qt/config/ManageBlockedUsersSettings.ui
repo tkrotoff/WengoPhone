@@ -2,18 +2,18 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>ManageBlockedUsersWidget</class>
- <widget class="QWidget" name="ManageBlockedUsersWidget" >
+ <class>ManageBlockedUsersSettings</class>
+ <widget class="QWidget" name="ManageBlockedUsersSettings" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
-    <height>308</height>
+    <width>357</width>
+    <height>247</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Form</string>
+   <string>WengoPhone - Manage blocked users</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -22,6 +22,9 @@
    <property name="spacing" >
     <number>6</number>
    </property>
+   <item row="1" column="0" >
+    <widget class="QListView" name="listView" />
+   </item>
    <item row="1" column="1" >
     <layout class="QVBoxLayout" >
      <property name="margin" >
@@ -31,16 +34,9 @@
       <number>6</number>
      </property>
      <item>
-      <widget class="QPushButton" name="pushButton" >
+      <widget class="QPushButton" name="unblockUserButton" >
        <property name="text" >
-        <string>Block User</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_2" >
-       <property name="text" >
-        <string>Unlock User</string>
+        <string>Unblock User</string>
        </property>
       </widget>
      </item>
@@ -58,7 +54,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_3" >
+      <widget class="QPushButton" name="closeButton" >
        <property name="text" >
         <string>Close</string>
        </property>
@@ -66,24 +62,8 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="1" column="0" >
-      <widget class="QListView" name="listView" />
-     </item>
-     <item row="0" column="0" >
-      <widget class="QLineEdit" name="lineEdit" />
-     </item>
-    </layout>
-   </item>
    <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
+    <widget class="QLabel" name="" >
      <property name="text" >
       <string>Manage blocked users</string>
      </property>
@@ -93,11 +73,9 @@
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
-  <tabstop>lineEdit</tabstop>
   <tabstop>listView</tabstop>
-  <tabstop>pushButton</tabstop>
-  <tabstop>pushButton_2</tabstop>
-  <tabstop>pushButton_3</tabstop>
+  <tabstop>unblockUserButton</tabstop>
+  <tabstop>closeButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

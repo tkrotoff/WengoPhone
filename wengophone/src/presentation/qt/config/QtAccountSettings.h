@@ -27,6 +27,7 @@
 class CWengoPhone;
 
 class QWidget;
+namespace Ui { class AccountSettings; }
 
 /**
  * Handles SIP and IM accounts.
@@ -39,11 +40,15 @@ public:
 
 	QtAccountSettings(CWengoPhone & cWengoPhone, QWidget * parent);
 
+	~QtAccountSettings();
+
 	QWidget * getWidget() const {
 		return _accountSettingsWidget;
 	}
 
 private:
+
+	Ui::AccountSettings * _ui;
 
 	QWidget * _accountSettingsWidget;
 };

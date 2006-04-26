@@ -8,55 +8,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>237</width>
-    <height>86</height>
+    <width>224</width>
+    <height>95</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
-    <number>11</number>
+    <number>0</number>
    </property>
-   <item row="0" column="1" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="2" column="0" colspan="2" >
-      <widget class="QLabel" name="audioSettingsLabel" >
-       <property name="text" >
-        <string>Audio Settings</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" >
-      <widget class="QSlider" name="outputSoundSlider" >
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2" >
-      <widget class="QLabel" name="videoSettingsLabel" >
-       <property name="text" >
-        <string>Video Settings</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" >
-      <widget class="QLabel" name="outputSoundLabel" >
-       <property name="pixmap" >
-        <pixmap resource="wengophone.qrc" >:/pics/headphones.png</pixmap>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="0" column="0" >
     <layout class="QGridLayout" >
      <property name="margin" >
@@ -66,30 +28,85 @@
       <number>6</number>
      </property>
      <item row="0" column="1" >
-      <widget class="QSlider" name="inputSoundSlider" >
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>0</number>
        </property>
-      </widget>
-     </item>
-     <item row="2" column="0" colspan="2" >
-      <widget class="QCheckBox" name="enableWenboxCheckBox" >
-       <property name="text" >
-        <string>Wenbox USB</string>
+       <property name="spacing" >
+        <number>6</number>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2" >
-      <widget class="QCheckBox" name="enableVideoCheckBox" >
-       <property name="text" >
-        <string>Enable Video</string>
-       </property>
-      </widget>
+       <item row="2" column="0" colspan="2" >
+        <widget class="QLabel" name="audioSettingsLabel" >
+         <property name="text" >
+          <string>Audio Settings</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QSlider" name="outputSoundSlider" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2" >
+        <widget class="QLabel" name="videoSettingsLabel" >
+         <property name="text" >
+          <string>Video Settings</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="outputSoundLabel" >
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/headphones.png</pixmap>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="0" column="0" >
-      <widget class="QLabel" name="inputSoundLabel" >
-       <property name="pixmap" >
-        <pixmap resource="wengophone.qrc" >:/pics/microphone.png</pixmap>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="0" column="1" >
+        <widget class="QSlider" name="inputSoundSlider" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2" >
+        <widget class="QCheckBox" name="enableWenboxCheckBox" >
+         <property name="text" >
+          <string>Wenbox USB</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2" >
+        <widget class="QCheckBox" name="enableVideoCheckBox" >
+         <property name="text" >
+          <string>Enable Video</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="inputSoundLabel" >
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/microphone.png</pixmap>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0" colspan="2" >
+      <widget class="QCheckBox" name="halfDuplexCheckBox" >
+       <property name="text" >
+        <string>Check this box when using loud speakers</string>
        </property>
       </widget>
      </item>

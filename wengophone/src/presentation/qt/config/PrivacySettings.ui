@@ -2,27 +2,24 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>PrivacySettingsWidget</class>
- <widget class="QWidget" name="PrivacySettingsWidget" >
+ <class>PrivacySettings</class>
+ <widget class="QWidget" name="PrivacySettings" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>625</width>
-    <height>357</height>
+    <width>324</width>
+    <height>327</height>
    </rect>
-  </property>
-  <property name="windowTitle" >
-   <string>Form</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>0</number>
    </property>
-   <item row="2" column="0" >
+   <item row="2" column="1" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -35,46 +32,10 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="manageBlockedUserPushButton" >
-       <property name="maximumSize" >
-        <size>
-         <width>16777215</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text" >
-        <string>Manage blocked users</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
+   <item row="0" column="0" colspan="2" >
+    <widget class="QGroupBox" name="" >
      <property name="title" >
-      <string>Privacy rules </string>
+      <string>Privacy Rules </string>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
@@ -84,9 +45,9 @@
        <number>6</number>
       </property>
       <item row="2" column="0" >
-       <widget class="QGroupBox" name="groupBox_4" >
+       <widget class="QGroupBox" name="" >
         <property name="title" >
-         <string>When I sign into Wengo :</string>
+         <string>When I sign into Wengo</string>
         </property>
         <layout class="QGridLayout" >
          <property name="margin" >
@@ -98,7 +59,7 @@
          <item row="0" column="0" >
           <widget class="QCheckBox" name="alwaysSignAsInvisible" >
            <property name="text" >
-            <string>Always sign in as invisible (appear offline to all users)</string>
+            <string>Always sign in as "Invisible" (appear offline to all users)</string>
            </property>
           </widget>
          </item>
@@ -106,9 +67,9 @@
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QGroupBox" name="groupBox_3" >
+       <widget class="QGroupBox" name="" >
         <property name="title" >
-         <string>Allow chats from :</string>
+         <string>Allow chats from</string>
         </property>
         <layout class="QGridLayout" >
          <property name="margin" >
@@ -118,16 +79,16 @@
           <number>6</number>
          </property>
          <item row="1" column="0" >
-          <widget class="QRadioButton" name="allowChatFromOnlyContactListRadioButton" >
+          <widget class="QRadioButton" name="allowChatsFromOnlyContactListRadioButton" >
            <property name="text" >
-            <string>only people from my contact list</string>
+            <string>Only people from my contact list</string>
            </property>
           </widget>
          </item>
          <item row="0" column="0" >
           <widget class="QRadioButton" name="allowChatsFromAnyoneRadioButton" >
            <property name="text" >
-            <string>anyone</string>
+            <string>Anyone</string>
            </property>
           </widget>
          </item>
@@ -135,9 +96,9 @@
        </widget>
       </item>
       <item row="0" column="0" >
-       <widget class="QGroupBox" name="groupBox_2" >
+       <widget class="QGroupBox" name="" >
         <property name="title" >
-         <string>Allow calls from :</string>
+         <string>Allow calls from</string>
         </property>
         <layout class="QGridLayout" >
          <property name="margin" >
@@ -147,16 +108,16 @@
           <number>6</number>
          </property>
          <item row="1" column="0" >
-          <widget class="QRadioButton" name="allowCallOnlyFromContactListRadioButton" >
+          <widget class="QRadioButton" name="allowCallsOnlyFromContactListRadioButton" >
            <property name="text" >
-            <string>only people from my contact list</string>
+            <string>Only people from my contact list</string>
            </property>
           </widget>
          </item>
          <item row="0" column="0" >
-          <widget class="QRadioButton" name="allowCallFromAnyoneRadioButton" >
+          <widget class="QRadioButton" name="allowCallsFromAnyoneRadioButton" >
            <property name="text" >
-            <string>anyone</string>
+            <string>Anyone</string>
            </property>
           </widget>
          </item>
@@ -166,16 +127,29 @@
      </layout>
     </widget>
    </item>
+   <item row="1" column="0" >
+    <widget class="QPushButton" name="manageBlockedUsersButton" >
+     <property name="maximumSize" >
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text" >
+      <string>Manage blocked users</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
-  <tabstop>allowCallFromAnyoneRadioButton</tabstop>
-  <tabstop>allowCallOnlyFromContactListRadioButton</tabstop>
+  <tabstop>allowCallsFromAnyoneRadioButton</tabstop>
+  <tabstop>allowCallsOnlyFromContactListRadioButton</tabstop>
   <tabstop>allowChatsFromAnyoneRadioButton</tabstop>
-  <tabstop>allowChatFromOnlyContactListRadioButton</tabstop>
+  <tabstop>allowChatsFromOnlyContactListRadioButton</tabstop>
   <tabstop>alwaysSignAsInvisible</tabstop>
-  <tabstop>manageBlockedUserPushButton</tabstop>
+  <tabstop>manageBlockedUsersButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

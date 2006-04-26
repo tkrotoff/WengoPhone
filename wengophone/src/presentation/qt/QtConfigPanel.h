@@ -24,6 +24,8 @@
 
 #include <QObject>
 
+class Settings;
+
 class QWidget;
 namespace Ui { class WengoPhoneWindowConfigPanel; }
 
@@ -58,9 +60,9 @@ private:
 
 	void initThreadSafe() { }
 
-	void configChangedEventHandler();
+	void configChangedEventHandler(Settings & sender, const std::string & key);
 
-	void configChangedEventHandlerThreadSafe();
+	void configChangedEventHandlerThreadSafe(Settings & sender, const std::string & key);
 
 	Ui::WengoPhoneWindowConfigPanel * _ui;
 

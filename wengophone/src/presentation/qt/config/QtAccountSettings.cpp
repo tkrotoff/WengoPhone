@@ -19,26 +19,29 @@
 
 #include "QtAccountSettings.h"
 
+#include "ui_AccountSettings.h"
+
 #include <presentation/qt/imaccount/QtIMAccountManager.h>
 
 #include <model/WengoPhone.h>
 #include <model/profile/UserProfile.h>
 #include <control/CWengoPhone.h>
 
-#include <qtutil/Object.h>
-#include <qtutil/Widget.h>
-#include <qtutil/WidgetFactory.h>
-
 #include <QtGui>
 
 QtAccountSettings::QtAccountSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObject(parent) {
 
-	_accountSettingsWidget = WidgetFactory::create(":/forms/config/AccountSettings.ui", parent);
+	_accountSettingsWidget = new QWidget(parent);
 
-	QStackedWidget * imAccountStackedWidget = Object::findChild<QStackedWidget *>(_accountSettingsWidget, "imAccountStackedWidget");
+	_ui = new Ui::AccountSettings();
+	_ui->setupUi(_accountSettingsWidget);
 
 	QtIMAccountManager imAccountManager(cWengoPhone.getWengoPhone().getCurrentUserProfile(), _accountSettingsWidget);
-	int index = imAccountStackedWidget->addWidget(imAccountManager.getWidget());
-	imAccountStackedWidget->setCurrentIndex(index);
+	int index = _ui->imAccountStackedWidget->addWidget(imAccountManager.getWidget());
+	_ui->imAccountStackedWidget->setCurrentIndex(index);
+}
+
+QtAccountSettings::~QtAccountSettings() {
+	delete _ui;
 }

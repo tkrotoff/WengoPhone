@@ -23,7 +23,6 @@
 #include "ConfigManager.h"
 
 #include <system/Startup.h>
-#include <settings/Settings.h>
 
 #include <util/Logger.h>
 #include <util/Path.h>
@@ -31,7 +30,7 @@
 #include <iostream>
 
 StartupSettingListener::StartupSettingListener() {
-	_startup = new Startup("WengoPhone NG", Path::getApplicationDirPath() + "qtwengophone.exe");
+	_startup = new Startup("WengoPhone", Path::getApplicationDirPath() + "qtwengophone.exe");
 	ConfigManager::getInstance().getCurrentConfig().valueChangedEvent += boost::bind(&StartupSettingListener::startupSettingChanged, this, _1, _2);
 }
 
@@ -42,7 +41,7 @@ StartupSettingListener::~StartupSettingListener() {
 }
 
 void StartupSettingListener::startupSettingChanged(Settings & sender, const std::string & key) const {
-	if (key == Config::GENERAL_SETTINGS_AUTOSTART_WENGO_KEY) {
-		_startup->setStartup(ConfigManager::getInstance().getCurrentConfig().getGeneralSettingsAutoStartWengo());
+	if (key == Config::GENERAL_AUTOSTART_KEY) {
+		_startup->setStartup(ConfigManager::getInstance().getCurrentConfig().getGeneralAutoStart());
 	}
 }
