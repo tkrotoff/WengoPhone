@@ -58,6 +58,7 @@ debug_print('Done copying emoticons!')
 
 #copy avatars
 debug_print('Copying avatars...')
+os.mkdir(temp_directory + '/pics')
 shutil.copytree(avatars_path, temp_directory + '/pics/avatars')
 debug_print('Done copying avatars!')
 
