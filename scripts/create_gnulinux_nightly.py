@@ -104,7 +104,7 @@ debug_print('Boost libraries directory is ' + boost_libraries_directory)
 debug_print('Copying Boost DLLs...')
 for root, dirs, files in os.walk(boost_libraries_directory):
     for file in files:
-        if re.match('libboost_(thread|signals|regex|)-gcc-mt-\d_\d\d_\d.so.\d.\d\d.\d', file):
+        if re.match('libboost_(program_options|thread|signals|regex|)-gcc-mt-\d_\d\d_\d.so.\d.\d\d.\d', file):
             shutil.copyfile(os.path.join(root, file), os.path.join(str(temp_directory), file))
 debug_print('Done copying Boost DLL!')
 
