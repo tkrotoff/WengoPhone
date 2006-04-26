@@ -160,17 +160,16 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 		char commandLine[_MAX_PATH];
 		strcpy(commandLine, "crashreport");
 		if (_styleName != NULL) {
-			strcat(commandLine, " -style=");
+			strcat(commandLine, " -s ");
 			strcat(commandLine, _styleName);
 		}
-		strcat(commandLine, " \"");
+		strcat(commandLine, " -d ");
 		strcat(commandLine, memoryDumpFile);
-		strcat(commandLine, "\" ");
+		strcat(commandLine, " -n ");
 		strcat(commandLine, _applicationName);
 		if (_languageFilename != NULL) {
-			strcat(commandLine, " \"");
+			strcat(commandLine, " -l ");
 			strcat(commandLine, _languageFilename);
-			strcat(commandLine, "\"");
 		}
 		LOG_DEBUG(commandLine);
 		executeProcess(commandLine);

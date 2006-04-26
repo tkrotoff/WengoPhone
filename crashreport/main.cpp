@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
 	string dumpfile = "";
 	string applicationName = "";
 	string lang = "";
+	string style = "";
 
 	try {
 
@@ -48,6 +49,7 @@ int main(int argc, char** argv) {
 				("dumpfile,d", value(&dumpfile), "path to the memory dump file")
 				("name,n", value(&applicationName), "the application name")
 				("lang,l", value(&lang), "the application language")
+				("style,s", value(&style), "the application Qt style name")
 				;
 
 		variables_map vm;
@@ -79,7 +81,13 @@ int main(int argc, char** argv) {
 			lang = vm["lang"].as<string>();
 		} else {
 			cout << "No lang specified" << endl;
-			return 1;
+		}
+
+		if (vm.count("style")) {
+			cout << "style = " << vm["style"].as<string>() << "\n";
+			style= vm["style"].as<string>();
+		} else {
+			cout << "No style specified" << endl;
 		}
 
 	}
@@ -87,7 +95,7 @@ int main(int argc, char** argv) {
 		cerr << e.what() << "\n";
 	}
 
-	QtCrashReport * crashReport = new QtCrashReport(dumpfile, applicationName, lang);
+	QtCrashReport * crashReport = new QtCrashReport(dumpfile, applicationName, lang, style);
 	crashReport->show();
 
 	return app.exec();

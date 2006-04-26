@@ -19,12 +19,13 @@
 
 #include "QtCrashReport.h"
 
+#include <cutil/global.h>
+#include <thread/Thread.h>
+
 #include <QtGui>
 
-#include <stdio.h>
-
-QtCrashReport::QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang) 
-	: QObjectThreadSafe(NULL)/*, QDialog(0)*/, _dumpfile(dumpfile), _lang(lang)  {
+QtCrashReport::QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang, std::string style) 
+	: QObjectThreadSafe(NULL), _dumpfile(dumpfile), _lang(lang)  {
 
 	_progressTotal = 0;
 	_progressNow = 0;
@@ -80,11 +81,12 @@ void QtCrashReport::updatePresentationThreadSafe() {
 	ui.progressBar->setMaximum(_progressTotal);
 	ui.progressBar->setValue(_progressNow);
 	
+	//sleep: only for the feeling
 	if( _status == FtpUpload::Ok ) {
-		sleep(1);
+		Thread::sleep(1);
 		_dialog->close();
 	} else if (_status == FtpUpload::Error) {
-		sleep(1);
+		Thread::sleep(1);
 		_dialog->close();
 	} else {
 	}

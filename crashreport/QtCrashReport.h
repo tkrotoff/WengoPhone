@@ -33,11 +33,11 @@
  *
  * @author Mathieu Stute
  */
-class QtCrashReport : public QObjectThreadSafe/*, public QDialog */ {
+class QtCrashReport : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang);
+	QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang = "", std::string style = "");
 
 	~QtCrashReport();
 
