@@ -53,12 +53,12 @@ typedef BOOL (WINAPI * MINIDUMPWRITEDUMP)
  * Remember that .exe, .dll and .pdb files should be generated from the same compilation process in debug mode.
  * If a .pdb file does not correspond to the exact .exe or .dll file, the .dmp file is inefficient.
  *
- * MemoryDump calls an external program (memorydump.exe) with the following arguments:
- * memorydump.exe -style=styleName "memoryDumpFile" applicationName languageFile
+ * MemoryDump calls an external program (crashreport.exe) with the following arguments:
+ * crashreport.exe -style=styleName "memoryDumpFile" applicationName languageFile
  * Example:
- * memorydump.exe -style=wengokeramik "C:/Program Files/Wengo/WengoPhone-0.93-0602124133.dmp" WengoPhone wengo_fr.qm
- * memorydump.exe can be wathever you want.
- * Currently it is a Qt application (MemoryDumpWindow) that sends via FTP the memorydump.
+ * crashreport.exe -style=wengokeramik "C:/Program Files/Wengo/WengoPhone-0.93-0602124133.dmp" WengoPhone wengo_fr.qm
+ * crashreport.exe can be wathever you want.
+ * Currently it is a Qt application (MemoryDumpWindow) that sends via FTP the crashreport.
  *
  * So it uses MemoryDumpWindow as a separate executable file otherwise
  * some crashes do not open MemoryDumpWindow (probably because of the dependency with the Qt dll).

@@ -156,9 +156,9 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 			LOG_ERROR("failed to create dump file: " + String(memoryDumpName) + " " + String::fromNumber(GetLastError()));
 		}
 
-		//Launches memorydump.exe
+		//Launches crashreport.exe
 		char commandLine[_MAX_PATH];
-		strcpy(commandLine, "memorydump");
+		strcpy(commandLine, "crashreport");
 		if (_styleName != NULL) {
 			strcat(commandLine, " -style=");
 			strcat(commandLine, _styleName);
@@ -172,7 +172,7 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 			strcat(commandLine, _languageFilename);
 			strcat(commandLine, "\"");
 		}
-		cerr << "MemoryDump: " << commandLine << endl;
+		LOG_DEBUG(commandLine);
 		executeProcess(commandLine);
 	}
 
