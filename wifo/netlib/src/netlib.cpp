@@ -273,17 +273,18 @@ int _getProxyAddress()
 void _get_proxy_auth_type(const char *url, int timeout)
 {
 		CURL *curl_tmp;
-		char buff[2048];
+		char url_buf[1024];
+		char proxy_buf[1024];
 		int ret;
 
 		ret = 0;
 		curl_tmp = curl_easy_init();
 
-		snprintf(buff, sizeof(buff), "http://%s", url);
-		curl_easy_setopt(curl_tmp, CURLOPT_URL, strdup(buff));
+		snprintf(url_buf, sizeof(url_buf), "http://%s", url);
+		curl_easy_setopt(curl_tmp, CURLOPT_URL, url_buf);
 
-		snprintf(buff, sizeof(buff), "%s:%d", _LocalProxy.address, _LocalProxy.port);
-		curl_easy_setopt(curl_tmp, CURLOPT_PROXY, strdup(buff));
+		snprintf(proxy_buf, sizeof(proxy_buf), "%s:%d", _LocalProxy.address, _LocalProxy.port);
+		curl_easy_setopt(curl_tmp, CURLOPT_PROXY, proxy_buf);
 
 		if (timeout > 0)
 			curl_easy_setopt(curl_tmp, CURLOPT_TIMEOUT, timeout);
@@ -293,21 +294,20 @@ void _get_proxy_auth_type(const char *url, int timeout)
 
 		curl_easy_getinfo(curl_tmp, CURLINFO_PROXYAUTH_AVAIL, &(_LocalProxy.proxy_auth_type));
 		
-		// free the Curl tmp handle
 		curl_easy_cleanup(curl_tmp);
 }
 
 void _get_auth_type(const char *url, int timeout)
 {
 		CURL *curl_tmp;
-		char buff[2048];
+		char url_buf[1024];
 		int ret;
 
 		ret = 0;
 		curl_tmp = curl_easy_init();
 
-		snprintf(buff, sizeof(buff), "http://%s", url);
-		curl_easy_setopt(curl_tmp, CURLOPT_URL, strdup(buff));
+		snprintf(url_buf, sizeof(url_buf), "http://%s", url);
+		curl_easy_setopt(curl_tmp, CURLOPT_URL, url_buf);
 
 		if (timeout > 0)
 			curl_easy_setopt(curl_tmp, CURLOPT_TIMEOUT, timeout);
@@ -315,14 +315,13 @@ void _get_auth_type(const char *url, int timeout)
 		ret = curl_easy_perform(curl_tmp);
 
 		curl_easy_getinfo(curl_tmp, CURLINFO_HTTPAUTH_AVAIL, &(_LocalProxy.auth_type));
-		
-		// free the Curl tmp handle
+
 		curl_easy_cleanup(curl_tmp);
 }
 
 char **internet_explorer_proxyless_exception_list()
 {
-#ifdef WIN32
+#ifdef OS_WIN32
 	char **list;
 	long ret;
 	HKEY result;
@@ -537,7 +536,9 @@ HttpRet is_http_conn_allowed(const char *url,
 							  const char *proxy_login, const char *proxy_passwd,
 							  NETLIB_BOOLEAN ssl, int timeout)
 {
-	char buff[1024];
+	char url_buf[1024];
+	char auth_buf[1024];
+	char proxy_buf[1024];
 	CURL *mcurl;
 	int ret;
 	long http_resp_code;
@@ -548,15 +549,15 @@ HttpRet is_http_conn_allowed(const char *url,
 	
 	if (ssl)
 	{
-		snprintf(buff, sizeof(buff), "https://%s", url);
+		snprintf(url_buf, sizeof(url_buf), "https://%s", url);
 		curl_easy_setopt(mcurl, CURLOPT_SSLVERSION, CURL_SSLVERSION_SSLv3);
 		curl_easy_setopt(mcurl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_easy_setopt(mcurl, CURLOPT_SSL_VERIFYHOST, 0);
 	}
 	else
-		snprintf(buff, sizeof(buff), "http://%s", url);
+		snprintf(url_buf, sizeof(url_buf), "http://%s", url);
 	
-	curl_easy_setopt(mcurl, CURLOPT_URL, strdup(buff));
+	curl_easy_setopt(mcurl, CURLOPT_URL, url_buf);
 
 	if (timeout > 0)
 		curl_easy_setopt(mcurl, CURLOPT_TIMEOUT, timeout);
@@ -574,8 +575,8 @@ HttpRet is_http_conn_allowed(const char *url,
 			if (!_LocalProxy.proxy_auth_type)
 				_get_proxy_auth_type(url, timeout);
 
-			snprintf(buff, sizeof(buff), "%s:%s", proxy_login, proxy_passwd);
-			curl_easy_setopt(mcurl, CURLOPT_PROXYUSERPWD, strdup(buff));
+			snprintf(auth_buf, sizeof(auth_buf), "%s:%s", proxy_login, proxy_passwd);
+			curl_easy_setopt(mcurl, CURLOPT_PROXYUSERPWD, auth_buf);
 			
 			if ((_LocalProxy.proxy_auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC)
 				curl_easy_setopt(mcurl, CURLOPT_PROXYAUTH, CURLAUTH_BASIC);
@@ -584,8 +585,8 @@ HttpRet is_http_conn_allowed(const char *url,
 			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_NTLM) == CURLAUTH_NTLM)
 				curl_easy_setopt(mcurl, CURLOPT_PROXYAUTH, CURLAUTH_NTLM);
 		}
-		snprintf(buff, sizeof(buff), "%s:%d", proxy_addr, proxy_port);
-		curl_easy_setopt(mcurl, CURLOPT_PROXY, strdup(buff));
+		snprintf(proxy_buf, sizeof(proxy_buf), "%s:%d", proxy_addr, proxy_port);
+		curl_easy_setopt(mcurl, CURLOPT_PROXY, proxy_buf);
 	}
 	else
 	{
@@ -594,8 +595,8 @@ HttpRet is_http_conn_allowed(const char *url,
 			if (!_LocalProxy.auth_type)
 				_get_auth_type(url, timeout);
 
-			snprintf(buff, sizeof(buff), "%s:%s", proxy_login, proxy_passwd);
-			curl_easy_setopt(mcurl, CURLOPT_USERPWD, strdup(buff));
+			snprintf(auth_buf, sizeof(auth_buf), "%s:%s", proxy_login, proxy_passwd);
+			curl_easy_setopt(mcurl, CURLOPT_USERPWD, auth_buf);
 
 			if ((_LocalProxy.proxy_auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC)
 				curl_easy_setopt(mcurl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
