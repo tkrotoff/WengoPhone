@@ -19,6 +19,7 @@ if WengoCCGCC() and not WengoOSWindows():
 			'boost_serialization-gcc-mt',
 			'boost_signals-gcc-mt',
 			'boost_regex-gcc-mt',
+			'boost_program_options-gcc-mt',
 		]
 	else:
 		libs += [
@@ -26,6 +27,7 @@ if WengoCCGCC() and not WengoOSWindows():
 			'boost_serialization',
 			'boost_signals',
 			'boost_regex',
+			'boost_program_options',
 		]
 	env = conf.Finish()
 if WengoCCMSVC():
@@ -34,6 +36,7 @@ if WengoCCMSVC():
 		'libboost_serialization-vc71-mt.lib',
 		'libboost_signals-vc71-mt.lib',
 		'libboost_regex-vc71-mt.lib',
+		'libboost_program_options-vc71-mt.lib',
 	]
 
 if WengoCCMinGW():
@@ -42,6 +45,7 @@ if WengoCCMinGW():
 		'libboost_serialization-mgw-mt',
 		'libboost_signals-mgw-mt',
 		'libboost_regex-mgw-mt',
+		'libboost_program_options-mgw-mt',
 	]
 
 lib_path = []
