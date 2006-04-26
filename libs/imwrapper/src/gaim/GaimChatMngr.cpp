@@ -35,6 +35,12 @@ extern "C" {
 
 /* **************** TYPING STATE MANAGEMENT ****************** */
 
+int chat_invite_request(GaimAccount *account, const char *who, 
+						const char *message, void *data)
+{
+	return 1;
+}
+
 void update_buddy_typing(GaimAccount *account, const char *who)
 {
 	GaimConversation *gConv = NULL;
@@ -54,6 +60,9 @@ void init_typing_state_event()
 						handle, GAIM_CALLBACK(update_buddy_typing), NULL);
 	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing-stopped",
 						handle, GAIM_CALLBACK(update_buddy_typing), NULL);
+
+	gaim_signal_connect(gaim_conversations_get_handle(), "chat-invited",
+						handle, GAIM_CALLBACK(chat_invite_request), NULL);
 }
 
 /* ***************** GAIM CALLBACK ***************** */
@@ -199,91 +208,15 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 	}
 	else if (chatType == GAIM_CONV_TYPE_CHAT)
 	{
-		mConvInfo_t *mConv;
-		int id = strtol(gaim_conversation_get_name(conv), (char **) NULL, 10);
-		
-		if (id && (mConv = mChat->FindChatStructById(id)) != NULL)
-		{
-			mConv->gaim_conv_session = conv;
-			conv->ui_data = mConv;
-		}
-		else
-		{
-			char name[100];
+		int id = (int) strtol(gaim_conversation_get_name(conv), (char **) NULL, 10);
 
+		if (mChat->FindChatStructById(id) == NULL)
+		{
 			mConv = mChat->CreateChatSession();
-			snprintf(name, sizeof(name), "%d", mConv->conv_id); 
-			gaim_conversation_set_name(conv, strdup(name));
 			mConv->gaim_conv_session = conv;
 			conv->ui_data = mConv; 		
 		}
 	}
-
-
-	//if (mConv == NULL)
-	//{
-	//	// We receive an incoming message
-	//	// and the ChatSession is not created yet
-
-	//	mConv = gChat->mCreateSession();
-	//	conv->ui_data = mConv;
-	//	chatSession = (IMChatSession *) mConv->conv_session;
-	//
-	//	if (chatType == GAIM_CONV_TYPE_IM)
-	//	{
-	//		gChat->contactAddedEvent(*gChat, *chatSession,
-	//								gaim_conversation_get_name(conv));
-	//	}
-	//	else if (chatType == GAIM_CONV_TYPE_CHAT)
-	//	{
-	//		GList *gChatUsers = gaim_conv_chat_get_users(GAIM_CONV_CHAT(conv));
-
-	//		GaimConvChatBuddy *gUser;
-	//		for ( ; gChatUsers; gChatUsers = gChatUsers->next)
-	//		{
-	//			gUser = (GaimConvChatBuddy *) gChatUsers->data;
-	//			gChat->contactAddedEvent(*gChat, *chatSession, gUser->name);
-	//		}
-	//	}
-
-	//	return;
-	//}
-
-	//// Get IMChatSession buddies number to know
-	//// if we have to send an event to IMWrapper
-	//// (because of an asynchrone management of create/add
-	//// operations between IMWrapper and Gaim)
-	//chatSession = (IMChatSession *) mConv->conv_session;
-
-	//if (chatType == GAIM_CONV_TYPE_IM)
-	//{
-	//	if (chatSession->getIMContactList().size() == 0)
-	//	{
-	//		gChat->contactAddedEvent(*gChat, *chatSession, gaim_conversation_get_name(conv));
-	//	}
-	//}
-	//else if (chatType == GAIM_CONV_TYPE_CHAT)
-	//{
-	//	const IMChatSession::IMContactList &ChatContact = chatSession->getIMContactList();
-	//	IMChatSession::IMContactList::const_iterator it = ChatContact.begin();
-	//	const char *contactId = (*it).getContactId().c_str();
-	//
-	//	GList *gChatUsers = gaim_conv_chat_get_users(GAIM_CONV_CHAT(conv));
-	//
-	//	GaimConvChatBuddy *gUser;
-
-	//	for ( ; gChatUsers; gChatUsers = gChatUsers->next)
-	//	{
-	//		gUser = (GaimConvChatBuddy *) gChatUsers->data;
-	//		if (gaim_utf8_strcasecmp(gUser->name, contactId) != 0)
-	//		{
-	//			gChat->contactAddedEvent(*gChat, *chatSession, gUser->name);
-	//			break;
-	//		}
-	//	}
-	//}
-
-	fprintf(stderr, "wgconv : gaim_wgconv_new()\n");
 }
 
 void GaimChatMngr::DestroyConversationCbk(GaimConversation *conv)

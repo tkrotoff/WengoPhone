@@ -27,6 +27,10 @@
 #include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMContactSet.h>
 
+extern "C" {
+#include <gaim/connection.h>
+}
+
 typedef struct	mConvInfo_s
 {
 	void		*conv_session;
@@ -60,6 +64,8 @@ public:
 	bool equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol);
 	void AddChatSessionInList(mConvInfo_t *conv);
 	static mConvInfo_t *FindChatStructById(int convId);
+
+	void createGaimChat(GaimConnection *gGC, int id, GList *users);
 
 private:
 
