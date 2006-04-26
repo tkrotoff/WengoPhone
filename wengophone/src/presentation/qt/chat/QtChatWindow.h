@@ -75,7 +75,6 @@ protected:
 
 	QtWengoStyleLabel * _inviteLabel;
 
-
 	/*
 		end new widget
 	*/
@@ -129,6 +128,8 @@ private:
 	void typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state);
 
 	void contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact);
+
+	void createMenu();
 
 };
 

@@ -73,11 +73,10 @@ void ChatWindow::initThreadSafe(){
 	LOG_DEBUG("************ Creating Chat window ************* ");
 	// Create the menu bar
 	_menuBar = new QMenuBar(_dialog);
-	QMenu * WengoMenu = new QMenu("Wengo");
-	WengoMenu->addAction(tr("Exit"));
-	_menuBar->addMenu(WengoMenu);
 
-	_contactListFrame = new QFrame();
+    createMenu();
+
+    _contactListFrame = new QFrame();
 
 	glayout = new QGridLayout();
 	glayout->setMargin(0);
@@ -115,7 +114,7 @@ void ChatWindow::initThreadSafe(){
 	connect ( _tabWidget,SIGNAL(currentChanged (int)), SLOT(tabSelectionChanged(int)) );
 
 	_tabWidget->removeTab(0);
-	_dialog->resize(384,464);
+	_dialog->resize(300,464);
 	_dialog->setWindowTitle(tr("Wengophone chat window"));
 	_dialog->show();
 
@@ -207,6 +206,8 @@ void ChatWindow::closeTab(){
         }
     }
     delete widget;
+    if ( _tabWidget->count() == 0 )
+        _dialog->hide();
     //_tabWidget->removeTab ( _tabWidget->currentIndex() );
 }
 void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state){
@@ -427,4 +428,77 @@ void ChatWindow::openContactListFrame(){
 
 void ChatWindow::closeContactListFrame(){
 	_contactListFrame->setVisible(false);
+}
+
+void ChatWindow::createMenu(){
+   	QMenu * WengoMenu = new QMenu("Wengo");
+   	WengoMenu->addAction(tr("View my &Wengo Account"));
+   	WengoMenu->addAction(tr("Edit my &Profile"));
+   	WengoMenu->addSeparator ();
+   	WengoMenu->addAction(tr("&Call-out service"));
+   	WengoMenu->addAction(tr("&Short text messages (SMS) "));
+   	WengoMenu->addAction(tr("&Voicemail"));
+   	WengoMenu->addSeparator ();
+   	WengoMenu->addAction(tr("&Open Another Wengo Account"));
+	WengoMenu->addAction(tr("&Log off"));
+   	WengoMenu->addSeparator ();
+	WengoMenu->addAction(tr("Exit"));
+	_menuBar->addMenu(WengoMenu);
+
+	QMenu * ContactsMenu = new QMenu(tr("&Contact"));
+
+    ContactsMenu->addAction(tr("Add a contact"));
+    ContactsMenu->addAction(tr("Search for contact"));
+    ContactsMenu->addAction(tr("Manage blocked contacts"));
+    ContactsMenu->addSeparator ();
+    ContactsMenu->addAction(tr("Add a group"));
+    ContactsMenu->addAction(tr("Show contact groups"));
+    ContactsMenu->addSeparator ();
+    ContactsMenu->addAction(tr("Show contacts offline"));
+    QMenu * sortMenu = new QMenu(tr("Sort contacts"));
+    sortMenu->addAction(tr("alphabetically"));
+    sortMenu->addAction(tr("by presence"));
+    sortMenu->addAction(tr("by media"));
+    ContactsMenu->addMenu(sortMenu);
+
+    _menuBar->addMenu(ContactsMenu);
+
+    QMenu * Actions = new QMenu(tr("&Actions"));
+    Actions->addAction(tr("Create a conference call"));
+    Actions->addAction(tr("Send a short text message (SMS)"));
+    Actions->addAction(tr("Forward incoming calls"));
+    Actions->addSeparator ();
+    Actions->addAction(tr("Create conference call"));
+
+    _menuBar->addMenu(Actions);
+
+    QMenu * ToolsMenu = new QMenu(tr("&Tools"));
+    ToolsMenu->addAction(tr("Instant Messaging settings"));
+    ToolsMenu->addSeparator ();
+    ToolsMenu->addAction(tr("View toolbar"));
+    ToolsMenu->addAction(tr("View adressbar"));
+    ToolsMenu->addAction(tr("View dialpad"));
+    ToolsMenu->addAction(tr("View avatars in chat window"));
+    ToolsMenu->addSeparator ();
+
+    QMenu * HistoryMenu = new QMenu(tr("Clear History"));
+    HistoryMenu->addAction(tr("Outgoing Calls"));
+    HistoryMenu->addAction(tr("Incoming Calls"));
+    HistoryMenu->addAction(tr("Missed Calls"));
+    HistoryMenu->addAction(tr("Chat sessions"));
+    HistoryMenu->addAction(tr("Short text message (SMS)"));
+    HistoryMenu->addAction(tr("All"));
+
+    ToolsMenu->addMenu(HistoryMenu);
+
+    _menuBar->addMenu(ToolsMenu);
+
+    QMenu * HelpMenu = new QMenu ("&Help");
+    HelpMenu->addAction(tr("&Form"));
+    HelpMenu->addAction(tr("&Wiki / Faq"));
+    HelpMenu->addSeparator ();
+    HelpMenu->addAction(tr("&About"));
+
+    _menuBar->addMenu(HelpMenu);
+
 }
