@@ -96,14 +96,7 @@ void QtEditMyProfile::changeAvatarClicked() {
 // FIXME : Just a test
 void QtEditMyProfile::imAccountAdded() {
 
-// open the protocols settings dialog
-/*
-_protocolSettings = new QtProtocolSettings(_wengoPhone,QtProtocolSettings::ADD,this);
-_protocolSettings->exec();
-*/
-	QtIMAccountManager imAccountManager(_userProfile, this);
-	imAccountManager.show();
-
+	QtIMAccountManager * imAccountManager = new QtIMAccountManager(_userProfile, true, this);
 
 	for ( int i = 0; i < _imAccountLineEdit.size(); i++ ) {
 			if ( _imAccountLineEdit[ i ] ->isVisible() == false ) {

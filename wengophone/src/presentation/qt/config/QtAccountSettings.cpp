@@ -37,8 +37,8 @@ QtAccountSettings::QtAccountSettings(CWengoPhone & cWengoPhone, QWidget * parent
 	_ui = new Ui::AccountSettings();
 	_ui->setupUi(_accountSettingsWidget);
 
-	QtIMAccountManager imAccountManager(cWengoPhone.getWengoPhone().getCurrentUserProfile(), _accountSettingsWidget);
-	int index = _ui->imAccountStackedWidget->addWidget(imAccountManager.getWidget());
+	QtIMAccountManager * imAccountManager = new QtIMAccountManager(cWengoPhone.getWengoPhone().getCurrentUserProfile(), false, _accountSettingsWidget);
+	int index = _ui->imAccountStackedWidget->addWidget(imAccountManager->getWidget());
 	_ui->imAccountStackedWidget->setCurrentIndex(index);
 }
 

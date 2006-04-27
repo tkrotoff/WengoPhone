@@ -48,9 +48,6 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 	//outputSoundSlider
 	connect(_ui->outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputSoundSliderValueChanged(int)));
 
-	//enableVideoCheckBox
-	connect(_ui->enableVideoCheckBox, SIGNAL(toggled(bool)), SLOT(enableVideoCheckBoxToggled(bool)));
-
 	//enableWenboxCheckBox
 	connect(_ui->enableWenboxCheckBox, SIGNAL(toggled(bool)), SLOT(enableWenboxCheckBoxToggled(bool)));
 
@@ -74,11 +71,6 @@ void QtConfigPanel::outputSoundSliderValueChanged(int value) {
 	volumeControl.setLevel(value);
 }
 
-void QtConfigPanel::enableVideoCheckBoxToggled(bool checked) {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.set(Config::VIDEO_ENABLE_KEY, checked);
-}
-
 void QtConfigPanel::enableWenboxCheckBoxToggled(bool checked) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.set(Config::WENBOX_ENABLE_KEY, checked);
@@ -98,21 +90,16 @@ void QtConfigPanel::configChangedEventHandler(Settings & sender, const std::stri
 void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const std::string & key) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	if (key == Config::AUDIO_OUTPUT_DEVICENAME_KEY ||
-		key == Config::AUDIO_INPUT_DEVICENAME_KEY) {
-
+	if (key == Config::AUDIO_INPUT_DEVICENAME_KEY) {
 		//inputSoundSlider
 		VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
 		_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());
+	}
 
+	if (key == Config::AUDIO_OUTPUT_DEVICENAME_KEY) {
 		//outputSoundSlider
 		VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
 		_ui->outputSoundSlider->setValue(outputVolumeControl.getLevel());
-	}
-
-	if (key == Config::VIDEO_ENABLE_KEY) {
-		//enableVideoCheckBox
-		_ui->enableVideoCheckBox->setChecked(config.getVideoEnable());
 	}
 
 	if (key == Config::WENBOX_ENABLE_KEY) {

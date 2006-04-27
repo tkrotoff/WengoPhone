@@ -30,14 +30,20 @@
 
 #include <QtGui>
 
-QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * parent)
+static const int COLUMN_ENABLE_BUTTON = 2;
+
+QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, bool showAsDialog, QWidget * parent)
 	: QObject(parent),
 	_userProfile(userProfile) {
 
-	_imAccountManagerWindow = new QDialog(parent);
+	if (showAsDialog) {
+		_imAccountManagerWidget = new QDialog(parent);
+	} else {
+		_imAccountManagerWidget = new QWidget(parent);
+	}
 
 	_ui = new Ui::IMAccountManager();
-	_ui->setupUi(_imAccountManagerWindow);
+	_ui->setupUi(_imAccountManagerWidget);
 
 	QMenu * addIMAccountMenu = new QMenu(_ui->addIMAccountButton);
 	connect(addIMAccountMenu, SIGNAL(triggered(QAction *)), SLOT(addIMAccount(QAction *)));
@@ -58,7 +64,11 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * pare
 
 	connect(_ui->deleteIMAccountButton, SIGNAL(clicked()), SLOT(deleteIMAccount()));
 
-	connect(_ui->closeButton, SIGNAL(clicked()), _imAccountManagerWindow, SLOT(accept()));
+	if (showAsDialog) {
+		connect(_ui->closeButton, SIGNAL(clicked()), _imAccountManagerWidget, SLOT(accept()));
+	} else {
+		_ui->closeButton->hide();
+	}
 
 	connect(_ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
 			SLOT(itemDoubleClicked(QTreeWidgetItem *, int)));
@@ -67,19 +77,17 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, QWidget * pare
 			SLOT(itemClicked(QTreeWidgetItem *, int)));
 
 	loadIMAccounts();
+
+	if (showAsDialog) {
+		_imAccountManagerWidget->show();
+	}
 }
 
 QtIMAccountManager::~QtIMAccountManager() {
 	delete _ui;
 }
 
-void QtIMAccountManager::show() {
-	_imAccountManagerWindow->exec();
-}
-
 void QtIMAccountManager::loadIMAccounts() {
-	static const int COLUMN_ENABLE_BUTTON = 2;
-
 	_ui->treeWidget->clear();
 
 	IMAccountHandler & imAccountHandler = _userProfile.getIMAccountHandler();
@@ -110,7 +118,7 @@ void QtIMAccountManager::addIMAccount(QAction * action) {
 	LOG_DEBUG(protocolName.toStdString());
 
 	EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
-	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imProtocol, _imAccountManagerWindow);
+	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imProtocol, _imAccountManagerWidget);
 	loadIMAccounts();
 }
 
@@ -119,7 +127,7 @@ void QtIMAccountManager::deleteIMAccount() {
 	if (imAccountItem) {
 		IMAccount * imAccount = imAccountItem->getIMAccount();
 
-		int buttonClicked = QMessageBox::question(_imAccountManagerWindow,
+		int buttonClicked = QMessageBox::question(_imAccountManagerWidget,
 					"WengoPhone",
 					tr("Are sure you want to delete this account?\n") + QString::fromStdString(imAccount->getLogin()),
 					tr("&Delete"), tr("Cancel"));
@@ -138,16 +146,16 @@ void QtIMAccountManager::modifyIMAccount() {
 }
 
 void QtIMAccountManager::itemClicked(QTreeWidgetItem * item, int column) {
-	if (column == 2) {
+	if (column == COLUMN_ENABLE_BUTTON) {
 		QtIMAccountItem * imAccountItem = dynamic_cast<QtIMAccountItem *>(item);
 		IMAccount * imAccount = imAccountItem->getIMAccount();
 
 		if (item->checkState(column) == Qt::Checked) {
-			item->setCheckState(column, Qt::Unchecked);
+			item->setCheckState(COLUMN_ENABLE_BUTTON, Qt::Unchecked);
 			_userProfile.setPresenceState(EnumPresenceState::PresenceStateOffline, imAccount);
 			_userProfile.getConnectHandler().disconnect(*imAccount);
 		} else {
-			item->setCheckState(column, Qt::Checked);
+			item->setCheckState(COLUMN_ENABLE_BUTTON, Qt::Checked);
 			_userProfile.getConnectHandler().connect(*imAccount);
 		}
 	}
@@ -158,5 +166,5 @@ void QtIMAccountManager::itemDoubleClicked(QTreeWidgetItem * item, int column) {
 
 	IMAccount * imAccount = imAccountItem->getIMAccount();
 
-	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imAccount, _imAccountManagerWindow);
+	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imAccount, _imAccountManagerWidget);
 }

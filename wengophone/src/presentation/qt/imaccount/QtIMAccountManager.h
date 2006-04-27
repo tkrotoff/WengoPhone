@@ -28,7 +28,6 @@
 
 class UserProfile;
 class QWidget;
-class QDialog;
 class QAction;
 class QTreeWidget;
 class QTreeWidgetItem;
@@ -37,21 +36,21 @@ namespace Ui { class IMAccountManager; }
 /**
  * Manages IM accounts: add/delete/modify IM accounts.
  *
+ * Can be an embedded widget or a separated window.
+ *
  * @author Tanguy Krotoff
  */
 class QtIMAccountManager : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtIMAccountManager(UserProfile & userProfile, QWidget * parent);
+	QtIMAccountManager(UserProfile & userProfile, bool showAsDialog, QWidget * parent);
 
 	~QtIMAccountManager();
 
-	QDialog * getWidget() const {
-		return _imAccountManagerWindow;
+	QWidget * getWidget() const {
+		return _imAccountManagerWidget;
 	}
-
-	void show();
 
 private Q_SLOTS:
 
@@ -73,7 +72,7 @@ private:
 
 	Ui::IMAccountManager * _ui;
 
-	QDialog * _imAccountManagerWindow;
+	QWidget * _imAccountManagerWidget;
 };
 
 #endif	//QTIMACCOUNTMANAGER_H

@@ -31,6 +31,8 @@
 
 #include <QtGui>
 
+static const char * MNG_FORMAT = "MNG";
+
 QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	: QObjectThreadSafe(statusBar),
 	_cWengoPhone(cWengoPhone) {
@@ -39,33 +41,37 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 
 	QWidget * statusGroup = new QWidget(_statusBar);
 	new QHBoxLayout(statusGroup);
+	statusGroup->layout()->setMargin(0);
+	statusGroup->layout()->setSpacing(2);
 
-    _wengoConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng","MNG",_statusBar);
-    _internetConnectionMovie = new QMovie(":/pics/statusbar/status-earth-connecting.mng","MNG",_statusBar);
+	_wengoConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng", MNG_FORMAT, _statusBar);
+	_internetConnectionMovie = new QMovie(":/pics/statusbar/status-earth-connecting.mng", MNG_FORMAT, _statusBar);
 
 	_cWengoPhone.networkDiscoveryStateChangedEvent +=
 		boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 
+	//internetConnectionStateLabel
 	_internetConnectionStateLabel = new QLabel(statusGroup);
 	_internetConnectionStateLabel->setMovie(_internetConnectionMovie);
 	_internetConnectionStateLabel->setToolTip(tr("Not Connected"));
 	statusGroup->layout()->addWidget(_internetConnectionStateLabel);
 	_internetConnectionMovie->start();
 
+	//phoneLineStateLabel
 	_phoneLineStateLabel = new QLabel(statusGroup);
 	_phoneLineStateLabel->setMovie(_wengoConnectionMovie);
 	_phoneLineStateLabel->setToolTip(tr("Not Connected"));
 	statusGroup->layout()->addWidget(_phoneLineStateLabel);
 	_wengoConnectionMovie->start();
 
+	//soundStateLabel
 	_soundStateLabel = new QLabel(statusGroup);
-
 	_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar_audio_error.png"));
-	_phoneLineStateLabel->setToolTip(tr("Audio Configuration Error"));
+	_soundStateLabel->setToolTip(tr("Audio Configuration Error"));
 	statusGroup->layout()->addWidget(_soundStateLabel);
 
 
-    _statusBar->addPermanentWidget(statusGroup);
+	_statusBar->addPermanentWidget(statusGroup);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this, _1, _2);
@@ -117,47 +123,39 @@ void QtStatusBar::networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount 
 	QString tooltip;
 	QString pixmap;
 
-    delete _internetConnectionMovie;
-    _internetConnectionMovie = NULL;
+	delete _internetConnectionMovie;
+	_internetConnectionMovie = NULL;
 
 	switch (state) {
 	case SipAccount::NetworkDiscoveryStateOk:
 		tooltip = tr("Internet Connection OK");
 		pixmap = ":/pics/statusbar/status-earth-connecting.mng";
-        _internetConnectionStateLabel->setPixmap(pixmap);
-        _internetConnectionStateLabel->setToolTip(tooltip);
 		break;
 
 	case SipAccount::NetworkDiscoveryStateHTTPError:
 		tooltip = tr("Internet Connection Error");
 		pixmap = ":/pics/statusbar/status-earth-offline.png";
-        _internetConnectionStateLabel->setPixmap(pixmap);
-        _internetConnectionStateLabel->setToolTip(tooltip);
 		break;
 
 	case SipAccount::NetworkDiscoveryStateSIPError:
 		tooltip = tr("Internet Connection Error");
 		pixmap = ":/pics/statusbar/status-earth-offline.png";
-        _internetConnectionStateLabel->setPixmap(pixmap);
-        _internetConnectionStateLabel->setToolTip(tooltip);
 		break;
 
 	case SipAccount::NetworkDiscoveryStateProxyNeedsAuthentication:
 		tooltip = tr("Internet Connection Error");
 		pixmap = ":/pics/statusbar/status-earth-offline.png";
-        _internetConnectionStateLabel->setPixmap(pixmap);
-        _internetConnectionStateLabel->setToolTip(tooltip);
 		break;
 
 	case SipAccount::NetworkDiscoveryStateError:
 		tooltip = tr("Internet Connection Error");
 		pixmap = ":/pics/statusbar/status-earth-offline.png";
-        _internetConnectionStateLabel->setPixmap(pixmap);
-        _internetConnectionStateLabel->setToolTip(tooltip);
 		break;
 
 	default:
 		LOG_FATAL("unknown state=" + String::fromNumber(state));
 	};
 
+	_internetConnectionStateLabel->setPixmap(pixmap);
+	_internetConnectionStateLabel->setToolTip(tooltip);
 }

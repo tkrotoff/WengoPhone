@@ -46,7 +46,7 @@ public:
 	/**
 	 * Gets default webcam device.
 	 *
-	 * @return the name of the device. WEBCAM_NULL if no webcam or error.
+	 * @return the name of the device; WEBCAM_NULL if no webcam or error
 	 */
 	virtual std::string getDefaultDevice() = 0;
 
@@ -56,7 +56,7 @@ public:
 	 * @param sender sender of the event
 	 * @param image captured image
 	 */
-	Event<void (IWebcamDriver *sender, piximage *image)> frameCapturedEvent;
+	Event<void (IWebcamDriver * sender, piximage * image)> frameCapturedEvent;
 
 	/**
 	 * @param flags set the webcam driver flags
@@ -86,7 +86,7 @@ public:
 	virtual void unsetFlags(int flags) = 0;
 
 	/**
-	 * Is given flag set?
+	 * Is given flag set?.
 	 *
 	 * @param flag flag to check
 	 * @return true if set
@@ -94,10 +94,10 @@ public:
 	virtual bool isFlagSet(int flag) = 0;
 
 	/**
-	 * Sets webcam device to use
+	 * Sets webcam device to use.
 	 *
 	 * @param deviceName name of the device to use, if name == "" then use the default device
-	 * @return WEBCAM_OK if no error, WEBCAM_NOK otherwise
+	 * @return WEBCAM_OK if no error; WEBCAM_NOK otherwise
 	 */
 	virtual webcamerrorcode setDevice(const std::string & deviceName) = 0;
 
@@ -107,50 +107,50 @@ public:
 	virtual bool isOpened() const = 0;
 
 	/**
-	 * Starts capture of video frames
+	 * Starts capture of video frames.
 	 */
 	virtual void startCapture() = 0;
 
 	/**
-	 * Pauses capture of video frames
+	 * Pauses capture of video frames.
 	 */
 	virtual void pauseCapture() = 0;
 
 	/**
-	 * Stops capture of video frames
+	 * Stops capture of video frames.
 	 */
 	virtual void stopCapture() = 0;
 
 	/**
-	 * Sets palette
+	 * Sets palette.
 	 *
 	 * @param palette palette to use
 	 */
 	virtual webcamerrorcode setPalette(pixosi palette) = 0;
 
 	/**
-	 * Gets palette
+	 * Gets palette.
 	 *
 	 * @return current palette
 	 */
 	virtual pixosi getPalette() const = 0;
 
 	/**
-	 * Sets capture rate
+	 * Sets capture rate.
 	 *
 	 * @param fps desired frame per seconds
 	 */
 	virtual webcamerrorcode setFPS(unsigned fps) = 0;
 
 	/**
-	 * Gets capture rate
+	 * Gets capture rate.
 	 *
 	 * @return current frame per seconds
 	 */
 	virtual unsigned getFPS() const = 0;
 
 	/**
-	 * Sets capture resolution
+	 * Sets capture resolution.
 	 *
 	 * @param width desired width
 	 * @param height desired height
@@ -158,49 +158,49 @@ public:
 	virtual webcamerrorcode setResolution(unsigned width, unsigned height) = 0;
 
 	/**
-	 * Gets captured frame width
+	 * Gets captured frame width.
 	 *
 	 * @return captured frame width
 	 */
 	virtual unsigned getWidth() const = 0;
 
 	/**
-	 * Gets captured frame height
+	 * Gets captured frame height.
 	 *
 	 * @return captured frame height
 	 */
 	virtual unsigned getHeight() const = 0;
 
 	/**
-	 * Sets capture brightness
+	 * Sets capture brightness.
 	 *
 	 * @param brightness brightness value
 	 */
 	virtual void setBrightness(int brightness) = 0;
 
 	/**
-	 * Gets capture brightness
+	 * Gets capture brightness.
 	 *
 	 * @param brightness brightness value
 	 */
 	virtual int getBrightness() const = 0;
 
 	/**
-	 * Sets capture contrast
+	 * Sets capture contrast.
 	 *
 	 * @param contrast contrast value
 	 */
 	virtual void setContrast(int contrast) = 0;
 
 	/**
-	 * Gets capture contrast
+	 * Gets capture contrast.
 	 *
 	 * @param contrast contrast value
 	 */
 	virtual int getContrast() const = 0;
 
 	/**
-	 * Flips captured frame horizontally
+	 * Flips captured frame horizontally.
 	 *
 	 * @param flip if true the picture will be flipped horizontally
 	 */

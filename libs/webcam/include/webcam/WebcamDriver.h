@@ -50,7 +50,7 @@ public:
 	 *
 	 * @param factory factory to use
 	 */
-	static void setFactory(WebcamDriverFactory *factory) {
+	static void setFactory(WebcamDriverFactory * factory) {
 		_factory = factory;
 	}
 
@@ -60,8 +60,8 @@ public:
 	 * Implements singleton pattern. This method create a WebcamDriver with
 	 * WEBCAM_FORCE_IMAGE_FORMAT flag.
 	 */
-	static WebcamDriver *getInstance() {
-		static WebcamDriver *instance = new WebcamDriver(WEBCAM_FORCE_IMAGE_FORMAT);
+	static WebcamDriver * getInstance() {
+		static WebcamDriver * instance = new WebcamDriver(WEBCAM_FORCE_IMAGE_FORMAT);
 		return instance;
 	}
 
@@ -141,7 +141,7 @@ private:
 	 * does not support the requested fps
 	 * @param image captured image
 	 */
-	void frameBufferAvailable(piximage *image);
+	void frameBufferAvailable(piximage * image);
 
 	/**
 	 * @see WEBCAM_FORCE_IMAGE_FORMAT
@@ -156,10 +156,10 @@ private:
 	void initializeConvImage();
 
 	/** Pointer to factory to use. */
-	static WebcamDriverFactory *_factory;
+	static WebcamDriverFactory * _factory;
 
 	/** Pointer to paltform dependent webcam driver. */
-	IWebcamDriver *_webcamPrivate;
+	IWebcamDriver * _webcamPrivate;
 
 	/** Desired FPS. */
 	unsigned _forcedFPS;
@@ -175,19 +175,19 @@ private:
 	/** Desired palette. */
 	pixosi _desiredPalette;
 
-	/** Desired width */
+	/** Desired width. */
 	unsigned _desiredWidth;
 
 	/** Desired height */
 	unsigned _desiredHeight;
 
-	/** Flags */
+	/** Flags. */
 	int _flags;
 
-	/** Contains the converted captured frame */
-	piximage *_convImage;
+	/** Contains the converted captured frame. */
+	piximage * _convImage;
 
-	/** Conversion flags */
+	/** Conversion flags. */
 	int _convFlags;
 };
 

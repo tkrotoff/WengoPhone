@@ -121,6 +121,8 @@ private Q_SLOTS:
 
 	void enableCallButton();
 
+	void enableVideo(bool checked);
+
 	void showWengoAccount();
 
 	void openWengoAccount();
@@ -262,6 +264,8 @@ private:
 	QtCallBar * _qtCallBar;
 
 	QPushButton * _addContactButton;
+
+	QPushButton * _enableVideoButton;
 
 	QWidget * _configPanelWidget;
 

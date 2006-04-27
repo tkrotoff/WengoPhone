@@ -35,6 +35,8 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 
+#include <webcam/WebcamDriver.h>
+
 #include "statusbar/QtStatusBar.h"
 #include "phoneline/QtPhoneLine.h"
 #include "phonecall/QtPhoneCall.h"
@@ -57,9 +59,10 @@
 #include "callbar/QtCallBar.h"
 
 #include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
 #include <qtutil/Widget.h>
+#include <qtutil/Object.h>
 #include <qtutil/MouseEventFilter.h>
+
 #include <thread/Thread.h>
 #include <util/Logger.h>
 #include <QtBrowser.h>
@@ -120,14 +123,6 @@ void QtWengoPhone::initThreadSafe() {
 	//hangUpButton
 	_hangUpButton = _qtCallBar->getHangButton();
 
-/*
-	//callButton
-	_callButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "callButton");
-
-	//hangUpButton
-	_hangUpButton = Object::findChild<QPushButton *>(_wengoPhoneWindow, "hangUpButton");
-
-*/
 	//phoneComboBox
 	_phoneComboBox=_qtCallBar->getComboBox();
 	MousePressEventFilter * leftMouseFilter = new MousePressEventFilter(
@@ -137,9 +132,17 @@ void QtWengoPhone::initThreadSafe() {
 	// IconBar
 	_iconBar = Object::findChild<QFrame *>(_wengoPhoneWindow,"iconBar");
 
-	// Add contact button
+	//Add contact button
 	_addContactButton = Object::findChild<QPushButton *>(_iconBar,"addContactButton");
-	connect ( _addContactButton, SIGNAL(clicked()), SLOT(addContact()));
+	connect(_addContactButton, SIGNAL(clicked()), SLOT(addContact()));
+
+	//enableVideoButton
+	_enableVideoButton = Object::findChild<QPushButton *>(_iconBar,"enableVideoButton");
+	WebcamDriver * webcam = WebcamDriver::getInstance();
+	if (webcam->getDeviceList().empty()) {
+		_enableVideoButton->setEnabled(false);
+	}
+	connect(_enableVideoButton, SIGNAL(toggled(bool)), SLOT(enableVideo(bool)));
 
 	//Buttons initialization
 	initButtons();
@@ -472,7 +475,7 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 		break;
 
 	default:
-		LOG_FATAL("Unknown state");
+		LOG_FATAL("unknown state=" + String::fromNumber(state));
 	};
 
 	updatePresentation();
@@ -535,6 +538,14 @@ void QtWengoPhone::exitApplication() {
 void QtWengoPhone::addContact() {
 	QtAddContact * qtAddContact = new QtAddContact(_cWengoPhone, _wengoPhoneWindow);
 	LOG_DEBUG("add contact");
+}
+
+void QtWengoPhone::enableVideo(bool checked) {
+	if (checked) {
+		_enableVideoButton->setIcon(QIcon(":pics/iconbar/webcam-off.png"));
+	} else {
+		_enableVideoButton->setIcon(QIcon(":pics/iconbar/webcam.png"));
+	}
 }
 
 void QtWengoPhone::showConfig() {
@@ -607,9 +618,7 @@ void QtWengoPhone::showAdvancedConfig() {
 }
 
 void QtWengoPhone::showAccountSettings() {
-	QtIMAccountManager imAccountManager(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _wengoPhoneWindow);
-
-	imAccountManager.show();
+	QtIMAccountManager * imAccountManager = new QtIMAccountManager(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), true, _wengoPhoneWindow);
 }
 
 

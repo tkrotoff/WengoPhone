@@ -52,8 +52,6 @@ private Q_SLOTS:
 
 	void outputSoundSliderValueChanged(int value);
 
-	void enableVideoCheckBoxToggled(bool checked);
-
 	void enableWenboxCheckBoxToggled(bool checked);
 
 	void halfDuplexCheckBoxToggled(bool checked);

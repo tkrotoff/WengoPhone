@@ -58,7 +58,7 @@
         <file>pics/group_close.png</file>
         <file>pics/group_open.png</file>
         <file>pics/hangup_button.png</file>
-        <file>pics/headphones.png</file>
+        <file>pics/speaker.png</file>
         <file>pics/help.png</file>
         <file>pics/home.png</file>
         <file>pics/homepage.png</file>
@@ -134,6 +134,8 @@
         <file>pics/iconbar/chat.png</file>
         <file>pics/iconbar/conference2.png</file>
         <file>pics/iconbar/search_contact.png</file>
+        <file>pics/iconbar/webcam.png</file>
+        <file>pics/iconbar/webcam-off.png</file>
         <file>pics/iconbar/sms2.png</file>
     </qresource>
     <qresource prefix="/data" >
