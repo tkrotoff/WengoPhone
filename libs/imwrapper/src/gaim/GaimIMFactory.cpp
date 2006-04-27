@@ -46,6 +46,9 @@ extern "C" {
 #include "GaimContactListMngr.h"
 #include "GaimPresenceMngr.h"
 
+#include <util/File.h>
+#include <util/Path.h>
+
 extern GaimConversationUiOps chat_wg_ops;
 extern GaimBlistUiOps blist_wg_ops;
 extern GaimConnectionUiOps conn_wg_ops;
@@ -196,9 +199,16 @@ void GaimIMFactory::GaimIMInit()
 	wgaim_init(GetModuleHandle(0));
 #endif
 
+	std::string configPath;
+
+#if defined(OS_MACOSX) || defined(OS_WINDOWS)
+	configPath = Path::getConfigurationDirPath() + File::convertPathSeparators("WengoPhone/");
+#else
+	configPath = Path::getConfigurationDirPath() + File::convertPathSeparators(".wengophone/");
+#endif
 
 #ifndef OS_WIN32
-	home_dir = g_build_filename(gaim_home_dir(), ".wengophone", "gaim", NULL);
+	home_dir = g_build_filename(gaim_home_dir(), configPath.c_str(), "gaim", NULL);
 	gaim_build_dir(home_dir, S_IRUSR|S_IWUSR|S_IXUSR);
 	gaim_util_set_user_dir(home_dir);
 #endif

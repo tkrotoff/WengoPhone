@@ -43,7 +43,9 @@ std::string IMContactXMLSerializer::serialize() {
 
 	result += ("<id>" + _imContact.getContactId() + "</id>\n");
 
-	result += ("<alias>" + _imContact.getAlias() + "</alias>\n");
+	if (!_imContact.getAlias().empty()) {
+		result += ("<alias><![CDATA[" + _imContact.getAlias() + "]]</alias>\n");
+	}
 
 	if (_imContact.getIMAccount()) {
 		result += ("<account>" + _imContact.getIMAccount()->getLogin() + "</account>\n");	
@@ -57,7 +59,7 @@ std::string IMContactXMLSerializer::serialize() {
 	for (IMContact::GroupSet::const_iterator it = _imContact._groupSet.begin();
 		it != _imContact._groupSet.end();
 		++it) {
-		result += ("<group>" + (*it) + "</group>\n");
+		result += ("<group><![CDATA[" + (*it) + "]]</group>\n");
 	}
 	result += "</groups>\n";
 

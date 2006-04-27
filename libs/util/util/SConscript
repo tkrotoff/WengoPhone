@@ -25,7 +25,13 @@ sources = [
 ]
 
 if WengoOSWindows():
-	libs += ['advapi32', 'shell32']
+	libs += ['advapi32', 'shell32', 'Rpcrt4']
+	sources += ['src/win/Uuid.cpp']
+else:
+	sources += ['src/unix/Uuid.cpp']
+
+if WengoOSLinux():
+	libs += ['uuid']
 
 elif WengoOSMacOSX():
 	link_flags += ['-framework CoreFoundation']
