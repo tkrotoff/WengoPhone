@@ -105,7 +105,7 @@ const std::string PhApiIMPresence::getRessourcePath() {
 }
 
 void PhApiIMPresence::contactIconChangedEventHandler(PhApiWrapper & sender, const std::string & contactId, const std::string & filename) {
-	Picture picture = Picture::pictureFromFile(getRessourcePath() + filename);
+	Picture picture = Picture::pictureFromFile(getRessourcePath() + "pics/avatars/" + filename);
 	contactIconChangedEvent(*this, contactId, picture);
 }
 
