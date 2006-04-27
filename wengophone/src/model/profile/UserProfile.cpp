@@ -335,7 +335,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		//TODO: callforward
 		//WsCallForward * w = new WsCallForward(_wengoAccount);
 		//w->disableCallForward();
-		
+
 		addPhoneLine(sender);
 
 		WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *) _wengoAccount);
@@ -362,11 +362,11 @@ IPhoneLine * UserProfile::findWengoPhoneLine() {
 		try {
 			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(sipAccount);
 			return _phoneLineList[i];
-		} catch ( bad_cast ) {
-			LOG_DEBUG("WengoAccount dynamic_cast failed");
+		} catch (bad_cast) {
+			LOG_ERROR("WengoAccount dynamic_cast failed");
 		}
 	}
-    return NULL;
+	return NULL;
 }
 
 void UserProfile::historyChangedEventHandler(History & sender, int id) {
@@ -399,5 +399,5 @@ void UserProfile::saveHistory() {
 }
 
 bool UserProfile::hasWengoAccount() const {
-	return ( _wengoAccount != NULL );
+	return _wengoAccount != NULL;
 }

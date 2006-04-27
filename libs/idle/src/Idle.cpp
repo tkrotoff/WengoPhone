@@ -21,21 +21,25 @@
 
 #include "MouseOrKeyboardEventFilter.h"
 
-#include <QtGui>
+#include <util/Logger.h>
 
-Idle::Idle(unsigned timeout, QObject * parent)
+#include <QtCore>
+
+Idle::Idle(QObject * parent)
 	: QObject(parent) {
 
 	_idleMode = false;
 
 	MouseOrKeyboardEventFilter * mouseOrKeyboardEventFilter = new MouseOrKeyboardEventFilter(this, SLOT(mouseOrKeyboardEvent()));
-	QDesktopWidget * desktop = QApplication::desktop();
-	desktop->installEventFilter(mouseOrKeyboardEventFilter);
+	QCoreApplication::instance()->installEventFilter(mouseOrKeyboardEventFilter);
 
 	_timer = new QTimer(parent);
-	_timer->setInterval(timeout);
 	_timer->setSingleShot(true);
 	connect(_timer, SIGNAL(timeout()), SLOT(timeout()));
+}
+
+void Idle::setIntervalBeforeIdleStatus(unsigned interval) {
+	_timer->setInterval(interval);
 }
 
 void Idle::start() {
@@ -49,7 +53,8 @@ void Idle::stop() {
 
 void Idle::mouseOrKeyboardEvent() {
 	if (_idleMode) {
-		idleEvent(*this, StatusActive);
+		statusChangedEvent(*this, StatusActive);
+		LOG_DEBUG("active state");
 	}
 
 	_idleMode = false;
@@ -60,5 +65,6 @@ void Idle::mouseOrKeyboardEvent() {
 
 void Idle::timeout() {
 	_idleMode = true;
-	idleEvent(*this, StatusIdle);
+	statusChangedEvent(*this, StatusIdle);
+	LOG_DEBUG("idle state");
 }

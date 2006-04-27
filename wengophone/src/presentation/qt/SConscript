@@ -11,6 +11,7 @@ libs = [
 	'owbrowser',
 	'trayicon',
 	'softupdater',
+	'owidle',
 ]
 if WengoCCMSVC():
 	libs.append('owmemorydump')

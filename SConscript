@@ -20,6 +20,7 @@ projects = [
 	'libs/sipx',
 	'libs/trayicon',
 	'libs/qtutil',
+	'libs/idle',
 	'libs/skinstyle',
 	'libs/sound',
 	'libs/ffmpeg',

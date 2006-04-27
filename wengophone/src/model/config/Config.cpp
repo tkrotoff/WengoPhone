@@ -178,7 +178,7 @@ Config::Config(const std::string & name)
 		char frameworkPath[1024];
 
 		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)frameworkPath, sizeof(frameworkPath))) {
-			pluginsPath = (std::string(frameworkPath) + File::getPathSeparator() 
+			pluginsPath = (std::string(frameworkPath) + File::getPathSeparator()
 				+ "phapi-plugins" + File::getPathSeparator());
 		}
 
@@ -219,7 +219,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[GENERAL_CLICK_START_FREECALL_KEY] = true;
 	_keyDefaultValueMap[GENERAL_CLICK_START_CHAT_KEY] = false;
 	_keyDefaultValueMap[GENERAL_CLICK_CALL_CELLPHONE_KEY] = false;
-	_keyDefaultValueMap[GENERAL_NOTAVAILABLE_TIMER_KEY] = 0;
+	_keyDefaultValueMap[GENERAL_NOTAVAILABLE_TIMER_KEY] = 2;
 
 	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY] = false;
 	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY] = false;

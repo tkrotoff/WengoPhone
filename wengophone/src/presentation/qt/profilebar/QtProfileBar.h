@@ -30,6 +30,8 @@
 
 #include <model/webservices/info/WsInfo.h>
 
+#include <idle/Idle.h>
+
 class UserProfile;
 class CWengoPhone;
 class QtWengoStyleLabel;
@@ -121,6 +123,11 @@ private:
 	void wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, float wengos);
 
 	void wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail);
+
+	/**
+	 * Idle status has changed, IMAccount presence state should be changed.
+	 */
+	void idleStatusChangedEventHandler(Idle & sender, Idle::Status status);
 };
 
 #endif	//QTPROFILEBAR_H

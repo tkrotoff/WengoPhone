@@ -52,15 +52,15 @@ public:
 	 * @param sender this class
 	 * @param status new idle or active status
 	 */
-	Event<void (Idle & sender, Status status)> idleEvent;
+	Event<void (Idle & sender, Status status)> statusChangedEvent;
+
+	Idle(QObject * parent);
 
 	/**
-	 * Constructs an Idle object.
-	 *
-	 * @param timeout time in seconds before considering
+	 * @param interval timeout time in seconds before considering
 	 *        the computer is in idle mode
 	 */
-	Idle(unsigned timeout, QObject * parent);
+	void setIntervalBeforeIdleStatus(unsigned interval);
 
 	/**
 	 * Starts the idle detection.

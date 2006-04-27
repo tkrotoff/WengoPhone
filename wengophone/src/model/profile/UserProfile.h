@@ -302,8 +302,8 @@ public:
 	 * Changes the PresenceState of this user.
 	 *
 	 * @param presenceState the PresenceState to set
-	 * @param imAccount the IMAccount to apply the PresenceState to.
-	 * Pass NULL to set the alias to all IMAccount.
+	 * @param imAccount the IMAccount to apply the PresenceState to;
+	 *        pass NULL to set the alias to all IMAccount
 	 */
 	void setPresenceState(EnumPresenceState::PresenceState presenceState, IMAccount * imAccount);
 

@@ -20,6 +20,8 @@
 #ifndef SEX_H
 #define SEX_H
 
+#include <util/NonCopyable.h>
+
 #include <string>
 
 /**
@@ -27,7 +29,7 @@
  *
  * @author Philippe Bernery
  */
-class EnumSex {
+class EnumSex : NonCopyable {
 public:
 
 	enum Sex {
@@ -51,7 +53,6 @@ public:
 	 * @return the sex represented by the string
 	 */
 	static Sex toSex(const std::string & sex);
-
 };
 
 #endif //SEX_H

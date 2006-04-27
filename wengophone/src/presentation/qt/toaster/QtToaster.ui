@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>338</width>
+    <width>339</width>
     <height>100</height>
    </rect>
   </property>
@@ -303,18 +303,10 @@
       </widget>
      </item>
      <item row="2" column="2" >
-      <widget class="QPushButton" name="actionButton3" >
-       <property name="text" >
-        <string>PushButton</string>
-       </property>
-      </widget>
+      <widget class="QPushButton" name="actionButton3" />
      </item>
      <item row="2" column="0" >
-      <widget class="QPushButton" name="actionButton1" >
-       <property name="text" >
-        <string>PushButton</string>
-       </property>
-      </widget>
+      <widget class="QPushButton" name="actionButton1" />
      </item>
      <item row="0" column="3" >
       <widget class="QPushButton" name="closeButton" >
@@ -338,17 +330,10 @@
          <height>22</height>
         </size>
        </property>
-       <property name="text" >
-        <string>PushButton</string>
-       </property>
       </widget>
      </item>
      <item row="2" column="1" >
-      <widget class="QPushButton" name="actionButton2" >
-       <property name="text" >
-        <string>PushButton</string>
-       </property>
-      </widget>
+      <widget class="QPushButton" name="actionButton2" />
      </item>
      <item row="0" column="0" colspan="3" >
       <widget class="QLabel" name="titleLabel" >
