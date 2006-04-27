@@ -36,32 +36,36 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_cWengoPhone(cWengoPhone) {
 
 	_statusBar = statusBar;
+
+	QWidget * statusGroup = new QWidget(_statusBar);
+	new QHBoxLayout(statusGroup);
+
     _wengoConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng","MNG",_statusBar);
-    _internetConnectionMovie = new QMovie(":/pics/statusbar/status-earth-online.mng","MNG",_statusBar);
+    _internetConnectionMovie = new QMovie(":/pics/statusbar/status-earth-connecting.mng","MNG",_statusBar);
 
 	_cWengoPhone.networkDiscoveryStateChangedEvent +=
 		boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 
-	_internetConnectionStateLabel = new QLabel(_statusBar);
-	//_internetConnectionStateLabel->setPixmap(QPixmap(":/pics/statusbar_connect_error.png"));
+	_internetConnectionStateLabel = new QLabel(statusGroup);
 	_internetConnectionStateLabel->setMovie(_internetConnectionMovie);
-	_internetConnectionMovie->start();
 	_internetConnectionStateLabel->setToolTip(tr("Not Connected"));
-	_statusBar->addPermanentWidget(_internetConnectionStateLabel);
+	statusGroup->layout()->addWidget(_internetConnectionStateLabel);
+	_internetConnectionMovie->start();
 
-
-
-	_phoneLineStateLabel = new QLabel(_statusBar);
-	//_phoneLineStateLabel->setPixmap(QPixmap(":/pics/statusbar_sip_error.png"));
+	_phoneLineStateLabel = new QLabel(statusGroup);
 	_phoneLineStateLabel->setMovie(_wengoConnectionMovie);
-	_wengoConnectionMovie->start();
 	_phoneLineStateLabel->setToolTip(tr("Not Connected"));
-	_statusBar->addPermanentWidget(_phoneLineStateLabel);
+	statusGroup->layout()->addWidget(_phoneLineStateLabel);
+	_wengoConnectionMovie->start();
 
-	_soundStateLabel = new QLabel(_statusBar);
+	_soundStateLabel = new QLabel(statusGroup);
+
 	_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar_audio_error.png"));
 	_phoneLineStateLabel->setToolTip(tr("Audio Configuration Error"));
-	_statusBar->addPermanentWidget(_soundStateLabel);
+	statusGroup->layout()->addWidget(_soundStateLabel);
+
+
+    _statusBar->addPermanentWidget(statusGroup);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this, _1, _2);
@@ -119,7 +123,7 @@ void QtStatusBar::networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount 
 	switch (state) {
 	case SipAccount::NetworkDiscoveryStateOk:
 		tooltip = tr("Internet Connection OK");
-		pixmap = ":/pics/statusbar/status-earth-online.mng";
+		pixmap = ":/pics/statusbar/status-earth-connecting.mng";
         _internetConnectionStateLabel->setPixmap(pixmap);
         _internetConnectionStateLabel->setToolTip(tooltip);
 		break;

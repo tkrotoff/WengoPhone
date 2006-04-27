@@ -50,8 +50,8 @@ QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
 
 void QtPhoneLine::initThreadSafe() {
 	//hangUpButton
-//	_hangUpButton = _qtWengoPhone->getHangUpButton();
-//	connect(_hangUpButton, SIGNAL(clicked()), SLOT(hangUpButtonClicked()));
+    //	_hangUpButton = _qtWengoPhone->getHangUpButton();
+    //	connect(_hangUpButton, SIGNAL(clicked()), SLOT(hangUpButtonClicked()));
 
 	//callButton
 	_connectionStatMovie = NULL;
