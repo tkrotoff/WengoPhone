@@ -142,7 +142,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	Idle * idle = new Idle(this);
 	idle->statusChangedEvent += boost::bind(&QtProfileBar::idleStatusChangedEventHandler, this, _1, _2);
-	idle->setIntervalBeforeIdleStatus(config.getGeneralNotAvailableTimer() * 60000);
+	idle->setIntervalBeforeIdleStatus(config.getGeneralAwayTimer() * 60000);
 	idle->start();
 }
 

@@ -126,10 +126,6 @@ public:
 	static const std::string AUDIO_RINGER_DEVICENAME_KEY;
 	std::string getAudioRingerDeviceName() const;
 
-	/** Personal audio configuration. */
-	static const std::string AUDIO_PERSONAL_CONFIGURATION_KEY;
-	bool getAudioPersonalConfiguration() const;
-
 	/** Ringing audio file name. */
 	static const std::string AUDIO_RINGING_FILE_KEY;
 	std::string getAudioRingingFile() const;
@@ -266,9 +262,10 @@ public:
 	static const std::string GENERAL_CLICK_CALL_CELLPHONE_KEY;
 	bool getGeneralClickCallCellPhone() const;
 
-	/** Show me as not available when I am inactive for. */
-	static const std::string GENERAL_NOTAVAILABLE_TIMER_KEY;
-	int getGeneralNotAvailableTimer() const;
+	/** Show me as away when I am inactive for. */
+	static const std::string GENERAL_AWAY_TIMER_KEY;
+	static const int NO_AWAY_TIMER = -1;
+	int getGeneralAwayTimer() const;
 
 	/** @} */
 

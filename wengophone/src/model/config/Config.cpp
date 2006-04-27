@@ -53,7 +53,6 @@ const std::string Config::AUDIO_OUTPUT_DEVICENAME_KEY = "audio.output.devicename
 const std::string Config::AUDIO_INPUT_DEVICENAME_KEY = "audio.input.devicename";
 const std::string Config::AUDIO_RINGER_DEVICENAME_KEY = "audio.ringer.devicename";
 const std::string Config::AUDIO_RINGING_FILE_KEY = "audio.ringing.file";
-const std::string Config::AUDIO_PERSONAL_CONFIGURATION_KEY = "audio.personal.configuration";
 const std::string Config::AUDIO_CALLCLOSED_FILE_KEY = "audio.callclosed.file";
 const std::string Config::AUDIO_SMILEYS_DIR_KEY = "audio.smileys.dir";
 const std::string Config::AUDIO_AEC_KEY = "audio.aec";
@@ -76,7 +75,7 @@ const std::string Config::GENERAL_AUTOSTART_KEY = "general.autostart";
 const std::string Config::GENERAL_CLICK_START_FREECALL_KEY = "general.click.start.freecall";
 const std::string Config::GENERAL_CLICK_START_CHAT_KEY = "general.click.start.chat";
 const std::string Config::GENERAL_CLICK_CALL_CELLPHONE_KEY = "general.click.call.cellphone";
-const std::string Config::GENERAL_NOTAVAILABLE_TIMER_KEY = "general.notavailable.timer";
+const std::string Config::GENERAL_AWAY_TIMER_KEY = "general.away.timer";
 
 const std::string Config::NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY = "notification.show.toaster.on.incoming.call";
 const std::string Config::NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY = "notification.show.toaster.on.contact";
@@ -196,7 +195,6 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[AUDIO_INPUT_DEVICENAME_KEY] = AudioDevice::getDefaultRecordDevice();
 	_keyDefaultValueMap[AUDIO_RINGER_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
 	_keyDefaultValueMap[AUDIO_RINGING_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
-	_keyDefaultValueMap[AUDIO_PERSONAL_CONFIGURATION_KEY] = false;
 	_keyDefaultValueMap[AUDIO_CALLCLOSED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/callclosed.wav");
 	_keyDefaultValueMap[AUDIO_SMILEYS_DIR_KEY] = File::convertPathSeparators(resourcesPath + "sounds/tones/");
 	_keyDefaultValueMap[AUDIO_AEC_KEY] = false;
@@ -219,7 +217,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[GENERAL_CLICK_START_FREECALL_KEY] = true;
 	_keyDefaultValueMap[GENERAL_CLICK_START_CHAT_KEY] = false;
 	_keyDefaultValueMap[GENERAL_CLICK_CALL_CELLPHONE_KEY] = false;
-	_keyDefaultValueMap[GENERAL_NOTAVAILABLE_TIMER_KEY] = 2;
+	_keyDefaultValueMap[GENERAL_AWAY_TIMER_KEY] = 2;
 
 	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY] = false;
 	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY] = false;
@@ -368,10 +366,6 @@ std::string Config::getAudioOutputDeviceName() const {
 	}
 }
 
-bool Config::getAudioPersonalConfiguration() const {
-	return getBooleanKeyValue(AUDIO_PERSONAL_CONFIGURATION_KEY);
-}
-
 std::string Config::getWengoServerHostname() const {
 	return getStringKeyValue(WENGO_SERVER_HOSTNAME_KEY);
 }
@@ -456,8 +450,8 @@ bool Config::getGeneralClickCallCellPhone() const {
 	return getBooleanKeyValue(GENERAL_CLICK_CALL_CELLPHONE_KEY);
 }
 
-int Config::getGeneralNotAvailableTimer() const {
-	return getIntegerKeyValue(GENERAL_NOTAVAILABLE_TIMER_KEY);
+int Config::getGeneralAwayTimer() const {
+	return getIntegerKeyValue(GENERAL_AWAY_TIMER_KEY);
 }
 
 bool Config::getNotificationShowToasterOnIncomingCall() const {

@@ -67,7 +67,6 @@ std::list<std::string> AudioDevice::getInputMixerDeviceList() {
 		const PaDeviceInfo * deviceInfo = Pa_GetDeviceInfo(i);
 
 		if (deviceInfo->maxInputChannels > 0) {
-			String deviceName;
 			if ((Pa_GetHostApiInfo(deviceInfo->hostApi)->type == paALSA) ||
 				(Pa_GetHostApiInfo(deviceInfo->hostApi)->type == paOSS) ||
 				(i != Pa_GetHostApiInfo(deviceInfo->hostApi)->defaultInputDevice)) {
@@ -100,7 +99,6 @@ std::list<std::string> AudioDevice::getOutputMixerDeviceList() {
 		const PaDeviceInfo * deviceInfo = Pa_GetDeviceInfo(i);
 
 		if (deviceInfo->maxOutputChannels > 0) {
-			String deviceName;
 			if ((Pa_GetHostApiInfo(deviceInfo->hostApi)->type == paALSA) ||
 				(Pa_GetHostApiInfo(deviceInfo->hostApi)->type == paOSS) ||
 				(i != Pa_GetHostApiInfo(deviceInfo->hostApi)->defaultOutputDevice)) {

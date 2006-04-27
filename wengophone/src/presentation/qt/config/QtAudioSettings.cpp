@@ -38,17 +38,6 @@ QtAudioSettings::QtAudioSettings(QWidget * parent)
 	_ui = new Ui::AudioSettings();
 	_ui->setupUi(_audioSettingsWidget);
 
-	//inputDeviceList
-	StringList inputDeviceList = AudioDevice::getInputMixerDeviceList();
-	_ui->inputDeviceComboBox->addItems(StringListConvert::toQStringList(inputDeviceList));
-
-	//outputDeviceList
-	StringList outputDeviceList = AudioDevice::getOutputMixerDeviceList();
-	_ui->outputDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
-
-	//ringingDeviceList = outputDeviceList
-	_ui->ringingDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
-
 	readConfig();
 }
 
@@ -62,16 +51,25 @@ void QtAudioSettings::saveConfig() {
 	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, _ui->inputDeviceComboBox->currentText().toStdString());
 	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, _ui->outputDeviceComboBox->currentText().toStdString());
 	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, _ui->ringingDeviceComboBox->currentText().toStdString());
-
-	config.set(Config::AUDIO_PERSONAL_CONFIGURATION_KEY, _ui->personalAudioConfig->isChecked());
 }
 
 void QtAudioSettings::readConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+	//inputDeviceList
+	StringList inputDeviceList = AudioDevice::getInputMixerDeviceList();
+	_ui->inputDeviceComboBox->clear();
+	_ui->inputDeviceComboBox->addItems(StringListConvert::toQStringList(inputDeviceList));
 	_ui->inputDeviceComboBox->setCurrentIndex(_ui->inputDeviceComboBox->findText(QString::fromStdString(config.getAudioInputDeviceName())));
-	_ui->outputDeviceComboBox->setCurrentIndex(_ui->outputDeviceComboBox->findText(QString::fromStdString(config.getAudioOutputDeviceName())));
-	_ui->ringingDeviceComboBox->setCurrentIndex(_ui->ringingDeviceComboBox->findText(QString::fromStdString(config.getAudioRingerDeviceName())));
 
-	_ui->personalAudioConfig->setChecked(config.getAudioPersonalConfiguration());
+	//outputDeviceList
+	StringList outputDeviceList = AudioDevice::getOutputMixerDeviceList();
+	_ui->outputDeviceComboBox->clear();
+	_ui->outputDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
+	_ui->outputDeviceComboBox->setCurrentIndex(_ui->outputDeviceComboBox->findText(QString::fromStdString(config.getAudioOutputDeviceName())));
+
+	//ringingDeviceList = outputDeviceList
+	_ui->ringingDeviceComboBox->clear();
+	_ui->ringingDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
+	_ui->ringingDeviceComboBox->setCurrentIndex(_ui->ringingDeviceComboBox->findText(QString::fromStdString(config.getAudioRingerDeviceName())));
 }
