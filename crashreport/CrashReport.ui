@@ -119,7 +119,7 @@ The WengoPhone Development Team.</string>
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="textEdit" >
+       <widget class="QTextEdit" name="descTextEdit" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>7</hsizetype>
@@ -146,7 +146,7 @@ The WengoPhone Development Team.</string>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit" />
+       <widget class="QLineEdit" name="mailLineEdit" />
       </item>
      </layout>
     </widget>
@@ -206,16 +206,16 @@ The WengoPhone Development Team.</string>
   <connection>
    <sender>cancelButton</sender>
    <signal>clicked()</signal>
-   <receiver>CrashReport</receiver>
+   <receiver>CrashReportForm</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>369</x>
-     <y>253</y>
+     <x>528</x>
+     <y>426</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>179</x>
-     <y>282</y>
+     <x>290</x>
+     <y>237</y>
     </hint>
    </hints>
   </connection>

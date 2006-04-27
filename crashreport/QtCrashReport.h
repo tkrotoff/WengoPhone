@@ -37,7 +37,7 @@ class QtCrashReport : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang = "", std::string style = "");
+	QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang = "");
 
 	~QtCrashReport();
 
@@ -57,8 +57,11 @@ private:
 
 	void initThreadSafe();
 
+	void createDescriptionFile();
 
 	FtpUpload * _ftpUpload;
+
+	FtpUpload * _ftpUpload2;
 
 	FtpUpload::Status _status;
 
@@ -68,11 +71,15 @@ private:
 
 	std::string _dumpfile;
 
+	std::string _descfile;
+
 	std::string _lang;
 
 	QDialog * _dialog;
 
 	Ui::CrashReportForm ui;
+
+	bool _firstFileUploaded;
 };
 
 #endif	//OW_QTCRASHREPORT_H

@@ -20,18 +20,28 @@
 #include "QtCrashReport.h"
 
 #include <cutil/global.h>
+#include <util/Date.h>
+#include <util/Time.h>
 #include <thread/Thread.h>
+
+#ifdef OS_WINDOWS
+	#include <system/WindowsVersion.h>
+#endif
 
 #include <QtGui>
 
-QtCrashReport::QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang, std::string style) 
+#include <fstream>
+
+QtCrashReport::QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang)
 	: QObjectThreadSafe(NULL), _dumpfile(dumpfile), _lang(lang)  {
 
 	_progressTotal = 0;
 	_progressNow = 0;
 	_status = FtpUpload::None;
+	_firstFileUploaded = false;
+	_descfile = _dumpfile + ".txt";
 	
-	_ftpUpload = new FtpUpload("ftp.wengo.fr", "wengophone_ng", dumpfile);
+	_ftpUpload = new FtpUpload("ftp.wengo.fr", "wengophone_ng", _dumpfile);
 	_ftpUpload->progressionEvent += boost::bind(&QtCrashReport::ftpProgressEventHandler, this, _1, _2, _3);
 	_ftpUpload->statusEvent += boost::bind(&QtCrashReport::ftpStatusEventHandler, this, _1, _2);
 
@@ -50,6 +60,7 @@ QtCrashReport::~QtCrashReport() {
 
 void QtCrashReport::sendButtonClicked() {
 	//start the upload
+	createDescriptionFile();
 	_ftpUpload->start();
 }
 
@@ -82,12 +93,53 @@ void QtCrashReport::updatePresentationThreadSafe() {
 	ui.progressBar->setValue(_progressNow);
 	
 	//sleep: only for the feeling
-	if( _status == FtpUpload::Ok ) {
-		Thread::sleep(1);
-		_dialog->close();
-	} else if (_status == FtpUpload::Error) {
-		Thread::sleep(1);
-		_dialog->close();
+	if(( _status == FtpUpload::Ok ) || (_status == FtpUpload::Error) ) {
+		
+		//TODO: upload the description file
+		if( !_firstFileUploaded  ) {
+			
+			_firstFileUploaded  = true;
+			ui.progressBar->setValue(0);
+
+			//delete _ftpUpload;
+			_ftpUpload2 = new FtpUpload("ftp.wengo.fr", "wengophone_ng", _descfile);
+			_ftpUpload2->progressionEvent += boost::bind(&QtCrashReport::ftpProgressEventHandler, this, _1, _2, _3);
+			_ftpUpload2->statusEvent += boost::bind(&QtCrashReport::ftpStatusEventHandler, this, _1, _2);
+			_ftpUpload2->start();
+			
+		} else {
+			Thread::sleep(1);
+			_dialog->close();
+		}
 	} else {
+		
 	}
+}
+
+void QtCrashReport::createDescriptionFile() {
+	
+	std::fstream file;
+	file.open(_descfile.c_str(), std::fstream::out);
+	
+	file << "Date: " << Date().toString() << std::endl;
+	file << "Time: " << Time().toString() << std::endl;
+
+#ifdef OS_WINDOWS
+	file << "Windows version: " << std::string(getWindowsVersion()) << std::endl;
+#endif
+	
+	std::string tmp = "";
+	if( ui.mailLineEdit ) {
+		
+		tmp = ui.mailLineEdit->text().toStdString();
+		file << "From: " << tmp << std::endl;
+	}
+	
+	if( ui.descTextEdit ) {
+		
+		tmp = ui.descTextEdit->toPlainText().toStdString();
+		file << "Description: " << tmp << std::endl;
+	}
+	
+	file.close();
 }
