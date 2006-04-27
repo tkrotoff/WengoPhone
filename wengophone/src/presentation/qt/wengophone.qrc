@@ -115,6 +115,11 @@
         <file>pics/statusbar_sip_error.png</file>
         <file>pics/statusbar_uptodate.png</file>
         <file>pics/statusbar_uptodate_error.png</file>
+        <file>pics/statusbar/status-earth-offline.png</file>
+        <file>pics/statusbar/status-earth-online.mng</file>
+        <file>pics/statusbar/status-network-connecting.mng</file>
+        <file>pics/statusbar/status-network-online.mng</file>
+        <file>pics/statusbar/status-network-offline.png</file>
         <file>pics/systray_icon.png</file>
         <file>pics/systray_icon_error.png</file>
         <file>pics/systray_popup_window.png</file>

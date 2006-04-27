@@ -36,17 +36,25 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_cWengoPhone(cWengoPhone) {
 
 	_statusBar = statusBar;
+    _wengoConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng","MNG",_statusBar);
+    _internetConnectionMovie = new QMovie(":/pics/statusbar/status-earth-online.mng","MNG",_statusBar);
 
 	_cWengoPhone.networkDiscoveryStateChangedEvent +=
 		boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 
 	_internetConnectionStateLabel = new QLabel(_statusBar);
-	_internetConnectionStateLabel->setPixmap(QPixmap(":/pics/statusbar_connect_error.png"));
+	//_internetConnectionStateLabel->setPixmap(QPixmap(":/pics/statusbar_connect_error.png"));
+	_internetConnectionStateLabel->setMovie(_internetConnectionMovie);
+	_internetConnectionMovie->start();
 	_internetConnectionStateLabel->setToolTip(tr("Not Connected"));
 	_statusBar->addPermanentWidget(_internetConnectionStateLabel);
 
+
+
 	_phoneLineStateLabel = new QLabel(_statusBar);
-	_phoneLineStateLabel->setPixmap(QPixmap(":/pics/statusbar_sip_error.png"));
+	//_phoneLineStateLabel->setPixmap(QPixmap(":/pics/statusbar_sip_error.png"));
+	_phoneLineStateLabel->setMovie(_wengoConnectionMovie);
+	_wengoConnectionMovie->start();
 	_phoneLineStateLabel->setToolTip(tr("Not Connected"));
 	_statusBar->addPermanentWidget(_phoneLineStateLabel);
 
@@ -105,36 +113,47 @@ void QtStatusBar::networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount 
 	QString tooltip;
 	QString pixmap;
 
+    delete _internetConnectionMovie;
+    _internetConnectionMovie = NULL;
+
 	switch (state) {
 	case SipAccount::NetworkDiscoveryStateOk:
 		tooltip = tr("Internet Connection OK");
-		pixmap = ":/pics/statusbar_connect.png";
+		pixmap = ":/pics/statusbar/status-earth-online.mng";
+        _internetConnectionStateLabel->setPixmap(pixmap);
+        _internetConnectionStateLabel->setToolTip(tooltip);
 		break;
 
 	case SipAccount::NetworkDiscoveryStateHTTPError:
 		tooltip = tr("Internet Connection Error");
-		pixmap = ":/pics/statusbar_connect_error.png";
+		pixmap = ":/pics/statusbar/status-earth-offline.png";
+        _internetConnectionStateLabel->setPixmap(pixmap);
+        _internetConnectionStateLabel->setToolTip(tooltip);
 		break;
 
 	case SipAccount::NetworkDiscoveryStateSIPError:
 		tooltip = tr("Internet Connection Error");
-		pixmap = ":/pics/statusbar_connect_error.png";
+		pixmap = ":/pics/statusbar/status-earth-offline.png";
+        _internetConnectionStateLabel->setPixmap(pixmap);
+        _internetConnectionStateLabel->setToolTip(tooltip);
 		break;
 
 	case SipAccount::NetworkDiscoveryStateProxyNeedsAuthentication:
 		tooltip = tr("Internet Connection Error");
-		pixmap = ":/pics/statusbar_connect_error.png";
+		pixmap = ":/pics/statusbar/status-earth-offline.png";
+        _internetConnectionStateLabel->setPixmap(pixmap);
+        _internetConnectionStateLabel->setToolTip(tooltip);
 		break;
 
 	case SipAccount::NetworkDiscoveryStateError:
 		tooltip = tr("Internet Connection Error");
-		pixmap = ":/pics/statusbar_connect_error.png";
+		pixmap = ":/pics/statusbar/status-earth-offline.png";
+        _internetConnectionStateLabel->setPixmap(pixmap);
+        _internetConnectionStateLabel->setToolTip(tooltip);
 		break;
 
 	default:
 		LOG_FATAL("unknown state=" + String::fromNumber(state));
 	};
 
-	_internetConnectionStateLabel->setPixmap(pixmap);
-	_internetConnectionStateLabel->setToolTip(tooltip);
 }

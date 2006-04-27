@@ -54,6 +54,7 @@ void QtPhoneLine::initThreadSafe() {
 //	connect(_hangUpButton, SIGNAL(clicked()), SLOT(hangUpButtonClicked()));
 
 	//callButton
+	_connectionStatMovie = NULL;
 	_callButton = _qtWengoPhone->getCallButton();
 	connect(_callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
 }
@@ -79,39 +80,50 @@ void QtPhoneLine::stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLi
 
 	QString tooltip;
 	QString pixmap;
-
+    if ( _connectionStatMovie )
+    {
+        delete _connectionStatMovie;
+    }
 	switch (state) {
 	case EnumPhoneLineState::PhoneLineStateDefault:
 		tooltip = tr("Not connected");
-		pixmap = ":/pics/statusbar_sip_error.png";
+		pixmap = ":/pics/statusbar/status-network-offline.png";
+        phoneLineStateLabel->setPixmap(pixmap);
+        phoneLineStateLabel->setToolTip(tooltip);
 		break;
 
 	case EnumPhoneLineState::PhoneLineStateServerError:
 		tooltip = tr("An error occured");
-		pixmap = ":/pics/statusbar_sip_error.png";
+		pixmap = ":/pics/statusbar/status-network-offline.png";
+        phoneLineStateLabel->setPixmap(pixmap);
+        phoneLineStateLabel->setToolTip(tooltip);
 		break;
 
 	case EnumPhoneLineState::PhoneLineStateTimeout:
 		tooltip = tr("An error occured");
-		pixmap = ":/pics/statusbar_sip_error.png";
+		pixmap = ":/pics/statusbar/status-network-offline.png";
+        phoneLineStateLabel->setPixmap(pixmap);
+        phoneLineStateLabel->setToolTip(tooltip);
 		break;
 
 	case EnumPhoneLineState::PhoneLineStateOk:
 		tooltip = tr("Register done");
-		pixmap = ":/pics/statusbar_sip.png";
+		_connectionStatMovie = new QMovie(":/pics/statusbar/status-network-online.mng","MNG",NULL);
+		phoneLineStateLabel->setMovie(_connectionStatMovie);
+		_connectionStatMovie->start();
+		//pixmap = ":/pics/statusbar/status-network-online.png";
 		break;
 
 	case EnumPhoneLineState::PhoneLineStateClosed:
 		tooltip = tr("Unregister done");
-		pixmap = ":/pics/statusbar_sip_error.png";
+		pixmap = ":/pics/statusbar/status-network-offline.png";
+        phoneLineStateLabel->setPixmap(pixmap);
+        phoneLineStateLabel->setToolTip(tooltip);
 		break;
-
 	default:
 		LOG_FATAL("unknown state=" + EnumPhoneLineState::toString(state));
 	};
 
-	phoneLineStateLabel->setPixmap(pixmap);
-	phoneLineStateLabel->setToolTip(tooltip);
 }
 
 void QtPhoneLine::phoneCallCreatedEventHandler(CPhoneCall & cPhoneCall) {

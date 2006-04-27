@@ -29,6 +29,7 @@ class Settings;
 
 class QStatusBar;
 class QLabel;
+class QMovie;
 
 /**
  * Main window status bar.
@@ -78,6 +79,10 @@ private:
 	QLabel * _internetConnectionStateLabel;
 
 	QLabel * _soundStateLabel;
+
+	QMovie * _wengoConnectionMovie;
+
+	QMovie * _internetConnectionMovie;
 };
 
 #endif	//QTSTATUSBAR_H
