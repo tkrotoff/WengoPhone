@@ -115,7 +115,8 @@ void QtVideoSettings::readConfig() {
 		break;
 
 	default:
-		LOG_FATAL("unknown video quality=" + String::fromNumber(videoQuality));
+		//LOG_FATAL("unknown video quality=" + String::fromNumber(videoQuality));
+		LOG_DEBUG("unknown video quality=" + String::fromNumber(videoQuality));
 	}
 
 	QList<QTreeWidgetItem *> items = _ui->videoQualityTreeWidget->findItems(videoQualityText, Qt::MatchExactly, VIDEO_QUALITY_COLUMN);

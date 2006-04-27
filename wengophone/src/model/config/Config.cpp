@@ -342,15 +342,30 @@ std::string Config::getAudioRingingFile() const {
 }
 
 std::string Config::getAudioRingerDeviceName() const {
-	return getStringKeyValue(AUDIO_RINGER_DEVICENAME_KEY);
+	std::string deviceName = getStringKeyValue(AUDIO_RINGER_DEVICENAME_KEY);
+	if (deviceName.empty()) {
+		return AudioDevice::getDefaultPlaybackDevice();
+	} else {
+		return deviceName;
+	}
 }
 
 std::string Config::getAudioInputDeviceName() const {
-	return getStringKeyValue(AUDIO_INPUT_DEVICENAME_KEY);
+	std::string deviceName = getStringKeyValue(AUDIO_INPUT_DEVICENAME_KEY);
+	if (deviceName.empty()) {
+		return AudioDevice::getDefaultRecordDevice();
+	} else {
+		return deviceName;
+	}
 }
 
 std::string Config::getAudioOutputDeviceName() const {
-	return getStringKeyValue(AUDIO_OUTPUT_DEVICENAME_KEY);
+	std::string deviceName = getStringKeyValue(AUDIO_OUTPUT_DEVICENAME_KEY);
+	if (deviceName.empty()) {
+		return AudioDevice::getDefaultPlaybackDevice();
+	} else {
+		return deviceName;
+	}
 }
 
 bool Config::getAudioPersonalConfiguration() const {

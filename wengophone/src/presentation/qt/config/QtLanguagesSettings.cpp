@@ -44,16 +44,20 @@ QtLanguagesSettings::~QtLanguagesSettings() {
 }
 
 void QtLanguagesSettings::saveConfig() {
+	static QTranslator * translator = new QTranslator();
 	/*
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.set(Config::LANGUAGE_KEY, _ui->listWidget->currentItem()->text().toStdString());
 	*/
 
-	QString language = _ui->listWidget->currentItem()->text();
+	QListWidgetItem * item = _ui->listWidget->currentItem();
 
-	QTranslator * translator = new QTranslator();
-	translator->load(language);
-	QApplication::installTranslator(translator);
+	if (item) {
+		QString language = item->text();
+
+		translator->load(language);
+		QApplication::installTranslator(translator);
+	}
 }
 
 void QtLanguagesSettings::readConfig() {

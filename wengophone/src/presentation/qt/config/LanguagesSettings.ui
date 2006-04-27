@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>296</width>
-    <height>246</height>
+    <width>278</width>
+    <height>268</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -19,8 +19,21 @@
    <property name="spacing" >
     <number>0</number>
    </property>
+   <item row="1" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="0" column="0" >
-    <widget class="QGroupBox" name="" >
+    <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Language</string>
      </property>
