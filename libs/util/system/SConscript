@@ -6,8 +6,14 @@ include_path = ['include']
 headers = []
 sources = [
 	'src/Startup.cpp',
-    'src/Processes.cpp',
+	'src/Processes.cpp',
 ]
+
+if WengoOSWindows():
+	sources += [
+		'src/WindowsVersion.c',
+	]
+	libs += ["Kernel32", "Advapi32", "User32"]
 
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
