@@ -30,7 +30,7 @@
 #include <iostream>
 
 StartupSettingListener::StartupSettingListener() {
-	_startup = new Startup("WengoPhone", Path::getApplicationDirPath() + "qtwengophone.exe");
+	_startup = new Startup("WengoPhoneNG", Path::getApplicationDirPath() + "qtwengophone.exe");
 	ConfigManager::getInstance().getCurrentConfig().valueChangedEvent += boost::bind(&StartupSettingListener::startupSettingChanged, this, _1, _2);
 }
 
