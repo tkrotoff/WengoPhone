@@ -8,11 +8,9 @@ lib_path = []
 include_path = ['include']
 headers = [
 	'include/idle/Idle.h',
-	'src/MouseOrKeyboardEventFilter.h',
 ]
 sources = [
 	'src/Idle.cpp',
-	'src/MouseOrKeyboardEventFilter.cpp',
 ]
 
 def moc(env, headers):

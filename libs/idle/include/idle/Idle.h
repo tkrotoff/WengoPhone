@@ -20,10 +20,11 @@
 #ifndef IDLE_H
 #define IDLE_H
 
-#include <QObject>
-
 #include <util/NonCopyable.h>
 #include <util/Event.h>
+
+#include <QObject>
+#include <QPoint>
 
 class QTimer;
 
@@ -74,7 +75,7 @@ public:
 
 private Q_SLOTS:
 
-	void mouseOrKeyboardEvent();
+	void checkMousePos();
 
 	void timeout();
 
@@ -84,6 +85,10 @@ private:
 	bool _idleMode;
 
 	QTimer * _timer;
+
+	QTimer * _checkMousePosTimer;
+
+	QPoint _originalMousePos;
 };
 
 #endif	//IDLE_H

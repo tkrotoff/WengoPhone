@@ -19,23 +19,28 @@
 
 #include <idle/Idle.h>
 
-#include "MouseOrKeyboardEventFilter.h"
-
 #include <util/Logger.h>
 
 #include <QtCore>
+#include <QCursor>
 
 Idle::Idle(QObject * parent)
 	: QObject(parent) {
 
 	_idleMode = false;
 
-	MouseOrKeyboardEventFilter * mouseOrKeyboardEventFilter = new MouseOrKeyboardEventFilter(this, SLOT(mouseOrKeyboardEvent()));
-	QCoreApplication::instance()->installEventFilter(mouseOrKeyboardEventFilter);
-
 	_timer = new QTimer(parent);
 	_timer->setSingleShot(true);
 	connect(_timer, SIGNAL(timeout()), SLOT(timeout()));
+
+	//Check mouse position every second
+	static const int CHECK_MOUSE_POS_TIMEOUT = 1000;
+
+	_checkMousePosTimer = new QTimer(parent);
+	_checkMousePosTimer->setSingleShot(false);
+	_checkMousePosTimer->setInterval(CHECK_MOUSE_POS_TIMEOUT);
+	connect(_checkMousePosTimer, SIGNAL(timeout()), SLOT(checkMousePos()));
+	_checkMousePosTimer->start();
 }
 
 void Idle::setIntervalBeforeIdleStatus(unsigned interval) {
@@ -43,6 +48,8 @@ void Idle::setIntervalBeforeIdleStatus(unsigned interval) {
 }
 
 void Idle::start() {
+	_originalMousePos = QCursor::pos();
+
 	stop();
 	_timer->start();
 }
@@ -51,20 +58,20 @@ void Idle::stop() {
 	_timer->stop();
 }
 
-void Idle::mouseOrKeyboardEvent() {
-	if (_idleMode) {
-		statusChangedEvent(*this, StatusActive);
-		LOG_DEBUG("active state");
+void Idle::checkMousePos() {
+	QPoint currentMousePos = QCursor::pos();
+	if (currentMousePos != _originalMousePos) {
+		if (_idleMode) {
+			statusChangedEvent(*this, StatusActive);
+			LOG_DEBUG("active state");
+			_idleMode = false;
+		}
+		start();
 	}
-
-	_idleMode = false;
-
-	//Restart timer
-	start();
 }
 
 void Idle::timeout() {
-	_idleMode = true;
 	statusChangedEvent(*this, StatusIdle);
 	LOG_DEBUG("idle state");
+	_idleMode = true;
 }
