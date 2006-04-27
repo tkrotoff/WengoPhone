@@ -24,11 +24,11 @@
 std::string Uuid::generate() {
 	UUID * pUUID = new UUID();
 	unsigned char *sUUID = NULL;
-	string result;
+	std::string result;
 
 	if (UuidCreateSequential(pUUID) == RPC_S_OK) {
 		UuidToString(pUUID, &sUUID);
-		result = string(sUUID);
+		result = std::string((char*)sUUID);
 		RpcStringFree(&sUUID);
 	}
 
