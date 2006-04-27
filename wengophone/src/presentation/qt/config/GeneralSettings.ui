@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>396</width>
+    <width>362</width>
     <height>351</height>
    </rect>
   </property>
@@ -77,7 +77,7 @@
           </widget>
          </item>
          <item row="0" column="1" >
-          <widget class="QSpinBox" name="notAvailableSpinBox" >
+          <widget class="QSpinBox" name="awaySpinBox" >
            <property name="maximumSize" >
             <size>
              <width>40</width>
@@ -87,9 +87,9 @@
           </widget>
          </item>
          <item row="0" column="0" >
-          <widget class="QCheckBox" name="showNotAvailableCheckBox" >
+          <widget class="QCheckBox" name="showAwayCheckBox" >
            <property name="text" >
-            <string>Show me as "not available" when I am inactive for:</string>
+            <string>Show me as "Away" when I am inactive for:</string>
            </property>
           </widget>
          </item>
@@ -181,8 +181,8 @@
   <tabstop>startFreeCallRadioButton</tabstop>
   <tabstop>callCellPhoneCheckBox</tabstop>
   <tabstop>startChatOnlyRadioButton</tabstop>
-  <tabstop>showNotAvailableCheckBox</tabstop>
-  <tabstop>notAvailableSpinBox</tabstop>
+  <tabstop>showAwayCheckBox</tabstop>
+  <tabstop>awaySpinBox</tabstop>
   <tabstop>editProfileButton</tabstop>
  </tabstops>
  <resources/>

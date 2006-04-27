@@ -41,6 +41,8 @@ QtGeneralSettings::~QtGeneralSettings() {
 	delete _ui;
 }
 
+static const int NO_AWAY_TIMER = -1;
+
 void QtGeneralSettings::readConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
@@ -48,7 +50,14 @@ void QtGeneralSettings::readConfig() {
 	_ui->startFreeCallRadioButton->setChecked(config.getGeneralClickStartFreeCall());
 	_ui->callCellPhoneCheckBox->setChecked(config.getGeneralClickCallCellPhone());
 	_ui->startChatOnlyRadioButton->setChecked(config.getGeneralClickStartChat());
-	_ui->notAvailableSpinBox->setValue(config.getGeneralNotAvailableTimer());
+
+	int awayTimer = config.getGeneralNotAvailableTimer();
+	if (awayTimer != NO_AWAY_TIMER) {
+		_ui->showAwayCheckBox->setChecked(true);
+		_ui->awaySpinBox->setValue(awayTimer);
+	} else {
+		_ui->showAwayCheckBox->setChecked(false);
+	}
 }
 
 void QtGeneralSettings::saveConfig() {
@@ -58,5 +67,11 @@ void QtGeneralSettings::saveConfig() {
 	config.set(Config::GENERAL_CLICK_START_FREECALL_KEY, _ui->startFreeCallRadioButton->isChecked());
 	config.set(Config::GENERAL_CLICK_CALL_CELLPHONE_KEY, _ui->callCellPhoneCheckBox->isChecked());
 	config.set(Config::GENERAL_CLICK_START_CHAT_KEY, _ui->startChatOnlyRadioButton->isChecked());
-	config.set(Config::GENERAL_NOTAVAILABLE_TIMER_KEY, _ui->notAvailableSpinBox->value());
+
+	int awayTimer = _ui->awaySpinBox->value();
+	if (_ui->showAwayCheckBox->isChecked()) {
+		config.set(Config::GENERAL_NOTAVAILABLE_TIMER_KEY, awayTimer);
+	} else {
+		config.set(Config::GENERAL_NOTAVAILABLE_TIMER_KEY, NO_AWAY_TIMER);
+	}
 }

@@ -53,6 +53,9 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 
 	//enableWenboxCheckBox
 	connect(_ui->enableWenboxCheckBox, SIGNAL(toggled(bool)), SLOT(enableWenboxCheckBoxToggled(bool)));
+
+	//halfDuplexCheckBox
+	connect(_ui->halfDuplexCheckBox, SIGNAL(toggled(bool)), SLOT(halfDuplexCheckBoxToggled(bool)));
 }
 
 QtConfigPanel::~QtConfigPanel() {
@@ -79,6 +82,11 @@ void QtConfigPanel::enableVideoCheckBoxToggled(bool checked) {
 void QtConfigPanel::enableWenboxCheckBoxToggled(bool checked) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.set(Config::WENBOX_ENABLE_KEY, checked);
+}
+
+void QtConfigPanel::halfDuplexCheckBoxToggled(bool checked) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.set(Config::AUDIO_HALFDUPLEX_KEY, checked);
 }
 
 void QtConfigPanel::configChangedEventHandler(Settings & sender, const std::string & key) {
@@ -110,5 +118,10 @@ void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const
 	if (key == Config::WENBOX_ENABLE_KEY) {
 		//enableWenboxCheckBox
 		_ui->enableWenboxCheckBox->setChecked(config.getWenboxEnable());
+	}
+
+	if (key == Config::AUDIO_HALFDUPLEX_KEY) {
+		//halfDuplexCheckBox
+		_ui->halfDuplexCheckBox->setChecked(config.getAudioHalfDuplex());
 	}
 }

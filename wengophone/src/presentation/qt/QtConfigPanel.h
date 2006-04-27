@@ -56,6 +56,8 @@ private Q_SLOTS:
 
 	void enableWenboxCheckBoxToggled(bool checked);
 
+	void halfDuplexCheckBoxToggled(bool checked);
+
 private:
 
 	void initThreadSafe() { }
