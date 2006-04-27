@@ -208,7 +208,7 @@ void GaimIMFactory::GaimIMInit()
 #endif
 
 #ifndef OS_WIN32
-	home_dir = g_build_filename(gaim_home_dir(), configPath.c_str(), "gaim", NULL);
+	home_dir = g_build_filename(configPath.c_str(), "gaim", NULL);
 	gaim_build_dir(home_dir, S_IRUSR|S_IWUSR|S_IXUSR);
 	gaim_util_set_user_dir(home_dir);
 #endif
