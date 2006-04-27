@@ -64,7 +64,9 @@ Q_SIGNALS:
 
 	void deleteMe(QtPhoneCall * qtPhoneCall);
 
-private Q_SLOTS:
+	void callRejected();
+
+public Q_SLOTS:
 
 	void acceptActionTriggered(bool checked);
 

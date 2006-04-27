@@ -33,6 +33,7 @@ QWidget (parent,f), _cWengoPhone(cWengoPhone)
 
 	// Setup the list widget
 	_layout->addWidget(_listWidget,0,0);
+	setAttribute(Qt::WA_DeleteOnClose,true);
 
 }
 
@@ -40,6 +41,7 @@ QWidget (parent,f), _cWengoPhone(cWengoPhone)
 void QtContactCallListWidget::addPhoneCall(QtPhoneCall * qtPhoneCall){
 	connect (qtPhoneCall,SIGNAL(startConference(QtPhoneCall *)),SLOT(startConference(QtPhoneCall *)));
 	connect (qtPhoneCall,SIGNAL(stopConference() ),SLOT(stopConference()));
+	connect (qtPhoneCall,SIGNAL(callRejected()), SLOT(callRejected()));
 	_listWidget->addPhoneCall(qtPhoneCall);
 }
 
@@ -86,3 +88,9 @@ void QtContactCallListWidget::stopConference(){
 
 }
 
+void QtContactCallListWidget::hangup(){
+
+}
+void QtContactCallListWidget::callRejected(){
+    close();
+}

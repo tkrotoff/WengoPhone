@@ -132,7 +132,7 @@ void QtPhoneLine::phoneCallCreatedEventHandlerThreadSafe(CPhoneCall & cPhoneCall
 		_callButton->setEnabled(false);
 	}
 	else {
-		LOG_FATAL("cannot be in this state=" + EnumPhoneCallState::toString(state));
+//		LOG_FATAL("cannot be in this state=" + EnumPhoneCallState::toString(state));
 	}
 }
 

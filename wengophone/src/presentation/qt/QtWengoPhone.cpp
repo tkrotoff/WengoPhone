@@ -301,22 +301,16 @@ void QtWengoPhone::initThreadSafe() {
 	_statusBar = new QtStatusBar(_cWengoPhone, statusBar);
 
 	//FIXME: can i create the widget here ?
-	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
+//	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
 
 	updatePresentation();
 	_wengoPhoneWindow->show();
-/*
-	QtToaster  * toaster = new QtToaster();
-	toaster->setTitle("Example toaster");
-	toaster->setMessage("Hello kavous !!!");
-	toaster->showToaster();
-*/
 }
 
 void QtWengoPhone::initButtons() {
 	//callButton
 	connect(_qtCallBar, SIGNAL(ButtonClicked()), SLOT(callButtonClicked()));
-	connect(_qtCallBar, SIGNAL(OffClicked()), SLOT(callButtonClicked()));
+	connect(_qtCallBar, SIGNAL(OffClicked()), SLOT(hangupButtonClicked()));
 	enableCallButton();
 
 	//hangUpButton
@@ -333,6 +327,10 @@ void QtWengoPhone::enableCallButton() {
 	//_videoCallButton->setEnabled(!phoneNumber.empty());
 }
 
+void QtWengoPhone::hangupButtonClicked(){
+
+}
+
 void QtWengoPhone::callButtonClicked() {
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 	if (!phoneNumber.empty()) {
@@ -342,14 +340,16 @@ void QtWengoPhone::callButtonClicked() {
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+	/*
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	static QWidget * tabPhoneCall = Object::findChild<QWidget *>(_tabWidget, "tabPhoneCall");
 	_tabWidget->setCurrentWidget(tabPhoneCall);
-	//static QGridLayout * layout = new QGridLayout(tabPhoneCall);
-
-	//layout->addWidget(qtPhoneCall->getWidget());
 	_contactCallListWidget->addPhoneCall(qtPhoneCall);
+	*/
+	QtContactCallListWidget * qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
+	_tabWidget->addTab(qtContactCallListWidget,"Call");
+	qtContactCallListWidget->addPhoneCall(qtPhoneCall);
 }
 
 void QtWengoPhone::showLoginWindow() {
@@ -374,9 +374,12 @@ void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
 }
 
 void QtWengoPhone::setPhoneCall(QtContactCallListWidget * qtContactCallListWidget) {
+	/*
 	QWidget * tabPhoneCall = Object::findChild<QWidget *>(_tabWidget,"tabPhoneCall");
 	Widget::createLayout(tabPhoneCall)->addWidget(qtContactCallListWidget);
 	_contactCallListWidget = qtContactCallListWidget;
+
+	*/
 }
 
 void QtWengoPhone::setSms(QtSms * qtSms) {

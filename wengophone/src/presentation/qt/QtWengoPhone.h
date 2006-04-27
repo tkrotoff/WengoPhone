@@ -117,6 +117,8 @@ private Q_SLOTS:
 
 	void callButtonClicked();
 
+	void hangupButtonClicked();
+
 	void enableCallButton();
 
 	void showWengoAccount();
@@ -250,7 +252,7 @@ private:
 	QtContactList *_contactList;
 
 	QtHistoryWidget * _qtHistoryWidget;
-	
+
 	QtContactCallListWidget * _contactCallListWidget;
 
 	QFrame * _iconBar;

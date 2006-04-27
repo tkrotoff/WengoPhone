@@ -237,11 +237,6 @@
              <string>Dialpad</string>
             </attribute>
            </widget>
-           <widget class="QWidget" name="tabPhoneCall" >
-            <attribute name="title" >
-             <string>Call</string>
-            </attribute>
-           </widget>
            <widget class="QWidget" name="tabHome" >
             <attribute name="title" >
              <string>Home</string>

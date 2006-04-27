@@ -311,6 +311,7 @@ void QtPhoneCall::acceptActionTriggered(bool) {
 
 void QtPhoneCall::rejectActionTriggered(bool) {
 	_cPhoneCall.hangUp();
+	callRejected();
 }
 
 void QtPhoneCall::holdResumeActionTriggered(bool) {

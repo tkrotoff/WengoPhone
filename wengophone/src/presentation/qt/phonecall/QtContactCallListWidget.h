@@ -45,6 +45,9 @@ public Q_SLOTS:
 
 	void stopConference();
 
+	void hangup();
+
+    void callRejected();
 
 
 protected:
