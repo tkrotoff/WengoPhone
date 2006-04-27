@@ -158,9 +158,9 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 
 		//Launches crashreport.exe
 		char commandLine[_MAX_PATH];
-		strcpy(commandLine, "crashreport");
+		strcpy(commandLine, "owcrashreport");
 		if (_styleName != NULL) {
-			strcat(commandLine, " -s ");
+			strcat(commandLine, " -style=");
 			strcat(commandLine, _styleName);
 		}
 		strcat(commandLine, " -d ");
