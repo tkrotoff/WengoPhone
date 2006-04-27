@@ -105,10 +105,10 @@ public:
 		return _callButton;
 	}
 
-	QtWengoStyleLabel * getHangUpButton() const {
+/*	QtWengoStyleLabel * getHangUpButton() const {
 		return _hangUpButton;
 	}
-
+*/
 	QComboBox * getPhoneComboBox() const {
 		return _phoneComboBox;
 	}

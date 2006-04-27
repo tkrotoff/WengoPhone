@@ -83,13 +83,15 @@ void QtContactCallListWidget::stopConference(){
 	phone = _listWidget->getPhoneCallList()[1];
 	_conferenceCall->removePhoneCall(phone->getCPhoneCall().getPhoneCall() );
 
-	// delete _conferenceCall;
+	delete _conferenceCall;
 	_conferenceCall = NULL;
 
 }
 
 void QtContactCallListWidget::hangup(){
-
+    QtPhoneCall * phone;
+    phone = _listWidget->getPhoneCallList()[0];
+    phone->rejectActionTriggered(true);
 }
 void QtContactCallListWidget::callRejected(){
     close();

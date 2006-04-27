@@ -36,7 +36,7 @@ QScrollArea(parent)
 void QtContactCallList::addPhoneCall(QtPhoneCall * qtPhoneCall){
 
 	_widgetLayout->addWidget( qtPhoneCall->getWidget() );
-	connect(qtPhoneCall,SIGNAL(deleteMe(qtPhoneCall *)), SLOT(deleteQtPhoneCall(qtPhoneCall *)));
+	connect(qtPhoneCall,SIGNAL(deleteMe(QtPhoneCall *)), SLOT(deleteQtPhoneCall(QtPhoneCall *)));
 	_phoneCallList.append(qtPhoneCall);
 }
 

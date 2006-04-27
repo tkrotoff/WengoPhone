@@ -328,7 +328,12 @@ void QtWengoPhone::enableCallButton() {
 }
 
 void QtWengoPhone::hangupButtonClicked(){
-
+     QtContactCallListWidget * widget = dynamic_cast<QtContactCallListWidget *>(_tabWidget->currentWidget());
+     if ( widget ){
+         widget->hangup();
+        //Widget is deleted automagically
+     }
+     _tabWidget->setCurrentIndex(0);
 }
 
 void QtWengoPhone::callButtonClicked() {
@@ -349,7 +354,9 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	*/
 	QtContactCallListWidget * qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
 	_tabWidget->addTab(qtContactCallListWidget,"Call");
+	_tabWidget->setCurrentWidget(qtContactCallListWidget);
 	qtContactCallListWidget->addPhoneCall(qtPhoneCall);
+	_hangUpButton->setEnabled(true);
 }
 
 void QtWengoPhone::showLoginWindow() {
