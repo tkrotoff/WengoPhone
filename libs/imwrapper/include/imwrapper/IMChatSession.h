@@ -220,7 +220,7 @@ private:
 
 	void typingStateChangedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, IMChat::TypingState state);
 
-	void contactAddedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId);
+	void contactAddedEventHandler(IMChat & sender, IMChatSession & imChatSession, const IMContact & imContact);
 
 	void contactRemovedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId);
 

@@ -32,22 +32,19 @@ QtChatHandler::QtChatHandler(CChatHandler & cChatHandler)
 	_cChatHandler(cChatHandler) {
 
 	_qtChatWidget = NULL;
-
-	_cChatHandler.newIMChatSessionCreatedEvent +=
-		boost::bind(&QtChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
 
 QtChatHandler::~QtChatHandler() {
 }
 
-void QtChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession) {
-	typedef PostEvent2<void (ChatHandler & sender, IMChatSession & imChatSession), ChatHandler &, IMChatSession &> MyPostEvent;
+void QtChatHandler::newIMChatSessionCreatedEventHandler(IMChatSession & imChatSession) {
+	typedef PostEvent1<void (IMChatSession & imChatSession), IMChatSession &> MyPostEvent;
 	MyPostEvent * event =
-		new MyPostEvent(boost::bind(&QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe, this, _1, _2), sender, imChatSession);
+		new MyPostEvent(boost::bind(&QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe, this, _1), imChatSession);
 	postEvent(event);
 }
 
-void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(ChatHandler & sender, IMChatSession & imChatSession) {
+void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession & imChatSession) {
 	if (!_qtChatWidget)
 	{
 		_qtChatWidget =  new ChatWindow(_cChatHandler, imChatSession);

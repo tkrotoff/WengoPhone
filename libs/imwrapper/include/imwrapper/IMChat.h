@@ -80,7 +80,7 @@ public:
 	 * @param imChatSession the session where a contact has been added
 	 * @param contactId the added contact
 	 */
-	Event<void (IMChat & sender, IMChatSession & imChatSession, const std::string & contactId)> contactAddedEvent;
+	Event<void (IMChat & sender, IMChatSession & imChatSession, const IMContact & imContact)> contactAddedEvent;
 
 	/**
 	 * Emitted when a contact is removed from a session

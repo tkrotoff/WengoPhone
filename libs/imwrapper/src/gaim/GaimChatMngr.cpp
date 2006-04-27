@@ -198,24 +198,31 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 
 	if (chatType == GAIM_CONV_TYPE_IM)
 	{
+		IMChatSession *chatSession = NULL;
+		IMContact imContact(*account, gaim_conversation_get_name(conv));
+
 		mConv = mChat->CreateChatSession();
 		mConv->gaim_conv_session = conv;
- 		conv->ui_data = mConv;	
+ 		conv->ui_data = mConv;
 
-		mChat->contactAddedEvent(*mChat, 
-								 *((IMChatSession *)(mConv->conv_session)), 
-								 gaim_conversation_get_name(conv));
+		chatSession = (IMChatSession *) mConv->conv_session;
+
+		((IMContactSet &) chatSession->getIMContactSet()).insert(imContact);
+		mChat->newIMChatSessionCreatedEvent(*mChat, *chatSession);
+
+		mChat->contactAddedEvent(*mChat, *chatSession, imContact);
 	}
 	else if (chatType == GAIM_CONV_TYPE_CHAT)
 	{
 		int id = (int) strtol(gaim_conversation_get_name(conv), (char **) NULL, 10);
 
-		if (mChat->FindChatStructById(id) == NULL)
+		if ((mConv = mChat->FindChatStructById(id)) == NULL)
 		{
 			mConv = mChat->CreateChatSession();
-			mConv->gaim_conv_session = conv;
-			conv->ui_data = mConv; 		
 		}
+
+		mConv->gaim_conv_session = conv;
+		conv->ui_data = mConv; 		
 	}
 }
 
@@ -267,19 +274,36 @@ void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
 	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
 								GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 	mConvInfo_t *mConv = NULL;
+	IMChatSession *chatSession = NULL;
 	GaimIMChat *mChat = FindIMChat(*account);
 
 	if (!mChat)
-		return;
+		LOG_FATAL("Can't find IMChat !");
 
 	mConv = (mConvInfo_t *) conv->ui_data;
+	chatSession = (IMChatSession *) mConv->conv_session;
 
 	for (l = users; l != NULL; l = l->next)
 	{
 		if (strcmp(gaim_account_get_username(gAccount), (char *) l->data))
-			mChat->contactAddedEvent(*mChat, 
-									*((IMChatSession *)(mConv->conv_session)), 
-									(char *) l->data);
+		{
+			IMContact imContact(*account, std::string((char *) l->data));
+
+			if (chatSession->getIMContactSet().find(imContact) != chatSession->getIMContactSet().end())
+			{
+				LOG_ERROR("IMContact for " + imContact.getContactId() + " already in IMContactList");
+			}
+			else
+			{	
+				((IMContactSet &) chatSession->getIMContactSet()).insert(imContact);
+
+				if (chatSession->getIMContactSet().size() == 1)
+					mChat->newIMChatSessionCreatedEvent(*mChat, *chatSession);
+
+				LOG_DEBUG("IMContact " + imContact.getContactId() + " added to IMContactList");
+				mChat->contactAddedEvent(*mChat, *chatSession, imContact);
+			}
+		}
 	}
 }
 

@@ -52,7 +52,7 @@ mConvInfo_t *GaimIMChat::CreateChatSession()
 	
 	AddChatSessionInList(mConv);
 	
-	newIMChatSessionCreatedEvent(*this, *chatSession);
+	//newIMChatSessionCreatedEvent(*this, *chatSession);
 
 	return mConv;
 }
@@ -70,7 +70,7 @@ void GaimIMChat::createSession(IMContactSet & imContactSet)
 
 	if (imContactSet.size() == 0)
 	{
-		return;
+		LOG_FATAL("imContactSet is empty !!");
 	}
 	else if (imContactSet.size() == 1)
 	{
@@ -168,6 +168,7 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	int BuddyNbr = chatSession.getIMContactSet().size();
+
 	
 	if (!gAccount)
 		LOG_FATAL("Account not found !!!");;
@@ -179,17 +180,14 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 
 	if (BuddyNbr == 0)
 	{
-		gConv = gaim_conversation_new(GAIM_CONV_TYPE_IM, gAccount, 
-									contactId.c_str());
-
-		mConv->gaim_conv_session = gConv;
+		LOG_ERROR("IMChatSession is empty");
 		return;
 	}
 
 	if (gaim_conversation_get_type(gConv) == GAIM_CONV_TYPE_IM)
 	{
 		GList *mlist = NULL;
-		const IMContactSet &chatContact = chatSession.getIMContactSet();
+		IMContactSet &chatContact = (IMContactSet &)chatSession.getIMContactSet();
 		IMContactSet::const_iterator it = chatContact.begin();
 		std::string firstContactId = it->getContactId();
 		GaimConnection *gGC;
@@ -208,8 +206,6 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 		
 		serv_chat_invite(gaim_conversation_get_gc(gConv), gaim_conv_chat_get_id(GAIM_CONV_CHAT(gConv)),
 			NULL, contactId.c_str());
-		
-		contactAddedEvent(*this, chatSession, contactId);
 	}
 	else
 	{

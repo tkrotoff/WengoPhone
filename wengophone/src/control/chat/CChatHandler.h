@@ -40,14 +40,6 @@ class UserProfile;
 class CChatHandler : NonCopyable {
 public:
 
-	/**
-	 * Emitted when a new IMChatSession has been created.
-	 *
-	 * @param sender this class
-	 * @param imChatSession the new IMChatSession
-	 */
-	Event<void (ChatHandler & sender, IMChatSession & imChatSession)> newIMChatSessionCreatedEvent;
-
 	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
 
 	UserProfile & getUserProfile() const { return _userProfile;}

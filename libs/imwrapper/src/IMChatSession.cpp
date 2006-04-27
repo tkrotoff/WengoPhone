@@ -152,18 +152,9 @@ int IMChatSession::getId() const {
 	return (long)this;
 }
 
-void IMChatSession::contactAddedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId) {
+void IMChatSession::contactAddedEventHandler(IMChat & sender, IMChatSession & imChatSession, const IMContact & imContact) {
 	if (imChatSession == *this) {
-		IMContact imContact(_imChat.getIMAccount(), contactId);
-		if (_imContactSet.find(imContact) != _imContactSet.end()) {
-			LOG_ERROR("IMContact for " + contactId + " already in IMContactList");
-		} else {
-			_imContactSet.insert(imContact);
-			LOG_DEBUG("IMContact " + contactId + " added to IMContactList");
-
-			//Takes the one from _imContactSet rather than imContact directly
-			contactAddedEvent(*this, *_imContactSet.find(imContact));
-		}
+		contactAddedEvent(*this, *_imContactSet.find(imContact));
 	}
 }
 
@@ -181,10 +172,17 @@ void IMChatSession::contactRemovedEventHandler(IMChat & sender, IMChatSession & 
 }
 
 bool IMChatSession::canDoMultiChat() {
-	if (_imChat.getIMAccount().getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
-		return true;
-	} else {
-		return false;
+	EnumIMProtocol::IMProtocol proto = _imChat.getIMAccount().getProtocol();
+
+	switch (proto) {
+		case EnumIMProtocol::IMProtocolMSN :
+			return true;
+		
+		case EnumIMProtocol::IMProtocolYahoo :
+			return true;
+
+		default :
+			return false;
 	}
 }
 

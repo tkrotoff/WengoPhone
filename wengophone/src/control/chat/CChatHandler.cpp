@@ -21,6 +21,7 @@
 
 #include <model/chat/ChatHandler.h>
 #include <presentation/PFactory.h>
+#include <presentation/PChatHandler.h>
 
 #include <util/Logger.h>
 
@@ -29,7 +30,6 @@ CChatHandler::CChatHandler(ChatHandler & chatHandler,UserProfile & userProfile)
 
 	_pChatHandler = PFactory::getFactory().createPresentationChatHandler(*this);
 
-	_chatHandler.newIMChatSessionCreatedEvent += newIMChatSessionCreatedEvent;
 	_chatHandler.newIMChatSessionCreatedEvent +=
 		boost::bind(&CChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
@@ -40,6 +40,7 @@ CChatHandler::~CChatHandler() {
 
 void CChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession) {
 	LOG_DEBUG("new IMChatSessionCreatedEvent");
+	_pChatHandler->newIMChatSessionCreatedEventHandler(imChatSession);
 }
 
 void CChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContactSet) {

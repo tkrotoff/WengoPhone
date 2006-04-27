@@ -56,7 +56,9 @@ void PhApiIMChat::newIMChatSessionCreatedEventHandler(PhApiWrapper & sender, IMC
 }
 
 void PhApiIMChat::contactAddedEventHandler(PhApiWrapper & sender, IMChatSession & imChatSession, const std::string & contactId) {
-	contactAddedEvent(*this, imChatSession, contactId);
+	IMContact imContact(_imAccount, contactId);
+	((IMContactSet &) imChatSession.getIMContactSet()).insert(imContact);
+	contactAddedEvent(*this, imChatSession, imContact);
 }
 
 void PhApiIMChat::contactRemovedEventHandler(PhApiWrapper & sender, IMChatSession & imChatSession, const std::string & contactId) {

@@ -26,7 +26,6 @@
 #include "QtChatWidget.h"
 #include "QtChatWindow.h"
 
-class ChatHandler;
 class CChatHandler;
 class IMContactSet;
 
@@ -45,16 +44,13 @@ public:
 
 	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
 
+	void newIMChatSessionCreatedEventHandler(IMChatSession & imChatSession);
+
 	void updatePresentation();
 
 private:
 
-	/**
-	 * @see ChatHandler::newChatSessionCreatedEvent
-	 */
-	void newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession);
-
-	void newIMChatSessionCreatedEventHandlerThreadSafe(ChatHandler & sender, IMChatSession & imChatSession);
+	void newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession & imChatSession);
 
 	void updatePresentationThreadSafe();
 

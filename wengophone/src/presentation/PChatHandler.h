@@ -42,6 +42,11 @@ public:
 	 * @see ChatHandler::createSession
 	 */
 	virtual void createSession(IMAccount & imAccount, IMContactSet & imContactSet) = 0;
+
+	/**
+	 * @see ChatHandler::newIMChatSessionCreatedEvent
+	 */
+	virtual void newIMChatSessionCreatedEventHandler(IMChatSession & imChatSession) = 0;
 };
 
 #endif	//PCHATHANDLER_H
