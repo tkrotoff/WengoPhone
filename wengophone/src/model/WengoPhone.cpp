@@ -72,20 +72,25 @@ WengoPhone::~WengoPhone() {
 	//Saves the configuration
 	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
 	configManagerStorage.save(config.getConfigDir());
+	////
+
+	// Saving the UserProfile
+	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
+	userProfileStorage->save(config.getConfigDir());
+	////
 
     /**
      *  Set up a timeout triggered if SIP registering is too long 
      *  so that closing WengoPhone NG is not too long.
-    */
+     */
 	static Timer shutdownTimeout;
     shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownTimeoutHandler, this);
     shutdownTimeout.start(3000, 3000);
-    
-    _userProfile.disconnect();
 
-	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
-	userProfileStorage->save(config.getConfigDir());
+	// Disconnection the UserProfile
+    _userProfile.disconnect();
 	delete userProfileStorage;
+	////
 
 	delete _startupSettingListener;
 }
