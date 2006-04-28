@@ -32,6 +32,8 @@
 
 #include <QtGui>
 
+static const char * MNG_FORMAT = "MNG";
+
 QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
 	: QObjectThreadSafe(NULL),
 	_cPhoneLine(cPhoneLine) {
@@ -108,7 +110,7 @@ void QtPhoneLine::stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLi
 
 	case EnumPhoneLineState::PhoneLineStateOk:
 		tooltip = tr("Register done");
-		_connectionStatMovie = new QMovie(":/pics/statusbar/status-network-online.mng","MNG",NULL);
+		_connectionStatMovie = new QMovie(":/pics/statusbar/status-network-online.mng",MNG_FORMAT,NULL);
 		phoneLineStateLabel->setMovie(_connectionStatMovie);
 		_connectionStatMovie->start();
 		//pixmap = ":/pics/statusbar/status-network-online.png";

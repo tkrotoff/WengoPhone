@@ -70,7 +70,6 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_soundStateLabel->setToolTip(tr("Audio Configuration Error"));
 	statusGroup->layout()->addWidget(_soundStateLabel);
 
-
     statusGroup->layout()->setMargin(0);
     statusGroup->layout()->setSpacing(0);
     _statusBar->addPermanentWidget(statusGroup);
