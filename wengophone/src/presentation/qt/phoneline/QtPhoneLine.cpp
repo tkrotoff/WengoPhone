@@ -112,7 +112,7 @@ void QtPhoneLine::stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLi
 		tooltip = tr("Register done");
 		// _connectionStatMovie = new QMovie(":/pics/statusbar/status-network-online.mng",MNG_FORMAT,NULL);
 		// phoneLineStateLabel->setMovie(_connectionStatMovie);
-		_connectionStatMovie->start();
+		//_connectionStatMovie->start();
 		pixmap = ":/pics/statusbar/status-network-online-static.png";
 		phoneLineStateLabel->setPixmap(pixmap);
 		phoneLineStateLabel->setToolTip(tooltip);
