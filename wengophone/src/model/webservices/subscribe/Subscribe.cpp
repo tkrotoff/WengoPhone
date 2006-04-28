@@ -33,7 +33,7 @@ WsWengoSubscribe::WsWengoSubscribe() {
 	//setup subscribe web service
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
-	setHttps(false);
+	setHttps(true);
 	setServicePath(config.getWengoSubscribePath());
 	setPort(80);
 	setWengoAuthentication(false);
