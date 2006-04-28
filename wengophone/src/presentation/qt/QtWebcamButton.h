@@ -17,42 +17,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCONFIGPANEL_H
-#define QTCONFIGPANEL_H
+#ifndef QTWEBCAMBUTTON_H
+#define QTWEBCAMBUTTON_H
 
 #include <qtutil/QObjectThreadSafe.h>
 
 class Settings;
 
-class QWidget;
-namespace Ui { class WengoPhoneWindowConfigPanel; }
+class QPushButton;
 
 /**
- * Audio and video configuration panel.
+ * Handles the webcam button from the main window.
  *
  * @author Tanguy Krotoff
  */
-class QtConfigPanel : public QObjectThreadSafe {
+class QtWebcamButton : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtConfigPanel(QWidget * parent);
-
-	~QtConfigPanel();
-
-	QWidget * getWidget() const {
-		return _configPanelWidget;
-	}
+	QtWebcamButton(QPushButton * webcamButton);
 
 private Q_SLOTS:
 
-	void inputSoundSliderValueChanged(int value);
-
-	void outputSoundSliderValueChanged(int value);
-
-	void enableWenboxCheckBoxToggled(bool checked);
-
-	void halfDuplexCheckBoxToggled(bool checked);
+	void enableVideo();
 
 private:
 
@@ -62,9 +49,11 @@ private:
 
 	void configChangedEventHandlerThreadSafe(Settings & sender, const std::string & key);
 
-	Ui::WengoPhoneWindowConfigPanel * _ui;
+	void changeWebcamButtonState();
 
-	QWidget * _configPanelWidget;
+	QPushButton * _webcamButton;
+
+	bool _enableVideo;
 };
 
-#endif	//QTCONFIGPANEL_H
+#endif	//QTWEBCAMBUTTON_H

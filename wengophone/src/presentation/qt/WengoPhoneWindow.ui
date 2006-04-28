@@ -231,7 +231,7 @@
         </widget>
        </item>
        <item row="0" column="4" >
-        <widget class="QPushButton" name="enableVideoButton" >
+        <widget class="QPushButton" name="webcamButton" >
          <property name="minimumSize" >
           <size>
            <width>38</width>
@@ -252,9 +252,6 @@
            <width>32</width>
            <height>32</height>
           </size>
-         </property>
-         <property name="checkable" >
-          <bool>true</bool>
          </property>
          <property name="flat" >
           <bool>true</bool>

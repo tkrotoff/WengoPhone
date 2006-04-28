@@ -107,6 +107,7 @@ sources = [
 	'QtWengoPhone.cpp',
 	'QtConfigPanel.cpp',
 	'QtDialpad.cpp',
+	'QtWebcamButton.cpp',
 	'QtAbout.cpp',
 	'QtHttpProxyLogin.cpp',
 	'phoneline/QtPhoneLine.cpp',

@@ -92,7 +92,7 @@ void QtVideoSettings::readConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	_ui->enableVideoGroupBox->setChecked(config.getVideoEnable());
-	_ui->webcamDeviceComboBox->setCurrentIndex(_ui->webcamDeviceComboBox->findText(QString::fromStdString(config.getVideoWebCamDevice())));
+	_ui->webcamDeviceComboBox->setCurrentIndex(_ui->webcamDeviceComboBox->findText(QString::fromStdString(config.getVideoWebcamDevice())));
 
 	int videoQuality = config.getVideoQuality();
 	QString videoQualityText;

@@ -28,15 +28,11 @@
 #include <model/history/History.h>
 #include <model/phonecall/SipAddress.h>
 
-#include <model/config/ConfigManager.h>
-#include <model/config/Config.h>
-
 #include <control/CWengoPhone.h>
 
 #include <imwrapper/EnumIMProtocol.h>
 
-#include <webcam/WebcamDriver.h>
-
+#include "QtWebcamButton.h"
 #include "statusbar/QtStatusBar.h"
 #include "phoneline/QtPhoneLine.h"
 #include "phonecall/QtPhoneCall.h"
@@ -137,13 +133,9 @@ void QtWengoPhone::initThreadSafe() {
 	_addContactButton = Object::findChild<QPushButton *>(_iconBar,"addContactButton");
 	connect(_addContactButton, SIGNAL(clicked()), SLOT(addContact()));
 
-	//enableVideoButton
-	_enableVideoButton = Object::findChild<QPushButton *>(_iconBar,"enableVideoButton");
-	WebcamDriver * webcam = WebcamDriver::getInstance();
-	if (webcam->getDeviceList().empty()) {
-		_enableVideoButton->setEnabled(false);
-	}
-	connect(_enableVideoButton, SIGNAL(toggled(bool)), SLOT(enableVideo(bool)));
+	//webcamButton
+	QPushButton * webcamButton = Object::findChild<QPushButton *>(_iconBar,"webcamButton");
+	new QtWebcamButton(webcamButton);
 
 	//Buttons initialization
 	initButtons();
@@ -542,14 +534,6 @@ void QtWengoPhone::addContact() {
 	QtEditContactProfile editContactDialog(QtEditContactProfile::ModeCreate,contact, _cWengoPhone);
 	editContactDialog.exec();
 	LOG_DEBUG("add contact");
-}
-
-void QtWengoPhone::enableVideo(bool checked) {
-	if (checked) {
-		_enableVideoButton->setIcon(QIcon(":pics/iconbar/webcam-off.png"));
-	} else {
-		_enableVideoButton->setIcon(QIcon(":pics/iconbar/webcam.png"));
-	}
 }
 
 void QtWengoPhone::showConfig() {

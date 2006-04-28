@@ -336,7 +336,7 @@ public:
 	bool getVideoEnable() const;
 
 	static const std::string VIDEO_WEBCAM_DEVICE_KEY;
-	std::string getVideoWebCamDevice() const;
+	std::string getVideoWebcamDevice() const;
 
 	static const std::string VIDEO_QUALITY_KEY;
 	int getVideoQuality() const;

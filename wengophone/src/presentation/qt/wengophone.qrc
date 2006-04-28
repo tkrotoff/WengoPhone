@@ -1,8 +1,5 @@
 <RCC>
     <qresource prefix="/" >
-        <file>pics/arrow_down.png</file>
-        <file>pics/arrow_right.png</file>
-        <file>pics/background.png</file>
         <file>pics/call_button.png</file>
         <file>pics/call_history.png</file>
         <file>pics/call_incoming.png</file>
@@ -221,7 +218,6 @@
         <file>imaccount/MSNSettings.ui</file>
         <file>imaccount/YahooSettings.ui</file>
         <file>login/LoginWindow.ui</file>
-        <file>login/contactWindow.ui</file>
         <file>login/profileWindow.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>

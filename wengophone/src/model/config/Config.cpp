@@ -21,6 +21,7 @@
 
 #include <sipwrapper/EnumNatType.h>
 
+#include <webcam/WebcamDriver.h>
 #include <webcam/EnumVideoQuality.h>
 
 #include <sound/AudioDevice.h>
@@ -31,7 +32,7 @@
 #include <cutil/global.h>
 
 #ifdef OS_MACOSX
-#include <CoreFoundation/CoreFoundation.h>
+	#include <CoreFoundation/CoreFoundation.h>
 #endif
 
 const std::string Config::NETWORK_SSO_SSL_KEY = "network.sso.ssl";
@@ -136,11 +137,8 @@ Config::Config(const std::string & name)
 
 	//Default resources path
 #if defined(OS_WINDOWS)
-
 	resourcesPath = Path::getApplicationDirPath();
-
 #elif defined(OS_MACOSX)
-
 	CFBundleRef mainBundle = CFBundleGetMainBundle();
 	if (mainBundle) {
 		CFURLRef url = CFBundleCopyResourcesDirectoryURL(mainBundle);
@@ -152,7 +150,6 @@ Config::Config(const std::string & name)
 
 		CFRelease(url);
 	}
-
 #endif
 	_keyDefaultValueMap[RESOURCES_DIR_KEY] = resourcesPath;
 
@@ -171,7 +168,6 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[NETWORK_PROXY_PASSWORD_KEY] = empty;
 
 #if defined(OS_MACOSX)
-
 	if (mainBundle) {
 		CFURLRef url = CFBundleCopyPrivateFrameworksURL(mainBundle);
 		char frameworkPath[1024];
@@ -183,12 +179,9 @@ Config::Config(const std::string & name)
 
 		CFRelease(url);
 	}
-
 #else
-
 	pluginsPath = empty;
-
-#endif // !OS_MACOSX
+#endif
 	_keyDefaultValueMap[CODEC_PLUGIN_PATH_KEY] = pluginsPath;
 
 	_keyDefaultValueMap[AUDIO_OUTPUT_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
@@ -233,7 +226,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[PRIVACY_SIGN_AS_INVISIBLE_KEY] = false;
 
 	_keyDefaultValueMap[VIDEO_ENABLE_KEY] = true;
-	_keyDefaultValueMap[VIDEO_WEBCAM_DEVICE_KEY] = empty;
+	_keyDefaultValueMap[VIDEO_WEBCAM_DEVICE_KEY] = WebcamDriver::getInstance()->getDefaultDevice();
 	_keyDefaultValueMap[VIDEO_QUALITY_KEY] = EnumVideoQuality::VideoQualityNormal;
 
 	_keyDefaultValueMap[WENGO_SERVER_HOSTNAME_KEY] = std::string("ws.wengo.fr");
@@ -502,7 +495,7 @@ bool Config::getVideoEnable() const {
 	return getBooleanKeyValue(VIDEO_ENABLE_KEY);
 }
 
-std::string Config::getVideoWebCamDevice() const {
+std::string Config::getVideoWebcamDevice() const {
 	return getStringKeyValue(VIDEO_WEBCAM_DEVICE_KEY);
 }
 
