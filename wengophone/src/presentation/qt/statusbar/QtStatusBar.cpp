@@ -71,7 +71,9 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	statusGroup->layout()->addWidget(_soundStateLabel);
 
 
-	_statusBar->addPermanentWidget(statusGroup);
+    statusGroup->layout()->setMargin(0);
+    statusGroup->layout()->setSpacing(0);
+    _statusBar->addPermanentWidget(statusGroup);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this, _1, _2);
