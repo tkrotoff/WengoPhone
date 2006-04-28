@@ -277,21 +277,21 @@ void QtProfileBar::createStatusMenu(){
 
 	QAction * action;
 
-	action = _statusMenu->addAction( tr( "Online" ) );
+	action = _statusMenu->addAction(QIcon(":/pics/status/online.png"),tr( "Online" ) );
 	connect(action,SIGNAL( triggered (bool) ),SLOT( onlineClicked(bool) ) );
 
-	action = _statusMenu->addAction( tr( "DND" ) );
+	action = _statusMenu->addAction(QIcon(":/pics/status/donotdisturb.png"), tr( "DND" ) );
 	connect(action,SIGNAL( triggered (bool) ),SLOT( dndClicked(bool) ) );
 
-	action = _statusMenu->addAction( tr( "Invisible" ) );
+	action = _statusMenu->addAction(QIcon(":/pics/status/offline.png"), tr( "Invisible" ) );
 	connect(action,SIGNAL( triggered (bool) ),SLOT( invisibleClicked(bool) ) );
 
-	action = _statusMenu->addAction( tr( "Away" ) );
+	action = _statusMenu->addAction(QIcon(":/pics/status/away.png"), tr( "Away" ) );
 	connect(action,SIGNAL( triggered (bool) ),SLOT( awayClicked(bool) ) );
-
-	action = _statusMenu->addAction( tr( "Forward to cellphone" ) );
+/*
+	action = _statusMenu->addAction(QIcon(":/pics/status/forward.png"), tr( "Forward to cellphone" ) );
 	connect(action,SIGNAL( triggered (bool) ),SLOT( forwardClicked(bool) ) );
-
+*/
 	QPoint p = _statusLabel->pos();
 
 	p.setY( p.y() + _statusLabel->rect().bottom() - 18 );

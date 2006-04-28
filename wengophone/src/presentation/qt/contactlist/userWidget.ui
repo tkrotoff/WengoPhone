@@ -170,9 +170,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="homePhoneLabel" >
+          <widget class="QLabel" name="cellPhoneLabel" >
            <property name="text" >
-            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">No phone set&lt;/p>&lt;/body>&lt;/html></string>
+            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">No cell phone number set&lt;/p>&lt;/body>&lt;/html></string>
            </property>
           </widget>
          </item>
@@ -219,9 +219,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="cellPhoneLabel" >
+          <widget class="QLabel" name="homePhoneLabel" >
            <property name="text" >
-            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">No cell phone set&lt;/p>&lt;/body>&lt;/html></string>
+            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">No phone number set&lt;/p>&lt;/body>&lt;/html></string>
            </property>
           </widget>
          </item>

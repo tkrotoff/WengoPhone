@@ -42,7 +42,7 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	QWidget * statusGroup = new QWidget(_statusBar);
 	new QHBoxLayout(statusGroup);
 	statusGroup->layout()->setMargin(0);
-	statusGroup->layout()->setSpacing(2);
+	statusGroup->layout()->setSpacing(3);
 
 	_wengoConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng", MNG_FORMAT, _statusBar);
 	_internetConnectionMovie = new QMovie(":/pics/statusbar/status-earth-connecting.mng", MNG_FORMAT, _statusBar);
@@ -66,12 +66,10 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 
 	//soundStateLabel
 	_soundStateLabel = new QLabel(statusGroup);
-	_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar_audio_error.png"));
+	_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar/status-audio-offline.png"));
 	_soundStateLabel->setToolTip(tr("Audio Configuration Error"));
 	statusGroup->layout()->addWidget(_soundStateLabel);
 
-    statusGroup->layout()->setMargin(0);
-    statusGroup->layout()->setSpacing(0);
     _statusBar->addPermanentWidget(statusGroup);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -108,7 +106,7 @@ void QtStatusBar::checkSoundConfigThreadSafe(Settings & sender, const std::strin
 			inputVolumeControl.getLevel() > 0 &&
 			AudioDevice::TypeInputMicrophone == AudioDevice::getSelectedRecordDevice(config.getAudioInputDeviceName())) {
 
-			_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar_audio.png"));
+			_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar/status-audio-online.png"));
 			_phoneLineStateLabel->setToolTip(tr("Audio Configuration OK"));
 		}
 	}

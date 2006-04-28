@@ -131,6 +131,9 @@
         <file>pics/statusbar/status-network-online.mng</file>
         <file>pics/statusbar/status-network-offline.png</file>
         <file>pics/statusbar/status-network-connecting.mng</file>
+        <file>pics/statusbar/status-audio-offline.png</file>
+        <file>pics/statusbar/status-audio-online.png</file>
+        <file>pics/statusbar/status-network-online-static.png</file>
         <file>pics/systray_icon.png</file>
         <file>pics/systray_icon_error.png</file>
         <file>pics/systray_popup_window.png</file>
@@ -148,6 +151,7 @@
         <file>pics/iconbar/webcam.png</file>
         <file>pics/iconbar/webcam-off.png</file>
         <file>pics/iconbar/sms2.png</file>
+        <file>pics/export1_96.png</file>
     </qresource>
     <qresource prefix="/data" >
         <file>AUTHORS</file>

@@ -99,15 +99,6 @@ void QtPhoneCall::initThreadSafe() {
 
 	_avatarLabel = Object::findChild<QLabel *>(_phoneCallWidget, "avatarLabel");
 
-	/*
-	QPixmap testPixmap(QSize(140,140));
-	QSvgRenderer svgRenderer(this);
-	svgRenderer.load(QString("images/w_dark.svg"));
-	QPainter painter(&testPixmap);
-	svgRenderer.render(&painter);
-	_avatarLabel->setPixmap(testPixmap);
-	*/
-
 	_popup = new QMenu(_phoneCallWidget);
 	//Accept call
 	_actionAcceptCall = _popup->addAction(tr("Accept"));
@@ -219,7 +210,6 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionHangupCall->setEnabled(false);
 		_statusLabel->setText(tr("Closed"));
 		delete _phoneCallWidget;
-
 		stopConference();
 		deleteMe(this);
 		break;

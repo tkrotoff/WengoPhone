@@ -54,7 +54,7 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent ,
 	_widgetLayout->setMargin(5);
 
 	_protocolLayout = new QGridLayout();
-	_protocolLayout->setSpacing(3);
+	_protocolLayout->setSpacing(5);
 	_protocolLayout->setMargin(0);
 
 
@@ -114,9 +114,8 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent ,
 
 
 	_jabberLabel->setPixmap(QPixmap(":pics/protocols/jabber.png"));
-	_jabberLabel->setToolTip(tr("Jabber"));
+	_jabberLabel->setToolTip(tr("Jabber / Google"));
     // _jabberLabel->setScaledContents ( true );
-
 
 	// Widget connections
 	connect ( _msnLabel,SIGNAL( clicked() ),SLOT( msnClicked() ) );
@@ -126,7 +125,6 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent ,
 	connect ( _avatarLabel, SIGNAL ( clicked() ), SLOT ( avatarClicked() ) );
 	connect ( _jabberLabel, SIGNAL ( clicked() ), SLOT ( jabberClicked() ) );
 	connect ( _nickNameEdit, SIGNAL(returnPressed ()), SLOT(nicknameChanged()));
-
 	// Widget initialization
 	init();
 }
