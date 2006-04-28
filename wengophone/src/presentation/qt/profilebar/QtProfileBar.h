@@ -30,8 +30,6 @@
 
 #include <model/webservices/info/WsInfo.h>
 
-#include <idle/Idle.h>
-
 class CWengoPhone;
 class IPhoneLine;
 class QtWengoStyleLabel;
@@ -128,11 +126,6 @@ private:
 	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
 
 	void setStatusLabel(const QString & on, const QString & off);
-
-	/**
-	 * Idle status has changed, IMAccount presence state should be changed.
-	 */
-	void idleStatusChangedEventHandler(Idle & sender, Idle::Status status);
 };
 
 #endif	//QTPROFILEBAR_H

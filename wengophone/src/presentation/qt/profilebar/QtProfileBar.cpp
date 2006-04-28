@@ -22,8 +22,6 @@
 #include <control/CWengoPhone.h>
 
 #include <model/account/wengo/WengoAccount.h>
-#include <model/config/ConfigManager.h>
-#include <model/config/Config.h>
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
@@ -149,12 +147,6 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
 	_userProfile.phoneLineCreatedEvent +=
 		boost::bind(&QtProfileBar::phoneLineCreatedEventHandler, this, _1, _2);
-
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	Idle * idle = new Idle(this);
-	idle->statusChangedEvent += boost::bind(&QtProfileBar::idleStatusChangedEventHandler, this, _1, _2);
-	idle->setIntervalBeforeIdleStatus(config.getGeneralAwayTimer() * 60000);
-	idle->start();
 }
 
 void QtProfileBar::statusClicked(){
@@ -303,24 +295,6 @@ void QtProfileBar::createStatusMenu(){
 	_statusMenu->setWindowOpacity(0.95);
 
 	_statusMenu->popup(mapToGlobal(p));
-}
-
-void QtProfileBar::idleStatusChangedEventHandler(Idle & sender, Idle::Status status) {
-	static EnumPresenceState::PresenceState presenceStateSaved;
-	switch (status) {
-	case Idle::StatusIdle:
-		presenceStateSaved = _userProfile.getPresenceState();
-		_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway, NULL);
-		break;
-
-	case Idle::StatusActive:
-		//Back to the previous presence state
-		_userProfile.setPresenceState(presenceStateSaved, NULL);
-		break;
-
-	default:
-		LOG_FATAL("unknow idle status=" + String::fromNumber(status));
-	}
 }
 
 void QtProfileBar::onlineClicked(bool){

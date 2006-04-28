@@ -33,6 +33,7 @@
 #include <imwrapper/EnumIMProtocol.h>
 
 #include "QtWebcamButton.h"
+#include "QtIdle.h"
 #include "statusbar/QtStatusBar.h"
 #include "phoneline/QtPhoneLine.h"
 #include "phonecall/QtPhoneCall.h"
@@ -279,6 +280,9 @@ void QtWengoPhone::initThreadSafe() {
 	int profileBarIndex = profileBar->addWidget(new QtProfileBar(_cWengoPhone, _cWengoPhone.getWengoPhone().getCurrentUserProfile(),profileBar));
 	profileBar->setCurrentIndex(profileBarIndex);
 	profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
+
+	//Idle detection
+	new QtIdle(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _wengoPhoneWindow);
 
 	//configPanel
 	QtConfigPanel * qtConfigPanel = new QtConfigPanel(_wengoPhoneWindow);
