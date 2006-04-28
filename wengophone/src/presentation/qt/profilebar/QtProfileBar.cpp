@@ -20,10 +20,11 @@
 #include "QtProfileBar.h"
 
 #include <control/CWengoPhone.h>
-#include <model/profile/UserProfile.h>
 
+#include <model/account/wengo/WengoAccount.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
 
@@ -144,7 +145,10 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	_creditWidget->setCWengoPhone(&_cWengoPhone);
 	_creditWidget->setVisible(false);
 
-	_userProfile.wsInfoCreatedEvent += boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
+	_userProfile.wsInfoCreatedEvent +=
+		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
+	_userProfile.phoneLineCreatedEvent +=
+		boost::bind(&QtProfileBar::phoneLineCreatedEventHandler, this, _1, _2);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	Idle * idle = new Idle(this);
@@ -396,6 +400,7 @@ void QtProfileBar::setOpen(bool status){
         // update();
     }
 }
+
 void QtProfileBar::setStatusLabel(const QString & on, const QString & off){
 
 	_statusLabel->setPixmaps(QPixmap(on),
@@ -408,3 +413,8 @@ void QtProfileBar::setStatusLabel(const QString & on, const QString & off){
 	                ); // no fill
     _statusLabel->update();
 }
+
+void QtProfileBar::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine) {
+	_nicknameLabel->setText(QString::fromStdString(_userProfile.getWengoAccount()->getIdentity()));
+}
+

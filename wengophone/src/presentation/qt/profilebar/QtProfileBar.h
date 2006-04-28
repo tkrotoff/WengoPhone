@@ -32,9 +32,10 @@
 
 #include <idle/Idle.h>
 
-class UserProfile;
 class CWengoPhone;
+class IPhoneLine;
 class QtWengoStyleLabel;
+class UserProfile;
 
 class QtProfileBar : public QWidget
 {
@@ -123,6 +124,8 @@ private:
 	void wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, float wengos);
 
 	void wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail);
+
+	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
 
 	void setStatusLabel(const QString & on, const QString & off);
 
