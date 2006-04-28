@@ -241,10 +241,27 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 }
 
 void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
-	//Image will be deleted in videoFrameReceivedThreadSafe
-	QImage * image = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
-			remoteVideoFrame.getHeight(), QImage::Format_RGB32);
 
+    
+    // the best image quality is obtained when the interim image size is set according to the screen target size
+    QSize size(640, 480); // will be the optimum interim resized image
+   	if (_videoWindow) {
+        QSize frameSize = _videoWindow->getFrameSize(); // screen target size
+        if (frameSize.width() < size.width()) {
+            size.setWidth(352);
+            size.setHeight(288);
+        }
+    }
+    
+
+	//Image will be deleted in videoFrameReceivedThreadSafe. Here we resize the remote image to the interim size
+	QImage *original = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
+			remoteVideoFrame.getHeight(), QImage::Format_RGB32);
+    
+    QImage *image = new QImage(original->scaled(size.width(), size.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
+    delete original;
+    
 	//If we want to embed the local webcam picture, we do it here
 	if (_encrustLocalWebcam) {
 		const unsigned offset_x = 10;
@@ -254,10 +271,10 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 		const QBrush border_color = Qt::black;
 
         // we force the ratio of the remote frame on the webcam frame (ignoring the webcam's aspect ratio)
-		unsigned width = remoteVideoFrame.getWidth() / ratio;
-		unsigned height = remoteVideoFrame.getHeight() / ratio;
-		unsigned posx = remoteVideoFrame.getWidth() - width - offset_x;
-		unsigned posy = remoteVideoFrame.getHeight() - height - offset_y;
+		unsigned width = size.width() / ratio;
+		unsigned height = size.height() / ratio;
+		unsigned posx = size.width() - width - offset_x;
+		unsigned posy = size.height() - height - offset_y;
 
 /*
 		piximage originalImage;
@@ -284,11 +301,13 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 				localVideoFrame.getHeight(),
 				QImage::Format_RGB32).scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-		QPainter painter(image);
+		QPainter painter;
+        painter.begin(image); 
         // draw a 1-pixel border around the local embedded frame
         painter.fillRect(posx - border_size, posy - border_size, width + 2*border_size, height + 2*border_size, border_color);
         // embed the image
 		painter.drawImage(posx, posy, localImage);
+        painter.end();
 	}
 
 	typedef PostEvent1<void (QImage *), QImage *> MyPostEvent;

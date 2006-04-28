@@ -57,6 +57,10 @@ QtVideo::QtVideo(QWidget * parent) {
 	connect(_fullScreenButton, SIGNAL(clicked()), SLOT(fullScreenButtonClicked()));
 }
 
+QSize QtVideo::getFrameSize() {
+    return _frame->frameRect().size();
+}
+
 void QtVideo::showImage(const QImage & image) {
 	_image = image;
 	_frame->update();

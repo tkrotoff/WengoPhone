@@ -40,6 +40,8 @@ public:
 		return _videoWindow;
 	}
 
+    QSize getFrameSize();
+
 private Q_SLOTS:
 
 	void paintEvent();
