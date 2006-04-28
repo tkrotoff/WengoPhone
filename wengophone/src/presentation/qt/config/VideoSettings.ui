@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>355</width>
-    <height>606</height>
+    <height>576</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -61,58 +61,51 @@
             <property name="spacing" >
              <number>6</number>
             </property>
-            <item row="1" column="0" >
-             <layout class="QGridLayout" >
-              <property name="margin" >
-               <number>0</number>
+            <item row="3" column="1" >
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Vertical</enum>
               </property>
-              <property name="spacing" >
-               <number>6</number>
+              <property name="sizeHint" >
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
               </property>
-              <item row="0" column="0" >
-               <widget class="QLabel" name="webcamPreviewLabel" >
-                <property name="minimumSize" >
-                 <size>
-                  <width>128</width>
-                  <height>128</height>
-                 </size>
-                </property>
-                <property name="maximumSize" >
-                 <size>
-                  <width>128</width>
-                  <height>128</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1" >
-               <widget class="QPushButton" name="webcamPreviewButton" >
-                <property name="text" >
-                 <string>Webcam preview</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             </spacer>
             </item>
-            <item row="0" column="0" >
-             <layout class="QHBoxLayout" >
-              <property name="margin" >
-               <number>0</number>
+            <item rowspan="4" row="0" column="0" >
+             <widget class="QLabel" name="webcamPreviewLabel" >
+              <property name="minimumSize" >
+               <size>
+                <width>128</width>
+                <height>128</height>
+               </size>
               </property>
-              <property name="spacing" >
-               <number>6</number>
+              <property name="maximumSize" >
+               <size>
+                <width>128</width>
+                <height>128</height>
+               </size>
               </property>
-              <item>
-               <widget class="QLabel" name="label_3" >
-                <property name="text" >
-                 <string>Webcam device:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="webcamDeviceComboBox" />
-              </item>
-             </layout>
+             </widget>
+            </item>
+            <item row="2" column="1" >
+             <widget class="QPushButton" name="webcamPreviewButton" >
+              <property name="text" >
+               <string>Webcam preview</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" >
+             <widget class="QLabel" name="label_3" >
+              <property name="text" >
+               <string>Webcam device:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" >
+             <widget class="QComboBox" name="webcamDeviceComboBox" />
             </item>
            </layout>
           </widget>
@@ -221,9 +214,6 @@
              <widget class="QLabel" name="label" >
               <property name="text" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;span style=" font-weight:600;">Warning!&lt;/span> When used for the first time we recommend that you select the normal video quality mode, then you can try different modes to find out the most suitable one&lt;/p>&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; font-weight:600;">Tips: &lt;span style=" font-weight:400;">Go to http://test.lvcm.com to determine your internet connection bandwidth&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
               </property>
               <property name="wordWrap" >
                <bool>true</bool>

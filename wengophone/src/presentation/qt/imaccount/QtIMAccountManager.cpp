@@ -67,6 +67,8 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, bool showAsDia
 	if (showAsDialog) {
 		connect(_ui->closeButton, SIGNAL(clicked()), _imAccountManagerWidget, SLOT(accept()));
 	} else {
+		_imAccountManagerWidget->layout()->setMargin(0);
+		_imAccountManagerWidget->layout()->setSpacing(0);
 		_ui->closeButton->hide();
 	}
 

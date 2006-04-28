@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>577</width>
-    <height>345</height>
+    <width>414</width>
+    <height>401</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -34,8 +34,11 @@
       <item row="1" column="0" >
        <widget class="QLabel" name="label" >
         <property name="text" >
-         <string>Les transferts d’appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et 
-nécessitent un crédit de Wengo’s. L’activation du transfert nécessite de renseigner un numéro mobile dans votre profil</string>
+         <string>Les transferts d'appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et 
+nécessitent un crédit de Wengo's. L'activation du transfert nécessite de renseigner un numéro mobile dans votre profil</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -64,9 +67,12 @@ nécessitent un crédit de Wengo’s. L’activation du transfert nécessite de 
       <item row="0" column="0" colspan="2" >
        <widget class="QLabel" name="label" >
         <property name="text" >
-         <string>Le transfert d’appel intervient si vous n’êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
-ou après vingt secondes si vous n’avez pas répondu. Vous pouvez configurer jusqu’à trois transferts 
-vers des postes fixes, des numéros mobiles ou sur votre messagerie. </string>
+         <string>Le transfert d'appel intervient si vous n'êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
+ou après vingt secondes si vous n'avez pas répondu. Vous pouvez configurer jusqu'à trois transferts 
+vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>true</bool>
         </property>
        </widget>
       </item>
