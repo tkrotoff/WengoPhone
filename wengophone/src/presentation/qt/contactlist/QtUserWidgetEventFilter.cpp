@@ -104,7 +104,13 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter,QRect rect)
 	int centeredText_y = (QtUser::UserSize - QFontMetrics(_target->font()).height() ) / 2;
 	textRect.setTop(textRect.top() + centeredText_y );
 
-	painter->drawText(textRect,Qt::AlignLeft,_user->getUserName(),0);
+
+    QFont font = painter->font();
+    font.setBold(true);
+    painter->setFont(font);
+    painter->drawText(textRect,Qt::AlignLeft,_user->getUserName(),0);
+    font.setBold(false);
+    painter->setFont(font);
 
 	int _iconsStartPosition;
 /*

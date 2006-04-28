@@ -74,16 +74,28 @@ void QtPhoneCall::initThreadSafe() {
 
 	//phoneNumberLabel
 	_nickNameLabel = Object::findChild<QLabel *>(_phoneCallWidget, "nickNameLabel");
-	_nickNameLabel->setText(callAddress);
+	QString tmp = QString("<html><head><meta name='qrichtext' content='1'/></head><body "
+	                      "style=white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
+                          " font-weight:400; font-style:normal; text-decoration:none;'><p style=' margin-top:0px; "
+                          " margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+                          "font-size:8pt;'><span style=' font-size:13pt; font-weight:600;'>%1</span></p></body></html>").arg(callAddress);
+
+	_nickNameLabel->setText(tmp);
+
+
+
+	/*
+
+	*/
 	_nickNameLabel->setToolTip(sipAddress);
 
 	_statusLabel = Object::findChild<QLabel *>(_phoneCallWidget, "statusLabel");
 	_statusLabel->setText("");
-	_statusLabel->setToolTip("Status");
+	_statusLabel->setToolTip(tr("Status"));
 
 	_durationLabel = Object::findChild<QLabel *>(_phoneCallWidget, "durationLabel");
 	_durationLabel->setText("00:00:00");
-	_durationLabel->setToolTip("Status");
+	_durationLabel->setToolTip(tr("Status"));
 
 	_avatarLabel = Object::findChild<QLabel *>(_phoneCallWidget, "avatarLabel");
 

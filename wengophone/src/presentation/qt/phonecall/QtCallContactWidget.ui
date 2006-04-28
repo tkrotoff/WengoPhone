@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>126</width>
-    <height>148</height>
+    <width>202</width>
+    <height>195</height>
    </rect>
   </property>
   <property name="palette" >
@@ -287,12 +287,18 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="2" column="0" >
+   <item row="3" column="0" >
     <widget class="QFrame" name="frame" >
+     <property name="minimumSize" >
+      <size>
+       <width>16</width>
+       <height>50</height>
+      </size>
+     </property>
      <property name="maximumSize" >
       <size>
        <width>16777215</width>
-       <height>22</height>
+       <height>50</height>
       </size>
      </property>
      <property name="palette" >
@@ -349,9 +355,9 @@
          <blue>255</blue>
         </color>
         <color>
-         <red>255</red>
-         <green>243</green>
-         <blue>181</blue>
+         <red>194</red>
+         <green>194</green>
+         <blue>194</blue>
         </color>
         <color>
          <red>64</red>
@@ -436,9 +442,9 @@
          <blue>255</blue>
         </color>
         <color>
-         <red>255</red>
-         <green>243</green>
-         <blue>181</blue>
+         <red>194</red>
+         <green>194</green>
+         <blue>194</blue>
         </color>
         <color>
          <red>64</red>
@@ -518,14 +524,14 @@
          <blue>100</blue>
         </color>
         <color>
-         <red>255</red>
-         <green>243</green>
-         <blue>181</blue>
+         <red>194</red>
+         <green>194</green>
+         <blue>194</blue>
         </color>
         <color>
-         <red>255</red>
-         <green>243</green>
-         <blue>181</blue>
+         <red>194</red>
+         <green>194</green>
+         <blue>194</blue>
         </color>
         <color>
          <red>0</red>
@@ -567,47 +573,50 @@
       <enum>QFrame::Box</enum>
      </property>
      <property name="frameShadow" >
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Plain</enum>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
-       <number>0</number>
+       <number>9</number>
       </property>
       <property name="spacing" >
-       <number>0</number>
+       <number>6</number>
       </property>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="durationLabel" >
+        <property name="text" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">Duration&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0" >
        <widget class="QLabel" name="statusLabel" >
         <property name="text" >
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">Status&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alignment" >
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="QLabel" name="durationLabel" >
-        <property name="text" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">Duration&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="nickNameLabel" >
-     <property name="text" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">NickName or number&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+   <item row="2" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter</set>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
      </property>
-    </widget>
+    </spacer>
    </item>
    <item row="0" column="0" >
     <widget class="QLabel" name="avatarLabel" >
@@ -616,6 +625,16 @@
      </property>
      <property name="pixmap" >
       <pixmap resource="../wengophone.qrc" >:/pics/contact_picture.png</pixmap>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="nickNameLabel" >
+     <property name="text" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;span style=" font-size:13pt; font-weight:600;">NickName or number&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="alignment" >
       <set>Qt::AlignCenter</set>

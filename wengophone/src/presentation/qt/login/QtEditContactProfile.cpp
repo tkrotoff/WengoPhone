@@ -18,6 +18,7 @@
 */
 
 #include <control/contactlist/CContact.h>
+#include <control/contactlist/CContactList.h>
 #include <control/CWengoPhone.h>
 
 #include <model/contactlist/Contact.h>
@@ -29,6 +30,8 @@
 #include <util/Logger.h>
 #include <util/Date.h>
 
+#include <qtutil/StringListConvert.h>
+
 #include <QtGui>
 
 #include "QtEditContactProfile.h"
@@ -39,8 +42,8 @@
 
 using namespace std;
 
-QtEditContactProfile::QtEditContactProfile(CContact & cContact, CWengoPhone & cWengoPhone, QWidget * parent) 
-: QDialog(parent), _cContact(cContact), _cWengoPhone(cWengoPhone) {
+QtEditContactProfile::QtEditContactProfile(QtEditContactProfile::EditMode mode,Contact & contact, CWengoPhone & cWengoPhone,QWidget * parent)
+: QDialog(parent), _contact(contact), _cWengoPhone(cWengoPhone), _mode(mode) {
 
 	_ui = new Ui::ContactDetails();
 	_ui->setupUi(this);
@@ -64,6 +67,8 @@ QtEditContactProfile::QtEditContactProfile(CContact & cContact, CWengoPhone & cW
 	connect(_ui->saveButton, SIGNAL(clicked()), this, SLOT(saveButtonClicked()));
 	connect(_ui->cancelButton, SIGNAL(clicked()), this, SLOT(cancelButtonClicked()));
 
+	QStringList tmp = StringListConvert::toQStringList(_cWengoPhone.getCContactList().getContactGroupStringList());
+    _ui->groupComboBox->insertItems(0, tmp);
 	readFromConfig();
 }
 
@@ -77,19 +82,19 @@ void QtEditContactProfile::cancelButtonClicked() {
 }
 
 void QtEditContactProfile::writeToConfig() {
-	Contact & c = _cContact.getContact();
+	// Contact & c = _cContact.getContact();
 
 	// Setting wengo id
-	c.setWengoPhoneId(_ui->alias->text().toStdString());
+	_contact.setWengoPhoneId(_ui->alias->text().toStdString());
 	////
 
 	// Setting name
-	c.setFirstName(_ui->firstName->text().toStdString());
-	c.setLastName(_ui->lastName->text().toStdString());
+	_contact.setFirstName(_ui->firstName->text().toStdString());
+	_contact.setLastName(_ui->lastName->text().toStdString());
 	////
 
 	// Setting sex
-	c.setSex((EnumSex::Sex) _ui->gender->currentIndex());
+	_contact.setSex((EnumSex::Sex) _ui->gender->currentIndex());
 	////
 
 	// Setting birthday
@@ -98,7 +103,7 @@ void QtEditContactProfile::writeToConfig() {
 	date.setDay(qdate.day());
 	date.setMonth(qdate.month());
 	date.setYear(qdate.year());
-	c.setBirthdate(date);
+	_contact.setBirthdate(date);
 	////
 
 	// Setting address
@@ -106,51 +111,55 @@ void QtEditContactProfile::writeToConfig() {
 	//address.setStateProvince(_state->text().toStdString());
 	//address.setCountry(_country->text().toStdString());
 	address.setCity(_ui->city->text().toStdString());
-	c.setStreetAddress(address);
+	_contact.setStreetAddress(address);
 	////
 
 	// Setting IMAccounts
 	////
 
 	// Setting phone numbers
-	c.setMobilePhone(_ui->cellPhone->text().toStdString());
-	c.setWorkPhone(_ui->workPhone->text().toStdString());
-	c.setHomePhone(_ui->homePhone->text().toStdString());
-	c.setWengoPhoneNumber(_ui->wengoPhone->text().toStdString());
+	_contact.setMobilePhone(_ui->cellPhone->text().toStdString());
+	_contact.setWorkPhone(_ui->workPhone->text().toStdString());
+	_contact.setHomePhone(_ui->homePhone->text().toStdString());
+	_contact.setWengoPhoneNumber(_ui->wengoPhone->text().toStdString());
 	////
 
 	// Setting emails
-	c.setPersonalEmail(_ui->email->text().toStdString());
+	_contact.setPersonalEmail(_ui->email->text().toStdString());
 	////
 
 	// Settings websites
-	c.setWebsite(_ui->web->text().toStdString());
+	_contact.setWebsite(_ui->web->text().toStdString());
 	////
+
+	if ( _mode == ModeCreate ){
+        _contact.addToContactGroup( _ui->groupComboBox->currentText().toStdString());
+	}
 }
 
 void QtEditContactProfile::readFromConfig() {
-	Contact & c = _cContact.getContact();
+	// Contact & c = _cContact.getContact();
 
 	// Setting wengo id
-	_ui->alias->setText(QString::fromStdString(c.getWengoPhoneId()));
+	_ui->alias->setText(QString::fromStdString(_contact.getWengoPhoneId()));
 	////
 
 	// Setting name
-	_ui->firstName->setText(QString::fromStdString(c.getFirstName()));
-	_ui->lastName->setText(QString::fromStdString(c.getLastName()));
+	_ui->firstName->setText(QString::fromStdString(_contact.getFirstName()));
+	_ui->lastName->setText(QString::fromStdString(_contact.getLastName()));
 	////
 
 	// Setting sex
-	_ui->gender->setCurrentIndex((int) c.getSex());
+	_ui->gender->setCurrentIndex((int) _contact.getSex());
 	////
 
 	// Setting birthday
-	Date date = c.getBirthdate();
+	Date date = _contact.getBirthdate();
 	_ui->birthDate->setDate(QDate(date.getYear(), date.getMonth(), date.getDay()));
 	////
 
 	// Setting address
-	StreetAddress address = c.getStreetAddress();
+	StreetAddress address = _contact.getStreetAddress();
 	//_ui->state->setText(QString::fromStdString(address.getStateProvince()));
 	//_ui->country->setText(QString::fromStdString(address.getCountry()));
 	_ui->city->setText(QString::fromStdString(address.getCity()));
@@ -158,8 +167,8 @@ void QtEditContactProfile::readFromConfig() {
 
 	// Setting IMAccounts
 	unsigned j = 0;
-	for (IMContactSet::const_iterator it = c.getIMContactSet().begin();
-		it != c.getIMContactSet().end();
+	for (IMContactSet::const_iterator it = _contact.getIMContactSet().begin();
+		it != _contact.getIMContactSet().end();
 		++it, ++j) {
 
 		QtIMContactDetails * qtIMContactDetails = new QtIMContactDetails((IMContact &)*it, _ui->IMAccountGroup);
@@ -168,23 +177,23 @@ void QtEditContactProfile::readFromConfig() {
 	////
 
 	// Setting phone numbers
-	_ui->cellPhone->setText(QString::fromStdString(c.getMobilePhone()));
-	_ui->workPhone->setText(QString::fromStdString(c.getWorkPhone()));
-	_ui->homePhone->setText(QString::fromStdString(c.getHomePhone()));
-	_ui->wengoPhone->setText(QString::fromStdString(c.getWengoPhoneNumber()));
+	_ui->cellPhone->setText(QString::fromStdString(_contact.getMobilePhone()));
+	_ui->workPhone->setText(QString::fromStdString(_contact.getWorkPhone()));
+	_ui->homePhone->setText(QString::fromStdString(_contact.getHomePhone()));
+	_ui->wengoPhone->setText(QString::fromStdString(_contact.getWengoPhoneNumber()));
 	////
 
 	// Setting emails
-	_ui->email->setText(QString::fromStdString(c.getPersonalEmail()));
+	_ui->email->setText(QString::fromStdString(_contact.getPersonalEmail()));
 	////
 
 	// Settings websites
-	_ui->web->setText(QString::fromStdString(c.getWebsite()));
+	_ui->web->setText(QString::fromStdString(_contact.getWebsite()));
 	////
 
 	// Setting icon
 	QPixmap pixmap;
-	string myData = c.getIcon().getData();
+	string myData = _contact.getIcon().getData();
 	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
 	_ui->avatarPixmap->setPixmap(pixmap.scaled(_ui->avatarPixmap->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 	////
@@ -205,7 +214,7 @@ void QtEditContactProfile::removeIMContactDetails(QtIMContactDetails * qtIMConta
 	QLayout * layout =  _ui->IMAccountGroup->layout();
 
 	if (layout) {
-		_cContact.removeIMContact(qtIMContactDetails->getIMContact());
+		_contact.removeIMContact(qtIMContactDetails->getIMContact());
 		layout->removeWidget(qtIMContactDetails);
 		delete qtIMContactDetails;
 	}
@@ -227,9 +236,8 @@ void QtEditContactProfile::addIMContact(EnumIMProtocol::IMProtocol imProtocol) {
 			it != imAccounts.end();
 			++it) {
 			imContact.setIMAccount(*it);
-			_cContact.addIMContact(imContact);
+			_contact.addIMContact(imContact);
 		}
-
 		readFromConfig();
 	}
 }
@@ -240,4 +248,8 @@ void QtEditContactProfile::removeButtonClicked(QtIMContactDetails * qtIMContactD
 
 void QtEditContactProfile::addIMContactButtonClicked() {
 	_addIMContactMenu->popup(_ui->addIMContactButton->mapToGlobal(_ui->addIMContactButton->pos()));
+}
+
+void QtEditContactProfile::createContact(){
+    Contact & contact = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getContactList().createContact();
 }

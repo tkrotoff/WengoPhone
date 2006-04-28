@@ -124,6 +124,8 @@ private:
 
 	void wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail);
 
+	void setStatusLabel(const QString & on, const QString & off);
+
 	/**
 	 * Idle status has changed, IMAccount presence state should be changed.
 	 */

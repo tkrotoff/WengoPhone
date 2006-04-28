@@ -39,6 +39,9 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent ,
 	setPalette(p);
 	setAutoFillBackground(true);
 */
+
+
+
 	_msnIMAccountMenu = NULL;
 	_yahooIMAccountMenu = NULL;
 	_jabberIMAccountMenu = NULL;
@@ -47,12 +50,14 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent ,
 
 	// Layouts
 	_widgetLayout = new QGridLayout( this );
-	_widgetLayout->setSpacing(0);
-	_widgetLayout->setMargin(0);
+	_widgetLayout->setSpacing(5);
+	_widgetLayout->setMargin(5);
 
 	_protocolLayout = new QGridLayout();
-	_protocolLayout->setSpacing(10);
+	_protocolLayout->setSpacing(3);
 	_protocolLayout->setMargin(0);
+
+
 
 	// Child widgets
 
@@ -69,23 +74,49 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent ,
 	_avatarLabel->setMaximumSize( QSize( 70,70 ) );
 
 	// Add widgets to the layouts
+    QVBoxLayout * vboxLayout = new QVBoxLayout();
 
 	_widgetLayout->addWidget( _avatarLabel,   0 , 0 );
 
-	_widgetLayout->addWidget( _nickNameEdit,  0 , 1 );
-	_widgetLayout->addLayout( _protocolLayout,1 , 1 );
+	//_widgetLayout->addWidget( _nickNameEdit,  0 , 1 );
+	vboxLayout->addWidget(_nickNameEdit, 0);
+    vboxLayout->addLayout(_protocolLayout,1);
 
+    _widgetLayout->addLayout(vboxLayout,0,1);
+
+	//_widgetLayout->addLayout( _protocolLayout,1 , 1 );
+
+    _protocolLayout->setColumnStretch ( 5, 1);
 	_protocolLayout->addWidget(_msnLabel     ,0 , 0 );
 	_protocolLayout->addWidget(_yahooLabel   ,0 , 1 );
 	_protocolLayout->addWidget(_wengoLabel   ,0 , 2 );
 	_protocolLayout->addWidget(_aimLabel     ,0 , 3 );
 	_protocolLayout->addWidget(_jabberLabel  ,0 , 4 );
+    //_widgetLayout->setRowStretch (5,1);
+	_msnLabel->setPixmap(QPixmap(":pics/protocols/msn.png"));
+	_msnLabel->setToolTip(tr("MSN"));
+	// _msnLabel->setScaledContents ( true );
 
-	_msnLabel->setPixmap(QPixmap(":pics/protocol_msn.png"));
-	_yahooLabel->setPixmap(QPixmap(":pics/protocol_yahoo.png"));
-	_wengoLabel->setPixmap(QPixmap(":pics/protocol_wengo.png"));
-	_aimLabel->setPixmap(QPixmap(":pics/protocol_aim.png"));
-	_jabberLabel->setPixmap(QPixmap(":pics/protocol_jabber.png"));
+
+	_yahooLabel->setPixmap(QPixmap(":pics/protocols/yahoo.png"));
+	_yahooLabel->setToolTip(tr("Yahoo!"));
+    // _yahooLabel->setScaledContents ( true );
+
+
+	_wengoLabel->setPixmap(QPixmap(":pics/protocols/wengo.png"));
+	_wengoLabel->setToolTip(tr("Wengo"));
+    // _wengoLabel->setScaledContents ( true );
+
+
+	_aimLabel->setPixmap(QPixmap(":pics/protocols/aim.png"));
+	_aimLabel->setToolTip(tr("Icq / Aim"));
+    // _aimLabel->setScaledContents ( true );
+
+
+	_jabberLabel->setPixmap(QPixmap(":pics/protocols/jabber.png"));
+	_jabberLabel->setToolTip(tr("Jabber"));
+    // _jabberLabel->setScaledContents ( true );
+
 
 	// Widget connections
 	connect ( _msnLabel,SIGNAL( clicked() ),SLOT( msnClicked() ) );

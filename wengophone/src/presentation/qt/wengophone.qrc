@@ -100,6 +100,16 @@
         <file>pics/protocol_msn.png</file>
         <file>pics/protocol_wengo.png</file>
         <file>pics/protocol_yahoo.png</file>
+        <file>pics/protocols/aim.png</file>
+        <file>pics/protocols/aim_off.png</file>
+        <file>pics/protocols/wengo.png</file>
+        <file>pics/protocols/wengo_off.png</file>
+        <file>pics/protocols/jabber.png</file>
+        <file>pics/protocols/jabber_off.png</file>
+        <file>pics/protocols/msn.png</file>
+        <file>pics/protocols/msn_off.png</file>
+        <file>pics/protocols/yahoo.png</file>
+        <file>pics/protocols/yahoo_off.png</file>
         <file>pics/sms.png</file>
         <file>pics/status/away.png</file>
         <file>pics/status/donotdisturb.png</file>

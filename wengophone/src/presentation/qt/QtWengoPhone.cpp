@@ -43,6 +43,7 @@
 #include "phonecall/QtContactCallListWidget.h"
 #include "login/QtLogin.h"
 #include "login/QtEditMyProfile.h"
+#include "login/QtEditContactProfile.h"
 #include "imaccount/QtIMAccountManager.h"
 #include "contactlist/QtContactList.h"
 #include "contactlist/QtAddContact.h"
@@ -536,7 +537,10 @@ void QtWengoPhone::exitApplication() {
 }
 
 void QtWengoPhone::addContact() {
-	QtAddContact * qtAddContact = new QtAddContact(_cWengoPhone, _wengoPhoneWindow);
+//	QtAddContact * qtAddContact = new QtAddContact(_cWengoPhone, _wengoPhoneWindow);
+    Contact & contact = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getContactList().createContact();
+	QtEditContactProfile editContactDialog(QtEditContactProfile::ModeCreate,contact, _cWengoPhone);
+	editContactDialog.exec();
 	LOG_DEBUG("add contact");
 }
 

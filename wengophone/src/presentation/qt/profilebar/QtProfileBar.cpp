@@ -29,6 +29,13 @@
 
 #include <qtutil/QtWengoStyleLabel.h>
 
+/*
+<file>pics/profilebar/bar_start_status_gray.png</file>
+<file>pics/profilebar/bar_start_status_green.png</file>
+<file>pics/profilebar/bar_start_status_orange.png</file>
+<file>pics/profilebar/bar_start_status_red.png</file>
+*/
+
 QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent , Qt::WFlags f )
 : QWidget (parent,f), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
 
@@ -314,18 +321,26 @@ void QtProfileBar::idleStatusChangedEventHandler(Idle & sender, Idle::Status sta
 
 void QtProfileBar::onlineClicked(bool){
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateOnline, NULL);
+    setStatusLabel(":/pics/profilebar/bar_start_status_green.png",
+                   ":/pics/profilebar/bar_on_start_status_green.png");
 }
 
 void QtProfileBar::dndClicked(bool){
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateDoNotDisturb, NULL);
+	setStatusLabel(":/pics/profilebar/bar_start_status_red.png",
+	               ":/pics/profilebar/bar_on_start_status_red.png");
 }
 
 void QtProfileBar::invisibleClicked(bool){
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateInvisible, NULL);
+	setStatusLabel(":/pics/profilebar/bar_start_status_gray.png",
+	               ":/pics/profilebar/bar_on_start_status_gray.png");
 }
 
 void QtProfileBar::awayClicked(bool){
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway, NULL);
+	setStatusLabel(":/pics/profilebar/bar_start_status_orange.png",
+	               ":/pics/profilebar/bar_on_start_status_orange.png");
 }
 
 void QtProfileBar::forwardClicked(bool){
@@ -380,4 +395,16 @@ void QtProfileBar::setOpen(bool status){
         // setAutoFillBackground(false);
         // update();
     }
+}
+void QtProfileBar::setStatusLabel(const QString & on, const QString & off){
+
+	_statusLabel->setPixmaps(QPixmap(on),
+	                QPixmap(), // no end
+	                QPixmap(), // no fill
+
+	                QPixmap(off),
+	                QPixmap(),  // no end
+	                QPixmap()
+	                ); // no fill
+    _statusLabel->update();
 }

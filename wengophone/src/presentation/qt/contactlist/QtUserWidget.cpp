@@ -40,8 +40,13 @@ QtUserWidget::QtUserWidget(CContact & cContact, QWidget * parent, Qt::WFlags f)
 	_homePhoneLabel = findChild<QLabel *>("homePhoneLabel");
 	_cellPhoneLabel = findChild<QLabel *>("cellPhoneLabel");
 
-	_homePhoneLabel->setText( QString::fromUtf8(_cContact.getContact().getHomePhone().c_str() ) );
-	_cellPhoneLabel->setText( QString::fromUtf8(_cContact.getContact().getMobilePhone().c_str() ) );
+    QString str = QString::fromUtf8(_cContact.getContact().getHomePhone().c_str());
+    if ( !str.isEmpty() )
+        _homePhoneLabel->setText( str );
+
+    str = QString::fromUtf8(_cContact.getContact().getMobilePhone().c_str());
+    if ( !str.isEmpty() )
+        _cellPhoneLabel->setText( str );
 
 	_avatarManager = new QtUserWidgetAvatarManager(this,_avatarLabel);
 	_avatarLabel->installEventFilter(_avatarManager);

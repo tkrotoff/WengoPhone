@@ -121,7 +121,7 @@ void QtUserManager::editContact(bool ){
 	QTreeWidgetItem * item = _tree->currentItem();
 
 	// The edit contact window
-	QtEditContactProfile editContactDialog(ul->getCContact(item->text(0)), _cWengoPhone);
+	QtEditContactProfile editContactDialog(QtEditContactProfile::ModeEdit,ul->getCContact(item->text(0)).getContact(), _cWengoPhone);
 	//editContact->set
 
 	editContactDialog.exec();

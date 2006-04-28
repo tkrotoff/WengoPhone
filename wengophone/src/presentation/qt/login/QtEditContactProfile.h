@@ -24,7 +24,7 @@
 
 #include <QDialog>
 
-class CContact;
+class Contact;
 class CWengoPhone;
 class QWidget;
 class QtIMContactDetails;
@@ -40,8 +40,9 @@ class QtEditContactProfile : public QDialog
 	Q_OBJECT
 
 public:
+    enum EditMode { ModeEdit, ModeCreate };
 
-	QtEditContactProfile (CContact & cContact, CWengoPhone & cWengoPhone, QWidget * parent = 0);
+	QtEditContactProfile (QtEditContactProfile::EditMode mode,Contact & contact, CWengoPhone & cWengoPhone, QWidget * parent = 0);
 
 private Q_SLOTS:
 
@@ -78,6 +79,8 @@ private:
 
 	void writeToConfig();
 
+	void createContact();
+
 	void addIMContactDetails(QtIMContactDetails * qtIMContactDetails);
 
 	void removeIMContactDetails(QtIMContactDetails * qtIMContactDetails);
@@ -87,7 +90,9 @@ private:
 	 */
 	Ui::ContactDetails * _ui;
 
-	CContact & _cContact;
+    EditMode _mode;
+
+	Contact & _contact;
 
 	CWengoPhone & _cWengoPhone;
 
