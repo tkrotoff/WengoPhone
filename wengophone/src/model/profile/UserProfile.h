@@ -197,6 +197,15 @@ public:
 	bool hasWengoAccount() const;
 
 	/**
+	 * Gets the WengoAccount.
+	 *
+	 * @return the WengoAccount
+	 */
+	WengoAccount * getWengoAccount() const {
+		return _wengoAccount;
+	}
+
+	/**
 	 * Gets the active phone call.
 	 *
 	 * Used for playing DTMF.
