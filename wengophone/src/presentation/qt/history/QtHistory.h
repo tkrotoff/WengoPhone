@@ -42,9 +42,9 @@ public:
 	void updatePresentation ();
 
 	void addHistoryMemento(const std::string & type, const std::string & date,
-		const std::string & time, int duration, const std::string & name, unsigned id);
+		const std::string & time, int duration, const std::string & name, unsigned int id);
 
-	void removeHistoryMemento(unsigned id);
+	void removeHistoryMemento(unsigned int id);
 
 	void clearAllEntries();
 
@@ -66,7 +66,7 @@ public Q_SLOTS:
 
 	void replayItem ( QtHistoryItem * item );
 
-	void removeItem( unsigned id);
+	void removeItem( unsigned int id);
 
 private:
 
@@ -76,11 +76,11 @@ private:
 
 	void historyLoadedEventHandler(CHistory &);
 
-	void mementoAddedEventHandler(CHistory &, unsigned id);
+	void mementoAddedEventHandler(CHistory &, unsigned int id);
 
-	void mementoUpdatedEventHandler(CHistory &, unsigned id);
+	void mementoUpdatedEventHandler(CHistory &, unsigned int id);
 
-	void mementoRemovedEventHandler(CHistory &, unsigned id);
+	void mementoRemovedEventHandler(CHistory &, unsigned int id);
 
 	QtHistoryWidget * _historyWidget;
 

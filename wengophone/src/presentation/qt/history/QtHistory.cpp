@@ -33,8 +33,7 @@
 #include <QTime>
 
 QtHistory::QtHistory( CHistory & cHistory )
-	: QObjectThreadSafe(NULL),
-	_cHistory(cHistory) {
+	: QObjectThreadSafe(NULL), _cHistory(cHistory) {
 
 	_cHistory.historyLoadedEvent += boost::bind(&QtHistory::historyLoadedEventHandler, this, _1);
 	_cHistory.mementoAddedEvent += boost::bind(&QtHistory::mementoAddedEventHandler, this, _1, _2);
@@ -89,7 +88,7 @@ void QtHistory::updatePresentationThreadSafe() {
 }
 
 void QtHistory::addHistoryMemento(const std::string & type, const std::string & date,
-		const std::string & time, int duration, const std::string & name, unsigned id) {
+		const std::string & time, int duration, const std::string & name, unsigned int id) {
 
 	QDate qdate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
 	QTime qtime = QTime::fromString(QString::fromStdString(time));
@@ -127,7 +126,7 @@ void QtHistory::addHistoryMemento(const std::string & type, const std::string & 
 	}
 }
 
-void QtHistory::removeHistoryMemento(unsigned id) {
+void QtHistory::removeHistoryMemento(unsigned int id) {
 	_cHistory.removeHistoryMemento(id);
 }
 
