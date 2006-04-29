@@ -37,7 +37,7 @@ include_path = []
 if WengoOSMacOSX():
 	include_path += [os.path.join(qtdir, 'lib', 'QtCore.framework', 'Headers')]
 	include_path += [os.path.join(qtdir, 'lib', 'QtGui.framework', 'Headers')]
-	include_path += [os.path.join(qtdir, 'lib', 'QtNetwork.framework', 'Headers')]
+#	include_path += [os.path.join(qtdir, 'lib', 'QtNetwork.framework', 'Headers')]
 	include_path += [os.path.join(qtdir, 'lib', 'QtXml.framework', 'Headers')]
 	include_path += [os.path.join(qtdir, 'lib', 'QtSvg.framework', 'Headers')]
 	include_path += [os.path.join(qtdir, 'include', 'QtUiTools')]
@@ -201,7 +201,7 @@ elif WengoOSMacOSX():
 		'-framework ApplicationServices',
 		'-framework QtCore',
 		'-framework QtGui',
-		'-framework QtNetwork',
+#		'-framework QtNetwork',
 		'-framework QtXml',
 		'-framework QtSvg',
 		'-F' + os.path.join(qtdir, 'lib'),
