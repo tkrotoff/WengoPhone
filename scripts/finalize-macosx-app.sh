@@ -93,6 +93,7 @@ testAndMkdir $WENGO_FRAMEWORK_PATH/QtCore.framework/Versions/4.0
 testAndMkdir $WENGO_FRAMEWORK_PATH/QtGui.framework/Versions/4.0
 testAndMkdir $WENGO_FRAMEWORK_PATH/QtXml.framework/Versions/4.0
 testAndMkdir $WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0
+testAndMkdir $WENGO_FRAMEWORK_PATH/QtNetwork.framework/Versions/4.0
 testAndMkdir $WENGO_FRAMEWORK_PATH/phapi-plugins
 
 testAndMkdir $WENGO_RESOURCES_PATH
@@ -104,18 +105,20 @@ cp $QTDIR/lib/QtCore.framework/Versions/4.0/QtCore $WENGO_FRAMEWORK_PATH/QtCore.
 cp $QTDIR/lib/QtGui.framework/Versions/4.0/QtGui $WENGO_FRAMEWORK_PATH/QtGui.framework/Versions/4.0/QtGui
 cp $QTDIR/lib/QtXml.framework/Versions/4.0/QtXml $WENGO_FRAMEWORK_PATH/QtXml.framework/Versions/4.0/QtXml
 cp $QTDIR/lib/QtSvg.framework/Versions/4.0/QtSvg $WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0/QtSvg
+cp $QTDIR/lib/QtNetwork.framework/Versions/4.0/QtNetwork $WENGO_FRAMEWORK_PATH/QtNetwork.framework/Versions/4.0/QtNetwork
 
 cp $QTDIR/lib/$LIBQTDESIGNER $WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER
 cp /sw/lib/libgnutls.12.dylib /sw/lib/libgcrypt.11.dylib /sw/lib/libtasn1.2.dylib /sw/lib/libpth.14.dylib /sw/lib/libgpg-error.0.dylib $WENGO_FRAMEWORK_PATH
 cp /sw/lib/libgmodule-2.0.0.dylib /sw/lib/libintl.1.dylib /sw/lib/libintl.3.dylib /sw/lib/libiconv.2.dylib /sw/lib/libglib-2.0.0.dylib /sw/lib/libgthread-2.0.0.dylib $WENGO_FRAMEWORK_PATH
 
-cp $WENGO_BUILD_PATH/phspeexplugin.dylib $WENGO_BUILD_PATH/libspeex.dylib $WENGO_FRAMEWORK_PATH/phapi-plugins
+cp $WENGO_BUILD_PATH/phspeexplugin.dylib $WENGO_BUILD_PATH/libspeex.1.dylib $WENGO_FRAMEWORK_PATH/phapi-plugins
 
 ##
 # Change install name of qtwengophone
 ##
 changeWengoPhoneInstallName "/sw/lib/libglib-2.0.0.dylib"
 changeWengoPhoneInstallName "/sw/lib/libintl.3.dylib"
+changeWengoPhoneInstallName "/sw/lib/libintl.1.dylib"
 changeWengoPhoneInstallName "/sw/lib/libiconv.2.dylib"
 changeWengoPhoneInstallName "/sw/lib/libgthread-2.0.0.dylib"
 changeWengoPhoneInstallName "/sw/lib/libgmodule-2.0.0.dylib"
@@ -125,6 +128,7 @@ changeWengoPhoneInstallName "$QTDIR/lib/QtCore.framework/Versions/4.0/QtCore" "Q
 changeWengoPhoneInstallName "$QTDIR/lib/QtGui.framework/Versions/4.0/QtGui" "QtGui.framework/Versions/4.0/QtGui"
 changeWengoPhoneInstallName "$QTDIR/lib/QtXml.framework/Versions/4.0/QtXml" "QtXml.framework/Versions/4.0/QtXml"
 changeWengoPhoneInstallName "$QTDIR/lib/QtSvg.framework/Versions/4.0/QtSvg" "QtSvg.framework/Versions/4.0/QtSvg"
+changeWengoPhoneInstallName "$QTDIR/lib/QtNetwork.framework/Versions/4.0/QtNetwork" "QtNetwork.framework/Versions/4.0/QtNetwork"
 
 ##
 # Change install name of copied libraries
@@ -137,6 +141,7 @@ install_name_tool -change "$QTDIR/lib/QtGui.framework/Versions/4.0/QtGui" "$WENG
 install_name_tool -change "$QTDIR/lib/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
 install_name_tool -change "$QTDIR/lib/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PREFIX/QtXml.framework/Versions/4.0/QtXml" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
 install_name_tool -change "$QTDIR/lib/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PREFIX/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER"
+install_name_tool -change "$QTDIR/lib/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtNetwork.framework/Versions/4.0/QtNetwork" "$WENGO_FRAMEWORK_PATH/QtNetwork.framework/Versions/4.0/QtNetwork"
 
 changeInstallName "/sw/lib/libglib-2.0.0.dylib" "$WENGO_FRAMEWORK_PATH/libgmodule-2.0.0.dylib"
 changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgmodule-2.0.0.dylib"
@@ -168,7 +173,7 @@ changeInstallName "/sw/lib/libgpg-error.0.dylib" "$WENGO_FRAMEWORK_PATH/libgcryp
 changeInstallName "/sw/lib/libintl.1.dylib" "$WENGO_FRAMEWORK_PATH/libgcrypt.11.dylib"
 changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgcrypt.11.dylib"
 
-install_name_tool -change "/usr/local/lib/libspeex.1.dylib" "libspeex.dylib" "$WENGO_FRAMEWORK_PATH/phapi-plugins/phspeexplugin.dylib"
+install_name_tool -change "/usr/local/lib/libspeex.1.dylib" "libspeex.1.dylib" "$WENGO_FRAMEWORK_PATH/phapi-plugins/phspeexplugin.dylib"
 
 ##
 # Copy resources files
