@@ -28,6 +28,7 @@
 #include <ortp.h>
 #include <ortp-export.h>
 #include <telephonyevents.h>
+#include "phdebug.h"
 #include "phapi.h"
 #include "phcall.h"
 #include "phmedia.h"
@@ -42,10 +43,6 @@
 #include "phglobal.h"
 
 #include <portaudio.h>
-
-static void no_printf(const char *x, ...) { }
- 
-#define ph_printf  printf
 
 #ifdef T_MSVC
 #define strncasecmp strnicmp
@@ -165,7 +162,9 @@ void ph_pa_driver_init()
     
   int err = Pa_Initialize();
   if ( err == paNoError )
+  {
     ph_register_audio_driver(&ph_pa_driver);
+  }
   Pa_Terminate();
   
   lat = getenv("PH_PA_LATENCY");
@@ -188,7 +187,7 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
   int rateIndex;
   double drate = (double) rate;
 
-  ph_printf("pa_dev_open\n");  
+  DBG5_DYNA_AUDIO_DRV("pa_dev_open: (name: %s, rate: %d, framesize: %d)\n", name, rate, framesize, 0);
   
   if (!strncasecmp(name, "pa:", 3))
     name += 3;
@@ -211,8 +210,8 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
       outputParameters.device = Pa_GetDefaultOutputDevice();
     }
 
-  ph_printf("pa_dev_open: PA Input %d, PA Output %d\n", inputParameters.device,
-		outputParameters.device);
+  DBG5_DYNA_AUDIO_DRV("pa_dev_open: PA Input %d, PA Output %d\n", inputParameters.device,
+		outputParameters.device,0,0);
    
   inputParameters.channelCount = 1;    
   inputParameters.sampleFormat = paInt16;
@@ -233,9 +232,8 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
 
   outputParameters.hostApiSpecificStreamInfo = 0;
 
-
-  ph_printf("pa_dev_open: using latencies  in = %d ms, out = %d ms\n",  (int) (inputParameters.suggestedLatency * 1000.0),
-	    (int) (outputParameters.suggestedLatency * 1000.0));
+  DBG5_DYNA_AUDIO_DRV("pa_dev_open: using latencies  in = %d ms, out = %d ms\n",  (int) (inputParameters.suggestedLatency * 1000.0),
+	    (int) (outputParameters.suggestedLatency * 1000.0),0,0);
 
 
   /* find the nearest matching entry in the table */
@@ -263,7 +261,7 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
     }
   else 
     {
-      /* find a smapling rate that IS accepted */
+      /* find a sampling rate that IS accepted */
       i = rateIndex + 1;
       rateIndex =  -1;
       for (i = 0; standardSampleRates[i] > 0; i++ )
@@ -333,8 +331,7 @@ int pa_stream_open(phastream_t *as, char *name, int rate, int framesize, ph_audi
   if (!pd)
     return -PH_NORESOURCES;
 
-  
-  ph_printf("pa_stream_open\n");
+  DBG5_DYNA_AUDIO_DRV("pa_stream_open: (name: %s, rate: %d, framesize: %d)\n", name, rate, framesize, 0);
   
   Pa_Initialize();
 
@@ -383,11 +380,11 @@ int pa_stream_open(phastream_t *as, char *name, int rate, int framesize, ph_audi
 
 void pa_stream_close(phastream_t *as)
 {
-  ph_printf("pa_stream_close\n");
+    DBG5_DYNA_AUDIO_DRV("pa_stream_close\n", 0,0,0,0);
 
   if (!as->drvinfo)
     {
-      ph_printf("pa stream already closed\n");
+      DBG5_DYNA_AUDIO_DRV("pa stream already closed\n", 0,0,0,0);
       return;
     }
 

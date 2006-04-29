@@ -18,6 +18,7 @@
 */
 
 #include <string.h>
+#include "phdebug.h"
 #include "phaudiodriver.h"
 
 #ifdef WIN32
@@ -35,19 +36,26 @@ void ph_register_audio_driver(struct ph_audio_driver *d)
 {
   struct ph_audio_driver **map = ph_snd_driver_map;
 
-
+  DBG5_DYNA_AUDIO_DRV("registering audio driver of kind \"%s\" ...\n", d->snd_driver_kind,0,0,0);
+  
   if (!d)
     return;
 
   for( ; map  < &ph_snd_driver_map[MAX_SOUND_DRIVERS]; map++)
     {
+        
       if (*map == d)
-	return;
+        {
+        DBG5_DYNA_AUDIO_DRV("...already registered\n", 0,0,0,0);
+	    return;
+        }
+        
       if (!*map)
-	{
-	  *map = d;
-	  return;
-	}
+	    {
+	    *map = d;
+        DBG5_DYNA_AUDIO_DRV("...registration ok\n", 0,0,0,0);
+	    return;
+	    }
     }
 }
 

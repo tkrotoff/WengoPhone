@@ -226,7 +226,11 @@ int ph_media_video_send_frame(phvstream_t *video_stream, phm_videoframe_t *phmvf
 	return 1;
 }
 
-
+/**
+ * @brief used to allocate static buffers that will hold the images
+ * 
+ * It is in this function that the callback format for images is decided
+ */
 void ph_media_video_alloc_processing_buffers(phvstream_t *vstream, unsigned width_source, unsigned height_source) {
 	vstream->width_proc_source = width_source;
 	vstream->height_proc_source = height_source;
@@ -438,7 +442,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   // wt is always initialized because the webcam object holds the convertImage function...
   video_stream->wt = webcam_get_instance();
 
-  // choixe of the frame server and init sequence
+  // choice of the frame server and init sequence
   if (sp->traffictype & PH_MSTREAM_TRAFFIC_OUT) {
     if (ph_media_video_initialize_webcam(video_stream)) {
       video_stream->phmfs_webcam.state = 1;

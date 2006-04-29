@@ -17,10 +17,10 @@ enum phcodec_types
 
 struct phcodec
 {
-  const char *mime;                  /** mime string desribing the codec */
-  int   clockrate;
+  const char *mime;                  /** mime string describing the codec */
+  int   clockrate; /** sampling rate of the decoded signal */
   int   encoded_framesize;
-  int   decoded_framesize;
+  int   decoded_framesize; /** size in bytes of a 20ms frame of samples */
   void  *(*encoder_init)(void *);
   void  *(*decoder_init)(void *);
   void  (*encoder_cleanup)(void *ctx);

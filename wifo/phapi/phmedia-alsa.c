@@ -28,6 +28,7 @@
 #include <ortp.h>
 #include <ortp-export.h>
 #include <telephonyevents.h>
+#include "phdebug.h"
 #include "phapi.h"
 #include "phcall.h"
 #include "phmedia.h"
@@ -93,9 +94,12 @@ snd_pcm_t *alsa_dev_open(char *name, int type, int rate, int framesize, int late
   char *nmend = 0;
 
 
-  ph_printf("alsa_dev_open\n");  
+  DBG5_DYNA_AUDIO_DRV("alsa_dev_open: (name: %s, rate: %d, framesize: %d)\n", name, rate, framesize, 0);
+
   if (!strncasecmp(name, "alsa:", 5))
+  {
     name += 5;
+  }
 
   if (type == SND_PCM_STREAM_CAPTURE)
     { 
@@ -298,7 +302,7 @@ int alsa_stream_open(phastream_t *as, char *name, int rate, int framesize, ph_au
   struct alsa_dev *ad = 0;
   
   
-  ph_printf("alsa_stream_open\n");
+  DBG5_DYNA_AUDIO_DRV("alsa_stream_open: (name: %s, rate: %d, framesize: %d)\n", name, rate, framesize, 0);
 
   ad = calloc(sizeof(*ad), 1);
   if (!ad)

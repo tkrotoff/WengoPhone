@@ -1527,20 +1527,29 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
   return processed;
 }
 
-
+/**
+ * @brief callback used by the audio subsystems to communicate with the phapi audio engine
+ * @param stream the concerned audio stream
+ * @param recbuf buffer that has just been recorded by the subsystem
+ * @param recbufsize size of the recorded buffer (maybe 0)
+ * @param playbuf
+ * @param playbufsize
+ */
 static int 
 ph_audio_callback(phastream_t *stream, void *recbuf, int recbufsize, void *playbuf, int *playbufsize)
 {
     int i = 0;
     
     if (recbuf && recbufsize > 0)
+    {
         ph_audio_rec_cbk(stream, recbuf, recbufsize);
+    }
 
     if ((playbuf != 0) && playbufsize && (*playbufsize > 0))
-        {
+    {
         i = ph_audio_play_cbk(stream, playbuf, *playbufsize);
         *playbufsize = i;
-        }
+    }
         
     return 0;
 
@@ -1997,6 +2006,9 @@ select_audio_device(const char *deviceId)
 }
 
 
+/**
+ * @brief opens a device for a given stream
+ */
 static int 
 open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *deviceId)
 {
@@ -2016,15 +2028,27 @@ open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *devi
   if (s->confflags != PH_MSESSION_CONF_MEMBER)
     {
       fd = audio_stream_open(stream, deviceId, clockrate, framesize, ph_audio_callback); 
+
       if (fd < 0)
-	{
-	  //	  phcb->errorNotify(PH_NOMEDIA);
-	  DBG1_MEDIA_ENGINE("open_audio_device: can't open  AUDIO device\n");
-	  return -1;
-	}
+	    {
+            //	  phcb->errorNotify(PH_NOMEDIA);
+	        DBG1_MEDIA_ENGINE("open_audio_device: can't open  AUDIO device\n");
+	        return -1;
+	    }
+
+        DBG8_DYNA_AUDIO_DRV("opened i/o devices: (s->rate, s->fsize)=(%d,%d) - (rate, fsize)=(%d,%d) - (s->actual_rate)=(%d)\n",
+        stream->clock_rate,
+        stream->ms.codec->decoded_framesize,
+        clockrate,
+        framesize,
+        stream->actual_rate,
+        0,0);
+
     }
   else
-    stream->actual_rate = clockrate;
+    {
+        stream->actual_rate = clockrate;
+    }
 
 
 
