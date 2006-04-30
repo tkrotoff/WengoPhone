@@ -1,5 +1,6 @@
 /*
   The phmedia-alsa  module implements interface to ALSA audio devices for phapi
+  Copyright (C) 2005-2006  Wengo
   Copyright (C) 2004  Vadim Lebedev  <vadim@mbdsys.com>
   
   this module is free software; you can redistribute it and/or modify
@@ -15,6 +16,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+/*
+ cf http://www.linuxjournal.com/article/6735 for an introduction to ALSA
 */
 #ifdef ENABLE_ALSA
 #include <osip2/osip_mt.h>
@@ -84,201 +88,253 @@ void ph_alsa_driver_init()
 
 snd_pcm_t *alsa_dev_open(char *name, int type, int rate, int framesize, int latencymsecs)
 {
-  snd_pcm_t *handle;
-  snd_pcm_hw_params_t *params;
-  snd_pcm_sw_params_t *sparams;
-  unsigned int val, val2;
-  int dir;
-  snd_pcm_uframes_t frames;
-  int rc;
-  char *nmend = 0;
+	snd_pcm_t *handle;
+	snd_pcm_hw_params_t *params;
+	snd_pcm_sw_params_t *sparams;
+	unsigned int val, val2;
+	int dir;
+	snd_pcm_uframes_t frames;
+	int rc;
+	char *nmend = 0;
 
+	DBG5_DYNA_AUDIO_DRV("alsa_dev_open: (name: %s, rate: %d, framesize: %d)\n", name, rate, framesize, 0);
 
-  DBG5_DYNA_AUDIO_DRV("alsa_dev_open: (name: %s, rate: %d, framesize: %d)\n", name, rate, framesize, 0);
-
-  if (!strncasecmp(name, "alsa:", 5))
-  {
-    name += 5;
-  }
-
-  if (type == SND_PCM_STREAM_CAPTURE)
-    { 
-      if (!strncasecmp(name, "in=", 3))
+	if (!strncasecmp(name, "alsa:", 5))
 	{
-	  nmend = strchr(name+3, ' ');
-	  if (nmend)
-	    {
-	      *nmend = 0;
-	    }
+		name += 5;
 	}
-    }
-  else if (!strncasecmp(name, "out=", 4))
-    {
-      nmend = strchr(name+4, ' ');
-      if (nmend)
+
+	if (type == SND_PCM_STREAM_CAPTURE)
+	{ 
+		if (!strncasecmp(name, "in=", 3))
+		{
+			nmend = strchr(name+3, ' ');
+			if (nmend)
+			{
+				*nmend = 0;
+			}
+		}
+	}
+	else if (!strncasecmp(name, "out=", 4))
 	{
-	      *nmend = 0;
+		nmend = strchr(name+4, ' ');
+		if (nmend)
+		{
+			*nmend = 0;
+		}
 	}
-    }
-    
-  /* Open PCM device */
-  rc = snd_pcm_open(&handle, name, type, 0);
 
-  /* restore the overwritten space */
-  if (nmend)
-    *nmend = ' ';
+	/* Open PCM device */
+	rc = snd_pcm_open(&handle, name, type, 0);
 
-  if (rc < 0) {
-    ph_printf( 
-            "unable to open <%s> pcm device: %s\n",
-            name, snd_strerror(rc));
-    return 0;
-  }
-  
-  /* Allocate a hardware parameters object. */
-  snd_pcm_hw_params_alloca(&params);
+	/* restore the overwritten space */
+	if (nmend)
+	{
+		*nmend = ' ';
+	}
 
-  /* Fill it in with default values. */
-  snd_pcm_hw_params_any(handle, params);
+	if (rc < 0)
+	{
+		DBG5_DYNA_AUDIO_DRV("unable to open <%s> pcm device: %s\n",
+			name, snd_strerror(rc),0,0);
+		return 0;
+	}
 
-  /* Set the desired hardware parameters. */
+	/* Allocate a hardware parameters object. */
+	snd_pcm_hw_params_alloca(&params);
 
-  /* Two channels (stereo) */
-  rc = snd_pcm_hw_params_set_channels(handle, params, 1);
-  if (rc < 0) {
-    ph_printf( 
-            "unable to set hw parameters(channels=1): %s\n",
-            snd_strerror(rc));
-    goto err;
-  }
+	/* Fill it in with default values. */
+	snd_pcm_hw_params_any(handle, params);
 
+	/* Set the desired hardware parameters. */
 
-
-  /* Interleaved mode */
-  rc = snd_pcm_hw_params_set_access(handle, params,
-                      SND_PCM_ACCESS_RW_INTERLEAVED);
-
-#if 1
-  /* Write the parameters to the driver */
-  if (rc < 0) {
-    ph_printf( 
-            "unable to set hw parameters(SND_PCM_ACCESS_RW_INTERLEAVED): %s\n",
-            snd_strerror(rc));
-    goto err;
-  }
-
-#endif
-
-  /* Signed 16-bit little-endian format */
-  rc = snd_pcm_hw_params_set_format(handle, params, 
-                              SND_PCM_FORMAT_S16_LE);
+	/* Two channels (stereo) */
+	rc = snd_pcm_hw_params_set_channels(handle, params, 1);
+	if (rc < 0)
+	{
+		DBG5_DYNA_AUDIO_DRV( 
+			"unable to set hw parameters(channels=1): %s\n",
+			snd_strerror(rc),0,0,0);
+		goto err;
+	}
 
 
-  if (rc < 0) {
-    ph_printf( 
-            "unable to set hw parameters(SND_PCM_FORMAT_S16_LE): %s\n",
-            snd_strerror(rc));
-    goto err;
-  }
+	/* Interleaved mode */
+	rc = snd_pcm_hw_params_set_access(handle, params,
+				SND_PCM_ACCESS_RW_INTERLEAVED);
+	if (rc < 0)
+	{
+		DBG5_DYNA_AUDIO_DRV( 
+			"unable to set hw parameters(SND_PCM_ACCESS_RW_INTERLEAVED): %s\n",
+			snd_strerror(rc),0,0,0);
+		goto err;
+	}
 
 
+	/* Signed 16-bit little-endian format */
+	rc = snd_pcm_hw_params_set_format(handle, params, 
+								SND_PCM_FORMAT_S16_LE);
+	if (rc < 0)
+	{
+		DBG5_DYNA_AUDIO_DRV( 
+			"unable to set hw parameters(SND_PCM_FORMAT_S16_LE): %s\n",
+			snd_strerror(rc),0,0,0);
+		goto err;
+	}
+
+	/* Set sampling rate */
+	val = rate;
+	rc = snd_pcm_hw_params_set_rate_near(handle, 
+									params, &val, 0);
+	if (rc < 0)
+	{
+		DBG5_DYNA_AUDIO_DRV( 
+			"unable to set hw parameters(rate=%d dir=%d): %s\n", val, dir,
+			snd_strerror(rc),0,0,0);
+		goto err;
+	}
+
+	/* Set period size */
+	frames = framesize;
+	rc = snd_pcm_hw_params_set_period_size_near(handle,
+								params, &frames, 0);
+	if (rc < 0)
+	{
+		DBG5_DYNA_AUDIO_DRV( 
+			"unable to set hw parameters(period_size=%d): %s\n", (int) frames,
+			snd_strerror(rc),0,0,0);
+		goto err;
+	}
+
+	/* Write the parameters to the driver */
+	rc = snd_pcm_hw_params(handle, params);
+	if (rc < 0)
+	{
+		DBG5_DYNA_AUDIO_DRV( 
+			"unable to set hw parameters: %s\n",
+			snd_strerror(rc),0,0,0);
+		goto err;
+	}
+
+	/* Write the parameters to the driver */
+	rc = snd_pcm_nonblock(handle, 1);
+	if (rc < 0)
+	{
+		DBG5_DYNA_AUDIO_DRV( 
+			"unable to set noblocking mode:%s\n",
+			snd_strerror(rc),0,0,0);
+		goto err;
+	}
+
+	/* Display information about the PCM interface */
+	DBG5_DYNA_AUDIO_DRV("PCM handle name = '%s'\n",
+		snd_pcm_name(handle),0,0,0);
+	DBG5_DYNA_AUDIO_DRV("PCM state = %s\n",
+		snd_pcm_state_name(snd_pcm_state(handle)),0,0,0);
+	snd_pcm_hw_params_get_access(params,
+			(snd_pcm_access_t *) &val);
+	DBG5_DYNA_AUDIO_DRV("access type = %s\n",
+		snd_pcm_access_name((snd_pcm_access_t)val),0,0,0);
+	snd_pcm_hw_params_get_format(params, &val);
+	DBG5_DYNA_AUDIO_DRV("format = '%s' (%s)\n",
+		snd_pcm_format_name((snd_pcm_format_t)val),
+		snd_pcm_format_description((snd_pcm_format_t)val),0,0);
+	snd_pcm_hw_params_get_subformat(params,
+		(snd_pcm_subformat_t *)&val);
+	DBG5_DYNA_AUDIO_DRV("subformat = '%s' (%s)\n",
+		snd_pcm_subformat_name((snd_pcm_subformat_t)val),
+		snd_pcm_subformat_description((snd_pcm_subformat_t)val),0,0);
+	snd_pcm_hw_params_get_channels(params, &val);
+	DBG5_DYNA_AUDIO_DRV("channels = %d\n", val,0,0,0);
+	snd_pcm_hw_params_get_rate(params, &val, &dir);
+	DBG5_DYNA_AUDIO_DRV("rate = %d bps\n", val,0,0,0);
+	snd_pcm_hw_params_get_period_time(params,
+		&val, &dir);
+	DBG5_DYNA_AUDIO_DRV("period time = %d us\n", val,0,0,0);
+	snd_pcm_hw_params_get_period_size(params,
+		&frames, &dir);
+	DBG5_DYNA_AUDIO_DRV("period size = %d frames\n", (int)frames,0,0,0);
+	snd_pcm_hw_params_get_buffer_time(params,
+		&val, &dir);
+	DBG5_DYNA_AUDIO_DRV("buffer time = %d us\n", val,0,0,0);
+	snd_pcm_hw_params_get_buffer_size(params,
+						(snd_pcm_uframes_t *) &val);
+	DBG5_DYNA_AUDIO_DRV("buffer size = %d frames\n", val,0,0,0);
+	snd_pcm_hw_params_get_periods(params, &val, &dir);
+	DBG5_DYNA_AUDIO_DRV("periods per buffer = %d frames\n", val,0,0,0);
+	snd_pcm_hw_params_get_rate_numden(params,
+		&val, &val2);
+	DBG5_DYNA_AUDIO_DRV("exact rate = %d/%d bps\n", val, val2,0,0);
+	val = snd_pcm_hw_params_get_sbits(params);
+	DBG5_DYNA_AUDIO_DRV("significant bits = %d\n", val,0,0,0);
+	snd_pcm_hw_params_get_tick_time(params,
+		&val, &dir);
+	DBG5_DYNA_AUDIO_DRV("tick time = %d us\n", val,0,0,0);
+	val = snd_pcm_hw_params_is_batch(params);
+	DBG5_DYNA_AUDIO_DRV("is batch = %d\n", val,0,0,0);
+	val = snd_pcm_hw_params_is_block_transfer(params);
+	DBG5_DYNA_AUDIO_DRV("is block transfer = %d\n", val,0,0,0);
+	val = snd_pcm_hw_params_is_double(params);
+	DBG5_DYNA_AUDIO_DRV("is double = %d\n", val,0,0,0);
+	val = snd_pcm_hw_params_is_half_duplex(params);
+	DBG5_DYNA_AUDIO_DRV("is half duplex = %d\n", val,0,0,0);
+	val = snd_pcm_hw_params_is_joint_duplex(params);
+	DBG5_DYNA_AUDIO_DRV("is joint duplex = %d\n", val,0,0,0);
+	val = snd_pcm_hw_params_can_overrange(params);
+	DBG5_DYNA_AUDIO_DRV("can overrange = %d\n", val,0,0,0);
+	val = snd_pcm_hw_params_can_mmap_sample_resolution(params);
+	DBG5_DYNA_AUDIO_DRV("can mmap = %d\n", val,0,0,0);
+	val = snd_pcm_hw_params_can_pause(params);
+	DBG5_DYNA_AUDIO_DRV("can pause = %d\n", val,0,0,0);
+	val = snd_pcm_hw_params_can_resume(params);
+	DBG5_DYNA_AUDIO_DRV("can resume = %d\n", val,0,0,0);
+	val = snd_pcm_hw_params_can_sync_start(params);
+	DBG5_DYNA_AUDIO_DRV("can sync start = %d\n", val,0,0,0);
+
+	if (!latencymsecs)
+	{
+		return handle;
+	}
+
+	snd_pcm_sw_params_alloca(&sparams);
+
+	/* retrieve the parameters from the driver */
+	rc = snd_pcm_sw_params_current(handle, sparams);
+	if (rc < 0)
+	{
+		DBG5_DYNA_AUDIO_DRV( 
+			"unable to get sw parameters: %s\n",
+			snd_strerror(rc),0,0,0);
+		goto err;
+	}
 
 
+	frames = rate/1000 * latencymsecs;
+	rc = snd_pcm_sw_params_set_start_threshold(handle, sparams, frames);
+	if (rc < 0)
+	{
+		DBG5_DYNA_AUDIO_DRV( 
+			"unable to set start threshold: %s\n",
+			snd_strerror(rc),0,0,0);
+		goto err;
+	}
 
 
- 
-  /* Set period size */
-  frames = framesize;
-  rc = snd_pcm_hw_params_set_period_size_near(handle,
-                              params, &frames, 0);
+	/* Write the parameters to the driver */
+	rc = snd_pcm_sw_params(handle, sparams);
+	if (rc < 0)
+	{
+		DBG5_DYNA_AUDIO_DRV( 
+			"unable to set sw parameters: %s\n",
+			snd_strerror(rc),0,0,0);
+		goto err;
+	}
 
-
-
-  if (rc < 0) {
-    ph_printf( 
-            "unable to set hw parameters(period_size=%d): %s\n", (int) frames,
-            snd_strerror(rc));
-    goto err;
-  }
-
-
-
-  val = rate;
-  rc = snd_pcm_hw_params_set_rate_near(handle, 
-                                 params, &val, 0);
-
-  if (rc < 0) {
-    ph_printf( 
-            "unable to set hw parameters(rate=%d dir=%d): %s\n", val, dir,
-            snd_strerror(rc));
-    goto err;
-  }
-
-
-
-
-
-  /* Write the parameters to the driver */
-  rc = snd_pcm_hw_params(handle, params);
-  if (rc < 0) {
-    ph_printf( 
-            "unable to set hw parameters: %s\n",
-            snd_strerror(rc));
-    goto err;
-  }
-
-  if (!latencymsecs)
-    return handle;
-
-  snd_pcm_sw_params_alloca(&sparams);
-
-  /* retrieve the parameters from the driver */
-  rc = snd_pcm_sw_params_current(handle, sparams);
-  if (rc < 0) {
-    ph_printf( 
-            "unable to get sw parameters: %s\n",
-            snd_strerror(rc));
-    goto err;
-  }
-
-
-  frames = rate/1000 * latencymsecs;
-  rc = snd_pcm_sw_params_set_start_threshold(handle, sparams, frames);
-  if (rc < 0) {
-    ph_printf( 
-            "unable to set start threshold: %s\n",
-            snd_strerror(rc));
-    goto err;
-  }
-
-
-  /* Write the parameters to the driver */
-  rc = snd_pcm_sw_params(handle, sparams);
-  if (rc < 0) {
-    ph_printf( 
-            "unable to set sw parameters: %s\n",
-            snd_strerror(rc));
-    goto err;
-  }
-
-  /* Write the parameters to the driver */
-  rc = snd_pcm_nonblock(handle, 1);
-  if (rc < 0) {
-    ph_printf( 
-            "unable to set noblocking mode:%s\n",
-            snd_strerror(rc));
-    goto err;
-  }
-
-  
-
-  return handle;
-
+	return handle;
 
 err:
-  snd_pcm_close(handle);
-
-  return 0;
+	snd_pcm_close(handle);
+	return 0;
 }
 
 

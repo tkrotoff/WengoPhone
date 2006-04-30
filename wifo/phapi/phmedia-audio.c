@@ -1,7 +1,7 @@
 /*
  * phmedia -  Phone Api media streamer
  *
- * Copyright (C) 2005 Wengo SAS
+ * Copyright (C) 2005-2006 Wengo SAS
  * Copyright (C) 2004 Vadim Lebedev <vadim@mbdsys.com>
  *
  * This is free software; you can redistribute it and/or modify
@@ -766,6 +766,12 @@ ph_generate_comfort_noice(phastream_t *stream, void *buf)
     return 0;
 }
 
+/**
+ * @brief ask for prepared samples for the SPK and play them
+ *
+ * prepared samples are decoded samples from the RX path mixed with
+ * different things (files, conference,..)
+ */
 static void
 ph_handle_network_data(phastream_t *stream)
 {
@@ -790,46 +796,55 @@ ph_handle_network_data(phastream_t *stream)
      return;
 #endif
   
-	// we try to read and write on the speaker packets from the network
- while (stream->ms.running)
-   {
-     int used;
-	  
-     gettimeofday(&now, 0);
-     // read pack
-     len = ph_audio_play_cbk(stream, data_in_dec, codec->decoded_framesize);
-     DBG5_DYNA_AUDIO_RX("ph_handle_network_data:%u.%u :: read %d full size packets\n", now.tv_sec, now.tv_usec, len/codec->decoded_framesize,0);
-     
-     if (!len)
-       break;
-     
-     played += len;
-     //freespace -= len;
-     
-     // write the decoded audio onto the speaker(out) device
-     len = audio_stream_write(stream, data_in_dec, len);
-     if (!len)
-       break;
+	while (stream->ms.running)
+	{
+		int used;
+		gettimeofday(&now, 0);
+
+		// try to read read to be played samples from the RX path
+		len = ph_audio_play_cbk(stream, data_in_dec, codec->decoded_framesize);
+		DBG5_DYNA_AUDIO_RX("ph_handle_network_data:%u.%u :: read %d full size packets\n", now.tv_sec, now.tv_usec, len/codec->decoded_framesize,0);
+
+		if (!len)
+		{
+			break;
+		}
+
+		played += len;
+		//freespace -= len;
+
+		// try to write the decoded audio onto the speaker(out) device
+		len = audio_stream_write(stream, data_in_dec, len);
+		
+		if (!len)
+		{
+			break;
+		}
+
 #ifdef DO_ECHO_CAN
-     if (!stream->using_out_callback)
-       store_pcm(stream, data_in_dec, len);
+		// SPIKE_AEC: record what is being played on the SPK for future reference
+		if (!stream->using_out_callback)
+		{
+			store_pcm(stream, data_in_dec, len);
+		}
 #endif
-     
-     // exit loop if we've played 4 full size packets
-     if (played >= codec->decoded_framesize * 4)
-       break;
-     
-     // exit loop if we waited too much in the audio_stream_write
-     gettimeofday(&now2, 0);
-     if (now2.tv_sec > now.tv_sec || (now2.tv_usec - now.tv_usec) >= 10000)
-       break;
-     
-     // while loop: we try to get more data from the RX path
-     
-   }
- 
- DBG5_DYNA_AUDIO_RX("ph_handle_network_data :: end\n",0,0,0,0);
-      
+
+		// exit loop if we've played 4 full size packets
+		if (played >= codec->decoded_framesize * 4)
+		{
+			break;
+		}
+
+		// exit loop if we waited too much in the audio_stream_write
+		gettimeofday(&now2, 0);
+		if (now2.tv_sec > now.tv_sec || (now2.tv_usec - now.tv_usec) >= 10000)
+		{
+			break;
+		}
+
+	} // while loop: we try to get more data from the RX path
+
+DBG5_DYNA_AUDIO_RX("ph_handle_network_data :: end\n",0,0,0,0);      
 } 
 
 
@@ -1036,89 +1051,99 @@ static void ph_mixmedia(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1)
 
 
 
-
+/**
+ * @brief catch a packet on the rtp RX path and decode it
+ *
+ * @param stream the concerned audio stream
+ * @param mbf decoded samples are put in this buffer
+ * @param clockrate decoded samples should be resampled if necessary to this clockrate
+ * @return 0 or len in bytes of catched samples
+ */
 static int
-ph_media_retreive_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf, int clockrate)
+ph_media_retrieve_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf, int clockrate)
 {
-  int len;
-  mblk_t *mp;
-  rtp_header_t *rtp;
-  phcodec_t *codec = stream->ms.codec;
-  int framesize = codec->decoded_framesize;
+	int codedlen=0, decodedlen=0, resampledlen=0;
+	mblk_t *mp;
+	rtp_header_t *rtp;
+	phcodec_t *codec = stream->ms.codec;
+	int framesize = codec->decoded_framesize;
 
-  
-  if (stream->ms.suspended)
-    return 0;
+	if (stream->ms.suspended)
+	{
+		return 0;
+	}
 
-  mp = rtp_session_recvm_with_ts(stream->ms.rtp_session,stream->ms.rxtstamp);
-  if (!mp)
-    return 0;
+	// try to retrieve an RTP packet on the RX path
+	mp = rtp_session_recvm_with_ts(stream->ms.rtp_session,stream->ms.rxtstamp);
+	if (!mp)
+	{
+		return 0;
+	}
 
+	// drop RTP packet if it is not of the correct payload type
+	rtp = (rtp_header_t*)mp->b_rptr;
+	if ( rtp->paytype != stream->ms.payload )
+	{
+		DBG5_DYNA_AUDIO("wrong audio payload: %d expecting %d\n", rtp->paytype, stream->ms.payload, 0, 0);
+		freemsg(mp);
+		return 0;
+	}
 
-  len = mp->b_cont->b_wptr-mp->b_cont->b_rptr;
-  rtp = (rtp_header_t*)mp->b_rptr;
-  if ( rtp->paytype != stream->ms.payload )
-    {
-      DBG5_DYNA_AUDIO("wrong audio payload: %d expecting %d\n", rtp->paytype, stream->ms.payload, 0, 0);
-      freemsg(mp);
-      return 0;
-    }
+	// drop RTP packet if stream is not in running mode
+	if (!stream->ms.running)
+	{
+		freemsg(mp);
+		return 0;
+	}
 
-     
-  DBG5_DYNA_AUDIO_RX("got %d bytes from net(%d)\n", len, ++iter,0,0);
-  if (!stream->ms.running)
-    {
-      freemsg(mp);
-      return 0;
-    }
+	codedlen = mp->b_cont->b_wptr-mp->b_cont->b_rptr;
 
 #ifdef PH_FORCE_16KHZ
-  if (len)
-    {
-      if (stream->clock_rate == 16000)
+	// here, the required clockrate is always 16000
+	if (codedlen)
 	{
-	  len = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, len, mbf->buf, framesize);
-	  mbf->next = len/2;
-	  stream->ms.rxts_inc += mbf->next;
-	}
-      else
-	{
-	  char *tmp = alloca(framesize);
-	  len = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, len, tmp, framesize);
-	  //	  ph_upsample(mbf->buf, tmp, framesize, &stream->lastsample);
-	  ph_upsample(stream->resamplectx, mbf->buf, tmp, framesize);
-	  mbf->next = len;
-	  stream->ms.rxts_inc += len/2;
-	  len *= 2;
-	}
+		if (stream->clock_rate == clockrate)
+		{
+			resampledlen = decodedlen = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, codedlen, mbf->buf, framesize);
+			mbf->next = decodedlen/2;
+			stream->ms.rxts_inc += mbf->next;
+		}
+		else
+		{
+			char *tmp = alloca(framesize);
+			decodedlen = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, codedlen, tmp, framesize);
+			//ph_upsample(mbf->buf, tmp, framesize, &stream->lastsample);
+			ph_upsample(stream->resamplectx, mbf->buf, tmp, framesize);
+			mbf->next = decodedlen;
+			stream->ms.rxts_inc += decodedlen/2;
+			resampledlen = decodedlen << 1;
+		}
     }
 #else    
-  if (len)
-    len = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, len, mbf->buf, framesize);
-
-  mbf->next = len/2;
-
-  stream->ms.rxts_inc += mbf->next;
+	if (codedlen)
+	{
+		resampledlen = decodedlen = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, codedlen, mbf->buf, framesize);
+	}
+	mbf->next = decodedlen/2;
+	stream->ms.rxts_inc += mbf->next;
 #endif
 
-  freemsg(mp);
+	freemsg(mp);
 
+	if (decodedlen)
+	{
+		struct timeval now;
+		gettimeofday(&now, 0);
+		stream->last_rtp_recv_time = now;
+	}
 
-
-  if (len)
-    {
-      struct timeval now;
-
-      gettimeofday(&now, 0);
-      stream->last_rtp_recv_time = now;
-    }
-
-
-  return len;
-
+	DBG5_DYNA_AUDIO_RX("retrieved RX bytes: decoded(%d), resampled(%d)\n", decodedlen, resampledlen,0,0);
+	return resampledlen;
 }
-  
 
+/**
+ * @brief tries to grab samples that are available for SPK playing
+ */
 static int
 ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 {
@@ -1147,384 +1172,386 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 #endif
 
 #ifdef PH_FORCE_16KHZ
-  if (targetRate == 8000)
-    {
-      framesize *= 2;
-      targetRate = 16000;
-    }
-#endif
-
-  // while start :
-  //		read packets from the network
-  //		the best case scenario is that one packet is ready to go
-  //		we do not try to read more than 4 packets in a row
-  stream->ms.rxts_inc = 0;
-#ifdef DO_CONF
-  if (stream->to_mix)
-    stream->to_mix->ms.rxts_inc = 0;
-#endif
-
-  while (stream->ms.running && (playbufsize >= framesize))
-    {
-      ph_mediabuf_t spkrbuf;
-
-      ph_mediabuf_init(&spkrbuf, playbuf, framesize);
-
-#ifdef DO_CONF
-      if (stream->to_mix)
+	if (targetRate == 8000)
 	{
-	  CONF_LOCK(stream);
-
-	  if (stream->to_mix && !stream->to_mix->ms.suspended)
-	    {
-	      int len2;
-	  
-	      len = ph_media_retreive_decoded_frame(stream, &stream->data_in, targetRate);
-	      len2 = ph_media_retreive_decoded_frame(stream->to_mix, &stream->to_mix->data_in, targetRate);
-	      ph_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, framesize/2);
-	  
-	      len = spkrbuf.next * 2;
-	    }
-	  CONF_UNLOCK(stream);
+		framesize *= 2;
+		targetRate = 16000;
 	}
-      else
 #endif
-	len = ph_media_retreive_decoded_frame(stream, &spkrbuf, targetRate);
 
-
-      if (!len)
-	break;
-
-      DBG5_DYNA_AUDIO_RX("Playing %d bytes from net\n", len,0,0,0);
-
-	
-      // SPIKE_HDX: if (mode == MIC has priority) and MIC is playing, attenuate SPK
-      if ((stream->hdxmode == PH_HDX_MODE_MIC) && !stream->hdxsilence)
+	// while start :
+	//		read packets from the network
+	//		the best case scenario is that one packet is ready to go
+	//		we do not try to read more than 4 packets in a row
+	stream->ms.rxts_inc = 0;
+#ifdef DO_CONF
+	if (stream->to_mix)
 	{
-	  short *samples = (short *) playbuf;
-	  int nsamples = len >> 1;
-	  const int HDXSHIFT = 7;
-	  
-	  while(nsamples--)
-	    {
-	      *samples = *samples >> HDXSHIFT;
-	      samples++;
-	    }
+    	stream->to_mix->ms.rxts_inc = 0;
 	}
+#endif
 
+	while (stream->ms.running && (playbufsize >= framesize))
+    {
+		ph_mediabuf_t spkrbuf;
+		ph_mediabuf_init(&spkrbuf, playbuf, framesize);
+
+#ifdef DO_CONF
+		if (stream->to_mix)
+		{
+			CONF_LOCK(stream);
+			if (stream->to_mix && !stream->to_mix->ms.suspended)
+			{
+				int len2;
+				len = ph_media_retrieve_decoded_frame(stream, &stream->data_in, targetRate);
+				len2 = ph_media_retrieve_decoded_frame(stream->to_mix, &stream->to_mix->data_in, targetRate);
+				ph_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, framesize/2);
+				len = spkrbuf.next * 2;
+			}
+			CONF_UNLOCK(stream);
+		}
+      	else
+		{
+			len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, targetRate);
+		}
+#else
+		len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, targetRate);
+#endif
+
+
+		if (!len)
+		{
+			break;
+		}
+
+		// SPIKE_HDX: if (mode == MIC has priority) and MIC is playing, attenuate SPK
+		if ((stream->hdxmode == PH_HDX_MODE_MIC) && !stream->hdxsilence)
+		{
+			short *samples = (short *) playbuf;
+			int nsamples = len >> 1;
+			const int HDXSHIFT = 7;
+			while(nsamples--)
+			{
+				*samples = *samples >> HDXSHIFT;
+				samples++;
+			}
+		}
 
 #ifdef DO_ECHO_CAN
-      if (stream->using_out_callback)
-	store_pcm(stream, playbuf, len);
+		if (stream->using_out_callback)
+		{
+			store_pcm(stream, playbuf, len);
+		}
 #endif
 
-      // SPIKE_HDX: if (mode == SPK has priority) update SPK voice activity detection
-      if (stream->hdxmode == PH_HDX_MODE_SPK)
-	{
-	  stream->spksilence = ph_vad_update0(&stream->cngo, playbuf, len);
-	}
-
-	
-      /* save played data */    
-      if (stream->lastframe)
-	memcpy(stream->lastframe, playbuf, len);
+		// SPIKE_HDX: if (mode == SPK has priority) update SPK voice activity detection
+		if (stream->hdxmode == PH_HDX_MODE_SPK)
+		{
+			stream->spksilence = ph_vad_update0(&stream->cngo, playbuf, len);
+		}
+		
+		/* save played data */    
+		if (stream->lastframe)
+		{
+			memcpy(stream->lastframe, playbuf, len);
+		}
+		
+		played += len;
       
-      played += len;
-
-     
-
-      
-      /* exit loop if we've played 4 full size packets */
-      if (played >= framesize * 4)
-	break;
+		/* exit loop if we've played 4 full size packets */
+		if (played >= framesize * 4)
+		{
+			break;
+		}
 
 #ifdef PH_USE_RESAMPLE
-      if (needResample)
-	{
-	  ph_audio_resample(stream->play_resample_ctx, playbuf, len, savedPlayBuf, &resampledLen);
-	  savedPlayBuf += resampledLen;
-	  savedBufSize -= resampledLen;
-	  if (savedBufSize <= 0)
-	    break;
-	}
-      else
+		if (needResample)
+		{
+			ph_audio_resample(stream->play_resample_ctx, playbuf, len, savedPlayBuf, &resampledLen);
+			savedPlayBuf += resampledLen;
+			savedBufSize -= resampledLen;
+			if (savedBufSize <= 0)
+			{
+	    		break;
+			}
+		}
+		else
 #endif
-	{
-	  // updating the placeholder for the next decode loop
-	  playbuf = len + (char *) playbuf;
-	  playbufsize -= len;
-	}
-    }
-  // while end : read packets from the network
+		{
+	  		// updating the placeholder for the next decode loop
+			playbuf = len + (char *) playbuf;
+			playbufsize -= len;
+		}
+    } // while end : read packets from the network
 
   
-  stream->ms.rxtstamp += stream->ms.rxts_inc;
+	stream->ms.rxtstamp += stream->ms.rxts_inc;
 #ifdef DO_CONF
-  if (stream->to_mix) 
+	if (stream->to_mix) 
     {
-      CONF_LOCK(stream);
-      if (stream->to_mix)
-	stream->to_mix->ms.rxtstamp += stream->to_mix->ms.rxts_inc;
-      CONF_UNLOCK(stream);
-    }
-
-#endif
-
-  if (played == 0)
-    {
-      /* if no data for at least NOISE_START_DELAY ms, start sending noise audio data */
-      if (stream->ms.running && stream->cngi.cng)
-	{
-	  int len;
-	  
-	  len = ph_generate_comfort_noice(stream, playbuf);
-	  if (len)
-	    {
-#ifdef DO_ECHO_CAN
-	      if (stream->using_out_callback)
-		store_pcm(stream, playbuf, len);
-#endif
-	    }
-	  played += len;
-	  playbufsize -= len;
+		CONF_LOCK(stream);
+		if (stream->to_mix)
+		{
+			stream->to_mix->ms.rxtstamp += stream->to_mix->ms.rxts_inc;
+		}
+		CONF_UNLOCK(stream);
 	}
-    }
+#endif
 
-     
+	if (played == 0)
+    {
+		/* if no data for at least NOISE_START_DELAY ms, start sending noise audio data */
+		if (stream->ms.running && stream->cngi.cng)
+		{
+			int len;
+			len = ph_generate_comfort_noice(stream, playbuf);
+			if (len)
+			{
+#ifdef DO_ECHO_CAN
+				if (stream->using_out_callback)
+				{
+					store_pcm(stream, playbuf, len);
+				}
+#endif
+			}
+			played += len;
+			playbufsize -= len;
+		}
+	}
 
 #ifdef PH_USE_RESAMPLE
-  if (needResample)
-    {
-      ph_audio_resample(stream->play_resample_ctx, playbuf, len, savedPlayBuf, &resampledLen);
-    }
+	if (needResample)
+	{
+		ph_audio_resample(stream->play_resample_ctx, playbuf, len, savedPlayBuf, &resampledLen);
+	}
 #endif
     
-  if (stream->lastframe != 0 && playbufsize)
-    {
-      /* we did no fill the buffer completely */
-      int morebytes = playbufsize;
-        
-      if (morebytes > codec->decoded_framesize)
-	morebytes = codec->decoded_framesize;
-        
+	if (stream->lastframe != 0 && playbufsize)
+	{
+		/* we did no fill the buffer completely */
+		int morebytes = playbufsize;
+		if (morebytes > codec->decoded_framesize)
+		{
+			morebytes = codec->decoded_framesize;
+		}
         
 #ifdef DO_ECHO_CAN
-      if (stream->using_out_callback)
-	store_pcm(stream, playbuf, morebytes);
+		if (stream->using_out_callback)
+		{
+			store_pcm(stream, playbuf, morebytes);
+		}
 #endif
-
-        
-      played += morebytes;
-    }        
-  return played;    
-} 
-
-
+		played += morebytes;
+	}    
+	return played;    
+}
 
 
 
 void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int framesize)
 {
-  int silok = 0;
-  int wakeup = 0;
-  struct timeval diff;
-  char data_out_enc[1000];
-  phcodec_t *codec = stream->ms.codec;
+	int silok = 0;
+	int wakeup = 0;
+	struct timeval diff;
+	char data_out_enc[1000];
+	phcodec_t *codec = stream->ms.codec;
 
-
-  if (stream->ms.suspended)
-      return;
-
-  /* do we need to do Voice Activity Detection ? */
-  if (stream->cngi.vad)
-    {
-      stream->hdxsilence = silok = ph_vad_update0(&stream->cngi, recordbuf, framesize);
-      if (!stream->cngi.cng && silok)
+	if (stream->ms.suspended)
 	{
-	  /* resend dummy CNG packet only if CNG was not negotiated */
-	  ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
-	  wakeup = (diff.tv_sec > RTP_RETRANSMIT);
+		return;
 	}
-    }
-  // SPIKE_HDX: if MIC has priority, update MIC voice activity detection
-  else if (stream->hdxmode == PH_HDX_MODE_MIC)
-    {
-      int hdxsil = ph_vad_update0(&stream->cngi, recordbuf, framesize);
-      if (hdxsil != stream->hdxsilence) 
-	{
-	  DBG5_DYNA_AUDIO("phmedia_audio: HDXSIL=%d\n", hdxsil,0,0,0);
-	  stream->hdxsilence = hdxsil;
-	}
-    }
-  
-  if ((stream->dtmfi.dtmfg_phase != DTMF_IDLE) || (stream->dtmfi.dtmfq_cnt != 0))
-    {
-      ph_generate_out_dtmf(stream, (short *) recordbuf, framesize/2, stream->ms.txtstamp);
-      silok = 0;
-    }
 
-  if (stream->mixbuf)
-    {   
-      int n = ph_mediabuf_mixaudio(stream->mixbuf, (short *)recordbuf, framesize/2);
-      if (!n)
+	/* do we need to do Voice Activity Detection ? */
+	if (stream->cngi.vad)
 	{
-	  ph_mediabuf_free(stream->mixbuf);
-	  stream->mixbuf =  0;
-	}
-      else
-	{
-	  stream->hdxsilence = silok = 0;
-	}
+		stream->hdxsilence = silok = ph_vad_update0(&stream->cngi, recordbuf, framesize);
+		if (!stream->cngi.cng && silok)
+		{
+			/* resend dummy CNG packet only if CNG was not negotiated */
+			ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
+			wakeup = (diff.tv_sec > RTP_RETRANSMIT);
+		}
     }
+	// SPIKE_HDX: if MIC has priority, update MIC voice activity detection
+	else if (stream->hdxmode == PH_HDX_MODE_MIC)
+	{
+		int hdxsil = ph_vad_update0(&stream->cngi, recordbuf, framesize);
+		if (hdxsil != stream->hdxsilence) 
+		{
+			DBG5_DYNA_AUDIO("phmedia_audio: HDXSIL=%d\n", hdxsil,0,0,0);
+			stream->hdxsilence = hdxsil;
+		}
+	}
 
-  
-  if (!silok)
-    {
-      int enclen;
+
+	if ((stream->dtmfi.dtmfg_phase != DTMF_IDLE) || (stream->dtmfi.dtmfq_cnt != 0))
+	{
+		ph_generate_out_dtmf(stream, (short *) recordbuf, framesize/2, stream->ms.txtstamp);
+		silok = 0;
+	}
+
+	if (stream->mixbuf)
+	{   
+		int n = ph_mediabuf_mixaudio(stream->mixbuf, (short *)recordbuf, framesize/2);
+		if (!n)
+		{
+			ph_mediabuf_free(stream->mixbuf);
+			stream->mixbuf =  0;
+		}
+		else
+		{
+			stream->hdxsilence = silok = 0;
+		}
+	}
+
+	if (!silok)
+	{
+		int enclen;
 
 #ifdef PH_FORCE_16KHZ
-      if (stream->clock_rate == 16000)
-	{
-	  enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
-	}
-      else
-	{
-	  ph_downsample(stream->resamplectx, recordbuf, framesize);
-	  enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize/2, data_out_enc, sizeof(data_out_enc));
-	  framesize /= 2;
-	}
+		if (stream->clock_rate == 16000)
+		{
+			enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
+		}
+		else
+		{
+			ph_downsample(stream->resamplectx, recordbuf, framesize);
+			enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize/2, data_out_enc, sizeof(data_out_enc));
+			framesize /= 2;
+		}
 #else
-       enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
+		enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
 #endif      
 
-      if (stream->record_send_stream)
-	ph_media_payload_record(&stream->send_stream_recorder, data_out_enc, enclen);
+		if (stream->record_send_stream)
+		{
+			ph_media_payload_record(&stream->send_stream_recorder, data_out_enc, enclen);
+		}
 
-      if (silok != stream->cngi.lastsil || wakeup)
-	{
-	  rtp_session_set_markbit(stream->ms.rtp_session, 1);
-	  rtp_session_send_with_ts(stream->ms.rtp_session, data_out_enc, enclen, stream->ms.txtstamp);
-	  rtp_session_set_markbit(stream->ms.rtp_session, 0);
+		if (silok != stream->cngi.lastsil || wakeup)
+		{
+			rtp_session_set_markbit(stream->ms.rtp_session, 1);
+			rtp_session_send_with_ts(stream->ms.rtp_session, data_out_enc, enclen, stream->ms.txtstamp);
+			rtp_session_set_markbit(stream->ms.rtp_session, 0);
+		}
+		else
+		{
+			rtp_session_send_with_ts(stream->ms.rtp_session, data_out_enc, enclen, stream->ms.txtstamp);
+		}
+
+		stream->last_rtp_sent_time = stream->now;
 	}
-      else
+	else if (stream->cngi.cng)
 	{
-	  rtp_session_send_with_ts(stream->ms.rtp_session, data_out_enc, enclen, stream->ms.txtstamp);
-	}
-      stream->last_rtp_sent_time = stream->now;
-    }
-  else if (stream->cngi.cng)
-    {
-      ph_tvdiff(&diff, &stream->now, &stream->cngi.last_dtx_time);
-      if (diff.tv_sec >= DTX_RETRANSMIT)
-	{
-	  ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
-	  if (diff.tv_sec >= DTX_RETRANSMIT)
-	    {
-	      ph_send_cng(stream, stream->ms.txtstamp);
-	      stream->cngi.last_dtx_time = stream->now;
-	    }
-	}
+		ph_tvdiff(&diff, &stream->now, &stream->cngi.last_dtx_time);
+		if (diff.tv_sec >= DTX_RETRANSMIT)
+		{
+			ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
+			if (diff.tv_sec >= DTX_RETRANSMIT)
+			{
+				ph_send_cng(stream, stream->ms.txtstamp);
+				stream->cngi.last_dtx_time = stream->now;
+			}
+		}
       
-      if (wakeup)
-	{
-	  /* send cng packet with -127dB */ 
-	  ph_send_cng(stream, stream->ms.txtstamp);
-	  stream->last_rtp_sent_time = stream->now;
+		if (wakeup)
+		{
+			/* send cng packet with -127dB */ 
+			ph_send_cng(stream, stream->ms.txtstamp);
+			stream->last_rtp_sent_time = stream->now;
+		}
 	}
-    }
-  
-  stream->cngi.lastsil = silok;
-  stream->ms.txtstamp += framesize/2;
+
+	stream->cngi.lastsil = silok;
+	stream->ms.txtstamp += framesize/2;
 } 
 
 int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 {
-  int framesize = stream->ms.codec->decoded_framesize;
-  int processed = 0;
+	int framesize = stream->ms.codec->decoded_framesize;
+	int processed = 0;
 #ifdef PH_USE_RESAMPLE
-  unsigned char resampleBuf[1000];
-  int resampledSize;
+	unsigned char resampleBuf[1000];
+	int resampledSize;
 
-  if (stream->clock_rate != stream->actual_rate)
-    {
-      ph_audio_resample(stream->rec_resample_ctx, recordbuf, recbufsize, resampleBuf, &resampledSize);
-      recbufsize = resampledSize;
-      recordbuf = resampleBuf;
-    }
+	if (stream->clock_rate != stream->actual_rate)
+	{
+		ph_audio_resample(stream->rec_resample_ctx, recordbuf, recbufsize, resampleBuf, &resampledSize);
+		recbufsize = resampledSize;
+		recordbuf = resampleBuf;
+	}
 #endif
 
 #ifdef PH_FORCE_16KHZ
-  if (stream->clock_rate == 8000)
-    {
-      framesize *= 2;
-    }
+	if (stream->clock_rate == 8000)
+	{
+		framesize *= 2;
+	}
 #endif
 
 
-  while(recbufsize >= framesize)
-    {
-      gettimeofday(&stream->now,0);
-
-      // SPIKE_HDX: if (mode = SPK has priority) and SPK is active, attenuate MIC
-      if ((stream->hdxmode == PH_HDX_MODE_SPK) && !stream->spksilence)
+	while(recbufsize >= framesize)
 	{
-	  short *samples = (short *) recordbuf;
-	  int nsamples = framesize >> 1;
-	  const int SPKHDXSHIFT = 4;
-		
-	    while(nsamples--)
-	      {
-		*samples = *samples >> SPKHDXSHIFT;
-		samples++;
-	      }
-	}
+		gettimeofday(&stream->now,0);
+
+		// SPIKE_HDX: if (mode = SPK has priority) and SPK is active, attenuate MIC
+		if ((stream->hdxmode == PH_HDX_MODE_SPK) && !stream->spksilence)
+		{
+			short *samples = (short *) recordbuf;
+			int nsamples = framesize >> 1;
+			const int SPKHDXSHIFT = 4;
+			while(nsamples--)
+			{
+				*samples = *samples >> SPKHDXSHIFT;
+				samples++;
+			}
+		}
 	    
 #ifdef DO_ECHO_CAN
-      do_echo_update(stream, recordbuf, framesize);
+		do_echo_update(stream, recordbuf, framesize);
 #endif
 
 #ifdef DO_CONF
-      if (stream->to_mix)
-	{
-	  CONF_LOCK(stream);
+		if (stream->to_mix)
+		{
+			CONF_LOCK(stream);
+			if (stream->to_mix && !stream->to_mix->ms.suspended) /* we're in conference mode */
+			{
+				phastream_t *other = stream->to_mix;
+				other->now = stream->now;
 
-	  if (stream->to_mix && !stream->to_mix->ms.suspended) /* we're in conference mode */
-	    {
-	      phastream_t *other = stream->to_mix;
+				memcpy(stream->data_out.buf, recordbuf, framesize);
+				stream->data_out.next = framesize/2;
 
-	      other->now = stream->now;
+				memcpy(other->data_out.buf, recordbuf, framesize);
+				other->data_out.next = framesize/2;
 
-	      memcpy(stream->data_out.buf, recordbuf, framesize);
-	      stream->data_out.next = framesize/2;
+				if (other->data_in.next)
+				{
+					ph_mixmedia(&stream->data_out, &other->data_in);
+				}
+				if (stream->data_in.next)
+				{
+					ph_mixmedia(&other->data_out, &stream->data_in);
+				}
 
-	      memcpy(other->data_out.buf, recordbuf, framesize);
-	      other->data_out.next = framesize/2;
-		
-	      if (other->data_in.next)
-		ph_mixmedia(&stream->data_out, &other->data_in);
-		
-	      if (stream->data_in.next)
-		ph_mixmedia(&other->data_out, &stream->data_in);
-		
-		
-	      ph_encode_and_send_audio_frame(stream, stream->data_out.buf, framesize);
-	      ph_encode_and_send_audio_frame(other, other->data_out.buf, framesize);
+				ph_encode_and_send_audio_frame(stream, stream->data_out.buf, framesize);
+				ph_encode_and_send_audio_frame(other, other->data_out.buf, framesize);
 	    
-	      //	    ph_handle_conference_in(stream, framesize);
-	    }
-	  CONF_UNLOCK(stream);
-	}
-      else
+				//ph_handle_conference_in(stream, framesize);
+			}
+			CONF_UNLOCK(stream);
+		}
+		else
 #endif
-	ph_encode_and_send_audio_frame(stream, recordbuf, framesize);
+		ph_encode_and_send_audio_frame(stream, recordbuf, framesize);
 
+		recbufsize -= framesize;
+		processed += framesize;
+		recordbuf = framesize + (char *)recordbuf;
+	}
 
-      recbufsize -= framesize;
-      processed += framesize;
-      recordbuf = framesize + (char *)recordbuf;
-    }   
-        
-  return processed;
+	return processed;
 }
 
 /**
@@ -1577,6 +1604,12 @@ ph_handle_audio_data(phastream_t *stream)
 
 #define SLEEP_TIME_US  10000
 
+/**
+ * @brief main thread for the audio engine
+ *
+ * Note that it is only created when the audio subsystem driver needs it
+ * It takes care of all the things that cannot be done in the subsystem threads
+ */
 void *
 ph_audio_io_thread(void *p)
 {
@@ -1587,7 +1620,9 @@ ph_audio_io_thread(void *p)
   int needsleep;
 
   if (stream->ms.media_io_thread)
-	  osip_thread_set_priority(stream->ms.media_io_thread, -19);
+  {
+    osip_thread_set_priority(stream->ms.media_io_thread, -19);
+  }
 
   DBG5_DYNA_AUDIO("new media io thread started\n",0,0,0,0);
 
@@ -1599,29 +1634,41 @@ ph_audio_io_thread(void *p)
 
      gettimeofday(&start_time, 0);
 
+     // if subsystem threading model does not take care of feeding SPK,
+     // do it : receive packets from the RX path and play them on SPK
      if (!audio_driver_has_play_callback())
-        ph_handle_network_data(stream);
-     if (!audio_driver_has_rec_callback())
-         ph_handle_audio_data(stream);
+        {
+            ph_handle_network_data(stream);
+        }
 
+     // if subsystem threading model does not take care of reading MIC,
+     // do it : read samples from MIC and send them on the TX path
+     if (!audio_driver_has_rec_callback())
+        {
+            ph_handle_audio_data(stream);
+        }
+
+     // evaluate how much time was spent in the above handlings
+     // and sleep for a while before looping
      gettimeofday(&end_time, 0);
      ph_tvsub(&end_time, &start_time);
      if (end_time.tv_usec < SLEEP_TIME_US)
-       {		       		
-     sleeptime.tv_usec = SLEEP_TIME_US; sleeptime.tv_sec = 0;
-     ph_tvsub(&sleeptime, &end_time);
-
-     TIMEVAL_TO_TIMESPEC(&sleeptime, &sleepns);
-
-
-     if (stream->ms.running)
+     {
+        sleeptime.tv_usec = SLEEP_TIME_US; sleeptime.tv_sec = 0;
+        ph_tvsub(&sleeptime, &end_time);
+        TIMEVAL_TO_TIMESPEC(&sleeptime, &sleepns);
+        if (stream->ms.running)
+        {
 #ifdef OS_WINDOWS
-       Sleep(sleeptime.tv_usec / 1000);
+           Sleep(sleeptime.tv_usec / 1000);
 #else
-       nanosleep(&sleepns, 0);
-#endif     
-       }
+           nanosleep(&sleepns, 0);
+#endif
+        }            
+     }
+
     }
+
   DBG5_DYNA_AUDIO("media io thread stopping\n",0,0,0,0);
   return NULL;
 }
@@ -2012,54 +2059,56 @@ select_audio_device(const char *deviceId)
 static int 
 open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *deviceId)
 {
-  int fd;
-  int clockrate = stream->clock_rate;
-  int framesize = stream->ms.codec->decoded_framesize;
+	int fd;
+	int clockrate = stream->clock_rate;
+	int framesize = stream->ms.codec->decoded_framesize;
 
 #ifdef PH_FORCE_16KHZ
-  if (clockrate == 8000)
-    {
-      clockrate = 16000;
-      framesize *= 2;
-    }
+	// devices should be opened with a 16000 Hz sampling rate
+	if (clockrate == 8000)
+	{
+		clockrate = 16000;
+		framesize *= 2;
+	}
 
 #endif
 
-  if (s->confflags != PH_MSESSION_CONF_MEMBER)
-    {
-      fd = audio_stream_open(stream, deviceId, clockrate, framesize, ph_audio_callback); 
+	if (s->confflags != PH_MSESSION_CONF_MEMBER)
+	{
+		fd = audio_stream_open(stream, deviceId, clockrate, framesize, ph_audio_callback); 
 
-      if (fd < 0)
-	    {
-            //	  phcb->errorNotify(PH_NOMEDIA);
-	        DBG1_MEDIA_ENGINE("open_audio_device: can't open  AUDIO device\n");
-	        return -1;
-	    }
+		if (fd < 0)
+		{
+			//	  phcb->errorNotify(PH_NOMEDIA);
+			DBG1_MEDIA_ENGINE("open_audio_device: can't open  AUDIO device\n");
+			return -1;
+		}
 
-        DBG8_DYNA_AUDIO_DRV("opened i/o devices: (s->rate, s->fsize)=(%d,%d) - (rate, fsize)=(%d,%d) - (s->actual_rate)=(%d)\n",
-        stream->clock_rate,
-        stream->ms.codec->decoded_framesize,
-        clockrate,
-        framesize,
-        stream->actual_rate,
-        0,0);
+		DBG8_DYNA_AUDIO_DRV("opened i/o devices: (s->rate, s->fsize)=(%d,%d) - (rate, fsize)=(%d,%d) - (s->actual_rate)=(%d)\n",
+		stream->clock_rate,
+		stream->ms.codec->decoded_framesize,
+		clockrate,
+		framesize,
+		stream->actual_rate,
+		0,0);
 
-    }
-  else
-    {
-        stream->actual_rate = clockrate;
-    }
+	}
+	else
+	{
+		stream->actual_rate = clockrate;
+	}
 
-
-
-  return 0;
+	return 0;
 }
 
 
+/**
+ * @brief start audio engine (read, writes)
+ */
 static void
 start_audio_device(struct ph_msession_s *s, phastream_t *stream)
 {
-  stream->using_out_callback = audio_driver_has_play_callback();
+	stream->using_out_callback = audio_driver_has_play_callback();
 
   /* 
      replay of last frame is only interesting when we're working in callback mode 
@@ -2067,19 +2116,27 @@ start_audio_device(struct ph_msession_s *s, phastream_t *stream)
      each 10 msecs, which is  
   */
 
-  if (0 && stream->using_out_callback)
-    stream->lastframe = calloc(stream->ms.codec->decoded_framesize, 1);
+	if (0 && stream->using_out_callback)
+	{
+		stream->lastframe = calloc(stream->ms.codec->decoded_framesize, 1);
+	}
 
 
-  if (s->confflags != PH_MSESSION_CONF_MEMBER)
-    audio_stream_start(stream);
+	if (s->confflags != PH_MSESSION_CONF_MEMBER)
+	{
+		audio_stream_start(stream);
+	}
 
 	
-  if ((!stream->ms.media_io_thread && (s->confflags != PH_MSESSION_CONF_MEMBER)) && 
-      (!audio_driver_has_rec_callback() || !audio_driver_has_play_callback()))
-    stream->ms.media_io_thread = osip_thread_create(20000,
-						    ph_audio_io_thread, stream);
-
+  if (
+		(!stream->ms.media_io_thread && (s->confflags != PH_MSESSION_CONF_MEMBER))
+		&& 
+		(!audio_driver_has_rec_callback() || !audio_driver_has_play_callback())
+	)
+	{
+		stream->ms.media_io_thread = osip_thread_create(20000,
+						ph_audio_io_thread, stream);
+	}
 
 }
 

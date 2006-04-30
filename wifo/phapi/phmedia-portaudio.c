@@ -187,7 +187,7 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
   int rateIndex;
   double drate = (double) rate;
 
-  DBG5_DYNA_AUDIO_DRV("pa_dev_open: (name: %s, rate: %d, framesize: %d)\n", name, rate, framesize, 0);
+  DBG5_DYNA_AUDIO_DRV("pa_dev_open: asking for (name: \"%s\", rate: %d, framesize: %d)\n", name, rate, framesize, 0);
   
   if (!strncasecmp(name, "pa:", 3))
     name += 3;
@@ -253,42 +253,46 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
       return 0;
     }
 
-  /* check if the initial match is accepted */
-  err = Pa_IsFormatSupported( &inputParameters, &outputParameters, standardSampleRates[rateIndex] );
-  if ( err == paFormatIsSupported )
-    {
-      as->actual_rate = (int) standardSampleRates[rateIndex];
-    }
-  else 
-    {
-      /* find a sampling rate that IS accepted */
-      i = rateIndex + 1;
-      rateIndex =  -1;
-      for (i = 0; standardSampleRates[i] > 0; i++ )
+	/* check if the initial match is accepted */
+	err = Pa_IsFormatSupported( &inputParameters, &outputParameters, standardSampleRates[rateIndex] );
+	if ( err == paFormatIsSupported )
 	{
-	  err = Pa_IsFormatSupported( &inputParameters, &outputParameters, standardSampleRates[i] );
-	  if ( err == paFormatIsSupported )
-	    {
-	      rateIndex = i;
-	      break;
-	    }
+		as->actual_rate = (int) standardSampleRates[rateIndex];
+	}
+	else 
+	{
+		/* find a sampling rate that IS accepted */
+		i = rateIndex + 1;
+		rateIndex =  -1;
+		for (i = 0; standardSampleRates[i] > 0; i++ )
+		{
+			err = Pa_IsFormatSupported( &inputParameters, &outputParameters, standardSampleRates[i] );
+			if ( err == paFormatIsSupported )
+			{
+				rateIndex = i;
+				break;
+			}
+		}
+		if (rateIndex == -1)
+		{
+			return 0;
+		}
 	}
 
-      if (rateIndex == -1)
-	return 0;
-    }
-
-  as->actual_rate = (int) standardSampleRates[rateIndex];
+	as->actual_rate = (int) standardSampleRates[rateIndex];
 
 
-  /* we need to recalculate the frame size? */
-  if (rate !=  as->actual_rate)
-    {
-      int frameDuration =  1000 * (framesize / 2) / rate;
-      
-      framesize = frameDuration * as->actual_rate/1000 * 2;
-    }
+	/* we need to recalculate the frame size? */
+	if (rate !=  as->actual_rate)
+	{
+		int frameDuration =  1000 * (framesize / 2) / rate;
+		framesize = frameDuration * as->actual_rate/1000 * 2;
+	}
 
+	DBG5_DYNA_AUDIO_DRV("pa_dev_open: chosen rate (freq, framesize)=(%d,%d)\n",
+							as->actual_rate,
+							framesize,
+							0,0);
 
   if (output)
     err = Pa_OpenStream(

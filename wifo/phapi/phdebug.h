@@ -98,7 +98,7 @@ available SPIKES are :
 #define DBG5_DYNA_AUDIO_RX(x1, x2, x3, x4, x5)
 #endif
 
-// DYNA_AUDIO_RX
+// DYNA_AUDIO_TX
 #if 0
 #define DBG5_DYNA_AUDIO_TX(x1, x2, x3, x4, x5) printf(x1, x2, x3, x4, x5)
 #else
