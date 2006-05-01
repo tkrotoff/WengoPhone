@@ -161,6 +161,7 @@ sources = [
 	'phapi.c',
 	'phaudiodriver.c',
 	'phmedia.c',
+	'phrecorder.c',
 	'phmedia-audio.c',
 	'aec2.cpp',
 	'fidlib.c',

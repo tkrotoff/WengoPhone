@@ -39,7 +39,7 @@
 #include "phaudiodriver.h"
 
 #define ph_printf printf
-
+#define PH_UNREFERENCED_PARAMETER(P) (P)
 
 /**
  * Declare the driver to phmedia-audio and initialize it.
@@ -118,10 +118,12 @@ void ph_null_driver_init() {
 }
 
 void null_start(phastream_t *as) {
+    PH_UNREFERENCED_PARAMETER(as);
 	ph_printf("** Starting audio stream\n");
 }
 
 int null_open(phastream_t *as, const char *name, int rate, int framesize, ph_audio_cbk cbk) {
+    PH_UNREFERENCED_PARAMETER(as);
 	ph_printf("** Opening device %s with rate: %d, framesize: %d, and callback: %p\n",
 		  name, rate, framesize, cbk);
 	
@@ -129,6 +131,7 @@ int null_open(phastream_t *as, const char *name, int rate, int framesize, ph_aud
 }
 
 int null_write(phastream_t *as, void *buf, int len) {
+    PH_UNREFERENCED_PARAMETER(as);
 	ph_printf("** Writing %d bytes of data from buffer %p\n",
 		  len, buf);
 	
@@ -136,6 +139,7 @@ int null_write(phastream_t *as, void *buf, int len) {
 }
 
 int null_read(phastream_t *as, void *buf, int len) {
+    PH_UNREFERENCED_PARAMETER(as);
 	ph_printf("** Reading %d bytes of data and putting it into buffer %p\n",
 		  len, buf);
 	
@@ -145,17 +149,20 @@ int null_read(phastream_t *as, void *buf, int len) {
 int null_get_out_space(phastream_t *as, int *used) {
 	*used = 0;
 
+    PH_UNREFERENCED_PARAMETER(as);
 	ph_printf("** Out space used: 0\n", *used);
 
 	return 0;
 }
 
 int null_get_avail_data(phastream_t *as) {
+    PH_UNREFERENCED_PARAMETER(as);
 	ph_printf("** Available data: 0\n");
 	
 	return 0;
 }
 
 void null_close(phastream_t *as) {
+    PH_UNREFERENCED_PARAMETER(as);
 	ph_printf("** Closing audio stream\n");
 }

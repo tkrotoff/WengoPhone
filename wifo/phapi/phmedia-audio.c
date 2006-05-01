@@ -36,6 +36,7 @@
 
 #include "phapi.h"
 #include "phmedia.h"
+#include "phrecorder.h"
 #include "phcodec.h"
 #include "tonegen.h"
 #include "phmbuf.h"
@@ -127,13 +128,11 @@ static int ph_generate_comfort_noice(phastream_t *stream, void *buf);
 
 int ph_ortp_session_object_size = sizeof(RtpSession);
 
+// helper functions for circular buffers (cb)
 static void cb_put(struct circbuf *cb, char *data, int len);
 static void cb_get(struct circbuf *cb, char **chunk1, int *chunk1len,  char **chunk2, int *chhunk2len, int len);
 static void cb_init(struct circbuf *cb, int size);
 static void cb_clean(struct circbuf *cb);
-
-
-
 
 static void 
 cb_put(struct circbuf *cb, char *data, int len)
@@ -266,10 +265,9 @@ cb_clean(struct circbuf *cb)
 
 
 
+
 static int select_audio_device(const char *deviceId);
 static void start_audio_device(struct ph_msession_s *s, phastream_t *stream);
-
-
 
 phcodec_t *ph_media_lookup_codec(int payload);
 void *ph_audio_io_thread(void *_p);
@@ -766,6 +764,7 @@ ph_generate_comfort_noice(phastream_t *stream, void *buf)
     return 0;
 }
 
+
 /**
  * @brief ask for prepared samples for the SPK and play them
  *
@@ -848,6 +847,7 @@ DBG5_DYNA_AUDIO_RX("ph_handle_network_data :: end\n",0,0,0,0);
 } 
 
 
+
 #ifdef PH_USE_RESAMPLE
 void ph_audio_resample(void *ctx, void *inbuf, int inbsize, void *outbuf, int *outbsize)
 {
@@ -884,7 +884,6 @@ void ph_audio_resample(void *ctx, void *inbuf, int inbsize, void *outbuf, int *o
 #endif
 
 #define SATURATE(x) ((x > 0x7fff) ? 0x7fff : ((x < ~0x7fff) ? ~0x7fff : x))
-
 
 #ifdef PH_FORCE_16KHZ
 
@@ -992,6 +991,7 @@ static void ph_upsample(void *dbuf, void *sbuf, int framesize, short *last)
 
 
 
+
 static void ph_mixmedia2(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1, ph_mediabuf_t *smb2, int framesize)
 {
   int tmp;
@@ -1026,6 +1026,7 @@ static void ph_mixmedia2(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1, ph_mediabuf_t 
 
 
 
+
 static void ph_mixmedia(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1)
 {
   int tmp;
@@ -1048,6 +1049,7 @@ static void ph_mixmedia(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1)
     }
 
 }
+
 
 
 
@@ -1140,6 +1142,7 @@ ph_media_retrieve_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf, int clo
 	DBG5_DYNA_AUDIO_RX("retrieved RX bytes: decoded(%d), resampled(%d)\n", decodedlen, resampledlen,0,0);
 	return resampledlen;
 }
+
 
 /**
  * @brief tries to grab samples that are available for SPK playing
@@ -1348,6 +1351,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 
 
 
+
 void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int framesize)
 {
 	int silok = 0;
@@ -1425,7 +1429,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 
 		if (stream->record_send_stream)
 		{
-			ph_media_payload_record(&stream->send_stream_recorder, data_out_enc, enclen);
+			ph_media_audio_fast_recording_record(&stream->send_stream_recorder, data_out_enc, enclen);
 		}
 
 		if (silok != stream->cngi.lastsil || wakeup)
@@ -1465,6 +1469,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 	stream->cngi.lastsil = silok;
 	stream->ms.txtstamp += framesize/2;
 } 
+
 
 int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 {
@@ -1554,6 +1559,7 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 	return processed;
 }
 
+
 /**
  * @brief callback used by the audio subsystems to communicate with the phapi audio engine
  * @param stream the concerned audio stream
@@ -1581,6 +1587,7 @@ ph_audio_callback(phastream_t *stream, void *recbuf, int recbufsize, void *playb
     return 0;
 
 }
+
 
 static int
 ph_handle_audio_data(phastream_t *stream)
@@ -1672,6 +1679,7 @@ ph_audio_io_thread(void *p)
   DBG5_DYNA_AUDIO("media io thread stopping\n",0,0,0,0);
   return NULL;
 }
+
 
 
 /* 
@@ -1787,6 +1795,7 @@ dtmf_again:
   
 
 
+
 #if 0
 int ph_media_set_recvol(phcall_t *ca, int level)
 {
@@ -1814,6 +1823,7 @@ int ph_media_set_spkvol(phcall_t *ca, int level)
   return 0;
 }
 #endif
+
 
 
 /**
@@ -1849,6 +1859,7 @@ void ph_audio_init_vad0(struct vadcng_info *cngp, int samples)
 
 
 
+
 void ph_audio_init_ivad(phastream_t *stream)
 {
   int samples = (stream->clock_rate)/1000;
@@ -1862,6 +1873,7 @@ void ph_audio_init_ivad(phastream_t *stream)
   
 }
 
+
 void ph_audio_init_ovad(phastream_t *stream)
 {
   int samples = (stream->clock_rate)/1000;
@@ -1874,6 +1886,7 @@ void ph_audio_init_ovad(phastream_t *stream)
   ph_audio_init_vad0(cngp, samples);
   
 }
+
 
 
 
@@ -1902,8 +1915,8 @@ void ph_audio_init_cng(phastream_t *stream)
 }
 
 
-#ifdef PH_USE_RESAMPLE
 
+#ifdef PH_USE_RESAMPLE
 void ph_resample_init0(phastream_t *stream)
 {
   SRC_DATA *resCtx = calloc(sizeof(SRC_DATA), 1);
@@ -1971,6 +1984,7 @@ void ph_ec_cleanup(void *ctx)
 }
 
 
+
 static void
 setup_recording(phastream_t *stream)
 {
@@ -2006,7 +2020,7 @@ setup_recording(phastream_t *stream)
 	rname = "sendstream%d.data";
 		
       snprintf(fname, 128, rname, sfnindex++);
-      ph_media_payload_recording_init(&stream->send_stream_recorder, fname);
+      ph_media_audio_fast_recording_init(&stream->send_stream_recorder, fname);
     }
 
 }
@@ -2051,6 +2065,7 @@ select_audio_device(const char *deviceId)
 
 
 }
+
 
 
 /**
@@ -2102,6 +2117,7 @@ open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *devi
 }
 
 
+
 /**
  * @brief start audio engine (read, writes)
  */
@@ -2139,6 +2155,7 @@ start_audio_device(struct ph_msession_s *s, phastream_t *stream)
 	}
 
 }
+
 
 
 static void
@@ -2180,6 +2197,7 @@ setup_hdx_mode(struct ph_msession_s *s, phastream_t *stream)
 
 
 }
+
 
 
 static void
@@ -2237,6 +2255,7 @@ setup_aec(struct ph_msession_s *s, phastream_t *stream)
 
 
 }
+
 
 
 int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
@@ -2559,6 +2578,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 }
 
 
+
 void ph_audio_vad_cleanup(phastream_t *stream)
 {
   if ( stream->cngi.pwr )
@@ -2582,6 +2602,7 @@ void ph_audio_vad_cleanup(phastream_t *stream)
 #endif
     }
 }
+
 
 
 
@@ -2712,6 +2733,7 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
 }
 
 
+
 void ph_msession_audio_stop(struct ph_msession_s *s, const char *deviceId)
 { 
   struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
@@ -2757,6 +2779,7 @@ void ph_msession_audio_stop(struct ph_msession_s *s, const char *deviceId)
   PH_MSESSION_AUDIO_UNLOCK();
 
 }
+
 
 
 void ph_msession_audio_suspend(struct ph_msession_s *s, int suspendwhat, const char *deviceId)
@@ -2805,6 +2828,7 @@ void ph_msession_audio_suspend(struct ph_msession_s *s, int suspendwhat, const c
 }
 
 
+
 void ph_msession_audio_resume(struct ph_msession_s *s, int resumewhat, const char *deviceId)
 {
   struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
@@ -2826,6 +2850,7 @@ void ph_msession_audio_resume(struct ph_msession_s *s, int resumewhat, const cha
   DBG4_MEDIA_ENGINE("audio_resume: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
 
 }
+
 
 
 int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s *s2, const char *deviceId)
@@ -2890,6 +2915,7 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
 } 
 
 
+
 int ph_msession_audio_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2)
 {
   struct ph_mstream_params_s *msp1 = &s1->streams[PH_MSTREAM_AUDIO1];
@@ -2925,6 +2951,7 @@ int ph_msession_audio_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *
 
 }
   
+
 
 
 
@@ -3024,6 +3051,7 @@ ph_media_audio_init()
 
 
 
+
 int ph_msession_send_dtmf(struct ph_msession_s *s, int dtmf, int mode)
 {
   phastream_t *stream = (phastream_t *)(s->streams[PH_MSTREAM_AUDIO1].streamerData);
@@ -3053,6 +3081,7 @@ int ph_msession_send_dtmf(struct ph_msession_s *s, int dtmf, int mode)
 
 
 
+
 int ph_msession_send_sound_file(struct ph_msession_s *s, const char *filename)
 {
   phastream_t *stream = (phastream_t *)(s->streams[PH_MSTREAM_AUDIO1].streamerData);
@@ -3075,6 +3104,7 @@ int ph_msession_send_sound_file(struct ph_msession_s *s, const char *filename)
 }
 
 
+
 /* we're called by rtp to announce reception of DTMF event */
 void 
 ph_telephone_event(RtpSession *rtp_session, int event, struct ph_msession_s *s)
@@ -3087,78 +3117,4 @@ ph_telephone_event(RtpSession *rtp_session, int event, struct ph_msession_s *s)
 
 }
 
-void
-ph_media_audio_recording_init(recording_t *recording, const char *filename, int nchannels, int chunksize) 
-{
-	
-  recording->samples = (short *) malloc(nchannels * chunksize * sizeof(short));
-  recording->chunksize = chunksize;
-  recording->nchannels = nchannels;
-  recording->position = 0;
-  recording->fd = fopen(filename,"wb");
 
-}
-
-void
-ph_media_payload_recording_init(recording_t *recording, const char *filename)
-{
-	
-  recording->samples = 0;
-  recording->chunksize = 0;
-  recording->nchannels = 0;
-  recording->position = 0;
-  recording->fd = fopen(filename,"wb");
-
-}
-
-void
-ph_media_payload_record(recording_t *recording, const void *payload, int size)
-{
-  fwrite(payload, 1, size, recording->fd);
-}
-
-
-void
-ph_media_audio_recording_record_one(recording_t *recording, short c1, short c2, short c3) 
-{
-
-  short *samples = recording->samples+recording->nchannels*recording->position;
-	
-  *samples++ = c1;
-  if (recording->nchannels > 1)
-    *samples++ = c2;
-  if (recording->nchannels > 2)
-    *samples++ = c3;
-  
-  
-  recording->position++;
-  if (recording->position == recording->chunksize) 
-    {
-      ph_media_audio_recording_dump(recording);
-      recording->position = 0;
-    }
-	
-}
-
-static void
-ph_media_audio_recording_dump(recording_t *recording) 
-{
-
-  if (recording->position > 0) 
-    {
-      fwrite(recording->samples, recording->nchannels*sizeof(short), recording->position, recording->fd);
-    }
-	
-}
-
-void
-ph_media_audio_recording_close(recording_t *recording) 
-{
-		
-  ph_media_audio_recording_dump(recording);
-  fclose(recording->fd);
-
-  if (recording->samples)
-    free(recording->samples);
-	
-}

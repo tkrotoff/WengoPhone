@@ -1,6 +1,7 @@
 #ifndef __PHASTREAM_H__
 #define __PHASTREAM_H__ 1
 
+#include "phrecorder.h"
 
 # define MAX_IN_BUFFERS 4
 # define USED_IN_BUFFERS 4
@@ -20,16 +21,6 @@ struct circbuf
 	char *cb_buf;
 };
 
-
-struct recording
-{
-	short *samples;
-	int chunksize;
-	int nchannels;
-	int position;
-	FILE *fd;
-};
-typedef struct recording recording_t;
 
 #define DTMF_LOCK(s) g_mutex_lock(s->dtmfi.dtmfg_lock)
 #define DTMF_UNLOCK(s) g_mutex_unlock(s->dtmfi.dtmfg_lock)
@@ -197,13 +188,5 @@ int ph_media_audio_start(phcall_t *ca, int port,
 #endif
 
 void ph_generate_out_dtmf(phastream_t *stream, short *signal, int siglen, long timestamp);
-
-/** first version of recodring functions (mainly used for audio processing debugging purpose) */
-void ph_media_audio_recording_init(recording_t *recording, const char *filename, int nchannels, int chunksize);
-void ph_media_payload_recording_init(recording_t *recording, const char *filename);
-void ph_media_audio_recording_close(recording_t *recording);
-static void ph_media_audio_recording_dump(recording_t *recording);
-void ph_media_audio_recording_record_one(recording_t *recording, short c1, short c2, short c3);
-void ph_media_payload_record(recording_t *recording, const void *payload, int size);
 
 #endif
