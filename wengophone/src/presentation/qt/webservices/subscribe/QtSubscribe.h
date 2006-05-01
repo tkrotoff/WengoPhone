@@ -30,6 +30,12 @@
 class QDialog;
 class CSubscribe;
 class QtWengoPhone;
+class QTextBrowser;
+class QLineEdit;
+class QLabel;
+class QPushButton;
+
+class QUrl;
 
 /**
  * Qt account creation widget.
@@ -54,6 +60,11 @@ private Q_SLOTS:
 
 	void configureLogin();
 
+
+public Q_SLOTS:
+
+	void urlClicked(const QUrl & link);
+
 private:
 
 	void initThreadSafe();
@@ -64,6 +75,8 @@ private:
 		const std::string & errorMessage, const std::string & password);
 
 	QDialog * _subscribeWindow;
+
+	QTextBrowser * _textBrowser;
 
 	CSubscribe & _cSubscribe;
 
@@ -84,6 +97,30 @@ private:
 	QWidget * _secondPage;
 
 	QWidget * _currentPage;
+
+	QLineEdit * _nicknameLineEdit;
+
+	QLineEdit * _passwordLineEdit;
+
+	QLineEdit * _password2LineEdit;
+
+	QLineEdit * _emailLineEdit;
+
+	QLabel * _errorLabel;
+
+	QLabel * _mailLabel;
+
+	QLabel * _passwordLabel;
+
+	QLabel * _nicknameLabel;
+
+	QPushButton * _sendRequestButton;
+
+	QPushButton * _goToWengoPhoneButton;
+
+	static const QString _termsOfServiceLink;
+
+	static const QString _termsOfServicePdfLink;
 };
 
 #endif	//QTSUBSCRIBE_H
