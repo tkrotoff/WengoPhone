@@ -19,12 +19,11 @@
 
 #include "QtJabberSettings.h"
 
+#include "ui_JabberSettings.h"
+
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
-
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
 
 #include <QtGui>
 
@@ -35,31 +34,10 @@ QtJabberSettings::QtJabberSettings(UserProfile & userProfile, IMAccount * imAcco
 }
 
 void QtJabberSettings::init() {
-	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/JabberSettings.ui", _parentWidget);
+	_IMSettingsWidget = new QWidget(_parentWidget);
 
-	//loginLineEdit
-	_loginLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "loginLineEdit");
-
-	//passwordLineEdit
-	_passwordLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "passwordLineEdit");
-
-	//useTLSCheckBox
-	_useTLSCheckBox = Object::findChild<QCheckBox *>(_IMSettingsWidget, "useTLSCheckBox");
-
-	//requireTLSCheckBox
-	_requireTLSCheckBox = Object::findChild<QCheckBox *>(_IMSettingsWidget, "requireTLSCheckBox");
-
-	//forceOldSSLCheckBox
-	_forceOldSSLCheckBox = Object::findChild<QCheckBox *>(_IMSettingsWidget, "forceOldSSLCheckBox");
-
-	//allowPlainTextAuthenticationCheckBox
-	_allowPlainTextAuthenticationCheckBox = Object::findChild<QCheckBox *>(_IMSettingsWidget, "allowPlainTextAuthenticationCheckBox");
-
-	//connectServerLineEdit
-	_connectServerLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "connectServerLineEdit");
-
-	//portLineEdit
-	_portLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "portLineEdit");
+	_ui = new Ui::JabberSettings();
+	_ui->setupUi(_IMSettingsWidget);
 
 	if (!_imAccount) {
 		return;
@@ -67,19 +45,19 @@ void QtJabberSettings::init() {
 
 	IMAccountParameters & params = _imAccount->getIMAccountParameters();
 
-	_loginLineEdit->setText(QString::fromStdString(_imAccount->getLogin()));
-	_passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
-	_useTLSCheckBox->setChecked(params.isJabberTLSUsed());
-	_requireTLSCheckBox->setChecked(params.isJabberTLSRequired());
-	_forceOldSSLCheckBox->setChecked(params.isJabberOldSSLUsed());
-	_allowPlainTextAuthenticationCheckBox->setChecked(params.isJabberAuthPlainInClearUsed());
-	_connectServerLineEdit->setText(QString::fromStdString(params.getJabberConnectionServer()));
-	_portLineEdit->setText(QString("%1").arg(params.getJabberServerPort()));
+	_ui->loginLineEdit->setText(QString::fromStdString(_imAccount->getLogin()));
+	_ui->passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
+	_ui->useTLSCheckBox->setChecked(params.isJabberTLSUsed());
+	_ui->requireTLSCheckBox->setChecked(params.isJabberTLSRequired());
+	_ui->forceOldSSLCheckBox->setChecked(params.isJabberOldSSLUsed());
+	_ui->allowPlainTextAuthenticationCheckBox->setChecked(params.isJabberAuthPlainInClearUsed());
+	_ui->connectServerLineEdit->setText(QString::fromStdString(params.getJabberConnectionServer()));
+	_ui->portLineEdit->setText(QString("%1").arg(params.getJabberServerPort()));
 }
 
 void QtJabberSettings::save() {
-	std::string login = _loginLineEdit->text().toStdString();
-	std::string password = _passwordLineEdit->text().toStdString();
+	std::string login = _ui->loginLineEdit->text().toStdString();
+	std::string password = _ui->passwordLineEdit->text().toStdString();
 
 	if (!_imAccount) {
 		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolJabber);
@@ -89,12 +67,12 @@ void QtJabberSettings::save() {
 
 	_imAccount->setLogin(login);
 	_imAccount->setPassword(password);
-	params.set(IMAccountParameters::JABBER_USE_TLS_KEY, _useTLSCheckBox->isChecked());
-	params.set(IMAccountParameters::JABBER_REQUIRE_TLS_KEY, _requireTLSCheckBox->isChecked());
-	params.set(IMAccountParameters::JABBER_USE_OLD_SSL_KEY, _forceOldSSLCheckBox->isChecked());
-	params.set(IMAccountParameters::JABBER_AUTH_PLAIN_IN_CLEAR_KEY, _allowPlainTextAuthenticationCheckBox->isChecked());
-	params.set(IMAccountParameters::JABBER_CONNECTION_SERVER_KEY, _connectServerLineEdit->text().toStdString());
-	params.set(IMAccountParameters::JABBER_PORT_KEY, _portLineEdit->text().toInt());
+	params.set(IMAccountParameters::JABBER_USE_TLS_KEY, _ui->useTLSCheckBox->isChecked());
+	params.set(IMAccountParameters::JABBER_REQUIRE_TLS_KEY, _ui->requireTLSCheckBox->isChecked());
+	params.set(IMAccountParameters::JABBER_USE_OLD_SSL_KEY, _ui->forceOldSSLCheckBox->isChecked());
+	params.set(IMAccountParameters::JABBER_AUTH_PLAIN_IN_CLEAR_KEY, _ui->allowPlainTextAuthenticationCheckBox->isChecked());
+	params.set(IMAccountParameters::JABBER_CONNECTION_SERVER_KEY, _ui->connectServerLineEdit->text().toStdString());
+	params.set(IMAccountParameters::JABBER_PORT_KEY, _ui->portLineEdit->text().toInt());
 
 	_userProfile.addIMAccount(*_imAccount);
 	_userProfile.getConnectHandler().connect(*_imAccount);

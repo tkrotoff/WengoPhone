@@ -20,6 +20,8 @@
 #ifndef QTDIALPAD_H
 #define QTDIALPAD_H
 
+#include <util/NonCopyable.h>
+
 #include <QObject>
 
 #include <string>
@@ -28,10 +30,9 @@ class QtWengoPhone;
 
 class QWidget;
 class QStringList;
-class QComboBox;
-class QPushButton;
+namespace Ui { class DialpadWidget; }
 
-class QtDialpad : public QObject {
+class QtDialpad : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
@@ -81,24 +82,11 @@ private:
 	 */
 	QStringList getListAudioSmileys() const;
 
+	Ui::DialpadWidget * _ui;
+
 	QWidget * _dialpadWidget;
 
 	QtWengoPhone * _qtWengoPhone;
-
-	QComboBox * _audioSmileysComboBox;
-
-	QPushButton * _zeroButton;
-	QPushButton * _oneButton;
-	QPushButton * _twoButton;
-	QPushButton * _threeButton;
-	QPushButton * _fourButton;
-	QPushButton * _fiveButton;
-	QPushButton * _sixButton;
-	QPushButton * _sevenButton;
-	QPushButton * _eightButton;
-	QPushButton * _nineButton;
-	QPushButton * _starButton;
-	QPushButton * _poundButton;
 };
 
 #endif	//QTDIALPAD_H

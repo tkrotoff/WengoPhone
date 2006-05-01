@@ -20,6 +20,8 @@
 #ifndef QTHTTPPROXYLOGIN_H
 #define QTHTTPPROXYLOGIN_H
 
+#include <util/NonCopyable.h>
+
 #include <QObject>
 
 #include <string>
@@ -33,7 +35,7 @@ namespace Ui { class HttpProxyLoginWindow; }
  *
  * @author Tanguy Krotoff
  */
-class QtHttpProxyLogin : public QObject {
+class QtHttpProxyLogin : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 

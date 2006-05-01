@@ -25,7 +25,7 @@
 class IMAccount;
 class UserProfile;
 class QWidget;
-class QLineEdit;
+namespace Ui { class MSNSettings; }
 
 class QtMSNSettings : public QtIMAccountPlugin {
 	Q_OBJECT
@@ -45,11 +45,9 @@ private:
 
 	void init();
 
+	Ui::MSNSettings * _ui;
+
 	QWidget * _IMSettingsWidget;
-
-	QLineEdit * _loginLineEdit;
-
-	QLineEdit * _passwordLineEdit;
 };
 
 #endif	//QTMSNSETTINGS_H

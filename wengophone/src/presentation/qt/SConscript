@@ -199,6 +199,7 @@ forms = [
 	'WengoPhoneWindowConfigPanel.ui',
 	'AboutWindow.ui',
 	'HttpProxyLoginWindow.ui',
+	'DialpadWidget.ui',
 	'imaccount/IMAccountTemplate.ui',
 	'imaccount/AIMSettings.ui',
 	'imaccount/GoogleTalkSettings.ui',

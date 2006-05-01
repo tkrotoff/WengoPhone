@@ -190,33 +190,17 @@
         <file>chat/emoticons/face-wink48.png</file>
     </qresource>
     <qresource prefix="/forms" >
-        <file>DialpadWidget.ui</file>
         <file>WengoPhoneWindow.ui</file>
         <file>chat/ChatRoomInviteWidget.ui</file>
         <file>chat/ChatRoomWidget.ui</file>
         <file>chat/ChatWidget.ui</file>
         <file>chat/chat.ui</file>
         <file>chat/emoticonswidget.ui</file>
-        <file>config/AdvancedSettings.ui</file>
-        <file>config/AudioSettings.ui</file>
-        <file>config/CallForwardSettings.ui</file>
-        <file>config/LanguagesSettings.ui</file>
-        <file>config/ManageBlockedUsersSettings.ui</file>
-        <file>config/NotificationSettings.ui</file>
-        <file>config/PrivacySettings.ui</file>
-        <file>config/VideoSettings.ui</file>
-        <file>config/WengoConfigDialog.ui</file>
         <file>contactlist/AddContactWindow.ui</file>
         <file>contactlist/ContactListWidget.ui</file>
         <file>contactlist/ContactWidget.ui</file>
         <file>contactlist/contactList.ui</file>
         <file>contactlist/userWidget.ui</file>
-        <file>imaccount/AIMSettings.ui</file>
-        <file>imaccount/GoogleTalkSettings.ui</file>
-        <file>imaccount/IMAccountManager.ui</file>
-        <file>imaccount/JabberSettings.ui</file>
-        <file>imaccount/MSNSettings.ui</file>
-        <file>imaccount/YahooSettings.ui</file>
         <file>login/LoginWindow.ui</file>
         <file>login/profileWindow.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>

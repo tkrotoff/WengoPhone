@@ -19,12 +19,11 @@
 
 #include "QtGoogleTalkSettings.h"
 
+#include "ui_GoogleTalkSettings.h"
+
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
-
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
 
 #include <QtGui>
 
@@ -39,13 +38,10 @@ QtGoogleTalkSettings::QtGoogleTalkSettings(UserProfile & userProfile, IMAccount 
 }
 
 void QtGoogleTalkSettings::init() {
-	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/GoogleTalkSettings.ui", _parentWidget);
+	_IMSettingsWidget = new QWidget(_parentWidget);
 
-	//loginLineEdit
-	_loginLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "loginLineEdit");
-
-	//passwordLineEdit
-	_passwordLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "passwordLineEdit");
+	_ui = new Ui::GoogleTalkSettings();
+	_ui->setupUi(_IMSettingsWidget);
 
 	if (!_imAccount) {
 		return;
@@ -53,13 +49,13 @@ void QtGoogleTalkSettings::init() {
 
 	IMAccountParameters & params = _imAccount->getIMAccountParameters();
 
-	_loginLineEdit->setText(QString::fromStdString(_imAccount->getLogin()));
-	_passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
+	_ui->loginLineEdit->setText(QString::fromStdString(_imAccount->getLogin()));
+	_ui->passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 }
 
 void QtGoogleTalkSettings::save() {
-	String login = _loginLineEdit->text().toStdString();
-	String password = _passwordLineEdit->text().toStdString();
+	String login = _ui->loginLineEdit->text().toStdString();
+	String password = _ui->passwordLineEdit->text().toStdString();
 	static const String AT = "@";
 
 	//Test if login ends with @gmail.com

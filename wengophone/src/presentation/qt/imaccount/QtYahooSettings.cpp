@@ -19,12 +19,11 @@
 
 #include "QtYahooSettings.h"
 
+#include "ui_YahooSettings.h"
+
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
-
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
 
 #include <QtGui>
 
@@ -35,13 +34,10 @@ QtYahooSettings::QtYahooSettings(UserProfile & userProfile, IMAccount * imAccoun
 }
 
 void QtYahooSettings::init() {
-	_IMSettingsWidget = WidgetFactory::create(":/forms/imaccount/YahooSettings.ui", _parentWidget);
+	_IMSettingsWidget = new QWidget(_parentWidget);
 
-	//loginLineEdit
-	_loginLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "loginLineEdit");
-
-	//passwordLineEdit
-	_passwordLineEdit = Object::findChild<QLineEdit *>(_IMSettingsWidget, "passwordLineEdit");
+	_ui = new Ui::YahooSettings();
+	_ui->setupUi(_IMSettingsWidget);
 
 	if (!_imAccount) {
 		return;
@@ -49,13 +45,13 @@ void QtYahooSettings::init() {
 
 	IMAccountParameters & param = _imAccount->getIMAccountParameters();
 
-	_loginLineEdit->setText(QString::fromStdString(_imAccount->getLogin()));
-	_passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
+	_ui->loginLineEdit->setText(QString::fromStdString(_imAccount->getLogin()));
+	_ui->passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 }
 
 void QtYahooSettings::save() {
-	std::string login = _loginLineEdit->text().toStdString();
-	std::string password = _passwordLineEdit->text().toStdString();
+	std::string login = _ui->loginLineEdit->text().toStdString();
+	std::string password = _ui->passwordLineEdit->text().toStdString();
 
 	if (!_imAccount) {
 		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolYahoo);

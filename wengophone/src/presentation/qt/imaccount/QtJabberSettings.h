@@ -25,8 +25,7 @@
 class IMAccount;
 class UserProfile;
 class QWidget;
-class QLineEdit;
-class QCheckBox;
+namespace Ui { class JabberSettings; }
 
 class QtJabberSettings : public QtIMAccountPlugin {
 	Q_OBJECT
@@ -46,23 +45,9 @@ private:
 
 	void init();
 
+	Ui::JabberSettings * _ui;
+
 	QWidget * _IMSettingsWidget;
-
-	QLineEdit * _loginLineEdit;
-
-	QLineEdit * _passwordLineEdit;
-
-	QCheckBox * _useTLSCheckBox;
-
-	QCheckBox * _requireTLSCheckBox;
-
-	QCheckBox * _forceOldSSLCheckBox;
-
-	QCheckBox * _allowPlainTextAuthenticationCheckBox;
-
-	QLineEdit * _connectServerLineEdit;
-
-	QLineEdit * _portLineEdit;
 };
 
 #endif	//QTJABBERSETTINGS_H

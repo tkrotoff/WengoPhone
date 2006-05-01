@@ -58,6 +58,7 @@ class QFrame;
 class QStackedWidget;
 class QWidget;
 class QMenu;
+namespace Ui { class WengoPhoneWindow; }
 
 /**
  * Qt Presentation component for WengoPhone.
@@ -226,6 +227,8 @@ private:
 
 	/** Direct link to the control. */
 	CWengoPhone & _cWengoPhone;
+
+	Ui::WengoPhoneWindow * _ui;
 
 	QMainWindow * _wengoPhoneWindow;
 

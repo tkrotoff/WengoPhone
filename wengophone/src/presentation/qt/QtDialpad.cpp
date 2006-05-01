@@ -19,6 +19,8 @@
 
 #include "QtDialpad.h"
 
+#include "ui_DialpadWidget.h"
+
 #include "QtWengoPhone.h"
 
 #include <model/config/ConfigManager.h>
@@ -31,61 +33,38 @@
 #include <util/Logger.h>
 #include <util/StringList.h>
 
-#include <qtutil/Object.h>
-#include <qtutil/WidgetFactory.h>
-
 #include <QtGui>
 
-QtDialpad::QtDialpad(QtWengoPhone * qtWengoPhone) : QObject() {
+QtDialpad::QtDialpad(QtWengoPhone * qtWengoPhone)
+	: QObject(NULL) {
+
 	_qtWengoPhone = qtWengoPhone;
 
-	_dialpadWidget = WidgetFactory::create(":/forms/DialpadWidget.ui", NULL);
+	_dialpadWidget = new QWidget(_qtWengoPhone->getWidget());
 
-	_zeroButton = Object::findChild<QPushButton *>(_dialpadWidget, "zeroButton");
-	connect(_zeroButton, SIGNAL(clicked()), SLOT(zeroButtonClicked()));
+	_ui = new Ui::DialpadWidget();
+	_ui->setupUi(_dialpadWidget);
 
-	_oneButton = Object::findChild<QPushButton *>(_dialpadWidget, "oneButton");
-	connect(_oneButton, SIGNAL(clicked()), SLOT(oneButtonClicked()));
-
-	_twoButton = Object::findChild<QPushButton *>(_dialpadWidget, "twoButton");
-	connect(_twoButton, SIGNAL(clicked()), SLOT(twoButtonClicked()));
-
-	_threeButton = Object::findChild<QPushButton *>(_dialpadWidget, "threeButton");
-	connect(_threeButton, SIGNAL(clicked()), SLOT(threeButtonClicked()));
-
-	_fourButton = Object::findChild<QPushButton *>(_dialpadWidget, "fourButton");
-	connect(_fourButton, SIGNAL(clicked()), SLOT(fourButtonClicked()));
-
-	_fiveButton = Object::findChild<QPushButton *>(_dialpadWidget, "fiveButton");
-	connect(_fiveButton, SIGNAL(clicked()), SLOT(fiveButtonClicked()));
-
-	_sixButton = Object::findChild<QPushButton *>(_dialpadWidget, "sixButton");
-	connect(_sixButton, SIGNAL(clicked()), SLOT(sixButtonClicked()));
-
-	_sevenButton = Object::findChild<QPushButton *>(_dialpadWidget, "sevenButton");
-	connect(_sevenButton, SIGNAL(clicked()), SLOT(sevenButtonClicked()));
-
-	_eightButton = Object::findChild<QPushButton *>(_dialpadWidget, "eightButton");
-	connect(_eightButton, SIGNAL(clicked()), SLOT(eightButtonClicked()));
-
-	_nineButton = Object::findChild<QPushButton *>(_dialpadWidget, "nineButton");
-	connect(_nineButton, SIGNAL(clicked()), SLOT(nineButtonClicked()));
-
-	_starButton = Object::findChild<QPushButton *>(_dialpadWidget, "starButton");
-	connect(_starButton, SIGNAL(clicked()), SLOT(starButtonClicked()));
-
-	_poundButton = Object::findChild<QPushButton *>(_dialpadWidget, "poundButton");
-	connect(_poundButton, SIGNAL(clicked()), SLOT(poundButtonClicked()));
-
-	_audioSmileysComboBox = Object::findChild<QComboBox *>(_dialpadWidget, "audioSmileysComboBox");
-	connect(_audioSmileysComboBox, SIGNAL(activated(int)), SLOT(audioSmileysComboBoxActivated(int)));
+	connect(_ui->zeroButton, SIGNAL(clicked()), SLOT(zeroButtonClicked()));
+	connect(_ui->oneButton, SIGNAL(clicked()), SLOT(oneButtonClicked()));
+	connect(_ui->twoButton, SIGNAL(clicked()), SLOT(twoButtonClicked()));
+	connect(_ui->threeButton, SIGNAL(clicked()), SLOT(threeButtonClicked()));
+	connect(_ui->fourButton, SIGNAL(clicked()), SLOT(fourButtonClicked()));
+	connect(_ui->fiveButton, SIGNAL(clicked()), SLOT(fiveButtonClicked()));
+	connect(_ui->sixButton, SIGNAL(clicked()), SLOT(sixButtonClicked()));
+	connect(_ui->sevenButton, SIGNAL(clicked()), SLOT(sevenButtonClicked()));
+	connect(_ui->eightButton, SIGNAL(clicked()), SLOT(eightButtonClicked()));
+	connect(_ui->nineButton, SIGNAL(clicked()), SLOT(nineButtonClicked()));
+	connect(_ui->starButton, SIGNAL(clicked()), SLOT(starButtonClicked()));
+	connect(_ui->poundButton, SIGNAL(clicked()), SLOT(poundButtonClicked()));
+	connect(_ui->audioSmileysComboBox, SIGNAL(activated(int)), SLOT(audioSmileysComboBoxActivated(int)));
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QStringList listAudioSmileys = getListAudioSmileys();
 	for (int i = 0; i < listAudioSmileys.size(); ++i) {
 		std::string theme = listAudioSmileys[i].toStdString();
 		std::string icon = config.getAudioSmileysDir() + theme + File::getPathSeparator() + theme + ".png";
-		_audioSmileysComboBox->addItem(QIcon(QString::fromStdString(icon)), listAudioSmileys[i]);
+		_ui->audioSmileysComboBox->addItem(QIcon(QString::fromStdString(icon)), listAudioSmileys[i]);
 	}
 }
 
@@ -119,11 +98,11 @@ void QtDialpad::playTone(const std::string & tone) {
 		soundFile = tone;
 	}
 
-	if (_audioSmileysComboBox->currentIndex() == 0) {
+	if (_ui->audioSmileysComboBox->currentIndex() == 0) {
 		_qtWengoPhone->dialpad(tone, String::null);
 		Sound::play(File::convertPathSeparators(config.getAudioSmileysDir() + soundFile + ".wav"), config.getAudioRingerDeviceName());
 	} else {
-		soundFile = config.getAudioSmileysDir() + _audioSmileysComboBox->currentText().toStdString()
+		soundFile = config.getAudioSmileysDir() + _ui->audioSmileysComboBox->currentText().toStdString()
 				+ File::getPathSeparator() + soundFile + ".raw";
 		_qtWengoPhone->dialpad(tone, File::convertPathSeparators(soundFile));
 		Sound::play(File::convertPathSeparators(soundFile), config.getAudioRingerDeviceName());
@@ -181,72 +160,72 @@ void QtDialpad::poundButtonClicked() {
 }
 
 void QtDialpad::audioSmileysComboBoxActivated(int index) {
-	static const QString originalZeroButtonText = _zeroButton->text();
-	static const QString originalOneButtonText = _oneButton->text();
-	static const QString originalTwoButtonText = _twoButton->text();
-	static const QString originalThreeButtonText = _threeButton->text();
-	static const QString originalFourButtonText = _fourButton->text();
-	static const QString originalFiveButtonText = _fiveButton->text();
-	static const QString originalSixButtonText = _sixButton->text();
-	static const QString originalSevenButtonText = _sevenButton->text();
-	static const QString originalEightButtonText = _eightButton->text();
-	static const QString originalNineButtonText = _nineButton->text();
-	static const QString originalStarButtonText = _starButton->text();
-	static const QString originalSharpButtonText = _poundButton->text();
+	static const QString originalZeroButtonText = _ui->zeroButton->text();
+	static const QString originalOneButtonText = _ui->oneButton->text();
+	static const QString originalTwoButtonText = _ui->twoButton->text();
+	static const QString originalThreeButtonText = _ui->threeButton->text();
+	static const QString originalFourButtonText = _ui->fourButton->text();
+	static const QString originalFiveButtonText = _ui->fiveButton->text();
+	static const QString originalSixButtonText = _ui->sixButton->text();
+	static const QString originalSevenButtonText = _ui->sevenButton->text();
+	static const QString originalEightButtonText = _ui->eightButton->text();
+	static const QString originalNineButtonText = _ui->nineButton->text();
+	static const QString originalStarButtonText = _ui->starButton->text();
+	static const QString originalSharpButtonText = _ui->poundButton->text();
 
 	if (index == 0) {
-		_zeroButton->setIcon(QIcon());
-		_zeroButton->setText(originalZeroButtonText);
-		_oneButton->setIcon(QIcon());
-		_oneButton->setText(originalOneButtonText);
-		_twoButton->setIcon(QIcon());
-		_twoButton->setText(originalTwoButtonText);
-		_threeButton->setIcon(QIcon());
-		_threeButton->setText(originalThreeButtonText);
-		_fourButton->setIcon(QIcon());
-		_fourButton->setText(originalFourButtonText);
-		_fiveButton->setIcon(QIcon());
-		_fiveButton->setText(originalFiveButtonText);
-		_sixButton->setIcon(QIcon());
-		_sixButton->setText(originalSixButtonText);
-		_sevenButton->setIcon(QIcon());
-		_sevenButton->setText(originalSevenButtonText);
-		_eightButton->setIcon(QIcon());
-		_eightButton->setText(originalEightButtonText);
-		_nineButton->setIcon(QIcon());
-		_nineButton->setText(originalNineButtonText);
-		_starButton->setIcon(QIcon());
-		_starButton->setText(originalStarButtonText);
-		_poundButton->setIcon(QIcon());
-		_poundButton->setText(originalSharpButtonText);
+		_ui->zeroButton->setIcon(QIcon());
+		_ui->zeroButton->setText(originalZeroButtonText);
+		_ui->oneButton->setIcon(QIcon());
+		_ui->oneButton->setText(originalOneButtonText);
+		_ui->twoButton->setIcon(QIcon());
+		_ui->twoButton->setText(originalTwoButtonText);
+		_ui->threeButton->setIcon(QIcon());
+		_ui->threeButton->setText(originalThreeButtonText);
+		_ui->fourButton->setIcon(QIcon());
+		_ui->fourButton->setText(originalFourButtonText);
+		_ui->fiveButton->setIcon(QIcon());
+		_ui->fiveButton->setText(originalFiveButtonText);
+		_ui->sixButton->setIcon(QIcon());
+		_ui->sixButton->setText(originalSixButtonText);
+		_ui->sevenButton->setIcon(QIcon());
+		_ui->sevenButton->setText(originalSevenButtonText);
+		_ui->eightButton->setIcon(QIcon());
+		_ui->eightButton->setText(originalEightButtonText);
+		_ui->nineButton->setIcon(QIcon());
+		_ui->nineButton->setText(originalNineButtonText);
+		_ui->starButton->setIcon(QIcon());
+		_ui->starButton->setText(originalStarButtonText);
+		_ui->poundButton->setIcon(QIcon());
+		_ui->poundButton->setText(originalSharpButtonText);
 	} else {
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
 		QString iconFile = QString::fromStdString(config.getAudioSmileysDir() +
-			_audioSmileysComboBox->currentText().toStdString() + File::getPathSeparator());
+			_ui->audioSmileysComboBox->currentText().toStdString() + File::getPathSeparator());
 
-		_zeroButton->setIcon(QIcon(iconFile + "0.png"));
-		_zeroButton->setText(QString::null);
-		_oneButton->setIcon(QIcon(iconFile + "1.png"));
-		_oneButton->setText(QString::null);
-		_twoButton->setIcon(QIcon(iconFile + "2.png"));
-		_twoButton->setText(QString::null);
-		_threeButton->setIcon(QIcon(iconFile + "3.png"));
-		_threeButton->setText(QString::null);
-		_fourButton->setIcon(QIcon(iconFile + "4.png"));
-		_fourButton->setText(QString::null);
-		_fiveButton->setIcon(QIcon(iconFile + "5.png"));
-		_fiveButton->setText(QString::null);
-		_sixButton->setIcon(QIcon(iconFile + "6.png"));
-		_sixButton->setText(QString::null);
-		_sevenButton->setIcon(QIcon(iconFile + "7.png"));
-		_sevenButton->setText(QString::null);
-		_eightButton->setIcon(QIcon(iconFile + "8.png"));
-		_eightButton->setText(QString::null);
-		_nineButton->setIcon(QIcon(iconFile + "9.png"));
-		_nineButton->setText(QString::null);
-		_starButton->setIcon(QIcon(iconFile + "star.png"));
-		_starButton->setText(QString::null);
-		_poundButton->setIcon(QIcon(iconFile + "pound.png"));
-		_poundButton->setText(QString::null);
+		_ui->zeroButton->setIcon(QIcon(iconFile + "0.png"));
+		_ui->zeroButton->setText(QString::null);
+		_ui->oneButton->setIcon(QIcon(iconFile + "1.png"));
+		_ui->oneButton->setText(QString::null);
+		_ui->twoButton->setIcon(QIcon(iconFile + "2.png"));
+		_ui->twoButton->setText(QString::null);
+		_ui->threeButton->setIcon(QIcon(iconFile + "3.png"));
+		_ui->threeButton->setText(QString::null);
+		_ui->fourButton->setIcon(QIcon(iconFile + "4.png"));
+		_ui->fourButton->setText(QString::null);
+		_ui->fiveButton->setIcon(QIcon(iconFile + "5.png"));
+		_ui->fiveButton->setText(QString::null);
+		_ui->sixButton->setIcon(QIcon(iconFile + "6.png"));
+		_ui->sixButton->setText(QString::null);
+		_ui->sevenButton->setIcon(QIcon(iconFile + "7.png"));
+		_ui->sevenButton->setText(QString::null);
+		_ui->eightButton->setIcon(QIcon(iconFile + "8.png"));
+		_ui->eightButton->setText(QString::null);
+		_ui->nineButton->setIcon(QIcon(iconFile + "9.png"));
+		_ui->nineButton->setText(QString::null);
+		_ui->starButton->setIcon(QIcon(iconFile + "star.png"));
+		_ui->starButton->setText(QString::null);
+		_ui->poundButton->setIcon(QIcon(iconFile + "pound.png"));
+		_ui->poundButton->setText(QString::null);
 	}
 }
