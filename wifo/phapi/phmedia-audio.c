@@ -990,69 +990,6 @@ static void ph_upsample(void *dbuf, void *sbuf, int framesize, short *last)
 
 
 
-
-
-static void ph_mixmedia2(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1, ph_mediabuf_t *smb2, int framesize)
-{
-  int tmp;
-  short *src1 = smb1->buf;
-  short *send1 = smb1->buf + smb1->next;
-  short *src2 = smb2->buf;
-  short *send2 = smb2->buf + smb2->next;
-  short *dst = dmb->buf;
-  short *dend = dst + framesize;
-  int s1len = smb1->next;
-  int s2len = smb2->next;
-
-
-  while((dst < dend) && s1len && s2len )
-    {
-      tmp = (int)*src1++ + (int)*src2++;
-
-      tmp = SATURATE(tmp);
-      *dst++ = (short) tmp;
-      s1len--; 
-      s2len--;
-    }
-
-  while((src1 < send1) && (dst < dend))
-    *dst++ = *src1++;
-
-  while((src2 < send2) && (dst < dend))
-    *dst++ = *src2++;
-
-  dmb->next = dst - dmb->buf;
-}
-
-
-
-
-static void ph_mixmedia(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1)
-{
-  int tmp;
-  short *src1 = smb1->buf;
-  short *dst = dmb->buf;
-  short *dend;
-
-
-  if (smb1->next < dmb->next)
-    dend = dmb->buf + smb1->next;
-  else
-    dend = dmb->buf + dmb->next;
-
-  while(dst < dend)
-    {
-      tmp = (int)*src1++ + (int)*dst;
-
-      tmp = SATURATE(tmp);
-      *dst++ = (short) tmp;
-    }
-
-}
-
-
-
-
 /**
  * @brief catch a packet on the rtp RX path and decode it
  *
@@ -1208,7 +1145,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 				int len2;
 				len = ph_media_retrieve_decoded_frame(stream, &stream->data_in, targetRate);
 				len2 = ph_media_retrieve_decoded_frame(stream->to_mix, &stream->to_mix->data_in, targetRate);
-				ph_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, framesize/2);
+				ph_mediabuf_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, framesize/2);
 				len = spkrbuf.next * 2;
 			}
 			CONF_UNLOCK(stream);
@@ -1533,11 +1470,11 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 
 				if (other->data_in.next)
 				{
-					ph_mixmedia(&stream->data_out, &other->data_in);
+					ph_mediabuf_mixmedia(&stream->data_out, &other->data_in);
 				}
 				if (stream->data_in.next)
 				{
-					ph_mixmedia(&other->data_out, &stream->data_in);
+					ph_mediabuf_mixmedia(&other->data_out, &stream->data_in);
 				}
 
 				ph_encode_and_send_audio_frame(stream, stream->data_out.buf, framesize);

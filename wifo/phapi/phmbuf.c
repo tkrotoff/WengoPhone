@@ -22,6 +22,7 @@ typedef long off_t;
 #define DONT(x)
 #define DO(x) x
 
+#define SATURATE(x) ((x > 0x7fff) ? 0x7fff : ((x < ~0x7fff) ? ~0x7fff : x))
 
 ph_mediabuf_t *
 ph_mediabuf_new(int size)
@@ -63,33 +64,100 @@ void ph_mediabuf_cleanup(ph_mediabuf_t *mb)
 }
 
 
+
 int ph_mediabuf_mixaudio(ph_mediabuf_t *mb, short *mix, int samples)
 {
-  short *src = mb->buf + mb->next;
-  int  len;
-  int  xlen;
-  int avail = mb->size - mb->next;
+	short *src = mb->buf + mb->next;
+	int  len;
+	int  xlen;
+	int avail = mb->size - mb->next;
 
-  if (samples > avail)
-    len = avail;
-  else
-    len = samples;
+	if (samples > avail)
+	{
+		len = avail;
+	}
+	else
+	{
+		len = samples;
+	}
 
-  xlen = len;
+	xlen = len;
 
-  while(len--)
-    {
-      *mix = (*mix + *src) >> 1;
-      mix++;
-      src++;
-    }
+	while(len--)
+	{
+		*mix = (*mix + *src) >> 1;
+		mix++;
+		src++;
+	}
 
-  
-  mb->next += xlen;
+	mb->next += xlen;
 
-  return xlen;
+	return xlen;
+}
+
+void ph_mediabuf_mixmedia(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1)
+{
+	int tmp;
+	short *src1 = smb1->buf;
+	short *dst = dmb->buf;
+	short *dend;
+
+	if (smb1->next < dmb->next)
+	{
+		dend = dmb->buf + smb1->next;
+	}
+	else
+	{
+		dend = dmb->buf + dmb->next;
+	}
+
+	while(dst < dend)
+	{
+		tmp = (int)*src1++ + (int)*dst;
+		tmp = SATURATE(tmp);
+		*dst++ = (short) tmp;
+	}
 
 }
+void ph_mediabuf_mixmedia2(ph_mediabuf_t *dmb, ph_mediabuf_t *smb1, ph_mediabuf_t *smb2, int framesize)
+{
+	int tmp;
+	short *src1 = smb1->buf;
+	short *send1 = smb1->buf + smb1->next;
+	short *src2 = smb2->buf;
+	short *send2 = smb2->buf + smb2->next;
+	short *dst = dmb->buf;
+	short *dend = dst + framesize;
+	int s1len = smb1->next;
+	int s2len = smb2->next;
+
+	// mixes the 2 buffers until framesize or starvation
+	while((dst < dend) && s1len && s2len )
+	{
+		tmp = (int)*src1++ + (int)*src2++;
+		tmp = SATURATE(tmp);
+		*dst++ = (short) tmp;
+		s1len--; 
+		s2len--;
+	}
+
+	// starvation was due to source 2
+	while((src1 < send1) && (dst < dend))
+	{
+		*dst++ = *src1++;
+	}
+
+	// starvation was due to source 1
+	while((src2 < send2) && (dst < dend))
+	{
+		*dst++ = *src2++;
+	}
+
+	dmb->next = dst - dmb->buf;
+}
+
+
+
 
 #define ABUFLEN (4*1024)
 #define BAD_HDR -1
@@ -215,7 +283,6 @@ ph_mediabuf_load(const char *filename, int samplerate)
 {
   int  fd;
   off_t flen;
-  int  xlen;
   ph_mediabuf_t *mb;
   int err;
 
