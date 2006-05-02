@@ -51,6 +51,11 @@ void WenboxPlugin::openWenbox() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	if (_wenbox->open()) {
 		if (config.getWenboxEnable()) {
+			//Disable Half-duplex mode
+			config.set(AUDIO_HALFDUPLEX_KEY, false);
+			//Enable AEC
+			config.set(AUDIO_AEC_KEY, true);
+
 			switchCurrentAudioDeviceToWenbox();
 			_wenbox->setDefaultMode(Wenbox::ModeUSB);
 			_wenbox->switchMode(Wenbox::ModeUSB);

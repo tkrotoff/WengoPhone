@@ -48,15 +48,15 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, bool showAsDia
 	QMenu * addIMAccountMenu = new QMenu(_ui->addIMAccountButton);
 	connect(addIMAccountMenu, SIGNAL(triggered(QAction *)), SLOT(addIMAccount(QAction *)));
 
-	addIMAccountMenu->addAction(QIcon(":pics/protocol_msn.png"),
+	addIMAccountMenu->addAction(QIcon(":pics/protocols/msn.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolMSN)));
-	addIMAccountMenu->addAction(QIcon(":pics/protocol_aim.png"),
+	addIMAccountMenu->addAction(QIcon(":pics/protocols/aim.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolAIMICQ)));
-	addIMAccountMenu->addAction(QIcon(":pics/protocol_yahoo.png"),
+	addIMAccountMenu->addAction(QIcon(":pics/protocols/yahoo.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolYahoo)));
-	addIMAccountMenu->addAction(QIcon(":pics/protocol_jabber.png"),
+	addIMAccountMenu->addAction(QIcon(":pics/protocols/jabber.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolJabber)));
-	addIMAccountMenu->addAction(QIcon(":pics/protocol_googletalk.png"),
+	addIMAccountMenu->addAction(QIcon(":pics/protocols/googletalk.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolGoogleTalk)));
 	_ui->addIMAccountButton->setMenu(addIMAccountMenu);
 
@@ -144,7 +144,11 @@ void QtIMAccountManager::deleteIMAccount() {
 }
 
 void QtIMAccountManager::modifyIMAccount() {
-	loadIMAccounts();
+	QtIMAccountItem * imAccountItem = (QtIMAccountItem *) _ui->treeWidget->currentItem();
+	if (imAccountItem) {
+		IMAccount * imAccount = imAccountItem->getIMAccount();
+		QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imAccount, _imAccountManagerWidget);
+	}
 }
 
 void QtIMAccountManager::itemClicked(QTreeWidgetItem * item, int column) {
@@ -164,9 +168,6 @@ void QtIMAccountManager::itemClicked(QTreeWidgetItem * item, int column) {
 }
 
 void QtIMAccountManager::itemDoubleClicked(QTreeWidgetItem * item, int column) {
-	QtIMAccountItem * imAccountItem = dynamic_cast<QtIMAccountItem *>(item);
-
-	IMAccount * imAccount = imAccountItem->getIMAccount();
-
-	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imAccount, _imAccountManagerWidget);
+	_ui->treeWidget->setCurrentItem(item);
+	modifyIMAccount();
 }

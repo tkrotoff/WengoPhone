@@ -1,70 +1,34 @@
 <RCC>
     <qresource prefix="/" >
-        <file>pics/call_button.png</file>
-        <file>pics/call_history.png</file>
-        <file>pics/call_incoming.png</file>
-        <file>pics/call_missed.png</file>
-        <file>pics/call_outgoing.png</file>
-        <file>pics/call_video_button.png</file>
         <file>pics/callbar/call_bar_button.png</file>
         <file>pics/callbar/call_bar_button_off.png</file>
-        <file>pics/callbar/call_bar_button_video.png</file>
         <file>pics/callbar/call_bar_fill.png</file>
         <file>pics/callbar/call_bar_start.png</file>
         <file>pics/callbar/call_bar_button_hangup.png</file>
         <file>pics/callbar/call_bar_button_hangup_on.png</file>
         <file>pics/callbar/call_bar_start.png</file>
         <file>pics/callbar/call_bar_button_on.png</file>
-        <file>pics/chat.png</file>
         <file>pics/chat/chat_call_bar_button.png</file>
         <file>pics/chat/chat_call_bar_button_on.png</file>
         <file>pics/chat/chat_emoticon_button.png</file>
         <file>pics/chat/chat_emoticon_button_on.png</file>
         <file>pics/chat/chat_send.png</file>
-        <file>pics/chat_send_message.png</file>
-        <file>pics/conference.png</file>
-        <file>pics/config.png</file>
-        <file>pics/config_advanced.png</file>
-        <file>pics/config_appearance.png</file>
-        <file>pics/config_audio.png</file>
-        <file>pics/config_general.png</file>
-        <file>pics/config_languages.png</file>
-        <file>pics/config_video.png</file>
-        <file>pics/contact_add.png</file>
-        <file>pics/contact_block.png</file>
+        <file>pics/config/advanced.png</file>
+        <file>pics/config/audio.png</file>
+        <file>pics/config/general.png</file>
+        <file>pics/config/languages.png</file>
+        <file>pics/config/video.png</file>
         <file>pics/contact_border.png</file>
-        <file>pics/contact_call.png</file>
-        <file>pics/contact_find.png</file>
-        <file>pics/contact_im.png</file>
-        <file>pics/contact_list.png</file>
-        <file>pics/contact_phone_home.png</file>
-        <file>pics/contact_phone_mobile.png</file>
-        <file>pics/contact_phone_wengo.png</file>
-        <file>pics/contact_phone_work.png</file>
-        <file>pics/contact_picture.png</file>
-        <file>pics/contact_picture_mini.png</file>
-        <file>pics/contact_remove.png</file>
-        <file>pics/contact_video.png</file>
-        <file>pics/contact_view.png</file>
         <file>pics/contact/chat.png</file>
-        <file>pics/contact/hangup.png</file>
+        <file>pics/contact/call.png</file>
         <file>pics/contact/sms.png</file>
         <file>pics/contact/mobile.png</file>
         <file>pics/contact/fixe.png</file>
-        <file>pics/dialpad.png</file>
         <file>pics/group_close.png</file>
         <file>pics/group_open.png</file>
-        <file>pics/hangup_button.png</file>
         <file>pics/speaker.png</file>
-        <file>pics/help.png</file>
-        <file>pics/home.png</file>
-        <file>pics/homepage.png</file>
-        <file>pics/logo-mini.png</file>
-        <file>pics/logo-spiral.png</file>
-        <file>pics/logo.png</file>
+        <file>pics/wengo.png</file>
         <file>pics/microphone.png</file>
-        <file>pics/no.png</file>
-        <file>pics/point.gif</file>
         <file>pics/browse.png</file>
         <file>pics/play.png</file>
         <file>pics/profilebar/bar_end.png</file>
@@ -91,12 +55,6 @@
         <file>pics/profilebar/bar_start_status_green.png</file>
         <file>pics/profilebar/bar_start_status_orange.png</file>
         <file>pics/profilebar/bar_start_status_red.png</file>
-        <file>pics/protocol_aim.png</file>
-        <file>pics/protocol_googletalk.png</file>
-        <file>pics/protocol_jabber.png</file>
-        <file>pics/protocol_msn.png</file>
-        <file>pics/protocol_wengo.png</file>
-        <file>pics/protocol_yahoo.png</file>
         <file>pics/protocols/aim.png</file>
         <file>pics/protocols/aim_off.png</file>
         <file>pics/protocols/wengo.png</file>
@@ -107,21 +65,12 @@
         <file>pics/protocols/msn_off.png</file>
         <file>pics/protocols/yahoo.png</file>
         <file>pics/protocols/yahoo_off.png</file>
-        <file>pics/sms.png</file>
         <file>pics/status/away.png</file>
         <file>pics/status/donotdisturb.png</file>
         <file>pics/status/forward.png</file>
         <file>pics/status/invisible.png</file>
         <file>pics/status/offline.png</file>
         <file>pics/status/online.png</file>
-        <file>pics/statusbar_audio.png</file>
-        <file>pics/statusbar_audio_error.png</file>
-        <file>pics/statusbar_connect.png</file>
-        <file>pics/statusbar_connect_error.png</file>
-        <file>pics/statusbar_sip.png</file>
-        <file>pics/statusbar_sip_error.png</file>
-        <file>pics/statusbar_uptodate.png</file>
-        <file>pics/statusbar_uptodate_error.png</file>
         <file>pics/statusbar/status-earth-offline.png</file>
         <file>pics/statusbar/status-earth-online.mng</file>
         <file>pics/statusbar/status-earth-connecting.mng</file>
@@ -133,7 +82,6 @@
         <file>pics/statusbar/status-network-online-static.png</file>
         <file>pics/systray_icon.png</file>
         <file>pics/systray_icon_error.png</file>
-        <file>pics/systray_popup_window.png</file>
         <file>pics/update.png</file>
         <file>pics/video_flip.png</file>
         <file>pics/video_fullscreen.png</file>
@@ -143,11 +91,11 @@
         <file>pics/close_on.png</file>
         <file>pics/iconbar/add_contact.png</file>
         <file>pics/iconbar/chat.png</file>
-        <file>pics/iconbar/conference2.png</file>
+        <file>pics/iconbar/conference.png</file>
         <file>pics/iconbar/search_contact.png</file>
         <file>pics/iconbar/webcam.png</file>
         <file>pics/iconbar/webcam-off.png</file>
-        <file>pics/iconbar/sms2.png</file>
+        <file>pics/iconbar/sms.png</file>
         <file>pics/export1_96.png</file>
     </qresource>
     <qresource prefix="/data" >
@@ -190,7 +138,6 @@
         <file>chat/emoticons/face-wink48.png</file>
     </qresource>
     <qresource prefix="/forms" >
-        <file>WengoPhoneWindow.ui</file>
         <file>chat/ChatRoomInviteWidget.ui</file>
         <file>chat/ChatRoomWidget.ui</file>
         <file>chat/ChatWidget.ui</file>

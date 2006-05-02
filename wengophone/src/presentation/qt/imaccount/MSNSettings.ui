@@ -24,11 +24,8 @@
    </property>
    <item row="0" column="0" >
     <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string/>
-     </property>
      <property name="pixmap" >
-      <pixmap resource="../wengophone.qrc" >:/pics/protocol_msn.png</pixmap>
+      <pixmap resource="../wengophone.qrc" >:/pics/protocols/msn.png</pixmap>
      </property>
     </widget>
    </item>

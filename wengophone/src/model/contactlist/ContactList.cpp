@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,6 @@ ContactList::ContactList(UserProfile & userProfile)
 		boost::bind(&ContactList::newIMAccountAddedEventHandler, this, _1, _2);
 	_userProfile.imAccountRemovedEvent +=
 		boost::bind(&ContactList::imAccountRemovedEventHandler, this, _1, _2);
-
 }
 
 ContactList::~ContactList() {
@@ -384,7 +383,7 @@ ContactGroup * ContactList::getContactGroup(const std::string & groupName) const
 	}
 }
 
-void ContactList::contactIconChangedEventHandler(PresenceHandler & sender, 
+void ContactList::contactIconChangedEventHandler(PresenceHandler & sender,
 	const IMContact & imContact, Picture icon) {
 
 	Contact * contact = findContactThatOwns(imContact);
@@ -423,4 +422,3 @@ void ContactList::moveContact(Contact & contact, const string & dst, const strin
 		removeFromContactGroup(src, contact);
 	}
 }
-

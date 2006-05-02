@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -224,7 +224,7 @@ private:
 	/**
 	 * @see PresenceHandler::contactIconChangedEvent
 	 */
-	void contactIconChangedEventHandler(PresenceHandler & sender, 
+	void contactIconChangedEventHandler(PresenceHandler & sender,
 		const IMContact & imContact, Picture icon);
 
 	/**
@@ -327,8 +327,7 @@ private:
 
 	IMContactListHandler & _imContactListHandler;
 
-	Mutex _mutex;
-
+	mutable Mutex _mutex;
 };
 
 #endif	//CONTACTLIST_H

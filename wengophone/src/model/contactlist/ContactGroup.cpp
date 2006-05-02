@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ std::list<std::string> ContactGroup::getMobilePhoneList() const {
 	std::list<std::string> list;
 	for (ContactVector::const_iterator it = _contactList.begin();
 		it != _contactList.end(); ++it) {
-		
+
 		std::string getMobilePhone = (*it)->getMobilePhone();
 		if( getMobilePhone != "" ) {
 			list.push_front(getMobilePhone);
@@ -89,4 +89,3 @@ std::list<std::string> ContactGroup::getMobilePhoneList() const {
 	}
 	return list;
 }
-

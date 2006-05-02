@@ -138,11 +138,8 @@ of the License, or (at your option) any later version.</string>
    </item>
    <item row="0" column="0" >
     <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string/>
-     </property>
      <property name="pixmap" >
-      <pixmap resource="wengophone.qrc" >:/pics/logo.png</pixmap>
+      <pixmap resource="wengophone.qrc" >:/pics/wengo.png</pixmap>
      </property>
      <property name="alignment" >
       <set>Qt::AlignHCenter</set>

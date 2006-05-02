@@ -74,6 +74,9 @@
      </item>
      <item row="1" column="0" colspan="2" >
       <widget class="QCheckBox" name="enableWenboxCheckBox" >
+       <property name="toolTip" >
+        <string>Enable Wenbox usage</string>
+       </property>
        <property name="text" >
         <string>Wenbox USB</string>
        </property>
@@ -88,6 +91,9 @@
      </item>
      <item row="2" column="0" colspan="2" >
       <widget class="QCheckBox" name="halfDuplexCheckBox" >
+       <property name="toolTip" >
+        <string>Enable half-duplex mode</string>
+       </property>
        <property name="text" >
         <string>Loud speakers mode</string>
        </property>

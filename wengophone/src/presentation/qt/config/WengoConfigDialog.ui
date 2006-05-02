@@ -63,7 +63,7 @@
        <string>General</string>
       </property>
       <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config_general.png</iconset>
+       <iconset resource="..\wengophone.qrc" >:/pics/config/general.png</iconset>
       </property>
      </item>
      <item>
@@ -71,7 +71,7 @@
        <string>Languages</string>
       </property>
       <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config_languages.png</iconset>
+       <iconset resource="..\wengophone.qrc" >:/pics/config/languages.png</iconset>
       </property>
      </item>
      <item>
@@ -89,7 +89,7 @@
        <string>Audio</string>
       </property>
       <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config_audio.png</iconset>
+       <iconset resource="..\wengophone.qrc" >:/pics/config/audio.png</iconset>
       </property>
      </item>
      <item>
@@ -97,7 +97,7 @@
        <string>Video</string>
       </property>
       <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config_video.png</iconset>
+       <iconset resource="..\wengophone.qrc" >:/pics/config/video.png</iconset>
       </property>
      </item>
      <item>
@@ -113,6 +113,9 @@
      <item>
       <property name="text" >
        <string>Advanced</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="..\wengophone.qrc" >:/pics/config/advanced.png</iconset>
       </property>
      </item>
     </widget>

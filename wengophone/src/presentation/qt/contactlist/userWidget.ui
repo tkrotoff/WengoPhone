@@ -12,9 +12,6 @@
     <height>93</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Form</string>
-  </property>
   <property name="autoFillBackground" >
    <bool>true</bool>
   </property>
@@ -49,11 +46,8 @@
            <height>22</height>
           </size>
          </property>
-         <property name="text" >
-          <string>PushButton</string>
-         </property>
          <property name="icon" >
-          <iconset resource="../wengophone.qrc" >:/pics/contact/hangup.png</iconset>
+          <iconset resource="../wengophone.qrc" >:/pics/contact/call.png</iconset>
          </property>
          <property name="flat" >
           <bool>true</bool>
@@ -67,9 +61,6 @@
            <width>22</width>
            <height>22</height>
           </size>
-         </property>
-         <property name="text" >
-          <string>PushButton</string>
          </property>
          <property name="icon" >
           <iconset resource="../wengophone.qrc" >:/pics/contact/chat.png</iconset>
@@ -86,9 +77,6 @@
            <width>22</width>
            <height>22</height>
           </size>
-         </property>
-         <property name="text" >
-          <string>PushButton</string>
          </property>
          <property name="icon" >
           <iconset resource="../wengophone.qrc" >:/pics/contact/sms.png</iconset>
@@ -158,9 +146,6 @@
              <height>16</height>
             </size>
            </property>
-           <property name="text" >
-            <string/>
-           </property>
            <property name="pixmap" >
             <pixmap resource="../wengophone.qrc" >:/pics/contact/mobile.png</pixmap>
            </property>
@@ -206,9 +191,6 @@
              <width>16</width>
              <height>16</height>
             </size>
-           </property>
-           <property name="text" >
-            <string/>
            </property>
            <property name="pixmap" >
             <pixmap resource="../wengophone.qrc" >:/pics/contact/fixe.png</pixmap>

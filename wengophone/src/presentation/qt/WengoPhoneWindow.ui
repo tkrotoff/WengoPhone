@@ -132,6 +132,9 @@
            <height>38</height>
           </size>
          </property>
+         <property name="toolTip" >
+          <string>Add a contact</string>
+         </property>
          <property name="icon" >
           <iconset resource="wengophone.qrc" >:/pics/iconbar/add_contact.png</iconset>
          </property>
@@ -159,6 +162,9 @@
            <width>38</width>
            <height>38</height>
           </size>
+         </property>
+         <property name="toolTip" >
+          <string>Search for a contact</string>
          </property>
          <property name="icon" >
           <iconset resource="wengophone.qrc" >:/pics/iconbar/search_contact.png</iconset>
@@ -188,6 +194,9 @@
            <height>38</height>
           </size>
          </property>
+         <property name="toolTip" >
+          <string>Create a conference call</string>
+         </property>
          <property name="icon" >
           <iconset resource="wengophone.qrc" >:/pics/iconbar/conference2.png</iconset>
          </property>
@@ -216,6 +225,9 @@
            <height>38</height>
           </size>
          </property>
+         <property name="toolTip" >
+          <string>Sends a SMS</string>
+         </property>
          <property name="icon" >
           <iconset resource="wengophone.qrc" >:/pics/iconbar/sms2.png</iconset>
          </property>
@@ -243,6 +255,9 @@
            <width>38</width>
            <height>38</height>
           </size>
+         </property>
+         <property name="toolTip" >
+          <string>Enable/disable video calls</string>
          </property>
          <property name="icon" >
           <iconset resource="wengophone.qrc" >:/pics/iconbar/webcam.png</iconset>
