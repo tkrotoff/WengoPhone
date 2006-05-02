@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 #include <presentation/PContact.h>
-#include <model/contactList/ContactList.h>
-#include <control/contactList/CContactList.h>
+#include <model/contactlist/ContactList.h>
+#include <control/contactlist/CContactList.h>
 #include <control/CWengoPhone.h>
 #include "QtUserManager.h"
 #include "UserTreeEventManager.h"
