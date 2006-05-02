@@ -158,7 +158,6 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 		}
 	}
 */
-
 	QString text = QString::fromUtf8(_cContact.getDisplayName().c_str());
 	painter->drawText(textRect, Qt::AlignLeft, text , 0);
 
