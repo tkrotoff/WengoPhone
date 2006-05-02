@@ -57,7 +57,7 @@ private Q_SLOTS:
 
 private:
 
-	void setItem(boost::any value, bool saveKeyValue, int row, int column);
+	void setItem(boost::any value, int row, int column);
 
 	Ui::AdvancedConfigWindow * _ui;
 

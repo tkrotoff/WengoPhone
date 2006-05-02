@@ -359,16 +359,6 @@ public:
 	/** @} */
 
 	/**
-	 * @name Protocols Methods
-	 * @{
-	 */
-
-	static const std::string AVAILABLE_PROTOCOLS_KEY;
-	StringList getAvailableProtocols() const;
-
-	/** @} */
-
-	/**
 	 * @name Wenbox Methods
 	 * @{
 	 */

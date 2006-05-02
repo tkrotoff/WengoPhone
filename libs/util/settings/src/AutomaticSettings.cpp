@@ -45,8 +45,7 @@ boost::any AutomaticSettings::getDefaultValue(const std::string & key) const {
 		LOG_FATAL("key=" + key + " not found, add it inside the AutomaticSettings constructor");
 	}
 
-	KeyValue keyValue = it->second;
-	boost::any defaultValue = keyValue.value;
+	boost::any defaultValue = it->second;
 	if (defaultValue.empty()) {
 		LOG_FATAL("default value for key=" + key + " not defined, add it inside the AutomaticSettings constructor");
 	}

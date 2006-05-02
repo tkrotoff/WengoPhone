@@ -84,45 +84,31 @@ bool Settings::contains(const std::string & key) const {
 	return false;
 }
 
-bool Settings::keyValueToBeSaved(const std::string & key) const {
-	Keys::const_iterator it = _keyMap.find(key);
-	if (it != _keyMap.end()) {
-		KeyValue keyValue = it->second;
-		if (keyValue.save) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	return false;
-}
-
-void Settings::set(const std::string & key, const std::string & value, bool save) {
-	_keyMap[key] = KeyValue(value, save);
+void Settings::set(const std::string & key, const std::string & value) {
+	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
 }
 
-void Settings::set(const std::string & key, const StringList & value, bool save) {
-	_keyMap[key] = KeyValue(value, save);
+void Settings::set(const std::string & key, const StringList & value) {
+	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
 }
 
-void Settings::set(const std::string & key, bool value, bool save) {
-	_keyMap[key] = KeyValue(value, save);
+void Settings::set(const std::string & key, bool value) {
+	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
 }
 
-void Settings::set(const std::string & key, int value, bool save) {
-	_keyMap[key] = KeyValue(value, save);
+void Settings::set(const std::string & key, int value) {
+	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
 }
 
 std::string Settings::get(const std::string & key, const std::string & defaultValue) const {
 	Keys::const_iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
-		KeyValue keyValue = it->second;
-		if (isString(keyValue.value)) {
-			return boost::any_cast<std::string>(keyValue.value);
+		if (isString(it->second)) {
+			return boost::any_cast<std::string>(it->second);
 		} else {
 			LOG_FATAL("the key doesn't match a string value");
 		}
@@ -134,9 +120,8 @@ std::string Settings::get(const std::string & key, const std::string & defaultVa
 StringList Settings::get(const std::string & key, const StringList & defaultValue) const {
 	Keys::const_iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
-		KeyValue keyValue = it->second;
-		if (isStringList(keyValue.value)) {
-			return boost::any_cast<StringList>(keyValue.value);
+		if (isStringList(it->second)) {
+			return boost::any_cast<StringList>(it->second);
 		} else {
 			LOG_FATAL("the key doesn't match a StringList value");
 		}
@@ -148,9 +133,8 @@ StringList Settings::get(const std::string & key, const StringList & defaultValu
 bool Settings::get(const std::string & key, bool defaultValue) const {
 	Keys::const_iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
-		KeyValue keyValue = it->second;
-		if (isBoolean(keyValue.value)) {
-			return boost::any_cast<bool>(keyValue.value);
+		if (isBoolean(it->second)) {
+			return boost::any_cast<bool>(it->second);
 		} else {
 			LOG_FATAL("the key doesn't match a boolean value");
 		}
@@ -162,9 +146,8 @@ bool Settings::get(const std::string & key, bool defaultValue) const {
 int Settings::get(const std::string & key, int defaultValue) const {
 	Keys::const_iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
-		KeyValue keyValue = it->second;
-		if (isInteger(keyValue.value)) {
-			return boost::any_cast<int>(keyValue.value);
+		if (isInteger(it->second)) {
+			return boost::any_cast<int>(it->second);
 		} else {
 			LOG_FATAL("the key doesn't match an integer value");
 		}
@@ -176,8 +159,7 @@ int Settings::get(const std::string & key, int defaultValue) const {
 boost::any Settings::getAny(const std::string & key, const boost::any & defaultValue) const {
 	Keys::const_iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
-		KeyValue keyValue = it->second;
-		return keyValue.value;
+		return it->second;
 	}
 
 	return defaultValue;

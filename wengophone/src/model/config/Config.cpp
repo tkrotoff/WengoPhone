@@ -105,8 +105,6 @@ const std::string Config::WENGO_SOFTUPDATE_PATH_KEY = "wengo.softupdate.path";
 const std::string Config::CONFIG_DIR_KEY = "config.dir";
 const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
 
-const std::string Config::AVAILABLE_PROTOCOLS_KEY = "available.protocols";
-
 const std::string Config::WENBOX_ENABLE_KEY = "wenbox.enable";
 
 Config::Config(const std::string & name)
@@ -117,12 +115,6 @@ Config::Config(const std::string & name)
 	std::string resourcesPath;
 	std::string configPath;
 	std::string pluginsPath;
-	StringList defaultProtocols;
-
-	defaultProtocols += "MSN";
-	defaultProtocols += "AIM / ICQ";
-	defaultProtocols += "Jabber";
-	defaultProtocols += "Yahoo";
 
 	_name = name;
 
@@ -190,7 +182,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[AUDIO_RINGING_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
 	_keyDefaultValueMap[AUDIO_CALLCLOSED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/callclosed.wav");
 	_keyDefaultValueMap[AUDIO_SMILEYS_DIR_KEY] = File::convertPathSeparators(resourcesPath + "sounds/tones/");
-	_keyDefaultValueMap[AUDIO_AEC_KEY] = false;
+	_keyDefaultValueMap[AUDIO_AEC_KEY] = true;
 	_keyDefaultValueMap[AUDIO_HALFDUPLEX_KEY] = true;
 
 	_keyDefaultValueMap[PROFILE_LAST_USED_NAME_KEY] = empty;
@@ -227,7 +219,7 @@ Config::Config(const std::string & name)
 
 	_keyDefaultValueMap[VIDEO_ENABLE_KEY] = true;
 	_keyDefaultValueMap[VIDEO_WEBCAM_DEVICE_KEY] = WebcamDriver::getInstance()->getDefaultDevice();
-	_keyDefaultValueMap[VIDEO_QUALITY_KEY] = EnumVideoQuality::VideoQualityNormal;
+	_keyDefaultValueMap[VIDEO_QUALITY_KEY] = (int) EnumVideoQuality::VideoQualityNormal;
 
 	_keyDefaultValueMap[WENGO_SERVER_HOSTNAME_KEY] = std::string("ws.wengo.fr");
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
@@ -235,8 +227,6 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[WENGO_INFO_PATH_KEY] = std::string("/info/info.php");
 	_keyDefaultValueMap[WENGO_SUBSCRIBE_PATH_KEY] = std::string("/softphone-subscription/index.php");
 	_keyDefaultValueMap[WENGO_SOFTUPDATE_PATH_KEY] = std::string("/softphone-version/version.php");
-
-	_keyDefaultValueMap[AVAILABLE_PROTOCOLS_KEY] = defaultProtocols;
 
 	_keyDefaultValueMap[WENBOX_ENABLE_KEY] = true;
 }
@@ -501,10 +491,6 @@ std::string Config::getVideoWebcamDevice() const {
 
 int Config::getVideoQuality() const {
 	return getIntegerKeyValue(VIDEO_QUALITY_KEY);
-}
-
-StringList Config::getAvailableProtocols() const {
-	return getStringListKeyValue(AVAILABLE_PROTOCOLS_KEY);
 }
 
 bool Config::getWenboxEnable() const {

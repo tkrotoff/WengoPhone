@@ -40,24 +40,19 @@ std::string SettingsXMLSerializer::serialize() {
 
 	for (Settings::Keys::const_iterator it = _settings._keyMap.begin(); it != _settings._keyMap.end(); ++it) {
 		string key = (*it).first;
-		Settings::KeyValue keyValue = (*it).second;
+		boost::any keyValue = (*it).second;
 		string value;
 
-		//Do not serialize the key/value if save == false
-		if (!keyValue.save) {
-			continue;
-		}
-
-		if (Settings::isString(keyValue.value)) {
-			value = "<string>" + boost::any_cast<std::string>(keyValue.value) + "</string>";
-		} else if (Settings::isStringList(keyValue.value)) {
-			StringList list = boost::any_cast<StringList>(keyValue.value);
+		if (Settings::isString(keyValue)) {
+			value = "<string>" + boost::any_cast<std::string>(keyValue) + "</string>";
+		} else if (Settings::isStringList(keyValue)) {
+			StringList list = boost::any_cast<StringList>(keyValue);
 			StringListXMLSerializer serializer(list);
 			value = serializer.serialize();
-		} else if (Settings::isBoolean(keyValue.value)) {
-			value = "<bool>" + String::fromBoolean(boost::any_cast<bool>(keyValue.value)) + "</bool>";
-		} else if (Settings::isInteger(keyValue.value)) {
-			value = "<int>" + String::fromNumber(boost::any_cast<int>(keyValue.value)) + "</int>";
+		} else if (Settings::isBoolean(keyValue)) {
+			value = "<bool>" + String::fromBoolean(boost::any_cast<bool>(keyValue)) + "</bool>";
+		} else if (Settings::isInteger(keyValue)) {
+			value = "<int>" + String::fromNumber(boost::any_cast<int>(keyValue)) + "</int>";
 		}
 
 		result += ("<" + key + ">" + value + "</" + key + ">\n");

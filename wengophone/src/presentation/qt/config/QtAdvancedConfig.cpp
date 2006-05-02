@@ -32,7 +32,6 @@ static const int STATUS_COLUMN = 1;
 static const int TYPE_COLUMN = 2;
 static const int VALUE_COLUMN = 3;
 static const int DEFAULT_VALUE_COLUMN = 4;
-static const int SAVE_KEY_COLUMN = 5;
 
 static const QString TYPE_STRING = "string";
 static const QString TYPE_STRINGLIST = "stringlist";
@@ -71,18 +70,18 @@ void QtAdvancedConfig::populate() {
 
 		boost::any value = config.getAny(key);
 		if (!value.empty()) {
-			setItem(value, config.keyValueToBeSaved(key), i, VALUE_COLUMN);
+			setItem(value, i, VALUE_COLUMN);
 		}
 
 		boost::any defaultValue = config.getDefaultValue(key);
 		if (!defaultValue.empty()) {
-			setItem(defaultValue, config.keyValueToBeSaved(key), i, DEFAULT_VALUE_COLUMN);
+			setItem(defaultValue, i, DEFAULT_VALUE_COLUMN);
 		}
 
 	}
 }
 
-void QtAdvancedConfig::setItem(boost::any value, bool saveKeyValue, int row, int column) {
+void QtAdvancedConfig::setItem(boost::any value, int row, int column) {
 	QTableWidgetItem * itemValue = NULL;
 	QTableWidgetItem * itemType = NULL;
 	if (Settings::isBoolean(value)) {
@@ -111,14 +110,6 @@ void QtAdvancedConfig::setItem(boost::any value, bool saveKeyValue, int row, int
 
 	_ui->tableWidget->setItem(row, column, itemValue);
 	_ui->tableWidget->setItem(row, TYPE_COLUMN, itemType);
-
-	QTableWidgetItem * itemSaveKeyValue = NULL;
-	if (saveKeyValue) {
-		itemSaveKeyValue = new QTableWidgetItem("true");
-	} else {
-		itemSaveKeyValue = new QTableWidgetItem("false");
-	}
-	_ui->tableWidget->setItem(row, SAVE_KEY_COLUMN, itemSaveKeyValue);
 }
 
 void QtAdvancedConfig::saveConfig() {

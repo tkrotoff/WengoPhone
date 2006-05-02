@@ -42,8 +42,6 @@ class Settings {
 	friend class SettingsXMLSerializer;
 public:
 
-	static const bool SAVE_KEY = true;
-
 	/**
 	 * A value has changed inside Settings.
 	 *
@@ -86,34 +84,27 @@ public:
 	bool contains(const std::string & key) const;
 
 	/**
-	 * Checks if the specified key/value is going to be saved/serialized.
-	 *
-	 * @return true if the key/value will be saved/serialized; false otherwise
-	 */
-	bool keyValueToBeSaved(const std::string & key) const;
-
-	/**
 	 * Sets the value of a key.
 	 *
 	 * @param key the key
 	 * @param value key value
 	 */
-	void set(const std::string & key, const std::string & value, bool save = SAVE_KEY);
+	void set(const std::string & key, const std::string & value);
 
 	/**
 	 * @see set()
 	 */
-	void set(const std::string & key, const StringList & value, bool save = SAVE_KEY);
+	void set(const std::string & key, const StringList & value);
 
 	/**
 	 * @see set()
 	 */
-	void set(const std::string & key, bool value, bool save = true);
+	void set(const std::string & key, bool value);
 
 	/**
 	 * @see set()
 	 */
-	void set(const std::string & key, int value, bool save = true);
+	void set(const std::string & key, int value);
 
 	/**
 	 * Gets the value for a given key.
@@ -189,58 +180,7 @@ protected:
 
 	virtual void copy(const Settings & settings);
 
-	/** Key value. */
-	class KeyValue {
-	public:
-
-		KeyValue() {
-			save = SAVE_KEY;
-		}
-
-		KeyValue(boost::any keyValue, bool keySave = SAVE_KEY) {
-			value = keyValue;
-			save = keySave;
-		}
-
-		KeyValue(const KeyValue & keyValue) {
-			value = keyValue.value;
-			save = keyValue.save;
-		}
-
-		KeyValue & operator=(const KeyValue & keyValue) {
-			value = keyValue.value;
-			save = keyValue.save;
-			return *this;
-		}
-
-		KeyValue & operator=(const std::string & keyValue) {
-			value = keyValue;
-			return *this;
-		}
-
-		KeyValue & operator=(int keyValue) {
-			value = keyValue;
-			return *this;
-		}
-
-		KeyValue & operator=(bool keyValue) {
-			value = keyValue;
-			return *this;
-		}
-
-		KeyValue & operator=(const StringList & keyValue) {
-			value = keyValue;
-			return *this;
-		}
-
-		/** Key value. */
-		boost::any value;
-
-		/** If the value/key should be serialize, true by default. */
-		bool save;
-	};
-
-	typedef std::map<const std::string, KeyValue> Keys;
+	typedef std::map<const std::string, boost::any> Keys;
 	Keys _keyMap;
 };
 
