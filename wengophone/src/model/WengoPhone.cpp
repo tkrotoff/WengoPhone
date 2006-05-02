@@ -53,6 +53,18 @@ WengoPhone::WengoPhone()
 	ss << "-";
 	ss << WengoPhoneBuildId::REVISION;
 	HttpRequest::setUserAgent(ss.str());
+	////
+
+	// Creating instance of Config
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	////
+
+	// Binding events
+	_userProfile.profileChangedEvent +=
+		boost::bind(&WengoPhone::profileChangedEventHandler, this, _1);
+	config.valueChangedEvent +=
+		boost::bind(&WengoPhone::valueChangedEventHandler, this, _1, _2);
+	////
 }
 
 void WengoPhone::shutdownTimeoutHandler() {
@@ -67,17 +79,9 @@ WengoPhone::~WengoPhone() {
 
 	delete _wenboxPlugin;
 
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	saveConfiguration();
 
-	//Saves the configuration
-	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
-	configManagerStorage.save(config.getConfigDir());
-	////
-
-	// Saving the UserProfile
-	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
-	userProfileStorage->save(config.getConfigDir());
-	////
+	saveUserProfile();
 
     /**
      *  Set up a timeout triggered if SIP registering is too long 
@@ -89,14 +93,12 @@ WengoPhone::~WengoPhone() {
 
 	// Disconnection the UserProfile
     _userProfile.disconnect();
-	delete userProfileStorage;
 	////
 
 	delete _startupSettingListener;
 }
 
 void WengoPhone::init() {
-	//Gets a config instance to create the config instance in the model thread.
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//Imports the Config from WengoPhone Classic.
@@ -156,4 +158,29 @@ void WengoPhone::terminateThreadSafe() {
 
 WenboxPlugin & WengoPhone::getWenboxPlugin() const {
 	return *_wenboxPlugin;
+}
+
+void WengoPhone::profileChangedEventHandler(Profile & sender) {
+	saveUserProfile();
+}
+
+void WengoPhone::saveUserProfile() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
+	userProfileStorage->save(config.getConfigDir());
+	delete userProfileStorage;
+}
+
+void WengoPhone::saveConfiguration() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
+	configManagerStorage.save(config.getConfigDir());
+}
+
+void WengoPhone::valueChangedEventHandler(Settings & sender, const std::string & key) {
+	if (sender.keyValueToBeSaved(key)) {
+		saveConfiguration();
+	}
 }

@@ -201,7 +201,8 @@ void QtEditMyProfile::readFromConfig() {
 	////
 
 	// Setting birthday
-	//_birthDate->setDate(QDate::fromString( QString().fromStdString( config.getProfileBirthDate() ) ) );
+	Date date = _userProfile.getBirthdate();
+	_birthDate->setDate(QDate(date.getYear(), date.getMonth(), date.getDay()));
 	////
 
 	// Setting address

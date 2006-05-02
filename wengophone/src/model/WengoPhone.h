@@ -129,6 +129,26 @@ private:
 	 */
 	void terminateThreadSafe();
 
+	/**
+	 * Saves the UserProfile.
+	 */
+	void saveUserProfile();
+
+	/**
+	 * Saves the Configuration.
+	 */
+	void saveConfiguration();
+
+	/**
+	 * @see Profile::profileChangedEvent
+	 */
+	void profileChangedEventHandler(Profile & sender);
+
+	/**
+	 * @see Settings::valueChangedEvent
+	 */
+	void valueChangedEventHandler(Settings & sender, const std::string & key);
+
 	/** Wenbox. */
 	WenboxPlugin * _wenboxPlugin;
 
