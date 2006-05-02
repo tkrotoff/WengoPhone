@@ -55,7 +55,7 @@ string ContactXMLSerializer::serialize() {
 	for (Contact::ContactGroupSet::const_iterator it = _contact._contactGroupSet.begin();
 		it != _contact._contactGroupSet.end();
 		++it) {
-		result += ("<group>" + (*it) + "</group>\n");
+		result += ("<group><![CDATA[" + (*it) + "]]></group>\n");
 	}
 	result += "</groups>\n";
 	////

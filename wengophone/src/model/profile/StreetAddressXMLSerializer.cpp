@@ -36,23 +36,23 @@ std::string StreetAddressXMLSerializer::serialize() {
 	result += "<address type=\"home\">\n";
 	
 	if (!_streetAddress._street.empty()) {
-		result += ("<street>" + _streetAddress._street + "</street>\n");
+		result += ("<street><![CDATA[" + _streetAddress._street + "]]></street>\n");
 	}
 	
 	if (!_streetAddress._city.empty()) {
-		result += ("<locality>" + _streetAddress._city + "</locality>\n");
+		result += ("<locality><![CDATA[" + _streetAddress._city + "]]></locality>\n");
 	}
 	
 	if (!_streetAddress._stateProvince.empty()) {
-		result += ("<region>" + _streetAddress._stateProvince + "</region>\n");
+		result += ("<region><![CDATA[" + _streetAddress._stateProvince + "]]></region>\n");
 	}
 	
 	if (!_streetAddress._zipCode.empty()) {
-		result += ("<postcode>" + _streetAddress._zipCode + "</postcode>\n");
+		result += ("<postcode><![CDATA[" + _streetAddress._zipCode + "]]></postcode>\n");
 	}
 	
 	if (!_streetAddress._country.empty()) {
-		result += ("<country>" + _streetAddress._country + "</country>\n");
+		result += ("<country><![CDATA[" + _streetAddress._country + "]]></country>\n");
 	}
 	
 	result += "</address>\n";

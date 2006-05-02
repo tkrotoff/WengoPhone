@@ -48,10 +48,10 @@ string ProfileXMLSerializer::serialize() {
 	// Serializing names
 	result += "<name>\n";
 	if (!_profile._firstName.empty()) {
-		result += ("<first>" + _profile._firstName + "</first>\n");
+		result += ("<first><![CDATA[" + _profile._firstName + "]]></first>\n");
 	}
 	if (!_profile._lastName.empty()) {
-		result += ("<last>" + _profile._lastName + "</last>\n");
+		result += ("<last><![CDATA[" + _profile._lastName + "]]></last>\n");
 	}
 	result += "</name>\n";
 	////
@@ -64,7 +64,7 @@ string ProfileXMLSerializer::serialize() {
 
 	// Serializing alias
 	if (!_profile._alias.empty()) {
-		result += ("<alias>" + _profile._alias + "</alias>");
+		result += ("<alias><![CDATA[" + _profile._alias + "]]></alias>");
 	}
 	////
 
