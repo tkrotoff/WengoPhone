@@ -23,9 +23,6 @@
 #include "GaimIMChat.h"
 #include "GaimEnumIMProtocol.h"
 
-#include <Windows.h>
-#include <Winbase.h>
-
 extern "C" {
 #include "gaim/conversation.h"
 }
