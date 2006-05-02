@@ -43,7 +43,7 @@
 using namespace std;
 
 QtEditContactProfile::QtEditContactProfile(QtEditContactProfile::EditMode mode,Contact & contact, CWengoPhone & cWengoPhone,QWidget * parent)
-: QDialog(parent), _contact(contact), _cWengoPhone(cWengoPhone), _mode(mode) {
+	: QDialog(parent), _mode(mode), _cWengoPhone(cWengoPhone), _contact(contact) {
 
 	_ui = new Ui::ContactDetails();
 	_ui->setupUi(this);
@@ -133,7 +133,7 @@ void QtEditContactProfile::writeToConfig() {
 	////
 
 	if ( _mode == ModeCreate ){
-        _contact.addToContactGroup( _ui->groupComboBox->currentText().toStdString());
+		_contact.addToContactGroup( _ui->groupComboBox->currentText().toStdString());
 	}
 }
 
@@ -141,12 +141,12 @@ void QtEditContactProfile::readFromConfig() {
 	// Contact & c = _cContact.getContact();
 
 	// Setting wengo id
-	_ui->alias->setText(QString::fromStdString(_contact.getWengoPhoneId()));
+	_ui->alias->setText(QString::fromUtf8(_contact.getWengoPhoneId().c_str()));
 	////
 
 	// Setting name
-	_ui->firstName->setText(QString::fromStdString(_contact.getFirstName()));
-	_ui->lastName->setText(QString::fromStdString(_contact.getLastName()));
+	_ui->firstName->setText(QString::fromUtf8(_contact.getFirstName().c_str()));
+	_ui->lastName->setText(QString::fromUtf8(_contact.getLastName().c_str()));
 	////
 
 	// Setting sex
@@ -162,7 +162,7 @@ void QtEditContactProfile::readFromConfig() {
 	StreetAddress address = _contact.getStreetAddress();
 	//_ui->state->setText(QString::fromStdString(address.getStateProvince()));
 	//_ui->country->setText(QString::fromStdString(address.getCountry()));
-	_ui->city->setText(QString::fromStdString(address.getCity()));
+	_ui->city->setText(QString::fromUtf8(address.getCity().c_str()));
 	////
 
 	// Setting IMAccounts
