@@ -100,7 +100,9 @@ headers = [
 	'history/QtHistoryWidget.h',
 	'history/QtHistoryItem.h',
 	'history/QtHistory.h',
-	'webservices/subscribe/QtSubscribe.h'
+	'webservices/subscribe/QtSubscribe.h',
+	'webservices/directory/QtWsDirectory.h',
+	'webservices/directory/QtWsDirectoryContact.h',
 ]
 
 sources = [
@@ -191,6 +193,8 @@ sources = [
 	'history/QtHistoryItem.cpp',
 	'history/QtHistory.cpp',
 	'webservices/subscribe/QtSubscribe.cpp',
+	'webservices/directory/QtWsDirectory.cpp',
+	'webservices/directory/QtWsDirectoryContact.cpp',
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]
 
@@ -210,6 +214,8 @@ forms = [
 	'login/ContactDetails.ui',
 	'login/IMContactDetails.ui',
 	'login/AddIMContactDialog.ui',
+	'webservices/directory/WsDirectory.ui',
+	'webservices/directory/WsDirectoryContact.ui',
 	'config/AccountSettings.ui',
 	'config/AdvancedConfigWindow.ui',
 	'config/GeneralSettings.ui',

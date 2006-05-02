@@ -46,6 +46,7 @@ class QtToaster;
 class QtStatusBar;
 class QtCallBar;
 class QtWengoStyleLabel;
+class QtWsDirectory;
 
 class TrayIcon;
 
@@ -80,8 +81,12 @@ public:
 	void setPhoneCall(QtContactCallListWidget * qtContactCallListWidget);
 
 	void setSms(QtSms * qtSms);
+	
+	void setWsDirectory(QtWsDirectory * qtWsDirectory);
 
 	QtSms * getSms() const;
+
+	QtWsDirectory * getQtWsDirectory() const;
 
 	void setSubscribe(QtSubscribe * qtSubscribe);
 
@@ -161,6 +166,8 @@ private Q_SLOTS:
 	void showCallOut();
 
 	void showSms();
+
+	void showSearchContactWindows();
 
 	void showVoiceMail();
 
@@ -244,6 +251,8 @@ private:
 
 	QtSms * _qtSms;
 
+	QtWsDirectory * _qtWsDirectory;
+
 	QtSubscribe * _qtSubscribe;
 
 	QtLogin * _qtLogin;
@@ -253,6 +262,8 @@ private:
 	QtContactList * _contactList;
 
 	QtHistoryWidget * _qtHistoryWidget;
+
+	QtContactCallListWidget * _contactCallListWidget;
 
 	QtCallBar * _qtCallBar;
 

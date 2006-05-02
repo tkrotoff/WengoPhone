@@ -48,6 +48,7 @@
 #include "QtAbout.h"
 #include "QtConfigPanel.h"
 #include "webservices/sms/QtSms.h"
+#include "webservices/directory/QtWsDirectory.h"
 #include "QtHttpProxyLogin.h"
 #include "config/QtAdvancedConfig.h"
 #include "config/QtWengoConfigDialog.h"
@@ -88,6 +89,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 	_cWengoPhone(cWengoPhone) {
 
 	_qtSms = NULL;
+	_qtWsDirectory = NULL;
 
 	_cWengoPhone.loginStateChangedEvent +=
 		boost::bind(&QtWengoPhone::loginStateChangedEventHandler, this, _1, _2);
@@ -228,7 +230,9 @@ void QtWengoPhone::initThreadSafe() {
 	//actionAll
 	connect(_ui->actionAll, SIGNAL(triggered()), SLOT(eraseHistory()));
 
-
+	//actionSearchContact
+	connect(_ui->actionSearchWengoUsers, SIGNAL(triggered()), SLOT(showSearchContactWindows()));
+	
 	//Embedded Browser
 	_browser = new QtBrowser(NULL);
 	_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
@@ -338,8 +342,16 @@ void QtWengoPhone::setSms(QtSms * qtSms) {
 	_qtSms = qtSms;
 }
 
+void QtWengoPhone::setWsDirectory(QtWsDirectory * qtWsDirectory) {
+	_qtWsDirectory = qtWsDirectory;
+}
+
 QtSms * QtWengoPhone::getSms() const {
 	return _qtSms;
+}
+
+QtWsDirectory * QtWengoPhone::getQtWsDirectory() const {
+	return _qtWsDirectory;
 }
 
 QtLogin * QtWengoPhone::getLogin() const {
@@ -370,10 +382,9 @@ void QtWengoPhone::updatePresentationThreadSafe() {
 	bool hasWengoAccount = _cWengoPhone.getCurrentUserProfile().hasWengoAccount();
 
 	_ui->actionShowWengoAccount->setEnabled(hasWengoAccount);
-
 	_ui->actionSendSms->setEnabled(hasWengoAccount);
-
 	_ui->actionCreateConferenceCall->setEnabled(hasWengoAccount);
+	_ui->actionSearchWengoUsers->setEnabled(hasWengoAccount);
 }
 
 void QtWengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
@@ -507,6 +518,12 @@ void QtWengoPhone::showCallOut() {
 
 void QtWengoPhone::showSms() {
 	_cWengoPhone.showWengoSMS();
+}
+
+void QtWengoPhone::showSearchContactWindows() {
+	if( _qtWsDirectory ) {
+		_qtWsDirectory->show();
+	}
 }
 
 void QtWengoPhone::showAbout() {

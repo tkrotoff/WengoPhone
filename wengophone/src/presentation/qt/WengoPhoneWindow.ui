@@ -346,7 +346,7 @@
      <x>0</x>
      <y>0</y>
      <width>296</width>
-     <height>19</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -395,6 +395,29 @@
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
    </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>&amp;Contacts</string>
+    </property>
+    <widget class="QMenu" name="menuHideShow" >
+     <property name="title" >
+      <string>&amp;Contact List Options</string>
+     </property>
+     <addaction name="actionViewToolbar" />
+     <addaction name="actionViewAddressbar" />
+     <addaction name="actionViewDialpad" />
+     <addaction name="separator" />
+     <addaction name="actionHideContactsOffline" />
+     <addaction name="actionShowContactGroups" />
+     <addaction name="separator" />
+     <addaction name="actionSortContacts" />
+    </widget>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearchWengoUsers" />
+    <addaction name="actionCreateGroup" />
+    <addaction name="separator" />
+    <addaction name="menuHideShow" />
+   </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>&amp;Wengo</string>
@@ -419,32 +442,8 @@
     <addaction name="actionVoiceMail" />
     <addaction name="separator" />
     <addaction name="actionOpenWengoAccount" />
-    <addaction name="actionLogOff" />
     <addaction name="separator" />
     <addaction name="actionExit" />
-   </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>&amp;Contacts</string>
-    </property>
-    <widget class="QMenu" name="menuHideShow" >
-     <property name="title" >
-      <string>&amp;Contact List Options</string>
-     </property>
-     <addaction name="actionViewToolbar" />
-     <addaction name="actionViewAddressbar" />
-     <addaction name="actionViewDialpad" />
-     <addaction name="separator" />
-     <addaction name="actionHideContactsOffline" />
-     <addaction name="actionShowContactGroups" />
-     <addaction name="separator" />
-     <addaction name="actionSortContacts" />
-    </widget>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSearchWengoUsers" />
-    <addaction name="actionCreateGroup" />
-    <addaction name="separator" />
-    <addaction name="menuHideShow" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -456,9 +455,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>552</y>
+     <y>549</y>
      <width>296</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

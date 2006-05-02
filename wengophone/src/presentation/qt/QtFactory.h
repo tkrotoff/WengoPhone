@@ -58,6 +58,9 @@
 #include "webservices/subscribe/QtSubscribe.h"
 #include <control/webservices/subscribe/CSubscribe.h>
 
+#include "webservices/directory/QtWsDirectory.h"
+#include <control/webservices/directory/CWsDirectory.h>
+
 #include <util/Logger.h>
 
 #include <QApplication>
@@ -149,6 +152,11 @@ public:
 	PSubscribe * createPresentationSubscribe(CSubscribe & cSubscribe) {
 		static QtSubscribe * qtSubscribe = new QtSubscribe(cSubscribe);
 		return qtSubscribe;
+	}
+
+	PWsDirectory * createPresentationWsDirectory(CWsDirectory & cWsDirectory) {
+		static QtWsDirectory * qtWsDirectory = new QtWsDirectory(cWsDirectory);
+		return qtWsDirectory;
 	}
 
 	PSoftUpdate * createPresentationSoftUpdate(CSoftUpdate & cSoftUpdate) {
