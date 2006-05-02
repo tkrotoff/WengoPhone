@@ -24,6 +24,8 @@
 #include "QtIMAccountItem.h"
 #include "QtIMAccountSettings.h"
 
+#include <control/CWengoPhone.h>
+
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
@@ -32,10 +34,8 @@
 
 static const int COLUMN_ENABLE_BUTTON = 2;
 
-QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, bool showAsDialog, QWidget * parent)
-	: QObject(parent),
-	_userProfile(userProfile) {
-
+QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, CWengoPhone & cWengoPhone, bool showAsDialog, QWidget * parent)
+	: QObject(parent), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
 	if (showAsDialog) {
 		_imAccountManagerWidget = new QDialog(parent);
 	} else {
@@ -122,6 +122,8 @@ void QtIMAccountManager::addIMAccount(QAction * action) {
 	EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
 	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imProtocol, _imAccountManagerWidget);
 	loadIMAccounts();
+
+	_cWengoPhone.saveUserProfile();
 }
 
 void QtIMAccountManager::deleteIMAccount() {

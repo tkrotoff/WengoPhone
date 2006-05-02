@@ -23,6 +23,7 @@
 #include <QtGui>
 #include "QtClickableLabel.h"
 
+class CWengoPhone;
 class UserProfile;
 
 class QtNickNameWidget : public QWidget
@@ -31,7 +32,7 @@ class QtNickNameWidget : public QWidget
 
 public:
 
-	QtNickNameWidget (UserProfile & userProfile, QWidget * parent = 0, Qt::WFlags f = 0);
+	QtNickNameWidget (UserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent = 0, Qt::WFlags f = 0);
 
 protected:
 
@@ -64,6 +65,8 @@ protected:
 	QMenu * _jabberIMAccountMenu;
 
 	UserProfile & _userProfile;
+
+	CWengoPhone & _cWengoPhone;
 
 	void showMsnMenu();
 

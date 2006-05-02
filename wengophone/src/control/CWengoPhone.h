@@ -176,6 +176,11 @@ public:
 	void showWengoBuyWengos();
 
 	/**
+	 * Saves the current UserProfile.
+	 */
+	void saveUserProfile();
+
+	/**
 	 * Entry point of the application, equivalent to main().
 	 *
 	 * Starts the object WengoPhone thus almost everything.

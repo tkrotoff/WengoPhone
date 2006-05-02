@@ -261,3 +261,7 @@ void CWengoPhone::authorizationRequestEventHandler(PresenceHandler & sender, con
 UserProfile & CWengoPhone::getCurrentUserProfile() {
 	return _wengoPhone.getCurrentUserProfile();
 }
+
+void CWengoPhone::saveUserProfile() {
+	_wengoPhone.saveUserProfile();
+}

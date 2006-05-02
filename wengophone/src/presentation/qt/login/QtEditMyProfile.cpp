@@ -37,8 +37,9 @@
 
 using namespace std;
 
-QtEditMyProfile::QtEditMyProfile(UserProfile & userProfile, QWidget * parent, Qt::WFlags f )
-: QDialog( parent, f ), _userProfile(userProfile) {
+QtEditMyProfile::QtEditMyProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
+								 QWidget * parent, Qt::WFlags f )
+: QDialog( parent, f ), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
 
 	_widget = qobject_cast<QWidget *>( WidgetFactory::create( ":/forms/login/profileWindow.ui", this ) );
 	layout = new QGridLayout( this );
@@ -96,22 +97,22 @@ void QtEditMyProfile::changeAvatarClicked() {
 // FIXME : Just a test
 void QtEditMyProfile::imAccountAdded() {
 
-	QtIMAccountManager * imAccountManager = new QtIMAccountManager(_userProfile, true, this);
+	QtIMAccountManager * imAccountManager = new QtIMAccountManager(_userProfile,
+		_cWengoPhone, true, this);
 
 	for ( int i = 0; i < _imAccountLineEdit.size(); i++ ) {
-			if ( _imAccountLineEdit[ i ] ->isVisible() == false ) {
-					_imAccountLineEdit[ i ] ->setVisible( true );
-					break;
-				}
+		if ( _imAccountLineEdit[ i ] ->isVisible() == false ) {
+			_imAccountLineEdit[ i ] ->setVisible( true );
+			break;
 		}
+	}
 
 	for ( int i = 0; i < _imAccountsPic.size(); i++ ) {
-			if ( _imAccountsPic[ i ] ->isVisible() == false ) {
-					_imAccountsPic[ i ] ->setVisible( false );
-					break;
-				}
+		if ( _imAccountsPic[ i ] ->isVisible() == false ) {
+			_imAccountsPic[ i ] ->setVisible( false );
+			break;
 		}
-
+	}
 }
 
 void QtEditMyProfile::hideAccountWidgets() {

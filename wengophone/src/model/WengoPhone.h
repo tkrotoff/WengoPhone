@@ -113,6 +113,11 @@ public:
 	}
 
 	/**
+	 * Saves the UserProfile.
+	 */
+	void saveUserProfile();
+
+	/**
 	 * Starts the thread of the model component.
 	 */
 	void run();
@@ -128,11 +133,6 @@ private:
 	 * @see terminate()
 	 */
 	void terminateThreadSafe();
-
-	/**
-	 * Saves the UserProfile.
-	 */
-	void saveUserProfile();
 
 	/**
 	 * Saves the Configuration.

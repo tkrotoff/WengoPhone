@@ -186,3 +186,4 @@ void WengoPhone::valueChangedEventHandler(Settings & sender, const std::string &
 	}
 #endif
 }
+

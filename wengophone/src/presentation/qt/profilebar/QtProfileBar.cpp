@@ -133,7 +133,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 
 
 	// create internal widgets
-	_nickNameWidget = new QtNickNameWidget(_userProfile, this);
+	_nickNameWidget = new QtNickNameWidget(_userProfile, _cWengoPhone, this);
 	_nickNameWidget->setVisible(false);
 
 	_eventWidget = new QtEventWidget(this);

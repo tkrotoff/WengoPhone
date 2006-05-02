@@ -27,6 +27,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
+class CWengoPhone;
 class UserProfile;
 
 class QtEditMyProfile : public QDialog
@@ -35,7 +36,8 @@ class QtEditMyProfile : public QDialog
 
 public:
 
-	QtEditMyProfile (UserProfile & userProfile, QWidget * parent = 0, Qt::WFlags f = 0);
+	QtEditMyProfile (UserProfile & userProfile, CWengoPhone & cWengoPhone,
+		QWidget * parent = 0, Qt::WFlags f = 0);
 
 protected:
 
@@ -62,6 +64,8 @@ public Q_SLOTS:
 protected:
 
 	UserProfile & _userProfile;
+
+	CWengoPhone & _cWengoPhone;
 
 	QWidget * _widget;
 
@@ -120,9 +124,6 @@ protected:
 	QPushButton * _cancelChange;
 
 	QMap<QString,QVariant> _data;
-
-
-
 };
 
 #endif

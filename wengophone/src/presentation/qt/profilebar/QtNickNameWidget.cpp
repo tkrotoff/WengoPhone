@@ -31,17 +31,14 @@
 
 using namespace std;
 
-QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, QWidget * parent , Qt::WFlags f )
-: QWidget(parent,f), _userProfile(userProfile) {
+QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent , Qt::WFlags f )
+: QWidget(parent,f), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
 /*
 	QPalette p = palette();
 	p.setColor(QPalette::Active,QPalette::Window,Qt::white);
 	setPalette(p);
 	setAutoFillBackground(true);
 */
-
-
-
 	_msnIMAccountMenu = NULL;
 	_yahooIMAccountMenu = NULL;
 	_jabberIMAccountMenu = NULL;
@@ -150,7 +147,7 @@ void QtNickNameWidget::jabberClicked(){
 }
 
 void QtNickNameWidget::avatarClicked(){
-	QtEditMyProfile profile(_userProfile, this);
+	QtEditMyProfile profile(_userProfile, _cWengoPhone, this);
 	if (profile.exec()) {
 		init();
 	}

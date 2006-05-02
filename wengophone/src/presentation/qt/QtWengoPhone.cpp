@@ -474,7 +474,8 @@ void QtWengoPhone::openWengoAccount() {
 }
 
 void QtWengoPhone::editMyProfile(){
-	QtEditMyProfile profile(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _ui->tabWidget);
+	QtEditMyProfile profile(_cWengoPhone.getWengoPhone().getCurrentUserProfile(),
+		_cWengoPhone, _ui->tabWidget);
 	profile.exec();
 }
 
@@ -569,7 +570,9 @@ void QtWengoPhone::showAdvancedConfig() {
 }
 
 void QtWengoPhone::showAccountSettings() {
-	QtIMAccountManager * imAccountManager = new QtIMAccountManager(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), true, _wengoPhoneWindow);
+	QtIMAccountManager * imAccountManager =
+		new QtIMAccountManager(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), 
+			_cWengoPhone, true, _wengoPhoneWindow);
 }
 
 
