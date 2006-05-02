@@ -34,6 +34,7 @@
 #include <model/webservices/sms/Sms.h>
 #include <model/webservices/softupdate/SoftUpdate.h>
 #include <model/webservices/info/WsInfo.h>
+#include <model/webservices/directory/WsDirectory.h>
 #include <model/history/History.h>
 //#include <model/webservices/callforward/WsCallForward.h>
 
@@ -57,6 +58,8 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_contactList(*this) {
 
 	_sms = NULL;
+	_wsInfo = NULL;
+	_wsDirectory = NULL;
 	_activePhoneLine = NULL;
 	_activePhoneCall = NULL;
 	_wengoAccount = NULL;
@@ -93,6 +96,15 @@ UserProfile::~UserProfile() {
 	if (_imAccountHandler) {
 		delete _imAccountHandler;
 	}
+	if( _wsInfo ) {
+		delete _wsInfo;
+	}
+	if( _wsDirectory ) {
+		delete _wsDirectory;
+	}
+/*	if( _wsCallForward ) {
+		delete _wsCallForward;
+}*/
 }
 
 void UserProfile::connect() {
@@ -332,9 +344,14 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		wsInfoCreatedEvent(*this, *_wsInfo);
 		LOG_DEBUG("WsInfo created");
 
+		//WsDirectory
+		_wsDirectory = new WsDirectory(_wengoAccount);
+		wsDirectoryCreatedEvent(*this, *_wsDirectory);
+		LOG_DEBUG("WsDirectory created");
+
 		//TODO: callforward
-		//WsCallForward * w = new WsCallForward(_wengoAccount);
-		//w->disableCallForward();
+		//_wsCallForward = new WsCallForward(_wengoAccount);
+		//wsCallForwardCreatedEvent(*this, *_wsCallForward);
 
 		addPhoneLine(sender);
 

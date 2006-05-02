@@ -49,6 +49,8 @@ class Sms;
 class SoftUpdate;
 class History;
 class WsInfo;
+class WsDirectory;
+//class WsCallForward;
 
 /**
  * Handle the profile of a User.
@@ -148,6 +150,21 @@ public:
 	 */
 	Event<void (UserProfile & sender, WsInfo & wsInfo)> wsInfoCreatedEvent;
 
+	/**
+	 * WsCallForward has been created.
+	 *
+	 * @param sender this class
+	 * @param wsCallForward WsCallForward created
+	 */
+	//Event<void (UserProfile & sender, WsCallForward & wsCallForward)> wsCallForwardCreatedEvent;
+
+	/**
+	 * WsDirectory has been created.
+	 *
+	 * @param sender this class
+	 * @param wsDirectory WsDirectory created
+	 */
+	Event<void (UserProfile & sender, WsDirectory & wsDirectory)> wsDirectoryCreatedEvent;
 
 	UserProfile(WengoPhone & wengoPhone);
 
@@ -397,6 +414,12 @@ private:
 
 	/** WsInfo */
 	WsInfo * _wsInfo;
+
+	/** WsCallForward. */
+	//WsCallForward * _wsCallForward;
+	
+	/** WsDirectory */
+	WsDirectory * _wsDirectory;
 
 	//TODO: create a list of SipAccount
 	WengoAccount * _wengoAccount;
