@@ -56,7 +56,7 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, bool showAsDia
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolYahoo)));
 	addIMAccountMenu->addAction(QIcon(":pics/protocols/jabber.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolJabber)));
-	addIMAccountMenu->addAction(QIcon(":pics/protocols/googletalk.png"),
+	addIMAccountMenu->addAction(QIcon(":pics/protocols/jabber.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolGoogleTalk)));
 	_ui->addIMAccountButton->setMenu(addIMAccountMenu);
 
