@@ -17,28 +17,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 #include <presentation/PContact.h>
-
+#include <model/contactList/ContactList.h>
+#include <control/contactList/CContactList.h>
+#include <control/CWengoPhone.h>
 #include "QtUserManager.h"
 #include "UserTreeEventManager.h"
 #include "QtUserList.h"
 #include "QtHidenContact.h"
 #include "QtContactPixmap.h"
+#include "QtUserTreeEventFilter.h"
 #include "../login/QtEditContactProfile.h"
-/*
-UserManagerEventManager::UserManagerEventManager(QTreeWidget * target, QtUserManager * userManager)
-	: QObject(target), _userManager(userManager) {
-	target->viewport()->installEventFilter(this);
-}
 
-bool UserManagerEventManager::eventFilter(QObject *obj, QEvent *event) {
-	if (event->type() == QEvent::MouseButtonPress) {
-		QMouseEvent * mouseEvent = static_cast<QMouseEvent *>(event);
-		_userManager->setMouseButton((int)(mouseEvent->button()));
-		return QObject::eventFilter(obj, event);
-	}
-	return QObject::eventFilter(obj, event);
-}
-*/
 QtUserManager::QtUserManager(CWengoPhone & cWengoPhone, QObject * parent, QTreeWidget * target)
 : QObject(parent), _cWengoPhone(cWengoPhone)
 {
@@ -52,41 +41,14 @@ QtUserManager::QtUserManager(CWengoPhone & cWengoPhone, QObject * parent, QTreeW
 	QtUserList::getInstance()->setTreeWidget(target);
 	target->setMouseTracking(true);
 	UserTreeEventManager * dnd = new UserTreeEventManager(this,target);
-
-//	UserManagerEventManager * userManagerEventManager = new UserManagerEventManager(target, this);
+    QtUserTreeEventFilter *keyFilter = new QtUserTreeEventFilter(this,target);
 
 	connect (target,SIGNAL(itemSelectionChanged ()),this,SLOT(treeViewSelectionChanged()));
 	connect (target,SIGNAL(itemClicked (QTreeWidgetItem *,int )),this,SLOT(itemClicked(QTreeWidgetItem *,int)));
 	connect (dnd,SIGNAL(itemEntered ( QTreeWidgetItem *)),this,SLOT(itemEntered ( QTreeWidgetItem * )));
 	connect (dnd,SIGNAL(itemTimeout(QTreeWidgetItem *)),this,SLOT(openUserInfo(QTreeWidgetItem *)));
 	connect (dnd,SIGNAL(mouseClicked(Qt::MouseButton)),SLOT(setMouseButton(Qt::MouseButton)));
-/*
-	QAction * action;
 
-    _menu = new QMenu(dynamic_cast<QWidget *>(parent));
-    _callAction = _menu->addAction(tr("Call"));
-
-    action = _menu->addAction(tr("Start Chat"));
-    connect (action,SIGNAL(triggered(bool)),SLOT(startChat(bool)));
-
-    action = _menu->addAction(tr("Send SMS"));
-    connect (action,SIGNAL(triggered(bool)),SLOT(startSMS(bool)));
-
-    _menu->addAction(tr("Invite to conference"));
-    _menu->addSeparator();
-
-    action = _menu->addAction(tr("Edit contact"));
-    connect(action,SIGNAL(triggered(bool)),this,SLOT(editContact(bool)));
-
-    _menu->addAction(tr("Delete contact"));
-    _menu->addSeparator();
-
-    _menu->addAction(tr("Block contact"));
-
-    _menu->addAction(tr("Forward to Cell phone"));
-
-    _menu->setWindowOpacity(0.97);
-*/
 }
 
 void QtUserManager::startSMS(bool checked){
@@ -125,6 +87,12 @@ void QtUserManager::editContact(bool ){
 	//editContact->set
 
 	editContactDialog.exec();
+}
+
+void QtUserManager::deleteContact(){
+    QtUserList * ul = QtUserList::getInstance();
+    QTreeWidgetItem * item = _tree->currentItem();
+    _cWengoPhone.getCContactList().removeContact(ul->getCContact(item->text(0)).getContact());
 }
 
 void QtUserManager::treeViewSelectionChanged(){
@@ -491,7 +459,11 @@ QMenu * QtUserManager::createMenu(){
 	action = menu->addAction(tr("Edit contact"));
 	connect(action,SIGNAL(triggered(bool)),this,SLOT(editContact(bool)));
 
-	menu->addAction(tr("Delete contact"));
+	action = menu->addAction(tr("Delete contact"));
+	connect(action,SIGNAL(triggered(bool)),this,SLOT(deleteContact()));
+
+
+	// _cWengoPhone.getCContactList()
 
 	menu->addSeparator();
 

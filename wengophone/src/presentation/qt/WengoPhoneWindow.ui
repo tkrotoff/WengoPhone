@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>296</width>
-    <height>571</height>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -358,15 +358,6 @@
     <addaction name="separator" />
     <addaction name="actionShowAbout" />
    </widget>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="actionSendSms" />
-    <addaction name="separator" />
-    <addaction name="actionCreateChatConnference" />
-   </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
      <string>&amp;Tools</string>
@@ -375,6 +366,17 @@
      <property name="title" >
       <string>Type Here</string>
      </property>
+    </widget>
+    <widget class="QMenu" name="menuClear_history" >
+     <property name="title" >
+      <string>Clear history</string>
+     </property>
+     <addaction name="actionOutgoing_Calls" />
+     <addaction name="actionIncoming_Calls" />
+     <addaction name="actionMissed_Calls" />
+     <addaction name="actionChat_sessions" />
+     <addaction name="actionShort_text_messages_SMS" />
+     <addaction name="actionAll_2" />
     </widget>
     <widget class="QMenu" name="menuClearHistory" >
      <property name="title" >
@@ -393,8 +395,49 @@
     <addaction name="actionConfiguration" />
     <addaction name="actionAdvancedConfiguration" />
     <addaction name="separator" />
+    <addaction name="actionView_toolbar" />
+    <addaction name="actionView_adressbar" />
+    <addaction name="actionView_dialgpad" />
+    <addaction name="actionView_avatars_in_chat_window" />
+    <addaction name="separator" />
     <addaction name="menuClearHistory" />
    </widget>
+<<<<<<< .mine
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionSendSms" />
+    <addaction name="actionForward_incoming_calls" />
+    <addaction name="separator" />
+    <addaction name="actionCreateChatConnference" />
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="separator" />
+   </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>&amp;Contacts</string>
+    </property>
+    <widget class="QMenu" name="menuHideShow" >
+     <property name="title" >
+      <string>&amp;Contact List Options</string>
+     </property>
+     <addaction name="actionAlphabetically" />
+     <addaction name="actionBy_presence" />
+     <addaction name="actionBy_media" />
+     <addaction name="actionBy_protocole" />
+    </widget>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearchWengoUsers" />
+    <addaction name="action_Manage_blocked_contacts" />
+    <addaction name="separator" />
+    <addaction name="actionCreateGroup" />
+    <addaction name="actionShow_contact_groups" />
+    <addaction name="separator" />
+    <addaction name="actionHideContactsOffline" />
+    <addaction name="menuHideShow" />
+   </widget>
+=======
    <widget class="QMenu" name="menuContacts" >
     <property name="title" >
      <string>&amp;Contacts</string>
@@ -418,6 +461,7 @@
     <addaction name="separator" />
     <addaction name="menuHideShow" />
    </widget>
+>>>>>>> .r5259
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>&amp;Wengo</string>
@@ -455,7 +499,11 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
+<<<<<<< .mine
+     <y>558</y>
+=======
      <y>549</y>
+>>>>>>> .r5259
      <width>296</width>
      <height>22</height>
     </rect>
@@ -503,7 +551,7 @@
   </action>
   <action name="actionSendSms" >
    <property name="text" >
-    <string>&amp;Send SMS</string>
+    <string>Send a short text message (SMS)</string>
    </property>
   </action>
   <action name="actionSetLogin" >
@@ -513,7 +561,7 @@
   </action>
   <action name="actionAdvancedConfiguration" >
    <property name="text" >
-    <string>&amp;Advanced Configuration</string>
+    <string>&amp;Advanced configuration</string>
    </property>
   </action>
   <action name="actionEditMyProfile" >
@@ -523,7 +571,7 @@
   </action>
   <action name="actionCreateConferenceCall" >
    <property name="text" >
-    <string>Create Conference C&amp;all</string>
+    <string>Create &amp;Conference C&amp;all</string>
    </property>
   </action>
   <action name="actionFaq" >
@@ -543,7 +591,7 @@
   </action>
   <action name="actionSms" >
    <property name="text" >
-    <string>&amp;Sms</string>
+    <string>&amp;Short text messages (SMS)</string>
    </property>
   </action>
   <action name="actionVoiceMail" >
@@ -583,7 +631,7 @@
   </action>
   <action name="actionIMAccountSettings" >
    <property name="text" >
-    <string>&amp;IM Account Settings</string>
+    <string>Instant Messaging settings </string>
    </property>
   </action>
   <action name="actionOutgoingCalls" >
@@ -623,17 +671,102 @@
   </action>
   <action name="actionSearchWengoUsers" >
    <property name="text" >
-    <string>&amp;Search Wengo Users</string>
+    <string>&amp;Search for contact</string>
    </property>
   </action>
   <action name="actionCreateGroup" >
    <property name="text" >
-    <string>Create &amp;Group</string>
+    <string>Add a &amp;Group</string>
    </property>
   </action>
   <action name="actionCreateChatConnference" >
    <property name="text" >
-    <string>Create Conference C&amp;hat</string>
+    <string>Create a Conference C&amp;hat</string>
+   </property>
+  </action>
+  <action name="action_Manage_blocked_contacts" >
+   <property name="text" >
+    <string>&amp;Manage blocked contacts</string>
+   </property>
+  </action>
+  <action name="actionShow_contact_groups" >
+   <property name="text" >
+    <string>Show contact groups</string>
+   </property>
+  </action>
+  <action name="actionAlphabetically" >
+   <property name="text" >
+    <string>alphabetically</string>
+   </property>
+  </action>
+  <action name="actionBy_presence" >
+   <property name="text" >
+    <string>by presence</string>
+   </property>
+  </action>
+  <action name="actionBy_media" >
+   <property name="text" >
+    <string>by media</string>
+   </property>
+  </action>
+  <action name="actionForward_incoming_calls" >
+   <property name="text" >
+    <string>Forward incoming calls</string>
+   </property>
+  </action>
+  <action name="actionView_toolbar" >
+   <property name="text" >
+    <string>View toolbar</string>
+   </property>
+  </action>
+  <action name="actionView_adressbar" >
+   <property name="text" >
+    <string>View adressbar</string>
+   </property>
+  </action>
+  <action name="actionView_dialgpad" >
+   <property name="text" >
+    <string>View dialgpad</string>
+   </property>
+  </action>
+  <action name="actionView_avatars_in_chat_window" >
+   <property name="text" >
+    <string>View avatars in chat window</string>
+   </property>
+  </action>
+  <action name="actionOutgoing_Calls" >
+   <property name="text" >
+    <string>Outgoing Calls</string>
+   </property>
+  </action>
+  <action name="actionIncoming_Calls" >
+   <property name="text" >
+    <string>Incoming Calls</string>
+   </property>
+  </action>
+  <action name="actionMissed_Calls" >
+   <property name="text" >
+    <string>Missed Calls</string>
+   </property>
+  </action>
+  <action name="actionChat_sessions" >
+   <property name="text" >
+    <string>Chat sessions</string>
+   </property>
+  </action>
+  <action name="actionShort_text_messages_SMS" >
+   <property name="text" >
+    <string>Short text messages (SMS)</string>
+   </property>
+  </action>
+  <action name="actionAll_2" >
+   <property name="text" >
+    <string>All</string>
+   </property>
+  </action>
+  <action name="actionBy_protocole" >
+   <property name="text" >
+    <string>by protocol</string>
    </property>
   </action>
  </widget>

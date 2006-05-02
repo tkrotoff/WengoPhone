@@ -345,7 +345,7 @@ void ContactList::_addToContactGroup(const std::string & groupName, Contact & co
 	}
 }
 
-void ContactList::_removeFromContactGroup(const std::string & groupName, Contact & contact) {
+void ContactList::_removeFromContactGroup(std::string groupName, Contact & contact) {
 	if (contact.isInContactGroup(groupName)) {
 		contact._removeFromContactGroup(groupName);
 

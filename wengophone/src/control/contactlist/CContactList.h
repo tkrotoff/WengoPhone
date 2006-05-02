@@ -46,6 +46,8 @@ public:
 
 	ContactGroup * getContactGroup(const std::string & groupName) const;
 
+    void removeContact(Contact & contact);
+
 private:
 
 	void contactAddedEventHandler(ContactList & sender, Contact & contact);

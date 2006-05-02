@@ -312,7 +312,7 @@ private:
 	 * @param contact the Contact
 	 * @param groupName the ContactGroup
 	 */
-	void _removeFromContactGroup(const std::string & groupName, Contact & contact);
+	void _removeFromContactGroup(std::string groupName, Contact & contact);
 
 	/** List of Contact. */
 	typedef std::list<Contact> Contacts;

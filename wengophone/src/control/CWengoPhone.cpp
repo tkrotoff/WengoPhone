@@ -145,7 +145,7 @@ void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 		boost::bind(&CWengoPhone::authorizationRequestEventHandler, this, _1, _2, _3);
 	LOG_DEBUG("CPresenceHandler created");
 
-	static CChatHandler cChatHandler(sender.getCurrentUserProfile().getChatHandler(), sender.getCurrentUserProfile());
+	static CChatHandler cChatHandler(sender.getCurrentUserProfile().getChatHandler(), *this,sender.getCurrentUserProfile());
 	LOG_DEBUG("CChatHandler created");
 
 	LOG_DEBUG("WengoPhone::init() finished");

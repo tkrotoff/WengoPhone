@@ -55,6 +55,8 @@ public Q_SLOTS:
 
 	void editContact(bool checked);
 
+	void deleteContact();
+
 	void userStateChanged();
 
 	void hideOffLineUsers();

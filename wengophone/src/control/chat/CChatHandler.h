@@ -30,7 +30,7 @@ class IMContactSet;
 class ChatHandler;
 class PChatHandler;
 class UserProfile;
-
+class CWengoPhone;
 /**
  *
  * @ingroup control
@@ -44,9 +44,11 @@ public:
 
 	UserProfile & getUserProfile() const { return _userProfile;}
 
-	CChatHandler(ChatHandler & chatHandler, UserProfile & userProfile);
+	CChatHandler(ChatHandler & chatHandler, CWengoPhone & cWengoPhone, UserProfile & userProfile);
 
 	~CChatHandler();
+
+	CWengoPhone & getCWengoPhone() const;
 
 private:
 
@@ -57,6 +59,8 @@ private:
 	PChatHandler * _pChatHandler;
 
 	UserProfile & _userProfile;
+
+	CWengoPhone & _cWengoPhone;
 
 };
 

@@ -83,3 +83,7 @@ StringList CContactList::getContactGroupStringList() const {
 ContactGroup * CContactList::getContactGroup(const std::string & groupName) const {
 	return _contactList.getContactGroup(groupName);
 }
+
+void CContactList::removeContact(Contact & contact) {
+    _contactList.removeContact(contact);
+}

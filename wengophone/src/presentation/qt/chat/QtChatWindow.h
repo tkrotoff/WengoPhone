@@ -86,6 +86,7 @@ protected:
 
 	ChatContactWidgets * _chatContactWidgets;
 
+
 public Q_SLOTS:
 	void addContactToContactListFrame(const Contact & contact);
 
@@ -131,6 +132,7 @@ private:
 
 	void createMenu();
 
+    QMainWindow * findMainWindow();
 };
 
 #endif

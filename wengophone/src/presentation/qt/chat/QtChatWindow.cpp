@@ -20,6 +20,7 @@
 #include "QtChatWindow.h"
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
+#include "../QtWengoPhone.h"
 
 #include <model/contactlist/ContactList.h>
 #include <model/contactlist/ContactGroup.h>
@@ -27,6 +28,8 @@
 #include <model/profile/UserProfile.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+
+#include <control/CWengoPhone.h>
 
 #include <imwrapper/IMChatSession.h>
 
@@ -69,7 +72,9 @@ void ChatWindow::initThreadSafe(){
 
 	QGridLayout * glayout;
 	_chatContactWidgets = new ChatContactWidgets();
-	_dialog = new QDialog();
+
+	_dialog = new QDialog(findMainWindow());
+
 	LOG_DEBUG("************ Creating Chat window ************* ");
 	// Create the menu bar
 	_menuBar = new QMenuBar(_dialog);
@@ -416,6 +421,7 @@ void ChatWindow::openContactListFrame(){
 
 	_scrollArea->setFrameShape(QFrame::NoFrame);
 	_scrollArea->setFrameShadow(QFrame::Plain);
+	tbfoftjs
 	*/
 }
 
@@ -424,49 +430,89 @@ void ChatWindow::closeContactListFrame(){
 }
 
 void ChatWindow::createMenu(){
+
+    QtWengoPhone * mainWindow = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
+    QAction * action;
+
    	QMenu * WengoMenu = new QMenu("Wengo");
-   	WengoMenu->addAction(tr("View my &Wengo Account"));
-   	WengoMenu->addAction(tr("Edit my &Profile"));
+
+   	action = WengoMenu->addAction(tr("View my &Wengo Account"));
+   	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(showWengoAccount()));
+
+   	action = WengoMenu->addAction(tr("Edit my &Profile"));
+   	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(editMyProfile()));
+
    	WengoMenu->addSeparator ();
-   	WengoMenu->addAction(tr("&Call-out service"));
-   	WengoMenu->addAction(tr("&Short text messages (SMS) "));
+   	action = WengoMenu->addAction(tr("&Call-out service"));
+   	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(showCallOut()));
+
+   	action = WengoMenu->addAction(tr("&Short text messages (SMS) "));
+   	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(showSms()));
+
    	WengoMenu->addAction(tr("&Voicemail"));
+   	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(showVoiceMail()));
+
    	WengoMenu->addSeparator ();
-   	WengoMenu->addAction(tr("&Open Another Wengo Account"));
+
+   	action = WengoMenu->addAction(tr("&Open Another Wengo Account"));
+   	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(openWengoAccount()));
+
 	WengoMenu->addAction(tr("&Log off"));
+
+
    	WengoMenu->addSeparator ();
-	WengoMenu->addAction(tr("Exit"));
+	action = WengoMenu->addAction(tr("Exit"));
+	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(exitApplication()));
 	_menuBar->addMenu(WengoMenu);
 
 	QMenu * ContactsMenu = new QMenu(tr("&Contact"));
 
-    ContactsMenu->addAction(tr("Add a contact"));
+    action = ContactsMenu->addAction(tr("Add a contact"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(addContact()));
+
     ContactsMenu->addAction(tr("Search for contact"));
-    ContactsMenu->addAction(tr("Manage blocked contacts"));
+
+    ContactsMenu->addAction(tr("&Manage blocked contacts"));
     ContactsMenu->addSeparator ();
     ContactsMenu->addAction(tr("Add a group"));
     ContactsMenu->addAction(tr("Show contact groups"));
     ContactsMenu->addSeparator ();
-    ContactsMenu->addAction(tr("Show contacts offline"));
+
+    action = ContactsMenu->addAction(tr("Show / hide contacts offline"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showHideOffLineContacts()));
+
     QMenu * sortMenu = new QMenu(tr("Sort contacts"));
     sortMenu->addAction(tr("alphabetically"));
     sortMenu->addAction(tr("by presence"));
     sortMenu->addAction(tr("by media"));
+    sortMenu->addAction(tr("by protocol"));
     ContactsMenu->addMenu(sortMenu);
 
     _menuBar->addMenu(ContactsMenu);
 
     QMenu * Actions = new QMenu(tr("&Actions"));
-    Actions->addAction(tr("Create a conference call"));
-    Actions->addAction(tr("Send a short text message (SMS)"));
+
+    action = Actions->addAction(tr("Send a short text message (SMS)"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(sendSms()));
+
     Actions->addAction(tr("Forward incoming calls"));
     Actions->addSeparator ();
-    Actions->addAction(tr("Create conference call"));
-
+    Actions->addAction(tr("Create a conference call"));
+    Actions->addAction(tr("Create a conference chat"));
     _menuBar->addMenu(Actions);
 
     QMenu * ToolsMenu = new QMenu(tr("&Tools"));
-    ToolsMenu->addAction(tr("Instant Messaging settings"));
+
+    action = ToolsMenu->addAction(tr("Instant Messaging settings"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showAccountSettings()));
+
+    ToolsMenu->addSeparator ();
+    action = ToolsMenu->addAction(tr("Configuration"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showConfig()));
+
+    action = ToolsMenu->addAction(tr("Advanced configuration"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showAdvancedConfig()));
+
     ToolsMenu->addSeparator ();
     ToolsMenu->addAction(tr("View toolbar"));
     ToolsMenu->addAction(tr("View adressbar"));
@@ -475,23 +521,55 @@ void ChatWindow::createMenu(){
     ToolsMenu->addSeparator ();
 
     QMenu * HistoryMenu = new QMenu(tr("Clear History"));
-    HistoryMenu->addAction(tr("Outgoing Calls"));
-    HistoryMenu->addAction(tr("Incoming Calls"));
-    HistoryMenu->addAction(tr("Missed Calls"));
-    HistoryMenu->addAction(tr("Chat sessions"));
-    HistoryMenu->addAction(tr("Short text message (SMS)"));
+
+    action = HistoryMenu->addAction(tr("Outgoing Calls"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistoryOutgoingCalls()));
+
+    action = HistoryMenu->addAction(tr("Incoming Calls"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistoryIncomingCalls()));
+
+    action = HistoryMenu->addAction(tr("Missed Calls"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistoryMissedCalls()));
+
+    action = HistoryMenu->addAction(tr("Chat sessions"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistoryChatSessions()));
+
+    action = HistoryMenu->addAction(tr("Short text message (SMS)"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistorySms()));
+
     HistoryMenu->addAction(tr("All"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistory()));
 
     ToolsMenu->addMenu(HistoryMenu);
 
     _menuBar->addMenu(ToolsMenu);
 
     QMenu * HelpMenu = new QMenu ("&Help");
-    HelpMenu->addAction(tr("&Form"));
+
+    action = HelpMenu->addAction(tr("&Forum"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showForum()));
+
     HelpMenu->addAction(tr("&Wiki / Faq"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showFaq()));
+
     HelpMenu->addSeparator ();
+
     HelpMenu->addAction(tr("&About"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showAbout()));
 
     _menuBar->addMenu(HelpMenu);
 
+}
+
+QMainWindow * ChatWindow::findMainWindow(){
+    QMainWindow * tmp;
+    QWidgetList widgetList = qApp->allWidgets();
+    QWidgetList::iterator iter;
+
+    for (iter = widgetList.begin(); iter != widgetList.end(); iter++){
+        if ( (*iter)->objectName() == QString("WengoPhoneWindow") ){
+            return ( dynamic_cast<QMainWindow *> ((*iter)) );
+        }
+    }
+    return NULL;
 }
