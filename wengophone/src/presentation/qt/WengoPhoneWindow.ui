@@ -198,7 +198,7 @@
           <string>Create a conference call</string>
          </property>
          <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/iconbar/conference2.png</iconset>
+          <iconset resource="wengophone.qrc" >:/pics/iconbar/conference.png</iconset>
          </property>
          <property name="iconSize" >
           <size>
@@ -229,7 +229,7 @@
           <string>Sends a SMS</string>
          </property>
          <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/iconbar/sms2.png</iconset>
+          <iconset resource="wengophone.qrc" >:/pics/iconbar/sms.png</iconset>
          </property>
          <property name="iconSize" >
           <size>
