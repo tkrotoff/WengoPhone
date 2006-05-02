@@ -265,12 +265,19 @@ void QtNickNameWidget::showJabberMenu(){
 	_jabberIMAccountMenu = new QMenu(this);
 	_jabberIMAccountMenu->setWindowOpacity(0.95);
 
-	set<IMAccount *> list;
-	list = _userProfile.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ);
+	set<IMAccount *> list1;
+	set<IMAccount *> list2;
+	list1 = _userProfile.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolJabber);
+	list2 = _userProfile.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolGoogleTalk);
 
-	for (set<IMAccount *>::const_iterator it = list.begin();
-		it != list.end();
-		++it) {
+	set<IMAccount *>::const_iterator it;
+
+	for (it = list1.begin(); it != list1.end(); ++it) {
+		QtIMMenu * menu = new QtIMMenu(_userProfile, *(*it), _jabberIMAccountMenu);
+		menu->setWindowOpacity(0.95);
+		_jabberIMAccountMenu->addMenu(menu);
+	}
+	for (it = list2.begin(); it != list2.end(); ++it) {
 		QtIMMenu * menu = new QtIMMenu(_userProfile, *(*it), _jabberIMAccountMenu);
 		menu->setWindowOpacity(0.95);
 		_jabberIMAccountMenu->addMenu(menu);
