@@ -190,7 +190,7 @@ snd_pcm_t *alsa_dev_open(char *name, int type, int rate, int framesize, int late
 	{
 		DBG5_DYNA_AUDIO_DRV( 
 			"unable to set hw parameters(rate=%d dir=%d): %s\n", val, dir,
-			snd_strerror(rc),0,0,0);
+			snd_strerror(rc),0);
 		goto err;
 	}
 
@@ -202,7 +202,7 @@ snd_pcm_t *alsa_dev_open(char *name, int type, int rate, int framesize, int late
 	{
 		DBG5_DYNA_AUDIO_DRV( 
 			"unable to set hw parameters(period_size=%d): %s\n", (int) frames,
-			snd_strerror(rc),0,0,0);
+			snd_strerror(rc),0,0);
 		goto err;
 	}
 
