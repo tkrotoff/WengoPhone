@@ -32,8 +32,6 @@
 
 #include <QtGui>
 
-static const char * MNG_FORMAT = "MNG";
-
 QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
 	: QObjectThreadSafe(NULL),
 	_cPhoneLine(cPhoneLine) {
@@ -51,12 +49,7 @@ QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
 }
 
 void QtPhoneLine::initThreadSafe() {
-	//hangUpButton
-    //	_hangUpButton = _qtWengoPhone->getHangUpButton();
-    //	connect(_hangUpButton, SIGNAL(clicked()), SLOT(hangUpButtonClicked()));
-
 	//callButton
-	_connectionStatMovie = NULL;
 	_callButton = _qtWengoPhone->getCallButton();
 	connect(_callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
 }
@@ -68,7 +61,6 @@ void QtPhoneLine::updatePresentationThreadSafe() {
 }
 
 void QtPhoneLine::addPhoneCall(QtPhoneCall * qtPhoneCall) {
-	//_stateLabel->setText(qtPhoneCall->);
 }
 
 void QtPhoneLine::stateChangedEventHandler(EnumPhoneLineState::PhoneLineState state) {
@@ -78,56 +70,7 @@ void QtPhoneLine::stateChangedEventHandler(EnumPhoneLineState::PhoneLineState st
 }
 
 void QtPhoneLine::stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLineState state) {
-	static QLabel * phoneLineStateLabel = _qtWengoPhone->getStatusBar().getPhoneLineStateLabel();
-
-	QString tooltip;
-	QString pixmap;
-    if ( _connectionStatMovie )
-    {
-        delete _connectionStatMovie;
-    }
-	switch (state) {
-	case EnumPhoneLineState::PhoneLineStateDefault:
-		tooltip = tr("Not connected");
-		pixmap = ":/pics/statusbar/status-network-offline.png";
-        phoneLineStateLabel->setPixmap(pixmap);
-        phoneLineStateLabel->setToolTip(tooltip);
-		break;
-
-	case EnumPhoneLineState::PhoneLineStateServerError:
-		tooltip = tr("An error occured");
-		pixmap = ":/pics/statusbar/status-network-offline.png";
-        phoneLineStateLabel->setPixmap(pixmap);
-        phoneLineStateLabel->setToolTip(tooltip);
-		break;
-
-	case EnumPhoneLineState::PhoneLineStateTimeout:
-		tooltip = tr("An error occured");
-		pixmap = ":/pics/statusbar/status-network-offline.png";
-        phoneLineStateLabel->setPixmap(pixmap);
-        phoneLineStateLabel->setToolTip(tooltip);
-		break;
-
-	case EnumPhoneLineState::PhoneLineStateOk:
-		tooltip = tr("Register done");
-		// _connectionStatMovie = new QMovie(":/pics/statusbar/status-network-online.mng",MNG_FORMAT,NULL);
-		// phoneLineStateLabel->setMovie(_connectionStatMovie);
-		//_connectionStatMovie->start();
-		pixmap = ":/pics/statusbar/status-network-online-static.png";
-		phoneLineStateLabel->setPixmap(pixmap);
-		phoneLineStateLabel->setToolTip(tooltip);
-		break;
-
-	case EnumPhoneLineState::PhoneLineStateClosed:
-		tooltip = tr("Unregister done");
-		pixmap = ":/pics/statusbar/status-network-offline.png";
-        phoneLineStateLabel->setPixmap(pixmap);
-        phoneLineStateLabel->setToolTip(tooltip);
-		break;
-	default:
-		LOG_FATAL("unknown state=" + EnumPhoneLineState::toString(state));
-	};
-
+	_qtWengoPhone->getStatusBar().phoneLineStateChanged(state);
 }
 
 void QtPhoneLine::phoneCallCreatedEventHandler(CPhoneCall & cPhoneCall) {
@@ -138,18 +81,6 @@ void QtPhoneLine::phoneCallCreatedEventHandler(CPhoneCall & cPhoneCall) {
 
 void QtPhoneLine::phoneCallCreatedEventHandlerThreadSafe(CPhoneCall & cPhoneCall) {
 	_activeCPhoneCall = &cPhoneCall;
-	EnumPhoneCallState::PhoneCallState state = cPhoneCall.getState();
-	if (state == EnumPhoneCallState::PhoneCallStateIncoming) {
-//		_hangUpButton->setEnabled(true);
-//		_callButton->setEnabled(true);
-	}
-	else if (state == EnumPhoneCallState::PhoneCallStateDialing) {
-//		_hangUpButton->setEnabled(true);
-//		_callButton->setEnabled(false);
-	}
-	else {
-//		LOG_FATAL("cannot be in this state=" + EnumPhoneCallState::toString(state));
-	}
 }
 
 void QtPhoneLine::phoneCallClosedEventHandler(CPhoneCall & cPhoneCall) {
@@ -159,8 +90,6 @@ void QtPhoneLine::phoneCallClosedEventHandler(CPhoneCall & cPhoneCall) {
 }
 
 void QtPhoneLine::phoneCallClosedEventHandlerThreadSafe(CPhoneCall & cPhoneCall) {
-//	_hangUpButton->setEnabled(false);
-//	_callButton->setEnabled(false);
 }
 
 void QtPhoneLine::hangUpButtonClicked() {

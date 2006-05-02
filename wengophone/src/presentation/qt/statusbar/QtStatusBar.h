@@ -22,6 +22,8 @@
 
 #include <model/account/SipAccount.h>
 
+#include <sipwrapper/EnumPhoneLineState.h>
+
 #include <qtutil/QObjectThreadSafe.h>
 
 class CWengoPhone;
@@ -44,19 +46,12 @@ public:
 
 	QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar);
 
-	void showMessage(const QString & message);
+	/**
+	 * @see QStatusBar::showMessage()
+	 */
+	void showMessage(const QString & message, int timeout = 0);
 
-	QLabel * getInternetConnectionStateLabel() const {
-		return _internetConnectionStateLabel;
-	}
-
-	QLabel * getPhoneLineStateLabel() const {
-		return _phoneLineStateLabel;
-	}
-
-	QLabel * getSoundStateLabel() const {
-		return _soundStateLabel;
-	}
+	void phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state);
 
 private:
 
@@ -80,9 +75,9 @@ private:
 
 	QLabel * _soundStateLabel;
 
-	QMovie * _wengoConnectionMovie;
-
 	QMovie * _internetConnectionMovie;
+
+	QMovie * _sipConnectionMovie;
 };
 
 #endif	//QTSTATUSBAR_H

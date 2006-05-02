@@ -30,7 +30,6 @@ class CPhoneCall;
 class QtPhoneCall;
 class QtWengoPhone;
 class QtWengoStyleLabel;
-class QMovie;
 
 class QtPhoneLine : public QObjectThreadSafe, public PPhoneLine {
 	Q_OBJECT
@@ -75,8 +74,6 @@ private:
 	QtWengoStyleLabel * _callButton;
 
 	CPhoneCall * _activeCPhoneCall;
-
-	QMovie * _connectionStatMovie;
 };
 
 #endif	//QTPHONELINE_H

@@ -305,12 +305,6 @@ void QtWengoPhone::callButtonClicked() {
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
-
-	/*
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	_ui->tabWidget->setCurrentWidget(_ui->tabPhoneCall);
-	_contactCallListWidget->addPhoneCall(qtPhoneCall);
-	*/
 	QtContactCallListWidget * qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
 	_ui->tabWidget->addTab(qtContactCallListWidget,"Call");
 	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
@@ -338,10 +332,6 @@ void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
 }
 
 void QtWengoPhone::setPhoneCall(QtContactCallListWidget * qtContactCallListWidget) {
-	/*
-	Widget::createLayout(_ui->tabPhoneCall)->addWidget(qtContactCallListWidget);
-	_contactCallListWidget = qtContactCallListWidget;
-	*/
 }
 
 void QtWengoPhone::setSms(QtSms * qtSms) {

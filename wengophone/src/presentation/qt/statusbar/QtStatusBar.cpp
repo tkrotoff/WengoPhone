@@ -44,13 +44,11 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	statusGroup->layout()->setMargin(0);
 	statusGroup->layout()->setSpacing(3);
 
-	_wengoConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng", MNG_FORMAT, _statusBar);
-	_internetConnectionMovie = new QMovie(":/pics/statusbar/status-earth-connecting.mng", MNG_FORMAT, _statusBar);
-
 	_cWengoPhone.networkDiscoveryStateChangedEvent +=
 		boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 
 	//internetConnectionStateLabel
+	_internetConnectionMovie = new QMovie(":/pics/statusbar/status-earth-connecting.mng", MNG_FORMAT, _statusBar);
 	_internetConnectionStateLabel = new QLabel(statusGroup);
 	_internetConnectionStateLabel->setMovie(_internetConnectionMovie);
 	_internetConnectionStateLabel->setToolTip(tr("Not Connected"));
@@ -58,11 +56,12 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_internetConnectionMovie->start();
 
 	//phoneLineStateLabel
+	_sipConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng", MNG_FORMAT, _statusBar);
 	_phoneLineStateLabel = new QLabel(statusGroup);
-	_phoneLineStateLabel->setMovie(_wengoConnectionMovie);
+	_phoneLineStateLabel->setMovie(_sipConnectionMovie);
 	_phoneLineStateLabel->setToolTip(tr("Not Connected"));
 	statusGroup->layout()->addWidget(_phoneLineStateLabel);
-	_wengoConnectionMovie->start();
+	_sipConnectionMovie->start();
 
 	//soundStateLabel
 	_soundStateLabel = new QLabel(statusGroup);
@@ -70,15 +69,15 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_soundStateLabel->setToolTip(tr("Audio Configuration Error"));
 	statusGroup->layout()->addWidget(_soundStateLabel);
 
-    _statusBar->addPermanentWidget(statusGroup);
+	_statusBar->addPermanentWidget(statusGroup);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this, _1, _2);
 	checkSoundConfigThreadSafe(config, Config::AUDIO_OUTPUT_DEVICENAME_KEY);
 }
 
-void QtStatusBar::showMessage(const QString & message) {
-	_statusBar->showMessage(message);
+void QtStatusBar::showMessage(const QString & message, int timeout) {
+	_statusBar->showMessage(message, timeout);
 }
 
 void QtStatusBar::checkSoundConfig(Settings & sender, const std::string & key) {
@@ -122,6 +121,7 @@ void QtStatusBar::networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount 
 	QString tooltip;
 	QString pixmap;
 
+	//Stops animated pixmap
 	delete _internetConnectionMovie;
 	_internetConnectionMovie = NULL;
 
@@ -157,4 +157,46 @@ void QtStatusBar::networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount 
 
 	_internetConnectionStateLabel->setPixmap(pixmap);
 	_internetConnectionStateLabel->setToolTip(tooltip);
+}
+
+void QtStatusBar::phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state) {
+	QString tooltip;
+	QString pixmap;
+
+	//Stops animated pixmap
+	delete _sipConnectionMovie;
+	_sipConnectionMovie = NULL;
+
+	switch (state) {
+	case EnumPhoneLineState::PhoneLineStateDefault:
+		tooltip = tr("Not connected");
+		pixmap = ":/pics/statusbar/status-network-offline.png";
+		break;
+
+	case EnumPhoneLineState::PhoneLineStateServerError:
+		tooltip = tr("An error occured");
+		pixmap = ":/pics/statusbar/status-network-offline.png";
+		break;
+
+	case EnumPhoneLineState::PhoneLineStateTimeout:
+		tooltip = tr("An error occured");
+		pixmap = ":/pics/statusbar/status-network-offline.png";
+		break;
+
+	case EnumPhoneLineState::PhoneLineStateOk:
+		tooltip = tr("Register done");
+		pixmap = ":/pics/statusbar/status-network-online-static.png";
+		break;
+
+	case EnumPhoneLineState::PhoneLineStateClosed:
+		tooltip = tr("Unregister done");
+		pixmap = ":/pics/statusbar/status-network-offline.png";
+		break;
+
+	default:
+		LOG_FATAL("unknown state=" + EnumPhoneLineState::toString(state));
+	};
+
+	_phoneLineStateLabel->setPixmap(pixmap);
+	_phoneLineStateLabel->setToolTip(tooltip);
 }

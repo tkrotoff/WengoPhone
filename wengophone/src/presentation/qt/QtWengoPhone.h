@@ -238,8 +238,6 @@ private:
 
 	QComboBox * _phoneComboBox;
 
-	QTabWidget * _tabWidget;
-
 	TrayIcon * _trayIcon;
 
 	QMenu * _trayMenu;
@@ -252,15 +250,11 @@ private:
 
 	QtBrowser * _browser;
 
-	QtContactList *_contactList;
+	QtContactList * _contactList;
 
 	QtHistoryWidget * _qtHistoryWidget;
 
-	QtContactCallListWidget * _contactCallListWidget;
-
 	QtCallBar * _qtCallBar;
-
-	QPushButton * _addContactButton;
 
 	QWidget * _configPanelWidget;
 
