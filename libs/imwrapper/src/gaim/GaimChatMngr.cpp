@@ -33,6 +33,26 @@ extern "C" {
 #endif
 
 
+/* **************** UTIL ****************** */
+int GetGaimConversationId(const char *name)
+{
+	int id = 0;
+	char *str_id = (char *) name;
+	
+	if (name == NULL)
+		return id;
+
+	while (str_id && *str_id && (*str_id > '9' || *str_id < '0'))
+		str_id++;
+
+	if (*str_id == '\0')
+		return id;
+
+	id = strtol(str_id, (char **) NULL, 10);
+	return id;
+}
+
+
 /* **************** TYPING STATE MANAGEMENT ****************** */
 
 int chat_invite_request(GaimAccount *account, const char *who, 
@@ -64,6 +84,7 @@ void init_typing_state_event()
 	gaim_signal_connect(gaim_conversations_get_handle(), "chat-invited",
 						handle, GAIM_CALLBACK(chat_invite_request), NULL);
 }
+
 
 /* ***************** GAIM CALLBACK ***************** */
 void C_CreateConversationCbk(GaimConversation *conv)
@@ -214,15 +235,29 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 	}
 	else if (chatType == GAIM_CONV_TYPE_CHAT)
 	{
-		int id = (int) strtol(gaim_conversation_get_name(conv), (char **) NULL, 10);
+		int id = GetGaimConversationId(gaim_conversation_get_name(conv));
 
 		if ((mConv = mChat->FindChatStructById(id)) == NULL)
 		{
 			mConv = mChat->CreateChatSession();
 		}
 
+		if (mConv->gaim_conv_session)
+			gaim_conversation_destroy((GaimConversation *)mConv->gaim_conv_session);
+
 		mConv->gaim_conv_session = conv;
-		conv->ui_data = mConv; 		
+		conv->ui_data = mConv;
+
+		if (mConv->pending_invit)
+		{
+			for (GList *l = mConv->pending_invit; l != NULL; l = l->next)
+			{
+				serv_chat_invite(gaim_conversation_get_gc(conv), 
+					gaim_conv_chat_get_id(GAIM_CONV_CHAT(conv)),
+					"Join my conference...", (char *)l->data);
+			}
+			mConv->pending_invit = NULL;
+		}
 	}
 }
 

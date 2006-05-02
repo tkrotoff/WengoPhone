@@ -176,9 +176,8 @@ bool IMChatSession::canDoMultiChat() {
 
 	switch (proto) {
 		case EnumIMProtocol::IMProtocolMSN :
-			return true;
-		
 		case EnumIMProtocol::IMProtocolYahoo :
+		case EnumIMProtocol::IMProtocolAIMICQ :
 			return true;
 
 		default :

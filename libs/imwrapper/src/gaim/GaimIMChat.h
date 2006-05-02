@@ -36,6 +36,7 @@ typedef struct	mConvInfo_s
 	void		*conv_session;
 	int			conv_id;
 	void		*gaim_conv_session;
+	GList		*pending_invit;
 }				mConvInfo_t;
 
 /**
@@ -65,7 +66,7 @@ public:
 	void AddChatSessionInList(mConvInfo_t *conv);
 	static mConvInfo_t *FindChatStructById(int convId);
 
-	void createGaimChat(GaimConnection *gGC, int id, GList *users);
+	int createGaimChat(GaimConnection *gGC, int id, GList *users);
 
 private:
 

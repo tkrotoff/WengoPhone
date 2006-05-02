@@ -23,6 +23,9 @@
 #include "GaimIMChat.h"
 #include "GaimEnumIMProtocol.h"
 
+#include <Windows.h>
+#include <Winbase.h>
+
 extern "C" {
 #include "gaim/conversation.h"
 }
@@ -33,6 +36,8 @@ extern "C" {
 #include <stdio.h>
 #endif
 
+#define CHAT_CREATED		0
+#define CHAT_NOT_CREATED	-1
 
 std::list<mConvInfo_t *> GaimIMChat::_GaimChatSessionList;
 
@@ -49,6 +54,7 @@ mConvInfo_t *GaimIMChat::CreateChatSession()
 	
 	mConv->conv_session = chatSession;
 	mConv->conv_id = chatSession->getId();
+	mConv->pending_invit = NULL;
 	
 	AddChatSessionInList(mConv);
 	
@@ -139,6 +145,8 @@ void GaimIMChat::changeTypingState(IMChatSession & chatSession, IMChat::TypingSt
 		return;
 
 	gConv = (GaimConversation *)mConv->gaim_conv_session;
+	if (!gConv)
+		return;
 
 	switch (state)
 	{
@@ -189,21 +197,21 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 		GList *mlist = NULL;
 		IMContactSet &chatContact = (IMContactSet &)chatSession.getIMContactSet();
 		IMContactSet::const_iterator it = chatContact.begin();
-		std::string firstContactId = it->getContactId();
+		const std::string & firstContactId = it->getContactId();
 		GaimConnection *gGC;
 
 		gConv = (GaimConversation *) mConv->gaim_conv_session;
 		gGC = gaim_conversation_get_gc(gConv);
-		gaim_conversation_destroy(gConv);
 		mlist = g_list_append(mlist, (char *) contactId.c_str());
 		mlist = g_list_append(mlist, (char *) firstContactId.c_str());
-		createGaimChat(gGC, chatSession.getId(), mlist);
+		
+		if (createGaimChat(gGC, chatSession.getId(), mlist) == CHAT_CREATED)
+		{
+			gaim_conversation_destroy(gConv);
+		}
 	}	
 	else if (gaim_conversation_get_type(gConv) == GAIM_CONV_TYPE_CHAT)
 	{
-		/*gaim_conv_chat_add_user(GAIM_CONV_CHAT(gConv), 
-								contactId.c_str(), NULL, GAIM_CBFLAGS_NONE, true);*/
-		
 		serv_chat_invite(gaim_conversation_get_gc(gConv), gaim_conv_chat_get_id(GAIM_CONV_CHAT(gConv)),
 			NULL, contactId.c_str());
 	}
@@ -269,7 +277,7 @@ mConvInfo_t *GaimIMChat::FindChatStructById(int convId)
 	return NULL;
 }
 
-void GaimIMChat::createGaimChat(GaimConnection *gGC, int id, GList *users)
+int GaimIMChat::createGaimChat(GaimConnection *gGC, int id, GList *users)
 {
 	if (!gGC)
 		LOG_FATAL("GaimConnection gGC = NULL!!");
@@ -281,7 +289,7 @@ void GaimIMChat::createGaimChat(GaimConnection *gGC, int id, GList *users)
 	if (mConv == NULL)
 		mConv = CreateChatSession();
 	
-	snprintf(chatName, sizeof(chatName), "%d", mConv->conv_id);
+	snprintf(chatName, sizeof(chatName), "Chat%d", mConv->conv_id);
 
 	if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolMSN)
 	{
@@ -300,16 +308,29 @@ void GaimIMChat::createGaimChat(GaimConnection *gGC, int id, GList *users)
 		GList *bl;
 
 		components = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+		
 		g_hash_table_replace(components, g_strdup("room"), g_strdup(chatName));
-		g_hash_table_replace(components, g_strdup("topic"), g_strdup("my room"));
-		g_hash_table_replace(components, g_strdup("type"), g_strdup("Conference"));
+		
+		if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolYahoo)
+		{
+			g_hash_table_replace(components, g_strdup("topic"), g_strdup("Join my conference..."));
+			g_hash_table_replace(components, g_strdup("type"), g_strdup("Conference"));
+		}
+		else if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolAIMICQ)
+		{
+			g_hash_table_replace(components, g_strdup("exchange"), g_strdup("16"));
+		}
+
 		serv_join_chat(gGC, components);
 		g_hash_table_destroy(components);
 
 		gConv = gaim_find_conversation_with_account(GAIM_CONV_TYPE_CHAT, chatName, gGC->account);
 
 		if (!gConv)
-			LOG_FATAL("Chat doesn't exist !!");
+		{
+			mConv->pending_invit = users;
+			return CHAT_NOT_CREATED;
+		}
 
 		mConv->gaim_conv_session = gConv;
 		gConv->ui_data = mConv;
@@ -317,9 +338,11 @@ void GaimIMChat::createGaimChat(GaimConnection *gGC, int id, GList *users)
 		for (bl = users; bl != NULL; bl = bl->next)
 		{
 			serv_chat_invite(gGC, gaim_conv_chat_get_id(GAIM_CONV_CHAT(gConv)),
-							NULL, (char *)bl->data);
+							"Join my conference...", (char *)bl->data);
 		}
 	}
+
+	return CHAT_CREATED;
 }
 
 bool GaimIMChat::IsChatSessionInList(int convId)
