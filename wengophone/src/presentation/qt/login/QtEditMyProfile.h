@@ -27,8 +27,6 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include "QtProtocolSettings.h"
-
 class UserProfile;
 
 class QtEditMyProfile : public QDialog
@@ -64,8 +62,6 @@ public Q_SLOTS:
 protected:
 
 	UserProfile & _userProfile;
-
-	QtProtocolSettings * _protocolSettings;
 
 	QWidget * _widget;
 
