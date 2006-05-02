@@ -47,6 +47,7 @@ class History;
 class IMAccount;
 class UserProfile;
 class WsWengoSubscribe;
+class WsDirectory;
 
 /**
  * @defgroup control Control Component
@@ -245,6 +246,8 @@ private:
 	void wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin);
 
 	void wsWengoSubscribeCreatedEventHandler(WengoPhone & sender, WsWengoSubscribe & wsWengoSubscribe);
+
+	void wsDiretoryCreatedEventHandler(UserProfile & sender, WsDirectory & wsDirectory);
 
 	void smsCreatedEventHandler(UserProfile & sender, Sms & sms);
 

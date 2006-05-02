@@ -32,6 +32,7 @@
 #include <model/webservices/softupdate/SoftUpdate.h>
 #include <WengoPhoneBuildId.h>
 #include <model/webservices/subscribe/Subscribe.h>
+#include <model/webservices/directory/WsDirectory.h>
 
 #include <presentation/PFactory.h>
 #include <presentation/PWengoPhone.h>
@@ -46,6 +47,7 @@
 #include <control/webservices/sms/CSms.h>
 #include <control/webservices/softupdate/CSoftUpdate.h>
 #include <control/webservices/subscribe/CSubscribe.h>
+#include <control/webservices/directory/CWsDirectory.h>
 
 #include <util/WebBrowser.h>
 #include <util/StringList.h>
@@ -71,6 +73,7 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 
 	_wengoPhone.wenboxPluginCreatedEvent += boost::bind(&CWengoPhone::wenboxPluginCreatedEventHandler, this, _1, _2);
 	_wengoPhone.wsWengoSubscribeCreatedEvent += boost::bind(&CWengoPhone::wsWengoSubscribeCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().wsDirectoryCreatedEvent += boost::bind(&CWengoPhone::wsDiretoryCreatedEventHandler, this, _1, _2);
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.getCurrentUserProfile().phoneLineCreatedEvent += boost::bind(&CWengoPhone::phoneLineCreatedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().loginStateChangedEvent += loginStateChangedEvent;
@@ -127,6 +130,12 @@ void CWengoPhone::wsWengoSubscribeCreatedEventHandler(WengoPhone & sender, WsWen
 	LOG_DEBUG("CWenboxPlugin created");
 }
 
+void CWengoPhone::wsDiretoryCreatedEventHandler(UserProfile & sender, WsDirectory & wsDirectory) {
+	static CWsDirectory cWsDirectory(*this, wsDirectory);
+
+	LOG_DEBUG("CWsDirectory created");
+}
+
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 	static CConnectHandler cConnectHandler(sender.getCurrentUserProfile().getConnectHandler());
 	LOG_DEBUG("CConnectHandler created");
@@ -141,7 +150,6 @@ void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 
 	LOG_DEBUG("WengoPhone::init() finished");
 }
-
 
 void CWengoPhone::smsCreatedEventHandler(UserProfile & sender, Sms & sms) {
 	static CSms cSms(sms, *this);
