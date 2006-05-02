@@ -32,9 +32,11 @@ UserTreeEventManager::UserTreeEventManager(QObject * parent, QTreeWidget * targe
 }
 
 bool UserTreeEventManager::eventFilter(QObject *obj, QEvent *event){
-
     switch (event->type())
     {
+        case QEvent::MouseButtonDblClick:
+            mouseDlbClick(dynamic_cast<QMouseEvent *>(event));
+            return false;
         case QEvent::MouseButtonPress:
             mousePressEvent(dynamic_cast<QMouseEvent *>(event));
             return false;
@@ -62,12 +64,21 @@ bool UserTreeEventManager::eventFilter(QObject *obj, QEvent *event){
     }
 }
 
+void UserTreeEventManager::mouseDlbClick(QMouseEvent * event){
+    QTreeWidgetItem * item = _tree->itemAt(event->pos());
+	QtUserList * ul = QtUserList::getInstance();
+    if (item){
+        ul->startChat(item->text(0));
+    }
+}
+
 void UserTreeEventManager::mousePressEvent(QMouseEvent *event)
 {
 
     mouseClicked(event->button());
     QTreeWidgetItem * item = _tree->itemAt(event->pos());
 	QtUserList * ul = QtUserList::getInstance();
+
 	if (_timer.isActive())
 		_timer.stop();
 
