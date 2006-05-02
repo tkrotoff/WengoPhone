@@ -180,7 +180,9 @@ void WengoPhone::saveConfiguration() {
 }
 
 void WengoPhone::valueChangedEventHandler(Settings & sender, const std::string & key) {
+#if 0
 	if (sender.keyValueToBeSaved(key)) {
 		saveConfiguration();
 	}
+#endif
 }
