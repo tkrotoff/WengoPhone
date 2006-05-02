@@ -33,7 +33,7 @@
      <item>
       <widget class="QLabel" name="protocolIcon" >
        <property name="pixmap" >
-        <pixmap resource="../wengophone.qrc" >:/pics/protocol_msn.png</pixmap>
+        <pixmap resource="../wengophone.qrc" >:/pics/protocols/aim.png</pixmap>
        </property>
       </widget>
      </item>
