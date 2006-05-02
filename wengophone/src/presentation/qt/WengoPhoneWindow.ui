@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>mainWindow</class>
- <widget class="QMainWindow" name="mainWindow" >
+ <class>WengoPhoneWindow</class>
+ <widget class="QMainWindow" name="WengoPhoneWindow" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -331,7 +331,7 @@
      <x>0</x>
      <y>0</y>
      <width>296</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -343,29 +343,6 @@
     <addaction name="separator" />
     <addaction name="actionShowAbout" />
    </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>&amp;Contacts</string>
-    </property>
-    <widget class="QMenu" name="menuHide_Show_2" >
-     <property name="title" >
-      <string>&amp;Contact List Options</string>
-     </property>
-     <addaction name="actionView_toolbar" />
-     <addaction name="actionView_addressbar" />
-     <addaction name="actionView_dialpad" />
-     <addaction name="separator" />
-     <addaction name="actionShow_Hide_contacts_offline" />
-     <addaction name="actionShow_contact_groups" />
-     <addaction name="separator" />
-     <addaction name="actionSort_contacts" />
-    </widget>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSearch_for_Wengo_users" />
-    <addaction name="actionCreate_Group" />
-    <addaction name="separator" />
-    <addaction name="menuHide_Show_2" />
-   </widget>
    <widget class="QMenu" name="menuActions" >
     <property name="title" >
      <string>&amp;Actions</string>
@@ -373,7 +350,7 @@
     <addaction name="actionCreateConferenceCall" />
     <addaction name="actionSendSms" />
     <addaction name="separator" />
-    <addaction name="actionCreate_Chat_Connference" />
+    <addaction name="actionCreateChatConnference" />
    </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
@@ -384,24 +361,24 @@
       <string>Type Here</string>
      </property>
     </widget>
-    <widget class="QMenu" name="menuClear_History_2" >
+    <widget class="QMenu" name="menuClearHistory" >
      <property name="title" >
       <string>Clear &amp;History</string>
      </property>
-     <addaction name="actionOutgoing_Calls" />
-     <addaction name="actionIncoming_Calls" />
-     <addaction name="actionMissed_Calls" />
-     <addaction name="actionChat_Sessions" />
+     <addaction name="actionOutgoingCalls" />
+     <addaction name="actionIncomingCalls" />
+     <addaction name="actionMissedCalls" />
+     <addaction name="actionChatSessions" />
      <addaction name="actionSMS" />
      <addaction name="separator" />
      <addaction name="actionAll" />
     </widget>
-    <addaction name="actionIM_Account_Settings" />
+    <addaction name="actionIMAccountSettings" />
     <addaction name="separator" />
     <addaction name="actionConfiguration" />
     <addaction name="actionAdvancedConfiguration" />
     <addaction name="separator" />
-    <addaction name="menuClear_History_2" />
+    <addaction name="menuClearHistory" />
    </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
@@ -427,9 +404,32 @@
     <addaction name="actionVoiceMail" />
     <addaction name="separator" />
     <addaction name="actionOpenWengoAccount" />
-    <addaction name="actionLog_off" />
+    <addaction name="actionLogOff" />
     <addaction name="separator" />
     <addaction name="actionExit" />
+   </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>&amp;Contacts</string>
+    </property>
+    <widget class="QMenu" name="menuHideShow" >
+     <property name="title" >
+      <string>&amp;Contact List Options</string>
+     </property>
+     <addaction name="actionViewToolbar" />
+     <addaction name="actionViewAddressbar" />
+     <addaction name="actionViewDialpad" />
+     <addaction name="separator" />
+     <addaction name="actionHideContactsOffline" />
+     <addaction name="actionShowContactGroups" />
+     <addaction name="separator" />
+     <addaction name="actionSortContacts" />
+    </widget>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearchWengoUsers" />
+    <addaction name="actionCreateGroup" />
+    <addaction name="separator" />
+    <addaction name="menuHideShow" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -537,57 +537,57 @@
     <string>&amp;Voicemail </string>
    </property>
   </action>
-  <action name="actionView_toolbar" >
+  <action name="actionViewToolbar" >
    <property name="text" >
     <string>View &amp;Toolbar</string>
    </property>
   </action>
-  <action name="actionView_addressbar" >
+  <action name="actionViewAddressbar" >
    <property name="text" >
     <string>View &amp;Addressbar</string>
    </property>
   </action>
-  <action name="actionView_dialpad" >
+  <action name="actionViewDialpad" >
    <property name="text" >
     <string>View &amp;Dialpad</string>
    </property>
   </action>
-  <action name="actionShow_Hide_contacts_offline" >
+  <action name="actionHideContactsOffline" >
    <property name="text" >
     <string>Show / Hide &amp;Contacts Offline</string>
    </property>
   </action>
-  <action name="actionShow_contact_groups" >
+  <action name="actionShowContactGroups" >
    <property name="text" >
     <string>Show Contact &amp;Groups</string>
    </property>
   </action>
-  <action name="actionSort_contacts" >
+  <action name="actionSortContacts" >
    <property name="text" >
     <string>&amp;Sort Contacts</string>
    </property>
   </action>
-  <action name="actionIM_Account_Settings" >
+  <action name="actionIMAccountSettings" >
    <property name="text" >
     <string>&amp;IM Account Settings</string>
    </property>
   </action>
-  <action name="actionOutgoing_Calls" >
+  <action name="actionOutgoingCalls" >
    <property name="text" >
     <string>&amp;Outgoing Calls</string>
    </property>
   </action>
-  <action name="actionIncoming_Calls" >
+  <action name="actionIncomingCalls" >
    <property name="text" >
     <string>&amp;Incoming Calls</string>
    </property>
   </action>
-  <action name="actionMissed_Calls" >
+  <action name="actionMissedCalls" >
    <property name="text" >
     <string>&amp;Missed Calls</string>
    </property>
   </action>
-  <action name="actionChat_Sessions" >
+  <action name="actionChatSessions" >
    <property name="text" >
     <string>&amp;Chat Sessions</string>
    </property>
@@ -602,22 +602,22 @@
     <string>&amp;All</string>
    </property>
   </action>
-  <action name="actionLog_off" >
+  <action name="actionLogOff" >
    <property name="text" >
     <string>&amp;Log off</string>
    </property>
   </action>
-  <action name="actionSearch_for_Wengo_users" >
+  <action name="actionSearchWengoUsers" >
    <property name="text" >
     <string>&amp;Search Wengo Users</string>
    </property>
   </action>
-  <action name="actionCreate_Group" >
+  <action name="actionCreateGroup" >
    <property name="text" >
     <string>Create &amp;Group</string>
    </property>
   </action>
-  <action name="actionCreate_Chat_Connference" >
+  <action name="actionCreateChatConnference" >
    <property name="text" >
     <string>Create Conference C&amp;hat</string>
    </property>

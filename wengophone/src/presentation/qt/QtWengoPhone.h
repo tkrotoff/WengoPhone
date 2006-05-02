@@ -258,17 +258,11 @@ private:
 
 	QtContactCallListWidget * _contactCallListWidget;
 
-	QFrame * _iconBar;
-
-	QFrame * _callBar;
-
 	QtCallBar * _qtCallBar;
 
 	QPushButton * _addContactButton;
 
 	QWidget * _configPanelWidget;
-
-	QStackedWidget * _configPanel;
 
 	QtStatusBar * _statusBar;
 

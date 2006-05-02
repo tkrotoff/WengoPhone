@@ -8,12 +8,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>431</width>
-    <height>456</height>
+    <width>491</width>
+    <height>422</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Account Creation</string>
+   <string>WengoPhone - Account Creation</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -25,7 +25,7 @@
    <item row="0" column="0" >
     <widget class="QStackedWidget" name="stackedWidget" >
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="FirstPageWidget" >
       <layout class="QVBoxLayout" >
@@ -66,7 +66,7 @@
          <item row="0" column="0" >
           <widget class="QLabel" name="NicknameLabel" >
            <property name="text" >
-            <string>nickname</string>
+            <string>Nickname:</string>
            </property>
           </widget>
          </item>
@@ -345,14 +345,14 @@
          <item row="3" column="0" >
           <widget class="QLabel" name="label" >
            <property name="text" >
-            <string>email</string>
+            <string>Email:</string>
            </property>
           </widget>
          </item>
          <item row="2" column="0" >
           <widget class="QLabel" name="ConfirmPasswordLabel" >
            <property name="text" >
-            <string>confirm password</string>
+            <string>Confirm password:</string>
            </property>
           </widget>
          </item>
@@ -362,7 +362,7 @@
          <item row="1" column="0" >
           <widget class="QLabel" name="PasswordLabel" >
            <property name="text" >
-            <string>password</string>
+            <string>Password:</string>
            </property>
           </widget>
          </item>
@@ -1208,7 +1208,7 @@
           </font>
          </property>
          <property name="text" >
-          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:8pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Your e-mail address will ONLY be used by our internal systems, ie only the nickname will be visible to other Wengo users. We respect your privacy and will never release your personal information.&lt;/p>&lt;/body>&lt;/html></string>
+          <string>Your e-mail address will ONLY be used by our internal systems, ie only the nickname will be visible to other Wengo users. We respect your privacy and will never release your personal information.</string>
          </property>
          <property name="scaledContents" >
           <bool>false</bool>
@@ -1597,7 +1597,7 @@
           </font>
          </property>
          <property name="text" >
-          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:8pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">After you complete registration, we will send you an e-mail asking you to confirm that the submitted information is correct. Please take the time to click on the link within our message within the 48 hours followi&lt;/p>&lt;/body>&lt;/html></string>
+          <string>After you complete registration, we will send you an e-mail asking you to confirm that the submitted information is correct. Please take the time to click on the link within our message within the 48 hours following your registration.</string>
          </property>
          <property name="alignment" >
           <set>Qt::AlignJustify|Qt::AlignVCenter</set>
@@ -1925,7 +1925,7 @@
               </font>
              </property>
              <property name="text" >
-              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:8pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Fields marked with asterisk are required&lt;/p>&lt;/body>&lt;/html></string>
+              <string>Fields marked with asterisk are required</string>
              </property>
             </widget>
            </item>
@@ -1995,7 +1995,7 @@
        <item>
         <widget class="QLabel" name="BelowDetailsLabel" >
          <property name="text" >
-          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" color:#000000;">Please find your details below, including the necessary identifiers to access your account.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+          <string>Please find your details below, including the necessary identifiers to access your account.</string>
          </property>
          <property name="alignment" >
           <set>Qt::AlignJustify|Qt::AlignVCenter</set>
@@ -2297,7 +2297,7 @@
             <bool>true</bool>
            </property>
            <property name="text" >
-            <string>Your e-mail</string>
+            <string>Your e-mail:</string>
            </property>
            <property name="alignment" >
             <set>Qt::AlignCenter</set>
@@ -2588,7 +2588,7 @@
             <bool>true</bool>
            </property>
            <property name="text" >
-            <string>Your nickname</string>
+            <string>Your nickname:</string>
            </property>
            <property name="alignment" >
             <set>Qt::AlignCenter</set>
@@ -2879,7 +2879,7 @@
             <bool>true</bool>
            </property>
            <property name="text" >
-            <string>Your password</string>
+            <string>Your password:</string>
            </property>
            <property name="alignment" >
             <set>Qt::AlignCenter</set>

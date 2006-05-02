@@ -104,13 +104,15 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 }
 
 void QtWengoPhone::initThreadSafe() {
-	_wengoPhoneWindow = qobject_cast<QMainWindow *>(WidgetFactory::create(":/forms/WengoPhoneWindow.ui", NULL));
+	_wengoPhoneWindow = new QMainWindow(NULL);
+
+	_ui = new Ui::WengoPhoneWindow();
+	_ui->setupUi(_wengoPhoneWindow);
 
 	_qtLogin = new QtLogin(_wengoPhoneWindow, *this);
 
-	_callBar = Object::findChild<QFrame *>(_wengoPhoneWindow, "callBarFrame");
-	QGridLayout * callBarLayout = new QGridLayout(_callBar);
-	_qtCallBar = new QtCallBar(_callBar);
+	QGridLayout * callBarLayout = new QGridLayout(_ui->callBarFrame);
+	_qtCallBar = new QtCallBar(_ui->callBarFrame);
 	callBarLayout->addWidget(_qtCallBar);
 	callBarLayout->setMargin(0);
 	callBarLayout->setSpacing(0);
@@ -122,33 +124,23 @@ void QtWengoPhone::initThreadSafe() {
 	_hangUpButton = _qtCallBar->getHangButton();
 
 	//phoneComboBox
-	_phoneComboBox=_qtCallBar->getComboBox();
+	_phoneComboBox = _qtCallBar->getComboBox();
 	MousePressEventFilter * leftMouseFilter = new MousePressEventFilter(
 		this, SLOT(phoneComboBoxClicked()), Qt::LeftButton);
 	_phoneComboBox->installEventFilter(leftMouseFilter);
 
-	// IconBar
-	_iconBar = Object::findChild<QFrame *>(_wengoPhoneWindow,"iconBar");
-
 	//Add contact button
-	_addContactButton = Object::findChild<QPushButton *>(_iconBar,"addContactButton");
-	connect(_addContactButton, SIGNAL(clicked()), SLOT(addContact()));
+	connect(_ui->addContactButton, SIGNAL(clicked()), SLOT(addContact()));
 
 	//webcamButton
-	QPushButton * webcamButton = Object::findChild<QPushButton *>(_iconBar,"webcamButton");
-	new QtWebcamButton(webcamButton);
+	new QtWebcamButton(_ui->webcamButton);
 
 	//Buttons initialization
 	initButtons();
 
-	//tabWidget
-	_tabWidget = Object::findChild<QTabWidget *>(_wengoPhoneWindow, "tabWidget");
-
-
 	//Dialpad
 	QtDialpad * qtDialpad = new QtDialpad(this);
-	QWidget * tabDialpad = Object::findChild<QWidget *>(_tabWidget, "tabDialpad");
-	Widget::createLayout(tabDialpad)->addWidget(qtDialpad->getWidget());
+	Widget::createLayout(_ui->tabDialpad)->addWidget(qtDialpad->getWidget());
 
 	//Systray
 	_trayMenu = NULL;
@@ -157,118 +149,90 @@ void QtWengoPhone::initThreadSafe() {
 	_trayIcon->show();
 
 	//actionShowWengoAccount
-	QAction * actionShowWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowWengoAccount");
-	connect(actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
+	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
 
 	//actionOpenWengoAccount
-	QAction * actionOpenWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionOpenWengoAccount");
-	connect(actionOpenWengoAccount, SIGNAL(triggered()), SLOT(openWengoAccount()));
+	connect(_ui->actionOpenWengoAccount, SIGNAL(triggered()), SLOT(openWengoAccount()));
 
 	//actionEditMyProfile
-	QAction * actionEditMyProfile = Object::findChild<QAction *>(_wengoPhoneWindow, "actionEditMyProfile");
-	connect(actionEditMyProfile, SIGNAL(triggered()), SLOT(editMyProfile()));
+	connect(_ui->actionEditMyProfile, SIGNAL(triggered()), SLOT(editMyProfile()));
 
 	//actionExit
-	QAction * actionExit = Object::findChild<QAction *>(_wengoPhoneWindow, "actionExit");
-	connect(actionExit, SIGNAL(triggered()), SLOT(exitApplication()));
+	connect(_ui->actionExit, SIGNAL(triggered()), SLOT(exitApplication()));
 
 	//actionAddContact
-	QAction * actionAddContact = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAddContact");
-	connect(actionAddContact, SIGNAL(triggered()), SLOT(addContact()));
+	connect(_ui->actionAddContact, SIGNAL(triggered()), SLOT(addContact()));
 
 	//actionConfiguration
-	QAction * actionConfiguration = Object::findChild<QAction *>(_wengoPhoneWindow, "actionConfiguration");
-	connect(actionConfiguration, SIGNAL(triggered()), SLOT(showConfig()));
+	connect(_ui->actionConfiguration, SIGNAL(triggered()), SLOT(showConfig()));
 
 	//actionShowForum
-	QAction * actionShowForum = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowForum");
-	connect(actionShowForum, SIGNAL(triggered()), SLOT(showForum()));
+	connect(_ui->actionShowForum, SIGNAL(triggered()), SLOT(showForum()));
 
 	//actionShowHelp
 	/*
-	QAction * actionShowHelp = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowHelp");
-	connect(actionShowHelp, SIGNAL(triggered()), SLOT(showHelp()));
+	connect(_ui->actionShowHelp, SIGNAL(triggered()), SLOT(showHelp()));
 	*/
 
 	//actionShowAbout
-	QAction * actionShowAbout = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowAbout");
-	connect(actionShowAbout, SIGNAL(triggered()), SLOT(showAbout()));
+	connect(_ui->actionShowAbout, SIGNAL(triggered()), SLOT(showAbout()));
 
 	//actionSendSms
-	QAction * actionSendSms = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSendSms");
-	connect(actionSendSms, SIGNAL(triggered()), SLOT(sendSms()));
+	connect(_ui->actionSendSms, SIGNAL(triggered()), SLOT(sendSms()));
 
 	//actionAdvancedConfiguration
-	QAction * actionAdvancedConfiguration = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAdvancedConfiguration");
-	connect(actionAdvancedConfiguration, SIGNAL(triggered()), SLOT(showAdvancedConfig()));
+	connect(_ui->actionAdvancedConfiguration, SIGNAL(triggered()), SLOT(showAdvancedConfig()));
 
 	//actionFaq
-	QAction * actionFaq = Object::findChild<QAction *>(_wengoPhoneWindow, "actionFaq");
-	connect(actionFaq, SIGNAL (triggered()), SLOT(showFaq()));
+	connect(_ui->actionFaq, SIGNAL (triggered()), SLOT(showFaq()));
 
 	//actionBuyCallOutCredits
-	QAction * actionBuyCallOutCredits = Object::findChild<QAction *>(_wengoPhoneWindow, "actionBuyCallOutCredits");
-	connect(actionBuyCallOutCredits, SIGNAL(triggered()), SLOT(showBuyOut()));
+	connect(_ui->actionBuyCallOutCredits, SIGNAL(triggered()), SLOT(showBuyOut()));
 
 	//actionCallOutService
-	QAction * actionCallOutService = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCallOutService");
-	connect(actionCallOutService, SIGNAL(triggered()), SLOT (showCallOut()));
+	connect(_ui->actionCallOutService, SIGNAL(triggered()), SLOT (showCallOut()));
 
 	//actionSms
-	QAction * actionSms = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSms");
-	connect(actionSms, SIGNAL(triggered()), SLOT (showSms()));
+	connect(_ui->actionSms, SIGNAL(triggered()), SLOT (showSms()));
 
 	//actionVoiceMail
-	QAction * actionVoiceMail = Object::findChild<QAction *>(_wengoPhoneWindow, "actionVoiceMail");
-	connect(actionVoiceMail, SIGNAL(triggered()), SLOT (showVoiceMail()));
+	connect(_ui->actionVoiceMail, SIGNAL(triggered()), SLOT (showVoiceMail()));
 
 	//actionIM_Account_Settings
-	QAction * actionIM_Account_Settings = Object::findChild<QAction *>(_wengoPhoneWindow,"actionIM_Account_Settings");
-	connect(actionIM_Account_Settings, SIGNAL(triggered()), SLOT(showAccountSettings()));
+	connect(_ui->actionIMAccountSettings, SIGNAL(triggered()), SLOT(showAccountSettings()));
 
 	//actionShow_Hide_contacts_offline
-	QAction * actionShow_Hide_contacts_offline = Object::findChild<QAction *>(_wengoPhoneWindow,"actionShow_Hide_contacts_offline");
-	connect(actionShow_Hide_contacts_offline, SIGNAL(triggered()), SLOT(showHideOffLineContacts()));
+	connect(_ui->actionHideContactsOffline, SIGNAL(triggered()), SLOT(showHideOffLineContacts()));
 
 	// actionSort_contacts
-	QAction * actionSort_contacts = Object::findChild<QAction *>(_wengoPhoneWindow,"actionSort_contacts");
-	connect(actionSort_contacts, SIGNAL(triggered()), SLOT(sortContacts()));
+	connect(_ui->actionSortContacts, SIGNAL(triggered()), SLOT(sortContacts()));
 
 	//actionCreateConferenceCall
-	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
-	connect(actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
-
+	connect(_ui->actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
 
 	//actionOutgoing_Calls
-	QAction * actionOutgoingCalls = Object::findChild<QAction *>(_wengoPhoneWindow, "actionOutgoing_Calls");
-	connect(actionOutgoingCalls, SIGNAL(triggered()), SLOT(eraseHistoryOutgoingCalls()));
+	connect(_ui->actionOutgoingCalls, SIGNAL(triggered()), SLOT(eraseHistoryOutgoingCalls()));
 
 	//actionIncoming_Calls
-	QAction * actionIncomingCalls = Object::findChild<QAction *>(_wengoPhoneWindow, "actionIncoming_Calls");
-	connect(actionIncomingCalls, SIGNAL(triggered()), SLOT(eraseHistoryIncomingCalls()));
+	connect(_ui->actionIncomingCalls, SIGNAL(triggered()), SLOT(eraseHistoryIncomingCalls()));
 
 	//actionMissed_Calls
-	QAction * actionMissedCalls = Object::findChild<QAction *>(_wengoPhoneWindow, "actionMissed_Calls");
-	connect(actionMissedCalls, SIGNAL(triggered()), SLOT(eraseHistoryMissedCalls()));
+	connect(_ui->actionMissedCalls, SIGNAL(triggered()), SLOT(eraseHistoryMissedCalls()));
 
 	//actionChat_Sessions
-	QAction * actionChatSessions = Object::findChild<QAction *>(_wengoPhoneWindow, "actionChat_Sessions");
-	connect(actionChatSessions, SIGNAL(triggered()), SLOT(eraseHistoryChatSessions()));
+	connect(_ui->actionChatSessions, SIGNAL(triggered()), SLOT(eraseHistoryChatSessions()));
 
 	//actionSMS
-	QAction * actionSMS = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSMS");
-	connect(actionSMS, SIGNAL(triggered()), SLOT(eraseHistorySms()));
+	connect(_ui->actionSMS, SIGNAL(triggered()), SLOT(eraseHistorySms()));
 
 	//actionAll
-	QAction * actionAll = Object::findChild<QAction *>(_wengoPhoneWindow, "actionAll");
-	connect(actionAll, SIGNAL(triggered()), SLOT(eraseHistory()));
+	connect(_ui->actionAll, SIGNAL(triggered()), SLOT(eraseHistory()));
 
 
 	//Embedded Browser
 	_browser = new QtBrowser(NULL);
 	_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
-	QWidget * tabHome = Object::findChild<QWidget *>(_tabWidget, "tabHome");
-	Widget::createLayout(tabHome)->addWidget((QWidget*) _browser->getWidget());
+	Widget::createLayout(_ui->tabHome)->addWidget((QWidget*) _browser->getWidget());
 #ifdef OS_WINDOWS
 	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
 #endif
@@ -276,10 +240,9 @@ void QtWengoPhone::initThreadSafe() {
 	_qtHistoryWidget = NULL;
 
 	//Add the profile bar
-	QStackedWidget * profileBar = Object::findChild<QStackedWidget *>(_wengoPhoneWindow, "profileBar");
-	int profileBarIndex = profileBar->addWidget(new QtProfileBar(_cWengoPhone, _cWengoPhone.getWengoPhone().getCurrentUserProfile(),profileBar));
-	profileBar->setCurrentIndex(profileBarIndex);
-	profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
+	int profileBarIndex = _ui->profileBar->addWidget(new QtProfileBar(_cWengoPhone, _cWengoPhone.getWengoPhone().getCurrentUserProfile(), _ui->profileBar));
+	_ui->profileBar->setCurrentIndex(profileBarIndex);
+	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
 
 	//Idle detection
 	new QtIdle(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _wengoPhoneWindow);
@@ -287,18 +250,15 @@ void QtWengoPhone::initThreadSafe() {
 	//configPanel
 	QtConfigPanel * qtConfigPanel = new QtConfigPanel(_wengoPhoneWindow);
 	_configPanelWidget = qtConfigPanel->getWidget();
-	_configPanel = Object::findChild<QStackedWidget *>(_wengoPhoneWindow, "configPanel");
-	int configPanelIndex = _configPanel->addWidget(_configPanelWidget);
-	_configPanel->setCurrentIndex(configPanelIndex);
-	_configPanel->hide();
+	int configPanelIndex = _ui->configPanel->addWidget(_configPanelWidget);
+	_ui->configPanel->setCurrentIndex(configPanelIndex);
+	_ui->configPanel->hide();
 
-	QLabel * configPanelLabel = Object::findChild<QLabel *>(_wengoPhoneWindow, "configPanelLabel");
 	MousePressEventFilter * mousePressEventFilter = new MousePressEventFilter(this, SLOT(expandConfigPanel()));
-	configPanelLabel->installEventFilter(mousePressEventFilter);
+	_ui->configPanelLabel->installEventFilter(mousePressEventFilter);
 
 	//Status bar
-	QStatusBar * statusBar = Object::findChild<QStatusBar *>(_wengoPhoneWindow, "statusBar");
-	_statusBar = new QtStatusBar(_cWengoPhone, statusBar);
+	_statusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
 
 	//FIXME: can i create the widget here ?
 //	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
@@ -328,12 +288,12 @@ void QtWengoPhone::enableCallButton() {
 }
 
 void QtWengoPhone::hangupButtonClicked(){
-     QtContactCallListWidget * widget = dynamic_cast<QtContactCallListWidget *>(_tabWidget->currentWidget());
+     QtContactCallListWidget * widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->currentWidget());
      if ( widget ){
          widget->hangup();
         //Widget is deleted automagically
      }
-     _tabWidget->setCurrentIndex(0);
+     _ui->tabWidget->setCurrentIndex(0);
 }
 
 void QtWengoPhone::callButtonClicked() {
@@ -348,13 +308,12 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 
 	/*
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	static QWidget * tabPhoneCall = Object::findChild<QWidget *>(_tabWidget, "tabPhoneCall");
-	_tabWidget->setCurrentWidget(tabPhoneCall);
+	_ui->tabWidget->setCurrentWidget(_ui->tabPhoneCall);
 	_contactCallListWidget->addPhoneCall(qtPhoneCall);
 	*/
 	QtContactCallListWidget * qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
-	_tabWidget->addTab(qtContactCallListWidget,"Call");
-	_tabWidget->setCurrentWidget(qtContactCallListWidget);
+	_ui->tabWidget->addTab(qtContactCallListWidget,"Call");
+	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
 	qtContactCallListWidget->addPhoneCall(qtPhoneCall);
 	_hangUpButton->setEnabled(true);
 }
@@ -368,24 +327,20 @@ void QtWengoPhone::showLoginWindow() {
 }
 
 void QtWengoPhone::setContactList(QtContactList * qtContactList) {
-	QWidget * tabContactList = Object::findChild<QWidget *>(_tabWidget, "tabContactList");
-	Widget::createLayout(tabContactList)->addWidget(qtContactList->getWidget());
+	Widget::createLayout(_ui->tabContactList)->addWidget(qtContactList->getWidget());
 	_contactList = qtContactList;
 	LOG_DEBUG("QtContactList added");
 }
 
 void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
-	QWidget * tabHistory = Object::findChild<QWidget *>(_tabWidget,"tabHistory");
-	Widget::createLayout(tabHistory)->addWidget(qtHistoryWidget);
+	Widget::createLayout(_ui->tabHistory)->addWidget(qtHistoryWidget);
 	_qtHistoryWidget = qtHistoryWidget;
 }
 
 void QtWengoPhone::setPhoneCall(QtContactCallListWidget * qtContactCallListWidget) {
 	/*
-	QWidget * tabPhoneCall = Object::findChild<QWidget *>(_tabWidget,"tabPhoneCall");
-	Widget::createLayout(tabPhoneCall)->addWidget(qtContactCallListWidget);
+	Widget::createLayout(_ui->tabPhoneCall)->addWidget(qtContactCallListWidget);
 	_contactCallListWidget = qtContactCallListWidget;
-
 	*/
 }
 
@@ -424,14 +379,11 @@ void QtWengoPhone::updatePresentationThreadSafe() {
 	//disabled some actions if no WengoAccount is used
 	bool hasWengoAccount = _cWengoPhone.getCurrentUserProfile().hasWengoAccount();
 
-	QAction * actionShowWengoAccount = Object::findChild<QAction *>(_wengoPhoneWindow, "actionShowWengoAccount");
-	actionShowWengoAccount->setEnabled(hasWengoAccount);
+	_ui->actionShowWengoAccount->setEnabled(hasWengoAccount);
 
-	QAction * actionSendSms = Object::findChild<QAction *>(_wengoPhoneWindow, "actionSendSms");
-	actionSendSms->setEnabled(hasWengoAccount);
+	_ui->actionSendSms->setEnabled(hasWengoAccount);
 
-	QAction * actionCreateConferenceCall = Object::findChild<QAction *>(_wengoPhoneWindow, "actionCreateConferenceCall");
-	actionCreateConferenceCall->setEnabled(hasWengoAccount);
+	_ui->actionCreateConferenceCall->setEnabled(hasWengoAccount);
 }
 
 void QtWengoPhone::loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
@@ -521,7 +473,7 @@ void QtWengoPhone::openWengoAccount() {
 }
 
 void QtWengoPhone::editMyProfile(){
-	QtEditMyProfile profile(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _tabWidget);
+	QtEditMyProfile profile(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _ui->tabWidget);
 	profile.exec();
 }
 
@@ -617,9 +569,7 @@ void QtWengoPhone::showAccountSettings() {
 //FIXME
 #include <model/phonecall/ConferenceCall.h>
 void QtWengoPhone::showCreateConferenceCall() {
-	QDialog * conferenceDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/phonecall/ConferenceCallWidget.ui", _wengoPhoneWindow));
-	QLineEdit * phoneNumber1LineEdit = Object::findChild<QLineEdit *>(conferenceDialog, "phoneNumber1LineEdit");
-	QLineEdit * phoneNumber2LineEdit = Object::findChild<QLineEdit *>(conferenceDialog, "phoneNumber2LineEdit");
+	/*QDialog * conferenceDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/phonecall/ConferenceCallWidget.ui", _wengoPhoneWindow));
 
 	int ret = conferenceDialog->exec();
 
@@ -628,12 +578,12 @@ void QtWengoPhone::showCreateConferenceCall() {
 
 		if (phoneLine != NULL) {
 			ConferenceCall * confCall = new ConferenceCall(*phoneLine);
-			confCall->addPhoneNumber(phoneNumber1LineEdit->text().toStdString());
-			confCall->addPhoneNumber(phoneNumber2LineEdit->text().toStdString());
+			confCall->addPhoneNumber(_ui->phoneNumber1LineEdit->text().toStdString());
+			confCall->addPhoneNumber(_ui->phoneNumber2LineEdit->text().toStdString());
 		} else {
 			LOG_DEBUG("phoneLine is NULL");
 		}
-	}
+	}*/
 }
 //!FIXME
 
@@ -741,9 +691,9 @@ void QtWengoPhone::expandConfigPanel() {
 
 	if (expand) {
 		_wengoPhoneWindow->resize(_wengoPhoneWindow->width(), _wengoPhoneWindow->height() + _configPanelWidget->height());
-		_configPanel->show();
+		_ui->configPanel->show();
 	} else {
-		_configPanel->hide();
+		_ui->configPanel->hide();
 		_wengoPhoneWindow->resize(_wengoPhoneWindow->width(), _wengoPhoneWindow->height() - _configPanelWidget->height());
 	}
 	expand = !expand;
