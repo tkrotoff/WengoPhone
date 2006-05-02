@@ -1985,6 +1985,13 @@ def WengoShowWindowsConsole(show):
 		else:
 			env.LinkFlags.removeLinkFlags(env, ['/subsystem:console'])
 			env.WengoAddLinkFlags(['/subsystem:windows'])
+	elif WengoCCMinGW():
+		if show:
+			env.LinkFlags.removeLinkFlags(env, ['-Wl,-subsystem,windows'])
+			env.WengoAddLinkFlags(['-Wl,-subsystem,console'])
+		else:
+			env.LinkFlags.removeLinkFlags(env, ['-Wl,-subsystem,console'])
+			env.WengoAddLinkFlags(['-Wl,-subsystem,windows'])
 
 def WengoUseLibraries(libs):
 	"""
