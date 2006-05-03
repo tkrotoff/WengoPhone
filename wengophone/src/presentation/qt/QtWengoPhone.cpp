@@ -135,6 +135,12 @@ void QtWengoPhone::initThreadSafe() {
 	//Add contact button
 	connect(_ui->addContactButton, SIGNAL(clicked()), SLOT(addContact()));
 
+	// Search button
+	connect(_ui->findContactButton,SIGNAL(clicked()),SLOT(showSearchContactWindows()));
+
+	// Send sms button
+	connect(_ui->sendSmsButton,SIGNAL(clicked()),SLOT(sendSms()));
+
 	//webcamButton
 	new QtWebcamButton(_ui->webcamButton);
 
@@ -154,10 +160,9 @@ void QtWengoPhone::initThreadSafe() {
                                       _ui->profileBar);
 	//Add the profile bar
 	int profileBarIndex = _ui->profileBar->addWidget(_qtProfileBar);
-
 	_ui->profileBar->setCurrentIndex(profileBarIndex);
 	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
-
+    connect(this, SIGNAL(modelInitializedEventSignal()), _profileBar,SLOT(userProfileUpdated()));
     //Systray
 	_trayMenu = NULL;
 	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
@@ -254,8 +259,6 @@ void QtWengoPhone::initThreadSafe() {
 #ifdef OS_WINDOWS
 	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
 #endif
-
-
 
 	//Idle detection
 	new QtIdle(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _wengoPhoneWindow);
