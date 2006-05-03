@@ -196,6 +196,8 @@ public Q_SLOTS:
 
     void chatEditChanged();
 
+    virtual void setVisible ( bool visible );
+
 Q_SIGNALS:
 
     void newMessage(IMChatSession* session,const QString & msg);

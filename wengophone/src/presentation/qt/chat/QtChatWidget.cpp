@@ -520,3 +520,9 @@ void ChatWidget::setupSendButton(){
     painter.end();
     _sendButton->setIcon(QIcon(pix));
 }
+
+void ChatWidget::setVisible ( bool visible ){
+    QWidget::setVisible(visible);
+    if ( visible )
+        _chatEdit->setFocus();
+}
