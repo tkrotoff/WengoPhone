@@ -282,8 +282,6 @@ private:
 
 	QtStatusBar * _statusBar;
 
-	QtProfileBar * _profileBar;
-
 	static const std::string ANCHOR_CONTACTLIST;
 
 	static const std::string ANCHOR_HISTORY;

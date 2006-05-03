@@ -90,7 +90,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 
 	_qtSms = NULL;
 	_qtWsDirectory = NULL;
-	_profileBar = NULL;
+	_qtProfileBar = NULL;
 
 	_cWengoPhone.loginStateChangedEvent +=
 		boost::bind(&QtWengoPhone::loginStateChangedEventHandler, this, _1, _2);
