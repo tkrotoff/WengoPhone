@@ -2802,6 +2802,9 @@ int eXosip_register      (int rid, int registration_period)
 	    int osip_cseq_num = 0;
 	    int length = 0;
 
+	    osip_authorization_t *aut;
+	    osip_proxy_authorization_t *proxy_aut;
+	    
 	    
 	    if ( ! reg->cseq->number ) {
 	      fprintf(stderr, "%s,%d: reg->cseq->number is NULL", __FILE__, __LINE__);
@@ -2812,9 +2815,6 @@ int eXosip_register      (int rid, int registration_period)
 	    length   = strlen(reg->cseq->number);
 
 
-	    osip_authorization_t *aut;
-	    osip_proxy_authorization_t *proxy_aut;
-	    
 	    aut = (osip_authorization_t *)osip_list_get(reg->authorizations, 0);
 	    while (aut!=NULL)
 	      {
