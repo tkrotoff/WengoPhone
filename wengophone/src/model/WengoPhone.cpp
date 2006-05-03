@@ -59,11 +59,22 @@ WengoPhone::WengoPhone()
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	////
 
+	//Loads the configuration: this is the first thing to do before anything else
+	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
+	configManagerStorage.load(config.getConfigDir());
+	////
+
 	// Binding events
 	_userProfile.profileChangedEvent +=
 		boost::bind(&WengoPhone::profileChangedEventHandler, this, _1);
 	config.valueChangedEvent +=
 		boost::bind(&WengoPhone::valueChangedEventHandler, this, _1, _2);
+	////
+
+	//Loading the UserProfile
+	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
+	userProfileStorage->load(config.getConfigDir());
+	delete userProfileStorage;
 	////
 }
 
@@ -104,10 +115,6 @@ void WengoPhone::init() {
 	//Imports the Config from WengoPhone Classic.
 	ClassicConfigImporter::importConfig(config.getConfigDir());
 
-	//Loads the configuration: this is the first thing to do before anything else
-	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
-	configManagerStorage.load(config.getConfigDir());
-
 	_wenboxPlugin = new WenboxPlugin(*this);
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
@@ -120,14 +127,8 @@ void WengoPhone::init() {
 	localAccount->init();
 	addPhoneLine(localAccount);*/
 
-	//Loading the UserProfile
-	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
-	userProfileStorage->load(config.getConfigDir());
-	delete userProfileStorage;
-
 	_userProfile.connect();
-	////
-	
+
 	//initFinishedEvent
 	initFinishedEvent(*this);
 }
