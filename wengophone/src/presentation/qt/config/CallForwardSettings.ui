@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>414</width>
-    <height>401</height>
+    <width>540</width>
+    <height>450</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -17,41 +17,8 @@
     <number>0</number>
    </property>
    <property name="spacing" >
-    <number>0</number>
+    <number>6</number>
    </property>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
-      <string>Forward to cellphone mode</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="label" >
-        <property name="text" >
-         <string>Les transferts d'appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et 
-nécessitent un crédit de Wengo's. L'activation du transfert nécessite de renseigner un numéro mobile dans votre profil</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="forwardCallMobilCheckBox" >
-        <property name="text" >
-         <string>Transférer les appels vers mon mobile lorsque je sélectionne le statut "mobile"</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="0" column="0" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
@@ -64,15 +31,17 @@ nécessitent un crédit de Wengo's. L'activation du transfert nécessite de rens
       <property name="spacing" >
        <number>6</number>
       </property>
-      <item row="0" column="0" colspan="2" >
-       <widget class="QLabel" name="label" >
+      <item row="2" column="0" >
+       <widget class="QRadioButton" name="forwardToNumberRadioButton" >
         <property name="text" >
-         <string>Le transfert d'appel intervient si vous n'êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
-ou après vingt secondes si vous n'avez pas répondu. Vous pouvez configurer jusqu'à trois transferts 
-vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
+         <string>Transférer tous vos appels non aboutis vers les n° suivants :</string>
         </property>
-        <property name="wordWrap" >
-         <bool>true</bool>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QRadioButton" name="forwardToVoiceMailRadioButton" >
+        <property name="text" >
+         <string>Transférer tous vos appels non aboutis vers la Messagerie vocale. </string>
         </property>
        </widget>
       </item>
@@ -129,17 +98,15 @@ vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
         </item>
        </layout>
       </item>
-      <item row="1" column="0" >
-       <widget class="QCheckBox" name="forwardCallCheckBox" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
         <property name="text" >
-         <string>Transférer tous vos appels non aboutis vers la Messagerie vocale. </string>
+         <string>Le transfert d'appel intervient si vous n'êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
+ou après vingt secondes si vous n'avez pas répondu. Vous pouvez configurer jusqu'à trois transferts 
+vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
         </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QCheckBox" name="forwardAllCallCheckBox" >
-        <property name="text" >
-         <string>Transférer tous vos appels non aboutis vers les n° suivants :</string>
+        <property name="wordWrap" >
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -159,12 +126,43 @@ vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
      </property>
     </spacer>
    </item>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Forward to cellphone mode</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Les transferts d'appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et 
+nécessitent un crédit de Wengo's. L'activation du transfert nécessite de renseigner un numéro mobile dans votre profil</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="forwardCallMobilCheckBox" >
+        <property name="text" >
+         <string>Transférer les appels vers mon mobile lorsque je sélectionne le statut "mobile"</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
-  <tabstop>forwardCallCheckBox</tabstop>
-  <tabstop>forwardAllCallCheckBox</tabstop>
   <tabstop>phoneNumber1Edit</tabstop>
   <tabstop>phoneNumber2Edit</tabstop>
   <tabstop>phoneNumber3Edit</tabstop>

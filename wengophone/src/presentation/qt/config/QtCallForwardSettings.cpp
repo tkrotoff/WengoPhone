@@ -44,21 +44,22 @@ QtCallForwardSettings::~QtCallForwardSettings() {
 void QtCallForwardSettings::saveConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	config.set(Config::CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY, _ui->forwardCallCheckBox->isChecked());
-	config.set(Config::CALL_FORWARD_ALL_UNDELIVREDTO_KEY, _ui->forwardAllCallCheckBox->isChecked());
-	config.set(Config::CALL_FORWARD_TOMOBILE_KEY, _ui->forwardCallMobilCheckBox->isChecked());
+	config.set(Config::CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY, _ui->forwardToVoiceMailRadioButton->isChecked());
+	config.set(Config::CALL_FORWARD_ALL_UNDELIVREDTO_KEY, _ui->forwardToNumberRadioButton->isChecked());
 	config.set(Config::CALL_FORWARD_PHONENUMBER1_KEY, _ui->phoneNumber1Edit->text().toStdString());
 	config.set(Config::CALL_FORWARD_PHONENUMBER2_KEY, _ui->phoneNumber2Edit->text().toStdString());
 	config.set(Config::CALL_FORWARD_PHONENUMBER3_KEY, _ui->phoneNumber3Edit->text().toStdString());
+	config.set(Config::CALL_FORWARD_TOMOBILE_KEY, _ui->forwardCallMobilCheckBox->isChecked());
 }
 
 void QtCallForwardSettings::readConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	_ui->forwardCallCheckBox->setChecked(config.getCallForwardAllUndelivredToVm());
-	_ui->forwardAllCallCheckBox->setChecked(config.getCallForwardAllUndelivredTo());
-	_ui->forwardCallMobilCheckBox->setChecked(config.getCallForwardToMobile());
+	_ui->forwardToVoiceMailRadioButton->setChecked(config.getCallForwardAllUndelivredToVm());
+	_ui->forwardToNumberRadioButton->setChecked(config.getCallForwardAllUndelivredTo());
 	_ui->phoneNumber1Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber1()));
 	_ui->phoneNumber2Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber2()));
 	_ui->phoneNumber3Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber3()));
+	_ui->forwardCallMobilCheckBox->setChecked(config.getCallForwardToMobile());
+
 }
