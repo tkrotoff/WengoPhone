@@ -65,16 +65,8 @@ WengoPhone::WengoPhone()
 	////
 
 	// Binding events
-	_userProfile.profileChangedEvent +=
-		boost::bind(&WengoPhone::profileChangedEventHandler, this, _1);
 	config.valueChangedEvent +=
 		boost::bind(&WengoPhone::valueChangedEventHandler, this, _1, _2);
-	////
-
-	//Loading the UserProfile
-	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
-	userProfileStorage->load(config.getConfigDir());
-	delete userProfileStorage;
 	////
 }
 
@@ -127,7 +119,16 @@ void WengoPhone::init() {
 	localAccount->init();
 	addPhoneLine(localAccount);*/
 
+	//Loading the UserProfile
+	UserProfileStorage * userProfileStorage = new UserProfileFileStorage(_userProfile);
+	userProfileStorage->load(config.getConfigDir());
+	delete userProfileStorage;
+
+	_userProfile.profileChangedEvent +=
+		boost::bind(&WengoPhone::profileChangedEventHandler, this, _1);
+
 	_userProfile.connect();
+	////
 
 	//initFinishedEvent
 	initFinishedEvent(*this);

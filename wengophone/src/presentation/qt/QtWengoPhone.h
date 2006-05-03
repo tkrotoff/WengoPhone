@@ -35,6 +35,7 @@ class UserProfile;
 class CWengoPhone;
 class PPhoneLine;
 class QtPhoneCall;
+class QtProfileBar;
 class QtContactList;
 class QtContactCallListWidget;
 class QtSms;
@@ -70,6 +71,8 @@ class QtWengoPhone : public QObjectThreadSafe, public PWengoPhone {
 public:
 
 	QtWengoPhone(CWengoPhone & cWengoPhone);
+
+	void modelInitializedEvent();
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
@@ -117,6 +120,10 @@ public:
 	QComboBox * getPhoneComboBox() const {
 		return _phoneComboBox;
 	}
+
+Q_SIGNALS:
+
+	void modelInitializedEventSignal();
 
 private Q_SLOTS:
 
@@ -271,6 +278,8 @@ private:
 	QWidget * _configPanelWidget;
 
 	QtStatusBar * _statusBar;
+
+	QtProfileBar * _profileBar;
 
 	static const std::string ANCHOR_CONTACTLIST;
 

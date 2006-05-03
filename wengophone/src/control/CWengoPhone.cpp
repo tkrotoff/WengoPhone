@@ -148,6 +148,8 @@ void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 	static CChatHandler cChatHandler(sender.getCurrentUserProfile().getChatHandler(), *this,sender.getCurrentUserProfile());
 	LOG_DEBUG("CChatHandler created");
 
+	_pWengoPhone->modelInitializedEvent();
+
 	LOG_DEBUG("WengoPhone::init() finished");
 }
 

@@ -88,10 +88,8 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, CWengoPhone & cWen
 
 	_yahooLabel->setPixmap(QPixmap(":pics/protocols/yahoo_off.png"));
 	_yahooLabel->setToolTip(tr("Yahoo!"));
-
 	_wengoLabel->setPixmap(QPixmap(":pics/protocols/wengo_off.png"));
 	_wengoLabel->setToolTip(tr("Wengo"));
-
 	_aimLabel->setPixmap(QPixmap(":pics/protocols/aim_off.png"));
 	_aimLabel->setToolTip(tr("Icq / Aim"));
 
@@ -352,4 +350,8 @@ void QtNickNameWidget::init() {
 	else{
 	    _avatarLabel->setPixmap(background);
 	}
+}
+
+void QtNickNameWidget::userProfileUpdated() {
+	init();
 }

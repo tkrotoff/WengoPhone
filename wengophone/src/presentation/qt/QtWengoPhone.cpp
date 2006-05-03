@@ -90,6 +90,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 
 	_qtSms = NULL;
 	_qtWsDirectory = NULL;
+	_profileBar = NULL;
 
 	_cWengoPhone.loginStateChangedEvent +=
 		boost::bind(&QtWengoPhone::loginStateChangedEventHandler, this, _1, _2);
@@ -244,10 +245,13 @@ void QtWengoPhone::initThreadSafe() {
 	_qtHistoryWidget = NULL;
 
 	//Add the profile bar
-	int profileBarIndex = _ui->profileBar->addWidget(new QtProfileBar(_cWengoPhone,
-	                                                                  _cWengoPhone.getWengoPhone().getCurrentUserProfile(),
-	                                                                  _cWengoPhone.getWengoPhone().getCurrentUserProfile().getConnectHandler(),
-	                                                                  _ui->profileBar));
+	_profileBar = new QtProfileBar(_cWengoPhone,
+		_cWengoPhone.getWengoPhone().getCurrentUserProfile(),
+		_cWengoPhone.getWengoPhone().getCurrentUserProfile().getConnectHandler(),
+		_ui->profileBar);
+	connect(this, SIGNAL(modelInitializedEventSignal()), _profileBar, SLOT(userProfileUpdated()));
+
+	int profileBarIndex = _ui->profileBar->addWidget(_profileBar);
 	_ui->profileBar->setCurrentIndex(profileBarIndex);
 	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
 
@@ -822,6 +826,12 @@ void QtWengoPhone::phoneComboBoxClicked() {
 		}
 	}
 }
+<<<<<<< .mine
+
+void QtWengoPhone::modelInitializedEvent() {
+	modelInitializedEventSignal();
+}
+=======
 QMenu * QtWengoPhone::createStatusMenu(){
 
     QMenu * menu = new QMenu("Status");
@@ -842,3 +852,4 @@ QMenu * QtWengoPhone::createStatusMenu(){
 
     return menu;
 }
+>>>>>>> .r5278

@@ -105,6 +105,7 @@ public Q_SLOTS:
 	void connected(IMAccount * pImAccount);
 
 	void disconnected(IMAccount * pImAccount);
+	void userProfileUpdated();
 };
 
 #endif

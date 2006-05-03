@@ -408,3 +408,6 @@ void QtProfileBar::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine
 	_nicknameLabel->setText(QString::fromStdString(_userProfile.getWengoAccount()->getIdentity()));
 }
 
+void QtProfileBar::userProfileUpdated() {
+	_nickNameWidget->userProfileUpdated();
+}

@@ -110,6 +110,8 @@ protected:
 
 public Q_SLOTS:
 
+	void userProfileUpdated();
+
 	void statusClicked();
 
 	void nicknameClicked();

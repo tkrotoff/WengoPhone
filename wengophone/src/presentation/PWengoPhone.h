@@ -37,6 +37,11 @@ class PPhoneLine;
 class PWengoPhone : public Presentation {
 public:
 
+	/**
+	 * Called by the Control when the Model is initialized.
+	 */
+	virtual void modelInitializedEvent() = 0;
+
 	/*virtual void addCommand(PCommand * command) = 0;
 
 	virtual void addContactList(PContactList * pContactList) = 0;
