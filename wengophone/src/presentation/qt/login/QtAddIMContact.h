@@ -40,6 +40,8 @@ public:
 
 	QtAddIMContact(EnumIMProtocol::IMProtocol protocol, std::set<IMAccount *> imAccounts, QWidget * parent = 0);
 
+    virtual ~QtAddIMContact();
+
 	QString contactId() const;
 
 	std::set<IMAccount *> selectedIMAccount() const;

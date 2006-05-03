@@ -28,11 +28,15 @@ using namespace std;
 QtAddIMContact::QtAddIMContact(EnumIMProtocol::IMProtocol protocol, set<IMAccount *> imAccounts, QWidget * parent)
 : QDialog(parent) {
 	_imAccounts = imAccounts;
-	
+
 	_ui = new Ui::AddIMContactDialog();
 	_ui->setupUi(this);
 
 	init();
+}
+
+QtAddIMContact::~QtAddIMContact(){
+    delete _ui;
 }
 
 void QtAddIMContact::init() {
