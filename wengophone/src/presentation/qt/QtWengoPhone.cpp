@@ -159,8 +159,8 @@ void QtWengoPhone::initThreadSafe() {
 	//actionEditMyProfile
 	connect(_ui->actionEditMyProfile, SIGNAL(triggered()), SLOT(editMyProfile()));
 
-	//actionExit
-	connect(_ui->actionExit, SIGNAL(triggered()), SLOT(exitApplication()));
+	//actionClose
+	connect(_ui->actionClose, SIGNAL(triggered()),_wengoPhoneWindow, SLOT(hide()));
 
 	//actionAddContact
 	connect(_ui->actionAddContact, SIGNAL(triggered()), SLOT(addContact()));
@@ -609,9 +609,11 @@ void QtWengoPhone::setTrayMenu() {
 	}
 	_trayMenu->clear();
 	// Open the wengophone window
-	_trayMenu->addAction(tr("Open Wengophone"));
+	action = _trayMenu->addAction(tr("Open Wengophone"));
+	connect ( action,SIGNAL(triggered()),_wengoPhoneWindow,SLOT(show()));
 	// Change status
-	_trayMenu->addAction(tr("Status"));
+	//_trayMenu->addAction(tr("Status"));
+	_trayMenu->addMenu(createStatusMenu());
 	// Start a call session
 	_trayMenu->addAction(tr("Call"));
 	// Send  SMS
@@ -819,4 +821,24 @@ void QtWengoPhone::phoneComboBoxClicked() {
 			}
 		}
 	}
+}
+QMenu * QtWengoPhone::createStatusMenu(){
+
+    QMenu * menu = new QMenu("Status");
+
+	QAction * action;
+
+	action = menu->addAction(QIcon(":/pics/status/online.png"),tr( "Online" ) );
+	connect(action,SIGNAL( triggered (bool) ),SLOT( onlineClicked(bool) ) );
+
+	action = menu->addAction(QIcon(":/pics/status/donotdisturb.png"), tr( "DND" ) );
+	connect(action,SIGNAL( triggered (bool) ),SLOT( dndClicked(bool) ) );
+
+	action = menu->addAction(QIcon(":/pics/status/offline.png"), tr( "Invisible" ) );
+	connect(action,SIGNAL( triggered (bool) ),SLOT( invisibleClicked(bool) ) );
+
+	action = menu->addAction(QIcon(":/pics/status/away.png"), tr( "Away" ) );
+	connect(action,SIGNAL( triggered (bool) ),SLOT( awayClicked(bool) ) );
+
+    return menu;
 }

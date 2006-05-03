@@ -231,6 +231,8 @@ private:
 
 	void urlClickedEventHandler(std::string url);
 
+	QMenu * createStatusMenu();
+
 	/** Direct link to the control. */
 	CWengoPhone & _cWengoPhone;
 

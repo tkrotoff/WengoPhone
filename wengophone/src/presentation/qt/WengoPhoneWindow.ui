@@ -448,7 +448,7 @@
     <addaction name="separator" />
     <addaction name="actionOpenWengoAccount" />
     <addaction name="separator" />
-    <addaction name="actionExit" />
+    <addaction name="actionClose" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -476,7 +476,7 @@
     <string>&amp;Open Another Wengo Account</string>
    </property>
   </action>
-  <action name="actionExit" >
+  <action name="actionClose" >
    <property name="text" >
     <string>&amp;Close</string>
    </property>
