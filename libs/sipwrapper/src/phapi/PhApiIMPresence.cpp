@@ -85,7 +85,8 @@ void PhApiIMPresence::subscribeStatusEventHandler(PhApiWrapper & sender, const s
 const std::string PhApiIMPresence::getRessourcePath() {
 	std::string resourcesPath;
 
-#if defined(OS_WINDOWS)
+// TODO: for linux, change it to the right directory (ressource directory)
+#if defined(OS_WINDOWS) || defined(OS_LINUX)
 	resourcesPath = Path::getApplicationDirPath();
 #elif defined(OS_MACOSX)
 	CFBundleRef mainBundle = CFBundleGetMainBundle();
@@ -100,7 +101,7 @@ const std::string PhApiIMPresence::getRessourcePath() {
 		CFRelease(url);
 	}
 #endif
-	//TODO: do linux code
+
 	return resourcesPath;
 }
 

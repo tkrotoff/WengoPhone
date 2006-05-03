@@ -27,6 +27,10 @@
 #include <CoreFoundation/CoreFoundation.h>
 #elif defined(OS_WINDOWS)
 #include <windows.h>
+#elif defined(OS_LINUX)
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
 #endif
 
 
@@ -61,7 +65,31 @@ string Path::getApplicationDirPath() {
 		CFRelease(url);
 	}
 
-#endif //OS_MACOSX
+#elif defined(OS_LINUX)
+
+	char procname[128];
+	pid_t pid;
+	int ret;
+	char buff[1024];
+	
+	memset(buff, 0, sizeof(buff));
+	memset(procname, 0, sizeof(procname));
+	pid = getpid();
+	
+	if (snprintf(procname, sizeof(procname), "/proc/%i/exe", pid) < 0)
+		return "";
+	
+	ret = readlink(procname, buff, sizeof(buff));
+	
+	if (ret == -1 || ret >= sizeof(buff))
+		return "";
+	
+	buff[ret] = 0;
+	string mstr(buff);
+	File f(mstr);
+	result = f.getPath() + File::getPathSeparator();
+
+#endif
 
 	return result;
 }
