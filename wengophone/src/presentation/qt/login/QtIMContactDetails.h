@@ -36,6 +36,8 @@ public:
 
 	QtIMContactDetails(IMContact & imContact, QWidget * parent = 0);
 
+    virtual ~QtIMContactDetails();
+
 	IMContact & getIMContact() const {
 		return _imContact;
 	}

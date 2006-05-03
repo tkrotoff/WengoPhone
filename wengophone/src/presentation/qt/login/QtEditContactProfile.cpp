@@ -72,6 +72,10 @@ QtEditContactProfile::QtEditContactProfile(QtEditContactProfile::EditMode mode,C
 	readFromConfig();
 }
 
+QtEditContactProfile::~QtEditContactProfile(){
+    delete _ui;
+}
+
 void QtEditContactProfile::saveButtonClicked() {
 	writeToConfig();
 	accept();

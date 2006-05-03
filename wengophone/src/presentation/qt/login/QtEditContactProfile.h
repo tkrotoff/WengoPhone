@@ -44,6 +44,8 @@ public:
 
 	QtEditContactProfile (QtEditContactProfile::EditMode mode,Contact & contact, CWengoPhone & cWengoPhone, QWidget * parent = 0);
 
+    virtual ~QtEditContactProfile();
+
 private Q_SLOTS:
 
 	void saveButtonClicked();

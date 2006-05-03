@@ -34,6 +34,10 @@ QtIMContactDetails::QtIMContactDetails(IMContact & imContact, QWidget * parent)
 	connect(_ui->removeButton, SIGNAL(clicked()), SLOT(removeButtonClicked()));
 }
 
+QtIMContactDetails::~QtIMContactDetails(){
+    delete _ui;
+}
+
 void QtIMContactDetails::init() {
 	_ui->imContactIdLabel->setText(QString::fromStdString(_imContact.getContactId()));
 
@@ -48,7 +52,7 @@ void QtIMContactDetails::init() {
 	} else if (_imContact.getProtocol() == EnumIMProtocol::IMProtocolJabber) {
 		pixmap = QPixmap(":pics/protocol_jabber.png");
 	} else if (_imContact.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
-		pixmap = QPixmap(":pics/protocol_wengo.png");		
+		pixmap = QPixmap(":pics/protocol_wengo.png");
 	}
 
 	_ui->protocolPixmap->setPixmap(pixmap);
