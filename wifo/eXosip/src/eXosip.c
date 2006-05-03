@@ -845,8 +845,6 @@ int eXosip_message    (char *to, char *from, char *route, char *buff, char *mime
 {
   osip_message_t *message;
   osip_transaction_t *transaction;
-  jinfo_t *ji;
-  eXosip_msg_t *jm = 0;
 
   int i;
 
@@ -910,7 +908,6 @@ int eXosip_options(char *to, char *from, char *route)
 int eXosip_info_call(int jid, char *content_type, char *body)
 {
   osip_transaction_t *transaction;
-  osip_event_t *sipevent;
   osip_message_t *info;
   eXosip_dialog_t *jd = NULL;
   eXosip_call_t *jc = NULL;
@@ -954,6 +951,13 @@ int eXosip_info_call(int jid, char *content_type, char *body)
     }
   
   osip_message_set_content_type(info, content_type);
+
+  if ( ! body ) {
+    OSIP_TRACE (osip_trace
+		(__FILE__, __LINE__, OSIP_ERROR, NULL,
+		 "eXosip: string body is NULL! "));
+    return -2;
+  }
   osip_message_set_body(info, body, strlen(body));
   
   return eXosip_create_transaction(jc, jd, info);
@@ -2795,8 +2799,17 @@ int eXosip_register      (int rid, int registration_period)
 
 	  /* modify the REGISTER request */
 	  {
-	    int osip_cseq_num = osip_atoi(reg->cseq->number);
-	    int length   = strlen(reg->cseq->number);
+	    int osip_cseq_num = 0;
+	    int length = 0;
+
+	    
+	    if ( ! reg->cseq->number ) {
+	      fprintf(stderr, "%s,%d: reg->cseq->number is NULL", __FILE__, __LINE__);
+	      return -1;
+	    }
+
+	    osip_cseq_num = osip_atoi(reg->cseq->number);
+	    length   = strlen(reg->cseq->number);
 
 
 	    osip_authorization_t *aut;
@@ -2956,7 +2969,14 @@ int eXosip_retry_with_auth_info(osip_transaction_t *tr,osip_message_t *response)
 
   /* modify the REGISTER request */
   {
-    int length   = strlen(org_request->cseq->number);
+    int length;
+
+    if ( ! org_request->cseq->number ) {
+      fprintf(stderr, "%s,%d: org_request->cseq->number is NULL", __FILE__, __LINE__);
+      return -1;
+    }
+
+    length = strlen(org_request->cseq->number);
     osip_cseq_num = osip_atoi(org_request->cseq->number);
 
     if (-1 == eXosip_update_top_via(org_request))
@@ -3109,7 +3129,8 @@ int eXosip_publish (char *to, char *from, char *route, const int winfo,
 int eXosip_ping(char * toaddr, int port, int ttl) {
 	struct addrinfo *addrinfo;
 	struct __eXosip_sockaddr addr;
-	int i,len,oldTtl,n;
+	int i,len,oldTtl;
+	socklen_t n;
 
 	if (eXosip.j_stop_ua) return -1;
 
@@ -3215,7 +3236,7 @@ int eXosip_subscribe    (char *to, char *from, char *route, const int winfo)
   return 0;
 }
 
-int eXosip_subscribe_refresh  (int sid, char *expires)
+int eXosip_subscribe_refresh  (int sid, const char *expires)
 {
   int i;
   eXosip_dialog_t *jd = NULL;
@@ -3402,7 +3423,15 @@ int _eXosip_transfer_send_notify(eXosip_call_t *jc,
       else if (reason==NORESOURCE)
 	osip_strncpy(subscription_state, "terminated;reason=noresource", 29);
     }
+
+  if ( ! subscription_state ) {
+    fprintf(stderr, "%s,%d: subscription_state is NULL", __FILE__, __LINE__);
+    return -1;
+  }
+
   tmp = subscription_state + strlen(subscription_state);
+
+
   if (subscription_status!=EXOSIP_SUBCRSTATE_TERMINATED)
     sprintf(tmp, "%i", 180);
   osip_message_set_header(notify, "Subscription-State",
@@ -3507,6 +3536,12 @@ int eXosip_notify_send_notify(eXosip_notify_t *jn,
       else if (jn->n_ss_reason==NORESOURCE)
 	osip_strncpy(subscription_state, "terminated;reason=noresource", 29);
     }
+
+  if ( ! subscription_state ) {
+    fprintf(stderr, "%s,%d: subscription_state is NULL", __FILE__, __LINE__);
+    return -1;
+  }
+
   tmp = subscription_state + strlen(subscription_state);
   if (jn->n_ss_status!=EXOSIP_SUBCRSTATE_TERMINATED)
     sprintf(tmp, "%i", jn->n_ss_expires-now);

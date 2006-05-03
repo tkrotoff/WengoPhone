@@ -655,7 +655,7 @@ int eXosip_retrieve_from(int jid, char **fromstr);
  * @param sid       id of subscription.
  * @param expires   Time between updates.
  */
-int  eXosip_subscribe_refresh(int sid, char *expires);
+int  eXosip_subscribe_refresh(int sid, const char *expires);
 
 /**
  * Close a subscription (SUBSCRIBE request).
