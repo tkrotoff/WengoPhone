@@ -118,6 +118,16 @@ void ConnectHandler::imAccountDeadEventHandler(IMAccount & sender) {
 	} else {
 		LOG_DEBUG("IMAccount not in ConnectHandler");
 	}
+
+	IMAccountPtrSet::iterator actIt = _actualIMAccount.find(&sender);
+	if (actIt != _actualIMAccount.end()) {
+		_actualIMAccount.erase(actIt);
+	}
+
+	IMAccountSet::iterator pendIt = _pendingConnections.find(sender);
+	if (pendIt != _pendingConnections.end()) {
+		_pendingConnections.erase(pendIt);
+	}
 }
 
 IMAccount * ConnectHandler::findIMAccount(const IMAccountPtrSet & set, const IMAccount & imAccount) {
