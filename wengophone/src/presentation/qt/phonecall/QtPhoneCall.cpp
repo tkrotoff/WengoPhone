@@ -209,8 +209,9 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionAcceptCall->setEnabled(false);
 		_actionHangupCall->setEnabled(false);
 		_statusLabel->setText(tr("Closed"));
-		delete _phoneCallWidget;
 		stopConference();
+		delete _phoneCallWidget;
+		callRejected();
 		deleteMe(this);
 		break;
 
@@ -242,7 +243,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 
 void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
 
-    
+
     // the best image quality is obtained when the interim image size is set according to the screen target size
     QSize size(640, 480); // will be the optimum interim resized image
    	if (_videoWindow) {
@@ -252,16 +253,16 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
             size.setHeight(288);
         }
     }
-    
+
 
 	//Image will be deleted in videoFrameReceivedThreadSafe. Here we resize the remote image to the interim size
 	QImage *original = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
 			remoteVideoFrame.getHeight(), QImage::Format_RGB32);
-    
+
     QImage *image = new QImage(original->scaled(size.width(), size.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
     delete original;
-    
+
 	//If we want to embed the local webcam picture, we do it here
 	if (_encrustLocalWebcam) {
 		const unsigned offset_x = 10;
@@ -302,7 +303,7 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 				QImage::Format_RGB32).scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 		QPainter painter;
-        painter.begin(image); 
+        painter.begin(image);
         // draw a 1-pixel border around the local embedded frame
         painter.fillRect(posx - border_size, posy - border_size, width + 2*border_size, height + 2*border_size, border_color);
         // embed the image
