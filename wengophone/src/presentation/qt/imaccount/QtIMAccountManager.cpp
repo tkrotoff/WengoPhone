@@ -35,7 +35,10 @@
 static const int COLUMN_ENABLE_BUTTON = 2;
 
 QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, CWengoPhone & cWengoPhone, bool showAsDialog, QWidget * parent)
-	: QObject(parent), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
+	: QObject(parent),
+	_userProfile(userProfile),
+	_cWengoPhone(cWengoPhone) {
+
 	if (showAsDialog) {
 		_imAccountManagerWidget = new QDialog(parent);
 	} else {
