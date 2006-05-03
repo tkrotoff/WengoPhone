@@ -24,10 +24,9 @@
 
 #include <QObject>
 
-#include <string>
-
 class CWengoPhone;
 class UserProfile;
+
 class QWidget;
 class QAction;
 class QTreeWidget;
@@ -39,6 +38,11 @@ namespace Ui { class IMAccountManager; }
  *
  * Can be an embedded widget or a separated window.
  *
+ * Very similar to QtIMContactManager but for IM accounts.
+ *
+ * @see QtIMContactManager
+ * @see UserProfile
+ * @see IMAccount
  * @author Tanguy Krotoff
  */
 class QtIMAccountManager : public QObject, NonCopyable {

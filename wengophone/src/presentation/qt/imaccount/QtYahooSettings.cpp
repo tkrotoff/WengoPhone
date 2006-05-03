@@ -50,8 +50,17 @@ void QtYahooSettings::init() {
 }
 
 void QtYahooSettings::save() {
-	std::string login = _ui->loginLineEdit->text().toStdString();
-	std::string password = _ui->passwordLineEdit->text().toStdString();
+	String login = _ui->loginLineEdit->text().toStdString();
+	String password = _ui->passwordLineEdit->text().toStdString();
+	static const String AT = "@";
+
+	//Test if login ends with @
+	if (login.contains(AT)) {
+		string::size_type posAT = login.find(AT);
+		if (posAT != string::npos) {
+			login = login.substr(0, posAT);
+		}
+	}
 
 	if (!_imAccount) {
 		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolYahoo);

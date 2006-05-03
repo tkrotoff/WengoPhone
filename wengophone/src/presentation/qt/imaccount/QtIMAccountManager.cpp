@@ -133,7 +133,8 @@ void QtIMAccountManager::deleteIMAccount() {
 
 		int buttonClicked = QMessageBox::question(_imAccountManagerWidget,
 					"WengoPhone",
-					tr("Are sure you want to delete this account?\n") + QString::fromStdString(imAccount->getLogin()),
+					tr("Are sure you want to delete this account?\n") +
+					QString::fromStdString(imAccount->getLogin()),
 					tr("&Delete"), tr("Cancel"));
 
 		//Button delete clicked

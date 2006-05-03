@@ -25,7 +25,7 @@
    <item row="0" column="0" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
-      <string>IM accounts</string>
+      <string>IM Accounts</string>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >

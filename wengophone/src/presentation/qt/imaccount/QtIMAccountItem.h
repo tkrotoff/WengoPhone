@@ -24,12 +24,19 @@
 
 class IMAccount;
 
+/**
+ * Handles an item of the QTreeWidget.
+ *
+ * @see QtIMAccountManager
+ * @see QtIMContactItem
+ * @author Tanguy Krotoff
+ */
 class QtIMAccountItem : public QTreeWidgetItem {
 public:
 
 	QtIMAccountItem(QTreeWidget * parent, const QStringList & strings);
 
-	void setIMAccount(IMAccount * imAccount){
+	void setIMAccount(IMAccount * imAccount) {
 		_imAccount = imAccount;
 	}
 
