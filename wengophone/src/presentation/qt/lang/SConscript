@@ -6,7 +6,7 @@ wengophone_source_translations = [
 ]
 
 if WengoGetConsoleArgument('update-translations'):
-	env.WengoCopyToBuildDir('..\lang\\' , 'wengophone\src\presentation\qt\lang')
+	env.WengoCopyToBuildDir('..\lang\\', 'wengophone\src\presentation\qt\lang')
 	env.WengoQtUpdateTranslations(wengophone_source_translations)
 
 wengophone_translations = [

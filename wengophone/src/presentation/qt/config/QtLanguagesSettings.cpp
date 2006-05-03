@@ -21,7 +21,11 @@
 
 #include "ui_LanguagesSettings.h"
 
+#include <presentation/qt/QtLanguage.h>
+
 #include <model/config/LanguageList.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 #include <QtGui>
 
@@ -33,10 +37,9 @@ QtLanguagesSettings::QtLanguagesSettings(QWidget * parent)
 	_ui = new Ui::LanguagesSettings();
 	_ui->setupUi(_languagesSettingsWidget);
 
-	_ui->listWidget->addItem(QString::fromUtf8(LanguageList::getLanguageName("aa").c_str()));
-	_ui->listWidget->addItem(QString::fromUtf8(LanguageList::getLanguageName("fr").c_str()));
-	_ui->listWidget->addItem(QString::fromUtf8(LanguageList::getLanguageName("en").c_str()));
-	_ui->listWidget->addItem(QString::fromUtf8(LanguageList::getLanguageName("es").c_str()));
+	_ui->listWidget->addItems(QtLanguage::getAvailableLanguages());
+
+	readConfig();
 }
 
 QtLanguagesSettings::~QtLanguagesSettings() {
@@ -44,21 +47,23 @@ QtLanguagesSettings::~QtLanguagesSettings() {
 }
 
 void QtLanguagesSettings::saveConfig() {
-	static QTranslator * translator = new QTranslator();
-	/*
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.set(Config::LANGUAGE_KEY, _ui->listWidget->currentItem()->text().toStdString());
-	*/
-
 	QListWidgetItem * item = _ui->listWidget->currentItem();
 
+	std::string language;
 	if (item) {
-		QString language = item->text();
-
-		translator->load(language);
-		QApplication::installTranslator(translator);
+		language = item->text().toUtf8().constData();
 	}
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.set(Config::LANGUAGE_KEY, LanguageList::getISO639Code(language));
 }
 
 void QtLanguagesSettings::readConfig() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string language = LanguageList::getLanguageName(config.getLanguage());
+
+	QList<QListWidgetItem *> list = _ui->listWidget->findItems(QString::fromUtf8(language.c_str()), Qt::MatchExactly);
+	if (!list.isEmpty()) {
+		_ui->listWidget->setCurrentItem(list[0]);
+	}
 }

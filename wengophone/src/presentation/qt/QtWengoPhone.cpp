@@ -34,6 +34,7 @@
 
 #include "QtWebcamButton.h"
 #include "QtIdle.h"
+#include "QtLanguage.h"
 #include "statusbar/QtStatusBar.h"
 #include "phoneline/QtPhoneLine.h"
 #include "phonecall/QtPhoneCall.h"
@@ -264,6 +265,9 @@ void QtWengoPhone::initThreadSafe() {
 
 	//Idle detection
 	new QtIdle(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _wengoPhoneWindow);
+
+	//Translation
+	new QtLanguage(_wengoPhoneWindow);
 
 	//configPanel
 	QtConfigPanel * qtConfigPanel = new QtConfigPanel(_wengoPhoneWindow);

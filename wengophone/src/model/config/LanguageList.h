@@ -21,6 +21,7 @@
 #define LANGUAGELIST_H
 
 #include <util/NonCopyable.h>
+#include <util/List.h>
 #include <util/StringList.h>
 
 /**
@@ -38,11 +39,31 @@ public:
 	 * Warning!
 	 * returns a UTF-8 encoded string.
 	 * For Qt4, check QString::fromUtf8()
+	 * <pre>
+	 * std::string tmp;
+	 * QString tmpUtf8 = QString::fromUtf8(tmp.c_str());
+	 * </pre>
 	 *
 	 * @param iso639Code ISO 639 Alpha-2 code (e.g en, fr ect...)
 	 * @return language name (e.g français, english...) or empty string
 	 */
 	static std::string getLanguageName(const std::string & iso639Code);
+
+	/**
+	 * Gets the ISO 639 Alpha-2 code from the language name.
+	 *
+	 * Warning!
+	 * Takes an UTF-8 encoded string.
+	 * For Qt4, check QString::toUtf8()
+	 * <pre>
+	 * Qstring tmp;
+	 * std::string tmpUtf8 = tmp.toUtf8().constData();
+	 * </pre>
+	 *
+	 * @param languageName language name (e.g français, english...)
+	 * @return ISO 639 Alpha-2 code (e.g en, fr ect...) or empty string
+	 */
+	static std::string getISO639Code(const std::string & languageName);
 
 	/**
 	 * Gets the english language name given its ISO 639 Alpha-2 code.
@@ -53,8 +74,6 @@ public:
 	static std::string getEnglishLanguageName(const std::string & iso639Code);
 
 private:
-
-	static std::string getResultRegex(const std::string & iso639Code, const std::string & regex);
 };
 
 #endif	//LANGUAGELIST_H

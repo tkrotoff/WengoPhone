@@ -269,6 +269,10 @@ public:
 
 	/** @} */
 
+	/** ISO 639 code of the current language for translating WengoPhone. */
+	static const std::string LANGUAGE_KEY;
+	std::string getLanguage() const;
+
 	/**
 	 * @name Notification Settings Methods
 	 * @{
@@ -352,7 +356,11 @@ public:
 	static const std::string CONFIG_DIR_KEY;
 	std::string getConfigDir() const;
 
-	/** Resources directory. */
+	/**
+	 * Resources directory.
+	 *
+	 * TODO move somewhere else since this is not dynamic and should not be changed.
+	 */
 	static const std::string RESOURCES_DIR_KEY;
 	std::string getResourcesDir() const;
 

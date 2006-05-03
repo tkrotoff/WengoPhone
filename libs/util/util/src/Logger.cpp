@@ -36,7 +36,7 @@ Logger::Logger() {
 }
 
 Logger::~Logger() {
-	_file->close();
+	flush();
 	delete _file;
 }
 
@@ -109,5 +109,6 @@ void Logger::log(Level level, const std::string & className, const std::string &
 }
 
 void Logger::flush() {
+
 	_file->close();
 }

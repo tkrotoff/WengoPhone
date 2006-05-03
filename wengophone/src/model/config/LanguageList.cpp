@@ -21,36 +21,40 @@
 
 #include "Languages.h"
 
-#include <util/String.h>
-
-#include <boost/regex.hpp>
+#include <util/Logger.h>
 
 std::string LanguageList::getLanguageName(const std::string & iso639Code) {
-	return getResultRegex(iso639Code, ".*\\t(.*)\\t");
+	std::string languageName;
+	for (int i = 0; i < LANGUAGES_SIZE; i++) {
+		Language lang = LANGUAGES[i];
+		if (lang.iso639Code == iso639Code) {
+			languageName = lang.name;
+			break;
+		}
+	}
+	return languageName;
 }
 
 std::string LanguageList::getEnglishLanguageName(const std::string & iso639Code) {
-	return getResultRegex(iso639Code, ".*\\t.*\\t(.*)$");
-}
-
-std::string LanguageList::getResultRegex(const std::string & iso639Code, const std::string & regex) {
-	static const char * pointer;
-	static int length = sizeof(LANGUAGES) / sizeof(pointer);
-
-	for (int i = 0; i < length; i++) {
-		std::string line(LANGUAGES[i]);
-
-		//en... -> en
-		boost::regex e("^" + iso639Code + "\\t");
-		if (boost::regex_search(line, e)) {
-			//en	English... -> English
-
-			boost::regex eLangName(regex);
-			boost::match_results<std::string::const_iterator> what;
-			boost::regex_search(line, what, eLangName);
-			std::string tmp(what[1].first, what[1].second);
-			return tmp;
+	std::string englishLanguageName;
+	for (int i = 0; i < LANGUAGES_SIZE; i++) {
+		Language lang = LANGUAGES[i];
+		if (lang.iso639Code == iso639Code) {
+			englishLanguageName = lang.englishName;
+			break;
 		}
 	}
-	return String::null;
+	return englishLanguageName;
+}
+
+std::string LanguageList::getISO639Code(const std::string & languageName) {
+	std::string iso639Code;
+	for (int i = 0; i < LANGUAGES_SIZE; i++) {
+		Language lang = LANGUAGES[i];
+		if (lang.name == languageName) {
+			iso639Code = lang.iso639Code;
+			break;
+		}
+	}
+	return iso639Code;
 }

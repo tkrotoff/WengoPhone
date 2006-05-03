@@ -78,6 +78,8 @@ const std::string Config::GENERAL_CLICK_START_CHAT_KEY = "general.click.start.ch
 const std::string Config::GENERAL_CLICK_CALL_CELLPHONE_KEY = "general.click.call.cellphone";
 const std::string Config::GENERAL_AWAY_TIMER_KEY = "general.away.timer";
 
+const std::string Config::LANGUAGE_KEY = "language";
+
 const std::string Config::NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY = "notification.show.toaster.on.incoming.call";
 const std::string Config::NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY = "notification.show.toaster.on.contact";
 const std::string Config::NOTIFICATION_DONOTDISTURB_NO_WINDOW_KEY = "notification.donotdisturb.nowindow";
@@ -203,6 +205,8 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[GENERAL_CLICK_START_CHAT_KEY] = false;
 	_keyDefaultValueMap[GENERAL_CLICK_CALL_CELLPHONE_KEY] = false;
 	_keyDefaultValueMap[GENERAL_AWAY_TIMER_KEY] = 2;
+
+	_keyDefaultValueMap[LANGUAGE_KEY] = std::string("en");
 
 	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY] = false;
 	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY] = false;
@@ -435,6 +439,10 @@ bool Config::getGeneralClickCallCellPhone() const {
 
 int Config::getGeneralAwayTimer() const {
 	return getIntegerKeyValue(GENERAL_AWAY_TIMER_KEY);
+}
+
+std::string Config::getLanguage() const {
+	return getStringKeyValue(LANGUAGE_KEY);
 }
 
 bool Config::getNotificationShowToasterOnIncomingCall() const {
