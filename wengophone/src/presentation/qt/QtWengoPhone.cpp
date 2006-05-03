@@ -158,8 +158,7 @@ void QtWengoPhone::initThreadSafe() {
 	_ui->profileBar->setCurrentIndex(profileBarIndex);
 	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
 
-
-	//Systray
+    //Systray
 	_trayMenu = NULL;
 	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
 	setTrayMenu();
@@ -257,8 +256,6 @@ void QtWengoPhone::initThreadSafe() {
 #endif
 
 
-	_ui->profileBar->setCurrentIndex(profileBarIndex);
-	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
 
 	//Idle detection
 	new QtIdle(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _wengoPhoneWindow);
