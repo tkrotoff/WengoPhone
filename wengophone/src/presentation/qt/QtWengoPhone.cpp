@@ -158,12 +158,14 @@ void QtWengoPhone::initThreadSafe() {
                                       _cWengoPhone.getWengoPhone().getCurrentUserProfile(),
                                       _cWengoPhone.getWengoPhone().getCurrentUserProfile().getConnectHandler(),
                                       _ui->profileBar);
+    connect(this, SIGNAL(modelInitializedEventSignal()), _qtProfileBar, SLOT(userProfileUpdated()));
+
 	//Add the profile bar
 	int profileBarIndex = _ui->profileBar->addWidget(_qtProfileBar);
 	_ui->profileBar->setCurrentIndex(profileBarIndex);
 	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
-    connect(this, SIGNAL(modelInitializedEventSignal()), _profileBar,SLOT(userProfileUpdated()));
-    //Systray
+
+	//Systray
 	_trayMenu = NULL;
 	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
 	setTrayMenu();
