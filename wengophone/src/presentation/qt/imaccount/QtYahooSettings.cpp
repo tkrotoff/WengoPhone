@@ -56,8 +56,8 @@ void QtYahooSettings::save() {
 
 	//Test if login ends with @
 	if (login.contains(AT)) {
-		string::size_type posAT = login.find(AT);
-		if (posAT != string::npos) {
+		std::string::size_type posAT = login.find(AT);
+		if (posAT != std::string::npos) {
 			login = login.substr(0, posAT);
 		}
 	}

@@ -70,6 +70,9 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_history->mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
 	_history->mementoAddedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
 	_history->mementoRemovedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
+
+	_connectHandler.connectedEvent +=
+		boost::bind(&UserProfile::connectedEventHandler, this, _1, _2);
 }
 
 UserProfile::~UserProfile() {
