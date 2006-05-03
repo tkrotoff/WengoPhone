@@ -36,8 +36,8 @@ QtIdle::QtIdle(UserProfile & userProfile, QObject * parent)
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtIdle::configChangedEventHandler, this, _1, _2);
 
-    // Init the idle class
-    configChangedEventHandler(config, Config::GENERAL_AWAY_TIMER_KEY);
+	//Init the idle class
+	configChangedEventHandler(config, Config::GENERAL_AWAY_TIMER_KEY);
 }
 
 void QtIdle::idleStatusChangedEventHandler(Idle & sender, Idle::Status status) {
