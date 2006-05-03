@@ -19,6 +19,8 @@
 
 #include "QtProfileBar.h"
 
+#include <imwrapper/IMAccount.h>
+
 #include <control/CWengoPhone.h>
 
 #include <model/account/wengo/WengoAccount.h>
@@ -28,15 +30,8 @@
 
 #include <qtutil/QtWengoStyleLabel.h>
 
-/*
-<file>pics/profilebar/bar_start_status_gray.png</file>
-<file>pics/profilebar/bar_start_status_green.png</file>
-<file>pics/profilebar/bar_start_status_orange.png</file>
-<file>pics/profilebar/bar_start_status_red.png</file>
-*/
-
-QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent , Qt::WFlags f )
-: QWidget (parent,f), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
+QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile, ConnectHandler & connectHandler,QWidget * parent , Qt::WFlags f )
+: QWidget (parent,f), _userProfile(userProfile), _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 
 	_statusMenu = NULL;
 
@@ -147,6 +142,27 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
 	_userProfile.phoneLineCreatedEvent +=
 		boost::bind(&QtProfileBar::phoneLineCreatedEventHandler, this, _1, _2);
+
+    _connectHandler.connectedEvent +=
+        boost::bind(&QtProfileBar::connectedEventHandler,this,_1,_2);
+
+    _connectHandler.disconnectedEvent +=
+        boost::bind(&QtProfileBar::disconnectedEventHandler,this,_1,_2);
+
+    connect(this,SIGNAL(connectEventSignal(IMAccount *)),_nickNameWidget,SLOT(connected(IMAccount *)));
+    connect(this,SIGNAL(disconnectedEventSignal(IMAccount *)),_nickNameWidget,SLOT(disconnected(IMAccount *)));
+}
+
+// Called in the model thread
+void QtProfileBar::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount){
+    IMAccount * pImAccount = &imAccount;
+    connectEventSignal(pImAccount);
+}
+
+// Called in the model thread
+void QtProfileBar::disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount){
+    IMAccount * pImAccount = &imAccount;
+    disconnectedEventSignal(pImAccount);
 }
 
 void QtProfileBar::statusClicked(){

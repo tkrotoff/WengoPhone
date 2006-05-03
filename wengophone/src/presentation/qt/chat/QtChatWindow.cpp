@@ -461,7 +461,7 @@ void ChatWindow::createMenu(){
 
 
    	WengoMenu->addSeparator ();
-	action = WengoMenu->addAction(tr("Exit"));
+	action = WengoMenu->addAction(tr("&Close"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(exitApplication()));
 	_menuBar->addMenu(WengoMenu);
 

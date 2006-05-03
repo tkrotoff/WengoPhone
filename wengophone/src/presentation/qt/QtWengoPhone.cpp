@@ -207,7 +207,7 @@ void QtWengoPhone::initThreadSafe() {
 	connect(_ui->actionHideContactsOffline, SIGNAL(triggered()), SLOT(showHideOffLineContacts()));
 
 	// actionSort_contacts
-	connect(_ui->actionSortContacts, SIGNAL(triggered()), SLOT(sortContacts()));
+	connect(_ui->actionSortAlphabetically, SIGNAL(triggered()), SLOT(sortContactsAlphabetically()));
 
 	//actionCreateConferenceCall
 	connect(_ui->actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
@@ -232,7 +232,7 @@ void QtWengoPhone::initThreadSafe() {
 
 	//actionSearchContact
 	connect(_ui->actionSearchWengoUsers, SIGNAL(triggered()), SLOT(showSearchContactWindows()));
-	
+
 	//Embedded Browser
 	_browser = new QtBrowser(NULL);
 	_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
@@ -244,7 +244,10 @@ void QtWengoPhone::initThreadSafe() {
 	_qtHistoryWidget = NULL;
 
 	//Add the profile bar
-	int profileBarIndex = _ui->profileBar->addWidget(new QtProfileBar(_cWengoPhone, _cWengoPhone.getWengoPhone().getCurrentUserProfile(), _ui->profileBar));
+	int profileBarIndex = _ui->profileBar->addWidget(new QtProfileBar(_cWengoPhone,
+	                                                                  _cWengoPhone.getWengoPhone().getCurrentUserProfile(),
+	                                                                  _cWengoPhone.getWengoPhone().getCurrentUserProfile().getConnectHandler(),
+	                                                                  _ui->profileBar));
 	_ui->profileBar->setCurrentIndex(profileBarIndex);
 	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
 
@@ -571,7 +574,7 @@ void QtWengoPhone::showAdvancedConfig() {
 
 void QtWengoPhone::showAccountSettings() {
 	QtIMAccountManager * imAccountManager =
-		new QtIMAccountManager(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), 
+		new QtIMAccountManager(_cWengoPhone.getWengoPhone().getCurrentUserProfile(),
 			_cWengoPhone, true, _wengoPhoneWindow);
 }
 
@@ -623,7 +626,7 @@ void QtWengoPhone::setTrayMenu() {
 	_trayIcon->setPopup(_trayMenu);
 }
 
-void QtWengoPhone::sortContacts() {
+void QtWengoPhone::sortContactsAlphabetically() {
 	_contactList->sortUsers();
 }
 

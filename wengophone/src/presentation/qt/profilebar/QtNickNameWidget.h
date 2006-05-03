@@ -25,6 +25,7 @@
 
 class CWengoPhone;
 class UserProfile;
+class IMAccount;
 
 class QtNickNameWidget : public QWidget
 {
@@ -101,6 +102,9 @@ public Q_SLOTS:
 
 	void nicknameChanged();
 
+	void connected(IMAccount * pImAccount);
+
+	void disconnected(IMAccount * pImAccount);
 };
 
 #endif

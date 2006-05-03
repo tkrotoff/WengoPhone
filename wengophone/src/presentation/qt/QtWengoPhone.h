@@ -47,7 +47,6 @@ class QtStatusBar;
 class QtCallBar;
 class QtWengoStyleLabel;
 class QtWsDirectory;
-
 class TrayIcon;
 
 class QPushButton;
@@ -81,7 +80,7 @@ public:
 	void setPhoneCall(QtContactCallListWidget * qtContactCallListWidget);
 
 	void setSms(QtSms * qtSms);
-	
+
 	void setWsDirectory(QtWsDirectory * qtWsDirectory);
 
 	QtSms * getSms() const;
@@ -175,7 +174,7 @@ private Q_SLOTS:
 
 	void setTrayMenu();
 
-	void sortContacts();
+	void sortContactsAlphabetically();
 
 	void toasterClosed(QtToaster * toaster);
 

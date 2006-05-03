@@ -63,6 +63,7 @@ headers = [
 	'contactlist/QtUserWidgetAvatarManager.h',
 	'contactlist/QtHidenContact.h',
 	'contactlist/QtUserTreeEventFilter.h',
+	'contactlist/QtRenameGroup.h',
 	'presence/QtPresenceHandler.h',
 	'chat/QtChatHandler.h',
 	'chat/QtChatWidget.h',
@@ -155,6 +156,7 @@ sources = [
 	'contactlist/QtUserWidgetAvatarManager.cpp',
 	'contactlist/QtHidenContact.cpp',
 	'contactlist/QtUserTreeEventFilter.cpp',
+	'contactlist/QtRenameGroup.cpp',
 	'presence/QtPresenceHandler.cpp',
 	'chat/QtChatHandler.cpp',
 	'chat/QtChatWidget.cpp',
@@ -230,6 +232,7 @@ forms = [
 	'config/PrivacySettings.ui',
 	'config/VideoSettings.ui',
 	'config/WengoConfigDialog.ui',
+	'contactlist/RenameGroupDialog.ui'
 ]
 
 for form in forms:

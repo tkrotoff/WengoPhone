@@ -34,17 +34,31 @@ class CWengoPhone;
 class IPhoneLine;
 class QtWengoStyleLabel;
 class UserProfile;
-
+class ConnectHandler;
+class IMAccount;
 class QtProfileBar : public QWidget
 {
 	Q_OBJECT
 
 public:
-	QtProfileBar (CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent = 0, Qt::WFlags f = 0 );
+	QtProfileBar (CWengoPhone & cWengoPhone, UserProfile & userProfile, ConnectHandler & connectHandler,QWidget * parent = 0, Qt::WFlags f = 0 );
 
 	void setWengos(float wengos);
 
+    void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
+
+    void disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount);
+
+
+Q_SIGNALS:
+
+    void connectEventSignal(IMAccount * imAccount);
+
+    void disconnectedEventSignal(IMAccount * imAccount);
+
 protected:
+
+    ConnectHandler & _connectHandler;
 
 	QGridLayout * _gridlayout;
 

@@ -33,12 +33,7 @@ using namespace std;
 
 QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent , Qt::WFlags f )
 : QWidget(parent,f), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
-/*
-	QPalette p = palette();
-	p.setColor(QPalette::Active,QPalette::Window,Qt::white);
-	setPalette(p);
-	setAutoFillBackground(true);
-*/
+
 	_msnIMAccountMenu = NULL;
 	_yahooIMAccountMenu = NULL;
 	_jabberIMAccountMenu = NULL;
@@ -53,8 +48,6 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, CWengoPhone & cWen
 	_protocolLayout = new QGridLayout();
 	_protocolLayout->setSpacing(5);
 	_protocolLayout->setMargin(0);
-
-
 
 	// Child widgets
 
@@ -89,30 +82,21 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, CWengoPhone & cWen
 	_protocolLayout->addWidget(_wengoLabel   ,0 , 2 );
 	_protocolLayout->addWidget(_aimLabel     ,0 , 3 );
 	_protocolLayout->addWidget(_jabberLabel  ,0 , 4 );
-    //_widgetLayout->setRowStretch (5,1);
-	_msnLabel->setPixmap(QPixmap(":pics/protocols/msn.png"));
+
+	_msnLabel->setPixmap(QPixmap(":pics/protocols/msn_off.png"));
 	_msnLabel->setToolTip(tr("MSN"));
-	// _msnLabel->setScaledContents ( true );
 
-
-	_yahooLabel->setPixmap(QPixmap(":pics/protocols/yahoo.png"));
+	_yahooLabel->setPixmap(QPixmap(":pics/protocols/yahoo_off.png"));
 	_yahooLabel->setToolTip(tr("Yahoo!"));
-    // _yahooLabel->setScaledContents ( true );
 
-
-	_wengoLabel->setPixmap(QPixmap(":pics/protocols/wengo.png"));
+	_wengoLabel->setPixmap(QPixmap(":pics/protocols/wengo_off.png"));
 	_wengoLabel->setToolTip(tr("Wengo"));
-    // _wengoLabel->setScaledContents ( true );
 
-
-	_aimLabel->setPixmap(QPixmap(":pics/protocols/aim.png"));
+	_aimLabel->setPixmap(QPixmap(":pics/protocols/aim_off.png"));
 	_aimLabel->setToolTip(tr("Icq / Aim"));
-    // _aimLabel->setScaledContents ( true );
 
-
-	_jabberLabel->setPixmap(QPixmap(":pics/protocols/jabber.png"));
+	_jabberLabel->setPixmap(QPixmap(":pics/protocols/jabber_off.png"));
 	_jabberLabel->setToolTip(tr("Jabber / Google"));
-    // _jabberLabel->setScaledContents ( true );
 
 	// Widget connections
 	connect ( _msnLabel,SIGNAL( clicked() ),SLOT( msnClicked() ) );
@@ -122,8 +106,72 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, CWengoPhone & cWen
 	connect ( _avatarLabel, SIGNAL ( clicked() ), SLOT ( avatarClicked() ) );
 	connect ( _jabberLabel, SIGNAL ( clicked() ), SLOT ( jabberClicked() ) );
 	connect ( _nickNameEdit, SIGNAL(returnPressed ()), SLOT(nicknameChanged()));
+
 	// Widget initialization
 	init();
+}
+
+void QtNickNameWidget::connected(IMAccount * pImAccount){
+
+
+    switch (pImAccount->getProtocol()){
+        case EnumIMProtocol::IMProtocolMSN:
+            _msnLabel->setPixmap(QPixmap(":pics/protocols/msn.png"));
+            break;
+        case EnumIMProtocol::IMProtocolSIPSIMPLE:
+            _wengoLabel->setPixmap(QPixmap(":pics/protocols/wengo.png"));
+            break;
+
+        case EnumIMProtocol::IMProtocolYahoo:
+            _yahooLabel->setPixmap(QPixmap(":pics/protocols/yahoo.png"));
+            break;
+
+        case EnumIMProtocol::IMProtocolAIMICQ:
+            _aimLabel->setPixmap(QPixmap(":pics/protocols/aim.png"));
+            break;
+
+        case EnumIMProtocol::IMProtocolJabber:
+            _jabberLabel->setPixmap(QPixmap(":pics/protocols/jabber.png"));
+            break;
+
+        case EnumIMProtocol::IMProtocolGoogleTalk:
+            _jabberLabel->setPixmap(QPixmap(":pics/protocols/jabber.png"));
+            break;
+
+        default:
+            break;
+    }
+
+}
+
+void QtNickNameWidget::disconnected(IMAccount * pImAccount){
+    switch (pImAccount->getProtocol()){
+        case EnumIMProtocol::IMProtocolMSN:
+            _msnLabel->setPixmap(QPixmap(":pics/protocols/msn_off.png"));
+            break;
+        case EnumIMProtocol::IMProtocolSIPSIMPLE:
+            _wengoLabel->setPixmap(QPixmap(":pics/protocols/wengo_off.png"));
+            break;
+
+        case EnumIMProtocol::IMProtocolYahoo:
+            _yahooLabel->setPixmap(QPixmap(":pics/protocols/yahoo_off.png"));
+            break;
+
+        case EnumIMProtocol::IMProtocolAIMICQ:
+            _aimLabel->setPixmap(QPixmap(":pics/protocols/aim_off.png"));
+            break;
+
+        case EnumIMProtocol::IMProtocolJabber:
+            _jabberLabel->setPixmap(QPixmap(":pics/protocols/jabber_off.png"));
+            break;
+
+        case EnumIMProtocol::IMProtocolGoogleTalk:
+            _jabberLabel->setPixmap(QPixmap(":pics/protocols/jabber_off.png"));
+            break;
+
+        default:
+            break;
+    }
 }
 
 void QtNickNameWidget::msnClicked(){
@@ -299,12 +347,9 @@ void QtNickNameWidget::init() {
         QPainter painter( & background );
         painter.drawPixmap(5,5,pixmap.scaled(60,60));
         painter.end();
-
-        // _avatarLabel->setPixmap(pixmap.scaled(_avatarLabel->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         _avatarLabel->setPixmap(background);
 	}
 	else{
 	    _avatarLabel->setPixmap(background);
 	}
-	////
 }

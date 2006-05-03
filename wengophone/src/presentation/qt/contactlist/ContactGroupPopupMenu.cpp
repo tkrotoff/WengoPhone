@@ -18,6 +18,7 @@
  */
 
 #include "ContactGroupPopupMenu.h"
+#include "QtRenameGroup.h"
 
 #include "model/contactlist/ContactGroup.h"
 
@@ -47,11 +48,14 @@ void ContactGroupPopupMenu::showMenu(const ContactGroup * contactGroup) {
 }
 
 void ContactGroupPopupMenu::removeContactGroup() const {
-	
+
 }
 
 void ContactGroupPopupMenu::renameContactGroup() const {
-	
+
+    QtRenameGroup dialog(dynamic_cast<QWidget *>(parent()));
+    dialog.exec();
+	//_contactGroup.setName()
 }
 
 void ContactGroupPopupMenu::sendSms() {
