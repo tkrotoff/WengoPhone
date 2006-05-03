@@ -66,7 +66,7 @@ public:
 	void AddChatSessionInList(mConvInfo_t *conv);
 	static mConvInfo_t *FindChatStructById(int convId);
 
-	int createGaimChat(GaimConnection *gGC, int id, GList *users);
+	void createGaimChat(GaimConnection *gGC, int id, GList *users);
 
 private:
 

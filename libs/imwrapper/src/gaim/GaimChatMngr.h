@@ -45,6 +45,8 @@ public:
 	void RemoveIMChat(IMAccount &account);
 
 	/* *************** GaimChatCallback **************** */
+	static void ChatJoinedCbk(GaimConversation *conv);
+
 	static void CreateConversationCbk(GaimConversation *conv);
 	static void DestroyConversationCbk(GaimConversation *conv);
 	static void WriteChatCbk(GaimConversation *conv, const char *who,

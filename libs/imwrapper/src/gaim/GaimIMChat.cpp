@@ -33,8 +33,6 @@ extern "C" {
 #include <stdio.h>
 #endif
 
-#define CHAT_CREATED		0
-#define CHAT_NOT_CREATED	-1
 
 std::list<mConvInfo_t *> GaimIMChat::_GaimChatSessionList;
 
@@ -202,10 +200,7 @@ void GaimIMChat::addContact(IMChatSession & chatSession, const std::string & con
 		mlist = g_list_append(mlist, (char *) contactId.c_str());
 		mlist = g_list_append(mlist, (char *) firstContactId.c_str());
 		
-		if (createGaimChat(gGC, chatSession.getId(), mlist) == CHAT_CREATED)
-		{
-			gaim_conversation_destroy(gConv);
-		}
+		createGaimChat(gGC, chatSession.getId(), mlist);
 	}	
 	else if (gaim_conversation_get_type(gConv) == GAIM_CONV_TYPE_CHAT)
 	{
@@ -274,7 +269,7 @@ mConvInfo_t *GaimIMChat::FindChatStructById(int convId)
 	return NULL;
 }
 
-int GaimIMChat::createGaimChat(GaimConnection *gGC, int id, GList *users)
+void GaimIMChat::createGaimChat(GaimConnection *gGC, int id, GList *users)
 {
 	if (!gGC)
 		LOG_FATAL("GaimConnection gGC = NULL!!");
@@ -318,28 +313,11 @@ int GaimIMChat::createGaimChat(GaimConnection *gGC, int id, GList *users)
 			g_hash_table_replace(components, g_strdup("exchange"), g_strdup("16"));
 		}
 
+		mConv->pending_invit = users;
+
 		serv_join_chat(gGC, components);
 		g_hash_table_destroy(components);
-
-		gConv = gaim_find_conversation_with_account(GAIM_CONV_TYPE_CHAT, chatName, gGC->account);
-
-		if (!gConv)
-		{
-			mConv->pending_invit = users;
-			return CHAT_NOT_CREATED;
-		}
-
-		mConv->gaim_conv_session = gConv;
-		gConv->ui_data = mConv;
-
-		for (bl = users; bl != NULL; bl = bl->next)
-		{
-			serv_chat_invite(gGC, gaim_conv_chat_get_id(GAIM_CONV_CHAT(gConv)),
-							"Join my conference...", (char *)bl->data);
-		}
 	}
-
-	return CHAT_CREATED;
 }
 
 bool GaimIMChat::IsChatSessionInList(int convId)

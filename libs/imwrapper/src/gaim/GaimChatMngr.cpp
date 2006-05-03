@@ -29,7 +29,12 @@ extern "C" {
 }
 
 #ifdef OS_WIN32
-#define snprintf _snprintf
+//#include <Windows.h>
+//#include <Winbase.h>
+#define snprintf	_snprintf
+//#define sleep(i)	Sleep(i * 1000)
+//#else
+//#include <unistd.h>
 #endif
 
 
@@ -55,6 +60,11 @@ int GetGaimConversationId(const char *name)
 
 /* **************** TYPING STATE MANAGEMENT ****************** */
 
+void chat_joined(GaimConversation *conv)
+{
+	GaimChatMngr::ChatJoinedCbk(conv);
+}
+
 int chat_invite_request(GaimAccount *account, const char *who, 
 						const char *message, void *data)
 {
@@ -72,7 +82,7 @@ void update_buddy_typing(GaimAccount *account, const char *who)
 	GaimChatMngr::UpdateBuddyTyping(gConv, gaim_conv_im_get_typing_state(GAIM_CONV_IM(gConv)));
 }
 
-void init_typing_state_event()
+void init_chat_event()
 {
 	void *handle = gaim_wg_get_handle();
 	
@@ -83,6 +93,9 @@ void init_typing_state_event()
 
 	gaim_signal_connect(gaim_conversations_get_handle(), "chat-invited",
 						handle, GAIM_CALLBACK(chat_invite_request), NULL);
+
+	gaim_signal_connect(gaim_conversations_get_handle(), "chat-joined",
+						handle, GAIM_CALLBACK(chat_joined), NULL);
 }
 
 
@@ -195,7 +208,7 @@ GaimChatMngr::GaimChatMngr()
 void GaimChatMngr::Init()
 {
 	_accountMngr = GaimAccountMngr::getInstance();
-	init_typing_state_event();
+	init_chat_event();
 }
 
 GaimChatMngr *GaimChatMngr::getInstance()
@@ -205,6 +218,29 @@ GaimChatMngr *GaimChatMngr::getInstance()
 		_staticInstance = new GaimChatMngr();
 	}
 	return _staticInstance;
+}
+
+void GaimChatMngr::ChatJoinedCbk(GaimConversation *conv)
+{
+	GaimAccount *gAccount = gaim_conversation_get_account(conv);
+	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
+	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
+								GaimIMPrcl::GetEnumIMProtocol(gPrclId));
+	mConvInfo_t *mConv = (mConvInfo_t *) conv->ui_data;
+
+	if (mConv->pending_invit)
+	{
+		for (GList *l = mConv->pending_invit; l != NULL; l = l->next)
+		{
+			//if (account->getProtocol() == EnumIMProtocol::IMProtocolYahoo)
+			//	sleep(10);
+
+			serv_chat_invite(gaim_conversation_get_gc(conv), 
+				gaim_conv_chat_get_id(GAIM_CONV_CHAT(conv)),
+				"Join my conference...", (char *)l->data);
+		}
+		mConv->pending_invit = NULL;
+	}
 }
 
 void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
@@ -247,17 +283,6 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 
 		mConv->gaim_conv_session = conv;
 		conv->ui_data = mConv;
-
-		if (mConv->pending_invit)
-		{
-			for (GList *l = mConv->pending_invit; l != NULL; l = l->next)
-			{
-				serv_chat_invite(gaim_conversation_get_gc(conv), 
-					gaim_conv_chat_get_id(GAIM_CONV_CHAT(conv)),
-					"Join my conference...", (char *)l->data);
-			}
-			mConv->pending_invit = NULL;
-		}
 	}
 }
 
