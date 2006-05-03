@@ -826,12 +826,11 @@ void QtWengoPhone::phoneComboBoxClicked() {
 		}
 	}
 }
-<<<<<<< .mine
 
 void QtWengoPhone::modelInitializedEvent() {
 	modelInitializedEventSignal();
 }
-=======
+
 QMenu * QtWengoPhone::createStatusMenu(){
 
     QMenu * menu = new QMenu("Status");
@@ -852,4 +851,3 @@ QMenu * QtWengoPhone::createStatusMenu(){
 
     return menu;
 }
->>>>>>> .r5278
