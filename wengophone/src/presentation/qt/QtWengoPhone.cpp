@@ -145,6 +145,20 @@ void QtWengoPhone::initThreadSafe() {
 	QtDialpad * qtDialpad = new QtDialpad(this);
 	Widget::createLayout(_ui->tabDialpad)->addWidget(qtDialpad->getWidget());
 
+	_qtHistoryWidget = NULL;
+
+	// Create the profilebar
+    _qtProfileBar = new QtProfileBar(_cWengoPhone,
+                                      _cWengoPhone.getWengoPhone().getCurrentUserProfile(),
+                                      _cWengoPhone.getWengoPhone().getCurrentUserProfile().getConnectHandler(),
+                                      _ui->profileBar);
+	//Add the profile bar
+	int profileBarIndex = _ui->profileBar->addWidget(_qtProfileBar);
+
+	_ui->profileBar->setCurrentIndex(profileBarIndex);
+	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
+
+
 	//Systray
 	_trayMenu = NULL;
 	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
@@ -242,16 +256,7 @@ void QtWengoPhone::initThreadSafe() {
 	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
 #endif
 
-	_qtHistoryWidget = NULL;
 
-	//Add the profile bar
-	_profileBar = new QtProfileBar(_cWengoPhone,
-		_cWengoPhone.getWengoPhone().getCurrentUserProfile(),
-		_cWengoPhone.getWengoPhone().getCurrentUserProfile().getConnectHandler(),
-		_ui->profileBar);
-	connect(this, SIGNAL(modelInitializedEventSignal()), _profileBar, SLOT(userProfileUpdated()));
-
-	int profileBarIndex = _ui->profileBar->addWidget(_profileBar);
 	_ui->profileBar->setCurrentIndex(profileBarIndex);
 	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
 
@@ -838,16 +843,16 @@ QMenu * QtWengoPhone::createStatusMenu(){
 	QAction * action;
 
 	action = menu->addAction(QIcon(":/pics/status/online.png"),tr( "Online" ) );
-	connect(action,SIGNAL( triggered (bool) ),SLOT( onlineClicked(bool) ) );
+	connect(action,SIGNAL( triggered (bool) ),_qtProfileBar, SLOT( onlineClicked(bool)) );
 
 	action = menu->addAction(QIcon(":/pics/status/donotdisturb.png"), tr( "DND" ) );
-	connect(action,SIGNAL( triggered (bool) ),SLOT( dndClicked(bool) ) );
+	connect(action,SIGNAL( triggered (bool) ),_qtProfileBar,SLOT( dndClicked(bool) ) );
 
 	action = menu->addAction(QIcon(":/pics/status/offline.png"), tr( "Invisible" ) );
-	connect(action,SIGNAL( triggered (bool) ),SLOT( invisibleClicked(bool) ) );
+	connect(action,SIGNAL( triggered (bool) ),_qtProfileBar,SLOT( invisibleClicked(bool) ) );
 
 	action = menu->addAction(QIcon(":/pics/status/away.png"), tr( "Away" ) );
-	connect(action,SIGNAL( triggered (bool) ),SLOT( awayClicked(bool) ) );
+	connect(action,SIGNAL( triggered (bool) ),_qtProfileBar,SLOT( awayClicked(bool) ) );
 
     return menu;
 }

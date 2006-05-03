@@ -46,6 +46,7 @@ class QtLogin;
 class QtToaster;
 class QtStatusBar;
 class QtCallBar;
+class QtProfileBar;
 class QtWengoStyleLabel;
 class QtWsDirectory;
 class TrayIcon;
@@ -272,6 +273,8 @@ private:
 	QtHistoryWidget * _qtHistoryWidget;
 
 	QtContactCallListWidget * _contactCallListWidget;
+
+    QtProfileBar * _qtProfileBar;
 
 	QtCallBar * _qtCallBar;
 

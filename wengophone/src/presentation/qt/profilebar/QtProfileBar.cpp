@@ -25,7 +25,7 @@
 
 #include <model/account/wengo/WengoAccount.h>
 #include <model/profile/UserProfile.h>
-
+#include <model/presence/PresenceHandler.h>
 #include <util/Logger.h>
 
 #include <qtutil/QtWengoStyleLabel.h>
@@ -149,6 +149,11 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
     _connectHandler.disconnectedEvent +=
         boost::bind(&QtProfileBar::disconnectedEventHandler,this,_1,_2);
 
+    PresenceHandler & presence = _userProfile.getPresenceHandler() ;
+
+    presence.myPresenceStatusEvent +=
+        boost::bind(&QtProfileBar::myPresenceStatusEventHandler,this,_1,_2,_3);
+
     connect(this,SIGNAL(connectEventSignal(IMAccount *)),_nickNameWidget,SLOT(connected(IMAccount *)));
     connect(this,SIGNAL(disconnectedEventSignal(IMAccount *)),_nickNameWidget,SLOT(disconnected(IMAccount *)));
 }
@@ -163,6 +168,32 @@ void QtProfileBar::connectedEventHandler(ConnectHandler & sender, IMAccount & im
 void QtProfileBar::disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount){
     IMAccount * pImAccount = &imAccount;
     disconnectedEventSignal(pImAccount);
+}
+
+void QtProfileBar::myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
+		                                        EnumPresenceState::MyPresenceStatus status){
+
+    EnumPresenceState::MyPresenceStatus * pstatus = new EnumPresenceState::MyPresenceStatus;
+    *pstatus = status;
+    myPresenceStatusEventSignal(pstatus);
+}
+
+void QtProfileBar::myPresenceStatusEventSlot(EnumPresenceState::MyPresenceStatus * status){
+
+    switch ( *status){
+        case EnumPresenceState::PresenceStateAway:
+            awayClicked(false);
+            break;
+        case EnumPresenceState::PresenceStateOnline:
+            onlineClicked(false);
+            break;
+        case EnumPresenceState::PresenceStateInvisible:
+            invisibleClicked(false);
+            break;
+        default:
+            break;
+    }
+    delete status;
 }
 
 void QtProfileBar::statusClicked(){

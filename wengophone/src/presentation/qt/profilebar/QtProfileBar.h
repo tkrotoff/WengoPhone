@@ -27,7 +27,7 @@
 #include "QtNickNameWidget.h"
 #include "QtEventWidget.h"
 #include "QtCreditWidget.h"
-
+#include <imwrapper/EnumPresenceState.h>
 #include <model/webservices/info/WsInfo.h>
 
 class CWengoPhone;
@@ -36,6 +36,8 @@ class QtWengoStyleLabel;
 class UserProfile;
 class ConnectHandler;
 class IMAccount;
+class PresenceHandler;
+
 class QtProfileBar : public QWidget
 {
 	Q_OBJECT
@@ -49,12 +51,16 @@ public:
 
     void disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount);
 
+    void myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
+		                              EnumPresenceState::MyPresenceStatus status);
 
 Q_SIGNALS:
 
     void connectEventSignal(IMAccount * imAccount);
 
     void disconnectedEventSignal(IMAccount * imAccount);
+
+    void myPresenceStatusEventSignal(EnumPresenceState::MyPresenceStatus * status);
 
 protected:
 
@@ -130,6 +136,8 @@ public Q_SLOTS:
 	void awayClicked(bool checked);
 
 	void forwardClicked(bool checked);
+
+	void myPresenceStatusEventSlot(EnumPresenceState::MyPresenceStatus * status);
 
 private:
 
