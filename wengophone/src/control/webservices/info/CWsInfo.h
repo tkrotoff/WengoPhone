@@ -63,7 +63,8 @@ public:
 	 * @see WsWengoInfo::wsCallForwardInfoEvent
 	 */
 	Event<void (WsInfo & sender, int id, WsInfo::WsInfoStatus status,
-				bool voicemail, std::string dest1, std::string dest2, std::string dest3)> wsCallForwardInfoEvent;
+		WsInfo::WsInfoCallForwardMode mode, bool voicemail, std::string dest1,
+		std::string dest2, std::string dest3)> wsCallForwardInfoEvent;
 
 	/**
 	 * default constructor.
