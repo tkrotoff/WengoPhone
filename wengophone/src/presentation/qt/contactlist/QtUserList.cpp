@@ -215,7 +215,10 @@ void QtUserList::startChat(const QString & userid){
     _mutex.lock();
     QtUser * user = _userList[userid];
     if ( ! user )
-        LOG_FATAL("User lookup failed !!!");
+        {
+            _mutex.unlock();
+            return;
+        }
     _mutex.unlock();
     user->startChat();
 }
