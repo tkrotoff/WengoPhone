@@ -164,12 +164,18 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 			strcat(commandLine, _styleName);
 		}
 		strcat(commandLine, " -d ");
+		strcat(commandLine, "\"");
 		strcat(commandLine, memoryDumpFile);
+		strcat(commandLine, "\"");
 		strcat(commandLine, " -n ");
+		strcat(commandLine, "\"");
 		strcat(commandLine, _applicationName);
+		strcat(commandLine, "\"");
 		if (_languageFilename != NULL) {
 			strcat(commandLine, " -l ");
+			strcat(commandLine, "\"");
 			strcat(commandLine, _languageFilename);
+			strcat(commandLine, "\"");
 		}
 		LOG_DEBUG(commandLine);
 
