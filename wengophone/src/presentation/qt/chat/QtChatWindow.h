@@ -52,6 +52,8 @@ public:
 
 	QWidget * getWidget() { return _dialog; }
 
+	void enableChatButton();
+
 protected:
 
 	typedef QMap <int, QtChatContactWidget *> ChatContactWidgets;

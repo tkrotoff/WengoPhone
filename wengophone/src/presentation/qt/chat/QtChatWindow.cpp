@@ -153,6 +153,11 @@ void ChatWindow::initThreadSafe(){
 
 	openContactListFrame();
 }
+
+void ChatWindow::enableChatButton(){
+   QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
+   qtWengoPhone->setChatWindow( _dialog );
+}
 void ChatWindow::createInviteFrame(){
 
     _inviteFrame->setMaximumSize(QSize(10000,80));
@@ -220,7 +225,6 @@ void ChatWindow::closeTab(){
         _dialog->hide();
         QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
         qtWengoPhone->setChatWindow( NULL );
-
     }
     //_tabWidget->removeTab ( _tabWidget->currentIndex() );
 }

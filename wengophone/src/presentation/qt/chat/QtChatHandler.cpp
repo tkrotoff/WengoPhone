@@ -51,6 +51,7 @@ void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession 
 	else
 	{
 		_qtChatWidget->addChatSession(&imChatSession);
+		_qtChatWidget->enableChatButton();
 	}
 	QtToaster  * toaster = new QtToaster();
 	toaster->setTitle(tr("New chat session:"));

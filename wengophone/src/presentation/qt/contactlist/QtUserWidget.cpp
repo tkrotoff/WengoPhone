@@ -46,7 +46,6 @@ QtUserWidget::QtUserWidget(CContact & cContact, QWidget * parent, Qt::WFlags f)
 	_avatarManager = new QtUserWidgetAvatarManager(this,_avatarLabel);
 	_avatarLabel->installEventFilter(_avatarManager);
 
-
     _smsButton = findChild<QPushButton *>("smsButton");
     _callButton= findChild<QPushButton *>("callButton");
     _chatButton= findChild<QPushButton *>("chatButton");
