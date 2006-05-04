@@ -36,7 +36,7 @@
 #include <model/webservices/info/WsInfo.h>
 #include <model/webservices/directory/WsDirectory.h>
 #include <model/history/History.h>
-//#include <model/webservices/callforward/WsCallForward.h>
+#include <model/webservices/callforward/WsCallForward.h>
 
 #include <imwrapper/IMAccountHandlerFileStorage.h>
 
@@ -106,9 +106,9 @@ UserProfile::~UserProfile() {
 	if( _wsDirectory ) {
 		delete _wsDirectory;
 	}
-/*	if( _wsCallForward ) {
+	if( _wsCallForward ) {
 		delete _wsCallForward;
-}*/
+	}
 }
 
 void UserProfile::connect() {
@@ -356,8 +356,8 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		LOG_DEBUG("WsDirectory created");
 
 		//TODO: callforward
-		//_wsCallForward = new WsCallForward(_wengoAccount);
-		//wsCallForwardCreatedEvent(*this, *_wsCallForward);
+		_wsCallForward = new WsCallForward(_wengoAccount);
+		wsCallForwardCreatedEvent(*this, *_wsCallForward);
 
 		addPhoneLine(sender);
 

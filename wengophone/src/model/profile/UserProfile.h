@@ -50,7 +50,7 @@ class SoftUpdate;
 class History;
 class WsInfo;
 class WsDirectory;
-//class WsCallForward;
+class WsCallForward;
 
 /**
  * Handle the profile of a User.
@@ -155,7 +155,7 @@ public:
 	 * @param sender this class
 	 * @param wsCallForward WsCallForward created
 	 */
-	//Event<void (UserProfile & sender, WsCallForward & wsCallForward)> wsCallForwardCreatedEvent;
+	Event<void (UserProfile & sender, WsCallForward & wsCallForward)> wsCallForwardCreatedEvent;
 
 	/**
 	 * WsDirectory has been created.
@@ -415,7 +415,7 @@ private:
 	WsInfo * _wsInfo;
 
 	/** WsCallForward. */
-	//WsCallForward * _wsCallForward;
+	WsCallForward * _wsCallForward;
 
 	/** WsDirectory */
 	WsDirectory * _wsDirectory;
