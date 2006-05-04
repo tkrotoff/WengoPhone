@@ -36,17 +36,12 @@ QtUserWidget::QtUserWidget(CContact & cContact, QWidget * parent, Qt::WFlags f)
 	layout->setMargin(0);
 	setLayout(layout);
 
+    int callButton = 2;
+
 	_avatarLabel = findChild<QLabel *>("avatarLabel");
 	_homePhoneLabel = findChild<QLabel *>("homePhoneLabel");
 	_cellPhoneLabel = findChild<QLabel *>("cellPhoneLabel");
 
-    QString str = QString::fromUtf8(_cContact.getContact().getHomePhone().c_str());
-    if ( !str.isEmpty() )
-        _homePhoneLabel->setText( str );
-
-    str = QString::fromUtf8(_cContact.getContact().getMobilePhone().c_str());
-    if ( !str.isEmpty() )
-        _cellPhoneLabel->setText( str );
 
 	_avatarManager = new QtUserWidgetAvatarManager(this,_avatarLabel);
 	_avatarLabel->installEventFilter(_avatarManager);
@@ -56,6 +51,25 @@ QtUserWidget::QtUserWidget(CContact & cContact, QWidget * parent, Qt::WFlags f)
     _callButton= findChild<QPushButton *>("callButton");
     _chatButton= findChild<QPushButton *>("chatButton");
 
+    QString str = QString::fromUtf8(_cContact.getContact().getHomePhone().c_str());
+    if ( !str.isEmpty() ){
+        _homePhoneLabel->setText( str );
+    }
+    else{
+        callButton--;
+    }
+    str = QString::fromUtf8(_cContact.getContact().getMobilePhone().c_str());
+    if ( !str.isEmpty() )
+    {
+        _cellPhoneLabel->setText( str );
+    }
+    else{
+        _smsButton->setEnabled(false);
+        callButton--;
+    }
+
+    if ( !callButton  )
+        _callButton->setEnabled(false);
 
     connect ( _callButton, SIGNAL(clicked()), SLOT ( callButtonClicked() ));
     connect ( _chatButton, SIGNAL(clicked()), SLOT ( chatButtonClicked() ));
