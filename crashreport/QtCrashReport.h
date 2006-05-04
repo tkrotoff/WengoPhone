@@ -37,7 +37,7 @@ class QtCrashReport : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang = "");
+	QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang = "", std::string info = "");
 
 	~QtCrashReport();
 
@@ -74,6 +74,8 @@ private:
 	std::string _descfile;
 
 	std::string _lang;
+
+	std::string _info;
 
 	QDialog * _dialog;
 

@@ -32,24 +32,26 @@ using namespace boost::program_options;
 int main(int argc, char** argv) {
 
 	QApplication app(argc, argv);
-	
+
 	string dumpfile = "";
 	string applicationName = "";
 	string lang = "";
 	string style = "";
+	string info = "";
 
 	try {
 
 		options_description desc("Allowed options");
 		desc.add_options()
-        // First parameter describes option name/short name
-        // The second is parameter to option
-        // The third is description
-				("help,h", "print usage message")
-				("dumpfile,d", value(&dumpfile), "path to the memory dump file")
-				("name,n", value(&applicationName), "the application name")
-				("lang,l", value(&lang), "the application language")
-				;
+			// First parameter describes option name/short name
+			// The second is parameter to option
+			// The third is description
+			("help,h", "print usage message")
+			("dumpfile,d", value(&dumpfile), "path to the memory dump file")
+			("name,n", value(&applicationName), "the application name")
+			("lang,l", value(&lang), "the application language")
+			("info,i", value(&info), "additionnal info")
+			;
 
 		variables_map vm;
 		store(parse_command_line(argc, argv, desc), vm);
@@ -66,7 +68,7 @@ int main(int argc, char** argv) {
 			cout << "No dump file specified" << endl;
 			return 1;
 		}
-		
+
 		if (vm.count("name")) {
 			cout << "name = " << vm["name"].as<string>() << "\n";
 			applicationName = vm["name"].as<string>();
@@ -82,12 +84,19 @@ int main(int argc, char** argv) {
 			cout << "No lang specified" << endl;
 		}
 
+		if (vm.count("info")) {
+			cout << "info = " << vm["info"].as<string>() << "\n";
+			info = vm["info"].as<string>();
+		} else {
+			cout << "No info specified" << endl;
+		}
+
 	}
 	catch(exception& e) {
 		cerr << e.what() << "\n";
 	}
 
-	QtCrashReport * crashReport = new QtCrashReport(dumpfile, applicationName, lang);
+	QtCrashReport * crashReport = new QtCrashReport(dumpfile, applicationName, lang, info);
 	crashReport->show();
 
 	return app.exec();

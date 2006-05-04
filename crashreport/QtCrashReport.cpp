@@ -32,26 +32,26 @@
 
 #include <fstream>
 
-QtCrashReport::QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang)
-	: QObjectThreadSafe(NULL), _dumpfile(dumpfile), _lang(lang)  {
+QtCrashReport::QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang, std::string info)
+	: QObjectThreadSafe(NULL), _dumpfile(dumpfile), _lang(lang), _info(info) {
 
 	_progressTotal = 0;
 	_progressNow = 0;
 	_status = FtpUpload::None;
 	_firstFileUploaded = false;
 	_descfile = _dumpfile + ".txt";
-	
+
 	_ftpUpload = new FtpUpload("ftp.wengo.fr", "wengophone_ng", _dumpfile);
 	_ftpUpload->progressionEvent += boost::bind(&QtCrashReport::ftpProgressEventHandler, this, _1, _2, _3);
 	_ftpUpload->statusEvent += boost::bind(&QtCrashReport::ftpStatusEventHandler, this, _1, _2);
 
 	_dialog = new QDialog(0);
 	ui.setupUi(_dialog);
-	
+
 	connect(ui.sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
-	
+
 	_dialog->setWindowTitle(QString::fromStdString(applicationName));
-	
+
 	ui.progressBar->setValue(0);
 }
 
@@ -82,7 +82,7 @@ void QtCrashReport::ftpProgressEventHandler(FtpUpload * sender, double ultotal, 
 
 void QtCrashReport::ftpStatusEventHandler(FtpUpload * sender, FtpUpload::Status status) {
 	_status = status;
-	
+
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtCrashReport::updatePresentationThreadSafe, this));
 	postEvent(event);
@@ -91,13 +91,13 @@ void QtCrashReport::ftpStatusEventHandler(FtpUpload * sender, FtpUpload::Status 
 void QtCrashReport::updatePresentationThreadSafe() {
 	ui.progressBar->setMaximum(_progressTotal);
 	ui.progressBar->setValue(_progressNow);
-	
+
 	//sleep: only for the feeling
 	if(( _status == FtpUpload::Ok ) || (_status == FtpUpload::Error) ) {
-		
+
 		//TODO: upload the description file
 		if( !_firstFileUploaded  ) {
-			
+
 			_firstFileUploaded  = true;
 			ui.progressBar->setValue(0);
 
@@ -106,40 +106,42 @@ void QtCrashReport::updatePresentationThreadSafe() {
 			_ftpUpload2->progressionEvent += boost::bind(&QtCrashReport::ftpProgressEventHandler, this, _1, _2, _3);
 			_ftpUpload2->statusEvent += boost::bind(&QtCrashReport::ftpStatusEventHandler, this, _1, _2);
 			_ftpUpload2->start();
-			
+
 		} else {
 			Thread::sleep(1);
 			_dialog->close();
 		}
 	} else {
-		
+
 	}
 }
 
 void QtCrashReport::createDescriptionFile() {
-	
+
 	std::fstream file;
 	file.open(_descfile.c_str(), std::fstream::out);
-	
+
 	file << "Date: " << Date().toString() << std::endl;
 	file << "Time: " << Time().toString() << std::endl;
 
 #ifdef OS_WINDOWS
 	file << "Windows version: " << std::string(getWindowsVersion()) << std::endl;
 #endif
-	
+
 	std::string tmp = "";
 	if( ui.mailLineEdit ) {
-		
+
 		tmp = ui.mailLineEdit->text().toStdString();
 		file << "From: " << tmp << std::endl;
 	}
-	
+
 	if( ui.descTextEdit ) {
-		
+
 		tmp = ui.descTextEdit->toPlainText().toStdString();
 		file << "Description: " << tmp << std::endl;
 	}
-	
+
+	file << "User info:\n" << _info << std::endl;
+
 	file.close();
 }
