@@ -18,11 +18,10 @@
  */
 
 #include "QtChatHandler.h"
-
 #include <presentation/qt/toaster/QtToaster.h>
 
 #include <control/chat/CChatHandler.h>
-
+#include <control/CWengoPhone.h>
 #include <util/Logger.h>
 
 #include <QWidget>
@@ -53,7 +52,6 @@ void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession 
 	{
 		_qtChatWidget->addChatSession(&imChatSession);
 	}
-
 	QtToaster  * toaster = new QtToaster();
 	toaster->setTitle(tr("New chat session:"));
 	if (imChatSession.getIMContactSet().size() > 0) {

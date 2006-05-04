@@ -113,42 +113,11 @@
       </property>
       <layout class="QGridLayout" >
        <property name="margin" >
-        <number>2</number>
+        <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="0" column="0" >
-        <widget class="QPushButton" name="addContactButton" >
-         <property name="minimumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Add a contact</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/iconbar/add_contact.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="flat" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="1" >
         <widget class="QPushButton" name="findContactButton" >
          <property name="minimumSize" >
@@ -179,6 +148,50 @@
           <bool>true</bool>
          </property>
         </widget>
+       </item>
+       <item row="0" column="4" >
+        <widget class="QPushButton" name="sendSmsButton" >
+         <property name="minimumSize" >
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="toolTip" >
+          <string>Sends a SMS</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="wengophone.qrc" >:/pics/iconbar/sms.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="flat" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="6" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="0" column="2" >
         <widget class="QPushButton" name="startConferenceButton" >
@@ -211,38 +224,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="3" >
-        <widget class="QPushButton" name="sendSmsButton" >
-         <property name="minimumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Sends a SMS</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/iconbar/sms.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="flat" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="4" >
+       <item row="0" column="5" >
         <widget class="QPushButton" name="webcamButton" >
          <property name="minimumSize" >
           <size>
@@ -273,18 +255,70 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="5" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" >
+       <item row="0" column="0" >
+        <widget class="QPushButton" name="addContactButton" >
+         <property name="minimumSize" >
           <size>
-           <width>40</width>
-           <height>20</height>
+           <width>38</width>
+           <height>38</height>
           </size>
          </property>
-        </spacer>
+         <property name="maximumSize" >
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="toolTip" >
+          <string>Add a contact</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="wengophone.qrc" >:/pics/iconbar/add_contact.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="flat" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3" >
+        <widget class="QPushButton" name="openChatWindowButton" >
+         <property name="minimumSize" >
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="toolTip" >
+          <string>Open the chat window</string>
+         </property>
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="icon" >
+          <iconset resource="wengophone.qrc" >:/pics/contact/chat.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>38</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="flat" >
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

@@ -50,6 +50,7 @@ public Q_SLOTS:
     void callRejected();
 
 
+
 protected:
 
 	QGridLayout * _layout;
@@ -60,6 +61,7 @@ protected:
 
 	CWengoPhone & _cWengoPhone;
 
+    QMutex _mutex;
 };
 
 #endif // QTCONTACTCALLLISTWIDGET_H

@@ -125,6 +125,8 @@ public:
 		return _phoneComboBox;
 	}
 
+	void setChatWindow(QWidget * chatWindow);
+
 Q_SIGNALS:
 
 	void modelInitializedEventSignal();
@@ -160,6 +162,8 @@ private Q_SLOTS:
 	void showContactList();
 
 	void showCallHistory();
+
+	void showChatWindow();
 
 	void sendSms();
 
@@ -288,6 +292,8 @@ private:
 	QWidget * _configPanelWidget;
 
 	QtStatusBar * _statusBar;
+
+	QWidget * _chatWindow;
 
 	static const std::string ANCHOR_CONTACTLIST;
 

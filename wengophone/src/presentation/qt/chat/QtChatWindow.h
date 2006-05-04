@@ -50,6 +50,8 @@ public:
 
 	void addChatSession(IMChatSession * imChatSession);
 
+	QWidget * getWidget() { return _dialog; }
+
 protected:
 
 	typedef QMap <int, QtChatContactWidget *> ChatContactWidgets;

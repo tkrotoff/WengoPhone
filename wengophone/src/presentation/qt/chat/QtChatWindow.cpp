@@ -73,7 +73,11 @@ void ChatWindow::initThreadSafe(){
 	QGridLayout * glayout;
 	_chatContactWidgets = new ChatContactWidgets();
 
-	_dialog = new QDialog(findMainWindow());
+	// _dialog = new QDialog(findMainWindow());
+	_dialog = new QDialog(NULL);
+    QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
+	qtWengoPhone->setChatWindow( _dialog );
+
 
 	LOG_DEBUG("************ Creating Chat window ************* ");
 	// Create the menu bar
@@ -212,7 +216,12 @@ void ChatWindow::closeTab(){
     }
     delete widget;
     if ( _tabWidget->count() == 0 )
+    {
         _dialog->hide();
+        QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
+        qtWengoPhone->setChatWindow( NULL );
+
+    }
     //_tabWidget->removeTab ( _tabWidget->currentIndex() );
 }
 void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state){

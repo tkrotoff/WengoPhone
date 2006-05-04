@@ -89,6 +89,7 @@ void QtContactCallListWidget::stopConference(){
 }
 
 void QtContactCallListWidget::hangup(){
+    QMutexLocker locker(&_mutex);
     QtPhoneCall * phone;
 
     QtContactCallList::QtPhoneCallList phoneCallList;

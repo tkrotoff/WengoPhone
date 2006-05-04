@@ -114,6 +114,9 @@ void QtWengoPhone::initThreadSafe() {
 	_ui = new Ui::WengoPhoneWindow();
 	_ui->setupUi(_wengoPhoneWindow);
 
+
+    _chatWindow = NULL;
+
 	_qtLogin = new QtLogin(_wengoPhoneWindow, *this);
 
 	QGridLayout * callBarLayout = new QGridLayout(_ui->callBarFrame);
@@ -145,6 +148,10 @@ void QtWengoPhone::initThreadSafe() {
 
 	// Start conference button
 	connect(_ui->startConferenceButton,SIGNAL(clicked()),SLOT(showCreateConferenceCall()));
+
+	// Open chat window button
+	_ui->openChatWindowButton->setEnabled(false);
+	connect ( _ui->openChatWindowButton,SIGNAL(clicked()),SLOT(showChatWindow()));
 
 
 	//webcamButton
@@ -932,3 +939,27 @@ void QtWengoPhone::sysTrayDoubleClicked(const QPoint& ){
     else
         _wengoPhoneWindow->setVisible(true);
 }
+
+void QtWengoPhone::setChatWindow(QWidget * chatWindow){
+    if ( chatWindow == NULL){
+        _chatWindow = NULL;
+        _ui->openChatWindowButton->setEnabled(false);
+    }
+    else
+    {
+        _chatWindow = chatWindow;
+        _ui->openChatWindowButton->setEnabled(true);
+    }
+
+}
+
+void QtWengoPhone::showChatWindow(){
+ if ( _chatWindow )
+    _chatWindow->setVisible(true);
+}
+
+
+
+
+
+
