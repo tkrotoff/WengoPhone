@@ -57,6 +57,9 @@ bool WengoAccount::init() {
 	static const unsigned LOGIN_TIMEOUT = 10000;
 	static const unsigned LIMIT_RETRY = 5;
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.set(Config::PROFILE_LAST_USED_NAME_KEY, _wengoLogin);
+
 	if (!discoverForSSO()) {
 		LOG_DEBUG("error while discovering network for SSO");
 		networkDiscoveryStateChangedEvent(*this, NetworkDiscoveryStateHTTPError);
