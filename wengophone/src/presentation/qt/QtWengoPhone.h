@@ -22,11 +22,12 @@
 
 #include <presentation/PWengoPhone.h>
 #include <model/account/SipAccount.h>
+#include <imwrapper/EnumPresenceState.h>
 
 #include <qtutil/QObjectThreadSafe.h>
 
 #include <QMainWindow>
-
+#include <QVariant>
 #include <string>
 
 class PresenceHandler;
@@ -201,6 +202,8 @@ private Q_SLOTS:
 	void eraseHistory();
 
 	void phoneComboBoxClicked();
+
+	void setSystrayIcon(QVariant status);
 
 private:
 

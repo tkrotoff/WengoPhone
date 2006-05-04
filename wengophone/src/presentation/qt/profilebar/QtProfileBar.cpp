@@ -157,11 +157,10 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
     connect(this,SIGNAL(connectEventSignal(IMAccount *)),_nickNameWidget,SLOT(connected(IMAccount *)));
     connect(this,SIGNAL(disconnectedEventSignal(IMAccount *)),_nickNameWidget,SLOT(disconnected(IMAccount *)));
 
-    if ( !connect(this,SIGNAL(myPresenceStatusEventSignal(EnumPresenceState::MyPresenceStatus * )),
-            this,SLOT  (myPresenceStatusEventSlot(EnumPresenceState::MyPresenceStatus * ))) ){
+    if ( !connect(this,SIGNAL(myPresenceStatusEventSignal(QVariant  )),
+            this,SLOT  (myPresenceStatusEventSlot( QVariant ))) ){
         LOG_FATAL("Signal / slot connection error");
     }
-
 }
 
 // Called in the model thread
@@ -179,13 +178,13 @@ void QtProfileBar::disconnectedEventHandler (ConnectHandler & sender, IMAccount 
 void QtProfileBar::myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
 		                                        EnumPresenceState::MyPresenceStatus status){
     EnumPresenceState::MyPresenceStatus * pstatus = new EnumPresenceState::MyPresenceStatus;
-    *pstatus = status;
-    myPresenceStatusEventSignal(pstatus);
+    QVariant v(status);
+    myPresenceStatusEventSignal(v);
 }
 
-void QtProfileBar::myPresenceStatusEventSlot(EnumPresenceState::MyPresenceStatus * status){
+void QtProfileBar::myPresenceStatusEventSlot(QVariant status){
 
-    if ( *status == EnumPresenceState::MyPresenceStatusOk)
+    if ( status.toInt() == (int)EnumPresenceState::MyPresenceStatusOk)
 
     switch ( _userProfile.getPresenceState() ){
         case EnumPresenceState::PresenceStateAway:
@@ -202,10 +201,8 @@ void QtProfileBar::myPresenceStatusEventSlot(EnumPresenceState::MyPresenceStatus
             break;
         default:
             LOG_DEBUG("Change presence state display to -- Not yet handled\n");
-            qDebug() << "Status : " << _userProfile.getPresenceState();
             break;
     }
-    delete status;
 }
 
 void QtProfileBar::statusClicked(){

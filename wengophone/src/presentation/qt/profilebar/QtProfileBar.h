@@ -22,8 +22,6 @@
 
 #include <QtGui>
 
-// #include "QtClickableLabel.h"
-// #include "QtProfileLabel.h"
 #include "QtNickNameWidget.h"
 #include "QtEventWidget.h"
 #include "QtCreditWidget.h"
@@ -60,7 +58,7 @@ Q_SIGNALS:
 
     void disconnectedEventSignal(IMAccount * imAccount);
 
-    void myPresenceStatusEventSignal(EnumPresenceState::MyPresenceStatus * status);
+    void myPresenceStatusEventSignal(QVariant status);
 
 protected:
 
@@ -145,7 +143,7 @@ public Q_SLOTS:
 
 	void forwardClicked(bool checked);
 
-	void myPresenceStatusEventSlot(EnumPresenceState::MyPresenceStatus * status);
+	void myPresenceStatusEventSlot(QVariant status);
 
 private:
 

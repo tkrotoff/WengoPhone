@@ -32,6 +32,7 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 
+
 #include "QtWebcamButton.h"
 #include "QtIdle.h"
 #include "QtLanguage.h"
@@ -108,6 +109,8 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 void QtWengoPhone::initThreadSafe() {
 	_wengoPhoneWindow = new QMainWindow(NULL);
 
+	qRegisterMetaType<QVariant>("QVariant");
+
 	_ui = new Ui::WengoPhoneWindow();
 	_ui->setupUi(_wengoPhoneWindow);
 
@@ -169,6 +172,9 @@ void QtWengoPhone::initThreadSafe() {
 	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
 	setTrayMenu();
 	_trayIcon->show();
+
+    connect (_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )),
+             this,SLOT(setSystrayIcon(QVariant )));
 
 	//actionShowWengoAccount
 	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
@@ -857,3 +863,28 @@ QMenu * QtWengoPhone::createStatusMenu(){
 
     return menu;
 }
+
+void QtWengoPhone::setSystrayIcon(QVariant status){
+
+    if ( status.toInt() == (int)EnumPresenceState::MyPresenceStatusOk)
+
+    switch ( _cWengoPhone.getWengoPhone().getCurrentUserProfile().getPresenceState() ){
+        case EnumPresenceState::PresenceStateAway:
+            _trayIcon->setIcon(QPixmap(":/pics/status/away.png"));
+            break;
+        case EnumPresenceState::PresenceStateOnline:
+            _trayIcon->setIcon(QPixmap(":/pics/status/online.png"));
+            break;
+        case EnumPresenceState::PresenceStateInvisible:
+            _trayIcon->setIcon(QPixmap(":/pics/status/offline.png"));
+            break;
+        case EnumPresenceState::PresenceStateDoNotDisturb:
+            _trayIcon->setIcon(QPixmap(":/pics/status/donotdisturb.png"));
+            break;
+        default:
+            LOG_DEBUG("Change presence state display to -- Not yet handled\n");
+            break;
+    }
+
+}
+
