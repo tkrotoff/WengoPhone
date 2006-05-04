@@ -65,7 +65,8 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_wengoAccount = NULL;
 	_softUpdate = NULL;
 	_imAccountHandler = new IMAccountHandler();
-
+	_presenceState = EnumPresenceState::PresenceStateOffline;
+	
 	_history = new History(*this);
 	_history->mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
 	_history->mementoAddedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
@@ -271,11 +272,13 @@ void UserProfile::removeIMAccount(const IMAccount & imAccount) {
 }
 
 EnumPresenceState::PresenceState UserProfile::getPresenceState() const {
-	return EnumPresenceState::PresenceStateOnline;
+	//return EnumPresenceState::PresenceStateOnline;
+	return Profile::getPresenceState();
 }
 
 void UserProfile::setPresenceState(EnumPresenceState::PresenceState presenceState,
 	IMAccount * imAccount) {
+	Profile::setPresenceState(presenceState);
 	_presenceHandler.changeMyPresenceState(presenceState, "", imAccount);
 }
 
@@ -399,6 +402,7 @@ void UserProfile::setIcon(const Picture & icon, IMAccount * imAccount) {
 }
 
 void UserProfile::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
+	_presenceState = imAccount.getPresenceState();
 	_presenceHandler.changeMyPresenceState(imAccount.getPresenceState(), "", &imAccount);
 	_presenceHandler.changeMyAlias(_alias, NULL);
 	_presenceHandler.changeMyIcon(_icon, NULL);

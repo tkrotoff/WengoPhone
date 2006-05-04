@@ -126,6 +126,14 @@ public Q_SLOTS:
 
 	void creditClicked();
 
+    void setAway();
+
+    void setInvisible();
+
+    void setDND();
+
+    void setOnline();
+
 	// Status menu actions
 	void onlineClicked(bool checked);
 

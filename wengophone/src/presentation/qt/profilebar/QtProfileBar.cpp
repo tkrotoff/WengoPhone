@@ -156,6 +156,12 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 
     connect(this,SIGNAL(connectEventSignal(IMAccount *)),_nickNameWidget,SLOT(connected(IMAccount *)));
     connect(this,SIGNAL(disconnectedEventSignal(IMAccount *)),_nickNameWidget,SLOT(disconnected(IMAccount *)));
+
+    if ( !connect(this,SIGNAL(myPresenceStatusEventSignal(EnumPresenceState::MyPresenceStatus * )),
+            this,SLOT  (myPresenceStatusEventSlot(EnumPresenceState::MyPresenceStatus * ))) ){
+        LOG_FATAL("Signal / slot connection error");
+    }
+
 }
 
 // Called in the model thread
@@ -172,7 +178,6 @@ void QtProfileBar::disconnectedEventHandler (ConnectHandler & sender, IMAccount 
 
 void QtProfileBar::myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
 		                                        EnumPresenceState::MyPresenceStatus status){
-
     EnumPresenceState::MyPresenceStatus * pstatus = new EnumPresenceState::MyPresenceStatus;
     *pstatus = status;
     myPresenceStatusEventSignal(pstatus);
@@ -180,17 +185,24 @@ void QtProfileBar::myPresenceStatusEventHandler(PresenceHandler & sender, const 
 
 void QtProfileBar::myPresenceStatusEventSlot(EnumPresenceState::MyPresenceStatus * status){
 
-    switch ( *status){
+    if ( *status == EnumPresenceState::MyPresenceStatusOk)
+
+    switch ( _userProfile.getPresenceState() ){
         case EnumPresenceState::PresenceStateAway:
-            awayClicked(false);
+            setAway();
             break;
         case EnumPresenceState::PresenceStateOnline:
-            onlineClicked(false);
+            setOnline();
             break;
         case EnumPresenceState::PresenceStateInvisible:
-            invisibleClicked(false);
+            setInvisible();
+            break;
+        case EnumPresenceState::PresenceStateDoNotDisturb:
+            setDND();
             break;
         default:
+            LOG_DEBUG("Change presence state display to -- Not yet handled\n");
+            qDebug() << "Status : " << _userProfile.getPresenceState();
             break;
     }
     delete status;
@@ -346,24 +358,40 @@ void QtProfileBar::createStatusMenu(){
 
 void QtProfileBar::onlineClicked(bool){
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateOnline, NULL);
+
+}
+
+
+void QtProfileBar::setOnline(){
     setStatusLabel(":/pics/profilebar/bar_start_status_green.png",
                    ":/pics/profilebar/bar_on_start_status_green.png");
 }
 
 void QtProfileBar::dndClicked(bool){
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateDoNotDisturb, NULL);
+
+}
+
+void QtProfileBar::setDND(){
 	setStatusLabel(":/pics/profilebar/bar_start_status_red.png",
 	               ":/pics/profilebar/bar_on_start_status_red.png");
 }
 
 void QtProfileBar::invisibleClicked(bool){
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateInvisible, NULL);
+}
+
+void QtProfileBar::setInvisible(){
 	setStatusLabel(":/pics/profilebar/bar_start_status_gray.png",
 	               ":/pics/profilebar/bar_on_start_status_gray.png");
 }
 
 void QtProfileBar::awayClicked(bool){
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway, NULL);
+
+}
+
+void QtProfileBar::setAway(){
 	setStatusLabel(":/pics/profilebar/bar_start_status_orange.png",
 	               ":/pics/profilebar/bar_on_start_status_orange.png");
 }
@@ -405,9 +433,8 @@ void QtProfileBar::setOpen(bool status){
         _nicknameLabel->setBackgroundColor(background);
         _eventsLabel->setBackgroundColor(background);
         _creditLabel->setBackgroundColor(background);
-        //setAutoFillBackground(true);
         setPalette(p);
-        // update();
+
     }
     else{
         QPalette p = (dynamic_cast<QWidget *>( parent()))->palette();
@@ -417,8 +444,6 @@ void QtProfileBar::setOpen(bool status){
         _nicknameLabel->setBackgroundColor(background);
         _eventsLabel->setBackgroundColor(background);
         _creditLabel->setBackgroundColor(background);
-        // setAutoFillBackground(false);
-        // update();
     }
 }
 
