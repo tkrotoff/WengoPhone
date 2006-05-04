@@ -2991,7 +2991,9 @@ phPoll()
 
   if (!phcfg.asyncmode)
     {
-      ph_event_get();
+      if (ph_event_get() == -2)
+		  return -2;
+
       ph_keep_refreshing();
     }
   return 0;
@@ -4191,7 +4193,8 @@ ph_event_get()
   /* use events to print some info */
   eXosip_event_t *je;
 
-  //  phReleaseTerminatedCalls();
+  
+  //phReleaseTerminatedCalls();
   for (;;)
     {
       je = eXosip_event_wait(0,timeout);
@@ -4296,6 +4299,8 @@ ph_event_get()
 		ph_notify_handler(je);
 		break;
 
+	case EXOSIP_ENGINE_STOPPED:
+		return -2;
 
 	default:
       if (phDebugLevel > 0)
@@ -4338,26 +4343,29 @@ ph_keep_refreshing()
 void *
 ph_api_thread(void *arg)
 {
-  time_t t1,t2;
-  t1 = 0;
-
-
-  phIsInitialized = 1;
+	time_t t1,t2;
+	t1 = 0;
+	phIsInitialized = 1;
     
-  time(&t1);
-  while(1) 
+	time(&t1);
+	while(1) 
     {
 #ifdef WIN32
-      Sleep(100);
+		Sleep(100);
 #endif		
-
-      if (!phIsInitialized)
-	return 0;
+		if (!phIsInitialized)
+			return 0;
       
-      ph_keep_refreshing();
-      ph_event_get();
-    }
-  return 0;
+		ph_keep_refreshing();
+
+		if (ph_event_get() == -2)
+		{
+			phIsInitialized = 0;
+			break;
+		}
+	}
+	
+	return 0;
 }
 
 #ifdef QOS_DEBUG_ENABLE
