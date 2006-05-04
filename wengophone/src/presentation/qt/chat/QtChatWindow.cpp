@@ -330,12 +330,23 @@ void ChatWindow::contactAddedThreadSafe(IMChatSession * session, const IMContact
 }
 
 void ChatWindow::addChatSession(IMChatSession * imChatSession){
+
+	// If this chat session already exists, display the right tab
+	int tabs = _tabWidget->count();
+	for (int i = 0; i < tabs; i++) {
+		ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
+		if (widget->getSessionId() == imChatSession->getId()) {
+			_tabWidget->setCurrentIndex(i);
+			return;
+		}
+	}
+
 	imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1);
 
 	imChatSession->typingStateChangedEvent +=
 		boost::bind(&ChatWindow::typingStateChangedEventHandler, this, _1, _2, _3);
-
+	
 	if ( imChatSession->getIMContactSet().size() != 0 ) {
 		IMContact from = *imChatSession->getIMContactSet().begin();
 		addChat(imChatSession,from);

@@ -208,6 +208,10 @@ void ChatWidget::enterPressed(){
 
 	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
 
+	// Drop empty message
+	if (_chatEdit->toPlainText().isEmpty())
+		return;
+
     QTextCursor curs(_chatHistory->document());
     curs.movePosition(QTextCursor::End);
 
