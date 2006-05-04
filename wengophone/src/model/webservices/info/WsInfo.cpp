@@ -32,16 +32,16 @@ const char * getValueFromKey(TiXmlElement * element, const std::string key);
 
 const std::string WsInfo::WENGOSCOUNT_TAG = "contract.counter.wengos";
 const std::string WsInfo::SMSCOUNT_TAG = "contract.counter.sms";
-const std::string WsInfo::ACTIVEMAIL_TAG = "ucf.email.isactif";
+const std::string WsInfo::ACTIVEMAIL_TAG = "ucf.email.isactive";
 const std::string WsInfo::UNREADVOICEMAILCOUNT_TAG = "tph.mbox.unseencount";
+const std::string WsInfo::ACTIVEVOICEMAIL_TAG = "tph.mbox.isactive";
 const std::string WsInfo::CALLFORWARD_TAG = "tph.callforward";
 const std::string WsInfo::PSTNNUMBER_TAG = "contract.option.pstnnum";
-const std::string WsInfo::CALLFORWARD_TOVOICEMAIL_ENABLE_TAG = "tph.callforward.cfb.enabled";
-const std::string WsInfo::CALLFORWARD_TOVOICEMAIL_DEST_TAG = "tph.callforward.cfb.destination";
-const std::string WsInfo::CALLFORWARD_TOPSTN_ENABLE_TAG = "tph.callforward.cffl.enabled";
-const std::string WsInfo::CALLFORWARD_TOPSTN_DEST1_TAG = "tph.callforward.cffl.destination1";
-const std::string WsInfo::CALLFORWARD_TOPSTN_DEST2_TAG = "tph.callforward.cffl.destination2";
-const std::string WsInfo::CALLFORWARD_TOPSTN_DEST3_TAG = "tph.callforward.cffl.destination3";
+
+const std::string WsInfo::CALLFORWARD_MODE_TAG = "tph.callforward.mode";
+const std::string WsInfo::CALLFORWARD_TOPSTN_DEST1_TAG = "tph.callforward.destination1";
+const std::string WsInfo::CALLFORWARD_TOPSTN_DEST2_TAG = "tph.callforward.destination2";
+const std::string WsInfo::CALLFORWARD_TOPSTN_DEST3_TAG = "tph.callforward.destination3";
 
 WsInfo::WsInfo(WengoAccount * wengoAccount) : WengoWebService(wengoAccount) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -60,6 +60,8 @@ WsInfo::WsInfo(WengoAccount * wengoAccount) : WengoWebService(wengoAccount) {
 	setServicePath(config.getWengoInfoPath());
 	setPort(80);
 	setWengoAuthentication(true);
+
+	getCallForwardInfo(true);
 }
 
 void WsInfo::getWengosCount(bool wengosCount) {
@@ -101,12 +103,14 @@ int WsInfo::execute() {
 	}
 	if(_unreadVoiceMail) {
 		query += UNREADVOICEMAILCOUNT_TAG + "|";
+		query += ACTIVEVOICEMAIL_TAG + "|";
 	}
 	if(_pstnNumber) {
 		query += PSTNNUMBER_TAG + "|";
 	}
 	if(_callForward) {
 		query += CALLFORWARD_TAG + "|";
+		query += ACTIVEVOICEMAIL_TAG + "|";
 	}
 
 	//remove the last pipe if any
@@ -122,11 +126,14 @@ int WsInfo::execute() {
 void WsInfo::answerReceived(const std::string & answer, int id) {
 
 	const char * value = NULL;
+	std::string forwardMode = "";
 	std::string voiceMailNumber = "";
 	std::string dest1 = "";
 	std::string dest2 = "";
 	std::string dest3 = "";
 	bool forward2VoiceMail = false;
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	TiXmlDocument document;
 	document.Parse(answer.c_str());
@@ -182,35 +189,23 @@ void WsInfo::answerReceived(const std::string & answer, int id) {
 						wsInfoVoiceMailEvent(*this, id, WsInfoStatusOk, voiceMail);
 					}
 
-				// call forward
-				} else if( key == CALLFORWARD_TOVOICEMAIL_ENABLE_TAG ) {
-					int enabled = 0;
-					value = getValueFromKey(element, CALLFORWARD_TOVOICEMAIL_ENABLE_TAG);
+				// active voice mail
+				} else if( key == ACTIVEVOICEMAIL_TAG ) {
+					bool activeVoiceMail = false;
+					value = getValueFromKey(element, UNREADVOICEMAILCOUNT_TAG);
 					if( value ) {
-						std::stringstream ss( value );
-						ss >> enabled;
-						if( enabled == 1 ) {
-							forward2VoiceMail = true;
+						if( std::string(value) == "true" ) {
+							activeVoiceMail = true;
 						}
+						config.set(Config::ACTIVE_VOICE_MAIL_KEY, activeVoiceMail);
 					}
+					wsInfoActiveVoiceMailEvent(*this, id, WsInfoStatusOk, activeVoiceMail);
 
 				// call forward
-				} else if( key == CALLFORWARD_TOVOICEMAIL_DEST_TAG ) {
-					value = getValueFromKey(element, CALLFORWARD_TOVOICEMAIL_DEST_TAG);
+				} else if( key == CALLFORWARD_MODE_TAG ) {
+					value = getValueFromKey(element, CALLFORWARD_MODE_TAG);
 					if( value ) {
-						voiceMailNumber = std::string(value);
-					}
-
-				// call forward
-				} else if( key == CALLFORWARD_TOPSTN_ENABLE_TAG ) {
-					int enabled = 0;
-					value = getValueFromKey(element, CALLFORWARD_TOPSTN_ENABLE_TAG);
-					if( value ) {
-						std::stringstream ss(value);
-						ss >> enabled;
-						if( enabled == 1 ) {
-							forward2VoiceMail = false;
-						}
+						forwardMode = std::string(value);
 					}
 
 				// call forward
@@ -249,11 +244,41 @@ void WsInfo::answerReceived(const std::string & answer, int id) {
 
 	//emit call forward event
 	if( _callForward ) {
-		if( forward2VoiceMail ) {
-			wsCallForwardInfoEvent(*this, id, WsInfoStatusOk, forward2VoiceMail, voiceMailNumber, "", "");
-		} else {
-			wsCallForwardInfoEvent(*this, id, WsInfoStatusOk, forward2VoiceMail, dest1, dest2, dest3);
+
+		//remove XXX coming from the ws
+		if( dest1 == "XXX" ) {
+			dest1 = "";
 		}
+		if( dest2 == "XXX" ) {
+			dest2 = "";
+		}
+		if( dest3 == "XXX" ) {
+			dest3 = "";
+		}
+
+		if( forwardMode == "enable" ) {
+
+			if( (dest1 == "voicemail") ) {
+				config.set(Config::CALL_FORWARD_MODE_KEY, std::string("voicemail"));
+				wsCallForwardInfoEvent(*this, id, WsInfoStatusOk, WsInfoCallForwardModeVoicemail, forward2VoiceMail, dest1, dest2, dest3);
+			} else {
+				config.set(Config::CALL_FORWARD_MODE_KEY, std::string("number"));
+				wsCallForwardInfoEvent(*this, id, WsInfoStatusOk, WsInfoCallForwardModeNumber, forward2VoiceMail, dest1, dest2, dest3);
+			}
+
+		} else if( forwardMode == "disable" ) {
+			config.set(Config::CALL_FORWARD_MODE_KEY, forwardMode);
+			wsCallForwardInfoEvent(*this, id, WsInfoStatusOk, WsInfoCallForwardMode_Disabled, forward2VoiceMail, dest1, dest2, dest3);
+		} else if( forwardMode == "unauthorized" ) {
+			config.set(Config::CALL_FORWARD_MODE_KEY, forwardMode);
+			wsCallForwardInfoEvent(*this, id, WsInfoStatusOk, WsInfoCallForwardMode_Unauthorized, forward2VoiceMail, dest1, dest2, dest3);
+		}
+
+		//write info to the Config
+		config.set(Config::CALL_FORWARD_TOMOBILE_KEY, false);
+		config.set(Config::CALL_FORWARD_PHONENUMBER1_KEY, dest1);
+		config.set(Config::CALL_FORWARD_PHONENUMBER2_KEY, dest2);
+		config.set(Config::CALL_FORWARD_PHONENUMBER3_KEY, dest3);
 	}
 }
 

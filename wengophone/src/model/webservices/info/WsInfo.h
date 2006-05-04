@@ -39,6 +39,20 @@ public:
 		WsInfoStatusOk
 	};
 
+	enum WsInfoCallForwardMode {
+		/** callforward is enabled & forward to voicemail. */
+		WsInfoCallForwardModeVoicemail,
+
+		/** callforward is enabled & forward to given PSTN numbers. */
+		WsInfoCallForwardModeNumber,
+
+		/** callforward is disabled. */
+		WsInfoCallForwardMode_Disabled,
+
+		/** callforward is unauthorized. */
+		WsInfoCallForwardMode_Unauthorized,
+	};
+
 	/**
 	 * default constructor
 	 *
@@ -108,7 +122,16 @@ public:
 	 * @param dest3	third forward number (meaningfull only if voicemail is true)
 	 */
 	Event<void (WsInfo & sender, int id, WsInfoStatus status,
-		bool voicemail, std::string dest1, std::string dest2, std::string dest3)> wsCallForwardInfoEvent;
+		WsInfoCallForwardMode mode, bool voicemail, std::string dest1, std::string dest2, std::string dest3)> wsCallForwardInfoEvent;
+
+	/**
+	 * An anwser active voice mail has been received.
+	 *
+	 * @param sender this class
+	 * @param status the request status (ok or error)
+	 * @param voicemail true if a voice mail is active
+	 */
+	Event<void (WsInfo & sender, int id, WsInfoStatus status, bool voicemail)> wsInfoActiveVoiceMailEvent;
 
 	/**
 	 * Set/unset wengo's request
@@ -192,15 +215,13 @@ private:
 
 	static const std::string UNREADVOICEMAILCOUNT_TAG;
 
+	static const std::string ACTIVEVOICEMAIL_TAG;
+
 	static const std::string PSTNNUMBER_TAG;
 
 	static const std::string CALLFORWARD_TAG;
 
-	static const std::string CALLFORWARD_TOVOICEMAIL_ENABLE_TAG;
-
-	static const std::string CALLFORWARD_TOVOICEMAIL_DEST_TAG;
-
-	static const std::string CALLFORWARD_TOPSTN_ENABLE_TAG;
+	static const std::string CALLFORWARD_MODE_TAG;
 
 	static const std::string CALLFORWARD_TOPSTN_DEST1_TAG;
 
