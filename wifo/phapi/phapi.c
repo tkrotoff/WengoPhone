@@ -2235,7 +2235,8 @@ ph_refresh_vlines()
       last_vline_refresh = time(0);
     }
 
-  if (!phcfg.use_tunnel && phcfg.nat_refresh_time > 0)
+  //if (!phcfg.use_tunnel && phcfg.nat_refresh_time > 0)
+  if (phcfg.nat_refresh_time > 0)
     {
       int i;
       struct vline *vl;
@@ -2630,7 +2631,10 @@ ph_nat_init()
 	
 	ntstr = phcfg.nattype;
     }
-
+  else if (phcfg.use_tunnel)
+  {
+	ntstr = "open";
+  }
 
   if (ntstr)
     {
