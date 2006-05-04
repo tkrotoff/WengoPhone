@@ -282,6 +282,10 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 
 	if (sessionIt != contactChatMap.end()) {
 		imChatSession = (*sessionIt).second;
+	}
+	// Drop typingstate packet if there is no chat session created
+	else if (info->ctype && strcmp(info->ctype, "typingstate") == 0) {
+		return;
 	} else {
 		LOG_DEBUG("creating new IMChatSession");
 		imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
