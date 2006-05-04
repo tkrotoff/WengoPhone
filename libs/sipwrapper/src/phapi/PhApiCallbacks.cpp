@@ -271,15 +271,24 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	string from = String(info->from).split(" ")[0];
 	std::map<const std::string, IMChatSession *>::const_iterator sessionIt = contactChatMap.find(from);
 
+	// Getting buddy icon
+	if (info->event == phMsgNew && strcmp(info->ctype, "buddyicon") == 0)
+	{
+		if (info->subtype && *info->subtype)
+			p->contactIconChangedEvent(*p, from, info->subtype);
+		
+		return;
+	}
+
 	if (sessionIt != contactChatMap.end()) {
 		imChatSession = (*sessionIt).second;
 	} else {
 		LOG_DEBUG("creating new IMChatSession");
 		imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
 		contactChatMap[from] = imChatSession;
-		p->addContact(*imChatSession, info->from);
+		p->addContact(*imChatSession, from);
 		p->newIMChatSessionCreatedEvent(*p, *imChatSession);
-		p->sendMyIcon(*imChatSession, p->getMyIconFilename());
+		//p->sendMyIcon(*imChatSession, p->getMyIconFilename());
 	}
 
 	switch(info->event) {
@@ -299,11 +308,6 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 				state = IMChat::TypingStateNotTyping;
 
 			p->typingStateChangedEvent(*p, *imChatSession, from, state);
-		}
-		else if (strcmp(info->ctype, "buddyicon") == 0)
-		{
-			if (info->subtype && *info->subtype)
-				p->contactIconChangedEvent(*p, from, info->subtype);
 		}
 		else
 		{

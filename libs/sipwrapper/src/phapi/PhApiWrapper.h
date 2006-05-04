@@ -202,9 +202,8 @@ public:
 
 	void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
 
-	const std::string getMyIconFilename();
-	void changeMyIcon(const std::string & iconFilename);
-	void sendMyIcon(IMChatSession & chatSession, const std::string & iconFilename);
+	// Look at changeMyIcon in IMPresence
+	void sendMyIcon(const std::string & contactId, const std::string & iconFilename);
 
 	void subscribeToPresenceOf(const std::string & contactId);
 
@@ -328,9 +327,6 @@ private:
 	unsigned _sipLocalPort;
 
 	std::string _pluginPath;
-
-	/** Current icon filename. */
-	std::string _iconFilename;
 
 	Mutex _mutex;
 };

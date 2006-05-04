@@ -51,11 +51,17 @@ void PhApiIMPresence::changeMyAlias(const std::string & nickname) {
 }
 
 void PhApiIMPresence::changeMyIcon(const Picture & picture) {
-	_phApiWrapper.changeMyIcon(picture.getFilename().c_str());
+	_iconFilename = picture.getFilename();
+
+	std::list<std::string>::iterator it;
+
+	for (it = _contactList.begin(); it != _contactList.end(); it++)
+		_phApiWrapper.sendMyIcon(*it, _iconFilename);
 }
 
 void PhApiIMPresence::subscribeToPresenceOf(const std::string & contactId) {
 	_phApiWrapper.subscribeToPresenceOf(contactId);
+	_contactList.push_back(contactId);
 }
 
 void PhApiIMPresence::blockContact(const std::string & contactId) {
@@ -72,6 +78,7 @@ void PhApiIMPresence::authorizeContact(const std::string & contactId, bool auhor
 
 void PhApiIMPresence::presenceStateChangedEventHandler(PhApiWrapper & sender, EnumPresenceState::PresenceState state, const std::string & note, const std::string & from) {
 	presenceStateChangedEvent(*this, state, note, from);
+	_phApiWrapper.sendMyIcon(from, _iconFilename);
 }
 
 void PhApiIMPresence::myPresenceStatusEventHandler(PhApiWrapper & sender, EnumPresenceState::MyPresenceStatus status, const std::string & note) {

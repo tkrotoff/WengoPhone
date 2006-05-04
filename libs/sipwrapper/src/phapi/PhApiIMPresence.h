@@ -23,6 +23,7 @@
 #include "PhApiFactory.h"
 
 #include <imwrapper/IMPresence.h>
+#include <list>
 
 class IMAccount;
 
@@ -63,6 +64,11 @@ private:
 	void contactIconChangedEventHandler(PhApiWrapper & sender, const std::string & contactId, const std::string & filename);
 
 	const std::string getRessourcePath();
+
+	std::list<std::string> _contactList;
+
+	/** Current icon filename. */
+	std::string _iconFilename;
 
 	PhApiWrapper & _phApiWrapper;
 };

@@ -547,7 +547,6 @@ void PhApiWrapper::createSession(IMChat & imChat, IMContactSet & imContactSet) {
 		} else {
 			imChatSession = new IMChatSession(imChat);
 			addContact(*imChatSession, (*imContactSet.begin()).getContactId());
-			sendMyIcon(*imChatSession, _iconFilename);
 		}
 	}
 
@@ -610,40 +609,16 @@ void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, cons
 	}
 }
 
-const std::string PhApiWrapper::getMyIconFilename()
-{
-	return _iconFilename;
-}
-
-void PhApiWrapper::changeMyIcon(const std::string &iconFilename)
-{
-	std::map<const std::string, IMChatSession *> & contactChatMap = getContactChatMap();
-	std::map<const std::string, IMChatSession *>::const_iterator sessionIt;
-	IMChatSession *imChatSession;
-
-	_iconFilename = iconFilename;
-	
-	for (sessionIt = contactChatMap.begin(); sessionIt != contactChatMap.end(); sessionIt++)
-	{
-		imChatSession = (*sessionIt).second;
-		sendMyIcon(*imChatSession, iconFilename);
-	}
-}
-
-void PhApiWrapper::sendMyIcon(IMChatSession & chatSession, const std::string & iconFilename)
+void PhApiWrapper::sendMyIcon(const std::string & contactId, const std::string & iconFilename)
 {
 	if (iconFilename.length() == 0)
 		return;
 
 	const std::string mime = "buddyicon/" + iconFilename;
 	const char *message("has changed his icon");
-	const IMContactSet & buddies = chatSession.getIMContactSet();
-	IMContactSet::const_iterator it;	
 
-	for (it = buddies.begin(); it != buddies.end(); it++) {
-		std::string sipAddress = "sip:" + (*it).getContactId() + "@" + _wengoRealm;
-		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message, mime.c_str());
-	}
+	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
+	int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message, mime.c_str());
 }
 
 void PhApiWrapper::publishOnline(const std::string & note) {
