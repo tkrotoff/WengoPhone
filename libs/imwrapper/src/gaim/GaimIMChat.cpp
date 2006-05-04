@@ -64,6 +64,7 @@ void GaimIMChat::createSession(IMContactSet & imContactSet)
 											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
 	GaimConversation *gConv = NULL;
+	mConvInfo_t *mConv = NULL;
 	IMContactSet::const_iterator it;
 
 	if (!gAccount)
@@ -77,6 +78,13 @@ void GaimIMChat::createSession(IMContactSet & imContactSet)
 	{
 		it = imContactSet.begin();
 		std::string contactId = (*it).getContactId();
+
+		if ((gConv = gaim_find_conversation_with_account(GAIM_CONV_TYPE_IM, 
+			contactId.c_str(), gAccount)))
+		{
+			mConv = (mConvInfo_t *)gConv->ui_data;
+			newIMChatSessionCreatedEvent(*this, *((IMChatSession *)(mConv->conv_session)));
+		}
 
 		gConv = gaim_conversation_new(GAIM_CONV_TYPE_IM, gAccount, contactId.c_str());
 	}
