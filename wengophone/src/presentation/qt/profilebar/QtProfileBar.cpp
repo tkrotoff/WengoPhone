@@ -408,6 +408,7 @@ void QtProfileBar::wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsIn
 	wsInfo.wsInfoVoiceMailEvent+= boost::bind(&QtProfileBar::wsInfoVoiceMailEventHandler, this, _1, _2, _3, _4);
 	wsInfo.getWengosCount(true);
 	wsInfo.getUnreadVoiceMail(true);
+	wsInfo.getCallForwardInfo(true);
 	wsInfo.execute();
 }
 
