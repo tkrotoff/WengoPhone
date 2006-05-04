@@ -75,7 +75,7 @@ std::string QtLanguage::getISO639CodeFromFileName(const QString & fileName) {
 }
 
 QString QtLanguage::getFileNameFromISO639Code(const std::string & iso639Code) {
-	return "wengophone_" + QString::fromStdString(iso639Code) + "." + LANGUAGE_FILE_EXTENSION;
+	return "qtwengophone_" + QString::fromStdString(iso639Code) + "." + LANGUAGE_FILE_EXTENSION;
 }
 
 QStringList QtLanguage::getAvailableLanguages() {
