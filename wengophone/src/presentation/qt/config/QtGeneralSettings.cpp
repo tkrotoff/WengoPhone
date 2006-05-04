@@ -27,7 +27,7 @@
 #include <QtGui>
 
 QtGeneralSettings::QtGeneralSettings(QWidget * parent)
-	: QObject(parent) {
+	: QtISettings(parent) {
 
 	_generalSettingsWidget = new QWidget(parent);
 
@@ -39,6 +39,10 @@ QtGeneralSettings::QtGeneralSettings(QWidget * parent)
 
 QtGeneralSettings::~QtGeneralSettings() {
 	delete _ui;
+}
+
+QString QtGeneralSettings::getName() const {
+	return tr("General");
 }
 
 void QtGeneralSettings::readConfig() {

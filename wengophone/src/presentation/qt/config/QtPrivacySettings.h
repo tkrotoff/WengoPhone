@@ -20,11 +20,10 @@
 #ifndef QTPRIVACYSETTINGS_H
 #define QTPRIVACYSETTINGS_H
 
-#include <util/NonCopyable.h>
-
-#include <QObject>
+#include "QtISettings.h"
 
 class QWidget;
+class QString;
 namespace Ui { class PrivacySettings; }
 
 /**
@@ -32,17 +31,19 @@ namespace Ui { class PrivacySettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtPrivacySettings : public QObject, NonCopyable {
+class QtPrivacySettings : public QtISettings {
 	Q_OBJECT
 public:
 
 	QtPrivacySettings(QWidget * parent);
 
-	~QtPrivacySettings();
+	virtual ~QtPrivacySettings();
 
 	QWidget * getWidget() const {
 		return _privacySettingsWidget;
 	}
+
+	QString getName() const;
 
 	void saveConfig();
 

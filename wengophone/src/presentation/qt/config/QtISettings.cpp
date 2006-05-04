@@ -17,43 +17,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTAUDIOSETTINGS_H
-#define QTAUDIOSETTINGS_H
-
 #include "QtISettings.h"
 
-class QWidget;
-class QString;
-namespace Ui { class AudioSettings; }
+#include <QtGui>
 
-/**
- * Audio configuration panel.
- *
- * @author Tanguy Krotoff
- */
-class QtAudioSettings : public QtISettings {
-	Q_OBJECT
-public:
+QtISettings::QtISettings(QWidget * parent)
+	: QObject(parent) {
+}
 
-	QtAudioSettings(QWidget * parent);
+QtISettings::~QtISettings() {
+}
 
-	virtual ~QtAudioSettings();
-
-	QWidget * getWidget() const {
-		return _audioSettingsWidget;
-	}
-
-	QString getName() const;
-
-	void saveConfig();
-
-private:
-
-	void readConfig();
-
-	Ui::AudioSettings * _ui;
-
-	QWidget * _audioSettingsWidget;
-};
-
-#endif	//QTAUDIOSETTINGS_H

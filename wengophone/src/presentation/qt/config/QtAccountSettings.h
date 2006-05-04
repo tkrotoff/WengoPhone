@@ -20,12 +20,11 @@
 #ifndef QTACCOUNTSETTINGS_H
 #define QTACCOUNTSETTINGS_H
 
-#include <util/NonCopyable.h>
-
-#include <QObject>
+#include "QtISettings.h"
 
 class CWengoPhone;
 
+class QString;
 class QWidget;
 namespace Ui { class AccountSettings; }
 
@@ -34,19 +33,25 @@ namespace Ui { class AccountSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtAccountSettings : public QObject, NonCopyable {
+class QtAccountSettings : public QtISettings {
 	Q_OBJECT
 public:
 
 	QtAccountSettings(CWengoPhone & cWengoPhone, QWidget * parent);
 
-	~QtAccountSettings();
+	virtual ~QtAccountSettings();
 
 	QWidget * getWidget() const {
 		return _accountSettingsWidget;
 	}
 
+	QString getName() const;
+
+	void saveConfig() { }
+
 private:
+
+	void readConfig() { }
 
 	Ui::AccountSettings * _ui;
 

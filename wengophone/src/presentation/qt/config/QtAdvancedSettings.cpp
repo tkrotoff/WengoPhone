@@ -24,7 +24,7 @@
 #include <QtGui>
 
 QtAdvancedSettings::QtAdvancedSettings(QWidget * parent)
-	: QObject(parent) {
+	: QtISettings(parent) {
 
 	_advancedSettingsWidget = new QWidget(parent);
 
@@ -36,6 +36,10 @@ QtAdvancedSettings::QtAdvancedSettings(QWidget * parent)
 
 QtAdvancedSettings::~QtAdvancedSettings() {
 	delete _ui;
+}
+
+QString QtAdvancedSettings::getName() const {
+	return tr("Advanced");
 }
 
 void QtAdvancedSettings::readConfig() {

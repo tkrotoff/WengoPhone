@@ -27,7 +27,7 @@
 #include <QtGui>
 
 QtNotificationSettings::QtNotificationSettings(QWidget * parent)
-	: QObject(parent) {
+	: QtISettings(parent) {
 
 	_notificationSettingsWidget = new QWidget(parent);
 
@@ -39,6 +39,10 @@ QtNotificationSettings::QtNotificationSettings(QWidget * parent)
 
 QtNotificationSettings::~QtNotificationSettings() {
 	delete _ui;
+}
+
+QString QtNotificationSettings::getName() const {
+	return tr("Notifications & Sounds");
 }
 
 void QtNotificationSettings::readConfig() {

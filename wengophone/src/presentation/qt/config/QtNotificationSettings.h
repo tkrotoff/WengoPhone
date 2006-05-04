@@ -20,11 +20,10 @@
 #ifndef QTNOTIFICATIONSETTINGS_H
 #define QTNOTIFICATIONSETTINGS_H
 
-#include <util/NonCopyable.h>
-
-#include <QObject>
+#include "QtISettings.h"
 
 class QWidget;
+class QString;
 namespace Ui { class NotificationSettings; }
 
 /**
@@ -32,17 +31,19 @@ namespace Ui { class NotificationSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtNotificationSettings : public QObject, NonCopyable {
+class QtNotificationSettings : public QtISettings {
 	Q_OBJECT
 public:
 
 	QtNotificationSettings(QWidget * parent);
 
-	~QtNotificationSettings();
+	virtual ~QtNotificationSettings();
 
 	QWidget * getWidget() const {
 		return _notificationSettingsWidget;
 	}
+
+	QString getName() const;
 
 	void saveConfig();
 

@@ -31,7 +31,7 @@
 #include <QtGui>
 
 QtAudioSettings::QtAudioSettings(QWidget * parent)
-	: QObject(parent) {
+	: QtISettings(parent) {
 
 	_audioSettingsWidget = new QWidget(parent);
 
@@ -43,6 +43,10 @@ QtAudioSettings::QtAudioSettings(QWidget * parent)
 
 QtAudioSettings::~QtAudioSettings() {
 	delete _ui;
+}
+
+QString QtAudioSettings::getName() const {
+	return tr("Audio");
 }
 
 void QtAudioSettings::saveConfig() {

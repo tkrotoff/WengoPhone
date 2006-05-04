@@ -27,7 +27,7 @@
 #include <QtGui>
 
 QtPrivacySettings::QtPrivacySettings(QWidget * parent)
-	: QObject(parent) {
+	: QtISettings(parent) {
 
 	_privacySettingsWidget = new QWidget(parent);
 
@@ -39,6 +39,10 @@ QtPrivacySettings::QtPrivacySettings(QWidget * parent)
 
 QtPrivacySettings::~QtPrivacySettings() {
 	delete _ui;
+}
+
+QString QtPrivacySettings::getName() const {
+	return tr("Privacy");
 }
 
 void QtPrivacySettings::readConfig() {

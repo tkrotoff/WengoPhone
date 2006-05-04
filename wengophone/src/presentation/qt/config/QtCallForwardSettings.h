@@ -20,9 +20,10 @@
 #ifndef QTCALLFORWARDSETTINGS_H
 #define QTCALLFORWARDSETTINGS_H
 
-#include <QObject>
+#include "QtISettings.h"
 
 class QWidget;
+class QString;
 namespace Ui { class CallForwardSettings; }
 
 /**
@@ -30,17 +31,19 @@ namespace Ui { class CallForwardSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtCallForwardSettings : public QObject {
+class QtCallForwardSettings : public QtISettings {
 	Q_OBJECT
 public:
 
 	QtCallForwardSettings(QWidget * parent);
 
-	~QtCallForwardSettings();
+	virtual ~QtCallForwardSettings();
 
 	QWidget * getWidget() const {
 		return _callForwardSettingsWidget;
 	}
+
+	QString getName() const;
 
 	void saveConfig();
 

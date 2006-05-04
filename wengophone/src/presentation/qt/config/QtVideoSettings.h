@@ -20,16 +20,16 @@
 #ifndef QTVIDEOSETTINGS_H
 #define QTVIDEOSETTINGS_H
 
-#include <util/NonCopyable.h>
+#include "QtISettings.h"
 
 #include <pixertool/pixertool.h>
 
-#include <QObject>
 #include <QPixmap>
 
 class IWebcamDriver;
 
 class QWidget;
+class QString;
 namespace Ui { class VideoSettings; }
 
 /**
@@ -37,23 +37,21 @@ namespace Ui { class VideoSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtVideoSettings : public QObject, NonCopyable {
+class QtVideoSettings : public QtISettings {
 	Q_OBJECT
 public:
 
 	QtVideoSettings(QWidget * parent);
 
-	~QtVideoSettings();
+	virtual ~QtVideoSettings();
 
 	QWidget * getWidget() const {
 		return _videoSettingsWidget;
 	}
 
+	QString getName() const;
+
 	void saveConfig();
-
-public Q_SLOTS:
-
-	void hide();
 
 private Q_SLOTS:
 

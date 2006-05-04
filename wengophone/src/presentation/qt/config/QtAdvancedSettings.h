@@ -20,10 +20,9 @@
 #ifndef QTADVANCEDSETTINGS_H
 #define QTADVANCEDSETTINGS_H
 
-#include <util/NonCopyable.h>
+#include "QtISettings.h"
 
-#include <QObject>
-
+class QString;
 class QWidget;
 namespace Ui { class AdvancedSettings; }
 
@@ -32,17 +31,19 @@ namespace Ui { class AdvancedSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtAdvancedSettings : public QObject, NonCopyable {
+class QtAdvancedSettings : public QtISettings {
 	Q_OBJECT
 public:
 
 	QtAdvancedSettings(QWidget * parent);
 
-	~QtAdvancedSettings();
+	virtual ~QtAdvancedSettings();
 
 	QWidget * getWidget() const {
 		return _advancedSettingsWidget;
 	}
+
+	QString getName() const;
 
 	void saveConfig();
 

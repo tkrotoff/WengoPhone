@@ -30,7 +30,7 @@
 #include <QtGui>
 
 QtLanguagesSettings::QtLanguagesSettings(QWidget * parent)
-	: QObject(parent) {
+	: QtISettings(parent) {
 
 	_languagesSettingsWidget = new QWidget(parent);
 
@@ -44,6 +44,10 @@ QtLanguagesSettings::QtLanguagesSettings(QWidget * parent)
 
 QtLanguagesSettings::~QtLanguagesSettings() {
 	delete _ui;
+}
+
+QString QtLanguagesSettings::getName() const {
+	return tr("Language");
 }
 
 void QtLanguagesSettings::saveConfig() {

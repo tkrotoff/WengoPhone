@@ -30,7 +30,7 @@
 #include <QtGui>
 
 QtAccountSettings::QtAccountSettings(CWengoPhone & cWengoPhone, QWidget * parent)
-	: QObject(parent) {
+	: QtISettings(parent) {
 
 	_accountSettingsWidget = new QWidget(parent);
 
@@ -45,4 +45,8 @@ QtAccountSettings::QtAccountSettings(CWengoPhone & cWengoPhone, QWidget * parent
 
 QtAccountSettings::~QtAccountSettings() {
 	delete _ui;
+}
+
+QString QtAccountSettings::getName() const {
+	return tr("Accounts");
 }

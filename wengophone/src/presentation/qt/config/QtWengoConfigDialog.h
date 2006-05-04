@@ -21,20 +21,13 @@
 #define QTWENGOCONFIGDIALOG_H
 
 #include <util/NonCopyable.h>
+#include <util/List.h>
 
 #include <QObject>
 
 class CWengoPhone;
 
-class QtNotificationSettings;
-class QtGeneralSettings;
-class QtAccountSettings;
-class QtPrivacySettings;
-class QtAudioSettings;
-class QtVideoSettings;
-class QtAdvancedSettings;
-class QtCallForwardSettings;
-class QtLanguagesSettings;
+class QtISettings;
 
 class QDialog;
 class QWidget;
@@ -55,11 +48,13 @@ public:
 
 public Q_SLOTS:
 
-	void itemActivated();
-
 	void save();
 
 	void show();
+
+private Q_SLOTS:
+
+	void itemActivated();
 
 private:
 
@@ -67,23 +62,9 @@ private:
 
 	QDialog * _configDialog;
 
-	QtNotificationSettings * _notificationSettingsWidget;
+	typedef List<QtISettings *> SettingsList;
 
-	QtGeneralSettings * _generalSettingsWidget;
-
-	QtAccountSettings * _accountSettingsWidget;
-
-	QtPrivacySettings * _privacySettingsWidget;
-
-	QtAudioSettings * _audioSettingsWidget;
-
-	QtVideoSettings * _videoSettingsWidget;
-
-	QtAdvancedSettings * _advancedSettingsWidget;
-
-	QtCallForwardSettings * _callForwardSettingsWidget;
-
-	QtLanguagesSettings * _languagesSettingsWidget;
+	SettingsList _settingsList;
 };
 
 #endif	//QTWENGOCONFIGDIALOG_H

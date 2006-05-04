@@ -36,7 +36,7 @@
 static const int VIDEO_QUALITY_COLUMN = 0;
 
 QtVideoSettings::QtVideoSettings(QWidget * parent)
-	: QObject(parent) {
+	: QtISettings(parent) {
 
 	_videoSettingsWidget = new QWidget(parent);
 
@@ -58,6 +58,10 @@ QtVideoSettings::QtVideoSettings(QWidget * parent)
 
 QtVideoSettings::~QtVideoSettings() {
 	delete _ui;
+}
+
+QString QtVideoSettings::getName() const {
+	return tr("Video");
 }
 
 void QtVideoSettings::saveConfig() {
@@ -154,9 +158,11 @@ void QtVideoSettings::webcamPreviewButtonPressed() {
 	}
 }
 
+/*
 void QtVideoSettings::hide() {
 	_webcamDriver->frameCapturedEvent -= boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);
 	if (_openedByMe) {
 		_webcamDriver->stopCapture();
 	}
 }
+*/

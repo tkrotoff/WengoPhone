@@ -68,7 +68,7 @@
      </item>
      <item>
       <property name="text" >
-       <string>Languages</string>
+       <string>Language</string>
       </property>
       <property name="icon" >
        <iconset resource="..\wengophone.qrc" >:/pics/config/languages.png</iconset>

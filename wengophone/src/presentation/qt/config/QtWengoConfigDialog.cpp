@@ -43,15 +43,15 @@ QtWengoConfigDialog::QtWengoConfigDialog(CWengoPhone & cWengoPhone, QWidget * pa
 	_ui = new Ui::WengoConfigDialog();
 	_ui->setupUi(_configDialog);
 
-	_generalSettingsWidget = new QtGeneralSettings(_configDialog);
-	_notificationSettingsWidget = new QtNotificationSettings(_configDialog);
-	_accountSettingsWidget = new QtAccountSettings(cWengoPhone, _configDialog);
-	_privacySettingsWidget = new QtPrivacySettings(_configDialog);
-	_audioSettingsWidget = new QtAudioSettings(_configDialog);
-	_videoSettingsWidget = new QtVideoSettings(_configDialog);
-	_advancedSettingsWidget = new QtAdvancedSettings(_configDialog);
-	_callForwardSettingsWidget = new QtCallForwardSettings(_configDialog);
-	_languagesSettingsWidget = new QtLanguagesSettings(_configDialog);
+	_settingsList += new QtGeneralSettings(_configDialog);
+	_settingsList += new QtNotificationSettings(_configDialog);
+	_settingsList += new QtAccountSettings(cWengoPhone, _configDialog);
+	_settingsList += new QtPrivacySettings(_configDialog);
+	_settingsList += new QtAudioSettings(_configDialog);
+	_settingsList += new QtVideoSettings(_configDialog);
+	_settingsList += new QtAdvancedSettings(_configDialog);
+	_settingsList += new QtCallForwardSettings(_configDialog);
+	_settingsList += new QtLanguagesSettings(_configDialog);
 
 	//treeWidget
 	connect(_ui->treeWidget, SIGNAL(itemSelectionChanged()), SLOT(itemActivated()));
@@ -59,16 +59,10 @@ QtWengoConfigDialog::QtWengoConfigDialog(CWengoPhone & cWengoPhone, QWidget * pa
 	_ui->treeWidget->header()->hide();
 
 	//stackedWidget
-	_ui->stackedWidget->addWidget(_generalSettingsWidget->getWidget());
-	_ui->stackedWidget->addWidget(_notificationSettingsWidget->getWidget());
-	_ui->stackedWidget->addWidget(_accountSettingsWidget->getWidget());
-	_ui->stackedWidget->addWidget(_privacySettingsWidget->getWidget());
-	_ui->stackedWidget->addWidget(_audioSettingsWidget->getWidget());
-	_ui->stackedWidget->addWidget(_videoSettingsWidget->getWidget());
-	_ui->stackedWidget->addWidget(_callForwardSettingsWidget->getWidget());
-	_ui->stackedWidget->addWidget(_advancedSettingsWidget->getWidget());
-	_ui->stackedWidget->addWidget(_languagesSettingsWidget->getWidget());
-	_ui->stackedWidget->setCurrentWidget(_generalSettingsWidget->getWidget());
+	for (unsigned i = 0; i < _settingsList.size(); i++) {
+		_ui->stackedWidget->addWidget(_settingsList[i]->getWidget());
+	}
+	_ui->stackedWidget->setCurrentWidget(_settingsList[0]->getWidget());
 
 	//saveButton
 	connect(_ui->saveButton, SIGNAL(clicked()), SLOT(save()));
@@ -82,51 +76,16 @@ void QtWengoConfigDialog::itemActivated() {
 	const QList<QTreeWidgetItem *> itemList = _ui->treeWidget->selectedItems();
 	QString itemText = itemList[0]->text(0);
 
-	if (itemText == tr("General")) {
-		_ui->stackedWidget->setCurrentWidget(_generalSettingsWidget->getWidget());
-		_videoSettingsWidget->hide();
+	for (unsigned i = 0; i < _settingsList.size(); i++) {
+		QtISettings * settings = _settingsList[i];
+		QString name = settings->getName();
+		if (name == itemText) {
+			_ui->stackedWidget->setCurrentWidget(settings->getWidget());
+			break;
+		}
 	}
 
-	else if (itemText == tr("Languages")) {
-		_ui->stackedWidget->setCurrentWidget(_languagesSettingsWidget->getWidget());
-		_videoSettingsWidget->hide();
-	}
-
-	else if (itemText == tr("Notifications & Sounds")) {
-		_ui->stackedWidget->setCurrentWidget(_notificationSettingsWidget->getWidget());
-		_videoSettingsWidget->hide();
-	}
-
-	else if (itemText == tr("Accounts")) {
-		_ui->stackedWidget->setCurrentWidget(_accountSettingsWidget->getWidget());
-		_videoSettingsWidget->hide();
-	}
-
-	else if (itemText == tr("Privacy")) {
-		_ui->stackedWidget->setCurrentWidget(_privacySettingsWidget->getWidget());
-		_videoSettingsWidget->hide();
-	}
-
-	else if (itemText == tr("Audio")) {
-		_ui->stackedWidget->setCurrentWidget(_audioSettingsWidget->getWidget());
-		_videoSettingsWidget->hide();
-	}
-
-	else if (itemText == tr("Video")) {
-		_ui->stackedWidget->setCurrentWidget(_videoSettingsWidget->getWidget());
-	}
-
-	else if (itemText == tr("Advanced")) {
-		_ui->stackedWidget->setCurrentWidget(_advancedSettingsWidget->getWidget());
-		_videoSettingsWidget->hide();
-	}
-
-	else if (itemText == tr("Call Forward")) {
-		_ui->stackedWidget->setCurrentWidget(_callForwardSettingsWidget->getWidget());
-		_videoSettingsWidget->hide();
-	}
-
-	else {
+	if (i >= _settingsList.size()) {
 		LOG_FATAL("unknown item text=" + itemText.toStdString());
 	}
 }
@@ -136,12 +95,7 @@ void QtWengoConfigDialog::show() {
 }
 
 void QtWengoConfigDialog::save() {
-	_generalSettingsWidget->saveConfig();
-	_languagesSettingsWidget->saveConfig();
-	_notificationSettingsWidget->saveConfig();
-	_privacySettingsWidget->saveConfig();
-	_audioSettingsWidget->saveConfig();
-	_callForwardSettingsWidget->saveConfig();
-	_videoSettingsWidget->saveConfig();
-	_videoSettingsWidget->hide();
+	for (unsigned i = 0; i < _settingsList.size(); i++) {
+		_settingsList[i]->saveConfig();
+	}
 }

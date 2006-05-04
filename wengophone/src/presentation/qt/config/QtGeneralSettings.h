@@ -20,11 +20,10 @@
 #ifndef QTGENERALSETTINGS_H
 #define QTGENERALSETTINGS_H
 
-#include <util/NonCopyable.h>
-
-#include <QObject>
+#include "QtISettings.h"
 
 class QWidget;
+class QString;
 namespace Ui { class GeneralSettings; }
 
 /**
@@ -32,17 +31,19 @@ namespace Ui { class GeneralSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtGeneralSettings : public QObject, NonCopyable {
+class QtGeneralSettings : public QtISettings {
 	Q_OBJECT
 public:
 
 	QtGeneralSettings(QWidget * parent);
 
-	~QtGeneralSettings();
+	virtual ~QtGeneralSettings();
 
 	QWidget * getWidget() const {
 		return _generalSettingsWidget;
 	}
+
+	QString getName() const;
 
 	void saveConfig();
 

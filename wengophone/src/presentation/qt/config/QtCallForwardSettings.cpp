@@ -27,7 +27,7 @@
 #include <QtGui>
 
 QtCallForwardSettings::QtCallForwardSettings(QWidget * parent)
-	: QObject(parent) {
+	: QtISettings(parent) {
 
 	_callForwardSettingsWidget = new QWidget(parent);
 
@@ -39,6 +39,10 @@ QtCallForwardSettings::QtCallForwardSettings(QWidget * parent)
 
 QtCallForwardSettings::~QtCallForwardSettings() {
 	delete _ui;
+}
+
+QString QtCallForwardSettings::getName() const {
+	return tr("Call Forward");
 }
 
 void QtCallForwardSettings::saveConfig() {
