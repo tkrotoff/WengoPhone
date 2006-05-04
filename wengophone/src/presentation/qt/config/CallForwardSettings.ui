@@ -8,19 +8,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>540</width>
-    <height>450</height>
+    <width>576</width>
+    <height>506</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>0</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="0" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
+   <item>
+    <widget class="QGroupBox" name="groupBoxSettings" >
      <property name="title" >
       <string>Call Forward Settings</string>
      </property>
@@ -31,21 +31,40 @@
       <property name="spacing" >
        <number>6</number>
       </property>
-      <item row="2" column="0" >
+      <item row="3" column="0" >
        <widget class="QRadioButton" name="forwardToNumberRadioButton" >
         <property name="text" >
          <string>Transférer tous vos appels non aboutis vers les n° suivants :</string>
         </property>
        </widget>
       </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Le transfert d'appel intervient si vous n'êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
+ou après vingt secondes si vous n'avez pas répondu. Vous pouvez configurer jusqu'à trois transferts 
+vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0" >
+       <widget class="QRadioButton" name="disableRadioButton" >
+        <property name="text" >
+         <string>Désactiver le transfert d'appel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
        <widget class="QRadioButton" name="forwardToVoiceMailRadioButton" >
         <property name="text" >
          <string>Transférer tous vos appels non aboutis vers la Messagerie vocale. </string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" >
+      <item row="4" column="0" >
        <layout class="QGridLayout" >
         <property name="margin" >
          <number>0</number>
@@ -54,10 +73,18 @@
          <number>6</number>
         </property>
         <item row="2" column="1" >
-         <widget class="QLineEdit" name="phoneNumber3Edit" />
+         <widget class="QLineEdit" name="phoneNumber3Edit" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="1" >
-         <widget class="QLineEdit" name="phoneNumber1Edit" />
+         <widget class="QLineEdit" name="phoneNumber1Edit" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0" >
          <widget class="QLabel" name="label" >
@@ -74,7 +101,11 @@
          </widget>
         </item>
         <item row="1" column="1" >
-         <widget class="QLineEdit" name="phoneNumber2Edit" />
+         <widget class="QLineEdit" name="phoneNumber2Edit" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0" >
          <widget class="QLabel" name="label" >
@@ -98,36 +129,11 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label" >
-        <property name="text" >
-         <string>Le transfert d'appel intervient si vous n'êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
-ou après vingt secondes si vous n'avez pas répondu. Vous pouvez configurer jusqu'à trois transferts 
-vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
+   <item>
+    <widget class="QGroupBox" name="groupBoxCellPhone" >
      <property name="title" >
       <string>Forward to cellphone mode</string>
      </property>
@@ -159,6 +165,19 @@ nécessitent un crédit de Wengo's. L'activation du transfert nécessite de rens
      </layout>
     </widget>
    </item>
+   <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
@@ -169,5 +188,54 @@ nécessitent un crédit de Wengo's. L'activation du transfert nécessite de rens
   <tabstop>forwardCallMobilCheckBox</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>forwardToNumberRadioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>phoneNumber1Edit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>287</x>
+     <y>193</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>187</x>
+     <y>223</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>forwardToNumberRadioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>phoneNumber2Edit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>287</x>
+     <y>193</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>187</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>forwardToNumberRadioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>phoneNumber3Edit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>287</x>
+     <y>193</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>187</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

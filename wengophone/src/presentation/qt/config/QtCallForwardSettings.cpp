@@ -23,11 +23,12 @@
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <control/CWengoPhone.h>
 
 #include <QtGui>
 
-QtCallForwardSettings::QtCallForwardSettings(QWidget * parent)
-	: QtISettings(parent) {
+QtCallForwardSettings::QtCallForwardSettings(CWengoPhone & cWengoPhone, QWidget * parent)
+	: QtISettings(parent), _cWengoPhone(cWengoPhone) {
 
 	_callForwardSettingsWidget = new QWidget(parent);
 
@@ -46,10 +47,9 @@ QString QtCallForwardSettings::getName() const {
 }
 
 void QtCallForwardSettings::saveConfig() {
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	config.set(Config::CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY, _ui->forwardToVoiceMailRadioButton->isChecked());
-	config.set(Config::CALL_FORWARD_ALL_UNDELIVREDTO_KEY, _ui->forwardToNumberRadioButton->isChecked());
 	config.set(Config::CALL_FORWARD_PHONENUMBER1_KEY, _ui->phoneNumber1Edit->text().toStdString());
 	config.set(Config::CALL_FORWARD_PHONENUMBER2_KEY, _ui->phoneNumber2Edit->text().toStdString());
 	config.set(Config::CALL_FORWARD_PHONENUMBER3_KEY, _ui->phoneNumber3Edit->text().toStdString());
@@ -57,13 +57,23 @@ void QtCallForwardSettings::saveConfig() {
 }
 
 void QtCallForwardSettings::readConfig() {
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	_ui->forwardToVoiceMailRadioButton->setChecked(config.getCallForwardAllUndelivredToVm());
-	_ui->forwardToNumberRadioButton->setChecked(config.getCallForwardAllUndelivredTo());
+	if( config.getCallForwardMode() == "voicemail") {
+		_ui->forwardToVoiceMailRadioButton->setChecked(true);
+	}  else if( config.getCallForwardMode() == "number" ) {
+		_ui->forwardToNumberRadioButton->setChecked(true);
+	} else if( config.getCallForwardMode() == "disable" ) {
+		_ui->disableRadioButton->setChecked(true);
+	} else if( config.getCallForwardMode() == "unauthorized") {
+		_ui->groupBoxSettings->setEnabled(false);
+		_ui->groupBoxCellPhone->setEnabled(false);
+	}
+	_ui->forwardToVoiceMailRadioButton->setEnabled(config.hasVoiceMail());
+	
 	_ui->phoneNumber1Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber1()));
 	_ui->phoneNumber2Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber2()));
 	_ui->phoneNumber3Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber3()));
 	_ui->forwardCallMobilCheckBox->setChecked(config.getCallForwardToMobile());
-
 }

@@ -22,7 +22,9 @@
 
 #include "QtISettings.h"
 
+class CWengoPhone;
 class QWidget;
+
 class QString;
 namespace Ui { class CallForwardSettings; }
 
@@ -30,12 +32,13 @@ namespace Ui { class CallForwardSettings; }
  * Call forward configuration panel.
  *
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
  */
 class QtCallForwardSettings : public QtISettings {
 	Q_OBJECT
 public:
 
-	QtCallForwardSettings(QWidget * parent);
+	QtCallForwardSettings(CWengoPhone & cWengoPhone, QWidget * parent);
 
 	virtual ~QtCallForwardSettings();
 
@@ -54,6 +57,8 @@ private:
 	Ui::CallForwardSettings * _ui;
 
 	QWidget * _callForwardSettingsWidget;
+
+	CWengoPhone & _cWengoPhone;
 };
 
 #endif	//QTCALLFORWARDSETTINGS_H
