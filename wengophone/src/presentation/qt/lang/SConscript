@@ -1,17 +1,17 @@
 env = WengoGetEnvironment()
 
-wengophone_source_translations = [
-	'wengophone_fr.ts',
-	'wengophone_en.ts',
+qtwengophone_source_translations = [
+	'qtwengophone_fr.ts',
+	'qtwengophone_en.ts',
 ]
 
-if WengoGetConsoleArgument('update-translations'):
+if WengoGetConsoleArgument('update-qtwengophone-translations'):
 	env.WengoCopyToBuildDir('..\lang\\', 'wengophone\src\presentation\qt\lang')
-	env.WengoQtUpdateTranslations(wengophone_source_translations)
+	env.WengoQtUpdateTranslations(qtwengophone_source_translations)
 
-wengophone_translations = [
-	env.WengoQtLanguageRelease('wengophone_fr.ts', 'wengophone_fr.qm'),
-	env.WengoQtLanguageRelease('wengophone_en.ts', 'wengophone_en.qm'),
+qtwengophone_translations = [
+	env.WengoQtLanguageRelease('qtwengophone_fr.ts', 'qtwengophone_fr.qm'),
+	env.WengoQtLanguageRelease('qtwengophone_en.ts', 'qtwengophone_en.qm'),
 ]
 
-env.WengoAlias('wengophone-translations', wengophone_translations)
+env.WengoAlias('qtwengophone-translations', qtwengophone_translations)
