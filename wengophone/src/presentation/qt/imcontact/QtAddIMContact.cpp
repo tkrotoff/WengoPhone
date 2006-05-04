@@ -25,6 +25,8 @@
 
 #include <QtGui>
 
+static const QString IM_PROTOCOL_WENGO = "Wengo";
+
 QtAddIMContact::QtAddIMContact(Contact & contact, QWidget * parent)
 	: QObject(parent),
 	_contact(contact) {
@@ -33,6 +35,8 @@ QtAddIMContact::QtAddIMContact(Contact & contact, QWidget * parent)
 
 	_ui = new Ui::AddIMContact();
 	_ui->setupUi(_addIMContactWindow);
+
+	_ui->protocolComboBox->addItem(QIcon(":pics/protocols/wengo.png"), IM_PROTOCOL_WENGO);
 
 	_ui->protocolComboBox->addItem(QIcon(":pics/protocols/msn.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolMSN)));
@@ -59,10 +63,19 @@ int QtAddIMContact::show() {
 }
 
 void QtAddIMContact::addIMContact() {
+	std::string contactId = _ui->contactIdLineEdit->text().toStdString();
+
 	QString protocolName = _ui->protocolComboBox->currentText();
-	EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
-	QString contactId = _ui->contactIdLineEdit->text();
-	IMContact imContact(imProtocol, contactId.toStdString());
-	//imContact.setIMAccount(imAccount);
-	_contact.addIMContact(imContact);
+
+	if (protocolName == IM_PROTOCOL_WENGO) {
+		_contact.setWengoPhoneId(contactId);
+	}
+
+	else {
+		EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
+
+		IMContact imContact(imProtocol, contactId);
+		//imContact.setIMAccount(imAccount);
+		_contact.addIMContact(imContact);
+	}
 }
