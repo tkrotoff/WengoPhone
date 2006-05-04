@@ -50,7 +50,7 @@ QtWengoConfigDialog::QtWengoConfigDialog(CWengoPhone & cWengoPhone, QWidget * pa
 	_settingsList += new QtAudioSettings(_configDialog);
 	_settingsList += new QtVideoSettings(_configDialog);
 	_settingsList += new QtAdvancedSettings(_configDialog);
-	_settingsList += new QtCallForwardSettings(_configDialog);
+	_settingsList += new QtCallForwardSettings(cWengoPhone, _configDialog);
 	_settingsList += new QtLanguagesSettings(_configDialog);
 
 	//treeWidget
