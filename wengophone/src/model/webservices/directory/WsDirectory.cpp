@@ -35,7 +35,7 @@ WsDirectory::WsDirectory(WengoAccount * wengoAccount) :
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
 	setHttps(false);
-	setServicePath("/directory/index.php"/*config.getWengoWsDirectoryPath()*/);
+	setServicePath(config.getWengoDirectoryPath());
 	setPort(80);
 	setWengoAuthentication(false);
 }
