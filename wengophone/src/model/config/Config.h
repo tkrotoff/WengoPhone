@@ -177,6 +177,14 @@ public:
 	static const std::string WENGO_SOFTUPDATE_PATH_KEY;
 	std::string getWengoSoftUpdatePath() const;
 
+	/** Wengo cirpack web service path on the server. */
+	static const std::string WENGO_CIRPACK_PATH_KEY;
+	std::string getWengoCirpackPath() const;
+
+	/** Wengo directory web service path on the server. */
+	static const std::string WENGO_DIRECTORY_PATH_KEY;
+	std::string getWengoDirectoryPath() const;
+
 	/** @} */
 
 	/**
@@ -215,14 +223,10 @@ public:
 	 * @{
 	 */
 
-	/** Forward all undelivred call to vm. */
-	static const std::string CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY;
-	bool getCallForwardAllUndelivredToVm() const;
-
-	/** Forward all undelivred call to. */
-	static const std::string CALL_FORWARD_ALL_UNDELIVREDTO_KEY;
-	bool getCallForwardAllUndelivredTo() const;
-
+	/** Call forward mode. */
+	static const std::string CALL_FORWARD_MODE_KEY;
+	std::string getCallForwardMode() const;
+	
 	/** Forward call phone number 1. */
 	static const std::string CALL_FORWARD_PHONENUMBER1_KEY;
 	std::string getCallForwardPhoneNumber1() const;
@@ -238,6 +242,10 @@ public:
 	/** Forward call to mobile when status is set to mobile. */
 	static const std::string CALL_FORWARD_TOMOBILE_KEY;
 	bool getCallForwardToMobile() const;
+
+	/** Active voice mail. */
+	static const std::string ACTIVE_VOICE_MAIL_KEY;
+	bool hasVoiceMail() const;
 
 	/** @} */
 

@@ -65,12 +65,13 @@ const std::string Config::PROFILE_HEIGHT = "profile.height";
 const std::string Config::PROFILE_POSX = "profile.posx";
 const std::string Config::PROFILE_POSY = "profile.posy";
 
-const std::string Config::CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY = "call.forward.all.undelivredtovm";
-const std::string Config::CALL_FORWARD_ALL_UNDELIVREDTO_KEY = "call.forward.all.undelivredto";
+const std::string Config::CALL_FORWARD_MODE_KEY = "call.forward.mode";
 const std::string Config::CALL_FORWARD_PHONENUMBER1_KEY = "call.forward.phonenumber1";
 const std::string Config::CALL_FORWARD_PHONENUMBER2_KEY = "call.forward.phonenumber2";
 const std::string Config::CALL_FORWARD_PHONENUMBER3_KEY = "call.forward.phonenumber3";
 const std::string Config::CALL_FORWARD_TOMOBILE_KEY = "call.forward.tomobile";
+
+const std::string Config::ACTIVE_VOICE_MAIL_KEY = "voicemail.active";
 
 const std::string Config::GENERAL_AUTOSTART_KEY = "general.autostart";
 const std::string Config::GENERAL_CLICK_START_FREECALL_KEY = "general.click.start.freecall";
@@ -103,6 +104,8 @@ const std::string Config::WENGO_SSO_PATH_KEY = "wengo.sso.path";
 const std::string Config::WENGO_INFO_PATH_KEY = "wengo.info.path";
 const std::string Config::WENGO_SUBSCRIBE_PATH_KEY = "wengo.subscribe.path";
 const std::string Config::WENGO_SOFTUPDATE_PATH_KEY = "wengo.softupdate.path";
+const std::string Config::WENGO_CIRPACK_PATH_KEY = "wengo.cirpack.path";
+const std::string Config::WENGO_DIRECTORY_PATH_KEY = "wengo.directory.path";
 
 const std::string Config::CONFIG_DIR_KEY = "config.dir";
 const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
@@ -193,12 +196,12 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[PROFILE_POSX] = 100;
 	_keyDefaultValueMap[PROFILE_POSY] = 100;
 
-	_keyDefaultValueMap[CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY] = false;
-	_keyDefaultValueMap[CALL_FORWARD_ALL_UNDELIVREDTO_KEY] = false;
+	_keyDefaultValueMap[CALL_FORWARD_MODE_KEY] = std::string("unauthorized");
 	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER1_KEY] = empty;
 	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER2_KEY] = empty;
 	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER3_KEY] = empty;
 	_keyDefaultValueMap[CALL_FORWARD_TOMOBILE_KEY] = false;
+	_keyDefaultValueMap[ACTIVE_VOICE_MAIL_KEY] = false;
 
 	_keyDefaultValueMap[GENERAL_AUTOSTART_KEY] = true;
 	_keyDefaultValueMap[GENERAL_CLICK_START_FREECALL_KEY] = true;
@@ -231,6 +234,8 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[WENGO_INFO_PATH_KEY] = std::string("/info/info.php");
 	_keyDefaultValueMap[WENGO_SUBSCRIBE_PATH_KEY] = std::string("/softphone-subscription/index.php");
 	_keyDefaultValueMap[WENGO_SOFTUPDATE_PATH_KEY] = std::string("/softphone-version/version.php");
+	_keyDefaultValueMap[WENGO_CIRPACK_PATH_KEY] = std::string("/cirpack/index.php");
+	_keyDefaultValueMap[WENGO_DIRECTORY_PATH_KEY] = std::string("/directory/index.php");
 
 	_keyDefaultValueMap[WENBOX_ENABLE_KEY] = true;
 }
@@ -377,6 +382,14 @@ std::string Config::getWengoSoftUpdatePath() const {
 	return getStringKeyValue(WENGO_SOFTUPDATE_PATH_KEY);
 }
 
+std::string Config::getWengoCirpackPath() const {
+	return getStringKeyValue(WENGO_CIRPACK_PATH_KEY);
+}
+
+std::string Config::getWengoDirectoryPath() const {
+	return getStringKeyValue(WENGO_DIRECTORY_PATH_KEY);
+}
+
 std::string Config::getProfileLastUsedName() const {
 	return getStringKeyValue(PROFILE_LAST_USED_NAME_KEY);
 }
@@ -397,12 +410,8 @@ int Config::getProfilePoxY() const {
 	return getIntegerKeyValue(PROFILE_POSY);
 }
 
-bool Config::getCallForwardAllUndelivredToVm() const {
-	return getBooleanKeyValue(CALL_FORWARD_ALL_UNDELIVREDTOVM_KEY);
-}
-
-bool Config::getCallForwardAllUndelivredTo() const {
-	return getBooleanKeyValue(CALL_FORWARD_ALL_UNDELIVREDTO_KEY);
+std::string Config::getCallForwardMode() const {
+	return getStringKeyValue(CALL_FORWARD_MODE_KEY);
 }
 
 std::string Config::getCallForwardPhoneNumber1() const {
@@ -419,6 +428,10 @@ std::string Config::getCallForwardPhoneNumber3() const {
 
 bool Config::getCallForwardToMobile() const {
 	return getBooleanKeyValue(CALL_FORWARD_TOMOBILE_KEY);
+}
+
+bool Config::hasVoiceMail() const {
+	return getBooleanKeyValue(ACTIVE_VOICE_MAIL_KEY);
 }
 
 bool Config::getGeneralAutoStart() const {
