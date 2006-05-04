@@ -457,12 +457,9 @@ void ChatWindow::createMenu(){
    	action = WengoMenu->addAction(tr("&Open Another Wengo Account"));
    	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(openWengoAccount()));
 
-	WengoMenu->addAction(tr("&Log off"));
-
-
    	WengoMenu->addSeparator ();
 	action = WengoMenu->addAction(tr("&Close"));
-	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(exitApplication()));
+	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(hide()));
 	_menuBar->addMenu(WengoMenu);
 
 	QMenu * ContactsMenu = new QMenu(tr("&Contact"));

@@ -90,8 +90,19 @@ void QtContactCallListWidget::stopConference(){
 
 void QtContactCallListWidget::hangup(){
     QtPhoneCall * phone;
-    phone = _listWidget->getPhoneCallList()[0];
-    phone->rejectActionTriggered(true);
+
+    QtContactCallList::QtPhoneCallList phoneCallList;
+    QtContactCallList::QtPhoneCallList::iterator iter;
+
+    phoneCallList = _listWidget->getPhoneCallList();
+
+    for ( iter = phoneCallList.begin(); iter != phoneCallList.end(); iter++){
+        phone =  (*iter); // _listWidget->getPhoneCallList()[0];
+        phone->rejectActionTriggered(true);
+    }
+
+    // phone = _listWidget->getPhoneCallList()[0];
+    //phone->rejectActionTriggered(true);
 }
 void QtContactCallListWidget::callRejected(){
     close();

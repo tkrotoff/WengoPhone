@@ -25,6 +25,8 @@
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/statusbar/QtStatusBar.h>
 
+#include <model/phonecall/PhoneCall.h>
+
 #include <control/phonecall/CPhoneCall.h>
 #include <control/CWengoPhone.h>
 
@@ -121,7 +123,8 @@ void QtPhoneCall::initThreadSafe() {
 
 	//Invite to conference
 	_actionInvite = _popup->addAction(tr("Invite to conference"));
-	connect(_actionInvite, SIGNAL(triggered(bool)), SLOT(inviteToConference(bool)));
+	_actionInvite->setEnabled(false);
+	//connect(_actionInvite, SIGNAL(triggered(bool)), SLOT(inviteToConference(bool)));
 	_popup->addSeparator();
 
 	//Show / Hide video
@@ -141,7 +144,13 @@ void QtPhoneCall::initThreadSafe() {
 
 	connect(filter, SIGNAL(openPopup(int, int)), SLOT(openPopup(int, int)));
 
-	_qtWengoPhone->addPhoneCall(this);
+    if ( ! _cPhoneCall.getPhoneCall().getConferenceCall() ){
+        _qtWengoPhone->addPhoneCall(this);
+    }
+    else
+    {
+        _qtWengoPhone->addToConference(this);
+    }
 }
 
 void QtPhoneCall::updatePresentation() {

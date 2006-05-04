@@ -143,6 +143,10 @@ void QtWengoPhone::initThreadSafe() {
 	// Send sms button
 	connect(_ui->sendSmsButton,SIGNAL(clicked()),SLOT(sendSms()));
 
+	// Start conference button
+	connect(_ui->startConferenceButton,SIGNAL(clicked()),SLOT(showCreateConferenceCall()));
+
+
 	//webcamButton
 	new QtWebcamButton(_ui->webcamButton);
 
@@ -175,6 +179,8 @@ void QtWengoPhone::initThreadSafe() {
 
     connect (_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )),
              this,SLOT(setSystrayIcon(QVariant )));
+
+    connect (_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT (sysTrayDoubleClicked(const QPoint &)));
 
 	//actionShowWengoAccount
 	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
@@ -332,7 +338,32 @@ void QtWengoPhone::callButtonClicked() {
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	QtContactCallListWidget * qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
-	_ui->tabWidget->addTab(qtContactCallListWidget,"Call");
+	_ui->tabWidget->addTab(qtContactCallListWidget,tr("Call"));
+	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
+	qtContactCallListWidget->addPhoneCall(qtPhoneCall);
+	_hangUpButton->setEnabled(true);
+}
+
+
+void QtWengoPhone::addToConference(QtPhoneCall * qtPhoneCall){
+
+
+    QtContactCallListWidget * qtContactCallListWidget;
+
+    int nbtab = _ui->tabWidget->count();
+
+    for ( int i = 0; i < nbtab; i++){
+        if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))){
+            // i is the index of the conference tab
+            qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+            qtContactCallListWidget->addPhoneCall(qtPhoneCall);
+            _ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
+            return;
+        }
+    }
+    // conference tab not found, create a new one
+	qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
+	_ui->tabWidget->addTab(qtContactCallListWidget,tr("Conference"));
 	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
 	qtContactCallListWidget->addPhoneCall(qtPhoneCall);
 	_hangUpButton->setEnabled(true);
@@ -598,21 +629,27 @@ void QtWengoPhone::showAccountSettings() {
 //FIXME
 #include <model/phonecall/ConferenceCall.h>
 void QtWengoPhone::showCreateConferenceCall() {
-	/*QDialog * conferenceDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/phonecall/ConferenceCallWidget.ui", _wengoPhoneWindow));
+	QDialog * conferenceDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/phonecall/ConferenceCallWidget.ui", _wengoPhoneWindow));
 
 	int ret = conferenceDialog->exec();
+
+    QLineEdit * phoneNumber1LineEdit;
+    QLineEdit * phoneNumber2LineEdit;
+
+    phoneNumber1LineEdit = Object::findChild<QLineEdit *>(conferenceDialog,"phoneNumber1LineEdit");
+    phoneNumber2LineEdit = Object::findChild<QLineEdit *>(conferenceDialog,"phoneNumber2LineEdit");
 
 	if (ret == QDialog::Accepted) {
 		IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
 
 		if (phoneLine != NULL) {
 			ConferenceCall * confCall = new ConferenceCall(*phoneLine);
-			confCall->addPhoneNumber(_ui->phoneNumber1LineEdit->text().toStdString());
-			confCall->addPhoneNumber(_ui->phoneNumber2LineEdit->text().toStdString());
+			confCall->addPhoneNumber(phoneNumber1LineEdit->text().toStdString());
+			confCall->addPhoneNumber(phoneNumber2LineEdit->text().toStdString());
 		} else {
 			LOG_DEBUG("phoneLine is NULL");
 		}
-	}*/
+	}
 }
 //!FIXME
 
@@ -888,3 +925,10 @@ void QtWengoPhone::setSystrayIcon(QVariant status){
 
 }
 
+void QtWengoPhone::sysTrayDoubleClicked(const QPoint& ){
+
+    if ( _wengoPhoneWindow->isVisible () )
+        _wengoPhoneWindow->setVisible(false);
+    else
+        _wengoPhoneWindow->setVisible(true);
+}

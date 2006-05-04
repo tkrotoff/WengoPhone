@@ -29,6 +29,8 @@
 
 #include <QFileDialog>
 
+#include "QtAvatarChooser.h"
+
 #include <string>
 
 using namespace std;

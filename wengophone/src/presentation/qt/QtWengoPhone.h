@@ -78,6 +78,8 @@ public:
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
+	void addToConference(QtPhoneCall * qtPhoneCall);
+
 	void setContactList(QtContactList * qtContactList);
 
 	void setHistory(QtHistoryWidget * qtHistoryWidget);
@@ -204,6 +206,8 @@ private Q_SLOTS:
 	void phoneComboBoxClicked();
 
 	void setSystrayIcon(QVariant status);
+
+	void sysTrayDoubleClicked(const QPoint& p);
 
 private:
 

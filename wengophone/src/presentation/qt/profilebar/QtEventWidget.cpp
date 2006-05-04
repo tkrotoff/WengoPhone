@@ -47,7 +47,6 @@ void QtEventWidget::addMissedCall(const QString & nickName){
 	QGridLayout * gridLayout = dynamic_cast<QGridLayout *>(layout());
 	int row = gridLayout->rowCount ();
 	gridLayout->addWidget( label, row, 0);
-
 }
 
 void QtEventWidget::addMessage(const QString & nickName){
