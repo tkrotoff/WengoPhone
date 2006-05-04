@@ -508,10 +508,11 @@ eXosip_answer_options_2xx(eXosip_call_t *jc, eXosip_dialog_t *jd, int code)
     }
   i = sdp_message_to_str(sdp, &body);
   sdp_message_free(sdp);
-  if (i!=0) {
+  if ( ( i!=0 ) || ( ! body ) ) {
     osip_message_free(response);
     return -1;
   }
+  
   i = osip_message_set_body(response, body, strlen(body));
   if (i!=0) {
     osip_message_free(response);
@@ -922,6 +923,12 @@ eXosip_answer_invite_2xx_with_body(eXosip_call_t *jc, eXosip_dialog_t *jd, int c
       return 0;
     }
 
+  if ( ! body ) {
+    fprintf(stderr, "%s,%d: body is NULL\n", __FILE__, __LINE__);
+    return -1;
+  }
+
+
   i = osip_message_set_body(response, body, strlen(body));
   if (i!=0) {
     goto g2atii_error_1;
@@ -1052,6 +1059,11 @@ eXosip_answer_invite_2xx(eXosip_call_t *jc, eXosip_dialog_t *jd, int code, char 
 	  __eXosip_wakeup();
       return 0;
     }
+
+  if ( ! body ) {
+    fprintf(stderr, "%s,%d: body is NULL\n", __FILE__, __LINE__);
+    return -1;
+  }
 
   i = osip_message_set_body(response, body, strlen(body));
   if (i!=0) {
