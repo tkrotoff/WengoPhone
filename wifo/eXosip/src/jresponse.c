@@ -269,14 +269,14 @@ generating_no_sdp_answer(eXosip_call_t *jc, eXosip_dialog_t *jd,
 		if (payload == NULL)
 		  {
 		  }
-		else if (0==strcmp("110",payload))
+		else if (0==strncmp("110",payload,3))
 		  {
 		    sdp_message_a_attribute_add (local_sdp,
 						 pos,
 						 osip_strdup ("AS"),
 						 osip_strdup ("110 20"));
 		  }
-		else if (0==strcmp("111",payload))
+		else if (0==strncmp("111",payload,3))
 		  {
 		    sdp_message_a_attribute_add (local_sdp,
 						 pos,
@@ -574,11 +574,12 @@ eXosip_answer_options_3456xx(eXosip_call_t *jc, eXosip_dialog_t *jd, int code)
       return -1;
     }
 
-  if (300<=code<=399)
-    {
-      /* Should add contact fields */
-      /* ... */
-    }
+/* eeeeeeekkk! should be OUT of wengophone! */
+/*   if (300<=code<=399) */
+/*     { */
+/*       /\* Should add contact fields *\/ */
+/*       /\* ... *\/ */
+/*     } */
 
   osip_message_set_content_length(response, "0");
   /*  send message to transaction layer */
@@ -625,14 +626,15 @@ _eXosip_answer_refer_123456(eXosip_call_t *jc, eXosip_dialog_t *jd, int code)
       return -1;
     }
 
-  if (200<=code<=299)
+  if ( ( code >= 200 ) && ( code <= 299) )
     complete_answer_that_establish_a_dialog(response, tr->orig_request);
 
-  if (300<=code<=399)
-    {
-      /* Should add contact fields */
-      /* ... */
-    }
+/* Yet another eeek */
+/*   if (300<=code<=399) */
+/*     { */
+/*       /\* Should add contact fields *\/ */
+/*       /\* ... *\/ */
+/*     } */
 
   osip_message_set_content_length(response, "0");
   /*  send message to transaction layer */
@@ -740,10 +742,8 @@ _eXosip2_answer_invite_2xx(eXosip_call_t *jc, eXosip_dialog_t *jd, int code, osi
 
   /* request that estabish a dialog: */
   /* 12.1.1 UAS Behavior */
-  {
     i = complete_answer_that_establish_a_dialog(*answer, tr->orig_request);
     if (i!=0) goto g2atii_error_1;; /* ?? */
-  }
 
   return 0;
 
@@ -783,11 +783,12 @@ _eXosip2_answer_invite_3456xx(eXosip_call_t *jc, eXosip_dialog_t *jd, int code, 
       return -1;
     }
 
-  if (300<=code<=399)
-    {
-      /* Should add contact fields */
-      /* ... */
-    }
+/* just another eeek */
+/*   if (300<=code<=399) */
+/*     { */
+/*       /\* Should add contact fields *\/ */
+/*       /\* ... *\/ */
+/*     } */
 
   osip_message_set_content_length(*answer, "0");
   /*  send message to transaction layer */
@@ -943,10 +944,8 @@ eXosip_answer_invite_2xx_with_body(eXosip_call_t *jc, eXosip_dialog_t *jd, int c
 
   /* request that estabish a dialog: */
   /* 12.1.1 UAS Behavior */
-  {
     i = complete_answer_that_establish_a_dialog(response, tr->orig_request);
-    if (i!=0) goto g2atii_error_1;; /* ?? */
-  }
+    if (i!=0) goto g2atii_error_1; /* ?? */
   /* THIS RESPONSE MUST BE SENT RELIABILY until the final ACK is received !! */
   /* this response must be stored at the upper layer!!! (it will be destroyed*/
   /* right after being sent! */
@@ -1155,7 +1154,7 @@ eXosip_answer_invite_3456xx(eXosip_call_t *jc, eXosip_dialog_t *jd, int code, co
       return -1;
     }
 
-  if (300<=code<=399 && (contact != 0))
+  if ( ( code >= 300 ) && ( code <= 399 ) && ( contact != 0 ) )
     {
       osip_message_clean_contacts(response);
       osip_message_set_contact(response, contact);
@@ -1325,11 +1324,11 @@ eXosip_notify_answer_subscribe_3456xx(eXosip_notify_t *jn, eXosip_dialog_t *jd, 
       return;
     }
 
-  if (300<=code<=399)
-    {
-      /* Should add contact fields */
-      /* ... */
-    }
+/*   if (300<=code<=399) */
+/*     { */
+/*       /\* Should add contact fields *\/ */
+/*       /\* ... *\/ */
+/*     } */
 
   evt_answer = osip_new_outgoing_sipmessage(response);
   evt_answer->transactionid = tr->transactionid;
