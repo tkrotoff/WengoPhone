@@ -772,6 +772,13 @@ int
 osip_uri_param_init (osip_uri_param_t ** url_param)
 {
   *url_param = (osip_uri_param_t *) osip_malloc (sizeof (osip_uri_param_t));
+
+  /* Added by STR: How can other functions check for failed malloc if we *ALWAYS* return 0!!! */
+  if ( ! url_param ) {
+    fprintf(stderr, "Memory exhausted (%s,%d)\n", __FILE__, __LINE__);
+    return -1;
+  }
+
   (*url_param)->gname = NULL;
   (*url_param)->gvalue = NULL;
   return 0;

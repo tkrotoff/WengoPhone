@@ -46,7 +46,7 @@ __osip_transaction_set_topvia (osip_transaction_t * transaction,
   if (i == 0)
     return 0;
   transaction->topvia = NULL;
-  return -1;
+  return i;
 }
 
 static int
