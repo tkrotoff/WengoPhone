@@ -36,6 +36,7 @@ using namespace std;
 char * MemoryDump::_applicationName = NULL;
 char * MemoryDump::_styleName = NULL;
 char * MemoryDump::_languageFilename = NULL;
+std::string (*MemoryDump::getAdditionnalInfo)();
 
 static const char * DBGHELP_DLL = "dbghelp.dll";
 
@@ -177,6 +178,14 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 			strcat(commandLine, _languageFilename);
 			strcat(commandLine, "\"");
 		}
+
+		if (getAdditionnalInfo) {
+			strcat(commandLine, " -i ");
+			strcat(commandLine, "\"");
+			strcat(commandLine, getAdditionnalInfo().c_str());
+			strcat(commandLine, "\"");
+		}
+
 		LOG_DEBUG(commandLine);
 
 		//Flushes the logger file
@@ -260,4 +269,8 @@ char * MemoryDump::getCurrentDateTime() {
 	sprintf(dateTime, "%s%s%s%s%s", monthStr, dayStr, hourStr, minutesStr, secondsStr);
 
 	return dateTime;
+}
+
+void MemoryDump::SetGetAdditionnalInfo(std::string (*proc)()) {
+	getAdditionnalInfo = proc;
 }

@@ -25,6 +25,8 @@
 #include <windows.h>
 #include <dbghelp.h>
 
+#include <string>
+
 //Based on dbghelp.h
 typedef BOOL (WINAPI * MINIDUMPWRITEDUMP)
 	(HANDLE hProcess, DWORD dwPid, HANDLE hFile, MINIDUMP_TYPE DumpType,
@@ -91,6 +93,10 @@ public:
 	 * @param languageFilename path to the Qt translation file (.qm)
 	 */
 	void setLanguage(const char * languageFilename);
+
+	static void SetGetAdditionnalInfo(std::string (*proc)());
+
+	static std::string (*getAdditionnalInfo)();
 
 private:
 
