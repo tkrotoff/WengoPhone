@@ -95,9 +95,9 @@ public:
 	 *
 	 * @param imContact the IMContact to test
 	 */
-	bool operator == (const IMContact & imContact) const;
+	bool operator==(const IMContact & imContact) const;
 
-	bool operator < (const IMContact & imContact) const;
+	bool operator<(const IMContact & imContact) const;
 
 	const IMAccount * getIMAccount() const {
 		return _imAccount;
@@ -170,7 +170,7 @@ private:
 	/**
 	 * Used to get a cleaned contact id.
 	 *
-	 * When chatting with a Jabber contact, its id changed to 
+	 * When chatting with a Jabber contact, its id changed to
 	 * our_contact_id/something wich made some strange behaviour
 	 * in our model. So we strip everything after the '/'.
 	 *

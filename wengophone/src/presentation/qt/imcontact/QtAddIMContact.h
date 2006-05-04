@@ -17,38 +17,49 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTADDCONTACT_H
-#define QTADDCONTACT_H
+#ifndef QTADDIMCONTACT_H
+#define QTADDIMCONTACT_H
+
+#include <util/NonCopyable.h>
 
 #include <QObject>
 
-#include <string>
+class Contact;
 
-class CWengoPhone;
-class QtContactWidget;
 class QWidget;
+class QDialog;
+namespace Ui { class AddIMContact; }
 
-class QtAddContact : public QObject {
+/**
+ * Window for adding an IM contact to a given contact.
+ *
+ * @author Tanguy Krotoff
+ */
+class QtAddIMContact : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtAddContact(CWengoPhone & cWengoPhone, QWidget * parent, const std::string & contactPhoneNumber = "");
+	QtAddIMContact(Contact & contact, QWidget * parent);
+
+	~QtAddIMContact();
+
+	QDialog * getWidget() const {
+		return _addIMContactWindow;
+	}
 
 private Q_SLOTS:
 
-	void addContact();
+	void addIMContact();
 
 private:
 
-	void showContactGroups();
+	int show();
 
-	QWidget * _addContactWindow;
+	Ui::AddIMContact * _ui;
 
-	QtContactWidget * _qtContactWidget;
+	QDialog * _addIMContactWindow;
 
-	CWengoPhone & _cWengoPhone;
-
-	std::string _contactPhoneNumber;
+	Contact & _contact;
 };
 
-#endif	//QTADDCONTACT_H
+#endif	//QTADDIMCONTACT_H

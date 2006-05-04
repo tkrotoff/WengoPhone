@@ -42,7 +42,7 @@ WengoPhone::WengoPhone()
 	_running = false;
 	_wenboxPlugin = NULL;
 	_wsWengoSubscribe = NULL;
-	
+
 	//set HttpRequest User Agent
 	std::stringstream ss;
 	ss << WengoPhoneBuildId::SOFTPHONE_NAME;
@@ -86,16 +86,16 @@ WengoPhone::~WengoPhone() {
 
 	saveUserProfile();
 
-    /**
-     *  Set up a timeout triggered if SIP registering is too long 
-     *  so that closing WengoPhone NG is not too long.
-     */
+	/**
+	 * Set up a timeout triggered if SIP registering is too long
+	 * so that closing WengoPhone NG is not too long.
+	 */
 	static Timer shutdownTimeout;
-    shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownTimeoutHandler, this);
-    shutdownTimeout.start(3000, 3000);
+	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownTimeoutHandler, this);
+	shutdownTimeout.start(3000, 3000);
 
 	// Disconnection the UserProfile
-    _userProfile.disconnect();
+	_userProfile.disconnect();
 	////
 
 	delete _startupSettingListener;
@@ -113,7 +113,7 @@ void WengoPhone::init() {
 
 	_wsWengoSubscribe = new WsWengoSubscribe();
 	wsWengoSubscribeCreatedEvent(*this, *_wsWengoSubscribe);
-	
+
 	//LocalNetworkAccount always created and added by default
 	/*LocalNetworkAccount * localAccount = new LocalNetworkAccount();
 	localAccount->init();
@@ -182,10 +182,5 @@ void WengoPhone::saveConfiguration() {
 }
 
 void WengoPhone::valueChangedEventHandler(Settings & sender, const std::string & key) {
-#if 0
-	if (sender.keyValueToBeSaved(key)) {
-		saveConfiguration();
-	}
-#endif
+	saveConfiguration();
 }
-

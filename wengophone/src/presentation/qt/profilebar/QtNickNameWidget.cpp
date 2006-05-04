@@ -21,9 +21,11 @@
 
 #include "QtIMMenu.h"
 
-#include <presentation/qt/login/QtEditMyProfile.h>
+#include <presentation/qt/profile/QtProfileDetails.h>
 
 #include <model/profile/UserProfile.h>
+
+#include <util/Logger.h>
 
 #include <QFileDialog>
 
@@ -91,10 +93,10 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, CWengoPhone & cWen
 	_wengoLabel->setPixmap(QPixmap(":pics/protocols/wengo_off.png"));
 	_wengoLabel->setToolTip(tr("Wengo"));
 	_aimLabel->setPixmap(QPixmap(":pics/protocols/aim_off.png"));
-	_aimLabel->setToolTip(tr("Icq / Aim"));
+	_aimLabel->setToolTip(tr("AIM / ICQ"));
 
 	_jabberLabel->setPixmap(QPixmap(":pics/protocols/jabber_off.png"));
-	_jabberLabel->setToolTip(tr("Jabber / Google"));
+	_jabberLabel->setToolTip(tr("Jabber / GoogleTalk"));
 
 	// Widget connections
 	connect ( _msnLabel,SIGNAL( clicked() ),SLOT( msnClicked() ) );
@@ -192,11 +194,9 @@ void QtNickNameWidget::jabberClicked(){
 	showJabberMenu();
 }
 
-void QtNickNameWidget::avatarClicked(){
-	QtEditMyProfile profile(_userProfile, _cWengoPhone, this);
-	if (profile.exec()) {
-		init();
-	}
+void QtNickNameWidget::avatarClicked() {
+	QtProfileDetails qtProfileDetails(_cWengoPhone, _userProfile, this);
+	LOG_DEBUG("edit user profile");
 }
 
 void QtNickNameWidget::nicknameChanged() {

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,24 +16,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include <presentation/PContact.h>
-#include <model/contactlist/ContactList.h>
-#include <control/contactlist/CContactList.h>
-#include <control/CWengoPhone.h>
+
 #include "QtUserManager.h"
+
 #include "UserTreeEventManager.h"
 #include "QtUserList.h"
 #include "QtHidenContact.h"
 #include "QtContactPixmap.h"
 #include "QtUserTreeEventFilter.h"
-#include "../login/QtEditContactProfile.h"
+
+#include <presentation/qt/profile/QtProfileDetails.h>
+#include <presentation/PContact.h>
+
+#include <control/contactlist/CContactList.h>
+#include <control/CWengoPhone.h>
+
+#include <model/contactlist/ContactList.h>
+
+#include <util/Logger.h>
 
 QtUserManager::QtUserManager(CWengoPhone & cWengoPhone, QObject * parent, QTreeWidget * target)
 : QObject(parent), _cWengoPhone(cWengoPhone)
 {
-    _tree = target;
-    _previous = NULL;
-    _lastClicked=NULL;
+	_tree = target;
+	_previous = NULL;
+	_lastClicked=NULL;
 	_hideUsers = false;
 	_sortUsers = false;
 	_menu = NULL;
@@ -41,14 +48,13 @@ QtUserManager::QtUserManager(CWengoPhone & cWengoPhone, QObject * parent, QTreeW
 	QtUserList::getInstance()->setTreeWidget(target);
 	target->setMouseTracking(true);
 	UserTreeEventManager * dnd = new UserTreeEventManager(this,target);
-    QtUserTreeEventFilter *keyFilter = new QtUserTreeEventFilter(this,target);
+	QtUserTreeEventFilter *keyFilter = new QtUserTreeEventFilter(this,target);
 
 	connect (target,SIGNAL(itemSelectionChanged ()),this,SLOT(treeViewSelectionChanged()));
 	connect (target,SIGNAL(itemClicked (QTreeWidgetItem *,int )),this,SLOT(itemClicked(QTreeWidgetItem *,int)));
 	connect (dnd,SIGNAL(itemEntered ( QTreeWidgetItem *)),this,SLOT(itemEntered ( QTreeWidgetItem * )));
 	connect (dnd,SIGNAL(itemTimeout(QTreeWidgetItem *)),this,SLOT(openUserInfo(QTreeWidgetItem *)));
 	connect (dnd,SIGNAL(mouseClicked(Qt::MouseButton)),SLOT(setMouseButton(Qt::MouseButton)));
-
 }
 
 void QtUserManager::startSMS(bool checked){
@@ -68,7 +74,7 @@ void QtUserManager::startChat(bool){
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
-	// The current selected item
+	//The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
 
 	user = ul->getUser(item->text(0));
@@ -76,17 +82,15 @@ void QtUserManager::startChat(bool){
 	user->startChat();
 }
 
-void QtUserManager::editContact(bool ){
-    QtUserList * ul = QtUserList::getInstance();
+void QtUserManager::editContact(bool) {
+	QtUserList * ul = QtUserList::getInstance();
 
-	// The current selected item
+	//The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
 
-	// The edit contact window
-	QtEditContactProfile editContactDialog(QtEditContactProfile::ModeEdit,ul->getCContact(item->text(0)).getContact(), _cWengoPhone);
-	//editContact->set
-
-	editContactDialog.exec();
+	Contact & contact = ul->getCContact(item->text(0)).getContact();
+	QtProfileDetails qtProfileDetails(_cWengoPhone, contact, _tree);
+	LOG_DEBUG("edit contact");
 }
 
 void QtUserManager::deleteContact(){

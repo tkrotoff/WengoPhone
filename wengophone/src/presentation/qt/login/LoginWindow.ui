@@ -163,7 +163,7 @@
       <string/>
      </property>
      <property name="pixmap" >
-      <pixmap/>
+      <pixmap resource="../wengophone.qrc" >:/pics/export1_96.png</pixmap>
      </property>
     </widget>
    </item>

@@ -40,11 +40,9 @@
 #include "phonecall/QtPhoneCall.h"
 #include "phonecall/QtContactCallListWidget.h"
 #include "login/QtLogin.h"
-#include "login/QtEditMyProfile.h"
-#include "login/QtEditContactProfile.h"
+#include "profile/QtProfileDetails.h"
 #include "imaccount/QtIMAccountManager.h"
 #include "contactlist/QtContactList.h"
-#include "contactlist/QtAddContact.h"
 #include "QtDialpad.h"
 #include "QtAbout.h"
 #include "QtConfigPanel.h"
@@ -491,10 +489,9 @@ void QtWengoPhone::openWengoAccount() {
 	showLoginWindow();
 }
 
-void QtWengoPhone::editMyProfile(){
-	QtEditMyProfile profile(_cWengoPhone.getWengoPhone().getCurrentUserProfile(),
-		_cWengoPhone, _ui->tabWidget);
-	profile.exec();
+void QtWengoPhone::editMyProfile() {
+	QtProfileDetails qtProfileDetails(_cWengoPhone, _cWengoPhone.getWengoPhone().getCurrentUserProfile(), _wengoPhoneWindow);
+	LOG_DEBUG("edit user profile");
 }
 
 void QtWengoPhone::exitApplication() {
@@ -505,10 +502,8 @@ void QtWengoPhone::exitApplication() {
 }
 
 void QtWengoPhone::addContact() {
-//	QtAddContact * qtAddContact = new QtAddContact(_cWengoPhone, _wengoPhoneWindow);
-    Contact & contact = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getContactList().createContact();
-	QtEditContactProfile editContactDialog(QtEditContactProfile::ModeCreate,contact, _cWengoPhone);
-	editContactDialog.exec();
+	Contact & contact = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getContactList().createContact();
+	QtProfileDetails qtProfileDetails(_cWengoPhone, contact, _wengoPhoneWindow);
 	LOG_DEBUG("add contact");
 }
 

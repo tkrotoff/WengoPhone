@@ -60,11 +60,11 @@ public:
 
 	Contact(const Contact & contact);
 
-	Contact & operator = (const Contact & contact);
+	Contact & operator=(const Contact & contact);
 
 	~Contact();
 
-	bool operator == (const Contact & contact) const;
+	bool operator==(const Contact & contact) const;
 
 	/**
 	 * Set the preferred phone number (can also be a wengo id or a sip address).
@@ -77,25 +77,25 @@ public:
 	 * Get the preferred phone number.
 	 *
 	 * @return the preferred phone number. If no preferred phone number has been set
-	 * the first set phone number is returned (the test is made in this order:
-	 * wengo id (if online), mobile, home, work and other phone number). If no phone number has
-	 * been set, a null string is returned.
+	 *         the first set phone number is returned (the test is made in this order:
+	 *         wengo id (if online), mobile, home, work and other phone number). If no phone number has
+	 *         been set, a null string is returned
 	 */
 	std::string getPreferredNumber() const;
 
 	/**
 	 * Set the preferred IMContact to use.
 	 *
-	 * @param the imContact to set. The given reference must stay valid during
-	 * the execution (this must be a reference to an IMContact of this Contact).
+	 * @param the imContact to set; the given reference must stay valid during
+	 *        the execution (this must be a reference to an IMContact of this Contact)
 	 */
 	void setPreferredIMContact(const IMContact & imContact) { _preferredIMContact = (IMContact *)&imContact; contactChangedEvent(*this); }
 
 	/**
 	 * Get the preferred IMContact.
 	 *
-	 * @return the preferred IMContact. If no IMContact has been set or no
-	 * IMContact is online, return NULL.
+	 * @return the preferred IMContact; if no IMContact has been set or no
+	 *         IMContact is online, return NULL
 	 */
 	IMContact * getPreferredIMContact() const;
 
@@ -105,7 +105,7 @@ public:
 	 * An available IMContact is a connected IMContact of protocol used in
 	 * the imChatSession.
 	 *
-	 * @return an available IMContact. If no IMContact has been found,  return NULL.
+	 * @return an available IMContact; if no IMContact has been found, return NULL
 	 */
 	IMContact * getAvailableIMContact(IMChatSession & imChatSession) const;
 
@@ -130,7 +130,7 @@ public:
 	/**
 	 * Test if the Contact is in a group.
 	 *
-	 * @param groupName thr group
+	 * @param groupName the group
 	 * @return true if in the group
 	 */
 	bool isInContactGroup(const std::string & groupName);
@@ -157,7 +157,7 @@ public:
 
 	/**
 	 * @param imContact the maybe associated IMContact
-	 * @return true if this Contact is associated with the given IMContact.
+	 * @return true if this Contact is associated with the given IMContact
 	 */
 	bool hasIMContact(const IMContact & imContact) const;
 
@@ -165,13 +165,13 @@ public:
 	 * Check if an IMContact of the Contact is equivalent to the given
 	 * IMContact.
 	 *
-	 * Equivalent IMContacts are of the same protocol. If an equivalent 
+	 * Equivalent IMContacts are of the same protocol. If an equivalent
 	 * IMContact has been found and if it has no associated IMAccount,
 	 * the IMAccount of the given IMContact is linked to the found
 	 * IMContact.
 	 *
 	 * @param imContact the IMContact to check
-	 * @return true if an equivalent IMContact has been found.
+	 * @return true if an equivalent IMContact has been found
 	 */
 	bool checkAndSetIMContact(const IMContact & imContact);
 
@@ -186,27 +186,27 @@ public:
 	/**
 	 * @return Set of IMContact
 	 */
-	const IMContactSet & getIMContactSet() {
+	const IMContactSet & getIMContactSet() const {
 		return _imContactSet;
 	}
 
 	/**
-	 * @return true if chat is available with this Contact.
+	 * @return true if chat is available with this Contact
 	 */
 	bool hasIM() const;
 
 	/**
-	 * @return true if we can place a call with this Contact.
+	 * @return true if we can place a call with this Contact
 	 */
 	bool hasCall() const;
 
 	/**
-	 * @return true if we can place a video call with this Contact.
+	 * @return true if we can place a video call with this Contact
 	 */
 	bool hasVideo() const;
 
 	/**
-	 * @return a display name computed from available Contact information.
+	 * @return a display name computed from available Contact information
 	 */
 	std::string getDisplayName() const;
 
@@ -326,13 +326,12 @@ private:
 
 	/**
 	 * @return true when a wengo id has been declared and this
-	 * id is online.
+	 *         id is online
 	 */
 	bool wengoIsAvailable() const;
 
-	/** Can't be used on a Contact.*/
+	/** Can't be used on a Contact. */
 	void setIcon(const Picture & icon);
-
 
 	/**
 	 * Merges this Contact with another.

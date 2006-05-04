@@ -50,7 +50,7 @@ public:
 
 	Profile(const Profile & profile);
 
-	bool operator == (const Profile & profile) const;
+	bool operator==(const Profile & profile) const;
 
 	virtual ~Profile() {}
 

@@ -17,47 +17,57 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTIMCONTACTDETAILS_H
-#define QTIMCONTACTDETAILS_H
+#ifndef QTIMCONTACTMANAGER_H
+#define QTIMCONTACTMANAGER_H
 
-#include <QWidget>
+#include <util/NonCopyable.h>
 
-class IMContact;
+#include <QObject>
 
-namespace Ui {
-	class IMContactDetails;
-}
+class Contact;
 
-class QtIMContactDetails : public QWidget
-{
+class QWidget;
+class QTreeWidget;
+class QTreeWidgetItem;
+namespace Ui { class IMContactManager; }
+
+/**
+ * Window that handles IM accounts of a contact (IMContact).
+ *
+ * Very similar to QtIMAccountManager but for IM contacts.
+ *
+ * @see QtIMAccountManager
+ * @see Contact
+ * @see IMContact
+ * @author Tanguy Krotoff
+ */
+class QtIMContactManager : public QObject, NonCopyable {
 	Q_OBJECT
-
 public:
 
-	QtIMContactDetails(IMContact & imContact, QWidget * parent = 0);
+	QtIMContactManager(Contact & contact, QWidget * parent);
 
-    virtual ~QtIMContactDetails();
+	~QtIMContactManager();
 
-	IMContact & getIMContact() const {
-		return _imContact;
+	QWidget * getWidget() const {
+		return _imContactManagerWidget;
 	}
-
-Q_SIGNALS:
-
-	void removeButtonClicked(QtIMContactDetails * qtIMContactDetails);
 
 private Q_SLOTS:
 
-	void removeButtonClicked();
+	void addIMContact();
+
+	void deleteIMContact();
 
 private:
 
-	void init();
+	void loadIMContacts();
 
-	Ui::IMContactDetails * _ui;
+	Ui::IMContactManager * _ui;
 
-	IMContact & _imContact;
+	QWidget * _imContactManagerWidget;
 
+	Contact & _contact;
 };
 
-#endif //QTIMCONTACTDETAILS_H
+#endif //QTIMCONTACTMANAGER_H

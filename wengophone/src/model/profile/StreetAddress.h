@@ -56,7 +56,7 @@ public:
 
 	void setCountry(const std::string & country) { _country = country; }
 	const std::string & getCountry() const { return _country; }
-	
+
 private:
 
 	/** Factorizes code between contructor and copy contructor. */

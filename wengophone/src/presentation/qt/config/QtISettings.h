@@ -17,43 +17,38 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTADDIMCONTACT_H
-#define QTADDIMCONTACT_H
+#ifndef QTISETTINGS_H
+#define QTISETTINGS_H
 
-#include <imwrapper/EnumIMProtocol.h>
+#include <util/Interface.h>
 
-#include <QDialog>
+#include <QObject>
 
-#include <set>
+class QWidget;
+class QString;
 
-class IMAccount;
-
-namespace Ui {
-	class AddIMContactDialog;
-}
-
-class QtAddIMContact : public QDialog
-{
+/**
+ * Interface for settings panel from the configuration window.
+ *
+ * @author Tanguy Krotoff
+ */
+class QtISettings : public QObject, Interface {
 	Q_OBJECT
-
 public:
 
-	QtAddIMContact(EnumIMProtocol::IMProtocol protocol, std::set<IMAccount *> imAccounts, QWidget * parent = 0);
+	QtISettings(QWidget * parent);
 
-    virtual ~QtAddIMContact();
+	virtual ~QtISettings();
 
-	QString contactId() const;
+	virtual QWidget * getWidget() const = 0;
 
-	std::set<IMAccount *> selectedIMAccount() const;
+	virtual QString getName() const = 0;
 
-private:
+	virtual void saveConfig() = 0;
 
-	void init();
+protected:
 
-	Ui::AddIMContactDialog * _ui;
-
-	std::set<IMAccount *> _imAccounts;
-
+	virtual void readConfig() = 0;
 };
 
-#endif //QTADDIMCONTACT_H
+#endif	//QTISETTINGS_H

@@ -105,7 +105,7 @@ public:
 	 * An IMAccount has been removed.
 	 *
 	 * @param sender this class
-	 * @param imAccount the removed IMAccount.
+	 * @param imAccount the removed IMAccount
 	 */
 	Event< void (UserProfile & sender, IMAccount & imAccount) > imAccountRemovedEvent;
 
@@ -116,7 +116,6 @@ public:
 	 * @param History History loaded
 	 */
 	Event<void (UserProfile & sender, History & history)> historyLoadedEvent;
-
 
 	/**
 	 * A PhoneLine has been created.
@@ -198,7 +197,7 @@ public:
 	/**
 	 * Gets the active/current PhoneLine.
 	 *
-	 * Only one PhoneLine is active at a time.
+	 * Only one PhoneLine is active at a time
 	 *
 	 * @return the active PhoneLine
 	 */
@@ -209,7 +208,7 @@ public:
 	/**
 	 * Return true if a WengoAccount is active.
 	 *
-	 * @return true if a WengoAccount is active.
+	 * @return true if a WengoAccount is active
 	 */
 	bool hasWengoAccount() const;
 
@@ -307,9 +306,9 @@ public:
 	/**
 	 * Changes alias of this user.
 	 *
-	 * @param alias the alias to set.
-	 * @param imAccount the IMAccount to apply the alias to.
-	 * Pass NULL to set the alias to all IMAccount.
+	 * @param alias the alias to set
+	 * @param imAccount the IMAccount to apply the alias to;
+	 *        pass NULL to set the alias to all IMAccount
 	 */
 	void setAlias(const std::string & alias, IMAccount * imAccount);
 
@@ -317,8 +316,8 @@ public:
 	 * Changes icon of this user.
 	 *
 	 * @param icon the icon to set
-	 * @param imAccount the IMAccount to apply the icon to.
-	 * Pass NULL to set the icon to all IMAccount.
+	 * @param imAccount the IMAccount to apply the icon to
+	 *        pass NULL to set the icon to all IMAccount
 	 */
 	void setIcon(const Picture & icon, IMAccount * account);
 
@@ -417,7 +416,7 @@ private:
 
 	/** WsCallForward. */
 	//WsCallForward * _wsCallForward;
-	
+
 	/** WsDirectory */
 	WsDirectory * _wsDirectory;
 

@@ -22,7 +22,6 @@
 #include "QtVideo.h"
 #include "QtPhoneCallEventFilter.h"
 
-#include <presentation/qt/contactlist/QtAddContact.h>
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/statusbar/QtStatusBar.h>
 
@@ -349,8 +348,8 @@ void QtPhoneCall::addContactActionTriggered(bool) {
 	if(callAddress.empty()) {
 		callAddress = _cPhoneCall.getPeerUserName();
 	}
-	QtAddContact * qtAddContact = new QtAddContact(_cPhoneCall.getCWengoPhone(), _phoneCallWidget, callAddress);
-	LOG_DEBUG("add contact=" + callAddress);
+	/*QtAddContact * qtAddContact = new QtAddContact(_cPhoneCall.getCWengoPhone(), _phoneCallWidget, callAddress);
+	LOG_DEBUG("add contact=" + callAddress);*/
 }
 
 void QtPhoneCall::transferButtonClicked() {
