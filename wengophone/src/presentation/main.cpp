@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 #include <system/Processes.h>
 
 #include <model/WengoPhone.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 #include <control/CWengoPhone.h>
 
 #ifdef GTKINTERFACE
@@ -51,9 +53,9 @@
 	#include <memorydump/MemoryDump.h>
 #endif
 
-#include <string>
-#include <iostream>
-using namespace std;
+#ifdef _MSC_VER
+#define snprintf _snprintf
+#endif
 
 /**
  * Stub function to make GCC silent.
@@ -64,12 +66,21 @@ int test_main(int argc, char *argv[]) {
 	return 1;
 }
 
+std::string setAddionnalInfo() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	return config.getProfileLastUsedName();
+}
+
 int main(int argc, char * argv[]) {
 
 #if defined(CC_MSVC)
-	new MemoryDump("WengoPhoneNG");
+	MemoryDump * memoryDump = new MemoryDump("WengoPhoneNG");
+	
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	memoryDump->setLanguage(config.getLanguage().c_str());
+	memoryDump->SetGetAdditionnalInfo(setAddionnalInfo);
 #endif
-    
+	
 	//Graphical interface implementation
 	PFactory * pFactory = NULL;
 #ifdef GTKINTERFACE
