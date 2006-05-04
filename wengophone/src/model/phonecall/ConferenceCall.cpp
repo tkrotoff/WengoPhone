@@ -47,6 +47,7 @@ ConferenceCall::~ConferenceCall() {
 }
 
 void ConferenceCall::addPhoneCall(PhoneCall & phoneCall) {
+	phoneCall.setConferenceCall(this);
 	if (_confId == -1) {
 		_confId = _phoneLine.getSipWrapper().createConference();
 	}
@@ -59,6 +60,7 @@ void ConferenceCall::addPhoneCall(PhoneCall & phoneCall) {
 }
 
 void ConferenceCall::removePhoneCall(PhoneCall & phoneCall) {
+	phoneCall.setConferenceCall(NULL);
 	int callId = phoneCall.getCallId();
 
 	if (_confId == -1) {

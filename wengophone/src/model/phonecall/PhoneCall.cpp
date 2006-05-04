@@ -43,7 +43,7 @@ PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 	_duration = -1;
 	_hold = false;
 	_resume = false;
-	_conference = false;
+	_conferenceCall = NULL;
 	_callRejected = false;
 	_timeStart = -1;
 	_videoEnabled = false;

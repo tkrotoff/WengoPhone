@@ -36,6 +36,7 @@ class WebcamVideoFrame;
 class PhoneCallState;
 class IPhoneLine;
 class WenboxPlugin;
+class ConferenceCall;
 
 /**
  * Class that holds informations about a current phone call.
@@ -198,14 +199,24 @@ public:
 		return _duration;
 	}
 
-	/** Sets if PhoneCall is a ConferenceCall. */
-	void setConference(bool conference) {
-		_conference = conference;
+	/**
+	 * Sets the conference associated with this call.
+	 *
+	 * Internal method, used only by ConferenceCall.
+	 *
+	 * @param conferenceCall conference
+	 */
+	void setConferenceCall(ConferenceCall * conferenceCall) {
+		_conferenceCall = conferenceCall;
 	}
 
-	/** If PhoneCall is a ConferenceCall. */
-	bool belongsToConference() const {
-		return _conference;
+	/**
+	 * Gets the conference associated with this call.
+	 *
+	 * @return ConferenceCall or NULL if this call is not associated with a conference
+	 */
+	ConferenceCall * getConferenceCall() const {
+		return _conferenceCall;
 	}
 
 	/**
@@ -248,8 +259,8 @@ private:
 	/** If the PhoneCall should be resumed. */
 	bool _resume;
 
-	/** If this PhoneCall belongs to a ConferenceCall or not. */
-	bool _conference;
+	/** Conference associated with this call. */
+	ConferenceCall * _conferenceCall;
 
 	/** If this PhoneCall has been rejected as an incoming call. */
 	bool _callRejected;
