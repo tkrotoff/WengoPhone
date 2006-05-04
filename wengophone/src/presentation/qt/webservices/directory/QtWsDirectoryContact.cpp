@@ -41,6 +41,7 @@ QtWsDirectoryContact::QtWsDirectoryContact(QtWsDirectory * qtWsDirectory, Profil
 			this, SLOT(addLabelClicked()), Qt::LeftButton);
 	ui.addLabel->installEventFilter(mouseFilter2);
 
+	setName(QString::fromUtf8(profile->getFirstName().c_str()) + " " + QString::fromUtf8(profile->getLastName().c_str()));
 	setNickname(tr("Nickname: ") + QString::fromUtf8(profile->getWengoPhoneId().c_str()));
 	setWengoNumber(tr("Wengo number: ") + QString::fromStdString(profile->getWengoPhoneNumber()));
 	setSipAddress(tr("Sip address: ") + QString::fromStdString(profile->getWengoPhoneId() + "@213.91.9.210"));
