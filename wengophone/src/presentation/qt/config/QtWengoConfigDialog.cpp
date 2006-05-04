@@ -75,8 +75,9 @@ QtWengoConfigDialog::~QtWengoConfigDialog() {
 void QtWengoConfigDialog::itemActivated() {
 	const QList<QTreeWidgetItem *> itemList = _ui->treeWidget->selectedItems();
 	QString itemText = itemList[0]->text(0);
+	unsigned i;
 
-	for (unsigned i = 0; i < _settingsList.size(); i++) {
+	for (i = 0; i < _settingsList.size(); i++) {
 		QtISettings * settings = _settingsList[i];
 		QString name = settings->getName();
 		if (name == itemText) {
