@@ -93,21 +93,10 @@ File "${BUILD_DIR}\emoticons\*"
 SetOutPath "$INSTDIR\pics\avatars\*"
 File "${BUILD_DIR}\pics\avatars\*"
 
-/*
+/* Translations */
 SetOutPath "$INSTDIR\lang\"
-File "${BUILD_DIR}\softphone\gui\lang\wengo_fr.qm"
-File "${BUILD_DIR}\softphone\gui\lang\wengo_en.qm"
-File "${BUILD_DIR}\softphone\gui\lang\wengo_es.qm"
-File "${BUILD_DIR}\softphone\gui\lang\wengo_de.qm"
-File "${BUILD_DIR}\softphone\gui\lang\wengo_fi.qm"
-File "${BUILD_DIR}\softphone\gui\lang\wengo_pl.qm"
-File "${BUILD_DIR}\softphone\gui\lang\wengo_it.qm"
-File "${BUILD_DIR}\softphone\gui\lang\wengo_ja.qm"
-File "${BUILD_DIR}\softphone\gui\lang\wengo_zh.qm"
-File "${BUILD_DIR}\softphone\gui\lang\wengo_cs.qm"
-File "${BUILD_DIR}\softphone\gui\lang\wengo_nl.qm"
-File "${BUILD_DIR}\softphone\gui\lang\*.ts"
-*/
+File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_fr.qm"
+File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_en.qm"
 
 /*
 SetOutPath "$INSTDIR\styles\"
@@ -134,31 +123,30 @@ File "${BUILD_DIR}\softphone\runtime\connecting\*"
  * into the home directory of the user.
  * Does not overwrite the files from this directory.
  */
-/*
-!define WENGODIR "$PROFILE\wengo"
-SetOutPath "${WENGODIR}"
+!define QTWENGOPHONEDIR "$PROFILE\Application Data\WengoPhone"
+SetOutPath "${QTWENGOPHONEDIR}"
 SetOverwrite off
 CreateDirectory "$PROFILE"
 
 ; Tests if the file exists because SetOverwrite does
 ; not work with FileWrite from the function writeToFile
-IfFileExists "wengo.config" 0 createFile
+IfFileExists "config.xml" 0 createFile
 	Goto done
 createFile:
-	StrCmp $LANGUAGE ${LANG_FRENCH} french default
+    StrCmp $LANGUAGE ${LANG_FRENCH} french default
 	french:
-		Push "<Wengo><style>WengoKeramik2</style><audio><input><name></name></input><output><name></name></output><ringing><name></name></ringing></audio><lang>wengo_fr.qm</lang></Wengo>"
+		Push "<settings><language><string>fr</string></language></settings>"
 		Goto writeFile
 	default: ; English
-		Push "<Wengo><style>WengoKeramik2</style><audio><input><name></name></input><output><name></name></output><ringing><name></name></ringing></audio><lang>wengo_en.qm</lang></Wengo>"
+		Push "<settings><language><string>en</string></language></settings>"
 		Goto writeFile
 
 writeFile:
-	Push "wengo.config"
+    Push "config.xml"
 	Call writeToFile
 done:
 SetOverwrite on
-*/
+
 
 /**
  * So that we can execute wengophone.exe
