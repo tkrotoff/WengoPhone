@@ -42,10 +42,10 @@ GaimIMChat::GaimIMChat(IMAccount & account)
 
 }
 
-mConvInfo_t *GaimIMChat::CreateChatSession()
+mConvInfo_t *GaimIMChat::CreateChatSession(bool userCreated)
 {
 	mConvInfo_t *mConv = new mConvInfo_t();
-	IMChatSession *chatSession = new IMChatSession(*this);
+	IMChatSession *chatSession = new IMChatSession(*this, userCreated);
 	
 	mConv->conv_session = chatSession;
 	mConv->conv_id = chatSession->getId();
@@ -84,9 +84,10 @@ void GaimIMChat::createSession(IMContactSet & imContactSet)
 		{
 			mConv = (mConvInfo_t *)gConv->ui_data;
 			newIMChatSessionCreatedEvent(*this, *((IMChatSession *)(mConv->conv_session)));
+			return;
 		}
 
-		gConv = gaim_conversation_new(GAIM_CONV_TYPE_IM, gAccount, contactId.c_str());
+		gaim_conversation_new(GAIM_CONV_TYPE_IM, gAccount, contactId.c_str());
 	}
 	else
 	{
@@ -287,7 +288,7 @@ void GaimIMChat::createGaimChat(GaimConnection *gGC, int id, GList *users)
 	GaimConversation *gConv;
 
 	if (mConv == NULL)
-		mConv = CreateChatSession();
+		mConv = CreateChatSession(true);
 	
 	snprintf(chatName, sizeof(chatName), "Chat%d", mConv->conv_id);
 

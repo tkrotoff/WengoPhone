@@ -47,7 +47,7 @@ public:
 	/* *************** GaimChatCallback **************** */
 	static void ChatJoinedCbk(GaimConversation *conv);
 
-	static void CreateConversationCbk(GaimConversation *conv);
+	static void CreateConversationCbk(GaimConversation *conv, bool userCreated);
 	static void DestroyConversationCbk(GaimConversation *conv);
 	static void WriteChatCbk(GaimConversation *conv, const char *who,
 							const char *message, GaimMessageFlags flags, time_t mtime);

@@ -58,51 +58,15 @@ int GetGaimConversationId(const char *name)
 }
 
 
-/* **************** TYPING STATE MANAGEMENT ****************** */
-
-void chat_joined(GaimConversation *conv)
-{
-	GaimChatMngr::ChatJoinedCbk(conv);
-}
-
-int chat_invite_request(GaimAccount *account, const char *who, 
-						const char *message, void *data)
-{
-	return 1;
-}
-
-void update_buddy_typing(GaimAccount *account, const char *who)
-{
-	GaimConversation *gConv = NULL;
-
-	gConv = gaim_find_conversation_with_account(GAIM_CONV_TYPE_IM, who, account);
-	if (!gConv)
-		return;
-
-	GaimChatMngr::UpdateBuddyTyping(gConv, gaim_conv_im_get_typing_state(GAIM_CONV_IM(gConv)));
-}
-
-void init_chat_event()
-{
-	void *handle = gaim_wg_get_handle();
-	
-	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing",
-						handle, GAIM_CALLBACK(update_buddy_typing), NULL);
-	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing-stopped",
-						handle, GAIM_CALLBACK(update_buddy_typing), NULL);
-
-	gaim_signal_connect(gaim_conversations_get_handle(), "chat-invited",
-						handle, GAIM_CALLBACK(chat_invite_request), NULL);
-
-	gaim_signal_connect(gaim_conversations_get_handle(), "chat-joined",
-						handle, GAIM_CALLBACK(chat_joined), NULL);
-}
-
-
 /* ***************** GAIM CALLBACK ***************** */
+void C_CreateIncomingConversationCbk(GaimConversation *conv)
+{
+	GaimChatMngr::CreateConversationCbk(conv, false);
+}
+
 void C_CreateConversationCbk(GaimConversation *conv)
 {
-	GaimChatMngr::CreateConversationCbk(conv);
+	GaimChatMngr::CreateConversationCbk(conv, true);
 }
 
 static void C_DestroyConversationCbk(GaimConversation *conv)
@@ -195,6 +159,63 @@ GaimConversationUiOps chat_wg_ops =	{
 												C_CustomSmileyCloseCbk,		/* custom_smiley_close	*/
 											};
 
+
+/* **************** MISCELLEANOUS CALLBACK ****************** */
+
+void chat_joined_cb(GaimConversation *conv)
+{
+	GaimChatMngr::ChatJoinedCbk(conv);
+}
+
+int chat_invite_request_cb(GaimAccount *account, const char *who, 
+						const char *message, void *data)
+{
+	return 1;
+}
+
+void update_buddy_typing_cb(GaimAccount *account, const char *who)
+{
+	GaimConversation *gConv = NULL;
+
+	gConv = gaim_find_conversation_with_account(GAIM_CONV_TYPE_IM, who, account);
+	if (!gConv)
+		return;
+
+	GaimChatMngr::UpdateBuddyTyping(gConv, gaim_conv_im_get_typing_state(GAIM_CONV_IM(gConv)));
+}
+
+void received_im_msg_cb(GaimAccount *account, char *sender, char *message,
+						GaimConversation *conv, int flags)
+{
+	GaimConversationUiOps *ops = &chat_wg_ops;
+	
+	if (conv != NULL)
+		return;
+
+	ops->create_conversation = C_CreateIncomingConversationCbk;
+	gaim_conversation_new(GAIM_CONV_TYPE_IM, account, sender);
+	ops->create_conversation = C_CreateConversationCbk;
+}
+
+void init_chat_event()
+{
+	void *handle = gaim_wg_get_handle();
+	
+	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing",
+						handle, GAIM_CALLBACK(update_buddy_typing_cb), NULL);
+	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing-stopped",
+						handle, GAIM_CALLBACK(update_buddy_typing_cb), NULL);
+
+	gaim_signal_connect(gaim_conversations_get_handle(), "chat-invited",
+						handle, GAIM_CALLBACK(chat_invite_request_cb), NULL);
+
+	gaim_signal_connect(gaim_conversations_get_handle(), "chat-joined",
+						handle, GAIM_CALLBACK(chat_joined_cb), NULL);
+
+	gaim_signal_connect(gaim_conversations_get_handle(), "received-im-msg",
+						handle, GAIM_CALLBACK(received_im_msg_cb), NULL);
+}
+
 /* ************************************************** */
 
 GaimChatMngr * GaimChatMngr::_staticInstance = NULL;
@@ -232,18 +253,14 @@ void GaimChatMngr::ChatJoinedCbk(GaimConversation *conv)
 	{
 		for (GList *l = mConv->pending_invit; l != NULL; l = l->next)
 		{
-			//if (account->getProtocol() == EnumIMProtocol::IMProtocolYahoo)
-			//	sleep(10);
-
 			serv_chat_invite(gaim_conversation_get_gc(conv), 
 				gaim_conv_chat_get_id(GAIM_CONV_CHAT(conv)),
 				"Join my conference...", (char *)l->data);
 		}
-		mConv->pending_invit = NULL;
 	}
 }
 
-void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
+void GaimChatMngr::CreateConversationCbk(GaimConversation *conv, bool userCreated)
 {
 	GaimAccount *gAccount = gaim_conversation_get_account(conv);
 	GaimConversationType chatType = gaim_conversation_get_type(conv);
@@ -258,7 +275,7 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 		IMChatSession *chatSession = NULL;
 		IMContact imContact(*account, gaim_conversation_get_name(conv));
 
-		mConv = mChat->CreateChatSession();
+		mConv = mChat->CreateChatSession(userCreated);
 		mConv->gaim_conv_session = conv;
  		conv->ui_data = mConv;
 
@@ -275,7 +292,7 @@ void GaimChatMngr::CreateConversationCbk(GaimConversation *conv)
 
 		if ((mConv = mChat->FindChatStructById(id)) == NULL)
 		{
-			mConv = mChat->CreateChatSession();
+			mConv = mChat->CreateChatSession(userCreated);
 		}
 
 		if (mConv->gaim_conv_session)
@@ -347,7 +364,8 @@ void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
 	{
 		if (strcmp(gaim_account_get_username(gAccount), (char *) l->data))
 		{
-			IMContact imContact(*account, std::string((char *) l->data));
+			std::string buddy((char *) l->data);
+			IMContact imContact(*account, buddy);
 
 			if (chatSession->getIMContactSet().find(imContact) != chatSession->getIMContactSet().end())
 			{

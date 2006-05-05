@@ -53,7 +53,7 @@ public:
 
 	GaimIMChat(IMAccount &account);
 
-	mConvInfo_t *CreateChatSession();
+	mConvInfo_t *CreateChatSession(bool userCreated);
 
 	virtual void createSession(IMContactSet & imContactList);
 	virtual void closeSession(IMChatSession & chatSession);
