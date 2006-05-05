@@ -95,13 +95,13 @@ void GaimIMConnect::AddMSNAccountParams(void *gaimAccount, IMAccountParameters &
 
 	gaim_account_set_string(gAccount, MSN_SERVER_KEY, mParams.getMSNServer().c_str());
 	gaim_account_set_int(gAccount, MSN_PORT_KEY, mParams.getMSNServerPort());
-	gaim_account_set_bool(gAccount, MSN_USE_HTTP_KEY, mParams.isMSNHttpUsed());	
+	gaim_account_set_bool(gAccount, MSN_USE_HTTP_KEY, mParams.isMSNHttpUsed());
 }
 
 void GaimIMConnect::AddYahooAccountParams(void *gaimAccount, IMAccountParameters &mParams)
 {
 	GaimAccount *gAccount = (GaimAccount *)gaimAccount;
-	
+
 	gaim_account_set_bool(gAccount, YAHOO_IS_JAPAN_KEY, mParams.isYahooJapan());
 	gaim_account_set_string(gAccount, YAHOO_SERVER_KEY, mParams.getYahooServer().c_str());
 	gaim_account_set_string(gAccount, YAHOO_JAPAN_SERVER_KEY, mParams.getYahooJapanServer().c_str());
@@ -152,7 +152,7 @@ void *GaimIMConnect::CreateAccount()
 }
 
 void GaimIMConnect::AddAccountParams(void *gaimAccount)
-{		
+{
 	GaimAccount *gAccount = (GaimAccount *)gaimAccount;
 	IMAccountParameters &mParams = _imAccount.getIMAccountParameters();
 
@@ -177,7 +177,7 @@ void GaimIMConnect::AddAccountParams(void *gaimAccount)
 			break;
 
 		default:
-			LOG_FATAL("protocol not supported");
+			LOG_FATAL("unknown protocol=" + String::fromNumber(_imAccount.getProtocol()));
 			break;
 	}
 }
@@ -215,5 +215,5 @@ void GaimIMConnect::disconnect()
 	if (gaim_account_get_enabled(gAccount, gaim_core_get_ui()))
 		gaim_account_set_enabled(gAccount, gaim_core_get_ui(), FALSE);
 	gaim_account_disconnect(gAccount);
-	
+
 }
