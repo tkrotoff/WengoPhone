@@ -44,6 +44,9 @@ QtCreditWidget::QtCreditWidget(QWidget * parent , Qt::WFlags f ) : QWidget(paren
 	//Pstn number label
 	_pstnNumber = new QLabel(this);
 
+	//call forward mode label
+	_callForwardMode = new QtClickableLabel(this);
+	
 	//add labels to the layout
 	_gridLayout = new QGridLayout(this);
 	_gridLayout->addWidget(buyLabel, 0, 0);
@@ -61,4 +64,9 @@ void QtCreditWidget::setPstnNumber(const QString & number) {
 	//TODO: remove the '0' hack when the ws will be updated
 	_pstnNumber->setText(tr("Your number: 0") + number);
 	_gridLayout->addWidget(_pstnNumber, 1, 0);
+}
+
+void QtCreditWidget::setCallForwardMode(const QString & mode) {
+	_callForwardMode->setText(tr("Call Forward mode: ") + mode);
+	_gridLayout->addWidget(_callForwardMode, 2, 0);
 }

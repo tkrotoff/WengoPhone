@@ -50,8 +50,6 @@ public:
 	QtProfileBar (CWengoPhone & cWengoPhone, UserProfile & userProfile, 
 		ConnectHandler & connectHandler,QWidget * parent = 0, Qt::WFlags f = 0 );
 
-	void setWengos(float wengos);
-
     void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
 
     void disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount);
@@ -161,6 +159,9 @@ private:
 	void wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail);
 
 	void wsInfoPtsnNumberEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, std::string number);
+
+	void wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status,
+		WsInfo::WsInfoCallForwardMode mode, bool voicemail, std::string dest1, std::string dest2, std::string dest3);
 
 	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
 

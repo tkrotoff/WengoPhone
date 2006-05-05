@@ -158,35 +158,35 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
     connect(this,SIGNAL(disconnectedEventSignal(IMAccount *)),_nickNameWidget,SLOT(disconnected(IMAccount *)));
 
     if ( !connect(this,SIGNAL(myPresenceStatusEventSignal(QVariant  )),
-            this,SLOT  (myPresenceStatusEventSlot( QVariant ))) ){
+            this,SLOT  (myPresenceStatusEventSlot( QVariant ))) ) {
         LOG_FATAL("Signal / slot connection error");
     }
 }
 
 // Called in the model thread
-void QtProfileBar::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount){
+void QtProfileBar::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
     IMAccount * pImAccount = &imAccount;
     connectEventSignal(pImAccount);
 }
 
 // Called in the model thread
-void QtProfileBar::disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount){
+void QtProfileBar::disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount) {
     IMAccount * pImAccount = &imAccount;
     disconnectedEventSignal(pImAccount);
 }
 
 void QtProfileBar::myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
-		                                        EnumPresenceState::MyPresenceStatus status){
+		                                        EnumPresenceState::MyPresenceStatus status) {
     EnumPresenceState::MyPresenceStatus * pstatus = new EnumPresenceState::MyPresenceStatus;
     QVariant v(status);
     myPresenceStatusEventSignal(v);
 }
 
-void QtProfileBar::myPresenceStatusEventSlot(QVariant status){
+void QtProfileBar::myPresenceStatusEventSlot(QVariant status) {
 
     if ( status.toInt() == (int)EnumPresenceState::MyPresenceStatusOk)
 
-    switch ( _userProfile.getPresenceState() ){
+    switch ( _userProfile.getPresenceState() ) {
         case EnumPresenceState::PresenceStateAway:
             setAway();
             break;
@@ -205,7 +205,7 @@ void QtProfileBar::myPresenceStatusEventSlot(QVariant status){
     }
 }
 
-void QtProfileBar::statusClicked(){
+void QtProfileBar::statusClicked() {
 	createStatusMenu();
 }
 
@@ -221,7 +221,7 @@ void QtProfileBar::nicknameClicked(){
 	}
 }
 
-void QtProfileBar::showNickNameWidget(){
+void QtProfileBar::showNickNameWidget() {
 
 	removeEventsWidget();
 	removeCreditWidget();
@@ -235,7 +235,7 @@ void QtProfileBar::showNickNameWidget(){
 	}
 }
 
-void QtProfileBar::removeNickNameWidget(){
+void QtProfileBar::removeNickNameWidget() {
 
 	if ( _nickNameWidgetVisible ){
 		_nickNameWidget->setVisible(false);
@@ -249,7 +249,7 @@ void QtProfileBar::removeNickNameWidget(){
 	}
 }
 
-void QtProfileBar::eventsClicked(){
+void QtProfileBar::eventsClicked() {
 
 	if ( _eventsWidgetVisible )
 		removeEventsWidget();
@@ -262,7 +262,7 @@ void QtProfileBar::eventsClicked(){
 	}
 }
 
-void QtProfileBar::showEventsWidget(){
+void QtProfileBar::showEventsWidget() {
 
 	removeNickNameWidget();
 	removeCreditWidget();
@@ -274,7 +274,7 @@ void QtProfileBar::showEventsWidget(){
 	}
 }
 
-void QtProfileBar::removeEventsWidget(){
+void QtProfileBar::removeEventsWidget() {
 	if ( _eventsWidgetVisible ){
 		_eventWidget->setVisible(false);
 		_widgetLayout->removeWidget( _eventWidget );
@@ -286,7 +286,7 @@ void QtProfileBar::removeEventsWidget(){
 	}
 }
 
-void QtProfileBar::creditClicked(){
+void QtProfileBar::creditClicked() {
 	if ( _crediWidgetVisible )
 		removeCreditWidget();
 	else{
@@ -297,7 +297,7 @@ void QtProfileBar::creditClicked(){
 	}
 }
 
-void QtProfileBar::showCreditWidget(){
+void QtProfileBar::showCreditWidget() {
 	removeNickNameWidget();
 	removeEventsWidget();
 	if ( ! _crediWidgetVisible ){
@@ -308,7 +308,7 @@ void QtProfileBar::showCreditWidget(){
 	}
 }
 
-void QtProfileBar::removeCreditWidget(){
+void QtProfileBar::removeCreditWidget() {
 
 	if ( _crediWidgetVisible ){
 		_creditWidget->setVisible(false);
@@ -321,7 +321,7 @@ void QtProfileBar::removeCreditWidget(){
 	}
 }
 
-void QtProfileBar::createStatusMenu(){
+void QtProfileBar::createStatusMenu() {
 	if (_statusMenu)
 		delete _statusMenu;
 	_statusMenu = new QMenu(this);
@@ -353,60 +353,56 @@ void QtProfileBar::createStatusMenu(){
 	_statusMenu->popup(mapToGlobal(p));
 }
 
-void QtProfileBar::onlineClicked(bool){
+void QtProfileBar::onlineClicked(bool) {
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateOnline, NULL);
 
 }
 
-
-void QtProfileBar::setOnline(){
+void QtProfileBar::setOnline() {
     setStatusLabel(":/pics/profilebar/bar_start_status_green.png",
                    ":/pics/profilebar/bar_on_start_status_green.png");
 }
 
-void QtProfileBar::dndClicked(bool){
+void QtProfileBar::dndClicked(bool) {
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateDoNotDisturb, NULL);
 
 }
 
-void QtProfileBar::setDND(){
+void QtProfileBar::setDND() {
 	setStatusLabel(":/pics/profilebar/bar_start_status_red.png",
 	               ":/pics/profilebar/bar_on_start_status_red.png");
 }
 
-void QtProfileBar::invisibleClicked(bool){
+void QtProfileBar::invisibleClicked(bool) {
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateInvisible, NULL);
 }
 
-void QtProfileBar::setInvisible(){
+void QtProfileBar::setInvisible() {
 	setStatusLabel(":/pics/profilebar/bar_start_status_gray.png",
 	               ":/pics/profilebar/bar_on_start_status_gray.png");
 }
 
-void QtProfileBar::awayClicked(bool){
+void QtProfileBar::awayClicked(bool) {
 	_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway, NULL);
 
 }
 
-void QtProfileBar::setAway(){
+void QtProfileBar::setAway() {
 	setStatusLabel(":/pics/profilebar/bar_start_status_orange.png",
 	               ":/pics/profilebar/bar_on_start_status_orange.png");
 }
 
-void QtProfileBar::forwardClicked(bool){
+void QtProfileBar::forwardClicked(bool) {
 	// We should switch to forward only on a Wengo account
 	//_userProfile.setPresenceState(EnumPresenceState::PresenceStateForward, NULL);
-}
-
-void QtProfileBar::setWengos ( float wengos ){
-	// 0x20ac is the unicode code for the euros currency symbol
-	_creditLabel->setText(QString() + QChar(0x20ac) + QString(" %1").arg(wengos) );
 }
 
 void QtProfileBar::wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsInfo) {
 	wsInfo.wsInfoWengosEvent += boost::bind(&QtProfileBar::wsInfoWengosEventHandler, this, _1, _2, _3, _4);
 	wsInfo.wsInfoVoiceMailEvent += boost::bind(&QtProfileBar::wsInfoVoiceMailEventHandler, this, _1, _2, _3, _4);
 	wsInfo.wsInfoPtsnNumberEvent += boost::bind(&QtProfileBar::wsInfoPtsnNumberEventHandler, this, _1, _2, _3, _4);
+	
+	wsInfo.wsCallForwardInfoEvent += boost::bind(&QtProfileBar::wsCallForwardInfoEventHandler, this, _1, _2, _3, _4, _5, _6, _7, _8);
 	
 	wsInfo.getWengosCount(true);
 	wsInfo.getUnreadVoiceMail(true);
@@ -417,7 +413,8 @@ void QtProfileBar::wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsIn
 
 void QtProfileBar::wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, float wengos) {
 	if( status == WsInfo::WsInfoStatusOk ) {
-		setWengos(wengos);
+		// 0x20ac is the unicode code for the euros currency symbol
+		_creditLabel->setText(QString() + QChar(0x20ac) + QString(" %1").arg(wengos) );
 	}
 }
 
@@ -433,7 +430,29 @@ void QtProfileBar::wsInfoPtsnNumberEventHandler(WsInfo & sender, int id, WsInfo:
 	}
 }
 
-void QtProfileBar::setOpen(bool status){
+void QtProfileBar::wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status,
+	WsInfo::WsInfoCallForwardMode mode, bool voicemail, std::string dest1, std::string dest2, std::string dest3) {
+	
+	if( status == WsInfo::WsInfoStatusOk) {
+		
+		switch( mode ) {
+			case WsInfo::WsInfoCallForwardModeVoicemail:
+				_creditWidget->setCallForwardMode(tr("voicemail"));
+				break;
+			case WsInfo::WsInfoCallForwardModeNumber:
+				_creditWidget->setCallForwardMode(tr("active"));
+				break;
+			case WsInfo::WsInfoCallForwardMode_Disabled:
+				_creditWidget->setCallForwardMode(tr("inactive"));
+				break;
+			case WsInfo::WsInfoCallForwardMode_Unauthorized:
+				_creditWidget->setCallForwardMode(tr("Unauthorized"));
+				break;
+		}
+	}
+}
+
+void QtProfileBar::setOpen(bool status) {
     if (status)
     {
         QColor background = QColor(189,189,189);
@@ -457,7 +476,7 @@ void QtProfileBar::setOpen(bool status){
     }
 }
 
-void QtProfileBar::setStatusLabel(const QString & on, const QString & off){
+void QtProfileBar::setStatusLabel(const QString & on, const QString & off) {
 
 	_statusLabel->setPixmaps(QPixmap(on),
 	                QPixmap(), // no end
@@ -477,3 +496,4 @@ void QtProfileBar::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine
 void QtProfileBar::userProfileUpdated() {
 	_nickNameWidget->userProfileUpdated();
 }
+

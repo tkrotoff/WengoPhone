@@ -35,11 +35,13 @@ class QtCreditWidget : public QWidget {
 	Q_OBJECT
 public:
 
-	QtCreditWidget(QWidget * parent =0, Qt::WFlags f = 0);
+	QtCreditWidget(QWidget * parent = 0, Qt::WFlags f = 0);
 
 	void setCWengoPhone(CWengoPhone * cwengophone);
 
 	void setPstnNumber(const QString & number);
+
+	void setCallForwardMode(const QString & mode);
 
 public Q_SLOTS:
 
@@ -49,12 +51,12 @@ private:
 
 	QLabel * _pstnNumber;
 
+	QLabel * _callForwardMode;
+
 	QGridLayout * _gridLayout;
 
 protected:
 
 	CWengoPhone * _cWengoPhone;
 };
-
 #endif
-
