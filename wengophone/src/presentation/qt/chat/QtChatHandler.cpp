@@ -53,6 +53,10 @@ void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession 
 		_qtChatWidget->addChatSession(&imChatSession);
 		_qtChatWidget->enableChatButton();
 	}
+
+	if (imChatSession.isUserCreated())
+		return;
+
 	QtToaster  * toaster = new QtToaster();
 	toaster->setTitle(tr("New chat session:"));
 	if (imChatSession.getIMContactSet().size() > 0) {
