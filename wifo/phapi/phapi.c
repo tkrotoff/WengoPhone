@@ -4360,7 +4360,7 @@ ph_api_thread(void *arg)
 
 		if (ph_event_get() == -2)
 		{
-			phIsInitialized = 0;
+			phTerminate();
 			break;
 		}
 	}
