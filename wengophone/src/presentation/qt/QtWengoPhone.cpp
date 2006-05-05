@@ -100,8 +100,8 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 		boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandler, this, _1, _2, _3);
 	_cWengoPhone.wrongProxyAuthenticationEvent +=
 		boost::bind(&QtWengoPhone::wrongProxyAuthenticationEventHandler, this, _1, _2, _3, _4, _5);
-
-	typedef PostEvent0<void ()> MyPostEvent;
+    
+    typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::initThreadSafe, this));
 	postEvent(event);
 }
@@ -184,10 +184,10 @@ void QtWengoPhone::initThreadSafe() {
 	setTrayMenu();
 	_trayIcon->show();
 
+    connect (_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT (sysTrayDoubleClicked(const QPoint &)));
+
     connect (_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )),
              this,SLOT(setSystrayIcon(QVariant )));
-
-    connect (_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT (sysTrayDoubleClicked(const QPoint &)));
 
 	//actionShowWengoAccount
 	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
@@ -301,8 +301,10 @@ void QtWengoPhone::initThreadSafe() {
 
 	//FIXME: can i create the widget here ?
 //	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
-
-	updatePresentation();
+    Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.set(Config::LANGUAGE_KEY, config.getLanguage());
+	
+    updatePresentation();
 	_wengoPhoneWindow->show();
 }
 
@@ -464,11 +466,12 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 				+ "&lang=" + "fr" + "&wl=" + "wengo" + "&page=softphone-web";
 			_browser->setUrl(URL_WENGO_MINI_HOME + data);
 		}
+        }
 #endif
-		break;
+    	break;
 
 	case SipAccount::LoginStateConnected:
-		break;
+	break;
 
 	case SipAccount::LoginStateDisconnected:
 #ifdef OS_WINDOWS
@@ -957,9 +960,4 @@ void QtWengoPhone::showChatWindow(){
  if ( _chatWindow )
     _chatWindow->setVisible(true);
 }
-
-
-
-
-
 
