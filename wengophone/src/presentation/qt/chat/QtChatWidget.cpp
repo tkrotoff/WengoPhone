@@ -17,6 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <imwrapper/IMContactSet.h>
+
 #include "QtChatWidget.h"
 #include "chatwidgetmanager.h"
 #include "QtEmoticonsWidget.h"
@@ -29,6 +31,8 @@
 #include <model/profile/UserProfile.h>
 
 #include <qtutil/QtWengoStyleLabel.h>
+
+
 
 ChatWidget::ChatWidget (CChatHandler & cChatHandler, int sessionId, QWidget * parent, Qt::WFlags f) :
 QWidget(parent, f), _cChatHandler(cChatHandler){
@@ -59,10 +63,10 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 	_contactListFrame = Object::findChild<QFrame *>(_widget,"contactListFrame");
 	_typingStateLabel = Object::findChild<QLabel *>(_widget,"typingStateLabel");
 	_actionFrame = Object::findChild<QFrame *>(_widget,"actionFrame");
+    _contactListLabel = Object::findChild<QLabel *>(_widget,"contactListLabel");
+
 	createActionFrame();
     setupSendButton();
-	// _inviteButton = Object::findChild<QPushButton *>(_widget,"inviteButton");
-	// connect ( _inviteButton,SIGNAL(clicked()), SLOT(inviteContact()));
 
     ChatWidgetManager * cwm = new ChatWidgetManager(this,_chatEdit);
 
@@ -71,6 +75,10 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
     connect (_chatHistory,SIGNAL(anchorClicked(const QUrl &)),this,SLOT(urlClicked(const QUrl & )));
     connect (_emoticonsLabel,SIGNAL(clicked()),this,SLOT(chooseEmoticon()));
     connect (_sendButton,SIGNAL(clicked()),this,SLOT(enterPressed()));
+
+    connect (this,SIGNAL(contactAddedEventSignal()),this,SLOT(contactAddedEventSlot()));
+    connect (this,SIGNAL(contactRemovedEventSignal()),this,SLOT(contactRemovedEventSlot()));
+
     _chatHistory->setHtml ("<qt type=detail>");
 
     _emoticonsWidget = new EmoticonsWidget(this,Qt::Popup);
@@ -89,6 +97,17 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 	new QHBoxLayout(_contactViewport);
 	_contactViewport->layout()->setMargin(0);
 	_scrollArea->setWidgetResizable(true);
+}
+
+ChatWidget::~ChatWidget(){
+
+	_imChatSession->contactAddedEvent -=
+        boost::bind(&ChatWidget::contactAddedEventHandler,this,_1,_2);
+
+    _imChatSession->contactRemovedEvent -=
+        boost::bind(&ChatWidget::contactRemovedEventHandler,this,_1,_2);
+
+    _imChatSession->close();
 }
 
 void ChatWidget::chatEditChanged(){
@@ -378,12 +397,58 @@ void ChatWidget::emoticonSelected(QtEmoticon emoticon){
 
 void ChatWidget::setIMChatSession(IMChatSession * imChatSession){
 	_imChatSession = imChatSession;
-	if ( ! _imChatSession->canDoMultiChat() )
-		//_inviteButton->setEnabled(false);
 
+	_imChatSession->contactAddedEvent +=
+        boost::bind(&ChatWidget::contactAddedEventHandler,this,_1,_2);
+
+    _imChatSession->contactRemovedEvent +=
+        boost::bind(&ChatWidget::contactRemovedEventHandler,this,_1,_2);
+
+//	if ( ! _imChatSession->canDoMultiChat() )
 	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
 
 }
+
+// called from the model's thread
+void ChatWidget::contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact){
+    contactAddedEventSignal();
+}
+
+// called from the model's thread
+void ChatWidget::contactRemovedEventHandler(IMChatSession & sender, const IMContact & imContact){
+    contactRemovedEventSignal();
+}
+
+// Qt thread
+void ChatWidget::contactAddedEventSlot(){
+    updateContactListLabel();
+}
+
+// Qt thread
+void ChatWidget::contactRemovedEventSlot(){
+    updateContactListLabel();
+}
+
+void ChatWidget::updateContactListLabel(){
+    // IMContactSet & getIMContactSet()
+    QMutexLocker locker(&_mutex);
+
+    IMContactSet imContactSet = _imChatSession->getIMContactSet();
+    QStringList contactStringList;
+
+    IMContactSet::iterator iter;
+
+    for (iter = imContactSet.begin(); iter != imContactSet.end(); iter++){
+        contactStringList << QString::fromStdString( (*iter).getContactId() );
+    }
+
+    if ( contactStringList.size() > 1 ){
+        QString str = QString (tr("Chat with : ")) + contactStringList.join("; ");
+        _contactListLabel->setText(str);
+    }
+
+}
+
 
 bool ChatWidget::canDoMultiChat(){
 	return _imChatSession->canDoMultiChat();
@@ -530,3 +595,4 @@ void ChatWidget::setVisible ( bool visible ){
     if ( visible )
         _chatEdit->setFocus();
 }
+

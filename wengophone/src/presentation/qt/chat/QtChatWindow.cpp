@@ -107,11 +107,6 @@ void ChatWindow::initThreadSafe(){
 
 	connect ( closeTabButton, SIGNAL(clicked() ), SLOT(closeTab()));
 
-/*
-	QPalette dialogPalette = _dialog->palette();
-	dialogPalette.setColor(QPalette::Window, QColor(60,60,60));
-	_dialog->setPalette(dialogPalette);
-*/
 	_inviteFrame = new QFrame(_dialog);
 	createInviteFrame();
 
@@ -213,12 +208,13 @@ void ChatWindow::inviteContact(){
 
 void ChatWindow::closeTab(){
     ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(_tabWidget->currentIndex() ) );
-
+/*
     if ( widget){
         if (widget->canDoMultiChat()){
             widget->getIMChatSession()->close();
         }
     }
+*/
     delete widget;
     if ( _tabWidget->count() == 0 )
     {
@@ -346,7 +342,7 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 
 	imChatSession->typingStateChangedEvent +=
 		boost::bind(&ChatWindow::typingStateChangedEventHandler, this, _1, _2, _3);
-	
+
 	if ( imChatSession->getIMContactSet().size() != 0 ) {
 		IMContact from = *imChatSession->getIMContactSet().begin();
 		addChat(imChatSession,from);

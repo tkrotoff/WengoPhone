@@ -45,6 +45,8 @@ public:
 
     ChatWidget(CChatHandler & cChatHandler, int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
 
+    virtual ~ChatWidget();
+
     void setNickBgColor(const QString &color);
 
     void setNickTextColor(const QString &color);
@@ -78,6 +80,12 @@ public:
     void openContactListFrame();
 
     bool canDoMultiChat();
+
+    // called from the model's thread
+    void contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact);
+
+    // called from the model's thread
+    void contactRemovedEventHandler(IMChatSession & sender, const IMContact & imContact);
 
 protected:
 
@@ -119,6 +127,8 @@ protected:
 
 	QLabel * _typingStateLabel;
 
+    QLabel * _contactListLabel;
+
 	IMChatSession * _imChatSession;
 
 	QFont _currentFont;
@@ -135,6 +145,8 @@ protected:
 
     EmoticonsWidget *_emoticonsWidget;
 
+    QMutex _mutex;
+
     const QString replaceUrls(const QString & str, const QString & htmlstr);
 
 	const QString text2Emoticon(const QString &htmlstr);
@@ -148,6 +160,8 @@ protected:
     void createActionFrame();
 
     void setupSendButton();
+
+    void updateContactListLabel();
 
     QString generateHtmlHeader(const QString & bgColor,
                                        const QString & barColor,
@@ -196,13 +210,23 @@ public Q_SLOTS:
 
     void chatEditChanged();
 
+    void contactAddedEventSlot();
+
+    void contactRemovedEventSlot();
+
+
     virtual void setVisible ( bool visible );
+
 
 Q_SIGNALS:
 
     void newMessage(IMChatSession* session,const QString & msg);
 
     void newContact(const Contact & contact);
+
+    void contactAddedEventSignal();
+
+    void contactRemovedEventSignal();
 
     void contactAdded();
 };
