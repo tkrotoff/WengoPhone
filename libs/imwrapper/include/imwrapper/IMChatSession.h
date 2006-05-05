@@ -130,7 +130,6 @@ public:
 
 	class IMChatMessage {
 	public:
-
 		IMChatMessage(const IMContact & imContact, const std::string & message);
 
 		const IMContact & getIMContact() const { return _imContact; }
@@ -138,11 +137,9 @@ public:
 		std::string getMessage() const { return _message; }
 
 	private:
-
 		const IMContact & _imContact;
 
 		std::string _message;
-
 	};
 
 	/**
@@ -157,8 +154,9 @@ public:
 	 * Constructs a chat session given a IMChat.
 	 *
 	 * @param imChat because a chat session is associated to 1 IMAccount
+	 * @param userCreated true if the session has been created by the user of this computer
 	 */
-	IMChatSession(IMChat & imChat);
+	IMChatSession(IMChat & imChat, bool userCreated = false);
 
 	~IMChatSession();
 
@@ -177,15 +175,30 @@ public:
 	 */
 	void addIMContact(const IMContact & imContact);
 
+	/**
+	 * Removes a contact from the chat session.
+	 *
+	 * @param imContact the IMContact to remove from the session
+	 */
 	void removeIMContact(const IMContact & imContact);
 
+	/**
+	 * Removes all IMContact from the session.
+	 */
 	void removeAllIMContact();
 
 	/**
 	 * @return true if this IMChatSession can do multi chat.
 	 * A session can do multi chat if it is on a particular protocol.
 	 */
-	bool canDoMultiChat();
+	bool canDoMultiChat() const;
+
+	/**
+	 * @return true if the session has been created by the user of this computer.
+	 */
+	bool isUserCreated() const {
+		return _userCreated;
+	}
 
 	/**
 	 * Sends a chat message to all the contacts from this chat session.
@@ -201,15 +214,19 @@ public:
 	 */
 	void changeTypingState(IMChat::TypingState state);
 
-
 	const IMContactSet & getIMContactSet() const {
 		return _imContactSet;
 	}
 
 	IMChat & getIMChat() { return _imChat; }
 
-	bool operator==(const IMChatSession & imChatSession) const;
+	bool operator == (const IMChatSession & imChatSession) const;
 
+	/**
+	 * Returns a unique id for this session. This id is only valid locally.
+	 *
+	 * @return the id of the session
+	 */
 	int getId() const;
 
 private:
@@ -232,6 +249,7 @@ private:
 
 	IMChatMessageList _receivedIMChatMessageList;
 
+	bool _userCreated;
 };
 
 #endif //IMCHATSESSION_H

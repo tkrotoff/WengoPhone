@@ -26,8 +26,8 @@
 
 using namespace std;
 
-IMChatSession::IMChatSession(IMChat & imChat)
-	: _imChat(imChat) {
+IMChatSession::IMChatSession(IMChat & imChat, bool userCreated)
+: _imChat(imChat), _userCreated(userCreated) {
 
 	_imChat.messageReceivedEvent +=
 		boost::bind(&IMChatSession::messageReceivedEventHandler, this, _1, _2, _3, _4);
@@ -144,7 +144,7 @@ void IMChatSession::typingStateChangedEventHandler(IMChat & sender, IMChatSessio
 	}
 }
 
-bool IMChatSession::operator==(const IMChatSession & imChatSession) const {
+bool IMChatSession::operator == (const IMChatSession & imChatSession) const {
 	return (getId() == imChatSession.getId());
 }
 
@@ -171,7 +171,7 @@ void IMChatSession::contactRemovedEventHandler(IMChat & sender, IMChatSession & 
 	}
 }
 
-bool IMChatSession::canDoMultiChat() {
+bool IMChatSession::canDoMultiChat() const {
 	EnumIMProtocol::IMProtocol proto = _imChat.getIMAccount().getProtocol();
 
 	switch (proto) {

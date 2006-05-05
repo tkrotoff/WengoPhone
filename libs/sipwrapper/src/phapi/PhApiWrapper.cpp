@@ -545,7 +545,7 @@ void PhApiWrapper::createSession(IMChat & imChat, IMContactSet & imContactSet) {
 			//A Session with this contact already exists
 			imChatSession = _contactChatMap[imContact.getContactId()];
 		} else {
-			imChatSession = new IMChatSession(imChat);
+			imChatSession = new IMChatSession(imChat, true);
 			addContact(*imChatSession, (*imContactSet.begin()).getContactId());
 		}
 	}
