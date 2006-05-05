@@ -60,6 +60,7 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_sms = NULL;
 	_wsInfo = NULL;
 	_wsDirectory = NULL;
+	_wsCallForward = NULL;
 	_activePhoneLine = NULL;
 	_activePhoneCall = NULL;
 	_wengoAccount = NULL;
