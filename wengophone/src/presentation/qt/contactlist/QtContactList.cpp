@@ -109,7 +109,6 @@ void QtContactList::initThreadSafe() {
 	_treeWidget->setUniformRowHeights(false);
 	_treeWidget->header()->hide();
 
-
 	//Popup Menus
 	_contactPopupMenu = new ContactPopupMenu(_treeWidget, _cContactList.getCWengoPhone().getWengoPhone());
 	_contactGroupPopupMenu = new ContactGroupPopupMenu(_treeWidget);
@@ -121,85 +120,6 @@ void QtContactList::initThreadSafe() {
 	qtWengoPhone->setContactList(this);
 	_treeWidget->viewport()->setFocus();
 
-
-	/**********************************************************************************************************************************/
-	/*
-		DELETE THIS !
-	*/
-	/*
-	QtUserList * ul = QtUserList::getInstance();
-	QTreeWidgetItem *group = new QTreeWidgetItem(_treeWidget);
-	group->setText(0, "Group 1");
-
-	QTreeWidgetItem *wengo;
-	QString uname;
-	QString userId;
-	QtUser * user;
-
-	int counter = 0;
-
-	wengo = new QTreeWidgetItem(group);
-	uname = QString("Kavous");
-	wengo->setText(0,uname);
-	wengo->setFlags(wengo->flags() | Qt::ItemIsEditable);
-
-	user = new QtUser();
-	user->setId(uname);
-	user->setUserName(uname);
-	user->setStatus(QtContactPixmap::ContactOnline);
-	user->haveIM(true);
-	user->haveCall(true);
-	user->haveVideo(true);
-	ul->addUser(user);
-
-	wengo = new QTreeWidgetItem(group);
-	uname = QString("Guirec");
-	wengo->setText(0,uname);
-	wengo->setFlags(wengo->flags() | Qt::ItemIsEditable);
-
-	user = new QtUser();
-	user->setId(uname);
-	user->setUserName(uname);
-	user->setStatus(QtContactPixmap::ContactAway);
-	user->haveIM(true);
-	user->haveVideo(true);
-	ul->addUser(user);
-
-	for (int i=1; i< 10; i++){
-		wengo = new QTreeWidgetItem(group);
-		uname = QString("User %1 in group 1").arg(i);
-		wengo->setText(0,uname);
-		wengo->setFlags(wengo->flags() | Qt::ItemIsEditable);
-		userId = QString("USER%1").arg(counter);
-		user = new QtUser();
-		user->setId(uname);
-		user->setUserName(uname);
-		user->setStatus(QtContactPixmap::ContactOnline);
-		user->haveIM(true);
-
-		ul->addUser(user);
-		counter++;
-	}
-
-	group = new QTreeWidgetItem(_treeWidget);
-	group->setText(0,"Group 2");
-
-	for (int i=1; i< 10; i++){
-		wengo = new QTreeWidgetItem(group);
-		wengo->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
-		uname = QString("User %1 in group 2").arg(i);
-		wengo->setText(0,uname);
-		wengo->setFlags(wengo->flags() | Qt::ItemIsEditable);
-		userId = QString("USER%1").arg(counter);
-		user = new QtUser();
-		user->setId(uname);
-		user->setUserName(uname);
-		user->setStatus(QtContactPixmap::ContactNotAvailable);
-		user->haveIM(true);
-		user->haveVideo(true);
-		ul->addUser(user);
-		counter++;
-	}*/
 }
 
 void QtContactList::updatePresentation() {
@@ -221,8 +141,6 @@ void QtContactList::addContactGroup(PContactGroup * pContactGroup) {
 }
 
 void QtContactList::addContactGroupThreadSafe(PContactGroup * pContactGroup) {
-	//LOG_DEBUG("contact group added:" + pContactGroup->getName());
-	//QString displayName = QString::fromStdString(pContactGroup->getDisplayName();
 	QString displayName = QString::fromUtf8(pContactGroup->getDisplayName().c_str());
 	QTreeWidgetItem *group = new QTreeWidgetItem(_treeWidget);
 	group->setText(0, displayName );

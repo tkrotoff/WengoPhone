@@ -404,7 +404,6 @@ void ChatWidget::setIMChatSession(IMChatSession * imChatSession){
     _imChatSession->contactRemovedEvent +=
         boost::bind(&ChatWidget::contactRemovedEventHandler,this,_1,_2);
 
-//	if ( ! _imChatSession->canDoMultiChat() )
 	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
 
 }
@@ -430,7 +429,6 @@ void ChatWidget::contactRemovedEventSlot(){
 }
 
 void ChatWidget::updateContactListLabel(){
-    // IMContactSet & getIMContactSet()
     QMutexLocker locker(&_mutex);
 
     IMContactSet imContactSet = _imChatSession->getIMContactSet();

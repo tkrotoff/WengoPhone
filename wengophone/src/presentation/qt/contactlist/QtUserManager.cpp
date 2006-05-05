@@ -24,7 +24,8 @@
 #include "QtHidenContact.h"
 #include "QtContactPixmap.h"
 #include "QtUserTreeEventFilter.h"
-
+#include "QtConferenceAction.h"
+#include "../QtWengoPhone.h"
 #include <presentation/qt/profile/QtProfileDetails.h>
 #include <presentation/PContact.h>
 
@@ -32,6 +33,11 @@
 #include <control/CWengoPhone.h>
 
 #include <model/contactlist/ContactList.h>
+#include <model/phoneline/PhoneLine.h>
+#include <model/phonecall/PhoneCall.h>
+#include <model/contactlist/Contact.h>
+
+#include <sipwrapper/EnumPhoneCallState.h>
 
 #include <util/Logger.h>
 
@@ -55,6 +61,15 @@ QtUserManager::QtUserManager(CWengoPhone & cWengoPhone, QObject * parent, QTreeW
 	connect (dnd,SIGNAL(itemEntered ( QTreeWidgetItem *)),this,SLOT(itemEntered ( QTreeWidgetItem * )));
 	connect (dnd,SIGNAL(itemTimeout(QTreeWidgetItem *)),this,SLOT(openUserInfo(QTreeWidgetItem *)));
 	connect (dnd,SIGNAL(mouseClicked(Qt::MouseButton)),SLOT(setMouseButton(Qt::MouseButton)));
+
+    QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cWengoPhone.getPresentation());
+
+    if ( ! connect(this,SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
+            qtWengoPhone,SLOT(addToConference(QString , PhoneCall * ))) ){
+        LOG_DEBUG("Unable to connect signal\n");
+    }
+
+
 }
 
 void QtUserManager::startSMS(bool checked){
@@ -406,8 +421,53 @@ void QtUserManager::showAllUsers(){
 	safeShowAllUsers();
 }
 
-QMenu * QtUserManager::createMenu(){
+QMenu * QtUserManager::createConferenceMenu(){
 
+    PhoneLine * phoneLine = dynamic_cast <PhoneLine *>(_cWengoPhone.getCurrentUserProfile().getActivePhoneLine());
+
+    QMenu * menu = new QMenu(tr("Invite to conference"));
+    if ( phoneLine ){
+        PhoneLine::PhoneCallList phoneCallList = phoneLine->getPhoneCallList();
+
+        PhoneLine::PhoneCallList::iterator it;
+
+        for ( it = phoneCallList.begin(); it != phoneCallList.end(); it++){
+
+            if ( (*it)->getState() != EnumPhoneCallState::PhoneCallStateClosed ){
+                // QAction * action = menu->addAction(QString::fromStdString( (*it)->getPeerSipAddress().getUserName() ));
+                QtConferenceAction * action = new QtConferenceAction(QString::fromStdString( (*it)->getPeerSipAddress().getUserName()),menu);
+                action->setPhoneCall((*it));
+                connect(action,SIGNAL(triggered(bool)),SLOT(inviteToConference()));
+                menu->addAction(action);
+            }
+        }
+    }
+    return menu;
+}
+
+void QtUserManager::inviteToConference(){ // SLOT
+
+    QObject * source = sender();
+
+    if ( source ){
+        QtConferenceAction * action = dynamic_cast<QtConferenceAction *>(source);
+        QtUserList * ul = QtUserList::getInstance();
+        QtUser * user;
+        // The current selected item
+        QTreeWidgetItem * item = _tree->currentItem();
+        user = ul->getUser(item->text(0));
+        if ( user ){
+            QString phone =  QString::fromStdString(user->getCContact().getContact().getPreferredNumber());
+            qDebug() << "Inviting " << phone << "to conference";
+            inviteToConferenceClicked(phone, action->getPhoneCall());
+        }
+    }
+    else{
+        LOG_DEBUG("Don't call this function directly !!! \n");
+    }
+}
+
+QMenu * QtUserManager::createMenu(){
 
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
@@ -416,7 +476,6 @@ QMenu * QtUserManager::createMenu(){
 	QTreeWidgetItem * item = _tree->currentItem();
 
 	user = ul->getUser(item->text(0));
-
 
 	QAction * action;
 
@@ -456,7 +515,8 @@ QMenu * QtUserManager::createMenu(){
 	action = menu->addAction(tr("Send SMS"));
 	connect (action,SIGNAL(triggered(bool)),SLOT(startSMS(bool)));
 
-	menu->addAction(tr("Invite to conference"));
+	// menu->addAction(tr("Invite to conference"));
+	menu->addMenu( createConferenceMenu() );
 
 	menu->addSeparator();
 

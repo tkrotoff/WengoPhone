@@ -19,7 +19,8 @@
 
 #include "QtPhoneCall.h"
 #include "QtContactCallList.h"
-
+#include <model/phonecall/PhoneCall.h>
+#include <control/phonecall/CPhoneCall.h>
 
 QtContactCallList::QtContactCallList ( QWidget * parent ):
 QScrollArea(parent)
@@ -55,5 +56,22 @@ void QtContactCallList::deleteQtPhoneCall(QtPhoneCall * qtPhoneCall){
 			break;
 		}
 	}
-	qtPhoneCall->deleteLater();
+	// qtPhoneCall->deleteLater();
+}
+
+bool QtContactCallList::hasPhoneCall(PhoneCall * phoneCall){
+	QtPhoneCallList::iterator iter;
+	QtPhoneCall * tmp = NULL;
+	for (iter = _phoneCallList.begin(); iter!=_phoneCallList.end(); iter++){
+	    tmp = (*iter);
+	    if ( tmp->getCPhoneCall().getPhoneCall().getCallId() == phoneCall->getCallId() )
+	    {
+	        return true;
+	    }
+	}
+	return false;
+}
+
+void QtContactCallList::clearCalls(){
+    _phoneCallList.clear();
 }

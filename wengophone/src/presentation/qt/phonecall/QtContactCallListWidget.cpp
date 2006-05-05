@@ -23,6 +23,7 @@
 
 #include <model/phonecall/ConferenceCall.h>
 #include <control/phonecall/CPhoneCall.h>
+#include <model/phonecall/PhoneCall.h>
 
 QtContactCallListWidget::QtContactCallListWidget (CWengoPhone & cWengoPhone,QWidget * parent, Qt::WFlags f) :
 QWidget (parent,f), _cWengoPhone(cWengoPhone)
@@ -98,13 +99,18 @@ void QtContactCallListWidget::hangup(){
     phoneCallList = _listWidget->getPhoneCallList();
 
     for ( iter = phoneCallList.begin(); iter != phoneCallList.end(); iter++){
-        phone =  (*iter); // _listWidget->getPhoneCallList()[0];
+        phone =  (*iter);
         phone->rejectActionTriggered(true);
     }
-
+    _listWidget->clearCalls();
     // phone = _listWidget->getPhoneCallList()[0];
     //phone->rejectActionTriggered(true);
 }
 void QtContactCallListWidget::callRejected(){
+
     close();
+}
+
+bool QtContactCallListWidget::hasPhoneCall(PhoneCall * phoneCall){
+    return _listWidget->hasPhoneCall(phoneCall);
 }

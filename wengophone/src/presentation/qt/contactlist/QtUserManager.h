@@ -29,6 +29,7 @@ class CContact;
 class PContact;
 class CWengoPhone;
 class QtHidenContact;
+class PhoneCall;
 
 class QtUserManager : public QObject {
 	Q_OBJECT
@@ -79,9 +80,13 @@ public Q_SLOTS:
 
 	void setMouseButton(Qt::MouseButton button);
 
+    void inviteToConference();
+
 Q_SIGNALS:
 
 	void groupRightClicked(const QString & groupName);
+
+	void inviteToConferenceClicked(QString phone, PhoneCall * target);
 
 protected:
 
@@ -96,6 +101,8 @@ protected:
 	void safeShowAllUsers();
 
 	void removeFromHidenContact(const CContact & cContact);
+
+	QMenu * createConferenceMenu();
 
 	QMenu * createMenu();
 

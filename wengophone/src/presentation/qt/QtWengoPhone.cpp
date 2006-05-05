@@ -27,6 +27,7 @@
 #include <model/profile/UserProfile.h>
 #include <model/history/History.h>
 #include <model/phonecall/SipAddress.h>
+#include <model/phonecall/ConferenceCall.h>
 
 #include <control/CWengoPhone.h>
 
@@ -378,6 +379,35 @@ void QtWengoPhone::addToConference(QtPhoneCall * qtPhoneCall){
 	_hangUpButton->setEnabled(true);
 }
 
+void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall){
+    QtContactCallListWidget * qtContactCallListWidget;
+
+    int nbtab = _ui->tabWidget->count();
+
+    for ( int i = 0; i < nbtab; i++){
+        if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))){
+            return;
+        }
+
+    for (int i = 0; i < _ui->tabWidget->count(); i++){
+        QtContactCallListWidget * qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+        if ( qtContactCallListWidget ){
+                if ( qtContactCallListWidget->hasPhoneCall( targetCall) ){
+                    _ui->tabWidget->setTabText(i,tr("Conference"));
+                    IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
+
+                    if (phoneLine != NULL) {
+                        ConferenceCall * confCall = new ConferenceCall(*phoneLine);
+                        confCall->addPhoneCall(*targetCall);
+                        confCall->addPhoneNumber(phoneNumber.toStdString());
+                    } else {
+                        LOG_DEBUG("phoneLine is NULL");
+                    }
+                }
+            }
+        }
+    }
+}
 void QtWengoPhone::showLoginWindow() {
 	int ret = _qtLogin->exec();
 
@@ -636,7 +666,6 @@ void QtWengoPhone::showAccountSettings() {
 
 
 //FIXME
-#include <model/phonecall/ConferenceCall.h>
 void QtWengoPhone::showCreateConferenceCall() {
 	QDialog * conferenceDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/phonecall/ConferenceCallWidget.ui", _wengoPhoneWindow));
 

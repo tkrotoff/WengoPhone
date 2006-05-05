@@ -26,6 +26,7 @@
 #include <QtGui>
 
 class QtContactCallList;
+class PhoneCall;
 class QtPhoneCall;
 class ConferenceCall;
 
@@ -38,6 +39,8 @@ public:
 	QtContactCallListWidget (CWengoPhone & cWengoPhone,QWidget * parent = 0, Qt::WFlags f = 0);
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
+
+	bool hasPhoneCall(PhoneCall * phoneCall);
 
 public Q_SLOTS:
 

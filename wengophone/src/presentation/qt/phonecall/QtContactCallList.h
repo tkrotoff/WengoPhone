@@ -23,6 +23,7 @@
 #include <QtGui>
 
 class QtPhoneCall;
+class PhoneCall;
 
 class QtContactCallList : public QScrollArea
 {
@@ -36,9 +37,14 @@ public:
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
+	bool hasPhoneCall(PhoneCall * phoneCall);
+
 	QtPhoneCallList & getPhoneCallList();
 
+	void clearCalls();
+
 public Q_SLOTS:
+
 	void deleteQtPhoneCall(QtPhoneCall * qtPhoneCall);
 
 protected:

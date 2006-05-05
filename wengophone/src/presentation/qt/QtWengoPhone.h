@@ -213,6 +213,8 @@ private Q_SLOTS:
 
 	void sysTrayDoubleClicked(const QPoint& p);
 
+	void addToConference(QString phoneNumber, PhoneCall * targetCall);
+
 private:
 
 	void initThreadSafe();
