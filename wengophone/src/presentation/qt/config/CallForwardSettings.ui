@@ -157,6 +157,9 @@ nécessitent un crédit de Wengo's. L'activation du transfert nécessite de rens
       </item>
       <item row="0" column="0" >
        <widget class="QCheckBox" name="forwardCallMobilCheckBox" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
         <property name="text" >
          <string>Transférer les appels vers mon mobile lorsque je sélectionne le statut "mobile"</string>
         </property>
