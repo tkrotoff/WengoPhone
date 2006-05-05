@@ -119,36 +119,6 @@ File "${BUILD_DIR}\softphone\runtime\connecting\*"
 */
 
 /**
- * Copies the default configuration of the softphone
- * into the home directory of the user.
- * Does not overwrite the files from this directory.
- */
-!define QTWENGOPHONEDIR "$PROFILE\Application Data\WengoPhone"
-SetOutPath "${QTWENGOPHONEDIR}"
-SetOverwrite off
-CreateDirectory "$PROFILE"
-
-; Tests if the file exists because SetOverwrite does
-; not work with FileWrite from the function writeToFile
-IfFileExists "config.xml" 0 createFile
-	Goto done
-createFile:
-    StrCmp $LANGUAGE ${LANG_FRENCH} french default
-	french:
-		Push "<settings><language><string>fr</string></language></settings>"
-		Goto writeFile
-	default: ; English
-		Push "<settings><language><string>en</string></language></settings>"
-		Goto writeFile
-
-writeFile:
-    Push "config.xml"
-	Call writeToFile
-done:
-SetOverwrite on
-
-
-/**
  * So that we can execute wengophone.exe
  */
 SetOutPath "$INSTDIR"
