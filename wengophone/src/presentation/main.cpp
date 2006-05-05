@@ -32,6 +32,7 @@
 
 #include <imwrapper/IMWrapperFactory.h>
 #include <sipwrapper/SipWrapperFactory.h>
+#include <WengoPhoneBuildId.h>
 
 #ifdef PHAPIWRAPPER
 	#include <PhApiFactory.h>
@@ -68,7 +69,10 @@ int test_main(int argc, char *argv[]) {
 
 std::string setAddionnalInfo() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	return config.getProfileLastUsedName();
+	std::string info = "User: " + config.getProfileLastUsedName() + "\n";
+	info += "buildid: " + String::fromUnsignedLongLong(WengoPhoneBuildId::BUILDID) + "\n";
+	info += "revision: " + String::fromUnsignedLongLong(WengoPhoneBuildId::REVISION) + "\n";
+	return info;
 }
 
 int main(int argc, char * argv[]) {
