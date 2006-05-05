@@ -213,6 +213,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
+		_qtWengoPhone->getStatusBar().showMessage(QString::null);
 		killTimer(_timerId);
 		_actionAcceptCall->setEnabled(false);
 		_actionHangupCall->setEnabled(false);

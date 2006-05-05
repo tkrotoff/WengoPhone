@@ -53,6 +53,11 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 
 	//halfDuplexCheckBox
 	connect(_ui->halfDuplexCheckBox, SIGNAL(toggled(bool)), SLOT(halfDuplexCheckBoxToggled(bool)));
+
+	configChangedEventHandler(config, Config::AUDIO_INPUT_DEVICENAME_KEY);
+	configChangedEventHandler(config, Config::AUDIO_OUTPUT_DEVICENAME_KEY);
+	configChangedEventHandler(config, Config::WENBOX_ENABLE_KEY);
+	configChangedEventHandler(config, Config::AUDIO_HALFDUPLEX_KEY);
 }
 
 QtConfigPanel::~QtConfigPanel() {

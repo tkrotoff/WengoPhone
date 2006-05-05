@@ -102,8 +102,7 @@ void QtStatusBar::checkSoundConfigThreadSafe(Settings & sender, const std::strin
 		if (!outputVolumeControl.isMuted() &&
 			outputVolumeControl.getLevel() > 0 &&
 			!inputVolumeControl.isMuted() &&
-			inputVolumeControl.getLevel() > 0 &&
-			AudioDevice::TypeInputMicrophone == AudioDevice::getSelectedRecordDevice(config.getAudioInputDeviceName())) {
+			inputVolumeControl.getLevel() > 0) {
 
 			_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar/status-audio-online.png"));
 			_phoneLineStateLabel->setToolTip(tr("Audio Configuration OK"));

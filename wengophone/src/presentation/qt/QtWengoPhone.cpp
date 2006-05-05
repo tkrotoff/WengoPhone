@@ -302,10 +302,8 @@ void QtWengoPhone::initThreadSafe() {
 
 	//FIXME: can i create the widget here ?
 //	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
-    Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.set(Config::LANGUAGE_KEY, config.getLanguage());
 
-    updatePresentation();
+	updatePresentation();
 	_wengoPhoneWindow->show();
 }
 

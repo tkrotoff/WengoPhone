@@ -35,6 +35,8 @@ QtLanguage::QtLanguage(QObject * parent)
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtLanguage::configChangedEventHandler, this, _1, _2);
+
+	configChangedEventHandler(config, Config::LANGUAGE_KEY);
 }
 
 QtLanguage::~QtLanguage() {
@@ -50,8 +52,17 @@ void QtLanguage::configChangedEventHandlerThreadSafe(Settings & sender, const st
 	static QTranslator * translator = new QTranslator(QCoreApplication::instance());
 
 	if (key == Config::LANGUAGE_KEY) {
+		std::string iso639Code;
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		QString fileName = getFileNameFromISO639Code(config.getLanguage());
+		if (config.getLanguage() == Config::LANGUAGE_AUTODETECT_KEYVALUE) {
+			//QLocale::system().name() = language_country
+			//we want locale = language
+			QStringList locale = QLocale::system().name().split("_");
+			iso639Code = locale[0].toLower().toStdString();
+		} else {
+			iso639Code = config.getLanguage();
+		}
+		QString fileName = getFileNameFromISO639Code(iso639Code);
 		fileName = QString::fromStdString(config.getResourcesDir()) + LANG_DIR + QDir::separator() + fileName;
 		translator->load(fileName);
 		QCoreApplication::installTranslator(translator);

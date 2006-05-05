@@ -82,6 +82,10 @@ void QtAddIMContact::addIMContact() {
 
 		std::set<IMAccount *> imAccounts = getSelectedIMAccounts(imProtocol);
 
+		if (imAccounts.empty()) {
+			_contact.addIMContact(imContact);
+		}
+
 		for (std::set<IMAccount *>::const_iterator it = imAccounts.begin();
 			it != imAccounts.end(); ++it) {
 

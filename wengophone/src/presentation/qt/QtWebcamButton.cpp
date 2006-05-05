@@ -40,6 +40,8 @@ QtWebcamButton::QtWebcamButton(QPushButton * webcamButton)
 	config.valueChangedEvent += boost::bind(&QtWebcamButton::configChangedEventHandler, this, _1, _2);
 
 	connect(_webcamButton, SIGNAL(clicked()), SLOT(enableVideo()));
+
+	configChangedEventHandler(config, Config::VIDEO_ENABLE_KEY);
 }
 
 void QtWebcamButton::enableVideo() {

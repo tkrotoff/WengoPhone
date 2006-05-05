@@ -228,12 +228,6 @@ void WenboxPlugin::switchCurrentAudioDeviceToWenbox() {
 	}
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-
-	//Saves previous audio settings
-	_soundCardOutputDeviceName = config.getAudioOutputDeviceName();
-	_soundCardInputDeviceName = config.getAudioInputDeviceName();
-	_soundCardRingerDeviceName = config.getAudioRingerDeviceName();
-
 	//Changes audio settings
 	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, outputDeviceName);
 	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, intputDeviceName);
@@ -243,7 +237,13 @@ void WenboxPlugin::switchCurrentAudioDeviceToWenbox() {
 void WenboxPlugin::switchCurrentAudioDeviceToSoundCard() {
 	//Back to the previous audio settings
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, _soundCardOutputDeviceName);
-	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, _soundCardInputDeviceName);
-	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, _soundCardRingerDeviceName);
+
+	std::string tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_OUTPUT_DEVICENAME_KEY));
+	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, tmp);
+
+	tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_INPUT_DEVICENAME_KEY));
+	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, tmp);
+
+	tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_RINGER_DEVICENAME_KEY));
+	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, tmp);
 }

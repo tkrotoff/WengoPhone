@@ -76,12 +76,6 @@ private:
 	WengoPhone & _wengoPhone;
 
 	std::string _phoneNumberBuffer;
-
-	std::string _soundCardOutputDeviceName;
-
-	std::string _soundCardInputDeviceName;
-
-	std::string _soundCardRingerDeviceName;
 };
 
 #endif	//WENBOXPLUGIN_H

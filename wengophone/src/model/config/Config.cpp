@@ -79,6 +79,7 @@ const std::string Config::GENERAL_CLICK_START_CHAT_KEY = "general.click.start.ch
 const std::string Config::GENERAL_CLICK_CALL_CELLPHONE_KEY = "general.click.call.cellphone";
 const std::string Config::GENERAL_AWAY_TIMER_KEY = "general.away.timer";
 
+const std::string Config::LANGUAGE_AUTODETECT_KEYVALUE = "detect";
 const std::string Config::LANGUAGE_KEY = "language";
 
 const std::string Config::NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY = "notification.show.toaster.on.incoming.call";
@@ -209,7 +210,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[GENERAL_CLICK_CALL_CELLPHONE_KEY] = false;
 	_keyDefaultValueMap[GENERAL_AWAY_TIMER_KEY] = 2;
 
-	_keyDefaultValueMap[LANGUAGE_KEY] = std::string("en");
+	_keyDefaultValueMap[LANGUAGE_KEY] = LANGUAGE_AUTODETECT_KEYVALUE;
 
 	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY] = false;
 	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY] = false;

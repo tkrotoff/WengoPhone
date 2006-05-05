@@ -226,7 +226,7 @@ public:
 	/** Call forward mode. */
 	static const std::string CALL_FORWARD_MODE_KEY;
 	std::string getCallForwardMode() const;
-	
+
 	/** Forward call phone number 1. */
 	static const std::string CALL_FORWARD_PHONENUMBER1_KEY;
 	std::string getCallForwardPhoneNumber1() const;
@@ -279,6 +279,7 @@ public:
 
 	/** ISO 639 code of the current language for translating WengoPhone. */
 	static const std::string LANGUAGE_KEY;
+	static const std::string LANGUAGE_AUTODETECT_KEYVALUE;
 	std::string getLanguage() const;
 
 	/**
