@@ -48,6 +48,8 @@ class IMAccount;
 class UserProfile;
 class WsWengoSubscribe;
 class WsDirectory;
+class WsCallForward;
+class CWsCallForward;
 
 /**
  * @defgroup control Control Component
@@ -223,6 +225,10 @@ public:
 		return *_cHistory;
 	}
 
+	CWsCallForward * getCWsCallForward() {
+		return _cWsCallForward;
+	}
+
 	UserProfile & getCurrentUserProfile();
 
 private:
@@ -262,6 +268,7 @@ private:
 
 	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
+	void wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward);
 
 	/**
 	 * @see IMPresence::authorizationRequestEvent
@@ -278,6 +285,8 @@ private:
 	CContactList * _cContactList;
 
 	CHistory * _cHistory;
+
+	CWsCallForward * _cWsCallForward;
 
 	static const std::string URL_WENGO_ACCOUNTCREATION;
 

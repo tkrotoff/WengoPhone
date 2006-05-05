@@ -293,9 +293,11 @@ const char * getValueFromKey(TiXmlElement * element, std::string key) {
 		if( ( type ) && (std::string(type) != "e" ) ) {
 
 			//extract value text
-			TiXmlText  * text = elt->FirstChild()->ToText();
-			if( text ) {
-				return text->Value();
+			if( elt->FirstChild() ) {
+				TiXmlText  * text = elt->FirstChild()->ToText();
+				if( text ) {
+					return text->Value();
+				}
 			}
 		}
 	}
