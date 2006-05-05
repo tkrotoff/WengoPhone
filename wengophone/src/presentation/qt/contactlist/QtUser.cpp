@@ -336,3 +336,7 @@ void QtUser::startCall(const QString & number){
 void QtUser::startCall(){
     _wengoPhone.getCurrentUserProfile().makeCall(_cContact.getContact(), false);
 }
+
+void QtUser::startFreeCall() {
+	_wengoPhone.getCurrentUserProfile().makeCall(_cContact.getContact().getFreePhoneNumber(), false);
+}

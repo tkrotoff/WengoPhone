@@ -197,8 +197,22 @@ public:
 
 	/**
 	 * @return true if we can place a call with this Contact
+	 * with any number
 	 */
 	bool hasCall() const;
+
+	/**
+	 * @return true if we can place a free call with this Contact
+	 * A free call can be made if the Contact has a Wengo ID or
+	 * a SIP address.
+	 */
+	bool hasFreeCall() const;
+
+	/**
+	 * @return free phone number (Wengo ID, SIP address).
+	 * an empty string if no phone number found
+	 */
+	std::string getFreePhoneNumber() const;
 
 	/**
 	 * @return true if we can place a video call with this Contact
@@ -339,6 +353,26 @@ private:
 	 * @param contact the Contact to merge with
 	 */
 	void merge(const Contact & contact);
+
+	/**
+	 * Gets an available SIP address than can be called
+	 * taken from IMContacts of protocol SIP/SIMPLE.
+	 *
+	 * This method does not check Wengo ID
+	 *
+	 * @return the found SIP address or an empty string
+	 * if no SIP address found
+	 */
+	std::string getAvailableSIPNumber() const;
+
+	/**
+	 * Check if a SIP number is available.
+	 *
+	 * This method does not check Wengo ID.
+	 *
+	 * @return true if the Contact has an available SIP Address.
+	 */
+	bool hasAvailableSIPNumber() const;
 
 	std::string _preferredNumber;
 

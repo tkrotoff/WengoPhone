@@ -89,6 +89,8 @@ public:
 
 	void startCall();
 
+	void startFreeCall();
+
 	QString getMobilePhone() const;
 
 	QString getHomePhone() const;

@@ -215,10 +215,7 @@ bool Contact::hasIM() const {
 }
 
 bool Contact::hasCall() const {
-	if (!_preferredNumber.empty()
-		|| wengoIsAvailable()
-		|| !_mobilePhone.empty()
-		|| !_homePhone.empty()) {
+	if (!getPreferredNumber().empty()) {
 		return true;
 	} else {
 		return false;
@@ -234,8 +231,8 @@ std::string Contact::getPreferredNumber() const {
 
 	if (!_preferredNumber.empty()) {
 		result = _preferredNumber;
-	} else if (wengoIsAvailable()) {
-		result = _wengoPhoneId;
+	} else if (hasFreeCall()) {
+		result = getFreePhoneNumber();
 	} else if (!_mobilePhone.empty()) {
 		result = _mobilePhone;
 	} else if (!_homePhone.empty()) {
@@ -481,4 +478,42 @@ void Contact::merge(const Contact & contact) {
 			addToContactGroup(*it);
 		}
 	}
+}
+
+std::string Contact::getAvailableSIPNumber() const {
+	std::string result;
+
+	for (IMContactSet::const_iterator it = _imContactSet.begin();
+		it != _imContactSet.end();
+		++it) {
+		// If we found an IMContact that is of SIP protocol and is not
+		// a Wengo ID
+		if (((*it).getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE)
+			&& ((*it).getContactId() != _wengoPhoneId)) {
+			result = (*it).getContactId();
+			break;
+		}
+	}
+
+	return result;
+}
+
+bool Contact::hasAvailableSIPNumber() const {
+	return (!getAvailableSIPNumber().empty());
+}
+
+bool Contact::hasFreeCall() const {
+	return (!getFreePhoneNumber().empty());
+}
+
+std::string Contact::getFreePhoneNumber() const {
+	std::string result;
+
+	if (wengoIsAvailable()) {
+		result = _wengoPhoneId;
+	} else if (hasAvailableSIPNumber()) {
+		result = getAvailableSIPNumber();
+	}
+
+	return result;
 }

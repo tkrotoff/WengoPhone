@@ -252,6 +252,16 @@ void QtUserList::startCall(const QString & userid){
     user->startCall();
 }
 
+void QtUserList::startFreeCall(const QString & userid) {
+    _mutex.lock();
+ 
+	QtUser * user = _userList[userid];
+    if (!user)
+        LOG_FATAL("User lookup failed !!!");
+    _mutex.unlock();
+
+	user->startFreeCall();
+}
 
 /*
 int QtUserList::getClickCount(){
