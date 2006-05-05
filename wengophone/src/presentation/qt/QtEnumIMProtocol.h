@@ -17,28 +17,32 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENUMIMPROTOCOL_H
-#define ENUMIMPROTOCOL_H
+#ifndef QTENUMIMPROTOCOL_H
+#define QTENUMIMPROTOCOL_H
 
 #include <util/NonCopyable.h>
 
-#include <string>
+#include <imwrapper/EnumIMProtocol.h>
+
+#include <QString>
 
 /**
  * Instant Messaging protocols.
  *
+ * @see EnumIMProtocol
  * @author Philippe Bernery
+ * @author Tanguy Krotoff
  */
-class EnumIMProtocol : NonCopyable {
+class QtEnumIMProtocol : NonCopyable {
 public:
 
 	enum IMProtocol {
 		IMProtocolUnknown,
-		IMProtocolAll,
 		IMProtocolMSN,
 		IMProtocolYahoo,
 		IMProtocolAIMICQ,
 		IMProtocolJabber,
+		IMProtocolGoogleTalk,
 		IMProtocolSIPSIMPLE
 	};
 
@@ -47,14 +51,21 @@ public:
 	 *
 	 * @return the string
 	 */
-	static std::string toString(IMProtocol protocol);
+	static QString toString(IMProtocol protocol);
 
 	/**
 	 * Converts a string into a protocol.
 	 *
 	 * @return the protocol
 	 */
-	static IMProtocol toIMProtocol(const std::string & protocol);
+	static IMProtocol toIMProtocol(const QString & protocol);
+
+	/**
+	 * Converts an EnumIMProtocol into a QtEnumIMProtocol.
+	 *
+	 * @return the protocol
+	 */
+	static IMProtocol toIMProtocol(EnumIMProtocol::IMProtocol protocol);
 };
 
-#endif	//ENUMIMPROTOCOL_H
+#endif	//QTENUMIMPROTOCOL_H

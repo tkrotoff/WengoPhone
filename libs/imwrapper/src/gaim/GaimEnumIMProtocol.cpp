@@ -49,9 +49,6 @@ const char *GaimIMPrcl::GetPrclId(EnumIMProtocol::IMProtocol protocol)
 		case EnumIMProtocol::IMProtocolJabber:
 			return PRPL_JABBER;
 
-		case EnumIMProtocol::IMProtocolGoogleTalk:
-			return PRPL_JABBER;
-
 		case EnumIMProtocol::IMProtocolSIPSIMPLE:
 			return PRPL_SIMPLE;
 

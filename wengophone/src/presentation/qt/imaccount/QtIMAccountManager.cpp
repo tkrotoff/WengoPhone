@@ -52,15 +52,15 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, CWengoPhone & 
 	connect(addIMAccountMenu, SIGNAL(triggered(QAction *)), SLOT(addIMAccount(QAction *)));
 
 	addIMAccountMenu->addAction(QIcon(":pics/protocols/msn.png"),
-				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolMSN)));
+				QtEnumIMProtocol::toString(QtEnumIMProtocol::IMProtocolMSN));
 	addIMAccountMenu->addAction(QIcon(":pics/protocols/aim.png"),
-				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolAIMICQ)));
+				QtEnumIMProtocol::toString(QtEnumIMProtocol::IMProtocolAIMICQ));
 	addIMAccountMenu->addAction(QIcon(":pics/protocols/yahoo.png"),
-				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolYahoo)));
+				QtEnumIMProtocol::toString(QtEnumIMProtocol::IMProtocolYahoo));
 	addIMAccountMenu->addAction(QIcon(":pics/protocols/jabber.png"),
-				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolJabber)));
+				QtEnumIMProtocol::toString(QtEnumIMProtocol::IMProtocolJabber));
 	addIMAccountMenu->addAction(QIcon(":pics/protocols/jabber.png"),
-				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolGoogleTalk)));
+				QtEnumIMProtocol::toString(QtEnumIMProtocol::IMProtocolGoogleTalk));
 	_ui->addIMAccountButton->setMenu(addIMAccountMenu);
 
 	connect(_ui->modifyIMAccountButton, SIGNAL(clicked()), SLOT(modifyIMAccount()));
@@ -122,7 +122,7 @@ void QtIMAccountManager::addIMAccount(QAction * action) {
 	QString protocolName = action->text();
 	LOG_DEBUG(protocolName.toStdString());
 
-	EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
+	QtEnumIMProtocol::IMProtocol imProtocol = QtEnumIMProtocol::toIMProtocol(protocolName);
 	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imProtocol, _imAccountManagerWidget);
 	loadIMAccounts();
 

@@ -20,7 +20,7 @@
 #ifndef QTIMACCOUNTSETTINGS_H
 #define QTIMACCOUNTSETTINGS_H
 
-#include <imwrapper/EnumIMProtocol.h>
+#include <presentation/qt/QtEnumIMProtocol.h>
 
 #include <QObject>
 
@@ -42,11 +42,11 @@ public:
 
 	QtIMAccountSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
 
-	QtIMAccountSettings(UserProfile & userProfile, EnumIMProtocol::IMProtocol imProtocol, QWidget * parent);
+	QtIMAccountSettings(UserProfile & userProfile, QtEnumIMProtocol::IMProtocol imProtocol, QWidget * parent);
 
 private:
 
-	void createIMProtocolWidget(QWidget * parent, EnumIMProtocol::IMProtocol imProtocol);
+	void createIMProtocolWidget(QWidget * parent, QtEnumIMProtocol::IMProtocol imProtocol);
 
 	Ui::IMAccountTemplate * _ui;
 

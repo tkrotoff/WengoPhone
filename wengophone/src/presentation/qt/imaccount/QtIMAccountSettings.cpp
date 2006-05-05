@@ -46,10 +46,10 @@ QtIMAccountSettings::QtIMAccountSettings(UserProfile & userProfile, IMAccount * 
 
 	_imAccountPlugin = NULL;
 	_imAccount = imAccount;
-	createIMProtocolWidget(parent, imAccount->getProtocol());
+	createIMProtocolWidget(parent, QtEnumIMProtocol::toIMProtocol(imAccount->getProtocol()));
 }
 
-QtIMAccountSettings::QtIMAccountSettings(UserProfile & userProfile, EnumIMProtocol::IMProtocol imProtocol, QWidget * parent)
+QtIMAccountSettings::QtIMAccountSettings(UserProfile & userProfile, QtEnumIMProtocol::IMProtocol imProtocol, QWidget * parent)
 	: QObject(parent),
 	_userProfile(userProfile) {
 
@@ -58,7 +58,7 @@ QtIMAccountSettings::QtIMAccountSettings(UserProfile & userProfile, EnumIMProtoc
 	createIMProtocolWidget(parent, imProtocol);
 }
 
-void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, EnumIMProtocol::IMProtocol imProtocol) {
+void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, QtEnumIMProtocol::IMProtocol imProtocol) {
 	QDialog * imAccountTemplateWindow = new QDialog(parent);
 
 	_ui = new Ui::IMAccountTemplate();
@@ -71,27 +71,27 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, EnumIMProtoco
 	connect(_ui->cancelButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(reject()));
 
 	switch (imProtocol) {
-	case EnumIMProtocol::IMProtocolMSN: {
+	case QtEnumIMProtocol::IMProtocolMSN: {
 		_imAccountPlugin = new QtMSNSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
 		break;
 	}
 
-	case EnumIMProtocol::IMProtocolYahoo: {
+	case QtEnumIMProtocol::IMProtocolYahoo: {
 		_imAccountPlugin = new QtYahooSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
 		break;
 	}
 
-	case EnumIMProtocol::IMProtocolAIMICQ: {
+	case QtEnumIMProtocol::IMProtocolAIMICQ: {
 		_imAccountPlugin = new QtAIMSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
 		break;
 	}
 
-	case EnumIMProtocol::IMProtocolJabber: {
+	case QtEnumIMProtocol::IMProtocolJabber: {
 		_imAccountPlugin = new QtJabberSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
 		break;
 	}
 
-	case EnumIMProtocol::IMProtocolGoogleTalk: {
+	case QtEnumIMProtocol::IMProtocolGoogleTalk: {
 		_imAccountPlugin = new QtGoogleTalkSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
 		break;
 	}
