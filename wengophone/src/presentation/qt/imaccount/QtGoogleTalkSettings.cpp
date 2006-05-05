@@ -64,7 +64,7 @@ void QtGoogleTalkSettings::save() {
 	}
 
 	if (!_imAccount) {
-		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolGoogleTalk);
+		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolJabber);
 	}
 
 	IMAccountParameters & params = _imAccount->getIMAccountParameters();

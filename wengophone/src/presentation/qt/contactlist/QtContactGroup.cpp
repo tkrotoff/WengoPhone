@@ -65,27 +65,29 @@ void QtContactGroup::addContactThreadSafe(PContact * pContact) {
 	QList<QTreeWidgetItem *> list;
 
 	list = _qtContactList->_treeWidget->findItems(QString::fromStdString(getDisplayName()), Qt::MatchExactly);
-	// A goup name is unique inside the model so we are sure that the first
-	// QTreeWidgetItem is the right one.
-	QtUserList * ul = QtUserList::getInstance();
+	if (list.size() > 0) {
+		// A goup name is unique inside the model so we are sure that the first
+		// QTreeWidgetItem is the right one.
+		QtUserList * ul = QtUserList::getInstance();
 
-	QTreeWidgetItem * newContact;
-	QString contactName;
-	QString contactId;
-	QtUser * user;
+		QTreeWidgetItem * newContact;
+		QString contactName;
+		QString contactId;
+		QtUser * user;
 
-	LOG_DEBUG("display name: " + pContact->getCContact().getDisplayName());
+		LOG_DEBUG("display name: " + pContact->getCContact().getDisplayName());
 
-	QUuid uid = QUuid::createUuid (); // Unique user identifier
+		QUuid uid = QUuid::createUuid (); // Unique user identifier
 
-	newContact = new QTreeWidgetItem(list[0]);
-	newContact->setText(0, uid.toString());
-	newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
+		newContact = new QTreeWidgetItem(list[0]);
+		newContact->setText(0, uid.toString());
+		newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
 
-	user = new QtUser(pContact->getCContact(), _cContactGroup.getCWengoPhone().getWengoPhone());
-	user->setId(uid.toString());
+		user = new QtUser(pContact->getCContact(), _cContactGroup.getCWengoPhone().getWengoPhone());
+		user->setId(uid.toString());
 
-	ul->addUser(user);
+		ul->addUser(user);
+	}
 }
 
 void QtContactGroup::removeContact(PContact * pContact) {

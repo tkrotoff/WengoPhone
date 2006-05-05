@@ -177,6 +177,7 @@ void GaimIMConnect::AddAccountParams(void *gaimAccount)
 			break;
 
 		default:
+			LOG_FATAL("protocol not supported");
 			break;
 	}
 }

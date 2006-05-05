@@ -48,8 +48,6 @@ QtAddIMContact::QtAddIMContact(UserProfile & userProfile, Contact & contact, QWi
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolYahoo)));
 	_ui->protocolComboBox->addItem(QIcon(":pics/protocols/jabber.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolJabber)));
-	_ui->protocolComboBox->addItem(QIcon(":pics/protocols/jabber.png"),
-				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolGoogleTalk)));
 	_ui->protocolComboBox->addItem(QIcon(":pics/protocols/sip.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolSIPSIMPLE)));
 
