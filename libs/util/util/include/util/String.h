@@ -169,6 +169,30 @@ public:
 	static std::string fromBoolean(bool boolean);
 
 	/**
+	 * Gets a string from a long.
+	 *
+	 * @param number long to convert into a string
+	 * @return long converted to a string
+	 */
+	static std::string fromLong(long number);
+
+	/**
+	 * Gets a string from a long long.
+	 *
+	 * @param number long long to convert into a string
+	 * @return long long converted to a string
+	 */
+	static std::string fromLongLong(long long number);
+
+	/**
+	 * Gets a string from a unsigned long long.
+	 *
+	 * @param number unsigned long long to convert into a string
+	 * @return unsigned long long converted to a string
+	 */
+	static std::string fromUnsignedLongLong(unsigned long long number);
+
+	/**
 	 * URL-encodes a string.
 	 *
 	 * @param url the string to encode

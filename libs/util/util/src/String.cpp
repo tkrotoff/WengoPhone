@@ -125,6 +125,24 @@ std::string String::fromBoolean(bool boolean) {
 	return ss.str();
 }
 
+std::string String::fromLong(long number) {
+	stringstream ss;
+	ss << number;
+	return ss.str();
+}
+
+std::string String::fromLongLong(long long number) {
+	stringstream ss;
+	ss << number;
+	return ss.str();
+}
+
+std::string String::fromUnsignedLongLong(unsigned long long number) {
+	stringstream ss;
+	ss << number;
+	return ss.str();
+}
+
 static unsigned char hex_to_int(unsigned char ch) {
 	if (ch >= 'A' && ch <= 'F') {
 		return ch - 'A' + 10;
