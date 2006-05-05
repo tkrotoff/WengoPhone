@@ -465,7 +465,6 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 			std::string data = "?login=" + wengoAccount->getWengoLogin() + "&password=" + wengoAccount->getWengoPassword()
 				+ "&lang=" + "fr" + "&wl=" + "wengo" + "&page=softphone-web";
 			_browser->setUrl(URL_WENGO_MINI_HOME + data);
-		}
         }
 #endif
     	break;
@@ -489,7 +488,7 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 
 	default:
 		LOG_FATAL("unknown state=" + String::fromNumber(state));
-	};
+	}
 
 	updatePresentation();
 }
