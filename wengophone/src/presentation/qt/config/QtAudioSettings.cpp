@@ -62,12 +62,14 @@ void QtAudioSettings::readConfig() {
 
 	//inputDeviceList
 	StringList inputDeviceList = AudioDevice::getInputMixerDeviceList();
+	inputDeviceList += AudioDevice::getDefaultRecordDevice();
 	_ui->inputDeviceComboBox->clear();
 	_ui->inputDeviceComboBox->addItems(StringListConvert::toQStringList(inputDeviceList));
 	_ui->inputDeviceComboBox->setCurrentIndex(_ui->inputDeviceComboBox->findText(QString::fromStdString(config.getAudioInputDeviceName())));
 
 	//outputDeviceList
 	StringList outputDeviceList = AudioDevice::getOutputMixerDeviceList();
+	outputDeviceList += AudioDevice::getDefaultPlaybackDevice();
 	_ui->outputDeviceComboBox->clear();
 	_ui->outputDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
 	_ui->outputDeviceComboBox->setCurrentIndex(_ui->outputDeviceComboBox->findText(QString::fromStdString(config.getAudioOutputDeviceName())));

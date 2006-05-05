@@ -25,6 +25,7 @@
 #include <QObject>
 
 class Contact;
+class UserProfile;
 
 class QWidget;
 class QTreeWidget;
@@ -45,7 +46,7 @@ class QtIMContactManager : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtIMContactManager(Contact & contact, QWidget * parent);
+	QtIMContactManager(UserProfile & userProfile, Contact & contact, QWidget * parent);
 
 	~QtIMContactManager();
 
@@ -66,6 +67,8 @@ private:
 	Ui::IMContactManager * _ui;
 
 	QWidget * _imContactManagerWidget;
+
+	UserProfile & _userProfile;
 
 	Contact & _contact;
 };

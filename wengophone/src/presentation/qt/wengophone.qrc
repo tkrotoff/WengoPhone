@@ -65,6 +65,8 @@
         <file>pics/protocols/msn_off.png</file>
         <file>pics/protocols/yahoo.png</file>
         <file>pics/protocols/yahoo_off.png</file>
+        <file>pics/protocols/sip.png</file>
+        <file>pics/protocols/sip_off.png</file>
         <file>pics/status/away.png</file>
         <file>pics/status/donotdisturb.png</file>
         <file>pics/status/forward.png</file>

@@ -21,14 +21,16 @@
 
 #include "ui_AddIMContact.h"
 
+#include <model/profile/UserProfile.h>
 #include <model/contactlist/Contact.h>
 
 #include <QtGui>
 
 static const QString IM_PROTOCOL_WENGO = "Wengo";
 
-QtAddIMContact::QtAddIMContact(Contact & contact, QWidget * parent)
+QtAddIMContact::QtAddIMContact(UserProfile & userProfile, Contact & contact, QWidget * parent)
 	: QObject(parent),
+	_userProfile(userProfile),
 	_contact(contact) {
 
 	_addIMContactWindow = new QDialog(parent);
@@ -48,8 +50,12 @@ QtAddIMContact::QtAddIMContact(Contact & contact, QWidget * parent)
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolJabber)));
 	_ui->protocolComboBox->addItem(QIcon(":pics/protocols/jabber.png"),
 				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolGoogleTalk)));
+	_ui->protocolComboBox->addItem(QIcon(":pics/protocols/sip.png"),
+				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolSIPSIMPLE)));
 
 	connect(_ui->addIMContactButton, SIGNAL(clicked()), SLOT(addIMContact()));
+
+	connect(_ui->protocolComboBox, SIGNAL(currentIndexChanged(const QString &)), SLOT(imProtocolChanged(const QString &)));
 
 	show();
 }
@@ -75,7 +81,71 @@ void QtAddIMContact::addIMContact() {
 		EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
 
 		IMContact imContact(imProtocol, contactId);
-		//imContact.setIMAccount(imAccount);
-		_contact.addIMContact(imContact);
+
+		std::set<IMAccount *> imAccounts = getSelectedIMAccounts(imProtocol);
+
+		for (std::set<IMAccount *>::const_iterator it = imAccounts.begin();
+			it != imAccounts.end(); ++it) {
+
+			imContact.setIMAccount(*it);
+			_contact.addIMContact(imContact);
+		}
 	}
+}
+
+void QtAddIMContact::imProtocolChanged(const QString & protocolName) {
+	EnumIMProtocol::IMProtocol imProtocol;
+
+	if (protocolName == IM_PROTOCOL_WENGO) {
+		imProtocol = EnumIMProtocol::IMProtocolSIPSIMPLE;
+	} else {
+		imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
+	}
+
+	loadIMAccounts(imProtocol);
+}
+
+void QtAddIMContact::loadIMAccounts(EnumIMProtocol::IMProtocol imProtocol) {
+	_ui->treeWidget->clear();
+
+	std::set<IMAccount *> imAccounts = _userProfile.getIMAccountHandler().getIMAccountsOfProtocol(imProtocol);
+
+	for (std::set<IMAccount *>::const_iterator it = imAccounts.begin();
+		it != imAccounts.end(); ++it) {
+
+		QTreeWidgetItem * item = new QTreeWidgetItem(_ui->treeWidget);
+
+		//By default, check the first element only
+		if (it == imAccounts.begin()) {
+			item->setCheckState(0, Qt::Checked);
+		}
+
+		else {
+			item->setCheckState(0, Qt::Unchecked);
+		}
+		item->setText(1, QString::fromStdString((*it)->getLogin()));
+	}
+}
+
+std::set<IMAccount *> QtAddIMContact::getSelectedIMAccounts(EnumIMProtocol::IMProtocol imProtocol) const {
+	std::set<IMAccount *> result;
+
+	std::set<IMAccount *> imAccounts = _userProfile.getIMAccountHandler().getIMAccountsOfProtocol(imProtocol);
+
+	for (std::set<IMAccount *>::const_iterator it = imAccounts.begin();
+		it != imAccounts.end(); ++it) {
+
+		QList<QTreeWidgetItem *> list =
+			_ui->treeWidget->findItems(QString::fromStdString((*it)->getLogin()), Qt::MatchExactly, 1);
+
+		if (list.size() > 0) {
+			//There should be only one item
+			QTreeWidgetItem * item = list[0];
+			if (item->checkState(0) == Qt::Checked) {
+				result.insert(*it);
+			}
+		}
+	}
+
+	return result;
 }

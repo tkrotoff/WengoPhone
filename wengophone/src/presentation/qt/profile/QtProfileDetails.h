@@ -45,7 +45,7 @@ class QtProfileDetails : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtProfileDetails(CWengoPhone & cWengoPhone, Contact & contact, QWidget * parent);
+	QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, Contact & contact, QWidget * parent);
 
 	QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent);
 

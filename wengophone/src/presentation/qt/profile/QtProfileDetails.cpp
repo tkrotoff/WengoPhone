@@ -38,7 +38,7 @@
 
 static const char * PNG_FORMAT = "PNG";
 
-QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, Contact & contact, QWidget * parent)
+QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, Contact & contact, QWidget * parent)
 	: QObject(parent),
 	_cWengoPhone(cWengoPhone),
 	_profile(contact) {
@@ -49,7 +49,7 @@ QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, Contact & contact,
 
 	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - Contact details"));
 
-	QtIMContactManager * qtIMContactManager = new QtIMContactManager(contact, _profileDetailsWindow);
+	QtIMContactManager * qtIMContactManager = new QtIMContactManager(userProfile, contact, _profileDetailsWindow);
 	int index = _ui->imStackedWidget->addWidget(qtIMContactManager->getWidget());
 	_ui->imStackedWidget->setCurrentIndex(index);
 
@@ -159,7 +159,10 @@ void QtProfileDetails::saveProfile() {
 void QtProfileDetails::saveContact() {
 	saveProfile();
 	Contact & contact = dynamic_cast<Contact &>(_profile);
-	contact.addToContactGroup(_ui->groupComboBox->currentText().toStdString());
+	std::string group = _ui->groupComboBox->currentText().toStdString();
+	if (!contact.isInContactGroup(group)) {
+		contact.addToContactGroup(group);
+	}
 
 	_profileDetailsWindow->accept();
 }

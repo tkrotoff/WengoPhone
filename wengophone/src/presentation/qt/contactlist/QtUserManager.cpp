@@ -89,7 +89,7 @@ void QtUserManager::editContact(bool) {
 	QTreeWidgetItem * item = _tree->currentItem();
 
 	Contact & contact = ul->getCContact(item->text(0)).getContact();
-	QtProfileDetails qtProfileDetails(_cWengoPhone, contact, _tree);
+	QtProfileDetails qtProfileDetails(_cWengoPhone, _cWengoPhone.getCurrentUserProfile(), contact, _tree);
 	LOG_DEBUG("edit contact");
 }
 

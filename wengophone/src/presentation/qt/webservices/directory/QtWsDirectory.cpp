@@ -141,6 +141,6 @@ void QtWsDirectory::addContact(Profile * profile) {
 	contact.setStreetAddress(profile->getStreetAddress());
 	contact.setWengoPhoneId(profile->getWengoPhoneId());
 
-	QtProfileDetails qtProfileDetails(_cWsDirectory.getCWengoPhone(), contact, _widget);
+	QtProfileDetails qtProfileDetails(_cWsDirectory.getCWengoPhone(), _cWsDirectory.getCWengoPhone().getCurrentUserProfile(), contact, _widget);
 	LOG_DEBUG("edit contact");
 }

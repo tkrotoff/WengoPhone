@@ -24,12 +24,14 @@
 #include "QtIMContactItem.h"
 #include "QtAddIMContact.h"
 
+#include <model/profile/UserProfile.h>
 #include <model/contactlist/Contact.h>
 
 #include <QtGui>
 
-QtIMContactManager::QtIMContactManager(Contact & contact, QWidget * parent)
+QtIMContactManager::QtIMContactManager(UserProfile & userProfile, Contact & contact, QWidget * parent)
 	: QObject(parent),
+	_userProfile(userProfile),
 	_contact(contact) {
 
 	_imContactManagerWidget = new QWidget(parent);
@@ -74,7 +76,7 @@ void QtIMContactManager::loadIMContacts() {
 }
 
 void QtIMContactManager::addIMContact() {
-	QtAddIMContact * qtAddIMContact = new QtAddIMContact(_contact, _imContactManagerWidget);
+	QtAddIMContact * qtAddIMContact = new QtAddIMContact(_userProfile, _contact, _imContactManagerWidget);
 	loadIMContacts();
 }
 

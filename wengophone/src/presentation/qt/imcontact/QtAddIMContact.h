@@ -22,12 +22,19 @@
 
 #include <util/NonCopyable.h>
 
+#include <imwrapper/EnumIMProtocol.h>
+
 #include <QObject>
 
+#include <set>
+
 class Contact;
+class UserProfile;
+class IMAccount;
 
 class QWidget;
 class QDialog;
+class QString;
 namespace Ui { class AddIMContact; }
 
 /**
@@ -39,7 +46,7 @@ class QtAddIMContact : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtAddIMContact(Contact & contact, QWidget * parent);
+	QtAddIMContact(UserProfile & userProfile, Contact & contact, QWidget * parent);
 
 	~QtAddIMContact();
 
@@ -51,13 +58,21 @@ private Q_SLOTS:
 
 	void addIMContact();
 
+	void imProtocolChanged(const QString & protocolName);
+
 private:
 
 	int show();
 
+	void loadIMAccounts(EnumIMProtocol::IMProtocol imProtocol);
+
+	std::set<IMAccount *> getSelectedIMAccounts(EnumIMProtocol::IMProtocol imProtocol) const;
+
 	Ui::AddIMContact * _ui;
 
 	QDialog * _addIMContactWindow;
+
+	UserProfile & _userProfile;
 
 	Contact & _contact;
 };

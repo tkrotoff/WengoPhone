@@ -100,7 +100,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 		boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandler, this, _1, _2, _3);
 	_cWengoPhone.wrongProxyAuthenticationEvent +=
 		boost::bind(&QtWengoPhone::wrongProxyAuthenticationEventHandler, this, _1, _2, _3, _4, _5);
-    
+
     typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::initThreadSafe, this));
 	postEvent(event);
@@ -168,8 +168,8 @@ void QtWengoPhone::initThreadSafe() {
 
 	// Create the profilebar
     _qtProfileBar = new QtProfileBar(_cWengoPhone,
-                                      _cWengoPhone.getWengoPhone().getCurrentUserProfile(),
-                                      _cWengoPhone.getWengoPhone().getCurrentUserProfile().getConnectHandler(),
+                                      _cWengoPhone.getCurrentUserProfile(),
+                                      _cWengoPhone.getCurrentUserProfile().getConnectHandler(),
                                       _ui->profileBar);
     connect(this, SIGNAL(modelInitializedEventSignal()), _qtProfileBar, SLOT(userProfileUpdated()));
 
@@ -281,7 +281,7 @@ void QtWengoPhone::initThreadSafe() {
 #endif
 
 	//Idle detection
-	new QtIdle(_cWengoPhone.getWengoPhone().getCurrentUserProfile(), _wengoPhoneWindow);
+	new QtIdle(_cWengoPhone.getCurrentUserProfile(), _wengoPhoneWindow);
 
 	//Translation
 	new QtLanguage(_wengoPhoneWindow);
@@ -303,7 +303,7 @@ void QtWengoPhone::initThreadSafe() {
 //	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
     Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.set(Config::LANGUAGE_KEY, config.getLanguage());
-	
+
     updatePresentation();
 	_wengoPhoneWindow->show();
 }
@@ -465,9 +465,9 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 			std::string data = "?login=" + wengoAccount->getWengoLogin() + "&password=" + wengoAccount->getWengoPassword()
 				+ "&lang=" + "fr" + "&wl=" + "wengo" + "&page=softphone-web";
 			_browser->setUrl(URL_WENGO_MINI_HOME + data);
-        }
+		}
 #endif
-    	break;
+	break;
 
 	case SipAccount::LoginStateConnected:
 	break;
@@ -536,7 +536,7 @@ void QtWengoPhone::openWengoAccount() {
 }
 
 void QtWengoPhone::editMyProfile() {
-	QtProfileDetails qtProfileDetails(_cWengoPhone, _cWengoPhone.getWengoPhone().getCurrentUserProfile(), _wengoPhoneWindow);
+	QtProfileDetails qtProfileDetails(_cWengoPhone, _cWengoPhone.getCurrentUserProfile(), _wengoPhoneWindow);
 	LOG_DEBUG("edit user profile");
 }
 
@@ -548,8 +548,8 @@ void QtWengoPhone::exitApplication() {
 }
 
 void QtWengoPhone::addContact() {
-	Contact & contact = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getContactList().createContact();
-	QtProfileDetails qtProfileDetails(_cWengoPhone, contact, _wengoPhoneWindow);
+	Contact & contact = _cWengoPhone.getCurrentUserProfile().getContactList().createContact();
+	QtProfileDetails qtProfileDetails(_cWengoPhone, _cWengoPhone.getCurrentUserProfile(), contact, _wengoPhoneWindow);
 	LOG_DEBUG("add contact");
 }
 
@@ -630,7 +630,7 @@ void QtWengoPhone::showAdvancedConfig() {
 
 void QtWengoPhone::showAccountSettings() {
 	QtIMAccountManager * imAccountManager =
-		new QtIMAccountManager(_cWengoPhone.getWengoPhone().getCurrentUserProfile(),
+		new QtIMAccountManager(_cWengoPhone.getCurrentUserProfile(),
 			_cWengoPhone, true, _wengoPhoneWindow);
 }
 
@@ -649,7 +649,7 @@ void QtWengoPhone::showCreateConferenceCall() {
     phoneNumber2LineEdit = Object::findChild<QLineEdit *>(conferenceDialog,"phoneNumber2LineEdit");
 
 	if (ret == QDialog::Accepted) {
-		IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
+		IPhoneLine * phoneLine = _cWengoPhone.getCurrentUserProfile().getActivePhoneLine();
 
 		if (phoneLine != NULL) {
 			ConferenceCall * confCall = new ConferenceCall(*phoneLine);
@@ -914,7 +914,7 @@ void QtWengoPhone::setSystrayIcon(QVariant status){
 
     if ( status.toInt() == (int)EnumPresenceState::MyPresenceStatusOk)
 
-    switch ( _cWengoPhone.getWengoPhone().getCurrentUserProfile().getPresenceState() ){
+    switch ( _cWengoPhone.getCurrentUserProfile().getPresenceState() ){
         case EnumPresenceState::PresenceStateAway:
             _trayIcon->setIcon(QPixmap(":/pics/status/away.png"));
             break;
