@@ -36,12 +36,19 @@ class ConnectHandler;
 class IMAccount;
 class PresenceHandler;
 
+/**
+ * Credit widget
+ * 
+ * @author Mr K.
+ * @author Mathieu Stute
+ */
 class QtProfileBar : public QWidget
 {
 	Q_OBJECT
 
 public:
-	QtProfileBar (CWengoPhone & cWengoPhone, UserProfile & userProfile, ConnectHandler & connectHandler,QWidget * parent = 0, Qt::WFlags f = 0 );
+	QtProfileBar (CWengoPhone & cWengoPhone, UserProfile & userProfile, 
+		ConnectHandler & connectHandler,QWidget * parent = 0, Qt::WFlags f = 0 );
 
 	void setWengos(float wengos);
 
@@ -152,6 +159,8 @@ private:
 	void wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, float wengos);
 
 	void wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail);
+
+	void wsInfoPtsnNumberEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, std::string number);
 
 	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
 

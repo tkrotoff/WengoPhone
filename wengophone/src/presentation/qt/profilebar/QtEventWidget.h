@@ -32,7 +32,6 @@
  */
 class QtEventWidget : public QWidget {
 	Q_OBJECT
-
 public:
 
 	typedef QList<QtClickableLabel *> QtClickableLabelList;
@@ -55,5 +54,4 @@ protected:
 
 	void addMessage(const QString & nickName);
 };
-
 #endif

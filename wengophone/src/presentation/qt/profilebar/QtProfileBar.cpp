@@ -405,22 +405,34 @@ void QtProfileBar::setWengos ( float wengos ){
 
 void QtProfileBar::wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsInfo) {
 	wsInfo.wsInfoWengosEvent += boost::bind(&QtProfileBar::wsInfoWengosEventHandler, this, _1, _2, _3, _4);
-	wsInfo.wsInfoVoiceMailEvent+= boost::bind(&QtProfileBar::wsInfoVoiceMailEventHandler, this, _1, _2, _3, _4);
+	wsInfo.wsInfoVoiceMailEvent += boost::bind(&QtProfileBar::wsInfoVoiceMailEventHandler, this, _1, _2, _3, _4);
+	wsInfo.wsInfoPtsnNumberEvent += boost::bind(&QtProfileBar::wsInfoPtsnNumberEventHandler, this, _1, _2, _3, _4);
+	
 	wsInfo.getWengosCount(true);
 	wsInfo.getUnreadVoiceMail(true);
 	wsInfo.getCallForwardInfo(true);
+	wsInfo.getPstnNumber(true);
 	wsInfo.execute();
 }
 
 void QtProfileBar::wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, float wengos) {
-	//TODO: add error check
-	setWengos(wengos);
+	if( status == WsInfo::WsInfoStatusOk ) {
+		setWengos(wengos);
+	}
 }
 
 void QtProfileBar::wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail) {
-	//TODO: add error check
-	_eventWidget->setNewMessages(voicemail);
+	if( status == WsInfo::WsInfoStatusOk ) {
+		_eventWidget->setNewMessages(voicemail);
+	}
 }
+
+void QtProfileBar::wsInfoPtsnNumberEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, std::string number) {
+	if( status == WsInfo::WsInfoStatusOk ) {
+		_creditWidget->setPstnNumber(QString::fromStdString(number));
+	}
+}
+
 void QtProfileBar::setOpen(bool status){
     if (status)
     {
