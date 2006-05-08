@@ -22,6 +22,7 @@
 
 #include <qtutil/QtWengoStyleLabel.h>
 #include <qtutil/MouseEventFilter.h>
+#include <qtutil/ToolTipLineEdit.h>
 
 QtCallBar::QtCallBar(QWidget * parent , Qt::WFlags f) : QFrame(parent,f) {
 
@@ -63,7 +64,9 @@ QtCallBar::QtCallBar(QWidget * parent , Qt::WFlags f) : QFrame(parent,f) {
 
 	QGridLayout * comboContLayout = new QGridLayout(_callBarComboContainer);
 	_phoneComboBox = new QComboBox(_callBarComboContainer);
+	_phoneComboBox->setLineEdit(new ToolTipLineEdit(_phoneComboBox));
 	_phoneComboBox->setEditable(true);
+	_phoneComboBox->setEditText(tr("Enter a phone number, a Wengo nickname or a SIP address"));
 	_phoneComboBox->setMaximumSize(QSize(10000,22));
 	comboContLayout->addWidget(_phoneComboBox);
 
