@@ -141,8 +141,10 @@ void QtNickNameWidget::connected(IMAccount * pImAccount) {
 	}
 }
 
-void QtNickNameWidget::disconnected(IMAccount * pImAccount){
-    switch (pImAccount->getProtocol()){
+void QtNickNameWidget::disconnected(IMAccount * pImAccount) {
+	EnumIMProtocol::IMProtocol imProtocol = pImAccount->getProtocol();
+
+	switch (pImAccount->getProtocol()){
         case EnumIMProtocol::IMProtocolMSN:
             _msnLabel->setPixmap(QPixmap(":pics/protocols/msn_off.png"));
             break;
