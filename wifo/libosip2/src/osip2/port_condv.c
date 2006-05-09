@@ -26,6 +26,8 @@
 #include <mpatrol.h>
 #endif
 
+#include <stdlib.h>
+
 #include <osip2/internal.h>
 #include <osip2/osip_mt.h>
 #include <osip2/osip_condv.h>

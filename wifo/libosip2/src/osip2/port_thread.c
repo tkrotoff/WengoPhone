@@ -20,6 +20,7 @@
 #ifdef OSIP_MT
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <osip2/internal.h>
 #include <osip2/osip_mt.h>
