@@ -84,7 +84,7 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, CWengoPhone & 
 	loadIMAccounts();
 
 	if (showAsDialog) {
-		_imAccountManagerWidget->show();
+		((QDialog *) _imAccountManagerWidget)->exec();
 	}
 }
 
