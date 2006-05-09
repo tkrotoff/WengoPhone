@@ -55,7 +55,7 @@ void SoftUpdate::checkForUpdate() {
 	operatingSystem = "linux";
 #endif
 
-	setParameters(std::string("aro=softphone") +
+	setParameters(std::string("aro=wengophoneng") +
 			std::string("&installer_type=") + operatingSystem);
 
 	//Calls the web service
@@ -101,12 +101,12 @@ void SoftUpdate::answerReceived(const std::string & answer, int requestId) {
 		ss >> fileSize;
 	}
 
-	/*FIXME to uncomment when update system is ready on the Wengo platform
-	if (buildId > WengoPhoneBuildId::BUILDID) {
-		//A new version of WengoPhone is available
-		LOG_DEBUG("new WengoPhone version=" + String::fromNumber(version));
+
+	if ((WengoPhoneBuildId::BUILDID != 0) && (buildId > WengoPhoneBuildId::BUILDID)) {
+		//A new version of WengoPhone is available and we don't have a developer version with buildid=0
+		LOG_DEBUG("new WengoPhone version=" + version + " buildid=" + String::fromNumber(buildId));
 		updateWengoPhoneEvent(*this, downloadUrl, buildId, version, fileSize);
-	} else */{
+	} else {
 		LOG_DEBUG("WengoPhone is up-to-date");
 	}
 }
