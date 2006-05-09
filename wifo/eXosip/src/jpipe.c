@@ -17,6 +17,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifndef WIN32
+
 
 #ifdef ENABLE_MPATROL
 #include <mpatrol.h>
@@ -25,9 +27,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+
 #include "jpipe.h"
 
-#ifndef WIN32
 
 jpipe_t * jpipe ()
 {
