@@ -19,8 +19,12 @@
 
 #include "QtEventWidget.h"
 
-QtEventWidget::QtEventWidget( QWidget * parent, Qt::WFlags f )
-	: QWidget ( parent, f ) {
+#include <model/profile/UserProfile.h>
+#include <model/phoneline/IPhoneLine.h>
+#include <control/CWengoPhone.h>
+
+QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent, Qt::WFlags f)
+	: QWidget ( parent, f ), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
 /*
 	QPalette p = palette();
 	p.setColor(QPalette::Active,QPalette::Window,Qt::white);
@@ -30,38 +34,33 @@ QtEventWidget::QtEventWidget( QWidget * parent, Qt::WFlags f )
 	QGridLayout * gridLayout = new QGridLayout(this);
 
 	_missedCallLabel = new QtClickableLabel(this);
-	_missedCallLabel->setText( tr ("Missed calls") );
+	_missedCallLabel->setText(tr("Missed calls"));
 
-	_newMessagesLabel = new QtClickableLabel(this);
-	_newMessagesLabel->setText( tr("New messages") );
+	_voiceMailLabel = new QtClickableLabel(this);
+	_voiceMailLabel->setText(tr("New messages"));
+	connect(_voiceMailLabel, SIGNAL(clicked()), SLOT(missedCallClicked()));
 
-	gridLayout->addWidget( _missedCallLabel ,0,0 );
-	gridLayout->addWidget( _newMessagesLabel,0,1 );
+	gridLayout->addWidget(_missedCallLabel, 0, 0);
+	gridLayout->addWidget(_voiceMailLabel, 0, 1);
 
 }
 
-void QtEventWidget::addMissedCall(const QString & nickName){
-
-	QtClickableLabel * label = new QtClickableLabel(this);
-	label->setText(nickName);
-	QGridLayout * gridLayout = dynamic_cast<QGridLayout *>(layout());
-	int row = gridLayout->rowCount ();
-	gridLayout->addWidget( label, row, 0);
-}
-
-void QtEventWidget::addMessage(const QString & nickName){
-
-	QtClickableLabel * label = new QtClickableLabel(this);
-	label->setText(nickName);
-	QGridLayout * gridLayout = dynamic_cast<QGridLayout *>(layout());
-	int row = gridLayout->rowCount ();
-	gridLayout->addWidget( label, row, 1);
-}
-
-void QtEventWidget::setNewMessages(int count) {
+void QtEventWidget::setVoiceMail(int count) {
 	if( count ) {
-		_newMessagesLabel->setText( QString("%1").arg(count) + tr(" new Voice Mail") );
+		_voiceMailLabel->setText(QString("%1").arg(count) + " " + tr("new Voice Mail"));
 	} else {
-		_newMessagesLabel->setText( tr("No new Voice Mail") );
+		_voiceMailLabel->setText(tr("No new Voice Mail"));
+	}
+}
+
+void QtEventWidget::missedCallClicked() {
+	if( QMessageBox::question(
+		this,
+		tr("Call message box"),
+		tr("Do you want to call 123?"),
+		tr("&No"), tr("&Yes"),
+		QString(), 0, 1) ) {
+
+		_userProfile.getActivePhoneLine()->makeCall("123", false);
 	}
 }

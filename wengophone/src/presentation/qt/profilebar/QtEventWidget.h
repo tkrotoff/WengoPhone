@@ -25,6 +25,9 @@
 
 #include <model/webservices/info/WsInfo.h>
 
+class UserProfile;
+class CWengoPhone;
+
 /**
  *
  * @author Mr K
@@ -36,22 +39,26 @@ public:
 
 	typedef QList<QtClickableLabel *> QtClickableLabelList;
 
-	QtEventWidget (QWidget * parent = 0, Qt::WFlags f = 0);
+	QtEventWidget (CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent = 0, Qt::WFlags f = 0);
 
-	void setNewMessages(int count);
+	void setVoiceMail(int count);
+
+private Q_SLOTS:
+
+	void missedCallClicked();
 
 protected:
 
 	QtClickableLabel * _missedCallLabel;
 
-	QtClickableLabel * _newMessagesLabel;
+	QtClickableLabel * _voiceMailLabel;
 
 	QtClickableLabelList _missedCallLabelList;
 
 	QtClickableLabelList _messagesLabelList;
 
-	void addMissedCall(const QString & nickName);
+	UserProfile & _userProfile;
 
-	void addMessage(const QString & nickName);
+	CWengoPhone & _cWengoPhone;
 };
 #endif

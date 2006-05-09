@@ -131,7 +131,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	_nickNameWidget = new QtNickNameWidget(_userProfile, _cWengoPhone, this);
 	_nickNameWidget->setVisible(false);
 
-	_eventWidget = new QtEventWidget(this);
+	_eventWidget = new QtEventWidget(_cWengoPhone, _userProfile, this);
 	_eventWidget->setVisible(false);
 
 	_creditWidget = new QtCreditWidget(this);
@@ -420,7 +420,7 @@ void QtProfileBar::wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsI
 
 void QtProfileBar::wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail) {
 	if( status == WsInfo::WsInfoStatusOk ) {
-		_eventWidget->setNewMessages(voicemail);
+		_eventWidget->setVoiceMail(voicemail);
 	}
 }
 
@@ -496,4 +496,3 @@ void QtProfileBar::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine
 void QtProfileBar::userProfileUpdated() {
 	_nickNameWidget->userProfileUpdated();
 }
-
