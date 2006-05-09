@@ -20,13 +20,15 @@
 #ifndef QTPROFILEBAR_H
 #define QTPROFILEBAR_H
 
-#include <QtGui>
-
 #include "QtNickNameWidget.h"
 #include "QtEventWidget.h"
 #include "QtCreditWidget.h"
-#include <imwrapper/EnumPresenceState.h>
+
 #include <model/webservices/info/WsInfo.h>
+
+#include <imwrapper/EnumPresenceState.h>
+
+#include <QtGui>
 
 class CWengoPhone;
 class IPhoneLine;

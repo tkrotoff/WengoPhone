@@ -25,12 +25,7 @@
 
 QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent, Qt::WFlags f)
 	: QWidget ( parent, f ), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
-/*
-	QPalette p = palette();
-	p.setColor(QPalette::Active,QPalette::Window,Qt::white);
-	setPalette(p);
-	setAutoFillBackground(true);
-*/
+
 	QGridLayout * gridLayout = new QGridLayout(this);
 
 	_missedCallLabel = new QtClickableLabel(this);

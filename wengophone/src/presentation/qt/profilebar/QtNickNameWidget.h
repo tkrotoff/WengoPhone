@@ -27,15 +27,56 @@ class CWengoPhone;
 class UserProfile;
 class IMAccount;
 
-class QtNickNameWidget : public QWidget
-{
+/**
+ *
+ * @author Mr K
+ * @author Mathieu Stute
+ */
+class QtNickNameWidget : public QWidget {
 	Q_OBJECT
-
 public:
 
 	QtNickNameWidget (UserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent = 0, Qt::WFlags f = 0);
 
+public Q_SLOTS:
+
+	void msnClicked();
+
+	void yahooClicked();
+
+	void wengoClicked();
+
+	void aimClicked();
+
+	void jabberClicked();
+
+	void avatarRightClicked();
+
+	void avatarClicked();
+
+	void nicknameChanged();
+
+	void connected(IMAccount * pImAccount);
+
+	void disconnected(IMAccount * pImAccount);
+
+	void userProfileUpdated();
+
 protected:
+
+	void updateAvatar();
+
+	void showMsnMenu();
+
+	void showYahooMenu();
+
+	void showWengoMenu();
+
+	void showAimMenu();
+
+	void showJabberMenu();
+
+	void init();
 
 	QtClickableLabel * _msnLabel;
 
@@ -68,44 +109,6 @@ protected:
 	UserProfile & _userProfile;
 
 	CWengoPhone & _cWengoPhone;
-
-	void showMsnMenu();
-
-	void showYahooMenu();
-
-	void showWengoMenu();
-
-	void showAimMenu();
-
-	void showJabberMenu();
-
-	/**
-	 * Initializes the widgets.
-	 *
-	 * Full the widgets with information container in UserProfile.
-	 */
-	void init();
-
-public Q_SLOTS:
-
-	void msnClicked();
-
-	void yahooClicked();
-
-	void wengoClicked();
-
-	void aimClicked();
-
-	void jabberClicked();
-
-	void avatarClicked();
-
-	void nicknameChanged();
-
-	void connected(IMAccount * pImAccount);
-
-	void disconnected(IMAccount * pImAccount);
-	void userProfileUpdated();
 };
 
 #endif

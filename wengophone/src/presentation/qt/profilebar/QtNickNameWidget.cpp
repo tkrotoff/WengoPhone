@@ -19,20 +19,17 @@
 
 #include "QtNickNameWidget.h"
 
+#include "QtAvatarChooser.h"
 #include "QtIMMenu.h"
 
 #include <presentation/qt/profile/QtProfileDetails.h>
-
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
 
 #include <QFileDialog>
 
-#include "QtAvatarChooser.h"
-
 #include <string>
-
 using namespace std;
 
 QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent , Qt::WFlags f )
@@ -103,9 +100,10 @@ QtNickNameWidget::QtNickNameWidget(UserProfile & userProfile, CWengoPhone & cWen
 	connect ( _yahooLabel, SIGNAL( clicked() ), SLOT ( yahooClicked() ) );
 	connect ( _wengoLabel, SIGNAL( clicked() ), SLOT ( wengoClicked() ) );
 	connect ( _aimLabel, SIGNAL ( clicked() ), SLOT ( aimClicked() ) );
-	connect ( _avatarLabel, SIGNAL ( clicked() ), SLOT ( avatarClicked() ) );
 	connect ( _jabberLabel, SIGNAL ( clicked() ), SLOT ( jabberClicked() ) );
 	connect ( _nickNameEdit, SIGNAL(returnPressed ()), SLOT(nicknameChanged()));
+	connect ( _avatarLabel, SIGNAL ( clicked() ), SLOT ( avatarClicked() ) );
+	connect ( _avatarLabel, SIGNAL ( rightClicked() ), SLOT ( avatarRightClicked() ));
 
 	// Widget initialization
 	init();
@@ -177,32 +175,37 @@ void QtNickNameWidget::yahooClicked(){
 	showYahooMenu();
 }
 
-void QtNickNameWidget::wengoClicked(){
+void QtNickNameWidget::wengoClicked() {
 	showWengoMenu();
 }
 
-void QtNickNameWidget::aimClicked(){
+void QtNickNameWidget::aimClicked() {
 	showAimMenu();
 }
 
-void QtNickNameWidget::jabberClicked(){
+void QtNickNameWidget::jabberClicked() {
 	showJabberMenu();
 }
 
 void QtNickNameWidget::avatarClicked() {
+	QtProfileDetails qtProfileDetails(_cWengoPhone, _userProfile, this, false);
+	qtProfileDetails.changeUserProfileAvatar();
+	updateAvatar();
+}
+
+void QtNickNameWidget::avatarRightClicked() {
 	QtProfileDetails qtProfileDetails(_cWengoPhone, _userProfile, this);
-	LOG_DEBUG("edit user profile");
+	updateAvatar();
 }
 
 void QtNickNameWidget::nicknameChanged() {
 	_userProfile.setAlias(_nickNameEdit->text().toStdString(), NULL);
 }
 
-// Menus
-
-void QtNickNameWidget::showMsnMenu(){
-	if (_msnIMAccountMenu)
+void QtNickNameWidget::showMsnMenu() {
+	if(_msnIMAccountMenu) {
 		delete _msnIMAccountMenu;
+	}
 
 	_msnIMAccountMenu = new QMenu(this);
 	_msnIMAccountMenu->setWindowOpacity(0.95);
@@ -224,9 +227,10 @@ void QtNickNameWidget::showMsnMenu(){
 	_msnIMAccountMenu->popup(mapToGlobal(p));
 }
 
-void QtNickNameWidget::showYahooMenu(){
-	if ( _yahooIMAccountMenu )
+void QtNickNameWidget::showYahooMenu() {
+	if(_yahooIMAccountMenu) {
 		delete _yahooIMAccountMenu;
+	}
 
 	_yahooIMAccountMenu = new QMenu(this);
 	_yahooIMAccountMenu->setWindowOpacity(0.95);
@@ -248,9 +252,10 @@ void QtNickNameWidget::showYahooMenu(){
 	_yahooIMAccountMenu->popup(mapToGlobal(p));
 }
 
-void QtNickNameWidget::showWengoMenu(){
-	if ( _wengoIMAccountMenu )
+void QtNickNameWidget::showWengoMenu() {
+	if(_wengoIMAccountMenu) {
 		delete _wengoIMAccountMenu;
+	}
 
 	_wengoIMAccountMenu = new QMenu(this);
 	_wengoIMAccountMenu->setWindowOpacity(0.95);
@@ -272,9 +277,10 @@ void QtNickNameWidget::showWengoMenu(){
 	_wengoIMAccountMenu->popup(mapToGlobal(p));
 }
 
-void QtNickNameWidget::showAimMenu(){
-	if ( _aimIMAccountMenu )
+void QtNickNameWidget::showAimMenu() {
+	if(_aimIMAccountMenu) {
 		delete _aimIMAccountMenu;
+	}
 
 	_aimIMAccountMenu = new QMenu(this);
 	_aimIMAccountMenu->setWindowOpacity(0.95);
@@ -296,9 +302,10 @@ void QtNickNameWidget::showAimMenu(){
 	_aimIMAccountMenu->popup(mapToGlobal(p));
 }
 
-void QtNickNameWidget::showJabberMenu(){
-	if ( _jabberIMAccountMenu)
+void QtNickNameWidget::showJabberMenu() {
+	if(_jabberIMAccountMenu) {
 		delete _jabberIMAccountMenu;
+	}
 
 	_jabberIMAccountMenu = new QMenu(this);
 	_jabberIMAccountMenu->setWindowOpacity(0.95);
@@ -320,24 +327,27 @@ void QtNickNameWidget::showJabberMenu(){
 
 void QtNickNameWidget::init() {
 	_nickNameEdit->setText(QString::fromStdString(_userProfile.getAlias()));
+	updateAvatar();
+}
 
-	// Setting avatar
+void QtNickNameWidget::userProfileUpdated() {
+	init();
+}
+
+void QtNickNameWidget::updateAvatar() {
+
 	QPixmap pixmap;
 	QPixmap background = QPixmap(":/pics/fond_avatar.png");
 	string myData = _userProfile.getIcon().getData();
 	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
 
 	if ( !pixmap.isNull()){
-        QPainter painter( & background );
-        painter.drawPixmap(5,5,pixmap.scaled(60,60));
-        painter.end();
-        _avatarLabel->setPixmap(background);
+		QPainter painter( & background );
+		painter.drawPixmap(5,5,pixmap.scaled(60,60));
+		painter.end();
+		_avatarLabel->setPixmap(background);
 	}
 	else{
-	    _avatarLabel->setPixmap(background);
+		_avatarLabel->setPixmap(background);
 	}
-}
-
-void QtNickNameWidget::userProfileUpdated() {
-	init();
 }

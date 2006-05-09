@@ -19,15 +19,13 @@
 
 #include "QtProfileBar.h"
 
-#include <imwrapper/IMAccount.h>
-
-#include <control/CWengoPhone.h>
-
 #include <model/account/wengo/WengoAccount.h>
 #include <model/profile/UserProfile.h>
 #include <model/presence/PresenceHandler.h>
-#include <util/Logger.h>
+#include <control/CWengoPhone.h>
 
+#include <util/Logger.h>
+#include <imwrapper/IMAccount.h>
 #include <qtutil/QtWengoStyleLabel.h>
 
 QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile, ConnectHandler & connectHandler,QWidget * parent , Qt::WFlags f )
