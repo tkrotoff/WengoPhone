@@ -113,7 +113,7 @@ static void report_event_with_status(eXosip_event_t *je, osip_message_t *sip);
  * Over UDP or over HTTP tunnel
  */
 int 
-_send_udp(void *buf, int len, int flags, const struct sockaddr *to, int tolen)
+_send_udp(const void *buf, int len, int flags, const struct sockaddr *to, int tolen)
 {
 	int res;
 
@@ -718,7 +718,6 @@ static void cb_rcv1xx(int type, osip_transaction_t *tr,osip_message_t *sip)
 
   if (MSG_IS_RESPONSE_FOR(sip, "OPTIONS"))
     {
-      eXosip_event_t *je;
       if (jc==NULL)
 	{
 	  OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcv1xx (id=%i) Error: no call or transaction info for OPTIONS transaction\r\n", tr->transactionid));
@@ -855,7 +854,6 @@ sdp_message_t *eXosip_get_sdp_body(osip_message_t *message)
 sdp_message_t *eXosip_get_remote_sdp(osip_transaction_t *transaction)
 {
   osip_message_t *message;
-  int pos = 0;
 
   if (transaction->ist_context!=NULL)
     /* remote sdp is in INVITE (or ACK!) */
@@ -877,10 +875,7 @@ sdp_message_t *eXosip_get_remote_sdp(osip_transaction_t *transaction)
 sdp_message_t *eXosip_get_local_sdp(osip_transaction_t *transaction)
 {
   osip_message_t *message;
-  osip_body_t *body;
-  sdp_message_t *sdp;
-  int i;
-  int pos = 0;
+
   if (transaction->ict_context!=NULL)
     /* local sdp is in INVITE (or ACK!) */
     message = transaction->orig_request;
@@ -1340,7 +1335,7 @@ static void cb_rcv2xx(int type, osip_transaction_t *tr,osip_message_t *sip)
 
   if (MSG_IS_RESPONSE_FOR(sip, "OPTIONS"))
     {
-      eXosip_event_t *je;
+
       if (jc==NULL)
 	{
 	  OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcv2xx (id=%i) Error: no call or transaction info for OPTIONS transaction\r\n", tr->transactionid));
@@ -1479,7 +1474,7 @@ static void cb_rcv3xx(int type, osip_transaction_t *tr,osip_message_t *sip)
 
   if (MSG_IS_RESPONSE_FOR(sip, "OPTIONS"))
     {
-      eXosip_event_t *je;
+
       if (jc==NULL)
 	{
 	  OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcv3xx (id=%i) Error: no call or transaction info for INFO transaction\r\n", tr->transactionid));
@@ -1548,7 +1543,7 @@ static void cb_rcv4xx(int type, osip_transaction_t *tr,osip_message_t *sip)
 
   if (MSG_IS_RESPONSE_FOR(sip, "OPTIONS"))
     {
-      eXosip_event_t *je;
+
       if (jc==NULL)
 	{
 	  OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcv4xx (id=%i) Error: no call or transaction info for INFO transaction\r\n", tr->transactionid));
@@ -1730,7 +1725,7 @@ static void cb_rcv6xx(int type, osip_transaction_t *tr,osip_message_t *sip)
 
   if (MSG_IS_RESPONSE_FOR(sip, "OPTIONS"))
     {
-      eXosip_event_t *je;
+
       if (jc==NULL)
 	{
 	  OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcv6xx (id=%i) Error: no call or transaction info for INFO transaction\r\n", tr->transactionid));
