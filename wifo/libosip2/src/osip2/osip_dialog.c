@@ -310,10 +310,13 @@ int
 osip_dialog_match_with_replaces (osip_dialog_t * dialog, const osip_replaces_t *rep)
 {
   
-  const char * from = osip_replaces_get_from_tag(rep);
-  const char * to  = osip_replaces_get_to_tag(rep);
+  const char * from;
+  const char * to;
   char *callid;
   int i;
+
+  from = (const char *) osip_replaces_get_from_tag((osip_replaces_t *)rep);
+  to   = (const char *) osip_replaces_get_to_tag((osip_replaces_t *)rep);
 
   if (-1 == osip_call_id_to_str(rep->call_id, &callid))
     return 0;
