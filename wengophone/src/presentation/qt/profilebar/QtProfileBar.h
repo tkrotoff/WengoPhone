@@ -41,7 +41,7 @@ class UserProfile;
 
 /**
  * Credit widget
- * 
+ *
  * @author Mr K.
  * @author Mathieu Stute
  */
@@ -97,6 +97,8 @@ protected:
 
 	bool _crediWidgetVisible;
 
+	bool _isOpen;
+
 	QPixmap _statusPixmap;
 
 	QMenu * _statusMenu;
@@ -120,6 +122,8 @@ protected:
 	void removeCreditWidget();
 
     void setOpen(bool opened);
+
+    void paintEvent ( QPaintEvent * event );
 
 public Q_SLOTS:
 

@@ -363,6 +363,10 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	_ui->tabWidget->addTab(qtContactCallListWidget,tr("Call"));
 	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
 	qtContactCallListWidget->addPhoneCall(qtPhoneCall);
+
+	connect ( qtContactCallListWidget, SIGNAL(startConferenceSignal(PhoneCall *, PhoneCall *)),
+	          SLOT(addToConference(PhoneCall *, PhoneCall *)));
+
 	_hangUpButton->setEnabled(true);
 }
 
@@ -395,6 +399,58 @@ void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall){
         }
     }
 }
+
+void QtWengoPhone::addToConference(PhoneCall * sourceCall, PhoneCall * targetCall){
+    // Bad and Ugly but works...
+
+    QtContactCallListWidget * qtContactCallListWidget;
+
+    int nbtab = _ui->tabWidget->count();
+
+    for ( int i = 0; i < nbtab; i++){
+        if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))){
+            return;
+        }
+    }
+
+    for (int i = 0; i < _ui->tabWidget->count(); i++){
+        QtContactCallListWidget * qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+        if ( qtContactCallListWidget ){
+            if ( qtContactCallListWidget->hasPhoneCall( sourceCall ) ){
+                _ui->tabWidget->setTabText(i,tr("Conference"));
+                IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
+                if (phoneLine != NULL) {
+                    ConferenceCall * confCall = new ConferenceCall(*phoneLine);
+                    confCall->addPhoneCall(*targetCall);
+                    confCall->addPhoneCall(*sourceCall);
+                    // Add the target to source and remove the target tab
+                    for (int j = 0; j < _ui->tabWidget->count(); j++){
+                        QtContactCallListWidget * toRemove =
+                            dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(j));
+                        if ( toRemove )
+                        {
+                            if ( toRemove->hasPhoneCall(targetCall) ){
+                                QtPhoneCall * qtPhoneCall = toRemove->takeQtPhoneCall(targetCall);
+                                if ( qtPhoneCall ){
+                                    toRemove->close();
+                                    qtContactCallListWidget->addPhoneCall(qtPhoneCall);
+                                    break;
+                                }
+
+                            }
+                        }
+
+                    }
+
+                }else {
+                    LOG_DEBUG("phoneLine is NULL");
+                }
+                break;
+            }
+        }
+    }
+}
+
 
 
 void QtWengoPhone::addToConference(QtPhoneCall * qtPhoneCall){

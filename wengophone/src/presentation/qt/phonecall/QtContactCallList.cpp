@@ -36,6 +36,7 @@ QScrollArea(parent)
 
 void QtContactCallList::addPhoneCall(QtPhoneCall * qtPhoneCall){
     QMutexLocker locker(&_mutex);
+    qtPhoneCall->getWidget()->setParent(_widget);
 	_widgetLayout->addWidget( qtPhoneCall->getWidget() );
 	connect(qtPhoneCall,SIGNAL(deleteMe(QtPhoneCall *)), SLOT(deleteQtPhoneCall(QtPhoneCall *)));
 	_phoneCallList.append(qtPhoneCall);
@@ -83,3 +84,22 @@ int QtContactCallList::count(){
     QMutexLocker locker(&_mutex);
     return _phoneCallList.size();
 }
+
+QtPhoneCall * QtContactCallList::takeQtPhoneCall ( PhoneCall * phoneCall){
+    QMutexLocker locker(&_mutex);
+
+    QtPhoneCallList::iterator iter;
+    for (iter = _phoneCallList.begin(); iter!=_phoneCallList.end(); iter++){
+
+        if ( (*iter)->getCPhoneCall().getPhoneCall().getPeerSipAddress().getUserName() ==
+              phoneCall->getPeerSipAddress().getUserName() ){
+                  _widgetLayout->removeWidget( (*iter)->getWidget() );
+                  QtPhoneCall * qtphoneCall = (*iter);
+                  _phoneCallList.erase(iter);
+                  return qtphoneCall;
+              }
+    }
+    return NULL;
+
+}
+

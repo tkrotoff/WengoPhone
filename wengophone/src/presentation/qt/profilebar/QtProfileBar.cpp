@@ -36,7 +36,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 
 	_statusMenu = NULL;
-
+    _isOpen = false;
 	_nickNameWidgetVisible = false;
 	_eventsWidgetVisible = false;
 	_crediWidgetVisible = false;
@@ -403,9 +403,9 @@ void QtProfileBar::wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsIn
 	wsInfo.wsInfoWengosEvent += boost::bind(&QtProfileBar::wsInfoWengosEventHandler, this, _1, _2, _3, _4);
 	wsInfo.wsInfoVoiceMailEvent += boost::bind(&QtProfileBar::wsInfoVoiceMailEventHandler, this, _1, _2, _3, _4);
 	wsInfo.wsInfoPtsnNumberEvent += boost::bind(&QtProfileBar::wsInfoPtsnNumberEventHandler, this, _1, _2, _3, _4);
-	
+
 	wsInfo.wsCallForwardInfoEvent += boost::bind(&QtProfileBar::wsCallForwardInfoEventHandler, this, _1, _2, _3, _4, _5, _6, _7, _8);
-	
+
 	wsInfo.getWengosCount(true);
 	wsInfo.getUnreadVoiceMail(true);
 	wsInfo.getCallForwardInfo(true);
@@ -434,9 +434,9 @@ void QtProfileBar::wsInfoPtsnNumberEventHandler(WsInfo & sender, int id, WsInfo:
 
 void QtProfileBar::wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status,
 	WsInfo::WsInfoCallForwardMode mode, bool voicemail, std::string dest1, std::string dest2, std::string dest3) {
-	
+
 	if( status == WsInfo::WsInfoStatusOk) {
-		
+
 		switch( mode ) {
 			case WsInfo::WsInfoCallForwardModeVoicemail:
 				_creditWidget->setCallForwardMode(tr("voicemail"));
@@ -455,27 +455,8 @@ void QtProfileBar::wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo
 }
 
 void QtProfileBar::setOpen(bool status) {
-    if (status)
-    {
-        QColor background = QColor(189,189,189);
-        QPalette p = palette();
-        p.setColor(QPalette::Window, background );
-        _statusLabel->setBackgroundColor(background);
-        _nicknameLabel->setBackgroundColor(background);
-        _eventsLabel->setBackgroundColor(background);
-        _creditLabel->setBackgroundColor(background);
-        setPalette(p);
-
-    }
-    else{
-        QPalette p = (dynamic_cast<QWidget *>( parent()))->palette();
-        setPalette(p);
-        QColor background = p.color(QPalette::Window);
-        _statusLabel->setBackgroundColor(background);
-        _nicknameLabel->setBackgroundColor(background);
-        _eventsLabel->setBackgroundColor(background);
-        _creditLabel->setBackgroundColor(background);
-    }
+    _isOpen = status;
+    update();
 }
 
 void QtProfileBar::setStatusLabel(const QString & on, const QString & off) {
@@ -498,4 +479,46 @@ void QtProfileBar::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine
 void QtProfileBar::userProfileUpdated() {
 	_nickNameWidget->userProfileUpdated();
 }
+
+void QtProfileBar::paintEvent ( QPaintEvent * event ){
+    if ( _isOpen ){
+        QRect r = rect();
+
+        QLinearGradient lg( QPointF( 1, r.top() ), QPointF( 1, r.bottom() ) );
+
+        lg.setColorAt ( 0, palette().color(QPalette::Window) );
+        QColor dest = palette().color(QPalette::Window);
+
+        float red = ((float )dest.red()) / 1.5f;
+        float blue = ((float )dest.blue()) / 1.5f;
+        float green = ((float )dest.green()) / 1.5f;
+
+        dest = QColor( (int)red,(int)green,(int)blue);
+        lg.setColorAt ( 1, dest  );
+
+        QPainter painter(this);
+        painter.fillRect( r, QBrush( lg ) );
+        painter.end();
+    } else {
+        QWidget::paintEvent(event);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

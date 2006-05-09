@@ -185,9 +185,4 @@ void QtTreeViewDelegate::drawGroup( QPainter * painter, const QStyleOptionViewIt
 		painter->setPen(QColor(128,128,128));
 		painter->drawLine(option.rect.left(),option.rect.bottom()-1,
 						  option.rect.width(),option.rect.bottom()-1);
-/*
-		painter->setPen(Qt::black);
-		painter->drawLine(option.rect.left(),option.rect.bottom()-2,
-						  option.rect.width(),option.rect.bottom()-2);
-*/
-	}
+}

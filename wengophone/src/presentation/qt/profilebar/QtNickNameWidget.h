@@ -21,7 +21,7 @@
 #define QTNICKNAMEWIDGET_H
 
 #include <QtGui>
-#include "QtClickableLabel.h"
+#include <qtutil/QtClickableLabel.h>
 
 class CWengoPhone;
 class CUserProfile;

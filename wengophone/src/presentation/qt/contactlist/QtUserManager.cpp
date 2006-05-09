@@ -57,7 +57,6 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
 	target->setMouseTracking(true);
 	UserTreeEventManager * dnd = new UserTreeEventManager(this,target);
 	QtUserTreeEventFilter *keyFilter = new QtUserTreeEventFilter(this,target);
-//	UserManagerEventManager * userManagerEventManager = new UserManagerEventManager(target, this);
 
 	connect (target,SIGNAL(itemSelectionChanged ()),this,SLOT(treeViewSelectionChanged()));
 	connect (target,SIGNAL(itemClicked (QTreeWidgetItem *,int )),this,SLOT(itemClicked(QTreeWidgetItem *,int)));
@@ -462,7 +461,6 @@ void QtUserManager::inviteToConference(){ // SLOT
         user = ul->getUser(item->text(0));
         if ( user ){
             QString phone =  user->getPreferredNumber();
-            qDebug() << "Inviting " << phone << "to conference";
             inviteToConferenceClicked(phone, action->getPhoneCall());
         }
     }

@@ -58,7 +58,7 @@ public:
 
 Q_SIGNALS:
 
-	void startConference(QtPhoneCall * phonCall);
+	void startConference(PhoneCall * sourceCall,  PhoneCall * targetCall);
 
 	void stopConference();
 
@@ -101,6 +101,10 @@ private:
 	void showVideoWidget();
 
 	void showAvatar();
+
+	QMenu * createMenu();
+
+    QMenu * createInviteMenu();
 
 	QMenu * _popup;
 

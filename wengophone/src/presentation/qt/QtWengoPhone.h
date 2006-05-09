@@ -215,6 +215,8 @@ private Q_SLOTS:
 
 	void addToConference(QString phoneNumber, PhoneCall * targetCall);
 
+	void addToConference(PhoneCall * sourceCall, PhoneCall * targetCall);
+
 private:
 
 	void initThreadSafe();

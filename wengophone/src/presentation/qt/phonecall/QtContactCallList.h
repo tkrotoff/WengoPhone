@@ -41,6 +41,8 @@ public:
 
 	QtPhoneCallList & getPhoneCallList();
 
+    QtPhoneCall * takeQtPhoneCall ( PhoneCall * phoneCall);
+
 	void clearCalls();
 
 	int count();

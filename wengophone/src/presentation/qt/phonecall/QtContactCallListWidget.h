@@ -42,9 +42,11 @@ public:
 
 	bool hasPhoneCall(PhoneCall * phoneCall);
 
+	QtPhoneCall * takeQtPhoneCall(PhoneCall * phoneCall);
+
 public Q_SLOTS:
 
-	void startConference(QtPhoneCall * qtPhoneCall);
+	void startConference(PhoneCall * sourceCall, PhoneCall * targetCall);
 
 	void stopConference();
 
@@ -52,7 +54,9 @@ public Q_SLOTS:
 
     void callRejected();
 
+Q_SIGNALS:
 
+    void startConferenceSignal(PhoneCall * sourceCall, PhoneCall * targetCall);
 
 protected:
 

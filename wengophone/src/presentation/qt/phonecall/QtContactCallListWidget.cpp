@@ -39,16 +39,16 @@ QWidget (parent,f), _cWengoPhone(cWengoPhone)
 	setAttribute(Qt::WA_DeleteOnClose,true);
 }
 
-
 void QtContactCallListWidget::addPhoneCall(QtPhoneCall * qtPhoneCall){
-	connect (qtPhoneCall,SIGNAL(startConference(QtPhoneCall *)),SLOT(startConference(QtPhoneCall *)));
+	connect (qtPhoneCall,SIGNAL(startConference(PhoneCall *,PhoneCall *)),SLOT(startConference(PhoneCall *,PhoneCall *)));
 	connect (qtPhoneCall,SIGNAL(stopConference() ),SLOT(stopConference()));
 	connect (qtPhoneCall,SIGNAL(callRejected()), SLOT(callRejected()));
 	_listWidget->addPhoneCall(qtPhoneCall);
 }
 
-void QtContactCallListWidget::startConference(QtPhoneCall * qtPhoneCall){
+void QtContactCallListWidget::startConference(PhoneCall * sourceCall, PhoneCall * targetCall){
 
+    startConferenceSignal(sourceCall, targetCall);
 	if ( _conferenceCall )
 		return;
 
@@ -116,4 +116,8 @@ void QtContactCallListWidget::callRejected(){
 
 bool QtContactCallListWidget::hasPhoneCall(PhoneCall * phoneCall){
     return _listWidget->hasPhoneCall(phoneCall);
+}
+
+QtPhoneCall * QtContactCallListWidget::takeQtPhoneCall(PhoneCall * phoneCall){
+    return _listWidget->takeQtPhoneCall(phoneCall);
 }

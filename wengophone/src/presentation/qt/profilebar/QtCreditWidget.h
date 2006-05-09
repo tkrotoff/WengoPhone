@@ -21,13 +21,13 @@
 #define QTCREDITWIDGET_H
 
 #include <QtGui>
-#include "QtClickableLabel.h"
+#include <qtutil/QtClickableLabel.h>
 
 class CWengoPhone;
 
 /**
  * Credit widget
- * 
+ *
  * @author Mr K.
  * @author Mathieu Stute
  */
