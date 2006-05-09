@@ -383,8 +383,6 @@ int osip_rfc3264_del_t38_media (struct osip_rfc3264 *config, int pos)
  */
   sdp_media_t *osip_rfc3264_find_t38 (struct osip_rfc3264 *config, char *payload)
 {
-  osip_rfc3264_t *cnf = (osip_rfc3264_t*) config;
-  if (config==NULL) return NULL;
   return NULL;
 }
 
@@ -395,8 +393,6 @@ int osip_rfc3264_del_t38_media (struct osip_rfc3264 *config, int pos)
  */
   sdp_media_t *osip_rfc3264_find_app (struct osip_rfc3264 *config, char *payload)
 {
-  osip_rfc3264_t *cnf = (osip_rfc3264_t*) config;
-  if (config==NULL) return NULL;
   return NULL;
 }
 
