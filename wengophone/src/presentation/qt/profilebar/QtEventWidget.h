@@ -24,6 +24,8 @@
 
 #include <model/webservices/info/WsInfo.h>
 
+#include <qtutil/QtClickableLabel.h>
+
 class CUserProfile;
 class CWengoPhone;
 
