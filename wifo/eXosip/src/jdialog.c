@@ -22,6 +22,8 @@
 #include <mpatrol.h>
 #endif
 
+#include <time.h>
+
 #include "eXosip2.h"
 
 extern eXosip_t eXosip;
@@ -174,7 +176,6 @@ int eXosip_dialog_init_as_uas(eXosip_dialog_t **_jd, osip_message_t *_invite, os
 {
   int i;
   eXosip_dialog_t *jd;
-  osip_contact_t  *ct;
 
   *_jd = NULL;
   jd = (eXosip_dialog_t *) osip_malloc(sizeof(eXosip_dialog_t));
@@ -228,7 +229,7 @@ clean_transaction_list(osip_list_t *tlist)
 void eXosip_dialog_free(eXosip_dialog_t *jd)
 {
 
-  printf("eXosip_dialog_free: id = %d jd=%08x\n", jd->d_id, jd); 
+  printf("eXosip_dialog_free: id = %d jd=%08x\n", jd->d_id, (unsigned int)jd); 
 
   clean_transaction_list(jd->d_inc_trs);
   clean_transaction_list(jd->d_out_trs);
