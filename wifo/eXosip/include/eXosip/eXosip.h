@@ -27,6 +27,7 @@
 
 #include <osipparser2/osip_parser.h>
 #include <osip2/osip_negotiation.h>
+#include <osip2/osip_dialog.h>
 #include <osip2/osip.h>
 
 /**
@@ -266,6 +267,8 @@ void eXosip_sdp_negotiation_add_videocodec(char *payload, char *number_of_port,
 				      char *a_rtpmap);
 
 
+void eXosip_sdp_negotiation_set_mediaip(osip_negotiation_t *sn);
+
 
 /**
  * Replace the internal SDP negociator facility.
@@ -491,6 +494,8 @@ int eXosip_retrieve_negotiated_video_payload(int jid, int *payload, char *payloa
  */
 int   eXosip_retrieve_negotiated_specific_payload(int jid, char *payload_name, int pnsize);
 
+int eXosip_retrieve_sdp_negotiation_specific_result(osip_negotiation_ctx_t *ctx, char *payload_name,  int pnsize);
+
 /**
  * Set a new application context for an existing call
  *
@@ -574,6 +579,11 @@ int   eXosip_answer_options(int cid, int jid, int status);
  * @param jid          dialog id of call.
  */
 int   eXosip_answer_refer(int jid, int status);
+
+
+struct eXosip_dialog_t;
+
+int _eXosip_answer_refer_123456(struct eXosip_call_t *jc, struct eXosip_dialog_t *jd, int code);
 
 /** @} */
 

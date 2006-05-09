@@ -219,6 +219,10 @@ extern "C"
   int osip_dialog_is_callee (osip_dialog_t * dialog);
 
 
+  int osip_dialog_build_replaces_value(osip_dialog_t * dialog, char **str);
+
+
+
 #ifdef __cplusplus
 }
 #endif

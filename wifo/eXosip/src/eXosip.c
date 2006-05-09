@@ -25,6 +25,7 @@
 #include <eXosip/eXosip.h>
 #include <eXosip/eXosip_cfg.h>
 
+#include <osip2/osip.h>
 #include <osip2/osip_mt.h>
 #include <osip2/osip_condv.h>
 
@@ -2251,7 +2252,7 @@ int eXosip_transfer_call_to(int jid, int tjid)
   eXosip_call_t *jc = NULL;
   eXosip_dialog_t *tjd = NULL;
   eXosip_call_t *tjc = NULL;
-  char *tx_cid_str, *tx_uri_str;
+  char *tx_cid_str;
   char *refer_to;
   osip_uri_t *txuri;
 
@@ -3070,7 +3071,7 @@ int eXosip_retry_with_auth_info(osip_transaction_t *tr,osip_message_t *response)
       }
 
     osip_remove_transaction(eXosip.j_osip,tr);
-    __osip_transaction_set_state(tr,MSG_IS_INVITE(org_request) ? ICT_TERMINATED : NICT_TERMINATED);
+    osip_transaction_set_state(tr,MSG_IS_INVITE(org_request) ? ICT_TERMINATED : NICT_TERMINATED);
     osip_transaction_set_your_instance(transaction, (void*) jinfo);
 
 
@@ -3091,7 +3092,6 @@ int eXosip_publish (char *to, char *from, char *route, const int winfo,
 {
   osip_message_t *publish;
   osip_transaction_t *transaction;
-  osip_event_t *sipevent;
   int i;
     
 	i = generating_initial_publish(&publish, to, from, route);

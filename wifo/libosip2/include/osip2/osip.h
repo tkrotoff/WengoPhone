@@ -781,6 +781,9 @@ extern "C"
 					     osip_event_t * evt);
 
 
+int osip_transaction_set_state  (osip_transaction_t * transaction, state_t state);
+
+
 #ifndef DOXYGEN
 /**
  * Some race conditions can happen in multi threaded applications.

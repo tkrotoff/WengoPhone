@@ -328,7 +328,8 @@ osip_dialog_match_with_replaces (osip_dialog_t * dialog, const osip_replaces_t *
 #define snprintf _snprintf
 #endif
 
-int osip_dialog_build_replaces_value(osip_dialog_t * dialog, char **str)
+extern int 
+osip_dialog_build_replaces_value(osip_dialog_t * dialog, char **str)
 {
   char *to, *from;
   char* val;

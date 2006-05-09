@@ -594,7 +594,7 @@ eXosip_answer_options_3456xx(eXosip_call_t *jc, eXosip_dialog_t *jd, int code)
 }
 
 
-int
+extern int
 _eXosip_answer_refer_123456(eXosip_call_t *jc, eXosip_dialog_t *jd, int code)
 {
   osip_event_t *evt_answer;

@@ -471,6 +471,14 @@ __osip_transaction_set_state (osip_transaction_t * transaction, state_t state)
   return 0;
 }
 
+extern int 
+osip_transaction_set_state  (osip_transaction_t * transaction, state_t state)
+{
+
+  return __osip_transaction_set_state(transaction, state);
+  
+}
+
 int
 osip_transaction_set_in_socket (osip_transaction_t * transaction, int sock)
 {

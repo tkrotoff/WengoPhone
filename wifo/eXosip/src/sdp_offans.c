@@ -209,7 +209,8 @@ int eXosip_sdp_negotiation_init(osip_negotiation_t **sn)
 }
 
 
-void eXosip_sdp_negotiation_set_mediaip(osip_negotiation_t *sn)
+extern void 
+eXosip_sdp_negotiation_set_mediaip(osip_negotiation_t *sn)
 {
   osip_free(sn->o_addr);
   osip_negotiation_set_o_addr(sn, osip_strdup(eXosip.mediaip));
@@ -385,7 +386,8 @@ int eXosip_retrieve_sdp_negotiation_result(osip_negotiation_ctx_t *ctx, char *pa
 
 
 
-int eXosip_retrieve_sdp_negotiation_specific_result(osip_negotiation_ctx_t *ctx, char *payload_name,  int pnsize)
+extern int 
+eXosip_retrieve_sdp_negotiation_specific_result(osip_negotiation_ctx_t *ctx, char *payload_name,  int pnsize)
 {
   sdp_message_t *local_sdp = 0;
   int result = -1;
