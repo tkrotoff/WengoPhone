@@ -64,14 +64,16 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
 	connect (dnd,SIGNAL(itemTimeout(QTreeWidgetItem *)),this,SLOT(openUserInfo(QTreeWidgetItem *)));
 	connect (dnd,SIGNAL(mouseClicked(Qt::MouseButton)),SLOT(setMouseButton(Qt::MouseButton)));
 
-    QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cWengoPhone.getPresentation());
+	connect(keyFilter, SIGNAL(openItem(QTreeWidgetItem*)), SLOT(openUserInfo(QTreeWidgetItem *)));
+	connect(keyFilter, SIGNAL(closeItem(QTreeWidgetItem*)), SLOT(closeUserInfo()));
+	connect(keyFilter, SIGNAL(deleteItem(QTreeWidgetItem*)), SLOT(deleteContact()));
 
-    if ( ! connect(this,SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
-            qtWengoPhone,SLOT(addToConference(QString , PhoneCall * ))) ){
-        LOG_DEBUG("Unable to connect signal\n");
-    }
+	QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cWengoPhone.getPresentation());
 
-
+	if ( ! connect(this,SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
+			qtWengoPhone,SLOT(addToConference(QString , PhoneCall * ))) ){
+		LOG_DEBUG("Unable to connect signal\n");
+	}
 }
 
 void QtUserManager::startSMS(bool checked){

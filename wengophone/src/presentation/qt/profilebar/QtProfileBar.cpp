@@ -480,7 +480,7 @@ void QtProfileBar::userProfileUpdated() {
 	_nickNameWidget->userProfileUpdated();
 }
 
-void QtProfileBar::paintEvent ( QPaintEvent * event ){
+void QtProfileBar::paintEvent ( QPaintEvent * event ) {
     if ( _isOpen ){
         QRect r = rect();
 
@@ -503,22 +503,3 @@ void QtProfileBar::paintEvent ( QPaintEvent * event ){
         QWidget::paintEvent(event);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

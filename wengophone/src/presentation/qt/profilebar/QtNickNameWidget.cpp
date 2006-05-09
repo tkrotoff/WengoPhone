@@ -378,7 +378,7 @@ void QtNickNameWidget::updateAvatar() {
 	string myData = _cUserProfile.getUserProfile().getIcon().getData();
 	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
 
-	if ( !pixmap.isNull()){
+	if ( !pixmap.isNull()) {
 		QPainter painter( & background );
 		painter.drawPixmap(5,5,pixmap.scaled(60,60));
 		painter.end();

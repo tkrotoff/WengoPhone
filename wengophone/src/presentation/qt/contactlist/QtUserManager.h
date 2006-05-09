@@ -16,6 +16,7 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+
 #ifndef QtUserManager_H
 #define QtUserManager_H
 
@@ -137,17 +138,4 @@ protected:
 
 	Qt::MouseButton _button;
 };
-/*
-class UserManagerEventManager : public QObject {
-	Q_OBJECT
-public:
-	UserManagerEventManager(QTreeWidget * target, QtUserManager * userManager);
-
-protected:
-	bool eventFilter(QObject *obj, QEvent *event);
-
-private:
-	QtUserManager * _userManager;
-};
-*/
 #endif

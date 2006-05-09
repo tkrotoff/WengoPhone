@@ -19,41 +19,52 @@
 
 #include "QtUserTreeEventFilter.h"
 
-QtUserTreeEventFilter::QtUserTreeEventFilter (QObject * parent,QTreeWidget * target){
-    _tree = target;
+QtUserTreeEventFilter::QtUserTreeEventFilter (QObject * parent, QTreeWidget * target) {
 
-    target->installEventFilter(this);
+	_tree = target;
+	target->installEventFilter(this);
 }
 
 bool QtUserTreeEventFilter::eventFilter(QObject *obj, QEvent *event){
 
-    switch (event->type())
-    {
-        case QEvent::KeyPress:
-            keyPress(dynamic_cast<QKeyEvent *>(event));
-            return false;
-        default:
-            return QObject::eventFilter(obj, event);
-    }
+	switch (event->type()) {
+		case QEvent::KeyPress:
+			keyPress(dynamic_cast<QKeyEvent *>(event));
+			return false;
+		default:
+			return QObject::eventFilter(obj, event);
+	}
 }
 
-void QtUserTreeEventFilter::keyPress(QKeyEvent * event){
+void QtUserTreeEventFilter::keyPress(QKeyEvent * event) {
 
-    switch ( event->key() ){
-        case Qt::Key_Left:
-            openItem();
-            break;
-        case Qt::Key_Right:
-            closeItem();
-            break;
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-            enterPressed();
-            break;
-        case Qt::Key_Delete:
-            deleteItem();
-            break;
-        default:
-            break;
-    }
+	QTreeWidgetItem * item = _tree->currentItem();
+
+	switch ( event->key() ) {
+		case Qt::Key_Left:
+			closeItem(item);
+			break;
+		case Qt::Key_Right:
+			openItem(item);
+			break;
+		case Qt::Key_Enter:
+		case Qt::Key_Return:
+			enterPressed(item);
+			break;
+		case Qt::Key_Delete:
+			deleteItem(item);
+			break;
+		case Qt::Key_C:
+			cPressed(item);
+			break;
+		case Qt::Key_W:
+			wPressed(item);
+			break;
+		case Qt::Key_S:
+			sPressed(item);
+			break;
+			
+		default:
+			break;
+	}
 }

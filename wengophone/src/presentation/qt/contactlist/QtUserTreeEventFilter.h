@@ -21,32 +21,35 @@
 
 #include <QtGui>
 
-class QtUserTreeEventFilter : public QObject
-{
-    Q_OBJECT
-
+class QtUserTreeEventFilter : public QObject {
+	Q_OBJECT
 public:
 
-    QtUserTreeEventFilter (QObject * parent = 0,QTreeWidget * target = 0);
+	QtUserTreeEventFilter (QObject * parent = 0,QTreeWidget * target = 0);
 
 Q_SIGNALS:
 
-    void openItem();
+	void openItem(QTreeWidgetItem * item);
 
-    void closeItem();
+	void closeItem(QTreeWidgetItem * item);
 
-    void enterPressed();
+	void enterPressed(QTreeWidgetItem * item);
 
-    void deleteItem();
+	void cPressed(QTreeWidgetItem * item);
+
+	void wPressed(QTreeWidgetItem * item);
+
+	void sPressed(QTreeWidgetItem * item);
+
+	void deleteItem(QTreeWidgetItem * item);
 
 protected:
 
-    bool eventFilter(QObject *obj, QEvent *event);
+	bool eventFilter(QObject *obj, QEvent *event);
 
-    void keyPress(QKeyEvent * event);
+	void keyPress(QKeyEvent * event);
 
-    QTreeWidget * _tree;
-
+	QTreeWidget * _tree;
 };
 
 #endif
