@@ -1378,6 +1378,9 @@ sdp_message_parse (sdp_message_t * sdp, const char *buf)
   char *ptr;
   int i;
 
+
+  if ( ! buf ) return -1;
+
   ptr = (char *) buf;
   /* mandatory */
   i = sdp_message_parse_v (sdp, ptr, &next_buf);
