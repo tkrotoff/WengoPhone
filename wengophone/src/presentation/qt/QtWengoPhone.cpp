@@ -406,8 +406,9 @@ void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall){
         }
     }
 }
+
 void QtWengoPhone::showLoginWindow() {
-	int ret = _qtLogin->exec();
+	int ret = _qtLogin->show();
 
 	if (ret == QDialog::Accepted) {
 		_cWengoPhone.addWengoAccount(_qtLogin->getLogin(), _qtLogin->getPassword(), _qtLogin->hasAutoLogin());

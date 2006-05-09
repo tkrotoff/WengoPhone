@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ class QtWengoPhone;
 class QWidget;
 class QDialog;
 class QLabel;
+namespace Ui { class LoginWindow; }
 
 /**
  * Qt login window.
@@ -41,7 +42,9 @@ public:
 
 	QtLogin(QWidget * parent, QtWengoPhone & qtWengoPhone);
 
-	QDialog * getWidget() const;
+	QDialog * getWidget() const {
+		return _loginWindow;
+	}
 
 	std::string getLogin() const;
 
@@ -57,15 +60,15 @@ public:
 
 public Q_SLOTS:
 
-	int exec();
+	int show();
 
 	void createAccountLabelClicked();
 
 private:
 
-	QDialog * _loginWindow;
+	Ui::LoginWindow * _ui;
 
-	QLabel * _createAccountLabel;
+	QDialog * _loginWindow;
 
 	QtWengoPhone & _qtWengoPhone;
 };

@@ -41,6 +41,6 @@ if not WengoOSMacOSX():
 
 WengoAddConsoleArguments(args)
 if WengoGetConsoleArgument("enable-debug-console"):
-    WengoShowWindowsConsole(True)
+	WengoShowWindowsConsole(True)
 else:
-    WengoShowWindowsConsole(False)
+	WengoShowWindowsConsole(False)

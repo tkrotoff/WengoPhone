@@ -216,6 +216,7 @@ forms = [
 	'AboutWindow.ui',
 	'HttpProxyLoginWindow.ui',
 	'DialpadWidget.ui',
+	'login/LoginWindow.ui',
 	'imaccount/IMAccountTemplate.ui',
 	'imaccount/AIMSettings.ui',
 	'imaccount/GoogleTalkSettings.ui',
