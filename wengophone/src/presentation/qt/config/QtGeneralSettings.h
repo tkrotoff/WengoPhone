@@ -47,6 +47,10 @@ public:
 
 	void saveConfig();
 
+private Q_SLOTS:
+
+	void editProfile();
+
 private:
 
 	void readConfig();

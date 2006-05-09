@@ -34,6 +34,8 @@ QtGeneralSettings::QtGeneralSettings(QWidget * parent)
 	_ui = new Ui::GeneralSettings();
 	_ui->setupUi(_generalSettingsWidget);
 
+	connect(_ui->editProfileButton, SIGNAL(clicked()), SLOT(editProfile()));
+
 	readConfig();
 }
 
@@ -76,4 +78,9 @@ void QtGeneralSettings::saveConfig() {
 	} else {
 		config.set(Config::GENERAL_AWAY_TIMER_KEY, Config::NO_AWAY_TIMER);
 	}
+}
+
+void QtGeneralSettings::editProfile() {
+	/*QtProfileDetails qtProfileDetails(_cWengoPhone, _cWengoPhone.getCurrentUserProfile(), _generalSettingsWidget);
+	LOG_DEBUG("edit user profile");*/
 }

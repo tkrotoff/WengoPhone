@@ -61,21 +61,23 @@ void QtAudioSettings::readConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//inputDeviceList
-	StringList inputDeviceList = AudioDevice::getInputMixerDeviceList();
-	inputDeviceList += AudioDevice::getDefaultRecordDevice();
+	QStringList inputDeviceList;
+	inputDeviceList << QString::fromStdString(AudioDevice::getDefaultRecordDevice());
+	inputDeviceList << StringListConvert::toQStringList(AudioDevice::getInputMixerDeviceList());
 	_ui->inputDeviceComboBox->clear();
-	_ui->inputDeviceComboBox->addItems(StringListConvert::toQStringList(inputDeviceList));
+	_ui->inputDeviceComboBox->addItems(inputDeviceList);
 	_ui->inputDeviceComboBox->setCurrentIndex(_ui->inputDeviceComboBox->findText(QString::fromStdString(config.getAudioInputDeviceName())));
 
 	//outputDeviceList
-	StringList outputDeviceList = AudioDevice::getOutputMixerDeviceList();
-	outputDeviceList += AudioDevice::getDefaultPlaybackDevice();
+	QStringList outputDeviceList;
+	outputDeviceList << QString::fromStdString(AudioDevice::getDefaultPlaybackDevice());
+	outputDeviceList << StringListConvert::toQStringList(AudioDevice::getOutputMixerDeviceList());
 	_ui->outputDeviceComboBox->clear();
-	_ui->outputDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
+	_ui->outputDeviceComboBox->addItems(outputDeviceList);
 	_ui->outputDeviceComboBox->setCurrentIndex(_ui->outputDeviceComboBox->findText(QString::fromStdString(config.getAudioOutputDeviceName())));
 
 	//ringingDeviceList = outputDeviceList
 	_ui->ringingDeviceComboBox->clear();
-	_ui->ringingDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
+	_ui->ringingDeviceComboBox->addItems(outputDeviceList);
 	_ui->ringingDeviceComboBox->setCurrentIndex(_ui->ringingDeviceComboBox->findText(QString::fromStdString(config.getAudioRingerDeviceName())));
 }
