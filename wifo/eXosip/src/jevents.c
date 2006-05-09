@@ -269,8 +269,6 @@ eXosip_event_add_sdp_info(eXosip_event_t *je, osip_message_t *message)
       i = sdp_message_parse(sdp,oldbody->body);
       if (i==0)
 	{
-	  int len = strlen(oldbody->body);
-
 	  if (je->msg_body)
 	    osip_free(je->msg_body);
 

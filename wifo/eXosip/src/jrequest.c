@@ -116,7 +116,6 @@ generating_request_out_of_dialog2(osip_message_t **dest, char *method_name,
   char locip[50];
 #endif
   int doing_register;
-  char *register_callid_number = NULL;
 
   i = osip_message_init(&request);
   if (i!=0) return -1;
@@ -574,7 +573,6 @@ int eXosip_build_initial_invite(osip_message_t **invite, char *to, char *from,
 				char *route, char *subject)
 {
   int i;
-  char *replaces;
 
   if (to!=NULL && *to=='\0')
     return -1;

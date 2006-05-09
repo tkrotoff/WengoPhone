@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <errno.h>
+#include <time.h>
 
 #ifdef ENABLE_MPATROL
 #include <mpatrol.h>
@@ -398,29 +399,26 @@ static void eXosip_process_notify_for_refer(eXosip_call_t *jc, eXosip_dialog_t *
   /* we are going to accept bodyless responses */
   ctype = osip_message_get_content_type(evt->sip);
 
-  if (0 && ctype==NULL || ctype->type==NULL || ctype->subtype==NULL)
-    {
+  if ( ( ctype == NULL ) || ( ctype->type == NULL ) || ( ctype->subtype == NULL) ) {
       send_default_answer(jd, transaction, evt, 400, "Missing Header", "Missing Content-Type Header", __LINE__);
       return ;      
-    }
+  }
 
-  if (0 && !ctype_is(ctype, "message", "sipfrag") && !ctype_is(ctype, "application", "sip")) 
-    {
+  if ( ! ( ctype_is(ctype, "message", "sipfrag") ) && ! ( ctype_is(ctype, "application", "sip") ) ) {
       send_default_answer(jd, transaction, evt, 501, "Unsupported body type", "Unsupported body type", __LINE__);
       return ;
-    }
+  }
 
   osip_message_get_body(evt->sip, 0, &body);
-  if (0 && body==NULL || body->body==NULL)
-    {
+  if ( ( body == NULL ) || ( body->body == NULL ) ) {
       send_default_answer(jd, transaction, evt, 400, "Missing Body", "Missing Body", __LINE__);
       return ;
-    }
+  }
 
   
   {
     eXosip_event_t *je;
-    int len;
+
     je = eXosip_event_init_for_call(EXOSIP_CALL_REFER_STATUS, jc, jd);
     if (je==NULL) return;
     
@@ -2029,7 +2027,7 @@ static void eXosip_process_newrequest (osip_event_t *evt)
 	      send_default_answer(jd, transaction, evt, 500, "Retry Later", "A pending NOTIFY is not terminated", __LINE__);
 	      return ;
 			} else {
-				__osip_transaction_set_state(old_trn, NIST_TERMINATED);
+				osip_transaction_set_state(old_trn, NIST_TERMINATED);
 				osip_list_remove_element(jd->d_inc_trs, old_trn);
 				osip_list_add_nodup(eXosip.j_transactions, old_trn, 0);
 			}

@@ -22,6 +22,9 @@
 #include <mpatrol.h>
 #endif
 
+#include <stdlib.h>
+#include <unistd.h>
+
 #include "jpipe.h"
 
 #ifndef WIN32

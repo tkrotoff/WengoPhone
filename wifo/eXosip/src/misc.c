@@ -54,10 +54,7 @@ void eXosip_transaction_free(osip_transaction_t *tr)
 int
 eXosip_remove_transaction_from_call(osip_transaction_t *tr, eXosip_call_t *jc)
 {
-  osip_transaction_t *inc_tr;
-  osip_transaction_t *out_tr;
   eXosip_dialog_t *jd;
-  int pos=0;
 
   if (!tr)
     return 0;
