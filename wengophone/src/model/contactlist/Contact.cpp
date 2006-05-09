@@ -79,6 +79,9 @@ void Contact::copy(const Contact & contact) {
 }
 
 void Contact::copy(const ContactProfile & contactProfile) {
+	profileChangedEvent +=
+		boost::bind(&Contact::profileChangedEventHandler, this, _1);
+
 	// Getting groups
 	ContactGroup * newContactGroup = _contactList.getContactGroup(contactProfile.getGroupId());
 	ContactGroup * oldContactGroup = _contactList.getContactGroup(getGroupId());

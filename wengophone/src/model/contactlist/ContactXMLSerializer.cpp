@@ -76,6 +76,13 @@ bool ContactXMLSerializer::unserialize(const string & data) {
 
 	ProfileXMLSerializer::unserializeContent(wgCard);
 
+	//Retrieving Groups
+	TiXmlNode * group = wgCard.FirstChild("group").Node();
+	if (group) {
+		_contactList._addToContactGroup(string(group->FirstChild()->Value()), _contact);
+	}
+	////
+
 	//Retrieving IMContacts
 	TiXmlNode * imLastChild = NULL;
 	while ((imLastChild = wgCard.Node()->IterateChildren("im", imLastChild))) {
@@ -86,14 +93,7 @@ bool ContactXMLSerializer::unserialize(const string & data) {
 		imData << *imLastChild;
 		imContactSerializer.unserialize(imData);
 
-		_contact.addIMContact(imContact);
-	}
-	////
-
-	//Retrieving Groups
-	TiXmlNode * group = wgCard.FirstChild("group").Node();
-	if (group) {
-		_contactList._addToContactGroup(string(group->FirstChild()->Value()), _contact);
+		_contact._addIMContact(imContact);
 	}
 	////
 
