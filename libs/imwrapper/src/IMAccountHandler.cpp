@@ -23,7 +23,7 @@
 
 using namespace std;
 
-set<IMAccount *> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) {
+set<IMAccount *> IMAccountHandler::getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) const {
 	set<IMAccount *> result;
 
 	for (IMAccountHandler::const_iterator it = begin() ; it != end() ; it++) {

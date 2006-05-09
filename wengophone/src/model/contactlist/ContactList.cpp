@@ -57,16 +57,34 @@ ContactList::~ContactList() {
 }
 
 void ContactList::addContactGroup(const string & groupName) {
+	//Mutex::ScopedLock lock(_mutex);
+
 	_addContactGroup(groupName);
 	_imContactListHandler.addGroup(groupName);
 }
 
-void ContactList::removeContactGroup(const string & groupName) {
-	_removeContactGroup(groupName);
-	_imContactListHandler.removeGroup(groupName);
+void ContactList::removeContactGroup(const string & id) {
+	//Mutex::ScopedLock lock(_mutex);
+
+	ContactGroup * contactGroup = getContactGroup(id);
+	if (contactGroup) {
+		_removeContactGroup(contactGroup->getName());
+		_imContactListHandler.removeGroup(contactGroup->getName());
+	}
 }
 
+void ContactList::renameContactGroup(const std::string & id, const std::string & name) {
+	ContactGroup * contactGroup = getContactGroup(id);
+
+	if (contactGroup) {
+		_imContactListHandler.changeGroupName(contactGroup->getName(), name);
+		contactGroup->setName(name);
+	}
+}
+	
 Contact & ContactList::createContact() {
+	//Mutex::ScopedLock lock(_mutex);
+
 	Contact contact(_userProfile);
 	Contacts::const_iterator it;
 
@@ -76,6 +94,8 @@ Contact & ContactList::createContact() {
 		it != _contacts.end();
 		++it) {
 		if (contact == (*it)) {
+			((Contact &) *it).contactChangedEvent +=
+				boost::bind(&ContactList::contactChangedEventHandler, this, _1);
 			contactAddedEvent(*this, (Contact &)*it);
 			break;
 		}
@@ -85,11 +105,12 @@ Contact & ContactList::createContact() {
 }
 
 void ContactList::removeContact(Contact & contact) {
-	// Remove the Contact from all its groups
-	for (Contact::ContactGroupSet::const_iterator it = contact._contactGroupSet.begin();
-		it != contact._contactGroupSet.end();
-		++it) {
-		_removeFromContactGroup(*it, contact);
+	//Mutex::ScopedLock lock(_mutex);
+
+	// Remove the Contact from its group
+	ContactGroupSet::iterator groupIt = _contactGroupSet.find(ContactGroup(contact.getGroup()));
+	if (groupIt != _contactGroupSet.end()) {
+		((ContactGroup &)(*groupIt)).removeContact(contact);
 	}
 	////
 
@@ -105,7 +126,7 @@ void ContactList::removeContact(Contact & contact) {
 	}
 	////
 
-	// Remove the Conatct from the ContactList
+	// Remove the Contact from the ContactList
 	for (Contacts::iterator it = _contacts.begin();
 		it != _contacts.end();
 		++it) {
@@ -119,67 +140,24 @@ void ContactList::removeContact(Contact & contact) {
 }
 
 void ContactList::addIMContact(Contact & contact, const IMContact & imContact) {
+	//Mutex::ScopedLock lock(_mutex);
+
 	contact._addIMContact(imContact);
 
-	// We get a copy of the ContactGroupSet because the set can be modified
-	// due to cascading events.
-	Contact::ContactGroupSet contactGroupSet = contact._contactGroupSet;
-
-	// Add the IMContact in all the groups of the Contact
-	for (Contact::ContactGroupSet::const_iterator it = contactGroupSet.begin();
-		it != contactGroupSet.end();
-		++it) {
-		_imContactListHandler.addIMContact(*it, imContact);
-	}
+	_imContactListHandler.addIMContact(contact.getGroup(), imContact);
 }
 
 void ContactList::removeIMContact(Contact & contact, const IMContact & imContact) {
-	// We get a copy of the ContactGroupSet because the set can be modified
-	// due to cascading events.
-	Contact::ContactGroupSet contactGroupSet = contact._contactGroupSet;
+	//Mutex::ScopedLock lock(_mutex);
 
-	// Remove the IMContact in all the groups of the Contact
-	for (Contact::ContactGroupSet::const_iterator it = contactGroupSet.begin();
-		it != contactGroupSet.end();
-		++it) {
-		_imContactListHandler.removeIMContact(*it, imContact);
-	}
+	_imContactListHandler.removeIMContact(contact.getGroup(), imContact);
 
 	contact._removeIMContact(imContact);
 }
 
-void ContactList::addToContactGroup(const std::string & groupName, Contact & contact) {
-	_addToContactGroup(groupName, contact);
-
-	// We get a copy of the IMContacSet because the set can be modified
-	// due to cascading events.
-	IMContactSet imContactSet = contact.getIMContactSet();
-
-	// Add all IMContact of the Contact to the group
-	for (IMContactSet::const_iterator it = imContactSet.begin();
-		it != imContactSet.end();
-		++it) {
-		_imContactListHandler.addIMContact(groupName, *it);
-	}
-}
-
-void ContactList::removeFromContactGroup(const std::string & groupName, Contact & contact) {
-	contact._removeFromContactGroup(groupName);
-
-	// We get a copy of the IMContacSet because the set can be modified
-	// due to cascading events.
-	IMContactSet imContactSet = contact.getIMContactSet();
-
-	// Remove all IMContact of the Contact from the group
-	for (IMContactSet::const_iterator it = imContactSet.begin();
-		it != imContactSet.end();
-		++it) {
-		_imContactListHandler.removeIMContact(groupName, *it);
-	}
-}
-
 void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 	const std::string & groupName, IMContact & newIMContact) {
+	//Mutex::ScopedLock lock(_mutex);
 
 	LOG_DEBUG("adding a new IMContact in group " + groupName + ": " + newIMContact.getContactId());
 
@@ -191,7 +169,6 @@ void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 	}
 
 	if (!contact->hasIMContact(newIMContact)) {
-		newIMContact.addToGroup(groupName);
 		contact->_addIMContact(newIMContact);
 		_addToContactGroup(groupName, *contact);
 
@@ -199,12 +176,14 @@ void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 	} else {
 		//This event can be received although the IMContact is already present
 		// in the ContactList. We assume that this is a move event.
-		imContactMovedEventHandler(sender, groupName, newIMContact);
+		_moveContactToGroup(groupName, *contact);
 	}
 }
 
 void ContactList::imContactRemovedEventHandler(IMContactListHandler & sender,
 	const std::string & groupName, IMContact & imContact) {
+	//Mutex::ScopedLock lock(_mutex);
+
 	LOG_DEBUG("IMContact removed from group " + groupName + ": "
 		+ imContact.getContactId());
 
@@ -221,12 +200,14 @@ void ContactList::imContactRemovedEventHandler(IMContactListHandler & sender,
 
 void ContactList::newContactGroupAddedEventHandler(IMContactList & sender,
 	const std::string & groupName) {
+	//Mutex::ScopedLock lock(_mutex);
 
 	_addContactGroup(groupName);
 }
 
 void ContactList::contactGroupRemovedEventHandler(IMContactList & sender,
 	const std::string & groupName) {
+	//Mutex::ScopedLock lock(_mutex);
 
 	_removeContactGroup(groupName);
 }
@@ -234,6 +215,7 @@ void ContactList::contactGroupRemovedEventHandler(IMContactList & sender,
 void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 	EnumPresenceState::PresenceState state,
 	const std::string & alias, const IMContact & imContact) {
+	//Mutex::ScopedLock lock(_mutex);
 
 	// Find the Contact that owns the IMContact. Creating a new one if needed
 	Contact * contact = findContactThatOwns(imContact);
@@ -261,20 +243,17 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 
 void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,
 	const std::string & groupName, IMContact & imContact) {
+	//Mutex::ScopedLock lock(_mutex);
 
 	Contact * contact = findContactThatOwns(imContact);
 	if (contact) {
-		//FIXME: currently we don't know from wich group the IMContact has been
-		// moved (because of Gaim limitation). So we are removing the found
-		// IMContact from all its groups (although the IMContact should be in only
-		// one group).
-		if (!contact->isInContactGroup(groupName)) {
-			LOG_DEBUG("IMContact moved to " + groupName);
-			contact->getIMContact(imContact).removeFromAllGroup();
-			contact->getIMContact(imContact).addToGroup(groupName);
+		// This method can be called when a Contact has changed, not only
+		// because the Contact has moved.
+		if (contact->getGroup() == groupName) {
+			contactChangedEvent(*this, *contact);
+		} else {
+			_moveContactToGroup(groupName, *contact);
 		}
-	} else {
-		LOG_DEBUG("IMContact not found: " + imContact.getContactId());
 	}
 }
 
@@ -292,13 +271,6 @@ Contact * ContactList::findContactThatOwns(const IMContact & imContact) const {
 	}
 
 	return result;
-}
-
-void ContactList::moveContactToGroup(Contact & contact, const std::string & to, const std::string & from) {
-	if ( to != from ){
-		contact.addToContactGroup(to);
-		contact.removeFromContactGroup(from);
-	}
 }
 
 void ContactList::_addContactGroup(const std::string & groupName) {
@@ -322,7 +294,7 @@ void ContactList::_removeContactGroup(const std::string & groupName) {
 		for (Contacts::const_iterator vectIt = _contacts.begin();
 			vectIt != _contacts.end();
 			++vectIt) {
-			((Contact &)(*vectIt))._removeFromContactGroup(groupName);
+			removeContact((Contact &)*vectIt);
 		}
 
 		_contactGroupSet.erase(it);
@@ -333,31 +305,27 @@ void ContactList::_removeContactGroup(const std::string & groupName) {
 }
 
 void ContactList::_addToContactGroup(const std::string & groupName, Contact & contact) {
-	addContactGroup(groupName);
-	contact._addToContactGroup(groupName);
+	if (!groupName.empty()) {
+		addContactGroup(groupName);
 
-	ContactGroupSet::const_iterator it = _contactGroupSet.find(ContactGroup(groupName));
-	if (it != _contactGroupSet.end()) {
-		LOG_DEBUG("adding a Contact to group " + groupName);
-		((ContactGroup &)(*it)).addContact(contact);
-	} else {
-		LOG_FATAL("the group " + groupName + " has not been added");
-	}
-}
-
-void ContactList::_removeFromContactGroup(std::string groupName, Contact & contact) {
-	if (contact.isInContactGroup(groupName)) {
-		contact._removeFromContactGroup(groupName);
-
-		LOG_DEBUG("removing a Contact from group " + groupName);
-		((ContactGroup &)(*_contactGroupSet.find(ContactGroup(groupName)))).removeContact(contact);
+		ContactGroupSet::const_iterator it = _contactGroupSet.find(ContactGroup(groupName));
+		if (it != _contactGroupSet.end()) {
+			LOG_DEBUG("adding a Contact to group " + groupName);
+			((ContactGroup &)(*it)).addContact(contact);
+			contact.setGroupId((*it).getUUID());
+		} else {
+			LOG_FATAL("the group " + groupName + " has not been added");
+		}
 	}
 }
 
 void ContactList::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
+	//Mutex::ScopedLock lock(_mutex);
 }
 
 void ContactList::imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount) {
+	//Mutex::ScopedLock lock(_mutex);
+
 	for (Contacts::const_iterator it = _contacts.begin();
 		it != _contacts.end();
 		++it) {
@@ -372,19 +340,24 @@ void ContactList::imAccountRemovedEventHandler(UserProfile & sender, IMAccount &
 	}
 }
 
-ContactGroup * ContactList::getContactGroup(const std::string & groupName) const {
-	ContactGroupSet::const_iterator it = _contactGroupSet.find(groupName);
-	if (it != _contactGroupSet.end()) {
-		ContactGroup group = (*it);
-		return &group;
-	} else {
-		LOG_DEBUG("this ContactGroup does not exist: " + groupName);
-		return NULL;
+ContactGroup * ContactList::getContactGroup(const std::string & groupId) const {
+	ContactGroup * result = NULL;
+
+	for (ContactGroupSet::const_iterator it = _contactGroupSet.begin();
+		it != _contactGroupSet.end();
+		++it) {
+		if ((*it).getUUID() == groupId) {
+			result = &(ContactGroup &)(*it);
+			break;
+		}
 	}
+
+	return result;
 }
 
 void ContactList::contactIconChangedEventHandler(PresenceHandler & sender,
 	const IMContact & imContact, Picture icon) {
+	//Mutex::ScopedLock lock(_mutex);
 
 	Contact * contact = findContactThatOwns(imContact);
 	if (contact) {
@@ -395,14 +368,17 @@ void ContactList::contactIconChangedEventHandler(PresenceHandler & sender,
 }
 
 void ContactList::mergeContacts(Contact & dst, Contact & src) {
+	//Mutex::ScopedLock lock(_mutex);
+
 	dst.merge(src);
 
 	// Remove the source Contact without removing it from linked IMContactLists
-	for (Contact::ContactGroupSet::const_iterator it = src._contactGroupSet.begin();
-		it != src._contactGroupSet.end();
-		++it) {
-		_removeFromContactGroup(*it, src);
+	// Remove the Contact from its group
+	ContactGroupSet::iterator groupIt = _contactGroupSet.find(ContactGroup(src.getGroup()));
+	if (groupIt != _contactGroupSet.end()) {
+		((ContactGroup &)(*groupIt)).removeContact(src);
 	}
+	////
 
 	for (Contacts::iterator it = _contacts.begin();
 		it != _contacts.end();
@@ -416,9 +392,79 @@ void ContactList::mergeContacts(Contact & dst, Contact & src) {
 	////
 }
 
-void ContactList::moveContact(Contact & contact, const string & dst, const string & src) {
-	if (contact.isInContactGroup(src) && !contact.isInContactGroup(dst)) {
-		addToContactGroup(dst, contact);
-		removeFromContactGroup(src, contact);
+void ContactList::_moveContactToGroup(const string & dst, Contact & contact) {
+	Mutex::ScopedLock lock(_mutex);
+
+	ContactGroup * contactGroup = getContactGroup(contact.getGroupId());
+	std::string oldGroupName;
+
+	if (contactGroup) {
+		oldGroupName = contactGroup->getName();
 	}
+
+	if (oldGroupName != dst) {
+		addContactGroup(dst);
+
+		ContactGroupSet::iterator oldIt = _contactGroupSet.find(ContactGroup(oldGroupName));
+		ContactGroupSet::iterator newIt = _contactGroupSet.find(ContactGroup(dst));
+
+		if ((newIt != _contactGroupSet.end())
+			&& (oldIt != _contactGroupSet.end())) {
+			((ContactGroup &)(*oldIt)).removeContact(contact);
+			((ContactGroup &)(*newIt)).addContact(contact);
+
+			contact.setGroupId((*newIt).getUUID());
+			contactMovedEvent(*this, (ContactGroup &)*newIt, (ContactGroup &)*oldIt, contact);
+		}
+	}
+}
+
+void ContactList::moveContactToGroup(const string & dst, Contact & contact) {
+	//Mutex::ScopedLock lock(_mutex);
+
+	ContactGroup * contactGroup = getContactGroup(contact.getGroupId());
+	std::string oldGroupName;
+
+	if (contactGroup) {
+		oldGroupName = contactGroup->getName();
+	}
+
+	if (oldGroupName != dst) {
+		addContactGroup(dst);
+
+		ContactGroupSet::iterator oldIt = _contactGroupSet.find(ContactGroup(oldGroupName));
+		ContactGroupSet::iterator newIt = _contactGroupSet.find(ContactGroup(dst));
+
+		for (IMContactSet::const_iterator it = contact.getIMContactSet().begin();
+			it != contact.getIMContactSet().end();
+			++it) {
+			_imContactListHandler.moveContactToGroup((*newIt).getName(), oldGroupName, (IMContact &)*it);
+		}
+
+		if ((newIt != _contactGroupSet.end())
+			&& (oldIt != _contactGroupSet.end())) {
+			((ContactGroup &)(*oldIt)).removeContact(contact);
+			((ContactGroup &)(*newIt)).addContact(contact);
+
+			contact.setGroupId((*newIt).getUUID());
+			contactMovedEvent(*this, (ContactGroup &)*newIt, (ContactGroup &)*oldIt, contact);
+		}
+	}
+}
+
+Contact * ContactList::getContact(const std::string & contactId) const {
+	for (Contacts::const_iterator it = _contacts.begin();
+		it != _contacts.end();
+		++it) {
+		if ((*it).getUUID() == contactId) {
+			return &(Contact &)(*it);
+			break;
+		}
+	}
+
+	return NULL;
+}
+
+void ContactList::contactChangedEventHandler(Contact & sender) {
+	contactChangedEvent(*this, sender);
 }

@@ -26,11 +26,12 @@
 
 #include <control/CWengoPhone.h>
 #include <control/contactlist/CContactList.h>
+#include <control/profile/CUserProfile.h>
 
-#include <model/profile/UserProfile.h>
-#include <model/contactlist/Contact.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/contactlist/ContactProfile.h>
+#include <model/profile/UserProfile.h>
 
 #include <qtutil/StringListConvert.h>
 
@@ -38,18 +39,27 @@
 
 static const char * PNG_FORMAT = "PNG";
 
-QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, Contact & contact, QWidget * parent, bool shown)
-	: QObject(parent),
-	_cWengoPhone(cWengoPhone),
-	_profile(contact) {
+QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
+	ContactProfile & contactProfile, QWidget * parent,bool shown)
+: QObject(parent),
+_cWengoPhone(cWengoPhone),
+_profile(contactProfile) {
 
 	init(parent);
-	QStringList tmp = StringListConvert::toQStringList(_cWengoPhone.getCContactList().getContactGroupStringList());
-	_ui->groupComboBox->addItems(tmp);
+
+	// FIXME: we should keep in memory the UUID of the group
+	std::vector< std::pair<std::string, std::string> > tmp = _cWengoPhone.getCUserProfile()->getCContactList().getContactGroups();
+	for (std::vector< std::pair<std::string, std::string> >::const_iterator it = tmp.begin();
+		it != tmp.end();
+		++it) {
+		_ui->groupComboBox->addItem(QString::fromStdString((*it).second), QString::fromStdString((*it).first));	
+	}
 
 	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - Contact details"));
 
-	QtIMContactManager * qtIMContactManager = new QtIMContactManager(userProfile, contact, _profileDetailsWindow);
+	QtIMContactManager * qtIMContactManager = new QtIMContactManager(contactProfile.getUUID(),
+		*cWengoPhone.getCUserProfile(), _profileDetailsWindow);
+
 	int index = _ui->imStackedWidget->addWidget(qtIMContactManager->getWidget());
 	_ui->imStackedWidget->setCurrentIndex(index);
 
@@ -72,8 +82,8 @@ QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & user
 	_ui->groupLabel->hide();
 	_ui->groupComboBox->hide();
 
-	QtIMAccountManager * qtIMAccountManager = new QtIMAccountManager(userProfile, _cWengoPhone,
-						false, _profileDetailsWindow);
+	QtIMAccountManager * qtIMAccountManager =
+		new QtIMAccountManager(userProfile, _cWengoPhone, false, _profileDetailsWindow);
 	int index = _ui->imStackedWidget->addWidget(qtIMAccountManager->getWidget());
 	_ui->imStackedWidget->setCurrentIndex(index);
 
@@ -162,17 +172,27 @@ void QtProfileDetails::saveProfile() {
 
 void QtProfileDetails::saveContact() {
 	saveProfile();
-	Contact & contact = dynamic_cast<Contact &>(_profile);
-	std::string group = _ui->groupComboBox->currentText().toStdString();
-	if (!contact.isInContactGroup(group)) {
-		contact.addToContactGroup(group);
+	
+	ContactProfile & contactProfile = dynamic_cast<ContactProfile &>(_profile);
+
+	QVariant groupId = _ui->groupComboBox->itemData(_ui->groupComboBox->currentIndex());
+	// If the group does not exist
+	if (!groupId.isValid()) {
+		std::string groupName = _ui->groupComboBox->currentText().toStdString();
+		_cWengoPhone.getCUserProfile()->getCContactList().addContactGroup(groupName);
+		groupId = QString::fromStdString(_cWengoPhone.getCUserProfile()->getCContactList().getContactGroupIdFromName(groupName));
 	}
+
+	contactProfile.setGroupId(groupId.toString().toStdString());
+
+	_cWengoPhone.getCUserProfile()->getCContactList().updateContact(contactProfile);
 
 	_profileDetailsWindow->accept();
 }
 
 void QtProfileDetails::saveUserProfile() {
 	saveProfile();
+
 	UserProfile & userProfile = dynamic_cast<UserProfile &>(_profile);
 
 	_profileDetailsWindow->accept();

@@ -55,14 +55,6 @@ std::string IMContactXMLSerializer::serialize() {
 		result += ("<photo><![CDATA[" + Base64::encode(_imContact._icon.getData()) + "]]></photo>");
 	}
 
-	result += "<groups>\n";
-	for (IMContact::GroupSet::const_iterator it = _imContact._groupSet.begin();
-		it != _imContact._groupSet.end();
-		++it) {
-		result += ("<group><![CDATA[" + (*it) + "]]></group>\n");
-	}
-	result += "</groups>\n";
-
 	result += "</im>\n";
 
 	return result;
@@ -122,15 +114,6 @@ bool IMContactXMLSerializer::unserialize(const std::string & data) {
 	if (photo) {
 		Picture picture = Picture::pictureFromData(Base64::decode(photo->Value()));
 		_imContact.setIcon(picture);
-	}
-	////
-
-	//Retrieving Groups
-	TiXmlNode * groups = im.FirstChild("groups").Node();
-
-	TiXmlNode * lastChild = NULL;
-	while ((lastChild = groups->IterateChildren("group", lastChild))) {
-		_imContact._groupSet.insert(string(lastChild->FirstChild()->Value()));
 	}
 	////
 

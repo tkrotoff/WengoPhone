@@ -28,8 +28,10 @@
 #include <imwrapper/IMAccount.h>
 #include <qtutil/QtWengoStyleLabel.h>
 
-QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile, ConnectHandler & connectHandler,QWidget * parent , Qt::WFlags f )
-: QWidget (parent,f), _userProfile(userProfile), _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
+QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
+	ConnectHandler & connectHandler, QWidget * parent, Qt::WFlags f)
+: QWidget (parent,f), _cUserProfile(cUserProfile),
+_cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 
 	_statusMenu = NULL;
 
@@ -136,9 +138,9 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
 	_creditWidget->setCWengoPhone(&_cWengoPhone);
 	_creditWidget->setVisible(false);
 
-	_userProfile.wsInfoCreatedEvent +=
+	_cUserProfile.getUserProfile().wsInfoCreatedEvent +=
 		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
-	_userProfile.phoneLineCreatedEvent +=
+	_cUserProfile.getUserProfile().phoneLineCreatedEvent +=
 		boost::bind(&QtProfileBar::phoneLineCreatedEventHandler, this, _1, _2);
 
     _connectHandler.connectedEvent +=
@@ -147,7 +149,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, UserProfile & userProfile,
     _connectHandler.disconnectedEvent +=
         boost::bind(&QtProfileBar::disconnectedEventHandler,this,_1,_2);
 
-    PresenceHandler & presence = _userProfile.getPresenceHandler() ;
+    PresenceHandler & presence = _cUserProfile.getUserProfile().getPresenceHandler() ;
 
     presence.myPresenceStatusEvent +=
         boost::bind(&QtProfileBar::myPresenceStatusEventHandler,this,_1,_2,_3);
@@ -352,7 +354,7 @@ void QtProfileBar::createStatusMenu() {
 }
 
 void QtProfileBar::onlineClicked(bool) {
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateOnline, NULL);
+	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateOnline, NULL);
 
 }
 
@@ -362,7 +364,7 @@ void QtProfileBar::setOnline() {
 }
 
 void QtProfileBar::dndClicked(bool) {
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateDoNotDisturb, NULL);
+	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateDoNotDisturb, NULL);
 
 }
 
@@ -372,7 +374,7 @@ void QtProfileBar::setDND() {
 }
 
 void QtProfileBar::invisibleClicked(bool) {
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateInvisible, NULL);
+	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateInvisible, NULL);
 }
 
 void QtProfileBar::setInvisible() {
@@ -381,7 +383,7 @@ void QtProfileBar::setInvisible() {
 }
 
 void QtProfileBar::awayClicked(bool) {
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway, NULL);
+	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateAway, NULL);
 
 }
 
@@ -488,9 +490,10 @@ void QtProfileBar::setStatusLabel(const QString & on, const QString & off) {
 }
 
 void QtProfileBar::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine) {
-	_nicknameLabel->setText(QString::fromStdString(_userProfile.getWengoAccount()->getIdentity()));
+	_nicknameLabel->setText(QString::fromStdString(_cUserProfile.getUserProfile().getWengoAccount()->getIdentity()));
 }
 
 void QtProfileBar::userProfileUpdated() {
 	_nickNameWidget->userProfileUpdated();
 }
+

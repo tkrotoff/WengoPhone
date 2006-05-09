@@ -51,9 +51,10 @@ public Q_SLOTS:
 	/**
 	 * The popup menu is being showed.
 	 *
-	 * @param contactGroup the menu is relative to a contact group
+	 * @param groupName the name of the group for wich we want to display the
+	 * menu 
 	 */
-	void showMenu(const ContactGroup * contactGroup);
+	void showMenu(const QString & groupName);
 
 private Q_SLOTS:
 
@@ -80,7 +81,7 @@ private Q_SLOTS:
 
 private:
 
-	const ContactGroup * _contactGroup;
+	QString _groupName;
 };
 
 #endif	//CONTACTContactGroupPopupMenu_H

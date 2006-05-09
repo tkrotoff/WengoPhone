@@ -26,9 +26,16 @@
 
 using namespace std;
 
+IMChatSession::IMChatMessage::IMChatMessage(const IMContact & imContact, const string & message)
+: _imContact(imContact), _message(message) {
+
+}
+
+IMChatSession::IMChatMessage::~IMChatMessage() {
+}
+
 IMChatSession::IMChatSession(IMChat & imChat, bool userCreated)
 : _imChat(imChat), _userCreated(userCreated) {
-
 	_imChat.messageReceivedEvent +=
 		boost::bind(&IMChatSession::messageReceivedEventHandler, this, _1, _2, _3, _4);
 	_imChat.statusMessageReceivedEvent +=
@@ -101,10 +108,6 @@ void IMChatSession::changeTypingState(IMChat::TypingState state) {
 	std::string messageState(message);
 	LOG_DEBUG("changing my typing state: " + messageState);
 	_imChat.changeTypingState(*this, state);
-}
-
-IMChatSession::IMChatMessage::IMChatMessage(const IMContact & imContact, const string & message)
-: _imContact(imContact), _message(message) {
 }
 
 void IMChatSession::messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, const std::string & message) {

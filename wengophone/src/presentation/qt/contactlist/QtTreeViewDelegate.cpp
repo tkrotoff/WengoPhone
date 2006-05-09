@@ -43,7 +43,8 @@ static int USER_WIDGET_FRAME_HEIGHT = 0;
 */
 static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 
-QtTreeViewDelegate::QtTreeViewDelegate( QObject *parent ) : QItemDelegate( parent ) {
+QtTreeViewDelegate::QtTreeViewDelegate(CUserProfile & cUserProfile, QObject *parent)
+: QItemDelegate(parent), _cUserProfile(cUserProfile) {
 /*
 	QtUserWidget * widget = new QtUserWidget( NULL );
 	QWidget * userWidget = Object::findChild<QWidget *>( widget, "UserWidget" );
@@ -67,8 +68,7 @@ QWidget * QtTreeViewDelegate::createEditor( QWidget *parent,
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user = ul->getUser(index.data().toString());
 
-	QtUserWidget * widget = new QtUserWidget(user->getCContact(), parent);
-	widget->setUserId(index.data().toString());
+	QtUserWidget * widget = new QtUserWidget(user->getId().toStdString(), _cUserProfile, parent);
 
 	QWidget * userWidget = Object::findChild<QWidget *>(widget, "UserWidget");
 

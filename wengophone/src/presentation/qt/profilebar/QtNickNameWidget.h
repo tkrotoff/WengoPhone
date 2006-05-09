@@ -24,7 +24,7 @@
 #include "QtClickableLabel.h"
 
 class CWengoPhone;
-class UserProfile;
+class CUserProfile;
 class IMAccount;
 
 /**
@@ -36,7 +36,7 @@ class QtNickNameWidget : public QWidget {
 	Q_OBJECT
 public:
 
-	QtNickNameWidget (UserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent = 0, Qt::WFlags f = 0);
+	QtNickNameWidget(CUserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent = 0, Qt::WFlags f = 0);
 
 public Q_SLOTS:
 
@@ -106,9 +106,10 @@ protected:
 
 	QMenu * _jabberIMAccountMenu;
 
-	UserProfile & _userProfile;
+	CUserProfile & _cUserProfile;
 
 	CWengoPhone & _cWengoPhone;
+
 };
 
 #endif

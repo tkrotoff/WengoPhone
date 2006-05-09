@@ -251,8 +251,6 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 }
 
 void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
-
-
     // the best image quality is obtained when the interim image size is set according to the screen target size
     QSize size(640, 480); // will be the optimum interim resized image
    	if (_videoWindow) {
@@ -262,7 +260,6 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
             size.setHeight(288);
         }
     }
-
 
 	//Image will be deleted in videoFrameReceivedThreadSafe. Here we resize the remote image to the interim size
 	QImage *original = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
@@ -312,7 +309,7 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 				QImage::Format_RGB32).scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 		QPainter painter;
-        painter.begin(image);
+        painter.begin(image); 
         // draw a 1-pixel border around the local embedded frame
         painter.fillRect(posx - border_size, posy - border_size, width + 2*border_size, height + 2*border_size, border_color);
         // embed the image
@@ -357,7 +354,6 @@ void QtPhoneCall::rejectActionTriggered(bool) {
             delete _phoneCallWidget;
             callRejected(); // Close the widget
     }
-
 }
 
 void QtPhoneCall::holdResumeActionTriggered(bool) {
@@ -369,12 +365,18 @@ void QtPhoneCall::holdResumeActionTriggered(bool) {
 }
 
 void QtPhoneCall::addContactActionTriggered(bool) {
-	std::string callAddress = _cPhoneCall.getPeerDisplayName();
-	if(callAddress.empty()) {
-		callAddress = _cPhoneCall.getPeerUserName();
+	if (_cPhoneCall.getCWengoPhone().getCUserProfile()) {
+		//CHECK: this method should not be called if no UserProfile has been
+		// set
+		std::string callAddress = _cPhoneCall.getPeerDisplayName();
+
+		if(callAddress.empty()) {
+			callAddress = _cPhoneCall.getPeerUserName();
+		}
+
+		/*QtAddContact * qtAddContact = new QtAddContact(*_cPhoneCall.getCWengoPhone().getCUserProfile(), _phoneCallWidget, callAddress);
+		LOG_DEBUG("add contact=" + callAddress);*/
 	}
-	/*QtAddContact * qtAddContact = new QtAddContact(_cPhoneCall.getCWengoPhone(), _phoneCallWidget, callAddress);
-	LOG_DEBUG("add contact=" + callAddress);*/
 }
 
 void QtPhoneCall::transferButtonClicked() {

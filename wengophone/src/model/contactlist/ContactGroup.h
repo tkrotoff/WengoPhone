@@ -69,13 +69,7 @@ public:
 
 	ContactGroup(const ContactGroup & contactGroup);
 
-	void setName(const std::string & groupName);
-
 	std::string getName() const {
-		return _groupName;
-	}
-
-	std::string toString() const {
 		return _groupName;
 	}
 
@@ -94,12 +88,20 @@ public:
 	unsigned size() const {
 		return _contactList.size();
 	}
-
+	
 	/**
 	 * @return a list containing all mobile phone number
 	 */
 	std::list<std::string> getMobilePhoneList() const;
 
+	/**
+	 * Gets the UUID of this ContactGroup.
+	 *
+	 * @return the UUID of this ContactGroup
+	 */
+	std::string getUUID() const {
+		return _uuid;
+	}
 
 	/**
 	 * Compare two groups.
@@ -116,6 +118,13 @@ public:
 	bool unserialize(const std::string & data);
 
 private:
+
+	/**
+	 * Sets the name of the group.
+	 *
+	 * @param groupName the desired name
+	 */
+	void setName(const std::string & groupName);
 
 	/**
 	 * Add a Contact to the ContactGroup.
@@ -143,6 +152,9 @@ private:
 
 	/** Name of the ContactGroup. */
 	std::string _groupName;
+
+	/** The UUID of this ContactGroup. */
+	std::string _uuid;
 
 	mutable Mutex _mutex;
 };

@@ -89,15 +89,7 @@ public:
 
 	virtual PContactList * createPresentationContactList(CContactList & cContactList) = 0;
 
-	virtual PContactGroup * createPresentationContactGroup(CContactGroup & cContactGroup) = 0;
-
-	virtual PContact * createPresentationContact(CContact & cContact) = 0;
-
 	virtual PWenboxPlugin * createPresentationWenboxPlugin(CWenboxPlugin & cWenboxPlugin) = 0;
-
-	virtual PConnectHandler * createPresentationConnectHandler(CConnectHandler & cConnectHandler) = 0;
-
-	virtual PPresenceHandler * createPresentationPresenceHandler(CPresenceHandler & cPresenceHandler) = 0;
 
 	virtual PChatHandler * createPresentationChatHandler(CChatHandler & cChatHandler) = 0;
 

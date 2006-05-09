@@ -113,6 +113,20 @@ public:
 	 */
 	void removeGroup(const std::string & groupName);
 
+	/**
+	 * Renames a group.
+	 *
+	 * @param oldGroupName the group to rename
+	 * @param newGroupName the desired group name
+	 */
+	void changeGroupName(const std::string & oldGroupName, const std::string & newGroupName);
+
+	/**
+	 * @see IMContactList::moveContactToGroup
+	 */
+	void moveContactToGroup(const std::string & newGroupName,
+		const std::string & oldGroupName, const IMContact & imContact);
+
 private:
 
 	/**

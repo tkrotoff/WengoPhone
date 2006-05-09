@@ -184,3 +184,7 @@ void WengoPhone::saveConfiguration() {
 void WengoPhone::valueChangedEventHandler(Settings & sender, const std::string & key) {
 	saveConfiguration();
 }
+
+UserProfile & WengoPhone::getCurrentUserProfile() const {
+	return (UserProfile &) _userProfile;
+}

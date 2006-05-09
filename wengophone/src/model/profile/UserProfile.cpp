@@ -101,13 +101,16 @@ UserProfile::~UserProfile() {
 	if (_imAccountHandler) {
 		delete _imAccountHandler;
 	}
-	if( _wsInfo ) {
+
+	if (_wsInfo) {
 		delete _wsInfo;
 	}
-	if( _wsDirectory ) {
+
+	if (_wsDirectory) {
 		delete _wsDirectory;
 	}
-	if( _wsCallForward ) {
+
+	if (_wsCallForward) {
 		delete _wsCallForward;
 	}
 }

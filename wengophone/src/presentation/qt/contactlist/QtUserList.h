@@ -29,6 +29,7 @@ class CContact;
 class QtUserList
 {
 public:
+
 	static QtUserList * getInstance();
 
 	void addUser(QtUser * user);
@@ -61,8 +62,6 @@ public:
 
 	void setTreeWidget(QTreeWidget * tree) { _tree=tree;}
 
-	CContact & getCContact(const QString & userid) const;
-
 	QTreeWidget * getTreeWidget() const {return _tree;}
 
 	void resetMouseStatus();
@@ -80,18 +79,19 @@ public:
 	 */
 	void startFreeCall(const QString & userid);
 
-/*
-	int getClickCount();
+protected:
 
-	void addClick();
-*/
-protected:
 	QtUserList ( );
+
 	QtUserList (const QtUserList& other) : _tree(other._tree), _userList(other._userList) {}
+
 	QtUserList & operator= (const QtUserList &other) { _tree = other._tree;  _userList = other._userList; return *this; }
+
 protected:
-	QHash<QString,QtUser *>	_userList;
+
 	QTreeWidget * _tree;
+
+	QHash<QString, QtUser *> _userList;
 
 private:
 

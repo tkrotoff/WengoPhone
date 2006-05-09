@@ -19,8 +19,6 @@
 
 #include "CContactList.h"
 
-#include "CContactGroup.h"
-
 #include <model/contactlist/ContactList.h>
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactGroup.h>
@@ -32,58 +30,155 @@
 
 #include <util/Logger.h>
 
-CContactList::CContactList(ContactList & contactList, CWengoPhone & cWengoPhone)
-	: _contactList(contactList),
-	_cWengoPhone(cWengoPhone) {
+CContactList::CContactList(ContactList & contactList)
+	: _contactList(contactList) {
 
 	_pContactList = PFactory::getFactory().createPresentationContactList(*this);
 
-	_contactList.contactGroupAddedEvent += boost::bind(&CContactList::contactGroupAddedEventHandler, this, _1, _2);
-	_contactList.contactGroupRemovedEvent += boost::bind(&CContactList::contactGroupRemovedEventHandler, this, _1, _2);
-	_contactList.contactAddedEvent += boost::bind(&CContactList::contactAddedEventHandler, this, _1, _2);
-	_contactList.contactRemovedEvent += boost::bind(&CContactList::contactRemovedEventHandler, this, _1, _2);
+	_contactList.contactGroupAddedEvent +=
+		boost::bind(&CContactList::contactGroupAddedEventHandler, this, _1, _2);
+	_contactList.contactGroupRemovedEvent +=
+		boost::bind(&CContactList::contactGroupRemovedEventHandler, this, _1, _2);
+	_contactList.contactAddedEvent +=
+		boost::bind(&CContactList::contactAddedEventHandler, this, _1, _2);
+	_contactList.contactRemovedEvent +=
+		boost::bind(&CContactList::contactRemovedEventHandler, this, _1, _2);
+	_contactList.contactMovedEvent +=
+		boost::bind(&CContactList::contactMovedEventHandler, this, _1, _2, _3, _4);
+	_contactList.contactChangedEvent +=
+		boost::bind(&CContactList::contactChangedEventHandler, this, _1, _2);
 }
 
 void CContactList::contactAddedEventHandler(ContactList & sender, Contact & contact) {
-
-	//_pContactList->addContact(
+	// We do not emit the event if the Contact has no group because the GUI
+	// does not support a Contact with no group
+	if (!contact.getGroupId().empty()) {
+		_pContactList->contactAddedEvent(contact.getUUID());
+	}
 }
 
 void CContactList::contactRemovedEventHandler(ContactList & sender, Contact & contact) {
+	_pContactList->contactRemovedEvent(contact.getUUID());
+}
 
+void CContactList::contactMovedEventHandler(ContactList & sender, ContactGroup & dstContactGroup,
+	ContactGroup & srcContactGroup, Contact & contact) {
+	_pContactList->contactMovedEvent(dstContactGroup.getUUID(), 
+		srcContactGroup.getUUID(), contact.getUUID());
 }
 
 void CContactList::contactGroupAddedEventHandler(ContactList & sender, ContactGroup & contactGroup) {
-	CContactGroup * cContactGroup = new CContactGroup(contactGroup, *this, _cWengoPhone);
-
-	LOG_DEBUG("contact group added: " + contactGroup.getName());
-	_pContactList->addContactGroup(cContactGroup->getPresentation());
-	_pContactList->updatePresentation();
+	LOG_DEBUG("contact group added. UUID: " + contactGroup.getUUID());
+	_pContactList->contactGroupAddedEvent(contactGroup.getUUID());
 }
 
 void CContactList::contactGroupRemovedEventHandler(ContactList & sender, ContactGroup & contactGroup) {
-//	LOG_DEBUG("contact group removed: " + contactGroup.getName());
-//	_pContactList->removeContactGroup(contactGroup->getPresentation());
-//	_pContactList->updatePresentation();
+	_pContactList->contactGroupRemovedEvent(contactGroup.getUUID());
 }
 
-StringList CContactList::getContactGroupStringList() const {
-	StringList result;
+void CContactList::contactChangedEventHandler(ContactList & sender, Contact & contact) {
+	_pContactList->contactChangedEvent(contact.getUUID());
+}
 
-	ContactList::ContactGroupSet contactGroupSet = _contactList.getContactGroupSet();
-	for (ContactList::ContactGroupSet::const_iterator it = contactGroupSet.begin();
-		it != contactGroupSet.end();
+std::vector< std::pair<std::string, std::string> > CContactList::getContactGroups() const {
+	std::vector< std::pair<std::string, std::string> > result;
+
+	ContactList::ContactGroupSet contactGroups = _contactList.getContactGroupSet();
+
+	for (ContactList::ContactGroupSet::const_iterator it = contactGroups.begin();
+		it != contactGroups.end();
 		++it) {
-		result += ((*it).getName());
+		result.push_back(std::pair<std::string, std::string>((*it).getUUID(), (*it).getName()));
 	}
 
 	return result;
 }
 
-ContactGroup * CContactList::getContactGroup(const std::string & groupName) const {
-	return _contactList.getContactGroup(groupName);
+std::string CContactList::getContactGroupName(const std::string & groupId) const {
+	std::string result;
+	ContactGroup * contactGroup = _contactList.getContactGroup(groupId);
+
+	if (contactGroup) {
+		result = contactGroup->getName();
+	}
+
+	return result;
 }
 
-void CContactList::removeContact(Contact & contact) {
-    _contactList.removeContact(contact);
+std::string CContactList::getContactGroupIdFromName(const std::string & groupName) const {
+	std::string result;
+	ContactList::ContactGroupSet contactGroups = _contactList.getContactGroupSet();
+
+	for (ContactList::ContactGroupSet::const_iterator it = contactGroups.begin();
+		it != contactGroups.end();
+		it++) {
+		LOG_DEBUG("groupName: " + groupName + ", current group name: " + (*it).getName());
+		if ((*it).getName() == groupName) {
+			result = (*it).getUUID();
+			break;
+		}
+	}
+
+	return result;
+}
+
+ContactProfile CContactList::getContactProfile(const std::string & contactId) const {
+	ContactProfile result;
+	Contact * contact = getContact(contactId);
+
+	if (contact) {
+		result = *contact;
+	}
+
+	return result;
+}
+
+Contact * CContactList::getContact(const std::string & contactId) const {
+	return _contactList.getContact(contactId);
+}
+
+void CContactList::addContact(const ContactProfile & contactProfile) {
+	Contact & contact = _contactList.createContact();
+	contact = contactProfile;
+
+	LOG_DEBUG("adding a new Contact: " + contact.getFirstName() +
+		" in group " + contact.getGroupId());
+
+	// We emit the contactAddedEvent because the first one (emitted by ContactList
+	// when calling createContact) is not processed because the Contact has no
+	// group.
+	_pContactList->contactAddedEvent(contact.getUUID());
+}
+
+std::vector<std::string> CContactList::getContactIds() const {
+	std::vector<std::string> result;
+	ContactList::Contacts contacts = _contactList.getContacts();
+
+	for (ContactList::Contacts::const_iterator it = contacts.begin();
+		it != contacts.end();
+		++it) {
+		result.push_back((*it).getUUID());
+	}
+
+	return result;
+}
+
+void CContactList::removeContact(const std::string & contactId) {
+	Contact * contact = getContact(contactId);
+
+	if (contact) {
+		_contactList.removeContact(*contact);
+	}
+}
+
+void CContactList::updateContact(const ContactProfile & contactProfile) {
+	Contact * contact = getContact(contactProfile.getUUID());
+
+	if (contact) {
+		(*contact) = contactProfile;
+	}
+}
+
+void CContactList::addContactGroup(const std::string & name) {
+	_contactList.addContactGroup(name);
 }

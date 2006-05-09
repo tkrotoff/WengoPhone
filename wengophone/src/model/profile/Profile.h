@@ -134,6 +134,13 @@ public:
 
 protected:
 
+	/**
+	 * Copy a Profile.
+	 *
+	 * @param profile the Profile to copy
+	 */
+	virtual void copy(const Profile & profile);
+
 	std::string _firstName;
 
 	std::string _lastName;

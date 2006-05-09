@@ -20,22 +20,12 @@
 #ifndef CONTACT_H
 #define CONTACT_H
 
-#include <model/profile/Profile.h>
-
-#include <imwrapper/EnumPresenceState.h>
-#include <imwrapper/IMAccount.h>
-#include <imwrapper/IMContact.h>
-#include <imwrapper/IMContactSet.h>
+#include "ContactProfile.h"
 
 #include <util/Event.h>
-#include <util/Date.h>
 
 #include <string>
 #include <set>
-
-class UserProfile;
-class ContactList;
-class IMChatSession;
 
 /**
  * Contact inside an address book.
@@ -44,7 +34,7 @@ class IMChatSession;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class Contact : public Profile {
+class Contact : public ContactProfile {
 	friend class ContactList;
 	friend class ContactXMLSerializer;
 public:
@@ -60,11 +50,13 @@ public:
 
 	Contact(const Contact & contact);
 
-	Contact & operator=(const Contact & contact);
+	Contact & operator = (const Contact & contact);
+
+	Contact & operator = (const ContactProfile & contactProfile);
 
 	~Contact();
 
-	bool operator==(const Contact & contact) const;
+	bool operator == (const Contact & contact) const;
 
 	/**
 	 * Set the preferred phone number (can also be a wengo id or a sip address).
@@ -74,66 +66,12 @@ public:
 	void setPreferredPhoneNumber(const std::string & number) { _preferredNumber = number; contactChangedEvent(*this); }
 
 	/**
-	 * Get the preferred phone number.
-	 *
-	 * @return the preferred phone number. If no preferred phone number has been set
-	 *         the first set phone number is returned (the test is made in this order:
-	 *         wengo id (if online), mobile, home, work and other phone number). If no phone number has
-	 *         been set, a null string is returned
-	 */
-	std::string getPreferredNumber() const;
-
-	/**
 	 * Set the preferred IMContact to use.
 	 *
-	 * @param the imContact to set; the given reference must stay valid during
-	 *        the execution (this must be a reference to an IMContact of this Contact)
+	 * @param the imContact to set. The given reference must stay valid during
+	 * the execution (this must be a reference to an IMContact of this Contact).
 	 */
 	void setPreferredIMContact(const IMContact & imContact) { _preferredIMContact = (IMContact *)&imContact; contactChangedEvent(*this); }
-
-	/**
-	 * Get the preferred IMContact.
-	 *
-	 * @return the preferred IMContact; if no IMContact has been set or no
-	 *         IMContact is online, return NULL
-	 */
-	IMContact * getPreferredIMContact() const;
-
-	/**
-	 * Get an available IMContact.
-	 *
-	 * An available IMContact is a connected IMContact of protocol used in
-	 * the imChatSession.
-	 *
-	 * @return an available IMContact; if no IMContact has been found, return NULL
-	 */
-	IMContact * getAvailableIMContact(IMChatSession & imChatSession) const;
-
-	/**
-	 * Add the Contact to the given ContactGroup.
-	 *
-	 * The process is the same as in addIMContact
-	 *
-	 * @param groupName the group name to add to
-	 */
-	void addToContactGroup(const std::string & groupName);
-
-	/**
-	 * Remove the Contact from a ContactGroup.
-	 *
-	 * The process is the same as in addIMContact
-	 *
-	 * @param groupName the group name to remove from
-	 */
-	void removeFromContactGroup(const std::string & groupName);
-
-	/**
-	 * Test if the Contact is in a group.
-	 *
-	 * @param groupName the group
-	 * @return true if in the group
-	 */
-	bool isInContactGroup(const std::string & groupName);
 
 	/**
 	 * Add an IMContact to the Contact.
@@ -156,83 +94,18 @@ public:
 	void removeIMContact(const IMContact & imContact);
 
 	/**
-	 * @param imContact the maybe associated IMContact
-	 * @return true if this Contact is associated with the given IMContact
-	 */
-	bool hasIMContact(const IMContact & imContact) const;
-
-	/**
 	 * Check if an IMContact of the Contact is equivalent to the given
 	 * IMContact.
 	 *
-	 * Equivalent IMContacts are of the same protocol. If an equivalent
+	 * Equivalent IMContacts are of the same protocol. If an equivalent 
 	 * IMContact has been found and if it has no associated IMAccount,
 	 * the IMAccount of the given IMContact is linked to the found
 	 * IMContact.
 	 *
 	 * @param imContact the IMContact to check
-	 * @return true if an equivalent IMContact has been found
+	 * @return true if an equivalent IMContact has been found.
 	 */
 	bool checkAndSetIMContact(const IMContact & imContact);
-
-	/**
-	 * Return the IMContact equals to given IMContact.
-	 *
-	 * @param imContact the desired IMContact
-	 * @return the IMContact
-	 */
-	IMContact & getIMContact(const IMContact & imContact) const;
-
-	/**
-	 * @return Set of IMContact
-	 */
-	const IMContactSet & getIMContactSet() const {
-		return _imContactSet;
-	}
-
-	/**
-	 * @return true if chat is available with this Contact
-	 */
-	bool hasIM() const;
-
-	/**
-	 * @return true if we can place a call with this Contact
-	 * with any number
-	 */
-	bool hasCall() const;
-
-	/**
-	 * @return true if we can place a free call with this Contact
-	 * A free call can be made if the Contact has a Wengo ID or
-	 * a SIP address.
-	 */
-	bool hasFreeCall() const;
-
-	/**
-	 * @return free phone number (Wengo ID, SIP address).
-	 * an empty string if no phone number found
-	 */
-	std::string getFreePhoneNumber() const;
-
-	/**
-	 * @return true if we can place a video call with this Contact
-	 */
-	bool hasVideo() const;
-
-	/**
-	 * @return a display name computed from available Contact information
-	 */
-	std::string getDisplayName() const;
-
-	/**
-	 * Move the Contact from a group to another one.
-	 *
-	 * @param to the new group
-	 * @param from the old group
-	 */
-	void moveToGroup(const std::string & to, const std::string & from);
-
-	EnumPresenceState::PresenceState getPresenceState() const;
 
 	/**
 	 * Avoid this contact to see my presence.
@@ -244,38 +117,25 @@ public:
 	 */
 	void unblock();
 
-	/**
-	 * @return true if the Contact is blocked.
-	 */
-	bool isBlocked() { return _blocked; }
-
-	std::string toString() const {
-		std::string display;
-		if (!getLastName().empty()) {
-			display += getLastName();
-		}
-		if (!getFirstName().empty()) {
-			if (!getLastName().empty()) {
-				display += ", " + getFirstName();
-			} else {
-				display += getFirstName();
-			}
-		}
-
-		return display;
-	}
-
 	UserProfile & getUserProfile() const {
 			return _userProfile;
 	}
 
 	// Inherited from Profile
 	void setWengoPhoneId(const std::string & wengoId);
-
-	Picture getIcon() const;
 	////
 
 private:
+
+	/**
+	 * Copy a Contact.
+	 */
+	virtual void copy(const Contact & contact);
+
+	/**
+	 * Copy a ContactProfile.
+	 */
+	virtual void copy(const ContactProfile & contactProfile);
 
 	/**
 	 * @see Profile::profileChangedEvent
@@ -283,37 +143,9 @@ private:
 	void profileChangedEventHandler(Profile & profile);
 
 	/**
-	 * @see IMContact::imContactAddedToGroupEvent
-	 */
-	void imContactAddedToGroupEventHandler(IMContact & sender, const std::string & groupName);
-
-	/**
-	 * @see IMContact::imContactRemovedFromGroupEvent
-	 */
-	void imContactRemovedFromGroupEventHandler(IMContact & sender, const std::string & groupName);
-
-	/**
 	 * @see IMContact::imContactChangedEvent
 	 */
 	void imContactChangedEventHandler(IMContact & sender);
-
-	/**
-	 * Actually add the Contact to a ContactGroup.
-	 *
-	 * This method must be called only by ContactList
-	 *
-	 * @param groupName the group name
-	 */
-	void _addToContactGroup(const std::string & groupName);
-
-	/**
-	 * Actually remove the Contact from a ContactGroup.
-	 *
-	 * This method must be called only by ContactList
-	 *
-	 * @param groupName the group name to remove from
-	 */
-	void _removeFromContactGroup(const std::string & groupName);
 
 	/**
 	 * Actually add an IMContact to this Contact.
@@ -335,16 +167,7 @@ private:
 	 */
 	void _removeIMContact(const IMContact & imContact);
 
-	/** Factorizes code between contructor and copy contructor. */
-	void initialize(const Contact & contact);
-
-	/**
-	 * @return true when a wengo id has been declared and this
-	 *         id is online
-	 */
-	bool wengoIsAvailable() const;
-
-	/** Can't be used on a Contact. */
+	/** Can't be used on a Contact.*/
 	void setIcon(const Picture & icon);
 
 	/**
@@ -353,38 +176,6 @@ private:
 	 * @param contact the Contact to merge with
 	 */
 	void merge(const Contact & contact);
-
-	/**
-	 * Gets an available SIP address than can be called
-	 * taken from IMContacts of protocol SIP/SIMPLE.
-	 *
-	 * This method does not check Wengo ID
-	 *
-	 * @return the found SIP address or an empty string
-	 * if no SIP address found
-	 */
-	std::string getAvailableSIPNumber() const;
-
-	/**
-	 * Check if a SIP number is available.
-	 *
-	 * This method does not check Wengo ID.
-	 *
-	 * @return true if the Contact has an available SIP Address.
-	 */
-	bool hasAvailableSIPNumber() const;
-
-	std::string _preferredNumber;
-
-	IMContact * _preferredIMContact;
-
-	bool _blocked;
-
-	IMContactSet _imContactSet;
-
-	typedef std::set<std::string> ContactGroupSet;
-
-	ContactGroupSet _contactGroupSet;
 
 	UserProfile & _userProfile;
 

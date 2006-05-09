@@ -24,11 +24,11 @@
 
 #include <QObject>
 
-class UserProfile;
-class Contact;
-class Profile;
+class ContactProfile;
 class CWengoPhone;
-
+class Profile;
+class CUserProfile;
+class UserProfile;
 class QWidget;
 class QDialog;
 namespace Ui { class ProfileDetails; }
@@ -45,7 +45,9 @@ class QtProfileDetails : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, Contact & contact, QWidget * parent, bool shown = true);
+	QtProfileDetails(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
+		ContactProfile & contactProfile, QWidget * parent, bool shown = true);
+
 
 	QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent, bool shown = true);
 

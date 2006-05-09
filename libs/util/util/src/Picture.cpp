@@ -26,8 +26,19 @@ using namespace std;
 Picture::Picture() {
 }
 
-Picture::Picture(const Picture & picture)
-: _pictureData(picture._pictureData) {
+Picture::Picture(const Picture & picture) {
+	copy(picture);
+}
+
+Picture & Picture::operator = (const Picture & picture) {
+	copy(picture);
+
+	return *this;
+}
+
+void Picture::copy(const Picture & picture) {
+	_pictureData = picture._pictureData;
+	_filename = picture._filename;
 }
 
 Picture Picture::pictureFromData(const std::string & data) 

@@ -143,3 +143,23 @@ void IMContactListHandler::removeGroup(const std::string & groupName) {
 		(*it).second->removeGroup(groupName);
 	}
 }
+
+void IMContactListHandler::moveContactToGroup(const std::string & newGroupName,
+	const std::string & oldGroupName, const IMContact & imContact) {
+
+	IMContactListMap::const_iterator it = _imContactListMap.find((IMAccount *)imContact.getIMAccount());
+
+	if (it != _imContactListMap.end()) {
+		(*it).second->moveContactToGroup(newGroupName, oldGroupName, imContact.getContactId());
+	} else {
+		LOG_DEBUG("this IMAccount is not registered: "
+			+ (imContact.getIMAccount() ? imContact.getIMAccount()->getLogin() : "(null)"));
+	}
+}
+
+void IMContactListHandler::changeGroupName(const std::string & oldGroupName, const std::string & newGroupName) {
+	for (IMContactListMap::const_iterator it = _imContactListMap.begin();
+		it != _imContactListMap.end(); it++) {
+		(*it).second->changeGroupName(oldGroupName, newGroupName);
+	}
+}

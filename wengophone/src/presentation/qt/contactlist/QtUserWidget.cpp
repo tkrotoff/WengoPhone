@@ -21,15 +21,23 @@
 
 #include "QtUserWidgetAvatarManager.h"
 #include "QtUserList.h"
-#include <control/contactlist/CContact.h>
-#include <model/contactlist/Contact.h>
+
+#include <control/contactlist/CContactList.h>
+#include <control/profile/CUserProfile.h>
+
+#include <util/Picture.h>
 
 #include <qtutil/WidgetFactory.h>
 
 #include <QtGui>
 
-QtUserWidget::QtUserWidget(CContact & cContact, QWidget * parent, Qt::WFlags f)
-: QWidget(parent, f), _cContact(cContact) {
+QtUserWidget::QtUserWidget(const std::string & contactId, CUserProfile & cUserProfile, QWidget * parent, Qt::WFlags f)
+: QWidget(parent, f), _cUserProfile(cUserProfile) {
+
+	_contactId = contactId;
+
+	contactProfileUpdated();
+
 	_widget = WidgetFactory::create(":/forms/contactlist/userWidget.ui", NULL);
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget(_widget);
@@ -41,18 +49,19 @@ QtUserWidget::QtUserWidget(CContact & cContact, QWidget * parent, Qt::WFlags f)
 	_cellPhoneLabel = findChild<QLabel *>("cellPhoneLabel");
 
 	_avatarManager = new QtUserWidgetAvatarManager(this,_avatarLabel);
+
 	_avatarLabel->installEventFilter(_avatarManager);
 
     _smsButton = findChild<QPushButton *>("smsButton");
     _callButton = findChild<QPushButton *>("callButton");
     _chatButton = findChild<QPushButton *>("chatButton");
 
-    QString str = QString::fromUtf8(_cContact.getContact().getHomePhone().c_str());
+    QString str = QString::fromUtf8(_contactProfile.getHomePhone().c_str());
     if (!str.isEmpty()) {
         _homePhoneLabel->setText( str );
     }
 
-    str = QString::fromUtf8(_cContact.getContact().getMobilePhone().c_str());
+    str = QString::fromUtf8(_contactProfile.getMobilePhone().c_str());
     if ( !str.isEmpty() )
     {
         _cellPhoneLabel->setText( str );
@@ -61,11 +70,11 @@ QtUserWidget::QtUserWidget(CContact & cContact, QWidget * parent, Qt::WFlags f)
         _smsButton->setEnabled(false);
     }
 
-	if (!_cContact.getContact().hasFreeCall()) {
+	if (!_contactProfile.hasFreeCall()) {
 		_callButton->setEnabled(false);
 	}
 
-	if (!_cContact.getContact().hasIM()) {
+	if (!_contactProfile.hasIM()) {
 		_chatButton->setEnabled(false);
 	}
 
@@ -81,17 +90,37 @@ void QtUserWidget::paintEvent(QPaintEvent * event){
 	painter.fillRect(rect(),QBrush(QColor(255,255,128)));
 }
 */
+
 void QtUserWidget::callButtonClicked(){
     QtUserList * ul = QtUserList::getInstance();
-	ul->startFreeCall(_userId);
+	ul->startCall(QString::fromStdString(_contactId));
 }
 
 void QtUserWidget::smsButtonClicked(){
     QtUserList * ul = QtUserList::getInstance();
-    ul->startSMS(_userId);
+    ul->startSMS(QString::fromStdString(_contactId));
 }
 
 void QtUserWidget::chatButtonClicked(){
     QtUserList * ul = QtUserList::getInstance();
-    ul->startChat(_userId);
+    ul->startChat(QString::fromStdString(_contactId));
 }
+
+QPixmap QtUserWidget::getIcon() const {
+	QMutexLocker locker(&_mutex);
+
+	Picture picture = _contactProfile.getIcon();
+	std::string data = picture.getData();
+
+	QPixmap result;
+	result.loadFromData((uchar *)data.c_str(), data.size());
+
+	return result;
+}
+
+void QtUserWidget::contactProfileUpdated() {
+	QMutexLocker locker(&_mutex);
+
+	_contactProfile = _cUserProfile.getCContactList().getContactProfile(_contactId);
+}
+

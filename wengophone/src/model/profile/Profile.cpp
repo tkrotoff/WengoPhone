@@ -41,6 +41,10 @@ Profile::Profile() {
 }
 
 Profile::Profile(const Profile & profile) {
+	copy(profile);
+}
+
+void Profile::copy(const Profile & profile) {
 	_sex = profile._sex;
 	_presenceState = profile._presenceState;;
 	_firstName = profile._firstName;
@@ -59,6 +63,7 @@ Profile::Profile(const Profile & profile) {
 	_otherEmail = profile._otherEmail;
 	_notes = profile._notes;
 	_alias = profile._alias;
+	_icon = profile._icon;
 }
 
 bool Profile::operator == (const Profile & profile) const {

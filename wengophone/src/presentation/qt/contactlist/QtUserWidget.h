@@ -20,22 +20,25 @@
 #ifndef QTUSERWIDGET_H
 #define QTUSERWIDGET_H
 
+#include <model/contactlist/ContactProfile.h>
+
 #include <QWidget>
 #include <QString>
+#include <QMutex>
 
 class QtUserWidgetAvatarManager;
 
-class QLabel;
 class CContact;
+class CUserProfile;
+class QLabel;
 class QPushButton;
-
 
 class QtUserWidget : public QWidget
 {
     Q_OBJECT
 public:
 
-    QtUserWidget(CContact & cContact, QWidget * parent = 0, Qt::WFlags f=0);
+    QtUserWidget(const std::string & contactId, CUserProfile & cUserProfile, QWidget * parent = 0, Qt::WFlags f=0);
 
 //	virtual void paintEvent(QPaintEvent * event);
 
@@ -47,17 +50,23 @@ public:
 		return _text;
 	}
 
-	CContact & getCContact() const {
-		return _cContact;
-	}
-
 	QLabel * getAvatarLabel() const {
 		return _avatarLabel;
 	}
 
-	void setUserId(const QString & userId){
-        _userId = userId;
-	}
+	QPixmap getIcon() const;
+
+public Q_SLOTS:
+
+	void contactProfileUpdated();
+
+protected Q_SLOTS:
+
+    void callButtonClicked();
+
+    void smsButtonClicked();
+
+    void chatButtonClicked();
 
 protected:
 
@@ -77,19 +86,15 @@ protected:
 
 	QString _text;
 
-	QString _userId;
-
 	QtUserWidgetAvatarManager * _avatarManager;
 
-	CContact & _cContact;
+	std::string _contactId;
 
-protected Q_SLOTS:
+	ContactProfile _contactProfile;
 
-    void callButtonClicked();
+	CUserProfile & _cUserProfile;
 
-    void smsButtonClicked();
-
-    void chatButtonClicked();
+	mutable QMutex _mutex;
 
 };
 

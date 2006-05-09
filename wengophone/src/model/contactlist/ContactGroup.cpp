@@ -23,13 +23,16 @@
 #include "IMContactListHandler.h"
 
 #include <util/Logger.h>
+#include <util/Uuid.h>
 
 ContactGroup::ContactGroup(const std::string & groupName)
-	: _groupName(groupName) {
+: _groupName(groupName) {
+	_uuid = Uuid::generate();
 }
 
 ContactGroup::ContactGroup(const ContactGroup & contactGroup)
-	: _groupName(contactGroup._groupName), _contactList(contactGroup._contactList) {
+: _groupName(contactGroup._groupName), _contactList(contactGroup._contactList) {
+	_uuid = contactGroup._uuid;
 }
 
 void ContactGroup::addContact(Contact & contact) {
@@ -81,7 +84,7 @@ std::list<std::string> ContactGroup::getMobilePhoneList() const {
 	std::list<std::string> list;
 	for (ContactVector::const_iterator it = _contactList.begin();
 		it != _contactList.end(); ++it) {
-
+		
 		std::string getMobilePhone = (*it)->getMobilePhone();
 		if( getMobilePhone != "" ) {
 			list.push_front(getMobilePhone);

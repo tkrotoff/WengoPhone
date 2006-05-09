@@ -26,15 +26,15 @@
 
 #include <QObject>
 
+#include <string>
 #include <set>
 
-class Contact;
-class UserProfile;
 class IMAccount;
-
+class CUserProfile;
 class QWidget;
 class QDialog;
 class QString;
+
 namespace Ui { class AddIMContact; }
 
 /**
@@ -46,7 +46,8 @@ class QtAddIMContact : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtAddIMContact(UserProfile & userProfile, Contact & contact, QWidget * parent);
+	QtAddIMContact(const std::string & contactId, CUserProfile & cUserProfile,
+		QWidget * parent);
 
 	~QtAddIMContact();
 
@@ -72,9 +73,9 @@ private:
 
 	QDialog * _addIMContactWindow;
 
-	UserProfile & _userProfile;
+	CUserProfile & _cUserProfile;
 
-	Contact & _contact;
+	std::string _contactId;
 };
 
 #endif	//QTADDIMCONTACT_H

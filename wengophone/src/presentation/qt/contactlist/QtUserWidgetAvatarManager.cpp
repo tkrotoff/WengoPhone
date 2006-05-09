@@ -21,7 +21,7 @@
 
 #include "QtUserWidget.h"
 
-#include <control/contactlist/CContact.h>
+#include <model/contactlist/ContactProfile.h>
 
 #include <util/Picture.h>
 
@@ -67,12 +67,7 @@ void QtUserWidgetAvatarManager::paintEvent(QPaintEvent * event)
 	*/
 
 	QPixmap background = QPixmap(":/pics/fond_avatar.png");
-	QPixmap pixmap;
-
-	Picture picture = _userWidget->getCContact().getIcon();
-
-	std::string data = picture.getData();
-	pixmap.loadFromData((uchar *)data.c_str(), data.size());
+	QPixmap pixmap = _userWidget->getIcon();
 
 	if ( ! pixmap.isNull())
         {

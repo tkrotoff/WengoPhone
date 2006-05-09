@@ -133,5 +133,9 @@ int main(int argc, char * argv[]) {
 	//Starts the model component thread
 	cWengoPhone.start();
 
-	return pFactory->exec();
+	pFactory->exec();
+
+	cWengoPhone.terminate();
+
+	return 0;
 }

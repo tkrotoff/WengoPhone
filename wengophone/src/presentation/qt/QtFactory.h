@@ -34,16 +34,9 @@
 #include "contactlist/QtContactList.h"
 #include <control/contactlist/CContactList.h>
 
-#include "contactlist/QtContact.h"
-#include <control/contactlist/CContact.h>
-
-#include "contactlist/QtContactGroup.h"
-#include <control/contactlist/CContactGroup.h>
-
 #include "wenbox/QtWenboxPlugin.h"
 #include <control/wenbox/CWenboxPlugin.h>
 
-#include "presence/QtPresenceHandler.h"
 #include "chat/QtChatHandler.h"
 
 #include "webservices/sms/QtSms.h"
@@ -115,28 +108,9 @@ public:
 		return _qtContactList;
 	}
 
-	PContactGroup * createPresentationContactGroup(CContactGroup & cContactGroup) {
-		QtContactGroup * qtContactGroup = new QtContactGroup(cContactGroup, _qtContactList);
-		return qtContactGroup;
-	}
-
-	PContact * createPresentationContact(CContact & cContact) {
-		QtContact * qtContact = new QtContact(cContact, _qtContactList);
-		return qtContact;
-	}
-
 	PWenboxPlugin * createPresentationWenboxPlugin(CWenboxPlugin & cWenboxPlugin) {
 		QtWenboxPlugin * qtWenboxPlugin = new QtWenboxPlugin(cWenboxPlugin);
 		return qtWenboxPlugin;
-	}
-
-	PConnectHandler * createPresentationConnectHandler(CConnectHandler & cConnectHandler) {
-		return NULL;
-	}
-
-	PPresenceHandler * createPresentationPresenceHandler(CPresenceHandler & cPresenceHandler) {
-		static QtPresenceHandler * qtPresenceHandler = new QtPresenceHandler(cPresenceHandler);
-		return qtPresenceHandler;
 	}
 
 	PChatHandler * createPresentationChatHandler(CChatHandler & cChatHandler) {

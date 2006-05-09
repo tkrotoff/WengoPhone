@@ -21,8 +21,10 @@
 #include "QtContactCallList.h"
 #include "QtPhoneCall.h"
 
-#include <model/phonecall/ConferenceCall.h>
 #include <control/phonecall/CPhoneCall.h>
+#include <control/profile/CUserProfile.h>
+
+#include <model/phonecall/ConferenceCall.h>
 #include <model/phonecall/PhoneCall.h>
 
 QtContactCallListWidget::QtContactCallListWidget (CWengoPhone & cWengoPhone,QWidget * parent, Qt::WFlags f) :
@@ -35,7 +37,6 @@ QWidget (parent,f), _cWengoPhone(cWengoPhone)
 	// Setup the list widget
 	_layout->addWidget(_listWidget,0,0);
 	setAttribute(Qt::WA_DeleteOnClose,true);
-
 }
 
 
@@ -51,7 +52,7 @@ void QtContactCallListWidget::startConference(QtPhoneCall * qtPhoneCall){
 	if ( _conferenceCall )
 		return;
 
-	IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
+	IPhoneLine * phoneLine = _cWengoPhone.getCUserProfile()->getUserProfile().getActivePhoneLine();
 
 	if (phoneLine == NULL)
 		return;

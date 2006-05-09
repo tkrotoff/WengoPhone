@@ -28,6 +28,7 @@
 #include <string>
 
 class Contact;
+class CUserProfile;
 class PWengoPhone;
 class IPhoneLine;
 class CPhoneLine;
@@ -118,11 +119,6 @@ public:
 	}
 
 	/**
-	 * @see WengoPhone::makeCall()
-	 */
-	void makeCall(const std::string & phoneNumber);
-
-	/**
 	 * @see WengoPhone::addWengoAccount()
 	 */
 	void addWengoAccount(const std::string & login, const std::string & password, bool autoLogin);
@@ -208,15 +204,6 @@ public:
 	PhoneCall * getActivePhoneCall() const;
 
 	/**
-	 * Gets the CContactList.
-	 *
-	 * @return the CContactList
-	 */
-	CContactList & getCContactList() const {
-		return *_cContactList;
-	}
-
-	/**
 	 * Gets the CHistory.
 	 *
 	 * @return the CHistory
@@ -225,11 +212,18 @@ public:
 		return *_cHistory;
 	}
 
+	/**
+	 * Gets the CUserProfile.
+	 *
+	 * @return the CUserProfile
+	 */
+	CUserProfile * getCUserProfile() const {
+		return _cUserProfile;
+	}
+
 	CWsCallForward * getCWsCallForward() {
 		return _cWsCallForward;
 	}
-
-	UserProfile & getCurrentUserProfile();
 
 private:
 
@@ -282,9 +276,9 @@ private:
 	/** Direct link to the presentation via an interface. */
 	PWengoPhone * _pWengoPhone;
 
-	CContactList * _cContactList;
-
 	CHistory * _cHistory;
+
+	CUserProfile * _cUserProfile;
 
 	CWsCallForward * _cWsCallForward;
 

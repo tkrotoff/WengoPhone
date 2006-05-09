@@ -53,10 +53,14 @@ class UserProfile;
 class ContactList {
 	friend class Contact;
 	friend class ContactListXMLSerializer;
+	friend class ContactXMLSerializer;
 public:
 
 	/** Set of ContactGroup. */
 	typedef std::set<ContactGroup> ContactGroupSet;
+
+	/** List of Contact. */
+	typedef std::list<Contact> Contacts;
 
 	ContactList(UserProfile & userProfile);
 
@@ -97,11 +101,29 @@ public:
 	Event<void (ContactList & sender, Contact & contact)> contactRemovedEvent;
 
 	/**
+	 * A Contact has moved.
+	 *
+	 * @param sender this class
+	 * @param groupName the destinaton group
+	 * @param contact the removed Contact
+	 */
+	Event<void (ContactList & sender, ContactGroup & dstContactGroup,	
+		ContactGroup & srcContactGroup, Contact & contact)> contactMovedEvent;
+
+	/**
+	 * Emitted when a Contact has been changed.
+	 *
+	 * @param sender this class
+	 * @param contact the changed Contact
+	 */
+	Event<void (ContactList & sender, Contact & contact)> contactChangedEvent;
+
+	/**
 	 * Add a ContactGroup.
 	 *
 	 * If a ContactGroup with the given name exists, no ContactGroup is created
 	 *
-	 * @param name of the ContactGroup to add.
+	 * @param name name of the ContactGroup to add.
 	 */
 	void addContactGroup(const std::string & name);
 
@@ -110,10 +132,18 @@ public:
 	 *
 	 * If no ContactGroup with the given name exists, nothing happens
 	 *
-	 * @param name of the ContactGroup to remove.
+	 * @param id the UUID of the ContactGroup to remove.
 	 */
-	void removeContactGroup(const std::string & name);
+	void removeContactGroup(const std::string & id);
 
+	/**
+	 * Renames a ContactGroup.
+	 *
+	 * @param id the UUID of the group to rename
+	 * @param name the desired name
+	 */
+	void renameContactGroup(const std::string & id, const std::string & name);
+	 
 	/**
 	 * Create and add a Contact to the ContactList.
 	 *
@@ -141,21 +171,20 @@ public:
 	void mergeContacts(Contact & dst, Contact & src);
 
 	/**
-	 * Moves a Contact from a group to another one.
+	 * Moves a Contact from to a group.
 	 *
 	 * @param contact the Contact to move
 	 * @param dst the destination group
-	 * @param src the source group
 	 */
-	void moveContact(Contact & contact, const std::string & dst, const std::string & src);
+	void moveContactToGroup(const std::string & dst, Contact & contact);
 
 	/**
-	 * Get a ContactGroup.
+	 * Gets a ContactGroup given its UUID.
 	 *
-	 * @param groupName the name of the desired ContactGroup
+	 * @param groupId the group UUID of the desired ContactGroup
 	 * @return a pointer to the ContactGroup, NULL if not found
 	 */
-	ContactGroup * getContactGroup(const std::string & groupName) const;
+	ContactGroup * getContactGroup(const std::string & groupId) const;
 
 	/**
 	 * @return a copy of the set of ContactGroups.
@@ -165,12 +194,29 @@ public:
 	}
 
 	/**
+	 * Gets the list of Contacts.
+	 *
+	 * @return the list of Contacts.
+	 */
+	const Contacts & getContacts() const {
+		return _contacts;
+	}
+
+	/**
 	 * Find the first Contact that owns an IMContact.
 	 *
 	 * @param imContact the IMContact to look for
 	 * @return the Contact or NULL if not found
 	 */
 	Contact * findContactThatOwns(const IMContact & imContact) const;
+
+	/**
+	 * Gets the Contact of given UUID.
+	 *
+	 * @param contactId the contact UUID
+	 * @return the Contact or NULL if no found
+	 */
+	Contact * getContact(const std::string & contactId) const;
 
 private:
 
@@ -228,6 +274,11 @@ private:
 		const IMContact & imContact, Picture icon);
 
 	/**
+	 * @see Contact::contactChangedEvent
+	 */
+	void contactChangedEventHandler(Contact & sender);
+
+	/**
 	 * Add an IMContact to a Contact.
 	 *
 	 * It sends an asynchronous command to IMContactListHandler.
@@ -252,37 +303,9 @@ private:
 	void removeIMContact(Contact & contact, const IMContact & imContact);
 
 	/**
-	 * Add a Contact to a ContactGroup.
-	 *
-	 * It sends an asynchronous command to IMContactListHandler.
-	 *
-	 * This method must be called only by Contact
-	 *
-	 * @param groupName the group name
-	 * @param contact the Contact to add
+	 * Moves a Contact to a group without modifying IM lists.
 	 */
-	void addToContactGroup(const std::string & groupName, Contact & contact);
-
-	/**
-	 * Remove a Contact from a ContactGroup.
-	 *
-	 * It sends an asynchronous command to IMContactListHandler.
-	 *
-	 * This method must be called only by Contact
-	 *
-	 * @param groupName the group name to remove from
-	 * @param contact the Contact that wants to be removed from the ContactGroup
-	 */
-	void removeFromContactGroup(const std::string & groupName, Contact & contact);
-
-	/**
-	 * Move a Contact to another ContactGroup.
-	 *
-	 * @param contact the Contact to move
-	 * @param to the group where we want to move in the Contact
-	 * @param from the group where we want to move out the Contact
-	 */
-	void moveContactToGroup(Contact & contact, const std::string & to, const std::string & from);
+	void _moveContactToGroup(const std::string & dst, Contact & contact);
 
 	/**
 	 * Actually add a ContactGroup.
@@ -305,17 +328,6 @@ private:
 	 * @param groupName the ContactGroup
 	 */
 	void _addToContactGroup(const std::string & groupName, Contact & contact);
-
-	/**
-	 * Actually remove the Contact to a ContactGroup.
-	 *
-	 * @param contact the Contact
-	 * @param groupName the ContactGroup
-	 */
-	void _removeFromContactGroup(std::string groupName, Contact & contact);
-
-	/** List of Contact. */
-	typedef std::list<Contact> Contacts;
 
 	/** Set of ContactGroup. */
 	ContactGroupSet _contactGroupSet;

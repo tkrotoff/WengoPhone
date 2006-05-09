@@ -19,6 +19,7 @@
 
 #include "Contact.h"
 
+#include <model/contactlist/ContactGroup.h>
 #include <model/contactlist/ContactList.h>
 #include <model/presence/PresenceHandler.h>
 #include <model/profile/UserProfile.h>
@@ -28,26 +29,26 @@
 #include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMChat.h>
 
-#include <util/StringList.h>
 #include <util/Logger.h>
 #include <util/Picture.h>
+#include <util/StringList.h>
+#include <util/Uuid.h>
 
 #include <iostream>
 using namespace std;
 
 Contact::Contact(UserProfile & userProfile)
-	: _userProfile(userProfile), _contactList(userProfile.getContactList()) {
-	_sex = EnumSex::SexUnknown;
-	_blocked = false;
-	_preferredIMContact = NULL;
+: ContactProfile(),
+_userProfile(userProfile),
+_contactList(userProfile.getContactList()) {
 
 	profileChangedEvent +=
 		boost::bind(&Contact::profileChangedEventHandler, this, _1);
 }
 
 Contact::Contact(const Contact & contact)
-	: _userProfile(contact._userProfile), _contactList(contact._contactList) {
-	initialize(contact);
+: _userProfile(contact._userProfile), _contactList(contact._contactList) {
+	copy(contact);
 }
 
 Contact::~Contact() {
@@ -55,24 +56,46 @@ Contact::~Contact() {
 
 Contact & Contact::operator = (const Contact & contact) {
 	if (&contact != this) {
-		initialize(contact);
+		copy(contact);
 	}
+
+	contactChangedEvent(*this);
+
 	return *this;
 }
 
-void Contact::initialize(const Contact & contact) {
-	//Profile::Profile(contact);
-	_blocked = contact._blocked;
-	_preferredIMContact = contact._preferredIMContact;
-	_imContactSet = contact._imContactSet;
+Contact & Contact::operator = (const ContactProfile & contactProfile) {
+	if (&contactProfile != this) {
+		copy(contactProfile);
+	}
+
+	contactChangedEvent(*this);
+
+	return *this;
+}
+
+void Contact::copy(const Contact & contact) {
+	copy((const ContactProfile &)contact);
+}
+
+void Contact::copy(const ContactProfile & contactProfile) {
+	// Getting groups
+	ContactGroup * newContactGroup = _contactList.getContactGroup(contactProfile.getGroupId());
+	ContactGroup * oldContactGroup = _contactList.getContactGroup(getGroupId());
+
+	if (oldContactGroup && newContactGroup && (oldContactGroup->getUUID() != newContactGroup->getUUID())) {
+		_contactList.moveContactToGroup(newContactGroup->getUUID(), *this);
+	} else if (newContactGroup) {
+		_contactList._addToContactGroup(newContactGroup->getUUID(), *this);
+	}
+
+	setWengoPhoneId(contactProfile._wengoPhoneId);
+
+	ContactProfile::copy(contactProfile);
 }
 
 bool Contact::operator == (const Contact & contact) const {
-	return (Profile::operator==(contact)
-		&& (_preferredNumber == contact._preferredNumber)
-		&& (_blocked == contact._blocked)
-		&& (_preferredIMContact == contact._preferredIMContact)
-		&& (_imContactSet == contact._imContactSet));
+	return (ContactProfile::operator == (contact));
 }
 
 void Contact::addIMContact(const IMContact & imContact) {
@@ -88,10 +111,7 @@ void Contact::_addIMContact(const IMContact & imContact) {
 
 	if (result.second) {
 		IMContact & newIMContact = (IMContact &)(*result.first);
-		newIMContact.imContactAddedToGroupEvent +=
-			boost::bind(&Contact::imContactAddedToGroupEventHandler, this, _1, _2);
-		newIMContact.imContactRemovedFromGroupEvent +=
-			boost::bind(&Contact::imContactRemovedFromGroupEventHandler, this, _1, _2);
+
 		newIMContact.imContactChangedEvent +=
 			boost::bind(&Contact::imContactChangedEventHandler, this, _1);
 
@@ -110,6 +130,7 @@ void Contact::_removeIMContact(const IMContact & imContact) {
 }
 
 void Contact::setWengoPhoneId(const string & wengoId) {
+	//TODO: remove previous IMContact
 	if (!wengoId.empty()) {
 		_wengoPhoneId = wengoId;
 
@@ -118,14 +139,6 @@ void Contact::setWengoPhoneId(const string & wengoId) {
 		if (list.begin() != list.end()) {
 			addIMContact(IMContact(*(*list.begin()), _wengoPhoneId));
 		}
-	}
-}
-
-bool Contact::hasIMContact(const IMContact & imContact) const {
-	if (_imContactSet.find(imContact) != _imContactSet.end()) {
-		return true;
-	} else {
-		return false;
 	}
 }
 
@@ -144,54 +157,8 @@ bool Contact::checkAndSetIMContact(const IMContact & imContact) {
 	return false;
 }
 
-IMContact & Contact::getIMContact(const IMContact & imContact) const {
-	return (IMContact &)*_imContactSet.find(imContact);
-}
-
-void Contact::imContactAddedToGroupEventHandler(IMContact & sender, const std::string & groupName) {
-	if (_contactGroupSet.find(groupName) == _contactGroupSet.end()) {
-		_contactList._addToContactGroup(groupName, *this);
-	}
-}
-
-void Contact::imContactRemovedFromGroupEventHandler(IMContact & sender, const std::string & groupName) {
-//	if (_contactGroupSet.size() > 1) {
-		_contactList._removeFromContactGroup(groupName, *this);
-//	}
-}
-
 void Contact::imContactChangedEventHandler(IMContact & sender) {
 	contactChangedEvent(*this);
-}
-
-void Contact::addToContactGroup(const std::string & groupName) {
-	_contactList.addToContactGroup(groupName, *this);
-}
-
-void Contact::removeFromContactGroup(const std::string & groupName) {
-	_contactList.removeFromContactGroup(groupName, *this);
-}
-
-void Contact::_addToContactGroup(const std::string & groupName) {
-	_contactGroupSet.insert(groupName);
-}
-
-void Contact::_removeFromContactGroup(const std::string & groupName) {
-	ContactGroupSet::iterator it = _contactGroupSet.find(groupName);
-
-	if (it != _contactGroupSet.end()) {
-		_contactGroupSet.erase(it);
-	}
-}
-
-bool Contact::isInContactGroup(const std::string & groupName) {
-	ContactGroupSet::const_iterator it = _contactGroupSet.find(groupName);
-
-	if (it != _contactGroupSet.end()) {
-		return true;
-	} else {
-		return false;
-	}
 }
 
 void Contact::block() {
@@ -210,186 +177,11 @@ void Contact::unblock() {
 	_blocked = false;
 }
 
-bool Contact::hasIM() const {
-	return (getPresenceState() != EnumPresenceState::PresenceStateOffline);
-}
-
-bool Contact::hasCall() const {
-	if (!getPreferredNumber().empty()) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-bool Contact::hasVideo() const {
-	return wengoIsAvailable();
-}
-
-std::string Contact::getPreferredNumber() const {
-	string result;
-
-	if (!_preferredNumber.empty()) {
-		result = _preferredNumber;
-	} else if (hasFreeCall()) {
-		result = getFreePhoneNumber();
-	} else if (!_mobilePhone.empty()) {
-		result = _mobilePhone;
-	} else if (!_homePhone.empty()) {
-		result = _homePhone;
-	} else if (!_workPhone.empty()) {
-		result = _workPhone;
-	} else if (!_otherPhone.empty()) {
-		result = _otherPhone;
-	}
-
-	return result;
-}
-
-IMContact * Contact::getPreferredIMContact() const {
-	IMContact * result = NULL;
-
-	if (_preferredIMContact != NULL) {
-		result = _preferredIMContact;
-	} else {
-		// Look for a connected IMContact
-		for (IMContactSet::const_iterator it = _imContactSet.begin() ;
-			it != _imContactSet.end() ;
-			it++) {
-			if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
-				return (IMContact *)&(*it);
-				break;
-			}
-		}
-	}
-
-	return result;
-}
-
-EnumPresenceState::PresenceState Contact::getPresenceState() const {
-	unsigned onlineIMContact = 0;
-	unsigned offlineIMContact = 0;
-	unsigned dndIMContact = 0;
-
-	for (IMContactSet::const_iterator it = _imContactSet.begin() ;
-		it != _imContactSet.end() ;
-		it++) {
-		if ((*it).getPresenceState() == EnumPresenceState::PresenceStateOffline) {
-			offlineIMContact++;
-		} else if ((*it).getPresenceState() == EnumPresenceState::PresenceStateOnline) {
-			onlineIMContact++;
-		} else if ((*it).getPresenceState() == EnumPresenceState::PresenceStateDoNotDisturb) {
-			dndIMContact++;
-		}
-	}
-
-	if (onlineIMContact > 0) {
-		return EnumPresenceState::PresenceStateOnline;
-	} else if (offlineIMContact == _imContactSet.size()) {
-		return EnumPresenceState::PresenceStateOffline;
-	} else if (dndIMContact == _imContactSet.size()) {
-		return EnumPresenceState::PresenceStateDoNotDisturb;
-	} else {
-		return EnumPresenceState::PresenceStateAway;
-	}
-}
-
-bool Contact::wengoIsAvailable() const {
-	if (!_wengoPhoneId.empty()) {
-		for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; ++it) {
-			if (((*it).getContactId() == _wengoPhoneId)
-				&& ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline)) {
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
-void Contact::moveToGroup(const std::string & to, const std::string & from) {
-	_contactList.moveContactToGroup(*this, to, from);
-}
-
 void Contact::profileChangedEventHandler(Profile & profile) {
 	contactChangedEvent(*this);
 }
 
 void Contact::setIcon(const Picture & icon) {
-}
-
-Picture Contact::getIcon() const {
-	Picture result;
-
-	for (IMContactSet::const_iterator it = _imContactSet.begin() ;
-		it != _imContactSet.end() ;
-		it++) {
-		if (!(*it).getIcon().getData().empty()) {
-			result = (*it).getIcon();
-			break;
-		}
-	}
-
-	return result;
-}
-
-string Contact::getDisplayName() const {
-	string result;
-	string pseudo;
-	string contactId;
-
-	if (!_firstName.empty() || !_lastName.empty()) {
-		result += _firstName;
-
-		if (!result.empty() && !_lastName.empty()) {
-			result += " ";
-		}
-
-		result += _lastName;
-	}
-
-	// Take the alias of the first IMContact
-	for (IMContactSet::const_iterator it = _imContactSet.begin();
-		it != _imContactSet.end();
-		++it) {
-		if (!(*it).getAlias().empty()) {
-			pseudo = (*it).getAlias();
-			contactId = (*it).getContactId();
-			break;
-		}
-	}
-
-	// If no alias set, we take the first contact id:
-	if (contactId.empty()) {
-		IMContactSet::const_iterator it = _imContactSet.begin();
-		if (it != _imContactSet.end()) {
-			contactId = (*it).getContactId();
-		}
-	}
-
-	if (result.empty()) {
-		result = contactId;
-	}
-
-	if (!pseudo.empty()) {
-		result += " - (" + pseudo + ")";
-	}
-
-	return result;
-}
-
-IMContact * Contact::getAvailableIMContact(IMChatSession & imChatSession) const {
-	IMContact * result = NULL;
-
-	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; ++it) {
-		if (((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline)
-			&& ((*(*it).getIMAccount()) == imChatSession.getIMChat().getIMAccount())) {
-			result = (IMContact *)&(*it);
-			break;
-		}
-	}
-
-	return result;
 }
 
 void Contact::merge(const Contact & contact) {
@@ -471,49 +263,7 @@ void Contact::merge(const Contact & contact) {
 		}
 	}
 
-	for (ContactGroupSet::const_iterator it = contact._contactGroupSet.begin();
-		it != contact._contactGroupSet.end();
-		++it) {
-		if (!isInContactGroup(*it)) {
-			addToContactGroup(*it);
-		}
+	if (_groupId.empty()) {
+			_groupId = contact._groupId;
 	}
-}
-
-std::string Contact::getAvailableSIPNumber() const {
-	std::string result;
-
-	for (IMContactSet::const_iterator it = _imContactSet.begin();
-		it != _imContactSet.end();
-		++it) {
-		// If we found an IMContact that is of SIP protocol and is not
-		// a Wengo ID
-		if (((*it).getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE)
-			&& ((*it).getContactId() != _wengoPhoneId)) {
-			result = (*it).getContactId();
-			break;
-		}
-	}
-
-	return result;
-}
-
-bool Contact::hasAvailableSIPNumber() const {
-	return (!getAvailableSIPNumber().empty());
-}
-
-bool Contact::hasFreeCall() const {
-	return (!getFreePhoneNumber().empty());
-}
-
-std::string Contact::getFreePhoneNumber() const {
-	std::string result;
-
-	if (wengoIsAvailable()) {
-		result = _wengoPhoneId;
-	} else if (hasAvailableSIPNumber()) {
-		result = getAvailableSIPNumber();
-	}
-
-	return result;
 }

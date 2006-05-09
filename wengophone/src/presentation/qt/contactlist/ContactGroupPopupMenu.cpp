@@ -31,19 +31,14 @@
 using namespace std;
 
 ContactGroupPopupMenu::ContactGroupPopupMenu(QWidget * parent) : QMenu(parent) {
-	_contactGroup = NULL;
-
 	addAction(QIcon(":/pics/contact_remove.png"), tr("Remove Contact Group"), this, SLOT(removeContactGroup()));
 	addAction(tr("Rename Contact Group"), this, SLOT(renameContactGroup()));
 	addAction(tr("Send SMS to group"), this, SLOT(sendSms()));
 }
 
-void ContactGroupPopupMenu::showMenu(const ContactGroup * contactGroup) {
-	if (!contactGroup) {
-		return;
-	}
+void ContactGroupPopupMenu::showMenu(const QString & groupName) {
+	_groupName = groupName;
 
-	_contactGroup = contactGroup;
 	exec(QCursor::pos());
 }
 

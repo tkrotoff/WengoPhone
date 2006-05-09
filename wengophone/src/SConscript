@@ -103,6 +103,7 @@ sources = [
 	'model/presence/MyPresenceStateInvisible.cpp',
 	'model/presence/MyPresenceStateForward.cpp',
 	'model/contactlist/Contact.cpp',
+	'model/contactlist/ContactProfile.cpp',
 	'model/contactlist/ContactXMLSerializer.cpp',
 	'model/contactlist/ContactList.cpp',
 	'model/contactlist/ContactListXMLSerializer.cpp',
@@ -112,6 +113,7 @@ sources = [
 	'model/contactlist/IMContactListHandler.cpp',
 	'model/profile/Profile.cpp',
 	'model/profile/ProfileXMLSerializer.cpp',
+#	'model/profile/UserData.cpp',
 	'model/profile/UserProfile.cpp',
 #	'model/profile/UserProfileHandler.cpp',
 	'model/profile/UserProfileXMLSerializer.cpp',
@@ -132,14 +134,11 @@ sources = [
 
 	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
-	'control/connect/CConnectHandler.cpp',
 	'control/chat/CChatHandler.cpp',
-	'control/presence/CPresenceHandler.cpp',
 	'control/phoneline/CPhoneLine.cpp',
 	'control/phonecall/CPhoneCall.cpp',
-	'control/contactlist/CContact.cpp',
+	'control/profile/CUserProfile.cpp',
 	'control/contactlist/CContactList.cpp',
-	'control/contactlist/CContactGroup.cpp',
 	'control/webservices/sms/CSms.cpp',
 	'control/webservices/softupdate/CSoftUpdate.cpp',
 	'control/webservices/info/CWsInfo.cpp',
@@ -147,6 +146,7 @@ sources = [
 	'control/webservices/directory/CWsDirectory.cpp',
 	'control/webservices/callforward/CWsCallForward.cpp',
 	'control/history/CHistory.cpp',
+
 	'presentation/PFactory.cpp'
 ]
 

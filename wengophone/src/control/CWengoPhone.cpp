@@ -41,9 +41,8 @@
 #include <control/contactlist/CContactList.h>
 #include <control/history/CHistory.h>
 #include <control/wenbox/CWenboxPlugin.h>
-#include <control/connect/CConnectHandler.h>
 #include <control/chat/CChatHandler.h>
-#include <control/presence/CPresenceHandler.h>
+#include <control/profile/CUserProfile.h>
 #include <control/webservices/sms/CSms.h>
 #include <control/webservices/softupdate/CSoftUpdate.h>
 #include <control/webservices/subscribe/CSubscribe.h>
@@ -71,6 +70,8 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
 
 	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
+
+	_cUserProfile = new CUserProfile(_wengoPhone.getCurrentUserProfile());
 
 	_wengoPhone.getCurrentUserProfile().loginStateChangedEvent += loginStateChangedEvent;
 	_wengoPhone.getCurrentUserProfile().networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
@@ -103,12 +104,8 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	//Event<void (UserProfile & sender, WsCallForward & wsCallForward)> wsCallForwardCreatedEvent;
 }
 
-void CWengoPhone::makeCall(const std::string & phoneNumber) {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	_wengoPhone.getCurrentUserProfile().makeCall(phoneNumber, config.getVideoEnable());
-}
-
 void CWengoPhone::addWengoAccount(const std::string & login, const std::string & password, bool autoLogin) {
+	//TODO: should pass through CUserProfile
 	_wengoPhone.getCurrentUserProfile().addSipAccount(login, password, autoLogin);
 }
 
@@ -117,9 +114,6 @@ void CWengoPhone::showWengoAccount() {
 }
 
 void CWengoPhone::start() {
-	_cContactList = new CContactList(_wengoPhone.getCurrentUserProfile().getContactList(), *this);
-	LOG_DEBUG("CContactList created");
-
 	_wengoPhone.start();
 }
 
@@ -152,14 +146,6 @@ void CWengoPhone::wsDiretoryCreatedEventHandler(UserProfile & sender, WsDirector
 }
 
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
-	static CConnectHandler cConnectHandler(sender.getCurrentUserProfile().getConnectHandler());
-	LOG_DEBUG("CConnectHandler created");
-
-	static CPresenceHandler cPresenceHandler(sender.getCurrentUserProfile().getPresenceHandler());
-	cPresenceHandler.authorizationRequestEvent +=
-		boost::bind(&CWengoPhone::authorizationRequestEventHandler, this, _1, _2, _3);
-	LOG_DEBUG("CPresenceHandler created");
-
 	static CChatHandler cChatHandler(sender.getCurrentUserProfile().getChatHandler(), *this,sender.getCurrentUserProfile());
 	LOG_DEBUG("CChatHandler created");
 
@@ -273,10 +259,6 @@ void CWengoPhone::historyLoadedEventHandler(History & history) {
 void CWengoPhone::authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
 	const std::string & message) {
 	_pWengoPhone->authorizationRequestEventHandler(sender, imContact, message);
-}
-
-UserProfile & CWengoPhone::getCurrentUserProfile() {
-	return _wengoPhone.getCurrentUserProfile();
 }
 
 void CWengoPhone::saveUserProfile() {

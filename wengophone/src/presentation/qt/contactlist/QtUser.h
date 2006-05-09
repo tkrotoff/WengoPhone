@@ -20,36 +20,34 @@
 #ifndef QTUSER_H
 #define QTUSER_H
 
-#include "QtContactPixmap.h"
+#include <model/contactlist/ContactProfile.h>
 
-#include <control/contactlist/CContact.h>
+#include "QtContactPixmap.h"
 
 #include <QtGui>
 
-class WengoPhone;
+class CWengoPhone;
 
 class QtUser : QObject
 {
 	Q_OBJECT
 public:
 
-	enum SizeHint { UserSize = 22};
+	enum SizeHint { UserSize = 22 };
 
-	QtUser (CContact & cContact, WengoPhone & wengoPhone, QObject * parent = 0);
+	QtUser(const std::string & contactId, CWengoPhone & wengoPhone, QObject * parent = 0);
 
 	virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 
 	QString getId() const;
 
-	void setId(const QString & id);
-
 	QString getUserName() const;
 
-	bool hasIM() const { return _cContact.hasIM();}
+	bool hasIM() const;
 
-	bool hasCall() const { return _cContact.hasCall();}
+	bool hasCall() const;
 
-	bool hasVideo() const { return _cContact.hasVideo();}
+	bool hasVideo() const;
 
 	void setMouseOn(bool value) { _mouseOn = value;}
 
@@ -79,8 +77,6 @@ public:
 
 	QString getAvatar() const { return _avatarPath;}
 
-	CContact & getCContact() const { return _cContact;}
-
 	void startChat();
 
 	void startSMS();
@@ -99,17 +95,19 @@ public:
 
 	QString getWengoPhoneNumber() const;
 
+	QString getPreferredNumber() const;
+
 	bool havePhoneNumber();
 
 public Q_SLOTS:
+
+	void contactUpdated();
 
 Q_SIGNALS:
 
 	void clicked(QtUser * user,int prt);
 
 protected:
-
-	QString	_userId;
 
 	QString	_userName;
 
@@ -123,11 +121,11 @@ protected:
 
 	QtContactPixmap::contactPixmap _status;
 
-	bool		_mouseOn;
+	bool _mouseOn;
 
-	bool		_openStatus;
+	bool _openStatus;
 
-	int			_iconsStartPosition;
+	int _iconsStartPosition;
 
 	Qt::MouseButton _mouseButton;
 
@@ -137,10 +135,16 @@ protected:
 
 	QString _avatarPath;
 
-	CContact & _cContact;
+	/**
+	 * The UUID of the Contact associated with this QtUser.
+	 */
+	std::string _contactId;
 
-	WengoPhone & _wengoPhone;
+	ContactProfile _contactProfile;
 
+	CWengoPhone & _cWengoPhone;
+
+	mutable QMutex _mutex;
 };
 
 #endif

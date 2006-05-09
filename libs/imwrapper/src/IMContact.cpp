@@ -42,7 +42,7 @@ IMContact::IMContact(const IMContact & imContact)
 	_contactId = imContact._contactId;
 	_presenceState = imContact._presenceState;
 	_protocol = imContact._protocol;
-	_groupSet = imContact._groupSet;
+	_icon = imContact._icon;
 }
 
 IMContact::~IMContact() {
@@ -67,7 +67,7 @@ bool IMContact::operator < (const IMContact & imContact) const {
 
 	return result;
 }
-
+/**
 void IMContact::addToGroup(const std::string & groupName) {
 	_groupSet.insert(groupName);
 	imContactAddedToGroupEvent(*this, *_groupSet.find(groupName));
@@ -88,7 +88,7 @@ void IMContact::removeFromAllGroup() {
 
 	_groupSet.clear();
 }
-
+*/
 string IMContact::cleanContactId() const {
 	string result;
 	string::size_type index = _contactId.find('/');

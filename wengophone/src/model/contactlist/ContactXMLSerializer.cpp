@@ -20,6 +20,8 @@
 #include "ContactXMLSerializer.h"
 
 #include "Contact.h"
+#include "ContactGroup.h"
+#include "ContactList.h"
 
 #include <model/profile/ProfileXMLSerializer.h>
 
@@ -30,8 +32,9 @@
 
 using namespace std;
 
-ContactXMLSerializer::ContactXMLSerializer(Contact & contact, IMAccountHandler & imAccountHandler)
-: ProfileXMLSerializer(contact), _contact(contact), _imAccountHandler(imAccountHandler) {
+ContactXMLSerializer::ContactXMLSerializer(Contact & contact, 
+	ContactList & contactList, IMAccountHandler & imAccountHandler)
+: ProfileXMLSerializer(contact), _contact(contact), _contactList(contactList), _imAccountHandler(imAccountHandler) {
 }
 
 string ContactXMLSerializer::serialize() {
@@ -50,14 +53,11 @@ string ContactXMLSerializer::serialize() {
 	}
 	////
 
-	// Serializing groups
-	result += "<groups>\n";
-	for (Contact::ContactGroupSet::const_iterator it = _contact._contactGroupSet.begin();
-		it != _contact._contactGroupSet.end();
-		++it) {
-		result += ("<group><![CDATA[" + (*it) + "]]></group>\n");
+	// Serializing group
+	ContactGroup * contactGroup = _contactList.getContactGroup(_contact.getGroupId());
+	if (contactGroup) {
+		result += "<group><![CDATA[" + contactGroup->getName() + "]]></group>\n";
 	}
-	result += "</groups>\n";
 	////
 
 	result += "</wgcard>\n";
@@ -91,13 +91,9 @@ bool ContactXMLSerializer::unserialize(const string & data) {
 	////
 
 	//Retrieving Groups
-	TiXmlNode * groups = wgCard.FirstChild("groups").Node();
-
-	if (groups) {
-		TiXmlNode * groupLastChild = NULL;
-		while ((groupLastChild = groups->IterateChildren("group", groupLastChild))) {
-			_contact.addToContactGroup(string(groupLastChild->FirstChild()->Value()));
-		}
+	TiXmlNode * group = wgCard.FirstChild("group").Node();
+	if (group) {
+		_contactList._addToContactGroup(string(group->FirstChild()->Value()), _contact);
 	}
 	////
 

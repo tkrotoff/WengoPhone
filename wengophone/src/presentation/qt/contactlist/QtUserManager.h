@@ -21,13 +21,12 @@
 
 #include <QtGui>
 
-class CContact;
-
 #define MAX_ITEM_SIZE 100
 #define MIN_ITEM_SIZE 28
 
-class PContact;
+class CUserProfile;
 class CWengoPhone;
+class QtContactList;
 class QtHidenContact;
 class PhoneCall;
 
@@ -36,11 +35,13 @@ class QtUserManager : public QObject {
 
 public:
 
-	QtUserManager(CWengoPhone & cWengoPhone, QObject * parent = 0, QTreeWidget * target = 0 );
+	QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
+		QtContactList & qtContactList, QObject * parent = 0, QTreeWidget * target = 0 );
 
-	void setContact(PContact * contact) { _pcontact = contact;};
+	void removeContact(const QString & contactId);
 
-	void removeContact(CContact & cContact);
+	void moveContact(const QString & contactId,
+		const QString & srcContactGroupId, const QString & dstContactGroupId);
 
 public Q_SLOTS:
 
@@ -90,7 +91,7 @@ Q_SIGNALS:
 
 protected:
 
-	void safeRemoveContact(CContact & cContact);
+	void safeRemoveContact(const QString & contactId);
 
 	void safeUserStateChanged();
 
@@ -100,7 +101,7 @@ protected:
 
 	void safeShowAllUsers();
 
-	void removeFromHidenContact(const CContact & cContact);
+	void removeFromHidenContact(const QString & contactId);
 
 	QMenu * createConferenceMenu();
 
@@ -128,7 +129,9 @@ protected:
 
 	QMutex _mutex;
 
-	PContact * _pcontact;
+	QtContactList & _qtContactList;
+
+	CUserProfile & _cUserProfile;
 
 	CWengoPhone & _cWengoPhone;
 

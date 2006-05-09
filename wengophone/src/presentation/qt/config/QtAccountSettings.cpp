@@ -23,9 +23,11 @@
 
 #include <presentation/qt/imaccount/QtIMAccountManager.h>
 
+#include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+
 #include <model/WengoPhone.h>
 #include <model/profile/UserProfile.h>
-#include <control/CWengoPhone.h>
 
 #include <QtGui>
 
@@ -37,7 +39,7 @@ QtAccountSettings::QtAccountSettings(CWengoPhone & cWengoPhone, QWidget * parent
 	_ui = new Ui::AccountSettings();
 	_ui->setupUi(_accountSettingsWidget);
 
-	QtIMAccountManager * imAccountManager = new QtIMAccountManager(cWengoPhone.getWengoPhone().getCurrentUserProfile(),
+	QtIMAccountManager * imAccountManager = new QtIMAccountManager(cWengoPhone.getCUserProfile()->getUserProfile(),
 		cWengoPhone, false, _accountSettingsWidget);
 	int index = _ui->imAccountStackedWidget->addWidget(imAccountManager->getWidget());
 	_ui->imAccountStackedWidget->setCurrentIndex(index);

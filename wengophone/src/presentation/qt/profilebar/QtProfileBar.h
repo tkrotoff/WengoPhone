@@ -33,10 +33,11 @@
 class CWengoPhone;
 class IPhoneLine;
 class QtWengoStyleLabel;
-class UserProfile;
+class CUserProfile;
 class ConnectHandler;
 class IMAccount;
 class PresenceHandler;
+class UserProfile;
 
 /**
  * Credit widget
@@ -49,15 +50,15 @@ class QtProfileBar : public QWidget
 	Q_OBJECT
 
 public:
-	QtProfileBar (CWengoPhone & cWengoPhone, UserProfile & userProfile, 
+	QtProfileBar (CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 		ConnectHandler & connectHandler,QWidget * parent = 0, Qt::WFlags f = 0 );
 
     void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
 
     void disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount);
 
-    void myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
-		                              EnumPresenceState::MyPresenceStatus status);
+    void myPresenceStatusEventHandler(PresenceHandler & sender,
+		const IMAccount & imAccount, EnumPresenceState::MyPresenceStatus status);
 
 Q_SIGNALS:
 
@@ -66,6 +67,7 @@ Q_SIGNALS:
     void disconnectedEventSignal(IMAccount * imAccount);
 
     void myPresenceStatusEventSignal(QVariant status);
+
 
 protected:
 
@@ -99,7 +101,7 @@ protected:
 
 	QMenu * _statusMenu;
 
-	UserProfile & _userProfile;
+	CUserProfile & _cUserProfile;
 
 	CWengoPhone & _cWengoPhone;
 

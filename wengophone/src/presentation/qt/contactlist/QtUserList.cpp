@@ -185,16 +185,6 @@ int	QtUserList::getHeight(const QString & userid) const {
  	else return 0;
 }
 
-CContact & QtUserList::getCContact(const QString & userid) const {
-
-	QMutexLocker locker(const_cast<QMutex *>(&_mutex));
-	QtUser * user = _userList[userid];
-	if (! user )
-		LOG_FATAL("User lookup failed !!!");
-
-	return user->getCContact();
-}
-
 void QtUserList::resetMouseStatus(){
 
 	QMutexLocker locker(&_mutex);

@@ -25,6 +25,7 @@
 #include <string>
 
 class Contact;
+class ContactList;
 class IMAccountHandler;
 
 /**
@@ -35,7 +36,8 @@ class IMAccountHandler;
 class ContactXMLSerializer : public ProfileXMLSerializer {
 public:
 
-	ContactXMLSerializer(Contact & contact, IMAccountHandler & imAccountHandler);
+	ContactXMLSerializer(Contact & contact, ContactList & contactList, 
+		IMAccountHandler & imAccountHandler);
 
 	std::string serialize();
 
@@ -44,6 +46,8 @@ public:
 private:
 
 	Contact & _contact;
+
+	ContactList & _contactList;
 
 	IMAccountHandler & _imAccountHandler;
 

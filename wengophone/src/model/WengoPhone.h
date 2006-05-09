@@ -83,7 +83,6 @@ public:
 	 */
 	Event<void (WengoPhone & sender, WsWengoSubscribe & wsWengoSubscribe)> wsWengoSubscribeCreatedEvent;
 
-
 	WengoPhone();
 
 	~WengoPhone();
@@ -96,21 +95,19 @@ public:
 	WenboxPlugin & getWenboxPlugin() const;
 
 	/**
+	 * Gets the current UserProfile.
+	 *
+	 * @return the current UserProfile
+	 */
+	UserProfile & getCurrentUserProfile() const;
+
+	/**
 	 * Terminates the model component thread i.e this thread.
 	 *
 	 * This method should be called when you exit definitly WengoPhone.
 	 * You cannot call start() then terminate() several times.
 	 */
 	void terminate();
-
-	/**
-	 * Gets the current UserProfile.
-	 *
-	 * @return the current UserProfile
-	 */
-	UserProfile & getCurrentUserProfile() {
-		return _userProfile;
-	}
 
 	/**
 	 * Saves the UserProfile.

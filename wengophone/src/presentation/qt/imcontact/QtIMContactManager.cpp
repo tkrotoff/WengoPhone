@@ -24,15 +24,18 @@
 #include "QtIMContactItem.h"
 #include "QtAddIMContact.h"
 
-#include <model/profile/UserProfile.h>
-#include <model/contactlist/Contact.h>
+#include <control/contactlist/CContactList.h>
+#include <control/profile/CUserProfile.h>
+
+#include <model/contactlist/ContactProfile.h>
 
 #include <QtGui>
 
-QtIMContactManager::QtIMContactManager(UserProfile & userProfile, Contact & contact, QWidget * parent)
-	: QObject(parent),
-	_userProfile(userProfile),
-	_contact(contact) {
+QtIMContactManager::QtIMContactManager(const std::string & contactId, 
+	CUserProfile & cUserProfile, QWidget * parent)
+: QObject(parent),
+_contactId(contactId),
+_cUserProfile(cUserProfile) {
 
 	_imContactManagerWidget = new QWidget(parent);
 
@@ -53,7 +56,9 @@ QtIMContactManager::~QtIMContactManager() {
 void QtIMContactManager::loadIMContacts() {
 	_ui->treeWidget->clear();
 
-	const IMContactSet & imContactSet = _contact.getIMContactSet();
+	ContactProfile contactProfile = _cUserProfile.getCContactList().getContactProfile(_contactId);
+
+	const IMContactSet & imContactSet = contactProfile.getIMContactSet();
 
 	for (IMContactSet::const_iterator it = imContactSet.begin(); it != imContactSet.end(); it++) {
 
@@ -76,7 +81,7 @@ void QtIMContactManager::loadIMContacts() {
 }
 
 void QtIMContactManager::addIMContact() {
-	QtAddIMContact * qtAddIMContact = new QtAddIMContact(_userProfile, _contact, _imContactManagerWidget);
+	QtAddIMContact * qtAddIMContact = new QtAddIMContact(_contactId, _cUserProfile, _imContactManagerWidget);
 	loadIMContacts();
 }
 
@@ -93,7 +98,9 @@ void QtIMContactManager::deleteIMContact() {
 
 		//Button delete clicked
 		if (buttonClicked == 0) {
-			_contact.removeIMContact(*imContact);
+			ContactProfile contactProfile = _cUserProfile.getCContactList().getContactProfile(_contactId);
+			contactProfile.removeIMContact(*imContact);
+			_cUserProfile.getCContactList().updateContact(contactProfile);
 		}
 	}
 

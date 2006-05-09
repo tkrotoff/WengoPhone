@@ -38,7 +38,7 @@ public:
 	 * @param protocol the desired protocol
 	 * @return IMAccount with protocol 'protocol'
 	 */
-	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol);
+	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) const;
 
 };
 

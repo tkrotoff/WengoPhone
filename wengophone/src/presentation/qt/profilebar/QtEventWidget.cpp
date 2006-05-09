@@ -23,8 +23,9 @@
 #include <model/phoneline/IPhoneLine.h>
 #include <control/CWengoPhone.h>
 
-QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent, Qt::WFlags f)
-	: QWidget ( parent, f ), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
+QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
+	QWidget * parent, Qt::WFlags f)
+	: QWidget ( parent, f ), _cUserProfile(cUserProfile), _cWengoPhone(cWengoPhone) {
 
 	QGridLayout * gridLayout = new QGridLayout(this);
 
@@ -56,6 +57,6 @@ void QtEventWidget::missedCallClicked() {
 		tr("&No"), tr("&Yes"),
 		QString(), 0, 1) ) {
 
-		_userProfile.getActivePhoneLine()->makeCall("123", false);
+		_cUserProfile.getUserProfile().getActivePhoneLine()->makeCall("123", false);
 	}
 }

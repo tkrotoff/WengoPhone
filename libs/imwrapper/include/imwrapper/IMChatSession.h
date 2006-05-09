@@ -131,6 +131,8 @@ public:
 	class IMChatMessage {
 	public:
 		IMChatMessage(const IMContact & imContact, const std::string & message);
+	
+		~IMChatMessage();
 
 		const IMContact & getIMContact() const { return _imContact; }
 

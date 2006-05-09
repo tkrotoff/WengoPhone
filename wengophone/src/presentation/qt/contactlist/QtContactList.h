@@ -35,7 +35,6 @@ class ContactGroupPopupMenu;
 class CWengoPhone;
 class QTreeWidget;
 class QMouseEvent;
-class QtContactGroup;
 class QtUserManager;
 
 /**
@@ -45,7 +44,6 @@ class QtUserManager;
  */
 class QtContactList : public QObjectThreadSafe, public PContactList {
 	Q_OBJECT
-	friend class QtContactGroup;
 public:
 
 	QtContactList(CContactList & cContactList, CWengoPhone & cWenghoPhone);
@@ -55,35 +53,78 @@ public:
 	}
 
 	QtUserManager * getUserManager() {
-		return _usermanager;
+		return _userManager;
 	}
 
 	void updatePresentation ();
 
-	void addContactGroup(PContactGroup * pContactGroup);
+	void contactGroupAddedEvent(std::string contactGroupId);
 
-	CContactList & getContactList() const;
+	void contactGroupRemovedEvent(std::string contactGroupId);
+
+	void contactAddedEvent(std::string contactId);
+
+	void contactRemovedEvent(std::string contactId);
+
+	void contactMovedEvent(std::string dstContactGroupId,
+		std::string srcContactGroupId, std::string contactId);
+
+	void contactChangedEvent(std::string contactId);
+
+	CContactList & getCContactList() const;
+
+Q_SIGNALS:
+
+	void contactGroupAddedEventSignal(QString contactGroupId);
+
+	void contactGroupRemovedEventSignal(QString contactGroupId);
+
+	void contactAddedEventSignal(QString contactId);
+
+	void contactRemovedEventSignal(QString contactId);
+
+	void contactMovedEventSignal(QString dstContactGroupId,
+		QString srcContactGroupId, QString contactId);
+
+	void contactChangedEventSignal(QString contactId);
 
 public Q_SLOTS:
+
 	void showAllUsers();
 
 	void hideOffLineUser();
 
 	void sortUsers();
 
+	void contactGroupAddedEventSlot(QString contactGroupId);
+
 private Q_SLOTS:
 
 	void groupRightClickedSlot(const QString & groupName);
 
+	void contactGroupRemovedEventSlot(QString contactGroupId);
+
+	void contactAddedEventSlot(QString contactId);
+
+	void contactRemovedEventSlot(QString contactId);
+
+	void contactMovedEventSlot(QString dstContactGroupId,
+		QString srcContactGroupId, QString contactId);
+
+	void contactChangedEventSlot(QString contactId);
+
 private:
+
+	/**
+	 * Initializes the Content of the QtContactList.
+	 */
+	void initContent();
 
 	void initThreadSafe();
 
 	void updatePresentationThreadSafe();
 
-	void addContactGroupThreadSafe(PContactGroup * pContactGroup);
-
-	QtUserManager * _usermanager;
+	QtUserManager * _userManager;
 
 	CContactList & _cContactList;
 

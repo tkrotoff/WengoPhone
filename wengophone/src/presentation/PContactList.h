@@ -22,7 +22,7 @@
 
 #include "Presentation.h"
 
-class PContactGroup;
+#include <string>
 
 /**
  *
@@ -32,7 +32,50 @@ class PContactGroup;
 class PContactList : public Presentation {
 public:
 
-	virtual void addContactGroup(PContactGroup * pContactGroup) = 0;
+	/**
+	 * Called by the control when a group has been added.
+	 *
+	 * @param contactGroupId the contact group UUID
+	 */
+	virtual void contactGroupAddedEvent(std::string contactGroupId) = 0;
+
+	/**
+	 * Called by the control when a group has been removed.
+	 *
+	 * @param contactGroupId the contact group UUID
+	 */
+	virtual void contactGroupRemovedEvent(std::string contactGroupId) = 0;
+
+	/**
+	 * Called by the control when a contact has been added.
+	 *
+	 * @param contactId the contact UUID
+	 */
+	virtual void contactAddedEvent(std::string contactId) = 0;
+
+	/**
+	 * Called by the control when a contact has been removed.
+	 *
+	 * @param contactId the contact UUID
+	 */
+	virtual void contactRemovedEvent(std::string contactId) = 0;
+
+	/**
+	 * Called by the control when a contact has moved.
+	 *
+	 * @param srcContactGroupId the contact group UUID
+	 * @param dstContactGroupId the contact group UUID
+	 * @param contactId the contact UUID
+	 */
+	virtual void contactMovedEvent(std::string dstContactGroupId,
+		std::string srcContactGroupId, std::string contactId) = 0;
+
+	/**
+	 * Called by the control when a contact has changed.
+	 *
+	 * @param contactId the UUID of the changed Contact
+	 */
+	virtual void contactChangedEvent(std::string contactId) = 0;
 };
 
 #endif	//PCONTACTLIST_H

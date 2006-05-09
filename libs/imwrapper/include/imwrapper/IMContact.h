@@ -50,7 +50,7 @@ public:
 	 * @param sender this IMContact
 	 * @param groupName the group where the IMContact has been added to
 	 */
-	Event< void (IMContact & sender, const std::string & groupName)> imContactAddedToGroupEvent;
+	//Event< void (IMContact & sender, const std::string & groupName)> imContactAddedToGroupEvent;
 
 	/**
 	 * Emitted when this IMContact has been removed from a group.
@@ -58,7 +58,7 @@ public:
 	 * @param sender this IMContact
 	 * @param groupName the group where the IMContact has been removed from
 	 */
-	Event< void (IMContact & sender, const std::string & groupName)> imContactRemovedFromGroupEvent;
+	//Event< void (IMContact & sender, const std::string & groupName)> imContactRemovedFromGroupEvent;
 
 	/**
 	 * Emitted when this IMContact has changed (e.g. its presence state
@@ -116,19 +116,19 @@ public:
 	 *
 	 * @param groupName the group to add this IMContact to
 	 */
-	void addToGroup(const std::string & groupName);
+	//void addToGroup(const std::string & groupName);
 
 	/**
 	 * Remove this IMContact to a group.
 	 *
 	 * @param groupName the group to remove this IMContact from
 	 */
-	void removeFromGroup(const std::string & groupName);
+	//void removeFromGroup(const std::string & groupName);
 
 	/**
 	 * Remove from all group.
 	 */
-	void removeFromAllGroup();
+	//void removeFromAllGroup();
 
 	EnumPresenceState::PresenceState getPresenceState() const {
 		return _presenceState;
@@ -197,8 +197,8 @@ private:
 
 	EnumPresenceState::PresenceState _presenceState;
 
-	typedef std::set<std::string> GroupSet;
-	GroupSet _groupSet;
+	//typedef std::set<std::string> GroupSet;
+	//GroupSet _groupSet;
 };
 
 #endif	//IMCONTACT_H

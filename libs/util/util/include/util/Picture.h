@@ -41,6 +41,8 @@ public:
 
 	Picture(const Picture & picture);
 
+	Picture & operator = (const Picture & picture);
+
 	/**
 	 * Constructs a Picture from data in memory.
 	 * These data must include the header available in the file from where
@@ -81,6 +83,8 @@ public:
 	void setFilename(const std::string & filename);
 
 private:
+
+	void copy(const Picture & picture);
 
 	std::string _pictureData;
 

@@ -53,7 +53,6 @@ protected:
 	bool _isSet;
 
 	QtUserWidget * _userWidget;
-
 };
 
 #endif // QTUSERWIDGETAVATARMANAGER_H

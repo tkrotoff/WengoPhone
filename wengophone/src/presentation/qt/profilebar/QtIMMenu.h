@@ -22,8 +22,8 @@
 
 #include <QtGui>
 
+class CUserProfile;
 class IMAccount;
-class UserProfile;
 
 /**
  * Menu for IMAccounts. This menu displays entries to set the PresenceState
@@ -42,7 +42,7 @@ public:
 	 * @param imAccount the IMAccount to change the PresenceState of
 	 * @param parent the parent QWidget
 	 */
-	QtIMMenu(UserProfile & userProfile, IMAccount & imAccount, QWidget * parent = NULL);
+	QtIMMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget * parent = NULL);
 
 private Q_SLOTS:
 
@@ -64,7 +64,7 @@ private:
 
 	IMAccount & _imAccount;
 
-	UserProfile & _userProfile;
+	CUserProfile & _cUserProfile;
 
 };
 

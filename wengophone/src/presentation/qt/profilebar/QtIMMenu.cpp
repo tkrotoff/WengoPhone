@@ -19,12 +19,15 @@
 
 #include "QtIMMenu.h"
 
-#include <imwrapper/IMAccount.h>
+#include <control/profile/CUserProfile.h>
+
 #include <model/profile/UserProfile.h>
 
-QtIMMenu::QtIMMenu(UserProfile & userProfile, IMAccount & imAccount, QWidget * parent) 
+#include <imwrapper/IMAccount.h>
+
+QtIMMenu::QtIMMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget * parent) 
 : QMenu(QString::fromStdString(imAccount.getLogin()), parent),
-_userProfile(userProfile),
+_cUserProfile(cUserProfile),
 _imAccount(imAccount) {
 	QAction * action = NULL;
 
@@ -72,30 +75,30 @@ _imAccount(imAccount) {
 }
 
 void QtIMMenu::onlineClicked(bool checked) {
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateOnline, &_imAccount);
+	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateOnline, &_imAccount);
 }
 
 void QtIMMenu::dndClicked(bool checked) {
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateDoNotDisturb, &_imAccount);
+	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateDoNotDisturb, &_imAccount);
 }
 
 void QtIMMenu::invisibleClicked(bool checked) {
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateInvisible, &_imAccount);
+	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateInvisible, &_imAccount);
 }
 
 void QtIMMenu::awayClicked(bool checked) {
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway, &_imAccount);
+	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateAway, &_imAccount);
 }
 
 void QtIMMenu::forwardClicked(bool checked) {
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateForward, &_imAccount);
+	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateForward, &_imAccount);
 }
 
 void QtIMMenu::disconnectClicked(bool checked) {
-	_userProfile.setPresenceState(EnumPresenceState::PresenceStateOffline, &_imAccount);
-	_userProfile.getConnectHandler().disconnect(_imAccount);
+	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateOffline, &_imAccount);
+	_cUserProfile.getUserProfile().getConnectHandler().disconnect(_imAccount);
 }
 
 void QtIMMenu::connectClicked(bool checked) {
-	_userProfile.getConnectHandler().connect(_imAccount);
+	_cUserProfile.getUserProfile().getConnectHandler().connect(_imAccount);
 }

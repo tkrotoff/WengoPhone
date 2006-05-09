@@ -25,9 +25,10 @@
 #include <presentation/qt/profile/QtProfileDetails.h>
 
 #include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
 
-#include <model/phoneline/IPhoneLine.h>
 #include <model/contactlist/Contact.h>
+#include <model/phoneline/IPhoneLine.h>
 
 #include <util/Logger.h>
 
@@ -130,17 +131,18 @@ void QtWsDirectory::contactFoundEventHandlerThreadSafe(WsDirectory & sender, Pro
 
 void QtWsDirectory::callContact(const QString & sipAddress) {
 	//get the active phone line from the current user profile & make a call
-	_cWsDirectory.getCWengoPhone().getWengoPhone().getCurrentUserProfile().getActivePhoneLine()->makeCall(sipAddress.toStdString(), 1);
+	_cWsDirectory.getCWengoPhone().getCUserProfile()->getUserProfile().getActivePhoneLine()->makeCall(sipAddress.toStdString(), 1);
 }
 
 void QtWsDirectory::addContact(Profile * profile) {
-	Contact & contact = _cWsDirectory.getCWengoPhone().getWengoPhone().getCurrentUserProfile().getContactList().createContact();
-	contact.setFirstName(profile->getFirstName());
-	contact.setLastName(profile->getLastName());
-	contact.setWengoPhoneNumber(profile->getWengoPhoneNumber());
-	contact.setStreetAddress(profile->getStreetAddress());
-	contact.setWengoPhoneId(profile->getWengoPhoneId());
+	ContactProfile contactProfile;
+	contactProfile.setFirstName(profile->getFirstName());
+	contactProfile.setLastName(profile->getLastName());
+	contactProfile.setWengoPhoneNumber(profile->getWengoPhoneNumber());
+	contactProfile.setStreetAddress(profile->getStreetAddress());
+	contactProfile.setWengoPhoneId(profile->getWengoPhoneId());
 
-	QtProfileDetails qtProfileDetails(_cWsDirectory.getCWengoPhone(), _cWsDirectory.getCWengoPhone().getCurrentUserProfile(), contact, _widget);
+	QtProfileDetails qtProfileDetails(_cWsDirectory.getCWengoPhone(), 
+		*_cWsDirectory.getCWengoPhone().getCUserProfile(), contactProfile, _widget);
 	LOG_DEBUG("edit contact");
 }
