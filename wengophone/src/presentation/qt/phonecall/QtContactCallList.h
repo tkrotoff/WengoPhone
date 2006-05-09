@@ -43,6 +43,8 @@ public:
 
 	void clearCalls();
 
+	int count();
+
 public Q_SLOTS:
 
 	void deleteQtPhoneCall(QtPhoneCall * qtPhoneCall);
@@ -54,6 +56,8 @@ protected:
 	QVBoxLayout * _widgetLayout;
 
 	QtPhoneCallList  _phoneCallList;
+
+    QMutex _mutex;
 
 };
 

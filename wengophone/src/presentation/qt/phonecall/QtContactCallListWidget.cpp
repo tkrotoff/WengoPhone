@@ -100,6 +100,7 @@ void QtContactCallListWidget::hangup(){
 
     for ( iter = phoneCallList.begin(); iter != phoneCallList.end(); iter++){
         phone =  (*iter);
+
         phone->rejectActionTriggered(true);
     }
     _listWidget->clearCalls();
@@ -108,7 +109,8 @@ void QtContactCallListWidget::hangup(){
 }
 void QtContactCallListWidget::callRejected(){
 
-    close();
+    if ( _listWidget->count() == 0)
+        close();
 }
 
 bool QtContactCallListWidget::hasPhoneCall(PhoneCall * phoneCall){

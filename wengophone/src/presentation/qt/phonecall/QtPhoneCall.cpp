@@ -220,8 +220,8 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_statusLabel->setText(tr("Closed"));
 		// stopConference();
 		delete _phoneCallWidget;
+		deleteMe(this);
 		callRejected();
-		// deleteMe(this);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming:
@@ -341,7 +341,22 @@ void QtPhoneCall::acceptActionTriggered(bool) {
 }
 
 void QtPhoneCall::rejectActionTriggered(bool) {
-	_cPhoneCall.hangUp();
+
+    switch ( _cPhoneCall.getState())
+    {
+        case EnumPhoneCallState::PhoneCallStateResumed:
+        case EnumPhoneCallState::PhoneCallStateTalking:
+        case EnumPhoneCallState::PhoneCallStateDialing:
+        case EnumPhoneCallState::PhoneCallStateRinging:
+        case EnumPhoneCallState::PhoneCallStateIncoming:
+        case EnumPhoneCallState::PhoneCallStateHold:
+        case EnumPhoneCallState::PhoneCallStateRedirected:
+            _cPhoneCall.hangUp();
+            break;
+        default:
+            delete _phoneCallWidget;
+            callRejected(); // Close the widget
+    }
 
 }
 

@@ -35,7 +35,7 @@ QScrollArea(parent)
 }
 
 void QtContactCallList::addPhoneCall(QtPhoneCall * qtPhoneCall){
-
+    QMutexLocker locker(&_mutex);
 	_widgetLayout->addWidget( qtPhoneCall->getWidget() );
 	connect(qtPhoneCall,SIGNAL(deleteMe(QtPhoneCall *)), SLOT(deleteQtPhoneCall(QtPhoneCall *)));
 	_phoneCallList.append(qtPhoneCall);
@@ -47,6 +47,7 @@ QtContactCallList::QtPhoneCallList & QtContactCallList::getPhoneCallList(){
 
 void QtContactCallList::deleteQtPhoneCall(QtPhoneCall * qtPhoneCall){
 
+    QMutexLocker locker(&_mutex);
 	QtPhoneCallList::iterator iter;
 	QtPhoneCall * tmp = NULL;
 	for (iter = _phoneCallList.begin(); iter!=_phoneCallList.end(); iter++){
@@ -56,10 +57,11 @@ void QtContactCallList::deleteQtPhoneCall(QtPhoneCall * qtPhoneCall){
 			break;
 		}
 	}
-	// qtPhoneCall->deleteLater();
+	qtPhoneCall->deleteLater();
 }
 
 bool QtContactCallList::hasPhoneCall(PhoneCall * phoneCall){
+    QMutexLocker locker(&_mutex);
 	QtPhoneCallList::iterator iter;
 	QtPhoneCall * tmp = NULL;
 	for (iter = _phoneCallList.begin(); iter!=_phoneCallList.end(); iter++){
@@ -73,5 +75,11 @@ bool QtContactCallList::hasPhoneCall(PhoneCall * phoneCall){
 }
 
 void QtContactCallList::clearCalls(){
+    QMutexLocker locker(&_mutex);
     _phoneCallList.clear();
+}
+
+int QtContactCallList::count(){
+    QMutexLocker locker(&_mutex);
+    return _phoneCallList.size();
 }
