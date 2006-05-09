@@ -64,7 +64,7 @@ osip_thread_set_priority (struct osip_thread *thread, int priority)
 
   param.sched_priority = priority;
 
-  pthread_setschedparam((pthread_t *)thread, SCHED_OTHER, &param);
+  pthread_setschedparam((pthread_t)thread, SCHED_OTHER, &param);
 
   return 0;
 }
