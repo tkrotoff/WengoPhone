@@ -19,9 +19,12 @@
 
 #include "QtEventWidget.h"
 
+#include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+
 #include <model/profile/UserProfile.h>
 #include <model/phoneline/IPhoneLine.h>
-#include <control/CWengoPhone.h>
+
 
 QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 	QWidget * parent, Qt::WFlags f)
