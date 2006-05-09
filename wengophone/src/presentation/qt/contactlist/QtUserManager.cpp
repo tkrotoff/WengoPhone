@@ -109,6 +109,9 @@ void QtUserManager::editContact(bool) {
 
 	ContactProfile contactProfile = _cUserProfile.getCContactList().getContactProfile(item->text(0).toStdString());
 	QtProfileDetails qtProfileDetails(_cWengoPhone, *_cWengoPhone.getCUserProfile(), contactProfile, _tree);
+	if (qtProfileDetails.show()) {
+		_cUserProfile.getCContactList().updateContact(contactProfile);
+	}
 
 	LOG_DEBUG("edit contact");
 }

@@ -40,7 +40,7 @@
 static const char * PNG_FORMAT = "PNG";
 
 QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
-	ContactProfile & contactProfile, QWidget * parent,bool shown)
+	ContactProfile & contactProfile, QWidget * parent)
 : QObject(parent),
 _cWengoPhone(cWengoPhone),
 _profile(contactProfile) {
@@ -57,20 +57,16 @@ _profile(contactProfile) {
 
 	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - Contact details"));
 
-	QtIMContactManager * qtIMContactManager = new QtIMContactManager(contactProfile.getUUID(),
+	QtIMContactManager * qtIMContactManager = new QtIMContactManager(contactProfile,
 		*cWengoPhone.getCUserProfile(), _profileDetailsWindow);
 
 	int index = _ui->imStackedWidget->addWidget(qtIMContactManager->getWidget());
 	_ui->imStackedWidget->setCurrentIndex(index);
 
 	connect(_ui->saveButton, SIGNAL(clicked()), SLOT(saveContact()));
-
-	if( shown ) {
-		show();
-	}
 }
 
-QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent, bool shown)
+QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent)
 	: QObject(parent),
 	_cWengoPhone(cWengoPhone),
 	_profile(userProfile) {
@@ -89,10 +85,6 @@ QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & user
 
 	connect(_ui->saveButton, SIGNAL(clicked()), SLOT(saveUserProfile()));
 	connect(_ui->avatarPixmapButton, SIGNAL(clicked()), SLOT(changeUserProfileAvatar()));
-
-	if( shown ) {
-		show();
-	}
 }
 
 int QtProfileDetails::show() {
@@ -184,8 +176,6 @@ void QtProfileDetails::saveContact() {
 	}
 
 	contactProfile.setGroupId(groupId.toString().toStdString());
-
-	_cWengoPhone.getCUserProfile()->getCContactList().updateContact(contactProfile);
 
 	_profileDetailsWindow->accept();
 }

@@ -27,10 +27,12 @@
 #include <string>
 class UserProfile;
 
+class ContactProfile;
 class CUserProfile;
 class QWidget;
 class QTreeWidget;
 class QTreeWidgetItem;
+
 namespace Ui { class IMContactManager; }
 
 /**
@@ -47,7 +49,7 @@ class QtIMContactManager : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtIMContactManager(const std::string & contactId,
+	QtIMContactManager(ContactProfile & contactProfile,
 		CUserProfile & cUserProfile, QWidget * parent);
 
 	~QtIMContactManager();
@@ -72,7 +74,7 @@ private:
 
 	CUserProfile & _cUserProfile;
 
-	std::string _contactId;
+	ContactProfile & _contactProfile;
 };
 
 #endif //QTIMCONTACTMANAGER_H

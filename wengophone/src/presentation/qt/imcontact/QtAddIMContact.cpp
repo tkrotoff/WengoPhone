@@ -30,10 +30,10 @@
 
 static const QString IM_PROTOCOL_WENGO = "Wengo";
 
-QtAddIMContact::QtAddIMContact(const std::string & contactId, 
+QtAddIMContact::QtAddIMContact(ContactProfile & contactProfile, 
 	CUserProfile & cUserProfile, QWidget * parent)
 : QObject(parent),
-_contactId(contactId),
+_contactProfile(contactProfile),
 _cUserProfile(cUserProfile) {
 	_addIMContactWindow = new QDialog(parent);
 
@@ -73,10 +73,8 @@ void QtAddIMContact::addIMContact() {
 
 	QString protocolName = _ui->protocolComboBox->currentText();
 
-	ContactProfile contactProfile = _cUserProfile.getCContactList().getContactProfile(_contactId);
-
 	if (protocolName == IM_PROTOCOL_WENGO) {
-		contactProfile.setWengoPhoneId(contactId);
+		_contactProfile.setWengoPhoneId(contactId);
 	} else {
 		EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
 		IMContact imContact(imProtocol, contactId);
@@ -84,18 +82,16 @@ void QtAddIMContact::addIMContact() {
 		std::set<IMAccount *> imAccounts = getSelectedIMAccounts(imProtocol);
 
 		if (imAccounts.empty()) {
-			contactProfile.addIMContact(imContact);
+			_contactProfile.addIMContact(imContact);
 		}
 
 		for (std::set<IMAccount *>::const_iterator it = imAccounts.begin();
 			it != imAccounts.end(); ++it) {
 
 			imContact.setIMAccount(*it);
-			contactProfile.addIMContact(imContact);
+			_contactProfile.addIMContact(imContact);
 		}
 	}
-
-	_cUserProfile.getCContactList().updateContact(contactProfile);
 }
 
 void QtAddIMContact::imProtocolChanged(const QString & protocolName) {

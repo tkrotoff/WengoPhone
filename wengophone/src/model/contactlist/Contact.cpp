@@ -89,7 +89,7 @@ void Contact::copy(const ContactProfile & contactProfile) {
 	if (oldContactGroup && newContactGroup && (oldContactGroup->getUUID() != newContactGroup->getUUID())) {
 		_contactList.moveContactToGroup(newContactGroup->getUUID(), *this);
 	} else if (newContactGroup) {
-		_contactList._addToContactGroup(newContactGroup->getUUID(), *this);
+		_contactList._addToContactGroup(newContactGroup->getName(), *this);
 	}
 
 	setWengoPhoneId(contactProfile._wengoPhoneId);

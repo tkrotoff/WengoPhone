@@ -144,5 +144,8 @@ void QtWsDirectory::addContact(Profile * profile) {
 
 	QtProfileDetails qtProfileDetails(_cWsDirectory.getCWengoPhone(), 
 		*_cWsDirectory.getCWengoPhone().getCUserProfile(), contactProfile, _widget);
-	LOG_DEBUG("edit contact");
+
+	if (qtProfileDetails.show()) {
+		_cWsDirectory.getCWengoPhone().getCUserProfile()->getCContactList().addContact(contactProfile);
+	}
 }

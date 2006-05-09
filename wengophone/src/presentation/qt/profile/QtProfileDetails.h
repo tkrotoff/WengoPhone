@@ -46,10 +46,11 @@ class QtProfileDetails : public QObject, NonCopyable {
 public:
 
 	QtProfileDetails(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
-		ContactProfile & contactProfile, QWidget * parent, bool shown = true);
+		ContactProfile & contactProfile, QWidget * parent);
 
+	QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent);
 
-	QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent, bool shown = true);
+	int show();
 
 	QDialog * getWidget() const {
 		return _profileDetailsWindow;
@@ -68,8 +69,6 @@ private Q_SLOTS:
 	void cancelButtonClicked();
 
 private:
-
-	int show();
 
 	void init(QWidget * parent);
 
