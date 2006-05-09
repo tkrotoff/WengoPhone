@@ -45,21 +45,23 @@ class QtProfileDetails : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, Contact & contact, QWidget * parent);
+	QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, Contact & contact, QWidget * parent, bool shown = true);
 
-	QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent);
+	QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent, bool shown = true);
 
 	QDialog * getWidget() const {
 		return _profileDetailsWindow;
 	}
+
+public Q_SLOTS:
+
+	void changeUserProfileAvatar();
 
 private Q_SLOTS:
 
 	void saveContact();
 
 	void saveUserProfile();
-
-	void changeUserProfileAvatar();
 
 	void cancelButtonClicked();
 

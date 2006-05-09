@@ -38,7 +38,7 @@
 
 static const char * PNG_FORMAT = "PNG";
 
-QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, Contact & contact, QWidget * parent)
+QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, Contact & contact, QWidget * parent, bool shown)
 	: QObject(parent),
 	_cWengoPhone(cWengoPhone),
 	_profile(contact) {
@@ -55,10 +55,12 @@ QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & user
 
 	connect(_ui->saveButton, SIGNAL(clicked()), SLOT(saveContact()));
 
-	show();
+	if( shown ) {
+		show();
+	}
 }
 
-QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent)
+QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent, bool shown)
 	: QObject(parent),
 	_cWengoPhone(cWengoPhone),
 	_profile(userProfile) {
@@ -78,7 +80,9 @@ QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone, UserProfile & user
 	connect(_ui->saveButton, SIGNAL(clicked()), SLOT(saveUserProfile()));
 	connect(_ui->avatarPixmapButton, SIGNAL(clicked()), SLOT(changeUserProfileAvatar()));
 
-	show();
+	if( shown ) {
+		show();
+	}
 }
 
 int QtProfileDetails::show() {
