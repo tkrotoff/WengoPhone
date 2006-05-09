@@ -141,7 +141,7 @@ void QtNickNameWidget::connected(IMAccount * pImAccount) {
 	}
 }
 
-vvoid QtNickNameWidget::disconnected(IMAccount * pImAccount){
+void QtNickNameWidget::disconnected(IMAccount * pImAccount){
     switch (pImAccount->getProtocol()){
         case EnumIMProtocol::IMProtocolMSN:
             _msnLabel->setPixmap(QPixmap(":pics/protocols/msn_off.png"));
@@ -340,7 +340,7 @@ void QtNickNameWidget::updateAvatar() {
 
 	QPixmap pixmap;
 	QPixmap background = QPixmap(":/pics/fond_avatar.png");
-	string myData = _userProfile.getIcon().getData();
+	string myData = _cUserProfile.getUserProfile().getIcon().getData();
 	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
 
 	if ( !pixmap.isNull()){
