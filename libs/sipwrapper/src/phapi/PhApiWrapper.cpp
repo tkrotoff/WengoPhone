@@ -125,6 +125,8 @@ void PhApiWrapper::terminate() {
 	}
 }
 
+#include <stdio.h>
+
 void PhApiWrapper::setNetworkParameter() {
 	std::string natType = "auto";
 	int natRefreshTime = 15;
@@ -133,8 +135,10 @@ void PhApiWrapper::setNetworkParameter() {
 		//TODO: activate SSL for HTTP tunnel
 		phTunnelConfig(_proxyServer.c_str(), _proxyPort, _tunnelServer.c_str(), _tunnelPort,
 			_proxyLogin.c_str(), _proxyPassword.c_str(), 0);
-
+		
+		phcfg.use_tunnel = 1;
 		natType = "fcone";
+		
 	} else {
 		switch(_natType) {
 		case EnumNatType::NatTypeOpen:
@@ -186,7 +190,10 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 	int ret = SipWrapper::VirtualLineIdError;
 	if (_isInitialized) {
 		phAddAuthInfo(username.c_str(), identity.c_str(), password.c_str(), String::null.c_str(), realm.c_str());
-		ret = phAddVline2(displayName.c_str(), identity.c_str(), registerServer.c_str(), proxyServer.c_str(), REGISTER_TIMEOUT);
+
+		std::string tmp = proxyServer;
+		tmp += ":" + String::fromNumber(_sipServerPort);
+		ret = phAddVline2(displayName.c_str(), identity.c_str(), registerServer.c_str(), tmp.c_str(), REGISTER_TIMEOUT);
 	}
 
 	String tmp(realm);
@@ -887,7 +894,7 @@ void PhApiWrapper::init() {
 	strncpy(phcfg.sipport, localPort.c_str(), sizeof(phcfg.sipport));
 
 	//Ignored since we are in direct link mode
-	static const std::string phApiServer = "127.0.0.1";
+	static const std::string phApiServer = "127.0.0.1:5065";
 
 	//If asynchronous mode = false then we have to call phPoll()
 	static const bool asynchronousMode = true;
