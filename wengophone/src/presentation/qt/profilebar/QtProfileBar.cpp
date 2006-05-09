@@ -19,10 +19,12 @@
 
 #include "QtProfileBar.h"
 
+#include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+
 #include <model/account/wengo/WengoAccount.h>
 #include <model/profile/UserProfile.h>
 #include <model/presence/PresenceHandler.h>
-#include <control/CWengoPhone.h>
 
 #include <util/Logger.h>
 #include <imwrapper/IMAccount.h>
@@ -128,10 +130,10 @@ _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 
 
 	// create internal widgets
-	_nickNameWidget = new QtNickNameWidget(_userProfile, _cWengoPhone, this);
+	_nickNameWidget = new QtNickNameWidget(_cUserProfile, _cWengoPhone, this);
 	_nickNameWidget->setVisible(false);
 
-	_eventWidget = new QtEventWidget(_cWengoPhone, _userProfile, this);
+	_eventWidget = new QtEventWidget(_cWengoPhone, _cUserProfile, this);
 	_eventWidget->setVisible(false);
 
 	_creditWidget = new QtCreditWidget(this);
@@ -186,7 +188,7 @@ void QtProfileBar::myPresenceStatusEventSlot(QVariant status) {
 
     if ( status.toInt() == (int)EnumPresenceState::MyPresenceStatusOk)
 
-    switch ( _userProfile.getPresenceState() ) {
+    switch ( _cUserProfile.getUserProfile().getPresenceState() ) {
         case EnumPresenceState::PresenceStateAway:
             setAway();
             break;
