@@ -681,9 +681,8 @@ void QtWengoPhone::showAdvancedConfig() {
 }
 
 void QtWengoPhone::showAccountSettings() {
-	QtIMAccountManager * imAccountManager =
-		new QtIMAccountManager(_cWengoPhone.getCUserProfile()->getUserProfile(),
-			_cWengoPhone, true, _wengoPhoneWindow);
+	QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfile()->getUserProfile(),
+		_cWengoPhone, true, _wengoPhoneWindow);
 }
 
 

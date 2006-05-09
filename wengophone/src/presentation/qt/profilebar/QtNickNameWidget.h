@@ -76,6 +76,8 @@ protected:
 
 	void showJabberMenu();
 
+	void showImAccountManager();
+
 	void init();
 
 	QtClickableLabel * _msnLabel;
@@ -110,6 +112,22 @@ protected:
 
 	CWengoPhone & _cWengoPhone;
 
+	static const double POPUPMENU_OPACITY;
+
+	static const QString PICS_MSN_ON;
+	static const QString PICS_MSN_OFF;
+
+	static const QString PICS_YAHOO_ON;
+	static const QString PICS_YAHOO_OFF;
+
+	static const QString PICS_WENGO_ON;
+	static const QString PICS_WENGO_OFF;
+
+	static const QString PICS_AIM_ON;
+	static const QString PICS_AIM_OFF;
+
+	static const QString PICS_JABBER_ON;
+	static const QString PICS_JABBER_OFF;
 };
 
 #endif

@@ -25,7 +25,6 @@
 #include <model/profile/UserProfile.h>
 #include <model/phoneline/IPhoneLine.h>
 
-
 QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 	QWidget * parent, Qt::WFlags f)
 	: QWidget ( parent, f ), _cUserProfile(cUserProfile), _cWengoPhone(cWengoPhone) {
