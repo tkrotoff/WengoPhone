@@ -17,6 +17,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include "jpipe.h"
+
 #ifndef _WIN32
 
 
@@ -28,7 +30,7 @@
 #include <unistd.h>
 
 
-#include "jpipe.h"
+
 
 
 jpipe_t * jpipe ()
