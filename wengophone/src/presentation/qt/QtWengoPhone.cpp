@@ -812,19 +812,21 @@ void QtWengoPhone::wrongProxyAuthenticationEventHandler(SipAccount & sender,
 		const std::string & proxyAddress, unsigned proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword) {
 
-	typedef PostEvent3<void (SipAccount & sender, const std::string & proxyAddress, int proxyPort),
+	typedef PostEvent3<void (SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort),
 			SipAccount &, std::string, unsigned> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1, _2, _3),
 				sender, proxyAddress, proxyPort);
 	postEvent(event);
+	QCoreApplication::processEvents();
 }
 
 void QtWengoPhone::proxyNeedsAuthenticationEventHandler(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort) {
-	typedef PostEvent3<void (SipAccount & sender, const std::string & proxyAddress, int proxyPort),
+	typedef PostEvent3<void (SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort),
 			SipAccount &, std::string, unsigned> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1, _2, _3),
 				sender, proxyAddress, proxyPort);
 	postEvent(event);
+	QCoreApplication::processEvents();
 }
 
 void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(SipAccount & sender,
