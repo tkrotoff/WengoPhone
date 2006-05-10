@@ -42,7 +42,7 @@
          </sizepolicy>
         </property>
         <property name="pixmap" >
-         <pixmap resource="../wengophone.qrc" >:/pics/speaker.png</pixmap>
+         <pixmap resource="../wengophone.qrc" >:/pics/audio/speaker.png</pixmap>
         </property>
        </widget>
       </item>
@@ -57,7 +57,7 @@
          </sizepolicy>
         </property>
         <property name="pixmap" >
-         <pixmap resource="../wengophone.qrc" >:/pics/speaker.png</pixmap>
+         <pixmap resource="../wengophone.qrc" >:/pics/audio/speaker.png</pixmap>
         </property>
        </widget>
       </item>
@@ -72,7 +72,7 @@
          </sizepolicy>
         </property>
         <property name="pixmap" >
-         <pixmap resource="../wengophone.qrc" >:/pics/microphone.png</pixmap>
+         <pixmap resource="../wengophone.qrc" >:/pics/audio/microphone.png</pixmap>
         </property>
        </widget>
       </item>

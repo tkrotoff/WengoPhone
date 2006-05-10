@@ -79,21 +79,22 @@ bool SettingsXMLSerializer::unserialize(const std::string & data) {
 			valueNode << *value;
 			string valueType = value->Value();
 			TiXmlNode * valueDataNode = value->FirstChild();
+			string valueData;
 			if (valueDataNode) {
-				string valueData = valueDataNode->Value();
+				valueData = valueDataNode->Value();
+			}
 
-				if (valueType == "stringlist") {
-					StringList list;
-					StringListXMLSerializer serializer(list);
-					serializer.unserialize(valueNode);
-					_settings.set(key, list);
-				} else if (valueType == "string") {
-					_settings.set(key, valueData);
-				} else if (valueType == "bool") {
-					_settings.set(key, String(valueData).toBoolean());
-				} else if (valueType == "int") {
-					_settings.set(key, String(valueData).toInteger());
-				}
+			if (valueType == "stringlist") {
+				StringList list;
+				StringListXMLSerializer serializer(list);
+				serializer.unserialize(valueNode);
+				_settings.set(key, list);
+			} else if (valueType == "string") {
+				_settings.set(key, valueData);
+			} else if (valueType == "bool") {
+				_settings.set(key, String(valueData).toBoolean());
+			} else if (valueType == "int") {
+				_settings.set(key, String(valueData).toInteger());
 			}
 		}
 	}

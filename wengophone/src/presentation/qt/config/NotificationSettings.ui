@@ -54,7 +54,7 @@
          <string>Play sound file</string>
         </property>
         <property name="icon" >
-         <iconset resource="../wengophone.qrc" >:/pics/play.png</iconset>
+         <iconset resource="../wengophone.qrc" >:/pics/audio/play.png</iconset>
         </property>
        </widget>
       </item>
@@ -105,7 +105,7 @@
       <item rowspan="2" row="0" column="0" >
        <widget class="QLabel" name="label_5" >
         <property name="pixmap" >
-         <pixmap resource="../wengophone.qrc" >:/pics/speaker.png</pixmap>
+         <pixmap/>
         </property>
        </widget>
       </item>

@@ -71,7 +71,7 @@ void QtVideoSettings::saveConfig() {
 	config.set(Config::VIDEO_WEBCAM_DEVICE_KEY, _ui->webcamDeviceComboBox->currentText().toStdString());
 
 	QTreeWidgetItem * item = _ui->videoQualityTreeWidget->currentItem();
-	int videoQuality;
+	int videoQuality = EnumVideoQuality::VideoQualityNormal;
 	if (item) {
 		if (tr("Normal") == item->text(VIDEO_QUALITY_COLUMN)) {
 			videoQuality = EnumVideoQuality::VideoQualityNormal;

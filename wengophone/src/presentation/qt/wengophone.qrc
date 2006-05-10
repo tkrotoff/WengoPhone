@@ -1,7 +1,8 @@
 <RCC>
     <qresource prefix="/" >
-        <file>pics/audio/hp.png</file>
-        <file>pics/audio/micro.png</file>
+        <file>pics/audio/speaker.png</file>
+        <file>pics/audio/microphone.png</file>
+        <file>pics/audio/play.png</file>
         <file>pics/audio/progress_1.png</file>
         <file>pics/audio/progress_1_off.png</file>
         <file>pics/audio/progress_2.png</file>
@@ -42,11 +43,8 @@
         <file>pics/contact/fixe.png</file>
         <file>pics/group_close.png</file>
         <file>pics/group_open.png</file>
-        <file>pics/speaker.png</file>
         <file>pics/wengo.png</file>
-        <file>pics/microphone.png</file>
         <file>pics/browse.png</file>
-        <file>pics/play.png</file>
         <file>pics/cancel.png</file>
         <file>pics/profilebar/bar_end.png</file>
         <file>pics/profilebar/bar_end.png</file>

@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>370</width>
+    <width>351</width>
     <height>125</height>
    </rect>
   </property>
@@ -30,7 +30,7 @@
      <item row="0" column="0" >
       <widget class="QLabel" name="inputSoundLabel" >
        <property name="pixmap" >
-        <pixmap resource="wengophone.qrc" >:/pics/microphone.png</pixmap>
+        <pixmap resource="wengophone.qrc" >:/pics/audio/microphone.png</pixmap>
        </property>
       </widget>
      </item>
@@ -254,7 +254,7 @@
      <item row="0" column="0" >
       <widget class="QLabel" name="outputSoundLabel" >
        <property name="pixmap" >
-        <pixmap resource="wengophone.qrc" >:/pics/speaker.png</pixmap>
+        <pixmap resource="wengophone.qrc" >:/pics/audio/speaker.png</pixmap>
        </property>
       </widget>
      </item>
