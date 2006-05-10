@@ -25,11 +25,12 @@ std::string Uuid::generate() {
 	CFUUIDRef uu = CFUUIDCreate(kCFAllocatorDefault);
 	CFStringRef str = CFUUIDCreateString(kCFAllocatorDefault, uu);
 
-	std::string result = CFStringGetCStringPtr(str, kCFStringEncodingASCII);
+	char buffer[37];
+	CFStringGetCString(str, buffer, sizeof(37), kCFStringEncodingMacRoman);
 
 	CFRelease(str);
 	CFRelease(uu);
 
-	return result;
+	return std::string(buffer);
 }
 
