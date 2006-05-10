@@ -65,10 +65,6 @@ public Q_SLOTS:
 
 	void userProfileUpdated();
 
-private Q_SLOTS:
-
-	void nicknameChanged();
-
 protected:
 
 	void updateAvatar();
