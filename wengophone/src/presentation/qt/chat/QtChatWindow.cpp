@@ -74,7 +74,8 @@ void ChatWindow::initThreadSafe(){
 	_chatContactWidgets = new ChatContactWidgets();
 
 	// _dialog = new QDialog(findMainWindow());
-	_dialog = new QDialog(NULL);
+	_dialog = new QDialog(NULL, Qt::Window | Qt::WindowMinMaxButtonsHint);
+
     QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
 	qtWengoPhone->setChatWindow( _dialog );
 
