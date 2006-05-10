@@ -222,7 +222,6 @@ void QtNickNameWidget::jabberClicked() {
 void QtNickNameWidget::avatarClicked() {
 	QtProfileDetails qtProfileDetails(_cWengoPhone, _cUserProfile.getUserProfile(), this);
 	//TODO: UserProfile must be updated if QtProfileDetails was accepted
-	qtProfileDetails.show();
 	qtProfileDetails.changeUserProfileAvatar();
 	updateAvatar();
 }
