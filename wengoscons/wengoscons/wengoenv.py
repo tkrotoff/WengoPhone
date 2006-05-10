@@ -428,6 +428,12 @@ class WengoSConsEnvironment(SConsEnvironment):
 					self.__CCFlags += ['-mthreads']
 					self.__linkFlags += ['-mthreads']
 
+			if os.path.exists('/usr/local/include'):
+				self.__CCFlags += ['-I/usr/local/include']
+
+			if os.path.exists('/usr/local/lib'):
+				self.__linkFlags += ['-L/usr/local/lib']
+
 		def setDebugMode(self):
 			self.__setDefaultFlags()
 			self.__CCFlags += ['-g']
