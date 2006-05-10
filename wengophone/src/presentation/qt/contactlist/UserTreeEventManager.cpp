@@ -20,6 +20,9 @@
 #include "UserTreeEventManager.h"
 #include "QtUserList.h"
 
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
 UserTreeEventManager::UserTreeEventManager(QObject * parent, QTreeWidget * target) : QObject(parent)
 {
     _tree = target;
@@ -64,12 +67,31 @@ bool UserTreeEventManager::eventFilter(QObject *obj, QEvent *event){
     }
 }
 
-void UserTreeEventManager::mouseDlbClick(QMouseEvent * event){
-    QTreeWidgetItem * item = _tree->itemAt(event->pos());
+void UserTreeEventManager::mouseDlbClick(QMouseEvent * event) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	QTreeWidgetItem * item = _tree->itemAt(event->pos());
 	QtUserList * ul = QtUserList::getInstance();
-    if (item){
-        ul->startChat(item->text(0));
-    }
+
+	if (item) {
+		QString userId = item->text(0);
+		CContact & cContact = ul->getCContact(userId);
+
+		if (config.getGeneralClickStartChat()) {
+			ul->startChat(userId);
+		}
+
+		else if (config.getGeneralClickStartFreeCall()) {
+			ul->startFreeCall(userId);
+		}
+
+		else if (config.getGeneralClickCallCellPhone()) {
+			if (EnumPresenceState::PresenceStateOnline != cContact.getPresenceState()) {
+				ul->startCall(userId);
+			}
+		}
+
+	}
 }
 
 void UserTreeEventManager::mousePressEvent(QMouseEvent *event)

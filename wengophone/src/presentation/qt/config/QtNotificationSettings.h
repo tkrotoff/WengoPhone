@@ -26,6 +26,8 @@ class QWidget;
 class QString;
 namespace Ui { class NotificationSettings; }
 
+#include <string>
+
 /**
  * Loads and display the notification settings configuration page.
  *
@@ -47,13 +49,32 @@ public:
 
 	void saveConfig();
 
+private Q_SLOTS:
+
+	void soundComboBoxActivated(const QString & text);
+
+	void browseSounds();
+
+	void playSound();
+
+	void clearSound();
+
 private:
 
 	void readConfig();
 
+	void setSounds(const QString & soundFile);
+
 	Ui::NotificationSettings * _ui;
 
 	QWidget * _notificationSettingsWidget;
+
+	std::string _incomingCallSoundFile;
+	std::string _callClosedSoundFile;
+	std::string _incomingChatSoundFile;
+	std::string _imAccountConnectedSoundFile;
+	std::string _imAccountDisconnectedSoundFile;
+	std::string _contactOnlineSoundFile;
 };
 
 #endif	//QTNOTIFICATIONSETTINGS_H

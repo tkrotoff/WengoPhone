@@ -53,8 +53,14 @@ const std::string Config::CODEC_PLUGIN_PATH_KEY = "codec.plugin.path";
 const std::string Config::AUDIO_OUTPUT_DEVICENAME_KEY = "audio.output.devicename";
 const std::string Config::AUDIO_INPUT_DEVICENAME_KEY = "audio.input.devicename";
 const std::string Config::AUDIO_RINGER_DEVICENAME_KEY = "audio.ringer.devicename";
-const std::string Config::AUDIO_RINGING_FILE_KEY = "audio.ringing.file";
+
+const std::string Config::AUDIO_INCOMINGCALL_FILE_KEY = "audio.incomingcall.file";
 const std::string Config::AUDIO_CALLCLOSED_FILE_KEY = "audio.callclosed.file";
+const std::string Config::AUDIO_INCOMINGCHAT_FILE_KEY = "audio.incomingchat.file";
+const std::string Config::AUDIO_IMACCOUNTCONNECTED_FILE_KEY = "audio.imaccountconnected.file";
+const std::string Config::AUDIO_IMACCOUNTDISCONNECTED_FILE_KEY = "audio.imaccountdisconnected.file";
+const std::string Config::AUDIO_CONTACTONLINE_FILE_KEY = "audio.contactonline.file";
+
 const std::string Config::AUDIO_SMILEYS_DIR_KEY = "audio.smileys.dir";
 const std::string Config::AUDIO_AEC_KEY = "audio.aec";
 const std::string Config::AUDIO_HALFDUPLEX_KEY = "audio.halfduplex";
@@ -185,8 +191,14 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[AUDIO_OUTPUT_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
 	_keyDefaultValueMap[AUDIO_INPUT_DEVICENAME_KEY] = AudioDevice::getDefaultRecordDevice();
 	_keyDefaultValueMap[AUDIO_RINGER_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
-	_keyDefaultValueMap[AUDIO_RINGING_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
+
+	_keyDefaultValueMap[AUDIO_INCOMINGCALL_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
 	_keyDefaultValueMap[AUDIO_CALLCLOSED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/callclosed.wav");
+	_keyDefaultValueMap[AUDIO_INCOMINGCHAT_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
+	_keyDefaultValueMap[AUDIO_IMACCOUNTCONNECTED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
+	_keyDefaultValueMap[AUDIO_IMACCOUNTDISCONNECTED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
+	_keyDefaultValueMap[AUDIO_CONTACTONLINE_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
+
 	_keyDefaultValueMap[AUDIO_SMILEYS_DIR_KEY] = File::convertPathSeparators(resourcesPath + "sounds/tones/");
 	_keyDefaultValueMap[AUDIO_AEC_KEY] = true;
 	_keyDefaultValueMap[AUDIO_HALFDUPLEX_KEY] = true;
@@ -207,7 +219,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[GENERAL_AUTOSTART_KEY] = true;
 	_keyDefaultValueMap[GENERAL_CLICK_START_FREECALL_KEY] = true;
 	_keyDefaultValueMap[GENERAL_CLICK_START_CHAT_KEY] = false;
-	_keyDefaultValueMap[GENERAL_CLICK_CALL_CELLPHONE_KEY] = false;
+	_keyDefaultValueMap[GENERAL_CLICK_CALL_CELLPHONE_KEY] = true;
 	_keyDefaultValueMap[GENERAL_AWAY_TIMER_KEY] = 2;
 
 	_keyDefaultValueMap[LANGUAGE_KEY] = LANGUAGE_AUTODETECT_KEYVALUE;
@@ -324,12 +336,28 @@ std::string Config::getAudioSmileysDir() const {
 	return getStringKeyValue(AUDIO_SMILEYS_DIR_KEY);
 }
 
+std::string Config::getAudioIncomingCallFile() const {
+	return getStringKeyValue(AUDIO_INCOMINGCALL_FILE_KEY);
+}
+
 std::string Config::getAudioCallClosedFile() const {
 	return getStringKeyValue(AUDIO_CALLCLOSED_FILE_KEY);
 }
 
-std::string Config::getAudioRingingFile() const {
-	return getStringKeyValue(AUDIO_RINGING_FILE_KEY);
+std::string Config::getAudioIncomingChatFile() const {
+	return getStringKeyValue(AUDIO_INCOMINGCHAT_FILE_KEY);
+}
+
+std::string Config::getAudioIMAccountConnectedFile() const {
+	return getStringKeyValue(AUDIO_IMACCOUNTCONNECTED_FILE_KEY);
+}
+
+std::string Config::getAudioIMAccountDisconnectedFile() const {
+	return getStringKeyValue(AUDIO_IMACCOUNTDISCONNECTED_FILE_KEY);
+}
+
+std::string Config::getAudioContactOnlineFile() const {
+	return getStringKeyValue(AUDIO_CONTACTONLINE_FILE_KEY);
 }
 
 std::string Config::getAudioRingerDeviceName() const {

@@ -20,12 +20,13 @@
 #include "PhoneCallStateIncoming.h"
 
 #include <model/wenbox/WenboxPlugin.h>
+#include <model/contactlist/ContactList.h>
 
 #include <sound/Sound.h>
 
 void PhoneCallStateIncoming::execute(PhoneCall & phoneCall) {
 	//Ringin tonality
-	_soundRingin = new Sound(getSoundRinginFile());
+	_soundRingin = new Sound(getSoundIncomingCallFile());
 	_soundRingin->setWaveOutDevice(getRingerAudioDeviceName());
 	//Play the sound indefinitely
 	_soundRingin->setLoops(-1);
@@ -33,4 +34,8 @@ void PhoneCallStateIncoming::execute(PhoneCall & phoneCall) {
 
 	WenboxPlugin & wenboxPlugin = phoneCall.getWenboxPlugin();
 	wenboxPlugin.setState(Wenbox::CallIncoming, phoneCall.getPeerSipAddress().toString());
+
+	//Rejects/accepts the incoming call
+
+	//Shows incoming call popup window
 }

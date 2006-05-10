@@ -19,6 +19,99 @@
    <property name="spacing" >
     <number>0</number>
    </property>
+   <item row="2" column="0" >
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>Activate sounds for/when</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="1" column="2" >
+       <widget class="QPushButton" name="clearSoundButton" >
+        <property name="toolTip" >
+         <string>No sound</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../wengophone.qrc" >:/pics/cancel.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QLineEdit" name="soundLineEdit" >
+        <property name="toolTip" >
+         <string>Sound file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4" >
+       <widget class="QPushButton" name="playButton" >
+        <property name="toolTip" >
+         <string>Play sound file</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../wengophone.qrc" >:/pics/play.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3" >
+       <widget class="QPushButton" name="browseButton" >
+        <property name="toolTip" >
+         <string>Find a sound file</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../wengophone.qrc" >:/pics/browse.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="4" >
+       <widget class="QComboBox" name="soundComboBox" >
+        <item>
+         <property name="text" >
+          <string>Incoming call (ringtone)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Call closed (hang up tone)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Incoming chat</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>IM account connected</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>IM account disconnected</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Contact online</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item rowspan="2" row="0" column="0" >
+       <widget class="QLabel" name="label_5" >
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/speaker.png</pixmap>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="3" column="0" >
     <spacer>
      <property name="orientation" >
@@ -173,79 +266,6 @@
         <property name="text" >
          <string>Do not show any pop-up window</string>
         </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="0" >
-    <widget class="QGroupBox" name="groupBox_2" >
-     <property name="title" >
-      <string>Activate sounds for/when</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item rowspan="2" row="0" column="0" >
-       <widget class="QLabel" name="label_5" >
-        <property name="pixmap" >
-         <pixmap resource="../wengophone.qrc" >:/pics/speaker.png</pixmap>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QLineEdit" name="soundLineEdit" />
-      </item>
-      <item row="1" column="3" >
-       <widget class="QPushButton" name="playButton" >
-        <property name="icon" >
-         <iconset resource="../wengophone.qrc" >:/pics/play.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" >
-       <widget class="QPushButton" name="browseButton" >
-        <property name="icon" >
-         <iconset resource="../wengophone.qrc" >:/pics/browse.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="3" >
-       <widget class="QComboBox" name="soundComboBox" >
-        <item>
-         <property name="text" >
-          <string>Incoming call (ringtone)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Call closed (hang up tone)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Incoming chat</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>IM account connected</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>IM account disconnected</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Contact online</string>
-         </property>
-        </item>
        </widget>
       </item>
      </layout>

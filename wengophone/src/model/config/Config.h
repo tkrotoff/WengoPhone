@@ -126,13 +126,29 @@ public:
 	static const std::string AUDIO_RINGER_DEVICENAME_KEY;
 	std::string getAudioRingerDeviceName() const;
 
-	/** Ringing audio file name. */
-	static const std::string AUDIO_RINGING_FILE_KEY;
-	std::string getAudioRingingFile() const;
+	/** Ringing/incoming call/ringtone audio file name. */
+	static const std::string AUDIO_INCOMINGCALL_FILE_KEY;
+	std::string getAudioIncomingCallFile() const;
 
 	/** Call closed audio file name. */
 	static const std::string AUDIO_CALLCLOSED_FILE_KEY;
 	std::string getAudioCallClosedFile() const;
+
+	/** Incoming chat audio file name. */
+	static const std::string AUDIO_INCOMINGCHAT_FILE_KEY;
+	std::string getAudioIncomingChatFile() const;
+
+	/** IM account connected audio file name. */
+	static const std::string AUDIO_IMACCOUNTCONNECTED_FILE_KEY;
+	std::string getAudioIMAccountConnectedFile() const;
+
+	/** IM account disconnected audio file name. */
+	static const std::string AUDIO_IMACCOUNTDISCONNECTED_FILE_KEY;
+	std::string getAudioIMAccountDisconnectedFile() const;
+
+	/** Contact online audio file name. */
+	static const std::string AUDIO_CONTACTONLINE_FILE_KEY;
+	std::string getAudioContactOnlineFile() const;
 
 	/** Audio smileys directory. */
 	static const std::string AUDIO_SMILEYS_DIR_KEY;

@@ -23,6 +23,10 @@ SoundFile::SoundFile() {
 }
 
 bool SoundFile::open(const std::string & filename) {
+	if (filename.empty()) {
+		return false;
+	}
+
 	LockResource(0);
 
 	//Open file

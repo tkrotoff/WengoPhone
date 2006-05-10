@@ -39,9 +39,9 @@ void PhoneCallState::stopSoundRingin() {
 	}
 }
 
-std::string PhoneCallState::getSoundRinginFile() {
+std::string PhoneCallState::getSoundIncomingCallFile() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	return config.getAudioRingingFile();
+	return config.getAudioIncomingCallFile();
 }
 
 std::string PhoneCallState::getSoundCallClosedFile() {

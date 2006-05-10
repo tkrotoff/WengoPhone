@@ -67,7 +67,7 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_softUpdate = NULL;
 	_imAccountHandler = new IMAccountHandler();
 	_presenceState = EnumPresenceState::PresenceStateOffline;
-	
+
 	_history = new History(*this);
 	_history->mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
 	_history->mementoAddedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
