@@ -57,6 +57,8 @@ public Q_SLOTS:
 
 	void nicknameChanged();
 
+	void textChanged ( const QString & text );
+
 	void connected(IMAccount * pImAccount);
 
 	void disconnected(IMAccount * pImAccount);

@@ -85,11 +85,11 @@ QtNickNameWidget::QtNickNameWidget(CUserProfile & cUserProfile, CWengoPhone & cW
 	// Add widgets to the layouts
     QVBoxLayout * vboxLayout = new QVBoxLayout();
 	_widgetLayout->addWidget( _avatarLabel,   0 , 0 );
-	//_widgetLayout->addWidget( _nickNameEdit,  0 , 1 );
+
 	vboxLayout->addWidget(_nickNameEdit, 0);
     vboxLayout->addLayout(_protocolLayout,1);
     _widgetLayout->addLayout(vboxLayout,0,1);
-	//_widgetLayout->addLayout( _protocolLayout,1 , 1 );
+
 
 	_protocolLayout->setColumnStretch(5, 1);
 	_protocolLayout->addWidget(_msnLabel     ,0 , 0 );
@@ -116,6 +116,7 @@ QtNickNameWidget::QtNickNameWidget(CUserProfile & cUserProfile, CWengoPhone & cW
 	connect ( _aimLabel, SIGNAL ( clicked() ), SLOT ( aimClicked() ) );
 	connect ( _jabberLabel, SIGNAL ( clicked() ), SLOT ( jabberClicked() ) );
 	connect ( _nickNameEdit, SIGNAL(returnPressed ()), SLOT(nicknameChanged()));
+	connect ( _nickNameEdit, SIGNAL(textChanged(const QString &)), SLOT(textChanged(const QString &)));
 	connect ( _avatarLabel, SIGNAL ( clicked() ), SLOT ( avatarClicked() ) );
 	connect ( _avatarLabel, SIGNAL ( rightClicked() ), SLOT ( avatarRightClicked() ));
 
@@ -252,6 +253,9 @@ void QtNickNameWidget::avatarRightClicked() {
 
 void QtNickNameWidget::nicknameChanged() {
 	_cUserProfile.getUserProfile().setAlias(_nickNameEdit->text().toStdString(), NULL);
+   	QPalette palette = _nickNameEdit->palette();
+	palette.setColor(QPalette::Text, Qt::gray);
+	_nickNameEdit->setPalette(palette);
 }
 
 void QtNickNameWidget::showMsnMenu() {
@@ -386,6 +390,11 @@ void QtNickNameWidget::init() {
 	if( _cUserProfile.getUserProfile().getAlias() != "" ) {
 		_nickNameEdit->setText(QString::fromStdString(_cUserProfile.getUserProfile().getAlias()));
 	}
+
+   	QPalette palette = _nickNameEdit->palette();
+	palette.setColor(QPalette::Text, Qt::gray);
+	_nickNameEdit->setPalette(palette);
+
 	updateAvatar();
 }
 
@@ -411,7 +420,6 @@ void QtNickNameWidget::updateAvatar() {
 }
 
 void QtNickNameWidget::showImAccountManager() {
-
 	QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfile()->getUserProfile(),
 		_cWengoPhone, true, this);
 }
@@ -422,3 +430,9 @@ void QtNickNameWidget::nickNameChanged(const QString & text) {
 		_nickNameEdit->setText(tr("Enter your nickname here"));
 	}
 }
+void QtNickNameWidget::textChanged ( const QString & text ) {
+   	QPalette palette = _nickNameEdit->palette();
+	palette.setColor(QPalette::Text, Qt::black);
+	_nickNameEdit->setPalette(palette);
+}
+
