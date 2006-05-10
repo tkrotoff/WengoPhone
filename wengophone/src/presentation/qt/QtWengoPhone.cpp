@@ -249,10 +249,10 @@ void QtWengoPhone::initThreadSafe() {
 	connect(_ui->actionCallOutService, SIGNAL(triggered()), SLOT (showCallOut()));
 
 	//actionSms
-	connect(_ui->actionSms, SIGNAL(triggered()), SLOT (showSms()));
+	//connect(_ui->actionSms, SIGNAL(triggered()), SLOT (showSms()));
 
 	//actionVoiceMail
-	connect(_ui->actionVoiceMail, SIGNAL(triggered()), SLOT (showVoiceMail()));
+	//connect(_ui->actionVoiceMail, SIGNAL(triggered()), SLOT (showVoiceMail()));
 
 	//actionIM_Account_Settings
 	connect(_ui->actionIMAccountSettings, SIGNAL(triggered()), SLOT(showAccountSettings()));
@@ -287,11 +287,11 @@ void QtWengoPhone::initThreadSafe() {
 	//actionSearchContact
 	connect(_ui->actionSearchWengoUsers, SIGNAL(triggered()), SLOT(showSearchContactWindows()));
 
+#ifdef OS_WINDOWS
 	//Embedded Browser
 	_browser = new QtBrowser(NULL);
 	_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
 	Widget::createLayout(_ui->tabHome)->addWidget((QWidget*) _browser->getWidget());
-#ifdef OS_WINDOWS
 	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
 #endif
 
