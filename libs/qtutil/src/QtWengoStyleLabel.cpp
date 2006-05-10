@@ -25,6 +25,7 @@ QLabel(parent,f){
 
 	_parent = parent;
 	_pressed = false;
+	_selected = false;
 
 	// Default background color
 	_backgroundColor = _parent->palette().color(QPalette::Window );
@@ -52,7 +53,7 @@ void QtWengoStyleLabel::paintEvent(QPaintEvent * event){
 
 	// painter.fillRect(rect,QBrush(_backgroundColor));
 
-	if ( ! _pressed ){
+	if ( ! _pressed && ! _selected ){
 		// Draw the left side if any
 		if ( !_normalLeftPixmap.isNull() ){
 			painter.drawPixmap(0,0,_normalLeftPixmap);
@@ -97,12 +98,8 @@ void QtWengoStyleLabel::paintEvent(QPaintEvent * event){
 		}
 	}
 	painter.end();
-
-
 	QPainter p ( this );
-
 	drawText(&p);
-
 	p.end();
 }
 
@@ -110,10 +107,8 @@ void QtWengoStyleLabel::drawText(QPainter * painter){
 	QRect rect = this->rect();
 
 	painter->save();
-
 	painter->setPen(_textColor);
 	painter->drawText ( rect, _alignment , this->text(), &rect );
-
 	painter->restore();
 
 }
