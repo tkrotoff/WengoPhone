@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public:
 
 	void setFunction(bool im, bool call, bool video);
 
-	int	 getIconsStartPosition() const {return _iconsStartPosition;}
+	int getIconsStartPosition() const {return _iconsStartPosition;}
 
 	void setButton(const Qt::MouseButton button);
 
@@ -109,13 +109,13 @@ Q_SIGNALS:
 
 protected:
 
-	QString	_userName;
+	QString _userName;
 
-	QPixmap	_imPixmap;
+	QPixmap _imPixmap;
 
-	QPixmap	_callPixmap;
+	QPixmap _callPixmap;
 
-	QPixmap	_videoPixmap;
+	QPixmap _videoPixmap;
 
 	QRect _painterRect;
 
@@ -147,5 +147,4 @@ protected:
 	mutable QMutex _mutex;
 };
 
-#endif
-
+#endif	//QTUSER_H

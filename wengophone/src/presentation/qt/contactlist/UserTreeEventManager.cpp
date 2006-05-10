@@ -75,7 +75,7 @@ void UserTreeEventManager::mouseDlbClick(QMouseEvent * event) {
 
 	if (item) {
 		QString userId = item->text(0);
-		CContact & cContact = ul->getCContact(userId);
+		//CContact & cContact = ul->getCContact(userId);
 
 		if (config.getGeneralClickStartChat()) {
 			ul->startChat(userId);
@@ -86,9 +86,9 @@ void UserTreeEventManager::mouseDlbClick(QMouseEvent * event) {
 		}
 
 		else if (config.getGeneralClickCallCellPhone()) {
-			if (EnumPresenceState::PresenceStateOnline != cContact.getPresenceState()) {
+			//if (EnumPresenceState::PresenceStateOnline != cContact.getPresenceState()) {
 				ul->startCall(userId);
-			}
+			//}
 		}
 
 	}
