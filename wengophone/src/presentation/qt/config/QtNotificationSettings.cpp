@@ -31,7 +31,7 @@
 #include <QtGui>
 
 QtNotificationSettings::QtNotificationSettings(QWidget * parent)
-	: QtISettings(parent) {
+	: QObject(parent) {
 
 	_notificationSettingsWidget = new QWidget(parent);
 

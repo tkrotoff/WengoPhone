@@ -45,25 +45,24 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 
 	//inputSoundSlider
 	_inputSoundSlider = new QtSliderManager(this);
-	_inputSoundSlider->addLabel(_ui->mic_vol0 , ":pics/audio/progress_1.png", ":pics/audio/progress_1_off.png");
-	_inputSoundSlider->addLabel(_ui->mic_vol1 , ":pics/audio/progress_2.png", ":pics/audio/progress_2_off.png");
-	_inputSoundSlider->addLabel(_ui->mic_vol2 , ":pics/audio/progress_3.png", ":pics/audio/progress_3_off.png");
-	_inputSoundSlider->addLabel(_ui->mic_vol3 , ":pics/audio/progress_4.png", ":pics/audio/progress_4_off.png");
-	_inputSoundSlider->addLabel(_ui->mic_vol4 , ":pics/audio/progress_5.png", ":pics/audio/progress_5_off.png");
-	_inputSoundSlider->addLabel(_ui->mic_vol5 , ":pics/audio/progress_6.png", ":pics/audio/progress_6_off.png");
-	_inputSoundSlider->addLabel(_ui->mic_vol6 , ":pics/audio/progress_7.png", ":pics/audio/progress_7_off.png");
-    connect(_inputSoundSlider, SIGNAL(volumeChanged(int)), SLOT(inputSoundSliderValueChanged(int)));
+	_inputSoundSlider->addLabel(_ui->mic_vol0, ":pics/audio/progress_1.png", ":pics/audio/progress_1_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol1, ":pics/audio/progress_2.png", ":pics/audio/progress_2_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol2, ":pics/audio/progress_3.png", ":pics/audio/progress_3_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol3, ":pics/audio/progress_4.png", ":pics/audio/progress_4_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol4, ":pics/audio/progress_5.png", ":pics/audio/progress_5_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol5, ":pics/audio/progress_6.png", ":pics/audio/progress_6_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol6, ":pics/audio/progress_7.png", ":pics/audio/progress_7_off.png");
+	connect(_inputSoundSlider, SIGNAL(volumeChanged(int)), SLOT(inputSoundSliderValueChanged(int)));
 
 	//outputSoundSlider
 	_outputSoundSlider = new QtSliderManager(this);
-	_outputSoundSlider->addLabel(_ui->hp_vol0 , ":pics/audio/progress_1.png", ":pics/audio/progress_1_off.png");
-	_outputSoundSlider->addLabel(_ui->hp_vol1 , ":pics/audio/progress_2.png", ":pics/audio/progress_2_off.png");
-	_outputSoundSlider->addLabel(_ui->hp_vol2 , ":pics/audio/progress_3.png", ":pics/audio/progress_3_off.png");
-	_outputSoundSlider->addLabel(_ui->hp_vol3 , ":pics/audio/progress_4.png", ":pics/audio/progress_4_off.png");
-	_outputSoundSlider->addLabel(_ui->hp_vol4 , ":pics/audio/progress_5.png", ":pics/audio/progress_5_off.png");
-	_outputSoundSlider->addLabel(_ui->hp_vol5 , ":pics/audio/progress_6.png", ":pics/audio/progress_6_off.png");
-	_outputSoundSlider->addLabel(_ui->hp_vol6 , ":pics/audio/progress_7.png", ":pics/audio/progress_7_off.png");
-
+	_outputSoundSlider->addLabel(_ui->hp_vol0, ":pics/audio/progress_1.png", ":pics/audio/progress_1_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol1, ":pics/audio/progress_2.png", ":pics/audio/progress_2_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol2, ":pics/audio/progress_3.png", ":pics/audio/progress_3_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol3, ":pics/audio/progress_4.png", ":pics/audio/progress_4_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol4, ":pics/audio/progress_5.png", ":pics/audio/progress_5_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol5, ":pics/audio/progress_6.png", ":pics/audio/progress_6_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol6, ":pics/audio/progress_7.png", ":pics/audio/progress_7_off.png");
 	connect(_outputSoundSlider, SIGNAL(volumeChanged(int)), SLOT(outputSoundSliderValueChanged(int)));
 
 	//enableWenboxCheckBox

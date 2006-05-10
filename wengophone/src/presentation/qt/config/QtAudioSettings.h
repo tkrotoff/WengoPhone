@@ -22,6 +22,8 @@
 
 #include "QtISettings.h"
 
+#include <QObject>
+
 class QWidget;
 class QString;
 namespace Ui { class AudioSettings; }
@@ -31,7 +33,7 @@ namespace Ui { class AudioSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtAudioSettings : public QtISettings {
+class QtAudioSettings : public QObject, public QtISettings {
 	Q_OBJECT
 public:
 

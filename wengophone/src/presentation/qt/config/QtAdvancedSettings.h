@@ -22,6 +22,8 @@
 
 #include "QtISettings.h"
 
+#include <QObject>
+
 class QString;
 class QWidget;
 namespace Ui { class AdvancedSettings; }
@@ -31,7 +33,7 @@ namespace Ui { class AdvancedSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtAdvancedSettings : public QtISettings {
+class QtAdvancedSettings : public QObject, public QtISettings {
 	Q_OBJECT
 public:
 

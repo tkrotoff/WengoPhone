@@ -55,7 +55,7 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
 
 	QtUserList::getInstance()->setTreeWidget(target);
 	target->setMouseTracking(true);
-	UserTreeEventManager * dnd = new UserTreeEventManager(this,target);
+	UserTreeEventManager * dnd = new UserTreeEventManager(qtContactList.getCContactList(), this,target);
 	QtUserTreeEventFilter *keyFilter = new QtUserTreeEventFilter(this,target);
 
 	connect (target,SIGNAL(itemSelectionChanged ()),this,SLOT(treeViewSelectionChanged()));

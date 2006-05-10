@@ -22,6 +22,8 @@
 
 #include "QtISettings.h"
 
+#include <QObject>
+
 class QWidget;
 class QString;
 namespace Ui { class PrivacySettings; }
@@ -31,7 +33,7 @@ namespace Ui { class PrivacySettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtPrivacySettings : public QtISettings {
+class QtPrivacySettings : public QObject, public QtISettings {
 	Q_OBJECT
 public:
 

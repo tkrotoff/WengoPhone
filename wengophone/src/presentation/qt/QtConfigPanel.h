@@ -71,8 +71,6 @@ private:
 	QtSliderManager * _inputSoundSlider;
 
 	QtSliderManager * _outputSoundSlider;
-
-
 };
 
 #endif	//QTCONFIGPANEL_H

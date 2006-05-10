@@ -22,6 +22,8 @@
 
 #include "QtISettings.h"
 
+#include <QObject>
+
 class CWengoPhone;
 
 class QString;
@@ -33,7 +35,7 @@ namespace Ui { class AccountSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtAccountSettings : public QtISettings {
+class QtAccountSettings : public QObject, public QtISettings {
 	Q_OBJECT
 public:
 

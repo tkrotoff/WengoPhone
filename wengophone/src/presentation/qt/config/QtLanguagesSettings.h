@@ -22,11 +22,13 @@
 
 #include "QtISettings.h"
 
+#include <QObject>
+
 class QWidget;
 class QString;
 namespace Ui { class LanguagesSettings; }
 
-class QtLanguagesSettings : public QtISettings {
+class QtLanguagesSettings : public QObject, public QtISettings {
 	Q_OBJECT
 public:
 

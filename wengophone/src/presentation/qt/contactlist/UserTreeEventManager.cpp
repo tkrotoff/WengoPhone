@@ -20,16 +20,20 @@
 #include "UserTreeEventManager.h"
 #include "QtUserList.h"
 
+#include <control/contactlist/CContactList.h>
+
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-UserTreeEventManager::UserTreeEventManager(QObject * parent, QTreeWidget * target) : QObject(parent)
-{
-    _tree = target;
-    /* We need to install the event filter in the viewport of the QTreeWidget */
-    target->viewport()->installEventFilter(this);
+UserTreeEventManager::UserTreeEventManager(CContactList & cContactList, QObject * parent, QTreeWidget * target)
+	: QObject(parent),
+	_cContactList(cContactList) {
+
+	_tree = target;
+	/* We need to install the event filter in the viewport of the QTreeWidget */
+	target->viewport()->installEventFilter(this);
 	_timer.setSingleShot(true);
-//    connect (&_timer,SIGNAL(timeout()),this,SLOT(timerTimeout()));
+	//connect (&_timer,SIGNAL(timeout()),this,SLOT(timerTimeout()));
 	_inDrag = false;
 	_selectedItem = NULL;
 }
@@ -75,7 +79,7 @@ void UserTreeEventManager::mouseDlbClick(QMouseEvent * event) {
 
 	if (item) {
 		QString userId = item->text(0);
-		//CContact & cContact = ul->getCContact(userId);
+		ContactProfile contactProfile = _cContactList.getContactProfile(userId.toStdString());
 
 		if (config.getGeneralClickStartChat()) {
 			ul->startChat(userId);
@@ -86,9 +90,9 @@ void UserTreeEventManager::mouseDlbClick(QMouseEvent * event) {
 		}
 
 		else if (config.getGeneralClickCallCellPhone()) {
-			//if (EnumPresenceState::PresenceStateOnline != cContact.getPresenceState()) {
+			if (EnumPresenceState::PresenceStateOnline != contactProfile.getPresenceState()) {
 				ul->startCall(userId);
-			//}
+			}
 		}
 
 	}

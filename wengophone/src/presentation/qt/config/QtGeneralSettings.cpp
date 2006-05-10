@@ -27,7 +27,7 @@
 #include <QtGui>
 
 QtGeneralSettings::QtGeneralSettings(QWidget * parent)
-	: QtISettings(parent) {
+	: QObject(parent) {
 
 	_generalSettingsWidget = new QWidget(parent);
 

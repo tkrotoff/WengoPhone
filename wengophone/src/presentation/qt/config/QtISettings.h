@@ -22,8 +22,6 @@
 
 #include <util/Interface.h>
 
-#include <QObject>
-
 class QWidget;
 class QString;
 
@@ -32,13 +30,10 @@ class QString;
  *
  * @author Tanguy Krotoff
  */
-class QtISettings : public QObject, Interface {
-	Q_OBJECT
+class QtISettings : Interface {
 public:
 
-	QtISettings(QWidget * parent);
-
-	virtual ~QtISettings();
+	virtual ~QtISettings() { }
 
 	virtual QWidget * getWidget() const = 0;
 

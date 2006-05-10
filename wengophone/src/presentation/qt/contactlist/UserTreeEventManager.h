@@ -22,6 +22,8 @@
 
 #include <QtGui>
 
+class CContactList;
+
 /**
  * Events manager for QTreeWidget
  *
@@ -29,14 +31,11 @@
  * to enter the name, phone numbers, address... of a Contact.
  *
  */
-
-class UserTreeEventManager : public QObject
-{
-    Q_OBJECT
-
+class UserTreeEventManager : public QObject {
+	Q_OBJECT
 public:
 
-    UserTreeEventManager(QObject * parent = 0,QTreeWidget * target = 0);
+	UserTreeEventManager(CContactList & cContactList, QObject * parent = 0,QTreeWidget * target = 0);
 
 public Q_SLOTS:
 	void timerTimeout();
@@ -46,30 +45,35 @@ Q_SIGNALS:
 
 	void itemTimeout(QTreeWidgetItem * item);
 
-    void mouseClicked(Qt::MouseButton button);
+	void mouseClicked(Qt::MouseButton button);
 
 protected:
 
-    bool eventFilter(QObject *obj, QEvent *event);
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void dragEnterEvent(QDragEnterEvent *event);
-    virtual void dropEvent(QDropEvent *event);
-    virtual void dragMoveEvent(QDragMoveEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *event);
-    virtual void mouseDlbClick(QMouseEvent * event);
-    /* The QTreeWidget */
-    QTreeWidget     *   _tree;
-    /* Start position for drag action */
-    QPoint              _dstart;
-    /* The selected item in the QTreeWidget */
-    QTreeWidgetItem *   _selectedItem;
+	bool eventFilter(QObject *obj, QEvent *event);
+	virtual void mousePressEvent(QMouseEvent *event);
+	virtual void mouseMoveEvent(QMouseEvent *event);
+	virtual void dragEnterEvent(QDragEnterEvent *event);
+	virtual void dropEvent(QDropEvent *event);
+	virtual void dragMoveEvent(QDragMoveEvent *event);
+	virtual void mouseReleaseEvent(QMouseEvent *event);
+	virtual void mouseDlbClick(QMouseEvent * event);
 
-	QTreeWidgetItem *	_entered;
+	/* The QTreeWidget */
+	QTreeWidget * _tree;
 
-	QTimer				_timer;
+	/* Start position for drag action */
+	QPoint _dstart;
 
-	bool				_inDrag;
+	/* The selected item in the QTreeWidget */
+	QTreeWidgetItem * _selectedItem;
+
+	QTreeWidgetItem * _entered;
+
+	QTimer _timer;
+
+	bool _inDrag;
+
+	CContactList & _cContactList;
 };
 
 #endif

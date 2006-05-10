@@ -26,7 +26,7 @@
 #include <QtGui>
 
 QtAdvancedSettings::QtAdvancedSettings(QWidget * parent)
-	: QtISettings(parent) {
+	: QObject(parent) {
 
 	_advancedSettingsWidget = new QWidget(parent);
 

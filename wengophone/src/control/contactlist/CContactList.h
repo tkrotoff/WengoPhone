@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ public:
 	 *
 	 * @param contactId the UUID of the Contact to remove
 	 */
-    void removeContact(const std::string & contactId);
+	void removeContact(const std::string & contactId);
 
 	/**
 	 * Updates a Contact from a ContactProfile.
@@ -169,7 +169,7 @@ private:
 	 * @see ContactList::contactGroupRenamedEvent
 	 */
 	void contactGroupRenamedEventHandler(ContactList & sender, ContactGroup & contactGroup);
-	
+
 	/**
 	 * @see ContactList::contactGroupMovedEvent
 	 */

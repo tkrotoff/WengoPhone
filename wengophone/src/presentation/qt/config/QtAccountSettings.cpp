@@ -32,7 +32,7 @@
 #include <QtGui>
 
 QtAccountSettings::QtAccountSettings(CWengoPhone & cWengoPhone, QWidget * parent)
-	: QtISettings(parent) {
+	: QObject(parent) {
 
 	_accountSettingsWidget = new QWidget(parent);
 

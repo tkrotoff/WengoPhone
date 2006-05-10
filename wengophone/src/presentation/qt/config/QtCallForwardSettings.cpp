@@ -31,7 +31,8 @@
 #include <QtGui>
 
 QtCallForwardSettings::QtCallForwardSettings(CWengoPhone & cWengoPhone, QWidget * parent)
-	: QtISettings(parent), _cWengoPhone(cWengoPhone) {
+	: QObject(parent),
+	_cWengoPhone(cWengoPhone) {
 
 	_callForwardSettingsWidget = new QWidget(parent);
 
@@ -56,7 +57,7 @@ void QtCallForwardSettings::saveConfig() {
 	std::string number1 =  _ui->phoneNumber1Edit->text().toStdString();
 	std::string number2 =  _ui->phoneNumber2Edit->text().toStdString();
 	std::string number3 =  _ui->phoneNumber3Edit->text().toStdString();
-	
+
 	if(_ui->forwardToVoiceMailRadioButton->isChecked()) {
 		mode = "voicemail";
 	} else if( _ui->disableRadioButton->isChecked() ) {
@@ -64,15 +65,15 @@ void QtCallForwardSettings::saveConfig() {
 	} else if( _ui->forwardToNumberRadioButton->isChecked() ) {
 		mode = "number";
 	}
-	
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	
+
 	//if the mode has changed
 	if( config.getCallForwardMode() != mode ) {
 		config.set(Config::CALL_FORWARD_MODE_KEY, mode);
 		mustCallTheWs = true;
 	} else {
-		
+
 		//if numbers have changed
 		if( (mode == "number") &&
 			(config.getCallForwardPhoneNumber1() != number1 ) ||
@@ -88,7 +89,7 @@ void QtCallForwardSettings::saveConfig() {
 
 	if( mustCallTheWs ) {
 		if( _cWengoPhone.getCWsCallForward() ) {
-			
+
 			if( mode == "voicemail" ) {
 				_cWengoPhone.getCWsCallForward()->forwardToVoiceMail();
 			} else if( mode == "disable" ) {

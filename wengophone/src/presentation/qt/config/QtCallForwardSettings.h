@@ -22,6 +22,8 @@
 
 #include "QtISettings.h"
 
+#include <QObject>
+
 class CWengoPhone;
 class QWidget;
 
@@ -34,7 +36,7 @@ namespace Ui { class CallForwardSettings; }
  * @author Tanguy Krotoff
  * @author Mathieu Stute
  */
-class QtCallForwardSettings : public QtISettings {
+class QtCallForwardSettings : public QObject, public QtISettings {
 	Q_OBJECT
 public:
 

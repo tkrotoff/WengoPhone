@@ -176,7 +176,6 @@ sources = [
 	'webservices/softupdate/QtSoftUpdate.cpp',
 	'callbar/QtCallBar.cpp',
 	'statusbar/QtStatusBar.cpp',
-	'config/QtISettings.cpp',
 	'config/QtAdvancedConfig.cpp',
 	'config/QtAccountSettings.cpp',
 	'config/QtAdvancedSettings.cpp',

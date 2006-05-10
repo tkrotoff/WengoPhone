@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>355</width>
-    <height>576</height>
+    <height>638</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -61,57 +61,83 @@
             <property name="spacing" >
              <number>6</number>
             </property>
-            <item row="3" column="1" >
-             <spacer>
-              <property name="orientation" >
-               <enum>Qt::Vertical</enum>
+            <item row="0" column="0" >
+             <layout class="QGridLayout" >
+              <property name="margin" >
+               <number>0</number>
               </property>
-              <property name="sizeHint" >
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
+              <property name="spacing" >
+               <number>6</number>
               </property>
-             </spacer>
-            </item>
-            <item rowspan="4" row="0" column="0" >
-             <widget class="QLabel" name="webcamPreviewLabel" >
-              <property name="minimumSize" >
-               <size>
-                <width>128</width>
-                <height>128</height>
-               </size>
-              </property>
-              <property name="maximumSize" >
-               <size>
-                <width>128</width>
-                <height>128</height>
-               </size>
-              </property>
-              <property name="pixmap" >
-               <pixmap resource="../wengophone.qrc" >:/pics/iconbar/webcam.png</pixmap>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1" >
-             <widget class="QPushButton" name="webcamPreviewButton" >
-              <property name="text" >
-               <string>Webcam preview</string>
-              </property>
-             </widget>
+              <item row="2" column="0" >
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="0" >
+               <widget class="QLabel" name="label_3" >
+                <property name="text" >
+                 <string>Webcam device:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QComboBox" name="webcamDeviceComboBox" />
+              </item>
+             </layout>
             </item>
             <item row="0" column="1" >
-             <widget class="QLabel" name="label_3" >
-              <property name="text" >
-               <string>Webcam device:</string>
+             <layout class="QGridLayout" >
+              <property name="margin" >
+               <number>0</number>
               </property>
-             </widget>
-            </item>
-            <item row="1" column="1" >
-             <widget class="QComboBox" name="webcamDeviceComboBox" />
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item row="0" column="0" >
+               <widget class="QLabel" name="webcamPreviewLabel" >
+                <property name="minimumSize" >
+                 <size>
+                  <width>128</width>
+                  <height>128</height>
+                 </size>
+                </property>
+                <property name="maximumSize" >
+                 <size>
+                  <width>128</width>
+                  <height>128</height>
+                 </size>
+                </property>
+                <property name="pixmap" >
+                 <pixmap resource="../wengophone.qrc" >:/pics/iconbar/webcam.png</pixmap>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
@@ -219,10 +245,7 @@
             <item row="2" column="0" >
              <widget class="QLabel" name="label" >
               <property name="text" >
-               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;span style=" font-weight:600;">Warning!&lt;/span> When used for the first time we recommend that you select the normal video quality mode, then you can try different modes to find out the most suitable one&lt;/p>&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; font-weight:600;">Tips: &lt;span style=" font-weight:400;">Go to http://test.lvcm.com to determine your internet connection bandwidth&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-              </property>
-              <property name="wordWrap" >
-               <bool>true</bool>
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;span style=" font-weight:600;">Warning!&lt;/span> When used for the first time we recommend that&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">you select the normal video quality mode, then you can try&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">different modes to find out the most suitable one&lt;/p>&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; font-weight:600;">Tips: &lt;span style=" font-weight:400;">Go to http://test.lvcm.com to determine your internet&lt;/span>&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">connection bandwidth&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
             </item>
@@ -235,13 +258,6 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QPushButton" name="makeTestVideoCallButton" >
-     <property name="text" >
-      <string>Make a test video call</string>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="1" >
     <spacer>
      <property name="orientation" >
@@ -249,18 +265,24 @@
      </property>
      <property name="sizeHint" >
       <size>
-       <width>20</width>
+       <width>151</width>
        <height>40</height>
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QPushButton" name="makeTestVideoCallButton" >
+     <property name="text" >
+      <string>Make a test video call</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
   <tabstop>webcamDeviceComboBox</tabstop>
-  <tabstop>webcamPreviewButton</tabstop>
   <tabstop>videoQualityTreeWidget</tabstop>
   <tabstop>makeTestVideoCallButton</tabstop>
  </tabstops>

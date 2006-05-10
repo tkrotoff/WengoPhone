@@ -36,20 +36,18 @@
 static const int VIDEO_QUALITY_COLUMN = 0;
 
 QtVideoSettings::QtVideoSettings(QWidget * parent)
-	: QtISettings(parent) {
-
-	_videoSettingsWidget = new QWidget(parent);
+	: QWidget(parent) {
 
 	_ui = new Ui::VideoSettings();
-	_ui->setupUi(_videoSettingsWidget);
+	_ui->setupUi(this);
 
 	_webcamDriver = WebcamDriver::getInstance();
 	_webcamDriver->frameCapturedEvent += boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);
-	_openedByMe = false;
 	_rgbImage = NULL;
+	_webcamDeviceOpened = false;
 
 	connect(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
-	connect(_ui->webcamPreviewButton, SIGNAL(clicked()), SLOT(webcamPreviewButtonPressed()));
+	connect(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(webcamPreview(const QString &)));
 
 	_ui->webcamDeviceComboBox->addItems(StringListConvert::toQStringList(_webcamDriver->getDeviceList()));
 
@@ -71,25 +69,26 @@ void QtVideoSettings::saveConfig() {
 	config.set(Config::VIDEO_WEBCAM_DEVICE_KEY, _ui->webcamDeviceComboBox->currentText().toStdString());
 
 	QTreeWidgetItem * item = _ui->videoQualityTreeWidget->currentItem();
-	int videoQuality = EnumVideoQuality::VideoQualityNormal;
 	if (item) {
-		if (tr("Normal") == item->text(VIDEO_QUALITY_COLUMN)) {
+		int videoQuality = EnumVideoQuality::VideoQualityNormal;
+		QString text = item->text(VIDEO_QUALITY_COLUMN);
+		if (tr("Normal") == text) {
 			videoQuality = EnumVideoQuality::VideoQualityNormal;
 		}
-		if (tr("Good") == item->text(VIDEO_QUALITY_COLUMN)) {
+		else if (tr("Good") == text) {
 			videoQuality = EnumVideoQuality::VideoQualityGood;
 		}
-		if (tr("Very good") == item->text(VIDEO_QUALITY_COLUMN)) {
+		else if (tr("Very good") == text) {
 			videoQuality = EnumVideoQuality::VideoQualityVeryGood;
 		}
-		if (tr("Excellent") == item->text(VIDEO_QUALITY_COLUMN)) {
+		else if (tr("Excellent") == text) {
 			videoQuality = EnumVideoQuality::VideoQualityExcellent;
 		}
 		else {
-			LOG_FATAL("unknown video quality=" + item->text(VIDEO_QUALITY_COLUMN).toStdString());
+			LOG_FATAL("unknown video quality=" + text.toStdString());
 		}
+		config.set(Config::VIDEO_QUALITY_KEY, videoQuality);
 	}
-	config.set(Config::VIDEO_QUALITY_KEY, videoQuality);
 }
 
 void QtVideoSettings::readConfig() {
@@ -144,24 +143,23 @@ void QtVideoSettings::newWebcamImageCaptured(QPixmap pixmap) {
 	_ui->webcamPreviewLabel->setPixmap(pixmap);
 }
 
-void QtVideoSettings::webcamPreviewButtonPressed() {
+void QtVideoSettings::webcamPreview(const QString & deviceName) {
 	//If the Webcam is currently in used, we cannot launch a capture and
 	//we cannot set any parameters as it is already launched
-	if (_ui->webcamDeviceComboBox->count() > 0 && !_webcamDriver->isOpened()) {
-		_openedByMe = true;
-		//_webcamDriver->setDevice(_webcamDeviceComboBox->currentText().toStdString());
-		_webcamDriver->setDevice("");
+	if (!_webcamDriver->isOpened()) {
+		_webcamDriver->setDevice(deviceName.toStdString());
 		//_webcamDriver->setPalette(PIX_OSI_RGB32);
 
 		_webcamDriver->startCapture();
+
+		_webcamDeviceOpened = true;
 	}
 }
 
-/*
-void QtVideoSettings::hide() {
-	_webcamDriver->frameCapturedEvent -= boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);
-	if (_openedByMe) {
+void QtVideoSettings::hideEvent(QHideEvent * event) {
+	if (_webcamDeviceOpened) {
+		_webcamDriver->frameCapturedEvent -= boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);
 		_webcamDriver->stopCapture();
+		_webcamDeviceOpened = false;
 	}
 }
-*/

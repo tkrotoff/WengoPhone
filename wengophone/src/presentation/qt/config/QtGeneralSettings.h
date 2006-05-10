@@ -22,6 +22,8 @@
 
 #include "QtISettings.h"
 
+#include <QObject>
+
 class QWidget;
 class QString;
 namespace Ui { class GeneralSettings; }
@@ -31,7 +33,7 @@ namespace Ui { class GeneralSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtGeneralSettings : public QtISettings {
+class QtGeneralSettings : public QObject, public QtISettings {
 	Q_OBJECT
 public:
 

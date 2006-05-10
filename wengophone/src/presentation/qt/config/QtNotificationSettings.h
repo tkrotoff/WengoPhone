@@ -22,6 +22,8 @@
 
 #include "QtISettings.h"
 
+#include <QObject>
+
 class QWidget;
 class QString;
 namespace Ui { class NotificationSettings; }
@@ -33,7 +35,7 @@ namespace Ui { class NotificationSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtNotificationSettings : public QtISettings {
+class QtNotificationSettings : public QObject, public QtISettings {
 	Q_OBJECT
 public:
 

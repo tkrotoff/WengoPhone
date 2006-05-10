@@ -27,7 +27,7 @@
 #include <QtGui>
 
 QtPrivacySettings::QtPrivacySettings(QWidget * parent)
-	: QtISettings(parent) {
+	: QObject(parent) {
 
 	_privacySettingsWidget = new QWidget(parent);
 

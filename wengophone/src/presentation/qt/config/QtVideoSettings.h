@@ -24,11 +24,13 @@
 
 #include <pixertool/pixertool.h>
 
+#include <QWidget>
 #include <QPixmap>
 
 class IWebcamDriver;
 
 class QWidget;
+class QHideEvent;
 class QString;
 namespace Ui { class VideoSettings; }
 
@@ -37,7 +39,7 @@ namespace Ui { class VideoSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtVideoSettings : public QtISettings {
+class QtVideoSettings : public QWidget, public QtISettings {
 	Q_OBJECT
 public:
 
@@ -46,7 +48,7 @@ public:
 	virtual ~QtVideoSettings();
 
 	QWidget * getWidget() const {
-		return _videoSettingsWidget;
+		return (QWidget *) this;
 	}
 
 	QString getName() const;
@@ -57,7 +59,7 @@ private Q_SLOTS:
 
 	void newWebcamImageCaptured(QPixmap pixmap);
 
-	void webcamPreviewButtonPressed();
+	void webcamPreview(const QString & deviceName);
 
 Q_SIGNALS:
 
@@ -69,17 +71,16 @@ private:
 
 	void frameCapturedEventHandler(IWebcamDriver * sender, piximage * image);
 
-	Ui::VideoSettings * _ui;
+	void hideEvent(QHideEvent * event);
 
-	QWidget * _videoSettingsWidget;
+	Ui::VideoSettings * _ui;
 
 	IWebcamDriver * _webcamDriver;
 
-	/** True when the webcam has been opened by this widget. */
-	bool _openedByMe;
-
 	/** Contains the converted picture from the Webcam. */
 	piximage * _rgbImage;
+
+	bool _webcamDeviceOpened;
 };
 
 #endif	//QTVIDEOSETTINGS_H

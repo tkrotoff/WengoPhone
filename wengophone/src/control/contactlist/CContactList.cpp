@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ void CContactList::contactRemovedEventHandler(ContactList & sender, Contact & co
 
 void CContactList::contactMovedEventHandler(ContactList & sender, ContactGroup & dstContactGroup,
 	ContactGroup & srcContactGroup, Contact & contact) {
-	_pContactList->contactMovedEvent(dstContactGroup.getUUID(), 
+	_pContactList->contactMovedEvent(dstContactGroup.getUUID(),
 		srcContactGroup.getUUID(), contact.getUUID());
 }
 
