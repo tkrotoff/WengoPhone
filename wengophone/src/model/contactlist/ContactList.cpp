@@ -68,8 +68,9 @@ void ContactList::removeContactGroup(const string & id) {
 
 	ContactGroup * contactGroup = getContactGroup(id);
 	if (contactGroup) {
-		_removeContactGroup(contactGroup->getName());
-		_imContactListHandler.removeGroup(contactGroup->getName());
+		string groupName = contactGroup->getName();
+		_removeContactGroup(id);
+		_imContactListHandler.removeGroup(groupName);
 	}
 }
 
@@ -296,21 +297,25 @@ void ContactList::_addContactGroup(const std::string & groupName) {
 	}
 }
 
-void ContactList::_removeContactGroup(const std::string & groupName) {
-	ContactGroup contactGroup(groupName);
-	ContactGroupSet::iterator it = _contactGroupSet.find(groupName);
+void ContactList::_removeContactGroup(const std::string & groupId) {
+	ContactGroup * contactGroup = getContactGroup(groupId);
 
-	if (it != _contactGroupSet.end()) {
-		for (Contacts::const_iterator vectIt = _contacts.begin();
-			vectIt != _contacts.end();
+	if (contactGroup) {
+		// Deleting every Contacts in the ContactGroup
+		ContactGroup contactGroupCopy = *contactGroup;
+		for (ContactGroup::ContactVector::const_iterator vectIt = contactGroupCopy._contactList.begin();
+			vectIt != contactGroupCopy._contactList.end();
 			++vectIt) {
-			removeContact((Contact &)*vectIt);
+			removeContact(*(*vectIt));
 		}
+		////
 
+		// Deleting the group
+		ContactGroupSet::iterator it = _contactGroupSet.find(contactGroupCopy);
+		contactGroupRemovedEvent(*this, contactGroupCopy);
 		_contactGroupSet.erase(it);
-		LOG_DEBUG("ContactGroup removed: " + groupName);
-	} else {
-		LOG_DEBUG("this ContactGroup does not exist: " + groupName);
+		////
+		LOG_DEBUG("ContactGroup removed. UUID: " + groupId);
 	}
 }
 

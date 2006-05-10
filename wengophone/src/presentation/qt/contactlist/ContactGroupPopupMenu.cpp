@@ -40,6 +40,7 @@ ContactGroupPopupMenu::ContactGroupPopupMenu(CContactList & cContactList, QWidge
 }
 
 void ContactGroupPopupMenu::showMenu(const QString & groupId) {
+	LOG_DEBUG("groupId: " + groupId.toStdString());
 	_groupId = groupId;
 
 	exec(QCursor::pos());

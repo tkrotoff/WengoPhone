@@ -325,9 +325,9 @@ private:
 	/**
 	 * Actually remove a ContactGroup.
 	 *
-	 * @param groupName the group name
+	 * @param groupId the group UUID
 	 */
-	void _removeContactGroup(const std::string & groupName);
+	void _removeContactGroup(const std::string & groupId);
 
 	/**
 	 * Actually add the Contact to a ContactGroup.

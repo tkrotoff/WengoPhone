@@ -45,22 +45,6 @@ class IMContact {
 public:
 
 	/**
-	 * Emitted when this IMContact has been added to a group.
-	 *
-	 * @param sender this IMContact
-	 * @param groupName the group where the IMContact has been added to
-	 */
-	//Event< void (IMContact & sender, const std::string & groupName)> imContactAddedToGroupEvent;
-
-	/**
-	 * Emitted when this IMContact has been removed from a group.
-	 *
-	 * @param sender this IMContact
-	 * @param groupName the group where the IMContact has been removed from
-	 */
-	//Event< void (IMContact & sender, const std::string & groupName)> imContactRemovedFromGroupEvent;
-
-	/**
 	 * Emitted when this IMContact has changed (e.g. its presence state
 	 * could have changed or its alias).
 	 *
@@ -110,25 +94,6 @@ public:
 	}
 
 	EnumIMProtocol::IMProtocol getProtocol() const;
-
-	/**
-	 * Add this IMContact to a group.
-	 *
-	 * @param groupName the group to add this IMContact to
-	 */
-	//void addToGroup(const std::string & groupName);
-
-	/**
-	 * Remove this IMContact to a group.
-	 *
-	 * @param groupName the group to remove this IMContact from
-	 */
-	//void removeFromGroup(const std::string & groupName);
-
-	/**
-	 * Remove from all group.
-	 */
-	//void removeFromAllGroup();
 
 	EnumPresenceState::PresenceState getPresenceState() const {
 		return _presenceState;
@@ -196,9 +161,6 @@ private:
 	bool _blocked;
 
 	EnumPresenceState::PresenceState _presenceState;
-
-	//typedef std::set<std::string> GroupSet;
-	//GroupSet _groupSet;
 };
 
 #endif	//IMCONTACT_H

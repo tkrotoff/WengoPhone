@@ -193,7 +193,12 @@ void QtContactList::contactGroupAddedEventSlot(QString contactGroupId) {
 
 void QtContactList::contactGroupRemovedEventSlot(QString contactGroupId) {
 	LOG_DEBUG("contact group removed. UUID: " + contactGroupId.toStdString());
-	//TODO
+
+	QList<QTreeWidgetItem *> list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
+
+	if (list.size() > 0) {
+		_treeWidget->takeTopLevelItem(_treeWidget->indexOfTopLevelItem(list[0]));
+	}
 }
 
 void QtContactList::contactGroupRenamedEventSlot(QString contactGroupId) {
