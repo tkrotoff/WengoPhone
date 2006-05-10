@@ -18,6 +18,7 @@
  */
 
 #include "QtConfigPanel.h"
+#include "QtSliderManager.h"
 
 #include "ui_WengoPhoneWindowConfigPanel.h"
 
@@ -43,10 +44,27 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 	config.valueChangedEvent += boost::bind(&QtConfigPanel::configChangedEventHandler, this, _1, _2);
 
 	//inputSoundSlider
-	connect(_ui->inputSoundSlider, SIGNAL(valueChanged(int)), SLOT(inputSoundSliderValueChanged(int)));
+	_inputSoundSlider = new QtSliderManager(this);
+	_inputSoundSlider->addLabel(_ui->mic_vol0 , ":pics/audio/progress_1.png", ":pics/audio/progress_1_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol1 , ":pics/audio/progress_2.png", ":pics/audio/progress_2_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol2 , ":pics/audio/progress_3.png", ":pics/audio/progress_3_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol3 , ":pics/audio/progress_4.png", ":pics/audio/progress_4_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol4 , ":pics/audio/progress_5.png", ":pics/audio/progress_5_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol5 , ":pics/audio/progress_6.png", ":pics/audio/progress_6_off.png");
+	_inputSoundSlider->addLabel(_ui->mic_vol6 , ":pics/audio/progress_7.png", ":pics/audio/progress_7_off.png");
+    connect(_inputSoundSlider, SIGNAL(volumeChanged(int)), SLOT(inputSoundSliderValueChanged(int)));
 
 	//outputSoundSlider
-	connect(_ui->outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputSoundSliderValueChanged(int)));
+	_outputSoundSlider = new QtSliderManager(this);
+	_outputSoundSlider->addLabel(_ui->hp_vol0 , ":pics/audio/progress_1.png", ":pics/audio/progress_1_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol1 , ":pics/audio/progress_2.png", ":pics/audio/progress_2_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol2 , ":pics/audio/progress_3.png", ":pics/audio/progress_3_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol3 , ":pics/audio/progress_4.png", ":pics/audio/progress_4_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol4 , ":pics/audio/progress_5.png", ":pics/audio/progress_5_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol5 , ":pics/audio/progress_6.png", ":pics/audio/progress_6_off.png");
+	_outputSoundSlider->addLabel(_ui->hp_vol6 , ":pics/audio/progress_7.png", ":pics/audio/progress_7_off.png");
+
+	connect(_outputSoundSlider, SIGNAL(volumeChanged(int)), SLOT(outputSoundSliderValueChanged(int)));
 
 	//enableWenboxCheckBox
 	connect(_ui->enableWenboxCheckBox, SIGNAL(toggled(bool)), SLOT(enableWenboxCheckBoxToggled(bool)));
@@ -81,6 +99,7 @@ void QtConfigPanel::enableWenboxCheckBoxToggled(bool checked) {
 	config.set(Config::WENBOX_ENABLE_KEY, checked);
 }
 
+
 void QtConfigPanel::halfDuplexCheckBoxToggled(bool checked) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.set(Config::AUDIO_HALFDUPLEX_KEY, checked);
@@ -98,13 +117,13 @@ void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const
 	if (key == Config::AUDIO_INPUT_DEVICENAME_KEY) {
 		//inputSoundSlider
 		VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
-		_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());
+		_inputSoundSlider->setVolume(inputVolumeControl.getLevel());
 	}
 
 	if (key == Config::AUDIO_OUTPUT_DEVICENAME_KEY) {
 		//outputSoundSlider
 		VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
-		_ui->outputSoundSlider->setValue(outputVolumeControl.getLevel());
+		_outputSoundSlider->setVolume(outputVolumeControl.getLevel());
 	}
 
 	if (key == Config::WENBOX_ENABLE_KEY) {

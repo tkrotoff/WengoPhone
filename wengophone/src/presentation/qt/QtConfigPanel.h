@@ -23,8 +23,10 @@
 #include <qtutil/QObjectThreadSafe.h>
 
 class Settings;
+class QtSliderManager;
 
 class QWidget;
+
 namespace Ui { class WengoPhoneWindowConfigPanel; }
 
 /**
@@ -65,6 +67,12 @@ private:
 	Ui::WengoPhoneWindowConfigPanel * _ui;
 
 	QWidget * _configPanelWidget;
+
+	QtSliderManager * _inputSoundSlider;
+
+	QtSliderManager * _outputSoundSlider;
+
+
 };
 
 #endif	//QTCONFIGPANEL_H

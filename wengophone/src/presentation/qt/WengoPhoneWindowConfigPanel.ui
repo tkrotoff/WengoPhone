@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>265</width>
-    <height>120</height>
+    <width>370</width>
+    <height>125</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -19,50 +19,6 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="0" column="1" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="2" column="0" colspan="2" >
-      <widget class="QLabel" name="audioSettingsLabel" >
-       <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt; text-decoration: underline;">Audio Settings&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" >
-      <widget class="QSlider" name="outputSoundSlider" >
-       <property name="baseSize" >
-        <size>
-         <width>1</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2" >
-      <widget class="QLabel" name="videoSettingsLabel" >
-       <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt; text-decoration: underline;">Video Settings&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" >
-      <widget class="QLabel" name="outputSoundLabel" >
-       <property name="pixmap" >
-        <pixmap resource="wengophone.qrc" >:/pics/speaker.png</pixmap>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="0" column="0" >
     <layout class="QGridLayout" >
      <property name="margin" >
@@ -78,22 +34,85 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0" colspan="2" >
-      <widget class="QCheckBox" name="enableWenboxCheckBox" >
-       <property name="toolTip" >
-        <string>Enable Wenbox usage</string>
-       </property>
-       <property name="text" >
-        <string>Wenbox USB</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1" >
-      <widget class="QSlider" name="inputSoundSlider" >
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
        </property>
-      </widget>
+       <property name="spacing" >
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QtClickableLabel" name="mic_vol0" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_1_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="mic_vol1" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_2_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="mic_vol2" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_3_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="mic_vol3" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_4_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="mic_vol4" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_5_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="mic_vol5" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_6_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="mic_vol6" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_7_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="2" column="0" colspan="2" >
       <widget class="QCheckBox" name="halfDuplexCheckBox" >
@@ -105,14 +124,168 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0" colspan="2" >
+      <widget class="QCheckBox" name="enableWenboxCheckBox" >
+       <property name="toolTip" >
+        <string>Enable Wenbox usage</string>
+       </property>
+       <property name="text" >
+        <string>USB audio device</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="1" column="0" colspan="2" >
+      <widget class="QLabel" name="videoSettingsLabel" >
+       <property name="text" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt; text-decoration: underline;">Video Settings&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="2" >
+      <widget class="QLabel" name="audioSettingsLabel" >
+       <property name="text" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt; text-decoration: underline;">Audio Settings&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QtClickableLabel" name="hp_vol0" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_1_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="hp_vol1" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_2_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="hp_vol2" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_3_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="hp_vol3" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_4_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="hp_vol4" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_5_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="hp_vol5" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_6_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtClickableLabel" name="hp_vol6" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_7_off.png</pixmap>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="outputSoundLabel" >
+       <property name="pixmap" >
+        <pixmap resource="wengophone.qrc" >:/pics/speaker.png</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>QtClickableLabel</class>
+   <extends>QLabel</extends>
+   <header>QtClickableLabel_proxy.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+ </customwidgets>
  <tabstops>
-  <tabstop>inputSoundSlider</tabstop>
-  <tabstop>outputSoundSlider</tabstop>
   <tabstop>enableWenboxCheckBox</tabstop>
  </tabstops>
  <resources>

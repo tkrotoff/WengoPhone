@@ -1,5 +1,21 @@
 <RCC>
     <qresource prefix="/" >
+        <file>pics/audio/hp.png</file>
+        <file>pics/audio/micro.png</file>
+        <file>pics/audio/progress_1.png</file>
+        <file>pics/audio/progress_1_off.png</file>
+        <file>pics/audio/progress_2.png</file>
+        <file>pics/audio/progress_2_off.png</file>
+        <file>pics/audio/progress_3.png</file>
+        <file>pics/audio/progress_3_off.png</file>
+        <file>pics/audio/progress_4.png</file>
+        <file>pics/audio/progress_4_off.png</file>
+        <file>pics/audio/progress_5.png</file>
+        <file>pics/audio/progress_5_off.png</file>
+        <file>pics/audio/progress_6.png</file>
+        <file>pics/audio/progress_6_off.png</file>
+        <file>pics/audio/progress_7.png</file>
+        <file>pics/audio/progress_7_off.png</file>
         <file>pics/callbar/call_bar_button.png</file>
         <file>pics/callbar/call_bar_button_off.png</file>
         <file>pics/callbar/call_bar_fill.png</file>
@@ -92,7 +108,7 @@
         <file>pics/close_normal.png</file>
         <file>pics/close_on.png</file>
         <file>pics/iconbar/add_contact.png</file>
-        <file>pics/iconbar/chat.png</file>
+        <file>pics/iconbar/iconBarchat.png</file>
         <file>pics/iconbar/conference.png</file>
         <file>pics/iconbar/search_contact.png</file>
         <file>pics/iconbar/webcam.png</file>

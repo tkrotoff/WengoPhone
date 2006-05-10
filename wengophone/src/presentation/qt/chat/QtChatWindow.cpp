@@ -488,7 +488,7 @@ void ChatWindow::createMenu(){
     action = ContactsMenu->addAction(tr("Add a contact"));
     connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(addContact()));
 
-    ContactsMenu->addAction(tr("Search for contact"));
+    ContactsMenu->addAction(tr("Search for Wengo users"));
 
     ContactsMenu->addAction(tr("&Manage blocked contacts"));
     ContactsMenu->addSeparator ();
@@ -521,7 +521,7 @@ void ChatWindow::createMenu(){
 
     QMenu * ToolsMenu = new QMenu(tr("&Tools"));
 
-    action = ToolsMenu->addAction(tr("Instant Messaging settings"));
+    action = ToolsMenu->addAction(tr("Instant Messaging Accounts"));
     connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showAccountSettings()));
 
     ToolsMenu->addSeparator ();
