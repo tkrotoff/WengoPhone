@@ -97,8 +97,10 @@ void QtSms::smsStatusEventHandlerThreadSafe(Sms::SmsStatus status) {
 
 void QtSms::setPhoneNumber(const QString & phone) {
 	QComboBox * phoneComboBox = Object::findChild<QComboBox *>(_smsWindow, "phoneComboBox");
-	phoneComboBox->addItem(phone);
-	phoneComboBox->setCurrentIndex(0);
+	if( phone != "" ) {
+		phoneComboBox->clear();
+		phoneComboBox->addItem(phone);
+	}
 }
 
 void QtSms::setText(const QString & text) {
