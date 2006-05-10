@@ -110,6 +110,14 @@ public:
 	void addContactGroup(const std::string & name);
 
 	/**
+	 * Changes a group name.
+	 *
+	 * @param groupId the UUID of the group to be changed
+	 * @param name the desired name
+	 */
+	void changeGroupName(const std::string & groupId, const std::string & name);
+
+	/**
 	 * Gets all existing Contact Ids.
 	 *
 	 * @return a vector of string containing the UUID of the Contacts.

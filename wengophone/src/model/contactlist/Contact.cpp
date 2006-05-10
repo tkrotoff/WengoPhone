@@ -82,19 +82,34 @@ void Contact::copy(const ContactProfile & contactProfile) {
 	profileChangedEvent +=
 		boost::bind(&Contact::profileChangedEventHandler, this, _1);
 
-	// Getting groups
+	// Sets groups
 	ContactGroup * newContactGroup = _contactList.getContactGroup(contactProfile.getGroupId());
 	ContactGroup * oldContactGroup = _contactList.getContactGroup(getGroupId());
 
 	if (oldContactGroup && newContactGroup && (oldContactGroup->getUUID() != newContactGroup->getUUID())) {
-		_contactList.moveContactToGroup(newContactGroup->getUUID(), *this);
-	} else if (newContactGroup) {
+		_contactList.moveContactToGroup(newContactGroup->getName(), *this);
+	} else if (!oldContactGroup && newContactGroup) {
 		_contactList._addToContactGroup(newContactGroup->getName(), *this);
 	}
+	////
 
 	setWengoPhoneId(contactProfile._wengoPhoneId);
 
-	ContactProfile::copy(contactProfile);
+	Profile::copy(contactProfile);
+	_uuid = contactProfile._uuid;
+	_blocked = contactProfile._blocked;
+	_preferredIMContact = contactProfile._preferredIMContact;
+	_groupId = contactProfile._groupId;
+
+	// Adds IMContacts
+	for (IMContactSet::const_iterator it = contactProfile._imContactSet.begin();
+		it != contactProfile._imContactSet.end();
+		++it) {
+		if (!hasIMContact(*it)) {
+			_contactList.addIMContact(*this, *it);
+		}
+	}
+	////
 }
 
 bool Contact::operator == (const Contact & contact) const {

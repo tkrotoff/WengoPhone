@@ -81,7 +81,7 @@ void ContactList::renameContactGroup(const std::string & id, const std::string &
 		contactGroup->setName(name);
 	}
 }
-	
+
 Contact & ContactList::createContact() {
 	Mutex::ScopedLock lock(_mutex);
 
@@ -141,7 +141,7 @@ void ContactList::removeContact(Contact & contact) {
 }
 
 void ContactList::addIMContact(Contact & contact, const IMContact & imContact) {
-	Mutex::ScopedLock lock(_mutex);
+	//Mutex::ScopedLock lock(_mutex);
 
 	ContactGroup * contactGroup = getContactGroup(contact.getGroupId());
 	
@@ -152,7 +152,7 @@ void ContactList::addIMContact(Contact & contact, const IMContact & imContact) {
 }
 
 void ContactList::removeIMContact(Contact & contact, const IMContact & imContact) {
-	Mutex::ScopedLock lock(_mutex);
+	//Mutex::ScopedLock lock(_mutex);
 
 	ContactGroup * contactGroup = getContactGroup(contact.getGroupId());
 

@@ -182,3 +182,7 @@ void CContactList::updateContact(const ContactProfile & contactProfile) {
 void CContactList::addContactGroup(const std::string & name) {
 	_contactList.addContactGroup(name);
 }
+
+void CContactList::changeGroupName(const std::string & groupId, const std::string & name) {
+	_contactList.renameContactGroup(groupId, name);
+}
