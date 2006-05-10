@@ -24,6 +24,8 @@
 #include "QtUserList.h"
 #include "QtContactPixmap.h"
 
+#include <control/profile/CUserProfile.h>
+
 #include <util/Logger.h>
 #include <util/StringList.h>
 
@@ -133,56 +135,59 @@ QSize QtTreeViewDelegate::sizeHint ( const QStyleOptionViewItem & option, const 
 	}
 
 void QtTreeViewDelegate::drawGroup( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
-		QRect r;
-		QtContactPixmap * spx;
-		QPixmap px;
-		int x;
-		spx = QtContactPixmap::getInstance();
-		painter->setPen( option.palette.text().color() );
-		r = option.rect;
+	QRect r;
+	QtContactPixmap * spx;
+	QPixmap px;
+	int x;
+	spx = QtContactPixmap::getInstance();
+	painter->setPen( option.palette.text().color() );
+	r = option.rect;
 
-		QLinearGradient lg( QPointF( 1, option.rect.top() ), QPointF( 1, option.rect.bottom() ) );
-		lg.setColorAt ( .8, QColor( 212, 208, 200 ) );
-		lg.setColorAt ( 0, QColor( 255, 255, 255 ) );
-		painter->fillRect( option.rect, QBrush( lg ) );
+	QLinearGradient lg( QPointF( 1, option.rect.top() ), QPointF( 1, option.rect.bottom() ) );
+	lg.setColorAt ( .8, QColor( 212, 208, 200 ) );
+	lg.setColorAt ( 0, QColor( 255, 255, 255 ) );
+	painter->fillRect( option.rect, QBrush( lg ) );
 
-		QFont f = option.font;
-		f.setBold( true );
-		painter->setFont( f );
+	QFont f = option.font;
+	f.setBold( true );
+	painter->setFont( f );
 
-		if ( option.state & QStyle::State_Open )
-			px = spx->getPixmap( QtContactPixmap::ContactGroupOpen );
-		else
-			px = spx->getPixmap( QtContactPixmap::ContactGroupClose );
+	if ( option.state & QStyle::State_Open )
+		px = spx->getPixmap( QtContactPixmap::ContactGroupOpen );
+	else
+		px = spx->getPixmap( QtContactPixmap::ContactGroupClose );
 
-		x = option.rect.left();
+	x = option.rect.left();
 
-		painter->drawPixmap (x,r.top()+3,px);
-		x+=px.width()+3;
-		r.setLeft( x );
+	painter->drawPixmap (x,r.top()+3,px);
+	x+=px.width()+3;
+	r.setLeft( x );
 
-		QFont font = painter->font();
+	QFont font = painter->font();
 
-		int y = ( ( r.bottom() - r.top() ) - QFontMetrics( font ).height() ) / 2;
+	int y = ( ( r.bottom() - r.top() ) - QFontMetrics( font ).height() ) / 2;
 
-		r.setTop( y + r.top() );
+	r.setTop( y + r.top() );
 
-		r.setLeft( r.left() + 10 );
+	r.setLeft( r.left() + 10 );
 
-		// Number of child
+	// Number of child
 
-		int nbchild = index.model()->rowCount(index);
+	int nbchild = index.model()->rowCount(index);
 
-		QString str= QString("%1 (%2)").arg(index.data().toString()).arg(nbchild);
+	std::string groupId = index.data().toString().toStdString();
+	QString groupName = QString::fromStdString(_cUserProfile.getCContactList().getContactGroupName(groupId));
 
-		// painter->drawText( r, Qt::AlignLeft, index.data().toString(), 0 );
-		painter->drawText( r, Qt::AlignLeft, str , 0 );
+	QString str= QString("%1 (%2)").arg(groupName).arg(nbchild);
 
-		painter->setPen(QColor(210,210,210));
-		painter->drawLine(option.rect.left(),option.rect.bottom(),
-						  option.rect.width(),option.rect.bottom());
+	// painter->drawText( r, Qt::AlignLeft, index.data().toString(), 0 );
+	painter->drawText( r, Qt::AlignLeft, str , 0 );
 
-		painter->setPen(QColor(128,128,128));
-		painter->drawLine(option.rect.left(),option.rect.bottom()-1,
-						  option.rect.width(),option.rect.bottom()-1);
+	painter->setPen(QColor(210,210,210));
+	painter->drawLine(option.rect.left(),option.rect.bottom(),
+					  option.rect.width(),option.rect.bottom());
+
+	painter->setPen(QColor(128,128,128));
+	painter->drawLine(option.rect.left(),option.rect.bottom()-1,
+					  option.rect.width(),option.rect.bottom()-1);
 }

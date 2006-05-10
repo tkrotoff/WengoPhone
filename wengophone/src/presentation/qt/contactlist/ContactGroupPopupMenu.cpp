@@ -20,7 +20,9 @@
 #include "ContactGroupPopupMenu.h"
 #include "QtRenameGroup.h"
 
-#include "model/contactlist/ContactGroup.h"
+#include <control/contactlist/CContactList.h>
+
+#include <model/contactlist/ContactGroup.h>
 
 #include <QtGui>
 
@@ -30,27 +32,28 @@
 #include <iostream>
 using namespace std;
 
-ContactGroupPopupMenu::ContactGroupPopupMenu(QWidget * parent) : QMenu(parent) {
+ContactGroupPopupMenu::ContactGroupPopupMenu(CContactList & cContactList, QWidget * parent)
+: QMenu(parent), _cContactList(cContactList) {
 	addAction(QIcon(":/pics/contact_remove.png"), tr("Remove Contact Group"), this, SLOT(removeContactGroup()));
 	addAction(tr("Rename Contact Group"), this, SLOT(renameContactGroup()));
 	addAction(tr("Send SMS to group"), this, SLOT(sendSms()));
 }
 
-void ContactGroupPopupMenu::showMenu(const QString & groupName) {
-	_groupName = groupName;
+void ContactGroupPopupMenu::showMenu(const QString & groupId) {
+	_groupId = groupId;
 
 	exec(QCursor::pos());
 }
 
 void ContactGroupPopupMenu::removeContactGroup() const {
-
+	_cContactList.removeContactGroup(_groupId.toStdString());
 }
 
 void ContactGroupPopupMenu::renameContactGroup() const {
-
     QtRenameGroup dialog(dynamic_cast<QWidget *>(parent()));
     dialog.exec();
-	//_contactGroup.setName()
+
+	_cContactList.renameContactGroup(_groupId.toStdString(), dialog.getGroupName().toStdString());
 }
 
 void ContactGroupPopupMenu::sendSms() {

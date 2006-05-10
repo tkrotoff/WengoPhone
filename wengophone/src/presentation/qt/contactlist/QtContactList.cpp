@@ -57,6 +57,8 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 		SLOT(contactGroupAddedEventSlot(QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactGroupRemovedEventSignal(QString)), 
 		SLOT(contactGroupRemovedEventSlot(QString)), Qt::QueuedConnection);
+	connect(this, SIGNAL(contactGroupRenamedEventSignal(QString)),
+		SLOT(contactGroupRenamedEventSlot(QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactAddedEventSignal(QString)), 
 		SLOT(contactAddedEventSlot(QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactRemovedEventSignal(QString)), 
@@ -121,7 +123,7 @@ void QtContactList::initThreadSafe() {
 	_treeWidget->header()->hide();
 
 	//Popup Menus
-	_contactGroupPopupMenu = new ContactGroupPopupMenu(_treeWidget);
+	_contactGroupPopupMenu = new ContactGroupPopupMenu(_cContactList, _treeWidget);
 
 	connect(_userManager, SIGNAL(groupRightClicked(const QString &)), SLOT(groupRightClickedSlot(const QString &)));
 
@@ -154,6 +156,10 @@ void QtContactList::contactGroupRemovedEvent(std::string contactGroupId) {
 	contactGroupRemovedEventSignal(QString::fromStdString(contactGroupId));
 }
 
+void QtContactList::contactGroupRenamedEvent(std::string contactGroupId) {
+	contactGroupRenamedEventSignal(QString::fromStdString(contactGroupId));
+}
+
 void QtContactList::contactAddedEvent(std::string contactId) {
 	contactAddedEventSignal(QString::fromStdString(contactId));
 }
@@ -175,14 +181,12 @@ void QtContactList::contactChangedEvent(std::string contactId) {
 void QtContactList::contactGroupAddedEventSlot(QString contactGroupId) {
 	LOG_DEBUG("contact group added. UUID: " + contactGroupId.toStdString());
 
-	//QString displayName = QString::fromUtf8(_cContactList.getContactGroupName(contactGroupId.toStdString()).c_str());
-	QString displayName = QString::fromStdString(_cContactList.getContactGroupName(contactGroupId.toStdString()));
-	QList<QTreeWidgetItem *> list = _treeWidget->findItems(displayName, Qt::MatchExactly);
+	QList<QTreeWidgetItem *> list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
 
 	// If no group exists, creating the group
 	if (list.size() == 0) {
 		QTreeWidgetItem *group = new QTreeWidgetItem(_treeWidget);
-		group->setText(0, displayName);
+		group->setText(0, contactGroupId);
 		_treeWidget->setItemExpanded(group, true);
 	}
 }
@@ -190,6 +194,12 @@ void QtContactList::contactGroupAddedEventSlot(QString contactGroupId) {
 void QtContactList::contactGroupRemovedEventSlot(QString contactGroupId) {
 	LOG_DEBUG("contact group removed. UUID: " + contactGroupId.toStdString());
 	//TODO
+}
+
+void QtContactList::contactGroupRenamedEventSlot(QString contactGroupId) {
+	LOG_DEBUG("contact group renamed. UUID: " + contactGroupId.toStdString());
+
+	updatePresentationThreadSafe();
 }
 
 void QtContactList::contactAddedEventSlot(QString contactId) {
@@ -200,16 +210,15 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 	if (!ul->getUser(contactId)) {
 		ContactProfile contactProfile = _cContactList.getContactProfile(contactId.toStdString());
 		QList<QTreeWidgetItem *> list;
-		std::string groupName = _cContactList.getContactGroupName(contactProfile.getGroupId());
 
 		// If the Contact has a group
-		if (!groupName.empty()) {
-			list = _treeWidget->findItems(QString::fromStdString(groupName), Qt::MatchExactly);
+		if (!contactProfile.getGroupId().empty()) {
+			list = _treeWidget->findItems(QString::fromStdString(contactProfile.getGroupId()), Qt::MatchExactly);
 
 			// No group exists. Creating the group
 			if (list.size() == 0) {
 				contactGroupAddedEventSlot(QString::fromStdString(contactProfile.getGroupId()));
-				list = _treeWidget->findItems(QString::fromStdString(groupName), Qt::MatchExactly);
+				list = _treeWidget->findItems(QString::fromStdString(contactProfile.getGroupId()), Qt::MatchExactly);
 			}
 
 			QTreeWidgetItem * newContact = NULL;
@@ -279,8 +288,8 @@ CContactList & QtContactList::getCContactList() const{
 	return _cContactList;
 }
 
-void QtContactList::groupRightClickedSlot(const QString & groupName) {
-	_contactGroupPopupMenu->showMenu(groupName);
+void QtContactList::groupRightClickedSlot(const QString & groupId) {
+	_contactGroupPopupMenu->showMenu(groupId);
 }
 
 void QtContactList::initContent() {

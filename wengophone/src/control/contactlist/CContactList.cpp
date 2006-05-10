@@ -76,6 +76,10 @@ void CContactList::contactGroupRemovedEventHandler(ContactList & sender, Contact
 	_pContactList->contactGroupRemovedEvent(contactGroup.getUUID());
 }
 
+void CContactList::contactGroupRenamedEventHandler(ContactList & sender, ContactGroup & contactGroup) {
+	_pContactList->contactGroupRenamedEvent(contactGroup.getUUID());
+}
+
 void CContactList::contactChangedEventHandler(ContactList & sender, Contact & contact) {
 	_pContactList->contactChangedEvent(contact.getUUID());
 }
@@ -183,6 +187,10 @@ void CContactList::addContactGroup(const std::string & name) {
 	_contactList.addContactGroup(name);
 }
 
-void CContactList::changeGroupName(const std::string & groupId, const std::string & name) {
+void CContactList::removeContactGroup(const std::string & id) {
+	_contactList.removeContactGroup(id);
+}
+
+void CContactList::renameContactGroup(const std::string & groupId, const std::string & name) {
 	_contactList.renameContactGroup(groupId, name);
 }

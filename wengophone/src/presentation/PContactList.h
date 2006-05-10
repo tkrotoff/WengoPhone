@@ -47,6 +47,13 @@ public:
 	virtual void contactGroupRemovedEvent(std::string contactGroupId) = 0;
 
 	/**
+	 * Called by the control when a group has been renamed.
+	 *
+	 * @param contactGroupId the contact group UUID
+	 */
+	virtual void contactGroupRenamedEvent(std::string contactGroupId) = 0;
+
+	/**
 	 * Called by the control when a contact has been added.
 	 *
 	 * @param contactId the contact UUID

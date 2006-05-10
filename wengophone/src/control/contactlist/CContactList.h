@@ -110,12 +110,19 @@ public:
 	void addContactGroup(const std::string & name);
 
 	/**
+	 * Removes a contact group.
+	 *
+	 * @param id the UUID of the group to remove
+	 */
+	void removeContactGroup(const std::string & id);
+
+	/**
 	 * Changes a group name.
 	 *
 	 * @param groupId the UUID of the group to be changed
 	 * @param name the desired name
 	 */
-	void changeGroupName(const std::string & groupId, const std::string & name);
+	void renameContactGroup(const std::string & groupId, const std::string & name);
 
 	/**
 	 * Gets all existing Contact Ids.
@@ -158,6 +165,11 @@ private:
 	 */
 	void contactGroupRemovedEventHandler(ContactList & sender, ContactGroup & contactGroup);
 
+	/**
+	 * @see ContactList::contactGroupRenamedEvent
+	 */
+	void contactGroupRenamedEventHandler(ContactList & sender, ContactGroup & contactGroup);
+	
 	/**
 	 * @see ContactList::contactGroupMovedEvent
 	 */

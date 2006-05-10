@@ -77,8 +77,10 @@ void ContactList::renameContactGroup(const std::string & id, const std::string &
 	ContactGroup * contactGroup = getContactGroup(id);
 
 	if (contactGroup) {
-		_imContactListHandler.changeGroupName(contactGroup->getName(), name);
+		std::string oldName = contactGroup->getName();
 		contactGroup->setName(name);
+		_imContactListHandler.changeGroupName(oldName, name);
+		contactGroupRenamedEvent(*this, *contactGroup);
 	}
 }
 

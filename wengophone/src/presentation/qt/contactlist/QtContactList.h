@@ -62,6 +62,8 @@ public:
 
 	void contactGroupRemovedEvent(std::string contactGroupId);
 
+	void contactGroupRenamedEvent(std::string contactGroupId);
+
 	void contactAddedEvent(std::string contactId);
 
 	void contactRemovedEvent(std::string contactId);
@@ -78,6 +80,8 @@ Q_SIGNALS:
 	void contactGroupAddedEventSignal(QString contactGroupId);
 
 	void contactGroupRemovedEventSignal(QString contactGroupId);
+
+	void contactGroupRenamedEventSignal(QString contactGroupId);
 
 	void contactAddedEventSignal(QString contactId);
 
@@ -103,6 +107,8 @@ private Q_SLOTS:
 	void groupRightClickedSlot(const QString & groupName);
 
 	void contactGroupRemovedEventSlot(QString contactGroupId);
+
+	void contactGroupRenamedEventSlot(QString contactGroupId);
 
 	void contactAddedEventSlot(QString contactId);
 

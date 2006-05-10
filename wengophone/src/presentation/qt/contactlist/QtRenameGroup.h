@@ -25,19 +25,25 @@ namespace Ui {
 	class RenameGroupDialog;
 }
 
-class QtRenameGroup : public QDialog
-{
-  Q_OBJECT
+/**
+ * Dialog to rename a group.
+ *
+ * @author Mr K
+ */
+class QtRenameGroup : public QDialog {
+	Q_OBJECT
+public:
 
-  public:
+	QtRenameGroup(QWidget * parent = 0, Qt::WFlags f = 0);
 
-    QtRenameGroup(QWidget * parent = 0, Qt::WFlags f = 0);
+	virtual ~QtRenameGroup();
 
-    virtual ~QtRenameGroup();
+	QString getGroupName() const;
 
 protected:
 
-    Ui::RenameGroupDialog * _ui;
+	Ui::RenameGroupDialog * _ui;
 };
 
-#endif
+#endif //QTRENAMEGROUP_H
+

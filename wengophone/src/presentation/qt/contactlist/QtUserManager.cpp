@@ -654,11 +654,10 @@ void QtUserManager::moveContact(const QString & contactId,
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user = NULL;
 	bool found = false;
-	QString srcGroupName = QString::fromStdString(_qtContactList.getCContactList().getContactGroupName(srcContactGroupId.toStdString()));
 
 	// Removing the Contact from the old group
 	// We should only one group
-	QList<QTreeWidgetItem *> list = _tree->findItems(srcGroupName, Qt::MatchExactly);
+	QList<QTreeWidgetItem *> list = _tree->findItems(srcContactGroupId, Qt::MatchExactly);
 	QTreeWidgetItem * group = list[0];
 	int count = group->childCount();
 
@@ -685,8 +684,7 @@ void QtUserManager::moveContact(const QString & contactId,
 	// If the user has been found
 	if (user) {
 		// Adding the user to the destination group
-		QString dstGroupName = QString::fromStdString(_qtContactList.getCContactList().getContactGroupName(dstContactGroupId.toStdString()));
-		list = _tree->findItems(dstGroupName, Qt::MatchExactly);
+		list = _tree->findItems(dstContactGroupId, Qt::MatchExactly);
 
 		// No group exists. Creating the group
 		if (list.size() == 0) {

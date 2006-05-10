@@ -18,13 +18,21 @@
  */
 
 #include "QtRenameGroup.h"
+
 #include "ui_RenameGroupDialog.h"
 
-QtRenameGroup::QtRenameGroup(QWidget * parent, Qt::WFlags f ) : QDialog(parent,f){
+#include <QLineEdit>
+
+QtRenameGroup::QtRenameGroup(QWidget * parent, Qt::WFlags f)
+: QDialog(parent,f) {
     _ui = new Ui::RenameGroupDialog();
     _ui->setupUi(this);
 }
 
-QtRenameGroup::~QtRenameGroup(){
+QtRenameGroup::~QtRenameGroup() {
     delete _ui;
+}
+
+QString QtRenameGroup::getGroupName() const {
+	return _ui->groupName->text();
 }

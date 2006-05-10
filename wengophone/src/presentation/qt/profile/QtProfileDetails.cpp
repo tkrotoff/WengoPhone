@@ -52,7 +52,10 @@ _profile(contactProfile) {
 	for (std::vector< std::pair<std::string, std::string> >::const_iterator it = tmp.begin();
 		it != tmp.end();
 		++it) {
-		_ui->groupComboBox->addItem(QString::fromStdString((*it).second), QString::fromStdString((*it).first));	
+		_ui->groupComboBox->addItem(QString::fromStdString((*it).second), QString::fromStdString((*it).first));
+		if ((*it).second == contactProfile.getGroupId()) {
+			_ui->groupComboBox->setCurrentIndex(_ui->groupComboBox->findText(QString::fromStdString((*it).second)));
+		}
 	}
 
 	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - Contact details"));
@@ -169,7 +172,7 @@ void QtProfileDetails::saveContact() {
 
 	QVariant groupId = _ui->groupComboBox->itemData(_ui->groupComboBox->currentIndex());
 	// If the group does not exist
-	if (!groupId.isValid()) {
+	if (!groupId.isNull()) {
 		std::string groupName = _ui->groupComboBox->currentText().toStdString();
 		_cWengoPhone.getCUserProfile()->getCContactList().addContactGroup(groupName);
 		groupId = QString::fromStdString(_cWengoPhone.getCUserProfile()->getCContactList().getContactGroupIdFromName(groupName));

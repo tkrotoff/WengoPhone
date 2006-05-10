@@ -17,14 +17,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTACTContactGroupPopupMenu_H
-#define CONTACTContactGroupPopupMenu_H
+#ifndef CONTACTGROUPPOPUPMENU_H
+#define CONTACTGROUPPOPUPMENU_H
 
 #include <util/NonCopyable.h>
 
 #include <QMenu>
 
-class ContactGroup;
+class CContactList;
 class QTreeWidgetItem;
 class QModelIndex;
 
@@ -36,7 +36,9 @@ class QModelIndex;
  * @author Philippe Bernery
  */
 class ContactGroupPopupMenu : public QMenu, NonCopyable {
+
 	Q_OBJECT
+
 public:
 
 	/**
@@ -44,17 +46,16 @@ public:
 	 *
 	 * @param parent parent widget
 	 */
-	ContactGroupPopupMenu(QWidget * parent);
+	ContactGroupPopupMenu(CContactList & cContactList, QWidget * parent);
 
 public Q_SLOTS:
 
 	/**
 	 * The popup menu is being showed.
 	 *
-	 * @param groupName the name of the group for wich we want to display the
-	 * menu 
+	 * @param groupId the UUID of the group to diplay the menu
 	 */
-	void showMenu(const QString & groupName);
+	void showMenu(const QString & groupId);
 
 private Q_SLOTS:
 
@@ -81,7 +82,10 @@ private Q_SLOTS:
 
 private:
 
-	QString _groupName;
+	QString _groupId;
+
+	CContactList & _cContactList;
+
 };
 
-#endif	//CONTACTContactGroupPopupMenu_H
+#endif //CONTACTGROUPPOPUPMENU_H

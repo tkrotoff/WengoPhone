@@ -83,6 +83,14 @@ public:
 	Event<void (ContactList & sender, ContactGroup & contactGroup)> contactGroupRemovedEvent;
 
 	/**
+	 * A ContactGroup has been renamed.
+	 *
+	 * @param sender this class
+	 * @param contactGroup ContactGroup renamed
+	 */
+	Event<void (ContactList & sender, ContactGroup & contactGroup)> contactGroupRenamedEvent;
+
+	/**
 	 * A Contact has been added to a ContactGroup.
 	 *
 	 * @param sender this class
