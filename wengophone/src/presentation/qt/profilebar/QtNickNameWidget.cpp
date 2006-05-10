@@ -76,8 +76,7 @@ QtNickNameWidget::QtNickNameWidget(CUserProfile & cUserProfile, CWengoPhone & cW
 	_avatarLabel = new QtClickableLabel(this);
 	_jabberLabel = new QtClickableLabel(this);
 	_nickNameEdit = new ToolTipLineEdit(this);
-	connect(_nickNameEdit, SIGNAL(textChanged(const QString &)), SLOT(nickNameChanged(const QString &)));
-	_nickNameEdit->setText("");
+	_nickNameEdit->setText(tr("Enter your nickname here"));
 
 	_avatarLabel->setMinimumSize( QSize( 70,70 ) );
 	_avatarLabel->setMaximumSize( QSize( 70,70 ) );
@@ -411,7 +410,7 @@ void QtNickNameWidget::updateAvatar() {
 
 	if ( !pixmap.isNull()) {
 		QPainter painter( & background );
-		painter.drawPixmap(5,5,pixmap.scaled(60,60));
+		painter.drawPixmap(5,5,pixmap.scaled(60,60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 		painter.end();
 		_avatarLabel->setPixmap(background);
 	} else {
@@ -424,12 +423,6 @@ void QtNickNameWidget::showImAccountManager() {
 		_cWengoPhone, true, this);
 }
 
-
-void QtNickNameWidget::nickNameChanged(const QString & text) {
-	if( text == "" ) {
-		_nickNameEdit->setText(tr("Enter your nickname here"));
-	}
-}
 void QtNickNameWidget::textChanged ( const QString & text ) {
    	QPalette palette = _nickNameEdit->palette();
 	palette.setColor(QPalette::Text, Qt::black);
