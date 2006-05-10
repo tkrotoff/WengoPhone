@@ -775,6 +775,7 @@ void QtWengoPhone::setTrayMenu() {
 	if (!_trayMenu) {
 		_trayMenu = new QMenu(_wengoPhoneWindow);
 	}
+
 	_trayMenu->clear();
 	// Open the wengophone window
 	action = _trayMenu->addAction(tr("Open Wengophone"));
@@ -783,12 +784,12 @@ void QtWengoPhone::setTrayMenu() {
 	//_trayMenu->addAction(tr("Status"));
 	_trayMenu->addMenu(createStatusMenu());
 	// Start a call session
-	_trayMenu->addAction(tr("Call"));
+	action = _trayMenu->addAction(QIcon(":/pics/contact/call.png"),tr("Call"));
 	// Send  SMS
-	action = _trayMenu->addAction(tr("Send a SMS"));
+	action = _trayMenu->addAction(QIcon(":/pics/contact/sms.png"),tr("Send a SMS"));
 	connect (action,SIGNAL(triggered()),this,SLOT(sendSms()));
 	// Start a chat
-	_trayMenu->addAction(tr("Start a chat"));
+	_trayMenu->addAction(QIcon(":/pics/contact/chat.png"),tr("Start a chat"));
 	// Exit
 	action = _trayMenu->addAction(tr("Quit Wengophone"));
 	connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
@@ -999,7 +1000,25 @@ void QtWengoPhone::modelInitializedEvent() {
 
 QMenu * QtWengoPhone::createStatusMenu(){
 
-    QMenu * menu = new QMenu("Status");
+   QMenu * menu = new QMenu(tr("Status"));
+
+   switch ( _cWengoPhone.getCUserProfile()->getUserProfile().getPresenceState() ){
+        case EnumPresenceState::PresenceStateAway:
+            menu->setIcon ( QIcon(":/pics/status/away.png"));
+            break;
+        case EnumPresenceState::PresenceStateOnline:
+            menu->setIcon ( QIcon(":/pics/status/online.png"));
+            break;
+        case EnumPresenceState::PresenceStateInvisible:
+            menu->setIcon ( QIcon(":/pics/status/offline.png"));
+            break;
+        case EnumPresenceState::PresenceStateDoNotDisturb:
+            menu->setIcon ( QIcon(":/pics/status/donotdisturb.png"));
+            break;
+        default:
+            menu->setIcon ( QIcon(":/pics/status/online.png"));
+            break;
+    }
 
 	QAction * action;
 
@@ -1020,6 +1039,7 @@ QMenu * QtWengoPhone::createStatusMenu(){
 
 void QtWengoPhone::setSystrayIcon(QVariant status){
 
+
     if ( status.toInt() == (int)EnumPresenceState::MyPresenceStatusOk)
 
     switch ( _cWengoPhone.getCUserProfile()->getUserProfile().getPresenceState() ){
@@ -1039,7 +1059,7 @@ void QtWengoPhone::setSystrayIcon(QVariant status){
             LOG_DEBUG("Change presence state display to -- Not yet handled\n");
             break;
     }
-
+    setTrayMenu();
 }
 
 void QtWengoPhone::sysTrayDoubleClicked(const QPoint& ){
