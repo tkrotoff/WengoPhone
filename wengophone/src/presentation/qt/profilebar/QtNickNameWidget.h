@@ -26,6 +26,7 @@
 class CWengoPhone;
 class CUserProfile;
 class IMAccount;
+class ToolTipLineEdit;
 
 /**
  *
@@ -62,6 +63,10 @@ public Q_SLOTS:
 
 	void userProfileUpdated();
 
+private Q_SLOTS:
+
+	void nickNameChanged(const QString & text);
+
 protected:
 
 	void updateAvatar();
@@ -92,7 +97,7 @@ protected:
 
 	QtClickableLabel * _avatarLabel;
 
-	QLineEdit * _nickNameEdit;
+	ToolTipLineEdit * _nickNameEdit;
 
 	QGridLayout * _protocolLayout;
 

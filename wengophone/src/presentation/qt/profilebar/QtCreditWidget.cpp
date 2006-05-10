@@ -20,12 +20,16 @@
 #include "QtCreditWidget.h"
 
 #include <control/CWengoPhone.h>
+#include <presentation/qt/config/QtWengoConfigDialog.h>
+
+#include <qtutil/QtClickableLabel.h>
 
 QtCreditWidget::QtCreditWidget(QWidget * parent , Qt::WFlags f ) : QWidget(parent,f){
 
 	//buy call-out label
 	QtClickableLabel * buyLabel = new QtClickableLabel(this);
 	buyLabel->setText(tr("Buy call-out credits"));
+	connect(buyLabel, SIGNAL(clicked()), SLOT(buyOutClicked()));
 
 	QPalette palette = buyLabel->palette();
 	palette.setColor(QPalette::WindowText, Qt::blue);
@@ -39,15 +43,27 @@ QtCreditWidget::QtCreditWidget(QWidget * parent , Qt::WFlags f ) : QWidget(paren
 	cursor.setShape(Qt::PointingHandCursor);
 	buyLabel->setCursor(cursor);
 
-	connect(buyLabel, SIGNAL(clicked()), SLOT(buyOutClicked()));
-	
+
+	//call forward mode label	
+	_callForwardMode = new QtClickableLabel(this);
+	connect(_callForwardMode, SIGNAL(clicked()), SLOT(callforwardModeClicked()));
+
+	palette = _callForwardMode->palette();
+	palette.setColor(QPalette::WindowText, Qt::blue);
+	_callForwardMode->setPalette(palette);
+
+	font = _callForwardMode->font();
+	font.setUnderline(true);
+	_callForwardMode->setFont(font);
+
+	cursor = _callForwardMode->cursor();
+	cursor.setShape(Qt::PointingHandCursor);
+	_callForwardMode->setCursor(cursor);
+
+
 	//Pstn number label
 	_pstnNumber = new QLabel(this);
 
-	//call forward mode label
-	_callForwardMode = new QtClickableLabel(this);
-	
-	//add labels to the layout
 	_gridLayout = new QGridLayout(this);
 	_gridLayout->addWidget(buyLabel, 0, 0);
 }
@@ -61,12 +77,19 @@ void QtCreditWidget::setCWengoPhone(CWengoPhone * cwengophone){
 }
 
 void QtCreditWidget::setPstnNumber(const QString & number) {
-	//TODO: remove the '0' hack when the ws will be updated
-	_pstnNumber->setText(tr("Your number: 0") + number);
+	_pstnNumber->setText(tr("Your number: ") + number);
 	_gridLayout->addWidget(_pstnNumber, 1, 0);
 }
 
 void QtCreditWidget::setCallForwardMode(const QString & mode) {
 	_callForwardMode->setText(tr("Call Forward mode: ") + mode);
 	_gridLayout->addWidget(_callForwardMode, 2, 0);
+}
+
+void QtCreditWidget::callforwardModeClicked() {
+	if( _cWengoPhone ) {
+		QtWengoConfigDialog dialog(*_cWengoPhone, this);
+		dialog.showCallForward();
+		dialog.show();
+	}
 }

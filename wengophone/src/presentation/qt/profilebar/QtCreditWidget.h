@@ -21,9 +21,9 @@
 #define QTCREDITWIDGET_H
 
 #include <QtGui>
-#include <qtutil/QtClickableLabel.h>
 
 class CWengoPhone;
+class QtClickableLabel;
 
 /**
  * Credit widget
@@ -43,15 +43,17 @@ public:
 
 	void setCallForwardMode(const QString & mode);
 
-public Q_SLOTS:
+private Q_SLOTS:
 
 	void buyOutClicked();
+
+	void callforwardModeClicked();
 
 private:
 
 	QLabel * _pstnNumber;
 
-	QLabel * _callForwardMode;
+	QtClickableLabel * _callForwardMode;
 
 	QGridLayout * _gridLayout;
 

@@ -31,6 +31,7 @@
 #include <presentation/qt/imaccount/QtIMAccountManager.h>
 
 #include <util/Logger.h>
+#include <qtutil/ToolTipLineEdit.h>
 
 #include <QFileDialog>
 
@@ -74,7 +75,9 @@ QtNickNameWidget::QtNickNameWidget(CUserProfile & cUserProfile, CWengoPhone & cW
 	_aimLabel = new QtClickableLabel(this);
 	_avatarLabel = new QtClickableLabel(this);
 	_jabberLabel = new QtClickableLabel(this);
-	_nickNameEdit = new QLineEdit(this);
+	_nickNameEdit = new ToolTipLineEdit(this);
+	connect(_nickNameEdit, SIGNAL(textChanged(const QString &)), SLOT(nickNameChanged(const QString &)));
+	_nickNameEdit->setText("");
 
 	_avatarLabel->setMinimumSize( QSize( 70,70 ) );
 	_avatarLabel->setMaximumSize( QSize( 70,70 ) );
@@ -179,7 +182,10 @@ void QtNickNameWidget::disconnected(IMAccount * pImAccount) {
 }
 
 void QtNickNameWidget::msnClicked(){
-	if( QVariant(QPixmap(PICS_MSN_ON)) ==  QVariant(*_wengoLabel->pixmap()) ) {
+	set<IMAccount *> list;
+	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolMSN);
+
+	if( list.size() != 0 ) {
 		showMsnMenu();
 	} else {
 		showImAccountManager();
@@ -187,16 +193,21 @@ void QtNickNameWidget::msnClicked(){
 }
 
 void QtNickNameWidget::yahooClicked(){
-	if( QVariant(QPixmap(PICS_YAHOO_ON)) ==  QVariant(*_wengoLabel->pixmap()) ) {
+	set<IMAccount *> list;
+	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolYahoo);
+
+	if( list.size() != 0 ) {
 		showYahooMenu();
 	} else {
 		showImAccountManager();
 	}
-
 }
 
 void QtNickNameWidget::wengoClicked() {
-	if( QVariant(QPixmap(PICS_WENGO_ON)) ==  QVariant(*_wengoLabel->pixmap()) ) {
+	set<IMAccount *> list;
+	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+
+	if( list.size() != 0 ) {
 		showWengoMenu();
 	} else {
 		showImAccountManager();
@@ -204,7 +215,10 @@ void QtNickNameWidget::wengoClicked() {
 }
 
 void QtNickNameWidget::aimClicked() {
-	if( QVariant(QPixmap(PICS_AIM_ON)) ==  QVariant(*_wengoLabel->pixmap()) ) {
+	set<IMAccount *> list;
+	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ);
+
+	if( list.size() != 0 ) {
 		showAimMenu();
 	} else {
 		showImAccountManager();
@@ -212,7 +226,10 @@ void QtNickNameWidget::aimClicked() {
 }
 
 void QtNickNameWidget::jabberClicked() {
-	if( QVariant(QPixmap(PICS_JABBER_ON)) ==  QVariant(*_wengoLabel->pixmap()) ) {
+	set<IMAccount *> list;
+	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolJabber);
+
+	if( list.size() != 0 ) {
 		showJabberMenu();
 	} else {
 		showImAccountManager();
@@ -366,7 +383,9 @@ void QtNickNameWidget::showJabberMenu() {
 }
 
 void QtNickNameWidget::init() {
-	_nickNameEdit->setText(QString::fromStdString(_cUserProfile.getUserProfile().getAlias()));
+	if( _cUserProfile.getUserProfile().getAlias() != "" ) {
+		_nickNameEdit->setText(QString::fromStdString(_cUserProfile.getUserProfile().getAlias()));
+	}
 	updateAvatar();
 }
 
@@ -386,8 +405,7 @@ void QtNickNameWidget::updateAvatar() {
 		painter.drawPixmap(5,5,pixmap.scaled(60,60));
 		painter.end();
 		_avatarLabel->setPixmap(background);
-	}
-	else {
+	} else {
 		_avatarLabel->setPixmap(background);
 	}
 }
@@ -396,4 +414,11 @@ void QtNickNameWidget::showImAccountManager() {
 
 	QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfile()->getUserProfile(),
 		_cWengoPhone, true, this);
+}
+
+
+void QtNickNameWidget::nickNameChanged(const QString & text) {
+	if( text == "" ) {
+		_nickNameEdit->setText(tr("Enter your nickname here"));
+	}
 }
