@@ -466,7 +466,6 @@ Contact * ContactList::getContact(const std::string & contactId) const {
 	for (Contacts::const_iterator it = _contacts.begin();
 		it != _contacts.end();
 		++it) {
-		LOG_DEBUG("Looking for: " + contactId + ", current: " + (*it).getUUID());
 		if ((*it).getUUID() == contactId) {
 			return &(Contact &)(*it);
 			break;
