@@ -489,9 +489,9 @@ void QtProfileBar::paintEvent ( QPaintEvent * event ) {
         lg.setColorAt ( 0, palette().color(QPalette::Window) );
         QColor dest = palette().color(QPalette::Window);
 
-        float red = ((float )dest.red()) / 1.5f;
-        float blue = ((float )dest.blue()) / 1.5f;
-        float green = ((float )dest.green()) / 1.5f;
+        float red = ((float )dest.red()) / 1.3f;
+        float blue = ((float )dest.blue()) / 1.3f;
+        float green = ((float )dest.green()) / 1.3f;
 
         dest = QColor( (int)red,(int)green,(int)blue);
         lg.setColorAt ( 1, dest  );
