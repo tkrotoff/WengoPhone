@@ -105,7 +105,7 @@
       <item rowspan="2" row="0" column="0" >
        <widget class="QLabel" name="label_5" >
         <property name="pixmap" >
-         <pixmap/>
+         <pixmap resource="../wengophone.qrc" >:/pics/audio/speaker.png</pixmap>
         </property>
        </widget>
       </item>
