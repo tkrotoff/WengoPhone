@@ -82,14 +82,6 @@ public:
 private:
 
 	/**
-	 * Handler for Settings changes.
-	 *
-	 * @param sender class Settings
-	 * @param key the key that have changed
-	 */
-	//void valueChangedEventHandler(Settings & sender, const std::string & key);
-
-	/**
 	 * @see WengoWebService
 	 */
 	void answerReceived(const std::string & answer, int requestId);

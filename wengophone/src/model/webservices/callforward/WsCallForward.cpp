@@ -40,6 +40,7 @@ WsCallForward::WsCallForward(WengoAccount * wengoAccount) : WengoWebService(weng
 }
 
 void WsCallForward::disableCallForward() {
+
 	std::string query = "action=callforward";
 	query += "&activate=0";
 
@@ -48,6 +49,7 @@ void WsCallForward::disableCallForward() {
 }
 
 void WsCallForward::forwardToVoiceMail() {
+
 	std::string query = "action=callforward";
 	query += "&activate=1";
 	query += "&num1=voicemail";
@@ -57,9 +59,10 @@ void WsCallForward::forwardToVoiceMail() {
 }
 
 void WsCallForward::forwardToNumber(const std::string & number1, const std::string & number2, const std::string & number3) {
-	std::string query = "action=callforward";
 
+	std::string query = "action=callforward";
 	query += "&activate=1";
+	
 	query += "&num1=" + number1;
 	query += "&num2=" + number2;
 	query += "&num3=" + number3;
@@ -81,12 +84,12 @@ void WsCallForward::answerReceived(const std::string & answer, int requestId) {
 		return;
 	}
 
-	TiXmlElement * elt = response->FirstChildElement("output");
+	TiXmlElement * elt = response->FirstChildElement("code");
 	if( elt && (elt->FirstChild()) ) {
 		
 		std::string r = elt->FirstChild()->ToText()->Value();
 		
-		if( r == "OK" ) {
+		if( r == "200" ) {
 			wsCallForwardEvent(*this, requestId, WsCallForwardStatusOk);
 		} else if( r == "401" ) {
 			wsCallForwardEvent(*this, requestId, WsCallForwardStatusAuthenticationError);
