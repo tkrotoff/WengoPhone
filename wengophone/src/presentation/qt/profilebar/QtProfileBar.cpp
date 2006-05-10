@@ -439,16 +439,16 @@ void QtProfileBar::wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo
 
 		switch( mode ) {
 			case WsInfo::WsInfoCallForwardModeVoicemail:
-				_creditWidget->setCallForwardMode(tr("voicemail"));
+				_creditWidget->setCallForwardMode(tr("active") + " (" + tr("voicemail)") + ")" );
 				break;
 			case WsInfo::WsInfoCallForwardModeNumber:
-				_creditWidget->setCallForwardMode(tr("active"));
+				_creditWidget->setCallForwardMode(tr("active") + " (" + QString::fromStdString(dest1) + ")" );
 				break;
 			case WsInfo::WsInfoCallForwardMode_Disabled:
 				_creditWidget->setCallForwardMode(tr("inactive"));
 				break;
 			case WsInfo::WsInfoCallForwardMode_Unauthorized:
-				_creditWidget->setCallForwardMode(tr("Unauthorized"));
+				_creditWidget->setCallForwardMode(tr("unauthorized"));
 				break;
 		}
 	}
