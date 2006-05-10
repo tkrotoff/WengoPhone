@@ -46,7 +46,9 @@ void QtIdle::idleStatusChangedEventHandler(Idle & sender, Idle::Status status) {
 	switch (status) {
 	case Idle::StatusIdle:
 		presenceStateSaved = _userProfile.getPresenceState();
-		_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway, NULL);
+		if( presenceStateSaved != EnumPresenceState::PresenceStateInvisible ) {
+			_userProfile.setPresenceState(EnumPresenceState::PresenceStateAway, NULL);
+		}
 		break;
 
 	case Idle::StatusActive:
