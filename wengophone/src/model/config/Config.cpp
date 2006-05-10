@@ -20,9 +20,9 @@
 #include "Config.h"
 
 #include <sipwrapper/EnumNatType.h>
+#include <sipwrapper/EnumVideoQuality.h>
 
 #include <webcam/WebcamDriver.h>
-#include <webcam/EnumVideoQuality.h>
 
 #include <sound/AudioDevice.h>
 

@@ -616,13 +616,13 @@ void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, cons
 	}
 }
 
-void PhApiWrapper::sendMyIcon(const std::string & contactId, const std::string & iconFilename)
-{
-	if (iconFilename.length() == 0)
+void PhApiWrapper::sendMyIcon(const std::string & contactId, const std::string & iconFilename) {
+	if (iconFilename.length() == 0) {
 		return;
+	}
 
 	const std::string mime = "buddyicon/" + iconFilename;
-	const char *message("has changed his icon");
+	const char * message = "has changed his icon";
 
 	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
 	int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message, mime.c_str());
@@ -782,6 +782,31 @@ void PhApiWrapper::setTunnel(const std::string & address, unsigned port, bool ss
 
 void PhApiWrapper::setNatType(EnumNatType::NatType natType) {
 	_natType = natType;
+}
+
+void PhApiWrapper::setVideoQuality(EnumVideoQuality::VideoQuality videoQuality) {
+	phVideoControlSetWebcamCaptureResolution(320, 240);
+
+	switch(videoQuality) {
+	case EnumVideoQuality::VideoQualityNormal:
+		phcfg.video_config.video_line_configuration = PHAPI_VIDEO_LINE_128KBPS;
+		break;
+
+	case EnumVideoQuality::VideoQualityGood:
+		phcfg.video_config.video_line_configuration = PHAPI_VIDEO_LINE_256KBPS;
+		break;
+
+	case EnumVideoQuality::VideoQualityVeryGood:
+		phcfg.video_config.video_line_configuration = PHAPI_VIDEO_LINE_512KBPS;
+		break;
+
+	case EnumVideoQuality::VideoQualityExcellent:
+		phcfg.video_config.video_line_configuration = PHAPI_VIDEO_LINE_1024KBPS;
+		break;
+
+	default:
+		LOG_FATAL("unknown video quality=" + String::fromNumber(videoQuality));
+	}
 }
 
 void PhApiWrapper::setSIP(const string & server, unsigned serverPort, unsigned localPort) {

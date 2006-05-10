@@ -417,6 +417,9 @@ void PhoneLine::configureSipWrapper() {
 	string natType = config.getNetworkNatType();
 	_sipWrapper->setNatType(EnumNatType::toNatType(natType));
 
+	//Setting video quality
+	_sipWrapper->setVideoQuality((EnumVideoQuality::VideoQuality) config.getVideoQuality());
+
 	//Setting audio devices
 	_sipWrapper->setCallOutputAudioDevice(config.getAudioOutputDeviceName());
 	_sipWrapper->setCallInputAudioDevice(config.getAudioInputDeviceName());

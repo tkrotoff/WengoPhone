@@ -24,6 +24,7 @@
 #include <sipwrapper/EnumPhoneLineState.h>
 #include <sipwrapper/EnumTone.h>
 #include <sipwrapper/EnumNatType.h>
+#include <sipwrapper/EnumVideoQuality.h>
 #include <sipwrapper/CodecList.h>
 
 #include <util/Interface.h>
@@ -281,8 +282,17 @@ public:
 
 	/**
 	 * Sets the NAT type.
+	 *
+	 * @see EnumNatType
 	 */
 	virtual void setNatType(EnumNatType::NatType natType) = 0;
+
+	/**
+	 * Sets the NAT type.
+	 *
+	 * @see EnumVideoQuality
+	 */
+	virtual void setVideoQuality(EnumVideoQuality::VideoQuality videoQuality) = 0;
 
 	/**
 	 * Sets the SIP parameters.

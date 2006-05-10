@@ -139,6 +139,8 @@ public:
 
 	void setNatType(EnumNatType::NatType natType);
 
+	void setVideoQuality(EnumVideoQuality::VideoQuality videoQuality);
+
 	void setSIP(const std::string & server, unsigned serverPort, unsigned localPort);
 
 
