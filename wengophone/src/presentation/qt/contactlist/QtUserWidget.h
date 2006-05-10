@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 #ifndef QTUSERWIDGET_H
 #define QTUSERWIDGET_H
 
+#include "ui_UserWidget.h"
+
 #include <model/contactlist/ContactProfile.h>
 
 #include <QWidget>
@@ -33,26 +35,30 @@ class CUserProfile;
 class QLabel;
 class QPushButton;
 
-class QtUserWidget : public QWidget
-{
+/**
+ * Qt user widget.
+ * Represents a contact in the contact list.
+ *
+ * @author Mr K
+ * @author Mathieu Stute
+ */
+class QtUserWidget : public QWidget {
     Q_OBJECT
 public:
 
-    QtUserWidget(const std::string & contactId, CUserProfile & cUserProfile, QWidget * parent = 0, Qt::WFlags f=0);
+	QtUserWidget(const std::string & contactId, CUserProfile & cUserProfile,
+		QWidget * parent = 0, Qt::WFlags f = 0);
 
-//	virtual void paintEvent(QPaintEvent * event);
-
-	void setText(QString text) {
+	void setText(const QString & text) {
 		_text = text;
 	}
-
+	
 	QString text() const {
 		return _text;
 	}
 
-	QLabel * getAvatarLabel() const {
-		return _avatarLabel;
-	}
+	
+	QLabel * getAvatarLabel() const;
 
 	QPixmap getIcon() const;
 
@@ -62,29 +68,19 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
 
-    void callButtonClicked();
+	void callButtonClicked();
 
-    void smsButtonClicked();
+	void smsButtonClicked();
 
-    void chatButtonClicked();
+	void chatButtonClicked();
+
+	void mobileButtonClicked();
+
+	void landLineButtonClicked();
 
 protected:
 
-	QLabel * _avatarLabel;
-
 	QWidget * _widget;
-
-	QLabel * _homePhoneLabel;
-
-	QLabel * _cellPhoneLabel;
-
-	QPushButton * _callButton;
-
-	QPushButton * _smsButton;
-
-	QPushButton * _chatButton;
-
-	QString _text;
 
 	QtUserWidgetAvatarManager * _avatarManager;
 
@@ -96,6 +92,9 @@ protected:
 
 	mutable QMutex _mutex;
 
+	QString _text;
+
+	Ui::UserWidget _ui;
 };
 
-#endif
+#endif	//QTUSERWIDGET_H

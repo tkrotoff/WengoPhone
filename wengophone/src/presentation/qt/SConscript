@@ -235,7 +235,8 @@ forms = [
 	'config/PrivacySettings.ui',
 	'config/VideoSettings.ui',
 	'config/WengoConfigDialog.ui',
-	'contactlist/RenameGroupDialog.ui'
+	'contactlist/RenameGroupDialog.ui',
+	'contactlist/UserWidget.ui'
 ]
 
 for form in forms:

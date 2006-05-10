@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,75 +35,60 @@ QtUserWidget::QtUserWidget(const std::string & contactId, CUserProfile & cUserPr
 : QWidget(parent, f), _cUserProfile(cUserProfile) {
 
 	_contactId = contactId;
-
 	contactProfileUpdated();
 
-	_widget = WidgetFactory::create(":/forms/contactlist/userWidget.ui", NULL);
+	_widget = new QWidget(NULL);
+	_ui.setupUi(_widget);
+
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget(_widget);
 	layout->setMargin(0);
 	setLayout(layout);
 
- 	_avatarLabel = findChild<QLabel *>("avatarLabel");
-	_homePhoneLabel = findChild<QLabel *>("homePhoneLabel");
-	_cellPhoneLabel = findChild<QLabel *>("cellPhoneLabel");
+	_avatarManager = new QtUserWidgetAvatarManager(this, _ui.avatarLabel);
+	_ui.avatarLabel->installEventFilter(_avatarManager);
 
-	_avatarManager = new QtUserWidgetAvatarManager(this,_avatarLabel);
-
-	_avatarLabel->installEventFilter(_avatarManager);
-
-    _smsButton = findChild<QPushButton *>("smsButton");
-    _callButton = findChild<QPushButton *>("callButton");
-    _chatButton = findChild<QPushButton *>("chatButton");
-
-    QString str = QString::fromUtf8(_contactProfile.getHomePhone().c_str());
-    if (!str.isEmpty()) {
-        _homePhoneLabel->setText( str );
-    }
-
-    str = QString::fromUtf8(_contactProfile.getMobilePhone().c_str());
-    if ( !str.isEmpty() )
-    {
-        _cellPhoneLabel->setText( str );
-    }
-    else{
-        _smsButton->setEnabled(false);
-    }
-
+	QString str = QString::fromUtf8(_contactProfile.getHomePhone().c_str());
+	if (!str.isEmpty()) {
+		_ui.homePhoneLabel->setText(str);
+	}
+	
+	str = QString::fromUtf8(_contactProfile.getMobilePhone().c_str());
+	if ( !str.isEmpty() ) {
+		_ui.cellPhoneLabel->setText(str);
+	}
+	else {
+		_ui.smsButton->setEnabled(false);
+	}
+	
 	if (!_contactProfile.hasFreeCall()) {
-		_callButton->setEnabled(false);
+		_ui.callButton->setEnabled(false);
 	}
-
+	
 	if (!_contactProfile.hasIM()) {
-		_chatButton->setEnabled(false);
+		_ui.chatButton->setEnabled(false);
 	}
-
-    connect ( _callButton, SIGNAL(clicked()), SLOT ( callButtonClicked() ));
-    connect ( _chatButton, SIGNAL(clicked()), SLOT ( chatButtonClicked() ));
-    connect ( _smsButton,  SIGNAL(clicked()), SLOT ( smsButtonClicked() ));
+	
+	connect ( _ui.callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
+	connect ( _ui.chatButton, SIGNAL(clicked()), SLOT(chatButtonClicked()));
+	connect ( _ui.smsButton, SIGNAL(clicked()), SLOT(smsButtonClicked()));
+	connect ( _ui.landLineButton, SIGNAL(clicked()), SLOT(landLineButtonClicked()));
+	connect ( _ui.mobileButton, SIGNAL(clicked()), SLOT(mobileButtonClicked()));
 }
-/*
-void QtUserWidget::paintEvent(QPaintEvent * event){
-
-	QPalette  p = palette();
-    QPainter painter(this);
-	painter.fillRect(rect(),QBrush(QColor(255,255,128)));
-}
-*/
 
 void QtUserWidget::callButtonClicked(){
-    QtUserList * ul = QtUserList::getInstance();
+	QtUserList * ul = QtUserList::getInstance();
 	ul->startCall(QString::fromStdString(_contactId));
 }
 
 void QtUserWidget::smsButtonClicked(){
-    QtUserList * ul = QtUserList::getInstance();
-    ul->startSMS(QString::fromStdString(_contactId));
+	QtUserList * ul = QtUserList::getInstance();
+	ul->startSMS(QString::fromStdString(_contactId));
 }
 
 void QtUserWidget::chatButtonClicked(){
-    QtUserList * ul = QtUserList::getInstance();
-    ul->startChat(QString::fromStdString(_contactId));
+	QtUserList * ul = QtUserList::getInstance();
+	ul->startChat(QString::fromStdString(_contactId));
 }
 
 QPixmap QtUserWidget::getIcon() const {
@@ -124,3 +109,21 @@ void QtUserWidget::contactProfileUpdated() {
 	_contactProfile = _cUserProfile.getCContactList().getContactProfile(_contactId);
 }
 
+QLabel * QtUserWidget::getAvatarLabel() const {
+	return _ui.avatarLabel;
+}
+
+
+void QtUserWidget::mobileButtonClicked() {
+	if( _ui.cellPhoneLabel->text() != tr("No cell phone number set") ) {
+		QtUserList * ul = QtUserList::getInstance();
+		ul->startCall(QString::fromStdString(_contactId), _ui.cellPhoneLabel->text());
+	}
+}
+
+void QtUserWidget::landLineButtonClicked() {
+	if( _ui.homePhoneLabel->text() != tr("No phone number set") ) {
+		QtUserList * ul = QtUserList::getInstance();
+		ul->startCall(QString::fromStdString(_contactId), _ui.homePhoneLabel->text());
+	}
+}
