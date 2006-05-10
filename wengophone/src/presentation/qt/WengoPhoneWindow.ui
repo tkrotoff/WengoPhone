@@ -334,8 +334,19 @@
     </item>
     <item row="4" column="0" >
      <widget class="QLabel" name="configPanelLabel" >
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>8</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>true</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
       <property name="text" >
-       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt; text-decoration: underline;">Audio and Video Settings&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+       <string>Audio and Video Settings</string>
       </property>
       <property name="indent" >
        <number>15</number>
@@ -366,7 +377,7 @@
      <x>0</x>
      <y>0</y>
      <width>282</width>
-     <height>29</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -377,37 +388,6 @@
     <addaction name="actionFaq" />
     <addaction name="separator" />
     <addaction name="actionShowAbout" />
-   </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>&amp;Contacts</string>
-    </property>
-    <widget class="QMenu" name="menuHideShow" >
-     <property name="title" >
-      <string>Sort contacts</string>
-     </property>
-     <addaction name="actionSortAlphabetically" />
-     <addaction name="actionBy_presence" />
-     <addaction name="actionBy_media" />
-     <addaction name="actionBy_protocol" />
-    </widget>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSearchWengoUsers" />
-    <addaction name="actionManage_blocked_contacts" />
-    <addaction name="separator" />
-    <addaction name="actionCreateGroup" />
-    <addaction name="actionShow_contact_groups" />
-    <addaction name="actionHideContactsOffline" />
-    <addaction name="menuHideShow" />
-   </widget>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionSendSms" />
-    <addaction name="actionForward_incoming_calls" />
-    <addaction name="separator" />
-    <addaction name="actionCreateConferenceCall" />
    </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
@@ -462,6 +442,36 @@
     <addaction name="separator" />
     <addaction name="actionClose" />
    </widget>
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionSendSms" />
+    <addaction name="actionForward_incoming_calls" />
+    <addaction name="separator" />
+    <addaction name="actionCreateConferenceCall" />
+   </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>&amp;Contacts</string>
+    </property>
+    <widget class="QMenu" name="menuHideShow" >
+     <property name="title" >
+      <string>Sort contacts</string>
+     </property>
+     <addaction name="actionSortAlphabetically" />
+     <addaction name="actionBy_presence" />
+     <addaction name="actionBy_media" />
+     <addaction name="actionBy_protocol" />
+    </widget>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearchWengoUsers" />
+    <addaction name="actionManage_blocked_contacts" />
+    <addaction name="separator" />
+    <addaction name="actionShow_contact_groups" />
+    <addaction name="actionHideContactsOffline" />
+    <addaction name="menuHideShow" />
+   </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
    <addaction name="menuActions" />
@@ -472,9 +482,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>568</y>
+     <y>571</y>
      <width>282</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>
