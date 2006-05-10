@@ -16,9 +16,9 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
 #include <cutil/safe-strings.h>
 
+#include <sys/types.h>
 
 /*
  * Copy src to string dst of size siz.  At most siz-1 characters

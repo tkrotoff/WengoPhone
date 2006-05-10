@@ -16,10 +16,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <sys/types.h>
-#include <string.h>
 #include <cutil/safe-strings.h>
 
+#include <sys/types.h>
+#include <string.h>
 
 /*
  * Appends src to string dst of size siz (unlike strncat, siz is the
@@ -55,4 +55,3 @@ strlcat(char *dst, const char *src, size_t siz)
 
 	return(dlen + (s - src));	/* count does not include NUL */
 }
-
