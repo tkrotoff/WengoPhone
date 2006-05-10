@@ -53,6 +53,10 @@ QtAdvancedConfig::~QtAdvancedConfig() {
 	delete _ui;
 }
 
+int QtAdvancedConfig::show() {
+	return _advancedConfigWindow->exec();
+}
+
 void QtAdvancedConfig::populate() {
 	//_ui->tableWidget->clear();
 

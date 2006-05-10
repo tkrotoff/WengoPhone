@@ -21,6 +21,8 @@
 
 #include "ui_AdvancedSettings.h"
 
+#include "QtAdvancedConfig.h"
+
 #include <QtGui>
 
 QtAdvancedSettings::QtAdvancedSettings(QWidget * parent)
@@ -30,6 +32,8 @@ QtAdvancedSettings::QtAdvancedSettings(QWidget * parent)
 
 	_ui = new Ui::AdvancedSettings();
 	_ui->setupUi(_advancedSettingsWidget);
+
+	connect(_ui->advancedConfigWindowButton, SIGNAL(clicked()), SLOT(showAdvancedConfigWindow()));
 
 	readConfig();
 }
@@ -46,4 +50,11 @@ void QtAdvancedSettings::readConfig() {
 }
 
 void QtAdvancedSettings::saveConfig() {
+}
+
+void QtAdvancedSettings::showAdvancedConfigWindow() {
+	static QtAdvancedConfig * configWindow = new QtAdvancedConfig(_advancedSettingsWidget);
+
+	configWindow->populate();
+	configWindow->show();
 }

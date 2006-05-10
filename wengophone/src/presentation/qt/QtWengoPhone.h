@@ -167,8 +167,6 @@ private Q_SLOTS:
 
 	void sendSms();
 
-	void showAdvancedConfig();
-
 	void showCreateConferenceCall();
 
 	void showAccountSettings();

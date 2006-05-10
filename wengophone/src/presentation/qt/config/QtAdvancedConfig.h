@@ -45,11 +45,9 @@ public:
 
 	~QtAdvancedConfig();
 
-	QDialog * getWidget() const {
-		return _advancedConfigWindow;
-	}
-
 	void populate();
+
+	int show();
 
 private Q_SLOTS:
 

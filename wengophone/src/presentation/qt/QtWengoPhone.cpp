@@ -52,7 +52,6 @@
 #include "webservices/sms/QtSms.h"
 #include "webservices/directory/QtWsDirectory.h"
 #include "QtHttpProxyLogin.h"
-#include "config/QtAdvancedConfig.h"
 #include "config/QtWengoConfigDialog.h"
 #include "profilebar/QtProfileBar.h"
 #include "history/QtHistoryWidget.h"
@@ -200,7 +199,7 @@ void QtWengoPhone::initThreadSafe() {
 	_trayIcon->show();
 
     connect (_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT (sysTrayDoubleClicked(const QPoint &)));
- 
+
     connect (_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )),
              this,SLOT(setSystrayIcon(QVariant )));
 
@@ -735,13 +734,6 @@ void QtWengoPhone::sendSms() {
 	if (_qtSms) {
 		_qtSms->getWidget()->show();
 	}
-}
-
-void QtWengoPhone::showAdvancedConfig() {
-	static QtAdvancedConfig * configWindow = new QtAdvancedConfig(_wengoPhoneWindow);
-
-	configWindow->populate();
-	configWindow->getWidget()->show();
 }
 
 void QtWengoPhone::showAccountSettings() {
