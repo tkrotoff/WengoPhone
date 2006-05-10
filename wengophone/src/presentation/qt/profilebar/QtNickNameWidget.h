@@ -67,7 +67,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-	void nicknameChanged(const QString & text);
+	void nicknameChanged();
 
 protected:
 
