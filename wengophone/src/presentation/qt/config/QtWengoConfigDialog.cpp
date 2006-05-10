@@ -100,3 +100,13 @@ void QtWengoConfigDialog::save() {
 		_settingsList[i]->saveConfig();
 	}
 }
+
+void QtWengoConfigDialog::showCallForward() {
+	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Call Forward"), Qt::MatchExactly);
+	if( !list.empty() ) {
+
+		if( list[0] ) {
+			_ui->treeWidget->setCurrentItem(list[0]);
+		}
+	}
+}

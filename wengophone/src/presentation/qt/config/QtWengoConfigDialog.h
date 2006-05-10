@@ -52,6 +52,8 @@ public Q_SLOTS:
 
 	void show();
 
+	void showCallForward();
+
 private Q_SLOTS:
 
 	void itemActivated();
