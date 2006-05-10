@@ -293,6 +293,8 @@ void QtWengoPhone::initThreadSafe() {
 	_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
 	Widget::createLayout(_ui->tabHome)->addWidget((QWidget*) _browser->getWidget());
 	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
+#else
+	_ui->tabWidget->removeTab(_ui->tabWidget->indexOf(_ui->tabHome));
 #endif
 
 	//Idle detection
