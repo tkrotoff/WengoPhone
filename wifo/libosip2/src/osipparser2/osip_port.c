@@ -243,7 +243,7 @@ osip_strdup (const char *ch)
     return NULL;
   length = strlen (ch);
   copy = (char *) osip_malloc (length + 1);
-  osip_strncpy (copy, ch, length);
+  osip_strncpy (copy, ch, length + 1);
   return copy;
 }
 
