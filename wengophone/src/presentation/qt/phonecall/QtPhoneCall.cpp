@@ -78,22 +78,16 @@ void QtPhoneCall::initThreadSafe() {
 	//phoneNumberLabel
 	_nickNameLabel = Object::findChild<QLabel *>(_phoneCallWidget, "nickNameLabel");
 	QString tmp = QString("<html><head><meta name='qrichtext' content='1'/></head><body "
-	                      "style=white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
-                          " font-weight:400; font-style:normal; text-decoration:none;'><p style=' margin-top:0px; "
-                          " margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-                          "font-size:8pt;'><span style=' font-size:13pt; font-weight:600;'>%1</span></p></body></html>").arg(callAddress);
+			"style=white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
+			" font-weight:400; font-style:normal; text-decoration:none;'><p style=' margin-top:0px; "
+			" margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+			"font-size:8pt;'><span style=' font-size:13pt; font-weight:600;'>%1</span></p></body></html>").arg(callAddress);
 
 	_nickNameLabel->setText(tmp);
-
-
-
-	/*
-
-	*/
 	_nickNameLabel->setToolTip(sipAddress);
 
 	_statusLabel = Object::findChild<QLabel *>(_phoneCallWidget, "statusLabel");
-	_statusLabel->setText("");
+	_statusLabel->setText(QString::null);
 	_statusLabel->setToolTip(tr("Status"));
 
 	_durationLabel = Object::findChild<QLabel *>(_phoneCallWidget, "durationLabel");
@@ -105,57 +99,53 @@ void QtPhoneCall::initThreadSafe() {
 	QtPhoneCallEventFilter * filter = new QtPhoneCallEventFilter(_phoneCallWidget);
 	_phoneCallWidget->installEventFilter(filter);
 
-    // Accept call
-	_actionAcceptCall = new QAction(tr("Accept"),this);
-    connect(_actionAcceptCall, SIGNAL(triggered(bool)), SLOT(acceptActionTriggered(bool)));
+	// Accept call
+	_actionAcceptCall = new QAction(tr("Accept"), _phoneCallWidget);
+	connect(_actionAcceptCall, SIGNAL(triggered(bool)), SLOT(acceptActionTriggered(bool)));
 
-    // Hand-up call
-	_actionHangupCall = new QAction(tr("Hang-up"),this);
+	// Hand-up call
+	_actionHangupCall = new QAction(tr("Hang-up"), _phoneCallWidget);
 	connect(_actionHangupCall, SIGNAL(triggered(bool)), SLOT(rejectActionTriggered(bool)));
 
-    // Hold
-	_actionHold = new QAction(tr("Hold"),this);
-    connect(_actionHold, SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
+	// Hold
+	_actionHold = new QAction(tr("Hold"), _phoneCallWidget);
+	connect(_actionHold, SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
 
 	//Resume
-    _actionResume = new QAction(tr("Resume"),this);
-    connect(_actionResume , SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
-    _actionResume->setEnabled(false);
+	_actionResume = new QAction(tr("Resume"), _phoneCallWidget);
+	connect(_actionResume , SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
+	_actionResume->setEnabled(false);
 
 	//Invite to conference
-	_actionInvite = new QAction(tr("Invite to conference"),this);
-    connect(_actionInvite, SIGNAL(triggered(bool)), SLOT(inviteToConference(bool)));
-    // _actionInvite->setEnabled(false);
+	_actionInvite = new QAction(tr("Invite to conference"), _phoneCallWidget);
+	connect(_actionInvite, SIGNAL(triggered(bool)), SLOT(inviteToConference(bool)));
+	// _actionInvite->setEnabled(false);
 
-    // Start / Stop video
-	_actionSwitchVideo = new QAction(tr("Stop video"),this);
-    connect(_actionSwitchVideo, SIGNAL(triggered(bool)), SLOT(switchVideo(bool)));
+	// Start / Stop video
+	_actionSwitchVideo = new QAction(tr("Stop video"), _phoneCallWidget);
+	connect(_actionSwitchVideo, SIGNAL(triggered(bool)), SLOT(switchVideo(bool)));
 
-    // Add contact
-	_actionAddContact = new QAction(tr("Add contact"),this);
-    connect(_actionAddContact, SIGNAL(triggered(bool)), SLOT(addContactActionTriggered(bool)));
+	// Add contact
+	_actionAddContact = new QAction(tr("Add contact"), _phoneCallWidget);
+	connect(_actionAddContact, SIGNAL(triggered(bool)), SLOT(addContactActionTriggered(bool)));
 
-    _popup = createMenu();
+	_popup = createMenu();
 
 	connect(filter, SIGNAL(openPopup(int, int)), SLOT(openPopup(int, int)));
 
-    if ( ! _cPhoneCall.getPhoneCall().getConferenceCall() ){
-        _qtWengoPhone->addPhoneCall(this);
-    }
-    else
-    {
-        _qtWengoPhone->addToConference(this);
-    }
+	if (!_cPhoneCall.getPhoneCall().getConferenceCall()) {
+		_qtWengoPhone->addPhoneCall(this);
+	} else {
+		_qtWengoPhone->addToConference(this);
+	}
 }
 
-QMenu * QtPhoneCall::createMenu(){
-
-
+QMenu * QtPhoneCall::createMenu() {
 	QMenu * menu = new QMenu(_phoneCallWidget);
 
-    // Accept .... resume
+	// Accept .... resume
 
-    menu->addAction(_actionAcceptCall);
+	menu->addAction(_actionAcceptCall);
 
 	menu->addAction(_actionHangupCall);
 
@@ -171,42 +161,41 @@ QMenu * QtPhoneCall::createMenu(){
 	//Separator
 	menu->addSeparator();
 
-    menu->addAction(_actionSwitchVideo);
+	menu->addAction(_actionSwitchVideo);
 
 	//Separator
 	menu->addSeparator();
 
-    menu->addAction(_actionAddContact);
+	menu->addAction(_actionAddContact);
 
 	menu->addAction(tr("Block contact"));
 
 	return menu;
-
 }
 
-QMenu * QtPhoneCall::createInviteMenu(){
+QMenu * QtPhoneCall::createInviteMenu() {
 
-    PhoneLine & phoneLine = dynamic_cast<PhoneLine &> ( _cPhoneCall.getPhoneCall().getPhoneLine());
+	PhoneLine & phoneLine = dynamic_cast<PhoneLine &> ( _cPhoneCall.getPhoneCall().getPhoneLine());
 
-    QMenu * menu = new QMenu(tr("Invite to conference"));
+	QMenu * menu = new QMenu(tr("Invite to conference"));
 
-    PhoneLine::PhoneCallList phoneCallList = phoneLine.getPhoneCallList();
+	PhoneLine::PhoneCallList phoneCallList = phoneLine.getPhoneCallList();
 
-    PhoneLine::PhoneCallList::iterator it;
+	PhoneLine::PhoneCallList::iterator it;
 
-    QString me = QString::fromStdString( _cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName() );
+	QString me = QString::fromStdString( _cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName() );
 
-    for ( it = phoneCallList.begin(); it != phoneCallList.end(); it++){
+	for ( it = phoneCallList.begin(); it != phoneCallList.end(); it++){
 
-        if ( (*it)->getState() != EnumPhoneCallState::PhoneCallStateClosed ){
+	if ( (*it)->getState() != EnumPhoneCallState::PhoneCallStateClosed) {
 
-            QString str = QString::fromStdString( (*it)->getPeerSipAddress().getUserName()) ;
-            if ( str != me ){
-                QAction * action = menu->addAction(str);
-                connect(action,SIGNAL(triggered(bool)),SLOT(inviteToConference(bool)));
-                menu->addAction(action);
-            }
-        }
+		QString str = QString::fromStdString( (*it)->getPeerSipAddress().getUserName());
+		if ( str != me) {
+			QAction * action = menu->addAction(str);
+			connect(action,SIGNAL(triggered(bool)),SLOT(inviteToConference(bool)));
+			menu->addAction(action);
+	    }
+	}
     }
     return menu;
 }
@@ -367,7 +356,7 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 				QImage::Format_RGB32).scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 		QPainter painter;
-        painter.begin(image); 
+        painter.begin(image);
         // draw a 1-pixel border around the local embedded frame
         painter.fillRect(posx - border_size, posy - border_size, width + 2*border_size, height + 2*border_size, border_color);
         // embed the image
@@ -396,22 +385,20 @@ void QtPhoneCall::acceptActionTriggered(bool) {
 }
 
 void QtPhoneCall::rejectActionTriggered(bool) {
-
-    switch ( _cPhoneCall.getState())
-    {
-        case EnumPhoneCallState::PhoneCallStateResumed:
-        case EnumPhoneCallState::PhoneCallStateTalking:
-        case EnumPhoneCallState::PhoneCallStateDialing:
-        case EnumPhoneCallState::PhoneCallStateRinging:
-        case EnumPhoneCallState::PhoneCallStateIncoming:
-        case EnumPhoneCallState::PhoneCallStateHold:
-        case EnumPhoneCallState::PhoneCallStateRedirected:
-            _cPhoneCall.hangUp();
-            break;
-        default:
-            delete _phoneCallWidget;
-            callRejected(); // Close the widget
-    }
+	switch (_cPhoneCall.getState()) {
+	case EnumPhoneCallState::PhoneCallStateResumed:
+	case EnumPhoneCallState::PhoneCallStateTalking:
+	case EnumPhoneCallState::PhoneCallStateDialing:
+	case EnumPhoneCallState::PhoneCallStateRinging:
+	case EnumPhoneCallState::PhoneCallStateIncoming:
+	case EnumPhoneCallState::PhoneCallStateHold:
+	case EnumPhoneCallState::PhoneCallStateRedirected:
+		_cPhoneCall.hangUp();
+		break;
+	default:
+		delete _phoneCallWidget;
+		callRejected(); // Close the widget
+	}
 }
 
 void QtPhoneCall::holdResumeActionTriggered(bool) {
@@ -428,7 +415,7 @@ void QtPhoneCall::addContactActionTriggered(bool) {
 		// set
 		std::string callAddress = _cPhoneCall.getPeerDisplayName();
 
-		if(callAddress.empty()) {
+		if (callAddress.empty()) {
 			callAddress = _cPhoneCall.getPeerUserName();
 		}
 
@@ -444,13 +431,12 @@ void QtPhoneCall::transferButtonClicked() {
 }
 
 void QtPhoneCall::openPopup(int x , int y) {
-    QMenu * m = createInviteMenu();
-    _actionInvite->setMenu(m);
+	QMenu * m = createInviteMenu();
+	_actionInvite->setMenu(m);
 	_popup->exec(QPoint(x, y));
 	_actionInvite->setMenu(NULL);
 	_actionInvite->setEnabled(true);
 	delete m;
-
 }
 
 void QtPhoneCall::timerEvent(QTimerEvent * event) {
@@ -522,35 +508,15 @@ void QtPhoneCall::inviteToConference(bool) {
 
     for ( it = phoneCallList.begin(); it != phoneCallList.end(); it++){
 
-        if ( (*it)->getState() != EnumPhoneCallState::PhoneCallStateClosed ){
+        if ( (*it)->getState() != EnumPhoneCallState::PhoneCallStateClosed) {
             PhoneCall & me = _cPhoneCall.getPhoneCall();
             PhoneCall * add = (*it);
             startConference(&me,add);
-            QString str = QString::fromStdString( (*it)->getPeerSipAddress().getUserName()) ;
-            if ( str == addCall ){
+            QString str = QString::fromStdString( (*it)->getPeerSipAddress().getUserName());
+            if ( str == addCall) {
 
             }
         }
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
