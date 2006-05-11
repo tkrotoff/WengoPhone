@@ -65,6 +65,7 @@ QtAddIMContact::~QtAddIMContact() {
 }
 
 int QtAddIMContact::show() {
+	imProtocolChanged(_ui->protocolComboBox->currentText());
 	return _addIMContactWindow->exec();
 }
 
