@@ -334,19 +334,8 @@
     </item>
     <item row="4" column="0" >
      <widget class="QLabel" name="configPanelLabel" >
-      <property name="font" >
-       <font>
-        <family>MS Shell Dlg</family>
-        <pointsize>8</pointsize>
-        <weight>50</weight>
-        <italic>false</italic>
-        <bold>false</bold>
-        <underline>true</underline>
-        <strikeout>false</strikeout>
-       </font>
-      </property>
       <property name="text" >
-       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8pt; font-weight:400; font-style:normal; text-decoration: underline;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" text-decoration:none;">Click to change &lt;/span>&lt;span style=" text-decoration:none;">Audio and Video Settings&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+       <string>Click to change Audio and Video Settings</string>
       </property>
       <property name="indent" >
        <number>15</number>
@@ -377,7 +366,7 @@
      <x>0</x>
      <y>0</y>
      <width>282</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile" >
@@ -480,9 +469,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>571</y>
+     <y>568</y>
      <width>282</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

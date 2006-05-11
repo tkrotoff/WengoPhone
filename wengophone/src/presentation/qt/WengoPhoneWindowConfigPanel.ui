@@ -159,15 +159,37 @@
      </property>
      <item row="1" column="0" colspan="2" >
       <widget class="QLabel" name="videoSettingsLabel" >
+       <property name="font" >
+        <font>
+         <family>Lucida Grande</family>
+         <pointsize>13</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+         <underline>true</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
        <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt; text-decoration: underline;">Video Settings&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+        <string>Video Settings</string>
        </property>
       </widget>
      </item>
      <item row="2" column="0" colspan="2" >
       <widget class="QLabel" name="audioSettingsLabel" >
+       <property name="font" >
+        <font>
+         <family>Lucida Grande</family>
+         <pointsize>13</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+         <underline>true</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
        <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt; text-decoration: underline;">Audio Settings&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+        <string>Audio Settings</string>
        </property>
       </widget>
      </item>
