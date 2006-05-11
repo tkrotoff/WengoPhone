@@ -641,7 +641,7 @@ void QtWengoPhone::openWengoAccount() {
 void QtWengoPhone::editMyProfile() {
 	if (_cWengoPhone.getCUserProfile()) {
 		//FIXME: this method should not be called if no UserProfile has been set
-		QtProfileDetails qtProfileDetails(_cWengoPhone, _cWengoPhone.getCUserProfile()->getUserProfile(), _wengoPhoneWindow);
+		QtProfileDetails qtProfileDetails(&_cWengoPhone, _cWengoPhone.getCUserProfile()->getUserProfile(), _wengoPhoneWindow);
 		//TODO: UserProfile must be updated if QtProfileDetails was accepted
 		qtProfileDetails.show();
 
@@ -661,7 +661,7 @@ void QtWengoPhone::addContact() {
 		//FIXME: this method should not be called if no UserProfile has been set
 		LOG_DEBUG("add contact");
 		ContactProfile (contactProfile);
-		QtProfileDetails qtProfileDetails(_cWengoPhone, *_cWengoPhone.getCUserProfile(), contactProfile, _wengoPhoneWindow);
+		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfile(), contactProfile, _wengoPhoneWindow);
 		if (qtProfileDetails.show()) {
 			_cWengoPhone.getCUserProfile()->getCContactList().addContact(contactProfile);
 		}

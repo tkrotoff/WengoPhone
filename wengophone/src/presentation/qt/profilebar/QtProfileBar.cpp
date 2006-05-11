@@ -437,7 +437,7 @@ void QtProfileBar::wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo
 
 		switch( mode ) {
 			case WsInfo::WsInfoCallForwardModeVoicemail:
-				_creditWidget->setCallForwardMode(tr("active") + " (" + tr("voicemail)") + ")" );
+				_creditWidget->setCallForwardMode(tr("active") + " (" + tr("voicemail") + ")" );
 				break;
 			case WsInfo::WsInfoCallForwardModeNumber:
 				_creditWidget->setCallForwardMode(tr("active") + " (" + QString::fromStdString(dest1) + ")" );

@@ -48,6 +48,7 @@ void QtCreditWidget::initThreadSafe() {
 
 	_ui->pstnNumberLabel->setText(tr("no number"));
 	_ui->callForwardLabel->setText(tr("unauthorized"));
+	_ui->callForwardLabel->setToolTip(tr("You need to buy wengo's credits in order to use the call forward"));
 
 	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
 		this, SLOT(buyOutClicked()), Qt::LeftButton);
@@ -76,6 +77,8 @@ void QtCreditWidget::updatePresentationThreadSafe() {
 		MousePressEventFilter * mouseFilter = new MousePressEventFilter(
 				this, SLOT(callforwardModeClicked()), Qt::LeftButton);
 		_ui->callForwardLabel->installEventFilter(mouseFilter);
+		
+		_ui->callForwardLabel->setToolTip(tr("Click here to change your call forward settings"));
 	}
 }
 

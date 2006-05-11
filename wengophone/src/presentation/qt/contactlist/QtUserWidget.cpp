@@ -22,14 +22,20 @@
 #include "QtUserWidgetAvatarManager.h"
 #include "QtUserList.h"
 
+#include <model/contactlist/ContactProfile.h>
+
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
 
-#include <util/Picture.h>
+#include <presentation/qt/contactlist/QtUserList.h>
+#include <presentation/qt/profile/QtProfileDetails.h>
 
+#include <util/Picture.h>
 #include <qtutil/WidgetFactory.h>
 
 #include <QtGui>
+
+#include <util/Logger.h>
 
 QtUserWidget::QtUserWidget(const std::string & contactId, CUserProfile & cUserProfile, QWidget * parent, Qt::WFlags f)
 : QWidget(parent, f), _cUserProfile(cUserProfile) {
@@ -115,15 +121,40 @@ QLabel * QtUserWidget::getAvatarLabel() const {
 
 
 void QtUserWidget::mobileButtonClicked() {
+	
+	LOG_DEBUG("\n\n\n\n\n" + _ui.cellPhoneLabel->text().toStdString() + "\n\n");
+	
+	
 	if (_ui.cellPhoneLabel->text() != tr("No cell phone number set")) {
+		
 		QtUserList * ul = QtUserList::getInstance();
 		ul->startCall(QString::fromStdString(_contactId), _ui.cellPhoneLabel->text());
+		
+	} else {
+		
+		ContactProfile contactProfile = _cUserProfile.getCContactList().getContactProfile(_text.toStdString());
+		QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile, this);
+		if( qtProfileDetails.show() ) {
+			_cUserProfile.getCContactList().updateContact(contactProfile);
+		}
 	}
 }
 
 void QtUserWidget::landLineButtonClicked() {
+
+	LOG_DEBUG("\n\n\n\n\n" + _ui.homePhoneLabel->text().toStdString() + "\n\n");
+
 	if (_ui.homePhoneLabel->text() != tr("No phone number set")) {
+		
 		QtUserList * ul = QtUserList::getInstance();
 		ul->startCall(QString::fromStdString(_contactId), _ui.homePhoneLabel->text());
+		
+	} else {
+		
+		ContactProfile contactProfile = _cUserProfile.getCContactList().getContactProfile(_text.toStdString());
+		QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile, this);
+		if( qtProfileDetails.show() ) {
+			_cUserProfile.getCContactList().updateContact(contactProfile);
+		}
 	}
 }
