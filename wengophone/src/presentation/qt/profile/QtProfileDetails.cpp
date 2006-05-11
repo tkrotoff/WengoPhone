@@ -170,12 +170,15 @@ void QtProfileDetails::saveContact() {
 	
 	ContactProfile & contactProfile = dynamic_cast<ContactProfile &>(_profile);
 
-	QVariant groupId = _ui->groupComboBox->itemData(_ui->groupComboBox->currentIndex());
+	int index = _ui->groupComboBox->findText(_ui->groupComboBox->currentText());
+	QVariant groupId;
 	// If the group does not exist
-	if (!groupId.isNull()) {
+	if (index == -1) {
 		std::string groupName = _ui->groupComboBox->currentText().toStdString();
 		_cWengoPhone.getCUserProfile()->getCContactList().addContactGroup(groupName);
 		groupId = QString::fromStdString(_cWengoPhone.getCUserProfile()->getCContactList().getContactGroupIdFromName(groupName));
+	} else {
+		groupId = _ui->groupComboBox->itemData(index);
 	}
 
 	contactProfile.setGroupId(groupId.toString().toStdString());
