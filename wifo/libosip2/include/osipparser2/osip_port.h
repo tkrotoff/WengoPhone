@@ -186,7 +186,7 @@ void osip_free(void *);
 /**************************/
 
   int osip_atoi (const char *number);
-  size_t osip_strncpy (char *dest, const char *src, size_t length);
+  char *osip_strncpy (char *dest, const char *src, size_t length);
   char *osip_strdup (const char *ch);
   char *osip_strdup_without_quote (const char *ch);
   int osip_tolower (char *word);
