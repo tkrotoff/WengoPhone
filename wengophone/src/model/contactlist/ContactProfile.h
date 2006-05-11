@@ -192,6 +192,10 @@ public:
 		return _groupId;
 	}
 
+	// Inherited from Profile
+	virtual void setWengoPhoneId(const std::string & wengoId);
+	////
+
 protected:
 
 	// Inherited from Profile

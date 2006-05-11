@@ -305,3 +305,12 @@ std::string ContactProfile::getFreePhoneNumber() const {
 
 	return result;
 }
+
+void ContactProfile::setWengoPhoneId(const std::string & wengoId) {
+	if (!_wengoPhoneId.empty()) {
+		removeIMContact(IMContact(EnumIMProtocol::IMProtocolSIPSIMPLE, _wengoPhoneId));
+	}
+
+	Profile::setWengoPhoneId(wengoId);
+	addIMContact(IMContact(EnumIMProtocol::IMProtocolSIPSIMPLE, _wengoPhoneId));
+}

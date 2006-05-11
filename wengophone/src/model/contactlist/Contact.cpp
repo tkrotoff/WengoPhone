@@ -101,7 +101,18 @@ void Contact::copy(const ContactProfile & contactProfile) {
 	_preferredIMContact = contactProfile._preferredIMContact;
 	_groupId = contactProfile._groupId;
 
-	// Adds IMContacts
+	// Removes not present IMContacts
+	for (IMContactSet::const_iterator it = _imContactSet.begin();
+		it != _imContactSet.end();
+		++it) {
+		if (!contactProfile.hasIMContact(*it)) {
+			IMContactSet::const_iterator curIt = it++;
+			_contactList.removeIMContact(*this, *curIt);
+		}
+	}
+	////
+
+	// Adds present IMContacts
 	for (IMContactSet::const_iterator it = contactProfile._imContactSet.begin();
 		it != contactProfile._imContactSet.end();
 		++it) {
@@ -148,14 +159,22 @@ void Contact::_removeIMContact(const IMContact & imContact) {
 }
 
 void Contact::setWengoPhoneId(const string & wengoId) {
-	//TODO: remove previous IMContact
 	if (!wengoId.empty()) {
-		_wengoPhoneId = wengoId;
+		set<IMAccount *> list =
+				_userProfile.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		if (list.size() > 0) {
+			//Deleting previous IMContact
+			IMContact oldIMContact(*(*list.begin()), _wengoPhoneId);
+			removeIMContact(oldIMContact);
+			////
 
-		set<IMAccount *> list;
-		list = _userProfile.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
-		if (list.begin() != list.end()) {
-			addIMContact(IMContact(*(*list.begin()), _wengoPhoneId));
+
+			// Addin the new IMContact
+			_wengoPhoneId = wengoId;
+
+			IMContact newIMContact(*(*list.begin()), _wengoPhoneId);
+			addIMContact(newIMContact);
+			////
 		}
 	}
 }
