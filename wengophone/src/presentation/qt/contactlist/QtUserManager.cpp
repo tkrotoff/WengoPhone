@@ -186,9 +186,12 @@ void QtUserManager::itemClicked(QTreeWidgetItem *, int) {
 			return;
 		}
 
-		if (_tree->isItemExpanded(item))
+		if (_tree->isItemExpanded(item)) {
 			_tree->collapseItem(item);
-		else _tree->expandItem(item);
+		}
+		else {
+			_tree->expandItem(item);
+		}
 	}
 
 	ul->mouseClicked(item->text(0), mousepos, widgetSize);

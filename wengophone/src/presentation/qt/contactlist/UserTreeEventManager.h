@@ -33,13 +33,14 @@ class CContactList;
  */
 class UserTreeEventManager : public QObject {
 	Q_OBJECT
-	public :
+public :
 
 	UserTreeEventManager(CContactList & cContactList, QObject * parent = 0, QTreeWidget * target = 0);
 
-	public Q_SLOTS :
+public Q_SLOTS :
 	void timerTimeout();
-	Q_SIGNALS:
+
+Q_SIGNALS:
 
 	void itemEntered(QTreeWidgetItem * item);
 

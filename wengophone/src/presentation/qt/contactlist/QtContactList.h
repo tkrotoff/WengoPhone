@@ -142,10 +142,6 @@ private:
 
 	QTreeWidget * _treeWidget;
 
-	QTreeWidgetItem * _previous;
-
-	QTreeWidgetItem * _lastClicked;
-
 	CWengoPhone & _cWengoPhone;
 };
 

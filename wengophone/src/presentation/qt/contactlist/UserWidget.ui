@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
+    <width>310</width>
     <height>103</height>
    </rect>
   </property>
@@ -142,8 +142,8 @@
           <widget class="QPushButton" name="mobileButton" >
            <property name="maximumSize" >
             <size>
-             <width>22</width>
-             <height>22</height>
+             <width>16</width>
+             <height>16</height>
             </size>
            </property>
            <property name="text" >
@@ -191,8 +191,8 @@
           <widget class="QPushButton" name="landLineButton" >
            <property name="maximumSize" >
             <size>
-             <width>22</width>
-             <height>22</height>
+             <width>16</width>
+             <height>16</height>
             </size>
            </property>
            <property name="text" >

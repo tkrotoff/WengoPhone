@@ -118,9 +118,12 @@ void UserTreeEventManager::mousePressEvent(QMouseEvent * event) {
 }
 
 void UserTreeEventManager::mouseReleaseEvent(QMouseEvent * event) {
-	if (event->button() == Qt::RightButton)
+	if (event->button() == Qt::RightButton) {
 		mouseClicked(Qt::RightButton);
-	else mouseClicked(Qt::NoButton);
+	}
+	else {
+		mouseClicked(Qt::NoButton);
+	}
 }
 
 void UserTreeEventManager::mouseMoveEvent(QMouseEvent * event) {
