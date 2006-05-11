@@ -478,8 +478,16 @@ eXosip_get_addrinfo (struct addrinfo **addrinfo, char *hostname, int service)
   struct addrinfo hints;
   int error;
   char portbuf[10];
+
   if (service!=0)
     snprintf(portbuf, sizeof(portbuf), "%i", service);
+
+  if (!hostname) {
+      OSIP_TRACE (osip_trace
+		  (__FILE__, __LINE__, OSIP_INFO2, NULL,
+		   "hostname NULL.\n"));
+     return -1;
+  }
 
   memset (&hints, 0, sizeof (hints));
 #ifndef WIN32
