@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,34 +25,33 @@
 
 class QtUserWidget;
 
-class QtUserWidgetAvatarManager : public QObject
-{
+class QtUserWidgetAvatarManager : public QObject {
 	Q_OBJECT
 public:
 
 	QtUserWidgetAvatarManager(QtUserWidget * userWidget, QFrame * target);
-	
+
 	void setAvatar(QByteArray svg);
-	
+
 	QByteArray getSvg();
-	
+
 	void loadAvatar(QString path);
 
 protected:
 
-	bool eventFilter(QObject *obj, QEvent *event);
-	
+	bool eventFilter(QObject * obj, QEvent * event);
+
 	void paintEvent(QPaintEvent * event);
-	
+
 	QFrame * _target;
-	
+
 	QByteArray _svg;
-	
+
 	QSvgRenderer _svgRenderer;
-	
+
 	bool _isSet;
 
 	QtUserWidget * _userWidget;
 };
 
-#endif // QTUSERWIDGETAVATARMANAGER_H
+#endif	//QTUSERWIDGETAVATARMANAGER_H

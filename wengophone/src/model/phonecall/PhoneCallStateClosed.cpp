@@ -24,14 +24,14 @@
 #include <sound/Sound.h>
 
 void PhoneCallStateClosed::execute(PhoneCall & phoneCall) {
-	stopSoundRingin();
+	stopSoundIncomingCall();
 
 	//Call closed tonality
-	static Sound soundCallClosed(getSoundCallClosedFile());
-	soundCallClosed.setWaveOutDevice(getRingerAudioDeviceName());
+	_soundCallClosed = new Sound(getSoundCallClosedFile());
+	_soundCallClosed->setWaveOutDevice(getRingerAudioDeviceName());
 	//Play the sound 4 times
-	soundCallClosed.setLoops(4);
-	soundCallClosed.play();
+	_soundCallClosed->setLoops(4);
+	_soundCallClosed->play();
 
 	WenboxPlugin & wenboxPlugin = phoneCall.getWenboxPlugin();
 	wenboxPlugin.setState(Wenbox::CallClosed);

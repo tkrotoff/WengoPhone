@@ -20,5 +20,5 @@
 #include "PhoneCallStateResumed.h"
 
 void PhoneCallStateResumed::execute(PhoneCall & phoneCall) {
-	stopSoundRingin();
+	stopSoundIncomingCall();
 }

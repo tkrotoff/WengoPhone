@@ -26,16 +26,25 @@
 
 #include <util/Logger.h>
 
-Sound * PhoneCallState::_soundRingin = NULL;
+Sound * PhoneCallState::_soundIncomingCall = NULL;
+Sound * PhoneCallState::_soundCallClosed = NULL;
 
 PhoneCallState::PhoneCallState() {
 }
 
-void PhoneCallState::stopSoundRingin() {
-	if (_soundRingin) {
-		_soundRingin->stop();
-		delete _soundRingin;
-		_soundRingin = NULL;
+void PhoneCallState::stopSoundIncomingCall() {
+	if (_soundIncomingCall) {
+		_soundIncomingCall->stop();
+		delete _soundIncomingCall;
+		_soundIncomingCall = NULL;
+	}
+}
+
+void PhoneCallState::stopSoundCallClosed() {
+	if (_soundCallClosed) {
+		_soundCallClosed->stop();
+		delete _soundCallClosed;
+		_soundCallClosed = NULL;
 	}
 }
 

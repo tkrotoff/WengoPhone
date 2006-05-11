@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef QTCONFERENCEACTION_H
 #define QTCONFERENCEACTION_H
 
@@ -23,25 +24,23 @@
 
 class PhoneCall;
 
-class QtConferenceAction : public QAction
-{
-    Q_OBJECT
+class QtConferenceAction : public QAction {
+	Q_OBJECT
 public:
 
-    QtConferenceAction(const QString & text, QObject * parent );
+	QtConferenceAction(const QString & text, QObject * parent);
 
-    QtConferenceAction(QObject * parent );
+	QtConferenceAction(QObject * parent);
 
-    QtConferenceAction(const QIcon & icon, const QString & text, QObject * parent );
+	QtConferenceAction(const QIcon & icon, const QString & text, QObject * parent);
 
-    void setPhoneCall(PhoneCall * phoneCall);
+	void setPhoneCall(PhoneCall * phoneCall);
 
-    PhoneCall * getPhoneCall();
+	PhoneCall * getPhoneCall();
 
 protected:
 
-    PhoneCall * _phoneCall;
-
+	PhoneCall * _phoneCall;
 };
 
-#endif
+#endif	//QTCONFERENCEACTION_H

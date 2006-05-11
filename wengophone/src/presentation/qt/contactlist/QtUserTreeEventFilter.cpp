@@ -19,17 +19,17 @@
 
 #include "QtUserTreeEventFilter.h"
 
-QtUserTreeEventFilter::QtUserTreeEventFilter (QObject * parent, QTreeWidget * target) {
+QtUserTreeEventFilter::QtUserTreeEventFilter(QObject * parent, QTreeWidget * target) {
 
 	_tree = target;
 	target->installEventFilter(this);
 }
 
-bool QtUserTreeEventFilter::eventFilter(QObject *obj, QEvent *event){
+bool QtUserTreeEventFilter::eventFilter(QObject * obj, QEvent * event) {
 
 	switch (event->type()) {
 		case QEvent::KeyPress:
-			keyPress(dynamic_cast<QKeyEvent *>(event));
+			keyPress(dynamic_cast < QKeyEvent * > (event));
 			return false;
 		default:
 			return QObject::eventFilter(obj, event);
@@ -40,7 +40,7 @@ void QtUserTreeEventFilter::keyPress(QKeyEvent * event) {
 
 	QTreeWidgetItem * item = _tree->currentItem();
 
-	switch ( event->key() ) {
+	switch (event->key()) {
 		case Qt::Key_Left:
 			closeItem(item);
 			break;
@@ -63,7 +63,7 @@ void QtUserTreeEventFilter::keyPress(QKeyEvent * event) {
 		case Qt::Key_S:
 			sPressed(item);
 			break;
-			
+
 		default:
 			break;
 	}

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,9 +36,7 @@ class QModelIndex;
  * @author Philippe Bernery
  */
 class ContactGroupPopupMenu : public QMenu, NonCopyable {
-
 	Q_OBJECT
-
 public:
 
 	/**
@@ -85,7 +83,6 @@ private:
 	QString _groupId;
 
 	CContactList & _cContactList;
-
 };
 
 #endif //CONTACTGROUPPOPUPMENU_H

@@ -58,7 +58,7 @@ QtVideo::QtVideo(QWidget * parent) {
 }
 
 QSize QtVideo::getFrameSize() {
-    return _frame->frameRect().size();
+	return _frame->frameRect().size();
 }
 
 void QtVideo::showImage(const QImage & image) {

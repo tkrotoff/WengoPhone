@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,13 +24,13 @@
 #include <QLineEdit>
 
 QtRenameGroup::QtRenameGroup(QWidget * parent, Qt::WFlags f)
-: QDialog(parent,f) {
-    _ui = new Ui::RenameGroupDialog();
-    _ui->setupUi(this);
+: QDialog(parent, f) {
+	_ui = new Ui::RenameGroupDialog();
+	_ui->setupUi(this);
 }
 
 QtRenameGroup::~QtRenameGroup() {
-    delete _ui;
+	delete _ui;
 }
 
 QString QtRenameGroup::getGroupName() const {

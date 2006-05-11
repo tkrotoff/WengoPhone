@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef QTUSERLIST_H
 #define QTUSERLIST_H
 
@@ -26,8 +27,7 @@
 
 class CContact;
 
-class QtUserList
-{
+class QtUserList {
 public:
 
 	static QtUserList * getInstance();
@@ -48,25 +48,25 @@ public:
 
 	QtUser * getUser(const QString & userid) const;
 
-	void mouseClicked(const QString & userid,const QPoint pos, const QRect & rect);
+	void mouseClicked(const QString & userid, const QPoint pos, const QRect & rect);
 
-	int	 getIconsStartPosition(const QString & userid) const;
+	int getIconsStartPosition(const QString & userid) const;
 
-	void setButton(const QString & userid,const Qt::MouseButton button);
+	void setButton(const QString & userid, const Qt::MouseButton button);
 
-	void setOpenStatus(const QString & userid,bool value);
+	void setOpenStatus(const QString & userid, bool value);
 
 	Qt::MouseButton getButton(const QString & userid) const;
 
-	int	 getHeight(const QString & userid) const;
+	int getHeight(const QString & userid) const;
 
-	void setTreeWidget(QTreeWidget * tree) { _tree=tree;}
+	void setTreeWidget(QTreeWidget * tree) { _tree = tree; }
 
-	QTreeWidget * getTreeWidget() const {return _tree;}
+	QTreeWidget * getTreeWidget() const { return _tree; }
 
 	void resetMouseStatus();
 
-    void startChat(const QString & userid);
+	void startChat(const QString & userid);
 
 	void startSMS(const QString & userid);
 
@@ -81,25 +81,27 @@ public:
 
 protected:
 
-	QtUserList ( );
+	QtUserList();
 
-	QtUserList (const QtUserList& other) : _tree(other._tree), _userList(other._userList) {}
+	QtUserList(const QtUserList & other) : _tree(other._tree), _userList(other._userList) { }
 
-	QtUserList & operator= (const QtUserList &other) { _tree = other._tree;  _userList = other._userList; return *this; }
-
-protected:
+	QtUserList & operator = (const QtUserList & other) {
+		_tree = other._tree;
+		_userList = other._userList;
+		return * this;
+	}
 
 	QTreeWidget * _tree;
 
-	QHash<QString, QtUser *> _userList;
+	QHash < QString, QtUser * > _userList;
 
 private:
 
 	static QtUserList * _instance;
 
-	QString	_lastMouseOn;
+	QString _lastMouseOn;
 
 	QMutex _mutex;
-
 };
-#endif
+
+#endif	//QTUSERLIST_H

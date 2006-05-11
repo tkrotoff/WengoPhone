@@ -58,7 +58,7 @@ public:
 
 Q_SIGNALS:
 
-	void startConference(PhoneCall * sourceCall,  PhoneCall * targetCall);
+	void startConference(PhoneCall * sourceCall, PhoneCall * targetCall);
 
 	void stopConference();
 
@@ -94,7 +94,8 @@ private:
 
 	void stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state);
 
-	void videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame);
+	void videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame,
+					const WebcamVideoFrame & localVideoFrame);
 
 	void videoFrameReceivedEventHandlerThreadSafe(QImage * image);
 
@@ -104,7 +105,7 @@ private:
 
 	QMenu * createMenu();
 
-    QMenu * createInviteMenu();
+	QMenu * createInviteMenu();
 
 	QMenu * _popup;
 

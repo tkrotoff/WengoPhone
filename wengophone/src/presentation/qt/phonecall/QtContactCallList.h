@@ -25,15 +25,13 @@
 class QtPhoneCall;
 class PhoneCall;
 
-class QtContactCallList : public QScrollArea
-{
+class QtContactCallList : public QScrollArea {
 	Q_OBJECT
-
 public:
 
-	typedef QList<QtPhoneCall *> QtPhoneCallList;
+	typedef QList < QtPhoneCall * > QtPhoneCallList;
 
-	QtContactCallList ( QWidget * parent = 0 );
+	QtContactCallList(QWidget * parent = 0);
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
@@ -41,7 +39,7 @@ public:
 
 	QtPhoneCallList & getPhoneCallList();
 
-    QtPhoneCall * takeQtPhoneCall ( PhoneCall * phoneCall);
+	QtPhoneCall * takeQtPhoneCall(PhoneCall * phoneCall);
 
 	void clearCalls();
 
@@ -57,10 +55,9 @@ protected:
 
 	QVBoxLayout * _widgetLayout;
 
-	QtPhoneCallList  _phoneCallList;
+	QtPhoneCallList _phoneCallList;
 
-    QMutex _mutex;
-
+	QMutex _mutex;
 };
 
 #endif // QTCONTACTCALLLIST_H

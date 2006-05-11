@@ -22,7 +22,7 @@
 #include "model/wenbox/WenboxPlugin.h"
 
 void PhoneCallStateError::execute(PhoneCall & phoneCall) {
-	stopSoundRingin();
+	stopSoundIncomingCall();
 
 	WenboxPlugin & wenboxPlugin = phoneCall.getWenboxPlugin();
 	wenboxPlugin.setState(Wenbox::CallError);

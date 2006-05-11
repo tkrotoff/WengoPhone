@@ -26,11 +26,11 @@
 
 void PhoneCallStateIncoming::execute(PhoneCall & phoneCall) {
 	//Ringin tonality
-	_soundRingin = new Sound(getSoundIncomingCallFile());
-	_soundRingin->setWaveOutDevice(getRingerAudioDeviceName());
+	_soundIncomingCall = new Sound(getSoundIncomingCallFile());
+	_soundIncomingCall->setWaveOutDevice(getRingerAudioDeviceName());
 	//Play the sound indefinitely
-	_soundRingin->setLoops(-1);
-	_soundRingin->play();
+	_soundIncomingCall->setLoops(-1);
+	_soundIncomingCall->play();
 
 	WenboxPlugin & wenboxPlugin = phoneCall.getWenboxPlugin();
 	wenboxPlugin.setState(Wenbox::CallIncoming, phoneCall.getPeerSipAddress().toString());

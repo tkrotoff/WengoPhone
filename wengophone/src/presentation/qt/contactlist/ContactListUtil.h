@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef CONTACTLISTUTIL_H
 #define CONTACTLISTUTIL_H
 
@@ -35,24 +36,24 @@ public:
 	 * @param v the QVariant to get the Contact from
 	 * @return the Contact or NULL if not found
 	 */
-	static IQtContact * getIQtContact(const QVariant &v) {
-		if (qVariantCanConvert<MetaContact>(v)) {
-			MetaContact metaContact = qVariantValue<MetaContact>(v);
+	static IQtContact * getIQtContact(const QVariant & v) {
+		if (qVariantCanConvert < MetaContact > (v)) {
+			MetaContact metaContact = qVariantValue < MetaContact > (v);
 			return metaContact.getIQtContact();
 		} else {
 			return NULL;
 		}
 	}
-	
+
 	/**
 	 * Return the ContactGroup contained by a Qvariant
 	 *
 	 * @param v the QVariant to get the ContactGroup from
 	 * @return the ContactGroup or NULL if not found
 	 */
-	static ContactGroup * getContactGroup(const QVariant &v) {
-		if (qVariantCanConvert<MetaContactGroup>(v)) {
-			MetaContactGroup metaContactGroup = qVariantValue<MetaContactGroup>(v);
+	static ContactGroup * getContactGroup(const QVariant & v) {
+		if (qVariantCanConvert < MetaContactGroup > (v)) {
+			MetaContactGroup metaContactGroup = qVariantValue < MetaContactGroup > (v);
 			return metaContactGroup.getContactGroup();
 		} else {
 			return NULL;

@@ -43,21 +43,21 @@ class QPushButton;
  * @author Mathieu Stute
  */
 class QtUserWidget : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 public:
 
 	QtUserWidget(const std::string & contactId, CUserProfile & cUserProfile,
-		QWidget * parent = 0, Qt::WFlags f = 0);
+	QWidget * parent = 0, Qt::WFlags f = 0);
 
 	void setText(const QString & text) {
 		_text = text;
 	}
-	
+
 	QString text() const {
 		return _text;
 	}
 
-	
+
 	QLabel * getAvatarLabel() const;
 
 	QPixmap getIcon() const;

@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef QTUSERTREEEVENTFILTER_H
 #define QTUSERTREEEVENTFILTER_H
 
@@ -25,7 +26,7 @@ class QtUserTreeEventFilter : public QObject {
 	Q_OBJECT
 public:
 
-	QtUserTreeEventFilter (QObject * parent = 0,QTreeWidget * target = 0);
+	QtUserTreeEventFilter(QObject * parent = 0, QTreeWidget * target = 0);
 
 Q_SIGNALS:
 
@@ -45,11 +46,11 @@ Q_SIGNALS:
 
 protected:
 
-	bool eventFilter(QObject *obj, QEvent *event);
+	bool eventFilter(QObject * obj, QEvent * event);
 
 	void keyPress(QKeyEvent * event);
 
 	QTreeWidget * _tree;
 };
 
-#endif
+#endif	//QTUSERTREEEVENTFILTER_H

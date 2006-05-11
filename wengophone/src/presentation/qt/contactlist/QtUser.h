@@ -28,8 +28,7 @@
 
 class CWengoPhone;
 
-class QtUser : QObject
-{
+class QtUser : QObject {
 	Q_OBJECT
 public:
 
@@ -49,15 +48,15 @@ public:
 
 	bool hasVideo() const;
 
-	void setMouseOn(bool value) { _mouseOn = value;}
+	void setMouseOn(bool value) { _mouseOn = value; }
 
-	void mouseClicked(const QPoint & pos,const QRect & rec);
+	void mouseClicked(const QPoint & pos, const QRect & rec);
 
 	QtContactPixmap::contactPixmap getStatus() const;
 
 	void setFunction(bool im, bool call, bool video);
 
-	int getIconsStartPosition() const {return _iconsStartPosition;}
+	int getIconsStartPosition() const { return _iconsStartPosition; }
 
 	void setButton(const Qt::MouseButton button);
 
@@ -71,11 +70,11 @@ public:
 
 	Qt::MouseButton getButton() const;
 
-	int getText_y() const { return _centeredText_y;}
+	int getText_y() const { return _centeredText_y; }
 
-	void setAvatar(QString path) {_avatarPath = path;}
+	void setAvatar(QString path) { _avatarPath = path; }
 
-	QString getAvatar() const { return _avatarPath;}
+	QString getAvatar() const { return _avatarPath; }
 
 	void startChat();
 
@@ -105,7 +104,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-	void clicked(QtUser * user,int prt);
+	void clicked(QtUser * user, int prt);
 
 protected:
 

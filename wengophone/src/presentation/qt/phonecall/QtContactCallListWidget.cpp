@@ -27,29 +27,30 @@
 #include <model/phonecall/ConferenceCall.h>
 #include <model/phonecall/PhoneCall.h>
 
-QtContactCallListWidget::QtContactCallListWidget (CWengoPhone & cWengoPhone,QWidget * parent, Qt::WFlags f) :
-QWidget (parent,f), _cWengoPhone(cWengoPhone)
-{
+QtContactCallListWidget::QtContactCallListWidget(CWengoPhone & cWengoPhone, QWidget * parent, Qt::WFlags f)
+	: QWidget(parent, f), _cWengoPhone(cWengoPhone) {
+
 	_layout = new QGridLayout(this);
 	_conferenceCall = NULL;
 	_listWidget = new QtContactCallList(this);
 
 	// Setup the list widget
-	_layout->addWidget(_listWidget,0,0);
-	setAttribute(Qt::WA_DeleteOnClose,true);
+	_layout->addWidget(_listWidget, 0, 0);
+	setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
-void QtContactCallListWidget::addPhoneCall(QtPhoneCall * qtPhoneCall){
-	connect (qtPhoneCall,SIGNAL(startConference(PhoneCall *,PhoneCall *)),SLOT(startConference(PhoneCall *,PhoneCall *)));
-	connect (qtPhoneCall,SIGNAL(stopConference() ),SLOT(stopConference()));
-	connect (qtPhoneCall,SIGNAL(callRejected()), SLOT(callRejected()));
+void QtContactCallListWidget::addPhoneCall(QtPhoneCall * qtPhoneCall) {
+	connect(qtPhoneCall, SIGNAL(startConference(PhoneCall *, PhoneCall *)),
+		SLOT(startConference(PhoneCall *, PhoneCall *)));
+	connect(qtPhoneCall, SIGNAL(stopConference()), SLOT(stopConference()));
+	connect(qtPhoneCall, SIGNAL(callRejected()), SLOT(callRejected()));
 	_listWidget->addPhoneCall(qtPhoneCall);
 }
 
-void QtContactCallListWidget::startConference(PhoneCall * sourceCall, PhoneCall * targetCall){
+void QtContactCallListWidget::startConference(PhoneCall * sourceCall, PhoneCall * targetCall) {
 
-    startConferenceSignal(sourceCall, targetCall);
-	if ( _conferenceCall )
+	startConferenceSignal(sourceCall, targetCall);
+	if (_conferenceCall)
 		return;
 
 	IPhoneLine * phoneLine = _cWengoPhone.getCUserProfile()->getUserProfile().getActivePhoneLine();
@@ -57,67 +58,66 @@ void QtContactCallListWidget::startConference(PhoneCall * sourceCall, PhoneCall 
 	if (phoneLine == NULL)
 		return;
 
-	if ( _listWidget->getPhoneCallList().size() != 2 ){
+	if (_listWidget->getPhoneCallList().size() != 2) {
 		return;
 	}
-	_conferenceCall = new ConferenceCall(*phoneLine);
+	_conferenceCall = new ConferenceCall(* phoneLine);
 
 	QtPhoneCall * phone;
 
-	phone = _listWidget->getPhoneCallList()[0];
-	_conferenceCall->addPhoneCall(phone->getCPhoneCall().getPhoneCall() );
+	phone = _listWidget->getPhoneCallList() [0];
+	_conferenceCall->addPhoneCall(phone->getCPhoneCall().getPhoneCall());
 
-	phone = _listWidget->getPhoneCallList()[1];
-	_conferenceCall->addPhoneCall(phone->getCPhoneCall().getPhoneCall() );
-
+	phone = _listWidget->getPhoneCallList() [1];
+	_conferenceCall->addPhoneCall(phone->getCPhoneCall().getPhoneCall());
 }
 
-void QtContactCallListWidget::stopConference(){
+void QtContactCallListWidget::stopConference() {
 
-	if ( ! _conferenceCall )
+	if (!_conferenceCall)
 		return;
 
 	QtPhoneCall * phone;
 
-	phone = _listWidget->getPhoneCallList()[0];
-	_conferenceCall->removePhoneCall(phone->getCPhoneCall().getPhoneCall() );
+	phone = _listWidget->getPhoneCallList() [0];
+	_conferenceCall->removePhoneCall(phone->getCPhoneCall().getPhoneCall());
 
-	phone = _listWidget->getPhoneCallList()[1];
-	_conferenceCall->removePhoneCall(phone->getCPhoneCall().getPhoneCall() );
+	phone = _listWidget->getPhoneCallList() [1];
+	_conferenceCall->removePhoneCall(phone->getCPhoneCall().getPhoneCall());
 
 	delete _conferenceCall;
 	_conferenceCall = NULL;
-
 }
 
-void QtContactCallListWidget::hangup(){
-    QMutexLocker locker(&_mutex);
-    QtPhoneCall * phone;
+void QtContactCallListWidget::hangup() {
+	QMutexLocker locker(& _mutex);
+	QtPhoneCall * phone;
 
-    QtContactCallList::QtPhoneCallList phoneCallList;
-    QtContactCallList::QtPhoneCallList::iterator iter;
+	QtContactCallList::QtPhoneCallList phoneCallList;
+	QtContactCallList::QtPhoneCallList::iterator iter;
 
-    phoneCallList = _listWidget->getPhoneCallList();
+	phoneCallList = _listWidget->getPhoneCallList();
 
-    for ( iter = phoneCallList.begin(); iter != phoneCallList.end(); iter++){
-        phone =  (*iter);
+	for (iter = phoneCallList.begin(); iter != phoneCallList.end(); iter++) {
+		phone = (* iter);
 
-        phone->rejectActionTriggered(true);
-    }
-    _listWidget->clearCalls();
-    // phone = _listWidget->getPhoneCallList()[0];
-    //phone->rejectActionTriggered(true);
-}
-void QtContactCallListWidget::callRejected(){
-
-    if ( _listWidget->count() == 0)
-        close();
+		phone->rejectActionTriggered(true);
+	}
+	_listWidget->clearCalls();
+	// phone = _listWidget->getPhoneCallList()[0];
+	//phone->rejectActionTriggered(true);
 }
 
-bool QtContactCallListWidget::hasPhoneCall(PhoneCall * phoneCall){
-    return _listWidget->hasPhoneCall(phoneCall);
+void QtContactCallListWidget::callRejected() {
+
+	if (_listWidget->count() == 0)
+		close();
 }
 
-QtPhoneCall * QtContactCallListWidget::takeQtPhoneCall(PhoneCall * phoneCall){
-    return _listWidget->takeQtPhoneCall(phoneCall);
+bool QtContactCallListWidget::hasPhoneCall(PhoneCall * phoneCall) {
+	return _listWidget->hasPhoneCall(phoneCall);
+}
+
+QtPhoneCall * QtContactCallListWidget::takeQtPhoneCall(PhoneCall * phoneCall) {
+	return _listWidget->takeQtPhoneCall(phoneCall);
 }

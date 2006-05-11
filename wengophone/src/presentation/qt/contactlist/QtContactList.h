@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ public:
 		return _userManager;
 	}
 
-	void updatePresentation ();
+	void updatePresentation();
 
 	void contactGroupAddedEvent(std::string contactGroupId);
 
@@ -69,7 +69,7 @@ public:
 	void contactRemovedEvent(std::string contactId);
 
 	void contactMovedEvent(std::string dstContactGroupId,
-		std::string srcContactGroupId, std::string contactId);
+	std::string srcContactGroupId, std::string contactId);
 
 	void contactChangedEvent(std::string contactId);
 
@@ -88,7 +88,7 @@ Q_SIGNALS:
 	void contactRemovedEventSignal(QString contactId);
 
 	void contactMovedEventSignal(QString dstContactGroupId,
-		QString srcContactGroupId, QString contactId);
+	QString srcContactGroupId, QString contactId);
 
 	void contactChangedEventSignal(QString contactId);
 
@@ -115,7 +115,7 @@ private Q_SLOTS:
 	void contactRemovedEventSlot(QString contactId);
 
 	void contactMovedEventSlot(QString dstContactGroupId,
-		QString srcContactGroupId, QString contactId);
+	QString srcContactGroupId, QString contactId);
 
 	void contactChangedEventSlot(QString contactId);
 
@@ -147,7 +147,6 @@ private:
 	QTreeWidgetItem * _lastClicked;
 
 	CWengoPhone & _cWengoPhone;
-
 };
 
 #endif	//QTCONTACTLIST_H

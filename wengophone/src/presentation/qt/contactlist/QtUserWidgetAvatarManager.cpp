@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,37 +26,32 @@
 #include <util/Picture.h>
 
 QtUserWidgetAvatarManager::QtUserWidgetAvatarManager(QtUserWidget * userWidget, QFrame * target)
-: QObject(userWidget), _userWidget(userWidget)
-{
+: QObject(userWidget), _userWidget(userWidget) {
 	_target = target;
 	_isSet = false;
 }
 
-void QtUserWidgetAvatarManager::setAvatar(QByteArray svg){
+void QtUserWidgetAvatarManager::setAvatar(QByteArray svg) {
 	_svg = svg;
 	_svgRenderer.load(_svg);
 	_isSet = true;
 }
 
-QByteArray QtUserWidgetAvatarManager::getSvg()
-{
+QByteArray QtUserWidgetAvatarManager::getSvg() {
 	return _svg;
 }
 
-bool QtUserWidgetAvatarManager::eventFilter(QObject *obj, QEvent *event)
-{
-	switch (event->type())
-    {
-        case QEvent::Paint:
-            paintEvent(dynamic_cast<QPaintEvent *>(event));
-            return true;
-        default:
-            return QObject::eventFilter(obj, event);
-    }
+bool QtUserWidgetAvatarManager::eventFilter(QObject * obj, QEvent * event) {
+	switch (event->type()) {
+		case QEvent::Paint:
+			paintEvent(dynamic_cast < QPaintEvent * > (event));
+			return true;
+		default:
+			return QObject::eventFilter(obj, event);
+	}
 }
 
-void QtUserWidgetAvatarManager::paintEvent(QPaintEvent * event)
-{
+void QtUserWidgetAvatarManager::paintEvent(QPaintEvent * event) {
 	/*
 	if (_isSet)
 	{
@@ -69,33 +64,28 @@ void QtUserWidgetAvatarManager::paintEvent(QPaintEvent * event)
 	QPixmap background = QPixmap(":/pics/fond_avatar.png");
 	QPixmap pixmap = _userWidget->getIcon();
 
-	if ( ! pixmap.isNull())
-        {
-            QRect rect = _userWidget->getAvatarLabel()->rect();
-            QPainter painter(_target);
-            QPainter pixpainter( & background );
-            pixpainter.drawPixmap(5,5,pixmap.scaled(60,60));
-            pixpainter.end();
-            painter.drawPixmap(rect, background, rect);
-            painter.end();
-        }
-        else
-        {
-            QPainter painter(_target);
-            painter.drawPixmap(0,0,background);
-            painter.end();
-        }
+	if (!pixmap.isNull()) {
+		QRect rect = _userWidget->getAvatarLabel()->rect();
+		QPainter painter(_target);
+		QPainter pixpainter(& background);
+		pixpainter.drawPixmap(5, 5, pixmap.scaled(60, 60));
+		pixpainter.end();
+		painter.drawPixmap(rect, background, rect);
+		painter.end();
+	}
+	else {
+		QPainter painter(_target);
+		painter.drawPixmap(0, 0, background);
+		painter.end();
+	}
 }
 
-void QtUserWidgetAvatarManager::loadAvatar(QString path)
-{
+void QtUserWidgetAvatarManager::loadAvatar(QString path) {
 	QFile file(path);
 	QByteArray tmp;
-	if (file.open(QIODevice::ReadOnly))
-	{
-		tmp = file.readAll ();
-		if ( !tmp.isEmpty() )
-		{
+	if (file.open(QIODevice::ReadOnly)) {
+		tmp = file.readAll();
+		if (!tmp.isEmpty()) {
 			setAvatar(tmp);
 		}
 		file.close();

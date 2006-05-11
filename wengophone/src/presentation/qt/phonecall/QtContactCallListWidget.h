@@ -22,7 +22,6 @@
 
 #include <control/CWengoPhone.h>
 
-
 #include <QtGui>
 
 class QtContactCallList;
@@ -30,13 +29,11 @@ class PhoneCall;
 class QtPhoneCall;
 class ConferenceCall;
 
-class QtContactCallListWidget : public QWidget
-{
+class QtContactCallListWidget : public QWidget {
 	Q_OBJECT
-
 public:
 
-	QtContactCallListWidget (CWengoPhone & cWengoPhone,QWidget * parent = 0, Qt::WFlags f = 0);
+	QtContactCallListWidget(CWengoPhone & cWengoPhone, QWidget * parent = 0, Qt::WFlags f = 0);
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
@@ -52,11 +49,11 @@ public Q_SLOTS:
 
 	void hangup();
 
-    void callRejected();
+	void callRejected();
 
 Q_SIGNALS:
 
-    void startConferenceSignal(PhoneCall * sourceCall, PhoneCall * targetCall);
+	void startConferenceSignal(PhoneCall * sourceCall, PhoneCall * targetCall);
 
 protected:
 
@@ -68,7 +65,7 @@ protected:
 
 	CWengoPhone & _cWengoPhone;
 
-    QMutex _mutex;
+	QMutex _mutex;
 };
 
 #endif // QTCONTACTCALLLISTWIDGET_H

@@ -335,7 +335,7 @@
     <item row="4" column="0" >
      <widget class="QLabel" name="configPanelLabel" >
       <property name="text" >
-       <string>Click to change Audio and Video Settings</string>
+       <string>&lt;u>Click to change Audio and Video Settings&lt;/u></string>
       </property>
       <property name="indent" >
        <number>15</number>
@@ -366,7 +366,7 @@
      <x>0</x>
      <y>0</y>
      <width>282</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile" >
@@ -469,9 +469,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>568</y>
+     <y>571</y>
      <width>282</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>

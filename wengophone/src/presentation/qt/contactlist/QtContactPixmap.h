@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,34 +16,40 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef QTSTATUSPIXMAP_H
 #define QTSTATUSPIXMAP_H
 
 #include <QtGui>
 
-class QtContactPixmap
-{
+class QtContactPixmap {
 public:
-	enum contactPixmap { ContactOnline = 1, ContactOffline, ContactDND, ContactInvisible, ContactAway, ContactForward,
-						 ContactIM, ContactCall, ContactVideo,
-						 ContactGroupOpen, ContactGroupClose
-						};
-	
+	enum contactPixmap {
+		ContactOnline = 1, ContactOffline, ContactDND, ContactInvisible, ContactAway, ContactForward,
+		ContactIM, ContactCall, ContactVideo,
+		ContactGroupOpen, ContactGroupClose
+	};
+
 	static QtContactPixmap * getInstance();
 
-	void setPixmap (contactPixmap status,const  QPixmap & px);
-	QPixmap & getPixmap(contactPixmap  status);
+	void setPixmap(contactPixmap status, const QPixmap & px);
+	QPixmap & getPixmap(contactPixmap status);
 
 protected:
-	QtContactPixmap ( );
-	QtContactPixmap (const QtContactPixmap& other) : _contactPixmap(other._contactPixmap) {}
-	QtContactPixmap & operator= (const QtContactPixmap &other) { _contactPixmap = other._contactPixmap; return *this; }
-	
-protected:
-	QHash<contactPixmap, QPixmap>	_contactPixmap;
-	
+
+	QtContactPixmap();
+
+	QtContactPixmap(const QtContactPixmap & other) : _contactPixmap(other._contactPixmap) { }
+
+	QtContactPixmap & operator = (const QtContactPixmap & other) {
+		_contactPixmap = other._contactPixmap;
+		return * this;
+	}
+
+	QHash < contactPixmap, QPixmap > _contactPixmap;
+
 private:
 	static QtContactPixmap * _instance;
-
 };
-#endif 
+
+#endif	//QTSTATUSPIXMAP_H

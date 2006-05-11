@@ -5,16 +5,13 @@
 
 class QtUser;
 
-class QtHidenContact : public QObject
-{
+class QtHidenContact : public QObject {
 	Q_OBJECT
-
 public:
 
-	QtHidenContact ( QTreeWidgetItem * item, QTreeWidgetItem * parentItem, QtUser * user, int index,QObject * parent = 0);
+	QtHidenContact(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, QtUser * user, int index, QObject * parent = 0);
 
-	QtHidenContact ( const QtHidenContact & other);
-
+	QtHidenContact(const QtHidenContact & other);
 
 	virtual ~QtHidenContact();
 
@@ -30,9 +27,9 @@ public:
 
 	bool isCleared();
 
-	virtual bool operator <(const QtHidenContact & other ) const ;
+	virtual bool operator < (const QtHidenContact & other) const;
 
-    virtual QtHidenContact & operator =(const QtHidenContact & other );
+	virtual QtHidenContact & operator = (const QtHidenContact & other);
 
 protected:
 
@@ -45,7 +42,6 @@ protected:
 	int _index;
 
 	bool _clear;
-
 };
 
-#endif
+#endif	//QTHIDENCONTACT_H

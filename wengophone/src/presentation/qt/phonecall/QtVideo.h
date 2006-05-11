@@ -40,7 +40,7 @@ public:
 		return _videoWindow;
 	}
 
-    QSize getFrameSize();
+	QSize getFrameSize();
 
 private Q_SLOTS:
 

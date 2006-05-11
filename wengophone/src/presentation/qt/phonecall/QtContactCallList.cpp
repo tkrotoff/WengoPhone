@@ -22,9 +22,9 @@
 #include <model/phonecall/PhoneCall.h>
 #include <control/phonecall/CPhoneCall.h>
 
-QtContactCallList::QtContactCallList ( QWidget * parent ):
-QScrollArea(parent)
-{
+QtContactCallList::QtContactCallList(QWidget * parent)
+	: QScrollArea(parent) {
+
 	_widget = new QWidget(this);
 
 	_widgetLayout = new QVBoxLayout(_widget);
@@ -34,26 +34,25 @@ QScrollArea(parent)
 	setWidgetResizable(true);
 }
 
-void QtContactCallList::addPhoneCall(QtPhoneCall * qtPhoneCall){
-    QMutexLocker locker(&_mutex);
-    qtPhoneCall->getWidget()->setParent(_widget);
-	_widgetLayout->addWidget( qtPhoneCall->getWidget() );
-	connect(qtPhoneCall,SIGNAL(deleteMe(QtPhoneCall *)), SLOT(deleteQtPhoneCall(QtPhoneCall *)));
+void QtContactCallList::addPhoneCall(QtPhoneCall * qtPhoneCall) {
+	QMutexLocker locker(& _mutex);
+	qtPhoneCall->getWidget()->setParent(_widget);
+	_widgetLayout->addWidget(qtPhoneCall->getWidget());
+	connect(qtPhoneCall, SIGNAL(deleteMe(QtPhoneCall *)), SLOT(deleteQtPhoneCall(QtPhoneCall *)));
 	_phoneCallList.append(qtPhoneCall);
 }
 
-QtContactCallList::QtPhoneCallList & QtContactCallList::getPhoneCallList(){
+QtContactCallList::QtPhoneCallList & QtContactCallList::getPhoneCallList() {
 	return _phoneCallList;
 }
 
-void QtContactCallList::deleteQtPhoneCall(QtPhoneCall * qtPhoneCall){
-
-    QMutexLocker locker(&_mutex);
+void QtContactCallList::deleteQtPhoneCall(QtPhoneCall * qtPhoneCall) {
+	QMutexLocker locker(& _mutex);
 	QtPhoneCallList::iterator iter;
 	QtPhoneCall * tmp = NULL;
-	for (iter = _phoneCallList.begin(); iter!=_phoneCallList.end(); iter++){
-		tmp = (*iter);
-		if ( tmp == qtPhoneCall ){
+	for (iter = _phoneCallList.begin(); iter != _phoneCallList.end(); iter++) {
+		tmp = (* iter);
+		if (tmp == qtPhoneCall) {
 			_phoneCallList.erase(iter);
 			break;
 		}
@@ -61,45 +60,42 @@ void QtContactCallList::deleteQtPhoneCall(QtPhoneCall * qtPhoneCall){
 	qtPhoneCall->deleteLater();
 }
 
-bool QtContactCallList::hasPhoneCall(PhoneCall * phoneCall){
-    QMutexLocker locker(&_mutex);
+bool QtContactCallList::hasPhoneCall(PhoneCall * phoneCall) {
+	QMutexLocker locker(& _mutex);
 	QtPhoneCallList::iterator iter;
 	QtPhoneCall * tmp = NULL;
-	for (iter = _phoneCallList.begin(); iter!=_phoneCallList.end(); iter++){
-	    tmp = (*iter);
-	    if ( tmp->getCPhoneCall().getPhoneCall().getCallId() == phoneCall->getCallId() )
-	    {
-	        return true;
-	    }
+	for (iter = _phoneCallList.begin(); iter != _phoneCallList.end(); iter++) {
+		tmp = (* iter);
+		if (tmp->getCPhoneCall().getPhoneCall().getCallId() == phoneCall->getCallId()) {
+			return true;
+		}
 	}
 	return false;
 }
 
-void QtContactCallList::clearCalls(){
-    QMutexLocker locker(&_mutex);
-    _phoneCallList.clear();
+void QtContactCallList::clearCalls() {
+	QMutexLocker locker(& _mutex);
+	_phoneCallList.clear();
 }
 
-int QtContactCallList::count(){
-    QMutexLocker locker(&_mutex);
-    return _phoneCallList.size();
+int QtContactCallList::count() {
+	QMutexLocker locker(& _mutex);
+	return _phoneCallList.size();
 }
 
-QtPhoneCall * QtContactCallList::takeQtPhoneCall ( PhoneCall * phoneCall){
-    QMutexLocker locker(&_mutex);
+QtPhoneCall * QtContactCallList::takeQtPhoneCall(PhoneCall * phoneCall) {
+	QMutexLocker locker(& _mutex);
 
-    QtPhoneCallList::iterator iter;
-    for (iter = _phoneCallList.begin(); iter!=_phoneCallList.end(); iter++){
+	QtPhoneCallList::iterator iter;
+	for (iter = _phoneCallList.begin(); iter != _phoneCallList.end(); iter++) {
 
-        if ( (*iter)->getCPhoneCall().getPhoneCall().getPeerSipAddress().getUserName() ==
-              phoneCall->getPeerSipAddress().getUserName() ){
-                  _widgetLayout->removeWidget( (*iter)->getWidget() );
-                  QtPhoneCall * qtphoneCall = (*iter);
-                  _phoneCallList.erase(iter);
-                  return qtphoneCall;
-              }
-    }
-    return NULL;
-
+		if ((* iter)->getCPhoneCall().getPhoneCall().getPeerSipAddress().getUserName() ==
+				phoneCall->getPeerSipAddress().getUserName()) {
+			_widgetLayout->removeWidget((* iter)->getWidget());
+			QtPhoneCall * qtphoneCall = (* iter);
+			_phoneCallList.erase(iter);
+			return qtphoneCall;
+		}
+	}
+	return NULL;
 }
-

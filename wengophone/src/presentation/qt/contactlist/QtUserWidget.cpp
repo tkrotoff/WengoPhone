@@ -52,59 +52,59 @@ QtUserWidget::QtUserWidget(const std::string & contactId, CUserProfile & cUserPr
 	if (!str.isEmpty()) {
 		_ui.homePhoneLabel->setText(str);
 	}
-	
+
 	str = QString::fromUtf8(_contactProfile.getMobilePhone().c_str());
-	if ( !str.isEmpty() ) {
+	if (!str.isEmpty()) {
 		_ui.cellPhoneLabel->setText(str);
 	}
 	else {
 		_ui.smsButton->setEnabled(false);
 	}
-	
+
 	if (!_contactProfile.hasFreeCall()) {
 		_ui.callButton->setEnabled(false);
 	}
-	
+
 	if (!_contactProfile.hasIM()) {
 		_ui.chatButton->setEnabled(false);
 	}
-	
-	connect ( _ui.callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
-	connect ( _ui.chatButton, SIGNAL(clicked()), SLOT(chatButtonClicked()));
-	connect ( _ui.smsButton, SIGNAL(clicked()), SLOT(smsButtonClicked()));
-	connect ( _ui.landLineButton, SIGNAL(clicked()), SLOT(landLineButtonClicked()));
-	connect ( _ui.mobileButton, SIGNAL(clicked()), SLOT(mobileButtonClicked()));
+
+	connect(_ui.callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
+	connect(_ui.chatButton, SIGNAL(clicked()), SLOT(chatButtonClicked()));
+	connect(_ui.smsButton, SIGNAL(clicked()), SLOT(smsButtonClicked()));
+	connect(_ui.landLineButton, SIGNAL(clicked()), SLOT(landLineButtonClicked()));
+	connect(_ui.mobileButton, SIGNAL(clicked()), SLOT(mobileButtonClicked()));
 }
 
-void QtUserWidget::callButtonClicked(){
+void QtUserWidget::callButtonClicked() {
 	QtUserList * ul = QtUserList::getInstance();
 	ul->startCall(QString::fromStdString(_contactId));
 }
 
-void QtUserWidget::smsButtonClicked(){
+void QtUserWidget::smsButtonClicked() {
 	QtUserList * ul = QtUserList::getInstance();
 	ul->startSMS(QString::fromStdString(_contactId));
 }
 
-void QtUserWidget::chatButtonClicked(){
+void QtUserWidget::chatButtonClicked() {
 	QtUserList * ul = QtUserList::getInstance();
 	ul->startChat(QString::fromStdString(_contactId));
 }
 
 QPixmap QtUserWidget::getIcon() const {
-	QMutexLocker locker(&_mutex);
+	QMutexLocker locker(& _mutex);
 
 	Picture picture = _contactProfile.getIcon();
 	std::string data = picture.getData();
 
 	QPixmap result;
-	result.loadFromData((uchar *)data.c_str(), data.size());
+	result.loadFromData((uchar *) data.c_str(), data.size());
 
 	return result;
 }
 
 void QtUserWidget::contactProfileUpdated() {
-	QMutexLocker locker(&_mutex);
+	QMutexLocker locker(& _mutex);
 
 	_contactProfile = _cUserProfile.getCContactList().getContactProfile(_contactId);
 }
@@ -115,14 +115,14 @@ QLabel * QtUserWidget::getAvatarLabel() const {
 
 
 void QtUserWidget::mobileButtonClicked() {
-	if( _ui.cellPhoneLabel->text() != tr("No cell phone number set") ) {
+	if (_ui.cellPhoneLabel->text() != tr("No cell phone number set")) {
 		QtUserList * ul = QtUserList::getInstance();
 		ul->startCall(QString::fromStdString(_contactId), _ui.cellPhoneLabel->text());
 	}
 }
 
 void QtUserWidget::landLineButtonClicked() {
-	if( _ui.homePhoneLabel->text() != tr("No phone number set") ) {
+	if (_ui.homePhoneLabel->text() != tr("No phone number set")) {
 		QtUserList * ul = QtUserList::getInstance();
 		ul->startCall(QString::fromStdString(_contactId), _ui.homePhoneLabel->text());
 	}

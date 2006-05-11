@@ -58,9 +58,13 @@ protected:
 
 	static std::string getSoundCallClosedFile();
 
-	static void stopSoundRingin();
+	static void stopSoundIncomingCall();
 
-	static Sound * _soundRingin;
+	static void stopSoundCallClosed();
+
+	static Sound * _soundIncomingCall;
+
+	static Sound * _soundCallClosed;
 };
 
 #endif	//PHONECALLSTATE_H

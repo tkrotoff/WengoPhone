@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,8 +51,8 @@ void ContactGroupPopupMenu::removeContactGroup() const {
 }
 
 void ContactGroupPopupMenu::renameContactGroup() const {
-    QtRenameGroup dialog(dynamic_cast<QWidget *>(parent()));
-    dialog.exec();
+	QtRenameGroup dialog(dynamic_cast < QWidget * > (parent()));
+	dialog.exec();
 
 	_cContactList.renameContactGroup(_groupId.toStdString(), dialog.getGroupName().toStdString());
 }

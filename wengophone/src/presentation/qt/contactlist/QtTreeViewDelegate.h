@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QtTreeViewDelegate_H
-#define QtTreeViewDelegate_H
+#ifndef QTTREEVIEWDELEGATE_H
+#define QTTREEVIEWDELEGATE_H
 
 #include <QtGui>
 #include <QItemDelegate>
@@ -28,35 +28,33 @@
 
 class CUserProfile;
 
-class QtTreeViewDelegate : public QItemDelegate
-{
-    Q_OBJECT
+class QtTreeViewDelegate : public QItemDelegate {
+	Q_OBJECT
 public:
 
-	QtTreeViewDelegate(CUserProfile & cUserProfile, QObject *parent = 0);
+	QtTreeViewDelegate(CUserProfile & cUserProfile, QObject * parent = 0);
 
-	virtual QWidget * createEditor(QWidget *parent,const QStyleOptionViewItem & option ,const QModelIndex &index) const;
+	virtual QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
 
-	virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
+	virtual void setEditorData(QWidget * editor, const QModelIndex & index) const;
 
-	virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+	virtual void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const;
 
-	virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-	
+	virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
+
 	void setParent(QWidget * parent);
 
-	virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+	virtual QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const;
 
 protected:
 
-    void drawGroup( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+	void drawGroup(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
 
-    const QWidget * _parent;
+	const QWidget * _parent;
 
-    QPixmap _menuIcon;
+	QPixmap _menuIcon;
 
 	CUserProfile & _cUserProfile;
 };
 
-#endif
-
+#endif	//QTTREEVIEWDELEGATE_H
