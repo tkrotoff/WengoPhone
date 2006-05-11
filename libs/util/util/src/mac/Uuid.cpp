@@ -22,15 +22,19 @@
 #include <CoreFoundation/CoreFoundation.h>
 
 std::string Uuid::generate() {
+	std::string result;
+
 	CFUUIDRef uu = CFUUIDCreate(kCFAllocatorDefault);
 	CFStringRef str = CFUUIDCreateString(kCFAllocatorDefault, uu);
 
 	char buffer[37];
-	CFStringGetCString(str, buffer, sizeof(37), kCFStringEncodingMacRoman);
+	if (CFStringGetCString(str, buffer, sizeof(buffer), kCFStringEncodingASCII)) {
+		result = buffer;
+	}
 
 	CFRelease(str);
 	CFRelease(uu);
 
-	return std::string(buffer);
+	return result;
 }
 
