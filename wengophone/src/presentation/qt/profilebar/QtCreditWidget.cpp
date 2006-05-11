@@ -22,74 +22,79 @@
 #include <control/CWengoPhone.h>
 #include <presentation/qt/config/QtWengoConfigDialog.h>
 
-#include <qtutil/QtClickableLabel.h>
+#include <qtutil/MouseEventFilter.h>
 
-QtCreditWidget::QtCreditWidget(QWidget * parent , Qt::WFlags f ) : QWidget(parent,f){
+QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent , Qt::WFlags f )
+	: QObjectThreadSafe(NULL), _cWengoPhone(cWengoPhone) {
 
-	//buy call-out label
-	QtClickableLabel * buyLabel = new QtClickableLabel(this);
-	buyLabel->setText(tr("Buy call-out credits"));
-	connect(buyLabel, SIGNAL(clicked()), SLOT(buyOutClicked()));
+	_callForwardMode = tr("unauthorized");
+	_pstnNumber = tr("no number");
 
-	QPalette palette = buyLabel->palette();
-	palette.setColor(QPalette::WindowText, Qt::blue);
-	buyLabel->setPalette(palette);
-
-	QFont font = buyLabel->font();
-	font.setUnderline(true);
-	buyLabel->setFont(font);
-
-	QCursor cursor = buyLabel->cursor();
-	cursor.setShape(Qt::PointingHandCursor);
-	buyLabel->setCursor(cursor);
-
-
-	//call forward mode label	
-	_callForwardMode = new QtClickableLabel(this);
-	connect(_callForwardMode, SIGNAL(clicked()), SLOT(callforwardModeClicked()));
-
-	palette = _callForwardMode->palette();
-	palette.setColor(QPalette::WindowText, Qt::blue);
-	_callForwardMode->setPalette(palette);
-
-	font = _callForwardMode->font();
-	font.setUnderline(true);
-	_callForwardMode->setFont(font);
-
-	cursor = _callForwardMode->cursor();
-	cursor.setShape(Qt::PointingHandCursor);
-	_callForwardMode->setCursor(cursor);
-
-
-	//Pstn number label
-	_pstnNumber = new QLabel(this);
-
-	_gridLayout = new QGridLayout(this);
-	_gridLayout->addWidget(buyLabel, 0, 0);
+	typedef PostEvent0<void ()> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtCreditWidget::initThreadSafe, this));
+	postEvent(event);
 }
 
-void QtCreditWidget::buyOutClicked(){
-	_cWengoPhone->showWengoBuyWengos();
+void QtCreditWidget::updatePresention() {
+	typedef PostEvent0<void ()> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtCreditWidget::updatePresentationThreadSafe, this));
+	postEvent(event);
 }
 
-void QtCreditWidget::setCWengoPhone(CWengoPhone * cwengophone){
-	_cWengoPhone = cwengophone;
+void QtCreditWidget::initThreadSafe() {
+	_widget = new QWidget();
+	_ui = new Ui::CreditWidget();
+	_ui->setupUi(_widget);
+
+	_ui->pstnNumberLabel->setText(tr("no number"));
+	_ui->callForwardLabel->setText(tr("unauthorized"));
+
+	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
+		this, SLOT(buyOutClicked()), Qt::LeftButton);
+	_ui->buyCreditsLabel->installEventFilter(mouseFilter);
+}
+
+void QtCreditWidget::updatePresentationThreadSafe() {
+
+	_ui->callForwardLabel->setText(_callForwardMode);
+	_ui->pstnNumberLabel->setText(_pstnNumber);
+
+	if( _callForwardMode != tr("unauthorized") ) {
+
+		QPalette palette = _ui->callForwardLabel->palette();
+		palette.setColor(QPalette::WindowText, Qt::blue);
+		_ui->callForwardLabel->setPalette(palette);
+
+		QFont font = _ui->callForwardLabel->font();
+		font.setUnderline(true);
+		_ui->callForwardLabel->setFont(font);
+
+		QCursor cursor = _ui->callForwardLabel->cursor();
+		cursor.setShape(Qt::PointingHandCursor);
+		_ui->callForwardLabel->setCursor(cursor);
+
+		MousePressEventFilter * mouseFilter = new MousePressEventFilter(
+				this, SLOT(callforwardModeClicked()), Qt::LeftButton);
+		_ui->callForwardLabel->installEventFilter(mouseFilter);
+	}
 }
 
 void QtCreditWidget::setPstnNumber(const QString & number) {
-	_pstnNumber->setText(tr("Your number: ") + number);
-	_gridLayout->addWidget(_pstnNumber, 1, 0);
+	_pstnNumber = number;
+	updatePresention();
 }
 
 void QtCreditWidget::setCallForwardMode(const QString & mode) {
-	_callForwardMode->setText(tr("Call Forward mode: ") + mode);
-	_gridLayout->addWidget(_callForwardMode, 2, 0);
+	_callForwardMode = mode;
+	updatePresention();
+}
+
+void QtCreditWidget::buyOutClicked() {
+	_cWengoPhone.showWengoBuyWengos();
 }
 
 void QtCreditWidget::callforwardModeClicked() {
-	if( _cWengoPhone ) {
-		QtWengoConfigDialog dialog(*_cWengoPhone, this);
-		dialog.showCallForward();
-		dialog.show();
-	}
+	QtWengoConfigDialog dialog(_cWengoPhone, _widget);
+	dialog.showCallForward();
+	dialog.show();
 }

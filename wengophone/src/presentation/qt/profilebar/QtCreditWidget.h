@@ -20,10 +20,15 @@
 #ifndef QTCREDITWIDGET_H
 #define QTCREDITWIDGET_H
 
+#include "ui_CreditWidget.h"
+
+#include <qtutil/QObjectThreadSafe.h>
+
 #include <QtGui>
 
 class CWengoPhone;
 class QtClickableLabel;
+class CWengoPhone;
 
 /**
  * Credit widget
@@ -31,17 +36,21 @@ class QtClickableLabel;
  * @author Mr K.
  * @author Mathieu Stute
  */
-class QtCreditWidget : public QWidget {
+class QtCreditWidget : QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtCreditWidget(QWidget * parent = 0, Qt::WFlags f = 0);
-
-	void setCWengoPhone(CWengoPhone * cwengophone);
+	QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent = 0, Qt::WFlags f = 0);
 
 	void setPstnNumber(const QString & number);
 
 	void setCallForwardMode(const QString & mode);
+
+	QWidget * getWidget() {
+		return _widget;
+	}
+
+	void updatePresention();
 
 private Q_SLOTS:
 
@@ -49,16 +58,20 @@ private Q_SLOTS:
 
 	void callforwardModeClicked();
 
-private:
-
-	QLabel * _pstnNumber;
-
-	QtClickableLabel * _callForwardMode;
-
-	QGridLayout * _gridLayout;
-
 protected:
 
-	CWengoPhone * _cWengoPhone;
+	QString _callForwardMode;
+
+	QString _pstnNumber;
+
+	void initThreadSafe();
+
+	void updatePresentationThreadSafe();
+
+	QWidget * _widget;
+
+	CWengoPhone & _cWengoPhone;
+
+	Ui::CreditWidget * _ui;
 };
 #endif

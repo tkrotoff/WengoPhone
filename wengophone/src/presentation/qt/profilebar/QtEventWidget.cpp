@@ -55,7 +55,7 @@ void QtEventWidget::missedCallClicked() {
 	if( QMessageBox::question(
 		this,
 		tr("Call message box"),
-		tr("Do you want to call 123?"),
+		tr("Do you want to call your voice mail?"),
 		tr("&No"), tr("&Yes"),
 		QString(), 0, 1) ) {
 

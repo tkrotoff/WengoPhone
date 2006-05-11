@@ -136,9 +136,7 @@ _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 	_eventWidget = new QtEventWidget(_cWengoPhone, _cUserProfile, this);
 	_eventWidget->setVisible(false);
 
-	_creditWidget = new QtCreditWidget(this);
-	_creditWidget->setCWengoPhone(&_cWengoPhone);
-	_creditWidget->setVisible(false);
+	_creditWidget = new QtCreditWidget(_cWengoPhone, this);
 
 	_cUserProfile.getUserProfile().wsInfoCreatedEvent +=
 		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
@@ -303,8 +301,8 @@ void QtProfileBar::showCreditWidget() {
 	removeNickNameWidget();
 	removeEventsWidget();
 	if ( ! _crediWidgetVisible ){
-		_widgetLayout->addWidget(_creditWidget, 1, 0);
-		_creditWidget->setVisible(true);
+		_widgetLayout->addWidget(_creditWidget->getWidget(), 1, 0);
+		_creditWidget->getWidget()->setVisible(true);
 		_crediWidgetVisible=true;
 		setOpen(true);
 	}
@@ -313,8 +311,8 @@ void QtProfileBar::showCreditWidget() {
 void QtProfileBar::removeCreditWidget() {
 
 	if ( _crediWidgetVisible ){
-		_creditWidget->setVisible(false);
-		_widgetLayout->removeWidget( _creditWidget );
+		_creditWidget->getWidget()->setVisible(false);
+		_widgetLayout->removeWidget( _creditWidget->getWidget() );
 		setMinimumSize(QSize(0,0));
 		resize(QSize(0,0));
 		_crediWidgetVisible=false;
