@@ -173,5 +173,6 @@
         <file>webservices/subscribe/Subscribe.ui</file>
         <file>webservices/directory/WsDirectory.ui</file>
         <file>webservices/directory/WsDirectoryContact.ui</file>
+        <file>profilebar/CreditWidget.ui</file>
     </qresource>
 </RCC>
