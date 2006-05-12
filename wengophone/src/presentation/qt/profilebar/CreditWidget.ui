@@ -30,7 +30,7 @@
         <color>
          <red>0</red>
          <green>0</green>
-         <blue>255</blue>
+         <blue>0</blue>
         </color>
         <color>
          <red>221</red>
@@ -60,7 +60,7 @@
         <color>
          <red>0</red>
          <green>0</green>
-         <blue>0</blue>
+         <blue>255</blue>
         </color>
         <color>
          <red>255</red>
@@ -117,7 +117,7 @@
         <color>
          <red>0</red>
          <green>0</green>
-         <blue>255</blue>
+         <blue>0</blue>
         </color>
         <color>
          <red>221</red>
@@ -147,7 +147,7 @@
         <color>
          <red>0</red>
          <green>0</green>
-         <blue>0</blue>
+         <blue>255</blue>
         </color>
         <color>
          <red>255</red>
@@ -289,22 +289,11 @@
        </disabled>
       </palette>
      </property>
-     <property name="font" >
-      <font>
-       <family>Sans Serif</family>
-       <pointsize>9</pointsize>
-       <weight>50</weight>
-       <italic>false</italic>
-       <bold>false</bold>
-       <underline>true</underline>
-       <strikeout>false</strikeout>
-      </font>
-     </property>
      <property name="cursor" >
       <cursor>13</cursor>
      </property>
      <property name="text" >
-      <string>Buy call-out credits</string>
+      <string>&lt;u>Buy call-out credits&lt;/u></string>
      </property>
      <property name="alignment" >
       <set>Qt::AlignCenter</set>
@@ -320,19 +309,8 @@
    </item>
    <item row="1" column="0" >
     <widget class="QLabel" name="label_2" >
-     <property name="font" >
-      <font>
-       <family>Sans Serif</family>
-       <pointsize>9</pointsize>
-       <weight>75</weight>
-       <italic>false</italic>
-       <bold>true</bold>
-       <underline>false</underline>
-       <strikeout>false</strikeout>
-      </font>
-     </property>
      <property name="text" >
-      <string>Call forward mode:</string>
+      <string>&lt;b>Call forward mode:&lt;/b></string>
      </property>
     </widget>
    </item>
@@ -345,19 +323,8 @@
    </item>
    <item row="0" column="0" >
     <widget class="QLabel" name="label" >
-     <property name="font" >
-      <font>
-       <family>Sans Serif</family>
-       <pointsize>9</pointsize>
-       <weight>75</weight>
-       <italic>false</italic>
-       <bold>true</bold>
-       <underline>false</underline>
-       <strikeout>false</strikeout>
-      </font>
-     </property>
      <property name="text" >
-      <string>Your number:</string>
+      <string>&lt;b>Your number:&lt;/b></string>
      </property>
     </widget>
    </item>
