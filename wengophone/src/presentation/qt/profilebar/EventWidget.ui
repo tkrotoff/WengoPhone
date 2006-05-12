@@ -1,0 +1,125 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>EventWidget</class>
+ <widget class="QWidget" name="EventWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>318</width>
+    <height>27</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>6</number>
+   </property>
+   <property name="spacing" >
+    <number>3</number>
+   </property>
+   <item row="0" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="2" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="voiceMailIconLabel" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="pixmap" >
+        <pixmap resource="../wengophone.qrc" >:/pics/profilebar/event/new-message.png</pixmap>
+       </property>
+       <property name="scaledContents" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="voiceMailLabel" >
+       <property name="text" >
+        <string>&lt;b>New voice mail:&lt;/b></string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="voiceMailCountLabel" >
+       <property name="text" >
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="missedCallIconLabel" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="pixmap" >
+        <pixmap resource="../wengophone.qrc" >:/pics/profilebar/event/missed-calls.png</pixmap>
+       </property>
+       <property name="scaledContents" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="missedCallLabel" >
+       <property name="text" >
+        <string>&lt;b>Missed call:&lt;/b></string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="missedCallCountLabel" >
+       <property name="text" >
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
+ <connections/>
+</ui>

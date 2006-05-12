@@ -47,14 +47,13 @@ void QtEventWidget::initThreadSafe() {
 	_ui = new Ui::EventWidget();
 	_ui->setupUi(_widget);
 
-	//TODO: mouse interaction
 	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
-			this, SLOT(voiceMailClicked()), Qt::LeftButton);
+		this, SLOT(voiceMailClicked()), Qt::LeftButton);
 	_ui->voiceMailIconLabel->installEventFilter(mouseFilter);
 	_ui->voiceMailIconLabel->setToolTip(tr("Click here to call your voice mail"));
 
 	MousePressEventFilter * mouseFilter2 = new MousePressEventFilter(
-			this, SLOT(missedCallClicked()), Qt::LeftButton);
+		this, SLOT(missedCallClicked()), Qt::LeftButton);
 	_ui->missedCallIconLabel->installEventFilter(mouseFilter2);
 	_ui->missedCallIconLabel->setToolTip(tr("Click here to see missed call(s)"));
 
