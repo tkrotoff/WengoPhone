@@ -24,6 +24,7 @@
 
 class Settings;
 class QtSliderManager;
+class CWengoPhone;
 
 class QWidget;
 
@@ -38,7 +39,7 @@ class QtConfigPanel : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtConfigPanel(QWidget * parent);
+	QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent);
 
 	~QtConfigPanel();
 
@@ -56,6 +57,10 @@ private Q_SLOTS:
 
 	void halfDuplexCheckBoxToggled(bool checked);
 
+	void videoSettingsClicked();
+
+	void audioSettingsClicked();
+
 private:
 
 	void initThreadSafe() { }
@@ -71,6 +76,8 @@ private:
 	QtSliderManager * _inputSoundSlider;
 
 	QtSliderManager * _outputSoundSlider;
+
+	CWengoPhone & _cWengoPhone;
 };
 
 #endif	//QTCONFIGPANEL_H

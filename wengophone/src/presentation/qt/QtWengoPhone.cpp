@@ -303,7 +303,7 @@ void QtWengoPhone::initThreadSafe() {
 	new QtLanguage(_wengoPhoneWindow);
 
 	//configPanel
-	QtConfigPanel * qtConfigPanel = new QtConfigPanel(_wengoPhoneWindow);
+	QtConfigPanel * qtConfigPanel = new QtConfigPanel(_cWengoPhone, _wengoPhoneWindow);
 	_configPanelWidget = qtConfigPanel->getWidget();
 	int configPanelIndex = _ui->configPanel->addWidget(_configPanelWidget);
 	_ui->configPanel->setCurrentIndex(configPanelIndex);

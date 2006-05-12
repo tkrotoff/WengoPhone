@@ -22,32 +22,7 @@
    <property name="spacing" >
     <number>3</number>
    </property>
-   <item row="0" column="1" >
-    <widget class="QLabel" name="pstnNumberTextLabel" >
-     <property name="text" >
-      <string>&lt;b>Your number:&lt;/b></string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="callForwardIconLabel" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>4</hsizetype>
-       <vsizetype>5</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text" >
-      <string/>
-     </property>
-     <property name="pixmap" >
-      <pixmap resource="../wengophone.qrc" >:/pics/profilebar/credit/mobile-redirect.png</pixmap>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="3" >
+   <item row="2" column="1" colspan="2" >
     <widget class="QLabel" name="buyCreditsLabel" >
      <property name="sizePolicy" >
       <sizepolicy>
@@ -329,7 +304,32 @@
       <string>&lt;u>Buy call-out credits&lt;/u></string>
      </property>
      <property name="alignment" >
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QLabel" name="pstnNumberTextLabel" >
+     <property name="text" >
+      <string>&lt;b>Your number:&lt;/b></string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="callForwardIconLabel" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>4</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/profilebar/credit/mobile-redirect.png</pixmap>
      </property>
     </widget>
    </item>
@@ -369,6 +369,24 @@
      </property>
      <property name="pixmap" >
       <pixmap resource="../wengophone.qrc" >:/pics/contact/fixe.png</pixmap>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>4</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/profilebar/credit/wengos.png</pixmap>
      </property>
     </widget>
    </item>

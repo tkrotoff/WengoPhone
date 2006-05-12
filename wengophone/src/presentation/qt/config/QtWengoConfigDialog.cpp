@@ -101,10 +101,81 @@ void QtWengoConfigDialog::save() {
 	}
 }
 
-void QtWengoConfigDialog::showCallForward() {
+void QtWengoConfigDialog::showGeneralPage() {
+	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("General"), Qt::MatchExactly);
+	if( !list.empty() ) {
+		if( list[0] ) {
+			_ui->treeWidget->setCurrentItem(list[0]);
+		}
+	}
+}
+
+void QtWengoConfigDialog::showLanguagePage() {
+	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Language"), Qt::MatchExactly);
+	if( !list.empty() ) {
+		if( list[0] ) {
+			_ui->treeWidget->setCurrentItem(list[0]);
+		}
+	}
+}
+
+void QtWengoConfigDialog::showAccountsPage() {
+	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Accounts"), Qt::MatchExactly);
+	if( !list.empty() ) {
+		if( list[0] ) {
+			_ui->treeWidget->setCurrentItem(list[0]);
+		}
+	}
+}
+
+void QtWengoConfigDialog::showPrivacyPage() {
+	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Privacy"), Qt::MatchExactly);
+	if( !list.empty() ) {
+		if( list[0] ) {
+			_ui->treeWidget->setCurrentItem(list[0]);
+		}
+	}
+}
+
+void QtWengoConfigDialog::showAudioPage() {
+	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Audio"), Qt::MatchExactly);
+	if( !list.empty() ) {
+		if( list[0] ) {
+			_ui->treeWidget->setCurrentItem(list[0]);
+		}
+	}
+}
+
+void QtWengoConfigDialog::showVideoPage() {
+	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Video"), Qt::MatchExactly);
+	if( !list.empty() ) {
+		if( list[0] ) {
+			_ui->treeWidget->setCurrentItem(list[0]);
+		}
+	}
+}
+
+void QtWengoConfigDialog::showNotificationsPage() {
+	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Notifications & Sounds"), Qt::MatchExactly);
+	if( !list.empty() ) {
+		if( list[0] ) {
+			_ui->treeWidget->setCurrentItem(list[0]);
+		}
+	}
+}
+
+void QtWengoConfigDialog::showCallForwardPage() {
 	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Call Forward"), Qt::MatchExactly);
 	if( !list.empty() ) {
+		if( list[0] ) {
+			_ui->treeWidget->setCurrentItem(list[0]);
+		}
+	}
+}
 
+void QtWengoConfigDialog::showAdvancedPage() {
+	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Advanced"), Qt::MatchExactly);
+	if( !list.empty() ) {
 		if( list[0] ) {
 			_ui->treeWidget->setCurrentItem(list[0]);
 		}

@@ -25,15 +25,18 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
+#include <presentation/qt/config/QtWengoConfigDialog.h>
+
 #include <sound/VolumeControl.h>
 #include <sound/AudioDevice.h>
 
 #include <util/Logger.h>
+#include <qtutil/MouseEventFilter.h>
 
 #include <QtGui>
 
-QtConfigPanel::QtConfigPanel(QWidget * parent)
-	: QObjectThreadSafe(parent) {
+QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
+	: QObjectThreadSafe(parent), _cWengoPhone(cWengoPhone) {
 
 	_configPanelWidget = new QWidget(parent);
 
@@ -75,6 +78,14 @@ QtConfigPanel::QtConfigPanel(QWidget * parent)
 	configChangedEventHandler(config, Config::AUDIO_OUTPUT_DEVICENAME_KEY);
 	configChangedEventHandler(config, Config::WENBOX_ENABLE_KEY);
 	configChangedEventHandler(config, Config::AUDIO_HALFDUPLEX_KEY);
+	
+	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
+		this, SLOT(videoSettingsClicked()), Qt::LeftButton);
+	_ui->videoSettingsLabel->installEventFilter(mouseFilter);
+
+	MousePressEventFilter * mouseFilter2 = new MousePressEventFilter(
+		this, SLOT(audioSettingsClicked()), Qt::LeftButton);
+	_ui->audioSettingsLabel->installEventFilter(mouseFilter2);
 }
 
 QtConfigPanel::~QtConfigPanel() {
@@ -134,4 +145,17 @@ void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const
 		//halfDuplexCheckBox
 		_ui->halfDuplexCheckBox->setChecked(config.getAudioHalfDuplex());
 	}
+}
+
+void QtConfigPanel::videoSettingsClicked() {
+	QtWengoConfigDialog dialog(_cWengoPhone, _configPanelWidget);
+	dialog.showVideoPage();
+	dialog.show();
+
+}
+
+void QtConfigPanel::audioSettingsClicked() {
+	QtWengoConfigDialog dialog(_cWengoPhone, _configPanelWidget);
+	dialog.showAudioPage();
+	dialog.show();
 }

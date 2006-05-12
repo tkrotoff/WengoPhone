@@ -104,6 +104,6 @@ void QtCreditWidget::buyOutClicked() {
 
 void QtCreditWidget::callforwardModeClicked() {
 	QtWengoConfigDialog dialog(_cWengoPhone, _widget);
-	dialog.showCallForward();
+	dialog.showCallForwardPage();
 	dialog.show();
 }

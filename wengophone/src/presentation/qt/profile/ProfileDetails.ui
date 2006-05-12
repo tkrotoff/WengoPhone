@@ -165,7 +165,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip" >
-           <string>Work phone</string>
+           <string>Home phone</string>
           </property>
           <property name="pixmap" >
            <pixmap resource="../wengophone.qrc" >:/pics/contact/fixe.png</pixmap>

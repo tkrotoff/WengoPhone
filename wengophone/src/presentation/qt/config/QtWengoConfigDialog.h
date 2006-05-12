@@ -52,7 +52,23 @@ public Q_SLOTS:
 
 	void show();
 
-	void showCallForward();
+	void showGeneralPage();
+
+	void showLanguagePage();
+
+	void showAccountsPage();
+
+	void showPrivacyPage();
+
+	void showAudioPage();
+
+	void showVideoPage();
+
+	void showNotificationsPage();
+
+	void showCallForwardPage();
+
+	void showAdvancedPage();
 
 private Q_SLOTS:
 
