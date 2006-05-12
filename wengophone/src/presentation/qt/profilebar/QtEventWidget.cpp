@@ -19,41 +19,77 @@
 
 #include "QtEventWidget.h"
 
+#include <QtGui>
+
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
 
 #include <model/profile/UserProfile.h>
 #include <model/phoneline/IPhoneLine.h>
 
+#include <qtutil/MouseEventFilter.h>
+
 QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 	QWidget * parent, Qt::WFlags f)
-	: QWidget ( parent, f ), _cUserProfile(cUserProfile), _cWengoPhone(cWengoPhone) {
+	: QObjectThreadSafe(NULL), _cUserProfile(cUserProfile), _cWengoPhone(cWengoPhone) {
 
-	QGridLayout * gridLayout = new QGridLayout(this);
+	_voiceMailCount = 0;
+	_missedCallCount = 0;
+	_widget = new QWidget();
 
-	_missedCallLabel = new QtClickableLabel(this);
-	_missedCallLabel->setText(tr("Missed calls"));
+	typedef PostEvent0<void ()> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtEventWidget::initThreadSafe, this));
+	postEvent(event);
+}
 
-	_voiceMailLabel = new QtClickableLabel(this);
-	_voiceMailLabel->setText(tr("New messages"));
-	connect(_voiceMailLabel, SIGNAL(clicked()), SLOT(missedCallClicked()));
+void QtEventWidget::initThreadSafe() {
 
-	gridLayout->addWidget(_missedCallLabel, 0, 0);
-	gridLayout->addWidget(_voiceMailLabel, 0, 1);
+	_ui = new Ui::EventWidget();
+	_ui->setupUi(_widget);
 
+	//TODO: mouse interaction
+	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
+			this, SLOT(voiceMailClicked()), Qt::LeftButton);
+	_ui->voiceMailIconLabel->installEventFilter(mouseFilter);
+	_ui->voiceMailIconLabel->setToolTip(tr("Click here to call your voice mail"));
+
+	MousePressEventFilter * mouseFilter2 = new MousePressEventFilter(
+			this, SLOT(missedCallClicked()), Qt::LeftButton);
+	_ui->missedCallIconLabel->installEventFilter(mouseFilter2);
+	_ui->missedCallIconLabel->setToolTip(tr("Click here to see missed call(s)"));
+
+	updatePresentation();
+}
+
+void QtEventWidget::updatePresentation() {
+	typedef PostEvent0<void ()> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtEventWidget::updatePresentationThreadSafe, this));
+	postEvent(event);
+}
+
+QWidget * QtEventWidget::getWidget() {
+	return _widget;
+}
+
+void QtEventWidget::updatePresentationThreadSafe() {
+	
+	_ui->voiceMailCountLabel->setText(QString("%1").arg(_voiceMailCount));
+	_ui->missedCallCountLabel->setText(QString("%1").arg(_missedCallCount));
 }
 
 void QtEventWidget::setVoiceMail(int count) {
-	if( count ) {
-		_voiceMailLabel->setText(QString("%1").arg(count) + " " + tr("new Voice Mail"));
-	} else {
-		_voiceMailLabel->setText(tr("No new Voice Mail"));
-	}
+	_voiceMailCount = count;
+	updatePresentation();
 }
 
-void QtEventWidget::missedCallClicked() {
+void QtEventWidget::setMissedCall(int count) {
+	_missedCallCount = count;
+	updatePresentation();
+}
+
+void QtEventWidget::voiceMailClicked() {
 	if( QMessageBox::question(
-		this,
+		_widget,
 		tr("Call message box"),
 		tr("Do you want to call your voice mail?"),
 		tr("&No"), tr("&Yes"),
@@ -61,4 +97,8 @@ void QtEventWidget::missedCallClicked() {
 
 		_cUserProfile.getUserProfile().getActivePhoneLine()->makeCall("123", false);
 	}
+}
+
+void QtEventWidget::missedCallClicked() {
+	//TODO: show the history tab
 }

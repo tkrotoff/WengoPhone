@@ -46,11 +46,9 @@ public:
 
 	void setCallForwardMode(const QString & mode);
 
-	QWidget * getWidget() {
-		return _widget;
-	}
+	QWidget * getWidget();
 
-	void updatePresention();
+	void updatePresentation();
 
 private Q_SLOTS:
 

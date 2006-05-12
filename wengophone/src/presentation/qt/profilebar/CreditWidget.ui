@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>314</width>
-    <height>75</height>
+    <width>284</width>
+    <height>93</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -20,10 +20,43 @@
     <number>6</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>3</number>
    </property>
-   <item row="2" column="0" colspan="2" >
+   <item row="0" column="1" >
+    <widget class="QLabel" name="pstnNumberTextLabel" >
+     <property name="text" >
+      <string>&lt;b>Your number:&lt;/b></string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="callForwardIconLabel" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>4</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/profilebar/credit/mobile-redirect.png</pixmap>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="3" >
     <widget class="QLabel" name="buyCreditsLabel" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>4</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="palette" >
       <palette>
        <active>
@@ -301,36 +334,49 @@
     </widget>
    </item>
    <item row="1" column="1" >
-    <widget class="QLabel" name="callForwardLabel" >
-     <property name="text" >
-      <string>active (voicemail)</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_2" >
+    <widget class="QLabel" name="callForwardTextLabel" >
      <property name="text" >
       <string>&lt;b>Call forward mode:&lt;/b></string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
+   <item row="0" column="2" >
     <widget class="QLabel" name="pstnNumberLabel" >
      <property name="text" >
       <string>0102030405</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
+   <item row="1" column="2" >
+    <widget class="QLabel" name="callForwardLabel" >
      <property name="text" >
-      <string>&lt;b>Your number:&lt;/b></string>
+      <string>active (voicemail)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label_3" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>4</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/contact/fixe.png</pixmap>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
- <resources/>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
  <connections/>
 </ui>

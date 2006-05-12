@@ -20,46 +20,58 @@
 #ifndef QTEVENTWIDGET_H
 #define QTEVENTWIDGET_H
 
-#include <QtGui>
+#include "ui_EventWidget.h"
 
 #include <model/webservices/info/WsInfo.h>
 
-#include <qtutil/QtClickableLabel.h>
+#include <qtutil/QObjectThreadSafe.h>
 
 class CUserProfile;
 class CWengoPhone;
+class QWidget;
 
 /**
+ * Event widget of the profile bar.
  *
  * @author Mr K
  * @author Mathieu Stute
  */
-class QtEventWidget : public QWidget {
+class QtEventWidget : public QObjectThreadSafe {
 	Q_OBJECT
 public:
-
-	typedef QList<QtClickableLabel *> QtClickableLabelList;
 
 	QtEventWidget (CWengoPhone & cWengoPhone, CUserProfile & cUserProfile, QWidget * parent = 0, Qt::WFlags f = 0);
 
 	void setVoiceMail(int count);
 
+	void setMissedCall(int count);
+
+	void updatePresentation();
+
+	QWidget * getWidget();
+
 private Q_SLOTS:
+
+	void voiceMailClicked();
 
 	void missedCallClicked();
 
-protected:
+private:
 
-	QtClickableLabel * _missedCallLabel;
+	void initThreadSafe();
 
-	QtClickableLabel * _voiceMailLabel;
-
-	QtClickableLabelList _missedCallLabelList;
-
-	QtClickableLabelList _messagesLabelList;
+	void updatePresentationThreadSafe();
 
 	CUserProfile & _cUserProfile;
 
 	CWengoPhone & _cWengoPhone;
+
+	QWidget * _widget;
+
+	Ui::EventWidget * _ui;
+
+	int _voiceMailCount;
+
+	int _missedCallCount;
 };
 #endif

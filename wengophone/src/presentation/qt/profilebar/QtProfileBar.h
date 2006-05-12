@@ -45,33 +45,30 @@ class UserProfile;
  * @author Mr K.
  * @author Mathieu Stute
  */
-class QtProfileBar : public QWidget
-{
+class QtProfileBar : public QWidget {
 	Q_OBJECT
-
 public:
 	QtProfileBar (CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 		ConnectHandler & connectHandler,QWidget * parent = 0, Qt::WFlags f = 0 );
 
-    void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
+	void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
 
-    void disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount);
+	void disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount);
 
     void myPresenceStatusEventHandler(PresenceHandler & sender,
 		const IMAccount & imAccount, EnumPresenceState::MyPresenceStatus status);
 
 Q_SIGNALS:
 
-    void connectEventSignal(IMAccount * imAccount);
+	void connectEventSignal(IMAccount * imAccount);
 
-    void disconnectedEventSignal(IMAccount * imAccount);
+	void disconnectedEventSignal(IMAccount * imAccount);
 
-    void myPresenceStatusEventSignal(QVariant status);
-
+	void myPresenceStatusEventSignal(QVariant status);
 
 protected:
 
-    ConnectHandler & _connectHandler;
+	ConnectHandler & _connectHandler;
 
 	QGridLayout * _gridlayout;
 
@@ -137,13 +134,13 @@ public Q_SLOTS:
 
 	void creditClicked();
 
-    void setAway();
+	void setAway();
 
-    void setInvisible();
+	void setInvisible();
 
-    void setDND();
+	void setDND();
 
-    void setOnline();
+	void setOnline();
 
 	// Status menu actions
 	void onlineClicked(bool checked);

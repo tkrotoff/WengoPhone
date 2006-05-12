@@ -160,6 +160,7 @@ void QtDialpad::poundButtonClicked() {
 }
 
 void QtDialpad::audioSmileysComboBoxActivated(int index) {
+	/*
 	static const QString originalZeroButtonText = _ui->zeroButton->text();
 	static const QString originalOneButtonText = _ui->oneButton->text();
 	static const QString originalTwoButtonText = _ui->twoButton->text();
@@ -228,4 +229,5 @@ void QtDialpad::audioSmileysComboBoxActivated(int index) {
 		_ui->poundButton->setIcon(QIcon(iconFile + "pound.png"));
 		_ui->poundButton->setText(QString::null);
 	}
+	*/
 }

@@ -35,7 +35,7 @@ QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent , Qt:
 	postEvent(event);
 }
 
-void QtCreditWidget::updatePresention() {
+void QtCreditWidget::updatePresentation() {
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtCreditWidget::updatePresentationThreadSafe, this));
 	postEvent(event);
@@ -47,12 +47,14 @@ void QtCreditWidget::initThreadSafe() {
 	_ui->setupUi(_widget);
 
 	_ui->pstnNumberLabel->setText(tr("no number"));
+	_ui->pstnNumberLabel->setToolTip(tr("Your Wengo number"));
 	_ui->callForwardLabel->setText(tr("unauthorized"));
 	_ui->callForwardLabel->setToolTip(tr("You need to buy wengo's credits in order to use the call forward"));
 
 	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
 		this, SLOT(buyOutClicked()), Qt::LeftButton);
 	_ui->buyCreditsLabel->installEventFilter(mouseFilter);
+	_ui->buyCreditsLabel->setToolTip(tr("Click here to buy Wengo's credits"));
 }
 
 void QtCreditWidget::updatePresentationThreadSafe() {
@@ -75,21 +77,25 @@ void QtCreditWidget::updatePresentationThreadSafe() {
 		_ui->callForwardLabel->setCursor(cursor);
 
 		MousePressEventFilter * mouseFilter = new MousePressEventFilter(
-				this, SLOT(callforwardModeClicked()), Qt::LeftButton);
+			this, SLOT(callforwardModeClicked()), Qt::LeftButton);
 		_ui->callForwardLabel->installEventFilter(mouseFilter);
 		
 		_ui->callForwardLabel->setToolTip(tr("Click here to change your call forward settings"));
 	}
 }
 
+QWidget * QtCreditWidget::getWidget() {
+	return _widget;
+}
+
 void QtCreditWidget::setPstnNumber(const QString & number) {
 	_pstnNumber = number;
-	updatePresention();
+	updatePresentation();
 }
 
 void QtCreditWidget::setCallForwardMode(const QString & mode) {
 	_callForwardMode = mode;
-	updatePresention();
+	updatePresentation();
 }
 
 void QtCreditWidget::buyOutClicked() {

@@ -134,7 +134,7 @@ _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 	_nickNameWidget->setVisible(false);
 
 	_eventWidget = new QtEventWidget(_cWengoPhone, _cUserProfile, this);
-	_eventWidget->setVisible(false);
+	//_eventWidget->getWidget()->setVisible(false);
 
 	_creditWidget = new QtCreditWidget(_cWengoPhone, this);
 
@@ -184,25 +184,26 @@ void QtProfileBar::myPresenceStatusEventHandler(PresenceHandler & sender, const 
 
 void QtProfileBar::myPresenceStatusEventSlot(QVariant status) {
 
-    if ( status.toInt() == (int)EnumPresenceState::MyPresenceStatusOk)
+	if ( status.toInt() == (int)EnumPresenceState::MyPresenceStatusOk) {
 
-    switch ( _cUserProfile.getUserProfile().getPresenceState() ) {
-        case EnumPresenceState::PresenceStateAway:
-            setAway();
-            break;
-        case EnumPresenceState::PresenceStateOnline:
-            setOnline();
-            break;
-        case EnumPresenceState::PresenceStateInvisible:
-            setInvisible();
-            break;
-        case EnumPresenceState::PresenceStateDoNotDisturb:
-            setDND();
-            break;
-        default:
-            LOG_DEBUG("Change presence state display to -- Not yet handled\n");
-            break;
-    }
+		switch ( _cUserProfile.getUserProfile().getPresenceState() ) {
+		case EnumPresenceState::PresenceStateAway:
+			setAway();
+			break;
+		case EnumPresenceState::PresenceStateOnline:
+			setOnline();
+			break;
+		case EnumPresenceState::PresenceStateInvisible:
+			setInvisible();
+			break;
+		case EnumPresenceState::PresenceStateDoNotDisturb:
+			setDND();
+			break;
+		default:
+			LOG_DEBUG("Change presence state display to -- Not yet handled\n");
+			break;
+    	}
+	}
 }
 
 void QtProfileBar::statusClicked() {
@@ -210,10 +211,10 @@ void QtProfileBar::statusClicked() {
 }
 
 void QtProfileBar::nicknameClicked(){
-	if ( _nickNameWidgetVisible ){
+	if ( _nickNameWidgetVisible ) {
 		removeNickNameWidget();
 	}
-	else{
+	else {
 		_nicknameLabel->setSelected(true);
 		_eventsLabel->setSelected(false);
 		_creditLabel->setSelected(false);
@@ -226,8 +227,7 @@ void QtProfileBar::showNickNameWidget() {
 	removeEventsWidget();
 	removeCreditWidget();
 
-	if ( ! _nickNameWidgetVisible )
-	{
+	if ( ! _nickNameWidgetVisible ) {
 		_widgetLayout->addWidget(_nickNameWidget, 1, 0 );
 		_nickNameWidget->setVisible(true);
 		_nickNameWidgetVisible=true;
@@ -237,12 +237,12 @@ void QtProfileBar::showNickNameWidget() {
 
 void QtProfileBar::removeNickNameWidget() {
 
-	if ( _nickNameWidgetVisible ){
+	if ( _nickNameWidgetVisible ) {
 		_nickNameWidget->setVisible(false);
 		_widgetLayout->removeWidget ( _nickNameWidget );
 
-		setMinimumSize(QSize(0,0));
-		resize(QSize(0,0));
+		setMinimumSize(QSize(0, 0));
+		resize(QSize(0, 0));
 		_nickNameWidgetVisible=false;
 		_nicknameLabel->setSelected(false);
 		setOpen(false);
@@ -251,10 +251,9 @@ void QtProfileBar::removeNickNameWidget() {
 
 void QtProfileBar::eventsClicked() {
 
-	if ( _eventsWidgetVisible )
+	if ( _eventsWidgetVisible ) {
 		removeEventsWidget();
-	else
-	{
+	} else {
 		_nicknameLabel->setSelected(false);
 		_eventsLabel->setSelected(true);
 		_creditLabel->setSelected(false);
@@ -266,30 +265,30 @@ void QtProfileBar::showEventsWidget() {
 
 	removeNickNameWidget();
 	removeCreditWidget();
-	if ( !_eventsWidgetVisible ){
-		_widgetLayout->addWidget(_eventWidget, 1, 0);
-		_eventWidget->setVisible(true);
-		_eventsWidgetVisible=true;
+	if ( !_eventsWidgetVisible ) {
+		_widgetLayout->addWidget(_eventWidget->getWidget(), 1, 0);
+		_eventWidget->getWidget()->setVisible(true);
+		_eventsWidgetVisible = true;
 		setOpen(true);
 	}
 }
 
 void QtProfileBar::removeEventsWidget() {
-	if ( _eventsWidgetVisible ){
-		_eventWidget->setVisible(false);
-		_widgetLayout->removeWidget( _eventWidget );
-		setMinimumSize(QSize(0,0));
-		resize(QSize(0,0));
-		_eventsWidgetVisible=false;
+	if ( _eventsWidgetVisible ) {
+		_eventWidget->getWidget()->setVisible(false);
+		_widgetLayout->removeWidget(_eventWidget->getWidget());
+		setMinimumSize(QSize(0, 0));
+		resize(QSize(0, 0));
+		_eventsWidgetVisible = false;
 		_eventsLabel->setSelected(false);
 		setOpen(false);
 	}
 }
 
 void QtProfileBar::creditClicked() {
-	if ( _crediWidgetVisible )
+	if ( _crediWidgetVisible ) {
 		removeCreditWidget();
-	else{
+	} else {
 		_nicknameLabel->setSelected(false);
 		_eventsLabel->setSelected(false);
 		_creditLabel->setSelected(true);
@@ -300,10 +299,10 @@ void QtProfileBar::creditClicked() {
 void QtProfileBar::showCreditWidget() {
 	removeNickNameWidget();
 	removeEventsWidget();
-	if ( ! _crediWidgetVisible ){
+	if ( ! _crediWidgetVisible ) {
 		_widgetLayout->addWidget(_creditWidget->getWidget(), 1, 0);
 		_creditWidget->getWidget()->setVisible(true);
-		_crediWidgetVisible=true;
+		_crediWidgetVisible = true;
 		setOpen(true);
 	}
 }
@@ -419,9 +418,9 @@ void QtProfileBar::wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsI
 }
 
 void QtProfileBar::wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail) {
-	if( status == WsInfo::WsInfoStatusOk ) {
+	//if( status == WsInfo::WsInfoStatusOk ) {
 		_eventWidget->setVoiceMail(voicemail);
-	}
+	//}
 }
 
 void QtProfileBar::wsInfoPtsnNumberEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, std::string number) {

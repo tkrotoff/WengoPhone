@@ -237,6 +237,7 @@ forms = [
 	'contactlist/RenameGroupDialog.ui',
 	'contactlist/UserWidget.ui',
 	'profilebar/CreditWidget.ui',
+	'profilebar/EventWidget.ui',
 ]
 
 for form in forms:
