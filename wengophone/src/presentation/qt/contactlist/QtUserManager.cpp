@@ -108,7 +108,7 @@ void QtUserManager::editContact(bool) {
 	QTreeWidgetItem * item = _tree->currentItem();
 
 	ContactProfile contactProfile = _cUserProfile.getCContactList().getContactProfile(item->text(0).toStdString());
-	QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfile(), contactProfile, _tree);
+	QtProfileDetails qtProfileDetails(_cWengoPhone, contactProfile, _tree);
 	if (qtProfileDetails.show()) {
 		_cUserProfile.getCContactList().updateContact(contactProfile);
 	}

@@ -24,6 +24,7 @@
 #include "QtUserList.h"
 #include "QtContactPixmap.h"
 
+#include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
 
 #include <util/Logger.h>
@@ -46,8 +47,8 @@ static int USER_WIDGET_FRAME_HEIGHT = 0;
 
 static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 
-QtTreeViewDelegate::QtTreeViewDelegate(CUserProfile & cUserProfile, QObject * parent)
-: QItemDelegate(parent), _cUserProfile(cUserProfile) {
+QtTreeViewDelegate::QtTreeViewDelegate(CWengoPhone & cWengoPhone, QObject * parent)
+: QItemDelegate(parent), _cWengoPhone(cWengoPhone) {
 /*
 	QtUserWidget * widget = new QtUserWidget( NULL );
 	QWidget * userWidget = Object::findChild<QWidget *>( widget, "UserWidget" );
@@ -72,7 +73,7 @@ const QModelIndex & index) const {
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user = ul->getUser(index.data().toString());
 
-	QtUserWidget * widget = new QtUserWidget(user->getId().toStdString(), _cUserProfile, parent);
+	QtUserWidget * widget = new QtUserWidget(user->getId().toStdString(), _cWengoPhone, parent);
 
 	QWidget * userWidget = Object::findChild < QWidget * > (widget, "UserWidget");
 
@@ -177,7 +178,8 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 	int nbchild = index.model()->rowCount(index);
 
 	std::string groupId = index.data().toString().toStdString();
-	QString groupName = QString::fromStdString(_cUserProfile.getCContactList().getContactGroupName(groupId));
+	QString groupName = 
+		QString::fromStdString(_cWengoPhone.getCUserProfile()->getCContactList().getContactGroupName(groupId));
 
 	QString str = QString("%1 (%2)").arg(groupName).arg(nbchild);
 

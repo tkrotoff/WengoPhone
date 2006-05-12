@@ -31,7 +31,7 @@
 class QtUserWidgetAvatarManager;
 
 class CContact;
-class CUserProfile;
+class CWengoPhone;
 class QLabel;
 class QPushButton;
 
@@ -46,8 +46,8 @@ class QtUserWidget : public QWidget {
 	Q_OBJECT
 public:
 
-	QtUserWidget(const std::string & contactId, CUserProfile & cUserProfile,
-	QWidget * parent = 0, Qt::WFlags f = 0);
+	QtUserWidget(const std::string & contactId, CWengoPhone & cWengoPhone,
+		QWidget * parent = 0, Qt::WFlags f = 0);
 
 	void setText(const QString & text) {
 		_text = text;
@@ -88,7 +88,7 @@ protected:
 
 	ContactProfile _contactProfile;
 
-	CUserProfile & _cUserProfile;
+	CWengoPhone & _cWengoPhone;
 
 	mutable QMutex _mutex;
 

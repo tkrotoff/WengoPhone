@@ -112,7 +112,7 @@ void QtContactList::initThreadSafe() {
 	_userManager = new QtUserManager(* _cWengoPhone.getCUserProfile(), _cWengoPhone,
 	* this, _treeWidget, _treeWidget);
 
-	QtTreeViewDelegate * delegate = new QtTreeViewDelegate(* _cWengoPhone.getCUserProfile(), _treeWidget);
+	QtTreeViewDelegate * delegate = new QtTreeViewDelegate(_cWengoPhone, _treeWidget);
 	delegate->setParent(_treeWidget->viewport());
 
 	_treeWidget->setItemDelegate(delegate);

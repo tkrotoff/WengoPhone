@@ -237,14 +237,14 @@ void QtNickNameWidget::jabberClicked() {
 }
 
 void QtNickNameWidget::avatarClicked() {
-	QtProfileDetails qtProfileDetails(&_cWengoPhone, _cUserProfile.getUserProfile(), this);
+	QtProfileDetails qtProfileDetails(_cWengoPhone, _cUserProfile.getUserProfile(), this);
 	//TODO: UserProfile must be updated if QtProfileDetails was accepted
 	qtProfileDetails.changeUserProfileAvatar();
 	updateAvatar();
 }
 
 void QtNickNameWidget::avatarRightClicked() {
-	QtProfileDetails qtProfileDetails(&_cWengoPhone, _cUserProfile.getUserProfile(), this);
+	QtProfileDetails qtProfileDetails(_cWengoPhone, _cUserProfile.getUserProfile(), this);
 	//TODO: UserProfile must be updated if QtProfileDetails was accepted
 	qtProfileDetails.show();
 	updateAvatar();

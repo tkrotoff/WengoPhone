@@ -24,15 +24,16 @@
 #include <QItemDelegate>
 #include <QLineEdit>
 #include <QDebug>
+
 #include "QtUserWidget.h"
 
-class CUserProfile;
+class CWengoPhone;
 
 class QtTreeViewDelegate : public QItemDelegate {
 	Q_OBJECT
 public:
 
-	QtTreeViewDelegate(CUserProfile & cUserProfile, QObject * parent = 0);
+	QtTreeViewDelegate(CWengoPhone & cWengoPhone, QObject * parent = 0);
 
 	virtual QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
 
@@ -54,7 +55,7 @@ protected:
 
 	QPixmap _menuIcon;
 
-	CUserProfile & _cUserProfile;
+	CWengoPhone & _cWengoPhone;
 };
 
 #endif	//QTTREEVIEWDELEGATE_H
