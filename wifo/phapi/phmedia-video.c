@@ -113,14 +113,14 @@ webcamerrorcode ph_media_video_initialize_webcam(phvstream_t *vstream) {
 	err = webcam_set_device(vstream->wt, cfg->video_config.video_device);
 
 	if (err == WEBCAM_OK) {
-		/*
+		
+        // beware: you must initialize these video_config parameters
+        // while debugging, you can always try PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT. 320,240 is a very good guess
 		webcam_set_resolution(vstream->wt,
 			cfg->video_config.video_webcam_capture_width,
 			cfg->video_config.video_webcam_capture_height);
-		*/
-		webcam_set_resolution(vstream->wt,
-			PHMEDIA_VIDEO_FRAME_WIDTH,
-			PHMEDIA_VIDEO_FRAME_HEIGHT);
+
+        // preferred palette output for webcam is YUV420P
 		webcam_set_palette(vstream->wt, PIX_OSI_YUV420P);
 	}
 
@@ -201,27 +201,61 @@ void ph_media_free_video_frame(phm_videoframe_t *ptr) {
  */
 int ph_media_video_send_frame(phvstream_t *video_stream, phm_videoframe_t *phmvf, int cache) {
 	ph_h263_encoder_ctx_t *video_encoder = (ph_h263_encoder_ctx_t *) video_stream->ms.encoder_ctx;
-	int enclen = 0;
-
-	unsigned length = avpicture_get_size (PIX_FMT_YUV420P,
+	unsigned enclen = 0;
+	struct _piximage *image_captured;
+	AVFrame *avf_prepared_for_encoding;
+	unsigned len_prepared_for_encoding = pix_size (PIX_OSI_YUV420P,
 		PHMEDIA_VIDEO_FRAME_WIDTH,
 		PHMEDIA_VIDEO_FRAME_HEIGHT);
 
-	pix_fill_avpicture((AVPicture *)video_encoder->encoder_ctx.sampled_frame,
-		&(phmvf->image));
+	image_captured = &(phmvf->image);
 
 	// if asked, a copy of the frame is put in cache on the stream
 	if (cache) {
-		memcpy(video_stream->local_frame_cache->data, phmvf->image.data,
-			pix_size(PIX_OSI_YUV420P, PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT));
+		// TODO: check that size is ok for the processing buffer
+		memcpy(video_stream->local_frame_cache->data, image_captured->data,
+			pix_size(image_captured->palette, image_captured->width, image_captured->height));
 	}
 
-	enclen = video_stream->ms.codec->encode(video_encoder,
-		video_encoder->encoder_ctx.sampled_frame, length,
-		video_encoder->data_enc, video_encoder->max_frame_len);
+	// if captured image is not PIX_OSI_YUV420P, force it !
+	if (image_captured->palette != PIX_OSI_YUV420P)
+	{
+		pix_convert(PIX_NO_FLAG, video_stream->image_wrong_pix, &(phmvf->image));
+		image_captured = video_stream->image_wrong_pix;
+	}
+	//
+	
+	// from here, the image is PIX_OSI_YUV420P
+	
+	// we prepare the captured image for the encoder
+	pix_fill_avpicture((AVPicture *)video_encoder->encoder_ctx.sampled_frame,
+		image_captured);
 
+	// adjust the sampled size to the 176x144 forced size
+	if (image_captured->width  == PHMEDIA_VIDEO_FRAME_WIDTH &&
+		image_captured->height == PHMEDIA_VIDEO_FRAME_HEIGHT)
+	{
+		// no more work is needed. Image is ready to go to the encoder
+		avf_prepared_for_encoding = video_encoder->encoder_ctx.sampled_frame;
+	}
+	else
+	{
+		// more work needed. Webcam capture a frame that we need to resize
+		// before sending it to the decoder
+		pix_convert(PIX_NO_FLAG, video_stream->image_ready_for_network, image_captured);
+		pix_fill_avpicture((AVPicture *)video_encoder->encoder_ctx.resized_pic,
+		video_stream->image_ready_for_network);
+		avf_prepared_for_encoding = video_encoder->encoder_ctx.resized_pic;
+	}
+	//
+
+	// encode the frame and re-adjust tstamps
+	enclen = video_stream->ms.codec->encode(video_encoder,
+		avf_prepared_for_encoding, len_prepared_for_encoding,
+		video_encoder->data_enc, video_encoder->max_frame_len);
 	video_stream->num_encoded_frames += 1;
 	video_stream->txtstamp += 90000;
+	//
 
 	return 1;
 }
@@ -231,27 +265,40 @@ int ph_media_video_send_frame(phvstream_t *video_stream, phm_videoframe_t *phmvf
  * 
  * It is in this function that the callback format for images is decided
  */
-void ph_media_video_alloc_processing_buffers(phvstream_t *vstream, unsigned width_source, unsigned height_source) {
-	vstream->width_proc_source = width_source;
-	vstream->height_proc_source = height_source;
+void ph_media_video_alloc_processing_buffers(phvstream_t *vstream, pixosi nego_pix, unsigned nego_width, unsigned nego_height) {
+	vstream->pix_proc_source = nego_pix;
+	vstream->width_proc_source = nego_width;
+	vstream->height_proc_source = nego_height;
 
-	vstream->local_frame_cache = pix_alloc(PIX_OSI_YUV420P, width_source, height_source);
+	// used for storing the local capture	
+	vstream->local_frame_cache = pix_alloc(nego_pix, nego_width, nego_height);
 
-	vstream->frame_event.frame_local = pix_alloc(PIX_OSI_RGB32, PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT);
+	// needed when the capture needs resizing before sending on the TX
+	vstream->image_ready_for_network = pix_alloc(PIX_OSI_YUV420P, PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT);
+
+    // buffer for the local capture event sent to the registered gui clients
+	vstream->frame_event.frame_local = pix_alloc(PIX_OSI_RGB32, nego_width, nego_height);
+
+    // buffer for the remote image event sent to the registered gui clients
 	vstream->frame_event.frame_remote = pix_alloc(PIX_OSI_RGB32, PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT);
+
+	vstream->image_wrong_pix = pix_alloc(PIX_OSI_YUV420P, nego_width, nego_height);
+	
 }
 
-void ph_media_video_check_processing_buffers(phvstream_t *vstream, unsigned width_source, unsigned height_source){
-	if ((width_source != vstream->width_proc_source) || (height_source != vstream->height_proc_source)) {
+void ph_media_video_check_processing_buffers(phvstream_t *vstream, pixosi pix_source, unsigned width_source, unsigned height_source){
+	if ((width_source != vstream->width_proc_source) || (height_source != vstream->height_proc_source) || (pix_source != vstream->pix_proc_source)) {
 		ph_media_video_free_processing_buffers(vstream);
-		ph_media_video_alloc_processing_buffers(vstream, width_source, height_source);
+		ph_media_video_alloc_processing_buffers(vstream, pix_source, width_source, height_source);
 	}
 }
 
 void ph_media_video_free_processing_buffers(phvstream_t *vstream){
-		pix_free(vstream->local_frame_cache);
 		pix_free(vstream->frame_event.frame_local);
 		pix_free(vstream->frame_event.frame_remote);
+		pix_free(vstream->image_ready_for_network);
+		pix_free(vstream->local_frame_cache);
+		pix_free(vstream->image_wrong_pix);
 }
 
 
@@ -386,9 +433,6 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   video_stream->rtpCallback = &phmedia_video_rtpsend_callback;
   video_stream->mtx = osip_mutex_init();
 
-  ph_media_video_alloc_processing_buffers(video_stream, PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT);
-
-
   if (codec->encoder_init) {
     video_stream->ms.encoder_ctx = codec->encoder_init(video_stream);
   }
@@ -453,42 +497,61 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
     video_stream->phmfs_onewaycam.state = 1; // init
   }
 
-  // start sequence of the webcam frame server
-  if (video_stream->phmfs_webcam.state == 1)  {
-    webcam_add_callback(video_stream->wt, webcam_frame_callback, (void *)video_stream);
-    webcam_start_capture(video_stream->wt);
-    video_stream->phmfs_webcam.state = 2;
 
-  }
+	// choice 1: start sequence of the webcam frame server
+	if (video_stream->phmfs_webcam.state == 1)  {
 
-  // start sequence of the virtual webcam frame server
-  if (video_stream->phmfs_onewaycam.state == 1) {
+		// create processing buffer after nego with the webcam
+		ph_media_video_alloc_processing_buffers(video_stream,
+				webcam_get_palette(video_stream->wt),
+				webcam_get_width(video_stream->wt),
+				webcam_get_height(video_stream->wt)
+			);
+		//
 
-    // note :	this "virtual" webcam may seem a little strange, but it facilitates NAT traversal right now
-    //			and makes it possible to have only the tx or rx having a cam
+		// start the engine
+		webcam_add_callback(video_stream->wt, webcam_frame_callback, (void *)video_stream);
+		webcam_start_capture(video_stream->wt);
+		video_stream->phmfs_webcam.state = 2;
+		//
+	}
 
-    fs_buffer = (uint8_t*)av_malloc((176*144*3)/2);
+	// choice 2: start sequence of the virtual webcam frame server
+	if (video_stream->phmfs_onewaycam.state == 1) {
 
-    for(fs_y=0;fs_y<144;fs_y++) {
-      for(fs_x=0;fs_x<176;fs_x++) {
-	fs_buffer[fs_y * 176 + fs_x] = 128;
-      }
-    }
+		// note :	this "virtual" webcam may seem a little strange, but it facilitates NAT traversal right now
+		//			and makes it possible to have only the tx or rx having a cam
 
-    for(fs_y=0;fs_y<144/2;fs_y++) {
-      for(fs_x=0;fs_x<176/2;fs_x++) {
-	fs_buffer[176*144 + fs_y * 176/2 + fs_x] = 255 * fs_x * 2 / 176;
-	fs_buffer[176*144 + (176*144/4) + fs_y * 176/2 + fs_x] = 255 * fs_y * 2 / 144;
-      }
-    }
+		// create processing buffer after nego with the webcam
+		ph_media_video_alloc_processing_buffers(video_stream,
+				PIX_OSI_YUV420P, 176, 144);
+		//
+		
+		// create the still image for the virtual webcam
+		fs_buffer = (uint8_t*)av_malloc((176*144*3)/2);
+		video_stream->phmfs_onewaycam.buffer = fs_buffer;
+		yuv_local_len = avpicture_get_size(PIX_FMT_YUV420P, 176, 144);
+		memcpy(video_stream->phmfs_onewaycam.buffer, pic_yuv, yuv_local_len);
+		//
+		
+		/*
+		// just as an example of a directly generated YUV kind of rainbow
+		for(fs_y=0;fs_y<144;fs_y++) {
+		for(fs_x=0;fs_x<176;fs_x++) {
+		fs_buffer[fs_y * 176 + fs_x] = 128;
+		}
+		}
+		for(fs_y=0;fs_y<144/2;fs_y++) {
+		for(fs_x=0;fs_x<176/2;fs_x++) {
+		fs_buffer[176*144 + fs_y * 176/2 + fs_x] = 255 * fs_x * 2 / 176;
+		fs_buffer[176*144 + (176*144/4) + fs_y * 176/2 + fs_x] = 255 * fs_y * 2 / 144;
+		}
+		}
+		*/
 
-    video_stream->phmfs_onewaycam.buffer = fs_buffer;
-
-    video_stream->phmfs_onewaycam.state = 2; // start producing
-
-    yuv_local_len = avpicture_get_size(PIX_FMT_YUV420P, 176, 144);
-    memcpy(video_stream->phmfs_onewaycam.buffer, pic_yuv, yuv_local_len);
-
+		// start the engine
+		video_stream->phmfs_onewaycam.state = 2;
+		//
   }
 
   video_stream->ms.running = 1;
@@ -646,7 +709,11 @@ int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDi
 	video_stream->rtpCallback = &phmedia_video_rtpsend_callback;
 	video_stream->mtx = osip_mutex_init();
 
-	ph_media_video_alloc_processing_buffers(video_stream, PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT);
+	ph_media_video_alloc_processing_buffers(video_stream,
+		PIX_OSI_YUV420P,
+		PHMEDIA_VIDEO_FRAME_WIDTH,
+		PHMEDIA_VIDEO_FRAME_HEIGHT
+	);
 
 
 	if (codec->encoder_init) {
@@ -1089,7 +1156,6 @@ void ph_video_io_timer(void *userdata) {
  *
  */
 
-#if 1
 void ph_msession_video_stop(struct ph_msession_s *s)
 {
   struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_VIDEO1];
@@ -1135,7 +1201,6 @@ void ph_msession_video_stop(struct ph_msession_s *s)
 
 
 
-
   ortp_set_debug_file("oRTP", stdout);
   ortp_session_stats_display(stream->ms.rtp_session);
   ortp_set_debug_file("oRTP", NULL);
@@ -1154,62 +1219,4 @@ void ph_msession_video_stop(struct ph_msession_s *s)
   memset(stream, 0, sizeof(phvstream_t));
   osip_free(stream);
 }
-
-#else
-
-void ph_media_video_stop(phcall_t *ca)
-{
-  phvstream_t *stream = (phvstream_t *) ca->ph_video_stream;
-
-
-  if (!stream)
-      return;
-
-	stream->ms.running = 0;
-
-	stream->t_impl->timer_stop(stream->v_timer);
-	stream->t_impl->timer_destroy(stream->v_timer);
-
-	if (phcfg.video_config.video_line_configuration == PHAPI_VIDEO_LINE_AUTOMATIC) {
-		osip_thread_join(stream->media_bw_control_thread);
-	}
-
-	webcam_release(stream->wt);
-	stream->phmfs_webcam.state = 0;
-	stream->wt = 0;
-
-	if (stream->phmfs_onewaycam.state == 2) {
-		av_free(stream->phmfs_onewaycam.buffer);
-		stream->phmfs_onewaycam.state = 0;
-	}
-
-	if (stream->ms.codec->encoder_cleanup)
-		stream->ms.codec->encoder_cleanup(stream->ms.encoder_ctx);
-
-	if (stream->ms.codec->decoder_cleanup)
-		stream->ms.codec->decoder_cleanup(stream->ms.decoder_ctx);
-
-	ph_media_video_free_processing_buffers(stream);
-
-	ca->ph_video_stream = 0;
-
-	ortp_set_debug_file("oRTP", stdout);
-	ortp_session_stats_display(stream->ms.rtp_session);
-	ortp_set_debug_file("oRTP", NULL);
-
-	rtp_session_destroy(stream->ms.rtp_session);
-
-
-#ifdef USE_HTTP_TUNNEL
-  if (stream->ms.tunRtp)
-  {
-	  TUNNEL_CLOSE(stream->ms.tunRtp);
-	  rtptun_free(stream->ms.tunRtp);
-  }
-#endif
-
-	memset(stream, 0, sizeof(phvstream_t));
-	osip_free(stream);
-}
-#endif
 

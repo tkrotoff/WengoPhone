@@ -698,7 +698,7 @@ struct phVideoConfig {
 	int video_fps;
 	int video_camera_flip_frame;
 	int video_max_frame_size;
-	int video_webcam_capture_width;
+	int video_webcam_capture_width; /** width x height for capture must be given. 320x240 is a good guess */
 	int video_webcam_capture_height;
 	int video_line_configuration;
 	int video_codec_max_bitrate;

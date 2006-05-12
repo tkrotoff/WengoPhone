@@ -50,7 +50,6 @@ int h263_encode(void *ctx, const void *src, int srcsize, void *dst, int dstsize)
 }
 
 ph_avcodec_meta_ctx_t * _h263_meta_init(ph_avcodec_meta_ctx_t * meta, phvstream_t *s) {
-	phConfig_t *cfg;
 
 	meta->avcodec_encoder_id = CODEC_ID_H263P;
 	meta->avcodec_decoder_id = CODEC_ID_H263;
@@ -62,7 +61,6 @@ ph_avcodec_meta_ctx_t * _h263_meta_init(ph_avcodec_meta_ctx_t * meta, phvstream_
 
 void *h263_encoder_init(void *ctx) {
 	phvstream_t *s = (phvstream_t *)ctx;
-	phConfig_t *cfg = phGetConfig();
 	ph_h263_encoder_ctx_t * h263t;
 
 	h263t = (ph_h263_encoder_ctx_t *) calloc(sizeof(ph_h263_encoder_ctx_t), 1);

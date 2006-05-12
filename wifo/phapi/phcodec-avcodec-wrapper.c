@@ -58,27 +58,6 @@ void ph_avcodec_wrapper_init()
 	avcodec_register_all();
 }
 
-
-AVFrame *alloc_picture (int pix_fmt, int width, int height){
-    AVFrame *picture;
-    uint8_t *picture_buf;
-    int size;
-
-    picture = avcodec_alloc_frame ();
-    if (!picture)
-        return NULL;
-    size = avpicture_get_size (pix_fmt, width, height);
-    picture_buf = av_malloc (size);
-    if (!picture_buf){
-        av_free (picture);
-        return NULL;
-    }
-    avpicture_fill ((AVPicture *) picture, picture_buf,
-            pix_fmt, width, height);
-    return picture;
-}
-
-
 int phcodec_avcodec_decode(void *ctx, const void *src,
 			int srcsize, void *dst, int dstsize) {
 
@@ -148,37 +127,11 @@ int phcodec_avcodec_encoder_init(ph_avcodec_encoder_ctx_t *encoder_t, void *ctx,
 			meta_t->frame_width, meta_t->frame_height
 	);
 
-	encoder_t->resized_pic = alloc_picture(PIX_FMT_YUV420P,
-		PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT);
-	encoder_t->sampled_frame = avcodec_alloc_frame();
+    encoder_t->resized_pic = avcodec_alloc_frame();
+    encoder_t->sampled_frame = avcodec_alloc_frame();
 
 	return 0;
 }
-
-ImgReSampleContext* phcodec_avcodec_get_resampler(ph_avcodec_encoder_ctx_t *encoder_t, void *ctx, int width, int height) {
-	ph_avcodec_meta_ctx_t *meta_t = (ph_avcodec_meta_ctx_t *) ctx;
-	int dest_width, dest_height;
-
-	if (width == meta_t->frame_width && height == meta_t->frame_height) {
-		return encoder_t->res_ctx;
-	}
-
-	img_resample_close(encoder_t->res_ctx);
-
-	dest_width = PHMEDIA_VIDEO_FRAME_WIDTH;
-	dest_height = PHMEDIA_VIDEO_FRAME_HEIGHT;
-	meta_t->frame_width = width;
-	meta_t->frame_height = height;
-
-	encoder_t->res_ctx = img_resample_init(
-			dest_width, dest_height,
-			meta_t->frame_width, meta_t->frame_height
-	);
-
-	return encoder_t->res_ctx;
-
-}
-
 
 int phcodec_avcodec_decoder_init(ph_avcodec_decoder_ctx_t * decoder_t, void *ctx) {
 	ph_avcodec_meta_ctx_t *meta_t = (ph_avcodec_meta_ctx_t *) ctx;

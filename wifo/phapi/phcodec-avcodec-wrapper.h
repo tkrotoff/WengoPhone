@@ -39,14 +39,11 @@ int phcodec_avcodec_encode(void *ctx, const void *src,
 		int srcsize, void *dst, int dstsize);
 
 int phcodec_avcodec_encoder_init(ph_avcodec_encoder_ctx_t *encoder_t, void *ctx, void *opaque);
-ImgReSampleContext* phcodec_avcodec_get_resampler(ph_avcodec_encoder_ctx_t *encoder_t, void *ctx, int width, int height);
 
 int phcodec_avcodec_decoder_init(ph_avcodec_decoder_ctx_t *decctx, void *ctx);
 
 void phcodec_avcodec_video_rtp_callback(struct AVCodecContext * context, void *data,
 	          int size, int packetNumber );
-
-AVFrame *alloc_picture (int pix_fmt, int width, int height);
 
 struct ph_avcodec_encoder_ctx {
 	AVPicture pictureOut;

@@ -918,6 +918,11 @@ void PhApiWrapper::init() {
 	String localPort = String::fromNumber(_sipLocalPort);
 	strncpy(phcfg.sipport, localPort.c_str(), sizeof(phcfg.sipport));
 
+#ifdef ENABLE_VIDEO
+    // default webcam capture size must be initialized to avoid a 0x0 size
+	phVideoControlSetWebcamCaptureResolution(320, 240);
+#endif
+
 	//Ignored since we are in direct link mode
 	static const std::string phApiServer = "127.0.0.1:5065";
 

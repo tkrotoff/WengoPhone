@@ -95,8 +95,11 @@ struct ph_video_stream
 	 */
 	struct _piximage *local_frame_cache; /** this is a piximage for the most recent tx image */
 
+    pixosi pix_proc_source; /** current pix of the source dedicated buffer */
 	unsigned width_proc_source; /** current width of the source dedicated buffer */
 	unsigned height_proc_source; /** current height of the source dedicated buffer */
+    struct _piximage *image_ready_for_network; /** processing buffer */
+    struct _piximage *image_wrong_pix; /** processing buffer used when webcam does not output yuv420P */
 	
 	
 	void (*rtpCallback)(void *stream, void *data, int size,
@@ -175,8 +178,8 @@ void ph_video_rtcp_sr_received(RtpSession *, rtcp_t *);
 void ph_handle_video_network_data(phvstream_t *stream, unsigned long timestamp, unsigned long *ts_inc);
 int ph_media_video_send_frame(phvstream_t *video_stream, phm_videoframe_t *phmvf, int cache);
 int ph_media_video_flush_queue(phvstream_t *stream, unsigned long seqnumber_start, unsigned long seqnumber_end);
-void ph_media_video_alloc_processing_buffers(phvstream_t *vstream, unsigned width_source, unsigned height_source);
-void ph_media_video_check_processing_buffers(phvstream_t *vstream, unsigned width_source, unsigned height_source);
+void ph_media_video_alloc_processing_buffers(phvstream_t *vstream, pixosi nego_pix, unsigned nego_width, unsigned nego_height);
+void ph_media_video_check_processing_buffers(phvstream_t *vstream, pixosi pix_source, unsigned width_source, unsigned height_source);
 void ph_media_video_free_processing_buffers(phvstream_t *vstream);
 
 /** Create a new video frame from a piximage. */

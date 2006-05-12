@@ -66,6 +66,7 @@ unsigned pix_size(pixosi pix, unsigned width, unsigned height) {
 
 pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 	AVPicture avp_source, avp_target, avp_tmp_target;
+    uint8_t * buf_tmp_target = NULL;
 	int len_target = 0;
 	int pix_fmt_source;
 	int pix_fmt_target;
@@ -113,20 +114,43 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 
 	// Resizing picture if needed. Needs test
 	if (need_resize) {
-		avpicture_fill(&avp_tmp_target, img_dst->data, pix_fmt_target, img_dst->width, img_dst->height);
-		//TODO: optimize this part
+        
+        // resampling only works yuv420P -> yuv420P in current ffmpeg
+
+        if (pix_fmt_source != PIX_FMT_YUV420P) {
+            return PIX_NOK;
+        }
+
+        
+		//TODO: optimize this part but will need the preparation of contexts
 		resample_context = img_resample_init(img_dst->width, img_dst->height,
 			img_src->width, img_src->height);
-		if (resample_context) {
-			img_resample(resample_context, &avp_tmp_target, &avp_source);
-			img_resample_close(resample_context);
-		}
 
-		if (img_convert(&avp_target, pix_fmt_target,
-			&avp_tmp_target, pix_fmt_source,
-			img_src->width, img_src->height) == -1) {
+		if (!resample_context) {
 			return PIX_NOK;
 		}
+
+		// we need to prepare a tmp buffer
+		buf_tmp_target = (uint8_t *)av_malloc(avpicture_get_size(pix_fmt_source, img_dst->width, img_dst->height)  * sizeof(uint8_t));
+		avpicture_fill(&avp_tmp_target, buf_tmp_target, pix_fmt_source, img_dst->width, img_dst->height);
+		//
+        
+		// do the resampling
+		img_resample(resample_context, &avp_tmp_target, &avp_source);
+		img_resample_close(resample_context);
+		//
+
+		// do the conversion
+		if (img_convert(&avp_target, pix_fmt_target,
+			&avp_tmp_target, pix_fmt_source,
+			img_dst->width, img_dst->height) == -1) {
+			
+			av_free(buf_tmp_target);
+			return PIX_NOK;
+		}
+		av_free(buf_tmp_target);
+		//
+		
 	} else {
 		if (img_convert(&avp_target, pix_fmt_target,
 			&avp_source, pix_fmt_source,

@@ -99,7 +99,7 @@ typedef struct _piximage {
 piximage * pix_alloc(pixosi pix, unsigned width, unsigned height);
 
 /**
- * Free memore allocated with pixNew.
+ * Free memory allocated with pixNew.
  *
  * @param ptr pointer to allocated data
  */
@@ -118,7 +118,8 @@ unsigned pix_size(pixosi pix, unsigned width, unsigned height);
 /**
  * Convert image data from original palette to desired palette.
  * Resize picture if img_dst size is different from img_src.
- * //TODO: implement resize
+ * //TODO: beware of resize. it can only work when img_src is in YUV420
+ *         (cf ffmpeg.avcodec.h function img_resample)
  *
  * @param flags setup conversion. Flags are described above
  * @param img_dst destination image. Must be allocated.
