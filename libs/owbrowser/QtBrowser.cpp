@@ -46,7 +46,6 @@ QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode) : QObject() {
 }
 
 void QtBrowser::setUrl(const std::string & url) {
-	LOG_DEBUG(url);
 	_url = QString::fromStdString(url);
 	if (_mode == IEMODE) {
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
@@ -70,11 +69,11 @@ std::string QtBrowser::getUrl() const {
 }
 
 void QtBrowser::backward() {
-	LOG_FATAL("Not yet implemented");
+	LOG_WARN("Not yet implemented");
 }
 
 void QtBrowser::forward() {
-	LOG_FATAL("Not yet implemented");
+	LOG_WARN("Not yet implemented");
 }
 
 void QtBrowser::beforeNavigate(const QUrl & link) {
@@ -102,7 +101,7 @@ bool QtBrowser::setMode(BrowserMode mode) {
 void QtBrowser::initBrowser() {
 #if (defined OS_WINDOWS) && (!defined QT_COMMERCIAL)
 	if (_mode == IEMODE) {
-		LOG_FATAL("IEMODE not allowed");
+		LOG_WARN("IEMODE not allowed");
 	}
 #endif
 
