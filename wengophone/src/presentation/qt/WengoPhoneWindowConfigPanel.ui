@@ -30,7 +30,7 @@
      <item row="0" column="0" >
       <widget class="QLabel" name="inputSoundLabel" >
        <property name="pixmap" >
-        <pixmap resource="wengophone.qrc" >:/pics/audio/microphone.png</pixmap>
+        <pixmap/>
        </property>
       </widget>
      </item>
@@ -48,7 +48,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_1_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -58,7 +58,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_2_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -68,7 +68,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_3_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -78,7 +78,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_4_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -88,7 +88,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_5_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -98,7 +98,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_6_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -108,7 +108,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_7_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -159,6 +159,9 @@
      </property>
      <item row="1" column="0" colspan="2" >
       <widget class="QLabel" name="videoSettingsLabel" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
        <property name="text" >
         <string>&lt;u>Video Settings&lt;/u></string>
        </property>
@@ -166,6 +169,9 @@
      </item>
      <item row="2" column="0" colspan="2" >
       <widget class="QLabel" name="audioSettingsLabel" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
        <property name="text" >
         <string>&lt;u>Audio Settings&lt;/u></string>
        </property>
@@ -185,7 +191,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_1_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -195,7 +201,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_2_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -205,7 +211,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_3_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -215,7 +221,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_4_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -225,7 +231,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_5_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -235,7 +241,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_6_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -245,7 +251,7 @@
           <string/>
          </property>
          <property name="pixmap" >
-          <pixmap resource="wengophone.qrc" >:/pics/audio/progress_7_off.png</pixmap>
+          <pixmap/>
          </property>
         </widget>
        </item>
@@ -254,7 +260,7 @@
      <item row="0" column="0" >
       <widget class="QLabel" name="outputSoundLabel" >
        <property name="pixmap" >
-        <pixmap resource="wengophone.qrc" >:/pics/audio/speaker.png</pixmap>
+        <pixmap/>
        </property>
       </widget>
      </item>
