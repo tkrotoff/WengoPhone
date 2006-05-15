@@ -95,9 +95,9 @@ void QtStatusBar::checkSoundConfigThreadSafe(Settings & sender, const std::strin
 
 		AudioDevice::selectAsRecordDevice(config.getAudioInputDeviceName(), AudioDevice::TypeInputMicrophone);
 		VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
-		outputVolumeControl.setMute(false);
+		//outputVolumeControl.setMute(false);
 		VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
-		inputVolumeControl.setMute(false);
+		//inputVolumeControl.setMute(false);
 
 		if (!outputVolumeControl.isMuted() &&
 			/*outputVolumeControl.getLevel() > 0 &&*/
