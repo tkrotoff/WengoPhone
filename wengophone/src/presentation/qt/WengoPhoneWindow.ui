@@ -300,7 +300,7 @@
           <string/>
          </property>
          <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/iconbar/iconBarchat.png</iconset>
+          <iconset resource="wengophone.qrc" >:/pics/contact/chat.png</iconset>
          </property>
          <property name="iconSize" >
           <size>
@@ -366,34 +366,9 @@
      <x>0</x>
      <y>0</y>
      <width>282</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>&amp;Wengo</string>
-    </property>
-    <widget class="QMenu" name="menuClear_History2" >
-     <property name="title" >
-      <string>Clear History</string>
-     </property>
-    </widget>
-    <widget class="QMenu" name="menuHide_Show2" >
-     <property name="title" >
-      <string>Hide / Show</string>
-     </property>
-     <addaction name="separator" />
-     <addaction name="separator" />
-    </widget>
-    <addaction name="actionShowWengoAccount" />
-    <addaction name="actionEditMyProfile" />
-    <addaction name="separator" />
-    <addaction name="actionCallOutService" />
-    <addaction name="separator" />
-    <addaction name="actionOpenWengoAccount" />
-    <addaction name="separator" />
-    <addaction name="actionClose" />
-   </widget>
    <widget class="QMenu" name="menuActions" >
     <property name="title" >
      <string>&amp;Actions</string>
@@ -458,6 +433,31 @@
     <addaction name="actionConfiguration" />
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
+   </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>&amp;Wengo</string>
+    </property>
+    <widget class="QMenu" name="menuClear_History2" >
+     <property name="title" >
+      <string>Clear History</string>
+     </property>
+    </widget>
+    <widget class="QMenu" name="menuHide_Show2" >
+     <property name="title" >
+      <string>Hide / Show</string>
+     </property>
+     <addaction name="separator" />
+     <addaction name="separator" />
+    </widget>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionEditMyProfile" />
+    <addaction name="separator" />
+    <addaction name="actionCallOutService" />
+    <addaction name="separator" />
+    <addaction name="actionOpenWengoAccount" />
+    <addaction name="separator" />
+    <addaction name="actionClose" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
