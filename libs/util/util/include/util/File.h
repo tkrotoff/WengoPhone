@@ -48,6 +48,13 @@ public:
 	}
 
 	/**
+	 * Gets the file extension.
+	 *
+	 * @return the file extension or NULL if there's no extension
+	 */
+	std::string File::getExtension();
+
+	/**
 	 * Gets the path to the file.
 	 *
 	 * The path does not contain the filename, it stops at the last /

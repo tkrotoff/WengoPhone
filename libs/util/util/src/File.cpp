@@ -59,6 +59,21 @@ File::File(const File & file)
 	: _filename(file._filename) {
 }
 
+std::string	File::getExtension() {
+	int posLastElm = _filename.find_last_of(getPathSeparator());
+
+	if (posLastElm == -1 || posLastElm == _filename.length())
+		return "";
+
+	string last = _filename.substr(++posLastElm, _filename.length() - posLastElm);
+	int posExt = last.find_last_of('.');
+
+	if (posExt == -1 || posExt == last.length())
+		return "";
+	else
+		return last.substr(++posExt, last.length() - posExt);
+}
+
 std::string File::getPath() {
 	String path = _filename;
 	path = convertPathSeparators(path);
