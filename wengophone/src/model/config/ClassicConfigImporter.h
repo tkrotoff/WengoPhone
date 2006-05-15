@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CLASSICCONFIGIMPORTER_H
-#define CLASSICCONFIGIMPORTER_H
+#ifndef CONFIGIMPORTER_H
+#define CONFIGIMPORTER_H
 
 #include <string>
 
@@ -35,16 +35,19 @@ public:
 	 * Imports the WengoPhone Classic Config only if no WengoPhone NG
 	 * configuration exists in the given folder.
 	 *
-	 * @param path folder where the WengoPhone NG configuration files could be
 	 * @return true if configuration has been imported, false if no configuration
 	 * found or the configuration has already been imported.
 	 */
-	static bool importConfig(const std::string & import);
+	static bool importConfig(std::string str);
 
 private:
 
 	static std::string getWengoClassicConfigPath();
-
+	static bool ImportConfigFromClassicToNG_1_0();
+	static bool ImportClassicContactsToNG_1_0(const std::string & fromDir, const std::string & toDir);
+	static bool ClassicVcardParser(const std::string & vcardFile, void *structVcard);
+	static bool ClassicXMLParser(const std::string & xmlFile, void *structVcard);
+	static std::string ClassicVCardToString(void *structVcard);
 };
 
-#endif	//CLASSICCONFIGIMPORTER_H
+#endif	//CONFIGIMPORTER_H

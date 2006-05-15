@@ -25,16 +25,111 @@
 #include <cutil/global.h>
 #include <util/Path.h>
 #include <util/File.h>
+#include <util/Logger.h>
+#include <util/String.h>
 
 using namespace std;
- 
-bool ClassicConfigImporter::importConfig(const std::string & import) {
+
+#include <string>
+#include <vector>
+#include <sstream>
+#include <iostream>
+
+typedef struct telNumber_s
+{
+	string	key;
+	string	value;
+}			telNumber_t;
+
+typedef std::list<telNumber_t *> telNumberList;
+typedef std::list<telNumber_t *>::iterator telNumberIt;
+
+typedef struct address_s
+{
+	string	street;
+	string	city;
+	string	post_code;
+	string	state;
+	string	country;
+}			address_t;
+
+typedef struct birthday_s
+{
+	int	day;
+	int	month;
+	int year;
+}		birthday_t;
+
+#define MALE	0
+#define FEMALE	1
+#define	UNKNOWN	2
+
+typedef struct vcard_s
+{
+	string			id;
+	string			fname;
+	string			lname;
+	int				gender;
+	string			company;
+	string			website;
+	birthday_t		birthday;
+	string			note;
+	address_t		address;
+	telNumberList	numbers;
+	StringList		emails;
+	bool			blocked;
+}					vcard_t;
+
+typedef std::list<vcard_t *> vcardList;
+typedef std::list<vcard_t *>::iterator vcardIt;
+
+telNumber_t *CreateNewNodeNumber(const std::string & key, const std::string & value)
+{
+	telNumber_t *number = new telNumber_t();
+	
+	memset(number, 0, sizeof(telNumber_t));
+	number->key = key;
+	number->value = value;
+
+	return number;
+}
+
+StringList mySplit(const std::string & str, char sep)
+{
+	string			word;
+	StringList		wordList;
+	istringstream	strStream(str);
+	
+	while (std::getline(strStream, word, sep))
+		wordList += word;
+
+	return wordList;
+}
+
+string myTrim(std::string str)
+{
+	string newstr;
+
+	string::size_type pos1 = str.find_first_not_of(' ');
+	string::size_type pos2 = str.find_last_not_of(' ');
+	newstr = str.substr(pos1 == string::npos ? 0 : pos1, 
+		pos2 == string::npos ? str.length() - 1 : pos2 - pos1 + 1);
+
+	return newstr;
+}
+
+bool ClassicConfigImporter::importConfig(string str) {
 
 #if (defined(OS_WINDOWS) || defined(OS_LINUX))
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-
-	if (!File::exists(config.getConfigDir()) && File::exists(getWengoClassicConfigPath())) {
+	File mFile(config.getConfigDir());
+	int dirNbr = mFile.getDirectoryList().size();
+	string classicConfigPath = getWengoClassicConfigPath();
+	bool dirExists = File::exists(classicConfigPath.substr(0, classicConfigPath.size() - 1));
+	
+	if (dirNbr == 0 && dirExists) {
+		ImportConfigFromClassicToNG_1_0();
 		return true;
 	}
 
@@ -57,4 +152,312 @@ string ClassicConfigImporter::getWengoClassicConfigPath() {
 #endif
 
 	return result;
+}
+
+bool ClassicConfigImporter::ClassicVcardParser(const string & vcardFile, void *structVcard)
+{
+	vcard_t *mVcard = (vcard_t *) structVcard;
+	std::ifstream fileStream;
+	string lastLine;
+	
+	fileStream.open(vcardFile.c_str());
+	if (!fileStream) 
+	{
+		LOG_ERROR("cannot open the file: " + vcardFile);
+		return false;
+	}
+	
+	std::getline(fileStream, lastLine);
+	if (lastLine != "BEGIN:VCARD")
+	{
+		fileStream.close();
+		return false;
+	}
+
+	string key, value, tmp;
+
+	std::getline(fileStream, tmp);
+
+	while (!lastLine.empty()) 
+	{
+		int pos = lastLine.find(":", 0);
+		key = lastLine.substr(0, pos);
+		value = lastLine.substr(pos + 1, lastLine.length() - (pos + 1));
+
+		if (!key.compare("N"))
+		{
+			StringList mList = mySplit(value, ';');
+			mVcard->lname = mList[0];
+			mVcard->fname = mList[1];
+
+			if (!mList[4].compare("Mme."))
+				mVcard->gender = FEMALE;
+			else if (!mList[4].compare("Mr."))
+				mVcard->gender = MALE;
+			else
+				mVcard->gender = UNKNOWN;
+		}
+		else if (!key.compare("TEL;TYPE=home"))
+			mVcard->numbers.push_back(CreateNewNodeNumber("home", value));
+
+		else if (!key.compare("TEL;TYPE=work"))
+			mVcard->numbers.push_back(CreateNewNodeNumber("work", value));
+
+		else if (!key.compare("TEL;TYPE=cell"))
+			mVcard->numbers.push_back(CreateNewNodeNumber("cell", value));
+		
+		else if (!key.compare("TEL;TYPE=pref"))
+			mVcard->numbers.push_back(CreateNewNodeNumber("pref", value));
+
+		else if (!key.compare("TEL;TYPE=fax"))
+			mVcard->numbers.push_back(CreateNewNodeNumber("fax", value));
+		
+		else if (!key.compare("TEL;TYPE=other"))
+			mVcard->numbers.push_back(CreateNewNodeNumber("other", value));
+
+		else if (!key.compare("EMAIL"))
+			mVcard->emails += value;
+
+		else if (!key.compare("ORG"))
+			mVcard->company = value;
+
+		else if (!key.compare("URL"))
+			mVcard->website = value;
+
+		else if (!key.compare("BDAY"))
+		{
+			StringList mList = mySplit(value, '-');
+			mVcard->birthday.year = atoi(mList[0].c_str());
+			mVcard->birthday.month = atoi(mList[1].c_str());
+			mVcard->birthday.day = atoi(mList[2].c_str());
+		}
+		else if (!key.compare("NOTE"))
+			mVcard->note = value;
+
+		else if (!key.compare("ADR;TYPE=home;TYPE=pref"))
+		{
+			StringList mList = mySplit(value, ';');
+			mVcard->address.street = mList[2];
+			mVcard->address.city = mList[3];
+			mVcard->address.state = mList[4];
+			mVcard->address.post_code = mList[5];
+			mVcard->address.country = mList[6];
+		}
+		else
+			LOG_DEBUG("KEY " + key + " not supported");
+
+		lastLine = myTrim(tmp);
+		std::getline(fileStream, tmp);
+
+		if (!tmp.empty())
+		{
+			if (tmp.find(":", 0) == -1)
+			{
+				lastLine += myTrim(tmp);
+				std::getline(fileStream, tmp);
+			}
+		}
+	}
+
+	fileStream.close();
+	return true;
+}
+
+bool ClassicConfigImporter::ClassicXMLParser(const string & xmlFile, void *structVcard)
+{
+	vcard_t *mVcard = (vcard_t *) structVcard;
+	std::ifstream fileStream;
+	string lastLine;
+
+	mVcard->blocked = false;
+	
+	fileStream.open(xmlFile.c_str());
+	if (!fileStream) 
+	{
+		LOG_ERROR("cannot open the file: " + xmlFile);
+		return false;
+	}
+
+	std::getline(fileStream, lastLine);
+
+	while (!lastLine.empty())
+	{
+		lastLine = myTrim(lastLine);
+
+		if (!strncmp(lastLine.c_str(), "<blocked>", 9))
+		{
+			int pos1 = lastLine.find_first_of('>');
+			int pos2 = lastLine.find_last_of('<');
+			string resp = myTrim(lastLine.substr(pos1 + 1, pos2 - (pos1 + 1) ));
+
+			if (resp == "true")
+				mVcard->blocked = true;
+		}
+
+		std::getline(fileStream, lastLine);
+	}
+
+	fileStream.close();
+	return true;
+}
+
+string ClassicConfigImporter::ClassicVCardToString(void *structVcard)
+{
+	vcard_t *mVcard = (vcard_t *) structVcard;
+	string res = "<wgcard version=\"1.0\" xmlns=\"http://www.openwengo.org/wgcard/1.0\">\n";
+
+	// Todo: look at ProfileXMLSerializer and try to use the same serializer
+	if (!mVcard->id.empty())
+		res += ("<wengoid>" + mVcard->id + "</wengoid>\n");
+	
+	res += "<name>\n";
+	if (!mVcard->fname.empty()) 
+		res += ("<first><![CDATA[" + mVcard->fname + "]]></first>\n");
+	if (!mVcard->lname.empty()) 
+		res += ("<last><![CDATA[" + mVcard->lname + "]]></last>\n");
+	res += "</name>\n";
+
+	if (mVcard->gender == MALE)
+		res += ("<sex>male</sex>\n");
+	else if (mVcard->gender == FEMALE)
+		res += ("<sex>female</sex>\n");
+
+	if (!mVcard->website.empty())
+		res += ("<url type=\"website\">" + mVcard->website + "</url>\n");
+
+	if (mVcard->birthday.day && mVcard->birthday.month && mVcard->birthday.year)
+	{
+		res += "<birthday>\n<date>\n";
+		res += ("<day>" + String::fromNumber(mVcard->birthday.day) + "</day>\n");
+		res += ("<month>" + String::fromNumber(mVcard->birthday.month) + "</month>\n");
+		res += ("<year>" + String::fromNumber(mVcard->birthday.year) + "</year>\n");
+		res += "</date>\n</birthday>\n";
+	}
+
+	if (!mVcard->company.empty())
+		res += "<organization>" + mVcard->company + "</organization>\n";
+
+	telNumberIt it;
+	for (it = mVcard->numbers.begin(); it != mVcard->numbers.end(); it++)
+	{
+		if (!(*it)->key.compare("home") && !((*it)->value.empty()))
+			res += "<tel type=\"home\">" + (*it)->value + "</tel>\n";
+		else if (!(*it)->key.compare("work") && !((*it)->value.empty()))
+			res += "<tel type=\"work\">" + (*it)->value + "</tel>\n";
+		else if (!(*it)->key.compare("cell") && !((*it)->value.empty()))
+			res += "<tel type=\"cell\">" + (*it)->value + "</tel>\n";
+		else if (!(*it)->key.compare("fax") && !((*it)->value.empty()))
+			res += "<fax type=\"home\">" + (*it)->value + "</fax>\n";
+	}
+
+	res += "<address type=\"home\">\n";
+	if (!mVcard->address.street.empty())
+		res += ("<street><![CDATA[" + mVcard->address.street + "]]></street>\n");
+	if (!mVcard->address.city.empty())
+		res += ("<locality><![CDATA[" + mVcard->address.city + "]]></locality>\n");
+	if (!mVcard->address.state.empty())
+		res += ("<region><![CDATA[" + mVcard->address.state + "]]></region>\n");
+	if (!mVcard->address.post_code.empty())
+		res += ("<postcode><![CDATA[" + mVcard->address.post_code + "]]></postcode>\n");
+	if (!mVcard->address.country.empty())
+		res += ("<country><![CDATA[" + mVcard->address.country + "]]></country>\n");
+	res += "</address>\n";
+
+	if (mVcard->emails.size() >= 1 && !mVcard->emails[0].empty())
+		res += ("<email type=\"home\">" + mVcard->emails[0] + "</email>\n");
+	if (mVcard->emails.size() >= 2 && !mVcard->emails[1].empty())
+		res += ("<email type=\"work\">" + mVcard->emails[1] + "</email>\n");	
+	if (mVcard->emails.size() >= 3 && !mVcard->emails[2].empty())
+		res += ("<email type=\"other\">" + mVcard->emails[2] + "</email>\n");	
+
+	if (!mVcard->note.empty())
+		res += ("<notes><![CDATA[" + mVcard->note + "]]></notes>\n");
+
+	res += "</wgcard>\n";
+	return res;
+}
+
+
+bool ClassicConfigImporter::ImportClassicContactsToNG_1_0(const string & fromDir, const string & toDir) {
+	File mDir(fromDir);
+	StringList fileList = mDir.getFileList();
+	vcardList vList;
+
+	for (int i = 0; i < fileList.size(); i++)
+	{
+		File mFile(fromDir + fileList[i]);
+		string Id = fileList[i].substr(0, fileList[i].find("_", 0));
+		vcard_t *mVcard;
+
+		if (!mFile.getExtension().compare("vcf"))
+		{
+			mVcard = new vcard_t();
+			mVcard->id = Id;
+			
+			if (ClassicVcardParser(fromDir + fileList[i], mVcard) == false)
+			{
+				delete mVcard;
+				continue;
+			}
+
+			int extPos = fileList[i].find_last_of('.');
+			string fileWoExt = fileList[i].substr(0, extPos + 1);
+			
+			ClassicXMLParser(fromDir + fileWoExt + "xml", mVcard);
+			vList.push_back(mVcard);
+		}
+	}
+
+	vcardIt	vIt;
+	FileWriter xmlFile(toDir + "contactlist.xml");
+	if (!xmlFile.open())
+	{
+		LOG_ERROR("cannot open the file: " + toDir + "contactlist.xml");
+		return false;
+	}
+	
+	// Write all informations to the xml conf file
+	xmlFile.write("<contactlist>\n");
+	for (vIt = vList.begin(); vIt != vList.end(); vIt++)
+	{
+		xmlFile.write(ClassicVCardToString((*vIt)));
+	}
+	xmlFile.write("</contactlist>\n");
+	xmlFile.close();
+
+	// Clean VCard list
+	vcardIt	vIt2;
+	telNumberIt tIt;
+	telNumberIt tIt2;
+	for (vIt = vList.begin(); vIt != vList.end(); )
+	{
+		vIt2 = vIt++;
+		for (tIt = (*vIt2)->numbers.begin(); tIt != (*vIt2)->numbers.end(); )
+		{
+			tIt2 = tIt++;
+			(*vIt2)->numbers.erase(tIt2);
+		}
+		vList.erase(vIt2);
+	}
+
+	return true;
+}
+
+bool ClassicConfigImporter::ImportConfigFromClassicToNG_1_0() {
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	string classicPath = getWengoClassicConfigPath();
+	File mDir(classicPath);
+	StringList dirList = mDir.getDirectoryList();
+	string sep = mDir.getPathSeparator();
+
+	for (int i = 0; i < dirList.size(); i++)
+	{
+		String newDir(config.getConfigDir() + dirList[i] + sep);
+		File::createPath(newDir);
+		string path = classicPath + dirList[i] + sep + "contacts" + sep;
+		ImportClassicContactsToNG_1_0(path, newDir);
+	}
+
+	return true;
 }
