@@ -38,37 +38,20 @@
 #include <qtutil/Object.h>
 #include <util/Logger.h>
 
-ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession) : QObjectThreadSafe(NULL),
-_cChatHandler(cChatHandler){
+ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession) 
+: QObject(NULL), _cChatHandler(cChatHandler){
     // LOG_DEBUG("ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(), _imChatSession(imChatSession)");
 	_imChatSession = &imChatSession;
+	_dialog = NULL;
 
-    _imChatSession->messageReceivedEvent +=
+	_imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1);
 
-    _imChatSession->typingStateChangedEvent +=
+	_imChatSession->typingStateChangedEvent +=
 		boost::bind(&ChatWindow::typingStateChangedEventHandler, this, _1, _2, _3);
 
 	_imChatSession->contactAddedEvent +=
 		boost::bind(&ChatWindow::contactAddedEventHandler, this, _1, _2);
-
-    typedef PostEvent0<void ()> MyPostEvent;
-    MyPostEvent * event =
-        new MyPostEvent(boost::bind(&ChatWindow::initThreadSafe, this));
-	postEvent(event);
-
-	connect (this,SIGNAL(typingStateChangedSignal(const IMChatSession *,const IMContact *,const  IMChat::TypingState *)),
-	              SLOT(typingStateChangedThreadSafe(const IMChatSession *,const IMContact *,const IMChat::TypingState *)),
-	              Qt::QueuedConnection);
-
-	connect (this,SIGNAL(contactAddedSignal(IMChatSession *,const IMContact *)),
-	              SLOT(contactAddedThreadSafe(IMChatSession *,const IMContact *)),
-	              Qt::QueuedConnection);
-
-
-}
-
-void ChatWindow::initThreadSafe(){
 
 	QGridLayout * glayout;
 	_chatContactWidgets = new ChatContactWidgets();
@@ -76,17 +59,16 @@ void ChatWindow::initThreadSafe(){
 	// _dialog = new QDialog(findMainWindow());
 	_dialog = new QDialog(NULL, Qt::Window | Qt::WindowMinMaxButtonsHint);
 
-    QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
+	QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
 	qtWengoPhone->setChatWindow( _dialog );
-
 
 	LOG_DEBUG("************ Creating Chat window ************* ");
 	// Create the menu bar
 	_menuBar = new QMenuBar(_dialog);
 
-    createMenu();
+	createMenu();
 
-    _contactListFrame = new QFrame();
+	_contactListFrame = new QFrame();
 
 	glayout = new QGridLayout();
 	glayout->setMargin(0);
@@ -148,6 +130,15 @@ void ChatWindow::initThreadSafe(){
 	addChat(_imChatSession,from);
 
 	openContactListFrame();
+
+	connect (this,SIGNAL(typingStateChangedSignal(const IMChatSession *,const IMContact *,const  IMChat::TypingState *)),
+		SLOT(typingStateChangedThreadSafe(const IMChatSession *,const IMContact *,const IMChat::TypingState *)));
+
+	connect (this,SIGNAL(contactAddedSignal(IMChatSession *,const IMContact *)),
+		SLOT(contactAddedThreadSafe(IMChatSession *,const IMContact *)));
+
+	connect(this, SIGNAL(messageReceivedSignal(IMChatSession *)),
+		SLOT(messageReceivedSlot(IMChatSession *)));
 }
 
 void ChatWindow::enableChatButton(){
@@ -156,38 +147,38 @@ void ChatWindow::enableChatButton(){
 }
 void ChatWindow::createInviteFrame(){
 
-    _inviteFrame->setMaximumSize(QSize(10000,80));
-    _inviteFrame->setMinimumSize(QSize(16,80));
+	_inviteFrame->setMaximumSize(QSize(10000,80));
+	_inviteFrame->setMinimumSize(QSize(16,80));
 	QGridLayout * layout = new QGridLayout(_inviteFrame);
 	_callLabel = new QtWengoStyleLabel(_inviteFrame);
 	_inviteLabel = new QtWengoStyleLabel(_inviteFrame);
 	_callLabel->setPixmaps(
-						QPixmap(":/pics/chat/chat_call_bar_button.png"),
-						QPixmap(),
-						QPixmap(), // Fill
+		QPixmap(":/pics/chat/chat_call_bar_button.png"),
+		QPixmap(),
+		QPixmap(), // Fill
 
-						QPixmap(":/pics/chat/chat_call_bar_button_on.png"),
-						QPixmap(":/pics/profilebar/bar_separator.png"),
-						QPixmap()  // Fill
-	                      );
+		QPixmap(":/pics/chat/chat_call_bar_button_on.png"),
+		QPixmap(":/pics/profilebar/bar_separator.png"),
+		QPixmap()  // Fill
+	);
 	_callLabel->setMaximumSize(QSize(46,65));
 	_callLabel->setMinimumSize(QSize(46,46));
 
 	_inviteLabel->setPixmaps(
-						QPixmap(),
-						QPixmap(":/pics/profilebar/bar_end.png"), //
-						QPixmap(":/pics/profilebar/bar_fill.png"), // Fill
-						QPixmap(),
-						QPixmap(":/pics/profilebar/bar_on_end.png"),
-						QPixmap(":/pics/profilebar/bar_on_fill.png") // Fill
-	                      );
+		QPixmap(),
+		QPixmap(":/pics/profilebar/bar_end.png"), //
+		QPixmap(":/pics/profilebar/bar_fill.png"), // Fill
+		QPixmap(),
+		QPixmap(":/pics/profilebar/bar_on_end.png"),
+		QPixmap(":/pics/profilebar/bar_on_fill.png") // Fill
+	);
 	_inviteLabel->setMinimumSize(QSize(120,65));
 	_inviteLabel->setText(tr("   invite"));
 	_inviteLabel->setTextColor(Qt::white);
 
 	_inviteLabel->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-    connect(_inviteLabel,SIGNAL(clicked()), SLOT(inviteContact()));
+	connect(_inviteLabel,SIGNAL(clicked()), SLOT(inviteContact()));
 
 	layout->addWidget(_callLabel,0,0);
 	layout->addWidget(_inviteLabel,0,1);
@@ -226,7 +217,6 @@ void ChatWindow::closeTab(){
     //_tabWidget->removeTab ( _tabWidget->currentIndex() );
 }
 void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state){
-
 	IMChat::TypingState * tmpState = new IMChat::TypingState;
 	*tmpState = state;
 	typingStateChangedSignal(&sender,&imContact,tmpState);
@@ -246,28 +236,24 @@ void ChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, cons
 	delete state;
 }
 
-void ChatWindow::messageReceivedEventHandler(IMChatSession & sender) {
-    typedef PostEvent1<void (IMChatSession & sender), IMChatSession &> MyPostEvent;
-	MyPostEvent * event =
-		new MyPostEvent(boost::bind(&ChatWindow::messageReceivedEventHandlerThreadSafe, this, _1), sender);
-	postEvent(event);
-}
-
 void ChatWindow::newMessage(IMChatSession *session,const QString & msg){
 	std::string message(msg.toUtf8().constData());
 	session->sendMessage(message);
 }
 
 void ChatWindow::show(){
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	_dialog->show();
 	_dialog->activateWindow();
 }
 
-void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender) {
+void ChatWindow::messageReceivedEventHandler(IMChatSession & sender) {
+	messageReceivedSignal(&sender);
+}
+
+void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	IMChatSession::IMChatMessage * imChatMessage = sender.getReceivedMessage();
+	IMChatSession::IMChatMessage * imChatMessage = sender->getReceivedMessage();
 	if (imChatMessage) {
 		const IMContact & from = imChatMessage->getIMContact();
 		std::string message = imChatMessage->getMessage();
@@ -278,18 +264,18 @@ void ChatWindow::messageReceivedEventHandlerThreadSafe(IMChatSession & sender) {
 		QString msg = QString::fromUtf8(message.c_str());
 
 		_dialog->show();
-		int tabs=_tabWidget->count();
 
-		for (int i=0; i<tabs;i++)
+		int tabs = _tabWidget->count();
+		for (int i = 0; i < tabs; i++)
 		{
 			ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
-			if ( widget->getSessionId() == sender.getId() )
+			if (widget->getSessionId() == sender->getId())
 			{
 				_chatWidget = qobject_cast<ChatWidget *>(_tabWidget->widget(i));
-				_chatWidget->addToHistory(senderName,msg);
-				if ( _tabWidget->currentWidget() != _chatWidget )
+				_chatWidget->addToHistory(senderName, msg);
+				if ( _tabWidget->currentWidget() != _chatWidget ) {
 					_tabWidget->setBlinkingTab(i);
-
+				}
 				_dialog->activateWindow();
 				return;
 			}
@@ -348,9 +334,11 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 		IMContact from = *imChatSession->getIMContactSet().begin();
 		addChat(imChatSession,from);
 		_dialog->show();
-	}
-	else
+	} else {
 		LOG_FATAL("New chat session is empty !!!!!");
+	}
+
+	enableChatButton();
 }
 
 void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {

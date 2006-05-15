@@ -20,26 +20,27 @@
 #ifndef CHATWINDOW_H
 #define CHATWINDOW_H
 
-#include <QtGui>
-#include <string>
-#include <qtutil/WidgetFactory.h>
-#include "QtChatWidget.h"
-#include <imwrapper/IMContact.h>
-#include <imwrapper/IMChatSession.h>
-#include <qtutil/QObjectThreadSafe.h>
 #include <control/chat/CChatHandler.h>
 
+#include <qtutil/WidgetFactory.h>
+
+#include <imwrapper/IMContact.h>
+#include <imwrapper/IMChatSession.h>
+
+#include "QtChatWidget.h"
 #include "QtChatContactWidget.h"
 
+#include <QtGui>
+
+#include <string>
 
 // class IMChatSession;
 // class IMContact;
 
 class QtChatTabWidget;
 //class CChatHandler;
-class ChatWindow : public QObjectThreadSafe
-{
 
+class ChatWindow : public QObject {
     Q_OBJECT
 
 public:
@@ -53,6 +54,40 @@ public:
 	QWidget * getWidget() { return _dialog; }
 
 	void enableChatButton();
+
+Q_SIGNALS:
+
+	void messageReceivedSignal(IMChatSession * sender);
+
+	void typingStateChangedSignal(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
+
+	void contactAddedSignal(IMChatSession * session, const IMContact * imContact );
+
+public Q_SLOTS:
+
+	void addContactToContactListFrame(const Contact & contact);
+
+	void newMessage(IMChatSession* session,const QString & msg);
+
+	void tabSelectionChanged ( int index );
+
+	void show();
+
+	void openContactListFrame();
+
+	void closeContactListFrame();
+
+protected Q_SLOTS:
+
+	void messageReceivedSlot(IMChatSession * sender);
+
+	void typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
+
+	void contactAddedThreadSafe(IMChatSession * session, const IMContact * imContact );
+
+	void inviteContact();
+
+	void closeTab();
 
 protected:
 
@@ -90,45 +125,11 @@ protected:
 
 	ChatContactWidgets * _chatContactWidgets;
 
-
-public Q_SLOTS:
-	void addContactToContactListFrame(const Contact & contact);
-
-	void newMessage(IMChatSession* session,const QString & msg);
-
-	void tabSelectionChanged ( int index );
-
-	void show();
-
-	void openContactListFrame();
-
-	void closeContactListFrame();
-
-protected Q_SLOTS:
-
-	void typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
-
-	void contactAddedThreadSafe(IMChatSession * session, const IMContact * imContact );
-
-	void inviteContact();
-
-	void closeTab();
-
-Q_SIGNALS:
-
-	void typingStateChangedSignal(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
-
-	void contactAddedSignal(IMChatSession * session, const IMContact * imContact );
-
 private:
-
-	void initThreadSafe();
 
 	void createInviteFrame();
 
 	void messageReceivedEventHandler(IMChatSession & sender);
-
-	void messageReceivedEventHandlerThreadSafe(IMChatSession & sender);
 
 	void typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state);
 

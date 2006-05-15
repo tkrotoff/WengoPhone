@@ -51,7 +51,6 @@ void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession 
 	else
 	{
 		_qtChatWidget->addChatSession(&imChatSession);
-		_qtChatWidget->enableChatButton();
 	}
 
 	if (imChatSession.isUserCreated())
