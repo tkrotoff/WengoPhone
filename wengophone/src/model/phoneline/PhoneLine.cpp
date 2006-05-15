@@ -235,11 +235,16 @@ CodecList::VideoCodec PhoneLine::getVideoCodecUsed(int callId) {
 
 void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState state, const SipAddress & sipAddress) {
 	LOG_DEBUG("call state changed callId=" + String::fromNumber(callId) +
-		" state=" + String::fromNumber(state) +
+		" state=" + EnumPhoneCallState::toString(state) +
 		" from=" + sipAddress.getSipAddress());
 
+	//save the last state
+	EnumPhoneCallState::PhoneCallState lastState = EnumPhoneCallState::PhoneCallStateDefault;
 	PhoneCall * phoneCall = getPhoneCall(callId);
 	if (phoneCall) {
+		
+		lastState = phoneCall->getState();
+
 		if (phoneCall->getState() == state) {
 			//We are already in this state
 			//Prevents the state to be applied 2 times in a row
@@ -275,6 +280,11 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
+		if( lastState == EnumPhoneCallState::PhoneCallStateIncoming ) {
+			//History: retrieve the memento and change its state to missed
+			_wengoPhone.getCurrentUserProfile().getHistory().updateCallState(callId, HistoryMemento::MissedCall);
+			LOG_DEBUG("call missed callId=" + String::fromNumber(callId));
+		}
 		callClosed(callId);
 		break;
 
@@ -386,6 +396,7 @@ void PhoneLine::initSipWrapper() {
 }
 
 void PhoneLine::configureSipWrapper() {
+	//TODO check if Settings keys have changed
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//Setting plugin path
