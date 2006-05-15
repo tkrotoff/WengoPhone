@@ -85,6 +85,8 @@ public Q_SLOTS:
 
 	void inviteToConference();
 
+	void defaultAction(QTreeWidgetItem * item);
+
 Q_SIGNALS:
 
 	void groupRightClicked(const QString & groupName);
@@ -104,8 +106,6 @@ protected:
 	void safeShowAllUsers();
 
 	void removeFromHidenContact(const QString & contactId);
-
-    void defaultAction(QTreeWidgetItem * item);
 
 	virtual void timerEvent ( QTimerEvent * event ) ;
 

@@ -48,36 +48,37 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
    QObject * parent, QTreeWidget * target)
    : QObject(parent), _cUserProfile(cUserProfile), _cWengoPhone(cWengoPhone), _qtContactList(qtContactList) {
 
-	   _tree = target;
-	   _previous = NULL;
-	   _lastClicked = NULL;
-	   _hideUsers = false;
-	   _sortUsers = true;
-	   _menu = NULL;
-	   _timerId = -1;
-	   _waitForDoubleClick = false;
+    _tree = target;
+    _previous = NULL;
+    _lastClicked = NULL;
+    _hideUsers = false;
+    _sortUsers = true;
+    _menu = NULL;
+    _timerId = -1;
+    _waitForDoubleClick = false;
 
-	   QtUserList::getInstance()->setTreeWidget(target);
-	   target->setMouseTracking(true);
-	   UserTreeEventManager * dnd = new UserTreeEventManager(qtContactList.getCContactList(), this, target);
-	   QtUserTreeEventFilter * keyFilter = new QtUserTreeEventFilter(this, target);
+    QtUserList::getInstance()->setTreeWidget(target);
+    target->setMouseTracking(true);
+    UserTreeEventManager * dnd = new UserTreeEventManager(qtContactList.getCContactList(), this, target);
+    QtUserTreeEventFilter * keyFilter = new QtUserTreeEventFilter(this, target);
 
-	   connect(target, SIGNAL(itemSelectionChanged()), this, SLOT(treeViewSelectionChanged()));
-	   connect(target, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(itemClicked(QTreeWidgetItem *, int)));
-	   connect(dnd, SIGNAL(itemEntered(QTreeWidgetItem *)), this, SLOT(itemEntered(QTreeWidgetItem *)));
-	   connect(dnd, SIGNAL(itemTimeout(QTreeWidgetItem *)), this, SLOT(openUserInfo(QTreeWidgetItem *)));
-	   connect(dnd, SIGNAL(mouseClicked(Qt::MouseButton)), SLOT(setMouseButton(Qt::MouseButton)));
+    connect(target, SIGNAL(itemSelectionChanged()), this, SLOT(treeViewSelectionChanged()));
+    connect(target, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(itemClicked(QTreeWidgetItem *, int)));
+    connect(dnd, SIGNAL(itemEntered(QTreeWidgetItem *)), this, SLOT(itemEntered(QTreeWidgetItem *)));
+    connect(dnd, SIGNAL(itemTimeout(QTreeWidgetItem *)), this, SLOT(openUserInfo(QTreeWidgetItem *)));
+    connect(dnd, SIGNAL(mouseClicked(Qt::MouseButton)), SLOT(setMouseButton(Qt::MouseButton)));
 
-	   connect(keyFilter, SIGNAL(openItem(QTreeWidgetItem *)), SLOT(openUserInfo(QTreeWidgetItem *)));
-	   connect(keyFilter, SIGNAL(closeItem(QTreeWidgetItem *)), SLOT(closeUserInfo()));
-	   connect(keyFilter, SIGNAL(deleteItem(QTreeWidgetItem *)), SLOT(deleteContact()));
+    connect(keyFilter, SIGNAL(openItem(QTreeWidgetItem *)), SLOT(openUserInfo(QTreeWidgetItem *)));
+    connect(keyFilter, SIGNAL(closeItem(QTreeWidgetItem *)), SLOT(closeUserInfo()));
+    connect(keyFilter, SIGNAL(deleteItem(QTreeWidgetItem *)), SLOT(deleteContact()));
+    connect(keyFilter, SIGNAL(enterPressed(QTreeWidgetItem *)),SLOT(defaultAction(QTreeWidgetItem *)));
 
-	   QtWengoPhone * qtWengoPhone = dynamic_cast < QtWengoPhone * > (_cWengoPhone.getPresentation());
+    QtWengoPhone * qtWengoPhone = dynamic_cast < QtWengoPhone * > (_cWengoPhone.getPresentation());
 
-	   if (!connect(this, SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
-	   qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)))) {
-		   LOG_DEBUG("Unable to connect signal\n");
-	   }
+    if (!connect(this, SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
+    qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)))) {
+       LOG_DEBUG("Unable to connect signal\n");
+    }
 }
 
 void QtUserManager::startSMS(bool checked) {
