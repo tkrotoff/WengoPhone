@@ -5,6 +5,7 @@ Delete "$INSTDIR\sounds\tones\jungle\*"
 Delete "$INSTDIR\sounds\tones\*"
 Delete "$INSTDIR\sounds\*"
 Delete "$INSTDIR\lang\*"
+Delete "$INSTDIR\webpages\*"
 
 /** Debug or release mode. */
 !ifdef DEBUG
@@ -97,6 +98,10 @@ File "${BUILD_DIR}\pics\avatars\*"
 SetOutPath "$INSTDIR\lang\"
 File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_fr.qm"
 File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_en.qm"
+
+/** web pages. */
+SetOutPath "$INSTDIR\webpages\*"
+File "${BUILD_DIR}\webpages\*"
 
 /*
 SetOutPath "$INSTDIR\styles\"
