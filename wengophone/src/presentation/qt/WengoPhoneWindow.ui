@@ -295,7 +295,7 @@
           <string/>
          </property>
          <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/contact/chat.png</iconset>
+          <iconset resource="wengophone.qrc" >:/pics/iconbar/iconBarchat.png</iconset>
          </property>
          <property name="iconSize" >
           <size>
