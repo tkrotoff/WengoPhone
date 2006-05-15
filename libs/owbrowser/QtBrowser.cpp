@@ -100,7 +100,7 @@ bool QtBrowser::setMode(BrowserMode mode) {
 }
 
 void QtBrowser::initBrowser() {
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (!defined QT_COMMERCIAL)
 	if (_mode == IEMODE) {
 		LOG_FATAL("IEMODE not allowed");
 	}
