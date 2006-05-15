@@ -38,7 +38,7 @@
 #include <qtutil/Object.h>
 #include <util/Logger.h>
 
-ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession) 
+ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession)
 : QObject(NULL), _cChatHandler(cChatHandler){
     // LOG_DEBUG("ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(), _imChatSession(imChatSession)");
 	_imChatSession = &imChatSession;
@@ -59,10 +59,10 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 	// _dialog = new QDialog(findMainWindow());
 	_dialog = new QDialog(NULL, Qt::Window | Qt::WindowMinMaxButtonsHint);
 
+
 	QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
 	qtWengoPhone->setChatWindow( _dialog );
 
-	LOG_DEBUG("************ Creating Chat window ************* ");
 	// Create the menu bar
 	_menuBar = new QMenuBar(_dialog);
 
@@ -103,7 +103,11 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 	_tabWidget->removeTab(0);
 	_dialog->resize(300,464);
 	_dialog->setWindowTitle(tr("WengoPhone chat window"));
-	_dialog->show();
+	if ( imChatSession.isUserCreated() )
+        _dialog->show();
+    else
+        _dialog->showMinimized ();
+	//_dialog->show();
 
 	// Create the contact list scroll area
 	QGridLayout * frameLayout = new QGridLayout(_contactListFrame);
@@ -285,7 +289,6 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
 
 void ChatWindow::contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact) {
 	// Send message to the GUI thread
-	qDebug() << "************** ChatWindow::contactAddedEventHandler *********************";
 	contactAddedSignal(&sender, &imContact );
 }
 
@@ -333,7 +336,10 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 	if ( imChatSession->getIMContactSet().size() != 0 ) {
 		IMContact from = *imChatSession->getIMContactSet().begin();
 		addChat(imChatSession,from);
-		_dialog->show();
+		if (imChatSession->isUserCreated())
+            _dialog->show();
+        else
+            _dialog->showMinimized ();
 	} else {
 		LOG_FATAL("New chat session is empty !!!!!");
 	}
