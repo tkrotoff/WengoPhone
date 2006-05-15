@@ -213,6 +213,8 @@ private Q_SLOTS:
 
 	void addToConference(PhoneCall * sourceCall, PhoneCall * targetCall);
 
+	void logoff();
+
 private:
 
 	void initThreadSafe();

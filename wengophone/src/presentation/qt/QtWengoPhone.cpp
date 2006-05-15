@@ -32,6 +32,7 @@
 #include <model/phonecall/ConferenceCall.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/phoneline/IPhoneLine.h>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -295,6 +296,9 @@ void QtWengoPhone::initThreadSafe() {
 	//actionSearchContact
 	connect(_ui->actionSearchWengoUsers, SIGNAL(triggered()), SLOT(showSearchContactWindows()));
 
+    //actionLog_off
+	connect(_ui->actionLog_off, SIGNAL(triggered()), SLOT(logoff()));
+
 	//Translation
 	new QtLanguage(_wengoPhoneWindow);
 
@@ -356,7 +360,7 @@ void QtWengoPhone::hangupButtonClicked(){
 		 widget->hangup();
 		//Widget is deleted automagically
 	}
-	
+
 	//set the last active page
 	if( _activeTabBeforeCall ) {
 		_ui->tabWidget->setCurrentWidget(_activeTabBeforeCall);
@@ -417,6 +421,12 @@ void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall){
 		}
 	}
 }
+
+void QtWengoPhone::logoff(){
+    IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
+    phoneLine->disconnect();
+}
+
 
 void QtWengoPhone::addToConference(PhoneCall * sourceCall, PhoneCall * targetCall){
 	// Bad and Ugly but works...

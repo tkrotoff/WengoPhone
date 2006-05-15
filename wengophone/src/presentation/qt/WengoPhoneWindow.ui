@@ -408,6 +408,26 @@
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
    </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>&amp;Contacts</string>
+    </property>
+    <widget class="QMenu" name="menuHideShow" >
+     <property name="title" >
+      <string>Sort contacts</string>
+     </property>
+     <addaction name="actionSortAlphabetically" />
+     <addaction name="actionBy_presence" />
+     <addaction name="actionBy_media" />
+     <addaction name="actionBy_protocol" />
+    </widget>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearchWengoUsers" />
+    <addaction name="actionManage_blocked_contacts" />
+    <addaction name="separator" />
+    <addaction name="actionShow_contact_groups" />
+    <addaction name="actionHideContactsOffline" />
+   </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>&amp;Wengo</string>
@@ -432,26 +452,7 @@
     <addaction name="actionOpenWengoAccount" />
     <addaction name="separator" />
     <addaction name="actionClose" />
-   </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>&amp;Contacts</string>
-    </property>
-    <widget class="QMenu" name="menuHideShow" >
-     <property name="title" >
-      <string>Sort contacts</string>
-     </property>
-     <addaction name="actionSortAlphabetically" />
-     <addaction name="actionBy_presence" />
-     <addaction name="actionBy_media" />
-     <addaction name="actionBy_protocol" />
-    </widget>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSearchWengoUsers" />
-    <addaction name="actionManage_blocked_contacts" />
-    <addaction name="separator" />
-    <addaction name="actionShow_contact_groups" />
-    <addaction name="actionHideContactsOffline" />
+    <addaction name="actionLog_off" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -697,6 +698,11 @@
   <action name="actionView_avatars_in_chat_window" >
    <property name="text" >
     <string>View avatars in chat window</string>
+   </property>
+  </action>
+  <action name="actionLog_off" >
+   <property name="text" >
+    <string>Log off</string>
    </property>
   </action>
  </widget>
