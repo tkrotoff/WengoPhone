@@ -65,8 +65,8 @@ void QuicktimeWebcamDriver::cleanup() {
 
 	_boundsRect.top = 0;
 	_boundsRect.left = 0;
-	_boundsRect.right = 176;
-	_boundsRect.bottom = 144;
+	_boundsRect.right = 320;
+	_boundsRect.bottom = 240;
 
 	_seqGrab = NULL;
 	_PGWorld = NULL;
@@ -106,6 +106,7 @@ void QuicktimeWebcamDriver::initializeCommonComponents() {
 		LOG_ERROR("can't create a video channel");
 		return;
 	}
+		
 }
 
 StringList QuicktimeWebcamDriver::getDeviceList() {
@@ -275,6 +276,7 @@ bool QuicktimeWebcamDriver::createGWorld() {
 
 	for (register unsigned i = 0 ; i < sizeof(pixTable) / sizeof(pixosi) ; i++) {
 		LOG_DEBUG("Attempting to create a GWorld with palette #" + String::fromNumber(pixTable[i]));
+		LOG_DEBUG("trying resolution: (top, left, right, bottom) = ("+String::fromNumber(_boundsRect.top)+","+String::fromNumber(_boundsRect.left)+","+String::fromNumber(_boundsRect.right)+","+String::fromNumber(_boundsRect.bottom)+")");
 		err = QTNewGWorld(&_PGWorld, //Does'nt work with planar format
 			pix_quicktime_from_pix_osi(pixTable[i]),
 			&_boundsRect,
@@ -398,19 +400,21 @@ webcamerrorcode QuicktimeWebcamDriver::setResolution(unsigned width, unsigned he
 	newBounds.right = width;
 	newBounds.bottom = height;
 
+	LOG_DEBUG("try to change resolution: (width, height) = " + String::fromNumber(width) + "," + String::fromNumber(height));
 	err = SGSetChannelBounds(_SGChanVideo, &newBounds);
 	if (err != noErr) {
+		LOG_DEBUG("could not change resolution...");
 		err = SGGetSrcVideoBounds(_SGChanVideo, &_boundsRect);
 		if (err != noErr) {
 			LOG_WARN("can't get source video bounds");
 		}
-
 		return WEBCAM_NOK;
 	} else {
 		_boundsRect.top = newBounds.top;
 		_boundsRect.left = newBounds.left;
 		_boundsRect.right = newBounds.right;
 		_boundsRect.bottom = newBounds.bottom;
+		LOG_DEBUG("new resolution: (top, left, right, bottom) = ("+String::fromNumber(newBounds.top)+","+String::fromNumber(newBounds.left)+","+String::fromNumber(newBounds.right)+","+String::fromNumber(newBounds.bottom)+")");
 	}
 
 	if (_decomSeq) {
@@ -504,6 +508,9 @@ OSErr mySGDataProc(SGChannel c,
 	// Shifting data. MacOS X introduces an offset on each picture line
 	// FIXME: This shift does work only with RGB format
 	image = pix_alloc(webcamDriver->_palette, webcamDriver->getWidth(), webcamDriver->getHeight());
+	LOG_DEBUG("allocated a trimmed image: palette: " + String::fromNumber(webcamDriver->_palette)
+		+ ", width: " + String::fromNumber(webcamDriver->getWidth())
+		+ ", height: " + String::fromNumber(webcamDriver->getHeight()));
 
 	PixMap *pixmap = *GetGWorldPixMap(webcamDriver->_PGWorld);
 	uint8_t *data;
@@ -534,11 +541,12 @@ void QuicktimeWebcamDriver::setupDecompressor() {
 	ComponentResult	err = noErr;
 	Rect sourceRect = { 0, 0, getWidth(), getHeight() };
 	MatrixRecord scaleMatrix;
-	ImageDescriptionHandle imageDesc = (ImageDescriptionHandle)NewHandle(0);
+	ImageDescriptionHandle imageDesc = (ImageDescriptionHandle)NewHandle(sizeof(ImageDescription));
 
 	err = SGGetChannelSampleDescription(_SGChanVideo, (Handle)imageDesc);
+	
 	if (err != noErr) {
-		LOG_ERROR("can't get channel sample description");
+		LOG_ERROR("can't get channel sample description:" + String::fromNumber(err));
 		return;
 	}
 
@@ -563,6 +571,7 @@ void QuicktimeWebcamDriver::setupDecompressor() {
 	}
 
 	DisposeHandle((Handle)imageDesc);
+	imageDesc = NULL;
 }
 
 void QuicktimeWebcamDriver::idleSeqGrab() {

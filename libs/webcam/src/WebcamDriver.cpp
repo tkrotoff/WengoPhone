@@ -45,8 +45,8 @@ WebcamDriver::WebcamDriver(int flags)
 	_fpsTimerLast = 0;
 
 	_desiredPalette = PIX_OSI_YUV420P;
-	_desiredWidth = 176;
-	_desiredHeight = 144;
+	_desiredWidth = 320;//176;
+	_desiredHeight = 240;//144;
 
 	_flags = flags;
 
@@ -153,6 +153,7 @@ unsigned WebcamDriver::getFPS() const {
 }
 
 webcamerrorcode WebcamDriver::setResolution(unsigned width, unsigned height) {
+	LOG_DEBUG("try to change resolution: (width, height) = " + String::fromNumber(width) + "," + String::fromNumber(height));
 	if (_webcamPrivate->setResolution(width, height) == WEBCAM_NOK) {
 		if (isFormatForced()) {
 			_desiredWidth = width;
