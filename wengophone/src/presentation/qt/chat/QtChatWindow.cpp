@@ -497,13 +497,6 @@ void ChatWindow::createMenu(){
     action = ContactsMenu->addAction(tr("Show / hide contacts offline"));
     connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showHideOffLineContacts()));
 
-    QMenu * sortMenu = new QMenu(tr("Sort contacts"));
-    sortMenu->addAction(tr("alphabetically"));
-    sortMenu->addAction(tr("by presence"));
-    sortMenu->addAction(tr("by media"));
-    sortMenu->addAction(tr("by protocol"));
-    ContactsMenu->addMenu(sortMenu);
-
     _menuBar->addMenu(ContactsMenu);
 
     QMenu * Actions = new QMenu(tr("&Actions"));
@@ -515,7 +508,13 @@ void ChatWindow::createMenu(){
     Actions->addSeparator ();
     Actions->addAction(tr("Create a conference call"));
     Actions->addAction(tr("Create a conference chat"));
+    Actions->addSeparator ();
     _menuBar->addMenu(Actions);
+    Actions->addAction(tr("Accept"));
+    Actions->addAction(tr("Hangup"));
+    Actions->addAction(tr("Hold"));
+    Actions->addAction(tr("Resume"));
+
 
     QMenu * ToolsMenu = new QMenu(tr("&Tools"));
 
