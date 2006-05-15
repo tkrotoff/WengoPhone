@@ -122,6 +122,7 @@ if WengoOSWindows():
 		try:
 			if env.WengoQtEdition() == 'QT_EDITION_DESKTOP':
 				libs.append('QAxContainerd')
+				defines['QT_COMMERCIAL'] = 1
 		except:
 			print 'env.WengoQtEdition() error'
 
@@ -153,6 +154,7 @@ if WengoOSWindows():
 		try:
 			if env.WengoQtEdition() == 'QT_EDITION_DESKTOP':
 				libs.append('QAxContainer')
+				defines['QT_COMMERCIAL'] = 1
 		except:
 			print 'env.WengoQtEdition() error'
 
