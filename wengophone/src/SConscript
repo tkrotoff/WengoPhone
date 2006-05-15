@@ -66,7 +66,7 @@ sources = [
 	'model/connect/Connect.cpp',
 	'model/connect/ConnectHandler.cpp',
 	'model/chat/ChatHandler.cpp',
-	'model/wenbox/WenboxPlugin.cpp',
+#	'model/wenbox/WenboxPlugin.cpp',
 	'model/phonecall/SipAddress.cpp',
 	'model/phonecall/PhoneCall.cpp',
 	'model/phonecall/PhoneCallState.cpp',
@@ -132,7 +132,7 @@ sources = [
 	'model/webservices/callforward/WsCallForward.cpp',
 	'model/webservices/directory/WsDirectory.cpp',
 
-	'control/wenbox/CWenboxPlugin.cpp',
+#	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
 	'control/chat/CChatHandler.cpp',
 	'control/phoneline/CPhoneLine.cpp',
@@ -149,6 +149,22 @@ sources = [
 
 	'presentation/PFactory.cpp'
 ]
+
+if WengoGetConsoleArgument("enable-wenbox-plugin"):
+	defines['ENABLE_WENBOX'] = 1
+	sources += [
+		'model/wenbox/WenboxPlugin.cpp',
+		'control/wenbox/CWenboxPlugin.cpp',
+	]
+
+	print
+
+	print
+
+	print
+	print "coucou"
+
+
 
 env.WengoCopyToBuildDir('../sounds', 'sounds')
 env.WengoCopyToBuildDir('../pics', 'pics')

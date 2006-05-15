@@ -24,6 +24,8 @@
 void PhoneCallStateError::execute(PhoneCall & phoneCall) {
 	stopSoundIncomingCall();
 
+#ifdef ENABLE_WENBOX
 	WenboxPlugin & wenboxPlugin = phoneCall.getWenboxPlugin();
 	wenboxPlugin.setState(Wenbox::CallError);
+#endif
 }

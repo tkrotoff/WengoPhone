@@ -224,10 +224,12 @@ void PhoneCall::close() {
 	}
 }
 
+#ifdef ENABLE_WENBOX
 WenboxPlugin & PhoneCall::getWenboxPlugin() const {
 	WengoPhone & wengoPhone = _phoneLine.getWengoPhone();
 	return wengoPhone.getWenboxPlugin();
 }
+#endif
 
 void PhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
 	videoFrameReceivedEvent(*this, remoteVideoFrame, localVideoFrame);

@@ -128,9 +128,11 @@ void CWengoPhone::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine 
 }
 
 void CWengoPhone::wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin) {
+#ifdef ENABLE_WENBOX
 	static CWenboxPlugin cWenboxPlugin(wenboxPlugin, *this);
 
 	LOG_DEBUG("CWenboxPlugin created");
+#endif
 }
 
 void CWengoPhone::wsWengoSubscribeCreatedEventHandler(WengoPhone & sender, WsWengoSubscribe & wsWengoSubscribe) {

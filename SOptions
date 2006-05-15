@@ -19,7 +19,8 @@ args = {
 	'nullsipwrapper' : 0,
 	'enable-samplerate' : 0,
 	'enable-phapi-audio-arts' : 0,
-	'portaudio-oss' : 0,
+	'portaudio-oss' : 1,
+	'enable-wenbox-plugin'	: 1,
 
 	#if 0 wmme support
 	'portaudio-dsound' : 0,

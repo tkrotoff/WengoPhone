@@ -24,6 +24,8 @@
 void PhoneCallStateTalking::execute(PhoneCall & phoneCall) {
 	stopSoundIncomingCall();
 
+#ifdef ENABLE_WENBOX
 	WenboxPlugin & wenboxPlugin = phoneCall.getWenboxPlugin();
 	wenboxPlugin.setState(Wenbox::CallTalking);
+#endif
 }

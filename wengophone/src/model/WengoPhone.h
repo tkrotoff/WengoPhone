@@ -92,7 +92,9 @@ public:
 	 *
 	 * @return the Wenbox
 	 */
+#ifdef ENABLE_WENBOX
 	WenboxPlugin & getWenboxPlugin() const;
+#endif
 
 	/**
 	 * Gets the current UserProfile.
@@ -147,7 +149,9 @@ private:
 	void valueChangedEventHandler(Settings & sender, const std::string & key);
 
 	/** Wenbox. */
+#ifdef ENABLE_WENBOX
 	WenboxPlugin * _wenboxPlugin;
+#endif
 
 	/** Wenbox. */
 	WsWengoSubscribe * _wsWengoSubscribe;

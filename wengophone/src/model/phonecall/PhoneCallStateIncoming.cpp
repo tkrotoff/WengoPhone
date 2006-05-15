@@ -32,8 +32,10 @@ void PhoneCallStateIncoming::execute(PhoneCall & phoneCall) {
 	_soundIncomingCall->setLoops(-1);
 	_soundIncomingCall->play();
 
+#ifdef ENABLE_WENBOX
 	WenboxPlugin & wenboxPlugin = phoneCall.getWenboxPlugin();
 	wenboxPlugin.setState(Wenbox::CallIncoming, phoneCall.getPeerSipAddress().toString());
+#endif
 
 	//Rejects/accepts the incoming call
 

@@ -40,7 +40,9 @@ WengoPhone::WengoPhone()
 	_terminate = false;
 	_startupSettingListener = new StartupSettingListener();
 	_running = false;
+#ifdef ENABLE_WENBOX
 	_wenboxPlugin = NULL;
+#endif
 	_wsWengoSubscribe = NULL;
 
 	//set HttpRequest User Agent
@@ -79,8 +81,9 @@ WengoPhone::~WengoPhone() {
 	while (_running) {
 		Thread::msleep(100);
 	}
-
+#ifdef ENABLE_WENBOX
 	delete _wenboxPlugin;
+#endif
 
 	saveConfiguration();
 
@@ -107,9 +110,11 @@ void WengoPhone::init() {
 	//Imports the Config from WengoPhone Classic.
 	ClassicConfigImporter::importConfig(config.getConfigDir());
 
+#ifdef ENABLE_WENBOX
 	_wenboxPlugin = new WenboxPlugin(*this);
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
+#endif
 
 	_wsWengoSubscribe = new WsWengoSubscribe();
 	wsWengoSubscribeCreatedEvent(*this, *_wsWengoSubscribe);
@@ -158,9 +163,11 @@ void WengoPhone::terminateThreadSafe() {
 	_terminate = true;
 }
 
+#ifdef ENABLE_WENBOX
 WenboxPlugin & WengoPhone::getWenboxPlugin() const {
 	return *_wenboxPlugin;
 }
+#endif
 
 void WengoPhone::profileChangedEventHandler(Profile & sender) {
 	saveUserProfile();
