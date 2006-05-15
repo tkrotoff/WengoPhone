@@ -76,7 +76,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 
 	if ((option.state & QStyle::State_Selected) == QStyle::State_Selected) {
 		QRect rect = option.rect;
-
+        rect.adjust(0,0,1,1);
 		painter->fillRect(option.rect, QBrush(lg));
 		painter->setPen(option.palette.text().color());
 	}
@@ -214,8 +214,8 @@ QtContactPixmap::contactPixmap QtUser::getStatus() const {
 
 void QtUser::startChat() {
 	//QMutexLocker locker(&_mutex);
-
 	_cWengoPhone.getCUserProfile()->startIM(_contactId);
+
 }
 
 void QtUser::startSMS() {

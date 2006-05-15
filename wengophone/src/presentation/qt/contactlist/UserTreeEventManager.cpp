@@ -73,6 +73,7 @@ bool UserTreeEventManager::eventFilter(QObject * obj, QEvent * event) {
 }
 
 void UserTreeEventManager::mouseDlbClick(QMouseEvent * event) {
+    /*
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	QTreeWidgetItem * item = _tree->itemAt(event->pos());
@@ -97,6 +98,7 @@ void UserTreeEventManager::mouseDlbClick(QMouseEvent * event) {
 		}
 
 	}
+	*/
 }
 
 void UserTreeEventManager::mousePressEvent(QMouseEvent * event) {

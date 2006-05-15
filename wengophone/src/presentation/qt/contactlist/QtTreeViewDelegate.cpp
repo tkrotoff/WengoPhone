@@ -35,15 +35,6 @@
 #include <QtGui>
 #include <QSize>
 
-/*
-#define MENUICON_WIDTH  8
-#define MENUICON_HEIGHT 8
-*/
-
-/*
-static int USER_TITLE_FRAME_HEIGHT = 0;
-static int USER_WIDGET_FRAME_HEIGHT = 0;
-*/
 
 static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 
@@ -178,19 +169,9 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 	int nbchild = index.model()->rowCount(index);
 
 	std::string groupId = index.data().toString().toStdString();
-	QString groupName = 
+	QString groupName =
 		QString::fromStdString(_cWengoPhone.getCUserProfile()->getCContactList().getContactGroupName(groupId));
 
 	QString str = QString("%1 (%2)").arg(groupName).arg(nbchild);
-
-	// painter->drawText( r, Qt::AlignLeft, index.data().toString(), 0 );
 	painter->drawText(r, Qt::AlignLeft, str, 0);
-
-	painter->setPen(QColor(210, 210, 210));
-	painter->drawLine(option.rect.left(), option.rect.bottom(),
-	option.rect.width(), option.rect.bottom());
-
-	painter->setPen(QColor(128, 128, 128));
-	painter->drawLine(option.rect.left(), option.rect.bottom() - 1,
-	option.rect.width(), option.rect.bottom() - 1);
 }

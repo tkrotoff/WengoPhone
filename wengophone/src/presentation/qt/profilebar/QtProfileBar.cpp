@@ -461,7 +461,6 @@ void QtProfileBar::setStatusLabel(const QString & on, const QString & off) {
 	_statusLabel->setPixmaps(QPixmap(on),
 	                QPixmap(), // no end
 	                QPixmap(), // no fill
-
 	                QPixmap(off),
 	                QPixmap(),  // no end
 	                QPixmap()

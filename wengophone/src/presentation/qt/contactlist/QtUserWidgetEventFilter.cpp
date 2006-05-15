@@ -37,47 +37,11 @@ bool QtUserWidgetEventFilter::eventFilter(QObject * obj, QEvent * event) {
 
 void QtUserWidgetEventFilter::paintEvent(QPaintEvent * event) {
 	QPalette p = _target->palette();
-
-/*
-	QLinearGradient lg( QPointF(1,1), QPointF(_target->rect().width(),1));
-	lg.setSpread(QGradient::RepeatSpread);
-	lg.setColorAt ( 0, p.midlight().color());
-	lg.setColorAt ( .8, QColor(210, 216, 234));
-*/
-
 	QColor lg(201, 201, 201);
-	QRect rect = _target->rect(); // = event->rect();
+	QRect rect = _target->rect();
 	QPainter painter(_target);
-
-/*
-    painter.setPen(QColor(233,233,233));
-    painter.drawLine(rect.left(),rect.top(),rect.right(),rect.top());
-    rect.adjust(0,1,0,0);
-    painter.setPen(QColor(215,215,215));
-    painter.drawLine(rect.left(),rect.top(),rect.right(),rect.top());
-    rect.adjust(0,1,0,0);
-    painter.setPen(QColor(255,255,255));
-    painter.drawLine(rect.left(),rect.top(),rect.right(),rect.top());
-    rect.adjust(0,1,0,0);
-    painter.setPen(QColor(255,255,255));
-    painter.drawLine(rect.left(),rect.top(),rect.right(),rect.top());
-*/
-
 	painter.fillRect(rect, QBrush(lg));
-
-	painter.setPen(QColor(233, 233, 233));
-	painter.drawLine(rect.left(), rect.bottom(), rect.right(), rect.bottom());
-	rect.adjust(0, 0, 0, -1);
-	painter.setPen(QColor(215, 215, 215));
-	painter.drawLine(rect.left(), rect.bottom(), rect.right(), rect.bottom());
-	rect.adjust(0, 0, 0, -1);
-	painter.setPen(QColor(255, 255, 255));
-	painter.drawLine(rect.left(), rect.top(), rect.right(), rect.top());
-	rect.adjust(0, 0, 0, -1);
-	painter.setPen(QColor(255, 255, 255));
-	painter.drawLine(rect.left(), rect.top(), rect.right(), rect.top());
-	paintUser(& painter, _target->rect());
-
+    paintUser(& painter, _target->rect());
 	painter.end();
 }
 
@@ -100,8 +64,8 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter, QRect rect) {
 	painter->drawPixmap(x, r.top() + centeredPx_y, px);
 	x += px.width() + 5;
 	r.setLeft(x);
+
 	// Draw the user
-	//painter->setFont(option.font);
 	QRect textRect = r;
 	int centeredText_y = (QtUser::UserSize - QFontMetrics(_target->font()).height()) / 2;
 	textRect.setTop(textRect.top() + centeredText_y);

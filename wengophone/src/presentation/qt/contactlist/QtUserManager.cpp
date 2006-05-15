@@ -1,4 +1,5 @@
 /*
+
  * WengoPhone, a voice over Internet phone
  * Copyright (C) 2004-2006  Wengo
  *
@@ -46,12 +47,15 @@
 QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone, QtContactList & qtContactList,
    QObject * parent, QTreeWidget * target)
    : QObject(parent), _cUserProfile(cUserProfile), _cWengoPhone(cWengoPhone), _qtContactList(qtContactList) {
+
 	   _tree = target;
 	   _previous = NULL;
 	   _lastClicked = NULL;
 	   _hideUsers = false;
 	   _sortUsers = false;
 	   _menu = NULL;
+	   _timerId = -1;
+	   _waitForDoubleClick = false;
 
 	   QtUserList::getInstance()->setTreeWidget(target);
 	   target->setMouseTracking(true);
@@ -83,53 +87,51 @@ void QtUserManager::startSMS(bool checked) {
 
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-
 	user = ul->getUser(item->text(0));
-
 	user->startSMS();
 }
 
 void QtUserManager::startChat(bool) {
+
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
 	//The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-
 	user = ul->getUser(item->text(0));
-
 	user->startChat();
 }
 
 void QtUserManager::editContact(bool) {
+
 	QtUserList * ul = QtUserList::getInstance();
 
 	//The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-
 	ContactProfile contactProfile = _cUserProfile.getCContactList().getContactProfile(item->text(0).toStdString());
 	QtProfileDetails qtProfileDetails(_cWengoPhone, contactProfile, _tree);
 	if (qtProfileDetails.show()) {
 		_cUserProfile.getCContactList().updateContact(contactProfile);
 	}
-
 	LOG_DEBUG("edit contact");
 }
 
 void QtUserManager::deleteContact() {
+
 	QtUserList * ul = QtUserList::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	_cUserProfile.getCContactList().removeContact(item->text(0).toStdString());
 }
 
 void QtUserManager::treeViewSelectionChanged() {
+
 	if (_button == Qt::NoButton)
 		closeUserInfo();
 }
 
 void QtUserManager::itemEntered(QTreeWidgetItem * item) {
-	QtUserList * ul = QtUserList::getInstance();
 
+	QtUserList * ul = QtUserList::getInstance();
 	if (ul) {
 		ul->mouseOn(item->text(0));
 		//		closeUserInfo();
@@ -139,6 +141,7 @@ void QtUserManager::itemEntered(QTreeWidgetItem * item) {
 }
 
 void QtUserManager::closeUserInfo() {
+
 	QtUserList * ul = QtUserList::getInstance();
 	if (_previous != NULL) {
 		_tree->closePersistentEditor(_previous, 0);
@@ -150,8 +153,8 @@ void QtUserManager::closeUserInfo() {
 }
 
 void QtUserManager::openUserInfo(QTreeWidgetItem * i) {
-	QTreeWidgetItem * item = i;
 
+	QTreeWidgetItem * item = i;
 	QtUserList * ul = QtUserList::getInstance();
 	if (_previous != NULL) {
 		closeUserInfo();
@@ -173,64 +176,116 @@ void QtUserManager::openUserInfo(QTreeWidgetItem * i) {
 	_tree->viewport()->update();
 }
 
-void QtUserManager::itemClicked(QTreeWidgetItem *, int) {
+void QtUserManager::itemClicked(QTreeWidgetItem * item, int) {
 
 	QtUserList * ul = QtUserList::getInstance();
-	QTreeWidgetItem * item = _tree->currentItem();
+    if ( (_lastClicked == item) && (_waitForDoubleClick)) {
+        defaultAction(item);
+        _button = Qt::NoButton;
+        return;
+    }
 
-	QRect widgetSize = _tree->rect();
-	QPoint mousepos = _tree->mapFromGlobal(QCursor::pos());
-	if (!item->parent()) {
-		if (_button == Qt::RightButton) {
-			groupRightClicked(item->text(0));
+    _waitForDoubleClick = true;
+    killTimer(_timerId);
+    _timerId = startTimer(qApp->doubleClickInterval ());
+
+    _lastClicked = item;
+
+
+    QRect widgetSize = _tree->rect();
+    QPoint mousepos = _tree->mapFromGlobal(QCursor::pos());
+    if (!item->parent()) {
+        if (_button == Qt::RightButton) {
+            groupRightClicked(item->text(0));
+            return;
+        }
+
+        if (_tree->isItemExpanded(item)) {
+            _tree->collapseItem(item);
+        }
+        else {
+            _tree->expandItem(item);
+        }
+    }
+
+    ul->mouseClicked(item->text(0), mousepos, widgetSize);
+
+    if (mousepos.x() > ul->getIconsStartPosition(item->text(0)))
+        return;
+
+    if (ul->getButton(item->text(0)) == Qt::RightButton) {
+        if (!_menu) {
+            _menu = createMenu();
+            _menu->popup(QCursor::pos());
+        }
+        else {
+            delete _menu;
+            _menu = createMenu();
+            _menu->popup(QCursor::pos());
+        }
+        _button = Qt::NoButton;
+        return;
+    }
+/*
+    if (_previous == item) {
+        closeUserInfo();
+    }
+*/
+    else if (_previous != NULL) {
+        closeUserInfo();
+        _previous = item;
+
+        if (item->parent()) {
+            openUserInfo(item);
+        }
+
+    }
+    else {
+        _previous = item;
+        if (item->parent()) {
+            openUserInfo(item);
+        }
+    }
+    _tree->viewport()->update();
+    _button = Qt::NoButton;
+}
+void QtUserManager::itemDoubleClicked(QTreeWidgetItem * item, int col) {
+
+    defaultAction(item);
+}
+
+void QtUserManager::defaultAction(QTreeWidgetItem * item){
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	QtUserList * ul = QtUserList::getInstance();
+
+    _button = Qt::NoButton;
+	if (item) {
+		QString userId = item->text(0);
+		ContactProfile contactProfile = _qtContactList.getCContactList().getContactProfile(userId.toStdString());
+
+		if (config.getGeneralClickStartChat()) {
+			ul->startChat(userId);
 			return;
 		}
-
-		if (_tree->isItemExpanded(item)) {
-			_tree->collapseItem(item);
+		if (config.getGeneralClickStartFreeCall()) {
+		    QString str = QString::fromUtf8(contactProfile.getFreePhoneNumber().c_str());
+		    if ( !str.isEmpty()){
+                ul->startFreeCall(userId);
+                return;
+		    }
 		}
-		else {
-			_tree->expandItem(item);
+		if (config.getGeneralClickCallCellPhone()) {
+            QString str = QString::fromUtf8(contactProfile.getMobilePhone().c_str());
+            if ( !str.isEmpty()){
+                if (EnumPresenceState::PresenceStateOnline != contactProfile.getPresenceState()) {
+                    ul->startCall(userId);
+                    return;
+                }
+            }
 		}
+		ul->startChat(userId);
 	}
-
-	ul->mouseClicked(item->text(0), mousepos, widgetSize);
-
-	if (mousepos.x() > ul->getIconsStartPosition(item->text(0)))
-		return;
-
-	if (ul->getButton(item->text(0)) == Qt::RightButton) {
-		if (!_menu) {
-			_menu = createMenu();
-			_menu->popup(QCursor::pos());
-		}
-		else {
-			delete _menu;
-			_menu = createMenu();
-			_menu->popup(QCursor::pos());
-		}
-		return;
-	}
-
-	if (_previous == item) {
-		closeUserInfo();
-	}
-	else if (_previous != NULL) {
-		closeUserInfo();
-		_previous = item;
-
-		if (item->parent()) {
-			openUserInfo(item);
-		}
-
-	}
-	else {
-		_previous = item;
-		if (item->parent()) {
-			openUserInfo(item);
-		}
-	}
-	_tree->viewport()->update();
 }
 
 QList < QtHidenContact * > QtUserManager::clearList(QList < QtHidenContact * > list) {
@@ -245,7 +300,6 @@ QList < QtHidenContact * > QtUserManager::clearList(QList < QtHidenContact * > l
 	}
 	return tmp;
 }
-
 
 void QtUserManager::safeUserStateChanged() {
 
@@ -277,7 +331,7 @@ void QtUserManager::safeUserStateChanged() {
 }
 
 void QtUserManager::userStateChanged() {
-	//QMutexLocker lock(&_mutex);
+
 	safeUserStateChanged();
 }
 
@@ -476,7 +530,7 @@ QMenu * QtUserManager::createMenu() {
 	QMenu * menu;
 
 	menu = new QMenu(dynamic_cast < QWidget * > (parent()));
-	// _callAction = menu->addAction(tr("Call"));
+
 	// Call menu
 	if (user->havePhoneNumber()) {
 
@@ -502,7 +556,6 @@ QMenu * QtUserManager::createMenu() {
 		}
 	}
 
-
 	action = menu->addAction(tr("Start Chat"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(startChat(bool)));
 
@@ -520,7 +573,6 @@ QMenu * QtUserManager::createMenu() {
 	action = menu->addAction(tr("Delete contact"));
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteContact()));
 
-
 	// _cWengoPhone.getCContactList()
 
 	menu->addSeparator();
@@ -532,7 +584,6 @@ QMenu * QtUserManager::createMenu() {
 	menu->setWindowOpacity(0.97);
 
 	return menu;
-
 }
 
 void QtUserManager::startMobileCall(bool checked) {
@@ -553,10 +604,8 @@ void QtUserManager::startHomeCall(bool checked) {
 
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-
 	user = ul->getUser(item->text(0));
 	user->startCall(user->getHomePhone());
-
 }
 
 void QtUserManager::startWorkCall(bool checked) {
@@ -566,7 +615,6 @@ void QtUserManager::startWorkCall(bool checked) {
 
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-
 	user = ul->getUser(item->text(0));
 	user->startCall(user->getWorkPhone());
 }
@@ -584,8 +632,8 @@ void QtUserManager::startWengoCall(bool checked) {
 }
 
 void QtUserManager::removeContact(const QString & contactId) {
-	QMutexLocker lock(& _mutex);
 
+	QMutexLocker lock(& _mutex);
 	safeRemoveContact(contactId);
 }
 
@@ -638,7 +686,6 @@ void QtUserManager::moveContact(const QString & contactId,
 const QString & srcContactGroupId, const QString & dstContactGroupId) {
 
 	//	QMutexLocker lock(&_mutex);
-
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user = NULL;
 	bool found = false;
@@ -656,7 +703,6 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 			found = true;
 		}
 	}
-
 	// If not found
 	if (!found) {
 		for (QList < QtHidenContact * >::iterator iter = _hidenContacts.begin(); iter != _hidenContacts.end();
@@ -686,4 +732,9 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 		newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
 		////
 	}
+}
+
+void QtUserManager::timerEvent ( QTimerEvent * event ) {
+    _waitForDoubleClick = false;
+    killTimer(_timerId);
 }

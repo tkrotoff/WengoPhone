@@ -143,6 +143,8 @@ private:
 	QTreeWidget * _treeWidget;
 
 	CWengoPhone & _cWengoPhone;
+
+	bool _groupHiden;
 };
 
 #endif	//QTCONTACTLIST_H

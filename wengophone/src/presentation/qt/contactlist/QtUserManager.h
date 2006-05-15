@@ -49,6 +49,8 @@ public Q_SLOTS:
 
 	void itemClicked(QTreeWidgetItem * item, int column);
 
+    void itemDoubleClicked(QTreeWidgetItem *,int);
+
 	void itemEntered(QTreeWidgetItem * item);
 
 	void openUserInfo(QTreeWidgetItem * i);
@@ -103,6 +105,10 @@ protected:
 
 	void removeFromHidenContact(const QString & contactId);
 
+    void defaultAction(QTreeWidgetItem * item);
+
+	virtual void timerEvent ( QTimerEvent * event ) ;
+
 	QMenu * createConferenceMenu();
 
 	QMenu * createMenu();
@@ -136,6 +142,11 @@ protected:
 	CWengoPhone & _cWengoPhone;
 
 	Qt::MouseButton _button;
+
+	int _timerId;
+
+	bool _waitForDoubleClick;
+
 };
 
 #endif	//QTUSERMANAGER_H

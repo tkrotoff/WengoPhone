@@ -429,4 +429,3 @@ void QtNickNameWidget::textChanged ( const QString & text ) {
 	palette.setColor(QPalette::Text, Qt::black);
 	_nickNameEdit->setPalette(palette);
 }
-
