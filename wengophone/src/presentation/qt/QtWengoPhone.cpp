@@ -38,6 +38,7 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 
+#include "QtWengoPhoneEventFilter.h"
 #include "QtWebcamButton.h"
 #include "QtIdle.h"
 #include "QtLanguage.h"
@@ -119,6 +120,13 @@ void QtWengoPhone::initThreadSafe() {
 	_ui = new Ui::WengoPhoneWindow();
 	_ui->setupUi(_wengoPhoneWindow);
 
+    // Install the close event filter
+    QtWengoPhoneEventFilter * qtWengoPhoneEventFilter;
+    qtWengoPhoneEventFilter = new QtWengoPhoneEventFilter(this);
+    _wengoPhoneWindow->installEventFilter(qtWengoPhoneEventFilter);
+    if (!connect (qtWengoPhoneEventFilter,SIGNAL(closeWindow()),_wengoPhoneWindow, SLOT(hide()))){
+        LOG_FATAL("Can't connect closeWindow() signal\n");
+    }
 
     _chatWindow = NULL;
 
@@ -262,9 +270,6 @@ void QtWengoPhone::initThreadSafe() {
 
 	//actionShow_Hide_contacts_offline
 	connect(_ui->actionHideContactsOffline, SIGNAL(triggered()), SLOT(showHideOffLineContacts()));
-
-	// actionSort_contacts
-	connect(_ui->actionSortAlphabetically, SIGNAL(triggered()), SLOT(sortContactsAlphabetically()));
 
 	//actionCreateConferenceCall
 	connect(_ui->actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
@@ -815,10 +820,6 @@ void QtWengoPhone::setTrayMenu() {
 	connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
 
 	_trayIcon->setPopup(_trayMenu);
-}
-
-void QtWengoPhone::sortContactsAlphabetically() {
-	_contactList->sortUsers();
 }
 
 void QtWengoPhone::wrongProxyAuthenticationEventHandler(SipAccount & sender,

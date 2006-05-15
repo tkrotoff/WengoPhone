@@ -373,27 +373,6 @@
     <addaction name="separator" />
     <addaction name="actionCreateConferenceCall" />
    </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>&amp;Contacts</string>
-    </property>
-    <widget class="QMenu" name="menuHideShow" >
-     <property name="title" >
-      <string>Sort contacts</string>
-     </property>
-     <addaction name="actionSortAlphabetically" />
-     <addaction name="actionBy_presence" />
-     <addaction name="actionBy_media" />
-     <addaction name="actionBy_protocol" />
-    </widget>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSearchWengoUsers" />
-    <addaction name="actionManage_blocked_contacts" />
-    <addaction name="separator" />
-    <addaction name="actionShow_contact_groups" />
-    <addaction name="actionHideContactsOffline" />
-    <addaction name="menuHideShow" />
-   </widget>
    <widget class="QMenu" name="menuHelp" >
     <property name="title" >
      <string>&amp;Help</string>
@@ -453,6 +432,26 @@
     <addaction name="actionOpenWengoAccount" />
     <addaction name="separator" />
     <addaction name="actionClose" />
+   </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>&amp;Contacts</string>
+    </property>
+    <widget class="QMenu" name="menuHideShow" >
+     <property name="title" >
+      <string>Sort contacts</string>
+     </property>
+     <addaction name="actionSortAlphabetically" />
+     <addaction name="actionBy_presence" />
+     <addaction name="actionBy_media" />
+     <addaction name="actionBy_protocol" />
+    </widget>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearchWengoUsers" />
+    <addaction name="actionManage_blocked_contacts" />
+    <addaction name="separator" />
+    <addaction name="actionShow_contact_groups" />
+    <addaction name="actionHideContactsOffline" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />

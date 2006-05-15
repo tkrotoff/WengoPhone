@@ -187,8 +187,6 @@ private Q_SLOTS:
 
 	void setTrayMenu();
 
-	void sortContactsAlphabetically();
-
 	void toasterClosed(QtToaster * toaster);
 
 	void expandConfigPanel();

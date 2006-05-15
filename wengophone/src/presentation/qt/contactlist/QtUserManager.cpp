@@ -52,7 +52,7 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
 	   _previous = NULL;
 	   _lastClicked = NULL;
 	   _hideUsers = false;
-	   _sortUsers = false;
+	   _sortUsers = true;
 	   _menu = NULL;
 	   _timerId = -1;
 	   _waitForDoubleClick = false;
