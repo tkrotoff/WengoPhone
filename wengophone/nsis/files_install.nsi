@@ -101,7 +101,7 @@ File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_en.qm"
 
 /** web pages. */
 SetOutPath "$INSTDIR\webpages\*"
-File "${BUILD_DIR}\webpages\*"
+File "${BUILD_DIR}\webpages\windows\*"
 
 /*
 SetOutPath "$INSTDIR\styles\"
