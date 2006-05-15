@@ -31,7 +31,7 @@ class QWidget;
 class QTextBrowser;
 class QVBoxLayout;
 class QUrl;
-#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 class QAxWidget;
 #endif
 
@@ -112,7 +112,7 @@ private:
 	 */
 	QWidget * _browserWidget;
 
-#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 	/**
 	 * Microsoft Web Browser ActiveX.
 	 */

@@ -23,7 +23,7 @@
 
 #include <QtGui>
 
-#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 #include <QAxWidget>
 #endif
 
@@ -33,7 +33,7 @@ using namespace std;
 QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode) : QObject() {
 	_browserWidget = new QWidget(parent);
 
-#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 	_ieBrowser = NULL;
 #endif
 	_qtBrowser = NULL;
@@ -49,7 +49,7 @@ void QtBrowser::setUrl(const std::string & url) {
 	LOG_DEBUG(url);
 	_url = QString::fromStdString(url);
 	if (_mode == IEMODE) {
-#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 		_ieBrowser->dynamicCall("Navigate(const QString&)", _url);
 #endif
 	} else {
@@ -86,8 +86,8 @@ void QtBrowser::beforeNavigate(const QString & url, int, const QString &, const 
 }
 
 bool QtBrowser::setMode(BrowserMode mode) {
-	//IEMODE is only available on Windows
-#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
+	//IEMODE is only available on Windows & Qt commercial
+#if (defined OS_WINDOWS) && (!defined QT_COMMERCIAL)
 	if (mode == IEMODE) {
 		_mode = QTMODE;
 		initBrowser();
@@ -100,14 +100,14 @@ bool QtBrowser::setMode(BrowserMode mode) {
 }
 
 void QtBrowser::initBrowser() {
-#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 	if (_mode == IEMODE) {
 		LOG_FATAL("IEMODE not allowed");
 	}
 #endif
 
 	if (_mode == QTMODE) {
-#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 		//clean ie browser
 		if (_ieBrowser) {
 			_layout->removeWidget(_ieBrowser);
@@ -123,7 +123,7 @@ void QtBrowser::initBrowser() {
 		_layout->addWidget(_qtBrowser);
 
 	} else {
-#if defined (OS_WINDOWS) && !defined (QT_EDITION_OPENSOURCE)
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 		//clean qt browser
 		if (_qtBrowser) {
 			_layout->removeWidget(_qtBrowser);
