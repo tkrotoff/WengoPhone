@@ -82,12 +82,12 @@ QtNickNameWidget::QtNickNameWidget(CUserProfile & cUserProfile, CWengoPhone & cW
 	_avatarLabel->setMaximumSize( QSize( 70,70 ) );
 
 	// Add widgets to the layouts
-    QVBoxLayout * vboxLayout = new QVBoxLayout();
+	QVBoxLayout * vboxLayout = new QVBoxLayout();
 	_widgetLayout->addWidget( _avatarLabel,   0 , 0 );
 
 	vboxLayout->addWidget(_nickNameEdit, 0);
-    vboxLayout->addLayout(_protocolLayout,1);
-    _widgetLayout->addLayout(vboxLayout,0,1);
+	vboxLayout->addLayout(_protocolLayout,1);
+	_widgetLayout->addLayout(vboxLayout,0,1);
 
 
 	_protocolLayout->setColumnStretch(5, 1);
@@ -393,6 +393,7 @@ void QtNickNameWidget::init() {
    	QPalette palette = _nickNameEdit->palette();
 	palette.setColor(QPalette::Text, Qt::gray);
 	_nickNameEdit->setPalette(palette);
+	_nickNameEdit->update();
 
 	updateAvatar();
 }
