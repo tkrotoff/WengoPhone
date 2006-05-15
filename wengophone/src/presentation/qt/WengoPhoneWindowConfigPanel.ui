@@ -29,8 +29,20 @@
      </property>
      <item row="0" column="0" >
       <widget class="QLabel" name="inputSoundLabel" >
+       <property name="minimumSize" >
+        <size>
+         <width>25</width>
+         <height>44</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>25</width>
+         <height>44</height>
+        </size>
+       </property>
        <property name="pixmap" >
-        <pixmap/>
+        <pixmap resource="wengophone.qrc" >:/pics/audio/microphone.png</pixmap>
        </property>
       </widget>
      </item>
@@ -259,8 +271,20 @@
      </item>
      <item row="0" column="0" >
       <widget class="QLabel" name="outputSoundLabel" >
+       <property name="minimumSize" >
+        <size>
+         <width>25</width>
+         <height>44</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>25</width>
+         <height>44</height>
+        </size>
+       </property>
        <property name="pixmap" >
-        <pixmap/>
+        <pixmap resource="wengophone.qrc" >:/pics/audio/speaker.png</pixmap>
        </property>
       </widget>
      </item>
