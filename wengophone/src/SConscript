@@ -157,15 +157,6 @@ if WengoGetConsoleArgument("enable-wenbox-plugin"):
 		'control/wenbox/CWenboxPlugin.cpp',
 	]
 
-	print
-
-	print
-
-	print
-	print "coucou"
-
-
-
 env.WengoCopyToBuildDir('../sounds', 'sounds')
 env.WengoCopyToBuildDir('../pics', 'pics')
 
