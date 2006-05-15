@@ -287,7 +287,7 @@ private:
 
 	QtContactCallListWidget * _contactCallListWidget;
 
-    QtProfileBar * _qtProfileBar;
+	QtProfileBar * _qtProfileBar;
 
 	QtCallBar * _qtCallBar;
 
@@ -296,6 +296,8 @@ private:
 	QtStatusBar * _statusBar;
 
 	QWidget * _chatWindow;
+
+	QWidget * _activeTabBeforeCall;
 
 	static const std::string ANCHOR_CONTACTLIST;
 

@@ -61,11 +61,6 @@
            <string>Dialpad</string>
           </attribute>
          </widget>
-         <widget class="QWidget" name="tabHome" >
-          <attribute name="title" >
-           <string>Home</string>
-          </attribute>
-         </widget>
         </widget>
        </item>
       </layout>

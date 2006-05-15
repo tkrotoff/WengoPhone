@@ -21,6 +21,8 @@
 
 #include "ui_WengoPhoneWindow.h"
 
+#include <WengoPhoneBuildId.h>
+
 #include <model/account/wengo/WengoAccount.h>
 #include <model/connect/ConnectHandler.h>
 #include <model/phonecall/PhoneCall.h>
@@ -28,12 +30,13 @@
 #include <model/history/History.h>
 #include <model/phonecall/SipAddress.h>
 #include <model/phonecall/ConferenceCall.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
 
 #include <imwrapper/EnumIMProtocol.h>
-
 
 #include "QtWebcamButton.h"
 #include "QtIdle.h"
@@ -92,6 +95,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 	_qtSms = NULL;
 	_qtWsDirectory = NULL;
 	_qtProfileBar = NULL;
+	_activeTabBeforeCall = NULL;
 
 	_cWengoPhone.loginStateChangedEvent +=
 		boost::bind(&QtWengoPhone::loginStateChangedEventHandler, this, _1, _2);
@@ -286,21 +290,20 @@ void QtWengoPhone::initThreadSafe() {
 	//actionSearchContact
 	connect(_ui->actionSearchWengoUsers, SIGNAL(triggered()), SLOT(showSearchContactWindows()));
 
-#ifdef OS_WINDOWS
+	//Translation
+	new QtLanguage(_wengoPhoneWindow);
+
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 	//Embedded Browser
 	_browser = new QtBrowser(NULL);
 	_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
-	Widget::createLayout(_ui->tabHome)->addWidget((QWidget*) _browser->getWidget());
+	_ui->tabWidget->insertTab(_ui->tabWidget->count(), (QWidget*) _browser->getWidget(), tr("Home"));
 	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
-#else
-	_ui->tabWidget->removeTab(_ui->tabWidget->indexOf(_ui->tabHome));
+	_ui->tabWidget->setCurrentWidget((QWidget*)_browser->getWidget());
 #endif
 
 	//Idle detection
 	new QtIdle(_cWengoPhone.getCUserProfile()->getUserProfile(), _wengoPhoneWindow);
-
-	//Translation
-	new QtLanguage(_wengoPhoneWindow);
 
 	//configPanel
 	QtConfigPanel * qtConfigPanel = new QtConfigPanel(_cWengoPhone, _wengoPhoneWindow);
@@ -343,12 +346,18 @@ void QtWengoPhone::enableCallButton() {
 }
 
 void QtWengoPhone::hangupButtonClicked(){
-     QtContactCallListWidget * widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->currentWidget());
-     if ( widget ){
-         widget->hangup();
-        //Widget is deleted automagically
-     }
-     _ui->tabWidget->setCurrentIndex(0);
+	QtContactCallListWidget * widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->currentWidget());
+	if ( widget ){
+		 widget->hangup();
+		//Widget is deleted automagically
+	}
+	
+	//set the last active page
+	if( _activeTabBeforeCall ) {
+		_ui->tabWidget->setCurrentWidget(_activeTabBeforeCall);
+	} else {
+		_ui->tabWidget->setCurrentIndex(0);
+	}
 }
 
 void QtWengoPhone::callButtonClicked() {
@@ -360,6 +369,9 @@ void QtWengoPhone::callButtonClicked() {
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
+
+	_activeTabBeforeCall = _ui->tabWidget->currentWidget();
+
 	QtContactCallListWidget * qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
 	_ui->tabWidget->addTab(qtContactCallListWidget,tr("Call"));
 	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
@@ -372,105 +384,105 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 }
 
 void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall){
-    QtContactCallListWidget * qtContactCallListWidget;
+	QtContactCallListWidget * qtContactCallListWidget;
 
-    int nbtab = _ui->tabWidget->count();
+	int nbtab = _ui->tabWidget->count();
 
-    for ( int i = 0; i < nbtab; i++){
-        if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))){
-            return;
-        }
+	for ( int i = 0; i < nbtab; i++){
+		if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))){
+			return;
+		}
 
-    for (int i = 0; i < _ui->tabWidget->count(); i++){
-        QtContactCallListWidget * qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
-        if ( qtContactCallListWidget ){
-                if ( qtContactCallListWidget->hasPhoneCall( targetCall) ){
-                    _ui->tabWidget->setTabText(i,tr("Conference"));
-                    IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
+	for (int i = 0; i < _ui->tabWidget->count(); i++){
+		QtContactCallListWidget * qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+		if ( qtContactCallListWidget ){
+				if ( qtContactCallListWidget->hasPhoneCall( targetCall) ){
+					_ui->tabWidget->setTabText(i,tr("Conference"));
+					IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
 
-                    if (phoneLine != NULL) {
-                        ConferenceCall * confCall = new ConferenceCall(*phoneLine);
-                        confCall->addPhoneCall(*targetCall);
-                        confCall->addPhoneNumber(phoneNumber.toStdString());
-                    } else {
-                        LOG_DEBUG("phoneLine is NULL");
-                    }
-                }
-            }
-        }
-    }
+					if (phoneLine != NULL) {
+						ConferenceCall * confCall = new ConferenceCall(*phoneLine);
+						confCall->addPhoneCall(*targetCall);
+						confCall->addPhoneNumber(phoneNumber.toStdString());
+					} else {
+						LOG_DEBUG("phoneLine is NULL");
+					}
+				}
+			}
+		}
+	}
 }
 
 void QtWengoPhone::addToConference(PhoneCall * sourceCall, PhoneCall * targetCall){
-    // Bad and Ugly but works...
+	// Bad and Ugly but works...
 
-    QtContactCallListWidget * qtContactCallListWidget;
+	QtContactCallListWidget * qtContactCallListWidget;
 
-    int nbtab = _ui->tabWidget->count();
+	int nbtab = _ui->tabWidget->count();
 
-    for ( int i = 0; i < nbtab; i++){
-        if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))){
-            return;
-        }
-    }
+	for ( int i = 0; i < nbtab; i++){
+		if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))){
+			return;
+		}
+	}
 
-    for (int i = 0; i < _ui->tabWidget->count(); i++){
-        QtContactCallListWidget * qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
-        if ( qtContactCallListWidget ){
-            if ( qtContactCallListWidget->hasPhoneCall( sourceCall ) ){
-                _ui->tabWidget->setTabText(i,tr("Conference"));
-                IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
-                if (phoneLine != NULL) {
-                    ConferenceCall * confCall = new ConferenceCall(*phoneLine);
-                    confCall->addPhoneCall(*targetCall);
-                    confCall->addPhoneCall(*sourceCall);
-                    // Add the target to source and remove the target tab
-                    for (int j = 0; j < _ui->tabWidget->count(); j++){
-                        QtContactCallListWidget * toRemove =
-                            dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(j));
-                        if ( toRemove )
-                        {
-                            if ( toRemove->hasPhoneCall(targetCall) ){
-                                QtPhoneCall * qtPhoneCall = toRemove->takeQtPhoneCall(targetCall);
-                                if ( qtPhoneCall ){
-                                    toRemove->close();
-                                    qtContactCallListWidget->addPhoneCall(qtPhoneCall);
-                                    break;
-                                }
+	for (int i = 0; i < _ui->tabWidget->count(); i++){
+		QtContactCallListWidget * qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+		if ( qtContactCallListWidget ){
+			if ( qtContactCallListWidget->hasPhoneCall( sourceCall ) ){
+				_ui->tabWidget->setTabText(i,tr("Conference"));
+				IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
+				if (phoneLine != NULL) {
+					ConferenceCall * confCall = new ConferenceCall(*phoneLine);
+					confCall->addPhoneCall(*targetCall);
+					confCall->addPhoneCall(*sourceCall);
+					// Add the target to source and remove the target tab
+					for (int j = 0; j < _ui->tabWidget->count(); j++){
+						QtContactCallListWidget * toRemove =
+							dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(j));
+						if ( toRemove )
+						{
+							if ( toRemove->hasPhoneCall(targetCall) ){
+								QtPhoneCall * qtPhoneCall = toRemove->takeQtPhoneCall(targetCall);
+								if ( qtPhoneCall ){
+									toRemove->close();
+									qtContactCallListWidget->addPhoneCall(qtPhoneCall);
+									break;
+								}
 
-                            }
-                        }
+							}
+						}
 
-                    }
+					}
 
-                }else {
-                    LOG_DEBUG("phoneLine is NULL");
-                }
-                break;
-            }
-        }
-    }
+				}else {
+					LOG_DEBUG("phoneLine is NULL");
+				}
+				break;
+			}
+		}
+	}
 }
-
-
 
 void QtWengoPhone::addToConference(QtPhoneCall * qtPhoneCall){
 
+	QtContactCallListWidget * qtContactCallListWidget;
 
-    QtContactCallListWidget * qtContactCallListWidget;
+	int nbtab = _ui->tabWidget->count();
 
-    int nbtab = _ui->tabWidget->count();
+	for ( int i = 0; i < nbtab; i++){
+		if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))){
+			// i is the index of the conference tab
+			qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+			qtContactCallListWidget->addPhoneCall(qtPhoneCall);
+			_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
+			return;
+		}
+	}
 
-    for ( int i = 0; i < nbtab; i++){
-        if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))){
-            // i is the index of the conference tab
-            qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
-            qtContactCallListWidget->addPhoneCall(qtPhoneCall);
-            _ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
-            return;
-        }
-    }
-    // conference tab not found, create a new one
+	_activeTabBeforeCall = _ui->tabWidget->currentWidget();
+
+	// conference tab not found, create a new one
 	qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
 	_ui->tabWidget->addTab(qtContactCallListWidget,tr("Conference"));
 	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
@@ -565,8 +577,9 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 	case SipAccount::LoginStateReady:
 #ifdef OS_WINDOWS
 		if (wengoAccount) {
+			//TODO: retrive the lang code from the current language
 			std::string data = "?login=" + wengoAccount->getWengoLogin() + "&password=" + wengoAccount->getWengoPassword()
-				+ "&lang=" + "fr" + "&wl=" + "wengo" + "&page=softphone-web";
+				+ "&lang=" + "eng" + "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) + "&page=softphone-web";
 			_browser->setUrl(URL_WENGO_MINI_HOME + data);
 		}
 #endif
