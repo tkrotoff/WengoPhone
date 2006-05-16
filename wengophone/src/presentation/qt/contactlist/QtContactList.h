@@ -20,8 +20,8 @@
 #ifndef QTCONTACTLIST_H
 #define QTCONTACTLIST_H
 
-#include "control/contactlist/CContactList.h"
-#include "presentation/PContactList.h"
+#include <control/contactlist/CContactList.h>
+#include <presentation/PContactList.h>
 
 #include <qtutil/QObjectThreadSafe.h>
 

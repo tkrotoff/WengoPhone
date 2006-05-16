@@ -78,10 +78,16 @@
       <property name="text" >
        <string>Accounts</string>
       </property>
+      <property name="icon" >
+       <iconset resource="..\wengophone.qrc" >:/pics/config/accounts.png</iconset>
+      </property>
      </item>
      <item>
       <property name="text" >
        <string>Privacy</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="..\wengophone.qrc" >:/pics/config/privacy.png</iconset>
       </property>
      </item>
      <item>
@@ -104,10 +110,16 @@
       <property name="text" >
        <string>Notifications &amp; Sounds</string>
       </property>
+      <property name="icon" >
+       <iconset resource="..\wengophone.qrc" >:/pics/config/notifications.png</iconset>
+      </property>
      </item>
      <item>
       <property name="text" >
        <string>Call Forward</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="..\wengophone.qrc" >:/pics/config/call-forward.png</iconset>
       </property>
      </item>
      <item>

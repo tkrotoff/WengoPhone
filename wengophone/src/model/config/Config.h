@@ -402,6 +402,17 @@ public:
 
 	/** @} */
 
+	/**
+	 * @name Other Methods
+	 * @{
+	 */
+
+	/** Enables Internet Explorer ActiveX support (relevant only under Windows). */
+	static const std::string IEACTIVEX_ENABLE_KEY;
+	bool getIEActiveX() const;
+
+	/** @} */
+
 private:
 
 	/** Name of this configuration. */

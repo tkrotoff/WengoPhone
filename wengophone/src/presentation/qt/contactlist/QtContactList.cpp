@@ -47,26 +47,26 @@ static inline QPixmap scalePixmap(const char * name) {
 }
 
 QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPhone)
-: QObjectThreadSafe(NULL),
-_cContactList(cContactList),
-_cWengoPhone(cWengoPhone) {
+	: QObjectThreadSafe(NULL),
+	_cContactList(cContactList),
+	_cWengoPhone(cWengoPhone) {
 
 	_treeWidget = NULL;
 
 	connect(this, SIGNAL(contactGroupAddedEventSignal(QString)),
-	SLOT(contactGroupAddedEventSlot(QString)), Qt::QueuedConnection);
+		SLOT(contactGroupAddedEventSlot(QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactGroupRemovedEventSignal(QString)),
-	SLOT(contactGroupRemovedEventSlot(QString)), Qt::QueuedConnection);
+		SLOT(contactGroupRemovedEventSlot(QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactGroupRenamedEventSignal(QString)),
-	SLOT(contactGroupRenamedEventSlot(QString)), Qt::QueuedConnection);
+		SLOT(contactGroupRenamedEventSlot(QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactAddedEventSignal(QString)),
-	SLOT(contactAddedEventSlot(QString)), Qt::QueuedConnection);
+		SLOT(contactAddedEventSlot(QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactRemovedEventSignal(QString)),
-	SLOT(contactRemovedEventSlot(QString)), Qt::QueuedConnection);
+		SLOT(contactRemovedEventSlot(QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactMovedEventSignal(QString, QString, QString)),
-	SLOT(contactMovedEventSlot(QString, QString, QString)), Qt::QueuedConnection);
+		SLOT(contactMovedEventSlot(QString, QString, QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactChangedEventSignal(QString)),
-	SLOT(contactChangedEventSlot(QString)), Qt::QueuedConnection);
+		SLOT(contactChangedEventSlot(QString)), Qt::QueuedConnection);
 
 	typedef PostEvent0 < void() > MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(& QtContactList::initThreadSafe, this));

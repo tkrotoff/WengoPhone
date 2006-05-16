@@ -96,7 +96,7 @@ void WengoWebService::answerReceivedEventHandler(IHttpRequest * sender, int requ
 		if (error == HttpRequest::NoError) {
 			_caller->answerReceived(answer, requestId);
 		} else {
-			_caller->answerReceived("", requestId);
+			_caller->answerReceived(String::null, requestId);
 		}
 	}
 	//FIXME (crashes on Linux/MacOS X): delete sender;

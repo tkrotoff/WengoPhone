@@ -21,26 +21,25 @@
 #define QTSUBSCRIBE_H
 
 #include <presentation/PSubscribe.h>
+
 #include <control/webservices/subscribe/CSubscribe.h>
 
 #include <qtutil/QObjectThreadSafe.h>
 
 #include <string>
 
-class QDialog;
 class CSubscribe;
 class QtWengoPhone;
-class QTextBrowser;
-class QLineEdit;
-class QLabel;
-class QPushButton;
 
-class QUrl;
+class QDialog;
+class QWidget;
+namespace Ui { class SubscribeWengo1; }
 
 /**
- * Qt account creation widget.
+ * Wengo account creation widget (1/2).
  *
  * @author Mathieu Stute
+ * @author Tanguy Krotoff
  */
 class QtSubscribe : public QObjectThreadSafe, public PSubscribe {
 	Q_OBJECT
@@ -48,79 +47,44 @@ public:
 
 	QtSubscribe(CSubscribe & cSubscribe);
 
+	~QtSubscribe();
+
 	QWidget * getWidget() const;
 
-	void updatePresentation();
+	void updatePresentation() { }
 
-	void exec();
+	void show();
 
 private Q_SLOTS:
 
 	void sendRequest();
 
-	void configureLogin();
-
-
-public Q_SLOTS:
-
-	void urlClicked(const QUrl & link);
-
 private:
 
 	void initThreadSafe();
 
-	void updatePresentationThreadSafe();
+	void updatePresentationThreadSafe() { }
 
 	void wengoSubscriptionEventHandler(WsWengoSubscribe & sender, int id, WsWengoSubscribe::SubscriptionStatus status,
 		const std::string & errorMessage, const std::string & password);
 
-	QDialog * _subscribeWindow;
+	void wengoSubscriptionEventHandlerThreadSafe(WsWengoSubscribe::SubscriptionStatus status, const std::string & password);
 
-	QTextBrowser * _textBrowser;
+	void showErrorMessage(const QString & errorMessage);
+
+	Ui::SubscribeWengo1 * _ui;
+
+	QDialog * _subscribeWindow;
 
 	CSubscribe & _cSubscribe;
 
 	QtWengoPhone * _qtWengoPhone;
 
-	bool _sendRequestButtonEnabled;
+	bool _subscribeButtonEnabled;
 
-	QString _errorMessage;
+	static const char * TERMSOFSERVICE_LINK;
 
-	QString _mailResult;
-
-	QString _passwordResult;
-
-	QString _nicknameResult;
-
-	QWidget * _firstPage;
-
-	QWidget * _secondPage;
-
-	QWidget * _currentPage;
-
-	QLineEdit * _nicknameLineEdit;
-
-	QLineEdit * _passwordLineEdit;
-
-	QLineEdit * _password2LineEdit;
-
-	QLineEdit * _emailLineEdit;
-
-	QLabel * _errorLabel;
-
-	QLabel * _mailLabel;
-
-	QLabel * _passwordLabel;
-
-	QLabel * _nicknameLabel;
-
-	QPushButton * _sendRequestButton;
-
-	QPushButton * _goToWengoPhoneButton;
-
-	static const QString _termsOfServiceLink;
-
-	static const QString _termsOfServicePdfLink;
+	static const char * TERMSOFSERVICEPDF_LINK;
 };
 
 #endif	//QTSUBSCRIBE_H

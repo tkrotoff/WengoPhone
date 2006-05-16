@@ -59,6 +59,7 @@ void QtLanguage::configChangedEventHandlerThreadSafe(Settings & sender, const st
 			//we want locale = language
 			QStringList locale = QLocale::system().name().split("_");
 			iso639Code = locale[0].toLower().toStdString();
+			config.set(Config::LANGUAGE_KEY, iso639Code);
 		} else {
 			iso639Code = config.getLanguage();
 		}

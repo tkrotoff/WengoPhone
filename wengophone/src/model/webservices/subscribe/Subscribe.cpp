@@ -27,13 +27,12 @@
 #include <tinyxml.h>
 
 WsWengoSubscribe::WsWengoSubscribe() {
-	
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	
+
 	//setup subscribe web service
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
-	setHttps(true);
+	setHttps(false);
 	setServicePath(config.getWengoSubscribePath());
 	setPort(80);
 	setWengoAuthentication(false);
@@ -41,7 +40,7 @@ WsWengoSubscribe::WsWengoSubscribe() {
 
 int WsWengoSubscribe::subscribe(const std::string & email, const std::string & nickname,
 	const std::string & lang, const std::string & password) {
-	
+
 	std::string query = "action=activate";
 
 	query += "&email=" + email;
@@ -55,59 +54,58 @@ int WsWengoSubscribe::subscribe(const std::string & email, const std::string & n
 }
 
 void WsWengoSubscribe::answerReceived(const std::string & answer, int id) {
-	
-	std::string statusCode = "";
-	std::string statusMessage = "";
-	std::string password = "";
+	std::string statusCode;
+	std::string statusMessage;
+	std::string password;
 	SubscriptionStatus status = SubscriptionUnknownError;
 
 	TiXmlDocument doc;
 	doc.Parse(answer.c_str());
-	
+
 	TiXmlHandle docHandle(& doc);
 	TiXmlHandle response = docHandle.FirstChild("response");
-	
+
 	//retrieve the version of the ws
 	TiXmlText * text = response.FirstChild("answer").FirstChild("version").FirstChild().Text();
-	if( text ) {
+	if (text) {
 	}
-	
+
 	//retrieve the status code
 	text = response.FirstChild("answer").FirstChild("status").FirstChild("code").FirstChild().Text();
-	if( text ) {
-		
+	if (text) {
+
 		statusCode = std::string(text->Value());
-		if( statusCode == "OK" ) {
+		if (statusCode == "OK") {
 			status = SubscriptioOk;
-		} else if( statusCode == "BAD_ACTIVATE" ) {
+		} else if (statusCode == "BAD_ACTIVATE") {
 			status = SubscriptionFailed;
-		} else if( statusCode == "UNIQUE_PSEUDO" ) {
+		} else if (statusCode == "UNIQUE_PSEUDO") {
 			status = SubscriptionNicknameError;
-		} else if( statusCode == "UNIQUE_EMAIL" ) {
+		} else if (statusCode == "UNIQUE_EMAIL") {
 			status = SubscriptionMailError;
-		} else if( statusCode == "ERROR" ) {
+		} else if (statusCode == "ERROR") {
 			status = SubscriptionUnknownError;
-		} else if( statusCode == "BAD_VERSION" ) {
+		} else if (statusCode == "BAD_VERSION") {
 			status = SubscriptionBadVersion;
-		} else if( statusCode == "BAD_QUERY" ) {
+		} else if (statusCode == "BAD_QUERY") {
 			status = SubscriptionBadQuery;
 		} else {
-			wengoSubscriptionEvent(*this, id, SubscriptionUnknownError, "", "");
+			wengoSubscriptionEvent(*this, id, SubscriptionUnknownError, String::null, String::null);
 			return;
 		}
 	}
-	
+
 	//retrieve the status message
 	text = response.FirstChild("answer").FirstChild("status").FirstChild("message").FirstChild().Text();
-	if( text ) {
+	if (text) {
 		statusMessage = std::string(text->Value());
 	}
-	
+
 	//retrieve the password
 	text = response.FirstChild("answer").FirstChild("data").FirstChild("password").FirstChild().Text();
-	if( text ) {
+	if (text) {
 		password = std::string(text->Value());
 	}
-	
+
 	wengoSubscriptionEvent(*this, id, status, statusMessage, password);
 }

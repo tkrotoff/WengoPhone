@@ -20,11 +20,18 @@
         <file>pics/config/general.png</file>
         <file>pics/config/languages.png</file>
         <file>pics/config/video.png</file>
+        <file>pics/config/accounts.png</file>
+        <file>pics/config/call-forward.png</file>
+        <file>pics/config/notifications.png</file>
+        <file>pics/config/privacy.png</file>
         <file>pics/contact/call.png</file>
         <file>pics/contact/chat.png</file>
         <file>pics/contact/fixe.png</file>
         <file>pics/contact/mobile.png</file>
         <file>pics/contact/sms.png</file>
+        <file>pics/contact/home.png</file>
+        <file>pics/contact/work.png</file>
+        <file>pics/contact/wengo.png</file>
         <file>pics/contact_border.png</file>
         <file>pics/export1_96.png</file>
         <file>pics/fond_avatar.png</file>
@@ -41,8 +48,9 @@
         <file>pics/iconbar/webcam-off.png</file>
         <file>pics/iconbar/iconBarchat.png</file>
         <file>pics/iconbar/webcam.png</file>
-        <file>pics/microphone.png</file>
-        <file>pics/play.png</file>
+        <file>pics/add.png</file>
+        <file>pics/delete.png</file>
+        <file>pics/edit.png</file>
         <file>pics/profilebar/bar_end.png</file>
         <file>pics/profilebar/bar_fill.png</file>
         <file>pics/profilebar/bar_on_end.png</file>
@@ -82,7 +90,6 @@
         <file>pics/protocols/wengo_off.png</file>
         <file>pics/protocols/yahoo.png</file>
         <file>pics/protocols/yahoo_off.png</file>
-        <file>pics/speaker.png</file>
         <file>pics/status/away.png</file>
         <file>pics/status/donotdisturb.png</file>
         <file>pics/status/forward.png</file>
@@ -122,6 +129,11 @@
         <file>pics/audio/progress_7.png</file>
         <file>pics/audio/progress_7_off.png</file>
         <file>pics/audio/speaker.png</file>
+        <file>pics/headers/conference.png</file>
+        <file>pics/headers/IM.png</file>
+        <file>pics/headers/login.png</file>
+        <file>pics/headers/new-account.png</file>
+        <file>pics/headers/search.png</file>
     </qresource>
     <qresource prefix="/data" >
         <file>AUTHORS</file>
@@ -208,6 +220,5 @@
         <file>webservices/directory/WsDirectoryContact.ui</file>
         <file>webservices/sms/SmsWindow.ui</file>
         <file>webservices/softupdate/SoftUpdateWindow.ui</file>
-        <file>webservices/subscribe/Subscribe.ui</file>
     </qresource>
 </RCC>

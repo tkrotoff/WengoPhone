@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>422</width>
-    <height>231</height>
+    <width>420</width>
+    <height>280</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -75,12 +75,18 @@
           <property name="text" >
            <string>Delete</string>
           </property>
+          <property name="icon" >
+           <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
+          </property>
          </widget>
         </item>
         <item row="0" column="2" >
          <widget class="QPushButton" name="modifyIMAccountButton" >
           <property name="text" >
            <string>Modify</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../wengophone.qrc" >:/pics/edit.png</iconset>
           </property>
          </widget>
         </item>
@@ -89,12 +95,18 @@
           <property name="text" >
            <string>Add</string>
           </property>
+          <property name="icon" >
+           <iconset resource="../wengophone.qrc" >:/pics/add.png</iconset>
+          </property>
          </widget>
         </item>
         <item row="0" column="4" >
          <widget class="QPushButton" name="closeButton" >
           <property name="text" >
            <string>Close</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../wengophone.qrc" >:/pics/cancel.png</iconset>
           </property>
          </widget>
         </item>
@@ -126,6 +138,8 @@
   <tabstop>deleteIMAccountButton</tabstop>
   <tabstop>closeButton</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
  <connections/>
 </ui>

@@ -36,6 +36,8 @@
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 #include <imwrapper/EnumIMProtocol.h>
 
@@ -108,7 +110,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 	_cWengoPhone.wrongProxyAuthenticationEvent +=
 		boost::bind(&QtWengoPhone::wrongProxyAuthenticationEventHandler, this, _1, _2, _3, _4, _5);
 
-    typedef PostEvent0<void ()> MyPostEvent;
+	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::initThreadSafe, this));
 	postEvent(event);
 }
@@ -129,7 +131,7 @@ void QtWengoPhone::initThreadSafe() {
         LOG_FATAL("Can't connect closeWindow() signal\n");
     }
 
-    _chatWindow = NULL;
+	_chatWindow = NULL;
 
 	_qtLogin = new QtLogin(_wengoPhoneWindow, *this);
 
@@ -194,7 +196,7 @@ void QtWengoPhone::initThreadSafe() {
 	_qtHistoryWidget = NULL;
 
 	// Create the profilebar
-    _qtProfileBar = new QtProfileBar(_cWengoPhone,
+	_qtProfileBar = new QtProfileBar(_cWengoPhone,
 		*_cWengoPhone.getCUserProfile(),
 		_cWengoPhone.getCUserProfile()->getUserProfile().getConnectHandler(),
 		_ui->profileBar);
@@ -211,10 +213,9 @@ void QtWengoPhone::initThreadSafe() {
 	setTrayMenu();
 	_trayIcon->show();
 
-    connect (_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT (sysTrayDoubleClicked(const QPoint &)));
+	connect(_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT(sysTrayDoubleClicked(const QPoint &)));
 
-    connect (_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )),
-             this,SLOT(setSystrayIcon(QVariant )));
+	connect(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )), SLOT(setSystrayIcon(QVariant )));
 
 	//actionShowWengoAccount
 	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
@@ -296,19 +297,23 @@ void QtWengoPhone::initThreadSafe() {
 	//actionSearchContact
 	connect(_ui->actionSearchWengoUsers, SIGNAL(triggered()), SLOT(showSearchContactWindows()));
 
-    //actionLog_off
+	//actionLog_off
 	connect(_ui->actionLog_off, SIGNAL(triggered()), SLOT(logoff()));
 
 	//Translation
 	new QtLanguage(_wengoPhoneWindow);
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
-	//Embedded Browser
-	_browser = new QtBrowser(NULL);
-	_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
-	_ui->tabWidget->insertTab(_ui->tabWidget->count(), (QWidget*) _browser->getWidget(), tr("Home"));
-	_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
-	_ui->tabWidget->setCurrentWidget((QWidget*)_browser->getWidget());
+	if (config.getIEActiveX()) {
+		//Embedded Browser
+		_browser = new QtBrowser(NULL);
+		_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
+		_ui->tabWidget->insertTab(_ui->tabWidget->count(), (QWidget*) _browser->getWidget(), tr("Home"));
+		_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
+		_ui->tabWidget->setCurrentWidget((QWidget*) _browser->getWidget());
+	}
 #endif
 
 	//Idle detection
@@ -588,10 +593,12 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 	const WengoAccount * wengoAccount = dynamic_cast<const WengoAccount *>(&sender);
 #endif
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 	switch (state) {
 	case SipAccount::LoginStateReady:
 #ifdef OS_WINDOWS
-		if (wengoAccount) {
+		if (config.getIEActiveX() && wengoAccount) {
 			//TODO: retrive the lang code from the current language
 			std::string data = "?login=" + wengoAccount->getWengoLogin() + "&password=" + wengoAccount->getWengoPassword()
 				+ "&lang=" + "eng" + "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) + "&page=softphone-web";
@@ -605,7 +612,7 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 
 	case SipAccount::LoginStateDisconnected:
 #ifdef OS_WINDOWS
-		if( wengoAccount ) {
+		if (config.getIEActiveX() && wengoAccount) {
 			_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
 		}
 #endif

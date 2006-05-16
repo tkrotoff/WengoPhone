@@ -1,0 +1,219 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>SubscribeWengo1</class>
+ <widget class="QWidget" name="SubscribeWengo1" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>370</width>
+    <height>333</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>WengoPhone - Wengo Account Creation (1/2)</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="6" column="0" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="0" column="1" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>178</width>
+         <height>24</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="label_9" >
+       <property name="text" >
+        <string>* &lt;i>Required fields&lt;/i></string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" >
+      <widget class="QPushButton" name="subscribeButton" >
+       <property name="enabled" >
+        <bool>true</bool>
+       </property>
+       <property name="text" >
+        <string>Subscribe</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="errorMessageLabel" >
+     <property name="autoFillBackground" >
+      <bool>true</bool>
+     </property>
+     <property name="text" >
+      <string>Error message label</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="2" column="1" >
+      <widget class="QLineEdit" name="confirmPasswordLineEdit" >
+       <property name="echoMode" >
+        <enum>QLineEdit::Password</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="nicknameLabel" >
+       <property name="text" >
+        <string>Nickname:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" >
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" >
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>Email:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="confirmPasswordLabel" >
+       <property name="text" >
+        <string>Confirm password:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" >
+      <widget class="QLineEdit" name="emailLineEdit" />
+     </item>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="passwordLabel" >
+       <property name="text" >
+        <string>Password:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QLineEdit" name="nicknameLineEdit" />
+     </item>
+     <item row="1" column="2" >
+      <widget class="QLabel" name="label_3" >
+       <property name="text" >
+        <string>*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2" >
+      <widget class="QLabel" name="label_4" >
+       <property name="text" >
+        <string>*</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QLineEdit" name="passwordLineEdit" >
+       <property name="echoMode" >
+        <enum>QLineEdit::Password</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2" >
+      <widget class="QLabel" name="label_5" >
+       <property name="text" >
+        <string>*</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="label_7" >
+     <property name="text" >
+      <string>&lt;i>Please check your email and confirm the above details within 48 hours&lt;/i></string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <widget class="QCheckBox" name="acceptTermsCheckBox" >
+     <property name="text" >
+      <string>I read and accept the Terms of Service</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label_6" >
+     <property name="text" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">Account Creation&lt;/span>&lt;/p>&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">Please fill in the details below&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources>
+  <include location="../../wengophone.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>acceptTermsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>subscribeButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>14</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>306</x>
+     <y>306</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

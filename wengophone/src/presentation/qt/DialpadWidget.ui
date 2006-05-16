@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>222</width>
-    <height>251</height>
+    <width>262</width>
+    <height>342</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -19,7 +19,58 @@
    <property name="spacing" >
     <number>6</number>
    </property>
+   <item row="0" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="1" column="1" >
+    <widget class="QComboBox" name="audioSmileysComboBox" >
+     <item>
+      <property name="text" >
+       <string>Audio Smileys</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="wengophone.qrc" >:/emoticons/chat/emoticons/face-devil-grin16.png</iconset>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="1" >
     <layout class="QGridLayout" >
      <property name="margin" >
       <number>0</number>
@@ -343,43 +394,18 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0" >
+   <item row="3" column="1" >
     <spacer>
      <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" >
       <size>
-       <width>16</width>
-       <height>16</height>
+       <width>20</width>
+       <height>40</height>
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="1" column="2" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>16</width>
-       <height>41</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="1" >
-    <widget class="QComboBox" name="audioSmileysComboBox" >
-     <item>
-      <property name="text" >
-       <string>Audio Smileys</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="wengophone.qrc" >:/emoticons/chat/emoticons/face-devil-grin16.png</iconset>
-      </property>
-     </item>
-    </widget>
    </item>
   </layout>
  </widget>

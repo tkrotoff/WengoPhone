@@ -118,6 +118,7 @@ const std::string Config::CONFIG_DIR_KEY = "config.dir";
 const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
 
 const std::string Config::WENBOX_ENABLE_KEY = "wenbox.enable";
+const std::string Config::IEACTIVEX_ENABLE_KEY = "ieactivex.enable";
 
 Config::Config(const std::string & name)
 	: AutomaticSettings() {
@@ -251,6 +252,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[WENGO_DIRECTORY_PATH_KEY] = std::string("/directory/index.php");
 
 	_keyDefaultValueMap[WENBOX_ENABLE_KEY] = true;
+	_keyDefaultValueMap[IEACTIVEX_ENABLE_KEY] = true;
 }
 
 Config::~Config() {
@@ -545,4 +547,8 @@ int Config::getVideoQuality() const {
 
 bool Config::getWenboxEnable() const {
 	return getBooleanKeyValue(WENBOX_ENABLE_KEY);
+}
+
+bool Config::getIEActiveX() const {
+	return getBooleanKeyValue(IEACTIVEX_ENABLE_KEY);
 }

@@ -59,7 +59,7 @@ int QtLogin::show() {
 
 void QtLogin::createAccountLabelClicked() {
 	if (_qtWengoPhone.getSubscribe()) {
-		_qtWengoPhone.getSubscribe()->exec();
+		_qtWengoPhone.getSubscribe()->show();
 	}
 }
 

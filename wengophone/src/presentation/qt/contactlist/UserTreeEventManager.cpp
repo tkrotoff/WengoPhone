@@ -26,8 +26,8 @@
 #include <model/config/Config.h>
 
 UserTreeEventManager::UserTreeEventManager(CContactList & cContactList, QObject * parent, QTreeWidget * target)
-: QObject(parent),
-_cContactList(cContactList) {
+	: QObject(parent),
+	_cContactList(cContactList) {
 
 	_tree = target;
 
@@ -42,33 +42,33 @@ _cContactList(cContactList) {
 
 bool UserTreeEventManager::eventFilter(QObject * obj, QEvent * event) {
 	switch (event->type()) {
-		case QEvent::MouseButtonDblClick:
-			mouseDlbClick(dynamic_cast < QMouseEvent * > (event));
-			return false;
-		case QEvent::MouseButtonPress:
-			mousePressEvent(dynamic_cast < QMouseEvent * > (event));
-			return false;
-		case QEvent::MouseButtonRelease:
-			mouseReleaseEvent(dynamic_cast < QMouseEvent * > (event));
-			return false;
-		case QEvent::MouseMove:
-			mouseMoveEvent(dynamic_cast < QMouseEvent * > (event));
-			event->accept();
-			return true;
-		case QEvent::DragEnter:
-			dragEnterEvent(dynamic_cast < QDragEnterEvent * > (event));
-			event->accept();
-			return true;
-		case QEvent::Drop:
-			dropEvent(dynamic_cast < QDropEvent * > (event));
-			event->accept();
-			return true;
-		case QEvent::DragMove:
-			dragMoveEvent(dynamic_cast < QDragMoveEvent * > (event));
-			event->accept();
-			return true;
-		default:
-			return QObject::eventFilter(obj, event);
+	case QEvent::MouseButtonDblClick:
+		mouseDlbClick(dynamic_cast < QMouseEvent * > (event));
+		return false;
+	case QEvent::MouseButtonPress:
+		mousePressEvent(dynamic_cast < QMouseEvent * > (event));
+		return false;
+	case QEvent::MouseButtonRelease:
+		mouseReleaseEvent(dynamic_cast < QMouseEvent * > (event));
+		return false;
+	case QEvent::MouseMove:
+		mouseMoveEvent(dynamic_cast < QMouseEvent * > (event));
+		event->accept();
+		return true;
+	case QEvent::DragEnter:
+		dragEnterEvent(dynamic_cast < QDragEnterEvent * > (event));
+		event->accept();
+		return true;
+	case QEvent::Drop:
+		dropEvent(dynamic_cast < QDropEvent * > (event));
+		event->accept();
+		return true;
+	case QEvent::DragMove:
+		dragMoveEvent(dynamic_cast < QDragMoveEvent * > (event));
+		event->accept();
+		return true;
+	default:
+		return QObject::eventFilter(obj, event);
 	}
 }
 
