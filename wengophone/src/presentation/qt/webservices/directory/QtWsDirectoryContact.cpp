@@ -25,8 +25,6 @@
 
 #include <model/contactlist/ContactProfile.h>
 
-#include <qtutil/MouseEventFilter.h>
-
 #include <QtGui>
 
 QtWsDirectoryContact::QtWsDirectoryContact(QtWsDirectory * qtWsDirectory, ContactProfile * contact, bool online, QWidget * parent)
@@ -42,13 +40,9 @@ QtWsDirectoryContact::QtWsDirectoryContact(QtWsDirectory * qtWsDirectory, Contac
 	_ui->statusLabel->setPixmap(QPixmap(":/pics/status/offline.png"));
 	_ui->statusLabel->setText(QString::null);
 
-	MousePressEventFilter * mouseFilter1 = new MousePressEventFilter(
-			this, SLOT(callLabelClicked()), Qt::LeftButton);
-	_ui->callLabel->installEventFilter(mouseFilter1);
+	connect(_ui->callButton, SIGNAL(clicked()), SLOT(call()));
 
-	MousePressEventFilter * mouseFilter2 = new MousePressEventFilter(
-			this, SLOT(addLabelClicked()), Qt::LeftButton);
-	_ui->addLabel->installEventFilter(mouseFilter2);
+	connect(_ui->addContactButton, SIGNAL(clicked()), SLOT(addContact()));
 
 	setName(QString::fromUtf8(_contact->getFirstName().c_str()) + " " + QString::fromUtf8(_contact->getLastName().c_str()));
 	setNickname(tr("Nickname: ") + QString::fromUtf8(_contact->getWengoPhoneId().c_str()));
@@ -94,10 +88,10 @@ void QtWsDirectoryContact::setOnline(bool online) {
 	}
 }
 
-void QtWsDirectoryContact::callLabelClicked() {
+void QtWsDirectoryContact::call() {
 	_qtWsDirectory->callContact(_ui->nicknameLabel->text());
 }
 
-void QtWsDirectoryContact::addLabelClicked() {
+void QtWsDirectoryContact::addContact() {
 	_qtWsDirectory->addContact(_contact);
 }

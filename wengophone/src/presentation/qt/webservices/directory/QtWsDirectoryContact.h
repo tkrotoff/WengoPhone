@@ -62,9 +62,9 @@ public:
 
 private Q_SLOTS:
 
-	void callLabelClicked();
+	void call();
 
-	void addLabelClicked();
+	void addContact();
 
 private:
 
