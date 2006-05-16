@@ -1186,11 +1186,11 @@ void QtWengoPhone::connectionStatusEventHandler(int totalSteps, int curStep, con
 
 void QtWengoPhone::connectionStatusEventHandlerSlot(int totalSteps, int curStep, QString infoMsg) {
 
-	int buttonClicked;
+	//int buttonClicked;
 
-	if (totalSteps == 0 && curStep == 0)
-		buttonClicked = QMessageBox::information(_wengoPhoneWindow, tr("WengoPhone - Network information"),
-			infoMsg, QMessageBox::Ok);
+	//if (totalSteps == 0 && curStep == 0)
+	//	buttonClicked = QMessageBox::information(_wengoPhoneWindow, tr("WengoPhone - Network information"),
+	//		infoMsg, QMessageBox::Ok);
 }
 
 void QtWengoPhone::tabSelectionChanged(int index){
