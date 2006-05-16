@@ -28,6 +28,10 @@ CUserProfile::CUserProfile(UserProfile & userProfile)
 : _userProfile(userProfile), _cContactList(userProfile.getContactList()) { 
 }
 
+void CUserProfile::disconnect() {
+	_userProfile.disconnect();
+}
+
 void CUserProfile::makeContactCall(const std::string & contactId) {
 	Contact * contact = _cContactList.getContact(contactId);
 	if (contact) {

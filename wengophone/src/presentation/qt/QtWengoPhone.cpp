@@ -473,8 +473,9 @@ void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall){
 }
 
 void QtWengoPhone::logoff(){
-    IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
-    phoneLine->disconnect();
+	if (_cWengoPhone.getCUserProfile()) {
+		_cWengoPhone.getCUserProfile()->disconnect();
+	}
 }
 
 

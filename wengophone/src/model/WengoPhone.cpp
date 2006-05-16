@@ -93,7 +93,7 @@ WengoPhone::~WengoPhone() {
 	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownTimeoutHandler, this);
 	shutdownTimeout.start(3000, 3000);
 
-	// Disconnection the UserProfile
+	// Disconnect the UserProfile
 	_userProfile.disconnect();
 	////
 
@@ -126,6 +126,7 @@ void WengoPhone::init() {
 	_userProfile.profileChangedEvent +=
 		boost::bind(&WengoPhone::profileChangedEventHandler, this, _1);
 
+	_userProfile.init();
 	_userProfile.connect();
 	////
 

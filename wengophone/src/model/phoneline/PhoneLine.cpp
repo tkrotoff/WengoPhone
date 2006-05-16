@@ -95,6 +95,11 @@ std::string PhoneLine::getMySipAddress() const {
 }
 
 int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
+	if (!_sipAccount.isConnected()) {
+		LOG_ERROR("SipAccount not connected");
+		return -1;
+	}
+
 	if (phoneNumber.empty()) {
 		LOG_ERROR("empty phone number");
 		return -1;

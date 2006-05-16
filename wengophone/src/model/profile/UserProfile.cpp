@@ -30,6 +30,7 @@
 #include <model/contactlist/ContactListStorage.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
+#include <model/phoneline/PhoneLineState.h>
 #include <model/phoneline/IPhoneLine.h>
 #include <model/webservices/sms/Sms.h>
 #include <model/webservices/softupdate/SoftUpdate.h>
@@ -66,6 +67,7 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_softUpdate = NULL;
 	_imAccountHandler = new IMAccountHandler();
 	_presenceState = EnumPresenceState::PresenceStateOffline;
+	_wengoAccountConnected = false;
 
 	_history = new History(*this);
 	_history->mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
@@ -114,6 +116,10 @@ UserProfile::~UserProfile() {
 	}
 }
 
+void UserProfile::init() {
+	wengoAccountInit();
+}
+
 void UserProfile::connect() {
 	connectIMAccounts();
 	connectSipAccounts();
@@ -137,21 +143,36 @@ void UserProfile::connectIMAccounts() {
 
 void UserProfile::connectSipAccounts() {
 	// Connect all SipAccounts
-	wengoAccountLogin();
+	if (_wengoAccount && _activePhoneLine && !_wengoAccountConnected) {
+		_activePhoneLine->connect();
+		_wengoAccountConnected = true;
+
+		IMAccount imAccount(_wengoAccount->getIdentity(), 
+				_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
+		addIMAccount(imAccount);
+		_connectHandler.connect((IMAccount &)*_imAccountHandler->find(imAccount));
+	}
 	////
 }
 
 void UserProfile::disconnect() {
-	if (_activePhoneLine) {
-		_activePhoneLine->disconnect();
-		Thread::sleep(5);
-		_activePhoneLine->getSipWrapper().terminate();
-	}
+	disconnectIMAccounts();
+	disconnectSipAccounts();
+}
 
+void UserProfile::disconnectIMAccounts() {
 	for (IMAccountHandler::const_iterator it = _imAccountHandler->begin();
 		it != _imAccountHandler->end();
 		++it) {
 		_connectHandler.disconnect((IMAccount &)*it);
+	}
+}
+
+void UserProfile::disconnectSipAccounts() {
+	if (_activePhoneLine && _wengoAccountConnected) {
+		_activePhoneLine->disconnect();
+		//Thread::sleep(5);
+		//_activePhoneLine->getSipWrapper().terminate();
 	}
 }
 
@@ -212,6 +233,9 @@ void UserProfile::addSipAccount(const std::string & login, const std::string & p
 
 	//Sends the HTTP request to the SSO
 	_wengoAccount->init();
+	// FIXME: there is currently only one SIP account so we are sure that the Wengo
+	// account will be connected
+	connectSipAccounts();
 }
 
 void UserProfile::addSipAccountThreadSafe(const std::string & login, const std::string & password, bool autoLogin) {
@@ -300,32 +324,31 @@ void UserProfile::addPhoneLine(SipAccount & account) {
 
 	//Sends the creation event
 	phoneLineCreatedEvent(*this, *phoneLine);
-
-	//Connects to the SIP server
-	phoneLine->connect();
 }
 
-void UserProfile::wengoAccountLogin() {
-	_wengoAccount = new WengoAccount(String::null, String::null, true);
-	_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
-	_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
-	_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
-	_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
-	_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
+void UserProfile::wengoAccountInit() {
+	if (!_wengoAccount) {
+		_wengoAccount = new WengoAccount(String::null, String::null, true);
+		_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
+		_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
+		_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
+		_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
+		_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 
-	WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *)_wengoAccount);
-	bool noAccount = true;
-	if (wengoAccountDataLayer->load()) {
-		if (_wengoAccount->hasAutoLogin()) {
-			//Sends the HTTP request to the SSO
-			_wengoAccount->init();
-			noAccount = false;
+		WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *)_wengoAccount);
+		bool noAccount = true;
+		if (wengoAccountDataLayer->load()) {
+			if (_wengoAccount->hasAutoLogin()) {
+				//Sends the HTTP request to the SSO
+				_wengoAccount->init();
+				noAccount = false;
+			}
 		}
-	}
-	delete wengoAccountDataLayer;
+		delete wengoAccountDataLayer;
 
-	if (noAccount) {
-		noAccountAvailableEvent(*this);
+		if (noAccount) {
+			noAccountAvailableEvent(*this);
+		}
 	}
 }
 
@@ -357,19 +380,23 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		wsCallForwardCreatedEvent(*this, *_wsCallForward);
 		_wsCallForward->wsCallForwardEvent += boost::bind(&UserProfile::wsCallForwardEventHandler, this, _1, _2, _3);
 		
-		addPhoneLine(sender);
-
 		WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *) _wengoAccount);
 		wengoAccountDataLayer->save();
 		delete wengoAccountDataLayer;
 
-		IMAccount imAccount(_wengoAccount->getIdentity(), _wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
-		addIMAccount(imAccount);
-		_connectHandler.connect((IMAccount &)*_imAccountHandler->find(imAccount));
+		addPhoneLine(*_wengoAccount);
 
 		loadHistory();
 
 		break;
+	}
+
+	case SipAccount::LoginStateConnected: {
+		_wengoAccountConnected = true;
+	}
+
+	case SipAccount::LoginStateDisconnected: {
+		_wengoAccountConnected = false;
 	}
 
 	default:

@@ -35,6 +35,11 @@ public:
 	CUserProfile(UserProfile & userProfile);
 
 	/**
+	 * @see UserProfile::disconnect
+	 */
+	void disconnect();
+
+	/**
 	 * @see UserProfile::makeCall(Contact & contact, bool enableVideo)
 	 */
 	void makeContactCall(const std::string & contactId);

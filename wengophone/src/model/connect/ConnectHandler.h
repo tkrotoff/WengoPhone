@@ -31,10 +31,10 @@
 #include <set>
 
 class Connect;
-class PresenceHandler;
-class WengoPhone;
 class IMAccount;
+class PresenceHandler;
 class UserProfile;
+class WengoPhone;
 
 /**
  *
@@ -126,6 +126,8 @@ private:
 	 * before adding IMAccount. This could leads some problem.
 	 */
 	IMAccountPtrSet _actualIMAccount;
+
+	UserProfile & _userProfile;
 };
 
 #endif	//CONNECTHANDLER_H

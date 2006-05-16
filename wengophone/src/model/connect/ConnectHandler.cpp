@@ -31,8 +31,9 @@
 
 using namespace std;
 
-ConnectHandler::ConnectHandler(UserProfile & userProfile) {
-	userProfile.newIMAccountAddedEvent +=
+ConnectHandler::ConnectHandler(UserProfile & userProfile)
+: _userProfile(userProfile) {
+	_userProfile.newIMAccountAddedEvent +=
 		boost::bind(&ConnectHandler::newIMAccountAddedEventHandler, this, _1, _2);
 }
 
@@ -62,6 +63,11 @@ void ConnectHandler::connect(IMAccount & imAccount) {
 	}
 
 	if (!imAccount.isConnected()) {
+		if (imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+			// FIXME: currently there is only one SIP account so we are sure that 
+			// the connectSipAccounts will connect the Wengo account
+			_userProfile.connectSipAccounts();
+		}
 		connect->connect();
 	}
 }
@@ -71,6 +77,11 @@ void ConnectHandler::disconnect(IMAccount & imAccount) {
 
 	if (it != _connectMap.end()) {
 		if (imAccount.isConnected()) {
+			if (imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+				// FIXME: currently there is only one SIP account so we are sure that 
+				// the connectSipAccounts will disconnect the Wengo account
+				_userProfile.disconnectSipAccounts();
+			}
 			(*it).second->disconnect();
 		}
 	}

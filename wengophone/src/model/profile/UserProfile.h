@@ -59,6 +59,7 @@ class WsDirectory;
  */
 class UserProfile : public Profile {
 	friend class UserProfileFileStorage;
+	friend class ConnectHandler;
 public:
 
 	/**
@@ -166,6 +167,11 @@ public:
 	Event<void (UserProfile & sender, WsDirectory & wsDirectory)> wsDirectoryCreatedEvent;
 
 	UserProfile(WengoPhone & wengoPhone);
+
+	/**
+	 * Initializes the UserProfile.
+	 */
+	void init();
 
 	/**
 	 * Connects all this UserProfile accounts (SipAccount and IMAccount) set
@@ -355,14 +361,24 @@ private:
 	void connectIMAccounts();
 
 	/**
+	 * Disconnect all IMAccounts.
+	 */
+	void disconnectIMAccounts();
+
+	/**
 	 * Connect all SipAccounts.
 	 */
 	void connectSipAccounts();
 
 	/**
-	 * Login the WengoAccount.
+	 * Disconnect all SipAccounts.
 	 */
-	void wengoAccountLogin();
+	void disconnectSipAccounts();
+
+	/**
+	 * Initializes the WengoAccount.
+	 */
+	void wengoAccountInit();
 
 	/**
 	 * Handle SipAccount::loginStateEvent.
@@ -425,6 +441,8 @@ private:
 	//TODO: create a list of SipAccount
 	WengoAccount * _wengoAccount;
 
+	bool _wengoAccountConnected;
+
 	IMAccountHandler * _imAccountHandler;
 
 	/** List of Contact. */
@@ -435,6 +453,7 @@ private:
 	PresenceHandler _presenceHandler;
 
 	ChatHandler _chatHandler;
+
 	ContactList _contactList;
 
 	EnumPresenceState::PresenceState _presenceState;
