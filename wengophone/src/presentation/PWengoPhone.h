@@ -56,6 +56,11 @@ public:
 	virtual void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
 		const std::string & message) = 0;
 
+	/**
+	 * @see IMConnect::connectionStatusEvent
+	 */
+	virtual void connectionStatusEventHandler(int totalSteps, int curStep, const std::string & infoMsg) = 0;
+
 protected:
 };
 

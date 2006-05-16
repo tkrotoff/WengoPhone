@@ -50,6 +50,9 @@ public:
 	 */
 	Event<void (IMConnect & sender, IMConnect::LoginStatus status)> loginStatusEvent;
 
+	Event<void (ConnectHandler & sender, int totalSteps, 
+		int curStep, const std::string & infoMsg)> connectionStatusEvent;
+
 	/**
 	 * Emitted when a IMAccount is connected.
 	 *
@@ -58,7 +61,7 @@ public:
 	Event<void (ConnectHandler & sender, IMAccount & imAccount)> connectedEvent;
 
 	/**
-	 * Emitted when a IMAccount is connected.
+	 * Emitted when a IMAccount is disconnected.
 	 *
 	 * @param imAccount the IMAccount that is disconnected
 	 */
@@ -88,6 +91,13 @@ private:
 	 * @see IMConnect::loginStatusEvent
 	 */
 	void loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status);
+
+	/**
+	 * @see IMConnect::connectionStatusEvent
+	 */
+	void connectionStatusEventHandler(IMConnect & sender, int totalSteps, int curStep, 
+		const std::string & infoMsg);
+
 
 	typedef std::map<IMAccount *, Connect *> ConnectMap;
 

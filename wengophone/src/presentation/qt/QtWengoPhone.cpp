@@ -318,6 +318,9 @@ void QtWengoPhone::initThreadSafe() {
 	// Hangup a call
     connect (_ui->actionHangup,SIGNAL(triggered()),SLOT(hangupCall()));
 
+	connect(this, SIGNAL(connectionStatusEventHandlerSignal(int, int, QString)), 
+		SLOT(connectionStatusEventHandlerSlot(int, int, QString)));
+
 	//Translation
 	new QtLanguage(_wengoPhoneWindow);
 
@@ -993,6 +996,13 @@ void QtWengoPhone::authorizationRequestEventHandlerThreadSafe(PresenceHandler & 
 	if (buttonClicked == 0) {
 		//TODO: give a personal message
 		sender.authorizeContact(imContact, true, "");
+	
+		ContactProfile contactProfile;
+		contactProfile.addIMContact(imContact);
+		QtProfileDetails qtProfileDetails(_cWengoPhone, contactProfile, _wengoPhoneWindow);
+		if (qtProfileDetails.show()) {
+			_cWengoPhone.getCUserProfile()->getCContactList().addContact(contactProfile);
+		}
 	} else {
 		//TODO: give a personal message
 		sender.authorizeContact(imContact, false, "");
@@ -1169,6 +1179,19 @@ void QtWengoPhone::showHistory() {
 	_ui->tabWidget->setCurrentWidget(_ui->tabHistory);
 }
 
+void QtWengoPhone::connectionStatusEventHandler(int totalSteps, int curStep, const std::string & infoMsg) {
+	connectionStatusEventHandlerSignal(totalSteps, curStep, QString::fromStdString(infoMsg));
+}
+
+void QtWengoPhone::connectionStatusEventHandlerSlot(int totalSteps, int curStep, QString infoMsg) {
+
+	int buttonClicked;
+
+	if (totalSteps == 0 && curStep == 0)
+		buttonClicked = QMessageBox::information(_wengoPhoneWindow, tr("WengoPhone - Network information"),
+			infoMsg, QMessageBox::Ok);
+}
+
 void QtWengoPhone::tabSelectionChanged(int index){
 
 }
@@ -1219,3 +1242,4 @@ void QtWengoPhone::hangupCall(){
 void QtWengoPhone::hideMainWindow(){
     _wengoPhoneWindow->hide();
 }
+

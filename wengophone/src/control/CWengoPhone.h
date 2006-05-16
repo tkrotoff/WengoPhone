@@ -278,6 +278,12 @@ private:
 	void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
 		const std::string & message);
 
+	/**
+	 * @see IMConnect::connectionStatusEvent
+	 */
+	void connectionStatusEventHandler(ConnectHandler & sender, int totalSteps, int curStep, 
+		const std::string & infoMsg);
+
 	/** Direct link to the model. */
 	WengoPhone & _wengoPhone;
 

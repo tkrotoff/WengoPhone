@@ -54,6 +54,8 @@ void ConnectHandler::connect(IMAccount & imAccount) {
 		connect = new Connect(*actIMAccount);
 		connect->loginStatusEvent +=
 			boost::bind(&ConnectHandler::loginStatusEventHandler, this, _1, _2);
+		connect->connectionStatusEvent +=
+			boost::bind(&ConnectHandler::connectionStatusEventHandler, this, _1, _2, _3, _4);
 		_connectMap.insert(pair<IMAccount *, Connect *>(actIMAccount, connect));
 	} else {
 		connect = (*it).second;
@@ -92,6 +94,12 @@ void ConnectHandler::loginStatusEventHandler(IMConnect & sender,
 	default:
 		LOG_FATAL("unknown status");
 	}
+}
+
+void ConnectHandler::connectionStatusEventHandler(IMConnect & sender, int totalSteps, 
+	int curStep, const std::string & infoMsg) {
+
+	connectionStatusEvent(*this, totalSteps, curStep, infoMsg);
 }
 
 void ConnectHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {

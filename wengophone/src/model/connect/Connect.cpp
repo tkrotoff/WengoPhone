@@ -31,6 +31,10 @@ Connect::Connect(IMAccount & account)
 	_imConnect->loginStatusEvent +=
 		boost::bind(&Connect::loginStatusEventHandler, this, _1, _2);
 	_imConnect->loginStatusEvent += loginStatusEvent;
+
+	_imConnect->connectionStatusEvent +=
+		boost::bind(&Connect::connectionStatusEventHandler, this, _1, _2, _3, _4);
+	_imConnect->connectionStatusEvent += connectionStatusEvent;
 }
 
 Connect::~Connect() {
@@ -48,6 +52,12 @@ void Connect::loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus
 	default:
 		LOG_FATAL("Unknown LoginStatus");
 	}
+}
+
+void Connect::connectionStatusEventHandler(IMConnect & sender, int totalSteps, int curStep, 
+	const std::string & infoMsg) {
+	
+	return;
 }
 
 void Connect::connect() {

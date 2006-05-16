@@ -41,6 +41,11 @@ public:
 	Event<void (IMConnect & sender, IMConnect::LoginStatus status)> loginStatusEvent;
 
 	/**
+	 * @see IMConnect::connectionStatusEvent
+	 */
+	Event<void (IMConnect & sender, int totalSteps, int curStep, const std::string & infoMsg)> connectionStatusEvent;
+
+	/**
 	 * Status changed event handler.
 	 *
 	 * @param sender the sender
@@ -48,6 +53,15 @@ public:
 	 */
 	void loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status);
 
+	/**
+	 * Connection status changed event handler.
+	 *
+	 * @param sender the sender
+	 * @param totalSteps connection progression total steps
+	 * @param curStep connection progression current step
+	 * @param infoMsg step description
+	 */
+	void connectionStatusEventHandler(IMConnect & sender, int totalSteps, int curStep, const std::string & infoMsg);
 
 	Connect(IMAccount & account);
 
