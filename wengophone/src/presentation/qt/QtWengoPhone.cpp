@@ -362,17 +362,31 @@ void QtWengoPhone::enableCallButton() {
 void QtWengoPhone::hangupButtonClicked(){
 	QtContactCallListWidget * widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->currentWidget());
 	if ( widget ){
-		 widget->hangup();
+		widget->hangup();
 		//Widget is deleted automagically
+        //set the last active page
+        if( _activeTabBeforeCall ) {
+            _ui->tabWidget->setCurrentWidget(_activeTabBeforeCall);
+        } else {
+            _ui->tabWidget->setCurrentIndex(0);
+        }
+        return;
 	}
-
-	//set the last active page
-	if( _activeTabBeforeCall ) {
-		_ui->tabWidget->setCurrentWidget(_activeTabBeforeCall);
-	} else {
-		_ui->tabWidget->setCurrentIndex(0);
-	}
+    for (int i = 0; i < _ui->tabWidget->count(); i++){
+		widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+		if ( widget ){
+		    widget->hangup();
+            //set the last active page
+            if( _activeTabBeforeCall ) {
+                _ui->tabWidget->setCurrentWidget(_activeTabBeforeCall);
+            } else {
+                _ui->tabWidget->setCurrentIndex(0);
+            }
+            return;
+		}
+    }
 }
+
 
 void QtWengoPhone::callButtonClicked() {
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();

@@ -37,6 +37,8 @@ public:
 
 	bool hasPhoneCall(PhoneCall * phoneCall);
 
+	bool hasActivePhoneCall();
+
 	QtPhoneCallList & getPhoneCallList();
 
 	QtPhoneCall * takeQtPhoneCall(PhoneCall * phoneCall);

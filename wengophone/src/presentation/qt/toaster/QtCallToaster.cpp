@@ -137,3 +137,10 @@ void QtCallToaster::timerEvent(QTimerEvent *event){
 	}
 }
 
+void QtCallToaster::hangupButtonSlot(){
+    hangupButtonClicked();
+}
+
+void QtCallToaster::callButtonSlot(){
+    callButtonClicked();
+}

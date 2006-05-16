@@ -39,6 +39,8 @@ public:
 
 	bool hasPhoneCall(PhoneCall * phoneCall);
 
+    bool hasActivePhoneCall();
+
 	QtPhoneCall * takeQtPhoneCall(PhoneCall * phoneCall);
 
 public Q_SLOTS:

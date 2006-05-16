@@ -44,6 +44,12 @@ public:
 
 	void setPixmap(const QPixmap &pixmap);
 
+Q_SIGNALS:
+
+    void hangupButtonClicked();
+
+    void callButtonClicked();
+
 protected:
 
     void setupGui();
@@ -64,9 +70,16 @@ protected:
 
     void timerEvent(QTimerEvent *event);
 
+protected Q_SLOTS:
+
+    void hangupButtonSlot();
+
+    void callButtonSlot();
+
 public Q_SLOTS:
 
 	void closeToaster();
+
 };
 
 #endif // QTCALLTOASTER_H

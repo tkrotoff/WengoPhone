@@ -88,7 +88,6 @@ QtPhoneCall * QtContactCallList::takeQtPhoneCall(PhoneCall * phoneCall) {
 
 	QtPhoneCallList::iterator iter;
 	for (iter = _phoneCallList.begin(); iter != _phoneCallList.end(); iter++) {
-
 		if ((* iter)->getCPhoneCall().getPhoneCall().getPeerSipAddress().getUserName() ==
 				phoneCall->getPeerSipAddress().getUserName()) {
 			_widgetLayout->removeWidget((* iter)->getWidget());
@@ -98,4 +97,16 @@ QtPhoneCall * QtContactCallList::takeQtPhoneCall(PhoneCall * phoneCall) {
 		}
 	}
 	return NULL;
+}
+bool QtContactCallList::hasActivePhoneCall(){
+	QMutexLocker locker(& _mutex);
+
+	QtPhoneCallList::iterator iter;
+    for (iter = _phoneCallList.begin(); iter != _phoneCallList.end(); iter++) {
+        if ((* iter)->getCPhoneCall().getState() == EnumPhoneCallState::PhoneCallStateTalking)
+        {
+            return true;
+        }
+    }
+    return false;
 }

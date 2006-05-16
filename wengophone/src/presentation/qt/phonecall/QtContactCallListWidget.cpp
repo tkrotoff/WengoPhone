@@ -121,3 +121,7 @@ bool QtContactCallListWidget::hasPhoneCall(PhoneCall * phoneCall) {
 QtPhoneCall * QtContactCallListWidget::takeQtPhoneCall(PhoneCall * phoneCall) {
 	return _listWidget->takeQtPhoneCall(phoneCall);
 }
+
+bool QtContactCallListWidget::hasActivePhoneCall(){
+    return _listWidget->hasActivePhoneCall();
+}
