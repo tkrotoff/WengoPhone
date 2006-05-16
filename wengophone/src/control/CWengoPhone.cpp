@@ -99,6 +99,8 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 		boost::bind(&CWengoPhone::historyLoadedEventHandler, this, _1);
 	_wengoPhone.getCurrentUserProfile().wsCallForwardCreatedEvent += 
 		boost::bind(&CWengoPhone::wsCallForwardCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().getPresenceHandler().authorizationRequestEvent +=
+		boost::bind(&CWengoPhone::authorizationRequestEventHandler, this, _1, _2, _3);
 
 	_cWsCallForward = NULL;
 	//Event<void (UserProfile & sender, WsCallForward & wsCallForward)> wsCallForwardCreatedEvent;
