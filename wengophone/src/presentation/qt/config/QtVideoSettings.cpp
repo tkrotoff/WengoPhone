@@ -46,7 +46,7 @@ QtVideoSettings::QtVideoSettings(QWidget * parent)
 	_rgbImage = NULL;
 	_webcamDeviceOpened = false;
 
-	connect(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
+	connect(this, SIGNAL(newWebcamImage(QPixmap)), SLOT(newWebcamImageCaptured(QPixmap)), Qt::QueuedConnection);
 	connect(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(webcamPreview(const QString &)));
 
 	_ui->webcamDeviceComboBox->addItems(StringListConvert::toQStringList(_webcamDriver->getDeviceList()));
