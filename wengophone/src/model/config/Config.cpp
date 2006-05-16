@@ -195,10 +195,10 @@ Config::Config(const std::string & name)
 
 	_keyDefaultValueMap[AUDIO_INCOMINGCALL_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
 	_keyDefaultValueMap[AUDIO_CALLCLOSED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/callclosed.wav");
-	_keyDefaultValueMap[AUDIO_INCOMINGCHAT_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
-	_keyDefaultValueMap[AUDIO_IMACCOUNTCONNECTED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
-	_keyDefaultValueMap[AUDIO_IMACCOUNTDISCONNECTED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
-	_keyDefaultValueMap[AUDIO_CONTACTONLINE_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
+	_keyDefaultValueMap[AUDIO_INCOMINGCHAT_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/incomingchat.wav");
+	_keyDefaultValueMap[AUDIO_IMACCOUNTCONNECTED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/imaccountconnected.wav");
+	_keyDefaultValueMap[AUDIO_IMACCOUNTDISCONNECTED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/imaccountdisconnected.wav");
+	_keyDefaultValueMap[AUDIO_CONTACTONLINE_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/contactonline.wav");
 
 	_keyDefaultValueMap[AUDIO_SMILEYS_DIR_KEY] = File::convertPathSeparators(resourcesPath + "sounds/tones/");
 	_keyDefaultValueMap[AUDIO_AEC_KEY] = true;
