@@ -27,6 +27,12 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
     </spacer>
    </item>
    <item row="2" column="0" >
@@ -141,6 +147,10 @@ Your account has been successfully created</string>
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
+  <tabstop>nicknameLineEdit</tabstop>
+  <tabstop>passwordLineEdit</tabstop>
+  <tabstop>emailLineEdit</tabstop>
+  <tabstop>addIMAccountButton</tabstop>
   <tabstop>finishButton</tabstop>
  </tabstops>
  <resources>

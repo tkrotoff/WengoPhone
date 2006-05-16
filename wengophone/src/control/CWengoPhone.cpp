@@ -79,25 +79,25 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.getCurrentUserProfile().proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 	_wengoPhone.getCurrentUserProfile().wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 
-	_wengoPhone.wenboxPluginCreatedEvent += 
+	_wengoPhone.wenboxPluginCreatedEvent +=
 		boost::bind(&CWengoPhone::wenboxPluginCreatedEventHandler, this, _1, _2);
-	_wengoPhone.wsWengoSubscribeCreatedEvent += 
+	_wengoPhone.wsWengoSubscribeCreatedEvent +=
 		boost::bind(&CWengoPhone::wsWengoSubscribeCreatedEventHandler, this, _1, _2);
-	_wengoPhone.getCurrentUserProfile().wsDirectoryCreatedEvent += 
+	_wengoPhone.getCurrentUserProfile().wsDirectoryCreatedEvent +=
 		boost::bind(&CWengoPhone::wsDiretoryCreatedEventHandler, this, _1, _2);
-	_wengoPhone.initFinishedEvent += 
+	_wengoPhone.initFinishedEvent +=
 		boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
-	_wengoPhone.getCurrentUserProfile().phoneLineCreatedEvent += 
+	_wengoPhone.getCurrentUserProfile().phoneLineCreatedEvent +=
 		boost::bind(&CWengoPhone::phoneLineCreatedEventHandler, this, _1, _2);
-	_wengoPhone.getCurrentUserProfile().smsCreatedEvent += 
+	_wengoPhone.getCurrentUserProfile().smsCreatedEvent +=
 		boost::bind(&CWengoPhone::smsCreatedEventHandler, this, _1, _2);
-	_wengoPhone.getCurrentUserProfile().softUpdateCreatedEvent += 
+	_wengoPhone.getCurrentUserProfile().softUpdateCreatedEvent +=
 		boost::bind(&CWengoPhone::softUpdateCreatedEventHandler, this, _1, _2);
-	_wengoPhone.getCurrentUserProfile().newIMAccountAddedEvent += 
+	_wengoPhone.getCurrentUserProfile().newIMAccountAddedEvent +=
 		boost::bind(&CWengoPhone::newIMAccountAddedEventHandler, this, _1, _2);
-	_wengoPhone.getCurrentUserProfile().getHistory().historyLoadedEvent += 
+	_wengoPhone.getCurrentUserProfile().getHistory().historyLoadedEvent +=
 		boost::bind(&CWengoPhone::historyLoadedEventHandler, this, _1);
-	_wengoPhone.getCurrentUserProfile().wsCallForwardCreatedEvent += 
+	_wengoPhone.getCurrentUserProfile().wsCallForwardCreatedEvent +=
 		boost::bind(&CWengoPhone::wsCallForwardCreatedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().getPresenceHandler().authorizationRequestEvent +=
 		boost::bind(&CWengoPhone::authorizationRequestEventHandler, this, _1, _2, _3);
@@ -132,11 +132,9 @@ void CWengoPhone::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine 
 }
 
 void CWengoPhone::wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin) {
-#ifdef ENABLE_WENBOX
 	static CWenboxPlugin cWenboxPlugin(wenboxPlugin, *this);
 
 	LOG_DEBUG("CWenboxPlugin created");
-#endif
 }
 
 void CWengoPhone::wsWengoSubscribeCreatedEventHandler(WengoPhone & sender, WsWengoSubscribe & wsWengoSubscribe) {

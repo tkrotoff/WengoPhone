@@ -17,45 +17,47 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_SUBSCRIBEWEBSERVICE_H
-#define OW_SUBSCRIBEWEBSERVICE_H
+#ifndef SUBSCRIBE_H
+#define SUBSCRIBE_H
 
 #include <model/webservices/WengoWebService.h>
 
 /**
- * @class WsWengoSubscribe Wengo subscribe web service
+ * Wengo subscribe web service.
  *
  * @author Mathieu Stute
  */
 class WsWengoSubscribe : public WengoWebService {
-
 public:
-	
+
 	enum SubscriptionStatus {
-		/** Subscription ok */
-		SubscriptioOk,
-		
-		/** Subscription bad query */
+		/** OK. */
+		SubscriptionOk,
+
+		/** Bad web service query. */
 		SubscriptionBadQuery,
-		
-		/** Subscription bad version */
+
+		/** Bad web service version. */
 		SubscriptionBadVersion,
-		
-		/** Subscription unknow error */
+
+		/** Subscription unknow error. */
 		SubscriptionUnknownError,
-		
-		/** Subscription mail error */
+
+		/** Mail already used. */
 		SubscriptionMailError,
-		
-		/** Subscription nickname error */
+
+		/** Nickname already used. */
 		SubscriptionNicknameError,
-		
-		/** Subscription failed */
+
+		/** Weak password (not strong enough). */
+		SubscriptionWeakPassword,
+
+		/** Subscription failed. */
 		SubscriptionFailed,
 	};
-	
+
 	/**
-	 * default constructor
+	 * Default constructor.
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
@@ -71,7 +73,7 @@ public:
 	 * @param status subscription status (ok or error)
 	 * @param error error message
 	 */
-	Event<void (WsWengoSubscribe & sender, int id, SubscriptionStatus status, 
+	Event<void (WsWengoSubscribe & sender, int id, SubscriptionStatus status,
 				const std::string & errorMessage, const std::string & password)> wengoSubscriptionEvent;
 
 	/**
@@ -83,7 +85,7 @@ public:
 	 * @param password Wengo password
 	 * @return a unique request id
 	 */
-	 int subscribe(const std::string & email, const std::string & nickname,
+	int subscribe(const std::string & email, const std::string & nickname,
 		const std::string & lang, const std::string & password = "");
 
 private:
@@ -94,4 +96,4 @@ private:
 	void answerReceived(const std::string & answer, int id);
 };
 
-#endif //OW_SUBSCRIBEWEBSERVICE_H
+#endif //SUBSCRIBE_H

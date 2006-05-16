@@ -64,9 +64,6 @@
    </item>
    <item row="1" column="0" >
     <widget class="QLabel" name="errorMessageLabel" >
-     <property name="autoFillBackground" >
-      <bool>true</bool>
-     </property>
      <property name="text" >
       <string>Error message label</string>
      </property>
@@ -195,6 +192,14 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>nicknameLineEdit</tabstop>
+  <tabstop>passwordLineEdit</tabstop>
+  <tabstop>confirmPasswordLineEdit</tabstop>
+  <tabstop>emailLineEdit</tabstop>
+  <tabstop>acceptTermsCheckBox</tabstop>
+  <tabstop>subscribeButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../../wengophone.qrc" />
  </resources>

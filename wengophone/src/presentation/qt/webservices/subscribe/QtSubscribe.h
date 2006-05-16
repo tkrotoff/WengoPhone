@@ -68,7 +68,7 @@ private:
 	void wengoSubscriptionEventHandler(WsWengoSubscribe & sender, int id, WsWengoSubscribe::SubscriptionStatus status,
 		const std::string & errorMessage, const std::string & password);
 
-	void wengoSubscriptionEventHandlerThreadSafe(WsWengoSubscribe::SubscriptionStatus status, const std::string & password);
+	void wengoSubscriptionEventHandlerThreadSafe(WsWengoSubscribe::SubscriptionStatus status, std::string password);
 
 	void showErrorMessage(const QString & errorMessage);
 

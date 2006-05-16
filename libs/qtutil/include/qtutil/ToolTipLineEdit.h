@@ -30,6 +30,7 @@ class QKeyEvent;
 /**
  * QLineEdit with a tooltip that disappears when the user clicks on it.
  *
+ * @see QLineEdit
  * @author Tanguy Krotoff
  */
 class ToolTipLineEdit : public QLineEdit {
@@ -37,6 +38,10 @@ class ToolTipLineEdit : public QLineEdit {
 public:
 
 	ToolTipLineEdit(QWidget * parent);
+
+public Q_SLOTS:
+
+	void setText(const QString & text);
 
 private:
 

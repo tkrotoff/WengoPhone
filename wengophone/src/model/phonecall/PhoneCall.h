@@ -188,9 +188,7 @@ public:
 	 *
 	 * @return Wenbox
 	 */
-#ifdef ENABLE_WENBOX
 	WenboxPlugin & getWenboxPlugin() const;
-#endif
 
 	/**
 	 * Gets the duration of the call in seconds

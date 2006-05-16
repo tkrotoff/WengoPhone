@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
+    <width>422</width>
     <height>280</height>
    </rect>
   </property>
@@ -25,7 +25,7 @@
    <item row="0" column="0" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
-      <string>Accounts</string>
+      <string>Instant Messaging Accounts</string>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
@@ -34,6 +34,66 @@
       <property name="spacing" >
        <number>6</number>
       </property>
+      <item row="1" column="0" >
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="0" column="3" >
+         <widget class="QPushButton" name="deleteIMAccountButton" >
+          <property name="text" >
+           <string>Delete</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" >
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>110</width>
+            <height>26</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="2" >
+         <widget class="QPushButton" name="modifyIMAccountButton" >
+          <property name="text" >
+           <string>Modify</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../wengophone.qrc" >:/pics/edit.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4" >
+         <widget class="QPushButton" name="closeButton" >
+          <property name="text" >
+           <string>Close</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <widget class="QPushButton" name="addIMAccountButton" >
+          <property name="text" >
+           <string>Add</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../wengophone.qrc" >:/pics/add.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item row="0" column="0" >
        <widget class="QTreeWidget" name="treeWidget" >
         <property name="minimumSize" >
@@ -61,69 +121,6 @@
          </property>
         </column>
        </widget>
-      </item>
-      <item row="1" column="0" >
-       <layout class="QGridLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <item row="0" column="3" >
-         <widget class="QPushButton" name="deleteIMAccountButton" >
-          <property name="text" >
-           <string>Delete</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2" >
-         <widget class="QPushButton" name="modifyIMAccountButton" >
-          <property name="text" >
-           <string>Modify</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../wengophone.qrc" >:/pics/edit.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" >
-         <widget class="QPushButton" name="addIMAccountButton" >
-          <property name="text" >
-           <string>Add</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../wengophone.qrc" >:/pics/add.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="4" >
-         <widget class="QPushButton" name="closeButton" >
-          <property name="text" >
-           <string>Close</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../wengophone.qrc" >:/pics/cancel.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" >
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>301</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
       </item>
      </layout>
     </widget>

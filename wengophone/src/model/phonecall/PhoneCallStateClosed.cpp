@@ -35,8 +35,6 @@ void PhoneCallStateClosed::execute(PhoneCall & phoneCall) {
 	_soundCallClosed->setLoops(4);
 	_soundCallClosed->play();
 
-#ifdef ENABLE_WENBOX
 	WenboxPlugin & wenboxPlugin = phoneCall.getWenboxPlugin();
 	wenboxPlugin.setState(Wenbox::CallClosed);
-#endif
 }

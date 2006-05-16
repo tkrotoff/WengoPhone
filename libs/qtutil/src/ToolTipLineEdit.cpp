@@ -33,6 +33,11 @@ ToolTipLineEdit::ToolTipLineEdit(QWidget * parent)
 	setPalette(palette);
 }
 
+void ToolTipLineEdit::setText(const QString & text) {
+	clearLineEdit();
+	QLineEdit::setText(text);
+}
+
 void ToolTipLineEdit::clearLineEdit() {
 	//Text color back to original color
 	setPalette(_originalPalette);

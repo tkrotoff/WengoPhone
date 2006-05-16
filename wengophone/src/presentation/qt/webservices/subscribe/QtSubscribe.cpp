@@ -69,17 +69,18 @@ void QtSubscribe::initThreadSafe() {
 }
 
 void QtSubscribe::showErrorMessage(const QString & errorMessage) {
+	static QPalette originalPalette = _ui->errorMessageLabel->palette();
+
 	_ui->subscribeButton->setEnabled(_subscribeButtonEnabled);
 
 	if (!errorMessage.isEmpty()) {
-		QPalette palette = _ui->errorMessageLabel->palette();
-		palette.setColor(QPalette::Active, QPalette::Window, Qt::red);
+		//Text color is red
+		QPalette palette;
+		palette.setColor(QPalette::Text, Qt::red);
 		_ui->errorMessageLabel->setPalette(palette);
 	} else {
-		const QColor & color = qApp->style()->standardPalette().color(QPalette::Window);
-		QPalette palette = QPalette(_ui->errorMessageLabel->palette());
-		palette.setColor(QPalette::Window, color);
-		_ui->errorMessageLabel->setPalette(palette);
+		//Text color back to original color
+		_ui->errorMessageLabel->setPalette(originalPalette);
 	}
 	_ui->errorMessageLabel->setText(errorMessage);
 }
@@ -108,7 +109,7 @@ void QtSubscribe::sendRequest() {
 		showErrorMessage(errorMessage);
 	} else {
 		//Call the ws
-		_cSubscribe.subscribe(mail, nickname, "", password1);
+		_cSubscribe.subscribe(mail, nickname, String::null, password1);
 	}
 }
 
@@ -116,48 +117,52 @@ void QtSubscribe::wengoSubscriptionEventHandler(
 	WsWengoSubscribe & sender, int id, WsWengoSubscribe::SubscriptionStatus status,
 	const std::string & errorMessage, const std::string & password) {
 
-	typedef PostEvent2<void (WsWengoSubscribe::SubscriptionStatus, const std::string &), WsWengoSubscribe::SubscriptionStatus, const std::string &> MyPostEvent;
+	typedef PostEvent2<void (WsWengoSubscribe::SubscriptionStatus, std::string), WsWengoSubscribe::SubscriptionStatus, const std::string &> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSubscribe::wengoSubscriptionEventHandlerThreadSafe, this, _1, _2), status, password);
 	postEvent(event);
 }
 
-void QtSubscribe::wengoSubscriptionEventHandlerThreadSafe(WsWengoSubscribe::SubscriptionStatus status, const std::string & password) {
+void QtSubscribe::wengoSubscriptionEventHandlerThreadSafe(WsWengoSubscribe::SubscriptionStatus status, std::string password) {
 	_subscribeButtonEnabled = true;
 	QString errorMessage;
 
 	switch (status) {
-	case WsWengoSubscribe::SubscriptioOk:
+	case WsWengoSubscribe::SubscriptionOk:
 		//Next page
-		QtSubscribe2(_ui->nicknameLineEdit->text(), QString::fromStdString(password),
-				_ui->emailLineEdit->text(), _subscribeWindow);
+		/*QtSubscribe2(_ui->nicknameLineEdit->text(), QString::fromStdString(password),
+				_ui->emailLineEdit->text(), _subscribeWindow);*/
 		break;
 
 	case WsWengoSubscribe::SubscriptionBadQuery:
-		errorMessage = tr("SubscriptionBadQuery");
+		errorMessage = tr("Unknown Error");
 		break;
 
 	case WsWengoSubscribe::SubscriptionBadVersion:
-		errorMessage = tr("SubscriptionBadVersion");
+		errorMessage = tr("Unknown Error");
 		break;
 
 	case WsWengoSubscribe::SubscriptionUnknownError:
-		errorMessage = tr("SubscriptionUnknownError");
+		errorMessage = tr("Unknown Error");
 		break;
 
 	case WsWengoSubscribe::SubscriptionMailError:
-		errorMessage = tr("SubscriptionMailError");
+		errorMessage = tr("You cannot use this email address, already in use");
 		break;
 
 	case WsWengoSubscribe::SubscriptionNicknameError:
-		errorMessage = tr("SubscriptionNicknameError");
+		errorMessage = tr("You cannot use this nickname, already in use");
+		break;
+
+	case WsWengoSubscribe::SubscriptionWeakPassword:
+		errorMessage = tr("Your password does not contain enough characters (6 minimum), try another one");
 		break;
 
 	case WsWengoSubscribe::SubscriptionFailed:
-		errorMessage = tr("SubscriptionFailed");
+		errorMessage = tr("Subscription Failed");
 		break;
 
 	default:
-		LOG_FATAL("Unknow SubscriptionStatus=" + String::fromNumber(status));
+		LOG_FATAL("unknown SubscriptionStatus=" + String::fromNumber(status));
 	}
 
 	showErrorMessage(errorMessage);

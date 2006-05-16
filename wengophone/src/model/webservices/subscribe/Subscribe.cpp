@@ -32,9 +32,9 @@ WsWengoSubscribe::WsWengoSubscribe() {
 	//setup subscribe web service
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
-	setHttps(false);
+	setHttps(true);
 	setServicePath(config.getWengoSubscribePath());
-	setPort(80);
+	setPort(443);
 	setWengoAuthentication(false);
 }
 
@@ -74,9 +74,9 @@ void WsWengoSubscribe::answerReceived(const std::string & answer, int id) {
 	text = response.FirstChild("answer").FirstChild("status").FirstChild("code").FirstChild().Text();
 	if (text) {
 
-		statusCode = std::string(text->Value());
+		statusCode = text->Value();
 		if (statusCode == "OK") {
-			status = SubscriptioOk;
+			status = SubscriptionOk;
 		} else if (statusCode == "BAD_ACTIVATE") {
 			status = SubscriptionFailed;
 		} else if (statusCode == "UNIQUE_PSEUDO") {
@@ -89,6 +89,8 @@ void WsWengoSubscribe::answerReceived(const std::string & answer, int id) {
 			status = SubscriptionBadVersion;
 		} else if (statusCode == "BAD_QUERY") {
 			status = SubscriptionBadQuery;
+		} else if (statusCode == "WEAK_PASSWORD") {
+			status = SubscriptionWeakPassword;
 		} else {
 			wengoSubscriptionEvent(*this, id, SubscriptionUnknownError, String::null, String::null);
 			return;
@@ -98,13 +100,13 @@ void WsWengoSubscribe::answerReceived(const std::string & answer, int id) {
 	//retrieve the status message
 	text = response.FirstChild("answer").FirstChild("status").FirstChild("message").FirstChild().Text();
 	if (text) {
-		statusMessage = std::string(text->Value());
+		statusMessage = text->Value();
 	}
 
 	//retrieve the password
 	text = response.FirstChild("answer").FirstChild("data").FirstChild("password").FirstChild().Text();
 	if (text) {
-		password = std::string(text->Value());
+		password = text->Value();
 	}
 
 	wengoSubscriptionEvent(*this, id, status, statusMessage, password);
