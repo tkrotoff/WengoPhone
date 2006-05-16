@@ -474,7 +474,7 @@ void ChatWindow::createMenu(){
 
    	WengoMenu->addSeparator ();
 	action = WengoMenu->addAction(tr("&Close"));
-	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(hide()));
+	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(hideMainWindow()));
 
 	action = WengoMenu->addAction(tr("Log off"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(logOff()));
@@ -510,11 +510,14 @@ void ChatWindow::createMenu(){
     Actions->addAction(tr("Create a conference chat"));
     Actions->addSeparator ();
     _menuBar->addMenu(Actions);
-    Actions->addAction(tr("Accept"));
-    Actions->addAction(tr("Hangup"));
-    Actions->addAction(tr("Hold"));
-    Actions->addAction(tr("Resume"));
+    action = Actions->addAction(tr("Accept"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(acceptCall()));
 
+    Actions->addAction(tr("Hangup"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(hangupCall()));
+
+    Actions->addAction(tr("Hold / Resume"));
+    connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(resumeCall()));
 
     QMenu * ToolsMenu = new QMenu(tr("&Tools"));
 

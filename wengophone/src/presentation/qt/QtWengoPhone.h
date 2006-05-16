@@ -219,6 +219,8 @@ private Q_SLOTS:
 
 	void hangupCall();
 
+	void hideMainWindow();
+
 private:
 
 	void initThreadSafe();

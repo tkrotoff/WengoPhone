@@ -1215,3 +1215,7 @@ void QtWengoPhone::hangupCall(){
         return;
     widget->hangup();
 }
+
+void QtWengoPhone::hideMainWindow(){
+    _wengoPhoneWindow->hide();
+}
