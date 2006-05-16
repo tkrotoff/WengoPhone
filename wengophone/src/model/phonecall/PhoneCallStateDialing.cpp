@@ -19,4 +19,6 @@
 
 #include "PhoneCallStateDialing.h"
 
+#include "PhoneCall.h"
+
 void PhoneCallStateDialing::execute(PhoneCall & phoneCall) { }

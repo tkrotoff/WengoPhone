@@ -23,8 +23,8 @@
 
 std::string EnumPhoneLineState::toString(PhoneLineState state) {
 	switch(state) {
-	case PhoneLineStateDefault:
-		return "PhoneLineStateDefault";
+	case PhoneLineStateUnknown:
+		return "PhoneLineStateUnknown";
 
 	case PhoneLineStateServerError:
 		return "PhoneLineStateServerError";

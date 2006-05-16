@@ -96,6 +96,7 @@
         <file>pics/status/invisible.png</file>
         <file>pics/status/offline.png</file>
         <file>pics/status/online.png</file>
+        <file>pics/status/unknown.png</file>
         <file>pics/statusbar/status-audio-offline.png</file>
         <file>pics/statusbar/status-audio-online.png</file>
         <file>pics/statusbar/status-earth-connecting.mng</file>
@@ -220,8 +221,6 @@
         <file>profilebar/EventWidget.ui</file>
         <file>toaster/QtToaster.ui</file>
         <file>toaster/QtCallToaster.ui</file>
-        <file>webservices/directory/WsDirectory.ui</file>
-        <file>webservices/directory/WsDirectoryContact.ui</file>
         <file>webservices/sms/SmsWindow.ui</file>
         <file>webservices/softupdate/SoftUpdateWindow.ui</file>
     </qresource>

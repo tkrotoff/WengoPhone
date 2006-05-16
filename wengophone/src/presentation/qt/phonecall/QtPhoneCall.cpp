@@ -78,10 +78,10 @@ void QtPhoneCall::initThreadSafe() {
 	//phoneNumberLabel
 	_nickNameLabel = Object::findChild < QLabel * > (_phoneCallWidget, "nickNameLabel");
 	QString tmp = QString("<html><head><meta name='qrichtext' content='1'/></head><body "
-	"style=white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
-	" font-weight:400; font-style:normal; text-decoration:none;'><p style=' margin-top:0px; "
-	" margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-	"font-size:8pt;'><span style=' font-size:13pt; font-weight:600;'>%1</span></p></body></html>").arg(callAddress);
+			"style=white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
+			" font-weight:400; font-style:normal; text-decoration:none;'><p style=' margin-top:0px; "
+			" margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
+			"font-size:8pt;'><span style=' font-size:13pt; font-weight:600;'>%1</span></p></body></html>").arg(callAddress);
 
 	_nickNameLabel->setText(tmp);
 	_nickNameLabel->setToolTip(sipAddress);
@@ -174,7 +174,6 @@ QMenu * QtPhoneCall::createMenu() {
 }
 
 QMenu * QtPhoneCall::createInviteMenu() {
-
 	PhoneLine & phoneLine = dynamic_cast < PhoneLine & > (_cPhoneCall.getPhoneCall().getPhoneLine());
 
 	QMenu * menu = new QMenu(tr("Invite to conference"));
@@ -216,121 +215,126 @@ void QtPhoneCall::stateChangedEventHandler(EnumPhoneCallState::PhoneCallState st
 }
 
 void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state) {
-	_qtWengoPhone->getStatusBar().showMessage(QString::fromStdString(
-	CodecList::toString(_cPhoneCall.getAudioCodecUsed()) + "/" +
-	CodecList::toString(_cPhoneCall.getVideoCodecUsed())));
+	std::string codecs;
+	if (_cPhoneCall.getAudioCodecUsed() != CodecList::AudioCodecError) {
+		codecs += _cPhoneCall.getAudioCodecUsed();
+	}
+	if (_cPhoneCall.getVideoCodecUsed() != CodecList::VideoCodecError) {
+		codecs += "/" + _cPhoneCall.getVideoCodecUsed();
+	}
+	_qtWengoPhone->getStatusBar().showMessage(QString::fromStdString(codecs));
 
 	switch (state) {
+	case EnumPhoneCallState::PhoneCallStateUnknown:
+		break;
 
-		case EnumPhoneCallState::PhoneCallStateDefault:
-			break;
+	case EnumPhoneCallState::PhoneCallStateError:
+		_statusLabel->setText(tr("Error"));
+		break;
 
-		case EnumPhoneCallState::PhoneCallStateError:
-			_statusLabel->setText(tr("Error"));
-			break;
+	case EnumPhoneCallState::PhoneCallStateResumed:
+		_actionResume->setEnabled(false);
+		_actionHold->setEnabled(true);
+		_statusLabel->setText(tr("Talking"));
+		_hold = false;
+		break;
 
-		case EnumPhoneCallState::PhoneCallStateResumed:
-			_actionResume->setEnabled(false);
-			_actionHold->setEnabled(true);
-			_statusLabel->setText(tr("Talking"));
-			_hold = false;
-			break;
+	case EnumPhoneCallState::PhoneCallStateTalking:
+		_duration = 0;
+		_timerId = startTimer(1000);
+		if (_timerId == 0) {
+			LOG_DEBUG("_timerId == 0");
+		}
+		_actionAcceptCall->setEnabled(false);
+		_actionHangupCall->setEnabled(true);
+		_statusLabel->setText(tr("Talking"));
+		break;
 
-		case EnumPhoneCallState::PhoneCallStateTalking:
-			_duration = 0;
-			_timerId = startTimer(1000);
-			if (_timerId == 0) {
-				LOG_DEBUG("_timerId == 0");
-			}
-			_actionAcceptCall->setEnabled(false);
-			_actionHangupCall->setEnabled(true);
-			_statusLabel->setText(tr("Talking"));
-			break;
+	case EnumPhoneCallState::PhoneCallStateDialing:
+		_actionAcceptCall->setEnabled(false);
+		_actionHangupCall->setEnabled(true);
+		_statusLabel->setText(tr("Dialing"));
+		break;
 
-		case EnumPhoneCallState::PhoneCallStateDialing:
-			_actionAcceptCall->setEnabled(false);
-			_actionHangupCall->setEnabled(true);
-			_statusLabel->setText(tr("Dialing"));
-			break;
+	case EnumPhoneCallState::PhoneCallStateRinging:
+		_actionAcceptCall->setEnabled(false);
+		_actionHangupCall->setEnabled(true);
+		_statusLabel->setText(tr("Ringing"));
+		break;
 
-		case EnumPhoneCallState::PhoneCallStateRinging:
-			_actionAcceptCall->setEnabled(false);
-			_actionHangupCall->setEnabled(true);
-			_statusLabel->setText(tr("Ringing"));
-			break;
+	case EnumPhoneCallState::PhoneCallStateClosed:
+		_qtWengoPhone->getStatusBar().showMessage(QString::null);
+		killTimer(_timerId);
+		_actionAcceptCall->setEnabled(false);
+		_actionHangupCall->setEnabled(false);
+		_statusLabel->setText(tr("Closed"));
+		// stopConference();
+		delete _phoneCallWidget;
+		deleteMe(this);
+		callRejected();
+		break;
 
-		case EnumPhoneCallState::PhoneCallStateClosed:
-			_qtWengoPhone->getStatusBar().showMessage(QString::null);
-			killTimer(_timerId);
-			_actionAcceptCall->setEnabled(false);
-			_actionHangupCall->setEnabled(false);
-			_statusLabel->setText(tr("Closed"));
-			// stopConference();
-			delete _phoneCallWidget;
-			deleteMe(this);
-			callRejected();
-			break;
+	case EnumPhoneCallState::PhoneCallStateIncoming:
+		_actionAcceptCall->setEnabled(true);
+		_actionHangupCall->setEnabled(true);
+		_statusLabel->setText(tr("Incoming Call"));
+		break;
 
-		case EnumPhoneCallState::PhoneCallStateIncoming:
-			_actionAcceptCall->setEnabled(true);
-			_actionHangupCall->setEnabled(true);
-			_statusLabel->setText(tr("Incoming Call"));
-			break;
+	case EnumPhoneCallState::PhoneCallStateHold:
+		_statusLabel->setText(tr("Hold"));
+		_actionHold->setEnabled(false);
+		_actionResume->setEnabled(true);
+		_hold = false;
+		break;
 
-		case EnumPhoneCallState::PhoneCallStateHold:
-			_statusLabel->setText(tr("Hold"));
-			_actionHold->setEnabled(false);
-			_actionResume->setEnabled(true);
-			_hold = false;
-			break;
+	case EnumPhoneCallState::PhoneCallStateMissed:
+		_statusLabel->setText(tr("Missed"));
+		break;
 
-		case EnumPhoneCallState::PhoneCallStateMissed:
-			_statusLabel->setText(tr("Missed"));
-			break;
+	case EnumPhoneCallState::PhoneCallStateRedirected:
+		_statusLabel->setText(tr("Redirected"));
+		break;
 
-		case EnumPhoneCallState::PhoneCallStateRedirected:
-			_statusLabel->setText(tr("Redirected"));
-			break;
-
-		default:
-			LOG_FATAL("unknown PhoneCallState=" + EnumPhoneCallState::toString(state));
+	default:
+		LOG_FATAL("unknown PhoneCallState=" + EnumPhoneCallState::toString(state));
 	}
 }
 
 void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame,
-   const WebcamVideoFrame & localVideoFrame) {
-	   // the best image quality is obtained when the interim image size is set according to the screen target size
-	   QSize size(640, 480); // will be the optimum interim resized image
-	   if (_videoWindow) {
-		   QSize frameSize = _videoWindow->getFrameSize(); // screen target size
-		   if (frameSize.width() < size.width()) {
-			   size.setWidth(352);
-			   size.setHeight(288);
-		   }
-	   }
+		const WebcamVideoFrame & localVideoFrame) {
 
-	   //Image will be deleted in videoFrameReceivedThreadSafe. Here we resize the remote image to the interim size
-	   QImage * original = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
-	   remoteVideoFrame.getHeight(), QImage::Format_RGB32);
+	// the best image quality is obtained when the interim image size is set according to the screen target size
+	QSize size(640, 480); // will be the optimum interim resized image
+	if (_videoWindow) {
+		QSize frameSize = _videoWindow->getFrameSize(); // screen target size
+		if (frameSize.width() < size.width()) {
+			size.setWidth(352);
+			size.setHeight(288);
+		}
+	}
 
-	   QImage * image = new QImage(original->scaled(size.width(), size.height(),
-	      Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+	//Image will be deleted in videoFrameReceivedThreadSafe. Here we resize the remote image to the interim size
+	QImage * original = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
+					remoteVideoFrame.getHeight(), QImage::Format_RGB32);
 
-	   delete original;
+	QImage * image = new QImage(original->scaled(size.width(), size.height(),
+					Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
-	   //If we want to embed the local webcam picture, we do it here
-	   if (_encrustLocalWebcam) {
-		   const unsigned offset_x = 10;
-		   const unsigned offset_y = 10;
-		   const unsigned ratio = 5;
-		   const unsigned border_size = 1;
-		   const QBrush border_color = Qt::black;
+	delete original;
 
-		   // we force the ratio of the remote frame on the webcam frame (ignoring the webcam's aspect ratio)
-		   unsigned width = size.width() / ratio;
-		   unsigned height = size.height() / ratio;
-		   unsigned posx = size.width() - width - offset_x;
-		   unsigned posy = size.height() - height - offset_y;
+	//If we want to embed the local webcam picture, we do it here
+	if (_encrustLocalWebcam) {
+		const unsigned offset_x = 10;
+		const unsigned offset_y = 10;
+		const unsigned ratio = 5;
+		const unsigned border_size = 1;
+		const QBrush border_color = Qt::black;
+
+		// we force the ratio of the remote frame on the webcam frame (ignoring the webcam's aspect ratio)
+		unsigned width = size.width() / ratio;
+		unsigned height = size.height() / ratio;
+		unsigned posx = size.width() - width - offset_x;
+		unsigned posy = size.height() - height - offset_y;
 
 /*
 		piximage originalImage;
@@ -352,24 +356,24 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 		pix_free(resizedImage);
 */
 
-		   // prepare the embedded image
-		   QImage localImage = QImage(localVideoFrame.getFrame(), localVideoFrame.getWidth(),
-		   localVideoFrame.getHeight(),
-		   QImage::Format_RGB32).scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		// prepare the embedded image
+		QImage localImage = QImage(localVideoFrame.getFrame(), localVideoFrame.getWidth(),
+		localVideoFrame.getHeight(),
+		QImage::Format_RGB32).scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-		   QPainter painter;
-		   painter.begin(image);
-		   // draw a 1-pixel border around the local embedded frame
-		   painter.fillRect(posx - border_size, posy - border_size, width + 2 * border_size,
-		      height + 2 * border_size, border_color);
-		   // embed the image
-		   painter.drawImage(posx, posy, localImage);
-		   painter.end();
-	   }
+		QPainter painter;
+		painter.begin(image);
+		// draw a 1-pixel border around the local embedded frame
+		painter.fillRect(posx - border_size, posy - border_size, width + 2 * border_size,
+		height + 2 * border_size, border_color);
+		// embed the image
+		painter.drawImage(posx, posy, localImage);
+		painter.end();
+	}
 
-	   typedef PostEvent1 < void(QImage *), QImage * > MyPostEvent;
-	   MyPostEvent * event = new MyPostEvent(boost::bind(& QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe, this, _1), image);
-	   postEvent(event);
+	typedef PostEvent1 < void(QImage *), QImage * > MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(& QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe, this, _1), image);
+	postEvent(event);
 }
 
 void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(QImage * image) {
@@ -389,18 +393,18 @@ void QtPhoneCall::acceptActionTriggered(bool) {
 
 void QtPhoneCall::rejectActionTriggered(bool) {
 	switch (_cPhoneCall.getState()) {
-		case EnumPhoneCallState::PhoneCallStateResumed:
-		case EnumPhoneCallState::PhoneCallStateTalking:
-		case EnumPhoneCallState::PhoneCallStateDialing:
-		case EnumPhoneCallState::PhoneCallStateRinging:
-		case EnumPhoneCallState::PhoneCallStateIncoming:
-		case EnumPhoneCallState::PhoneCallStateHold:
-		case EnumPhoneCallState::PhoneCallStateRedirected:
-			_cPhoneCall.hangUp();
-			break;
-		default:
-			delete _phoneCallWidget;
-			callRejected(); // Close the widget
+	case EnumPhoneCallState::PhoneCallStateResumed:
+	case EnumPhoneCallState::PhoneCallStateTalking:
+	case EnumPhoneCallState::PhoneCallStateDialing:
+	case EnumPhoneCallState::PhoneCallStateRinging:
+	case EnumPhoneCallState::PhoneCallStateIncoming:
+	case EnumPhoneCallState::PhoneCallStateHold:
+	case EnumPhoneCallState::PhoneCallStateRedirected:
+		_cPhoneCall.hangUp();
+		break;
+	default:
+		delete _phoneCallWidget;
+		callRejected(); // Close the widget
 	}
 }
 
@@ -522,5 +526,4 @@ void QtPhoneCall::inviteToConference(bool) {
 			}
 		}
 	}
-
 }

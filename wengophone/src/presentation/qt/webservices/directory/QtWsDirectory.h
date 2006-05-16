@@ -17,10 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_QTDIRECTORY_H
-#define OW_QTDIRECTORY_H
-
-#include "ui_WsDirectory.h"
+#ifndef QTWSDIRECTORY_H
+#define QTWSDIRECTORY_H
 
 #include <presentation/PWsDirectory.h>
 #include <control/webservices/directory/CWsDirectory.h>
@@ -29,26 +27,30 @@
 
 #include <QWidget>
 
-class QtWsDirectoryContact;
+class ContactProfile;
 class CWsDirectory;
+class QtWsDirectoryContact;
 class QtWengoPhone;
+
+class QWidget;
+namespace Ui { class WsDirectory; }
 
 /**
  * Search buddies qt widget.
  *
  * @author Mathieu Stute
  */
-class QtWsDirectory : public QObjectThreadSafe , public PWsDirectory {
-	friend class QtWsDirectoryContact;
+class QtWsDirectory : public QObjectThreadSafe, public PWsDirectory {
 	Q_OBJECT
+	friend class QtWsDirectoryContact;
 public:
 
-	QtWsDirectory(CWsDirectory & cWsDirectory, QObject * parent = 0);
+	QtWsDirectory(CWsDirectory & cWsDirectory);
 
 	~QtWsDirectory();
 
 	QWidget * getWidget();
-	
+
 	void updatePresentation();
 
 	void clear();
@@ -63,23 +65,23 @@ private:
 
 	void callContact(const QString & sipAddress);
 
-	void addContact(Profile * profile);
+	void addContact(ContactProfile * contact);
 
 	void initThreadSafe();
 
 	void updatePresentationThreadSafe();
 
-	void contactFoundEventHandler(WsDirectory & sender, Profile * profile, bool online);
+	void contactFoundEventHandler(WsDirectory & sender, ContactProfile * contact, bool online);
 
-	void contactFoundEventHandlerThreadSafe(WsDirectory & sender, Profile * profile, bool online);
+	void contactFoundEventHandlerThreadSafe(WsDirectory & sender, ContactProfile * contact, bool online);
 
 	CWsDirectory & _cWsDirectory;
 
-	Ui::WsDirectoryForm ui;
+	Ui::WsDirectory * _ui;
 
 	QWidget * _widget;
 
 	QtWengoPhone * _qtWengoPhone;
 };
 
-#endif	//OW_QTDIRECTORY_H
+#endif	//QTWSDIRECTORY_H

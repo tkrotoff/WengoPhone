@@ -20,7 +20,7 @@
 #include "QtContactPixmap.h"
 
 
-QtContactPixmap * QtContactPixmap::_instance = 0;
+QtContactPixmap * QtContactPixmap::_instance = NULL;
 
 QtContactPixmap::QtContactPixmap() {
 }
@@ -32,10 +32,10 @@ QtContactPixmap * QtContactPixmap::getInstance() {
 	return _instance;
 }
 
-void QtContactPixmap::setPixmap(contactPixmap status, const QPixmap & px) {
+void QtContactPixmap::setPixmap(ContactPixmap status, const QPixmap & px) {
 	_contactPixmap[status] = px;
 }
 
-QPixmap & QtContactPixmap::getPixmap(contactPixmap status) {
+QPixmap & QtContactPixmap::getPixmap(ContactPixmap status) {
 	return _contactPixmap[status];
 }

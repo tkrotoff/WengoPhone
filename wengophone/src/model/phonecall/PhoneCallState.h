@@ -22,8 +22,6 @@
 
 #include <sipwrapper/EnumPhoneCallState.h>
 
-#include <string>
-
 class PhoneCall;
 class Sound;
 

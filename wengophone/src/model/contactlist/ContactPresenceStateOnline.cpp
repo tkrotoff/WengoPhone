@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "PhoneCallStateRinging.h"
+#include "ContactPresenceStateOnline.h"
 
-#include "PhoneCall.h"
+#include "ContactProfile.h"
 
-void PhoneCallStateRinging::execute(PhoneCall & phoneCall) { }
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
+#include <sound/Sound.h>
+
+#include <util/Logger.h>
+
+void ContactPresenceStateOnline::execute(ContactProfile & contact) {
+	static bool firstConnection = true;
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	if (firstConnection) {
+		Sound::play(config.getAudioIMAccountConnectedFile());
+		firstConnection = false;
+	} else {
+		Sound::play(config.getAudioContactOnlineFile());
+	}
+}

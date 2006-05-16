@@ -79,27 +79,27 @@ void QtSms::smsStatusEventHandler(Sms & sender, int smsId, Sms::SmsStatus status
 }
 
 void QtSms::smsStatusEventHandlerThreadSafe(Sms::SmsStatus status) {
-	QString smsStatus = "";
-	switch(status) {
-		case Sms::SmsStatusError:
-			smsStatus = tr("SmsStatusError");
-			break;
-		case Sms::SmsStatusOk:
-			smsStatus = tr("SmsStatusOk");
-			break;
-		default:
-			LOG_FATAL("Unknown SmsStatus");
+	QString smsStatus = String::null;
+	switch (status) {
+	case Sms::SmsStatusError:
+		smsStatus = tr("SmsStatusError");
+		break;
+	case Sms::SmsStatusOk:
+		smsStatus = tr("SmsStatusOk");
+		break;
+	default:
+		LOG_FATAL("Unknown SmsStatus");
 	}
 
 	_sendButton->setEnabled(true);
 	QMessageBox::information(_smsWindow, tr("Sms"), smsStatus);
 }
 
-void QtSms::setPhoneNumber(const QString & phone) {
+void QtSms::setPhoneNumber(const QString & phoneNumber) {
 	QComboBox * phoneComboBox = Object::findChild<QComboBox *>(_smsWindow, "phoneComboBox");
-	if( phone != "" ) {
+	if (!phoneNumber.isEmpty()) {
 		phoneComboBox->clear();
-		phoneComboBox->addItem(phone);
+		phoneComboBox->addItem(phoneNumber);
 	}
 }
 

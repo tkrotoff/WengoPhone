@@ -123,7 +123,7 @@ const std::string Config::IEACTIVEX_ENABLE_KEY = "ieactivex.enable";
 Config::Config(const std::string & name)
 	: AutomaticSettings() {
 
-	static const std::string empty("");
+	static const std::string empty(String::null);
 	static const StringList emptyStrList;
 	std::string resourcesPath;
 	std::string configPath;

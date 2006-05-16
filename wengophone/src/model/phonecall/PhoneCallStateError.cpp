@@ -19,6 +19,8 @@
 
 #include "PhoneCallStateError.h"
 
+#include "PhoneCall.h"
+
 #include "model/wenbox/WenboxPlugin.h"
 
 void PhoneCallStateError::execute(PhoneCall & phoneCall) {

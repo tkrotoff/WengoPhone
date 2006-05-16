@@ -135,10 +135,10 @@ void PhApiWrapper::setNetworkParameter() {
 		//TODO: activate SSL for HTTP tunnel
 		phTunnelConfig(_proxyServer.c_str(), _proxyPort, _tunnelServer.c_str(), _tunnelPort,
 			_proxyLogin.c_str(), _proxyPassword.c_str(), 0);
-		
+
 		phcfg.use_tunnel = 1;
 		natType = "fcone";
-		
+
 	} else {
 		switch(_natType) {
 		case EnumNatType::NatTypeOpen:
@@ -189,7 +189,7 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 
 	int ret = SipWrapper::VirtualLineIdError;
 	if (_isInitialized) {
-		phAddAuthInfo(username.c_str(), identity.c_str(), password.c_str(), String::null.c_str(), realm.c_str());
+		phAddAuthInfo(username.c_str(), identity.c_str(), password.c_str(), String::null, realm.c_str());
 
 		std::string tmp = proxyServer;
 		tmp += ":" + String::fromNumber(_sipServerPort);

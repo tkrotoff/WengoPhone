@@ -62,20 +62,19 @@ public:
 		/** My presence has been changed successfully. */
 		MyPresenceStatusOk,
 
-		/** An eror occured while changing my presence. */
+		/** An error occured while changing my presence. */
 		MyPresenceStatusError
 	};
 
 	/**
-	 * Get a string representation of the presence state.
+	 * Gets a string representation of the presence state.
 	 */
 	static std::string toString(PresenceState presenceState);
 
 	/**
-	 * Get a presence state from a string representation.
+	 * Gets a presence state from a string representation.
 	 */
 	static PresenceState fromString(const std::string & presenceState);
-
 };
 
 #endif	//ENUMPRESENCESTATE_H

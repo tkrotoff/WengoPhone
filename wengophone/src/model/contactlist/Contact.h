@@ -50,13 +50,13 @@ public:
 
 	Contact(const Contact & contact);
 
-	Contact & operator = (const Contact & contact);
+	Contact & operator=(const Contact & contact);
 
-	Contact & operator = (const ContactProfile & contactProfile);
+	Contact & operator=(const ContactProfile & contactProfile);
 
 	~Contact();
 
-	bool operator == (const Contact & contact) const;
+	bool operator==(const Contact & contact) const;
 
 	/**
 	 * Set the preferred phone number (can also be a wengo id or a sip address).
@@ -97,7 +97,7 @@ public:
 	 * Check if an IMContact of the Contact is equivalent to the given
 	 * IMContact.
 	 *
-	 * Equivalent IMContacts are of the same protocol. If an equivalent 
+	 * Equivalent IMContacts are of the same protocol. If an equivalent
 	 * IMContact has been found and if it has no associated IMAccount,
 	 * the IMAccount of the given IMContact is linked to the found
 	 * IMContact.

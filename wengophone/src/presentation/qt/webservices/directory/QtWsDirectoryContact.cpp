@@ -18,76 +18,86 @@
  */
 
 #include "QtWsDirectoryContact.h"
+
+#include "ui_WsDirectoryContact.h"
+
 #include "QtWsDirectory.h"
 
-#include <model/profile/Profile.h>
+#include <model/contactlist/ContactProfile.h>
 
 #include <qtutil/MouseEventFilter.h>
 
 #include <QtGui>
 
-QtWsDirectoryContact::QtWsDirectoryContact(QtWsDirectory * qtWsDirectory, Profile * profile, bool online, QWidget * parent) 
-	: QWidget(parent), _qtWsDirectory(qtWsDirectory), _profile(profile) {
+QtWsDirectoryContact::QtWsDirectoryContact(QtWsDirectory * qtWsDirectory, ContactProfile * contact, bool online, QWidget * parent)
+	: QObject(parent),
+	_qtWsDirectory(qtWsDirectory),
+	_contact(contact) {
 
-	ui.setupUi(this);
-	ui.statusLabel->setPixmap(QPixmap(":/pics/status/offline.png"));
-	ui.statusLabel->setText("");
-	
+	_wsDirectoryWidget = new QWidget(parent);
+
+	_ui = new Ui::WsDirectoryContact();
+	_ui->setupUi(_wsDirectoryWidget);
+
+	_ui->statusLabel->setPixmap(QPixmap(":/pics/status/offline.png"));
+	_ui->statusLabel->setText(QString::null);
+
 	MousePressEventFilter * mouseFilter1 = new MousePressEventFilter(
-		this, SLOT(callLabelClicked()), Qt::LeftButton);
-	ui.callLabel->installEventFilter(mouseFilter1);
-	
+			this, SLOT(callLabelClicked()), Qt::LeftButton);
+	_ui->callLabel->installEventFilter(mouseFilter1);
+
 	MousePressEventFilter * mouseFilter2 = new MousePressEventFilter(
 			this, SLOT(addLabelClicked()), Qt::LeftButton);
-	ui.addLabel->installEventFilter(mouseFilter2);
+	_ui->addLabel->installEventFilter(mouseFilter2);
 
-	setName(QString::fromUtf8(profile->getFirstName().c_str()) + " " + QString::fromUtf8(profile->getLastName().c_str()));
-	setNickname(tr("Nickname: ") + QString::fromUtf8(profile->getWengoPhoneId().c_str()));
-	setWengoNumber(tr("Wengo number: ") + QString::fromStdString(profile->getWengoPhoneNumber()));
-	setSipAddress(tr("Sip address: ") + QString::fromStdString(profile->getWengoPhoneId() + "@213.91.9.210"));
-	setLocality(tr("City: ") + QString::fromUtf8(profile->getStreetAddress().getCity().c_str()));
-	setCountry(tr("Country: ") + QString::fromUtf8(profile->getStreetAddress().getCountry().c_str()));
+	setName(QString::fromUtf8(_contact->getFirstName().c_str()) + " " + QString::fromUtf8(_contact->getLastName().c_str()));
+	setNickname(tr("Nickname: ") + QString::fromUtf8(_contact->getWengoPhoneId().c_str()));
+	setWengoNumber(tr("Wengo number: ") + QString::fromStdString(_contact->getWengoPhoneNumber()));
+	setSipAddress(tr("SIP address: ") + QString::fromStdString(_contact->getWengoPhoneId() + "@213.91.9.210"));
+	setLocality(tr("City: ") + QString::fromUtf8(_contact->getStreetAddress().getCity().c_str()));
+	setCountry(tr("Country: ") + QString::fromUtf8(_contact->getStreetAddress().getCountry().c_str()));
 	setOnline(online);
 }
 
 QtWsDirectoryContact::~QtWsDirectoryContact() {
-	delete _profile;
+	delete _contact;
+	delete _ui;
 }
 
 void QtWsDirectoryContact::setNickname(const QString & nickname) {
-	ui.nicknameLabel->setText(nickname);
+	_ui->nicknameLabel->setText(nickname);
 }
 
 void QtWsDirectoryContact::setWengoNumber(const QString & number) {
-	ui.wengoNumberLabel->setText(number);
+	_ui->wengoNumberLabel->setText(number);
 }
 
 void QtWsDirectoryContact::setSipAddress(const QString & sipAddress) {
-	ui.sipLabel->setText(sipAddress);
+	_ui->sipLabel->setText(sipAddress);
 }
 
 void QtWsDirectoryContact::setName(const QString & name) {
-	ui.nameLabel->setText(name);
+	_ui->nameLabel->setText(name);
 }
 
 void QtWsDirectoryContact::setLocality(const QString & locality) {
-	ui.localityLabel->setText(locality);
+	_ui->localityLabel->setText(locality);
 }
 
 void QtWsDirectoryContact::setCountry(const QString & country) {
-	ui.countryLabel->setText(country);
+	_ui->countryLabel->setText(country);
 }
 
 void QtWsDirectoryContact::setOnline(bool online) {
-	if( online ) {
-		ui.statusLabel->setPixmap(QPixmap(":/pics/status/online.png"));
+	if (online) {
+		_ui->statusLabel->setPixmap(QPixmap(":/pics/status/online.png"));
 	}
 }
 
 void QtWsDirectoryContact::callLabelClicked() {
-	_qtWsDirectory->callContact(ui.nicknameLabel->text());
+	_qtWsDirectory->callContact(_ui->nicknameLabel->text());
 }
 
 void QtWsDirectoryContact::addLabelClicked() {
-	_qtWsDirectory->addContact(_profile);
+	_qtWsDirectory->addContact(_contact);
 }

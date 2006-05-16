@@ -85,7 +85,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	}
 
 	// Draw the status pixmap
-	QtContactPixmap::contactPixmap status = getStatus();
+	QtContactPixmap::ContactPixmap status = getStatus();
 
 	px = spx->getPixmap(status);
 	r = option.rect;
@@ -180,33 +180,35 @@ QString QtUser::getUserName() const {
 	return QString::fromUtf8(_contactProfile.getDisplayName().c_str());
 }
 
-QtContactPixmap::contactPixmap QtUser::getStatus() const {
+QtContactPixmap::ContactPixmap QtUser::getStatus() const {
 	//QMutexLocker locker(&_mutex);
 
-	QtContactPixmap::contactPixmap status;
+	QtContactPixmap::ContactPixmap status;
 
 	switch (_contactProfile.getPresenceState()) {
-		case EnumPresenceState::PresenceStateOnline:
-			status = QtContactPixmap::ContactOnline;
-			break;
-		case EnumPresenceState::PresenceStateOffline:
-			status = QtContactPixmap::ContactOffline;
-			break;
-		case EnumPresenceState::PresenceStateDoNotDisturb:
-			status = QtContactPixmap::ContactDND;
-			break;
-		case EnumPresenceState::PresenceStateAway:
-			status = QtContactPixmap::ContactAway;
-			break;
-		case EnumPresenceState::PresenceStateInvisible:
-			status = QtContactPixmap::ContactInvisible;
-			break;
-		case EnumPresenceState::PresenceStateForward:
-			status = QtContactPixmap::ContactForward;
-			break;
-		default:
-			LOG_FATAL("Unknown state");
-
+	case EnumPresenceState::PresenceStateUnknown:
+		status = QtContactPixmap::ContactUnknown;
+		break;
+	case EnumPresenceState::PresenceStateOnline:
+		status = QtContactPixmap::ContactOnline;
+		break;
+	case EnumPresenceState::PresenceStateOffline:
+		status = QtContactPixmap::ContactOffline;
+		break;
+	case EnumPresenceState::PresenceStateDoNotDisturb:
+		status = QtContactPixmap::ContactDND;
+		break;
+	case EnumPresenceState::PresenceStateAway:
+		status = QtContactPixmap::ContactAway;
+		break;
+	case EnumPresenceState::PresenceStateInvisible:
+		status = QtContactPixmap::ContactInvisible;
+		break;
+	case EnumPresenceState::PresenceStateForward:
+		status = QtContactPixmap::ContactForward;
+		break;
+	default:
+		LOG_FATAL("Unknown state=" + String::fromNumber(_contactProfile.getPresenceState()));
 	}
 
 	return status;

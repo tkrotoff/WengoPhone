@@ -19,7 +19,9 @@
 
 #include "PhoneCallStateTalking.h"
 
-#include "model/wenbox/WenboxPlugin.h"
+#include "PhoneCall.h"
+
+#include <model/wenbox/WenboxPlugin.h>
 
 void PhoneCallStateTalking::execute(PhoneCall & phoneCall) {
 	stopSoundIncomingCall();

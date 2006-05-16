@@ -17,6 +17,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "PhoneCallStateDefault.h"
+#ifndef CONTACTPRESENCESTATEDONOTDISTURB_H
+#define CONTACTPRESENCESTATEDONOTDISTURB_H
 
-void PhoneCallStateDefault::execute(PhoneCall & phoneCall) { }
+#include "ContactPresenceState.h"
+
+/**
+ *
+ * @ingroup model
+ * @author Tanguy Krotoff
+ */
+class ContactPresenceStateDoNotDisturb : public ContactPresenceState {
+public:
+
+	void execute(ContactProfile & contact);
+
+	EnumPresenceState::PresenceState getCode() const {
+		return EnumPresenceState::PresenceStateDoNotDisturb;
+	}
+};
+
+#endif	//CONTACTPRESENCESTATEDONOTDISTURB_H

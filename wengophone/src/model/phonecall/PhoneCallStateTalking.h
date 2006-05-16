@@ -21,7 +21,6 @@
 #define PHONECALLSTATETALKING_H
 
 #include "PhoneCallState.h"
-#include "PhoneCall.h"
 
 /**
  * Communication state.

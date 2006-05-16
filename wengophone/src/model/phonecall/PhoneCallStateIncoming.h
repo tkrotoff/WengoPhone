@@ -21,7 +21,6 @@
 #define PHONECALLSTATEINCOMING_H
 
 #include "PhoneCallState.h"
-#include "PhoneCall.h"
 
 /**
  * Incoming PhoneCall.

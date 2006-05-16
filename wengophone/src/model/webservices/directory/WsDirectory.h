@@ -21,18 +21,18 @@
 #define WSDIRECTORY_H
 
 #include <model/webservices/WengoWebService.h>
-#include <model/profile/Profile.h>
 
 #include <util/Event.h>
 
+class ContactProfile;
+
 /**
  * Search for Wengo users web service
- * 
+ *
  * @ingroup model
  * @author Mathieu Stute
  */
 class WsDirectory : public WengoWebService {
-
 public:
 
 	enum Criteria {
@@ -48,11 +48,12 @@ public:
 	/**
 	 * Emitted when a contact has been found.
 	 *
-	 * @param sender this class
+	 * @param sender WsDirectory
+	 * @param contact contact found
 	 */
-	Event< void(WsDirectory & sender, Profile * profile, bool online) > contactFoundEvent;
+	Event< void(WsDirectory & sender, ContactProfile * contact, bool online) > contactFoundEvent;
 
-    /**
+	/**
 	 * Default constructor.
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
@@ -61,10 +62,11 @@ public:
 
 	virtual ~WsDirectory() {}
 
-    void searchEntry(const std::string & query, Criteria criteria = none);
+	void searchEntry(const std::string & query, Criteria criteria = none);
 
 private:
 
 	void answerReceived(const std::string & answer, int requestId);
 };
-#endif /* WSDIRECTORY_H */
+
+#endif	//WSDIRECTORY_H

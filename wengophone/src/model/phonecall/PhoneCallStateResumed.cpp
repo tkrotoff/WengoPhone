@@ -19,6 +19,8 @@
 
 #include "PhoneCallStateResumed.h"
 
+#include "PhoneCall.h"
+
 void PhoneCallStateResumed::execute(PhoneCall & phoneCall) {
 	stopSoundIncomingCall();
 }

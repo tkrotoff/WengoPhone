@@ -19,7 +19,7 @@
 
 #include "PhoneCall.h"
 
-#include "PhoneCallStateDefault.h"
+#include "PhoneCallStateUnknown.h"
 #include "PhoneCallStateClosed.h"
 #include "PhoneCallStateDialing.h"
 #include "PhoneCallStateError.h"
@@ -50,12 +50,12 @@ PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 
 	_sipAddress = sipAddress;
 
-	static PhoneCallStateDefault stateDefault;
+	static PhoneCallStateUnknown stateUnknown;
 
-	//Default state (PhoneCallStateDefault)
-	_state = &stateDefault;
+	//Default state (PhoneCallStateUnknown)
+	_state = &stateUnknown;
 
-	_phoneCallStateList += &stateDefault;
+	_phoneCallStateList += &stateUnknown;
 
 	static PhoneCallStateClosed stateClosed;
 	_phoneCallStateList += &stateClosed;
@@ -137,10 +137,12 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 					" state=" + EnumPhoneCallState::toString(_state->getCode()));
 				applyState(state);
 				stateChangedEvent(*this, state);
-				break;
+				return;
 			}
 		}
 	}
+
+	LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
 }
 
 void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
@@ -152,8 +154,7 @@ void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
 
 	//This should not replace the state machine pattern PhoneCallState
 	switch(state) {
-
-	case EnumPhoneCallState::PhoneCallStateDefault:
+	case EnumPhoneCallState::PhoneCallStateUnknown:
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:

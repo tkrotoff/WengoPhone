@@ -307,20 +307,22 @@ void QtUserManager::safeUserStateChanged() {
 	safeHideOffLineUsers();
 
 	QtHidenContact * hidenContact;
-	QList < QtHidenContact * >::iterator iter;
+	QList < QtHidenContact * >::iterator it;
 
 	QList < QtHidenContact * > newHidenList;
 
-	for (iter = _hidenContacts.begin(); iter != _hidenContacts.end(); iter++) {
+	for (it = _hidenContacts.begin(); it != _hidenContacts.end(); it++) {
 
-		hidenContact = (QtHidenContact *) (* iter);
+		hidenContact = (QtHidenContact *) (* it);
 
 		if (hidenContact->getUser()->getStatus() != QtContactPixmap::ContactOffline) {
 
-			if (hidenContact->getIndex() > hidenContact->getParentItem()->childCount())
+			if (hidenContact->getIndex() > hidenContact->getParentItem()->childCount()) {
 				hidenContact->getParentItem()->insertChild(hidenContact->getParentItem()->childCount(),
-				hidenContact->getItem());
-			else hidenContact->getParentItem()->insertChild(hidenContact->getIndex(), hidenContact->getItem());
+								hidenContact->getItem());
+			} else {
+				hidenContact->getParentItem()->insertChild(hidenContact->getIndex(), hidenContact->getItem());
+			}
 		}
 		else {
 			newHidenList.append(hidenContact);

@@ -52,7 +52,7 @@ public:
 
 	void updatePresentation();
 
-	void setPhoneNumber(const QString & phone);
+	void setPhoneNumber(const QString & phoneNumber);
 
 	void setText(const QString & text);
 
@@ -77,7 +77,7 @@ private:
 	QWidget * _smsWindow;
 
 	QPushButton * _sendButton;
-	
+
 	QTextEdit * _smsText;
 };
 

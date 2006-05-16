@@ -21,7 +21,6 @@
 #define PHONECALLSTATECLOSED_H
 
 #include "PhoneCallState.h"
-#include "PhoneCall.h"
 
 /**
  *

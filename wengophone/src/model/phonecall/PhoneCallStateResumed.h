@@ -21,7 +21,6 @@
 #define PHONECALLSTATERESUME_H
 
 #include "PhoneCallState.h"
-#include "PhoneCall.h"
 
 /**
  *

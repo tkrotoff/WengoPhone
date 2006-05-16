@@ -27,7 +27,7 @@
 #include <sstream>
 using namespace std;
 
-const String String::null;
+const char * String::null = "";
 
 int String::toInteger() const {
 	int tmp;

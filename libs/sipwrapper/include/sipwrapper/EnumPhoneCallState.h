@@ -33,8 +33,8 @@ class EnumPhoneCallState : NonCopyable {
 public:
 
 	enum PhoneCallState {
-		/** Default state. */
-		PhoneCallStateDefault,
+		/** Unknown state. */
+		PhoneCallStateUnknown,
 
 		/** An error occured. */
 		PhoneCallStateError,

@@ -19,6 +19,8 @@
 
 #include "PhoneCallStateClosed.h"
 
+#include "PhoneCall.h"
+
 #include <model/wenbox/WenboxPlugin.h>
 
 #include <sound/Sound.h>

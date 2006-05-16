@@ -19,25 +19,26 @@
 
 #include "Profile.h"
 
+#include <util/Logger.h>
+
 Profile::Profile() {
 	_sex = EnumSex::SexUnknown;
-	_presenceState = EnumPresenceState::PresenceStateUnknown;
-	_firstName = "";
-	_lastName = "";
-	_website = "";
-	_company = "";
-	_wengoPhoneId = "";
-	_mobilePhone = "";
-	_homePhone = "";
-	_workPhone = "";
-	_wengoPhoneNumber = "";
-	_otherPhone = "";
-	_fax = "";
-	_personalEmail = "";
-	_workEmail = "";
-	_otherEmail = "";
-	_notes = "";
-	_alias = "";
+	_firstName = String::null;
+	_lastName = String::null;
+	_website = String::null;
+	_company = String::null;
+	_wengoPhoneId = String::null;
+	_mobilePhone = String::null;
+	_homePhone = String::null;
+	_workPhone = String::null;
+	_wengoPhoneNumber = String::null;
+	_otherPhone = String::null;
+	_fax = String::null;
+	_personalEmail = String::null;
+	_workEmail = String::null;
+	_otherEmail = String::null;
+	_notes = String::null;
+	_alias = String::null;
 }
 
 Profile::Profile(const Profile & profile) {
@@ -46,7 +47,6 @@ Profile::Profile(const Profile & profile) {
 
 void Profile::copy(const Profile & profile) {
 	_sex = profile._sex;
-	_presenceState = profile._presenceState;;
 	_firstName = profile._firstName;
 	_lastName = profile._lastName;
 	_website = profile._website;
@@ -66,7 +66,7 @@ void Profile::copy(const Profile & profile) {
 	_icon = profile._icon;
 }
 
-bool Profile::operator == (const Profile & profile) const {
+bool Profile::operator==(const Profile & profile) const {
 	return ((_firstName == profile._firstName)
 		&& (_lastName == profile._lastName)
 		&& (_sex == profile._sex)
@@ -83,6 +83,5 @@ bool Profile::operator == (const Profile & profile) const {
 		&& (_workEmail == profile._workEmail)
 		&& (_otherEmail == profile._otherEmail)
 		&& (_streetAddress == profile._streetAddress)
-		&& (_notes == profile._notes)
-		&& (_presenceState == profile._presenceState));
+		&& (_notes == profile._notes));
 }

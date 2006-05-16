@@ -112,7 +112,7 @@ public:
 private:
 
 	/**
-	 * Set the state of this Presence
+	 * Sets the state of this Presence
 	 *
 	 * @param the desired state
 	 */
@@ -123,7 +123,6 @@ private:
 	IMPresence * _imPresence;
 
 	MyPresenceState * _state;
-
 };
 
 #endif	//PRESENCE_H

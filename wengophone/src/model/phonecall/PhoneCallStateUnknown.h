@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "PhoneCallStateRinging.h"
+#ifndef PHONECALLSTATEUNKNOWN_H
+#define PHONECALLSTATEUNKNOWN_H
 
-#include "PhoneCall.h"
+#include "PhoneCallState.h"
 
-void PhoneCallStateRinging::execute(PhoneCall & phoneCall) { }
+/**
+ *
+ * @ingroup model
+ * @author Tanguy Krotoff
+ */
+class PhoneCallStateUnknown : public PhoneCallState {
+public:
+
+	EnumPhoneCallState::PhoneCallState getCode() const {
+		return EnumPhoneCallState::PhoneCallStateUnknown;
+	}
+
+	void execute(PhoneCall & phoneCall);
+};
+
+#endif	//PHONECALLSTATEUNKNOWN_H

@@ -19,6 +19,8 @@
 
 #include "PhoneCallStateIncoming.h"
 
+#include "PhoneCall.h"
+
 #include <model/wenbox/WenboxPlugin.h>
 #include <model/contactlist/ContactList.h>
 

@@ -19,6 +19,13 @@
 
 #include "ContactProfile.h"
 
+#include "ContactPresenceStateUnknown.h"
+#include "ContactPresenceStateOnline.h"
+#include "ContactPresenceStateOffline.h"
+#include "ContactPresenceStateAway.h"
+#include "ContactPresenceStateDoNotDisturb.h"
+#include "ContactPresenceStateForward.h"
+
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMContact.h>
 #include <imwrapper/IMChatSession.h>
@@ -32,12 +39,31 @@
 
 using namespace std;
 
+ContactProfile::PresenceStates ContactProfile::_presenceStateMap;
+
+static ContactPresenceStateUnknown contactPresenceStateUnknown;
+static ContactPresenceStateOnline contactPresenceStateOnline;
+static ContactPresenceStateOffline contactPresenceStateOffline;
+static ContactPresenceStateAway contactPresenceStateAway;
+static ContactPresenceStateDoNotDisturb contactPresenceStateDoNotDisturb;
+static ContactPresenceStateForward contactPresenceStateForward;
+
 ContactProfile::ContactProfile() {
 	_sex = EnumSex::SexUnknown;
 	_blocked = false;
 	_preferredIMContact = NULL;
 
 	_uuid = Uuid::generate();
+
+	//Default state (ContactPresenceStateUnknown)
+	_presenceState = &contactPresenceStateUnknown;
+
+	_presenceStateMap[contactPresenceStateUnknown.getCode()] = &contactPresenceStateUnknown;
+	_presenceStateMap[contactPresenceStateOnline.getCode()] = &contactPresenceStateOnline;
+	_presenceStateMap[contactPresenceStateOffline.getCode()] = &contactPresenceStateOffline;
+	_presenceStateMap[contactPresenceStateAway.getCode()] = &contactPresenceStateAway;
+	_presenceStateMap[contactPresenceStateDoNotDisturb.getCode()] = &contactPresenceStateDoNotDisturb;
+	_presenceStateMap[contactPresenceStateForward.getCode()] = &contactPresenceStateForward;
 }
 
 ContactProfile::ContactProfile(const ContactProfile & contactProfile) {
@@ -47,7 +73,7 @@ ContactProfile::ContactProfile(const ContactProfile & contactProfile) {
 ContactProfile::~ContactProfile() {
 }
 
-ContactProfile & ContactProfile::operator = (const ContactProfile & contactProfile) {
+ContactProfile & ContactProfile::operator=(const ContactProfile & contactProfile) {
 	if (&contactProfile != this) {
 		copy(contactProfile);
 	}
@@ -62,9 +88,10 @@ void ContactProfile::copy(const ContactProfile & contactProfile) {
 	_preferredIMContact = contactProfile._preferredIMContact;
 	_imContactSet = contactProfile._imContactSet;
 	_groupId = contactProfile._groupId;
+	_presenceState = contactProfile._presenceState;
 }
 
-bool ContactProfile::operator == (const ContactProfile & contactProfile) const {
+bool ContactProfile::operator==(const ContactProfile & contactProfile) const {
 	return (_uuid == contactProfile._uuid);
 }
 
@@ -98,7 +125,8 @@ void ContactProfile::setGroupId(const std::string & groupId) {
 }
 
 bool ContactProfile::hasIM() const {
-	return (getPresenceState() != EnumPresenceState::PresenceStateOffline);
+	return (getPresenceState() != EnumPresenceState::PresenceStateOffline &&
+		getPresenceState() != EnumPresenceState::PresenceStateUnknown);
 }
 
 bool ContactProfile::hasCall() const {
@@ -154,6 +182,10 @@ IMContact * ContactProfile::getPreferredIMContact() const {
 }
 
 EnumPresenceState::PresenceState ContactProfile::getPresenceState() const {
+	return _presenceState->getCode();
+}
+
+EnumPresenceState::PresenceState ContactProfile::computePresenceState() const {
 	unsigned onlineIMContact = 0;
 	unsigned offlineIMContact = 0;
 	unsigned dndIMContact = 0;
@@ -178,6 +210,28 @@ EnumPresenceState::PresenceState ContactProfile::getPresenceState() const {
 		return EnumPresenceState::PresenceStateDoNotDisturb;
 	} else {
 		return EnumPresenceState::PresenceStateAway;
+	}
+}
+
+void ContactProfile::updatePresenceState() {
+	EnumPresenceState::PresenceState presenceState = computePresenceState();
+
+	LOG_DEBUG("PresenceState=" + String::fromNumber(presenceState));
+
+	PresenceStates::iterator it = _presenceStateMap.find(presenceState);
+	if (it == _presenceStateMap.end()) {
+		LOG_FATAL("unknown PresenceState=" + String::fromNumber(presenceState));
+	}
+
+	ContactPresenceState * state = it->second;
+	if (state->getCode() == presenceState) {
+		if (_presenceState->getCode() != state->getCode()) {
+			_presenceState = state;
+			_presenceState->execute(*this);
+			LOG_DEBUG("presence state changed=" + EnumPresenceState::toString(_presenceState->getCode()));
+			profileChangedEvent(*this);
+			return;
+		}
 	}
 }
 

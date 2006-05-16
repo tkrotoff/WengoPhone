@@ -38,23 +38,24 @@
 using namespace std;
 
 Contact::Contact(UserProfile & userProfile)
-: ContactProfile(),
-_userProfile(userProfile),
-_contactList(userProfile.getContactList()) {
+	: ContactProfile(),
+	_userProfile(userProfile),
+	_contactList(userProfile.getContactList()) {
 
-	profileChangedEvent +=
-		boost::bind(&Contact::profileChangedEventHandler, this, _1);
+	profileChangedEvent += boost::bind(&Contact::profileChangedEventHandler, this, _1);
 }
 
 Contact::Contact(const Contact & contact)
-: _userProfile(contact._userProfile), _contactList(contact._contactList) {
+	: _userProfile(contact._userProfile),
+	_contactList(contact._contactList) {
+
 	copy(contact);
 }
 
 Contact::~Contact() {
 }
 
-Contact & Contact::operator = (const Contact & contact) {
+Contact & Contact::operator=(const Contact & contact) {
 	if (&contact != this) {
 		copy(contact);
 	}
@@ -64,7 +65,7 @@ Contact & Contact::operator = (const Contact & contact) {
 	return *this;
 }
 
-Contact & Contact::operator = (const ContactProfile & contactProfile) {
+Contact & Contact::operator=(const ContactProfile & contactProfile) {
 	if (&contactProfile != this) {
 		copy(contactProfile);
 	}
@@ -100,6 +101,7 @@ void Contact::copy(const ContactProfile & contactProfile) {
 	_blocked = contactProfile._blocked;
 	_preferredIMContact = contactProfile._preferredIMContact;
 	_groupId = contactProfile._groupId;
+	_presenceState = contactProfile._presenceState;
 
 	// Removes not present IMContacts
 	for (IMContactSet::const_iterator it = _imContactSet.begin();
@@ -123,7 +125,7 @@ void Contact::copy(const ContactProfile & contactProfile) {
 	////
 }
 
-bool Contact::operator == (const Contact & contact) const {
+bool Contact::operator==(const Contact & contact) const {
 	return (ContactProfile::operator == (contact));
 }
 
@@ -195,6 +197,7 @@ bool Contact::checkAndSetIMContact(const IMContact & imContact) {
 }
 
 void Contact::imContactChangedEventHandler(IMContact & sender) {
+	updatePresenceState();
 	contactChangedEvent(*this);
 }
 
@@ -293,14 +296,13 @@ void Contact::merge(const Contact & contact) {
 	}
 
 	for (IMContactSet::const_iterator it = contact._imContactSet.begin();
-		it != contact._imContactSet.end();
-		++it) {
+		it != contact._imContactSet.end(); ++it) {
 		if (!hasIMContact(*it)) {
 			_imContactSet.insert(*it);
 		}
 	}
 
 	if (_groupId.empty()) {
-			_groupId = contact._groupId;
+		_groupId = contact._groupId;
 	}
 }

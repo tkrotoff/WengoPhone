@@ -29,6 +29,7 @@
 #include <util/Event.h>
 #include <util/Interface.h>
 #include <util/Picture.h>
+#include <util/List.h>
 
 /**
  * Handle common data between a Contact a UserProfile.
@@ -115,22 +116,11 @@ public:
 	virtual Picture getIcon() const { return _icon; }
 
 	/**
-	 * Return the PresenceState of this Profile.
+	 * Gets the PresenceState of this Profile.
 	 *
 	 * @return the PresenceState
 	 */
-	virtual EnumPresenceState::PresenceState getPresenceState() const {
-		return _presenceState;
-	}
-
-	/**
-	 * Set the PresenceState of the profile.
-	 *
-	 * @return the PresenceState
-	 */
-	virtual void setPresenceState(EnumPresenceState::PresenceState presenceState) {
-		_presenceState = presenceState;
-	}
+	virtual EnumPresenceState::PresenceState getPresenceState() const = 0;
 
 protected:
 
@@ -177,11 +167,9 @@ protected:
 
 	std::string _notes;
 
-	EnumPresenceState::PresenceState _presenceState;
-
 	std::string _alias;
 
 	Picture _icon;
 };
 
-#endif //PROFILE_H
+#endif	//PROFILE_H

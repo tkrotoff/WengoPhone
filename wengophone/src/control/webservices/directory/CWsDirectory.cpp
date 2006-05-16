@@ -19,13 +19,13 @@
 
 #include "CWsDirectory.h"
 
-#include <control/CWengoPhone.h>
 #include <presentation/PFactory.h>
 #include <presentation/PWsDirectory.h>
 
 CWsDirectory::CWsDirectory(CWengoPhone & cWengoPhone, WsDirectory & wsDirectory)
-	: _cWengoPhone(cWengoPhone), _wsDirectory(wsDirectory) {
-	
+	: _cWengoPhone(cWengoPhone),
+	_wsDirectory(wsDirectory) {
+
 	_wsDirectory.contactFoundEvent += contactFoundEvent;
 	_pWsDirectory = PFactory::getFactory().createPresentationWsDirectory(*this);
 }
@@ -35,8 +35,4 @@ CWsDirectory::~CWsDirectory() {
 
 void CWsDirectory::searchEntry(const std::string & query, WsDirectory::Criteria criteria) {
 	_wsDirectory.searchEntry(query, criteria);
-}
-
-CWengoPhone& CWsDirectory::getCWengoPhone() {
-	return _cWengoPhone;
 }

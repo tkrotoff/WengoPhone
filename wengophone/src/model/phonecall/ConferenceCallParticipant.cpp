@@ -56,7 +56,7 @@ void ConferenceCallParticipant::joinConference() {
 void ConferenceCallParticipant::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state) {
 	switch(state) {
 
-	case EnumPhoneCallState::PhoneCallStateDefault:
+	case EnumPhoneCallState::PhoneCallStateUnknown:
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:

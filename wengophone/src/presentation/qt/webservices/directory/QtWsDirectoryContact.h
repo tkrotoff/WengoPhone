@@ -17,28 +17,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_QTDIRECTORYCONTACT_H
-#define OW_QTDIRECTORYCONTACT_H
+#ifndef QTWSDIRECTORYCONTACT_H
+#define QTWSDIRECTORYCONTACT_H
 
-#include "ui_WsDirectoryContact.h"
-
-#include <QWidget>
+#include <QObject>
 
 class QtWsDirectory;
-class Profile;
+class ContactProfile;
+
+class QString;
+class QWidget;
+namespace Ui { class WsDirectoryContact; }
 
 /**
  * Contact widget for search result.
  *
  * @author Mathieu Stute
  */
-class QtWsDirectoryContact : public QWidget {
+class QtWsDirectoryContact : public QObject {
 	Q_OBJECT
 public:
 
-	QtWsDirectoryContact(QtWsDirectory * qtWsDirectory, Profile * profile, bool online, QWidget * parent = 0);
+	QtWsDirectoryContact(QtWsDirectory * qtWsDirectory, ContactProfile * contact, bool online, QWidget * parent);
 
 	~QtWsDirectoryContact();
+
+	QWidget * getWidget() const {
+		return _wsDirectoryWidget;
+	}
 
 	void setNickname(const QString & nickname);
 
@@ -64,9 +70,11 @@ private:
 
 	QtWsDirectory * _qtWsDirectory;
 
-	Profile * _profile;
+	ContactProfile * _contact;
 
-	Ui::WsDirectoryContact ui;
+	Ui::WsDirectoryContact * _ui;
+
+	QWidget * _wsDirectoryWidget;
 };
 
-#endif	//OW_QTDIRECTORYCONTACT_H
+#endif	//QTWSDIRECTORYCONTACT_H

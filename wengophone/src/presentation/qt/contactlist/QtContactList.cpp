@@ -93,6 +93,7 @@ void QtContactList::initThreadSafe() {
 	// icons
 	QtContactPixmap * spx = QtContactPixmap::getInstance();
 
+	spx->setPixmap(QtContactPixmap::ContactUnknown, scalePixmap(":/pics/status/unknown.png"));
 	spx->setPixmap(QtContactPixmap::ContactOnline, scalePixmap(":/pics/status/online.png"));
 	spx->setPixmap(QtContactPixmap::ContactOffline, scalePixmap(":/pics/status/offline.png"));
 	spx->setPixmap(QtContactPixmap::ContactDND, scalePixmap(":/pics/status/donotdisturb.png"));
@@ -110,7 +111,7 @@ void QtContactList::initThreadSafe() {
 	spx->setPixmap(QtContactPixmap::ContactGroupClose, QPixmap(":/pics/group_close.png"));
 
 	_userManager = new QtUserManager(* _cWengoPhone.getCUserProfile(), _cWengoPhone,
-	* this, _treeWidget, _treeWidget);
+			* this, _treeWidget, _treeWidget);
 
 	QtTreeViewDelegate * delegate = new QtTreeViewDelegate(_cWengoPhone, _treeWidget);
 	delegate->setParent(_treeWidget->viewport());
@@ -181,7 +182,7 @@ void QtContactList::contactGroupAddedEventSlot(QString contactGroupId) {
 	QList < QTreeWidgetItem * > list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
 
 	// If no group exists, creating the group
-	if (list.size() == 0) {
+	if (list.isEmpty()) {
 		QTreeWidgetItem * group = new QTreeWidgetItem(_treeWidget);
 		group->setText(0, contactGroupId);
 		_treeWidget->setItemExpanded(group, true);
@@ -193,7 +194,7 @@ void QtContactList::contactGroupRemovedEventSlot(QString contactGroupId) {
 
 	QList < QTreeWidgetItem * > list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
 
-	if (list.size() > 0) {
+	if (list.isEmpty()) {
 		_treeWidget->takeTopLevelItem(_treeWidget->indexOfTopLevelItem(list[0]));
 	}
 }
@@ -298,8 +299,7 @@ void QtContactList::groupRightClickedSlot(const QString & groupId) {
 void QtContactList::initContent() {
 	std::vector < std::string > contacts = _cContactList.getContactIds();
 	for (std::vector < std::string >::const_iterator it = contacts.begin();
-	it != contacts.end();
-	++it) {
+		it != contacts.end(); ++it) {
 		contactAddedEventSlot(QString::fromStdString(* it));
 	}
 }

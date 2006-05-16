@@ -52,13 +52,13 @@ public:
 	 * @see IMPresence::presenceStateChangedEvent
 	 * @param imContact the IMContact for wich the state has changed
 	 */
-	Event<void (PresenceHandler & sender, EnumPresenceState::PresenceState state, 
+	Event<void (PresenceHandler & sender, EnumPresenceState::PresenceState state,
 		const std::string & alias, const IMContact & imContact)> presenceStateChangedEvent;
 
 	/**
 	 * @see IMPresence::presenceStatusEvent
 	 */
-	Event<void (PresenceHandler & sender, const IMAccount & imAccount, 
+	Event<void (PresenceHandler & sender, const IMAccount & imAccount,
 		EnumPresenceState::MyPresenceStatus status)> myPresenceStatusEvent;
 
 	/**
@@ -76,7 +76,7 @@ public:
 	/**
 	 * @see IMPresence::contactIconChangedEvent
 	 */
-	Event< void (PresenceHandler & sender, const IMContact & imContact, 
+	Event< void (PresenceHandler & sender, const IMContact & imContact,
 		Picture icon) > contactIconChangedEvent;
 
 
@@ -85,18 +85,18 @@ public:
 	~PresenceHandler();
 
 	/**
-	 * Change my presence on desired protocol.
+	 * Changes my presence on desired protocol.
 	 *
 	 * @param state my state
 	 * @param note used by PresenceStateUserDefined
 	 * @param imAccount the IMAccount that we want the presence changed. If NULL
 	 * presence state of all accounts is changed.
 	 */
-	void changeMyPresenceState(EnumPresenceState::PresenceState state,	
+	void changeMyPresenceState(EnumPresenceState::PresenceState state,
 		const std::string & note, IMAccount * imAccount = NULL);
 
 	/**
-	 * Change my alias.
+	 * Changes my alias.
 	 *
 	 * @param alias the desired alias
 	 * @param imAccount the IMAccount that we want the alias changed. If NULL
@@ -105,7 +105,7 @@ public:
 	void changeMyAlias(const std::string & alias, IMAccount * imAccount = NULL);
 
 	/**
-	 * Change my icon.
+	 * Changes my icon.
 	 *
 	 * @param picture the desired icon
 	 * @param imAccount the IMAccount that we want the icon changed. If NULL
@@ -124,7 +124,7 @@ public:
 	Picture getContactIcon(const IMContact & imContact);
 
 	/**
-	 * Subscribe to presence of a IMContact.
+	 * Subscribes to the presence of an IMContact.
 	 *
 	 * @param imContact the IMContact
 	 */
@@ -143,14 +143,14 @@ public:
 	/**
 	 * @see IMPresence::authorizeContact
 	 */
-	void authorizeContact(const IMContact & imContact, bool authorized, 
-		const std::string message);
+	void authorizeContact(const IMContact & imContact, bool authorized,
+		const std::string & message);
 
 private:
 
 	typedef std::map<IMAccount *, Presence *> PresenceMap;
 
-	typedef	std::multimap<IMAccount *, const IMContact *> IMContactMultiMap;
+	typedef std::multimap<IMAccount *, const IMContact *> IMContactMultiMap;
 
 	/**
 	 * @see ConnectHandler::connectedEvent
@@ -177,7 +177,7 @@ private:
 	 * @see IMPresence::subscribeStatusEvent
 	 */
 	void subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status);
-	
+
 	/**
 	 * @see IMPresence::authorizationRequestEvent
 	 */
@@ -199,7 +199,7 @@ private:
 	void contactIconChangedEventHandler(IMPresence & sender, const std::string & contactId, Picture icon);
 
 	/**
-	 * Find the Presence related to the given protocol.
+	 * Finds the Presence related to the given protocol.
 	 *
 	 * @param presenceMap the PresenceMap to search in
 	 * @param protocol the protocol
@@ -210,7 +210,6 @@ private:
 	PresenceMap _presenceMap;
 
 	IMContactMultiMap _pendingSubscriptions;
-
 };
 
 #endif	//PRESENCEHANDLER_H

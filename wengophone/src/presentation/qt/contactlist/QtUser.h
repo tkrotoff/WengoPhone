@@ -52,7 +52,7 @@ public:
 
 	void mouseClicked(const QPoint & pos, const QRect & rec);
 
-	QtContactPixmap::contactPixmap getStatus() const;
+	QtContactPixmap::ContactPixmap getStatus() const;
 
 	void setFunction(bool im, bool call, bool video);
 
@@ -118,7 +118,7 @@ protected:
 
 	QRect _painterRect;
 
-	QtContactPixmap::contactPixmap _status;
+	QtContactPixmap::ContactPixmap _status;
 
 	bool _mouseOn;
 

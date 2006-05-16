@@ -226,7 +226,7 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 		break;
 
 	case -2:
-		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateDefault);
+		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateUnknown);
 		break;
 
 	//Register ok
@@ -276,7 +276,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	{
 		if (info->subtype && *info->subtype)
 			p->contactIconChangedEvent(*p, from, info->subtype);
-		
+
 		return;
 	}
 
@@ -317,7 +317,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		{
 			p->messageReceivedEvent(*p, *imChatSession, from, content);
 		}
-		
+
 		break;
 	}
 

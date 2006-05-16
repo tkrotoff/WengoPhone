@@ -24,16 +24,26 @@
 
 class QtContactPixmap {
 public:
-	enum contactPixmap {
-		ContactOnline = 1, ContactOffline, ContactDND, ContactInvisible, ContactAway, ContactForward,
-		ContactIM, ContactCall, ContactVideo,
-		ContactGroupOpen, ContactGroupClose
+
+	enum ContactPixmap {
+		ContactUnknown,
+		ContactOnline,
+		ContactOffline,
+		ContactDND,
+		ContactInvisible,
+		ContactAway,
+		ContactForward,
+		ContactIM,
+		ContactCall,
+		ContactVideo,
+		ContactGroupOpen,
+		ContactGroupClose
 	};
 
 	static QtContactPixmap * getInstance();
 
-	void setPixmap(contactPixmap status, const QPixmap & px);
-	QPixmap & getPixmap(contactPixmap status);
+	void setPixmap(ContactPixmap status, const QPixmap & px);
+	QPixmap & getPixmap(ContactPixmap status);
 
 protected:
 
@@ -46,7 +56,7 @@ protected:
 		return * this;
 	}
 
-	QHash < contactPixmap, QPixmap > _contactPixmap;
+	QHash < ContactPixmap, QPixmap > _contactPixmap;
 
 private:
 	static QtContactPixmap * _instance;

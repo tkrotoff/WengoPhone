@@ -33,8 +33,8 @@ class EnumPhoneLineState : NonCopyable {
 public:
 
 	enum PhoneLineState {
-		/** Default state. */
-		PhoneLineStateDefault,
+		/** Unknown state. */
+		PhoneLineStateUnknown,
 
 		/** Connection to the SIP server failed. */
 		PhoneLineStateServerError,

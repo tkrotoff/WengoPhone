@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "PhoneCallStateRinging.h"
+#include "ContactPresenceState.h"
 
-#include "PhoneCall.h"
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
-void PhoneCallStateRinging::execute(PhoneCall & phoneCall) { }
+#include <sound/Sound.h>
+
+#include <util/Logger.h>
+
+ContactPresenceState::ContactPresenceState() {
+}

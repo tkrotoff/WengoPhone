@@ -19,7 +19,7 @@
 
 #include "PhoneLine.h"
 
-#include "PhoneLineStateDefault.h"
+#include "PhoneLineStateUnknown.h"
 #include "PhoneLineStateOk.h"
 #include "PhoneLineStateClosed.h"
 #include "PhoneLineStateTimeout.h"
@@ -57,9 +57,9 @@ PhoneLine::PhoneLine(SipAccount & sipAccount, WengoPhone & wengoPhone)
 
 	_lineId = SipWrapper::VirtualLineIdError;
 
-	static PhoneLineStateDefault stateDefault;
-	_phoneLineStateList += &stateDefault;
-	_state = &stateDefault;
+	static PhoneLineStateUnknown stateUnknown;
+	_phoneLineStateList += &stateUnknown;
+	_state = &stateUnknown;
 
 	static PhoneLineStateOk stateOk;
 	_phoneLineStateList += &stateOk;
@@ -239,10 +239,10 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		" from=" + sipAddress.getSipAddress());
 
 	//save the last state
-	EnumPhoneCallState::PhoneCallState lastState = EnumPhoneCallState::PhoneCallStateDefault;
+	EnumPhoneCallState::PhoneCallState lastState = EnumPhoneCallState::PhoneCallStateUnknown;
 	PhoneCall * phoneCall = getPhoneCall(callId);
 	if (phoneCall) {
-		
+
 		lastState = phoneCall->getState();
 
 		if (phoneCall->getState() == state) {
@@ -255,9 +255,9 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 	}
 
 	//This should not replace the state machine pattern PhoneCallState or PhoneLineState
-	switch(state) {
+	switch (state) {
 
-	case EnumPhoneCallState::PhoneCallStateDefault:
+	case EnumPhoneCallState::PhoneCallStateUnknown:
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:
@@ -367,7 +367,9 @@ void PhoneLine::holdCallsExcept(int callId) {
 }
 
 void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
-	for (unsigned int i = 0; i < _phoneLineStateList.size(); i++) {
+	LOG_DEBUG("PhoneLineState=" + String::fromNumber(state));
+
+	for (unsigned i = 0; i < _phoneLineStateList.size(); i++) {
 		PhoneLineState * callState = _phoneLineStateList[i];
 		if (callState->getCode() == state) {
 			if (_state->getCode() != callState->getCode()) {
@@ -376,10 +378,12 @@ void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
 				LOG_DEBUG("line state changed lineId=" + String::fromNumber(_lineId) +
 					" state=" + EnumPhoneLineState::toString(_state->getCode()));
 				stateChangedEvent(*this, state);
-				break;
+				return;
 			}
 		}
 	}
+
+	LOG_FATAL("unknown PhoneLineState=" + String::fromNumber(state));
 }
 
 PhoneCall * PhoneLine::getPhoneCall(int callId) {

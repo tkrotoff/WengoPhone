@@ -97,7 +97,7 @@ void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount &
 		}
 
 		(*it).second->changeMyPresence(presenceState, String::null);
-		
+
 		//Launch all pending subscriptions
 		IMContactMultiMap::iterator pendIt = _pendingSubscriptions.find(&imAccount);
 		while (pendIt != _pendingSubscriptions.end()) {
@@ -115,14 +115,14 @@ void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount &
 void PresenceHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
 	PresenceMap::iterator it = _presenceMap.find(&imAccount);
 
-	LOG_DEBUG("an account is disconnected: login: " + imAccount.getLogin()
-		+ ", protocol: " + String::fromNumber(imAccount.getProtocol()));
+	LOG_DEBUG("an account is disconnected, login=" + imAccount.getLogin()
+		+ ", protocol=" + String::fromNumber(imAccount.getProtocol()));
 	if (it != _presenceMap.end()) {
 		// The presence state is now used to save the last presence state
 		// used when connected. @see IMAccount::_presenceState
 		// (*it).second->changeMyPresence(EnumPresenceState::PresenceStateOffline, String::null);
 	} else {
-		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());
+		LOG_ERROR("this IMAccount has already been added=" + imAccount.getLogin());
 	}
 }
 
@@ -187,6 +187,8 @@ void PresenceHandler::changeMyIcon(const Picture & picture, IMAccount * imAccoun
 void PresenceHandler::presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
 	const std::string & alias, const std::string & from) {
 
+	//Plays a sound
+
 	presenceStateChangedEvent(*this, state, alias, IMContact(sender.getIMAccount(), from));
 }
 
@@ -233,9 +235,9 @@ void PresenceHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAcco
 
 		imAccount.imAccountDeadEvent +=
 			boost::bind(&PresenceHandler::imAccountDeadEventHandler, this, _1);
-	
+
 	} else {
-		LOG_ERROR("this IMAccount has already been added " + imAccount.getLogin());
+		LOG_ERROR("this IMAccount has already been added=" + imAccount.getLogin());
 	}
 }
 
@@ -246,7 +248,7 @@ void PresenceHandler::imAccountDeadEventHandler(IMAccount & sender) {
 		delete (*it).second;
 		_presenceMap.erase(it);
 	} else {
-		LOG_ERROR("this IMAccount has not been added " + sender.getLogin());
+		LOG_ERROR("this IMAccount has not been added=" + sender.getLogin());
 	}
 }
 
@@ -264,18 +266,18 @@ Picture PresenceHandler::getContactIcon(const IMContact & imContact) {
 	return Picture();
 }
 
-void PresenceHandler::authorizeContact(const IMContact & imContact, bool authorized, const std::string message) {
-	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
+void PresenceHandler::authorizeContact(const IMContact & imContact, bool authorized, const std::string & message) {
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *) imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
 		return (*it).second->authorizeContact(imContact.getContactId(), authorized, message);
 	} else {
-		LOG_FATAL("Unknown IMAccount");
+		LOG_FATAL("unknown IMAccount");
 	}
 }
 
-void PresenceHandler::contactIconChangedEventHandler(IMPresence & sender, 
+void PresenceHandler::contactIconChangedEventHandler(IMPresence & sender,
 	const std::string & contactId, Picture icon) {
-	
+
 	contactIconChangedEvent(*this, IMContact(sender.getIMAccount(), contactId), icon);
 }

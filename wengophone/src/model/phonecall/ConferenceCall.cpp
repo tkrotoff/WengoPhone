@@ -128,9 +128,9 @@ PhoneCall * ConferenceCall::getPhoneCall(const std::string & phoneNumber) const 
 }
 
 void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state) {
-	switch(state) {
+	switch (state) {
 
-	case EnumPhoneCallState::PhoneCallStateDefault:
+	case EnumPhoneCallState::PhoneCallStateUnknown:
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:

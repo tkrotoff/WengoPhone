@@ -97,6 +97,6 @@ void Presence::setState(EnumPresenceState::PresenceState state) {
 		_state = _state->forward();
 		break;
 	default:
-		LOG_FATAL("EnumPresenceState::PresenceState unknown state");
+		LOG_FATAL("EnumPresenceState::PresenceState unknown state=" + String::fromNumber(state));
 	}
 }

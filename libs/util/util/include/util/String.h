@@ -46,7 +46,7 @@ public:
 	 * if (myString.empty())
 	 * return "" -> return String::null
 	 */
-	static const String null;
+	static const char * null;
 
 
 	String() : std::string() { }

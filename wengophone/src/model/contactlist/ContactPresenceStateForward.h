@@ -17,19 +17,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHONELINESTATEDEFAULT_H
-#define PHONELINESTATEDEFAULT_H
+#ifndef CONTACTPRESENCESTATEFORWARD_H
+#define CONTACTPRESENCESTATEFORWARD_H
 
-#include "PhoneLineState.h"
+#include "ContactPresenceState.h"
 
-class PhoneLineStateDefault : public PhoneLineState {
+/**
+ *
+ * @ingroup model
+ * @author Tanguy Krotoff
+ */
+class ContactPresenceStateForward : public ContactPresenceState {
 public:
 
-	void execute(IPhoneLine & phoneLine);
+	void execute(ContactProfile & contact);
 
-	EnumPhoneLineState::PhoneLineState getCode() const {
-		return EnumPhoneLineState::PhoneLineStateDefault;
+	EnumPresenceState::PresenceState getCode() const {
+		return EnumPresenceState::PresenceStateForward;
 	}
 };
 
-#endif	//PHONELINESTATEDEFAULT_H
+#endif	//CONTACTPRESENCESTATEFORWARD_H

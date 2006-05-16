@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,35 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "PhoneCallStateRinging.h"
+#ifndef CONTACTPRESENCESTATE_H
+#define CONTACTPRESENCESTATE_H
 
-#include "PhoneCall.h"
+#include <imwrapper/EnumPresenceState.h>
 
-void PhoneCallStateRinging::execute(PhoneCall & phoneCall) { }
+class ContactProfile;
+
+/**
+ * Represents the presence state of a Contact.
+ *
+ * @ingroup model
+ * @author Tanguy Krotoff
+ */
+class ContactPresenceState {
+public:
+
+	ContactPresenceState();
+
+	virtual ~ContactPresenceState() {
+	}
+
+	virtual void execute(ContactProfile & contact) = 0;
+
+	/**
+	 * Gets the status code corresponding to this Contact presence state.
+	 *
+	 * @return status code of this state
+	 */
+	virtual EnumPresenceState::PresenceState getCode() const = 0;
+};
+
+#endif	//CONTACTPRESENCESTATE_H

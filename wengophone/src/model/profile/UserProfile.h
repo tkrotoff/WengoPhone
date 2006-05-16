@@ -321,7 +321,9 @@ public:
 	 */
 	void setIcon(const Picture & icon, IMAccount * account);
 
-	EnumPresenceState::PresenceState getPresenceState() const;
+	EnumPresenceState::PresenceState getPresenceState() const {
+		return _presenceState;
+	}
 
 	/**
 	 * Changes the PresenceState of this user.
@@ -338,11 +340,9 @@ private:
 	void setAlias(const std::string & alias) { _alias = alias; };
 
 	void setIcon(const Picture & icon) { setIcon(icon, NULL); };
-
-	void setPresenceState(EnumPresenceState::PresenceState presenceState) {};
 	/**/
 
-	/*
+	/**
 	 * @see ConnectHandler::connectedEvent
 	 */
 	void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
@@ -436,6 +436,8 @@ private:
 
 	ChatHandler _chatHandler;
 	ContactList _contactList;
+
+	EnumPresenceState::PresenceState _presenceState;
 };
 
 #endif //USERPROFILE_H

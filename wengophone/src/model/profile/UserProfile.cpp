@@ -274,15 +274,9 @@ void UserProfile::removeIMAccount(const IMAccount & imAccount) {
 	}
 }
 
-EnumPresenceState::PresenceState UserProfile::getPresenceState() const {
-	//return EnumPresenceState::PresenceStateOnline;
-	return Profile::getPresenceState();
-}
-
-void UserProfile::setPresenceState(EnumPresenceState::PresenceState presenceState,
-	IMAccount * imAccount) {
-	Profile::setPresenceState(presenceState);
-	_presenceHandler.changeMyPresenceState(presenceState, "", imAccount);
+void UserProfile::setPresenceState(EnumPresenceState::PresenceState presenceState, IMAccount * imAccount) {
+	_presenceState = presenceState;
+	_presenceHandler.changeMyPresenceState(presenceState, String::null, imAccount);
 }
 
 void UserProfile::setAlias(const string & alias, IMAccount * imAccount) {
@@ -407,7 +401,7 @@ void UserProfile::setIcon(const Picture & icon, IMAccount * imAccount) {
 
 void UserProfile::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
 	_presenceState = imAccount.getPresenceState();
-	_presenceHandler.changeMyPresenceState(imAccount.getPresenceState(), "", &imAccount);
+	_presenceHandler.changeMyPresenceState(imAccount.getPresenceState(), String::null, &imAccount);
 	_presenceHandler.changeMyAlias(_alias, NULL);
 	_presenceHandler.changeMyIcon(_icon, NULL);
 }

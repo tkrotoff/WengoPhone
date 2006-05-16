@@ -29,10 +29,12 @@
 
 #include <string>
 #include <set>
+#include <map>
 
 class UserProfile;
 class ContactList;
 class IMChatSession;
+class ContactPresenceState;
 
 /**
  * Contact Profile.
@@ -52,32 +54,32 @@ public:
 
 	ContactProfile(const ContactProfile & contactProfile);
 
-	ContactProfile & operator = (const ContactProfile & contactProfile);
+	ContactProfile & operator=(const ContactProfile & contactProfile);
 
 	~ContactProfile();
 
-	bool operator == (const ContactProfile & contactProfile) const;
+	bool operator==(const ContactProfile & contactProfile) const;
 
 	/**
-	 * Get the preferred phone number.
+	 * Gets the preferred phone number.
 	 *
 	 * @return the preferred phone number. If no preferred phone number has been set
-	 * the first set phone number is returned (the test is made in this order:
-	 * wengo id (if online), mobile, home, work and other phone number). If no phone number has
-	 * been set, a null string is returned.
+	 *         the first set phone number is returned (the test is made in this order:
+	 *         wengo id (if online), mobile, home, work and other phone number). If no phone number has
+	 *         been set, a null string is returned.
 	 */
 	std::string getPreferredNumber() const;
 
 	/**
-	 * Get the preferred IMContact.
+	 * Gets the preferred IMContact.
 	 *
 	 * @return the preferred IMContact. If no IMContact has been set or no
-	 * IMContact is online, return NULL.
+	 *         IMContact is online, return NULL.
 	 */
 	IMContact * getPreferredIMContact() const;
 
 	/**
-	 * Get an available IMContact.
+	 * Gets an available IMContact.
 	 *
 	 * An available IMContact is a connected IMContact of protocol used in
 	 * the imChatSession.
@@ -87,14 +89,14 @@ public:
 	IMContact * getAvailableIMContact(IMChatSession & imChatSession) const;
 
 	/**
-	 * Add an IMContact to the ContactProfile.
+	 * Adds an IMContact to the ContactProfile.
 	 *
 	 * @param imContact IMContact to add
 	 */
 	virtual void addIMContact(const IMContact & imContact);
 
 	/**
-	 * Remove an IMContact from the ContactProfile.
+	 * Removes an IMContact from the ContactProfile.
 	 *
 	 * @param imContact IMContact to remove
 	 */
@@ -237,13 +239,22 @@ protected:
 	std::string getAvailableSIPNumber() const;
 
 	/**
-	 * Check if a SIP number is available.
+	 * Checks if a SIP number is available.
 	 *
 	 * This method does not check Wengo ID.
 	 *
 	 * @return true if the Contact has an available SIP Address.
 	 */
 	bool hasAvailableSIPNumber() const;
+
+	/**
+	 * Updated the current presence state.
+	 *
+	 * Called by the class Contact (that's why it's protected and not private).
+	 * ContactProfile cannot be connected to the event imContactChangedEvent, so Contact
+	 * connects to this event and notify ContactProfile via the method updatePresenceState()
+	 */
+	void updatePresenceState();
 
 	/** The preferrred number for this Contact. */
 	std::string _preferredNumber;
@@ -267,6 +278,26 @@ protected:
 	 * A Contact copy has the same UUID.
 	 */
 	std::string _uuid;
+
+	/** Current presence state of this Contact. */
+	ContactPresenceState * _presenceState;
+
+private:
+
+	/**
+	 * Computes the current presence state.
+	 *
+	 * Internal helper method.
+	 *
+	 * @return current presence state
+	 */
+	EnumPresenceState::PresenceState computePresenceState() const;
+
+	/** Defines the map of ContactPresenceState. */
+	typedef std::map< EnumPresenceState::PresenceState, ContactPresenceState * > PresenceStates;
+
+	/** Map of ContactPresenceState. */
+	static PresenceStates _presenceStateMap;
 };
 
 #endif	//CONTACTPROFILE_H

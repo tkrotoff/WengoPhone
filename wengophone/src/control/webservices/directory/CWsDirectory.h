@@ -24,6 +24,7 @@
 
 class CWengoPhone;
 class PWsDirectory;
+class ContactProfile;
 
 /**
  *
@@ -31,32 +32,30 @@ class PWsDirectory;
  * @author Mathieu Stute
  */
 class CWsDirectory {
-
 public:
 
-	CWsDirectory(CWengoPhone & cWengoPhone, WsDirectory& wsDirectory);
+	CWsDirectory(CWengoPhone & cWengoPhone, WsDirectory & wsDirectory);
 
 	~CWsDirectory();
 
 	/**
-	 * Emitted when a contact has been found.
-	 *
-	 * @param sender WsDirectory
-	 * @param profile profile
+	 * @see WsDirectory::contactFoundEvent
 	 */
-	Event< void(WsDirectory & sender, Profile * profile, bool online) > contactFoundEvent;
+	Event< void(WsDirectory & sender, ContactProfile * profile, bool online) > contactFoundEvent;
 
 	void searchEntry(const std::string & query, WsDirectory::Criteria criteria = WsDirectory::none);
 
-	CWengoPhone& getCWengoPhone();
+	CWengoPhone & getCWengoPhone() const {
+		return _cWengoPhone;
+	}
 
 private:
 
-	WsDirectory& _wsDirectory;
+	WsDirectory & _wsDirectory;
 
-	CWengoPhone& _cWengoPhone;
-	
+	CWengoPhone & _cWengoPhone;
+
 	PWsDirectory * _pWsDirectory;
 };
 
-#endif /* CWSDIRECTORY_H */
+#endif	//CWSDIRECTORY_H

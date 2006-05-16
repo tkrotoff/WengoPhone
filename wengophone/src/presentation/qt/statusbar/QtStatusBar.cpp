@@ -167,7 +167,7 @@ void QtStatusBar::phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state
 	_sipConnectionMovie = NULL;
 
 	switch (state) {
-	case EnumPhoneLineState::PhoneLineStateDefault:
+	case EnumPhoneLineState::PhoneLineStateUnknown:
 		tooltip = tr("Not connected");
 		pixmap = ":/pics/statusbar/status-network-offline.png";
 		break;

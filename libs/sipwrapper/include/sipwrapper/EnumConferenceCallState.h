@@ -31,8 +31,8 @@ class EnumConferenceCallState : NonCopyable {
 public:
 
 	enum ConferenceCallState {
-		/** Default state. */
-		ConferenceCallStateDefault,
+		/** Unknown state. */
+		ConferenceCallStateUnknown,
 
 		/** An error occured. */
 		ConferenceCallStateError,

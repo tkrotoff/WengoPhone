@@ -19,4 +19,6 @@
 
 #include "PhoneCallStateHold.h"
 
+#include "PhoneCall.h"
+
 void PhoneCallStateHold::execute(PhoneCall & phoneCall) { }
