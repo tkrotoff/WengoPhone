@@ -182,7 +182,13 @@ void QtWengoPhone::initThreadSafe() {
 	_ui->openChatWindowButton->setEnabled(false);
 	connect ( _ui->openChatWindowButton,SIGNAL(clicked()),SLOT(showChatWindow()));
 
-
+/*
+    // Disable call items in Action menu
+    _ui->actionAccept->setEnabled(false);
+    _ui->actionHangup->setEnabled(false);
+    _ui->actionHold->setEnabled(false);
+    _ui->actionResume->setEnabled(false);
+*/
 	//webcamButton
 	new QtWebcamButton(_ui->webcamButton);
 
@@ -236,7 +242,7 @@ void QtWengoPhone::initThreadSafe() {
 	connect(_ui->actionConfiguration, SIGNAL(triggered()), SLOT(showConfig()));
 
 	//actionShowForum
-	connect(_ui->actionShowForum, SIGNAL(triggered()), SLOT(showForum()));
+	connect(_ui->actionShowForum, SIGNAL(_ui->actionAccept), SLOT(showForum()));
 
 	//actionShowHelp
 	/*
@@ -299,6 +305,18 @@ void QtWengoPhone::initThreadSafe() {
 
 	//actionLog_off
 	connect(_ui->actionLog_off, SIGNAL(triggered()), SLOT(logoff()));
+
+	// Tab selection
+	connect(_ui->tabWidget,SIGNAL(currentChanged (int)),SLOT(tabSelectionChanged(int)));
+
+	// Accept a call
+	connect (_ui->actionAccept,SIGNAL(triggered()),SLOT(acceptCall()));
+
+    // Resume a call
+    connect (_ui->actionHold_Resume,SIGNAL(triggered()),SLOT(resumeCall()));
+
+	// Hangup a call
+    connect (_ui->actionHangup,SIGNAL(triggered()),SLOT(hangupCall()));
 
 	//Translation
 	new QtLanguage(_wengoPhoneWindow);
@@ -387,6 +405,16 @@ void QtWengoPhone::hangupButtonClicked(){
     }
 }
 
+int QtWengoPhone::findFirstCallTab(){
+    QtContactCallListWidget * widget;
+    for (int i = 0; i < _ui->tabWidget->count(); i++){
+        widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+        if ( widget ){
+            return i;
+        }
+    }
+    return -1;
+}
 
 void QtWengoPhone::callButtonClicked() {
 	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
@@ -1139,4 +1167,51 @@ void QtWengoPhone::showChatWindow(){
 
 void QtWengoPhone::showHistory() {
 	_ui->tabWidget->setCurrentWidget(_ui->tabHistory);
+}
+
+void QtWengoPhone::tabSelectionChanged(int index){
+
+}
+
+void QtWengoPhone::acceptCall(){
+    int callIndex = findFirstCallTab();
+    if (callIndex == -1 )
+        return;
+    QtContactCallListWidget * widget;
+
+    widget = dynamic_cast<QtContactCallListWidget *> (_ui->tabWidget->widget(callIndex));
+    if (!widget)
+        return;
+
+    QtPhoneCall * qtPhoneCall = widget->getFirstQtPhoneCall();
+    if (qtPhoneCall)
+        qtPhoneCall->acceptActionTriggered(true);
+}
+
+void QtWengoPhone::resumeCall(){
+    int callIndex = findFirstCallTab();
+    if (callIndex == -1 )
+        return;
+    QtContactCallListWidget * widget;
+
+    widget = dynamic_cast<QtContactCallListWidget *> (_ui->tabWidget->widget(callIndex));
+    if (!widget)
+        return;
+
+    QtPhoneCall * qtPhoneCall = widget->getFirstQtPhoneCall();
+    if (qtPhoneCall)
+        qtPhoneCall->holdResumeActionTriggered(true);
+}
+
+void QtWengoPhone::hangupCall(){
+
+    int callIndex = findFirstCallTab();
+    if (callIndex == -1 )
+        return;
+    QtContactCallListWidget * widget;
+
+    widget = dynamic_cast<QtContactCallListWidget *> (_ui->tabWidget->widget(callIndex));
+    if (!widget)
+        return;
+    widget->hangup();
 }

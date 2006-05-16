@@ -110,3 +110,4 @@ bool QtContactCallList::hasActivePhoneCall(){
     }
     return false;
 }
+

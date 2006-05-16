@@ -117,10 +117,6 @@ public:
 		return _callButton;
 	}
 
-/*	QtWengoStyleLabel * getHangUpButton() const {
-		return _hangUpButton;
-	}
-*/
 	QComboBox * getPhoneComboBox() const {
 		return _phoneComboBox;
 	}
@@ -215,6 +211,14 @@ private Q_SLOTS:
 
 	void logoff();
 
+	void tabSelectionChanged(int index);
+
+	void acceptCall();
+
+	void resumeCall();
+
+	void hangupCall();
+
 private:
 
 	void initThreadSafe();
@@ -251,6 +255,8 @@ private:
 	void showLoginWindow();
 
 	void urlClickedEventHandler(std::string url);
+
+	int findFirstCallTab();
 
 	QMenu * createStatusMenu();
 

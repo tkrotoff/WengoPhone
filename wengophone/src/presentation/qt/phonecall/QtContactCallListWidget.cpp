@@ -122,6 +122,12 @@ QtPhoneCall * QtContactCallListWidget::takeQtPhoneCall(PhoneCall * phoneCall) {
 	return _listWidget->takeQtPhoneCall(phoneCall);
 }
 
+QtPhoneCall * QtContactCallListWidget::getFirstQtPhoneCall(){
+    if (_listWidget->count() == 0)
+        return NULL;
+    return _listWidget->getPhoneCallList()[0];
+}
+
 bool QtContactCallListWidget::hasActivePhoneCall(){
     return _listWidget->hasActivePhoneCall();
 }

@@ -43,6 +43,8 @@ public:
 
 	QtPhoneCall * takeQtPhoneCall(PhoneCall * phoneCall);
 
+	QtPhoneCall * getFirstQtPhoneCall();
+
 public Q_SLOTS:
 
 	void startConference(PhoneCall * sourceCall, PhoneCall * targetCall);

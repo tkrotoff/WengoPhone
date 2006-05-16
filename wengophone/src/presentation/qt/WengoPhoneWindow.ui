@@ -456,8 +456,7 @@
     <addaction name="separator" />
     <addaction name="actionAccept" />
     <addaction name="actionHangup" />
-    <addaction name="actionHold" />
-    <addaction name="actionResume" />
+    <addaction name="actionHold_Resume" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -720,14 +719,9 @@
     <string>Hangup</string>
    </property>
   </action>
-  <action name="actionHold" >
+  <action name="actionHold_Resume" >
    <property name="text" >
-    <string>Hold</string>
-   </property>
-  </action>
-  <action name="actionResume" >
-   <property name="text" >
-    <string>Resume</string>
+    <string>Hold / Resume</string>
    </property>
   </action>
  </widget>
