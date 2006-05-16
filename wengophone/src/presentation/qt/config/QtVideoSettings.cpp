@@ -156,6 +156,10 @@ void QtVideoSettings::webcamPreview(const QString & deviceName) {
 	}
 }
 
+void QtVideoSettings::showEvent(QShowEvent * event) {
+	webcamPreview(_ui->webcamDeviceComboBox->currentText());
+}
+
 void QtVideoSettings::hideEvent(QHideEvent * event) {
 	if (_webcamDeviceOpened) {
 		_webcamDriver->frameCapturedEvent -= boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);

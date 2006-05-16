@@ -31,11 +31,15 @@ class IWebcamDriver;
 
 class QWidget;
 class QHideEvent;
+class QShowEvent;
 class QString;
 namespace Ui { class VideoSettings; }
 
 /**
  * Video configuration panel.
+ *
+ * Inherits from QWidget so we can overwrite QWidget::hideEvent() and
+ * QWidget::showEvent() that are protected methods from QWidget.
  *
  * @author Tanguy Krotoff
  */
@@ -72,6 +76,8 @@ private:
 	void frameCapturedEventHandler(IWebcamDriver * sender, piximage * image);
 
 	void hideEvent(QHideEvent * event);
+
+	void showEvent(QShowEvent * event);
 
 	Ui::VideoSettings * _ui;
 
