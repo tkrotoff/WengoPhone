@@ -142,7 +142,7 @@ void PhoneCall::setState(EnumPhoneCallState::PhoneCallState state) {
 		}
 	}
 
-	LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
+	//LOG_FATAL("unknown PhoneCallState=" + String::fromNumber(state));
 }
 
 void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
