@@ -89,7 +89,8 @@ void WsCallForward::answerReceived(const std::string & answer, int requestId) {
 		
 		std::string r = elt->FirstChild()->ToText()->Value();
 		
-		if( r == "200" ) {
+		//TODO: change when the ws doc will be updated
+		if( r == "OK" ) {
 			wsCallForwardEvent(*this, requestId, WsCallForwardStatusOk);
 		} else if( r == "401" ) {
 			wsCallForwardEvent(*this, requestId, WsCallForwardStatusAuthenticationError);

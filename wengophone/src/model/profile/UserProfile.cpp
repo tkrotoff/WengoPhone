@@ -36,7 +36,6 @@
 #include <model/webservices/info/WsInfo.h>
 #include <model/webservices/directory/WsDirectory.h>
 #include <model/history/History.h>
-#include <model/webservices/callforward/WsCallForward.h>
 
 #include <imwrapper/IMAccountHandlerFileStorage.h>
 
@@ -362,7 +361,8 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		//TODO: callforward
 		_wsCallForward = new WsCallForward(_wengoAccount);
 		wsCallForwardCreatedEvent(*this, *_wsCallForward);
-
+		_wsCallForward->wsCallForwardEvent += boost::bind(&UserProfile::wsCallForwardEventHandler, this, _1, _2, _3);
+		
 		addPhoneLine(sender);
 
 		WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *) _wengoAccount);
@@ -428,4 +428,19 @@ void UserProfile::saveHistory() {
 
 bool UserProfile::hasWengoAccount() const {
 	return _wengoAccount != NULL;
+}
+
+void UserProfile::wsCallForwardEventHandler(WsCallForward & sender,
+	int id, WsCallForward::WsCallForwardStatus status) {
+
+	if( status == WsCallForward::WsCallForwardStatusOk ) {
+
+		_wsInfo->getWengosCount(false);
+		_wsInfo->getSmsCount(false);
+		_wsInfo->getActiveMail(false);
+		_wsInfo->getUnreadVoiceMail(false);
+		_wsInfo->getPstnNumber(false);
+		_wsInfo->getCallForwardInfo(true);
+		_wsInfo->execute();
+	}
 }

@@ -27,6 +27,7 @@
 
 #include <model/account/SipAccount.h>
 #include <model/history/History.h>
+#include <model/webservices/callforward/WsCallForward.h>
 #include <model/connect/ConnectHandler.h>
 #include <model/contactlist/ContactList.h>
 #include <model/contactlist/IMContactListHandler.h>
@@ -50,7 +51,6 @@ class SoftUpdate;
 class History;
 class WsInfo;
 class WsDirectory;
-class WsCallForward;
 
 /**
  * Handle the profile of a User.
@@ -346,6 +346,8 @@ private:
 	 * @see ConnectHandler::connectedEvent
 	 */
 	void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
+
+	void wsCallForwardEventHandler(WsCallForward & sender, int id, WsCallForward::WsCallForwardStatus status);
 
 	/**
 	 * Connect all IMAccounts.
