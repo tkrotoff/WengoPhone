@@ -1,0 +1,1 @@
+#include <qtutil/QtWengoStyleLabel.h>

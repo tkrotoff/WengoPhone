@@ -40,6 +40,7 @@ headers = [
 	'phonecall/QtContactCallListWidget.h',
 	'phonecall/QtPhoneCallEventFilter.h',
 	'toaster/QtToaster.h',
+	'toaster/QtCallToaster.h',
 	'login/QtLogin.h',
 	'profile/QtProfileDetails.h',
 	'imcontact/QtIMContactManager.h',
@@ -132,6 +133,7 @@ sources = [
 	'phonecall/QtContactCallListWidget.cpp',
 	'phonecall/QtPhoneCallEventFilter.cpp',
 	'toaster/QtToaster.cpp',
+	'toaster/QtCallToaster.cpp',
 	'login/QtLogin.cpp',
 	'imcontact/QtIMContactManager.cpp',
 	'imcontact/QtAddIMContact.cpp',
@@ -244,6 +246,7 @@ forms = [
 	'contactlist/UserWidget.ui',
 	'profilebar/CreditWidget.ui',
 	'profilebar/EventWidget.ui',
+	'toaster/QtCallToaster.ui',
 ]
 
 for form in forms:

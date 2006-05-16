@@ -22,25 +22,27 @@
 
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
+#include <qtutil/QtWengoStyleLabel.h>
 
 QtToaster::QtToaster(QWidget * parent , Qt::WFlags f ):
-QWidget(parent, Qt::Window | Qt::Popup)
+QWidget(parent, Qt::Window | Qt::FramelessWindowHint )
 {
+	//setupGui();
+}
+
+void QtToaster::setupGui(){
 	_widget = WidgetFactory::create( ":/forms/toaster/QtToaster.ui", this );
 	_widget->setAutoFillBackground(true);
 	_closeTimerId = -1 ;
 	_closeTimer = 5000;
 	_show =   true;
 
+
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget( _widget );
 	layout->setMargin( 0 );
 	setLayout( layout );
 	setAttribute (Qt::WA_DeleteOnClose,true);
-	setupGui();
-}
-
-void QtToaster::setupGui(){
 
 	_closeButton =  Object::findChild<QPushButton *>( _widget,"closeButton" );
 
@@ -57,6 +59,12 @@ void QtToaster::setupGui(){
 	_pixmapLabel = Object::findChild<QLabel *>( _widget,"pixmapLabel");
 
 	connect ( _closeButton, SIGNAL(clicked()), SLOT(closeToaster()) );
+
+	connect ( _button1,SIGNAL(clicked()),SLOT(button1Slot()));
+
+	connect ( _button2,SIGNAL(clicked()),SLOT(button2Slot()));
+
+	connect ( _button3,SIGNAL(clicked()),SLOT(button3Slot()));
 }
 
 void QtToaster::setPixmap(const QPixmap &pixmap){
@@ -133,8 +141,9 @@ void QtToaster::timerEvent(QTimerEvent *event){
 }
 
 void QtToaster::showToaster(){
-	QDesktopWidget * desktop = QApplication::desktop();
+    setupGui();
 
+	QDesktopWidget * desktop = QApplication::desktop();
 
 	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
 
@@ -177,4 +186,16 @@ void QtToaster::closeToaster(){
 
 void QtToaster::setCloseTimer(int timer){
 	_closeTimer=timer;
+}
+
+void QtToaster::button1Slot(){
+    button1Clicked();
+}
+
+void QtToaster::button2Slot(){
+    button2Clicked();
+}
+
+void QtToaster::button3Slot(){
+    button3Clicked();
 }

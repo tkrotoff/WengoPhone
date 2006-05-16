@@ -22,6 +22,7 @@
 
 #include <QtGui>
 
+class QtWengoStyleLabel;
 
 
 class QtToaster : public QWidget
@@ -62,6 +63,14 @@ public Q_SLOTS:
 
 	void closeToaster();
 
+Q_SIGNALS:
+
+    void button1Clicked();
+
+    void button2Clicked();
+
+    void button3Clicked();
+
 protected:
 
 	void setupGui();
@@ -92,11 +101,17 @@ protected:
 
 	bool _show;
 
+protected Q_SLOTS:
+
+    void button1Slot();
+
+    void button2Slot();
+
+    void button3Slot();
 
 protected:
 
-        void timerEvent(QTimerEvent *event);
-
+    void timerEvent(QTimerEvent *event);
 };
 
 #endif

@@ -436,7 +436,7 @@ void ChatWindow::openContactListFrame(){
 
 	_scrollArea->setFrameShape(QFrame::NoFrame);
 	_scrollArea->setFrameShadow(QFrame::Plain);
-	tbfoftjs
+
 	*/
 }
 

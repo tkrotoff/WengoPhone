@@ -134,6 +134,9 @@
         <file>pics/headers/login.png</file>
         <file>pics/headers/new-account.png</file>
         <file>pics/headers/search.png</file>
+        <file>pics/toaster/chat.png</file>
+        <file>pics/toaster/decrocher.png</file>
+        <file>pics/toaster/raccrocher.png</file>
     </qresource>
     <qresource prefix="/data" >
         <file>AUTHORS</file>
@@ -216,6 +219,7 @@
         <file>profilebar/CreditWidget.ui</file>
         <file>profilebar/EventWidget.ui</file>
         <file>toaster/QtToaster.ui</file>
+        <file>toaster/QtCallToaster.ui</file>
         <file>webservices/directory/WsDirectory.ui</file>
         <file>webservices/directory/WsDirectoryContact.ui</file>
         <file>webservices/sms/SmsWindow.ui</file>
