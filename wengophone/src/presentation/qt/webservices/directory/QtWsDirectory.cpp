@@ -54,10 +54,10 @@ QtWsDirectory::~QtWsDirectory() {
 void QtWsDirectory::initThreadSafe() {
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWsDirectory.getCWengoPhone().getPresentation();
 
-	_widget = new QWidget(qtWengoPhone->getWidget());
+	_directoryWindow = new QDialog(qtWengoPhone->getWidget());
 
 	_ui = new Ui::WsDirectory();
-	_ui->setupUi(_widget);
+	_ui->setupUi(_directoryWindow);
 
 	_qtWengoPhone = (QtWengoPhone *) _cWsDirectory.getCWengoPhone().getPresentation();
 	_cWsDirectory.contactFoundEvent += boost::bind(&QtWsDirectory::contactFoundEventHandler, this, _1, _2, _3);
@@ -76,7 +76,7 @@ void QtWsDirectory::updatePresentationThreadSafe() {
 }
 
 void QtWsDirectory::show() {
-	_widget->show();
+	_directoryWindow->show();
 }
 
 void QtWsDirectory::clear() {
@@ -84,7 +84,7 @@ void QtWsDirectory::clear() {
 }
 
 QWidget * QtWsDirectory::getWidget() {
-	return _widget;
+	return _directoryWindow;
 }
 
 void QtWsDirectory::searchButtonClicked() {
@@ -123,7 +123,7 @@ void QtWsDirectory::contactFoundEventHandlerThreadSafe(WsDirectory & sender, Con
 	//if no contact has been found
 	if (!contact) {
 		_ui->searchPushButton->setEnabled(true);
-		QMessageBox::warning(_widget, tr("Search Wengo Contacts"), tr("No contact match your query"));
+		QMessageBox::warning(_directoryWindow, tr("Search Wengo Contacts"), tr("No contact match your query"));
 		return;
 	}
 
@@ -149,7 +149,7 @@ void QtWsDirectory::addContact(ContactProfile * contact) {
 	contactProfile.setStreetAddress(contact->getStreetAddress());
 	contactProfile.setWengoPhoneId(contact->getWengoPhoneId());
 
-	QtProfileDetails qtProfileDetails(_cWsDirectory.getCWengoPhone(), contactProfile, _widget);
+	QtProfileDetails qtProfileDetails(_cWsDirectory.getCWengoPhone(), contactProfile, _directoryWindow);
 
 	if (qtProfileDetails.show()) {
 		_cWsDirectory.getCWengoPhone().getCUserProfile()->getCContactList().addContact(contactProfile);

@@ -32,6 +32,7 @@ class CWsDirectory;
 class QtWsDirectoryContact;
 class QtWengoPhone;
 
+class QDialog;
 class QWidget;
 namespace Ui { class WsDirectory; }
 
@@ -79,7 +80,7 @@ private:
 
 	Ui::WsDirectory * _ui;
 
-	QWidget * _widget;
+	QDialog * _directoryWindow;
 
 	QtWengoPhone * _qtWengoPhone;
 };
