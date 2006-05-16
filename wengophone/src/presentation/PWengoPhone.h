@@ -48,6 +48,8 @@ public:
 
 	virtual void addHistory(PHistory * pHistory) = 0;*/
 
+	virtual void showHistory() = 0;
+
 	/**
 	 * @see IMPresence::authorizationRequestEvent
 	 */

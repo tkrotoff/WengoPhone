@@ -34,6 +34,7 @@ CHistory::CHistory(History & history, CWengoPhone & cWengoPhone)
 	_history.mementoAddedEvent += boost::bind(&CHistory::historyMementoAddedEventHandler, this, _1, _2);
 	_history.mementoUpdatedEvent += boost::bind(&CHistory::historyMementoUpdatedEventHandler, this, _1, _2);
 	_history.mementoRemovedEvent += boost::bind(&CHistory::historyMementoRemovedEventHandler, this, _1, _2);
+	_history.unseenMissedCallsChangedEvent += boost::bind(&CHistory::unseenMissedCallsChangedEventhandler, this, _1, _2);
 }
 
 CWengoPhone & CHistory::getCWengoPhone() const {
@@ -58,6 +59,10 @@ void CHistory::historyMementoRemovedEventHandler(History & history, unsigned int
 
 void CHistory::historyLoadedEventHandler(History & history) {
 	historyLoadedEvent(*this);
+}
+
+void CHistory::unseenMissedCallsChangedEventhandler(History &, int count) {
+	unseenMissedCallsChangedEvent(*this, count);
 }
 
 void CHistory::removeHistoryMemento(unsigned int id) {
@@ -106,4 +111,12 @@ void CHistory::replay(unsigned int id) {
 
 HistoryMementoCollection * CHistory::getMementos(HistoryMemento::State state, int count) {
 	return _history.getMementos(state, count);
+}
+
+void CHistory::resetUnseenMissedCalls() {
+	_history.resetUnseenMissedCalls();
+}
+
+int CHistory::getUnseenMissedCalls() {
+	return _history.getUnseenMissedCalls();
 }

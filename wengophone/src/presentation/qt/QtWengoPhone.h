@@ -127,6 +127,8 @@ public:
 
 	void setChatWindow(QWidget * chatWindow);
 
+	void showHistory();
+
 Q_SIGNALS:
 
 	void modelInitializedEventSignal();
@@ -160,8 +162,6 @@ private Q_SLOTS:
 	void showHome();
 
 	void showContactList();
-
-	void showCallHistory();
 
 	void showChatWindow();
 

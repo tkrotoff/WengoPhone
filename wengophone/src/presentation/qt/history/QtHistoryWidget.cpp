@@ -61,7 +61,7 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 	_treeWidget->setHeaderLabels(headerLabels);
 	_treeWidget->setSortingEnabled ( false );
 
-	_header->resizeSection (0,200);
+	_header->resizeSection (0, 150);
 	_header->setStretchLastSection(true);
 
 	gridLayout->addWidget(_treeWidget,0,0);
@@ -90,6 +90,8 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 
 	connect (_treeWidget, SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),SLOT (itemDoubleClicked ( QTreeWidgetItem *, int) ) );
 
+	connect(_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *,int)), SLOT(itemClicked()));
+	
 	connect (_header,SIGNAL(sectionClicked (int)),SLOT(headerClicked(int)) );
 
 
@@ -280,4 +282,8 @@ void QtHistoryWidget::replayEntry() {
 
 void QtHistoryWidget::sortHistory() {
 	_treeWidget->sortItems(QtHistoryItem::COLUMN_DATE, Qt::DescendingOrder);
+}
+
+void QtHistoryWidget::itemClicked() {
+	missedCallsSeen();
 }

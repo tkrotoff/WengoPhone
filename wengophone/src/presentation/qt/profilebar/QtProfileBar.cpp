@@ -19,12 +19,13 @@
 
 #include "QtProfileBar.h"
 
-#include <control/CWengoPhone.h>
-#include <control/profile/CUserProfile.h>
-
 #include <model/account/wengo/WengoAccount.h>
 #include <model/profile/UserProfile.h>
 #include <model/presence/PresenceHandler.h>
+
+#include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+#include <control/history/CHistory.h>
 
 #include <util/Logger.h>
 #include <imwrapper/IMAccount.h>
@@ -56,13 +57,13 @@ _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 	_statusLabel->setMinimumSize(QSize(46,65));
 	_statusLabel->setMaximumSize(QSize(46,65));
 	_statusLabel->setPixmaps(QPixmap(":/pics/profilebar/bar_start_status_green.png"),
-	                QPixmap(), // no end
-	                QPixmap(), // no fill
-
-	                QPixmap(":/pics/profilebar/bar_on_start_status_green.png"),
-	                QPixmap(),  // no end
-	                QPixmap()
-	                ); // no fill
+					QPixmap(), // no end
+					QPixmap(), // no fill
+	
+					QPixmap(":/pics/profilebar/bar_on_start_status_green.png"),
+					QPixmap(),  // no end
+					QPixmap()
+					); // no fill
 
 	// Nickname label
 	_nicknameLabel = new QtWengoStyleLabel(this);
@@ -70,12 +71,12 @@ _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 	_nicknameLabel->setMaximumSize(QSize(1000,65));
 	_nicknameLabel->setPixmaps(
 					QPixmap(), // no start
-	                QPixmap(":/pics/profilebar/bar_separator.png"), //  end
-	                QPixmap(":/pics/profilebar/bar_fill.png"),
-	                QPixmap(),  // no start
-	                QPixmap(":/pics/profilebar/bar_on_separator_left.png"),  // end
-	                QPixmap(":/pics/profilebar/bar_on_fill.png") // fill
-	                );
+					QPixmap(":/pics/profilebar/bar_separator.png"), //  end
+					QPixmap(":/pics/profilebar/bar_fill.png"),
+					QPixmap(),  // no start
+					QPixmap(":/pics/profilebar/bar_on_separator_left.png"),  // end
+					QPixmap(":/pics/profilebar/bar_on_fill.png") // fill
+					);
 
 
 	// The events label
@@ -83,24 +84,24 @@ _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 	_eventsLabel->setMinimumSize(QSize(46,65));
 	_eventsLabel->setMaximumSize(QSize(1000,65));
 	_eventsLabel->setPixmaps(QPixmap(), // no start
-	                QPixmap(":/pics/profilebar/bar_separator.png"), //  end
-	                QPixmap(":/pics/profilebar/bar_fill.png"),
-	                QPixmap(),  // no start
-	                QPixmap(":/pics/profilebar/bar_on_separator_left.png"),  // end
-	                QPixmap(":/pics/profilebar/bar_on_fill.png")
-	                );
+					QPixmap(":/pics/profilebar/bar_separator.png"), //  end
+					QPixmap(":/pics/profilebar/bar_fill.png"),
+					QPixmap(),  // no start
+					QPixmap(":/pics/profilebar/bar_on_separator_left.png"),  // end
+					QPixmap(":/pics/profilebar/bar_on_fill.png")
+					);
 
 	// The credit label
 	_creditLabel = new QtWengoStyleLabel(this);
 	_creditLabel->setMinimumSize(QSize(46,65));
 	_creditLabel->setMaximumSize(QSize(1000,65));
 	_creditLabel->setPixmaps(QPixmap(), // no start
-	                QPixmap(":/pics/profilebar/bar_end.png"),
-	                QPixmap(":/pics/profilebar/bar_fill.png"),
-	                QPixmap(),  // no start
-	                QPixmap(":/pics/profilebar/bar_on_end.png"),
-	                QPixmap(":/pics/profilebar/bar_on_fill.png")
-	                );
+					QPixmap(":/pics/profilebar/bar_end.png"),
+					QPixmap(":/pics/profilebar/bar_fill.png"),
+					QPixmap(),  // no start
+					QPixmap(":/pics/profilebar/bar_on_end.png"),
+					QPixmap(":/pics/profilebar/bar_on_fill.png")
+					);
 
 	// Add the labels to the gridlayout
 	_gridlayout->addWidget( _statusLabel   , 0, 0 );
@@ -143,43 +144,47 @@ _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 	_cUserProfile.getUserProfile().phoneLineCreatedEvent +=
 		boost::bind(&QtProfileBar::phoneLineCreatedEventHandler, this, _1, _2);
 
-    _connectHandler.connectedEvent +=
-        boost::bind(&QtProfileBar::connectedEventHandler,this,_1,_2);
+	_connectHandler.connectedEvent +=
+		boost::bind(&QtProfileBar::connectedEventHandler,this,_1,_2);
 
-    _connectHandler.disconnectedEvent +=
-        boost::bind(&QtProfileBar::disconnectedEventHandler,this,_1,_2);
+	_connectHandler.disconnectedEvent +=
+		boost::bind(&QtProfileBar::disconnectedEventHandler,this,_1,_2);
 
-    PresenceHandler & presence = _cUserProfile.getUserProfile().getPresenceHandler() ;
+	cWengoPhone.cHistoryCreatedEvent +=
+		boost::bind(&QtProfileBar::cHistoryCreatedEventHandler, this, _1, _2);
 
-    presence.myPresenceStatusEvent +=
-        boost::bind(&QtProfileBar::myPresenceStatusEventHandler,this,_1,_2,_3);
+	PresenceHandler & presence = _cUserProfile.getUserProfile().getPresenceHandler();
 
-    connect(this,SIGNAL(connectEventSignal(IMAccount *)),_nickNameWidget,SLOT(connected(IMAccount *)));
-    connect(this,SIGNAL(disconnectedEventSignal(IMAccount *)),_nickNameWidget,SLOT(disconnected(IMAccount *)));
+	presence.myPresenceStatusEvent +=
+		boost::bind(&QtProfileBar::myPresenceStatusEventHandler,this,_1,_2,_3);
 
-    if ( !connect(this,SIGNAL(myPresenceStatusEventSignal(QVariant  )),
-            this,SLOT  (myPresenceStatusEventSlot( QVariant ))) ) {
-        LOG_FATAL("Signal / slot connection error");
-    }
+	connect(this,SIGNAL(connectEventSignal(IMAccount *)),_nickNameWidget,SLOT(connected(IMAccount *)));
+	connect(this,SIGNAL(disconnectedEventSignal(IMAccount *)),_nickNameWidget,SLOT(disconnected(IMAccount *)));
+
+	if ( !connect(this,SIGNAL(myPresenceStatusEventSignal(QVariant  )),
+		this,SLOT  (myPresenceStatusEventSlot( QVariant ))) ) {
+		LOG_FATAL("Signal / slot connection error");
+	}
 }
 
 // Called in the model thread
 void QtProfileBar::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
-    IMAccount * pImAccount = &imAccount;
-    connectEventSignal(pImAccount);
+	IMAccount * pImAccount = &imAccount;
+	connectEventSignal(pImAccount);
 }
 
 // Called in the model thread
 void QtProfileBar::disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount) {
-    IMAccount * pImAccount = &imAccount;
-    disconnectedEventSignal(pImAccount);
+	IMAccount * pImAccount = &imAccount;
+	disconnectedEventSignal(pImAccount);
 }
 
 void QtProfileBar::myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
-		                                        EnumPresenceState::MyPresenceStatus status) {
-    EnumPresenceState::MyPresenceStatus * pstatus = new EnumPresenceState::MyPresenceStatus;
-    QVariant v(status);
-    myPresenceStatusEventSignal(v);
+	EnumPresenceState::MyPresenceStatus status) {
+
+	EnumPresenceState::MyPresenceStatus * pstatus = new EnumPresenceState::MyPresenceStatus;
+	QVariant v(status);
+	myPresenceStatusEventSignal(v);
 }
 
 void QtProfileBar::myPresenceStatusEventSlot(QVariant status) {
@@ -452,20 +457,20 @@ void QtProfileBar::wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo
 }
 
 void QtProfileBar::setOpen(bool status) {
-    _isOpen = status;
-    update();
+	_isOpen = status;
+	update();
 }
 
 void QtProfileBar::setStatusLabel(const QString & on, const QString & off) {
 
 	_statusLabel->setPixmaps(QPixmap(on),
-	                QPixmap(), // no end
-	                QPixmap(), // no fill
-	                QPixmap(off),
-	                QPixmap(),  // no end
-	                QPixmap()
-	                ); // no fill
-    _statusLabel->update();
+					QPixmap(), // no end
+					QPixmap(), // no fill
+					QPixmap(off),
+					QPixmap(),  // no end
+					QPixmap()
+					); // no fill
+	_statusLabel->update();
 }
 
 void QtProfileBar::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine) {
@@ -477,25 +482,37 @@ void QtProfileBar::userProfileUpdated() {
 }
 
 void QtProfileBar::paintEvent ( QPaintEvent * event ) {
-    if ( _isOpen ){
-        QRect r = rect();
+	if ( _isOpen ){
+		QRect r = rect();
 
-        QLinearGradient lg( QPointF( 1, r.top() ), QPointF( 1, r.bottom() ) );
+		QLinearGradient lg( QPointF( 1, r.top() ), QPointF( 1, r.bottom() ) );
 
-        lg.setColorAt ( 0, palette().color(QPalette::Window) );
-        QColor dest = palette().color(QPalette::Window);
+		lg.setColorAt ( 0, palette().color(QPalette::Window) );
+		QColor dest = palette().color(QPalette::Window);
 
-        float red = ((float )dest.red()) / 1.3f;
-        float blue = ((float )dest.blue()) / 1.3f;
-        float green = ((float )dest.green()) / 1.3f;
+		float red = ((float )dest.red()) / 1.3f;
+		float blue = ((float )dest.blue()) / 1.3f;
+		float green = ((float )dest.green()) / 1.3f;
+	
+		dest = QColor( (int)red,(int)green,(int)blue);
+		lg.setColorAt ( 1, dest  );
 
-        dest = QColor( (int)red,(int)green,(int)blue);
-        lg.setColorAt ( 1, dest  );
+		QPainter painter(this);
+		painter.fillRect( r, QBrush( lg ) );
+		painter.end();
+	} else {
+		QWidget::paintEvent(event);
+	}
+}
 
-        QPainter painter(this);
-        painter.fillRect( r, QBrush( lg ) );
-        painter.end();
-    } else {
-        QWidget::paintEvent(event);
-    }
+void QtProfileBar::cHistoryCreatedEventHandler(CWengoPhone & sender, CHistory & cHistory) {
+	
+	cHistory.unseenMissedCallsChangedEvent +=
+		boost::bind(&QtProfileBar::unseenMissedCallsChangedEventHandler, this, _1, _2);
+	
+	_eventWidget->setMissedCall(cHistory.getUnseenMissedCalls());
+}
+
+void QtProfileBar::unseenMissedCallsChangedEventHandler(CHistory &, int count) {
+	_eventWidget->setMissedCall(count);
 }

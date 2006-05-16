@@ -27,6 +27,8 @@
 #include <model/profile/UserProfile.h>
 #include <model/phoneline/IPhoneLine.h>
 
+#include <presentation/PWengoPhone.h>
+
 #include <qtutil/MouseEventFilter.h>
 
 QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
@@ -100,4 +102,5 @@ void QtEventWidget::voiceMailClicked() {
 
 void QtEventWidget::missedCallClicked() {
 	//TODO: show the history tab
+	_cWengoPhone.getPresentation()->showHistory();
 }

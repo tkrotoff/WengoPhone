@@ -57,6 +57,11 @@ public:
 	Event<void (CHistory &, unsigned int id)> mementoRemovedEvent;
 
 	/**
+	 * Unseen missed calls changed event.
+	 */
+	Event<void (CHistory &, int count)> unseenMissedCallsChangedEvent;
+
+	/**
 	 * Default constructor.
 	 */
 	CHistory(History & history, CWengoPhone & cWengoPhone);
@@ -128,6 +133,19 @@ public:
 	std::string getMementoPeer(unsigned int id);
 
 	/**
+	 * Reset unseen missed calls.
+	 *
+	 */
+	void resetUnseenMissedCalls();
+
+	/**
+	 * Returns the unseen missed calls count.
+	 *
+	 * @return unseen missed calls count
+	 */
+	int getUnseenMissedCalls();
+
+	/**
 	 * retrive the CWengoPhone.
 	 *
 	 * @return the CWengoPhone
@@ -144,12 +162,14 @@ public:
 private:
 
 	void historyMementoAddedEventHandler(History &, unsigned int id);
-	
+
 	void historyMementoUpdatedEventHandler(History &, unsigned int id);
 
 	void historyMementoRemovedEventHandler(History &, unsigned int id);
 
 	void historyLoadedEventHandler(History &);
+
+	void unseenMissedCallsChangedEventhandler(History &, int count);
 
 	/** link to the model. */
 	History & _history;

@@ -108,6 +108,14 @@ public:
 		const std::string & proxyAddress, unsigned proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
+	/**
+	 * CHistory has been created.
+	 *
+	 * @param sender this class
+	 * @param wsWengoSubscribe WsWengoSubscribe created
+	 */
+	Event<void (CWengoPhone & sender, CHistory & cHistory)> cHistoryCreatedEvent;
+
 	CWengoPhone(WengoPhone & wengoPhone);
 
 	PWengoPhone * getPresentation() const {

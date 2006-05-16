@@ -68,6 +68,10 @@ public Q_SLOTS:
 
 	void removeItem( unsigned int id);
 
+private Q_SLOTS:
+
+	void resetUnseenMissedCalls();
+
 private:
 
 	void initThreadSafe();

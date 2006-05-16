@@ -31,6 +31,7 @@
 
 History::History(UserProfile & userProfile) : _userProfile(userProfile) {
 	_collection = new HistoryMementoCollection();
+	_missedCallCount = 0;
 }
 
 History::~History() {
@@ -70,6 +71,11 @@ void History::updateCallState(int callId, HistoryMemento::State state) {
 		memento->updateState(state);
 		unsigned int id = _collection->getMementoId(memento);
 		mementoUpdatedEvent(*this, id);
+		
+		if( state == HistoryMemento::MissedCall ) {
+			_missedCallCount++;
+			unseenMissedCallsChangedEvent(*this, _missedCallCount);
+		}
 	}
 }
 
@@ -82,6 +88,7 @@ std::string History::serialize() {
 	try {
 		boost::archive::xml_oarchive oa(ss);
 		oa << BOOST_SERIALIZATION_NVP(_collection);
+		oa << BOOST_SERIALIZATION_NVP(_missedCallCount);
 		return ss.str();
 	} catch (boost::archive::archive_exception & e) {
 		LOG_DEBUG(e.what());
@@ -94,6 +101,7 @@ bool History::unserialize(const std::string & data) {
 	try {
 		boost::archive::xml_iarchive ia(ss);
 		ia >> BOOST_SERIALIZATION_NVP(_collection);
+		ia >> BOOST_SERIALIZATION_NVP(_missedCallCount);
 	} catch (boost::archive::archive_exception & e) {
 		LOG_DEBUG(e.what());
 		return false;
@@ -103,7 +111,7 @@ bool History::unserialize(const std::string & data) {
 
 void History::clear(HistoryMemento::State state) {
 	_collection->clear(state);
-	mementoRemovedEvent(*this, -1);
+	mementoRemovedEvent(*this, 0);
 }
 
 std::string History::toString() {
@@ -146,7 +154,6 @@ void History::load(std::string filename) {
 	clear();
 	unserialize(lines);
 	historyLoadedEvent(*this);
-	//LOG_DEBUG(toString());
 }
 
 void History::save(std::string filename) {
@@ -154,7 +161,6 @@ void History::save(std::string filename) {
 	ofs << serialize();
 	ofs.close();
 	historySavedEvent(*this);
-	//LOG_DEBUG(toString());
 }
 
 void History::replay(unsigned int id) {
@@ -164,4 +170,13 @@ void History::replay(unsigned int id) {
 		std::string phoneNumber = getMemento(id)->getPeer();
 		_userProfile.getActivePhoneLine()->makeCall(phoneNumber, false);
 	}
+}
+
+void History::resetUnseenMissedCalls() {
+	_missedCallCount = 0;
+	unseenMissedCallsChangedEvent(*this, _missedCallCount);
+}
+
+int History::getUnseenMissedCalls() {
+	return _missedCallCount;
 }

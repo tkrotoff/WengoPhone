@@ -256,6 +256,7 @@ void CWengoPhone::showWengoBuyWengos() {
 
 void CWengoPhone::historyLoadedEventHandler(History & history) {
 	_cHistory = new CHistory(history, *this);
+	cHistoryCreatedEvent(*this, *_cHistory);
 }
 
 void CWengoPhone::authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,

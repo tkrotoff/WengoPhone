@@ -762,9 +762,6 @@ void QtWengoPhone::showHome() {
 void QtWengoPhone::showContactList() {
 }
 
-void QtWengoPhone::showCallHistory() {
-}
-
 void QtWengoPhone::sendSms() {
 	if (_qtSms) {
 		_qtSms->getWidget()->show();
@@ -880,7 +877,7 @@ void QtWengoPhone::urlClickedEventHandler(std::string url) {
 		showContactList();
 	}
 	else if( anchor == ANCHOR_HISTORY ) {
-		showCallHistory();
+		showHistory();
 	}
 	else if( anchor == ANCHOR_CONFIGURATION ) {
 		showConfig();
@@ -1119,3 +1116,6 @@ void QtWengoPhone::showChatWindow(){
     _chatWindow->setVisible(true);
 }
 
+void QtWengoPhone::showHistory() {
+	_ui->tabWidget->setCurrentWidget(_ui->tabHistory);
+}

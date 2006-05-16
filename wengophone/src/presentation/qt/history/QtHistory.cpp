@@ -54,6 +54,7 @@ void QtHistory::initThreadSafe() {
 
 	connect (_historyWidget, SIGNAL( replayItem(QtHistoryItem *) ),SLOT( replayItem(QtHistoryItem *) ));
 	connect (_historyWidget, SIGNAL( removeItem(unsigned int) ),SLOT( removeItem(unsigned int) ));
+	connect(_historyWidget, SIGNAL(missedCallsSeen()), SLOT(resetUnseenMissedCalls()));
 
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 	qtWengoPhone->setHistory(_historyWidget);
@@ -166,7 +167,7 @@ void QtHistory::clearRejectedCallEntries() {
 	_cHistory.clearRejectedCallEntries();
 }
 
-void QtHistory::replayItem ( QtHistoryItem * item ) {
+void QtHistory::replayItem(QtHistoryItem * item) {
 	QString text = "";
 	QString phoneNumber = "";
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
@@ -220,4 +221,8 @@ void QtHistory::removeItem(unsigned id) {
 
 void QtHistory::mementoRemovedEventHandler(CHistory &, unsigned id) {
 	updatePresentation();
+}
+
+void QtHistory::resetUnseenMissedCalls() {
+	_cHistory.resetUnseenMissedCalls();
 }

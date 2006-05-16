@@ -38,6 +38,7 @@ class ConnectHandler;
 class IMAccount;
 class PresenceHandler;
 class UserProfile;
+class CHistory;
 
 /**
  * Credit widget
@@ -167,6 +168,10 @@ private:
 
 	void wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status,
 		WsInfo::WsInfoCallForwardMode mode, bool voicemail, std::string dest1, std::string dest2, std::string dest3);
+
+	void cHistoryCreatedEventHandler(CWengoPhone & sender, CHistory &  cHistory);
+
+	void unseenMissedCallsChangedEventHandler(CHistory &, int count);
 
 	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
 

@@ -100,6 +100,12 @@ Q_SIGNALS:
 
 	void removeItem( unsigned int id );
 
+	void missedCallsSeen();
+
+private Q_SLOTS:
+
+	void itemClicked();
+
 protected:
 
 	QTreeWidget * _treeWidget;
@@ -111,7 +117,7 @@ protected:
 	QMenu * _popupMenu;
 
 	QtHistoryItem * _currentItem;
-	
+
 	HistoryTreeEventManager * _historyTreeEventManager;
 };
 

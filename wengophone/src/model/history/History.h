@@ -81,6 +81,11 @@ public:
 	Event<void (History &, unsigned int id)> mementoRemovedEvent;
 
 	/**
+	 * Unseen missed calls changed event.
+	 */
+	Event<void (History &, int count)> unseenMissedCallsChangedEvent;
+
+	/**
 	 * Default constructor
 	 *
 	 * @param wengophone a pointer to WengoPhone
@@ -197,25 +202,41 @@ public:
 	 */
 	void replay(unsigned int id);
 
+	/**
+	 * Reset unseen missed calls.
+	 *
+	 */
+	void resetUnseenMissedCalls();
+
+	/**
+	 * Returns the unseen missed calls count.
+	 *
+	 * @return unseen missed calls count
+	 */
+	int getUnseenMissedCalls();
+
 private:
 
 	/**
 	 * Serialize the history.
 	 */
 	std::string serialize();
-	
+
 	/**
 	 * Serialize the history.
 	 */
 	bool unserialize(const std::string & data);
-	
+
 	/**
 	 * Private HistoryMementoList that store
 	 * all HistoryMemento objects.
 	 */
 	HistoryMementoCollection *_collection;
-	
+
 	/**	  a ref  to UserProfile */
 	UserProfile & _userProfile;
+
+	/** unseen missed calls count */
+	int _missedCallCount;
 };
 #endif //OW_HISTORY_H
