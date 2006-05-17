@@ -1002,11 +1002,14 @@ void QtWengoPhone::expandConfigPanel() {
 	static bool expand = true;
 
 	if (expand) {
-		_wengoPhoneWindow->resize(_wengoPhoneWindow->width(), _wengoPhoneWindow->height() + _configPanelWidget->height());
+		_wengoPhoneWindow->resize(_wengoPhoneWindow->width(), 
+					  _wengoPhoneWindow->height() + _configPanelWidget->height());
 		_ui->configPanel->show();
 	} else {
-		_ui->configPanel->hide();
-		_wengoPhoneWindow->resize(_wengoPhoneWindow->width(), _wengoPhoneWindow->height() - _configPanelWidget->height());
+	  _wengoPhoneWindow->resize(_wengoPhoneWindow->width(),
+				    _wengoPhoneWindow->height() - _configPanelWidget->height());
+
+	  _ui->configPanel->hide();
 	}
 	expand = !expand;
 }

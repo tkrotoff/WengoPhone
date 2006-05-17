@@ -318,9 +318,10 @@ if WengoOSWindows():
 
 print "Copying Qt's mng plugin to build dir..."
 try:	
+	os.mkdir(os.path.join(env.WengoGetRootBuildDir(), 'imageformats'))
 	shutil.copy2(os.path.join(os.environ['QTDIR'], 'plugins', 'imageformats', qt_mng_plugin_file), env.WengoGetRootBuildDir());
 except (IOError, os.error), why:
-	print "Can't copy %s to %s: %s" % (qt_mng_plugin_file, os.path.join(env.WengoGetRootBuildDir(), qt_mng_plugin_file), str(why))
+	print "Can't copy %s to %s: %s" % (qt_mng_plugin_file, os.path.join(env.WengoGetRootBuildDir(), 'imageformats', qt_mng_plugin_file), str(why))
 else:
 	print 'Done.'
 
