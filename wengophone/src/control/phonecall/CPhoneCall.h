@@ -45,6 +45,10 @@ public:
 		return _pPhoneCall;
 	}
 
+	void setPresentation(PPhoneCall * p) {
+		_pPhoneCall = p;
+	}
+
 	CWengoPhone & getCWengoPhone() const {
 		return _cWengoPhone;
 	}

@@ -37,7 +37,7 @@ CPhoneCall::CPhoneCall(PhoneCall & phoneCall, CWengoPhone & cWengoPhone)
 	: _phoneCall(phoneCall),
 	_cWengoPhone(cWengoPhone) {
 
-	_pPhoneCall = PFactory::getFactory().createPresentationPhoneCall(*this);
+	//_pPhoneCall = PFactory::getFactory().createPresentationPhoneCall(*this);
 
 	_phoneCall.stateChangedEvent += boost::bind(&CPhoneCall::stateChangedEventHandler, this, _1, _2);
 	_phoneCall.videoFrameReceivedEvent += boost::bind(&CPhoneCall::videoFrameReceivedEventHandler, this, _1, _2, _3);
