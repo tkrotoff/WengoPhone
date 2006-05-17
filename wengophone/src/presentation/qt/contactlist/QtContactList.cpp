@@ -195,7 +195,7 @@ void QtContactList::contactGroupRemovedEventSlot(QString contactGroupId) {
 
 	QList < QTreeWidgetItem * > list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
 
-	if (list.isEmpty()) {
+	if (!list.isEmpty()) {
 		_treeWidget->takeTopLevelItem(_treeWidget->indexOfTopLevelItem(list[0]));
 	}
 }
