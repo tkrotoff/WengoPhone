@@ -258,7 +258,7 @@ QString srcContactGroupId, QString contactId) {
 	+ ". UUID: " + contactId.toStdString());
 
 	_userManager->moveContact(contactId,
-	srcContactGroupId, dstContactGroupId);
+		srcContactGroupId, dstContactGroupId);
 	updatePresentationThreadSafe();
 }
 

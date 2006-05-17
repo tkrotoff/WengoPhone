@@ -131,6 +131,14 @@ public:
 	 */
 	std::vector<std::string> getContactIds() const;
 
+	/**
+	 * Merges two contacts.
+	 *
+	 * @param dstContactId the id of the destination contact
+	 * @param srcContactId the id of the source contact
+	 */
+	void merge(const std::string & dstContactId, const std::string & srcContactId);
+
 private:
 
 	/**

@@ -194,3 +194,12 @@ void CContactList::removeContactGroup(const std::string & id) {
 void CContactList::renameContactGroup(const std::string & groupId, const std::string & name) {
 	_contactList.renameContactGroup(groupId, name);
 }
+
+void CContactList::merge(const std::string & dstContactId, const std::string & srcContactId) {
+	Contact * dstContact = getContact(dstContactId);
+	Contact * srcContact = getContact(srcContactId);
+
+	if (dstContact && srcContact) {
+		_contactList.mergeContacts(*dstContact, *srcContact);
+	}
+}

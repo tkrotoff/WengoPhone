@@ -194,10 +194,28 @@ void UserTreeEventManager::dropEvent(QDropEvent * event) {
 
 	if (item) {
 		if (_selectedItem) {
-			if (_selectedItem == item)
+
+			if (_selectedItem == item) {
 				return;
-			if (_selectedItem->parent() == item->parent()) //Same group
-				return;
+			}
+
+			if (_selectedItem->parent() == item->parent()) {
+				// The destination and the source groups are the same
+				// This is a contact combination
+				ContactProfile dstContactProfile = _cContactList.getContactProfile(_selectedItem->text(0).toStdString());
+				ContactProfile srcContactProfile = _cContactList.getContactProfile(item->text(0).toStdString());
+
+				if (QMessageBox::question(NULL, 
+					tr("Merge Contacts -- WengoPhone"),
+					tr("Merge %1 with %2?")
+					.arg(QString::fromStdString(dstContactProfile.getDisplayName()))
+					.arg(QString::fromStdString(srcContactProfile.getDisplayName())),
+					tr("&Yes"), tr("&No"),
+					QString(), 0, 1)) {
+           			_cContactList.merge(_selectedItem->text(0).toStdString(),
+						item->text(0).toStdString());
+				}
+			}
 
 			p = _selectedItem->parent();
 
