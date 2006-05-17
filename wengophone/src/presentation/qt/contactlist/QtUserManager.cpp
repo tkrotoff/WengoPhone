@@ -88,8 +88,10 @@ void QtUserManager::startSMS(bool checked) {
 
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-	user = ul->getUser(item->text(0));
-	user->startSMS();
+	if( ul && item ) {
+		user = ul->getUser(item->text(0));
+		user->startSMS();
+	}
 }
 
 void QtUserManager::startChat(bool) {
@@ -99,8 +101,10 @@ void QtUserManager::startChat(bool) {
 
 	//The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-	user = ul->getUser(item->text(0));
-	user->startChat();
+	if( ul && item ) {
+		user = ul->getUser(item->text(0));
+		user->startChat();
+	}
 }
 
 void QtUserManager::editContact(bool) {
@@ -596,9 +600,10 @@ void QtUserManager::startMobileCall(bool checked) {
 
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-
-	user = ul->getUser(item->text(0));
-	user->startCall(user->getMobilePhone());
+	if( ul && item ) {
+		user = ul->getUser(item->text(0));
+		user->startCall(user->getMobilePhone());
+	}
 }
 
 void QtUserManager::startHomeCall(bool checked) {
@@ -607,8 +612,10 @@ void QtUserManager::startHomeCall(bool checked) {
 
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-	user = ul->getUser(item->text(0));
-	user->startCall(user->getHomePhone());
+	if( ul && item ) {
+		user = ul->getUser(item->text(0));
+		user->startCall(user->getHomePhone());
+	}
 }
 
 void QtUserManager::startWorkCall(bool checked) {
@@ -618,8 +625,10 @@ void QtUserManager::startWorkCall(bool checked) {
 
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-	user = ul->getUser(item->text(0));
-	user->startCall(user->getWorkPhone());
+	if( ul && item ) {
+		user = ul->getUser(item->text(0));
+		user->startCall(user->getWorkPhone());
+	}
 }
 
 void QtUserManager::startWengoCall(bool checked) {
@@ -629,9 +638,10 @@ void QtUserManager::startWengoCall(bool checked) {
 
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
-
-	user = ul->getUser(item->text(0));
-	user->startCall(user->getWengoPhoneNumber());
+	if( ul && item ) {
+		user = ul->getUser(item->text(0));
+		user->startCall(user->getWengoPhoneNumber());
+	}
 }
 
 void QtUserManager::removeContact(const QString & contactId) {
