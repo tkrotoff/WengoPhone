@@ -703,11 +703,24 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 	QtUser * user = NULL;
 	bool found = false;
 
-	// Removing the Contact from the old group
-	// We should only one group
-	QList < QTreeWidgetItem * > list = _tree->findItems(srcContactGroupId, Qt::MatchExactly);
+	// Looking for the contact in the destination group
+	// If it is inside this group nothing is done
+	QList < QTreeWidgetItem * > list = _tree->findItems(dstContactGroupId, Qt::MatchExactly);
 	QTreeWidgetItem * group = list[0];
 	int count = group->childCount();
+
+	for (int t = 0; (t < count) && !found; t++) {
+		user = ul->getUser(group->child(t)->text(0));
+		if (user->getId() == contactId) {
+			return;
+		}
+	}
+
+	// Removing the Contact from the old group
+	// We should only one group
+	list = _tree->findItems(srcContactGroupId, Qt::MatchExactly);
+	group = list[0];
+	count = group->childCount();
 
 	for (int t = 0; (t < count) && !found; t++) {
 		user = ul->getUser(group->child(t)->text(0));
