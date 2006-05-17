@@ -221,7 +221,6 @@
         <file>profilebar/EventWidget.ui</file>
         <file>toaster/QtToaster.ui</file>
         <file>toaster/QtCallToaster.ui</file>
-        <file>webservices/sms/SmsWindow.ui</file>
         <file>webservices/softupdate/SoftUpdateWindow.ui</file>
     </qresource>
 </RCC>

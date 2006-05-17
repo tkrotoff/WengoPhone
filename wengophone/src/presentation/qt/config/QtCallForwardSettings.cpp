@@ -34,7 +34,7 @@ QtCallForwardSettings::QtCallForwardSettings(CWengoPhone & cWengoPhone, QWidget 
 	: QObject(parent),
 	_cWengoPhone(cWengoPhone) {
 
-	_callForwardSettingsWidget = new QWidget(parent);
+	_callForwardSettingsWidget = new QWidget(NULL);
 
 	_ui = new Ui::CallForwardSettings();
 	_ui->setupUi(_callForwardSettingsWidget);

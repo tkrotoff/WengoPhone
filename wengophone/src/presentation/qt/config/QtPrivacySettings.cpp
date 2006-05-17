@@ -29,7 +29,7 @@
 QtPrivacySettings::QtPrivacySettings(QWidget * parent)
 	: QObject(parent) {
 
-	_privacySettingsWidget = new QWidget(parent);
+	_privacySettingsWidget = new QWidget(NULL);
 
 	_ui = new Ui::PrivacySettings();
 	_ui->setupUi(_privacySettingsWidget);

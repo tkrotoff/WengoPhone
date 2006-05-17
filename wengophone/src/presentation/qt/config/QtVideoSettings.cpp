@@ -36,20 +36,17 @@
 static const int VIDEO_QUALITY_COLUMN = 0;
 
 QtVideoSettings::QtVideoSettings(QWidget * parent)
-	: QWidget(parent) {
+	: QWidget(NULL) {
 
 	_ui = new Ui::VideoSettings();
 	_ui->setupUi(this);
 
 	_webcamDriver = WebcamDriver::getInstance();
-	_webcamDriver->frameCapturedEvent += boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);
 	_rgbImage = NULL;
-	_webcamDeviceOpened = false;
 
-	connect(this, SIGNAL(newWebcamImage(QPixmap)), SLOT(newWebcamImageCaptured(QPixmap)), Qt::QueuedConnection);
-	connect(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(webcamPreview(const QString &)));
-
-	_ui->webcamDeviceComboBox->addItems(StringListConvert::toQStringList(_webcamDriver->getDeviceList()));
+	connect(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
+	connect(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(startWebcamPreview(const QString &)));
+	connect(_ui->enableVideoGroupBox, SIGNAL(toggled(bool)), SLOT(enableVideo(bool)));
 
 	readConfig();
 }
@@ -95,6 +92,9 @@ void QtVideoSettings::readConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	_ui->enableVideoGroupBox->setChecked(config.getVideoEnable());
+
+	_ui->webcamDeviceComboBox->clear();
+	_ui->webcamDeviceComboBox->addItems(StringListConvert::toQStringList(_webcamDriver->getDeviceList()));
 	_ui->webcamDeviceComboBox->setCurrentIndex(_ui->webcamDeviceComboBox->findText(QString::fromStdString(config.getVideoWebcamDevice())));
 
 	int videoQuality = config.getVideoQuality();
@@ -136,34 +136,39 @@ void QtVideoSettings::frameCapturedEventHandler(IWebcamDriver * sender, piximage
 
 	pix_convert(PIX_NO_FLAG, _rgbImage, image);
 
-	newWebcamImage(QPixmap::fromImage(QImage(_rgbImage->data, _rgbImage->width, _rgbImage->height, QImage::Format_RGB32)));
+	newWebcamImage(new QImage(_rgbImage->data, _rgbImage->width, _rgbImage->height, QImage::Format_RGB32));
 }
 
-void QtVideoSettings::newWebcamImageCaptured(QPixmap pixmap) {
-	_ui->webcamPreviewLabel->setPixmap(pixmap);
+void QtVideoSettings::newWebcamImageCaptured(QImage * image) {
+	_ui->webcamPreviewLabel->setPixmap(QPixmap::fromImage(*image));
+	delete image;
 }
 
-void QtVideoSettings::webcamPreview(const QString & deviceName) {
-	//If the Webcam is currently in used, we cannot launch a capture and
-	//we cannot set any parameters as it is already launched
-	if (!_webcamDriver->isOpened()) {
-		_webcamDriver->setDevice(deviceName.toStdString());
-		//_webcamDriver->setPalette(PIX_OSI_RGB32);
+void QtVideoSettings::startWebcamPreview(const QString & deviceName) {
+	_webcamDriver->frameCapturedEvent += boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);
+	_webcamDriver->setDevice(deviceName.toStdString());
+	_webcamDriver->setPalette(PIX_OSI_YUV420P);
+	_webcamDriver->startCapture();
+}
 
-		_webcamDriver->startCapture();
-
-		_webcamDeviceOpened = true;
-	}
+void QtVideoSettings::stopWebcamPreview() {
+	_webcamDriver->frameCapturedEvent -= boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);
+	_webcamDriver->stopCapture();
 }
 
 void QtVideoSettings::showEvent(QShowEvent * event) {
-	webcamPreview(_ui->webcamDeviceComboBox->currentText());
+	readConfig();
+	startWebcamPreview(_ui->webcamDeviceComboBox->currentText());
 }
 
 void QtVideoSettings::hideEvent(QHideEvent * event) {
-	if (_webcamDeviceOpened) {
-		_webcamDriver->frameCapturedEvent -= boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);
-		_webcamDriver->stopCapture();
-		_webcamDeviceOpened = false;
+	stopWebcamPreview();
+}
+
+void QtVideoSettings::enableVideo(bool enable) {
+	if (enable) {
+		startWebcamPreview(_ui->webcamDeviceComboBox->currentText());
+	} else {
+		stopWebcamPreview();
 	}
 }

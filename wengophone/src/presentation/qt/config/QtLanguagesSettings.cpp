@@ -32,7 +32,7 @@
 QtLanguagesSettings::QtLanguagesSettings(QWidget * parent)
 	: QObject(parent) {
 
-	_languagesSettingsWidget = new QWidget(parent);
+	_languagesSettingsWidget = new QWidget(NULL);
 
 	_ui = new Ui::LanguagesSettings();
 	_ui->setupUi(_languagesSettingsWidget);

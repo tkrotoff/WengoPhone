@@ -230,6 +230,7 @@ forms = [
 	'webservices/directory/WsDirectoryContact.ui',
 	'webservices/subscribe/SubscribeWengo1.ui',
 	'webservices/subscribe/SubscribeWengo2.ui',
+	'webservices/sms/SmsWindow.ui',
 	'config/AccountSettings.ui',
 	'config/AdvancedConfigWindow.ui',
 	'config/GeneralSettings.ui',

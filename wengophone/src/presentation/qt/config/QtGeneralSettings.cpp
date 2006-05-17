@@ -29,7 +29,7 @@
 QtGeneralSettings::QtGeneralSettings(QWidget * parent)
 	: QObject(parent) {
 
-	_generalSettingsWidget = new QWidget(parent);
+	_generalSettingsWidget = new QWidget(NULL);
 
 	_ui = new Ui::GeneralSettings();
 	_ui->setupUi(_generalSettingsWidget);

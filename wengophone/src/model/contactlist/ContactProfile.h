@@ -28,7 +28,6 @@
 #include <util/Event.h>
 
 #include <string>
-#include <set>
 #include <map>
 
 class UserProfile;
@@ -49,6 +48,14 @@ class ContactProfile : public Profile {
 public:
 
 	//typedef std::set<std::string> ContactGroupSet;
+
+	/**
+	 * Emitted when the contact presence state has been changed.
+	 * FIXME not connected yet, this is for the toaster/notification
+	 *
+	 * @param sender this class
+	 */
+	Event<void (const ContactProfile & sender)> contactProfilePresenceChangedEvent;
 
 	ContactProfile();
 

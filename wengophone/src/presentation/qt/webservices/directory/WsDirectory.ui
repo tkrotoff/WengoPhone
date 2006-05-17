@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>514</width>
-    <height>308</height>
+    <width>428</width>
+    <height>302</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -69,10 +69,7 @@
    <item row="0" column="0" colspan="3" >
     <widget class="QLabel" name="label" >
      <property name="text" >
-      <string>Make sure your contact doesn't already have an account on our directory! Enter his/her name, first name, city, nickname, or even email and click the search link!</string>
-     </property>
-     <property name="wordWrap" >
-      <bool>true</bool>
+      <string>Make sure your contact doesn't already have an account on our directory!&lt;br>Enter his/her name, first name, city, nickname or even email and click the search link.</string>
      </property>
     </widget>
    </item>

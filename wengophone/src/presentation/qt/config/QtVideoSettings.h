@@ -25,11 +25,10 @@
 #include <pixertool/pixertool.h>
 
 #include <QWidget>
-#include <QPixmap>
 
 class IWebcamDriver;
 
-class QWidget;
+class QImage;
 class QHideEvent;
 class QShowEvent;
 class QString;
@@ -61,17 +60,21 @@ public:
 
 private Q_SLOTS:
 
-	void newWebcamImageCaptured(QPixmap pixmap);
+	void newWebcamImageCaptured(QImage * image);
 
-	void webcamPreview(const QString & deviceName);
+	void startWebcamPreview(const QString & deviceName);
+
+	void enableVideo(bool enable);
 
 Q_SIGNALS:
 
-	void newWebcamImage(QPixmap pixmap);
+	void newWebcamImage(QImage * image);
 
 private:
 
 	void readConfig();
+
+	void stopWebcamPreview();
 
 	void frameCapturedEventHandler(IWebcamDriver * sender, piximage * image);
 
@@ -85,8 +88,6 @@ private:
 
 	/** Contains the converted picture from the Webcam. */
 	piximage * _rgbImage;
-
-	bool _webcamDeviceOpened;
 };
 
 #endif	//QTVIDEOSETTINGS_H

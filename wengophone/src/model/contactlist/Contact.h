@@ -22,10 +22,7 @@
 
 #include "ContactProfile.h"
 
-#include <util/Event.h>
-
 #include <string>
-#include <set>
 
 /**
  * Contact inside an address book.

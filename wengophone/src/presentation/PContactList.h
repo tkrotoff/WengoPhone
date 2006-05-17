@@ -22,15 +22,29 @@
 
 #include "Presentation.h"
 
+#include <util/Event.h>
+
 #include <string>
 
 /**
+ *
+ * FIXME Please put const std::string & rather than just std::string,
+ * there is a good reason behind this.
  *
  * @ingroup presentation
  * @author Tanguy Krotoff
  */
 class PContactList : public Presentation {
 public:
+
+	/**
+	 * A toaster must be showed with a contact description inside.
+	 *
+	 * FIXME not finished yet
+	 *
+	 * @param contactId contact UUID to show
+	 */
+	Event<void (const std::string & contactId)> showToaster;
 
 	/**
 	 * Called by the control when a group has been added.

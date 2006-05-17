@@ -33,7 +33,7 @@
 QtAudioSettings::QtAudioSettings(QWidget * parent)
 	: QObject(parent) {
 
-	_audioSettingsWidget = new QWidget(parent);
+	_audioSettingsWidget = new QWidget(NULL);
 
 	_ui = new Ui::AudioSettings();
 	_ui->setupUi(_audioSettingsWidget);

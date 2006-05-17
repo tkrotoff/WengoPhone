@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>355</width>
-    <height>638</height>
+    <width>460</width>
+    <height>624</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -52,7 +52,7 @@
          <item row="0" column="0" >
           <widget class="QGroupBox" name="groupBox_2" >
            <property name="title" >
-            <string>Select your webcam</string>
+            <string>Webcam Selection</string>
            </property>
            <layout class="QGridLayout" >
             <property name="margin" >
@@ -145,7 +145,7 @@
          <item row="1" column="0" >
           <widget class="QGroupBox" name="groupBox" >
            <property name="title" >
-            <string>Connection type</string>
+            <string>Connection Type</string>
            </property>
            <layout class="QGridLayout" >
             <property name="margin" >
@@ -245,7 +245,7 @@
             <item row="2" column="0" >
              <widget class="QLabel" name="label" >
               <property name="text" >
-               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;span style=" font-weight:600;">Warning!&lt;/span> When used for the first time we recommend that&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">you select the normal video quality mode, then you can try&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">different modes to find out the most suitable one&lt;/p>&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; font-weight:600;">Tips: &lt;span style=" font-weight:400;">Go to http://test.lvcm.com to determine your internet&lt;/span>&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;">connection bandwidth&lt;/p>&lt;/body>&lt;/html></string>
+               <string>&lt;b>Warning!&lt;/b> When used for the first time we recommend that you select&lt;br>the normal video quality mode, then you can try different modes to find out&lt;br>the most suitable one&lt;br>&lt;br>&lt;b>Tips&lt;/b>: Go to http://test.lvcm.com to determine your Internet connection bandwidth</string>
               </property>
              </widget>
             </item>

@@ -19,15 +19,13 @@
 
 #include "QtSms.h"
 
+#include "ui_SmsWindow.h"
+
 #include <presentation/qt/QtWengoPhone.h>
 
 #include <control/CWengoPhone.h>
 
-#include <qtutil/Object.h>
-#include <qtutil/WidgetFactory.h>
-
 #include <QtGui>
-#include <QMessageBox>
 
 #include <util/Logger.h>
 
@@ -44,14 +42,18 @@ QtSms::QtSms(CSms & cSms)
 }
 
 void QtSms::initThreadSafe() {
-	_smsWindow = WidgetFactory::create(":/forms/webservices/sms/SmsWindow.ui", _qtWengoPhone->getWidget());
+	_smsWindow = new QDialog(_qtWengoPhone->getWidget());
 
-	_sendButton = Object::findChild<QPushButton *>(_smsWindow, "sendButton");
-	connect(_sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
+	_ui = new Ui::SmsWindow();
+	_ui->setupUi(_smsWindow);
 
-	_smsText = Object::findChild<QTextEdit *>(_smsWindow, "smsText");
+	connect(_ui->sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
 
 	_qtWengoPhone->setSms(this);
+}
+
+QWidget * QtSms::getWidget() const {
+	return _smsWindow;
 }
 
 void QtSms::updatePresentation() {
@@ -61,13 +63,11 @@ void QtSms::updatePresentationThreadSafe() {
 }
 
 void QtSms::sendButtonClicked() {
-	static QComboBox * phoneComboBox = Object::findChild<QComboBox *>(_smsWindow, "phoneComboBox");
-
-	_sendButton->setEnabled(false);
+	_ui->sendButton->setEnabled(false);
 
 	//Converts to UTF-8
-	std::string phoneNumber(phoneComboBox->currentText().toUtf8().constData());
-	std::string sms(_smsText->toPlainText().toUtf8().constData());
+	std::string phoneNumber(_ui->phoneComboBox->currentText().toUtf8().constData());
+	std::string sms(_ui->smsText->toPlainText().toUtf8().constData());
 
 	_cSms.sendSMS(phoneNumber, sms);
 }
@@ -88,21 +88,20 @@ void QtSms::smsStatusEventHandlerThreadSafe(Sms::SmsStatus status) {
 		smsStatus = tr("SmsStatusOk");
 		break;
 	default:
-		LOG_FATAL("Unknown SmsStatus");
+		LOG_FATAL("unknown SmsStatus=" + String::fromNumber(status));
 	}
 
-	_sendButton->setEnabled(true);
+	_ui->sendButton->setEnabled(true);
 	QMessageBox::information(_smsWindow, tr("Sms"), smsStatus);
 }
 
 void QtSms::setPhoneNumber(const QString & phoneNumber) {
-	QComboBox * phoneComboBox = Object::findChild<QComboBox *>(_smsWindow, "phoneComboBox");
 	if (!phoneNumber.isEmpty()) {
-		phoneComboBox->clear();
-		phoneComboBox->addItem(phoneNumber);
+		_ui->phoneComboBox->clear();
+		_ui->phoneComboBox->addItem(phoneNumber);
 	}
 }
 
 void QtSms::setText(const QString & text) {
-	_smsText->setPlainText(text);
+	_ui->smsText->setPlainText(text);
 }

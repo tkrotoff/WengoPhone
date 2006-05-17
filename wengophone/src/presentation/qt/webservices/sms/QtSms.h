@@ -33,6 +33,8 @@ class QtWengoPhone;
 class QWidget;
 class QPushButton;
 class QTextEdit;
+class QDialog;
+namespace Ui { class SmsWindow; }
 
 /**
  * Qt Presentation component for SMS.
@@ -46,9 +48,7 @@ public:
 
 	QtSms(CSms & cSms);
 
-	QWidget * getWidget() const {
-		return _smsWindow;
-	}
+	QWidget * getWidget() const;
 
 	void updatePresentation();
 
@@ -74,11 +74,9 @@ private:
 
 	QtWengoPhone * _qtWengoPhone;
 
-	QWidget * _smsWindow;
+	Ui::SmsWindow * _ui;
 
-	QPushButton * _sendButton;
-
-	QTextEdit * _smsText;
+	QDialog * _smsWindow;
 };
 
 #endif	//QTSMS_H

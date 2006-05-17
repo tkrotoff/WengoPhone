@@ -147,7 +147,7 @@ void ContactList::addIMContact(Contact & contact, const IMContact & imContact) {
 	//Mutex::ScopedLock lock(_mutex);
 
 	ContactGroup * contactGroup = getContactGroup(contact.getGroupId());
-	
+
 	if (contactGroup) {
 		contact._addIMContact(imContact);
 		_imContactListHandler.addIMContact(contactGroup->getName(), imContact);

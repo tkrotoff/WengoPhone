@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>339</width>
-    <height>300</height>
+    <height>272</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -23,51 +23,37 @@
     <number>6</number>
    </property>
    <item row="2" column="0" colspan="2" >
-    <layout class="QHBoxLayout" >
+    <layout class="QGridLayout" >
      <property name="margin" >
       <number>0</number>
      </property>
      <property name="spacing" >
       <number>6</number>
      </property>
-     <item>
+     <item row="0" column="1" >
+      <widget class="QPushButton" name="sendButton" >
+       <property name="text" >
+        <string>Send</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../../wengophone.qrc" >:/pics/contact/sms.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
       <spacer>
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" >
         <size>
-         <width>251</width>
-         <height>20</height>
+         <width>256</width>
+         <height>28</height>
         </size>
        </property>
       </spacer>
      </item>
-     <item>
-      <widget class="QPushButton" name="sendButton" >
-       <property name="text" >
-        <string>Send</string>
-       </property>
-       <property name="icon" >
-        <iconset/>
-       </property>
-      </widget>
-     </item>
     </layout>
-   </item>
-   <item row="1" column="0" colspan="2" >
-    <widget class="QTextEdit" name="smsText" >
-     <property name="acceptRichText" >
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="phoneNumberLabel" >
-     <property name="text" >
-      <string>Phone number:</string>
-     </property>
-    </widget>
    </item>
    <item row="0" column="1" >
     <widget class="QComboBox" name="phoneComboBox" >
@@ -84,6 +70,20 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="phoneNumberLabel" >
+     <property name="text" >
+      <string>Phone number:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QTextEdit" name="smsText" >
+     <property name="acceptRichText" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
@@ -94,6 +94,7 @@
  </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
+  <include location="../../wengophone.qrc" />
  </resources>
  <connections/>
 </ui>

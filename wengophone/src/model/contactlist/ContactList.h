@@ -109,13 +109,19 @@ public:
 	Event<void (ContactList & sender, Contact & contact)> contactRemovedEvent;
 
 	/**
+	 * @see contactProfilePresenceChangedEvent
+	 * FIXME not finished yet, this is for notification/toaster
+	 */
+	Event<void (ContactList & sender, Contact & contact)> contactPresenceChangedEvent;
+
+	/**
 	 * A Contact has moved.
 	 *
 	 * @param sender this class
 	 * @param groupName the destinaton group
 	 * @param contact the removed Contact
 	 */
-	Event<void (ContactList & sender, ContactGroup & dstContactGroup,	
+	Event<void (ContactList & sender, ContactGroup & dstContactGroup,
 		ContactGroup & srcContactGroup, Contact & contact)> contactMovedEvent;
 
 	/**
@@ -151,7 +157,7 @@ public:
 	 * @param name the desired name
 	 */
 	void renameContactGroup(const std::string & id, const std::string & name);
-	 
+
 	/**
 	 * Create and add a Contact to the ContactList.
 	 *

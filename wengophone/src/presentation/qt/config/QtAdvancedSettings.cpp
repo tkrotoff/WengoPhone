@@ -28,7 +28,7 @@
 QtAdvancedSettings::QtAdvancedSettings(QWidget * parent)
 	: QObject(parent) {
 
-	_advancedSettingsWidget = new QWidget(parent);
+	_advancedSettingsWidget = new QWidget(NULL);
 
 	_ui = new Ui::AdvancedSettings();
 	_ui->setupUi(_advancedSettingsWidget);
