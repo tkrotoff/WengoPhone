@@ -388,7 +388,7 @@ void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
 		}
 	}
 
-	LOG_FATAL("unknown PhoneLineState=" + String::fromNumber(state));
+	//LOG_FATAL("unknown PhoneLineState=" + String::fromNumber(state));
 }
 
 PhoneCall * PhoneLine::getPhoneCall(int callId) {
