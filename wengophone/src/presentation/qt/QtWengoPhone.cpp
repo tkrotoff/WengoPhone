@@ -884,16 +884,16 @@ void QtWengoPhone::setTrayMenu() {
 	if (gdmSession && !strcmp(gdmSession, "gnome")) {
 	  // Open the wengophone window
 	  LOG_DEBUG("We're running a GDM session.");
-	  action = _trayMenu->addAction(tr("Open Wengophone"));
+	  action = _trayMenu->addAction(QIcon(":/pics/open.png"), tr("Open Wengophone"));
 	  connect ( action,SIGNAL(triggered()),_wengoPhoneWindow,SLOT(show()));
 	} else {
 	  // Exit
-	  action = _trayMenu->addAction(tr("Quit Wengophone"));
+	  action = _trayMenu->addAction(QIcon(":/pics/exit.png"), tr("Quit Wengophone"));
 	  connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
 	}
 #else
 	// Exit
-	action = _trayMenu->addAction(tr("Quit Wengophone"));
+	action = _trayMenu->addAction(QIcon(":/pics/exit.png"), tr("Quit Wengophone"));
 	connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
 #endif
 	// Change status
@@ -912,16 +912,16 @@ void QtWengoPhone::setTrayMenu() {
 #ifdef OS_LINUX
 	if (gdmSession && (!strcmp(gdmSession, "gnome"))) {
 	  // Exit
-	  action = _trayMenu->addAction(tr("Quit Wengophone"));
+	  action = _trayMenu->addAction(QIcon(":/pics/exit.png"), tr("Quit Wengophone"));
 	  connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
 	} else {
 	  // Open the wengophone window
-	  action = _trayMenu->addAction(tr("Open Wengophone"));
+	  action = _trayMenu->addAction(QIcon(":/pics/open.png"), tr("Open Wengophone"));
 	  connect ( action,SIGNAL(triggered()),_wengoPhoneWindow,SLOT(show()));
 	}
 #else
 	// Open the wengophone window
-	  action = _trayMenu->addAction(tr("Open Wengophone"));
+	  action = _trayMenu->addAction(QIcon(":/pics/open.png"), tr("Open Wengophone"));
 	  connect ( action,SIGNAL(triggered()),_wengoPhoneWindow,SLOT(show()));
 #endif
 	_trayIcon->setPopup(_trayMenu);
