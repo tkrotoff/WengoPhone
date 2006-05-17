@@ -26,6 +26,8 @@
 
 #include <util/Logger.h>
 
+#include <qtutil/WidgetBackgroundImage.h>
+
 #include <QtGui>
 
 QtSubscribe2::QtSubscribe2(const QString & nickName, const QString & password, const QString & email, QWidget * parent)
@@ -35,6 +37,8 @@ QtSubscribe2::QtSubscribe2(const QString & nickName, const QString & password, c
 
 	_ui = new Ui::SubscribeWengo2();
 	_ui->setupUi(_subscribeWindow);
+
+	WidgetBackgroundImage::setBackgroundImage(_ui->accountCreationLabel, ":pics/headers/new-account.png", true);
 
 	_ui->nicknameLineEdit->setText(nickName);
 	_ui->passwordLineEdit->setText(password);

@@ -41,26 +41,25 @@ Sms::Sms(WengoAccount * wengoAccount, UserProfile & userProfile)
 }
 
 int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
-
-	//encode the message
+	//Encode the message
 	String message2 = String::encodeUrl(message);
 	message2.replace("%2e", ".", false);
-	
+
 	setParameters("message=" + message2 + "&target=" + phoneNumber);
 
-	//call the web service
+	//Call the web service
 	int requestId = call(this);
 
 	//History: create a History Memento for this outgoing SMS
 	HistoryMemento * memento = new HistoryMemento(
 		HistoryMemento::OutgoingSmsNok, phoneNumber, requestId, message2);
 	_userProfile.getHistory().addMemento(memento);
-	
+
 	return requestId;
 }
 
 void Sms::answerReceived(const std::string & answer, int requestId) {
-	//TODO: replace this ugly "parsing" with a real Xml parsing
+	//TODO: replace this ugly "parsing" with a real XML parsing
 	static const std::string STATUS_UNAUTHORIZED = "401";
 	static const std::string STATUS_OK = "200";
 
@@ -74,7 +73,7 @@ void Sms::answerReceived(const std::string & answer, int requestId) {
 
 			//History: retrieve the HistoryMemento & update its state to Ok
 			_userProfile.getHistory().updateSMSState(requestId, HistoryMemento::OutgoingSmsOk);
-			
+
 			return;
 		}
 	}

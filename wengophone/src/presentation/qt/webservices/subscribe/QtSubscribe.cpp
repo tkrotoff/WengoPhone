@@ -32,6 +32,8 @@
 
 #include <util/Logger.h>
 
+#include <qtutil/WidgetBackgroundImage.h>
+
 #include <QtGui>
 
 const char * QtSubscribe::TERMSOFSERVICE_LINK = "http://www.wengo.fr";
@@ -62,6 +64,8 @@ void QtSubscribe::initThreadSafe() {
 	_ui = new Ui::SubscribeWengo1();
 	_ui->setupUi(_subscribeWindow);
 
+	WidgetBackgroundImage::setBackgroundImage(_ui->accountCreationLabel, ":pics/headers/new-account.png", true);
+
 	connect(_ui->subscribeButton, SIGNAL(clicked()), SLOT(sendRequest()));
 
 	showErrorMessage(QString::null);
@@ -75,7 +79,7 @@ void QtSubscribe::showErrorMessage(const QString & errorMessage) {
 
 	if (!errorMessage.isEmpty()) {
 		//Text color is red
-		QPalette palette;
+		QPalette palette = _ui->errorMessageLabel->palette();
 		palette.setColor(QPalette::Text, Qt::red);
 		_ui->errorMessageLabel->setPalette(palette);
 	} else {

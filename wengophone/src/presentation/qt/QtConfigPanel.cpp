@@ -38,7 +38,7 @@
 QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObjectThreadSafe(parent), _cWengoPhone(cWengoPhone) {
 
-	_configPanelWidget = new QWidget(parent);
+	_configPanelWidget = new QWidget(NULL);
 
 	_ui = new Ui::WengoPhoneWindowConfigPanel();
 	_ui->setupUi(_configPanelWidget);
@@ -78,7 +78,7 @@ QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
 	configChangedEventHandler(config, Config::AUDIO_OUTPUT_DEVICENAME_KEY);
 	configChangedEventHandler(config, Config::WENBOX_ENABLE_KEY);
 	configChangedEventHandler(config, Config::AUDIO_HALFDUPLEX_KEY);
-	
+
 	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
 		this, SLOT(videoSettingsClicked()), Qt::LeftButton);
 	_ui->videoSettingsLabel->installEventFilter(mouseFilter);

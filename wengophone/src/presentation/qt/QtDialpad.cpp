@@ -40,7 +40,7 @@ QtDialpad::QtDialpad(QtWengoPhone * qtWengoPhone)
 
 	_qtWengoPhone = qtWengoPhone;
 
-	_dialpadWidget = new QWidget(_qtWengoPhone->getWidget());
+	_dialpadWidget = new QWidget(NULL);
 
 	_ui = new Ui::DialpadWidget();
 	_ui->setupUi(_dialpadWidget);

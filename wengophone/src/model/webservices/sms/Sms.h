@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_SMSWEBSERVICE_H
-#define OW_SMSWEBSERVICE_H
+#ifndef SMS_H
+#define SMS_H
 
 #include <model/webservices/WengoWebService.h>
 
@@ -31,6 +31,9 @@ class UserProfile;
  */
 class Sms : public WengoWebService {
 public:
+
+	/** Maximum SMS length = 150 characters. */
+	static const unsigned SMS_MAX_LENGTH = 150;
 
 	enum SmsStatus {
 		/** The SMS was not sent. */
@@ -70,8 +73,8 @@ public:
 private:
 
 	void answerReceived(const std::string & answer, int requestId);
-	
+
 	UserProfile & _userProfile;
 };
 
-#endif //OW_SMSWEBSERVICE_H
+#endif //SMS_H

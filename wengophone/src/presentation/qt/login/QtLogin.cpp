@@ -25,6 +25,7 @@
 #include <presentation/qt/webservices/subscribe/QtSubscribe.h>
 
 #include <qtutil/MouseEventFilter.h>
+#include <qtutil/WidgetBackgroundImage.h>
 
 #include <QtGui>
 
@@ -35,6 +36,8 @@ QtLogin::QtLogin(QWidget * parent, QtWengoPhone & qtWengoPhone)
 
 	_ui = new Ui::LoginWindow();
 	_ui->setupUi(_loginWindow);
+
+	WidgetBackgroundImage::setBackgroundImage(_ui->loginLabel, ":pics/headers/login.png", true);
 
 	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
 		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);

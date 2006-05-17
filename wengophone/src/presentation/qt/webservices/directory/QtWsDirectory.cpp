@@ -34,6 +34,8 @@
 
 #include <util/Logger.h>
 
+#include <qtutil/WidgetBackgroundImage.h>
+
 #include <QtGui>
 
 #include <cstdio>
@@ -58,6 +60,8 @@ void QtWsDirectory::initThreadSafe() {
 
 	_ui = new Ui::WsDirectory();
 	_ui->setupUi(_directoryWindow);
+
+	WidgetBackgroundImage::setBackgroundImage(_ui->searchLabel, ":pics/headers/search.png", true);
 
 	_qtWengoPhone = (QtWengoPhone *) _cWsDirectory.getCWengoPhone().getPresentation();
 	_cWsDirectory.contactFoundEvent += boost::bind(&QtWsDirectory::contactFoundEventHandler, this, _1, _2, _3);
