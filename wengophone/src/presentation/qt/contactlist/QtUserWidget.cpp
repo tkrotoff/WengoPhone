@@ -21,6 +21,7 @@
 
 #include "QtUserWidgetAvatarManager.h"
 #include "QtUserList.h"
+#include "QtUser.h"
 
 #include <model/contactlist/ContactProfile.h>
 
@@ -38,10 +39,12 @@
 
 #include <util/Logger.h>
 
-QtUserWidget::QtUserWidget(const std::string & contactId,
+QtUserWidget::QtUserWidget(const std::string & contactId, 
 	CWengoPhone & cWengoPhone, QWidget * parent, Qt::WFlags f)
-: QWidget(parent, f), _cWengoPhone(cWengoPhone) {
-
+  : QWidget(parent, f), _cWengoPhone(cWengoPhone) {
+	
+  //contactProfileUpdated();
+  
 	_contactId = contactId;
 	contactProfileUpdated();
 

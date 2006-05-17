@@ -66,6 +66,8 @@ gdict['WengoGetCurrentDateTime'] = wengoenv.WengoGetCurrentDateTime
 gdict['WengoAddCCFlags'] = wengoenv.WengoAddCCFlags
 gdict['WengoAddDefines'] = wengoenv.WengoAddDefines
 gdict['WengoAddIncludePath'] = wengoenv.WengoAddIncludePath
+gdict['WengoPrependIncludePath'] = wengoenv.WengoPrependIncludePath
 gdict['WengoAddLibPath'] = wengoenv.WengoAddLibPath
+gdict['WengoPrependLibPath'] = wengoenv.WengoPrependLibPath
 
 gdict['WengoGetSourcePath'] = wengoenv.WengoGetSourcePath

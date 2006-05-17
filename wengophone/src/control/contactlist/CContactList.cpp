@@ -156,7 +156,7 @@ void CContactList::addContact(const ContactProfile & contactProfile) {
 
 std::vector<std::string> CContactList::getContactIds() const {
 	std::vector<std::string> result;
-	ContactList::Contacts contacts = _contactList.getContacts();
+	const ContactList::Contacts &contacts = _contactList.getContacts();
 
 	for (ContactList::Contacts::const_iterator it = contacts.begin();
 		it != contacts.end();

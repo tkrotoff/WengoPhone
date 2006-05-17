@@ -109,6 +109,11 @@ public:
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
 	/**
+	 * @see WengoPhone::timeoutEvent
+	 */
+	Event<void ()> controlTimeoutEvent;
+
+	/**
 	 * CHistory has been created.
 	 *
 	 * @param sender this class
@@ -271,6 +276,8 @@ private:
 	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
 
 	void wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward);
+
+	void controlTimeoutEventHandler();
 
 	/**
 	 * @see IMPresence::authorizationRequestEvent

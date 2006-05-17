@@ -70,9 +70,8 @@ WengoPhone::WengoPhone()
 	////
 }
 
-void WengoPhone::shutdownTimeoutHandler() {
-    LOG_DEBUG("Shutdown triggered because of timeout");
-    exit(0);
+void WengoPhone::shutdownAfterTimeout() {
+  timeoutEvent();
 }
 
 WengoPhone::~WengoPhone() {
@@ -90,7 +89,7 @@ WengoPhone::~WengoPhone() {
 	 * so that closing WengoPhone NG is not too long.
 	 */
 	static Timer shutdownTimeout;
-	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownTimeoutHandler, this);
+	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownAfterTimeout, this);
 	shutdownTimeout.start(3000, 3000);
 
 	// Disconnect the UserProfile

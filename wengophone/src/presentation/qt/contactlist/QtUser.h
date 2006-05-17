@@ -35,7 +35,7 @@ public:
 	enum SizeHint { UserSize = 22 };
 
 	QtUser(const std::string & contactId, CWengoPhone & wengoPhone, QObject * parent = 0);
-
+	
 	virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 
 	QString getId() const;
@@ -45,6 +45,8 @@ public:
 	bool hasIM() const;
 
 	bool hasCall() const;
+
+	bool hasFreeCall() const;
 
 	bool hasVideo() const;
 
@@ -96,7 +98,11 @@ public:
 
 	QString getPreferredNumber() const;
 
-	bool havePhoneNumber();
+	bool hasPhoneNumber() const;
+
+	QString getDisplayName() const;
+	
+	EnumPresenceState::PresenceState getPresenceState() const;
 
 public Q_SLOTS:
 

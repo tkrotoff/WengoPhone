@@ -220,6 +220,16 @@ class WengoSConsEnvironment(SConsEnvironment):
 		The linker searches for libraries inside the library path.
 		"""
 
+		def prependLibPath(env, paths):
+			"""
+			@see WengoSConsEnvironment.WengoPrependLibPath()
+			"""
+
+			for path in paths:
+				if not path in env['LIBPATH']:
+					env.Prepend(LIBPATH = path)
+		prependLibPath = staticmethod(prependLibPath)
+
 		def addLibPath(env, paths):
 			"""
 			@see WengoSConsEnvironment.WengoAddLibPath()
@@ -392,6 +402,12 @@ class WengoSConsEnvironment(SConsEnvironment):
 		The compiler will search for header files inside the include paths.
 		"""
 
+		def prependIncludePath(env, paths):
+			for path in paths:
+				if not path in env['CPPPATH']:
+					env.Prepend(CPPPATH = path)
+		prependIncludePath = staticmethod(prependIncludePath)
+		
 		def addIncludePath(env, paths):
 			for path in paths:
 				if not path in env['CPPPATH']:
@@ -748,6 +764,11 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		return self.__projectName
 
+	def WengoBuildInDir(self, script, builddir):
+		return self.SConscript(script,
+				       build_dir = self.WengoGetRootBuildDir() + os.sep + builddir,
+				       duplicate = 1)
+
 	def WengoProgram(self, programName, sources, headers = []):
 		"""
 		Generates a program e.g a .exe file given its name and source code.
@@ -784,6 +805,51 @@ class WengoSConsEnvironment(SConsEnvironment):
 		self.__useChildLibraries()
 		self.__installPDBFile()
 		return prog
+
+	def WengoSyncDirs(self, src, dest):
+		print "return Sync dirs command !"
+		return self.Command(dest, src, self._WengoSyncDirs)
+
+	def _WengoSyncDirs(self, target, source, env):
+		"""
+		Synchronizes directory 'dest' with directory 'src'.
+
+		This method copies files and directories if and only if
+		the files or the directories in 'dest' do not exist or
+		have been changed in 'src'.
+
+		@type src string
+		@param src source directory
+		@type dest string
+		@param dest destination directory
+		"""
+		for dest, src in zip(target, source):
+			dest = str(dest)
+			src = str(src)
+			if not os.path.exists(dest):
+				os.makedirs(dest)
+
+			for root, dirs, files in os.walk(src):
+				for f in files:
+					absSrcFile = os.path.join(root, f)
+					i = absSrcFile.find(src) + len(src) + 1
+					absDestFile = os.path.join(dest, absSrcFile[i:])
+					if (not os.path.exists(absDestFile)) \
+					    or (os.stat(absSrcFile).st_mtime != os.stat(absDestFile).st_mtime):
+						shutil.copy2(absSrcFile, absDestFile)
+
+				#Don't visit CVS, .svn and _svn directories
+				repoDirs = ['CVS', '.svn', '_svn']
+				for d in repoDirs:
+					if d in dirs:
+						dirs.remove(d)
+
+				for d in dirs:
+					absSrcDir = os.path.join(root, d)
+					i = absSrcDir.find(src) + len(src) + 1
+					absDestDir = os.path.join(dest, absSrcDir[i:])
+					if not os.path.exists(absDestDir):
+						os.mkdir(absDestDir)
 
 	def WengoCopyToBuildDir(self, src, dest = ''):
 		"""
@@ -1223,6 +1289,16 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		self.LinkFlags.addLinkFlags(self, flags)
 
+	def WengoPrependLibPath(self, paths):
+		"""
+		Adds paths to the beginning of LIBPATH SCons variable.
+
+		@type paths stringlist
+		@param paths paths to add
+		"""
+
+		self.LibPath.prependLibPath(self, paths)
+		
 	def WengoAddLibPath(self, paths):
 		"""
 		Adds paths to the LIBPATH SCons variable.
@@ -1250,6 +1326,16 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		self.Defines.addDefines(self, defines)
 
+	def WengoPrependIncludePath(self, paths):
+		"""
+		Adds paths to the beginning of CPPPATH SCons variable.
+
+		@type paths stringlist
+		@param paths paths to add
+		"""
+
+		self.IncludePath.prependIncludePath(self, paths)
+		
 	def WengoAddIncludePath(self, paths):
 		"""
 		Adds paths to the CPPPATH SCons variable.
@@ -1766,6 +1852,16 @@ def WengoAddDefines(defines):
 	env = getGlobalEnvironment()
 	env.WengoAddDefines(defines)
 
+def WengoPrependIncludePath(paths):
+	"""
+	Adds include paths to the global Environment.
+
+	@see WengoSConsEnvironment.WengoAddIncludePath()
+	"""
+
+	env = getGlobalEnvironment()
+	env.WengoPrependIncludePath(paths)
+	
 def WengoAddIncludePath(paths):
 	"""
 	Adds include paths to the global Environment.
@@ -1776,6 +1872,16 @@ def WengoAddIncludePath(paths):
 	env = getGlobalEnvironment()
 	env.WengoAddIncludePath(paths)
 
+def WengoPrependLibPath(paths):
+	"""
+	Adds lib paths to the global Environment.
+
+	@see WengoSConsEnvironment.WengoAddLibPath()
+	"""
+
+	env = getGlobalEnvironment()
+	env.WengoPrependLibPath(paths)
+	
 def WengoAddLibPath(paths):
 	"""
 	Adds lib paths to the global Environment.

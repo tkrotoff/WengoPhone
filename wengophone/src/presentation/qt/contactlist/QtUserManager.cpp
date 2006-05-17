@@ -537,7 +537,7 @@ QMenu * QtUserManager::createMenu() {
 	menu = new QMenu(dynamic_cast < QWidget * > (parent()));
 
 	// Call menu
-	if (user->havePhoneNumber()) {
+	if (user->hasPhoneNumber()) {
 
 		QMenu * callMenu = menu->addMenu(tr("Call"));
 		if (!user->getMobilePhone().isEmpty()) {

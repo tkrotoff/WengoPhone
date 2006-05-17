@@ -342,7 +342,7 @@ QString QtUser::getPreferredNumber() const {
 	return wphone;
 }
 
-bool QtUser::havePhoneNumber() {
+bool QtUser::hasPhoneNumber() const {
 	if (!getMobilePhone().isEmpty())
 		return true;
 	if (!getHomePhone().isEmpty())
@@ -359,6 +359,12 @@ bool QtUser::hasIM() const {
 	//QMutexLocker locker(&_mutex);
 
 	return _contactProfile.hasIM();
+}
+
+bool QtUser::hasFreeCall() const {
+	//QMutexLocker locker(&_mutex);
+
+	return _contactProfile.hasFreeCall();
 }
 
 bool QtUser::hasCall() const {
@@ -384,9 +390,17 @@ void QtUser::startCall() {
 }
 
 void QtUser::contactUpdated() {
-	_contactProfile = _cWengoPhone.getCUserProfile()->getCContactList().getContactProfile(_contactId);
+  _contactProfile = _cWengoPhone.getCUserProfile()->getCContactList().getContactProfile(_contactId);
 }
 
 void QtUser::startFreeCall() {
 	_cWengoPhone.getCUserProfile()->makeCall(_contactProfile.getFreePhoneNumber(), false);
+}
+
+QString QtUser::getDisplayName() const {
+  return QString::fromStdString(_contactProfile.getDisplayName());
+}
+
+EnumPresenceState::PresenceState QtUser::getPresenceState() const {
+  return _contactProfile.getPresenceState();
 }

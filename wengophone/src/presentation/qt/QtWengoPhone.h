@@ -28,6 +28,7 @@
 
 #include <QMainWindow>
 #include <QVariant>
+#include <QAction>
 #include <string>
 
 class PresenceHandler;
@@ -187,8 +188,6 @@ private Q_SLOTS:
 
 	void showHideOffLineContacts();
 
-	void setTrayMenu();
-
 	void toasterClosed(QtToaster * toaster);
 
 	void expandConfigPanel();
@@ -227,6 +226,26 @@ private Q_SLOTS:
 
 	void hideMainWindow();
 
+	void slotSystrayMenuCallWengo(QAction * action);
+
+	void slotSystrayMenuCallMobile(QAction * action);
+
+	void slotSystrayMenuCallLandLine(QAction * action);
+
+	void slotSystrayMenuStartChat(QAction * action);
+
+	void slotSystrayMenuSendSms(QAction * action);
+
+	void slotSystrayMenuCallBlank(bool checked);
+
+	void setTrayMenu();
+
+	void slotTimeoutEventReachedThreadSafe();
+
+Q_SIGNALS:
+
+	void signalTimeoutEventReached();
+
 private:
 
 	void initThreadSafe();
@@ -238,6 +257,8 @@ private:
 	 * since QtPhoneCall modifies the behaviour of this buttons.
 	 */
 	void initButtons();
+
+	void updateCallMenu();
 
 	void updatePresentationThreadSafe();
 
@@ -268,6 +289,15 @@ private:
 
 	QMenu * createStatusMenu();
 
+	void updateTrayMenuHandler(ContactList & sender, Contact & contact);
+
+	void timeoutEventHandler();
+
+	QMenu * createCallLandLineTrayMenu();
+	QMenu * createCallMobileTrayMenu();
+	QMenu * createCallWengoTrayMenu();
+	QMenu * createCallMenu();
+
 	/** Direct link to the control. */
 	CWengoPhone & _cWengoPhone;
 
@@ -284,6 +314,15 @@ private:
 	TrayIcon * _trayIcon;
 
 	QMenu * _trayMenu;
+	
+	QMenu * _callMenu;
+	QMenu * _callLandLineMenu;
+	QMenu * _callMobileMenu;
+	QMenu * _callWengoMenu;
+
+	QMenu * _startChatMenu;
+	
+	QMenu * _sendSmsMenu;
 
 	QtSms * _qtSms;
 

@@ -83,6 +83,13 @@ public:
 	 */
 	Event<void (WengoPhone & sender, WsWengoSubscribe & wsWengoSubscribe)> wsWengoSubscribeCreatedEvent;
 
+	/**
+	 * timeout has been reached.
+	 *
+	 * @param sender this class
+	 */
+	Event<void ()> timeoutEvent;
+
 	WengoPhone();
 
 	~WengoPhone();
@@ -160,12 +167,12 @@ private:
 	 */
 	bool _terminate;
 
-	/**
-	 * Emergency timeout handler called when SIP unregistering
-	 * is not quick enough, or timed out.
-	 */
-	void shutdownTimeoutHandler();
-
+    /** 
+     *  Emergency timeout handler called when SIP unregistering 
+     *  is not quick enough, or timed out
+     */
+    void shutdownAfterTimeout();
+	
 	/**
 	 * True if the thread is running.
 	 */

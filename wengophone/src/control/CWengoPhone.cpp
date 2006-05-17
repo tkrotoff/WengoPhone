@@ -98,7 +98,8 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	_wengoPhone.getCurrentUserProfile().getHistory().historyLoadedEvent +=
 		boost::bind(&CWengoPhone::historyLoadedEventHandler, this, _1);
 	_wengoPhone.getCurrentUserProfile().wsCallForwardCreatedEvent +=
-		boost::bind(&CWengoPhone::wsCallForwardCreatedEventHandler, this, _1, _2);
+	  boost::bind(&CWengoPhone::wsCallForwardCreatedEventHandler, this, _1, _2);
+	_wengoPhone.timeoutEvent += boost::bind(&CWengoPhone::controlTimeoutEventHandler, this);
 	_wengoPhone.getCurrentUserProfile().getPresenceHandler().authorizationRequestEvent +=
 		boost::bind(&CWengoPhone::authorizationRequestEventHandler, this, _1, _2, _3);
 	_wengoPhone.getCurrentUserProfile().getConnectHandler().connectionStatusEvent +=
@@ -277,4 +278,8 @@ void CWengoPhone::saveUserProfile() {
 
 void CWengoPhone::wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward) {
 	_cWsCallForward = new CWsCallForward(*this, wsCallForward);
+}
+
+void CWengoPhone::controlTimeoutEventHandler() {
+  controlTimeoutEvent();
 }
