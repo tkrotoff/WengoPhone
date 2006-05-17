@@ -32,11 +32,10 @@ QWidget(parent, Qt::Window | Qt::FramelessWindowHint )
 
 void QtToaster::setupGui(){
 	_widget = WidgetFactory::create( ":/forms/toaster/QtToaster.ui", this );
-	_widget->setAutoFillBackground(true);
+
 	_closeTimerId = -1 ;
 	_closeTimer = 5000;
 	_show =   true;
-
 
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget( _widget );
@@ -88,6 +87,10 @@ void QtToaster::setButton1Title(const QString & title){
 }
 
 void QtToaster::setButton1Pixmap(const QPixmap & pixmap){
+    _button1->setMinimumSize(pixmap.size());
+    _button1->setMaximumSize(pixmap.size());
+    _button1->setIconSize(pixmap.size());
+    _button1->setFlat(true);
 	_button1->setIcon(QIcon(pixmap));
 }
 
@@ -96,6 +99,10 @@ void QtToaster::setButton2Title(const QString & title){
 }
 
 void QtToaster::setButton2Pixmap(const QPixmap & pixmap){
+    _button2->setMinimumSize(pixmap.size());
+    _button2->setMaximumSize(pixmap.size());
+    _button2->setIconSize(pixmap.size());
+	_button2->setFlat(true);
 	_button2->setIcon(QIcon(pixmap));
 }
 
@@ -104,6 +111,10 @@ void QtToaster::setButton3Title(const QString & title){
 }
 
 void QtToaster::setButton3Pixmap(const QPixmap & pixmap){
+    _button3->setMinimumSize(pixmap.size());
+    _button3->setMaximumSize(pixmap.size());
+    _button3->setIconSize(pixmap.size());
+    _button3->setFlat(true);
 	_button3->setIcon(QIcon(pixmap));
 }
 
@@ -188,12 +199,15 @@ void QtToaster::setCloseTimer(int timer){
 
 void QtToaster::button1Slot(){
     button1Clicked();
+    close();
 }
 
 void QtToaster::button2Slot(){
     button2Clicked();
+    close();
 }
 
 void QtToaster::button3Slot(){
     button3Clicked();
+    close();
 }

@@ -22,7 +22,7 @@
 
 QtCallToaster::QtCallToaster(QWidget * parent , Qt::WFlags f ) :
 QWidget(parent,Qt::Window | Qt::FramelessWindowHint){
-
+    setupGui();
 }
 
 void QtCallToaster::setupGui(){
@@ -73,9 +73,8 @@ void QtCallToaster::closeToaster(){
 	close();
 }
 
-
 void QtCallToaster::showToaster(){
-    setupGui();
+
 
 	QDesktopWidget * desktop = QApplication::desktop();
 

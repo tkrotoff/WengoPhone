@@ -21,7 +21,7 @@
 
 #include "QtVideo.h"
 #include "QtPhoneCallEventFilter.h"
-
+#include "../toaster/QtCallToaster.h"
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/statusbar/QtStatusBar.h>
 

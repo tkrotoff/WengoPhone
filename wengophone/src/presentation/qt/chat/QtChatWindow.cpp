@@ -246,7 +246,9 @@ void ChatWindow::newMessage(IMChatSession *session,const QString & msg){
 }
 
 void ChatWindow::show(){
-	_dialog->show();
+    _dialog->hide();
+	_dialog->showNormal();
+	_dialog->raise();
 	_dialog->activateWindow();
 }
 

@@ -70,7 +70,9 @@ void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession 
 		}
 		toaster->setMessage(message);
 	}
-	toaster->hideButton(1); toaster->hideButton(2); toaster->hideButton(3);
+	toaster->hideButton(2); toaster->hideButton(3);
+	toaster->setButton1Pixmap(QPixmap(":pics/toaster/chat.png"));
+	connect(toaster,SIGNAL(button1Clicked()),_qtChatWidget,SLOT(show()));
 	toaster->showToaster();
 }
 
