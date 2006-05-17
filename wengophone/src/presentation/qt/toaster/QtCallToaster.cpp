@@ -36,11 +36,11 @@ void QtCallToaster::setupGui(){
 
 	setAttribute (Qt::WA_DeleteOnClose,true);
 
-	_ui->hangupLabel->setPixmaps(QPixmap(),
-								QPixmap(":/pics/toaster/raccrocher.png"),
+	_ui->hangupLabel->setPixmaps(QPixmap(":/pics/toaster/raccrocher.png"),
+								QPixmap(),
 				                QPixmap(),
-                                QPixmap(),
-								QPixmap(":/pics/toaster/raccrocher.png"),
+                                QPixmap(":/pics/toaster/raccrocher.png"),
+								QPixmap(),
                                 QPixmap());
 
 	_ui->callLabel->setPixmaps(QPixmap(":/pics/toaster/decrocher.png"),
@@ -55,6 +55,9 @@ void QtCallToaster::setupGui(){
 
     _ui->hangupLabel->setMinimumSize(QSize(28,56));
     _ui->hangupLabel->setMaximumSize(QSize(28,56));
+
+    connect(_ui->hangupLabel,SIGNAL(clicked()),SLOT(hangupButtonSlot()));
+    connect(_ui->callLabel,SIGNAL(clicked()),SLOT(callButtonSlot()));
 
     resize(1,1);
 }
@@ -138,8 +141,10 @@ void QtCallToaster::timerEvent(QTimerEvent *event){
 
 void QtCallToaster::hangupButtonSlot(){
     hangupButtonClicked();
+    close();
 }
 
 void QtCallToaster::callButtonSlot(){
     callButtonClicked();
+    close();
 }

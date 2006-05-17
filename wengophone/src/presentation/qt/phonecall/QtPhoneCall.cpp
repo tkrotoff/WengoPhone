@@ -279,6 +279,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionAcceptCall->setEnabled(true);
 		_actionHangupCall->setEnabled(true);
 		_statusLabel->setText(tr("Incoming Call"));
+		showToaster();
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateHold:
@@ -409,6 +410,15 @@ void QtPhoneCall::rejectActionTriggered(bool) {
 	}
 }
 
+void QtPhoneCall::acceptCall(){
+    acceptActionTriggered(true);
+}
+
+void QtPhoneCall::rejectCall(){
+    rejectActionTriggered(true);
+}
+
+
 void QtPhoneCall::holdResumeActionTriggered(bool) {
 	if (_hold) {
 		_cPhoneCall.hold();
@@ -532,4 +542,14 @@ void QtPhoneCall::inviteToConference(bool) {
 bool QtPhoneCall::isIncoming() {
 
 	return (_cPhoneCall.getState() == EnumPhoneCallState::PhoneCallStateIncoming);
+}
+
+void QtPhoneCall::showToaster(){
+    QtCallToaster * toaster = new QtCallToaster();
+    toaster->setTitle(QString::fromStdString(_cPhoneCall.getPeerDisplayName()));
+    toaster->setMessage(tr("is calling"));
+    connect(toaster,SIGNAL(callButtonClicked()),SLOT(acceptCall()));
+    connect(toaster,SIGNAL(hangupButtonClicked()),SLOT(rejectCall()));
+    toaster->setPixmap(QPixmap(":/pics/export1_96.png"));
+    toaster->showToaster();
 }

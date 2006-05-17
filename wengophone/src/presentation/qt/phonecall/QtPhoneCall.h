@@ -86,6 +86,10 @@ public Q_SLOTS:
 
 	void openPopup(int x, int y);
 
+	void acceptCall();
+
+	void rejectCall();
+
 private:
 
 	void initThreadSafe();
@@ -104,6 +108,8 @@ private:
 	void showVideoWidget();
 
 	void showAvatar();
+
+    void showToaster();
 
 	QMenu * createMenu();
 
