@@ -53,7 +53,7 @@ QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone,
 		it != tmp.end();
 		++it) {
 		_ui->groupComboBox->addItem(QString::fromStdString((*it).second), QString::fromStdString((*it).first));
-		if ((*it).second == contactProfile.getGroupId()) {
+		if ((*it).first == contactProfile.getGroupId()) {
 			_ui->groupComboBox->setCurrentIndex(_ui->groupComboBox->findText(QString::fromStdString((*it).second)));
 		}
 	}
