@@ -215,23 +215,13 @@ void UserTreeEventManager::dropEvent(QDropEvent * event) {
            			_cContactList.merge(_selectedItem->text(0).toStdString(),
 						item->text(0).toStdString());
 				}
-			}
-
-			p = _selectedItem->parent();
-
-			p->takeChild(p->indexOfChild(_selectedItem));
-
-			if (!item->parent()) { // GROUP
-				p = item;
-				// p->insertChild(0,_selectedItem);
-				p->insertChild(p->childCount(), _selectedItem);
-				_selectedItem = NULL;
-			}
-			else {
-				p = item->parent();
-				// p->insertChild(p->indexOfChild (item),_selectedItem);
-				p->insertChild(p->childCount(), _selectedItem);
-				_selectedItem = NULL;
+			} else {
+				// The destination group and the source group are different
+				// This is a Contact move
+				ContactProfile contactProfile = _cContactList.getContactProfile(_selectedItem->text(0).toStdString());
+				QString groupId = item->parent()->text(0);
+				contactProfile.setGroupId(groupId.toStdString());
+				_cContactList.updateContact(contactProfile);
 			}
 		}
 		event->acceptProposedAction();
