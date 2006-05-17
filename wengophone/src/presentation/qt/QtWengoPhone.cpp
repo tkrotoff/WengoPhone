@@ -175,9 +175,6 @@ void QtWengoPhone::initThreadSafe() {
 	// Send sms button
 	connect(_ui->sendSmsButton,SIGNAL(clicked()),SLOT(sendSms()));
 
-	// Start conference button
-	connect(_ui->startConferenceButton,SIGNAL(clicked()),SLOT(showCreateConferenceCall()));
-
 	// Open chat window button
 	_ui->openChatWindowButton->setEnabled(false);
 	connect ( _ui->openChatWindowButton,SIGNAL(clicked()),SLOT(showChatWindow()));
@@ -318,7 +315,7 @@ void QtWengoPhone::initThreadSafe() {
 	// Hangup a call
     connect (_ui->actionHangup,SIGNAL(triggered()),SLOT(hangupCall()));
 
-	connect(this, SIGNAL(connectionStatusEventHandlerSignal(int, int, QString)), 
+	connect(this, SIGNAL(connectionStatusEventHandlerSignal(int, int, QString)),
 		SLOT(connectionStatusEventHandlerSlot(int, int, QString)));
 
 	//Translation
@@ -997,7 +994,7 @@ void QtWengoPhone::authorizationRequestEventHandlerThreadSafe(PresenceHandler & 
 	if (buttonClicked == 0) {
 		//TODO: give a personal message
 		sender.authorizeContact(imContact, true, "");
-	
+
 		ContactProfile contactProfile;
 		contactProfile.addIMContact(imContact);
 		QtProfileDetails qtProfileDetails(_cWengoPhone, contactProfile, _wengoPhoneWindow);
