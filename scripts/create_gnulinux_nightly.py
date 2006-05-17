@@ -80,10 +80,12 @@ if os.environ.has_key('QTLIBDIR'):
     qt_libraries_directory = os.environ['QTLIBDIR']
 elif os.environ.has_key('QTDIR'):
     qt_libraries_directory = os.environ['QTDIR'] + '/lib'
+    qt_plugins_directory = os.environ['QTDIR'] + '/plugins'
 else:
     print 'Can\'t find Qt libraries directory, aborting!'
     sys.exit(1)
 debug_print('Qt libraries directory is ' + qt_libraries_directory)
+debug_print('Qt plugins directory is ' + qt_plugins_directory)
 
 debug_print('Copying Qt DLLs...')
 for root, dirs, files in os.walk(qt_libraries_directory):
@@ -92,6 +94,14 @@ for root, dirs, files in os.walk(qt_libraries_directory):
             shutil.copyfile(os.path.join(root, file), os.path.join(str(temp_directory),
                                                                    re.sub('.so.4.1.1', '.so.4', file)))
 debug_print('Done copying Qt DLL!')
+
+debug_print('Copying Qt plugins...')
+for root, dirs, files in os.walk(qt_plugins_directory):
+    for file in files:
+        if re.match('lib(qmng).so.\d.\d.\d', file):
+            shutil.copyfile(os.path.join(root, file), os.path.join(str(temp_directory),
+                                                                   file))
+debug_print('Done copying Qt plugins!')
 
 #copy Boost runtime libraries
 if os.environ.has_key('BOOSTLIBDIR'):
