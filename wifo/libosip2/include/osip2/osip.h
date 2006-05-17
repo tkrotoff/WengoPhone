@@ -808,7 +808,7 @@ int osip_transaction_set_state  (osip_transaction_t * transaction, state_t state
  * @param osip The element to work on.
  * @param evt The element representing the SIP MESSAGE.
  */
-  int osip_find_transaction_and_add_event (osip_t * osip, osip_event_t * evt);
+  osip_transaction_t *osip_find_transaction_and_add_event (osip_t * osip, osip_event_t * evt);
 
 /**
  * Create a transaction for this event (MUST be a SIP REQUEST event).

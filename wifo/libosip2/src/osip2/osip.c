@@ -744,14 +744,12 @@ osip_distribute_event (osip_t * osip, osip_event_t * evt)
 }
 #endif
 
-int
+osip_transaction_t *
 osip_find_transaction_and_add_event (osip_t * osip, osip_event_t * evt)
 {
   osip_transaction_t *transaction = __osip_find_transaction (osip, evt, 1);
 
-  if (transaction == NULL)
-    return -1;
-  return 0;
+  return transaction;
 }
 
 #ifndef OSIP_MT

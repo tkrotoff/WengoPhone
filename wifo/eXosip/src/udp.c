@@ -2281,8 +2281,8 @@ int eXosip_read_message   ( int max_message_nb, int sec_max, int usec_max )
 		    osip_message_fix_last_via_header(sipevent->sip, inet_ntoa (sa.sin_addr), ntohs (sa.sin_port));
 
 
-		  i = osip_find_transaction_and_add_event(eXosip.j_osip, sipevent);
-		  if (i!=0)
+		  transaction = osip_find_transaction_and_add_event(eXosip.j_osip, sipevent);
+		  if (transaction == NULL)
 		    {
 		      /* this event has no transaction, */
 		      OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
