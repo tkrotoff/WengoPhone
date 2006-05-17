@@ -1,4 +1,4 @@
-import os
+import os, shutil
 
 env = WengoGetQt4Environment()
 
@@ -298,5 +298,31 @@ env.WengoCopyToBuildDir('webpages', 'webpages')
 env.WengoAddDefines(defines)
 env.WengoAddLinkFlags(link_flags)
 env.WengoUseLibraries(libs)
+
+qt_mng_plugin_file = ''
+if WengoOSPosix():
+	qt_mng_plugin_file += 'lib'
+if WengoOSLinux():
+	qt_mng_plugin_file += 'qmng'
+else:
+	qt_mng_plugin_file += 'qmng1'
+if env.isDebugMode():
+	if WengoOSPosix():
+		qt_mng_plugin_file += '_debug'
+if WengoOSLinux() or (WengoOSBSD() and not WengoOSMacOSX()):
+	qt_mng_plugin_file += '.so'
+if WengoOSMacOSX():
+	qt_mng_plugin_file += '.dylib'
+if WengoOSWindows():
+	qt_mng_plugin_file += '.dll'
+
+print "Copying Qt's mng plugin to build dir..."
+try:	
+	shutil.copy2(os.path.join(os.environ['QTDIR'], 'plugins', 'imageformats', qt_mng_plugin_file), env.WengoGetRootBuildDir());
+except (IOError, os.error), why:
+	print "Can't copy %s to %s: %s" % (qt_mng_plugin_file, os.path.join(env.WengoGetRootBuildDir(), qt_mng_plugin_file), str(why))
+else:
+	print 'Done.'
+
 qtwengophone_program = env.WengoProgram('qtwengophone', sources, headers)
 env.WengoAlias("qtwengophone_alias", qtwengophone_program)

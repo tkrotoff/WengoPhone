@@ -1391,14 +1391,18 @@ void QtWengoPhone::slotSystrayMenuStartChat(QAction * action) {
 
 void QtWengoPhone::slotSystrayMenuSendSms(QAction * action) {
   if (action) {
-    if (_qtSms) {
+    if (_qtSms && 
+	_cWengoPhone.getWengoPhone().getCurrentUserProfile().hasWengoAccount() && 
+	_cWengoPhone.getWengoPhone().getCurrentUserProfile().getWengoAccount()->isConnected()) {
       _qtSms->getWidget()->show();
       getWidget()->show();
       getWidget()->setWindowState(getWidget()->windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
       _qtSms->setPhoneNumber(action->data().toString());
-
     } else {
-      LOG_FATAL("SMS widget not available yet, can't send SMS!");
+       QMessageBox::warning(0, 
+			    QObject::tr("WengoPhone"), 
+			    QObject::tr("Can't send SMS unless you're connected to a SIP service."), 
+			    QMessageBox::Ok, 0);
     }
   } else {
     LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
