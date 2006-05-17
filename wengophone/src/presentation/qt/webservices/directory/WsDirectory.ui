@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
+    <width>503</width>
     <height>332</height>
    </rect>
   </property>
@@ -345,8 +345,7 @@
       </font>
      </property>
      <property name="text" >
-      <string>&lt;span style="font-size:18pt;">Search for Wengo contacts&lt;/span>&lt;br />&lt;br />&lt;span>Enter his/her name, city, or email and click the search button&lt;/span>
-</string>
+      <string>&lt;span style="font-size:18pt;">Search for Wengo contacts&lt;/span>&lt;br />&lt;br />&lt;span>Enter a name, nickname, city, or email and click the search button&lt;/span></string>
      </property>
      <property name="indent" >
       <number>100</number>
