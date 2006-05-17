@@ -211,7 +211,7 @@ void UserTreeEventManager::dropEvent(QDropEvent * event) {
 					.arg(QString::fromStdString(dstContactProfile.getDisplayName()))
 					.arg(QString::fromStdString(srcContactProfile.getDisplayName())),
 					tr("&Yes"), tr("&No"),
-					QString(), 0, 1)) {
+					QString(), 0, 1) == 0) {
            			_cContactList.merge(_selectedItem->text(0).toStdString(),
 						item->text(0).toStdString());
 				}
