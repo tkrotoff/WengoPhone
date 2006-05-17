@@ -56,6 +56,8 @@ public:
 
 	CPhoneCall & getCPhoneCall();
 
+	bool isIncoming();
+
 Q_SIGNALS:
 
 	void startConference(PhoneCall * sourceCall, PhoneCall * targetCall);
@@ -95,7 +97,7 @@ private:
 	void stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state);
 
 	void videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame,
-					const WebcamVideoFrame & localVideoFrame);
+		const WebcamVideoFrame & localVideoFrame);
 
 	void videoFrameReceivedEventHandlerThreadSafe(QImage * image);
 

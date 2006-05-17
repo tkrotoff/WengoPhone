@@ -224,6 +224,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 	}
 	_qtWengoPhone->getStatusBar().showMessage(QString::fromStdString(codecs));
 
+
 	switch (state) {
 	case EnumPhoneCallState::PhoneCallStateUnknown:
 		break;
@@ -526,4 +527,9 @@ void QtPhoneCall::inviteToConference(bool) {
 			}
 		}
 	}
+}
+
+bool QtPhoneCall::isIncoming() {
+
+	return (_cPhoneCall.getState() == EnumPhoneCallState::PhoneCallStateIncoming);
 }
