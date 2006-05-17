@@ -22,8 +22,8 @@ headers = [
 	'include/qtutil/Widget.h',
 	'include/qtutil/QtWengoStyleLabel.h',
 	'include/qtutil/ToolTipLineEdit.h',
-	'include/qtutil/QtClickableLabel.h'
-
+	'include/qtutil/QtClickableLabel.h',
+	'include/qtutil/WidgetBackgroundImage.h',
 ]
 sources = [
 	'src/EventFilter.cpp',
@@ -40,8 +40,8 @@ sources = [
 	'src/Widget.cpp',
 	'src/QtWengoStyleLabel.cpp',
 	'src/ToolTipLineEdit.cpp',
-	'src/QtClickableLabel.cpp'
-
+	'src/QtClickableLabel.cpp',
+	'src/WidgetBackgroundImage.cpp',
 ]
 
 def moc(env, headers):
