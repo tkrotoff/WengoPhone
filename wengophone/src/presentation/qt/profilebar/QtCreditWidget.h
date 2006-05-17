@@ -29,6 +29,7 @@
 class CWengoPhone;
 class QtClickableLabel;
 class CWengoPhone;
+class MousePressEventFilter;
 
 /**
  * Credit widget
@@ -71,5 +72,7 @@ protected:
 	CWengoPhone & _cWengoPhone;
 
 	Ui::CreditWidget * _ui;
+
+	MousePressEventFilter * _callForwardMouseFilter;
 };
 #endif
