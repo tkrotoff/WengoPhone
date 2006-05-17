@@ -25,7 +25,7 @@
 #include <qtutil/QtWengoStyleLabel.h>
 
 QtToaster::QtToaster(QWidget * parent , Qt::WFlags f ):
-QWidget(parent, Qt::Window | Qt::FramelessWindowHint )
+QWidget(parent, Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint )
 {
 	setupGui();
 }

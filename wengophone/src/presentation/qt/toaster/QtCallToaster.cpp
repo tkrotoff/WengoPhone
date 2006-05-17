@@ -21,7 +21,7 @@
 #include "ui_QtCallToaster.h"
 
 QtCallToaster::QtCallToaster(QWidget * parent , Qt::WFlags f ) :
-QWidget(parent,Qt::Window | Qt::FramelessWindowHint){
+QWidget(parent,Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint){
     setupGui();
 }
 

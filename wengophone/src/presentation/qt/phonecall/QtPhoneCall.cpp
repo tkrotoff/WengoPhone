@@ -133,6 +133,8 @@ void QtPhoneCall::initThreadSafe() {
 
 	connect(filter, SIGNAL(openPopup(int, int)), SLOT(openPopup(int, int)));
 
+    showToaster();
+
 	if (!_cPhoneCall.getPhoneCall().getConferenceCall()) {
 		_qtWengoPhone->addPhoneCall(this);
 	} else {
@@ -279,7 +281,6 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionAcceptCall->setEnabled(true);
 		_actionHangupCall->setEnabled(true);
 		_statusLabel->setText(tr("Incoming Call"));
-		showToaster();
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateHold:
@@ -545,6 +546,10 @@ bool QtPhoneCall::isIncoming() {
 }
 
 void QtPhoneCall::showToaster(){
+
+    if (!isIncoming())
+        return;
+
     QtCallToaster * toaster = new QtCallToaster();
     toaster->setTitle(QString::fromStdString(_cPhoneCall.getPeerDisplayName()));
     toaster->setMessage(tr("is calling"));
