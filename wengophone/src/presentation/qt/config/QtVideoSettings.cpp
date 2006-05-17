@@ -23,6 +23,12 @@
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/profile/UserProfile.h>
+#include <model/phoneline/IPhoneLine.h>
+
+#include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+
 
 #include <webcam/WebcamDriver.h>
 #include <sipwrapper/EnumVideoQuality.h>
@@ -35,8 +41,8 @@
 
 static const int VIDEO_QUALITY_COLUMN = 0;
 
-QtVideoSettings::QtVideoSettings(QWidget * parent)
-	: QWidget(NULL) {
+QtVideoSettings::QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent)
+	: QWidget(NULL), _cWengoPhone(cWengoPhone) {
 
 	_ui = new Ui::VideoSettings();
 	_ui->setupUi(this);
@@ -47,6 +53,7 @@ QtVideoSettings::QtVideoSettings(QWidget * parent)
 	connect(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
 	connect(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(startWebcamPreview(const QString &)));
 	connect(_ui->enableVideoGroupBox, SIGNAL(toggled(bool)), SLOT(enableVideo(bool)));
+	connect(_ui->makeTestVideoCallButton, SIGNAL(pressed()), SLOT(makeTestCallClicked()));
 
 	readConfig();
 }
@@ -170,5 +177,12 @@ void QtVideoSettings::enableVideo(bool enable) {
 		startWebcamPreview(_ui->webcamDeviceComboBox->currentText());
 	} else {
 		stopWebcamPreview();
+	}
+}
+
+void QtVideoSettings::makeTestCallClicked() {
+	CUserProfile * up = _cWengoPhone.getCUserProfile();
+	if( up ) {
+		up->getUserProfile().getActivePhoneLine()->makeCall("334", false);
 	}
 }

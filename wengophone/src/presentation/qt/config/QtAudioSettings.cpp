@@ -23,6 +23,11 @@
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/profile/UserProfile.h>
+#include <model/phoneline/IPhoneLine.h>
+
+#include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
 
 #include <sound/AudioDevice.h>
 
@@ -30,13 +35,15 @@
 
 #include <QtGui>
 
-QtAudioSettings::QtAudioSettings(QWidget * parent)
-	: QObject(parent) {
+QtAudioSettings::QtAudioSettings(CWengoPhone & cWengoPhone, QWidget * parent)
+	: QObject(parent), _cWengoPhone(cWengoPhone) {
 
 	_audioSettingsWidget = new QWidget(NULL);
 
 	_ui = new Ui::AudioSettings();
 	_ui->setupUi(_audioSettingsWidget);
+
+	connect(_ui->makeTestCallButton, SIGNAL(pressed()), SLOT(makeTestCallClicked()));
 
 	readConfig();
 }
@@ -80,4 +87,11 @@ void QtAudioSettings::readConfig() {
 	_ui->ringingDeviceComboBox->clear();
 	_ui->ringingDeviceComboBox->addItems(outputDeviceList);
 	_ui->ringingDeviceComboBox->setCurrentIndex(_ui->ringingDeviceComboBox->findText(QString::fromStdString(config.getAudioRingerDeviceName())));
+}
+
+void QtAudioSettings::makeTestCallClicked() {
+	CUserProfile * up = _cWengoPhone.getCUserProfile();
+	if( up ) {
+		up->getUserProfile().getActivePhoneLine()->makeCall("333", false);
+	}
 }

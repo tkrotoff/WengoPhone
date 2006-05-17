@@ -26,6 +26,7 @@
 
 class QWidget;
 class QString;
+class CWengoPhone;
 namespace Ui { class AudioSettings; }
 
 /**
@@ -37,7 +38,7 @@ class QtAudioSettings : public QObject, public QtISettings {
 	Q_OBJECT
 public:
 
-	QtAudioSettings(QWidget * parent);
+	QtAudioSettings(CWengoPhone & cWengoPhone, QWidget * parent);
 
 	virtual ~QtAudioSettings();
 
@@ -49,6 +50,10 @@ public:
 
 	void saveConfig();
 
+private Q_SLOTS:
+
+	void makeTestCallClicked();
+
 private:
 
 	void readConfig();
@@ -56,6 +61,8 @@ private:
 	Ui::AudioSettings * _ui;
 
 	QWidget * _audioSettingsWidget;
+
+	CWengoPhone & _cWengoPhone;
 };
 
 #endif	//QTAUDIOSETTINGS_H

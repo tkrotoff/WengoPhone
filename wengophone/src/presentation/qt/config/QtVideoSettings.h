@@ -32,6 +32,7 @@ class QImage;
 class QHideEvent;
 class QShowEvent;
 class QString;
+class CWengoPhone;
 namespace Ui { class VideoSettings; }
 
 /**
@@ -46,7 +47,7 @@ class QtVideoSettings : public QWidget, public QtISettings {
 	Q_OBJECT
 public:
 
-	QtVideoSettings(QWidget * parent);
+	QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent);
 
 	virtual ~QtVideoSettings();
 
@@ -65,6 +66,8 @@ private Q_SLOTS:
 	void startWebcamPreview(const QString & deviceName);
 
 	void enableVideo(bool enable);
+
+	void makeTestCallClicked();
 
 Q_SIGNALS:
 
@@ -88,6 +91,8 @@ private:
 
 	/** Contains the converted picture from the Webcam. */
 	piximage * _rgbImage;
+
+	CWengoPhone & _cWengoPhone;
 };
 
 #endif	//QTVIDEOSETTINGS_H
