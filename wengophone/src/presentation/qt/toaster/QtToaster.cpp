@@ -27,7 +27,7 @@
 QtToaster::QtToaster(QWidget * parent , Qt::WFlags f ):
 QWidget(parent, Qt::Window | Qt::FramelessWindowHint )
 {
-	//setupGui();
+	setupGui();
 }
 
 void QtToaster::setupGui(){
@@ -141,8 +141,6 @@ void QtToaster::timerEvent(QTimerEvent *event){
 }
 
 void QtToaster::showToaster(){
-    setupGui();
-
 	QDesktopWidget * desktop = QApplication::desktop();
 
 	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
