@@ -22,6 +22,9 @@
 
 #include <phapi.h>
 
+#include <string>
+#include <set>
+
 /**
  * PhApi callbacks.
  *
@@ -49,6 +52,16 @@ public:
 	void subscriptionProgress(int subscriptionId, const phSubscriptionStateInfo_t * info);
 
 	void onNotify(const char * event, const char * from, const char * content);
+
+private:
+
+	/**
+	 * Transforms a PhApi contacts (e.g: sip:joe@voip.wengo.fr)
+	 * in an IMWrapper compatible form (e.g: joe)
+	 */
+	std::string computeContactId(const std::string & contactFromPhApi);
+
+	std::set<std::string> _subscribedContacts;
 };
 
 #endif	//PHAPICALLBACKS_H

@@ -51,7 +51,7 @@ IMContact::~IMContact() {
 
 bool IMContact::operator == (const IMContact & imContact) const {
 	return (((_imAccount && imContact._imAccount) ?
-			(*_imAccount == *(imContact._imAccount) && (cleanContactId() == imContact.cleanContactId())) :
+			((*_imAccount == *(imContact._imAccount)) && (cleanContactId() == imContact.cleanContactId())) :
 			(getProtocol() == imContact.getProtocol())) && (cleanContactId() == imContact.cleanContactId()));
 }
 

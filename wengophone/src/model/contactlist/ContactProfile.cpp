@@ -89,6 +89,7 @@ void ContactProfile::copy(const ContactProfile & contactProfile) {
 	_imContactSet = contactProfile._imContactSet;
 	_groupId = contactProfile._groupId;
 	_presenceState = contactProfile._presenceState;
+	setWengoPhoneId(contactProfile._wengoPhoneId);
 }
 
 bool ContactProfile::operator==(const ContactProfile & contactProfile) const {
@@ -361,7 +362,7 @@ std::string ContactProfile::getFreePhoneNumber() const {
 }
 
 void ContactProfile::setWengoPhoneId(const std::string & wengoId) {
-	if (!_wengoPhoneId.empty()) {
+	if (!_wengoPhoneId.empty() && (wengoId != _wengoPhoneId)) {
 		removeIMContact(IMContact(EnumIMProtocol::IMProtocolSIPSIMPLE, _wengoPhoneId));
 	}
 

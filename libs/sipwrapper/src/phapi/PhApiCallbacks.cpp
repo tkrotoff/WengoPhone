@@ -232,11 +232,21 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 	//Register ok
 	case 0:
 		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateOk);
+		for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
+			it != _subscribedContacts.end();
+			++it) {
+			p->subscribeToPresenceOf(*it);
+		}
 		break;
 
 	//Unregister ok
 	case 32768:
 		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateClosed);
+		for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
+			it != _subscribedContacts.end();
+			++it) {
+			p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateUnknown, "", *it);
+		}
 		break;
 
 	//500 Server Internal Error
@@ -341,10 +351,8 @@ void PhApiCallbacks::onNotify(const char * event, const char * from, const char 
 	std::string tmp(event);
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 
-	std::string buddyTmp(from);
-	unsigned colonIndex = buddyTmp.find(':', 0);
-	unsigned atIndex = buddyTmp.find('@', 0);
-	std::string buddy = buddyTmp.substr(colonIndex + 1, atIndex - colonIndex - 1);
+	std::string buddy = computeContactId(from);
+	_subscribedContacts.insert(computeContactId(buddy));
 
 	TiXmlDocument doc;
 	doc.Parse(content);
@@ -401,4 +409,11 @@ void PhApiCallbacks::onNotify(const char * event, const char * from, const char 
 	} else {
 		LOG_FATAL("Unknown message event");
 	}
+}
+
+std::string PhApiCallbacks::computeContactId(const std::string & contactFromPhApi) {
+	std::string buddyTmp(contactFromPhApi);
+	unsigned colonIndex = buddyTmp.find(':', 0);
+	unsigned atIndex = buddyTmp.find('@', 0);
+	return buddyTmp.substr(colonIndex + 1, atIndex - colonIndex - 1);
 }

@@ -79,6 +79,10 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 }
 
 UserProfile::~UserProfile() {
+	disconnect();
+    Thread::sleep(5);
+	_activePhoneLine->getSipWrapper().terminate();
+
 	if (_sms) {
 		delete _sms;
 	}
@@ -148,7 +152,7 @@ void UserProfile::connectSipAccounts() {
 		_wengoAccountConnected = true;
 
 		IMAccount imAccount(_wengoAccount->getIdentity(), 
-				_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
+			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 		addIMAccount(imAccount);
 		_connectHandler.connect((IMAccount &)*_imAccountHandler->find(imAccount));
 	}
@@ -171,8 +175,9 @@ void UserProfile::disconnectIMAccounts() {
 void UserProfile::disconnectSipAccounts() {
 	if (_activePhoneLine && _wengoAccountConnected) {
 		_activePhoneLine->disconnect();
-		//Thread::sleep(5);
-		//_activePhoneLine->getSipWrapper().terminate();
+		IMAccount imAccount(_wengoAccount->getIdentity(), 
+			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
+		_connectHandler.disconnect((IMAccount &)*_imAccountHandler->find(imAccount));
 	}
 }
 
