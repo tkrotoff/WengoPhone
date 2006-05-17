@@ -232,6 +232,7 @@ void QtUser::startSMS() {
 		QString mobilePhone = QString::fromStdString(_contactProfile.getMobilePhone());
 		qwengophone->getSms()->setPhoneNumber(mobilePhone);
 		qwengophone->getSms()->setText("");
+		qwengophone->getSms()->setSignature("");
 		qwengophone->getSms()->getWidget()->show();
 	}
 }

@@ -110,8 +110,8 @@ void QtSms::smsStatusEventHandlerThreadSafe(Sms::SmsStatus status) {
 }
 
 void QtSms::setPhoneNumber(const QString & phoneNumber) {
+	_ui->phoneComboBox->clear();
 	if (!phoneNumber.isEmpty()) {
-		_ui->phoneComboBox->clear();
 		_ui->phoneComboBox->addItem(phoneNumber);
 	}
 }
@@ -134,4 +134,8 @@ QString QtSms::getCompleteMessage() {
 	completeMessage += _ui->signatureLineEdit->text();
 
 	return completeMessage;
+}
+
+void QtSms::setSignature(const QString & signature) {
+	_ui->signatureLineEdit->setText(signature);
 }

@@ -56,6 +56,8 @@ public:
 
 	void setText(const QString & text);
 
+	void setSignature(const QString & signature);
+
 private Q_SLOTS:
 
 	void sendButtonClicked();
