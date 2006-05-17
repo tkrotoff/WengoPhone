@@ -437,6 +437,10 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	          SLOT(addToConference(PhoneCall *, PhoneCall *)));
 
 	_hangUpButton->setEnabled(true);
+
+	if( qtPhoneCall->isIncoming() ) {
+		_callButton->setEnabled(true);
+	}
 }
 
 void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall){
