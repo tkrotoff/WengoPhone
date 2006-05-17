@@ -183,6 +183,6 @@ void QtVideoSettings::enableVideo(bool enable) {
 void QtVideoSettings::makeTestCallClicked() {
 	CUserProfile * up = _cWengoPhone.getCUserProfile();
 	if( up ) {
-		up->getUserProfile().getActivePhoneLine()->makeCall("334", false);
+		up->getUserProfile().getActivePhoneLine()->makeCall("334", true);
 	}
 }
