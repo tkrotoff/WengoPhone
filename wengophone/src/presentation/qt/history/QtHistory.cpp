@@ -171,6 +171,14 @@ void QtHistory::replayItem(QtHistoryItem * item) {
 	QString text = "";
 	QString phoneNumber = "";
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
+
+	QMessageBox mb(tr("Replay call"),
+		tr("Do you want to call %1?").arg(item->text(QtHistoryItem::COLUMN_PEERS)),
+		QMessageBox::Question,
+		QMessageBox::Yes | QMessageBox::Default,
+		QMessageBox::No | QMessageBox::Escape,
+		QMessageBox::NoButton);
+
 	switch ( item->getItemType() ) {
 
 		case QtHistoryItem::Sms:
@@ -188,14 +196,10 @@ void QtHistory::replayItem(QtHistoryItem * item) {
 
 		case QtHistoryItem::OutGoingCall:
 
-			if( QMessageBox::question(
-				_historyWidget,
-				tr("Replay call"),
-				tr("Do you want to call %1?").arg(item->text(QtHistoryItem::COLUMN_PEERS)),
-				tr("&No"), tr("&Yes"),
-				QString(), 0, 1) ) {
-					_cHistory.replay(item->getId());
-				}
+			if (mb.exec() == QMessageBox::Yes) {
+				_cHistory.replay(item->getId());
+			}
+
 			break;
 
 		case QtHistoryItem::IncomingCall:

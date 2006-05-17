@@ -89,13 +89,15 @@ void QtEventWidget::setMissedCall(int count) {
 }
 
 void QtEventWidget::voiceMailClicked() {
-	if( QMessageBox::question(
-		_widget,
-		tr("Call message box"),
-		tr("Do you want to call your voice mail?"),
-		tr("&No"), tr("&Yes"),
-		QString(), 0, 1) ) {
+	
+	QMessageBox mb(tr("Replay call"),
+		tr("Do you want to call  your voice mail?"),
+		QMessageBox::Question,
+		QMessageBox::Yes | QMessageBox::Default,
+		QMessageBox::No | QMessageBox::Escape,
+		QMessageBox::NoButton);
 
+	if( mb.exec() == QMessageBox::Yes ) {
 		_cUserProfile.getUserProfile().getActivePhoneLine()->makeCall("123", false);
 	}
 }
