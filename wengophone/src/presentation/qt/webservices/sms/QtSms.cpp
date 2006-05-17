@@ -21,9 +21,9 @@
 
 #include "ui_SmsWindow.h"
 
-#include <presentation/qt/QtWengoPhone.h>
-
 #include <control/CWengoPhone.h>
+
+#include <presentation/qt/QtWengoPhone.h>
 
 #include <QtGui>
 
@@ -63,11 +63,25 @@ void QtSms::updatePresentationThreadSafe() {
 }
 
 void QtSms::sendButtonClicked() {
+
+	//validate sms length before sending
+	if( !checkSmsLength() ) {
+
+		QMessageBox::warning(_smsWindow, 
+			tr("Wengo SMS service"),
+			tr("Your message is too long.\n"
+				"The length can not exeed 156 characters.\n"
+				"Don't forget to add your signature length."
+			  ));
+
+		return;
+	}
+
 	_ui->sendButton->setEnabled(false);
 
 	//Converts to UTF-8
 	std::string phoneNumber(_ui->phoneComboBox->currentText().toUtf8().constData());
-	std::string sms(_ui->smsText->toPlainText().toUtf8().constData());
+	std::string sms(getCompleteMessage().toUtf8().constData());
 
 	_cSms.sendSMS(phoneNumber, sms);
 }
@@ -82,17 +96,17 @@ void QtSms::smsStatusEventHandlerThreadSafe(Sms::SmsStatus status) {
 	QString smsStatus = String::null;
 	switch (status) {
 	case Sms::SmsStatusError:
-		smsStatus = tr("SmsStatusError");
+		smsStatus = tr("Your SMS has not been sent");
 		break;
 	case Sms::SmsStatusOk:
-		smsStatus = tr("SmsStatusOk");
+		smsStatus = tr("Your SMS has been sent");
 		break;
 	default:
 		LOG_FATAL("unknown SmsStatus=" + String::fromNumber(status));
 	}
 
 	_ui->sendButton->setEnabled(true);
-	QMessageBox::information(_smsWindow, tr("Sms"), smsStatus);
+	QMessageBox::information(_smsWindow, tr("Wengo SMS service"), smsStatus);
 }
 
 void QtSms::setPhoneNumber(const QString & phoneNumber) {
@@ -104,4 +118,20 @@ void QtSms::setPhoneNumber(const QString & phoneNumber) {
 
 void QtSms::setText(const QString & text) {
 	_ui->smsText->setPlainText(text);
+}
+
+bool QtSms::checkSmsLength() {
+
+	QString mess = getCompleteMessage();
+
+	return ( mess.length() < 160 );
+}
+
+QString QtSms::getCompleteMessage() {
+
+	QString completeMessage = _ui->smsText->toPlainText();
+	completeMessage += " -- ";
+	completeMessage += _ui->signatureLineEdit->text();
+
+	return completeMessage;
 }

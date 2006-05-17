@@ -70,6 +70,10 @@ private:
 
 	void smsStatusEventHandlerThreadSafe(Sms::SmsStatus status);
 
+	QString getCompleteMessage();
+
+	bool checkSmsLength();
+
 	CSms & _cSms;
 
 	QtWengoPhone * _qtWengoPhone;
