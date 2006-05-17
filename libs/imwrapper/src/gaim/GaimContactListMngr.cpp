@@ -31,32 +31,6 @@ extern "C" {
 #include <util/Logger.h>
 #include <util/Picture.h>
 
-const char *find_default_group_name(EnumIMProtocol::IMProtocol protocol)
-{
-	switch (protocol)
-	{
-		case EnumIMProtocol::IMProtocolMSN:
-			return "MSN";
-
-		case EnumIMProtocol::IMProtocolYahoo:
-			return "Yahoo";
-
-		case EnumIMProtocol::IMProtocolAIMICQ:
-			return "AIM/ICQ";
-
-		case EnumIMProtocol::IMProtocolJabber:
-			return "Jabber";
-
-		case EnumIMProtocol::IMProtocolSIPSIMPLE:
-			return "Simple";
-
-		default:
-			return "Default";
-	}
-}
-
-#define DEFAULT_GROUP_NAME(i)	find_default_group_name(i)
-
 /* ************ BUDDY ICON MANAGEMENT ************** */
 
 void update_buddy_icon(GaimBuddy *buddy)
@@ -182,7 +156,7 @@ const char *GaimContactListMngr::FindBuddyGroup(GaimBuddy *gBuddy)
 	if (gGroup)
 		return gGroup->name;
 	else
-		return DEFAULT_GROUP_NAME(GaimIMPrcl::GetEnumIMProtocol(gPrclId));
+		return NULL;
 }
 
 void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
@@ -197,9 +171,10 @@ void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
 	{
 		const char *groupName = FindBuddyGroup(gBuddy);
 
-		mIMContactList->newContactAddedEvent(*mIMContactList,
-											groupName,
-											gaim_buddy_get_name(gBuddy));
+		if (groupName) {
+			mIMContactList->newContactAddedEvent(*mIMContactList,
+				groupName, gaim_buddy_get_name(gBuddy));
+		}
 	}
 }
 
@@ -283,9 +258,11 @@ void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 	
 		if (mIMBList)
 		{
-			mIMBList->contactMovedEvent(*mIMBList, 
-										FindBuddyGroup(gBuddy),
-										gaim_buddy_get_name(gBuddy));
+			const char * groupName = FindBuddyGroup(gBuddy);
+			if (groupName) {
+				mIMBList->contactMovedEvent(*mIMBList, 
+					groupName, gaim_buddy_get_name(gBuddy));
+			}
 		}
 
 

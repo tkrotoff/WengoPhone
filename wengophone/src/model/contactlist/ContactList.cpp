@@ -169,24 +169,26 @@ void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 	const std::string & groupName, IMContact & newIMContact) {
 	//Mutex::ScopedLock lock(_mutex);
 
-	LOG_DEBUG("adding a new IMContact in group " + groupName + ": " + newIMContact.getContactId());
+	if (!groupName.empty()) {
+		LOG_DEBUG("adding a new IMContact in group " + groupName + ": " + newIMContact.getContactId());
 
-	// Find the Contact that owns the IMContact. Creating a new one if needed
-	Contact * contact = findContactThatOwns(newIMContact);
-	if (!contact) {
-		LOG_DEBUG("IMContact " + newIMContact.getContactId() + " not found. Adding a new Contact");
-		contact = &(createContact());
-	}
+		// Find the Contact that owns the IMContact. Creating a new one if needed
+		Contact * contact = findContactThatOwns(newIMContact);
+		if (!contact) {
+			LOG_DEBUG("IMContact " + newIMContact.getContactId() + " not found. Adding a new Contact");
+			contact = &(createContact());
+		}
 
-	if (!contact->hasIMContact(newIMContact)) {
-		_addToContactGroup(groupName, *contact);
-		contact->_addIMContact(newIMContact);
+		if (!contact->hasIMContact(newIMContact)) {
+			_addToContactGroup(groupName, *contact);
+			contact->_addIMContact(newIMContact);
 
-		LOG_DEBUG("IMContact added in group " + groupName + ": " + newIMContact.getContactId());
-	} else {
-		//This event can be received although the IMContact is already present
-		// in the ContactList. We assume that this is a move event.
-		_moveContactToGroup(groupName, *contact);
+			LOG_DEBUG("IMContact added in group " + groupName + ": " + newIMContact.getContactId());
+		} else {
+			//This event can be received although the IMContact is already present
+			// in the ContactList. We assume that this is a move event.
+			_moveContactToGroup(groupName, *contact);
+		}
 	}
 }
 
@@ -229,25 +231,18 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 
 	// Find the Contact that owns the IMContact. Creating a new one if needed
 	Contact * contact = findContactThatOwns(imContact);
-	if (!contact) {
-		LOG_INFO("adding a new IMContact:" + imContact.getContactId());
-		const string groupName = "Default";
-		contact = &(createContact());
-		contact->_addIMContact(imContact);
-		_addToContactGroup(groupName, *contact);
-	}
-
-	// The PresenceState must not be changed if the PresenceState is
-	// UserDefined (used by PhApi to set the alias)
-	if (state != EnumPresenceState::PresenceStateUserDefined) {
-		contact->getIMContact(imContact).setPresenceState(state);
-		if (imContact.getIMAccount()->getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
+	if (contact) {
+		// The PresenceState must not be changed if the PresenceState is
+		// UserDefined (used by PhApi to set the alias)
+		if (state != EnumPresenceState::PresenceStateUserDefined) {
+			contact->getIMContact(imContact).setPresenceState(state);
+			if (imContact.getIMAccount()->getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
+				contact->getIMContact(imContact).setAlias(alias);
+			}
+		} else {
+			contact->getIMContact(imContact).setPresenceState(EnumPresenceState::PresenceStateOnline);
 			contact->getIMContact(imContact).setAlias(alias);
 		}
-	} else {
-		contact->getIMContact(imContact).setPresenceState(EnumPresenceState::PresenceStateOnline);
-		contact->getIMContact(imContact).setAlias(alias);
-		//contact->getIMContact(imContact).setIcon();
 	}
 }
 
