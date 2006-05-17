@@ -380,8 +380,7 @@ void QtUserManager::safeHideOffLineUsers() {
 				group->takeChild(group->indexOfChild((* deleteIterator)));
 			}
 			// Work around Qt bug ...
-			_tree->setItemExpanded(group, false);
-			_tree->setItemExpanded(group, true);
+			_tree->doItemsLayout();
 		}
 
 	}
@@ -389,7 +388,6 @@ void QtUserManager::safeHideOffLineUsers() {
 }
 
 void QtUserManager::hideOffLineUsers() {
-
 	//QMutexLocker lock(&_mutex);
 	_hideUsers = true;
 	safeHideOffLineUsers();
