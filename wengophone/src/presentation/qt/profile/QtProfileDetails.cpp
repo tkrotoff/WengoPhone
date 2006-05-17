@@ -35,6 +35,8 @@
 
 #include <qtutil/StringListConvert.h>
 
+#include <util/Logger.h>
+
 #include <QtGui>
 
 static const char * PNG_FORMAT = "PNG";
@@ -53,7 +55,9 @@ QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone,
 		it != tmp.end();
 		++it) {
 		_ui->groupComboBox->addItem(QString::fromStdString((*it).second), QString::fromStdString((*it).first));
-		if ((*it).first == contactProfile.getGroupId()) {
+		std::string str1 = (*it).first;
+		std::string str2 = contactProfile.getGroupId();
+		if (str1 == str2) {
 			_ui->groupComboBox->setCurrentIndex(_ui->groupComboBox->findText(QString::fromStdString((*it).second)));
 		}
 	}
