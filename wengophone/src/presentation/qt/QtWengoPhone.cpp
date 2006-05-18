@@ -876,26 +876,24 @@ void QtWengoPhone::setTrayMenu() {
 
 	gdmSession = getenv("GDMSESSION");
 	if (gdmSession) {
-	  LOG_DEBUG("GDMSSESSION environment variable is set to: " + std::string(gdmSession));
+		LOG_DEBUG("GDMSSESSION environment variable is set to: " + std::string(gdmSession));
 	} else {
-	  LOG_DEBUG("No GDMSESSION environment variable.");
+		LOG_DEBUG("No GDMSESSION environment variable.");
 	}
 	_trayMenu->clear();
 #ifdef OS_LINUX
 	if (gdmSession && !strcmp(gdmSession, "gnome")) {
-	  // Open the wengophone window
 	  LOG_DEBUG("We're running a GDM session.");
-	  action = _trayMenu->addAction(QIcon(":/pics/open.png"), tr("Open Wengophone"));
-	  connect ( action,SIGNAL(triggered()),_wengoPhoneWindow,SLOT(show()));
-	} else {
-	  // Exit
 	  action = _trayMenu->addAction(QIcon(":/pics/exit.png"), tr("Quit Wengophone"));
 	  connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
+	} else {
+		action = _trayMenu->addAction(QIcon(":/pics/open.png"), tr("Open Wengophone"));
+		connect ( action,SIGNAL(triggered()),_wengoPhoneWindow,SLOT(show()));
 	}
 #else
-	// Exit
-	action = _trayMenu->addAction(QIcon(":/pics/exit.png"), tr("Quit Wengophone"));
-	connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
+	// open
+	action = _trayMenu->addAction(QIcon(":/pics/open.png"), tr("Open Wengophone"));
+	connect ( action,SIGNAL(triggered()),_wengoPhoneWindow,SLOT(show()));
 #endif
 	// Change status
 	_trayMenu->addMenu(createStatusMenu());
@@ -906,24 +904,17 @@ void QtWengoPhone::setTrayMenu() {
 	updateCallMenu();
 	_trayMenu->addMenu(_callMenu);
 
-
-
-
-
 #ifdef OS_LINUX
 	if (gdmSession && (!strcmp(gdmSession, "gnome"))) {
-	  // Exit
-	  action = _trayMenu->addAction(QIcon(":/pics/exit.png"), tr("Quit Wengophone"));
-	  connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
+		action = _trayMenu->addAction(QIcon(":/pics/open.png"), tr("Open Wengophone"));
+		connect ( action,SIGNAL(triggered()),_wengoPhoneWindow,SLOT(show()));
 	} else {
-	  // Open the wengophone window
-	  action = _trayMenu->addAction(QIcon(":/pics/open.png"), tr("Open Wengophone"));
-	  connect ( action,SIGNAL(triggered()),_wengoPhoneWindow,SLOT(show()));
+		action = _trayMenu->addAction(QIcon(":/pics/exit.png"), tr("Quit Wengophone"));
+		connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
 	}
 #else
-	// Open the wengophone window
-	  action = _trayMenu->addAction(QIcon(":/pics/open.png"), tr("Open Wengophone"));
-	  connect ( action,SIGNAL(triggered()),_wengoPhoneWindow,SLOT(show()));
+	action = _trayMenu->addAction(QIcon(":/pics/exit.png"), tr("Quit Wengophone"));
+	connect (action,SIGNAL(triggered()),this,SLOT(exitApplication()));
 #endif
 	_trayIcon->setPopup(_trayMenu);
 }
