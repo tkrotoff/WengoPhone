@@ -254,7 +254,7 @@ void QtNickNameWidget::connectionProgress(IMAccount * pImAccount,
 
 	case EnumIMProtocol::IMProtocolYahoo:
 		_yahooLabel->setPixmap(QPixmap(PICS_YAHOO_ERROR));
-		_yahooLabel->setToolTip("Jabber / GoogleTalk Info: " + infoMessage);
+		_yahooLabel->setToolTip("Yahoo! Info: " + infoMessage);
 		break;
 
 	case EnumIMProtocol::IMProtocolAIMICQ:
