@@ -225,7 +225,6 @@
         <file>phonecall/PhoneCallWidget.ui</file>
         <file>phonecall/QtCallContactWidget.ui</file>
         <file>phonecall/VideoWindow.ui</file>
-        <file>phonecall/VideoWindow2.ui</file>
         <file>profilebar/CreditWidget.ui</file>
         <file>profilebar/EventWidget.ui</file>
         <file>toaster/QtCallToaster.ui</file>

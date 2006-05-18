@@ -39,7 +39,7 @@
 using namespace std;
 
 QtVideo::QtVideo(QWidget * parent) {
-	_videoWindow = WidgetFactory::create(":/forms/phonecall/VideoWindow2.ui", parent);
+	_videoWindow = WidgetFactory::create(":/forms/phonecall/VideoWindow.ui", parent);
 
 	//frame
 	_frame = Object::findChild<QFrame *>(_videoWindow, "frame");
