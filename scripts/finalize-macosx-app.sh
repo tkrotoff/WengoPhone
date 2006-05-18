@@ -92,6 +92,17 @@ cp -r $WENGO_PATH/qtwengophone.app $WENGO_APP_PATH
 mv $WENGO_APP_PATH/Contents/MacOS/qtwengophone $WENGO_EXE
 
 ##
+# Check the MacOS X version
+##
+OSVERSION=$(uname -r)
+if [ $OSVERSION = "7.9.0" ]; then
+	# MacOS X 10.3.9
+	INTLLIB='libintl.1.dylib'
+else
+	INTLLIB='libintl.3.dylib'
+fi
+
+##
 ##
 # Creates the needed directories if they do not exist
 ##
@@ -122,7 +133,7 @@ cp $WENGO_BUILD_PATH/phspeexplugin.dylib $WENGO_BUILD_PATH/libspeex.1.dylib $WEN
 # Change install name of qtwengophone
 ##
 changeWengoPhoneInstallName "/sw/lib/libglib-2.0.0.dylib"
-changeWengoPhoneInstallName "/sw/lib/libintl.3.dylib"
+changeWengoPhoneInstallName "/sw/lib/$INTLLIB"
 changeWengoPhoneInstallName "/sw/lib/libintl.1.dylib"
 changeWengoPhoneInstallName "/sw/lib/libiconv.2.dylib"
 changeWengoPhoneInstallName "/sw/lib/libgthread-2.0.0.dylib"
@@ -152,12 +163,12 @@ changeInstallName "/sw/lib/libintl.3.dylib" "$WENGO_FRAMEWORK_PATH/libgmodule-2.
 
 changeInstallName "/sw/lib/libglib-2.0.0.dylib" "$WENGO_FRAMEWORK_PATH/libgthread-2.0.0.dylib"
 changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgthread-2.0.0.dylib"
-changeInstallName "/sw/lib/libintl.3.dylib" "$WENGO_FRAMEWORK_PATH/libgthread-2.0.0.dylib"
+changeInstallName "/sw/lib/$INTLLIB" "$WENGO_FRAMEWORK_PATH/libgthread-2.0.0.dylib"
 
 changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libglib-2.0.0.dylib"
-changeInstallName "/sw/lib/libintl.3.dylib" "$WENGO_FRAMEWORK_PATH/libglib-2.0.0.dylib"
+changeInstallName "/sw/lib/$INTLLIB" "$WENGO_FRAMEWORK_PATH/libglib-2.0.0.dylib"
 
-changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libintl.3.dylib"
+changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/$INTLLIB"
 
 changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libintl.1.dylib"
 
@@ -167,7 +178,7 @@ changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgpg-error
 changeInstallName "/sw/lib/libtasn1.2.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
 changeInstallName "/sw/lib/libgcrypt.11.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
 changeInstallName "/sw/lib/libpth.14.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
-changeInstallName "/sw/lib/libintl.3.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
+changeInstallName "/sw/lib/$INTLLIB" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
 changeInstallName "/sw/lib/libiconv.2.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
 changeInstallName "/sw/lib/libgpg-error.0.dylib" "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
 
