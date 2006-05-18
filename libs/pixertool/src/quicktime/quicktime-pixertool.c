@@ -28,8 +28,8 @@ typedef struct _pix_quicktime_table_elt {
 
 pix_quicktime_table_elt pix_quicktime_table[] = {
 	{ PIX_OSI_RGB555, k16BE555PixelFormat },
-	{ PIX_OSI_ARGB32, k32ARGBPixelFormat },
-	{ PIX_OSI_RGB32, k32RGBAPixelFormat },
+	{ PIX_OSI_RGB32, k32ARGBPixelFormat },
+	{ PIX_OSI_RGBA32, k32RGBAPixelFormat },
 	{ PIX_OSI_YUV420P, kYUV420PixelFormat },
 	{ PIX_OSI_RGB24, k24RGBPixelFormat}
 };

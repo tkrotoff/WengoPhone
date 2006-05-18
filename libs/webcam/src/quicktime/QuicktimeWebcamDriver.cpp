@@ -244,9 +244,8 @@ bool QuicktimeWebcamDriver::createGWorld() {
 	OSErr err = noErr;
 
 	pixosi pixTable[] = {
-		PIX_OSI_RGBA32,
 		PIX_OSI_RGB32,
-		PIX_OSI_ARGB32,
+		PIX_OSI_RGBA32,
 		PIX_OSI_RGB24
 	};
 	/* FIXME: These formats are not supported because of offset suppressor in
@@ -268,12 +267,18 @@ bool QuicktimeWebcamDriver::createGWorld() {
 		PIX_OSI_NV12,
 		PIX_OSI_RGB565,
 		PIX_OSI_RGB555,
+		PIX_OSI_ARGB32,
 		PIX_OSI_RGB8,
 		PIX_OSI_RGB4,
 		PIX_OSI_RGB1
 	};
 	*/
 
+	/*
+	The webcam will always be initialized with the first recognized palette
+	usually:
+		MacOSX G5 PPC	-	k32ARGBPixelFormat	=>	PIX_OSI_RGB32
+	*/
 	for (register unsigned i = 0 ; i < sizeof(pixTable) / sizeof(pixosi) ; i++) {
 		LOG_DEBUG("Attempting to create a GWorld with palette #" + String::fromNumber(pixTable[i]));
 		LOG_DEBUG("trying resolution: (top, left, right, bottom) = ("+String::fromNumber(_boundsRect.top)+","+String::fromNumber(_boundsRect.left)+","+String::fromNumber(_boundsRect.right)+","+String::fromNumber(_boundsRect.bottom)+")");

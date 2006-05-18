@@ -154,6 +154,7 @@ void QtVideoSettings::newWebcamImageCaptured(QImage * image) {
 void QtVideoSettings::startWebcamPreview(const QString & deviceName) {
 	_webcamDriver->frameCapturedEvent += boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);
 	_webcamDriver->setDevice(deviceName.toStdString());
+	_webcamDriver->setResolution(320, 240);
 	_webcamDriver->setPalette(PIX_OSI_YUV420P);
 	_webcamDriver->startCapture();
 }
