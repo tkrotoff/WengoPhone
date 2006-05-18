@@ -663,7 +663,7 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 		if (config.getIEActiveX() && wengoAccount) {
 			//TODO: retrive the lang code from the current language
 			std::string data = "?login=" + wengoAccount->getWengoLogin() + "&password=" + wengoAccount->getWengoPassword()
-				+ "&lang=" + "eng" + "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) + "&page=softphone-web";
+				+ "&lang=" + "eng" + "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) + "&page=softphoneng-web";
 			_browser->setUrl(URL_WENGO_MINI_HOME + data);
 		}
 #endif
