@@ -246,7 +246,8 @@ void ChatWindow::newMessage(IMChatSession *session,const QString & msg){
 }
 
 void ChatWindow::show(){
-    _dialog->hide();
+    if ( _dialog->isMinimized())
+        _dialog->hide();
 	_dialog->showNormal();
 	_dialog->raise();
 	_dialog->activateWindow();
@@ -325,6 +326,7 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 		ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
 		if (widget->getSessionId() == imChatSession->getId()) {
 			_tabWidget->setCurrentIndex(i);
+			show();
 			return;
 		}
 	}
