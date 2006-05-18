@@ -31,37 +31,25 @@
  *
  * @ingroup model
  * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
 class Connect : Interface {
 public:
 
 	/**
-	 * @see IMConnect::loginStatusEvent
+	 * @see IMConnect::connectedEvent
 	 */
-	Event<void (IMConnect & sender, IMConnect::LoginStatus status)> loginStatusEvent;
+	Event<void (IMConnect & sender)> connectedEvent;
 
 	/**
-	 * @see IMConnect::connectionStatusEvent
+	 * @see IMConnect::disconnectedEvent
 	 */
-	Event<void (IMConnect & sender, int totalSteps, int curStep, const std::string & infoMsg)> connectionStatusEvent;
+	Event<void (IMConnect & sender, bool connectionError, const std::string & reason)> disconnectedEvent;
 
 	/**
-	 * Status changed event handler.
-	 *
-	 * @param sender the sender
-	 * @param status new status
+	 * @see IMConnect::connectionProgressEvent
 	 */
-	void loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status);
-
-	/**
-	 * Connection status changed event handler.
-	 *
-	 * @param sender the sender
-	 * @param totalSteps connection progression total steps
-	 * @param curStep connection progression current step
-	 * @param infoMsg step description
-	 */
-	void connectionStatusEventHandler(IMConnect & sender, int totalSteps, int curStep, const std::string & infoMsg);
+	Event<void (IMConnect & sender, int currentStep, int totalSteps, const std::string & infoMessage)> connectionProgressEvent;
 
 	Connect(IMAccount & account);
 

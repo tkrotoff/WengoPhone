@@ -106,40 +106,50 @@ void GaimConnectMngr::ConnProgressCbk(GaimConnection *gc, const char *text,
 {
 	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
-	if (mIMConnect != NULL)
-		mIMConnect->connectionStatusEvent(*mIMConnect, step_count, step, text == NULL ? "" : text);
+	if (mIMConnect)
+	{
+		mIMConnect->connectionProgressEvent(*mIMConnect, step, step_count, text == NULL ? String::null : text);
+	}
 }
 
 void GaimConnectMngr::ConnConnectedCbk(GaimConnection *gc)
 {
 	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
-	if (mIMConnect != NULL)
-		mIMConnect->loginStatusEvent(*mIMConnect, mIMConnect->LoginStatusConnected);
+	if (mIMConnect)
+	{
+		mIMConnect->connectedEvent(*mIMConnect);
+	}
 }
 
 void GaimConnectMngr::ConnDisconnectedCbk(GaimConnection *gc)
 {
 	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
-	if (mIMConnect != NULL)
-		mIMConnect->loginStatusEvent(*mIMConnect, mIMConnect->LoginStatusDisconnected);
+	if (mIMConnect)
+	{
+		mIMConnect->disconnectedEvent(*mIMConnect, false, String::null);
+	}
 }
 
 void GaimConnectMngr::ConnNoticeCbk(GaimConnection *gc, const char *text)
 {
 	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
-	if (mIMConnect != NULL)
-		mIMConnect->connectionStatusEvent(*mIMConnect, 0, 0, text == NULL ? "" : text);
+	if (mIMConnect)
+	{
+		mIMConnect->connectionProgressEvent(*mIMConnect, 0, 0, text == NULL ? String::null : text);
+	}
 }
 
 void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *text)
 {
 	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
-	if (mIMConnect != NULL)
-		mIMConnect->connectionStatusEvent(*mIMConnect, 0, 0, text == NULL ? "" : text);
+	if (mIMConnect)
+	{
+		mIMConnect->connectionProgressEvent(*mIMConnect, 0, 0, text == NULL ? String::null : text);
+	}
 }
 
 /* **************** MANAGE CONNECT_LIST ****************** */
@@ -165,7 +175,7 @@ GaimIMConnect *GaimConnectMngr::AddIMConnect(IMAccount &account)
 {
 	GaimIMConnect *mIMConnect = FindIMConnect(account);
 
-	if (mIMConnect == NULL)
+	if (!mIMConnect)
 	{
 		mIMConnect = new GaimIMConnect(account);
 		_gaimIMConnectList.push_back(mIMConnect);
@@ -188,7 +198,7 @@ void GaimConnectMngr::RemoveIMConnect(IMAccount &account)
 		if ((*i)->equalsTo(account.getLogin(), account.getProtocol()))
 		{
 
-			_gaimIMConnectList.erase(i);	
+			_gaimIMConnectList.erase(i);
 			break;
 		}
 	}

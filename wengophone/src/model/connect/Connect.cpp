@@ -28,36 +28,13 @@ Connect::Connect(IMAccount & account)
 
 	_imConnect = IMWrapperFactory::getFactory().createIMConnect(account);
 
-	_imConnect->loginStatusEvent +=
-		boost::bind(&Connect::loginStatusEventHandler, this, _1, _2);
-	_imConnect->loginStatusEvent += loginStatusEvent;
-
-	_imConnect->connectionStatusEvent +=
-		boost::bind(&Connect::connectionStatusEventHandler, this, _1, _2, _3, _4);
-	_imConnect->connectionStatusEvent += connectionStatusEvent;
+	_imConnect->connectedEvent += connectedEvent;
+	_imConnect->disconnectedEvent += disconnectedEvent;
+	_imConnect->connectionProgressEvent += connectionProgressEvent;
 }
 
 Connect::~Connect() {
 	delete _imConnect;
-}
-
-void Connect::loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status) {
-	switch (status) {
-	case IMConnect::LoginStatusConnected:
-		_connected = true;
-		break;
-	case IMConnect::LoginStatusDisconnected:
-		_connected = false;
-		break;
-	default:
-		LOG_FATAL("Unknown LoginStatus");
-	}
-}
-
-void Connect::connectionStatusEventHandler(IMConnect & sender, int totalSteps, int curStep, 
-	const std::string & infoMsg) {
-	
-	return;
 }
 
 void Connect::connect() {

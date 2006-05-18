@@ -38,20 +38,32 @@
 #include <string>
 using namespace std;
 
-const QString QtNickNameWidget::PICS_MSN_ON = ":pics/protocols/msn.png";
-const QString QtNickNameWidget::PICS_MSN_OFF = ":pics/protocols/msn_off.png";
-const QString QtNickNameWidget::PICS_YAHOO_ON = ":pics/protocols/yahoo.png";
-const QString QtNickNameWidget::PICS_YAHOO_OFF = ":pics/protocols/yahoo_off.png";
-const QString QtNickNameWidget::PICS_WENGO_ON = ":pics/protocols/wengo.png";
-const QString QtNickNameWidget::PICS_WENGO_OFF = ":pics/protocols/wengo_off.png";
-const QString QtNickNameWidget::PICS_AIM_ON = ":pics/protocols/aim.png";
-const QString QtNickNameWidget::PICS_AIM_OFF = ":pics/protocols/aim_off.png";
-const QString QtNickNameWidget::PICS_JABBER_ON = ":pics/protocols/jabber.png";
-const QString QtNickNameWidget::PICS_JABBER_OFF = ":pics/protocols/jabber_off.png";
+const char * QtNickNameWidget::PICS_MSN_ON = ":pics/protocols/msn.png";
+const char * QtNickNameWidget::PICS_MSN_OFF = ":pics/protocols/msn_off.png";
+const char * QtNickNameWidget::PICS_MSN_ERROR = ":pics/protocols/msn_error.png";
+
+const char * QtNickNameWidget::PICS_YAHOO_ON = ":pics/protocols/yahoo.png";
+const char * QtNickNameWidget::PICS_YAHOO_OFF = ":pics/protocols/yahoo_off.png";
+const char * QtNickNameWidget::PICS_YAHOO_ERROR = ":pics/protocols/yahoo_error.png";
+
+const char * QtNickNameWidget::PICS_WENGO_ON = ":pics/protocols/wengo.png";
+const char * QtNickNameWidget::PICS_WENGO_OFF = ":pics/protocols/wengo_off.png";
+const char * QtNickNameWidget::PICS_WENGO_ERROR = ":pics/protocols/wengo_error.png";
+
+const char * QtNickNameWidget::PICS_AIM_ON = ":pics/protocols/aim.png";
+const char * QtNickNameWidget::PICS_AIM_OFF = ":pics/protocols/aim_off.png";
+const char * QtNickNameWidget::PICS_AIM_ERROR = ":pics/protocols/aim_error.png";
+
+const char * QtNickNameWidget::PICS_JABBER_ON = ":pics/protocols/jabber.png";
+const char * QtNickNameWidget::PICS_JABBER_OFF = ":pics/protocols/jabber_off.png";
+const char * QtNickNameWidget::PICS_JABBER_ERROR = ":pics/protocols/jabber_error.png";
+
 const double QtNickNameWidget::POPUPMENU_OPACITY = 0.95;
 
-QtNickNameWidget::QtNickNameWidget(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone, QWidget * parent , Qt::WFlags f )
-: QWidget(parent,f), _cUserProfile(cUserProfile), _cWengoPhone(cWengoPhone) {
+QtNickNameWidget::QtNickNameWidget(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone, QWidget * parent)
+	: QWidget(parent),
+	_cUserProfile(cUserProfile),
+	_cWengoPhone(cWengoPhone) {
 
 	_msnIMAccountMenu = NULL;
 	_yahooIMAccountMenu = NULL;
@@ -98,15 +110,15 @@ QtNickNameWidget::QtNickNameWidget(CUserProfile & cUserProfile, CWengoPhone & cW
 	_protocolLayout->addWidget(_jabberLabel  ,0 , 4 );
 
 	_msnLabel->setPixmap(QPixmap(PICS_MSN_OFF));
-	_msnLabel->setToolTip(tr("MSN"));
+	_msnLabel->setToolTip("MSN");
 	_yahooLabel->setPixmap(QPixmap(PICS_YAHOO_OFF));
-	_yahooLabel->setToolTip(tr("Yahoo!"));
+	_yahooLabel->setToolTip("Yahoo!");
 	_wengoLabel->setPixmap(QPixmap(PICS_WENGO_OFF));
-	_wengoLabel->setToolTip(tr("Wengo"));
+	_wengoLabel->setToolTip("Wengo");
 	_aimLabel->setPixmap(QPixmap(PICS_AIM_OFF));
-	_aimLabel->setToolTip(tr("AIM / ICQ"));
+	_aimLabel->setToolTip("AIM / ICQ");
 	_jabberLabel->setPixmap(QPixmap(PICS_JABBER_OFF));
-	_jabberLabel->setToolTip(tr("Jabber / GoogleTalk"));
+	_jabberLabel->setToolTip("Jabber / GoogleTalk");
 
 	// Widget connections
 	connect ( _msnLabel,SIGNAL( clicked() ),SLOT( msnClicked() ) );
@@ -152,33 +164,97 @@ void QtNickNameWidget::connected(IMAccount * pImAccount) {
 	}
 }
 
-void QtNickNameWidget::disconnected(IMAccount * pImAccount) {
+void QtNickNameWidget::disconnected(IMAccount * pImAccount, bool connectionError, const std::string & reason) {
 	EnumIMProtocol::IMProtocol imProtocol = pImAccount->getProtocol();
 
-	switch (pImAccount->getProtocol()){
-		case EnumIMProtocol::IMProtocolMSN:
+	QString tooltip;
+	QString pixmap;
+
+	switch (imProtocol) {
+	case EnumIMProtocol::IMProtocolMSN: {
+		if (connectionError) {
+			_msnLabel->setPixmap(QPixmap(PICS_MSN_ERROR));
+			_msnLabel->setToolTip("MSN Error: " + QString::fromStdString(reason));
+		} else {
 			_msnLabel->setPixmap(QPixmap(PICS_MSN_OFF));
-            break;
+		}
+		break;
+	}
 
-		case EnumIMProtocol::IMProtocolSIPSIMPLE:
+	case EnumIMProtocol::IMProtocolSIPSIMPLE: {
+		if (connectionError) {
+			_wengoLabel->setPixmap(QPixmap(PICS_WENGO_ERROR));
+			_wengoLabel->setToolTip("Wengo Error: " + QString::fromStdString(reason));
+		} else {
 			_wengoLabel->setPixmap(QPixmap(PICS_WENGO_OFF));
-            break;
+		}
+		break;
+	}
 
-		case EnumIMProtocol::IMProtocolYahoo:
+	case EnumIMProtocol::IMProtocolYahoo: {
+		if (connectionError) {
+			_yahooLabel->setPixmap(QPixmap(PICS_YAHOO_ERROR));
+			_yahooLabel->setToolTip("Yahoo! Error: " + QString::fromStdString(reason));
+		} else {
 			_yahooLabel->setPixmap(QPixmap(PICS_YAHOO_OFF));
-            break;
+		}
+		break;
+	}
 
-		case EnumIMProtocol::IMProtocolAIMICQ:
+	case EnumIMProtocol::IMProtocolAIMICQ: {
+		if (connectionError) {
+			_aimLabel->setPixmap(QPixmap(PICS_AIM_ERROR));
+			_aimLabel->setToolTip("AIM / ICQ Error: " + QString::fromStdString(reason));
+		} else {
 			_aimLabel->setPixmap(QPixmap(PICS_AIM_OFF));
-            break;
+		}
+		break;
+	}
 
-		case EnumIMProtocol::IMProtocolJabber:
+	case EnumIMProtocol::IMProtocolJabber: {
+		if (connectionError) {
 			_jabberLabel->setPixmap(QPixmap(PICS_JABBER_OFF));
-            break;
+			_jabberLabel->setToolTip("Jabber / GoogleTalk Error: " + QString::fromStdString(reason));
+		} else {
+			_jabberLabel->setPixmap(QPixmap(PICS_JABBER_ERROR));
+		}
+		break;
+	}
 
-		default:
-			LOG_FATAL("unknown IM protocol=" + String::fromNumber(imProtocol));
-    }
+	default:
+		LOG_FATAL("unknown IM protocol=" + String::fromNumber(imProtocol));
+	}
+}
+
+void QtNickNameWidget::connectionProgress(IMAccount * pImAccount,
+	int currentStep, int totalSteps, const std::string & infoMessage) {
+
+	EnumIMProtocol::IMProtocol imProtocol = pImAccount->getProtocol();
+
+	switch (imProtocol) {
+	case EnumIMProtocol::IMProtocolMSN:
+		_msnLabel->setPixmap(QPixmap(PICS_MSN_ERROR));
+		break;
+
+	case EnumIMProtocol::IMProtocolSIPSIMPLE:
+		_wengoLabel->setPixmap(QPixmap(PICS_WENGO_ERROR));
+		break;
+
+	case EnumIMProtocol::IMProtocolYahoo:
+		_yahooLabel->setPixmap(QPixmap(PICS_YAHOO_ERROR));
+		break;
+
+	case EnumIMProtocol::IMProtocolAIMICQ:
+		_aimLabel->setPixmap(QPixmap(PICS_AIM_ERROR));
+		break;
+
+	case EnumIMProtocol::IMProtocolJabber:
+		_jabberLabel->setPixmap(QPixmap(PICS_JABBER_ERROR));
+		break;
+
+	default:
+		LOG_FATAL("unknown IM protocol=" + String::fromNumber(imProtocol));
+	}
 }
 
 void QtNickNameWidget::msnClicked(){

@@ -23,6 +23,8 @@
 #include <QtGui>
 #include <qtutil/QtClickableLabel.h>
 
+#include <string>
+
 class CWengoPhone;
 class CUserProfile;
 class IMAccount;
@@ -30,14 +32,13 @@ class ToolTipLineEdit;
 
 /**
  *
- * @author Mr K
  * @author Mathieu Stute
  */
 class QtNickNameWidget : public QWidget {
 	Q_OBJECT
 public:
 
-	QtNickNameWidget(CUserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent = 0, Qt::WFlags f = 0);
+	QtNickNameWidget(CUserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent);
 
 public Q_SLOTS:
 
@@ -61,7 +62,9 @@ public Q_SLOTS:
 
 	void connected(IMAccount * pImAccount);
 
-	void disconnected(IMAccount * pImAccount);
+	void disconnected(IMAccount * pImAccount, bool connectionError, const std::string & reason);
+
+	void connectionProgress(IMAccount * pImAccount, int currentStep, int totalSteps, const std::string & infoMessage);
 
 	void userProfileUpdated();
 
@@ -117,20 +120,25 @@ protected:
 
 	static const double POPUPMENU_OPACITY;
 
-	static const QString PICS_MSN_ON;
-	static const QString PICS_MSN_OFF;
+	static const char * PICS_MSN_ON;
+	static const char * PICS_MSN_OFF;
+	static const char * PICS_MSN_ERROR;
 
-	static const QString PICS_YAHOO_ON;
-	static const QString PICS_YAHOO_OFF;
+	static const char * PICS_YAHOO_ON;
+	static const char * PICS_YAHOO_OFF;
+	static const char * PICS_YAHOO_ERROR;
 
-	static const QString PICS_WENGO_ON;
-	static const QString PICS_WENGO_OFF;
+	static const char * PICS_WENGO_ON;
+	static const char * PICS_WENGO_OFF;
+	static const char * PICS_WENGO_ERROR;
 
-	static const QString PICS_AIM_ON;
-	static const QString PICS_AIM_OFF;
+	static const char * PICS_AIM_ON;
+	static const char * PICS_AIM_OFF;
+	static const char * PICS_AIM_ERROR;
 
-	static const QString PICS_JABBER_ON;
-	static const QString PICS_JABBER_OFF;
+	static const char * PICS_JABBER_ON;
+	static const char * PICS_JABBER_OFF;
+	static const char * PICS_JABBER_ERROR;
 };
 
-#endif
+#endif	//QTNICKNAMEWIDGET_H

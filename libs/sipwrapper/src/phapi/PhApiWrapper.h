@@ -28,7 +28,6 @@
 
 #include <imwrapper/EnumPresenceState.h>
 #include <imwrapper/IMChat.h>
-#include <imwrapper/IMConnect.h>
 #include <imwrapper/IMPresence.h>
 #include <imwrapper/IMChatSession.h>
 
@@ -64,7 +63,11 @@ public:
 
 	Event<void (PhApiWrapper & sender, IMChatSession & chatSession, const std::string & contactId, IMChat::TypingState state)> typingStateChangedEvent;
 
-	Event<void (PhApiWrapper & sender, IMConnect::LoginStatus status)> loginStatusEvent;
+	Event<void (PhApiWrapper & sender)> connectedEvent;
+
+	Event<void (PhApiWrapper & sender, bool connectionError, const std::string & reason)> disconnectedEvent;
+
+	Event<void (PhApiWrapper & sender, int currentStep, int totalSteps, const std::string & infoMessage)> connectionProgressEvent;
 
 	Event<void (PhApiWrapper & sender, EnumPresenceState::PresenceState state, const std::string & note, const std::string & from)> presenceStateChangedEvent;
 

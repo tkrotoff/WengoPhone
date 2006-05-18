@@ -25,7 +25,9 @@ PhApiIMConnect::PhApiIMConnect(IMAccount & account, PhApiWrapper & phApiWrapper)
 	: IMConnect(account),
 	_phApiWrapper(phApiWrapper) {
 
-	_phApiWrapper.loginStatusEvent += boost::bind(&PhApiIMConnect::loginStatusEventHandler, this, _1, _2);
+	_phApiWrapper.connectedEvent += boost::bind(&PhApiIMConnect::connectedEventHandler, this, _1);
+	_phApiWrapper.disconnectedEvent += boost::bind(&PhApiIMConnect::disconnectedEventHandler, this, _1, _2, _3);
+	_phApiWrapper.connectionProgressEvent += boost::bind(&PhApiIMConnect::connectionProgressEventHandler, this, _1, _2, _3, _4);
 }
 
 void PhApiIMConnect::connect() {
@@ -36,6 +38,14 @@ void PhApiIMConnect::disconnect() {
 	_phApiWrapper.disconnect();
 }
 
-void PhApiIMConnect::loginStatusEventHandler(PhApiWrapper & sender, IMConnect::LoginStatus status) {
-	loginStatusEvent(*this, status);
+void PhApiIMConnect::connectedEventHandler(PhApiWrapper & sender) {
+	connectedEvent(*this);
+}
+
+void PhApiIMConnect::disconnectedEventHandler(PhApiWrapper & sender, bool connectionError, const std::string & reason) {
+	disconnectedEvent(*this, connectionError, reason);
+}
+
+void PhApiIMConnect::connectionProgressEventHandler(PhApiWrapper & sender, int currentStep, int totalSteps, const std::string & infoMessage) {
+	connectionProgressEvent(*this, currentStep, totalSteps, infoMessage);
 }

@@ -490,12 +490,12 @@ void PhApiWrapper::enableHalfDuplex(bool enable) {
  */
 
 void PhApiWrapper::connect() {
-	loginStatusEvent(*this, IMConnect::LoginStatusConnected);
+	connectedEvent(*this);
 }
 
 void PhApiWrapper::disconnect() {
 	removeVirtualLine(_wengoVline);
-	loginStatusEvent(*this, IMConnect::LoginStatusDisconnected);
+	disconnectedEvent(*this, false, String::null);
 }
 
 void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & message) {

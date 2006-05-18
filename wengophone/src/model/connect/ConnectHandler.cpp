@@ -32,7 +32,8 @@
 using namespace std;
 
 ConnectHandler::ConnectHandler(UserProfile & userProfile)
-: _userProfile(userProfile) {
+	: _userProfile(userProfile) {
+
 	_userProfile.newIMAccountAddedEvent +=
 		boost::bind(&ConnectHandler::newIMAccountAddedEventHandler, this, _1, _2);
 }
@@ -53,18 +54,24 @@ void ConnectHandler::connect(IMAccount & imAccount) {
 
 	if (it == _connectMap.end()) {
 		connect = new Connect(*actIMAccount);
-		connect->loginStatusEvent +=
-			boost::bind(&ConnectHandler::loginStatusEventHandler, this, _1, _2);
-		connect->connectionStatusEvent +=
-			boost::bind(&ConnectHandler::connectionStatusEventHandler, this, _1, _2, _3, _4);
+
+		connect->connectedEvent +=
+			boost::bind(&ConnectHandler::connectedEventHandler, this, _1);
+		connect->disconnectedEvent +=
+			boost::bind(&ConnectHandler::disconnectedEventHandler, this, _1, _2, _3);
+		connect->connectionProgressEvent +=
+			boost::bind(&ConnectHandler::connectionProgressEventHandler, this, _1, _2, _3, _4);
+
 		_connectMap.insert(pair<IMAccount *, Connect *>(actIMAccount, connect));
-	} else {
+	}
+
+	else {
 		connect = (*it).second;
 	}
 
 	if (!imAccount.isConnected()) {
 		if (imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
-			// FIXME: currently there is only one SIP account so we are sure that 
+			// FIXME: currently there is only one SIP account so we are sure that
 			// the connectSipAccounts will connect the Wengo account
 			_userProfile.connectSipAccounts();
 		}
@@ -78,7 +85,7 @@ void ConnectHandler::disconnect(IMAccount & imAccount) {
 	if (it != _connectMap.end()) {
 		if (imAccount.isConnected()) {
 			if (imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
-				// FIXME: currently there is only one SIP account so we are sure that 
+				// FIXME: currently there is only one SIP account so we are sure that
 				// the connectSipAccounts will disconnect the Wengo account
 				_userProfile.disconnectSipAccounts();
 			}
@@ -87,30 +94,18 @@ void ConnectHandler::disconnect(IMAccount & imAccount) {
 	}
 }
 
-void ConnectHandler::loginStatusEventHandler(IMConnect & sender,
-	IMConnect::LoginStatus status) {
-	switch(status) {
-	case IMConnect::LoginStatusConnected: {
-		connectedEvent(*this, sender.getIMAccount());
-		break;
-	}
-
-	case IMConnect::LoginStatusPasswordError:
-		break;
-
-	case IMConnect::LoginStatusDisconnected:
-		disconnectedEvent(*this, sender.getIMAccount());
-		break;
-
-	default:
-		LOG_FATAL("unknown status");
-	}
+void ConnectHandler::connectedEventHandler(IMConnect & sender) {
+	connectedEvent(*this, sender.getIMAccount());
 }
 
-void ConnectHandler::connectionStatusEventHandler(IMConnect & sender, int totalSteps, 
-	int curStep, const std::string & infoMsg) {
+void ConnectHandler::disconnectedEventHandler(IMConnect & sender, bool connectionError, const std::string & reason) {
+	disconnectedEvent(*this, sender.getIMAccount(), connectionError, reason);
+}
 
-	connectionStatusEvent(*this, totalSteps, curStep, infoMsg);
+void ConnectHandler::connectionProgressEventHandler(IMConnect & sender, int currentStep, int totalSteps,
+				const std::string & infoMessage) {
+
+	connectionProgressEvent(*this, sender.getIMAccount(), currentStep, totalSteps, infoMessage);
 }
 
 void ConnectHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {

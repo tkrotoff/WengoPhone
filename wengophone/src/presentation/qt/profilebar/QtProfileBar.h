@@ -52,18 +52,13 @@ public:
 	QtProfileBar (CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 		ConnectHandler & connectHandler,QWidget * parent = 0, Qt::WFlags f = 0 );
 
-	void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
-
-	void disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount);
-
-    void myPresenceStatusEventHandler(PresenceHandler & sender,
-		const IMAccount & imAccount, EnumPresenceState::MyPresenceStatus status);
-
 Q_SIGNALS:
 
 	void connectEventSignal(IMAccount * imAccount);
 
-	void disconnectedEventSignal(IMAccount * imAccount);
+	void disconnectedEventSignal(IMAccount * imAccount, bool connectionError, const std::string & reason);
+
+	void connectionProgressEventSignal(IMAccount * imAccount, int currentStep, int totalSteps, const std::string & infoMessage);
 
 	void myPresenceStatusEventSignal(QVariant status);
 
@@ -119,9 +114,9 @@ protected:
 
 	void removeCreditWidget();
 
-    void setOpen(bool opened);
+	void setOpen(bool opened);
 
-    void paintEvent ( QPaintEvent * event );
+	void paintEvent ( QPaintEvent * event );
 
 public Q_SLOTS:
 
@@ -157,6 +152,17 @@ public Q_SLOTS:
 	void myPresenceStatusEventSlot(QVariant status);
 
 private:
+
+	void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
+
+	void disconnectedEventHandler(ConnectHandler & sender, IMAccount & imAccount,
+			bool connectionError, const std::string & reason);
+
+	void connectionProgressEventHandler(ConnectHandler & sender, IMAccount & imAccount,
+			int currentStep, int totalSteps, const std::string & infoMessage);
+
+	void myPresenceStatusEventHandler(PresenceHandler & sender,
+		const IMAccount & imAccount, EnumPresenceState::MyPresenceStatus status);
 
 	void wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsInfo);
 

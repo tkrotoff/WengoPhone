@@ -104,16 +104,22 @@
         <file>pics/profilebar/event/new-message.png</file>
         <file>pics/protocols/aim.png</file>
         <file>pics/protocols/aim_off.png</file>
+        <file>pics/protocols/aim_error.png</file>
         <file>pics/protocols/jabber.png</file>
         <file>pics/protocols/jabber_off.png</file>
+        <file>pics/protocols/jabber_error.png</file>
         <file>pics/protocols/msn.png</file>
         <file>pics/protocols/msn_off.png</file>
+        <file>pics/protocols/msn_error.png</file>
         <file>pics/protocols/sip.png</file>
         <file>pics/protocols/sip_off.png</file>
+        <file>pics/protocols/sip_error.png</file>
         <file>pics/protocols/wengo.png</file>
         <file>pics/protocols/wengo_off.png</file>
+        <file>pics/protocols/wengo_error.png</file>
         <file>pics/protocols/yahoo.png</file>
         <file>pics/protocols/yahoo_off.png</file>
+        <file>pics/protocols/yahoo_error.png</file>
         <file>pics/status/away.png</file>
         <file>pics/status/donotdisturb.png</file>
         <file>pics/status/forward.png</file>

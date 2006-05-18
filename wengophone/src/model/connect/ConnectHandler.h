@@ -46,34 +46,28 @@ class ConnectHandler : NonCopyable {
 public:
 
 	/**
-	 * @see IMConnect::loginStatusEvent
-	 */
-	Event<void (IMConnect & sender, IMConnect::LoginStatus status)> loginStatusEvent;
-
-	Event<void (ConnectHandler & sender, int totalSteps, 
-		int curStep, const std::string & infoMsg)> connectionStatusEvent;
-
-	/**
-	 * Emitted when a IMAccount is connected.
-	 *
-	 * @param imAccount the IMAccount that is connected
+	 * @see IMConnect::connectedEvent
 	 */
 	Event<void (ConnectHandler & sender, IMAccount & imAccount)> connectedEvent;
 
 	/**
-	 * Emitted when a IMAccount is disconnected.
-	 *
-	 * @param imAccount the IMAccount that is disconnected
+	 * @see IMConnect::disconnectedEvent
 	 */
-	Event<void (ConnectHandler & sender, IMAccount & imAccount)> disconnectedEvent;
+	Event<void (ConnectHandler & sender, IMAccount & imAccount, bool connectionError, const std::string & reason)> disconnectedEvent;
 
-	void connect(IMAccount & imAccount);
-
-	void disconnect(IMAccount & imAccount);
+	/**
+	 * @see IMConnect::connectionProgressEvent
+	 */
+	Event<void (ConnectHandler & sender, IMAccount & imAccount,
+		int currentStep, int totalSteps, const std::string & infoMessage)> connectionProgressEvent;
 
 	ConnectHandler(UserProfile & userProfile);
 
 	~ConnectHandler();
+
+	void connect(IMAccount & imAccount);
+
+	void disconnect(IMAccount & imAccount);
 
 private:
 
@@ -88,15 +82,20 @@ private:
 	void imAccountDeadEventHandler(IMAccount & sender);
 
 	/**
-	 * @see IMConnect::loginStatusEvent
+	 * @see IMConnect::connectedEvent
 	 */
-	void loginStatusEventHandler(IMConnect & sender, IMConnect::LoginStatus status);
+	void connectedEventHandler(IMConnect & sender);
 
 	/**
-	 * @see IMConnect::connectionStatusEvent
+	 * @see IMConnect::disconnectedEvent
 	 */
-	void connectionStatusEventHandler(IMConnect & sender, int totalSteps, int curStep, 
-		const std::string & infoMsg);
+	void disconnectedEventHandler(IMConnect & sender, bool connectionError, const std::string & reason);
+
+	/**
+	 * @see IMConnect::connectionProgressEvent
+	 */
+	void connectionProgressEventHandler(IMConnect & sender, int currentStep, int totalSteps,
+				const std::string & infoMessage);
 
 
 	typedef std::map<IMAccount *, Connect *> ConnectMap;

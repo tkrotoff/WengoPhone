@@ -46,6 +46,14 @@ public:
 		/** Down=+8192kbit/s up=+1024kbit/s. */
 		VideoQualityExcellent
 	};
+
+	/**
+	 * Checks video quality value.
+	 *
+	 * @param videoQuality value to check
+	 * @param video quality; VideoQualityNormal if videoQuality is not valid
+	 */
+	static VideoQuality checkValue(int videoQuality);
 };
 
 #endif	//ENUMVIDEOQUALITY_H

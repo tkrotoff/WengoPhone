@@ -149,7 +149,7 @@ Config::Config(const std::string & name)
 		CFURLRef url = CFBundleCopyResourcesDirectoryURL(mainBundle);
 		char resPath[1024];
 
-		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)resPath, sizeof(resPath))) {
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *) resPath, sizeof(resPath))) {
 			resourcesPath = (std::string(resPath) + File::getPathSeparator());
 		}
 
@@ -177,7 +177,7 @@ Config::Config(const std::string & name)
 		CFURLRef url = CFBundleCopyPrivateFrameworksURL(mainBundle);
 		char frameworkPath[1024];
 
-		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)frameworkPath, sizeof(frameworkPath))) {
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *) frameworkPath, sizeof(frameworkPath))) {
 			pluginsPath = (std::string(frameworkPath) + File::getPathSeparator()
 				+ "phapi-plugins" + File::getPathSeparator());
 		}
@@ -542,7 +542,7 @@ std::string Config::getVideoWebcamDevice() const {
 }
 
 int Config::getVideoQuality() const {
-	return getIntegerKeyValue(VIDEO_QUALITY_KEY);
+	return EnumVideoQuality::checkValue(getIntegerKeyValue(VIDEO_QUALITY_KEY));
 }
 
 bool Config::getWenboxEnable() const {

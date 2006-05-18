@@ -34,35 +34,31 @@
 class IMConnect : Interface {
 public:
 
-	enum LoginStatus {
-		/** Connected, login is OK. */
-		LoginStatusConnected,
-
-		/** login/password is incorrect. */
-		LoginStatusPasswordError,
-
-		/** A network error occured. */
-		LoginStatusDisconnected
-	};
-
 	/**
-	 * Status changed.
+	 * Connection event.
 	 *
 	 * @param sender this class
-	 * @param status new status
 	 */
-	Event<void (IMConnect & sender, LoginStatus status)> loginStatusEvent;
-
+	Event<void (IMConnect & sender)> connectedEvent;
 
 	/**
-	 * Status changed.
+	 * Disconnection event.
 	 *
 	 * @param sender this class
+	 * @param connectionError true if an error occured; false otherwise
+	 * @param reason reason for the connection failure
+	 */
+	Event<void (IMConnect & sender, bool connectionError, const std::string & reason)> disconnectedEvent;
+
+	/**
+	 * Connection progression status changed.
+	 *
+	 * @param sender this class
+	 * @param currentStep the connection current step
 	 * @param totalSteps number of steps during the connection
-	 * @param curStep the connection current step
-	 * @param infoMsg description of the current step
+	 * @param infoMessage description of the current step
 	 */
-	Event<void (IMConnect & sender, int totalSteps, int curStep, const std::string & infoMsg)> connectionStatusEvent;
+	Event<void (IMConnect & sender, int currentStep, int totalSteps, const std::string & infoMessage)> connectionProgressEvent;
 
 	virtual ~IMConnect() { }
 
@@ -77,12 +73,11 @@ public:
 protected:
 
 	IMConnect(IMAccount & account) : _imAccount(account) {
-		loginStatusEvent +=
-			boost::bind(&IMConnect::loginStatusEventHandler, this, _1, _2);
+		connectedEvent += boost::bind(&IMConnect::connectedEventHandler, this, _1);
 	}
 
-	void loginStatusEventHandler(IMConnect & sender, LoginStatus status) {
-		_imAccount.setConnected(status == LoginStatusConnected);
+	void connectedEventHandler(IMConnect & sender) {
+		_imAccount.setConnected(true);
 	}
 
 	IMAccount & _imAccount;

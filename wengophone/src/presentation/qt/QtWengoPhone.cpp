@@ -1434,11 +1434,11 @@ void QtWengoPhone::showHistory() {
 	_ui->tabWidget->setCurrentWidget(_ui->tabHistory);
 }
 
-void QtWengoPhone::connectionStatusEventHandler(int totalSteps, int curStep, const std::string & infoMsg) {
-	connectionStatusEventHandlerSignal(totalSteps, curStep, QString::fromStdString(infoMsg));
+void QtWengoPhone::connectionStatusEventHandler(int totalSteps, int currentStep, const std::string & infoMsg) {
+	connectionStatusEventHandlerSignal(totalSteps, currentStep, QString::fromStdString(infoMsg));
 }
 
-void QtWengoPhone::connectionStatusEventHandlerSlot(int totalSteps, int curStep, QString infoMsg) {
+void QtWengoPhone::connectionStatusEventHandlerSlot(int totalSteps, int currentStep, QString infoMsg) {
 
 	//int buttonClicked;
 

@@ -17,40 +17,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHAPIIMCONNECT_H
-#define PHAPIIMCONNECT_H
+#include <sipwrapper/EnumVideoQuality.h>
 
-#include "PhApiFactory.h"
+EnumVideoQuality::VideoQuality EnumVideoQuality::checkValue(int videoQuality) {
+	switch (videoQuality) {
+	case VideoQualityNormal:
+		return VideoQualityNormal;
 
-#include <imwrapper/IMConnect.h>
+	case VideoQualityGood:
+		return VideoQualityGood;
 
-class IMAccount;
+	case VideoQualityVeryGood:
+		return VideoQualityVeryGood;
 
-/**
- * SIP Instant Messaging connection.
- *
- * @ingroup model
- * @author Mathieu Stute
- */
-class PhApiIMConnect : public IMConnect {
-	friend class PhApiFactory;
-public:
+	case VideoQualityExcellent:
+		return VideoQualityExcellent;
 
-	void connect();
-
-	void disconnect();
-
-private:
-
-	PhApiIMConnect(IMAccount & account, PhApiWrapper & phApiWrapper);
-
-	void connectedEventHandler(PhApiWrapper & sender);
-
-	void disconnectedEventHandler(PhApiWrapper & sender, bool connectionError, const std::string & reason);
-
-	void connectionProgressEventHandler(PhApiWrapper & sender, int currentStep, int totalSteps, const std::string & infoMessage);
-
-	PhApiWrapper & _phApiWrapper;
-};
-
-#endif	//PHAPIIMCONNECT_H
+	default:
+		return VideoQualityNormal;
+	}
+}

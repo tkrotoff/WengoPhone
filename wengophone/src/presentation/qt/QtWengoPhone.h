@@ -108,7 +108,7 @@ public:
 	void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
 		const std::string & message);
 
-	void connectionStatusEventHandler(int totalSteps, int curStep, const std::string & infoMsg);
+	void connectionStatusEventHandler(int totalSteps, int currentStep, const std::string & infoMsg);
 
 	QWidget * getWidget() const {
 		return _wengoPhoneWindow;
@@ -131,12 +131,12 @@ public:
 Q_SIGNALS:
 
 	void modelInitializedEventSignal();
-	
-	void connectionStatusEventHandlerSignal(int totalSteps, int curStep, QString infoMsg);
+
+	void connectionStatusEventHandlerSignal(int totalSteps, int currentStep, QString infoMsg);
 
 private Q_SLOTS:
 
-	void connectionStatusEventHandlerSlot(int totalSteps, int curStep, QString infoMsg);
+	void connectionStatusEventHandlerSlot(int totalSteps, int currentStep, QString infoMsg);
 
 	void callButtonClicked();
 

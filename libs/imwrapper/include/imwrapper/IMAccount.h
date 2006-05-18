@@ -32,7 +32,7 @@
  * Instant Messaging account.
  *
  * Associates a login/password to an IM protocol.
- * Example: login: "bob@hotmail.com" password: "bob" protocol: IMProtocolMSN
+ * Example: login: "bob@hotmail.com" password: "axBi9opZ" protocol: IMProtocolMSN
  *
  * @author Tanguy Krotoff
  * @author Philippe Bernery
@@ -77,7 +77,7 @@ public:
 	}
 
 	void setLogin(const std::string & login);
-	
+
 	const std::string & getPassword() const {
 		return _password;
 	}
@@ -87,8 +87,8 @@ public:
 	EnumIMProtocol::IMProtocol getProtocol() const {
 		return _protocol;
 	}
- 
-	EnumPresenceState::PresenceState getPresenceState() const {	
+
+	EnumPresenceState::PresenceState getPresenceState() const {
 		return _presenceState;
 	}
 
@@ -112,7 +112,7 @@ private:
 	void setPresenceState(EnumPresenceState::PresenceState presenceState) {
 		_presenceState = presenceState;
 	}
- 
+
 	/**
 	 * Used by IMConnect to set the connection state.
 	 */
@@ -155,6 +155,5 @@ private:
 	/** Connection state. */
 	bool _connected;
 };
-
 
 #endif	//IMACCOUNT_H

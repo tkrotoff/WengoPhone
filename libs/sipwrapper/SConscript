@@ -11,6 +11,7 @@ include_path = [
 headers = [
 	'include/sipwrapper/EnumPhoneCallState.h',
 	'include/sipwrapper/EnumPhoneLineState.h',
+	'include/sipwrapper/EnumVideoQuality.h',
 	'include/sipwrapper/SipWrapper.h',
 	'include/sipwrapper/SipWrapperFactory.h'
 	'include/sipwrapper/WebcamVideoFrame.h',
@@ -21,6 +22,7 @@ sources = [
 	'src/EnumPhoneCallState.cpp',
 	'src/EnumPhoneLineState.cpp',
 	'src/EnumNatType.cpp',
+	'src/EnumVideoQuality.cpp',
 	'src/CodecList.cpp',
 ]
 

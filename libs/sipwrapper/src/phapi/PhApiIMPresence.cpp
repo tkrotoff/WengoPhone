@@ -27,7 +27,7 @@
 #include <cutil/global.h>
 
 #ifdef OS_MACOSX
-#include <CoreFoundation/CoreFoundation.h>
+	#include <CoreFoundation/CoreFoundation.h>
 #endif
 
 PhApiIMPresence::PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrapper)
@@ -72,8 +72,7 @@ void PhApiIMPresence::unblockContact(const std::string & contactId) {
 	_phApiWrapper.unblockContact(contactId);
 }
 
-void PhApiIMPresence::authorizeContact(const std::string & contactId, bool auhorized, 
-									   const std::string message) {
+void PhApiIMPresence::authorizeContact(const std::string & contactId, bool auhorized, const std::string message) {
 }
 
 void PhApiIMPresence::presenceStateChangedEventHandler(PhApiWrapper & sender, EnumPresenceState::PresenceState state, const std::string & note, const std::string & from) {

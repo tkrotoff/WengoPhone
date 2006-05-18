@@ -33,11 +33,11 @@
 
 QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 	ConnectHandler & connectHandler, QWidget * parent, Qt::WFlags f)
-: QWidget (parent,f), _cUserProfile(cUserProfile),
-_cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
+	: QWidget (parent,f), _cUserProfile(cUserProfile),
+	_cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 
 	_statusMenu = NULL;
-    _isOpen = false;
+	_isOpen = false;
 	_nickNameWidgetVisible = false;
 	_eventsWidgetVisible = false;
 	_crediWidgetVisible = false;
@@ -59,7 +59,7 @@ _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 	_statusLabel->setPixmaps(QPixmap(":/pics/profilebar/bar_start_status_green.png"),
 					QPixmap(), // no end
 					QPixmap(), // no fill
-	
+
 					QPixmap(":/pics/profilebar/bar_on_start_status_green.png"),
 					QPixmap(),  // no end
 					QPixmap()
@@ -147,8 +147,11 @@ _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 	_connectHandler.connectedEvent +=
 		boost::bind(&QtProfileBar::connectedEventHandler,this,_1,_2);
 
+	_connectHandler.connectionProgressEvent +=
+		boost::bind(&QtProfileBar::connectionProgressEventHandler, this, _1, _2, _3, _4, _5);
+
 	_connectHandler.disconnectedEvent +=
-		boost::bind(&QtProfileBar::disconnectedEventHandler,this,_1,_2);
+		boost::bind(&QtProfileBar::disconnectedEventHandler, this, _1, _2, _3, _4);
 
 	cWengoPhone.cHistoryCreatedEvent +=
 		boost::bind(&QtProfileBar::cHistoryCreatedEventHandler, this, _1, _2);
@@ -158,8 +161,14 @@ _cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
 	presence.myPresenceStatusEvent +=
 		boost::bind(&QtProfileBar::myPresenceStatusEventHandler,this,_1,_2,_3);
 
-	connect(this,SIGNAL(connectEventSignal(IMAccount *)),_nickNameWidget,SLOT(connected(IMAccount *)));
-	connect(this,SIGNAL(disconnectedEventSignal(IMAccount *)),_nickNameWidget,SLOT(disconnected(IMAccount *)));
+	connect(this, SIGNAL(connectEventSignal(IMAccount *)),
+		_nickNameWidget,SLOT(connected(IMAccount *)));
+
+	connect(this, SIGNAL(disconnectedEventSignal(IMAccount *)),
+		_nickNameWidget,SLOT(disconnected(IMAccount *)));
+
+	connect(this, SIGNAL(connectionProgressEventSignal(IMAccount *, int, int, const std::string &)),
+		_nickNameWidget, SLOT(connectionProgress(IMAccount *, int, int, const std::string &)));
 
 	if ( !connect(this,SIGNAL(myPresenceStatusEventSignal(QVariant  )),
 		this,SLOT  (myPresenceStatusEventSlot( QVariant ))) ) {
@@ -174,9 +183,18 @@ void QtProfileBar::connectedEventHandler(ConnectHandler & sender, IMAccount & im
 }
 
 // Called in the model thread
-void QtProfileBar::disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount) {
+void QtProfileBar::disconnectedEventHandler (ConnectHandler & sender, IMAccount & imAccount,
+	bool connectionError, const std::string & reason) {
+
 	IMAccount * pImAccount = &imAccount;
-	disconnectedEventSignal(pImAccount);
+	disconnectedEventSignal(pImAccount, connectionError, reason);
+}
+
+void QtProfileBar::connectionProgressEventHandler(ConnectHandler & sender, IMAccount & imAccount,
+			int currentStep, int totalSteps, const std::string & infoMessage) {
+
+	IMAccount * pImAccount = &imAccount;
+	connectionProgressEventSignal(pImAccount, currentStep, totalSteps, infoMessage);
 }
 
 void QtProfileBar::myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
@@ -336,10 +354,10 @@ void QtProfileBar::createStatusMenu() {
 	action = _statusMenu->addAction(QIcon(":/pics/status/online.png"),tr( "Online" ) );
 	connect(action,SIGNAL( triggered (bool) ),SLOT( onlineClicked(bool) ) );
 
-	action = _statusMenu->addAction(QIcon(":/pics/status/donotdisturb.png"), tr( "DND" ) );
+	action = _statusMenu->addAction(QIcon(":/pics/status/donotdisturb.png"), tr("Do Not Disturb") );
 	connect(action,SIGNAL( triggered (bool) ),SLOT( dndClicked(bool) ) );
 
-	action = _statusMenu->addAction(QIcon(":/pics/status/offline.png"), tr( "Invisible" ) );
+	action = _statusMenu->addAction(QIcon(":/pics/status/invisible.png"), tr( "Invisible" ) );
 	connect(action,SIGNAL( triggered (bool) ),SLOT( invisibleClicked(bool) ) );
 
 	action = _statusMenu->addAction(QIcon(":/pics/status/away.png"), tr( "Away" ) );
@@ -493,7 +511,7 @@ void QtProfileBar::paintEvent ( QPaintEvent * event ) {
 		float red = ((float )dest.red()) / 1.3f;
 		float blue = ((float )dest.blue()) / 1.3f;
 		float green = ((float )dest.green()) / 1.3f;
-	
+
 		dest = QColor( (int)red,(int)green,(int)blue);
 		lg.setColorAt ( 1, dest  );
 
@@ -506,10 +524,10 @@ void QtProfileBar::paintEvent ( QPaintEvent * event ) {
 }
 
 void QtProfileBar::cHistoryCreatedEventHandler(CWengoPhone & sender, CHistory & cHistory) {
-	
+
 	cHistory.unseenMissedCallsChangedEvent +=
 		boost::bind(&QtProfileBar::unseenMissedCallsChangedEventHandler, this, _1, _2);
-	
+
 	_eventWidget->setMissedCall(cHistory.getUnseenMissedCalls());
 }
 
