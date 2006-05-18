@@ -117,7 +117,7 @@ void GaimIMChat::closeSession(IMChatSession & chatSession)
 
 void GaimIMChat::sendMessage(IMChatSession & chatSession, const std::string & message)
 {
-	if (message.empty())
+	if (message.empty() || message.length() == 0)
 		return;
 
 	mConvInfo_t *mConv = FindChatStructById(chatSession.getId());

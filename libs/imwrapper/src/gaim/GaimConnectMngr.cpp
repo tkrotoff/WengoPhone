@@ -134,12 +134,12 @@ void GaimConnectMngr::ConnDisconnectedCbk(GaimConnection *gc)
 
 void GaimConnectMngr::ConnNoticeCbk(GaimConnection *gc, const char *text)
 {
-	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
+	//GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
-	if (mIMConnect)
-	{
-		mIMConnect->connectionProgressEvent(*mIMConnect, 0, 0, text == NULL ? String::null : text);
-	}
+	//if (mIMConnect)
+	//{
+	//	mIMConnect->connectionProgressEvent(*mIMConnect, 0, 0, text == NULL ? String::null : text);
+	//}
 }
 
 void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *text)
@@ -148,7 +148,7 @@ void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *te
 
 	if (mIMConnect)
 	{
-		mIMConnect->connectionProgressEvent(*mIMConnect, 0, 0, text == NULL ? String::null : text);
+		mIMConnect->disconnectedEvent(*mIMConnect, true, text == NULL ? String::null : text);
 	}
 }
 
