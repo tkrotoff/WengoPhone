@@ -26,24 +26,46 @@
 
 bool Processes::isRunning(const std::string & processName) {
 #ifdef WIN32
-    //check if another instance is already running
- 	int index= 0;
- 	int instance_counter = 0;
- 	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,0);
- 	PROCESSENTRY32* processInfo =new PROCESSENTRY32;
- 	processInfo->dwSize = sizeof(PROCESSENTRY32);
- 	
- 	while(Process32Next(hSnapShot,processInfo)!=FALSE) {
- 	    std::string s(processInfo->szExeFile);
- 	    if (s == processName) {
- 	        instance_counter++;
- 	    }
-    }
- 	        //if another instance is detected, exit
- 	if (instance_counter == 2) {
-	    return true;
-    }
+	//check if another instance is already running
+	int instance_counter = 0;
+	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	PROCESSENTRY32* processInfo =new PROCESSENTRY32;
+	processInfo->dwSize = sizeof(PROCESSENTRY32);
+	
+	while( Process32Next(hSnapShot,processInfo) != FALSE ) {
+		std::string s(processInfo->szExeFile);
+		if (s == processName) {
+			instance_counter++;
+		}
+	}
+
+	//if another instance is detected, exit
+	if (instance_counter == 2) {
+		return true;
+	}
     return false;
+#else
+	/* FIXME: Need implementation on other platforms */
+	return false;
+#endif /* WIN32 */
+}
+
+bool Processes::killProcess(const std::string & processName) {
+#ifdef WIN32
+ 	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	PROCESSENTRY32* processInfo =new PROCESSENTRY32;
+	processInfo->dwSize = sizeof(PROCESSENTRY32);
+	
+	//retrive the pid
+	while( Process32Next(hSnapShot,processInfo) != FALSE ) {
+		std::string s(processInfo->szExeFile);
+		if (s == processName) {
+			HANDLE ps = OpenProcess( SYNCHRONIZE|PROCESS_TERMINATE, FALSE, processInfo->th32ProcessID);
+			return TerminateProcess(ps, 0);
+		}
+	}
+
+	return false;
 #else
     /* FIXME: Need implementation on other platforms */
     return false;

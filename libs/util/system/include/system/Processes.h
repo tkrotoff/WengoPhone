@@ -23,9 +23,15 @@
 
 #include <string>
 
-class Processes : NonCopyable {
+/**
+ *
+ * @author Mathieu Stute
+ */
+ class Processes : NonCopyable {
 public:
-    static bool isRunning(const std::string & processName);
+	static bool isRunning(const std::string & processName);
+
+	static bool killProcess(const std::string & processName);
 };
 
 #endif /* PROCESSES_H */
