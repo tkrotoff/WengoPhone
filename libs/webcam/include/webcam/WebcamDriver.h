@@ -60,10 +60,7 @@ public:
 	 * Implements singleton pattern. This method create a WebcamDriver with
 	 * WEBCAM_FORCE_IMAGE_FORMAT flag.
 	 */
-	static WebcamDriver * getInstance() {
-		static WebcamDriver * instance = new WebcamDriver(WEBCAM_FORCE_IMAGE_FORMAT);
-		return instance;
-	}
+	static WebcamDriver * getInstance();
 
 	/** Do not use: this is an internal method. */
 	void cleanup();
@@ -120,6 +117,8 @@ public:
 	void flipHorizontally(bool flip);
 
 private:
+
+	static WebcamDriver * instance;
 
 	WebcamDriver(int flags);
 
@@ -189,6 +188,9 @@ private:
 
 	/** Conversion flags. */
 	int _convFlags;
+
+	/** True if the WebcamDriver is running and used. */
+	bool _isRunning;
 };
 
 #endif	//WEBCAMDRIVER_H

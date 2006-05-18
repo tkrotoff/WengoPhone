@@ -28,6 +28,16 @@ WebcamDriverFactory * WebcamDriver::_factory = 0;
 #include <iostream>
 using namespace std;
 
+WebcamDriver * WebcamDriver::instance = NULL;
+
+WebcamDriver * WebcamDriver::getInstance() {
+	if (!instance) {
+		instance = new WebcamDriver(WEBCAM_FORCE_IMAGE_FORMAT);	
+	}
+
+	return instance;
+}
+
 WebcamDriver::WebcamDriver(int flags)
 : IWebcamDriver(flags) {
 	if (!_factory) {
@@ -51,6 +61,8 @@ WebcamDriver::WebcamDriver(int flags)
 	_flags = flags;
 
 	_convFlags = PIX_NO_FLAG;
+
+	_isRunning = false;
 }
 
 WebcamDriver::~WebcamDriver() {
@@ -77,15 +89,20 @@ std::string WebcamDriver::getDefaultDevice() {
 }
 
 webcamerrorcode WebcamDriver::setDevice(const std::string & deviceName) {
-	cleanup();
+	if (!_isRunning) {
+		cleanup();
 
-	std::string actualDeviceName = deviceName;
-	if (actualDeviceName.empty()) {
-		actualDeviceName = getDefaultDevice();
+		std::string actualDeviceName = deviceName;
+		if (actualDeviceName.empty()) {
+			actualDeviceName = getDefaultDevice();
+		}
+
+		LOG_DEBUG("desired device: " + deviceName + ", actual device: " + actualDeviceName);
+		return _webcamPrivate->setDevice(actualDeviceName);
+	} else {
+		LOG_WARN("WebcamDriver is running. Can't set a device.");
+		return WEBCAM_NOK;
 	}
-
-	LOG_DEBUG("desired device: " + deviceName + ", actual device: " + actualDeviceName);
-	return _webcamPrivate->setDevice(actualDeviceName);
 }
 
 bool WebcamDriver::isOpened() const {
@@ -93,8 +110,13 @@ bool WebcamDriver::isOpened() const {
 }
 
 void WebcamDriver::startCapture() {
-	LOG_DEBUG("Starting capture");
-	_webcamPrivate->startCapture();
+	if (!_isRunning) {
+		LOG_DEBUG("Starting capture");
+		_webcamPrivate->startCapture();
+		_isRunning = true;
+	} else {
+		LOG_INFO("Capture is already started");
+	}
 }
 
 void WebcamDriver::pauseCapture() {
@@ -103,26 +125,34 @@ void WebcamDriver::pauseCapture() {
 }
 
 void WebcamDriver::stopCapture() {
-	LOG_DEBUG("Stopping capture");
-	_webcamPrivate->stopCapture();
-	cleanup();
+	if (_isRunning) {
+		LOG_DEBUG("Stopping capture");
+		_webcamPrivate->stopCapture();
+		cleanup();
+		_isRunning = false;
+	}
 }
 
 webcamerrorcode WebcamDriver::setPalette(pixosi palette) {
-	if (_webcamPrivate->setPalette(palette) == WEBCAM_NOK) {
-		LOG_DEBUG("This webcam does not support palette #" + String::fromNumber(palette));
-		if (isFormatForced()) {
-			LOG_DEBUG("Palette conversion will be forced");
-			_desiredPalette = palette;
-			initializeConvImage();
-			return WEBCAM_OK;
+	if (!_isRunning) {
+		if (_webcamPrivate->setPalette(palette) == WEBCAM_NOK) {
+			LOG_DEBUG("This webcam does not support palette #" + String::fromNumber(palette));
+			if (isFormatForced()) {
+				LOG_DEBUG("Palette conversion will be forced");
+				_desiredPalette = palette;
+				initializeConvImage();
+				return WEBCAM_OK;
+			} else {
+				return WEBCAM_NOK;
+			}
 		} else {
-			return WEBCAM_NOK;
+			LOG_DEBUG("This webcam supports palette #" + String::fromNumber(palette));
+			_desiredPalette = palette;
+			return WEBCAM_OK;
 		}
 	} else {
-		LOG_DEBUG("This webcam supports palette #" + String::fromNumber(palette));
-		_desiredPalette = palette;
-		return WEBCAM_OK;
+		LOG_INFO("WebcamDriver is running. Can't set palette.");
+		return WEBCAM_NOK;
 	}
 }
 
@@ -135,17 +165,22 @@ pixosi WebcamDriver::getPalette() const {
 }
 
 webcamerrorcode WebcamDriver::setFPS(unsigned fps) {
-	if (_webcamPrivate->setFPS(fps) == WEBCAM_NOK) {
-		LOG_DEBUG("This webcam does not support the desired fps(" + String::fromNumber(fps) + "). Will force it");
-		_forceFPS = true;
+	if (!_isRunning) {
+		if (_webcamPrivate->setFPS(fps) == WEBCAM_NOK) {
+			LOG_DEBUG("This webcam does not support the desired fps(" + String::fromNumber(fps) + "). Will force it");
+			_forceFPS = true;
+		} else {
+			LOG_DEBUG("Webcam FPS changed to " + String::fromNumber(fps));
+			_forceFPS = false;
+		}
+
+		_forcedFPS = fps;
+
+		return WEBCAM_OK;
 	} else {
-		LOG_DEBUG("Webcam FPS changed to " + String::fromNumber(fps));
-		_forceFPS = false;
+		LOG_INFO("WebcamDriver is running. Can't set FPS.");
+		return WEBCAM_NOK;
 	}
-
-	_forcedFPS = fps;
-
-	return WEBCAM_OK;
 }
 
 unsigned WebcamDriver::getFPS() const {
@@ -153,20 +188,25 @@ unsigned WebcamDriver::getFPS() const {
 }
 
 webcamerrorcode WebcamDriver::setResolution(unsigned width, unsigned height) {
-	LOG_DEBUG("try to change resolution: (width, height) = " + String::fromNumber(width) + "," + String::fromNumber(height));
-	if (_webcamPrivate->setResolution(width, height) == WEBCAM_NOK) {
-		if (isFormatForced()) {
+	if (!_isRunning) {
+		LOG_DEBUG("try to change resolution: (width, height) = " + String::fromNumber(width) + "," + String::fromNumber(height));
+		if (_webcamPrivate->setResolution(width, height) == WEBCAM_NOK) {
+			if (isFormatForced()) {
+				_desiredWidth = width;
+				_desiredHeight = height;
+				initializeConvImage();
+				return WEBCAM_OK;
+			} else {
+				return WEBCAM_NOK;
+			}
+		} else {
 			_desiredWidth = width;
 			_desiredHeight = height;
-			initializeConvImage();
 			return WEBCAM_OK;
-		} else {
-			return WEBCAM_NOK;
 		}
 	} else {
-		_desiredWidth = width;
-		_desiredHeight = height;
-		return WEBCAM_OK;
+		LOG_INFO("WebcamDriver is running. Can't set resolution.");
+		return WEBCAM_NOK;
 	}
 }
 
