@@ -74,10 +74,16 @@ protected:
 
 	IMConnect(IMAccount & account) : _imAccount(account) {
 		connectedEvent += boost::bind(&IMConnect::connectedEventHandler, this, _1);
+		disconnectedEvent += boost::bind(&IMConnect::disconnectedEventHandler, this, _1, _2, _3);
 	}
 
 	void connectedEventHandler(IMConnect & sender) {
 		_imAccount.setConnected(true);
+	}
+
+	void disconnectedEventHandler(IMConnect & sender,
+		bool connectionError, const std::string & reason) {
+		_imAccount.setConnected(false);
 	}
 
 	IMAccount & _imAccount;
