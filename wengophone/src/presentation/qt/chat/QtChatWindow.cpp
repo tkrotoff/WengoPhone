@@ -342,6 +342,10 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 		ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
 		if (widget->getSessionId() == imChatSession->getId()) {
 			_tabWidget->setCurrentIndex(i);
+			if (imChatSession->isUserCreated()){
+                show();
+                return;
+			}
 			if ( ! _dialog->isVisible())
 			{
                 _dialog->showMinimized ();

@@ -178,6 +178,9 @@ QMenu * QtPhoneCall::createMenu() {
 QMenu * QtPhoneCall::createInviteMenu() {
 	PhoneLine & phoneLine = dynamic_cast < PhoneLine & > (_cPhoneCall.getPhoneCall().getPhoneLine());
 
+    if (phoneLine.getPhoneCallList().size() == 0)
+        return NULL;
+
 	QMenu * menu = new QMenu(tr("Invite to conference"));
 
 	PhoneLine::PhoneCallList phoneCallList = phoneLine.getPhoneCallList();
@@ -452,11 +455,15 @@ void QtPhoneCall::transferButtonClicked() {
 
 void QtPhoneCall::openPopup(int x, int y) {
 	QMenu * m = createInviteMenu();
-	_actionInvite->setMenu(m);
-	_popup->exec(QPoint(x, y));
-	_actionInvite->setMenu(NULL);
-	_actionInvite->setEnabled(true);
-	delete m;
+	if ( m ) {
+        _actionInvite->setMenu(m);
+        _popup->exec(QPoint(x, y));
+        _actionInvite->setMenu(NULL);
+        _actionInvite->setEnabled(true);
+        delete m;
+        return;
+	}
+    _popup->exec(QPoint(x, y));
 }
 
 void QtPhoneCall::timerEvent(QTimerEvent * event) {
@@ -549,10 +556,9 @@ void QtPhoneCall::showToaster(){
 
     if (!isIncoming())
         return;
-
     QtCallToaster * toaster = new QtCallToaster();
-    toaster->setTitle(QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName()));
-    toaster->setMessage(tr("is calling you"));
+    toaster->setTitle(tr("New incoming call"));
+    toaster->setMessage(QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName()));
     connect(toaster,SIGNAL(callButtonClicked()),SLOT(acceptCall()));
     connect(toaster,SIGNAL(hangupButtonClicked()),SLOT(rejectCall()));
     toaster->setPixmap(QPixmap(":/pics/export1_96.png"));

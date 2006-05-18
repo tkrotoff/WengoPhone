@@ -208,7 +208,9 @@ void QtWengoPhone::initThreadSafe() {
 
 	//Dialpad
 	QtDialpad * qtDialpad = new QtDialpad(this);
+
 	Widget::createLayout(_ui->tabDialpad)->addWidget(qtDialpad->getWidget());
+    qtDialpad->getWidget()->setMaximumSize(196,228);
 
 	_qtHistoryWidget = NULL;
 
@@ -364,10 +366,9 @@ void QtWengoPhone::initThreadSafe() {
 	//Status bar
 	_statusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
 
-	//FIXME: can i create the widget here ?
-//	setPhoneCall(new QtContactCallListWidget(_cWengoPhone,(_wengoPhoneWindow)));
-
 	updatePresentation();
+	_wengoPhoneWindow->resize(QSize(config.getProfileWidth(),config.getProfileHeight()));
+    _wengoPhoneWindow->move(QPoint(config.getProfilePosX(),config.getProfilePoxY()));
 	_wengoPhoneWindow->show();
 }
 
@@ -752,8 +753,17 @@ void QtWengoPhone::editMyProfile() {
 }
 
 void QtWengoPhone::exitApplication() {
+
+    Config & config = ConfigManager::getInstance().getCurrentConfig();
+    // Save the window size
+    QSize winsize = _wengoPhoneWindow->size();
+    config.set(Config::PROFILE_WIDTH,winsize.width());
+    config.set(Config::PROFILE_HEIGHT,winsize.height());
+    // Save the window position
+    QPoint winpos = _wengoPhoneWindow->pos();
+    config.set(Config::PROFILE_POSX,winpos.x());
+    config.set(Config::PROFILE_POSY,winpos.y());
 	QApplication::closeAllWindows ();
-//	_wengoPhoneWindow->hide();
 	_cWengoPhone.terminate();
 	_trayIcon->hide();
 	QCoreApplication::exit(EXIT_SUCCESS);
