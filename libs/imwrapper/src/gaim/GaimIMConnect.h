@@ -45,6 +45,8 @@ public:
 
 	bool equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol);
 
+	bool isConnected() {return _connected;};
+	void setConnected(bool connected) {_connected = connected;};
 
 private:
 
@@ -56,6 +58,8 @@ private:
 	void AddYahooAccountParams(void *gaimAccount, IMAccountParameters & mParams);
 	void AddOscarAccountParams(void *gaimAccount, IMAccountParameters & mParams);
 	void AddJabberAccountParams(void *gaimAccount, IMAccountParameters & mParams);
+
+	bool _connected;
 };
 
 #endif	//GAIMIMCONNECT_H

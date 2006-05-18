@@ -118,6 +118,7 @@ void GaimConnectMngr::ConnConnectedCbk(GaimConnection *gc)
 
 	if (mIMConnect)
 	{
+		mIMConnect->setConnected(true);
 		mIMConnect->connectedEvent(*mIMConnect);
 	}
 }
@@ -126,8 +127,9 @@ void GaimConnectMngr::ConnDisconnectedCbk(GaimConnection *gc)
 {
 	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
-	if (mIMConnect)
+	if (mIMConnect && mIMConnect->isConnected())
 	{
+		mIMConnect->setConnected(false);
 		mIMConnect->disconnectedEvent(*mIMConnect, false, String::null);
 	}
 }
@@ -148,6 +150,7 @@ void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *te
 
 	if (mIMConnect)
 	{
+		mIMConnect->setConnected(false);
 		mIMConnect->disconnectedEvent(*mIMConnect, true, text == NULL ? String::null : text);
 	}
 }
