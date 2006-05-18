@@ -251,7 +251,13 @@ void ChatWidget::enterPressed(){
     _chatHistory->insertHtml (text2Emoticon(replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>")));
     _chatHistory->ensureCursorVisible();
 
-    newMessage(_imChatSession, prepareMessageForSending(_chatEdit->toPlainText()));
+	QString tmp = Emoticon2Text(_chatEdit->toHtml());
+	
+	// bad and ugly hack
+	QTextEdit textEditTmp(NULL);
+	textEditTmp.setHtml(tmp);
+
+    newMessage(_imChatSession, prepareMessageForSending(textEditTmp.toPlainText()));
 
     _chatEdit->clear();
     _chatEdit->setFocus();
@@ -330,7 +336,8 @@ const QString ChatWidget::Emoticon2Text(const QString &htmlstr){
 
 	for (int i = 0; i < emoticons.size(); i++)
 	{
-		tmp.replace(QRegExp(emoticons[i].getHtmlRegExp(),Qt::CaseInsensitive),emoticons[i].getDefaultText());
+		//tmp.replace(QRegExp(emoticons[i].getHtmlRegExp(),Qt::CaseInsensitive),emoticons[i].getDefaultText());
+		tmp = tmp.replace(emoticons[i].getHtml2(),emoticons[i].getDefaultText());
 	}
 	return tmp;
 }

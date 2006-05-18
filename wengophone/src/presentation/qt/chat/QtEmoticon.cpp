@@ -46,8 +46,14 @@ QString QtEmoticon::getHtml()
 
 QString QtEmoticon::getHtmlRegExp()
 {
-	return QString("<img src=\"%1\" \\/>").arg(_path);
+	return QString("<img src=\"%1\" />").arg(_path);
 }
+
+QString QtEmoticon::getHtml2()
+{
+	return QString("<img src=\"%1\" />").arg(_path);
+}
+
 
 bool QtEmoticon::isNull()
 {

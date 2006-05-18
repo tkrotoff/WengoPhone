@@ -56,6 +56,8 @@ public:
 	QString getHtmlRegExp();
 	
 	QString getHtml();
+
+	QString getHtml2();
 	
 	bool isNull();
 	
