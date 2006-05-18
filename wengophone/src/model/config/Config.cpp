@@ -202,7 +202,7 @@ Config::Config(const std::string & name)
 
 	_keyDefaultValueMap[AUDIO_SMILEYS_DIR_KEY] = File::convertPathSeparators(resourcesPath + "sounds/tones/");
 	_keyDefaultValueMap[AUDIO_AEC_KEY] = true;
-	_keyDefaultValueMap[AUDIO_HALFDUPLEX_KEY] = true;
+	_keyDefaultValueMap[AUDIO_HALFDUPLEX_KEY] = false;
 
 	_keyDefaultValueMap[PROFILE_LAST_USED_NAME_KEY] = empty;
 	_keyDefaultValueMap[PROFILE_WIDTH] = 786;
