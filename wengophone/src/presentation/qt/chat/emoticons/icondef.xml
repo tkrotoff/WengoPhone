@@ -57,4 +57,50 @@
 		<button>face-kiss48.png</button>
 	</icon>
 	
+    <icon>
+		<text>:-p</text>
+		<text>:p</text>
+		<regexp>(\:-\p)</regexp>
+		<object>face-smile-big22.png</object>
+		<button>face-smile-big48.png</button>
+	</icon>
+
+    <icon>
+		<text>;-)</text>
+		<text>;)</text>
+		<regexp>(\;-\))</regexp>
+		<object>face-wink22.png</object>
+		<button>face-wink48.png</button>
+	</icon>
+    
+    <icon>
+		<text>:-(</text>
+		<text>:(</text>
+		<regexp>(\:-\()</regexp>
+		<object>face-sad22.png</object>
+		<button>face-sad48.png</button>
+	</icon>
+    
+    <icon>
+		<text>>:-)</text>
+		<text>>:D</text>
+		<text>>:p</text>
+        <text>>:-D</text>
+		<text>>:-p</text>
+        <text>}:-)</text>
+        <text>}:-p</text>
+        <text>}:-D</text>
+        <regexp>(\>:-\))</regexp>
+		<object>face-devil-grin22.png</object>
+		<button>face-devil-grin48.png</button>
+	</icon>
+    
+    <icon>
+		<text>:-|</text>
+		<text>:|</text>
+		<regexp>(\:-|)</regexp>
+		<object>face-plain22.png</object>
+		<button>face-plain48.png</button>
+	</icon>
+    
 </icondef>
