@@ -289,8 +289,6 @@ private:
 
 	QMenu * createStatusMenu();
 
-	void updateTrayMenuHandler(ContactList & sender, Contact & contact);
-
 	void timeoutEventHandler();
 
 	QMenu * createCallLandLineTrayMenu();

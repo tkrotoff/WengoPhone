@@ -124,6 +124,8 @@ public:
 	 */
 	static bool exists(const std::string & path);
 
+	const static std::string directorySeparator;
+
 protected:
 
 	std::string _filename;

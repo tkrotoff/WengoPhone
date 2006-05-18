@@ -41,9 +41,18 @@
 	#endif
 #endif
 
+
+
 #include <dirent.h>
 
 #include <string>
+
+#if defined(OS_WINDOWS)
+	const std::string File::directorySeparator = "\\";
+#else
+	const std::string File::directorySeparator = "/";
+#endif /* defined(OS_WINDOWS) */
+
 #include <iostream>
 using namespace std;
 
@@ -108,7 +117,7 @@ StringList File::getDirectoryList() const {
 			}
 
 			struct stat statinfo;
-			std::string absPath = _filename + dir;
+			std::string absPath = _filename + directorySeparator + dir;
 			if (stat(absPath.c_str(), &statinfo) == 0) {
 				if (S_ISDIR(statinfo.st_mode)) {
 					//ep->d_name is a directory

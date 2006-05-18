@@ -118,6 +118,7 @@ libs = [
 	'stun',
 	'gsm',
 	'wtimer',
+	'owutil',
 ]
 
 
