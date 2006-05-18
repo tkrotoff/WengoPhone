@@ -366,6 +366,8 @@ void ContactProfile::setWengoPhoneId(const std::string & wengoId) {
 		removeIMContact(IMContact(EnumIMProtocol::IMProtocolSIPSIMPLE, _wengoPhoneId));
 	}
 
-	Profile::setWengoPhoneId(wengoId);
-	addIMContact(IMContact(EnumIMProtocol::IMProtocolSIPSIMPLE, _wengoPhoneId));
+	if (!wengoId.empty()) {
+		Profile::setWengoPhoneId(wengoId);
+		addIMContact(IMContact(EnumIMProtocol::IMProtocolSIPSIMPLE, _wengoPhoneId));
+	}
 }
