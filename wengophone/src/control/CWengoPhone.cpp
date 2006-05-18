@@ -189,6 +189,9 @@ void CWengoPhone::openWengoUrlWithoutAuth(const std::string & url) {
 	//TODO: retrieve the language from the configuration
 	static const std::string langCode = "fra";
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string language = config.getLanguage();
+
 	//tune the url for Wengo
 	std::string finalUrl = url;
 	finalUrl += "&wl=" + string(WengoPhoneBuildId::SOFTPHONE_NAME);

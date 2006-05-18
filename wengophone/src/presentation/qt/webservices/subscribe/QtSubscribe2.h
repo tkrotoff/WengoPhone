@@ -22,6 +22,8 @@
 
 #include <QObject>
 
+class CWengoPhone;
+
 class QString;
 class QDialog;
 class QWidget;
@@ -37,7 +39,7 @@ class QtSubscribe2 : public QObject {
 	Q_OBJECT
 public:
 
-	QtSubscribe2(const QString & nickName, const QString & password, const QString & email, QWidget * parent);
+	QtSubscribe2(CWengoPhone & cWengoPhone, const QString & nickName, const QString & password, const QString & email, QWidget * parent);
 
 	~QtSubscribe2();
 
@@ -50,6 +52,8 @@ private Q_SLOTS:
 private:
 
 	void show();
+
+	CWengoPhone & _cWengoPhone;
 
 	Ui::SubscribeWengo2 * _ui;
 

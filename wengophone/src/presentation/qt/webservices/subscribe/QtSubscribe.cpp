@@ -132,9 +132,11 @@ void QtSubscribe::wengoSubscriptionEventHandlerThreadSafe(WsWengoSubscribe::Subs
 
 	switch (status) {
 	case WsWengoSubscribe::SubscriptionOk:
+		//Close previous page
+		_subscribeWindow->close();
 		//Next page
-		/*QtSubscribe2(_ui->nicknameLineEdit->text(), QString::fromStdString(password),
-				_ui->emailLineEdit->text(), _subscribeWindow);*/
+		new QtSubscribe2(_cSubscribe.getCWengoPhone(), _ui->nicknameLineEdit->text(), QString::fromStdString(password),
+				_ui->emailLineEdit->text(), _subscribeWindow);
 		break;
 
 	case WsWengoSubscribe::SubscriptionBadQuery:

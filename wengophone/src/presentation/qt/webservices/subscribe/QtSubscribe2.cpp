@@ -22,7 +22,13 @@
 #include "ui_SubscribeWengo2.h"
 
 #include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/imaccount/QtIMAccountManager.h>
 #include <presentation/qt/login/QtLogin.h>
+
+#include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+
+#include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
 
@@ -30,8 +36,9 @@
 
 #include <QtGui>
 
-QtSubscribe2::QtSubscribe2(const QString & nickName, const QString & password, const QString & email, QWidget * parent)
-	: QObject(parent) {
+QtSubscribe2::QtSubscribe2(CWengoPhone & cWengoPhone, const QString & nickName, const QString & password, const QString & email, QWidget * parent)
+	: QObject(parent),
+	_cWengoPhone(cWengoPhone) {
 
 	_subscribeWindow = new QDialog(parent);
 
@@ -59,12 +66,15 @@ void QtSubscribe2::show() {
 }
 
 void QtSubscribe2::configureLogin() {
-	/*_qtWengoPhone->getLogin()->setLogin(_ui->emailLineEdit->text().toStdString());
-	_qtWengoPhone->getLogin()->setPassword(_ui->passwordLineEdit->text().toStdString());
-	_qtWengoPhone->getLogin()->setAutoLogin(true);
-	_qtWengoPhone->getLogin()->getWidget()->exec();*/
+	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhone.getPresentation();
+	qtWengoPhone->getLogin()->setLogin(_ui->emailLineEdit->text());
+	qtWengoPhone->getLogin()->setPassword(_ui->passwordLineEdit->text());
+	qtWengoPhone->getLogin()->setAutoLogin(true);
+	qtWengoPhone->getLogin()->show();
 	_subscribeWindow->close();
 }
 
 void QtSubscribe2::addIMAccount() {
+	QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfile()->getUserProfile(),
+		_cWengoPhone, true, _subscribeWindow);
 }
