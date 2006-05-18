@@ -104,6 +104,9 @@ void WengoPhone::init() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//remove WengoPhone Classic from startup registry
+	ClassicExterminator::killClassicExecutable();
+
+	//remove WengoPhone Classic from startup registry
 	ClassicExterminator::removeClassicFromStartup();
 
 	//Imports the Config from WengoPhone Classic.

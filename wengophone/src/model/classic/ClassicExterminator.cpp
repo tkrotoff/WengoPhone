@@ -22,6 +22,8 @@
 
 #include <cutil/global.h>
 
+#include <system/Processes.h>
+
 #include <stdio.h>
 
 #ifdef OS_WINDOWS
@@ -29,6 +31,8 @@
 static const char * STARTUP_REGISTRY_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
 static const char * WENGO_VALUE = "Wengo";
 #endif
+
+static const char * CLASSIC_EXECUTABLE_NAME = "wengophone.exe";
 
 void ClassicExterminator::removeClassicFromStartup() {
 #ifdef OS_WINDOWS
@@ -53,4 +57,5 @@ void ClassicExterminator::removeClassicFromStartup() {
 }
 
 void ClassicExterminator::killClassicExecutable() {
+	Processes::killProcess(std::string(CLASSIC_EXECUTABLE_NAME));
 }
