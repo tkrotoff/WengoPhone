@@ -315,7 +315,7 @@ void QtWengoPhone::initThreadSafe() {
 	connect(_ui->actionSearchWengoUsers, SIGNAL(triggered()), SLOT(showSearchContactWindows()));
 
 	//actionLog_off
-	connect(_ui->actionLog_off, SIGNAL(triggered()), SLOT(logoff()));
+	//connect(_ui->actionLog_off, SIGNAL(triggered()), SLOT(logoff()));
 
 	// Tab selection
 	connect(_ui->tabWidget,SIGNAL(currentChanged (int)),SLOT(tabSelectionChanged(int)));

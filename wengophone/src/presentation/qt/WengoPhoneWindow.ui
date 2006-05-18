@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>282</width>
-    <height>590</height>
+    <width>329</width>
+    <height>602</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -360,8 +360,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>282</width>
-     <height>21</height>
+     <width>329</width>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -419,6 +419,19 @@
     <addaction name="actionShow_contact_groups" />
     <addaction name="actionHideContactsOffline" />
    </widget>
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionSendSms" />
+    <addaction name="actionForward_incoming_calls" />
+    <addaction name="separator" />
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="separator" />
+    <addaction name="actionAccept" />
+    <addaction name="actionHangup" />
+    <addaction name="actionHold_Resume" />
+   </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>&amp;Wengo</string>
@@ -443,20 +456,6 @@
     <addaction name="actionOpenWengoAccount" />
     <addaction name="separator" />
     <addaction name="actionClose" />
-    <addaction name="actionLog_off" />
-   </widget>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionSendSms" />
-    <addaction name="actionForward_incoming_calls" />
-    <addaction name="separator" />
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="separator" />
-    <addaction name="actionAccept" />
-    <addaction name="actionHangup" />
-    <addaction name="actionHold_Resume" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -468,9 +467,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>571</y>
-     <width>282</width>
-     <height>19</height>
+     <y>580</y>
+     <width>329</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>
