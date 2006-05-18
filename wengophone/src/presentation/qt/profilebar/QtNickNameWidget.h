@@ -62,9 +62,9 @@ public Q_SLOTS:
 
 	void connected(IMAccount * pImAccount);
 
-	void disconnected(IMAccount * pImAccount, bool connectionError, const std::string & reason);
+	void disconnected(IMAccount * pImAccount, bool connectionError, const QString & reason);
 
-	void connectionProgress(IMAccount * pImAccount, int currentStep, int totalSteps, const std::string & infoMessage);
+	void connectionProgress(IMAccount * pImAccount, int currentStep, int totalSteps, const QString & infoMessage);
 
 	void userProfileUpdated();
 

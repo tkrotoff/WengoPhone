@@ -141,22 +141,27 @@ void QtNickNameWidget::connected(IMAccount * pImAccount) {
 	switch (imProtocol) {
 	case EnumIMProtocol::IMProtocolMSN:
 		_msnLabel->setPixmap(QPixmap(PICS_MSN_ON));
+		_msnLabel->setToolTip("MSN");
 		break;
 
 	case EnumIMProtocol::IMProtocolSIPSIMPLE:
 		_wengoLabel->setPixmap(QPixmap(PICS_WENGO_ON));
+		_wengoLabel->setToolTip("Wengo");
 		break;
 
 	case EnumIMProtocol::IMProtocolYahoo:
 		_yahooLabel->setPixmap(QPixmap(PICS_YAHOO_ON));
+		_yahooLabel->setToolTip("Yahoo!");
 		break;
 
 	case EnumIMProtocol::IMProtocolAIMICQ:
 		_aimLabel->setPixmap(QPixmap(PICS_AIM_ON));
+		_aimLabel->setToolTip("AIM / ICQ");
 		break;
 
 	case EnumIMProtocol::IMProtocolJabber:
 		_jabberLabel->setPixmap(QPixmap(PICS_JABBER_ON));
+		_jabberLabel->setToolTip("Jabber / GoogleTalk");
 		break;
 
 	default:
@@ -164,7 +169,7 @@ void QtNickNameWidget::connected(IMAccount * pImAccount) {
 	}
 }
 
-void QtNickNameWidget::disconnected(IMAccount * pImAccount, bool connectionError, const std::string & reason) {
+void QtNickNameWidget::disconnected(IMAccount * pImAccount, bool connectionError, const QString & reason) {
 	EnumIMProtocol::IMProtocol imProtocol = pImAccount->getProtocol();
 
 	QString tooltip;
@@ -174,9 +179,10 @@ void QtNickNameWidget::disconnected(IMAccount * pImAccount, bool connectionError
 	case EnumIMProtocol::IMProtocolMSN: {
 		if (connectionError) {
 			_msnLabel->setPixmap(QPixmap(PICS_MSN_ERROR));
-			_msnLabel->setToolTip("MSN Error: " + QString::fromStdString(reason));
+			_msnLabel->setToolTip("MSN Error: " + reason);
 		} else {
 			_msnLabel->setPixmap(QPixmap(PICS_MSN_OFF));
+			_msnLabel->setToolTip("MSN");
 		}
 		break;
 	}
@@ -184,9 +190,10 @@ void QtNickNameWidget::disconnected(IMAccount * pImAccount, bool connectionError
 	case EnumIMProtocol::IMProtocolSIPSIMPLE: {
 		if (connectionError) {
 			_wengoLabel->setPixmap(QPixmap(PICS_WENGO_ERROR));
-			_wengoLabel->setToolTip("Wengo Error: " + QString::fromStdString(reason));
+			_wengoLabel->setToolTip("Wengo Error: " + reason);
 		} else {
 			_wengoLabel->setPixmap(QPixmap(PICS_WENGO_OFF));
+			_wengoLabel->setToolTip("Wengo");
 		}
 		break;
 	}
@@ -194,9 +201,10 @@ void QtNickNameWidget::disconnected(IMAccount * pImAccount, bool connectionError
 	case EnumIMProtocol::IMProtocolYahoo: {
 		if (connectionError) {
 			_yahooLabel->setPixmap(QPixmap(PICS_YAHOO_ERROR));
-			_yahooLabel->setToolTip("Yahoo! Error: " + QString::fromStdString(reason));
+			_yahooLabel->setToolTip("Yahoo! Error: " + reason);
 		} else {
 			_yahooLabel->setPixmap(QPixmap(PICS_YAHOO_OFF));
+			_yahooLabel->setToolTip("Yahoo!");
 		}
 		break;
 	}
@@ -204,19 +212,21 @@ void QtNickNameWidget::disconnected(IMAccount * pImAccount, bool connectionError
 	case EnumIMProtocol::IMProtocolAIMICQ: {
 		if (connectionError) {
 			_aimLabel->setPixmap(QPixmap(PICS_AIM_ERROR));
-			_aimLabel->setToolTip("AIM / ICQ Error: " + QString::fromStdString(reason));
+			_aimLabel->setToolTip("AIM / ICQ Error: " + reason);
 		} else {
 			_aimLabel->setPixmap(QPixmap(PICS_AIM_OFF));
+			_aimLabel->setToolTip("AIM / ICQ");
 		}
 		break;
 	}
 
 	case EnumIMProtocol::IMProtocolJabber: {
 		if (connectionError) {
-			_jabberLabel->setPixmap(QPixmap(PICS_JABBER_OFF));
-			_jabberLabel->setToolTip("Jabber / GoogleTalk Error: " + QString::fromStdString(reason));
-		} else {
 			_jabberLabel->setPixmap(QPixmap(PICS_JABBER_ERROR));
+			_jabberLabel->setToolTip("Jabber / GoogleTalk Error: " + reason);
+		} else {
+			_jabberLabel->setPixmap(QPixmap(PICS_JABBER_OFF));
+			_jabberLabel->setToolTip("Jabber / GoogleTalk");
 		}
 		break;
 	}
@@ -227,29 +237,34 @@ void QtNickNameWidget::disconnected(IMAccount * pImAccount, bool connectionError
 }
 
 void QtNickNameWidget::connectionProgress(IMAccount * pImAccount,
-	int currentStep, int totalSteps, const std::string & infoMessage) {
+	int currentStep, int totalSteps, const QString & infoMessage) {
 
 	EnumIMProtocol::IMProtocol imProtocol = pImAccount->getProtocol();
 
 	switch (imProtocol) {
 	case EnumIMProtocol::IMProtocolMSN:
 		_msnLabel->setPixmap(QPixmap(PICS_MSN_ERROR));
+		_msnLabel->setToolTip("MSN Info: " + infoMessage);
 		break;
 
 	case EnumIMProtocol::IMProtocolSIPSIMPLE:
 		_wengoLabel->setPixmap(QPixmap(PICS_WENGO_ERROR));
+		_wengoLabel->setToolTip("Wengo Info: " + infoMessage);
 		break;
 
 	case EnumIMProtocol::IMProtocolYahoo:
 		_yahooLabel->setPixmap(QPixmap(PICS_YAHOO_ERROR));
+		_yahooLabel->setToolTip("Jabber / GoogleTalk Info: " + infoMessage);
 		break;
 
 	case EnumIMProtocol::IMProtocolAIMICQ:
 		_aimLabel->setPixmap(QPixmap(PICS_AIM_ERROR));
+		_aimLabel->setToolTip("AIM / ICQ Info: " + infoMessage);
 		break;
 
 	case EnumIMProtocol::IMProtocolJabber:
 		_jabberLabel->setPixmap(QPixmap(PICS_JABBER_ERROR));
+		_jabberLabel->setToolTip("Jabber / GoogleTalk Info: " + infoMessage);
 		break;
 
 	default:

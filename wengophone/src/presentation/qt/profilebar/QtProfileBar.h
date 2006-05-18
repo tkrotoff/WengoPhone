@@ -54,11 +54,11 @@ public:
 
 Q_SIGNALS:
 
-	void connectEventSignal(IMAccount * imAccount);
+	void connectedEventSignal(IMAccount * imAccount);
 
-	void disconnectedEventSignal(IMAccount * imAccount, bool connectionError, const std::string & reason);
+	void disconnectedEventSignal(IMAccount * imAccount, bool connectionError, const QString & reason);
 
-	void connectionProgressEventSignal(IMAccount * imAccount, int currentStep, int totalSteps, const std::string & infoMessage);
+	void connectionProgressEventSignal(IMAccount * imAccount, int currentStep, int totalSteps, const QString & infoMessage);
 
 	void myPresenceStatusEventSignal(QVariant status);
 

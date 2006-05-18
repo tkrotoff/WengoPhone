@@ -159,19 +159,19 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	PresenceHandler & presence = _cUserProfile.getUserProfile().getPresenceHandler();
 
 	presence.myPresenceStatusEvent +=
-		boost::bind(&QtProfileBar::myPresenceStatusEventHandler,this,_1,_2,_3);
+		boost::bind(&QtProfileBar::myPresenceStatusEventHandler, this, _1, _2, _3);
 
-	connect(this, SIGNAL(connectEventSignal(IMAccount *)),
-		_nickNameWidget,SLOT(connected(IMAccount *)));
+	connect(this, SIGNAL(connectedEventSignal(IMAccount *)),
+		_nickNameWidget, SLOT(connected(IMAccount *)));
 
-	connect(this, SIGNAL(disconnectedEventSignal(IMAccount *)),
-		_nickNameWidget,SLOT(disconnected(IMAccount *)));
+	connect(this, SIGNAL(disconnectedEventSignal(IMAccount *, bool, const QString &)),
+		_nickNameWidget, SLOT(disconnected(IMAccount *, bool, const QString &)));
 
-	connect(this, SIGNAL(connectionProgressEventSignal(IMAccount *, int, int, const std::string &)),
-		_nickNameWidget, SLOT(connectionProgress(IMAccount *, int, int, const std::string &)));
+	connect(this, SIGNAL(connectionProgressEventSignal(IMAccount *, int, int, const QString &)),
+		_nickNameWidget, SLOT(connectionProgress(IMAccount *, int, int, const QString &)));
 
 	if ( !connect(this,SIGNAL(myPresenceStatusEventSignal(QVariant  )),
-		this,SLOT  (myPresenceStatusEventSlot( QVariant ))) ) {
+		this,SLOT (myPresenceStatusEventSlot( QVariant ))) ) {
 		LOG_FATAL("Signal / slot connection error");
 	}
 }
@@ -179,7 +179,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 // Called in the model thread
 void QtProfileBar::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
 	IMAccount * pImAccount = &imAccount;
-	connectEventSignal(pImAccount);
+	connectedEventSignal(pImAccount);
 }
 
 // Called in the model thread
@@ -187,14 +187,14 @@ void QtProfileBar::disconnectedEventHandler (ConnectHandler & sender, IMAccount 
 	bool connectionError, const std::string & reason) {
 
 	IMAccount * pImAccount = &imAccount;
-	disconnectedEventSignal(pImAccount, connectionError, reason);
+	disconnectedEventSignal(pImAccount, connectionError, QString::fromStdString(reason));
 }
 
 void QtProfileBar::connectionProgressEventHandler(ConnectHandler & sender, IMAccount & imAccount,
 			int currentStep, int totalSteps, const std::string & infoMessage) {
 
 	IMAccount * pImAccount = &imAccount;
-	connectionProgressEventSignal(pImAccount, currentStep, totalSteps, infoMessage);
+	connectionProgressEventSignal(pImAccount, currentStep, totalSteps, QString::fromStdString(infoMessage));
 }
 
 void QtProfileBar::myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,

@@ -95,23 +95,17 @@ void ConnectHandler::disconnect(IMAccount & imAccount) {
 }
 
 void ConnectHandler::connectedEventHandler(IMConnect & sender) {
-	if (!sender.getIMAccount().isConnected()) {
-		connectedEvent(*this, sender.getIMAccount());
-	}
+	connectedEvent(*this, sender.getIMAccount());
 }
 
 void ConnectHandler::disconnectedEventHandler(IMConnect & sender, bool connectionError, const std::string & reason) {
-	if (sender.getIMAccount().isConnected()) {
-		disconnectedEvent(*this, sender.getIMAccount(), connectionError, reason);
-	}
+	disconnectedEvent(*this, sender.getIMAccount(), connectionError, reason);
 }
 
 void ConnectHandler::connectionProgressEventHandler(IMConnect & sender, int currentStep, int totalSteps,
 				const std::string & infoMessage) {
 
-	if (!sender.getIMAccount().isConnected()) {
-		connectionProgressEvent(*this, sender.getIMAccount(), currentStep, totalSteps, infoMessage);
-	}
+	connectionProgressEvent(*this, sender.getIMAccount(), currentStep, totalSteps, infoMessage);
 }
 
 void ConnectHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
