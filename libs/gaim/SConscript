@@ -79,6 +79,14 @@ if WengoOSWindows() and WengoCCMSVC():
 		'binary-lib/msvc/softokn3.dll',
 		'binary-lib/msvc/ssl3.dll',
 		'binary-lib/msvc/zlib1.dll',
+		'binary-lib/msvc/idletrack.dll',
+		'binary-lib/msvc/libatk-1.0-0.dll',
+		'binary-lib/msvc/libgdk_pixbuf-2.0-0.dll',
+		'binary-lib/msvc/libgdk-win32-2.0-0.dll',
+		'binary-lib/msvc/libgobject-2.0-0.dll',
+		'binary-lib/msvc/libgtk-win32-2.0-0.dll',
+		'binary-lib/msvc/libpango-1.0-0.dll',
+		'binary-lib/msvc/libpangowin32-1.0-0.dll',
 	]
 
 	env.WengoCopyToBuildDir('binary-lib/msvc/')
