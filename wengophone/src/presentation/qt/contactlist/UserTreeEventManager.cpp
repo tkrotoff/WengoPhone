@@ -215,7 +215,7 @@ void UserTreeEventManager::dropEvent(QDropEvent * event) {
            			_cContactList.merge(_selectedItem->text(0).toStdString(),
 						item->text(0).toStdString());
 				}
-			} else {
+			} else if (item->parent()) {
 				// The destination group and the source group are different
 				// This is a Contact move
 				ContactProfile contactProfile = _cContactList.getContactProfile(_selectedItem->text(0).toStdString());
