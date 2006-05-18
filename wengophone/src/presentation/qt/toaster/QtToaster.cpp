@@ -58,6 +58,24 @@ void QtToaster::setupGui(){
 
 	connect ( _button1,SIGNAL(clicked()),SLOT(button1Slot()));
 
+	QFrame * frame = Object::findChild<QFrame *>( _widget,"frame_2" );
+
+    QRect r = frame->rect();
+
+    QLinearGradient lg( QPointF( 1, r.top() ), QPointF( 1, r.bottom() ) );
+    lg.setColorAt ( 0, qApp->palette().color(QPalette::Window) );
+
+    QColor dest = qApp->palette().color(QPalette::Window);
+    float red = ((float )dest.red()) / 1.3f;
+    float blue = ((float )dest.blue()) / 1.3f;
+    float green = ((float )dest.green()) / 1.3f;
+    dest = QColor( (int)red,(int)green,(int)blue);
+    lg.setColorAt ( 1, dest  );
+
+	QPalette palette = frame->palette();
+	palette.setBrush(frame->backgroundRole(), QBrush(lg));
+	frame->setPalette(palette);
+
 }
 
 void QtToaster::setPixmap(const QPixmap &pixmap){

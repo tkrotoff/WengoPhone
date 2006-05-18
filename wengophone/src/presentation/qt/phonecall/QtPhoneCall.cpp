@@ -81,7 +81,7 @@ void QtPhoneCall::initThreadSafe() {
 			"style=white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
 			" font-weight:400; font-style:normal; text-decoration:none;'><p style=' margin-top:0px; "
 			" margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-			"font-size:8pt;'><span style=' font-size:13pt; font-weight:600;'>%1</span></p></body></html>").arg(callAddress);
+			"font-size:8pt;'><span style=' font-size:13pt; font-weight:600;'>%1</span></p></body></html>").arg(QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName()));
 
 	_nickNameLabel->setText(tmp);
 	_nickNameLabel->setToolTip(sipAddress);
@@ -549,9 +549,10 @@ void QtPhoneCall::showToaster(){
 
     if (!isIncoming())
         return;
+
     QtCallToaster * toaster = new QtCallToaster();
-    toaster->setTitle(QString::fromStdString(_cPhoneCall.getPeerDisplayName()));
-    toaster->setMessage(tr("is calling"));
+    toaster->setTitle(QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName()));
+    toaster->setMessage(tr("is calling you"));
     connect(toaster,SIGNAL(callButtonClicked()),SLOT(acceptCall()));
     connect(toaster,SIGNAL(hangupButtonClicked()),SLOT(rejectCall()));
     toaster->setPixmap(QPixmap(":/pics/export1_96.png"));

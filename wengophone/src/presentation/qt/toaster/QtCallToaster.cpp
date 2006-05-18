@@ -60,6 +60,23 @@ void QtCallToaster::setupGui(){
     connect(_ui->callLabel,SIGNAL(clicked()),SLOT(callButtonSlot()));
 
     resize(1,1);
+
+
+    QRect r = _ui->frame_3->rect();
+
+    QLinearGradient lg( QPointF( 1, r.top() ), QPointF( 1, r.bottom() ) );
+    lg.setColorAt ( 0, qApp->palette().color(QPalette::Window) );
+
+    QColor dest = qApp->palette().color(QPalette::Window);
+    float red = ((float )dest.red()) / 1.3f;
+    float blue = ((float )dest.blue()) / 1.3f;
+    float green = ((float )dest.green()) / 1.3f;
+    dest = QColor( (int)red,(int)green,(int)blue);
+    lg.setColorAt ( 1, dest  );
+
+	QPalette palette = _ui->frame_3->palette();
+	palette.setBrush(_ui->frame_3->backgroundRole(), QBrush(lg));
+	_ui->frame_3->setPalette(palette);
 }
 
 void QtCallToaster::setTitle(const QString & title){
