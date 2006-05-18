@@ -399,19 +399,6 @@
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
    </widget>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionSendSms" />
-    <addaction name="actionForward_incoming_calls" />
-    <addaction name="separator" />
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="separator" />
-    <addaction name="actionAccept" />
-    <addaction name="actionHangup" />
-    <addaction name="actionHold_Resume" />
-   </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>&amp;Wengo</string>
@@ -455,6 +442,18 @@
     <addaction name="separator" />
     <addaction name="actionShow_contact_groups" />
     <addaction name="actionHideContactsOffline" />
+   </widget>
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionSendSms" />
+    <addaction name="separator" />
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="separator" />
+    <addaction name="actionAccept" />
+    <addaction name="actionHangup" />
+    <addaction name="actionHold_Resume" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
