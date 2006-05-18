@@ -110,6 +110,7 @@ void PhoneCall::hold() {
 		if (!_hold) {
 			_phoneLine.holdCall(_callId);
 			_hold = false;
+			setState(EnumPhoneCallState::PhoneCallStateHold);
 		}
 	} else {
 		_hold = true;
