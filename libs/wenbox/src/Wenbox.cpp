@@ -70,7 +70,7 @@ bool Wenbox::open() {
 }
 
 bool Wenbox::close() {
-	if (_wenboxPrivate) {
+	if (_wenboxPrivate && _open) {
 		_open = false;
 		LOG_DEBUG("close device");
 		return _wenboxPrivate->close();
@@ -79,7 +79,7 @@ bool Wenbox::close() {
 }
 
 std::string Wenbox::getDeviceName() {
-	if (_wenboxPrivate) {
+	if (_wenboxPrivate && _open) {
 		return _wenboxPrivate->getDeviceName();
 	}
 	return String::null;
@@ -88,7 +88,7 @@ std::string Wenbox::getDeviceName() {
 std::list<std::string> Wenbox::getAudioDeviceNameList() const {
 	StringList strList;
 
-	if (_wenboxPrivate) {
+	if (_wenboxPrivate && _open) {
 		return _wenboxPrivate->getAudioDeviceNameList();
 	}
 
@@ -96,21 +96,21 @@ std::list<std::string> Wenbox::getAudioDeviceNameList() const {
 }
 
 bool Wenbox::setDefaultMode(Mode mode) {
-	if (_wenboxPrivate) {
+	if (_wenboxPrivate && _open) {
 		return _wenboxPrivate->setDefaultMode(mode);
 	}
 	return false;
 }
 
 bool Wenbox::switchMode(Mode mode) {
-	if (_wenboxPrivate) {
+	if (_wenboxPrivate && _open) {
 		return _wenboxPrivate->switchMode(mode);
 	}
 	return false;
 }
 
 bool Wenbox::setLCDMessage(const std::string & message) {
-	if (_wenboxPrivate) {
+	if (_wenboxPrivate && _open) {
 		LOG_DEBUG("LCD message changed");
 		return _wenboxPrivate->setLCDMessage(message);
 	}
@@ -118,7 +118,7 @@ bool Wenbox::setLCDMessage(const std::string & message) {
 }
 
 bool Wenbox::setRingingTone(int tone) {
-	if (_wenboxPrivate) {
+	if (_wenboxPrivate && _open) {
 		LOG_DEBUG("ringing tone changed");
 		return _wenboxPrivate->setRingingTone(tone);
 	}
@@ -126,7 +126,7 @@ bool Wenbox::setRingingTone(int tone) {
 }
 
 bool Wenbox::setState(PhoneCallState state, const std::string & phoneNumber) {
-	if (_wenboxPrivate) {
+	if (_wenboxPrivate && _open) {
 		return _wenboxPrivate->setState(state, phoneNumber);
 	}
 	return false;
