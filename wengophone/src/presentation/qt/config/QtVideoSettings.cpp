@@ -40,6 +40,7 @@
 #include <QtGui>
 
 static const int VIDEO_QUALITY_COLUMN = 0;
+static const char * VIDEO_TEST_CALL = "334";
 
 QtVideoSettings::QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	: QWidget(NULL), _cWengoPhone(cWengoPhone) {
@@ -182,8 +183,8 @@ void QtVideoSettings::enableVideo(bool enable) {
 }
 
 void QtVideoSettings::makeTestCallClicked() {
-	CUserProfile * up = _cWengoPhone.getCUserProfile();
-	if( up ) {
-		up->getUserProfile().getActivePhoneLine()->makeCall("334", true);
+	CUserProfile * cUserProfile = _cWengoPhone.getCUserProfile();
+	if (cUserProfile) {
+		cUserProfile->getUserProfile().getActivePhoneLine()->makeCall(VIDEO_TEST_CALL, true);
 	}
 }

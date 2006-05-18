@@ -35,6 +35,8 @@
 
 #include <QtGui>
 
+static const char * AUDIO_TEST_CALL = "333";
+
 QtAudioSettings::QtAudioSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObject(parent), _cWengoPhone(cWengoPhone) {
 
@@ -90,8 +92,8 @@ void QtAudioSettings::readConfig() {
 }
 
 void QtAudioSettings::makeTestCallClicked() {
-	CUserProfile * up = _cWengoPhone.getCUserProfile();
-	if( up ) {
-		up->getUserProfile().getActivePhoneLine()->makeCall("333", false);
+	CUserProfile * cUserProfile = _cWengoPhone.getCUserProfile();
+	if (cUserProfile) {
+		cUserProfile->getUserProfile().getActivePhoneLine()->makeCall(AUDIO_TEST_CALL, false);
 	}
 }
