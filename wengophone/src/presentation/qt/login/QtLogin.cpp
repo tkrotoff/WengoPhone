@@ -24,8 +24,13 @@
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/webservices/subscribe/QtSubscribe.h>
 
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
 #include <qtutil/MouseEventFilter.h>
 #include <qtutil/WidgetBackgroundImage.h>
+
+#include <util/WebBrowser.h>
 
 #include <QtGui>
 
@@ -61,8 +66,16 @@ int QtLogin::show() {
 }
 
 void QtLogin::createAccountLabelClicked() {
-	if (_qtWengoPhone.getSubscribe()) {
+	/*if (_qtWengoPhone.getSubscribe()) {
 		_qtWengoPhone.getSubscribe()->show();
+	}*/
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string lang = config.getLanguage();
+
+	if (lang == "fr") {
+		WebBrowser::openUrl("http://www.wengo.com/public/public.php?page=subscribe_wengos&lang=fra");
+	} else {
+		WebBrowser::openUrl("http://www.wengo.com/public/public.php?page=subscribe_wengos&lang=eng");
 	}
 }
 
