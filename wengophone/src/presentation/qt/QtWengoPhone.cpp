@@ -345,7 +345,7 @@ void QtWengoPhone::initThreadSafe() {
 		_browser = new QtBrowser(NULL);
 		_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
 		_ui->tabWidget->insertTab(_ui->tabWidget->count(), (QWidget*) _browser->getWidget(), tr("Home"));
-		_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
+		_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/loading.htm");
 		_ui->tabWidget->setCurrentWidget((QWidget*) _browser->getWidget());
 	}
 #endif
