@@ -80,8 +80,10 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 
 UserProfile::~UserProfile() {
 	disconnect();
-    Thread::sleep(5);
-	_activePhoneLine->getSipWrapper().terminate();
+	if (_activePhoneLine) {
+		Thread::sleep(5);
+		_activePhoneLine->getSipWrapper().terminate();
+	}
 
 	if (_sms) {
 		delete _sms;
