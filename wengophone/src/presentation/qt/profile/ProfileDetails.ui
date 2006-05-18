@@ -426,11 +426,13 @@
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
+  <tabstop>groupComboBox</tabstop>
   <tabstop>firstNameLineEdit</tabstop>
   <tabstop>lastNameLineEdit</tabstop>
   <tabstop>birthDate</tabstop>
   <tabstop>genderComboBox</tabstop>
   <tabstop>countryComboBox</tabstop>
+  <tabstop>stateLineEdit</tabstop>
   <tabstop>cityLineEdit</tabstop>
   <tabstop>mobilePhoneLineEdit</tabstop>
   <tabstop>wengoPhoneLineEdit</tabstop>
@@ -438,6 +440,7 @@
   <tabstop>workPhoneLineEdit</tabstop>
   <tabstop>emailLineEdit</tabstop>
   <tabstop>webLineEdit</tabstop>
+  <tabstop>avatarPixmapButton</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>cancelButton</tabstop>
  </tabstops>
