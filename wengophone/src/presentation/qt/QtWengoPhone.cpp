@@ -255,7 +255,7 @@ void QtWengoPhone::initThreadSafe() {
 	connect(_ui->actionConfiguration, SIGNAL(triggered()), SLOT(showConfig()));
 
 	//actionShowForum
-	connect(_ui->actionShowForum, SIGNAL(_ui->actionAccept), SLOT(showForum()));
+	connect(_ui->actionShowForum, SIGNAL(triggered()), SLOT(showForum()));
 
 	//actionShowHelp
 	/*
