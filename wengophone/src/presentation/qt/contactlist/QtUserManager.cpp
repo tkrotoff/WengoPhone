@@ -394,6 +394,10 @@ void QtUserManager::hideOffLineUsers() {
 }
 
 void QtUserManager::safeSortUsers() {
+	/* FIXME: sort is desactivated because of the 'Mad cow disease':
+		the contact list is trembling while being sorting which
+		is very annoying.
+
 	//FIXME: only use sortList or deleteList
 	if (!_sortUsers)
 		return;
@@ -441,6 +445,7 @@ void QtUserManager::safeSortUsers() {
 			}
 		}
 	}
+	*/
 }
 
 void QtUserManager::sortUsers() {
