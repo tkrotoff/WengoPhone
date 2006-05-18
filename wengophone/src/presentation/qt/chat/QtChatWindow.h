@@ -93,6 +93,8 @@ protected:
 
 	typedef QMap <int, QtChatContactWidget *> ChatContactWidgets;
 
+	void flashWindow();
+
     ChatWidget  *   _chatWidget;
 
     QtChatTabWidget *   _tabWidget;

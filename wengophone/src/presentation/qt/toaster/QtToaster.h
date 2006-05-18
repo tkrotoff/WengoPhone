@@ -43,14 +43,6 @@ public:
 
 	void setButton1Pixmap(const QPixmap & pixmap);
 
-	void setButton2Title(const QString & title);
-
-	void setButton2Pixmap(const QPixmap & pixmap);
-
-	void setButton3Title(const QString & title);
-
-	void setButton3Pixmap(const QPixmap & pixmap);
-
 	void hideButton(int num);
 
 	void showToaster();
@@ -66,10 +58,6 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void button1Clicked();
-
-    void button2Clicked();
-
-    void button3Clicked();
 
 protected:
 
@@ -104,10 +92,6 @@ protected:
 protected Q_SLOTS:
 
     void button1Slot();
-
-    void button2Slot();
-
-    void button3Slot();
 
 protected:
 

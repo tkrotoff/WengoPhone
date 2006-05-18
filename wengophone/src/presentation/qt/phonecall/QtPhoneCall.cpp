@@ -549,7 +549,6 @@ void QtPhoneCall::showToaster(){
 
     if (!isIncoming())
         return;
-
     QtCallToaster * toaster = new QtCallToaster();
     toaster->setTitle(QString::fromStdString(_cPhoneCall.getPeerDisplayName()));
     toaster->setMessage(tr("is calling"));

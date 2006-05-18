@@ -25,7 +25,7 @@
 #include <qtutil/QtWengoStyleLabel.h>
 
 QtToaster::QtToaster(QWidget * parent , Qt::WFlags f ):
-QWidget(parent, Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint )
+QWidget(parent, Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint )
 {
 	setupGui();
 }
@@ -51,9 +51,6 @@ void QtToaster::setupGui(){
 
 	_button1 = Object::findChild<QPushButton *>( _widget,"actionButton1" );
 
-	_button2 = Object::findChild<QPushButton *>( _widget,"actionButton2" );
-
-	_button3 = Object::findChild<QPushButton *>( _widget,"actionButton3" );
 
 	_pixmapLabel = Object::findChild<QLabel *>( _widget,"pixmapLabel");
 
@@ -61,9 +58,6 @@ void QtToaster::setupGui(){
 
 	connect ( _button1,SIGNAL(clicked()),SLOT(button1Slot()));
 
-	connect ( _button2,SIGNAL(clicked()),SLOT(button2Slot()));
-
-	connect ( _button3,SIGNAL(clicked()),SLOT(button3Slot()));
 }
 
 void QtToaster::setPixmap(const QPixmap &pixmap){
@@ -94,29 +88,6 @@ void QtToaster::setButton1Pixmap(const QPixmap & pixmap){
 	_button1->setIcon(QIcon(pixmap));
 }
 
-void QtToaster::setButton2Title(const QString & title){
-	_button2->setText(title);
-}
-
-void QtToaster::setButton2Pixmap(const QPixmap & pixmap){
-    _button2->setMinimumSize(pixmap.size());
-    _button2->setMaximumSize(pixmap.size());
-    _button2->setIconSize(pixmap.size());
-	_button2->setFlat(true);
-	_button2->setIcon(QIcon(pixmap));
-}
-
-void QtToaster::setButton3Title(const QString & title){
-	_button3->setText(title);
-}
-
-void QtToaster::setButton3Pixmap(const QPixmap & pixmap){
-    _button3->setMinimumSize(pixmap.size());
-    _button3->setMaximumSize(pixmap.size());
-    _button3->setIconSize(pixmap.size());
-    _button3->setFlat(true);
-	_button3->setIcon(QIcon(pixmap));
-}
 
 void QtToaster::timerEvent(QTimerEvent *event){
 	QDesktopWidget * desktop = QApplication::desktop();
@@ -178,10 +149,10 @@ void QtToaster::hideButton(int num){
 			_button1->hide();
 			break;
 		case 2:
-			_button2->hide();
+
 			break;
 		case 3:
-			_button3->hide();
+
 		default:
 			break;
 	}
@@ -202,12 +173,3 @@ void QtToaster::button1Slot(){
     close();
 }
 
-void QtToaster::button2Slot(){
-    button2Clicked();
-    close();
-}
-
-void QtToaster::button3Slot(){
-    button3Clicked();
-    close();
-}

@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
+#include <cutil/global.h>
 #include "QtChatWindow.h"
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
@@ -38,6 +38,10 @@
 #include <qtutil/Object.h>
 #include <util/Logger.h>
 
+#ifdef OS_WINDOWS
+#include <windows.h>
+#endif
+
 ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession)
 : QObject(NULL), _cChatHandler(cChatHandler){
     // LOG_DEBUG("ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(), _imChatSession(imChatSession)");
@@ -58,7 +62,6 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 
 	// _dialog = new QDialog(findMainWindow());
 	_dialog = new QDialog(NULL, Qt::Window | Qt::WindowMinMaxButtonsHint);
-
 
 	QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
 	qtWengoPhone->setChatWindow( _dialog );
@@ -105,8 +108,12 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 	_dialog->setWindowTitle(tr("WengoPhone chat window"));
 	if ( imChatSession.isUserCreated() )
         _dialog->show();
-    else
-        _dialog->showMinimized ();
+    else{
+        if ( !_dialog->isVisible())
+            _dialog->showMinimized ();
+            // _dialog->activateWindow();
+            flashWindow();
+    }
 	//_dialog->show();
 
 	// Create the contact list scroll area
@@ -250,11 +257,14 @@ void ChatWindow::show(){
         _dialog->hide();
 	_dialog->showNormal();
 	_dialog->raise();
-	_dialog->activateWindow();
+	// _dialog->activateWindow();
+	flashWindow();
 }
 
 void ChatWindow::messageReceivedEventHandler(IMChatSession & sender) {
 	messageReceivedSignal(&sender);
+	// _dialog->activateWindow();
+	//flashWindow();
 }
 
 void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
@@ -270,7 +280,13 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
 
 		QString msg = QString::fromUtf8(message.c_str());
 
-		_dialog->show();
+        if (!_dialog->isVisible())
+        {
+            _dialog->showMinimized ();
+            flashWindow();
+        }
+        else
+            flashWindow();
 
 		int tabs = _tabWidget->count();
 		for (int i = 0; i < tabs; i++)
@@ -283,7 +299,7 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
 				if ( _tabWidget->currentWidget() != _chatWidget ) {
 					_tabWidget->setBlinkingTab(i);
 				}
-				_dialog->activateWindow();
+				flashWindow();
 				return;
 			}
 		}
@@ -326,7 +342,14 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 		ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
 		if (widget->getSessionId() == imChatSession->getId()) {
 			_tabWidget->setCurrentIndex(i);
-			show();
+			if ( ! _dialog->isVisible())
+			{
+                _dialog->showMinimized ();
+                // _dialog->activateWindow();
+                flashWindow();
+            }
+            else
+                flashWindow();
 			return;
 		}
 	}
@@ -342,8 +365,12 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 		addChat(imChatSession,from);
 		if (imChatSession->isUserCreated())
             _dialog->show();
-        else
-            _dialog->showMinimized ();
+        else{
+            if ( !_dialog->isVisible())
+                _dialog->showMinimized ();
+                // _dialog->activateWindow();
+                flashWindow();
+        }
 	} else {
 		LOG_FATAL("New chat session is empty !!!!!");
 	}
@@ -594,4 +621,15 @@ QMainWindow * ChatWindow::findMainWindow(){
         }
     }
     return NULL;
+}
+void ChatWindow::flashWindow() {
+#ifdef OS_WINDOWS
+	FLASHWINFO flashInfo;
+	flashInfo.cbSize = sizeof(FLASHWINFO);
+	flashInfo.hwnd = _dialog->winId();
+	flashInfo.dwFlags = FLASHW_TRAY | FLASHW_TIMERNOFG;
+	flashInfo.uCount = 5;
+	flashInfo.dwTimeout = 500;
+	FlashWindowEx(&flashInfo);
+#endif
 }
