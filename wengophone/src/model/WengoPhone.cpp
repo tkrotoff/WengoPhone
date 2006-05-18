@@ -28,6 +28,7 @@
 #include "wenbox/WenboxPlugin.h"
 #include "webservices/subscribe/Subscribe.h"
 #include "WengoPhoneBuildId.h"
+#include "classic/ClassicExterminator.h"
 
 #include <util/Logger.h>
 #include <thread/Timer.h>
@@ -101,6 +102,9 @@ WengoPhone::~WengoPhone() {
 
 void WengoPhone::init() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	//remove WengoPhone Classic from startup registry
+	ClassicExterminator::removeClassicFromStartup();
 
 	//Imports the Config from WengoPhone Classic.
 	ClassicConfigImporter::importConfig(config.getConfigDir());
