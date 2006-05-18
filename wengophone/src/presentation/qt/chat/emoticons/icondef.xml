@@ -95,12 +95,4 @@
 		<button>face-devil-grin48.png</button>
 	</icon>
     
-    <icon>
-		<text>:-|</text>
-		<text>:|</text>
-		<regexp>(\:-|)</regexp>
-		<object>face-plain22.png</object>
-		<button>face-plain48.png</button>
-	</icon>
-    
 </icondef>
