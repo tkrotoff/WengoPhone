@@ -41,9 +41,9 @@
 
 static const char * PNG_FORMAT = "PNG";
 
-QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone,	
+QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone,
 	ContactProfile & contactProfile, QWidget * parent)
-	: QObject(parent), 
+	: QObject(parent),
 	_cWengoPhone(cWengoPhone),
 	_profile(contactProfile) {
 
@@ -171,8 +171,19 @@ void QtProfileDetails::saveProfile() {
 
 void QtProfileDetails::saveContact() {
 	saveProfile();
-	
+
 	ContactProfile & contactProfile = dynamic_cast<ContactProfile &>(_profile);
+
+	if (_ui->groupComboBox->currentText().isEmpty()) {
+		QMessageBox::warning(_profileDetailsWindow,
+			tr("WengoPhone -- No group selected"),
+			tr("A contact must have a group. Please set a group."),
+			QMessageBox::NoButton,
+			QMessageBox::NoButton,
+			QMessageBox::Ok);
+
+		return;
+	}
 
 	int index = _ui->groupComboBox->findText(_ui->groupComboBox->currentText());
 	QVariant groupId;
