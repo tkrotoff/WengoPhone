@@ -1,5 +1,23 @@
 <RCC>
     <qresource prefix="/" >
+        <file>pics/add.png</file>
+        <file>pics/audio/microphone.png</file>
+        <file>pics/audio/play.png</file>
+        <file>pics/audio/progress_1.png</file>
+        <file>pics/audio/progress_1_off.png</file>
+        <file>pics/audio/progress_2.png</file>
+        <file>pics/audio/progress_2_off.png</file>
+        <file>pics/audio/progress_3.png</file>
+        <file>pics/audio/progress_3_off.png</file>
+        <file>pics/audio/progress_4.png</file>
+        <file>pics/audio/progress_4_off.png</file>
+        <file>pics/audio/progress_5.png</file>
+        <file>pics/audio/progress_5_off.png</file>
+        <file>pics/audio/progress_6.png</file>
+        <file>pics/audio/progress_6_off.png</file>
+        <file>pics/audio/progress_7.png</file>
+        <file>pics/audio/progress_7_off.png</file>
+        <file>pics/audio/speaker.png</file>
         <file>pics/browse.png</file>
         <file>pics/callbar/call_bar_button.png</file>
         <file>pics/callbar/call_bar_button_hangup.png</file>
@@ -15,42 +33,48 @@
         <file>pics/chat/chat_send.png</file>
         <file>pics/close_normal.png</file>
         <file>pics/close_on.png</file>
+        <file>pics/config/accounts.png</file>
         <file>pics/config/advanced.png</file>
         <file>pics/config/audio.png</file>
+        <file>pics/config/call-forward.png</file>
         <file>pics/config/general.png</file>
         <file>pics/config/languages.png</file>
-        <file>pics/config/video.png</file>
-        <file>pics/config/accounts.png</file>
-        <file>pics/config/call-forward.png</file>
         <file>pics/config/notifications.png</file>
         <file>pics/config/privacy.png</file>
+        <file>pics/config/video.png</file>
         <file>pics/contact/call.png</file>
         <file>pics/contact/chat.png</file>
         <file>pics/contact/fixe.png</file>
+        <file>pics/contact/home.png</file>
         <file>pics/contact/mobile.png</file>
         <file>pics/contact/sms.png</file>
-        <file>pics/contact/home.png</file>
-        <file>pics/contact/work.png</file>
         <file>pics/contact/wengo.png</file>
+        <file>pics/contact/work.png</file>
         <file>pics/contact_border.png</file>
+        <file>pics/delete.png</file>
+        <file>pics/edit.png</file>
+        <file>pics/exit.png</file>
         <file>pics/export1_96.png</file>
         <file>pics/fond_avatar.png</file>
         <file>pics/group_close.png</file>
         <file>pics/group_open.png</file>
+        <file>pics/headers/IM.png</file>
+        <file>pics/headers/conference.png</file>
+        <file>pics/headers/login.png</file>
+        <file>pics/headers/new-account.png</file>
+        <file>pics/headers/search.png</file>
         <file>pics/history/call_incoming.png</file>
         <file>pics/history/call_missed.png</file>
         <file>pics/history/call_outgoing.png</file>
         <file>pics/history/sms_send.png</file>
         <file>pics/iconbar/add_contact.png</file>
         <file>pics/iconbar/conference.png</file>
+        <file>pics/iconbar/iconBarchat.png</file>
         <file>pics/iconbar/search_contact.png</file>
         <file>pics/iconbar/sms.png</file>
         <file>pics/iconbar/webcam-off.png</file>
-        <file>pics/iconbar/iconBarchat.png</file>
         <file>pics/iconbar/webcam.png</file>
-        <file>pics/add.png</file>
-        <file>pics/delete.png</file>
-        <file>pics/edit.png</file>
+        <file>pics/open.png</file>
         <file>pics/profilebar/bar_end.png</file>
         <file>pics/profilebar/bar_fill.png</file>
         <file>pics/profilebar/bar_on_end.png</file>
@@ -108,36 +132,14 @@
         <file>pics/statusbar/status-network-online.mng</file>
         <file>pics/systray_icon.png</file>
         <file>pics/systray_icon_error.png</file>
+        <file>pics/toaster/chat.png</file>
+        <file>pics/toaster/decrocher.png</file>
+        <file>pics/toaster/raccrocher.png</file>
         <file>pics/update.png</file>
         <file>pics/video_flip.png</file>
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
         <file>pics/wengo.png</file>
-        <file>pics/audio/microphone.png</file>
-        <file>pics/audio/play.png</file>
-        <file>pics/audio/progress_1.png</file>
-        <file>pics/audio/progress_1_off.png</file>
-        <file>pics/audio/progress_2.png</file>
-        <file>pics/audio/progress_2_off.png</file>
-        <file>pics/audio/progress_3.png</file>
-        <file>pics/audio/progress_3_off.png</file>
-        <file>pics/audio/progress_4.png</file>
-        <file>pics/audio/progress_4_off.png</file>
-        <file>pics/audio/progress_5.png</file>
-        <file>pics/audio/progress_5_off.png</file>
-        <file>pics/audio/progress_6.png</file>
-        <file>pics/audio/progress_6_off.png</file>
-        <file>pics/audio/progress_7.png</file>
-        <file>pics/audio/progress_7_off.png</file>
-        <file>pics/audio/speaker.png</file>
-        <file>pics/headers/conference.png</file>
-        <file>pics/headers/IM.png</file>
-        <file>pics/headers/login.png</file>
-        <file>pics/headers/new-account.png</file>
-        <file>pics/headers/search.png</file>
-        <file>pics/toaster/chat.png</file>
-        <file>pics/toaster/decrocher.png</file>
-        <file>pics/toaster/raccrocher.png</file>
     </qresource>
     <qresource prefix="/data" >
         <file>AUTHORS</file>
@@ -219,8 +221,8 @@
         <file>phonecall/VideoWindow2.ui</file>
         <file>profilebar/CreditWidget.ui</file>
         <file>profilebar/EventWidget.ui</file>
-        <file>toaster/QtToaster.ui</file>
         <file>toaster/QtCallToaster.ui</file>
+        <file>toaster/QtToaster.ui</file>
         <file>webservices/softupdate/SoftUpdateWindow.ui</file>
     </qresource>
 </RCC>
