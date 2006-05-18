@@ -36,6 +36,9 @@ pixosi pix_ffmpeg_to_pix_osi(int pix) {
 	case PIX_FMT_RGB24:
 		palette = PIX_OSI_RGB24;
 		break;
+	case PIX_FMT_BGR24:
+		palette = PIX_OSI_BGR24;
+		break;
 	case PIX_FMT_RGB555:
 		palette = PIX_OSI_RGB555;
 		break;
@@ -68,6 +71,9 @@ int pix_ffmpeg_from_pix_osi(pixosi pix) {
 	int palette;
 
 	switch(pix) {
+	case PIX_OSI_BGR24:
+		palette = PIX_FMT_BGR24;
+		break;
 	case PIX_OSI_RGB24:
 		palette = PIX_FMT_RGB24;
 		break;
@@ -77,6 +83,7 @@ int pix_ffmpeg_from_pix_osi(pixosi pix) {
 	case PIX_OSI_RGB565:
 		palette = PIX_FMT_RGB565;
 		break;
+	case PIX_OSI_ARGB32:
 	case PIX_OSI_RGB32:
 	case PIX_OSI_RGBA32:
 		palette = PIX_FMT_RGBA32;

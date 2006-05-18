@@ -27,14 +27,14 @@ typedef struct _pix_quicktime_table_elt {
 } pix_quicktime_table_elt;
 
 pix_quicktime_table_elt pix_quicktime_table[] = {
-	{ PIX_OSI_RGB555, k16BE555PixelFormat },
-	{ PIX_OSI_RGB32, k32ARGBPixelFormat },
-	{ PIX_OSI_RGBA32, k32RGBAPixelFormat },
-	{ PIX_OSI_YUV420P, kYUV420PixelFormat },
-	{ PIX_OSI_RGB24, k24RGBPixelFormat}
+	{ PIX_OSI_BGR24, k24BGRPixelFormat},
+	{ PIX_OSI_ARGB32, k32ARGBPixelFormat },
+	{ PIX_OSI_RGBA32, k32RGBAPixelFormat }
 };
 	//TODO: verify format compatibility with MacOS/Windows then implement remaining formats
 	/*
+	{ PIX_OSI_YUV420P, kYUV420PixelFormat }
+	{ PIX_OSI_RGB24, k24RGBPixelFormat}
 	case k4444YpCbCrA8RPixelFormat:
 	case kCMYKPixelFormat:
 	case k422YpCbCr8PixelFormat:
