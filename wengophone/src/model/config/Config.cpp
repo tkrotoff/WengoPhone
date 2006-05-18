@@ -205,8 +205,8 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[AUDIO_HALFDUPLEX_KEY] = false;
 
 	_keyDefaultValueMap[PROFILE_LAST_USED_NAME_KEY] = empty;
-	_keyDefaultValueMap[PROFILE_WIDTH] = 786;
-	_keyDefaultValueMap[PROFILE_HEIGHT] = 758;
+	_keyDefaultValueMap[PROFILE_WIDTH] = 340;
+	_keyDefaultValueMap[PROFILE_HEIGHT] = 600;
 	_keyDefaultValueMap[PROFILE_POSX] = 100;
 	_keyDefaultValueMap[PROFILE_POSY] = 100;
 
