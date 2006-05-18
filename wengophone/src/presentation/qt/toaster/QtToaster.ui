@@ -647,7 +647,7 @@
             <string/>
            </property>
            <property name="pixmap" >
-            <pixmap resource="../wengophone.qrc" >:/pics/fond_avatar.png</pixmap>
+            <pixmap resource="../wengophone.qrc" >:/pics/default-avatar.png</pixmap>
            </property>
           </widget>
          </item>

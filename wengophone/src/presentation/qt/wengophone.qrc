@@ -146,6 +146,7 @@
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
         <file>pics/wengo.png</file>
+        <file>pics/default-avatar.png</file>
     </qresource>
     <qresource prefix="/data" >
         <file>AUTHORS</file>

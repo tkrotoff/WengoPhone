@@ -561,6 +561,6 @@ void QtPhoneCall::showToaster(){
     toaster->setMessage(QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName()));
     connect(toaster,SIGNAL(callButtonClicked()),SLOT(acceptCall()));
     connect(toaster,SIGNAL(hangupButtonClicked()),SLOT(rejectCall()));
-    toaster->setPixmap(QPixmap(":/pics/export1_96.png"));
+    toaster->setPixmap(QPixmap(":/pics/default-avatar.png"));
     toaster->showToaster();
 }
