@@ -6,7 +6,7 @@ nsis_defines = {}
 WengoPhoneBuildId = WengoGetVariable('WengoPhoneBuildId')
 nsis_defines['PRODUCT_VERSION'] = str(WengoPhoneBuildId['buildId'])
 nsis_defines['BUILD_DIR'] = env.WengoGetRootBuildDir()
-nsis_defines['PRODUCT_NAME'] = 'WengoPhoneNG'
+nsis_defines['PRODUCT_NAME'] = 'WengoPhone'
 nsis_defines['QTDIR'] = os.environ['QTDIR']
 
 if WengoDebugMode():
