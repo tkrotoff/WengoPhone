@@ -20,15 +20,18 @@
 
 #include "ClassicExterminator.h"
 
-#include <windows.h>
+#include <cutil/global.h>
 
 #include <stdio.h>
 
+#ifdef OS_WINDOWS
+#include <windows.h>
 static const char * STARTUP_REGISTRY_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
 static const char * WENGO_VALUE = "Wengo";
+#endif
 
 void ClassicExterminator::removeClassicFromStartup() {
-
+#ifdef OS_WINDOWS
 	long error = 0;
 	HKEY hKey;
 
@@ -46,8 +49,8 @@ void ClassicExterminator::removeClassicFromStartup() {
 		::RegCloseKey(hKey);
 		return;
 	}
+#endif
 }
 
 void ClassicExterminator::killClassicExecutable() {
-	
 }
