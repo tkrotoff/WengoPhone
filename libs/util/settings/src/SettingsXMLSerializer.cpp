@@ -64,6 +64,8 @@ std::string SettingsXMLSerializer::serialize() {
 }
 
 bool SettingsXMLSerializer::unserialize(const std::string & data) {
+	TiXmlBase::SetCondenseWhiteSpace(false);
+
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
 
