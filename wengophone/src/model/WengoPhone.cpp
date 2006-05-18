@@ -110,7 +110,7 @@ void WengoPhone::init() {
 	ClassicExterminator::removeClassicFromStartup();
 
 	//Imports the Config from WengoPhone Classic.
-	ClassicConfigImporter::importConfig(config.getConfigDir());
+	//ClassicConfigImporter::importConfig(config.getConfigDir());
 
 	_wenboxPlugin = new WenboxPlugin(*this);
 	//Sends the Wenbox creation event
