@@ -52,10 +52,10 @@ fi
 ##
 WENGO_BUILD_PATH=$1/$MODE
 WENGO_PATH=$WENGO_BUILD_PATH/wengophone/src/presentation/qt
-WENGO_APP_PATH=$WENGO_PATH/qtwengophone.app
+WENGO_APP_PATH=$WENGO_PATH/WengoPhone.app
 WENGO_RESOURCES_PATH=$WENGO_APP_PATH/Contents/Resources
 WENGO_FRAMEWORK_PATH=$WENGO_APP_PATH/Contents/Frameworks
-WENGO_EXE=$WENGO_APP_PATH/Contents/MacOS/qtwengophone
+WENGO_EXE=$WENGO_APP_PATH/Contents/MacOS/WengoPhone
 WENGO_FRAMEWORK_PREFIX=@executable_path/../Frameworks
 
 ##
@@ -79,12 +79,19 @@ changeInstallName()
 
 testAndMkdir()
 {
-	
+
 	if [ ! -d $1 ]; then
 		mkdir -p $1
 	fi
 }
 
+##
+# Copy the bundle into the desired one
+##
+cp -r $WENGO_PATH/qtwengophone.app $WENGO_APP_PATH
+mv $WENGO_APP_PATH/Contents/MacOS/qtwengophone $WENGO_EXE
+
+##
 ##
 # Creates the needed directories if they do not exist
 ##

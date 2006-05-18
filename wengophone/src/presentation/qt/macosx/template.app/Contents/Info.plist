@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>qtwengophone</string>
+	<string>WengoPhone</string>
 	<key>CFBundleIconFile</key>
 	<string>wengophone.icns</string>
 	<key>CFBundleIdentifier</key>
