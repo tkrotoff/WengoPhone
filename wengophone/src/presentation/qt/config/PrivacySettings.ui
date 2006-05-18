@@ -4,6 +4,9 @@
  <exportmacro></exportmacro>
  <class>PrivacySettings</class>
  <widget class="QWidget" name="PrivacySettings" >
+  <property name="enabled" >
+   <bool>false</bool>
+  </property>
   <property name="geometry" >
    <rect>
     <x>0</x>
