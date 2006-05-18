@@ -88,7 +88,9 @@ testAndMkdir()
 ##
 # Copy the bundle into the desired one
 ##
-cp -r $WENGO_PATH/qtwengophone.app $WENGO_APP_PATH
+
+testAndMkdir $WENGO_APP_PATH
+cp -rf $WENGO_PATH/qtwengophone.app/* $WENGO_APP_PATH
 mv $WENGO_APP_PATH/Contents/MacOS/qtwengophone $WENGO_EXE
 
 ##
