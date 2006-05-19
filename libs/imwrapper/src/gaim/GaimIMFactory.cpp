@@ -207,11 +207,9 @@ void GaimIMFactory::GaimIMInit()
 	configPath = Path::getConfigurationDirPath() + File::convertPathSeparators(".wengophone/");
 #endif
 
-#ifndef OS_WIN32
 	home_dir = g_build_filename(configPath.c_str(), "gaim", NULL);
-	gaim_build_dir(home_dir, S_IRUSR|S_IWUSR|S_IXUSR);
+	File::createPath(home_dir + File::getPathSeparator());
 	gaim_util_set_user_dir(home_dir);
-#endif
 
 	gaim_core_set_ui_ops(&core_wg_ops);
 	gaim_eventloop_set_ui_ops(&eventloop_wg_ops);
