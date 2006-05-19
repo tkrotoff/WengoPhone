@@ -384,7 +384,7 @@
       </font>
      </property>
      <property name="text" >
-      <string>&lt;span style="font-size:18pt;">Login&lt;/span>&lt;br />&lt;br />&lt;span>Please enter your email address and password&lt;/span>
+      <string>&lt;span style="font-size:18pt;">Login&lt;/span>&lt;br />&lt;br />&lt;span>Please enter your email address and&lt;br>password&lt;/span>
 </string>
      </property>
      <property name="indent" >
