@@ -675,7 +675,7 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 	case SipAccount::LoginStateDisconnected:
 #ifdef OS_WINDOWS
 		if (config.getIEActiveX() && wengoAccount) {
-			_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/connecting_fr.htm");
+			_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/loading.htm");
 		}
 #endif
 		break;
