@@ -155,6 +155,7 @@ void QtUserManager::closeUserInfo() {
 		_previous = NULL;
 	}
 	_tree->viewport()->update();
+	_tree->doItemsLayout();
 }
 
 void QtUserManager::openUserInfo(QTreeWidgetItem * i) {
@@ -179,6 +180,8 @@ void QtUserManager::openUserInfo(QTreeWidgetItem * i) {
 		}
 	}
 	_tree->viewport()->update();
+	_tree->doItemsLayout();
+    _tree->scrollToItem ( i );
 }
 
 void QtUserManager::itemClicked(QTreeWidgetItem * item, int) {
