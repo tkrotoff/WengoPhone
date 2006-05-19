@@ -160,8 +160,6 @@ private:
 
 	bool _encrustLocalWebcam;
 
-	QMutex * _mutex;
-
 protected:
 
 	void timerEvent(QTimerEvent * event);

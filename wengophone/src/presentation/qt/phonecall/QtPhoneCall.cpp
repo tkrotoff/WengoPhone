@@ -66,7 +66,7 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 }
 
 void QtPhoneCall::initThreadSafe() {
-    _mutex = new QMutex();
+
 	_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/QtCallContactWidget.ui", _qtWengoPhone->getWidget());
 	_phoneCallWidget->setAutoFillBackground(true);
 
@@ -221,8 +221,7 @@ void QtPhoneCall::stateChangedEventHandler(EnumPhoneCallState::PhoneCallState st
 }
 
 void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state) {
-    QMutexLocker locker(_mutex);
-	std::string codecs;
+ 	std::string codecs;
 	if (_cPhoneCall.getAudioCodecUsed() != CodecList::AudioCodecError) {
 		codecs += _cPhoneCall.getAudioCodecUsed();
 	}
@@ -280,7 +279,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		delete _phoneCallWidget;
 		deleteMe(this);
 		callRejected();
-		break;
+        break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming:
 		_actionAcceptCall->setEnabled(true);
@@ -458,7 +457,7 @@ void QtPhoneCall::transferButtonClicked() {
 }
 
 void QtPhoneCall::openPopup(int x, int y) {
-    QMutexLocker locker(_mutex);
+
 	QMenu * m = createInviteMenu();
 	if ( m ) {
         _actionInvite->setMenu(m);
