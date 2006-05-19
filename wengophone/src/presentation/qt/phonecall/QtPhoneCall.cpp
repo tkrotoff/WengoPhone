@@ -149,7 +149,7 @@ QMenu * QtPhoneCall::createMenu() {
 
 	menu->addAction(_actionAcceptCall);
 
-//	menu->addAction(_actionHangupCall);
+	menu->addAction(_actionHangupCall);
 
 	menu->addAction(_actionHold);
 

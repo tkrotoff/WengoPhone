@@ -105,16 +105,16 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 
 	_tabWidget->removeTab(0);
 	_dialog->resize(300,464);
-	_dialog->setWindowTitle(tr("WengoPhone chat window"));
-	if ( imChatSession.isUserCreated() )
+	_dialog->setWindowTitle(tr("WengoChat"));
+
+	if ( imChatSession.isUserCreated() ){
         _dialog->show();
+	}
     else{
         if ( !_dialog->isVisible())
             _dialog->showMinimized ();
-            // _dialog->activateWindow();
             flashWindow();
     }
-	//_dialog->show();
 
 	// Create the contact list scroll area
 	QGridLayout * frameLayout = new QGridLayout(_contactListFrame);
@@ -480,48 +480,48 @@ void ChatWindow::closeContactListFrame(){
 }
 
 void ChatWindow::createMenu(){
-	
+
 	QtWengoPhone * mainWindow = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
 	QAction * action;
-	
+
 	QMenu * WengoMenu = new QMenu("Wengo");
-	
+
 	action = WengoMenu->addAction(tr("View my &Wengo Account"));
 	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(showWengoAccount()));
-	
+
 	action = WengoMenu->addAction(tr("Edit my &Profile"));
 	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(editMyProfile()));
-	
+
 	WengoMenu->addSeparator ();
-	
+
 	action = WengoMenu->addAction(tr("&Learn more about Wengo Services"));
 	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(showCallOut()));
-	
+
 //	action = WengoMenu->addAction(tr("&Short text messages (SMS) "));
 //	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(showSms()));
-	
+
 //	WengoMenu->addAction(tr("&Voicemail"));
 //	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(showVoiceMail()));
-	
+
 	WengoMenu->addSeparator ();
-	
+
 	action = WengoMenu->addAction(tr("&Open Another Wengo Account"));
 	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(openWengoAccount()));
-	
+
 	WengoMenu->addSeparator ();
 	action = WengoMenu->addAction(tr("&Close"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(hideMainWindow()));
-	
+
 //	action = WengoMenu->addAction(tr("Log off"));
 //	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(logOff()));
-	
+
 	_menuBar->addMenu(WengoMenu);
-	
+
 	QMenu * ContactsMenu = new QMenu(tr("&Contacts"));
-	
+
 	action = ContactsMenu->addAction(tr("Add contact"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(addContact()));
-	
+
 	action = ContactsMenu->addAction(tr("Search for Wengo users"));
 	connect(action,SIGNAL(triggered(bool)),mainWindow,SLOT(showSearchContactWindows()));
 
@@ -534,17 +534,17 @@ void ChatWindow::createMenu(){
 //	ContactsMenu->addAction(tr("Add a group"));
 	ContactsMenu->addAction(tr("Show contact groups"));
 //	ContactsMenu->addSeparator ();
-	
+
 	action = ContactsMenu->addAction(tr("Show / hide contacts offline"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showHideOffLineContacts()));
-	
+
 	_menuBar->addMenu(ContactsMenu);
-	
+
 	QMenu * Actions = new QMenu(tr("&Actions"));
-	
+
 	action = Actions->addAction(tr("Send a short text message (SMS)"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(sendSms()));
-	
+
 //	Actions->addAction(tr("Forward incoming calls"));
 //	Actions->addSeparator ();
 	action = Actions->addAction(tr("Create a conference call"));
@@ -555,72 +555,72 @@ void ChatWindow::createMenu(){
 	_menuBar->addMenu(Actions);
 	action = Actions->addAction(tr("Accept"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(acceptCall()));
-	
+
 	Actions->addAction(tr("Hangup"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(hangupCall()));
-	
+
 	Actions->addAction(tr("Hold / Resume"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(resumeCall()));
-	
+
 	QMenu * ToolsMenu = new QMenu(tr("&Tools"));
-	
+
 	action = ToolsMenu->addAction(tr("Instant Messaging Accounts"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showAccountSettings()));
-	
+
 	ToolsMenu->addSeparator ();
 
 	action = ToolsMenu->addAction(tr("Configuration"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showConfig()));
-	
+
 //	action = ToolsMenu->addAction(tr("Advanced configuration"));
 //	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showAdvancedConfig()));
-	
+
 //	ToolsMenu->addSeparator ();
 //	ToolsMenu->addAction(tr("View toolbar"));
 //	ToolsMenu->addAction(tr("View adressbar"));
 //	ToolsMenu->addAction(tr("View dialpad"));
 //	ToolsMenu->addAction(tr("View avatars in chat window"));
 //	ToolsMenu->addSeparator ();
-	
+
 	QMenu * HistoryMenu = new QMenu(tr("Clear History"));
-	
+
 	action = HistoryMenu->addAction(tr("Outgoing Calls"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistoryOutgoingCalls()));
-	
+
 	action = HistoryMenu->addAction(tr("Incoming Calls"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistoryIncomingCalls()));
-	
+
 	action = HistoryMenu->addAction(tr("Missed Calls"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistoryMissedCalls()));
-	
+
 	action = HistoryMenu->addAction(tr("Chat sessions"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistoryChatSessions()));
-	
+
 	action = HistoryMenu->addAction(tr("Short text message (SMS)"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistorySms()));
-	
+
 	HistoryMenu->addAction(tr("All"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(eraseHistory()));
-	
+
 	ToolsMenu->addMenu(HistoryMenu);
-	
+
 	_menuBar->addMenu(ToolsMenu);
-	
+
 	QMenu * HelpMenu = new QMenu ("&Help");
-	
+
 	action = HelpMenu->addAction(tr("&Forum"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showForum()));
-	
+
 	HelpMenu->addAction(tr("&Wiki / Faq"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showFaq()));
-	
+
 	HelpMenu->addSeparator ();
-	
+
 	HelpMenu->addAction(tr("&About"));
 	connect (action,SIGNAL(triggered(bool)),mainWindow,SLOT(showAbout()));
-	
+
 	_menuBar->addMenu(HelpMenu);
-	
+
 }
 
 QMainWindow * ChatWindow::findMainWindow(){
@@ -637,10 +637,11 @@ QMainWindow * ChatWindow::findMainWindow(){
 }
 void ChatWindow::flashWindow() {
 #ifdef OS_WINDOWS
+    LOG_DEBUG("-************************ FLASHING WINDOW ************************-\n");
 	FLASHWINFO flashInfo;
 	flashInfo.cbSize = sizeof(FLASHWINFO);
 	flashInfo.hwnd = _dialog->winId();
-	flashInfo.dwFlags = FLASHW_TRAY | FLASHW_TIMERNOFG;
+	flashInfo.dwFlags = FLASHW_TRAY; //FLASHW_TRAY | FLASHW_TIMERNOFG;
 	flashInfo.uCount = 5;
 	flashInfo.dwTimeout = 500;
 	FlashWindowEx(&flashInfo);
