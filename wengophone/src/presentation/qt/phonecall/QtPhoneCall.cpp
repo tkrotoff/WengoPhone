@@ -66,6 +66,7 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 }
 
 void QtPhoneCall::initThreadSafe() {
+    _mutex = new QMutex();
 	_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/QtCallContactWidget.ui", _qtWengoPhone->getWidget());
 	_phoneCallWidget->setAutoFillBackground(true);
 
@@ -105,7 +106,7 @@ void QtPhoneCall::initThreadSafe() {
 
 	// Hand-up call
 	_actionHangupCall = new QAction(tr("Hang-up"), _phoneCallWidget);
-	connect(_actionHangupCall, SIGNAL(triggered(bool)), SLOT(rejectActionTriggered(bool)));
+	connect(_actionHangupCall, SIGNAL(triggered(bool)), SLOT(rejectActionTriggered(bool)),Qt::QueuedConnection);
 
 	// Hold
 	_actionHold = new QAction(tr("Hold"), _phoneCallWidget);
@@ -149,7 +150,7 @@ QMenu * QtPhoneCall::createMenu() {
 
 	menu->addAction(_actionAcceptCall);
 
-//	menu->addAction(_actionHangupCall);
+	menu->addAction(_actionHangupCall);
 
 	menu->addAction(_actionHold);
 
@@ -220,6 +221,7 @@ void QtPhoneCall::stateChangedEventHandler(EnumPhoneCallState::PhoneCallState st
 }
 
 void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state) {
+    QMutexLocker locker(_mutex);
 	std::string codecs;
 	if (_cPhoneCall.getAudioCodecUsed() != CodecList::AudioCodecError) {
 		codecs += _cPhoneCall.getAudioCodecUsed();
@@ -398,6 +400,8 @@ void QtPhoneCall::acceptActionTriggered(bool) {
 }
 
 void QtPhoneCall::rejectActionTriggered(bool) {
+
+    LOG_DEBUG("Hangup call ******************\n");
 	switch (_cPhoneCall.getState()) {
 	case EnumPhoneCallState::PhoneCallStateResumed:
 	case EnumPhoneCallState::PhoneCallStateTalking:
@@ -454,6 +458,7 @@ void QtPhoneCall::transferButtonClicked() {
 }
 
 void QtPhoneCall::openPopup(int x, int y) {
+    QMutexLocker locker(_mutex);
 	QMenu * m = createInviteMenu();
 	if ( m ) {
         _actionInvite->setMenu(m);

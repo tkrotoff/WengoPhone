@@ -36,6 +36,7 @@ class QWidget;
 class QLabel;
 class QMenu;
 class QAction;
+class QMutex;
 
 /**
  * Qt Presentation component for PhoneCall.
@@ -158,6 +159,8 @@ private:
 	bool _showVideo;
 
 	bool _encrustLocalWebcam;
+
+	QMutex * _mutex;
 
 protected:
 
