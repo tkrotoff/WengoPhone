@@ -34,7 +34,8 @@ File "${BUILD_DIR}\plds4.dll"
 File "${BUILD_DIR}\softokn3.dll"
 File "${BUILD_DIR}\ssl3.dll"
 File "${BUILD_DIR}\zlib1.dll"
-/** Temporary hack for PC Cillin antivirus false positive */
+
+/** Temporary hack for PC Cillin antivirus false positive. */
 File "${BUILD_DIR}\idletrack.dll"
 File "${BUILD_DIR}\libatk-1.0-0.dll"
 File "${BUILD_DIR}\libgdk_pixbuf-2.0-0.dll"
@@ -108,29 +109,9 @@ SetOutPath "$INSTDIR\lang\"
 File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_fr.qm"
 File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_en.qm"
 
-/** web pages. */
+/** Web pages. */
 SetOutPath "$INSTDIR\webpages\windows\"
 File "${BUILD_DIR}\webpages\windows\*"
-
-/*
-SetOutPath "$INSTDIR\styles\"
-File "dll\styles\*.dll"
-*/
-
-/*
-SetOutPath "$INSTDIR\styles\"
-File "${BUILD_DIR}\libs\wengokeramik\thinkeramik\wengokeramikstyle2.dll"
-*/
-
-/*
-SetOutPath "$INSTDIR\icons\"
-File "${BUILD_DIR}\softphone\runtime\icons\homepage.png"
-*/
-
-/*
-SetOutPath "$INSTDIR\connecting\"
-File "${BUILD_DIR}\softphone\runtime\connecting\*"
-*/
 
 /**
  * So that we can execute wengophone.exe

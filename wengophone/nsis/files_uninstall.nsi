@@ -25,6 +25,21 @@ RMDir "$INSTDIR\emoticons\"
 Delete "$INSTDIR\plugins\*"
 RMDir "$INSTDIR\plugins\"
 
+Delete "$INSTDIR\pics\avatars\*"
+RMDir "$INSTDIR\pics\avatars\"
+
+Delete "$INSTDIR\pics\*"
+RMDir "$INSTDIR\pics\"
+
+Delete "$INSTDIR\webpages\windows\*"
+RMDir "$INSTDIR\webpages\windows\"
+
+Delete "$INSTDIR\webpages\*"
+RMDir "$INSTDIR\webpages\"
+
+Delete "$INSTDIR\imageformats\*"
+RMDir "$INSTDIR\imageformats\"
+
 Delete "$INSTDIR\*"
 RMDir "$INSTDIR"
 

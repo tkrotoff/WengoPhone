@@ -79,7 +79,6 @@ OutFile "${INSTALLER_NAME}"
 !include "nsProcess.nsh"
 
 !include "isUserAdmin.nsi"
-!include "writeToFile.nsi"
 Function .onInit
 	/** Kills running qtwengophone.exe */
 	${nsProcess::KillProcess} "qtwengophone.exe" $R0
