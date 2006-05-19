@@ -190,6 +190,7 @@ void QtUserManager::itemClicked(QTreeWidgetItem * item, int) {
         return;
     }
 
+
     _waitForDoubleClick = true;
     killTimer(_timerId);
     _timerId = startTimer(qApp->doubleClickInterval ());
@@ -222,11 +223,25 @@ void QtUserManager::itemClicked(QTreeWidgetItem * item, int) {
         if (!_menu) {
             _menu = createMenu();
             _menu->popup(QCursor::pos());
+            // clearSelection () is bugged ! We have to clear the selection ourself
+            QList <QTreeWidgetItem * > selectedList = _tree->selectedItems();
+            QList <QTreeWidgetItem * >::iterator iter;
+            for ( iter = selectedList.begin(); iter != selectedList.end(); iter ++){
+                _tree->setItemSelected((*iter),false);
+            }
+            _tree->setItemSelected ( item, true );
         }
         else {
             delete _menu;
             _menu = createMenu();
             _menu->popup(QCursor::pos());
+            // clearSelection () is bugged ! We have to clear the selection ourself
+            QList <QTreeWidgetItem * > selectedList = _tree->selectedItems();
+            QList <QTreeWidgetItem * >::iterator iter;
+            for ( iter = selectedList.begin(); iter != selectedList.end(); iter ++){
+                _tree->setItemSelected((*iter),false);
+            }
+            _tree->setItemSelected ( item, true );
         }
         _button = Qt::NoButton;
         return;
