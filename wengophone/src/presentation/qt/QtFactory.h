@@ -65,7 +65,7 @@ public:
 
 	QtFactory(int argc, char * argv[]) {
 		_app = new QApplication(argc, argv);
-		QCoreApplication::addLibraryPath (".");
+		QCoreApplication::addLibraryPath(".");
 		_qtContactList = NULL;
 		_cWengoPhone = NULL;
 	}

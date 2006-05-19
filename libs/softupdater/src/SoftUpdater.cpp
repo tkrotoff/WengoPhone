@@ -24,7 +24,9 @@
 
 #include <ctime>
 
-SoftUpdater::SoftUpdater() {
+SoftUpdater::SoftUpdater(const std::string & url, const std::string & fileName) {
+	_url = url;
+	_fileName = fileName;
 	_httpRequest = NULL;
 }
 
@@ -34,13 +36,17 @@ SoftUpdater::~SoftUpdater() {
 	}
 }
 
-void SoftUpdater::download(const std::string & url, const std::string & fileName) {
-	_fileName = fileName;
+void SoftUpdater::start() {
+	if (_httpRequest) {
+		LOG_FATAL("file transfer already started");
+		return;
+	}
+
 	_httpRequest = new HttpRequest();
 	_httpRequest->dataReadProgressEvent += boost::bind(&SoftUpdater::dataReadProgressEventHandler, this, _1, _2, _3);
 	_httpRequest->answerReceivedEvent += boost::bind(&SoftUpdater::answerReceivedEventHandler, this, _1, _2, _3, _4);
 
-	_httpRequest->sendRequest(url, String::null);
+	_httpRequest->sendRequest(_url, String::null);
 }
 
 void SoftUpdater::abort() {
@@ -65,6 +71,9 @@ void SoftUpdater::answerReceivedEventHandler(IHttpRequest * sender, int requestI
 		file.write(answer);
 	}
 	downloadFinishedEvent(error);
-	delete sender;
-	sender = NULL;
+	//sender == _httpRequest
+	/*delete sender;
+	sender = NULL;*/
+	delete _httpRequest;
+	_httpRequest = NULL;
 }

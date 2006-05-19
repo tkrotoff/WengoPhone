@@ -45,17 +45,22 @@ public:
 	 */
 	Event<void (HttpRequest::Error error)> downloadFinishedEvent;
 
-	SoftUpdater();
-
-	~SoftUpdater();
-
 	/**
-	 * Downloads a file from an URL to a destination.
+	 * Downloads a file from an URL to a destination file.
 	 *
 	 * @param url URL of the source file (http://login:password@www.website.com/file.txt)
 	 * @param fileName destination file (C:/Program Files/file.txt)
 	 */
-	void download(const std::string & url, const std::string & fileName);
+	SoftUpdater(const std::string & url, const std::string & fileName);
+
+	~SoftUpdater();
+
+	/**
+	 * Starts the file transfer.
+	 *
+	 * Does nothing if the file transfer has been already started.
+	 */
+	void start();
 
 	/**
 	 * @see IHttpRequest::abort()
@@ -71,6 +76,8 @@ private:
 	void answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error);
 
 	std::string _fileName;
+
+	std::string _url;
 
 	HttpRequest * _httpRequest;
 };

@@ -90,10 +90,10 @@ void QtSoftUpdate::updateWengoPhoneEventHandlerThreadSafe(const std::string & do
 	file.remove();
 	file.close();
 
-	_softUpdater = new SoftUpdater();
+	_softUpdater = new SoftUpdater(downloadUrl, UPDATE_PROGRAM);
 	_softUpdater->dataReadProgressEvent += boost::bind(&QtSoftUpdate::dataReadProgressEventHandler, this, _1, _2, _3);
 	_softUpdater->downloadFinishedEvent += boost::bind(&QtSoftUpdate::downloadFinishedEventHandler, this, _1);
-	_softUpdater->download(downloadUrl, UPDATE_PROGRAM);
+	_softUpdater->start();
 
 	_softUpdateWindow->exec();
 }
