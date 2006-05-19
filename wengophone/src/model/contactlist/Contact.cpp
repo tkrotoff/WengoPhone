@@ -305,4 +305,6 @@ void Contact::merge(const Contact & contact) {
 	if (_groupId.empty()) {
 		_groupId = contact._groupId;
 	}
+
+	contactChangedEvent(*this);
 }
