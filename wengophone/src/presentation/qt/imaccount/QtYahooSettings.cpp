@@ -70,6 +70,7 @@ void QtYahooSettings::save() {
 
 	_imAccount->setLogin(login);
 	_imAccount->setPassword(password);
+	params.set(IMAccountParameters::YAHOO_IS_JAPAN_KEY, _ui->useJapanServerCheckBox->isChecked());
 	//FIXME to remove, must be done inside model
 	params.set(IMAccountParameters::YAHOO_PORT_KEY, 23);
 
