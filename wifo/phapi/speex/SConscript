@@ -6,7 +6,7 @@ if WengoOSMacOSX():
 	]
 	
 	env.WengoAddIncludePath(include_path)
-	env.WengoAutoconf('speex', ['libspeex/.libs/libspeex.la'])
+	env.WengoAutoconf('speex', ['libspeex/.libs/libspeex.la', 'libspeex/.libs/libspeex.1.dylib'])
 
 else:
 	env.SConscript('libspeex/SConscript')
