@@ -196,3 +196,5 @@ install_name_tool -change "/usr/local/lib/libspeex.1.dylib" "libspeex.1.dylib" "
 ##
 cp -r $WENGO_BUILD_PATH/sounds $WENGO_RESOURCES_PATH/
 cp -r $WENGO_BUILD_PATH/emoticons $WENGO_RESOURCES_PATH/
+cp -r $WENGO_BUILD_PATH/pics $WENGO_RESOURCES_PATH/
+
