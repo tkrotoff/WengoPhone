@@ -233,7 +233,7 @@ void QtWengoPhone::initThreadSafe() {
 	_trayIcon->show();
 	setTrayMenu();
 
-	connect(_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT(sysTrayDoubleClicked(const QPoint &)));
+	connect(_trayIcon, SIGNAL(clicked(const QPoint &,int)), SLOT(sysTrayDoubleClicked(const QPoint &)));
 	connect(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )), SLOT(setSystrayIcon(QVariant )));
 
 	//actionShowWengoAccount
