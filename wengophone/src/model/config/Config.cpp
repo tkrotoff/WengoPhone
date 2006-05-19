@@ -35,6 +35,8 @@
 	#include <CoreFoundation/CoreFoundation.h>
 #endif
 
+const int Config::CONFIG_VERSION = 2;
+
 const std::string Config::CONFIG_VERSION_KEY = "config.version";
 
 const std::string Config::NETWORK_SSO_SSL_KEY = "network.sso.ssl";

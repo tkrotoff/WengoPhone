@@ -46,7 +46,7 @@ public:
 	 * version 1: WengoPhone classic
 	 * version 2: WengoPhone NG Beta1
 	 */
-	static const int CONFIG_VERSION = 2;
+	static const int CONFIG_VERSION;
 
 	static const std::string CONFIG_VERSION_KEY;
 	int getConfigVersion() const;
