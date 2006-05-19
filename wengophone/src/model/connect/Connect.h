@@ -23,8 +23,11 @@
 #include <imwrapper/IMConnect.h>
 #include <imwrapper/IMAccount.h>
 
+#include <thread/Timer.h>
+
 #include <util/Interface.h>
 #include <util/Event.h>
+
 
 /**
  * Wrapper for Instant Messaging connection.
@@ -67,11 +70,30 @@ public:
 
 protected:
 
+	/**
+	 * Used disconnectedEventHandler to launch reconnection
+	 * without resetting _connectionRetryCount to 0.
+	 */
+	void autoConnect();
+
+	void connectedEventHandler(IMConnect & sender);
+
+	void disconnectedEventHandler(IMConnect & sender, bool connectionError, const std::string & reason);
+
+	void timeoutEventHandler(Timer & sender);
+
+	bool _timerIsRunning;
+
+	/** Count how many time we retry to connect. */
+	unsigned _connectionRetryCount;
+
 	IMAccount _account;
 
 	IMConnect * _imConnect;
 
 	bool _connected;
+
+	Timer _timer;
 };
 
 #endif	//CONNECT_H
