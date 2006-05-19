@@ -54,10 +54,10 @@ CurlHttpRequest::CurlHttpRequest() {
 	downloadTotal = 0;
 
 	_sslProtocol = false;
-	_hostname = "";
+	_hostname = String::null;
 	_hostPort = 0;
-	_path = "";
-	_data = "";
+	_path = String::null;
+	_data = String::null;
 	_postMethod = false;
 }
 
@@ -112,8 +112,8 @@ void CurlHttpRequest::run() {
 			LOG_DEBUG("server response code=" + String::fromNumber(response));
 		}
 
-		if( _verbose ) {
-			char * effectiveUrl = "";
+		if (_verbose) {
+			char * effectiveUrl = NULL;
 			curl_easy_getinfo(_curl, CURLINFO_EFFECTIVE_URL, &effectiveUrl);
 			if( effectiveUrl ) {
 				LOG_DEBUG("CURLINFO_EFFECTIVE_URL: " + std::string(effectiveUrl));
@@ -143,7 +143,7 @@ void CurlHttpRequest::run() {
 		}
 	}
 	else {
-		LOG_WARN("Curl initialization failed");
+		LOG_WARN("cURL initialization failed");
 		return;
 	}
 	curl_easy_cleanup(_curl);
@@ -198,7 +198,13 @@ void CurlHttpRequest::setCurlParam() {
 	curl_easy_setopt(_curl, CURLOPT_WRITEDATA, this);
 	curl_easy_setopt(_curl, CURLOPT_PROGRESSDATA, this);
 	curl_easy_setopt(_curl, CURLOPT_NOSIGNAL, 0);
-	curl_easy_setopt(_curl, CURLOPT_TIMEOUT, 10);
+
+	//Maximum time in seconds that you allow the libcurl transfer operation to take
+	curl_easy_setopt(_curl, CURLOPT_TIMEOUT, 0);
+
+	//Limits the connection phase, once it has connected, this option is of no more use
+	curl_easy_setopt(_curl, CURLOPT_CONNECTTIMEOUT, 10);
+
 	curl_easy_setopt(_curl, CURLOPT_USERAGENT, HttpRequest::getUserAgent().c_str());
 }
 
