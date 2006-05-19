@@ -51,6 +51,10 @@ public Q_SLOTS:
 
 	void deleteQtPhoneCall(QtPhoneCall * qtPhoneCall);
 
+Q_SIGNALS:
+
+    void lastQtPhoneCallClosed();
+
 protected:
 
 	QWidget * _widget;

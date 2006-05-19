@@ -43,7 +43,8 @@ void QtContactCallListWidget::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	connect(qtPhoneCall, SIGNAL(startConference(PhoneCall *, PhoneCall *)),
 		SLOT(startConference(PhoneCall *, PhoneCall *)));
 	connect(qtPhoneCall, SIGNAL(stopConference()), SLOT(stopConference()));
-	connect(qtPhoneCall, SIGNAL(callRejected()), SLOT(callRejected()));
+	//connect(qtPhoneCall, SIGNAL(callRejected()), SLOT(callRejected()));
+	connect(_listWidget, SIGNAL(lastQtPhoneCallClosed()),SLOT(callRejected()));
 	_listWidget->addPhoneCall(qtPhoneCall);
 }
 
@@ -110,7 +111,7 @@ void QtContactCallListWidget::hangup() {
 
 void QtContactCallListWidget::callRejected() {
 
-	if (_listWidget->count() == 0)
+//	if (_listWidget->count() == 0)
 		close();
 }
 

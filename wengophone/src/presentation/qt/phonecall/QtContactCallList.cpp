@@ -58,6 +58,9 @@ void QtContactCallList::deleteQtPhoneCall(QtPhoneCall * qtPhoneCall) {
 		}
 	}
 	qtPhoneCall->deleteLater();
+	if (_phoneCallList.size()==0){
+	    lastQtPhoneCallClosed();
+	}
 }
 
 bool QtContactCallList::hasPhoneCall(PhoneCall * phoneCall) {
@@ -76,6 +79,7 @@ bool QtContactCallList::hasPhoneCall(PhoneCall * phoneCall) {
 void QtContactCallList::clearCalls() {
 	QMutexLocker locker(& _mutex);
 	_phoneCallList.clear();
+	lastQtPhoneCallClosed();
 }
 
 int QtContactCallList::count() {
