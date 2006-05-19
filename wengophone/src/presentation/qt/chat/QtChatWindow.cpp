@@ -257,14 +257,11 @@ void ChatWindow::show(){
         _dialog->hide();
 	_dialog->showNormal();
 	_dialog->raise();
-	// _dialog->activateWindow();
 	flashWindow();
 }
 
 void ChatWindow::messageReceivedEventHandler(IMChatSession & sender) {
 	messageReceivedSignal(&sender);
-	// _dialog->activateWindow();
-	//flashWindow();
 }
 
 void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
@@ -285,9 +282,6 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
             _dialog->showMinimized ();
             flashWindow();
         }
-        else
-            flashWindow();
-
 		int tabs = _tabWidget->count();
 		for (int i = 0; i < tabs; i++)
 		{
@@ -349,7 +343,6 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 			if ( ! _dialog->isVisible())
 			{
                 _dialog->showMinimized ();
-                // _dialog->activateWindow();
                 flashWindow();
             }
             else
@@ -372,7 +365,6 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
         else{
             if ( !_dialog->isVisible())
                 _dialog->showMinimized ();
-                // _dialog->activateWindow();
                 flashWindow();
         }
 	} else {

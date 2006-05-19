@@ -57,7 +57,7 @@ void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession 
 		return;
 
 	QtToaster  * toaster = new QtToaster();
-	toaster->setTitle(tr("New chat session:"));
+	toaster->setTitle(tr("New chat session"));
 	if (imChatSession.getIMContactSet().size() > 0) {
 		QString message;
 		for (IMContactSet::const_iterator it = imChatSession.getIMContactSet().begin();

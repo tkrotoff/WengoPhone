@@ -244,15 +244,13 @@ void ChatWidget::enterPressed(){
     arg(_nickTextColor).
     arg(QTime::currentTime().toString());
 
-//    QString text = generateHtmlHeader("#dced80","#b9db01","#3d7c00",_nickName);
-
     _chatHistory->setTextCursor(curs);
     _chatHistory->insertHtml (text);
     _chatHistory->insertHtml (text2Emoticon(replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>")));
     _chatHistory->ensureCursorVisible();
 
 	QString tmp = Emoticon2Text(_chatEdit->toHtml());
-	
+
 	// bad and ugly hack
 	QTextEdit textEditTmp(NULL);
 	textEditTmp.setHtml(tmp);

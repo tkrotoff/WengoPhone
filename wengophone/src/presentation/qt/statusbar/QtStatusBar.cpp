@@ -18,6 +18,7 @@
  */
 
 #include "QtStatusBar.h"
+#include "QtStatusBarStyle.h"
 
 #include <control/CWengoPhone.h>
 
@@ -38,6 +39,8 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_cWengoPhone(cWengoPhone) {
 
 	_statusBar = statusBar;
+	QtStatusBarStyle * qtStatusBarstyle = new QtStatusBarStyle();
+	_statusBar->setStyle(qtStatusBarstyle);
 
 	QWidget * statusGroup = new QWidget(_statusBar);
 	new QHBoxLayout(statusGroup);

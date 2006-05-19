@@ -90,6 +90,7 @@ headers = [
 	'webservices/directory/QtWsDirectoryContact.h',
 	'callbar/QtCallBar.h',
 	'statusbar/QtStatusBar.h',
+	'statusbar/QtStatusBarStyle.h',
 	'config/QtISettings.h',
 	'config/QtAdvancedConfig.h',
 	'config/QtAccountSettings.h',
@@ -185,6 +186,7 @@ sources = [
 	'webservices/directory/QtWsDirectoryContact.cpp',
 	'callbar/QtCallBar.cpp',
 	'statusbar/QtStatusBar.cpp',
+	'statusbar/QtStatusBarStyle.cpp',
 	'config/QtAdvancedConfig.cpp',
 	'config/QtAccountSettings.cpp',
 	'config/QtAdvancedSettings.cpp',
@@ -317,7 +319,7 @@ if WengoOSWindows():
 	qt_mng_plugin_file += '.dll'
 
 print "Copying Qt's mng plugin to build dir..."
-try:	
+try:
 	os.mkdir(os.path.join(env.WengoGetRootBuildDir(), 'imageformats'))
 	shutil.copy2(os.path.join(os.environ['QTDIR'], 'plugins', 'imageformats', qt_mng_plugin_file), env.WengoGetRootBuildDir());
 except (IOError, os.error), why:

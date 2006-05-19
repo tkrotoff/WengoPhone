@@ -104,7 +104,7 @@ void QtPhoneCall::initThreadSafe() {
 	_actionAcceptCall = new QAction(tr("Accept"), _phoneCallWidget);
 	connect(_actionAcceptCall, SIGNAL(triggered(bool)), SLOT(acceptActionTriggered(bool)));
 
-	// Hand-up call
+	// Hand-up call - Qt::QueuedConnection is needed ! Don't remove it !!!
 	_actionHangupCall = new QAction(tr("Hang-up"), _phoneCallWidget);
 	connect(_actionHangupCall, SIGNAL(triggered(bool)), SLOT(rejectActionTriggered(bool)),Qt::QueuedConnection);
 
