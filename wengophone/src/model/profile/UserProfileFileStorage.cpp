@@ -77,7 +77,7 @@ bool UserProfileFileStorage::loadProfile(const std::string & url) {
 		return true;
 	}
 
-	return false;
+	return true;
 }
 
 bool UserProfileFileStorage::saveProfile(const std::string & url) {

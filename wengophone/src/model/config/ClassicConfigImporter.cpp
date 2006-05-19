@@ -19,6 +19,7 @@
  
 #include "ClassicConfigImporter.h"
 
+
 #include "ConfigManager.h"
 #include "Config.h"
 
@@ -27,6 +28,11 @@
 #include <util/File.h>
 #include <util/Logger.h>
 #include <util/String.h>
+#include <model/account/wengo/WengoAccount.h>
+#include <model/account/wengo/WengoAccountDataLayer.h>
+#include <model/account/wengo/WengoAccountXMLLayer.h>
+#include <model/profile/UserProfile.h>
+#include <model/WengoPhone.h>
 
 using namespace std;
 
@@ -77,6 +83,7 @@ typedef struct vcard_s
 	address_t		address;
 	telNumberList	numbers;
 	StringList		emails;
+	string			owner;
 	bool			blocked;
 }					vcard_t;
 
@@ -118,24 +125,69 @@ string myTrim(std::string str)
 	return newstr;
 }
 
+#define CONFIG_UNKNOWN	0
+#define CONFIG_VERSION1 1
+#define CONFIG_VERSION2 2
+#define CONFIG_VERSION3 3
+
+ClassicConfigImporter::ClassicConfigImporter(WengoPhone & wengoPhone) 
+: _wengoPhone(wengoPhone), _userProfile(wengoPhone.getCurrentUserProfile()) {
+}
+
 bool ClassicConfigImporter::importConfig(string str) {
 
 #if (defined(OS_WINDOWS) || defined(OS_LINUX))
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	File mFile(config.getConfigDir());
-	int dirNbr = mFile.getDirectoryList().size();
-	string classicConfigPath = getWengoClassicConfigPath();
-	bool dirExists = File::exists(classicConfigPath.substr(0, classicConfigPath.size() - 1));
-	
-	if (dirNbr == 0 && dirExists) {
-		ImportConfigFromClassicToNG_1_0();
+	int localVersion = detectLastVersion();
+
+	if (localVersion != CONFIG_UNKNOWN && localVersion < config.CONFIG_VERSION) {
+		makeImportConfig(localVersion, config.CONFIG_VERSION);
 		return true;
 	}
 
 #endif
 
 	return false;
+}
+
+int ClassicConfigImporter::detectLastVersion()
+{
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	string ConfigPathV1 = getWengoClassicConfigPath();
+	string ConfigPathV2 = config.getConfigDir();
+	bool dirV1Exists = File::exists(ConfigPathV1.substr(0, ConfigPathV1.size() - 1));
+	bool dirV2Exists = File::exists(ConfigPathV2.substr(0, ConfigPathV2.size() - 1));
+
+	if (dirV2Exists)
+	{
+		File mFile(ConfigPathV2);
+		int dirNbr = mFile.getDirectoryList().size();
+
+		if (dirNbr)
+			return CONFIG_VERSION3;
+		else if (File::exists(ConfigPathV2 + "contactlist.xml"))
+			return CONFIG_VERSION2;
+		else if (dirV1Exists)
+		return CONFIG_VERSION1;
+	}
+	else if (dirV1Exists)
+		return CONFIG_VERSION1;
+
+	return CONFIG_UNKNOWN;
+}
+
+void ClassicConfigImporter::makeImportConfig(int from, int to) 
+{
+	if (from == CONFIG_VERSION1 && to == CONFIG_VERSION2)
+		ImportConfigFromV1toV2();
+	else if (from == CONFIG_VERSION1 && to == CONFIG_VERSION3)
+		ImportConfigFromV1toV3();
+	
+	// Todo: import config files from version 2 to version 3
+	//else if (from == CONFIG_VERSION2 && to == CONFIG_VERSION3)
+	//	ImportConfigFromV2toV3();
+
 }
 
 string ClassicConfigImporter::getWengoClassicConfigPath() {
@@ -309,7 +361,7 @@ string ClassicConfigImporter::ClassicVCardToString(void *structVcard)
 	// Todo: look at ProfileXMLSerializer and try to use the same serializer
 	if (!mVcard->id.empty())
 		res += ("<wengoid>" + mVcard->id + "</wengoid>\n");
-	
+
 	res += "<name>\n";
 	if (!mVcard->fname.empty()) 
 		res += ("<first><![CDATA[" + mVcard->fname + "]]></first>\n");
@@ -363,6 +415,14 @@ string ClassicConfigImporter::ClassicVCardToString(void *structVcard)
 		res += ("<country><![CDATA[" + mVcard->address.country + "]]></country>\n");
 	res += "</address>\n";
 
+	if (!mVcard->id.empty())
+	{
+		res += "<im protocol=\"SIP/SIMPLE\">\n";
+		res += ("<id>" + mVcard->id + "</id>\n");
+		res += ("<account>" + mVcard->owner + "</account>");
+		res += "</im>\n";
+	}
+
 	if (mVcard->emails.size() >= 1 && !mVcard->emails[0].empty())
 		res += ("<email type=\"home\">" + mVcard->emails[0] + "</email>\n");
 	if (mVcard->emails.size() >= 2 && !mVcard->emails[1].empty())
@@ -373,12 +433,16 @@ string ClassicConfigImporter::ClassicVCardToString(void *structVcard)
 	if (!mVcard->note.empty())
 		res += ("<notes><![CDATA[" + mVcard->note + "]]></notes>\n");
 
+	res += ("<group><![CDATA[Wengo]]></group>\n");
+
 	res += "</wgcard>\n";
 	return res;
 }
 
 
-bool ClassicConfigImporter::ImportClassicContactsToNG_1_0(const string & fromDir, const string & toDir) {
+bool ClassicConfigImporter::ImportContactsFromV1toV3(const string & fromDir, 
+	const string & toDir, const string & owner) {
+
 	File mDir(fromDir);
 	StringList fileList = mDir.getFileList();
 	vcardList vList;
@@ -393,6 +457,7 @@ bool ClassicConfigImporter::ImportClassicContactsToNG_1_0(const string & fromDir
 		{
 			mVcard = new vcard_t();
 			mVcard->id = Id;
+			mVcard->owner = owner;
 			
 			if (ClassicVcardParser(fromDir + fileList[i], mVcard) == false)
 			{
@@ -443,7 +508,111 @@ bool ClassicConfigImporter::ImportClassicContactsToNG_1_0(const string & fromDir
 	return true;
 }
 
-bool ClassicConfigImporter::ImportConfigFromClassicToNG_1_0() {
+typedef struct last_user_s
+{
+	string	login;
+	string	password;
+	bool	auto_login;
+}			last_user_t;
+
+void * ClassicConfigImporter::GetLastClassicWengoUser() {
+	string classicPath = getWengoClassicConfigPath();
+	std::ifstream fileStream;
+	std::string lastLine;
+
+	last_user_t * lastUser = new last_user_t();
+	fileStream.open((classicPath +	"user.config").c_str());
+	if (!fileStream) 
+	{
+		LOG_ERROR("cannot open the file: " + (classicPath +	"user.config"));
+		return NULL;
+	}
+
+	std::getline(fileStream, lastLine);
+
+	while (!lastLine.empty())
+	{
+		lastLine = myTrim(lastLine);
+
+		if (!strncmp(lastLine.c_str(), "<login>", 7))
+		{
+			int pos2 = lastLine.find_first_of(']');
+			int pos1 = lastLine.find_last_of('[');
+			lastUser->login = myTrim(lastLine.substr(pos1 + 1, pos2 - (pos1 + 1) ));
+		}
+		else if (!strncmp(lastLine.c_str(), "<password>", 10))
+		{
+			int pos2 = lastLine.find_first_of(']');
+			int pos1 = lastLine.find_last_of('[');
+			lastUser->password = myTrim(lastLine.substr(pos1 + 1, pos2 - (pos1 + 1) ));
+		}
+		else if (!strncmp(lastLine.c_str(), "<autoLogin>", 11))
+		{
+			int pos1 = lastLine.find_first_of('>');
+			int pos2 = lastLine.find_last_of('<');
+			string resp = myTrim(lastLine.substr(pos1 + 1, pos2 - (pos1 + 1) ));
+
+			if (resp == "true")
+				lastUser->auto_login = true;
+			else
+				lastUser->auto_login = false;
+		}
+
+		std::getline(fileStream, lastLine);
+	}
+
+	fileStream.close();
+	return lastUser;
+}
+
+bool ClassicConfigImporter::ImportConfigFromV1toV2() {
+
+	last_user_t * lastUser = (last_user_t *) GetLastClassicWengoUser();
+	if (lastUser == NULL)
+		return false;
+
+	//WengoAccount wAccount(lastUser->login, lastUser->password, lastUser->auto_login);
+	//WengoAccountDataLayer * wAccountDL = new WengoAccountXMLLayer(wAccount);
+	//WengoAccountDataLayer wAccountDL(wAccount);
+	_userProfile.loginStateChangedEvent +=
+		boost::bind(&ClassicConfigImporter::loginStateChangedEventHandler, this, _1, _2);
+	_userProfile.addSipAccount(lastUser->login, lastUser->password, lastUser->auto_login);
+	//wAccountDL->save();
+	
+	return true;
+}
+
+void ClassicConfigImporter::loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
+	switch (state) {
+	case SipAccount::LoginStateReady:
+		try {
+			_userProfile.loginStateChangedEvent -=
+				boost::bind(&ClassicConfigImporter::loginStateChangedEventHandler, this, _1, _2);
+
+			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(sender);
+			IMAccount imAccount(wengoAccount.getIdentity(), 
+				wengoAccount.getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
+			_userProfile.addIMAccount(imAccount);
+			_wengoPhone.saveUserProfile();
+
+			Config & config = ConfigManager::getInstance().getCurrentConfig();
+			string confV1 = getWengoClassicConfigPath();
+			string confV2 = config.getConfigDir();
+			string sep = File::getPathSeparator();
+
+			string contactsPathV1 = confV1 + wengoAccount.getWengoLogin() + sep + "contacts" + sep;
+			ImportContactsFromV1toV3(contactsPathV1, confV2, wengoAccount.getIdentity());
+
+		} catch (bad_cast) {
+			LOG_DEBUG("can't cast the SipAccount to a WengoAccount");
+		}
+
+	default:
+		;
+	}
+}
+
+bool ClassicConfigImporter::ImportConfigFromV1toV3() {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	string classicPath = getWengoClassicConfigPath();
@@ -456,7 +625,7 @@ bool ClassicConfigImporter::ImportConfigFromClassicToNG_1_0() {
 		String newDir(config.getConfigDir() + dirList[i] + sep);
 		File::createPath(newDir);
 		string path = classicPath + dirList[i] + sep + "contacts" + sep;
-		ImportClassicContactsToNG_1_0(path, newDir);
+		ImportContactsFromV1toV3(path, newDir, dirList[i]);
 	}
 
 	return true;

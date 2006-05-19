@@ -38,6 +38,19 @@
 class Config : public AutomaticSettings {
 public:
 
+	/**
+	 * Last configuration version.
+	 *
+	 * Used to import config from previous version of Wengophone
+	 *
+	 * version 1: WengoPhone classic
+	 * version 2: WengoPhone NG Beta1
+	 */
+	static const int CONFIG_VERSION = 2;
+
+	static const std::string CONFIG_VERSION_KEY;
+	int getConfigVersion() const;
+
 	Config(const std::string & name);
 
 	~Config();

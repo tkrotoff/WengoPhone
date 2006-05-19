@@ -148,6 +148,10 @@ void UserProfile::connectIMAccounts() {
 }
 
 void UserProfile::connectSipAccounts() {
+
+ 	if (!_activePhoneLine)
+		addPhoneLine(*_wengoAccount);
+
 	// Connect all SipAccounts
 	if (_wengoAccount && _activePhoneLine && !_wengoAccountConnected) {
 		_activePhoneLine->connect();
@@ -390,8 +394,6 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *) _wengoAccount);
 		wengoAccountDataLayer->save();
 		delete wengoAccountDataLayer;
-
-		addPhoneLine(*_wengoAccount);
 
 		loadHistory();
 

@@ -109,12 +109,13 @@ void WengoPhone::init() {
 	//remove WengoPhone Classic from startup registry
 	ClassicExterminator::removeClassicFromStartup();
 
-	//Imports the Config from WengoPhone Classic.
-	//ClassicConfigImporter::importConfig(config.getConfigDir());
-
 	_wenboxPlugin = new WenboxPlugin(*this);
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
+
+	//Imports the Config from WengoPhone Classic.
+	ClassicConfigImporter importer(*this);
+	importer.importConfig(config.getConfigDir());
 
 	_wsWengoSubscribe = new WsWengoSubscribe();
 	wsWengoSubscribeCreatedEvent(*this, *_wsWengoSubscribe);

@@ -35,6 +35,8 @@
 	#include <CoreFoundation/CoreFoundation.h>
 #endif
 
+const std::string Config::CONFIG_VERSION_KEY = "config.version";
+
 const std::string Config::NETWORK_SSO_SSL_KEY = "network.sso.ssl";
 const std::string Config::NETWORK_NAT_TYPE_KEY = "network.nat.type";
 const std::string Config::NETWORK_SIP_SERVER_KEY = "network.sip.server";
@@ -130,6 +132,8 @@ Config::Config(const std::string & name)
 	std::string pluginsPath;
 
 	_name = name;
+
+	_keyDefaultValueMap[CONFIG_VERSION_KEY] = CONFIG_VERSION;
 
 	//Default config path
 #if defined(OS_MACOSX) || defined(OS_WINDOWS)
@@ -260,6 +264,10 @@ Config::~Config() {
 
 std::string Config::getName() const {
 	return _name;
+}
+
+int Config::getConfigVersion() const {
+	return getIntegerKeyValue(CONFIG_VERSION_KEY);
 }
 
 bool Config::getNetworkSSOSSL() const {
