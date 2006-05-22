@@ -78,7 +78,7 @@ std::string setAddionnalInfo() {
 int main(int argc, char * argv[]) {
 
 #if defined(CC_MSVC)
-	MemoryDump * memoryDump = new MemoryDump("WengoPhoneNG");
+	MemoryDump * memoryDump = new MemoryDump("WengoPhoneNG", String::fromUnsignedLongLong(WengoPhoneBuildId::REVISION).c_str());
 	
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	memoryDump->setLanguage(config.getLanguage().c_str());
