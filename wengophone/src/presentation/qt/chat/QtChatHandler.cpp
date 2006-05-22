@@ -20,6 +20,9 @@
 #include "QtChatHandler.h"
 #include <presentation/qt/toaster/QtToaster.h>
 
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
 #include <control/chat/CChatHandler.h>
 #include <control/CWengoPhone.h>
 #include <util/Logger.h>
@@ -44,6 +47,9 @@ void QtChatHandler::newIMChatSessionCreatedEventHandler(IMChatSession & imChatSe
 }
 
 void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession & imChatSession) {
+
+    Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 	if (!_qtChatWidget)
 	{
 		_qtChatWidget =  new ChatWindow(_cChatHandler, imChatSession);
@@ -55,6 +61,10 @@ void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession 
 
 	if (imChatSession.isUserCreated())
 		return;
+
+    // Shows toaster for incoming incoming chats ?
+    if (!config.getNotificationShowToasterOnIncomingCall())
+        return;
 
 	QtToaster  * toaster = new QtToaster();
 	toaster->setTitle(tr("New chat session"));

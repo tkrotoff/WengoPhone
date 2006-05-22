@@ -27,6 +27,8 @@
 
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 
 #include <control/phonecall/CPhoneCall.h>
@@ -558,8 +560,15 @@ bool QtPhoneCall::isIncoming() {
 
 void QtPhoneCall::showToaster(){
 
+    Config & config = ConfigManager::getInstance().getCurrentConfig();
+
     if (!isIncoming())
         return;
+
+    // Shows toaster for incoming incoming chats ?
+    if (!config.getNotificationShowToasterOnIncomingCall())
+        return;
+
     QtCallToaster * toaster = new QtCallToaster();
     toaster->setTitle(tr("New incoming call"));
     toaster->setMessage(QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName()));
