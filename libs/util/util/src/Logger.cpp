@@ -104,7 +104,7 @@ void Logger::log(Level level, const std::string & className, const std::string &
 	std::string tmp = "(" + levelString + ") " + timeMsg + " " + classNameTmp +  ": " + message;
 	std::cerr << tmp << std::endl;
 
-	messageAddedEvent(tmp);
+//	messageAddedEvent(tmp);
 	_file->write(tmp + "\n");
 }
 
