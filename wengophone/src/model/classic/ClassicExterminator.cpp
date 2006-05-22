@@ -23,6 +23,7 @@
 #include <cutil/global.h>
 
 #include <system/Processes.h>
+#include <system/Startup.h>
 
 #include <stdio.h>
 
@@ -36,23 +37,8 @@ static const char * CLASSIC_EXECUTABLE_NAME = "wengophone.exe";
 
 void ClassicExterminator::removeClassicFromStartup() {
 #ifdef OS_WINDOWS
-	long error = 0;
-	HKEY hKey;
-
-	//open key
-	error = ::RegOpenKeyExA(HKEY_CURRENT_USER, STARTUP_REGISTRY_KEY, 0, KEY_ALL_ACCESS, &hKey);
-	if( error != ERROR_SUCCESS ) {
-		printf("Failed to open key: %s\n", STARTUP_REGISTRY_KEY);
-		return;
-	}
-
-	//delete value
-	error = ::RegDeleteValueA(hKey, "Wengo");
-	if(  error != ERROR_SUCCESS ) {
-		printf("Failed to erase the \"Wengo\" value, error code: %d\n", error);
-		::RegCloseKey(hKey);
-		return;
-	}
+	Startup startup(WENGO_VALUE, "");
+	startup.setStartup(false);
 #endif
 }
 
