@@ -147,6 +147,10 @@ protected:
 
 	bool _waitForDoubleClick;
 
+	int _sortTimerId;
+
+	bool _canSort;
+
 };
 
 #endif	//QTUSERMANAGER_H

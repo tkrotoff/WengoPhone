@@ -55,7 +55,9 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
     _sortUsers = true;
     _menu = NULL;
     _timerId = -1;
+    _sortTimerId = -1;
     _waitForDoubleClick = false;
+    _canSort = true;
 
     QtUserList::getInstance()->setTreeWidget(target);
     target->setMouseTracking(true);
@@ -79,6 +81,7 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
     qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)))) {
        LOG_DEBUG("Unable to connect signal\n");
     }
+
 }
 
 void QtUserManager::startSMS(bool checked) {
@@ -413,6 +416,13 @@ void QtUserManager::safeSortUsers() {
 
 	if (!_sortUsers)
 		return;
+
+    if (_canSort){
+        _canSort=false;
+        if (_sortTimerId != -1)
+            killTimer(_sortTimerId);
+        _sortTimerId = startTimer(2000);
+    }
 
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
@@ -769,6 +779,14 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 }
 
 void QtUserManager::timerEvent ( QTimerEvent * event ) {
+
+    if (event->timerId() == _sortTimerId ){
+        killTimer(_sortTimerId);
+        _sortTimerId = -1;
+        _canSort = true;
+        return;
+    }
+
     _waitForDoubleClick = false;
     killTimer(_timerId);
 }

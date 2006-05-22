@@ -18,6 +18,7 @@
  */
 
 #include "QtHidenContact.h"
+#include "QtUserList.h"
 #include "QtUser.h"
 
 QtHidenContact::QtHidenContact(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, QtUser * user, int index, QObject * parent)
@@ -66,6 +67,7 @@ int QtHidenContact::getIndex() const {
 
 bool QtHidenContact::operator < (const QtHidenContact & other) const {
 
+    //return ((user->getStatus() == EnumPresenceState::PresenceStateOnline) &&
 	return (_user->getUserName().toUpper() < other.getUser()->getUserName().toUpper());
 }
 
