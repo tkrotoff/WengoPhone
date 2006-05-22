@@ -256,7 +256,7 @@ bool ClassicConfigImporter::ClassicVcardParser(const string & vcardFile, void *s
 			mVcard->numbers.push_back(CreateNewNodeNumber("cell", value));
 		
 		else if (!key.compare("TEL;TYPE=pref"))
-			mVcard->numbers.push_back(CreateNewNodeNumber("pref", value));
+			mVcard->id = value;
 
 		else if (!key.compare("TEL;TYPE=fax"))
 			mVcard->numbers.push_back(CreateNewNodeNumber("fax", value));
@@ -453,7 +453,6 @@ bool ClassicConfigImporter::ImportContactsFromV1toV3(const string & fromDir,
 		if (!mFile.getExtension().compare("vcf"))
 		{
 			mVcard = new vcard_t();
-			mVcard->id = Id;
 			mVcard->owner = owner;
 			
 			if (ClassicVcardParser(fromDir + fileList[i], mVcard) == false)
