@@ -197,9 +197,7 @@ void QtUserManager::itemClicked(QTreeWidgetItem * item, int) {
     _waitForDoubleClick = true;
     killTimer(_timerId);
     _timerId = startTimer(qApp->doubleClickInterval ());
-
     _lastClicked = item;
-
 
     QRect widgetSize = _tree->rect();
     QPoint mousepos = _tree->mapFromGlobal(QCursor::pos());
@@ -412,11 +410,7 @@ void QtUserManager::hideOffLineUsers() {
 }
 
 void QtUserManager::safeSortUsers() {
-	/* FIXME: sort is desactivated because of the 'Mad cow disease':
-		the contact list is trembling while being sorting which
-		is very annoying.
 
-	//FIXME: only use sortList or deleteList
 	if (!_sortUsers)
 		return;
 
@@ -424,7 +418,6 @@ void QtUserManager::safeSortUsers() {
 	QtUser * user;
 
 	QList < QTreeWidgetItem * > itemList = _tree->findItems("*", Qt::MatchWildcard);
-	QList < QTreeWidgetItem * > deleteList;
 	QList < QtHidenContact > sortList;
 	QList < QTreeWidgetItem * >::iterator i;
 
@@ -435,7 +428,6 @@ void QtUserManager::safeSortUsers() {
 
 		if (group->parent() == 0) {
 			// We have all parents (if groups are not hiden)
-			deleteList.clear();
 			sortList.clear();
 
 			int count = group->childCount();
@@ -447,23 +439,18 @@ void QtUserManager::safeSortUsers() {
 				int index = group->indexOfChild(item);
 				QtHidenContact hiden = QtHidenContact(item, item->parent(), user, index, this);
 				sortList.append(hiden);
-				deleteList.append(item);
-			}
-			// Delete the childs
-			QList < QTreeWidgetItem * >::iterator deleteIterator;
-			for (deleteIterator = deleteList.begin(); deleteIterator != deleteList.end(); deleteIterator++) {
-				group->takeChild(group->indexOfChild((* deleteIterator)));
 			}
 			// Sort and reinsert items
 			qSort(sortList.begin(), sortList.end());
 
 			QList < QtHidenContact >::iterator insertIterator;
 			for (insertIterator = sortList.begin(); insertIterator != sortList.end(); insertIterator++) {
+				group->takeChild(group->indexOfChild((* insertIterator).getItem()));
 				group->insertChild(group->childCount(), (* insertIterator).getItem());
 			}
 		}
 	}
-	*/
+	QCoreApplication::processEvents();
 }
 
 void QtUserManager::sortUsers() {
