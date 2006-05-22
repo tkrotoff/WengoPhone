@@ -39,8 +39,6 @@
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
-#include <model/config/ConfigManager.h>
-#include <model/config/Config.h>
 
 #include <imwrapper/EnumIMProtocol.h>
 #include <imwrapper/EnumPresenceState.h>
