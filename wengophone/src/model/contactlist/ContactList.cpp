@@ -25,13 +25,16 @@
 #include <model/presence/PresenceHandler.h>
 #include <model/profile/UserProfile.h>
 
+#include <thread/Thread.h>
+
 #include <util/StringList.h>
 #include <util/Logger.h>
 
 using namespace std;
 
 ContactList::ContactList(UserProfile & userProfile)
-	: _userProfile(userProfile), _imContactListHandler(userProfile.getIMContactListHandler()) {
+	: _userProfile(userProfile), 
+	_imContactListHandler(userProfile.getIMContactListHandler()) {
 
 	_imContactListHandler.newIMContactAddedEvent +=
 		boost::bind(&ContactList::newIMContactAddedEventHandler, this, _1, _2, _3);
@@ -57,14 +60,14 @@ ContactList::~ContactList() {
 }
 
 void ContactList::addContactGroup(const string & groupName) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	_addContactGroup(groupName);
 	_imContactListHandler.addGroup(groupName);
 }
 
 void ContactList::removeContactGroup(const string & id) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	ContactGroup * contactGroup = getContactGroup(id);
 	if (contactGroup) {
@@ -75,6 +78,8 @@ void ContactList::removeContactGroup(const string & id) {
 }
 
 void ContactList::renameContactGroup(const std::string & id, const std::string & name) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	ContactGroup * contactGroup = getContactGroup(id);
 
 	if (contactGroup) {
@@ -86,7 +91,7 @@ void ContactList::renameContactGroup(const std::string & id, const std::string &
 }
 
 Contact & ContactList::createContact() {
-	Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	Contact contact(_userProfile);
 	Contacts::const_iterator it;
@@ -108,7 +113,7 @@ Contact & ContactList::createContact() {
 }
 
 void ContactList::removeContact(Contact & contact) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	// Remove the Contact from its group
 	ContactGroup * contactGroup = getContactGroup(contact.getGroupId());
@@ -144,7 +149,7 @@ void ContactList::removeContact(Contact & contact) {
 }
 
 void ContactList::addIMContact(Contact & contact, const IMContact & imContact) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	ContactGroup * contactGroup = getContactGroup(contact.getGroupId());
 
@@ -155,7 +160,7 @@ void ContactList::addIMContact(Contact & contact, const IMContact & imContact) {
 }
 
 void ContactList::removeIMContact(Contact & contact, const IMContact & imContact) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	ContactGroup * contactGroup = getContactGroup(contact.getGroupId());
 
@@ -167,7 +172,7 @@ void ContactList::removeIMContact(Contact & contact, const IMContact & imContact
 
 void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 	const std::string & groupName, IMContact & newIMContact) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	if (!groupName.empty()) {
 		LOG_DEBUG("adding a new IMContact in group " + groupName + ": " + newIMContact.getContactId());
@@ -194,7 +199,7 @@ void ContactList::newIMContactAddedEventHandler(IMContactListHandler & sender,
 
 void ContactList::imContactRemovedEventHandler(IMContactListHandler & sender,
 	const std::string & groupName, IMContact & imContact) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	LOG_DEBUG("IMContact removed from group " + groupName + ": "
 		+ imContact.getContactId());
@@ -212,14 +217,14 @@ void ContactList::imContactRemovedEventHandler(IMContactListHandler & sender,
 
 void ContactList::newContactGroupAddedEventHandler(IMContactList & sender,
 	const std::string & groupName) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	_addContactGroup(groupName);
 }
 
 void ContactList::contactGroupRemovedEventHandler(IMContactList & sender,
 	const std::string & groupName) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	_removeContactGroup(groupName);
 }
@@ -227,7 +232,7 @@ void ContactList::contactGroupRemovedEventHandler(IMContactList & sender,
 void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 	EnumPresenceState::PresenceState state,
 	const std::string & alias, const IMContact & imContact) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	// Find the Contact that owns the IMContact. Creating a new one if needed
 	Contact * contact = findContactThatOwns(imContact);
@@ -248,7 +253,7 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 
 void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,
 	const std::string & groupName, IMContact & imContact) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	Contact * contact = findContactThatOwns(imContact);
 	if (contact) {
@@ -264,6 +269,8 @@ void ContactList::imContactMovedEventHandler(IMContactListHandler & sender,
 }
 
 Contact * ContactList::findContactThatOwns(const IMContact & imContact) const {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	Contact * result = NULL;
 
 	for (Contacts::const_iterator it = _contacts.begin();
@@ -280,6 +287,8 @@ Contact * ContactList::findContactThatOwns(const IMContact & imContact) const {
 }
 
 void ContactList::_addContactGroup(const std::string & groupName) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	ContactGroup contactGroup(groupName);
 	pair<ContactGroupSet::const_iterator, bool> result = _contactGroupSet.insert(contactGroup);
 
@@ -293,6 +302,8 @@ void ContactList::_addContactGroup(const std::string & groupName) {
 }
 
 void ContactList::_removeContactGroup(const std::string & groupId) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	ContactGroup * contactGroup = getContactGroup(groupId);
 
 	if (contactGroup) {
@@ -315,6 +326,8 @@ void ContactList::_removeContactGroup(const std::string & groupId) {
 }
 
 void ContactList::_addToContactGroup(const std::string & groupName, Contact & contact) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	if (!groupName.empty()) {
 		addContactGroup(groupName);
 
@@ -330,11 +343,12 @@ void ContactList::_addToContactGroup(const std::string & groupName, Contact & co
 }
 
 void ContactList::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 }
 
 void ContactList::imAccountRemovedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	for (Contacts::const_iterator it = _contacts.begin();
 		it != _contacts.end();
@@ -351,6 +365,8 @@ void ContactList::imAccountRemovedEventHandler(UserProfile & sender, IMAccount &
 }
 
 ContactGroup * ContactList::getContactGroup(const std::string & groupId) const {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	ContactGroup * result = NULL;
 
 	for (ContactGroupSet::const_iterator it = _contactGroupSet.begin();
@@ -367,7 +383,7 @@ ContactGroup * ContactList::getContactGroup(const std::string & groupId) const {
 
 void ContactList::contactIconChangedEventHandler(PresenceHandler & sender,
 	const IMContact & imContact, Picture icon) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	Contact * contact = findContactThatOwns(imContact);
 	if (contact) {
@@ -378,7 +394,7 @@ void ContactList::contactIconChangedEventHandler(PresenceHandler & sender,
 }
 
 void ContactList::mergeContacts(Contact & dst, Contact & src) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	dst.merge(src);
 
@@ -403,7 +419,7 @@ void ContactList::mergeContacts(Contact & dst, Contact & src) {
 }
 
 void ContactList::_moveContactToGroup(const string & dst, Contact & contact) {
-	Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	ContactGroup * contactGroup = getContactGroup(contact.getGroupId());
 	std::string oldGroupName;
@@ -430,7 +446,7 @@ void ContactList::_moveContactToGroup(const string & dst, Contact & contact) {
 }
 
 void ContactList::moveContactToGroup(const string & dst, Contact & contact) {
-	//Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	ContactGroup * contactGroup = getContactGroup(contact.getGroupId());
 	std::string oldGroupName;
@@ -463,6 +479,8 @@ void ContactList::moveContactToGroup(const string & dst, Contact & contact) {
 }
 
 Contact * ContactList::getContact(const std::string & contactId) const {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	for (Contacts::const_iterator it = _contacts.begin();
 		it != _contacts.end();
 		++it) {
@@ -476,5 +494,7 @@ Contact * ContactList::getContact(const std::string & contactId) const {
 }
 
 void ContactList::contactChangedEventHandler(Contact & sender) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	contactChangedEvent(*this, sender);
 }

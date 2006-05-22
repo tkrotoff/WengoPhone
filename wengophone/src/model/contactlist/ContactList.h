@@ -24,9 +24,10 @@
 
 #include <imwrapper/EnumPresenceState.h>
 
+#include <thread/RecursiveMutex.h>
+
 #include <util/Event.h>
 #include <util/Picture.h>
-#include <thread/Mutex.h>
 
 #include <set>
 #include <list>
@@ -257,6 +258,12 @@ private:
 		const std::string & groupName, IMContact & imContact);
 
 	/**
+	 * @see IMContactListHandler::imContactMovedEvent
+	 */
+	void imContactMovedEventHandler(IMContactListHandler & sender,
+		const std::string & groupName, IMContact & imContact);
+
+	/**
 	 * @see IMContactListHandler::newContactGroupAddedEvent
 	 */
 	void newContactGroupAddedEventHandler(IMContactList & sender,
@@ -274,12 +281,6 @@ private:
 	void presenceStateChangedEventHandler(PresenceHandler & sender,
 		EnumPresenceState::PresenceState state,
 		const std::string & alias, const IMContact & imContact);
-
-	/**
-	 * @see IMContactListHandler::imContactMovedEvent
-	 */
-	void imContactMovedEventHandler(IMContactListHandler & sender,
-		const std::string & groupName, IMContact & imContact);
 
 	/**
 	 * @see PresenceHandler::contactIconChangedEvent
@@ -353,7 +354,7 @@ private:
 
 	IMContactListHandler & _imContactListHandler;
 
-	mutable Mutex _mutex;
+	mutable RecursiveMutex _mutex;
 };
 
 #endif	//CONTACTLIST_H
