@@ -123,6 +123,8 @@ public:
 
 	CodecList::VideoCodec getVideoCodecUsed(int callId);
 
+	void setVideoDevice(std::string deviceName);
+
 	bool setCallInputAudioDevice(const std::string & deviceName);
 
 	bool setRingerOutputAudioDevice(const std::string & deviceName);

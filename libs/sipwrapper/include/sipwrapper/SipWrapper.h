@@ -262,6 +262,13 @@ public:
 	 */
 	virtual CodecList::VideoCodec getVideoCodecUsed(int callId) = 0;
 
+	/**
+	 * Set the video device.
+	 *
+	 * @param deviceName the name of the video device
+	 */
+	virtual void setVideoDevice(std::string deviceName) = 0;
+
 	/** @} */
 
 	/**

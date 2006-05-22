@@ -805,7 +805,8 @@ void PhApiWrapper::setVideoQuality(EnumVideoQuality::VideoQuality videoQuality) 
 		break;
 
 	default:
-		LOG_FATAL("unknown video quality=" + String::fromNumber(videoQuality));
+		;
+//		LOG_FATAL("unknown video quality=" + String::fromNumber(videoQuality));
 	}
 }
 
@@ -1016,4 +1017,8 @@ std::string PhApiWrapper::phapiCallStateToString(enum phCallStateEvent event) {
 		LOG_FATAL("unknown phapi state=" + String::fromNumber(event));
 	}
 	return toReturn;
+}
+
+void PhApiWrapper::setVideoDevice(std::string deviceName) {
+	 strncpy(phcfg.video_config.video_device, deviceName.c_str(), sizeof(phcfg.video_config.video_device));
 }
