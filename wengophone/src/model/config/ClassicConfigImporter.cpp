@@ -161,15 +161,12 @@ int ClassicConfigImporter::detectLastVersion()
 
 	if (dirV2Exists)
 	{
-		File mFile(ConfigPathV2);
-		int dirNbr = mFile.getDirectoryList().size();
-
-		if (dirNbr)
+		if (File::exists(profilesPath + "profiles"))
 			return CONFIG_VERSION3;
 		else if (File::exists(ConfigPathV2 + "contactlist.xml"))
 			return CONFIG_VERSION2;
 		else if (dirV1Exists)
-		return CONFIG_VERSION1;
+			return CONFIG_VERSION1;
 	}
 	else if (dirV1Exists)
 		return CONFIG_VERSION1;
@@ -622,7 +619,7 @@ bool ClassicConfigImporter::ImportConfigFromV1toV3() {
 
 	for (int i = 0; i < dirList.size(); i++)
 	{
-		String newDir(config.getConfigDir() + dirList[i] + sep);
+		String newDir(config.getConfigDir() + sep + "profiles" + sep + dirList[i] + sep);
 		File::createPath(newDir);
 		string path = classicPath + dirList[i] + sep + "contacts" + sep;
 		ImportContactsFromV1toV3(path, newDir, dirList[i]);

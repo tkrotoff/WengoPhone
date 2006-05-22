@@ -114,8 +114,8 @@ void WengoPhone::init() {
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
 
 	//Imports the Config from WengoPhone Classic.
-	/*ClassicConfigImporter importer(*this);
-	importer.importConfig(config.getConfigDir());*/
+	ClassicConfigImporter importer(*this);
+	importer.importConfig(config.getConfigDir());
 
 	_wsWengoSubscribe = new WsWengoSubscribe();
 	wsWengoSubscribeCreatedEvent(*this, *_wsWengoSubscribe);
