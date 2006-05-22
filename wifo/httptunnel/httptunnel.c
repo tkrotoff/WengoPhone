@@ -45,6 +45,10 @@
 
 #endif
 
+#if defined(__APPLE__) || defined(WIN32)
+	#define MSG_NOSIGNAL 0
+#endif
+
 
 #include <string.h>
 #include <stdlib.h>
@@ -510,7 +514,7 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 			nbytes = SSL_write(hs->s_ssl, query, (int) strlen(query));
 		else
 #endif
-			nbytes = send(hs->fd, query, (int) strlen(query), 0);
+			nbytes = send(hs->fd, query, (int) strlen(query), MSG_NOSIGNAL);
 
 		if (nbytes < 0)
 		{
@@ -622,7 +626,7 @@ int	http_tunnel_send(void *h_tunnel, const void *buffer, int size)
 				send_bytes = SSL_write(hs->s_ssl, (char *) ptr2, size2send);
 			else
 #endif
-				send_bytes = send(hs->fd, (char *) ptr2, size2send, 0);
+				send_bytes = send(hs->fd, (char *) ptr2, size2send, MSG_NOSIGNAL);
 
 			if (send_bytes < 0)
 			{
