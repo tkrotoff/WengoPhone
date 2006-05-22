@@ -69,7 +69,7 @@ void QtToaster::setupGui(){
     float red = ((float )dest.red()) / 1.3f;
     float blue = ((float )dest.blue()) / 1.3f;
     float green = ((float )dest.green()) / 1.3f;
-    dest = QColor( (int)red,(int)green,(int)blue);
+    dest = QColor((int)red,(int)green,(int)blue);
     lg.setColorAt ( 1, dest  );
 
 	QPalette palette = frame->palette();

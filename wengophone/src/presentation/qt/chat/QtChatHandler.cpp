@@ -59,11 +59,7 @@ void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession 
 		_qtChatWidget->addChatSession(&imChatSession);
 	}
 
-	if (imChatSession.isUserCreated())
-		return;
-
-    if (!_qtChatWidget->isVisible())
-        showToaster(imChatSession);
+    showToaster(imChatSession);
 }
 
 void QtChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContactSet) {
@@ -85,6 +81,10 @@ void QtChatHandler::showToaster(IMChatSession & imChatSession) {
 
     Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+    if (_qtChatWidget->isVisible())
+        return;
+	if (imChatSession.isUserCreated())
+		return;
     // Shows toaster for incoming incoming chats ?
     if (!config.getNotificationShowToasterOnIncomingCall())
         return;
@@ -118,14 +118,14 @@ void QtChatHandler::showToaster(IMChatSession & imChatSession) {
 	}
 	toaster->hideButton(2); toaster->hideButton(3);
     if (!result.isNull()) {
-        QRect rect = QRect(0,0,70,70);
+
         QPainter pixpainter(& background);
         pixpainter.drawPixmap(5, 5, result.scaled(60, 60));
         pixpainter.end();
     }
 	else {
 	    result = QPixmap(":pics/toaster/chat.png");
-        QRect rect = QRect(0,0,70,70);
+
         QPainter pixpainter(& background);
         pixpainter.drawPixmap(5, 5, result.scaled(60, 60));
         pixpainter.end();
