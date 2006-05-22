@@ -629,7 +629,6 @@ QMainWindow * ChatWindow::findMainWindow(){
 }
 void ChatWindow::flashWindow() {
 #ifdef OS_WINDOWS
-    LOG_DEBUG("-************************ FLASHING WINDOW ************************-\n");
 	FLASHWINFO flashInfo;
 	flashInfo.cbSize = sizeof(FLASHWINFO);
 	flashInfo.hwnd = _dialog->winId();
@@ -638,4 +637,10 @@ void ChatWindow::flashWindow() {
 	flashInfo.dwTimeout = 500;
 	FlashWindowEx(&flashInfo);
 #endif
+}
+
+bool ChatWindow::isVisible(){
+    if (_dialog->isVisible() && (!_dialog->isMinimized()))
+        return true;
+    return false;
 }

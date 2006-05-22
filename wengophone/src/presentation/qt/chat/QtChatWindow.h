@@ -55,6 +55,8 @@ public:
 
 	void enableChatButton();
 
+    bool isVisible();
+
 Q_SIGNALS:
 
 	void messageReceivedSignal(IMChatSession * sender);

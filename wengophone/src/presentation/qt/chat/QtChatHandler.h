@@ -56,6 +56,8 @@ private:
 
 	void initThreadSafe();
 
+	void showToaster(IMChatSession & imChatSession);
+
 	CChatHandler & _cChatHandler;
 
 	ChatWindow * _qtChatWidget;
