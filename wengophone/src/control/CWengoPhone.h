@@ -277,7 +277,6 @@ private:
 
 	void wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward);
 
-	void controlTimeoutEventHandler();
 
 	/**
 	 * @see IMPresence::authorizationRequestEvent
