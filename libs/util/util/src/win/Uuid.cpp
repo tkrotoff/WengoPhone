@@ -26,10 +26,14 @@ std::string Uuid::generate() {
 	unsigned char *sUUID = NULL;
 	std::string result;
 
-	if (UuidCreateSequential(pUUID) == RPC_S_OK) {
+	if (UuidCreate(pUUID) == RPC_S_OK) {
 		UuidToString(pUUID, &sUUID);
-		result = std::string((char*)sUUID);
+		result = std::string((char *)sUUID);
 		RpcStringFree(&sUUID);
+	}
+
+	if (pUUID) {
+		delete pUUID;
 	}
 
 	return result;
