@@ -123,6 +123,12 @@ int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 	//Puts all the PhoneCall in the hold state before to create a new PhoneCall
 	holdCallsExcept(-1);
 
+	if( enableVideo ) {
+		//set the video device
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		_sipWrapper->setVideoDevice(config.getVideoWebcamDevice());
+	}
+	
 	PhoneCall * phoneCall = new PhoneCall(*this, sipAddress);
 	int callId = _sipWrapper->makeCall(_lineId, sipAddress.getRawSipAddress(), enableVideo);
 	phoneCall->setCallId(callId);
