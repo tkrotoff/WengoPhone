@@ -45,7 +45,7 @@
 
 #endif
 
-#if defined(__APPLE__) || defined(WIN32)
+#ifndef MSG_NOSIGNAL
 	#define MSG_NOSIGNAL 0
 #endif
 
@@ -464,12 +464,17 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 	else
 	{
 
+		int i = 1;
 		sock = socket(PF_INET, SOCK_STREAM, 0);
 		if (sock == -1)
 		  {
 		    free(hs);
 		    return NULL;
 		  }
+
+#ifdef SO_NOSIGPIPE
+		setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &i, sizeof(i));
+#endif
 
 		hs->fd = sock;
 		addr.sin_port = (unsigned short) htons(httpServerPort);
