@@ -422,6 +422,8 @@ void QtUserManager::safeSortUsers() {
         if (_sortTimerId != -1)
             killTimer(_sortTimerId);
         _sortTimerId = startTimer(2000);
+    }else{
+        return;
     }
 
 	QtUserList * ul = QtUserList::getInstance();
