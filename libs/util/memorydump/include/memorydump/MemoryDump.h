@@ -76,7 +76,7 @@ public:
 	 *
 	 * @param applicationName name of the application (e.g WengoPhone)
 	 */
-	MemoryDump(const char * applicationName);
+	MemoryDump(const char * applicationName, const char * revision);
 
 	~MemoryDump();
 
@@ -114,6 +114,11 @@ private:
 	 * Path to the translation file.
 	 */
 	static char * _languageFilename;
+
+	/**
+	 * Name of the application that uses MemoryDump.
+	 */
+	static char * _revision;
 
 	/**
 	 * win32 API stuff.

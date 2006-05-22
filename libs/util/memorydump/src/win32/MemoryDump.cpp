@@ -36,11 +36,12 @@ using namespace std;
 char * MemoryDump::_applicationName = NULL;
 char * MemoryDump::_styleName = NULL;
 char * MemoryDump::_languageFilename = NULL;
+char * MemoryDump::_revision = NULL;
 std::string (*MemoryDump::getAdditionnalInfo)();
 
 static const char * DBGHELP_DLL = "dbghelp.dll";
 
-MemoryDump::MemoryDump(const char * applicationName) {
+MemoryDump::MemoryDump(const char * applicationName, const char * revision) {
 	//If this assert fires then you have two instances of MemoryDump
 	//which is not allowed
 	if (_applicationName) {
@@ -48,6 +49,7 @@ MemoryDump::MemoryDump(const char * applicationName) {
 	}
 
 	_applicationName = strdup(applicationName);
+	_revision = strdup(revision);
 
 	::SetUnhandledExceptionFilter(topLevelFilter);
 }
@@ -124,6 +126,8 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 		strcpy(memoryDumpName, _applicationName);
 		strcat(memoryDumpName, "-");
 		strcat(memoryDumpName, getCurrentDateTime());
+		strcat(memoryDumpName, "-revision-");
+		strcat(memoryDumpName, _revision);
 		strcat(memoryDumpName, ".dmp");
 
 		//GetModuleFileName retrieves the path of the executable file of the current process.
