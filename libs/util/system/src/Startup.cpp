@@ -49,6 +49,7 @@ bool Startup::setStartup(bool startup) {
 	::RegOpenKeyExA(HKEY_CURRENT_USER, STARTUP_REGISTRY_KEY,
 				0, KEY_WRITE, &hKey);
 
+	//add the entry to the key
 	if (startup) {
 		::RegCreateKeyA(HKEY_CURRENT_USER, STARTUP_REGISTRY_KEY, &hKey);
 
@@ -56,18 +57,20 @@ bool Startup::setStartup(bool startup) {
 				(const BYTE *) _executablePath.c_str(), _executablePath.length())) {
 			::RegCloseKey(hKey);
 			return true;
+		} else {
+			::RegCloseKey(hKey);
+			return false;
 		}
+	//remove the entry from the key
 	} else {
-		string empty = "";
-		if (ERROR_SUCCESS == ::RegSetValueExA(hKey, _applicationName.c_str(), 0, REG_SZ,
-				(const BYTE *) empty.c_str(), empty.length())) {
+		if( ::RegDeleteValueA(hKey, _applicationName.c_str()) != ERROR_SUCCESS ) {
+			::RegCloseKey(hKey);
+			return false;
+		} else {
 			::RegCloseKey(hKey);
 			return true;
 		}
 	}
-
-	::RegCloseKey(hKey);
-	return false;
 #else
 	startup = false;
 	return startup;

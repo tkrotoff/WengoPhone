@@ -64,10 +64,9 @@ bool Processes::killProcess(const std::string & processName) {
 			return TerminateProcess(ps, 0);
 		}
 	}
-
 	return false;
 #else
-    /* FIXME: Need implementation on other platforms */
-    return false;
+	/* FIXME: Need implementation on other platforms */
+	return false;
 #endif /* WIN32 */
 }

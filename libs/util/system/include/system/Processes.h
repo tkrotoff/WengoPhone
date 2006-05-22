@@ -33,5 +33,4 @@ public:
 
 	static bool killProcess(const std::string & processName);
 };
-
 #endif /* PROCESSES_H */
