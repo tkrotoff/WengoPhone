@@ -42,12 +42,18 @@ V4LWebcamDriver::~V4LWebcamDriver() {
 }
 
 void V4LWebcamDriver::cleanup() {
-	if (_fhandle > 0)
+	if (_fhandle > 0) {
 		close(_fhandle);
+	}
 	_fhandle = 0;
 	_isOpened = false;
 	_terminate = false;
 	_fps = 15;
+}
+
+
+void V4LWebcamDriver::terminate() {
+	_terminate = true;
 }
 
 StringList V4LWebcamDriver::getDeviceList() {
@@ -76,6 +82,9 @@ string V4LWebcamDriver::getDefaultDevice() {
 webcamerrorcode V4LWebcamDriver::setDevice(const std::string & deviceName) {
 	//TODO: test if a webcam is already opened
 
+	std::string device = "/dev/" + deviceName.substr(deviceName.size() - 6, deviceName.size() - 1);
+
+#if 0
 	//Looking for the device path
 	//FIXME: the current device naming scheme allows different devices to have
 	//	the same name. This can produce some unwanted behavior (such as selecting
@@ -90,7 +99,8 @@ webcamerrorcode V4LWebcamDriver::setDevice(const std::string & deviceName) {
 		}
 		i++;
 	}
-
+#endif
+	
 	_fhandle = open(device.c_str(), O_RDWR);
 	if (_fhandle <= 0) {
 		return WEBCAM_NOK;
@@ -124,7 +134,7 @@ void V4LWebcamDriver::stopCapture() {
 webcamerrorcode V4LWebcamDriver::setPalette(pixosi palette) {
 	int depth;
 	int v4l_palette = pix_v4l_from_pix_osi(palette);
-
+	
 	switch (palette) {
 	case PIX_OSI_YUV420P:
 		depth = 12;
@@ -246,10 +256,6 @@ void V4LWebcamDriver::run() {
 	pix_free(image);
 }
 
-void V4LWebcamDriver::terminate() {
-	_terminate = true;
-}
-
 V4LWebcamDriver::DevNameArray V4LWebcamDriver::getDevices() {
 	return getDevices2_6();
 }
@@ -260,11 +266,14 @@ V4LWebcamDriver::DevNameArray V4LWebcamDriver::getDevices2_6() {
 	FileReader sysDir(dir);
 	StringList list = sysDir.getDirectoryList();
 
+	
 	for (register unsigned i = 0 ; i < list.size() ; i++) {
 		if (list[i][0] != '.') {
-			ifstream nameFile((dir + list[i] + "/name").c_str());
+			ifstream nameFile((dir + "/" + list[i] + "/name").c_str());
 			char buffer[512];
 			nameFile.getline(buffer, 512);
+			
+			strncat(buffer, (" : " + list[i]).c_str(), list[i].size() + 3); 
 
 			array[list[i]] = buffer;
 		}
