@@ -84,6 +84,8 @@ void Contact::copy(const ContactProfile & contactProfile) {
 		boost::bind(&Contact::profileChangedEventHandler, this, _1);
 
 	// Sets groups
+	_contactList.lock();
+
 	ContactGroup * newContactGroup = _contactList.getContactGroup(contactProfile.getGroupId());
 	ContactGroup * oldContactGroup = _contactList.getContactGroup(getGroupId());
 
@@ -92,6 +94,8 @@ void Contact::copy(const ContactProfile & contactProfile) {
 	} else if (!oldContactGroup && newContactGroup) {
 		_contactList._addToContactGroup(newContactGroup->getName(), *this);
 	}
+
+	_contactList.unlock();
 	////
 
 	setWengoPhoneId(contactProfile._wengoPhoneId);

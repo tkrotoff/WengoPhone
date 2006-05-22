@@ -36,6 +36,8 @@ ContactList::ContactList(UserProfile & userProfile)
 	: _userProfile(userProfile), 
 	_imContactListHandler(userProfile.getIMContactListHandler()) {
 
+	_scopedLock = NULL;
+
 	_imContactListHandler.newIMContactAddedEvent +=
 		boost::bind(&ContactList::newIMContactAddedEventHandler, this, _1, _2, _3);
 	_imContactListHandler.imContactRemovedEvent +=
@@ -497,4 +499,17 @@ void ContactList::contactChangedEventHandler(Contact & sender) {
 	RecursiveMutex::ScopedLock lock(_mutex);
 
 	contactChangedEvent(*this, sender);
+}
+
+void ContactList::lock() {
+	if (!_scopedLock) {
+		_scopedLock = new RecursiveMutex::ScopedLock(_mutex);
+	}
+}
+
+void ContactList::unlock() {
+	if (_scopedLock) {
+		delete _scopedLock;
+		_scopedLock = NULL;
+	}
 }

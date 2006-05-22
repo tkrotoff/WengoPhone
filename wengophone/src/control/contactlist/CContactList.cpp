@@ -87,7 +87,9 @@ void CContactList::contactChangedEventHandler(ContactList & sender, Contact & co
 std::vector< std::pair<std::string, std::string> > CContactList::getContactGroups() const {
 	std::vector< std::pair<std::string, std::string> > result;
 
+	_contactList.lock();
 	ContactList::ContactGroupSet contactGroups = _contactList.getContactGroupSet();
+	_contactList.unlock();
 
 	for (ContactList::ContactGroupSet::const_iterator it = contactGroups.begin();
 		it != contactGroups.end();
@@ -100,18 +102,26 @@ std::vector< std::pair<std::string, std::string> > CContactList::getContactGroup
 
 std::string CContactList::getContactGroupName(const std::string & groupId) const {
 	std::string result;
+
+	_contactList.lock();
+
 	ContactGroup * contactGroup = _contactList.getContactGroup(groupId);
 
 	if (contactGroup) {
 		result = contactGroup->getName();
 	}
 
+	_contactList.unlock();
+
 	return result;
 }
 
 std::string CContactList::getContactGroupIdFromName(const std::string & groupName) const {
 	std::string result;
+
+	_contactList.lock();
 	ContactList::ContactGroupSet contactGroups = _contactList.getContactGroupSet();
+	_contactList.unlock();
 
 	for (ContactList::ContactGroupSet::const_iterator it = contactGroups.begin();
 		it != contactGroups.end();
@@ -156,6 +166,9 @@ void CContactList::addContact(const ContactProfile & contactProfile) {
 
 std::vector<std::string> CContactList::getContactIds() const {
 	std::vector<std::string> result;
+
+	_contactList.lock();
+
 	const ContactList::Contacts &contacts = _contactList.getContacts();
 
 	for (ContactList::Contacts::const_iterator it = contacts.begin();
@@ -163,6 +176,8 @@ std::vector<std::string> CContactList::getContactIds() const {
 		++it) {
 		result.push_back((*it).getUUID());
 	}
+
+	_contactList.unlock();
 
 	return result;
 }

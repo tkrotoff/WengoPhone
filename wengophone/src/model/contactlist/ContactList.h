@@ -233,6 +233,23 @@ public:
 	 */
 	Contact * getContact(const std::string & contactId) const;
 
+	/**
+	 * Locks the ContactList.
+	 *
+	 * A locked ContactList can't be modified.
+	 * The ContactList must be unlocked by calling unlock.
+	 *
+	 * This method is used by the model and the control.
+	 */
+	void lock();
+
+	/**
+	 * Unlocks the ContactList.
+	 *
+	 * This method is used by the model and the control.
+	 */
+	void unlock();
+
 private:
 
 	/**
@@ -355,6 +372,8 @@ private:
 	IMContactListHandler & _imContactListHandler;
 
 	mutable RecursiveMutex _mutex;
+
+	RecursiveMutex::ScopedLock * _scopedLock;
 };
 
 #endif	//CONTACTLIST_H
