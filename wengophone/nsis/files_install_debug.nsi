@@ -10,4 +10,4 @@ File "C:\WINDOWS\system32\msvcr71d.dll"
 File "C:\WINDOWS\system32\msvcp71d.dll"
 
 SetOutPath "$INSTDIR\imageformats"
-File "${QTDIR}\plugins\imageformats\qmng1d.dll"
+File "${QTDIR}\plugins\imageformats\qmngd1.dll"
