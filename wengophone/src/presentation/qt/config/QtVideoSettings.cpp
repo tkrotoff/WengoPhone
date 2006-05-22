@@ -29,7 +29,6 @@
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
 
-
 #include <webcam/WebcamDriver.h>
 #include <sipwrapper/EnumVideoQuality.h>
 
@@ -54,7 +53,8 @@ QtVideoSettings::QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	connect(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
 	connect(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(startWebcamPreview(const QString &)));
 	connect(_ui->enableVideoGroupBox, SIGNAL(toggled(bool)), SLOT(enableVideo(bool)));
-	connect(_ui->makeTestVideoCallButton, SIGNAL(pressed()), SLOT(makeTestCallClicked()));
+	connect(_ui->makeTestVideoCallButton, SIGNAL(clicked()), SLOT(makeTestCallClicked()));
+	connect(_ui->webcamPreviewButton, SIGNAL(clicked()), SLOT(webcamPreview()));
 
 	readConfig();
 }
@@ -165,7 +165,7 @@ void QtVideoSettings::stopWebcamPreview() {
 	_webcamDriver->stopCapture();
 }
 
-void QtVideoSettings::showEvent(QShowEvent * event) {
+void QtVideoSettings::webcamPreview() {
 	readConfig();
 	startWebcamPreview(_ui->webcamDeviceComboBox->currentText());
 }

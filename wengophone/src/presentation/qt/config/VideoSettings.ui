@@ -69,23 +69,24 @@
               <property name="spacing" >
                <number>6</number>
               </property>
-              <item row="2" column="0" >
-               <spacer>
-                <property name="orientation" >
-                 <enum>Qt::Vertical</enum>
-                </property>
-                <property name="sizeHint" >
-                 <size>
-                  <width>20</width>
-                  <height>40</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
               <item row="0" column="0" >
                <widget class="QLabel" name="label_3" >
                 <property name="text" >
                  <string>Webcam device:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0" >
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Vertical</enum>
+                </property>
+               </spacer>
+              </item>
+              <item row="2" column="0" >
+               <widget class="QPushButton" name="webcamPreviewButton" >
+                <property name="text" >
+                 <string>Webcam Preview</string>
                 </property>
                </widget>
               </item>
@@ -258,6 +259,16 @@
      </layout>
     </widget>
    </item>
+   <item row="1" column="0" >
+    <widget class="QPushButton" name="makeTestVideoCallButton" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="text" >
+      <string>Make a test video call</string>
+     </property>
+    </widget>
+   </item>
    <item row="2" column="1" >
     <spacer>
      <property name="orientation" >
@@ -270,16 +281,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QPushButton" name="makeTestVideoCallButton" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-     <property name="text" >
-      <string>Make a test video call</string>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

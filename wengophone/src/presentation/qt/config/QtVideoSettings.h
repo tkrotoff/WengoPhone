@@ -30,7 +30,6 @@ class IWebcamDriver;
 
 class QImage;
 class QHideEvent;
-class QShowEvent;
 class QString;
 class CWengoPhone;
 namespace Ui { class VideoSettings; }
@@ -61,6 +60,8 @@ public:
 
 private Q_SLOTS:
 
+	void webcamPreview();
+
 	void newWebcamImageCaptured(QImage * image);
 
 	void startWebcamPreview(const QString & deviceName);
@@ -82,8 +83,6 @@ private:
 	void frameCapturedEventHandler(IWebcamDriver * sender, piximage * image);
 
 	void hideEvent(QHideEvent * event);
-
-	void showEvent(QShowEvent * event);
 
 	Ui::VideoSettings * _ui;
 
