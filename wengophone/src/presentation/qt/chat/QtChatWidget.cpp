@@ -1,4 +1,5 @@
 /*
+
  * WengoPhone, a voice over Internet phone
  * Copyright (C) 2004-2005  Wengo
  *
@@ -449,7 +450,6 @@ void ChatWidget::updateContactListLabel(){
         QString str = QString (tr("Chat with : ")) + contactStringList.join("; ");
         _contactListLabel->setText(str);
     }
-
 }
 
 

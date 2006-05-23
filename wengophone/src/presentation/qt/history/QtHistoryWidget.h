@@ -42,7 +42,7 @@ class QtHistoryWidget : public QWidget {
 public:
 
 	QtHistoryWidget ( QWidget * parent = 0, Qt::WFlags f = 0);
-	
+
 	~QtHistoryWidget();
 
 	void clearHistory();
@@ -71,6 +71,8 @@ public:
 		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
 
 	void showPopupMenu(const QPoint & point);
+
+	void resizeColumns();
 
 public Q_SLOTS:
 

@@ -91,7 +91,7 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 	connect (_treeWidget, SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),SLOT (itemDoubleClicked ( QTreeWidgetItem *, int) ) );
 
 	connect(_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *,int)), SLOT(itemClicked()));
-	
+
 	connect (_header,SIGNAL(sectionClicked (int)),SLOT(headerClicked(int)) );
 
 
@@ -119,7 +119,7 @@ void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const 
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId(id);
 	item->setItemType(QtHistoryItem::Sms);
-
+    resizeColumns();
 	sortHistory();
 }
 
@@ -135,7 +135,7 @@ void QtHistoryWidget::addOutGoingCallItem(const QString & text,const QDate & dat
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::OutGoingCall);
-
+    resizeColumns();
 	sortHistory();
 }
 
@@ -150,7 +150,7 @@ void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & dat
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::IncomingCall);
-
+    resizeColumns();
 	sortHistory();
 }
 
@@ -164,7 +164,7 @@ void QtHistoryWidget::addChatItem(const QString & text,const QDate & date, const
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::Chat);
-
+    resizeColumns();
 	sortHistory();
 }
 
@@ -178,7 +178,7 @@ void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date,
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::MissedCall);
-
+    resizeColumns();
 	sortHistory();
 }
 
@@ -193,7 +193,7 @@ void QtHistoryWidget::addRejectedCallItem(const QString & text,const QDate & dat
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId( id );
 	item->setItemType(QtHistoryItem::RejectedCall);
-
+    resizeColumns();
 	sortHistory();
 }
 
@@ -210,6 +210,7 @@ void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QT
 			item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
 			item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
 			item->setText(QtHistoryItem::COLUMN_PEERS, name);
+            resizeColumns();
 			break;
 		}
 	}
@@ -286,4 +287,11 @@ void QtHistoryWidget::sortHistory() {
 
 void QtHistoryWidget::itemClicked() {
 	missedCallsSeen();
+}
+
+void QtHistoryWidget::resizeColumns() {
+    _treeWidget->resizeColumnToContents (QtHistoryItem::COLUMN_TYPE);
+    _treeWidget->resizeColumnToContents (QtHistoryItem::COLUMN_DATE);
+    _treeWidget->resizeColumnToContents (QtHistoryItem::COLUMN_DURATION);
+    _treeWidget->resizeColumnToContents (QtHistoryItem::COLUMN_PEERS);
 }

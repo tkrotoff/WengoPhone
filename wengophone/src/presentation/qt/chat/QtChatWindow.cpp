@@ -387,7 +387,7 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 		tabNumber = _tabWidget->insertTab(_tabWidget->count(),_chatWidget,senderName);
 	else
 		tabNumber = _tabWidget->insertTab(0,_chatWidget,senderName);
-
+    _dialog->setWindowTitle(_tabWidget->tabText(tabNumber));
     _chatWidget->setNickName(nickName);
 
 	// Adding probably missed message
@@ -417,6 +417,7 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 
 void ChatWindow::tabSelectionChanged ( int index ){
 	_tabWidget->stopBlinkingTab(index);
+	_dialog->setWindowTitle(_tabWidget->tabText(_tabWidget->currentIndex()));
 }
 
 void ChatWindow::addContactToContactListFrame(const Contact & contact){
