@@ -251,7 +251,7 @@ void ChatWindow::show(){
         _dialog->hide();
 	_dialog->showNormal();
 	_dialog->raise();
-	flashWindow();
+	//flashWindow();
 }
 
 void ChatWindow::messageReceivedEventHandler(IMChatSession & sender) {
@@ -285,9 +285,13 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
 				_chatWidget = qobject_cast<ChatWidget *>(_tabWidget->widget(i));
 				_chatWidget->addToHistory(senderName, msg);
 				if ( _tabWidget->currentWidget() != _chatWidget ) {
-					_tabWidget->setBlinkingTab(i);
+					if (_dialog->isMinimized())
+                        _tabWidget->setCurrentIndex(i);
+                    else
+                        _tabWidget->setBlinkingTab(i);
 				}
-				flashWindow();
+				if (_dialog->isMinimized())
+                    flashWindow();
 				return;
 			}
 		}
@@ -340,7 +344,8 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
                 flashWindow();
             }
             else
-                flashWindow();
+                if (_dialog->isMinimized())
+                    flashWindow();
 			return;
 		}
 	}
@@ -679,16 +684,20 @@ void ChatWindow::statusChangedSlot(QString contactId) {
             if (widget->getContactId() == contactId){
                 switch(pstate) {
                     case EnumPresenceState::PresenceStateOnline:
-                        _tabWidget->setTabText(i,displayName + " (Online)");
+                        // _tabWidget->setTabText(i,displayName + " (Online)");
+                        _tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/online.png")));
                         break;
                     case EnumPresenceState::PresenceStateOffline:
-                        _tabWidget->setTabText(i,displayName + " (Offline)");
+                        // _tabWidget->setTabText(i,displayName + " (Offline)");
+                        _tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/offline.png")));
                         break;
                     case EnumPresenceState::PresenceStateDoNotDisturb:
-                        _tabWidget->setTabText(i,displayName + " (DND)");
+                        // _tabWidget->setTabText(i,displayName + " (DND)");
+                        _tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/donotdisturb.png")));
                         break;
                     case EnumPresenceState::PresenceStateAway:
-                        _tabWidget->setTabText(i,displayName + " (Away)");
+                        // _tabWidget->setTabText(i,displayName + " (Away)");
+                        _tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/away.png")));
                         break;
                     default:
                         break;
