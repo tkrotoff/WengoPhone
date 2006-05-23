@@ -278,3 +278,12 @@ void CContactList::mergeThreadSafe(std::string dstContactId, std::string srcCont
 		_contactList.mergeContacts(*dstContact, *srcContact);
 	}
 }
+std::string CContactList::findContactThatOwns(const IMContact & imContact){
+    std::string result;
+
+    Contact * contact = _contactList.findContactThatOwns(imContact);
+    if (contact) {
+        result = contact->getUUID();
+    }
+    return result;
+}

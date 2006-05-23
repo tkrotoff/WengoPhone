@@ -21,7 +21,7 @@
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
 #include "../QtWengoPhone.h"
-
+#include "../contactlist/QtContactList.h"
 #include <model/contactlist/ContactList.h>
 #include <model/contactlist/ContactGroup.h>
 
@@ -211,21 +211,15 @@ void ChatWindow::inviteContact(){
 
 void ChatWindow::closeTab(){
     ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(_tabWidget->currentIndex() ) );
-/*
-    if ( widget){
-        if (widget->canDoMultiChat()){
-            widget->getIMChatSession()->close();
-        }
-    }
-*/
+
     delete widget;
+
     if ( _tabWidget->count() == 0 )
     {
         _dialog->hide();
         QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
         qtWengoPhone->setChatWindow( NULL );
     }
-    //_tabWidget->removeTab ( _tabWidget->currentIndex() );
 }
 void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state){
 	IMChat::TypingState * tmpState = new IMChat::TypingState;
@@ -379,14 +373,26 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	QString nickName = QString().fromStdString(session->getIMChat().getIMAccount().getLogin());
 	QString senderName = QString::fromStdString(from.getContactId());
 	int tabNumber;
+
+    QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
+    QtContactList * qtContactList = qtWengoPhone->getContactList();
+
     _chatWidget = new ChatWidget(_cChatHandler,session->getId(), _tabWidget);
 	_chatWidget->setIMChatSession(session);
+	_chatWidget->setContactId(QString::fromStdString(qtContactList->getCContactList().findContactThatOwns(from)));
+
+	connect(qtContactList,SIGNAL(contactChangedEventSignal(QString )), SLOT(statusChangedSlot(QString)));
+
 //	connect ( _chatWidget, SIGNAL( newContact(const Contact & ) ), SLOT ( addContactToContactListFrame(const Contact &)));
 
 	if (_tabWidget->count() > 0)
 		tabNumber = _tabWidget->insertTab(_tabWidget->count(),_chatWidget,senderName);
 	else
 		tabNumber = _tabWidget->insertTab(0,_chatWidget,senderName);
+
+
+    statusChangedSlot(QString::fromStdString(qtContactList->getCContactList().findContactThatOwns(from)));
+
     _dialog->setWindowTitle(_tabWidget->tabText(tabNumber));
     _chatWidget->setNickName(nickName);
 
@@ -402,7 +408,11 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 
     connect (_chatWidget,SIGNAL(newMessage(IMChatSession *,const QString & )),SLOT(newMessage(IMChatSession *,const QString &)));
 
-	_tabWidget->setCurrentIndex(tabNumber);
+	if ( !_dialog->isVisible() || _dialog->isMinimized())
+        _tabWidget->setCurrentIndex(tabNumber);
+
+
+
 
 	Contact * contact = _cChatHandler.getUserProfile().getContactList().findContactThatOwns(from);
 	if ( contact ){
@@ -644,4 +654,47 @@ bool ChatWindow::isVisible(){
     if (_dialog->isVisible() && (!_dialog->isMinimized()))
         return true;
     return false;
+}
+
+void ChatWindow::imContactChangedEventHandler(IMContact & sender) {
+    statusChangedSignal(&sender);
+}
+
+void ChatWindow::statusChangedSlot(QString contactId) {
+
+    QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
+    QtContactList * qtContactList = qtWengoPhone->getContactList();
+
+
+    std::string sdname = qtContactList->getCContactList().getContactProfile(contactId.toStdString()).getDisplayName();
+
+    EnumPresenceState::PresenceState pstate = qtContactList->getCContactList().getContactProfile(contactId.toStdString()).getPresenceState();
+
+    QString displayName = QString::fromStdString(sdname);
+
+    // search for the tab that contain sender
+    for (int i = 0; i < _tabWidget->count(); i++) {
+        ChatWidget * widget = dynamic_cast<ChatWidget *> (_tabWidget->widget(i));
+        if (widget) {
+            if (widget->getContactId() == contactId){
+                switch(pstate) {
+                    case EnumPresenceState::PresenceStateOnline:
+                        _tabWidget->setTabText(i,displayName + " (Online)");
+                        break;
+                    case EnumPresenceState::PresenceStateOffline:
+                        _tabWidget->setTabText(i,displayName + " (Offline)");
+                        break;
+                    case EnumPresenceState::PresenceStateDoNotDisturb:
+                        _tabWidget->setTabText(i,displayName + " (DND)");
+                        break;
+                    case EnumPresenceState::PresenceStateAway:
+                        _tabWidget->setTabText(i,displayName + " (Away)");
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            }
+        }
+    }
 }

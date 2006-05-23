@@ -87,11 +87,17 @@ public:
     // called from the model's thread
     void contactRemovedEventHandler(IMChatSession & sender, const IMContact & imContact);
 
+    void setContactId(QString contactId) { _contactId = contactId;}
+
+    QString getContactId() { return _contactId;}
+
 protected:
 
     QWidget *       _widget;
 
 	CChatHandler & _cChatHandler;
+
+	QString  _contactId;
 
 	int _sessionId;
 
@@ -213,7 +219,6 @@ public Q_SLOTS:
     void contactAddedEventSlot();
 
     void contactRemovedEventSlot();
-
 
     virtual void setVisible ( bool visible );
 

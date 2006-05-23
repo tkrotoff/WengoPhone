@@ -83,6 +83,8 @@ public:
 
 	void setContactList(QtContactList * qtContactList);
 
+	QtContactList * getContactList() { return _contactList;}
+
 	void setHistory(QtHistoryWidget * qtHistoryWidget);
 
 	void setPhoneCall(QtContactCallListWidget * qtContactCallListWidget);
@@ -312,14 +314,14 @@ private:
 	TrayIcon * _trayIcon;
 
 	QMenu * _trayMenu;
-	
+
 	QMenu * _callMenu;
 	QMenu * _callLandLineMenu;
 	QMenu * _callMobileMenu;
 	QMenu * _callWengoMenu;
 
 	QMenu * _startChatMenu;
-	
+
 	QMenu * _sendSmsMenu;
 
 	QtSms * _qtSms;

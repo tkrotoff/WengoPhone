@@ -57,6 +57,8 @@ public:
 
     bool isVisible();
 
+    void imContactChangedEventHandler(IMContact & sender);
+
 Q_SIGNALS:
 
 	void messageReceivedSignal(IMChatSession * sender);
@@ -64,6 +66,8 @@ Q_SIGNALS:
 	void typingStateChangedSignal(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
 
 	void contactAddedSignal(IMChatSession * session, const IMContact * imContact );
+
+	void statusChangedSignal(IMContact * sender);
 
 public Q_SLOTS:
 
@@ -79,6 +83,7 @@ public Q_SLOTS:
 
 	void closeContactListFrame();
 
+
 protected Q_SLOTS:
 
 	void messageReceivedSlot(IMChatSession * sender);
@@ -90,6 +95,8 @@ protected Q_SLOTS:
 	void inviteContact();
 
 	void closeTab();
+
+	void statusChangedSlot(QString contactId);
 
 protected:
 

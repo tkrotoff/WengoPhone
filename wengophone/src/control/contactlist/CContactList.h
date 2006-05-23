@@ -78,6 +78,8 @@ public:
 	 */
 	ContactProfile getContactProfile(const std::string & contactId) const;
 
+    std::string findContactThatOwns(const IMContact & imContact);
+
 	/**
 	 * Gets all existing Contact Ids.
 	 *

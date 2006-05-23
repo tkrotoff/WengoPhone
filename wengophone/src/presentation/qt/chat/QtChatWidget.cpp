@@ -65,7 +65,6 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 	_typingStateLabel = Object::findChild<QLabel *>(_widget,"typingStateLabel");
 	_actionFrame = Object::findChild<QFrame *>(_widget,"actionFrame");
     _contactListLabel = Object::findChild<QLabel *>(_widget,"contactListLabel");
-
 	createActionFrame();
     setupSendButton();
 
@@ -98,6 +97,7 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 	new QHBoxLayout(_contactViewport);
 	_contactViewport->layout()->setMargin(0);
 	_scrollArea->setWidgetResizable(true);
+
 }
 
 ChatWidget::~ChatWidget(){
