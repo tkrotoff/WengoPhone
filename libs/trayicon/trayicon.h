@@ -76,13 +76,14 @@ protected:
 	virtual void mousePressEvent( QMouseEvent *e );
 	virtual void mouseReleaseEvent( QMouseEvent *e );
 	virtual void mouseDoubleClickEvent( QMouseEvent *e );
-
+	
 private:
 	QMenu *pop;
 	QPixmap pm;
 	QString tip;
 	bool v_isWMDock;
-
+	int _clickTimerId;
+	bool _waitForDoubleClick;
 	// system-dependant part
 public:
 	class TrayIconPrivate;

@@ -40,6 +40,7 @@ TrayIcon::TrayIcon( QObject *parent)
 : QObject(parent), pop(0), d(0)
 {
 	v_isWMDock = FALSE;
+	_clickTimerId = -1;
 }
 
 /*!
@@ -247,6 +248,15 @@ void TrayIcon::mouseReleaseEvent( QMouseEvent *e )
 			}
 			break;
 		case Qt::LeftButton:
+			if ( pop ) {
+				// Necessary to make keyboard focus
+				// and menu closing work on Windows.
+				pop->activateWindow ();
+				pop->popup( e->globalPos() );
+				pop->activateWindow ();
+				e->accept();
+			}
+			break;
 		case Qt::MidButton:
 			clicked( e->globalPos(), e->button() );
 			break;
