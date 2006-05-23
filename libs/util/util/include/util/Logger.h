@@ -26,6 +26,8 @@
 
 #include <cutil/global.h>
 
+#include <boost/thread/mutex.hpp>
+
 class FileWriter;
 
 /*
@@ -38,7 +40,7 @@ __PRETTY_FUNCTION__ : function name
 */
 
 #ifdef CC_GCC
-#define __FUNCTION__ __PRETTY_FUNCTION__
+	#define __FUNCTION__ __PRETTY_FUNCTION__
 #endif
 
 /** Macros for the Logger class. */
@@ -111,12 +113,6 @@ public:
 
 	void fatal(const std::string & className, const std::string & message);
 
-	void operator<<(std::ostream & os);
-
-	friend std::ostream & operator<<(std::ostream & os, const Logger & /*logger*/) {
-		return os;
-	}
-
 	/**
 	 * Flushes the logger.
 	 */
@@ -138,6 +134,9 @@ private:
 
 	/** Writes the log messages to a file named log.txt. */
 	FileWriter * _file;
+
+	/** Ensures Logger is thread-safe. */
+	mutable boost::mutex _mutex;
 };
 
 #endif	//LOGGER_H

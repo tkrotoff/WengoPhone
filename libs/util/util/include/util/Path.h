@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,14 +55,13 @@ public:
 	 * @return the configuration directory path
 	 */
 	static std::string getConfigurationDirPath();
- 
+
 	/**
 	 * Gets the home directory path.
 	 *
 	 * @return the home dir of the current user.
 	 */
 	static std::string getHomeDirPath();
-
 #ifdef OS_MACOSX
 	// Special extensions for MacOS X
 

@@ -18,17 +18,21 @@
  */
 
 #include "QtStatusBarStyle.h"
-QtStatusBarStyle::QtStatusBarStyle() : QCommonStyle(){
+
+#include <QtGui>
+
+QtStatusBarStyle::QtStatusBarStyle() : QCommonStyle() {
 }
-QtStatusBarStyle::~QtStatusBarStyle(){
+
+QtStatusBarStyle::~QtStatusBarStyle() {
 }
 
+void QtStatusBarStyle::drawPrimitive(PrimitiveElement elem, const QStyleOption * option,
+		QPainter * painter, const QWidget * widget) const {
 
-void QtStatusBarStyle::drawPrimitive ( PrimitiveElement elem, const QStyleOption * option,
-    QPainter * painter, const QWidget * widget ) const{
+	if (elem == PE_FrameStatusBar) {
+		return;
+	}
 
-    if (elem == PE_FrameStatusBar )
-        return;
-
-    QCommonStyle::drawPrimitive(elem,option,painter,widget);
+	QCommonStyle::drawPrimitive(elem, option, painter, widget);
 }

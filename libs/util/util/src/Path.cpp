@@ -20,17 +20,17 @@
 #include <util/Path.h>
 
 #include <util/File.h>
+#include <util/Logger.h>
 
 #if defined(OS_MACOSX)
-#include <CoreFoundation/CoreFoundation.h>
+	#include <CoreFoundation/CoreFoundation.h>
 #elif defined(OS_WINDOWS)
-#include <windows.h>
+	#include <windows.h>
 #elif defined(OS_LINUX)
-#include <stdio.h>
-#include <sys/types.h>
-#include <unistd.h>
+	#include <stdio.h>
+	#include <sys/types.h>
+	#include <unistd.h>
 #endif
-
 
 using namespace std;
 
@@ -69,19 +69,21 @@ string Path::getApplicationDirPath() {
 	pid_t pid;
 	int ret;
 	char buff[1024];
-	
+
 	memset(buff, 0, sizeof(buff));
 	memset(procname, 0, sizeof(procname));
 	pid = getpid();
-	
-	if (snprintf(procname, sizeof(procname), "/proc/%i/exe", pid) < 0)
-		return "";
-	
+
+	if (snprintf(procname, sizeof(procname), "/proc/%i/exe", pid) < 0) {
+		return String::null;
+	}
+
 	ret = readlink(procname, buff, sizeof(buff));
-	
-	if (ret == -1 || ret >= sizeof(buff))
-		return "";
-	
+
+	if (ret == -1 || ret >= sizeof(buff)) {
+		return String::null;
+	}
+
 	buff[ret] = 0;
 	string mstr(buff);
 	File f(mstr);

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,10 +32,29 @@ using namespace std;
 Logger Logger::logger;
 
 Logger::Logger() {
-	_file = new FileWriter(Path::getApplicationDirPath() + "log.txt");
+	boost::mutex::scoped_lock scopedLock(_mutex);
+
+	std::string fileName = Path::getApplicationDirPath() + "log.txt";
+
+	//Up to 10 different log.txt files
+	for (int i = 0; i < 10; i++) {
+		FileReader fileReader(fileName);
+
+		//Checks if the file already exists
+		if (!fileReader.open()) {
+			//File does not exist, lets create it and write into it
+			_file = new FileWriter(fileName);
+			break;
+		} else {
+			//Find another log file name
+			fileName = Path::getApplicationDirPath() + "log" + String::fromNumber(i) + ".txt";
+		}
+	}
 }
 
 Logger::~Logger() {
+	boost::mutex::scoped_lock scopedLock(_mutex);
+
 	flush();
 	delete _file;
 }
@@ -57,21 +76,19 @@ void Logger::error(const std::string & className, const std::string & message) {
 }
 
 void Logger::fatal(const std::string & className, const std::string & message) {
+	boost::mutex::scoped_lock scopedLock(_mutex);
+
 	log(Fatal, className, message);
 	flush();
 	assert(NULL && "Fatal error");
 }
 
-void Logger::operator<<(std::ostream & os) {
-	std::ostringstream ostr;
-	ostr << os;
-	log(Debug, "", ostr.str());
-}
-
 void Logger::log(Level level, const std::string & className, const std::string & message) {
+	boost::mutex::scoped_lock scopedLock(_mutex);
+
 	std::string levelString;
 
-	switch(level) {
+	switch (level) {
 	case Debug:
 		levelString = "debug";
 		break;
@@ -104,11 +121,12 @@ void Logger::log(Level level, const std::string & className, const std::string &
 	std::string tmp = "(" + levelString + ") " + timeMsg + " " + classNameTmp +  ": " + message;
 	std::cerr << tmp << std::endl;
 
-//	messageAddedEvent(tmp);
+	//messageAddedEvent(tmp);
 	_file->write(tmp + "\n");
 }
 
 void Logger::flush() {
+	boost::mutex::scoped_lock scopedLock(_mutex);
 
 	_file->close();
 }

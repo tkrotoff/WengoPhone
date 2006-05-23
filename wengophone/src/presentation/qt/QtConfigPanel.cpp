@@ -151,7 +151,6 @@ void QtConfigPanel::videoSettingsClicked() {
 	QtWengoConfigDialog dialog(_cWengoPhone, _configPanelWidget);
 	dialog.showVideoPage();
 	dialog.show();
-
 }
 
 void QtConfigPanel::audioSettingsClicked() {

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,9 +50,9 @@ public:
 	/**
 	 * Gets the file extension.
 	 *
-	 * @return the file extension or NULL if there's no extension
+	 * @return the file extension or empty string if there's no extension
 	 */
-	std::string File::getExtension();
+	std::string getExtension() const;
 
 	/**
 	 * Gets the path to the file.
@@ -61,14 +61,14 @@ public:
 	 *
 	 * @return path to the file
 	 */
-	std::string getPath();
+	std::string getPath() const;
 
 	/**
 	 * Gets the full path to the file.
 	 *
 	 * @return path to the file
 	 */
-	std::string getFullPath();
+	std::string getFullPath() const;
 
 	/**
 	 * Gets directory list.
@@ -123,8 +123,6 @@ public:
 	 * @return true if the given path exists.
 	 */
 	static bool exists(const std::string & path);
-
-	const static std::string directorySeparator;
 
 protected:
 

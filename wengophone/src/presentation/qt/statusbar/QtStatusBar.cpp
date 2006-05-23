@@ -96,7 +96,8 @@ void QtStatusBar::checkSoundConfigThreadSafe(Settings & sender, const std::strin
 		key == Config::AUDIO_INPUT_DEVICENAME_KEY ||
 		key == Config::AUDIO_RINGER_DEVICENAME_KEY) {
 
-		AudioDevice::selectAsRecordDevice(config.getAudioInputDeviceName(), AudioDevice::TypeInputMicrophone);
+		//FIXME This is responsible for a lot of crashes
+		//AudioDevice::selectAsRecordDevice(config.getAudioInputDeviceName(), AudioDevice::TypeInputMicrophone);
 		VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
 		//outputVolumeControl.setMute(false);
 		VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);

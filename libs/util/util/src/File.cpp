@@ -41,17 +41,9 @@
 	#endif
 #endif
 
-
-
 #include <dirent.h>
 
 #include <string>
-
-#if defined(OS_WINDOWS)
-	const std::string File::directorySeparator = "\\";
-#else
-	const std::string File::directorySeparator = "/";
-#endif /* defined(OS_WINDOWS) */
 
 #include <iostream>
 using namespace std;
@@ -68,22 +60,24 @@ File::File(const File & file)
 	: _filename(file._filename) {
 }
 
-std::string	File::getExtension() {
+std::string File::getExtension() const {
 	int posLastElm = _filename.find_last_of(getPathSeparator());
 
-	if (posLastElm == -1 || posLastElm == _filename.length())
-		return "";
+	if (posLastElm == -1 || posLastElm == _filename.length()) {
+		return String::null;
+	}
 
 	string last = _filename.substr(++posLastElm, _filename.length() - posLastElm);
 	int posExt = last.find_last_of('.');
 
-	if (posExt == -1 || posExt == last.length())
-		return "";
-	else
+	if (posExt == -1 || posExt == last.length()) {
+		return String::null;
+	} else {
 		return last.substr(++posExt, last.length() - posExt);
+	}
 }
 
-std::string File::getPath() {
+std::string File::getPath() const {
 	String path = _filename;
 	path = convertPathSeparators(path);
 
@@ -97,7 +91,7 @@ std::string File::getPath() {
 	}
 }
 
-std::string File::getFullPath() {
+std::string File::getFullPath() const {
 	return _filename;
 }
 
@@ -117,7 +111,7 @@ StringList File::getDirectoryList() const {
 			}
 
 			struct stat statinfo;
-			std::string absPath = _filename + directorySeparator + dir;
+			std::string absPath = _filename + getPathSeparator() + dir;
 			if (stat(absPath.c_str(), &statinfo) == 0) {
 				if (S_ISDIR(statinfo.st_mode)) {
 					//ep->d_name is a directory
@@ -270,7 +264,7 @@ bool FileWriter::open() {
 }
 
 void FileWriter::write(const std::string & data) {
-	//see http://www.cplusplus.com/doc/tutorial/files.html
+	//See http://www.cplusplus.com/doc/tutorial/files.html
 
 	if (!_file.is_open()) {
 		//Tries to open the file if not already done

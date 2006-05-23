@@ -108,6 +108,8 @@ public:
 	 *
 	 * A sound card (=audio device) can have different inputs, one should be selected as the record one.
 	 *
+	 * FIXME does not work currently, should be totally reworked
+	 *
 	 * @param deviceName name of the audio device (sound card)
 	 * @param typeInput input to be selected as the record input
 	 * @return true if the input is now selected; false otherwise
@@ -116,6 +118,8 @@ public:
 
 	/**
 	 * Gets the selected record device type.
+	 *
+	 * FIXME does not work currently, should be totally reworked
 	 *
 	 * @param deviceName name of the device to be selected as the record audio device
 	 * @return the input selected selected as the record one for this audio device
