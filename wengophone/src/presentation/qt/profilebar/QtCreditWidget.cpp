@@ -27,9 +27,10 @@
 QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent , Qt::WFlags f )
 	: QObjectThreadSafe(NULL), _cWengoPhone(cWengoPhone) {
 
+	_ui = NULL;
 	_callForwardMode = tr("unauthorized");
 	_pstnNumber = tr("no number");
-
+	
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtCreditWidget::initThreadSafe, this));
 	postEvent(event);
@@ -105,4 +106,9 @@ void QtCreditWidget::callforwardModeClicked() {
 	QtWengoConfigDialog dialog(_cWengoPhone, _widget);
 	dialog.showCallForwardPage();
 	dialog.show();
+}
+
+void QtCreditWidget::slotUpdatedTranslation() {
+  if (_ui)
+    _ui->retranslateUi(_widget);
 }

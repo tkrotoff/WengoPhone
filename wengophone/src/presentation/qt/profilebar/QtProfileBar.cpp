@@ -110,10 +110,10 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	_gridlayout->addWidget( _creditLabel   , 0, 3 );
 
 	//_statusLabel->setText("S");
-	_nicknameLabel->setText("NickName");
+	_nicknameLabel->setText(tr("NickName"));
 	_nicknameLabel->setTextColor(Qt::white);
 
-	_eventsLabel->setText("events");
+	_eventsLabel->setText(tr("events"));
 	_eventsLabel->setTextColor(Qt::white);
 
 
@@ -135,10 +135,12 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	_nickNameWidget->setVisible(false);
 
 	_eventWidget = new QtEventWidget(_cWengoPhone, _cUserProfile, this);
+	connect(this, SIGNAL(updatedTranslationSignal()),_eventWidget, SLOT(slotUpdatedTranslation()));
 	//_eventWidget->getWidget()->setVisible(false);
-
+	
 	_creditWidget = new QtCreditWidget(_cWengoPhone, this);
-
+	connect(this, SIGNAL(updatedTranslationSignal()), _creditWidget, SLOT(slotUpdatedTranslation()));
+	
 	_cUserProfile.getUserProfile().wsInfoCreatedEvent +=
 		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
 	_cUserProfile.getUserProfile().phoneLineCreatedEvent +=
@@ -533,4 +535,8 @@ void QtProfileBar::cHistoryCreatedEventHandler(CWengoPhone & sender, CHistory & 
 
 void QtProfileBar::unseenMissedCallsChangedEventHandler(CHistory &, int count) {
 	_eventWidget->setMissedCall(count);
+}
+
+void QtProfileBar::slotTranslationChanged() {
+  updatedTranslationSignal();
 }

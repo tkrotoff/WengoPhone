@@ -37,7 +37,7 @@ class MousePressEventFilter;
  * @author Mr K.
  * @author Mathieu Stute
  */
-class QtCreditWidget : QObjectThreadSafe {
+class QtCreditWidget : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
@@ -56,6 +56,8 @@ private Q_SLOTS:
 	void buyOutClicked();
 
 	void callforwardModeClicked();
+
+	void slotUpdatedTranslation();
 
 protected:
 

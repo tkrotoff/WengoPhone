@@ -64,7 +64,7 @@ const std::string CWengoPhone::URL_WENGO_SMS = "http://www.wengo.fr/public/publi
 const std::string CWengoPhone::URL_WENGO_VOICEMAIL = "http://www.wengo.fr/public/public.php?page=product_voicemail";
 const std::string CWengoPhone::URL_WENGO_SEARCH_EXT = "http://www.wengo.fr/public/public.php?page=main_smart_directory";
 const std::string CWengoPhone::URL_WENGO_SEARCH_INT = "http://www.wengo.fr/public/public.php?page=smart_directory";
-const std::string CWengoPhone::URL_WENGO_FAQ = "http://www.wengo.fr/public/public.php?page=helpcenter";
+const std::string CWengoPhone::URL_WENGO_FAQ = "http://www.wengo.fr/public/public.php?page=wiki";
 const std::string CWengoPhone::URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php?page=homepage";
 const std::string CWengoPhone::URL_WENGO_BUYWENGOS = "https://www.wengo.fr/auth/auth.php?page=reload";
 

@@ -42,6 +42,7 @@ QtWengoConfigDialog::QtWengoConfigDialog(CWengoPhone & cWengoPhone, QWidget * pa
 
 	_ui = new Ui::WengoConfigDialog();
 	_ui->setupUi(_configDialog);
+	_ui->retranslateUi(_configDialog);
 
 	_settingsList += new QtGeneralSettings(_configDialog);
 	_settingsList += new QtNotificationSettings(_configDialog);

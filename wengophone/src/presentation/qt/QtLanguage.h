@@ -42,6 +42,12 @@ public:
 	~QtLanguage();
 
 	static QStringList getAvailableLanguages();
+	
+	void updateTranslation();
+
+ Q_SIGNALS:
+
+	void translationChangedSignal();
 
 private:
 

@@ -158,3 +158,7 @@ void QtConfigPanel::audioSettingsClicked() {
 	dialog.showAudioPage();
 	dialog.show();
 }
+
+void QtConfigPanel::slotTranslationChanged() {
+  _ui->retranslateUi(_configPanelWidget);
+}

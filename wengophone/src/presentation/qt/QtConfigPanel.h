@@ -61,6 +61,8 @@ private Q_SLOTS:
 
 	void audioSettingsClicked();
 
+	void slotTranslationChanged();
+
 private:
 
 	void initThreadSafe() { }

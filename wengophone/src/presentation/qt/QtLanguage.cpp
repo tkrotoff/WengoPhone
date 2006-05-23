@@ -39,6 +39,11 @@ QtLanguage::QtLanguage(QObject * parent)
 	configChangedEventHandler(config, Config::LANGUAGE_KEY);
 }
 
+void QtLanguage::updateTranslation() {
+  Config & config = ConfigManager::getInstance().getCurrentConfig();
+  configChangedEventHandler(config, Config::LANGUAGE_KEY);
+}
+
 QtLanguage::~QtLanguage() {
 }
 
@@ -68,6 +73,7 @@ void QtLanguage::configChangedEventHandlerThreadSafe(Settings & sender, const st
 		translator->load(fileName);
 		QCoreApplication::installTranslator(translator);
 		LOG_DEBUG("language changed=" + fileName.toStdString());
+		translationChangedSignal();
 	}
 }
 

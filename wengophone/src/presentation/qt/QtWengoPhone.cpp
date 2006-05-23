@@ -135,13 +135,18 @@ void QtWengoPhone::initThreadSafe() {
 	_ui = new Ui::WengoPhoneWindow();
 	_ui->setupUi(_wengoPhoneWindow);
 
-    // Install the close event filter
-    QtWengoPhoneEventFilter * qtWengoPhoneEventFilter;
-    qtWengoPhoneEventFilter = new QtWengoPhoneEventFilter(this);
-    _wengoPhoneWindow->installEventFilter(qtWengoPhoneEventFilter);
-    if (!connect (qtWengoPhoneEventFilter,SIGNAL(closeWindow()),_wengoPhoneWindow, SLOT(hide()))){
-        LOG_FATAL("Can't connect closeWindow() signal\n");
-    }
+	//Translation
+	QtLanguage *qtLanguage = new QtLanguage(_wengoPhoneWindow);
+	connect(qtLanguage, SIGNAL(translationChangedSignal()), SLOT(slotTranslationChanged()));
+	qtLanguage->updateTranslation();
+		
+	// Install the close event filter
+	QtWengoPhoneEventFilter * qtWengoPhoneEventFilter;
+	qtWengoPhoneEventFilter = new QtWengoPhoneEventFilter(this);
+	_wengoPhoneWindow->installEventFilter(qtWengoPhoneEventFilter);
+	if (!connect (qtWengoPhoneEventFilter,SIGNAL(closeWindow()),_wengoPhoneWindow, SLOT(hide()))){
+	  LOG_FATAL("Can't connect closeWindow() signal\n");
+	}
 
 	_chatWindow = NULL;
 
@@ -208,7 +213,7 @@ void QtWengoPhone::initThreadSafe() {
 	QtDialpad * qtDialpad = new QtDialpad(this);
 
 	Widget::createLayout(_ui->tabDialpad)->addWidget(qtDialpad->getWidget());
-    qtDialpad->getWidget()->setMaximumSize(196,228);
+	qtDialpad->getWidget()->setMaximumSize(196,228);
 
 	_qtHistoryWidget = NULL;
 
@@ -218,6 +223,7 @@ void QtWengoPhone::initThreadSafe() {
 		_cWengoPhone.getCUserProfile()->getUserProfile().getConnectHandler(),
 		_ui->profileBar);
 	connect(this, SIGNAL(modelInitializedEventSignal()), _qtProfileBar, SLOT(userProfileUpdated()));
+	connect(qtLanguage, SIGNAL(translationChangedSignal()), _qtProfileBar, SLOT(slotTranslationChanged()));
 
 	//Add the profile bar
 	int profileBarIndex = _ui->profileBar->addWidget(_qtProfileBar);
@@ -325,17 +331,14 @@ void QtWengoPhone::initThreadSafe() {
 	// Accept a call
 	connect (_ui->actionAccept,SIGNAL(triggered()),SLOT(acceptCall()));
 
-    // Resume a call
-    connect (_ui->actionHold_Resume,SIGNAL(triggered()),SLOT(resumeCall()));
-
+	// Resume a call
+	connect (_ui->actionHold_Resume,SIGNAL(triggered()),SLOT(resumeCall()));
+	
 	// Hangup a call
-    connect (_ui->actionHangup,SIGNAL(triggered()),SLOT(hangupCall()));
-
+	connect (_ui->actionHangup,SIGNAL(triggered()),SLOT(hangupCall()));
+	
 	connect(this, SIGNAL(connectionStatusEventHandlerSignal(int, int, QString)),
 		SLOT(connectionStatusEventHandlerSlot(int, int, QString)));
-
-	//Translation
-	new QtLanguage(_wengoPhoneWindow);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
@@ -355,6 +358,7 @@ void QtWengoPhone::initThreadSafe() {
 
 	//configPanel
 	QtConfigPanel * qtConfigPanel = new QtConfigPanel(_cWengoPhone, _wengoPhoneWindow);
+	connect(qtLanguage, SIGNAL(translationChangedSignal()),qtConfigPanel, SLOT(slotTranslationChanged()));
 	_configPanelWidget = qtConfigPanel->getWidget();
 	int configPanelIndex = _ui->configPanel->addWidget(_configPanelWidget);
 	_ui->configPanel->setCurrentIndex(configPanelIndex);
@@ -368,8 +372,10 @@ void QtWengoPhone::initThreadSafe() {
 
 	updatePresentation();
 	_wengoPhoneWindow->resize(QSize(config.getProfileWidth(),config.getProfileHeight()));
-    _wengoPhoneWindow->move(QPoint(config.getProfilePosX(),config.getProfilePoxY()));
+	_wengoPhoneWindow->move(QPoint(config.getProfilePosX(),config.getProfilePoxY()));
 	_wengoPhoneWindow->show();
+
+	qtLanguage->updateTranslation();
 }
 
 void QtWengoPhone::initButtons() {
@@ -1504,3 +1510,7 @@ void QtWengoPhone::hideMainWindow(){
     _wengoPhoneWindow->hide();
 }
 
+
+void QtWengoPhone::slotTranslationChanged() {
+  _ui->retranslateUi(_wengoPhoneWindow);
+}

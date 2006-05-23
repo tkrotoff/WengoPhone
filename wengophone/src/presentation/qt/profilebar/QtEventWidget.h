@@ -50,11 +50,14 @@ public:
 
 	QWidget * getWidget();
 
+
 private Q_SLOTS:
 
 	void voiceMailClicked();
 
 	void missedCallClicked();
+	
+	void slotUpdatedTranslation();
 
 private:
 

@@ -34,10 +34,12 @@
 QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 	QWidget * parent, Qt::WFlags f)
 	: QObjectThreadSafe(NULL), _cUserProfile(cUserProfile), _cWengoPhone(cWengoPhone) {
-
+  
+	_ui = NULL;
 	_voiceMailCount = 0;
 	_missedCallCount = 0;
 	_widget = new QWidget();
+
 
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtEventWidget::initThreadSafe, this));
@@ -45,7 +47,7 @@ QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProf
 }
 
 void QtEventWidget::initThreadSafe() {
-
+  
 	_ui = new Ui::EventWidget();
 	_ui->setupUi(_widget);
 
@@ -108,4 +110,9 @@ void QtEventWidget::voiceMailClicked() {
 void QtEventWidget::missedCallClicked() {
 	//TODO: show the history tab
 	_cWengoPhone.getPresentation()->showHistory();
+}
+
+void QtEventWidget::slotUpdatedTranslation() {
+  if (_ui)
+    _ui->retranslateUi(_widget);
 }

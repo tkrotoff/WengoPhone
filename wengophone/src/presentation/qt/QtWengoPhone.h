@@ -244,6 +244,8 @@ private Q_SLOTS:
 
 	void slotTimeoutEventReachedThreadSafe();
 
+	void slotTranslationChanged();
+
 Q_SIGNALS:
 
 	void signalTimeoutEventReached();

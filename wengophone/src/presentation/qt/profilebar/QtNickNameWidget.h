@@ -68,6 +68,8 @@ public Q_SLOTS:
 
 	void userProfileUpdated();
 
+	void updateTranslation();
+
 protected:
 
 	void updateAvatar();
@@ -97,7 +99,7 @@ protected:
 	QtClickableLabel * _jabberLabel;
 
 	QtClickableLabel * _avatarLabel;
-
+	
 	ToolTipLineEdit * _nickNameEdit;
 
 	QGridLayout * _protocolLayout;

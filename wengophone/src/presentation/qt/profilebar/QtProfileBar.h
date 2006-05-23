@@ -62,6 +62,8 @@ Q_SIGNALS:
 
 	void myPresenceStatusEventSignal(QVariant status);
 
+	void updatedTranslationSignal();
+
 protected:
 
 	ConnectHandler & _connectHandler;
@@ -150,6 +152,8 @@ public Q_SLOTS:
 	void forwardClicked(bool checked);
 
 	void myPresenceStatusEventSlot(QVariant status);
+
+	void slotTranslationChanged();
 
 private:
 
