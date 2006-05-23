@@ -31,6 +31,7 @@
 
 class WenboxPlugin;
 class WsWengoSubscribe;
+class NetworkObserver;
 
 /**
  * @defgroup model Model Component
@@ -182,6 +183,8 @@ private:
 	UserProfile _userProfile;
 
 	StartupSettingListener * _startupSettingListener;
+
+	NetworkObserver * _networkObserver;
 };
 
 #endif	//WENGOPHONE_H

@@ -202,6 +202,13 @@ typedef enum
 								const char *proxy_login, const char *proxy_passwd,
 								NETLIB_BOOLEAN ssl, int timeout,
 								NETLIB_BOOLEAN sip_ping, int ping_timeout);
+
+/**
+ * Check the connection state.
+ *
+ * @return true if a connection is available otherwise false
+ */
+ NETLIB_BOOLEAN is_connection_available();
 					
 
 

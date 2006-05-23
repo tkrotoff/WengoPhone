@@ -19,6 +19,7 @@
 
 #include "WengoPhone.h"
 
+#include "account/NetworkObserver.h"
 #include "config/ClassicConfigImporter.h"
 #include "config/ConfigManagerFileStorage.h"
 #include "config/ConfigManager.h"
@@ -112,6 +113,8 @@ void WengoPhone::init() {
 	_wenboxPlugin = new WenboxPlugin(*this);
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
+
+	_networkObserver = NetworkObserver::getInstance();
 
 	//Imports the Config from WengoPhone Classic.
 	ClassicConfigImporter importer(*this);

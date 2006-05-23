@@ -88,6 +88,7 @@ sources = [
 	'model/phoneline/PhoneLineStateTimeout.cpp',
 	'model/phoneline/PhoneLineStateServerError.cpp',
 	'model/account/NetworkDiscovery.cpp',
+	'model/account/NetworkObserver.cpp',
 	'model/account/wengo/WengoAccount.cpp',
 	'model/account/wengo/WengoAccountRPCLayer.cpp',
 	'model/account/wengo/WengoAccountXMLLayer.cpp',
