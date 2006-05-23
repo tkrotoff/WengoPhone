@@ -89,6 +89,8 @@ inline int strncasecmp(const char *str1, const char *str2, int size) {return str
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <errno.h>
+#include <net/if.h>
+#include <sys/ioctl.h> 
 
 /*
 typedef int Socket;
@@ -756,25 +758,25 @@ NETLIB_BOOLEAN is_connection_available()
 #else
 	NETLIB_BOOLEAN res = NETLIB_FALSE;
 	int sock;
-	char buf[BUFSIZ]; 
-	struct ifconf ifc; 
+	char buf[BUFSIZ];
+	struct ifconf ifc;
 
-	memset(&ifc, 0, sizeof ifc); 
-	
-	ifc.ifc_len = sizeof buf; 
-	ifc.ifc_buf = (char *)buf; 
-	
-	if ((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) 
+	memset(&ifc, 0, sizeof ifc);
+
+	ifc.ifc_len = sizeof buf;
+	ifc.ifc_buf = (char *)buf;
+
+	if ((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0)
 		return NETLIB_FALSE;
-	
-	if (ioctl(sock, SIOCGIFCONF, &ifc) == -1)
-	{ 
-		closesocket(sock);
-		return NETLIB_FALSE; 
-	} 
 
-	for (int i = 0; i < (ifc.ifc_len / sizeof(struct ifreq)); i++ ) 
-	{ 
+	if (ioctl(sock, SIOCGIFCONF, &ifc) == -1)
+	{
+		closesocket(sock);
+		return NETLIB_FALSE;
+	}
+
+	for (int i = 0; i < (ifc.ifc_len / sizeof(struct ifreq)); i++ )
+	{
 		if (ioctl(sock, SIOCGIFFLAGS, &ifc.ifc_req[i]) == 0)
 		{
 			if ((ifc.ifc_req[i]).ifr_ifru.ifru_flags & IFF_LOOPBACK)
@@ -783,7 +785,7 @@ NETLIB_BOOLEAN is_connection_available()
 			if ((ifc.ifc_req[i]).ifr_ifru.ifru_flags & IFF_RUNNING)
 				res = NETLIB_TRUE;
 		}
-	} 
+	}
 
 	closesocket(sock);
 	return res;
