@@ -451,7 +451,7 @@ NETLIB_BOOLEAN sip_ping(Socket sock, int ping_timeout)
 	ret = recv(sock, buff, sizeof (buff), 0);
 	if (ret < 1)
 	{
-#if defined(WIN32)
+#if defined(OS_WIN32)
 		ret = GetLastError();
 #else
 		ret = errno;
@@ -484,7 +484,7 @@ NETLIB_BOOLEAN sip_ping2(http_sock_t *hs, int ping_timeout)
 	ret = http_tunnel_recv(hs, buff, sizeof (buff));
 	if (ret < 1)
 	{
-#if defined(WIN32)
+#if defined(OS_WIN32)
 		ret = GetLastError();
 #else
 		ret = errno;
@@ -744,4 +744,49 @@ NatType get_nat_type(const char *stun_server)
 	bool presPort = false;
 	bool hairpin = false;
 	return stunNatType(stunServerAddr, true, & presPort, & hairpin, 0, & sAddr[0]);
+}
+
+NETLIB_BOOLEAN is_connection_available()
+{
+#if defined(OS_WIN32)
+	DWORD flags;
+
+	return InternetGetConnectedState(&flags, 0);
+
+#else
+	NETLIB_BOOLEAN res = NETLIB_FALSE;
+	int sock;
+	char buf[BUFSIZ]; 
+	struct ifconf ifc; 
+
+	memset(&ifc, 0, sizeof ifc); 
+	
+	ifc.ifc_len = sizeof buf; 
+	ifc.ifc_buf = (char *)buf; 
+	
+	if ((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) 
+		return NETLIB_FALSE;
+	
+	if (ioctl(sock, SIOCGIFCONF, &ifc) == -1)
+	{ 
+		closesocket(sock);
+		return NETLIB_FALSE; 
+	} 
+
+	for (int i = 0; i < (ifc.ifc_len / sizeof(struct ifreq)); i++ ) 
+	{ 
+		if (ioctl(sock, SIOCGIFFLAGS, &ifc.ifc_req[i]) == 0)
+		{
+			if ((ifc.ifc_req[i]).ifr_ifru.ifru_flags & IFF_LOOPBACK)
+				continue;
+
+			if ((ifc.ifc_req[i]).ifr_ifru.ifru_flags & IFF_RUNNING)
+				res = NETLIB_TRUE;
+		}
+	} 
+
+	closesocket(sock);
+	return res;
+
+#endif
 }
