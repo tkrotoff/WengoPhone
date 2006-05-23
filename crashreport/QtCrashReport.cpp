@@ -31,6 +31,7 @@
 #include <QtGui>
 
 #include <fstream>
+#include <stdio.h>
 
 QtCrashReport::QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang, std::string info)
 	: QObjectThreadSafe(NULL), _dumpfile(dumpfile), _lang(lang), _info(info) {
@@ -116,6 +117,22 @@ void QtCrashReport::updatePresentationThreadSafe() {
 	}
 }
 
+std::string readLogFile() {
+	std::string content;
+	std::string line;
+	std::ifstream myfile ("log.txt");
+	if (myfile.is_open()) {
+		while (! myfile.eof() ) {
+			getline(myfile,line);
+			content += line + "\n";
+		}
+		myfile.close();
+	} else {
+		printf("Failed to open log.txt\n");
+	}
+	return content;
+}
+
 void QtCrashReport::createDescriptionFile() {
 
 	std::fstream file;
@@ -142,6 +159,8 @@ void QtCrashReport::createDescriptionFile() {
 	}
 
 	file << "User info:\n" << _info << std::endl;
+
+	file << "log.txt content:\n" << readLogFile() << std::endl;
 
 	file.close();
 }

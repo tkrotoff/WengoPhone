@@ -190,8 +190,6 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 			strcat(commandLine, "\"");
 		}
 
-		LOG_DEBUG(commandLine);
-
 		//Flushes the logger file
 		Logger::logger.flush();
 
