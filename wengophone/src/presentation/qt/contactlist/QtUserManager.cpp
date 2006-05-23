@@ -58,6 +58,7 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
     _sortTimerId = -1;
     _waitForDoubleClick = false;
     _canSort = true;
+    _whantSort = false;
 
     QtUserList::getInstance()->setTreeWidget(target);
     target->setMouseTracking(true);
@@ -422,7 +423,9 @@ void QtUserManager::safeSortUsers() {
         if (_sortTimerId != -1)
             killTimer(_sortTimerId);
         _sortTimerId = startTimer(2000);
+        _whantSort = false;
     }else{
+        _whantSort = true;
         return;
     }
 
@@ -831,6 +834,10 @@ void QtUserManager::timerEvent ( QTimerEvent * event ) {
         killTimer(_sortTimerId);
         _sortTimerId = -1;
         _canSort = true;
+        if ( _whantSort ) {
+            safeSortUsers();
+            _whantSort = false;
+        }
         return;
     }
 

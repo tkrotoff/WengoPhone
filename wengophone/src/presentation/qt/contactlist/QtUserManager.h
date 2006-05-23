@@ -151,6 +151,8 @@ protected:
 
 	bool _canSort;
 
+	bool _whantSort;
+
 };
 
 #endif	//QTUSERMANAGER_H
