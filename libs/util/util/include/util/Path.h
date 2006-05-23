@@ -20,6 +20,8 @@
 #ifndef PATH_H
 #define PATH_H
 
+#include <cutil/global.h>
+
 #include <util/NonCopyable.h>
 
 #include <string>
@@ -60,6 +62,25 @@ public:
 	 * @return the home dir of the current user.
 	 */
 	static std::string getHomeDirPath();
+
+#ifdef OS_MACOSX
+	// Special extensions for MacOS X
+
+	/**
+	 * Gets the Private Frameworks path.
+	 *
+	 * e.g: full-path-tp-application.app/Contents/Frameworks
+	 */
+	static std::string getApplicationPrivateFrameworksDirPath();
+
+	/**
+	 * Gets the Resources path.
+	 *
+	 * e.g: full-path-tp-application.app/Contents/Resources
+	 */
+	static std::string getApplicationResourcesDirPath();
+
+#endif
 
 };
 

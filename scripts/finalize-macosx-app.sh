@@ -113,6 +113,8 @@ testAndMkdir $WENGO_FRAMEWORK_PATH/QtCore.framework/Versions/4.0
 testAndMkdir $WENGO_FRAMEWORK_PATH/QtGui.framework/Versions/4.0
 testAndMkdir $WENGO_FRAMEWORK_PATH/QtXml.framework/Versions/4.0
 testAndMkdir $WENGO_FRAMEWORK_PATH/QtSvg.framework/Versions/4.0
+testAndMkdir $WENGO_FRAMEWORK_PATH/qt-plugins/imageformats
+
 testAndMkdir $WENGO_FRAMEWORK_PATH/phapi-plugins
 
 testAndMkdir $WENGO_RESOURCES_PATH
@@ -197,4 +199,11 @@ install_name_tool -change "/usr/local/lib/libspeex.1.dylib" "libspeex.1.dylib" "
 cp -r $WENGO_BUILD_PATH/sounds $WENGO_RESOURCES_PATH/
 cp -r $WENGO_BUILD_PATH/emoticons $WENGO_RESOURCES_PATH/
 cp -r $WENGO_BUILD_PATH/pics $WENGO_RESOURCES_PATH/
+
+##
+# Copy QT Plugins
+##
+cp -r $QTDIR/plugins/imageformats/libqmng.dylib $WENGO_FRAMEWORK_PATH/qt-plugins/imageformats/libqmng.dylib
+install_name_tool -change "$QTDIR/lib/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/qt-plugins/imageformats/libqmng.dylib"
+install_name_tool -change "$QTDIR/lib/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PREFIX/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PATH/qt-plugins/imageformats/libqmng.dylib"
 

@@ -150,17 +150,7 @@ Config::Config(const std::string & name)
 #if defined(OS_WINDOWS)
 	resourcesPath = Path::getApplicationDirPath();
 #elif defined(OS_MACOSX)
-	CFBundleRef mainBundle = CFBundleGetMainBundle();
-	if (mainBundle) {
-		CFURLRef url = CFBundleCopyResourcesDirectoryURL(mainBundle);
-		char resPath[1024];
-
-		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *) resPath, sizeof(resPath))) {
-			resourcesPath = (std::string(resPath) + File::getPathSeparator());
-		}
-
-		CFRelease(url);
-	}
+	resourcesPath = Path::getApplicationResourcesDirPath();
 #endif
 	_keyDefaultValueMap[RESOURCES_DIR_KEY] = resourcesPath;
 
@@ -179,17 +169,8 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[NETWORK_PROXY_PASSWORD_KEY] = empty;
 
 #if defined(OS_MACOSX)
-	if (mainBundle) {
-		CFURLRef url = CFBundleCopyPrivateFrameworksURL(mainBundle);
-		char frameworkPath[1024];
-
-		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *) frameworkPath, sizeof(frameworkPath))) {
-			pluginsPath = (std::string(frameworkPath) + File::getPathSeparator()
-				+ "phapi-plugins" + File::getPathSeparator());
-		}
-
-		CFRelease(url);
-	}
+	pluginsPath = Path::getApplicationPrivateFrameworksDirPath() 
+		+ "phapi-plugins" + File::getPathSeparator();
 #else
 	pluginsPath = empty;
 #endif

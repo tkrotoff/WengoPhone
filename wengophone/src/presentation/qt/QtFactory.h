@@ -54,9 +54,17 @@
 #include "webservices/directory/QtWsDirectory.h"
 #include <control/webservices/directory/CWsDirectory.h>
 
+#include <util/File.h>
 #include <util/Logger.h>
+#include <util/Path.h>
+
+#include <cutil/global.h>
 
 #include <QApplication>
+
+#ifdef OS_MACOSX
+	#include <CoreFoundation/CoreFoundation.h>
+#endif
 
 PFactory * PFactory::_factory = 0;
 
@@ -66,6 +74,12 @@ public:
 	QtFactory(int argc, char * argv[]) {
 		_app = new QApplication(argc, argv);
 		QCoreApplication::addLibraryPath(".");
+#ifdef OS_MACOSX
+		std::string qtPlugins = Path::getApplicationPrivateFrameworksDirPath() +
+			File::convertPathSeparators("qt-plugins/");
+
+		QCoreApplication::addLibraryPath(QString::fromStdString(qtPlugins));
+#endif		
 		_qtContactList = NULL;
 		_cWengoPhone = NULL;
 	}

@@ -20,8 +20,6 @@
 #include <util/Path.h>
 
 #include <util/File.h>
-#include <cutil/global.h>
-
 
 #if defined(OS_MACOSX)
 #include <CoreFoundation/CoreFoundation.h>
@@ -145,3 +143,43 @@ string Path::getHomeDirPath() {
 
 	return result;
 }
+
+#ifdef OS_MACOSX
+
+std::string Path::getApplicationPrivateFrameworksDirPath() {
+	std::string result;
+	CFBundleRef mainBundle = CFBundleGetMainBundle();
+
+	if (mainBundle) {
+		CFURLRef url = CFBundleCopyPrivateFrameworksURL(mainBundle);
+		char frameworkPath[1024];
+
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *) frameworkPath, sizeof(frameworkPath))) {
+			result = (std::string(frameworkPath) + File::getPathSeparator());
+		}
+
+		CFRelease(url);
+	}
+
+	return result;
+}
+
+std::string Path::getApplicationResourcesDirPath() {
+	std::string result;
+	CFBundleRef mainBundle = CFBundleGetMainBundle();
+
+	if (mainBundle) {
+		CFURLRef url = CFBundleCopyResourcesDirectoryURL(mainBundle);
+		char resPath[1024];
+
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *) resPath, sizeof(resPath))) {
+			result = (std::string(resPath) + File::getPathSeparator());
+		}
+
+		CFRelease(url);
+	}
+
+	return result;
+}
+
+#endif
