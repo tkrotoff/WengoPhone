@@ -3,6 +3,8 @@
 
 #include <QtGui>
 
+#include "QtContactPixmap.h"
+
 class QtUser;
 
 class QtHidenContact : public QObject {
@@ -26,6 +28,8 @@ public:
 	void clear();
 
 	bool isCleared();
+
+	QtContactPixmap::ContactPixmap getStatus();
 
 	virtual bool operator < (const QtHidenContact & other) const;
 

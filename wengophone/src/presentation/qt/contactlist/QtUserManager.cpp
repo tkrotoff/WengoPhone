@@ -430,7 +430,12 @@ void QtUserManager::safeSortUsers() {
 	QtUser * user;
 
 	QList < QTreeWidgetItem * > itemList = _tree->findItems("*", Qt::MatchWildcard);
-	QList < QtHidenContact > sortList;
+	QList <QtHidenContact> onlineContact;
+	QList <QtHidenContact> idleContact;
+	QList <QtHidenContact> dndContact;
+	QList <QtHidenContact> offlineContact;
+	QList <QtHidenContact> othersContact;
+
 	QList < QTreeWidgetItem * >::iterator i;
 
 	for (i = itemList.begin(); i != itemList.end(); i++) {
@@ -440,23 +445,63 @@ void QtUserManager::safeSortUsers() {
 
 		if (group->parent() == 0) {
 			// We have all parents (if groups are not hiden)
-			sortList.clear();
-
+            onlineContact.clear();
+            idleContact.clear();
+            dndContact.clear();
+            offlineContact.clear();
+            othersContact.clear();
 			int count = group->childCount();
 
 			for (int t = 0; t < count; t++) {
 				item = group->child(t);
 				user = ul->getUser(item->text(0));
+
 				// Take the widget and put it in sortList
 				int index = group->indexOfChild(item);
 				QtHidenContact hiden = QtHidenContact(item, item->parent(), user, index, this);
-				sortList.append(hiden);
+				switch (hiden.getStatus()){
+                    case QtContactPixmap::ContactOnline:
+                        onlineContact.append(hiden);
+                        break;
+                    case QtContactPixmap::ContactOffline:
+                        offlineContact.append(hiden);
+                        break;
+                    case QtContactPixmap::ContactDND:
+                        dndContact.append(hiden);
+                        break;
+                    case QtContactPixmap::ContactAway:
+                        idleContact.append(hiden);
+                        break;
+                    default:
+                        othersContact.append(hiden);
+				}
 			}
+
 			// Sort and reinsert items
-			qSort(sortList.begin(), sortList.end());
+            qSort(onlineContact.begin(), onlineContact.end());
+            qSort(offlineContact.begin(),offlineContact.end());
+            qSort(dndContact.begin(),dndContact.end());
+            qSort(idleContact.begin(),idleContact.end());
+            qSort(othersContact.begin(),othersContact.end());
 
 			QList < QtHidenContact >::iterator insertIterator;
-			for (insertIterator = sortList.begin(); insertIterator != sortList.end(); insertIterator++) {
+			for (insertIterator = onlineContact.begin(); insertIterator != onlineContact.end(); insertIterator++) {
+				group->takeChild(group->indexOfChild((* insertIterator).getItem()));
+				group->insertChild(group->childCount(), (* insertIterator).getItem());
+			}
+			for (insertIterator = idleContact.begin(); insertIterator != idleContact.end(); insertIterator++) {
+				group->takeChild(group->indexOfChild((* insertIterator).getItem()));
+				group->insertChild(group->childCount(), (* insertIterator).getItem());
+			}
+			for (insertIterator = dndContact.begin(); insertIterator != dndContact.end(); insertIterator++) {
+				group->takeChild(group->indexOfChild((* insertIterator).getItem()));
+				group->insertChild(group->childCount(), (* insertIterator).getItem());
+			}
+			for (insertIterator = offlineContact.begin(); insertIterator != offlineContact.end(); insertIterator++) {
+				group->takeChild(group->indexOfChild((* insertIterator).getItem()));
+				group->insertChild(group->childCount(), (* insertIterator).getItem());
+			}
+			for (insertIterator = othersContact.begin(); insertIterator != othersContact.end(); insertIterator++) {
 				group->takeChild(group->indexOfChild((* insertIterator).getItem()));
 				group->insertChild(group->childCount(), (* insertIterator).getItem());
 			}

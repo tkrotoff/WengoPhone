@@ -66,9 +66,12 @@ int QtHidenContact::getIndex() const {
 }
 
 bool QtHidenContact::operator < (const QtHidenContact & other) const {
+/*
+    return ( (_user->getStatus() == EnumPresenceState::PresenceStateOnline) &&
+	 (_user->getUserName().toUpper() < other.getUser()->getUserName().toUpper()) );
 
-    //return ((user->getStatus() == EnumPresenceState::PresenceStateOnline) &&
-	return (_user->getUserName().toUpper() < other.getUser()->getUserName().toUpper());
+ */
+    return _user->getUserName().toUpper() < other.getUser()->getUserName().toUpper();
 }
 
 QtHidenContact & QtHidenContact::operator = (const QtHidenContact & other) {
@@ -78,4 +81,8 @@ QtHidenContact & QtHidenContact::operator = (const QtHidenContact & other) {
 	_index = other._index;
 	_clear = other._clear;
 	return * this;
+}
+
+QtContactPixmap::ContactPixmap QtHidenContact::getStatus() {
+    return _user->getStatus();
 }
