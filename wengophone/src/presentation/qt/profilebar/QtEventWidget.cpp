@@ -98,7 +98,10 @@ void QtEventWidget::voiceMailClicked() {
 		QMessageBox::NoButton);
 
 	if( mb.exec() == QMessageBox::Yes ) {
-		_cUserProfile.getUserProfile().getActivePhoneLine()->makeCall("123", false);
+		IPhoneLine * phoneLine = _cUserProfile.getUserProfile().getActivePhoneLine();
+		if( phoneLine ) {
+			phoneLine->makeCall("123", false);
+		}
 	}
 }
 
