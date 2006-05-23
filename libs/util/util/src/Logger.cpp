@@ -35,21 +35,7 @@ Logger::Logger() {
 	boost::mutex::scoped_lock scopedLock(_mutex);
 
 	std::string fileName = Path::getApplicationDirPath() + "log.txt";
-
-	//Up to 10 different log.txt files
-	for (int i = 0; i < 10; i++) {
-		FileReader fileReader(fileName);
-
-		//Checks if the file already exists
-		if (!fileReader.open()) {
-			//File does not exist, lets create it and write into it
-			_file = new FileWriter(fileName);
-			break;
-		} else {
-			//Find another log file name
-			fileName = Path::getApplicationDirPath() + "log" + String::fromNumber(i) + ".txt";
-		}
-	}
+	_file = new FileWriter(fileName);
 }
 
 Logger::~Logger() {
