@@ -24,8 +24,9 @@
 #include <model/contactlist/Contact.h>
 #include <model/profile/UserProfile.h>
 
-CUserProfile::CUserProfile(UserProfile & userProfile) 
-: _userProfile(userProfile), _cContactList(userProfile.getContactList()) { 
+CUserProfile::CUserProfile(UserProfile & userProfile, Thread & modelThread) 
+: _userProfile(userProfile), 
+_cContactList(userProfile.getContactList(), modelThread) { 
 }
 
 void CUserProfile::disconnect() {

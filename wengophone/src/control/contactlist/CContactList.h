@@ -29,8 +29,9 @@ class ContactList;
 class Contact;
 class ContactGroup;
 class ContactProfile;
-class PContactList;
 class CWengoPhone;
+class PContactList;
+class Thread;
 
 /**
  *
@@ -41,7 +42,7 @@ class CContactList {
 	friend class CUserProfile;
 public:
 
-	CContactList(ContactList & contactList);
+	CContactList(ContactList & contactList, Thread & modelThread);
 
 	/**
 	 * Gets a list of pair of <group UUID, group name>.
@@ -76,6 +77,13 @@ public:
 	 * @return a ContactProfile based on the found Contact
 	 */
 	ContactProfile getContactProfile(const std::string & contactId) const;
+
+	/**
+	 * Gets all existing Contact Ids.
+	 *
+	 * @return a vector of string containing the UUID of the Contacts.
+	 */
+	std::vector<std::string> getContactIds() const;
 
 	/**
 	 * Add a Contact to the ContactList.
@@ -123,13 +131,6 @@ public:
 	 * @param name the desired name
 	 */
 	void renameContactGroup(const std::string & groupId, const std::string & name);
-
-	/**
-	 * Gets all existing Contact Ids.
-	 *
-	 * @return a vector of string containing the UUID of the Contacts.
-	 */
-	std::vector<std::string> getContactIds() const;
 
 	/**
 	 * Merges two contacts.
@@ -189,11 +190,49 @@ private:
 	 */
 	void contactChangedEventHandler(ContactList & sender, Contact & contact);
 
+	/**
+	 * @see addContact
+	 */
+	void addContactThreadSafe(ContactProfile contactProfile);
+
+	/**
+	 * @see removeContact
+	 */
+	void removeContactThreadSafe(std::string contactId);
+
+	/**
+	 * @see updateContact
+	 */
+	void updateContactThreadSafe(ContactProfile contactProfile);
+
+	/**
+	 * @see addContactGroup
+	 */
+	void addContactGroupThreadSafe(std::string name);
+
+	/**
+	 * @see removeContactGroup
+	 */
+	void removeContactGroupThreadSafe(std::string id);
+
+	/**
+	 * @see renameContactGroup
+	 */
+	void renameContactGroupThreadSafe(std::string groupId, std::string name);
+
+	/**
+	 * @see merge
+	 */
+	void mergeThreadSafe(std::string dstContactId, std::string srcContactId);
+
 	/** Direct link to the model. */
 	ContactList & _contactList;
 
 	/** Direct link to the presentation via an interface. */
 	PContactList * _pContactList;
+
+	/** Reference to model Thread. Used to post event to the model thread. */
+	Thread & _modelThread;
 };
 
 #endif	//CCONTACTLIST_H

@@ -19,6 +19,9 @@
 
 #include "CWengoPhone.h"
 
+#include <WengoPhoneBuildId.h>
+
+#include <model/WengoPhone.h>
 #include <model/wenbox/WenboxPlugin.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/contactlist/Contact.h>
@@ -30,7 +33,6 @@
 #include <model/config/Config.h>
 #include <model/webservices/sms/Sms.h>
 #include <model/webservices/softupdate/SoftUpdate.h>
-#include <WengoPhoneBuildId.h>
 #include <model/webservices/subscribe/Subscribe.h>
 #include <model/webservices/directory/WsDirectory.h>
 
@@ -71,7 +73,7 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 
 	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
 
-	_cUserProfile = new CUserProfile(_wengoPhone.getCurrentUserProfile());
+	_cUserProfile = new CUserProfile(_wengoPhone.getCurrentUserProfile(), wengoPhone);
 
 	_wengoPhone.getCurrentUserProfile().loginStateChangedEvent += loginStateChangedEvent;
 	_wengoPhone.getCurrentUserProfile().networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;

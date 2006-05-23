@@ -28,10 +28,13 @@
 #include <presentation/PFactory.h>
 #include <presentation/PContactList.h>
 
+#include <thread/Thread.h>
+
 #include <util/Logger.h>
 
-CContactList::CContactList(ContactList & contactList)
-	: _contactList(contactList) {
+CContactList::CContactList(ContactList & contactList, Thread & modelThread)
+	: _contactList(contactList),
+	_modelThread(modelThread) {
 
 	_pContactList = PFactory::getFactory().createPresentationContactList(*this);
 
@@ -151,19 +154,6 @@ Contact * CContactList::getContact(const std::string & contactId) const {
 	return _contactList.getContact(contactId);
 }
 
-void CContactList::addContact(const ContactProfile & contactProfile) {
-	Contact & contact = _contactList.createContact();
-	contact = contactProfile;
-
-	LOG_DEBUG("adding a new Contact: " + contact.getFirstName() +
-		" in group " + contact.getGroupId());
-
-	// We emit the contactAddedEvent because the first one (emitted by ContactList
-	// when calling createContact) is not processed because the Contact has no
-	// group.
-	_pContactList->contactAddedEvent(contact.getUUID());
-}
-
 std::vector<std::string> CContactList::getContactIds() const {
 	std::vector<std::string> result;
 
@@ -182,7 +172,36 @@ std::vector<std::string> CContactList::getContactIds() const {
 	return result;
 }
 
+void CContactList::addContact(const ContactProfile & contactProfile) {
+	typedef ThreadEvent1<void (ContactProfile contactProfile), ContactProfile> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&CContactList::addContactThreadSafe, this, _1), contactProfile);
+
+	_modelThread.postEvent(event);
+}
+
+void CContactList::addContactThreadSafe(ContactProfile contactProfile) {
+	Contact & contact = _contactList.createContact();
+	contact = contactProfile;
+
+	LOG_DEBUG("adding a new Contact: " + contact.getFirstName() +
+		" in group " + contact.getGroupId());
+
+	// We emit the contactAddedEvent because the first one (emitted by ContactList
+	// when calling createContact) is not processed because the Contact has no
+	// group.
+	_pContactList->contactAddedEvent(contact.getUUID());
+}
+
 void CContactList::removeContact(const std::string & contactId) {
+	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
+	MyThreadEvent * event = 
+		new MyThreadEvent(boost::bind(&CContactList::removeContactThreadSafe, this, _1), contactId);
+
+	_modelThread.postEvent(event);
+}
+
+void CContactList::removeContactThreadSafe(std::string contactId) {
 	Contact * contact = getContact(contactId);
 
 	if (contact) {
@@ -190,7 +209,16 @@ void CContactList::removeContact(const std::string & contactId) {
 	}
 }
 
+
 void CContactList::updateContact(const ContactProfile & contactProfile) {
+	typedef ThreadEvent1<void (ContactProfile contactProfile), ContactProfile> MyThreadEvent;
+	MyThreadEvent * event = 
+		new MyThreadEvent(boost::bind(&CContactList::updateContactThreadSafe, this, _1), contactProfile);
+
+	_modelThread.postEvent(event);
+}
+
+void CContactList::updateContactThreadSafe(ContactProfile contactProfile) {
 	Contact * contact = getContact(contactProfile.getUUID());
 
 	if (contact) {
@@ -199,18 +227,50 @@ void CContactList::updateContact(const ContactProfile & contactProfile) {
 }
 
 void CContactList::addContactGroup(const std::string & name) {
+	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
+	MyThreadEvent * event = 
+		new MyThreadEvent(boost::bind(&CContactList::addContactGroupThreadSafe, this, _1), name);
+
+	_modelThread.postEvent(event);
+}
+
+void CContactList::addContactGroupThreadSafe(std::string name) {
 	_contactList.addContactGroup(name);
 }
 
 void CContactList::removeContactGroup(const std::string & id) {
+	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
+	MyThreadEvent * event = 
+		new MyThreadEvent(boost::bind(&CContactList::removeContactGroupThreadSafe, this, _1), id);
+
+	_modelThread.postEvent(event);
+}
+
+void CContactList::removeContactGroupThreadSafe(std::string id) {
 	_contactList.removeContactGroup(id);
 }
 
 void CContactList::renameContactGroup(const std::string & groupId, const std::string & name) {
+	typedef ThreadEvent2<void (std::string contactId, std::string name), std::string, std::string> MyThreadEvent;
+	MyThreadEvent * event = 
+		new MyThreadEvent(boost::bind(&CContactList::renameContactGroupThreadSafe, this, _1, _2), groupId, name);
+
+	_modelThread.postEvent(event);
+}
+
+void CContactList::renameContactGroupThreadSafe(std::string groupId, std::string name) {
 	_contactList.renameContactGroup(groupId, name);
 }
 
 void CContactList::merge(const std::string & dstContactId, const std::string & srcContactId) {
+	typedef ThreadEvent2<void (std::string dstContactId, std::string srcContactId), std::string, std::string> MyThreadEvent;
+	MyThreadEvent * event = 
+		new MyThreadEvent(boost::bind(&CContactList::mergeThreadSafe, this, _1, _2), dstContactId, srcContactId);
+
+	_modelThread.postEvent(event);
+}
+
+void CContactList::mergeThreadSafe(std::string dstContactId, std::string srcContactId) {
 	Contact * dstContact = getContact(dstContactId);
 	Contact * srcContact = getContact(srcContactId);
 

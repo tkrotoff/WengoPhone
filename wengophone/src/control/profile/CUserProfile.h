@@ -27,12 +27,13 @@
 #include <set>
 
 class IMAccount;
+class Thread;
 class UserProfile;
 
 class CUserProfile {
 public:
 
-	CUserProfile(UserProfile & userProfile);
+	CUserProfile(UserProfile & userProfile, Thread & modelThread);
 
 	/**
 	 * @see UserProfile::disconnect
@@ -89,7 +90,6 @@ private:
 	UserProfile & _userProfile;
 
 	CContactList _cContactList;
-
 };
 
 #endif	//CUSERPROFILE_H
