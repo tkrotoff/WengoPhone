@@ -231,7 +231,9 @@ void QtWengoPhone::initThreadSafe() {
 	_trayIcon->show();
 	setTrayMenu();
 
-	connect(_trayIcon, SIGNAL(clicked(const QPoint &,int)), SLOT(sysTrayDoubleClicked(const QPoint &)));
+	connect(_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT(sysTrayDoubleClicked(const QPoint &)));
+	//connect(_trayIcon, SIGNAL(clicked(const QPoint &,int)), SLOT(sysTrayDoubleClicked(const QPoint &)));
+
 	connect(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )), SLOT(setSystrayIcon(QVariant )));
 
 	//actionShowWengoAccount
@@ -1199,10 +1201,14 @@ void QtWengoPhone::setSystrayIcon(QVariant status){
 
 void QtWengoPhone::sysTrayDoubleClicked(const QPoint& ){
 
-    if ( _wengoPhoneWindow->isVisible () )
+    if ( _wengoPhoneWindow->isVisible () ){
         _wengoPhoneWindow->setVisible(false);
-    else
-        _wengoPhoneWindow->setVisible(true);
+    }
+    else{
+        //_wengoPhoneWindow->setVisible(true);
+        _wengoPhoneWindow->showMinimized();
+        _wengoPhoneWindow->showNormal();
+    }
 }
 
 void QtWengoPhone::setChatWindow(QWidget * chatWindow){
