@@ -24,6 +24,7 @@ headers = [
 	'include/qtutil/ToolTipLineEdit.h',
 	'include/qtutil/QtClickableLabel.h',
 	'include/qtutil/WidgetBackgroundImage.h',
+	'include/qtutil/Wizard.h',
 ]
 sources = [
 	'src/EventFilter.cpp',
@@ -42,7 +43,15 @@ sources = [
 	'src/ToolTipLineEdit.cpp',
 	'src/QtClickableLabel.cpp',
 	'src/WidgetBackgroundImage.cpp',
+	'src/Wizard.cpp',
 ]
+forms = [
+	'src/Wizard.ui',
+]
+
+for form in forms:
+	header = env.WengoCompileQt4UiFile(form)
+	headers += [ header ]
 
 def moc(env, headers):
 	moced = []
