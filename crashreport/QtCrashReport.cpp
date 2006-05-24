@@ -122,7 +122,7 @@ std::string readLogFile() {
 	std::string content;
 	std::string line;
 
-	std::ifstream myfile (getApplicationDirPath() + "log.txt");
+	std::ifstream myfile ("log.txt");
 	if (myfile.is_open()) {
 		while (! myfile.eof() ) {
 			getline(myfile,line);
