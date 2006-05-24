@@ -98,18 +98,21 @@ void QtStatusBar::checkSoundConfigThreadSafe(Settings & sender, const std::strin
 
 		//FIXME This is responsible for a lot of crashes
 		//AudioDevice::selectAsRecordDevice(config.getAudioInputDeviceName(), AudioDevice::TypeInputMicrophone);
-		VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
-		//outputVolumeControl.setMute(false);
-		VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
-		//inputVolumeControl.setMute(false);
+		try {
+			VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
+			//outputVolumeControl.setMute(false);
+			VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
+			//inputVolumeControl.setMute(false);
 
-		if (!outputVolumeControl.isMuted() &&
-			/*outputVolumeControl.getLevel() > 0 &&*/
-			!inputVolumeControl.isMuted()/* &&
-			inputVolumeControl.getLevel() > 0*/) {
+			if (!outputVolumeControl.isMuted() &&
+				/*outputVolumeControl.getLevel() > 0 &&*/
+				!inputVolumeControl.isMuted()/* &&
+				inputVolumeControl.getLevel() > 0*/) {
 
-			_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar/status-audio-online.png"));
-			_soundStateLabel->setToolTip(tr("Audio Configuration OK"));
+				_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar/status-audio-online.png"));
+				_soundStateLabel->setToolTip(tr("Audio Configuration OK"));
+			}
+		} catch (Exception & e) {
 		}
 	}
 }

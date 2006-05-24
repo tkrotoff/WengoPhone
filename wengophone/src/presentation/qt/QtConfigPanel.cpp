@@ -126,14 +126,20 @@ void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const
 
 	if (key == Config::AUDIO_INPUT_DEVICENAME_KEY) {
 		//inputSoundSlider
-		VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
-		_inputSoundSlider->setVolume(inputVolumeControl.getLevel());
+		try {
+			VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
+			_inputSoundSlider->setVolume(inputVolumeControl.getLevel());
+		} catch (Exception & e) {
+		}
 	}
 
 	if (key == Config::AUDIO_OUTPUT_DEVICENAME_KEY) {
 		//outputSoundSlider
-		VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
-		_outputSoundSlider->setVolume(outputVolumeControl.getLevel());
+		try {
+			VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
+			_outputSoundSlider->setVolume(outputVolumeControl.getLevel());
+		} catch (Exception & e) {
+		}
 	}
 
 	if (key == Config::WENBOX_ENABLE_KEY) {

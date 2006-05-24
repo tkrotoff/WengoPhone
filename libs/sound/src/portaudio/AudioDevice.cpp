@@ -28,13 +28,7 @@
 #include <util/StringList.h>
 #include <util/Logger.h>
 
-#include <cutil/global.h>
-
 #include <portaudio.h>
-
-#ifdef OS_WINDOWS
-	#include <windows.h>
-#endif
 
 #include <cstdio>
 
@@ -181,13 +175,13 @@ int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {
 
 	if (deviceName.length()) {
 		for (int i = 0; i < Pa_GetDeviceCount(); i++) {
-			const PaDeviceInfo * pdi = Pa_GetDeviceInfo(i);
+			const PaDeviceInfo * deviceInfo = Pa_GetDeviceInfo(i);
 
-			if (pdi->maxOutputChannels > 0 && pdi->name == deviceName) {
-				int deviceId = Pa_HostApiDeviceIndexToDeviceIndex(pdi->hostApi, i);
+			if (deviceInfo->maxOutputChannels > 0 && deviceInfo->name == deviceName) {
+				int deviceId = Pa_HostApiDeviceIndexToDeviceIndex(deviceInfo->hostApi, i);
 
 				LOG_DEBUG("found output device id=" + String::fromNumber(i) + " for="
-					+ deviceName + " (" + String(pdi->name) + ")");
+					+ deviceName + " (" + String(deviceInfo->name) + ")");
 
 				Pa_Terminate();
 
@@ -209,13 +203,13 @@ int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
 
 	if (deviceName.length()) {
 		for (int i = 0; i < Pa_GetDeviceCount(); i++) {
-			const PaDeviceInfo * pdi = Pa_GetDeviceInfo(i);
+			const PaDeviceInfo * deviceInfo = Pa_GetDeviceInfo(i);
 
-			if (pdi->maxInputChannels > 0 && pdi->name == deviceName) {
-				int deviceId = Pa_HostApiDeviceIndexToDeviceIndex(pdi->hostApi, i);
+			if (deviceInfo->maxInputChannels > 0 && deviceInfo->name == deviceName) {
+				int deviceId = Pa_HostApiDeviceIndexToDeviceIndex(deviceInfo->hostApi, i);
 
 				LOG_DEBUG("found input device id=" + String::fromNumber(i) + " for="
-					+ deviceName + " (" + String(pdi->name) + ")");
+					+ deviceName + " (" + String(deviceInfo->name) + ")");
 
 				Pa_Terminate();
 

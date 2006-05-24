@@ -30,13 +30,14 @@ VolumeControl::VolumeControl(const std::string & deviceName, DeviceType deviceTy
 
 	LOG_DEBUG("audio device=" + deviceName + String::fromNumber(deviceId));
 
-	if (deviceId == -1) {
-		throw NoSoundCardException(deviceName);
-	}
-
 	//Volume throws an exception inside the constructor so _volume can be NULL
 	//Check VolumeControl::closeMixer()
 	_volumeControlPrivate = NULL;
+
+	if (deviceId == -1) {
+		throw NoSoundCardException(deviceName);
+		return;
+	}
 
 	//Output device
 	if (deviceType == DeviceTypeOutput) {
