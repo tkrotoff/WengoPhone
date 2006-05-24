@@ -117,6 +117,8 @@ void QtUserManager::editContact(bool) {
 
 	//The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
+	if (!item)
+        return;
 	ContactProfile contactProfile = _cUserProfile.getCContactList().getContactProfile(item->text(0).toStdString());
 	QtProfileDetails qtProfileDetails(_cWengoPhone, contactProfile, _tree);
 	if (qtProfileDetails.show()) {
@@ -129,6 +131,8 @@ void QtUserManager::deleteContact() {
 
 	QtUserList * ul = QtUserList::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
+	if (!item)
+        return;
 	if ( QMessageBox::question(_tree,
         tr("Delete contact"),
         tr("Do you really want to delete this contact ?"),
