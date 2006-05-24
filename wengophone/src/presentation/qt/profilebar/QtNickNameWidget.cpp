@@ -521,6 +521,6 @@ void QtNickNameWidget::textChanged ( const QString & text ) {
 	_nickNameEdit->setPalette(palette);
 }
 
-void QtNickNameWidget::updateTranslation() {
-  
+void QtNickNameWidget::slotUpdatedTranslation() {
+  _nickNameEdit->setText(tr("Enter your nickname here"));
 }

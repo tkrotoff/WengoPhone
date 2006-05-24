@@ -68,7 +68,7 @@ public Q_SLOTS:
 
 	void userProfileUpdated();
 
-	void updateTranslation();
+	void slotUpdatedTranslation();
 
 protected:
 

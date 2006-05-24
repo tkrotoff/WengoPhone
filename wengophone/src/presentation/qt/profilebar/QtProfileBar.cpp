@@ -133,6 +133,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	// create internal widgets
 	_nickNameWidget = new QtNickNameWidget(_cUserProfile, _cWengoPhone, this);
 	_nickNameWidget->setVisible(false);
+	connect(this, SIGNAL(updatedTranslationSignal()),_nickNameWidget, SLOT(slotUpdatedTranslation()));
 
 	_eventWidget = new QtEventWidget(_cWengoPhone, _cUserProfile, this);
 	connect(this, SIGNAL(updatedTranslationSignal()),_eventWidget, SLOT(slotUpdatedTranslation()));
@@ -538,5 +539,11 @@ void QtProfileBar::unseenMissedCallsChangedEventHandler(CHistory &, int count) {
 }
 
 void QtProfileBar::slotTranslationChanged() {
+  _nicknameLabel->setText(tr("NickName"));
+  _nicknameLabel->setTextColor(Qt::white);
+  
+  _eventsLabel->setText(tr("events"));
+  _eventsLabel->setTextColor(Qt::white);
   updatedTranslationSignal();
 }
+
