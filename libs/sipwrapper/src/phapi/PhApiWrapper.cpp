@@ -558,6 +558,7 @@ void PhApiWrapper::createSession(IMChat & imChat, IMContactSet & imContactSet) {
 	}
 
 	newIMChatSessionCreatedEvent(*this, *imChatSession);
+	sendMyIcon((*imContactSet.begin()).getContactId(), _iconFilename);
 }
 
 void PhApiWrapper::closeSession(IMChatSession & sender) {

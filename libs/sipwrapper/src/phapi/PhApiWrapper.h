@@ -246,6 +246,9 @@ public:
 
 	static PhApiWrapper * PhApiWrapperHack;
 
+	// Fixme: temporary hack
+	std::string _iconFilename;
+
 private:
 
 	/**
