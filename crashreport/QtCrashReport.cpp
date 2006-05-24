@@ -22,6 +22,7 @@
 #include <cutil/global.h>
 #include <util/Date.h>
 #include <util/Time.h>
+#include <util/Path.h>
 #include <thread/Thread.h>
 
 #ifdef OS_WINDOWS
@@ -120,7 +121,8 @@ void QtCrashReport::updatePresentationThreadSafe() {
 std::string readLogFile() {
 	std::string content;
 	std::string line;
-	std::ifstream myfile ("log.txt");
+
+	std::ifstream myfile (getApplicationDirPath() + "log.txt");
 	if (myfile.is_open()) {
 		while (! myfile.eof() ) {
 			getline(myfile,line);
