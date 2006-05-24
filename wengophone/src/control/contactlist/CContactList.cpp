@@ -222,11 +222,14 @@ void CContactList::updateContactThreadSafe(ContactProfile contactProfile) {
 }
 
 void CContactList::addContactGroup(const std::string & name) {
-	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
+/*	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
 	MyThreadEvent * event = 
 		new MyThreadEvent(boost::bind(&CContactList::addContactGroupThreadSafe, this, _1), name);
 
-	_modelThread.postEvent(event);
+	_modelThread.postEvent(event);*/
+	// FIXME: Here we do not change the thread because QtProfileDetails needs this method to be blocking
+	// We should change the code in QtProfileDetails
+	_contactList.addContactGroup(name);
 }
 
 void CContactList::addContactGroupThreadSafe(std::string name) {
