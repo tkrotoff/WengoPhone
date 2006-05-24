@@ -250,9 +250,8 @@ void ChatWindow::show(){
     if ( _dialog->isMinimized())
         _dialog->hide();
 	_dialog->showNormal();
-#ifdef OS_WINDOWS
-    BringWindowToTop(_dialog->winId());
-#endif
+	_dialog->activateWindow();
+	_dialog->raise();
 }
 
 void ChatWindow::messageReceivedEventHandler(IMChatSession & sender) {
