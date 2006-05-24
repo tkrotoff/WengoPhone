@@ -547,7 +547,7 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>WengoChat</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;Learn more about Wengo Services</source>
@@ -708,7 +708,7 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>Send SMS to group</source>
-        <translation>Envoyer un SMS aux menbres du groupe</translation>
+        <translation>Envoyer un SMS aux membres du groupe</translation>
     </message>
 </context>
 <context>
@@ -794,7 +794,7 @@ Décriverz les circonsances du problème:</translation>
     <name>CreditWidget</name>
     <message>
         <source>&lt;u&gt;Buy call-out credits&lt;/u&gt;</source>
-        <translation>&lt;u&gt;Recharger mon compte&lt;/u&gt;</translation>
+        <translation>&lt;u&gt;Créditer mon compte&lt;/u&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Your number:&lt;/b&gt;</source>
@@ -802,7 +802,7 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>&lt;b&gt;Call forward mode:&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Mode de transfert:&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Transfert d&apos;appel:&lt;/b&gt;</translation>
     </message>
     <message>
         <source>0102030405</source>
@@ -831,7 +831,7 @@ Décriverz les circonsances du problème:</translation>
     <name>EventWidget</name>
     <message>
         <source>&lt;b&gt;New voice mail:&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Nouveau message:&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Nouveau(x) message(s):&lt;/b&gt;</translation>
     </message>
     <message>
         <source>0</source>
@@ -870,7 +870,7 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>&amp;Start</source>
-        <translation>&amp;Comencer</translation>
+        <translation>&amp;Commencer</translation>
     </message>
     <message>
         <source>Group Name</source>
@@ -933,7 +933,7 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>Show me as &quot;Away&quot; when I am inactive for:</source>
-        <translation>Changez mon statut en &quot;absent&quot; après une période d&apos;inactivité de:</translation>
+        <translation>Changer mon statut en &quot;absent&quot; après une période d&apos;inactivité de:</translation>
     </message>
     <message>
         <source>When I double-click on a contact </source>
@@ -941,11 +941,11 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>Start a free call if applicable</source>
-        <translation>Passer un appel PC à PC si disponible</translation>
+        <translation>Passer un appel PC à PC si possible</translation>
     </message>
     <message>
         <source>Start a chat if applicable</source>
-        <translation>Commencer un chat si disponible</translation>
+        <translation>Commencer un chat si possible</translation>
     </message>
     <message>
         <source>When I start my computer</source>
@@ -1404,7 +1404,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <name>PrivacySettings</name>
     <message>
         <source>Privacy Rules </source>
-        <translation> Confidentialité</translation>
+        <translation>Confidentialité</translation>
     </message>
     <message>
         <source>When I sign into Wengo</source>
@@ -1483,7 +1483,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>dd MMMM yyyy</source>
-        <translation>jj MMMM aaaa</translation>
+        <translation>dd MMMM yyyy</translation>
     </message>
     <message>
         <source>State:</source>
@@ -1792,7 +1792,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <name>QtNotificationSettings</name>
     <message>
         <source>Notifications &amp; Sounds</source>
-        <translation>Alertes &amp; sons</translation>
+        <translation>Alertes &amp; Sons</translation>
     </message>
     <message>
         <source>Incoming call (ringtone)</source>
@@ -2153,7 +2153,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     <name>QtVideoSettings</name>
     <message>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation>Vidéo</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -2523,7 +2523,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     <name>VideoSettings</name>
     <message>
         <source>Video Settings</source>
-        <translation>Paramètres Vidéo</translation>
+        <translation>Vidéo</translation>
     </message>
     <message>
         <source>Enable video</source>
@@ -2645,7 +2645,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>Privacy</source>
-        <translation>Confidentialié</translation>
+        <translation>Confidentialité</translation>
     </message>
     <message>
         <source>Audio</source>
@@ -2692,7 +2692,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>Dialpad</source>
-        <translation>Pavé téléphonique</translation>
+        <translation>Composer</translation>
     </message>
     <message>
         <source>Add a contact</source>
@@ -2836,7 +2836,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>Show / Hide &amp;Contacts Offline</source>
-        <translation>Afficher / Cacher &amp;Les contacts Hors ligne</translation>
+        <translation>Afficher / cacher &amp;les contacts hors ligne</translation>
     </message>
     <message>
         <source>Show Contact &amp;Groups</source>
@@ -2936,7 +2936,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>&amp;Learn more about Wengo Services</source>
-        <translation>&amp;Découvre les services que vous offrent Wengo</translation>
+        <translation>&amp;Découvrez les services que vous offrent Wengo</translation>
     </message>
     <message>
         <source>Instant Messaging Accounts</source>
@@ -2979,7 +2979,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>USB audio device</source>
-        <translation>Périque Audio USB</translation>
+        <translation>Périphérique audio USB</translation>
     </message>
     <message>
         <source>&lt;u&gt;Video Settings&lt;/u&gt;</source>
@@ -3021,7 +3021,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>Rechercehr</translation>
+        <translation>Rechercher</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Enter name, nickname, city or email and click the search button&lt;/span&gt;</source>
