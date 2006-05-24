@@ -342,7 +342,8 @@ void QtNickNameWidget::avatarRightClicked() {
 }
 
 void QtNickNameWidget::nicknameChanged() {
-	_cUserProfile.getUserProfile().setAlias(_nickNameEdit->text().toStdString(), NULL);
+	std::string alias(_nickNameEdit->text().toUtf8().constData());
+	_cUserProfile.getUserProfile().setAlias(alias, NULL);
    	QPalette palette = _nickNameEdit->palette();
 	palette.setColor(QPalette::Text, Qt::gray);
 	_nickNameEdit->setPalette(palette);
