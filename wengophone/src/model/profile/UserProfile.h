@@ -49,6 +49,7 @@ class PhoneCall;
 class Sms;
 class SoftUpdate;
 class History;
+class Thread;
 class WsInfo;
 class WsDirectory;
 
@@ -274,7 +275,14 @@ public:
 	 */
 	void saveHistory();
 
-	void addSipAccount(const std::string & login, const std::string & password, bool autoLogin);
+	/**
+	 * Sets the WengoAccount of this UserProfile.
+	 *
+	 * The WengoAccount os copied internally.
+	 *
+	 * @param wengoAccount the WengoAccount to set
+	 */
+	void setWengoAccount(const WengoAccount & wengoAccount);
 
 	/**
 	 * Adds an IMAccount to this UserProfile.
@@ -386,11 +394,6 @@ private:
 	void loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState loginState);
 
 	/**
-	 * @see addSipAccount()
-	 */
-	void addSipAccountThreadSafe(const std::string & login, const std::string & password, bool autoLogin);
-
-	/**
 	 * Creates and adds a new PhoneLine given a SipAccount.
 	 *
 	 * This is a helper method.
@@ -457,6 +460,8 @@ private:
 	ContactList _contactList;
 
 	EnumPresenceState::PresenceState _presenceState;
+
+	Thread & _modelThread;
 };
 
 #endif //USERPROFILE_H

@@ -579,10 +579,13 @@ void QtWengoPhone::addToConference(QtPhoneCall * qtPhoneCall){
 }
 
 void QtWengoPhone::showLoginWindow() {
-	int ret = _qtLogin->show();
+	if (_cWengoPhone.getCUserProfile()) {
+		int ret = _qtLogin->show();
 
-	if (ret == QDialog::Accepted) {
-		_cWengoPhone.addWengoAccount(_qtLogin->getLogin(), _qtLogin->getPassword(), _qtLogin->hasAutoLogin());
+		if (ret == QDialog::Accepted) {
+			WengoAccount wengoAccount(_qtLogin->getLogin(), _qtLogin->getPassword(), _qtLogin->hasAutoLogin());
+			_cWengoPhone.getCUserProfile()->setWengoAccount(wengoAccount);
+		}
 	}
 }
 

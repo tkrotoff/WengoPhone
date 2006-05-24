@@ -110,11 +110,6 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	//Event<void (UserProfile & sender, WsCallForward & wsCallForward)> wsCallForwardCreatedEvent;
 }
 
-void CWengoPhone::addWengoAccount(const std::string & login, const std::string & password, bool autoLogin) {
-	//TODO: should pass through CUserProfile
-	_wengoPhone.getCurrentUserProfile().addSipAccount(login, password, autoLogin);
-}
-
 void CWengoPhone::showWengoAccount() {
 	openWengoUrlWithAuth(URL_WENGO_ACCOUNT);
 }

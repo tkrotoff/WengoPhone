@@ -19,6 +19,7 @@
 
 #include "UserProfile.h"
 
+#include <model/WengoPhone.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/account/wengo/WengoAccountXMLLayer.h>
 #include <model/chat/ChatHandler.h>
@@ -55,7 +56,8 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_connectHandler(*this),
 	_presenceHandler(*this),
 	_chatHandler(*this),
-	_contactList(*this) {
+	_contactList(*this),
+	_modelThread(wengoPhone) {
 
 	_sms = NULL;
 	_wsInfo = NULL;
@@ -209,12 +211,7 @@ void UserProfile::startIM(Contact & contact) {
 	}
 }
 
-void UserProfile::addSipAccount(const std::string & login, const std::string & password, bool autoLogin) {
-/*
-	typedef ThreadEvent3<void (const std::string & login, const std::string & password, bool autoLogin), std::string, std::string, bool> MyThreadEvent;
-	MyThreadEvent * event = new MyThreadEvent(boost::bind(&UserProfile::addSipAccountThreadSafe, this, _1, _2, _3), login, password, autoLogin);
-	postEvent(event);
-*/
+void UserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 	//TODO allow several SipAccount
 	if (_wengoAccount) {
 		IPhoneLine * p = findWengoPhoneLine();
@@ -223,9 +220,10 @@ void UserProfile::addSipAccount(const std::string & login, const std::string & p
 			//TODO remove the PhoneLine from _phoneLines & destroy it
 		}
 		delete _wengoAccount;
+		_wengoAccount = NULL;
 	}
 
-	_wengoAccount = new WengoAccount(login, password, autoLogin);
+	_wengoAccount = new WengoAccount(wengoAccount);
 
 	//Empty login or password
 	if (_wengoAccount->getWengoLogin().empty() || _wengoAccount->getWengoPassword().empty()) {
@@ -244,37 +242,6 @@ void UserProfile::addSipAccount(const std::string & login, const std::string & p
 	// FIXME: there is currently only one SIP account so we are sure that the Wengo
 	// account will be connected
 	connectSipAccounts();
-}
-
-void UserProfile::addSipAccountThreadSafe(const std::string & login, const std::string & password, bool autoLogin) {
-/*
-	//TODO allow several SipAccount
-	if (_wengoAccount) {
-		IPhoneLine * p = findWengoPhoneLine();
-		if( p ) {
-			p->disconnect();
-			//TODO remove the PhoneLine from _phoneLines & destroy it
-		}
-		delete _wengoAccount;
-	}
-
-	_wengoAccount = new WengoAccount(login, password, autoLogin);
-
-	//Empty login or password
-	if (_wengoAccount->getWengoLogin().empty() || _wengoAccount->getWengoPassword().empty()) {
-		loginStateChangedEvent(*_wengoAccount, SipAccount::LoginStatePasswordError);
-		return;
-	}
-
-	_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
-	_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
-	_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
-	_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
-	_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
-
-	//Sends the HTTP request to the SSO
-	_wengoAccount->init();
-*/
 }
 
 void UserProfile::addIMAccount(const IMAccount & imAccount) {

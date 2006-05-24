@@ -42,12 +42,25 @@ WengoAccount::WengoAccount(const std::string & login, const std::string & passwo
 	_autoLogin = autoLogin;
 	_ssoRequestOk = false;
 	_wengoLoginOk = false;
+	_SSOWithSSL = false;
 	_stunServer = "stun.wengo.fr";
 
 	_timer.timeoutEvent += boost::bind(&WengoAccount::timeoutEventHandler, this);
 	_timer.lastTimeoutEvent += boost::bind(&WengoAccount::lastTimeoutEventHandler, this);
+}
 
-	_SSOWithSSL = false;
+WengoAccount::WengoAccount(const WengoAccount & wengoAccount) {
+	SipAccount::copy(wengoAccount);
+	_wengoLogin = wengoAccount._wengoLogin;
+	_wengoPassword = wengoAccount._wengoPassword;
+	_autoLogin = wengoAccount._autoLogin;
+	_ssoRequestOk = wengoAccount._ssoRequestOk;
+	_wengoLoginOk = wengoAccount._wengoLoginOk;
+	_SSOWithSSL = wengoAccount._SSOWithSSL;
+	_stunServer = wengoAccount._stunServer;
+
+	_timer.timeoutEvent += boost::bind(&WengoAccount::timeoutEventHandler, this);
+	_timer.lastTimeoutEvent += boost::bind(&WengoAccount::lastTimeoutEventHandler, this);
 }
 
 WengoAccount::~WengoAccount() {

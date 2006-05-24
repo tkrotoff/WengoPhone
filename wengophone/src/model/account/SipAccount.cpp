@@ -37,6 +37,13 @@ SipAccount::SipAccount() {
 }
 
 SipAccount::SipAccount(const SipAccount & sipAccount) {
+	copy(sipAccount);
+}
+
+SipAccount::~SipAccount() {
+}
+
+void SipAccount::copy(const SipAccount & sipAccount) {
 	_registerServerHostname = sipAccount._registerServerHostname;
 	_registerServerPort = sipAccount._registerServerPort;
 	_sipProxyServerHostname = sipAccount._sipProxyServerHostname;
@@ -53,9 +60,6 @@ SipAccount::SipAccount(const SipAccount & sipAccount) {
 	_username = sipAccount._username;
 	_password = sipAccount._password;
 	_realm = sipAccount._realm;
-}
-
-SipAccount::~SipAccount() {
 }
 
 void SipAccount::setProxySettings(const std::string & proxyAddress, unsigned proxyPort,

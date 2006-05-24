@@ -49,6 +49,8 @@ public:
 
 	~WengoAccount();
 
+	WengoAccount(const WengoAccount & wengoAccount);
+
 	bool init();
 
 	const std::string & getWengoLogin() const {

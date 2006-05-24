@@ -252,6 +252,11 @@ public:
 
 protected:
 
+	/**
+	 * Copy a SipAccount.
+	 */
+	void copy(const SipAccount & sipAccount);
+
 	void proxyNeedsAuthenticationEventHandler(NetworkDiscovery & sender, const std::string & proxyUrl, int proxyPort);
 
 	void wrongProxyAuthenticationEventHandler(NetworkDiscovery & sender,

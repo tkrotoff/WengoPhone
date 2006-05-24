@@ -23,23 +23,25 @@
 #include "ConfigManager.h"
 #include "Config.h"
 
-#include <cutil/global.h>
-#include <util/Path.h>
-#include <util/File.h>
-#include <util/Logger.h>
-#include <util/String.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/account/wengo/WengoAccountDataLayer.h>
 #include <model/account/wengo/WengoAccountXMLLayer.h>
 #include <model/profile/UserProfile.h>
 #include <model/WengoPhone.h>
 
-using namespace std;
+#include <cutil/global.h>
+
+#include <util/Path.h>
+#include <util/File.h>
+#include <util/Logger.h>
+#include <util/String.h>
 
 #include <string>
 #include <vector>
 #include <sstream>
 #include <iostream>
+
+using namespace std;
 
 typedef struct telNumber_s
 {
@@ -572,7 +574,8 @@ bool ClassicConfigImporter::ImportConfigFromV1toV2() {
 	//WengoAccountDataLayer wAccountDL(wAccount);
 	_userProfile.loginStateChangedEvent +=
 		boost::bind(&ClassicConfigImporter::loginStateChangedEventHandler, this, _1, _2);
-	_userProfile.addSipAccount(lastUser->login, lastUser->password, lastUser->auto_login);
+	WengoAccount wengoAccount(lastUser->login, lastUser->password, lastUser->auto_login);
+	_userProfile.setWengoAccount(wengoAccount);
 	//wAccountDL->save();
 	
 	return true;

@@ -29,6 +29,7 @@
 class IMAccount;
 class Thread;
 class UserProfile;
+class WengoAccount;
 
 class CUserProfile {
 public:
@@ -62,6 +63,11 @@ public:
 	void startIM(const std::string & contactId);
 
 	/**
+	 * @see UserProfile::setWengoAccount
+	 */
+	void setWengoAccount(const WengoAccount & wengoAccount);
+
+	/**
 	 * Gets IMAccounts of a desired protocol.
 	 */
 	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) const;
@@ -87,9 +93,41 @@ public:
 
 private:
 
+	/**
+	 * @see disconnect
+	 */
+	void disconnectThreadSafe();
+
+	/**
+	 * @see :makeCall(Contact & contact, bool enableVideo)
+	 */
+	void makeContactCallThreadSafe(std::string contactId);
+
+	/**
+	 * @see makeCall(const std::string & phoneNumber, bool enableVideo)
+	 */
+	void makeCallThreadSafe(std::string phoneNumber);
+
+	/**
+	 * @see makeCall(const std::string & phoneNumber, bool enableVideo)
+	 */
+	void makeCallThreadSafe(std::string phoneNumber, bool enableVideo);
+
+	/**
+	 * @see startIM
+	 */
+	void startIMThreadSafe(std::string contactId);
+
+	/**
+	 * @see setWengoAccount
+	 */
+	void setWengoAccountThreadSafe(WengoAccount wengoAccount);
+
 	UserProfile & _userProfile;
 
 	CContactList _cContactList;
+
+	Thread & _modelThread;
 };
 
 #endif	//CUSERPROFILE_H

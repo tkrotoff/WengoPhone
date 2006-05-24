@@ -47,6 +47,7 @@ class SoftUpdate;
 class History;
 class IMAccount;
 class UserProfile;
+class WengoAccount;
 class WsWengoSubscribe;
 class WsDirectory;
 class WsCallForward;
@@ -130,11 +131,6 @@ public:
 	WengoPhone & getWengoPhone() const {
 		return _wengoPhone;
 	}
-
-	/**
-	 * @see WengoPhone::addWengoAccount()
-	 */
-	void addWengoAccount(const std::string & login, const std::string & password, bool autoLogin);
 
 	/**
 	 * @see WengoPhone::addIMAccount()
