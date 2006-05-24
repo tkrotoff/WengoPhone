@@ -138,10 +138,10 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	_eventWidget = new QtEventWidget(_cWengoPhone, _cUserProfile, this);
 	connect(this, SIGNAL(updatedTranslationSignal()),_eventWidget, SLOT(slotUpdatedTranslation()));
 	//_eventWidget->getWidget()->setVisible(false);
-	
+
 	_creditWidget = new QtCreditWidget(_cWengoPhone, this);
 	connect(this, SIGNAL(updatedTranslationSignal()), _creditWidget, SLOT(slotUpdatedTranslation()));
-	
+
 	_cUserProfile.getUserProfile().wsInfoCreatedEvent +=
 		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
 	_cUserProfile.getUserProfile().phoneLineCreatedEvent +=

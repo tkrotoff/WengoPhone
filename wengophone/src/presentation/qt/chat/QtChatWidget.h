@@ -204,6 +204,8 @@ public Q_SLOTS:
 
     void enterPressed();
 
+    void deletePressed();
+
     void chooseFont();
 
     void chooseEmoticon();

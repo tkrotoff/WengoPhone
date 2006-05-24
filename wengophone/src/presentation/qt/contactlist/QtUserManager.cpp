@@ -329,7 +329,10 @@ QList < QtHidenContact * > QtUserManager::clearList(QList < QtHidenContact * > l
 void QtUserManager::safeUserStateChanged() {
 
 	safeHideOffLineUsers();
-
+    if (_menu){
+        delete _menu;
+        _menu=NULL;
+    }
 	QtHidenContact * hidenContact;
 	QList < QtHidenContact * >::iterator it;
 

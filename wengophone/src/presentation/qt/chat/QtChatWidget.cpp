@@ -71,6 +71,8 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
     ChatWidgetManager * cwm = new ChatWidgetManager(this,_chatEdit);
 
     connect (cwm,SIGNAL(enterPressed()),this, SLOT (enterPressed()));
+    connect (cwm,SIGNAL(deletePressed()),this,SLOT (deletePressed()));
+
     connect (_fontLabel,SIGNAL(clicked()), this, SLOT (chooseFont()));
     connect (_chatHistory,SIGNAL(anchorClicked(const QUrl &)),this,SLOT(urlClicked(const QUrl & )));
     connect (_emoticonsLabel,SIGNAL(clicked()),this,SLOT(chooseEmoticon()));
@@ -201,8 +203,12 @@ void ChatWidget::addToHistory(const QString & senderName,const QString & str){
 	arg(_nickBgColorAlt).
     arg(_nickTextColor).
     arg(QTime::currentTime().toString());
+
+    QTextDocument tmp;
+    tmp.setHtml (str);
+
 	_chatHistory->insertHtml (header);
-    _chatHistory->insertHtml (text2Emoticon(str));
+    _chatHistory->insertHtml (text2Emoticon(replaceUrls(tmp.toPlainText(),str + "<P></P>")));
     _chatHistory->ensureCursorVisible();
 }
     /* SLOTS */
@@ -261,6 +267,18 @@ void ChatWidget::enterPressed(){
     _chatEdit->clear();
     _chatEdit->setFocus();
 
+}
+
+void ChatWidget::deletePressed() {
+    QTextCursor cursor = _chatEdit->textCursor();
+    if (!cursor.hasSelection ()){
+        cursor.movePosition( QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 1 );
+        cursor.removeSelectedText();
+    }
+    else {
+        cursor.removeSelectedText();
+    }
+    _chatEdit->setTextCursor(cursor);
 }
 
 QString ChatWidget::prepareMessageForSending(const QString & message) {
@@ -332,7 +350,7 @@ void ChatWidget::chooseFont(){
 const QString ChatWidget::Emoticon2Text(const QString &htmlstr){
 	QVector<QtEmoticon> emoticons = _emoticonsWidget->getEmoticonsVector();
 	QString tmp = htmlstr;
-
+    //qDebug() << "ChatWidget::Emoticon2Text : " << htmlstr;
 	for (int i = 0; i < emoticons.size(); i++)
 	{
 		//tmp.replace(QRegExp(emoticons[i].getHtmlRegExp(),Qt::CaseInsensitive),emoticons[i].getDefaultText());
@@ -344,7 +362,7 @@ const QString ChatWidget::Emoticon2Text(const QString &htmlstr){
 const QString ChatWidget::text2Emoticon(const QString &htmlstr){
 	QVector<QtEmoticon> emoticons = _emoticonsWidget->getEmoticonsVector();
 	QString tmp = htmlstr;
-
+    //qDebug() << "ChatWidget::text2Emoticon : " << htmlstr;
 	for (int i = 0; i < emoticons.size(); i++)
 	{
 		tmp.replace(QRegExp(emoticons[i].getRegExp(),Qt::CaseInsensitive),emoticons[i].getHtml());

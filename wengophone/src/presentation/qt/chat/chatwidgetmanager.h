@@ -30,15 +30,15 @@ public:
 
     ChatWidgetManager (QObject * parent = 0, QTextEdit * target = 0);
 
-Q_SIGNALS: 
+Q_SIGNALS:
     void    enterPressed();
-    
+    void    deletePressed();
 protected:
 
     bool    eventFilter(QObject *obj, QEvent *event);
 
     bool    keyPress(QObject *obj, QEvent *event);
-    
+
 
     QTextEdit       *       _target;
     QObject         *       _parent;
