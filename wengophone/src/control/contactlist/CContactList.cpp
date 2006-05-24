@@ -186,11 +186,6 @@ void CContactList::addContactThreadSafe(ContactProfile contactProfile) {
 
 	LOG_DEBUG("adding a new Contact: " + contact.getFirstName() +
 		" in group " + contact.getGroupId());
-
-	// We emit the contactAddedEvent because the first one (emitted by ContactList
-	// when calling createContact) is not processed because the Contact has no
-	// group.
-	_pContactList->contactAddedEvent(contact.getUUID());
 }
 
 void CContactList::removeContact(const std::string & contactId) {

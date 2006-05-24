@@ -80,6 +80,7 @@ void Contact::copy(const Contact & contact) {
 }
 
 void Contact::copy(const ContactProfile & contactProfile) {
+	_uuid = contactProfile._uuid;
 	profileChangedEvent +=
 		boost::bind(&Contact::profileChangedEventHandler, this, _1);
 
@@ -101,7 +102,6 @@ void Contact::copy(const ContactProfile & contactProfile) {
 	setWengoPhoneId(contactProfile._wengoPhoneId);
 
 	Profile::copy(contactProfile);
-	_uuid = contactProfile._uuid;
 	_blocked = contactProfile._blocked;
 	_preferredIMContact = contactProfile._preferredIMContact;
 	_groupId = contactProfile._groupId;

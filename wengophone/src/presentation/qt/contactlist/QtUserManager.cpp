@@ -227,7 +227,7 @@ void QtUserManager::itemClicked(QTreeWidgetItem * item, int) {
     if (ul->getButton(item->text(0)) == Qt::RightButton) {
         if (!_menu) {
             _menu = createMenu();
-            _menu->popup(QCursor::pos());
+            _menu->exec(QCursor::pos());
             // clearSelection () is bugged ! We have to clear the selection ourself
             QList <QTreeWidgetItem * > selectedList = _tree->selectedItems();
             QList <QTreeWidgetItem * >::iterator iter;
@@ -239,7 +239,7 @@ void QtUserManager::itemClicked(QTreeWidgetItem * item, int) {
         else {
             delete _menu;
             _menu = createMenu();
-            _menu->popup(QCursor::pos());
+            _menu->exec(QCursor::pos());
             // clearSelection () is bugged ! We have to clear the selection ourself
             QList <QTreeWidgetItem * > selectedList = _tree->selectedItems();
             QList <QTreeWidgetItem * >::iterator iter;

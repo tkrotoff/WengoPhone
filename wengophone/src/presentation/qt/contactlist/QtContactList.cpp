@@ -253,7 +253,7 @@ void QtContactList::contactRemovedEventSlot(QString contactId) {
 }
 
 void QtContactList::contactMovedEventSlot(QString dstContactGroupId,
-QString srcContactGroupId, QString contactId) {
+	QString srcContactGroupId, QString contactId) {
 	LOG_DEBUG("contact moved from " + srcContactGroupId.toStdString()
 	+ " to " + dstContactGroupId.toStdString()
 	+ ". UUID: " + contactId.toStdString());
