@@ -120,13 +120,13 @@ debug_print('Done copying Boost DLL!')
 
 #Copy other dependencies: ssl, icu and gnutls
 dependencies = {
-    'ssl':'0.9.8',
-    'crypto':'0.9.8',
-    'icui18n':'34',
-    'icuuc':'34',
-    'icudata':'34',
-    'gnutls':'11',
-    'tasn1':'2',
+   'ssl':'0.9.8',
+   'crypto':'0.9.8',
+   'icui18n':'34',
+   'icuuc':'34',
+   'icudata':'34',
+   'gnutls':'11',
+   'tasn1':'2',
     }
 
 for library in dependencies.keys():
@@ -145,6 +145,19 @@ for library in X11_dependencies.keys():
 zip_file = tarfile.open('wengophone-ng-GNULinux-binary-latest.tar.bz2', 'w:bz2')
 debug_print('Using zip file: ' + str(zip_file) + '...')
 
+#Creating wrapper script to start WengoPhone
+debug_print('Creating wrapper script...')
+wrapper_script_path = os.path.join(str(temp_directory), 'wengophone.sh')
+wrapper_script = open(wrapper_script_path, 'w')
+
+wrapper_script.write("""
+#!/bin/sh
+LD_LIBRARY_PATH=. ./qtwengophone
+""")
+wrapper_script.close()
+os.chmod(wrapper_script_path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IWOTH)
+debug_print('Done creating wrapper script!')
+
 debug_print('Adding files to zip archive...')
 for root, dirs, files in os.walk(temp_directory):
     for file in files:
@@ -154,8 +167,9 @@ for root, dirs, files in os.walk(temp_directory):
         zip_file.add(filename_to_add, filename_in_zip)
 debug_print('Zip file created!')
 
+
 #Cleaning temporary directory
 debug_print('Cleaning temporary...')
-#shutil.rmtree(temp_directory)
+shutil.rmtree(temp_directory)
 debug_print('Temporary directory cleaned!')
 debug_print('Done!')
