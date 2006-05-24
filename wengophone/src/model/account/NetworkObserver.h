@@ -43,6 +43,8 @@ public:
 	 */
 	Event< void (NetworkObserver & sender)> connectionIsDownEvent;
 
+	bool isConnected() { return _isConnected; };
+
 	static NetworkObserver *getInstance();
 
 private:
