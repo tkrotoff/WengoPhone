@@ -28,6 +28,7 @@
 #include <QMouseEvent>
 #include <QEvent>
 #include <QMenu>
+#include <QPoint>
 
 class QMenu;
 
@@ -76,14 +77,16 @@ protected:
 	virtual void mousePressEvent( QMouseEvent *e );
 	virtual void mouseReleaseEvent( QMouseEvent *e );
 	virtual void mouseDoubleClickEvent( QMouseEvent *e );
-	
+	virtual void timerEvent(QTimerEvent *event);
+
 private:
 	QMenu *pop;
 	QPixmap pm;
 	QString tip;
 	bool v_isWMDock;
 	int _clickTimerId;
-	bool _waitForDoubleClick;
+	int _clickCounter;
+	QPoint _globalPos;
 	// system-dependant part
 public:
 	class TrayIconPrivate;

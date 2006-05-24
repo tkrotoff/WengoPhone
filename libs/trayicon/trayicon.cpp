@@ -24,6 +24,7 @@
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QEvent>
+#include <QDebug>
 
 /*!
   \class TrayIcon qtrayicon.h
@@ -41,6 +42,7 @@ TrayIcon::TrayIcon( QObject *parent)
 {
 	v_isWMDock = FALSE;
 	_clickTimerId = -1;
+	_clickCounter = 0;
 }
 
 /*!
@@ -54,6 +56,8 @@ TrayIcon::TrayIcon( const QPixmap &icon, const QString &tooltip, QMenu *popup, Q
 : QObject(parent), pop(popup), pm(icon), tip(tooltip), d(0)
 {
 	v_isWMDock = FALSE;
+	_clickTimerId = -1;
+	_clickCounter = 0;
 
 	if ( !pm.width() || !pm.height() )
 		pm = QPixmap( 16, 16 );
@@ -248,14 +252,17 @@ void TrayIcon::mouseReleaseEvent( QMouseEvent *e )
 			}
 			break;
 		case Qt::LeftButton:
-			if ( pop ) {
-				// Necessary to make keyboard focus
-				// and menu closing work on Windows.
-				pop->activateWindow ();
-				pop->popup( e->globalPos() );
-				pop->activateWindow ();
-				e->accept();
+			{
+				_globalPos = e->globalPos();
+				_clickCounter++;
+				if (_clickTimerId == -1){
+					_clickTimerId = startTimer(qApp->doubleClickInterval());
+				} else {
+					killTimer(_clickTimerId);
+					_clickTimerId = startTimer(qApp->doubleClickInterval());
+				}
 			}
+			e->accept();
 			break;
 		case Qt::MidButton:
 			clicked( e->globalPos(), e->button() );
@@ -265,6 +272,25 @@ void TrayIcon::mouseReleaseEvent( QMouseEvent *e )
 	}
 #endif
 	e->ignore();
+}
+
+
+void TrayIcon::timerEvent(QTimerEvent *event){
+	if (event->timerId() == _clickTimerId){
+		qDebug()<<"Timer event";
+		killTimer(_clickTimerId);
+		_clickTimerId = -1;
+		if (_clickCounter == 1){
+			if ( pop ) {
+				// Necessary to make keyboard focus
+				// and menu closing work on Windows.
+				pop->activateWindow ();
+				pop->popup( _globalPos );
+				pop->activateWindow ();
+			}
+		}
+		_clickCounter=0;
+	}
 }
 
 /*!
