@@ -101,5 +101,5 @@ QComboBox * QtCallBar::getComboBox() {
 }
 
 void QtCallBar::slotUpdatedTranslation() {
-  _phoneComboBox->setEditText(tr("Enter a phone number, a Wengo nickname or a SIP address"));
+	//_phoneComboBox->setEditText(tr("Enter a phone number, a Wengo nickname or a SIP address"));
 }
