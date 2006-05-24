@@ -148,7 +148,7 @@ void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *te
 {
 	GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
 
-	if (mIMConnect)
+	if (mIMConnect && !gc->wants_to_die)
 	{
 		mIMConnect->setConnected(false);
 		mIMConnect->disconnectedEvent(*mIMConnect, true, text == NULL ? String::null : text);
