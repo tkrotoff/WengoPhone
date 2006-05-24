@@ -72,6 +72,9 @@ bool SettingsXMLSerializer::unserialize(const std::string & data) {
 	TiXmlHandle docHandle(& doc);
 	TiXmlNode * settings = docHandle.FirstChild("settings").Node();
 
+	if (settings == NULL)
+		return false;
+
 	TiXmlNode * lastChild = NULL;
 	while ((lastChild = settings->IterateChildren(lastChild))) {
 		string key = lastChild->Value();
