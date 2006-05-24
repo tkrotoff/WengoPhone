@@ -154,6 +154,7 @@ void QtWengoPhone::initThreadSafe() {
 
 	QGridLayout * callBarLayout = new QGridLayout(_ui->callBarFrame);
 	_qtCallBar = new QtCallBar(_ui->callBarFrame);
+	connect(qtLanguage, SIGNAL(translationChangedSignal()), _qtCallBar, SLOT(slotUpdatedTranslation()));
 	callBarLayout->addWidget(_qtCallBar);
 	callBarLayout->setMargin(0);
 	callBarLayout->setSpacing(0);
@@ -1250,6 +1251,7 @@ void QtWengoPhone::updateCallMenu() {
     connect (_sendSmsMenu,SIGNAL(triggered(QAction*)),this,SLOT(slotSystrayMenuSendSms(QAction*)));
   } else {
     _sendSmsMenu->clear();
+    _sendSmsMenu->setTitle(tr("Send a SMS"));
   }
 
   QAction *sendSmsBlankAction =_sendSmsMenu->addAction(tr("Send SMS"));
@@ -1262,6 +1264,7 @@ void QtWengoPhone::updateCallMenu() {
     _startChatMenu->setIcon(QIcon(":/pics/contact/chat.png"));
   } else {
     _startChatMenu->clear();
+    _startChatMenu->setTitle(tr("Start a chat"));
   }
   _trayMenu->addMenu(_startChatMenu);
 
@@ -1270,6 +1273,7 @@ void QtWengoPhone::updateCallMenu() {
     connect(_callWengoMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotSystrayMenuCallWengo(QAction*)));
   } else {
     _callWengoMenu->clear();
+    _callWengoMenu->setTitle(tr("Call SIP"));
   }
   QAction *placeCallBlankAction =_callMenu->addAction(tr("Place Call"));
   connect(placeCallBlankAction, SIGNAL(triggered(bool)), this, SLOT(slotSystrayMenuCallBlank(bool)));
@@ -1281,6 +1285,7 @@ void QtWengoPhone::updateCallMenu() {
     connect(_callMobileMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotSystrayMenuCallMobile(QAction*)));
   }  else {
     _callMobileMenu->clear();
+    _callMobileMenu->setTitle(tr("Call Mobile"));
   }
  _callMenu->addMenu(_callMobileMenu);
 
@@ -1290,6 +1295,7 @@ void QtWengoPhone::updateCallMenu() {
     connect(_callLandLineMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotSystrayMenuCallLandLine(QAction*)));
   } else {
     _callLandLineMenu->clear();
+    _callLandLineMenu->setTitle(tr("Call land line"));
   }
   _callMenu->addMenu(_callLandLineMenu);
 

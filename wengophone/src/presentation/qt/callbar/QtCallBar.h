@@ -64,5 +64,7 @@ protected Q_SLOTS:
 	void callBarButtonOffClicked();
 
 	void callBarButtonClicked();
+	  
+	void slotUpdatedTranslation();
 };
 #endif
