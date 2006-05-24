@@ -70,13 +70,14 @@ void PhApiIMChat::sendMessage(IMChatSession & chatSession, const std::string & m
 }
 
 void PhApiIMChat::changeTypingState(IMChatSession & chatSession, IMChat::TypingState state) {
-	_phApiWrapper.changeTypingState(chatSession, state);
+	// Fixme: Disable typing state because of a bad interoperability with Wengophone Classic
+	//_phApiWrapper.changeTypingState(chatSession, state);
 }
 
 void PhApiIMChat::createSession(IMContactSet & imContactSet) {
 	_phApiWrapper.createSession(*this, imContactSet);
 }
-
+	
 void PhApiIMChat::closeSession(IMChatSession & chatSession) {
 	_phApiWrapper.closeSession(chatSession);
 }
