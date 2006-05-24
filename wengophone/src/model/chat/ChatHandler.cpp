@@ -61,10 +61,12 @@ void ChatHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & 
 void ChatHandler::newIMChatSessionCreatedEventHandler(IMChat & sender, IMChatSession & imChatSession) {
 	LOG_DEBUG("a new IMChatSession has been created");
 	_imChatSessionSet.insert(&imChatSession);
+	imChatSession.imChatSessionWillDieEvent += 
+		boost::bind(&ChatHandler::imChatSessionWillDieEventHandler, this, _1);
 	newIMChatSessionCreatedEvent(*this, imChatSession);
 }
 
-void ChatHandler::imChatSesssionWillDieEventHandler(IMChatSession & sender) {
+void ChatHandler::imChatSessionWillDieEventHandler(IMChatSession & sender) {
 	IMChatSessionSet::iterator it = _imChatSessionSet.find(&sender);
 
 	if (it != _imChatSessionSet.end()) {

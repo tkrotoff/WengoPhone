@@ -92,7 +92,7 @@ private:
 	/**
 	 * @see IMChatSession::imChatSessionWillDieEvent
 	 */
-	void imChatSesssionWillDieEventHandler(IMChatSession & sender);
+	void imChatSessionWillDieEventHandler(IMChatSession & sender);
 
 	typedef std::map<IMAccount *, IMChat *> IMChatMap;
 
