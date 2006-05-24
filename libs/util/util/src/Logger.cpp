@@ -32,15 +32,11 @@ using namespace std;
 Logger Logger::logger;
 
 Logger::Logger() {
-	boost::mutex::scoped_lock scopedLock(_mutex);
-
 	std::string fileName = Path::getApplicationDirPath() + "log.txt";
 	_file = new FileWriter(fileName);
 }
 
 Logger::~Logger() {
-	boost::mutex::scoped_lock scopedLock(_mutex);
-
 	flush();
 	delete _file;
 }
@@ -62,8 +58,6 @@ void Logger::error(const std::string & className, const std::string & message) {
 }
 
 void Logger::fatal(const std::string & className, const std::string & message) {
-	boost::mutex::scoped_lock scopedLock(_mutex);
-
 	log(Fatal, className, message);
 	flush();
 	assert(NULL && "Fatal error");
