@@ -101,7 +101,7 @@ void QtContactList::initThreadSafe() {
 	spx->setPixmap(QtContactPixmap::ContactAway, scalePixmap(":/pics/status/away.png"));
 	spx->setPixmap(QtContactPixmap::ContactForward, scalePixmap(":/pics/status/forward.png"));
 
-	// Fonctions icons
+	// Functions icons
 	spx->setPixmap(QtContactPixmap::ContactIM, scalePixmap(":/pics/contact_im.png"));
 	spx->setPixmap(QtContactPixmap::ContactCall, scalePixmap(":/pics/contact_call.png"));
 	spx->setPixmap(QtContactPixmap::ContactVideo, scalePixmap(":/pics/contact_video.png"));

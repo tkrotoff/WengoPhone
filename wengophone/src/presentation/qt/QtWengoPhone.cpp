@@ -1190,15 +1190,19 @@ void QtWengoPhone::setSystrayIcon(QVariant status){
     switch ( _cWengoPhone.getCUserProfile()->getUserProfile().getPresenceState() ){
         case EnumPresenceState::PresenceStateAway:
             _trayIcon->setIcon(QPixmap(":/pics/status/away.png"));
+            _trayIcon->setToolTip(QString("Wengophone - ") + tr("Away"));
             break;
         case EnumPresenceState::PresenceStateOnline:
             _trayIcon->setIcon(QPixmap(":/pics/status/online.png"));
+            _trayIcon->setToolTip(QString("Wengophone - ") + tr("Online"));
             break;
         case EnumPresenceState::PresenceStateInvisible:
             _trayIcon->setIcon(QPixmap(":/pics/status/offline.png"));
+            _trayIcon->setToolTip(QString("Wengophone - ") + tr("Offline"));
             break;
         case EnumPresenceState::PresenceStateDoNotDisturb:
             _trayIcon->setIcon(QPixmap(":/pics/status/donotdisturb.png"));
+            _trayIcon->setToolTip(QString("Wengophone - ") + tr("Do not disturb"));
             break;
         default:
             LOG_DEBUG("Change presence state display to -- Not yet handled\n");
