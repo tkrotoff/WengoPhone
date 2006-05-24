@@ -21,6 +21,8 @@
 
 #include "ui_HttpProxyLoginWindow.h"
 
+#include <qtutil/WidgetBackgroundImage.h>
+
 #include <QtGui>
 
 QtHttpProxyLogin::QtHttpProxyLogin(QWidget * parent, const std::string & proxyAddress, unsigned proxyPort)
@@ -30,6 +32,8 @@ QtHttpProxyLogin::QtHttpProxyLogin(QWidget * parent, const std::string & proxyAd
 
 	_ui = new Ui::HttpProxyLoginWindow();
 	_ui->setupUi(_httpProxyLoginWindow);
+
+	WidgetBackgroundImage::setBackgroundImage(_ui->httpProxyLabel, ":pics/headers/login.png", true);
 
 	//addressLineEdit
 	_ui->addressLineEdit->setText(QString::fromStdString(proxyAddress));
