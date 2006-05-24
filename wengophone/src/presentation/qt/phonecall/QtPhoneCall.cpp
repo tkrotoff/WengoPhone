@@ -225,10 +225,10 @@ void QtPhoneCall::stateChangedEventHandler(EnumPhoneCallState::PhoneCallState st
 void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state) {
  	std::string codecs;
 	if (_cPhoneCall.getAudioCodecUsed() != CodecList::AudioCodecError) {
-		codecs += _cPhoneCall.getAudioCodecUsed();
+		codecs += CodecList::toString(_cPhoneCall.getAudioCodecUsed());
 	}
 	if (_cPhoneCall.getVideoCodecUsed() != CodecList::VideoCodecError) {
-		codecs += "/" + _cPhoneCall.getVideoCodecUsed();
+		codecs += "/" + CodecList::toString(_cPhoneCall.getVideoCodecUsed());
 	}
 	_qtWengoPhone->getStatusBar().showMessage(QString::fromStdString(codecs));
 

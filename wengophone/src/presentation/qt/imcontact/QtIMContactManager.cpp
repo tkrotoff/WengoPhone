@@ -31,13 +31,13 @@
 
 #include <QtGui>
 
-QtIMContactManager::QtIMContactManager(ContactProfile & contactProfile, 
+QtIMContactManager::QtIMContactManager(ContactProfile & contactProfile,
 	CUserProfile & cUserProfile, QWidget * parent)
-: QObject(parent),
-_contactProfile(contactProfile),
-_cUserProfile(cUserProfile) {
+	: QObject(parent),
+	_contactProfile(contactProfile),
+	_cUserProfile(cUserProfile) {
 
-	_imContactManagerWidget = new QWidget(parent);
+	_imContactManagerWidget = new QWidget(NULL);
 
 	_ui = new Ui::IMContactManager();
 	_ui->setupUi(_imContactManagerWidget);
