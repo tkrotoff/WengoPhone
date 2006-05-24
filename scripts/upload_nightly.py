@@ -34,6 +34,7 @@ ftp_connection.sendcmd('cwd ' + dst_directory)
 
 # Get svn revision from which this version comes
 
+revision_number = ''
 try:
     (stdin, stdout) = os.popen2("svnversion .")
     revision_number = stdout.readline().split(':')[0]
