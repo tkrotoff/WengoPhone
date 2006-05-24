@@ -34,16 +34,14 @@
       <item row="3" column="0" >
        <widget class="QRadioButton" name="forwardToNumberRadioButton" >
         <property name="text" >
-         <string>Transférer tous vos appels non aboutis vers les n° suivants :</string>
+         <string>Forward all unanswered calls to following phone numbers</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0" >
        <widget class="QLabel" name="label" >
         <property name="text" >
-         <string>Le transfert d'appel intervient si vous n'êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
-ou après vingt secondes si vous n'avez pas répondu. Vous pouvez configurer jusqu'à trois transferts 
-vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
+         <string>Call forwarding is active if you're not connected to Wengo, when your line is busy or 20 seconds after your  you did not answer a call. You can configure up to three call forwards to landlines, mobile phones or vocal box.</string>
         </property>
         <property name="wordWrap" >
          <bool>true</bool>
@@ -53,14 +51,14 @@ vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
       <item row="1" column="0" >
        <widget class="QRadioButton" name="disableRadioButton" >
         <property name="text" >
-         <string>Désactiver le transfert d'appel</string>
+         <string>Disable call forwarding</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0" >
        <widget class="QRadioButton" name="forwardToVoiceMailRadioButton" >
         <property name="text" >
-         <string>Transférer tous vos appels non aboutis vers la Messagerie vocale. </string>
+         <string>Forward all unanswered calls to message box</string>
         </property>
        </widget>
       </item>
@@ -87,16 +85,16 @@ vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
          </widget>
         </item>
         <item row="2" column="0" >
-         <widget class="QLabel" name="label" >
+         <widget class="QLabel" name="label_2" >
           <property name="text" >
-           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">3eme&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+           <string>&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;/head>&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; font-size:8pt;&quot;>3rd&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
           </property>
          </widget>
         </item>
         <item row="0" column="0" >
-         <widget class="QLabel" name="label" >
+         <widget class="QLabel" name="label_3" >
           <property name="text" >
-           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">1er&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+           <string>&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;/head>&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; font-size:8pt;&quot;>1st&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
           </property>
          </widget>
         </item>
@@ -108,9 +106,9 @@ vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
          </widget>
         </item>
         <item row="1" column="0" >
-         <widget class="QLabel" name="label" >
+         <widget class="QLabel" name="label_4" >
           <property name="text" >
-           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">2eme&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+           <string>&lt;html>&lt;head>&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; />&lt;/head>&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;>&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;>&lt;span style=&quot; font-size:8pt;&quot;>2nd&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
           </property>
          </widget>
         </item>
@@ -145,10 +143,9 @@ vers des postes fixes, des numéros mobiles ou sur votre messagerie.</string>
        <number>6</number>
       </property>
       <item row="1" column="0" >
-       <widget class="QLabel" name="label" >
+       <widget class="QLabel" name="label_5" >
         <property name="text" >
-         <string>Les transferts d'appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et 
-nécessitent un crédit de Wengo's. L'activation du transfert nécessite de renseigner un numéro mobile dans votre profil</string>
+         <string>Call forwards to my mobile are billed on standard rates and needs Wengo credits. You need to fill up a mobile phone number in your profile before using call forwarding.</string>
         </property>
         <property name="wordWrap" >
          <bool>true</bool>
@@ -161,7 +158,7 @@ nécessitent un crédit de Wengo's. L'activation du transfert nécessite de rens
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Transférer les appels vers mon mobile lorsque je sélectionne le statut "mobile"</string>
+         <string>Forward calls to my mobile when I choose &quot;mobile&quot; status</string>
         </property>
        </widget>
       </item>

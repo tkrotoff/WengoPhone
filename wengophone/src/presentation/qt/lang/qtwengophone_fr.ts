@@ -198,29 +198,17 @@ of the License, or (at your option) any later version.</translation>
     </message>
     <message encoding="UTF-8">
         <source>Transférer tous vos appels non aboutis vers les n° suivants :</source>
-        <translation>Transférer tous vos appels non aboutis vers les n° suivants :</translation>
+        <translation type="obsolete">Transférer tous vos appels non aboutis vers les n° suivants :</translation>
     </message>
     <message encoding="UTF-8">
         <source>Transférer tous vos appels non aboutis vers la Messagerie vocale. </source>
-        <translation>Transférer tous vos appels non aboutis vers la Messagerie vocale. </translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;3eme&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;1er&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;2eme&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
+        <translation type="obsolete">Transférer tous vos appels non aboutis vers la Messagerie vocale. </translation>
     </message>
     <message encoding="UTF-8">
         <source>Le transfert d&apos;appel intervient si vous n&apos;êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
 ou après vingt secondes si vous n&apos;avez pas répondu. Vous pouvez configurer jusqu&apos;à trois transferts 
 vers des postes fixes, des numéros mobiles ou sur votre messagerie.</source>
-        <translation>Le transfert d&apos;appel intervient si vous n&apos;êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
+        <translation type="obsolete">Le transfert d&apos;appel intervient si vous n&apos;êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
 ou après vingt secondes si vous n&apos;avez pas répondu. Vous pouvez configurer jusqu&apos;à trois transferts 
 vers des postes fixes, des numéros mobiles ou sur votre messagerie.</translation>
     </message>
@@ -231,16 +219,55 @@ vers des postes fixes, des numéros mobiles ou sur votre messagerie.</translatio
     <message encoding="UTF-8">
         <source>Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et 
 nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessite de renseigner un numéro mobile dans votre profil</source>
-        <translation>Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et 
+        <translation type="obsolete">Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et 
 nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessite de renseigner un numéro mobile dans votre profil</translation>
     </message>
     <message encoding="UTF-8">
         <source>Transférer les appels vers mon mobile lorsque je sélectionne le statut &quot;mobile&quot;</source>
-        <translation>Transférer les appels vers mon mobile lorsque je sélectionne le statut &quot;mobile&quot;</translation>
+        <translation type="obsolete">Transférer les appels vers mon mobile lorsque je sélectionne le statut &quot;mobile&quot;</translation>
     </message>
     <message encoding="UTF-8">
         <source>Désactiver le transfert d&apos;appel</source>
-        <translation>Désactiver le transfert d&apos;appel</translation>
+        <translation type="obsolete">Désactiver le transfert d&apos;appel</translation>
+    </message>
+    <message>
+        <source>Forward all unanswered calls to following phone numbers</source>
+        <translation>Transférer tous vos appels non aboutis vers les n° suivants</translation>
+    </message>
+    <message>
+        <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line is busy or 20 seconds after your  you did not answer a call. You can configure up to three call forwards to landlines, mobile phones or vocal box.</source>
+        <translation>Le transfert d&apos;appel intervient si vous n&apos;êtes pas connecté à Wengo, lorsque votre ligne est occupée,
+ou après vingt secondes si vous n&apos;avez pas répondu. Vous pouvez configurer jusqu&apos;à trois transferts
+vers des postes fixes, des numéros mobiles ou sur votre messagerie.</translation>
+    </message>
+    <message>
+        <source>Disable call forwarding</source>
+        <translation>Désactiver le transfet d&apos;appel</translation>
+    </message>
+    <message>
+        <source>Forward all unanswered calls to message box</source>
+        <translation>Transférer tous vos appels non aboutis vers la messagerie vocale</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;3rd&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;3ème&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;1st&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;1er&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;2nd&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;2ème&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Call forwards to my mobile are billed on standard rates and needs Wengo credits. You need to fill up a mobile phone number in your profile before using call forwarding.</source>
+        <translation>Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et
+nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessite de renseigner un numéro mobile dans votre profil.</translation>
+    </message>
+    <message>
+        <source>Forward calls to my mobile when I choose &quot;mobile&quot; status</source>
+        <translation>Transférer les appels vers mon mobile lorsque je sélectionne le statut &quot;mobile&quot;</translation>
     </message>
 </context>
 <context>
@@ -321,11 +348,11 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>SEND</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -512,11 +539,11 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Tab 1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>WengoChat</source>
@@ -524,15 +551,15 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>&amp;Learn more about Wengo Services</source>
-        <translation type="unfinished">&amp;Découvre les services que vous offrent Wengo</translation>
+        <translation>&amp;Découvrez les services que vous offrent Wengo</translation>
     </message>
     <message>
         <source>&amp;Contacts</source>
-        <translation type="unfinished">&amp;Contacts</translation>
+        <translation>&amp;Contacts</translation>
     </message>
     <message>
         <source>Add contact</source>
-        <translation type="unfinished">Ajouter un contact</translation>
+        <translation>Ajouter un contact</translation>
     </message>
 </context>
 <context>
@@ -1079,11 +1106,11 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Wengo ID or other network ID (MSN, Jabber...)</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifiant Wengo ou identifiant d&apos;autres réseaux (MSN, Jabber,...)</translation>
     </message>
     <message>
         <source>Click on the add button below to add a new ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer sur le bouton Ajouter ci dessous pour associer un identifiant de messagerie à ce contact</translation>
     </message>
 </context>
 <context>
@@ -1186,24 +1213,24 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You don&apos;t have a Wengo account? &lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Click here&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Vous n&apos;avez pas de compte Wengo ? &lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Cliquez ici&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Please connect yourself using your Wengo account in order to access your contact list and to phone at the lowest rates.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Veuillez vous connecter en utilisant votre compte Wengo afin d&apos;accéder à votre liste de contacts et aux meilleurs tarifs de communications&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Email Address:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Adresse e-mail :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Password:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Mot de passe :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Please enter your email address and&lt;br&gt;password&lt;/span&gt;
 </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Identifiant&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Veuillez entrer votre adresse e-mail et&lt;br&gt;votre mot de passe&lt;/span&gt;(new line)</translation>
     </message>
 </context>
 <context>
@@ -1561,7 +1588,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>New chat session</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle session de chat</translation>
     </message>
 </context>
 <context>
@@ -1880,7 +1907,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>New incoming call</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvel appel entrant</translation>
     </message>
 </context>
 <context>
@@ -2204,7 +2231,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>Quit Wengophone</source>
-        <translation type="unfinished">Fermer WengoPhone</translation>
+        <translation>Fermer WengoPhone</translation>
     </message>
     <message>
         <source>WengoPhone - Authorization request</source>
@@ -2588,7 +2615,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>Webcam Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Prévisualisation de la Webcam</translation>
     </message>
 </context>
 <context>
@@ -2967,19 +2994,19 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     <name>Wizard</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation type="unfinished">Terminer</translation>
+        <translation>Terminer</translation>
     </message>
     <message>
         <source>Next &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Suivant &gt;</translation>
     </message>
     <message>
         <source>&lt; Back</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt; Précédent</translation>
     </message>
 </context>
 <context>
@@ -3056,11 +3083,11 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>Advanced Options</source>
-        <translation type="unfinished">Options avancées</translation>
+        <translation>Options avancées</translation>
     </message>
     <message>
         <source>Use Yahoo! Japan server</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser les serveurs de Yahoo! Japan</translation>
     </message>
 </context>
 <context>
