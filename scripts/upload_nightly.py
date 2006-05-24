@@ -32,14 +32,24 @@ ftp_connection.set_pasv(True)
 # Change working directory to be in the right place
 ftp_connection.sendcmd('cwd ' + dst_directory)
 
+# Get svn revision from which this version comes
+
+try:
+    (stdin, stdout) = os.popen2("svnversion .")
+    revision_number = stdout.readline().split(':')[0]
+except IOError:
+    print "Couldn't get revision number, aborting."
+    ftp_connection.quit()
+    sys.exit(1)
+
+
 # Actually upload files
 index = 4
 while index < len(sys.argv):
     remote_filename = sys.argv[index + 1]
     local_filename = sys.argv[index]
-    ftp_connection.storbinary('STOR ' + re.sub('timestamp',
-                                               time.strftime("%Y%m%d%H%M%S",
-                                                             time.gmtime()),
+    ftp_connection.storbinary('STOR ' + re.sub('revnumber',
+                                               revision_number,
                                                remote_filename),
                               open(local_filename, 'rb'))
     index += 2
