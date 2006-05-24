@@ -166,6 +166,9 @@ void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
 	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
 													GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 	
+	if (account == NULL)
+		return;
+
 	GaimIMContactList *mIMContactList = FindIMContactList(*account);
 	if (mIMContactList)
 	{
