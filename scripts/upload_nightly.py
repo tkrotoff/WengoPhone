@@ -50,7 +50,10 @@ index = 4
 while index < len(sys.argv):
     remote_filename = sys.argv[index + 1]
     local_filename = sys.argv[index]
-    ftp_connection.storbinary('STOR ' + re.sub('revnumber',
+    print 'Uploading remote filename: ' + str(re.sub('revnumber',
+                                                     revision_number,
+                                                     remote_filename))
+    ftp_connection.storbinary('STOR ' +  re.sub('revnumber',
                                                revision_number,
                                                remote_filename),
                               open(local_filename, 'rb'))
