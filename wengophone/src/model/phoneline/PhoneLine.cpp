@@ -108,13 +108,15 @@ int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 	for (PhoneCalls::iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
 		PhoneCall * phoneCall = (*it).second;
 
-		EnumPhoneCallState::PhoneCallState state = phoneCall->getState();
-		if (state != EnumPhoneCallState::PhoneCallStateTalking &&
-			state != EnumPhoneCallState::PhoneCallStateResumed &&
-			state != EnumPhoneCallState::PhoneCallStateHold) {
+		if (phoneCall) {
+			EnumPhoneCallState::PhoneCallState state = phoneCall->getState();
+			if (state != EnumPhoneCallState::PhoneCallStateTalking &&
+				state != EnumPhoneCallState::PhoneCallStateResumed &&
+				state != EnumPhoneCallState::PhoneCallStateHold) {
 
-			LOG_ERROR("cannot place the call=" + phoneNumber + ", at least another phone call is not in talking state");
-			return -1;
+				LOG_ERROR("cannot place the call=" + phoneNumber + ", at least another phone call is not in talking state");
+				return -1;
+			}
 		}
 	}
 
