@@ -77,6 +77,7 @@ void QtChatHandler::updatePresentationThreadSafe() {
 void QtChatHandler::initThreadSafe() {
 	_qtChatWidget = NULL;
 }
+
 void QtChatHandler::showToaster(IMChatSession & imChatSession) {
 
     Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -85,10 +86,11 @@ void QtChatHandler::showToaster(IMChatSession & imChatSession) {
         return;
 	if (imChatSession.isUserCreated())
 		return;
+/*
     // Shows toaster for incoming incoming chats ?
     if (!config.getNotificationShowToasterOnIncomingCall())
         return;
-
+*/
     QPixmap result;
 
     ContactList & contactList = _cChatHandler.getUserProfile().getContactList();

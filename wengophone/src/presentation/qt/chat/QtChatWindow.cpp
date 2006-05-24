@@ -250,7 +250,7 @@ void ChatWindow::show(){
     if ( _dialog->isMinimized())
         _dialog->hide();
 	_dialog->showNormal();
-	_dialog->raise();
+
 	//flashWindow();
 }
 

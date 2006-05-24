@@ -139,7 +139,7 @@ void QtWengoPhone::initThreadSafe() {
 	QtLanguage *qtLanguage = new QtLanguage(_wengoPhoneWindow);
 	connect(qtLanguage, SIGNAL(translationChangedSignal()), SLOT(slotTranslationChanged()));
 	qtLanguage->updateTranslation();
-		
+
 	// Install the close event filter
 	QtWengoPhoneEventFilter * qtWengoPhoneEventFilter;
 	qtWengoPhoneEventFilter = new QtWengoPhoneEventFilter(this);
@@ -193,8 +193,6 @@ void QtWengoPhone::initThreadSafe() {
 	connect(_ui->sendSmsButton,SIGNAL(clicked()),SLOT(sendSms()));
 
 	// Open chat window button
-	_ui->openChatWindowButton->setEnabled(false);
-	connect ( _ui->openChatWindowButton,SIGNAL(clicked()),SLOT(showChatWindow()));
 
 /*
     // Disable call items in Action menu
@@ -333,10 +331,10 @@ void QtWengoPhone::initThreadSafe() {
 
 	// Resume a call
 	connect (_ui->actionHold_Resume,SIGNAL(triggered()),SLOT(resumeCall()));
-	
+
 	// Hangup a call
 	connect (_ui->actionHangup,SIGNAL(triggered()),SLOT(hangupCall()));
-	
+
 	connect(this, SIGNAL(connectionStatusEventHandlerSignal(int, int, QString)),
 		SLOT(connectionStatusEventHandlerSlot(int, int, QString)));
 
@@ -1234,8 +1232,10 @@ void QtWengoPhone::setChatWindow(QWidget * chatWindow){
 }
 
 void QtWengoPhone::showChatWindow(){
- if ( _chatWindow )
-    _chatWindow->setVisible(true);
+ if ( _chatWindow ) {
+    _chatWindow->showNormal();
+    _chatWindow->activateWindow();
+ }
 }
 
 void QtWengoPhone::updateCallMenu() {
