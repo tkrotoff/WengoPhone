@@ -151,7 +151,7 @@ protected:
 
 	bool _canSort;
 
-	bool _whantSort;
+	bool _wantSort;
 
 };
 

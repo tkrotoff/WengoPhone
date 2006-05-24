@@ -58,7 +58,7 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
     _sortTimerId = -1;
     _waitForDoubleClick = false;
     _canSort = true;
-    _whantSort = false;
+    _wantSort = false;
 
     QtUserList::getInstance()->setTreeWidget(target);
     target->setMouseTracking(true);
@@ -129,7 +129,15 @@ void QtUserManager::deleteContact() {
 
 	QtUserList * ul = QtUserList::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
-	_cUserProfile.getCContactList().removeContact(item->text(0).toStdString());
+	if ( QMessageBox::question(_tree,
+        tr("Delete contact"),
+        tr("Do you really want to delete this contact ?"),
+        tr("&Yes"),
+        tr("&No"),
+        QString(),
+        0,1) == 0){
+            _cUserProfile.getCContactList().removeContact(item->text(0).toStdString());
+        }
 }
 
 void QtUserManager::treeViewSelectionChanged() {
@@ -426,9 +434,9 @@ void QtUserManager::safeSortUsers() {
         if (_sortTimerId != -1)
             killTimer(_sortTimerId);
         _sortTimerId = startTimer(2000);
-        _whantSort = false;
+        _wantSort = false;
     }else{
-        _whantSort = true;
+        _wantSort = true;
         return;
     }
 
@@ -837,9 +845,9 @@ void QtUserManager::timerEvent ( QTimerEvent * event ) {
         killTimer(_sortTimerId);
         _sortTimerId = -1;
         _canSort = true;
-        if ( _whantSort ) {
+        if ( _wantSort ) {
             safeSortUsers();
-            _whantSort = false;
+            _wantSort = false;
         }
         return;
     }
