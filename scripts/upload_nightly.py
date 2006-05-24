@@ -37,7 +37,7 @@ ftp_connection.sendcmd('cwd ' + dst_directory)
 revision_number = ''
 try:
     (stdin, stdout) = os.popen2("svnversion .")
-    revision_number = stdout.readline().split(':')[0]
+    revision_number = stdout.readline().split(':')[0].rstrip(os.linesep)
     revision_number = re.sub('(M|S)', '', revision_number)
 except IOError:
     print "Couldn't get revision number, aborting."
