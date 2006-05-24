@@ -250,8 +250,9 @@ void ChatWindow::show(){
     if ( _dialog->isMinimized())
         _dialog->hide();
 	_dialog->showNormal();
-
-	//flashWindow();
+#ifdef OS_WINDOWS
+    BringWindowToTop(_dialog->winId());
+#endif
 }
 
 void ChatWindow::messageReceivedEventHandler(IMChatSession & sender) {
@@ -337,16 +338,18 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 			if (imChatSession->isUserCreated()){
                 show();
                 return;
-			}
-			if ( ! _dialog->isVisible())
-			{
-                _dialog->showMinimized ();
-                flashWindow();
-            }
-            else
-                if (_dialog->isMinimized())
+			}else{
+                if ( ! _dialog->isVisible())
+                {
+                    _dialog->showMinimized ();
                     flashWindow();
-			return;
+                    return;
+                }
+                else
+                    if (_dialog->isMinimized())
+                        flashWindow();
+                        return;
+            }
 		}
 	}
 
@@ -360,7 +363,7 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 		IMContact from = *imChatSession->getIMContactSet().begin();
 		addChat(imChatSession,from);
 		if (imChatSession->isUserCreated())
-            _dialog->show();
+            show();
         else{
             if ( !_dialog->isVisible())
                 _dialog->showMinimized ();
@@ -395,6 +398,8 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	else
 		tabNumber = _tabWidget->insertTab(0,_chatWidget,senderName);
 
+    if (session->isUserCreated())
+        _tabWidget->setCurrentIndex(tabNumber);
 
     statusChangedSlot(QString::fromStdString(qtContactList->getCContactList().findContactThatOwns(from)));
 
