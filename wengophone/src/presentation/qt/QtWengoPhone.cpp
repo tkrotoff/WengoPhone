@@ -151,6 +151,7 @@ void QtWengoPhone::initThreadSafe() {
 	_chatWindow = NULL;
 
 	_qtLogin = new QtLogin(_wengoPhoneWindow, *this);
+	connect(qtLanguage, SIGNAL(translationChangedSignal()), _qtLogin, SLOT(slotUpdatedTranslation()));
 
 	QGridLayout * callBarLayout = new QGridLayout(_ui->callBarFrame);
 	_qtCallBar = new QtCallBar(_ui->callBarFrame);

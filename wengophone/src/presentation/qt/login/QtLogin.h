@@ -64,6 +64,8 @@ public Q_SLOTS:
 
 	void createAccountLabelClicked();
 
+	void slotUpdatedTranslation();
+
 private:
 
 	Ui::LoginWindow * _ui;

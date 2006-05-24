@@ -1230,7 +1230,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Please enter your email address and&lt;br&gt;password&lt;/span&gt;
 </source>
-        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Identifiant&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Veuillez entrer votre adresse e-mail et&lt;br&gt;votre mot de passe&lt;/span&gt;(new line)</translation>
+        <translation type="unfinished">&lt;span style=&quot;font-size:18pt;&quot;&gt;Identifiant&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Veuillez entrer votre adresse e-mail et&lt;br&gt;votre mot de passe&lt;/span&gt;</translation>
     </message>
 </context>
 <context>

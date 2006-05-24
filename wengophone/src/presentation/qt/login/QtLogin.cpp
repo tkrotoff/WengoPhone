@@ -90,3 +90,7 @@ void QtLogin::setPassword(const QString & password) {
 void QtLogin::setAutoLogin(bool autoLogin) {
 	_ui->autoLoginCheckBox->setChecked(autoLogin);
 }
+
+void QtLogin::slotUpdatedTranslation() {
+  _ui->retranslateUi(_loginWindow);
+}
