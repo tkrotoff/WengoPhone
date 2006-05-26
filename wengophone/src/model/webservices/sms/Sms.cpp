@@ -52,7 +52,7 @@ int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
 
 	//History: create a History Memento for this outgoing SMS
 	HistoryMemento * memento = new HistoryMemento(
-		HistoryMemento::OutgoingSmsNok, phoneNumber, requestId, message2);
+		HistoryMemento::OutgoingSmsNok, phoneNumber, requestId, message);
 	_userProfile.getHistory().addMemento(memento);
 
 	return requestId;
