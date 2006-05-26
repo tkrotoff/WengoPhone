@@ -658,9 +658,10 @@ void ChatWindow::flashWindow() {
 	flashInfo.dwTimeout = 500;
 	FlashWindowEx(&flashInfo);
 #endif
+    _dialog->activateWindow();
 }
 
-bool ChatWindow::isVisible(){
+bool ChatWindow::chatIsVisible(){
     if (_dialog->isVisible() && (!_dialog->isMinimized()))
         return true;
     return false;

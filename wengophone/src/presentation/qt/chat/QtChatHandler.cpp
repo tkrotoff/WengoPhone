@@ -48,18 +48,22 @@ void QtChatHandler::newIMChatSessionCreatedEventHandler(IMChatSession & imChatSe
 
 void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession & imChatSession) {
 
-    Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 
 	if (!_qtChatWidget)
 	{
-		_qtChatWidget =  new ChatWindow(_cChatHandler, imChatSession);
+		 _qtChatWidget =  new ChatWindow(_cChatHandler, imChatSession);
+		showToaster(&imChatSession);
+		connect(_qtChatWidget,SIGNAL(messageReceivedSignal(IMChatSession *)),
+            SLOT(showToaster(IMChatSession *)));
+
 	}
 	else
 	{
 		_qtChatWidget->addChatSession(&imChatSession);
 	}
 
-    showToaster(imChatSession);
+
 }
 
 void QtChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContactSet) {
@@ -78,20 +82,18 @@ void QtChatHandler::initThreadSafe() {
 	_qtChatWidget = NULL;
 }
 
-void QtChatHandler::showToaster(IMChatSession & imChatSession) {
+void QtChatHandler::showToaster(IMChatSession * imChatSession) {
 
     Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-    if (_qtChatWidget->isVisible())
+    if (_qtChatWidget->chatIsVisible())
+    {
         return;
+    }
 
-	if (imChatSession.isUserCreated())
+	if (imChatSession->isUserCreated())
 		return;
-/*
-    // Shows toaster for incoming incoming chats ?
-    if (!config.getNotificationShowToasterOnIncomingCall())
-        return;
-*/
+
     QPixmap result;
 
     ContactList & contactList = _cChatHandler.getUserProfile().getContactList();
@@ -100,12 +102,12 @@ void QtChatHandler::showToaster(IMChatSession & imChatSession) {
 
 	QtToaster  * toaster = new QtToaster();
 	toaster->setTitle(tr("New chat session"));
-	if (imChatSession.getIMContactSet().size() > 0) {
+	if (imChatSession->getIMContactSet().size() > 0) {
 		QString message;
-		for (IMContactSet::const_iterator it = imChatSession.getIMContactSet().begin();
-			it != imChatSession.getIMContactSet().end();
+		for (IMContactSet::const_iterator it = imChatSession->getIMContactSet().begin();
+			it != imChatSession->getIMContactSet().end();
 			++it) {
-			if (it != imChatSession.getIMContactSet().begin()) {
+			if (it != imChatSession->getIMContactSet().begin()) {
 				message += ", ";
 			}
 			message += QString::fromStdString((*it).getContactId());

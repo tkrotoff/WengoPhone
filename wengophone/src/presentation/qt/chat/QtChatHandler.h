@@ -36,6 +36,9 @@ class IMContactSet;
  * @author Philippe Bernery
  */
 class QtChatHandler : public QObjectThreadSafe, public PChatHandler {
+
+    Q_OBJECT
+
 public:
 
 	QtChatHandler(CChatHandler & cChatHandler);
@@ -48,6 +51,10 @@ public:
 
 	void updatePresentation();
 
+public Q_SLOTS:
+
+	void showToaster(IMChatSession * imChatSession);
+
 private:
 
 	void newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession & imChatSession);
@@ -55,8 +62,6 @@ private:
 	void updatePresentationThreadSafe();
 
 	void initThreadSafe();
-
-	void showToaster(IMChatSession & imChatSession);
 
 	CChatHandler & _cChatHandler;
 

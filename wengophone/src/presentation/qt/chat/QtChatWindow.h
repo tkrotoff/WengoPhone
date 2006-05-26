@@ -55,7 +55,7 @@ public:
 
 	void enableChatButton();
 
-    bool isVisible();
+    bool chatIsVisible();
 
     void imContactChangedEventHandler(IMContact & sender);
 
