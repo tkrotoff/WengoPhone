@@ -249,11 +249,15 @@ void QtProfileBar::nicknameClicked(){
 }
 
 void QtProfileBar::showNickNameWidget() {
-
+    QSize widgetSize;
+    QWidget * parentWidget;
 	removeEventsWidget();
 	removeCreditWidget();
 
 	if ( ! _nickNameWidgetVisible ) {
+	    parentWidget = dynamic_cast<QWidget *>(parent());
+	    widgetSize = parentWidget->size();
+	    _nickNameWidget->resize(widgetSize.width(),150);
 		_widgetLayout->addWidget(_nickNameWidget, 1, 0 );
 		_nickNameWidget->setVisible(true);
 		_nickNameWidgetVisible=true;
@@ -288,10 +292,15 @@ void QtProfileBar::eventsClicked() {
 }
 
 void QtProfileBar::showEventsWidget() {
+    QSize widgetSize;
+    QWidget * parentWidget;
 
 	removeNickNameWidget();
 	removeCreditWidget();
 	if ( !_eventsWidgetVisible ) {
+	    parentWidget = dynamic_cast<QWidget *>(parent());
+	    widgetSize = parentWidget->size();
+	    _eventWidget->getWidget()->resize(widgetSize.width(),150);
 		_widgetLayout->addWidget(_eventWidget->getWidget(), 1, 0);
 		_eventWidget->getWidget()->setVisible(true);
 		_eventsWidgetVisible = true;
@@ -323,9 +332,15 @@ void QtProfileBar::creditClicked() {
 }
 
 void QtProfileBar::showCreditWidget() {
+    QSize widgetSize;
+    QWidget * parentWidget;
+
 	removeNickNameWidget();
 	removeEventsWidget();
 	if ( ! _crediWidgetVisible ) {
+	    parentWidget = dynamic_cast<QWidget *>(parent());
+	    widgetSize = parentWidget->size();
+	    _creditWidget->getWidget()->resize(widgetSize.width(),150);
 		_widgetLayout->addWidget(_creditWidget->getWidget(), 1, 0);
 		_creditWidget->getWidget()->setVisible(true);
 		_crediWidgetVisible = true;
@@ -541,7 +556,7 @@ void QtProfileBar::unseenMissedCallsChangedEventHandler(CHistory &, int count) {
 void QtProfileBar::slotTranslationChanged() {
   _nicknameLabel->setText(tr("NickName"));
   _nicknameLabel->setTextColor(Qt::white);
-  
+
   _eventsLabel->setText(tr("events"));
   _eventsLabel->setTextColor(Qt::white);
   updatedTranslationSignal();

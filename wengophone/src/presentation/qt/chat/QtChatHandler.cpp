@@ -84,6 +84,7 @@ void QtChatHandler::showToaster(IMChatSession & imChatSession) {
 
     if (_qtChatWidget->isVisible())
         return;
+
 	if (imChatSession.isUserCreated())
 		return;
 /*

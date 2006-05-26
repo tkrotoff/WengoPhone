@@ -338,17 +338,18 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
                 show();
                 return;
 			}else{
-                if ( ! _dialog->isVisible())
+                if (!_dialog->isVisible())
                 {
                     _dialog->showMinimized ();
                     flashWindow();
                     return;
                 }
-                else
-                    if (_dialog->isMinimized())
+                if (_dialog->isMinimized()){
                         flashWindow();
                         return;
+                }
             }
+            return;
 		}
 	}
 
