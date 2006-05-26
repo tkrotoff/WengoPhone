@@ -532,7 +532,7 @@ void ChatWidget::addContactToContactListFrame(const Contact & contact){
 }
 
 void ChatWidget::createActionFrame(){
-    QGridLayout * layout = new QGridLayout(_actionFrame);
+    QHBoxLayout * layout = new QHBoxLayout(_actionFrame);
    	_emoticonsLabel = new QtWengoStyleLabel(_actionFrame);
 
 	_fontLabel = new QtWengoStyleLabel(_actionFrame);
@@ -560,7 +560,7 @@ void ChatWidget::createActionFrame(){
 						QPixmap(":/pics/profilebar/bar_on_fill.png")  // Fill
                         );
 
-    _emoticonsLabel->setText(tr("emoticons   "));
+    _emoticonsLabel->setText(tr("emoticons  "));
 	_emoticonsLabel->setTextColor(Qt::white);
 	_emoticonsLabel->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
@@ -571,9 +571,13 @@ void ChatWidget::createActionFrame(){
 	_fontLabel->setText(tr("    fonts"));
 	_fontLabel->setTextColor(Qt::white);
     _fontLabel->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-
+/*
 	layout->addWidget(_emoticonsLabel,0,0);
 	layout->addWidget(_fontLabel,0,1);
+*/
+	layout->addWidget(_emoticonsLabel);
+	layout->addWidget(_fontLabel);
+
 	layout->setMargin(0);
 	layout->setSpacing(0);
 

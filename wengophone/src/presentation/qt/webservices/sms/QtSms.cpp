@@ -67,7 +67,7 @@ void QtSms::sendButtonClicked() {
 	//validate sms length before sending
 	if( !checkSmsLength() ) {
 
-		QMessageBox::warning(_smsWindow, 
+		QMessageBox::warning(_smsWindow,
 			tr("Wengo SMS service"),
 			tr("Your message is too long.\n"
 				"The length can not exeed 156 characters.\n"
