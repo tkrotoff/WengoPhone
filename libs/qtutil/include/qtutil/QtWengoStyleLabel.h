@@ -47,6 +47,10 @@ public:
 
 	void setSelected(bool value) { _selected=value; };
 
+public Q_SLOTS:
+
+    void setText(const QString & text);
+
 Q_SIGNALS:
 
 	void clicked();

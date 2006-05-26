@@ -181,3 +181,18 @@ void QtWengoStyleLabel::mouseReleaseEvent ( QMouseEvent * event ){
 	}
 }
 
+void QtWengoStyleLabel::setText(const QString & text){
+
+    QLabel::setText(text);
+    QFontMetrics fm(font());
+    int textWidth = fm.width(text);
+    textWidth+=40;
+    QSize s = size();
+    if ( textWidth > s.width()){
+//        setMaximumSize(textWidth,s.height());
+        setMinimumSize(textWidth,s.height());
+    }
+
+}
+
+
