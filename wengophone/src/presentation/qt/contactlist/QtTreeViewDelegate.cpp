@@ -127,7 +127,33 @@ QSize QtTreeViewDelegate::sizeHint(const QStyleOptionViewItem & option, const QM
 
 	return orig;
 }
+bool QtTreeViewDelegate::checkForUtf8(const unsigned char * text, int size) const {
+    bool isUtf8 = false;
 
+    if (size==0)
+        return true;
+
+    if ( (text[0]<0x7F) && size==1){
+        return true;
+    }
+
+    for (int i=0;i<size;i++){
+        if (text[i] == 0 ){
+            return false;
+        }
+        if (text[i]>=0x7F){
+            if ((text[i] & 0xC0) == 0xC0){
+                if (i+1 > size)
+                    return false;
+                if ((text[i+1] & 0xC0) == 0x80){
+                    isUtf8=true;
+                }
+            }
+        }
+    }
+
+    return isUtf8;
+}
 void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const {
 	QRect r;
 	QtContactPixmap * spx;
@@ -169,9 +195,20 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 	int nbchild = index.model()->rowCount(index);
 
 	std::string groupId = index.data().toString().toStdString();
-	QString groupName =
-		QString::fromStdString(_cWengoPhone.getCUserProfile()->getCContactList().getContactGroupName(groupId));
+    std::string groupNameTmp = _cWengoPhone.getCUserProfile()->getCContactList().getContactGroupName(groupId);
 
+    QString groupName;
+
+    if (checkForUtf8((const unsigned char *)(groupNameTmp.c_str()), groupNameTmp.size())){
+        	groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
+    }
+    else{
+        groupName=QString::fromStdString(groupNameTmp);
+    }
+/*
+	QString groupName =
+		QString::fromUtf8(_cWengoPhone.getCUserProfile()->getCContactList().getContactGroupName(groupId).c_str());
+*/
 	QString str = QString("%1 (%2)").arg(groupName).arg(nbchild);
 	painter->drawText(r, Qt::AlignLeft, str, 0);
 }

@@ -51,6 +51,8 @@ protected:
 
 	void drawGroup(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
 
+    bool checkForUtf8(const unsigned char * text, int size) const;
+
 	const QWidget * _parent;
 
 	QPixmap _menuIcon;
