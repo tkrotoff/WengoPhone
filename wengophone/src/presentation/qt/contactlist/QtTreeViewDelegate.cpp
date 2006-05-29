@@ -147,6 +147,7 @@ bool QtTreeViewDelegate::checkForUtf8(const unsigned char * text, int size) cons
                     return false;
                 if ((text[i+1] & 0xC0) == 0x80){
                     isUtf8=true;
+                    return isUtf8;
                 }
             }
         }
@@ -205,10 +206,6 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
     else{
         groupName=QString::fromStdString(groupNameTmp);
     }
-/*
-	QString groupName =
-		QString::fromUtf8(_cWengoPhone.getCUserProfile()->getCContactList().getContactGroupName(groupId).c_str());
-*/
 	QString str = QString("%1 (%2)").arg(groupName).arg(nbchild);
 	painter->drawText(r, Qt::AlignLeft, str, 0);
 }
