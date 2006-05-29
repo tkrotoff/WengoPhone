@@ -57,6 +57,7 @@ private:
 
 	static void GaimIMInit();
 	void GaimWrapperInit();
+	void GaimSetCallbacks();
 };
 
 #endif	//GAIMIMFACTORY_H

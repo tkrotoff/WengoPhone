@@ -176,6 +176,16 @@ GaimIMFactory::GaimIMFactory()
 	
 	GaimIMInit();
 	GaimWrapperInit();
+	GaimSetCallbacks();
+}
+
+void GaimIMFactory::GaimSetCallbacks()
+{
+	gaim_connections_set_ui_ops(&conn_wg_ops);
+	gaim_conversations_set_ui_ops(&chat_wg_ops);
+	gaim_blist_set_ui_ops(&blist_wg_ops);
+	gaim_accounts_set_ui_ops(&acc_wg_ops);
+	gaim_privacy_set_ui_ops(&privacy_wg_ops);
 }
 
 void GaimIMFactory::GaimWrapperInit()
@@ -213,11 +223,6 @@ void GaimIMFactory::GaimIMInit()
 
 	gaim_core_set_ui_ops(&core_wg_ops);
 	gaim_eventloop_set_ui_ops(&eventloop_wg_ops);
-	gaim_connections_set_ui_ops(&conn_wg_ops);
-	gaim_conversations_set_ui_ops(&chat_wg_ops);
-	gaim_blist_set_ui_ops(&blist_wg_ops);
-	gaim_accounts_set_ui_ops(&acc_wg_ops);
-	gaim_privacy_set_ui_ops(&privacy_wg_ops);
 
 	search_path = g_build_filename(gaim_user_dir(), "plugins", NULL);
 	gaim_plugins_add_search_path(search_path);
