@@ -4540,11 +4540,12 @@ static void gaim_auth_sendrequest(GaimConnection *gc, char *name) {
 	data->name = g_strdup(name);
 	data->nick = NULL;
 
-	gaim_request_action(gc, NULL, _("Request Authorization"), dialog_msg,
+	gaim_auth_request(data, NULL);
+	/*gaim_request_action(gc, NULL, _("Request Authorization"), dialog_msg,
 						0, data, 2,
 						_("_Request Authorization"),
 						G_CALLBACK(gaim_auth_request_msgprompt),
-						_("Cancel"), G_CALLBACK(gaim_auth_dontrequest));
+						_("Cancel"), G_CALLBACK(gaim_auth_dontrequest));*/
 
 	g_free(dialog_msg);
 	g_free(nombre);
