@@ -119,9 +119,9 @@ StringList File::getDirectoryList() const {
 				}
 			}
 		}
-	}
 
-	closedir(dp);
+		closedir(dp);
+	}
 
 	return dirList;
 }
