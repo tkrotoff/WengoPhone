@@ -79,11 +79,17 @@ OutFile "${INSTALLER_NAME}"
 !include "nsProcess.nsh"
 
 !include "isUserAdmin.nsi"
+!include "isSilent.nsi"
 Function .onInit
 	/** Kills running qtwengophone.exe */
 	${nsProcess::KillProcess} "qtwengophone.exe" $R0
 
 	!insertmacro MUI_LANGDLL_DISPLAY
+
+	Call IsSilent
+	Pop $0
+	StrCmp $0 1 0 +2
+		goto initDone
 
 	Call isUserAdmin
 	Pop $R0
