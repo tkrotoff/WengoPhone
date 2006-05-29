@@ -2142,7 +2142,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     <name>QtUserWidget</name>
     <message>
         <source>No cell phone number set</source>
-        <translation>Aucune numéro de mobile saisi</translation>
+        <translation>Aucun numéro de mobile saisi</translation>
     </message>
     <message>
         <source>No phone number set</source>
@@ -2512,11 +2512,11 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>No cell phone number set</source>
-        <translation>Aucune numéro de mobile saisi</translation>
+        <translation>Aucun numéro de mobile saisi</translation>
     </message>
     <message>
         <source>No phone number set</source>
-        <translation>Aucune numéro de mobile saisi</translation>
+        <translation>Aucun numéro de mobile saisi</translation>
     </message>
 </context>
 <context>
