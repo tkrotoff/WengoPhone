@@ -419,7 +419,7 @@ void QtUserManager::safeHideOffLineUsers() {
 		}
 
 	}
-
+    safeSortUsers();
 }
 
 void QtUserManager::hideOffLineUsers() {
