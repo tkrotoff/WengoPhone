@@ -362,8 +362,9 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 	if ( imChatSession->getIMContactSet().size() != 0 ) {
 		IMContact from = *imChatSession->getIMContactSet().begin();
 		addChat(imChatSession,from);
-		if (imChatSession->isUserCreated())
+		if (imChatSession->isUserCreated()){
             show();
+		}
         else{
             if ( !_dialog->isVisible())
                 _dialog->showMinimized ();
@@ -421,9 +422,6 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	if ( !_dialog->isVisible() || _dialog->isMinimized())
         _tabWidget->setCurrentIndex(tabNumber);
 
-
-
-
 	Contact * contact = _cChatHandler.getUserProfile().getContactList().findContactThatOwns(from);
 	if ( contact ){
 		contactAddedSignal(session, &from );
@@ -432,7 +430,7 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 		//
 		// Contact * contact = _cChatHandler.getUserProfile().getPresenceHandler().getContactIcon(from);
 	}
-	_dialog->show();
+	//_dialog->show();
 }
 
 void ChatWindow::tabSelectionChanged ( int index ){
