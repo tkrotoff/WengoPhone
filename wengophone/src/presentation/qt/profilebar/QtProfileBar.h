@@ -64,6 +64,11 @@ Q_SIGNALS:
 
 	void updatedTranslationSignal();
 
+	void wsInfoWengosEvent(float wengos);
+	void wsInfoVoiceMailEvent(int count);
+	void wsInfoPtsnNumberEvent(const QString & number);
+	void wsCallForwardInfoEvent(const QString & mode);
+
 protected:
 
 	ConnectHandler & _connectHandler;
@@ -154,6 +159,14 @@ public Q_SLOTS:
 	void myPresenceStatusEventSlot(QVariant status);
 
 	void slotTranslationChanged();
+
+private Q_SLOTS:
+
+	void wsInfoWengosEventSlot(float wengos);
+	void wsInfoVoiceMailEventSlot(int count);
+	void wsInfoPtsnNumberEventSlot(const QString & number);
+	void wsCallForwardInfoEventSlot(const QString & mode);
+
 
 private:
 

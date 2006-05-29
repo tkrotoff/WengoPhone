@@ -177,6 +177,11 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 		this,SLOT (myPresenceStatusEventSlot( QVariant ))) ) {
 		LOG_FATAL("Signal / slot connection error");
 	}
+
+	connect(this, SIGNAL(wsInfoWengosEvent(float)), SLOT(wsInfoWengosEventSlot(float)));
+	connect(this, SIGNAL(wsInfoVoiceMailEvent(int)), SLOT(wsInfoVoiceMailEventSlot(int)));
+	connect(this, SIGNAL(wsInfoPtsnNumberEvent(const QString &)), SLOT(wsInfoPtsnNumberEventSlot(const QString &)));
+	connect(this, SIGNAL(wsCallForwardInfoEvent(const QString &)), SLOT(wsCallForwardInfoEventSlot(const QString &)));
 }
 
 // Called in the model thread
@@ -441,7 +446,6 @@ void QtProfileBar::wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsIn
 	wsInfo.wsInfoWengosEvent += boost::bind(&QtProfileBar::wsInfoWengosEventHandler, this, _1, _2, _3, _4);
 	wsInfo.wsInfoVoiceMailEvent += boost::bind(&QtProfileBar::wsInfoVoiceMailEventHandler, this, _1, _2, _3, _4);
 	wsInfo.wsInfoPtsnNumberEvent += boost::bind(&QtProfileBar::wsInfoPtsnNumberEventHandler, this, _1, _2, _3, _4);
-
 	wsInfo.wsCallForwardInfoEvent += boost::bind(&QtProfileBar::wsCallForwardInfoEventHandler, this, _1, _2, _3, _4, _5, _6, _7, _8);
 
 	wsInfo.getWengosCount(true);
@@ -453,20 +457,19 @@ void QtProfileBar::wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsIn
 
 void QtProfileBar::wsInfoWengosEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, float wengos) {
 	if( status == WsInfo::WsInfoStatusOk ) {
-		// 0x20ac is the unicode code for the euros currency symbol
-		_creditLabel->setText(QString() + QChar(0x20ac) + QString(" %1").arg(wengos) );
+		wsInfoWengosEvent(wengos);
 	}
 }
 
 void QtProfileBar::wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail) {
-	//if( status == WsInfo::WsInfoStatusOk ) {
-		_eventWidget->setVoiceMail(voicemail);
-	//}
+	if( status == WsInfo::WsInfoStatusOk ) {
+		wsInfoVoiceMailEvent(voicemail);
+	}
 }
 
 void QtProfileBar::wsInfoPtsnNumberEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, std::string number) {
 	if( status == WsInfo::WsInfoStatusOk ) {
-		_creditWidget->setPstnNumber(QString::fromStdString(number));
+		wsInfoPtsnNumberEvent(QString::fromStdString(number));
 	}
 }
 
@@ -477,16 +480,16 @@ void QtProfileBar::wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo
 
 		switch( mode ) {
 			case WsInfo::WsInfoCallForwardModeVoicemail:
-				_creditWidget->setCallForwardMode(tr("active") + " (" + tr("voicemail") + ")" );
+				wsCallForwardInfoEvent(tr("active") + " (" + tr("voicemail") + ")" );
 				break;
 			case WsInfo::WsInfoCallForwardModeNumber:
-				_creditWidget->setCallForwardMode(tr("active") + " (" + QString::fromStdString(dest1) + ")" );
+				wsCallForwardInfoEvent(tr("active") + " (" + QString::fromStdString(dest1) + ")" );
 				break;
 			case WsInfo::WsInfoCallForwardMode_Disabled:
-				_creditWidget->setCallForwardMode(tr("inactive"));
+				wsCallForwardInfoEvent(tr("inactive"));
 				break;
 			case WsInfo::WsInfoCallForwardMode_Unauthorized:
-				_creditWidget->setCallForwardMode(tr("unauthorized"));
+				wsCallForwardInfoEvent(tr("unauthorized"));
 				break;
 		}
 	}
@@ -562,3 +565,19 @@ void QtProfileBar::slotTranslationChanged() {
   updatedTranslationSignal();
 }
 
+void QtProfileBar::wsInfoWengosEventSlot(float wengos) {
+	// 0x20ac is the unicode code for the euros currency symbol
+	_creditLabel->setText(QString() + QChar(0x20ac) + QString(" %1").arg(wengos) );
+}
+
+void QtProfileBar::wsInfoVoiceMailEventSlot(int count) {
+	_eventWidget->setVoiceMail(count);
+}
+
+void QtProfileBar::wsInfoPtsnNumberEventSlot(const QString & number) {
+	_creditWidget->setPstnNumber(number);
+}
+
+void QtProfileBar::wsCallForwardInfoEventSlot(const QString & mode) {
+	_creditWidget->setCallForwardMode(mode);
+}
