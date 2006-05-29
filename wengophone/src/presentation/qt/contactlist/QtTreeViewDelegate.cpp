@@ -133,7 +133,7 @@ bool QtTreeViewDelegate::checkForUtf8(const unsigned char * text, int size) cons
     if (size==0)
         return true;
 
-    if ( (text[0]<0x7F) && size==1){
+    if ( (text[0]<=0x7F) && size==1){
         return true;
     }
 
@@ -141,7 +141,7 @@ bool QtTreeViewDelegate::checkForUtf8(const unsigned char * text, int size) cons
         if (text[i] == 0 ){
             return false;
         }
-        if (text[i]>=0x7F){
+        if (text[i]>0x7F){
             if ((text[i] & 0xC0) == 0xC0){
                 if (i+1 > size)
                     return false;
