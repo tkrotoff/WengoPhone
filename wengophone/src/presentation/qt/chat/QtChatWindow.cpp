@@ -61,7 +61,8 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 	_chatContactWidgets = new ChatContactWidgets();
 
 	// _dialog = new QDialog(findMainWindow());
-	_dialog = new QDialog(NULL, Qt::Window | Qt::WindowMinMaxButtonsHint);
+	// _dialog = new QDialog(NULL, Qt::Window | Qt::WindowMinMaxButtonsHint);
+	_dialog = new QWidget(NULL, Qt::Window | Qt::WindowMinMaxButtonsHint);
 
 	QtWengoPhone * qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
 	qtWengoPhone->setChatWindow( _dialog );
@@ -646,16 +647,21 @@ QMainWindow * ChatWindow::findMainWindow(){
     return NULL;
 }
 void ChatWindow::flashWindow() {
+    _dialog->activateWindow();
 #ifdef OS_WINDOWS
+    HWND desktopWindow = GetDesktopWindow();
+    SwitchToThisWindow( desktopWindow ,false);
 	FLASHWINFO flashInfo;
 	flashInfo.cbSize = sizeof(FLASHWINFO);
 	flashInfo.hwnd = _dialog->winId();
-	flashInfo.dwFlags = FLASHW_TRAY; //FLASHW_TRAY | FLASHW_TIMERNOFG;
+	flashInfo.dwFlags = FLASHW_TRAY|FLASHW_TIMERNOFG;
 	flashInfo.uCount = 5;
 	flashInfo.dwTimeout = 500;
 	FlashWindowEx(&flashInfo);
 #endif
-    _dialog->activateWindow();
+
+
+
 }
 
 bool ChatWindow::chatIsVisible(){
