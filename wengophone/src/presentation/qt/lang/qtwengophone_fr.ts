@@ -551,7 +551,7 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>&amp;Learn more about Wengo Services</source>
-        <translation>&amp;Découvrez les services que vous offrent Wengo</translation>
+        <translation>&amp;Découvrez les services que vous offre Wengo</translation>
     </message>
     <message>
         <source>&amp;Contacts</source>
@@ -1230,7 +1230,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Please enter your email address and&lt;br&gt;password&lt;/span&gt;
 </source>
-        <translation type="unfinished">&lt;span style=&quot;font-size:18pt;&quot;&gt;Identifiant&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Veuillez entrer votre adresse e-mail et&lt;br&gt;votre mot de passe&lt;/span&gt;</translation>
+        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Identifiant&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Veuillez entrer votre adresse e-mail et&lt;br&gt;votre mot de passe&lt;/span&gt;(new line)</translation>
     </message>
 </context>
 <context>
@@ -1420,11 +1420,11 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Only people from my contact list</source>
-        <translation>uniquement des personnes présentes dans ma liste de contacts</translation>
+        <translation>Uniquement de mes contacts</translation>
     </message>
     <message>
         <source>Anyone</source>
-        <translation>Personne</translation>
+        <translation>Tout le monde</translation>
     </message>
     <message>
         <source>Allow calls from</source>
@@ -2611,7 +2611,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you select&lt;br&gt;the normal video quality mode, then you can try different modes to find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to http://test.lvcm.com to determine your Internet connection bandwidth</source>
-        <translation>&lt;b&gt;Attention!&lt;/b&gt;Pour une première expérience, nous vous recommandons le niveau normal&lt;br&gt;Par la suite, testez les autres niveaux pour déterminer la configuration optimale&lt;br&gt;&lt;br&gt;&lt;b&gt;Astuve&lt;/b&gt;: Rendez vous sur http://test.lvcm.com pour déterminer la vitesse de votre connexion Internet</translation>
+        <translation>&lt;b&gt;Attention!&lt;/b&gt;Pour une première expérience, nous vous recommandons le niveau normal&lt;br&gt;Par la suite, testez les autres niveaux pour déterminer la configuration optimale&lt;br&gt;&lt;br&gt;&lt;b&gt;Astuce&lt;/b&gt;: Rendez vous sur http://test.lvcm.com pour déterminer la vitesse de votre connexion Internet</translation>
     </message>
     <message>
         <source>Webcam Preview</source>
@@ -2936,7 +2936,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>&amp;Learn more about Wengo Services</source>
-        <translation>&amp;Découvrez les services que vous offrent Wengo</translation>
+        <translation>&amp;Découvrez les services que vous offre Wengo</translation>
     </message>
     <message>
         <source>Instant Messaging Accounts</source>
