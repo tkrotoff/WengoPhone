@@ -53,6 +53,11 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 
 	_treeWidget = NULL;
 
+	typedef PostEvent0 < void() > MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(& QtContactList::initThreadSafe, this));
+	postEvent(event);
+
+
 	connect(this, SIGNAL(contactGroupAddedEventSignal(QString)),
 		SLOT(contactGroupAddedEventSlot(QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactGroupRemovedEventSignal(QString)),
@@ -68,9 +73,6 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 	connect(this, SIGNAL(contactChangedEventSignal(QString)),
 		SLOT(contactChangedEventSlot(QString)), Qt::QueuedConnection);
 
-	typedef PostEvent0 < void() > MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(& QtContactList::initThreadSafe, this));
-	postEvent(event);
 }
 
 void QtContactList::initThreadSafe() {

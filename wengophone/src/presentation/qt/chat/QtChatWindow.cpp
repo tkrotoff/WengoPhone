@@ -391,7 +391,6 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	_chatWidget->setContactId(QString::fromStdString(qtContactList->getCContactList().findContactThatOwns(from)));
 
 	connect(qtContactList,SIGNAL(contactChangedEventSignal(QString )), SLOT(statusChangedSlot(QString)));
-
 //	connect ( _chatWidget, SIGNAL( newContact(const Contact & ) ), SLOT ( addContactToContactListFrame(const Contact &)));
 
 	if (_tabWidget->count() > 0)
