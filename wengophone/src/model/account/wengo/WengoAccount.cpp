@@ -23,6 +23,7 @@
 #include "WengoAccountParser.h"
 #include "WengoAccountSerializer.h"
 
+#include <model/account/NetworkObserver.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
@@ -42,11 +43,15 @@ WengoAccount::WengoAccount(const std::string & login, const std::string & passwo
 	_autoLogin = autoLogin;
 	_ssoRequestOk = false;
 	_wengoLoginOk = false;
-	_SSOWithSSL = false;
+	_ssoWithSSL = false;
 	_stunServer = "stun.wengo.fr";
+	_discoveringNetwork	= false;
 
-	_timer.timeoutEvent += boost::bind(&WengoAccount::timeoutEventHandler, this);
-	_timer.lastTimeoutEvent += boost::bind(&WengoAccount::lastTimeoutEventHandler, this);
+	_ssoTimer.timeoutEvent += boost::bind(&WengoAccount::ssoTimeoutEventHandler, this);
+	_ssoTimer.lastTimeoutEvent += boost::bind(&WengoAccount::ssoLastTimeoutEventHandler, this);
+
+	_initTimer.timeoutEvent += boost::bind(&WengoAccount::initTimeoutEventHandler, this);
+	_initTimer.lastTimeoutEvent += boost::bind(&WengoAccount::initLastTimeoutEventHandler, this);
 }
 
 WengoAccount::WengoAccount(const WengoAccount & wengoAccount) {
@@ -56,17 +61,61 @@ WengoAccount::WengoAccount(const WengoAccount & wengoAccount) {
 	_autoLogin = wengoAccount._autoLogin;
 	_ssoRequestOk = wengoAccount._ssoRequestOk;
 	_wengoLoginOk = wengoAccount._wengoLoginOk;
-	_SSOWithSSL = wengoAccount._SSOWithSSL;
+	_ssoWithSSL = wengoAccount._ssoWithSSL;
 	_stunServer = wengoAccount._stunServer;
+	_discoveringNetwork	= false;
 
-	_timer.timeoutEvent += boost::bind(&WengoAccount::timeoutEventHandler, this);
-	_timer.lastTimeoutEvent += boost::bind(&WengoAccount::lastTimeoutEventHandler, this);
+	_ssoTimer.timeoutEvent += boost::bind(&WengoAccount::ssoTimeoutEventHandler, this);
+	_ssoTimer.lastTimeoutEvent += boost::bind(&WengoAccount::ssoLastTimeoutEventHandler, this);
+
+	_initTimer.timeoutEvent += boost::bind(&WengoAccount::initTimeoutEventHandler, this);
+	_initTimer.lastTimeoutEvent += boost::bind(&WengoAccount::initLastTimeoutEventHandler, this);
 }
 
 WengoAccount::~WengoAccount() {
 }
 
-bool WengoAccount::init() {
+void WengoAccount::init() {
+
+	if (NetworkObserver::getInstance().isConnected())
+		_initTimer.start(0, 5000, 5);
+
+	NetworkObserver::getInstance().connectionIsDownEvent += 
+		boost::bind(&WengoAccount::connectionIsDownEventHandler, this, _1);
+
+	NetworkObserver::getInstance().connectionIsUpEvent += 
+		boost::bind(&WengoAccount::connectionIsUpEventHandler, this, _1);
+
+}
+
+void WengoAccount::initTimeoutEventHandler() {
+	if (!_discoveringNetwork) {
+
+		_discoveringNetwork	= true;
+		SipAccount::LoginState result = discoverNetwork();
+		if (result != LoginStateNetworkError) {
+			_initTimer.stop();
+			loginStateChangedEvent(*this, result);
+			networkDiscoveryStateChangedEvent(*this, _lastNetworkDiscoveryState);
+		}
+		_discoveringNetwork	= false;
+	}
+}
+
+void WengoAccount::initLastTimeoutEventHandler() {
+	loginStateChangedEvent(*this, LoginStateNetworkError);
+	networkDiscoveryStateChangedEvent(*this, _lastNetworkDiscoveryState);
+}
+
+void WengoAccount::connectionIsUpEventHandler(NetworkObserver & sender) {
+	_initTimer.start(0, 5000, 5);
+}
+
+void WengoAccount::connectionIsDownEventHandler(NetworkObserver & sender) {
+	_initTimer.stop();
+}
+
+SipAccount::LoginState WengoAccount::discoverNetwork() {
 	static const unsigned LOGIN_TIMEOUT = 10000;
 	static const unsigned LIMIT_RETRY = 5;
 
@@ -75,36 +124,34 @@ bool WengoAccount::init() {
 
 	if (!discoverForSSO()) {
 		LOG_DEBUG("error while discovering network for SSO");
-		networkDiscoveryStateChangedEvent(*this, NetworkDiscoveryStateHTTPError);
-		return false;
+		_lastNetworkDiscoveryState = NetworkDiscoveryStateHTTPError;
+		return LoginStateNetworkError;
 	}
 
-	_timerFinished = false;
-	_timer.start(0, LOGIN_TIMEOUT, LIMIT_RETRY);
-	while (!_timerFinished) {
+	_ssoTimerFinished = false;
+	_ssoTimer.start(0, LOGIN_TIMEOUT, LIMIT_RETRY);
+	while (!_ssoTimerFinished) {
 		Thread::msleep(100);
 	}
 
 	if (!_ssoRequestOk) {
 		LOG_DEBUG("error while doing SSO request");
-		networkDiscoveryStateChangedEvent(*this, NetworkDiscoveryStateError);
-		return false;
+		_lastNetworkDiscoveryState = NetworkDiscoveryStateError;
+		return LoginStateNetworkError;
 	} else if (_ssoRequestOk && !_wengoLoginOk) {
 		LOG_DEBUG("SSO request Ok but login/password are invalid");
-		loginStateChangedEvent(*this, LoginStatePasswordError);
-		return false;
+		return LoginStatePasswordError;
 	}
 
 	if (!discoverForSIP()) {
 		LOG_DEBUG("error while discovering network for SIP");
-		networkDiscoveryStateChangedEvent(*this, NetworkDiscoveryStateSIPError);
-		return false;
+		_lastNetworkDiscoveryState = NetworkDiscoveryStateSIPError;
+		return LoginStateNetworkError;
 	}
 
 	LOG_DEBUG("initialization Ok");
-	loginStateChangedEvent(*this, LoginStateReady);
-	networkDiscoveryStateChangedEvent(*this, NetworkDiscoveryStateOk);
-	return true;
+	_lastNetworkDiscoveryState = NetworkDiscoveryStateOk;
+	return LoginStateReady;
 }
 
 bool WengoAccount::discoverForSSO() {
@@ -114,14 +161,14 @@ bool WengoAccount::discoverForSSO() {
 
 	string url = config.getWengoServerHostname() + ":" + String::fromNumber(443) + config.getWengoSSOPath();
 	if (_networkDiscovery.testHTTP(url, true)) {
-		_SSOWithSSL = true;
+		_ssoWithSSL = true;
 		LOG_DEBUG("SSO can connect on port 443 with SSL");
 		return true;
 	}
 
 	url = config.getWengoServerHostname() + ":" + String::fromNumber(80) + config.getWengoSSOPath();
 	if (_networkDiscovery.testHTTP(url, false)) {
-		_SSOWithSSL = false;
+		_ssoWithSSL = false;
 		LOG_DEBUG("SSO can connect on port 80 without SSL");
 		return true;
 	}
@@ -184,7 +231,7 @@ bool WengoAccount::discoverForSIP() {
 	return false;
 }
 
-void WengoAccount::timeoutEventHandler() {
+void WengoAccount::ssoTimeoutEventHandler() {
 	//Url::encode(_wengoLogin);
 	//Url::encode(_wengoPassword);
 	std::string data = "login=" + _wengoLogin + "&password=" + _wengoPassword + "&wl=" + WengoPhoneBuildId::SOFTPHONE_NAME;
@@ -201,7 +248,7 @@ void WengoAccount::timeoutEventHandler() {
 
 	//First parameter: true = HTTPS, false = HTTP
 	//Last parameter: true = POST method, false = GET method
-	if (_SSOWithSSL) {
+	if (_ssoWithSSL) {
 		LOG_DEBUG("sending SSO request with SSL");
 		httpRequest->sendRequest(true, config.getWengoServerHostname(), 443, config.getWengoSSOPath(), data, true);
 	} else {
@@ -210,8 +257,8 @@ void WengoAccount::timeoutEventHandler() {
 	}
 }
 
-void WengoAccount::lastTimeoutEventHandler() {
-	_timerFinished = true;
+void WengoAccount::ssoLastTimeoutEventHandler() {
+	_ssoTimerFinished = true;
 }
 
 void WengoAccount::answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error) {
@@ -222,13 +269,13 @@ void WengoAccount::answerReceivedEventHandler(IHttpRequest * sender, int request
 		if (parser.isLoginPasswordOk()) {
 			LOG_DEBUG("login/password is Ok");
 			_wengoLoginOk = true;
-			_timer.stop();
-			_timerFinished = true;
-			//SIP connection test can now be launched as _timer has been joined in init()
+			_ssoTimer.stop();
+			_ssoTimerFinished = true;
+			//SIP connection test can now be launched as _ssoTimer has been joined in init()
 		} else {
 			LOG_DEBUG("login/password is not Ok");
-			_timer.stop();
-			_timerFinished = true;
+			_ssoTimer.stop();
+			_ssoTimerFinished = true;
 		}
 	}
 	//FIXME (crashes on Linux/MacOS X): delete sender;

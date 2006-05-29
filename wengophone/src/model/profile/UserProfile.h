@@ -45,6 +45,7 @@ class Contact;
 class ContactList;
 class History;
 class IPhoneLine;
+class NetworkObserver;
 class PhoneCall;
 class Sms;
 class SoftUpdate;
@@ -407,6 +408,10 @@ private:
 	 */
 	void historyChangedEventHandler(History & sender, int id);
 
+	void connectionIsUpEventHandler(NetworkObserver & sender);
+
+	void connectionIsDownEventHandler(NetworkObserver & sender);
+
 	WengoPhone & _wengoPhone;
 
 	/**
@@ -445,6 +450,9 @@ private:
 	WengoAccount * _wengoAccount;
 
 	bool _wengoAccountConnected;
+
+	/** True if the WengoAccount must be connected if it init is successful. */
+	bool _mustConnectWengoAccount;
 
 	IMAccountHandler * _imAccountHandler;
 

@@ -183,8 +183,6 @@ private:
 	UserProfile _userProfile;
 
 	StartupSettingListener * _startupSettingListener;
-
-	NetworkObserver * _networkObserver;
 };
 
 #endif	//WENGOPHONE_H

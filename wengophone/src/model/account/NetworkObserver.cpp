@@ -33,12 +33,12 @@ NetworkObserver::NetworkObserver()
 
 NetworkObserver *NetworkObserver::_staticInstance = NULL;
 
-NetworkObserver *NetworkObserver::getInstance()
+NetworkObserver & NetworkObserver::getInstance()
 {
 	if (!_staticInstance)
 		_staticInstance = new NetworkObserver();
 
-	return _staticInstance;
+	return * _staticInstance;
 }
 
 NetworkObserver::~NetworkObserver() 

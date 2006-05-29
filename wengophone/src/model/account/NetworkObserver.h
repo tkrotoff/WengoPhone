@@ -45,7 +45,7 @@ public:
 
 	bool isConnected() { return _isConnected; };
 
-	static NetworkObserver *getInstance();
+	static NetworkObserver & getInstance();
 
 private:
 

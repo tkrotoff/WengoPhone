@@ -114,8 +114,6 @@ void WengoPhone::init() {
 	//Sends the Wenbox creation event
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
 
-	_networkObserver = NetworkObserver::getInstance();
-
 	//Imports the Config from WengoPhone Classic.
 	ClassicConfigImporter importer(*this);
 	importer.importConfig(config.getConfigDir());

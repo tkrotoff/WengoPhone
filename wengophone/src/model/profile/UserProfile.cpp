@@ -20,6 +20,7 @@
 #include "UserProfile.h"
 
 #include <model/WengoPhone.h>
+#include <model/account/NetworkObserver.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/account/wengo/WengoAccountXMLLayer.h>
 #include <model/chat/ChatHandler.h>
@@ -70,6 +71,7 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_imAccountHandler = new IMAccountHandler();
 	_presenceState = EnumPresenceState::PresenceStateOffline;
 	_wengoAccountConnected = false;
+	_mustConnectWengoAccount = false;
 
 	_history = new History(*this);
 	_history->mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
@@ -78,6 +80,12 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 
 	_connectHandler.connectedEvent +=
 		boost::bind(&UserProfile::connectedEventHandler, this, _1, _2);
+
+	NetworkObserver::getInstance().connectionIsDownEvent += 
+		boost::bind(&UserProfile::connectionIsDownEventHandler, this, _1);
+
+	NetworkObserver::getInstance().connectionIsUpEvent += 
+		boost::bind(&UserProfile::connectionIsUpEventHandler, this, _1);
 }
 
 UserProfile::~UserProfile() {
@@ -125,6 +133,7 @@ UserProfile::~UserProfile() {
 }
 
 void UserProfile::init() {
+	_mustConnectWengoAccount = true;
 	wengoAccountInit();
 }
 
@@ -151,7 +160,7 @@ void UserProfile::connectIMAccounts() {
 
 void UserProfile::connectSipAccounts() {
 
-	// Connect all SipAccounts
+	// Connect all SipAccounts if not connected
 	if (_wengoAccount && _activePhoneLine && !_wengoAccountConnected) {
 		_activePhoneLine->connect();
 		_wengoAccountConnected = true;
@@ -238,10 +247,8 @@ void UserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 	_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 
 	//Sends the HTTP request to the SSO
+	_mustConnectWengoAccount = true;
 	_wengoAccount->init();
-	// FIXME: there is currently only one SIP account so we are sure that the Wengo
-	// account will be connected
-	connectSipAccounts();
 }
 
 void UserProfile::addIMAccount(const IMAccount & imAccount) {
@@ -361,6 +368,11 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 
 		addPhoneLine(*_wengoAccount);
 
+		if (_mustConnectWengoAccount) {
+			_mustConnectWengoAccount = false;
+			connectSipAccounts();
+		}
+
 		loadHistory();
 
 		break;
@@ -429,7 +441,7 @@ bool UserProfile::hasWengoAccount() const {
 void UserProfile::wsCallForwardEventHandler(WsCallForward & sender,
 	int id, WsCallForward::WsCallForwardStatus status) {
 
-	if( status == WsCallForward::WsCallForwardStatusOk ) {
+	if ( status == WsCallForward::WsCallForwardStatusOk ) {
 
 		_wsInfo->getWengosCount(false);
 		_wsInfo->getSmsCount(false);
@@ -439,4 +451,12 @@ void UserProfile::wsCallForwardEventHandler(WsCallForward & sender,
 		_wsInfo->getCallForwardInfo(true);
 		_wsInfo->execute();
 	}
+}
+
+void UserProfile::connectionIsUpEventHandler(NetworkObserver & sender) {
+	connectSipAccounts();
+}
+
+void UserProfile::connectionIsDownEventHandler(NetworkObserver & sender) {
+	disconnectSipAccounts();
 }

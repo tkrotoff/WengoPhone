@@ -26,6 +26,8 @@
 #include <thread/Timer.h>
 #include <util/Event.h>
 
+class NetworkObserver;
+
 /**
  * Connects to the single sign-on (SSO) system of the Wengo SIP service.
  *
@@ -51,7 +53,7 @@ public:
 
 	WengoAccount(const WengoAccount & wengoAccount);
 
-	bool init();
+	void init();
 
 	const std::string & getWengoLogin() const {
 		return _wengoLogin;
@@ -75,6 +77,8 @@ public:
 
 private:
 
+	SipAccount::LoginState discoverNetwork();
+
 	bool discoverForSSO();
 
 	bool discoverForSIP();
@@ -83,18 +87,27 @@ private:
 
 	void answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error);
 
-	void timeoutEventHandler();
+	void ssoTimeoutEventHandler();
 
-	void lastTimeoutEventHandler();
+	void ssoLastTimeoutEventHandler();
+
+	void initTimeoutEventHandler();
+
+	void initLastTimeoutEventHandler();
+
+	void connectionIsUpEventHandler(NetworkObserver & sender);
+	void connectionIsDownEventHandler(NetworkObserver & sender);
 
 	std::string _wengoLogin;
 
 	std::string _wengoPassword;
 
-	Timer _timer;
+	Timer _ssoTimer;
+
+	Timer _initTimer;
 
 	/** True if SSO request can be done with SSL. */
-	bool _SSOWithSSL;
+	bool _ssoWithSSL;
 
 	/** True if SSO request is Ok. */
 	bool _ssoRequestOk;
@@ -103,7 +116,13 @@ private:
 	bool _wengoLoginOk;
 
 	/** True when _timer is finished. */
-	bool _timerFinished;
+	bool _ssoTimerFinished;
+
+	/** True if network discovery is running. */
+	bool _discoveringNetwork;
+
+	/** Used to remember the last NetworkDiscoveryState. */
+	SipAccount::NetworkDiscoveryState _lastNetworkDiscoveryState;
 };
 
 #endif	//WENGOACCOUNT_H

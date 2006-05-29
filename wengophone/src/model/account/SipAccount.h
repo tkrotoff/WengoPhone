@@ -109,10 +109,8 @@ public:
 	 * Initializes the SIP account.
 	 *
 	 * Discover network and set configuration.
-	 *
-	 * @return true if initialization is OK
 	 */
-	virtual bool init() = 0;
+	virtual void init() = 0;
 
 	/**
 	 * @return the user identity
