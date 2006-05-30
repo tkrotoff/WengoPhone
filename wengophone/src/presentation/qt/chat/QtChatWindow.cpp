@@ -278,7 +278,7 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
             _dialog->showMinimized ();
             flashWindow();
         }else{
-            _dialog->activateWindow();
+            //_dialog->activateWindow();
         }
 		int tabs = _tabWidget->count();
 		for (int i = 0; i < tabs; i++)
