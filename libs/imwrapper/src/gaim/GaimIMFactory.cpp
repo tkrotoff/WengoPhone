@@ -224,7 +224,7 @@ void GaimIMFactory::GaimIMInit()
 	gaim_core_set_ui_ops(&core_wg_ops);
 	gaim_eventloop_set_ui_ops(&eventloop_wg_ops);
 
-	search_path = g_build_filename(gaim_user_dir(), "plugins", NULL);
+	search_path = g_build_filename(Path::getApplicationDirPath().c_str(), "plugins", NULL);
 	gaim_plugins_add_search_path(search_path);
 	gaim_plugins_add_search_path("plugins");
 	g_free(search_path);
