@@ -182,6 +182,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	connect(this, SIGNAL(wsInfoVoiceMailEvent(int)), SLOT(wsInfoVoiceMailEventSlot(int)));
 	connect(this, SIGNAL(wsInfoPtsnNumberEvent(const QString &)), SLOT(wsInfoPtsnNumberEventSlot(const QString &)));
 	connect(this, SIGNAL(wsCallForwardInfoEvent(const QString &)), SLOT(wsCallForwardInfoEventSlot(const QString &)));
+	connect(this, SIGNAL(phoneLineCreatedEvent()), SLOT(phoneLineCreatedEventSlot()));
 }
 
 // Called in the model thread
@@ -513,6 +514,10 @@ void QtProfileBar::setStatusLabel(const QString & on, const QString & off) {
 }
 
 void QtProfileBar::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine) {
+	phoneLineCreatedEvent();
+}
+
+void QtProfileBar::phoneLineCreatedEventSlot() {
 	_nicknameLabel->setText(QString::fromStdString(_cUserProfile.getUserProfile().getWengoAccount()->getIdentity()));
 }
 

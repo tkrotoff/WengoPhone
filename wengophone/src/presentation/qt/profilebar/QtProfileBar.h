@@ -68,6 +68,7 @@ Q_SIGNALS:
 	void wsInfoVoiceMailEvent(int count);
 	void wsInfoPtsnNumberEvent(const QString & number);
 	void wsCallForwardInfoEvent(const QString & mode);
+	void phoneLineCreatedEvent();
 
 protected:
 
@@ -166,7 +167,7 @@ private Q_SLOTS:
 	void wsInfoVoiceMailEventSlot(int count);
 	void wsInfoPtsnNumberEventSlot(const QString & number);
 	void wsCallForwardInfoEventSlot(const QString & mode);
-
+	void phoneLineCreatedEventSlot();
 
 private:
 
