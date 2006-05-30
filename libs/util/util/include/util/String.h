@@ -48,6 +48,15 @@ public:
 	 */
 	static const char * null;
 
+	/**
+	 * End of line character.
+	 *
+	 * Equals \r\n (CRLF) so that is compatible with Windows and UNIX.
+	 * Used by Logger.
+	 *
+	 * Maybe (if needed) we should split this in WIN_EOL, UNIX_EOL, SYSTEM_EOL.
+	 */
+	static const std::string EOL;
 
 	String() : std::string() { }
 

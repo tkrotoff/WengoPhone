@@ -57,23 +57,18 @@ WengoPhone::WengoPhone()
 	HttpRequest::setUserAgent(ss.str());
 	////
 
-	// Creating instance of Config
+	//Creating instance of Config
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	////
 
-	//Loads the configuration: this is the first thing to do before anything else
-	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
-	configManagerStorage.load(config.getConfigDir());
-	////
-
-	// Binding events
+	//Binding events
 	config.valueChangedEvent +=
 		boost::bind(&WengoPhone::valueChangedEventHandler, this, _1, _2);
 	////
 }
 
 void WengoPhone::shutdownAfterTimeout() {
-  timeoutEvent();
+	timeoutEvent();
 }
 
 WengoPhone::~WengoPhone() {
@@ -94,7 +89,7 @@ WengoPhone::~WengoPhone() {
 	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownAfterTimeout, this);
 	shutdownTimeout.start(3000, 3000);
 
-	// Disconnect the UserProfile
+	//Disconnect the UserProfile
 	_userProfile.disconnect();
 	////
 

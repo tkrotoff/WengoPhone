@@ -48,7 +48,7 @@ public:
 
 	webcamerrorcode setDevice(const std::string & deviceName);
 
-	bool isOpened() const;
+	bool isOpen() const;
 
 	void startCapture();
 

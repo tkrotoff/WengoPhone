@@ -30,6 +30,7 @@
  */
 class NullWebcamDriverFactory : public WebcamDriverFactory {
 public:
+
 	IWebcamDriver * create(WebcamDriver *driver, int flags) const {
 		return new NullWebcamDriver(driver, flags);
 	}

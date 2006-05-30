@@ -35,7 +35,6 @@ public:
 protected:
 
 	IMAccountHandler & _imAccountHandler;
-
 };
 
-#endif //IMACCOUNTHANDLERFILESTORAGE_H
+#endif	//IMACCOUNTHANDLERFILESTORAGE_H

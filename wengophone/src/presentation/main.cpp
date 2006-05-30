@@ -20,6 +20,7 @@
 #include <system/Processes.h>
 
 #include <model/WengoPhone.h>
+#include <model/config/ConfigManagerFileStorage.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 #include <control/CWengoPhone.h>
@@ -54,10 +55,6 @@
 	#include <memorydump/MemoryDump.h>
 #endif
 
-#ifdef _MSC_VER
-#define snprintf _snprintf
-#endif
-
 /**
  * Stub function to make GCC silent.
  *
@@ -67,24 +64,35 @@ int test_main(int argc, char *argv[]) {
 	return 1;
 }
 
-std::string setAddionnalInfo() {
+std::string getAddionnalInfo() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	std::string info = "User: " + config.getProfileLastUsedName() + "\n";
-	info += "buildid: " + String::fromUnsignedLongLong(WengoPhoneBuildId::BUILDID) + "\n";
-	info += "revision: " + String::fromUnsignedLongLong(WengoPhoneBuildId::REVISION) + "\n";
+	std::string info = "User: " + config.getProfileLastUsedName() + String::EOL;
+	info += "buildid: " + String::fromUnsignedLongLong(WengoPhoneBuildId::BUILDID) + String::EOL;
+	info += "revision: " + String::fromUnsignedLongLong(WengoPhoneBuildId::REVISION) + String::EOL;
 	return info;
 }
 
 int main(int argc, char * argv[]) {
 
+	//Todo before anything else: initializes the logger system
+	LOG_DEBUG("WengoPhone");
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	//Loads the configuration: this is the first thing to do before anything else
+	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
+	configManagerStorage.load(config.getConfigDir());
+	////
+
+	LOG_DEBUG(String::EOL + getAddionnalInfo());
+
 #if defined(CC_MSVC)
 	MemoryDump * memoryDump = new MemoryDump("WengoPhoneNG", String::fromUnsignedLongLong(WengoPhoneBuildId::REVISION).c_str());
-	
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 	memoryDump->setLanguage(config.getLanguage().c_str());
-	memoryDump->SetGetAdditionnalInfo(setAddionnalInfo);
+	memoryDump->SetGetAdditionnalInfo(getAddionnalInfo);
 #endif
-	
+
 	//Graphical interface implementation
 	PFactory * pFactory = NULL;
 #ifdef GTKINTERFACE
@@ -94,10 +102,12 @@ int main(int argc, char * argv[]) {
 #endif
 	PFactory::setFactory(pFactory);
 
-    if (Processes::isRunning("qtwengophone.exe")) {
-        QMessageBox::warning(0, QObject::tr("WengoPhone"), QObject::tr("WengoPhone is already running."), QMessageBox::Ok, 0);
-        exit(0);
-    }
+	//No 2 qtwengophone at the same time
+	if (Processes::isRunning("qtwengophone.exe")) {
+		QMessageBox::warning(NULL, QObject::tr("WengoPhone"), QObject::tr("WengoPhone is already running."), QMessageBox::Ok, 0);
+		return EXIT_SUCCESS;
+	}
+
 	//CWengoPhone creates PWengoPhone (QtWengoPhone, GtkWengoPhone...)
 	//thus creating CWengoPhone at the very beginning makes the gui
 	//to be shown before everything is fully loaded
@@ -137,5 +147,5 @@ int main(int argc, char * argv[]) {
 
 	cWengoPhone.terminate();
 
-	return 0;
+	return EXIT_SUCCESS;
 }

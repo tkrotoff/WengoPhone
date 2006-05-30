@@ -17,32 +17,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef FTPUPLOAD_H
+#define FTPUPLOAD_H
 
-#ifndef OW_FTPUPLOAD_H
-#define OW_FTPUPLOAD_H
-
-#include <string>
 #include <thread/Thread.h>
 #include <util/Event.h>
+
+#include <string>
 
 int ftp_upload(const char * path, const char *fullfilename, void * instance);
 
 /**
  * FtpUpload upload a file to a ftp server.
- * 
+ *
  * @author Julien Bossart
  * @author Mathieu Stute
  */
 class FtpUpload : public Thread {
-
 public:
-	
+
 	enum Status {
 		Ok,
 		Error,
 		None,
 	};
-	
+
 	/**
 	 * Progression event.
 	 *
@@ -52,7 +51,7 @@ public:
 	 * @param error Error code
 	 */
 	Event<void (FtpUpload * sender, Status status)> statusEvent;
-	
+
 	/**
 	 * Progression event.
 	 *
@@ -63,16 +62,16 @@ public:
 	Event<void (FtpUpload * sender, double ultotal, double ulnow)> progressionEvent;
 
 	FtpUpload(const std::string & host, const std::string & path, const std::string & filename)
-	: _host(host), _path(path), _filename(filename) {
+		: _host(host), _path(path), _filename(filename) {
 	}
-	
+
 	void setProgress(double ultotal, double ulnow) {
 		progressionEvent(this, ultotal, ulnow);
 	}
-	
+
 	void run() {
 		int res = ftp_upload(_path.c_str(), _filename.c_str(), this);
-		
+
 		if( res == 0) {
 			statusEvent(this, Ok);
 		} else {
@@ -81,12 +80,12 @@ public:
 	}
 
 private:
-	
+
 	std::string _host;
-	
+
 	std::string _path;
-	
+
 	std::string _filename;
 };
 
-#endif //OW_FTPUPLOAD_H
+#endif	//FTPUPLOAD_H

@@ -64,6 +64,7 @@ bool WengoAccountXMLLayer::save() {
 	if (data.empty()) {
 		return false;
 	}
+
 	file.write(data);
 	file.close();
 	return true;

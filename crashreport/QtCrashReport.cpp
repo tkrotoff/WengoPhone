@@ -19,6 +19,8 @@
 
 #include "QtCrashReport.h"
 
+#include "ui_CrashReport.h"
+
 #include <cutil/global.h>
 #include <util/Date.h>
 #include <util/Time.h>
@@ -31,11 +33,20 @@
 
 #include <QtGui>
 
+#include <iostream>
 #include <fstream>
-#include <stdio.h>
+#include <cstdio>
 
-QtCrashReport::QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang, std::string info)
-	: QObjectThreadSafe(NULL), _dumpfile(dumpfile), _lang(lang), _info(info) {
+static const char * LOG_FILE = "log-main.txt";
+static const char * FTP_SERVER = "ftp.wengo.fr";
+static const char * FTP_PATH = "wengophone_ng";
+
+QtCrashReport::QtCrashReport(const std::string & dumpfile, const std::string & applicationName,
+			const std::string & lang, const std::string & info)
+	: QObjectThreadSafe(NULL),
+	_dumpfile(dumpfile),
+	_lang(lang),
+	_info(info) {
 
 	_progressTotal = 0;
 	_progressNow = 0;
@@ -43,21 +54,24 @@ QtCrashReport::QtCrashReport(std::string dumpfile, std::string applicationName, 
 	_firstFileUploaded = false;
 	_descfile = _dumpfile + ".txt";
 
-	_ftpUpload = new FtpUpload("ftp.wengo.fr", "wengophone_ng", _dumpfile);
+	_ftpUpload = new FtpUpload(FTP_SERVER, FTP_PATH, _dumpfile);
 	_ftpUpload->progressionEvent += boost::bind(&QtCrashReport::ftpProgressEventHandler, this, _1, _2, _3);
 	_ftpUpload->statusEvent += boost::bind(&QtCrashReport::ftpStatusEventHandler, this, _1, _2);
 
-	_dialog = new QDialog(0);
-	ui.setupUi(_dialog);
+	_dialog = new QDialog(NULL);
 
-	connect(ui.sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
+	_ui = new Ui::CrashReport();
+	_ui->setupUi(_dialog);
+
+	connect(_ui->sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
 
 	_dialog->setWindowTitle(QString::fromStdString(applicationName));
 
-	ui.progressBar->setValue(0);
+	_ui->progressBar->setValue(0);
 }
 
 QtCrashReport::~QtCrashReport() {
+	delete _ui;
 }
 
 void QtCrashReport::sendButtonClicked() {
@@ -91,8 +105,8 @@ void QtCrashReport::ftpStatusEventHandler(FtpUpload * sender, FtpUpload::Status 
 }
 
 void QtCrashReport::updatePresentationThreadSafe() {
-	ui.progressBar->setMaximum(_progressTotal);
-	ui.progressBar->setValue(_progressNow);
+	_ui->progressBar->setMaximum(_progressTotal);
+	_ui->progressBar->setValue(_progressNow);
 
 	//sleep: only for the feeling
 	if(( _status == FtpUpload::Ok ) || (_status == FtpUpload::Error) ) {
@@ -101,10 +115,10 @@ void QtCrashReport::updatePresentationThreadSafe() {
 		if( !_firstFileUploaded  ) {
 
 			_firstFileUploaded  = true;
-			ui.progressBar->setValue(0);
+			_ui->progressBar->setValue(0);
 
 			//delete _ftpUpload;
-			_ftpUpload2 = new FtpUpload("ftp.wengo.fr", "wengophone_ng", _descfile);
+			_ftpUpload2 = new FtpUpload(FTP_SERVER, FTP_PATH, _descfile);
 			_ftpUpload2->progressionEvent += boost::bind(&QtCrashReport::ftpProgressEventHandler, this, _1, _2, _3);
 			_ftpUpload2->statusEvent += boost::bind(&QtCrashReport::ftpStatusEventHandler, this, _1, _2);
 			_ftpUpload2->start();
@@ -122,15 +136,15 @@ std::string readLogFile() {
 	std::string content;
 	std::string line;
 
-	std::ifstream myfile ("log.txt");
+	std::ifstream myfile(LOG_FILE);
 	if (myfile.is_open()) {
-		while (! myfile.eof() ) {
+		while (!myfile.eof()) {
 			getline(myfile,line);
 			content += line + "\n";
 		}
 		myfile.close();
 	} else {
-		printf("Failed to open log.txt\n");
+		std::cerr << "Failed to open log file=" << LOG_FILE << endl;
 	}
 	return content;
 }
@@ -147,22 +161,20 @@ void QtCrashReport::createDescriptionFile() {
 	file << "Windows version: " << std::string(getWindowsVersion()) << std::endl;
 #endif
 
-	std::string tmp = "";
-	if( ui.mailLineEdit ) {
-
-		tmp = ui.mailLineEdit->text().toStdString();
+	std::string tmp;
+	if( _ui->mailLineEdit ) {
+		tmp = _ui->mailLineEdit->text().toStdString();
 		file << "From: " << tmp << std::endl;
 	}
 
-	if( ui.descTextEdit ) {
-
-		tmp = ui.descTextEdit->toPlainText().toStdString();
+	if( _ui->descTextEdit ) {
+		tmp = _ui->descTextEdit->toPlainText().toStdString();
 		file << "Description: " << tmp << std::endl;
 	}
 
 	file << "User info:\n" << _info << std::endl;
 
-	file << "log.txt content:\n" << readLogFile() << std::endl;
+	file << LOG_FILE << " content:\n" << readLogFile() << std::endl;
 
 	file.close();
 }

@@ -62,7 +62,7 @@ public:
 
 	webcamerrorcode setDevice(const std::string & deviceName);
 
-	bool isOpened() const;
+	bool isOpen() const;
 
 	void startCapture();
 	void pauseCapture();
@@ -120,7 +120,7 @@ private:
 	Timer _timer;
 
 	/** True if webcam is opened */
-	bool _isOpened;
+	bool _isOpen;
 
 	/** Webcam palette */
 	pixosi _palette;

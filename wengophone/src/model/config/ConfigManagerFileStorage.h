@@ -40,7 +40,6 @@ public:
 	bool load(const std::string & url);
 
 	bool save(const std::string & url);
-
 };
 
-#endif //CONFIGMANAGERFILESTORAGE_H
+#endif	//CONFIGMANAGERFILESTORAGE_H

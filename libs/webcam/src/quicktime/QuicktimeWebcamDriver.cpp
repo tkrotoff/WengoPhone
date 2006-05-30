@@ -39,7 +39,7 @@ QuicktimeWebcamDriver::QuicktimeWebcamDriver(WebcamDriver *driver, int flags)
 	_PGWorld = NULL;
 	_SGChanVideo = NULL;
 	_decomSeq = 0;
-	_isOpened = false;
+	_isOpen = false;
 
 	getDeviceList();
 	getDefaultDevice();
@@ -72,7 +72,7 @@ void QuicktimeWebcamDriver::cleanup() {
 	_PGWorld = NULL;
 	_SGChanVideo = NULL;
 	_decomSeq = 0;
-	_isOpened = false;
+	_isOpen = false;
 	_palette = PIX_OSI_UNSUPPORTED;
 }
 
@@ -106,7 +106,7 @@ void QuicktimeWebcamDriver::initializeCommonComponents() {
 		LOG_ERROR("can't create a video channel");
 		return;
 	}
-		
+
 }
 
 StringList QuicktimeWebcamDriver::getDeviceList() {
@@ -114,7 +114,7 @@ StringList QuicktimeWebcamDriver::getDeviceList() {
 	OSErr err = noErr;
 	StringList deviceList;
 
-	if (!isOpened()) {
+	if (!isOpen()) {
 		cleanup();
 		initializeCommonComponents();
 
@@ -151,7 +151,7 @@ string QuicktimeWebcamDriver::getDefaultDevice() {
 	OSErr err = noErr;
 	SGChannel channel;
 
-	if (!isOpened()) {
+	if (!isOpen()) {
 		cleanup();
 		initializeCommonComponents();
 
@@ -235,7 +235,7 @@ webcamerrorcode QuicktimeWebcamDriver::setDevice(const std::string &deviceName) 
 
 	setupDecompressor();
 
-	_isOpened = true;
+	_isOpen = true;
 
 	return WEBCAM_OK;
 }
@@ -284,7 +284,7 @@ bool QuicktimeWebcamDriver::createGWorld() {
 		imac intel		knows
 								k32ARGBPixelFormat	(OSI 20)
 								k24BGRPixelFormat	(OSI 22)
-								
+
 	*/
 	for (register unsigned i = 0 ; i < sizeof(pixTable) / sizeof(pixosi) ; i++) {
 		LOG_DEBUG("Attempting to create a GWorld with palette #" + String::fromNumber(pixTable[i]));
@@ -321,8 +321,8 @@ bool QuicktimeWebcamDriver::createGWorld() {
 	return true;
 }
 
-bool QuicktimeWebcamDriver::isOpened() const {
-	return _isOpened;
+bool QuicktimeWebcamDriver::isOpen() const {
+	return _isOpen;
 }
 
 void QuicktimeWebcamDriver::startCapture() {
@@ -557,7 +557,7 @@ void QuicktimeWebcamDriver::setupDecompressor() {
 	ImageDescriptionHandle imageDesc = (ImageDescriptionHandle)NewHandle(sizeof(ImageDescription));
 
 	err = SGGetChannelSampleDescription(_SGChanVideo, (Handle)imageDesc);
-	
+
 	if (err != noErr) {
 		LOG_ERROR("can't get channel sample description:" + String::fromNumber(err));
 		return;

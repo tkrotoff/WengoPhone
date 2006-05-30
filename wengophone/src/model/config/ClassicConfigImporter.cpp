@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 #include "ClassicConfigImporter.h"
 
 
@@ -45,32 +45,32 @@ using namespace std;
 
 typedef struct telNumber_s
 {
-	string	key;
-	string	value;
-}			telNumber_t;
+	string key;
+	string value;
+} telNumber_t;
 
 typedef std::list<telNumber_t *> telNumberList;
 typedef std::list<telNumber_t *>::iterator telNumberIt;
 
 typedef struct address_s
 {
-	string	street;
-	string	city;
-	string	post_code;
-	string	state;
-	string	country;
-}			address_t;
+	string street;
+	string city;
+	string post_code;
+	string state;
+	string country;
+} address_t;
 
 typedef struct birthday_s
 {
-	int	day;
-	int	month;
+	int day;
+	int month;
 	int year;
-}		birthday_t;
+} birthday_t;
 
-#define MALE	0
-#define FEMALE	1
-#define	UNKNOWN	2
+#define MALE 0
+#define FEMALE 1
+#define UNKNOWN 2
 
 typedef struct vcard_s
 {
@@ -95,7 +95,7 @@ typedef std::list<vcard_t *>::iterator vcardIt;
 telNumber_t *CreateNewNodeNumber(const std::string & key, const std::string & value)
 {
 	telNumber_t *number = new telNumber_t();
-	
+
 	memset(number, 0, sizeof(telNumber_t));
 	number->key = key;
 	number->value = value;
@@ -108,7 +108,7 @@ StringList mySplit(const std::string & str, char sep)
 	string			word;
 	StringList		wordList;
 	istringstream	strStream(str);
-	
+
 	while (std::getline(strStream, word, sep))
 		wordList += word;
 
@@ -121,19 +121,20 @@ string myTrim(std::string str)
 
 	string::size_type pos1 = str.find_first_not_of(' ');
 	string::size_type pos2 = str.find_last_not_of(' ');
-	newstr = str.substr(pos1 == string::npos ? 0 : pos1, 
+	newstr = str.substr(pos1 == string::npos ? 0 : pos1,
 		pos2 == string::npos ? str.length() - 1 : pos2 - pos1 + 1);
 
 	return newstr;
 }
 
-#define CONFIG_UNKNOWN	0
+#define CONFIG_UNKNOWN 0
 #define CONFIG_VERSION1 1
 #define CONFIG_VERSION2 2
 #define CONFIG_VERSION3 3
 
-ClassicConfigImporter::ClassicConfigImporter(WengoPhone & wengoPhone) 
-: _wengoPhone(wengoPhone), _userProfile(wengoPhone.getCurrentUserProfile()) {
+ClassicConfigImporter::ClassicConfigImporter(WengoPhone & wengoPhone)
+	: _wengoPhone(wengoPhone),
+	_userProfile(wengoPhone.getCurrentUserProfile()) {
 }
 
 bool ClassicConfigImporter::importConfig(string str) {
@@ -176,13 +177,13 @@ int ClassicConfigImporter::detectLastVersion()
 	return CONFIG_UNKNOWN;
 }
 
-void ClassicConfigImporter::makeImportConfig(int from, int to) 
+void ClassicConfigImporter::makeImportConfig(int from, int to)
 {
 	if (from == CONFIG_VERSION1 && to == CONFIG_VERSION2)
 		ImportConfigFromV1toV2();
 	else if (from == CONFIG_VERSION1 && to == CONFIG_VERSION3)
 		ImportConfigFromV1toV3();
-	
+
 	// Todo: import config files from version 2 to version 3
 	//else if (from == CONFIG_VERSION2 && to == CONFIG_VERSION3)
 	//	ImportConfigFromV2toV3();
@@ -210,14 +211,14 @@ bool ClassicConfigImporter::ClassicVcardParser(const string & vcardFile, void *s
 	vcard_t *mVcard = (vcard_t *) structVcard;
 	std::ifstream fileStream;
 	string lastLine;
-	
+
 	fileStream.open(vcardFile.c_str());
-	if (!fileStream) 
+	if (!fileStream)
 	{
 		LOG_ERROR("cannot open the file: " + vcardFile);
 		return false;
 	}
-	
+
 	std::getline(fileStream, lastLine);
 	if (lastLine != "BEGIN:VCARD")
 	{
@@ -229,7 +230,7 @@ bool ClassicConfigImporter::ClassicVcardParser(const string & vcardFile, void *s
 
 	std::getline(fileStream, tmp);
 
-	while (!lastLine.empty()) 
+	while (!lastLine.empty())
 	{
 		int pos = lastLine.find(":", 0);
 		key = lastLine.substr(0, pos);
@@ -256,13 +257,13 @@ bool ClassicConfigImporter::ClassicVcardParser(const string & vcardFile, void *s
 
 		else if (!key.compare("TEL;TYPE=cell"))
 			mVcard->numbers.push_back(CreateNewNodeNumber("cell", value));
-		
+
 		else if (!key.compare("TEL;TYPE=pref"))
 			mVcard->id = value;
 
 		else if (!key.compare("TEL;TYPE=fax"))
 			mVcard->numbers.push_back(CreateNewNodeNumber("fax", value));
-		
+
 		else if (!key.compare("TEL;TYPE=other"))
 			mVcard->numbers.push_back(CreateNewNodeNumber("other", value));
 
@@ -321,9 +322,9 @@ bool ClassicConfigImporter::ClassicXMLParser(const string & xmlFile, void *struc
 	string lastLine;
 
 	mVcard->blocked = false;
-	
+
 	fileStream.open(xmlFile.c_str());
-	if (!fileStream) 
+	if (!fileStream)
 	{
 		LOG_ERROR("cannot open the file: " + xmlFile);
 		return false;
@@ -362,9 +363,9 @@ string ClassicConfigImporter::ClassicVCardToString(void *structVcard)
 		res += ("<wengoid>" + mVcard->id + "</wengoid>\n");
 
 	res += "<name>\n";
-	if (!mVcard->fname.empty()) 
+	if (!mVcard->fname.empty())
 		res += ("<first><![CDATA[" + mVcard->fname + "]]></first>\n");
-	if (!mVcard->lname.empty()) 
+	if (!mVcard->lname.empty())
 		res += ("<last><![CDATA[" + mVcard->lname + "]]></last>\n");
 	res += "</name>\n";
 
@@ -425,9 +426,9 @@ string ClassicConfigImporter::ClassicVCardToString(void *structVcard)
 	if (mVcard->emails.size() >= 1 && !mVcard->emails[0].empty())
 		res += ("<email type=\"home\">" + mVcard->emails[0] + "</email>\n");
 	if (mVcard->emails.size() >= 2 && !mVcard->emails[1].empty())
-		res += ("<email type=\"work\">" + mVcard->emails[1] + "</email>\n");	
+		res += ("<email type=\"work\">" + mVcard->emails[1] + "</email>\n");
 	if (mVcard->emails.size() >= 3 && !mVcard->emails[2].empty())
-		res += ("<email type=\"other\">" + mVcard->emails[2] + "</email>\n");	
+		res += ("<email type=\"other\">" + mVcard->emails[2] + "</email>\n");
 
 	if (!mVcard->note.empty())
 		res += ("<notes><![CDATA[" + mVcard->note + "]]></notes>\n");
@@ -439,7 +440,7 @@ string ClassicConfigImporter::ClassicVCardToString(void *structVcard)
 }
 
 
-bool ClassicConfigImporter::ImportContactsFromV1toV3(const string & fromDir, 
+bool ClassicConfigImporter::ImportContactsFromV1toV3(const string & fromDir,
 	const string & toDir, const string & owner) {
 
 	File mDir(fromDir);
@@ -456,7 +457,7 @@ bool ClassicConfigImporter::ImportContactsFromV1toV3(const string & fromDir,
 		{
 			mVcard = new vcard_t();
 			mVcard->owner = owner;
-			
+
 			if (ClassicVcardParser(fromDir + fileList[i], mVcard) == false)
 			{
 				delete mVcard;
@@ -465,20 +466,15 @@ bool ClassicConfigImporter::ImportContactsFromV1toV3(const string & fromDir,
 
 			int extPos = fileList[i].find_last_of('.');
 			string fileWoExt = fileList[i].substr(0, extPos + 1);
-			
+
 			ClassicXMLParser(fromDir + fileWoExt + "xml", mVcard);
 			vList.push_back(mVcard);
 		}
 	}
 
-	vcardIt	vIt;
+	vcardIt vIt;
 	FileWriter xmlFile(toDir + "contactlist.xml");
-	if (!xmlFile.open())
-	{
-		LOG_ERROR("cannot open the file: " + toDir + "contactlist.xml");
-		return false;
-	}
-	
+
 	// Write all informations to the xml conf file
 	xmlFile.write("<contactlist>\n");
 	for (vIt = vList.begin(); vIt != vList.end(); vIt++)
@@ -520,7 +516,7 @@ void * ClassicConfigImporter::GetLastClassicWengoUser() {
 
 	last_user_t * lastUser = new last_user_t();
 	fileStream.open((classicPath +	"user.config").c_str());
-	if (!fileStream) 
+	if (!fileStream)
 	{
 		LOG_ERROR("cannot open the file: " + (classicPath +	"user.config"));
 		return NULL;
@@ -577,7 +573,7 @@ bool ClassicConfigImporter::ImportConfigFromV1toV2() {
 	WengoAccount wengoAccount(lastUser->login, lastUser->password, lastUser->auto_login);
 	_userProfile.setWengoAccount(wengoAccount);
 	//wAccountDL->save();
-	
+
 	return true;
 }
 
@@ -589,7 +585,7 @@ void ClassicConfigImporter::loginStateChangedEventHandler(SipAccount & sender, S
 				boost::bind(&ClassicConfigImporter::loginStateChangedEventHandler, this, _1, _2);
 
 			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(sender);
-			IMAccount imAccount(wengoAccount.getIdentity(), 
+			IMAccount imAccount(wengoAccount.getIdentity(),
 				wengoAccount.getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 			_userProfile.addIMAccount(imAccount);
 			_wengoPhone.saveUserProfile();

@@ -23,13 +23,14 @@
 
 #include <cutil/global.h>
 
+#include <string>
+#include <iostream>
+using namespace std;
+
 #include <stdio.h>
 #include <stddef.h>
+#include <dirent.h>
 #include <sys/types.h>
-#ifdef CC_MSVC
-	#include <direct.h>
-#endif
-
 #include <sys/stat.h>
 
 #if defined(OS_WINDOWS)
@@ -41,15 +42,11 @@
 	#endif
 #endif
 
-#include <dirent.h>
-
-#include <string>
-
-#include <iostream>
-using namespace std;
-
 #ifdef OS_WINDOWS
 	#include <windows.h>
+#endif
+#ifdef CC_MSVC
+	#include <direct.h>
 #endif
 
 File::File(const std::string & filename)
@@ -167,7 +164,7 @@ std::string File::getPathSeparator() {
 #else
 	static const std::string PATH_SEPARATOR = "/";
 	return PATH_SEPARATOR;
-#endif	//OS_WINDOWS
+#endif
 }
 
 void File::createPath(const std::string & path) {
@@ -214,24 +211,25 @@ FileReader::~FileReader() {
 
 bool FileReader::open() {
 	_file.open(_filename.c_str(), ios::binary);
+	return isOpen();
+}
+
+bool FileReader::isOpen() const {
 	return _file.is_open();
 }
 
 std::string FileReader::read() {
 	static const unsigned int BUFFER_SIZE = 2000;
 
-	if (!_file.is_open()) {
-		//Tries to open the file if not already done
-		open();
+	if (!isOpen()) {
+		LOG_FATAL("you must check the file is open");
 	}
 
 	std::string data;
-	if (_file.is_open()) {
-		char tmp[BUFFER_SIZE];
-		while (!_file.eof()) {
-			_file.read(tmp, BUFFER_SIZE);
-			data.append(tmp, _file.gcount());
-		}
+	char tmp[BUFFER_SIZE];
+	while (!_file.eof()) {
+		_file.read(tmp, BUFFER_SIZE);
+		data.append(tmp, _file.gcount());
 	}
 
 	return data;
@@ -260,18 +258,24 @@ FileWriter::~FileWriter() {
 
 bool FileWriter::open() {
 	_file.open(_filename.c_str(), ios::binary);
+	return isOpen();
+}
+
+bool FileWriter::isOpen() const {
 	return _file.is_open();
 }
 
 void FileWriter::write(const std::string & data) {
 	//See http://www.cplusplus.com/doc/tutorial/files.html
 
-	if (!_file.is_open()) {
-		//Tries to open the file if not already done
+	static bool fileOpen = false;
+
+	if (!fileOpen) {
 		open();
+		fileOpen = true;
 	}
 
-	if (_file.is_open() && !data.empty()) {
+	if (!data.empty()) {
 		_file.write(data.c_str(), data.size());
 	}
 }

@@ -28,6 +28,7 @@
 using namespace std;
 
 const char * String::null = "";
+const std::string String::EOL = "\r\n";
 
 int String::toInteger() const {
 	int tmp;

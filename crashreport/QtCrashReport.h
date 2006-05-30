@@ -17,16 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_QTCRASHREPORT_H
-#define OW_QTCRASHREPORT_H
+#ifndef QTCRASHREPORT_H
+#define QTCRASHREPORT_H
 
 #include "FtpUpload.h"
 
-#include "ui_CrashReport.h"
-
-#include <QDialog>
-
 #include <qtutil/QObjectThreadSafe.h>
+
+class QDialog;
+namespace Ui { class CrashReport; }
 
 /**
  * Crash report widget
@@ -37,7 +36,8 @@ class QtCrashReport : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtCrashReport(std::string dumpfile, std::string applicationName, std::string lang = "", std::string info = "");
+	QtCrashReport(const std::string & dumpfile, const std::string & applicationName,
+		const std::string & lang = "", const std::string & info = "");
 
 	~QtCrashReport();
 
@@ -79,9 +79,9 @@ private:
 
 	QDialog * _dialog;
 
-	Ui::CrashReportForm ui;
+	Ui::CrashReport * _ui;
 
 	bool _firstFileUploaded;
 };
 
-#endif	//OW_QTCRASHREPORT_H
+#endif	//QTCRASHREPORT_H

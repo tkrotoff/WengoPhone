@@ -21,6 +21,8 @@
 
 #include <util/File.h>
 #include <util/Path.h>
+#include <util/Time.h>
+#include <util/Date.h>
 
 #include <iostream>
 #include <sstream>
@@ -32,8 +34,7 @@ using namespace std;
 Logger Logger::logger;
 
 Logger::Logger() {
-	std::string fileName = Path::getApplicationDirPath() + "log.txt";
-	_file = new FileWriter(fileName);
+	_file = NULL;
 }
 
 Logger::~Logger() {
@@ -66,6 +67,8 @@ void Logger::fatal(const std::string & className, const std::string & message) {
 void Logger::log(Level level, const std::string & className, const std::string & message) {
 	boost::mutex::scoped_lock scopedLock(_mutex);
 
+	static const char * CLASS_METHOD_SEPARATOR = "::";
+
 	std::string levelString;
 
 	switch (level) {
@@ -84,29 +87,43 @@ void Logger::log(Level level, const std::string & className, const std::string &
 	case Fatal:
 		levelString = "fatal";
 		break;
+	default:
+		LOG_FATAL("unknown log level=" + String::fromNumber(level));
 	}
 
 	time_t t = time(NULL);
 	struct tm * localTime = localtime(&t);
 
-	string timeMsg = String::fromNumber(localTime->tm_hour) + ":"
-		+ String::fromNumber(localTime->tm_min) + ":"
-		+ String::fromNumber(localTime->tm_sec);
-
-
 	String classNameTmp = className;
 	classNameTmp.remove("class");
 	classNameTmp.remove("*");
 	classNameTmp.remove(" ");
-	std::string tmp = "(" + levelString + ") " + timeMsg + " " + classNameTmp +  ": " + message;
+	std::string tmp = "(" + levelString + ") " + Time().toString() + " " + classNameTmp +  ": " + message;
+
+	if (!_file) {
+		std::string strippedClassName = className;
+		string::size_type pos = strippedClassName.find(CLASS_METHOD_SEPARATOR);
+		if (pos != string::npos) {
+			strippedClassName = strippedClassName.substr(0, pos);
+		}
+		std::string fileName = Path::getApplicationDirPath() + "log-" + strippedClassName + ".txt";
+		_file = new FileWriter(fileName);
+		_file->write("Log file=" + fileName + String::EOL);
+		_file->write("Date=" + Date().toString() + String::EOL);
+		_file->write("Time=" + Time().toString() + String::EOL + String::EOL);
+	}
+
+	_file->write(tmp + String::EOL);
+
 	std::cerr << tmp << std::endl;
 
 	//messageAddedEvent(tmp);
-	_file->write(tmp + "\n");
 }
 
 void Logger::flush() {
 	boost::mutex::scoped_lock scopedLock(_mutex);
 
-	_file->close();
+	if (_file) {
+		_file->close();
+	}
 }

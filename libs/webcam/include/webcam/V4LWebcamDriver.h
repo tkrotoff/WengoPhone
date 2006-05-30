@@ -56,7 +56,7 @@ public:
 
 	webcamerrorcode setDevice(const std::string & deviceName);
 
-	bool isOpened() const;
+	bool isOpen() const;
 
 	void startCapture();
 
@@ -102,7 +102,7 @@ private:
 	struct video_picture _vPic;
 	struct video_clip _vClips;
 
-	bool _isOpened;
+	bool _isOpen;
 	bool _terminate;
 
 	void readCaps();

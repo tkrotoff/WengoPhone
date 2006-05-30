@@ -30,6 +30,7 @@
  */
 class V4LWebcamDriverFactory : public WebcamDriverFactory {
 public:
+
 	IWebcamDriver * create(WebcamDriver *driver, int flags) const {
 		return new V4LWebcamDriver(driver, flags);
 	}

@@ -38,25 +38,9 @@ public:
 
 	virtual ~UserProfileStorage() { }
 
-	/**
-	 * load a user profile.
-	 *
-	 * @param url url to user profile. This url must point to a directory
-	 * @return true if ok
-	 */
-	virtual bool load(const std::string & url) = 0;
-
-	/**
-	 * save a user profile.
-	 *
-	 * @param url url to user profile. This url must point to a directory
-	 * @return true if ok
-	 */
-	virtual bool save(const std::string & url) = 0;
-
 protected:
 
 	UserProfile & _userProfile;
 };
 
-#endif //USERPROFILESTORAGE_H
+#endif	//USERPROFILESTORAGE_H

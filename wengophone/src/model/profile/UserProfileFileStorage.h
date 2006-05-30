@@ -46,7 +46,6 @@ private:
 	bool saveProfile(const std::string & url);
 
 	bool loadProfile(const std::string & url);
-
 };
 
-#endif //USERPROFILEFILESTORAGE_H
+#endif	//USERPROFILEFILESTORAGE_H

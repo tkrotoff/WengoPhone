@@ -31,7 +31,8 @@
 using namespace std;
 
 ContactListFileStorage::ContactListFileStorage(ContactList & contactList, IMAccountHandler & imAccountHandler)
-	: ContactListStorage(contactList), _imAccountHandler(imAccountHandler) {
+	: ContactListStorage(contactList),
+	_imAccountHandler(imAccountHandler) {
 }
 
 ContactListFileStorage::~ContactListFileStorage() {
@@ -59,6 +60,5 @@ bool ContactListFileStorage::save(const std::string & url) {
 
 	file.write(serializer.serialize());
 	file.close();
-	
 	return true;
 }

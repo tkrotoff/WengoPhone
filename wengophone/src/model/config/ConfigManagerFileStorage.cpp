@@ -27,8 +27,8 @@
 
 using namespace std;
 
-ConfigManagerFileStorage::ConfigManagerFileStorage(ConfigManager & configManager) 
-: ConfigManagerStorage(configManager) {
+ConfigManagerFileStorage::ConfigManagerFileStorage(ConfigManager & configManager)
+	: ConfigManagerStorage(configManager) {
 }
 
 ConfigManagerFileStorage::~ConfigManagerFileStorage() {
@@ -56,6 +56,5 @@ bool ConfigManagerFileStorage::save(const std::string & url) {
 
 	file.write(serializer.serialize());
 	file.close();
-
 	return true;
 }

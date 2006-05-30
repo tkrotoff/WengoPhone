@@ -28,7 +28,7 @@ class IMAccountHandler;
 /**
  * WARNING: the IMAccountHandler given in the constructor must be poupulated
  * BEFORE using the 'load' method.
- * 
+ *
  * @ingroup model
  * @author Tanguy Krotoff
  * @author Philippe Bernery
@@ -47,7 +47,6 @@ public:
 private:
 
 	IMAccountHandler & _imAccountHandler;
-
 };
 
-#endif //CONTACTLISTFILESTORAGE_H
+#endif	//CONTACTLISTFILESTORAGE_H

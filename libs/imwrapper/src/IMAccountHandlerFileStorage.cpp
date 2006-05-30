@@ -30,7 +30,8 @@
 using namespace std;
 
 IMAccountHandlerFileStorage::IMAccountHandlerFileStorage(IMAccountHandler & imAccountHandler)
-: IMAccountHandlerStorage(imAccountHandler), _imAccountHandler(imAccountHandler) {
+	: IMAccountHandlerStorage(imAccountHandler),
+	_imAccountHandler(imAccountHandler) {
 }
 
 IMAccountHandlerFileStorage::~IMAccountHandlerFileStorage() {

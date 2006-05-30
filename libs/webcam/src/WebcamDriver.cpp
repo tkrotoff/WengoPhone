@@ -32,7 +32,7 @@ WebcamDriver * WebcamDriver::instance = NULL;
 
 WebcamDriver * WebcamDriver::getInstance() {
 	if (!instance) {
-		instance = new WebcamDriver(WEBCAM_FORCE_IMAGE_FORMAT);	
+		instance = new WebcamDriver(WEBCAM_FORCE_IMAGE_FORMAT);
 	}
 
 	return instance;
@@ -105,8 +105,8 @@ webcamerrorcode WebcamDriver::setDevice(const std::string & deviceName) {
 	}
 }
 
-bool WebcamDriver::isOpened() const {
-	return _webcamPrivate->isOpened();
+bool WebcamDriver::isOpen() const {
+	return _webcamPrivate->isOpen();
 }
 
 void WebcamDriver::startCapture() {

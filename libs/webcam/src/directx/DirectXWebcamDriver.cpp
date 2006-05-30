@@ -46,7 +46,7 @@ DirectXWebcamDriver::~DirectXWebcamDriver() {
 }
 
 void DirectXWebcamDriver::cleanup() {
-	_isOpened = false;
+	_isOpen = false;
 	_cachedWidth = 0;
 	_cachedHeight = 0;
 	_cachedFPS = 15;
@@ -183,7 +183,7 @@ string DirectXWebcamDriver::getDefaultDevice() {
 }
 
 webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
-	//TODO: test if a webcam is already opened
+	//TODO: test if a webcam is already open
 
 	HRESULT hr;
 
@@ -275,13 +275,13 @@ webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 		return WEBCAM_NOK;
 	}
 
-	_isOpened = true;
+	_isOpen = true;
 
 	return WEBCAM_OK;
 }
 
-bool DirectXWebcamDriver::isOpened() const {
-	return _isOpened;
+bool DirectXWebcamDriver::isOpen() const {
+	return _isOpen;
 }
 
 void DirectXWebcamDriver::startCapture() {
@@ -380,7 +380,7 @@ webcamerrorcode DirectXWebcamDriver::setCaps(pixosi palette, unsigned fps, unsig
 
 	_cachedFPS = fps;
 
-	if (!isOpened()) {
+	if (!isOpen()) {
 		return WEBCAM_NOK;
 	}
 

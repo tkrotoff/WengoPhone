@@ -38,14 +38,9 @@ public:
 
 	virtual ~ConfigManagerStorage() { }
 
-	virtual bool load(const std::string & url) = 0;
-
-	virtual bool save(const std::string & url) = 0;
-
 protected:
 
 	ConfigManager & _configManager;
-
 };
 
-#endif //CONFIGMANAGERSTORAGE_H
+#endif	//CONFIGMANAGERSTORAGE_H

@@ -41,8 +41,7 @@ void Picture::copy(const Picture & picture) {
 	_filename = picture._filename;
 }
 
-Picture Picture::pictureFromData(const std::string & data) 
-{
+Picture Picture::pictureFromData(const std::string & data) {
 	Picture result;
 
 	result._pictureData = data;
@@ -50,8 +49,7 @@ Picture Picture::pictureFromData(const std::string & data)
 	return result;
 }
 
-Picture Picture::pictureFromFile(const std::string & filename) 
-{
+Picture Picture::pictureFromFile(const std::string & filename) {
 	string data;
 	FileReader file(filename);
 	if (file.open()) {

@@ -104,7 +104,7 @@ public:
 	/**
 	 * @return true webcam if is opened
 	 */
-	virtual bool isOpened() const = 0;
+	virtual bool isOpen() const = 0;
 
 	/**
 	 * Starts capture of video frames.

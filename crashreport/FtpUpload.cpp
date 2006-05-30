@@ -19,23 +19,25 @@
 
 #include "FtpUpload.h"
 
-#include <sys/stat.h> 
-#include "curl/curl.h"
-#include "cutil/global.h"
+#include <cutil/global.h>
 
-#define WENGO_FTP		"ftp.wengo.fr"
-#define WENGO_USER		"wengophone"
-#define WENGO_PASSWD	"coredump"
+#include <curl/curl.h>
+
+#include <sys/stat.h>
+
+#define WENGO_FTP "ftp.wengo.fr"
+#define WENGO_USER "wengophone"
+#define WENGO_PASSWD "coredump"
 
 #ifdef OS_WIN32
-#define snprintf	_snprintf
-#define stat		_stat
+	#define snprintf _snprintf
+	#define stat _stat
 #else
-#include <string.h>
+	#include <cstring>
 #endif
 
 int curlFTPProgress(void * instance, double dltotal, double dlnow, double ultotal, double ulnow) {
-	
+
 	if( instance ) {
 		FtpUpload * ftpUpload = (FtpUpload*)instance;
 		ftpUpload->setProgress(ultotal, ulnow);
@@ -48,18 +50,21 @@ char *get_filename(const char *full)
 	char *filename;
 	char *begin = (char *) full;
 
-	if (!full)
+	if (!full) {
 		return NULL;
+	}
 
 	filename = begin + strlen(begin) - 1;
 
-	while (filename != begin && *filename != '\\' && *filename != '/')
+	while (filename != begin && *filename != '\\' && *filename != '/') {
 		filename--;
+	}
 
-	if (filename == begin)
+	if (filename == begin) {
 		return begin;
-	else
+	} else {
 		return ++filename;
+	}
 }
 
 int ftp_upload(const char * path, const char *fullfilename, void * ftpUploadInstance)
@@ -72,22 +77,24 @@ int ftp_upload(const char * path, const char *fullfilename, void * ftpUploadInst
 	FILE *lfile;
 	struct stat buf;
 	int res;
-	
+
 	memset(url_buff, 0, sizeof(url_buff));
 	memset(auth_passwd, 0, sizeof(auth_passwd));
 	memset(tmp, 0, sizeof(tmp));
-	
-	if (!fullfilename)
+
+	if (!fullfilename) {
 		return -1;
+	}
 
 	stat(fullfilename, &buf);
 	filename = get_filename(fullfilename);
-	
+
 	snprintf(url_buff, sizeof(url_buff), "ftp://%s", WENGO_FTP);
-	
-	if (path && *path)
+
+	if (path && *path) {
 		snprintf(tmp, sizeof(tmp), "%s/%s", url_buff, path);
-	
+	}
+
 	snprintf(url_buff, sizeof(url_buff), "%s/%s", tmp, filename);
 
 	snprintf(auth_passwd, sizeof(auth_passwd), "%s:%s", WENGO_USER, WENGO_PASSWD);
@@ -95,7 +102,7 @@ int ftp_upload(const char * path, const char *fullfilename, void * ftpUploadInst
 	curl_global_init(CURL_GLOBAL_ALL);
 
 	lfile = fopen(fullfilename, "rb");
- 
+
 	handle = curl_easy_init();
 
 	curl_easy_setopt(handle, CURLOPT_URL, url_buff);
@@ -110,7 +117,7 @@ int ftp_upload(const char * path, const char *fullfilename, void * ftpUploadInst
 	curl_easy_setopt(handle, CURLOPT_NOPROGRESS, 0);
 	curl_easy_setopt(handle, CURLOPT_PROGRESSFUNCTION, curlFTPProgress);
 	curl_easy_setopt(handle, CURLOPT_PROGRESSDATA, ftpUploadInstance);
-	
+
 	res = curl_easy_perform(handle);
 
 	curl_easy_cleanup(handle);

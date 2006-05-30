@@ -38,13 +38,9 @@ public:
 
 	virtual ~ContactListStorage() { }
 
-	virtual bool load(const std::string & url) = 0;
-
-	virtual bool save(const std::string & url) = 0;
-
 protected:
 
 	ContactList & _contactList;
 };
 
-#endif //CONTACTLISTSTORAGE_H
+#endif	//CONTACTLISTSTORAGE_H

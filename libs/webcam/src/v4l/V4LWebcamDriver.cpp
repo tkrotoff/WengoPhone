@@ -31,7 +31,7 @@
 using namespace std;
 
 V4LWebcamDriver::V4LWebcamDriver(WebcamDriver *driver, int flags)
-: IWebcamDriver(flags) {
+	: IWebcamDriver(flags) {
 	_webcamDriver = driver;
 
 	_fhandle = 0;
@@ -46,7 +46,7 @@ void V4LWebcamDriver::cleanup() {
 		close(_fhandle);
 	}
 	_fhandle = 0;
-	_isOpened = false;
+	_isOpen = false;
 	_terminate = false;
 	_fps = 15;
 }
@@ -80,7 +80,7 @@ string V4LWebcamDriver::getDefaultDevice() {
 }
 
 webcamerrorcode V4LWebcamDriver::setDevice(const std::string & deviceName) {
-	//TODO: test if a webcam is already opened
+	//TODO: test if a webcam is already open
 
 	std::string device = "/dev/" + deviceName.substr(deviceName.size() - 6, deviceName.size() - 1);
 
@@ -100,7 +100,7 @@ webcamerrorcode V4LWebcamDriver::setDevice(const std::string & deviceName) {
 		i++;
 	}
 #endif
-	
+
 	_fhandle = open(device.c_str(), O_RDWR);
 	if (_fhandle <= 0) {
 		return WEBCAM_NOK;
@@ -108,15 +108,15 @@ webcamerrorcode V4LWebcamDriver::setDevice(const std::string & deviceName) {
 
 	fcntl(_fhandle, O_NONBLOCK);
 
-	_isOpened = true;
+	_isOpen = true;
 
 	readCaps();
 
 	return WEBCAM_OK;
 }
 
-bool V4LWebcamDriver::isOpened() const {
-	return _isOpened;
+bool V4LWebcamDriver::isOpen() const {
+	return _isOpen;
 }
 
 void V4LWebcamDriver::startCapture() {
@@ -134,7 +134,7 @@ void V4LWebcamDriver::stopCapture() {
 webcamerrorcode V4LWebcamDriver::setPalette(pixosi palette) {
 	int depth;
 	int v4l_palette = pix_v4l_from_pix_osi(palette);
-	
+
 	switch (palette) {
 	case PIX_OSI_YUV420P:
 		depth = 12;
@@ -226,7 +226,7 @@ void V4LWebcamDriver::flipHorizontally(bool flip) {
 }
 
 void V4LWebcamDriver::readCaps() {
-	if (isOpened()) {
+	if (isOpen()) {
 		ioctl(_fhandle, VIDIOCGCAP, &_vCaps);
 		ioctl(_fhandle, VIDIOCGWIN, &_vWin);
 		ioctl(_fhandle, VIDIOCGPICT, &_vPic);
@@ -235,18 +235,18 @@ void V4LWebcamDriver::readCaps() {
 
 void V4LWebcamDriver::run() {
 	int len, fsize;
-	piximage *image;
+	piximage * image;
 
 	image = pix_alloc(getPalette(), getWidth(), getHeight());
 
-	while (isOpened() && !_terminate) {
+	while (isOpen() && !_terminate) {
 		msleep(1000 / _fps);
 
 		fsize = pix_size(image->palette, image->width, image->height);
 		len = read(_fhandle, image->data, pix_size(image->palette, image->width, image->height));
 
 		if (len >= fsize) {
-			if (!isOpened()) {
+			if (!isOpen()) {
 				break;
 			}
 			_webcamDriver->frameBufferAvailable(image);
@@ -263,17 +263,17 @@ V4LWebcamDriver::DevNameArray V4LWebcamDriver::getDevices() {
 V4LWebcamDriver::DevNameArray V4LWebcamDriver::getDevices2_6() {
 	const string dir = "/sys/class/video4linux";
 	DevNameArray array;
-	FileReader sysDir(dir);
+	File sysDir(dir);
 	StringList list = sysDir.getDirectoryList();
 
-	
+
 	for (register unsigned i = 0 ; i < list.size() ; i++) {
 		if (list[i][0] != '.') {
 			ifstream nameFile((dir + "/" + list[i] + "/name").c_str());
 			char buffer[512];
 			nameFile.getline(buffer, 512);
-			
-			strncat(buffer, (" : " + list[i]).c_str(), list[i].size() + 3); 
+
+			strncat(buffer, (" : " + list[i]).c_str(), list[i].size() + 3);
 
 			array[list[i]] = buffer;
 		}
@@ -286,7 +286,7 @@ V4LWebcamDriver::DevNameArray V4LWebcamDriver::getDevices2_6() {
 V4LWebcamDriver::DevNameArray V4LWebcamDriver::getDevices2_4() {
 	const string dir = "/proc/video/dev";
 	DevNameArray array;
-	FileReader sysDir(dir);
+	File sysDir(dir);
 	StringList list = sysDir.getDirectoryList();
 
 	for (register unsigned i = 0 ; i < list.size() ; i++) {

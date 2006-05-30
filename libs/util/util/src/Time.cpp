@@ -51,5 +51,21 @@ bool Time::operator==(const Time & time) const {
 }
 
 std::string Time::toString() const {
-	return String::fromNumber(_hour) + ":" + String::fromNumber(_minute) + ":" + String::fromNumber(_second);
+	std::string hour = String::fromNumber(_hour);
+	std::string minute = String::fromNumber(_minute);
+	std::string second = String::fromNumber(_second);
+
+	if (hour.size() == 1) {
+		hour = "0" + hour;
+	}
+
+	if (minute.size() == 1) {
+		minute = "0" + minute;
+	}
+
+	if (second.size() == 1) {
+		second = "0" + second;
+	}
+
+	return hour + ":" + minute + ":" + second;
 }

@@ -20,7 +20,6 @@
 #include <wenbox/Wenbox.h>
 
 #include <util/Logger.h>
-#include <util/File.h>
 #include <util/Path.h>
 #include <util/StringList.h>
 

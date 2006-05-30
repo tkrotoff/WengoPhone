@@ -20,11 +20,13 @@
 #ifndef IMACCOUNTHANDLERSTORAGE_H
 #define IMACCOUNTHANDLERSTORAGE_H
 
+#include <serialization/Storage.h>
+
 #include <string>
 
 class IMAccountHandler;
 
-class IMAccountHandlerStorage {
+class IMAccountHandlerStorage : public Storage {
 public:
 
 	IMAccountHandlerStorage(IMAccountHandler & imAccountHandler)
@@ -32,14 +34,9 @@ public:
 
 	virtual ~IMAccountHandlerStorage() {};
 
-	virtual bool load(const std::string & url) = 0;
-
-	virtual bool save(const std::string & url) = 0;
-
 protected:
 
 	IMAccountHandler & _imAccountHandler;
-
 };
 
-#endif //IMACCOUNTHANDLERSTORAGE_H
+#endif	//IMACCOUNTHANDLERSTORAGE_H

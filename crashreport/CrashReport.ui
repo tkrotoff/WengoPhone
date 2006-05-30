@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>CrashReportForm</class>
- <widget class="QDialog" name="CrashReportForm" >
+ <class>CrashReport</class>
+ <widget class="QDialog" name="CrashReport" >
   <property name="geometry" >
    <rect>
     <x>0</x>

@@ -37,12 +37,13 @@ GaimIMPresence::GaimIMPresence(IMAccount & account)
 
 bool GaimIMPresence::equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol)
 {
-	IMAccount imAccount(login, "", protocol);
+	IMAccount imAccount(login, String::null, protocol);
 
-	if (_imAccount == imAccount)
+	if (_imAccount == imAccount) {
 		return true;
-	else
+	} else {
 		return false;
+	}
 }
 
 void GaimIMPresence::changeMyPresence(EnumPresenceState::PresenceState state,
@@ -73,7 +74,7 @@ void GaimIMPresence::changeMyAlias(const std::string & nickname)
 		gaim_account_set_alias(gAccount, nickname.c_str(), TRUE);
 }
 
-void GaimIMPresence::changeMyIcon(const Picture & picture) 
+void GaimIMPresence::changeMyIcon(const Picture & picture)
 {
 	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
@@ -81,7 +82,7 @@ void GaimIMPresence::changeMyIcon(const Picture & picture)
 	FileWriter file = File::createTemporaryFile();
 	file.write(picture.getData());
 	file.close();
-	
+
 	gaim_account_set_buddy_icon(gAccount, file.getFullPath().c_str());
 }
 
@@ -115,20 +116,20 @@ void GaimIMPresence::unblockContact(const std::string & contactId)
 	}
 }
 
-void GaimIMPresence::authorizeContact(const std::string & contactId, bool authorized, 
+void GaimIMPresence::authorizeContact(const std::string & contactId, bool authorized,
 									  const std::string message)
 {
 	GaimAccount *gAccount;
 
 	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
-	
+
 	if (!gAccount)
 		return;
 
 	if (authorized == true)
 	{
-		gaim_account_accept_auth_request(gAccount, contactId.c_str(), NULL,	message.c_str());
+		gaim_account_accept_auth_request(gAccount, contactId.c_str(), NULL, message.c_str());
 	}
 	else
 	{

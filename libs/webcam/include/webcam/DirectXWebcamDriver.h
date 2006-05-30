@@ -58,7 +58,7 @@ public:
 
 	webcamerrorcode setDevice(const std::string & deviceName);
 
-	bool isOpened() const;
+	bool isOpen() const;
 
 	void startCapture();
 
@@ -132,7 +132,7 @@ private:
 	piximage _capturedImage;
 
 	/** True if webcam is opened */
-	bool _isOpened;
+	bool _isOpen;
 
 	void webcam_dx_error(const char *error) {
 		std::cerr << "!!DirectX Webcam Driver: " << error << std::endl;

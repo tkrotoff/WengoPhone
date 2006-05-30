@@ -116,4 +116,3 @@ void PhApiIMPresence::contactIconChangedEventHandler(PhApiWrapper & sender, cons
 	Picture picture = Picture::pictureFromFile(getRessourcePath() + "pics/avatars/" + filename);
 	contactIconChangedEvent(*this, contactId, picture);
 }
-

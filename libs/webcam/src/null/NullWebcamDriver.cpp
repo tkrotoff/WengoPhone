@@ -47,7 +47,7 @@ webcamerrorcode NullWebcamDriver::setDevice(const std::string & deviceName) {
 	return WEBCAM_OK;
 }
 
-bool NullWebcamDriver::isOpened() const {
+bool NullWebcamDriver::isOpen() const {
 	return false;
 }
 

@@ -84,7 +84,7 @@ public:
 
 	webcamerrorcode setDevice(const std::string & deviceName);
 
-	bool isOpened() const;
+	bool isOpen() const;
 
 	void startCapture();
 
@@ -124,7 +124,7 @@ private:
 
 	virtual ~WebcamDriver();
 
-#if defined(OS_WIN32)
+#if defined(OS_WINDOWS)
 	friend class DirectXWebcamDriver;
 #elif defined(OS_MACOSX)
 	friend class QuicktimeWebcamDriver;

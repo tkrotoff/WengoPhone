@@ -26,12 +26,16 @@ using namespace std;
 typedef struct _webcamcallbacklist {
 	/** sender */
 	webcam * wc;
+
 	/** The callback */
 	webcamcallback * cbk;
+
 	/** User data associated with this callback */
 	void * data;
+
 	/** Link to previous and next callback. Linked list */
 	_webcamcallbacklist *prev, *next;
+
 } webcamcallbacklist;
 
 struct opaquewebcam {
@@ -204,8 +208,8 @@ webcamerrorcode webcam_set_palette(webcam * wc, pixosi palette) {
 	return wc->driver->setPalette(palette);
 }
 
-int webcam_is_opened(webcam * wc) {
-	if (wc->driver->isOpened()) {
+int webcam_is_open(webcam * wc) {
+	if (wc->driver->isOpen()) {
 		return 1;
 	} else {
 		return 0;

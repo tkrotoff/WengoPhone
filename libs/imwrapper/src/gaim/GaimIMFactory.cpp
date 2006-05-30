@@ -19,9 +19,9 @@
 
 #include <cutil/global.h>
 
-#ifdef OS_WIN32
-#include <winsock2.h>
-#include <windows.h>
+#ifdef OS_WINDOWS
+	#include <winsock2.h>
+	#include <windows.h>
 #endif
 
 extern "C" {
@@ -167,13 +167,13 @@ static GaimEventLoopUiOps eventloop_wg_ops =
 };
 
 GaimIMFactory::GaimIMFactory()
-{	
+{
 	AccountMngr = GaimAccountMngr::getInstance();
 	ConnectMngr = GaimConnectMngr::getInstance();
 	PresenceMngr = GaimPresenceMngr::getInstance();
 	ChatMngr = GaimChatMngr::getInstance();
 	ContactListMngr = GaimContactListMngr::getInstance();
-	
+
 	GaimIMInit();
 	GaimWrapperInit();
 	GaimSetCallbacks();

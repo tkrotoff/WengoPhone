@@ -20,7 +20,7 @@
 #ifndef FILE_H
 #define FILE_H
 
-#include <util/NonCopyable.h>
+#include <util/Interface.h>
 #include <util/StringList.h>
 
 #include <string>
@@ -131,11 +131,44 @@ protected:
 
 
 /**
+ * Interface for FileReader and FileWriter.
+ *
+ * Code factorization.
+ *
+ * @author Tanguy Krotoff
+ */
+class IFile : Interface {
+public:
+
+	/**
+	 * Closes the file.
+	 */
+	virtual void close() = 0;
+
+protected:
+
+	/**
+	 * Opens the file for writing or reading.
+	 *
+	 * @return true if success; false otherwise
+	 */
+	virtual bool open() = 0;
+
+	/**
+	 * Gets if the file is open or not.
+	 *
+	 * @return true if file open; false otherwise
+	 */
+	virtual bool isOpen() const = 0;
+};
+
+
+/**
  * Reads from a file.
  *
  * @author Tanguy Krotoff
  */
-class FileReader : public File {
+class FileReader : public File, public IFile {
 public:
 
 	FileReader(const std::string & filename);
@@ -146,13 +179,28 @@ public:
 
 	~FileReader();
 
+	/**
+	 * Opens the file for reading.
+	 *
+	 * @return true if success; false otherwise
+	 */
 	bool open();
 
+	/**
+	 * Reads data from the file.
+	 *
+	 * You must call open() first and check the returned value otherwise
+	 * it will make an assertion (a crash).
+	 *
+	 * @return data read from the file
+	 */
 	std::string read();
 
 	void close();
 
 private:
+
+	bool isOpen() const;
 
 	std::ifstream _file;
 };
@@ -163,7 +211,7 @@ private:
  *
  * @author Tanguy Krotoff
  */
-class FileWriter : public File {
+class FileWriter : public File, public IFile {
 public:
 
 	FileWriter(const std::string & filename);
@@ -174,13 +222,23 @@ public:
 
 	~FileWriter();
 
-	bool open();
-
+	/**
+	 * Writes data to the file.
+	 *
+	 * You must call open() first and check the returned value otherwise
+	 * it will make an assertion (a crash).
+	 *
+	 * @param data data to write to the file
+	 */
 	void write(const std::string & data);
 
 	void close();
 
 private:
+
+	bool open();
+
+	bool isOpen() const;
 
 	std::ofstream _file;
 };

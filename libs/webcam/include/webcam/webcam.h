@@ -179,9 +179,9 @@ pixosi webcam_get_palette(webcam *wc);
 webcamerrorcode webcam_set_palette(webcam *wc, pixosi palette);
 
 /**
- * @see IWebcamDriver::isOpened()
+ * @see IWebcamDriver::isOpen()
  */
-int webcam_is_opened(webcam *wc);
+int webcam_is_open(webcam *wc);
 
 /**
  * @see IWebcamDriver::setFPS()

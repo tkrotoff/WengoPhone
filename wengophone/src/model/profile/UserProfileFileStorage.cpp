@@ -30,7 +30,7 @@
 using namespace std;
 
 UserProfileFileStorage::UserProfileFileStorage(UserProfile & userProfile)
-: UserProfileStorage(userProfile) {
+	: UserProfileStorage(userProfile) {
 }
 
 UserProfileFileStorage::~UserProfileFileStorage() {
@@ -86,6 +86,5 @@ bool UserProfileFileStorage::saveProfile(const std::string & url) {
 
 	file.write(serializer.serialize());
 	file.close();
-
 	return true;
 }
