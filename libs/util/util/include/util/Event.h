@@ -25,6 +25,7 @@
 #include <boost/signal.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+#include <boost/visit_each.hpp>
 
 #include <list>
 
