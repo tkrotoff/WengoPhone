@@ -25,6 +25,7 @@
 
 extern "C" {
 #include "gaim/conversation.h"
+#include "gaim/util.h"
 }
 
 #ifdef OS_WIN32
@@ -120,18 +121,34 @@ void GaimIMChat::sendMessage(IMChatSession & chatSession, const std::string & me
 	if (message.empty() || message.length() == 0)
 		return;
 
+	char *cleanMess = (char *) message.c_str();
+
 	mConvInfo_t *mConv = FindChatStructById(chatSession.getId());
 	GaimConversation *gConv = (GaimConversation *)mConv->gaim_conv_session;
 	
+	// special case for ICQ
+	GaimAccount *gAccount = gaim_conversation_get_account(gConv);
+	GaimPlugin *prpl = gaim_find_prpl(gaim_account_get_protocol_id(gAccount));
+	if (prpl)
+	{
+		GaimPluginProtocolInfo *prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(prpl);
+		if (prpl_info->list_icon != NULL)
+		{
+			if (!strcmp("icq", prpl_info->list_icon(gAccount, NULL)))
+				cleanMess = (char *) gaim_markup_strip_html(message.c_str());
+		}
+	}
+
+
 	if (gaim_conversation_get_type(gConv) == GAIM_CONV_TYPE_IM)
 	{
 		gaim_conv_im_send_with_flags(GAIM_CONV_IM(gConv), 
-									message.c_str(), GAIM_MESSAGE_SEND);
+			cleanMess, GAIM_MESSAGE_SEND);
 	}
 	else if (gaim_conversation_get_type(gConv) == GAIM_CONV_TYPE_CHAT)
 	{
 		gaim_conv_chat_send_with_flags(GAIM_CONV_CHAT(gConv), 
-									message.c_str(), GAIM_MESSAGE_SEND);
+			cleanMess, GAIM_MESSAGE_SEND);
 	}
 	else
 	{
