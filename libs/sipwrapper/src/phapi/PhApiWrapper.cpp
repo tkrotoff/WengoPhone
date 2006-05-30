@@ -381,8 +381,11 @@ CodecList::AudioCodec PhApiWrapper::getAudioCodecUsed(int callId) {
 	else if (tmp.contains(PhApiCodecList::AUDIO_CODEC_SPEEXWB)) {
 		return CodecList::AudioCodecSPEEXWB;
 	}
+	else if (tmp.empty()) {
+		return CodecList::AudioCodecError;
+	}
 	else {
-		LOG_ERROR("unknown codec=" + tmp);
+		LOG_FATAL("unknown codec=" + tmp);
 		return CodecList::AudioCodecError;
 	}
 }
@@ -403,8 +406,11 @@ CodecList::VideoCodec PhApiWrapper::getVideoCodecUsed(int callId) {
 	else if (tmp.contains(PhApiCodecList::VIDEO_CODEC_MPEG4)) {
 		return CodecList::VideoCodecMPEG4;
 	}
+	else if (tmp.empty()) {
+		return CodecList::VideoCodecError;
+	}
 	else {
-		LOG_ERROR("unknown codec=" + tmp);
+		LOG_FATAL("unknown codec=" + tmp);
 		return CodecList::VideoCodecError;
 	}
 }
