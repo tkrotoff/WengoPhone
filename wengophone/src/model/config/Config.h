@@ -316,9 +316,13 @@ public:
 	 * @{
 	 */
 
-	/** Shows toaster for incoming calls & incoming chats. */
+	/** Shows toaster for incoming calls. */
 	static const std::string NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY;
 	bool getNotificationShowToasterOnIncomingCall() const;
+
+	/** Shows toaster for incoming chats. */
+	static const std::string NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CHAT_KEY;
+	bool getNotificationShowToasterOnIncomingChat() const;
 
 	/** Shows toaster when a contact is turning online. */
 	static const std::string NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY;

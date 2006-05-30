@@ -58,6 +58,7 @@ void QtNotificationSettings::readConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	_ui->showToasterOnIncomingCallCheckBox->setChecked(config.getNotificationShowToasterOnIncomingCall());
+	_ui->showToasterOnIncomingChatCheckBox->setChecked(config.getNotificationShowToasterOnIncomingChat());
 	_ui->showToasterOnContactOnlineCheckBox->setChecked(config.getNotificationShowToasterOnContactOnline());
 
 	_ui->doNotDisturbNoWindowCheckBox->setChecked(config.getNotificationDoNotDisturbNoWindow());
@@ -79,6 +80,7 @@ void QtNotificationSettings::saveConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	config.set(Config::NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY, _ui->showToasterOnIncomingCallCheckBox->isChecked());
+	config.set(Config::NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CHAT_KEY, _ui->showToasterOnIncomingChatCheckBox->isChecked());
 	config.set(Config::NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY, _ui->showToasterOnContactOnlineCheckBox->isChecked());
 
 	config.set(Config::NOTIFICATION_DONOTDISTURB_NO_WINDOW_KEY, _ui->doNotDisturbNoWindowCheckBox->isChecked());

@@ -93,6 +93,7 @@ const std::string Config::LANGUAGE_AUTODETECT_KEYVALUE = "detect";
 const std::string Config::LANGUAGE_KEY = "language";
 
 const std::string Config::NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY = "notification.show.toaster.on.incoming.call";
+const std::string Config::NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CHAT_KEY = "notification.show.toaster.on.incoming.chat";
 const std::string Config::NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY = "notification.show.toaster.on.contact";
 const std::string Config::NOTIFICATION_DONOTDISTURB_NO_WINDOW_KEY = "notification.donotdisturb.nowindow";
 const std::string Config::NOTIFICATION_DONOTDISTURB_NO_AUDIO_KEY = "notification.donotdisturb.noaudio";
@@ -169,7 +170,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[NETWORK_PROXY_PASSWORD_KEY] = empty;
 
 #if defined(OS_MACOSX)
-	pluginsPath = Path::getApplicationPrivateFrameworksDirPath() 
+	pluginsPath = Path::getApplicationPrivateFrameworksDirPath()
 		+ "phapi-plugins" + File::getPathSeparator();
 #else
 	pluginsPath = empty;
@@ -213,6 +214,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[LANGUAGE_KEY] = LANGUAGE_AUTODETECT_KEYVALUE;
 
 	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY] = true;
+	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CHAT_KEY] = true;
 	_keyDefaultValueMap[NOTIFICATION_SHOW_TOASTER_ON_CONTACT_ONLINE_KEY] = true;
 	_keyDefaultValueMap[NOTIFICATION_DONOTDISTURB_NO_WINDOW_KEY] = false;
 	_keyDefaultValueMap[NOTIFICATION_DONOTDISTURB_NO_AUDIO_KEY] = false;
@@ -482,6 +484,10 @@ std::string Config::getLanguage() const {
 
 bool Config::getNotificationShowToasterOnIncomingCall() const {
 	return getBooleanKeyValue(NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CALL_KEY);
+}
+
+bool Config::getNotificationShowToasterOnIncomingChat() const {
+	return getBooleanKeyValue(NOTIFICATION_SHOW_TOASTER_ON_INCOMING_CHAT_KEY);
 }
 
 bool Config::getNotificationShowToasterOnContactOnline() const {

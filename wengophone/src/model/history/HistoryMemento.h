@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_HISTORYMEMENTO_H
-#define OW_HISTORYMEMENTO_H
+#ifndef HISTORYMEMENTO_H
+#define HISTORYMEMENTO_H
 
 #include <sipwrapper/EnumPhoneCallState.h>
 
@@ -36,18 +36,18 @@
 
 /**
  * History Memento (Memento in the Memento pattern)
- * 
+ *
  * @author Mathieu Stute
  */
 class HistoryMemento {
 	friend class HistoryMementoCollection;
 	friend class History;
 public:
-	
+
 	static const unsigned int SERIALIZATION_VERSION = 1;
 
 	/**
-	 * State of a memento
+	 * State of a memento.
 	 */
 	enum State {
 		IncomingCall,
@@ -60,92 +60,92 @@ public:
 		None,
 		Any,
 	};
-	
+
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	HistoryMemento();
-	
+
 	/**
-	 * Complete constructor
+	 * Complete constructor.
 	 */
-	HistoryMemento(State state, std::string peer, int callId = -1, std::string data = "");
-	
+	HistoryMemento(State state, const std::string & peer, int callId = -1, const std::string & data = "");
+
 	/**
 	 * Default destructor.
 	 */
 	~HistoryMemento();
-	
+
 	/**
 	 * return the state.
-	 * 
+	 *
 	 * @return the state
 	 */
-	HistoryMemento::State getState();
-	
+	HistoryMemento::State getState() const;
+
 	/**
 	 * return the peer.
-	 * 
+	 *
 	 * @return the peer
 	 */
-	std::string getPeer();
-	
+	std::string getPeer() const;
+
 	/**
 	 * return the duration.
-	 * 
+	 *
 	 * @return the duration
 	 */
-	int getDuration();
-	
+	int getDuration() const;
+
 	/**
 	 * return the date.
-	 * 
+	 *
 	 * @return the date
 	 */
-	Date getDate();
-	
+	Date getDate() const;
+
 	/**
 	 * return the time.
-	 * 
+	 *
 	 * @return the time
 	 */
-	Time getTime();
+	Time getTime() const;
 
 	/**
 	 * return data.
-	 * 
+	 *
 	 * @return data
 	 */
-	std::string getData();
+	std::string getData() const;
 
 	/**
 	 * return true if the Memento can be replayed.
-	 * 
+	 *
 	 * @return true if the Memento can be replayed
 	 */
-	bool canReplay();
+	bool canReplay() const;
 
 	/**
 	 * update the duration.
-	 * 
+	 *
 	 * @param duration the duration of the call
 	 */
 	void updateDuration(int duration);
 
 	/**
 	 * return a string representing the memento.
-	 * 
+	 *
 	 * @return return a string representing the memento
 	 */
-	std::string toString();
+	std::string toString() const;
 
 	/**
 	 * return a string representing a memento state.
-	 * 
+	 *
 	 * @return return a string representing a memento state
 	 */
 	static std::string stateToString(State state);
-	
+
 	static const std::string StateIncomingCall;
 	static const std::string StateOutgoingCall;
 	static const std::string StateMissedCall;
@@ -154,71 +154,71 @@ public:
 	static const std::string StateOutgoingSMSNOK;
 	static const std::string StateNone;
 	static const std::string StateAny;
-	
+
 private:
 
 	/**
 	 * return true if the memento is for a call.
-	 * 
+	 *
 	 * @return true if the memento is for a call
 	 */
-	bool isCallMemento();
-	
+	bool isCallMemento() const;
+
 	/**
 	 * return true if the memento is for a SMS.
-	 * 
+	 *
 	 * @return true if the memento is for a SMS
 	 */
-	bool isSMSMemento();
+	bool isSMSMemento() const;
 
 	/**
 	 * return true if the memento is for a chat session.
-	 * 
+	 *
 	 * @return true if the memento is for a chat session
 	 */
-	bool isChatSessionMemento();
+	bool isChatSessionMemento() const;
 
 	/**
 	 * update state.
-	 * 
+	 *
 	 * @param state new state
 	 */
 	void updateState(State state);
-	
+
 	/**
 	 * return the callId associated to the memento.
-	 * 
+	 *
 	 * @return return the callId associated to the memento
 	 */
-	int getCallId();
-	
+	int getCallId() const;
+
 	/**
 	 * the peer.
 	 * TODO: replace by a set of peers (multi SMS, audio conf)
 	 */
 	std::string _peer;
-	
+
 	/** State of the Memento. */
 	State _state;
-	
+
 	/** Date associated to the memento. */
 	Date _date;
-	
+
 	/** Time associated to the memento. */
 	Time _time;
-	
+
 	/** data: meaningfull only for SMS. */
 	std::string _data;
-	
+
 	/** data: meaningfull only for calls. */
 	int _duration;
-	
+
 	/** data: meaningfull only for calls from this instance of the application. */
 	int _callId;
-	
+
 	friend class boost::serialization::access;
 
-	/**	 serialialization load method. */
+	/** Serialialization load method. */
 	template < class Archive >
 	void load(Archive & ar, const unsigned int version) {
 		if( version == SERIALIZATION_VERSION ) {
@@ -239,7 +239,7 @@ private:
 		}
 	}
 
-	/**	 serialialization save method. */
+	/** Serialialization save method. */
 	template < class Archive >
 	void save(Archive & ar, const unsigned int version) const {
 		ar << BOOST_SERIALIZATION_NVP(_peer);
@@ -253,10 +253,10 @@ private:
 		ar << BOOST_SERIALIZATION_NVP(_state);
 		ar << BOOST_SERIALIZATION_NVP(_data);
 	}
-	
+
 	BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 
 BOOST_CLASS_VERSION(HistoryMemento, HistoryMemento::SERIALIZATION_VERSION)
 
-#endif //OW_HISTORYMEMENTO_H
+#endif	//HISTORYMEMENTO_H

@@ -56,6 +56,12 @@ QtVideoSettings::QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	connect(_ui->makeTestVideoCallButton, SIGNAL(clicked()), SLOT(makeTestCallClicked()));
 	connect(_ui->webcamPreviewButton, SIGNAL(clicked()), SLOT(webcamPreview()));
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	//No webcam driver
+	if (_webcamDriver->getDeviceList().empty()) {
+		config.set(Config::VIDEO_ENABLE_KEY, _ui->enableVideoGroupBox->isChecked());
+	}
+
 	readConfig();
 }
 

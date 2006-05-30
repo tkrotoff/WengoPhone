@@ -36,15 +36,13 @@ const std::string HistoryMemento::StateAny = "StateAny";
 
 HistoryMemento::HistoryMemento() {
 	_state = None;
-	_peer = "";
 	_callId = -1;
 	_duration = 0;
 	_date = Date();
 	_time = Time();
-	_data = "";
 }
 
-HistoryMemento::HistoryMemento(State state, std::string peer, int callId, std::string data) {
+HistoryMemento::HistoryMemento(State state, const std::string & peer, int callId, const std::string & data) {
 	_state = state;
 	_peer = peer;
 	_callId = callId;
@@ -57,31 +55,31 @@ HistoryMemento::HistoryMemento(State state, std::string peer, int callId, std::s
 HistoryMemento::~HistoryMemento() {
 }
 
-HistoryMemento::State HistoryMemento::getState() {
+HistoryMemento::State HistoryMemento::getState() const {
 	return _state;
 }
 
-std::string HistoryMemento::getPeer() {
+std::string HistoryMemento::getPeer() const {
 	return _peer;
 }
 
-int HistoryMemento::getDuration() {
+int HistoryMemento::getDuration() const {
 	return _duration;
 }
 
-Date HistoryMemento::getDate() {
+Date HistoryMemento::getDate() const {
 	return _date;
 }
 
-Time HistoryMemento::getTime() {
+Time HistoryMemento::getTime() const {
 	return _time;
 }
 
-int HistoryMemento::getCallId() {
+int HistoryMemento::getCallId() const {
 	return _callId;
 }
 
-std::string HistoryMemento::getData() {
+std::string HistoryMemento::getData() const {
 	return _data;
 }
 
@@ -93,7 +91,7 @@ void HistoryMemento::updateState(State state) {
 	_state = state;
 }
 
-bool HistoryMemento::canReplay() {
+bool HistoryMemento::canReplay() const {
 	if( ( _state == OutgoingCall ) || ( _state == OutgoingSmsOk )) {
 		return true;
 	} else {
@@ -101,23 +99,23 @@ bool HistoryMemento::canReplay() {
 	}
 }
 
-bool HistoryMemento::isCallMemento() {
+bool HistoryMemento::isCallMemento() const {
 	return ((_state == OutgoingCall) || (_state == IncomingCall) ||
 			(_state == MissedCall)  || (_state == RejectedCall));
 }
 
-bool HistoryMemento::isSMSMemento() {
+bool HistoryMemento::isSMSMemento() const {
 	return ( (_state == OutgoingSmsOk) || (_state == OutgoingSmsNok) );
 }
 
-bool HistoryMemento::isChatSessionMemento() {
+bool HistoryMemento::isChatSessionMemento() const {
 	return (_state == ChatSession);
 }
 
-std::string HistoryMemento::toString() {
-	std::string toReturn = "";
-	static std::string separator = "\n\t- ";
-	
+std::string HistoryMemento::toString() const {
+	std::string toReturn;
+	static const std::string separator = "\n\t- ";
+
 	toReturn += "Peer: " + _peer + separator;
 	toReturn += "date: " + _date.toString() + separator;
 	toReturn += "time: " + _time.toString() + separator;
@@ -125,7 +123,7 @@ std::string HistoryMemento::toString() {
 	toReturn += "state: " + stateToString(_state) + separator;
 	toReturn += "callid: " + String::fromNumber(_callId) + separator;
 	toReturn += "data: " + _data;
-	
+
 	return toReturn;
 }
 
@@ -156,6 +154,6 @@ std::string HistoryMemento::stateToString(State state) {
 		return StateAny;
 		break;
 	default:
-		LOG_FATAL("Unknown state");
+		LOG_FATAL("unknown state=" + String::fromNumber(state));
 	}
 }
