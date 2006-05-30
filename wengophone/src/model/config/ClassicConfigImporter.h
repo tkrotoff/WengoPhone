@@ -22,10 +22,11 @@
 
 #include <string>
 #include <model/account/SipAccount.h>
+#include <model/account/wengo/WengoAccount.h>
 
+class Thread;
 class UserProfile;
-class WengoPhone;
-
+class WengoPhone; 
 
 /**
  * Import configuration from WengoPhone classic.
@@ -76,9 +77,15 @@ private:
 
 	void loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state);
 
+	void loginStateChangedEventHandlerThreadSafe(WengoAccount wengoAccount);
+
 	UserProfile & _userProfile;
 
 	WengoPhone & _wengoPhone;
+
+	Thread & _modelThread;
+
+	bool _importerDone;
 };
 
 #endif	//CONFIGIMPORTER_H

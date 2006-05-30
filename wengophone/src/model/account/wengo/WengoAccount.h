@@ -53,6 +53,8 @@ public:
 
 	WengoAccount(const WengoAccount & wengoAccount);
 
+	WengoAccount & operator = (const WengoAccount & wengoAccount);
+
 	void init();
 
 	const std::string & getWengoLogin() const {
@@ -76,6 +78,8 @@ public:
 	}
 
 private:
+
+	void copy(const WengoAccount & wengoAccount);
 
 	SipAccount::LoginState discoverNetwork();
 

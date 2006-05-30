@@ -132,9 +132,11 @@ string myTrim(std::string str)
 #define CONFIG_VERSION2 2
 #define CONFIG_VERSION3 3
 
-ClassicConfigImporter::ClassicConfigImporter(WengoPhone & wengoPhone)
-	: _wengoPhone(wengoPhone),
-	_userProfile(wengoPhone.getCurrentUserProfile()) {
+
+ClassicConfigImporter::ClassicConfigImporter(WengoPhone & wengoPhone) 
+	: _wengoPhone(wengoPhone), _modelThread(wengoPhone), _userProfile(wengoPhone.getCurrentUserProfile()) {
+
+	_importerDone = false;
 }
 
 bool ClassicConfigImporter::importConfig(string str) {
@@ -145,7 +147,11 @@ bool ClassicConfigImporter::importConfig(string str) {
 	int localVersion = detectLastVersion();
 
 	if (localVersion != CONFIG_UNKNOWN && localVersion < config.CONFIG_VERSION) {
+
 		makeImportConfig(localVersion, config.CONFIG_VERSION);
+		while (_importerDone != true)
+			Thread::msleep(100);
+
 		return true;
 	}
 
@@ -581,30 +587,44 @@ void ClassicConfigImporter::loginStateChangedEventHandler(SipAccount & sender, S
 	switch (state) {
 	case SipAccount::LoginStateReady:
 		try {
-			_userProfile.loginStateChangedEvent -=
-				boost::bind(&ClassicConfigImporter::loginStateChangedEventHandler, this, _1, _2);
+			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(sender);		
+			typedef ThreadEvent1<void (WengoAccount wengoAccount), WengoAccount> MyThreadEvent;
+			
+			MyThreadEvent * event =
+				new MyThreadEvent(boost::bind(&ClassicConfigImporter::loginStateChangedEventHandlerThreadSafe, this, _1), wengoAccount);
 
-			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(sender);
-			IMAccount imAccount(wengoAccount.getIdentity(),
-				wengoAccount.getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
-			_userProfile.addIMAccount(imAccount);
-			_wengoPhone.saveUserProfile();
-
-			Config & config = ConfigManager::getInstance().getCurrentConfig();
-			string confV1 = getWengoClassicConfigPath();
-			string confV2 = config.getConfigDir();
-			string sep = File::getPathSeparator();
-
-			string contactsPathV1 = confV1 + wengoAccount.getWengoLogin() + sep + "contacts" + sep;
-			ImportContactsFromV1toV3(contactsPathV1, confV2, wengoAccount.getIdentity());
-
-		} catch (bad_cast) {
-			LOG_DEBUG("can't cast the SipAccount to a WengoAccount");
+			_modelThread.postEvent(event);
 		}
+		catch (bad_cast) {
+			LOG_DEBUG("can't cast the SipAccount to a WengoAccount");
+			_importerDone = true;
+		}
+		break;
 
 	default:
-		;
+		_importerDone = true;
+		break;
 	}
+}
+
+void ClassicConfigImporter::loginStateChangedEventHandlerThreadSafe(WengoAccount wengoAccount) {
+	_userProfile.loginStateChangedEvent -=
+		boost::bind(&ClassicConfigImporter::loginStateChangedEventHandler, this, _1, _2);
+
+	IMAccount imAccount(wengoAccount.getIdentity(), 
+		wengoAccount.getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
+	_userProfile.addIMAccount(imAccount);
+	_wengoPhone.saveUserProfile();
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	string confV1 = getWengoClassicConfigPath();
+	string confV2 = config.getConfigDir();
+	string sep = File::getPathSeparator();
+
+	string contactsPathV1 = confV1 + wengoAccount.getWengoLogin() + sep + "contacts" + sep;
+	ImportContactsFromV1toV3(contactsPathV1, confV2, wengoAccount.getIdentity());
+
+	_importerDone = true;
 }
 
 bool ClassicConfigImporter::ImportConfigFromV1toV3() {

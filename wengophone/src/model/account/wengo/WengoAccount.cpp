@@ -55,6 +55,16 @@ WengoAccount::WengoAccount(const std::string & login, const std::string & passwo
 }
 
 WengoAccount::WengoAccount(const WengoAccount & wengoAccount) {
+	copy(wengoAccount);
+}
+
+WengoAccount & WengoAccount::operator = (const WengoAccount & wengoAccount) {
+	copy(wengoAccount);
+
+	return *this;
+}
+
+void WengoAccount::copy(const WengoAccount & wengoAccount) {
 	SipAccount::copy(wengoAccount);
 	_wengoLogin = wengoAccount._wengoLogin;
 	_wengoPassword = wengoAccount._wengoPassword;
