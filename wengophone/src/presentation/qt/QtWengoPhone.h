@@ -246,6 +246,8 @@ private Q_SLOTS:
 
 	void slotTranslationChanged();
 
+    void showHideGroups();
+
 Q_SIGNALS:
 
 	void signalTimeoutEventReached();

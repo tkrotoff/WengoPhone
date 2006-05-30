@@ -51,30 +51,10 @@ void QtUserList::addUser(QtUser * user) {
 
 void QtUserList::removeUser(QtUser * user) {
 	QMutexLocker locker(& _mutex);
-
 	if (user) {
-
-		//QString key = _userList.key(user);
-		// QtUser * tmp = _userList[key];
-
 		_userList.remove(user->getId());
-
-		QHash < QString, QtUser * >::iterator iter;
-
-		for (iter = _userList.begin(); iter != _userList.end(); iter++) {
-			QtUser * quser = iter.value();
-			if (quser == NULL) {
-				qDebug() << "!!!!!!!!!!!!!!!!!!! USER IS NULL !!!!!!!!!!!!!!!!!!!!!!!!!!";
-				qDebug() << "!!!!!!!!!!!!!!!!!!! USER IS NULL !!!!!!!!!!!!!!!!!!!!!!!!!!";
-				qDebug() << "User : " << user->getId();
-				qDebug() << "!!!!!!!!!!!!!!!!!!! USER IS NULL !!!!!!!!!!!!!!!!!!!!!!!!!!";
-				qDebug() << "!!!!!!!!!!!!!!!!!!! USER IS NULL !!!!!!!!!!!!!!!!!!!!!!!!!!";
-			}
-		}
 		delete user;
 	}
-
-
 }
 
 void QtUserList::mouseOn(const QString & userid) {
@@ -252,3 +232,11 @@ void QtUserList::addClick(){
 
 }
 */
+void QtUserList::clear(){
+    QMutexLocker locker(&_mutex);
+    QHash < QString, QtUser * >::iterator iter;
+    for (iter=_userList.begin();iter!=_userList.end();iter++){
+        delete((*iter));
+    }
+    _userList.clear();
+}

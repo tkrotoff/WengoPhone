@@ -51,28 +51,7 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 
 	spx = QtContactPixmap::getInstance();
 
-/*
-	QLinearGradient lg( QPointF(1,1), QPointF(option.rect.width(),1));
-	lg.setSpread(QGradient::RepeatSpread);
-	lg.setColorAt ( 0, option.palette.midlight().color());
-	lg.setColorAt ( .8, QColor(210, 216, 234));
-*/
-
 	QColor lg(201, 201, 201);
-
-	/*
-
-	if (_mouseOn)
-	{
-		painter->fillRect(option.rect,QBrush(lg));
-		painter->setPen(option.palette.text().color());
-	}
-    else
-    {
-        painter->setPen(option.palette.text().color() );
-    }
-
-	*/
 
 	if ((option.state & QStyle::State_Selected) == QStyle::State_Selected) {
 		QRect rect = option.rect;
@@ -98,45 +77,6 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	x += px.width() + 5;
 	r.setLeft(x);
 
-    /*
-            Draw Functions icons
-
-	*/
-
-	/*
-	x=option.rect.width();
-	if ( (option.state & QStyle::State_Selected) )
-	{
-		px = spx->getPixmap(QtContactPixmap::ContactVideo);
-		if (hasVideo())
-		{
-			x-=px.width();
-			painter->drawPixmap (x,r.top(),px);
-		}
-		else
-			x-=px.width();
-		px = spx->getPixmap(QtContactPixmap::ContactCall);
-		if (hasCall())
-		{
-			x-=px.width();
-			painter->drawPixmap (x,r.top(),px);
-		}
-		else
-			x-=px.width();
-
-		px = spx->getPixmap(QtContactPixmap::ContactIM);
-		if (hasIM())
-		{
-			px = spx->getPixmap(QtContactPixmap::ContactIM);
-			x-=px.width();
-			painter->drawPixmap (x,r.top(),px);
-		}
-		else
-			x-=px.width();
-		_iconsStartPosition = x;
-	}
-	*/
-
 	_iconsStartPosition = 10000;
 
 	// Draw the text
@@ -145,26 +85,6 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	QRect textRect = r;
 	_centeredText_y = ((r.bottom() - r.top()) - QFontMetrics(option.font).height()) / 2;
 	textRect.setTop(_centeredText_y + textRect.top());
-
-/*
-	QFontMetrics fontMetrics = painter->fontMetrics();
-	// get the size of a dot
-	int dotsize = fontMetrics.width(QChar('.'));
-	dotsize = dotsize * 3;
-
-	QString showText;
-	QByteArray textArray
-	QString text = QString::fromUtf8(_cContact.getDisplayName().c_str());
-	int maxTextWidth = _iconsStartPosition - dotsize;
-	int textWidth = 0;
-
-	for (int i = 0; i < text.size(); i++ ){
-		if ( textWidth + fontMetrics.width( text.at(i) ) < maxTextWidth )
-		{
-			showText
-		}
-	}
-*/
 
 	QString text = QString::fromUtf8(_contactProfile.getDisplayName().c_str());
 	painter->drawText(textRect, Qt::AlignLeft, text, 0);
@@ -176,13 +96,11 @@ QString QtUser::getId() const {
 
 QString QtUser::getUserName() const {
 	//QMutexLocker locker(&_mutex);
-
 	return QString::fromUtf8(_contactProfile.getDisplayName().c_str());
 }
 
 QtContactPixmap::ContactPixmap QtUser::getStatus() const {
 	//QMutexLocker locker(&_mutex);
-
 	QtContactPixmap::ContactPixmap status;
 
 	switch (_contactProfile.getPresenceState()) {
@@ -210,7 +128,6 @@ QtContactPixmap::ContactPixmap QtUser::getStatus() const {
 	default:
 		LOG_FATAL("Unknown state=" + String::fromNumber(_contactProfile.getPresenceState()));
 	}
-
 	return status;
 }
 
@@ -305,7 +222,6 @@ int QtUser::getHeight() const {
 
 QString QtUser::getMobilePhone() const {
 	//QMutexLocker locker(&_mutex);
-
 	QString mphone = QString::fromStdString(_contactProfile.getMobilePhone());
 
 	return mphone;

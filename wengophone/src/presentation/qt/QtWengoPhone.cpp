@@ -292,6 +292,9 @@ void QtWengoPhone::initThreadSafe() {
 	//actionVoiceMail
 	//connect(_ui->actionVoiceMail, SIGNAL(triggered()), SLOT (showVoiceMail()));
 
+    // Show / Hide groups
+    connect(_ui->actionShow_Hide_groups, SIGNAL(triggered()), SLOT(showHideGroups()));
+
 	//actionIM_Account_Settings
 	connect(_ui->actionIMAccountSettings, SIGNAL(triggered()), SLOT(showAccountSettings()));
 
@@ -834,14 +837,7 @@ void QtWengoPhone::showVoiceMail() {
 }
 
 void QtWengoPhone::showHideOffLineContacts() {
-	static bool hidden = false;
-
-	if (hidden) {
-		_contactList->showAllUsers();
-	} else {
-		_contactList->hideOffLineUser();
-	}
-	hidden = !hidden;
+	_contactList->hideOffLineUser();
 }
 
 void QtWengoPhone::showHome() {
@@ -1527,4 +1523,8 @@ void QtWengoPhone::hideMainWindow(){
 
 void QtWengoPhone::slotTranslationChanged() {
   _ui->retranslateUi(_wengoPhoneWindow);
+}
+
+void QtWengoPhone::showHideGroups(){
+    _contactList->showHideGroups();
 }

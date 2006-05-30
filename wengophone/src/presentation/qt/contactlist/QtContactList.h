@@ -100,6 +100,8 @@ public Q_SLOTS:
 
 	void sortUsers();
 
+	void showHideGroups();
+
 	void contactGroupAddedEventSlot(QString contactGroupId);
 
 private Q_SLOTS:

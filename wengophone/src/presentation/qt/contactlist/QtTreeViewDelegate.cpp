@@ -194,18 +194,24 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 	// Number of child
 
 	int nbchild = index.model()->rowCount(index);
-
-	std::string groupId = index.data().toString().toStdString();
-    std::string groupNameTmp = _cWengoPhone.getCUserProfile()->getCContactList().getContactGroupName(groupId);
-
     QString groupName;
+    std::string groupId;
+    std::string groupNameTmp;
 
+    if (index.data().toString() == QString("WENGO2006CLISTHIDE")){
+        groupName = tr("Contacts list");
+        groupNameTmp=std::string(groupName.toUtf8().data());
+    } else{
+        groupName = index.data().toString();
+        groupId = groupName.toStdString();
+        groupNameTmp = _cWengoPhone.getCUserProfile()->getCContactList().getContactGroupName(groupId);
+    }
     if (checkForUtf8((const unsigned char *)(groupNameTmp.c_str()), groupNameTmp.size())){
         	groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
-    }
-    else{
+    } else {
         groupName=QString::fromStdString(groupNameTmp);
     }
+
 	QString str = QString("%1 (%2)").arg(groupName).arg(nbchild);
 	painter->drawText(r, Qt::AlignLeft, str, 0);
 }

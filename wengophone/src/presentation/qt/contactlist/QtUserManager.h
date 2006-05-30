@@ -30,18 +30,21 @@ class CWengoPhone;
 class QtContactList;
 class QtHidenContact;
 class PhoneCall;
+class ContactProfile;
 
 class QtUserManager : public QObject {
 	Q_OBJECT
 public:
 
 	QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
-	QtContactList & qtContactList, QObject * parent = 0, QTreeWidget * target = 0);
+        QtContactList & qtContactList, QObject * parent = 0, QTreeWidget * target = 0);
 
 	void removeContact(const QString & contactId);
 
 	void moveContact(const QString & contactId,
-	const QString & srcContactGroupId, const QString & dstContactGroupId);
+        const QString & srcContactGroupId, const QString & dstContactGroupId);
+
+    bool groupsAreHiden();
 
 public Q_SLOTS:
 
@@ -64,6 +67,8 @@ public Q_SLOTS:
 	void userStateChanged();
 
 	void hideOffLineUsers();
+
+	void hideGroups();
 
 	void showAllUsers();
 
@@ -101,11 +106,15 @@ protected:
 
 	void safeHideOffLineUsers();
 
-	void safeSortUsers();
+	void safeSortUsers(bool bypassTimer = false);
 
 	void safeShowAllUsers();
 
 	void removeFromHidenContact(const QString & contactId);
+
+	void safeHideGroup();
+
+    bool canShowUser(const ContactProfile * cprofile);
 
 	virtual void timerEvent ( QTimerEvent * event ) ;
 
@@ -118,6 +127,8 @@ protected:
 	bool _hideUsers;
 
 	bool _sortUsers;
+
+	bool _hideGroups;
 
 	QTreeWidget * _tree;
 
@@ -149,9 +160,15 @@ protected:
 
 	int _sortTimerId;
 
+	int _showTimerId;
+
 	bool _canSort;
 
 	bool _wantSort;
+
+	bool _canShow;
+
+	bool _wantShow;
 
 };
 

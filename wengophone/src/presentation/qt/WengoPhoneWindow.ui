@@ -361,7 +361,7 @@
      <x>0</x>
      <y>0</y>
      <width>329</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -451,6 +451,7 @@
     <addaction name="actionSearchWengoUsers" />
     <addaction name="separator" />
     <addaction name="actionHideContactsOffline" />
+    <addaction name="actionShow_Hide_groups" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
@@ -716,6 +717,11 @@
   <action name="actionHold_Resume" >
    <property name="text" >
     <string>Hold / Resume</string>
+   </property>
+  </action>
+  <action name="actionShow_Hide_groups" >
+   <property name="text" >
+    <string>Show / Hide groups</string>
    </property>
   </action>
  </widget>

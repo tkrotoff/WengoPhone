@@ -74,6 +74,8 @@ public:
 
 	void startCall(const QString & userid);
 
+	void clear();
+
 	/**
 	 * Will start a call with a free phone number.
 	 */

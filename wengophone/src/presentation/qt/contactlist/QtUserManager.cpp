@@ -53,12 +53,16 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
     _lastClicked = NULL;
     _hideUsers = false;
     _sortUsers = true;
+    _hideGroups = false;
     _menu = NULL;
     _timerId = -1;
     _sortTimerId = -1;
+    _showTimerId = -1;
     _waitForDoubleClick = false;
     _canSort = true;
     _wantSort = false;
+	_canShow = true;
+	_wantShow = false;
 
     QtUserList::getInstance()->setTreeWidget(target);
     target->setMouseTracking(true);
@@ -339,37 +343,12 @@ QList < QtHidenContact * > QtUserManager::clearList(QList < QtHidenContact * > l
 }
 
 void QtUserManager::safeUserStateChanged() {
-
 	safeHideOffLineUsers();
     if (_menu){
         delete _menu;
         _menu=NULL;
     }
-	QtHidenContact * hidenContact;
-	QList < QtHidenContact * >::iterator it;
-
-	QList < QtHidenContact * > newHidenList;
-
-	for (it = _hidenContacts.begin(); it != _hidenContacts.end(); it++) {
-
-		hidenContact = (QtHidenContact *) (* it);
-
-		if (hidenContact->getUser()->getStatus() != QtContactPixmap::ContactOffline) {
-
-			if (hidenContact->getIndex() > hidenContact->getParentItem()->childCount()) {
-				hidenContact->getParentItem()->insertChild(hidenContact->getParentItem()->childCount(),
-								hidenContact->getItem());
-			} else {
-				hidenContact->getParentItem()->insertChild(hidenContact->getIndex(), hidenContact->getItem());
-			}
-		}
-		else {
-			newHidenList.append(hidenContact);
-		}
-	}
-	_hidenContacts = newHidenList;
-
-	safeSortUsers();
+	safeShowAllUsers();
 }
 
 void QtUserManager::userStateChanged() {
@@ -378,72 +357,52 @@ void QtUserManager::userStateChanged() {
 }
 
 void QtUserManager::safeHideOffLineUsers() {
-	//TODO: Add the code to manage hidden groups
-
-	if (!_hideUsers)
-		return;
-	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user;
-	QList < QTreeWidgetItem * > itemList = _tree->findItems("*", Qt::MatchWildcard);
-	QList < QTreeWidgetItem * > deleteList;
-	QList < QTreeWidgetItem * >::iterator i;
-
-	for (i = itemList.begin(); i != itemList.end(); i++) {
-
-		QTreeWidgetItem * item;
-		QTreeWidgetItem * group = (QTreeWidgetItem *) (* i);
-
-		if (group->parent() == 0) {
-			// We have all parents (if groups are not hiden)
-			deleteList.clear();
-			int count = group->childCount();
-
-			for (int t = 0; t < count; t++) {
-				item = group->child(t);
-				user = ul->getUser(item->text(0));
-				if (user->getStatus() == QtContactPixmap::ContactOffline) {
-					// Take the widget and put it in _hidenContacts
-					int index = group->indexOfChild(item);
-					QtHidenContact * hiden = new QtHidenContact(item, item->parent(), user, index, this);
-					_hidenContacts.append(hiden);
-					deleteList.append(item);
-				}
-			}
-			// Delete the childs
-			QList < QTreeWidgetItem * >::iterator deleteIterator;
-			for (deleteIterator = deleteList.begin(); deleteIterator != deleteList.end(); deleteIterator++) {
-				group->takeChild(group->indexOfChild((* deleteIterator)));
-			}
-			// Work around Qt bug ...
-			_tree->doItemsLayout();
-		}
-
-	}
-    safeSortUsers();
+    showAllUsers();
 }
 
 void QtUserManager::hideOffLineUsers() {
 	//QMutexLocker lock(&_mutex);
-	_hideUsers = true;
+	if (_hideUsers)
+        _hideUsers = false;
+    else
+        _hideUsers = true;
 	safeHideOffLineUsers();
 }
 
-void QtUserManager::safeSortUsers() {
+void QtUserManager::hideGroups(){
+	//QMutexLocker lock(&_mutex);
+	if ( _hideGroups ){
+	    _hideGroups = false;
+	    safeShowAllUsers();
+	}
+	else{
+	    _hideGroups = true;
+	    safeHideGroup();
+	}
+}
+
+
+void QtUserManager::safeHideGroup(){
+    safeShowAllUsers();
+}
+
+void QtUserManager::safeSortUsers(bool bypassTimer) {
 
 	if (!_sortUsers)
 		return;
 
-    if (_canSort){
-        _canSort=false;
-        if (_sortTimerId != -1)
-            killTimer(_sortTimerId);
-        _sortTimerId = startTimer(2000);
-        _wantSort = false;
-    }else{
-        _wantSort = true;
-        return;
+    if (!bypassTimer){
+        if (_canSort){
+            _canSort=false;
+            if (_sortTimerId != -1)
+                killTimer(_sortTimerId);
+            _sortTimerId = startTimer(1000);
+            _wantSort = false;
+        }else{
+            _wantSort = true;
+            return;
+        }
     }
-
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
@@ -535,26 +494,83 @@ void QtUserManager::sortUsers() {
 }
 
 void QtUserManager::safeShowAllUsers() {
-	QtHidenContact * hidenContact;
-	QList < QtHidenContact * >::iterator iter;
 
-	for (iter = _hidenContacts.begin(); iter != _hidenContacts.end(); iter++) {
+    if (_canShow){
+        _canShow=false;
+        if (_showTimerId != -1)
+            killTimer(_showTimerId);
+        _showTimerId = startTimer(500);
+        _wantShow = false;
+    }else{
+        _wantShow = true;
+        return;
+    }
 
-		hidenContact = (QtHidenContact *) (* iter);
+    QCoreApplication::processEvents(); // Clear the events buffer
 
-		if (hidenContact->getIndex() > hidenContact->getParentItem()->childCount())
-			hidenContact->getParentItem()->insertChild(hidenContact->getParentItem()->childCount(),
-			hidenContact->getItem());
-		else hidenContact->getParentItem()->insertChild(hidenContact->getIndex(), hidenContact->getItem());
+    ContactProfile cprofile;
+	QtUserList * ul = QtUserList::getInstance();
+	QtUser * user;
+    QTreeWidgetItem * group;
+    std::vector<std::string> contactIds = _qtContactList.getCContactList().getContactIds();
+    std::vector<std::string>::iterator contactIterator;
 
-		delete hidenContact;
-	}
-	_hidenContacts.clear();
+    // First, remove all item from the treeview and all users from userlist
+    _tree->clear();
+    ul->clear();
+
+    for (contactIterator=contactIds.begin();contactIterator!=contactIds.end();contactIterator++){
+        cprofile = _qtContactList.getCContactList().getContactProfile((*contactIterator));
+        if (canShowUser(&cprofile)){
+            // Create new group if needed
+            std::string contactGroupId = cprofile.getGroupId();
+            QList < QTreeWidgetItem * > list;
+            if (groupsAreHiden()){
+                list = _tree->findItems("WENGO2006CLISTHIDE",Qt::MatchExactly);
+            }else{
+                list =_tree->findItems(QString::fromStdString(contactGroupId), Qt::MatchExactly);
+            }
+            // If no group exists, create the group
+            if (list.isEmpty()) {
+                group = new QTreeWidgetItem(_tree);
+                if (groupsAreHiden()){
+                    group->setText(0, "WENGO2006CLISTHIDE");
+                }else{
+                    group->setText(0, QString::fromStdString(contactGroupId));
+                }
+                _tree->setItemExpanded(group, true);
+            }else{
+                group = list[0];
+            }
+            // We have the group, now add users to the group
+            QTreeWidgetItem * newContact = NULL;
+            QtUser * user = NULL;
+            QString contactName;
+
+            newContact = new QTreeWidgetItem(group);
+            newContact->setText(0, QString::fromStdString((*contactIterator)));
+            newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
+            user = new QtUser((*contactIterator), _cWengoPhone);
+            ul->addUser(user);
+        }
+    }
+    safeSortUsers(true);
+    //_tree->doItemsLayout();
+}
+
+
+bool QtUserManager::canShowUser(const ContactProfile * cprofile){
+    if (_hideUsers){
+        if (cprofile->getPresenceState() == EnumPresenceState::PresenceStateOffline )
+            return false;
+        if (cprofile->getPresenceState() == EnumPresenceState::PresenceStateUnknown)
+            return false;
+    }
+    return true;
 }
 
 void QtUserManager::showAllUsers() {
 	//QMutexLocker lock(&_mutex);
-	_hideUsers = false;
 	safeShowAllUsers();
 }
 
@@ -856,6 +872,24 @@ void QtUserManager::timerEvent ( QTimerEvent * event ) {
         return;
     }
 
-    _waitForDoubleClick = false;
-    killTimer(_timerId);
+    if (event->timerId() == _showTimerId){
+        killTimer(_showTimerId);
+        _showTimerId = -1;
+        _canShow = true;
+        if ( _wantShow ) {
+            safeShowAllUsers();
+            _wantShow = false;
+        }
+        return;
+    }
+
+    if (event->timerId() == _timerId){
+        _waitForDoubleClick = false;
+        killTimer(_timerId);
+        return;
+    }
+}
+
+bool QtUserManager::groupsAreHiden(){
+    return _hideGroups;
 }
