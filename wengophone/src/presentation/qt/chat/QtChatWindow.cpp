@@ -115,6 +115,7 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
         if ( !_dialog->isVisible())
             _dialog->showMinimized ();
             flashWindow();
+
     }
 
 	// Create the contact list scroll area
@@ -276,6 +277,8 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
         {
             _dialog->showMinimized ();
             flashWindow();
+        }else{
+            _dialog->activateWindow();
         }
 		int tabs = _tabWidget->count();
 		for (int i = 0; i < tabs; i++)
@@ -647,7 +650,7 @@ QMainWindow * ChatWindow::findMainWindow(){
     return NULL;
 }
 void ChatWindow::flashWindow() {
-    _dialog->activateWindow();
+    // _dialog->activateWindow();
 #ifdef OS_WINDOWS
     HWND desktopWindow = GetDesktopWindow();
     SwitchToThisWindow( desktopWindow ,false);
