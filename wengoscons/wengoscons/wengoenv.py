@@ -35,7 +35,7 @@ except AttributeError:
 #FIXME Is this a good idea to put this here?
 _libs = {}
 
-GCCVersion = (0 > 1)
+GCCVersion = False
 
 class WengoSConsEnvironment(SConsEnvironment):
 	"""
