@@ -220,7 +220,7 @@
         <file>chat/chat.ui</file>
         <file>chat/emoticonswidget.ui</file>
         <file>contactlist/contactList.ui</file>
-        <file>contactlist/userWidget.ui</file>
+        <file>contactlist/UserWidget.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
         <file>phonecall/PhoneCallWidget.ui</file>
         <file>phonecall/QtCallContactWidget.ui</file>
