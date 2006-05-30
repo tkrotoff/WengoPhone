@@ -17,13 +17,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <util/IdGenerator.h>
+#include <util/Uuid.h>
 
 #include <util/Logger.h>
 
 #include <ctime>
 
-int IdGenerator::generate() {
+int Uuid::generateInteger() {
 	//Under GNU systems
 	//int = 32 bits from -2,147,483,647 to 2,147,483,647
 
@@ -46,15 +46,3 @@ int IdGenerator::generate() {
 	return id;
 }
 
-std::string IdGenerator::generateString() {
-	//Number of seconds since 1970
-	time_t seconds = time(NULL);
-
-	//Until 1000 id generated per second
-	static int seed = 0;
-	std::string date = String::fromNumber(seconds) + String::fromNumber(seed++ % 1000);
-
-	LOG_DEBUG("generated id=" + date);
-
-	return date;
-}

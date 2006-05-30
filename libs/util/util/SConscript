@@ -20,21 +20,21 @@ sources = [
 	'src/File.cpp',
 	'src/Base64.cpp',
 	'src/Logger.cpp',
-	'src/IdGenerator.cpp',
 	'src/Picture.cpp',
+	'src/Uuid.cpp',
 ]
 
 if WengoOSWindows():
 	libs += ['advapi32', 'shell32', 'Rpcrt4']
-	sources += ['src/win/Uuid.cpp']
+	sources += ['src/win/UuidWin.cpp']
 
 elif WengoOSMacOSX():
 	link_flags += ['-framework CoreFoundation']
-	sources += ['src/mac/Uuid.cpp']
+	sources += ['src/mac/UuidMac.cpp']
 
 elif WengoOSLinux():
 	libs += ['uuid']
-	sources += ['src/unix/Uuid.cpp']
+	sources += ['src/unix/UuidUnix.cpp']
 
 
 if WengoCCMSVC():

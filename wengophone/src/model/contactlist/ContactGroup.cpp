@@ -27,7 +27,7 @@
 
 ContactGroup::ContactGroup(const std::string & groupName)
 : _groupName(groupName) {
-	_uuid = Uuid::generate();
+	_uuid = Uuid::generateString();
 }
 
 ContactGroup::ContactGroup(const ContactGroup & contactGroup)

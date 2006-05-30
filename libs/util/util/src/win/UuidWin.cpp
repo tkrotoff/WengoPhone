@@ -19,22 +19,22 @@
 
 #include <util/Uuid.h>
 
-#include <CoreFoundation/CoreFoundation.h>
+#include <Rpc.h>
 
-std::string Uuid::generate() {
+std::string Uuid::generateString() {
+	UUID * pUUID = new UUID();
+	unsigned char *sUUID = NULL;
 	std::string result;
 
-	CFUUIDRef uu = CFUUIDCreate(kCFAllocatorDefault);
-	CFStringRef str = CFUUIDCreateString(kCFAllocatorDefault, uu);
-
-	char buffer[37];
-	if (CFStringGetCString(str, buffer, sizeof(buffer), kCFStringEncodingASCII)) {
-		result = buffer;
+	if (UuidCreate(pUUID) == RPC_S_OK) {
+		UuidToString(pUUID, &sUUID);
+		result = std::string((char *)sUUID);
+		RpcStringFree(&sUUID);
 	}
 
-	CFRelease(str);
-	CFRelease(uu);
+	if (pUUID) {
+		delete pUUID;
+	}
 
 	return result;
 }
-

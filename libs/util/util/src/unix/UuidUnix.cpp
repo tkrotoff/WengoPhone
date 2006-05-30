@@ -21,7 +21,7 @@
 
 #include <uuid/uuid.h>
 
-std::string Uuid::generate() {
+std::string Uuid::generateString() {
 	uuid_t uu;
 	char buffer[37];
 

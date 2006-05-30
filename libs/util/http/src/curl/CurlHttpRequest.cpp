@@ -22,7 +22,7 @@
 #include <http/HttpRequest.h>
 
 #include <util/Logger.h>
-#include <util/IdGenerator.h>
+#include <util/Uuid.h>
 
 #include <iostream>
 using namespace std;
@@ -78,7 +78,7 @@ int CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname,
 	_data = data;
 	_postMethod = postMethod;
 
-	_lastRequestId = IdGenerator::generate();
+	_lastRequestId = Uuid::generateInteger();
 	start();
 
 	return _lastRequestId;

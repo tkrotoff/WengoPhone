@@ -26,16 +26,29 @@
  * Universally Unique IDentifier Generator.
  *
  * @author Philippe Bernery
+ * @author Tanguy Krotoff
  */
 class Uuid {
 public:
+
+	/**
+	 * FIXME: Generates a pseudo-unique ID.
+	 *
+	 * Current implementation works with less that 10 ID generated per second,
+	 * above 10 an id already generated will be obtain.
+	 * Every 4 years there is a risk to get the same ID.
+	 * This is the price to fit the ID inside a integer.
+	 *
+	 * @return unique ID generated
+	 */
+	static int generateInteger();
 
 	/**
 	 * Generates a UUID.
 	 *
 	 * @return a string containing a UUID.
 	 */
-	static std::string generate();
+	static std::string generateString();
 
 };
 

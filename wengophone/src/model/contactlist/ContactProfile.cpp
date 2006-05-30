@@ -53,7 +53,7 @@ ContactProfile::ContactProfile() {
 	_blocked = false;
 	_preferredIMContact = NULL;
 
-	_uuid = Uuid::generate();
+	_uuid = Uuid::generateString();
 
 	//Default state (ContactPresenceStateUnknown)
 	_presenceState = &contactPresenceStateUnknown;
