@@ -278,6 +278,12 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionHangupCall->setEnabled(false);
 		_statusLabel->setText(tr("Closed"));
 		// stopConference();
+		if (_videoWindow){
+		    if (_videoWindow->isFullScreen()){
+		        _videoWindow->unFullScreen();
+		    }
+		}
+		delete _videoWindow;
 		delete _phoneCallWidget;
 		deleteMe(this);
 		callRejected();

@@ -42,6 +42,12 @@ public:
 
 	QSize getFrameSize();
 
+	bool isFullScreen();
+
+	void fullScreen();
+
+	void unFullScreen();
+
 private Q_SLOTS:
 
 	void paintEvent();
@@ -52,10 +58,6 @@ private Q_SLOTS:
 
 private:
 
-	void fullScreen();
-
-	void unFullScreen();
-
 	QWidget * _videoWindow;
 
 	/** Current frame to show inside the video window. */
@@ -64,6 +66,8 @@ private:
 	QFrame * _frame;
 
 	int _frameWindowFlags;
+
+	bool _fullScreen;
 
 	QPushButton * _fullScreenButton;
 };

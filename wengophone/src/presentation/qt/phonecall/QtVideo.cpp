@@ -40,7 +40,7 @@ using namespace std;
 
 QtVideo::QtVideo(QWidget * parent) {
 	_videoWindow = WidgetFactory::create(":/forms/phonecall/VideoWindow.ui", parent);
-
+    _fullScreen = false;
 	//frame
 	_frame = Object::findChild<QFrame *>(_videoWindow, "frame");
 	_frameWindowFlags = _frame->windowFlags();
@@ -123,34 +123,28 @@ void QtVideo::flipWebcam() {
 }
 
 void QtVideo::fullScreenButtonClicked() {
-	static bool fullScreen = true;
-
 	_frame->setFocus();
 
-	if (fullScreen) {
-		this->fullScreen();
-	} else {
+	if (_fullScreen) {
 		this->unFullScreen();
+		_fullScreen = false;
+	} else {
+		this->fullScreen();
+		_fullScreen = true;
 	}
 
-	fullScreen = !fullScreen;
 }
 
 void QtVideo::fullScreen() {
 	_fullScreenButton->setIcon(QIcon(":/pics/video_unfullscreen.png"));
-
 	QLayout * layout = _videoWindow->layout();
 	layout->removeWidget(_frame);
-
 	_frame->setParent(NULL);
-
 #if defined OS_WINDOWS && defined CC_MSVC
 	//TODO put inside LibUtil
-
 	int nModeExist;
 	int nModeSwitch;
 	DEVMODE devMode;
-
 	//Tries to switch to desktop resolution 640x480
 	//Uses less processor time if the desktop resolution is lower
 	devMode.dmSize = sizeof(DEVMODE);
@@ -167,7 +161,6 @@ void QtVideo::fullScreen() {
 		}
 	}
 #endif
-
 	_frame->showFullScreen();
 }
 
@@ -183,4 +176,8 @@ void QtVideo::unFullScreen() {
 #endif
 
 	_frame->show();
+}
+
+bool QtVideo::isFullScreen(){
+    return _fullScreen;
 }
