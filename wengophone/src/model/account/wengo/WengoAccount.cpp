@@ -87,13 +87,14 @@ WengoAccount::~WengoAccount() {
 
 void WengoAccount::init() {
 
-	if (NetworkObserver::getInstance().isConnected())
+	if (NetworkObserver::getInstance().isConnected()) {
 		_initTimer.start(0, 5000, 5);
+	}
 
-	NetworkObserver::getInstance().connectionIsDownEvent += 
+	NetworkObserver::getInstance().connectionIsDownEvent +=
 		boost::bind(&WengoAccount::connectionIsDownEventHandler, this, _1);
 
-	NetworkObserver::getInstance().connectionIsUpEvent += 
+	NetworkObserver::getInstance().connectionIsUpEvent +=
 		boost::bind(&WengoAccount::connectionIsUpEventHandler, this, _1);
 
 }
@@ -101,14 +102,14 @@ void WengoAccount::init() {
 void WengoAccount::initTimeoutEventHandler() {
 	if (!_discoveringNetwork) {
 
-		_discoveringNetwork	= true;
+		_discoveringNetwork = true;
 		SipAccount::LoginState result = discoverNetwork();
 		if (result != LoginStateNetworkError) {
 			_initTimer.stop();
 			loginStateChangedEvent(*this, result);
 			networkDiscoveryStateChangedEvent(*this, _lastNetworkDiscoveryState);
 		}
-		_discoveringNetwork	= false;
+		_discoveringNetwork = false;
 	}
 }
 

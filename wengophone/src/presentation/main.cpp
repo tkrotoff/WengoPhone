@@ -75,7 +75,7 @@ std::string getAddionnalInfo() {
 int main(int argc, char * argv[]) {
 
 	//Todo before anything else: initializes the logger system
-	LOG_DEBUG("WengoPhone");
+	LOG_DEBUG("WengoPhone started");
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
@@ -146,6 +146,8 @@ int main(int argc, char * argv[]) {
 	pFactory->exec();
 
 	cWengoPhone.terminate();
+
+	LOG_DEBUG("WengoPhone ended");
 
 	return EXIT_SUCCESS;
 }

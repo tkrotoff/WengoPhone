@@ -242,6 +242,7 @@ void FileReader::close() {
 
 FileWriter::FileWriter(const std::string & filename)
 	: File(filename) {
+	_fileOpen = false;
 }
 
 FileWriter::FileWriter(const File & file)
@@ -258,21 +259,19 @@ FileWriter::~FileWriter() {
 
 bool FileWriter::open() {
 	_file.open(_filename.c_str(), ios::binary);
+	_fileOpen = true;
 	return isOpen();
 }
 
 bool FileWriter::isOpen() const {
-	return _file.is_open();
+	return _fileOpen;
 }
 
 void FileWriter::write(const std::string & data) {
 	//See http://www.cplusplus.com/doc/tutorial/files.html
 
-	static bool fileOpen = false;
-
-	if (!fileOpen) {
+	if (!isOpen()) {
 		open();
-		fileOpen = true;
 	}
 
 	if (!data.empty()) {

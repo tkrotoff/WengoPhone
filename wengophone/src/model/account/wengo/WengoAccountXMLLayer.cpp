@@ -67,5 +67,6 @@ bool WengoAccountXMLLayer::save() {
 
 	file.write(data);
 	file.close();
+	LOG_DEBUG("file user.config saved");
 	return true;
 }

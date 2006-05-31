@@ -241,6 +241,8 @@ private:
 	bool isOpen() const;
 
 	std::ofstream _file;
+
+	bool _fileOpen;
 };
 
 #endif	//FILE_H
