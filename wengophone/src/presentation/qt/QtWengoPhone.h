@@ -73,7 +73,7 @@ class QtWengoPhone : public QObjectThreadSafe, public PWengoPhone {
 	Q_OBJECT
 public:
 
-	QtWengoPhone(CWengoPhone & cWengoPhone);
+	QtWengoPhone(CWengoPhone & cWengoPhone, bool background = false);
 
 	void modelInitializedEvent();
 
@@ -373,6 +373,8 @@ private:
 	static const std::string URL_WENGO_MINI_HOME;
 
 	static const std::string LOCAL_WEB_DIR;
+
+	bool _background;
 };
 
 #endif	//QTWENGOPHONE_H

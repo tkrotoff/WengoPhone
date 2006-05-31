@@ -95,9 +95,9 @@ const std::string QtWengoPhone::URL_WENGO_MINI_HOME = "https://www.wengo.fr/auth
 const std::string QtWengoPhone::LOCAL_WEB_DIR = "webpages/windows";
 
 
-QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
+QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone, bool background)
 	: QObjectThreadSafe(NULL),
-	_cWengoPhone(cWengoPhone) {
+	_cWengoPhone(cWengoPhone), _background(background) {
 
 	_qtSms = NULL;
 	_qtWsDirectory = NULL;
@@ -376,7 +376,10 @@ void QtWengoPhone::initThreadSafe() {
 	updatePresentation();
 	_wengoPhoneWindow->resize(QSize(config.getProfileWidth(),config.getProfileHeight()));
 	_wengoPhoneWindow->move(QPoint(config.getProfilePosX(),config.getProfilePoxY()));
-	_wengoPhoneWindow->show();
+
+	if(!_background) {
+		_wengoPhoneWindow->show();
+	}
 
 	qtLanguage->updateTranslation();
 }
