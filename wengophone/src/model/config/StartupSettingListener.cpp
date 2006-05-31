@@ -30,7 +30,8 @@
 #include <iostream>
 
 StartupSettingListener::StartupSettingListener() {
-	_startup = new Startup("WengoPhoneNG", Path::getApplicationDirPath() + "qtwengophone.exe");
+	//add the -b option to start in background mode
+	_startup = new Startup("WengoPhoneNG", Path::getApplicationDirPath() + "qtwengophone.exe -b");
 	ConfigManager::getInstance().getCurrentConfig().valueChangedEvent += boost::bind(&StartupSettingListener::startupSettingChanged, this, _1, _2);
 }
 
