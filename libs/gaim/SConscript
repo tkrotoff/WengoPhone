@@ -332,8 +332,10 @@ if WengoCCGCC() or WengoCCMinGW():
 		
 		libs += [
 			'gnutls',
-			'resolv',
 		]
+
+        if WengoOSLinux():
+            libs += [ 'resolv' ]
 
 
 	env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
