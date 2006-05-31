@@ -24,8 +24,8 @@
 #include "HistoryMementoCollection.h"
 
 #include <util/Event.h>
-#include <thread/Mutex.h>
 #include <serialization/Serializable.h>
+#include <boost/thread/mutex.hpp>
 
 class UserProfile;
 
@@ -96,14 +96,14 @@ public:
 	 * destructor.
 	 */
 	~History();
-	
+
 	/**
 	 * load the history from a file.
 	 *
 	 * @param filename filename to load
 	 */
 	void load(std::string filename);
-	
+
 	/**
 	 * save the history to a file.
 	 *
@@ -238,5 +238,8 @@ private:
 
 	/** unseen missed calls count */
 	int _missedCallCount;
+
+	/** mutex for thread-safe. */
+	mutable boost::mutex _mutex;
 };
 #endif //OW_HISTORY_H

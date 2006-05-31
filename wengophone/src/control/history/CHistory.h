@@ -25,6 +25,7 @@
 
 class CWengoPhone;
 class PHistory;
+class Thread;
 
 #include <string>
 
@@ -64,52 +65,25 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	CHistory(History & history, CWengoPhone & cWengoPhone);
+	CHistory(History & history, CWengoPhone & cWengoPhone, Thread & modelThread);
 
 	/**
 	 * @see History::removeMemento
 	 */
 	void removeHistoryMemento(unsigned int id);
+	void removeHistoryMementoThreadSafe(unsigned int id);
 
 	/**
 	 * @see History::clear
 	 */
-	void clearAllEntries();
-
-	/**
-	 * @see History::clear
-	 */
-	void clearSmsEntries();
-	
-	/**
-	 * @see History::clear
-	 */
-	void clearChatEntries();
-	
-	/**
-	 * @see History::clear
-	 */
-	void clearIncomingCallEntries();
-	
-	/**
-	 * @see History::clear
-	 */
-	void clearOutgoingCallEntries();
-
-	/**
-	 * @see History::clear
-	 */
-	void clearMissedCallEntries();
-	
-	/**
-	 * @see History::clear
-	 */
-	void clearRejectedCallEntries();
+	void clear(HistoryMemento::State state = HistoryMemento::Any);
+	void clearThreadSafe(HistoryMemento::State state);
 
 	/**
 	 * @see History::replay
 	 */
 	void replay(unsigned int id);
+	void replayThreadSafe(unsigned int id);
 
 	/**
 	 * @see History::getMementos
@@ -137,6 +111,7 @@ public:
 	 *
 	 */
 	void resetUnseenMissedCalls();
+	void resetUnseenMissedCallsThreadSafe();
 
 	/**
 	 * Returns the unseen missed calls count.
@@ -179,5 +154,8 @@ private:
 
 	/** link to the presentation via an interface. */
 	PHistory * _pHistory;
+
+	/** Reference to model Thread. Used to post event to the model thread. */
+	Thread & _modelThread;
 };
 #endif	//OW_CHISTORY_H

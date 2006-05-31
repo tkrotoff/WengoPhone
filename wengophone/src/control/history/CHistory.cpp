@@ -24,12 +24,13 @@
 #include <presentation/PHistory.h>
 
 #include <util/Logger.h>
+#include <thread/Thread.h>
 
-CHistory::CHistory(History & history, CWengoPhone & cWengoPhone)
-	: _history(history), _cWengoPhone(cWengoPhone) {
+CHistory::CHistory(History & history, CWengoPhone & cWengoPhone, Thread & modelThread)
+	: _history(history), _cWengoPhone(cWengoPhone), _modelThread(modelThread) {
 
 	_pHistory = PFactory::getFactory().createPresentationHistory(*this);
-	
+
 	_history.historyLoadedEvent += boost::bind(&CHistory::historyLoadedEventHandler, this, _1);
 	_history.mementoAddedEvent += boost::bind(&CHistory::historyMementoAddedEventHandler, this, _1, _2);
 	_history.mementoUpdatedEvent += boost::bind(&CHistory::historyMementoUpdatedEventHandler, this, _1, _2);
@@ -66,35 +67,27 @@ void CHistory::unseenMissedCallsChangedEventhandler(History &, int count) {
 }
 
 void CHistory::removeHistoryMemento(unsigned int id) {
+	typedef ThreadEvent1<void (unsigned int id), unsigned int> MyThreadEvent;
+	MyThreadEvent * event =
+			new MyThreadEvent(boost::bind(&CHistory::removeHistoryMementoThreadSafe, this, _1), id);
+
+	_modelThread.postEvent(event);
+}
+
+void CHistory::removeHistoryMementoThreadSafe(unsigned int id) {
 	_history.removeMemento(id);
 }
 
-void CHistory::clearAllEntries() {
-	_history.clear(HistoryMemento::Any);
+void CHistory::clear(HistoryMemento::State state) {
+	typedef ThreadEvent1<void (HistoryMemento::State state), HistoryMemento::State> MyThreadEvent;
+	MyThreadEvent * event =
+			new MyThreadEvent(boost::bind(&CHistory::clearThreadSafe, this, _1), state);
+
+	_modelThread.postEvent(event);
 }
 
-void CHistory::clearSmsEntries() {
-	_history.clear(HistoryMemento::OutgoingSmsOk);
-}
-	
-void CHistory::clearChatEntries() {
-	LOG_WARN("Not implemented yet");
-}
-	
-void CHistory::clearIncomingCallEntries() {
-	_history.clear(HistoryMemento::IncomingCall);
-}
-	
-void CHistory::clearOutgoingCallEntries() {
-	_history.clear(HistoryMemento::OutgoingCall);
-}
-
-void CHistory::clearMissedCallEntries() {
-	_history.clear(HistoryMemento::MissedCall);
-}
-
-void CHistory::clearRejectedCallEntries() {
-	_history.clear(HistoryMemento::RejectedCall);
+void CHistory::clearThreadSafe(HistoryMemento::State state) {
+	_history.clear(state);
 }
 
 std::string CHistory::getMementoData(unsigned int id) {
@@ -106,6 +99,14 @@ std::string CHistory::getMementoPeer(unsigned int id) {
 }
 
 void CHistory::replay(unsigned int id) {
+	typedef ThreadEvent1<void (unsigned int id), unsigned int> MyThreadEvent;
+	MyThreadEvent * event =
+			new MyThreadEvent(boost::bind(&CHistory::replayThreadSafe, this, _1), id);
+
+	_modelThread.postEvent(event);
+}
+
+void CHistory::replayThreadSafe(unsigned int id) {
 	_history.replay(id);
 }
 
@@ -114,6 +115,14 @@ HistoryMementoCollection * CHistory::getMementos(HistoryMemento::State state, in
 }
 
 void CHistory::resetUnseenMissedCalls() {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event =
+			new MyThreadEvent(boost::bind(&CHistory::resetUnseenMissedCallsThreadSafe, this));
+
+	_modelThread.postEvent(event);
+}
+
+void CHistory::resetUnseenMissedCallsThreadSafe() {
 	_history.resetUnseenMissedCalls();
 }
 

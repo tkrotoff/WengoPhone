@@ -107,7 +107,6 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 		boost::bind(&CWengoPhone::authorizationRequestEventHandler, this, _1, _2, _3);
 
 	_cWsCallForward = NULL;
-	//Event<void (UserProfile & sender, WsCallForward & wsCallForward)> wsCallForwardCreatedEvent;
 }
 
 void CWengoPhone::showWengoAccount() {
@@ -184,16 +183,13 @@ void CWengoPhone::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount 
 }
 
 void CWengoPhone::openWengoUrlWithoutAuth(const std::string & url) {
-	//TODO: retrieve the language from the configuration
-	static const std::string langCode = "fra";
-
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string language = config.getLanguage();
 
 	//tune the url for Wengo
 	std::string finalUrl = url;
 	finalUrl += "&wl=" + string(WengoPhoneBuildId::SOFTPHONE_NAME);
-	finalUrl += "&lang=" + langCode;
+	finalUrl += "&lang=" + language;
 
 	WebBrowser::openUrl(finalUrl);
 	LOG_DEBUG("url opened: " + finalUrl);
@@ -257,7 +253,7 @@ void CWengoPhone::showWengoBuyWengos() {
 }
 
 void CWengoPhone::historyLoadedEventHandler(History & history) {
-	_cHistory = new CHistory(history, *this);
+	_cHistory = new CHistory(history, *this, _wengoPhone);
 	cHistoryCreatedEvent(*this, *_cHistory);
 }
 

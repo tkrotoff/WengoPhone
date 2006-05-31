@@ -1071,27 +1071,27 @@ void QtWengoPhone::authorizationRequestEventHandlerThreadSafe(PresenceHandler & 
 }
 
 void QtWengoPhone::eraseHistoryOutgoingCalls() {
-	_cWengoPhone.getCHistory().clearOutgoingCallEntries();
+	_cWengoPhone.getCHistory().clear(HistoryMemento::OutgoingCall);
 }
 
 void QtWengoPhone::eraseHistoryIncomingCalls() {
-	_cWengoPhone.getCHistory().clearIncomingCallEntries();
+	_cWengoPhone.getCHistory().clear(HistoryMemento::IncomingCall);
 }
 
 void QtWengoPhone::eraseHistoryMissedCalls() {
-	_cWengoPhone.getCHistory().clearMissedCallEntries();
+	_cWengoPhone.getCHistory().clear(HistoryMemento::MissedCall);
 }
 
 void QtWengoPhone::eraseHistoryChatSessions() {
-	_cWengoPhone.getCHistory().clearChatEntries();
+	_cWengoPhone.getCHistory().clear(HistoryMemento::ChatSession);
 }
 
 void QtWengoPhone::eraseHistorySms() {
-	_cWengoPhone.getCHistory().clearSmsEntries();
+	_cWengoPhone.getCHistory().clear(HistoryMemento::OutgoingSmsOk);
 }
 
 void QtWengoPhone::eraseHistory() {
-	_cWengoPhone.getCHistory().clearAllEntries();
+	_cWengoPhone.getCHistory().clear(HistoryMemento::Any);
 }
 
 void QtWengoPhone::phoneComboBoxClicked() {

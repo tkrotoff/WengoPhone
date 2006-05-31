@@ -119,16 +119,19 @@ std::string History::toString() {
 }
 
 void History::removeMemento(unsigned int id) {
-	//TODO: verify that the memento is really removed
 	_collection->removeMemento(id);
 	mementoRemovedEvent(*this, id);
 }
 
 HistoryMemento * History::getMemento(unsigned int id) {
+	boost::mutex::scoped_lock scopedLock(_mutex);
+
 	return _collection->getMemento(id);
 }
 
 HistoryMementoCollection * History::getMementos(HistoryMemento::State state, int count) {
+	boost::mutex::scoped_lock scopedLock(_mutex);
+
 	return _collection->getMementos(state, count);
 }
 
@@ -178,5 +181,7 @@ void History::resetUnseenMissedCalls() {
 }
 
 int History::getUnseenMissedCalls() {
+	boost::mutex::scoped_lock scopedLock(_mutex);
+
 	return _missedCallCount;
 }

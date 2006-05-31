@@ -140,31 +140,31 @@ void QtHistory::mementoUpdatedEventHandler(CHistory &, unsigned id) {
 }
 
 void QtHistory::clearAllEntries() {
-	_cHistory.clearAllEntries();
+	_cHistory.clear(HistoryMemento::Any);
 }
 
 void QtHistory::clearSmsEntries() {
-	_cHistory.clearSmsEntries();
+	_cHistory.clear(HistoryMemento::OutgoingSmsOk);
 }
 
 void QtHistory::clearChatEntries() {
-	_cHistory.clearChatEntries();
+	_cHistory.clear(HistoryMemento::ChatSession);
 }
 
 void QtHistory::clearIncomingCallEntries() {
-	_cHistory.clearIncomingCallEntries();
+	_cHistory.clear(HistoryMemento::IncomingCall);
 }
 
 void QtHistory::clearOutgoingCallEntries() {
-	_cHistory.clearOutgoingCallEntries();
+	_cHistory.clear(HistoryMemento::OutgoingCall);
 }
 
 void QtHistory::clearMissedCallEntries() {
-	_cHistory.clearMissedCallEntries();
+	_cHistory.clear(HistoryMemento::MissedCall);
 }
 
 void QtHistory::clearRejectedCallEntries() {
-	_cHistory.clearRejectedCallEntries();
+	_cHistory.clear(HistoryMemento::RejectedCall);
 }
 
 void QtHistory::replayItem(QtHistoryItem * item) {
