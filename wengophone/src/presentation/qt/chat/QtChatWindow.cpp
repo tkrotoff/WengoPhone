@@ -278,7 +278,7 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
             _dialog->showMinimized ();
             flashWindow();
         }else{
-            //_dialog->activateWindow();
+            flashWindow();
         }
 		int tabs = _tabWidget->count();
 		for (int i = 0; i < tabs; i++)
@@ -653,7 +653,10 @@ void ChatWindow::flashWindow() {
     // _dialog->activateWindow();
 #ifdef OS_WINDOWS
     HWND desktopWindow = GetDesktopWindow();
-    SwitchToThisWindow( desktopWindow ,false);
+    if (_dialog->isMinimized())
+        SwitchToThisWindow(desktopWindow,false);
+    else
+        BringWindowToTop(desktopWindow);
 	FLASHWINFO flashInfo;
 	flashInfo.cbSize = sizeof(FLASHWINFO);
 	flashInfo.hwnd = _dialog->winId();

@@ -23,7 +23,6 @@
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
 #include <qtutil/QtWengoStyleLabel.h>
-
 QtToaster::QtToaster(QWidget * parent , Qt::WFlags f ):
 QWidget(parent, Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint )
 {
