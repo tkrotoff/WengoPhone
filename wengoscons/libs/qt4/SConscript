@@ -164,7 +164,7 @@ if WengoOSWindows():
 	defines['QT_LARGEFILE_SUPPORT'] = 1
 	defines['WIN32'] = 1
 
-elif WengoOSLinux():
+elif WengoOSLinux() or WengoOSBSD():
 	if WengoDebugMode():
 		libs += [
 			'QtCore_debug',

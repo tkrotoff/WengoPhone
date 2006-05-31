@@ -24,7 +24,7 @@ if WengoOSWindows():
 	]
 	libs += ['winmm', 'advapi32']
 
-elif WengoOSLinux():
+elif WengoOSLinux() or WengoOSBSD():
 	sources += [
 		'src/unix/Sound.cpp',
 		'src/unix/VolumeControl.cpp',
