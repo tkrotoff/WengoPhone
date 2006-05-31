@@ -113,10 +113,12 @@ void QtChatHandler::showToaster(IMChatSession * imChatSession) {
 			message += QString::fromStdString((*it).getContactId());
 
 			Contact * contact = contactList.findContactThatOwns((*it));
-			Picture picture = contact->getIcon();
-            std::string data = picture.getData();
-            if ( !data.empty()) {
-                result.loadFromData((uchar *) data.c_str(), data.size());
+			if ( contact ){
+                    Picture picture = contact->getIcon();
+                    std::string data = picture.getData();
+                    if ( !data.empty()) {
+                        result.loadFromData((uchar *) data.c_str(), data.size());
+                }
             }
 		}
 		toaster->setMessage(message);
