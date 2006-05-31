@@ -649,6 +649,7 @@ QMainWindow * ChatWindow::findMainWindow(){
     }
     return NULL;
 }
+
 void ChatWindow::flashWindow() {
     // _dialog->activateWindow();
 #ifdef OS_WINDOWS
@@ -664,10 +665,9 @@ void ChatWindow::flashWindow() {
 	flashInfo.uCount = 5;
 	flashInfo.dwTimeout = 500;
 	FlashWindowEx(&flashInfo);
+#else
+    _dialog->activateWindow();
 #endif
-
-
-
 }
 
 bool ChatWindow::chatIsVisible(){
