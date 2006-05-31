@@ -108,6 +108,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 	for (PhoneCalls::iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
 		PhoneCall * phoneCall = (*it).second;
 
+		//FIXME this should be a LOG_FATAL()
 		if (phoneCall) {
 			EnumPhoneCallState::PhoneCallState state = phoneCall->getState();
 			if (state != EnumPhoneCallState::PhoneCallStateTalking &&
@@ -133,6 +134,12 @@ int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 
 	PhoneCall * phoneCall = new PhoneCall(*this, sipAddress);
 	int callId = _sipWrapper->makeCall(_lineId, sipAddress.getRawSipAddress(), enableVideo);
+	if (callId < 0) {
+		//FIXME should be replaced by a LOG_FATAL()
+		LOG_ERROR("couldn't place the call, SipWrapper returned an error=" + String::fromNumber(callId));
+		return callId;
+	}
+
 	phoneCall->setCallId(callId);
 
 	//Adds the PhoneCall to the list of PhoneCall

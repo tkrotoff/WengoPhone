@@ -208,7 +208,7 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 
 void PhApiWrapper::removeVirtualLine(int lineId) {
 	if (_isInitialized) {
-		publishOffline("");
+		publishOffline(String::null);
 		phDelVline(lineId);
 	}
 }
@@ -952,7 +952,7 @@ void PhApiWrapper::setPluginPath(const string & path) {
 }
 
 std::string PhApiWrapper::phapiCallStateToString(enum phCallStateEvent event) {
-	std::string toReturn = "";
+	std::string toReturn;
 	switch(event) {
 	case phDIALING:
 		toReturn = "phDIALING";
