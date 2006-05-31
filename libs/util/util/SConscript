@@ -32,7 +32,7 @@ elif WengoOSMacOSX():
 	link_flags += ['-framework CoreFoundation']
 	sources += ['src/mac/UuidMac.cpp']
 
-elif WengoOSLinux():
+elif WengoOSLinux() or WengoOSBSD():
 	libs += ['uuid']
 	sources += ['src/unix/UuidUnix.cpp']
 
