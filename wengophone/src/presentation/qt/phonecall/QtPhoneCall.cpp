@@ -134,9 +134,13 @@ void QtPhoneCall::initThreadSafe() {
 
 	_popup = createMenu();
 
+	//Computes the call duration
+	_callTimer = new QTimer(_phoneCallWidget);
+	connect(_callTimer, SIGNAL(timeout()), SLOT(updateCallDuration()));
+
 	connect(filter, SIGNAL(openPopup(int, int)), SLOT(openPopup(int, int)));
 
-    showToaster();
+	showToaster();
 
 	if (!_cPhoneCall.getPhoneCall().getConferenceCall()) {
 		_qtWengoPhone->addPhoneCall(this);
@@ -181,8 +185,9 @@ QMenu * QtPhoneCall::createMenu() {
 QMenu * QtPhoneCall::createInviteMenu() {
 	PhoneLine & phoneLine = dynamic_cast < PhoneLine & > (_cPhoneCall.getPhoneCall().getPhoneLine());
 
-    if (phoneLine.getPhoneCallList().size() == 0)
-        return NULL;
+	if (phoneLine.getPhoneCallList().size() == 0) {
+		return NULL;
+	}
 
 	QMenu * menu = new QMenu(tr("Invite to conference"));
 
@@ -250,10 +255,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 
 	case EnumPhoneCallState::PhoneCallStateTalking:
 		_duration = 0;
-		_timerId = startTimer(1000);
-		if (_timerId == 0) {
-			LOG_DEBUG("_timerId == 0");
-		}
+		_callTimer->start(1000);
 		_actionAcceptCall->setEnabled(false);
 		_actionHangupCall->setEnabled(true);
 		_statusLabel->setText(tr("Talking"));
@@ -273,21 +275,21 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
 		_qtWengoPhone->getStatusBar().showMessage(QString::null);
-		killTimer(_timerId);
+		_callTimer->stop();
 		_actionAcceptCall->setEnabled(false);
 		_actionHangupCall->setEnabled(false);
 		_statusLabel->setText(tr("Closed"));
 		// stopConference();
 		if (_videoWindow){
-		    if (_videoWindow->isFullScreen()){
-		        _videoWindow->unFullScreen();
-		    }
+			if (_videoWindow->isFullScreen()){
+				_videoWindow->unFullScreen();
+			}
 		}
 		delete _videoWindow;
 		delete _phoneCallWidget;
 		deleteMe(this);
 		callRejected();
-        break;
+		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming:
 		_actionAcceptCall->setEnabled(true);
@@ -408,7 +410,7 @@ void QtPhoneCall::acceptActionTriggered(bool) {
 
 void QtPhoneCall::rejectActionTriggered(bool) {
 
-    LOG_DEBUG("Hangup call ******************\n");
+	LOG_DEBUG("Hangup call ******************\n");
 	switch (_cPhoneCall.getState()) {
 	case EnumPhoneCallState::PhoneCallStateResumed:
 	case EnumPhoneCallState::PhoneCallStateTalking:
@@ -425,14 +427,13 @@ void QtPhoneCall::rejectActionTriggered(bool) {
 	}
 }
 
-void QtPhoneCall::acceptCall(){
-    acceptActionTriggered(true);
+void QtPhoneCall::acceptCall() {
+	acceptActionTriggered(true);
 }
 
-void QtPhoneCall::rejectCall(){
-    rejectActionTriggered(true);
+void QtPhoneCall::rejectCall() {
+	rejectActionTriggered(true);
 }
-
 
 void QtPhoneCall::holdResumeActionTriggered(bool) {
 	if (_hold) {
@@ -459,7 +460,7 @@ void QtPhoneCall::addContactActionTriggered(bool) {
 
 void QtPhoneCall::transferButtonClicked() {
 	static QLineEdit * transferPhoneNumberLineEdit =
-	   Object::findChild < QLineEdit * > (_phoneCallWidget, "transferPhoneNumberLineEdit");
+		Object::findChild < QLineEdit * > (_phoneCallWidget, "transferPhoneNumberLineEdit");
 
 	_cPhoneCall.blindTransfer(transferPhoneNumberLineEdit->text().toStdString());
 }
@@ -468,17 +469,17 @@ void QtPhoneCall::openPopup(int x, int y) {
 
 	QMenu * m = createInviteMenu();
 	if ( m ) {
-        _actionInvite->setMenu(m);
-        _popup->exec(QPoint(x, y));
-        _actionInvite->setMenu(NULL);
-        _actionInvite->setEnabled(true);
-        delete m;
-        return;
+		_actionInvite->setMenu(m);
+		_popup->exec(QPoint(x, y));
+		_actionInvite->setMenu(NULL);
+		_actionInvite->setEnabled(true);
+		delete m;
+		return;
 	}
-    _popup->exec(QPoint(x, y));
+	_popup->exec(QPoint(x, y));
 }
 
-void QtPhoneCall::timerEvent(QTimerEvent * event) {
+void QtPhoneCall::updateCallDuration() {
 	_duration++;
 	QTime time;
 	time = time.addSecs(_duration);
@@ -560,26 +561,26 @@ void QtPhoneCall::inviteToConference(bool) {
 }
 
 bool QtPhoneCall::isIncoming() {
-
 	return (_cPhoneCall.getState() == EnumPhoneCallState::PhoneCallStateIncoming);
 }
 
-void QtPhoneCall::showToaster(){
+void QtPhoneCall::showToaster() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-    Config & config = ConfigManager::getInstance().getCurrentConfig();
+	if (!isIncoming()) {
+		return;
+	}
 
-    if (!isIncoming())
-        return;
+	// Shows toaster for incoming incoming chats ?
+	if (!config.getNotificationShowToasterOnIncomingCall()) {
+		return;
+	}
 
-    // Shows toaster for incoming incoming chats ?
-    if (!config.getNotificationShowToasterOnIncomingCall())
-        return;
-
-    QtCallToaster * toaster = new QtCallToaster();
-    toaster->setTitle(tr("New incoming call"));
-    toaster->setMessage(QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName()));
-    connect(toaster,SIGNAL(callButtonClicked()),SLOT(acceptCall()));
-    connect(toaster,SIGNAL(hangupButtonClicked()),SLOT(rejectCall()));
-    toaster->setPixmap(QPixmap(":/pics/default-avatar.png"));
-    toaster->showToaster();
+	QtCallToaster * toaster = new QtCallToaster();
+	toaster->setTitle(tr("New incoming call"));
+	toaster->setMessage(QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName()));
+	connect(toaster,SIGNAL(callButtonClicked()),SLOT(acceptCall()));
+	connect(toaster,SIGNAL(hangupButtonClicked()),SLOT(rejectCall()));
+	toaster->setPixmap(QPixmap(":/pics/default-avatar.png"));
+	toaster->showToaster();
 }

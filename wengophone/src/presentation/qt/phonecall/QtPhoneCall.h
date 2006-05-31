@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTPHONECALL_H
-#define QTPHONECALL_H
+#ifndef OWQTPHONECALL_H
+#define OWQTPHONECALL_H
 
 #include <presentation/PPhoneCall.h>
 
@@ -37,6 +37,7 @@ class QLabel;
 class QMenu;
 class QAction;
 class QMutex;
+class QTimer;
 
 /**
  * Qt Presentation component for PhoneCall.
@@ -91,6 +92,10 @@ public Q_SLOTS:
 
 	void rejectCall();
 
+private Q_SLOTS:
+
+	void updateCallDuration();
+
 private:
 
 	void initThreadSafe();
@@ -110,7 +115,7 @@ private:
 
 	void showAvatar();
 
-    void showToaster();
+	void showToaster();
 
 	QMenu * createMenu();
 
@@ -150,7 +155,8 @@ private:
 
 	QAction * _actionBlockContact;
 
-	int _timerId;
+	/** Computes the call duration. */
+	QTimer * _callTimer;
 
 	int _duration;
 
@@ -159,10 +165,6 @@ private:
 	bool _showVideo;
 
 	bool _encrustLocalWebcam;
-
-protected:
-
-	void timerEvent(QTimerEvent * event);
 };
 
-#endif	//QTPHONECALL_H
+#endif	//OWQTPHONECALL_H
