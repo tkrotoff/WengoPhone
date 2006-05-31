@@ -172,7 +172,7 @@ int ClassicConfigImporter::detectLastVersion()
 	{
 		if (File::exists(ConfigPathV2 + "profiles"))
 			return CONFIG_VERSION3;
-		else if (File::exists(ConfigPathV2 + "contactlist.xml"))
+		else if (File::exists(ConfigPathV2 + "user.config"))
 			return CONFIG_VERSION2;
 		else if (dirV1Exists)
 			return CONFIG_VERSION1;
