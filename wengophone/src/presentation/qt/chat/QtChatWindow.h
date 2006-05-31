@@ -38,6 +38,7 @@
 // class IMContact;
 
 class QtChatTabWidget;
+class QtWengoPhone;
 //class CChatHandler;
 
 class ChatWindow : public QObject {
@@ -148,7 +149,13 @@ private:
 
 	void createMenu();
 
+    void showMinimized();
+
+    void showToaster(IMChatSession * imChatSession);
+
     QMainWindow * findMainWindow();
+
+    QtWengoPhone * _qtWengoPhone;
 };
 
 #endif
