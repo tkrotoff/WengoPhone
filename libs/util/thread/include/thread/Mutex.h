@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef MUTEX_H
-#define MUTEX_H
+#ifndef OWMUTEX_H
+#define OWMUTEX_H
 
 #include <boost/thread/mutex.hpp>
 
@@ -27,6 +27,9 @@
  *
  * Example:
  * <pre>
+ *
+ * #include <thread/Mutex.h>
+ *
  * class Counter {
  * public:
  *
@@ -61,4 +64,4 @@ public:
 	typedef scoped_lock ScopedLock;
 };
 
-#endif	//MUTEX_H
+#endif	//OWMUTEX_H

@@ -90,6 +90,9 @@ void QtPhoneLine::phoneCallClosedEventHandler(CPhoneCall & cPhoneCall) {
 }
 
 void QtPhoneLine::phoneCallClosedEventHandlerThreadSafe(CPhoneCall & cPhoneCall) {
+	if (_activeCPhoneCall == &cPhoneCall) {
+		_activeCPhoneCall = NULL;
+	}
 }
 
 void QtPhoneLine::hangUpButtonClicked() {

@@ -42,37 +42,37 @@ HistoryMementoCollection * History::getHistoryMementoCollection() {
 }
 
 unsigned int History::addMemento(HistoryMemento * memento) {
-	unsigned int id = _collection->addMemento(memento);
+	unsigned id = _collection->addMemento(memento);
 	mementoAddedEvent(*this, id);
 	return id;
 }
 
 void History::updateCallDuration(int callId, int duration) {
 	HistoryMemento * memento = _collection->getMementoByCallId(callId);
-	if( memento ) {
+	if (memento) {
 		memento->updateDuration(duration);
-		unsigned int id = _collection->getMementoId(memento);
+		unsigned id = _collection->getMementoId(memento);
 		mementoUpdatedEvent(*this, id);
 	}
 }
 
 void History::updateSMSState(int callId, HistoryMemento::State state) {
 	HistoryMemento * memento = _collection->getMementoBySMSId(callId);
-	if( memento ) {
+	if (memento) {
 		memento->updateState(state);
-		unsigned int id = _collection->getMementoId(memento);
+		unsigned id = _collection->getMementoId(memento);
 		mementoUpdatedEvent(*this, id);
 	}
 }
 
 void History::updateCallState(int callId, HistoryMemento::State state) {
 	HistoryMemento * memento = _collection->getMementoByCallId(callId);
-	if( memento ) {
+	if (memento) {
 		memento->updateState(state);
-		unsigned int id = _collection->getMementoId(memento);
+		unsigned id = _collection->getMementoId(memento);
 		mementoUpdatedEvent(*this, id);
-		
-		if( state == HistoryMemento::MissedCall ) {
+
+		if (state == HistoryMemento::MissedCall) {
 			_missedCallCount++;
 			unseenMissedCallsChangedEvent(*this, _missedCallCount);
 		}
@@ -118,35 +118,35 @@ std::string History::toString() {
 	return _collection->toString();
 }
 
-void History::removeMemento(unsigned int id) {
+void History::removeMemento(unsigned id) {
 	_collection->removeMemento(id);
 	mementoRemovedEvent(*this, id);
 }
 
-HistoryMemento * History::getMemento(unsigned int id) {
+HistoryMemento * History::getMemento(unsigned id) {
 	boost::mutex::scoped_lock scopedLock(_mutex);
 
 	return _collection->getMemento(id);
 }
 
 HistoryMementoCollection * History::getMementos(HistoryMemento::State state, int count) {
-	boost::mutex::scoped_lock scopedLock(_mutex);
+	Mutex::ScopedLock scopedLock(_mutex);
 
 	return _collection->getMementos(state, count);
 }
 
 void History::load(std::string filename) {
-	std::string line = "";
-	std::string lines = "";
+	std::string line;
+	std::string lines;
 
-	if( filename == "" ) {
+	if (filename.empty()) {
 		return;
 	}
 
 	//open the file & read all its content
 	std::ifstream myfile (filename.c_str());
 	if (myfile.is_open()) {
-		while (! myfile.eof() ) {
+		while (!myfile.eof()) {
 			getline (myfile,line);
 			lines += line;
 		}
@@ -166,10 +166,10 @@ void History::save(std::string filename) {
 	historySavedEvent(*this);
 }
 
-void History::replay(unsigned int id) {
+void History::replay(unsigned id) {
 
 	//replay only outgoing call
-	if( getMemento(id)->getState() == HistoryMemento::OutgoingCall ) {
+	if (getMemento(id)->getState() == HistoryMemento::OutgoingCall) {
 		std::string phoneNumber = getMemento(id)->getPeer();
 		_userProfile.getActivePhoneLine()->makeCall(phoneNumber, false);
 	}
@@ -181,7 +181,7 @@ void History::resetUnseenMissedCalls() {
 }
 
 int History::getUnseenMissedCalls() {
-	boost::mutex::scoped_lock scopedLock(_mutex);
+	Mutex::ScopedLock scopedLock(_mutex);
 
 	return _missedCallCount;
 }

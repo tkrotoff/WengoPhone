@@ -483,7 +483,8 @@ void QtPhoneCall::updateCallDuration() {
 	_duration++;
 	QTime time;
 	time = time.addSecs(_duration);
-	_durationLabel->setText(time.toString(Qt::TextDate));
+	//FIXME strange crash
+	//_durationLabel->setText(time.toString(Qt::TextDate));
 }
 
 void QtPhoneCall::showVideoWidget() {

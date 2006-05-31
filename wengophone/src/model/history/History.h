@@ -17,36 +17,36 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_HISTORY_H
-#define OW_HISTORY_H
+#ifndef OWHISTORY_H
+#define OWHISTORY_H
 
 #include "HistoryMemento.h"
 #include "HistoryMementoCollection.h"
 
 #include <util/Event.h>
 #include <serialization/Serializable.h>
-#include <boost/thread/mutex.hpp>
+#include <thread/Mutex.h>
 
 class UserProfile;
 
 /**
  * History (Care Taker in the Memento pattern)
  *
- * exemple: serialization example
+ * example: serialization example
  *	<pre>
  *	std::ofstream ofs("history.log");
  *	ofs << History::history.serialize();
  *	ofs.close();
  *	</pre>
- * 
- * exemple: unserialize a History
+ *
+ * example: unserialize a History
  *	<pre>
- * 	std::string lines;
+ *	std::string lines;
  *
  *	// assum you have read the save file
  *	// and you have the content of this file
  *	// in the std::string lines
- * 
+ *
  *	History::history.unserialize(lines);
  *	</pre>
  *
@@ -64,17 +64,17 @@ public:
 	 * The history has been saved.
 	 */
 	Event<void (History &)> historySavedEvent;
-	
+
 	/**
 	 * A memento has been added.
 	 */
 	Event<void (History &, unsigned int id)> mementoAddedEvent;
-	
+
 	/**
 	 * A memento has been updated.
 	 */
 	Event<void (History &, unsigned int id)> mementoUpdatedEvent;
-	
+
 	/**
 	 * A memento has been removed.
 	 */
@@ -117,7 +117,7 @@ public:
 	 * @param id the id
 	 * @return the HistoryMemento with the given id
 	 */
-	HistoryMemento * getMemento(unsigned int id);
+	HistoryMemento * getMemento(unsigned id);
 
 	/**
 	 * get a HistoryMementoCollection containing all mementos
@@ -134,8 +134,8 @@ public:
 	 *
 	 * @param id the id
 	 */
-	void removeMemento(unsigned int id);
-	
+	void removeMemento(unsigned id);
+
 	/**
 	 * Clear entries of the history
 	 * @param state type of entries to remove
@@ -147,7 +147,7 @@ public:
 	 *
 	 * @return the number of HistoryMemento's
 	 */
-	unsigned int size();
+	unsigned size();
 
 	/**
 	 * add a history memento to the history.
@@ -155,7 +155,7 @@ public:
 	 * @param memento the memento to add
 	 * @return the id of the memento
 	 */
-	unsigned int addMemento(HistoryMemento * memento);
+	unsigned addMemento(HistoryMemento * memento);
 
 	/**
 	 * Return a string representing this object.
@@ -178,7 +178,7 @@ public:
 	 * @param duration duration
 	 */
 	void updateCallDuration(int callId, int duration);
-	
+
 	/**
 	 * update a memento state (for incoming/outgoing calls).
 	 *
@@ -200,7 +200,7 @@ public:
 	 *
 	 * @param id memento to replay
 	 */
-	void replay(unsigned int id);
+	void replay(unsigned id);
 
 	/**
 	 * Reset unseen missed calls.
@@ -233,13 +233,14 @@ private:
 	 */
 	HistoryMementoCollection *_collection;
 
-	/**	  a ref  to UserProfile */
+	/** A ref to UserProfile */
 	UserProfile & _userProfile;
 
-	/** unseen missed calls count */
+	/** Unseen missed calls count. */
 	int _missedCallCount;
 
-	/** mutex for thread-safe. */
-	mutable boost::mutex _mutex;
+	/** Mutex for thread-safe. */
+	mutable Mutex _mutex;
 };
-#endif //OW_HISTORY_H
+
+#endif //OWHISTORY_H

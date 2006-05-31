@@ -293,7 +293,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
-		if( lastState == EnumPhoneCallState::PhoneCallStateIncoming ) {
+		if (lastState == EnumPhoneCallState::PhoneCallStateIncoming) {
 			//History: retrieve the memento and change its state to missed
 			_wengoPhone.getCurrentUserProfile().getHistory().updateCallState(callId, HistoryMemento::MissedCall);
 			LOG_DEBUG("call missed callId=" + String::fromNumber(callId));
