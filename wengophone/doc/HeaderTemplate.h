@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef HEADERTEMPLATE_H
-#define HEADERTEMPLATE_H
+#ifndef OWHEADERTEMPLATE_H
+#define OWHEADERTEMPLATE_H
 
 /**
  * Header template with copyright and GNU GPL license.
@@ -33,4 +33,4 @@
 class HeaderTemplate {
 };
 
-#endif	//HEADERTEMPLATE_H
+#endif	//OWHEADERTEMPLATE_H
