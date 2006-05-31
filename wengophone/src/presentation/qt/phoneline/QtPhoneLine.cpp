@@ -79,13 +79,8 @@ void QtPhoneLine::phoneCallCreatedEventHandler(CPhoneCall & cPhoneCall) {
 	postEvent(event);
 }
 
-#include <presentation/PPhoneCall.h>
-#include <presentation/PFactory.h>
-
 void QtPhoneLine::phoneCallCreatedEventHandlerThreadSafe(CPhoneCall & cPhoneCall) {
 	_activeCPhoneCall = &cPhoneCall;
-	PPhoneCall * p = PFactory::getFactory().createPresentationPhoneCall(cPhoneCall);
-	cPhoneCall.setPresentation(p);
 }
 
 void QtPhoneLine::phoneCallClosedEventHandler(CPhoneCall & cPhoneCall) {

@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTPHONELINE_H
-#define QTPHONELINE_H
+#ifndef OWQTPHONELINE_H
+#define OWQTPHONELINE_H
 
 #include <presentation/PPhoneLine.h>
 
@@ -76,4 +76,4 @@ private:
 	CPhoneCall * _activeCPhoneCall;
 };
 
-#endif	//QTPHONELINE_H
+#endif	//OWQTPHONELINE_H

@@ -32,7 +32,7 @@
 #include <QDate>
 #include <QTime>
 
-QtHistory::QtHistory( CHistory & cHistory )
+QtHistory::QtHistory(CHistory & cHistory)
 	: QObjectThreadSafe(NULL), _cHistory(cHistory) {
 
 	_cHistory.historyLoadedEvent += boost::bind(&QtHistory::historyLoadedEventHandler, this, _1);
@@ -52,8 +52,8 @@ QWidget * QtHistory::getWidget() {
 void QtHistory::initThreadSafe() {
 	_historyWidget = new QtHistoryWidget();
 
-	connect (_historyWidget, SIGNAL( replayItem(QtHistoryItem *) ),SLOT( replayItem(QtHistoryItem *) ));
-	connect (_historyWidget, SIGNAL( removeItem(unsigned int) ),SLOT( removeItem(unsigned int) ));
+	connect(_historyWidget, SIGNAL(replayItem(QtHistoryItem *) ), SLOT(replayItem(QtHistoryItem *) ));
+	connect(_historyWidget, SIGNAL(removeItem(unsigned int) ), SLOT(removeItem(unsigned int) ));
 	connect(_historyWidget, SIGNAL(missedCallsSeen()), SLOT(resetUnseenMissedCalls()));
 
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
@@ -74,7 +74,7 @@ void QtHistory::updatePresentationThreadSafe() {
 	_historyWidget->clearHistory();
 
 	HistoryMementoCollection * collection = _cHistory.getHistory().getHistoryMementoCollection();
-	for(HistoryMap::iterator it = collection->begin(); it != collection->end(); it++ ) {
+	for (HistoryMap::iterator it = collection->begin(); it != collection->end(); it++) {
 		HistoryMemento * memento = (*it).second;
 
 		addHistoryMemento(
@@ -94,7 +94,7 @@ void QtHistory::addHistoryMemento(const std::string & type, const std::string & 
 	QDate qdate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
 	QTime qtime = QTime::fromString(QString::fromStdString(time));
 	QTime qduration;
-	if( duration == -1 ) {
+	if (duration == -1) {
 		qduration = qduration.addSecs(0);
 	} else {
 		qduration = qduration.addSecs(duration);
@@ -103,26 +103,26 @@ void QtHistory::addHistoryMemento(const std::string & type, const std::string & 
 	SipAddress sipAddress(name);
 	QString formattedName = QString::fromStdString(sipAddress.getUserName());
 
-	if( type == HistoryMemento::StateIncomingCall ) {
+	if (type == HistoryMemento::StateIncomingCall) {
 		_historyWidget->addIncomingCallItem(QString::fromStdString(type),
 			qdate, qtime, qduration, formattedName, id);
-	} else if ( type == HistoryMemento::StateOutgoingCall ) {
+	} else if (type == HistoryMemento::StateOutgoingCall) {
 		_historyWidget->addOutGoingCallItem(QString::fromStdString(type),
 			qdate, qtime, qduration, formattedName, id);
-	} else if ( type == HistoryMemento::StateMissedCall ) {
+	} else if (type == HistoryMemento::StateMissedCall) {
 		_historyWidget->addMissedCallItem(QString::fromStdString(type),
 			qdate, qtime, qduration, formattedName, id);
-	} else if ( type == HistoryMemento::StateRejectedCall) {
+	} else if (type == HistoryMemento::StateRejectedCall) {
 		_historyWidget->addRejectedCallItem(QString::fromStdString(type),
 			qdate, qtime, qduration, formattedName, id);
-	} else if ( type == HistoryMemento::StateOutgoingSMSOK) {
+	} else if (type == HistoryMemento::StateOutgoingSMSOK) {
 		_historyWidget->addSMSItem(QString::fromStdString(type),
 			qdate, qtime, qduration, formattedName, id);
-	} else if ( type == HistoryMemento::StateOutgoingSMSNOK) {
+	} else if (type == HistoryMemento::StateOutgoingSMSNOK) {
 		//do not show unsent SMS for now
-	} else if ( type == HistoryMemento::StateNone) {
+	} else if (type == HistoryMemento::StateNone) {
 		//nothing to add
-	} else if ( type == HistoryMemento::StateAny) {
+	} else if (type == HistoryMemento::StateAny) {
 		//nothing to add
 	}
 }
@@ -168,8 +168,8 @@ void QtHistory::clearRejectedCallEntries() {
 }
 
 void QtHistory::replayItem(QtHistoryItem * item) {
-	QString text = "";
-	QString phoneNumber = "";
+	QString text;
+	QString phoneNumber;
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 
 	QMessageBox mb(tr("Replay call"),
@@ -177,44 +177,43 @@ void QtHistory::replayItem(QtHistoryItem * item) {
 		QMessageBox::Question,
 		QMessageBox::Yes | QMessageBox::Default,
 		QMessageBox::No | QMessageBox::Escape,
-		QMessageBox::NoButton);
+		QMessageBox::NoButton, _historyWidget);
 
-	switch ( item->getItemType() ) {
+	switch (item->getItemType()) {
 
-		case QtHistoryItem::Sms:
-			//retrieve info & configure the Sms widget
-			text = QString::fromStdString(_cHistory.getMementoData(item->getId()));
-			phoneNumber = QString::fromStdString(_cHistory.getMementoPeer(item->getId()));
+	case QtHistoryItem::Sms:
+		//retrieve info & configure the Sms widget
+		text = QString::fromStdString(_cHistory.getMementoData(item->getId()));
+		phoneNumber = QString::fromStdString(_cHistory.getMementoPeer(item->getId()));
 
-			//test existance of Sms (available only if a WengoAccount has been created)
-			if( qtWengoPhone->getSms() ) {
-				qtWengoPhone->getSms()->setText(text);
-				qtWengoPhone->getSms()->setPhoneNumber(phoneNumber);
-				qtWengoPhone->getSms()->getWidget()->show();
-			}
-			break;
+		//test existance of Sms (available only if a WengoAccount has been created)
+		if (qtWengoPhone->getSms()) {
+			qtWengoPhone->getSms()->setText(text);
+			qtWengoPhone->getSms()->setPhoneNumber(phoneNumber);
+			qtWengoPhone->getSms()->getWidget()->show();
+		}
+		break;
 
-		case QtHistoryItem::OutGoingCall:
+	case QtHistoryItem::OutGoingCall:
+		if (mb.exec() == QMessageBox::Yes) {
+			_cHistory.replay(item->getId());
+		}
 
-			if (mb.exec() == QMessageBox::Yes) {
-				_cHistory.replay(item->getId());
-			}
+		break;
 
-			break;
+	case QtHistoryItem::IncomingCall:
+		//can't replay
+		break;
 
-		case QtHistoryItem::IncomingCall:
-			//can't replay
-			break;
+	case QtHistoryItem::MissedCall:
+		//can't replay
+		break;
 
-		case QtHistoryItem::MissedCall:
-			//can't replay
-			break;
+	case QtHistoryItem::Chat:
+		break;
 
-		case QtHistoryItem::Chat:
-			break;
-
-		default:
-			break;
+	default:
+		break;
 	}
 }
 

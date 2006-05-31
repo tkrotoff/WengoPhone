@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CPHONECALL_H
-#define CPHONECALL_H
+#ifndef OWCPHONECALL_H
+#define OWCPHONECALL_H
 
 #include <sipwrapper/EnumPhoneCallState.h>
 #include <sipwrapper/CodecList.h>
@@ -43,10 +43,6 @@ public:
 
 	PPhoneCall * getPresentation() const {
 		return _pPhoneCall;
-	}
-
-	void setPresentation(PPhoneCall * p) {
-		_pPhoneCall = p;
 	}
 
 	CWengoPhone & getCWengoPhone() const {
@@ -151,4 +147,4 @@ private:
 	CWengoPhone & _cWengoPhone;
 };
 
-#endif	//CPHONECALL_H
+#endif	//OWCPHONECALL_H
