@@ -15,7 +15,7 @@ if WengoOSMacOSX():
 	sources += ['trayicon_mac.cpp'];
 if WengoOSWindows():
 	sources += ['trayicon_win.cpp'];
-if WengoOSLinux():
+if WengoOSLinux() or WengoOSBSD():
 	sources += ['trayicon_x11.cpp'];
 
 
