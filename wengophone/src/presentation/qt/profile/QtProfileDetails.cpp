@@ -54,11 +54,11 @@ QtProfileDetails::QtProfileDetails(CWengoPhone & cWengoPhone,
 	for (std::vector< std::pair<std::string, std::string> >::const_iterator it = tmp.begin();
 		it != tmp.end();
 		++it) {
-		_ui->groupComboBox->addItem(QString::fromStdString((*it).second), QString::fromStdString((*it).first));
+        _ui->groupComboBox->addItem(QString::fromUtf8((*it).second.c_str()), QString::fromStdString((*it).first.c_str()));
 		std::string str1 = (*it).first;
 		std::string str2 = contactProfile.getGroupId();
 		if (str1 == str2) {
-			_ui->groupComboBox->setCurrentIndex(_ui->groupComboBox->findText(QString::fromStdString((*it).second)));
+			_ui->groupComboBox->setCurrentIndex(_ui->groupComboBox->findText(QString::fromUtf8((*it).second.c_str())));
 		}
 	}
 
@@ -189,7 +189,7 @@ void QtProfileDetails::saveContact() {
 	QVariant groupId;
 	// If the group does not exist
 	if (index == -1) {
-		std::string groupName = _ui->groupComboBox->currentText().toStdString();
+		std::string groupName = std::string(_ui->groupComboBox->currentText().toUtf8().data());
 		_cWengoPhone.getCUserProfile()->getCContactList().addContactGroup(groupName);
 		groupId = QString::fromStdString(_cWengoPhone.getCUserProfile()->getCContactList().getContactGroupIdFromName(groupName));
 	} else {
