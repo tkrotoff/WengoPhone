@@ -582,7 +582,7 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>Create a new conference</source>
-        <translation>Crée une nouvelle conférence</translation>
+        <translation>Créer une nouvelle conférence</translation>
     </message>
 </context>
 <context>
@@ -2804,7 +2804,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>Create Conference C&amp;all</source>
-        <translation>Crée une &amp;conférence</translation>
+        <translation>Créer une &amp;conférence</translation>
     </message>
     <message>
         <source>&amp;Wiki / Faq</source>
