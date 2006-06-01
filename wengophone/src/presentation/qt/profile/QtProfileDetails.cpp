@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
+#include <cutil/global.h>
 #include "QtProfileDetails.h"
 
 #include "ui_ProfileDetails.h"
@@ -38,6 +38,9 @@
 #include <util/Logger.h>
 
 #include <QtGui>
+#ifdef OS_WINDOWS
+#include <windows.h>
+#endif
 
 static const char * PNG_FORMAT = "PNG";
 
@@ -244,4 +247,8 @@ void QtProfileDetails::changeUserProfileAvatar() {
 
 		readProfileAvatar();
 	}
+#ifdef OS_WINDOWS
+	BringWindowToTop(_profileDetailsWindow->winId());
+#endif
+
 }
