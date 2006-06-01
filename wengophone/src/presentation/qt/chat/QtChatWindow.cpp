@@ -48,7 +48,7 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
     // LOG_DEBUG("ChatWindow::ChatWindow(IMChatSession & imChatSession) : QDialog(), _imChatSession(imChatSession)");
 	_imChatSession = &imChatSession;
 	_dialog = NULL;
-
+    _flashTimerId = -1;
 	_imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1);
 
@@ -732,6 +732,7 @@ void ChatWindow::statusChangedSlot(QString contactId) {
         }
     }
 }
+
 void ChatWindow::showToaster(IMChatSession * imChatSession) {
 
     Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -791,4 +792,8 @@ void ChatWindow::showToaster(IMChatSession * imChatSession) {
     toaster->setButton1Pixmap(QPixmap(":pics/toaster/chat.png"));
 	connect(toaster,SIGNAL(button1Clicked()),SLOT(show()));
 	toaster->showToaster();
+}
+
+void ChatWindow::timerEvent(QTimerEvent *event){
+
 }

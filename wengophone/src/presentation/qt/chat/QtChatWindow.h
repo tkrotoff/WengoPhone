@@ -60,6 +60,8 @@ public:
 
     void imContactChangedEventHandler(IMContact & sender);
 
+    void showToaster(IMChatSession * imChatSession);
+
 Q_SIGNALS:
 
 	void messageReceivedSignal(IMChatSession * sender);
@@ -84,7 +86,6 @@ public Q_SLOTS:
 
 	void closeContactListFrame();
 
-
 protected Q_SLOTS:
 
 	void messageReceivedSlot(IMChatSession * sender);
@@ -105,15 +106,14 @@ protected:
 
 	void flashWindow();
 
+	void timerEvent(QTimerEvent *event);
+
     ChatWidget  *   _chatWidget;
 
     QtChatTabWidget *   _tabWidget;
 
     QMenuBar * _menuBar;
 
-    /*
-		New widget
-    */
 	QScrollArea  *  _scrollArea;
 
 	QWidget * _contactViewport;
@@ -126,9 +126,6 @@ protected:
 
 	QtWengoStyleLabel * _inviteLabel;
 
-	/*
-		end new widget
-	*/
     IMChatSession * _imChatSession;
 
     QWidget	* _dialog;
@@ -136,6 +133,8 @@ protected:
 	CChatHandler & _cChatHandler;
 
 	ChatContactWidgets * _chatContactWidgets;
+
+	int _flashTimerId;
 
 private:
 
@@ -150,8 +149,6 @@ private:
 	void createMenu();
 
     void showMinimized();
-
-    void showToaster(IMChatSession * imChatSession);
 
     QMainWindow * findMainWindow();
 
