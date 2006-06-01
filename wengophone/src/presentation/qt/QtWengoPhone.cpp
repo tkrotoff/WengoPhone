@@ -394,7 +394,7 @@ void QtWengoPhone::initButtons() {
 	_hangUpButton->setEnabled(false);
 
 	//phoneComboBox
-	//connect(_phoneComboBox, SIGNAL(activated(int)), SLOT(callButtonClicked()));
+	connect(_phoneComboBox->lineEdit(), SIGNAL(returnPressed ()), SLOT(callButtonClicked()));
 	connect(_phoneComboBox, SIGNAL(editTextChanged(const QString &)), SLOT(enableCallButton()));
 }
 
