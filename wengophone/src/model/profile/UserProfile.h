@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef USERPROFILE_H
-#define USERPROFILE_H
+#ifndef OWUSERPROFILE_H
+#define OWUSERPROFILE_H
 
 #include "Profile.h"
 
@@ -381,8 +381,10 @@ private:
 
 	/**
 	 * Disconnect all SipAccounts.
+	 *
+ 	 * @param now if true, disconnect without doing any transactions
 	 */
-	void disconnectSipAccounts();
+	void disconnectSipAccounts(bool now = false);
 
 	/**
 	 * Initializes the WengoAccount.
@@ -472,4 +474,4 @@ private:
 	Thread & _modelThread;
 };
 
-#endif //USERPROFILE_H
+#endif //OWUSERPROFILE_H

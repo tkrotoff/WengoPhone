@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IPHONELINE_H
-#define IPHONELINE_H
+#ifndef OWIPHONELINE_H
+#define OWIPHONELINE_H
 
 #include <util/Event.h>
 #include <util/Interface.h>
@@ -145,8 +145,10 @@ public:
 
 	/**
 	 * Finishes the connection with the SIP server.
+	 *
+	 * @param now if true, disconnect without doing any transactions
 	 */
-	virtual void disconnect() = 0;
+	virtual void disconnect(bool now = false) = 0;
 
 	/**
 	 * Sets the state of a PhoneCall.
@@ -216,4 +218,4 @@ public:
 	virtual PhoneCallList getPhoneCallList() const = 0;
 };
 
-#endif	//IPHONELINE_H
+#endif	//OWIPHONELINE_H

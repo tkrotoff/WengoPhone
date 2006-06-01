@@ -79,7 +79,7 @@ void ConnectHandler::connect(IMAccount & imAccount) {
 	}
 }
 
-void ConnectHandler::disconnect(IMAccount & imAccount) {
+void ConnectHandler::disconnect(IMAccount & imAccount, bool now) {
 	ConnectMap::const_iterator it = _connectMap.find(&imAccount);
 
 	if (it != _connectMap.end()) {
@@ -87,7 +87,7 @@ void ConnectHandler::disconnect(IMAccount & imAccount) {
 			if (imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
 				// FIXME: currently there is only one SIP account so we are sure that
 				// the connectSipAccounts will disconnect the Wengo account
-				_userProfile.disconnectSipAccounts();
+				_userProfile.disconnectSipAccounts(now);
 			}
 			(*it).second->disconnect();
 		}

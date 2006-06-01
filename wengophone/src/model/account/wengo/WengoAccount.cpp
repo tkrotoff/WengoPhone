@@ -108,6 +108,12 @@ void WengoAccount::initTimeoutEventHandler() {
 			_initTimer.stop();
 			loginStateChangedEvent(*this, result);
 			networkDiscoveryStateChangedEvent(*this, _lastNetworkDiscoveryState);
+
+			NetworkObserver::getInstance().connectionIsDownEvent -=
+				boost::bind(&WengoAccount::connectionIsDownEventHandler, this, _1);
+
+			NetworkObserver::getInstance().connectionIsUpEvent -=
+				boost::bind(&WengoAccount::connectionIsUpEventHandler, this, _1);
 		}
 		_discoveringNetwork = false;
 	}

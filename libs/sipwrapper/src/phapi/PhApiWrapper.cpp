@@ -206,10 +206,10 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 	return ret;
 }
 
-void PhApiWrapper::removeVirtualLine(int lineId) {
+void PhApiWrapper::removeVirtualLine(int lineId, int regTimeout) {
 	if (_isInitialized) {
 		publishOffline(String::null);
-		phDelVline(lineId);
+		phDelVline(lineId, regTimeout);
 	}
 }
 

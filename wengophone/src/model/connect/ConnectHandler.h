@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONNECTHANDLER_H
-#define CONNECTHANDLER_H
+#ifndef OWCONNECTHANDLER_H
+#define OWCONNECTHANDLER_H
 
 #include <model/chat/ChatHandler.h>
 
@@ -67,7 +67,7 @@ public:
 
 	void connect(IMAccount & imAccount);
 
-	void disconnect(IMAccount & imAccount);
+	void disconnect(IMAccount & imAccount, bool now = false);
 
 private:
 
@@ -129,4 +129,4 @@ private:
 	UserProfile & _userProfile;
 };
 
-#endif	//CONNECTHANDLER_H
+#endif	//OWCONNECTHANDLER_H

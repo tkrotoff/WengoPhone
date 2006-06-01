@@ -184,12 +184,12 @@ void UserProfile::disconnectIMAccounts() {
 	}
 }
 
-void UserProfile::disconnectSipAccounts() {
+void UserProfile::disconnectSipAccounts(bool now) {
 	if (_activePhoneLine && _wengoAccountConnected) {
-		_activePhoneLine->disconnect();
+		_activePhoneLine->disconnect(now);
 		IMAccount imAccount(_wengoAccount->getIdentity(),
 			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
-		_connectHandler.disconnect((IMAccount &)*_imAccountHandler->find(imAccount));
+		_connectHandler.disconnect((IMAccount &)*_imAccountHandler->find(imAccount), now);
 	}
 }
 
@@ -462,5 +462,5 @@ void UserProfile::connectionIsUpEventHandler(NetworkObserver & sender) {
 }
 
 void UserProfile::connectionIsDownEventHandler(NetworkObserver & sender) {
-	disconnectSipAccounts();
+	disconnectSipAccounts(true);
 }

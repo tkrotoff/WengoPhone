@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SIPWRAPPER_H
-#define SIPWRAPPER_H
+#ifndef OWSIPWRAPPER_H
+#define OWSIPWRAPPER_H
 
 #include <sipwrapper/EnumPhoneCallState.h>
 #include <sipwrapper/EnumPhoneLineState.h>
@@ -154,8 +154,9 @@ public:
 	 * Removes a given virtual phone line.
 	 *
 	 * @param lineId id of the virtual phone line to remove
+	 * @param regTimeout unregister timeout (-1 = unchanged)
 	 */
-	virtual void removeVirtualLine(int lineId) = 0;
+	virtual void removeVirtualLine(int lineId, int regTimeout = -1) = 0;
 
 	/** @} */
 
@@ -430,4 +431,4 @@ public:
 	virtual void setPluginPath(const std::string & path) = 0;
 };
 
-#endif	//SIPWRAPPER_H
+#endif	//OWSIPWRAPPER_H

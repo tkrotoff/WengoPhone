@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHONELINE_H
-#define PHONELINE_H
+#ifndef OWPHONELINE_H
+#define OWPHONELINE_H
 
 #include "IPhoneLine.h"
 
@@ -74,7 +74,7 @@ public:
 
 	void connect();
 
-	void disconnect();
+	void disconnect(bool now = false);
 
 	void setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState state, const SipAddress & sipAddress);
 
@@ -173,4 +173,4 @@ private:
 	WengoPhone & _wengoPhone;
 };
 
-#endif	//PHONELINE_H
+#endif	//OWPHONELINE_H

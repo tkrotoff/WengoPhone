@@ -281,7 +281,7 @@ static char *evtnames[] =
   name(EXOSIP_CALL_RELEASED),           /* call context is cleared.            */
 
   /* for UAC events */
-  name( EXOSIP_OPTIONS_NOANSWER),        /* announce no answer within the timeout */
+  name(EXOSIP_OPTIONS_NOANSWER),        /* announce no answer within the timeout */
   name(EXOSIP_OPTIONS_PROCEEDING),      /* announce processing by a remote app   */
   name(EXOSIP_OPTIONS_ANSWERED),        /* announce a 200ok                      */
   name(EXOSIP_OPTIONS_REDIRECTED),      /* announce a redirection                */
@@ -1941,43 +1941,47 @@ phAddVline2(const char *displayname, const char* username, const char *server, c
 
 
 MY_DLLEXPORT int 
-phDelVline(int vlid)
+phDelVline(int vlid, int regTimeout)
 {
-  struct vline *vl;
-  phcall_t *ca;
+	struct vline *vl;
+	phcall_t *ca;
 
-  if (!(vl = ph_valid_vlid(vlid)))
-      return -PH_BADVLID;
+	if (!(vl = ph_valid_vlid(vlid)))
+		return -PH_BADVLID;
 
 
-  /* forbid deletion of the lines which have pending calls */  
-  for(ca = ph_calls; ca < &ph_calls[PH_MAX_CALLS]; ca++)
-    {
-      if (ca->vlid == vlid && ca->cid > 0)
-	return -PH_VLBUSY;
-    }
+	/* forbid deletion of the lines which have pending calls */  
+	for(ca = ph_calls; ca < &ph_calls[PH_MAX_CALLS]; ca++)
+	{
+		if (ca->vlid == vlid && ca->cid > 0)
+			return -PH_VLBUSY;
+	}
 
+	if (regTimeout >= 0)
+		vl->regTimeout = regTimeout;
   
-  /* 
-     if the line has an associatied timeout, 
+	/* 
+	 if the line has an associatied timeout, 
      it means it is regsitered on some server,
      so we need to unregister 
-  */
-  if (vl->regTimeout)
-    {
-      
-      eXosip_lock();
-      eXosip_register(vl->rid, 0);
-      vl->regTimeout = 0;
-      vl->used = VL_DELETING;
-      eXosip_unlock();
-
+	*/
+	if (vl->regTimeout)
+	{  
+		eXosip_lock();
+		eXosip_register(vl->rid, 0);
+		vl->regTimeout = 0;
+		vl->used = VL_DELETING;
+		eXosip_unlock();
     }
-  
-  if (vl->used != VL_DELETING)
-    return 0;
-
-  return 0;
+	else
+	{
+		vline_free(vl);
+	}
+ 
+	if (vl->used != VL_DELETING)
+		return 0;
+	
+	return 0;
 }
 
 
@@ -2939,7 +2943,7 @@ phTerminate()
 
   for(i = 0; i < PH_MAX_VLINES; i++)
     {
-      phDelVline(i+1);
+      phDelVline(i+1, -1);
     }
 
 
@@ -4299,6 +4303,7 @@ ph_event_get()
 		ph_notify_handler(je);
 		break;
 
+	case EXOSIP_OPTIONS_NOANSWER:
 	case EXOSIP_ENGINE_STOPPED:
 		return -2;
 

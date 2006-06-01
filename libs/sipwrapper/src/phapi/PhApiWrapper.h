@@ -97,7 +97,7 @@ public:
 		const std::string & password, const std::string & realm,
 		const std::string & proxyServer, const std::string & registerServer);
 
-	void removeVirtualLine(int lineId);
+	void removeVirtualLine(int lineId, int regTimeout = -1);
 
 	int makeCall(int lineId, const std::string & sipAddress, bool enableVideo);
 

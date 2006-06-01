@@ -193,10 +193,11 @@ MY_DLLEXPORT int phAddVline2(const char* displayname, const char* username, cons
  * Delete virtual line 
  *  This will cause REGISTER request with timeout=0 to be sent to server if needed
  *
- * @param  vlid        Virual line id to remove 
+ * @param  vlid        Virual line id to remove
+ * @param  regTimeout  0: no unregister has to be done, -1: timeout unchanged, or new unregister timeout 
  * @return             0 in case of success
  */
-MY_DLLEXPORT int phDelVline(int vlid);
+MY_DLLEXPORT int phDelVline(int vlid, int regTimeout);
 
 /**
  * Place an outgoing call using given virtual line
