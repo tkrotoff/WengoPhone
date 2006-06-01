@@ -54,7 +54,7 @@ void ContactGroupPopupMenu::renameContactGroup() const {
 	QtRenameGroup dialog(dynamic_cast < QWidget * > (parent()));
 	dialog.exec();
 
-	_cContactList.renameContactGroup(_groupId.toStdString(), dialog.getGroupName().toStdString());
+	_cContactList.renameContactGroup(_groupId.toStdString(), dialog.getGroupName().toUtf8().data());
 }
 
 void ContactGroupPopupMenu::sendSms() {
