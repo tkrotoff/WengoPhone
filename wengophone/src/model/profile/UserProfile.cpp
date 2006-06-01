@@ -22,7 +22,7 @@
 #include <model/WengoPhone.h>
 #include <model/account/NetworkObserver.h>
 #include <model/account/wengo/WengoAccount.h>
-#include <model/account/wengo/wengoAccountFileStorage.h>
+#include <model/account/wengo/WengoAccountFileStorage.h>
 #include <model/chat/ChatHandler.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
