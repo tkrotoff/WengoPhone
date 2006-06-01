@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,12 +17,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WENGOACCOUNTPARSER_H
-#define WENGOACCOUNTPARSER_H
+#ifndef OWWENGOACCOUNTPARSER_H
+#define OWWENGOACCOUNTPARSER_H
 
 #include "WengoAccount.h"
 
 #include <string>
+
+class StringList;
 
 /**
  * Parses the XML datas from the Single Sign On authentication on the Wengo platform (SSO).
@@ -67,7 +69,7 @@
  * 	<d k="netlib.tunnel.http.3" v="192.168.1.1"/>
  * 	<d k="netlib.tunnel.https.1" v="192.168.1.1"/>
  * 	<d k="netlib.tunnel.https.2" v="192.168.1.1"/>
- * </sso> 
+ * </sso>
  * </pre>
  *
  * @ingroup model
@@ -81,7 +83,7 @@ public:
 
 	/**
 	 * Check if password is correct
-	 * 
+	 *
 	 * @return true if login ok
 	 */
 	bool isLoginPasswordOk() const {
@@ -92,13 +94,13 @@ private:
 
 	/**
 	 * Choose a random http tunnel
-	 * 
+	 *
 	 * @param httpTunnels a list of http tunnel ip
 	 * @return a http tunnel ip
 	 */
-	std::string chooseHttpTunnel(std::vector<std::string> httpTunnels);
+	std::string chooseHttpTunnel(const StringList & httpTunnels);
 
 	bool _loginPasswordOk;
 };
 
-#endif	//WENGOACCOUNTPARSER_H
+#endif	//OWWENGOACCOUNTPARSER_H

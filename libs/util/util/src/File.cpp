@@ -236,6 +236,7 @@ std::string FileReader::read() {
 }
 
 void FileReader::close() {
+	LOG_DEBUG("file=" + _filename + " loaded");
 	_file.close();
 }
 
@@ -280,5 +281,6 @@ void FileWriter::write(const std::string & data) {
 }
 
 void FileWriter::close() {
+	LOG_DEBUG("file=" + _filename + " saved");
 	_file.close();
 }

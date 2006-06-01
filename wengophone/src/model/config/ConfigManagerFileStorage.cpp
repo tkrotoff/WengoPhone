@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@
 
 using namespace std;
 
+static const std::string CONFIG_FILENAME = "config.xml";
+
 ConfigManagerFileStorage::ConfigManagerFileStorage(ConfigManager & configManager)
 	: ConfigManagerStorage(configManager) {
 }
@@ -35,15 +37,13 @@ ConfigManagerFileStorage::~ConfigManagerFileStorage() {
 }
 
 bool ConfigManagerFileStorage::load(const std::string & url) {
-	FileReader file(url + "config.xml");
+	FileReader file(url + CONFIG_FILENAME);
 	if (file.open()) {
 		string data = file.read();
 		file.close();
 
 		ConfigXMLSerializer serializer(_configManager.getCurrentConfig());
 		serializer.unserialize(data);
-
-		LOG_DEBUG("file config.xml loaded");
 		return true;
 	}
 
@@ -51,7 +51,7 @@ bool ConfigManagerFileStorage::load(const std::string & url) {
 }
 
 bool ConfigManagerFileStorage::save(const std::string & url) {
-	FileWriter file(url + "config.xml");
+	FileWriter file(url + CONFIG_FILENAME);
 	ConfigXMLSerializer serializer(_configManager.getCurrentConfig());
 
 	file.write(serializer.serialize());

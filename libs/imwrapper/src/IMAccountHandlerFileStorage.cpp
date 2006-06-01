@@ -29,6 +29,8 @@
 
 using namespace std;
 
+static const std::string IMACCOUNT_FILENAME = "imaccounts.xml";
+
 IMAccountHandlerFileStorage::IMAccountHandlerFileStorage(IMAccountHandler & imAccountHandler)
 	: IMAccountHandlerStorage(imAccountHandler),
 	_imAccountHandler(imAccountHandler) {
@@ -38,8 +40,7 @@ IMAccountHandlerFileStorage::~IMAccountHandlerFileStorage() {
 }
 
 bool IMAccountHandlerFileStorage::load(const string & url) {
-	FileReader file(url);
-	LOG_DEBUG("loading " + url);
+	FileReader file(url + IMACCOUNT_FILENAME);
 
 	if (file.open()) {
 		string data = file.read();
@@ -48,7 +49,6 @@ bool IMAccountHandlerFileStorage::load(const string & url) {
 		IMAccountHandlerXMLSerializer serializer(_imAccountHandler);
 		serializer.unserialize(data);
 
-		LOG_DEBUG("file " + url + " loaded");
 		return true;
 	}
 
@@ -56,14 +56,11 @@ bool IMAccountHandlerFileStorage::load(const string & url) {
 }
 
 bool IMAccountHandlerFileStorage::save(const string & url) {
-	FileWriter file(url);
-	LOG_DEBUG("saving " + url);
+	FileWriter file(url + IMACCOUNT_FILENAME);
 
 	IMAccountHandlerXMLSerializer serializer(_imAccountHandler);
 	file.write(serializer.serialize());
 	file.close();
-
-	LOG_DEBUG(url + " saved");
 
 	return true;
 }

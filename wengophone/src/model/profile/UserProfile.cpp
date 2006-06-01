@@ -22,14 +22,12 @@
 #include <model/WengoPhone.h>
 #include <model/account/NetworkObserver.h>
 #include <model/account/wengo/WengoAccount.h>
-#include <model/account/wengo/WengoAccountXMLLayer.h>
+#include <model/account/wengo/wengoAccountFileStorage.h>
 #include <model/chat/ChatHandler.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
-#include <model/contactlist/ContactListFileStorage.h>
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactGroup.h>
-#include <model/contactlist/ContactListStorage.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
 #include <model/phoneline/PhoneLineState.h>
@@ -81,10 +79,10 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_connectHandler.connectedEvent +=
 		boost::bind(&UserProfile::connectedEventHandler, this, _1, _2);
 
-	NetworkObserver::getInstance().connectionIsDownEvent += 
+	NetworkObserver::getInstance().connectionIsDownEvent +=
 		boost::bind(&UserProfile::connectionIsDownEventHandler, this, _1);
 
-	NetworkObserver::getInstance().connectionIsUpEvent += 
+	NetworkObserver::getInstance().connectionIsUpEvent +=
 		boost::bind(&UserProfile::connectionIsUpEventHandler, this, _1);
 }
 
@@ -165,7 +163,7 @@ void UserProfile::connectSipAccounts() {
 		_activePhoneLine->connect();
 		_wengoAccountConnected = true;
 
-		IMAccount imAccount(_wengoAccount->getIdentity(), 
+		IMAccount imAccount(_wengoAccount->getIdentity(),
 			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 		addIMAccount(imAccount);
 		_connectHandler.connect((IMAccount &)*_imAccountHandler->find(imAccount));
@@ -189,7 +187,7 @@ void UserProfile::disconnectIMAccounts() {
 void UserProfile::disconnectSipAccounts() {
 	if (_activePhoneLine && _wengoAccountConnected) {
 		_activePhoneLine->disconnect();
-		IMAccount imAccount(_wengoAccount->getIdentity(), 
+		IMAccount imAccount(_wengoAccount->getIdentity(),
 			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 		_connectHandler.disconnect((IMAccount &)*_imAccountHandler->find(imAccount));
 	}
@@ -223,9 +221,9 @@ void UserProfile::startIM(Contact & contact) {
 void UserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 	//TODO allow several SipAccount
 	if (_wengoAccount) {
-		IPhoneLine * p = findWengoPhoneLine();
-		if( p ) {
-			p->disconnect();
+		IPhoneLine * phoneLine = findWengoPhoneLine();
+		if (phoneLine) {
+			phoneLine->disconnect();
 			//TODO remove the PhoneLine from _phoneLines & destroy it
 		}
 		delete _wengoAccount;
@@ -317,16 +315,19 @@ void UserProfile::wengoAccountInit() {
 		_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
 		_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 
-		WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *)_wengoAccount);
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+		//FIXME Needs to be dynamic?
+		WengoAccountFileStorage * wengoAccountFileStorage = new WengoAccountFileStorage(*(WengoAccount *) _wengoAccount);
 		bool noAccount = true;
-		if (wengoAccountDataLayer->load()) {
+		if (wengoAccountFileStorage->load(config.getConfigDir())) {
 			if (_wengoAccount->hasAutoLogin()) {
 				//Sends the HTTP request to the SSO
 				_wengoAccount->init();
 				noAccount = false;
 			}
 		}
-		delete wengoAccountDataLayer;
+		delete wengoAccountFileStorage;
 
 		if (noAccount) {
 			noAccountAvailableEvent(*this);
@@ -361,10 +362,13 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		_wsCallForward = new WsCallForward(_wengoAccount);
 		wsCallForwardCreatedEvent(*this, *_wsCallForward);
 		_wsCallForward->wsCallForwardEvent += boost::bind(&UserProfile::wsCallForwardEventHandler, this, _1, _2, _3);
-		
-		WengoAccountDataLayer * wengoAccountDataLayer = new WengoAccountXMLLayer(*(WengoAccount *) _wengoAccount);
-		wengoAccountDataLayer->save();
-		delete wengoAccountDataLayer;
+
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+		//FIXME Needs to be dynamic?
+		WengoAccountFileStorage * wengoAccountFileStorage = new WengoAccountFileStorage(*(WengoAccount *) _wengoAccount);
+		wengoAccountFileStorage->save(config.getConfigDir());
+		delete wengoAccountFileStorage;
 
 		addPhoneLine(*_wengoAccount);
 
@@ -441,7 +445,7 @@ bool UserProfile::hasWengoAccount() const {
 void UserProfile::wsCallForwardEventHandler(WsCallForward & sender,
 	int id, WsCallForward::WsCallForwardStatus status) {
 
-	if ( status == WsCallForward::WsCallForwardStatusOk ) {
+	if (status == WsCallForward::WsCallForwardStatusOk) {
 
 		_wsInfo->getWengosCount(false);
 		_wsInfo->getSmsCount(false);

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,8 @@
 #include <string>
 using namespace std;
 
+static const std::string CONTACTLIST_FILENAME = "contactlist.xml";
+
 ContactListFileStorage::ContactListFileStorage(ContactList & contactList, IMAccountHandler & imAccountHandler)
 	: ContactListStorage(contactList),
 	_imAccountHandler(imAccountHandler) {
@@ -39,15 +41,13 @@ ContactListFileStorage::~ContactListFileStorage() {
 }
 
 bool ContactListFileStorage::load(const std::string & url) {
-	FileReader file(url);
+	FileReader file(url + CONTACTLIST_FILENAME);
 	if (file.open()) {
 		string data = file.read();
 		file.close();
 
 		ContactListXMLSerializer serializer(_contactList, _imAccountHandler);
 		serializer.unserialize(data);
-
-		LOG_DEBUG("file contactlist.xml loaded");
 		return true;
 	}
 
@@ -55,7 +55,7 @@ bool ContactListFileStorage::load(const std::string & url) {
 }
 
 bool ContactListFileStorage::save(const std::string & url) {
-	FileWriter file(url);
+	FileWriter file(url + CONTACTLIST_FILENAME);
 	ContactListXMLSerializer serializer(_contactList, _imAccountHandler);
 
 	file.write(serializer.serialize());

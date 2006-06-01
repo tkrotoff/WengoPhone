@@ -17,11 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WENGOACCOUNT_H
-#define WENGOACCOUNT_H
+#ifndef OWWENGOACCOUNT_H
+#define OWWENGOACCOUNT_H
 
 #include <model/account/SipAccount.h>
 
+#include <serialization/Serializable.h>
 #include <http/HttpRequest.h>
 #include <thread/Timer.h>
 #include <util/Event.h>
@@ -35,7 +36,7 @@ class NetworkObserver;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class WengoAccount : public SipAccount {
+class WengoAccount : public SipAccount, public Serializable {
 
 	/**
 	 * WengoAccountParser can directly access to _identity, _username ect...
@@ -53,7 +54,7 @@ public:
 
 	WengoAccount(const WengoAccount & wengoAccount);
 
-	WengoAccount & operator = (const WengoAccount & wengoAccount);
+	WengoAccount & operator=(const WengoAccount & wengoAccount);
 
 	void init();
 
@@ -129,4 +130,4 @@ private:
 	SipAccount::NetworkDiscoveryState _lastNetworkDiscoveryState;
 };
 
-#endif	//WENGOACCOUNT_H
+#endif	//OWWENGOACCOUNT_H

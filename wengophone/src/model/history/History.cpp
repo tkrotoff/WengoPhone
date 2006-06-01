@@ -23,9 +23,8 @@
 #include <model/phoneline/IPhoneLine.h>
 
 #include <util/Logger.h>
-#include <util/String.h>
+#include <util/File.h>
 
-#include <fstream>
 #include <sstream>
 #include <exception>
 
@@ -79,7 +78,7 @@ void History::updateCallState(int callId, HistoryMemento::State state) {
 	}
 }
 
-unsigned int History::size() {
+unsigned int History::size() const {
 	return _collection->size();
 }
 
@@ -114,7 +113,7 @@ void History::clear(HistoryMemento::State state) {
 	mementoRemovedEvent(*this, 0);
 }
 
-std::string History::toString() {
+std::string History::toString() const {
 	return _collection->toString();
 }
 
@@ -124,7 +123,7 @@ void History::removeMemento(unsigned id) {
 }
 
 HistoryMemento * History::getMemento(unsigned id) {
-	boost::mutex::scoped_lock scopedLock(_mutex);
+	Mutex::ScopedLock scopedLock(_mutex);
 
 	return _collection->getMemento(id);
 }
@@ -135,35 +134,33 @@ HistoryMementoCollection * History::getMementos(HistoryMemento::State state, int
 	return _collection->getMementos(state, count);
 }
 
-void History::load(std::string filename) {
-	std::string line;
-	std::string lines;
+bool History::load(const std::string & url) {
+	FileReader file(url);
 
-	if (filename.empty()) {
-		return;
+	if (file.open()) {
+		std::string data = file.read();
+		file.close();
+
+		//clear & unserialize the history
+		clear();
+		unserialize(data);
+		historyLoadedEvent(*this);
+
+		return true;
 	}
 
-	//open the file & read all its content
-	std::ifstream myfile (filename.c_str());
-	if (myfile.is_open()) {
-		while (!myfile.eof()) {
-			getline (myfile,line);
-			lines += line;
-		}
-		myfile.close();
-	}
-
-	//clear & unserialize the history
-	clear();
-	unserialize(lines);
-	historyLoadedEvent(*this);
+	return false;
 }
 
-void History::save(std::string filename) {
-	std::ofstream ofs(filename.c_str());
-	ofs << serialize();
-	ofs.close();
+bool History::save(const std::string & url) {
+	FileWriter file(url);
+
+	file.write(serialize());
+	file.close();
+
 	historySavedEvent(*this);
+
+	return true;
 }
 
 void History::replay(unsigned id) {

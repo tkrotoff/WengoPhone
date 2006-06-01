@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@
 
 using namespace std;
 
+static const std::string USERPROFILE_FILENAME = "userprofile.xml";
+
 UserProfileFileStorage::UserProfileFileStorage(UserProfile & userProfile)
 	: UserProfileStorage(userProfile) {
 }
@@ -42,10 +44,10 @@ bool UserProfileFileStorage::load(const std::string & url) {
 	}
 
 	IMAccountHandlerFileStorage imAccountHandlerFileStorage(*(_userProfile._imAccountHandler));
-	imAccountHandlerFileStorage.load(url + "imaccounts.xml");
+	imAccountHandlerFileStorage.load(url);
 
 	ContactListFileStorage contactListFileStorage(_userProfile._contactList, *(_userProfile._imAccountHandler));
-	contactListFileStorage.load(url + "contactlist.xml");
+	contactListFileStorage.load(url);
 
 	return true;
 }
@@ -56,24 +58,22 @@ bool UserProfileFileStorage::save(const std::string & url) {
 	}
 
 	IMAccountHandlerFileStorage imAccountHandlerFileStorage(*(_userProfile._imAccountHandler));
-	imAccountHandlerFileStorage.save(url + "imaccounts.xml");
+	imAccountHandlerFileStorage.save(url);
 
 	ContactListFileStorage contactListFileStorage(_userProfile._contactList, *(_userProfile._imAccountHandler));
-	contactListFileStorage.save(url + "contactlist.xml");
+	contactListFileStorage.save(url);
 
 	return true;
 }
 
 bool UserProfileFileStorage::loadProfile(const std::string & url) {
-	FileReader file(url + "userprofile.xml");
+	FileReader file(url + USERPROFILE_FILENAME);
 	if (file.open()) {
 		string data = file.read();
 		file.close();
 
 		UserProfileXMLSerializer serializer(_userProfile);
 		serializer.unserialize(data);
-
-		LOG_DEBUG("file userprofile.xml loaded");
 		return true;
 	}
 
@@ -81,7 +81,7 @@ bool UserProfileFileStorage::loadProfile(const std::string & url) {
 }
 
 bool UserProfileFileStorage::saveProfile(const std::string & url) {
-	FileWriter file(url + "userprofile.xml");
+	FileWriter file(url + USERPROFILE_FILENAME);
 	UserProfileXMLSerializer serializer(_userProfile);
 
 	file.write(serializer.serialize());

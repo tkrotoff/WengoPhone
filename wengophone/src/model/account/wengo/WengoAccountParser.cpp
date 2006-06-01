@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,14 +33,14 @@ using namespace std;
 static const std::string STATUS_CODE_OK = "200";
 
 WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string & data) {
-	
+
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
 
 	TiXmlHandle docHandle(& doc);
 
 	TiXmlHandle sso = docHandle.FirstChild("sso");
-	
+
 	//sso status code
 	TiXmlElement * elem = sso.FirstChild("status").Element();
 	if (elem) {
@@ -53,80 +53,80 @@ WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string
 			_loginPasswordOk = true;
 		}
 	}
-	
+
 	//iterate over "d" element
 	TiXmlElement * element = sso.FirstChild("d").Element();
-	while ( element ) {
-		
+	while (element) {
+
 		std::string key = std::string(element->Attribute("k"));
 		std::string value = "";
 		const char * tmp = element->Attribute("v");
-		if( tmp ) {
+		if (tmp) {
 			value = std::string(tmp);
 		}
-		
-		if( key == "sip.auth.userid") {
+
+		if (key == "sip.auth.userid") {
 			account._identity = value;
-		} else if( key == "sip.auth.password") {
+		} else if (key == "sip.auth.password") {
 			account._password = value;
-		} else if( key == "sip.auth.realm") {
+		} else if (key == "sip.auth.realm") {
 			account._realm = value;
-		} else if( key == "sip.address.name") {
+		} else if (key == "sip.address.name") {
 			account._username = value;
-		} else if( key == "sip.address.displayname") {
+		} else if (key == "sip.address.displayname") {
 			account._displayName = value;
-		} else if( key == "sip.address.server.host") {
+		} else if (key == "sip.address.server.host") {
 			account._registerServerHostname = value;
-		} else if( key == "sip.address.server.port") {
+		} else if (key == "sip.address.server.port") {
 			account._registerServerPort = String(value).toInteger();
-		} else if( key == "sip.outbound") {
+		} else if (key == "sip.outbound") {
 			//TODO: pass this parameter to phapi by phconfig
-		} else if( key == "sip.outbound.proxy.host") {
+		} else if (key == "sip.outbound.proxy.host") {
 			account._sipProxyServerHostname = value;
-		} else if( key == "sip.outbound.proxy.port") {
+		} else if (key == "sip.outbound.proxy.port") {
 			account._sipProxyServerPort = String(value).toInteger();
-		} else if( key == "netlib.stun.host") {
+		} else if (key == "netlib.stun.host") {
 			account._stunServer = value;
 		}
-		
-		else if( key == "netlib.tunnel.http") {
-			std::vector<std::string> httpTunnels;
+
+		else if (key == "netlib.tunnel.http") {
+			StringList httpTunnels;
 			TiXmlElement * elt = element->FirstChildElement("l");
-			while(elt) {
-				
+			while (elt) {
+
 				const char * tmp = elt->Attribute("v");
-				if( tmp ) {
-					httpTunnels.push_back(std::string(tmp));
+				if (tmp) {
+					httpTunnels += std::string(tmp);
 				}
-				
+
 				elt = elt->NextSiblingElement("l");
 			}
 			account._httpTunnelServerHostname = chooseHttpTunnel(httpTunnels);
-			
-		} else if( key == "netlib.tunnel.https") {
-			std::vector<std::string> httpsTunnels;
+
+		} else if (key == "netlib.tunnel.https") {
+			StringList httpsTunnels;
 			TiXmlElement * elt = element->FirstChildElement("l");
-			while(elt) {
-				
+			while (elt) {
+
 				const char * tmp = elt->Attribute("v");
-				if( tmp ) {
-					httpsTunnels.push_back(std::string(tmp));
+				if (tmp) {
+					httpsTunnels += std::string(tmp);
 				}
-				
+
 				elt = elt->NextSiblingElement("l");
 			}
-			
+
 			//if https tunnel is activated
-			if( account.httpTunnelHasSSL() ) {
+			if (account.httpTunnelHasSSL()) {
 				account._httpTunnelServerHostname = chooseHttpTunnel(httpsTunnels);
 			}
 		}
-		
+
 		element = element->NextSiblingElement("d");
 	}
 }
 
-std::string WengoAccountParser::chooseHttpTunnel(std::vector<std::string> httpTunnels) {
+std::string WengoAccountParser::chooseHttpTunnel(const StringList & httpTunnels) {
 	srand(time(NULL));
 	return httpTunnels[rand() % httpTunnels.size()];
 }

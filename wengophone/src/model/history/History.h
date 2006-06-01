@@ -97,19 +97,9 @@ public:
 	 */
 	~History();
 
-	/**
-	 * load the history from a file.
-	 *
-	 * @param filename filename to load
-	 */
-	void load(std::string filename);
+	bool load(const std::string & url);
 
-	/**
-	 * save the history to a file.
-	 *
-	 * @param filename filename
-	 */
-	void save(std::string filename);
+	bool save(const std::string & url);
 
 	/**
 	 * get a HistoryMemento by its id.
@@ -147,7 +137,7 @@ public:
 	 *
 	 * @return the number of HistoryMemento's
 	 */
-	unsigned size();
+	unsigned size() const;
 
 	/**
 	 * add a history memento to the history.
@@ -162,7 +152,7 @@ public:
 	 *
 	 * @return a string representing this object
 	 */
-	std::string toString();
+	std::string toString() const;
 
 	/**
 	 * return a pointer to the HistoryMementoCollection.

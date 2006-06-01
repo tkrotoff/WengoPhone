@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WENGOACCOUNTXMLLAYER_H
-#define WENGOACCOUNTXMLLAYER_H
+#ifndef OWWENGOACCOUNTFILESTORAGE_H
+#define OWWENGOACCOUNTFILESTORAGE_H
 
-#include "WengoAccountDataLayer.h"
+#include "WengoAccountStorage.h"
 
 class WengoAccount;
 
@@ -29,16 +29,16 @@ class WengoAccount;
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class WengoAccountXMLLayer : public WengoAccountDataLayer {
+class WengoAccountFileStorage : public WengoAccountStorage {
 public:
 
-	WengoAccountXMLLayer(WengoAccount & wengoAccount);
+	WengoAccountFileStorage(WengoAccount & wengoAccount);
 
-	~WengoAccountXMLLayer();
+	~WengoAccountFileStorage();
 
-	bool load();
+	bool load(const std::string & url);
 
-	bool save();
+	bool save(const std::string & url);
 };
 
-#endif	//WENGOACCOUNTXMLLAYER_H
+#endif	//OWWENGOACCOUNTFILESTORAGE_H

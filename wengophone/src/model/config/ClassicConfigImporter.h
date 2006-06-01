@@ -17,16 +17,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONFIGIMPORTER_H
-#define CONFIGIMPORTER_H
+#ifndef OWCONFIGIMPORTER_H
+#define OWCONFIGIMPORTER_H
 
-#include <string>
 #include <model/account/SipAccount.h>
 #include <model/account/wengo/WengoAccount.h>
 
+#include <string>
+
 class Thread;
 class UserProfile;
-class WengoPhone; 
+class WengoPhone;
 
 /**
  * Import configuration from WengoPhone classic.
@@ -46,7 +47,7 @@ public:
 	 * @return true if configuration has been imported, false if no configuration
 	 * found or the configuration has already been imported.
 	 */
-	bool importConfig(std::string str);
+	bool importConfig(const std::string & str);
 
 private:
 
@@ -68,7 +69,7 @@ private:
 	static std::string getWengoClassicConfigPath();
 	bool ImportConfigFromV1toV3();
 	bool ImportConfigFromV1toV2();
-	bool ImportContactsFromV1toV3(const std::string & fromDir, const std::string & toDir, 
+	bool ImportContactsFromV1toV3(const std::string & fromDir, const std::string & toDir,
 		const std::string & owner);
 	static bool ClassicVcardParser(const std::string & vcardFile, void *structVcard);
 	static bool ClassicXMLParser(const std::string & xmlFile, void *structVcard);
@@ -88,4 +89,4 @@ private:
 	bool _importerDone;
 };
 
-#endif	//CONFIGIMPORTER_H
+#endif	//OWCONFIGIMPORTER_H

@@ -19,13 +19,10 @@
 
 #include "ClassicConfigImporter.h"
 
-
 #include "ConfigManager.h"
 #include "Config.h"
 
 #include <model/account/wengo/WengoAccount.h>
-#include <model/account/wengo/WengoAccountDataLayer.h>
-#include <model/account/wengo/WengoAccountXMLLayer.h>
 #include <model/profile/UserProfile.h>
 #include <model/WengoPhone.h>
 
@@ -115,7 +112,7 @@ StringList mySplit(const std::string & str, char sep)
 	return wordList;
 }
 
-string myTrim(std::string str)
+string myTrim(const std::string & str)
 {
 	string newstr;
 
@@ -133,13 +130,13 @@ string myTrim(std::string str)
 #define CONFIG_VERSION3 3
 
 
-ClassicConfigImporter::ClassicConfigImporter(WengoPhone & wengoPhone) 
+ClassicConfigImporter::ClassicConfigImporter(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone), _modelThread(wengoPhone), _userProfile(wengoPhone.getCurrentUserProfile()) {
 
 	_importerDone = false;
 }
 
-bool ClassicConfigImporter::importConfig(string str) {
+bool ClassicConfigImporter::importConfig(const string & str) {
 
 #if (defined(OS_WINDOWS) || defined(OS_LINUX))
 
@@ -587,9 +584,9 @@ void ClassicConfigImporter::loginStateChangedEventHandler(SipAccount & sender, S
 	switch (state) {
 	case SipAccount::LoginStateReady:
 		try {
-			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(sender);		
+			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(sender);
 			typedef ThreadEvent1<void (WengoAccount wengoAccount), WengoAccount> MyThreadEvent;
-			
+
 			MyThreadEvent * event =
 				new MyThreadEvent(boost::bind(&ClassicConfigImporter::loginStateChangedEventHandlerThreadSafe, this, _1), wengoAccount);
 
@@ -611,7 +608,7 @@ void ClassicConfigImporter::loginStateChangedEventHandlerThreadSafe(WengoAccount
 	_userProfile.loginStateChangedEvent -=
 		boost::bind(&ClassicConfigImporter::loginStateChangedEventHandler, this, _1, _2);
 
-	IMAccount imAccount(wengoAccount.getIdentity(), 
+	IMAccount imAccount(wengoAccount.getIdentity(),
 		wengoAccount.getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 	_userProfile.addIMAccount(imAccount);
 	_wengoPhone.saveUserProfile();

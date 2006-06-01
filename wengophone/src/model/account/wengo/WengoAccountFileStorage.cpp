@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "WengoAccountXMLLayer.h"
+#include "WengoAccountFileStorage.h"
 
 #include "WengoAccount.h"
 
@@ -30,16 +30,18 @@
 #include <string>
 using namespace std;
 
-WengoAccountXMLLayer::WengoAccountXMLLayer(WengoAccount & wengoAccount)
-: WengoAccountDataLayer(wengoAccount) {
+static const std::string WENGOACCOUNT_FILENAME = "user.config";
+
+WengoAccountFileStorage::WengoAccountFileStorage(WengoAccount & wengoAccount)
+	: WengoAccountStorage(wengoAccount) {
 }
 
-WengoAccountXMLLayer::~WengoAccountXMLLayer() {
+WengoAccountFileStorage::~WengoAccountFileStorage() {
 }
 
-bool WengoAccountXMLLayer::load() {
+bool WengoAccountFileStorage::load(const std::string & url) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	FileReader file(config.getConfigDir() + "user.config");
+	FileReader file(url + WENGOACCOUNT_FILENAME);
 
 	if (file.open()) {
 		string data = file.read();
@@ -49,16 +51,15 @@ bool WengoAccountXMLLayer::load() {
 			return false;
 		}
 
-		LOG_DEBUG("file user.config loaded");
 		return true;
 	}
 
 	return false;
 }
 
-bool WengoAccountXMLLayer::save() {
+bool WengoAccountFileStorage::save(const std::string & url) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	FileWriter file(config.getConfigDir() + "user.config");
+	FileWriter file(url + WENGOACCOUNT_FILENAME);
 
 	std::string data = _wengoAccount.serialize();
 	if (data.empty()) {
@@ -67,6 +68,5 @@ bool WengoAccountXMLLayer::save() {
 
 	file.write(data);
 	file.close();
-	LOG_DEBUG("file user.config saved");
 	return true;
 }
