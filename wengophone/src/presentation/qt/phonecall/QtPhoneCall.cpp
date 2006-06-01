@@ -275,7 +275,11 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
 		_qtWengoPhone->getStatusBar().showMessage(QString::null);
+		_durationLabel = NULL;
+		_callTimer->disconnect();
 		_callTimer->stop();
+		delete _callTimer;
+
 		_actionAcceptCall->setEnabled(false);
 		_actionHangupCall->setEnabled(false);
 		_statusLabel->setText(tr("Closed"));
@@ -480,11 +484,13 @@ void QtPhoneCall::openPopup(int x, int y) {
 }
 
 void QtPhoneCall::updateCallDuration() {
+    if (!_durationLabel)
+        return;
 	_duration++;
 	QTime time;
 	time = time.addSecs(_duration);
 	//FIXME strange crash
-	//_durationLabel->setText(time.toString(Qt::TextDate));
+	_durationLabel->setText(time.toString(Qt::TextDate));
 }
 
 void QtPhoneCall::showVideoWidget() {
