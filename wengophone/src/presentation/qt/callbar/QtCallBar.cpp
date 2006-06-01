@@ -68,6 +68,8 @@ QtCallBar::QtCallBar(QWidget * parent , Qt::WFlags f) : QFrame(parent,f) {
 	_phoneComboBox->setEditable(true);
 	//_phoneComboBox->setEditText(tr("Enter a phone number, a Wengo nickname or a SIP address"));
 	_phoneComboBox->setMaximumSize(QSize(10000,22));
+	_phoneComboBox->setAutoCompletion ( false );
+
 	comboContLayout->addWidget(_phoneComboBox);
 
 	QGridLayout *  layout = new QGridLayout(this);

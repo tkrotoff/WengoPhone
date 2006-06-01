@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCALLBAR_H
-#define QTCALLBAR_H
+#ifndef OWQTCALLBAR_H
+#define OWQTCALLBAR_H
 
 class QtWengoStyleLabel;
 
@@ -64,7 +64,7 @@ protected Q_SLOTS:
 	void callBarButtonOffClicked();
 
 	void callBarButtonClicked();
-	  
+
 	void slotUpdatedTranslation();
 };
 #endif
