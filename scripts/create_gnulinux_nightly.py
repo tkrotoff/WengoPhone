@@ -127,11 +127,16 @@ dependencies = {
    'icudata':'34',
    'gnutls':'11',
    'tasn1':'2',
+   'uuid':'1',
     }
 
 for library in dependencies.keys():
     filename = 'lib' + library + '.so.' + dependencies[library]
-    shutil.copyfile('/usr/lib/' + filename, os.path.join(str(temp_directory), filename))
+    try:
+        shutil.copyfile('/usr/lib/' + filename, os.path.join(str(temp_directory), filename))
+    except IOError:
+        shutil.copyfile('/lib/' + filename, os.path.join(str(temp_directory), filename))
+        
 
 X11_dependencies = {
     'Xinerama':'1',
