@@ -304,6 +304,14 @@ public:
 	static const int NO_AWAY_TIMER = -1;
 	int getGeneralAwayTimer() const;
 
+	/** Show / Hide groups in the contacts list. */
+	static const std::string GENERAL_SHOW_GROUPS_KEY;
+	bool getShowGroups() const;
+
+	/** Show / Hide offline contacts in the contacts list. */
+	static const std::string GENERAL_SHOW_OFFLINE_CONTACTS_KEY;
+	bool getShowOfflineContacts() const;
+
 	/** @} */
 
 	/** ISO 639 code of the current language for translating WengoPhone. */

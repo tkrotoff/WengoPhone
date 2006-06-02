@@ -88,6 +88,8 @@ const std::string Config::GENERAL_CLICK_START_FREECALL_KEY = "general.click.star
 const std::string Config::GENERAL_CLICK_START_CHAT_KEY = "general.click.start.chat";
 const std::string Config::GENERAL_CLICK_CALL_CELLPHONE_KEY = "general.click.call.cellphone";
 const std::string Config::GENERAL_AWAY_TIMER_KEY = "general.away.timer";
+const std::string Config::GENERAL_SHOW_GROUPS_KEY = "general.show.groups";
+const std::string Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY = "general.show.offline.contacts";
 
 const std::string Config::LANGUAGE_AUTODETECT_KEYVALUE = "detect";
 const std::string Config::LANGUAGE_KEY = "language";
@@ -210,6 +212,8 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[GENERAL_CLICK_START_CHAT_KEY] = false;
 	_keyDefaultValueMap[GENERAL_CLICK_CALL_CELLPHONE_KEY] = true;
 	_keyDefaultValueMap[GENERAL_AWAY_TIMER_KEY] = 2;
+    _keyDefaultValueMap[GENERAL_SHOW_GROUPS_KEY] = false;
+    _keyDefaultValueMap[GENERAL_SHOW_OFFLINE_CONTACTS_KEY] = false;
 
 	_keyDefaultValueMap[LANGUAGE_KEY] = LANGUAGE_AUTODETECT_KEYVALUE;
 
@@ -476,6 +480,14 @@ bool Config::getGeneralClickCallCellPhone() const {
 
 int Config::getGeneralAwayTimer() const {
 	return getIntegerKeyValue(GENERAL_AWAY_TIMER_KEY);
+}
+
+bool Config::getShowGroups() const {
+    return getBooleanKeyValue(GENERAL_SHOW_GROUPS_KEY);
+}
+
+bool Config::getShowOfflineContacts() const {
+    return getBooleanKeyValue(GENERAL_SHOW_OFFLINE_CONTACTS_KEY);
 }
 
 std::string Config::getLanguage() const {
