@@ -28,7 +28,7 @@
 
 #include <boost/thread/mutex.hpp>
 
-class FileWriter;
+#include <fstream>
 
 /*
 __FILE__ : file source name
@@ -133,7 +133,7 @@ private:
 	void log(Level level, const std::string & className, const std::string & message);
 
 	/** Writes the log messages to a file named log.txt. */
-	FileWriter * _file;
+	std::ofstream _file;
 
 	/** Ensures Logger is thread-safe. */
 	mutable boost::mutex _mutex;

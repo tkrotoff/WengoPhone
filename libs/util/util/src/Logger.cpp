@@ -19,7 +19,6 @@
 
 #include <util/Logger.h>
 
-#include <util/File.h>
 #include <util/Path.h>
 #include <util/Time.h>
 #include <util/Date.h>
@@ -34,12 +33,11 @@ using namespace std;
 Logger Logger::logger;
 
 Logger::Logger() {
-	_file = NULL;
 }
 
 Logger::~Logger() {
 	flush();
-	delete _file;
+	_file.close();
 }
 
 void Logger::debug(const std::string & className, const std::string & message) {
@@ -107,13 +105,13 @@ void Logger::log(Level level, const std::string & className, const std::string &
 			strippedClassName = strippedClassName.substr(0, pos);
 		}
 		std::string fileName = Path::getApplicationDirPath() + "log-" + strippedClassName + ".txt";
-		_file = new FileWriter(fileName);
-		_file->write("Log file=" + fileName + String::EOL);
-		_file->write("Date=" + Date().toString() + String::EOL);
-		_file->write("Time=" + Time().toString() + String::EOL + String::EOL);
+		_file.open(fileName.c_str());
+		_file << ("Log file=" + fileName + String::EOL);
+		_file << ("Date=" + Date().toString() + String::EOL);
+		_file << ("Time=" + Time().toString() + String::EOL + String::EOL);
 	}
 
-	_file->write(tmp + String::EOL);
+	_file << (tmp + String::EOL);
 
 	std::cerr << tmp << std::endl;
 
@@ -123,7 +121,5 @@ void Logger::log(Level level, const std::string & className, const std::string &
 void Logger::flush() {
 	boost::mutex::scoped_lock scopedLock(_mutex);
 
-	if (_file) {
-		_file->close();
-	}
+	_file.flush();
 }
