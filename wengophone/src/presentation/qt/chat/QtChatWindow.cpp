@@ -49,6 +49,8 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 	_imChatSession = &imChatSession;
 	_dialog = NULL;
     _flashTimerId = -1;
+    _flashStat=false;
+    _flashCount=0;
 	_imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1);
 
@@ -114,8 +116,7 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 	}
     else{
         if ( !_dialog->isVisible())
-            _dialog->showMinimized ();
-            _dialog->setWindowState(_dialog->windowState() & ~Qt::WindowActive | Qt::WindowMinimized);
+            showMinimized();
             QCoreApplication::processEvents();
             flashWindow();
     }
@@ -276,8 +277,7 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
 
         if (!_dialog->isVisible())
         {
-            _dialog->showMinimized ();
-            _dialog->setWindowState(_dialog->windowState() & ~Qt::WindowActive | Qt::WindowMinimized);
+            showMinimized ();
             flashWindow();
         }else{
             flashWindow();
@@ -346,8 +346,7 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 			}else{
                 if (!_dialog->isVisible())
                 {
-                    _dialog->showMinimized ();
-                    _dialog->setWindowState(_dialog->windowState() & ~Qt::WindowActive | Qt::WindowMinimized);
+                    showMinimized ();
                     flashWindow();
                     return;
                 }
@@ -374,8 +373,7 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 		}
         else{
             if ( !_dialog->isVisible())
-                _dialog->showMinimized ();
-                _dialog->setWindowState(_dialog->windowState() & ~Qt::WindowActive | Qt::WindowMinimized);
+                showMinimized();
                 flashWindow();
         }
 	} else {
@@ -660,21 +658,23 @@ QMainWindow * ChatWindow::findMainWindow(){
 
 void ChatWindow::flashWindow() {
 #ifdef OS_WINDOWS
-/*
-    HWND desktopWindow = GetDesktopWindow();
-    if (_dialog->isMinimized())
-        SwitchToThisWindow(desktopWindow,false);
-    else
-        BringWindowToTop(desktopWindow);
-*/
-	FLASHWINFO flashInfo;
-	flashInfo.cbSize = sizeof(FLASHWINFO);
-	flashInfo.hwnd = _dialog->winId();
-	flashInfo.dwFlags = FLASHW_TRAY; // |FLASHW_TIMERNOFG;
-	flashInfo.uCount = 5;
-	flashInfo.dwTimeout = 500;
-	FlashWindowEx(&flashInfo);
-//    FlashWindow(_dialog->winId(), true);
+    FLASHWINFO flashInfo;
+    if (_qtWengoPhone->getWidget()->winId() == GetForegroundWindow()){
+        flashInfo.cbSize = sizeof(FLASHWINFO);
+        flashInfo.hwnd = _dialog->winId();
+        flashInfo.dwFlags = FLASHW_TRAY;
+        flashInfo.uCount = 5;
+        flashInfo.dwTimeout = 500;
+        FlashWindowEx(&flashInfo);
+//        FlashWindow(_dialog->winId(), true);
+    } else{
+        flashInfo.cbSize = sizeof(FLASHWINFO);
+        flashInfo.hwnd = _dialog->winId();
+        flashInfo.dwFlags = FLASHW_TRAY|FLASHW_TIMERNOFG;
+        flashInfo.uCount = 5;
+        flashInfo.dwTimeout = 500;
+        FlashWindowEx(&flashInfo);
+    }
 #else
     _dialog->activateWindow();
 #endif
@@ -794,6 +794,13 @@ void ChatWindow::showToaster(IMChatSession * imChatSession) {
 	toaster->showToaster();
 }
 
-void ChatWindow::timerEvent(QTimerEvent *event){
 
+void ChatWindow::showMinimized(){
+#ifdef OS_WINDOWS
+    HWND topWindow = GetForegroundWindow();
+#endif
+    _dialog->showMinimized();
+#ifdef OS_WINDOWS
+    SetForegroundWindow(topWindow);
+#endif
 }

@@ -106,8 +106,6 @@ protected:
 
 	void flashWindow();
 
-	void timerEvent(QTimerEvent *event);
-
     ChatWidget  *   _chatWidget;
 
     QtChatTabWidget *   _tabWidget;
@@ -135,6 +133,10 @@ protected:
 	ChatContactWidgets * _chatContactWidgets;
 
 	int _flashTimerId;
+
+	bool _flashStat;
+
+	int _flashCount;
 
 private:
 
