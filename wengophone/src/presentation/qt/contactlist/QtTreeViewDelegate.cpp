@@ -212,7 +212,6 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
         groupName=QString::fromStdString(groupNameTmp);
     }
 
-	// QString str = QString("%1 (%2)").arg(groupName).arg(nbchild);
-	QString str = groupName;
+	QString str = QString("%1 (%2)").arg(groupName).arg(nbchild);
 	painter->drawText(r, Qt::AlignLeft, str, 0);
 }
