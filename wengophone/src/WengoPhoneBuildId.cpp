@@ -22,7 +22,7 @@
 #define stringize2(x) #x
 #define stringize(x) stringize2(x)
 
-const unsigned long long WengoPhoneBuildId::BUILDID = 13LL;
+const unsigned long long WengoPhoneBuildId::BUILDID = DD_BUILDID;
 const char * WengoPhoneBuildId::VERSION = stringize(DD_VERSION);
 const unsigned long long WengoPhoneBuildId::REVISION = DD_REVISION;
 const char * WengoPhoneBuildId::SOFTPHONE_NAME = stringize(DD_SOFTPHONE_NAME);
