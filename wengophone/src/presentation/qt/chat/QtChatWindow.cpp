@@ -660,17 +660,17 @@ QMainWindow * ChatWindow::findMainWindow(){
 
 void ChatWindow::flashWindow() {
 #ifdef OS_WINDOWS
-
+/*
     HWND desktopWindow = GetDesktopWindow();
     if (_dialog->isMinimized())
         SwitchToThisWindow(desktopWindow,false);
     else
         BringWindowToTop(desktopWindow);
-
+*/
 	FLASHWINFO flashInfo;
 	flashInfo.cbSize = sizeof(FLASHWINFO);
 	flashInfo.hwnd = _dialog->winId();
-	flashInfo.dwFlags = FLASHW_TRAY|FLASHW_TIMERNOFG;
+	flashInfo.dwFlags = FLASHW_TRAY; // |FLASHW_TIMERNOFG;
 	flashInfo.uCount = 5;
 	flashInfo.dwTimeout = 500;
 	FlashWindowEx(&flashInfo);
