@@ -24,14 +24,13 @@
 
 #include <util/Logger.h>
 
-WengoWebService::WengoWebService(WengoAccount * wengoAccount) : _wengoAccount(wengoAccount) {
+WengoWebService::WengoWebService(WengoAccount * wengoAccount)
+	: _wengoAccount(wengoAccount) {
+
 	_https = false;
 	_get = false;
 	_auth = false;
-	_hostname = "";
 	_port = 0;
-	_servicePath = "";
-	_parameters = "";
 }
 
 void WengoWebService::setHttps(bool https) {
@@ -69,16 +68,18 @@ int WengoWebService::sendRequest() {
 }
 
 int WengoWebService::call(WengoWebService * caller) {
-	//set caller
+	//Set caller
 	_caller = caller;
 
-	//add wengo parameters
-	//TODO: retrive the language from Config
-	std::string data = "lang=fra";
+	//Add wengo parameters
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string language = config.getLanguage();
+
+	std::string data = "lang=" + language;
 	data += "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME);
 
-	//add authentication parameters
-	if( (_auth) && (_wengoAccount) ) {
+	//Add authentication parameters
+	if ((_auth) && (_wengoAccount)) {
 		String login = String::encodeUrl(_wengoAccount->getWengoLogin());
 		login.replace("%2e", ".", false);
 		String password = String::encodeUrl(_wengoAccount->getWengoPassword());
@@ -87,7 +88,7 @@ int WengoWebService::call(WengoWebService * caller) {
 	}
 
 	_parameters = data + "&" + _parameters;
-	
+
 	return sendRequest();
 }
 

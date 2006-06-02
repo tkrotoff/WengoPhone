@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_WENGOSWEBSERVICE_H
-#define OW_WENGOSWEBSERVICE_H
+#ifndef OWWSINFO_H
+#define OWWSINFO_H
 
 #include <model/webservices/WengoWebService.h>
 
@@ -28,7 +28,6 @@
  * @author Mathieu Stute
  */
 class WsInfo : public WengoWebService {
-
 public:
 
 	enum WsInfoStatus {
@@ -230,4 +229,4 @@ private:
 	static const std::string CALLFORWARD_TOPSTN_DEST3_TAG;
 };
 
-#endif //OW_SMSWEBSERVICE_H
+#endif	//OWWSINFO_H

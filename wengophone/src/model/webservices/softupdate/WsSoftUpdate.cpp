@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "SoftUpdate.h"
+#include "WsSoftUpdate.h"
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -31,7 +31,7 @@
 
 #include <sstream>
 
-SoftUpdate::SoftUpdate(WengoAccount * wengoAccount) : WengoWebService(wengoAccount) {
+WsSoftUpdate::WsSoftUpdate(WengoAccount * wengoAccount) : WengoWebService(wengoAccount) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
@@ -44,13 +44,17 @@ SoftUpdate::SoftUpdate(WengoAccount * wengoAccount) : WengoWebService(wengoAccou
 	setWengoAuthentication(false);
 }
 
-void SoftUpdate::checkForUpdate() {
+void WsSoftUpdate::checkForUpdate() {
 	std::string operatingSystem;
 
 #ifdef OS_WINDOWS
 	operatingSystem = "windows";
 #elif defined (OS_MACOSX)
-	operatingSystem = "macosx";
+	#if defined (__BIG_ENDIAN__)
+		operatingSystem = "osx_ppc";
+	#else
+		operatingSystem = "osx_x86";
+	#endif
 #elif defined (OS_LINUX)
 	operatingSystem = "linux";
 #endif
@@ -62,7 +66,7 @@ void SoftUpdate::checkForUpdate() {
 	call(this);
 }
 
-void SoftUpdate::answerReceived(const std::string & answer, int requestId) {
+void WsSoftUpdate::answerReceived(const std::string & answer, int requestId) {
 	if (answer.empty()) {
 		return;
 	}
@@ -105,6 +109,10 @@ void SoftUpdate::answerReceived(const std::string & answer, int requestId) {
 	if ((WengoPhoneBuildId::BUILDID != 0) && (buildId > WengoPhoneBuildId::BUILDID)) {
 		//A new version of WengoPhone is available and we don't have a developer version with buildid=0
 		LOG_DEBUG("new WengoPhone version=" + version + " buildid=" + String::fromNumber(buildId));
+
+		//File size in megabytes
+		fileSize = fileSize / 1000 / 1000;
+
 		updateWengoPhoneEvent(*this, downloadUrl, buildId, version, fileSize);
 	} else {
 		LOG_DEBUG("WengoPhone is up-to-date");

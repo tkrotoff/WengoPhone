@@ -42,15 +42,15 @@ class PresenceHandler;
 class ConnectHandler;
 class ChatHandler;
 class PhoneCall;
-class Sms;
-class SoftUpdate;
 class History;
 class IMAccount;
 class UserProfile;
 class WengoAccount;
-class WsWengoSubscribe;
+class WsSubscribe;
 class WsDirectory;
 class WsCallForward;
+class WsSms;
+class WsSoftUpdate;
 class CWsCallForward;
 
 /**
@@ -138,51 +138,6 @@ public:
 	void addIMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol);
 
 	/**
-	 * Opens a web browser and shows the Wengo account informations inside.
-	 */
-	void showWengoAccount();
-
-	/**
-	 * Opens a web browser and shows the Wengo account creation page.
-	 */
-	void showWengoAccountCreation();
-
-	/**
-	 * Opens a web browser and shows the Wengo help center page.
-	 */
-	void showWengoFAQ();
-
-	/**
-	 * Opens a web browser and shows the Wengo forum page.
-	 */
-	void showWengoForum();
-
-	/**
-	 * Opens a web browser and shows the Wengo smart directory page.
-	 */
-	void showWengoSmartDirectory();
-
-	/**
-	 * Opens a web browser and shows the Wengo callout page.
-	 */
-	void showWengoCallOut();
-
-	/**
-	 * Opens a web browser and shows the Wengo SMS page.
-	 */
-	void showWengoSMS();
-
-	/**
-	 * Opens a web browser and shows the Wengo voice mail page.
-	 */
-	void showWengoVoiceMail();
-
-	/**
-	 * Opens a web browser and shows the Wengo buy page.
-	 */
-	void showWengoBuyWengos();
-
-	/**
 	 * Saves the current UserProfile.
 	 */
 	void saveUserProfile();
@@ -237,20 +192,6 @@ public:
 private:
 
 	/**
-	 * Opens a web browser with the given url.
-	 *
-	 * @param url the url to open
-	 */
-	void openWengoUrlWithoutAuth(const std::string & url);
-
-	/**
-	 * Opens a web browser with the given url.
-	 *
-	 * @param url the url to open
-	 */
-	void openWengoUrlWithAuth(const std::string & url);
-
-	/**
 	 * Handle History::historyLoadedEvent
 	 */
 	void historyLoadedEventHandler(History & sender);
@@ -259,19 +200,19 @@ private:
 
 	void wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin);
 
-	void wsWengoSubscribeCreatedEventHandler(WengoPhone & sender, WsWengoSubscribe & wsWengoSubscribe);
+	void wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscribe & wsSubscribe);
 
-	void wsDiretoryCreatedEventHandler(UserProfile & sender, WsDirectory & wsDirectory);
+	void wsDirectoryCreatedEventHandler(UserProfile & sender, WsDirectory & wsDirectory);
 
-	void smsCreatedEventHandler(UserProfile & sender, Sms & sms);
+	void wsSmsCreatedEventHandler(UserProfile & sender, WsSms & wsSms);
 
-	void softUpdateCreatedEventHandler(UserProfile & sender, SoftUpdate & softUpdate);
+	void wsSoftUpdateCreatedEventHandler(UserProfile & sender, WsSoftUpdate & wsSoftUpdate);
+
+	void wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward);
 
 	void initFinishedEventHandler(WengoPhone & sender);
 
 	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
-
-	void wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward);
 
 
 	/**
@@ -291,26 +232,6 @@ private:
 	CUserProfile * _cUserProfile;
 
 	CWsCallForward * _cWsCallForward;
-
-	static const std::string URL_WENGO_ACCOUNTCREATION;
-
-	static const std::string URL_WENGO_FORUM;
-
-	static const std::string URL_WENGO_FAQ;
-
-	static const std::string URL_WENGO_SEARCH_EXT;
-
-	static const std::string URL_WENGO_SEARCH_INT;
-
-	static const std::string URL_WENGO_CALLOUT;
-
-	static const std::string URL_WENGO_SMS;
-
-	static const std::string URL_WENGO_VOICEMAIL;
-
-	static const std::string URL_WENGO_ACCOUNT;
-
-	static const std::string URL_WENGO_BUYWENGOS;
 };
 
 #endif	//CWENGOPHONE_H

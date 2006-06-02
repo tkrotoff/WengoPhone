@@ -22,13 +22,13 @@
 #include <presentation/PFactory.h>
 #include <presentation/PSubscribe.h>
 
-CSubscribe::CSubscribe(WsWengoSubscribe & wsWengoSubscribe, CWengoPhone & cWengoPhone)
-	: _wsWengoSubscribe(wsWengoSubscribe),
+CSubscribe::CSubscribe(WsSubscribe & wsSubscribe, CWengoPhone & cWengoPhone)
+	: _wsSubscribe(wsSubscribe),
 	_cWengoPhone(cWengoPhone) {
 
 	_pSubscribe = PFactory::getFactory().createPresentationSubscribe(*this);
 
-	_wsWengoSubscribe.wengoSubscriptionEvent += wengoSubscriptionEvent;
+	_wsSubscribe.wengoSubscriptionEvent += wengoSubscriptionEvent;
 }
 
 CSubscribe::~CSubscribe() {
@@ -37,5 +37,5 @@ CSubscribe::~CSubscribe() {
 
 int CSubscribe::subscribe(const std::string & email, const std::string & nickname,
 	const std::string & lang, const std::string & password) {
-	return _wsWengoSubscribe.subscribe(email, nickname, lang, password);
+	return _wsSubscribe.subscribe(email, nickname, lang, password);
 }

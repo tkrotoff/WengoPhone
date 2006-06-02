@@ -19,6 +19,7 @@
 
 #include "QtCreditWidget.h"
 
+#include <model/webservices/url/WsUrl.h>
 #include <control/CWengoPhone.h>
 #include <presentation/qt/config/QtWengoConfigDialog.h>
 
@@ -30,7 +31,7 @@ QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent , Qt:
 	_ui = NULL;
 	_callForwardMode = tr("unauthorized");
 	_pstnNumber = tr("no number");
-	
+
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtCreditWidget::initThreadSafe, this));
 	postEvent(event);
@@ -99,7 +100,7 @@ void QtCreditWidget::setCallForwardMode(const QString & mode) {
 }
 
 void QtCreditWidget::buyOutClicked() {
-	_cWengoPhone.showWengoBuyWengos();
+	WsUrl::showWengoBuyWengos();
 }
 
 void QtCreditWidget::callforwardModeClicked() {
@@ -109,6 +110,7 @@ void QtCreditWidget::callforwardModeClicked() {
 }
 
 void QtCreditWidget::slotUpdatedTranslation() {
-  if (_ui)
-    _ui->retranslateUi(_widget);
+	if (_ui) {
+		_ui->retranslateUi(_widget);
+	}
 }

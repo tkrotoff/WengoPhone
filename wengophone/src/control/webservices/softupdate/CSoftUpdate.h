@@ -22,7 +22,7 @@
 
 #include <string>
 
-class SoftUpdate;
+class WsSoftUpdate;
 class CWengoPhone;
 class PSoftUpdate;
 
@@ -34,7 +34,7 @@ class PSoftUpdate;
 class CSoftUpdate {
 public:
 
-	CSoftUpdate(SoftUpdate & softUpdate, CWengoPhone & cWengoPhone);
+	CSoftUpdate(WsSoftUpdate & wsSoftUpdate, CWengoPhone & cWengoPhone);
 
 	~CSoftUpdate();
 
@@ -44,13 +44,13 @@ public:
 
 private:
 
-	void updateWengoPhoneEventHandler(SoftUpdate & sender,
+	void updateWengoPhoneEventHandler(WsSoftUpdate & sender,
 				const std::string & downloadUrl,
 				unsigned long long buildId,
 				const std::string & version,
 				unsigned fileSize);
 
-	SoftUpdate & _softUpdate;
+	WsSoftUpdate & _wsSoftUpdate;
 
 	CWengoPhone & _cWengoPhone;
 

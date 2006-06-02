@@ -36,6 +36,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 #include <model/phoneline/IPhoneLine.h>
+#include <model/webservices/url/WsUrl.h>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -470,19 +471,19 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	}
 }
 
-void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall){
+void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall) {
 	QtContactCallListWidget * qtContactCallListWidget;
 
 	int nbtab = _ui->tabWidget->count();
 
-	for ( int i = 0; i < nbtab; i++){
-		if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))){
+	for (int i = 0; i < nbtab; i++) {
+		if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))) {
 			return;
 		}
 
-	for (int i = 0; i < _ui->tabWidget->count(); i++){
-		QtContactCallListWidget * qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
-		if ( qtContactCallListWidget ){
+		for (int i = 0; i < _ui->tabWidget->count(); i++) {
+			QtContactCallListWidget * qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+			if ( qtContactCallListWidget ) {
 				if ( qtContactCallListWidget->hasPhoneCall( targetCall) ){
 					_ui->tabWidget->setTabText(i,tr("Conference"));
 					IPhoneLine * phoneLine = _cWengoPhone.getWengoPhone().getCurrentUserProfile().getActivePhoneLine();
@@ -676,16 +677,18 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 	case SipAccount::LoginStateReady:
 #ifdef OS_WINDOWS
 		if (config.getIEActiveX() && wengoAccount) {
-			//TODO: retrive the lang code from the current language
-			std::string data = "?login=" + wengoAccount->getWengoLogin() + "&password=" + wengoAccount->getWengoPassword()
-				+ "&lang=" + "eng" + "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) + "&page=softphoneng-web";
+			std::string data = "?login=" + wengoAccount->getWengoLogin() +
+				"&password=" + wengoAccount->getWengoPassword() +
+				"&lang=" + config.getLanguage() +
+				"&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) +
+				"&page=softphoneng-web";
 			_browser->setUrl(URL_WENGO_MINI_HOME + data);
 		}
 #endif
-	break;
+		break;
 
 	case SipAccount::LoginStateConnected:
-	break;
+		break;
 
 	case SipAccount::LoginStateDisconnected:
 #ifdef OS_WINDOWS
@@ -748,7 +751,7 @@ void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFi
 }
 
 void QtWengoPhone::showWengoAccount() {
-	_cWengoPhone.showWengoAccount();
+	WsUrl::showWengoAccount();
 }
 
 void QtWengoPhone::openWengoAccount() {
@@ -803,25 +806,25 @@ void QtWengoPhone::showConfig() {
 }
 
 void QtWengoPhone::showForum() {
-	_cWengoPhone.showWengoForum();
+	WsUrl::showWengoForum();
 }
 
 void QtWengoPhone::showHelp() {
 }
 
 void QtWengoPhone::showFaq() {
-	_cWengoPhone.showWengoFAQ();
+	WsUrl::showWengoFAQ();
 }
 
 void QtWengoPhone::showBuyOut() {
-	_cWengoPhone.showWengoBuyWengos();
+	WsUrl::showWengoBuyWengos();
 }
 void QtWengoPhone::showCallOut() {
-	_cWengoPhone.showWengoCallOut();
+	WsUrl::showWengoCallOut();
 }
 
 void QtWengoPhone::showSms() {
-	_cWengoPhone.showWengoSMS();
+	WsUrl::showWengoSMS();
 }
 
 void QtWengoPhone::showSearchContactWindows() {
@@ -836,7 +839,7 @@ void QtWengoPhone::showAbout() {
 }
 
 void QtWengoPhone::showVoiceMail() {
-	_cWengoPhone.showWengoVoiceMail();
+	WsUrl::showWengoVoiceMail();
 }
 
 void QtWengoPhone::showHideOffLineContacts() {
@@ -975,7 +978,7 @@ void QtWengoPhone::urlClickedEventHandler(std::string url) {
 	LOG_DEBUG(url);
 
 	//find anchor
-	std::string anchor = "";
+	std::string anchor;
 	int sharpPos = QString::fromStdString(url).indexOf('#');
 	if( sharpPos != -1 ){
 		anchor = QString::fromStdString(url).right(url.length() - sharpPos - 1).toStdString();
@@ -1315,7 +1318,7 @@ void QtWengoPhone::updateCallMenu() {
 	tmpAction->setData(QVariant(QString::fromStdString(tmpContactProfile.getFreePhoneNumber())));
       }
 
-      if (tmpContactProfile.getMobilePhone() != "") {
+      if (!tmpContactProfile.getMobilePhone().empty()) {
 	/* Call mobile action */
 	QAction * tmpAction =_callMobileMenu->addAction(QString::fromStdString(tmpContactProfile.getDisplayName() +
 									       ": " +
@@ -1328,7 +1331,7 @@ void QtWengoPhone::updateCallMenu() {
 	tmpAction->setData(QVariant(QString::fromStdString(tmpContactProfile.getMobilePhone())));
       }
 
-      if (tmpContactProfile.getHomePhone() != "") {
+      if (!tmpContactProfile.getHomePhone().empty()) {
 	QAction * tmpAction =_callLandLineMenu->addAction(QString::fromStdString(tmpContactProfile.getDisplayName() +
 										 ": " +
 										 tmpContactProfile.getHomePhone()));

@@ -28,7 +28,7 @@
 
 #include <control/CWengoPhone.h>
 
-#include <model/webservices/subscribe/Subscribe.h>
+#include <model/webservices/subscribe/WsSubscribe.h>
 
 #include <util/Logger.h>
 
@@ -118,20 +118,20 @@ void QtSubscribe::sendRequest() {
 }
 
 void QtSubscribe::wengoSubscriptionEventHandler(
-	WsWengoSubscribe & sender, int id, WsWengoSubscribe::SubscriptionStatus status,
+	WsSubscribe & sender, int id, WsSubscribe::SubscriptionStatus status,
 	const std::string & errorMessage, const std::string & password) {
 
-	typedef PostEvent2<void (WsWengoSubscribe::SubscriptionStatus, std::string), WsWengoSubscribe::SubscriptionStatus, const std::string &> MyPostEvent;
+	typedef PostEvent2<void (WsSubscribe::SubscriptionStatus, std::string), WsSubscribe::SubscriptionStatus, const std::string &> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSubscribe::wengoSubscriptionEventHandlerThreadSafe, this, _1, _2), status, password);
 	postEvent(event);
 }
 
-void QtSubscribe::wengoSubscriptionEventHandlerThreadSafe(WsWengoSubscribe::SubscriptionStatus status, std::string password) {
+void QtSubscribe::wengoSubscriptionEventHandlerThreadSafe(WsSubscribe::SubscriptionStatus status, std::string password) {
 	_subscribeButtonEnabled = true;
 	QString errorMessage;
 
 	switch (status) {
-	case WsWengoSubscribe::SubscriptionOk:
+	case WsSubscribe::SubscriptionOk:
 		//Close previous page
 		_subscribeWindow->close();
 		//Next page
@@ -139,31 +139,31 @@ void QtSubscribe::wengoSubscriptionEventHandlerThreadSafe(WsWengoSubscribe::Subs
 				_ui->emailLineEdit->text(), _subscribeWindow);
 		break;
 
-	case WsWengoSubscribe::SubscriptionBadQuery:
+	case WsSubscribe::SubscriptionBadQuery:
 		errorMessage = tr("Unknown Error");
 		break;
 
-	case WsWengoSubscribe::SubscriptionBadVersion:
+	case WsSubscribe::SubscriptionBadVersion:
 		errorMessage = tr("Unknown Error");
 		break;
 
-	case WsWengoSubscribe::SubscriptionUnknownError:
+	case WsSubscribe::SubscriptionUnknownError:
 		errorMessage = tr("Unknown Error");
 		break;
 
-	case WsWengoSubscribe::SubscriptionMailError:
+	case WsSubscribe::SubscriptionMailError:
 		errorMessage = tr("You cannot use this email address, already in use");
 		break;
 
-	case WsWengoSubscribe::SubscriptionNicknameError:
+	case WsSubscribe::SubscriptionNicknameError:
 		errorMessage = tr("You cannot use this nickname, already in use");
 		break;
 
-	case WsWengoSubscribe::SubscriptionWeakPassword:
+	case WsSubscribe::SubscriptionWeakPassword:
 		errorMessage = tr("Your password does not contain enough characters (6 minimum), try another one");
 		break;
 
-	case WsWengoSubscribe::SubscriptionFailed:
+	case WsSubscribe::SubscriptionFailed:
 		errorMessage = tr("Subscription Failed");
 		break;
 

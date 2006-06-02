@@ -27,7 +27,7 @@
 #include "profile/UserProfileFileStorage.h"
 #include "profile/UserProfile.h"
 #include "wenbox/WenboxPlugin.h"
-#include "webservices/subscribe/Subscribe.h"
+#include "webservices/subscribe/WsSubscribe.h"
 #include "WengoPhoneBuildId.h"
 #include "classic/ClassicExterminator.h"
 
@@ -37,13 +37,19 @@
 
 #include <sstream>
 
+//FIXME hack
+WengoPhone * WengoPhone::instance = NULL;
+
 WengoPhone::WengoPhone()
 	: _userProfile(*this) {
 	_terminate = false;
 	_startupSettingListener = new StartupSettingListener();
 	_running = false;
 	_wenboxPlugin = NULL;
-	_wsWengoSubscribe = NULL;
+	_wsSubscribe = NULL;
+
+	//FIXME hack
+	instance = this;
 
 	//set HttpRequest User Agent
 	std::stringstream ss;
@@ -113,8 +119,8 @@ void WengoPhone::init() {
 	ClassicConfigImporter importer(*this);
 	importer.importConfig(config.getConfigDir());
 
-	_wsWengoSubscribe = new WsWengoSubscribe();
-	wsWengoSubscribeCreatedEvent(*this, *_wsWengoSubscribe);
+	_wsSubscribe = new WsSubscribe();
+	wsSubscribeCreatedEvent(*this, *_wsSubscribe);
 
 	//LocalNetworkAccount always created and added by default
 	/*LocalNetworkAccount * localAccount = new LocalNetworkAccount();

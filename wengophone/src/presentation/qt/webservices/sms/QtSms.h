@@ -68,9 +68,9 @@ private:
 
 	void updatePresentationThreadSafe();
 
-	void smsStatusEventHandler(Sms & sender, int smsId, Sms::SmsStatus status);
+	void smsStatusEventHandler(WsSms & sender, int smsId, WsSms::SmsStatus status);
 
-	void smsStatusEventHandlerThreadSafe(Sms::SmsStatus status);
+	void smsStatusEventHandlerThreadSafe(WsSms::SmsStatus status);
 
 	QString getCompleteMessage();
 

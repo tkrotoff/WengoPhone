@@ -19,23 +19,23 @@
 
 #include "CSoftUpdate.h"
 
-#include <model/webservices/softupdate/SoftUpdate.h>
+#include <model/webservices/softupdate/WsSoftUpdate.h>
 #include <presentation/PFactory.h>
 #include <presentation/PSoftUpdate.h>
 
-CSoftUpdate::CSoftUpdate(SoftUpdate & softUpdate, CWengoPhone & cWengoPhone)
-	: _softUpdate(softUpdate),
+CSoftUpdate::CSoftUpdate(WsSoftUpdate & wsSoftUpdate, CWengoPhone & cWengoPhone)
+	: _wsSoftUpdate(wsSoftUpdate),
 	_cWengoPhone(cWengoPhone) {
 
 	_pSoftUpdate = PFactory::getFactory().createPresentationSoftUpdate(*this);
 
-	_softUpdate.updateWengoPhoneEvent += boost::bind(&CSoftUpdate::updateWengoPhoneEventHandler, this, _1, _2, _3, _4, _5);
+	_wsSoftUpdate.updateWengoPhoneEvent += boost::bind(&CSoftUpdate::updateWengoPhoneEventHandler, this, _1, _2, _3, _4, _5);
 }
 
 CSoftUpdate::~CSoftUpdate() {
 }
 
-void CSoftUpdate::updateWengoPhoneEventHandler(SoftUpdate & sender,
+void CSoftUpdate::updateWengoPhoneEventHandler(WsSoftUpdate & sender,
 				const std::string & downloadUrl,
 				unsigned long long buildId,
 				const std::string & version,

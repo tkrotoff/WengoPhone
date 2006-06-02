@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WSDIRECTORY_H
-#define WSDIRECTORY_H
+#ifndef OWWSDIRECTORY_H
+#define OWWSDIRECTORY_H
 
 #include <model/webservices/WengoWebService.h>
 
@@ -58,7 +58,7 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	 WsDirectory(WengoAccount * wengoAccount);
+	WsDirectory(WengoAccount * wengoAccount);
 
 	virtual ~WsDirectory() {}
 
@@ -69,4 +69,4 @@ private:
 	void answerReceived(const std::string & answer, int requestId);
 };
 
-#endif	//WSDIRECTORY_H
+#endif	//OWWSDIRECTORY_H

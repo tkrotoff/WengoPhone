@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTSOFTUPDATE_H
-#define QTSOFTUPDATE_H
+#ifndef OWQTSOFTUPDATE_H
+#define OWQTSOFTUPDATE_H
 
 #include <presentation/PSoftUpdate.h>
 
@@ -35,7 +35,7 @@ class CSoftUpdate;
 class QtWengoPhone;
 
 class QDialog;
-class QLabel;
+namespace Ui { class SoftUpdateWindow; }
 
 /**
  * Shows a Qt progress dialog when downloading a WengoPhone update.
@@ -110,12 +110,12 @@ private:
 	/** Original progress dialog label text. */
 	QString _originalLabelText;
 
+	Ui::SoftUpdateWindow * _ui;
+
 	/**
 	 * Progress dialog.
 	 */
 	QDialog * _softUpdateWindow;
-
-	QLabel * _updateTextLabel;
 };
 
-#endif	//QTSOFTUPDATE_H
+#endif	//OWQTSOFTUPDATE_H

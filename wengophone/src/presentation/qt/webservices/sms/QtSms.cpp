@@ -64,8 +64,8 @@ void QtSms::updatePresentationThreadSafe() {
 
 void QtSms::sendButtonClicked() {
 
-	//validate sms length before sending
-	if( !checkSmsLength() ) {
+	//Validate SMS length before sending
+	if (!checkSmsLength()) {
 
 		QMessageBox::warning(_smsWindow,
 			tr("Wengo SMS service"),
@@ -86,19 +86,19 @@ void QtSms::sendButtonClicked() {
 	_cSms.sendSMS(phoneNumber, sms);
 }
 
-void QtSms::smsStatusEventHandler(Sms & sender, int smsId, Sms::SmsStatus status) {
+void QtSms::smsStatusEventHandler(WsSms & sender, int smsId, WsSms::SmsStatus status) {
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSms::smsStatusEventHandlerThreadSafe, this, status));
 	postEvent(event);
 }
 
-void QtSms::smsStatusEventHandlerThreadSafe(Sms::SmsStatus status) {
+void QtSms::smsStatusEventHandlerThreadSafe(WsSms::SmsStatus status) {
 	QString smsStatus = String::null;
 	switch (status) {
-	case Sms::SmsStatusError:
+	case WsSms::SmsStatusError:
 		smsStatus = tr("Your SMS has not been sent");
 		break;
-	case Sms::SmsStatusOk:
+	case WsSms::SmsStatusOk:
 		smsStatus = tr("Your SMS has been sent");
 		break;
 	default:
@@ -124,7 +124,7 @@ bool QtSms::checkSmsLength() {
 
 	QString mess = getCompleteMessage();
 
-	return ( mess.length() < 160 );
+	return (mess.length() < 160);
 }
 
 QString QtSms::getCompleteMessage() {

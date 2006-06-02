@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WENGOPHONE_H
-#define WENGOPHONE_H
+#ifndef OWWENGOPHONE_H
+#define OWWENGOPHONE_H
 
 #include <model/account/SipAccount.h>
 #include <model/profile/UserProfile.h>
@@ -30,7 +30,7 @@
 #include <string>
 
 class WenboxPlugin;
-class WsWengoSubscribe;
+class WsSubscribe;
 class NetworkObserver;
 
 /**
@@ -77,12 +77,12 @@ public:
 	Event<void (WengoPhone & sender, WenboxPlugin & wenboxPlugin)> wenboxPluginCreatedEvent;
 
 	/**
-	 * WsWengoSubscribe has been created.
+	 * WsSubscribe has been created.
 	 *
 	 * @param sender this class
 	 * @param wsWengoSubscribe WsWengoSubscribe created
 	 */
-	Event<void (WengoPhone & sender, WsWengoSubscribe & wsWengoSubscribe)> wsWengoSubscribeCreatedEvent;
+	Event<void (WengoPhone & sender, WsSubscribe & wsSubscribe)> wsSubscribeCreatedEvent;
 
 	/**
 	 * timeout has been reached.
@@ -92,6 +92,16 @@ public:
 	Event<void ()> timeoutEvent;
 
 	WengoPhone();
+
+
+	/**
+	 * FIXME
+	 * This is a hack needed by WsUrl::openWengoUrlWithAuth()
+	 * A better solution (elegant solution) has to find.
+	 * Please check WsUrl::openWengoUrlWithAuth() and if you have
+	 * a solution to this problem, just do it.
+	 */
+	static WengoPhone * instance;
 
 	~WengoPhone();
 
@@ -157,8 +167,8 @@ private:
 	/** Wenbox. */
 	WenboxPlugin * _wenboxPlugin;
 
-	/** Wenbox. */
-	WsWengoSubscribe * _wsWengoSubscribe;
+	/** Wengo subscribe web service. */
+	WsSubscribe * _wsSubscribe;
 
 	/**
 	 * If this thread should be terminate or not.
@@ -168,12 +178,12 @@ private:
 	 */
 	bool _terminate;
 
-    /** 
-     *  Emergency timeout handler called when SIP unregistering 
-     *  is not quick enough, or timed out
-     */
-    void shutdownAfterTimeout();
-	
+	/**
+	 * Emergency timeout handler called when SIP unregistering
+	 * is not quick enough, or timed out.
+	 */
+	void shutdownAfterTimeout();
+
 	/**
 	 * True if the thread is running.
 	 */
@@ -185,4 +195,4 @@ private:
 	StartupSettingListener * _startupSettingListener;
 };
 
-#endif	//WENGOPHONE_H
+#endif	//OWWENGOPHONE_H

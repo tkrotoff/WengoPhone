@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_CALLFORWARDWEBSERVICE_H
-#define OW_CALLFORWARDWEBSERVICE_H
+#ifndef OWWSCALLFORWARD_H
+#define OWWSCALLFORWARD_H
 
 #include <model/webservices/WengoWebService.h>
 
@@ -85,7 +85,6 @@ private:
 	 * @see WengoWebService
 	 */
 	void answerReceived(const std::string & answer, int requestId);
-
 };
 
-#endif //OW_CALLFORWARDWEBSERVICE_H
+#endif	//OWWSCALLFORWARD_H

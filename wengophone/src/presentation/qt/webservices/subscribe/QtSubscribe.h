@@ -65,10 +65,10 @@ private:
 
 	void updatePresentationThreadSafe() { }
 
-	void wengoSubscriptionEventHandler(WsWengoSubscribe & sender, int id, WsWengoSubscribe::SubscriptionStatus status,
+	void wengoSubscriptionEventHandler(WsSubscribe & sender, int id, WsSubscribe::SubscriptionStatus status,
 		const std::string & errorMessage, const std::string & password);
 
-	void wengoSubscriptionEventHandlerThreadSafe(WsWengoSubscribe::SubscriptionStatus status, std::string password);
+	void wengoSubscriptionEventHandlerThreadSafe(WsSubscribe::SubscriptionStatus status, std::string password);
 
 	void showErrorMessage(const QString & errorMessage);
 

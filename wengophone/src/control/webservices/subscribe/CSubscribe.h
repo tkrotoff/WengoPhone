@@ -20,7 +20,7 @@
 #ifndef OW_CWENGOSUBSCRIBE_H
 #define OW_CWENGOSUBSCRIBE_H
 
-#include <model/webservices/subscribe/Subscribe.h>
+#include <model/webservices/subscribe/WsSubscribe.h>
 
 #include <string>
 
@@ -36,12 +36,12 @@ class CSubscribe {
 public:
 
 	/**
-	 * @see WsWengoSubscribe::wengoSubscriptionEvent
+	 * @see WsSubscribe::wengoSubscriptionEvent
 	 */
-	Event<void (WsWengoSubscribe & sender, int id, WsWengoSubscribe::SubscriptionStatus status,
+	Event<void (WsSubscribe & sender, int id, WsSubscribe::SubscriptionStatus status,
 				const std::string & errorMessage, const std::string & password)> wengoSubscriptionEvent;
 
-	CSubscribe(WsWengoSubscribe & wsWengoSubscribe, CWengoPhone & cWengoPhone);
+	CSubscribe(WsSubscribe & wsSubscribe, CWengoPhone & cWengoPhone);
 
 	~CSubscribe();
 
@@ -50,14 +50,14 @@ public:
 	}
 
 	/**
-	 * @see WsWengoSubscribe::subscribe()
+	 * @see WsSubscribe::subscribe()
 	 */
 	int subscribe(const std::string & email, const std::string & nickname,
 		const std::string & lang, const std::string & password = "");
 
 private:
 
-	WsWengoSubscribe & _wsWengoSubscribe;
+	WsSubscribe & _wsSubscribe;
 
 	CWengoPhone & _cWengoPhone;
 

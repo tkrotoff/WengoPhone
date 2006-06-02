@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WENGOWEBSERVICE_H
-#define WENGOWEBSERVICE_H
+#ifndef OWWENGOWEBSERVICE_H
+#define OWWENGOWEBSERVICE_H
 
 #include <http/HttpRequest.h>
 
@@ -46,7 +46,7 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	WengoWebService(WengoAccount * wengoAccount = 0);
+	WengoWebService(WengoAccount * wengoAccount = NULL);
 
 	virtual ~WengoWebService() {}
 
@@ -134,7 +134,7 @@ private:
 	 * @param requestId the request id
 	 */
 	virtual void answerReceived(const std::string & answer, int requestId) = 0;
-	
+
 	/** WengoAccount: to get login & password */
 	WengoAccount * _wengoAccount;
 
@@ -163,4 +163,4 @@ private:
 	WengoWebService * _caller;
 };
 
-#endif	//WENGOWEBSERVICE_H
+#endif	//OWWENGOWEBSERVICE_H

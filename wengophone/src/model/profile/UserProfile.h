@@ -47,10 +47,10 @@ class History;
 class IPhoneLine;
 class NetworkObserver;
 class PhoneCall;
-class Sms;
-class SoftUpdate;
 class History;
 class Thread;
+class WsSms;
+class WsSoftUpdate;
 class WsInfo;
 class WsDirectory;
 
@@ -134,7 +134,7 @@ public:
 	 * @param sender this class
 	 * @param sms Sms created
 	 */
-	Event<void (UserProfile & sender, Sms & sms)> smsCreatedEvent;
+	Event<void (UserProfile & sender, WsSms & sms)> wsSmsCreatedEvent;
 
 	/**
 	 * SoftUpdate has been created.
@@ -142,7 +142,7 @@ public:
 	 * @param sender this class
 	 * @param sms Sms created
 	 */
-	Event<void (UserProfile & sender, SoftUpdate & softUpdate)> softUpdateCreatedEvent;
+	Event<void (UserProfile & sender, WsSoftUpdate & softUpdate)> wsSoftUpdateCreatedEvent;
 
 	/**
 	 * WsInfo has been created.
@@ -430,14 +430,14 @@ private:
 	/** List of PhoneLine. */
 	PhoneLines _phoneLineList;
 
-	/** SMS. */
-	Sms * _sms;
-
 	/** History. */
 	History * _history;
 
 	/** WengoPhone update system. */
-	SoftUpdate * _softUpdate;
+	WsSoftUpdate * _wsSoftUpdate;
+
+	/** SMS. */
+	WsSms * _wsSms;
 
 	/** WsInfo */
 	WsInfo * _wsInfo;

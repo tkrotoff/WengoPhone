@@ -19,6 +19,10 @@
 
 #include "QtSoftUpdate.h"
 
+#include "ui_SoftUpdateWindow.h"
+
+#include "QtBrowserSoftUpdate.h"
+
 #include <presentation/qt/QtWengoPhone.h>
 
 #include <control/CWengoPhone.h>
@@ -27,9 +31,7 @@
 #include <softupdater/SoftUpdater.h>
 
 #include <util/Logger.h>
-
-#include <qtutil/Object.h>
-#include <qtutil/WidgetFactory.h>
+#include <cutil/global.h>
 
 #include <QtGui>
 
@@ -52,6 +54,7 @@ void QtSoftUpdate::initThreadSafe() {
 }
 
 QtSoftUpdate::~QtSoftUpdate() {
+	delete _ui;
 	delete _softUpdater;
 }
 
@@ -72,18 +75,20 @@ void QtSoftUpdate::updateWengoPhoneEventHandlerThreadSafe(const std::string & do
 				const std::string & version,
 				unsigned fileSize) {
 
-	_softUpdateWindow = qobject_cast<QDialog *>(
-					WidgetFactory::create(":/forms/webservices/softupdate/SoftUpdateWindow.ui",
-							_qtWengoPhone->getWidget()));
+#ifdef OS_WINDOWS
+	_softUpdateWindow = new QDialog(_qtWengoPhone->getWidget());
+
+	_ui = new Ui::SoftUpdateWindow();
+	_ui->setupUi(_softUpdateWindow);
+
 	connect(_softUpdateWindow, SIGNAL(rejected()), SLOT(abortDownload()));
 
 	//updateTextLabel
-	_updateTextLabel = Object::findChild<QLabel *>(_softUpdateWindow, "updateTextLabel");
-	_originalLabelText = _updateTextLabel->text()
+	_originalLabelText = _ui->updateTextLabel->text()
 				.arg(QString::fromStdString(version))
 				.arg(QString::fromStdString(downloadUrl))
 				.arg(fileSize);
-	_updateTextLabel->setText(_originalLabelText);
+	_ui->updateTextLabel->setText(_originalLabelText);
 
 	//Deletes previous update program
 	QFile file(UPDATE_PROGRAM);
@@ -96,6 +101,9 @@ void QtSoftUpdate::updateWengoPhoneEventHandlerThreadSafe(const std::string & do
 	_softUpdater->start();
 
 	_softUpdateWindow->exec();
+#else
+	QtBrowserSoftUpdate(downloadUrl, buildId, version, fileSize, _qtWengoPhone->getWidget());
+#endif
 }
 
 void QtSoftUpdate::dataReadProgressEventHandler(double bytesDone, double bytesTotal, unsigned downloadSpeed) {
@@ -108,11 +116,10 @@ void QtSoftUpdate::dataReadProgressEventHandlerThreadSafe(double bytesDone, doub
 	LOG_DEBUG("progress=" + String::fromNumber(bytesDone));
 
 	//progressBar
-	static QProgressBar * progressBar = Object::findChild<QProgressBar *>(_softUpdateWindow, "progressBar");
-	progressBar->setRange(0, bytesTotal);
-	progressBar->setValue(bytesDone);
+	_ui->progressBar->setRange(0, bytesTotal);
+	_ui->progressBar->setValue(bytesDone);
 
-	_updateTextLabel->setText(_originalLabelText.arg(downloadSpeed));
+	_ui->updateTextLabel->setText(_originalLabelText.arg(downloadSpeed));
 
 	QApplication::processEvents();
 }

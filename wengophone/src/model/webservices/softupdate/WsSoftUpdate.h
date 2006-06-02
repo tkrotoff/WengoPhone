@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SOFTUPDATE_H
-#define SOFTUPDATE_H
+#ifndef OWWSSOFTUPDATE_H
+#define OWWSSOFTUPDATE_H
 
 #include <model/webservices/WengoWebService.h>
 
@@ -27,7 +27,7 @@
  *
  * @author Tanguy Krotoff
  */
-class SoftUpdate : public WengoWebService {
+class WsSoftUpdate : public WengoWebService {
 public:
 
 	/**
@@ -35,9 +35,9 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	SoftUpdate(WengoAccount * wengoAccount);
+	WsSoftUpdate(WengoAccount * wengoAccount);
 
-	virtual ~SoftUpdate() {}
+	virtual ~WsSoftUpdate() {}
 
 	/**
 	 * Event WengoPhone should be updated.
@@ -48,7 +48,7 @@ public:
 	 * @param version WengoPhone update version number
 	 * @param fileSize WengoPhone update file size in kil bytes
 	 */
-	Event<void (SoftUpdate & sender,
+	Event<void (WsSoftUpdate & sender,
 			const std::string & downloadUrl,
 			unsigned long long buildId,
 			const std::string & version,
@@ -67,4 +67,4 @@ private:
 	void answerReceived(const std::string & answer, int id);
 };
 
-#endif //SOFTUPDATE_H
+#endif //OWWSSOFTUPDATE_H

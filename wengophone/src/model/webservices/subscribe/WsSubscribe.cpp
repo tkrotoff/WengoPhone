@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "Subscribe.h"
+#include "WsSubscribe.h"
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -26,7 +26,7 @@
 
 #include <tinyxml.h>
 
-WsWengoSubscribe::WsWengoSubscribe() {
+WsSubscribe::WsSubscribe() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//setup subscribe web service
@@ -38,7 +38,7 @@ WsWengoSubscribe::WsWengoSubscribe() {
 	setWengoAuthentication(false);
 }
 
-int WsWengoSubscribe::subscribe(const std::string & email, const std::string & nickname,
+int WsSubscribe::subscribe(const std::string & email, const std::string & nickname,
 	const std::string & lang, const std::string & password) {
 
 	std::string query = "action=activate";
@@ -53,7 +53,7 @@ int WsWengoSubscribe::subscribe(const std::string & email, const std::string & n
 	return call(this);
 }
 
-void WsWengoSubscribe::answerReceived(const std::string & answer, int id) {
+void WsSubscribe::answerReceived(const std::string & answer, int id) {
 	std::string statusCode;
 	std::string statusMessage;
 	std::string password;

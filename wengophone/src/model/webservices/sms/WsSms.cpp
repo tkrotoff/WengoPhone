@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "Sms.h"
+#include "WsSms.h"
 
 #include <model/history/History.h>
 #include <model/config/ConfigManager.h>
@@ -26,12 +26,13 @@
 
 #include <util/Logger.h>
 
-Sms::Sms(WengoAccount * wengoAccount, UserProfile & userProfile)
-	: WengoWebService(wengoAccount), _userProfile(userProfile) {
+WsSms::WsSms(WengoAccount * wengoAccount, UserProfile & userProfile)
+	: WengoWebService(wengoAccount),
+	_userProfile(userProfile) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	//setup SMS web service
+	//Setup SMS web service
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
 	setHttps(true);
@@ -40,7 +41,7 @@ Sms::Sms(WengoAccount * wengoAccount, UserProfile & userProfile)
 	setWengoAuthentication(true);
 }
 
-int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
+int WsSms::sendSMS(const std::string & phoneNumber, const std::string & message) {
 	//Encode the message
 	String message2 = String::encodeUrl(message);
 	message2.replace("%2e", ".", false);
@@ -58,7 +59,7 @@ int Sms::sendSMS(const std::string & phoneNumber, const std::string & message) {
 	return requestId;
 }
 
-void Sms::answerReceived(const std::string & answer, int requestId) {
+void WsSms::answerReceived(const std::string & answer, int requestId) {
 	//TODO: replace this ugly "parsing" with a real XML parsing
 	static const std::string STATUS_UNAUTHORIZED = "401";
 	static const std::string STATUS_OK = "200";

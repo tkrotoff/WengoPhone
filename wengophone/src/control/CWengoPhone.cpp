@@ -19,21 +19,16 @@
 
 #include "CWengoPhone.h"
 
-#include <WengoPhoneBuildId.h>
-
 #include <model/WengoPhone.h>
 #include <model/wenbox/WenboxPlugin.h>
-#include <model/account/wengo/WengoAccount.h>
 #include <model/contactlist/Contact.h>
 #include <model/connect/ConnectHandler.h>
 #include <model/profile/UserProfile.h>
 #include <model/phoneline/IPhoneLine.h>
 #include <model/history/History.h>
-#include <model/config/ConfigManager.h>
-#include <model/config/Config.h>
-#include <model/webservices/sms/Sms.h>
-#include <model/webservices/softupdate/SoftUpdate.h>
-#include <model/webservices/subscribe/Subscribe.h>
+#include <model/webservices/sms/WsSms.h>
+#include <model/webservices/softupdate/WsSoftUpdate.h>
+#include <model/webservices/subscribe/WsSubscribe.h>
 #include <model/webservices/directory/WsDirectory.h>
 
 #include <presentation/PFactory.h>
@@ -51,22 +46,9 @@
 #include <control/webservices/directory/CWsDirectory.h>
 #include <control/webservices/callforward/CWsCallForward.h>
 
-#include <util/WebBrowser.h>
-#include <util/StringList.h>
 #include <util/Logger.h>
 
 using namespace std;
-
-const std::string CWengoPhone::URL_WENGO_ACCOUNTCREATION = "https://www.wengo.fr/public/public.php?page=subscribe_wengos";
-const std::string CWengoPhone::URL_WENGO_FORUM = "http://www.wengo.fr/public/public.php?page=forum";
-const std::string CWengoPhone::URL_WENGO_CALLOUT = "http://www.wengo.fr/public/public.php?page=product_callout";
-const std::string CWengoPhone::URL_WENGO_SMS = "http://www.wengo.fr/public/public.php?page=product_sms";
-const std::string CWengoPhone::URL_WENGO_VOICEMAIL = "http://www.wengo.fr/public/public.php?page=product_voicemail";
-const std::string CWengoPhone::URL_WENGO_SEARCH_EXT = "http://www.wengo.fr/public/public.php?page=main_smart_directory";
-const std::string CWengoPhone::URL_WENGO_SEARCH_INT = "http://www.wengo.fr/public/public.php?page=smart_directory";
-const std::string CWengoPhone::URL_WENGO_FAQ = "http://www.wengo.fr/public/public.php?page=wiki";
-const std::string CWengoPhone::URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php?page=homepage";
-const std::string CWengoPhone::URL_WENGO_BUYWENGOS = "https://www.wengo.fr/auth/auth.php?page=reload";
 
 CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
@@ -83,34 +65,33 @@ CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 
 	_wengoPhone.wenboxPluginCreatedEvent +=
 		boost::bind(&CWengoPhone::wenboxPluginCreatedEventHandler, this, _1, _2);
-	_wengoPhone.wsWengoSubscribeCreatedEvent +=
-		boost::bind(&CWengoPhone::wsWengoSubscribeCreatedEventHandler, this, _1, _2);
+
+	_wengoPhone.wsSubscribeCreatedEvent +=
+		boost::bind(&CWengoPhone::wsSubscribeCreatedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().wsDirectoryCreatedEvent +=
-		boost::bind(&CWengoPhone::wsDiretoryCreatedEventHandler, this, _1, _2);
+		boost::bind(&CWengoPhone::wsDirectoryCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().wsSmsCreatedEvent +=
+		boost::bind(&CWengoPhone::wsSmsCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().wsSoftUpdateCreatedEvent +=
+		boost::bind(&CWengoPhone::wsSoftUpdateCreatedEventHandler, this, _1, _2);
+	_wengoPhone.getCurrentUserProfile().wsCallForwardCreatedEvent +=
+		boost::bind(&CWengoPhone::wsCallForwardCreatedEventHandler, this, _1, _2);
+
 	_wengoPhone.initFinishedEvent +=
 		boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.getCurrentUserProfile().phoneLineCreatedEvent +=
 		boost::bind(&CWengoPhone::phoneLineCreatedEventHandler, this, _1, _2);
-	_wengoPhone.getCurrentUserProfile().smsCreatedEvent +=
-		boost::bind(&CWengoPhone::smsCreatedEventHandler, this, _1, _2);
-	_wengoPhone.getCurrentUserProfile().softUpdateCreatedEvent +=
-		boost::bind(&CWengoPhone::softUpdateCreatedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().newIMAccountAddedEvent +=
 		boost::bind(&CWengoPhone::newIMAccountAddedEventHandler, this, _1, _2);
 	_wengoPhone.getCurrentUserProfile().getHistory().historyLoadedEvent +=
 		boost::bind(&CWengoPhone::historyLoadedEventHandler, this, _1);
-	_wengoPhone.getCurrentUserProfile().wsCallForwardCreatedEvent +=
-	  boost::bind(&CWengoPhone::wsCallForwardCreatedEventHandler, this, _1, _2);
+
 //	_wengoPhone.timeoutEvent += boost::bind(&CWengoPhone::controlssoTimeoutEventHandler, this);
 	_wengoPhone.timeoutEvent += controlTimeoutEvent;
 	_wengoPhone.getCurrentUserProfile().getPresenceHandler().authorizationRequestEvent +=
 		boost::bind(&CWengoPhone::authorizationRequestEventHandler, this, _1, _2, _3);
 
 	_cWsCallForward = NULL;
-}
-
-void CWengoPhone::showWengoAccount() {
-	openWengoUrlWithAuth(URL_WENGO_ACCOUNT);
 }
 
 void CWengoPhone::start() {
@@ -133,18 +114,6 @@ void CWengoPhone::wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlu
 	LOG_DEBUG("CWenboxPlugin created");
 }
 
-void CWengoPhone::wsWengoSubscribeCreatedEventHandler(WengoPhone & sender, WsWengoSubscribe & wsWengoSubscribe) {
-	static CSubscribe cSubscribe(wsWengoSubscribe, *this);
-
-	LOG_DEBUG("CWenboxPlugin created");
-}
-
-void CWengoPhone::wsDiretoryCreatedEventHandler(UserProfile & sender, WsDirectory & wsDirectory) {
-	static CWsDirectory cWsDirectory(*this, wsDirectory);
-
-	LOG_DEBUG("CWsDirectory created");
-}
-
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 	static CChatHandler cChatHandler(sender.getCurrentUserProfile().getChatHandler(), *this,sender.getCurrentUserProfile());
 	LOG_DEBUG("CChatHandler created");
@@ -154,14 +123,30 @@ void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 	LOG_DEBUG("WengoPhone::init() finished");
 }
 
-void CWengoPhone::smsCreatedEventHandler(UserProfile & sender, Sms & sms) {
-	static CSms cSms(sms, *this);
+void CWengoPhone::wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscribe & wsSubscribe) {
+	static CSubscribe cSubscribe(wsSubscribe, *this);
+
+	LOG_DEBUG("CWenboxPlugin created");
+}
+
+void CWengoPhone::wsDirectoryCreatedEventHandler(UserProfile & sender, WsDirectory & wsDirectory) {
+	static CWsDirectory cWsDirectory(*this, wsDirectory);
+
+	LOG_DEBUG("CWsDirectory created");
+}
+
+void CWengoPhone::wsSmsCreatedEventHandler(UserProfile & sender, WsSms & wsSms) {
+	static CSms cSms(wsSms, *this);
 
 	LOG_DEBUG("CSms created");
 }
 
-void CWengoPhone::softUpdateCreatedEventHandler(UserProfile & sender, SoftUpdate & softUpdate) {
-	static CSoftUpdate cSoftUpdate(softUpdate, *this);
+void CWengoPhone::wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward) {
+	_cWsCallForward = new CWsCallForward(*this, wsCallForward);
+}
+
+void CWengoPhone::wsSoftUpdateCreatedEventHandler(UserProfile & sender, WsSoftUpdate & wsSoftUpdate) {
+	static CSoftUpdate cSoftUpdate(wsSoftUpdate, *this);
 
 	LOG_DEBUG("CSoftUpdate created");
 }
@@ -182,76 +167,6 @@ void CWengoPhone::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount 
 	//_wengoPhone.getCurrentUserProfile().getConnectHandler().connect(imAccount);
 }
 
-void CWengoPhone::openWengoUrlWithoutAuth(const std::string & url) {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	std::string language = config.getLanguage();
-
-	//tune the url for Wengo
-	std::string finalUrl = url;
-	finalUrl += "&wl=" + string(WengoPhoneBuildId::SOFTPHONE_NAME);
-	finalUrl += "&lang=" + language;
-
-	WebBrowser::openUrl(finalUrl);
-	LOG_DEBUG("url opened: " + finalUrl);
-}
-
-void CWengoPhone::openWengoUrlWithAuth(const std::string & url) {
-	static const std::string langCode = "fra";
-
-	IPhoneLine * activePhoneLine = _wengoPhone.getCurrentUserProfile().getActivePhoneLine();
-	if (activePhoneLine) {
-		const SipAccount & account = activePhoneLine->getSipAccount();
-		try {
-			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(account);
-
-			//tune the url for Wengo, with authentication
-			std::string finalUrl = url;
-			finalUrl += "&wl=" + string(WengoPhoneBuildId::SOFTPHONE_NAME);
-			finalUrl += "&lang=" + langCode;
-			finalUrl += "&login=" + wengoAccount.getWengoLogin();
-			finalUrl += "&password=" + wengoAccount.getWengoPassword();
-
-			WebBrowser::openUrl(finalUrl);
-			LOG_DEBUG("url opened: " + finalUrl);
-
-		} catch (bad_cast) {
-			LOG_DEBUG("Bad cast: from \"const SipAccount &\" to \"const WengoAccount &\"");
-		}
-	}
-}
-
-void CWengoPhone::showWengoFAQ() {
-	openWengoUrlWithoutAuth(URL_WENGO_FAQ);
-}
-
-void CWengoPhone::showWengoForum() {
-	openWengoUrlWithoutAuth(URL_WENGO_FORUM);
-}
-
-void CWengoPhone::showWengoSmartDirectory() {
-	openWengoUrlWithoutAuth(URL_WENGO_SEARCH_EXT);
-}
-
-void CWengoPhone::showWengoAccountCreation() {
-	openWengoUrlWithoutAuth(URL_WENGO_ACCOUNTCREATION);
-}
-
-void CWengoPhone::showWengoCallOut() {
-	openWengoUrlWithoutAuth(URL_WENGO_CALLOUT);
-}
-
-void CWengoPhone::showWengoSMS() {
-	openWengoUrlWithoutAuth(URL_WENGO_SMS);
-}
-
-void CWengoPhone::showWengoVoiceMail() {
-	openWengoUrlWithoutAuth(URL_WENGO_VOICEMAIL);
-}
-
-void CWengoPhone::showWengoBuyWengos() {
-	openWengoUrlWithAuth(URL_WENGO_BUYWENGOS);
-}
-
 void CWengoPhone::historyLoadedEventHandler(History & history) {
 	_cHistory = new CHistory(history, *this, _wengoPhone);
 	cHistoryCreatedEvent(*this, *_cHistory);
@@ -264,8 +179,4 @@ void CWengoPhone::authorizationRequestEventHandler(PresenceHandler & sender, con
 
 void CWengoPhone::saveUserProfile() {
 	_wengoPhone.saveUserProfile();
-}
-
-void CWengoPhone::wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward) {
-	_cWsCallForward = new CWsCallForward(*this, wsCallForward);
 }

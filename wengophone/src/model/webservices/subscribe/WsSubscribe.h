@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SUBSCRIBE_H
-#define SUBSCRIBE_H
+#ifndef OWWSSUBSCRIBE_H
+#define OWWSSUBSCRIBE_H
 
 #include <model/webservices/WengoWebService.h>
 
@@ -27,7 +27,7 @@
  *
  * @author Mathieu Stute
  */
-class WsWengoSubscribe : public WengoWebService {
+class WsSubscribe : public WengoWebService {
 public:
 
 	enum SubscriptionStatus {
@@ -61,9 +61,9 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	WsWengoSubscribe();
+	WsSubscribe();
 
-	virtual ~WsWengoSubscribe() {}
+	virtual ~WsSubscribe() {}
 
 	/**
 	 * Callback to check if the SMS was received or not.
@@ -73,7 +73,7 @@ public:
 	 * @param status subscription status (ok or error)
 	 * @param error error message
 	 */
-	Event<void (WsWengoSubscribe & sender, int id, SubscriptionStatus status,
+	Event<void (WsSubscribe & sender, int id, SubscriptionStatus status,
 				const std::string & errorMessage, const std::string & password)> wengoSubscriptionEvent;
 
 	/**
@@ -96,4 +96,4 @@ private:
 	void answerReceived(const std::string & answer, int id);
 };
 
-#endif //SUBSCRIBE_H
+#endif	//OWWSSUBSCRIBE_H

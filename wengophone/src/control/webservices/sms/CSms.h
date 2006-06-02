@@ -20,7 +20,7 @@
 #ifndef CSMS_H
 #define CSMS_H
 
-#include <model/webservices/sms/Sms.h>
+#include <model/webservices/sms/WsSms.h>
 
 #include <string>
 
@@ -39,9 +39,9 @@ public:
 	/**
 	 * @see Sms::smsStatusEvent
 	 */
-	Event <void (Sms & sender, int smsId, Sms::SmsStatus status)> smsStatusEvent;
+	Event <void (WsSms & sender, int smsId, WsSms::SmsStatus status)> smsStatusEvent;
 
-	CSms(Sms & sms, CWengoPhone & cWengoPhone);
+	CSms(WsSms & sms, CWengoPhone & cWengoPhone);
 
 	~CSms();
 
@@ -56,7 +56,7 @@ public:
 
 private:
 
-	Sms & _sms;
+	WsSms & _wsSms;
 
 	CWengoPhone & _cWengoPhone;
 

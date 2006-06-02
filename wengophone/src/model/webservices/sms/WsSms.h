@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SMS_H
-#define SMS_H
+#ifndef OWWSSMS_H
+#define OWWSSMS_H
 
 #include <model/webservices/WengoWebService.h>
 
@@ -29,7 +29,7 @@ class UserProfile;
  *
  * @author Mathieu Stute
  */
-class Sms : public WengoWebService {
+class WsSms : public WengoWebService {
 public:
 
 	/** Maximum SMS length = 150 characters. */
@@ -48,9 +48,9 @@ public:
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
-	Sms(WengoAccount * wengoAccount, UserProfile & userProfile);
+	WsSms(WengoAccount * wengoAccount, UserProfile & userProfile);
 
-	virtual ~Sms() {}
+	virtual ~WsSms() {}
 
 	/**
 	 * Callback to check if the SMS was received or not.
@@ -59,7 +59,7 @@ public:
 	 * @param smsId SMS unique identifier
 	 * @param status SMS status (ok or error)
 	 */
-	Event<void (Sms & sender, int smsId, SmsStatus status)> smsStatusEvent;
+	Event<void (WsSms & sender, int smsId, SmsStatus status)> smsStatusEvent;
 
 	/**
 	 * Sends a SMS given a destination phone number and a message.
@@ -77,4 +77,4 @@ private:
 	UserProfile & _userProfile;
 };
 
-#endif //SMS_H
+#endif //OWWSSMS_H

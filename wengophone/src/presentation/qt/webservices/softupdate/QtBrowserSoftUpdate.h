@@ -17,12 +17,43 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "WengoPhoneBuildId.h"
+#ifndef OWQTBROWSERSOFTUPDATE_H
+#define OWQTBROWSERSOFTUPDATE_H
 
-#define stringize2(x) #x
-#define stringize(x) stringize2(x)
+#include <QObject>
 
-const unsigned long long WengoPhoneBuildId::BUILDID = 13LL;
-const char * WengoPhoneBuildId::VERSION = stringize(DD_VERSION);
-const unsigned long long WengoPhoneBuildId::REVISION = DD_REVISION;
-const char * WengoPhoneBuildId::SOFTPHONE_NAME = stringize(DD_SOFTPHONE_NAME);
+#include <util/NonCopyable.h>
+
+#include <string>
+
+class QDialog;
+namespace Ui { class BrowserSoftUpdateWindow; }
+
+/**
+ * Shows a window with the a clickable link to the WengoPhone download page.
+ *
+ * @author Tanguy Krotoff
+ */
+class QtBrowserSoftUpdate : public QObject, NonCopyable {
+	Q_OBJECT
+public:
+
+	QtBrowserSoftUpdate(const std::string & downloadUrl,
+				unsigned long long buildId,
+				const std::string & version,
+				unsigned fileSize, QWidget * parent);
+
+	~QtBrowserSoftUpdate();
+
+private Q_SLOTS:
+
+	void showWengoDownloadWebPage();
+
+private:
+
+	Ui::BrowserSoftUpdateWindow * _ui;
+
+	QDialog * _softUpdateWindow;
+};
+
+#endif	//OWQTBROWSERSOFTUPDATE_H

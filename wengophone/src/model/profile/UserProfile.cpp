@@ -32,11 +32,11 @@
 #include <model/phoneline/PhoneLine.h>
 #include <model/phoneline/PhoneLineState.h>
 #include <model/phoneline/IPhoneLine.h>
-#include <model/webservices/sms/Sms.h>
-#include <model/webservices/softupdate/SoftUpdate.h>
+#include <model/history/History.h>
+#include <model/webservices/sms/WsSms.h>
+#include <model/webservices/softupdate/WsSoftUpdate.h>
 #include <model/webservices/info/WsInfo.h>
 #include <model/webservices/directory/WsDirectory.h>
-#include <model/history/History.h>
 
 #include <imwrapper/IMAccountHandlerFileStorage.h>
 
@@ -58,14 +58,14 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_contactList(*this),
 	_modelThread(wengoPhone) {
 
-	_sms = NULL;
+	_wsSms = NULL;
 	_wsInfo = NULL;
 	_wsDirectory = NULL;
 	_wsCallForward = NULL;
+	_wsSoftUpdate = NULL;
 	_activePhoneLine = NULL;
 	_activePhoneCall = NULL;
 	_wengoAccount = NULL;
-	_softUpdate = NULL;
 	_imAccountHandler = new IMAccountHandler();
 	_presenceState = EnumPresenceState::PresenceStateOffline;
 	_wengoAccountConnected = false;
@@ -93,10 +93,6 @@ UserProfile::~UserProfile() {
 		_activePhoneLine->getSipWrapper().terminate();
 	}
 
-	if (_sms) {
-		delete _sms;
-	}
-
 	if (_activePhoneLine) {
 		delete _activePhoneLine;
 	}
@@ -105,16 +101,20 @@ UserProfile::~UserProfile() {
 		delete _activePhoneCall;
 	}
 
-	if (_softUpdate) {
-		delete _softUpdate;
-	}
-
 	if (_history) {
 		delete _history;
 	}
 
 	if (_imAccountHandler) {
 		delete _imAccountHandler;
+	}
+
+	if (_wsSms) {
+		delete _wsSms;
+	}
+
+	if (_wsSoftUpdate) {
+		delete _wsSoftUpdate;
 	}
 
 	if (_wsInfo) {
@@ -339,14 +339,14 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 	switch (state) {
 	case SipAccount::LoginStateReady: {
 		//Creates SMS, SMS needs a WengoAccount
-		_sms = new Sms(_wengoAccount, *this);
-		smsCreatedEvent(*this, *_sms);
+		_wsSms = new WsSms(_wengoAccount, *this);
+		wsSmsCreatedEvent(*this, *_wsSms);
 		LOG_DEBUG("SMS created");
 
 		//Creates SoftUpdate, SoftUpdate needs a WengoAccount
-		_softUpdate = new SoftUpdate(_wengoAccount);
-		softUpdateCreatedEvent(*this, *_softUpdate);
-		_softUpdate->checkForUpdate();
+		_wsSoftUpdate = new WsSoftUpdate(_wengoAccount);
+		wsSoftUpdateCreatedEvent(*this, *_wsSoftUpdate);
+		_wsSoftUpdate->checkForUpdate();
 		LOG_DEBUG("SoftUpdate created");
 
 		_wsInfo = new WsInfo(_wengoAccount);

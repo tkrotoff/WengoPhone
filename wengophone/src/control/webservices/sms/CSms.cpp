@@ -22,18 +22,18 @@
 #include <presentation/PFactory.h>
 #include <presentation/PSms.h>
 
-CSms::CSms(Sms & sms, CWengoPhone & cWengoPhone)
-	: _sms(sms),
+CSms::CSms(WsSms & wsSms, CWengoPhone & cWengoPhone)
+	: _wsSms(wsSms),
 	_cWengoPhone(cWengoPhone) {
 
 	_pSms = PFactory::getFactory().createPresentationSms(*this);
 
-	_sms.smsStatusEvent += smsStatusEvent;
+	_wsSms.smsStatusEvent += smsStatusEvent;
 }
 
 CSms::~CSms() {
 }
 
 int CSms::sendSMS(const std::string & phoneNumber, const std::string & message) {
-	return _sms.sendSMS(phoneNumber, message);
+	return _wsSms.sendSMS(phoneNumber, message);
 }
