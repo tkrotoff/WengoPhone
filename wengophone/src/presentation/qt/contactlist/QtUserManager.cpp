@@ -48,12 +48,15 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
    QObject * parent, QTreeWidget * target)
    : QObject(parent), _cUserProfile(cUserProfile), _cWengoPhone(cWengoPhone), _qtContactList(qtContactList) {
 
+    Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+
     _tree = target;
     _previous = NULL;
     _lastClicked = NULL;
-    _hideUsers = false;
+    _hideUsers = config.getShowOfflineContacts();
     _sortUsers = true;
-    _hideGroups = false;
+    _hideGroups = config.getShowGroups();
     _menu = NULL;
     _timerId = -1;
     _sortTimerId = -1;
@@ -361,22 +364,29 @@ void QtUserManager::safeHideOffLineUsers() {
 }
 
 void QtUserManager::hideOffLineUsers() {
-	//QMutexLocker lock(&_mutex);
-	if (_hideUsers)
-        _hideUsers = false;
-    else
-        _hideUsers = true;
+    Config & config = ConfigManager::getInstance().getCurrentConfig();
+    _hideUsers=config.getShowOfflineContacts();
 	safeHideOffLineUsers();
 }
 
 void QtUserManager::hideGroups(){
 	//QMutexLocker lock(&_mutex);
-	if ( _hideGroups ){
+/*	if ( _hideGroups ){
 	    _hideGroups = false;
 	    safeShowAllUsers();
 	}
 	else{
 	    _hideGroups = true;
+	    safeHideGroup();
+	}
+	*/
+    Config & config = ConfigManager::getInstance().getCurrentConfig();
+    _hideGroups=config.getShowGroups();
+
+	if ( _hideGroups ){
+	    safeShowAllUsers();
+	}
+	else{
 	    safeHideGroup();
 	}
 }

@@ -185,9 +185,14 @@ void QtContactList::contactGroupAddedEventSlot(QString contactGroupId) {
 	QList < QTreeWidgetItem * > list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
 
     // if groups are hidden, don't add any group
-	if (_userManager->groupsAreHiden())
+	if (_userManager->groupsAreHiden()){
+		if (contactGroupId == "WENGO2006CLISTHIDE"){
+			QTreeWidgetItem * group = new QTreeWidgetItem(_treeWidget);
+			group->setText(0, contactGroupId);
+			_treeWidget->setItemExpanded(group, true);
+		}
         return;
-
+	}
 	// If no group exists, creating the group
 	if (list.isEmpty()) {
 		QTreeWidgetItem * group = new QTreeWidgetItem(_treeWidget);
@@ -230,8 +235,8 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 
 			// No group exists. Creating the group
 			if (list.size() == 0) {
-				contactGroupAddedEventSlot(QString::fromStdString(contactProfile.getGroupId()));
-				list = _treeWidget->findItems(QString::fromStdString(contactProfile.getGroupId()),
+				contactGroupAddedEventSlot(QString("WENGO2006CLISTHIDE"));
+				list = _treeWidget->findItems(QString("WENGO2006CLISTHIDE"),
 				   Qt::MatchExactly);
 			}
 
