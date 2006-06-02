@@ -30,6 +30,9 @@
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
 
+#include <typeinfo>
+#include <exception>
+
 static const std::string URL_WENGO_ACCOUNTCREATION = "https://www.wengo.fr/public/public.php?page=subscribe_wengos";
 static const std::string URL_WENGO_FORUM = "http://www.wengo.fr/public/public.php?page=forum";
 static const std::string URL_WENGO_CALLOUT = "http://www.wengo.fr/public/public.php?page=product_callout";
