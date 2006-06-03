@@ -30,9 +30,6 @@
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
 
-#include <typeinfo>
-#include <exception>
-
 static const std::string URL_WENGO_ACCOUNTCREATION = "https://www.wengo.fr/public/public.php?page=subscribe_wengos";
 static const std::string URL_WENGO_FORUM = "http://www.wengo.fr/public/public.php?page=forum";
 static const std::string URL_WENGO_CALLOUT = "http://www.wengo.fr/public/public.php?page=product_callout";
@@ -72,7 +69,8 @@ void WsUrl::openWengoUrlWithAuth(const std::string & url) {
 	IPhoneLine * activePhoneLine = WengoPhone::instance->getCurrentUserProfile().getActivePhoneLine();
 	if (activePhoneLine) {
 		const SipAccount & account = activePhoneLine->getSipAccount();
-		try {
+
+		if (account.getType() == SipAccount::SipAccountTypeWengo) {
 			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(account);
 
 			//Tune the url for Wengo, with authentication
@@ -83,10 +81,7 @@ void WsUrl::openWengoUrlWithAuth(const std::string & url) {
 			finalUrl += "&password=" + wengoAccount.getWengoPassword();
 
 			WebBrowser::openUrl(finalUrl);
-			LOG_DEBUG("url opened: " + finalUrl);
-
-		} catch (bad_cast) {
-			LOG_DEBUG("bad cast: from \"const SipAccount &\" to \"const WengoAccount &\"");
+			LOG_DEBUG("url opened=" + finalUrl);
 		}
 	}
 }

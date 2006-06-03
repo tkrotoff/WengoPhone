@@ -70,10 +70,6 @@ public:
 
 	bool unserialize(const std::string & data);
 
-	std::string getName() const {
-		return "WengoAccount";
-	}
-
 	SipAccountType getType() const {
 		return SipAccountTypeWengo;
 	}
