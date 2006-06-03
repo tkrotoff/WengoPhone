@@ -19,25 +19,26 @@
 
 #include <util/WebBrowser.h>
 
+#include <util/Logger.h>
 #include <cutil/global.h>
 
 #ifdef OS_WINDOWS
 	#include <windows.h>
 #elif defined (OS_LINUX)
 
-#include <unistd.h>
-#include <stdio.h>
+#include <cunistd>
+#include <cstdio>
 
 void tux_open_url(const char * url) {
-	if( !fork() ) {
-		
+	if (!fork()) {
+
 		//use $BROWSER if it exists
 		char * browser = getenv("BROWSER");
-		if( browser ) {
-			printf("Use browser: %s\n", browser);
+		if (browser) {
+			LOG_DEBUG("use browser=" + std::string(browser));
 			execlp(browser, browser, url, NULL);
 		}
-			
+
 		//sensible-browser script
 		execlp("sensible-browser", "sensible-browser", url, NULL);
 
@@ -72,7 +73,6 @@ void tux_open_url(const char * url) {
 #include <Carbon/Carbon.h>
 
 bool mac_open_url(const char * curl) {
-	
 	CFStringRef urlString = CFStringCreateWithCString(NULL, curl, 0);
 	CFURLRef url = CFURLCreateWithString(NULL, urlString, NULL);
 	return (LSOpenCFURLRef(url, NULL) == noErr);

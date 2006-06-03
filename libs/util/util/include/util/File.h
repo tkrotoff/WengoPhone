@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef FILE_H
-#define FILE_H
+#ifndef OWFILE_H
+#define OWFILE_H
 
 #include <util/Interface.h>
 #include <util/StringList.h>
@@ -159,7 +159,7 @@ protected:
 	 *
 	 * @return true if file open; false otherwise
 	 */
-	virtual bool isOpen() const = 0;
+	virtual bool isOpen() /*const*/ = 0;
 };
 
 
@@ -200,7 +200,7 @@ public:
 
 private:
 
-	bool isOpen() const;
+	bool isOpen();
 
 	std::ifstream _file;
 };
@@ -238,11 +238,11 @@ private:
 
 	bool open();
 
-	bool isOpen() const;
+	bool isOpen();
 
 	std::ofstream _file;
 
 	bool _fileOpen;
 };
 
-#endif	//FILE_H
+#endif	//OWFILE_H

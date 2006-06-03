@@ -214,7 +214,7 @@ bool FileReader::open() {
 	return isOpen();
 }
 
-bool FileReader::isOpen() const {
+bool FileReader::isOpen() {
 	return _file.is_open();
 }
 
@@ -264,7 +264,7 @@ bool FileWriter::open() {
 	return isOpen();
 }
 
-bool FileWriter::isOpen() const {
+bool FileWriter::isOpen() {
 	return _fileOpen;
 }
 
