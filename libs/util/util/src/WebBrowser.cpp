@@ -26,8 +26,8 @@
 	#include <windows.h>
 #elif defined (OS_LINUX)
 
-#include <cunistd>
-#include <cstdio>
+#include <unistd.h>
+#include <stdio.h>
 
 void tux_open_url(const char * url) {
 	if (!fork()) {
