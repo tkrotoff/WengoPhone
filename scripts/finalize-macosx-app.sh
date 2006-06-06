@@ -207,3 +207,15 @@ cp -r $QTDIR/plugins/imageformats/libqmng.dylib $WENGO_FRAMEWORK_PATH/qt-plugins
 install_name_tool -change "$QTDIR/lib/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PREFIX/QtCore.framework/Versions/4.0/QtCore" "$WENGO_FRAMEWORK_PATH/qt-plugins/imageformats/libqmng.dylib"
 install_name_tool -change "$QTDIR/lib/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PREFIX/QtGui.framework/Versions/4.0/QtGui" "$WENGO_FRAMEWORK_PATH/qt-plugins/imageformats/libqmng.dylib"
 
+##
+# Languages
+##
+cp -r $WENGO_PATH/lang $WENGO_RESOURCES_PATH/
+for f in $(ls $WENGO_RESOURCES_PATH/lang/*.qm | sed "s/.*_\([^\.]*\)\.qm/\1/");
+do
+	DIR=$WENGO_RESOURCES_PATH/$f.lproj
+	if [ ! -d $DIR ]; then
+		mkdir $DIR
+	fi
+done
+
