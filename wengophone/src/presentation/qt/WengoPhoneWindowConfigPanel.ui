@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>351</width>
-    <height>125</height>
+    <width>231</width>
+    <height>122</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -27,25 +27,6 @@
      <property name="spacing" >
       <number>6</number>
      </property>
-     <item row="0" column="0" >
-      <widget class="QLabel" name="inputSoundLabel" >
-       <property name="minimumSize" >
-        <size>
-         <width>25</width>
-         <height>44</height>
-        </size>
-       </property>
-       <property name="maximumSize" >
-        <size>
-         <width>25</width>
-         <height>44</height>
-        </size>
-       </property>
-       <property name="pixmap" >
-        <pixmap resource="wengophone.qrc" >:/pics/audio/microphone.png</pixmap>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1" >
       <layout class="QHBoxLayout" >
        <property name="margin" >
@@ -126,26 +107,6 @@
        </item>
       </layout>
      </item>
-     <item row="2" column="0" colspan="2" >
-      <widget class="QCheckBox" name="halfDuplexCheckBox" >
-       <property name="toolTip" >
-        <string>Enable half-duplex mode</string>
-       </property>
-       <property name="text" >
-        <string>Loud speakers mode</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2" >
-      <widget class="QCheckBox" name="enableWenboxCheckBox" >
-       <property name="toolTip" >
-        <string>Enable Wenbox usage</string>
-       </property>
-       <property name="text" >
-        <string>USB audio device</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="2" >
       <spacer>
        <property name="orientation" >
@@ -154,10 +115,59 @@
        <property name="sizeHint" >
         <size>
          <width>40</width>
-         <height>20</height>
+         <height>44</height>
         </size>
        </property>
       </spacer>
+     </item>
+     <item row="1" column="0" colspan="3" >
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QCheckBox" name="enableWenboxCheckBox" >
+         <property name="toolTip" >
+          <string>Enable Wenbox usage</string>
+         </property>
+         <property name="text" >
+          <string>USB audio device</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QCheckBox" name="halfDuplexCheckBox" >
+         <property name="toolTip" >
+          <string>Enable half-duplex mode</string>
+         </property>
+         <property name="text" >
+          <string>Loud speakers mode</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="inputSoundLabel" >
+       <property name="minimumSize" >
+        <size>
+         <width>25</width>
+         <height>44</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>25</width>
+         <height>44</height>
+        </size>
+       </property>
+       <property name="pixmap" >
+        <pixmap resource="wengophone.qrc" >:/pics/audio/microphone.png</pixmap>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -169,23 +179,22 @@
      <property name="spacing" >
       <number>6</number>
      </property>
-     <item row="1" column="0" colspan="2" >
-      <widget class="QLabel" name="videoSettingsLabel" >
-       <property name="cursor" >
-        <cursor>13</cursor>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="outputSoundLabel" >
+       <property name="minimumSize" >
+        <size>
+         <width>25</width>
+         <height>44</height>
+        </size>
        </property>
-       <property name="text" >
-        <string>&lt;u>Video Settings&lt;/u></string>
+       <property name="maximumSize" >
+        <size>
+         <width>25</width>
+         <height>44</height>
+        </size>
        </property>
-      </widget>
-     </item>
-     <item row="2" column="0" colspan="2" >
-      <widget class="QLabel" name="audioSettingsLabel" >
-       <property name="cursor" >
-        <cursor>13</cursor>
-       </property>
-       <property name="text" >
-        <string>&lt;u>Audio Settings&lt;/u></string>
+       <property name="pixmap" >
+        <pixmap resource="wengophone.qrc" >:/pics/audio/speaker.png</pixmap>
        </property>
       </widget>
      </item>
@@ -269,24 +278,35 @@
        </item>
       </layout>
      </item>
-     <item row="0" column="0" >
-      <widget class="QLabel" name="outputSoundLabel" >
-       <property name="minimumSize" >
-        <size>
-         <width>25</width>
-         <height>44</height>
-        </size>
+     <item row="1" column="0" colspan="3" >
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>0</number>
        </property>
-       <property name="maximumSize" >
-        <size>
-         <width>25</width>
-         <height>44</height>
-        </size>
+       <property name="spacing" >
+        <number>6</number>
        </property>
-       <property name="pixmap" >
-        <pixmap resource="wengophone.qrc" >:/pics/audio/speaker.png</pixmap>
-       </property>
-      </widget>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="videoSettingsLabel" >
+         <property name="cursor" >
+          <cursor>13</cursor>
+         </property>
+         <property name="text" >
+          <string>&lt;u>Video Settings&lt;/u></string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="audioSettingsLabel" >
+         <property name="cursor" >
+          <cursor>13</cursor>
+         </property>
+         <property name="text" >
+          <string>&lt;u>Audio Settings&lt;/u></string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="0" column="2" >
       <spacer>
@@ -296,7 +316,7 @@
        <property name="sizeHint" >
         <size>
          <width>40</width>
-         <height>20</height>
+         <height>44</height>
         </size>
        </property>
       </spacer>
