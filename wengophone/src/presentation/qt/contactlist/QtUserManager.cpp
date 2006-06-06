@@ -805,9 +805,9 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 	// Looking for the contact in the destination group
 	// If it is inside this group nothing is done
 	QList < QTreeWidgetItem * > list = _tree->findItems(dstContactGroupId, Qt::MatchExactly);
-	QTreeWidgetItem * group = list[0];
 	if (list.isEmpty())
         return;
+	QTreeWidgetItem * group = list[0];
 
 	int count = group->childCount();
 
@@ -854,6 +854,7 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 		// No group exists. Creating the group
 		if (list.size() == 0) {
 			_qtContactList.contactGroupAddedEventSlot(dstContactGroupId);
+			list = _tree->findItems(dstContactGroupId, Qt::MatchExactly);
 		}
 
 		QTreeWidgetItem * newContact = NULL;
