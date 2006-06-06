@@ -638,17 +638,14 @@ ph_locate_call(eXosip_event_t *je, int creatit)
 
 void ph_release_call(phcall_t *ca)
 {
-	DBG4_SIP_NEGO("SIP_NEGO: ph_release_call\n", 0, 0, 0);
+  DBG4_SIP_NEGO("SIP_NEGO: ph_release_call\n", 0, 0, 0);
 
-	if (ph_call_hasaudio(ca)) {
-		printf("\n\nph_release_call: ph_call_hasaudio\n\n");
-		ph_call_media_stop(ca);
-	} else {
-		printf("\n\nph_release_call: ph_call_hasaudio\n\n");
-	}
+  if (ph_call_hasaudio(ca)) {
+      ph_call_media_stop(ca);
+  }
 
-	memset(ca, 0, sizeof(phcall_t));
-	ca->cid = -1;
+  memset(ca, 0, sizeof(phcall_t));
+  ca->cid = -1;
 }
 
 
