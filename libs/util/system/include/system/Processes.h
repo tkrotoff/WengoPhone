@@ -16,8 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef PROCESSES_H
-#define PROCESSES_H
+
+#ifndef OWPROCESSES_H
+#define OWPROCESSES_H
 
 #include <util/NonCopyable.h>
 
@@ -29,8 +30,10 @@
  */
  class Processes : NonCopyable {
 public:
+
 	static bool isRunning(const std::string & processName);
 
 	static bool killProcess(const std::string & processName);
 };
-#endif /* PROCESSES_H */
+
+#endif	//OWPROCESSES_H

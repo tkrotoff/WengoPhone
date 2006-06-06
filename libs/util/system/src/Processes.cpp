@@ -19,20 +19,24 @@
 
 #include <system/Processes.h>
 
-#ifdef WIN32
-#include <windows.h>
-#include <tlhelp32.h>
-#endif /* WIN32 */
+#include <cutil/global.h>
+
+#include <util/Logger.h>
+
+#ifdef OS_WINDOWS
+	#include <windows.h>
+	#include <tlhelp32.h>
+#endif
 
 bool Processes::isRunning(const std::string & processName) {
-#ifdef WIN32
+#ifdef OS_WINDOWS
 	//check if another instance is already running
 	int instance_counter = 0;
 	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-	PROCESSENTRY32* processInfo =new PROCESSENTRY32;
+	PROCESSENTRY32 * processInfo = new PROCESSENTRY32;
 	processInfo->dwSize = sizeof(PROCESSENTRY32);
-	
-	while( Process32Next(hSnapShot,processInfo) != FALSE ) {
+
+	while (Process32Next(hSnapShot, processInfo) != FALSE) {
 		std::string s(processInfo->szExeFile);
 		if (s == processName) {
 			instance_counter++;
@@ -43,30 +47,30 @@ bool Processes::isRunning(const std::string & processName) {
 	if (instance_counter == 2) {
 		return true;
 	}
-    return false;
-#else
-	/* FIXME: Need implementation on other platforms */
 	return false;
-#endif /* WIN32 */
+#else
+	//FIXME: Need implementation on other platforms
+	return false;
+#endif
 }
 
 bool Processes::killProcess(const std::string & processName) {
-#ifdef WIN32
+#ifdef OS_WINDOWS
  	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-	PROCESSENTRY32* processInfo =new PROCESSENTRY32;
+	PROCESSENTRY32 * processInfo = new PROCESSENTRY32;
 	processInfo->dwSize = sizeof(PROCESSENTRY32);
-	
-	//retrive the pid
-	while( Process32Next(hSnapShot,processInfo) != FALSE ) {
+
+	//retrieve the pid
+	while (Process32Next(hSnapShot,processInfo) != FALSE) {
 		std::string s(processInfo->szExeFile);
 		if (s == processName) {
-			HANDLE ps = OpenProcess( SYNCHRONIZE|PROCESS_TERMINATE, FALSE, processInfo->th32ProcessID);
+			HANDLE ps = OpenProcess(SYNCHRONIZE | PROCESS_TERMINATE, FALSE, processInfo->th32ProcessID);
 			return TerminateProcess(ps, 0);
 		}
 	}
 	return false;
 #else
-	/* FIXME: Need implementation on other platforms */
+	//FIXME: Need implementation on other platforms
 	return false;
-#endif /* WIN32 */
+#endif
 }
