@@ -113,18 +113,16 @@ void QtProfileDetails::init(QWidget * parent) {
 }
 
 void QtProfileDetails::readProfile() {
-	_ui->firstNameLineEdit->setText(QString::fromStdString(_profile.getFirstName()));
-	_ui->lastNameLineEdit->setText(QString::fromStdString(_profile.getLastName()));
-	//_wengoNickName->setText(QString::fromStdString(_profile.getWengoPhoneId()));
+	_ui->firstNameLineEdit->setText(QString::fromUtf8(_profile.getFirstName().c_str()));
+	_ui->lastNameLineEdit->setText(QString::fromUtf8(_profile.getLastName().c_str()));
 	_ui->genderComboBox->setCurrentIndex((int) _profile.getSex());
 
 	Date date = _profile.getBirthdate();
 	_ui->birthDate->setDate(QDate(date.getYear(), date.getMonth(), date.getDay()));
 
 	StreetAddress address = _profile.getStreetAddress();
-	_ui->cityLineEdit->setText(QString::fromStdString(address.getCity()));
-	//_ui->countryComboBox->setCurrentIndex(_ui->countryComboBox->findText(QString::fromStdString(address.getCountry())));
-	_ui->stateLineEdit->setText(QString::fromStdString(address.getStateProvince()));
+	_ui->cityLineEdit->setText(QString::fromUtf8(address.getCity().c_str()));
+	_ui->stateLineEdit->setText(QString::fromUtf8(address.getStateProvince().c_str()));
 
 	_ui->mobilePhoneLineEdit->setText(QString::fromStdString(_profile.getMobilePhone()));
 	_ui->homePhoneLineEdit->setText(QString::fromStdString(_profile.getHomePhone()));
@@ -148,9 +146,14 @@ void QtProfileDetails::readProfileAvatar() {
 }
 
 void QtProfileDetails::saveProfile() {
-	_profile.setFirstName(_ui->firstNameLineEdit->text().toStdString());
-	_profile.setLastName(_ui->lastNameLineEdit->text().toStdString());
-	//_profile.setWengoPhoneId(_wengoNickName->text().toStdString());
+
+    std::string tmp;
+
+    tmp = std::string(_ui->firstNameLineEdit->text().toUtf8().data());
+	_profile.setFirstName(tmp);
+
+	tmp = std::string(_ui->lastNameLineEdit->text().toUtf8().data());
+	_profile.setLastName(tmp);
 
 	QDate date = _ui->birthDate->date();
 	_profile.setBirthdate(Date(date.day(), date.month(), date.year()));
@@ -159,8 +162,12 @@ void QtProfileDetails::saveProfile() {
 
 	StreetAddress address;
 	//address.setCountry(_ui->countryComboBox->currentText().toStdString());
-	address.setStateProvince(_ui->stateLineEdit->text().toStdString());
-	address.setCity(_ui->cityLineEdit->text().toStdString());
+	tmp = std::string(_ui->stateLineEdit->text().toUtf8().data());
+	address.setStateProvince(tmp);
+
+    tmp = std::string(_ui->cityLineEdit->text().toUtf8().data());
+	address.setCity(tmp);
+
 	_profile.setStreetAddress(address);
 
 	_profile.setMobilePhone(_ui->mobilePhoneLineEdit->text().toStdString());
