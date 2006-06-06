@@ -181,19 +181,24 @@ void QtContactList::contactChangedEvent(std::string contactId) {
 
 void QtContactList::contactGroupAddedEventSlot(QString contactGroupId) {
 	LOG_DEBUG("contact group added. UUID: " + contactGroupId.toStdString());
+	if (_userManager->groupsAreHiden()){
+	    contactGroupId = "WENGO2006CLISTHIDE";
+	}
+    addGroup(contactGroupId);
+}
 
-	QList < QTreeWidgetItem * > list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
+QTreeWidgetItem * QtContactList::addGroup(QString contactGroupId){
 
-    // if groups are hidden, don't add any group
-	if (_userManager->groupsAreHiden())
-        return;
-
+	QList < QTreeWidgetItem * > list;
+    QTreeWidgetItem * group;
 	// If no group exists, creating the group
+	list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
 	if (list.isEmpty()) {
-		QTreeWidgetItem * group = new QTreeWidgetItem(_treeWidget);
+        group = new QTreeWidgetItem(_treeWidget);
 		group->setText(0, contactGroupId);
 		_treeWidget->setItemExpanded(group, true);
 	}
+	return group;
 }
 
 void QtContactList::contactGroupRemovedEventSlot(QString contactGroupId) {
@@ -214,25 +219,24 @@ void QtContactList::contactGroupRenamedEventSlot(QString contactGroupId) {
 void QtContactList::contactAddedEventSlot(QString contactId) {
 	LOG_DEBUG("contact added. UUID: " + contactId.toStdString());
 	QtUserList * ul = QtUserList::getInstance();
-
+    QString groupId;
 	// If User is not already in UserList
 	if (!ul->getUser(contactId)) {
 		ContactProfile contactProfile = _cContactList.getContactProfile(contactId.toStdString());
+		if (_userManager->groupsAreHiden())
+            groupId = "WENGO2006CLISTHIDE";
+        else
+            groupId = QString::fromStdString(contactProfile.getGroupId());
 		QList < QTreeWidgetItem * > list;
 
 		// If the Contact has a group
 		if (!contactProfile.getGroupId().empty()) {
-		    if (_userManager->groupsAreHiden()){
-		        list = _treeWidget->findItems("WENGO2006CLISTHIDE",Qt::MatchExactly);
-		    } else {
-                list = _treeWidget->findItems(QString::fromStdString(contactProfile.getGroupId()), Qt::MatchExactly);
-		    }
+            list = _treeWidget->findItems(groupId, Qt::MatchExactly);
 
 			// No group exists. Creating the group
 			if (list.size() == 0) {
-				contactGroupAddedEventSlot(QString::fromStdString(contactProfile.getGroupId()));
-				list = _treeWidget->findItems(QString::fromStdString(contactProfile.getGroupId()),
-				   Qt::MatchExactly);
+                contactGroupAddedEventSlot(groupId);
+                list = _treeWidget->findItems(groupId,Qt::MatchExactly);
 			}
 
 			QTreeWidgetItem * newContact = NULL;

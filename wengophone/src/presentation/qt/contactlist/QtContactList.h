@@ -132,6 +132,8 @@ private:
 
 	void updatePresentationThreadSafe();
 
+	QTreeWidgetItem * addGroup(QString contactGroupId);
+
 	QtUserManager * _userManager;
 
 	CContactList & _cContactList;

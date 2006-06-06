@@ -842,10 +842,6 @@ void QtWengoPhone::showVoiceMail() {
 	WsUrl::showWengoVoiceMail();
 }
 
-void QtWengoPhone::showHideOffLineContacts() {
-	_contactList->hideOffLineUser();
-}
-
 void QtWengoPhone::showHome() {
 }
 
@@ -1532,6 +1528,25 @@ void QtWengoPhone::slotTranslationChanged() {
 }
 
 void QtWengoPhone::showHideGroups(){
-    _contactList->showHideGroups();
+
+    Config & config = ConfigManager::getInstance().getCurrentConfig();
+    bool showHide = config.getShowGroups();
+    if ( showHide ){
+        config.set(Config::GENERAL_SHOW_GROUPS_KEY,false);
+        _contactList->showHideGroups();
+    } else {
+        config.set(Config::GENERAL_SHOW_GROUPS_KEY,true);
+        _contactList->showHideGroups();
+    }
 }
 
+void QtWengoPhone::showHideOffLineContacts() {
+    Config & config = ConfigManager::getInstance().getCurrentConfig();
+    bool showHide = config.getShowOfflineContacts();
+    if ( showHide ){
+        config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY,false);
+    } else {
+        config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY,true);
+    }
+	_contactList->hideOffLineUser();
+}
