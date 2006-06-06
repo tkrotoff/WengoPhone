@@ -17,29 +17,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 #include "ClassicExterminator.h"
-
-#include <cutil/global.h>
 
 #include <system/Processes.h>
 #include <system/Startup.h>
 
+#include <util/Logger.h>
+
 #include <stdio.h>
 
-#ifdef OS_WINDOWS
-#include <windows.h>
-static const char * STARTUP_REGISTRY_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
 static const char * WENGO_VALUE = "Wengo";
-#endif
-
 static const char * CLASSIC_EXECUTABLE_NAME = "wengophone.exe";
 
 void ClassicExterminator::removeClassicFromStartup() {
-#ifdef OS_WINDOWS
-	Startup startup(WENGO_VALUE, "");
+	Startup startup(WENGO_VALUE, String::null);
 	startup.setStartup(false);
-#endif
 }
 
 void ClassicExterminator::killClassicExecutable() {

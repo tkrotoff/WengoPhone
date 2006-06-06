@@ -17,9 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
-#ifndef CLASSICEXTERMINATOR_H
-#define CLASSICEXTERMINATOR_H
+#ifndef OWCLASSICEXTERMINATOR_H
+#define OWCLASSICEXTERMINATOR_H
 
 /**
  * WengoPhone classic exterminator.
@@ -30,10 +29,9 @@
 class ClassicExterminator {
 public:
 
-static void removeClassicFromStartup();
+	static void removeClassicFromStartup();
 
-static void killClassicExecutable();
-
+	static void killClassicExecutable();
 };
 
-#endif	//CLASSICEXTERMINATOR_H
+#endif	//OWCLASSICEXTERMINATOR_H
