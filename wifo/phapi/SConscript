@@ -9,8 +9,6 @@ if WengoGetConsoleArgument('speexwb-replaces-amrwb') and \
    print "******* Please Select ONLY ONE of: [ speexwb-replaces-amrwb  speexwb-replaces-amrnb or speexwb-replaces-g726wb]"
    Exit(1)
 
-
-
 if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
     amr_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
     speex_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
@@ -28,21 +26,16 @@ if WengoGetConsoleArgument('speexwb-replaces-g726wb'):
     defines['PH_SPEEXWB_REPLACES_G726WB'] = 1
 
 
-
-
 amr_env = WengoGetEnvironment()
 amr_libs = [
 	'amrwb',
 	'amrnb',
 ]
 
-
 amr_env.WengoAddDefines(amr_defines)
 amr_env.WengoUseLibraries(amr_libs)
 amr_env.WengoAddCCFlags(WengoGetVariable('phapi_optimization_flags'))
 amr = amr_env.WengoPlugin('phamrplugin', ['phcodec-amr-wrapper.c'])
-
-
 
 speex_env = WengoGetEnvironment()
 speex_libs = [
@@ -51,18 +44,13 @@ speex_libs = [
 
 speex_env.WengoUseLibraries(speex_libs)
 speex_env.WengoAddCCFlags(WengoGetVariable('phapi_optimization_flags'))
-
-
-
 speex_env.WengoAddDefines(speex_defines)
-
 speex_env.Append(LIBS = speex_libs)
 speex = speex_env.WengoPlugin('phspeexplugin', ['phcodec-speex.c'])
 
 if WengoGetConsoleArgument('enable-ipp'):
     IPPROOT = False
     IPPSAMPLEROOT = False
-
 
     if os.environ.has_key('IPPROOT'):
         IPPROOT = os.environ['IPPROOT']
@@ -84,7 +72,6 @@ if WengoGetConsoleArgument('enable-ipp'):
             IPPROOT + "/include", IPPSAMPLEROOT + "/codec/include"
             ]
 
-
         if WengoOSWindows():
             ipp_libpath = [
 
@@ -99,7 +86,6 @@ if WengoGetConsoleArgument('enable-ipp'):
             IPPROOT + "/sharedlib", IPPROOT + "/sharedlib/linux32",
             IPPSAMPLEROOT + "/bin/ia32/lib"
             ]
-
 
         ipp_env.Append( LIBS = ipp_libs,  LIBPATH = ipp_libpath)
         ipp_env.WengoAddIncludePath(ipp_includes)
@@ -120,7 +106,6 @@ libs = [
 	'wtimer',
 	'owutil',
 ]
-
 
 lib_path = []
 include_path = ['.']
@@ -150,8 +135,6 @@ if not WengoOSWindows():
 #
 # To activate FORCED 16 KHZ SAMPLING
 defines['PH_FORCE_16KHZ'] = 1
-#
-
 
 headers = []
 sources = [
@@ -159,7 +142,6 @@ sources = [
 	'phmbuf.c',
 	'wav.c',
 	'tonegen.c',
-#	'phx.c',
 	'phmedia-audio-null.c',
 	'phapi.c',
 	'phaudiodriver.c',
@@ -196,8 +178,6 @@ else:
 
 if shphapi:
     defines['BUILD_PHAPI_DLL'] = 1
-
-
 
 if WengoGetConsoleArgument('enable-qos-debug'):
 	defines['PHAPI_QOS_DEBUG'] =  1
@@ -295,7 +275,6 @@ if WengoOSMacOSX():
 		'-framework CoreServices',
 	]
 
-
 env.WengoAddIncludePath(include_path)
 env.WengoAddDefines(defines)
 env.WengoAddLinkFlags(link_flags)
@@ -318,7 +297,6 @@ phapi_py_env = WengoGetEnvironment()
 """
 pyphapi
 """
-
 #python_include = "C:\Program Files\Python24\include"
 #python_lib = "C:\Program Files\Python24\libs"
 python_lib = "/usr/lib/python2.4/config"

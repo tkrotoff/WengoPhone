@@ -1,5 +1,5 @@
 /*
- * phmedia -  Phone Api media streamer
+ * phrecorder -  Phone Api media recorder
  *
  * Copyright (C) 2006 WENGO SAS
  *
@@ -25,11 +25,11 @@
 
 struct recording
 {
-	short *samples;
-	int chunksize;
-	int nchannels;
-	int position;
-	FILE *fd;
+  short *samples;
+  int chunksize;
+  int nchannels;
+  int position;
+  FILE *fd;
 };
 typedef struct recording recording_t;
 
@@ -41,4 +41,4 @@ static void ph_media_audio_recording_dump(recording_t *recording);
 void ph_media_audio_recording_record_one(recording_t *recording, short c1, short c2, short c3);
 void ph_media_payload_record(recording_t *recording, const void *payload, int size);
 
-#endif
+#endif  //__PHRECORDER_H__

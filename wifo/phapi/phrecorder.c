@@ -23,69 +23,62 @@
 void
 ph_media_audio_recording_init(recording_t *recording, const char *filename, int nchannels, int chunksize) 
 {
-	
   recording->samples = (short *) malloc(nchannels * chunksize * sizeof(short));
   recording->chunksize = chunksize;
   recording->nchannels = nchannels;
   recording->position = 0;
   recording->fd = fopen(filename,"wb");
-
 }
 
 void
 ph_media_audio_recording_record_one(recording_t *recording, short c1, short c2, short c3) 
 {
-
   short *samples = recording->samples+recording->nchannels*recording->position;
-	
+
   *samples++ = c1;
-  if (recording->nchannels > 1)
+  if (recording->nchannels > 1) {
     *samples++ = c2;
-  if (recording->nchannels > 2)
+  }
+  if (recording->nchannels > 2) {
     *samples++ = c3;
-  
-  
+  }
+
   recording->position++;
   if (recording->position == recording->chunksize) 
-    {
-      ph_media_audio_recording_dump(recording);
-      recording->position = 0;
-    }
-	
+  {
+    ph_media_audio_recording_dump(recording);
+    recording->position = 0;
+  }
 }
 
 static void
 ph_media_audio_recording_dump(recording_t *recording) 
 {
-
   if (recording->position > 0) 
-    {
-      fwrite(recording->samples, recording->nchannels*sizeof(short), recording->position, recording->fd);
-    }
-	
+  {
+    fwrite(recording->samples, recording->nchannels*sizeof(short), recording->position, recording->fd);
+  }
 }
 
 void
 ph_media_audio_recording_close(recording_t *recording) 
 {
-		
   ph_media_audio_recording_dump(recording);
   fclose(recording->fd);
 
-  if (recording->samples)
+  if (recording->samples) {
     free(recording->samples);
-	
+  }
 }
+
 void
 ph_media_audio_fast_recording_init(recording_t *recording, const char *filename)
 {
-	
   recording->samples = 0;
   recording->chunksize = 0;
   recording->nchannels = 0;
   recording->position = 0;
   recording->fd = fopen(filename,"wb");
-
 }
 
 void
@@ -93,5 +86,3 @@ ph_media_audio_fast_recording_record(recording_t *recording, const void *payload
 {
   fwrite(payload, 1, size, recording->fd);
 }
-
-

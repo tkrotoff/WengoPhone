@@ -1,6 +1,8 @@
 #ifndef __PHMSTREAM_H__
 #define __PHMSTREAM_H__
 
+#include "phcodec.h"
+
 #ifdef __cplusplus
 extern "C"
 {

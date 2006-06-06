@@ -19,7 +19,6 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-
 #include "phglobal.h"
 #include "phdebug.h"
 #include <osip2/osip_mt.h>
@@ -46,6 +45,9 @@
 #include "phastream.h"
 #include "phaudiodriver.h"
 
+#ifdef PH_USE_RESAMPLE
+#include "phresample.h"
+#endif
 
 #define DO_CONF 1
 
@@ -57,13 +59,8 @@
 #define CONF_UNLOCK(x)
 #endif
 
-
 #ifdef USE_SPXEC
 #include "spxec.h"
-#endif
-
-#ifdef PH_USE_RESAMPLE
-#include <samplerate.h>
 #endif
 
 #define RTP_SESSION_LOCK(x)
@@ -79,7 +76,6 @@
 #define ECHO_SYNC_LOCK(x)
 #define ECHO_SYNC_UNLOCK(x)
 
-
 #define NO_ECHO__SUPPRESSOR 1	
 #define abs(x) ((x>=0)?x:(-x))
 
@@ -88,12 +84,10 @@ short do_AEC(void *ec, short x, short y);
 void kill_AEC(void *ec);
 #endif
 
-
 GMutex *ph_audio_mux;
 
 #define PH_MSESSION_AUDIO_LOCK() g_mutex_lock(ph_audio_mux)
 #define PH_MSESSION_AUDIO_UNLOCK() g_mutex_unlock(ph_audio_mux)
-
 
 #define CNG_TBL_SIZE 128
 /* table for CNG generation */
@@ -142,7 +136,9 @@ cb_put(struct circbuf *cb, char *data, int len)
     int chunk1max, chunk2max;
 
     if (len > cb->cb_siz)
+    {
         len = cb->cb_siz;
+    }
 
     if (len > free)
     {
@@ -161,21 +157,25 @@ cb_put(struct circbuf *cb, char *data, int len)
 
     chunk1max = cb->cb_siz - cb->cb_wrx;
     if (len < chunk1max)
+    {
         chunk1max = len;
+    }
 
     chunk2max = len - chunk1max;
 
-    
     memcpy(cb->cb_buf+cb->cb_wrx, data, chunk1max);
 
     cb->cb_cnt += chunk1max;
     cb->cb_wrx += chunk1max;
     if (cb->cb_wrx == cb->cb_siz)
+    {
         cb->cb_wrx = 0;
+    }
 
-    
     if (chunk2max <= 0)
+    {
         return;
+    }
 
     memcpy(cb->cb_buf+cb->cb_wrx, data+chunk1max, chunk2max);
 
@@ -188,48 +188,48 @@ cb_put(struct circbuf *cb, char *data, int len)
 static void 
 cb_get(struct circbuf *cb, char **chunk1, int *chunk1len,  char **chunk2, int *chunk2len, int len)
 {
-    int chunk1max = cb->cb_siz - cb->cb_rdx;
+  int chunk1max = cb->cb_siz - cb->cb_rdx;
 
-    if (len > cb->cb_cnt)
-        len = cb->cb_cnt;
+  if (len > cb->cb_cnt)
+  {
+      len = cb->cb_cnt;
+  }
 
-    *chunk2 = 0;
-    *chunk2len = 0;
+  *chunk2 = 0;
+  *chunk2len = 0;
 
+  *chunk1 = cb->cb_buf + cb->cb_rdx;
+  if (len <= chunk1max)
+  {
+      *chunk1len = len;
+      cb->cb_cnt -= len;
+      cb->cb_rdx += len;
+      if (cb->cb_rdx == cb->cb_siz)
+      {
+          cb->cb_rdx = 0;
+      }
+      return;
+  }
 
-    *chunk1 = cb->cb_buf + cb->cb_rdx;
-    if (len <= chunk1max)
-    {
-        *chunk1len = len;
-        cb->cb_cnt -= len;
-        cb->cb_rdx += len;
-        if (cb->cb_rdx == cb->cb_siz)
-            cb->cb_rdx = 0;
-        return;
-    }
-    
-    *chunk1len = chunk1max;
-    cb->cb_rdx = 0;
-    cb->cb_cnt -= chunk1max;
-    
-    len -= chunk1max;
+  *chunk1len = chunk1max;
+  cb->cb_rdx = 0;
+  cb->cb_cnt -= chunk1max;
 
+  len -= chunk1max;
 
-    *chunk2 = cb->cb_buf;
-    *chunk2len = len;
-    cb->cb_cnt -= len;
-    cb->cb_rdx += len;
-}	
-
-
+  *chunk2 = cb->cb_buf;
+  *chunk2len = len;
+  cb->cb_cnt -= len;
+  cb->cb_rdx += len;
+}
 
 static char zeroes[] =
-  {
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0
-  };
+{
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0
+};
 
 void 
 cb_zfill(struct circbuf *cb, int len)
@@ -238,33 +238,28 @@ cb_zfill(struct circbuf *cb, int len)
   const int mx = sizeof(zeroes);
 
   while(len > 0)
-    {
-      x = (len > mx) ? mx : len;
+  {
+    x = (len > mx) ? mx : len;
 
-      cb_put(cb, zeroes, mx);
-      len -= x;
-    }
+    cb_put(cb, zeroes, mx);
+    len -= x;
+  }
 }
-
 
 
 static void 
 cb_init(struct circbuf *cb, int size)
 {
-    memset(cb, 0, sizeof(0));
-    cb->cb_buf = (char *) g_malloc(size);
-    cb->cb_siz = size;
+  memset(cb, 0, sizeof(0));
+  cb->cb_buf = (char *) g_malloc(size);
+  cb->cb_siz = size;
 }
 
 static void 
 cb_clean(struct circbuf *cb)
 {
-    g_free(cb->cb_buf);
+  g_free(cb->cb_buf);
 }
-
-
-
-
 
 
 static int select_audio_device(const char *deviceId);
@@ -274,15 +269,14 @@ phcodec_t *ph_media_lookup_codec(int payload);
 void *ph_audio_io_thread(void *_p);
 
 
-
 void ph_gen_silence()
 {
-    int i;
-    short *p = sil_pkt;
-    for(i=0; i < MAX_FRAME_SIZE; i++)
-      {
-	*p++ = -32767;      /* lowest value */
-      } 
+  int i;
+  short *p = sil_pkt;
+  for(i=0; i < MAX_FRAME_SIZE; i++)
+  {
+    *p++ = -32767;      /* lowest value */
+  }
 }
 
 #define NOISE_LEN       0x4000
@@ -292,36 +286,38 @@ static short noise_pattern[NOISE_LEN];
 static unsigned short noise_max;
 
 static unsigned int normalize(unsigned int maxval)
+{
+  int i=31;
+  if(maxval < 0x7FFF)
   {
-    int i=31;
-    if(maxval < 0x7FFF)
-      return 0;
-    while((1<<i & maxval) == 0)
-      i--;
-    return(i-15);
+    return 0;
   }
+  while((1<<i & maxval) == 0) 
+  {
+    i--;
+  }
+  return(i-15);
+}
 
-/* read file to choose 'friendly' white noise */ 
+/* read file to choose 'friendly' white noise */
 
 void ph_gen_noise()
 {
   int i;
   unsigned int norm;
-   unsigned long sum=0;
+  unsigned long sum=0;
 
-  if(1)
-    {
-      norm = normalize(RAND_MAX);
-      DBG5_DYNA_AUDIO("no NOISE file, using random normalized %u\n", norm,0,0,0);
-      for(i=0; i<NOISE_LEN; i++)
-      noise_pattern[i] =  rand()>>norm;
-    }
+  norm = normalize(RAND_MAX);
+  DBG5_DYNA_AUDIO("no NOISE file, using random normalized %u\n", norm,0,0,0);
   for(i=0; i<NOISE_LEN; i++)
-    {
-      if(noise_max < abs(noise_pattern[i]))
-    noise_max = abs(noise_pattern[i]);
+  noise_pattern[i] =  rand()>>norm;
+  for(i=0; i<NOISE_LEN; i++) 
+  {
+      if(noise_max < abs(noise_pattern[i])) {
+        noise_max = abs(noise_pattern[i]);
+      }
       sum += abs(noise_pattern[i]);
-    }
+  }
   DBG5_DYNA_AUDIO("max noise %u mean %u\n", noise_max, sum/NOISE_LEN,0,0);
 }
 
@@ -336,31 +332,37 @@ ph_on_cng_packet(RtpSession *rtp_session, mblk_t *mp, struct ph_msession_s *s)
   unsigned int cng_level;
   phastream_t *stream = (phastream_t *)s->streams[PH_MSTREAM_AUDIO1].streamerData;
   if(stream->ms.running && stream->cngi.cng && mp != NULL)
+  {
+    /* first byte contains level, following fields (if any) are discarded */
+    p = mp->b_rptr + RTP_FIXED_HEADER_SIZE;
+    cng_level =  tab_tx_cng[*p]>>stream->cngi.long_pwr_shift;
+    if(!cng_level)
     {
-      /* first byte contains level, following fields (if any) are discarded */
-      p = mp->b_rptr + RTP_FIXED_HEADER_SIZE;
-      cng_level =  tab_tx_cng[*p]>>stream->cngi.long_pwr_shift;
-      if(!cng_level)
-    cng_level = 1;
-      factor = noise_max/cng_level;
-      if(!factor)
-    factor=1;
+      cng_level = 1;
+    }
+    factor = noise_max/cng_level;
+    if(!factor)
+    {
+      factor=1;
+    }
 
-      CNG_LOCK(stream);
-      if(stream->ms.running && stream->cngi.noise)
+    CNG_LOCK(stream);
+    if(stream->ms.running && stream->cngi.noise)
     {
       noise = (short *)stream->cngi.noise;
       for(i=0; i<NOISE_LEN; i++)
-        {
-          noise[i] =  noise_pattern[i]/factor;
-        }
+      {
+        noise[i] =  noise_pattern[i]/factor;
+      }
     }
-      CNG_UNLOCK(stream);
-      DBG5_DYNA_AUDIO("PHMEDIA:got CNG %u -> %u -> %u factor %u\n",*p, tab_tx_cng[*p], cng_level, factor); 
-      stream->cngi.got_cng =  1;
-    }else{
-      DBG5_DYNA_AUDIO("PHMEDIA:got CNG, discarding\n",0,0,0,0);
-    } 
+    CNG_UNLOCK(stream);
+    DBG5_DYNA_AUDIO("PHMEDIA:got CNG %u -> %u -> %u factor %u\n",*p, tab_tx_cng[*p], cng_level, factor); 
+    stream->cngi.got_cng =  1;
+  }
+  else
+  {
+    DBG5_DYNA_AUDIO("PHMEDIA:got CNG, discarding\n",0,0,0,0);
+  }
 }
 
 
@@ -369,31 +371,29 @@ ph_on_cng_packet(RtpSession *rtp_session, mblk_t *mp, struct ph_msession_s *s)
 void do_echo_update(phastream_t *s, char *data, int len);
 void store_pcm(phastream_t *s, char *buf, int len);
 
-
 void store_pcm(phastream_t *s, char *buf, int len)
 {
 
-  if (!s->ec)
-      return;
+  if (!s->ec) {
+    return;
+  }
 
   ECHO_SYNC_LOCK(s);
   if (s->underrun)
-    {
-      int used;
-      
+  {
+    int used;
+
  //     audio_stream_get_out_space(s, &used);
  //     DBG5_DYNA_AUDIO("Detected Underrun: used = %d lat = %d\n", used, s->audio_loop_latency, 0, 0);
       cb_zfill(&s->pcmoutbuf, s->audio_loop_latency);
       s->underrun = 0;
-    }
+  }
 
   cb_put(&s->pcmoutbuf, buf, len);
   s->sent_cnt += len;
-  ECHO_SYNC_UNLOCK(s);    
+  ECHO_SYNC_UNLOCK(s);
   DBG5_DYNA_AUDIO_ECHO("PUT read, recv, sent: %d, %d, %d\n", s->read_cnt, s->recv_cnt, s->sent_cnt,0);
 }
-
-
 
 #define AEC do_AEC
 
@@ -411,84 +411,86 @@ void do_echo_update(phastream_t *s, char *micdata, int length)
   char tmpspk[2048];
   char tmpmic[2048];
 #endif
-	
+
   if (!s->ec)
+  {
     return;
+  }
 
   DBG5_DYNA_AUDIO_ECHO("echo pointers: %d, %d, %d\n", 2*s->spk_current_sample - s->read_cnt, length, s->sent_cnt - 2*s->mic_current_sample,0);
-	// echo critical section : recovering the data that was previously saved from the speaker
-    ECHO_SYNC_LOCK(s);
-	s->recv_cnt += length;
+  // echo critical section : recovering the data that was previously saved from the speaker
+  ECHO_SYNC_LOCK(s);
+  s->recv_cnt += length;
 
-    cb_get(&s->pcmoutbuf, &spkchunk1, &spklen1, &spkchunk2, &spklen2, length);
-    s->read_cnt += (spklen1 + spklen2);
-    ECHO_SYNC_UNLOCK(s);
-    DBG8_DYNA_AUDIO_ECHO("GET read (just read) - recv, sent (diff): %d (%d), - %d, %d (%d)\n", s->read_cnt, (spklen1 + spklen2), s->recv_cnt, s->sent_cnt, s->recv_cnt - s->sent_cnt,0,0);
-    if (spklen1 + spklen2 < length)
-      {
-	s->underrun = 1;
+  cb_get(&s->pcmoutbuf, &spkchunk1, &spklen1, &spkchunk2, &spklen2, length);
+  s->read_cnt += (spklen1 + spklen2);
+  ECHO_SYNC_UNLOCK(s);
+  DBG8_DYNA_AUDIO_ECHO("GET read (just read) - recv, sent (diff): %d (%d), - %d, %d (%d)\n",
+    s->read_cnt, (spklen1 + spklen2), s->recv_cnt, s->sent_cnt, s->recv_cnt - s->sent_cnt,0,0);
+  if (spklen1 + spklen2 < length)
+  {
+    s->underrun = 1;
 #if 0
-	audio_stream_get_out_space(s, &used); 
-	DBG5_DYNA_AUDIO_ECHO("UNDERRUN: current out queue length: %d \n", used,0,0,0);
+  audio_stream_get_out_space(s, &used); 
+  DBG5_DYNA_AUDIO_ECHO("UNDERRUN: current out queue length: %d \n", used,0,0,0);
 #endif
-      }
+  }
 
-
-    
-  
-    if (spklen1 <= 0)
-      return;
+  if (spklen1 <= 0)
+  {
+    return;
+  }
 
 #if PSEUDO_AEC
     return;
 #endif
 
-
 #ifdef USE_SPXEC
-    if (spklen1)
-      {
-	memcpy(tmpspk, spkchunk1, spklen1);
-	if (spklen2)
-	  memcpy(tmpspk+spklen1, spkchunk2, spklen2);
-      }
+  if (spklen1)
+  {
+    memcpy(tmpspk, spkchunk1, spklen1);
+    if (spklen2)
+    {
+      memcpy(tmpspk+spklen1, spkchunk2, spklen2);
+    }
+  }
 
-
-    if (spklen1 + spklen2 < length)
-      memset(tmpspk+spklen1+spklen2, 0, length - (spklen1 + spklen2));
+  if (spklen1 + spklen2 < length)
+  {
+    memset(tmpspk+spklen1+spklen2, 0, length - (spklen1 + spklen2));
+  }
 #endif
 
 
-    micpcm = (short *) micdata;
-    length /= 2;
+  micpcm = (short *) micdata;
+  length /= 2;
 
-    spkpcm1 = (short *) spkchunk1;
-    spklen1 /= 2;
+  spkpcm1 = (short *) spkchunk1;
+  spklen1 /= 2;
 
-    spkpcm2 = (short *) spkchunk2;
-    spklen2 /= 2;
+  spkpcm2 = (short *) spkchunk2;
+  spklen2 /= 2;
 
-    
 #ifdef USE_SPXEC
 
-    total = spklen1 + spklen2;
-    spxec_echo_cancel(s->ec, micpcm, (short *) tmpspk, (short *) tmpmic, 0);
-    if (s->activate_recorder)
-      {
-	short *cleansignal = (short *) tmpmic;
-	int N = length;
+  total = spklen1 + spklen2;
+  spxec_echo_cancel(s->ec, micpcm, (short *) tmpspk, (short *) tmpmic, 0);
+  if (s->activate_recorder)
+  {
+    short *cleansignal = (short *) tmpmic;
+    int N = length;
 
-	spkpcm1 = (short *) tmpspk;
-	while(N--)
-	  {
-	    ph_media_audio_recording_record_one(&s->recorder, *spkpcm1++, *micpcm++,  *cleansignal++);
-	  }
+    spkpcm1 = (short *) tmpspk;
+    while(N--)
+    {
+      ph_media_audio_recording_record_one(&s->recorder, *spkpcm1++, *micpcm++,  *cleansignal++);
+    }
 
-	
-      }
-    memcpy(micdata, tmpmic, length*2);
-	
-#else 
-    
+  }
+  memcpy(micdata, tmpmic, length*2);
+
+#else
+
     // adjust mic through echo cancellation. reference signal is the first chunk of the stored circular buffer
     // (this is the regular, common case)
     length -= spklen1;
@@ -724,7 +726,7 @@ ph_generate_comfort_noice(phastream_t *stream, void *buf)
        { 
        int lg,lg2,ret; // length in shorts
        int used = 0;
-       
+
        ret = audio_stream_get_out_space(stream, &used);
        if (ret < 0)
            {
@@ -798,6 +800,7 @@ ph_handle_network_data(phastream_t *stream)
   
 	while (stream->ms.running)
 	{
+
 		int used;
 		gettimeofday(&now, 0);
 
@@ -848,148 +851,14 @@ DBG5_DYNA_AUDIO_RX("ph_handle_network_data :: end\n",0,0,0,0);
 } 
 
 
-
-#ifdef PH_USE_RESAMPLE
-void ph_audio_resample(void *ctx, void *inbuf, int inbsize, void *outbuf, int *outbsize)
-{
-  float finbuf[2048];
-  float foutbuf[2048];
-  SRC_DATA *sd = (SRC_DATA *)ctx;
-  static int cnt = 20;
-  
-  
-  
-  
-  sd->data_in = finbuf;
-  sd->input_frames = inbsize / 2;
-
-  sd->data_out = foutbuf;
-  sd->output_frames = 2048;
-
-  src_short_to_float_array((short *)inbuf, finbuf, sd->input_frames);
-  src_simple(sd, SRC_LINEAR, 1);
-  src_float_to_short_array(finbuf, (short *)outbuf, sd->output_frames_gen);
-  *outbsize =  sd->output_frames_gen * 2;
-
-
-  if (cnt <= 2)
-     DBG5_DYNA_AUDIO("resample: ratio=%f in=%d out=%d\n", sd->src_ratio, 
-  	sd->input_frames, sd->output_frames_gen,0);
-
-  cnt--;
-  if (cnt <= 0)
-	  cnt = 20; 
-
-}
-
-#endif
-
 #define SATURATE(x) ((x > 0x7fff) ? 0x7fff : ((x < ~0x7fff) ? ~0x7fff : x))
 
 #ifdef PH_FORCE_16KHZ
-
-#if 1
-
 void ph_downsample(void *rctx, void *framebuf, int framesize);
 void ph_upsample(void *rctx, void *dbuf, void *framebuf, int framesize);
 void *ph_resample_init();
 void ph_resample_cleanup(void *ctx);
-
-#else
-
-/**
- * @brief in-place downsample of a buffer by a factor of 2
- */
-static void ph_downsample(void *framebuf, int framesize)
-{
-  short *sp = (short *) framebuf; // 'narrow' buffer
-  short *dp = (short *) framebuf; // 'wide' buffer
-  
-  framesize = framesize / ( sizeof(short)*2 );
-
-  while( framesize-- )
-    {
-      *dp++ = *sp++;
-      sp++;
-    }
-}
-
-/**
- * @brief upsample of a buffer into another buffer by a factor of 2
- */
-static void ph_upsample(void *dbuf, void *sbuf, int framesize, short *last)
-{
-  short *sp = (short *) sbuf; // 'narrow' - original buffer
-  short *dp = (short *) dbuf; // 'wide' - target buffer
-  int tmp;
-
-  framesize = framesize / sizeof(short);
-
-  if (framesize<=0)
-  {
-      return;
-  }
-  
-  
-#if 1
-#if 1  /* try to use classic upsamling algo */ 
-  tmp = framesize - 1;
-  *dp++ = *last;
-  *dp++ = 0;
-  while( tmp--)
-    {
-      *dp++ = *sp++;
-      *dp++ = 0;
-    }
-
-  dp = (short *) dbuf;
-  
-  framesize *= 2;
-  framesize -= 1;
-  while( framesize--)
-    {
-      tmp = ((int)dp[0] + (int)dp[1]) >> 1;
-      *dp++ = (short) SATURATE(tmp);
-    }
-
-  *dp++ = tmp;
-  *last = *sp;
-#else
-      
-
-  tmp = ((int) *last + (int) *sp) >> 1;
-  *dp++ = (short) SATURATE(tmp);
-  *dp++ = *sp;
-
-  // prepare for the last perequation on the right border of the sbuf
-  framesize--;
-
-  // loop and upsample the sbuf into the dbuf with a linear interpolation
-  while(framesize--)
-    {
-      tmp = ((int)sp[0] + (int)sp[1]) >> 1;
-      *dp++ = (short) SATURATE(tmp);
-      sp++;
-      *dp++ = *sp;
-    }
-
-  *last = *sp;
 #endif
-
-#else
-  while(framesize--)
-    {
-      *dp++ = *sp;
-      *dp++ = *sp++;
-    }
-#endif
-    
-}
-#endif
-
-#endif
-
-
 
 /**
  * @brief catch a packet on the rtp RX path and decode it
@@ -1059,7 +928,7 @@ ph_media_retrieve_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf, int clo
 			resampledlen = decodedlen << 1;
 		}
     }
-#else    
+#else
 	if (codedlen)
 	{
 		resampledlen = decodedlen = codec->decode(stream->ms.decoder_ctx, mp->b_cont->b_rptr, codedlen, mbf->buf, framesize);
@@ -1090,35 +959,45 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 {
   int len = 0;
   phcodec_t *codec = stream->ms.codec;
-  int framesize = codec->decoded_framesize;
+  int expected_framesize = codec->decoded_framesize;
+  int expected_clockrate = stream->clock_rate;
   struct timeval now;
   int iter = 0;
   int played = 0;
-  int targetRate = stream->clock_rate;
-
+  int audio_drv_played=0;
 #ifdef PH_USE_RESAMPLE
-  unsigned char resampleBuf[2000];
-  int resampledSize;
-  char *savedPlayBuf = (char *) playbuf;
-  int savedBufSize = playbufsize;
-  int needResample;
-  int resampledLen;
+  unsigned char resampleBuf[3000];
+  int resampledSize = 0;
+  char *savedPlayBuf = NULL;
+  int savedBufSize = 0;
+  int resampledLen = 0;
+  int needResample = 0;
+#endif
 
-  if ((needResample = (stream->clock_rate != stream->actual_rate)))
-    {
+    DBG5_DYNA_AUDIO("DYNA_AUDIO:ph_audio_play_cbk: audio drv is asking for %d (char*) casted samples\n",
+                   playbufsize,0,0,0);
+
+#ifdef PH_FORCE_16KHZ
+  if (expected_clockrate == 8000)
+  {
+    expected_framesize *= 2;
+    expected_clockrate = 16000;
+  }
+#endif
+
+  // if we accept dynamic resampling, we need to retrieve the RX audio datas in a temporary buffer
+#ifdef PH_USE_RESAMPLE
+  savedPlayBuf = (char *) playbuf;
+  savedBufSize = playbufsize;
+  needResample = (expected_clockrate != stream->actual_rate);
+
+  if (needResample) {
       playbuf = resampleBuf;
       playbufsize = sizeof(resampleBuf);
       //recordbuf = resampledBuf;
-    }
+  }
 #endif
 
-#ifdef PH_FORCE_16KHZ
-	if (targetRate == 8000)
-	{
-		framesize *= 2;
-		targetRate = 16000;
-	}
-#endif
 
 	// while start :
 	//		read packets from the network
@@ -1132,10 +1011,10 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 	}
 #endif
 
-	while (stream->ms.running && (playbufsize >= framesize))
+	while (stream->ms.running && (playbufsize >= expected_framesize))
     {
 		ph_mediabuf_t spkrbuf;
-		ph_mediabuf_init(&spkrbuf, playbuf, framesize);
+		ph_mediabuf_init(&spkrbuf, playbuf, expected_framesize);
 
 #ifdef DO_CONF
 		if (stream->to_mix)
@@ -1144,19 +1023,19 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 			if (stream->to_mix && !stream->to_mix->ms.suspended)
 			{
 				int len2;
-				len = ph_media_retrieve_decoded_frame(stream, &stream->data_in, targetRate);
-				len2 = ph_media_retrieve_decoded_frame(stream->to_mix, &stream->to_mix->data_in, targetRate);
-				ph_mediabuf_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, framesize/2);
+				len = ph_media_retrieve_decoded_frame(stream, &stream->data_in, expected_clockrate);
+				len2 = ph_media_retrieve_decoded_frame(stream->to_mix, &stream->to_mix->data_in, expected_clockrate);
+				ph_mediabuf_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, expected_framesize/2);
 				len = spkrbuf.next * 2;
 			}
 			CONF_UNLOCK(stream);
 		}
       	else
 		{
-			len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, targetRate);
+			len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, expected_clockrate);
 		}
 #else
-		len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, targetRate);
+		len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, expected_clockrate);
 #endif
 
 
@@ -1164,6 +1043,8 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 		{
 			break;
 		}
+
+        // Here we have managed to retrieve audio data from the RX path at frequency 'expected_clockrate'
 
 		// SPIKE_HDX: if (mode == MIC has priority) and MIC is playing, attenuate SPK
 		if ((stream->hdxmode == PH_HDX_MODE_MIC) && !stream->hdxsilence)
@@ -1197,32 +1078,43 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 			memcpy(stream->lastframe, playbuf, len);
 		}
 		
-		played += len;
       
+#ifdef PH_USE_RESAMPLE
+        if (needResample)
+        {
+          DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_play_cbk: need resampling with recbufsize: %d\n", len,0,0,0);
+          resampledLen = 0;
+            ph_resample_audio0(stream->resample_audiodrv_ctx_spk, playbuf, len, savedPlayBuf, &resampledLen);
+            DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_play_cbk: after resampling with resampledSize: %d\n", resampledLen,0,0,0);
+            savedPlayBuf += resampledLen;
+            savedBufSize -= resampledLen;
+            if (resampledLen!=0)
+            {
+              played += len;
+            }
+            audio_drv_played += resampledLen;
+            if (savedBufSize <= 0)
+            {
+                break;
+            }
+        }
+        else
+#endif
+        {
+            // updating the placeholder for the next decode loop
+            playbuf = len + (char *) playbuf;
+            playbufsize -= len;
+            played += len;
+            audio_drv_played += len;
+        }
+
+
 		/* exit loop if we've played 4 full size packets */
-		if (played >= framesize * 4)
+		if (played >= expected_framesize * 4)
 		{
 			break;
 		}
 
-#ifdef PH_USE_RESAMPLE
-		if (needResample)
-		{
-			ph_audio_resample(stream->play_resample_ctx, playbuf, len, savedPlayBuf, &resampledLen);
-			savedPlayBuf += resampledLen;
-			savedBufSize -= resampledLen;
-			if (savedBufSize <= 0)
-			{
-	    		break;
-			}
-		}
-		else
-#endif
-		{
-	  		// updating the placeholder for the next decode loop
-			playbuf = len + (char *) playbuf;
-			playbufsize -= len;
-		}
     } // while end : read packets from the network
 
   
@@ -1258,24 +1150,27 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 			played += len;
 			playbufsize -= len;
 		}
-	}
-
+	
 #ifdef PH_USE_RESAMPLE
-	if (needResample)
-	{
-		ph_audio_resample(stream->play_resample_ctx, playbuf, len, savedPlayBuf, &resampledLen);
-	}
+      if (needResample)
+      {
+        resampledLen = 0;
+        ph_resample_audio0(stream->resample_audiodrv_ctx_spk, playbuf, len, savedPlayBuf, &resampledLen);
+      }
 #endif
-    
+
+    }
+
+
 	if (stream->lastframe != 0 && playbufsize)
 	{
-		/* we did no fill the buffer completely */
+		/* we did not fill the buffer completely */
 		int morebytes = playbufsize;
 		if (morebytes > codec->decoded_framesize)
 		{
 			morebytes = codec->decoded_framesize;
 		}
-        
+
 #ifdef DO_ECHO_CAN
 		if (stream->using_out_callback)
 		{
@@ -1283,8 +1178,9 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 		}
 #endif
 		played += morebytes;
-	}    
-	return played;    
+	}
+
+    return audio_drv_played; 
 }
 
 
@@ -1306,10 +1202,12 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 	/* do we need to do Voice Activity Detection ? */
 	if (stream->cngi.vad)
 	{
+      DBG5_DYNA_AUDIO("VAD:ph_encode_and_send_audio_frame:stream->cngi.vad\n", 0, 0, 0, 0);
 		stream->hdxsilence = silok = ph_vad_update0(&stream->cngi, recordbuf, framesize);
 		if (!stream->cngi.cng && silok)
 		{
-			/* resend dummy CNG packet only if CNG was not negotiated */
+          DBG5_DYNA_AUDIO("VAD:ph_encode_and_send_audio_frame: resend dummy CNG packet only if CNG was not negotiated\n", 0, 0, 0, 0);
+          /* resend dummy CNG packet only if CNG was not negotiated */
 			ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
 			wakeup = (diff.tv_sec > RTP_RETRANSMIT);
 		}
@@ -1333,7 +1231,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 	}
 
 	if (stream->mixbuf)
-	{   
+	{
 		int n = ph_mediabuf_mixaudio(stream->mixbuf, (short *)recordbuf, framesize/2);
 		if (!n)
 		{
@@ -1362,11 +1260,13 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 			framesize /= 2;
 		}
 #else
-		enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
-#endif      
+        DBG5_DYNA_AUDIO("DYNA_AUDIO:ph_encode_and_send_audio_frame: start encoding\n", 0, 0, 0, 0);
+        enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
+#endif
 
 		if (stream->record_send_stream)
 		{
+            // record the encoded audio in a file
 			ph_media_audio_fast_recording_record(&stream->send_stream_recorder, data_out_enc, enclen);
 		}
 
@@ -1391,11 +1291,13 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 			ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
 			if (diff.tv_sec >= DTX_RETRANSMIT)
 			{
+              DBG5_DYNA_AUDIO("VAD:ph_encode_and_send_audio_frame: ph_send_cng\n", 0, 0, 0, 0);
+
 				ph_send_cng(stream, stream->ms.txtstamp);
 				stream->cngi.last_dtx_time = stream->now;
 			}
 		}
-      
+
 		if (wakeup)
 		{
 			/* send cng packet with -127dB */ 
@@ -1411,29 +1313,53 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 
 int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 {
-	int framesize = stream->ms.codec->decoded_framesize;
-	int processed = 0;
+  // framesize must be calculated in order to be the size in char* of a 20ms period in MIC frequency unit
+  int decoded_framesize = stream->ms.codec->decoded_framesize;
+  int expected_framesize = 0;
+  int expected_clockrate = 0;
+  int processed = 0;
 #ifdef PH_USE_RESAMPLE
-	unsigned char resampleBuf[1000];
-	int resampledSize;
-
-	if (stream->clock_rate != stream->actual_rate)
-	{
-		ph_audio_resample(stream->rec_resample_ctx, recordbuf, recbufsize, resampleBuf, &resampledSize);
-		recbufsize = resampledSize;
-		recordbuf = resampleBuf;
-	}
+    unsigned char resampleBuf[1000];
+    long resampledSize = 0;
 #endif
 
+  // record the audio direct from the mic in a file
+  if (stream->record_mic_stream) {
+    ph_media_audio_fast_recording_record(&stream->mic_stream_recorder, recordbuf, recbufsize);
+  }
+
+  // calculate the expected framesize from the audio device
+  expected_framesize = decoded_framesize;
+  expected_clockrate = stream->clock_rate;
 #ifdef PH_FORCE_16KHZ
-	if (stream->clock_rate == 8000)
-	{
-		framesize *= 2;
-	}
+  // when the "internal phapi clockrate" is forced to 16Khz, we know that the audio device always outputs 16Khz
+  if (stream->clock_rate == 8000)
+  {
+    expected_clockrate = 2*stream->clock_rate;
+    expected_framesize = decoded_framesize * 2;
+  }
 #endif
 
+  // resample MIC buffer when audio device could not accept requested clock_rate
+#ifdef PH_USE_RESAMPLE
+  if (expected_clockrate != stream->actual_rate) {
+    DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_rec_cbk: need resampling with recbufsize: %d\n", recbufsize, 0, 0, 0);
+    resampledSize = expected_framesize;
+    ph_resample_audio0(stream->resample_audiodrv_ctx_mic, recordbuf, recbufsize, resampleBuf, &resampledSize);
+    DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_rec_cbk: after resampling with resampledSize: %d\n", resampledSize, 0, 0 ,0);
+    recbufsize = resampledSize;
+    recordbuf = resampleBuf;
 
-	while(recbufsize >= framesize)
+    // record the resampled audio in a file
+    if (stream->record_mic_resample_stream)
+    {
+      ph_media_audio_fast_recording_record(&stream->mic_resample_stream_recorder, recordbuf, recbufsize);
+    }
+  }
+#endif
+
+	// loop over each 'framesize' window of the MIC signal (recbufsize should certainly be a multiple of framesize)
+	while(recbufsize >= expected_framesize)
 	{
 		gettimeofday(&stream->now,0);
 
@@ -1441,7 +1367,7 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 		if ((stream->hdxmode == PH_HDX_MODE_SPK) && !stream->spksilence)
 		{
 			short *samples = (short *) recordbuf;
-			int nsamples = framesize >> 1;
+            int nsamples = expected_framesize >> 1;
 			const int SPKHDXSHIFT = 4;
 			while(nsamples--)
 			{
@@ -1449,11 +1375,13 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 				samples++;
 			}
 		}
-	    
+
+		// echo cancelling algo
 #ifdef DO_ECHO_CAN
-		do_echo_update(stream, recordbuf, framesize);
+		do_echo_update(stream, recordbuf, expected_framesize);
 #endif
 
+		// handle conference
 #ifdef DO_CONF
 		if (stream->to_mix)
 		{
@@ -1463,11 +1391,11 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 				phastream_t *other = stream->to_mix;
 				other->now = stream->now;
 
-				memcpy(stream->data_out.buf, recordbuf, framesize);
-				stream->data_out.next = framesize/2;
+                memcpy(stream->data_out.buf, recordbuf, expected_framesize);
+                stream->data_out.next = expected_framesize/2;
 
-				memcpy(other->data_out.buf, recordbuf, framesize);
-				other->data_out.next = framesize/2;
+                memcpy(other->data_out.buf, recordbuf, expected_framesize);
+                other->data_out.next = expected_framesize/2;
 
 				if (other->data_in.next)
 				{
@@ -1478,22 +1406,23 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 					ph_mediabuf_mixmedia(&other->data_out, &stream->data_in);
 				}
 
-				ph_encode_and_send_audio_frame(stream, stream->data_out.buf, framesize);
-				ph_encode_and_send_audio_frame(other, other->data_out.buf, framesize);
-	    
-				//ph_handle_conference_in(stream, framesize);
+                ph_encode_and_send_audio_frame(stream, stream->data_out.buf, expected_framesize);
+                ph_encode_and_send_audio_frame(other, other->data_out.buf, expected_framesize);
+
+				//ph_handle_conference_in(stream, expected_framesize);
 			}
 			CONF_UNLOCK(stream);
 		}
 		else
 #endif
-		ph_encode_and_send_audio_frame(stream, recordbuf, framesize);
+        ph_encode_and_send_audio_frame(stream, recordbuf, expected_framesize);
 
-		recbufsize -= framesize;
-		processed += framesize;
-		recordbuf = framesize + (char *)recordbuf;
+        recbufsize -= expected_framesize;
+        processed += expected_framesize;
+        recordbuf = expected_framesize + (char *)recordbuf;
 	}
 
+    DBG5_DYNA_AUDIO("DYNA_AUDIO:ph_audio_rec_cbk: processed %d short audio samples\n", processed/2, 0, 0, 0);
 	return processed;
 }
 
@@ -1853,43 +1782,6 @@ void ph_audio_init_cng(phastream_t *stream)
 }
 
 
-
-#ifdef PH_USE_RESAMPLE
-void ph_resample_init0(phastream_t *stream)
-{
-  SRC_DATA *resCtx = calloc(sizeof(SRC_DATA), 1);
-  double playRatio, recRatio;
-
-  playRatio = (1.0 * stream->actual_rate) / stream->clock_rate;  
-  recRatio = (1.0 * stream->clock_rate) / stream->actual_rate;
-  DBG5_DYNA_AUDIO("ph_resample_init: wanted = %d actual = %d play=%f rec=%f\n",
-  	stream->clock_rate, stream->actual_rate, playRatio, recRatio);
-	
-
-  resCtx->src_ratio = playRatio;
-  
-  stream->play_resample_ctx = resCtx;
-
-  resCtx = calloc(sizeof(SRC_DATA), 1);
-  resCtx->src_ratio = recRatio;
-  
-
-  stream->rec_resample_ctx = resCtx;
-}
-
-
-void ph_resample_clean(phastream_t *stream)
-{
-  if (stream->rec_resample_ctx)
-    free(stream->rec_resample_ctx);
-  if (stream->play_resample_ctx)
-    free(stream->play_resample_ctx);
-
-}
-
-#endif
-
-
 void *ph_ec_init(int framesize, int clock_rate)
 {
   int frame_samples = framesize/2;
@@ -1961,6 +1853,28 @@ setup_recording(phastream_t *stream)
       ph_media_audio_fast_recording_init(&stream->send_stream_recorder, fname);
     }
 
+    stream->record_mic_stream = 0;
+    if (stream->record_mic_stream)
+    {
+      char *rname = NULL;
+      char fname[128];
+      static int mic_filename_index = 1;
+      rname = "micstream%d.data";
+      snprintf(fname, 128, rname, mic_filename_index++);
+      ph_media_audio_fast_recording_init(&stream->mic_stream_recorder, fname);
+    }
+
+    stream->record_mic_resample_stream = 0;
+    if (stream->record_mic_resample_stream)
+    {
+      char *rname = NULL;
+      char fname[128];
+      static int mic_filename_index = 1;
+      rname = "mic_resample_stream%d.data";
+      snprintf(fname, 128, rname, mic_filename_index++);
+      ph_media_audio_fast_recording_init(&stream->mic_resample_stream_recorder, fname);
+    }
+
 }
 
 
@@ -2018,42 +1932,37 @@ open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *devi
 
 #ifdef PH_FORCE_16KHZ
 	// devices should be opened with a 16000 Hz sampling rate
-	if (clockrate == 8000)
-	{
+	if (clockrate == 8000) {
 		clockrate = 16000;
 		framesize *= 2;
 	}
-
 #endif
 
-	if (s->confflags != PH_MSESSION_CONF_MEMBER)
-	{
+	if (s->confflags != PH_MSESSION_CONF_MEMBER) {
 		fd = audio_stream_open(stream, deviceId, clockrate, framesize, ph_audio_callback); 
 
-		if (fd < 0)
-		{
-			//	  phcb->errorNotify(PH_NOMEDIA);
+		if (fd < 0) {
 			DBG1_MEDIA_ENGINE("open_audio_device: can't open  AUDIO device\n");
+
+			if( phcb->errorNotify ) {
+				phcb->errorNotify(PH_NOAUDIODEVICE);
+			}
 			return -1;
 		}
 
 		DBG8_DYNA_AUDIO_DRV("opened i/o devices: (s->rate, s->fsize)=(%d,%d) - (rate, fsize)=(%d,%d) - (s->actual_rate)=(%d)\n",
-		stream->clock_rate,
-		stream->ms.codec->decoded_framesize,
-		clockrate,
-		framesize,
-		stream->actual_rate,
-		0,0);
-
-	}
-	else
-	{
+			stream->clock_rate,
+			stream->ms.codec->decoded_framesize,
+			clockrate,
+			framesize,
+			stream->actual_rate,
+			0,0);
+	} else {
 		stream->actual_rate = clockrate;
 	}
 
 	return 0;
 }
-
 
 
 /**
@@ -2372,32 +2281,38 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
   DBG2_MEDIA_ENGINE("ph_msession_audio_start: CNG %s\n", stream->cngi.cng ? "activating" : "desactivating");
   DBG2_MEDIA_ENGINE("ph_msession_audio_start: opening AUDIO device %s\n", deviceId);
 
-  if (open_audio_device(s, stream, deviceId))
-    {
-        //	  phcb->errorNotify(PH_NOMEDIA);
-        free(stream);
-        PH_MSESSION_AUDIO_UNLOCK();
-        return -PH_NORESOURCES;
-    }
+	if (open_audio_device(s, stream, deviceId)) {
+		free(stream);
+		PH_MSESSION_AUDIO_UNLOCK();
+		return -PH_NORESOURCES;
+	}
 
-
+  // if the audio device do not support the expected clockrate
+  // we need to resample audio data
 #ifdef PH_USE_RESAMPLE
   if (stream->clock_rate != stream->actual_rate)
-    ph_resample_init0(stream);
+  {
+    stream->resample_audiodrv_ctx_spk = ph_resample_spk_init0(stream->clock_rate, stream->actual_rate);
+    stream->resample_audiodrv_ctx_mic = ph_resample_mic_init0(stream->clock_rate, stream->actual_rate);
+  }
 #endif
 
 
 #ifdef PH_FORCE_16KHZ
   if (stream->clock_rate != stream->actual_rate)
+  {
     stream->resamplectx = ph_resample_init();
+  }
 #endif
 
 
-  if (codec->encoder_init)
+  if (codec->encoder_init) {
     stream->ms.encoder_ctx = codec->encoder_init(0);
+  }
 
-  if (codec->decoder_init)
+  if (codec->decoder_init) {
     stream->ms.decoder_ctx = codec->decoder_init(0);
+  }
 
 
   strcpy(stream->ms.remote_ip, sp->remoteaddr);
@@ -2573,10 +2488,12 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
       CONF_UNLOCK(master);
     }
 
-
 #ifdef PH_USE_RESAMPLE
   if (stream->actual_rate != stream->clock_rate)
-    ph_resample_clean(stream);
+  {
+    ph_resample_cleanup0(stream->resample_audiodrv_ctx_mic);
+    ph_resample_cleanup0(stream->resample_audiodrv_ctx_spk);
+  }
 #endif
 
 
@@ -2654,8 +2571,16 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
       ph_media_audio_recording_close(&stream->recorder);
     }
 
+    if (stream->record_mic_stream)
+    {
+      ph_media_audio_recording_close(&stream->mic_stream_recorder);
+    }
 
-  
+    if (stream->record_mic_resample_stream)
+    {
+      ph_media_audio_recording_close(&stream->mic_resample_stream_recorder);
+    }
+
   DBG1_MEDIA_ENGINE("\naudio stream closed\n");
 
   if (stream->lastframe)
@@ -2663,7 +2588,9 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
 
 #ifdef PH_FORCE_16KHZ
   if (stream->resamplectx)
+  {
       ph_resample_cleanup(stream->resamplectx);
+  }
 #endif      
 
 
@@ -2994,19 +2921,21 @@ int ph_msession_send_dtmf(struct ph_msession_s *s, int dtmf, int mode)
 {
   phastream_t *stream = (phastream_t *)(s->streams[PH_MSTREAM_AUDIO1].streamerData);
 
-  if (!stream)
+  if (!stream) {
     return -1;
+  }
 
-
-  if (!mode || mode > 3)
+  if (!mode || mode > 3) {
     mode = 3;
+  }
 
   DTMF_LOCK(stream);
   if (stream->dtmfi.dtmfq_cnt < DTMFQ_MAX)
     {
       stream->dtmfi.dtmfq_buf[stream->dtmfi.dtmfq_wr++] = (unsigned short) (dtmf | (mode << 8));
-      if (stream->dtmfi.dtmfq_wr == DTMFQ_MAX)
-    stream->dtmfi.dtmfq_wr = 0;
+      if (stream->dtmfi.dtmfq_wr == DTMFQ_MAX) {
+        stream->dtmfi.dtmfq_wr = 0;
+      }
 
       stream->dtmfi.dtmfq_cnt++;
       DTMF_UNLOCK(stream);
