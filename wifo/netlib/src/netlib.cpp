@@ -755,6 +755,11 @@ NETLIB_BOOLEAN is_connection_available()
 
 	return InternetGetConnectedState(&flags, 0);
 
+#elif defined(OS_MACOSX)
+
+	// TODO: to be implemented
+	return NETLIB_TRUE;
+
 #else
 	NETLIB_BOOLEAN res = NETLIB_FALSE;
 	int sock;

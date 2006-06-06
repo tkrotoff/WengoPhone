@@ -25,7 +25,7 @@
 
 NetworkObserver::NetworkObserver() 
 {
-	_isConnected = false;
+	_isConnected = is_connection_available();
 	_timer.timeoutEvent += boost::bind(&NetworkObserver::timeoutEventHandler, this);
 
 	_timer.start(0, 500, 0);
@@ -43,7 +43,7 @@ NetworkObserver & NetworkObserver::getInstance()
 
 NetworkObserver::~NetworkObserver() 
 {
-
+	_timer.stop();
 }
 
 void NetworkObserver::timeoutEventHandler() 
