@@ -17,9 +17,8 @@ args = {
 	'phapiwrapper' : 0,
 	'multiimwrapper' : 1,
 	'nullsipwrapper' : 0,
-	'enable-samplerate' : 0,
 	'enable-phapi-audio-arts' : 0,
-	'portaudio-oss' : 1,
+	'portaudio-oss' : 0,
 
 	#if 0 wmme support
 	'portaudio-dsound' : 0,
@@ -38,6 +37,11 @@ args = {
 
 if not WengoOSMacOSX():
 	args['enable-libsound-portaudio'] = 1
+
+if WengoOSLinux() or WengoOSBSD():
+	args['enable-samplerate'] = 1
+else:
+    args['enable-samplerate'] = 0
 
 WengoAddConsoleArguments(args)
 if WengoGetConsoleArgument("enable-debug-console"):
