@@ -32,6 +32,7 @@
 class WenboxPlugin;
 class WsSubscribe;
 class NetworkObserver;
+class ClassicConfigImporter;
 
 /**
  * @defgroup model Model Component
@@ -193,6 +194,8 @@ private:
 	UserProfile _userProfile;
 
 	StartupSettingListener * _startupSettingListener;
+
+	ClassicConfigImporter *_importer;
 };
 
 #endif	//OWWENGOPHONE_H

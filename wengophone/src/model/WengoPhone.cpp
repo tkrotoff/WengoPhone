@@ -47,6 +47,7 @@ WengoPhone::WengoPhone()
 	_running = false;
 	_wenboxPlugin = NULL;
 	_wsSubscribe = NULL;
+	_importer = NULL;
 
 	//FIXME hack
 	instance = this;
@@ -100,6 +101,9 @@ WengoPhone::~WengoPhone() {
 	////
 
 	delete _startupSettingListener;
+
+	if (_importer)
+		delete _importer;
 }
 
 void WengoPhone::init() {
@@ -116,8 +120,8 @@ void WengoPhone::init() {
 	wenboxPluginCreatedEvent(*this, *_wenboxPlugin);
 
 	//Imports the Config from WengoPhone Classic.
-	ClassicConfigImporter importer(*this);
-	importer.importConfig(config.getConfigDir());
+	_importer = new ClassicConfigImporter(*this);
+	_importer->importConfig(config.getConfigDir());
 
 	_wsSubscribe = new WsSubscribe();
 	wsSubscribeCreatedEvent(*this, *_wsSubscribe);
