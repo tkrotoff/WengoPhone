@@ -311,7 +311,7 @@ void QtUserManager::defaultAction(QTreeWidgetItem * item){
 			return;
 		}
 		if (config.getGeneralClickStartFreeCall()) {
-		    QString str = QString::fromUtf8(contactProfile.getPreferredNumber().c_str()); //getFreePhoneNumber().c_str());
+		    QString str = QString::fromUtf8(contactProfile.getFreePhoneNumber().c_str());
 		    if ( !str.isEmpty()){
                 ul->startFreeCall(userId);
                 return;
@@ -808,6 +808,7 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 	QTreeWidgetItem * group = list[0];
 	if (list.isEmpty())
         return;
+
 	int count = group->childCount();
 
 	for (int t = 0; (t < count) && !found; t++) {
