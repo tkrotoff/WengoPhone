@@ -95,7 +95,22 @@ void QtWsDirectory::searchButtonClicked() {
 	QString query = _ui->searchLineEdit->text();
 	LOG_DEBUG("query=" + query.toStdString());
 
-	_cWsDirectory.searchEntry(query.toStdString());
+	QString criteria = _ui->criteriaComboBox->currentText();
+	LOG_DEBUG("criteria=" + criteria.toStdString());
+
+	if (criteria == "Nickname") {
+		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::wengoid);
+	} else if (criteria == "First Name") {
+		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::fname);
+	} else if (criteria == "Last Name") {
+		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::lname);
+	} else if (criteria == "City") {
+		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::city);
+	} else if (criteria == "Country") {
+		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::country);
+	} else {
+		_cWsDirectory.searchEntry(query.toStdString());
+	}
 
 	clear();
 	_ui->searchPushButton->setEnabled(false);
