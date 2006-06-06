@@ -306,9 +306,8 @@ void ph_resample_cleanup0(void* resample_audiodrv_ctx)
 
 void ph_resample_audio0(void *ctx, void *inbuf, int inbsize, void *outbuf, int *outbsize)
 {
-  static const short buffSize = 2048;
-  float finbuf[buffSize];
-  float foutbuf[buffSize];
+  float finbuf[2048];
+  float foutbuf[2048];
   struct phresamplectx *ctx_filter = (struct phresamplectx *)ctx;
   int errorCode = 0;
   //outbsize is the excepted frame size after resampling
@@ -326,7 +325,7 @@ void ph_resample_audio0(void *ctx, void *inbuf, int inbsize, void *outbuf, int *
   //pointer to the output data samples
   ctx_filter->src_data->data_out = foutbuf;
   //Maximum number of frames pointer to by data_out
-  ctx_filter->src_data->output_frames = (long)buffSize;
+  ctx_filter->src_data->output_frames = 2048.0;
 
   //more data are comming
   ctx_filter->src_data->end_of_input = 0;
