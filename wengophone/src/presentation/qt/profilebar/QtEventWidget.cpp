@@ -19,7 +19,9 @@
 
 #include "QtEventWidget.h"
 
-#include <QtGui>
+#include "ui_EventWidget.h"
+
+#include <presentation/PWengoPhone.h>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -27,19 +29,20 @@
 #include <model/profile/UserProfile.h>
 #include <model/phoneline/IPhoneLine.h>
 
-#include <presentation/PWengoPhone.h>
-
 #include <qtutil/MouseEventFilter.h>
 
+#include <QtGui>
+
 QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
-	QWidget * parent, Qt::WFlags f)
-	: QObjectThreadSafe(NULL), _cUserProfile(cUserProfile), _cWengoPhone(cWengoPhone) {
-  
+	QWidget * parent)
+	: QObjectThreadSafe(NULL),
+	_cUserProfile(cUserProfile),
+	_cWengoPhone(cWengoPhone) {
+
+	_widget = NULL;
 	_ui = NULL;
 	_voiceMailCount = 0;
 	_missedCallCount = 0;
-	_widget = new QWidget();
-
 
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtEventWidget::initThreadSafe, this));
@@ -47,7 +50,9 @@ QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProf
 }
 
 void QtEventWidget::initThreadSafe() {
-  
+
+	_widget = new QWidget();
+
 	_ui = new Ui::EventWidget();
 	_ui->setupUi(_widget);
 
@@ -64,18 +69,21 @@ void QtEventWidget::initThreadSafe() {
 	updatePresentation();
 }
 
+QtEventWidget::~QtEventWidget() {
+	delete _ui;
+}
+
+QWidget * QtEventWidget::getWidget() const {
+	return _widget;
+}
+
 void QtEventWidget::updatePresentation() {
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtEventWidget::updatePresentationThreadSafe, this));
 	postEvent(event);
 }
 
-QWidget * QtEventWidget::getWidget() {
-	return _widget;
-}
-
 void QtEventWidget::updatePresentationThreadSafe() {
-	
 	_ui->voiceMailCountLabel->setText(QString("%1").arg(_voiceMailCount));
 	_ui->missedCallCountLabel->setText(QString("%1").arg(_missedCallCount));
 }
@@ -91,28 +99,29 @@ void QtEventWidget::setMissedCall(int count) {
 }
 
 void QtEventWidget::voiceMailClicked() {
-	
-	QMessageBox mb(tr("Replay call"),
-		tr("Do you want to call  your voice mail?"),
+
+	QMessageBox mb(tr("WengoPhone - Voice Mail"),
+		tr("Do you want to call your voice mail?"),
 		QMessageBox::Question,
 		QMessageBox::Yes | QMessageBox::Default,
 		QMessageBox::No | QMessageBox::Escape,
-		QMessageBox::NoButton);
+		QMessageBox::NoButton, _widget);
 
-	if( mb.exec() == QMessageBox::Yes ) {
+	if (mb.exec() == QMessageBox::Yes) {
 		IPhoneLine * phoneLine = _cUserProfile.getUserProfile().getActivePhoneLine();
-		if( phoneLine ) {
+		if (phoneLine) {
 			phoneLine->makeCall("123", false);
 		}
 	}
 }
 
 void QtEventWidget::missedCallClicked() {
-	//TODO: show the history tab
+	//Shows the history tab
 	_cWengoPhone.getPresentation()->showHistory();
 }
 
 void QtEventWidget::slotUpdatedTranslation() {
-  if (_ui)
-    _ui->retranslateUi(_widget);
+	if (_ui) {
+		_ui->retranslateUi(_widget);
+	}
 }

@@ -19,15 +19,21 @@
 
 #include "QtCreditWidget.h"
 
+#include "ui_CreditWidget.h"
+
 #include <model/webservices/url/WsUrl.h>
 #include <control/CWengoPhone.h>
 #include <presentation/qt/config/QtWengoConfigDialog.h>
 
 #include <qtutil/MouseEventFilter.h>
 
-QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent , Qt::WFlags f )
-	: QObjectThreadSafe(NULL), _cWengoPhone(cWengoPhone) {
+#include <QtGui>
 
+QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent)
+	: QObjectThreadSafe(NULL),
+	_cWengoPhone(cWengoPhone) {
+
+	_widget = NULL;
 	_ui = NULL;
 	_callForwardMode = tr("unauthorized");
 	_pstnNumber = tr("no number");
@@ -37,14 +43,9 @@ QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent , Qt:
 	postEvent(event);
 }
 
-void QtCreditWidget::updatePresentation() {
-	typedef PostEvent0<void ()> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtCreditWidget::updatePresentationThreadSafe, this));
-	postEvent(event);
-}
-
 void QtCreditWidget::initThreadSafe() {
 	_widget = new QWidget();
+
 	_ui = new Ui::CreditWidget();
 	_ui->setupUi(_widget);
 
@@ -52,9 +53,10 @@ void QtCreditWidget::initThreadSafe() {
 	_ui->pstnNumberLabel->setToolTip(tr("Your Wengo number"));
 	_ui->callForwardLabel->setText(tr("unauthorized"));
 	_ui->callForwardLabel->setToolTip(tr("You need to buy wengo's credits in order to use the call forward"));
-	_callForwardMouseFilter = new MousePressEventFilter(
+
+	MousePressEventFilter * callForwardMouseFilter = new MousePressEventFilter(
 			this, SLOT(callforwardModeClicked()), Qt::LeftButton);
-	_ui->callForwardLabel->installEventFilter(_callForwardMouseFilter);
+	_ui->callForwardLabel->installEventFilter(callForwardMouseFilter);
 
 	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
 		this, SLOT(buyOutClicked()), Qt::LeftButton);
@@ -62,12 +64,26 @@ void QtCreditWidget::initThreadSafe() {
 	_ui->buyCreditsLabel->setToolTip(tr("Click here to buy Wengo's credits"));
 }
 
+QtCreditWidget::~QtCreditWidget() {
+	delete _ui;
+}
+
+QWidget * QtCreditWidget::getWidget() const {
+	return _widget;
+}
+
+void QtCreditWidget::updatePresentation() {
+	typedef PostEvent0<void ()> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtCreditWidget::updatePresentationThreadSafe, this));
+	postEvent(event);
+}
+
 void QtCreditWidget::updatePresentationThreadSafe() {
 
 	_ui->callForwardLabel->setText(_callForwardMode);
 	_ui->pstnNumberLabel->setText(_pstnNumber);
 
-	if( _callForwardMode != tr("unauthorized") ) {
+	if (_callForwardMode != tr("unauthorized")) {
 
 		QPalette palette = _ui->callForwardLabel->palette();
 		palette.setColor(QPalette::WindowText, Qt::blue);
@@ -83,10 +99,6 @@ void QtCreditWidget::updatePresentationThreadSafe() {
 
 		_ui->callForwardLabel->setToolTip(tr("Click here to change your call forward settings"));
 	}
-}
-
-QWidget * QtCreditWidget::getWidget() {
-	return _widget;
 }
 
 void QtCreditWidget::setPstnNumber(const QString & number) {

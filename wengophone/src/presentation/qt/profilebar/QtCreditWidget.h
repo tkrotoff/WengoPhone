@@ -17,37 +17,38 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCREDITWIDGET_H
-#define QTCREDITWIDGET_H
-
-#include "ui_CreditWidget.h"
+#ifndef OWQTCREDITWIDGET_H
+#define OWQTCREDITWIDGET_H
 
 #include <qtutil/QObjectThreadSafe.h>
 
-#include <QtGui>
+#include <QString>
 
 class CWengoPhone;
-class QtClickableLabel;
-class CWengoPhone;
-class MousePressEventFilter;
+
+class QWidget;
+namespace Ui { class CreditWidget; }
 
 /**
- * Credit widget
+ * Credit widget of the profile bar
  *
- * @author Mr K.
+ * Shows the Wengo's credit available for the user.
+ *
  * @author Mathieu Stute
  */
 class QtCreditWidget : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent = 0, Qt::WFlags f = 0);
+	QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent);
+
+	~QtCreditWidget();
 
 	void setPstnNumber(const QString & number);
 
 	void setCallForwardMode(const QString & mode);
 
-	QWidget * getWidget();
+	QWidget * getWidget() const;
 
 	void updatePresentation();
 
@@ -59,7 +60,7 @@ private Q_SLOTS:
 
 	void slotUpdatedTranslation();
 
-protected:
+private:
 
 	QString _callForwardMode;
 
@@ -69,12 +70,11 @@ protected:
 
 	void updatePresentationThreadSafe();
 
-	QWidget * _widget;
-
 	CWengoPhone & _cWengoPhone;
 
-	Ui::CreditWidget * _ui;
+	QWidget * _widget;
 
-	MousePressEventFilter * _callForwardMouseFilter;
+	Ui::CreditWidget * _ui;
 };
-#endif
+
+#endif	//OWQTCREDITWIDGET_H

@@ -17,30 +17,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTEVENTWIDGET_H
-#define QTEVENTWIDGET_H
-
-#include "ui_EventWidget.h"
-
-#include <model/webservices/info/WsInfo.h>
+#ifndef OWQTEVENTWIDGET_H
+#define OWQTEVENTWIDGET_H
 
 #include <qtutil/QObjectThreadSafe.h>
 
 class CUserProfile;
 class CWengoPhone;
+
 class QWidget;
+namespace Ui { class EventWidget; }
 
 /**
  * Event widget of the profile bar.
  *
- * @author Mr K
+ * Shows
+ *
  * @author Mathieu Stute
  */
 class QtEventWidget : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtEventWidget (CWengoPhone & cWengoPhone, CUserProfile & cUserProfile, QWidget * parent = 0, Qt::WFlags f = 0);
+	QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile, QWidget * parent);
+
+	~QtEventWidget();
 
 	void setVoiceMail(int count);
 
@@ -48,15 +49,14 @@ public:
 
 	void updatePresentation();
 
-	QWidget * getWidget();
-
+	QWidget * getWidget() const;
 
 private Q_SLOTS:
 
 	void voiceMailClicked();
 
 	void missedCallClicked();
-	
+
 	void slotUpdatedTranslation();
 
 private:
@@ -77,4 +77,5 @@ private:
 
 	int _missedCallCount;
 };
-#endif
+
+#endif	//OWQTEVENTWIDGET_H
