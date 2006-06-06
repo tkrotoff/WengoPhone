@@ -153,7 +153,8 @@ enum phErrors {
   PH_BADARG,      /* BAD argument */
   PH_VLBUSY,       /* There is oparation pending on this VLINE */
   PH_BADCFID,       /* bad conf call id */
-  PH_REDIRLOOP    /* setFollomMe or blindTransfer creates a loop */
+  PH_REDIRLOOP,    /* setFollomMe or blindTransfer creates a loop */
+  PH_NOAUDIODEVICE /* failed to open an audio device */
 };
 
 #ifdef WIN32

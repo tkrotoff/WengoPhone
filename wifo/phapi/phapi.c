@@ -636,23 +636,19 @@ ph_locate_call(eXosip_event_t *je, int creatit)
   return ca;
 }
 
-
-
-
 void ph_release_call(phcall_t *ca)
 {
+	DBG4_SIP_NEGO("SIP_NEGO: ph_release_call\n", 0, 0, 0);
 
-  DBG4_SIP_NEGO("SIP_NEGO: ph_release_call\n", 0, 0, 0);
+	if (ph_call_hasaudio(ca)) {
+		printf("\n\nph_release_call: ph_call_hasaudio\n\n");
+		ph_call_media_stop(ca);
+	} else {
+		printf("\n\nph_release_call: ph_call_hasaudio\n\n");
+	}
 
-  if (ph_call_hasaudio(ca))
-    {
-      ph_call_media_stop(ca);
-    }
-
-  memset(ca, 0, sizeof(phcall_t));
-  ca->cid = -1;
-
-
+	memset(ca, 0, sizeof(phcall_t));
+	ca->cid = -1;
 }
 
 
@@ -1817,7 +1813,6 @@ ph_scrap_port(char *buf, int bufsize, const char *host, int *port)
   if (!strchr(host, ':'))
     return host;
 
-
   strncpy(buf, host, bufsize);
   host = strchr(buf, ':');
   if (host)
@@ -1962,7 +1957,7 @@ phDelVline(int vlid, int regTimeout)
   
 	/* 
 	 if the line has an associatied timeout, 
-     it means it is regsitered on some server,
+     it means it is registered on some server,
      so we need to unregister 
 	*/
 	if (vl->regTimeout)
@@ -1985,7 +1980,6 @@ phDelVline(int vlid, int regTimeout)
 }
 
 
-
 MY_DLLEXPORT int phChangeAudioDevices(const char *devstr)
 {
   if (devstr)
@@ -1993,8 +1987,6 @@ MY_DLLEXPORT int phChangeAudioDevices(const char *devstr)
 
   return 0;
 }
-
-
 
 
 static struct vline *
@@ -4442,10 +4434,10 @@ int getPublicPort(char *  local_voice_port, char * local_video_port, char * publ
   
   do {
     printf("get pub video: %s", local_video_port);
-    
+
     res2 = stunOpenSocketPair(&stunServerAddr, &mappedAddr,&sock2, &sock3,atoi(local_video_port), NULL, 1);
     //sock2 = stunOpenSocket(&stunServerAddr, &mappedAddr, atoi(&local_video_port), NULL, 0); 
-    
+
     if (-1 !=  res2)
       {
 	snprintf(local_video_port, 9, "%i", res2);
@@ -4490,10 +4482,8 @@ int phLineGetSipAddress(int vlid, char buf[], int bufsize) {
 
 int phCrash() {
     *(int *)0 = 0;
-    
 }
 
 void phSetDebugLevel(int level) {
     phDebugLevel = level;
 }
-
