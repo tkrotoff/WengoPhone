@@ -311,7 +311,7 @@ void QtUserManager::defaultAction(QTreeWidgetItem * item){
 			return;
 		}
 		if (config.getGeneralClickStartFreeCall()) {
-		    QString str = QString::fromUtf8(contactProfile.getFreePhoneNumber().c_str());
+		    QString str = QString::fromUtf8(contactProfile.getPreferredNumber().c_str()); //getFreePhoneNumber().c_str());
 		    if ( !str.isEmpty()){
                 ul->startFreeCall(userId);
                 return;
@@ -794,7 +794,10 @@ void QtUserManager::setMouseButton(Qt::MouseButton button) {
 void QtUserManager::moveContact(const QString & contactId,
 const QString & srcContactGroupId, const QString & dstContactGroupId) {
 
-	//	QMutexLocker lock(&_mutex);
+	// If groups are hiden, there is nothing to move...
+	if (groupsAreHiden())
+        return;
+
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user = NULL;
 	bool found = false;
@@ -803,6 +806,8 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 	// If it is inside this group nothing is done
 	QList < QTreeWidgetItem * > list = _tree->findItems(dstContactGroupId, Qt::MatchExactly);
 	QTreeWidgetItem * group = list[0];
+	if (list.isEmpty())
+        return;
 	int count = group->childCount();
 
 	for (int t = 0; (t < count) && !found; t++) {
@@ -815,6 +820,8 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 	// Removing the Contact from the old group
 	// We should only one group
 	list = _tree->findItems(srcContactGroupId, Qt::MatchExactly);
+	if (list.isEmpty())
+        return;
 	group = list[0];
 	count = group->childCount();
 
