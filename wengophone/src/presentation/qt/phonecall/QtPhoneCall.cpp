@@ -73,18 +73,23 @@ void QtPhoneCall::initThreadSafe() {
 	_phoneCallWidget->setAutoFillBackground(true);
 
 	QString sipAddress = QString::fromStdString(_cPhoneCall.getPeerSipAddress());
-	QString callAddress = QString::fromStdString(_cPhoneCall.getPeerDisplayName());
-	if (callAddress.isEmpty()) {
-		callAddress = QString::fromStdString(_cPhoneCall.getPeerUserName());
-	}
 
 	//phoneNumberLabel
 	_nickNameLabel = Object::findChild < QLabel * > (_phoneCallWidget, "nickNameLabel");
+
+    // QString userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
+
+    QString userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getDisplayName());
+    if (userInfo.isEmpty())
+        userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
+
+    userInfo = getDisplayName(userInfo);
+
 	QString tmp = QString("<html><head><meta name='qrichtext' content='1'/></head><body "
 			"style=white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
 			" font-weight:400; font-style:normal; text-decoration:none;'><p style=' margin-top:0px; "
 			" margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-			"font-size:8pt;'><span style=' font-size:13pt; font-weight:600;'>%1</span></p></body></html>").arg(QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName()));
+			"font-size:8pt;'><span style=' font-size:13pt; font-weight:600;'>%1</span></p></body></html>").arg(userInfo);
 
 	_nickNameLabel->setText(tmp);
 	_nickNameLabel->setToolTip(sipAddress);
@@ -147,6 +152,25 @@ void QtPhoneCall::initThreadSafe() {
 	} else {
 		_qtWengoPhone->addToConference(this);
 	}
+}
+
+QString QtPhoneCall::getDisplayName(QString str){
+    QString tmp;
+    int begin, end;
+
+    begin = str.indexOf("sip:",0,Qt::CaseInsensitive);
+    if (begin == -1 ){
+        // Not found, return ...
+        return str;
+    }
+    begin+=4;
+    end = str.indexOf("@",begin,Qt::CaseInsensitive);
+    if (end == -1){
+        // Not found, return ...
+        return str;
+    }
+    tmp = str.mid(begin,end - begin);
+    return tmp;
 }
 
 QMenu * QtPhoneCall::createMenu() {

@@ -117,6 +117,8 @@ private:
 
 	void showToaster();
 
+	QString getDisplayName(QString str);
+
 	QMenu * createMenu();
 
 	QMenu * createInviteMenu();
