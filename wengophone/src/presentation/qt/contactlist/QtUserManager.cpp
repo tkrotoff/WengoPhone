@@ -244,7 +244,7 @@ void QtUserManager::itemClicked(QTreeWidgetItem * item, int) {
     if (ul->getButton(item->text(0)) == Qt::RightButton) {
         if (!_menu) {
             _menu = createMenu();
-            _menu->exec(QCursor::pos());
+            _menu->popup(QCursor::pos());
             // clearSelection () is bugged ! We have to clear the selection ourself
             QList <QTreeWidgetItem * > selectedList = _tree->selectedItems();
             QList <QTreeWidgetItem * >::iterator iter;
@@ -256,7 +256,7 @@ void QtUserManager::itemClicked(QTreeWidgetItem * item, int) {
         else {
             delete _menu;
             _menu = createMenu();
-            _menu->exec(QCursor::pos());
+            _menu->popup(QCursor::pos());
             // clearSelection () is bugged ! We have to clear the selection ourself
             QList <QTreeWidgetItem * > selectedList = _tree->selectedItems();
             QList <QTreeWidgetItem * >::iterator iter;
@@ -298,12 +298,14 @@ void QtUserManager::itemDoubleClicked(QTreeWidgetItem * item, int col) {
 
 void QtUserManager::defaultAction(QTreeWidgetItem * item){
 
+    QtUser * user;
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QtUserList * ul = QtUserList::getInstance();
 
     _button = Qt::NoButton;
 	if (item) {
 		QString userId = item->text(0);
+		user = ul->getUser(userId);
 		ContactProfile contactProfile = _qtContactList.getCContactList().getContactProfile(userId.toStdString());
 
 		if (config.getGeneralClickStartChat()) {
@@ -326,7 +328,10 @@ void QtUserManager::defaultAction(QTreeWidgetItem * item){
                 }
             }
 		}
-		ul->startChat(userId);
+ 		if (!user->getWengoPhoneNumber().isEmpty()) {
+			ul->startCall(userId);
+		}
+//		ul->startChat(userId);
 	}
 }
 
