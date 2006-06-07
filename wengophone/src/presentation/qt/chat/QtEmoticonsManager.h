@@ -20,6 +20,7 @@
 #define QTEMOTICONSMANAGER_H
 
 #include <QtGui>
+#include <QtXml>
 #include "QtEmoticon.h"
 
 class QtEmoticonsManager : public QObject
@@ -27,18 +28,32 @@ class QtEmoticonsManager : public QObject
 	Q_OBJECT
 
 public:
-	
+
+    typedef QList<QtEmoticon> QtEmoticonsList;
+
+    typedef QHash<QString, QtEmoticonsList> ProtocolsList;
+
 	QtEmoticonsManager(QObject * parent);
-	
-	void addEmoticon(const QString & path, const QString & text);
-	
+
 	QtEmoticon getEmoticon(const QString & text);
 
-	int count();
-	
+	void loadFromFile(QString filename);
+
+	QString text2Emoticon(const QString & text, const QString protocol);
+
+	int getProtocolCount();
+
+	int getEmoticonsCount(QString protocol);
+
 protected:
 
-	QMap<QString, QtEmoticon> _data;
+    void readProtocol(QDomNode node);
+
+    void readIcon(QDomNode node, QString protocol);
+
+    ProtocolsList _protocolsList;
+
+    QtEmoticonsList _qtEmoticonsList;
 
 };
 
