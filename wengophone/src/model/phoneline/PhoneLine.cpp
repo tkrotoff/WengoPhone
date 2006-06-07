@@ -20,6 +20,7 @@
 #include "PhoneLine.h"
 
 #include "PhoneLineStateUnknown.h"
+#include "PhoneLineStateProgress.h"
 #include "PhoneLineStateOk.h"
 #include "PhoneLineStateClosed.h"
 #include "PhoneLineStateTimeout.h"
@@ -60,6 +61,9 @@ PhoneLine::PhoneLine(SipAccount & sipAccount, WengoPhone & wengoPhone)
 	static PhoneLineStateUnknown stateUnknown;
 	_phoneLineStateList += &stateUnknown;
 	_state = &stateUnknown;
+
+	static PhoneLineStateProgress stateProgress;
+	_phoneLineStateList += &stateProgress;
 
 	static PhoneLineStateOk stateOk;
 	_phoneLineStateList += &stateOk;

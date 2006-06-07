@@ -83,6 +83,7 @@ sources = [
 	'model/phonecall/ConferenceCallParticipant.cpp',
 	'model/phoneline/PhoneLine.cpp',
 	'model/phoneline/PhoneLineStateUnknown.cpp',
+	'model/phoneline/PhoneLineStateProgress.cpp',
 	'model/phoneline/PhoneLineStateOk.cpp',
 	'model/phoneline/PhoneLineStateClosed.cpp',
 	'model/phoneline/PhoneLineStateTimeout.cpp',

@@ -17,31 +17,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <sipwrapper/EnumPhoneLineState.h>
+#ifndef OWPHONELINESTATEPROGRESS_H
+#define OWPHONELINESTATEPROGRESS_H
 
-#include <util/Logger.h>
+#include "PhoneLineState.h"
 
-std::string EnumPhoneLineState::toString(PhoneLineState state) {
-	switch(state) {
-	case PhoneLineStateUnknown:
-		return "PhoneLineStateUnknown";
+class PhoneLineStateProgress : public PhoneLineState {
+public:
 
-	case PhoneLineStateProgress:
-		return "PhoneLineStateProgress";
+	void execute(IPhoneLine & phoneLine);
 
-	case PhoneLineStateServerError:
-		return "PhoneLineStateServerError";
-
-	case PhoneLineStateTimeout:
-		return "PhoneLineStateTimeout";
-
-	case PhoneLineStateOk:
-		return "PhoneLineStateOk";
-
-	case PhoneLineStateClosed:
-		return "PhoneLineStateClosed";
-
-	default:
-		LOG_FATAL("unknown PhoneLineState=" + String::fromNumber(state));
+	EnumPhoneLineState::PhoneLineState getCode() const {
+		return EnumPhoneLineState::PhoneLineStateProgress;
 	}
-}
+};
+
+#endif	//OWPHONELINESTATEPROGRESS_H

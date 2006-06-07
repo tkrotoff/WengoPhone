@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENUMPHONELINESTATE_H
-#define ENUMPHONELINESTATE_H
+#ifndef OWENUMPHONELINESTATE_H
+#define OWENUMPHONELINESTATE_H
 
 #include <util/NonCopyable.h>
 
@@ -35,6 +35,9 @@ public:
 	enum PhoneLineState {
 		/** Unknown state. */
 		PhoneLineStateUnknown,
+
+		/** Progress state. */
+		PhoneLineStateProgress,
 
 		/** Connection to the SIP server failed. */
 		PhoneLineStateServerError,
@@ -57,4 +60,4 @@ public:
 	static std::string toString(PhoneLineState state);
 };
 
-#endif	//ENUMPHONELINESTATE_H
+#endif	//OWENUMPHONELINESTATE_H

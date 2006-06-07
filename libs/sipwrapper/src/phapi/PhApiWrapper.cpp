@@ -194,6 +194,8 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 		std::string tmp = proxyServer;
 		tmp += ":" + String::fromNumber(_sipServerPort);
 		ret = phAddVline2(displayName.c_str(), identity.c_str(), registerServer.c_str(), tmp.c_str(), REGISTER_TIMEOUT);
+		
+		phoneLineStateChangedEvent(*this, ret, EnumPhoneLineState::PhoneLineStateProgress);
 	}
 
 	String tmp(realm);
