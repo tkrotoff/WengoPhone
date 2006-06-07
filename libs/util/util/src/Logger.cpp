@@ -28,11 +28,10 @@
 
 #include <ctime>
 
-using namespace std;
-
 Logger Logger::logger;
 
 Logger::Logger() {
+	_fileCreated = false;
 }
 
 Logger::~Logger() {
@@ -98,10 +97,10 @@ void Logger::log(Level level, const std::string & className, const std::string &
 	classNameTmp.remove(" ");
 	std::string tmp = "(" + levelString + ") " + Time().toString() + " " + classNameTmp +  ": " + message;
 
-	if (!_file) {
+	if (!_fileCreated) {
 		std::string strippedClassName = className;
-		string::size_type pos = strippedClassName.find(CLASS_METHOD_SEPARATOR);
-		if (pos != string::npos) {
+		std::string::size_type pos = strippedClassName.find(CLASS_METHOD_SEPARATOR);
+		if (pos != std::string::npos) {
 			strippedClassName = strippedClassName.substr(0, pos);
 		}
 		std::string fileName = Path::getApplicationDirPath() + "log-" + strippedClassName + ".txt";
@@ -109,9 +108,10 @@ void Logger::log(Level level, const std::string & className, const std::string &
 		_file << ("Log file=" + fileName + String::EOL);
 		_file << ("Date=" + Date().toString() + String::EOL);
 		_file << ("Time=" + Time().toString() + String::EOL + String::EOL);
+		_fileCreated = true;
 	}
 
-	_file << (tmp + String::EOL);
+	_file << (tmp + "\n");
 
 	std::cerr << tmp << std::endl;
 

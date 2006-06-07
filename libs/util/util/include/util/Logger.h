@@ -135,6 +135,9 @@ private:
 	/** Writes the log messages to a file named log.txt. */
 	std::ofstream _file;
 
+	/** File created or not. */
+	bool _fileCreated;
+
 	/** Ensures Logger is thread-safe. */
 	mutable boost::mutex _mutex;
 };
