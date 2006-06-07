@@ -20,12 +20,15 @@
 #include "QtChatWindow.h"
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
-#include "../QtWengoPhone.h"
-#include "../contactlist/QtContactList.h"
-#include <model/contactlist/ContactList.h>
-#include <model/contactlist/ContactGroup.h>
+
+#include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/contactlist/QtContactList.h>
+#include <presentation/qt/contactlist/QtUserList.h>
 #include <presentation/qt/toaster/QtToaster.h>
 
+#include <model/contactlist/ContactList.h>
+#include <model/contactlist/ContactGroup.h>
+#include <model/contactlist/ContactProfile.h>
 #include <model/profile/UserProfile.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -35,8 +38,8 @@
 #include <imwrapper/IMChatSession.h>
 
 #include <qtutil/QtWengoStyleLabel.h>
-
 #include <qtutil/Object.h>
+
 #include <util/Logger.h>
 
 #ifdef OS_WINDOWS
@@ -195,6 +198,7 @@ void ChatWindow::createInviteFrame(){
 	_inviteLabel->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
 	connect(_inviteLabel,SIGNAL(clicked()), SLOT(inviteContact()));
+    connect(_callLabel,SIGNAL(clicked()),SLOT(callContact()));
 
 	layout->addWidget(_callLabel,0,0);
 	layout->addWidget(_inviteLabel,0,1);
@@ -203,11 +207,26 @@ void ChatWindow::createInviteFrame(){
 	layout->setSpacing(0);
 
 }
+void ChatWindow::callContact(){
+    ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(_tabWidget->currentIndex() ) );
+    QString contactId;
+    QtContactList * qtContactList;
+    ContactProfile contactProfile;
+    QtUserList * ul ;
+
+    if (widget){
+        contactId = widget->getContactId();
+        qtContactList = _qtWengoPhone->getContactList();
+        contactProfile = qtContactList->getCContactList().getContactProfile(contactId.toStdString());
+        ul = QtUserList::getInstance();
+        ul->startCall(contactId);
+    }
+}
 
 void ChatWindow::inviteContact(){
 
     ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(_tabWidget->currentIndex() ) );
-    if ( widget){
+    if (widget){
         if (widget->canDoMultiChat()){
             widget->inviteContact();
         }

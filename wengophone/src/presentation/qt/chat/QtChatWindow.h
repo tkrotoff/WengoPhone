@@ -96,6 +96,8 @@ protected Q_SLOTS:
 
 	void inviteContact();
 
+	void callContact();
+
 	void closeTab();
 
 	void statusChangedSlot(QString contactId);
