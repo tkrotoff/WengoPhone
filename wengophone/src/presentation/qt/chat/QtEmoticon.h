@@ -26,43 +26,45 @@ class QtEmoticon
 public:
 
 	QtEmoticon();
-	
+
 	QtEmoticon(const QtEmoticon & source);
-	
+
 	~QtEmoticon();
-	
+
 	void setText(const QStringList & text) { _text = text;};
-	
+
 	void setPath(const QString & path) { _path = path;};
-	
+
 	void setPixmap(const QPixmap & pixmap) { _pixmap = pixmap;};
-	
+
 	void setButtonPixmap(const QPixmap & pixmap) { _buttonPixmap = pixmap;};
-	
+
 	void setRegExp(const QString & regExp);
-	
+
 	QString & getRegExp() {return _regExp;};
-	
+
 	QStringList & getText() { return _text;};
-	
+
 	QString & getDefaultText() { return _text[0];};
-	
+
 	QPixmap & getPixmap() { return _pixmap;};
-	
+
 	QPixmap & getButtonPixmap() { return _buttonPixmap;};
-	
+
 	QString & getPath() { return _path;};
-	
+
 	QString getHtmlRegExp();
-	
+
 	QString getHtml();
 
 	QString getHtml2();
-	
+
 	bool isNull();
-	
+
+	QtEmoticon & operator=(const QtEmoticon & source);
+
 	//bool operator <(QtEmoticon & source) const;
-	
+
 protected:
 	QString _path;
 	QStringList _text;

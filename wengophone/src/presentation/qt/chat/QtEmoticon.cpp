@@ -63,6 +63,15 @@ bool QtEmoticon::isNull()
 }
 
 void QtEmoticon::setRegExp(const QString & regExp)
-{ 
+{
 	_regExp = regExp;
+}
+
+QtEmoticon & QtEmoticon::operator=(const QtEmoticon & source){
+    _path = source._path;
+    _text = source._text;
+    _regExp = source._regExp;
+    _pixmap = source._pixmap;
+    _buttonPixmap = source._buttonPixmap;
+    return *this;
 }
