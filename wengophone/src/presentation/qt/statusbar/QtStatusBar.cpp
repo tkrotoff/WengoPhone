@@ -22,6 +22,7 @@
 
 #include <control/CWengoPhone.h>
 
+#include <model/account/NetworkObserver.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
@@ -47,8 +48,14 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	statusGroup->layout()->setMargin(0);
 	statusGroup->layout()->setSpacing(3);
 
-	_cWengoPhone.networkDiscoveryStateChangedEvent +=
-		boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
+	//_cWengoPhone.networkDiscoveryStateChangedEvent +=
+	//	boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
+
+	NetworkObserver::getInstance().connectionIsDownEvent +=
+		boost::bind(&QtStatusBar::connectionIsDownEventHandler, this, _1);
+
+	NetworkObserver::getInstance().connectionIsUpEvent +=
+		boost::bind(&QtStatusBar::connectionIsUpEventHandler, this, _1);
 
 	//internetConnectionStateLabel
 	_internetConnectionMovie = new QMovie(":/pics/statusbar/status-earth-connecting.mng", MNG_FORMAT, _statusBar);
@@ -57,6 +64,10 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_internetConnectionStateLabel->setToolTip(tr("Not Connected"));
 	statusGroup->layout()->addWidget(_internetConnectionStateLabel);
 	_internetConnectionMovie->start();
+	if (NetworkObserver::getInstance().isConnected()) {
+		connectionIsUpEventHandler(NetworkObserver::getInstance());
+	}
+
 
 	//phoneLineStateLabel
 	_sipConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng", MNG_FORMAT, _statusBar);
@@ -117,13 +128,21 @@ void QtStatusBar::checkSoundConfigThreadSafe(Settings & sender, const std::strin
 	}
 }
 
-void QtStatusBar::networkDiscoveryStateChangedEventHandler(SipAccount & sender, SipAccount::NetworkDiscoveryState state) {
-	typedef PostEvent2<void (SipAccount &, SipAccount::NetworkDiscoveryState), SipAccount &, SipAccount::NetworkDiscoveryState> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandlerThreadSafe, this, _1, _2), sender, state);
+void QtStatusBar::connectionIsDownEventHandler(NetworkObserver & sender) {
+	typedef PostEvent1<void (bool), bool> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtStatusBar::connectionStateEventHandlerThreadSafe, this, _1), false);
+	postEvent(event);
+
+	phoneLineStateChanged(EnumPhoneLineState::PhoneLineStateUnknown);
+}
+
+void QtStatusBar::connectionIsUpEventHandler(NetworkObserver & sender) {
+	typedef PostEvent1<void (bool), bool> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtStatusBar::connectionStateEventHandlerThreadSafe, this, _1), true);
 	postEvent(event);
 }
 
-void QtStatusBar::networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::NetworkDiscoveryState state) {
+void QtStatusBar::connectionStateEventHandlerThreadSafe(bool connected) {
 	QString tooltip;
 	QString pixmap;
 
@@ -131,35 +150,14 @@ void QtStatusBar::networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount 
 	delete _internetConnectionMovie;
 	_internetConnectionMovie = NULL;
 
-	switch (state) {
-	case SipAccount::NetworkDiscoveryStateOk:
+	if (connected) {
 		tooltip = tr("Internet Connection OK");
 		pixmap = ":/pics/statusbar/status-earth-connecting.mng";
-		break;
-
-	case SipAccount::NetworkDiscoveryStateHTTPError:
+	}
+	else {
 		tooltip = tr("Internet Connection Error");
 		pixmap = ":/pics/statusbar/status-earth-offline.png";
-		break;
-
-	case SipAccount::NetworkDiscoveryStateSIPError:
-		tooltip = tr("Internet Connection Error");
-		pixmap = ":/pics/statusbar/status-earth-offline.png";
-		break;
-
-	case SipAccount::NetworkDiscoveryStateProxyNeedsAuthentication:
-		tooltip = tr("Internet Connection Error");
-		pixmap = ":/pics/statusbar/status-earth-offline.png";
-		break;
-
-	case SipAccount::NetworkDiscoveryStateError:
-		tooltip = tr("Internet Connection Error");
-		pixmap = ":/pics/statusbar/status-earth-offline.png";
-		break;
-
-	default:
-		LOG_FATAL("unknown state=" + String::fromNumber(state));
-	};
+	}
 
 	_internetConnectionStateLabel->setPixmap(pixmap);
 	_internetConnectionStateLabel->setToolTip(tooltip);
@@ -198,6 +196,13 @@ void QtStatusBar::phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state
 		tooltip = tr("Unregister done");
 		pixmap = ":/pics/statusbar/status-network-offline.png";
 		break;
+
+	case EnumPhoneLineState::PhoneLineStateProgress:
+		_sipConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng", MNG_FORMAT, _statusBar);
+		_phoneLineStateLabel->setMovie(_sipConnectionMovie);
+		_phoneLineStateLabel->setToolTip(tr("Connecting"));
+		_sipConnectionMovie->start();
+		return;
 
 	default:
 		LOG_FATAL("unknown state=" + EnumPhoneLineState::toString(state));

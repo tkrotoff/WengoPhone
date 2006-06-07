@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTSTATUSBAR_H
-#define QTSTATUSBAR_H
+#ifndef OWQTSTATUSBAR_H
+#define OWQTSTATUSBAR_H
 
 #include <model/account/SipAccount.h>
 
@@ -27,6 +27,7 @@
 #include <qtutil/QObjectThreadSafe.h>
 
 class CWengoPhone;
+class NetworkObserver;
 class Settings;
 
 class QStatusBar;
@@ -57,13 +58,15 @@ private:
 
 	void initThreadSafe() { }
 
-	void networkDiscoveryStateChangedEventHandler(SipAccount & sender, SipAccount::NetworkDiscoveryState state);
-
-	void networkDiscoveryStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::NetworkDiscoveryState state);
-
 	void checkSoundConfig(Settings & sender, const std::string & key);
 
 	void checkSoundConfigThreadSafe(Settings & sender, const std::string & key);
+
+	void connectionIsUpEventHandler(NetworkObserver & sender);
+	
+	void connectionIsDownEventHandler(NetworkObserver & sender);
+
+	void connectionStateEventHandlerThreadSafe(bool connected);
 
 	CWengoPhone & _cWengoPhone;
 
@@ -80,4 +83,4 @@ private:
 	QMovie * _sipConnectionMovie;
 };
 
-#endif	//QTSTATUSBAR_H
+#endif	//OWQTSTATUSBAR_H
