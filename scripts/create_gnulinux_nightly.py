@@ -43,6 +43,16 @@ debug_print('Creating temporary directory...')
 os.mkdir(temp_directory)
 debug_print('Temporary directory created!')
 
+#copy translations
+debug_print('Copying translations...')
+os.mkdir(os.path.join(temp_directory, 'lang'))
+for lang in ['en', 'fr']:
+    shutil.copyfile(os.path.join(release_mode, 'wengophone', 'src',
+                                 'presentation', 'qt', 'lang',
+                                 'qtwengophone_' + lang + '.qm'),
+                    os.path.join(temp_directory, 'lang', 'qtwengophone_' + lang + '.qm'))
+debug_print('Done copying translations!')
+
 #copy dlls
 debug_print('Copying dependent dynamic libraries...')
 for file in [f for f in (os.listdir(release_mode)) if f.endswith('.so') or f == "qtwengophone"]:
