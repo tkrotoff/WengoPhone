@@ -49,6 +49,7 @@ class NetworkObserver;
 class PhoneCall;
 class History;
 class Thread;
+class WenboxPlugin;
 class WsSms;
 class WsSoftUpdate;
 class WsInfo;
@@ -61,6 +62,7 @@ class WsDirectory;
  */
 class UserProfile : public Profile {
 	friend class UserProfileFileStorage;
+	friend class UserProfileXMLSerializer;
 	friend class ConnectHandler;
 public:
 
@@ -89,11 +91,6 @@ public:
 	Event<void (SipAccount & sender,
 		const std::string & proxyAddress, unsigned proxyPort,
 		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
-
-	/**
-	 * Emitted when no account exists.
-	 */
-	Event<void (UserProfile & sender)> noAccountAvailableEvent;
 
 	/**
 	 * A new IMAccount has been added.
@@ -214,22 +211,6 @@ public:
 	}
 
 	/**
-	 * Return true if a WengoAccount is active.
-	 *
-	 * @return true if a WengoAccount is active
-	 */
-	bool hasWengoAccount() const;
-
-	/**
-	 * Gets the WengoAccount.
-	 *
-	 * @return the WengoAccount
-	 */
-	WengoAccount * getWengoAccount() const {
-		return _wengoAccount;
-	}
-
-	/**
 	 * Gets the active phone call.
 	 *
 	 * Used for playing DTMF.
@@ -266,6 +247,10 @@ public:
 		return *_history;
 	}
 
+	WenboxPlugin * getWenboxPlugin() {
+		return _wenboxPlugin;
+	}
+
 	/**
 	 * Load the history.
 	 */
@@ -284,6 +269,32 @@ public:
 	 * @param wengoAccount the WengoAccount to set
 	 */
 	void setWengoAccount(const WengoAccount & wengoAccount);
+
+	/**
+	 * Return true if a WengoAccount is active.
+	 *
+	 * @return true if a WengoAccount is active
+	 */
+	bool hasWengoAccount() const;
+
+	/**
+	 * Gets the WengoAccount.
+	 *
+	 * @return the WengoAccount
+	 */
+	WengoAccount * getWengoAccount() const {
+		return _wengoAccount;
+	}
+
+	/**
+	 * Check if the WengoAccount is valid.
+	 *
+	 * If no wengo account is set true is returned.
+	 * If a wengo account is set but the initalization has not been made
+	 * initialization is launched. The method blocks until initialization 
+	 * is finished (it can take from few seconds to several minutes).
+	 */
+	bool isWengoAccountValid();
 
 	/**
 	 * Adds an IMAccount to this UserProfile.
@@ -349,7 +360,24 @@ public:
 	 */
 	void setPresenceState(EnumPresenceState::PresenceState presenceState, IMAccount * imAccount);
 
+	/**
+	 * Gets the name of this UserProfile.
+	 *
+	 * The name is computed from the WengoAccount. "Default" is returned if no
+	 * WengoAccount is set. There should be only one Default UserProfile at
+	 * a time.
+	 */
+	std::string getName() const {
+		return _name;
+	}
+
 private:
+
+	/**
+	 * Compute the name of the UserProfile from the WengoAccount 
+	 * and set the _name variable.
+	 */
+	void computeName();
 
 	/* Inherited from Profile */
 	void setAlias(const std::string & alias) { _alias = alias; };
@@ -451,10 +479,16 @@ private:
 	//TODO: create a list of SipAccount
 	WengoAccount * _wengoAccount;
 
+	/** Wenbox. */
+	WenboxPlugin * _wenboxPlugin;
+
 	bool _wengoAccountConnected;
 
-	/** True if the WengoAccount must be connected if it init is successful. */
-	bool _mustConnectWengoAccount;
+	bool _wengoAccountInitializationFinished;
+
+	bool _wengoAccountIsValid;
+
+	bool _wengoAccountMustConnectAfterInit;
 
 	IMAccountHandler * _imAccountHandler;
 
@@ -471,7 +505,8 @@ private:
 
 	EnumPresenceState::PresenceState _presenceState;
 
-	Thread & _modelThread;
+	/** Name of the UserProfile. */
+	std::string _name;
 };
 
 #endif //OWUSERPROFILE_H

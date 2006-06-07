@@ -32,6 +32,9 @@ CSms::CSms(WsSms & wsSms, CWengoPhone & cWengoPhone)
 }
 
 CSms::~CSms() {
+	//_sms.smsStatusEvent -= smsStatusEvent;
+
+	delete _pSms;
 }
 
 int CSms::sendSMS(const std::string & phoneNumber, const std::string & message) {

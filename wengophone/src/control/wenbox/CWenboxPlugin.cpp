@@ -29,10 +29,15 @@ CWenboxPlugin::CWenboxPlugin(WenboxPlugin & wenboxPlugin, CWengoPhone & cWengoPh
 
 	_pWenboxPlugin = PFactory::getFactory().createPresentationWenboxPlugin(*this);
 
-	_wenboxPlugin.phoneNumberBufferUpdatedEvent += boost::bind(&CWenboxPlugin::phoneNumberBufferUpdatedEventHandler, this, _1, _2);
+	_wenboxPlugin.phoneNumberBufferUpdatedEvent +=
+		boost::bind(&CWenboxPlugin::phoneNumberBufferUpdatedEventHandler, this, _1, _2);
 }
 
 CWenboxPlugin::~CWenboxPlugin() {
+	_wenboxPlugin.phoneNumberBufferUpdatedEvent -= 
+		boost::bind(&CWenboxPlugin::phoneNumberBufferUpdatedEventHandler, this, _1, _2);
+
+	delete _pWenboxPlugin;
 }
 
 void CWenboxPlugin::phoneNumberBufferUpdatedEventHandler(WenboxPlugin & sender, const std::string & phoneNumberBuffer) {

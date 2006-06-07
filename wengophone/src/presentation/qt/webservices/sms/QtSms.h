@@ -48,6 +48,8 @@ public:
 
 	QtSms(CSms & cSms);
 
+	virtual ~QtSms();
+
 	QWidget * getWidget() const;
 
 	void updatePresentation();

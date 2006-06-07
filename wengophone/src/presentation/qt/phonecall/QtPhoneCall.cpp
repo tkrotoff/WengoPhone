@@ -67,6 +67,12 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	postEvent(event);
 }
 
+QtPhoneCall::~QtPhoneCall() {
+	//TODO: unregister events, delete created objects
+	stateChangedEvent -= boost::bind(& QtPhoneCall::stateChangedEventHandler, this, _1);
+	videoFrameReceivedEvent -= boost::bind(& QtPhoneCall::videoFrameReceivedEventHandler, this, _1, _2);
+}
+
 void QtPhoneCall::initThreadSafe() {
 
 	_phoneCallWidget = WidgetFactory::create(":/forms/phonecall/QtCallContactWidget.ui", _qtWengoPhone->getWidget());

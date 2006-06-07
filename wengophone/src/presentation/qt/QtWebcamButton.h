@@ -37,6 +37,8 @@ public:
 
 	QtWebcamButton(QPushButton * webcamButton);
 
+	virtual ~QtWebcamButton();
+
 private Q_SLOTS:
 
 	void enableVideo();

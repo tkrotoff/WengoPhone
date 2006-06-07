@@ -111,11 +111,20 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 	_inputAudioDeviceId = 0;
 	_outputAudioDeviceId = 0;
 
+	_publishTimer.timeoutEvent += boost::bind(&PhApiWrapper::renewPublishEventHandler, this);
+
 	//FIXME ugly hack for conference
-	phoneCallStateChangedEvent += boost::bind(&PhApiWrapper::phoneCallStateChangedEventHandler, this, _1, _2, _3, _4);
+	phoneCallStateChangedEvent +=
+		boost::bind(&PhApiWrapper::phoneCallStateChangedEventHandler, this, _1, _2, _3, _4);
 }
 
 PhApiWrapper::~PhApiWrapper() {
+	_publishTimer.stop();
+
+	phoneCallStateChangedEvent -=
+		boost::bind(&PhApiWrapper::phoneCallStateChangedEventHandler, this, _1, _2, _3, _4);
+
+	terminate();
 }
 
 void PhApiWrapper::terminate() {
@@ -694,10 +703,8 @@ void PhApiWrapper::publishPresence(const std::string & pidf, const std::string &
 	static const unsigned PUBLISH_TIMEOUT = 9 * 60 * 1000;
 
 	if (_lastPidf.empty()) {
-		//Creates and launches the timer only once
-		static Timer timer;
-		timer.timeoutEvent += boost::bind(&PhApiWrapper::renewPublishEventHandler, this);
-		timer.start(PUBLISH_TIMEOUT, PUBLISH_TIMEOUT);
+		//Launches the timer only once
+		_publishTimer.start(PUBLISH_TIMEOUT, PUBLISH_TIMEOUT);
 	}
 
 	//Saves the pidf

@@ -29,10 +29,15 @@ CSoftUpdate::CSoftUpdate(WsSoftUpdate & wsSoftUpdate, CWengoPhone & cWengoPhone)
 
 	_pSoftUpdate = PFactory::getFactory().createPresentationSoftUpdate(*this);
 
-	_wsSoftUpdate.updateWengoPhoneEvent += boost::bind(&CSoftUpdate::updateWengoPhoneEventHandler, this, _1, _2, _3, _4, _5);
+	_wsSoftUpdate.updateWengoPhoneEvent += 
+		boost::bind(&CSoftUpdate::updateWengoPhoneEventHandler, this, _1, _2, _3, _4, _5);
 }
 
 CSoftUpdate::~CSoftUpdate() {
+	_wsSoftUpdate.updateWengoPhoneEvent -= 
+		boost::bind(&CSoftUpdate::updateWengoPhoneEventHandler, this, _1, _2, _3, _4, _5);
+
+	delete _pSoftUpdate;
 }
 
 void CSoftUpdate::updateWengoPhoneEventHandler(WsSoftUpdate & sender,

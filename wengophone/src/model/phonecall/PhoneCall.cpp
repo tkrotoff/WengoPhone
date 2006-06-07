@@ -30,8 +30,8 @@
 #include "PhoneCallStateRinging.h"
 
 #include <model/phoneline/IPhoneLine.h>
+#include <model/profile/UserProfile.h>
 #include <model/wenbox/WenboxPlugin.h>
-#include <model/WengoPhone.h>
 
 #include <util/Logger.h>
 
@@ -227,8 +227,7 @@ void PhoneCall::close() {
 }
 
 WenboxPlugin & PhoneCall::getWenboxPlugin() const {
-	WengoPhone & wengoPhone = _phoneLine.getWengoPhone();
-	return wengoPhone.getWenboxPlugin();
+	return *_phoneLine.getUserProfile().getWenboxPlugin();
 }
 
 void PhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {

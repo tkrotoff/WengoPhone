@@ -19,6 +19,9 @@
 
 #include "UserProfileXMLSerializer.h"
 
+#include <model/account/wengo/WengoAccount.h>
+#include <model/account/wengo/WengoAccountXMLSerializer.h>
+
 #include "UserProfile.h"
 
 #include <tinyxml.h>
@@ -36,6 +39,11 @@ string UserProfileXMLSerializer::serialize() {
 
 	result += ProfileXMLSerializer::serialize();
 
+	if (_userProfile.hasWengoAccount()) {
+		WengoAccountXMLSerializer serializer(*_userProfile.getWengoAccount());
+		result += serializer.serialize();
+	}
+
 	result += "</userprofile>\n";
 
 	return result;
@@ -50,6 +58,21 @@ bool UserProfileXMLSerializer::unserialize(const string & data) {
 	TiXmlHandle userprofile = docHandle.FirstChild("userprofile");
 
 	ProfileXMLSerializer::unserializeContent(userprofile);
+
+	// Retrieving wengoaccount
+	TiXmlNode * wengoaccount = userprofile.FirstChild("wengoaccount").Node();
+	if (wengoaccount) {
+		TiXmlElement * wengoaccountElt = wengoaccount->ToElement();
+		string wengoaccountData;
+		wengoaccountData << *wengoaccountElt;
+		WengoAccount wengoAccount;
+		WengoAccountXMLSerializer serializer(wengoAccount);
+		if (serializer.unserialize(wengoaccountData) && !wengoAccount.getWengoLogin().empty()) {
+			_userProfile._wengoAccount = new WengoAccount(wengoAccount);
+			_userProfile.computeName();
+		}
+	}
+	/////
 
 	return true;
 }

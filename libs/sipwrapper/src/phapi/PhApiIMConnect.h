@@ -33,7 +33,9 @@ class IMAccount;
  * @author Mathieu Stute
  */
 class PhApiIMConnect : public IMConnect {
+
 	friend class PhApiFactory;
+
 public:
 
 	void connect();
@@ -43,6 +45,8 @@ public:
 private:
 
 	PhApiIMConnect(IMAccount & account, PhApiWrapper & phApiWrapper);
+
+	~PhApiIMConnect();
 
 	void connectedEventHandler(PhApiWrapper & sender);
 

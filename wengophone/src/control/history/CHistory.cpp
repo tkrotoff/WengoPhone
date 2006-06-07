@@ -38,6 +38,16 @@ CHistory::CHistory(History & history, CWengoPhone & cWengoPhone, Thread & modelT
 	_history.unseenMissedCallsChangedEvent += boost::bind(&CHistory::unseenMissedCallsChangedEventhandler, this, _1, _2);
 }
 
+CHistory::~CHistory() {
+	_history.historyLoadedEvent -= boost::bind(&CHistory::historyLoadedEventHandler, this, _1);
+	_history.mementoAddedEvent -= boost::bind(&CHistory::historyMementoAddedEventHandler, this, _1, _2);
+	_history.mementoUpdatedEvent -= boost::bind(&CHistory::historyMementoUpdatedEventHandler, this, _1, _2);
+	_history.mementoRemovedEvent -= boost::bind(&CHistory::historyMementoRemovedEventHandler, this, _1, _2);
+	_history.unseenMissedCallsChangedEvent -= boost::bind(&CHistory::unseenMissedCallsChangedEventhandler, this, _1, _2);
+
+	delete _pHistory;
+}
+
 CWengoPhone & CHistory::getCWengoPhone() const {
 	return _cWengoPhone;
 }

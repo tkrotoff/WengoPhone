@@ -56,23 +56,18 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 	typedef PostEvent0 < void() > MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(& QtContactList::initThreadSafe, this));
 	postEvent(event);
+}
 
+QtContactList::~QtContactList() {
+}
 
-	connect(this, SIGNAL(contactGroupAddedEventSignal(QString)),
-		SLOT(contactGroupAddedEventSlot(QString)), Qt::QueuedConnection);
-	connect(this, SIGNAL(contactGroupRemovedEventSignal(QString)),
-		SLOT(contactGroupRemovedEventSlot(QString)), Qt::QueuedConnection);
-	connect(this, SIGNAL(contactGroupRenamedEventSignal(QString)),
-		SLOT(contactGroupRenamedEventSlot(QString)), Qt::QueuedConnection);
-	connect(this, SIGNAL(contactAddedEventSignal(QString)),
-		SLOT(contactAddedEventSlot(QString)), Qt::QueuedConnection);
-	connect(this, SIGNAL(contactRemovedEventSignal(QString)),
-		SLOT(contactRemovedEventSlot(QString)), Qt::QueuedConnection);
-	connect(this, SIGNAL(contactMovedEventSignal(QString, QString, QString)),
-		SLOT(contactMovedEventSlot(QString, QString, QString)), Qt::QueuedConnection);
-	connect(this, SIGNAL(contactChangedEventSignal(QString)),
-		SLOT(contactChangedEventSlot(QString)), Qt::QueuedConnection);
+void QtContactList::cleanup() {
+	QtUserList::getInstance()->clear();
 
+	if (_contactListWidget) {
+		delete _contactListWidget;
+		_contactListWidget = NULL;
+	}
 }
 
 void QtContactList::initThreadSafe() {
@@ -126,6 +121,23 @@ void QtContactList::initThreadSafe() {
 	_contactGroupPopupMenu = new ContactGroupPopupMenu(_cContactList, _treeWidget);
 
 	connect(_userManager, SIGNAL(groupRightClicked(const QString &)), SLOT(groupRightClickedSlot(const QString &)));
+
+	// Events from the Control
+	connect(this, SIGNAL(contactGroupAddedEventSignal(QString)),
+		SLOT(contactGroupAddedEventSlot(QString)), Qt::QueuedConnection);
+	connect(this, SIGNAL(contactGroupRemovedEventSignal(QString)),
+		SLOT(contactGroupRemovedEventSlot(QString)), Qt::QueuedConnection);
+	connect(this, SIGNAL(contactGroupRenamedEventSignal(QString)),
+		SLOT(contactGroupRenamedEventSlot(QString)), Qt::QueuedConnection);
+	connect(this, SIGNAL(contactAddedEventSignal(QString)),
+		SLOT(contactAddedEventSlot(QString)), Qt::QueuedConnection);
+	connect(this, SIGNAL(contactRemovedEventSignal(QString)),
+		SLOT(contactRemovedEventSlot(QString)), Qt::QueuedConnection);
+	connect(this, SIGNAL(contactMovedEventSignal(QString, QString, QString)),
+		SLOT(contactMovedEventSlot(QString, QString, QString)), Qt::QueuedConnection);
+	connect(this, SIGNAL(contactChangedEventSignal(QString)),
+		SLOT(contactChangedEventSlot(QString)), Qt::QueuedConnection);
+	////
 
 	//Connect events
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhone.getPresentation();

@@ -41,6 +41,8 @@ public:
 
 	CPhoneCall(PhoneCall & phoneCall, CWengoPhone & cWengoPhone);
 
+	~CPhoneCall();
+
 	PPhoneCall * getPresentation() const {
 		return _pPhoneCall;
 	}

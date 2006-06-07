@@ -121,7 +121,7 @@ public:
 		//the Qt library (I mean the equivalent from Boost)
 		//Fabien Penso's source code needs to be checked (SoftPhone class)
 		//Boost Synchronization Primitives needs to be checked aswell
-		//Mutex::ScopedLock ScopedLock(_mutex);
+		Mutex::ScopedLock ScopedLock(_mutex);
 		_eventList.push_back(event);
 	}
 
@@ -220,7 +220,7 @@ protected:
 	virtual void runEvents() {
 		//FIXME See info inside postEvent()
 		//There is a problem here
-		//Mutex::ScopedLock ScopedLock(_mutex);
+		Mutex::ScopedLock ScopedLock(_mutex);
 		msleep(100);
 		for (unsigned int i = 0; i < _eventList.size(); i++) {
 			_eventList[i]->callback();

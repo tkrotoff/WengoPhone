@@ -43,6 +43,10 @@ QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent)
 	postEvent(event);
 }
 
+QtCreditWidget::~QtCreditWidget() {
+	delete _ui;
+}
+
 void QtCreditWidget::initThreadSafe() {
 	_widget = new QWidget();
 
@@ -62,10 +66,6 @@ void QtCreditWidget::initThreadSafe() {
 		this, SLOT(buyOutClicked()), Qt::LeftButton);
 	_ui->buyCreditsLabel->installEventFilter(mouseFilter);
 	_ui->buyCreditsLabel->setToolTip(tr("Click here to buy Wengo's credits"));
-}
-
-QtCreditWidget::~QtCreditWidget() {
-	delete _ui;
 }
 
 QWidget * QtCreditWidget::getWidget() const {

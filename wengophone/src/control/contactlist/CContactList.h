@@ -44,6 +44,8 @@ public:
 
 	CContactList(ContactList & contactList, Thread & modelThread);
 
+	~CContactList();
+
 	/**
 	 * Gets a list of pair of <group UUID, group name>.
 	 */

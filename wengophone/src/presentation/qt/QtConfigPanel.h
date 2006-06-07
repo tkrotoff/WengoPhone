@@ -41,7 +41,7 @@ public:
 
 	QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent);
 
-	~QtConfigPanel();
+	virtual ~QtConfigPanel();
 
 	QWidget * getWidget() const {
 		return _configPanelWidget;

@@ -66,6 +66,7 @@ void WsUrl::openWengoUrlWithAuth(const std::string & url) {
 	std::string language = config.getLanguage();
 
 	//FIXME hack with WengoPhone::instance
+	/*
 	IPhoneLine * activePhoneLine = WengoPhone::instance->getCurrentUserProfile().getActivePhoneLine();
 	if (activePhoneLine) {
 		const SipAccount & account = activePhoneLine->getSipAccount();
@@ -84,6 +85,7 @@ void WsUrl::openWengoUrlWithAuth(const std::string & url) {
 			LOG_DEBUG("url opened=" + finalUrl);
 		}
 	}
+	*/
 }
 
 void WsUrl::showWengoAccount() {

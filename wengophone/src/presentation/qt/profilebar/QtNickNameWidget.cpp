@@ -131,6 +131,13 @@ QtNickNameWidget::QtNickNameWidget(CUserProfile & cUserProfile, CWengoPhone & cW
 	connect ( _avatarLabel, SIGNAL ( clicked() ), SLOT ( avatarClicked() ) );
 	connect ( _avatarLabel, SIGNAL ( rightClicked() ), SLOT ( avatarRightClicked() ));
 
+	// UserProfile changed event connection
+	_cUserProfile.getUserProfile().profileChangedEvent +=
+		boost::bind(&QtNickNameWidget::profileChangedEventHandler, this, _1);
+	connect(this, SIGNAL(profileChangedEventHandlerSignal()),
+		SLOT(profileChangedEventHandlerSlot()), Qt::QueuedConnection);
+	////
+
 	// Widget initialization
 	init();
 }
@@ -490,10 +497,6 @@ void QtNickNameWidget::init() {
 	updateAvatar();
 }
 
-void QtNickNameWidget::userProfileUpdated() {
-	init();
-}
-
 void QtNickNameWidget::updateAvatar() {
 
 	QPixmap pixmap;
@@ -524,4 +527,12 @@ void QtNickNameWidget::textChanged ( const QString & text ) {
 
 void QtNickNameWidget::slotUpdatedTranslation() {
   _nickNameEdit->setText(tr("Enter your nickname here"));
+}
+
+void QtNickNameWidget::profileChangedEventHandler(Profile & sender) {
+	profileChangedEventHandlerSignal();
+}
+
+void QtNickNameWidget::profileChangedEventHandlerSlot() {
+	init();
 }

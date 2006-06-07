@@ -185,6 +185,29 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	connect(this, SIGNAL(phoneLineCreatedEvent()), SLOT(phoneLineCreatedEventSlot()));
 }
 
+QtProfileBar::~QtProfileBar() {
+	_cUserProfile.getUserProfile().wsInfoCreatedEvent -=
+		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
+	_cUserProfile.getUserProfile().phoneLineCreatedEvent -=
+		boost::bind(&QtProfileBar::phoneLineCreatedEventHandler, this, _1, _2);
+
+	PresenceHandler & presence = _cUserProfile.getUserProfile().getPresenceHandler();
+	presence.myPresenceStatusEvent -=
+		boost::bind(&QtProfileBar::myPresenceStatusEventHandler, this, _1, _2, _3);
+
+	_connectHandler.connectedEvent -=
+		boost::bind(&QtProfileBar::connectedEventHandler,this,_1,_2);
+
+	_connectHandler.connectionProgressEvent -=
+		boost::bind(&QtProfileBar::connectionProgressEventHandler, this, _1, _2, _3, _4, _5);
+
+	_connectHandler.disconnectedEvent -=
+		boost::bind(&QtProfileBar::disconnectedEventHandler, this, _1, _2, _3, _4);
+
+	_cWengoPhone.cHistoryCreatedEvent -=
+		boost::bind(&QtProfileBar::cHistoryCreatedEventHandler, this, _1, _2);
+}
+
 // Called in the model thread
 void QtProfileBar::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
 	IMAccount * pImAccount = &imAccount;
@@ -519,10 +542,6 @@ void QtProfileBar::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine
 
 void QtProfileBar::phoneLineCreatedEventSlot() {
 	_nicknameLabel->setText(QString::fromStdString(_cUserProfile.getUserProfile().getWengoAccount()->getIdentity()));
-}
-
-void QtProfileBar::userProfileUpdated() {
-	_nickNameWidget->userProfileUpdated();
 }
 
 void QtProfileBar::paintEvent ( QPaintEvent * event ) {

@@ -19,11 +19,10 @@
 
 #include "WenboxPlugin.h"
 
-#include <model/WengoPhone.h>
-#include <model/phoneline/IPhoneLine.h>
-#include <model/phonecall/PhoneCall.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/phonecall/PhoneCall.h>
+#include <model/phoneline/IPhoneLine.h>
 #include <model/profile/UserProfile.h>
 
 #include <sound/AudioDevice.h>
@@ -32,18 +31,22 @@
 
 using namespace std;
 
-WenboxPlugin::WenboxPlugin(WengoPhone & wengoPhone)
-	: _wengoPhone(wengoPhone) {
+WenboxPlugin::WenboxPlugin(UserProfile & userProfile)
+	: _userProfile(userProfile) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.valueChangedEvent += boost::bind(&WenboxPlugin::wenboxConfigChangedEventHandler, this, _1, _2);
+	config.valueChangedEvent +=
+		boost::bind(&WenboxPlugin::wenboxConfigChangedEventHandler, this, _1, _2);
 
 	_wenbox = new Wenbox();
 	openWenbox();
 }
 
 WenboxPlugin::~WenboxPlugin() {
-	_wenbox->close();
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.valueChangedEvent -=
+		boost::bind(&WenboxPlugin::wenboxConfigChangedEventHandler, this, _1, _2);
+
 	delete _wenbox;
 }
 
@@ -164,7 +167,7 @@ void WenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
 }
 
 PhoneCall * WenboxPlugin::getActivePhoneCall() const {
-	IPhoneLine * phoneLine = _wengoPhone.getCurrentUserProfile().getActivePhoneLine();
+	IPhoneLine * phoneLine = _userProfile.getActivePhoneLine();
 	PhoneCall * phoneCall = NULL;
 	if (phoneLine) {
 		phoneCall = phoneLine->getActivePhoneCall();

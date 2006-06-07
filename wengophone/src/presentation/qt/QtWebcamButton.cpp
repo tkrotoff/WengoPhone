@@ -44,6 +44,10 @@ QtWebcamButton::QtWebcamButton(QPushButton * webcamButton)
 	configChangedEventHandler(config, Config::VIDEO_ENABLE_KEY);
 }
 
+QtWebcamButton::~QtWebcamButton() {
+	//TODO: unregister events, delete created objects
+}
+
 void QtWebcamButton::enableVideo() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.set(Config::VIDEO_ENABLE_KEY, !_enableVideo);

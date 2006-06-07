@@ -28,6 +28,7 @@
 class CWengoPhone;
 class CUserProfile;
 class IMAccount;
+class Profile;
 class ToolTipLineEdit;
 
 /**
@@ -39,6 +40,10 @@ class QtNickNameWidget : public QWidget {
 public:
 
 	QtNickNameWidget(CUserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent);
+
+Q_SIGNALS:
+
+	void profileChangedEventHandlerSignal();
 
 public Q_SLOTS:
 
@@ -66,11 +71,18 @@ public Q_SLOTS:
 
 	void connectionProgress(IMAccount * pImAccount, int currentStep, int totalSteps, const QString & infoMessage);
 
-	void userProfileUpdated();
-
 	void slotUpdatedTranslation();
 
-protected:
+private Q_SLOTS:
+
+	void profileChangedEventHandlerSlot();
+
+private:
+
+	/**
+	 * @see UserProfile::profileChangedEvent
+	 */
+	void profileChangedEventHandler(Profile & sender);
 
 	void updateAvatar();
 

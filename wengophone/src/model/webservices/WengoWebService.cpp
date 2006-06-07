@@ -33,6 +33,10 @@ WengoWebService::WengoWebService(WengoAccount * wengoAccount)
 	_port = 0;
 }
 
+WengoWebService::~WengoWebService() {
+
+}
+
 void WengoWebService::setHttps(bool https) {
 	_https = https;
 }
@@ -62,7 +66,7 @@ void WengoWebService::setWengoAuthentication(bool auth) {
 }
 
 int WengoWebService::sendRequest() {
-	HttpRequest * httpRequest = new HttpRequest();
+	HttpRequest * httpRequest = new HttpRequest(); //FIXME: memory leak
 	httpRequest->answerReceivedEvent += boost::bind(&WengoWebService::answerReceivedEventHandler, this, _1, _2, _3, _4);
 	return httpRequest->sendRequest(_https, _hostname, _port, _servicePath, _parameters, _get);
 }

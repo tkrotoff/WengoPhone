@@ -21,10 +21,14 @@
 #include "QtStatusBarStyle.h"
 
 #include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
 
 #include <model/account/NetworkObserver.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/phoneline/IPhoneLine.h>
+#include <model/phoneline/PhoneLineState.h>
+#include <model/profile/UserProfile.h>
 
 #include <sound/VolumeControl.h>
 #include <sound/AudioDevice.h>
@@ -88,6 +92,12 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this, _1, _2);
 	checkSoundConfigThreadSafe(config, Config::AUDIO_OUTPUT_DEVICENAME_KEY);
+
+	init();
+}
+
+QtStatusBar::~QtStatusBar() {
+	//TODO: unregister events, delete created objects
 }
 
 void QtStatusBar::showMessage(const QString & message, int timeout) {
@@ -142,6 +152,10 @@ void QtStatusBar::connectionIsUpEventHandler(NetworkObserver & sender) {
 	postEvent(event);
 }
 
+void QtStatusBar::phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state) {
+	updatePhoneLineState();
+}
+
 void QtStatusBar::connectionStateEventHandlerThreadSafe(bool connected) {
 	QString tooltip;
 	QString pixmap;
@@ -153,8 +167,7 @@ void QtStatusBar::connectionStateEventHandlerThreadSafe(bool connected) {
 	if (connected) {
 		tooltip = tr("Internet Connection OK");
 		pixmap = ":/pics/statusbar/status-earth-connecting.mng";
-	}
-	else {
+	} else {
 		tooltip = tr("Internet Connection Error");
 		pixmap = ":/pics/statusbar/status-earth-offline.png";
 	}
@@ -163,51 +176,68 @@ void QtStatusBar::connectionStateEventHandlerThreadSafe(bool connected) {
 	_internetConnectionStateLabel->setToolTip(tooltip);
 }
 
-void QtStatusBar::phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state) {
-	QString tooltip;
-	QString pixmap;
+void QtStatusBar::updateInternetConnectionState() {
+	connectionStateEventHandlerThreadSafe(NetworkObserver::getInstance().isConnected());
+}
 
-	//Stops animated pixmap
-	delete _sipConnectionMovie;
-	_sipConnectionMovie = NULL;
+void QtStatusBar::updatePhoneLineState() {
+	EnumPhoneLineState::PhoneLineState state;
 
-	switch (state) {
-	case EnumPhoneLineState::PhoneLineStateUnknown:
-		tooltip = tr("Not connected");
-		pixmap = ":/pics/statusbar/status-network-offline.png";
-		break;
+	if (_cWengoPhone.getCUserProfile() && _cWengoPhone.getCUserProfile()->getUserProfile().getActivePhoneLine()) {
+		//FIXME: next line could crash if active phone line is destroyed during update
+		state = _cWengoPhone.getCUserProfile()->getUserProfile().getActivePhoneLine()->getState().getCode();
 
-	case EnumPhoneLineState::PhoneLineStateServerError:
-		tooltip = tr("An error occured");
-		pixmap = ":/pics/statusbar/status-network-offline.png";
-		break;
+		QString tooltip;
+		QString pixmap;
 
-	case EnumPhoneLineState::PhoneLineStateTimeout:
-		tooltip = tr("An error occured");
-		pixmap = ":/pics/statusbar/status-network-offline.png";
-		break;
+		//Stops animated pixmap
+		delete _sipConnectionMovie;
+		_sipConnectionMovie = NULL;
 
-	case EnumPhoneLineState::PhoneLineStateOk:
-		tooltip = tr("Register done");
-		pixmap = ":/pics/statusbar/status-network-online-static.png";
-		break;
+		switch (state) {
+		case EnumPhoneLineState::PhoneLineStateUnknown:
+			tooltip = tr("Not connected");
+			pixmap = ":/pics/statusbar/status-network-offline.png";
+			break;
 
-	case EnumPhoneLineState::PhoneLineStateClosed:
-		tooltip = tr("Unregister done");
-		pixmap = ":/pics/statusbar/status-network-offline.png";
-		break;
+		case EnumPhoneLineState::PhoneLineStateServerError:
+			tooltip = tr("An error occured");
+			pixmap = ":/pics/statusbar/status-network-offline.png";
+			break;
 
-	case EnumPhoneLineState::PhoneLineStateProgress:
-		_sipConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng", MNG_FORMAT, _statusBar);
-		_phoneLineStateLabel->setMovie(_sipConnectionMovie);
-		_phoneLineStateLabel->setToolTip(tr("Connecting"));
-		_sipConnectionMovie->start();
-		return;
+		case EnumPhoneLineState::PhoneLineStateTimeout:
+			tooltip = tr("An error occured");
+			pixmap = ":/pics/statusbar/status-network-offline.png";
+			break;
 
-	default:
-		LOG_FATAL("unknown state=" + EnumPhoneLineState::toString(state));
-	};
+		case EnumPhoneLineState::PhoneLineStateOk:
+			tooltip = tr("Register done");
+			pixmap = ":/pics/statusbar/status-network-online-static.png";
+			break;
 
-	_phoneLineStateLabel->setPixmap(pixmap);
-	_phoneLineStateLabel->setToolTip(tooltip);
+		case EnumPhoneLineState::PhoneLineStateClosed:
+			tooltip = tr("Unregister done");
+			pixmap = ":/pics/statusbar/status-network-offline.png";
+			break;
+
+		case EnumPhoneLineState::PhoneLineStateProgress:
+			tooltip = tr("Not connected");
+			_sipConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng", MNG_FORMAT, _statusBar);
+			_phoneLineStateLabel->setMovie(_sipConnectionMovie);
+			_phoneLineStateLabel->setToolTip(tr("Connecting"));
+			_sipConnectionMovie->start();
+			return;
+
+		default:
+			LOG_FATAL("unknown state=" + EnumPhoneLineState::toString(state));
+		};
+
+		_phoneLineStateLabel->setPixmap(pixmap);
+		_phoneLineStateLabel->setToolTip(tooltip);
+	}
+}
+
+void QtStatusBar::init() {
+	updateInternetConnectionState();
+	updatePhoneLineState();
 }

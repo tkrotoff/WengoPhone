@@ -25,9 +25,21 @@ PhApiIMConnect::PhApiIMConnect(IMAccount & account, PhApiWrapper & phApiWrapper)
 	: IMConnect(account),
 	_phApiWrapper(phApiWrapper) {
 
-	_phApiWrapper.connectedEvent += boost::bind(&PhApiIMConnect::connectedEventHandler, this, _1);
-	_phApiWrapper.disconnectedEvent += boost::bind(&PhApiIMConnect::disconnectedEventHandler, this, _1, _2, _3);
-	_phApiWrapper.connectionProgressEvent += boost::bind(&PhApiIMConnect::connectionProgressEventHandler, this, _1, _2, _3, _4);
+	_phApiWrapper.connectedEvent += 
+		boost::bind(&PhApiIMConnect::connectedEventHandler, this, _1);
+	_phApiWrapper.disconnectedEvent += 
+		boost::bind(&PhApiIMConnect::disconnectedEventHandler, this, _1, _2, _3);
+	_phApiWrapper.connectionProgressEvent += 
+		boost::bind(&PhApiIMConnect::connectionProgressEventHandler, this, _1, _2, _3, _4);
+}
+
+PhApiIMConnect::~PhApiIMConnect() {
+	_phApiWrapper.connectedEvent -= 
+		boost::bind(&PhApiIMConnect::connectedEventHandler, this, _1);
+	_phApiWrapper.disconnectedEvent -=
+		boost::bind(&PhApiIMConnect::disconnectedEventHandler, this, _1, _2, _3);
+	_phApiWrapper.connectionProgressEvent -= 
+		boost::bind(&PhApiIMConnect::connectionProgressEventHandler, this, _1, _2, _3, _4);
 }
 
 void PhApiIMConnect::connect() {

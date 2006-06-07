@@ -21,7 +21,6 @@
 
 #include "WengoPhoneBuildId.h"
 #include "WengoAccountParser.h"
-#include "WengoAccountSerializer.h"
 
 #include <model/account/NetworkObserver.h>
 #include <model/config/ConfigManager.h>
@@ -35,6 +34,21 @@
 #include <exception>
 
 using namespace std;
+
+WengoAccount::WengoAccount()
+	: SipAccount() {
+	_ssoRequestOk = false;
+	_wengoLoginOk = false;
+	_ssoWithSSL = false;
+	_stunServer = "stun.wengo.fr";
+	_discoveringNetwork	= false;
+
+	_ssoTimer.timeoutEvent += boost::bind(&WengoAccount::ssoTimeoutEventHandler, this);
+	_ssoTimer.lastTimeoutEvent += boost::bind(&WengoAccount::ssoLastTimeoutEventHandler, this);
+
+	_initTimer.timeoutEvent += boost::bind(&WengoAccount::initTimeoutEventHandler, this);
+	_initTimer.lastTimeoutEvent += boost::bind(&WengoAccount::initLastTimeoutEventHandler, this);
+}
 
 WengoAccount::WengoAccount(const std::string & login, const std::string & password, bool autoLogin)
 	: SipAccount() {
@@ -73,7 +87,7 @@ void WengoAccount::copy(const WengoAccount & wengoAccount) {
 	_wengoLoginOk = wengoAccount._wengoLoginOk;
 	_ssoWithSSL = wengoAccount._ssoWithSSL;
 	_stunServer = wengoAccount._stunServer;
-	_discoveringNetwork = false;
+	_discoveringNetwork	= false;
 
 	_ssoTimer.timeoutEvent += boost::bind(&WengoAccount::ssoTimeoutEventHandler, this);
 	_ssoTimer.lastTimeoutEvent += boost::bind(&WengoAccount::ssoLastTimeoutEventHandler, this);
@@ -83,6 +97,8 @@ void WengoAccount::copy(const WengoAccount & wengoAccount) {
 }
 
 WengoAccount::~WengoAccount() {
+	_ssoTimer.stop();
+	_initTimer.stop();
 }
 
 void WengoAccount::init() {
@@ -103,10 +119,10 @@ void WengoAccount::initTimeoutEventHandler() {
 	if (!_discoveringNetwork) {
 
 		_discoveringNetwork = true;
-		SipAccount::LoginState result = discoverNetwork();
-		if (result != LoginStateNetworkError) {
+		_lastLoginState = discoverNetwork();
+		if (_lastLoginState != LoginStateNetworkError) {
 			_initTimer.stop();
-			loginStateChangedEvent(*this, result);
+			loginStateChangedEvent(*this, _lastLoginState);
 			networkDiscoveryStateChangedEvent(*this, _lastNetworkDiscoveryState);
 
 			NetworkObserver::getInstance().connectionIsDownEvent -=
@@ -296,30 +312,4 @@ void WengoAccount::answerReceivedEventHandler(IHttpRequest * sender, int request
 		}
 	}
 	//FIXME (crashes on Linux/MacOS X): delete sender;
-}
-
-std::string WengoAccount::serialize() {
-	const WengoAccountSerializer serializer(*this);
-	std::stringstream ss;
-	try {
-		boost::archive::xml_oarchive oa(ss);
-		oa << BOOST_SERIALIZATION_NVP(serializer);
-		return ss.str();
-	} catch (boost::archive::archive_exception & e) {
-		LOG_DEBUG(e.what());
-		return String::null;
-	}
-}
-
-bool WengoAccount::unserialize(const std::string & data) {
-	WengoAccountSerializer serializer(*this);
-	std::stringstream ss(data);
-	try {
-		boost::archive::xml_iarchive ia(ss);
-		ia >> BOOST_SERIALIZATION_NVP(serializer);
-	} catch (boost::archive::archive_exception & e) {
-		LOG_DEBUG(e.what());
-		return false;
-	}
-	return true;
 }

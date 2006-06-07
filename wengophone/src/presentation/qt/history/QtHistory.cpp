@@ -45,6 +45,10 @@ QtHistory::QtHistory(CHistory & cHistory)
 	postEvent(event);
 }
 
+QtHistory::~QtHistory() {
+
+}
+
 QWidget * QtHistory::getWidget() {
 	return _historyWidget;
 }

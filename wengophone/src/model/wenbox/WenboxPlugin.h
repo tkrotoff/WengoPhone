@@ -24,9 +24,9 @@
 
 #include <util/String.h>
 
-class WengoPhone;
 class PhoneCall;
 class Settings;
+class UserProfile;
 
 /**
  * Handles the Wenbox.
@@ -43,7 +43,7 @@ public:
 
 	Event<void (WenboxPlugin & sender, const std::string & phoneNumberBuffer)> phoneNumberBufferUpdatedEvent;
 
-	WenboxPlugin(WengoPhone & wengoPhone);
+	WenboxPlugin(UserProfile & userProfile);
 
 	~WenboxPlugin();
 
@@ -73,7 +73,7 @@ private:
 
 	Wenbox * _wenbox;
 
-	WengoPhone & _wengoPhone;
+	UserProfile & _userProfile;
 
 	std::string _phoneNumberBuffer;
 };

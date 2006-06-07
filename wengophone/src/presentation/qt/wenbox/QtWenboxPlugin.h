@@ -33,7 +33,7 @@ public:
 
 	QtWenboxPlugin(CWenboxPlugin & cWenboxPlugin);
 
-	~QtWenboxPlugin();
+	virtual ~QtWenboxPlugin();
 
 	void phoneNumberBufferUpdatedEvent(const std::string & phoneNumberBuffer);
 

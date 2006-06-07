@@ -41,7 +41,7 @@ public:
 
 	QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile, QWidget * parent);
 
-	~QtEventWidget();
+	virtual ~QtEventWidget();
 
 	void setVoiceMail(int count);
 

@@ -43,7 +43,7 @@ public:
 
 	QtChatHandler(CChatHandler & cChatHandler);
 
-	~QtChatHandler();
+	virtual ~QtChatHandler();
 
 	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
 

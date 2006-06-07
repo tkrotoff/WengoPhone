@@ -39,6 +39,8 @@ public:
 
 	QtIdle(UserProfile & userProfile, QObject * parent);
 
+	virtual ~QtIdle();
+
 private:
 
 	void initThreadSafe() { }

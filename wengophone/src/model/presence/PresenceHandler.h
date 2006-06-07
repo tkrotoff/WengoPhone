@@ -32,12 +32,12 @@
 
 #include <map>
 
-class UserProfile;
-class ContactList;
 class Connect;
-class Presence;
+class ContactList;
 class IMAccount;
 class IMContact;
+class Presence;
+class UserProfile;
 
 /**
  *
@@ -210,6 +210,8 @@ private:
 	PresenceMap _presenceMap;
 
 	IMContactMultiMap _pendingSubscriptions;
+
+	UserProfile & _userProfile;
 };
 
 #endif	//PRESENCEHANDLER_H

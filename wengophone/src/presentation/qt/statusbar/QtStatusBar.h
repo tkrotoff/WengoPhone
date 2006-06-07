@@ -47,6 +47,8 @@ public:
 
 	QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar);
 
+	virtual ~QtStatusBar();
+
 	/**
 	 * @see QStatusBar::showMessage()
 	 */
@@ -55,6 +57,15 @@ public:
 	void phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state);
 
 private:
+
+	/**
+	 * Initializes widgets content.
+	 */
+	void init();
+
+	void updateInternetConnectionState();
+
+	void updatePhoneLineState();
 
 	void initThreadSafe() { }
 

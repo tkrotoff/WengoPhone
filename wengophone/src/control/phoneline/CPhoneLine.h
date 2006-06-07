@@ -41,6 +41,8 @@ public:
 
 	CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone);
 
+	~CPhoneLine();
+
 	PPhoneLine * getPresentation() const {
 		return _pPhoneLine;
 	}

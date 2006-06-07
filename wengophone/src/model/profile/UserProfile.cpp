@@ -22,12 +22,12 @@
 #include <model/WengoPhone.h>
 #include <model/account/NetworkObserver.h>
 #include <model/account/wengo/WengoAccount.h>
-#include <model/account/wengo/WengoAccountFileStorage.h>
 #include <model/chat/ChatHandler.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactGroup.h>
+#include <model/history/History.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
 #include <model/phoneline/PhoneLineState.h>
@@ -37,6 +37,7 @@
 #include <model/webservices/softupdate/WsSoftUpdate.h>
 #include <model/webservices/info/WsInfo.h>
 #include <model/webservices/directory/WsDirectory.h>
+#include <model/wenbox/WenboxPlugin.h>
 
 #include <imwrapper/IMAccountHandlerFileStorage.h>
 
@@ -55,8 +56,7 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_connectHandler(*this),
 	_presenceHandler(*this),
 	_chatHandler(*this),
-	_contactList(*this),
-	_modelThread(wengoPhone) {
+	_contactList(*this) {
 
 	_wsSms = NULL;
 	_wsInfo = NULL;
@@ -69,7 +69,10 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 	_imAccountHandler = new IMAccountHandler();
 	_presenceState = EnumPresenceState::PresenceStateOffline;
 	_wengoAccountConnected = false;
-	_mustConnectWengoAccount = false;
+	_wengoAccountInitializationFinished = false;
+	_wengoAccountIsValid = false;
+	_wengoAccountMustConnectAfterInit = false;
+	_wenboxPlugin = NULL;
 
 	_history = new History(*this);
 	_history->mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
@@ -78,6 +81,8 @@ UserProfile::UserProfile(WengoPhone & wengoPhone)
 
 	_connectHandler.connectedEvent +=
 		boost::bind(&UserProfile::connectedEventHandler, this, _1, _2);
+
+	computeName();
 
 	NetworkObserver::getInstance().connectionIsDownEvent +=
 		boost::bind(&UserProfile::connectionIsDownEventHandler, this, _1);
@@ -128,10 +133,16 @@ UserProfile::~UserProfile() {
 	if (_wsCallForward) {
 		delete _wsCallForward;
 	}
+
+	if (_wenboxPlugin) {
+		delete _wenboxPlugin;
+	}
 }
 
 void UserProfile::init() {
-	_mustConnectWengoAccount = true;
+	_wenboxPlugin = new WenboxPlugin(*this);
+
+	_wengoAccountMustConnectAfterInit = true;
 	wengoAccountInit();
 }
 
@@ -230,23 +241,26 @@ void UserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 		_wengoAccount = NULL;
 	}
 
-	_wengoAccount = new WengoAccount(wengoAccount);
+	if (!wengoAccount.getWengoLogin().empty()) {
+		_wengoAccountInitializationFinished = false;
+		_wengoAccount = new WengoAccount(wengoAccount);
+		computeName();
 
-	//Empty login or password
-	if (_wengoAccount->getWengoLogin().empty() || _wengoAccount->getWengoPassword().empty()) {
-		loginStateChangedEvent(*_wengoAccount, SipAccount::LoginStatePasswordError);
-		return;
+		//Empty login or password
+		if (_wengoAccount->getWengoLogin().empty() || _wengoAccount->getWengoPassword().empty()) {
+			loginStateChangedEvent(*_wengoAccount, SipAccount::LoginStatePasswordError);
+			return;
+		}
+
+		_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
+		_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
+		_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
+		_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
+		_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
+
+		//Sends the HTTP request to the SSO
+		_wengoAccount->init();
 	}
-
-	_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
-	_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
-	_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
-	_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
-	_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
-
-	//Sends the HTTP request to the SSO
-	_mustConnectWengoAccount = true;
-	_wengoAccount->init();
 }
 
 void UserProfile::addIMAccount(const IMAccount & imAccount) {
@@ -290,7 +304,7 @@ void UserProfile::setAlias(const string & alias, IMAccount * imAccount) {
 
 void UserProfile::addPhoneLine(SipAccount & account) {
 	//Creates new a PhoneLine associated with the account just added
-	PhoneLine * phoneLine = new PhoneLine(account, _wengoPhone);
+	PhoneLine * phoneLine = new PhoneLine(account, *this);
 
 	//Adds the PhoneLine to the list of PhoneLine
 	_phoneLineList += phoneLine;
@@ -307,30 +321,16 @@ void UserProfile::addPhoneLine(SipAccount & account) {
 }
 
 void UserProfile::wengoAccountInit() {
-	if (!_wengoAccount) {
-		_wengoAccount = new WengoAccount(String::null, String::null, true);
-		_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
-		_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
-		_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
-		_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
-		_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
+	if (_wengoAccount) {
+		if (_wengoAccount->hasAutoLogin()) {
+			_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
+			_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
+			_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
+			_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
+			_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
-
-		//FIXME Needs to be dynamic?
-		WengoAccountFileStorage * wengoAccountFileStorage = new WengoAccountFileStorage(*(WengoAccount *) _wengoAccount);
-		bool noAccount = true;
-		if (wengoAccountFileStorage->load(config.getConfigDir())) {
-			if (_wengoAccount->hasAutoLogin()) {
-				//Sends the HTTP request to the SSO
-				_wengoAccount->init();
-				noAccount = false;
-			}
-		}
-		delete wengoAccountFileStorage;
-
-		if (noAccount) {
-			noAccountAvailableEvent(*this);
+			//Sends the HTTP request to the SSO
+			_wengoAccount->init();
 		}
 	}
 }
@@ -363,31 +363,38 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		wsCallForwardCreatedEvent(*this, *_wsCallForward);
 		_wsCallForward->wsCallForwardEvent += boost::bind(&UserProfile::wsCallForwardEventHandler, this, _1, _2, _3);
 
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
-
-		//FIXME Needs to be dynamic?
-		WengoAccountFileStorage * wengoAccountFileStorage = new WengoAccountFileStorage(*(WengoAccount *) _wengoAccount);
-		wengoAccountFileStorage->save(config.getConfigDir());
-		delete wengoAccountFileStorage;
-
 		addPhoneLine(*_wengoAccount);
 
-		if (_mustConnectWengoAccount) {
-			_mustConnectWengoAccount = false;
+		loadHistory();
+
+		_wengoAccountIsValid = true;
+		_wengoAccountInitializationFinished = true;
+
+		if (_wengoAccountMustConnectAfterInit) {
+			_wengoAccountMustConnectAfterInit = false;
+			//FIXME: currently there is only one sip account and we are sure 
+			//this is a Wengo account.
 			connectSipAccounts();
 		}
 
-		loadHistory();
+		break;
+	}
+
+	case SipAccount::LoginStatePasswordError: {
+		_wengoAccountIsValid = false;
+		_wengoAccountInitializationFinished = true;
 
 		break;
 	}
 
 	case SipAccount::LoginStateConnected: {
 		_wengoAccountConnected = true;
+		break;
 	}
 
 	case SipAccount::LoginStateDisconnected: {
 		_wengoAccountConnected = false;
+		break;
 	}
 
 	default:
@@ -455,6 +462,31 @@ void UserProfile::wsCallForwardEventHandler(WsCallForward & sender,
 		_wsInfo->getCallForwardInfo(true);
 		_wsInfo->execute();
 	}
+}
+
+void UserProfile::computeName() {
+	if (!_wengoAccount || _wengoAccount->getWengoLogin().empty()) {
+		_name = "Default";
+	} else {
+		_name = _wengoAccount->getWengoLogin();
+	}
+}
+
+bool UserProfile::isWengoAccountValid() {
+	bool result = false;
+
+	if (!hasWengoAccount()) {
+		result = true;
+	} else {
+		// Waiting for end of Wengo initialization
+		while (!_wengoAccountInitializationFinished) {
+			Thread::msleep(100);
+		}
+
+		result = _wengoAccountIsValid;
+	}
+
+	return result;
 }
 
 void UserProfile::connectionIsUpEventHandler(NetworkObserver & sender) {

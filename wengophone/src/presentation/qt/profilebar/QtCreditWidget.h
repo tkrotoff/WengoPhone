@@ -42,7 +42,7 @@ public:
 
 	QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent);
 
-	~QtCreditWidget();
+	virtual ~QtCreditWidget();
 
 	void setPstnNumber(const QString & number);
 

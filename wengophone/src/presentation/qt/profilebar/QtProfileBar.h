@@ -47,10 +47,15 @@ class CHistory;
  * @author Mathieu Stute
  */
 class QtProfileBar : public QWidget {
+
 	Q_OBJECT
+
 public:
+
 	QtProfileBar (CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 		ConnectHandler & connectHandler,QWidget * parent = 0, Qt::WFlags f = 0 );
+
+	~QtProfileBar();
 
 Q_SIGNALS:
 
@@ -128,8 +133,6 @@ protected:
 
 public Q_SLOTS:
 
-	void userProfileUpdated();
-
 	void statusClicked();
 
 	void nicknameClicked();
@@ -170,6 +173,11 @@ private Q_SLOTS:
 	void phoneLineCreatedEventSlot();
 
 private:
+
+	/**
+	 * Initializes widgets content.
+	 */
+	void init();
 
 	void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
 

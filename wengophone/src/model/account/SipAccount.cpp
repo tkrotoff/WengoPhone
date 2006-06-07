@@ -29,6 +29,9 @@ SipAccount::SipAccount() {
 	_isConnected = false;
 	_autoLogin = false;
 
+	_lastNetworkDiscoveryState = NetworkDiscoveryStateUnknown;
+	_lastLoginState = LoginStateUnknown;
+
 	_networkDiscovery.proxyNeedsAuthenticationEvent +=
 		boost::bind(&SipAccount::proxyNeedsAuthenticationEventHandler, this, _1, _2, _3);
 
@@ -60,6 +63,8 @@ void SipAccount::copy(const SipAccount & sipAccount) {
 	_username = sipAccount._username;
 	_password = sipAccount._password;
 	_realm = sipAccount._realm;
+	_lastNetworkDiscoveryState = sipAccount._lastNetworkDiscoveryState;
+	_lastLoginState = sipAccount._lastLoginState;
 }
 
 void SipAccount::setProxySettings(const std::string & proxyAddress, unsigned proxyPort,

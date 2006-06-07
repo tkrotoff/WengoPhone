@@ -43,6 +43,11 @@ CPhoneCall::CPhoneCall(PhoneCall & phoneCall, CWengoPhone & cWengoPhone)
 	_phoneCall.videoFrameReceivedEvent += boost::bind(&CPhoneCall::videoFrameReceivedEventHandler, this, _1, _2, _3);
 }
 
+CPhoneCall::~CPhoneCall() {
+	_phoneCall.stateChangedEvent -= boost::bind(&CPhoneCall::stateChangedEventHandler, this, _1, _2);
+	_phoneCall.videoFrameReceivedEvent -= boost::bind(&CPhoneCall::videoFrameReceivedEventHandler, this, _1, _2, _3);
+}
+
 std::string CPhoneCall::getPeerSipAddress() const {
 	return _phoneCall.getPeerSipAddress().getSipAddress();
 }

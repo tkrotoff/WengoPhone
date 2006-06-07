@@ -50,7 +50,7 @@ public:
 
 	QtSoftUpdate(CSoftUpdate & cSoftUpdate);
 
-	~QtSoftUpdate();
+	virtual ~QtSoftUpdate();
 
 	void updatePresentation() { }
 

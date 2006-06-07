@@ -17,49 +17,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTLANGUAGE_H
-#define QTLANGUAGE_H
+#ifndef WENGOACCOUNTXMLSERIALIZER_H
+#define WENGOACCOUNTXMLSERIALIZER_H
 
-#include <qtutil/QObjectThreadSafe.h>
+#include <serialization/Serializable.h>
 
-class Settings;
-
-class QString;
-class QStringList;
+class WengoAccount;
 
 /**
- * Changes the language of the application.
+ * Serialize a WengoAccount object.
  *
- * @see QTranslator
- * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
-class QtLanguage : public QObjectThreadSafe {
-	Q_OBJECT
+class WengoAccountXMLSerializer : public Serializable {
 public:
 
-	QtLanguage(QObject * parent);
+	WengoAccountXMLSerializer(WengoAccount & wengoAccount);
 
-	virtual ~QtLanguage();
+	std::string serialize();
 
-	static QStringList getAvailableLanguages();
-	
-	void updateTranslation();
-
- Q_SIGNALS:
-
-	void translationChangedSignal();
+	bool unserialize(const std::string & data);
 
 private:
 
-	void initThreadSafe() { }
+	WengoAccount & _wengoAccount;
 
-	void configChangedEventHandler(Settings & sender, const std::string & key);
-
-	void configChangedEventHandlerThreadSafe(Settings & sender, const std::string & key);
-
-	static std::string getISO639CodeFromFileName(const QString & fileName);
-
-	static QString getFileNameFromISO639Code(const std::string & iso639Code);
 };
 
-#endif	//QTLANGUAGE_H
+#endif //WENGOACCOUNTXMLSERIALIZER_H

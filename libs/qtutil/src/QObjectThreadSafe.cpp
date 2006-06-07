@@ -27,6 +27,9 @@ QObjectThreadSafe::QObjectThreadSafe(QObject * parent)
 	_blockEvents = false;
 }
 
+QObjectThreadSafe::~QObjectThreadSafe() {
+}
+
 void QObjectThreadSafe::postEvent(PostEvent * event) {
 	QCoreApplication::postEvent(this, event);
 }

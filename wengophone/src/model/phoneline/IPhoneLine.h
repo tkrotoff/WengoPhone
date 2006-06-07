@@ -31,13 +31,13 @@
 
 #include <string>
 
+class PhoneCall;
+class PhoneLineState;
 class SipAccount;
 class SipWrapper;
 class SipAddress;
 class SipPresenceState;
-class PhoneLineState;
-class WengoPhone;
-class PhoneCall;
+class UserProfile;
 
 /**
  * Interface representing a phone line.
@@ -192,7 +192,7 @@ public:
 	 *
 	 * @return UserProfile instance
 	 */
-	virtual WengoPhone & getWengoPhone() const = 0;
+	virtual UserProfile & getUserProfile() const = 0;
 
 	/**
 	 * Gets the PhoneCall associated with a given callId.

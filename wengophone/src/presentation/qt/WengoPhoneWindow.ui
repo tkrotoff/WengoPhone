@@ -361,7 +361,7 @@
      <x>0</x>
      <y>0</y>
      <width>329</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -411,29 +411,6 @@
     <addaction name="actionHangup" />
     <addaction name="actionHold_Resume" />
    </widget>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>&amp;Wengo</string>
-    </property>
-    <widget class="QMenu" name="menuClear_History2" >
-     <property name="title" >
-      <string>Clear History</string>
-     </property>
-    </widget>
-    <widget class="QMenu" name="menuHide_Show2" >
-     <property name="title" >
-      <string>Hide / Show</string>
-     </property>
-     <addaction name="separator" />
-     <addaction name="separator" />
-    </widget>
-    <addaction name="actionShowWengoAccount" />
-    <addaction name="actionEditMyProfile" />
-    <addaction name="separator" />
-    <addaction name="actionCallOutService" />
-    <addaction name="separator" />
-    <addaction name="actionClose" />
-   </widget>
    <widget class="QMenu" name="menuContacts" >
     <property name="title" >
      <string>&amp;Contacts</string>
@@ -453,6 +430,32 @@
     <addaction name="actionHideContactsOffline" />
     <addaction name="actionShow_Hide_groups" />
    </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>&amp;Wengo</string>
+    </property>
+    <widget class="QMenu" name="menuClear_History2" >
+     <property name="title" >
+      <string>Clear History</string>
+     </property>
+    </widget>
+    <widget class="QMenu" name="menuHide_Show2" >
+     <property name="title" >
+      <string>Hide / Show</string>
+     </property>
+     <addaction name="separator" />
+     <addaction name="separator" />
+    </widget>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionEditMyProfile" />
+    <addaction name="actionLogOff" />
+    <addaction name="separator" />
+    <addaction name="actionChangeProfile" />
+    <addaction name="separator" />
+    <addaction name="actionCallOutService" />
+    <addaction name="separator" />
+    <addaction name="actionClose" />
+   </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
    <addaction name="menuActions" />
@@ -463,9 +466,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>583</y>
+     <y>580</y>
      <width>329</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -722,6 +725,16 @@
   <action name="actionShow_Hide_groups" >
    <property name="text" >
     <string>Show / Hide groups</string>
+   </property>
+  </action>
+  <action name="actionChangeProfile" >
+   <property name="text" >
+    <string>Change Profile...</string>
+   </property>
+  </action>
+  <action name="actionLogOff" >
+   <property name="text" >
+    <string>Log Off</string>
    </property>
   </action>
  </widget>

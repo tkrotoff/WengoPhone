@@ -41,6 +41,10 @@ QtSms::QtSms(CSms & cSms)
 	postEvent(event);
 }
 
+QtSms::~QtSms() {
+	//TODO: unregister events, delete created objects
+}
+
 void QtSms::initThreadSafe() {
 	_smsWindow = new QDialog(_qtWengoPhone->getWidget());
 

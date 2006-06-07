@@ -23,13 +23,15 @@
 #include "Presentation.h"
 
 #include <model/WengoPhone.h>
-#include <model/account/SipAccount.h>
 
 #include <util/Event.h>
 
 #include <string>
 
 class PPhoneLine;
+class UserProfile;
+class UserProfileHandler;
+class WengoAccount;
 
 /**
  *
@@ -38,11 +40,6 @@ class PPhoneLine;
  */
 class PWengoPhone : public Presentation {
 public:
-
-	/**
-	 * Called by the Control when the Model is initialized.
-	 */
-	virtual void modelInitializedEvent() = 0;
 
 	/*virtual void addCommand(PCommand * command) = 0;
 
@@ -55,8 +52,28 @@ public:
 	/**
 	 * @see IMPresence::authorizationRequestEvent
 	 */
-	virtual void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
-		const std::string & message) = 0;
+	virtual void authorizationRequestEventHandler(PresenceHandler & sender,
+		const IMContact & imContact, const std::string & message) = 0;
+
+	/**
+	 * @see UserProfileHandler::noCurrentUserProfileSetEvent
+	 */
+	virtual void noCurrentUserProfileSetEventHandler() = 0;
+
+	/**
+	 * @see UserProfileHandler::currentUserProfileWillDieEvent
+	 */
+	virtual void currentUserProfileWillDieEventHandler() = 0;
+
+	/**
+	 * @see UserProfileHandler::userProfileInitializedEvent
+	 */
+	virtual void userProfileInitializedEventHandler() = 0;
+
+	/**
+	 * @see UserProfileHandler::wengoAccountNotValidEvent
+	 */
+	virtual void wengoAccountNotValidEventHandler(const WengoAccount & wengoAccount) = 0;
 
 protected:
 };

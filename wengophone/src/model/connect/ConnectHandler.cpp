@@ -39,6 +39,8 @@ ConnectHandler::ConnectHandler(UserProfile & userProfile)
 }
 
 ConnectHandler::~ConnectHandler() {
+	_userProfile.newIMAccountAddedEvent -=
+		boost::bind(&ConnectHandler::newIMAccountAddedEventHandler, this, _1, _2);
 }
 
 void ConnectHandler::connect(IMAccount & imAccount) {

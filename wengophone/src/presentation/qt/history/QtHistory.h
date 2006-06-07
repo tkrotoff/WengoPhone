@@ -39,6 +39,8 @@ public:
 
 	QtHistory ( CHistory & cHistory );
 
+	virtual ~QtHistory();
+
 	void updatePresentation ();
 
 	void addHistoryMemento(const std::string & type, const std::string & date,

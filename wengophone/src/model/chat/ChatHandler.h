@@ -26,11 +26,11 @@
 #include <map>
 #include <set>
 
+class ConnectHandler;
 class IMAccount;
 class IMChat;
 class IMChatSession;
 class IMContactSet;
-class ConnectHandler;
 class UserProfile;
 
 /**
@@ -101,6 +101,8 @@ private:
 	typedef std::set<IMChatSession *> IMChatSessionSet;
 
 	IMChatSessionSet _imChatSessionSet;
+
+	UserProfile & _userProfile;
 };
 
 #endif	//CHATHANDLER_H

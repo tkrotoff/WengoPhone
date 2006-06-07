@@ -51,6 +51,8 @@ public:
 
 	SipCallbacks(SipWrapper & sipWrapper, UserProfile & userProfile);
 
+	virtual ~SipCallbacks();
+
 private:
 
 	void phoneCallStateChangedEventHandler(SipWrapper & sender, int callId,

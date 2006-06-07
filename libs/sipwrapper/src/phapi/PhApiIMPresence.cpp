@@ -34,10 +34,25 @@ PhApiIMPresence::PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrappe
 	: IMPresence(account),
 	_phApiWrapper(phApiWrapper) {
 
-	_phApiWrapper.presenceStateChangedEvent += boost::bind(&PhApiIMPresence::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
-	_phApiWrapper.myPresenceStatusEvent += boost::bind(&PhApiIMPresence::myPresenceStatusEventHandler, this, _1, _2, _3);
-	_phApiWrapper.subscribeStatusEvent += boost::bind(&PhApiIMPresence::subscribeStatusEventHandler, this, _1, _2, _3);
-	_phApiWrapper.contactIconChangedEvent += boost::bind(&PhApiIMPresence::contactIconChangedEventHandler, this, _1, _2, _3);
+	_phApiWrapper.presenceStateChangedEvent += 
+		boost::bind(&PhApiIMPresence::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
+	_phApiWrapper.myPresenceStatusEvent += 
+		boost::bind(&PhApiIMPresence::myPresenceStatusEventHandler, this, _1, _2, _3);
+	_phApiWrapper.subscribeStatusEvent += 
+		boost::bind(&PhApiIMPresence::subscribeStatusEventHandler, this, _1, _2, _3);
+	_phApiWrapper.contactIconChangedEvent += 
+		boost::bind(&PhApiIMPresence::contactIconChangedEventHandler, this, _1, _2, _3);
+}
+
+PhApiIMPresence::~PhApiIMPresence() {
+	_phApiWrapper.presenceStateChangedEvent -= 
+		boost::bind(&PhApiIMPresence::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
+	_phApiWrapper.myPresenceStatusEvent -= 
+		boost::bind(&PhApiIMPresence::myPresenceStatusEventHandler, this, _1, _2, _3);
+	_phApiWrapper.subscribeStatusEvent -= 
+		boost::bind(&PhApiIMPresence::subscribeStatusEventHandler, this, _1, _2, _3);
+	_phApiWrapper.contactIconChangedEvent -=
+		boost::bind(&PhApiIMPresence::contactIconChangedEventHandler, this, _1, _2, _3);
 }
 
 void PhApiIMPresence::changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {

@@ -53,6 +53,7 @@ Contact::Contact(const Contact & contact)
 }
 
 Contact::~Contact() {
+	profileChangedEvent -= boost::bind(&Contact::profileChangedEventHandler, this, _1);
 }
 
 Contact & Contact::operator=(const Contact & contact) {

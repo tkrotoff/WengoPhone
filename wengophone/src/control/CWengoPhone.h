@@ -20,6 +20,8 @@
 #ifndef CWENGOPHONE_H
 #define CWENGOPHONE_H
 
+#include <control/profile/CUserProfileHandler.h>
+
 #include <model/WengoPhone.h>
 #include <model/account/SipAccount.h>
 
@@ -28,6 +30,7 @@
 #include <string>
 
 class Contact;
+class CPhoneLine;
 class CUserProfile;
 class PWengoPhone;
 class IPhoneLine;
@@ -49,9 +52,14 @@ class WengoAccount;
 class WsSubscribe;
 class WsDirectory;
 class WsCallForward;
+class CChatHandler;
+class CSms;
+class CSoftUpdate;
+class CWenboxPlugin;
 class WsSms;
 class WsSoftUpdate;
 class CWsCallForward;
+class CWsDirectory;
 
 /**
  * @defgroup control Control Component
@@ -133,16 +141,6 @@ public:
 	}
 
 	/**
-	 * @see WengoPhone::addIMAccount()
-	 */
-	void addIMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol);
-
-	/**
-	 * Saves the current UserProfile.
-	 */
-	void saveUserProfile();
-
-	/**
 	 * Entry point of the application, equivalent to main().
 	 *
 	 * Starts the object WengoPhone thus almost everything.
@@ -157,6 +155,11 @@ public:
 	 * @see WengoPhone::terminate()
 	 */
 	void terminate();
+
+	/**
+	 * Used by GUI to prevent control that the UserProfile can be deleted.
+	 */
+	void currentUserProfileReleased();
 
 	/**
 	 * Gets the active phone call.
@@ -189,6 +192,13 @@ public:
 		return _cWsCallForward;
 	}
 
+	/**
+	 * Gets the CUserProfileHandler
+	 */
+	CUserProfileHandler & getCUserProfileHandler() {
+		return _cUserProfileHandler;
+	}
+
 private:
 
 	/**
@@ -198,11 +208,9 @@ private:
 
 	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
 
-	void wenboxPluginCreatedEventHandler(WengoPhone & sender, WenboxPlugin & wenboxPlugin);
+	void wsDirectoryCreatedEventHandler(UserProfile & sender, WsDirectory & wsDirectory);
 
 	void wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscribe & wsSubscribe);
-
-	void wsDirectoryCreatedEventHandler(UserProfile & sender, WsDirectory & wsDirectory);
 
 	void wsSmsCreatedEventHandler(UserProfile & sender, WsSms & wsSms);
 
@@ -212,14 +220,32 @@ private:
 
 	void initFinishedEventHandler(WengoPhone & sender);
 
-	void newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount);
-
 
 	/**
 	 * @see IMPresence::authorizationRequestEvent
 	 */
 	void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
 		const std::string & message);
+
+	/**
+	 * @see UserProfileHandler::noCurrentUserProfileSetEvent
+	 */
+	void noCurrentUserProfileSetEventHandler(UserProfileHandler & sender);
+
+	/**
+	 * @see UserProfileHandler::currentUserProfileWillDieEvent
+	 */
+	void currentUserProfileWillDieEventHandler(UserProfileHandler & sender);
+
+	/**
+	 * @see UserProfileHandler::userProfileInitializedEvent
+	 */
+	void userProfileInitializedEventHandler(UserProfileHandler & sender, UserProfile & userProfile);
+
+	/**
+	 * @see UserProfileHandler::wengoAccountNotValidEvent
+	 */
+	void wengoAccountNotValidEventHandler(UserProfileHandler & sender, WengoAccount & wengoAccount);
 
 	/** Direct link to the model. */
 	WengoPhone & _wengoPhone;
@@ -231,7 +257,21 @@ private:
 
 	CUserProfile * _cUserProfile;
 
+	CUserProfileHandler _cUserProfileHandler;
+
 	CWsCallForward * _cWsCallForward;
+
+	CWsDirectory * _cWsDirectory;
+
+	CWenboxPlugin * _cWenboxPlugin;
+
+	CChatHandler * _cChatHandler;
+
+	CSms * _cSms;
+
+	CSoftUpdate * _cSoftUpdate;
+
+	CPhoneLine * _cPhoneLine;
 };
 
 #endif	//CWENGOPHONE_H

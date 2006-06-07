@@ -22,16 +22,16 @@
 
 #include <model/account/SipAccount.h>
 #include <model/profile/UserProfile.h>
+#include <model/profile/UserProfileHandler.h>
 #include <model/config/StartupSettingListener.h>
 
-#include <util/Event.h>
 #include <thread/Thread.h>
+
+#include <util/Event.h>
 
 #include <string>
 
-class WenboxPlugin;
 class WsSubscribe;
-class NetworkObserver;
 class ClassicConfigImporter;
 
 /**
@@ -70,14 +70,6 @@ public:
 	Event<void (WengoPhone & sender)> initFinishedEvent;
 
 	/**
-	 * WenboxPlugin has been created.
-	 *
-	 * @param sender this class
-	 * @param wenboxPlugin WenboxPlugin created
-	 */
-	Event<void (WengoPhone & sender, WenboxPlugin & wenboxPlugin)> wenboxPluginCreatedEvent;
-
-	/**
 	 * WsSubscribe has been created.
 	 *
 	 * @param sender this class
@@ -107,18 +99,11 @@ public:
 	~WengoPhone();
 
 	/**
-	 * Gets the Wenbox (USB phone device).
-	 *
-	 * @return the Wenbox
+	 * Gets the UserProfileHandler.
 	 */
-	WenboxPlugin & getWenboxPlugin() const;
-
-	/**
-	 * Gets the current UserProfile.
-	 *
-	 * @return the current UserProfile
-	 */
-	UserProfile & getCurrentUserProfile() const;
+	UserProfileHandler & getUserProfileHandler() {
+		return _userProfileHandler;
+	}
 
 	/**
 	 * Terminates the model component thread i.e this thread.
@@ -127,11 +112,6 @@ public:
 	 * You cannot call start() then terminate() several times.
 	 */
 	void terminate();
-
-	/**
-	 * Saves the UserProfile.
-	 */
-	void saveUserProfile();
 
 	/**
 	 * Starts the thread of the model component.
@@ -156,17 +136,9 @@ private:
 	void saveConfiguration();
 
 	/**
-	 * @see Profile::profileChangedEvent
-	 */
-	void profileChangedEventHandler(Profile & sender);
-
-	/**
 	 * @see Settings::valueChangedEvent
 	 */
 	void valueChangedEventHandler(Settings & sender, const std::string & key);
-
-	/** Wenbox. */
-	WenboxPlugin * _wenboxPlugin;
 
 	/** Wengo subscribe web service. */
 	WsSubscribe * _wsSubscribe;
@@ -190,8 +162,7 @@ private:
 	 */
 	bool _running;
 
-	//FIXME: currently only one UserProfile exists
-	UserProfile _userProfile;
+	UserProfileHandler _userProfileHandler;
 
 	StartupSettingListener * _startupSettingListener;
 

@@ -49,6 +49,12 @@ QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProf
 	postEvent(event);
 }
 
+QtEventWidget::~QtEventWidget() {
+	if (_ui) {
+		delete _ui;
+	}
+}
+
 void QtEventWidget::initThreadSafe() {
 
 	_widget = new QWidget();
@@ -67,10 +73,6 @@ void QtEventWidget::initThreadSafe() {
 	_ui->missedCallIconLabel->setToolTip(tr("Click here to see missed call(s)"));
 
 	updatePresentation();
-}
-
-QtEventWidget::~QtEventWidget() {
-	delete _ui;
 }
 
 QWidget * QtEventWidget::getWidget() const {

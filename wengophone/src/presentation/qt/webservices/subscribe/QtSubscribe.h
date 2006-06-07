@@ -47,7 +47,7 @@ public:
 
 	QtSubscribe(CSubscribe & cSubscribe);
 
-	~QtSubscribe();
+	virtual ~QtSubscribe();
 
 	QWidget * getWidget() const;
 

@@ -43,10 +43,14 @@ class QtUserManager;
  * @author Tanguy Krotoff
  */
 class QtContactList : public QObjectThreadSafe, public PContactList {
+
 	Q_OBJECT
+
 public:
 
 	QtContactList(CContactList & cContactList, CWengoPhone & cWenghoPhone);
+
+	virtual ~QtContactList();
 
 	QWidget * getWidget() const {
 		return _contactListWidget;
@@ -94,6 +98,8 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
+	void cleanup();
+
 	void showAllUsers();
 
 	void hideOffLineUser();
@@ -117,7 +123,7 @@ private Q_SLOTS:
 	void contactRemovedEventSlot(QString contactId);
 
 	void contactMovedEventSlot(QString dstContactGroupId,
-	QString srcContactGroupId, QString contactId);
+		QString srcContactGroupId, QString contactId);
 
 	void contactChangedEventSlot(QString contactId);
 

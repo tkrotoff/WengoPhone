@@ -50,6 +50,8 @@ public:
 
 	QtPhoneCall(CPhoneCall & cPhoneCall);
 
+	virtual ~QtPhoneCall();
+
 	void updatePresentation();
 
 	QWidget * getWidget() const {

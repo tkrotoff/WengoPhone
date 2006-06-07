@@ -41,6 +41,9 @@ QtSoftUpdate::QtSoftUpdate(CSoftUpdate & cSoftUpdate)
 	: QObjectThreadSafe(NULL),
 	_cSoftUpdate(cSoftUpdate) {
 
+	_softUpdater = NULL;
+	_ui = NULL;
+
 	_qtWengoPhone = (QtWengoPhone *) _cSoftUpdate.getCWengoPhone().getPresentation();
 
 	updateWengoPhoneEvent += boost::bind(&QtSoftUpdate::updateWengoPhoneEventHandler, this, _1, _2, _3, _4);
@@ -54,8 +57,15 @@ void QtSoftUpdate::initThreadSafe() {
 }
 
 QtSoftUpdate::~QtSoftUpdate() {
-	delete _ui;
-	delete _softUpdater;
+	if (_softUpdater) {
+		delete _softUpdater;
+		_softUpdater = NULL;
+	}
+
+	if (_ui) {
+		delete _ui;
+		_ui = NULL;
+	}
 }
 
 void QtSoftUpdate::updateWengoPhoneEventHandler(const std::string & downloadUrl,

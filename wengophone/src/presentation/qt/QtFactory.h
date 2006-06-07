@@ -114,14 +114,9 @@ public:
 			File::convertPathSeparators("qt-plugins/");
 
 		QCoreApplication::addLibraryPath(QString::fromStdString(qtPlugins));
-#endif		
-		_qtContactList = NULL;
-		_cWengoPhone = NULL;
-	}
+#endif
 
-	~QtFactory() {
-		delete _app;
-		delete _qtContactList;
+		reset();
 	}
 
 	void processEvents() {
@@ -132,6 +127,19 @@ public:
 		return _app->exec();
 	}
 
+	void reset() {
+		// Objects are deleted by the class who constructs them.
+		// So we can set the pointer to NULL safely.
+		_qtContactList = NULL;
+		_qtChatHandler = NULL;
+		_qtWenboxPlugin = NULL;
+		_qtSms = NULL;
+		_qtSubscribe = NULL;
+		_qtWsDirectory = NULL;
+		_qtSoftUpdate = NULL;
+		_qtHistory = NULL;
+	}
+
 	PWengoPhone * createPresentationWengoPhone(CWengoPhone & cWengoPhone) {
 		_cWengoPhone = &cWengoPhone;
 		static QtWengoPhone qtWengoPhone(cWengoPhone, _background);
@@ -139,11 +147,13 @@ public:
 	}
 
 	PPhoneLine * createPresentationPhoneLine(CPhoneLine & cPhoneLine) {
+		//FIXME: memory leak?
 		QtPhoneLine * qtPhoneLine = new QtPhoneLine(cPhoneLine);
 		return qtPhoneLine;
 	}
 
 	PPhoneCall * createPresentationPhoneCall(CPhoneCall & cPhoneCall) {
+		//FIXME: memory leak?
 		QtPhoneCall * qtPhoneCall = new QtPhoneCall(cPhoneCall);
 		return qtPhoneCall;
 	}
@@ -159,38 +169,52 @@ public:
 	}
 
 	PWenboxPlugin * createPresentationWenboxPlugin(CWenboxPlugin & cWenboxPlugin) {
-		QtWenboxPlugin * qtWenboxPlugin = new QtWenboxPlugin(cWenboxPlugin);
-		return qtWenboxPlugin;
+		if (!_qtWenboxPlugin) {
+			_qtWenboxPlugin = new QtWenboxPlugin(cWenboxPlugin);
+		}
+		return _qtWenboxPlugin;
 	}
 
 	PChatHandler * createPresentationChatHandler(CChatHandler & cChatHandler) {
-		static QtChatHandler * qtChatHandler = new QtChatHandler(cChatHandler);
-		return qtChatHandler;
+		if (!_qtChatHandler) {
+			_qtChatHandler = new QtChatHandler(cChatHandler);
+		}	
+		return _qtChatHandler;
 	}
 
 	PSms * createPresentationSms(CSms & cSms) {
-		static QtSms * qtSms = new QtSms(cSms);
-		return qtSms;
+		if (!_qtSms) {
+			_qtSms = new QtSms(cSms);
+		}	
+		return _qtSms;
 	}
 
 	PSubscribe * createPresentationSubscribe(CSubscribe & cSubscribe) {
-		static QtSubscribe * qtSubscribe = new QtSubscribe(cSubscribe);
-		return qtSubscribe;
+		if (!_qtSubscribe) {
+			_qtSubscribe = new QtSubscribe(cSubscribe);
+		}
+		return _qtSubscribe;
 	}
 
 	PWsDirectory * createPresentationWsDirectory(CWsDirectory & cWsDirectory) {
-		static QtWsDirectory * qtWsDirectory = new QtWsDirectory(cWsDirectory);
-		return qtWsDirectory;
+		if (!_qtWsDirectory) {
+			_qtWsDirectory = new QtWsDirectory(cWsDirectory);
+		}
+		return _qtWsDirectory;
 	}
 
 	PSoftUpdate * createPresentationSoftUpdate(CSoftUpdate & cSoftUpdate) {
-		static QtSoftUpdate * qtSoftUpdate = new QtSoftUpdate(cSoftUpdate);
-		return qtSoftUpdate;
+		if (!_qtSoftUpdate) {
+			_qtSoftUpdate = new QtSoftUpdate(cSoftUpdate);
+		}
+		return _qtSoftUpdate;
 	}
 
 	PHistory * createPresentationHistory(CHistory & cHistory) {
-		static QtHistory * qtHistory = new QtHistory(cHistory);
-		return qtHistory;
+		if (!_qtHistory) {
+			_qtHistory = new QtHistory(cHistory);
+		}
+		return _qtHistory;
 	}
 
 private:
@@ -198,6 +222,20 @@ private:
 	QApplication * _app;
 
 	QtContactList * _qtContactList;
+
+	QtChatHandler * _qtChatHandler;
+
+	QtWenboxPlugin * _qtWenboxPlugin;
+
+	QtSms * _qtSms;
+
+	QtSubscribe * _qtSubscribe;
+
+	QtWsDirectory * _qtWsDirectory;
+
+	QtSoftUpdate * _qtSoftUpdate;
+
+	QtHistory * _qtHistory;
 
 	CWengoPhone * _cWengoPhone;
 

@@ -126,7 +126,7 @@ void QtIMAccountManager::addIMAccount(QAction * action) {
 	QtIMAccountSettings * qtIMAccountSettings = new QtIMAccountSettings(_userProfile, imProtocol, _imAccountManagerWidget);
 	loadIMAccounts();
 
-	_cWengoPhone.saveUserProfile();
+	//_cWengoPhone.saveUserProfile();
 }
 
 void QtIMAccountManager::deleteIMAccount() {

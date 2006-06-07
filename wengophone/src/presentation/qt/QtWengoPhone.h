@@ -21,7 +21,10 @@
 #define QTWENGOPHONE_H
 
 #include <presentation/PWengoPhone.h>
+
 #include <model/account/SipAccount.h>
+#include <model/account/wengo/WengoAccount.h>
+
 #include <imwrapper/EnumPresenceState.h>
 
 #include <qtutil/QObjectThreadSafe.h>
@@ -44,6 +47,8 @@ class QtSms;
 class QtSubscribe;
 class QtBrowser;
 class QtHistoryWidget;
+class QtIdle;
+class QtLanguage;
 class QtLogin;
 class QtToaster;
 class QtStatusBar;
@@ -75,7 +80,7 @@ public:
 
 	QtWengoPhone(CWengoPhone & cWengoPhone, bool background = false);
 
-	void modelInitializedEvent();
+	virtual ~QtWengoPhone();
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
@@ -112,6 +117,14 @@ public:
 
 	void connectionStatusEventHandler(int totalSteps, int currentStep, const std::string & infoMsg);
 
+	void noCurrentUserProfileSetEventHandler();
+
+	void currentUserProfileWillDieEventHandler();
+
+	void userProfileInitializedEventHandler();
+
+	void wengoAccountNotValidEventHandler(const WengoAccount & wengoAccount);
+
 	QWidget * getWidget() const {
 		return _wengoPhoneWindow;
 	}
@@ -132,13 +145,29 @@ public:
 
 Q_SIGNALS:
 
-	void modelInitializedEventSignal();
-
 	void connectionStatusEventHandlerSignal(int totalSteps, int currentStep, QString infoMsg);
+
+	void noCurrentUserProfileSetEventHandlerSignal();
+
+	void currentUserProfileWillDieEventHandlerSignal();
+
+	void userProfileInitializedEventHandlerSignal();
+
+	void wengoAccountNotValidEventHandlerSignal(WengoAccount wengoAccount);
+
+	void signalTimeoutEventReached();
 
 private Q_SLOTS:
 
 	void connectionStatusEventHandlerSlot(int totalSteps, int currentStep, QString infoMsg);
+
+	void noCurrentUserProfileSetEventHandlerSlot();
+
+	void currentUserProfileWillDieEventHandlerSlot();
+
+	void userProfileInitializedEventHandlerSlot();
+
+	void wengoAccountNotValidEventHandlerSlot(WengoAccount wengoAccount);
 
 	void callButtonClicked();
 
@@ -165,6 +194,8 @@ private Q_SLOTS:
 	void showAbout();
 
 	void showHome();
+
+	void showLoginWindow();
 
 	void showContactList();
 
@@ -248,10 +279,6 @@ private Q_SLOTS:
 
     void showHideGroups();
 
-Q_SIGNALS:
-
-	void signalTimeoutEventReached();
-
 private:
 
 	void initThreadSafe();
@@ -268,10 +295,6 @@ private:
 
 	void updatePresentationThreadSafe();
 
-	void noAccountAvailableEventHandler(UserProfile & sender);
-
-	void noAccountAvailableEventHandlerThreadSafe(UserProfile & sender);
-
 	void loginStateChangedEventHandler(SipAccount & sipAccount, SipAccount::LoginState state);
 
 	void loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state);
@@ -286,8 +309,6 @@ private:
 
 	void authorizationRequestEventHandlerThreadSafe(PresenceHandler & sender, const IMContact & imContact,
 		const std::string & message);
-
-	void showLoginWindow();
 
 	void urlClickedEventHandler(std::string url);
 
@@ -340,11 +361,17 @@ private:
 
 	QtContactList * _contactList;
 
+	QLayout * _contactListTabLayout;
+
 	QtHistoryWidget * _qtHistoryWidget;
 
 	QtContactCallListWidget * _contactCallListWidget;
 
 	QtProfileBar * _qtProfileBar;
+
+	QtIdle * _qtIdle;
+
+	QtLanguage * _qtLanguage;
 
 	QtCallBar * _qtCallBar;
 

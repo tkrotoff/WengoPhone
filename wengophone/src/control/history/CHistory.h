@@ -67,6 +67,8 @@ public:
 	 */
 	CHistory(History & history, CWengoPhone & cWengoPhone, Thread & modelThread);
 
+	~CHistory();
+
 	/**
 	 * @see History::removeMemento
 	 */

@@ -42,6 +42,8 @@ public:
 
 	QObjectThreadSafe(QObject * parent);
 
+	virtual ~QObjectThreadSafe();
+
 	/**
 	 * Initialization of the QObjectThreadSafe subclass object.
 	 *

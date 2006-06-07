@@ -52,6 +52,24 @@ CContactList::CContactList(ContactList & contactList, Thread & modelThread)
 		boost::bind(&CContactList::contactChangedEventHandler, this, _1, _2);
 }
 
+CContactList::~CContactList() {
+	_contactList.contactGroupAddedEvent -=
+		boost::bind(&CContactList::contactGroupAddedEventHandler, this, _1, _2);
+	_contactList.contactGroupRemovedEvent -=
+		boost::bind(&CContactList::contactGroupRemovedEventHandler, this, _1, _2);
+	_contactList.contactAddedEvent -=
+		boost::bind(&CContactList::contactAddedEventHandler, this, _1, _2);
+	_contactList.contactRemovedEvent -=
+		boost::bind(&CContactList::contactRemovedEventHandler, this, _1, _2);
+	_contactList.contactMovedEvent -=
+		boost::bind(&CContactList::contactMovedEventHandler, this, _1, _2, _3, _4);
+	_contactList.contactChangedEvent -=
+		boost::bind(&CContactList::contactChangedEventHandler, this, _1, _2);
+
+	delete _pContactList;
+	_pContactList = NULL;
+}
+
 void CContactList::contactAddedEventHandler(ContactList & sender, Contact & contact) {
 	// We do not emit the event if the Contact has no group because the GUI
 	// does not support a Contact with no group
@@ -61,7 +79,7 @@ void CContactList::contactAddedEventHandler(ContactList & sender, Contact & cont
 }
 
 void CContactList::contactRemovedEventHandler(ContactList & sender, Contact & contact) {
-	_pContactList->contactRemovedEvent(contact.getUUID());
+		_pContactList->contactRemovedEvent(contact.getUUID());
 }
 
 void CContactList::contactMovedEventHandler(ContactList & sender, ContactGroup & dstContactGroup,
@@ -71,7 +89,6 @@ void CContactList::contactMovedEventHandler(ContactList & sender, ContactGroup &
 }
 
 void CContactList::contactGroupAddedEventHandler(ContactList & sender, ContactGroup & contactGroup) {
-	LOG_DEBUG("contact group added. UUID: " + contactGroup.getUUID());
 	_pContactList->contactGroupAddedEvent(contactGroup.getUUID());
 }
 
@@ -276,12 +293,15 @@ void CContactList::mergeThreadSafe(std::string dstContactId, std::string srcCont
 		_contactList.mergeContacts(*dstContact, *srcContact);
 	}
 }
-std::string CContactList::findContactThatOwns(const IMContact & imContact){
-    std::string result;
 
-    Contact * contact = _contactList.findContactThatOwns(imContact);
-    if (contact) {
-        result = contact->getUUID();
-    }
-    return result;
+std::string CContactList::findContactThatOwns(const IMContact & imContact){
+	std::string result;
+
+	Contact * contact = _contactList.findContactThatOwns(imContact);
+		
+	if (contact) {
+		result = contact->getUUID();
+	}
+
+	return result;
 }

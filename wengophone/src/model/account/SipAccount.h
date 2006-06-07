@@ -38,6 +38,9 @@ class SipAccount : Interface {
 public:
 
 	enum LoginState {
+		/** Initial login state. */
+		LoginStateUnknown,
+
 		/** This SipAccount is ready to login. */
 		LoginStateReady,
 
@@ -63,6 +66,9 @@ public:
 	Event< void (SipAccount & sender, LoginState loginState) > loginStateChangedEvent;
 
 	enum NetworkDiscoveryState {
+		/** Initial NetworkDiscoveryState. */
+		NetworkDiscoveryStateUnknown,
+	
 		/** Network discovery has been successful. */
 		NetworkDiscoveryStateOk,
 
@@ -248,6 +254,14 @@ public:
 
 	virtual SipAccountType getType() const = 0;
 
+	NetworkDiscoveryState getLastNetworkDiscoveryState() const {
+		return _lastNetworkDiscoveryState;
+	}
+
+	LoginState getLastLoginState() const {
+		return _lastLoginState;
+	}
+
 protected:
 
 	/**
@@ -314,6 +328,12 @@ protected:
 
 	/** The STUN server used by NetworkDiscovery to check NAT and UDP connection. */
 	std::string _stunServer;
+
+	/** Used to remember the last NetworkDiscoveryState. */
+	NetworkDiscoveryState _lastNetworkDiscoveryState;
+
+	/** Used to remember the last LoginState. */
+	LoginState _lastLoginState;
 };
 
 #endif	//SIPACCOUNT_H

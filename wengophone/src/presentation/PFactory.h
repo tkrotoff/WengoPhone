@@ -109,6 +109,9 @@ public:
 	/** Processes all pending events of the presentation. */
 	virtual void processEvents() = 0;
 
+	/** Reset the factory. */
+	virtual void reset() = 0;
+
 private:
 
 	static PFactory * _factory;

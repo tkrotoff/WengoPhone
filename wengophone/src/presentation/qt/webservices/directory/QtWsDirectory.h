@@ -48,7 +48,7 @@ public:
 
 	QtWsDirectory(CWsDirectory & cWsDirectory);
 
-	~QtWsDirectory();
+	virtual ~QtWsDirectory();
 
 	QWidget * getWidget();
 

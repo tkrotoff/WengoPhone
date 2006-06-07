@@ -22,7 +22,6 @@
 
 #include <model/account/SipAccount.h>
 
-#include <serialization/Serializable.h>
 #include <http/HttpRequest.h>
 #include <thread/Timer.h>
 #include <util/Event.h>
@@ -36,17 +35,15 @@ class NetworkObserver;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class WengoAccount : public SipAccount, public Serializable {
+class WengoAccount : public SipAccount {
 
-	/**
-	 * WengoAccountParser can directly access to _identity, _username ect...
-	 * This avoid getters and setters.
-	 */
-	friend class WengoAccountParser;
+	friend class WengoAccountXMLSerializer;
 
-	friend class WengoAccountSerializer;
+	friend class WengoAccountParser; 
 
 public:
+
+	WengoAccount();
 
 	WengoAccount(const std::string & login, const std::string & password, bool autoLogin);
 
@@ -54,7 +51,7 @@ public:
 
 	WengoAccount(const WengoAccount & wengoAccount);
 
-	WengoAccount & operator=(const WengoAccount & wengoAccount);
+	WengoAccount & operator = (const WengoAccount & wengoAccount);
 
 	void init();
 
@@ -65,10 +62,6 @@ public:
 	const std::string & getWengoPassword() const {
 		return _wengoPassword;
 	}
-
-	std::string serialize();
-
-	bool unserialize(const std::string & data);
 
 	SipAccountType getType() const {
 		return SipAccountTypeWengo;
@@ -97,6 +90,7 @@ private:
 	void initLastTimeoutEventHandler();
 
 	void connectionIsUpEventHandler(NetworkObserver & sender);
+
 	void connectionIsDownEventHandler(NetworkObserver & sender);
 
 	std::string _wengoLogin;
@@ -121,9 +115,6 @@ private:
 
 	/** True if network discovery is running. */
 	bool _discoveringNetwork;
-
-	/** Used to remember the last NetworkDiscoveryState. */
-	SipAccount::NetworkDiscoveryState _lastNetworkDiscoveryState;
 };
 
 #endif	//OWWENGOACCOUNT_H

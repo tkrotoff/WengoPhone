@@ -40,6 +40,11 @@ QtIdle::QtIdle(UserProfile & userProfile, QObject * parent)
 	configChangedEventHandler(config, Config::GENERAL_AWAY_TIMER_KEY);
 }
 
+QtIdle::~QtIdle() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.valueChangedEvent -= boost::bind(&QtIdle::configChangedEventHandler, this, _1, _2);
+}
+
 void QtIdle::idleStatusChangedEventHandler(Idle & sender, Idle::Status status) {
 	static EnumPresenceState::PresenceState presenceStateSaved;
 

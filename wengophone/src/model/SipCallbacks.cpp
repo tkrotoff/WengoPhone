@@ -41,6 +41,15 @@ SipCallbacks::SipCallbacks(SipWrapper & sipWrapper, UserProfile & userProfile)
 		boost::bind(&SipCallbacks::videoFrameReceivedEventHandler, this, _1, _2, _3, _4);
 }
 
+SipCallbacks::~SipCallbacks() {
+	_sipWrapper.phoneCallStateChangedEvent -=
+		boost::bind(&SipCallbacks::phoneCallStateChangedEventHandler, this, _1, _2, _3, _4);
+	_sipWrapper.phoneLineStateChangedEvent -=
+		boost::bind(&SipCallbacks::phoneLineStateChangedEventHandler, this, _1, _2, _3);
+	_sipWrapper.videoFrameReceivedEvent -=
+		boost::bind(&SipCallbacks::videoFrameReceivedEventHandler, this, _1, _2, _3, _4);
+}
+
 void SipCallbacks::phoneCallStateChangedEventHandler(SipWrapper & sender, int callId,
 	EnumPhoneCallState::PhoneCallState state, const std::string & from) {
 

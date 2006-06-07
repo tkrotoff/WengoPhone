@@ -53,6 +53,8 @@ bool UserProfileFileStorage::load(const std::string & url) {
 }
 
 bool UserProfileFileStorage::save(const std::string & url) {
+	File::createPath(url);
+
 	if (!saveProfile(url)) {
 		return false;
 	}

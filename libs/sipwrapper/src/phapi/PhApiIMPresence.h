@@ -55,6 +55,8 @@ private:
 
 	PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrapper);
 
+	~PhApiIMPresence();
+
 	void presenceStateChangedEventHandler(PhApiWrapper & sender, EnumPresenceState::PresenceState state, const std::string & note, const std::string & from);
 
 	void myPresenceStatusEventHandler(PhApiWrapper & sender, EnumPresenceState::MyPresenceStatus status, const std::string & note);

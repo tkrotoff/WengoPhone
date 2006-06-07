@@ -31,16 +31,23 @@
 
 using namespace std;
 
-PresenceHandler::PresenceHandler(UserProfile & userProfile) {
-	userProfile.newIMAccountAddedEvent +=
+PresenceHandler::PresenceHandler(UserProfile & userProfile)
+: _userProfile(userProfile) {
+	_userProfile.newIMAccountAddedEvent +=
 		boost::bind(&PresenceHandler::newIMAccountAddedEventHandler, this, _1, _2);
-	userProfile.getConnectHandler().connectedEvent +=
+	_userProfile.getConnectHandler().connectedEvent +=
 		boost::bind(&PresenceHandler::connectedEventHandler, this, _1, _2);
-	userProfile.getConnectHandler().disconnectedEvent +=
+	_userProfile.getConnectHandler().disconnectedEvent +=
 		boost::bind(&PresenceHandler::disconnectedEventHandler, this, _1, _2);
 }
 
 PresenceHandler::~PresenceHandler() {
+	_userProfile.newIMAccountAddedEvent -=
+		boost::bind(&PresenceHandler::newIMAccountAddedEventHandler, this, _1, _2);
+	_userProfile.getConnectHandler().connectedEvent -=
+		boost::bind(&PresenceHandler::connectedEventHandler, this, _1, _2);
+	_userProfile.getConnectHandler().disconnectedEvent -=
+		boost::bind(&PresenceHandler::disconnectedEventHandler, this, _1, _2);
 }
 
 void PresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {

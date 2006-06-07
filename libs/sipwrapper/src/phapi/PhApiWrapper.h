@@ -33,6 +33,7 @@
 
 #include <util/Event.h>
 #include <thread/Mutex.h>
+#include <thread/Timer.h>
 
 #include <phapi.h>
 
@@ -339,6 +340,8 @@ private:
 	std::string _pluginPath;
 
 	Mutex _mutex;
+
+	Timer _publishTimer;
 };
 
 #endif	//PHAPIWRAPPER_H

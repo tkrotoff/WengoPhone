@@ -37,6 +37,8 @@ public:
 
 	QtPhoneLine(CPhoneLine & cPhoneLine);
 
+	virtual ~QtPhoneLine();
+
 	void updatePresentation();
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);

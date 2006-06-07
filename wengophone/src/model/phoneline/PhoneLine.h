@@ -30,13 +30,14 @@ class PhoneLineState;
 class PhoneCall;
 class WengoPhone;
 class SipAddress;
+class SipCallbacks;
 class SipWrapper;
 class SipPresenceState;
 
 class PhoneLine : public IPhoneLine {
 public:
 
-	PhoneLine(SipAccount & sipAccount, WengoPhone & wengoPhone);
+	PhoneLine(SipAccount & sipAccount, UserProfile & userProfile);
 
 	~PhoneLine();
 
@@ -88,8 +89,8 @@ public:
 		return *_state;
 	}
 
-	WengoPhone & getWengoPhone() const {
-		return _wengoPhone;
+	UserProfile & getUserProfile() const {
+		return _userProfile;
 	}
 
 	PhoneCall * getPhoneCall(int callId) /*const*/;
@@ -144,6 +145,8 @@ private:
 	/** SIP implementation. */
 	SipWrapper * _sipWrapper;
 
+	SipCallbacks * _sipCallbacks;
+
 	typedef std::map < int, PhoneCall * > PhoneCalls;
 
 	/** Map of PhoneCall. */
@@ -170,7 +173,7 @@ private:
 	/** List of PhoneCall. */
 	PhoneCallList _phoneCallList;
 
-	WengoPhone & _wengoPhone;
+	UserProfile & _userProfile;
 };
 
 #endif	//OWPHONELINE_H

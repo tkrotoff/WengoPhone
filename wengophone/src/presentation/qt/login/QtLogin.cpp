@@ -21,9 +21,11 @@
 
 #include "ui_LoginWindow.h"
 
-#include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/webservices/subscribe/QtSubscribe.h>
 
+#include <control/profile/CUserProfileHandler.h>
+
+#include <model/account/wengo/WengoAccount.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
@@ -34,8 +36,8 @@
 
 #include <QtGui>
 
-QtLogin::QtLogin(QWidget * parent, QtWengoPhone & qtWengoPhone)
-	: _qtWengoPhone(qtWengoPhone) {
+QtLogin::QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler)
+	: _cUserProfileHandler(cUserProfileHandler) {
 
 	_loginWindow = new QDialog(parent);
 
@@ -47,6 +49,18 @@ QtLogin::QtLogin(QWidget * parent, QtWengoPhone & qtWengoPhone)
 	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
 		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);
 	_ui->linkWengoAccountLabel->installEventFilter(mouseFilter);
+
+	connect(_ui->loginComboBox, SIGNAL(currentIndexChanged(const QString &)),
+		SLOT(currentIndexChanged(const QString &)));
+	connect(_ui->loginButton, SIGNAL(clicked()), SLOT(loginClicked()));
+	connect(_ui->cancelButton, SIGNAL(clicked()), SLOT(cancelClicked()));
+
+	_infoPalette = _ui->loginLabel->palette();
+
+	_errorPalette = _infoPalette;
+	_errorPalette.setColor(QPalette::WindowText, QColor(Qt::red));
+
+	init();
 }
 
 std::string QtLogin::getLogin() const {
@@ -62,8 +76,21 @@ bool QtLogin::hasAutoLogin() const {
 }
 
 int QtLogin::show() {
+	init();
+
+	setInfoMessage(tr("Please enter your email address<br/>and your password"));
+
 	return _loginWindow->exec();
 }
+
+int QtLogin::showWithInvalidWengoAccount(WengoAccount wengoAccount) {
+	init();
+
+	setErrorMessage(tr("Wrong email/password entered"));
+
+	return _loginWindow->exec();
+}
+
 
 void QtLogin::createAccountLabelClicked() {
 	/*if (_qtWengoPhone.getSubscribe()) {
@@ -91,6 +118,67 @@ void QtLogin::setAutoLogin(bool autoLogin) {
 	_ui->autoLoginCheckBox->setChecked(autoLogin);
 }
 
+void QtLogin::init() {
+	_ui->loginComboBox->clear();
+	
+	std::vector<std::string> profileNames = _cUserProfileHandler.getUserProfileNames();
+
+	for (std::vector<std::string>::const_iterator it = profileNames.begin();
+		it != profileNames.end();
+		++it) {
+		_ui->loginComboBox->addItem(QString::fromStdString(*it));
+	}
+
+	if (profileNames.size() > 0) {
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		_ui->loginComboBox->setCurrentIndex(_ui->loginComboBox->findText(QString::fromStdString(config.getProfileLastUsedName())));
+	}
+}
+
+void QtLogin::currentIndexChanged(const QString & profileName) {
+	WengoAccount wengoAccount = _cUserProfileHandler.getWengoAccountOfUserProfile(profileName.toStdString());
+	setPassword(QString::fromStdString(wengoAccount.getWengoPassword()));
+	setAutoLogin(wengoAccount.hasAutoLogin());
+}
+
 void QtLogin::slotUpdatedTranslation() {
   _ui->retranslateUi(_loginWindow);
+}
+
+void QtLogin::loginClicked() {
+	std::string login = _ui->loginComboBox->currentText().toStdString();
+	
+	//FIXME: if login is empty we should create a default profile
+	if (!login.empty()) {
+		// Looking for the selected profile
+		if (!_cUserProfileHandler.userProfileExists(login)) {
+			// The selected profile does not exist. Creating a new one.
+			WengoAccount wengoAccount(login, _ui->passwordLineEdit->text().toStdString(), _ui->autoLoginCheckBox->isChecked());
+			_cUserProfileHandler.createAndSetUserProfile(wengoAccount);
+		} else {
+			_cUserProfileHandler.setCurrentUserProfile(login);
+		}
+
+		_loginWindow->accept();
+	}
+}
+
+void QtLogin::cancelClicked() {
+	_loginWindow->reject();
+}
+
+void QtLogin::setInfoMessage(const QString & message) {
+	//_ui->loginLabel->setPalette(_infoPalette);
+	setLoginLabel(message);
+}
+
+void QtLogin::setErrorMessage(const QString & message) {
+	//_ui->loginLabel->setPalette(_errorPalette);
+	setLoginLabel(QString("<font color=\"red\">%1</font>").arg(message));
+}
+
+void QtLogin::setLoginLabel(const QString & message) {
+	QString loginLabel = QString("<font size=\"18\">Login</font><br/>%1").arg(message);
+
+	_ui->loginLabel->setText(loginLabel);
 }

@@ -31,6 +31,8 @@ CWsDirectory::CWsDirectory(CWengoPhone & cWengoPhone, WsDirectory & wsDirectory)
 }
 
 CWsDirectory::~CWsDirectory() {
+	//_wsDirectory.contactFoundEvent -= contactFoundEvent;
+	delete _pWsDirectory;
 }
 
 void CWsDirectory::searchEntry(const std::string & query, WsDirectory::Criteria criteria) {

@@ -35,7 +35,10 @@ CChatHandler::CChatHandler(ChatHandler & chatHandler, CWengoPhone & cWengoPhone,
 }
 
 CChatHandler::~CChatHandler() {
+	_chatHandler.newIMChatSessionCreatedEvent -=
+		boost::bind(&CChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 
+	delete _pChatHandler;
 }
 
 void CChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession) {

@@ -42,6 +42,14 @@ CPhoneLine::CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone)
 	_phoneLine.phoneCallClosedEvent += boost::bind(&CPhoneLine::phoneCallClosedEventHandler, this, _1, _2);
 }
 
+CPhoneLine::~CPhoneLine() {
+	_phoneLine.stateChangedEvent -= boost::bind(&CPhoneLine::stateChangedEventHandler, this, _1, _2);
+	_phoneLine.phoneCallCreatedEvent -= boost::bind(&CPhoneLine::phoneCallCreatedEventHandler, this, _1, _2);
+	_phoneLine.phoneCallClosedEvent -= boost::bind(&CPhoneLine::phoneCallClosedEventHandler, this, _1, _2);
+
+	delete _pPhoneLine;
+}
+
 int CPhoneLine::makeCall(const std::string & phoneNumber) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	return _phoneLine.makeCall(phoneNumber, config.getVideoEnable());

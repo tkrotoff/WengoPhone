@@ -20,14 +20,18 @@
 #ifndef QTLOGIN_H
 #define QTLOGIN_H
 
+#include <model/account/wengo/WengoAccount.h>
+
 #include <QObject>
+#include <QPalette>
 
 #include <string>
 
-class QtWengoPhone;
+class CUserProfileHandler;
 class QWidget;
 class QDialog;
 class QLabel;
+
 namespace Ui { class LoginWindow; }
 
 /**
@@ -40,7 +44,7 @@ class QtLogin : public QObject {
 	Q_OBJECT
 public:
 
-	QtLogin(QWidget * parent, QtWengoPhone & qtWengoPhone);
+	QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler);
 
 	QDialog * getWidget() const {
 		return _loginWindow;
@@ -60,19 +64,61 @@ public:
 
 public Q_SLOTS:
 
+	/**
+	 * Will display the login window normally.
+	 */
 	int show();
 
-	void createAccountLabelClicked();
+	/**
+	 * Will display the login dialog and the given WengoAccount which is invalid
+	 * (the password or the login is/are wrong).
+	 * Thus a message on the login will say that the login/password is invalid.
+	 */
+	int showWithInvalidWengoAccount(WengoAccount wengoAccount);
 
 	void slotUpdatedTranslation();
 
+private Q_SLOTS:
+
+	void createAccountLabelClicked();
+
+	void currentIndexChanged(const QString & profileName);
+
+	void loginClicked();
+
+	void cancelClicked();
+
 private:
+
+	/**
+	 * Sets the text of infoLabel to 'message' and colorize it to normal color.
+	 */
+	void setInfoMessage(const QString & message);
+
+	/**
+	 * Sets the text of infoLabel to 'message' and colorize it to red.
+	 */
+	void setErrorMessage(const QString & message);
+
+	/**
+	 * Sets the login label.
+	 */
+	void setLoginLabel(const QString & message);
+
+	/**
+	 * Initializes the widgets.
+	 */
+	void init();
 
 	Ui::LoginWindow * _ui;
 
 	QDialog * _loginWindow;
 
-	QtWengoPhone & _qtWengoPhone;
+	QPalette _infoPalette;
+
+	QPalette _errorPalette;
+
+	CUserProfileHandler & _cUserProfileHandler;
 };
 
 #endif	//QTLOGIN_H
