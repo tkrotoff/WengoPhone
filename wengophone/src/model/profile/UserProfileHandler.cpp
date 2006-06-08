@@ -191,9 +191,6 @@ void UserProfileHandler::currentUserProfileReleased() {
 void UserProfileHandler::init() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string profileName = config.getProfileLastUsedName();
-	if (profileName.empty()) {
-		profileName = "Default";
-	}
 
 	setCurrentUserProfile(profileName);
 }
