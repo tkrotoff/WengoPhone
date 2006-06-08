@@ -2157,7 +2157,7 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation>Normale</translation>
     </message>
     <message>
         <source>Good</source>
