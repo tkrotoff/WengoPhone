@@ -63,7 +63,7 @@
        </property>
        <property name="sizeHint" >
         <size>
-         <width>20</width>
+         <width>49</width>
          <height>40</height>
         </size>
        </property>
@@ -87,7 +87,7 @@
       <number>0</number>
      </property>
      <property name="spacing" >
-      <number>6</number>
+      <number>0</number>
      </property>
      <item row="2" column="0" >
       <widget class="QLabel" name="sipLabel" >
@@ -645,7 +645,7 @@
         <number>0</number>
        </property>
        <property name="spacing" >
-        <number>6</number>
+        <number>0</number>
        </property>
        <item row="0" column="1" >
         <widget class="QLabel" name="nameLabel" >
@@ -1497,7 +1497,7 @@
       </widget>
      </item>
      <item row="3" column="0" >
-      <widget class="QLabel" name="localityLabel" >
+      <widget class="QLabel" name="cityLabel" >
        <property name="palette" >
         <palette>
          <active>
@@ -1776,7 +1776,7 @@
    <item row="0" column="0" >
     <layout class="QGridLayout" >
      <property name="margin" >
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="spacing" >
       <number>6</number>

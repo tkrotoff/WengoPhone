@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CWSDIRECTORY_H
-#define CWSDIRECTORY_H
+#ifndef OWCWSDIRECTORY_H
+#define OWCWSDIRECTORY_H
 
 #include <model/webservices/directory/WsDirectory.h>
 
@@ -43,7 +43,7 @@ public:
 	 */
 	Event< void(WsDirectory & sender, ContactProfile * profile, bool online) > contactFoundEvent;
 
-	void searchEntry(const std::string & query, WsDirectory::Criteria criteria = WsDirectory::none);
+	void searchEntry(const std::string & query, WsDirectory::Criteria criteria = WsDirectory::None);
 
 	CWengoPhone & getCWengoPhone() const {
 		return _cWengoPhone;
@@ -58,4 +58,4 @@ private:
 	PWsDirectory * _pWsDirectory;
 };
 
-#endif	//CWSDIRECTORY_H
+#endif	//OWCWSDIRECTORY_H

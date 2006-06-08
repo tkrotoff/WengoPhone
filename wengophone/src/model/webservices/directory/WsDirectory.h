@@ -35,14 +35,17 @@ class ContactProfile;
 class WsDirectory : public WengoWebService {
 public:
 
+	/**
+	 * Search criterias.
+	 */
 	enum Criteria {
-		lname,
-		fname,
-		city,
-		country,
-		alias,
-		wengoid,
-		none,
+		LastName,
+		FirstName,
+		City,
+		Country,
+		Alias,
+		WengoId,
+		None,
 	};
 
 	/**
@@ -62,7 +65,7 @@ public:
 
 	virtual ~WsDirectory() {}
 
-	void searchEntry(const std::string & query, Criteria criteria = none);
+	void searchEntry(const std::string & query, Criteria criteria = None);
 
 private:
 

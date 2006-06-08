@@ -20,6 +20,7 @@
 #include "WsDirectory.h"
 
 #include <model/contactlist/ContactProfile.h>
+#include <model/profile/ProfileXMLSerializer.h>
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -30,8 +31,8 @@
 
 #include <cstdio>
 
-WsDirectory::WsDirectory(WengoAccount * wengoAccount) :
-	WengoWebService(wengoAccount) {
+WsDirectory::WsDirectory(WengoAccount * wengoAccount)
+	: WengoWebService(wengoAccount) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
@@ -43,46 +44,45 @@ WsDirectory::WsDirectory(WengoAccount * wengoAccount) :
 	setWengoAuthentication(false);
 }
 
-void WsDirectory::searchEntry(const std::string & q, Criteria criteria) {
+void WsDirectory::searchEntry(const std::string & query, Criteria criteria) {
 
-	std::string query = "q=" + q;
+	std::string q = "q=" + query;
 
 	switch (criteria) {
-	case lname:
-		query += "&a=lname";
+	case LastName:
+		q += "&a=lname";
 		break;
-	case fname:
-		query += "&a=fname";
+	case FirstName:
+		q += "&a=fname";
 		break;
-	case city:
-		query += "&a=city";
+	case City:
+		q += "&a=city";
 		break;
-	case country:
-		query += "&a=country";
+	case Country:
+		q += "&a=country";
 		break;
-	case alias:
-		query += "&a=alias";
+	case Alias:
+		q += "&a=alias";
 		break;
-	case wengoid:
-		query += "&a=wengoid";
+	case WengoId:
+		q += "&a=wengoid";
 		break;
-	case none:
+	case None:
 		break;
 	default:
-		LOG_FATAL("Unknown Criteria");
+		LOG_FATAL("unknown criteria=" + String::fromNumber(criteria));
 	}
 
-	setParameters(query);
+	setParameters(q);
 	call(this);
 }
 
 void WsDirectory::answerReceived(const std::string & answer, int requestId) {
-
-	int wgcardCount = 0;
+	int wgCardCount = 0;
 	TiXmlDocument doc;
 	doc.Parse(answer.c_str());
 
-	TiXmlHandle docHandle(& doc);
+	TiXmlHandle docHandle(&doc);
 	TiXmlElement * root = docHandle.FirstChild("root").Element();
 
 	if (!root) {
@@ -90,127 +90,31 @@ void WsDirectory::answerReceived(const std::string & answer, int requestId) {
 		return;
 	}
 
-	TiXmlElement * wgcard = root->FirstChildElement("wgcard");
-	while (wgcard) {
+	//Retrieving Contacts
+	TiXmlNode * wgCard = NULL;
+	while ((wgCard = root->IterateChildren("wgcard", wgCard))) {
+
+		//Create a Contact with extracted info
+		ContactProfile * contact = new ContactProfile();
+
+		ProfileXMLSerializer serializer(*contact);
+		serializer.unserializeContent(TiXmlHandle(wgCard));
+		wgCardCount++;
 
 		bool online = false;
-		std::string wengoid = "";
-		std::string sip = "";
-		std::string fname = "";
-		std::string lname = "";
-		std::string city = "";
-		std::string country = "";
-		std::string wengoNumber = "";
-
-		//TODO: extract the wgcard version
-
-		//extract "wengoid"
-		TiXmlElement * elt = wgcard->FirstChildElement("wengoid");
-		if (elt && (elt->FirstChild())) {
-			wengoid = std::string(elt->FirstChild()->ToText()->Value());
-		}
-
-		//extract "status"
-		elt = wgcard->FirstChildElement("status");
+		//Extract "status"
+		TiXmlElement * elt = wgCard->FirstChildElement("status");
 		if (elt && (elt->FirstChild())) {
 			if (std::string(elt->FirstChild()->ToText()->Value()) == "online") {
 				online = true;
 			}
 		}
 
-		//extract "sip"
-		elt = wgcard->FirstChildElement("sip");
-		if (elt && (elt->FirstChild())) {
-			sip = std::string(elt->FirstChild()->ToText()->Value());
-		}
-
-		//extract "name" info
-		elt = wgcard->FirstChildElement("name");
-		if (elt) {
-
-			TiXmlElement * eltName = elt->FirstChildElement("last");
-			if (eltName && (eltName->FirstChild())) {
-				lname = std::string(eltName->FirstChild()->ToText()->Value());
-			}
-
-			eltName = elt->FirstChildElement("first");
-			if (eltName && (eltName->FirstChild())) {
-				fname = std::string(eltName->FirstChild()->ToText()->Value());
-			}
-		}
-
-		//extract all "address" info
-		elt = wgcard->FirstChildElement("address");
-		while (elt) {
-			const char * type = elt->Attribute("type");
-			if (type) {
-				if (std::string(type) == "home") {
-
-					TiXmlElement * addElt = elt->FirstChildElement("country");
-					if (addElt && (addElt->FirstChild())) {
-						country = std::string(addElt->FirstChild()->ToText()->Value());
-					}
-
-					addElt = elt->FirstChildElement("locality");
-					if (addElt && (addElt->FirstChild())) {
-						city = std::string(addElt->FirstChild()->ToText()->Value());
-					}
-				} else if (std::string(type) == "work") {
-				}
-			}
-			elt = elt->NextSiblingElement("address");
-		}
-
-		//extract phone numbers
-		elt = wgcard->FirstChildElement("tel");
-		while (elt) {
-
-			const char * prefered = elt->Attribute("prefered");
-			if (prefered && (std::string(prefered) == "prefered")) {
-
-			}
-
-			const char * type = elt->Attribute("type");
-			if (type) {
-
-				if (std::string(type) == "home") {
-					if (elt && (elt->FirstChild())) {
-					}
-				} else if  (std::string(type) == "work") {
-					if (elt && (elt->FirstChild())) {
-					}
-				} else if  (std::string(type) == "cell") {
-					if (elt && (elt->FirstChild())) {
-					}
-				} else if  (std::string(type) == "wengo") {
-					if (elt && (elt->FirstChild())) {
-						wengoNumber = std::string(elt->FirstChild()->ToText()->Value());
-					}
-				}
-			}
-
-			elt = elt->NextSiblingElement("tel");
-		}
-
-		//create a Contact with extracted info
-		ContactProfile * contact = new ContactProfile();
-		StreetAddress address;
-		address.setCity(city);
-		address.setCountry(country);
-		contact->setStreetAddress(address);
-		contact->setWengoPhoneNumber(wengoNumber);
-		contact->setFirstName(fname);
-		contact->setLastName(lname);
-		contact->setWengoPhoneId(wengoid);
-
-		//emit the contactFoundEvent event
+		//Emit the contactFoundEvent event
 		contactFoundEvent(*this, contact, online);
-
-		wgcardCount++;
-		wgcard = wgcard->NextSiblingElement("wgcard");
 	}
 
-	if (wgcardCount == 0) {
+	if (wgCardCount == 0) {
 		contactFoundEvent(*this, NULL, false);
 	}
 }

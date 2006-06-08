@@ -27,8 +27,9 @@
 
 using namespace std;
 
-ContactListXMLSerializer::ContactListXMLSerializer(ContactList & contactList, IMAccountHandler & imAccountHandler) 
-: _contactList(contactList), _imAccountHandler(imAccountHandler) {
+ContactListXMLSerializer::ContactListXMLSerializer(ContactList & contactList, IMAccountHandler & imAccountHandler)
+	: _contactList(contactList),
+	_imAccountHandler(imAccountHandler) {
 }
 
 string ContactListXMLSerializer::serialize() {
@@ -39,7 +40,7 @@ string ContactListXMLSerializer::serialize() {
 	for (ContactList::Contacts::const_iterator it = _contactList._contacts.begin();
 		it != _contactList._contacts.end();
 		++it) {
-		ContactXMLSerializer serializer((Contact &)(*it), _contactList, 
+		ContactXMLSerializer serializer((Contact &)(*it), _contactList,
 			_imAccountHandler);
 		result += serializer.serialize();
 	}
@@ -63,7 +64,7 @@ bool ContactListXMLSerializer::unserialize(const std::string & data) {
 		while ((lastChild = contactlist->IterateChildren("wgcard", lastChild))) {
 			string nodeData;
 			nodeData << *lastChild;
-			ContactXMLSerializer serializer(_contactList.createContact(), 
+			ContactXMLSerializer serializer(_contactList.createContact(),
 				_contactList, _imAccountHandler);
 			serializer.unserialize(nodeData);
 		}

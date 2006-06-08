@@ -27,7 +27,7 @@
 using namespace std;
 
 TimeXMLSerializer::TimeXMLSerializer(Time & time)
-: _time(time) {
+	: _time(time) {
 }
 
 string TimeXMLSerializer::serialize() {

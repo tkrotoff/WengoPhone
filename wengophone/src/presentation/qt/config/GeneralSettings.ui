@@ -33,9 +33,6 @@
       </property>
       <item row="1" column="0" >
        <widget class="QGroupBox" name="groupBox_3" >
-        <property name="enabled" >
-         <bool>false</bool>
-        </property>
         <property name="title" >
          <string>When I double-click on a contact </string>
         </property>

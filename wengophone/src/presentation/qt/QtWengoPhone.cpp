@@ -227,7 +227,7 @@ void QtWengoPhone::initThreadSafe() {
 	//Systray
 	_trayMenu = new QMenu(_wengoPhoneWindow);
 	connect(_trayMenu, SIGNAL(aboutToShow()), this, SLOT(setTrayMenu()));
-	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("Wengophone"), _trayMenu, _wengoPhoneWindow);
+	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("WengoPhone"), _trayMenu, _wengoPhoneWindow);
 	_trayIcon->show();
 	setTrayMenu();
 
@@ -360,7 +360,7 @@ void QtWengoPhone::initThreadSafe() {
 		_browser = new QtBrowser(NULL);
 		_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
 		_ui->tabWidget->insertTab(_ui->tabWidget->count(), (QWidget*) _browser->getWidget(), tr("Home"));
-		_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/loading.htm");
+		_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/loading.html");
 		_ui->tabWidget->setCurrentWidget((QWidget*) _browser->getWidget());
 	}
 #endif
@@ -481,21 +481,21 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall) {
 	if (_cWengoPhone.getCUserProfile()) {
 		QtContactCallListWidget * qtContactCallListWidget;
-		
+
 		int nbtab = _ui->tabWidget->count();
-		
+
 		for ( int i = 0; i < nbtab; i++){
 			if ( _ui->tabWidget->tabText(i) == QString(tr("Conference"))){
 				return;
 			}
-			
+
 			for (int i = 0; i < _ui->tabWidget->count(); i++){
 				QtContactCallListWidget * qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
 				if ( qtContactCallListWidget ){
 					if ( qtContactCallListWidget->hasPhoneCall( targetCall) ){
 						_ui->tabWidget->setTabText(i,tr("Conference"));
 						IPhoneLine * phoneLine = _cWengoPhone.getCUserProfile()->getUserProfile().getActivePhoneLine();
-						
+
 						if (phoneLine != NULL) {
 							ConferenceCall * confCall = new ConferenceCall(*phoneLine);
 							confCall->addPhoneCall(*targetCall);
@@ -603,7 +603,7 @@ void QtWengoPhone::setContactList(QtContactList * qtContactList) {
 	if (!_contactListTabLayout) {
 		_contactListTabLayout = Widget::createLayout(_ui->tabContactList);
 	}
-	
+
 	_contactList = qtContactList;
 	_contactListTabLayout->addWidget(_contactList->getWidget());
 
@@ -1266,11 +1266,11 @@ void QtWengoPhone::updateCallMenu() {
 		_sendSmsMenu->clear();
 		_sendSmsMenu->setTitle(tr("Send a SMS"));
 	}
-	
+
 	QAction *sendSmsBlankAction =_sendSmsMenu->addAction(tr("Send SMS"));
 	sendSmsBlankAction->setData("");
 	_trayMenu->addMenu(_sendSmsMenu);
-	
+
 	if (!_startChatMenu) {
 		_startChatMenu = new QMenu(tr("Start a chat"));
 		connect(_startChatMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotSystrayMenuStartChat(QAction*)));
@@ -1280,7 +1280,7 @@ void QtWengoPhone::updateCallMenu() {
 		_startChatMenu->setTitle(tr("Start a chat"));
 	}
 	_trayMenu->addMenu(_startChatMenu);
-	
+
 	if (!_callWengoMenu) {
 		_callWengoMenu = createCallWengoTrayMenu();
 		connect(_callWengoMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotSystrayMenuCallWengo(QAction*)));
@@ -1292,7 +1292,7 @@ void QtWengoPhone::updateCallMenu() {
 	connect(placeCallBlankAction, SIGNAL(triggered(bool)), this, SLOT(slotSystrayMenuCallBlank(bool)));
 	placeCallBlankAction->setData("");
 	_callMenu->addMenu(_callWengoMenu);
-	
+
 	if (!_callMobileMenu) {
 		_callMobileMenu = createCallMobileTrayMenu();
 		connect(_callMobileMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotSystrayMenuCallMobile(QAction*)));
@@ -1301,8 +1301,8 @@ void QtWengoPhone::updateCallMenu() {
 		_callMobileMenu->setTitle(tr("Call Mobile"));
 	}
 	_callMenu->addMenu(_callMobileMenu);
-	
-	
+
+
 	if (!_callLandLineMenu) {
 		_callLandLineMenu = createCallLandLineTrayMenu();
 		connect(_callLandLineMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotSystrayMenuCallLandLine(QAction*)));
@@ -1311,23 +1311,23 @@ void QtWengoPhone::updateCallMenu() {
 		_callLandLineMenu->setTitle(tr("Call land line"));
 	}
 	_callMenu->addMenu(_callLandLineMenu);
-	
+
 	CUserProfile *currentCUserProfile = _cWengoPhone.getCUserProfile();
 	if (currentCUserProfile) {
 		CContactList &currentCContactList = currentCUserProfile->getCContactList();
 		std::vector<std::string> currentContactsIds = currentCContactList.getContactIds();
-		
+
 		for (std::vector<std::string>::const_iterator it = currentContactsIds.begin();
 			 it != currentContactsIds.end(); ++it)
 		{
 			ContactProfile tmpContactProfile = currentCContactList.getContactProfile(*it);
-			
+
 			if (tmpContactProfile.hasFreeCall()) {
 				LOG_DEBUG("Adding :" + tmpContactProfile.getFreePhoneNumber());
 				QAction * tmpAction =_callWengoMenu->addAction(QString::fromStdString(tmpContactProfile.getFreePhoneNumber()));
 				tmpAction->setData(QVariant(QString::fromStdString(tmpContactProfile.getFreePhoneNumber())));
 			}
-			
+
 			if (!tmpContactProfile.getMobilePhone().empty()) {
 				/* Call mobile action */
 				QAction * tmpAction =_callMobileMenu->addAction(QString::fromStdString(tmpContactProfile.getDisplayName() +
@@ -1340,19 +1340,19 @@ void QtWengoPhone::updateCallMenu() {
 																		  tmpContactProfile.getMobilePhone()));
 				tmpAction->setData(QVariant(QString::fromStdString(tmpContactProfile.getMobilePhone())));
 			}
-			
+
 			if (!tmpContactProfile.getHomePhone().empty()) {
 				QAction * tmpAction =_callLandLineMenu->addAction(QString::fromStdString(tmpContactProfile.getDisplayName() +
 																						 ": " +
 																						 tmpContactProfile.getHomePhone()));
 				tmpAction->setData(QVariant(QString::fromStdString(tmpContactProfile.getHomePhone())));
 			}
-			
+
 			if (tmpContactProfile.getPreferredIMContact() != NULL &&
 				tmpContactProfile.getPresenceState() != EnumPresenceState::PresenceStateOffline) {
 				QAction * tmpAction = _startChatMenu->addAction(QString::fromStdString(tmpContactProfile.getDisplayName()));
 				tmpAction->setData(QVariant(QString::fromStdString(*it)));
-				
+
 				switch (tmpContactProfile.getPresenceState()) {
 					case EnumPresenceState::PresenceStateOnline:
 						tmpAction->setIcon(QIcon(":/pics/status/online.png"));

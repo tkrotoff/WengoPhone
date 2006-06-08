@@ -32,8 +32,8 @@
 
 using namespace std;
 
-ProfileXMLSerializer::ProfileXMLSerializer(Profile & profile) 
-: _profile(profile) {
+ProfileXMLSerializer::ProfileXMLSerializer(Profile & profile)
+	: _profile(profile) {
 }
 
 string ProfileXMLSerializer::serialize() {
@@ -120,11 +120,11 @@ string ProfileXMLSerializer::serialize() {
 	}
 
 	if (!_profile._workEmail.empty()) {
-		result += ("<email type=\"work\">" + _profile._workEmail + "</email>\n");	
+		result += ("<email type=\"work\">" + _profile._workEmail + "</email>\n");
 	}
 
 	if (!_profile._otherEmail.empty()) {
-		result += ("<email type=\"other\">" + _profile._otherEmail + "</email>\n");	
+		result += ("<email type=\"other\">" + _profile._otherEmail + "</email>\n");
 	}
 	////
 
@@ -144,37 +144,34 @@ bool ProfileXMLSerializer::unserialize(const std::string & data) {
 
 bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 	// Retrieving Wengo ID
-	TiXmlNode * wengoid = rootElt.FirstChild("wengoid").Node();
-	if (wengoid) {
-		_profile.setWengoPhoneId(wengoid->FirstChild()->Value());
+	TiXmlNode * wengoPhoneId = rootElt.FirstChild("wengoid").FirstChild().Node();
+	if (wengoPhoneId) {
+		_profile._wengoPhoneId = wengoPhoneId->Value();
 	}
 	////
 
 	// Retrieving names
-	TiXmlNode * name = rootElt.FirstChild("name").Node();
-	if (name) {
-		TiXmlNode * firstName = name->FirstChild("first");
-		if (firstName) {
-			_profile.setFirstName(firstName->FirstChild()->Value());
-		}
-		TiXmlNode * lastName = name->FirstChild("last");
-		if (lastName) {
-			_profile.setLastName(lastName->FirstChild()->Value());
-		}
+	TiXmlNode * firstName = rootElt.FirstChild("name").FirstChild("first").FirstChild().Node();
+	if (firstName) {
+		_profile._firstName = firstName->Value();
+	}
+	TiXmlNode * lastName = rootElt.FirstChild("name").FirstChild("last").FirstChild().Node();
+	if (lastName) {
+		_profile._lastName = lastName->Value();
 	}
 	////
 
 	// Retrieving alias
-	TiXmlNode * alias = rootElt.FirstChild("alias").Node();
+	TiXmlNode * alias = rootElt.FirstChild("alias").FirstChild().Node();
 	if (alias) {
-		_profile._alias = alias->FirstChild()->Value();
+		_profile._alias = alias->Value();
 	}
 	////
 
 	// Retrieving sex
-	TiXmlNode * sex = rootElt.FirstChild("sex").Node();
+	TiXmlNode * sex = rootElt.FirstChild("sex").FirstChild().Node();
 	if (sex) {
-		_profile.setSex(EnumSex::toSex(sex->FirstChild()->Value()));
+		_profile._sex = EnumSex::toSex(sex->Value());
 	}
 	////
 
@@ -184,22 +181,25 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 		TiXmlElement * urlElt = url->ToElement();
 		string typeAttr = string(urlElt->Attribute("type"));
 		if (typeAttr == "website") {
-			_profile.setWebsite(url->FirstChild()->Value());
+			TiXmlNode * website = url->FirstChild();
+			if (website) {
+				_profile._website = website->Value();
+			}
 		}
 	}
 	////
 
 	// Retrieving birthday
-	TiXmlNode * birthday = rootElt.FirstChild("birthday").Node();
+	TiXmlNode * birthday = rootElt.FirstChild("birthday").FirstChild("date").Node();
 	if (birthday) {
-		TiXmlElement * birthdayElt = birthday->FirstChild("date")->ToElement();
+		TiXmlElement * birthdayElt = birthday->ToElement();
 		string birthdayData;
 		birthdayData << *birthdayElt;
 		Date date;
 		DateXMLSerializer dateSerializer(date);
 		dateSerializer.unserialize(birthdayData);
-		_profile.setBirthdate(date);
-	}	
+		_profile._birthdate = date;
+	}
 	/////
 
 	// Retrieving organization
@@ -208,13 +208,13 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 	// Retrieving address
 	TiXmlNode * address = rootElt.FirstChild("address").Node();
 	if (address) {
-		TiXmlElement* addressElt = address->ToElement();
+		TiXmlElement * addressElt = address->ToElement();
 		string addressData;
 		addressData << *addressElt;
 		StreetAddress streetAddress;
 		StreetAddressXMLSerializer addressSerializer(streetAddress);
 		addressSerializer.unserialize(addressData);
-		_profile.setStreetAddress(streetAddress);
+		_profile._streetAddress = streetAddress;
 	}
 	////
 
@@ -224,13 +224,25 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 		TiXmlElement * telElt = tel->ToElement();
 		string typeAttr = string(telElt->Attribute("type"));
 		if (typeAttr == "home") {
-			_profile.setHomePhone(tel->FirstChild()->Value());
+			TiXmlNode * homePhone = tel->FirstChild();
+			if (homePhone) {
+				_profile._homePhone = homePhone->Value();
+			}
 		} else if (typeAttr == "work") {
-			_profile.setWorkPhone(tel->FirstChild()->Value());
+			TiXmlNode * workPhone = tel->FirstChild();
+			if (workPhone) {
+				_profile._workPhone = workPhone->Value();
+			}
 		} else if (typeAttr == "cell") {
-			_profile.setMobilePhone(tel->FirstChild()->Value());
+			TiXmlNode * mobilePhone = tel->FirstChild();
+			if (mobilePhone) {
+				_profile._mobilePhone = mobilePhone->Value();
+			}
 		} else if (typeAttr == "wengo") {
-			_profile.setWengoPhoneNumber(tel->FirstChild()->Value());
+			TiXmlNode * wengoPhoneNumber = tel->FirstChild();
+			if (wengoPhoneNumber) {
+				_profile._wengoPhoneNumber = wengoPhoneNumber->Value();
+			}
 		}
 	}
 	////
@@ -241,11 +253,20 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 		TiXmlElement * emailElt = email->ToElement();
 		string typeAttr = string(emailElt->Attribute("type"));
 		if (typeAttr == "home") {
-			_profile.setPersonalEmail(email->FirstChild()->Value());
+			TiXmlNode * personalEmail = email->FirstChild();
+			if (personalEmail) {
+				_profile._personalEmail = personalEmail->Value();
+			}
 		} else if (typeAttr == "work") {
-			_profile.setWorkEmail(email->FirstChild()->Value());
+			TiXmlNode * workEmail = email->FirstChild();
+			if (workEmail) {
+				_profile._workEmail = workEmail->Value();
+			}
 		} else if (typeAttr == "other") {
-			_profile.setOtherEmail(email->FirstChild()->Value());
+			TiXmlNode * otherEmail = email->FirstChild();
+			if (otherEmail) {
+				_profile._otherEmail = otherEmail->Value();
+			}
 		}
 	}
 	////
@@ -257,13 +278,15 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 		string filename;
 		const char * filenameAttr = photoElt->Attribute("filename");
 		if (filenameAttr) {
-			filename = string(filenameAttr); 
+			filename = string(filenameAttr);
 		}
 
-		Picture picture = Picture::pictureFromData(Base64::decode(photo->FirstChild()->Value()));
-		picture.setFilename(filename);
-
-		_profile.setIcon(picture);
+		TiXmlNode * photoNode = photo->FirstChild();
+		if (photoNode) {
+			Picture picture = Picture::pictureFromData(Base64::decode(photoNode->Value()));
+			picture.setFilename(filename);
+			_profile._icon = picture;
+		}
 	}
 	////
 

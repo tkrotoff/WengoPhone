@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTWSDIRECTORYCONTACT_H
-#define QTWSDIRECTORYCONTACT_H
+#ifndef OWQTWSDIRECTORYCONTACT_H
+#define OWQTWSDIRECTORYCONTACT_H
 
 #include <QObject>
 
@@ -46,6 +46,14 @@ public:
 		return _wsDirectoryWidget;
 	}
 
+private Q_SLOTS:
+
+	void call();
+
+	void addContact();
+
+private:
+
 	void setNickname(const QString & nickname);
 
 	void setWengoNumber(const QString & number);
@@ -54,19 +62,11 @@ public:
 
 	void setName(const QString & name);
 
-	void setLocality(const QString & locality);
+	void setCity(const QString & city);
 
 	void setCountry(const QString & country);
 
 	void setOnline(bool online);
-
-private Q_SLOTS:
-
-	void call();
-
-	void addContact();
-
-private:
 
 	QtWsDirectory * _qtWsDirectory;
 
@@ -77,4 +77,4 @@ private:
 	QWidget * _wsDirectoryWidget;
 };
 
-#endif	//QTWSDIRECTORYCONTACT_H
+#endif	//OWQTWSDIRECTORYCONTACT_H

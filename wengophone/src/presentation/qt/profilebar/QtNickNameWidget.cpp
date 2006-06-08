@@ -19,7 +19,6 @@
 
 #include "QtNickNameWidget.h"
 
-#include "QtAvatarChooser.h"
 #include "QtIMMenu.h"
 
 #include <model/profile/UserProfile.h>
@@ -32,8 +31,6 @@
 
 #include <util/Logger.h>
 #include <qtutil/ToolTipLineEdit.h>
-
-#include <QFileDialog>
 
 #include <string>
 using namespace std;

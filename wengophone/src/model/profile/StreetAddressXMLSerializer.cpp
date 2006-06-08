@@ -27,34 +27,34 @@ using namespace std;
 
 StreetAddressXMLSerializer::StreetAddressXMLSerializer(StreetAddress & streetAddress)
 : _streetAddress(streetAddress) {
-	
+
 }
 
 std::string StreetAddressXMLSerializer::serialize() {
 	string result;
-	
+
 	result += "<address type=\"home\">\n";
-	
+
 	if (!_streetAddress._street.empty()) {
 		result += ("<street><![CDATA[" + _streetAddress._street + "]]></street>\n");
 	}
-	
+
 	if (!_streetAddress._city.empty()) {
 		result += ("<locality><![CDATA[" + _streetAddress._city + "]]></locality>\n");
 	}
-	
+
 	if (!_streetAddress._stateProvince.empty()) {
 		result += ("<region><![CDATA[" + _streetAddress._stateProvince + "]]></region>\n");
 	}
-	
+
 	if (!_streetAddress._zipCode.empty()) {
 		result += ("<postcode><![CDATA[" + _streetAddress._zipCode + "]]></postcode>\n");
 	}
-	
+
 	if (!_streetAddress._country.empty()) {
 		result += ("<country><![CDATA[" + _streetAddress._country + "]]></country>\n");
 	}
-	
+
 	result += "</address>\n";
 
 	return result;
@@ -63,35 +63,32 @@ std::string StreetAddressXMLSerializer::serialize() {
 bool StreetAddressXMLSerializer::unserialize(const std::string & data) {
 	TiXmlDocument doc;
 	doc.Parse(data.c_str());
-	
+
 	TiXmlHandle docHandle(& doc);
-	TiXmlNode * address = docHandle.FirstChild("address").Node();
 
-	if (address) {
-		TiXmlNode * street = address->FirstChild("street");
-		if (street) {
-			_streetAddress._street = street->FirstChild()->Value();
-		}
+	TiXmlNode * street = docHandle.FirstChild("address").FirstChild("street").FirstChild().Node();
+	if (street) {
+		_streetAddress._street = street->Value();
+	}
 
-		TiXmlNode * locality = address->FirstChild("locality");
-		if (locality) {
-			_streetAddress._city = locality->FirstChild()->Value();
-		}
+	TiXmlNode * locality = docHandle.FirstChild("address").FirstChild("locality").FirstChild().Node();
+	if (locality) {
+		_streetAddress._city = locality->Value();
+	}
 
-		TiXmlNode * region = address->FirstChild("region");
-		if (region) {
-			_streetAddress._stateProvince = region->FirstChild()->Value();
-		}
+	TiXmlNode * region = docHandle.FirstChild("address").FirstChild("region").FirstChild().Node();
+	if (region) {
+		_streetAddress._stateProvince = region->Value();
+	}
 
-		TiXmlNode * postcode = address->FirstChild("postcode");
-		if (postcode) {
-			_streetAddress._zipCode = postcode->FirstChild()->Value();
-		}
+	TiXmlNode * postcode = docHandle.FirstChild("address").FirstChild("postcode").FirstChild().Node();
+	if (postcode) {
+		_streetAddress._zipCode = postcode->Value();
+	}
 
-		TiXmlNode * country = address->FirstChild("country");
-		if (country) {
-			_streetAddress._country = country->FirstChild()->Value();
-		}
+	TiXmlNode * country = docHandle.FirstChild("address").FirstChild("country").FirstChild().Node();
+	if (country) {
+		_streetAddress._country = country->Value();
 	}
 
 	return true;

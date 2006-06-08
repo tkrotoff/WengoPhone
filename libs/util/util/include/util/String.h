@@ -51,8 +51,7 @@ public:
 	/**
 	 * End of line character.
 	 *
-	 * Equals \r\n (CRLF) so that is compatible with Windows and UNIX.
-	 * Used by Logger.
+	 * Equals \n (LF).
 	 *
 	 * Maybe (if needed) we should split this in WIN_EOL, UNIX_EOL, SYSTEM_EOL.
 	 */

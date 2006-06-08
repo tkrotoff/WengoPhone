@@ -49,10 +49,6 @@ QtWsDirectory::QtWsDirectory(CWsDirectory & cWsDirectory)
 	postEvent(event);
 }
 
-QtWsDirectory::~QtWsDirectory() {
-	delete _ui;
-}
-
 void QtWsDirectory::initThreadSafe() {
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWsDirectory.getCWengoPhone().getPresentation();
 
@@ -65,9 +61,17 @@ void QtWsDirectory::initThreadSafe() {
 
 	_qtWengoPhone = (QtWengoPhone *) _cWsDirectory.getCWengoPhone().getPresentation();
 	_cWsDirectory.contactFoundEvent += boost::bind(&QtWsDirectory::contactFoundEventHandler, this, _1, _2, _3);
-	connect(_ui->searchPushButton, SIGNAL(clicked()), SLOT(searchButtonClicked()));
+	connect(_ui->searchButton, SIGNAL(clicked()), SLOT(searchButtonClicked()));
 
 	_qtWengoPhone->setWsDirectory(this);
+}
+
+QtWsDirectory::~QtWsDirectory() {
+	delete _ui;
+}
+
+QWidget * QtWsDirectory::getWidget() const {
+	return _directoryWindow;
 }
 
 void QtWsDirectory::updatePresentation() {
@@ -87,10 +91,6 @@ void QtWsDirectory::clear() {
 	_ui->listWidget->clear();
 }
 
-QWidget * QtWsDirectory::getWidget() {
-	return _directoryWindow;
-}
-
 void QtWsDirectory::searchButtonClicked() {
 	QString query = _ui->searchLineEdit->text();
 	LOG_DEBUG("query=" + query.toStdString());
@@ -99,21 +99,21 @@ void QtWsDirectory::searchButtonClicked() {
 	LOG_DEBUG("criteria=" + criteria.toStdString());
 
 	if (criteria == "Nickname") {
-		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::wengoid);
+		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::WengoId);
 	} else if (criteria == "First Name") {
-		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::fname);
+		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::FirstName);
 	} else if (criteria == "Last Name") {
-		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::lname);
+		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::LastName);
 	} else if (criteria == "City") {
-		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::city);
+		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::City);
 	} else if (criteria == "Country") {
-		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::country);
+		_cWsDirectory.searchEntry(query.toStdString(), WsDirectory::Country);
 	} else {
 		_cWsDirectory.searchEntry(query.toStdString());
 	}
 
 	clear();
-	_ui->searchPushButton->setEnabled(false);
+	_ui->searchButton->setEnabled(false);
 }
 
 void QtWsDirectory::contactFoundEventHandler(WsDirectory & sender, ContactProfile * contact, bool online) {
@@ -126,7 +126,7 @@ void QtWsDirectory::contactFoundEventHandler(WsDirectory & sender, ContactProfil
 void QtWsDirectory::contactFoundEventHandlerThreadSafe(WsDirectory & sender, ContactProfile * contact, bool online) {
 	//if no contact has been found
 	if (!contact) {
-		_ui->searchPushButton->setEnabled(true);
+		_ui->searchButton->setEnabled(true);
 		QMessageBox::warning(_directoryWindow, tr("Search Wengo Contacts"), tr("No contact match your query"));
 		return;
 	}
@@ -137,12 +137,12 @@ void QtWsDirectory::contactFoundEventHandlerThreadSafe(WsDirectory & sender, Con
 	//to avoid having a 16 pixels height item
 	item->setSizeHint(qtWsDirectoryContact->getWidget()->minimumSizeHint());
 	_ui->listWidget->setItemWidget(item, qtWsDirectoryContact->getWidget());
-	_ui->searchPushButton->setEnabled(true);
+	_ui->searchButton->setEnabled(true);
 }
 
 void QtWsDirectory::callContact(const QString & sipAddress) {
 	//get the active phone line from the current user contact & make a call
-	_cWsDirectory.getCWengoPhone().getCUserProfile()->getUserProfile().getActivePhoneLine()->makeCall(sipAddress.toStdString(), 1);
+	_cWsDirectory.getCWengoPhone().getCUserProfile()->getUserProfile().getActivePhoneLine()->makeCall(sipAddress.toStdString(), true);
 }
 
 void QtWsDirectory::addContact(ContactProfile * contact) {

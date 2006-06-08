@@ -27,7 +27,7 @@
 using namespace std;
 
 DateXMLSerializer::DateXMLSerializer(Date & date)
-: _date(date) {
+	: _date(date) {
 }
 
 string DateXMLSerializer::serialize() {

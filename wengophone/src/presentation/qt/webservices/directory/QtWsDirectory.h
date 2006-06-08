@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTWSDIRECTORY_H
-#define QTWSDIRECTORY_H
+#ifndef OWQTWSDIRECTORY_H
+#define OWQTWSDIRECTORY_H
 
 #include <presentation/PWsDirectory.h>
 #include <control/webservices/directory/CWsDirectory.h>
@@ -50,7 +50,7 @@ public:
 
 	virtual ~QtWsDirectory();
 
-	QWidget * getWidget();
+	QWidget * getWidget() const;
 
 	void updatePresentation();
 
@@ -85,4 +85,4 @@ private:
 	QtWengoPhone * _qtWengoPhone;
 };
 
-#endif	//QTWSDIRECTORY_H
+#endif	//OWQTWSDIRECTORY_H

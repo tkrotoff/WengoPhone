@@ -32,9 +32,12 @@
 
 using namespace std;
 
-ContactXMLSerializer::ContactXMLSerializer(Contact & contact, 
+ContactXMLSerializer::ContactXMLSerializer(Contact & contact,
 	ContactList & contactList, IMAccountHandler & imAccountHandler)
-: ProfileXMLSerializer(contact), _contact(contact), _contactList(contactList), _imAccountHandler(imAccountHandler) {
+	: ProfileXMLSerializer(contact),
+	_contact(contact),
+	_contactList(contactList),
+	_imAccountHandler(imAccountHandler) {
 }
 
 string ContactXMLSerializer::serialize() {
@@ -89,7 +92,7 @@ bool ContactXMLSerializer::unserialize(const string & data) {
 	TiXmlNode * imLastChild = NULL;
 	while ((imLastChild = wgCard.Node()->IterateChildren("im", imLastChild))) {
 		string imData;
-		IMContact imContact(EnumIMProtocol::IMProtocolUnknown, "");
+		IMContact imContact(EnumIMProtocol::IMProtocolUnknown, String::null);
 		IMContactXMLSerializer imContactSerializer(imContact, _imAccountHandler);
 
 		imData << *imLastChild;

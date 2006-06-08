@@ -58,7 +58,7 @@ void Logger::error(const std::string & className, const std::string & message) {
 void Logger::fatal(const std::string & className, const std::string & message) {
 	log(Fatal, className, message);
 	flush();
-	assert(NULL && "Fatal error");
+	assert(NULL && "fatal error");
 }
 
 void Logger::log(Level level, const std::string & className, const std::string & message) {
@@ -92,29 +92,41 @@ void Logger::log(Level level, const std::string & className, const std::string &
 	struct tm * localTime = localtime(&t);
 
 	String classNameTmp = className;
-	classNameTmp.remove("class");
+	/*classNameTmp.remove("class");
 	classNameTmp.remove("*");
-	classNameTmp.remove(" ");
+	classNameTmp.remove("static");
+	classNameTmp.remove(",");
+	classNameTmp.remove("(");
+	classNameTmp.remove(")");
+	classNameTmp.remove("int");
+	classNameTmp.remove("char");
+	classNameTmp.remove("std::string");
+	classNameTmp.remove("std::");
+	classNameTmp.remove("void");
+	classNameTmp.remove("bool");
+	classNameTmp.remove("const");*/
 	std::string tmp = "(" + levelString + ") " + Time().toString() + " " + classNameTmp +  ": " + message;
 
 	if (!_fileCreated) {
-		std::string strippedClassName = className;
+		String strippedClassName = className;
 		std::string::size_type pos = strippedClassName.find(CLASS_METHOD_SEPARATOR);
 		if (pos != std::string::npos) {
 			strippedClassName = strippedClassName.substr(0, pos);
 		}
+		strippedClassName.remove(CLASS_METHOD_SEPARATOR);
 		std::string fileName = Path::getApplicationDirPath() + "log-" + strippedClassName + ".txt";
 		_file.open(fileName.c_str());
-		_file << ("Log file=" + fileName + String::EOL);
-		_file << ("Date=" + Date().toString() + String::EOL);
-		_file << ("Time=" + Time().toString() + String::EOL + String::EOL);
+		_file << "Log file=" << fileName << std::endl;
+		_file << "Date=" << Date().toString() << std::endl;
+		_file << "Time=" << Time().toString() << std::endl << std::endl;
 		_fileCreated = true;
 	}
 
-	_file << (tmp + "\n");
+	_file << tmp << std::endl;
 
 	std::cerr << tmp << std::endl;
 
+	//Disable, not needed for the moment
 	//messageAddedEvent(tmp);
 }
 

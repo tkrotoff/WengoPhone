@@ -48,7 +48,7 @@ QtWsDirectoryContact::QtWsDirectoryContact(QtWsDirectory * qtWsDirectory, Contac
 	setNickname(tr("Nickname: ") + QString::fromUtf8(_contact->getWengoPhoneId().c_str()));
 	setWengoNumber(tr("Wengo number: ") + QString::fromStdString(_contact->getWengoPhoneNumber()));
 	setSipAddress(tr("SIP address: ") + QString::fromStdString(_contact->getWengoPhoneId() + "@213.91.9.210"));
-	setLocality(tr("City: ") + QString::fromUtf8(_contact->getStreetAddress().getCity().c_str()));
+	setCity(tr("City: ") + QString::fromUtf8(_contact->getStreetAddress().getCity().c_str()));
 	setCountry(tr("Country: ") + QString::fromUtf8(_contact->getStreetAddress().getCountry().c_str()));
 	setOnline(online);
 }
@@ -74,8 +74,8 @@ void QtWsDirectoryContact::setName(const QString & name) {
 	_ui->nameLabel->setText(name);
 }
 
-void QtWsDirectoryContact::setLocality(const QString & locality) {
-	_ui->localityLabel->setText(locality);
+void QtWsDirectoryContact::setCity(const QString & city) {
+	_ui->cityLabel->setText(city);
 }
 
 void QtWsDirectoryContact::setCountry(const QString & country) {
