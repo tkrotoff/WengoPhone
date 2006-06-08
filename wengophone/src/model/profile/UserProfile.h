@@ -173,6 +173,12 @@ public:
 	void init();
 
 	/**
+	 * Return the profile directory
+	 * @return profile directory. 
+	 */
+	std::string getProfileDirectory() const;
+
+	/**
 	 * Connects all this UserProfile accounts (SipAccount and IMAccount) set
 	 * to be automatically connected.
 	 */

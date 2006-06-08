@@ -43,6 +43,7 @@
 
 #include <sipwrapper/SipWrapper.h>
 
+#include <util/File.h>
 #include <util/Logger.h>
 #include <thread/Thread.h>
 
@@ -144,6 +145,11 @@ void UserProfile::init() {
 
 	_wengoAccountMustConnectAfterInit = true;
 	wengoAccountInit();
+}
+
+std::string UserProfile::getProfileDirectory() const {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	return File::convertPathSeparators(config.getConfigDir() + "profiles/" + _name + "/");
 }
 
 void UserProfile::connect() {
@@ -432,17 +438,12 @@ void UserProfile::connectedEventHandler(ConnectHandler & sender, IMAccount & imA
 }
 
 void UserProfile::loadHistory() {
-	//History: load the user history
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	std::string filename = config.getConfigDir() + _wengoAccount->getIdentity() + "_history";
-	_history->load(filename);
+    _history->load(getProfileDirectory() + "history.xml");
+    historyLoadedEvent(*this, *_history);
 }
 
 void UserProfile::saveHistory() {
-	//History: save the history
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	std::string filename = config.getConfigDir() + _wengoAccount->getIdentity() + "_history";
-	_history->save(filename);
+    _history->save(getProfileDirectory() + "history.xml");
 }
 
 bool UserProfile::hasWengoAccount() const {
