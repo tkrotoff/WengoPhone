@@ -184,9 +184,18 @@ File File::createTemporaryFile() {
 }
 
 bool File::exists(const std::string & path) {
+	std::string myPath = path;
+	// Checking for ending PathSeparator existance.
+	// if the path contains a trailing PathSepartor, 'exists' will not work 
+	// under Windows
+	std::string pathSeparator = File::getPathSeparator();
+	if (myPath.substr(myPath.size() - pathSeparator.size()) == pathSeparator) {
+		myPath = myPath.substr(0, myPath.size() - pathSeparator.size());
+	}
+
 	struct stat statinfo;
 
-	if (stat(path.c_str(), &statinfo) == 0) {
+	if (stat(myPath.c_str(), &statinfo) == 0) {
 		return true;
 	} else {
 		return false;
