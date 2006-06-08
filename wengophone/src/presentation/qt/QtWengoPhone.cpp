@@ -726,7 +726,7 @@ void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, 
 
 void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFile) {
 	if (_cWengoPhone.getCUserProfile()) {
-		PhoneCall * phoneCall = _cWengoPhone.getActivePhoneCall();
+		PhoneCall * phoneCall = _cWengoPhone.getCUserProfile()->getActivePhoneCall();
 		if (phoneCall) {
 			if (soundFile.empty()) {
 				if (tone == "0") { phoneCall->playTone(EnumTone::Tone0); }
@@ -1078,44 +1078,44 @@ void QtWengoPhone::authorizationRequestEventHandlerThreadSafe(PresenceHandler & 
 
 void QtWengoPhone::eraseHistoryOutgoingCalls() {
 	if (_cWengoPhone.getCUserProfile()) {
-		_cWengoPhone.getCHistory().clear(HistoryMemento::OutgoingCall);
+		_cWengoPhone.getCUserProfile()->getCHistory().clear(HistoryMemento::OutgoingCall);
 	}
 }
 
 void QtWengoPhone::eraseHistoryIncomingCalls() {
 	if (_cWengoPhone.getCUserProfile()) {
-		_cWengoPhone.getCHistory().clear(HistoryMemento::IncomingCall);
+		_cWengoPhone.getCUserProfile()->getCHistory().clear(HistoryMemento::IncomingCall);
 	}
 }
 
 void QtWengoPhone::eraseHistoryMissedCalls() {
 	if (_cWengoPhone.getCUserProfile()) {
-		_cWengoPhone.getCHistory().clear(HistoryMemento::MissedCall);
+		_cWengoPhone.getCUserProfile()->getCHistory().clear(HistoryMemento::MissedCall);
 	}
 }
 
 void QtWengoPhone::eraseHistoryChatSessions() {
 	if (_cWengoPhone.getCUserProfile()) {
-		_cWengoPhone.getCHistory().clear(HistoryMemento::ChatSession);
+		_cWengoPhone.getCUserProfile()->getCHistory().clear(HistoryMemento::ChatSession);
 	}
 }
 
 void QtWengoPhone::eraseHistorySms() {
 	if (_cWengoPhone.getCUserProfile()) {
-		_cWengoPhone.getCHistory().clear(HistoryMemento::OutgoingSmsOk);
+		_cWengoPhone.getCUserProfile()->getCHistory().clear(HistoryMemento::OutgoingSmsOk);
 	}
 }
 
 void QtWengoPhone::eraseHistory() {
 	if (_cWengoPhone.getCUserProfile()) {
-		_cWengoPhone.getCHistory().clear(HistoryMemento::Any);
+		_cWengoPhone.getCUserProfile()->getCHistory().clear(HistoryMemento::Any);
 	}
 }
 
 void QtWengoPhone::phoneComboBoxClicked() {
 	//if _qtHistoryWidget is set it means that History has been created
 	if( _qtHistoryWidget ) {
-		HistoryMementoCollection * mementos = _cWengoPhone.getCHistory().getMementos(HistoryMemento::OutgoingCall, 10);
+		HistoryMementoCollection * mementos = _cWengoPhone.getCUserProfile()->getCHistory().getMementos(HistoryMemento::OutgoingCall, 10);
 		_phoneComboBox->clear();
 		_phoneComboBox->clearEditText();
 		for(HistoryMap::iterator it = mementos->begin(); it != mementos->end(); it++ ) {

@@ -30,36 +30,14 @@
 #include <string>
 
 class Contact;
-class CPhoneLine;
 class CUserProfile;
-class PWengoPhone;
-class IPhoneLine;
-class CPhoneLine;
-class ContactList;
-class CContactList;
-class CHistory;
-class StringList;
-class WenboxPlugin;
-class IMHandler;
-class PresenceHandler;
-class ConnectHandler;
-class ChatHandler;
-class PhoneCall;
-class History;
 class IMAccount;
+class PresenceHandler;
+class PWengoPhone;
 class UserProfile;
 class WengoAccount;
 class WsSubscribe;
-class WsDirectory;
-class WsCallForward;
-class CChatHandler;
-class CSms;
-class CSoftUpdate;
-class CWenboxPlugin;
-class WsSms;
-class WsSoftUpdate;
-class CWsCallForward;
-class CWsDirectory;
+
 
 /**
  * @defgroup control Control Component
@@ -101,11 +79,6 @@ public:
 	Event<void (SipAccount & sender, SipAccount::NetworkDiscoveryState state) > networkDiscoveryStateChangedEvent;
 
 	/**
-	 * @see UserProfile::noAccountAvailableEvent
-	 */
-	Event<void (UserProfile & sender)> noAccountAvailableEvent;
-
-	/**
 	 * @see UserProfile::proxyNeedsAuthenticationEvent
 	 */
 	Event<void(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort)> proxyNeedsAuthenticationEvent;
@@ -122,14 +95,6 @@ public:
 	 */
 	Event<void ()> controlTimeoutEvent;
 
-	/**
-	 * CHistory has been created.
-	 *
-	 * @param sender this class
-	 * @param wsWengoSubscribe WsWengoSubscribe created
-	 */
-	Event<void (CWengoPhone & sender, CHistory & cHistory)> cHistoryCreatedEvent;
-
 	CWengoPhone(WengoPhone & wengoPhone);
 
 	PWengoPhone * getPresentation() const {
@@ -137,6 +102,10 @@ public:
 	}
 
 	WengoPhone & getWengoPhone() const {
+		return _wengoPhone;
+	}
+
+	Thread & getModelThread() const  {
 		return _wengoPhone;
 	}
 
@@ -162,34 +131,12 @@ public:
 	void currentUserProfileReleased();
 
 	/**
-	 * Gets the active phone call.
-	 *
-	 * Used for playing DTMF.
-	 *
-	 * @return active phone call or NULL
-	 */
-	PhoneCall * getActivePhoneCall() const;
-
-	/**
-	 * Gets the CHistory.
-	 *
-	 * @return the CHistory
-	 */
-	CHistory & getCHistory() const {
-		return *_cHistory;
-	}
-
-	/**
 	 * Gets the CUserProfile.
 	 *
 	 * @return the CUserProfile
 	 */
 	CUserProfile * getCUserProfile() const {
 		return _cUserProfile;
-	}
-
-	CWsCallForward * getCWsCallForward() {
-		return _cWsCallForward;
 	}
 
 	/**
@@ -201,25 +148,9 @@ public:
 
 private:
 
-	/**
-	 * Handle History::historyLoadedEvent
-	 */
-	void historyLoadedEventHandler(History & sender);
-
-	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
-
-	void wsDirectoryCreatedEventHandler(UserProfile & sender, WsDirectory & wsDirectory);
-
-	void wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscribe & wsSubscribe);
-
-	void wsSmsCreatedEventHandler(UserProfile & sender, WsSms & wsSms);
-
-	void wsSoftUpdateCreatedEventHandler(UserProfile & sender, WsSoftUpdate & wsSoftUpdate);
-
-	void wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward);
-
 	void initFinishedEventHandler(WengoPhone & sender);
 
+	void wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscribe & wsSubscribe);
 
 	/**
 	 * @see IMPresence::authorizationRequestEvent
@@ -253,25 +184,9 @@ private:
 	/** Direct link to the presentation via an interface. */
 	PWengoPhone * _pWengoPhone;
 
-	CHistory * _cHistory;
-
 	CUserProfile * _cUserProfile;
 
 	CUserProfileHandler _cUserProfileHandler;
-
-	CWsCallForward * _cWsCallForward;
-
-	CWsDirectory * _cWsDirectory;
-
-	CWenboxPlugin * _cWenboxPlugin;
-
-	CChatHandler * _cChatHandler;
-
-	CSms * _cSms;
-
-	CSoftUpdate * _cSoftUpdate;
-
-	CPhoneLine * _cPhoneLine;
 };
 
 #endif	//CWENGOPHONE_H

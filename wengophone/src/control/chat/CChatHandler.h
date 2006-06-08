@@ -25,12 +25,13 @@
 #include <util/NonCopyable.h>
 #include <util/Event.h>
 
+class ChatHandler;
+class CUserProfile;
+class CWengoPhone;
 class IMAccount;
 class IMContactSet;
-class ChatHandler;
 class PChatHandler;
-class UserProfile;
-class CWengoPhone;
+
 /**
  *
  * @ingroup control
@@ -40,15 +41,13 @@ class CWengoPhone;
 class CChatHandler : NonCopyable {
 public:
 
-	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
-
-	UserProfile & getUserProfile() const { return _userProfile;}
-
-	CChatHandler(ChatHandler & chatHandler, CWengoPhone & cWengoPhone, UserProfile & userProfile);
+	CChatHandler(ChatHandler & chatHandler, CUserProfile & cUserProfile);
 
 	~CChatHandler();
 
-	CWengoPhone & getCWengoPhone() const;
+	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
+
+	CUserProfile & getCUserProfile() const { return _cUserProfile;}
 
 private:
 
@@ -58,10 +57,7 @@ private:
 
 	PChatHandler * _pChatHandler;
 
-	UserProfile & _userProfile;
-
-	CWengoPhone & _cWengoPhone;
-
+	CUserProfile & _cUserProfile;
 };
 
 #endif	//CCHATHANDLER_H

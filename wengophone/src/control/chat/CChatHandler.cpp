@@ -19,14 +19,15 @@
 
 #include "CChatHandler.h"
 
-#include <model/chat/ChatHandler.h>
-#include <presentation/PFactory.h>
 #include <presentation/PChatHandler.h>
+#include <presentation/PFactory.h>
+
+#include <model/chat/ChatHandler.h>
 
 #include <util/Logger.h>
 
-CChatHandler::CChatHandler(ChatHandler & chatHandler, CWengoPhone & cWengoPhone, UserProfile & userProfile)
-	: _chatHandler(chatHandler), _userProfile(userProfile), _cWengoPhone(cWengoPhone) {
+CChatHandler::CChatHandler(ChatHandler & chatHandler, CUserProfile & cUserProfile)
+	: _chatHandler(chatHandler), _cUserProfile(cUserProfile) {
 
 	_pChatHandler = PFactory::getFactory().createPresentationChatHandler(*this);
 
@@ -48,8 +49,4 @@ void CChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMC
 
 void CChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContactSet) {
 	_chatHandler.createSession(imAccount, imContactSet);
-}
-
-CWengoPhone & CChatHandler::getCWengoPhone() const{
-    return _cWengoPhone;
 }

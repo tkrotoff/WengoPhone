@@ -24,8 +24,8 @@
 #include <model/presence/PresenceHandler.h>
 
 #include <control/CWengoPhone.h>
-#include <control/profile/CUserProfile.h>
 #include <control/history/CHistory.h>
+#include <control/profile/CUserProfile.h>
 
 #include <util/Logger.h>
 #include <imwrapper/IMAccount.h>
@@ -156,8 +156,11 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	_connectHandler.disconnectedEvent +=
 		boost::bind(&QtProfileBar::disconnectedEventHandler, this, _1, _2, _3, _4);
 
-	cWengoPhone.cHistoryCreatedEvent +=
-		boost::bind(&QtProfileBar::cHistoryCreatedEventHandler, this, _1, _2);
+	if (cWengoPhone.getCUserProfile()) {
+		//FIXME: we should check if the history is loaded yet
+		cWengoPhone.getCUserProfile()->cHistoryCreatedEvent +=
+			boost::bind(&QtProfileBar::cHistoryCreatedEventHandler, this, _1, _2);
+	}
 
 	PresenceHandler & presence = _cUserProfile.getUserProfile().getPresenceHandler();
 
@@ -204,8 +207,10 @@ QtProfileBar::~QtProfileBar() {
 	_connectHandler.disconnectedEvent -=
 		boost::bind(&QtProfileBar::disconnectedEventHandler, this, _1, _2, _3, _4);
 
-	_cWengoPhone.cHistoryCreatedEvent -=
-		boost::bind(&QtProfileBar::cHistoryCreatedEventHandler, this, _1, _2);
+	if (_cWengoPhone.getCUserProfile()) {
+		_cWengoPhone.getCUserProfile()->cHistoryCreatedEvent -=
+			boost::bind(&QtProfileBar::cHistoryCreatedEventHandler, this, _1, _2);
+	}
 }
 
 // Called in the model thread
@@ -568,7 +573,7 @@ void QtProfileBar::paintEvent ( QPaintEvent * event ) {
 	}
 }
 
-void QtProfileBar::cHistoryCreatedEventHandler(CWengoPhone & sender, CHistory & cHistory) {
+void QtProfileBar::cHistoryCreatedEventHandler(CUserProfile & sender, CHistory & cHistory) {
 
 	cHistory.unseenMissedCallsChangedEvent +=
 		boost::bind(&QtProfileBar::unseenMissedCallsChangedEventHandler, this, _1, _2);

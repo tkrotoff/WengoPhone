@@ -44,7 +44,7 @@ void QtChatContactWidget::updateDisplay(){
 
 	// Fill the pixmap list
 	for (it = contactSet.begin(); it != contactSet.end(); it++){
-		Picture picture = _cChatHandler.getUserProfile().getPresenceHandler().getContactIcon( (*it) );
+		Picture picture;// = _cChatHandler.getUserProfile().getPresenceHandler().getContactIcon( (*it) );
 		QString contactId = QString::fromStdString( (*it).getContactId() );
 		std::string data = picture.getData();
 		QPixmap pixmap;

@@ -19,16 +19,148 @@
 
 #include "CUserProfile.h"
 
+#include <control/CWengoPhone.h>
+#include <control/chat/CChatHandler.h>
+#include <control/contactlist/CContactList.h>
+#include <control/history/CHistory.h>
+#include <control/phoneline/CPhoneLine.h>
+#include <control/webservices/sms/CSms.h>
+#include <control/webservices/softupdate/CSoftUpdate.h>
+#include <control/webservices/directory/CWsDirectory.h>
+#include <control/webservices/callforward/CWsCallForward.h>
+#include <control/wenbox/CWenboxPlugin.h>
+
 #include <model/account/wengo/WengoAccount.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 #include <model/contactlist/Contact.h>
+#include <model/history/History.h>
+#include <model/phoneline/IPhoneLine.h>
 #include <model/profile/UserProfile.h>
+#include <model/webservices/directory/WsDirectory.h>
+#include <model/webservices/sms/WsSms.h>
+#include <model/webservices/softupdate/WsSoftUpdate.h>
+#include <model/wenbox/WenboxPlugin.h>
 
-CUserProfile::CUserProfile(UserProfile & userProfile, Thread & modelThread) 
-: _userProfile(userProfile), 
+#include <util/Logger.h>
+
+CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone, 
+	Thread & modelThread) 
+: _userProfile(userProfile),
+_cWengoPhone(cWengoPhone),
 _cContactList(userProfile.getContactList(), modelThread),
-_modelThread(modelThread) { 
+_cWenboxPlugin(*userProfile.getWenboxPlugin(), cWengoPhone),
+_cChatHandler(userProfile.getChatHandler(), *this),
+_modelThread(modelThread) {
+
+	_cHistory = NULL;
+	_cPhoneLine = NULL;
+	_cSms = NULL;
+	_cSoftUpdate = NULL;
+	_cWsCallForward = NULL;
+	_cWsDirectory = NULL;
+
+	_userProfile.wsDirectoryCreatedEvent +=
+		boost::bind(&CUserProfile::wsDirectoryCreatedEventHandler, this, _1, _2);
+	_userProfile.phoneLineCreatedEvent +=
+		boost::bind(&CUserProfile::phoneLineCreatedEventHandler, this, _1, _2);
+	_userProfile.wsSmsCreatedEvent +=
+		boost::bind(&CUserProfile::wsSmsCreatedEventHandler, this, _1, _2);
+	_userProfile.wsSoftUpdateCreatedEvent +=
+		boost::bind(&CUserProfile::wsSoftUpdateCreatedEventHandler, this, _1, _2);
+	_userProfile.getHistory().historyLoadedEvent +=
+		boost::bind(&CUserProfile::historyLoadedEventHandler, this, _1);
+	_userProfile.wsCallForwardCreatedEvent +=
+	  boost::bind(&CUserProfile::wsCallForwardCreatedEventHandler, this, _1, _2);
+
+}
+
+CUserProfile::~CUserProfile() {
+	_userProfile.wsDirectoryCreatedEvent -=
+		boost::bind(&CUserProfile::wsDirectoryCreatedEventHandler, this, _1, _2);
+	_userProfile.phoneLineCreatedEvent -=
+		boost::bind(&CUserProfile::phoneLineCreatedEventHandler, this, _1, _2);
+	_userProfile.wsSmsCreatedEvent -=
+		boost::bind(&CUserProfile::wsSmsCreatedEventHandler, this, _1, _2);
+	_userProfile.wsSoftUpdateCreatedEvent -=
+		boost::bind(&CUserProfile::wsSoftUpdateCreatedEventHandler, this, _1, _2);
+	_userProfile.getHistory().historyLoadedEvent -=
+		boost::bind(&CUserProfile::historyLoadedEventHandler, this, _1);
+	_userProfile.wsCallForwardCreatedEvent -=
+	  boost::bind(&CUserProfile::wsCallForwardCreatedEventHandler, this, _1, _2);
+
+	if (_cWsDirectory) {
+		delete _cWsDirectory;
+		_cWsDirectory = NULL;
+	}
+
+	if (_cHistory) {
+		delete _cHistory;
+		_cHistory = NULL;
+	}
+
+	if (_cSms) {
+		delete _cSms;
+		_cSms = NULL;
+	}
+
+	if (_cSoftUpdate) {
+		delete _cSoftUpdate;
+		_cSoftUpdate = NULL;
+	}
+
+	if (_cPhoneLine) {
+		delete _cPhoneLine;
+		_cPhoneLine = NULL;
+	}
+}
+
+PhoneCall * CUserProfile::getActivePhoneCall() const {
+	PhoneCall * result = NULL;
+
+	//FIXME: model must not be used directly by the GUI
+	IPhoneLine * phoneLine = _userProfile.getActivePhoneLine();
+	if (phoneLine) {
+		result = phoneLine->getActivePhoneCall();
+	}
+
+	return result;
+}
+
+void CUserProfile::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine) {
+	_cPhoneLine = new CPhoneLine(phoneLine, _cWengoPhone);
+
+	LOG_DEBUG("CPhoneLine created");
+}
+
+void CUserProfile::wsDirectoryCreatedEventHandler(UserProfile & sender, WsDirectory & wsDirectory) {
+	if (!_cWsDirectory) {
+		_cWsDirectory = new CWsDirectory(_cWengoPhone, wsDirectory);
+		LOG_DEBUG("CWsDirectory created");
+	}
+}
+
+void CUserProfile::wsSmsCreatedEventHandler(UserProfile & sender, WsSms & sms) {
+	if (!_cSms) {
+		_cSms = new CSms(sms, _cWengoPhone);
+		LOG_DEBUG("CSms created");
+	}
+}
+
+void CUserProfile::wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward) {
+	_cWsCallForward = new CWsCallForward(_cWengoPhone, wsCallForward);
+}
+
+void CUserProfile::wsSoftUpdateCreatedEventHandler(UserProfile & sender, WsSoftUpdate & wsSoftUpdate) {
+	if (!_cSoftUpdate) {
+		_cSoftUpdate = new CSoftUpdate(wsSoftUpdate, _cWengoPhone);
+		LOG_DEBUG("CSoftUpdate created");
+	}
+}
+
+void CUserProfile::historyLoadedEventHandler(History & history) {
+	_cHistory = new CHistory(history, _cWengoPhone, _cWengoPhone.getModelThread());
+	cHistoryCreatedEvent(*this, *_cHistory);
 }
 
 void CUserProfile::disconnect() {

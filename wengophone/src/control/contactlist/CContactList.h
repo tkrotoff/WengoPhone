@@ -144,6 +144,12 @@ public:
 	 */
 	void merge(const std::string & dstContactId, const std::string & srcContactId);
 
+	/**
+	 * FIXME: this part should not exist. It is here until QtChatRoomInviteDlg
+	 * will be refactored.
+	 */
+	ContactList & getContactList() { return _contactList; }
+
 private:
 
 	/**

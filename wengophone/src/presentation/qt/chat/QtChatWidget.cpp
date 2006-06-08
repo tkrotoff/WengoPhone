@@ -24,16 +24,16 @@
 #include "chatwidgetmanager.h"
 #include "QtEmoticonsWidget.h"
 
-#include <util/Logger.h>
-
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
+#include <control/contactlist/CContactList.h>
+#include <control/profile/CUserProfile.h>
 
 #include <model/profile/UserProfile.h>
 
+#include <util/Logger.h>
+
+#include <qtutil/Object.h>
 #include <qtutil/QtWengoStyleLabel.h>
-
-
+#include <qtutil/WidgetFactory.h>
 
 ChatWidget::ChatWidget (CChatHandler & cChatHandler, int sessionId, QWidget * parent, Qt::WFlags f) :
 QWidget(parent, f), _cChatHandler(cChatHandler){
@@ -476,7 +476,8 @@ bool ChatWidget::canDoMultiChat(){
 }
 
 void ChatWidget::inviteContact(){
-	QtChatRoomInviteDlg	dlg(*_imChatSession, _cChatHandler.getUserProfile().getContactList(),this);
+	QtChatRoomInviteDlg	dlg(*_imChatSession,
+		_cChatHandler.getCUserProfile().getCContactList().getContactList(), this);
 	dlg.exec();
 	if ( dlg.result() == QDialog::Accepted ){
 		QtChatRoomInviteDlg::SelectedContact selectedContact = dlg.getSelectedContact();

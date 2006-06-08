@@ -21,10 +21,12 @@
 
 #include "ui_CallForwardSettings.h"
 
+#include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+#include <control/webservices/callforward/CWsCallForward.h>
+
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
-#include <control/CWengoPhone.h>
-#include <control/webservices/callforward/CWsCallForward.h>
 
 #include <util/Logger.h>
 
@@ -51,12 +53,11 @@ QString QtCallForwardSettings::getName() const {
 }
 
 void QtCallForwardSettings::saveConfig() {
-
 	bool mustCallTheWs = false;
 	std::string mode = "";
-	std::string number1 =  _ui->phoneNumber1Edit->text().toStdString();
-	std::string number2 =  _ui->phoneNumber2Edit->text().toStdString();
-	std::string number3 =  _ui->phoneNumber3Edit->text().toStdString();
+	std::string number1 = _ui->phoneNumber1Edit->text().toStdString();
+	std::string number2 = _ui->phoneNumber2Edit->text().toStdString();
+	std::string number3 = _ui->phoneNumber3Edit->text().toStdString();
 
 	if(_ui->forwardToVoiceMailRadioButton->isChecked()) {
 		mode = "voicemail";
@@ -69,17 +70,15 @@ void QtCallForwardSettings::saveConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//if the mode has changed
-	if( config.getCallForwardMode() != mode ) {
+	if (config.getCallForwardMode() != mode) {
 		config.set(Config::CALL_FORWARD_MODE_KEY, mode);
 		mustCallTheWs = true;
 	} else {
-
 		//if numbers have changed
-		if( (mode == "number") &&
+		if ((mode == "number") &&
 			(config.getCallForwardPhoneNumber1() != number1 ) ||
 			(config.getCallForwardPhoneNumber2() != number2 ) ||
-			(config.getCallForwardPhoneNumber3() != number3))
-		{
+			(config.getCallForwardPhoneNumber3() != number3)) {
 			config.set(Config::CALL_FORWARD_PHONENUMBER1_KEY, number1);
 			config.set(Config::CALL_FORWARD_PHONENUMBER2_KEY, number2);
 			config.set(Config::CALL_FORWARD_PHONENUMBER3_KEY, number3);
@@ -87,15 +86,16 @@ void QtCallForwardSettings::saveConfig() {
 		}
 	}
 
-	if( mustCallTheWs ) {
-		if( _cWengoPhone.getCWsCallForward() ) {
-
-			if( mode == "voicemail" ) {
-				_cWengoPhone.getCWsCallForward()->forwardToVoiceMail();
-			} else if( mode == "disable" ) {
-				_cWengoPhone.getCWsCallForward()->disableCallForward();
-			} else if( mode == "number" ) {
-				_cWengoPhone.getCWsCallForward()->forwardToNumber(number1, number2, number3);
+	if (mustCallTheWs) {	
+		if (_cWengoPhone.getCUserProfile()) {
+			if (_cWengoPhone.getCUserProfile()->getCWsCallForward()) {
+				if (mode == "voicemail") {
+					_cWengoPhone.getCUserProfile()->getCWsCallForward()->forwardToVoiceMail();
+				} else if (mode == "disable") {
+					_cWengoPhone.getCUserProfile()->getCWsCallForward()->disableCallForward();
+				} else if (mode == "number") {
+					_cWengoPhone.getCUserProfile()->getCWsCallForward()->forwardToNumber(number1, number2, number3);
+				}
 			}
 		}
 	}

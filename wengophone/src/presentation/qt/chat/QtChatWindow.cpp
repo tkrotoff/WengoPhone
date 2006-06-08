@@ -26,14 +26,12 @@
 #include <presentation/qt/contactlist/QtUserList.h>
 #include <presentation/qt/toaster/QtToaster.h>
 
-#include <model/contactlist/ContactList.h>
-#include <model/contactlist/ContactGroup.h>
+#include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+
 #include <model/contactlist/ContactProfile.h>
-#include <model/profile/UserProfile.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
-
-#include <control/CWengoPhone.h>
 
 #include <imwrapper/IMChatSession.h>
 
@@ -70,7 +68,7 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 	// _dialog = new QDialog(NULL, Qt::Window | Qt::WindowMinMaxButtonsHint);
 	_dialog = new QWidget(NULL, Qt::Window | Qt::WindowMinMaxButtonsHint);
 
-	_qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
+	_qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCUserProfile().getCWengoPhone().getPresentation());
 	_qtWengoPhone->setChatWindow( _dialog );
 
 	// Create the menu bar
@@ -450,9 +448,9 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	if ( !_dialog->isVisible() || _dialog->isMinimized())
         _tabWidget->setCurrentIndex(tabNumber);
 
-	Contact * contact = _cChatHandler.getUserProfile().getContactList().findContactThatOwns(from);
-	if ( contact ){
-		contactAddedSignal(session, &from );
+	std::string contact = _cChatHandler.getCUserProfile().getCContactList().findContactThatOwns(from);
+	if (!contact.empty()) {
+		contactAddedSignal(session, &from);
 		// addContactToContactListFrame(*contact);
 	}else{
 		//
@@ -520,7 +518,7 @@ void ChatWindow::closeContactListFrame(){
 
 void ChatWindow::createMenu(){
 
-	QtWengoPhone * mainWindow = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCWengoPhone().getPresentation());
+	QtWengoPhone * mainWindow = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCUserProfile().getCWengoPhone().getPresentation());
 	QAction * action;
 
 	QMenu * WengoMenu = new QMenu("Wengo");
@@ -766,8 +764,6 @@ void ChatWindow::showToaster(IMChatSession * imChatSession) {
 
     QPixmap result;
 
-    ContactList & contactList = _cChatHandler.getUserProfile().getContactList();
-
 	QPixmap background = QPixmap(":/pics/fond_avatar.png");
 
 	QtToaster  * toaster = new QtToaster();
@@ -782,12 +778,13 @@ void ChatWindow::showToaster(IMChatSession * imChatSession) {
 			}
 			message += QString::fromStdString((*it).getContactId());
 
-			Contact * contact = contactList.findContactThatOwns((*it));
-			if ( contact ){
-                    Picture picture = contact->getIcon();
-                    std::string data = picture.getData();
-                    if ( !data.empty()) {
-                        result.loadFromData((uchar *) data.c_str(), data.size());
+			std::string contact =  _cChatHandler.getCUserProfile().getCContactList().findContactThatOwns((*it));
+			if (!contact.empty()) {
+				ContactProfile contactProfile = _cChatHandler.getCUserProfile().getCContactList().getContactProfile(contact);
+				Picture picture = contactProfile.getIcon();
+				std::string data = picture.getData();
+				if (!data.empty()) {
+					result.loadFromData((uchar *) data.c_str(), data.size());
                 }
             }
 		}

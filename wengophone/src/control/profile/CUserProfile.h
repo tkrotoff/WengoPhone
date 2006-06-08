@@ -20,21 +20,55 @@
 #ifndef CUSERPROFILE_H
 #define CUSERPROFILE_H
 
+#include <control/chat/CChatHandler.h>
 #include <control/contactlist/CContactList.h>
+#include <control/wenbox/CWenboxPlugin.h>
 
 #include <imwrapper/EnumIMProtocol.h>
 
 #include <set>
 
+class CHistory;
+class CPhoneLine;
+class CSms;
+class CSoftUpdate;
+class CWengoPhone;
+class CWsCallForward;
+class CWsDirectory;
+class History;
 class IMAccount;
-class Thread;
+class IPhoneLine;
+class PhoneCall;
 class UserProfile;
+class Thread;
 class WengoAccount;
+class WsCallForward;
+class WsDirectory;
+class WsSms;
+class WsSoftUpdate;
 
+/**
+ * Control layer for UserProfile.
+ *
+ * FIXME: 'init()' must be called on UserProfile before constructing CUserProfile.
+ *
+ * @author Philippe Bernery
+ */
 class CUserProfile {
 public:
 
-	CUserProfile(UserProfile & userProfile, Thread & modelThread);
+	/**
+	 * CHistory has been created.
+	 *
+	 * @param sender this class
+	 * @param wsWengoSubscribe WsWengoSubscribe created
+	 */
+	Event<void (CUserProfile & sender, CHistory & cHistory)> cHistoryCreatedEvent;
+
+	CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone, 
+		Thread & modelThread);
+
+	~CUserProfile();
 
 	/**
 	 * @see UserProfile::disconnect
@@ -73,12 +107,44 @@ public:
 	std::set<IMAccount *> getIMAccountsOfProtocol(EnumIMProtocol::IMProtocol protocol) const;
 
 	/**
+	 * Gets the active phone call.
+	 *
+	 * Used for playing DTMF.
+	 *
+	 * @return active phone call or NULL
+	 */
+	PhoneCall * getActivePhoneCall() const;
+
+	/**
+	 * Gets the CHistory.
+	 *
+	 * @return the CHistory
+	 */
+	CHistory & getCHistory() const {
+		return *_cHistory;
+	}
+
+	/**
 	 * Gets the CContactList.
 	 *
 	 * @return the CContactList
 	 */
 	CContactList & getCContactList() {
 		return _cContactList;
+	}
+
+	/**
+	 * @return the CWsCallForward object.
+	 */
+	CWsCallForward * getCWsCallForward() {
+		return _cWsCallForward;
+	}
+
+	/**
+	 * @return the CWengoPhone object.
+	 */
+	CWengoPhone & getCWengoPhone() {
+		return _cWengoPhone;
 	}
 
 	/**
@@ -92,6 +158,36 @@ public:
 	}
 
 private:
+
+	/**
+	 * @see UserProfile::historyLoadedEvent
+	 */
+	void historyLoadedEventHandler(History & sender);
+
+	/**
+	 * @see UserProfile::phoneLineCreatedEvent
+	 */
+	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
+	
+	/**
+	 * @see UserProfile::wsDirectoryCreatedEvent
+	 */
+	void wsDirectoryCreatedEventHandler(UserProfile & sender, WsDirectory & wsDirectory);
+
+	/**
+	 * @see UserProfile::wsSmsCreatedEvent
+	 */
+	void wsSmsCreatedEventHandler(UserProfile & sender, WsSms & wsSms);
+
+	/**
+	 * @see UserProfile::wsSoftUpdateCreatedEvent
+	 */
+	void wsSoftUpdateCreatedEventHandler(UserProfile & sender, WsSoftUpdate & wsSoftUpdate);
+
+	/**
+	 * @see UserProfile::wsCallForwardCreatedEvent
+	 */
+	void wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward);
 
 	/**
 	 * @see disconnect
@@ -127,6 +223,24 @@ private:
 
 	CContactList _cContactList;
 
+	CHistory * _cHistory;
+
+	CWsCallForward * _cWsCallForward;
+
+	CWsDirectory * _cWsDirectory;
+
+	CWenboxPlugin _cWenboxPlugin;
+
+	CChatHandler _cChatHandler;
+
+	CSms * _cSms;
+
+	CSoftUpdate * _cSoftUpdate;
+
+	CPhoneLine * _cPhoneLine;
+
+	CWengoPhone & _cWengoPhone;
+	
 	Thread & _modelThread;
 };
 
