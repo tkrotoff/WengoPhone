@@ -35,11 +35,15 @@ public:
 
 	QtEmoticonsManager(QObject * parent);
 
-	QtEmoticon getEmoticon(const QString & text);
+	QtEmoticon getEmoticon(const QString & text, const QString & protocol);
 
 	void loadFromFile(QString filename);
 
 	QString text2Emoticon(const QString & text, const QString protocol);
+
+    QString emoticons2Text(const QString & text, const QString protocol);
+
+    QtEmoticonsList getQtEmoticonsList(const QString & protocol);
 
 	int getProtocolCount();
 
@@ -50,6 +54,8 @@ protected:
     void readProtocol(QDomNode node);
 
     void readIcon(QDomNode node, QString protocol);
+
+    QString encode(const QString & text);
 
     ProtocolsList _protocolsList;
 

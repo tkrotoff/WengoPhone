@@ -26,27 +26,27 @@
 #include "QtEmoticon.h"
 #include "QtEmoticonButton.h"
 
+class QtEmoticonsManager;
+
 class EmoticonsWidget : public QWidget //, Ui::EmoticonsWidget
 {
     Q_OBJECT
-    
+
 public:
 	enum EmoticonsWidgetStat {Window,Popup};
-	
-    EmoticonsWidget(QWidget * parent = 0, Qt::WFlags f= 0);
-	
-    void loadConfig(const QString & path);
-	
-	QVector<QtEmoticon> getEmoticonsVector() {return _emoticonsVector;};
-	
+
+    EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent = 0, Qt::WFlags f= 0);
+
+    void initButtons(const QString & protocol);
+
 protected:
 
 	QWidget * _widget;
-	
+
 	WidgetSeeker _seeker;
-	
+
 	QStringList _iconName;
-	
+
 	EmoticonsWidgetStat _stat;
 
 	int _buttonX;
@@ -55,24 +55,24 @@ protected:
 
 	QGridLayout * _layout;
 
-	QVector<QtEmoticon> _emoticonsVector;
-	
 	void addButton(QtEmoticon emoticon);
-	
+
 	virtual void closeEvent ( QCloseEvent * event );
+
+    QtEmoticonsManager * _qtEmoticonsManager;
+
 public Q_SLOTS:
 
-	void changeStat(); 
+	void changeStat();
 
 	void buttonClicked(QtEmoticon emoticon);
 
 Q_SIGNALS:
 
 	void emoticonClicked(QtEmoticon emoticon);
-	
+
 	void closed();
 
-	
 };
 
 

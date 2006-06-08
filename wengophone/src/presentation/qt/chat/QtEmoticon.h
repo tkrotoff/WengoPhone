@@ -57,8 +57,6 @@ public:
 
 	QString getHtml();
 
-	QString getHtml2();
-
 	bool isNull();
 
 	QtEmoticon & operator=(const QtEmoticon & source);

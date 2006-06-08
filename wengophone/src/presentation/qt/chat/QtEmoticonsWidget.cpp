@@ -19,7 +19,7 @@
 
 #include "QtEmoticonsWidget.h"
 #include "QtEmoticonButton.h"
-
+#include "QtEmoticonsManager.h"
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
@@ -27,114 +27,58 @@
 #include <QtXml>
 #include <util/Logger.h>
 
-EmoticonsWidget::EmoticonsWidget(QWidget * parent, Qt::WFlags f) : QWidget(parent,f){
-    _layout = new QGridLayout(this);
-    _layout->setMargin(0);
-
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-    loadConfig(QString::fromStdString(config.getResourcesDir() + "emoticons/icondef.xml"));
-
-	// Default stat is popup
-	_stat=Popup;
-
-//    QPushButton * exitButton = _seeker.getPushButton(_widget, "emoticonCloseButton");
-
-//    connect(exitButton,SIGNAL(clicked()),this,SLOT(changeStat()));
-
+EmoticonsWidget::EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent, Qt::WFlags f) : QWidget(parent,f){
+    _layout = NULL;
+    Config & config = ConfigManager::getInstance().getCurrentConfig();
+//    loadConfig(QString::fromStdString(config.getResourcesDir() + "emoticons/icondef.xml"));
+    _qtEmoticonsManager = qtEmoticonsManager;
+    _qtEmoticonsManager->loadFromFile(QString::fromStdString(config.getResourcesDir() + "emoticons/icondef2.xml"));
+    _stat=Popup;
+	_buttonX = 0;
+	_buttonY = 0;
 }
 
 void EmoticonsWidget::buttonClicked(QtEmoticon emoticon)
 {
-	if (_stat == Popup)
-		close();
-	emoticonClicked(emoticon);
+    if (_stat == Popup)
+        close();
+    emoticonClicked(emoticon);
 }
 
 void EmoticonsWidget::changeStat()
 {
-	if (_stat == Popup)
-	{
-		close();
-		setWindowFlags(Qt::Window);
-		_stat = Window;
-		show();
-	}
-	else
-	{
-		close();
-		setWindowFlags(Qt::Popup);
-		_stat=Popup;
-	}
-}
-
-void EmoticonsWidget::loadConfig(const QString & path)
-{
-	//regexp = QString("(\\b(%1))|((%2)\\b)").arg(regexp).arg(regexp);
-	_buttonX = 0;
-	_buttonY = 0;
-
-	QFile file(path);
-	QDomDocument doc("wengoIcons");
-
-    if (!file.open(QIODevice::ReadOnly))
-        return;
-    if (!doc.setContent(&file)) {
-        file.close();
-        return;
+    if (_stat == Popup) {
+        close();
+        setWindowFlags(Qt::Window);
+        _stat = Window;
+        show();
+	} else {
+        close();
+        setWindowFlags(Qt::Popup);
+        _stat=Popup;
     }
-    file.close();
+}
+void EmoticonsWidget::initButtons(const QString & protocol) {
+    QtEmoticonsManager::QtEmoticonsList emoticonsList;
+    QtEmoticonsManager::QtEmoticonsList::iterator it;
 
-	QDomElement docElem = doc.documentElement();
+    if (_layout) {
+        delete _layout;
+    }
+    _layout = new QGridLayout(this);
+    _layout->setMargin(0);
+	_buttonX=0;
+	_buttonY=0;
+    emoticonsList = _qtEmoticonsManager->getQtEmoticonsList(protocol);
 
-	QDomNode n = docElem.firstChild();
-
-	QtEmoticon emoticon;
-
-	QStringList textList;
-
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-
-	while(!n.isNull()) {
-        QDomElement e = n.toElement();
-        if(!e.isNull()) {
-			if (e.tagName() == "icon")
-			{
-				textList.clear();
-				QDomNode n1 = e.firstChild();
-				while ( ! n1.isNull() )
-				{
-					QDomElement e1 = n1.toElement();
-					if ( !e1.isNull()){
-						QString emoticonPath = QString::fromStdString(config.getResourcesDir() + "emoticons/") + e1.text();
-
-						if (e1.tagName() == "text"){
-							textList << e1.text();
-						}
-						if (e1.tagName() == "object"){
-							emoticon.setPath(emoticonPath);
-							emoticon.setPixmap(QPixmap(emoticonPath));
-						}
-						if (e1.tagName() == "regexp"){
-							emoticon.setRegExp(e1.text());
-						}
-						if (e1.tagName() == "button"){
-							emoticon.setButtonPixmap(QPixmap(emoticonPath));
-						}
-					}
-					n1 = n1.nextSibling();
-				}
-			}
-        }
-		emoticon.setText(textList);
-		_emoticonsVector.append(emoticon);
-		addButton(emoticon);
-        n = n.nextSibling();
+    for (it=emoticonsList.begin();it!=emoticonsList.end();it++) {
+        addButton((*it));
     }
 }
 
-void EmoticonsWidget::addButton(QtEmoticon emoticon){
+void EmoticonsWidget::addButton(QtEmoticon emoticon) {
 
-	if ( _buttonX == 3 ){
+	if ( _buttonX == 10 ){
 		_buttonX=0;
 		_buttonY+=1;
 	}

@@ -38,9 +38,36 @@ int QtEmoticonsManager::getEmoticonsCount(QString protocol) {
     return _protocolsList[protocol].size();
 }
 
-QtEmoticon QtEmoticonsManager::getEmoticon(const QString & text) {
+QtEmoticon QtEmoticonsManager::getEmoticon(const QString & text,const QString & protocol) {
     QtEmoticon e;
+    QtEmoticonsList emoticonList;
+    QtEmoticonsList::iterator it;
+    QStringList::iterator si;
+    QStringList tlist;
+
+    if (_protocolsList.find(protocol) == _protocolsList.end()) {
+        return e;
+    }
+    emoticonList = _protocolsList[protocol];
+
+    for (it=emoticonList.begin();it!=emoticonList.end();it++){
+        tlist = (*it).getText();
+        for (si=tlist.begin();si!=tlist.end();si++){
+            if ((*si).toUpper() == text.toUpper()){
+                return (*it);
+            }
+        }
+    }
 	return e;
+}
+
+QtEmoticonsManager::QtEmoticonsList QtEmoticonsManager::getQtEmoticonsList(const QString & protocol) {
+    QtEmoticonsList emoticonList;
+    if (_protocolsList.find(protocol) == _protocolsList.end()) {
+        return emoticonList;
+    }
+	emoticonList = _protocolsList[protocol];
+    return emoticonList;
 }
 
 void QtEmoticonsManager::loadFromFile(QString filename) {
@@ -103,7 +130,7 @@ void QtEmoticonsManager::readIcon(QDomNode node, QString protocol) {
     QDomNode n1 = node.firstChild();
     QStringList textList;
     QtEmoticon emoticon;
-
+    QPixmap emoticonPix;
     while ( ! n1.isNull() ) {
         QDomElement e1 = n1.toElement();
         if ( !e1.isNull()){
@@ -113,7 +140,9 @@ void QtEmoticonsManager::readIcon(QDomNode node, QString protocol) {
             if (e1.tagName() == "object") {
                 QString emoticonPath = QString::fromStdString(config.getResourcesDir() + "emoticons/") + e1.text();
                 emoticon.setPath(emoticonPath);
-                emoticon.setPixmap(QPixmap(emoticonPath));
+                emoticonPix = QPixmap(emoticonPath);
+                emoticon.setPixmap(emoticonPix);
+                emoticon.setButtonPixmap(emoticonPix);
             }
         }
         n1 = n1.nextSibling();
@@ -132,16 +161,68 @@ QString QtEmoticonsManager::text2Emoticon(const QString & text, const QString pr
     QString ret = text;
 
     if (_protocolsList.find(protocol) == _protocolsList.end()) {
-        // The protocol does not exists
         return text;
     }
     emoticonList = _protocolsList[protocol];
 
-    for (it = emoticonList.begin(); it != emoticonList.end(); it++){
+    for (it = emoticonList.begin(); it != emoticonList.end(); it++) {
         stringList = (*it).getText();
-        for (si = stringList.begin(); si != stringList.end(); si++){
+        for (si = stringList.begin(); si != stringList.end(); si++) {
             ret.replace((*si),(*it).getHtml(),Qt::CaseInsensitive);
         }
     }
     return ret;
 }
+
+QString QtEmoticonsManager::emoticons2Text(const QString & text, const QString protocol) {
+    int pos;
+    QtEmoticonsList emoticonList;
+    QtEmoticonsList::iterator it;
+    QStringList stringList;
+    QStringList::iterator si;
+    QString ret = text;
+
+    if (_protocolsList.find(protocol) == _protocolsList.end()) {
+        return text;
+    }
+    emoticonList = _protocolsList[protocol];
+
+    for (it = emoticonList.begin(); it != emoticonList.end(); it++) {
+        stringList = (*it).getText();
+        for (si = stringList.begin(); si != stringList.end(); si++) {
+            ret.replace((*it).getHtml(),encode((*si)),Qt::CaseInsensitive);
+        }
+    }
+    return ret;
+}
+QString QtEmoticonsManager::encode(const QString & text) {
+
+    int size;
+    int i;
+    size = text.size();
+    QByteArray ba;
+
+    for (i=0;i<size;i++){
+        switch(text[i].toAscii()){
+            case '<':
+                ba += "&lt;";
+                break;
+            case '>':
+                ba += "&gt;";
+                break;
+            case '&':
+                ba += "&amp;";
+                break;
+            case '\'':
+                ba += "&apos;";
+                break;
+            case '"':
+                ba += "&apos;";
+                break;
+            default:
+                ba += text[i];
+        }
+    }
+    return QString(ba);
+}
+

@@ -40,20 +40,17 @@ QtEmoticon::~QtEmoticon()
 
 QString QtEmoticon::getHtml()
 {
+    /*
     QString html = QString("<img src='%1' />").arg(_path);
 	return html;
+	*/
+	return QString("<img src=\"%1\" />").arg(_path);
 }
 
 QString QtEmoticon::getHtmlRegExp()
 {
 	return QString("<img src=\"%1\" />").arg(_path);
 }
-
-QString QtEmoticon::getHtml2()
-{
-	return QString("<img src=\"%1\" />").arg(_path);
-}
-
 
 bool QtEmoticon::isNull()
 {

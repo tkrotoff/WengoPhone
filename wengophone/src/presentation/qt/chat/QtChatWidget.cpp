@@ -1,5 +1,4 @@
 /*
-
  * WengoPhone, a voice over Internet phone
  * Copyright (C) 2004-2005  Wengo
  *
@@ -19,10 +18,12 @@
  */
 
 #include <imwrapper/IMContactSet.h>
+#include <imwrapper/EnumIMProtocol.h>
 
 #include "QtChatWidget.h"
 #include "chatwidgetmanager.h"
 #include "QtEmoticonsWidget.h"
+#include "QtEmoticonsManager.h"
 
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
@@ -43,6 +44,9 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
     layout->addWidget(_widget);
     layout->setMargin(0);
     setLayout(layout);
+
+    _qtEmoticonManager = new QtEmoticonsManager(this);
+    _emoticonsWidget = new EmoticonsWidget(_qtEmoticonManager,this,Qt::Popup);
 
 	_stoppedTypingDelay=1000;
 	_notTypingDelay=1000;
@@ -83,7 +87,7 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 
     _chatHistory->setHtml ("<qt type=detail>");
 
-    _emoticonsWidget = new EmoticonsWidget(this,Qt::Popup);
+
 
     connect(_emoticonsWidget,SIGNAL(emoticonClicked(QtEmoticon)),this,SLOT(emoticonSelected(QtEmoticon)));
 	connect(_emoticonsWidget,SIGNAL(closed()),_chatEdit,SLOT(setFocus()));
@@ -256,7 +260,7 @@ void ChatWidget::enterPressed(){
     _chatHistory->insertHtml (text2Emoticon(replaceUrls(_chatEdit->toPlainText(),_chatEdit->toHtml() + "<P></P>")));
     _chatHistory->ensureCursorVisible();
 
-	QString tmp = Emoticon2Text(_chatEdit->toHtml());
+	QString tmp = emoticon2Text(_chatEdit->toHtml());
 
 	// bad and ugly hack
 	QTextEdit textEditTmp(NULL);
@@ -347,30 +351,40 @@ void ChatWidget::chooseFont(){
     _chatEdit->setFocus();
 }
 
-const QString ChatWidget::Emoticon2Text(const QString &htmlstr){
-	QVector<QtEmoticon> emoticons = _emoticonsWidget->getEmoticonsVector();
-	QString tmp = htmlstr;
-    //qDebug() << "ChatWidget::Emoticon2Text : " << htmlstr;
-	for (int i = 0; i < emoticons.size(); i++)
-	{
-		//tmp.replace(QRegExp(emoticons[i].getHtmlRegExp(),Qt::CaseInsensitive),emoticons[i].getDefaultText());
-		tmp = tmp.replace(emoticons[i].getHtml2(),emoticons[i].getDefaultText());
-	}
-	return tmp;
+const QString ChatWidget::emoticon2Text(const QString &htmlstr){
+    return _qtEmoticonManager->emoticons2Text(htmlstr,getProtocol());
 }
 
 const QString ChatWidget::text2Emoticon(const QString &htmlstr){
-	QVector<QtEmoticon> emoticons = _emoticonsWidget->getEmoticonsVector();
-	QString tmp = htmlstr;
-    //qDebug() << "ChatWidget::text2Emoticon : " << htmlstr;
-	for (int i = 0; i < emoticons.size(); i++)
-	{
-		tmp.replace(QRegExp(emoticons[i].getRegExp(),Qt::CaseInsensitive),emoticons[i].getHtml());
-	}
-	return tmp;
+    return _qtEmoticonManager->text2Emoticon(htmlstr,getProtocol());
 }
 
-const QString  ChatWidget::replaceUrls(const QString & str, const QString & htmlstr){
+QString ChatWidget::getProtocol() const {
+    QString protocol;
+
+    EnumIMProtocol::IMProtocol proto = _imChatSession->getIMChat().getIMAccount().getProtocol();
+    switch (proto) {
+        case EnumIMProtocol::IMProtocolMSN:
+            protocol="msn";
+            break;
+        case EnumIMProtocol::IMProtocolYahoo:
+            protocol="yahoo";
+            break;
+        case EnumIMProtocol::IMProtocolSIPSIMPLE:
+            protocol="wengo";
+            break;
+        case EnumIMProtocol::IMProtocolJabber:
+        case EnumIMProtocol::IMProtocolAIMICQ:
+        case EnumIMProtocol::IMProtocolUnknown:
+            protocol="default";
+            break;
+        default:
+            protocol="default";
+    }
+    return protocol;
+}
+
+const QString ChatWidget::replaceUrls(const QString & str, const QString & htmlstr){
     int beginPos = 0;
     QString tmp=htmlstr;
     int endPos;
@@ -411,6 +425,7 @@ void ChatWidget::chooseEmoticon(){
 	p.setY(p.y() + _actionFrame->rect().bottom());
 	_emoticonsWidget->move(mapToGlobal(p));
 	_emoticonsWidget->setWindowOpacity(0.95);
+
     _emoticonsWidget->show();
 }
 
@@ -421,6 +436,7 @@ void ChatWidget::emoticonSelected(QtEmoticon emoticon){
 
 void ChatWidget::setIMChatSession(IMChatSession * imChatSession){
 	_imChatSession = imChatSession;
+	_emoticonsWidget->initButtons(getProtocol());
 
 	_imChatSession->contactAddedEvent +=
         boost::bind(&ChatWidget::contactAddedEventHandler,this,_1,_2);

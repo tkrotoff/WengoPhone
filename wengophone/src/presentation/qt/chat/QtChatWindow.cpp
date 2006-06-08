@@ -21,6 +21,7 @@
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
 
+
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/contactlist/QtContactList.h>
 #include <presentation/qt/contactlist/QtUserList.h>
@@ -52,6 +53,7 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
     _flashTimerId = -1;
     _flashStat=false;
     _flashCount=0;
+
 	_imChatSession->messageReceivedEvent +=
 		boost::bind(&ChatWindow::messageReceivedEventHandler, this, _1);
 

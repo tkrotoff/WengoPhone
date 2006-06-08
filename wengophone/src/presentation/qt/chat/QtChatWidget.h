@@ -36,6 +36,7 @@
 #include "QtChatRoomInviteDlg.h"
 
 class QtWengoStyleLabel;
+class QtEmoticonsManager;
 
 class ChatWidget : public QWidget //, Ui::ChatWidget
 {
@@ -157,7 +158,7 @@ protected:
 
 	const QString text2Emoticon(const QString &htmlstr);
 
-	const QString Emoticon2Text(const QString &htmlstr);
+	const QString emoticon2Text(const QString &htmlstr);
 
 	virtual void timerEvent ( QTimerEvent * event );
 
@@ -169,12 +170,14 @@ protected:
 
     void updateContactListLabel();
 
+    QString getProtocol() const;
+
     QString generateHtmlHeader(const QString & bgColor,
                                        const QString & barColor,
                                        const QString & stringColor,
                                        const QString & nickName);
 
-
+    QtEmoticonsManager * _qtEmoticonManager;
 
 	/**
 	 * Prepares a message to be sent to the network.
