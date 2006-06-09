@@ -22,7 +22,7 @@
 
 #include <util/Interface.h>
 
-#include <thread/Mutex.h>
+#include <thread/RecursiveMutex.h>
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/xtime.hpp>
@@ -121,7 +121,7 @@ public:
 		//the Qt library (I mean the equivalent from Boost)
 		//Fabien Penso's source code needs to be checked (SoftPhone class)
 		//Boost Synchronization Primitives needs to be checked aswell
-		Mutex::ScopedLock ScopedLock(_mutex);
+		RecursiveMutex::ScopedLock ScopedLock(_mutex);
 		_eventList.push_back(event);
 	}
 
@@ -220,8 +220,8 @@ protected:
 	virtual void runEvents() {
 		//FIXME See info inside postEvent()
 		//There is a problem here
-		Mutex::ScopedLock ScopedLock(_mutex);
-		msleep(100);
+		RecursiveMutex::ScopedLock ScopedLock(_mutex);
+
 		for (unsigned int i = 0; i < _eventList.size(); i++) {
 			_eventList[i]->callback();
 			delete _eventList[i];
@@ -260,7 +260,7 @@ protected:
 	 *
 	 * FIXME
 	 */
-	mutable Mutex _mutex;
+	mutable RecursiveMutex _mutex;
 
 private:
 
