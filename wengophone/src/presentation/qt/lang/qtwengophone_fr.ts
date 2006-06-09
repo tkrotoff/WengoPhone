@@ -1871,7 +1871,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Talking</source>
-        <translation>Communication en cous</translation>
+        <translation>Communication en cours</translation>
     </message>
     <message>
         <source>Dialing</source>
