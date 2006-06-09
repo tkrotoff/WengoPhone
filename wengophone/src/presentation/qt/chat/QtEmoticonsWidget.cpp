@@ -61,7 +61,6 @@ void EmoticonsWidget::changeStat()
 void EmoticonsWidget::initButtons(const QString & protocol) {
     QtEmoticonsManager::QtEmoticonsList emoticonsList;
     QtEmoticonsManager::QtEmoticonsList::iterator it;
-
     if (_layout) {
         delete _layout;
     }
@@ -82,7 +81,7 @@ void EmoticonsWidget::addButton(QtEmoticon emoticon) {
 		_buttonX=0;
 		_buttonY+=1;
 	}
-	QtEmoticonButton * button = new QtEmoticonButton(this);
+	QtEmoticonButton * button = new QtEmoticonButton();
 	button->setEmoticon(emoticon);
 	button->setMaximumSize(emoticon.getButtonPixmap().size());
 	button->setMinimumSize(emoticon.getButtonPixmap().size());

@@ -425,7 +425,6 @@ void ChatWidget::chooseEmoticon(){
 	p.setY(p.y() + _actionFrame->rect().bottom());
 	_emoticonsWidget->move(mapToGlobal(p));
 	_emoticonsWidget->setWindowOpacity(0.95);
-
     _emoticonsWidget->show();
 }
 
@@ -436,7 +435,7 @@ void ChatWidget::emoticonSelected(QtEmoticon emoticon){
 
 void ChatWidget::setIMChatSession(IMChatSession * imChatSession){
 	_imChatSession = imChatSession;
-	_emoticonsWidget->initButtons(getProtocol());
+    _emoticonsWidget->initButtons(getProtocol());
 
 	_imChatSession->contactAddedEvent +=
         boost::bind(&ChatWidget::contactAddedEventHandler,this,_1,_2);

@@ -57,6 +57,7 @@ class QtProfileBar;
 class QtWengoStyleLabel;
 class QtWsDirectory;
 class TrayIcon;
+class QtTrayIcon;
 
 class QPushButton;
 class QComboBox;
@@ -143,6 +144,10 @@ public:
 
 	void showHistory();
 
+	CWengoPhone & getCWengoPhone() { return _cWengoPhone; }
+
+	QtProfileBar * getProfileBar() { return _qtProfileBar; }
+
 Q_SIGNALS:
 
 	void connectionStatusEventHandlerSignal(int totalSteps, int currentStep, QString infoMsg);
@@ -157,7 +162,7 @@ Q_SIGNALS:
 
 	void signalTimeoutEventReached();
 
-private Q_SLOTS:
+public Q_SLOTS:
 
 	void connectionStatusEventHandlerSlot(int totalSteps, int currentStep, QString infoMsg);
 
@@ -239,10 +244,6 @@ private Q_SLOTS:
 
 	void phoneComboBoxClicked();
 
-	void setSystrayIcon(QVariant status);
-
-	void sysTrayDoubleClicked(const QPoint& p);
-
 	void addToConference(QString phoneNumber, PhoneCall * targetCall);
 
 	void addToConference(PhoneCall * sourceCall, PhoneCall * targetCall);
@@ -271,8 +272,6 @@ private Q_SLOTS:
 
 	void slotSystrayMenuCallBlank(bool checked);
 
-	void setTrayMenu();
-
 	void slotTimeoutEventReachedThreadSafe();
 
 	void slotTranslationChanged();
@@ -290,8 +289,6 @@ private:
 	 * since QtPhoneCall modifies the behaviour of this buttons.
 	 */
 	void initButtons();
-
-	void updateCallMenu();
 
 	void updatePresentationThreadSafe();
 
@@ -318,9 +315,6 @@ private:
 
 	void timeoutEventHandler();
 
-	QMenu * createCallLandLineTrayMenu();
-	QMenu * createCallMobileTrayMenu();
-	QMenu * createCallWengoTrayMenu();
 	QMenu * createCallMenu();
 
 	/** Direct link to the control. */
@@ -338,18 +332,9 @@ private:
 
 	TrayIcon * _trayIcon;
 
-	QMenu * _trayMenu;
+	QtTrayIcon * _qtTrayIcon;
 
-	QMenu * _callMenu;
-	QMenu * _callLandLineMenu;
-	QMenu * _callMobileMenu;
-	QMenu * _callWengoMenu;
-
-	QMenu * _startChatMenu;
-
-	QMenu * _sendSmsMenu;
-
-	QtSms * _qtSms;
+    QtSms * _qtSms;
 
 	QtWsDirectory * _qtWsDirectory;
 
