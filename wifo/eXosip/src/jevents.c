@@ -63,123 +63,130 @@ eXosip_event_init_for_call(int type,
 			   eXosip_call_t *jc,
 			   eXosip_dialog_t *jd)
 {
-  eXosip_event_t *je;
-  eXosip_event_init(&je, type);
-  if (je==NULL) return NULL;
-  je->jc = jc;
-  je->jd = jd;
+	eXosip_event_t *je;
+	eXosip_event_init(&je, type);
 
-  je->cid = jc->c_id;
-  if (jd!=NULL)
-    je->did = jd->d_id;
+	if (je==NULL) 
+		return NULL;
+	
+	je->jc = jc;
+	je->jd = jd;
 
-  je->external_reference = jc->external_reference;
-
-  /* fill in usefull info */
-  if (type==EXOSIP_CALL_NEW
-      || type==EXOSIP_CALL_ACK
-      || type==EXOSIP_CALL_NOANSWER
-      || type==EXOSIP_CALL_PROCEEDING
-      || type==EXOSIP_CALL_RINGING
-      || type==EXOSIP_CALL_ANSWERED
-      || type==EXOSIP_CALL_REDIRECTED
-      || type==EXOSIP_CALL_REQUESTFAILURE
-      || type==EXOSIP_CALL_SERVERFAILURE
-      || type==EXOSIP_CALL_GLOBALFAILURE
-      || type==EXOSIP_CALL_REPLACES
-
-      || type==EXOSIP_OPTIONS_NOANSWER
-      || type==EXOSIP_OPTIONS_PROCEEDING
-      || type==EXOSIP_OPTIONS_ANSWERED
-      || type==EXOSIP_OPTIONS_REDIRECTED
-      || type==EXOSIP_OPTIONS_REQUESTFAILURE
-      || type==EXOSIP_OPTIONS_SERVERFAILURE
-      || type==EXOSIP_OPTIONS_GLOBALFAILURE
-      || type==EXOSIP_OPTIONS_NEW
-
-      || type==EXOSIP_INFO_NOANSWER
-      || type==EXOSIP_INFO_PROCEEDING
-      || type==EXOSIP_INFO_ANSWERED
-      || type==EXOSIP_INFO_REDIRECTED
-      || type==EXOSIP_INFO_REQUESTFAILURE
-      || type==EXOSIP_INFO_SERVERFAILURE
-      || type==EXOSIP_INFO_GLOBALFAILURE
-      || type==EXOSIP_INFO_NEW
-
-      || type==EXOSIP_CALL_CANCELLED
-      || type==EXOSIP_CALL_TIMEOUT
-      || type==EXOSIP_CALL_HOLD
-      || type==EXOSIP_CALL_OFFHOLD
-      || type==EXOSIP_CALL_CLOSED
-      || type==EXOSIP_CALL_STARTAUDIO
-
-      || type==EXOSIP_CALL_REFERED
-      || type==EXOSIP_CALL_REFER_STATUS
-      || type==EXOSIP_CALL_REFER_FAILURE
-
-      || type==EXOSIP_CALL_RELEASED)
-    {
-      if (jc->c_sdp_port[0]!='\0')
-	je->local_sdp_audio_port = osip_atoi(jc->c_sdp_port);
-
-      if (jd!=NULL&&jd->d_dialog!=NULL)
+	if (jc != NULL)
 	{
-	  osip_transaction_t *tr;
-	  osip_header_t *subject;
-	  char *tmp;
-	  
-	  fill_dialog_params(je,jd->d_dialog);
-
-	  if (type==EXOSIP_OPTIONS_NOANSWER
-	      || type==EXOSIP_OPTIONS_PROCEEDING
-	      || type==EXOSIP_OPTIONS_ANSWERED
-	      || type==EXOSIP_OPTIONS_REDIRECTED
-	      || type==EXOSIP_OPTIONS_REQUESTFAILURE
-	      || type==EXOSIP_OPTIONS_SERVERFAILURE
-	      || type==EXOSIP_OPTIONS_GLOBALFAILURE
-	      || type==EXOSIP_OPTIONS_NEW)
-	    tr = eXosip_find_last_options(jc, jd);
-	  else if (type==EXOSIP_INFO_NOANSWER
-		   || type==EXOSIP_INFO_PROCEEDING
-		   || type==EXOSIP_INFO_ANSWERED
-		   || type==EXOSIP_INFO_REDIRECTED
-		   || type==EXOSIP_INFO_REQUESTFAILURE
-		   || type==EXOSIP_INFO_SERVERFAILURE
-		   || type==EXOSIP_INFO_GLOBALFAILURE
-		   || type==EXOSIP_INFO_NEW)
-	    tr = eXosip_find_last_info(jc, jd);
-	  else if (type==EXOSIP_CALL_REFERED)
-	    tr = eXosip_find_last_refer(jc, jd);
-	  else if (type==EXOSIP_CALL_REFER_STATUS)
-	    tr = eXosip_find_last_inc_notify_for_refer(jc, jd);
-	  else
-	    tr = eXosip_find_last_invite(jc, jd);
-	  if (tr!=NULL && tr->orig_request!=NULL)
-	    {
-	      osip_message_get_subject(tr->orig_request, 0, &subject);
-	      if (subject!=NULL && subject->hvalue!=NULL && subject->hvalue[0]!='\0')
-		snprintf(je->subject, 255, "%s", subject->hvalue);
-	      osip_message_header_get_byname(tr->orig_request, "refer-to", 0,
-					     &subject);
-	      if (subject!=NULL && subject->hvalue!=NULL && subject->hvalue[0]!='\0')
-		snprintf(je->refer_to, 255, "%s", subject->hvalue);
-
-	      osip_uri_to_str(tr->orig_request->req_uri, &tmp);
-	      if (tmp!=NULL)
-		{
-		  snprintf(je->req_uri, 255, "%s", tmp);
-		  osip_free(tmp);
-		}
-	    }
-	  if (tr!=NULL && tr->last_response!=NULL)
-	    {
-	      snprintf(je->reason_phrase, 49, "%s", tr->last_response->reason_phrase);
-	      je->status_code = tr->last_response->status_code;
-	    }
+		je->cid = jc->c_id;
+		je->external_reference = jc->external_reference;
 	}
+	if (jd!=NULL)
+		je->did = jd->d_id;
+
+	/* fill in usefull info */
+	if (type==EXOSIP_CALL_NEW
+		|| type==EXOSIP_CALL_ACK
+		|| type==EXOSIP_CALL_NOANSWER
+		|| type==EXOSIP_CALL_PROCEEDING
+		|| type==EXOSIP_CALL_RINGING
+		|| type==EXOSIP_CALL_ANSWERED
+		|| type==EXOSIP_CALL_REDIRECTED
+		|| type==EXOSIP_CALL_REQUESTFAILURE
+		|| type==EXOSIP_CALL_SERVERFAILURE
+		|| type==EXOSIP_CALL_GLOBALFAILURE
+		|| type==EXOSIP_CALL_REPLACES
+
+		|| type==EXOSIP_OPTIONS_NOANSWER
+		|| type==EXOSIP_OPTIONS_PROCEEDING
+		|| type==EXOSIP_OPTIONS_ANSWERED
+		|| type==EXOSIP_OPTIONS_REDIRECTED
+		|| type==EXOSIP_OPTIONS_REQUESTFAILURE
+		|| type==EXOSIP_OPTIONS_SERVERFAILURE
+		|| type==EXOSIP_OPTIONS_GLOBALFAILURE
+		|| type==EXOSIP_OPTIONS_NEW
+
+		|| type==EXOSIP_INFO_NOANSWER
+		|| type==EXOSIP_INFO_PROCEEDING
+		|| type==EXOSIP_INFO_ANSWERED
+		|| type==EXOSIP_INFO_REDIRECTED
+		|| type==EXOSIP_INFO_REQUESTFAILURE
+		|| type==EXOSIP_INFO_SERVERFAILURE
+		|| type==EXOSIP_INFO_GLOBALFAILURE
+		|| type==EXOSIP_INFO_NEW
+
+		|| type==EXOSIP_CALL_CANCELLED
+		|| type==EXOSIP_CALL_TIMEOUT
+		|| type==EXOSIP_CALL_HOLD
+		|| type==EXOSIP_CALL_OFFHOLD
+		|| type==EXOSIP_CALL_CLOSED
+		|| type==EXOSIP_CALL_STARTAUDIO
+
+		|| type==EXOSIP_CALL_REFERED
+		|| type==EXOSIP_CALL_REFER_STATUS
+		|| type==EXOSIP_CALL_REFER_FAILURE
+
+		|| type==EXOSIP_CALL_RELEASED)
+    {
+		if (jc != NULL && jc->c_sdp_port[0]!='\0')
+			je->local_sdp_audio_port = osip_atoi(jc->c_sdp_port);
+
+		if (jd != NULL && jd->d_dialog != NULL)
+		{
+			osip_transaction_t *tr;
+			osip_header_t *subject;
+			char *tmp;
+			  
+			fill_dialog_params(je,jd->d_dialog);
+
+			if (type==EXOSIP_OPTIONS_NOANSWER
+				|| type==EXOSIP_OPTIONS_PROCEEDING
+				|| type==EXOSIP_OPTIONS_ANSWERED
+				|| type==EXOSIP_OPTIONS_REDIRECTED
+				|| type==EXOSIP_OPTIONS_REQUESTFAILURE
+				|| type==EXOSIP_OPTIONS_SERVERFAILURE
+				|| type==EXOSIP_OPTIONS_GLOBALFAILURE
+				|| type==EXOSIP_OPTIONS_NEW)
+				tr = eXosip_find_last_options(jc, jd);
+			else if (type==EXOSIP_INFO_NOANSWER
+				|| type==EXOSIP_INFO_PROCEEDING
+				|| type==EXOSIP_INFO_ANSWERED
+				|| type==EXOSIP_INFO_REDIRECTED
+				|| type==EXOSIP_INFO_REQUESTFAILURE
+				|| type==EXOSIP_INFO_SERVERFAILURE
+				|| type==EXOSIP_INFO_GLOBALFAILURE
+				|| type==EXOSIP_INFO_NEW)
+				tr = eXosip_find_last_info(jc, jd);
+			else if (type==EXOSIP_CALL_REFERED)
+				tr = eXosip_find_last_refer(jc, jd);
+			else if (type==EXOSIP_CALL_REFER_STATUS)
+				tr = eXosip_find_last_inc_notify_for_refer(jc, jd);
+			else
+				tr = eXosip_find_last_invite(jc, jd);
+
+			if (tr!=NULL && tr->orig_request!=NULL)
+			{
+				osip_message_get_subject(tr->orig_request, 0, &subject);
+				if (subject!=NULL && subject->hvalue!=NULL && subject->hvalue[0]!='\0')
+					snprintf(je->subject, 255, "%s", subject->hvalue);
+				osip_message_header_get_byname(tr->orig_request, "refer-to", 0,
+								&subject);
+				if (subject!=NULL && subject->hvalue!=NULL && subject->hvalue[0]!='\0')
+					snprintf(je->refer_to, 255, "%s", subject->hvalue);
+
+				osip_uri_to_str(tr->orig_request->req_uri, &tmp);
+				if (tmp!=NULL)
+				{
+					snprintf(je->req_uri, 255, "%s", tmp);
+					osip_free(tmp);
+				}
+			}
+	  
+			if (tr!=NULL && tr->last_response!=NULL)
+			{
+				snprintf(je->reason_phrase, 49, "%s", tr->last_response->reason_phrase);
+				je->status_code = tr->last_response->status_code;
+			}
+		}
     }
   
-  return je;
+	return je;
 }
 
 int

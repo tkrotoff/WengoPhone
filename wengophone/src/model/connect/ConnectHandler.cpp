@@ -55,7 +55,7 @@ void ConnectHandler::connect(IMAccount & imAccount) {
 	ConnectMap::const_iterator it = _connectMap.find(actIMAccount);
 
 	if (it == _connectMap.end()) {
-		connect = new Connect(*actIMAccount);
+		connect = new Connect(*actIMAccount, _userProfile);
 
 		connect->connectedEvent +=
 			boost::bind(&ConnectHandler::connectedEventHandler, this, _1);

@@ -289,61 +289,60 @@ int jfriend_get_and_set_next_token (char **dest, char *buf,
 typedef struct eXosip_t eXosip_t;
 
 struct eXosip_t {
-  int forced_localip; /* set to 1 when we must always use the default local ip */
-  char *localip;	/* default local ip */
-  char *localport;
+	int					forced_localip;	/* set to 1 when we must always use the default local ip */
+	char				*localip;		/* default local ip */
+	char				*localport;
 
-  char *mediaip;      /* use this address for media ip */
+	char				*mediaip;		/* use this address for media ip */
 
-  char *user_agent;
+	char				*user_agent;
 
-  const char *subscribe_timeout;
-  FILE               *j_input;
-  FILE               *j_output;
-  eXosip_call_t      *j_calls;        /* my calls        */
-  eXosip_subscribe_t *j_subscribes;   /* my friends      */
-  eXosip_notify_t    *j_notifies;     /* my susbscribers */
-  osip_list_t        *j_transactions;
+	const char			*subscribe_timeout;
+	FILE				*j_input;
+	FILE				*j_output;
+	eXosip_call_t		*j_calls;		/* my calls        */
+	eXosip_subscribe_t	*j_subscribes;	/* my friends      */
+	eXosip_notify_t		*j_notifies;	/* my susbscribers */
+	osip_list_t			*j_transactions;
 
-  eXosip_reg_t       *j_reg;
-  eXosip_msg_t       *j_msgs;
+	eXosip_reg_t		*j_reg;
+	eXosip_msg_t		*j_msgs;
 
-  void               *j_cond;
-  void               *j_mutexlock;
+	void				*j_cond;
+	void				*j_mutexlock;
 
-  
-  void				 *j_socket_mutex;
+	void				*j_socket_mutex;
 
-  eXosip_tunnel_t	 *tunnel;
+	eXosip_tunnel_t		*tunnel;
 
-  int				 use_tunnel;
+	time_t				last_srv_active_time;	// The moment that we received the last message from the server.
 
-  
+	int					use_tunnel;
 
-  osip_t             *j_osip;
-  int                 j_socket;
-  int                 j_stop_ua;
-  void               *j_thread;
-  jpipe_t            *j_socketctl;
-  jpipe_t            *j_socketctl_event;
+	osip_t				*j_osip;
+	int					j_socket;
+	int					j_stop_ua;
+	void				*j_thread;
+	jpipe_t				*j_socketctl;
+	jpipe_t				*j_socketctl_event;
 
-  jsubscriber_t      *j_subscribers;
-  jfriend_t          *j_friends;
-  jidentity_t        *j_identitys;
+	jsubscriber_t		*j_subscribers;
+	jfriend_t			*j_friends;
+	jidentity_t			*j_identitys;
 
-  int                 j_runtime_mode;
-  eXosip_callback_t   j_call_callbacks[EXOSIP_CALLBACK_COUNT];
-  osip_fifo_t        *j_events;
+	int					j_runtime_mode;
+	eXosip_callback_t	j_call_callbacks[EXOSIP_CALLBACK_COUNT];
+	osip_fifo_t			*j_events;
 
-  osip_negotiation_t *osip_negotiation;
-  char                j_firewall_ip[50];
-  char					j_firewall_port[9];
-  jauthinfo_t        *authinfos;
+	osip_negotiation_t	*osip_negotiation;
+	char				j_firewall_ip[50];
+	char				j_firewall_port[9];
+	jauthinfo_t			*authinfos;
 
-  int                 ip_family; /* AF_INET6 or AF_INET */
-  char                nat_type[16];
-  char                forced_proxy[256];
-  char                answer_contact[256]; /* conatact header value to use in answers */
+	int					ip_family;				/* AF_INET6 or AF_INET */
+	char				nat_type[16];
+	char				forced_proxy[256];
+	char				answer_contact[256];	/* conatact header value to use in answers */
 };
 
 typedef struct jinfo_t jinfo_t;

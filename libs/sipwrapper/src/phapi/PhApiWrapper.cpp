@@ -110,6 +110,7 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 	PhApiWrapperHack = this;
 	_inputAudioDeviceId = 0;
 	_outputAudioDeviceId = 0;
+	_registered = false;
 
 	_publishTimer.timeoutEvent += boost::bind(&PhApiWrapper::renewPublishEventHandler, this);
 
@@ -507,7 +508,8 @@ void PhApiWrapper::enableHalfDuplex(bool enable) {
  */
 
 void PhApiWrapper::connect() {
-	connectedEvent(*this);
+	if (isRegistered())
+		connectedEvent(*this);
 }
 
 void PhApiWrapper::disconnect() {

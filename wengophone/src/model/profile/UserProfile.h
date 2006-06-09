@@ -64,6 +64,7 @@ class UserProfile : public Profile {
 	friend class UserProfileFileStorage;
 	friend class UserProfileXMLSerializer;
 	friend class ConnectHandler;
+	friend class Connect;
 public:
 
 	/**

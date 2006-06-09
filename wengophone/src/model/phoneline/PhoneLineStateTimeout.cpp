@@ -20,6 +20,8 @@
 #include "PhoneLineStateTimeout.h"
 
 #include "IPhoneLine.h"
+#include <model/account/SipAccount.h>
 
 void PhoneLineStateTimeout::execute(IPhoneLine & phoneLine) {
+	phoneLine.getSipAccount().setConnected(false);
 }

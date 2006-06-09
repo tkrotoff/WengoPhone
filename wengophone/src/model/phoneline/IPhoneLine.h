@@ -136,7 +136,7 @@ public:
 	 *
 	 * @return SIP account associated with this PhoneLine or NULL
 	 */
-	virtual const SipAccount & getSipAccount() const = 0;
+	virtual SipAccount & getSipAccount() = 0;
 
 	/**
 	 * Establishes a connection with the SIP server.

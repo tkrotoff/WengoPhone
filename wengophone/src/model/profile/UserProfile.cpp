@@ -184,6 +184,7 @@ void UserProfile::connectSipAccounts() {
 			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 		addIMAccount(imAccount);
 		_connectHandler.connect((IMAccount &)*_imAccountHandler->find(imAccount));
+		_wengoAccountConnected = false;
 	}
 	////
 }

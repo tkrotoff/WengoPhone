@@ -330,6 +330,9 @@ int
 eXosip_unlock_jsocket(void);
 
 
+int eXosip_get_srv_idle_time();
+
+void eXosip_reset_idle_time();
 
 /** @} */
 
@@ -819,33 +822,33 @@ typedef enum eXosip_event_type_t {
   EXOSIP_CALLBACK_COUNT
 } eXosip_event_type_t;
 
-typedef struct eXosip_event {
-  eXosip_event_type_t type;
-  void               *external_reference;
-  char                reason_phrase[50];
-  int                 status_code;
-  char		      sip_event[30];
-  
-  char                textinfo[256];
-  char                req_uri[256];
-  char                local_uri[256];
-  char                remote_uri[256];
-  char                remote_contact[256];
-  char                refer_to[256];
-  char                subject[256];
-  osip_content_type_t *i_ctt;
-  osip_list_t         *i_bodies;
+typedef struct eXosip_event {	
+	eXosip_event_type_t	type;
+	void				*external_reference;
+	char				reason_phrase[50];
+	int					status_code;
+	char				sip_event[30];
+	  
+	char				textinfo[256];
+	char				req_uri[256];
+	char				local_uri[256];
+	char				remote_uri[256];
+	char				remote_contact[256];
+	char				refer_to[256];
+	char				subject[256];
+	osip_content_type_t	*i_ctt;
+	osip_list_t			*i_bodies;
 
-  char                remote_sdp_audio_ip[50];
-  int                 remote_sdp_audio_port;
-  int                 local_sdp_audio_port;
-  char                remote_sdp_video_ip[50];
-  int                 remote_sdp_video_port;
-  int                 local_sdp_video_port;
-  int                 payload;
-  char                payload_name[50];
-  int                 video_payload;
-  char                video_payload_name[50];
+	char				remote_sdp_audio_ip[50];
+	int					remote_sdp_audio_port;
+	int					local_sdp_audio_port;
+	char				remote_sdp_video_ip[50];
+	int					remote_sdp_video_port;
+	int					local_sdp_video_port;
+	int					payload;
+	char				payload_name[50];
+	int					video_payload;
+	char				video_payload_name[50];
 
 /*<MINHPQ>
  *  I change the name and the type of the following variable due to following reasons:

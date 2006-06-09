@@ -154,20 +154,20 @@ static int ph_call_media_suspend(phcall_t *ca, int localhold);
 
 struct vline
 {
-  char  *displayname;
-  char  *username;
-  char  *server;
-  int    port;
-  char  *proxy;
-  char  *contact;
-  time_t   regTimeout;
-  time_t   lastRegTime;
-  int   rid;
+	char	*displayname;
+	char	*username;
+	char	*server;
+	int		port;
+	char	*proxy;
+	char	*contact;
+	time_t	regTimeout;
+	time_t	lastRegTime;
+	int		rid;
 #define VL_USED 1
 #define VL_DELETING 2
-  int   used;
-  int   busy;
-  char  *followme;
+	int		used;
+	int		busy;
+	char	*followme;
 };
 
 
@@ -1951,28 +1951,28 @@ phDelVline(int vlid, int regTimeout)
 
 	if (regTimeout >= 0)
 		vl->regTimeout = regTimeout;
-  
+
 	/* 
 	 if the line has an associatied timeout, 
      it means it is registered on some server,
      so we need to unregister 
 	*/
 	if (vl->regTimeout)
-	{  
+	{
 		eXosip_lock();
 		eXosip_register(vl->rid, 0);
 		vl->regTimeout = 0;
 		vl->used = VL_DELETING;
 		eXosip_unlock();
-    }
+	}
 	else
 	{
 		vline_free(vl);
 	}
- 
+
 	if (vl->used != VL_DELETING)
 		return 0;
-	
+
 	return 0;
 }
 
@@ -2202,57 +2202,57 @@ ph_nat_refresh(struct vline *vl)
 
 }
 
+#define MAX_SRV_IDLE_TIME	45 /* The maximum idle time since we receive the last message from server */
+
 static time_t last_vline_refresh, last_nat_refresh;
 static void 
 ph_refresh_vlines()
 {
-  time_t now = time(NULL);
+	time_t now = time(NULL);
 
-  if (now - last_vline_refresh > 5)
-    {
-      int i;
-      struct vline *vl;
-
-      for( i = 0; i < PH_MAX_VLINES; i++)
+	if (now - last_vline_refresh > 5)
 	{
-	  vl = ph_vlines + i;  
-	  if (!vl->used)
-	    continue;
+		int i;
+		struct vline *vl;
 
-	  if (vl->server && vl->server[0] && vl->regTimeout > 0)
-	    {
-	      if ((now - vl->lastRegTime) > (vl->regTimeout - 5))
-		phvlRegister(ph_vline2vlid(vl));
-	    }
+		for (i = 0; i < PH_MAX_VLINES; i++)
+		{
+			vl = ph_vlines + i;  
+			if (!vl->used)
+				continue;
+
+			if (vl->server && vl->server[0] && vl->regTimeout > 0)
+			{
+				if ((now - vl->lastRegTime) > (vl->regTimeout - 5))
+					phvlRegister(ph_vline2vlid(vl));
+			}
+		}
+		last_vline_refresh = time(0);
 	}
-      last_vline_refresh = time(0);
-    }
 
-  //if (!phcfg.use_tunnel && phcfg.nat_refresh_time > 0)
-  if (phcfg.nat_refresh_time > 0)
-    {
-      int i;
-      struct vline *vl;
+	//if (!phcfg.use_tunnel && phcfg.nat_refresh_time > 0)
+	if (phcfg.nat_refresh_time > 0)
+	{
+		int i;
+		struct vline *vl;
 
-      if (now - last_nat_refresh > phcfg.nat_refresh_time)
-	    {
-	    for( i = 0; i < PH_MAX_VLINES; i++)
-          {
-          vl = ph_vlines + i;  
-          if (!vl->used)
-		     continue;
+		if (now - last_nat_refresh > phcfg.nat_refresh_time)
+		{
+			for( i = 0; i < PH_MAX_VLINES; i++)
+			{
+				vl = ph_vlines + i;  
+				if (!vl->used)
+					continue;
 
-          if (vl->server && vl->server[0] && vl->regTimeout > 0)
-		    {
-		    ph_nat_refresh(vl);
-		    }
-          }
-	
-	  last_nat_refresh = time(0);
+				if (vl->server && vl->server[0] && vl->regTimeout > 0)
+				{
+					ph_nat_refresh(vl);
+				}
+			}
+		
+			last_nat_refresh = time(0);
+		}
 	}
-    }
-
-
 }
   
 
@@ -2262,54 +2262,51 @@ ph_refresh_vlines()
 static void
 ph_scan_calls()
 {
-  int i;
-  phcall_t *ca;
+	int i;
+	phcall_t *ca;
 
-  ca = ph_calls;
-  for(i = PH_MAX_CALLS; i; i--, ca++)
-    {
-      if (ca->cid > 0 && ca->closereq)
+	ca = ph_calls;
+	for (i = PH_MAX_CALLS; i; i--, ca++)
 	{
-	  phCallStateInfo_t info;
-	  int cid = ca->cid;
-	  
-	  memset(&info, 0, sizeof(info));
-	  info.vlid = ca->vlid;
-	  info.event = phCALLCLOSED;
+		if (ca->cid > 0 && ca->closereq)
+		{
+			phCallStateInfo_t info;
+			int cid = ca->cid;
+		  
+			memset(&info, 0, sizeof(info));
+			info.vlid = ca->vlid;
+			info.event = phCALLCLOSED;
 
-	  ph_release_call(ca);
-	  
-
-
-	  phcb->callProgress(cid, &info);
+			ph_release_call(ca);
+		  
+			phcb->callProgress(cid, &info);
+		}
 	}
-    }
-
 }
 
 static char *
 ph_get_proxy(const char *userid)
 {
-  struct vline *vl = ph_find_matching_vline(userid, PHM_IGNORE_PORT);
+	struct vline *vl = ph_find_matching_vline(userid, PHM_IGNORE_PORT);
 
-  if (!vl)
-    return "";
+	if (!vl)
+		return "";
 
-  return vl->proxy ? vl->proxy : "";
+	return vl->proxy ? vl->proxy : "";
 }
 
 
 static char *
 ph_get_call_contact(phcall_t *ca)
 {
-  struct vline *vl;
-  assert(ca);
+	struct vline *vl;
+	assert(ca);
 
-  vl = ph_vlid2vline(ca->vlid);
-  if (!vl)
-    return 0;
+	vl = ph_vlid2vline(ca->vlid);
+	if (!vl)
+		return 0;
 
- return vl->contact;
+	return vl->contact;
 }
   
 
@@ -3414,7 +3411,7 @@ ph_call_replaces(eXosip_event_t *je)
 	info.u.remoteUri = je->remote_uri; 
 	info.localUri = je->local_uri;
 	info.newcid =  je->cid;
-       
+
 	info.vlid = oldca->vlid;
 	
 	if (!ca->vlid)
@@ -3871,103 +3868,102 @@ ph_call_onhold(eXosip_event_t *je)
 void 
 ph_call_offhold(eXosip_event_t *je)
 {
-    phCallStateInfo_t info;
-    phcall_t *ca;
-    int cng=0;
-    int remhold;
-    
-    DBG4_SIP_NEGO("SIP NEGO: ph_call_offhold\n", 0, 0, 0);
-    
-    ca = ph_locate_call(je, 0);
-    if (!ca)
-    {
-        return;
-    }
-    
-    clear(info);
-    
-    info.vlid = ca->vlid;
-    // ph_media_resume(ca);
-    
-    //  if (ph_call_hasaudio(ca))
-    //      ph_media_stop(ca);
-    
-    remhold = ca->remotehold;
-    ca->remotehold = 0;
-    
-    ph_call_retrieve_payloads(ca, je, -1);
-    ph_call_media_start(ca, je, -1, remhold);
-    
-    if (remhold)
-    {
-        info.userData = je->external_reference;
-        info.event = phCALLRESUMED;
-        info.streams = ca->nego_mflags;
-        
-        phcb->callProgress(je->cid, &info);
-    }
-    
-    ca->remotehold = 0;
+	phCallStateInfo_t info;
+	phcall_t *ca;
+	int cng=0;
+	int remhold;
+
+	DBG4_SIP_NEGO("SIP NEGO: ph_call_offhold\n", 0, 0, 0);
+	
+	ca = ph_locate_call(je, 0);
+	if (!ca)
+	{
+		return;
+	}
+
+	clear(info);
+
+	info.vlid = ca->vlid;
+	// ph_media_resume(ca);
+	
+	//  if (ph_call_hasaudio(ca))
+	//      ph_media_stop(ca);
+
+	remhold = ca->remotehold;
+	ca->remotehold = 0;
+
+	ph_call_retrieve_payloads(ca, je, -1);
+	ph_call_media_start(ca, je, -1, remhold);
+
+	if (remhold)
+	{
+		info.userData = je->external_reference;
+		info.event = phCALLRESUMED;
+		info.streams = ca->nego_mflags;
+
+		phcb->callProgress(je->cid, &info);
+	}
+
+	ca->remotehold = 0;
 
 }
 
 
 void ph_reg_progress(eXosip_event_t *je)
 {
-  int i;
-  struct vline *vl = 0;
-  int vlid;
-  int mask = 0;
+	int i;
+	struct vline *vl = 0;
+	int vlid;
+	int mask = 0;
 
-  vl =  ph_find_vline_by_rid(je->rid);
-  
-  if (!vl)
-    return;
+	vl =  ph_find_vline_by_rid(je->rid);
 
-  if (vl->regTimeout == 0)
-    mask = PH_UNREG_MASK;
-  vlid = ph_vline2vlid(vl);
+	if (!vl)
+		return;
 
+	if (vl->regTimeout == 0)
+		mask = PH_UNREG_MASK;
+	vlid = ph_vline2vlid(vl);
 
+	DBG4_SIP_NEGO("REGPROGRESS reg=%d for vlid=%d\n", je->rid, vlid,0);
 
-  DBG4_SIP_NEGO("REGPROGRESS reg=%d for vlid=%d\n", je->rid, vlid,0);
-
-  if (je->type == EXOSIP_REGISTRATION_SUCCESS)
-    {
-      if (je->expires)
-	vl->regTimeout = je->expires;
-      phcb->regProgress(vlid, 0 | mask);
-      if (vl->used == VL_DELETING)
-	vline_free(vl);
-    }    
-  else if (je->type == EXOSIP_REGISTRATION_FAILURE)
-    {
-      int newtimeout = -1;
-
-      if (je->status_code == 423)  /* Interval to brief */
+	if (je->type == EXOSIP_REGISTRATION_SUCCESS)
 	{
-	  if (je->minexpires)
-	    {
-	      vl->regTimeout = newtimeout = je->minexpires;
-	    }
-	}
+		if (je->expires)
+			vl->regTimeout = je->expires;
 
-      if (je->status_code == 401 || je->status_code == 407 || (newtimeout > 0))
+		phcb->regProgress(vlid, 0 | mask);
+		if (vl->used == VL_DELETING)
+			vline_free(vl);
+	}
+	else if (je->type == EXOSIP_REGISTRATION_FAILURE)
 	{
-	  eXosip_lock();
-	  i = eXosip_register(je->rid, newtimeout);
-	  eXosip_unlock();
-	  
-	  SKIP(printf("Retrying reg=%d for vlid=%d i=%d t=%d\n", je->rid, vlid, i, newtimeout))
-	  if (i == 0) return;
+		int newtimeout = -1;
+
+		if (je->status_code == 423)  /* Interval to brief */
+		{
+			if (je->minexpires)
+			{
+				vl->regTimeout = newtimeout = je->minexpires;
+			}
+		}
+
+		if (je->status_code == 401 || je->status_code == 407 || (newtimeout > 0))
+		{
+			eXosip_lock();
+			i = eXosip_register(je->rid, newtimeout);
+			eXosip_unlock();
+
+			SKIP(printf("Retrying reg=%d for vlid=%d i=%d t=%d\n", je->rid, vlid, i, newtimeout))
+			if (i == 0) 
+				return;
+		}
+
+		phcb->regProgress(vlid, mask | (je->status_code ? je->status_code : 500) );
+
+		if (vl->used == VL_DELETING)
+		vline_free(vl);
 	}
-      phcb->regProgress(vlid, mask | (je->status_code ? je->status_code : 500) );
-
-    if (vl->used == VL_DELETING)
-      vline_free(vl);
-
-    }
-    
 }
 
 
@@ -3983,350 +3979,346 @@ void ph_notify_handler(eXosip_event_t *je)
 
 void ph_call_refered(eXosip_event_t *je)
 {
-  phcall_t *ca;
-  phCallStateInfo_t info;
-  int nCid;
-  struct vline *vl = 0;
+	phcall_t *ca;
+	phCallStateInfo_t info;
+	int nCid;
+	struct vline *vl = 0;
 
-  DBG4_SIP_NEGO("SIP_NEGO: ph_call_refered\n", 0, 0, 0);
+	DBG4_SIP_NEGO("SIP_NEGO: ph_call_refered\n", 0, 0, 0);
 
-  ca = ph_locate_call_by_cid(je->cid);
-  
-  if (ca)
-    vl = ph_valid_vlid(ca->vlid);
+	ca = ph_locate_call_by_cid(je->cid);
 
-
-  /* 
-     we're rejecting the requests refering unxisting calls, vlines and
-     if we detect URI loop
-  */
-  if (!ca || !vl || ph_find_matching_vline(je->refer_to, 0))
-    {
-      eXosip_lock();
-      eXosip_answer_refer(je->did, (!ca) ? 481 : 488);
-      eXosip_unlock();
-      return;
-    }
+	if (ca)
+		vl = ph_valid_vlid(ca->vlid);
 
 
-  eXosip_lock();
-  eXosip_answer_refer(je->did, 202);
-  eXosip_unlock();
+	/* 
+		we're rejecting the requests refering unxisting calls, vlines and
+		if we detect URI loop
+	*/
+	if (!ca || !vl || ph_find_matching_vline(je->refer_to, 0))
+	{
+		eXosip_lock();
+		eXosip_answer_refer(je->did, (!ca) ? 481 : 488);
+		eXosip_unlock();
+		return;
+	}
 
-  clear(info);
-  ca->rdid = je->did;
+	eXosip_lock();
+	eXosip_answer_refer(je->did, 202);
+	eXosip_unlock();
 
-  ph_call_media_stop(ca);
+	clear(info);
+	ca->rdid = je->did;
 
+	ph_call_media_stop(ca);
 
-  info.newcid = phLinePlaceCall2(ca->vlid, je->refer_to,  0, je->cid, ca->user_mflags);
-  
+	info.newcid = phLinePlaceCall2(ca->vlid, je->refer_to,  0, je->cid, ca->user_mflags);
 
-  info.event = phXFERREQ;
-  info.u.remoteUri = je->refer_to;
-  info.vlid = ca->vlid;
-  
-  phcb->callProgress(je->cid, &info);
+	info.event = phXFERREQ;
+	info.u.remoteUri = je->refer_to;
+	info.vlid = ca->vlid;
+
+	phcb->callProgress(je->cid, &info);
 
 }
 
 
 void ph_call_refer_status(eXosip_event_t *je)
 {
-  phcall_t *ca;
-  phCallStateInfo_t info;
-  int cheat = 0;
-  const char *resultstr;
-  int status = 0;
-  int txcid;
+	phcall_t *ca;
+	phCallStateInfo_t info;
+	int cheat = 0;
+	const char *resultstr;
+	int status = 0;
+	int txcid;
 
-  ca = ph_locate_call_by_cid(je->cid);
-  
-  if (!ca)
-    return;
+	ca = ph_locate_call_by_cid(je->cid);
 
-  clear(info);
+	if (!ca)
+		return;
 
-  if (je->type == EXOSIP_CALL_REFER_STATUS)
-    {
-      if (phDebugLevel)
-	ph_printf("refer_status sdp=%s\n", je->msg_body);
+	clear(info);
 
-      if (je->ss_status == EXOSIP_SUBCRSTATE_TERMINATED)
+	if (je->type == EXOSIP_CALL_REFER_STATUS)
 	{
-	  /* cheat and suppose that the transfer succeeded */
-	  cheat  = 200;
+		if (phDebugLevel)
+			ph_printf("refer_status sdp=%s\n", je->msg_body);
+
+		if (je->ss_status == EXOSIP_SUBCRSTATE_TERMINATED)
+		{
+			/* cheat and suppose that the transfer succeeded */
+			cheat  = 200;
+		}
+
+		resultstr = strchr(je->msg_body, ' ');
+
+		if (resultstr)
+			status = atoi(resultstr);
 	}
-      
-      resultstr = strchr(je->msg_body, ' ');
+	else
+		status = je->status_code;
 
-      if (resultstr)
-	status = atoi(resultstr);
+	if (!status)
+	{
+		if (!cheat)
+			return;
 
+		status = cheat;
+	}
 
-    }
-  else
-    status = je->status_code;
-    
+	if ((status < 200) && cheat)
+		status = cheat;
 
-  if (!status)
-    {
-      if (!cheat)
-	return;
+	info.u.errorCode = status;
+	info.vlid = ca->vlid;
 
-      status = cheat;
-    }
+	if (!ca->txcid && status == 180)  
+	{
+		/* blind transfer:  RINGING is good enough for us */ 
+		info.event = phXFEROK;
+	}
+	else if (status < 200 && status >= 100)
+	{
+		info.event = phXFERPROGRESS;
+	}
+	else if (status >= 200 && status < 300)
+	{
+		info.event = phXFEROK;
+	}
+	else
+		info.event = phXFERFAIL;
 
-  if ((status < 200) && cheat)
-    status = cheat;
+	txcid = ca->txcid;
 
-  info.u.errorCode = status;
-  info.vlid = ca->vlid;
+	phcb->callProgress(je->cid, &info);
 
-
-  if (!ca->txcid && status == 180)  
-    {
-      /* blind transfer:  RINGING is good enough for us */ 
-      info.event = phXFEROK;
-    }
-  else if (status < 200 && status >= 100)
-    {
-      info.event = phXFERPROGRESS;
-    }
-  else if (status >= 200 && status < 300)
-    {
-      info.event = phXFEROK;
-    }
-  else
-    info.event = phXFERFAIL;
-
-
-  txcid = ca->txcid;
-
-  phcb->callProgress(je->cid, &info);
-
-  if (info.event == phXFEROK || info.event == phXFERFAIL)
-    {
-      if (txcid > 0)  /* assisted transfer, close both calls  */
-	  phCloseCall(txcid);
-      if (ca->cid > 0)  /* assisted or blind transfer, close call  */
-	  phCloseCall(ca->cid);
-    }
+	if (info.event == phXFEROK || info.event == phXFERFAIL)
+	{
+		if (txcid > 0)		/* assisted transfer, close both calls  */
+			phCloseCall(txcid);
+		if (ca->cid > 0)	/* assisted or blind transfer, close call  */
+			phCloseCall(ca->cid);
+	}
 }
-
 
 void ph_message_progress(eXosip_event_t *je)
 {
-  phMsgStateInfo_t info;
-  
-  memset(&info, 0, sizeof(info));
-  
-  if (je->type == EXOSIP_MESSAGE_NEW) 
-    {
-      info.event = phMsgNew;
-      info.content = je->msg_body;
-      info.ctype = je->i_ctt->type;
-      info.subtype = je->i_ctt->subtype;
-      info.to = je->local_uri;
-      info.from = je->remote_uri;
-      if (phcb->msgProgress != NULL)
-	phcb->msgProgress(0, &info);
-    }
-  else if (je->type == EXOSIP_MESSAGE_SUCCESS)
-    {
-      info.event = phMsgOk;
-      info.to = je->local_uri;
-      info.from = je->remote_uri;
-      if (phcb->msgProgress != NULL)
-	phcb->msgProgress(je->mid, &info);
-    }
-  else if (je->type == EXOSIP_MESSAGE_FAILURE)
-    {
-      info.to = je->local_uri;
-      info.from = je->remote_uri;
-      info.event = phMsgError;
-      if (phcb->msgProgress != NULL)
-	phcb->msgProgress(je->mid, &info);
-    }
+	phMsgStateInfo_t info;
+
+	memset(&info, 0, sizeof(info));
+
+	if (je->type == EXOSIP_MESSAGE_NEW) 
+	{
+		info.event = phMsgNew;
+		info.content = je->msg_body;
+		info.ctype = je->i_ctt->type;
+		info.subtype = je->i_ctt->subtype;
+		info.to = je->local_uri;
+		info.from = je->remote_uri;
+		if (phcb->msgProgress != NULL)
+			phcb->msgProgress(0, &info);
+	}
+	else if (je->type == EXOSIP_MESSAGE_SUCCESS)
+	{
+		info.event = phMsgOk;
+		info.to = je->local_uri;
+		info.from = je->remote_uri;
+		if (phcb->msgProgress != NULL)
+			phcb->msgProgress(je->mid, &info);
+	}
+	else if (je->type == EXOSIP_MESSAGE_FAILURE)
+	{
+		info.to = je->local_uri;
+		info.from = je->remote_uri;
+		info.event = phMsgError;
+		if (phcb->msgProgress != NULL)
+			phcb->msgProgress(je->mid, &info);
+	}
 }
 
 
 void ph_subscription_progress(eXosip_event_t *je)
 {
-  phSubscriptionStateInfo_t info;
+	phSubscriptionStateInfo_t info;
 
-  memset(&info, 0, sizeof(info));
-  
-  if (je->type == EXOSIP_SUBSCRIPTION_ANSWERED) 
-    {
-      info.event = phSubscriptionOk;
-      info.from = je->local_uri;		
-      info.to = je->remote_uri;
-      
-      if (phcb->subscriptionProgress != NULL)
-	phcb->subscriptionProgress (je->sid, &info);
-    }
-  else if (je->type == EXOSIP_SUBSCRIPTION_REQUESTFAILURE)
-    {
-      info.event = phSubscriptionError;
-      if (je->status_code == 404) {
-	info.event = phSubscriptionErrNotFound;
-      }		
-      info.from = je->local_uri;
-      info.to = je->remote_uri;
-      if (phcb->subscriptionProgress != NULL)
-	phcb->subscriptionProgress (je->sid, &info);
-    }
+	memset(&info, 0, sizeof(info));
+
+	if (je->type == EXOSIP_SUBSCRIPTION_ANSWERED) 
+	{
+		info.event = phSubscriptionOk;
+		info.from = je->local_uri;
+		info.to = je->remote_uri;
+
+		if (phcb->subscriptionProgress != NULL)
+			phcb->subscriptionProgress (je->sid, &info);
+	}
+	else if (je->type == EXOSIP_SUBSCRIPTION_REQUESTFAILURE)
+	{
+		info.event = phSubscriptionError;
+		if (je->status_code == 404) {
+			info.event = phSubscriptionErrNotFound;
+		}
+
+		info.from = je->local_uri;
+		info.to = je->remote_uri;
+		if (phcb->subscriptionProgress != NULL)
+		phcb->subscriptionProgress (je->sid, &info);
+	}
 }
 
 static int
 ph_event_get()
 {
-  int counter =0;
-  /* use events to print some info */
-  eXosip_event_t *je;
+	int counter =0;
+	/* use events to print some info */
+	eXosip_event_t *je;
 
-  
-  //phReleaseTerminatedCalls();
-  for (;;)
-    {
-      je = eXosip_event_wait(0,timeout);
-      if (je==NULL)
-	break;
-      counter++;
 
-      if (phDebugLevel > 0)
-	ph_printf("\n<- %s (%i %i) [%i %s] %s requri=%s\n",
-		   evtnames[je->type], je->cid, je->did, 
-		   je->status_code,
-		   je->reason_phrase,
-		   je->remote_uri,
-		   je->req_uri);
-
-      switch(je->type)
+	//phReleaseTerminatedCalls();
+	for (;;)
 	{
-	case EXOSIP_CALL_NEW:
-	  ph_call_new(je);
-	  break;
+		je = eXosip_event_wait(0,timeout);
+		if (je==NULL)
+		break;
+		counter++;
+
+		if (phDebugLevel > 0)
+			ph_printf("\n<- %s (%i %i) [%i %s] %s requri=%s\n",
+				evtnames[je->type], je->cid, je->did, 
+				je->status_code,
+				je->reason_phrase,
+				je->remote_uri,
+				je->req_uri);
+
+		switch(je->type)
+		{
+			case EXOSIP_CALL_NEW:
+				ph_call_new(je);
+				break;
 	
-	case EXOSIP_CALL_ANSWERED:
-		ph_callStopRinging(je);
-	  ph_call_answered(je);
-	  break;
+			case EXOSIP_CALL_ANSWERED:
+				ph_callStopRinging(je);
+				ph_call_answered(je);
+				break;
 
-	case EXOSIP_CALL_PROCEEDING:
-	  ph_call_proceeding(je);
-	  break;
+			case EXOSIP_CALL_PROCEEDING:
+				ph_call_proceeding(je);
+				break;
 
-	case EXOSIP_CALL_RINGING:
-	  ph_call_ringing(je);
-	  break;
+			case EXOSIP_CALL_RINGING:
+				ph_call_ringing(je);
+				break;
 
-	case EXOSIP_CALL_REDIRECTED:
-	  ph_call_redirected(je);
-	  break;
+			case EXOSIP_CALL_REDIRECTED:
+				ph_call_redirected(je);
+				break;
 
-	case EXOSIP_CALL_REPLACES:
-	  ph_call_replaces(je);
-	  break;
+			case EXOSIP_CALL_REPLACES:
+				ph_call_replaces(je);
+				break;
 
-	case EXOSIP_CALL_REQUESTFAILURE:
-	  ph_call_requestfailure(je);
-	  break;
+			case EXOSIP_CALL_REQUESTFAILURE:
+				ph_call_requestfailure(je);
+				break;
+
+			case EXOSIP_CALL_SERVERFAILURE:
+				ph_call_serverfailure(je);
+				break;
+
+			case EXOSIP_CALL_GLOBALFAILURE:
+				ph_call_globalfailure(je);
+				break;
+
+			case EXOSIP_CALL_NOANSWER:
+				ph_call_noanswer(je);
+				break;
+
+			case EXOSIP_CALL_CLOSED:
+				ph_call_closed(je);
+				break;
+
+			case EXOSIP_CALL_HOLD:
+				ph_call_onhold(je);
+				break;
+
+			case EXOSIP_CALL_OFFHOLD:
+				ph_call_offhold(je);
+				break;
+
+			case EXOSIP_REGISTRATION_SUCCESS:
+				ph_reg_progress(je);
+				break;
+
+			case EXOSIP_REGISTRATION_FAILURE:
+				ph_reg_progress(je);
+				break;
+
+			case EXOSIP_CALL_REFERED:
+				ph_call_refered(je);
+				break;
+
+			case EXOSIP_CALL_REFER_STATUS:
+			case EXOSIP_CALL_REFER_FAILURE:
+				ph_call_refer_status(je);
+				break;
 
 
-	case EXOSIP_CALL_SERVERFAILURE:
-	  ph_call_serverfailure(je);
-	  break;
+			case EXOSIP_MESSAGE_NEW:
+			case EXOSIP_MESSAGE_SUCCESS:		/* announce a 200ok to a previous sent */
+			case EXOSIP_MESSAGE_FAILURE:
+				ph_message_progress(je);
+				break;
 
-	case EXOSIP_CALL_GLOBALFAILURE:
-	  ph_call_globalfailure(je);
-	  break;
+			case EXOSIP_SUBSCRIPTION_REQUESTFAILURE:
+			case EXOSIP_SUBSCRIPTION_ANSWERED:
+				ph_subscription_progress(je);
+				break;
 
-	case EXOSIP_CALL_NOANSWER:
-	  ph_call_noanswer(je);
-	  break;
+			case EXOSIP_SUBSCRIPTION_NOTIFY:
+				ph_notify_handler(je);
+				break;
 
-	case EXOSIP_CALL_CLOSED:
-	  ph_call_closed(je);
-	  break;
+			case EXOSIP_OPTIONS_NOANSWER:
+			case EXOSIP_ENGINE_STOPPED:
+				return -2;
 
-	case EXOSIP_CALL_HOLD:
-	  ph_call_onhold(je);
-	  break;
+			default:
+				if (phDebugLevel > 0)
+				ph_printf("event(%i %i %i %i) text=%s\n", je->cid, je->sid, je->nid, je->did, je->textinfo);
+				break;
+		}
 
-	case EXOSIP_CALL_OFFHOLD:
-	  ph_call_offhold(je);
-	  break;
-
-	case EXOSIP_REGISTRATION_SUCCESS:
-	  ph_reg_progress(je);
-	  break;
-
-	case EXOSIP_REGISTRATION_FAILURE:
-	  ph_reg_progress(je);
-	  break;
-
-	case EXOSIP_CALL_REFERED:
-	  ph_call_refered(je);
-	  break;
-
-        case EXOSIP_CALL_REFER_STATUS:
-        case EXOSIP_CALL_REFER_FAILURE:
-	  ph_call_refer_status(je);
-	  break;
-
-
-	case EXOSIP_MESSAGE_NEW:
-	case EXOSIP_MESSAGE_SUCCESS:        /* announce a 200ok to a previous sent */
-	case EXOSIP_MESSAGE_FAILURE:
-		ph_message_progress(je);
-		break;
-
-	case EXOSIP_SUBSCRIPTION_REQUESTFAILURE:
-	case EXOSIP_SUBSCRIPTION_ANSWERED:
-		ph_subscription_progress(je);
-		break;
-
-	case EXOSIP_SUBSCRIPTION_NOTIFY:
-		ph_notify_handler(je);
-		break;
-
-	case EXOSIP_OPTIONS_NOANSWER:
-	case EXOSIP_ENGINE_STOPPED:
-		return -2;
-
-	default:
-      if (phDebugLevel > 0)
-	  ph_printf("event(%i %i %i %i) text=%s\n", je->cid, je->sid, je->nid, je->did, je->textinfo);
-	  break;
+		eXosip_event_free(je);
 	}
-	
-      eXosip_event_free(je);
-    }
 
+	ph_refresh_vlines();
+	ph_scan_calls();
 
-    ph_refresh_vlines();
-    ph_scan_calls();
-
-  if (counter>0)
-    return 0;
-  return -1;
+	if (counter>0)
+		return 0;
+	return -1;
 }
-
 
 static void
 ph_keep_refreshing()
 {
-  time_t now;
-  static time_t last_refresh;
-  
-  time(&now);
-  if (now - last_refresh > PH_REFRESH_INTERVAL)
-    {
-      phRefresh();
-      last_refresh = now;
-    }
+	time_t now;
+	static time_t last_refresh;
+
+	time(&now);
+	if (now - last_refresh > PH_REFRESH_INTERVAL)
+	{
+		phRefresh();
+		last_refresh = now;
+	}
+
+	if (eXosip_get_srv_idle_time() > MAX_SRV_IDLE_TIME) 
+	{
+		// We treat this as register failure.
+		eXosip_reset_idle_time();
+		phcb->regProgress(0, -1);
+	}
 }
 
 
@@ -4340,16 +4332,16 @@ ph_api_thread(void *arg)
 	time_t t1,t2;
 	t1 = 0;
 	phIsInitialized = 1;
-    
+
 	time(&t1);
-	while(1) 
-    {
+	while(1)
+	{
 #ifdef WIN32
 		Sleep(100);
 #endif		
 		if (!phIsInitialized)
 			return 0;
-      
+
 		ph_keep_refreshing();
 
 		if (ph_event_get() == -2)
@@ -4358,7 +4350,7 @@ ph_api_thread(void *arg)
 			break;
 		}
 	}
-	
+
 	return 0;
 }
 
@@ -4383,7 +4375,7 @@ MY_DLLEXPORT int phrtcp_report_end()
 #endif /* end of QOS_DEBUG_ENABLE */
 
 
-int getPublicPort(char *  local_voice_port, char * local_video_port, char * public_voice_port, char * public_video_port)
+int getPublicPort(char * local_voice_port, char * local_video_port, char * public_voice_port, char * public_video_port)
 {
 	
   Socket  sock;

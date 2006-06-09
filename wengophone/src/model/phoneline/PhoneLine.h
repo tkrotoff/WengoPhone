@@ -69,7 +69,7 @@ public:
 		return *_sipWrapper;
 	}
 
-	SipAccount & getSipAccount() const {
+	SipAccount & getSipAccount() {
 		return _sipAccount;
 	}
 

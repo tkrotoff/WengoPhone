@@ -21,13 +21,15 @@
 
 #include <imwrapper/IMWrapperFactory.h>
 
+#include <model/profile/UserProfile.h>
+
 #include <util/Logger.h>
 
 const unsigned RECONNECT_INTERVAL = 20000;
 const unsigned RECONNECT_RETRY = 5;
 
-Connect::Connect(IMAccount & account)
-	: _account(account) {
+Connect::Connect(IMAccount & account, UserProfile & userProfile)
+	: _imAccount(account), _userProfile(userProfile) {
 
 	_imConnect = IMWrapperFactory::getFactory().createIMConnect(account);
 
@@ -79,6 +81,8 @@ void Connect::disconnect() {
 void Connect::timeoutEventHandler(Timer & sender) {
 	if (_connectionRetryCount < RECONNECT_RETRY) {
 		++_connectionRetryCount;
+		if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE)
+			_userProfile.connectSipAccounts();
 		_imConnect->connect();
 	} else {
 		// Either the user as cancelled the connection 

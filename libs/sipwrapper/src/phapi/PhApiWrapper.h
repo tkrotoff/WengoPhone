@@ -250,6 +250,11 @@ public:
 	// Fixme: temporary hack
 	std::string _iconFilename;
 
+	bool isRegistered() { return _registered; };
+	void setRegistered(bool registered) { _registered = registered; };
+
+	int getActiveVline() { return _wengoVline; };
+
 private:
 
 	/**
@@ -342,6 +347,8 @@ private:
 	Mutex _mutex;
 
 	Timer _publishTimer;
+
+	bool _registered;
 };
 
 #endif	//PHAPIWRAPPER_H

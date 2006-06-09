@@ -890,37 +890,35 @@ sdp_message_t *eXosip_get_local_sdp(osip_transaction_t *transaction)
 void 
 eXosip_report_call_event_with_status(int evt, eXosip_call_t *jc, eXosip_dialog_t *jd, osip_message_t *sip)
 {
-  eXosip_event_t *je;
-  je = eXosip_event_init_for_call(evt, jc, jd);
-  if (je!=NULL)
-    {
-      if (sip != NULL)
+	eXosip_event_t *je;
+	je = eXosip_event_init_for_call(evt, jc, jd);
+	if (je!=NULL)
 	{
-	eXosip_event_add_status(je, sip);
-	eXosip_event_add_sdp_info(je, sip);
-	if (300 <= je->status_code && je->status_code < 400)
-	  {
-	    osip_contact_t *ct = 0;
+		if (sip != NULL)
+		{
+			eXosip_event_add_status(je, sip);
+			eXosip_event_add_sdp_info(je, sip);
+			if (300 <= je->status_code && je->status_code < 400)
+			{
+				osip_contact_t *ct = 0;
 
-	    osip_message_get_contact(sip, 0, &ct);
-	    if (ct)
-	      {
-		char *tmp;
+				osip_message_get_contact(sip, 0, &ct);
+				if (ct)
+				{
+					char *tmp;
 
-		osip_contact_to_str(ct, &tmp);
-		osip_strncpy(je->remote_contact, tmp, sizeof(je->remote_contact)-1);
-		osip_free(tmp);
-	      }
+					osip_contact_to_str(ct, &tmp);
+					osip_strncpy(je->remote_contact, tmp, sizeof(je->remote_contact)-1);
+					osip_free(tmp);
+				}
+			}
+		}
 
-	  }
-	}
-
-      if (eXosip.j_call_callbacks[evt]!=NULL)
-	eXosip.j_call_callbacks[evt](evt, je);
-      else if (eXosip.j_runtime_mode==EVENT_MODE)
-	eXosip_event_add(je);
+		if (eXosip.j_call_callbacks[evt]!=NULL)
+			eXosip.j_call_callbacks[evt](evt, je);
+		else if (eXosip.j_runtime_mode==EVENT_MODE)
+			eXosip_event_add(je);
     }
-
 }
 
 static

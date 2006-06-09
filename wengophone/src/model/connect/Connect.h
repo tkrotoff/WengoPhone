@@ -28,6 +28,7 @@
 #include <util/Interface.h>
 #include <util/Event.h>
 
+class UserProfile;
 
 /**
  * Wrapper for Instant Messaging connection.
@@ -54,7 +55,7 @@ public:
 	 */
 	Event<void (IMConnect & sender, int currentStep, int totalSteps, const std::string & infoMessage)> connectionProgressEvent;
 
-	Connect(IMAccount & account);
+	Connect(IMAccount & account, UserProfile & userProfile);
 
 	virtual ~Connect();
 
@@ -65,7 +66,7 @@ public:
 	bool isConnected() { return _connected; }
 
 	const IMAccount & getIMAccount() const {
-		return _account;
+		return _imAccount;
 	}
 
 protected:
@@ -87,9 +88,11 @@ protected:
 	/** Count how many time we retry to connect. */
 	unsigned _connectionRetryCount;
 
-	IMAccount _account;
+	IMAccount _imAccount;
 
 	IMConnect * _imConnect;
+
+	UserProfile & _userProfile;
 
 	bool _connected;
 

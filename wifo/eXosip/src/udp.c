@@ -2166,32 +2166,33 @@ static void eXosip_process_response_out_of_transaction (osip_event_t *evt)
 
 /* if second==-1 && useconds==-1  -> wait for ever
    if max_message_nb<=0  -> infinite loop....  */
-int eXosip_read_message   ( int max_message_nb, int sec_max, int usec_max )
+int eXosip_read_message( int max_message_nb, int sec_max, int usec_max )
 {
-  fd_set osip_fdset;
-  struct timeval tv;
-  char *buf;
-  
-  if (eXosip.use_tunnel && !eXosip.tunnel)
-	  return -1;
+	fd_set osip_fdset;
+	struct timeval tv;
+	char *buf;
+	  
+	if (eXosip.use_tunnel && !eXosip.tunnel)
+		return -1;
 
-  tv.tv_sec = sec_max;
-  tv.tv_usec = usec_max;
-  
-  buf = (char *)osip_malloc(SIP_MESSAGE_MAX_LENGTH*sizeof(char)+1);
-  while (max_message_nb!=0 && eXosip.j_stop_ua==0)
+	tv.tv_sec = sec_max;
+	tv.tv_usec = usec_max;
+	  
+	buf = (char *)osip_malloc(SIP_MESSAGE_MAX_LENGTH*sizeof(char)+1);
+	while (max_message_nb!=0 && eXosip.j_stop_ua==0)
     {
-      int i,sock;
-      int max;
-      int wakeup_socket = jpipe_get_read_descr(eXosip.j_socketctl);
-      FD_ZERO(&osip_fdset);
+		int i,sock;
+		int max;
+		int wakeup_socket = jpipe_get_read_descr(eXosip.j_socketctl);
+		FD_ZERO(&osip_fdset);
 
 
-	if (eXosip.use_tunnel) {
-		sock = eXosip.tunnel->get_tunnel_socket(eXosip.tunnel->h_tunnel);
-	} else {
-		sock = eXosip.j_socket;
-	}
+		if (eXosip.use_tunnel) {
+			sock = eXosip.tunnel->get_tunnel_socket(eXosip.tunnel->h_tunnel);
+		} 
+		else {
+			sock = eXosip.j_socket;
+		}
 
 #if defined (WIN32) || defined (_WIN32_WCE)
 		FD_SET(sock, &osip_fdset);
@@ -2199,128 +2200,125 @@ int eXosip_read_message   ( int max_message_nb, int sec_max, int usec_max )
 		FD_SET(sock, &osip_fdset);
 #endif
 
-	max = sock;
-
+		max = sock;
 
 #if defined (WIN32) || defined (_WIN32_WCE)
-      FD_SET((unsigned int)wakeup_socket, &osip_fdset);
+		FD_SET((unsigned int)wakeup_socket, &osip_fdset);
 #else
-      FD_SET(wakeup_socket, &osip_fdset);
+		FD_SET(wakeup_socket, &osip_fdset);
 #endif
-	if (wakeup_socket>max)
-	max = wakeup_socket;
-      if ((sec_max==-1)||(usec_max==-1))
-	i = select(max+1, &osip_fdset, NULL, NULL, NULL);
-      else
-	i = select(max+1, &osip_fdset, NULL, NULL, &tv);
-      
-      if ((i == -1) && (errno == EINTR || errno == EAGAIN))
-	  continue;
-      
-      if ((i > 0) && FD_ISSET (wakeup_socket, &osip_fdset))
-	{
-	  char buf2[500];
-	  jpipe_read (eXosip.j_socketctl, buf2, 499);
-	}
+		if (wakeup_socket>max)
+		max = wakeup_socket;
+		if ((sec_max==-1)||(usec_max==-1))
+			i = select(max+1, &osip_fdset, NULL, NULL, NULL);
+		else
+			i = select(max+1, &osip_fdset, NULL, NULL, &tv);
+	      
+		if ((i == -1) && (errno == EINTR || errno == EAGAIN))
+			continue;
+	      
+		if ((i > 0) && FD_ISSET (wakeup_socket, &osip_fdset))
+		{
+			char buf2[500];
+			jpipe_read (eXosip.j_socketctl, buf2, 499);
+		}
 
-      if (0==i || eXosip.j_stop_ua!=0)
-	{
-	}
-      else if (-1==i)
-	{
-	  osip_free(buf);
-	  return -2; /* error */
-	}
-	else if (FD_ISSET (sock, &osip_fdset))
-	{
-	  struct sockaddr_in sa;
-#ifdef __linux
-	  socklen_t slen;
-#else
-	  int slen;
-#endif
-	  slen = sizeof(struct sockaddr_in);
-
-	  if (eXosip.use_tunnel) {
-		i = eXosip.tunnel->tunnel_recv(eXosip.tunnel->h_tunnel, buf, SIP_MESSAGE_MAX_LENGTH);
-		if (i < 0) {
+		if (0==i || eXosip.j_stop_ua!=0)
+		{
+		}
+		else if (-1==i)
+		{
 			osip_free(buf);
-			return -2;
+			return -2; /* error */
 		}
-	  }
-	  else
-
-		i = recvfrom (eXosip.j_socket, buf, SIP_MESSAGE_MAX_LENGTH, 0, (struct sockaddr *) &sa, &slen);
-		
-
-
-	  if( i > 5 ) /* we expect at least one byte, otherwise there's no doubt that it is not a sip message !*/
-	    {
-	      /* Message might not end with a "\0" but we know the number of */
-	      /* char received! */
-	      osip_transaction_t *transaction = NULL;
-	      osip_event_t *sipevent;
-	      osip_strncpy(buf+i,"\0",1);
-	      OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
-				    "Received message: \n%s\n", buf));
-#ifdef WIN32
-		  if (strlen(buf)>412)
-		  {
-		      OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
-					    "Message suite: \n%s\n", buf+412));
-		  }
+		else if (FD_ISSET (sock, &osip_fdset))
+		{
+			struct sockaddr_in sa;
+#ifdef __linux
+			socklen_t slen;
+#else
+			int slen;
 #endif
+			slen = sizeof(struct sockaddr_in);
 
-	      sipevent = osip_parse(buf, i);
-	      transaction = NULL;
-	      if (sipevent!=NULL&&sipevent->sip!=NULL)
-		{
+			if (eXosip.use_tunnel) 
+			{
+				i = eXosip.tunnel->tunnel_recv(eXosip.tunnel->h_tunnel, buf, SIP_MESSAGE_MAX_LENGTH);
+				if (i < 0) 
+				{
+					osip_free(buf);
+					return -2;
+				}
+			}
+			else
+				i = recvfrom (eXosip.j_socket, buf, SIP_MESSAGE_MAX_LENGTH, 0, (struct sockaddr *) &sa, &slen);
+		
+			time(&eXosip.last_srv_active_time);
 
-		  
-		  if (!eXosip.use_tunnel)
-		    osip_message_fix_last_via_header(sipevent->sip, inet_ntoa (sa.sin_addr), ntohs (sa.sin_port));
+			if( i > 5 ) /* we expect at least one byte, otherwise there's no doubt that it is not a sip message !*/
+			{
+				/* Message might not end with a "\0" but we know the number of */
+				/* char received! */
+				osip_transaction_t *transaction = NULL;
+				osip_event_t *sipevent;
+				osip_strncpy(buf+i,"\0",1);
+				OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
+					"Received message: \n%s\n", buf));
+#ifdef WIN32
+				if (strlen(buf)>412)
+				{
+					OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
+						"Message suite: \n%s\n", buf+412));
+				}
+#endif
+		
+				sipevent = osip_parse(buf, i);
+				transaction = NULL;
+				if (sipevent!=NULL&&sipevent->sip!=NULL)
+				{
+					if (!eXosip.use_tunnel)
+						osip_message_fix_last_via_header(sipevent->sip, inet_ntoa (sa.sin_addr), ntohs (sa.sin_port));
 
-
-		  transaction = osip_find_transaction_and_add_event(eXosip.j_osip, sipevent);
-		  if (transaction == NULL)
-		    {
-		      /* this event has no transaction, */
-		      OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
-				  "This is a request\n", buf));
-		      eXosip_lock();
-		      if (MSG_IS_REQUEST(sipevent->sip))
-			eXosip_process_newrequest(sipevent);
-		      else if (MSG_IS_RESPONSE(sipevent->sip))
-			eXosip_process_response_out_of_transaction(sipevent);
-		      eXosip_unlock();
-		    }
-		  else
-		    {
-		      /* handled by oSIP !*/
-		    }
+					transaction = osip_find_transaction_and_add_event(eXosip.j_osip, sipevent);
+					if (transaction == NULL)
+					{
+						/* this event has no transaction, */
+						OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
+							"This is a request\n", buf));
+						eXosip_lock();
+						if (MSG_IS_REQUEST(sipevent->sip))
+							eXosip_process_newrequest(sipevent);
+						else if (MSG_IS_RESPONSE(sipevent->sip))
+							eXosip_process_response_out_of_transaction(sipevent);
+						eXosip_unlock();
+					}
+					else
+					{
+						/* handled by oSIP !*/
+					}
+				}
+				else
+				{
+					OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_ERROR,NULL,
+						"Could not parse SIP message\n"));
+					osip_event_free(sipevent);
+				}
+			}
+			else if (i<0)
+			{
+				OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_ERROR,NULL,
+					"Could not read socket\n"));
+			}
+			else 
+			{
+				OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
+					"Dummy SIP message received\n"));
+			}
 		}
-	      else
-		{
-		  OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_ERROR,NULL,
-			      "Could not parse SIP message\n"));
-		  osip_event_free(sipevent);
-		}
-	    }
-	  else if (i<0)
-	    {
-	      OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_ERROR,NULL,
-			  "Could not read socket\n"));
-	    }
-	  else 
-	    {
-	      OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
-			  "Dummy SIP message received\n"));
-	    }
-	}
-      max_message_nb--;
+		max_message_nb--;
     }
-  osip_free(buf);
-  return 0;
+	osip_free(buf);
+	return 0;
 }
 
 

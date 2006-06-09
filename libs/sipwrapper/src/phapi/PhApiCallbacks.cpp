@@ -203,35 +203,48 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 
 	//401 Unauthorized
 	case 401:
+		p->setRegistered(false);
 		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
 		break;
 
 	//404 Not Found
 	case 404:
+		p->setRegistered(false);
 		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
 		break;
 
 	//407 Proxy Authentication Required
 	case 407:
+		p->setRegistered(false);
 		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
 		break;
 
 	//408 Request Timeout
 	case 408:
+		p->setRegistered(false);
 		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateTimeout);
 		break;
 
 	case -1:
-		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateTimeout);
+		if (p->isRegistered())
+		{
+			p->setRegistered(false);
+			p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateTimeout);
+			p->removeVirtualLine(p->getActiveVline());
+			p->disconnectedEvent(*p, true, "No response from server");
+		}
 		break;
 
 	case -2:
+		p->setRegistered(false);
 		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateUnknown);
 		break;
 
 	//Register ok
 	case 0:
+		p->setRegistered(true);
 		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateOk);
+		p->connectedEvent(*p);
 		for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
 			it != _subscribedContacts.end();
 			++it) {
@@ -241,6 +254,7 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 
 	//Unregister ok
 	case 32768:
+		p->setRegistered(false);
 		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateClosed);
 		for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
 			it != _subscribedContacts.end();
@@ -251,10 +265,12 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 
 	//500 Server Internal Error
 	case 500:
+		p->setRegistered(false);
 		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
 		break;
 
 	default:
+		p->setRegistered(false);
 		LOG_ERROR("unknown phApi event=" + String::fromNumber(status));
 		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
 	}

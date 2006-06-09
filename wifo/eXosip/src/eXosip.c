@@ -741,105 +741,107 @@ eXosip_set_user_agent(const char *user_agent)
 void
 eXosip_update()
 {
-  static int static_id  = 1;
-  eXosip_call_t      *jc;
-  eXosip_subscribe_t *js;
-  eXosip_notify_t *jn;
-  eXosip_dialog_t    *jd;
-  eXosip_msg_t    *ms;
-  int now;
+	static int			static_id = 1;
+	eXosip_call_t		*jc;
+	eXosip_subscribe_t	*js;
+	eXosip_notify_t		*jn;
+	eXosip_dialog_t		*jd;
+	eXosip_msg_t		*ms;
+	int					now;
 
-  if (static_id>100000)
-    static_id = 1; /* loop */
+	if (static_id > 100000)
+		static_id = 1; /* loop */
 
-  now = time(NULL);
-  for (jc=eXosip.j_calls; jc!=NULL; jc=jc->next)
-    {
-      if (jc->c_id<1)
+	now = time(NULL);
+	for (jc = eXosip.j_calls; jc != NULL; jc = jc->next)
 	{
-	  jc->c_id = static_id;
-	  static_id++;
-	}
-      for (jd=jc->c_dialogs; jd!=NULL; jd=jd->next)
-	{
-	  if (jd->d_dialog!=NULL) /* finished call */
-	    {
-	      if (jd->d_id<1)
+		if (jc->c_id < 1)
 		{
-		  jd->d_id = static_id;
-		  static_id++;
+			jc->c_id = static_id;
+			static_id++;
 		}
-	    }
-	  else jd->d_id = -1;
-	}
-    }
-
-  for (js=eXosip.j_subscribes; js!=NULL; js=js->next)
-    {
-      int newone = 0;
-      if (js->s_id<1)
-	{
-	  js->s_id = static_id;
-	  static_id++;
-	  newone = 1;
-	}
-      if (!newone && (js->s_dialogs == 0))
-        {
-	  if (eXosip_subscribe_need_refresh(js, now)==0)
-	    eXosip_subscribe_refresh(js->s_id, eXosip.subscribe_timeout);
-	  continue;
-        }
-        
-      for (jd=js->s_dialogs; jd!=NULL; jd=jd->next)
-	{
-	  if (jd->d_dialog!=NULL) /* finished call */
-	    {
-	      if (jd->d_id<1)
+		
+		for (jd = jc->c_dialogs; jd != NULL; jd = jd->next)
 		{
-		  jd->d_id = static_id;
-		  static_id++;
+			if (jd->d_dialog != NULL) /* finished call */
+			{
+				if (jd->d_id < 1)
+				{
+					jd->d_id = static_id;
+					static_id++;
+				}
+			}
+			else 
+				jd->d_id = -1;
 		}
-	      if (eXosip_subscribe_need_refresh(js, now)==0)
+	}
+
+	for (js = eXosip.j_subscribes; js != NULL; js = js->next)
+	{
+		int newone = 0;
+		if (js->s_id < 1)
 		{
-		  int i;
-		  i = eXosip_subscribe_send_subscribe(js, jd, eXosip.subscribe_timeout);
+			js->s_id = static_id;
+			static_id++;
+			newone = 1;
 		}
-	    }
-	  else
-	    jd->d_id = -1;
-	}
-    }
-
-  for (jn=eXosip.j_notifies; jn!=NULL; jn=jn->next)
-    {
-      if (jn->n_id<1)
-	{
-	  jn->n_id = static_id;
-	  static_id++;
-	}
-      for (jd=jn->n_dialogs; jd!=NULL; jd=jd->next)
-	{
-	  if (jd->d_dialog!=NULL) /* finished call */
-	    {
-	      if (jd->d_id<1)
+		if (!newone && (js->s_dialogs == 0))
 		{
-		  jd->d_id = static_id;
-		  static_id++;
+			if (eXosip_subscribe_need_refresh(js, now) == 0)
+				eXosip_subscribe_refresh(js->s_id, eXosip.subscribe_timeout);
+			continue;
 		}
-	    }
-	  else jd->d_id = -1;
+	        
+		for (jd = js->s_dialogs; jd != NULL; jd = jd->next)
+		{
+			if (jd->d_dialog != NULL) /* finished call */
+			{
+				if (jd->d_id < 1)
+				{
+					jd->d_id = static_id;
+					static_id++;
+				}
+				if (eXosip_subscribe_need_refresh(js, now) == 0)
+				{
+					int i;
+					i = eXosip_subscribe_send_subscribe(js, jd, eXosip.subscribe_timeout);
+				}
+			}
+			else
+				jd->d_id = -1;
+		}
 	}
-    }
 
-  for (ms=eXosip.j_msgs; ms!=NULL; ms=ms->next)
-    {
-      if (ms->m_id<1)
+	for (jn = eXosip.j_notifies; jn != NULL; jn = jn->next)
 	{
-	  ms->m_id = static_id;
-	  static_id++;
+		if (jn->n_id < 1)
+		{
+			jn->n_id = static_id;
+			static_id++;
+		}
+		for (jd = jn->n_dialogs; jd != NULL; jd = jd->next)
+		{
+			if (jd->d_dialog != NULL) /* finished call */
+			{
+				if (jd->d_id < 1)
+				{
+					jd->d_id = static_id;
+					static_id++;
+				}
+			}
+			else 
+				jd->d_id = -1;
+		}
 	}
-    }
 
+	for (ms = eXosip.j_msgs; ms != NULL; ms = ms->next)
+	{
+		if (ms->m_id < 1)
+		{
+			ms->m_id = static_id;
+			static_id++;
+		}
+	}
 }
 
 int eXosip_message    (char *to, char *from, char *route, char *buff, char *mime)
@@ -3708,4 +3710,21 @@ void eXosip_guess_contact_uri(const char *url, char *strbuf, int bufsize, int pu
 void eXosip_set_answer_contact(const char *contacturl)
 {
   osip_strncpy(eXosip.answer_contact, contacturl ? contacturl : "", sizeof(eXosip.answer_contact)-1);
+}
+
+int eXosip_get_srv_idle_time()
+{
+	time_t now;
+
+	if (eXosip.last_srv_active_time == 0) {
+		return 0;
+	}
+
+	time(&now);
+	return now - eXosip.last_srv_active_time;
+}
+
+void eXosip_reset_idle_time()
+{
+	eXosip.last_srv_active_time = 0;
 }
