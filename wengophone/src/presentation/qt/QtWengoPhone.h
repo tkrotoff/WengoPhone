@@ -56,7 +56,6 @@ class QtCallBar;
 class QtProfileBar;
 class QtWengoStyleLabel;
 class QtWsDirectory;
-class TrayIcon;
 class QtTrayIcon;
 
 class QPushButton;
@@ -162,7 +161,7 @@ Q_SIGNALS:
 
 	void signalTimeoutEventReached();
 
-public Q_SLOTS:
+private Q_SLOTS:
 
 	void connectionStatusEventHandlerSlot(int totalSteps, int currentStep, QString infoMsg);
 
@@ -329,8 +328,6 @@ private:
 	QtWengoStyleLabel * _hangUpButton;
 
 	QComboBox * _phoneComboBox;
-
-	TrayIcon * _trayIcon;
 
 	QtTrayIcon * _qtTrayIcon;
 

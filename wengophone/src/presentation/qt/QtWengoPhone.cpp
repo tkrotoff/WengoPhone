@@ -83,7 +83,7 @@
 
 #include <QtGui>
 #include <QAction>
-#include <trayicon.h>
+
 #include "QtTrayIcon.h"
 
 using namespace std;
