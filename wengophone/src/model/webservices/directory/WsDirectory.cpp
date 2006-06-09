@@ -98,7 +98,8 @@ void WsDirectory::answerReceived(const std::string & answer, int requestId) {
 		ContactProfile * contact = new ContactProfile();
 
 		ProfileXMLSerializer serializer(*contact);
-		serializer.unserializeContent(TiXmlHandle(wgCard));
+		TiXmlHandle h(wgCard);
+		serializer.unserializeContent(h);
 		wgCardCount++;
 
 		bool online = false;
