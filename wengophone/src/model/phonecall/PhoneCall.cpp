@@ -34,6 +34,7 @@
 #include <model/wenbox/WenboxPlugin.h>
 
 #include <util/Logger.h>
+#include <thread/Thread.h>
 
 #include <ctime>
 
@@ -108,6 +109,7 @@ void PhoneCall::hold() {
 		_state->getCode() == EnumPhoneCallState::PhoneCallStateResumed) {
 
 		if (!_hold) {
+			Thread::sleep(1);
 			_phoneLine.holdCall(_callId);
 			_hold = false;
 			setState(EnumPhoneCallState::PhoneCallStateHold);

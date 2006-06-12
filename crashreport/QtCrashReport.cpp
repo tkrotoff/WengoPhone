@@ -144,7 +144,7 @@ static std::string readLogFile() {
 }
 
 void QtCrashReport::createDescriptionFile() const {
-	FileWriter file(_descfile);
+	FileWriter file(_descfile, false);
 
 	file.write("Date: " + Date().toString() + String::EOL);
 	file.write("Time: " + Time().toString() + String::EOL);

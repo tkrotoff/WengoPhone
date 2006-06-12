@@ -186,11 +186,6 @@ public:
 
 	~FileReader();
 
-	/**
-	 * Opens the file for reading.
-	 *
-	 * @return true if success; false otherwise
-	 */
 	bool open();
 
 	/**
@@ -221,7 +216,7 @@ private:
 class FileWriter : public File, public IFile {
 public:
 
-	FileWriter(const std::string & filename);
+	FileWriter(const std::string & filename, bool binaryMode = true);
 
 	FileWriter(const FileWriter & fileWriter);
 
@@ -250,6 +245,8 @@ private:
 	std::ofstream _file;
 
 	bool _fileOpen;
+
+	bool _binaryMode;
 };
 
 #endif	//OWFILE_H

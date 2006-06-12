@@ -193,7 +193,7 @@ File File::createTemporaryFile() {
 bool File::exists(const std::string & path) {
 	std::string myPath = path;
 	// Checking for ending PathSeparator existance.
-	// if the path contains a trailing PathSepartor, 'exists' will not work 
+	// if the path contains a trailing PathSepartor, 'exists' will not work
 	// under Windows
 	std::string pathSeparator = File::getPathSeparator();
 	if (myPath.substr(myPath.size() - pathSeparator.size()) == pathSeparator) {
@@ -257,8 +257,9 @@ void FileReader::close() {
 }
 
 
-FileWriter::FileWriter(const std::string & filename)
+FileWriter::FileWriter(const std::string & filename, bool binaryMode)
 	: File(filename) {
+	_binaryMode = binaryMode;
 	_fileOpen = false;
 }
 
@@ -275,7 +276,11 @@ FileWriter::~FileWriter() {
 }
 
 bool FileWriter::open() {
-	_file.open(_filename.c_str(), ios::binary);
+	if (_binaryMode) {
+		_file.open(_filename.c_str(), ios::binary);
+	} else {
+		_file.open(_filename.c_str());
+	}
 	_fileOpen = true;
 	return isOpen();
 }

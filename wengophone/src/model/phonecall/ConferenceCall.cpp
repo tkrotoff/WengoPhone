@@ -28,6 +28,7 @@
 #include <sipwrapper/SipWrapper.h>
 
 #include <util/Logger.h>
+#include <thread/Thread.h>
 
 ConferenceCall::ConferenceCall(IPhoneLine & phoneLine)
 	: _phoneLine(phoneLine) {
@@ -181,5 +182,6 @@ void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumP
 }
 
 void ConferenceCall::join(int callId) {
+	Thread::sleep(1);
 	_phoneLine.getSipWrapper().joinConference(_confId, callId);
 }

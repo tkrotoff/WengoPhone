@@ -19,6 +19,7 @@
 
 #include <util/String.h>
 
+#include <cutil/global.h>
 #include <util/StringList.h>
 #include <util/Logger.h>
 
@@ -29,6 +30,14 @@ using namespace std;
 
 const char * String::null = "";
 const std::string String::EOL = "\n";
+const std::string String::WIN_EOL = "\r\n";
+const std::string String::UNIX_EOL = String::EOL;
+
+#ifdef OS_WINDOWS
+	const std::string String::SYSTEM_EOL = String::WIN_EOL;
+#else
+	const std::string String::SYSTEM_EOL = String::UNIX_EOL;
+#endif
 
 int String::toInteger() const {
 	int tmp;

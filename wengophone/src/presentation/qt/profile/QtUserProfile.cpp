@@ -41,10 +41,10 @@
 #include <QMessageBox>
 #include <QMetaType>
 
-QtUserProfile::QtUserProfile(CUserProfile & cUserProfile, QtWengoPhone & qtWengoPhone) 
-: QObjectThreadSafe(&qtWengoPhone), 
-_qtWengoPhone(qtWengoPhone),
-_cUserProfile(cUserProfile) {
+QtUserProfile::QtUserProfile(CUserProfile & cUserProfile, QtWengoPhone & qtWengoPhone)
+	: QObjectThreadSafe(NULL),
+	_qtWengoPhone(qtWengoPhone),
+	_cUserProfile(cUserProfile) {
 
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtUserProfile::initThreadSafe, this));
@@ -54,9 +54,9 @@ _cUserProfile(cUserProfile) {
 void QtUserProfile::initThreadSafe() {
 	qRegisterMetaType<IMContact>("IMContact");
 
-	connect(this, SIGNAL(cHistoryCreatedEventHandlerSignal()), 
+	connect(this, SIGNAL(cHistoryCreatedEventHandlerSignal()),
 		SLOT(cHistoryCreatedEventHandlerSlot()), Qt::QueuedConnection);
-	connect(this, SIGNAL(loginStateChangedEventHandlerSignal(SipAccount *, int)), 
+	connect(this, SIGNAL(loginStateChangedEventHandlerSignal(SipAccount *, int)),
 		SLOT(loginStateChangedEventHandlerSlot(SipAccount *, int)), Qt::QueuedConnection);
 	connect(this, SIGNAL(networkDiscoveryStateChangedEventHandlerSignal(SipAccount *, int)),
 		SLOT(networkDiscoveryStateChangedEventHandlerSlot(SipAccount *, int)), Qt::QueuedConnection);
@@ -94,7 +94,7 @@ void QtUserProfile::networkDiscoveryStateChangedEventHandler(SipAccount & sender
 
 void QtUserProfile::proxyNeedsAuthenticationEventHandler(SipAccount & sender,
 	const std::string & proxyAddress, unsigned proxyPort) {
-	proxyNeedsAuthenticationEventHandlerSignal(&sender, 
+	proxyNeedsAuthenticationEventHandlerSignal(&sender,
 		QString::fromStdString(proxyAddress), proxyPort);
 }
 
@@ -179,7 +179,7 @@ void QtUserProfile::networkDiscoveryStateChangedEventHandlerSlot(SipAccount * se
 void QtUserProfile::proxyNeedsAuthenticationEventHandlerSlot(SipAccount * sender,
 	QString proxyAddress, int proxyPort) {
 
-	static QtHttpProxyLogin * httpProxy = 
+	static QtHttpProxyLogin * httpProxy =
 		new QtHttpProxyLogin(_qtWengoPhone.getWidget(), proxyAddress.toStdString(), proxyPort);
 
 	int ret = httpProxy->show();
@@ -214,11 +214,11 @@ void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sende
 
 	if (buttonClicked == 0) {
 		//TODO: give a personal message
-		sender->authorizeContact(imContact, true, "");
+		sender->authorizeContact(imContact, true, String::null);
 
 		ContactProfile contactProfile;
 		contactProfile.addIMContact(imContact);
-		QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile, 
+		QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile,
 			_qtWengoPhone.getWidget());
 		if (qtProfileDetails.show()) {
 			_cUserProfile.getCContactList().addContact(contactProfile);
@@ -226,6 +226,6 @@ void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sende
 	} else {
 		// TODO: give a personal message
 		// TODO: avoid direct access to model (as we are in the GUI thread)
-		sender->authorizeContact(imContact, false, "");
+		sender->authorizeContact(imContact, false, String::null);
 	}
 }

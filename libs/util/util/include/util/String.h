@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef OWSTRING_H
+#define OWSTRING_H
 
 #include <string>
 
@@ -52,10 +52,29 @@ public:
 	 * End of line character.
 	 *
 	 * Equals \n (LF).
-	 *
-	 * Maybe (if needed) we should split this in WIN_EOL, UNIX_EOL, SYSTEM_EOL.
 	 */
 	static const std::string EOL;
+
+	/**
+	 * Windows end of line character.
+	 *
+	 * Equals \r\n (CRLF).
+	 */
+	static const std::string WIN_EOL;
+
+	/**
+	 * Unix end of line character.
+	 *
+	 * Equals \n (LF).
+	 */
+	static const std::string UNIX_EOL;
+
+	/**
+	 * System end of line character.
+	 *
+	 * Equals \r\n or \n depending on the system (Windows, Unix...)
+	 */
+	static const std::string SYSTEM_EOL;
 
 	String() : std::string() { }
 
@@ -243,4 +262,4 @@ public:
 	std::string trim();
 };
 
-#endif	//STRING_H
+#endif	//OWSTRING_H

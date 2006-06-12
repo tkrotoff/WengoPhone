@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTWENGOPHONE_H
-#define QTWENGOPHONE_H
+#ifndef OWQTWENGOPHONE_H
+#define OWQTWENGOPHONE_H
 
 #include <presentation/PWengoPhone.h>
 
@@ -76,6 +76,10 @@ namespace Ui { class WengoPhoneWindow; }
 class QtWengoPhone : public QObjectThreadSafe, public PWengoPhone {
 	Q_OBJECT
 public:
+
+	static const std::string URL_WENGO_MINI_HOME;
+
+	static const std::string LOCAL_WEB_DIR;
 
 	QtWengoPhone(CWengoPhone & cWengoPhone, bool background = false);
 
@@ -243,7 +247,7 @@ private Q_SLOTS:
 
 	void slotTranslationChanged();
 
-    void showHideGroups();
+	void showHideGroups();
 
 private:
 
@@ -299,7 +303,7 @@ private:
 
 	QtTrayIcon * _qtTrayIcon;
 
-    QtSms * _qtSms;
+	QtSms * _qtSms;
 
 	QtWsDirectory * _qtWsDirectory;
 
@@ -345,11 +349,7 @@ private:
 
 	static const std::string ANCHOR_FORUM;
 
-	static const std::string URL_WENGO_MINI_HOME;
-
-	static const std::string LOCAL_WEB_DIR;
-
 	bool _background;
 };
 
-#endif	//QTWENGOPHONE_H
+#endif	//OWQTWENGOPHONE_H
