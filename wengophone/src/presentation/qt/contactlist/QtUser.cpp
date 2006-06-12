@@ -24,6 +24,7 @@
 #include <control/CWengoPhone.h>
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <util/Logger.h>
 
@@ -133,7 +134,7 @@ QtContactPixmap::ContactPixmap QtUser::getStatus() const {
 
 void QtUser::startChat() {
 	//QMutexLocker locker(&_mutex);
-	_cWengoPhone.getCUserProfile()->startIM(_contactId);
+	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->startIM(_contactId);
 
 }
 
@@ -299,19 +300,19 @@ bool QtUser::hasVideo() const {
 void QtUser::startCall(const QString & number) {
 	//QMutexLocker locker(&_mutex);
 
-	_cWengoPhone.getCUserProfile()->makeCall(number.toStdString());
+	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(number.toStdString());
 }
 
 void QtUser::startCall() {
-	_cWengoPhone.getCUserProfile()->makeContactCall(_contactId);
+	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeContactCall(_contactId);
 }
 
 void QtUser::contactUpdated() {
-  _contactProfile = _cWengoPhone.getCUserProfile()->getCContactList().getContactProfile(_contactId);
+  _contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
 }
 
 void QtUser::startFreeCall() {
-	_cWengoPhone.getCUserProfile()->makeCall(_contactProfile.getFreePhoneNumber(), false);
+	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(_contactProfile.getFreePhoneNumber(), false);
 }
 
 QString QtUser::getDisplayName() const {

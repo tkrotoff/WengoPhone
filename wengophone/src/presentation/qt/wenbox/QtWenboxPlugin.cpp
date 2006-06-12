@@ -23,6 +23,7 @@
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 #include <control/wenbox/CWenboxPlugin.h>
 
 #include <qtutil/WidgetFactory.h>
@@ -76,5 +77,5 @@ void QtWenboxPlugin::timeoutEventHandler() {
 	_timer->stop();
 
 	CWengoPhone & cWengoPhone = _cWenboxPlugin.getCWengoPhone();
-	cWengoPhone.getCUserProfile()->makeCall(_phoneComboBox->currentText().toStdString());
+	cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(_phoneComboBox->currentText().toStdString());
 }

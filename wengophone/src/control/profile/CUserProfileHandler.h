@@ -17,13 +17,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CUSERPROFILEHANDLER_H
-#define CUSERPROFILEHANDLER_H
+#ifndef OWCUSERPROFILEHANDLER_H
+#define OWCUSERPROFILEHANDLER_H
 
 #include <model/account/wengo/WengoAccount.h>
 
 #include <string>
 
+class CUserProfile;
+class CWengoPhone;
+class PUserProfileHandler;
+class UserProfile;
 class UserProfileHandler;
 class Thread;
 
@@ -36,7 +40,7 @@ class CUserProfileHandler {
 public:
 
 	CUserProfileHandler(UserProfileHandler & userProfileHandler,
-		Thread & modelThread);
+		CWengoPhone & cWengoPhone, Thread & modelThread);
 
 	~CUserProfileHandler();
 
@@ -81,7 +85,38 @@ public:
 	 */
 	WengoAccount getWengoAccountOfUserProfile(const std::string & name);
 
+	/**
+	 * @return the current CUserProfile.
+	 * Can be NULL.
+	 */
+	CUserProfile * getCUserProfile() { return _cUserProfile; }
+
+	/**
+	 * @return the Presentation layer.
+	 */
+	PUserProfileHandler * getPresentation() { return _pUserProfileHandler; }
+
 private:
+
+	/**
+	 * @see UserProfileHandler::noCurrentUserProfileSetEvent
+	 */
+	void noCurrentUserProfileSetEventHandler(UserProfileHandler & sender);
+
+	/**
+	 * @see UserProfileHandler::currentUserProfileWillDieEvent
+	 */
+	void currentUserProfileWillDieEventHandler(UserProfileHandler & sender);
+
+	/**
+	 * @see UserProfileHandler::userProfileInitializedEvent
+	 */
+	void userProfileInitializedEventHandler(UserProfileHandler & sender, UserProfile & userProfile);
+
+	/**
+	 * @see UserProfileHandler::wengoAccountNotValidEvent
+	 */
+	void wengoAccountNotValidEventHandler(UserProfileHandler & sender, WengoAccount & wengoAccount);
 
 	/**
 	 * @see createUserProfile
@@ -103,9 +138,15 @@ private:
 	 */
 	void currentUserProfileReleasedThreadSafe();
 
+	CUserProfile * _cUserProfile;
+
+	PUserProfileHandler * _pUserProfileHandler;
+
 	UserProfileHandler & _userProfileHandler;
+
+	CWengoPhone & _cWengoPhone;
 
 	Thread & _modelThread;
 };
 
-#endif //CUSERPROFILEHANDLER_H
+#endif //OWCUSERPROFILEHANDLER_H

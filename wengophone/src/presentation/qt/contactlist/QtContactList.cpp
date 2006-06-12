@@ -28,6 +28,7 @@
 #include <presentation/qt/QtWengoPhone.h>
 
 #include <control/CWengoPhone.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactGroup.h>
@@ -107,7 +108,7 @@ void QtContactList::initThreadSafe() {
 	spx->setPixmap(QtContactPixmap::ContactGroupOpen, QPixmap(":/pics/group_open.png"));
 	spx->setPixmap(QtContactPixmap::ContactGroupClose, QPixmap(":/pics/group_close.png"));
 
-	_userManager = new QtUserManager(* _cWengoPhone.getCUserProfile(), _cWengoPhone,
+	_userManager = new QtUserManager(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), _cWengoPhone,
 			* this, _treeWidget, _treeWidget);
 
 	QtTreeViewDelegate * delegate = new QtTreeViewDelegate(_cWengoPhone, _treeWidget);

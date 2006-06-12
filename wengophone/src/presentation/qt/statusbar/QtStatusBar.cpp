@@ -22,6 +22,7 @@
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <model/account/NetworkObserver.h>
 #include <model/config/ConfigManager.h>
@@ -183,9 +184,10 @@ void QtStatusBar::updateInternetConnectionState() {
 void QtStatusBar::updatePhoneLineState() {
 	EnumPhoneLineState::PhoneLineState state;
 
-	if (_cWengoPhone.getCUserProfile() && _cWengoPhone.getCUserProfile()->getUserProfile().getActivePhoneLine()) {
+	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile() &&
+		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine()) {
 		//FIXME: next line could crash if active phone line is destroyed during update
-		state = _cWengoPhone.getCUserProfile()->getUserProfile().getActivePhoneLine()->getState().getCode();
+		state = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine()->getState().getCode();
 
 		QString tooltip;
 		QString pixmap;

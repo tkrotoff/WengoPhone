@@ -22,17 +22,18 @@
 #include "QtVideo.h"
 #include "QtPhoneCallEventFilter.h"
 #include "../toaster/QtCallToaster.h"
+
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/statusbar/QtStatusBar.h>
+
+#include <control/phonecall/CPhoneCall.h>
+#include <control/profile/CUserProfileHandler.h>
+#include <control/CWengoPhone.h>
 
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
-
-
-#include <control/phonecall/CPhoneCall.h>
-#include <control/CWengoPhone.h>
 
 #include <sipwrapper/WebcamVideoFrame.h>
 #include <sipwrapper/CodecList.h>
@@ -478,7 +479,7 @@ void QtPhoneCall::holdResumeActionTriggered(bool) {
 }
 
 void QtPhoneCall::addContactActionTriggered(bool) {
-	if (_cPhoneCall.getCWengoPhone().getCUserProfile()) {
+	if (_cPhoneCall.getCWengoPhone().getCUserProfileHandler().getCUserProfile()) {
 		//CHECK: this method should not be called if no UserProfile has been
 		// set
 		std::string callAddress = _cPhoneCall.getPeerDisplayName();

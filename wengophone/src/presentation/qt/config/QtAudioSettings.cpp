@@ -28,6 +28,7 @@
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <sound/AudioDevice.h>
 
@@ -96,7 +97,7 @@ void QtAudioSettings::readConfig() {
 }
 
 void QtAudioSettings::makeTestCallClicked() {
-	CUserProfile * cUserProfile = _cWengoPhone.getCUserProfile();
+	CUserProfile * cUserProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile();
 	if (cUserProfile) {
 		cUserProfile->getUserProfile().getActivePhoneLine()->makeCall(AUDIO_TEST_CALL, false);
 	}

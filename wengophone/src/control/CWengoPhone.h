@@ -30,14 +30,13 @@
 #include <string>
 
 class Contact;
-class CUserProfile;
+class CUserProfileHandler;
 class IMAccount;
 class PresenceHandler;
 class PWengoPhone;
 class UserProfile;
 class WengoAccount;
 class WsSubscribe;
-
 
 /**
  * @defgroup control Control Component
@@ -69,33 +68,13 @@ class CWengoPhone {
 public:
 
 	/**
-	 * @see UserProfile::loginStateChangedEvent
-	 */
-	Event<void (SipAccount & sender, SipAccount::LoginState state)> loginStateChangedEvent;
-
-	/**
-	 * @see UserProfile::networkDiscoveryStateChangedEvent
-	 */
-	Event<void (SipAccount & sender, SipAccount::NetworkDiscoveryState state) > networkDiscoveryStateChangedEvent;
-
-	/**
-	 * @see UserProfile::proxyNeedsAuthenticationEvent
-	 */
-	Event<void(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort)> proxyNeedsAuthenticationEvent;
-
-	/**
-	 * @see UserProfile::wrongProxyAuthenticationEvent
-	 */
-	Event<void(SipAccount & sender,
-		const std::string & proxyAddress, unsigned proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
-
-	/**
 	 * @see WengoPhone::timeoutEvent
 	 */
 	Event<void ()> controlTimeoutEvent;
 
 	CWengoPhone(WengoPhone & wengoPhone);
+
+	~CWengoPhone();
 
 	PWengoPhone * getPresentation() const {
 		return _pWengoPhone;
@@ -126,24 +105,10 @@ public:
 	void terminate();
 
 	/**
-	 * Used by GUI to prevent control that the UserProfile can be deleted.
-	 */
-	void currentUserProfileReleased();
-
-	/**
-	 * Gets the CUserProfile.
-	 *
-	 * @return the CUserProfile
-	 */
-	CUserProfile * getCUserProfile() const {
-		return _cUserProfile;
-	}
-
-	/**
 	 * Gets the CUserProfileHandler
 	 */
 	CUserProfileHandler & getCUserProfileHandler() {
-		return _cUserProfileHandler;
+		return *_cUserProfileHandler;
 	}
 
 private:
@@ -152,41 +117,13 @@ private:
 
 	void wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscribe & wsSubscribe);
 
-	/**
-	 * @see IMPresence::authorizationRequestEvent
-	 */
-	void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
-		const std::string & message);
-
-	/**
-	 * @see UserProfileHandler::noCurrentUserProfileSetEvent
-	 */
-	void noCurrentUserProfileSetEventHandler(UserProfileHandler & sender);
-
-	/**
-	 * @see UserProfileHandler::currentUserProfileWillDieEvent
-	 */
-	void currentUserProfileWillDieEventHandler(UserProfileHandler & sender);
-
-	/**
-	 * @see UserProfileHandler::userProfileInitializedEvent
-	 */
-	void userProfileInitializedEventHandler(UserProfileHandler & sender, UserProfile & userProfile);
-
-	/**
-	 * @see UserProfileHandler::wengoAccountNotValidEvent
-	 */
-	void wengoAccountNotValidEventHandler(UserProfileHandler & sender, WengoAccount & wengoAccount);
-
 	/** Direct link to the model. */
 	WengoPhone & _wengoPhone;
 
 	/** Direct link to the presentation via an interface. */
 	PWengoPhone * _pWengoPhone;
 
-	CUserProfile * _cUserProfile;
-
-	CUserProfileHandler _cUserProfileHandler;
+	CUserProfileHandler * _cUserProfileHandler;
 };
 
 #endif	//CWENGOPHONE_H

@@ -23,6 +23,11 @@
 
 using namespace std;
 
+IMContact::IMContact() {
+	_presenceState = EnumPresenceState::PresenceStateOffline;
+	_protocol = EnumIMProtocol::IMProtocolUnknown;
+}
+
 IMContact::IMContact(const IMAccount & imAccount, const std::string & contactId)
 	: _imAccount(&imAccount) {
 	_contactId = contactId;

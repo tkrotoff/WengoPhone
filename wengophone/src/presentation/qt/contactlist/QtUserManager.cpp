@@ -34,6 +34,7 @@
 #include <control/CWengoPhone.h>
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <model/contactlist/ContactList.h>
 #include <model/phoneline/PhoneLine.h>
@@ -125,7 +126,7 @@ void QtUserManager::editContact(bool) {
 	if (!item)
         return;
 	ContactProfile contactProfile = _cUserProfile.getCContactList().getContactProfile(item->text(0).toStdString());
-	QtProfileDetails qtProfileDetails(_cWengoPhone, contactProfile, _tree);
+	QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile, _tree);
 	if (qtProfileDetails.show()) {
 		_cUserProfile.getCContactList().updateContact(contactProfile);
 	}
@@ -579,7 +580,7 @@ void QtUserManager::showAllUsers() {
 QMenu * QtUserManager::createConferenceMenu() {
 
 	PhoneLine * phoneLine = dynamic_cast < PhoneLine * >
-	   (_cWengoPhone.getCUserProfile()->getUserProfile().getActivePhoneLine());
+	   (_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine());
 
 	QMenu * menu = new QMenu(tr("Invite to conference"));
 	if (phoneLine) {

@@ -23,6 +23,7 @@
 
 #include <control/phonecall/CPhoneCall.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <model/phonecall/ConferenceCall.h>
 #include <model/phonecall/PhoneCall.h>
@@ -54,7 +55,8 @@ void QtContactCallListWidget::startConference(PhoneCall * sourceCall, PhoneCall 
 	if (_conferenceCall)
 		return;
 
-	IPhoneLine * phoneLine = _cWengoPhone.getCUserProfile()->getUserProfile().getActivePhoneLine();
+	//FIXME: phoneline must not be directly usable by GUI thread
+	IPhoneLine * phoneLine = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine();
 
 	if (phoneLine == NULL)
 		return;

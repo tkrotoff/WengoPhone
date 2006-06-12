@@ -22,7 +22,6 @@
 #include <presentation/PFactory.h>
 #include <presentation/PWengoPhone.h>
 
-#include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
 #include <control/webservices/subscribe/CSubscribe.h>
 
@@ -34,27 +33,24 @@
 using namespace std;
 
 CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
-	: _wengoPhone(wengoPhone),
-	_cUserProfileHandler(wengoPhone.getUserProfileHandler(), _wengoPhone)  {
-
-	_cUserProfile = NULL;
+	: _wengoPhone(wengoPhone) {
 
 	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
+
+	_cUserProfileHandler = 
+		new CUserProfileHandler(wengoPhone.getUserProfileHandler(), *this, _wengoPhone);
 
 	_wengoPhone.initFinishedEvent +=
 		boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.timeoutEvent += controlTimeoutEvent;
 	_wengoPhone.wsSubscribeCreatedEvent +=
 		boost::bind(&CWengoPhone::wsSubscribeCreatedEventHandler, this, _1, _2);
+}
 
-	_wengoPhone.getUserProfileHandler().noCurrentUserProfileSetEvent +=
-		boost::bind(&CWengoPhone::noCurrentUserProfileSetEventHandler, this, _1);
-	_wengoPhone.getUserProfileHandler().currentUserProfileWillDieEvent +=
-		boost::bind(&CWengoPhone::currentUserProfileWillDieEventHandler, this, _1);
-	_wengoPhone.getUserProfileHandler().userProfileInitializedEvent +=
-		boost::bind(&CWengoPhone::userProfileInitializedEventHandler, this, _1, _2);
-	_wengoPhone.getUserProfileHandler().wengoAccountNotValidEvent +=
-		boost::bind(&CWengoPhone::wengoAccountNotValidEventHandler, this, _1, _2);
+CWengoPhone::~CWengoPhone() {
+	if (_pWengoPhone) {
+		delete _pWengoPhone;
+	}
 }
 
 void CWengoPhone::start() {
@@ -73,47 +69,4 @@ void CWengoPhone::wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscrib
 	static CSubscribe cSubscribe(wsSubscribe, *this);
 
 	LOG_DEBUG("CSubscribe created");
-}
-
-void CWengoPhone::authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
-	const std::string & message) {
-	_pWengoPhone->authorizationRequestEventHandler(sender, imContact, message);
-}
-
-void CWengoPhone::noCurrentUserProfileSetEventHandler(UserProfileHandler & sender) {
-	_pWengoPhone->noCurrentUserProfileSetEventHandler();
-}
-
-void CWengoPhone::currentUserProfileWillDieEventHandler(UserProfileHandler & sender) {
-	_pWengoPhone->currentUserProfileWillDieEventHandler();
-}
-
-void CWengoPhone::currentUserProfileReleased() {
-	_cUserProfile->getUserProfile().getPresenceHandler().authorizationRequestEvent -=
-		boost::bind(&CWengoPhone::authorizationRequestEventHandler, this, _1, _2, _3);
-
-	if (_cUserProfile) {
-		delete _cUserProfile;
-		_cUserProfile = NULL;
-	}
-
-	_cUserProfileHandler.currentUserProfileReleased();
-}
-
-void CWengoPhone::userProfileInitializedEventHandler(UserProfileHandler & sender, UserProfile & userProfile) {
-	_cUserProfile = new CUserProfile(userProfile, *this, _wengoPhone);
-
-	userProfile.loginStateChangedEvent += loginStateChangedEvent;
-	userProfile.networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
-	userProfile.proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
-	userProfile.wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
-
-	userProfile.getPresenceHandler().authorizationRequestEvent +=
-		boost::bind(&CWengoPhone::authorizationRequestEventHandler, this, _1, _2, _3);
-	
-	_pWengoPhone->userProfileInitializedEventHandler();
-}
-
-void CWengoPhone::wengoAccountNotValidEventHandler(UserProfileHandler & sender, WengoAccount & wengoAccount) {
-	_pWengoPhone->wengoAccountNotValidEventHandler(wengoAccount);
 }

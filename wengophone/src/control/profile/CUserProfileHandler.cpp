@@ -20,6 +20,9 @@
 #include "CUserProfileHandler.h"
 
 #include <presentation/PFactory.h>
+#include <presentation/PUserProfileHandler.h>
+
+#include <control/profile/CUserProfile.h>
 
 #include <model/account/wengo/WengoAccount.h>
 #include <model/profile/UserProfile.h>
@@ -28,11 +31,33 @@
 #include <thread/Thread.h>
 
 CUserProfileHandler::CUserProfileHandler(UserProfileHandler & userProfileHandler, 
-	Thread & modelThread) 
-: _userProfileHandler(userProfileHandler), _modelThread(modelThread) {
+	CWengoPhone & cWengoPhone, Thread & modelThread) 
+: _userProfileHandler(userProfileHandler),
+ _modelThread(modelThread),
+ _cWengoPhone(cWengoPhone) {
+
+	_cUserProfile = NULL;
+
+	_pUserProfileHandler = PFactory::getFactory().createPresentationUserProfileHandler(*this);
+
+	_userProfileHandler.noCurrentUserProfileSetEvent +=
+		boost::bind(&CUserProfileHandler::noCurrentUserProfileSetEventHandler, this, _1);
+	_userProfileHandler.currentUserProfileWillDieEvent +=
+		boost::bind(&CUserProfileHandler::currentUserProfileWillDieEventHandler, this, _1);
+	_userProfileHandler.userProfileInitializedEvent +=
+		boost::bind(&CUserProfileHandler::userProfileInitializedEventHandler, this, _1, _2);
+	_userProfileHandler.wengoAccountNotValidEvent +=
+		boost::bind(&CUserProfileHandler::wengoAccountNotValidEventHandler, this, _1, _2);
 }
 
 CUserProfileHandler::~CUserProfileHandler() {
+	if (_pUserProfileHandler) {
+		delete _pUserProfileHandler;
+	}
+
+	if (_cUserProfile) {
+		delete _cUserProfile;
+	}
 }
 
 std::vector<std::string> CUserProfileHandler::getUserProfileNames() {
@@ -104,6 +129,30 @@ void CUserProfileHandler::currentUserProfileReleased() {
 }
 
 void CUserProfileHandler::currentUserProfileReleasedThreadSafe() {
+	if (_cUserProfile) {
+		delete _cUserProfile;
+		_cUserProfile = NULL;
+	}
+
 	PFactory::getFactory().reset();
+
 	_userProfileHandler.currentUserProfileReleased();
+}
+
+
+void CUserProfileHandler::noCurrentUserProfileSetEventHandler(UserProfileHandler & sender) {
+	_pUserProfileHandler->noCurrentUserProfileSetEventHandler();
+}
+
+void CUserProfileHandler::currentUserProfileWillDieEventHandler(UserProfileHandler & sender) {
+	_pUserProfileHandler->currentUserProfileWillDieEventHandler();
+}
+
+void CUserProfileHandler::userProfileInitializedEventHandler(UserProfileHandler & sender, UserProfile & userProfile) {
+	_cUserProfile = new CUserProfile(userProfile, _cWengoPhone, _modelThread);
+	_pUserProfileHandler->userProfileInitializedEventHandler();
+}
+
+void CUserProfileHandler::wengoAccountNotValidEventHandler(UserProfileHandler & sender, WengoAccount & wengoAccount) {
+	_pUserProfileHandler->wengoAccountNotValidEventHandler(wengoAccount);
 }

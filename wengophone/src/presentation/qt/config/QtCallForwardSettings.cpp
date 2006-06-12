@@ -23,6 +23,7 @@
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 #include <control/webservices/callforward/CWsCallForward.h>
 
 #include <model/config/ConfigManager.h>
@@ -87,14 +88,14 @@ void QtCallForwardSettings::saveConfig() {
 	}
 
 	if (mustCallTheWs) {	
-		if (_cWengoPhone.getCUserProfile()) {
-			if (_cWengoPhone.getCUserProfile()->getCWsCallForward()) {
+		if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
+			if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCWsCallForward()) {
 				if (mode == "voicemail") {
-					_cWengoPhone.getCUserProfile()->getCWsCallForward()->forwardToVoiceMail();
+					_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCWsCallForward()->forwardToVoiceMail();
 				} else if (mode == "disable") {
-					_cWengoPhone.getCUserProfile()->getCWsCallForward()->disableCallForward();
+					_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCWsCallForward()->disableCallForward();
 				} else if (mode == "number") {
-					_cWengoPhone.getCUserProfile()->getCWsCallForward()->forwardToNumber(number1, number2, number3);
+					_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCWsCallForward()->forwardToNumber(number1, number2, number3);
 				}
 			}
 		}

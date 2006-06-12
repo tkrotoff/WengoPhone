@@ -56,12 +56,6 @@ public:
 
 	bool hasAutoLogin() const;
 
-	void setLogin(const QString & login);
-
-	void setPassword(const QString & password);
-
-	void setAutoLogin(bool autoLogin);
-
 public Q_SLOTS:
 
 	/**
@@ -76,6 +70,12 @@ public Q_SLOTS:
 	 */
 	int showWithInvalidWengoAccount(WengoAccount wengoAccount);
 
+	/**
+	 * Will display the login dialog, add the given WengoAccount to the 
+	 * profile list and select it as default.
+	 */
+	int showWithWengoAccount(WengoAccount wengoAccount);
+
 	void slotUpdatedTranslation();
 
 private Q_SLOTS:
@@ -89,6 +89,12 @@ private Q_SLOTS:
 	void cancelClicked();
 
 private:
+
+	void setLogin(const QString & login);
+
+	void setPassword(const QString & password);
+
+	void setAutoLogin(bool autoLogin);
 
 	/**
 	 * Sets the text of infoLabel to 'message' and colorize it to normal color.
@@ -109,6 +115,8 @@ private:
 	 * Initializes the widgets.
 	 */
 	void init();
+
+	bool _dontUpdateWidgets;
 
 	Ui::LoginWindow * _ui;
 

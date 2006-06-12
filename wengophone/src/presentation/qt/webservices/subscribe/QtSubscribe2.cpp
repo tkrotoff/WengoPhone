@@ -24,10 +24,13 @@
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/imaccount/QtIMAccountManager.h>
 #include <presentation/qt/login/QtLogin.h>
+#include <presentation/qt/profile/QtUserProfileHandler.h>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
+#include <model/account/wengo/WengoAccount.h>
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
@@ -66,15 +69,18 @@ void QtSubscribe2::show() {
 }
 
 void QtSubscribe2::configureLogin() {
-	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhone.getPresentation();
-	qtWengoPhone->getLogin()->setLogin(_ui->emailLineEdit->text());
-	qtWengoPhone->getLogin()->setPassword(_ui->passwordLineEdit->text());
-	qtWengoPhone->getLogin()->setAutoLogin(true);
-	qtWengoPhone->getLogin()->show();
+	WengoAccount wengoAccount(_ui->emailLineEdit->text().toStdString(), 
+		_ui->passwordLineEdit->text().toStdString(), 
+		true);
+
+	((QtUserProfileHandler *)(_cWengoPhone.getCUserProfileHandler().getPresentation()))->showLoginWindowWithWengoAccount(wengoAccount);
+
 	_subscribeWindow->close();
 }
 
 void QtSubscribe2::addIMAccount() {
-	QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfile()->getUserProfile(),
-		_cWengoPhone, true, _subscribeWindow);
+	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
+		QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(),
+			true, _subscribeWindow);
+	}
 }

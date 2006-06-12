@@ -28,6 +28,7 @@
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <model/contactlist/Contact.h>
 #include <model/phoneline/IPhoneLine.h>
@@ -142,7 +143,7 @@ void QtWsDirectory::contactFoundEventHandlerThreadSafe(WsDirectory & sender, Con
 
 void QtWsDirectory::callContact(const QString & sipAddress) {
 	//get the active phone line from the current user contact & make a call
-	_cWsDirectory.getCWengoPhone().getCUserProfile()->getUserProfile().getActivePhoneLine()->makeCall(sipAddress.toStdString(), true);
+	_cWsDirectory.getCWengoPhone().getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine()->makeCall(sipAddress.toStdString(), true);
 }
 
 void QtWsDirectory::addContact(ContactProfile * contact) {
@@ -153,9 +154,9 @@ void QtWsDirectory::addContact(ContactProfile * contact) {
 	contactProfile.setStreetAddress(contact->getStreetAddress());
 	contactProfile.setWengoPhoneId(contact->getWengoPhoneId());
 
-	QtProfileDetails qtProfileDetails(_cWsDirectory.getCWengoPhone(), contactProfile, _directoryWindow);
+	QtProfileDetails qtProfileDetails(*_cWsDirectory.getCWengoPhone().getCUserProfileHandler().getCUserProfile(), contactProfile, _directoryWindow);
 
 	if (qtProfileDetails.show()) {
-		_cWsDirectory.getCWengoPhone().getCUserProfile()->getCContactList().addContact(contactProfile);
+		_cWsDirectory.getCWengoPhone().getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
 	}
 }

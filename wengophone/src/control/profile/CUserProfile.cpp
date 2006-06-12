@@ -19,6 +19,9 @@
 
 #include "CUserProfile.h"
 
+#include <presentation/PFactory.h>
+#include <presentation/PUserProfile.h>
+
 #include <control/CWengoPhone.h>
 #include <control/chat/CChatHandler.h>
 #include <control/contactlist/CContactList.h>
@@ -60,6 +63,8 @@ _modelThread(modelThread) {
 	_cWsCallForward = NULL;
 	_cWsDirectory = NULL;
 
+	_pUserProfile = PFactory::getFactory().createPresentationUserProfile(*this);
+
 	_userProfile.wsDirectoryCreatedEvent +=
 		boost::bind(&CUserProfile::wsDirectoryCreatedEventHandler, this, _1, _2);
 	_userProfile.phoneLineCreatedEvent +=
@@ -68,11 +73,23 @@ _modelThread(modelThread) {
 		boost::bind(&CUserProfile::wsSmsCreatedEventHandler, this, _1, _2);
 	_userProfile.wsSoftUpdateCreatedEvent +=
 		boost::bind(&CUserProfile::wsSoftUpdateCreatedEventHandler, this, _1, _2);
-	_userProfile.getHistory().historyLoadedEvent +=
-		boost::bind(&CUserProfile::historyLoadedEventHandler, this, _1);
 	_userProfile.wsCallForwardCreatedEvent +=
 	  boost::bind(&CUserProfile::wsCallForwardCreatedEventHandler, this, _1, _2);
 
+	_userProfile.loginStateChangedEvent +=
+		boost::bind(&CUserProfile::loginStateChangedEventHandler, this, _1, _2);
+	_userProfile.networkDiscoveryStateChangedEvent +=
+		boost::bind(&CUserProfile::networkDiscoveryStateChangedEventHandler, this, _1, _2);
+	_userProfile.proxyNeedsAuthenticationEvent +=
+		boost::bind(&CUserProfile::proxyNeedsAuthenticationEventHandler, this, _1, _2, _3);
+	_userProfile.wrongProxyAuthenticationEvent +=
+		boost::bind(&CUserProfile::wrongProxyAuthenticationEventHandler, this, _1, _2, _3, _4, _5);
+
+	_userProfile.getHistory().historyLoadedEvent +=
+		boost::bind(&CUserProfile::historyLoadedEventHandler, this, _1);
+
+	_userProfile.getPresenceHandler().authorizationRequestEvent +=
+		boost::bind(&CUserProfile::authorizationRequestEventHandler, this, _1, _2, _3);
 }
 
 CUserProfile::~CUserProfile() {
@@ -88,6 +105,26 @@ CUserProfile::~CUserProfile() {
 		boost::bind(&CUserProfile::historyLoadedEventHandler, this, _1);
 	_userProfile.wsCallForwardCreatedEvent -=
 	  boost::bind(&CUserProfile::wsCallForwardCreatedEventHandler, this, _1, _2);
+
+	_userProfile.loginStateChangedEvent -=
+		boost::bind(&CUserProfile::loginStateChangedEventHandler, this, _1, _2);
+	_userProfile.networkDiscoveryStateChangedEvent -=
+		boost::bind(&CUserProfile::networkDiscoveryStateChangedEventHandler, this, _1, _2);
+	_userProfile.proxyNeedsAuthenticationEvent -=
+		boost::bind(&CUserProfile::proxyNeedsAuthenticationEventHandler, this, _1, _2, _3);
+	_userProfile.wrongProxyAuthenticationEvent -=
+		boost::bind(&CUserProfile::wrongProxyAuthenticationEventHandler, this, _1, _2, _3, _4, _5);
+
+	_userProfile.getHistory().historyLoadedEvent -=
+		boost::bind(&CUserProfile::historyLoadedEventHandler, this, _1);
+
+	_userProfile.getPresenceHandler().authorizationRequestEvent -=
+		boost::bind(&CUserProfile::authorizationRequestEventHandler, this, _1, _2, _3);
+
+	if (_pUserProfile) {
+		delete _pUserProfile;
+		_pUserProfile = NULL;
+	}
 
 	if (_cWsDirectory) {
 		delete _cWsDirectory;
@@ -115,16 +152,32 @@ CUserProfile::~CUserProfile() {
 	}
 }
 
-PhoneCall * CUserProfile::getActivePhoneCall() const {
-	PhoneCall * result = NULL;
+void CUserProfile::loginStateChangedEventHandler(SipAccount & sender,
+	SipAccount::LoginState state) {
+	_pUserProfile->loginStateChangedEventHandler(sender, state);
+}
 
-	//FIXME: model must not be used directly by the GUI
-	IPhoneLine * phoneLine = _userProfile.getActivePhoneLine();
-	if (phoneLine) {
-		result = phoneLine->getActivePhoneCall();
-	}
+void CUserProfile::networkDiscoveryStateChangedEventHandler(SipAccount & sender,
+	SipAccount::NetworkDiscoveryState state) {
+	_pUserProfile->networkDiscoveryStateChangedEventHandler(sender, state);
+}
 
-	return result;
+void CUserProfile::proxyNeedsAuthenticationEventHandler(SipAccount & sender,
+	const std::string & proxyAddress, unsigned proxyPort) {
+	_pUserProfile->proxyNeedsAuthenticationEventHandler(sender,
+		proxyAddress, proxyPort);
+}
+
+void CUserProfile::wrongProxyAuthenticationEventHandler(SipAccount & sender,
+	const std::string & proxyAddress, unsigned proxyPort,
+	const std::string & proxyLogin, const std::string & proxyPassword) {
+	_pUserProfile->wrongProxyAuthenticationEventHandler(sender, proxyAddress,
+		proxyPort, proxyLogin, proxyPassword);
+}
+
+void CUserProfile::authorizationRequestEventHandler(PresenceHandler & sender,
+	const IMContact & imContact, const std::string & message) {
+	_pUserProfile->authorizationRequestEventHandler(sender, imContact, message);
 }
 
 void CUserProfile::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine) {
@@ -160,7 +213,7 @@ void CUserProfile::wsSoftUpdateCreatedEventHandler(UserProfile & sender, WsSoftU
 
 void CUserProfile::historyLoadedEventHandler(History & history) {
 	_cHistory = new CHistory(history, _cWengoPhone, _cWengoPhone.getModelThread());
-	cHistoryCreatedEvent(*this, *_cHistory);
+	_pUserProfile->cHistoryCreatedEventHandler();
 }
 
 void CUserProfile::disconnect() {
@@ -252,6 +305,18 @@ std::set<IMAccount *> CUserProfile::getIMAccountsOfProtocol(EnumIMProtocol::IMPr
 		if ((*it).getProtocol() == protocol) {
 			result.insert((IMAccount *)(&(*it)));
 		}
+	}
+
+	return result;
+}
+
+PhoneCall * CUserProfile::getActivePhoneCall() const {
+	PhoneCall * result = NULL;
+
+	//FIXME: model must not be used directly by the GUI
+	IPhoneLine * phoneLine = _userProfile.getActivePhoneLine();
+	if (phoneLine) {
+		result = phoneLine->getActivePhoneCall();
 	}
 
 	return result;

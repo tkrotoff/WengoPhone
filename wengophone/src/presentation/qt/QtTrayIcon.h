@@ -37,8 +37,6 @@ public:
 
     void updateCallMenu();
 
-
-
 public Q_SLOTS:
 
     void setTrayMenu();
@@ -60,12 +58,12 @@ public Q_SLOTS:
     void slotSystrayMenuSendSms(QAction * action);
 
 protected:
+
     QMenu * createCallWengoTrayMenu();
 
     QMenu * createCallMobileTrayMenu();
 
     QMenu * createCallLandLineTrayMenu();
-
 
     QtWengoPhone * _qtWengoPhone;
 

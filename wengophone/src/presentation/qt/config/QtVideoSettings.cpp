@@ -28,6 +28,7 @@
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <webcam/WebcamDriver.h>
 #include <sipwrapper/EnumVideoQuality.h>
@@ -189,7 +190,7 @@ void QtVideoSettings::enableVideo(bool enable) {
 }
 
 void QtVideoSettings::makeTestCallClicked() {
-	CUserProfile * cUserProfile = _cWengoPhone.getCUserProfile();
+	CUserProfile * cUserProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile();
 	if (cUserProfile) {
 		cUserProfile->getUserProfile().getActivePhoneLine()->makeCall(VIDEO_TEST_CALL, true);
 	}

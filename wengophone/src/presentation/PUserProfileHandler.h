@@ -17,27 +17,40 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PWENGOPHONE_H
-#define PWENGOPHONE_H
+#ifndef PUSERPROFILEHANDLER_H
+#define PUSERPROFILEHANDLER_H
 
 #include "Presentation.h"
 
-class IMContact;
-class PresenceHandler;
 class WengoAccount;
 
-#include <string>
-
 /**
- *
+ * Presentation layer of UserProfileHandler
  * @ingroup presentation
- * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
-class PWengoPhone : public Presentation {
+class PUserProfileHandler : public Presentation {
 public:
 
-	virtual void showHistory() = 0;
+	/**
+	 * @see UserProfileHandler::noCurrentUserProfileSetEvent
+	 */
+	virtual void noCurrentUserProfileSetEventHandler() = 0;
 
+	/**
+	 * @see UserProfileHandler::currentUserProfileWillDieEvent
+	 */
+	virtual void currentUserProfileWillDieEventHandler() = 0;
+
+	/**
+	 * @see UserProfileHandler::userProfileInitializedEvent
+	 */
+	virtual void userProfileInitializedEventHandler() = 0;
+
+	/**
+	 * @see UserProfileHandler::wengoAccountNotValidEvent
+	 */
+	virtual void wengoAccountNotValidEventHandler(const WengoAccount & wengoAccount) = 0;
 };
 
-#endif	//PWENGOPHONE_H
+#endif	//PUSERPROFILEHANDLER_H

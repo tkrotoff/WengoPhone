@@ -60,6 +60,8 @@ QtLogin::QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler)
 	_errorPalette = _infoPalette;
 	_errorPalette.setColor(QPalette::WindowText, QColor(Qt::red));
 
+	_dontUpdateWidgets = false;
+
 	init();
 }
 
@@ -91,6 +93,24 @@ int QtLogin::showWithInvalidWengoAccount(WengoAccount wengoAccount) {
 	return _loginWindow->exec();
 }
 
+int QtLogin::showWithWengoAccount(WengoAccount wengoAccount) {
+	init();
+
+	// Add and select the given WengoAccount
+	_dontUpdateWidgets = true;
+	_ui->loginComboBox->addItem(QString::fromStdString(wengoAccount.getWengoLogin()));
+	setPassword(QString::fromStdString(wengoAccount.getWengoPassword()));
+	setAutoLogin(wengoAccount.hasAutoLogin());
+
+	_ui->loginComboBox->setCurrentIndex(_ui->loginComboBox->findText(QString::fromStdString(wengoAccount.getWengoLogin())));
+
+	_dontUpdateWidgets = false;
+	////
+
+	setInfoMessage(tr("Click on Login to connect to Wengo"));
+
+	return _loginWindow->exec();
+}
 
 void QtLogin::createAccountLabelClicked() {
 	/*if (_qtWengoPhone.getSubscribe()) {
@@ -136,9 +156,11 @@ void QtLogin::init() {
 }
 
 void QtLogin::currentIndexChanged(const QString & profileName) {
-	WengoAccount wengoAccount = _cUserProfileHandler.getWengoAccountOfUserProfile(profileName.toStdString());
-	setPassword(QString::fromStdString(wengoAccount.getWengoPassword()));
-	setAutoLogin(wengoAccount.hasAutoLogin());
+	if (!_dontUpdateWidgets) {
+		WengoAccount wengoAccount = _cUserProfileHandler.getWengoAccountOfUserProfile(profileName.toStdString());
+		setPassword(QString::fromStdString(wengoAccount.getWengoPassword()));
+		setAutoLogin(wengoAccount.hasAutoLogin());
+	}
 }
 
 void QtLogin::slotUpdatedTranslation() {

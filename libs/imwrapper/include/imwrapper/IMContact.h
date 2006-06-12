@@ -72,6 +72,8 @@ public:
 
 	IMContact(const IMContact & imContact);
 
+	IMContact();
+
 	~IMContact();
 
 	/**

@@ -201,7 +201,7 @@ private:
 	void wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status,
 		WsInfo::WsInfoCallForwardMode mode, bool voicemail, std::string dest1, std::string dest2, std::string dest3);
 
-	void cHistoryCreatedEventHandler(CUserProfile & sender, CHistory &  cHistory);
+	void cHistoryCreatedEventHandlerSlot();
 
 	void unseenMissedCallsChangedEventHandler(CHistory &, int count);
 

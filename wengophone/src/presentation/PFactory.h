@@ -50,7 +50,10 @@ class PSubscribe;
 class CSubscribe;
 class PWsDirectory;
 class CWsDirectory;
-
+class PUserProfile;
+class CUserProfile;
+class PUserProfileHandler;
+class CUserProfileHandler;
 
 /**
  * Factories for the presentation component.
@@ -82,6 +85,10 @@ public:
 	}
 
 	virtual PWengoPhone * createPresentationWengoPhone(CWengoPhone & cWengoPhone) = 0;
+
+	virtual PUserProfile * createPresentationUserProfile(CUserProfile & cUserProfile) = 0;
+
+	virtual PUserProfileHandler * createPresentationUserProfileHandler(CUserProfileHandler & cUserProfileHandler) = 0;
 
 	virtual PPhoneLine * createPresentationPhoneLine(CPhoneLine & cPhoneLine) = 0;
 

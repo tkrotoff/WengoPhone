@@ -19,13 +19,16 @@
 
 #include "QtProfileBar.h"
 
-#include <model/account/wengo/WengoAccount.h>
-#include <model/profile/UserProfile.h>
-#include <model/presence/PresenceHandler.h>
+#include <presentation/qt/profile/QtUserProfile.h>
 
 #include <control/CWengoPhone.h>
 #include <control/history/CHistory.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
+
+#include <model/account/wengo/WengoAccount.h>
+#include <model/profile/UserProfile.h>
+#include <model/presence/PresenceHandler.h>
 
 #include <util/Logger.h>
 #include <imwrapper/IMAccount.h>
@@ -156,12 +159,6 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	_connectHandler.disconnectedEvent +=
 		boost::bind(&QtProfileBar::disconnectedEventHandler, this, _1, _2, _3, _4);
 
-	if (cWengoPhone.getCUserProfile()) {
-		//FIXME: we should check if the history is loaded yet
-		cWengoPhone.getCUserProfile()->cHistoryCreatedEvent +=
-			boost::bind(&QtProfileBar::cHistoryCreatedEventHandler, this, _1, _2);
-	}
-
 	PresenceHandler & presence = _cUserProfile.getUserProfile().getPresenceHandler();
 
 	presence.myPresenceStatusEvent +=
@@ -181,11 +178,18 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 		LOG_FATAL("Signal / slot connection error");
 	}
 
+	if (_cUserProfile.getCHistory()) {
+		_eventWidget->setMissedCall(_cUserProfile.getCHistory()->getUnseenMissedCalls());
+	}
+
 	connect(this, SIGNAL(wsInfoWengosEvent(float)), SLOT(wsInfoWengosEventSlot(float)));
 	connect(this, SIGNAL(wsInfoVoiceMailEvent(int)), SLOT(wsInfoVoiceMailEventSlot(int)));
 	connect(this, SIGNAL(wsInfoPtsnNumberEvent(const QString &)), SLOT(wsInfoPtsnNumberEventSlot(const QString &)));
 	connect(this, SIGNAL(wsCallForwardInfoEvent(const QString &)), SLOT(wsCallForwardInfoEventSlot(const QString &)));
 	connect(this, SIGNAL(phoneLineCreatedEvent()), SLOT(phoneLineCreatedEventSlot()));
+	QtUserProfile * qtUserProfile = ((QtUserProfile *)(_cUserProfile.getPresentation()));
+	connect(qtUserProfile, SIGNAL(cHistoryCreatedEventHandlerSignal()),
+		SLOT(cHistoryCreatedEventHandlerSlot()));
 }
 
 QtProfileBar::~QtProfileBar() {
@@ -206,11 +210,6 @@ QtProfileBar::~QtProfileBar() {
 
 	_connectHandler.disconnectedEvent -=
 		boost::bind(&QtProfileBar::disconnectedEventHandler, this, _1, _2, _3, _4);
-
-	if (_cWengoPhone.getCUserProfile()) {
-		_cWengoPhone.getCUserProfile()->cHistoryCreatedEvent -=
-			boost::bind(&QtProfileBar::cHistoryCreatedEventHandler, this, _1, _2);
-	}
 }
 
 // Called in the model thread
@@ -573,12 +572,11 @@ void QtProfileBar::paintEvent ( QPaintEvent * event ) {
 	}
 }
 
-void QtProfileBar::cHistoryCreatedEventHandler(CUserProfile & sender, CHistory & cHistory) {
-
-	cHistory.unseenMissedCallsChangedEvent +=
+void QtProfileBar::cHistoryCreatedEventHandlerSlot() {
+	_cUserProfile.getCHistory()->unseenMissedCallsChangedEvent +=
 		boost::bind(&QtProfileBar::unseenMissedCallsChangedEventHandler, this, _1, _2);
 
-	_eventWidget->setMissedCall(cHistory.getUnseenMissedCalls());
+	_eventWidget->setMissedCall(_cUserProfile.getCHistory()->getUnseenMissedCalls());
 }
 
 void QtProfileBar::unseenMissedCallsChangedEventHandler(CHistory &, int count) {

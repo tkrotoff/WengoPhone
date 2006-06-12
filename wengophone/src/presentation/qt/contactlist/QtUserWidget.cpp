@@ -28,6 +28,7 @@
 #include <control/CWengoPhone.h>
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <presentation/qt/contactlist/QtUserList.h>
 #include <presentation/qt/profile/QtProfileDetails.h>
@@ -117,7 +118,7 @@ QPixmap QtUserWidget::getIcon() const {
 void QtUserWidget::contactProfileUpdated() {
 	QMutexLocker locker(& _mutex);
 
-	_contactProfile = _cWengoPhone.getCUserProfile()->getCContactList().getContactProfile(_contactId);
+	_contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
 }
 
 QLabel * QtUserWidget::getAvatarLabel() const {
@@ -134,10 +135,10 @@ void QtUserWidget::mobileButtonClicked() {
 		ul->startCall(QString::fromStdString(_contactId), _ui.cellPhoneLabel->text());
 	} else {
 		ContactProfile contactProfile =
-			_cWengoPhone.getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
-		QtProfileDetails qtProfileDetails(_cWengoPhone, contactProfile, this);
+			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
+		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), contactProfile, this);
 		if( qtProfileDetails.show() ) {
-			_cWengoPhone.getCUserProfile()->getCContactList().updateContact(contactProfile);
+			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);
 		}
 	}
 }
@@ -150,10 +151,10 @@ void QtUserWidget::landLineButtonClicked() {
 		ul->startCall(QString::fromStdString(_contactId), _ui.homePhoneLabel->text());
 	} else {
 		ContactProfile contactProfile = 
-			_cWengoPhone.getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
-		QtProfileDetails qtProfileDetails(_cWengoPhone, contactProfile, this);
+			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
+		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), contactProfile, this);
 		if( qtProfileDetails.show() ) {
-			_cWengoPhone.getCUserProfile()->getCContactList().updateContact(contactProfile);
+			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);
 		}
 	}
 }

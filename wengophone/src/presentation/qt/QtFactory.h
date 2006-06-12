@@ -23,36 +23,18 @@
 #include <presentation/PFactory.h>
 
 #include "QtWengoPhone.h"
-#include <control/CWengoPhone.h>
-
-#include "phoneline/QtPhoneLine.h"
-#include <control/phoneline/CPhoneLine.h>
-
-#include "phonecall/QtPhoneCall.h"
-#include <control/phonecall/CPhoneCall.h>
-
-#include "contactlist/QtContactList.h"
-#include <control/contactlist/CContactList.h>
-
-#include "wenbox/QtWenboxPlugin.h"
-#include <control/wenbox/CWenboxPlugin.h>
-
 #include "chat/QtChatHandler.h"
-
-#include "webservices/sms/QtSms.h"
-#include <control/webservices/sms/CSms.h>
-
-#include "webservices/softupdate/QtSoftUpdate.h"
-#include <control/webservices/softupdate/CSoftUpdate.h>
-
+#include "contactlist/QtContactList.h"
 #include "history/QtHistory.h"
-#include <control/history/CHistory.h>
-
+#include "phoneline/QtPhoneLine.h"
+#include "phonecall/QtPhoneCall.h"
+#include "profile/QtUserProfile.h"
+#include "profile/QtUserProfileHandler.h"
+#include "webservices/sms/QtSms.h"
+#include "webservices/softupdate/QtSoftUpdate.h"
 #include "webservices/subscribe/QtSubscribe.h"
-#include <control/webservices/subscribe/CSubscribe.h>
-
 #include "webservices/directory/QtWsDirectory.h"
-#include <control/webservices/directory/CWsDirectory.h>
+#include "wenbox/QtWenboxPlugin.h"
 
 #include <util/File.h>
 #include <util/Logger.h>
@@ -138,12 +120,31 @@ public:
 		_qtWsDirectory = NULL;
 		_qtSoftUpdate = NULL;
 		_qtHistory = NULL;
+		_qtWengoPhone = NULL;
+		_qtUserProfileHandler = NULL;
 	}
 
 	PWengoPhone * createPresentationWengoPhone(CWengoPhone & cWengoPhone) {
 		_cWengoPhone = &cWengoPhone;
-		static QtWengoPhone qtWengoPhone(cWengoPhone, _background);
-		return &qtWengoPhone;
+		if (!_qtWengoPhone) {
+			_qtWengoPhone = new QtWengoPhone(cWengoPhone, _background);
+		}
+
+		return _qtWengoPhone;
+	}
+
+	PUserProfile * createPresentationUserProfile(CUserProfile & cUserProfile) {
+		//FIXME: QtWengoPhone must be instanciated before any QtUserProfile
+		return new QtUserProfile(cUserProfile, *_qtWengoPhone);
+	}
+
+	PUserProfileHandler * createPresentationUserProfileHandler(CUserProfileHandler & cUserProfileHandler) {
+		if (!_qtUserProfileHandler) {
+			//FIXME: QtWengoPhone must be instanciated before _qtUserProfileHandler
+			_qtUserProfileHandler = new QtUserProfileHandler(cUserProfileHandler, *_qtWengoPhone);
+		}
+		
+		return _qtUserProfileHandler;
 	}
 
 	PPhoneLine * createPresentationPhoneLine(CPhoneLine & cPhoneLine) {
@@ -238,6 +239,10 @@ private:
 	QtHistory * _qtHistory;
 
 	CWengoPhone * _cWengoPhone;
+
+	QtWengoPhone * _qtWengoPhone;
+
+	QtUserProfileHandler * _qtUserProfileHandler;
 
 	bool _background;
 };

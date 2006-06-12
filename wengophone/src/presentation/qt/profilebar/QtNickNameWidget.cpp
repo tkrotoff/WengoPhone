@@ -23,8 +23,9 @@
 
 #include <model/profile/UserProfile.h>
 
-#include <control/profile/CUserProfile.h>
 #include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <presentation/qt/profile/QtProfileDetails.h>
 #include <presentation/qt/imaccount/QtIMAccountManager.h>
@@ -332,14 +333,14 @@ void QtNickNameWidget::jabberClicked() {
 }
 
 void QtNickNameWidget::avatarClicked() {
-	QtProfileDetails qtProfileDetails(_cWengoPhone, _cUserProfile.getUserProfile(), this);
+	QtProfileDetails qtProfileDetails(_cUserProfile, _cUserProfile.getUserProfile(), this);
 	//TODO: UserProfile must be updated if QtProfileDetails was accepted
 	qtProfileDetails.changeUserProfileAvatar();
 	updateAvatar();
 }
 
 void QtNickNameWidget::avatarRightClicked() {
-	QtProfileDetails qtProfileDetails(_cWengoPhone, _cUserProfile.getUserProfile(), this);
+	QtProfileDetails qtProfileDetails(_cUserProfile, _cUserProfile.getUserProfile(), this);
 	//TODO: UserProfile must be updated if QtProfileDetails was accepted
 	qtProfileDetails.show();
 	updateAvatar();
@@ -512,8 +513,8 @@ void QtNickNameWidget::updateAvatar() {
 }
 
 void QtNickNameWidget::showImAccountManager() {
-	QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfile()->getUserProfile(),
-		_cWengoPhone, true, this);
+	QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(),
+		 true, this);
 }
 
 void QtNickNameWidget::textChanged ( const QString & text ) {

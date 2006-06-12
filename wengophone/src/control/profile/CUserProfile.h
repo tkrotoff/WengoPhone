@@ -24,6 +24,8 @@
 #include <control/contactlist/CContactList.h>
 #include <control/wenbox/CWenboxPlugin.h>
 
+#include <model/account/SipAccount.h>
+
 #include <imwrapper/EnumIMProtocol.h>
 
 #include <set>
@@ -39,6 +41,7 @@ class History;
 class IMAccount;
 class IPhoneLine;
 class PhoneCall;
+class PUserProfile;
 class UserProfile;
 class Thread;
 class WengoAccount;
@@ -56,14 +59,6 @@ class WsSoftUpdate;
  */
 class CUserProfile {
 public:
-
-	/**
-	 * CHistory has been created.
-	 *
-	 * @param sender this class
-	 * @param wsWengoSubscribe WsWengoSubscribe created
-	 */
-	Event<void (CUserProfile & sender, CHistory & cHistory)> cHistoryCreatedEvent;
 
 	CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone, 
 		Thread & modelThread);
@@ -120,8 +115,8 @@ public:
 	 *
 	 * @return the CHistory
 	 */
-	CHistory & getCHistory() const {
-		return *_cHistory;
+	CHistory * getCHistory() const {
+		return _cHistory;
 	}
 
 	/**
@@ -157,7 +152,45 @@ public:
 		return _userProfile;
 	}
 
+	/**
+	 * Gets the Presentation layer.
+	 */
+	PUserProfile * getPresentation() {
+		return _pUserProfile;
+	}
+
 private:
+
+	/**
+	 * @see UserProfile::loginStateChangedEvent
+	 */
+	void loginStateChangedEventHandler(SipAccount & sender,
+		SipAccount::LoginState state);
+
+	/**
+	 * @see UserProfile::networkDiscoveryStateChangedEvent
+	 */
+	void networkDiscoveryStateChangedEventHandler(SipAccount & sender,
+		SipAccount::NetworkDiscoveryState state);
+
+	/**
+	 * @see UserProfile::proxyNeedsAuthenticationEvent
+	 */
+	void proxyNeedsAuthenticationEventHandler(SipAccount & sender,
+		const std::string & proxyAddress, unsigned proxyPort);
+
+	/**
+	 * @see UserProfile::wrongProxyAuthenticationEvent
+	 */
+	void wrongProxyAuthenticationEventHandler(SipAccount & sender,
+		const std::string & proxyAddress, unsigned proxyPort,
+		const std::string & proxyLogin, const std::string & proxyPassword);
+
+	/**
+	 * @see PresenceHandler::authorizationRequestEvent
+	 */
+	void authorizationRequestEventHandler(PresenceHandler & sender,
+		const IMContact & imContact, const std::string & message);
 
 	/**
 	 * @see UserProfile::historyLoadedEvent
@@ -220,6 +253,8 @@ private:
 	void setWengoAccountThreadSafe(WengoAccount wengoAccount);
 
 	UserProfile & _userProfile;
+
+	PUserProfile * _pUserProfile;
 
 	CContactList _cContactList;
 

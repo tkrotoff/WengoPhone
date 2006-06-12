@@ -34,29 +34,28 @@
 #include <QAction>
 #include <string>
 
-class PresenceHandler;
-class IMContact;
-class UserProfile;
 class CWengoPhone;
+class IMContact;
 class PPhoneLine;
-class QtPhoneCall;
-class QtProfileBar;
-class QtContactList;
-class QtContactCallListWidget;
-class QtSms;
-class QtSubscribe;
+class PhoneCall;
+class PresenceHandler;
 class QtBrowser;
+class QtCallBar;
+class QtContactCallListWidget;
+class QtContactList;
 class QtHistoryWidget;
 class QtIdle;
 class QtLanguage;
-class QtLogin;
-class QtToaster;
-class QtStatusBar;
-class QtCallBar;
+class QtPhoneCall;
 class QtProfileBar;
+class QtSms;
+class QtStatusBar;
+class QtSubscribe;
+class QtToaster;
 class QtWengoStyleLabel;
 class QtWsDirectory;
 class QtTrayIcon;
+class UserProfile;
 
 class QPushButton;
 class QComboBox;
@@ -106,24 +105,11 @@ public:
 
 	QtSubscribe * getSubscribe() const;
 
-	QtLogin * getLogin() const;
-
 	void updatePresentation();
 
 	void dialpad(const std::string & tone, const std::string & soundFile);
 
-	void authorizationRequestEventHandler(PresenceHandler & sender, const IMContact & imContact,
-		const std::string & message);
-
 	void connectionStatusEventHandler(int totalSteps, int currentStep, const std::string & infoMsg);
-
-	void noCurrentUserProfileSetEventHandler();
-
-	void currentUserProfileWillDieEventHandler();
-
-	void userProfileInitializedEventHandler();
-
-	void wengoAccountNotValidEventHandler(const WengoAccount & wengoAccount);
 
 	QWidget * getWidget() const {
 		return _wengoPhoneWindow;
@@ -139,6 +125,14 @@ public:
 		return _phoneComboBox;
 	}
 
+	QtLanguage * getQtLanguage() {
+		return _qtLanguage;
+	}
+
+	QtBrowser * getQtBrowser() {
+		return _browser;
+	}
+
 	void setChatWindow(QWidget * chatWindow);
 
 	void showHistory();
@@ -151,27 +145,17 @@ Q_SIGNALS:
 
 	void connectionStatusEventHandlerSignal(int totalSteps, int currentStep, QString infoMsg);
 
-	void noCurrentUserProfileSetEventHandlerSignal();
-
-	void currentUserProfileWillDieEventHandlerSignal();
-
-	void userProfileInitializedEventHandlerSignal();
-
-	void wengoAccountNotValidEventHandlerSignal(WengoAccount wengoAccount);
-
 	void signalTimeoutEventReached();
 
-private Q_SLOTS:
-
-	void connectionStatusEventHandlerSlot(int totalSteps, int currentStep, QString infoMsg);
-
-	void noCurrentUserProfileSetEventHandlerSlot();
+public Q_SLOTS:
 
 	void currentUserProfileWillDieEventHandlerSlot();
 
 	void userProfileInitializedEventHandlerSlot();
 
-	void wengoAccountNotValidEventHandlerSlot(WengoAccount wengoAccount);
+private Q_SLOTS:
+
+	void connectionStatusEventHandlerSlot(int totalSteps, int currentStep, QString infoMsg);
 
 	void callButtonClicked();
 
@@ -196,8 +180,6 @@ private Q_SLOTS:
 	void showHelp();
 
 	void showAbout();
-
-	void showLoginWindow();
 
 	void showContactList();
 
@@ -322,8 +304,6 @@ private:
 	QtWsDirectory * _qtWsDirectory;
 
 	QtSubscribe * _qtSubscribe;
-
-	QtLogin * _qtLogin;
 
 	QtBrowser * _browser;
 

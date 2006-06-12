@@ -26,6 +26,7 @@
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <util/Logger.h>
 #include <util/StringList.h>
@@ -204,7 +205,7 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
     } else{
         groupName = index.data().toString();
         groupId = groupName.toStdString();
-        groupNameTmp = _cWengoPhone.getCUserProfile()->getCContactList().getContactGroupName(groupId);
+        groupNameTmp = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactGroupName(groupId);
     }
     if (checkForUtf8((const unsigned char *)(groupNameTmp.c_str()), groupNameTmp.size())){
         	groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());

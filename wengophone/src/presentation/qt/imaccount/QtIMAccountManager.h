@@ -49,8 +49,8 @@ class QtIMAccountManager : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtIMAccountManager(UserProfile & userProfile, CWengoPhone & cWengoPhone,
-			bool showAsDialog, QWidget * parent);
+	QtIMAccountManager(UserProfile & userProfile, bool showAsDialog,
+		QWidget * parent);
 
 	~QtIMAccountManager();
 
@@ -75,8 +75,6 @@ private:
 	void loadIMAccounts();
 
 	UserProfile & _userProfile;
-
-	CWengoPhone & _cWengoPhone;
 
 	Ui::IMAccountManager * _ui;
 
