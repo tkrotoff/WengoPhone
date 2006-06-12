@@ -41,7 +41,8 @@ WengoAccount::WengoAccount()
 	_wengoLoginOk = false;
 	_ssoWithSSL = false;
 	_stunServer = "stun.wengo.fr";
-	_discoveringNetwork	= false;
+	_discoveringNetwork = false;
+	_lastNetworkDiscoveryState = NetworkDiscoveryStateError;
 
 	_ssoTimer.timeoutEvent += boost::bind(&WengoAccount::ssoTimeoutEventHandler, this);
 	_ssoTimer.lastTimeoutEvent += boost::bind(&WengoAccount::ssoLastTimeoutEventHandler, this);
@@ -60,6 +61,7 @@ WengoAccount::WengoAccount(const std::string & login, const std::string & passwo
 	_ssoWithSSL = false;
 	_stunServer = "stun.wengo.fr";
 	_discoveringNetwork = false;
+	_lastNetworkDiscoveryState = NetworkDiscoveryStateError;
 
 	_ssoTimer.timeoutEvent += boost::bind(&WengoAccount::ssoTimeoutEventHandler, this);
 	_ssoTimer.lastTimeoutEvent += boost::bind(&WengoAccount::ssoLastTimeoutEventHandler, this);
@@ -72,7 +74,7 @@ WengoAccount::WengoAccount(const WengoAccount & wengoAccount) {
 	copy(wengoAccount);
 }
 
-WengoAccount & WengoAccount::operator = (const WengoAccount & wengoAccount) {
+WengoAccount & WengoAccount::operator=(const WengoAccount & wengoAccount) {
 	copy(wengoAccount);
 
 	return *this;
@@ -87,7 +89,8 @@ void WengoAccount::copy(const WengoAccount & wengoAccount) {
 	_wengoLoginOk = wengoAccount._wengoLoginOk;
 	_ssoWithSSL = wengoAccount._ssoWithSSL;
 	_stunServer = wengoAccount._stunServer;
-	_discoveringNetwork	= false;
+	_discoveringNetwork = false;
+	_lastNetworkDiscoveryState = wengoAccount._lastNetworkDiscoveryState;
 
 	_ssoTimer.timeoutEvent += boost::bind(&WengoAccount::ssoTimeoutEventHandler, this);
 	_ssoTimer.lastTimeoutEvent += boost::bind(&WengoAccount::ssoLastTimeoutEventHandler, this);

@@ -32,6 +32,8 @@
  * what if a signal is emitted and the receiver object for this signal is already destroyed?
  * most likely, a segmentation fault will occur.
  *
+ * You have to inherit publicly from Trackable.
+ *
  * @author Tanguy Krotoff
  */
 class Trackable : public boost::signals::trackable {
