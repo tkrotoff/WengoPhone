@@ -37,8 +37,12 @@
 #include <QtBrowser.h>
 #include <WengoPhoneBuildId.h>
 
+#include <QtGui>
 #include <QMessageBox>
 #include <QMetaType>
+
+const std::string QtWengoPhone::URL_WENGO_MINI_HOME = "https://www.wengo.fr/auth/auth.php";
+const std::string QtWengoPhone::LOCAL_WEB_DIR = "webpages/windows";
 
 QtUserProfile::QtUserProfile(CUserProfile & cUserProfile, QtWengoPhone & qtWengoPhone) 
 : QObjectThreadSafe(&qtWengoPhone), 
