@@ -78,7 +78,7 @@ void QtAudioSettings::readConfig() {
 
 	_ui->inputDeviceComboBox->clear();
 	_ui->inputDeviceComboBox->addItems(StringListConvert::toQStringList(inputDeviceList));
-	_ui->inputDeviceComboBox->setCurrentIndex(_ui->inputDeviceComboBox->findText(QString::fromStdString(config.getAudioInputDeviceName())));
+	_ui->inputDeviceComboBox->setCurrentIndex(_ui->inputDeviceComboBox->findText(QString::fromUtf8(config.getAudioInputDeviceName().c_str())));
 
 	//outputDeviceList
 	StringList outputDeviceList;
