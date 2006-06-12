@@ -810,9 +810,6 @@ void QtWengoPhone::showVoiceMail() {
 	WsUrl::showWengoVoiceMail();
 }
 
-void QtWengoPhone::showHome() {
-}
-
 void QtWengoPhone::showContactList() {
 }
 
@@ -828,7 +825,6 @@ void QtWengoPhone::showAccountSettings() {
 			_cWengoPhone, true, _wengoPhoneWindow);
 	}
 }
-
 
 //FIXME
 void QtWengoPhone::showCreateConferenceCall() {
@@ -925,10 +921,6 @@ void QtWengoPhone::urlClickedEventHandler(std::string url) {
 	else if( anchor == ANCHOR_FORUM ) {
 		showForum();
 	}
-}
-
-void QtWengoPhone::toasterClosed(QtToaster * toaster) {
-	delete toaster;
 }
 
 void QtWengoPhone::expandConfigPanel() {
@@ -1127,84 +1119,19 @@ void QtWengoPhone::setChatWindow(QWidget * chatWindow){
 }
 
 void QtWengoPhone::showChatWindow(){
- if ( _chatWindow ) {
-    _chatWindow->showNormal();
-    _chatWindow->activateWindow();
- }
-}
-
-void QtWengoPhone::slotSystrayMenuCallWengo(QAction * action) {
-  if (action) {
-    LOG_DEBUG("Call " + action->data().toString().toStdString());
-    _cWengoPhone.getCUserProfile()->makeCall(action->data().toString().toStdString());
-  } else {
-    LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
-  }
-}
-
-void QtWengoPhone::slotSystrayMenuCallMobile(QAction * action) {
-  if (action) {
-    LOG_DEBUG("Call " + action->data().toString().toStdString());
-    _cWengoPhone.getCUserProfile()->makeCall(action->data().toString().toStdString());
-  } else {
-    LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
-  }
-}
-
-void QtWengoPhone::slotSystrayMenuCallLandLine(QAction * action) {
-  if (action) {
-    LOG_DEBUG("Call " + action->data().toString().toStdString());
-    _cWengoPhone.getCUserProfile()->makeCall(action->data().toString().toStdString());
-  } else {
-    LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
-  }
-}
-
-void QtWengoPhone::slotSystrayMenuStartChat(QAction * action) {
-  if (action) {
-    QtUserList * ul = QtUserList::getInstance();
-    if (ul) {
-      LOG_DEBUG("Starting IM chat with " + action->data().toString().toStdString());
-      ul->startChat(action->data().toString());
-    } else {
-      LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
+    if ( _chatWindow ) {
+        _chatWindow->showNormal();
+        _chatWindow->activateWindow();
     }
-  } else {
-    LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
-  }
-}
-
-void QtWengoPhone::slotSystrayMenuSendSms(QAction * action) {
-
-  if (action) {
-    if (_qtSms &&
-	_cWengoPhone.getCUserProfile() &&
-	_cWengoPhone.getCUserProfile()->getUserProfile().hasWengoAccount() &&
-	_cWengoPhone.getCUserProfile()->getUserProfile().getWengoAccount()->isConnected()) {
-      _qtSms->getWidget()->show();
-      getWidget()->show();
-      getWidget()->setWindowState(getWidget()->windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
-      _qtSms->setPhoneNumber(action->data().toString());
-    } else {
-       QMessageBox::warning(0,
-			    QObject::tr("WengoPhone"),
-			    QObject::tr("Can't send SMS unless you're connected to a SIP service."),
-			    QMessageBox::Ok, 0);
-    }
-  } else {
-    LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
-  }
-
 }
 
 void QtWengoPhone::slotSystrayMenuCallBlank(bool checked) {
-  LOG_DEBUG("Placing a blank call from systray.");
-  _ui->tabWidget->setCurrentIndex(2);
-  getWidget()->show();
-  getWidget()->raise();
-  getWidget()->setWindowState(getWidget()->windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
+    LOG_DEBUG("Placing a blank call from systray.");
+    _ui->tabWidget->setCurrentIndex(2);
+    getWidget()->show();
+    getWidget()->raise();
+    getWidget()->setWindowState(getWidget()->windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
 }
-
 
 void QtWengoPhone::timeoutEventHandler() {
   signalTimeoutEventReached();

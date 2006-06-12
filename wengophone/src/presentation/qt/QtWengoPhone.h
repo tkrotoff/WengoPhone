@@ -197,8 +197,6 @@ private Q_SLOTS:
 
 	void showAbout();
 
-	void showHome();
-
 	void showLoginWindow();
 
 	void showContactList();
@@ -224,8 +222,6 @@ private Q_SLOTS:
 	void showVoiceMail();
 
 	void showHideOffLineContacts();
-
-	void toasterClosed(QtToaster * toaster);
 
 	void expandConfigPanel();
 
@@ -258,16 +254,6 @@ private Q_SLOTS:
 	void hangupCall();
 
 	void hideMainWindow();
-
-	void slotSystrayMenuCallWengo(QAction * action);
-
-	void slotSystrayMenuCallMobile(QAction * action);
-
-	void slotSystrayMenuCallLandLine(QAction * action);
-
-	void slotSystrayMenuStartChat(QAction * action);
-
-	void slotSystrayMenuSendSms(QAction * action);
 
 	void slotSystrayMenuCallBlank(bool checked);
 

@@ -27,6 +27,8 @@
 #include "QtTrayIcon.h"
 #include "QtWengoPhone.h"
 #include "profilebar/QtProfileBar.h"
+#include "contactlist/QtUserList.h"
+#include "webservices/sms/QtSms.h"
 
 QtTrayIcon::QtTrayIcon (QObject * parent ) {
     _qtWengoPhone = qobject_cast<QtWengoPhone *>(parent);
@@ -148,7 +150,7 @@ void QtTrayIcon::updateCallMenu() {
 	if (!_sendSmsMenu) {
 		_sendSmsMenu = new QMenu(tr("Send a SMS"));
 		_sendSmsMenu->setIcon(QIcon(":/pics/contact/sms.png"));
-		connect (_sendSmsMenu,SIGNAL(triggered(QAction*)),_qtWengoPhone,SLOT(slotSystrayMenuSendSms(QAction*)));
+		connect (_sendSmsMenu,SIGNAL(triggered(QAction*)),SLOT(slotSystrayMenuSendSms(QAction*)));
 	} else {
 		_sendSmsMenu->clear();
 		_sendSmsMenu->setTitle(tr("Send a SMS"));
@@ -160,7 +162,7 @@ void QtTrayIcon::updateCallMenu() {
 
 	if (!_startChatMenu) {
 		_startChatMenu = new QMenu(tr("Start a chat"));
-		connect(_startChatMenu, SIGNAL(triggered(QAction*)), _qtWengoPhone, SLOT(slotSystrayMenuStartChat(QAction*)));
+		connect(_startChatMenu, SIGNAL(triggered(QAction*)), SLOT(slotSystrayMenuStartChat(QAction*)));
 		_startChatMenu->setIcon(QIcon(":/pics/contact/chat.png"));
 	} else {
 		_startChatMenu->clear();
@@ -170,7 +172,7 @@ void QtTrayIcon::updateCallMenu() {
 
 	if (!_callWengoMenu) {
 		_callWengoMenu = createCallWengoTrayMenu();
-		connect(_callWengoMenu, SIGNAL(triggered(QAction*)), _qtWengoPhone, SLOT(slotSystrayMenuCallWengo(QAction*)));
+		connect(_callWengoMenu, SIGNAL(triggered(QAction*)),SLOT(slotSystrayMenuCallWengo(QAction*)));
 	} else {
 		_callWengoMenu->clear();
 		_callWengoMenu->setTitle(tr("Call SIP"));
@@ -182,7 +184,7 @@ void QtTrayIcon::updateCallMenu() {
 
 	if (!_callMobileMenu) {
 		_callMobileMenu = createCallMobileTrayMenu();
-		connect(_callMobileMenu, SIGNAL(triggered(QAction*)), _qtWengoPhone, SLOT(slotSystrayMenuCallMobile(QAction*)));
+		connect(_callMobileMenu, SIGNAL(triggered(QAction*)), SLOT(slotSystrayMenuCallMobile(QAction*)));
 	}  else {
 		_callMobileMenu->clear();
 		_callMobileMenu->setTitle(tr("Call Mobile"));
@@ -192,7 +194,7 @@ void QtTrayIcon::updateCallMenu() {
 
 	if (!_callLandLineMenu) {
 		_callLandLineMenu = createCallLandLineTrayMenu();
-		connect(_callLandLineMenu, SIGNAL(triggered(QAction*)), _qtWengoPhone, SLOT(slotSystrayMenuCallLandLine(QAction*)));
+		connect(_callLandLineMenu, SIGNAL(triggered(QAction*)), SLOT(slotSystrayMenuCallLandLine(QAction*)));
 	} else {
 		_callLandLineMenu->clear();
 		_callLandLineMenu->setTitle(tr("Call land line"));
@@ -316,4 +318,70 @@ void QtTrayIcon::sysTrayDoubleClicked(const QPoint& ){
 
 void QtTrayIcon::hide() {
     _trayIcon->hide();
+}
+
+void QtTrayIcon::slotSystrayMenuCallWengo(QAction * action) {
+    CWengoPhone & cWengoPhone = _qtWengoPhone->getCWengoPhone();
+    if (action) {
+        LOG_DEBUG("Call " + action->data().toString().toStdString());
+        cWengoPhone.getCUserProfile()->makeCall(action->data().toString().toStdString());
+    } else {
+        LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
+    }
+}
+
+void QtTrayIcon::slotSystrayMenuCallMobile(QAction * action) {
+    CWengoPhone & cWengoPhone = _qtWengoPhone->getCWengoPhone();
+    if (action) {
+        LOG_DEBUG("Call " + action->data().toString().toStdString());
+        cWengoPhone.getCUserProfile()->makeCall(action->data().toString().toStdString());
+    } else {
+        LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
+    }
+}
+
+void QtTrayIcon::slotSystrayMenuCallLandLine(QAction * action) {
+    CWengoPhone & cWengoPhone = _qtWengoPhone->getCWengoPhone();
+    if (action) {
+        LOG_DEBUG("Call " + action->data().toString().toStdString());
+        cWengoPhone.getCUserProfile()->makeCall(action->data().toString().toStdString());
+    } else {
+        LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
+    }
+}
+
+void QtTrayIcon::slotSystrayMenuStartChat(QAction * action) {
+  if (action) {
+    QtUserList * ul = QtUserList::getInstance();
+    if (ul) {
+      LOG_DEBUG("Starting IM chat with " + action->data().toString().toStdString());
+      ul->startChat(action->data().toString());
+    } else {
+      LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
+    }
+  } else {
+    LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
+  }
+}
+
+void QtTrayIcon::slotSystrayMenuSendSms(QAction * action) {
+    CWengoPhone & cWengoPhone = _qtWengoPhone->getCWengoPhone();
+    if (action) {
+        if (_qtWengoPhone->getSms() &&
+            cWengoPhone.getCUserProfile() &&
+            cWengoPhone.getCUserProfile()->getUserProfile().hasWengoAccount() &&
+            cWengoPhone.getCUserProfile()->getUserProfile().getWengoAccount()->isConnected()) {
+              _qtWengoPhone->getSms()->getWidget()->show();
+              _qtWengoPhone->getWidget()->show();
+              _qtWengoPhone->getWidget()->setWindowState(_qtWengoPhone->getWidget()->windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
+              _qtWengoPhone->getSms()->setPhoneNumber(action->data().toString());
+        } else {
+           QMessageBox::warning(0,
+                    QObject::tr("WengoPhone"),
+                    QObject::tr("Can't send SMS unless you're connected to a SIP service."),
+                    QMessageBox::Ok, 0);
+        }
+    } else {
+        LOG_FATAL("No action passed to slot! Shouldn't reach this code.");
+    }
 }

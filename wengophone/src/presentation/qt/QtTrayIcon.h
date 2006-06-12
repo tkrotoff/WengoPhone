@@ -49,6 +49,16 @@ public Q_SLOTS:
 
     void hide();
 
+    void slotSystrayMenuCallWengo(QAction * action);
+
+    void slotSystrayMenuCallMobile(QAction * action);
+
+    void slotSystrayMenuCallLandLine(QAction * action);
+
+    void slotSystrayMenuStartChat(QAction * action);
+
+    void slotSystrayMenuSendSms(QAction * action);
+
 protected:
     QMenu * createCallWengoTrayMenu();
 
