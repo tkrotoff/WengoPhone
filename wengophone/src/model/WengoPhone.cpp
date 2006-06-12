@@ -40,7 +40,7 @@ WengoPhone * WengoPhone::instance = NULL;
 
 WengoPhone::WengoPhone()
 	: _userProfileHandler(*this) {
-	_terminate = false;
+	
 	_startupSettingListener = new StartupSettingListener();
 	_running = false;
 	_wsSubscribe = NULL;
@@ -141,17 +141,22 @@ void WengoPhone::run() {
 	_running = true;
 
 	//Keeps the thread running until terminate() is called
+	/*
 	while (!_terminate) {
 		runEvents();
 	}
-
+	*/
+	runEvents();
 	_running = false;
 }
 
 void WengoPhone::terminate() {
+/*
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&WengoPhone::terminateThreadSafe, this));
 	postEvent(event);
+*/
+	Thread::terminate();
 }
 
 void WengoPhone::terminateThreadSafe() {

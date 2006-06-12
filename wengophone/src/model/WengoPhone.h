@@ -111,7 +111,7 @@ public:
 	 * This method should be called when you exit definitly WengoPhone.
 	 * You cannot call start() then terminate() several times.
 	 */
-	void terminate();
+	virtual void terminate();
 
 	/**
 	 * Starts the thread of the model component.
@@ -143,13 +143,6 @@ private:
 	/** Wengo subscribe web service. */
 	WsSubscribe * _wsSubscribe;
 
-	/**
-	 * If this thread should be terminate or not.
-	 *
-	 * By default _terminate == false.
-	 * @see terminate()
-	 */
-	bool _terminate;
 
 	/**
 	 * Emergency timeout handler called when SIP unregistering
