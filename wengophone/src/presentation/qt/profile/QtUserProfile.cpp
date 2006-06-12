@@ -41,9 +41,6 @@
 #include <QMessageBox>
 #include <QMetaType>
 
-const std::string QtWengoPhone::URL_WENGO_MINI_HOME = "https://www.wengo.fr/auth/auth.php";
-const std::string QtWengoPhone::LOCAL_WEB_DIR = "webpages/windows";
-
 QtUserProfile::QtUserProfile(CUserProfile & cUserProfile, QtWengoPhone & qtWengoPhone) 
 : QObjectThreadSafe(&qtWengoPhone), 
 _qtWengoPhone(qtWengoPhone),
@@ -137,7 +134,7 @@ void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
 				"&lang=" + config.getLanguage() +
 				"&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) +
 				"&page=softphoneng-web";
-			_qtWengoPhone.getQtBrowser()->setUrl(URL_WENGO_MINI_HOME + data);
+			_qtWengoPhone.getQtBrowser()->setUrl(QtWengoPhone::URL_WENGO_MINI_HOME + data);
 		}
 #endif
 		break;
@@ -148,7 +145,8 @@ void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
 	case SipAccount::LoginStateDisconnected:
 #ifdef OS_WINDOWS
 		if (config.getIEActiveX() && wengoAccount) {
-			_qtWengoPhone.getQtBrowser()->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/loading.htm");
+			_qtWengoPhone.getQtBrowser()->setUrl(qApp->applicationDirPath().toStdString() +
+				"/" + QtWengoPhone::LOCAL_WEB_DIR + "/loading.htm");
 		}
 #endif
 		break;
