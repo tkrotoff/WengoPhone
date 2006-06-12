@@ -21,10 +21,12 @@
 #define THREAD_H
 
 #include <util/Interface.h>
-
+#include <util/Logger.h>
 #include <thread/RecursiveMutex.h>
-
+#include <thread/Mutex.h>
+#include <boost/thread/detail/lock.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/thread/condition.hpp>
 #include <boost/thread/xtime.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
@@ -79,6 +81,7 @@ public:
 	virtual ~Thread() {
 		//FIXME Do not delete the boost::thread otherwise it crashes
 		//delete _thread;
+		_terminate = false;
 	}
 
 	/**
@@ -114,15 +117,10 @@ public:
 	 * @param event to inject inside the thread main loop
 	 */
 	virtual void postEvent(ThreadEvent * event) {
-		//FIXME There is a problem with the mutex.
-		//Several thread at the same time cannot
-		//access this method.
-		//We have to use something like QWaitCondition from
-		//the Qt library (I mean the equivalent from Boost)
-		//Fabien Penso's source code needs to be checked (SoftPhone class)
-		//Boost Synchronization Primitives needs to be checked aswell
-		RecursiveMutex::ScopedLock ScopedLock(_mutex);
+		Mutex::ScopedLock ScopedLock(_mutex);
 		_eventList.push_back(event);
+		ScopedLock.unlock();
+		_condition.notify_all();
 	}
 
 	/**
@@ -214,21 +212,23 @@ protected:
 
 	/**
 	 * Runs the events inserted inside the main thread loop via postEvent().
-	 *
-	 * FIXME
 	 */
 	virtual void runEvents() {
-		//FIXME See info inside postEvent()
-		//There is a problem here
-		RecursiveMutex::ScopedLock ScopedLock(_mutex);
-		msleep(100);
-		for (unsigned int i = 0; i < _eventList.size(); i++) {
-			_eventList[i]->callback();
-			delete _eventList[i];
+		Mutex::ScopedLock ScopedLock(_mutex);
+		while (1){
+			for (unsigned int i = 0; i < _eventList.size(); i++) {
+				ScopedLock.unlock();
+				_eventList[i]->callback();
+				ScopedLock.lock();
+				delete _eventList[i];
+			}
+			_eventList.clear();
+			if (_terminate){
+				return;
+			}
+			_condition.wait(ScopedLock);			
 		}
-		_eventList.clear();
 	}
-
 	/**
 	 * Terminates the execution of the thread.
 	 *
@@ -247,6 +247,10 @@ protected:
 	 * </pre>
 	 */
 	virtual void terminate() {
+		Mutex::ScopedLock ScopedLock(_mutex);
+		_terminate = true;
+		ScopedLock.unlock();
+		_condition.notify_all();
 	}
 
 	/** Defines the vector of ThreadEvent. */
@@ -260,7 +264,17 @@ protected:
 	 *
 	 * FIXME
 	 */
-	mutable RecursiveMutex _mutex;
+	// mutable RecursiveMutex _mutex;
+	mutable Mutex _mutex;
+	boost::condition _condition;
+
+	/**
+	 * If this thread should be terminate or not.
+	 *
+	 * By default _terminate == false.
+	 * @see terminate()
+	 */
+	bool _terminate;
 
 private:
 
