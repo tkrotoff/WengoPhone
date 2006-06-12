@@ -67,6 +67,16 @@ public:
 	std::string operator[](unsigned i) const;
 
 	/**
+	 * @see List::operator+=
+	 */
+	void operator+=(const StringList & strList);
+
+	/**
+	 * @see List::operator+=
+	 */
+	void operator+=(const std::string & str);
+
+	/**
 	 * Gets the number of occurrences of a string contained inside the StringList.
 	 *
 	 * Example:
@@ -106,6 +116,11 @@ public:
 	 * @param order sorting order
 	 */
 	void sort(SortingOrder order = Ascendant);
+
+	/**
+	 * Removes duplicated strings if any.
+	 */
+	void removeDuplicatedStrings();
 
 private:
 

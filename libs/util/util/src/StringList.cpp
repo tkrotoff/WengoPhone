@@ -50,6 +50,16 @@ std::string StringList::operator[](unsigned i) const {
 	return List<std::string>::operator[](i);
 }
 
+void StringList::operator+=(const std::string & str) {
+	List<std::string>::operator+=(str);
+}
+
+void StringList::operator+=(const StringList & strList) {
+	for (unsigned i = 0; i < strList.size(); i++) {
+		(*this) += strList[i];
+	}
+}
+
 unsigned StringList::contains(const std::string & str, bool caseSensitive) const {
 	unsigned result = 0;
 	for (unsigned i = 0; i < size(); i++) {
@@ -79,7 +89,7 @@ void StringList::sort(SortingOrder order) {
 		break;
 
 	default:
-		LOG_FATAL("unknown sorting order");
+		LOG_FATAL("unknown sorting order=" + String::fromNumber(order));
 	}
 }
 
@@ -95,4 +105,19 @@ std::string StringList::join(const std::string & separator) {
 		}
 	}
 	return joinedString;
+}
+
+void StringList::removeDuplicatedStrings() {
+	for (unsigned i = 0; i < size(); i++) {
+		std::string tmp = (*this)[i];
+		for (unsigned j = 0; j < size(); j++) {
+			if (tmp == (*this)[j] && i != j) {
+				remove(tmp);
+
+				//Restarts the entire loop
+				i = 0;
+				break;
+			}
+		}
+	}
 }

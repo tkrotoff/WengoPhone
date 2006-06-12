@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>231</width>
+    <width>267</width>
     <height>122</height>
    </rect>
   </property>
@@ -134,7 +134,7 @@
           <string>Enable Wenbox usage</string>
          </property>
          <property name="text" >
-          <string>USB audio device</string>
+          <string>USB audio device (Wenbox)</string>
          </property>
         </widget>
        </item>
