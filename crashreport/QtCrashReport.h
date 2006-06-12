@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCRASHREPORT_H
-#define QTCRASHREPORT_H
+#ifndef OWQTCRASHREPORT_H
+#define OWQTCRASHREPORT_H
 
 #include "FtpUpload.h"
 
@@ -57,7 +57,7 @@ private:
 
 	void initThreadSafe();
 
-	void createDescriptionFile();
+	void createDescriptionFile() const;
 
 	FtpUpload * _ftpUpload;
 
@@ -69,11 +69,7 @@ private:
 
 	double _progressTotal;
 
-	std::string _dumpfile;
-
 	std::string _descfile;
-
-	std::string _lang;
 
 	std::string _info;
 
@@ -84,4 +80,4 @@ private:
 	bool _firstFileUploaded;
 };
 
-#endif	//QTCRASHREPORT_H
+#endif	//OWQTCRASHREPORT_H

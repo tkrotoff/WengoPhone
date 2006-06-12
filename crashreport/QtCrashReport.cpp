@@ -25,6 +25,7 @@
 #include <util/Date.h>
 #include <util/Time.h>
 #include <util/Path.h>
+#include <util/File.h>
 #include <thread/Thread.h>
 
 #ifdef OS_WINDOWS
@@ -34,27 +35,24 @@
 #include <QtGui>
 
 #include <iostream>
-#include <fstream>
 #include <cstdio>
 
-static const char * LOG_FILE = "log-main.txt";
-static const char * FTP_SERVER = "ftp.wengo.fr";
-static const char * FTP_PATH = "wengophone_ng";
+static const std::string LOG_FILE = "log-main.txt";
+static const std::string FTP_SERVER = "ftp.wengo.fr";
+static const std::string FTP_PATH = "wengophone_ng";
 
 QtCrashReport::QtCrashReport(const std::string & dumpfile, const std::string & applicationName,
 			const std::string & lang, const std::string & info)
 	: QObjectThreadSafe(NULL),
-	_dumpfile(dumpfile),
-	_lang(lang),
 	_info(info) {
 
 	_progressTotal = 0;
 	_progressNow = 0;
 	_status = FtpUpload::None;
 	_firstFileUploaded = false;
-	_descfile = _dumpfile + ".txt";
+	_descfile = dumpfile + ".txt";
 
-	_ftpUpload = new FtpUpload(FTP_SERVER, FTP_PATH, _dumpfile);
+	_ftpUpload = new FtpUpload(FTP_SERVER, FTP_PATH, dumpfile);
 	_ftpUpload->progressionEvent += boost::bind(&QtCrashReport::ftpProgressEventHandler, this, _1, _2, _3);
 	_ftpUpload->statusEvent += boost::bind(&QtCrashReport::ftpStatusEventHandler, this, _1, _2);
 
@@ -109,10 +107,10 @@ void QtCrashReport::updatePresentationThreadSafe() {
 	_ui->progressBar->setValue(_progressNow);
 
 	//sleep: only for the feeling
-	if(( _status == FtpUpload::Ok ) || (_status == FtpUpload::Error) ) {
+	if ((_status == FtpUpload::Ok) || (_status == FtpUpload::Error)) {
 
 		//TODO: upload the description file
-		if( !_firstFileUploaded  ) {
+		if (!_firstFileUploaded) {
 
 			_firstFileUploaded  = true;
 			_ui->progressBar->setValue(0);
@@ -132,49 +130,40 @@ void QtCrashReport::updatePresentationThreadSafe() {
 	}
 }
 
-std::string readLogFile() {
-	std::string content;
-	std::string line;
+static std::string readLogFile() {
+	std::string data;
 
-	std::ifstream myfile(LOG_FILE);
-	if (myfile.is_open()) {
-		while (!myfile.eof()) {
-			getline(myfile,line);
-			content += line + "\n";
-		}
-		myfile.close();
+	FileReader file(LOG_FILE);
+	if (file.open()) {
+		data = file.read();
+		file.close();
 	} else {
-		std::cerr << "Failed to open log file=" << LOG_FILE << endl;
+		LOG_ERROR("failed to open log file=" + LOG_FILE);
 	}
-	return content;
+	return data;
 }
 
-void QtCrashReport::createDescriptionFile() {
+void QtCrashReport::createDescriptionFile() const {
+	FileWriter file(_descfile);
 
-	std::fstream file;
-	file.open(_descfile.c_str(), std::fstream::out);
-
-	file << "Date: " << Date().toString() << std::endl;
-	file << "Time: " << Time().toString() << std::endl;
+	file.write("Date: " + Date().toString() + String::EOL);
+	file.write("Time: " + Time().toString() + String::EOL);
 
 #ifdef OS_WINDOWS
-	file << "Windows version: " << std::string(getWindowsVersion()) << std::endl;
+	file.write("Windows version: " + std::string(getWindowsVersion()) + String::EOL);
 #endif
 
-	std::string tmp;
-	if( _ui->mailLineEdit ) {
-		tmp = _ui->mailLineEdit->text().toStdString();
-		file << "From: " << tmp << std::endl;
+	if (_ui->mailLineEdit) {
+		file.write("From: " + _ui->mailLineEdit->text().toStdString() + String::EOL);
 	}
 
-	if( _ui->descTextEdit ) {
-		tmp = _ui->descTextEdit->toPlainText().toStdString();
-		file << "Description: " << tmp << std::endl;
+	if (_ui->descTextEdit) {
+		file.write("Description: " + _ui->descTextEdit->toPlainText().toStdString() + String::EOL);
 	}
 
-	file << "User info:\n" << _info << std::endl;
+	file.write("User info:\n" + _info + String::EOL);
 
-	file << LOG_FILE << " content:\n" << readLogFile() << std::endl;
+	file.write(LOG_FILE + " content:\n" + readLogFile() + String::EOL);
 
 	file.close();
 }

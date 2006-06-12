@@ -29,7 +29,7 @@
 #define WENGO_USER "wengophone"
 #define WENGO_PASSWD "coredump"
 
-#ifdef OS_WIN32
+#ifdef OS_WINDOWS
 	#define snprintf _snprintf
 	#define stat _stat
 #else
@@ -38,17 +38,16 @@
 
 int curlFTPProgress(void * instance, double dltotal, double dlnow, double ultotal, double ulnow) {
 
-	if( instance ) {
-		FtpUpload * ftpUpload = (FtpUpload*)instance;
+	if (instance) {
+		FtpUpload * ftpUpload = (FtpUpload*) instance;
 		ftpUpload->setProgress(ultotal, ulnow);
 	}
 	return 0;
 }
 
-char *get_filename(const char *full)
-{
-	char *filename;
-	char *begin = (char *) full;
+char * get_filename(const char * full) {
+	char * filename;
+	char * begin = (char *) full;
 
 	if (!full) {
 		return NULL;
@@ -67,14 +66,13 @@ char *get_filename(const char *full)
 	}
 }
 
-int ftp_upload(const char * path, const char *fullfilename, void * ftpUploadInstance)
-{
-	CURL *handle;
+int ftp_upload(const char * path, const char * fullfilename, void * ftpUploadInstance) {
+	CURL * handle;
 	char url_buff[1024];
 	char auth_passwd[1024];
 	char tmp[1024];
-	const char *filename;
-	FILE *lfile;
+	const char * filename;
+	FILE * lfile;
 	struct stat buf;
 	int res;
 

@@ -17,15 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef FTPUPLOAD_H
-#define FTPUPLOAD_H
+#ifndef OWFTPUPLOAD_H
+#define OWFTPUPLOAD_H
 
 #include <thread/Thread.h>
 #include <util/Event.h>
 
 #include <string>
 
-int ftp_upload(const char * path, const char *fullfilename, void * instance);
+int ftp_upload(const char * path, const char * fullfilename, void * instance);
 
 /**
  * FtpUpload upload a file to a ftp server.
@@ -62,7 +62,8 @@ public:
 	Event<void (FtpUpload * sender, double ultotal, double ulnow)> progressionEvent;
 
 	FtpUpload(const std::string & host, const std::string & path, const std::string & filename)
-		: _host(host), _path(path), _filename(filename) {
+		: _path(path),
+		_filename(filename) {
 	}
 
 	void setProgress(double ultotal, double ulnow) {
@@ -72,7 +73,7 @@ public:
 	void run() {
 		int res = ftp_upload(_path.c_str(), _filename.c_str(), this);
 
-		if( res == 0) {
+		if (res == 0) {
 			statusEvent(this, Ok);
 		} else {
 			statusEvent(this, Error);
@@ -81,11 +82,9 @@ public:
 
 private:
 
-	std::string _host;
-
 	std::string _path;
 
 	std::string _filename;
 };
 
-#endif	//FTPUPLOAD_H
+#endif	//OWFTPUPLOAD_H

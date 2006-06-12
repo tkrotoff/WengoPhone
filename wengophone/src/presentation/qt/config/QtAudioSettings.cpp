@@ -88,12 +88,12 @@ void QtAudioSettings::readConfig() {
 
 	_ui->outputDeviceComboBox->clear();
 	_ui->outputDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
-	_ui->outputDeviceComboBox->setCurrentIndex(_ui->outputDeviceComboBox->findText(QString::fromStdString(config.getAudioOutputDeviceName())));
+	_ui->outputDeviceComboBox->setCurrentIndex(_ui->outputDeviceComboBox->findText(QString::fromUtf8(config.getAudioOutputDeviceName().c_str())));
 
 	//ringingDeviceList = outputDeviceList
 	_ui->ringingDeviceComboBox->clear();
 	_ui->ringingDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
-	_ui->ringingDeviceComboBox->setCurrentIndex(_ui->ringingDeviceComboBox->findText(QString::fromStdString(config.getAudioRingerDeviceName())));
+	_ui->ringingDeviceComboBox->setCurrentIndex(_ui->ringingDeviceComboBox->findText(QString::fromUtf8(config.getAudioRingerDeviceName().c_str())));
 }
 
 void QtAudioSettings::makeTestCallClicked() {

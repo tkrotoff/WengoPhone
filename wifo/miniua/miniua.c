@@ -1163,7 +1163,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	    ret = 0;
 	    while(!ret && *p)
 	      ret = phSendDtmf(cid, *p++, dtmf_mode);
-	    
+
 	    break;
 	  }
 
@@ -1301,7 +1301,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 	case CMD_VLDEL:
 	  vlid = atoi(args);
-	  ret = phDelVline(vlid);
+	  ret = phDelVline(vlid, -1);
 	  break;
 
 

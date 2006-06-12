@@ -51,14 +51,6 @@
       </property>
       <item row="0" column="0" >
        <widget class="QLabel" name="label" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="text" >
          <string>The WengoPhone execution failed and has generated a diagnostic file.&lt;br>This file contains usefull information to solve the problem you are encounting.&lt;br>Thanks for your contribution.&lt;br>&lt;br>The WengoPhone Development Team.</string>
         </property>
@@ -118,14 +110,6 @@
       </property>
       <item row="0" column="0" >
        <widget class="QLabel" name="label_4" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="text" >
          <string>In order to help the developers you can complete this report. This step is optional.&lt;br>Use Case Description:</string>
         </property>
@@ -136,30 +120,13 @@
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="label_3" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="text" >
          <string>Your Mail:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QTextEdit" name="descTextEdit" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>3</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
+       <widget class="QTextEdit" name="descTextEdit" />
       </item>
      </layout>
     </widget>
@@ -167,21 +134,27 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>descTextEdit</tabstop>
+  <tabstop>mailLineEdit</tabstop>
+  <tabstop>sendButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
    <sender>cancelButton</sender>
    <signal>clicked()</signal>
-   <receiver>CrashReportForm</receiver>
+   <receiver>CrashReport</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>528</x>
-     <y>426</y>
+     <x>419</x>
+     <y>509</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>290</x>
-     <y>237</y>
+     <x>407</x>
+     <y>516</y>
     </hint>
    </hints>
   </connection>
