@@ -81,7 +81,6 @@ public:
 	virtual ~Thread() {
 		//FIXME Do not delete the boost::thread otherwise it crashes
 		//delete _thread;
-		_terminate = false;
 	}
 
 	/**
@@ -90,6 +89,7 @@ public:
 	 * Calls the pure virtual method run().
 	 */
 	void start() {
+		_terminate = false;
 		_thread = new boost::thread(boost::bind(&Thread::run, this));
 	}
 
