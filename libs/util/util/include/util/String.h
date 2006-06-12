@@ -233,6 +233,14 @@ public:
 	 * @return tokens, strings created by splitting the input string
 	 */
 	StringList split(const std::string & separator) const;
+
+	/**
+	 * Removes spaces at the beginning and the end of a string.
+	 *
+	 * @param str the string you want to clean
+	 * @return a cleaned string
+	 */
+	static std::string trim(const std::string & str);
 };
 
 #endif	//STRING_H
