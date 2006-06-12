@@ -221,7 +221,7 @@ protected:
 		//FIXME See info inside postEvent()
 		//There is a problem here
 		RecursiveMutex::ScopedLock ScopedLock(_mutex);
-
+		msleep(100);
 		for (unsigned int i = 0; i < _eventList.size(); i++) {
 			_eventList[i]->callback();
 			delete _eventList[i];
