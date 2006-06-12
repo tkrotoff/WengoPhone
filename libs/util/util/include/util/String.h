@@ -240,7 +240,7 @@ public:
 	 * @param str the string you want to clean
 	 * @return a cleaned string
 	 */
-	static std::string trim(const std::string & str);
+	std::string trim();
 };
 
 #endif	//STRING_H

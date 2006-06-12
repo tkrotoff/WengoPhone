@@ -235,13 +235,13 @@ StringList String::split(const std::string & separator) const {
 	return tokens;
 }
 
-std::string String::trim(const std::string & str) {
+std::string String::trim() {
 	string newstr;
 
-	string::size_type pos1 = str.find_first_not_of(' ');
-	string::size_type pos2 = str.find_last_not_of(' ');
-	newstr = str.substr(pos1 == string::npos ? 0 : pos1,
-		pos2 == string::npos ? str.length() - 1 : pos2 - pos1 + 1);
+	string::size_type pos1 = find_first_not_of(" \t");
+	string::size_type pos2 = find_last_not_of(" \t");
+	newstr = substr(pos1 == string::npos ? 0 : pos1,
+		pos2 == string::npos ? length() - 1 : pos2 - pos1 + 1);
 
 	return newstr;
 }

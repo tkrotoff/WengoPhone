@@ -74,6 +74,13 @@ std::string File::getExtension() const {
 	}
 }
 
+bool File::move(const std::string & newName) {
+	if (!rename(_filename.c_str(), newName.c_str()))	
+		return true;
+	else 
+		return false;
+}
+
 std::string File::getPath() const {
 	String path = _filename;
 	path = convertPathSeparators(path);
@@ -293,3 +300,4 @@ void FileWriter::close() {
 	LOG_DEBUG("file=" + _filename + " saved");
 	_file.close();
 }
+

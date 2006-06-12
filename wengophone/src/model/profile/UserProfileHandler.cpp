@@ -70,7 +70,7 @@ UserProfile * UserProfileHandler::getUserProfile(const std::string & name) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	if (userProfileExists(name)) {
-		result = new UserProfile(_wengoPhone);
+		result = new UserProfile();
 		UserProfileFileStorage userProfileStorage(*result);
 		userProfileStorage.load(File::convertPathSeparators(config.getConfigDir() + "profiles/" + name + "/"));
 	}
@@ -83,7 +83,7 @@ bool UserProfileHandler::createUserProfile(const WengoAccount & wengoAccount) {
 	bool result = false;
 	std::string profileName;
 
-	userProfile = new UserProfile(_wengoPhone);
+	userProfile = new UserProfile();
 	if (!wengoAccount.getWengoLogin().empty()) {
 		userProfile->setWengoAccount(wengoAccount);
 	}

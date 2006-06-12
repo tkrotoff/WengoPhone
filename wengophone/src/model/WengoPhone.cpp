@@ -21,7 +21,7 @@
 
 #include "account/NetworkObserver.h"
 #include "classic/ClassicExterminator.h"
-//#include "config/ClassicConfigImporter.h"
+#include "config/ClassicConfigImporter.h"
 #include "config/ConfigManagerFileStorage.h"
 #include "config/ConfigManager.h"
 #include "config/Config.h"
@@ -116,8 +116,9 @@ void WengoPhone::init() {
 	ClassicExterminator::removeClassicFromStartup();
 
 	//Imports the Config from WengoPhone Classic.
-	//_importer = new ClassicConfigImporter(*this);
-	//_importer->importConfig(config.getConfigDir());
+	_importer = new ClassicConfigImporter();
+	_importer->importConfig(config.getConfigDir());
+
 
 	_wsSubscribe = new WsSubscribe();
 	wsSubscribeCreatedEvent(*this, *_wsSubscribe);

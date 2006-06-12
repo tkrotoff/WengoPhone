@@ -38,7 +38,7 @@ class WengoPhone;
 class ClassicConfigImporter {
 public:
 
-	ClassicConfigImporter(WengoPhone & WengoPhone);
+	ClassicConfigImporter();
 
 	/**
 	 * Imports the WengoPhone Classic Config only if no WengoPhone NG
@@ -68,23 +68,13 @@ private:
 
 	static std::string getWengoClassicConfigPath();
 	bool ImportConfigFromV1toV3();
-	bool ImportConfigFromV1toV2();
+	bool ImportConfigFromV2toV3();
 	bool ImportContactsFromV1toV3(const std::string & fromDir, const std::string & toDir,
 		const std::string & owner);
 	static bool ClassicVcardParser(const std::string & vcardFile, void *structVcard);
 	static bool ClassicXMLParser(const std::string & xmlFile, void *structVcard);
 	static std::string ClassicVCardToString(void *structVcard);
-	static void * GetLastClassicWengoUser();
-
-	void loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state);
-
-	void loginStateChangedEventHandlerThreadSafe(WengoAccount wengoAccount);
-
-	UserProfile & _userProfile;
-
-	WengoPhone & _wengoPhone;
-
-	Thread & _modelThread;
+	static void * GetLastWengoUser(const std::string & configUserFile);
 
 	bool _importerDone;
 };

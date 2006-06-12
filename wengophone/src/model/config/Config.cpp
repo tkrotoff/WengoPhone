@@ -35,7 +35,7 @@
 	#include <CoreFoundation/CoreFoundation.h>
 #endif
 
-const int Config::CONFIG_VERSION = 2;
+const int Config::CONFIG_VERSION = 3;
 
 const std::string Config::CONFIG_VERSION_KEY = "config.version";
 

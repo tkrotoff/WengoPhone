@@ -55,6 +55,13 @@ public:
 	std::string getExtension() const;
 
 	/**
+	 * Renames a file.
+	 *
+	 * @return true if the operation succeeds otherwise false.
+	 */
+	bool move(const std::string & newName);
+
+	/**
 	 * Gets the path to the file.
 	 *
 	 * The path does not contain the filename, it stops at the last /

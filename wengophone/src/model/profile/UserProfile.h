@@ -40,7 +40,6 @@
 class SipAccount;
 class WengoAccount;
 class IMAccount;
-class WengoPhone;
 class Contact;
 class ContactList;
 class History;
@@ -166,7 +165,7 @@ public:
 	 */
 	Event<void (UserProfile & sender, WsDirectory & wsDirectory)> wsDirectoryCreatedEvent;
 
-	UserProfile(WengoPhone & wengoPhone);
+	UserProfile();
 
 	/**
 	 * Initializes the UserProfile.
@@ -448,8 +447,6 @@ private:
 	void connectionIsUpEventHandler(NetworkObserver & sender);
 
 	void connectionIsDownEventHandler(NetworkObserver & sender);
-
-	WengoPhone & _wengoPhone;
 
 	/**
 	 * find the wengo phone line

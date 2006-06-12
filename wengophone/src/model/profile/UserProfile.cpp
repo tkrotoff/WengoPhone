@@ -51,9 +51,8 @@
 
 using namespace std;
 
-UserProfile::UserProfile(WengoPhone & wengoPhone)
-	: _wengoPhone(wengoPhone),
-	_imContactListHandler(*this),
+UserProfile::UserProfile()
+	: _imContactListHandler(*this),
 	_connectHandler(*this),
 	_presenceHandler(*this),
 	_chatHandler(*this),

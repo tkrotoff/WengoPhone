@@ -24,13 +24,16 @@
 
 #include <model/account/wengo/WengoAccount.h>
 #include <model/profile/UserProfile.h>
+#include <model/profile/UserProfileFileStorage.h>
+#include <model/profile/UserProfileXMLSerializer.h>
 #include <model/WengoPhone.h>
 
 #include <cutil/global.h>
 
-#include <util/Path.h>
+#include <util/Base64.h>
 #include <util/File.h>
 #include <util/Logger.h>
+#include <util/Path.h>
 #include <util/String.h>
 
 #include <string>
@@ -112,26 +115,19 @@ StringList mySplit(const std::string & str, char sep)
 	return wordList;
 }
 
-string myTrim(const std::string & str)
-{
-	string newstr;
-
-	string::size_type pos1 = str.find_first_not_of(' ');
-	string::size_type pos2 = str.find_last_not_of(' ');
-	newstr = str.substr(pos1 == string::npos ? 0 : pos1,
-		pos2 == string::npos ? str.length() - 1 : pos2 - pos1 + 1);
-
-	return newstr;
-}
-
 #define CONFIG_UNKNOWN 0
 #define CONFIG_VERSION1 1
 #define CONFIG_VERSION2 2
 #define CONFIG_VERSION3 3
 
+static const std::string USERPROFILE_FILENAME = "userprofile.xml";
+static const std::string USERCONFIG_FILENAME = "user.config";
+static const std::string IMACCOUNTS_FILENAME = "imaccounts.xml";
+static const std::string CONTACTLIST_FILENAME = "contactlist.xml";
+static const std::string NEW_HISTORY_FILENAME = "history.xml";
+static const std::string OLD_HISTORY_FILENAME = "_history";
 
-ClassicConfigImporter::ClassicConfigImporter(WengoPhone & wengoPhone)
-	: _wengoPhone(wengoPhone), _modelThread(wengoPhone), _userProfile(wengoPhone.getCurrentUserProfile()) {
+ClassicConfigImporter::ClassicConfigImporter() {
 
 	_importerDone = false;
 }
@@ -182,15 +178,11 @@ int ClassicConfigImporter::detectLastVersion()
 
 void ClassicConfigImporter::makeImportConfig(int from, int to)
 {
-	if (from == CONFIG_VERSION1 && to == CONFIG_VERSION2)
-		ImportConfigFromV1toV2();
-	else if (from == CONFIG_VERSION1 && to == CONFIG_VERSION3)
+	if (from == CONFIG_VERSION1 && to == CONFIG_VERSION3)
 		ImportConfigFromV1toV3();
-
-	// Todo: import config files from version 2 to version 3
-	//else if (from == CONFIG_VERSION2 && to == CONFIG_VERSION3)
-	//	ImportConfigFromV2toV3();
-
+	
+	else if (from == CONFIG_VERSION2 && to == CONFIG_VERSION3)
+		ImportConfigFromV2toV3();
 }
 
 string ClassicConfigImporter::getWengoClassicConfigPath() {
@@ -229,7 +221,7 @@ bool ClassicConfigImporter::ClassicVcardParser(const string & vcardFile, void *s
 		return false;
 	}
 
-	string key, value, tmp;
+	String key, value, tmp;
 
 	std::getline(fileStream, tmp);
 
@@ -301,14 +293,14 @@ bool ClassicConfigImporter::ClassicVcardParser(const string & vcardFile, void *s
 		else
 			LOG_DEBUG("KEY " + key + " not supported");
 
-		lastLine = myTrim(tmp);
+		lastLine = tmp.trim();
 		std::getline(fileStream, tmp);
 
 		if (!tmp.empty())
 		{
 			if (tmp.find(":", 0) == -1)
 			{
-				lastLine += myTrim(tmp);
+				lastLine += tmp.trim();
 				std::getline(fileStream, tmp);
 			}
 		}
@@ -322,7 +314,7 @@ bool ClassicConfigImporter::ClassicXMLParser(const string & xmlFile, void *struc
 {
 	vcard_t *mVcard = (vcard_t *) structVcard;
 	std::ifstream fileStream;
-	string lastLine;
+	String lastLine;
 
 	mVcard->blocked = false;
 
@@ -337,13 +329,13 @@ bool ClassicConfigImporter::ClassicXMLParser(const string & xmlFile, void *struc
 
 	while (!lastLine.empty())
 	{
-		lastLine = myTrim(lastLine);
+		lastLine = lastLine.trim();
 
 		if (!strncmp(lastLine.c_str(), "<blocked>", 9))
 		{
 			int pos1 = lastLine.find_first_of('>');
 			int pos2 = lastLine.find_last_of('<');
-			string resp = myTrim(lastLine.substr(pos1 + 1, pos2 - (pos1 + 1) ));
+			string resp = ((String)lastLine.substr(pos1 + 1, pos2 - (pos1 + 1))).trim();
 
 			if (resp == "true")
 				mVcard->blocked = true;
@@ -512,16 +504,15 @@ typedef struct last_user_s
 	bool	auto_login;
 }			last_user_t;
 
-void * ClassicConfigImporter::GetLastClassicWengoUser() {
-	string classicPath = getWengoClassicConfigPath();
+void * ClassicConfigImporter::GetLastWengoUser(const std::string & configUserFile) {
 	std::ifstream fileStream;
-	std::string lastLine;
+	String lastLine;
 
 	last_user_t * lastUser = new last_user_t();
-	fileStream.open((classicPath +	"user.config").c_str());
+	fileStream.open(configUserFile.c_str());
 	if (!fileStream)
 	{
-		LOG_ERROR("cannot open the file: " + (classicPath +	"user.config"));
+		LOG_ERROR("cannot open the file: " + configUserFile);
 		return NULL;
 	}
 
@@ -529,27 +520,32 @@ void * ClassicConfigImporter::GetLastClassicWengoUser() {
 
 	while (!lastLine.empty())
 	{
-		lastLine = myTrim(lastLine);
+		lastLine = lastLine.trim();
 
 		if (!strncmp(lastLine.c_str(), "<login>", 7))
 		{
-			int pos2 = lastLine.find_first_of(']');
-			int pos1 = lastLine.find_last_of('[');
-			lastUser->login = myTrim(lastLine.substr(pos1 + 1, pos2 - (pos1 + 1) ));
+			//int pos2 = lastLine.find_first_of(']');
+			//int pos1 = lastLine.find_last_of('[');
+			int pos1 = lastLine.find_first_of('>');
+			int pos2 = lastLine.find_last_of('<');
+			lastUser->login = ((String)lastLine.substr(pos1 + 1, pos2 - (pos1 + 1))).trim();
 		}
 		else if (!strncmp(lastLine.c_str(), "<password>", 10))
 		{
-			int pos2 = lastLine.find_first_of(']');
-			int pos1 = lastLine.find_last_of('[');
-			lastUser->password = myTrim(lastLine.substr(pos1 + 1, pos2 - (pos1 + 1) ));
+			//int pos2 = lastLine.find_first_of(']');
+			//int pos1 = lastLine.find_last_of('[');
+			int pos1 = lastLine.find_first_of('>');
+			int pos2 = lastLine.find_last_of('<');
+			lastUser->password = ((String)lastLine.substr(pos1 + 1, pos2 - (pos1 + 1))).trim();
 		}
 		else if (!strncmp(lastLine.c_str(), "<autoLogin>", 11))
 		{
 			int pos1 = lastLine.find_first_of('>');
 			int pos2 = lastLine.find_last_of('<');
-			string resp = myTrim(lastLine.substr(pos1 + 1, pos2 - (pos1 + 1) ));
+			string resp = ((String)lastLine.substr(pos1 + 1, pos2 - (pos1 + 1))).trim();
 
-			if (resp == "true")
+			//if (resp == "true")
+			if (resp == "1")
 				lastUser->auto_login = true;
 			else
 				lastUser->auto_login = false;
@@ -560,68 +556,6 @@ void * ClassicConfigImporter::GetLastClassicWengoUser() {
 
 	fileStream.close();
 	return lastUser;
-}
-
-bool ClassicConfigImporter::ImportConfigFromV1toV2() {
-
-	last_user_t * lastUser = (last_user_t *) GetLastClassicWengoUser();
-	if (lastUser == NULL)
-		return false;
-
-	//WengoAccount wAccount(lastUser->login, lastUser->password, lastUser->auto_login);
-	//WengoAccountDataLayer * wAccountDL = new WengoAccountXMLLayer(wAccount);
-	//WengoAccountDataLayer wAccountDL(wAccount);
-	_userProfile.loginStateChangedEvent +=
-		boost::bind(&ClassicConfigImporter::loginStateChangedEventHandler, this, _1, _2);
-	WengoAccount wengoAccount(lastUser->login, lastUser->password, lastUser->auto_login);
-	_userProfile.setWengoAccount(wengoAccount);
-	//wAccountDL->save();
-
-	return true;
-}
-
-void ClassicConfigImporter::loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
-	switch (state) {
-	case SipAccount::LoginStateReady:
-		try {
-			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(sender);
-			typedef ThreadEvent1<void (WengoAccount wengoAccount), WengoAccount> MyThreadEvent;
-
-			MyThreadEvent * event =
-				new MyThreadEvent(boost::bind(&ClassicConfigImporter::loginStateChangedEventHandlerThreadSafe, this, _1), wengoAccount);
-
-			_modelThread.postEvent(event);
-		}
-		catch (bad_cast) {
-			LOG_DEBUG("can't cast the SipAccount to a WengoAccount");
-			_importerDone = true;
-		}
-		break;
-
-	default:
-		_importerDone = true;
-		break;
-	}
-}
-
-void ClassicConfigImporter::loginStateChangedEventHandlerThreadSafe(WengoAccount wengoAccount) {
-	_userProfile.loginStateChangedEvent -=
-		boost::bind(&ClassicConfigImporter::loginStateChangedEventHandler, this, _1, _2);
-
-	IMAccount imAccount(wengoAccount.getIdentity(),
-		wengoAccount.getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
-	_userProfile.addIMAccount(imAccount);
-	_wengoPhone.saveUserProfile();
-
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	string confV1 = getWengoClassicConfigPath();
-	string confV2 = config.getConfigDir();
-	string sep = File::getPathSeparator();
-
-	string contactsPathV1 = confV1 + wengoAccount.getWengoLogin() + sep + "contacts" + sep;
-	ImportContactsFromV1toV3(contactsPathV1, confV2, wengoAccount.getIdentity());
-
-	_importerDone = true;
 }
 
 bool ClassicConfigImporter::ImportConfigFromV1toV3() {
@@ -641,4 +575,55 @@ bool ClassicConfigImporter::ImportConfigFromV1toV3() {
 	}
 
 	return true;
+}
+
+bool ClassicConfigImporter::ImportConfigFromV2toV3() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	String configDir = config.getConfigDir();
+	UserProfile userProfile;
+	string sep = File::getPathSeparator();
+
+	FileReader file(configDir + USERPROFILE_FILENAME);
+	if (file.open()) 
+	{
+		string data = file.read();
+		file.close();
+
+		UserProfileXMLSerializer serializer(userProfile);
+		serializer.unserialize(data);
+
+		last_user_t * lastUser = (last_user_t *) GetLastWengoUser(configDir + USERCONFIG_FILENAME);
+		if (lastUser == NULL)
+			return false;
+
+		WengoAccount wAccount(lastUser->login, Base64::decode(lastUser->password), lastUser->auto_login);
+		userProfile.setWengoAccount(wAccount);
+
+		if (userProfile.isWengoAccountValid())
+		{
+			String accountDir(userProfile.getProfileDirectory());
+			File::createPath(accountDir);
+			UserProfileFileStorage fStorage(userProfile);
+			fStorage.save(accountDir);
+
+			File mFile1(configDir + IMACCOUNTS_FILENAME);
+			mFile1.move(accountDir + IMACCOUNTS_FILENAME);
+
+			File mFile2(configDir + CONTACTLIST_FILENAME);
+			mFile2.move(accountDir + CONTACTLIST_FILENAME);
+
+			File mDir(configDir);
+			StringList dirList = mDir.getFileList();
+			for (int i = 0; i < dirList.size(); i++)
+			{
+				if (dirList[i].length() > OLD_HISTORY_FILENAME.length()) {
+					if (dirList[i].substr(dirList[i].length() - OLD_HISTORY_FILENAME.length()) == OLD_HISTORY_FILENAME) {
+						File mFile3(configDir + dirList[i]);
+						mFile3.move(accountDir + NEW_HISTORY_FILENAME);
+						break;
+					}
+				}
+			}
+		}
+	}
 }
