@@ -37,7 +37,7 @@
 
 WengoPhone::WengoPhone()
 	: _userProfileHandler(*this) {
-	
+
 	_startupSettingListener = new StartupSettingListener();
 	_running = false;
 	_wsSubscribe = NULL;
@@ -110,8 +110,8 @@ void WengoPhone::init() {
 	ClassicExterminator::removeClassicFromStartup();
 
 	//Imports the Config from WengoPhone Classic.
-	_importer = new ClassicConfigImporter();
-	_importer->importConfig(config.getConfigDir());
+	/*_importer = new ClassicConfigImporter();
+	_importer->importConfig(config.getConfigDir());*/
 
 
 	_wsSubscribe = new WsSubscribe();
