@@ -17,11 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtHidenContact.h"
+#include "QtContactInfo.h"
 #include "QtUserList.h"
 #include "QtUser.h"
+#include <QTreeWidgetItem>
 
-QtHidenContact::QtHidenContact(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, QtUser * user, int index, QObject * parent)
+QtContactInfo::QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, QtUser * user, int index, QObject * parent)
 : QObject(parent) {
 	_user = user;
 	_item = item;
@@ -30,7 +31,7 @@ QtHidenContact::QtHidenContact(QTreeWidgetItem * item, QTreeWidgetItem * parentI
 	_clear = false;
 }
 
-QtHidenContact::QtHidenContact(const QtHidenContact & other) {
+QtContactInfo::QtContactInfo(const QtContactInfo & other) {
 	_user = other._user;
 	_item = other._item;
 	_parentItem = other._parentItem;
@@ -38,43 +39,38 @@ QtHidenContact::QtHidenContact(const QtHidenContact & other) {
 	_clear = other._clear;
 }
 
-QtHidenContact::~QtHidenContact() {
+QtContactInfo::~QtContactInfo() {
 }
 
-void QtHidenContact::clear() {
+void QtContactInfo::clear() {
 	_clear = true;
 }
 
-bool QtHidenContact::isCleared() {
+bool QtContactInfo::isCleared() {
 	return _clear;
 }
 
-QTreeWidgetItem * QtHidenContact::getItem() {
+QTreeWidgetItem * QtContactInfo::getItem() {
 	return _item;
 }
 
-QTreeWidgetItem * QtHidenContact::getParentItem() {
+QTreeWidgetItem * QtContactInfo::getParentItem() {
 	return _parentItem;
 }
 
-QtUser * QtHidenContact::getUser() const {
+QtUser * QtContactInfo::getUser() const {
 	return _user;
 }
 
-int QtHidenContact::getIndex() const {
+int QtContactInfo::getIndex() const {
 	return _index;
 }
 
-bool QtHidenContact::operator < (const QtHidenContact & other) const {
-/*
-    return ( (_user->getStatus() == EnumPresenceState::PresenceStateOnline) &&
-	 (_user->getUserName().toUpper() < other.getUser()->getUserName().toUpper()) );
-
- */
+bool QtContactInfo::operator < (const QtContactInfo & other) const {
     return _user->getUserName().toUpper() < other.getUser()->getUserName().toUpper();
 }
 
-QtHidenContact & QtHidenContact::operator = (const QtHidenContact & other) {
+QtContactInfo & QtContactInfo::operator = (const QtContactInfo & other) {
 	_user = other._user;
 	_item = other._item;
 	_parentItem = other._parentItem;
@@ -83,6 +79,6 @@ QtHidenContact & QtHidenContact::operator = (const QtHidenContact & other) {
 	return * this;
 }
 
-QtContactPixmap::ContactPixmap QtHidenContact::getStatus() {
+QtContactPixmap::ContactPixmap QtContactInfo::getStatus() {
     return _user->getStatus();
 }

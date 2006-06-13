@@ -21,6 +21,7 @@
 
 #include "ui_RenameGroupDialog.h"
 
+#include <QWidget>
 #include <QLineEdit>
 
 QtRenameGroup::QtRenameGroup(QWidget * parent, Qt::WFlags f)

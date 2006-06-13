@@ -22,12 +22,20 @@
 
 #include "QtContactList.h"
 #include "QtContactPixmap.h"
-#include "QtHidenContact.h"
+#include "QtContactInfo.h"
 #include "QtUserList.h"
 #include "QtUserTreeEventFilter.h"
 #include "UserTreeEventManager.h"
 #include "QtConferenceAction.h"
 #include "../QtWengoPhone.h"
+
+#include <QString>
+#include <QTreeWidgetItem>
+#include <QTimerEvent>
+#include <QMenu>
+#include <QTreeWidget>
+#include <QSize>
+#include <QAction>
 
 #include <presentation/qt/profile/QtProfileDetails.h>
 
@@ -336,19 +344,6 @@ void QtUserManager::defaultAction(QTreeWidgetItem * item){
 	}
 }
 
-QList < QtHidenContact * > QtUserManager::clearList(QList < QtHidenContact * > list) {
-
-	QList < QtHidenContact * >::iterator iter;
-	QList < QtHidenContact * > tmp;
-
-	for (iter = list.begin(); iter != list.end(); iter++) {
-
-		if (!(* iter)->isCleared())
-			tmp.append((* iter));
-	}
-	return tmp;
-}
-
 void QtUserManager::safeUserStateChanged() {
 	safeHideOffLineUsers();
     if (_menu){
@@ -410,11 +405,11 @@ void QtUserManager::safeSortUsers(bool bypassTimer) {
 	QtUser * user;
 
 	QList < QTreeWidgetItem * > itemList = _tree->findItems("*", Qt::MatchWildcard);
-	QList <QtHidenContact> onlineContact;
-	QList <QtHidenContact> idleContact;
-	QList <QtHidenContact> dndContact;
-	QList <QtHidenContact> offlineContact;
-	QList <QtHidenContact> othersContact;
+	QtContactInfoList onlineContact;
+	QtContactInfoList idleContact;
+	QtContactInfoList dndContact;
+	QtContactInfoList offlineContact;
+	QtContactInfoList othersContact;
 
 	QList < QTreeWidgetItem * >::iterator i;
 
@@ -438,7 +433,7 @@ void QtUserManager::safeSortUsers(bool bypassTimer) {
 
 				// Take the widget and put it in sortList
 				int index = group->indexOfChild(item);
-				QtHidenContact hiden = QtHidenContact(item, item->parent(), user, index, this);
+				QtContactInfo hiden = QtContactInfo(item, item->parent(), user, index, this);
 				switch (hiden.getStatus()){
                     case QtContactPixmap::ContactOnline:
                         onlineContact.append(hiden);
@@ -464,7 +459,7 @@ void QtUserManager::safeSortUsers(bool bypassTimer) {
             qSort(idleContact.begin(),idleContact.end());
             qSort(othersContact.begin(),othersContact.end());
 
-			QList < QtHidenContact >::iterator insertIterator;
+			QtContactInfoList::iterator insertIterator;
 			for (insertIterator = onlineContact.begin(); insertIterator != onlineContact.end(); insertIterator++) {
 				group->takeChild(group->indexOfChild((* insertIterator).getItem()));
 				group->insertChild(group->childCount(), (* insertIterator).getItem());
@@ -529,7 +524,7 @@ void QtUserManager::safeShowAllUsers() {
             std::string contactGroupId = cprofile.getGroupId();
             QList < QTreeWidgetItem * > list;
             if (groupsAreHiden()){
-                list = _tree->findItems("WENGO2006CLISTHIDE",Qt::MatchExactly);
+                list = _tree->findItems(QtContactList::DEFAULT_GROUP_NAME,Qt::MatchExactly);
             }else{
                 list =_tree->findItems(QString::fromStdString(contactGroupId), Qt::MatchExactly);
             }
@@ -537,7 +532,7 @@ void QtUserManager::safeShowAllUsers() {
             if (list.isEmpty()) {
                 group = new QTreeWidgetItem(_tree);
                 if (groupsAreHiden()){
-                    group->setText(0, "WENGO2006CLISTHIDE");
+                    group->setText(0, QtContactList::DEFAULT_GROUP_NAME);
                 }else{
                     group->setText(0, QString::fromStdString(contactGroupId));
                 }
@@ -778,19 +773,6 @@ void QtUserManager::safeRemoveContact(const QString & contactId) {
 			}
 		}
 	}
-
-	removeFromHidenContact(contactId);
-}
-
-void QtUserManager::removeFromHidenContact(const QString & contactId) {
-	QList < QtHidenContact * >::iterator iter;
-
-	for (iter = _hidenContacts.begin(); iter != _hidenContacts.end(); iter++) {
-		if ((* iter)->getUser()->getId() == contactId) {
-			_hidenContacts.erase(iter);
-			break;
-		}
-	}
 }
 
 void QtUserManager::setMouseButton(Qt::MouseButton button) {
@@ -823,15 +805,12 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 			return;
 		}
 	}
-
 	// Removing the Contact from the old group
-	// We should only one group
 	list = _tree->findItems(srcContactGroupId, Qt::MatchExactly);
 	if (list.isEmpty())
         return;
 	group = list[0];
 	count = group->childCount();
-
 	for (int t = 0; (t < count) && !found; t++) {
 		user = ul->getUser(group->child(t)->text(0));
 		if (user->getId() == contactId) {
@@ -839,20 +818,6 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 			found = true;
 		}
 	}
-	// If not found
-	if (!found) {
-		for (QList < QtHidenContact * >::iterator iter = _hidenContacts.begin(); iter != _hidenContacts.end();
-		   iter++) {
-			   if ((* iter)->getUser()->getId() == contactId) {
-				   user = (* iter)->getUser();
-				   _hidenContacts.erase(iter);
-				   break;
-			   }
-		}
-	}
-	////
-
-	// If the user has been found
 	if (user) {
 		// Adding the user to the destination group
 		list = _tree->findItems(dstContactGroupId, Qt::MatchExactly);
@@ -878,7 +843,7 @@ void QtUserManager::timerEvent ( QTimerEvent * event ) {
         _sortTimerId = -1;
         _canSort = true;
         if ( _wantSort ) {
-            safeSortUsers();
+            safeSortUsers(true);
             _wantSort = false;
         }
         return;

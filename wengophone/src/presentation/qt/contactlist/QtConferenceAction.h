@@ -17,13 +17,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCONFERENCEACTION_H
-#define QTCONFERENCEACTION_H
+#ifndef OWQTCONFERENCEACTION_H
+#define OWQTCONFERENCEACTION_H
 
-#include <QtGui>
+#include <QObject>
+#include <QAction>
 
 class PhoneCall;
+class QString;
+class QIcon;
 
+/**
+ * Default action for conference
+ *
+ * @author Mr K
+ */
 class QtConferenceAction : public QAction {
 	Q_OBJECT
 public:
@@ -43,4 +51,4 @@ protected:
 	PhoneCall * _phoneCall;
 };
 
-#endif	//QTCONFERENCEACTION_H
+#endif	//OWQTCONFERENCEACTION_H

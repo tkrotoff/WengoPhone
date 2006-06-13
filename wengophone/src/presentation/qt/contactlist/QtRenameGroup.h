@@ -17,10 +17,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTRENAMEGROUP_H
-#define QTRENAMEGROUP_H
+#ifndef OWQTRENAMEGROUP_H
+#define OWQTRENAMEGROUP_H
 
-#include <QtGui>
+#include <QString>
+#include <QDialog>
+
+class QWidget;
 
 namespace Ui {
 	class RenameGroupDialog;
@@ -46,4 +49,4 @@ protected:
 	Ui::RenameGroupDialog * _ui;
 };
 
-#endif	//QTRENAMEGROUP_H
+#endif	//OWQTRENAMEGROUP_H

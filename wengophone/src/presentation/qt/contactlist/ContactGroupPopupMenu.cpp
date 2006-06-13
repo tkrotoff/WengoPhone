@@ -40,9 +40,7 @@ ContactGroupPopupMenu::ContactGroupPopupMenu(CContactList & cContactList, QWidge
 }
 
 void ContactGroupPopupMenu::showMenu(const QString & groupId) {
-	LOG_DEBUG("groupId: " + groupId.toStdString());
 	_groupId = groupId;
-
 	exec(QCursor::pos());
 }
 
@@ -53,7 +51,6 @@ void ContactGroupPopupMenu::removeContactGroup() const {
 void ContactGroupPopupMenu::renameContactGroup() const {
 	QtRenameGroup dialog(dynamic_cast < QWidget * > (parent()));
 	dialog.exec();
-
 	_cContactList.renameContactGroup(_groupId.toStdString(), dialog.getGroupName().toUtf8().data());
 }
 

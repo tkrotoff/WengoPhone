@@ -23,6 +23,12 @@
 #include "QtUserWidget.h"
 #include "QtUserList.h"
 #include "QtContactPixmap.h"
+#include "QtContactList.h"
+
+#include <QModelIndex>
+#include <QWidget>;
+#include <QStyleOptionViewItem>;
+#include <QAbstractItemModel>;
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -33,22 +39,10 @@
 
 #include <qtutil/Object.h>
 
-#include <QtGui>
-#include <QSize>
-
-
 static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 
 QtTreeViewDelegate::QtTreeViewDelegate(CWengoPhone & cWengoPhone, QObject * parent)
 : QItemDelegate(parent), _cWengoPhone(cWengoPhone) {
-/*
-	QtUserWidget * widget = new QtUserWidget( NULL );
-	QWidget * userWidget = Object::findChild<QWidget *>( widget, "UserWidget" );
-	QFrame * userTitleFrame = Object::findChild<QFrame *>( userWidget, "userTitleFrame" );
-*/
-
-	//	USER_TITLE_FRAME_HEIGHT = userTitleFrame->height();
-	//	USER_WIDGET_FRAME_HEIGHT = userWidget->height();
 }
 
 void QtTreeViewDelegate::setParent(QWidget * parent) {
@@ -58,10 +52,6 @@ void QtTreeViewDelegate::setParent(QWidget * parent) {
 QWidget * QtTreeViewDelegate::createEditor(QWidget * parent,
 const QStyleOptionViewItem &,
 const QModelIndex & index) const {
-
-	// USER_TITLE_FRAME_HEIGHT = userTitleFrame->height();
-	//LOG_DEBUG( "height= " + String::fromNumber( USER_TITLE_FRAME_HEIGHT ) );
-
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user = ul->getUser(index.data().toString());
 
@@ -73,8 +63,6 @@ const QModelIndex & index) const {
 
 	userWidget->installEventFilter(new QtUserWidgetEventFilter((QObject *) this, userWidget, user));
 
-	//widget->setAvatar("emoticons/cat.svg");
-
 	return (QWidget *) widget;
 }
 
@@ -84,26 +72,24 @@ void QtTreeViewDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
 	if (!widget) {
 		return;
 	}
-
 	widget->setText(index.model()->data(index).toString());
 }
 
 void QtTreeViewDelegate::setModelData(QWidget * editor, QAbstractItemModel * model,
-const QModelIndex & index) const {
+    const QModelIndex & index) const {
 	QtUserWidget * widget = qobject_cast < QtUserWidget * > (editor);
 
-	if (!widget)
+	if (!widget) {
 		return;
-
+	}
 	model->setData(index, widget->text());
 }
 
 void QtTreeViewDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const {
-	if (!index.parent().isValid())
+	if (!index.parent().isValid()) {
 		drawGroup(painter, option, index);
-	else {
+	} else {
 		QtUserList * ul = QtUserList::getInstance();
-
 		if (ul) {
 			ul->paintUser(painter, option, index);
 		}
@@ -112,32 +98,26 @@ void QtTreeViewDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
 
 QSize QtTreeViewDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const {
 	QSize orig = QItemDelegate::sizeHint(option, index);
-
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user = ul->getUser(index.data().toString());
 
 	if (user) {
 		return QSize(orig.width(), ul->getUser(index.data().toString())->getHeight());
-	}
-
-	else {
+	} else {
 		if (!index.parent().isValid()) {
 			return (QSize(orig.width(), GROUP_WIDGET_FRAME_HEIGHT));
 		}
 	}
-
 	return orig;
 }
 bool QtTreeViewDelegate::checkForUtf8(const unsigned char * text, int size) const {
     bool isUtf8 = false;
-
     if (size==0)
         return true;
 
     if ( (text[0]<=0x7F) && size==1){
         return true;
     }
-
     for (int i=0;i<size;i++){
         if (text[i] == 0 ){
             return false;
@@ -153,7 +133,6 @@ bool QtTreeViewDelegate::checkForUtf8(const unsigned char * text, int size) cons
             }
         }
     }
-
     return isUtf8;
 }
 void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const {
@@ -193,13 +172,12 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 	r.setLeft(r.left() + 10);
 
 	// Number of child
-
 	int nbchild = index.model()->rowCount(index);
     QString groupName;
     std::string groupId;
     std::string groupNameTmp;
 
-    if (index.data().toString() == QString("WENGO2006CLISTHIDE")){
+    if (index.data().toString() == QtContactList::DEFAULT_GROUP_NAME){
         groupName = tr("Contacts list");
         groupNameTmp=std::string(groupName.toUtf8().data());
     } else{
@@ -212,8 +190,6 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
     } else {
         groupName=QString::fromStdString(groupNameTmp);
     }
-
-	// QString str = QString("%1 (%2)").arg(groupName).arg(nbchild);
 	QString str = groupName;
 	painter->drawText(r, Qt::AlignLeft, str, 0);
 }

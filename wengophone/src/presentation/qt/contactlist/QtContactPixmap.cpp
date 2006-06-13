@@ -19,7 +19,6 @@
 
 #include "QtContactPixmap.h"
 
-
 QtContactPixmap * QtContactPixmap::_instance = NULL;
 
 QtContactPixmap::QtContactPixmap() {

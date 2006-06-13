@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCONTACTLIST_H
-#define QTCONTACTLIST_H
+#ifndef OWQTCONTACTLIST_H
+#define OWQTCONTACTLIST_H
 
 #include <control/contactlist/CContactList.h>
 #include <presentation/PContactList.h>
@@ -27,6 +27,7 @@
 
 #include <map>
 
+#include <QString>
 #include <QTreeWidgetItem>
 
 class Contact;
@@ -47,6 +48,8 @@ class QtContactList : public QObjectThreadSafe, public PContactList {
 	Q_OBJECT
 
 public:
+
+    static const QString DEFAULT_GROUP_NAME;
 
 	QtContactList(CContactList & cContactList, CWengoPhone & cWenghoPhone);
 
@@ -157,4 +160,4 @@ private:
 	bool _groupHiden;
 };
 
-#endif	//QTCONTACTLIST_H
+#endif	//OWQTCONTACTLIST_H

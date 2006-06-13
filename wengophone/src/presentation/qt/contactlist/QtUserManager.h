@@ -17,10 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTUSERMANAGER_H
-#define QTUSERMANAGER_H
+#ifndef OWQTUSERMANAGER_H
+#define OWQTUSERMANAGER_H
 
-#include <QtGui>
+#include <QObject>
+#include <QMutex>
+#include <QList>
 
 #define MAX_ITEM_SIZE 100
 #define MIN_ITEM_SIZE 28
@@ -28,13 +30,25 @@
 class CUserProfile;
 class CWengoPhone;
 class QtContactList;
-class QtHidenContact;
+class QtContactInfo;
 class PhoneCall;
 class ContactProfile;
 
+class QString;
+class QTreeWidgetItem;
+class QTimerEvent;
+class QMenu;
+class QTreeWidget;
+class QSize;
+class QAction;
+
 class QtUserManager : public QObject {
+
 	Q_OBJECT
+
 public:
+
+    typedef QList <QtContactInfo> QtContactInfoList;
 
 	QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
         QtContactList & qtContactList, QObject * parent = 0, QTreeWidget * target = 0);
@@ -110,19 +124,15 @@ protected:
 
 	void safeShowAllUsers();
 
-	void removeFromHidenContact(const QString & contactId);
-
 	void safeHideGroup();
 
     bool canShowUser(const ContactProfile * cprofile);
 
-	virtual void timerEvent ( QTimerEvent * event ) ;
-
-	QMenu * createConferenceMenu();
+    QMenu * createConferenceMenu();
 
 	QMenu * createMenu();
 
-	QList < QtHidenContact * > clearList(QList < QtHidenContact * > list);
+	virtual void timerEvent ( QTimerEvent * event ) ;
 
 	bool _hideUsers;
 
@@ -135,8 +145,6 @@ protected:
 	QTreeWidgetItem * _previous;
 
 	QTreeWidgetItem * _lastClicked;
-
-	QList < QtHidenContact * > _hidenContacts;
 
 	QSize * _itemSize;
 
@@ -172,4 +180,4 @@ protected:
 
 };
 
-#endif	//QTUSERMANAGER_H
+#endif	//OWQTUSERMANAGER_H

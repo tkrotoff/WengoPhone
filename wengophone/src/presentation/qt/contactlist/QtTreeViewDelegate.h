@@ -17,18 +17,26 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTTREEVIEWDELEGATE_H
-#define QTTREEVIEWDELEGATE_H
+#ifndef OWQTTREEVIEWDELEGATE_H
+#define OWQTTREEVIEWDELEGATE_H
 
-#include <QtGui>
 #include <QItemDelegate>
-#include <QLineEdit>
-#include <QDebug>
+#include <QSize>
+#include <QPixmap>
 
 #include "QtUserWidget.h"
 
 class CWengoPhone;
+class QModelIndex;
+class QWidget;
+class QStyleOptionViewItem;
+class QAbstractItemModel;
 
+/**
+ * Qt Presentation component for ContactList.
+ *
+ * @author Mr K
+ */
 class QtTreeViewDelegate : public QItemDelegate {
 	Q_OBJECT
 public:
@@ -60,4 +68,4 @@ protected:
 	CWengoPhone & _cWengoPhone;
 };
 
-#endif	//QTTREEVIEWDELEGATE_H
+#endif	//OWQTTREEVIEWDELEGATE_H

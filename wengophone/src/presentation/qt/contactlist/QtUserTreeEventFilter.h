@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTUSERTREEEVENTFILTER_H
-#define QTUSERTREEEVENTFILTER_H
+#ifndef OWQTUSERTREEEVENTFILTER_H
+#define OWQTUSERTREEEVENTFILTER_H
 
 #include <QtGui>
 
@@ -53,4 +53,4 @@ protected:
 	QTreeWidget * _tree;
 };
 
-#endif	//QTUSERTREEEVENTFILTER_H
+#endif //OWQTUSERTREEEVENTFILTER_H

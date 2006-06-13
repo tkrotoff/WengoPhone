@@ -17,10 +17,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTSTATUSPIXMAP_H
-#define QTSTATUSPIXMAP_H
+#ifndef OWQTCONTACTPIXMAP_H
+#define OWQTCONTACTPIXMAP_H
 
-#include <QtGui>
+#include <QHash>
+#include <QPixmap>
+
+
+/**
+ * Store status pixmaps
+ *
+ * @author Mr K
+ */
 
 class QtContactPixmap {
 public:
@@ -43,6 +51,7 @@ public:
 	static QtContactPixmap * getInstance();
 
 	void setPixmap(ContactPixmap status, const QPixmap & px);
+
 	QPixmap & getPixmap(ContactPixmap status);
 
 protected:
@@ -59,7 +68,8 @@ protected:
 	QHash < ContactPixmap, QPixmap > _contactPixmap;
 
 private:
+
 	static QtContactPixmap * _instance;
 };
 
-#endif	//QTSTATUSPIXMAP_H
+#endif	//OWQTCONTACTPIXMAP_H

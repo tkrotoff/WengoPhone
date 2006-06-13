@@ -40,8 +40,12 @@
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/MouseEventFilter.h>
 
-#include <QtGui>
-#include <QDebug>
+#include <QPixmap>
+#include <QtreeWidget>
+#include <QTreeWidgetItem>
+#include <QString>
+
+const QString QtContactList::DEFAULT_GROUP_NAME = "WENGO2006CLISTHIDE";
 
 static inline QPixmap scalePixmap(const char * name) {
 	return QPixmap(name).scaled(QSize(16, 16), Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -76,7 +80,6 @@ void QtContactList::initThreadSafe() {
 
 	//treeWidget
 	_treeWidget = Object::findChild < QTreeWidget * > (_contactListWidget, "treeWidget");
-
 	_treeWidget->setAcceptDrops(true);
 	_treeWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	_treeWidget->setProperty("showDropIndicator", QVariant(true));
@@ -86,11 +89,9 @@ void QtContactList::initThreadSafe() {
 	_treeWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
 	_treeWidget->setIndentation(0);
 	_treeWidget->setRootIsDecorated(false);
-	// _treeWidget->setAlternatingRowColors ( true );
 
 	// icons
 	QtContactPixmap * spx = QtContactPixmap::getInstance();
-
 	spx->setPixmap(QtContactPixmap::ContactUnknown, scalePixmap(":/pics/status/unknown.png"));
 	spx->setPixmap(QtContactPixmap::ContactOnline, scalePixmap(":/pics/status/online.png"));
 	spx->setPixmap(QtContactPixmap::ContactOffline, scalePixmap(":/pics/status/offline.png"));
@@ -120,8 +121,8 @@ void QtContactList::initThreadSafe() {
 
 	//Popup Menus
 	_contactGroupPopupMenu = new ContactGroupPopupMenu(_cContactList, _treeWidget);
-
-	connect(_userManager, SIGNAL(groupRightClicked(const QString &)), SLOT(groupRightClickedSlot(const QString &)));
+	connect(_userManager, SIGNAL(groupRightClicked(const QString &)),
+        SLOT(groupRightClickedSlot(const QString &)));
 
 	// Events from the Control
 	connect(this, SIGNAL(contactGroupAddedEventSignal(QString)),
@@ -138,14 +139,22 @@ void QtContactList::initThreadSafe() {
 		SLOT(contactMovedEventSlot(QString, QString, QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactChangedEventSignal(QString)),
 		SLOT(contactChangedEventSlot(QString)), Qt::QueuedConnection);
-	////
 
-	//Connect events
+
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhone.getPresentation();
 	qtWengoPhone->setContactList(this);
 	_treeWidget->viewport()->setFocus();
 
 	initContent();
+}
+
+void QtContactList::initContent() {
+	std::vector < std::string > contacts = _cContactList.getContactIds();
+	std::vector < std::string >::const_iterator it;
+
+	for (it = contacts.begin(); it != contacts.end(); ++it) {
+		contactAddedEventSlot(QString::fromStdString(*it));
+	}
 }
 
 void QtContactList::updatePresentation() {
@@ -155,14 +164,12 @@ void QtContactList::updatePresentation() {
 }
 
 void QtContactList::updatePresentationThreadSafe() {
-	//TODO: Add code to manage hidden users
 	_userManager->closeUserInfo();
 	_userManager->userStateChanged();
 	_treeWidget->viewport()->update();
 }
 
 void QtContactList::contactGroupAddedEvent(std::string contactGroupId) {
-	LOG_DEBUG("contact group added. UUID: " + contactGroupId);
 	contactGroupAddedEventSignal(QString::fromStdString(contactGroupId));
 }
 
@@ -183,9 +190,10 @@ void QtContactList::contactRemovedEvent(std::string contactId) {
 }
 
 void QtContactList::contactMovedEvent(std::string dstContactGroupId,
-std::string srcContactGroupId, std::string contactId) {
+    std::string srcContactGroupId, std::string contactId) {
+
 	contactMovedEventSignal(QString::fromStdString(dstContactGroupId),
-	QString::fromStdString(srcContactGroupId), QString::fromStdString(contactId));
+        QString::fromStdString(srcContactGroupId), QString::fromStdString(contactId));
 }
 
 void QtContactList::contactChangedEvent(std::string contactId) {
@@ -193,18 +201,16 @@ void QtContactList::contactChangedEvent(std::string contactId) {
 }
 
 void QtContactList::contactGroupAddedEventSlot(QString contactGroupId) {
-	LOG_DEBUG("contact group added. UUID: " + contactGroupId.toStdString());
 	if (_userManager->groupsAreHiden()){
-	    contactGroupId = "WENGO2006CLISTHIDE";
+	    contactGroupId = DEFAULT_GROUP_NAME;
 	}
     addGroup(contactGroupId);
 }
 
-QTreeWidgetItem * QtContactList::addGroup(QString contactGroupId){
-
+QTreeWidgetItem * QtContactList::addGroup(QString contactGroupId) {
 	QList < QTreeWidgetItem * > list;
     QTreeWidgetItem * group;
-	// If no group exists, creating the group
+
 	list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
 	if (list.isEmpty()) {
         group = new QTreeWidgetItem(_treeWidget);
@@ -215,8 +221,6 @@ QTreeWidgetItem * QtContactList::addGroup(QString contactGroupId){
 }
 
 void QtContactList::contactGroupRemovedEventSlot(QString contactGroupId) {
-	LOG_DEBUG("contact group removed. UUID: " + contactGroupId.toStdString());
-
 	QList < QTreeWidgetItem * > list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
 
 	if (!list.isEmpty()) {
@@ -225,19 +229,17 @@ void QtContactList::contactGroupRemovedEventSlot(QString contactGroupId) {
 }
 
 void QtContactList::contactGroupRenamedEventSlot(QString contactGroupId) {
-	LOG_DEBUG("contact group renamed. UUID: " + contactGroupId.toStdString());
 	updatePresentationThreadSafe();
 }
 
 void QtContactList::contactAddedEventSlot(QString contactId) {
-	LOG_DEBUG("contact added. UUID: " + contactId.toStdString());
 	QtUserList * ul = QtUserList::getInstance();
     QString groupId;
 	// If User is not already in UserList
 	if (!ul->getUser(contactId)) {
 		ContactProfile contactProfile = _cContactList.getContactProfile(contactId.toStdString());
 		if (_userManager->groupsAreHiden())
-            groupId = "WENGO2006CLISTHIDE";
+            groupId = DEFAULT_GROUP_NAME;
         else
             groupId = QString::fromStdString(contactProfile.getGroupId());
 		QList < QTreeWidgetItem * > list;
@@ -256,8 +258,6 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 			QtUser * user = NULL;
 			QString contactName;
 
-			LOG_DEBUG("display name: " + contactProfile.getDisplayName());
-
 			newContact = new QTreeWidgetItem(list[0]);
 			newContact->setText(0, contactId);
 			newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
@@ -267,31 +267,23 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 			ul->addUser(user);
 
 			updatePresentationThreadSafe();
-		}
+  		}
 	}
 }
 
 void QtContactList::contactRemovedEventSlot(QString contactId) {
-	LOG_DEBUG("contact removed. UUID: " + contactId.toStdString());
-
 	_userManager->removeContact(contactId);
 	updatePresentationThreadSafe();
 }
 
 void QtContactList::contactMovedEventSlot(QString dstContactGroupId,
 	QString srcContactGroupId, QString contactId) {
-	LOG_DEBUG("contact moved from " + srcContactGroupId.toStdString()
-	+ " to " + dstContactGroupId.toStdString()
-	+ ". UUID: " + contactId.toStdString());
-
 	_userManager->moveContact(contactId,
 		srcContactGroupId, dstContactGroupId);
 	updatePresentationThreadSafe();
 }
 
 void QtContactList::contactChangedEventSlot(QString contactId) {
-	LOG_DEBUG("contact changed: " + contactId.toStdString());
-
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user = ul->getUser(contactId);
 
@@ -323,13 +315,6 @@ void QtContactList::groupRightClickedSlot(const QString & groupId) {
 	_contactGroupPopupMenu->showMenu(groupId);
 }
 
-void QtContactList::initContent() {
-	std::vector < std::string > contacts = _cContactList.getContactIds();
-	for (std::vector < std::string >::const_iterator it = contacts.begin();
-		it != contacts.end(); ++it) {
-		contactAddedEventSlot(QString::fromStdString(* it));
-	}
-}
 void QtContactList::showHideGroups(){
     _userManager->hideGroups();
 }

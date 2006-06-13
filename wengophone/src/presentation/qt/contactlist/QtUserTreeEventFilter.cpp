@@ -29,7 +29,7 @@ bool QtUserTreeEventFilter::eventFilter(QObject * obj, QEvent * event) {
 
 	switch (event->type()) {
 		case QEvent::KeyPress:
-			keyPress(dynamic_cast < QKeyEvent * > (event));
+			keyPress(dynamic_cast <QKeyEvent *> (event));
 			return false;
 		default:
 			return QObject::eventFilter(obj, event);
@@ -37,9 +37,7 @@ bool QtUserTreeEventFilter::eventFilter(QObject * obj, QEvent * event) {
 }
 
 void QtUserTreeEventFilter::keyPress(QKeyEvent * event) {
-
 	QTreeWidgetItem * item = _tree->currentItem();
-
 	switch (event->key()) {
 		case Qt::Key_Left:
 			closeItem(item);
