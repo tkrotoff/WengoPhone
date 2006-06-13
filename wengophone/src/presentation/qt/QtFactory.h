@@ -99,6 +99,8 @@ public:
 #endif
 
 		reset();
+		_qtWengoPhone = NULL;
+		_qtUserProfileHandler = NULL;
 	}
 
 	void processEvents() {
@@ -120,8 +122,6 @@ public:
 		_qtWsDirectory = NULL;
 		_qtSoftUpdate = NULL;
 		_qtHistory = NULL;
-		_qtWengoPhone = NULL;
-		_qtUserProfileHandler = NULL;
 	}
 
 	PWengoPhone * createPresentationWengoPhone(CWengoPhone & cWengoPhone) {
