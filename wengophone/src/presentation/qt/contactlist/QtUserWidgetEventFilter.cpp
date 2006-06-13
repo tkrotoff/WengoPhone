@@ -70,7 +70,6 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter, QRect rect) {
 	int centeredText_y = (QtUser::UserSize - QFontMetrics(_target->font()).height()) / 2;
 	textRect.setTop(textRect.top() + centeredText_y);
 
-
 	QFont font = painter->font();
 	font.setBold(true);
 	painter->setFont(font);

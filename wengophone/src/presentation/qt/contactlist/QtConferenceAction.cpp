@@ -27,7 +27,7 @@ QtConferenceAction::QtConferenceAction(QObject * parent) : QAction(parent) {
 }
 
 QtConferenceAction::QtConferenceAction(const QIcon & icon, const QString & text, QObject * parent) :
-QAction(icon, text, parent) {
+	QAction(icon, text, parent) {
 }
 
 void QtConferenceAction::setPhoneCall(PhoneCall * phoneCall) {

@@ -161,7 +161,6 @@ void QtUserList::resetMouseStatus() {
 		QtUser * user = iter.value();
 		if (user != NULL) {
 			user->setButton(Qt::NoButton);
-			//qDebug() << "!!!!!!!!!!!!!!!!!!! USER IS NULL !!!!!!!!!!!!!!!!!!!!!!!!!!";
 		}
 	}
 }
@@ -209,7 +208,6 @@ void QtUserList::startCall(const QString & userid) {
 
 void QtUserList::startFreeCall(const QString & userid) {
 	_mutex.lock();
-
 	QtUser * user = _userList[userid];
 	if (!user)
 		LOG_FATAL("User lookup failed !!!");

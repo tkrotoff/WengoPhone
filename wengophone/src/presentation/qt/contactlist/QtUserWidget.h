@@ -45,7 +45,7 @@ class QPushButton;
  * @author Mathieu Stute
  */
 class QtUserWidget : public QWidget {
-         Q_OBJECT
+		Q_OBJECT
 public:
 
 	QtUserWidget(const std::string & contactId, CWengoPhone & cWengoPhone,

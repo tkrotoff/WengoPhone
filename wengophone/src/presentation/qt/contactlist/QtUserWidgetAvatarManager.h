@@ -26,7 +26,9 @@
 class QtUserWidget;
 
 class QtUserWidgetAvatarManager : public QObject {
+
 	Q_OBJECT
+
 public:
 
 	QtUserWidgetAvatarManager(QtUserWidget * userWidget, QFrame * target);

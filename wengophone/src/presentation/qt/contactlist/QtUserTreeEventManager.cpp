@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "UserTreeEventManager.h"
+#include "QtUserTreeEventManager.h"
 #include "QtUserList.h"
 
 #include <control/contactlist/CContactList.h>
@@ -28,7 +28,6 @@
 QtUserTreeEventManager::QtUserTreeEventManager(CContactList & cContactList, QObject * parent, QTreeWidget * target)
 	: QObject(parent),
 	_cContactList(cContactList) {
-
 	_tree = target;
 
 	/* We need to install the event filter in the viewport of the QTreeWidget */
@@ -94,7 +93,7 @@ void QtUserTreeEventManager::mouseReleaseEvent(QMouseEvent * event) {
 
 void QtUserTreeEventManager::mouseMoveEvent(QMouseEvent * event) {
 
-	QTreeWidgetItem * item = _selectedItem;
+	QTreeWidgetItem * item=_selectedItem;
 
 	if (!_selectedItem) {
 		return;
@@ -113,7 +112,7 @@ void QtUserTreeEventManager::mouseMoveEvent(QMouseEvent * event) {
 			}
 		}
 	}
-	item = _selectedItem;
+	item=_selectedItem;
 
 	if (!(event->buttons() & Qt::LeftButton)) {
 		return;
@@ -169,7 +168,6 @@ void QtUserTreeEventManager::dropEvent(QDropEvent * event) {
 				// This is a contact combination
 				ContactProfile dstContactProfile = _cContactList.getContactProfile(_selectedItem->text(0).toStdString());
 				ContactProfile srcContactProfile = _cContactList.getContactProfile(item->text(0).toStdString());
-
 				if (QMessageBox::question(NULL,
 					tr("Merge Contacts -- WengoPhone"),
 					tr("Merge %1 with %2?")
@@ -204,16 +202,14 @@ void QtUserTreeEventManager::dragMoveEvent(QDragMoveEvent * event) {
 	}
 }
 
-/*
-	SLOTS
-*/
-
 void QtUserTreeEventManager::timerTimeout() {
 
-	if (_inDrag)
+	if (_inDrag) {
 		return;
+	}
 
 	QTreeWidgetItem * item = _tree->itemAt(_tree->mapFromGlobal(QCursor::pos()));
+
 	if (item) {
 		itemTimeout(item);
 	}

@@ -646,6 +646,7 @@ void QtWengoPhone::editMyProfile() {
 void QtWengoPhone::exitApplication() {
 
     Config & config = ConfigManager::getInstance().getCurrentConfig();
+	_qtTrayIcon->hide();
 	delete _qtTrayIcon;
     // Save the window size
     QSize winsize = _wengoPhoneWindow->size();

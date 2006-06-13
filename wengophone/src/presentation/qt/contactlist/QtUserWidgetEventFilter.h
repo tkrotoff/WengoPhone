@@ -33,9 +33,13 @@ public:
 protected:
 
 	bool eventFilter(QObject * obj, QEvent * event);
+
 	void paintEvent(QPaintEvent * event);
+
 	void paintUser(QPainter * painter, QRect rect);
+
 	QWidget * _target;
+
 	QtUser * _user;
 };
 

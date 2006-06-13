@@ -80,5 +80,5 @@ QtContactInfo & QtContactInfo::operator = (const QtContactInfo & other) {
 }
 
 QtContactPixmap::ContactPixmap QtContactInfo::getStatus() {
-    return _user->getStatus();
+	return _user->getStatus();
 }

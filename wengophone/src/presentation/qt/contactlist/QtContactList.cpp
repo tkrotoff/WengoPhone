@@ -123,7 +123,7 @@ void QtContactList::initThreadSafe() {
 	//Popup Menus
 	_contactGroupPopupMenu = new ContactGroupPopupMenu(_cContactList, _treeWidget);
 	connect(_userManager, SIGNAL(groupRightClicked(const QString &)),
-        SLOT(groupRightClickedSlot(const QString &)));
+		SLOT(groupRightClickedSlot(const QString &)));
 
 	// Events from the Control
 	connect(this, SIGNAL(contactGroupAddedEventSignal(QString)),
@@ -238,10 +238,11 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 	// If User is not already in UserList
 	if (!ul->getUser(contactId)) {
 		ContactProfile contactProfile = _cContactList.getContactProfile(contactId.toStdString());
-		if (_userManager->groupsAreHiden())
+		if (_userManager->groupsAreHiden()) {
 			groupId = DEFAULT_GROUP_NAME;
-		else
+		} else {
 			groupId = QString::fromStdString(contactProfile.getGroupId());
+		}
 		QList < QTreeWidgetItem * > list;
 
 		// If the Contact has a group
