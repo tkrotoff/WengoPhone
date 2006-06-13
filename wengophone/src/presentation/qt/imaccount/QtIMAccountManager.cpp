@@ -158,11 +158,9 @@ void QtIMAccountManager::itemClicked(QTreeWidgetItem * item, int column) {
 		IMAccount * imAccount = imAccountItem->getIMAccount();
 
 		if (item->checkState(column) == Qt::Checked) {
-			item->setCheckState(COLUMN_ENABLE_BUTTON, Qt::Unchecked);
 			_userProfile.setPresenceState(EnumPresenceState::PresenceStateOffline, imAccount);
 			_userProfile.getConnectHandler().disconnect(*imAccount);
 		} else {
-			item->setCheckState(COLUMN_ENABLE_BUTTON, Qt::Checked);
 			_userProfile.getConnectHandler().connect(*imAccount);
 		}
 	}
