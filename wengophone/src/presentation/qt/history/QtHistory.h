@@ -43,7 +43,7 @@ public:
 
 	void updatePresentation ();
 
-	void addHistoryMemento(const std::string & type, const std::string & date,
+	void addHistoryMemento(HistoryMemento::State, const std::string & date,
 		const std::string & time, int duration, const std::string & name, unsigned int id);
 
 	void removeHistoryMemento(unsigned int id);

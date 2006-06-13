@@ -82,7 +82,7 @@ void QtHistory::updatePresentationThreadSafe() {
 		HistoryMemento * memento = (*it).second;
 
 		addHistoryMemento(
-			HistoryMemento::stateToString(memento->getState()),
+			memento->getState(),
 			memento->getDate().toString(),
 			memento->getTime().toString(),
 			memento->getDuration(),
@@ -92,7 +92,7 @@ void QtHistory::updatePresentationThreadSafe() {
 	}
 }
 
-void QtHistory::addHistoryMemento(const std::string & type, const std::string & date,
+void QtHistory::addHistoryMemento(HistoryMemento::State state, const std::string & date,
 		const std::string & time, int duration, const std::string & name, unsigned int id) {
 
 	QDate qdate = QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd");
@@ -107,27 +107,37 @@ void QtHistory::addHistoryMemento(const std::string & type, const std::string & 
 	SipAddress sipAddress(name);
 	QString formattedName = QString::fromStdString(sipAddress.getUserName());
 
-	if (type == HistoryMemento::StateIncomingCall) {
-		_historyWidget->addIncomingCallItem(QString::fromStdString(type),
-			qdate, qtime, qduration, formattedName, id);
-	} else if (type == HistoryMemento::StateOutgoingCall) {
-		_historyWidget->addOutGoingCallItem(QString::fromStdString(type),
-			qdate, qtime, qduration, formattedName, id);
-	} else if (type == HistoryMemento::StateMissedCall) {
-		_historyWidget->addMissedCallItem(QString::fromStdString(type),
-			qdate, qtime, qduration, formattedName, id);
-	} else if (type == HistoryMemento::StateRejectedCall) {
-		_historyWidget->addRejectedCallItem(QString::fromStdString(type),
-			qdate, qtime, qduration, formattedName, id);
-	} else if (type == HistoryMemento::StateOutgoingSMSOK) {
-		_historyWidget->addSMSItem(QString::fromStdString(type),
-			qdate, qtime, qduration, formattedName, id);
-	} else if (type == HistoryMemento::StateOutgoingSMSNOK) {
-		//do not show unsent SMS for now
-	} else if (type == HistoryMemento::StateNone) {
-		//nothing to add
-	} else if (type == HistoryMemento::StateAny) {
-		//nothing to add
+	switch(state) {
+		case HistoryMemento::IncomingCall:
+			_historyWidget->addIncomingCallItem(tr("Incoming call"),
+				qdate, qtime, qduration, formattedName, id);
+			break;
+		case HistoryMemento::OutgoingCall:
+			_historyWidget->addOutGoingCallItem(tr("Outgoing call"),
+				qdate, qtime, qduration, formattedName, id);
+			break;
+		case HistoryMemento::MissedCall:
+			_historyWidget->addMissedCallItem("Missed call",
+				qdate, qtime, qduration, formattedName, id);
+			break;
+		case HistoryMemento::RejectedCall:
+			_historyWidget->addRejectedCallItem(tr("Rejected call"),
+				qdate, qtime, qduration, formattedName, id);
+			break;
+		case HistoryMemento::OutgoingSmsOk:
+			_historyWidget->addSMSItem(tr("Outgoing SMS"),
+				qdate, qtime, qduration, formattedName, id);
+			break;
+		case HistoryMemento::OutgoingSmsNok:
+			break;
+		case HistoryMemento::ChatSession:
+			break;
+		case HistoryMemento::None:
+			break;
+		case HistoryMemento::Any:
+			break;
+		default:
+			LOG_FATAL("Unknown HistoryMemento::State" + String::fromNumber(state));
 	}
 }
 
