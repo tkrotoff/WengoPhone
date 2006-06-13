@@ -24,11 +24,14 @@
 #include <WengoPhoneBuildId.h>
 
 #include <util/Logger.h>
+#include <cutil/global.h>
 
 #include <QtGui>
 
 #include <curl/curl.h>
-#include <portaudio.h>
+#ifndef OS_MACOSX
+	#include <portaudio.h>
+#endif
 #include <boost/version.hpp>
 #include <avcodec.h>
 #include <tinyxml.h>
@@ -63,7 +66,9 @@ QtAbout::QtAbout(QWidget * parent) {
 				"Gaim: " + QString(gaim_core_get_version()) + eol +
 				"cURL: " + QString(curl_version()) + eol +
 				"TinyXML: " + QString::number(TIXML_MAJOR_VERSION) + "." + QString::number(TIXML_MINOR_VERSION) + "." + QString::number(TIXML_PATCH_VERSION) + eol +
-				"FFmpeg's libavcodec: " + QString::number(avcodec_version()) + eol +
-				"PortAudio: " + QString(Pa_GetVersionText())
+				"FFmpeg's libavcodec: " + QString::number(avcodec_version())
+#ifndef OS_MACOSX
+				+ eol + "PortAudio: " + QString(Pa_GetVersionText())
+#endif
 				);
 }
