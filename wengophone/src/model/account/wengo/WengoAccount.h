@@ -21,8 +21,8 @@
 #define OWWENGOACCOUNT_H
 
 #include <model/account/SipAccount.h>
+#include <model/webservices/WengoWebService.h>
 
-#include <http/HttpRequest.h>
 #include <thread/Timer.h>
 #include <util/Event.h>
 
@@ -34,12 +34,13 @@ class NetworkObserver;
  * @ingroup model
  * @author Tanguy Krotoff
  * @author Philippe Bernery
+ * @author Mathieu Stute
  */
-class WengoAccount : public SipAccount {
+class WengoAccount : public SipAccount, public WengoWebService {
 
 	friend class WengoAccountXMLSerializer;
 
-	friend class WengoAccountParser; 
+	friend class WengoAccountParser;
 
 public:
 
@@ -79,7 +80,7 @@ private:
 
 	void wengoLoginEventHandler();
 
-	void answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error);
+	void answerReceived(const std::string & answer, int requestId);
 
 	void ssoTimeoutEventHandler();
 
