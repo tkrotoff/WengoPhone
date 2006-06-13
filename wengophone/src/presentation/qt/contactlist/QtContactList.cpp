@@ -41,7 +41,7 @@
 #include <qtutil/MouseEventFilter.h>
 
 #include <QPixmap>
-#include <QtreeWidget>
+#include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QString>
 
