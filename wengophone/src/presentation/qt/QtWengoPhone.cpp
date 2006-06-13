@@ -450,9 +450,7 @@ void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall) 
 }
 
 void QtWengoPhone::logoff(){
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->disconnect();
-	}
+	_cWengoPhone.getCUserProfileHandler().setCurrentUserProfile(String::null);
 }
 
 void QtWengoPhone::addToConference(PhoneCall * sourceCall, PhoneCall * targetCall){
@@ -627,7 +625,10 @@ void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFi
 }
 
 void QtWengoPhone::showWengoAccount() {
-	WsUrl::showWengoAccount();
+	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
+		//FIXME: should not be called when no UserProfile set
+		WsUrl::showWengoAccount();
+	}
 }
 
 void QtWengoPhone::editMyProfile() {
@@ -701,7 +702,7 @@ void QtWengoPhone::showSms() {
 }
 
 void QtWengoPhone::showSearchContactWindows() {
-	if( _qtWsDirectory ) {
+	if (_qtWsDirectory) {
 		_qtWsDirectory->show();
 	}
 }
@@ -1085,26 +1086,30 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
 	_qtTrayIcon->setTrayMenu();
 }
-void QtWengoPhone::showHideGroups(){
 
-    Config & config = ConfigManager::getInstance().getCurrentConfig();
-    bool showHide = config.getShowGroups();
-    if ( showHide ){
-        config.set(Config::GENERAL_SHOW_GROUPS_KEY,false);
-        _contactList->showHideGroups();
-    } else {
-        config.set(Config::GENERAL_SHOW_GROUPS_KEY,true);
-        _contactList->showHideGroups();
-    }
+void QtWengoPhone::showHideGroups() {
+	if (_contactList) {
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		bool showHide = config.getShowGroups();
+		if (showHide) {
+			config.set(Config::GENERAL_SHOW_GROUPS_KEY,false);
+			_contactList->showHideGroups();
+		} else {
+			config.set(Config::GENERAL_SHOW_GROUPS_KEY,true);
+			_contactList->showHideGroups();
+		}
+	}
 }
 
 void QtWengoPhone::showHideOffLineContacts() {
-    Config & config = ConfigManager::getInstance().getCurrentConfig();
-    bool showHide = config.getShowOfflineContacts();
-    if ( showHide ){
-        config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY,false);
-    } else {
-        config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY,true);
-    }
-	_contactList->hideOffLineUser();
+	if (_contactList) {
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		bool showHide = config.getShowOfflineContacts();
+		if (showHide) {
+			config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY,false);
+		} else {
+			config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY,true);
+		}
+		_contactList->hideOffLineUser();
+	}
 }

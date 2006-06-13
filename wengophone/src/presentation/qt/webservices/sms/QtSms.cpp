@@ -43,6 +43,7 @@ QtSms::QtSms(CSms & cSms)
 
 QtSms::~QtSms() {
 	//TODO: unregister events, delete created objects
+	_qtWengoPhone->setSms(NULL);
 }
 
 void QtSms::initThreadSafe() {

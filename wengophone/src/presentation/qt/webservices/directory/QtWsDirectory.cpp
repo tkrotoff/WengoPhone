@@ -68,6 +68,7 @@ void QtWsDirectory::initThreadSafe() {
 }
 
 QtWsDirectory::~QtWsDirectory() {
+	_qtWengoPhone->setWsDirectory(NULL);
 	delete _ui;
 }
 

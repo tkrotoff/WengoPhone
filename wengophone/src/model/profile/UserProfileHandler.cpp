@@ -147,7 +147,12 @@ void UserProfileHandler::setCurrentUserProfile(const std::string & name) {
 				initializeCurrentUserProfile();
 			}
 		} else {
-			noCurrentUserProfileSetEvent(*this);
+			if (_currentUserProfile && name.empty()) {
+				_desiredUserProfile = NULL;
+				currentUserProfileWillDieEvent(*this);
+			} else {
+				noCurrentUserProfileSetEvent(*this);
+			}
 		}
 	}
 }
