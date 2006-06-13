@@ -23,9 +23,11 @@
 #include "ui_WengoPhoneWindow.h"
 
 #include <presentation/PFactory.h>
+#include <presentation/qt/profile/QtUserProfileHandler.h>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
 #include <model/account/wengo/WengoAccount.h>
 #include <model/connect/ConnectHandler.h>
@@ -202,9 +204,6 @@ void QtWengoPhone::initThreadSafe() {
 	//actionShowWengoAccount
 	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
 
-	//actionOpenWengoAccount
-	//connect(_ui->actionOpenWengoAccount, SIGNAL(triggered()), SLOT(openWengoAccount()));
-
 	//actionEditMyProfile
 	connect(_ui->actionEditMyProfile, SIGNAL(triggered()), SLOT(editMyProfile()));
 
@@ -272,7 +271,9 @@ void QtWengoPhone::initThreadSafe() {
 	connect(_ui->actionSearchWengoUsers, SIGNAL(triggered()), SLOT(showSearchContactWindows()));
 
 	//actionChangeProfile
-	connect(_ui->actionChangeProfile, SIGNAL(triggered()), SLOT(showLoginWindow()));
+	QtUserProfileHandler * qtUserProfileHandler =
+		dynamic_cast<QtUserProfileHandler *>(_cWengoPhone.getCUserProfileHandler().getPresentation());
+	connect(_ui->actionChangeProfile, SIGNAL(triggered()), qtUserProfileHandler, SLOT(showLoginWindow()));
 
 	//actionLog_off
 	connect(_ui->actionLogOff, SIGNAL(triggered()), SLOT(logoff()));
@@ -627,10 +628,6 @@ void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFi
 
 void QtWengoPhone::showWengoAccount() {
 	WsUrl::showWengoAccount();
-}
-
-void QtWengoPhone::openWengoAccount() {
-	//showLoginWindow();
 }
 
 void QtWengoPhone::editMyProfile() {

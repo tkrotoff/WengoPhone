@@ -65,18 +65,6 @@ public:
 	 */
 	void wengoAccountNotValidEventHandler(const WengoAccount & wengoAccount);
 
-	/**
-	 * Show the Profile chooser window.
-	 */
-	void showLoginWindow();
-
-	/**
-	 * Show the Profile chooser window with the given WengoAccount.
-	 *
-	 * Used by QtSubscribe2.
-	 */
-	void showLoginWindowWithWengoAccount(const WengoAccount & wengoAccount);
-
 Q_SIGNALS:
 
 	/**
@@ -98,6 +86,20 @@ Q_SIGNALS:
 	 * @see wengoAccountNotValidEventHandler
 	 */
 	void wengoAccountNotValidEventHandlerSignal(WengoAccount wengoAccount);
+
+public Q_SLOTS:
+
+	/**
+	 * Show the Profile chooser window.
+	 */
+	void showLoginWindow();
+
+	/**
+	 * Show the Profile chooser window with the given WengoAccount.
+	 *
+	 * Used by QtSubscribe2.
+	 */
+	void showLoginWindowWithWengoAccount(const WengoAccount & wengoAccount);
 
 private Q_SLOTS:
 
