@@ -3,7 +3,7 @@
 
 args = {
 	#if 1 then WengoPhoneBuildId is not generated
-	'nobuildid' : 0,
+	'nobuildid' : 1,
 
 	'enable-video' : 1,
 	'enable-ssl' : 1,

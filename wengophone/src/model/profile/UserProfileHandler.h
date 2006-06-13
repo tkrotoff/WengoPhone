@@ -155,6 +155,11 @@ public:
 
 private:
 
+	/**
+	 * Initializes the current UserProfile.
+	 */
+	void initializeCurrentUserProfile();
+
 	/*
 	 * @see Profile::profileChangedEvent
 	 */

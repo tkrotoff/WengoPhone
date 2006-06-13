@@ -86,16 +86,6 @@ public:
 
 	WengoPhone();
 
-
-	/**
-	 * FIXME
-	 * This is a hack needed by WsUrl::openWengoUrlWithAuth()
-	 * A better solution (elegant solution) has to find.
-	 * Please check WsUrl::openWengoUrlWithAuth() and if you have
-	 * a solution to this problem, just do it.
-	 */
-	static WengoPhone * instance;
-
 	~WengoPhone();
 
 	/**

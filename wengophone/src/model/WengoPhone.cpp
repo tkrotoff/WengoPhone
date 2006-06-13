@@ -35,9 +35,6 @@
 
 #include <sstream>
 
-//FIXME hack
-WengoPhone * WengoPhone::instance = NULL;
-
 WengoPhone::WengoPhone()
 	: _userProfileHandler(*this) {
 	
@@ -45,9 +42,6 @@ WengoPhone::WengoPhone()
 	_running = false;
 	_wsSubscribe = NULL;
 	_importer = NULL;
-
-	//FIXME hack
-	instance = this;
 
 	//set HttpRequest User Agent
 	std::stringstream ss;

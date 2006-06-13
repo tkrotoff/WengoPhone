@@ -24,6 +24,7 @@
 #include <model/config/Config.h>
 #include <model/profile/UserProfile.h>
 #include <model/profile/UserProfileFileStorage.h>
+#include <model/webservices/url/WsUrl.h>
 
 #include <util/File.h>
 #include <util/Logger.h>
@@ -42,6 +43,7 @@ UserProfileHandler::~UserProfileHandler() {
 	if (_currentUserProfile) {
 		_currentUserProfile->disconnect();
 		saveUserProfile(*_currentUserProfile);
+		WsUrl::setWengoAccount(NULL);
 		delete _currentUserProfile;
 	}
 }
@@ -142,15 +144,7 @@ void UserProfileHandler::setCurrentUserProfile(const std::string & name) {
 			} else {
 				LOG_DEBUG("No current UserProfile set. Change now");
 				_currentUserProfile = result;
-				_currentUserProfile->profileChangedEvent +=
-					boost::bind(&UserProfileHandler::profileChangedEventHandler, this, _1);
-
-				_currentUserProfile->init();
-				userProfileInitializedEvent(*this, *_currentUserProfile);
-
-				_currentUserProfile->connect();
-
-				setLastUsedUserProfile(*_currentUserProfile);
+				initializeCurrentUserProfile();
 			}
 		} else {
 			noCurrentUserProfileSetEvent(*this);
@@ -166,6 +160,7 @@ void UserProfileHandler::setLastUsedUserProfile(const UserProfile & userProfile)
 void UserProfileHandler::currentUserProfileReleased() {
 	if (_currentUserProfile) {
 		saveUserProfile(*_currentUserProfile);
+		WsUrl::setWengoAccount(NULL);
 		delete _currentUserProfile;
 		_currentUserProfile = NULL;
 	}
@@ -175,17 +170,21 @@ void UserProfileHandler::currentUserProfileReleased() {
 		LOG_DEBUG("Old UserProfile killed. Setting the new one");
 		_currentUserProfile = _desiredUserProfile;
 		_desiredUserProfile = NULL;
-
-		_currentUserProfile->profileChangedEvent +=
-			boost::bind(&UserProfileHandler::profileChangedEventHandler, this, _1);
-
-		_currentUserProfile->init();
-		userProfileInitializedEvent(*this, *_currentUserProfile);
-
-		_currentUserProfile->connect();
-
-		setLastUsedUserProfile(*_currentUserProfile);
+		initializeCurrentUserProfile();
 	}
+}
+
+void UserProfileHandler::initializeCurrentUserProfile() {
+	_currentUserProfile->profileChangedEvent +=
+		boost::bind(&UserProfileHandler::profileChangedEventHandler, this, _1);
+
+	_currentUserProfile->init();
+	WsUrl::setWengoAccount(_currentUserProfile->getWengoAccount());
+	userProfileInitializedEvent(*this, *_currentUserProfile);
+
+	_currentUserProfile->connect();
+
+	setLastUsedUserProfile(*_currentUserProfile);
 }
 
 void UserProfileHandler::init() {

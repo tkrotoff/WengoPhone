@@ -21,10 +21,8 @@
 
 #include <WengoPhoneBuildId.h>
 
-#include <model/WengoPhone.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
-#include <model/phoneline/IPhoneLine.h>
 #include <model/account/wengo/WengoAccount.h>
 
 #include <util/WebBrowser.h>
@@ -42,6 +40,8 @@ static const std::string URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php
 static const std::string URL_WENGO_BUYWENGOS = "https://www.wengo.fr/auth/auth.php?page=reload";
 static const std::string URL_WENGO_DOWNLOAD = "http://www.wengo.fr/public/public.php?page=download";
 
+WengoAccount * WsUrl::_wengoAccount = NULL;
+
 void WsUrl::openWengoUrlWithoutAuth(const std::string & url) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string language = config.getLanguage();
@@ -56,36 +56,21 @@ void WsUrl::openWengoUrlWithoutAuth(const std::string & url) {
 }
 
 void WsUrl::openWengoUrlWithAuth(const std::string & url) {
-	//FIXME hack with WengoPhone::instance
-	if (!WengoPhone::instance) {
-		LOG_ERROR("WengoPhone instance not available");
-		return;
-	}
+	if (_wengoAccount) {
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		std::string language = config.getLanguage();
 
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	std::string language = config.getLanguage();
-
-	//FIXME hack with WengoPhone::instance
-	/*
-	IPhoneLine * activePhoneLine = WengoPhone::instance->getCurrentUserProfile().getActivePhoneLine();
-	if (activePhoneLine) {
-		const SipAccount & account = activePhoneLine->getSipAccount();
-
-		if (account.getType() == SipAccount::SipAccountTypeWengo) {
-			const WengoAccount & wengoAccount = dynamic_cast<const WengoAccount &>(account);
-
-			//Tune the url for Wengo, with authentication
-			std::string finalUrl = url;
-			finalUrl += "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME);
-			finalUrl += "&lang=" + language;
-			finalUrl += "&login=" + wengoAccount.getWengoLogin();
-			finalUrl += "&password=" + wengoAccount.getWengoPassword();
-
+		//Tune the url for Wengo, with authentication
+		std::string finalUrl = url;
+		finalUrl += "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME);
+		finalUrl += "&lang=" + language;
+		finalUrl += "&login=" + _wengoAccount->getWengoLogin();
+		finalUrl += "&password=" + _wengoAccount->getWengoPassword();
 			WebBrowser::openUrl(finalUrl);
-			LOG_DEBUG("url opened=" + finalUrl);
-		}
+		LOG_DEBUG("url opened=" + finalUrl);
+	} else {
+		LOG_FATAL("No WengoAccount set. This method should not be called");
 	}
-	*/
 }
 
 void WsUrl::showWengoAccount() {

@@ -167,6 +167,8 @@ public:
 
 	UserProfile();
 
+	virtual ~UserProfile();
+
 	/**
 	 * Initializes the UserProfile.
 	 */
@@ -188,8 +190,6 @@ public:
 	 * Disconnects all accounts.
 	 */
 	void disconnect();
-
-	virtual ~UserProfile();
 
 	/** List of IPhoneLine. */
 	typedef List < IPhoneLine * > PhoneLines;

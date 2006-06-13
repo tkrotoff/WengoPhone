@@ -24,6 +24,8 @@
 
 #include <string>
 
+class WengoAccount;
+
 /**
  * Helper class that stores all the url related to Wengo.
  *
@@ -38,6 +40,7 @@
  * @author Tanguy Krotoff
  */
 class WsUrl : NonCopyable {
+	friend class UserProfileHandler;
 public:
 
 	/**
@@ -105,6 +108,14 @@ private:
 	 * @param url the url to open
 	 */
 	static void openWengoUrlWithAuth(const std::string & url);
+
+	/**
+	 * Sets the value of _wengoAccount.
+	 */
+	static void setWengoAccount(WengoAccount * wengoAccount) { _wengoAccount = wengoAccount; }
+
+	/** Link to the current WengoAccount. */
+	static WengoAccount * _wengoAccount;
 };
 
 #endif	//OWWSURL_H
