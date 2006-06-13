@@ -66,7 +66,7 @@ void WengoWebService::setWengoAuthentication(bool auth) {
 }
 
 int WengoWebService::sendRequest() {
-	HttpRequest * httpRequest = new HttpRequest(); //FIXME: memory leak
+	HttpRequest * httpRequest = new HttpRequest();
 	httpRequest->answerReceivedEvent += boost::bind(&WengoWebService::answerReceivedEventHandler, this, _1, _2, _3, _4);
 	return httpRequest->sendRequest(_https, _hostname, _port, _servicePath, _parameters, _get);
 }
@@ -91,7 +91,11 @@ int WengoWebService::call(WengoWebService * caller) {
 		data += "&login=" + login + "&password=" + password;
 	}
 
-	_parameters = data + "&" + _parameters;
+	if(!_parameters.empty()) {
+		_parameters = data + "&" + _parameters;
+	} else {
+		_parameters = data;
+	}
 
 	return sendRequest();
 }
@@ -104,5 +108,6 @@ void WengoWebService::answerReceivedEventHandler(IHttpRequest * sender, int requ
 			_caller->answerReceived(String::null, requestId);
 		}
 	}
-	//FIXME (crashes on Linux/MacOS X): delete sender;
+
+	delete sender;
 }
