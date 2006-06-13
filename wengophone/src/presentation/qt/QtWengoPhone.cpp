@@ -199,7 +199,7 @@ void QtWengoPhone::initThreadSafe() {
 
 	//Systray
     _qtTrayIcon = new QtTrayIcon(this);
-	connect(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )), _qtTrayIcon, SLOT(setSystrayIcon(QVariant )));
+
 
 	//actionShowWengoAccount
 	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
@@ -1075,6 +1075,7 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 		*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
 		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getConnectHandler(),
 		_ui->profileBar);
+    connect(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )), _qtTrayIcon, SLOT(setSystrayIcon(QVariant )));
 	connect(_qtLanguage, SIGNAL(translationChangedSignal()), _qtProfileBar, SLOT(slotTranslationChanged()));
 
 	//Add the profile bar
