@@ -26,64 +26,60 @@ class QtWengoPhone;
 class TrayIcon;
 
 class QtTrayIcon : public QObject {
-
-    Q_OBJECT
-
+	Q_OBJECT
 public:
 
-    QtTrayIcon (QObject * parent = 0);
+	QtTrayIcon(QObject * parent);
 
-    QMenu * createStatusMenu();
+	QMenu * createStatusMenu();
 
-    void updateCallMenu();
+	void updateCallMenu();
 
 public Q_SLOTS:
 
-    void setTrayMenu();
+	void setTrayMenu();
 
-    void setSystrayIcon(QVariant status);
+	void setSystrayIcon(QVariant status);
 
-    void sysTrayDoubleClicked(const QPoint& );
+	void sysTrayDoubleClicked(const QPoint& );
 
-    void hide();
+	void hide();
 
-    void slotSystrayMenuCallWengo(QAction * action);
+	void slotSystrayMenuCallWengo(QAction * action);
 
-    void slotSystrayMenuCallMobile(QAction * action);
+	void slotSystrayMenuCallMobile(QAction * action);
 
-    void slotSystrayMenuCallLandLine(QAction * action);
+	void slotSystrayMenuCallLandLine(QAction * action);
 
-    void slotSystrayMenuStartChat(QAction * action);
+	void slotSystrayMenuStartChat(QAction * action);
 
-    void slotSystrayMenuSendSms(QAction * action);
+	void slotSystrayMenuSendSms(QAction * action);
 
-protected:
+private:
 
-    QMenu * createCallWengoTrayMenu();
+	QMenu * createCallWengoTrayMenu();
 
-    QMenu * createCallMobileTrayMenu();
+	QMenu * createCallMobileTrayMenu();
 
-    QMenu * createCallLandLineTrayMenu();
+	QMenu * createCallLandLineTrayMenu();
 
-    QtWengoPhone * _qtWengoPhone;
+	QtWengoPhone * _qtWengoPhone;
 
-    QMenu * _trayMenu;
+	QMenu * _trayMenu;
 
-    QMenu * _callMenu;
+	QMenu * _callMenu;
 
-    QMenu * _sendSmsMenu;
+	QMenu * _sendSmsMenu;
 
-    QMenu * _startChatMenu;
+	QMenu * _startChatMenu;
 
-    QMenu * _callWengoMenu;
+	QMenu * _callWengoMenu;
 
-    QMenu * _callMobileMenu;
+	QMenu * _callMobileMenu;
 
-    QMenu * _callLandLineMenu;
+	QMenu * _callLandLineMenu;
 
-    TrayIcon * _trayIcon;
-
+	TrayIcon * _trayIcon;
 };
 
-#endif
-
+#endif	//OWQTTRAYICON_H

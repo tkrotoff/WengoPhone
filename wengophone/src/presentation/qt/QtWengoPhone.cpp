@@ -862,7 +862,8 @@ void QtWengoPhone::phoneComboBoxClicked() {
 			HistoryMemento * memento = (*it).second;
 			SipAddress sipAddress(memento->getPeer());
 
-			switch(memento->getState()) {
+			HistoryMemento::State state = memento->getState();
+			switch(state) {
 				case HistoryMemento::IncomingCall:
 					_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/call_incoming.png")),
 						QString::fromStdString(sipAddress.getUserName()));
@@ -892,7 +893,7 @@ void QtWengoPhone::phoneComboBoxClicked() {
 				case HistoryMemento::Any:
 					break;
 				default:
-					LOG_FATAL("Unknown HistoryMemento::state");
+					LOG_FATAL("unknown HistoryMemento state=" + String::fromNumber(state));
 			}
 		}
 	}

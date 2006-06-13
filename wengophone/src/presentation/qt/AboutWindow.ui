@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>362</width>
-    <height>369</height>
+    <width>410</width>
+    <height>333</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -36,17 +36,11 @@
         <number>6</number>
        </property>
        <item row="3" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
+        <widget class="QLabel" name="versionLabel" >
+         <property name="enabled" >
+          <bool>false</bool>
          </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
        <item row="2" column="0" >
         <widget class="QLabel" name="licenseLabel" >
@@ -72,6 +66,19 @@ of the License, or (at your option) any later version.</string>
          </property>
         </widget>
        </item>
+       <item row="4" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="authorsTab" >
@@ -96,6 +103,16 @@ of the License, or (at your option) any later version.</string>
      </widget>
     </widget>
    </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="pixmap" >
+      <pixmap resource="wengophone.qrc" >:/pics/wengo.png</pixmap>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignHCenter</set>
+     </property>
+    </widget>
+   </item>
    <item row="2" column="0" >
     <layout class="QHBoxLayout" >
      <property name="margin" >
@@ -108,9 +125,6 @@ of the License, or (at your option) any later version.</string>
       <widget class="QLabel" name="wengoPhoneBuildIdStringLabel" >
        <property name="enabled" >
         <bool>false</bool>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
       </widget>
      </item>
@@ -135,16 +149,6 @@ of the License, or (at your option) any later version.</string>
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="pixmap" >
-      <pixmap resource="wengophone.qrc" >:/pics/wengo.png</pixmap>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignHCenter</set>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

@@ -27,6 +27,16 @@
 
 #include <QtGui>
 
+#include <curl/curl.h>
+#include <portaudio.h>
+#include <boost/version.hpp>
+#include <avcodec.h>
+#include <tinyxml.h>
+extern "C" {
+#include <glib.h>
+#include <gaim/core.h>
+}
+
 QtAbout::QtAbout(QWidget * parent) {
 	_aboutDialog = new QDialog(parent);
 
@@ -46,4 +56,14 @@ QtAbout::QtAbout(QWidget * parent) {
 	} else {
 		LOG_ERROR("couldn't locate file=" + file.fileName().toStdString());
 	}
+
+	QString eol = QString::fromStdString(String::EOL);
+	_ui->versionLabel->setText("Qt: " + QString(qVersion()) + eol +
+				"Boost: " + QString(BOOST_LIB_VERSION) + eol +
+				"Gaim: " + QString(gaim_core_get_version()) + eol +
+				"cURL: " + QString(curl_version()) + eol +
+				"TinyXML: " + QString::number(TIXML_MAJOR_VERSION) + "." + QString::number(TIXML_MINOR_VERSION) + "." + QString::number(TIXML_PATCH_VERSION) + eol +
+				"FFmpeg's libavcodec: " + QString::number(avcodec_version()) + eol +
+				"PortAudio: " + QString(Pa_GetVersionText())
+				);
 }
