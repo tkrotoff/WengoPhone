@@ -86,7 +86,7 @@ public Q_SLOTS:
 
 	void showAllUsers();
 
-	void sortUsers();
+	void sortUsers(bool bypassTimer = false);
 
 	void startChat(bool checked);
 
@@ -114,15 +114,9 @@ Q_SIGNALS:
 
 protected:
 
-	void safeRemoveContact(const QString & contactId);
-
 	void safeUserStateChanged();
 
 	void safeHideOffLineUsers();
-
-	void safeSortUsers(bool bypassTimer = false);
-
-	void safeShowAllUsers();
 
 	void safeHideGroup();
 

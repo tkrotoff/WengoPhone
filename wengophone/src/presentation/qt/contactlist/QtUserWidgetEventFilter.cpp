@@ -28,7 +28,7 @@ QtUserWidgetEventFilter::QtUserWidgetEventFilter(QObject * parent, QWidget * tar
 bool QtUserWidgetEventFilter::eventFilter(QObject * obj, QEvent * event) {
 	switch (event->type()) {
 		case QEvent::Paint:
-			paintEvent(dynamic_cast < QPaintEvent * > (event));
+			paintEvent(dynamic_cast <QPaintEvent *> (event));
 			return true;
 		default:
 			return QObject::eventFilter(obj, event);
@@ -79,43 +79,6 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter, QRect rect) {
 	painter->setFont(font);
 
 	int _iconsStartPosition;
-
-/*
-	x=rect.width()-1;
-	if ( _user->getStatus() != QtContactPixmap::ContactOffline)
-	{
-		px = spx->getPixmap(QtContactPixmap::ContactVideo);
-		if (_user->hasVideo())
-		{
-			x-=px.width();
-			painter->drawPixmap (x,r.top(),px);
-		}
-		else
-			x-=px.width();
-		px = spx->getPixmap(QtContactPixmap::ContactCall);
-		if (_user->hasCall())
-		{
-			x-=px.width();
-			painter->drawPixmap (x,r.top(),px);
-		}
-		else
-			x-=px.width();
-
-		px = spx->getPixmap(QtContactPixmap::ContactIM);
-		if (_user->hasIM())
-		{
-			px = spx->getPixmap(QtContactPixmap::ContactIM);
-			x-=px.width();
-			painter->drawPixmap (x,r.top(),px);
-		}
-		else
-			x-=px.width();
-		_iconsStartPosition = x;
-	}
-	else
-		_iconsStartPosition = x;
-
-*/
 
 	_iconsStartPosition = 10000;
 }

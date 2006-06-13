@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef UserTreeEventManager_H
-#define UserTreeEventManager_H
+#ifndef OWQTUSERTREEEVENTMANAGER_H
+#define OWQTUSERTREEEVENTMANAGER_H
 
 #include <QtGui>
 
@@ -27,57 +27,54 @@ class CContactList;
 /**
  * Events manager for QTreeWidget
  *
- * Graphical representation of a Contact: permits to the user
- * to enter the name, phone numbers, address... of a Contact.
- *
+ * @author Mr K
  */
-class UserTreeEventManager : public QObject {
-	Q_OBJECT
+class QtUserTreeEventManager : public QObject {
+    Q_OBJECT
 public :
 
-	UserTreeEventManager(CContactList & cContactList, QObject * parent = 0, QTreeWidget * target = 0);
+    QtUserTreeEventManager(CContactList & cContactList, QObject * parent = 0, QTreeWidget * target = 0);
 
 public Q_SLOTS :
-	void timerTimeout();
+    void timerTimeout();
 
 Q_SIGNALS:
 
-	void itemEntered(QTreeWidgetItem * item);
+    void itemEntered(QTreeWidgetItem * item);
 
-	void itemTimeout(QTreeWidgetItem * item);
+    void itemTimeout(QTreeWidgetItem * item);
 
-	void mouseClicked(Qt::MouseButton button);
+    void mouseClicked(Qt::MouseButton button);
 
 protected:
 
-	bool eventFilter(QObject * obj, QEvent * event);
-	virtual void mousePressEvent(QMouseEvent * event);
-	virtual void mouseMoveEvent(QMouseEvent * event);
-	virtual void dragEnterEvent(QDragEnterEvent * event);
-	virtual void dropEvent(QDropEvent * event);
-	virtual void dragMoveEvent(QDragMoveEvent * event);
-	virtual void mouseReleaseEvent(QMouseEvent * event);
-	virtual void mouseDlbClick(QMouseEvent * event);
+    bool eventFilter(QObject * obj, QEvent * event);
 
-	/* The QTreeWidget */
+    virtual void mousePressEvent(QMouseEvent * event);
 
-	QTreeWidget * _tree;
+    virtual void mouseMoveEvent(QMouseEvent * event);
 
-	/* Start position for drag action */
+    virtual void dragEnterEvent(QDragEnterEvent * event);
 
-	QPoint _dstart;
+    virtual void dropEvent(QDropEvent * event);
 
-	/* The selected item in the QTreeWidget */
+    virtual void dragMoveEvent(QDragMoveEvent * event);
 
-	QTreeWidgetItem * _selectedItem;
+    virtual void mouseReleaseEvent(QMouseEvent * event);
 
-	QTreeWidgetItem * _entered;
+    QTreeWidget * _tree;
 
-	QTimer _timer;
+    QPoint _dstart;
 
-	bool _inDrag;
+    QTreeWidgetItem * _selectedItem;
 
-	CContactList & _cContactList;
+    QTreeWidgetItem * _entered;
+
+    QTimer _timer;
+
+    bool _inDrag;
+
+    CContactList & _cContactList;
 };
 
-#endif
+#endif // OWQTUSERTREEEVENTMANAGER_H

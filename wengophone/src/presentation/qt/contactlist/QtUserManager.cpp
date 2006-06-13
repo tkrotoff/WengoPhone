@@ -76,14 +76,14 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
 
     QtUserList::getInstance()->setTreeWidget(target);
     target->setMouseTracking(true);
-    UserTreeEventManager * dnd = new UserTreeEventManager(qtContactList.getCContactList(), this, target);
+    QtUserTreeEventManager * qtUserTreeEventManager = new QtUserTreeEventManager(qtContactList.getCContactList(), this, target);
     QtUserTreeEventFilter * keyFilter = new QtUserTreeEventFilter(this, target);
 
     connect(target, SIGNAL(itemSelectionChanged()), this, SLOT(treeViewSelectionChanged()));
     connect(target, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(itemClicked(QTreeWidgetItem *, int)));
-    connect(dnd, SIGNAL(itemEntered(QTreeWidgetItem *)), this, SLOT(itemEntered(QTreeWidgetItem *)));
-    connect(dnd, SIGNAL(itemTimeout(QTreeWidgetItem *)), this, SLOT(openUserInfo(QTreeWidgetItem *)));
-    connect(dnd, SIGNAL(mouseClicked(Qt::MouseButton)), SLOT(setMouseButton(Qt::MouseButton)));
+    connect(qtUserTreeEventManager, SIGNAL(itemEntered(QTreeWidgetItem *)), this, SLOT(itemEntered(QTreeWidgetItem *)));
+    connect(qtUserTreeEventManager, SIGNAL(itemTimeout(QTreeWidgetItem *)), this, SLOT(openUserInfo(QTreeWidgetItem *)));
+    connect(qtUserTreeEventManager, SIGNAL(mouseClicked(Qt::MouseButton)), SLOT(setMouseButton(Qt::MouseButton)));
 
     connect(keyFilter, SIGNAL(openItem(QTreeWidgetItem *)), SLOT(openUserInfo(QTreeWidgetItem *)));
     connect(keyFilter, SIGNAL(closeItem(QTreeWidgetItem *)), SLOT(closeUserInfo()));
@@ -93,7 +93,7 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
     QtWengoPhone * qtWengoPhone = dynamic_cast < QtWengoPhone * > (_cWengoPhone.getPresentation());
 
     if (!connect(this, SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
-    qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)))) {
+        qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)))) {
        LOG_DEBUG("Unable to connect signal\n");
     }
 
@@ -350,7 +350,7 @@ void QtUserManager::safeUserStateChanged() {
         delete _menu;
         _menu=NULL;
     }
-	safeShowAllUsers();
+	showAllUsers();
 }
 
 void QtUserManager::userStateChanged() {
@@ -372,19 +372,18 @@ void QtUserManager::hideGroups(){
     Config & config = ConfigManager::getInstance().getCurrentConfig();
     _hideGroups = config.getShowGroups();
 	if ( _hideGroups ){
-	    safeShowAllUsers();
+	    showAllUsers();
 	}
 	else{
 	    safeHideGroup();
 	}
 }
 
-
-void QtUserManager::safeHideGroup(){
-    safeShowAllUsers();
+void QtUserManager::safeHideGroup() {
+    showAllUsers();
 }
 
-void QtUserManager::safeSortUsers(bool bypassTimer) {
+void QtUserManager::sortUsers(bool bypassTimer) {
 
 	if (!_sortUsers)
 		return;
@@ -485,14 +484,17 @@ void QtUserManager::safeSortUsers(bool bypassTimer) {
 	QCoreApplication::processEvents();
 }
 
-void QtUserManager::sortUsers() {
-	//QMutexLocker lock(&_mutex);
-	_sortUsers = true;
-	safeSortUsers();
+bool QtUserManager::canShowUser(const ContactProfile * cprofile){
+    if (_hideUsers){
+        if (cprofile->getPresenceState() == EnumPresenceState::PresenceStateOffline )
+            return false;
+        if (cprofile->getPresenceState() == EnumPresenceState::PresenceStateUnknown)
+            return false;
+    }
+    return true;
 }
 
-void QtUserManager::safeShowAllUsers() {
-
+void QtUserManager::showAllUsers() {
     if (_canShow){
         _canShow=false;
         if (_showTimerId != -1)
@@ -552,24 +554,7 @@ void QtUserManager::safeShowAllUsers() {
             ul->addUser(user);
         }
     }
-    safeSortUsers(true);
-    //_tree->doItemsLayout();
-}
-
-
-bool QtUserManager::canShowUser(const ContactProfile * cprofile){
-    if (_hideUsers){
-        if (cprofile->getPresenceState() == EnumPresenceState::PresenceStateOffline )
-            return false;
-        if (cprofile->getPresenceState() == EnumPresenceState::PresenceStateUnknown)
-            return false;
-    }
-    return true;
-}
-
-void QtUserManager::showAllUsers() {
-	//QMutexLocker lock(&_mutex);
-	safeShowAllUsers();
+    sortUsers(true);
 }
 
 QMenu * QtUserManager::createConferenceMenu() {
@@ -742,12 +727,6 @@ void QtUserManager::startWengoCall(bool checked) {
 }
 
 void QtUserManager::removeContact(const QString & contactId) {
-
-	QMutexLocker lock(& _mutex);
-	safeRemoveContact(contactId);
-}
-
-void QtUserManager::safeRemoveContact(const QString & contactId) {
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user = NULL;
 	bool found = false;
@@ -827,12 +806,10 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 			_qtContactList.contactGroupAddedEventSlot(dstContactGroupId);
 			list = _tree->findItems(dstContactGroupId, Qt::MatchExactly);
 		}
-
 		QTreeWidgetItem * newContact = NULL;
 		newContact = new QTreeWidgetItem(list[0]);
 		newContact->setText(0, contactId);
 		newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
-		////
 	}
 }
 
@@ -843,7 +820,7 @@ void QtUserManager::timerEvent ( QTimerEvent * event ) {
         _sortTimerId = -1;
         _canSort = true;
         if ( _wantSort ) {
-            safeSortUsers(true);
+            sortUsers(true);
             _wantSort = false;
         }
         return;
@@ -854,7 +831,7 @@ void QtUserManager::timerEvent ( QTimerEvent * event ) {
         _showTimerId = -1;
         _canShow = true;
         if ( _wantShow ) {
-            safeShowAllUsers();
+            showAllUsers();
             _wantShow = false;
         }
         return;
