@@ -20,24 +20,23 @@
 #ifndef GAIMIMCHAT_H
 #define GAIMIMCHAT_H
 
-//#include "GaimIMFactory.h"
-
-#include <imwrapper/IMAccount.h>
 #include <imwrapper/IMChat.h>
-#include <imwrapper/IMChatSession.h>
-#include <imwrapper/IMContactSet.h>
+
+class IMAccount;
+class IMChatSession;
+class IMContactSet;
 
 extern "C" {
 #include <gaim/connection.h>
 }
 
-typedef struct	mConvInfo_s
+typedef struct mConvInfo_s
 {
-	void		*conv_session;
-	int			conv_id;
-	void		*gaim_conv_session;
-	GList		*pending_invit;
-}				mConvInfo_t;
+	void *conv_session;
+	int conv_id;
+	void *gaim_conv_session;
+	GList *pending_invit;
+} mConvInfo_t;
 
 /**
  * Gaim IM chat.

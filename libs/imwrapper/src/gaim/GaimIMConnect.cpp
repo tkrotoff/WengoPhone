@@ -19,42 +19,42 @@
 
 #include "GaimIMConnect.h"
 
+#include "GaimEnumIMProtocol.h"
+
 extern "C" {
-#include "gaim/account.h"
-#include "gaim/connection.h"
-#include "gaim/core.h"
+#include <gaim/account.h>
+#include <gaim/connection.h>
+#include <gaim/core.h>
 }
 
-#include "GaimEnumIMProtocol.h"
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMAccountParameters.h>
 
 #include <util/Logger.h>
 
-#define MAIL_NOTIFICATION_KEY			"check-mail"
-
-#define YAHOO_IS_JAPAN_KEY				"yahoojp"
-#define YAHOO_SERVER_KEY				"server"
-#define YAHOO_JAPAN_SERVER_KEY			"serverjp"
-#define YAHOO_PORT_KEY					"port"
-#define YAHOO_XFER_HOST_KEY				"xfer_host"
-#define YAHOO_JAPAN_XFER_HOST_KEY		"xferjp_host"
-#define YAHOO_XFER_PORT_KEY				"xfer_port"
-#define YAHOO_ROOM_LIST_LOCALE_KEY		"room_listlocale"
-#define MSN_SERVER_KEY					"server"
-#define MSN_PORT_KEY					"port"
-#define MSN_USE_HTTP_KEY				"http_method"
-#define OSCAR_SERVER_KEY				"server"
-#define OSCAR_PORT_KEY					"port"
-#define OSCAR_ENCODING_KEY				"encoding"
-#define JABBER_SERVER_KEY				"server"
-#define JABBER_PORT_KEY					"port"
-#define JABBER_RESOURCE_KEY				"resource"
-#define JABBER_USE_TLS_KEY				"use_tls"
-#define JABBER_REQUIRE_TLS_KEY			"require_tls"
-#define JABBER_USE_OLD_SSL_KEY			"old_ssl"
-#define JABBER_AUTH_PLAIN_IN_CLEAR_KEY	"auth_plain_in_clear"
-#define JABBER_CONNECTION_SERVER_KEY	"connect_server"
+static const char * MAIL_NOTIFICATION_KEY = "check-mail";
+static const char * YAHOO_IS_JAPAN_KEY = "yahoojp";
+static const char * YAHOO_SERVER_KEY = "server";
+static const char * YAHOO_JAPAN_SERVER_KEY = "serverjp";
+static const char * YAHOO_PORT_KEY = "port";
+static const char * YAHOO_XFER_HOST_KEY = "xfer_host";
+static const char * YAHOO_JAPAN_XFER_HOST_KEY = "xferjp_host";
+static const char * YAHOO_XFER_PORT_KEY = "xfer_port";
+static const char * YAHOO_ROOM_LIST_LOCALE_KEY = "room_listlocale";
+static const char * MSN_SERVER_KEY = "server";
+static const char * MSN_PORT_KEY = "port";
+static const char * MSN_USE_HTTP_KEY = "http_method";
+static const char * OSCAR_SERVER_KEY = "server";
+static const char * OSCAR_PORT_KEY = "port";
+static const char * OSCAR_ENCODING_KEY = "encoding";
+static const char * JABBER_SERVER_KEY = "server";
+static const char * JABBER_PORT_KEY = "port";
+static const char * JABBER_RESOURCE_KEY = "resource";
+static const char * JABBER_USE_TLS_KEY = "use_tls";
+static const char * JABBER_REQUIRE_TLS_KEY = "require_tls";
+static const char * JABBER_USE_OLD_SSL_KEY = "old_ssl";
+static const char * JABBER_AUTH_PLAIN_IN_CLEAR_KEY = "auth_plain_in_clear";
+static const char * JABBER_CONNECTION_SERVER_KEY = "connect_server";
 
 /*
 int GetTabSize(char **tab)
@@ -82,12 +82,9 @@ GaimIMConnect::~GaimIMConnect()
 
 bool GaimIMConnect::equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol)
 {
-	IMAccount imAccount(login, "", protocol);
+	IMAccount imAccount(login, String::null, protocol);
 
-	if (_imAccount == imAccount)
-		return true;
-	else
-		return false;
+	return (_imAccount == imAccount);
 }
 
 void GaimIMConnect::AddMSNAccountParams(void *gaimAccount, IMAccountParameters &mParams)
@@ -138,10 +135,9 @@ void GaimIMConnect::AddJabberAccountParams(void *gaimAccount, IMAccountParameter
 
 void *GaimIMConnect::CreateAccount()
 {
-	GaimAccount	*gAccount = NULL;
 	char *PrclId = (char *)GaimIMPrcl::GetPrclId(_imAccount.getProtocol());
 
-	gAccount = gaim_account_new(_imAccount.getLogin().c_str(), PrclId);
+	GaimAccount *gAccount = gaim_account_new(_imAccount.getLogin().c_str(), PrclId);
 
 	if (gAccount)
 	{
@@ -185,11 +181,9 @@ void GaimIMConnect::AddAccountParams(void *gaimAccount)
 
 void GaimIMConnect::connect()
 {
-	GaimAccount	*gAccount;
-
-	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
+	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
-	if (gAccount == NULL)
+	if (!gAccount)
 	{
 		if (!(gAccount = (GaimAccount *) CreateAccount()))
 			return;
@@ -206,9 +200,7 @@ void GaimIMConnect::connect()
 
 void GaimIMConnect::disconnect()
 {
-	GaimAccount	*gAccount;
-
-	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
+	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	if (!gAccount)
 		return;
@@ -216,5 +208,4 @@ void GaimIMConnect::disconnect()
 	if (gaim_account_get_enabled(gAccount, gaim_core_get_ui()))
 		gaim_account_set_enabled(gAccount, gaim_core_get_ui(), FALSE);
 	gaim_account_disconnect(gAccount);
-
 }

@@ -18,14 +18,14 @@
  */
 
 #include "GaimIMContactList.h"
-#include "GaimEnumIMProtocol.h"
 
-extern "C" {
-#include "gaim/blist.h"
-}
+#include "GaimEnumIMProtocol.h"
 
 #include <util/Logger.h>
 
+extern "C" {
+#include <gaim/blist.h>
+}
 
 GaimIMContactList::GaimIMContactList(IMAccount & account)
 	: IMContactList(account)
@@ -34,25 +34,21 @@ GaimIMContactList::GaimIMContactList(IMAccount & account)
 
 bool GaimIMContactList::equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol)
 {
-	IMAccount imAccount(login, "", protocol);
+	IMAccount imAccount(login, String::null, protocol);
 
-	if (_imAccount == imAccount)
-		return true;
-	else
-		return false;
+	return (_imAccount == imAccount);
 }
 
 void GaimIMContactList::addContact(const std::string & groupName, const std::string & contactId)
 {
-	GaimGroup *gGroup;
-	GaimBuddy *gBuddy;
-	GaimAccount *gAccount;
-
 	if (contactId.empty())
 		return;
 
-	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
+	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
+
+	GaimGroup *gGroup = NULL;
+	GaimBuddy *gBuddy = NULL;
 	if (gAccount)
 	{
 		if ((gGroup = gaim_find_group(groupName.c_str())) == NULL)
@@ -69,16 +65,14 @@ void GaimIMContactList::addContact(const std::string & groupName, const std::str
 
 void GaimIMContactList::removeContact(const std::string & groupName, const std::string & contactId)
 {
-	GaimGroup *gGroup = NULL;
-	GaimBuddy *gBuddy = NULL;
-	GaimAccount *gAccount = NULL;
-
-	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
+	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
 	if (contactId.empty())
 		return;
 
+	GaimGroup *gGroup = NULL;
+	GaimBuddy *gBuddy = NULL;
 	if (!groupName.empty())
 	{
 		gGroup = gaim_find_group(groupName.c_str());
@@ -136,24 +130,20 @@ void GaimIMContactList::moveContactToGroup(const std::string & newGroupName,
 											const std::string & oldGroupName,
 											const std::string & contactId)
 {
-	GaimAccount *gAccount = NULL;
-	GaimBuddy *gBuddy = NULL;
-	GaimGroup *gOldGroup, *gNewGroup;
-
-	gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
+	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 								GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 	if (!gAccount)
 		return;
 
-	gOldGroup = gaim_find_group(oldGroupName.c_str());
+	GaimGroup *gOldGroup = gaim_find_group(oldGroupName.c_str());
 	if (!gOldGroup)
 		return;
 
-	gBuddy = gaim_find_buddy_in_group(gAccount, contactId.c_str(), gOldGroup);
+	GaimBuddy *gBuddy = gaim_find_buddy_in_group(gAccount, contactId.c_str(), gOldGroup);
 	if (!gBuddy)
 		return;
 
-	gNewGroup = gaim_find_group(newGroupName.c_str());
+	GaimGroup *gNewGroup = gaim_find_group(newGroupName.c_str());
 	if (!gNewGroup)
 		gNewGroup = gaim_group_new(newGroupName.c_str());
 

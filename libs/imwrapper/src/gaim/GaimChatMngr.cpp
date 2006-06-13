@@ -18,23 +18,26 @@
  */
 
 #include "GaimChatMngr.h"
+
 #include "GaimAccountMngr.h"
 #include "GaimEnumIMProtocol.h"
 
+#include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMContact.h>
+
 #include <util/Logger.h>
 
 extern "C" {
-#include "gaim/util.h"
+#include <gaim/util.h>
 }
 
-#ifdef OS_WIN32
-//#include <Windows.h>
-//#include <Winbase.h>
-#define snprintf	_snprintf
-//#define sleep(i)	Sleep(i * 1000)
+#ifdef OS_WINDOWS
+	//#include <Windows.h>
+	//#include <Winbase.h>
+	#define snprintf _snprintf
+	//#define sleep(i) Sleep(i * 1000)
 //#else
-//#include <unistd.h>
+	//#include <unistd.h>
 #endif
 
 
@@ -43,7 +46,7 @@ int GetGaimConversationId(const char *name)
 {
 	int id = 0;
 	char *str_id = (char *) name;
-	
+
 	if (name == NULL)
 		return id;
 
@@ -142,22 +145,22 @@ static void C_CustomSmileyCloseCbk(GaimConversation *conv, const char *smile)
 	GaimChatMngr::CustomSmileyCloseCbk(conv, smile);
 }
 
-GaimConversationUiOps chat_wg_ops =	{
-												C_CreateConversationCbk,
-												C_DestroyConversationCbk,	/* destroy_conversation */
-												C_WriteChatCbk,				/* write_chat           */
-												C_WriteIMCbk,				/* write_im             */
-												C_WriteConvCbk,				/* write_conv           */
-												C_ChatAddUsersCbk,			/* chat_add_users       */
-												C_ChatRenameUserCbk,		/* chat_rename_user     */
-												C_ChatRemoveUsersCbk,		/* chat_remove_users    */
-												C_ChatUpdateUserCbk,		/* chat_update_user     */
-												C_PresentConvCbk,			/* present				*/
-												C_HasFocusCbk,				/* has_focus            */
-												C_CustomSmileyAddCbk,		/* custom_smiley_add    */
-												C_CustomSmileyWriteCbk,		/* custom_smiley_write	*/
-												C_CustomSmileyCloseCbk,		/* custom_smiley_close	*/
-											};
+GaimConversationUiOps chat_wg_ops = {
+	C_CreateConversationCbk,
+	C_DestroyConversationCbk,	/* destroy_conversation */
+	C_WriteChatCbk,				/* write_chat */
+	C_WriteIMCbk,				/* write_im */
+	C_WriteConvCbk,				/* write_conv */
+	C_ChatAddUsersCbk,			/* chat_add_users */
+	C_ChatRenameUserCbk,		/* chat_rename_user */
+	C_ChatRemoveUsersCbk,		/* chat_remove_users */
+	C_ChatUpdateUserCbk,		/* chat_update_user */
+	C_PresentConvCbk,			/* present */
+	C_HasFocusCbk,				/* has_focus */
+	C_CustomSmileyAddCbk,		/* custom_smiley_add */
+	C_CustomSmileyWriteCbk,		/* custom_smiley_write */
+	C_CustomSmileyCloseCbk,		/* custom_smiley_close */
+};
 
 
 /* **************** MISCELLEANOUS CALLBACK ****************** */
@@ -167,7 +170,7 @@ void chat_joined_cb(GaimConversation *conv)
 	GaimChatMngr::ChatJoinedCbk(conv);
 }
 
-int chat_invite_request_cb(GaimAccount *account, const char *who, 
+int chat_invite_request_cb(GaimAccount *account, const char *who,
 						const char *message, void *data)
 {
 	return 1;
@@ -188,7 +191,7 @@ void received_im_msg_cb(GaimAccount *account, char *sender, char *message,
 						GaimConversation *conv, int flags)
 {
 	GaimConversationUiOps *ops = &chat_wg_ops;
-	
+
 	if (conv != NULL)
 		return;
 
@@ -200,7 +203,7 @@ void received_im_msg_cb(GaimAccount *account, char *sender, char *message,
 void init_chat_event()
 {
 	void *handle = gaim_wg_get_handle();
-	
+
 	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing",
 						handle, GAIM_CALLBACK(update_buddy_typing_cb), NULL);
 	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing-stopped",
@@ -253,7 +256,7 @@ void GaimChatMngr::ChatJoinedCbk(GaimConversation *conv)
 	{
 		for (GList *l = mConv->pending_invit; l != NULL; l = l->next)
 		{
-			serv_chat_invite(gaim_conversation_get_gc(conv), 
+			serv_chat_invite(gaim_conversation_get_gc(conv),
 				gaim_conv_chat_get_id(GAIM_CONV_CHAT(conv)),
 				"Join my conference...", (char *)l->data);
 		}
@@ -372,7 +375,7 @@ void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
 				LOG_ERROR("IMContact for " + imContact.getContactId() + " already in IMContactList");
 			}
 			else
-			{	
+			{
 				((IMContactSet &) chatSession->getIMContactSet()).insert(imContact);
 
 				if (chatSession->getIMContactSet().size() == 1)
@@ -429,7 +432,7 @@ void GaimChatMngr::UpdateBuddyTyping(GaimConversation *conv, GaimTypingState sta
 
 	mConvInfo_t *mConv = (mConvInfo_t *)conv->ui_data;
 	GaimIMChat *mIMChat = FindIMChatByGaimConv(conv);
-	
+
 	if (!mIMChat)
 		return;
 
@@ -448,7 +451,7 @@ void GaimChatMngr::UpdateBuddyTyping(GaimConversation *conv, GaimTypingState sta
 			break;
 	}
 
-	mIMChat->typingStateChangedEvent(*mIMChat, *((IMChatSession *)(mConv->conv_session)), 
+	mIMChat->typingStateChangedEvent(*mIMChat, *((IMChatSession *)(mConv->conv_session)),
 									gaim_conversation_get_name(conv), mState);
 
 }
