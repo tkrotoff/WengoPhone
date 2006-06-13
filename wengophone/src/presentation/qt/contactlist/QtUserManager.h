@@ -48,17 +48,17 @@ class QtUserManager : public QObject {
 
 public:
 
-    typedef QList <QtContactInfo> QtContactInfoList;
+	typedef QList <QtContactInfo> QtContactInfoList;
 
 	QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
-        QtContactList & qtContactList, QObject * parent = 0, QTreeWidget * target = 0);
+		QtContactList & qtContactList, QObject * parent = 0, QTreeWidget * target = 0);
 
 	void removeContact(const QString & contactId);
 
 	void moveContact(const QString & contactId,
-        const QString & srcContactGroupId, const QString & dstContactGroupId);
+		const QString & srcContactGroupId, const QString & dstContactGroupId);
 
-    bool groupsAreHiden();
+	bool groupsAreHiden();
 
 public Q_SLOTS:
 
@@ -66,7 +66,7 @@ public Q_SLOTS:
 
 	void itemClicked(QTreeWidgetItem * item, int column);
 
-    void itemDoubleClicked(QTreeWidgetItem *,int);
+	void itemDoubleClicked(QTreeWidgetItem *,int);
 
 	void itemEntered(QTreeWidgetItem * item);
 
@@ -120,9 +120,9 @@ protected:
 
 	void safeHideGroup();
 
-    bool canShowUser(const ContactProfile * cprofile);
+	bool canShowUser(const ContactProfile * cprofile);
 
-    QMenu * createConferenceMenu();
+	QMenu * createConferenceMenu();
 
 	QMenu * createMenu();
 

@@ -111,29 +111,29 @@ QSize QtTreeViewDelegate::sizeHint(const QStyleOptionViewItem & option, const QM
 	return orig;
 }
 bool QtTreeViewDelegate::checkForUtf8(const unsigned char * text, int size) const {
-    bool isUtf8 = false;
-    if (size==0)
-        return true;
+	bool isUtf8 = false;
+	if (size==0)
+		return true;
 
-    if ( (text[0]<=0x7F) && size==1){
-        return true;
-    }
-    for (int i=0;i<size;i++){
-        if (text[i] == 0 ){
-            return false;
-        }
-        if (text[i]>0x7F){
-            if ((text[i] & 0xC0) == 0xC0){
-                if (i+1 > size)
-                    return false;
-                if ((text[i+1] & 0xC0) == 0x80){
-                    isUtf8=true;
-                    return isUtf8;
-                }
-            }
-        }
-    }
-    return isUtf8;
+	if ( (text[0]<=0x7F) && size==1){
+		return true;
+	}
+	for (int i=0;i<size;i++){
+		if (text[i] == 0 ){
+			return false;
+		}
+		if (text[i]>0x7F){
+			if ((text[i] & 0xC0) == 0xC0){
+				if (i+1 > size)
+					return false;
+				if ((text[i+1] & 0xC0) == 0x80){
+					isUtf8=true;
+					return isUtf8;
+				}
+			}
+		}
+	}
+	return isUtf8;
 }
 void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const {
 	QRect r;
@@ -173,23 +173,23 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 
 	// Number of child
 	int nbchild = index.model()->rowCount(index);
-    QString groupName;
-    std::string groupId;
-    std::string groupNameTmp;
+	QString groupName;
+	std::string groupId;
+	std::string groupNameTmp;
 
-    if (index.data().toString() == QtContactList::DEFAULT_GROUP_NAME){
-        groupName = tr("Contacts list");
-        groupNameTmp=std::string(groupName.toUtf8().data());
-    } else{
-        groupName = index.data().toString();
-        groupId = groupName.toStdString();
-        groupNameTmp = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactGroupName(groupId);
-    }
-    if (checkForUtf8((const unsigned char *)(groupNameTmp.c_str()), groupNameTmp.size())){
-        	groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
-    } else {
-        groupName=QString::fromStdString(groupNameTmp);
-    }
+	if (index.data().toString() == QtContactList::DEFAULT_GROUP_NAME){
+		groupName = tr("Contacts list");
+		groupNameTmp=std::string(groupName.toUtf8().data());
+	} else {
+		groupName = index.data().toString();
+		groupId = groupName.toStdString();
+		groupNameTmp = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactGroupName(groupId);
+	}
+	if (checkForUtf8((const unsigned char *)(groupNameTmp.c_str()), groupNameTmp.size())){
+			groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
+	} else {
+		groupName=QString::fromStdString(groupNameTmp);
+	}
 	QString str = groupName;
 	painter->drawText(r, Qt::AlignLeft, str, 0);
 }

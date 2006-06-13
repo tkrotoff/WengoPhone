@@ -48,33 +48,32 @@ class QtUserWidget : public QWidget {
          Q_OBJECT
 public:
 
-       QtUserWidget(const std::string & contactId, CWengoPhone & cWengoPhone,
-               QWidget * parent = 0, Qt::WFlags f = 0);
+	QtUserWidget(const std::string & contactId, CWengoPhone & cWengoPhone,
+			QWidget * parent = 0, Qt::WFlags f = 0);
 
-       void setText(const QString & text) {
-               _text = text;
-       }
+	void setText(const QString & text) {
+		_text = text;
+	}
 
-       QString text() const {
-               return _text;
-       }
+	QString text() const {
+		return _text;
+	}
 
 
-       QLabel * getAvatarLabel() const;
+	QLabel * getAvatarLabel() const;
 
-       QPixmap getIcon() const;
+	QPixmap getIcon() const;
 
-  
 public Q_SLOTS:
-    
-  void contactProfileUpdated();
-  
+
+	void contactProfileUpdated();
+
 protected Q_SLOTS:
-   
+
 	void callButtonClicked();
- 
+
 	void smsButtonClicked();
- 
+
 	void chatButtonClicked();
 
 	void mobileButtonClicked();
@@ -88,7 +87,7 @@ protected:
 	QtUserWidgetAvatarManager * _avatarManager;
 
 	std::string _contactId;
-	
+
 	ContactProfile _contactProfile;
 
 	CWengoPhone & _cWengoPhone;

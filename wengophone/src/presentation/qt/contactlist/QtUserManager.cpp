@@ -104,7 +104,6 @@ void QtUserManager::startSMS(bool checked) {
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
-	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
 	if( ul && item ) {
 		user = ul->getUser(item->text(0));
@@ -117,7 +116,6 @@ void QtUserManager::startChat(bool) {
 	QtUserList * ul = QtUserList::getInstance();
 	QtUser * user;
 
-	//The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
 	if( ul && item ) {
 		user = ul->getUser(item->text(0));
@@ -129,7 +127,6 @@ void QtUserManager::editContact(bool) {
 
 	QtUserList * ul = QtUserList::getInstance();
 
-	//The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (!item)
         return;
@@ -138,7 +135,6 @@ void QtUserManager::editContact(bool) {
 	if (qtProfileDetails.show()) {
 		_cUserProfile.getCContactList().updateContact(contactProfile);
 	}
-	LOG_DEBUG("edit contact");
 }
 
 void QtUserManager::deleteContact() {
@@ -160,8 +156,9 @@ void QtUserManager::deleteContact() {
 
 void QtUserManager::treeViewSelectionChanged() {
 
-	if (_button == Qt::NoButton)
+	if (_button == Qt::NoButton) {
 		closeUserInfo();
+	}
 }
 
 void QtUserManager::itemEntered(QTreeWidgetItem * item) {
@@ -169,8 +166,6 @@ void QtUserManager::itemEntered(QTreeWidgetItem * item) {
 	QtUserList * ul = QtUserList::getInstance();
 	if (ul) {
 		ul->mouseOn(item->text(0));
-		//		closeUserInfo();
-
 	}
 	_tree->viewport()->update();
 }
@@ -222,8 +217,6 @@ void QtUserManager::itemClicked(QTreeWidgetItem * item, int) {
         _button = Qt::NoButton;
         return;
     }
-
-
     _waitForDoubleClick = true;
     killTimer(_timerId);
     _timerId = startTimer(qApp->doubleClickInterval ());
@@ -236,7 +229,6 @@ void QtUserManager::itemClicked(QTreeWidgetItem * item, int) {
             groupRightClicked(item->text(0));
             return;
         }
-
         if (_tree->isItemExpanded(item)) {
             _tree->collapseItem(item);
         }
@@ -815,35 +807,35 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 
 void QtUserManager::timerEvent ( QTimerEvent * event ) {
 
-    if (event->timerId() == _sortTimerId ){
-        killTimer(_sortTimerId);
-        _sortTimerId = -1;
-        _canSort = true;
-        if ( _wantSort ) {
-            sortUsers(true);
-            _wantSort = false;
-        }
-        return;
-    }
+	if (event->timerId() == _sortTimerId ){
+		killTimer(_sortTimerId);
+		_sortTimerId = -1;
+		_canSort = true;
+		if ( _wantSort ) {
+			sortUsers(true);
+			_wantSort = false;
+		}
+		return;
+	}
 
-    if (event->timerId() == _showTimerId){
-        killTimer(_showTimerId);
-        _showTimerId = -1;
-        _canShow = true;
-        if ( _wantShow ) {
-            showAllUsers();
-            _wantShow = false;
-        }
-        return;
-    }
+	if (event->timerId() == _showTimerId){
+		killTimer(_showTimerId);
+		_showTimerId = -1;
+		_canShow = true;
+		if ( _wantShow ) {
+			showAllUsers();
+			_wantShow = false;
+		}
+		return;
+	}
 
-    if (event->timerId() == _timerId){
-        _waitForDoubleClick = false;
-        killTimer(_timerId);
-        return;
-    }
+	if (event->timerId() == _timerId){
+		_waitForDoubleClick = false;
+		killTimer(_timerId);
+		return;
+	}
 }
 
 bool QtUserManager::groupsAreHiden(){
-    return _hideGroups;
+	return _hideGroups;
 }

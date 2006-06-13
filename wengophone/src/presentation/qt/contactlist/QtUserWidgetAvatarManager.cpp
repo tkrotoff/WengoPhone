@@ -52,14 +52,6 @@ bool QtUserWidgetAvatarManager::eventFilter(QObject * obj, QEvent * event) {
 }
 
 void QtUserWidgetAvatarManager::paintEvent(QPaintEvent * event) {
-	/*
-	if (_isSet)
-	{
-		// Get a painter
-		QPainter painter(_target);
-		_svgRenderer.render(&painter);
-	}
-	*/
 
 	QPixmap background = QPixmap(":/pics/fond_avatar.png");
 	QPixmap pixmap = _userWidget->getIcon();

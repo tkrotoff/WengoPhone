@@ -30,51 +30,52 @@ class CContactList;
  * @author Mr K
  */
 class QtUserTreeEventManager : public QObject {
-    Q_OBJECT
+	Q_OBJECT
 public :
 
-    QtUserTreeEventManager(CContactList & cContactList, QObject * parent = 0, QTreeWidget * target = 0);
+	QtUserTreeEventManager(CContactList & cContactList, QObject * parent = 0, QTreeWidget * target = 0);
 
 public Q_SLOTS :
-    void timerTimeout();
+
+	void timerTimeout();
 
 Q_SIGNALS:
 
-    void itemEntered(QTreeWidgetItem * item);
+	void itemEntered(QTreeWidgetItem * item);
 
-    void itemTimeout(QTreeWidgetItem * item);
+	void itemTimeout(QTreeWidgetItem * item);
 
-    void mouseClicked(Qt::MouseButton button);
+	void mouseClicked(Qt::MouseButton button);
 
 protected:
 
-    bool eventFilter(QObject * obj, QEvent * event);
+	bool eventFilter(QObject * obj, QEvent * event);
 
-    virtual void mousePressEvent(QMouseEvent * event);
+	virtual void mousePressEvent(QMouseEvent * event);
 
-    virtual void mouseMoveEvent(QMouseEvent * event);
+	virtual void mouseMoveEvent(QMouseEvent * event);
 
-    virtual void dragEnterEvent(QDragEnterEvent * event);
+	virtual void dragEnterEvent(QDragEnterEvent * event);
 
-    virtual void dropEvent(QDropEvent * event);
+	virtual void dropEvent(QDropEvent * event);
 
-    virtual void dragMoveEvent(QDragMoveEvent * event);
+	virtual void dragMoveEvent(QDragMoveEvent * event);
 
-    virtual void mouseReleaseEvent(QMouseEvent * event);
+	virtual void mouseReleaseEvent(QMouseEvent * event);
 
-    QTreeWidget * _tree;
+	QTreeWidget * _tree;
 
-    QPoint _dstart;
+	QPoint _dstart;
 
-    QTreeWidgetItem * _selectedItem;
+	QTreeWidgetItem * _selectedItem;
 
-    QTreeWidgetItem * _entered;
+	QTreeWidgetItem * _entered;
 
-    QTimer _timer;
+	QTimer _timer;
 
-    bool _inDrag;
+	bool _inDrag;
 
-    CContactList & _cContactList;
+	CContactList & _cContactList;
 };
 
 #endif // OWQTUSERTREEEVENTMANAGER_H

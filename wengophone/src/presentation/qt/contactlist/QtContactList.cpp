@@ -40,6 +40,7 @@
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/MouseEventFilter.h>
 
+
 #include <QPixmap>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -190,10 +191,10 @@ void QtContactList::contactRemovedEvent(std::string contactId) {
 }
 
 void QtContactList::contactMovedEvent(std::string dstContactGroupId,
-    std::string srcContactGroupId, std::string contactId) {
+	std::string srcContactGroupId, std::string contactId) {
 
 	contactMovedEventSignal(QString::fromStdString(dstContactGroupId),
-        QString::fromStdString(srcContactGroupId), QString::fromStdString(contactId));
+		QString::fromStdString(srcContactGroupId), QString::fromStdString(contactId));
 }
 
 void QtContactList::contactChangedEvent(std::string contactId) {
@@ -202,18 +203,18 @@ void QtContactList::contactChangedEvent(std::string contactId) {
 
 void QtContactList::contactGroupAddedEventSlot(QString contactGroupId) {
 	if (_userManager->groupsAreHiden()){
-	    contactGroupId = DEFAULT_GROUP_NAME;
+		contactGroupId = DEFAULT_GROUP_NAME;
 	}
-    addGroup(contactGroupId);
+	addGroup(contactGroupId);
 }
 
 QTreeWidgetItem * QtContactList::addGroup(QString contactGroupId) {
 	QList < QTreeWidgetItem * > list;
-    QTreeWidgetItem * group;
+	QTreeWidgetItem * group;
 
 	list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
 	if (list.isEmpty()) {
-        group = new QTreeWidgetItem(_treeWidget);
+		group = new QTreeWidgetItem(_treeWidget);
 		group->setText(0, contactGroupId);
 		_treeWidget->setItemExpanded(group, true);
 	}
@@ -222,7 +223,6 @@ QTreeWidgetItem * QtContactList::addGroup(QString contactGroupId) {
 
 void QtContactList::contactGroupRemovedEventSlot(QString contactGroupId) {
 	QList < QTreeWidgetItem * > list = _treeWidget->findItems(contactGroupId, Qt::MatchExactly);
-
 	if (!list.isEmpty()) {
 		_treeWidget->takeTopLevelItem(_treeWidget->indexOfTopLevelItem(list[0]));
 	}
@@ -234,24 +234,24 @@ void QtContactList::contactGroupRenamedEventSlot(QString contactGroupId) {
 
 void QtContactList::contactAddedEventSlot(QString contactId) {
 	QtUserList * ul = QtUserList::getInstance();
-    QString groupId;
+	QString groupId;
 	// If User is not already in UserList
 	if (!ul->getUser(contactId)) {
 		ContactProfile contactProfile = _cContactList.getContactProfile(contactId.toStdString());
 		if (_userManager->groupsAreHiden())
-            groupId = DEFAULT_GROUP_NAME;
-        else
-            groupId = QString::fromStdString(contactProfile.getGroupId());
+			groupId = DEFAULT_GROUP_NAME;
+		else
+			groupId = QString::fromStdString(contactProfile.getGroupId());
 		QList < QTreeWidgetItem * > list;
 
 		// If the Contact has a group
 		if (!contactProfile.getGroupId().empty()) {
-            list = _treeWidget->findItems(groupId, Qt::MatchExactly);
+			list = _treeWidget->findItems(groupId, Qt::MatchExactly);
 
 			// No group exists. Creating the group
 			if (list.size() == 0) {
-                contactGroupAddedEventSlot(groupId);
-                list = _treeWidget->findItems(groupId,Qt::MatchExactly);
+				contactGroupAddedEventSlot(groupId);
+				list = _treeWidget->findItems(groupId,Qt::MatchExactly);
 			}
 
 			QTreeWidgetItem * newContact = NULL;
@@ -267,7 +267,7 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 			ul->addUser(user);
 
 			updatePresentationThreadSafe();
-  		}
+		}
 	}
 }
 
@@ -316,5 +316,5 @@ void QtContactList::groupRightClickedSlot(const QString & groupId) {
 }
 
 void QtContactList::showHideGroups(){
-    _userManager->hideGroups();
+	_userManager->hideGroups();
 }

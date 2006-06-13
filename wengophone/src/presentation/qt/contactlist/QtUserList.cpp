@@ -218,25 +218,12 @@ void QtUserList::startFreeCall(const QString & userid) {
 	user->startFreeCall();
 }
 
-/*
-int QtUserList::getClickCount(){
-	QMutexLocker locker(const_cast<QMutex *>(&_mutex));
-	QtUser * user = _userList[userid];
-	if (user)
-		return user->getClickCount();
- 	else return 0;
 
-}
-
-void QtUserList::addClick(){
-
-}
-*/
 void QtUserList::clear(){
-    QMutexLocker locker(&_mutex);
-    QHash < QString, QtUser * >::iterator iter;
-    for (iter=_userList.begin();iter!=_userList.end();iter++){
-        delete((*iter));
-    }
-    _userList.clear();
+	QMutexLocker locker(&_mutex);
+	QHash < QString, QtUser * >::iterator iter;
+	for (iter=_userList.begin();iter!=_userList.end();iter++){
+		delete((*iter));
+	}
+	_userList.clear();
 }

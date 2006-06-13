@@ -156,51 +156,6 @@ void QtUser::startSMS() {
 }
 
 void QtUser::mouseClicked(const QPoint & pos, const QRect & rect) {
-	//QMutexLocker locker(&_mutex);
-
-/*
-	QPixmap px;
-	QtContactPixmap * spx;
-	int x;
-
-	spx = QtContactPixmap::getInstance();
-
-	x = _painterRect.width();
-
-	px = spx->getPixmap(QtContactPixmap::ContactVideo);
-	if (_cContact.hasVideo())
-	{
-		x-=px.width();
-		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			_wengoPhone.getCurrentUserProfile().makeCall(_cContact.getContact(), false);
-		}
-	}
-	else
-		x-=px.width();
-
-
-	px = spx->getPixmap(QtContactPixmap::ContactCall);
-	if (_cContact.hasCall())
-	{
-		x-=px.width();
-		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			_wengoPhone.getCurrentUserProfile().makeCall(_cContact.getContact(), false);
-		}
-	}
-	else
-		x-=px.width();
-
-	px = spx->getPixmap(QtContactPixmap::ContactIM);
-	if (_cContact.hasIM())
-	{
-		x-=px.width();
-		if ( (pos.x()>=x) && (pos.x()<=x+px.width()) ) {
-			_wengoPhone.getCurrentUserProfile().startIM(_cContact.getContact());
-		}
-	}
-	else
-		x-=px.width();
-*/
 }
 
 void QtUser::setButton(const Qt::MouseButton button) {
@@ -269,37 +224,26 @@ bool QtUser::hasPhoneNumber() const {
 		return true;
 	if (!getWengoPhoneNumber().isEmpty())
 		return true;
-
 	return false;
 }
 
 bool QtUser::hasIM() const {
-	//QMutexLocker locker(&_mutex);
-
 	return _contactProfile.hasIM();
 }
 
 bool QtUser::hasFreeCall() const {
-	//QMutexLocker locker(&_mutex);
-
 	return _contactProfile.hasFreeCall();
 }
 
 bool QtUser::hasCall() const {
-	//QMutexLocker locker(&_mutex);
-
 	return _contactProfile.hasCall();
 }
 
 bool QtUser::hasVideo() const {
-	//QMutexLocker locker(&_mutex);
-
 	return _contactProfile.hasVideo();
 }
 
 void QtUser::startCall(const QString & number) {
-	//QMutexLocker locker(&_mutex);
-
 	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(number.toStdString());
 }
 
@@ -308,7 +252,7 @@ void QtUser::startCall() {
 }
 
 void QtUser::contactUpdated() {
-  _contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
+	_contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
 }
 
 void QtUser::startFreeCall() {
@@ -316,9 +260,9 @@ void QtUser::startFreeCall() {
 }
 
 QString QtUser::getDisplayName() const {
-  return QString::fromStdString(_contactProfile.getDisplayName());
+	return QString::fromStdString(_contactProfile.getDisplayName());
 }
 
 EnumPresenceState::PresenceState QtUser::getPresenceState() const {
-  return _contactProfile.getPresenceState();
+	return _contactProfile.getPresenceState();
 }

@@ -40,12 +40,10 @@
 
 #include <util/Logger.h>
 
-QtUserWidget::QtUserWidget(const std::string & contactId, 
+QtUserWidget::QtUserWidget(const std::string & contactId,
 	CWengoPhone & cWengoPhone, QWidget * parent, Qt::WFlags f)
-  : QWidget(parent, f), _cWengoPhone(cWengoPhone) {
-	
-  //contactProfileUpdated();
-  
+	: QWidget(parent, f), _cWengoPhone(cWengoPhone) {
+
 	_contactId = contactId;
 	contactProfileUpdated();
 
@@ -128,8 +126,8 @@ QLabel * QtUserWidget::getAvatarLabel() const {
 
 void QtUserWidget::mobileButtonClicked() {
 	LOG_DEBUG("\n\n\n\n\n" + _ui.cellPhoneLabel->text().toStdString() + "\n\n");
-	
-	
+
+
 	if (_ui.cellPhoneLabel->text() != tr("No cell phone number set")) {
 		QtUserList * ul = QtUserList::getInstance();
 		ul->startCall(QString::fromStdString(_contactId), _ui.cellPhoneLabel->text());
@@ -150,7 +148,7 @@ void QtUserWidget::landLineButtonClicked() {
 		QtUserList * ul = QtUserList::getInstance();
 		ul->startCall(QString::fromStdString(_contactId), _ui.homePhoneLabel->text());
 	} else {
-		ContactProfile contactProfile = 
+		ContactProfile contactProfile =
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
 		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), contactProfile, this);
 		if( qtProfileDetails.show() ) {

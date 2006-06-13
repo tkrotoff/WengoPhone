@@ -76,7 +76,7 @@ public:
 	void contactRemovedEvent(std::string contactId);
 
 	void contactMovedEvent(std::string dstContactGroupId,
-        std::string srcContactGroupId, std::string contactId);
+		std::string srcContactGroupId, std::string contactId);
 
 	void contactChangedEvent(std::string contactId);
 
@@ -95,7 +95,7 @@ Q_SIGNALS:
 	void contactRemovedEventSignal(QString contactId);
 
 	void contactMovedEventSignal(QString dstContactGroupId,
-        QString srcContactGroupId, QString contactId);
+		QString srcContactGroupId, QString contactId);
 
 	void contactChangedEventSignal(QString contactId);
 
