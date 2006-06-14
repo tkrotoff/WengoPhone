@@ -32,7 +32,9 @@ public:
 
 	static QtUserList * getInstance();
 
-	void addUser(QtContact * user);
+	virtual ~QtUserList();
+
+	void addContact(QtContact * user);
 
 	void removeUser(QtContact* user);
 
@@ -40,17 +42,29 @@ public:
 
 	void mouseOn(const QString & userid);
 
+	bool contains(const QString & userid) const;
+
+	void contactUpdated(const QString & userid);
+
 	bool hasIM(const QString & userid) const;
 
 	bool hasCall(const QString & userid) const;
 
 	bool hasVideo(const QString & userid) const;
 
-	QtContact * getUser(const QString & userid) const;
+	bool hasPhoneNumber(const QString & userid) const;
+
+	QtContact * getContact(const QString & userid) const;
+
+	QString getPreferredNumber(const QString & userid) const;
+
+	QString getMobilePhone(const QString & userid) const;
+
+	QString getHomePhone(const QString & userid) const;
+
+	QString getWorkPhone(const QString & userid) const;
 
 	void mouseClicked(const QString & userid, const QPoint pos, const QRect & rect);
-
-	int getIconsStartPosition(const QString & userid) const;
 
 	void setButton(const QString & userid, const Qt::MouseButton button);
 
@@ -59,6 +73,8 @@ public:
 	Qt::MouseButton getButton(const QString & userid) const;
 
 	int getHeight(const QString & userid) const;
+
+	QString getWengoPhoneNumber(const QString & userid) const;
 
 	void setTreeWidget(QTreeWidget * tree) { _tree = tree; }
 
@@ -103,7 +119,7 @@ private:
 
 	QString _lastMouseOn;
 
-	QMutex _mutex;
+	QMutex * _mutex;
 };
 
 #endif	//QTUSERLIST_H

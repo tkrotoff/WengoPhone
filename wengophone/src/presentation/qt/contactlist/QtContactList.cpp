@@ -236,7 +236,7 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 	QtUserList * ul = QtUserList::getInstance();
 	QString groupId;
 	// If User is not already in UserList
-	if (!ul->getUser(contactId)) {
+	if (!ul->contains(contactId)) {
 		ContactProfile contactProfile = _cContactList.getContactProfile(contactId.toStdString());
 		if (_userManager->groupsAreHiden()) {
 			groupId = DEFAULT_GROUP_NAME;
@@ -256,17 +256,15 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 			}
 
 			QTreeWidgetItem * newContact = NULL;
-			QtContact * user = NULL;
+			QtContact * qtContact = NULL;
 			QString contactName;
 
 			newContact = new QTreeWidgetItem(list[0]);
 			newContact->setText(0, contactId);
 			newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
 
-			user = new QtContact(contactId.toStdString(), _cWengoPhone);
-
-			ul->addUser(user);
-
+			qtContact = new QtContact(contactId.toStdString(), _cWengoPhone);
+			ul->addContact(qtContact);
 			updatePresentationThreadSafe();
 		}
 	}
@@ -286,10 +284,8 @@ void QtContactList::contactMovedEventSlot(QString dstContactGroupId,
 
 void QtContactList::contactChangedEventSlot(QString contactId) {
 	QtUserList * ul = QtUserList::getInstance();
-	QtContact * user = ul->getUser(contactId);
-
-	if (user) {
-		user->contactUpdated();
+	if (ul->contains(contactId)) {
+		ul->contactUpdated(contactId);
 		updatePresentationThreadSafe();
 	} else {
 		contactAddedEventSlot(contactId);
@@ -304,8 +300,8 @@ void QtContactList::hideOffLineUser() {
 	_userManager->hideOffLineUsers();
 }
 
-void QtContactList::sortUsers() {
-	_userManager->sortUsers();
+void QtContactList::sortContacts() {
+	_userManager->sortContacts();
 }
 
 CContactList & QtContactList::getCContactList() const {

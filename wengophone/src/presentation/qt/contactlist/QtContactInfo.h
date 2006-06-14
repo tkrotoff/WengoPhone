@@ -17,7 +17,7 @@ class QtContactInfo : public QObject {
 	Q_OBJECT
 public:
 
-	QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, QtContact * user, int index, QObject * parent = 0);
+	QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, const QString &contactId, int index, QObject * parent = 0);
 
 	QtContactInfo(const QtContactInfo & other);
 
@@ -27,7 +27,7 @@ public:
 
 	QTreeWidgetItem * getParentItem();
 
-	QtContact * getUser() const;
+	QString getContactId() const;
 
 	int getIndex() const;
 
@@ -47,7 +47,7 @@ protected:
 
 	QTreeWidgetItem * _parentItem;
 
-	QtContact * _user;
+	QString _contactId;
 
 	int _index;
 

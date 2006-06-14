@@ -31,25 +31,30 @@ QtUserList * QtUserList::getInstance() {
 }
 
 QtUserList::QtUserList() {
+	_mutex = new QMutex(QMutex::Recursive);
 }
 
+QtUserList::~QtUserList() {
+	delete _mutex;
+}
 void QtUserList::paintUser(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) {
-	QMutexLocker locker(&_mutex);
+	QMutexLocker locker(_mutex);
 	QtContact * user;
-	user = _userList[index.data().toString()];
-	if (user)
+	if (contains(index.data().toString())) {
+		user = _userList[index.data().toString()];
 		user->paint(painter, option, index);
+	}
 }
 
-void QtUserList::addUser(QtContact  * user) {
-	QMutexLocker locker(& _mutex);
+void QtUserList::addContact(QtContact * user) {
+	QMutexLocker locker(_mutex);
 	if (user) {
 		_userList[user->getId()] = user;
 	}
 }
 
 void QtUserList::removeUser(QtContact  * user) {
-	QMutexLocker locker(& _mutex);
+	QMutexLocker locker(_mutex);
 	if (user) {
 		_userList.remove(user->getId());
 		delete user;
@@ -57,27 +62,80 @@ void QtUserList::removeUser(QtContact  * user) {
 }
 
 void QtUserList::mouseOn(const QString & userid) {
-	QMutexLocker locker(& _mutex);
-	QtContact * user;
-	user = _userList[userid];
-	if (user)
-		user->setMouseOn(true);
-	user = _userList[_lastMouseOn];
-	if (user)
-		user->setMouseOn(false);
+	QMutexLocker locker(_mutex);
+	QtContact * qtContact;
+	qtContact = _userList[userid];
+	if (qtContact)
+		qtContact->setMouseOn(true);
+	qtContact = _userList[_lastMouseOn];
+	if (qtContact)
+		qtContact->setMouseOn(false);
 	_lastMouseOn = userid;
 }
 
-QtContact * QtUserList::getUser(const QString & userid) const {
-	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtContact * user;
-	user = _userList[userid];
-	return user;
+QtContact * QtUserList::getContact(const QString & userid) const {
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
+	if (contains(userid)) {
+		return _userList[userid];
+	}
+	return NULL;
+}
+
+QString QtUserList::getPreferredNumber(const QString & userid) const {
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
+	if (contains(userid)) {
+		return _userList[userid]->getPreferredNumber();
+	}
+	return QString();
+}
+
+QString QtUserList::getMobilePhone(const QString & userid) const {
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
+	if (contains(userid)) {
+		return _userList[userid]->getMobilePhone();
+	}
+	return QString();
+}
+
+QString QtUserList::getHomePhone(const QString & userid) const {
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
+	if (contains(userid)) {
+		return _userList[userid]->getHomePhone();
+	}
+	return QString();
+}
+
+QString QtUserList::getWorkPhone(const QString & userid) const {
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
+	if (contains(userid)) {
+		return _userList[userid]->getHomePhone();
+	}
+	return QString();
+}
+
+bool QtUserList::contains(const QString & userid) const {
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
+	return _userList.contains(userid);
+}
+
+void QtUserList::contactUpdated(const QString & userid) {
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
+	if (contains(userid)) {
+		_userList[userid]->contactUpdated();
+	}
+}
+
+QString QtUserList::getWengoPhoneNumber(const QString & userid) const {
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
+	if (contains(userid)) {
+		return _userList[userid]->getWengoPhoneNumber();
+	}
+	return QString();
 }
 
 bool QtUserList::hasIM(const QString & userid) const {
 
-	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
 		return user->hasIM();
@@ -86,7 +144,7 @@ bool QtUserList::hasIM(const QString & userid) const {
 
 bool QtUserList::hasCall(const QString & userid) const {
 
-	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
 		return user->hasCall();
@@ -94,38 +152,37 @@ bool QtUserList::hasCall(const QString & userid) const {
 }
 
 bool QtUserList::hasVideo(const QString & userid) const {
-
-	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
 		return user->hasVideo();
 	return false;
 }
 
+bool QtUserList::hasPhoneNumber(const QString & userid) const {
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
+	if (contains(userid)) {
+		return _userList[userid]->hasPhoneNumber();
+	}
+	return false;
+}
+
 void QtUserList::mouseClicked(const QString & userid, const QPoint pos, const QRect & rect) {
-	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
 		user->mouseClicked(pos, rect);
 }
 
-int QtUserList::getIconsStartPosition(const QString & userid) const {
-	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtContact * user = _userList[userid];
-	if (user)
-		return user->getIconsStartPosition();
-	return -1;
-}
-
 void QtUserList::setButton(const QString & userid, const Qt::MouseButton button) {
-	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
 		user->setButton(button);
 }
 
 Qt::MouseButton QtUserList::getButton(const QString & userid) const {
-	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
 		return user->getButton();
@@ -133,7 +190,7 @@ Qt::MouseButton QtUserList::getButton(const QString & userid) const {
 }
 
 void QtUserList::setOpenStatus(const QString & userid, bool value) {
-	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
 		user->setOpenStatus(value);
@@ -141,7 +198,7 @@ void QtUserList::setOpenStatus(const QString & userid, bool value) {
 
 int QtUserList::getHeight(const QString & userid) const {
 
-	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
+	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
 		return user->getHeight();
@@ -150,7 +207,7 @@ int QtUserList::getHeight(const QString & userid) const {
 
 void QtUserList::resetMouseStatus() {
 
-	QMutexLocker locker(& _mutex);
+	QMutexLocker locker(_mutex);
 
 	QHash <QString,QtContact *>::iterator iter;
 
@@ -164,58 +221,58 @@ void QtUserList::resetMouseStatus() {
 
 void QtUserList::startChat(const QString & userid) {
 
-	_mutex.lock();
+	_mutex->lock();
 	QtContact * user = _userList[userid];
 	if (!user) {
-		_mutex.unlock();
+		_mutex->unlock();
 		return;
 	}
-	_mutex.unlock();
+	_mutex->unlock();
 	user->startChat();
 }
 
 void QtUserList::startSMS(const QString & userid) {
-	_mutex.lock();
+	_mutex->lock();
 	QtContact * user=_userList[userid];
 	if (!user)
 		LOG_FATAL("User lookup failed !!!");
-	_mutex.unlock();
+	_mutex->unlock();
 	user->startSMS();
 
 }
 
 void QtUserList::startCall(const QString & userid, const QString & number) {
-	_mutex.lock();
+	_mutex->lock();
 	QtContact * user = _userList[userid];
 	if (!user)
 		LOG_FATAL("User lookup failed !!!");
-	_mutex.unlock();
+	_mutex->unlock();
 	user->startCall(number);
 }
 
 
 void QtUserList::startCall(const QString & userid) {
-	_mutex.lock();
+	_mutex->lock();
 	QtContact * user = _userList[userid];
 	if (!user)
 		LOG_FATAL("User lookup failed !!!");
-	_mutex.unlock();
+	_mutex->unlock();
 	user->startCall();
 }
 
 void QtUserList::startFreeCall(const QString & userid) {
-	_mutex.lock();
+	_mutex->lock();
 	QtContact * user = _userList[userid];
 	if (!user)
 		LOG_FATAL("User lookup failed !!!");
-	_mutex.unlock();
+	_mutex->unlock();
 
 	user->startFreeCall();
 }
 
 
 void QtUserList::clear(){
-	QMutexLocker locker(&_mutex);
+	QMutexLocker locker(_mutex);
 	QHash <QString, QtContact *>::iterator iter;
 	for (iter=_userList.begin();iter!=_userList.end();iter++){
 		delete((*iter));

@@ -58,8 +58,6 @@ public:
 
 	void setFunction(bool im, bool call, bool video);
 
-	int getIconsStartPosition() const { return _iconsStartPosition; }
-
 	void setButton(const Qt::MouseButton button);
 
 	void setOpenStatus(bool value);
@@ -121,8 +119,6 @@ protected:
 	QPixmap _callPixmap;
 
 	QPixmap _videoPixmap;
-
-	QRect _painterRect;
 
 	QtContactPixmap::ContactPixmap _status;
 

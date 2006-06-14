@@ -42,25 +42,22 @@ QtContact::QtContact(const std::string & contactId, CWengoPhone & cWengoPhone, Q
 void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) {
 	QMutexLocker locker(& _mutex);
 
-	QRect r;
+	QRect painterRect;
 	QPixmap px;
 	QtContactPixmap * spx;
 	int x;
 	bool parentItem = false;
 
-	_painterRect = option.rect;
-
 	spx = QtContactPixmap::getInstance();
 
-	QColor lg(201, 201, 201);
+	QColor selectedBackground(201, 201, 201);
 
 	if ((option.state & QStyle::State_Selected) == QStyle::State_Selected) {
 		QRect rect = option.rect;
 		rect.adjust(0,0,1,1);
-		painter->fillRect(option.rect, QBrush(lg));
+		painter->fillRect(option.rect, QBrush(selectedBackground));
 		painter->setPen(option.palette.text().color());
-	}
-	else {
+	} else {
 		painter->setPen(option.palette.text().color());
 	}
 
@@ -68,23 +65,23 @@ void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, c
 	QtContactPixmap::ContactPixmap status = getStatus();
 
 	px = spx->getPixmap(status);
-	r = option.rect;
-	x = r.left();
+	painterRect = option.rect;
+	x = painterRect.left();
 
-	_centeredPx_y = ((r.bottom() - r.top()) - px.size().height()) / 2;
+	_centeredPx_y = ((painterRect.bottom() - painterRect.top()) - px.size().height()) / 2;
 
-	painter->drawPixmap(x, r.top() + _centeredPx_y, px);
+	painter->drawPixmap(x, painterRect.top() + _centeredPx_y, px);
 
 	x += px.width() + 5;
-	r.setLeft(x);
+	painterRect.setLeft(x);
 
 	_iconsStartPosition = 10000;
 
 	// Draw the text
 	painter->setFont(option.font);
 	// Center the text vertically
-	QRect textRect = r;
-	_centeredText_y = ((r.bottom() - r.top()) - QFontMetrics(option.font).height()) / 2;
+	QRect textRect = painterRect;
+	_centeredText_y = ((painterRect.bottom() - painterRect.top()) - QFontMetrics(option.font).height()) / 2;
 	textRect.setTop(_centeredText_y + textRect.top());
 
 	QString text = QString::fromUtf8(_contactProfile.getDisplayName().c_str());

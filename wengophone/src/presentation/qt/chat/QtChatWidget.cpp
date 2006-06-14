@@ -192,7 +192,7 @@ void ChatWidget::addToHistory(const QString & senderName,const QString & str){
 	QString bgColor;
     QTextCursor curs(_chatHistory->document());
     curs.movePosition(QTextCursor::End);
-
+	_chatHistory->setTextCursor(curs);
 	if (senderName == _nickName)
 		bgColor = _nickBgColor;
 	else
@@ -244,6 +244,7 @@ void ChatWidget::enterPressed(){
 
     QTextCursor curs(_chatHistory->document());
     curs.movePosition(QTextCursor::End);
+	_chatHistory->setTextCursor(curs);
 
     QString text= QString("<table border=0 width=100% cellspacing=0 "
     "cellpadding=0><tr><td BGCOLOR=%1> <font color=%2> %3 </font></td><td BGCOLOR=%4 align=right>"

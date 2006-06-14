@@ -107,7 +107,7 @@ public Q_SLOTS:
 
 	void hideOffLineUser();
 
-	void sortUsers();
+	void sortContacts();
 
 	void showHideGroups();
 

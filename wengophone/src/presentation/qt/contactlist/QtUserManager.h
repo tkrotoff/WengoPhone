@@ -86,7 +86,7 @@ public Q_SLOTS:
 
 	void showAllUsers();
 
-	void sortUsers(bool bypassTimer = false);
+	void sortContacts(bool bypassTimer = false);
 
 	void startChat(bool checked);
 
@@ -130,7 +130,7 @@ protected:
 
 	bool _hideUsers;
 
-	bool _sortUsers;
+	bool _sortContacts;
 
 	bool _hideGroups;
 

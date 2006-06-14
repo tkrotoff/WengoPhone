@@ -22,9 +22,9 @@
 #include "QtContact.h"
 #include <QTreeWidgetItem>
 
-QtContactInfo::QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, QtContact * user, int index, QObject * parent)
+QtContactInfo::QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, const QString & contactId, int index, QObject * parent)
 : QObject(parent) {
-	_user = user;
+	_contactId = contactId;
 	_item = item;
 	_parentItem = parentItem;
 	_index = index;
@@ -32,7 +32,7 @@ QtContactInfo::QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentIte
 }
 
 QtContactInfo::QtContactInfo(const QtContactInfo & other) {
-	_user = other._user;
+	_contactId = other._contactId;
 	_item = other._item;
 	_parentItem = other._parentItem;
 	_index = other._index;
@@ -58,8 +58,8 @@ QTreeWidgetItem * QtContactInfo::getParentItem() {
 	return _parentItem;
 }
 
-QtContact * QtContactInfo::getUser() const {
-	return _user;
+QString QtContactInfo::getContactId() const {
+	return _contactId;
 }
 
 int QtContactInfo::getIndex() const {
@@ -67,11 +67,16 @@ int QtContactInfo::getIndex() const {
 }
 
 bool QtContactInfo::operator < (const QtContactInfo & other) const {
-    return _user->getUserName().toUpper() < other.getUser()->getUserName().toUpper();
+	QtUserList * ul = QtUserList::getInstance();
+	QtContact * qtContact = ul->getContact(_contactId);
+	QtContact * otherQtContact = ul->getContact(other._contactId);
+	if (qtContact && otherQtContact) {
+		return qtContact->getUserName().toUpper() < otherQtContact->getUserName().toUpper();
+	}
 }
 
 QtContactInfo & QtContactInfo::operator = (const QtContactInfo & other) {
-	_user = other._user;
+	_contactId = other._contactId;
 	_item = other._item;
 	_parentItem = other._parentItem;
 	_index = other._index;
@@ -80,5 +85,9 @@ QtContactInfo & QtContactInfo::operator = (const QtContactInfo & other) {
 }
 
 QtContactPixmap::ContactPixmap QtContactInfo::getStatus() {
-	return _user->getStatus();
+	QtUserList * ul = QtUserList::getInstance();
+	QtContact * qtContact = ul->getContact(_contactId);
+	if (qtContact) {
+		return qtContact->getStatus();
+	}
 }
