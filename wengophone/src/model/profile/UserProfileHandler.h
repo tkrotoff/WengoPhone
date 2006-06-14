@@ -38,6 +38,12 @@ class WengoPhone;
 class UserProfileHandler {
 public:
 
+	enum UserProfileHandlerError {
+		UserProfileHandlerErrorNoError,
+		UserProfileHandlerErrorUserProfileAlreadyExists,
+		UserProfileHandlerErrorWengoAccountNotValid
+	};
+
 	/**
 	 * No current UserProfile has been set. This can happen at the first launch
 	 * of the softphone when no UserProfile has been set.
@@ -72,7 +78,7 @@ public:
 	 */
 	Event<void (UserProfileHandler & sender, WengoAccount & wengoAccount)> wengoAccountNotValidEvent;
 
-	UserProfileHandler(WengoPhone & wengoPhone);
+	UserProfileHandler();
 
 	~UserProfileHandler();
 
@@ -111,16 +117,16 @@ public:
 	 * If the WengoAccount is empty (that is it has an empty login), a 'Default'
 	 * UserProfile is created.
 	 *
-	 * @return true if the UserProfile has been created, false otherwhise
+	 * @return an error code
 	 */
-	bool createUserProfile(const WengoAccount & wengoAccount);
+	UserProfileHandlerError createUserProfile(const WengoAccount & wengoAccount);
 
 	/**
 	 * Creates a new UserProfile and set it as current UserProfile.
 	 *
 	 * @param wengoAccount a UserProfile is identified with a WengoAccount.
-	 * If the WengoAccount is empty (that is it has an empty login), a 'Default'
-	 * UserProfile is created.
+	 * If the WengoAccount is empty (that is to say it has an empty login),
+	 *  a 'Default' UserProfile is created.
 	 */
 	void createAndSetUserProfile(const WengoAccount & wengoAccount);
 
@@ -182,8 +188,6 @@ private:
 	UserProfile * _currentUserProfile;
 
 	UserProfile * _desiredUserProfile;
-
-	WengoPhone & _wengoPhone;
 };
 
 #endif //OWUSERPROFILEHANDLER_H

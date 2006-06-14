@@ -82,6 +82,8 @@ private Q_SLOTS:
 
 	void createAccountLabelClicked();
 
+	void useWengoPhoneWithoutAWengoAccountClicked();
+
 	void currentIndexChanged(const QString & profileName);
 
 	void loginClicked();

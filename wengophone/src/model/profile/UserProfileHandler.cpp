@@ -29,8 +29,7 @@
 #include <util/File.h>
 #include <util/Logger.h>
 
-UserProfileHandler::UserProfileHandler(WengoPhone & wengoPhone)
-: _wengoPhone(wengoPhone) {
+UserProfileHandler::UserProfileHandler() {
 	_currentUserProfile = NULL;
 	_desiredUserProfile = NULL;
 }
@@ -43,6 +42,7 @@ UserProfileHandler::~UserProfileHandler() {
 	if (_currentUserProfile) {
 		_currentUserProfile->disconnect();
 		saveUserProfile(*_currentUserProfile);
+		setLastUsedUserProfile(*_currentUserProfile);
 		WsUrl::setWengoAccount(NULL);
 		delete _currentUserProfile;
 	}
@@ -80,9 +80,9 @@ UserProfile * UserProfileHandler::getUserProfile(const std::string & name) {
 	return result;
 }
 
-bool UserProfileHandler::createUserProfile(const WengoAccount & wengoAccount) {
+UserProfileHandler::UserProfileHandlerError UserProfileHandler::createUserProfile(const WengoAccount & wengoAccount) {
 	UserProfile * userProfile = NULL;
-	bool result = false;
+	UserProfileHandlerError result = UserProfileHandlerErrorNoError;
 	std::string profileName;
 
 	userProfile = new UserProfile();
@@ -90,19 +90,19 @@ bool UserProfileHandler::createUserProfile(const WengoAccount & wengoAccount) {
 		userProfile->setWengoAccount(wengoAccount);
 	}
 
-	//FIXME: Here we could know if the WengoAccount is valid or not and then
-	// save the UserProfile or not or do anything else
 	profileName = userProfile->getName();
 
 	if (!userProfileExists(profileName)) {
 		if (userProfile->isWengoAccountValid()) {
 			saveUserProfile(*userProfile);
-			result = true;
+			result = UserProfileHandlerErrorNoError;
 		} else {
 			wengoAccountNotValidEvent(*this, *userProfile->getWengoAccount());
+			result = UserProfileHandlerErrorWengoAccountNotValid;
 		}
 	} else {
 		LOG_ERROR("A UserProfile with the name: " + profileName + " already exists");
+		result = UserProfileHandlerErrorUserProfileAlreadyExists;
 	}
 
 	delete userProfile;
@@ -111,7 +111,9 @@ bool UserProfileHandler::createUserProfile(const WengoAccount & wengoAccount) {
 }
 
 void UserProfileHandler::createAndSetUserProfile(const WengoAccount & wengoAccount) {
-	if (createUserProfile(wengoAccount)) {
+	createUserProfile(wengoAccount);
+	
+	if (createUserProfile(wengoAccount) != UserProfileHandlerErrorWengoAccountNotValid) {
 		std::string profileName = wengoAccount.getWengoLogin();
 		if (profileName.empty()) {
 			profileName = "Default";
@@ -158,7 +160,7 @@ void UserProfileHandler::setCurrentUserProfile(const std::string & name) {
 }
 
 void UserProfileHandler::setLastUsedUserProfile(const UserProfile & userProfile) {
-	Config config = ConfigManager::getInstance().getCurrentConfig();
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.set(Config::PROFILE_LAST_USED_NAME_KEY, userProfile.getName());
 }
 

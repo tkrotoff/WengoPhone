@@ -29,6 +29,8 @@
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
 
+#include <model/profile/UserProfile.h>
+
 #include <trayicon.h>
 
 QtTrayIcon::QtTrayIcon(QObject * parent)

@@ -32,6 +32,7 @@
 #include <qtutil/MouseEventFilter.h>
 #include <qtutil/WidgetBackgroundImage.h>
 
+#include <util/Logger.h>
 #include <util/WebBrowser.h>
 
 #include <QtGui>
@@ -46,9 +47,13 @@ QtLogin::QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler)
 
 	WidgetBackgroundImage::setBackgroundImage(_ui->loginLabel, ":pics/headers/login.png", true);
 
-	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
+	MousePressEventFilter * mouseFilterCreateWengoAccount = new MousePressEventFilter(
 		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);
-	_ui->linkWengoAccountLabel->installEventFilter(mouseFilter);
+	_ui->linkWengoAccountLabel->installEventFilter(mouseFilterCreateWengoAccount);
+
+	MousePressEventFilter * mouseFilterUseWithoutAWengoAccount = new MousePressEventFilter(
+		this, SLOT(useWengoPhoneWithoutAWengoAccountClicked()), Qt::LeftButton);
+	_ui->linkUseWithoutAWengoAccountLabel->installEventFilter(mouseFilterUseWithoutAWengoAccount);
 
 	connect(_ui->loginComboBox, SIGNAL(currentIndexChanged(const QString &)),
 		SLOT(currentIndexChanged(const QString &)));
@@ -124,6 +129,13 @@ void QtLogin::createAccountLabelClicked() {
 	} else {
 		WebBrowser::openUrl("http://www.wengo.com/public/public.php?page=subscribe_wengos&lang=eng");
 	}
+}
+
+void QtLogin::useWengoPhoneWithoutAWengoAccountClicked() {
+	LOG_DEBUG("Will use WengoPhone without a Wengo account");
+	WengoAccount wengoAccount;
+	_cUserProfileHandler.createAndSetUserProfile(wengoAccount);
+	_loginWindow->accept();
 }
 
 void QtLogin::setLogin(const QString & login) {

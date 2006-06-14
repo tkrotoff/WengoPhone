@@ -19,6 +19,8 @@
 
 #include "WengoPhone.h"
 
+#include <model/profile/UserProfileHandler.h>
+
 #include "account/NetworkObserver.h"
 #include "classic/ClassicExterminator.h"
 #include "config/ClassicConfigImporter.h"
@@ -35,8 +37,7 @@
 
 #include <sstream>
 
-WengoPhone::WengoPhone()
-	: _userProfileHandler(*this) {
+WengoPhone::WengoPhone() {
 
 	_startupSettingListener = new StartupSettingListener();
 	_running = false;
@@ -63,7 +64,6 @@ WengoPhone::WengoPhone()
 	NetworkObserver::getInstance();
 	////
 
-	// Creating instance of Network
 	//Loads the configuration: this is the first thing to do before anything else
 	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
 	configManagerStorage.load(config.getConfigDir());
@@ -73,6 +73,10 @@ WengoPhone::WengoPhone()
 	config.valueChangedEvent +=
 		boost::bind(&WengoPhone::valueChangedEventHandler, this, _1, _2);
 	////
+
+	// Creating the UserProfileHandler instance
+	_userProfileHandler = new UserProfileHandler();
+	////
 }
 
 void WengoPhone::shutdownAfterTimeout() {
@@ -81,9 +85,21 @@ void WengoPhone::shutdownAfterTimeout() {
 
 WengoPhone::~WengoPhone() {
 	while (_running) {
+		// Waiting for end of model thread
 		Thread::msleep(100);
 	}
 
+	// Deleting created objects
+	if (_userProfileHandler) {
+		delete _userProfileHandler;
+	}
+
+
+	if (_startupSettingListener) {
+		delete _startupSettingListener;
+	}
+	////
+		
 	saveConfiguration();
 
 	/**
@@ -93,11 +109,6 @@ WengoPhone::~WengoPhone() {
 	static Timer shutdownTimeout;
 	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownAfterTimeout, this);
 	shutdownTimeout.start(3000, 3000);
-
-	delete _startupSettingListener;
-
-//	if (_importer)
-//		delete _importer;
 }
 
 void WengoPhone::init() {
@@ -122,7 +133,7 @@ void WengoPhone::init() {
 	localAccount->init();
 	addPhoneLine(localAccount);*/
 
-	_userProfileHandler.init();
+	_userProfileHandler->init();
 
 	//initFinishedEvent
 	initFinishedEvent(*this);

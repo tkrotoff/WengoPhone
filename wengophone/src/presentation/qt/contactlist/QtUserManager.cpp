@@ -44,10 +44,9 @@
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
 
-#include <model/contactlist/ContactList.h>
 #include <model/phoneline/PhoneLine.h>
 #include <model/phonecall/PhoneCall.h>
-#include <model/contactlist/Contact.h>
+#include <model/profile/UserProfile.h>
 
 #include <sipwrapper/EnumPhoneCallState.h>
 
@@ -448,6 +447,7 @@ void QtUserManager::sortContacts(bool bypassTimer) {
 			}
 		}
 	}
+
 	QCoreApplication::processEvents();
 }
 
@@ -519,6 +519,7 @@ void QtUserManager::showAllUsers() {
 			ul->addContact(qtContact);
 		}
 	}
+
 	sortContacts(true);
 }
 

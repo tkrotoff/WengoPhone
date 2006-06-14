@@ -20,9 +20,6 @@
 #ifndef OWWENGOPHONE_H
 #define OWWENGOPHONE_H
 
-#include <model/account/SipAccount.h>
-#include <model/profile/UserProfile.h>
-#include <model/profile/UserProfileHandler.h>
 #include <model/config/StartupSettingListener.h>
 
 #include <thread/Thread.h>
@@ -31,8 +28,9 @@
 
 #include <string>
 
-class WsSubscribe;
 class ClassicConfigImporter;
+class UserProfileHandler;
+class WsSubscribe;
 
 /**
  * @defgroup model Model Component
@@ -92,7 +90,7 @@ public:
 	 * Gets the UserProfileHandler.
 	 */
 	UserProfileHandler & getUserProfileHandler() {
-		return _userProfileHandler;
+		return *_userProfileHandler;
 	}
 
 	/**
@@ -145,7 +143,7 @@ private:
 	 */
 	bool _running;
 
-	UserProfileHandler _userProfileHandler;
+	UserProfileHandler * _userProfileHandler;
 
 	StartupSettingListener * _startupSettingListener;
 

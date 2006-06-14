@@ -16,11 +16,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
+#include <cutil/global.h>
+
+#if defined(OS_WINDOWS)
+#include <windows.h>
+#elif defined(OS_MACOSX)
+/*
+#include <Carbon/Carbon.h>
+#include <Cocoa/Cocoa.h>
+// Picture defined in Carbon conflicts with the one we define in our libs.
+#ifdef Picture 
+#undef Picture
+#endif //Picture
+*/
+#endif //!OS_MACOSX
+
 #include <cutil/global.h>
 #include "QtChatWindow.h"
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
-
 
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/contactlist/QtContactList.h>
@@ -40,10 +55,6 @@
 #include <qtutil/Object.h>
 
 #include <util/Logger.h>
-
-#ifdef OS_WINDOWS
-#include <windows.h>
-#endif
 
 ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession)
 : QObject(NULL), _cChatHandler(cChatHandler){
@@ -296,7 +307,9 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
 
         if (!_dialog->isVisible())
         {
+#if !defined(OS_MACOSX)
             showMinimized ();
+#endif
             flashWindow();
         }else{
             flashWindow();
@@ -676,17 +689,17 @@ QMainWindow * ChatWindow::findMainWindow(){
 }
 
 void ChatWindow::flashWindow() {
-#ifdef OS_WINDOWS
+#if defined(OS_WINDOWS)
     FLASHWINFO flashInfo;
-    if (_qtWengoPhone->getWidget()->winId() == GetForegroundWindow()){
+    if (_qtWengoPhone->getWidget()->winId() == GetForegroundWindow()) {
         flashInfo.cbSize = sizeof(FLASHWINFO);
         flashInfo.hwnd = _dialog->winId();
         flashInfo.dwFlags = FLASHW_TRAY;
         flashInfo.uCount = 5;
         flashInfo.dwTimeout = 500;
         FlashWindowEx(&flashInfo);
-//        FlashWindow(_dialog->winId(), true);
-    } else{
+		//FlashWindow(_dialog->winId(), true);
+    } else {
         flashInfo.cbSize = sizeof(FLASHWINFO);
         flashInfo.hwnd = _dialog->winId();
         flashInfo.dwFlags = FLASHW_TRAY|FLASHW_TIMERNOFG;
@@ -694,6 +707,16 @@ void ChatWindow::flashWindow() {
         flashInfo.dwTimeout = 500;
         FlashWindowEx(&flashInfo);
     }
+/*#elif defined(OS_MACOSX)
+	WindowPtr windowPtr = (WindowPtr) _qtWengoPhone->getWidget()->winId();
+	if (IsValidWindowPtr(windowPtr)) {
+		if (!IsWindowActive(windowPtr)) {
+			// The chat window is not the frontmost window.
+			// Notifying user by making the dock icon bounce.
+			int request = [NSApp requestUserAttention:NSInformationalRequest];
+			[NSApp cancelUserAttentionRequest:request];
+		}	
+	}*/
 #else
     _dialog->activateWindow();
 #endif

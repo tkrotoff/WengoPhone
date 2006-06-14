@@ -27,6 +27,7 @@
 
 #include <model/phonecall/ConferenceCall.h>
 #include <model/phonecall/PhoneCall.h>
+#include <model/profile/UserProfile.h>
 
 QtContactCallListWidget::QtContactCallListWidget(CWengoPhone & cWengoPhone, QWidget * parent, Qt::WFlags f)
 	: QWidget(parent, f), _cWengoPhone(cWengoPhone) {

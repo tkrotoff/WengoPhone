@@ -13,15 +13,31 @@ libs = [
 	'softupdater',
 	'owidle',
 ]
+
 if WengoCCMSVC():
 	libs.append('owmemorydump')
 
-if WengoOSMacOSX():
-	libs += ['glib-2.0', 'gthread-2.0']
 lib_path = []
+
 include_path = []
+
 defines = {}
+
 link_flags = []
+
+cc_flags = []
+
+if WengoOSMacOSX():
+	libs += [
+		'glib-2.0',
+		'gthread-2.0'
+	]
+	cc_flags += ['-x objective-c++']
+	link_flags += [
+		'-framework Cocoa',
+		'-framework Carbon',
+	]
+
 headers = [
 	'QtWengoPhone.h',
 	'QtConfigPanel.h',
@@ -308,6 +324,7 @@ env.WengoCopyToBuildDir('chat/emoticons', 'emoticons')
 env.WengoCopyToBuildDir('webpages', 'webpages')
 env.WengoAddDefines(defines)
 env.WengoAddLinkFlags(link_flags)
+env.WengoAddCCFlags(cc_flags)
 env.WengoUseLibraries(libs)
 
 qt_mng_plugin_file = ''

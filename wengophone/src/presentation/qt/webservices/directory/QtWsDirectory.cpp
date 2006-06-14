@@ -32,6 +32,7 @@
 
 #include <model/contactlist/Contact.h>
 #include <model/phoneline/IPhoneLine.h>
+#include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
 
