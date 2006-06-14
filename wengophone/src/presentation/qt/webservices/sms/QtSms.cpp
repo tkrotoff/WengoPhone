@@ -29,6 +29,8 @@
 
 #include <util/Logger.h>
 
+const QString & QtSms::signatureSeparator = " -- ";
+
 QtSms::QtSms(CSms & cSms)
 	: QObjectThreadSafe(NULL),
 	_cSms(cSms) {
@@ -122,7 +124,16 @@ void QtSms::setPhoneNumber(const QString & phoneNumber) {
 }
 
 void QtSms::setText(const QString & text) {
-	_ui->smsText->setPlainText(text);
+	int pos = text.lastIndexOf(signatureSeparator);
+	QString mess = text;
+	if(pos != -1) {
+		//extract the signature
+		setSignature(text.right(text.length() - pos - 4));
+		mess = text.left(pos);
+	}
+
+	_ui->smsText->clear();
+	_ui->smsText->setHtml("<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style=\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">" + mess + "</p></body></html>");
 }
 
 bool QtSms::checkSmsLength() {
@@ -135,7 +146,7 @@ bool QtSms::checkSmsLength() {
 QString QtSms::getCompleteMessage() {
 
 	QString completeMessage = _ui->smsText->toPlainText();
-	completeMessage += " -- ";
+	completeMessage += signatureSeparator;
 	completeMessage += _ui->signatureLineEdit->text();
 
 	return completeMessage;

@@ -197,7 +197,9 @@ void QtHistory::replayItem(QtHistoryItem * item) {
 
 	case QtHistoryItem::Sms:
 		//retrieve info & configure the Sms widget
-		text = QString::fromStdString(_cHistory.getMementoData(item->getId()));
+		text = QString::fromLocal8Bit(
+			_cHistory.getMementoData(item->getId()).c_str(),
+			_cHistory.getMementoData(item->getId()).size());
 		phoneNumber = QString::fromStdString(_cHistory.getMementoPeer(item->getId()));
 
 		//test existance of Sms (available only if a WengoAccount has been created)

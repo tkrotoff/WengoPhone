@@ -66,6 +66,8 @@ private Q_SLOTS:
 
 private:
 
+	const static QString & signatureSeparator;
+
 	void initThreadSafe();
 
 	void updatePresentationThreadSafe();
