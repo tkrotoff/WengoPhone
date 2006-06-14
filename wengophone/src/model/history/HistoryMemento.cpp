@@ -21,19 +21,6 @@
 
 #include <util/Logger.h>
 
-#include <fstream>
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
-
-const std::string HistoryMemento::StateIncomingCall = "StateIncomingCall";
-const std::string HistoryMemento::StateOutgoingCall = "StateOutgoingCall";
-const std::string HistoryMemento::StateMissedCall = "StateMissedCall";
-const std::string HistoryMemento::StateRejectedCall = "StateRejectedCall";
-const std::string HistoryMemento::StateOutgoingSMSOK = "StateOutgoingSMSOK";
-const std::string HistoryMemento::StateOutgoingSMSNOK = "StateOutgoingSMSNOK";
-const std::string HistoryMemento::StateNone = "StateNone";
-const std::string HistoryMemento::StateAny = "StateAny";
-
 HistoryMemento::HistoryMemento() {
 	_state = None;
 	_callId = -1;
@@ -92,11 +79,7 @@ void HistoryMemento::updateState(State state) {
 }
 
 bool HistoryMemento::canReplay() const {
-	if( ( _state == OutgoingCall ) || ( _state == OutgoingSmsOk )) {
-		return true;
-	} else {
-		return false;
-	}
+	return ((_state == OutgoingCall) || (_state == OutgoingSmsOk));
 }
 
 bool HistoryMemento::isCallMemento() const {
@@ -105,7 +88,7 @@ bool HistoryMemento::isCallMemento() const {
 }
 
 bool HistoryMemento::isSMSMemento() const {
-	return ( (_state == OutgoingSmsOk) || (_state == OutgoingSmsNok) );
+	return ((_state == OutgoingSmsOk) || (_state == OutgoingSmsNok));
 }
 
 bool HistoryMemento::isChatSessionMemento() const {
@@ -130,29 +113,29 @@ std::string HistoryMemento::toString() const {
 std::string HistoryMemento::stateToString(State state) {
 	switch(state) {
 	case OutgoingCall:
-		return StateOutgoingCall;
-		break;
+		return "StateOutgoingCall";
+
 	case IncomingCall:
-		return StateIncomingCall;
-		break;
+		return "StateIncomingCall";
+
 	case OutgoingSmsOk:
-		return StateOutgoingSMSOK;
-		break;
+		return "StateOutgoingSMSOK";
+
 	case OutgoingSmsNok:
-		return StateOutgoingSMSNOK;
-		break;
+		return "StateOutgoingSMSNOK";
+
 	case RejectedCall:
-		return StateRejectedCall;
-		break;
+		return "StateRejectedCall";
+
 	case MissedCall:
-		return StateMissedCall;
-		break;
+		return "StateMissedCall";
+
 	case None:
-		return StateNone;
-		break;
+		return "StateNone";
+
 	case Any:
-		return StateAny;
-		break;
+		return "StateAny";
+
 	default:
 		LOG_FATAL("unknown state=" + String::fromNumber(state));
 	}

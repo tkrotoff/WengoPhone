@@ -35,7 +35,7 @@
        <number>6</number>
       </property>
       <item row="2" column="0" >
-       <widget class="QGroupBox" name="groupBox" >
+       <widget class="QGroupBox" name="groupBox_3" >
         <property name="title" >
          <string>When I sign into Wengo</string>
         </property>
@@ -72,7 +72,7 @@
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QGroupBox" name="groupBox" >
+       <widget class="QGroupBox" name="groupBox_4" >
         <property name="title" >
          <string>Allow chats from</string>
         </property>
@@ -116,7 +116,7 @@
        </widget>
       </item>
       <item row="0" column="0" >
-       <widget class="QGroupBox" name="groupBox" >
+       <widget class="QGroupBox" name="groupBox_2" >
         <property name="title" >
          <string>Allow calls from</string>
         </property>

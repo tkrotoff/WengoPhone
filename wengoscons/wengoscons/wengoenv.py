@@ -407,7 +407,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 				if not path in env['CPPPATH']:
 					env.Prepend(CPPPATH = path)
 		prependIncludePath = staticmethod(prependIncludePath)
-		
+
 		def addIncludePath(env, paths):
 			for path in paths:
 				if not path in env['CPPPATH']:
@@ -1298,7 +1298,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		"""
 
 		self.LibPath.prependLibPath(self, paths)
-		
+
 	def WengoAddLibPath(self, paths):
 		"""
 		Adds paths to the LIBPATH SCons variable.
@@ -1335,7 +1335,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		"""
 
 		self.IncludePath.prependIncludePath(self, paths)
-		
+
 	def WengoAddIncludePath(self, paths):
 		"""
 		Adds paths to the CPPPATH SCons variable.
@@ -1555,6 +1555,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		@return Windows resource file compiled (.res)
 		"""
 
+		print 'res ' + rcFile
 		#FIXME This does not work with MinGW since the resource program of MinGW
 		#has to be launched in the same directory where the .rc file is
 		#Visual C++ does not have this limitation
@@ -1597,6 +1598,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		@return Qt4 resource file compiled (.cpp)
 		"""
 
+		print 'rcc ' + qrcFile
 		qtdir = os.environ['QTDIR']
 		rcc = os.path.join(qtdir, 'bin', 'rcc')
 
@@ -1619,6 +1621,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		@return C++ header corresponding to the Qt Designer file (.h)
 		"""
 
+		print 'uic ' + uiFile
 		qtdir = os.environ['QTDIR']
 		uic = os.path.join(qtdir, 'bin', 'uic')
 
@@ -1861,7 +1864,7 @@ def WengoPrependIncludePath(paths):
 
 	env = getGlobalEnvironment()
 	env.WengoPrependIncludePath(paths)
-	
+
 def WengoAddIncludePath(paths):
 	"""
 	Adds include paths to the global Environment.
@@ -1881,7 +1884,7 @@ def WengoPrependLibPath(paths):
 
 	env = getGlobalEnvironment()
 	env.WengoPrependLibPath(paths)
-	
+
 def WengoAddLibPath(paths):
 	"""
 	Adds lib paths to the global Environment.

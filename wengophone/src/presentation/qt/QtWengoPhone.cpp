@@ -123,7 +123,7 @@ QtWengoPhone::~QtWengoPhone() {
 
 void QtWengoPhone::initThreadSafe() {
 	_wengoPhoneWindow = new QMainWindow(NULL);
-    QApplication::setQuitOnLastWindowClosed ( false );
+	QApplication::setQuitOnLastWindowClosed ( false );
 	qRegisterMetaType<QVariant>("QVariant");
 
 	_ui = new Ui::WengoPhoneWindow();
@@ -198,7 +198,7 @@ void QtWengoPhone::initThreadSafe() {
 	_qtHistoryWidget = NULL;
 
 	//Systray
-    _qtTrayIcon = new QtTrayIcon(this);
+	_qtTrayIcon = new QtTrayIcon(this);
 
 
 	//actionShowWengoAccount
@@ -225,20 +225,14 @@ void QtWengoPhone::initThreadSafe() {
 	//actionSendSms
 	connect(_ui->actionSendSms, SIGNAL(triggered()), SLOT(sendSms()));
 
-	//actionAdvancedConfiguration
-	connect(_ui->actionAdvancedConfiguration, SIGNAL(triggered()), SLOT(showAdvancedConfig()));
-
 	//actionFaq
 	connect(_ui->actionFaq, SIGNAL (triggered()), SLOT(showFaq()));
-
-	//actionBuyCallOutCredits
-	connect(_ui->actionBuyCallOutCredits, SIGNAL(triggered()), SLOT(showBuyOut()));
 
 	//actionCallOutService
 	connect(_ui->actionCallOutService, SIGNAL(triggered()), SLOT (showCallOut()));
 
-    // Show / Hide groups
-    connect(_ui->actionShow_Hide_groups, SIGNAL(triggered()), SLOT(showHideGroups()));
+	// Show / Hide groups
+	connect(_ui->actionHideContactGroups, SIGNAL(triggered()), SLOT(showHideGroups()));
 
 	//actionIM_Account_Settings
 	connect(_ui->actionIMAccountSettings, SIGNAL(triggered()), SLOT(showAccountSettings()));
@@ -285,7 +279,7 @@ void QtWengoPhone::initThreadSafe() {
 	connect (_ui->actionAccept, SIGNAL(triggered()), SLOT(acceptCall()));
 
 	// Resume a call
-	connect (_ui->actionHold_Resume, SIGNAL(triggered()), SLOT(resumeCall()));
+	connect (_ui->actionHoldResume, SIGNAL(triggered()), SLOT(resumeCall()));
 
 	// Hangup a call
 	connect (_ui->actionHangup, SIGNAL(triggered()), SLOT(hangupCall()));
@@ -691,9 +685,6 @@ void QtWengoPhone::showFaq() {
 	WsUrl::showWengoFAQ();
 }
 
-void QtWengoPhone::showBuyOut() {
-	WsUrl::showWengoBuyWengos();
-}
 void QtWengoPhone::showCallOut() {
 	WsUrl::showWengoCallOut();
 }

@@ -17,12 +17,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef HISTORYMEMENTO_H
-#define HISTORYMEMENTO_H
+#ifndef OWHISTORYMEMENTO_H
+#define OWHISTORYMEMENTO_H
 
 #include <sipwrapper/EnumPhoneCallState.h>
 
-#include <util/Event.h>
 #include <util/Date.h>
 #include <util/Time.h>
 #include <serializer/DateXMLSerializer.h>
@@ -77,49 +76,49 @@ public:
 	~HistoryMemento();
 
 	/**
-	 * return the state.
+	 * Returns the state.
 	 *
 	 * @return the state
 	 */
 	HistoryMemento::State getState() const;
 
 	/**
-	 * return the peer.
+	 * Returns the peer.
 	 *
 	 * @return the peer
 	 */
 	std::string getPeer() const;
 
 	/**
-	 * return the duration.
+	 * Returns the duration.
 	 *
 	 * @return the duration
 	 */
 	int getDuration() const;
 
 	/**
-	 * return the date.
+	 * Returns the date.
 	 *
 	 * @return the date
 	 */
 	Date getDate() const;
 
 	/**
-	 * return the time.
+	 * Returns the time.
 	 *
 	 * @return the time
 	 */
 	Time getTime() const;
 
 	/**
-	 * return data.
+	 * Returns data.
 	 *
 	 * @return data
 	 */
 	std::string getData() const;
 
 	/**
-	 * return true if the Memento can be replayed.
+	 * Returns true if the Memento can be replayed.
 	 *
 	 * @return true if the Memento can be replayed
 	 */
@@ -133,64 +132,55 @@ public:
 	void updateDuration(int duration);
 
 	/**
-	 * return a string representing the memento.
+	 * Returns a string representing the memento.
 	 *
 	 * @return return a string representing the memento
 	 */
 	std::string toString() const;
 
-	/**
-	 * return a string representing a memento state.
-	 *
-	 * @return return a string representing a memento state
-	 */
-	static std::string stateToString(State state);
-
-	static const std::string StateIncomingCall;
-	static const std::string StateOutgoingCall;
-	static const std::string StateMissedCall;
-	static const std::string StateRejectedCall;
-	static const std::string StateOutgoingSMSOK;
-	static const std::string StateOutgoingSMSNOK;
-	static const std::string StateNone;
-	static const std::string StateAny;
-
 private:
 
 	/**
-	 * return true if the memento is for a call.
+	 * Returns true if the memento is for a call.
 	 *
 	 * @return true if the memento is for a call
 	 */
 	bool isCallMemento() const;
 
 	/**
-	 * return true if the memento is for a SMS.
+	 * Returns true if the memento is for a SMS.
 	 *
 	 * @return true if the memento is for a SMS
 	 */
 	bool isSMSMemento() const;
 
 	/**
-	 * return true if the memento is for a chat session.
+	 * Returns true if the memento is for a chat session.
 	 *
 	 * @return true if the memento is for a chat session
 	 */
 	bool isChatSessionMemento() const;
 
 	/**
-	 * update state.
+	 * Updates state.
 	 *
 	 * @param state new state
 	 */
 	void updateState(State state);
 
 	/**
-	 * return the callId associated to the memento.
+	 * Returns the callId associated to the memento.
 	 *
 	 * @return return the callId associated to the memento
 	 */
 	int getCallId() const;
+
+	/**
+	 * Returns a string representing a memento state.
+	 *
+	 * @return return a string representing a memento state
+	 */
+	static std::string stateToString(State state);
 
 	/**
 	 * the peer.
@@ -221,7 +211,7 @@ private:
 	/** Serialialization load method. */
 	template < class Archive >
 	void load(Archive & ar, const unsigned int version) {
-		if( version == SERIALIZATION_VERSION ) {
+		if (version == SERIALIZATION_VERSION) {
 			ar >> BOOST_SERIALIZATION_NVP(_peer);
 			DateXMLSerializer d(_date);
 			std::string date;
@@ -259,4 +249,4 @@ private:
 
 BOOST_CLASS_VERSION(HistoryMemento, HistoryMemento::SERIALIZATION_VERSION)
 
-#endif	//HISTORYMEMENTO_H
+#endif	//OWHISTORYMEMENTO_H

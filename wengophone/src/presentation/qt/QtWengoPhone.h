@@ -195,8 +195,6 @@ private Q_SLOTS:
 
 	void showFaq();
 
-	void showBuyOut();
-
 	void showCallOut();
 
 	void showSms();

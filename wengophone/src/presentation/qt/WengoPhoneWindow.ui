@@ -324,7 +324,6 @@
       <property name="currentIndex" >
        <number>0</number>
       </property>
-      <widget class="QWidget" name="page" />
      </widget>
     </item>
     <item row="4" column="0" >
@@ -350,7 +349,6 @@
       <property name="currentIndex" >
        <number>0</number>
       </property>
-      <widget class="QWidget" name="page" />
      </widget>
     </item>
    </layout>
@@ -361,7 +359,7 @@
      <x>0</x>
      <y>0</y>
      <width>329</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -377,11 +375,6 @@
     <property name="title" >
      <string>&amp;Tools</string>
     </property>
-    <widget class="QMenu" name="menuType_Here" >
-     <property name="title" >
-      <string>Type Here</string>
-     </property>
-    </widget>
     <widget class="QMenu" name="menuClearHistory" >
      <property name="title" >
       <string>Clear &amp;History</string>
@@ -409,43 +402,22 @@
     <addaction name="separator" />
     <addaction name="actionAccept" />
     <addaction name="actionHangup" />
-    <addaction name="actionHold_Resume" />
+    <addaction name="actionHoldResume" />
    </widget>
    <widget class="QMenu" name="menuContacts" >
     <property name="title" >
      <string>&amp;Contacts</string>
     </property>
-    <widget class="QMenu" name="menuHideShow" >
-     <property name="title" >
-      <string>Sort contacts</string>
-     </property>
-     <addaction name="actionSortAlphabetically" />
-     <addaction name="actionBy_presence" />
-     <addaction name="actionBy_media" />
-     <addaction name="actionBy_protocol" />
-    </widget>
     <addaction name="actionAddContact" />
     <addaction name="actionSearchWengoUsers" />
     <addaction name="separator" />
     <addaction name="actionHideContactsOffline" />
-    <addaction name="actionShow_Hide_groups" />
+    <addaction name="actionHideContactGroups" />
    </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>&amp;Wengo</string>
     </property>
-    <widget class="QMenu" name="menuClear_History2" >
-     <property name="title" >
-      <string>Clear History</string>
-     </property>
-    </widget>
-    <widget class="QMenu" name="menuHide_Show2" >
-     <property name="title" >
-      <string>Hide / Show</string>
-     </property>
-     <addaction name="separator" />
-     <addaction name="separator" />
-    </widget>
     <addaction name="actionShowWengoAccount" />
     <addaction name="actionEditMyProfile" />
     <addaction name="actionLogOff" />
@@ -466,20 +438,15 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>580</y>
+     <y>583</y>
      <width>329</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>
   <action name="actionShowWengoAccount" >
    <property name="text" >
     <string>View My &amp;Wengo Account</string>
-   </property>
-  </action>
-  <action name="actionOpenWengoAccount" >
-   <property name="text" >
-    <string>&amp;Open Another Wengo Account</string>
    </property>
   </action>
   <action name="actionClose" >
@@ -490,11 +457,6 @@
   <action name="actionShowForum" >
    <property name="text" >
     <string>&amp;Forum</string>
-   </property>
-  </action>
-  <action name="actionShowHelp" >
-   <property name="text" >
-    <string>Help</string>
    </property>
   </action>
   <action name="actionShowAbout" >
@@ -517,16 +479,6 @@
     <string>&amp;Send a short text message (SMS)</string>
    </property>
   </action>
-  <action name="actionSetLogin" >
-   <property name="text" >
-    <string>Set login</string>
-   </property>
-  </action>
-  <action name="actionAdvancedConfiguration" >
-   <property name="text" >
-    <string>&amp;Advanced Configuration</string>
-   </property>
-  </action>
   <action name="actionEditMyProfile" >
    <property name="text" >
     <string>Edit My &amp;Profile</string>
@@ -542,49 +494,14 @@
     <string>&amp;Wiki / Faq</string>
    </property>
   </action>
-  <action name="actionBuyCallOutCredits" >
-   <property name="text" >
-    <string>Buy call-out credits</string>
-   </property>
-  </action>
   <action name="actionCallOutService" >
    <property name="text" >
     <string>&amp;Learn more about Wengo Services</string>
    </property>
   </action>
-  <action name="actionSms" >
-   <property name="text" >
-    <string>&amp;Short text messages (SMS)</string>
-   </property>
-  </action>
-  <action name="actionVoiceMail" >
-   <property name="text" >
-    <string>&amp;Voicemail </string>
-   </property>
-  </action>
-  <action name="actionViewToolbar" >
-   <property name="text" >
-    <string>View &amp;Toolbar</string>
-   </property>
-  </action>
-  <action name="actionViewAddressbar" >
-   <property name="text" >
-    <string>View &amp;Addressbar</string>
-   </property>
-  </action>
-  <action name="actionViewDialpad" >
-   <property name="text" >
-    <string>View &amp;Dialpad</string>
-   </property>
-  </action>
   <action name="actionHideContactsOffline" >
    <property name="text" >
     <string>Show / Hide &amp;Contacts Offline</string>
-   </property>
-  </action>
-  <action name="actionShowContactGroups" >
-   <property name="text" >
-    <string>Show Contact &amp;Groups</string>
    </property>
   </action>
   <action name="actionIMAccountSettings" >
@@ -622,89 +539,9 @@
     <string>&amp;All</string>
    </property>
   </action>
-  <action name="actionLogOff" >
-   <property name="text" >
-    <string>&amp;Log off</string>
-   </property>
-  </action>
   <action name="actionSearchWengoUsers" >
    <property name="text" >
     <string>&amp;Search for Wengo Users</string>
-   </property>
-  </action>
-  <action name="actionCreateGroup" >
-   <property name="text" >
-    <string>Add a group</string>
-   </property>
-  </action>
-  <action name="actionCreateChatConnference" >
-   <property name="text" >
-    <string>Create Conference C&amp;hat</string>
-   </property>
-  </action>
-  <action name="actionShow_contact_groups" >
-   <property name="text" >
-    <string>Show contact groups</string>
-   </property>
-  </action>
-  <action name="actionManage_blocked_contacts" >
-   <property name="text" >
-    <string>Manage blocked contacts</string>
-   </property>
-  </action>
-  <action name="actionShow_hide_contacts_offline" >
-   <property name="text" >
-    <string>Show / hide contacts offline</string>
-   </property>
-  </action>
-  <action name="actionSortAlphabetically" >
-   <property name="text" >
-    <string>alphabetically</string>
-   </property>
-  </action>
-  <action name="actionBy_presence" >
-   <property name="text" >
-    <string>by presence</string>
-   </property>
-  </action>
-  <action name="actionBy_media" >
-   <property name="text" >
-    <string>by media</string>
-   </property>
-  </action>
-  <action name="actionBy_protocol" >
-   <property name="text" >
-    <string>by protocol</string>
-   </property>
-  </action>
-  <action name="actionForward_incoming_calls" >
-   <property name="text" >
-    <string>Forward incoming calls</string>
-   </property>
-  </action>
-  <action name="actionView_toolbar" >
-   <property name="text" >
-    <string>View toolbar</string>
-   </property>
-  </action>
-  <action name="actionView_adressbar" >
-   <property name="text" >
-    <string>View adressbar</string>
-   </property>
-  </action>
-  <action name="actionView_dialpad" >
-   <property name="text" >
-    <string>View dialpad</string>
-   </property>
-  </action>
-  <action name="actionView_avatars_in_chat_window" >
-   <property name="text" >
-    <string>View avatars in chat window</string>
-   </property>
-  </action>
-  <action name="actionLog_off" >
-   <property name="text" >
-    <string>Log off</string>
    </property>
   </action>
   <action name="actionAccept" >
@@ -717,12 +554,12 @@
     <string>Hangup</string>
    </property>
   </action>
-  <action name="actionHold_Resume" >
+  <action name="actionHoldResume" >
    <property name="text" >
     <string>Hold / Resume</string>
    </property>
   </action>
-  <action name="actionShow_Hide_groups" >
+  <action name="actionHideContactGroups" >
    <property name="text" >
     <string>Show / Hide groups</string>
    </property>
