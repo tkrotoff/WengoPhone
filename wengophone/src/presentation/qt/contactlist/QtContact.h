@@ -28,14 +28,14 @@
 
 class CWengoPhone;
 
-class QtUser : QObject {
+class QtContact : QObject {
 	Q_OBJECT
 public:
 
 	enum SizeHint { UserSize = 22 };
 
-	QtUser(const std::string & contactId, CWengoPhone & wengoPhone, QObject * parent = 0);
-	
+	QtContact(const std::string & contactId, CWengoPhone & wengoPhone, QObject * parent = 0);
+
 	virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 
 	QString getId() const;
@@ -101,7 +101,7 @@ public:
 	bool hasPhoneNumber() const;
 
 	QString getDisplayName() const;
-	
+
 	EnumPresenceState::PresenceState getPresenceState() const;
 
 public Q_SLOTS:
@@ -110,7 +110,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-	void clicked(QtUser * user, int prt);
+	void clicked(QtContact * user, int prt);
 
 protected:
 
@@ -141,7 +141,7 @@ protected:
 	QString _avatarPath;
 
 	/**
-	 * The UUID of the Contact associated with this QtUser.
+	 * The UUID of the Contact associated with this QtContact.
 	 */
 	std::string _contactId;
 

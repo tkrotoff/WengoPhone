@@ -5,7 +5,7 @@
 #include "QtContactPixmap.h"
 
 class QTreeWidgetItem;
-class QtUser;
+class QtContact;
 
 
 /**
@@ -17,7 +17,7 @@ class QtContactInfo : public QObject {
 	Q_OBJECT
 public:
 
-	QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, QtUser * user, int index, QObject * parent = 0);
+	QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, QtContact * user, int index, QObject * parent = 0);
 
 	QtContactInfo(const QtContactInfo & other);
 
@@ -27,7 +27,7 @@ public:
 
 	QTreeWidgetItem * getParentItem();
 
-	QtUser * getUser() const;
+	QtContact * getUser() const;
 
 	int getIndex() const;
 
@@ -47,7 +47,7 @@ protected:
 
 	QTreeWidgetItem * _parentItem;
 
-	QtUser * _user;
+	QtContact * _user;
 
 	int _index;
 

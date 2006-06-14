@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtUser.h"
+#include "QtContact.h"
 
 #include <model/contactlist/ContactProfile.h>
 
@@ -28,10 +28,10 @@
 
 #include <util/Logger.h>
 
-#include "../QtWengoPhone.h"
-#include "../webservices/sms/QtSms.h"
+#include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/webservices/sms/QtSms.h>
 
-QtUser::QtUser(const std::string & contactId, CWengoPhone & cWengoPhone, QObject * parent)
+QtContact::QtContact(const std::string & contactId, CWengoPhone & cWengoPhone, QObject * parent)
 : QObject(parent), _cWengoPhone(cWengoPhone) {
 	_contactId = contactId;
 	contactUpdated();
@@ -39,7 +39,7 @@ QtUser::QtUser(const std::string & contactId, CWengoPhone & cWengoPhone, QObject
 	_openStatus = false;
 }
 
-void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) {
+void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) {
 	QMutexLocker locker(& _mutex);
 
 	QRect r;
@@ -91,17 +91,15 @@ void QtUser::paint(QPainter * painter, const QStyleOptionViewItem & option, cons
 	painter->drawText(textRect, Qt::AlignLeft, text, 0);
 }
 
-QString QtUser::getId() const {
+QString QtContact::getId() const {
 	return QString::fromStdString(_contactId);
 }
 
-QString QtUser::getUserName() const {
-	//QMutexLocker locker(&_mutex);
+QString QtContact::getUserName() const {
 	return QString::fromUtf8(_contactProfile.getDisplayName().c_str());
 }
 
-QtContactPixmap::ContactPixmap QtUser::getStatus() const {
-	//QMutexLocker locker(&_mutex);
+QtContactPixmap::ContactPixmap QtContact::getStatus() const {
 	QtContactPixmap::ContactPixmap status;
 
 	switch (_contactProfile.getPresenceState()) {
@@ -132,20 +130,16 @@ QtContactPixmap::ContactPixmap QtUser::getStatus() const {
 	return status;
 }
 
-void QtUser::startChat() {
-	//QMutexLocker locker(&_mutex);
+void QtContact::startChat() {
 	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->startIM(_contactId);
 
 }
 
-void QtUser::startSMS() {
-	//QMutexLocker locker(&_mutex);
-
+void QtContact::startSMS() {
 	QtWengoPhone * qwengophone = dynamic_cast < QtWengoPhone * > (_cWengoPhone.getPresentation());
-
-	if (!qwengophone)
+	if (!qwengophone) {
 		return;
-
+	}
 	if (qwengophone->getSms()) {
 		QString mobilePhone = QString::fromStdString(_contactProfile.getMobilePhone());
 		qwengophone->getSms()->setPhoneNumber(mobilePhone);
@@ -155,67 +149,53 @@ void QtUser::startSMS() {
 	}
 }
 
-void QtUser::mouseClicked(const QPoint & pos, const QRect & rect) {
+void QtContact::mouseClicked(const QPoint & pos, const QRect & rect) {
 }
 
-void QtUser::setButton(const Qt::MouseButton button) {
+void QtContact::setButton(const Qt::MouseButton button) {
 	_mouseButton = button;
 }
 
-Qt::MouseButton QtUser::getButton() const {
+Qt::MouseButton QtContact::getButton() const {
 	return _mouseButton;
 }
 
-void QtUser::setOpenStatus(bool value) {
+void QtContact::setOpenStatus(bool value) {
 	_openStatus = value;
 }
 
-int QtUser::getHeight() const {
+int QtContact::getHeight() const {
 	if (_openStatus)
 		return 90;
 	return UserSize;
 }
 
-QString QtUser::getMobilePhone() const {
-	//QMutexLocker locker(&_mutex);
+QString QtContact::getMobilePhone() const {
 	QString mphone = QString::fromStdString(_contactProfile.getMobilePhone());
-
 	return mphone;
 }
 
-QString QtUser::getHomePhone() const {
-	//QMutexLocker locker(&_mutex);
-
+QString QtContact::getHomePhone() const {
 	QString hphone = QString::fromStdString(_contactProfile.getHomePhone());
-
 	return hphone;
 }
 
-QString QtUser::getWorkPhone() const {
-	//QMutexLocker locker(&_mutex);
-
+QString QtContact::getWorkPhone() const {
 	QString wphone = QString::fromStdString(_contactProfile.getWorkPhone());
-
 	return wphone;
 }
 
-QString QtUser::getWengoPhoneNumber() const {
-	//QMutexLocker locker(&_mutex);
-
+QString QtContact::getWengoPhoneNumber() const {
 	QString wphone = QString::fromStdString(_contactProfile.getWengoPhoneId());
-
 	return wphone;
 }
 
-QString QtUser::getPreferredNumber() const {
-	//QMutexLocker locker(&_mutex);
-
+QString QtContact::getPreferredNumber() const {
 	QString wphone = QString::fromStdString(_contactProfile.getPreferredNumber());
-
 	return wphone;
 }
 
-bool QtUser::hasPhoneNumber() const {
+bool QtContact::hasPhoneNumber() const {
 	if (!getMobilePhone().isEmpty())
 		return true;
 	if (!getHomePhone().isEmpty())
@@ -227,42 +207,42 @@ bool QtUser::hasPhoneNumber() const {
 	return false;
 }
 
-bool QtUser::hasIM() const {
+bool QtContact::hasIM() const {
 	return _contactProfile.hasIM();
 }
 
-bool QtUser::hasFreeCall() const {
+bool QtContact::hasFreeCall() const {
 	return _contactProfile.hasFreeCall();
 }
 
-bool QtUser::hasCall() const {
+bool QtContact::hasCall() const {
 	return _contactProfile.hasCall();
 }
 
-bool QtUser::hasVideo() const {
+bool QtContact::hasVideo() const {
 	return _contactProfile.hasVideo();
 }
 
-void QtUser::startCall(const QString & number) {
+void QtContact::startCall(const QString & number) {
 	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(number.toStdString());
 }
 
-void QtUser::startCall() {
+void QtContact::startCall() {
 	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeContactCall(_contactId);
 }
 
-void QtUser::contactUpdated() {
+void QtContact::contactUpdated() {
 	_contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
 }
 
-void QtUser::startFreeCall() {
+void QtContact::startFreeCall() {
 	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(_contactProfile.getFreePhoneNumber(), false);
 }
 
-QString QtUser::getDisplayName() const {
+QString QtContact::getDisplayName() const {
 	return QString::fromStdString(_contactProfile.getDisplayName());
 }
 
-EnumPresenceState::PresenceState QtUser::getPresenceState() const {
+EnumPresenceState::PresenceState QtContact::getPresenceState() const {
 	return _contactProfile.getPresenceState();
 }

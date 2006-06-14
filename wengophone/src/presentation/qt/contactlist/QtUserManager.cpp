@@ -101,7 +101,7 @@ QtUserManager::QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPh
 void QtUserManager::startSMS(bool checked) {
 
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user;
+	QtContact * user;
 
 	QTreeWidgetItem * item = _tree->currentItem();
 	if( ul && item ) {
@@ -113,7 +113,7 @@ void QtUserManager::startSMS(bool checked) {
 void QtUserManager::startChat(bool) {
 
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user;
+	QtContact* user;
 
 	QTreeWidgetItem * item = _tree->currentItem();
 	if( ul && item ) {
@@ -285,7 +285,7 @@ void QtUserManager::itemDoubleClicked(QTreeWidgetItem * item, int col) {
 }
 
 void QtUserManager::defaultAction(QTreeWidgetItem * item){
-	QtUser * user;
+	QtContact * user;
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QtUserList * ul = QtUserList::getInstance();
 
@@ -375,7 +375,7 @@ void QtUserManager::sortUsers(bool bypassTimer) {
 		}
 	}
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user;
+	QtContact * user;
 
 	QList < QTreeWidgetItem * > itemList = _tree->findItems("*", Qt::MatchWildcard);
 	QtContactInfoList onlineContact;
@@ -484,7 +484,7 @@ void QtUserManager::showAllUsers() {
 
 	ContactProfile cprofile;
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user;
+	QtContact * user;
 	QTreeWidgetItem * group;
 	std::vector<std::string> contactIds = _qtContactList.getCContactList().getContactIds();
 	std::vector<std::string>::iterator contactIterator;
@@ -518,12 +518,12 @@ void QtUserManager::showAllUsers() {
 			}
 			// We have the group, now add users to the group
 			QTreeWidgetItem * newContact = NULL;
-			QtUser * user = NULL;
+			QtContact * user = NULL;
 			QString contactName;
 			newContact = new QTreeWidgetItem(group);
 			newContact->setText(0, QString::fromStdString((*contactIterator)));
 			newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
-			user = new QtUser((*contactIterator),_cWengoPhone);
+			user = new QtContact((*contactIterator),_cWengoPhone);
 			ul->addUser(user);
 		}
 	}
@@ -558,7 +558,7 @@ void QtUserManager::inviteToConference() { // SLOT
 	if (source) {
 		QtConferenceAction * action = dynamic_cast < QtConferenceAction * > (source);
 		QtUserList * ul = QtUserList::getInstance();
-		QtUser * user;
+		QtContact * user;
 		// The current selected item
 		QTreeWidgetItem * item = _tree->currentItem();
 		user = ul->getUser(item->text(0));
@@ -575,7 +575,7 @@ void QtUserManager::inviteToConference() { // SLOT
 QMenu * QtUserManager::createMenu() {
 
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user;
+	QtContact * user;
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
 	user = ul->getUser(item->text(0));
@@ -627,7 +627,7 @@ QMenu * QtUserManager::createMenu() {
 void QtUserManager::startMobileCall(bool checked) {
 
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user;
+	QtContact * user;
 
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
@@ -639,7 +639,7 @@ void QtUserManager::startMobileCall(bool checked) {
 
 void QtUserManager::startHomeCall(bool checked) {
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user;
+	QtContact * user;
 
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
@@ -652,7 +652,7 @@ void QtUserManager::startHomeCall(bool checked) {
 void QtUserManager::startWorkCall(bool checked) {
 
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user;
+	QtContact * user;
 
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
@@ -665,7 +665,7 @@ void QtUserManager::startWorkCall(bool checked) {
 void QtUserManager::startWengoCall(bool checked) {
 
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user;
+	QtContact * user;
 	// The current selected item
 	QTreeWidgetItem * item = _tree->currentItem();
 	if(ul && item) {
@@ -676,7 +676,7 @@ void QtUserManager::startWengoCall(bool checked) {
 
 void QtUserManager::removeContact(const QString & contactId) {
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user = NULL;
+	QtContact * user = NULL;
 	bool found = false;
 
 	QList <QTreeWidgetItem *> itemList = _tree->findItems("*", Qt::MatchWildcard);
@@ -712,7 +712,7 @@ const QString & srcContactGroupId, const QString & dstContactGroupId) {
 	if (groupsAreHiden())
 		return;
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user = NULL;
+	QtContact * user = NULL;
 	bool found = false;
 	// Looking for the contact in the destination group
 	// If it is inside this group nothing is done

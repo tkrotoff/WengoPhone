@@ -21,7 +21,7 @@
 #define QTUSERLIST_H
 
 #include <QtGui>
-#include "QtUser.h"
+#include "QtContact.h"
 #include "QtContactPixmap.h"
 #include "QtUserList.h"
 
@@ -32,9 +32,9 @@ public:
 
 	static QtUserList * getInstance();
 
-	void addUser(QtUser * user);
+	void addUser(QtContact * user);
 
-	void removeUser(QtUser * user);
+	void removeUser(QtContact* user);
 
 	void paintUser(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 
@@ -46,7 +46,7 @@ public:
 
 	bool hasVideo(const QString & userid) const;
 
-	QtUser * getUser(const QString & userid) const;
+	QtContact * getUser(const QString & userid) const;
 
 	void mouseClicked(const QString & userid, const QPoint pos, const QRect & rect);
 
@@ -95,7 +95,7 @@ protected:
 
 	QTreeWidget * _tree;
 
-	QHash < QString, QtUser * > _userList;
+	QHash <QString,QtContact *> _userList;
 
 private:
 

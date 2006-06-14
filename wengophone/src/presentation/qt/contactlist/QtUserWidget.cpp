@@ -21,7 +21,7 @@
 
 #include "QtUserWidgetAvatarManager.h"
 #include "QtUserList.h"
-#include "QtUser.h"
+#include "QtContact.h"
 
 #include <model/contactlist/ContactProfile.h>
 

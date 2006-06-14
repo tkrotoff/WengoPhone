@@ -256,14 +256,14 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 			}
 
 			QTreeWidgetItem * newContact = NULL;
-			QtUser * user = NULL;
+			QtContact * user = NULL;
 			QString contactName;
 
 			newContact = new QTreeWidgetItem(list[0]);
 			newContact->setText(0, contactId);
 			newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
 
-			user = new QtUser(contactId.toStdString(), _cWengoPhone);
+			user = new QtContact(contactId.toStdString(), _cWengoPhone);
 
 			ul->addUser(user);
 
@@ -286,7 +286,7 @@ void QtContactList::contactMovedEventSlot(QString dstContactGroupId,
 
 void QtContactList::contactChangedEventSlot(QString contactId) {
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user = ul->getUser(contactId);
+	QtContact * user = ul->getUser(contactId);
 
 	if (user) {
 		user->contactUpdated();

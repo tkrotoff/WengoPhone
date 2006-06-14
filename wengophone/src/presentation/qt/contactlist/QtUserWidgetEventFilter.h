@@ -20,15 +20,19 @@
 #ifndef QTUSERWIDGETEVENTFILTER
 #define QTUSERWIDGETEVENTFILTER
 
-#include <QtGui>
+#include <QObject>
 #include "QtUserWidget.h"
-#include "QtUser.h"
+
+class QWidget;
+class QtContact;
 
 class QtUserWidgetEventFilter : public QObject {
+
 	Q_OBJECT
+
 public:
 
-	QtUserWidgetEventFilter(QObject * parent, QWidget * target, QtUser * user);
+	QtUserWidgetEventFilter(QObject * parent, QWidget * target, QtContact * user);
 
 protected:
 
@@ -40,7 +44,7 @@ protected:
 
 	QWidget * _target;
 
-	QtUser * _user;
+	QtContact * _user;
 };
 
 #endif	//QTUSERWIDGETEVENTFILTER

@@ -23,7 +23,7 @@
 #include "ui_UserWidget.h"
 
 #include <model/contactlist/ContactProfile.h>
-#include "QtUser.h"
+#include "QtContact.h"
 
 #include <QWidget>
 #include <QString>

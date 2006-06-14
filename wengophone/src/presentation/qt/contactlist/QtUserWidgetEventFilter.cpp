@@ -16,11 +16,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#include <QObject>
+#include <QWidget>
 
+#include "QtContact.h"
 #include "QtUserWidgetEventFilter.h"
 #include "QtContactPixmap.h"
 
-QtUserWidgetEventFilter::QtUserWidgetEventFilter(QObject * parent, QWidget * target, QtUser * user) : QObject(parent) {
+QtUserWidgetEventFilter::QtUserWidgetEventFilter(QObject * parent, QWidget * target, QtContact * user) : QObject(parent) {
 	_target = target;
 	_user = user;
 }
@@ -59,7 +62,7 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter, QRect rect) {
 	r = rect;
 	x = r.left();
 
-	int centeredPx_y = (QtUser::UserSize - px.size().height()) / 2;
+	int centeredPx_y = (QtContact::UserSize - px.size().height()) / 2;
 
 	painter->drawPixmap(x, r.top() + centeredPx_y, px);
 	x += px.width() + 5;
@@ -67,7 +70,7 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter, QRect rect) {
 
 	// Draw the user
 	QRect textRect = r;
-	int centeredText_y = (QtUser::UserSize - QFontMetrics(_target->font()).height()) / 2;
+	int centeredText_y = (QtContact::UserSize - QFontMetrics(_target->font()).height()) / 2;
 	textRect.setTop(textRect.top() + centeredText_y);
 
 	QFont font = painter->font();

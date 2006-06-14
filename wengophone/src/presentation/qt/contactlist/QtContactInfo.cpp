@@ -19,10 +19,10 @@
 
 #include "QtContactInfo.h"
 #include "QtUserList.h"
-#include "QtUser.h"
+#include "QtContact.h"
 #include <QTreeWidgetItem>
 
-QtContactInfo::QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, QtUser * user, int index, QObject * parent)
+QtContactInfo::QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, QtContact * user, int index, QObject * parent)
 : QObject(parent) {
 	_user = user;
 	_item = item;
@@ -58,7 +58,7 @@ QTreeWidgetItem * QtContactInfo::getParentItem() {
 	return _parentItem;
 }
 
-QtUser * QtContactInfo::getUser() const {
+QtContact * QtContactInfo::getUser() const {
 	return _user;
 }
 

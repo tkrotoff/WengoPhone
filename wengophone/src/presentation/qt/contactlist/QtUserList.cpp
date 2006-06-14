@@ -34,22 +34,21 @@ QtUserList::QtUserList() {
 }
 
 void QtUserList::paintUser(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) {
-	QMutexLocker locker(& _mutex);
-	QtUser * user;
+	QMutexLocker locker(&_mutex);
+	QtContact * user;
 	user = _userList[index.data().toString()];
 	if (user)
 		user->paint(painter, option, index);
 }
 
-void QtUserList::addUser(QtUser * user) {
+void QtUserList::addUser(QtContact  * user) {
 	QMutexLocker locker(& _mutex);
-
 	if (user) {
 		_userList[user->getId()] = user;
 	}
 }
 
-void QtUserList::removeUser(QtUser * user) {
+void QtUserList::removeUser(QtContact  * user) {
 	QMutexLocker locker(& _mutex);
 	if (user) {
 		_userList.remove(user->getId());
@@ -59,21 +58,19 @@ void QtUserList::removeUser(QtUser * user) {
 
 void QtUserList::mouseOn(const QString & userid) {
 	QMutexLocker locker(& _mutex);
-	QtUser * user;
+	QtContact * user;
 	user = _userList[userid];
-
 	if (user)
 		user->setMouseOn(true);
-
 	user = _userList[_lastMouseOn];
 	if (user)
 		user->setMouseOn(false);
 	_lastMouseOn = userid;
 }
 
-QtUser * QtUserList::getUser(const QString & userid) const {
+QtContact * QtUserList::getUser(const QString & userid) const {
 	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtUser * user;
+	QtContact * user;
 	user = _userList[userid];
 	return user;
 }
@@ -81,7 +78,7 @@ QtUser * QtUserList::getUser(const QString & userid) const {
 bool QtUserList::hasIM(const QString & userid) const {
 
 	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (user)
 		return user->hasIM();
 	return false;
@@ -90,7 +87,7 @@ bool QtUserList::hasIM(const QString & userid) const {
 bool QtUserList::hasCall(const QString & userid) const {
 
 	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (user)
 		return user->hasCall();
 	return false;
@@ -99,7 +96,7 @@ bool QtUserList::hasCall(const QString & userid) const {
 bool QtUserList::hasVideo(const QString & userid) const {
 
 	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (user)
 		return user->hasVideo();
 	return false;
@@ -107,14 +104,14 @@ bool QtUserList::hasVideo(const QString & userid) const {
 
 void QtUserList::mouseClicked(const QString & userid, const QPoint pos, const QRect & rect) {
 	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (user)
 		user->mouseClicked(pos, rect);
 }
 
 int QtUserList::getIconsStartPosition(const QString & userid) const {
 	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (user)
 		return user->getIconsStartPosition();
 	return -1;
@@ -122,14 +119,14 @@ int QtUserList::getIconsStartPosition(const QString & userid) const {
 
 void QtUserList::setButton(const QString & userid, const Qt::MouseButton button) {
 	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (user)
 		user->setButton(button);
 }
 
 Qt::MouseButton QtUserList::getButton(const QString & userid) const {
 	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (user)
 		return user->getButton();
 	return Qt::NoButton;
@@ -137,7 +134,7 @@ Qt::MouseButton QtUserList::getButton(const QString & userid) const {
 
 void QtUserList::setOpenStatus(const QString & userid, bool value) {
 	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (user)
 		user->setOpenStatus(value);
 }
@@ -145,7 +142,7 @@ void QtUserList::setOpenStatus(const QString & userid, bool value) {
 int QtUserList::getHeight(const QString & userid) const {
 
 	QMutexLocker locker(const_cast < QMutex * > (& _mutex));
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (user)
 		return user->getHeight();
 	else return 0;
@@ -155,10 +152,10 @@ void QtUserList::resetMouseStatus() {
 
 	QMutexLocker locker(& _mutex);
 
-	QHash < QString, QtUser * >::iterator iter;
+	QHash <QString,QtContact *>::iterator iter;
 
 	for (iter = _userList.begin(); iter != _userList.end(); iter++) {
-		QtUser * user = iter.value();
+		QtContact * user = iter.value();
 		if (user != NULL) {
 			user->setButton(Qt::NoButton);
 		}
@@ -168,7 +165,7 @@ void QtUserList::resetMouseStatus() {
 void QtUserList::startChat(const QString & userid) {
 
 	_mutex.lock();
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (!user) {
 		_mutex.unlock();
 		return;
@@ -179,7 +176,7 @@ void QtUserList::startChat(const QString & userid) {
 
 void QtUserList::startSMS(const QString & userid) {
 	_mutex.lock();
-	QtUser * user = _userList[userid];
+	QtContact * user=_userList[userid];
 	if (!user)
 		LOG_FATAL("User lookup failed !!!");
 	_mutex.unlock();
@@ -189,7 +186,7 @@ void QtUserList::startSMS(const QString & userid) {
 
 void QtUserList::startCall(const QString & userid, const QString & number) {
 	_mutex.lock();
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (!user)
 		LOG_FATAL("User lookup failed !!!");
 	_mutex.unlock();
@@ -199,7 +196,7 @@ void QtUserList::startCall(const QString & userid, const QString & number) {
 
 void QtUserList::startCall(const QString & userid) {
 	_mutex.lock();
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (!user)
 		LOG_FATAL("User lookup failed !!!");
 	_mutex.unlock();
@@ -208,7 +205,7 @@ void QtUserList::startCall(const QString & userid) {
 
 void QtUserList::startFreeCall(const QString & userid) {
 	_mutex.lock();
-	QtUser * user = _userList[userid];
+	QtContact * user = _userList[userid];
 	if (!user)
 		LOG_FATAL("User lookup failed !!!");
 	_mutex.unlock();
@@ -219,7 +216,7 @@ void QtUserList::startFreeCall(const QString & userid) {
 
 void QtUserList::clear(){
 	QMutexLocker locker(&_mutex);
-	QHash < QString, QtUser * >::iterator iter;
+	QHash <QString, QtContact *>::iterator iter;
 	for (iter=_userList.begin();iter!=_userList.end();iter++){
 		delete((*iter));
 	}

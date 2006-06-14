@@ -26,9 +26,9 @@
 #include "QtContactList.h"
 
 #include <QModelIndex>
-#include <QWidget>;
-#include <QStyleOptionViewItem>;
-#include <QAbstractItemModel>;
+#include <QWidget>
+#include <QStyleOptionViewItem>
+#include <QAbstractItemModel>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -53,7 +53,7 @@ QWidget * QtTreeViewDelegate::createEditor(QWidget * parent,
 const QStyleOptionViewItem &,
 const QModelIndex & index) const {
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user = ul->getUser(index.data().toString());
+	QtContact * user = ul->getUser(index.data().toString());
 
 	QtUserWidget * widget = new QtUserWidget(user->getId().toStdString(), _cWengoPhone, parent);
 
@@ -99,7 +99,7 @@ void QtTreeViewDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
 QSize QtTreeViewDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const {
 	QSize orig = QItemDelegate::sizeHint(option, index);
 	QtUserList * ul = QtUserList::getInstance();
-	QtUser * user = ul->getUser(index.data().toString());
+	QtContact * user = ul->getUser(index.data().toString());
 
 	if (user) {
 		return QSize(orig.width(), ul->getUser(index.data().toString())->getHeight());
