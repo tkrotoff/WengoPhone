@@ -198,6 +198,7 @@ void CurlHttpRequest::setCurlParam() {
 	curl_easy_setopt(_curl, CURLOPT_WRITEDATA, this);
 	curl_easy_setopt(_curl, CURLOPT_PROGRESSDATA, this);
 	curl_easy_setopt(_curl, CURLOPT_NOSIGNAL, 0);
+	curl_easy_setopt(_curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
 
 	//Maximum time in seconds that you allow the libcurl transfer operation to take
 	curl_easy_setopt(_curl, CURLOPT_TIMEOUT, 0);
@@ -205,12 +206,13 @@ void CurlHttpRequest::setCurlParam() {
 	//Limits the connection phase, once it has connected, this option is of no more use
 	curl_easy_setopt(_curl, CURLOPT_CONNECTTIMEOUT, 10);
 
+	//set the user agent
 	curl_easy_setopt(_curl, CURLOPT_USERAGENT, HttpRequest::getUserAgent().c_str());
 }
 
 void CurlHttpRequest::setSSLParam() {
 	curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYPEER, 0);
-	curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYHOST, 0);
+	curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYHOST, 1);
 	curl_easy_setopt(_curl, CURLOPT_SSLVERSION, 3);
 }
 
