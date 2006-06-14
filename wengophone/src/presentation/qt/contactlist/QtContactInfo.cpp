@@ -73,6 +73,7 @@ bool QtContactInfo::operator < (const QtContactInfo & other) const {
 	if (qtContact && otherQtContact) {
 		return qtContact->getUserName().toUpper() < otherQtContact->getUserName().toUpper();
 	}
+	return false;
 }
 
 QtContactInfo & QtContactInfo::operator = (const QtContactInfo & other) {
@@ -87,7 +88,6 @@ QtContactInfo & QtContactInfo::operator = (const QtContactInfo & other) {
 QtContactPixmap::ContactPixmap QtContactInfo::getStatus() {
 	QtUserList * ul = QtUserList::getInstance();
 	QtContact * qtContact = ul->getContact(_contactId);
-	if (qtContact) {
-		return qtContact->getStatus();
-	}
+	return qtContact->getStatus();
+
 }
