@@ -134,7 +134,8 @@ void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
 				"&lang=" + config.getLanguage() +
 				"&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) +
 				"&page=softphoneng-web";
-			_qtWengoPhone.getQtBrowser()->setUrl(QtWengoPhone::URL_WENGO_MINI_HOME + data);
+			if (_qtWengoPhone.getQtBrowser())
+                _qtWengoPhone.getQtBrowser()->setUrl(QtWengoPhone::URL_WENGO_MINI_HOME + data);
 		}
 #endif
 		break;
