@@ -73,7 +73,7 @@ void QtVideo::paintEvent() {
 		QSize size = frameSize;
 		int xpos = 0, ypos = 0;
 
-#if defined(OS_MACOSX)
+#if defined(OS_MACOSX) || defined(OS_LINUX)
 		if (frameSize.width() > 640) {
 			size.setWidth(640);
 		}
@@ -86,28 +86,8 @@ void QtVideo::paintEvent() {
 		xpos = (frameSize.width() - size.width()) / 2;
 		ypos = (frameSize.height() - size.height()) / 2;
 #endif
-		/*
-		FIXME resize using FFmpeg crashes
 
-		piximage originalImage;
-		originalImage.palette = PIX_OSI_RGB32;
-		originalImage.width = _image.width();
-		originalImage.height = _image.height();
-		originalImage.data = _image.bits();
-
-		piximage * resizedImage = pix_alloc(PIX_OSI_RGB32, size.width(), size.height());
-
-		pix_convert(PIX_NO_FLAG, resizedImage, &originalImage);
-
-		QImage resizedQImage = QImage(resizedImage->data, resizedImage->width,
-			resizedImage->height, QImage::Format_RGB32);
-
-		painter.drawImage(xpos, ypos, resizedQImage);
-
-		pix_free(resizedImage);
-		*/
-
-		//FIXME Qt scaling, too slow
+		//FIXME Qt scaling, too slow ?
 		painter.drawImage(xpos, ypos, _image.scaled(size, Qt::IgnoreAspectRatio,
 			Qt::FastTransformation));
 	}
