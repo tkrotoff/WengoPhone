@@ -377,6 +377,13 @@ public:
 		return _name;
 	}
 
+	/**
+	 * Gets the WsInfo pointer.
+	 */
+	WsInfo * getWsInfo() {
+		return _wsInfo;
+	}
+
 private:
 
 	/**

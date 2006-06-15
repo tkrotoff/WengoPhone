@@ -51,6 +51,8 @@ PresenceHandler::~PresenceHandler() {
 }
 
 void PresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
@@ -63,6 +65,8 @@ void PresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {
 }
 
 void PresenceHandler::blockContact(const IMContact & imContact) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
@@ -77,6 +81,8 @@ void PresenceHandler::blockContact(const IMContact & imContact) {
 }
 
 void PresenceHandler::unblockContact(const IMContact & imContact) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
@@ -91,13 +97,14 @@ void PresenceHandler::unblockContact(const IMContact & imContact) {
 }
 
 void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	PresenceMap::const_iterator it = _presenceMap.find(&imAccount);
 
 	if (it != _presenceMap.end()) {
 		LOG_DEBUG("an account is connected: login: " + imAccount.getLogin()
 			+ " protocol: " + String::fromNumber(imAccount.getProtocol()));
 
-		//TODO: Presence must be change to Presence set before disconnection
 		EnumPresenceState::PresenceState presenceState = (*it).first->getPresenceState();
 		if (presenceState == EnumPresenceState::PresenceStateOffline) {
 			presenceState =  EnumPresenceState::PresenceStateOnline;
@@ -120,6 +127,8 @@ void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount &
 }
 
 void PresenceHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	PresenceMap::iterator it = _presenceMap.find(&imAccount);
 
 	LOG_DEBUG("an account is disconnected, login=" + imAccount.getLogin()
@@ -135,6 +144,8 @@ void PresenceHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccoun
 
 void PresenceHandler::changeMyPresenceState(EnumPresenceState::PresenceState state,
 	const string & note, IMAccount * imAccount) {
+
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	LOG_DEBUG("changing MyPresenceState for "
 		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol " + String::fromNumber(imAccount->getProtocol()))
@@ -155,6 +166,8 @@ void PresenceHandler::changeMyPresenceState(EnumPresenceState::PresenceState sta
 }
 
 void PresenceHandler::changeMyAlias(const string & alias, IMAccount * imAccount) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	LOG_DEBUG("changing alias for "
 		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol " + String::fromNumber(imAccount->getProtocol()))
 		+ " with alias " + alias);
@@ -174,6 +187,8 @@ void PresenceHandler::changeMyAlias(const string & alias, IMAccount * imAccount)
 }
 
 void PresenceHandler::changeMyIcon(const Picture & picture, IMAccount * imAccount) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	LOG_DEBUG("changing icon for "
 		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol " + String::fromNumber(imAccount->getProtocol())));
 
@@ -194,20 +209,26 @@ void PresenceHandler::changeMyIcon(const Picture & picture, IMAccount * imAccoun
 void PresenceHandler::presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
 	const std::string & alias, const std::string & from) {
 
-	//Plays a sound
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	presenceStateChangedEvent(*this, state, alias, IMContact(sender.getIMAccount(), from));
 }
 
 void PresenceHandler::myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	myPresenceStatusEvent(*this, sender.getIMAccount(), status);
 }
 
 void PresenceHandler::authorizationRequestEventHandler(IMPresence & sender, const std::string & contactId, const std::string & message) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	authorizationRequestEvent(*this, IMContact(sender.getIMAccount(), contactId), message);
 }
 
 void PresenceHandler::subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	subscribeStatusEvent(*this, IMContact(sender.getIMAccount(), contactId), status);
 }
 
@@ -222,6 +243,8 @@ PresenceHandler::PresenceMap::iterator PresenceHandler::findPresence(PresenceMap
 }
 
 void PresenceHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	PresenceMap::const_iterator i = _presenceMap.find(&imAccount);
 
 	//Presence for this IMAccount has not yet been created
@@ -249,6 +272,8 @@ void PresenceHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAcco
 }
 
 void PresenceHandler::imAccountDeadEventHandler(IMAccount & sender) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	PresenceMap::iterator it = _presenceMap.find(&sender);
 
 	if (it != _presenceMap.end()) {
@@ -274,6 +299,8 @@ Picture PresenceHandler::getContactIcon(const IMContact & imContact) {
 }
 
 void PresenceHandler::authorizeContact(const IMContact & imContact, bool authorized, const std::string & message) {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
 	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *) imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
@@ -285,6 +312,8 @@ void PresenceHandler::authorizeContact(const IMContact & imContact, bool authori
 
 void PresenceHandler::contactIconChangedEventHandler(IMPresence & sender,
 	const std::string & contactId, Picture icon) {
+
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	contactIconChangedEvent(*this, IMContact(sender.getIMAccount(), contactId), icon);
 }

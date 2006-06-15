@@ -136,8 +136,14 @@ bool UserProfileHandler::userProfileExists(const std::string & name) {
 
 void UserProfileHandler::setCurrentUserProfile(const std::string & name, 
 	const WengoAccount & wengoAccount) {
-	if (!_currentUserProfile || (_currentUserProfile && (_currentUserProfile->getName() != name))) {
-		UserProfile * result = getUserProfile(name);
+
+	UserProfile * result = getUserProfile(name);
+
+	if (!_currentUserProfile ||
+		(_currentUserProfile &&
+			((_currentUserProfile->getName() != name) ||
+			((wengoAccount.getWengoPassword() != result->getWengoAccount()->getWengoPassword()) ||
+					(wengoAccount.hasAutoLogin() != result->getWengoAccount()->hasAutoLogin()))))) {
 
 		if (result) {
 			// If the WengoAccount is not empty, we update the one in UserProfile
@@ -197,12 +203,20 @@ void UserProfileHandler::initializeCurrentUserProfile() {
 		boost::bind(&UserProfileHandler::profileChangedEventHandler, this, _1);
 
 	_currentUserProfile->init();
-	WsUrl::setWengoAccount(_currentUserProfile->getWengoAccount());
-	userProfileInitializedEvent(*this, *_currentUserProfile);
 
-	_currentUserProfile->connect();
+	if (!_currentUserProfile->isWengoAccountValid()) {
+		wengoAccountNotValidEvent(*this, *_currentUserProfile->getWengoAccount());
+		delete _currentUserProfile;
+		_currentUserProfile = NULL;
+	} else {
+		WsUrl::setWengoAccount(_currentUserProfile->getWengoAccount());
 
-	setLastUsedUserProfile(*_currentUserProfile);
+		userProfileInitializedEvent(*this, *_currentUserProfile);
+
+		_currentUserProfile->connect();
+
+		setLastUsedUserProfile(*_currentUserProfile);
+	}
 }
 
 void UserProfileHandler::init() {

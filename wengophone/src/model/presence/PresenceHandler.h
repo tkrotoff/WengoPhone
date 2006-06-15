@@ -27,6 +27,8 @@
 #include <imwrapper/EnumPresenceState.h>
 #include <imwrapper/IMPresence.h>
 
+#include <thread/RecursiveMutex.h>
+
 #include <util/NonCopyable.h>
 #include <util/Event.h>
 
@@ -210,6 +212,8 @@ private:
 	PresenceMap _presenceMap;
 
 	IMContactMultiMap _pendingSubscriptions;
+
+	RecursiveMutex _mutex;
 
 	UserProfile & _userProfile;
 };

@@ -90,6 +90,11 @@ _modelThread(modelThread) {
 
 	_userProfile.getPresenceHandler().authorizationRequestEvent +=
 		boost::bind(&CUserProfile::authorizationRequestEventHandler, this, _1, _2, _3);
+
+	// Check if a PhoneLine already exist
+	if (_userProfile.getActivePhoneLine()) {
+		phoneLineCreatedEventHandler(_userProfile, *_userProfile.getActivePhoneLine());
+	}
 }
 
 CUserProfile::~CUserProfile() {

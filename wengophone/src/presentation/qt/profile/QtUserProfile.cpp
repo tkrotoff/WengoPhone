@@ -153,11 +153,6 @@ void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
 		break;
 
 	case SipAccount::LoginStatePasswordError:
-		QMessageBox::warning(
-			_qtWengoPhone.getWidget(),
-			tr("Login error"),
-			tr("Login and/or password incorrect"),
-			tr("&Ok"));
 		break;
 
 	case SipAccount::LoginStateNetworkError:

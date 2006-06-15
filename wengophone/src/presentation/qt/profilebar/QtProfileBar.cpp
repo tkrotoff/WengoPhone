@@ -147,6 +147,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 
 	_cUserProfile.getUserProfile().wsInfoCreatedEvent +=
 		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
+
 	_cUserProfile.getUserProfile().phoneLineCreatedEvent +=
 		boost::bind(&QtProfileBar::phoneLineCreatedEventHandler, this, _1, _2);
 
@@ -190,6 +191,13 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	QtUserProfile * qtUserProfile = ((QtUserProfile *)(_cUserProfile.getPresentation()));
 	connect(qtUserProfile, SIGNAL(cHistoryCreatedEventHandlerSignal()),
 		SLOT(cHistoryCreatedEventHandlerSlot()));
+
+	// Check if a PhoneLine already exist
+	if (_cUserProfile.getUserProfile().getActivePhoneLine()) {
+		//FIXME: must not use model class
+		phoneLineCreatedEventHandler(_cUserProfile.getUserProfile(), *_cUserProfile.getUserProfile().getActivePhoneLine());
+		wsInfoCreatedEventHandler(_cUserProfile.getUserProfile(), *_cUserProfile.getUserProfile().getWsInfo());
+	}
 }
 
 QtProfileBar::~QtProfileBar() {
