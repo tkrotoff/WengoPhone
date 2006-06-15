@@ -31,6 +31,7 @@ class QModelIndex;
 class QWidget;
 class QStyleOptionViewItem;
 class QAbstractItemModel;
+class QRect;
 
 /**
  * Qt Presentation component for ContactList.
@@ -60,6 +61,8 @@ protected:
 	void drawGroup(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
 
     bool checkForUtf8(const unsigned char * text, int size) const;
+
+    QPixmap getGroupBackGround(const QRect & rect) const;
 
 	const QWidget * _parent;
 

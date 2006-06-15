@@ -17,16 +17,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTUSERTREEEVENTFILTER_H
-#define OWQTUSERTREEEVENTFILTER_H
+#ifndef OWQTCONTACTTREEKEYFILTER_H
+#define OWQTCONTACTTREEKEYFILTER_H
 
 #include <QtGui>
 
-class QtUserTreeEventFilter : public QObject {
+class QtContactTreeKeyFilter : public QObject {
 	Q_OBJECT
 public:
 
-	QtUserTreeEventFilter(QObject * parent = 0, QTreeWidget * target = 0);
+	QtContactTreeKeyFilter(QObject * parent = 0, QTreeWidget * target = 0);
 
 Q_SIGNALS:
 

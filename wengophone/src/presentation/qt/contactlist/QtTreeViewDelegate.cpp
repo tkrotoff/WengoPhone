@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <QStyleOptionViewItem>
 #include <QAbstractItemModel>
+#include <QPixmapCache>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -137,40 +138,27 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 	spx = QtContactPixmap::getInstance();
 	painter->setPen(option.palette.text().color());
 	r = option.rect;
+	QFont font = option.font;
 
-	QLinearGradient lg(QPointF(1, option.rect.top()), QPointF(1, option.rect.bottom()));
-	lg.setColorAt(.8, QColor(212, 208, 200));
-	lg.setColorAt(0, QColor(255, 255, 255));
-	painter->fillRect(option.rect, QBrush(lg));
+	painter->drawPixmap(option.rect.left(),option.rect.top(),getGroupBackGround(option.rect));
 
-	QFont f = option.font;
-	f.setBold(true);
-	painter->setFont(f);
-
+	font.setBold(true);
+	painter->setFont(font);
 	if (option.state & QStyle::State_Open)
 		px = spx->getPixmap(QtContactPixmap::ContactGroupOpen);
 	else px = spx->getPixmap(QtContactPixmap::ContactGroupClose);
-
 	x = option.rect.left();
-
 	painter->drawPixmap(x, r.top() + 3, px);
 	x += px.width() + 3;
 	r.setLeft(x);
-
-	QFont font = painter->font();
-
 	int y = ((r.bottom() - r.top()) - QFontMetrics(font).height()) / 2;
-
 	r.setTop(y + r.top());
-
 	r.setLeft(r.left() + 10);
-
 	// Number of child
 	int nbchild = index.model()->rowCount(index);
 	QString groupName;
 	std::string groupId;
 	std::string groupNameTmp;
-
 	if (index.data().toString() == QtContactList::DEFAULT_GROUP_NAME){
 		groupName = tr("Contacts list");
 		groupNameTmp=std::string(groupName.toUtf8().data());
@@ -186,4 +174,25 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 	}
 	QString str = groupName;
 	painter->drawText(r, Qt::AlignLeft, str, 0);
+}
+
+QPixmap QtTreeViewDelegate::getGroupBackGround(const QRect & rect) const {
+	QPixmap backGround;
+	QRect pixmapRect;
+	QString rectString = QString("GROUPRECT%1").arg(rect.width());
+
+	if (QPixmapCache::find(rectString,backGround)) {
+		return backGround;
+	}
+	QLinearGradient lg(QPointF(1, rect.top()), QPointF(1, rect.bottom()));
+	lg.setColorAt(.8,QColor(212, 208, 200));
+	lg.setColorAt(0,QColor(255, 255, 255));
+
+	backGround = QPixmap(rect.width(),rect.height());
+	QPainter painter(&backGround);
+	painter.fillRect(backGround.rect(),QBrush(lg));
+	painter.end();
+
+	QPixmapCache::insert(rectString,backGround);
+	return backGround;
 }

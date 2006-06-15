@@ -134,7 +134,6 @@ QString QtContactListManager::getWengoPhoneNumber(const QString & userid) const 
 }
 
 bool QtContactListManager::hasIM(const QString & userid) const {
-
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
@@ -143,7 +142,6 @@ bool QtContactListManager::hasIM(const QString & userid) const {
 }
 
 bool QtContactListManager::hasCall(const QString & userid) const {
-
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
@@ -197,7 +195,6 @@ void QtContactListManager::setOpenStatus(const QString & userid, bool value) {
 }
 
 int QtContactListManager::getHeight(const QString & userid) const {
-
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
@@ -206,11 +203,8 @@ int QtContactListManager::getHeight(const QString & userid) const {
 }
 
 void QtContactListManager::resetMouseStatus() {
-
 	QMutexLocker locker(_mutex);
-
 	QHash <QString,QtContact *>::iterator iter;
-
 	for (iter = _userList.begin(); iter != _userList.end(); iter++) {
 		QtContact * user = iter.value();
 		if (user != NULL) {
@@ -220,7 +214,6 @@ void QtContactListManager::resetMouseStatus() {
 }
 
 void QtContactListManager::startChat(const QString & userid) {
-
 	_mutex->lock();
 	QtContact * user = _userList[userid];
 	if (!user) {

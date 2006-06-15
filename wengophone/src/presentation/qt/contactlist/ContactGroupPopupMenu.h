@@ -85,4 +85,4 @@ private:
 	CContactList & _cContactList;
 };
 
-#endif //CONTACTGROUPPOPUPMENU_H
+#endif //OWCONTACTGROUPPOPUPMENU_H

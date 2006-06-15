@@ -24,10 +24,22 @@
 
 #include "QtContactPixmap.h"
 
-#include <QtGui>
+#include <QObject>
+#include <QString>
+#include <QPixmap>
+#include <QMutex>
 
+class QPainter;
 class CWengoPhone;
+class QModelIndex;
+class QStyleOptionViewItem;
 
+
+/**
+ * Qt Presentation component for Contact
+ *
+ * @author Mr K
+ */
 class QtContact : QObject {
 	Q_OBJECT
 public:
@@ -145,7 +157,7 @@ protected:
 
 	CWengoPhone & _cWengoPhone;
 
-	mutable QMutex _mutex;
+	QMutex _mutex;
 };
 
 #endif	//QTUSER_H

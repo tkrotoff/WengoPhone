@@ -17,15 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtUserTreeEventFilter.h"
+#include "QtContactTreeKeyFilter.h"
 
-QtUserTreeEventFilter::QtUserTreeEventFilter(QObject * parent, QTreeWidget * target) {
+QtContactTreeKeyFilter::QtContactTreeKeyFilter(QObject * parent, QTreeWidget * target) {
 
 	_tree = target;
 	target->installEventFilter(this);
 }
 
-bool QtUserTreeEventFilter::eventFilter(QObject * obj, QEvent * event) {
+bool QtContactTreeKeyFilter::eventFilter(QObject * obj, QEvent * event) {
 
 	switch (event->type()) {
 		case QEvent::KeyPress:
@@ -36,7 +36,7 @@ bool QtUserTreeEventFilter::eventFilter(QObject * obj, QEvent * event) {
 	}
 }
 
-void QtUserTreeEventFilter::keyPress(QKeyEvent * event) {
+void QtContactTreeKeyFilter::keyPress(QKeyEvent * event) {
 	QTreeWidgetItem * item = _tree->currentItem();
 	switch (event->key()) {
 		case Qt::Key_Left:

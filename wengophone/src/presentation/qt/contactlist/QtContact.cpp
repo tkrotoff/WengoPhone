@@ -17,6 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <QPainter>
+#include <QModelIndex>
+#include <QStyleOptionViewItem>
+
 #include "QtContact.h"
 
 #include <model/contactlist/ContactProfile.h>

@@ -25,6 +25,7 @@
 
 class QWidget;
 class QtContact;
+class QPainter;
 
 class QtUserWidgetEventFilter : public QObject {
 

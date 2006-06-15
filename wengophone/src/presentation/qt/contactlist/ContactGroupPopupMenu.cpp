@@ -24,12 +24,15 @@
 
 #include <model/contactlist/ContactGroup.h>
 
-#include <QtGui>
+#include <QAction>
+#include <QString>
+#include <QWidget>
 
 #include <util/Logger.h>
 #include <util/StringList.h>
 
 #include <iostream>
+
 using namespace std;
 
 ContactGroupPopupMenu::ContactGroupPopupMenu(CContactList & cContactList, QWidget * parent)
@@ -49,7 +52,7 @@ void ContactGroupPopupMenu::removeContactGroup() const {
 }
 
 void ContactGroupPopupMenu::renameContactGroup() const {
-	QtRenameGroup dialog(dynamic_cast < QWidget * > (parent()));
+	QtRenameGroup dialog(dynamic_cast <QWidget *> (parent()));
 	dialog.exec();
 	_cContactList.renameContactGroup(_groupId.toStdString(), dialog.getGroupName().toUtf8().data());
 }

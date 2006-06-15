@@ -42,6 +42,11 @@ class QTreeWidget;
 class QSize;
 class QAction;
 
+/**
+ * Qt Presentation manager for the ContactList
+ *
+ * @author Mr K.
+ */
 class QtContactManager : public QObject {
 
 	Q_OBJECT

@@ -18,6 +18,8 @@
  */
 #include <QObject>
 #include <QWidget>
+#include <QPainter>
+#include <QPaintEvent>
 
 #include "QtContact.h"
 #include "QtUserWidgetEventFilter.h"

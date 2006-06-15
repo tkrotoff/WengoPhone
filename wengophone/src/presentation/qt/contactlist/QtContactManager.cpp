@@ -24,7 +24,7 @@
 #include "QtContactPixmap.h"
 #include "QtContactInfo.h"
 #include "QtContactListManager.h"
-#include "QtUserTreeEventFilter.h"
+#include "QtContactTreeKeyFilter.h"
 #include "QtUserTreeEventManager.h"
 #include "QtConferenceAction.h"
 #include <presentation/qt/QtWengoPhone.h>
@@ -78,7 +78,7 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 	QtContactListManager::getInstance()->setTreeWidget(target);
 	target->setMouseTracking(true);
 	QtUserTreeEventManager * qtUserTreeEventManager = new QtUserTreeEventManager(qtContactList.getCContactList(), this, target);
-	QtUserTreeEventFilter * keyFilter = new QtUserTreeEventFilter(this, target);
+	QtContactTreeKeyFilter * keyFilter = new QtContactTreeKeyFilter(this, target);
 
 	connect(target, SIGNAL(itemSelectionChanged()), this, SLOT(treeViewSelectionChanged()));
 	connect(target, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(itemClicked(QTreeWidgetItem *, int)));
@@ -102,12 +102,8 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 void QtContactManager::startSMS(bool checked) {
 
 	QtContactListManager * ul = QtContactListManager::getInstance();
-//	QtContact * user;
-
 	QTreeWidgetItem * item = _tree->currentItem();
 	if( ul && item ) {
-		//user = ul->getUser(item->text(0));
-		//user->startSMS();
 		ul->startSMS(item->text(0));
 	}
 }
@@ -115,20 +111,14 @@ void QtContactManager::startSMS(bool checked) {
 void QtContactManager::startChat(bool) {
 
 	QtContactListManager * ul = QtContactListManager::getInstance();
-//	QtContact* user;
-
 	QTreeWidgetItem * item = _tree->currentItem();
 	if( ul && item ) {
-		// user = ul->getUser(item->text(0));
-		// user->startChat();
 		ul->startChat(item->text(0));
 	}
 }
 
 void QtContactManager::editContact(bool) {
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
-
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (!item)
 		return;
@@ -140,7 +130,6 @@ void QtContactManager::editContact(bool) {
 }
 
 void QtContactManager::deleteContact() {
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (!item)
@@ -157,14 +146,12 @@ void QtContactManager::deleteContact() {
 }
 
 void QtContactManager::treeViewSelectionChanged() {
-
 	if (_button == Qt::NoButton) {
 		closeUserInfo();
 	}
 }
 
 void QtContactManager::itemEntered(QTreeWidgetItem * item) {
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (ul) {
 		ul->mouseOn(item->text(0));
@@ -173,7 +160,6 @@ void QtContactManager::itemEntered(QTreeWidgetItem * item) {
 }
 
 void QtContactManager::closeUserInfo() {
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (_previous != NULL) {
 		_tree->closePersistentEditor(_previous, 0);
@@ -284,16 +270,13 @@ void QtContactManager::itemDoubleClicked(QTreeWidgetItem * item, int col) {
 }
 
 void QtContactManager::defaultAction(QTreeWidgetItem * item){
-	// QtContact * user;
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QtContactListManager * ul = QtContactListManager::getInstance();
 
 	_button = Qt::NoButton;
 	if (item) {
 		QString userId = item->text(0);
-		// user = ul->getUser(userId);
 		ContactProfile contactProfile = _qtContactList.getCContactList().getContactProfile(userId.toStdString());
-
 		if (config.getGeneralClickStartChat()) {
 			ul->startChat(userId);
 			return;
@@ -352,11 +335,9 @@ void QtContactManager::hideGroups(){
 		safeHideGroup();
 	}
 }
-
 void QtContactManager::safeHideGroup() {
 	showAllUsers();
 }
-
 void QtContactManager::sortContacts(bool bypassTimer) {
 	if (!_sortContacts) {
 		return;
@@ -379,7 +360,6 @@ void QtContactManager::sortContacts(bool bypassTimer) {
 	QtContactInfoList dndContact;
 	QtContactInfoList offlineContact;
 	QtContactInfoList othersContact;
-
 	QList < QTreeWidgetItem * >::iterator i;
 
 	for (i = itemList.begin(); i != itemList.end(); i++) {
@@ -449,7 +429,6 @@ void QtContactManager::sortContacts(bool bypassTimer) {
 			}
 		}
 	}
-
 	QCoreApplication::processEvents();
 }
 
@@ -482,7 +461,6 @@ void QtContactManager::showAllUsers() {
 	QTreeWidgetItem * group;
 	std::vector<std::string> contactIds = _qtContactList.getCContactList().getContactIds();
 	std::vector<std::string>::iterator contactIterator;
-
 	// First, remove all item from the treeview and all users from userlist
 	_tree->clear();
 	ul->clear();
@@ -521,14 +499,12 @@ void QtContactManager::showAllUsers() {
 			ul->addContact(qtContact);
 		}
 	}
-
 	sortContacts(true);
 }
 
 QMenu * QtContactManager::createConferenceMenu() {
 	PhoneLine * phoneLine = dynamic_cast <PhoneLine *>
 		(_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine());
-
 	QMenu * menu = new QMenu(_trStringInviteToConference);
 	if (phoneLine) {
 		PhoneLine::PhoneCallList phoneCallList = phoneLine->getPhoneCallList();
@@ -547,7 +523,6 @@ QMenu * QtContactManager::createConferenceMenu() {
 }
 
 void QtContactManager::inviteToConference() {
-
 	QObject * source = sender();
 	if (source) {
 		QtConferenceAction * action = dynamic_cast < QtConferenceAction * > (source);
@@ -566,7 +541,6 @@ void QtContactManager::inviteToConference() {
 }
 
 QMenu * QtContactManager::createMenu() {
-
 	retranslateUi();
 	QAction * action;
 	QMenu * menu;
@@ -599,7 +573,6 @@ QMenu * QtContactManager::createMenu() {
 			connect(action, SIGNAL(triggered(bool)), SLOT(startWengoCall(bool)));
 		}
 	}
-
 	action = menu->addAction(_trStringStartChat);
 	connect(action, SIGNAL(triggered(bool)), SLOT(startChat(bool)));
 	action = menu->addAction(_trStringSendSMS);
@@ -618,7 +591,6 @@ QMenu * QtContactManager::createMenu() {
 }
 
 void QtContactManager::startMobileCall(bool checked) {
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact;
 	// The current selected item
@@ -666,10 +638,8 @@ void QtContactManager::removeContact(const QString & contactId) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = NULL;
 	bool found = false;
-
 	QList <QTreeWidgetItem *> itemList = _tree->findItems("*", Qt::MatchWildcard);
 	QList <QTreeWidgetItem *>::iterator i;
-
 	for (i = itemList.begin(); (i != itemList.end()) && !found; i++) {
 		QTreeWidgetItem * item;
 		QTreeWidgetItem * group = (QTreeWidgetItem *) (* i);
@@ -695,7 +665,6 @@ void QtContactManager::setMouseButton(Qt::MouseButton button) {
 
 void QtContactManager::moveContact(const QString & contactId,
 	const QString & srcContactGroupId, const QString & dstContactGroupId) {
-
 	// If groups are hiden, there is nothing to move...
 	if (groupsAreHiden())
 		return;
@@ -708,9 +677,7 @@ void QtContactManager::moveContact(const QString & contactId,
 	if (list.isEmpty())
 		return;
 	QTreeWidgetItem * group = list[0];
-
 	int count = group->childCount();
-
 	for (int t = 0; (t < count) && !found; t++) {
 		qtContact = ul->getContact(group->child(t)->text(0));
 		if (qtContact->getId() == contactId) {
@@ -757,7 +724,6 @@ void QtContactManager::timerEvent ( QTimerEvent * event ) {
 		}
 		return;
 	}
-
 	if (event->timerId() == _showTimerId){
 		killTimer(_showTimerId);
 		_showTimerId = -1;
@@ -768,7 +734,6 @@ void QtContactManager::timerEvent ( QTimerEvent * event ) {
 		}
 		return;
 	}
-
 	if (event->timerId() == _timerId){
 		_waitForDoubleClick = false;
 		killTimer(_timerId);
