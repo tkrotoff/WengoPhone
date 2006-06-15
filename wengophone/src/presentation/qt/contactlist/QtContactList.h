@@ -36,7 +36,7 @@ class ContactGroupPopupMenu;
 class CWengoPhone;
 class QTreeWidget;
 class QMouseEvent;
-class QtUserManager;
+class QtContactManager;
 
 /**
  * Qt Presentation component for ContactList.
@@ -59,8 +59,8 @@ public:
 		return _contactListWidget;
 	}
 
-	QtUserManager * getUserManager() {
-		return _userManager;
+	QtContactManager * getContactManager() {
+		return _contactManager;
 	}
 
 	void updatePresentation();
@@ -143,7 +143,7 @@ private:
 
 	QTreeWidgetItem * addGroup(QString contactGroupId);
 
-	QtUserManager * _userManager;
+	QtContactManager * _contactManager;
 
 	CContactList & _cContactList;
 

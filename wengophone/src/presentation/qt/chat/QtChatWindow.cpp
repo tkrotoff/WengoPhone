@@ -26,7 +26,7 @@
 #include <Carbon/Carbon.h>
 #include <Cocoa/Cocoa.h>
 // Picture defined in Carbon conflicts with the one we define in our libs.
-#ifdef Picture 
+#ifdef Picture
 #undef Picture
 #endif //Picture
 */
@@ -186,7 +186,6 @@ void ChatWindow::createInviteFrame(){
 		QPixmap(":/pics/chat/chat_call_bar_button.png"),
 		QPixmap(),
 		QPixmap(), // Fill
-
 		QPixmap(":/pics/chat/chat_call_bar_button_on.png"),
 		QPixmap(":/pics/profilebar/bar_separator.png"),
 		QPixmap()  // Fill
@@ -715,7 +714,7 @@ void ChatWindow::flashWindow() {
 			// Notifying user by making the dock icon bounce.
 			int request = [NSApp requestUserAttention:NSInformationalRequest];
 			[NSApp cancelUserAttentionRequest:request];
-		}	
+		}
 	}*/
 #else
     _dialog->activateWindow();

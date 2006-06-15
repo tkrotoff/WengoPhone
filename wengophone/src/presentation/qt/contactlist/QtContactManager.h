@@ -42,7 +42,7 @@ class QTreeWidget;
 class QSize;
 class QAction;
 
-class QtUserManager : public QObject {
+class QtContactManager : public QObject {
 
 	Q_OBJECT
 
@@ -50,7 +50,7 @@ public:
 
 	typedef QList <QtContactInfo> QtContactInfoList;
 
-	QtUserManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
+	QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
 		QtContactList & qtContactList, QObject * parent = 0, QTreeWidget * target = 0);
 
 	void removeContact(const QString & contactId);
@@ -59,6 +59,8 @@ public:
 		const QString & srcContactGroupId, const QString & dstContactGroupId);
 
 	bool groupsAreHiden();
+
+	virtual bool event ( QEvent * e );
 
 public Q_SLOTS:
 
@@ -122,6 +124,8 @@ protected:
 
 	bool canShowUser(const ContactProfile * cprofile);
 
+	void retranslateUi();
+
 	QMenu * createConferenceMenu();
 
 	QMenu * createMenu();
@@ -171,6 +175,22 @@ protected:
 	bool _canShow;
 
 	bool _wantShow;
+
+	/**
+	* Translated strings
+	*/
+	QString _trStringCall;
+	QString _trStringMobilePhone;
+	QString _trStringHomePhone;
+	QString _trStringWorkPhone;
+	QString _trStringWengoPhone;
+	QString _trStringSendSMS;
+	QString _trStringEditContact;
+	QString _trStringDeleteContact;
+	QString _trStringBlockContact;
+	QString _trStringForwardToCellPhone;
+	QString _trStringStartChat;
+	QString _trStringInviteToConference;
 
 };
 
