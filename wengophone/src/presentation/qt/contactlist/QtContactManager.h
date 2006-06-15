@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTUSERMANAGER_H
-#define OWQTUSERMANAGER_H
+#ifndef OWQTCONTACTMANAGER_H
+#define OWQTCONTACTMANAGER_H
 
 #include <QObject>
 #include <QMutex>
@@ -59,8 +59,6 @@ public:
 		const QString & srcContactGroupId, const QString & dstContactGroupId);
 
 	bool groupsAreHiden();
-
-	virtual bool event ( QEvent * e );
 
 public Q_SLOTS:
 
@@ -108,6 +106,8 @@ public Q_SLOTS:
 
 	void defaultAction(QTreeWidgetItem * item);
 
+	void retranslateUi();
+
 Q_SIGNALS:
 
 	void groupRightClicked(const QString & groupName);
@@ -123,8 +123,6 @@ protected:
 	void safeHideGroup();
 
 	bool canShowUser(const ContactProfile * cprofile);
-
-	void retranslateUi();
 
 	QMenu * createConferenceMenu();
 
@@ -191,7 +189,6 @@ protected:
 	QString _trStringForwardToCellPhone;
 	QString _trStringStartChat;
 	QString _trStringInviteToConference;
-
 };
 
 #endif	//OWQTUSERMANAGER_H

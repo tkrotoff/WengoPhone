@@ -567,6 +567,7 @@ void QtContactManager::inviteToConference() {
 
 QMenu * QtContactManager::createMenu() {
 
+	retranslateUi();
 	QAction * action;
 	QMenu * menu;
 	QtContactListManager * ul = QtContactListManager::getInstance();
@@ -777,13 +778,6 @@ void QtContactManager::timerEvent ( QTimerEvent * event ) {
 
 bool QtContactManager::groupsAreHiden(){
 	return _hideGroups;
-}
-
-bool QtContactManager::event ( QEvent * e ) {
-	if (e->type() == QEvent::LanguageChange ) {
-		retranslateUi();
-	}
-	return QObject::event(e);
 }
 
 void QtContactManager::retranslateUi() {
