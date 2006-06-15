@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef TRACKABLE_H
-#define TRACKABLE_H
+#ifndef OWTRACKABLE_H
+#define OWTRACKABLE_H
 
 #include <boost/signals/trackable.hpp>
 
@@ -26,17 +26,17 @@
  * Delegates/Design Pattern Observer.
  *
  * Provides the mechanism for automatic signal/slot disconnection when the object is destructed.
- * You must inherit from this class.
+ * You must inherit publicly from this class.
  *
  * The problem solved by Trackable is simple:
- * what if a signal is emitted and the receiver object for this signal is already destroyed?
+ * what if a signal is emitted and the receiver object for this signal is already been destroyed?
  * most likely, a segmentation fault will occur.
  *
- * You have to inherit publicly from Trackable.
+ * The emitter of a signal does not inherit from Trackable, the receiver does inherit from Trackable.
  *
  * @author Tanguy Krotoff
  */
 class Trackable : public boost::signals::trackable {
 };
 
-#endif	//TRACKABLE_H
+#endif	//OWTRACKABLE_H
