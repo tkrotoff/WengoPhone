@@ -377,10 +377,6 @@
 			<text>=*</text>
 			<object>kiss.png</object>
 		</icon>
-		<icon>
-			<text></text>
-			<object>kiss.png</object>
-		</icon>
 	</protocol>
 	<protocol name="wengo">
 		<icon>
