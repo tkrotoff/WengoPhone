@@ -18,7 +18,7 @@
  */
 
 #include "QtUserTreeEventManager.h"
-#include "QtUserList.h"
+#include "QtContactListManager.h"
 
 #include <control/contactlist/CContactList.h>
 
@@ -69,7 +69,7 @@ bool QtUserTreeEventManager::eventFilter(QObject * obj, QEvent * event) {
 void QtUserTreeEventManager::mousePressEvent(QMouseEvent * event) {
 	mouseClicked(event->button());
 	QTreeWidgetItem * item = _tree->itemAt(event->pos());
-	QtUserList * ul = QtUserList::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
 
 	if (_timer.isActive()) {
 		_timer.stop();

@@ -21,7 +21,7 @@
 
 #include "QtUserWidgetEventFilter.h"
 #include "QtUserWidget.h"
-#include "QtUserList.h"
+#include "QtContactListManager.h"
 #include "QtContactPixmap.h"
 #include "QtContactList.h"
 
@@ -52,12 +52,10 @@ void QtTreeViewDelegate::setParent(QWidget * parent) {
 QWidget * QtTreeViewDelegate::createEditor(QWidget * parent,
 const QStyleOptionViewItem &,
 const QModelIndex & index) const {
-	QtUserList * ul = QtUserList::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = ul->getContact(index.data().toString());
-
 	QtUserWidget * widget = new QtUserWidget(qtContact->getId().toStdString(), _cWengoPhone, parent);
 	QWidget * userWidget = Object::findChild <QWidget *> (widget, "UserWidget");
-//	QFrame * userTitleFrame = Object::findChild <QFrame *> (userWidget, "userTitleFrame");
 	userWidget->installEventFilter(new QtUserWidgetEventFilter((QObject *) this, userWidget, qtContact));
 	return (QWidget *) widget;
 }
@@ -85,7 +83,7 @@ void QtTreeViewDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
 	if (!index.parent().isValid()) {
 		drawGroup(painter, option, index);
 	} else {
-		QtUserList * ul = QtUserList::getInstance();
+		QtContactListManager * ul = QtContactListManager::getInstance();
 		if (ul) {
 			ul->paintUser(painter, option, index);
 		}
@@ -94,7 +92,7 @@ void QtTreeViewDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
 
 QSize QtTreeViewDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const {
 	QSize orig = QItemDelegate::sizeHint(option, index);
-	QtUserList * ul = QtUserList::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = ul->getContact(index.data().toString());
 
 	if (qtContact) {

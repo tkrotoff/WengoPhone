@@ -20,7 +20,7 @@
 #include "QtUserWidget.h"
 
 #include "QtUserWidgetAvatarManager.h"
-#include "QtUserList.h"
+#include "QtContactListManager.h"
 #include "QtContact.h"
 
 #include <model/contactlist/ContactProfile.h>
@@ -30,7 +30,7 @@
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
 
-#include <presentation/qt/contactlist/QtUserList.h>
+#include <presentation/qt/contactlist/QtContactListManager.h>
 #include <presentation/qt/profile/QtProfileDetails.h>
 
 #include <util/Picture.h>
@@ -87,17 +87,17 @@ QtUserWidget::QtUserWidget(const std::string & contactId,
 }
 
 void QtUserWidget::callButtonClicked() {
-	QtUserList * ul = QtUserList::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
 	ul->startCall(QString::fromStdString(_contactId));
 }
 
 void QtUserWidget::smsButtonClicked() {
-	QtUserList * ul = QtUserList::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
 	ul->startSMS(QString::fromStdString(_contactId));
 }
 
 void QtUserWidget::chatButtonClicked() {
-	QtUserList * ul = QtUserList::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
 	ul->startChat(QString::fromStdString(_contactId));
 }
 
@@ -129,7 +129,7 @@ void QtUserWidget::mobileButtonClicked() {
 
 
 	if (_ui.cellPhoneLabel->text() != tr("No cell phone number set")) {
-		QtUserList * ul = QtUserList::getInstance();
+		QtContactListManager * ul = QtContactListManager::getInstance();
 		ul->startCall(QString::fromStdString(_contactId), _ui.cellPhoneLabel->text());
 	} else {
 		ContactProfile contactProfile =
@@ -145,7 +145,7 @@ void QtUserWidget::landLineButtonClicked() {
 	LOG_DEBUG("\n\n\n\n\n" + _ui.homePhoneLabel->text().toStdString() + "\n\n");
 
 	if (_ui.homePhoneLabel->text() != tr("No phone number set")) {
-		QtUserList * ul = QtUserList::getInstance();
+		QtContactListManager * ul = QtContactListManager::getInstance();
 		ul->startCall(QString::fromStdString(_contactId), _ui.homePhoneLabel->text());
 	} else {
 		ContactProfile contactProfile =

@@ -39,7 +39,7 @@
 
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/contactlist/QtContactList.h>
-#include <presentation/qt/contactlist/QtUserList.h>
+#include <presentation/qt/contactlist/QtContactListManager.h>
 #include <presentation/qt/toaster/QtToaster.h>
 
 #include <control/CWengoPhone.h>
@@ -223,13 +223,13 @@ void ChatWindow::callContact(){
     QString contactId;
     QtContactList * qtContactList;
     ContactProfile contactProfile;
-    QtUserList * ul ;
+    QtContactListManager * ul ;
 
     if (widget){
         contactId = widget->getContactId();
         qtContactList = _qtWengoPhone->getContactList();
         contactProfile = qtContactList->getCContactList().getContactProfile(contactId.toStdString());
-        ul = QtUserList::getInstance();
+        ul = QtContactListManager::getInstance();
         ul->startCall(contactId);
     }
 }

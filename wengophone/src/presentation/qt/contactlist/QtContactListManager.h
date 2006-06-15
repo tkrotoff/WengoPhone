@@ -17,22 +17,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTUSERLIST_H
-#define QTUSERLIST_H
+#ifndef OWCONTACTLISTMANAGER_H
+#define OWCONTACTLISTMANAGER_H
 
 #include <QtGui>
 #include "QtContact.h"
 #include "QtContactPixmap.h"
-#include "QtUserList.h"
 
 class CContact;
 
-class QtUserList {
+class QtContactListManager {
 public:
 
-	static QtUserList * getInstance();
+	static QtContactListManager * getInstance();
 
-	virtual ~QtUserList();
+	virtual ~QtContactListManager();
 
 	void addContact(QtContact * user);
 
@@ -99,11 +98,11 @@ public:
 
 protected:
 
-	QtUserList();
+	QtContactListManager();
 
-	QtUserList(const QtUserList & other) : _tree(other._tree), _userList(other._userList) { }
+	QtContactListManager(const QtContactListManager & other) : _tree(other._tree), _userList(other._userList) { }
 
-	QtUserList & operator = (const QtUserList & other) {
+	QtContactListManager & operator = (const QtContactListManager & other) {
 		_tree = other._tree;
 		_userList = other._userList;
 		return * this;
@@ -115,11 +114,11 @@ protected:
 
 private:
 
-	static QtUserList * _instance;
+	static QtContactListManager * _instance;
 
 	QString _lastMouseOn;
 
 	QMutex * _mutex;
 };
 
-#endif	//QTUSERLIST_H
+#endif	//OWCONTACTLISTMANAGER_H

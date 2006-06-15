@@ -20,7 +20,7 @@
 #include "QtContactList.h"
 
 #include "ContactGroupPopupMenu.h"
-#include "QtUserList.h"
+#include "QtContactListManager.h"
 #include "QtContactPixmap.h"
 #include "QtUserManager.h"
 #include "QtTreeViewDelegate.h"
@@ -68,7 +68,7 @@ QtContactList::~QtContactList() {
 }
 
 void QtContactList::cleanup() {
-	QtUserList::getInstance()->clear();
+	QtContactListManager::getInstance()->clear();
 
 	if (_contactListWidget) {
 		delete _contactListWidget;
@@ -233,7 +233,7 @@ void QtContactList::contactGroupRenamedEventSlot(QString contactGroupId) {
 }
 
 void QtContactList::contactAddedEventSlot(QString contactId) {
-	QtUserList * ul = QtUserList::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
 	QString groupId;
 	// If User is not already in UserList
 	if (!ul->contains(contactId)) {
@@ -283,7 +283,7 @@ void QtContactList::contactMovedEventSlot(QString dstContactGroupId,
 }
 
 void QtContactList::contactChangedEventSlot(QString contactId) {
-	QtUserList * ul = QtUserList::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (ul->contains(contactId)) {
 		ul->contactUpdated(contactId);
 		updatePresentationThreadSafe();

@@ -19,25 +19,25 @@
 
 #include <util/Logger.h>
 
-#include "QtUserList.h"
+#include "QtContactListManager.h"
 
-QtUserList * QtUserList::_instance = 0;
+QtContactListManager * QtContactListManager::_instance = 0;
 
-QtUserList * QtUserList::getInstance() {
+QtContactListManager * QtContactListManager::getInstance() {
 	if (_instance == 0) {
-		_instance = new QtUserList;
+		_instance = new QtContactListManager;
 	}
 	return _instance;
 }
 
-QtUserList::QtUserList() {
+QtContactListManager::QtContactListManager() {
 	_mutex = new QMutex(QMutex::Recursive);
 }
 
-QtUserList::~QtUserList() {
+QtContactListManager::~QtContactListManager() {
 	delete _mutex;
 }
-void QtUserList::paintUser(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) {
+void QtContactListManager::paintUser(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) {
 	QMutexLocker locker(_mutex);
 	QtContact * user;
 	if (contains(index.data().toString())) {
@@ -46,14 +46,14 @@ void QtUserList::paintUser(QPainter * painter, const QStyleOptionViewItem & opti
 	}
 }
 
-void QtUserList::addContact(QtContact * user) {
+void QtContactListManager::addContact(QtContact * user) {
 	QMutexLocker locker(_mutex);
 	if (user) {
 		_userList[user->getId()] = user;
 	}
 }
 
-void QtUserList::removeUser(QtContact  * user) {
+void QtContactListManager::removeUser(QtContact  * user) {
 	QMutexLocker locker(_mutex);
 	if (user) {
 		_userList.remove(user->getId());
@@ -61,7 +61,7 @@ void QtUserList::removeUser(QtContact  * user) {
 	}
 }
 
-void QtUserList::mouseOn(const QString & userid) {
+void QtContactListManager::mouseOn(const QString & userid) {
 	QMutexLocker locker(_mutex);
 	QtContact * qtContact;
 	qtContact = _userList[userid];
@@ -73,7 +73,7 @@ void QtUserList::mouseOn(const QString & userid) {
 	_lastMouseOn = userid;
 }
 
-QtContact * QtUserList::getContact(const QString & userid) const {
+QtContact * QtContactListManager::getContact(const QString & userid) const {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	if (contains(userid)) {
 		return _userList[userid];
@@ -81,7 +81,7 @@ QtContact * QtUserList::getContact(const QString & userid) const {
 	return NULL;
 }
 
-QString QtUserList::getPreferredNumber(const QString & userid) const {
+QString QtContactListManager::getPreferredNumber(const QString & userid) const {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	if (contains(userid)) {
 		return _userList[userid]->getPreferredNumber();
@@ -89,7 +89,7 @@ QString QtUserList::getPreferredNumber(const QString & userid) const {
 	return QString();
 }
 
-QString QtUserList::getMobilePhone(const QString & userid) const {
+QString QtContactListManager::getMobilePhone(const QString & userid) const {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	if (contains(userid)) {
 		return _userList[userid]->getMobilePhone();
@@ -97,7 +97,7 @@ QString QtUserList::getMobilePhone(const QString & userid) const {
 	return QString();
 }
 
-QString QtUserList::getHomePhone(const QString & userid) const {
+QString QtContactListManager::getHomePhone(const QString & userid) const {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	if (contains(userid)) {
 		return _userList[userid]->getHomePhone();
@@ -105,7 +105,7 @@ QString QtUserList::getHomePhone(const QString & userid) const {
 	return QString();
 }
 
-QString QtUserList::getWorkPhone(const QString & userid) const {
+QString QtContactListManager::getWorkPhone(const QString & userid) const {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	if (contains(userid)) {
 		return _userList[userid]->getHomePhone();
@@ -113,19 +113,19 @@ QString QtUserList::getWorkPhone(const QString & userid) const {
 	return QString();
 }
 
-bool QtUserList::contains(const QString & userid) const {
+bool QtContactListManager::contains(const QString & userid) const {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	return _userList.contains(userid);
 }
 
-void QtUserList::contactUpdated(const QString & userid) {
+void QtContactListManager::contactUpdated(const QString & userid) {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	if (contains(userid)) {
 		_userList[userid]->contactUpdated();
 	}
 }
 
-QString QtUserList::getWengoPhoneNumber(const QString & userid) const {
+QString QtContactListManager::getWengoPhoneNumber(const QString & userid) const {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	if (contains(userid)) {
 		return _userList[userid]->getWengoPhoneNumber();
@@ -133,7 +133,7 @@ QString QtUserList::getWengoPhoneNumber(const QString & userid) const {
 	return QString();
 }
 
-bool QtUserList::hasIM(const QString & userid) const {
+bool QtContactListManager::hasIM(const QString & userid) const {
 
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
@@ -142,7 +142,7 @@ bool QtUserList::hasIM(const QString & userid) const {
 	return false;
 }
 
-bool QtUserList::hasCall(const QString & userid) const {
+bool QtContactListManager::hasCall(const QString & userid) const {
 
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
@@ -151,7 +151,7 @@ bool QtUserList::hasCall(const QString & userid) const {
 	return false;
 }
 
-bool QtUserList::hasVideo(const QString & userid) const {
+bool QtContactListManager::hasVideo(const QString & userid) const {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
@@ -159,7 +159,7 @@ bool QtUserList::hasVideo(const QString & userid) const {
 	return false;
 }
 
-bool QtUserList::hasPhoneNumber(const QString & userid) const {
+bool QtContactListManager::hasPhoneNumber(const QString & userid) const {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	if (contains(userid)) {
 		return _userList[userid]->hasPhoneNumber();
@@ -167,21 +167,21 @@ bool QtUserList::hasPhoneNumber(const QString & userid) const {
 	return false;
 }
 
-void QtUserList::mouseClicked(const QString & userid, const QPoint pos, const QRect & rect) {
+void QtContactListManager::mouseClicked(const QString & userid, const QPoint pos, const QRect & rect) {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
 		user->mouseClicked(pos, rect);
 }
 
-void QtUserList::setButton(const QString & userid, const Qt::MouseButton button) {
+void QtContactListManager::setButton(const QString & userid, const Qt::MouseButton button) {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
 		user->setButton(button);
 }
 
-Qt::MouseButton QtUserList::getButton(const QString & userid) const {
+Qt::MouseButton QtContactListManager::getButton(const QString & userid) const {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
@@ -189,14 +189,14 @@ Qt::MouseButton QtUserList::getButton(const QString & userid) const {
 	return Qt::NoButton;
 }
 
-void QtUserList::setOpenStatus(const QString & userid, bool value) {
+void QtContactListManager::setOpenStatus(const QString & userid, bool value) {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
 	if (user)
 		user->setOpenStatus(value);
 }
 
-int QtUserList::getHeight(const QString & userid) const {
+int QtContactListManager::getHeight(const QString & userid) const {
 
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	QtContact * user = _userList[userid];
@@ -205,7 +205,7 @@ int QtUserList::getHeight(const QString & userid) const {
 	else return 0;
 }
 
-void QtUserList::resetMouseStatus() {
+void QtContactListManager::resetMouseStatus() {
 
 	QMutexLocker locker(_mutex);
 
@@ -219,7 +219,7 @@ void QtUserList::resetMouseStatus() {
 	}
 }
 
-void QtUserList::startChat(const QString & userid) {
+void QtContactListManager::startChat(const QString & userid) {
 
 	_mutex->lock();
 	QtContact * user = _userList[userid];
@@ -231,7 +231,7 @@ void QtUserList::startChat(const QString & userid) {
 	user->startChat();
 }
 
-void QtUserList::startSMS(const QString & userid) {
+void QtContactListManager::startSMS(const QString & userid) {
 	_mutex->lock();
 	QtContact * user=_userList[userid];
 	if (!user)
@@ -241,7 +241,7 @@ void QtUserList::startSMS(const QString & userid) {
 
 }
 
-void QtUserList::startCall(const QString & userid, const QString & number) {
+void QtContactListManager::startCall(const QString & userid, const QString & number) {
 	_mutex->lock();
 	QtContact * user = _userList[userid];
 	if (!user)
@@ -251,7 +251,7 @@ void QtUserList::startCall(const QString & userid, const QString & number) {
 }
 
 
-void QtUserList::startCall(const QString & userid) {
+void QtContactListManager::startCall(const QString & userid) {
 	_mutex->lock();
 	QtContact * user = _userList[userid];
 	if (!user)
@@ -260,7 +260,7 @@ void QtUserList::startCall(const QString & userid) {
 	user->startCall();
 }
 
-void QtUserList::startFreeCall(const QString & userid) {
+void QtContactListManager::startFreeCall(const QString & userid) {
 	_mutex->lock();
 	QtContact * user = _userList[userid];
 	if (!user)
@@ -271,7 +271,7 @@ void QtUserList::startFreeCall(const QString & userid) {
 }
 
 
-void QtUserList::clear(){
+void QtContactListManager::clear(){
 	QMutexLocker locker(_mutex);
 	QHash <QString, QtContact *>::iterator iter;
 	for (iter=_userList.begin();iter!=_userList.end();iter++){

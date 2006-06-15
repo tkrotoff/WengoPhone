@@ -22,7 +22,7 @@
 #include "QtTrayIcon.h"
 #include "QtWengoPhone.h"
 #include "profilebar/QtProfileBar.h"
-#include "contactlist/QtUserList.h"
+#include "contactlist/QtContactListManager.h"
 #include "webservices/sms/QtSms.h"
 
 #include <control/CWengoPhone.h>
@@ -365,7 +365,7 @@ void QtTrayIcon::slotSystrayMenuCallLandLine(QAction * action) {
 
 void QtTrayIcon::slotSystrayMenuStartChat(QAction * action) {
 	if (action) {
-		QtUserList * ul = QtUserList::getInstance();
+		QtContactListManager * ul = QtContactListManager::getInstance();
 		if (ul) {
 			LOG_DEBUG("Starting IM chat with " + action->data().toString().toStdString());
 			ul->startChat(action->data().toString());

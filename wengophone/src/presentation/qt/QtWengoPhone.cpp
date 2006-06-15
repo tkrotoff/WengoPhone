@@ -18,8 +18,6 @@
  */
 
 #include "QtWengoPhone.h"
-#include "contactlist/QtUserList.h"
-
 #include "ui_WengoPhoneWindow.h"
 
 #include <presentation/PFactory.h>
@@ -482,10 +480,8 @@ void QtWengoPhone::addToConference(PhoneCall * sourceCall, PhoneCall * targetCal
 										qtContactCallListWidget->addPhoneCall(qtPhoneCall);
 										break;
 									}
-
 								}
 							}
-
 						}
 
 					}else {

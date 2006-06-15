@@ -18,7 +18,7 @@
  */
 
 #include "QtContactInfo.h"
-#include "QtUserList.h"
+#include "QtContactListManager.h"
 #include "QtContact.h"
 #include <QTreeWidgetItem>
 
@@ -67,7 +67,7 @@ int QtContactInfo::getIndex() const {
 }
 
 bool QtContactInfo::operator < (const QtContactInfo & other) const {
-	QtUserList * ul = QtUserList::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = ul->getContact(_contactId);
 	QtContact * otherQtContact = ul->getContact(other._contactId);
 	if (qtContact && otherQtContact) {
@@ -86,7 +86,7 @@ QtContactInfo & QtContactInfo::operator = (const QtContactInfo & other) {
 }
 
 QtContactPixmap::ContactPixmap QtContactInfo::getStatus() {
-	QtUserList * ul = QtUserList::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = ul->getContact(_contactId);
 	return qtContact->getStatus();
 
