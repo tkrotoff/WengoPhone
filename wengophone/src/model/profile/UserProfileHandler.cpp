@@ -118,7 +118,7 @@ void UserProfileHandler::createAndSetUserProfile(const WengoAccount & wengoAccou
 		if (profileName.empty()) {
 			profileName = "Default";
 		}
-		setCurrentUserProfile(profileName);
+		setCurrentUserProfile(profileName, wengoAccount);
 	}
 }
 
@@ -134,11 +134,22 @@ bool UserProfileHandler::userProfileExists(const std::string & name) {
 	return result;
 }
 
-void UserProfileHandler::setCurrentUserProfile(const std::string & name) {
+void UserProfileHandler::setCurrentUserProfile(const std::string & name, 
+	const WengoAccount & wengoAccount) {
 	if (!_currentUserProfile || (_currentUserProfile && (_currentUserProfile->getName() != name))) {
 		UserProfile * result = getUserProfile(name);
 
 		if (result) {
+			// If the WengoAccount is not empty, we update the one in UserProfile
+			if (result->hasWengoAccount() && 
+				!wengoAccount.getWengoLogin().empty() &&
+				((wengoAccount.getWengoPassword() != result->getWengoAccount()->getWengoPassword()) ||
+					(wengoAccount.hasAutoLogin() != result->getWengoAccount()->hasAutoLogin()))) {
+				WengoAccount myWengoAccount(result->getWengoAccount()->getWengoLogin(),
+					wengoAccount.getWengoPassword(), wengoAccount.hasAutoLogin());
+				result->setWengoAccount(myWengoAccount);
+			}
+
 			if (_currentUserProfile) {
 				LOG_DEBUG("UserProfile will change");
 				_desiredUserProfile = result;
@@ -198,7 +209,8 @@ void UserProfileHandler::init() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string profileName = config.getProfileLastUsedName();
 
-	setCurrentUserProfile(profileName);
+	WengoAccount wengoAccount;
+	setCurrentUserProfile(profileName, wengoAccount);
 }
 
 void UserProfileHandler::saveUserProfile(UserProfile & userProfile) {

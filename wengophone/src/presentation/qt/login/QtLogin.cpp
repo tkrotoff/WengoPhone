@@ -184,13 +184,14 @@ void QtLogin::loginClicked() {
 	
 	//FIXME: if login is empty we should create a default profile
 	if (!login.empty()) {
+		WengoAccount wengoAccount(login, _ui->passwordLineEdit->text().toStdString(), _ui->autoLoginCheckBox->isChecked());
+
 		// Looking for the selected profile
 		if (!_cUserProfileHandler.userProfileExists(login)) {
 			// The selected profile does not exist. Creating a new one.
-			WengoAccount wengoAccount(login, _ui->passwordLineEdit->text().toStdString(), _ui->autoLoginCheckBox->isChecked());
 			_cUserProfileHandler.createAndSetUserProfile(wengoAccount);
 		} else {
-			_cUserProfileHandler.setCurrentUserProfile(login);
+			_cUserProfileHandler.setCurrentUserProfile(login, wengoAccount);
 		}
 
 		_loginWindow->accept();

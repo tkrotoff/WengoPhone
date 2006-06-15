@@ -88,17 +88,18 @@ void CUserProfileHandler::createAndSetUserProfileThreadSafe(WengoAccount wengoAc
 	_userProfileHandler.createAndSetUserProfile(wengoAccount);
 }
 
-void CUserProfileHandler::setCurrentUserProfile(const std::string & login) {
-	typedef ThreadEvent1<void (std::string), std::string> MyThreadEvent;
+void CUserProfileHandler::setCurrentUserProfile(const std::string & login, 
+	const WengoAccount & wengoAccount) {
+	typedef ThreadEvent2<void (std::string, WengoAccount), std::string, WengoAccount> MyThreadEvent;
 	MyThreadEvent * event =
-		new MyThreadEvent(boost::bind(&CUserProfileHandler::setUserProfileThreadSafe, this, _1), 
-			login);
+		new MyThreadEvent(boost::bind(&CUserProfileHandler::setUserProfileThreadSafe, this, _1, _2), 
+			login, wengoAccount);
 
 	_modelThread.postEvent(event);
 }
 
-void CUserProfileHandler::setUserProfileThreadSafe(std::string profileName) {
-	_userProfileHandler.setCurrentUserProfile(profileName);
+void CUserProfileHandler::setUserProfileThreadSafe(std::string profileName, WengoAccount wengoAccount) {
+	_userProfileHandler.setCurrentUserProfile(profileName, wengoAccount);
 }
 
 bool CUserProfileHandler::userProfileExists(const std::string & name) const {

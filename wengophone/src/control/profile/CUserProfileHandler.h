@@ -67,7 +67,8 @@ public:
 	/**
 	 * @see UserProfileHandler::setUserProfile
 	 */
-	void setCurrentUserProfile(const std::string & profileName);
+	void setCurrentUserProfile(const std::string & profileName, 
+		const WengoAccount & wengoAccount);
 
 	/**
 	 * @see UserProfileHandler::currentUserProfileReleased
@@ -131,7 +132,7 @@ private:
 	/**
 	 * @see setCurrentUserProfile
 	 */
-	void setUserProfileThreadSafe(std::string profileName);
+	void setUserProfileThreadSafe(std::string profileName, WengoAccount wengoAccount);
 
 	/**
 	 * @see currentUserProfileReleased

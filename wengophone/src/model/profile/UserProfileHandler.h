@@ -101,11 +101,16 @@ public:
 	std::vector<std::string> getUserProfileNames();
 
 	/**
-	 * Set the current UserProfile.
+	 * Sets the current UserProfile.
+	 *
+	 * A non empty WengoAccount can be given in parameter. It will be used
+	 * to update password and autologin attributes of the UserProfile.
 	 *
 	 * @param name the name of the current UserProfile to set
+	 * @param wengoAccount the WengoAccount that will update the UserProfile
 	 */
-	void setCurrentUserProfile(const std::string & name);
+	void setCurrentUserProfile(const std::string & name,
+		const WengoAccount & wengoAccount);
 
 	/**
 	 * Creates a new UserProfile.
