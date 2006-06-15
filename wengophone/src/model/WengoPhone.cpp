@@ -109,6 +109,11 @@ WengoPhone::~WengoPhone() {
 	static Timer shutdownTimeout;
 	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownAfterTimeout, this);
 	shutdownTimeout.start(3000, 3000);
+
+	delete _startupSettingListener;
+
+	if (_importer)
+		delete _importer;
 }
 
 void WengoPhone::init() {
@@ -121,8 +126,8 @@ void WengoPhone::init() {
 	ClassicExterminator::removeClassicFromStartup();
 
 	//Imports the Config from WengoPhone Classic.
-	/*_importer = new ClassicConfigImporter();
-	_importer->importConfig(config.getConfigDir());*/
+	_importer = new ClassicConfigImporter();
+	_importer->importConfig(config.getConfigDir());
 
 
 	_wsSubscribe = new WsSubscribe();

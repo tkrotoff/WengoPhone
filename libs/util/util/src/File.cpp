@@ -74,10 +74,20 @@ std::string File::getExtension() const {
 	}
 }
 
-bool File::move(const std::string & newName) {
-	if (!rename(_filename.c_str(), newName.c_str()))	
+bool File::remove() {
+	if (!::remove(_filename.c_str()))
 		return true;
-	else 
+	else
+		return false;
+}
+
+bool File::move(const std::string & newName, bool overwrite) {
+	if (exists(newName) && overwrite)
+		::remove(newName.c_str());
+
+	if (!rename(_filename.c_str(), newName.c_str()))
+		return true;
+	else
 		return false;
 }
 

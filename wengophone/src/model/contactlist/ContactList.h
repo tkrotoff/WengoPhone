@@ -234,6 +234,14 @@ public:
 	Contact * getContact(const std::string & contactId) const;
 
 	/**
+	 * Gets the UUID of a ContactGroup from its name.
+	 *
+	 * @param groupName the name of the group to find
+	 * @return the UUID of the group. An empty string if not found
+	 */
+	std::string getContactGroupIdFromName(const std::string & groupName) const;
+
+	/**
 	 * Locks the ContactList.
 	 *
 	 * A locked ContactList can't be modified.

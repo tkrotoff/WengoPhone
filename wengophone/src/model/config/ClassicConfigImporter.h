@@ -67,16 +67,13 @@ private:
 	void makeImportConfig(int from, int to);
 
 	static std::string getWengoClassicConfigPath();
-	bool ImportConfigFromV1toV3();
-	bool ImportConfigFromV2toV3();
-	bool ImportContactsFromV1toV3(const std::string & fromDir, const std::string & toDir,
-		const std::string & owner);
-	static bool ClassicVcardParser(const std::string & vcardFile, void *structVcard);
-	static bool ClassicXMLParser(const std::string & xmlFile, void *structVcard);
-	static std::string ClassicVCardToString(void *structVcard);
-	static void * GetLastWengoUser(const std::string & configUserFile);
-
-	bool _importerDone;
+	bool importConfigFromV1toV3();
+	bool importConfigFromV2toV3();
+	bool importContactsFromV1toV3(const std::string & fromDir, UserProfile & userProfile);
+	static bool classicVcardParser(const std::string & vcardFile, void *structVcard);
+	static bool classicXMLParser(const std::string & xmlFile, void *structVcard);
+	static std::string classicVCardToString(void *structVcard);
+	static void * getLastWengoUser(const std::string & configUserFile, int version);
 };
 
 #endif	//OWCONFIGIMPORTER_H

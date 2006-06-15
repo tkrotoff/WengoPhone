@@ -137,23 +137,7 @@ std::string CContactList::getContactGroupName(const std::string & groupId) const
 }
 
 std::string CContactList::getContactGroupIdFromName(const std::string & groupName) const {
-	std::string result;
-
-	_contactList.lock();
-	ContactList::ContactGroupSet contactGroups = _contactList.getContactGroupSet();
-	_contactList.unlock();
-
-	for (ContactList::ContactGroupSet::const_iterator it = contactGroups.begin();
-		it != contactGroups.end();
-		it++) {
-		LOG_DEBUG("groupName: " + groupName + ", current group name: " + (*it).getName());
-		if ((*it).getName() == groupName) {
-			result = (*it).getUUID();
-			break;
-		}
-	}
-
-	return result;
+	return _contactList.getContactGroupIdFromName(groupName);
 }
 
 ContactProfile CContactList::getContactProfile(const std::string & contactId) const {

@@ -57,7 +57,7 @@ bool WengoAccountXMLSerializer::unserialize(const std::string & data) {
 
 	// Retrieving login
 	TiXmlNode * login = wengoaccount.FirstChild("login").Node();
-	if (login) {
+	if (login && login->FirstChild()) {
 		_wengoAccount._wengoLogin = login->FirstChild()->Value();
 	} else {
 		LOG_ERROR("Invalid WengoAccount: no login set");
@@ -67,14 +67,14 @@ bool WengoAccountXMLSerializer::unserialize(const std::string & data) {
 
 	// Retrieving password
 	TiXmlNode * password = wengoaccount.FirstChild("password").Node();
-	if (password) {
+	if (password && password->FirstChild()) {
 		_wengoAccount._wengoPassword = Base64::decode(password->FirstChild()->Value());
 	}
 	////
 
 	// Retrieving autologin
 	TiXmlNode * autologin = wengoaccount.FirstChild("autologin").Node();
-	if (autologin) {
+	if (autologin && autologin->FirstChild()) {
 		String autologinStr = autologin->FirstChild()->Value();
 		_wengoAccount._autoLogin = autologinStr.toBoolean();
 	}

@@ -524,3 +524,21 @@ void ContactList::lock() {
 void ContactList::unlock() {
 	_mutex.unlock();
 }
+
+std::string ContactList::getContactGroupIdFromName(const std::string & groupName) const {
+	RecursiveMutex::ScopedLock lock(_mutex);
+
+	std::string result;
+
+	for (ContactGroupSet::const_iterator it = _contactGroupSet.begin();
+		it != _contactGroupSet.end();
+		it++) {
+		LOG_DEBUG("groupName: " + groupName + ", current group name: " + (*it).getName());
+		if ((*it).getName() == groupName) {
+			result = (*it).getUUID();
+			break;
+		}
+	}
+
+	return result;
+}

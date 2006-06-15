@@ -55,11 +55,21 @@ public:
 	std::string getExtension() const;
 
 	/**
-	 * Renames a file.
+	 * Moves a file.
+	 *
+	 * @param newPath the path we want to move the file to
+	 * @param overwrite true to overwrite the file if it exists.
 	 *
 	 * @return true if the operation succeeds otherwise false.
 	 */
-	bool move(const std::string & newName);
+	bool move(const std::string & newPath, bool overwrite = false);
+
+	/**
+	 * Removes a file.
+	 *
+	 * @return true if the operation succeeds otherwise false.
+	 */
+	bool remove();
 
 	/**
 	 * Gets the path to the file.

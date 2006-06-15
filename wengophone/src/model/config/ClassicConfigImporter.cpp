@@ -23,6 +23,7 @@
 #include "Config.h"
 
 #include <model/account/wengo/WengoAccount.h>
+#include <model/contactlist/Contact.h>
 #include <model/profile/UserProfile.h>
 #include <model/profile/UserProfileFileStorage.h>
 #include <model/profile/UserProfileXMLSerializer.h>
@@ -92,7 +93,7 @@ typedef struct vcard_s
 typedef std::list<vcard_t *> vcardList;
 typedef std::list<vcard_t *>::iterator vcardIt;
 
-telNumber_t *CreateNewNodeNumber(const std::string & key, const std::string & value)
+telNumber_t *createNewNodeNumber(const std::string & key, const std::string & value)
 {
 	telNumber_t *number = new telNumber_t();
 
@@ -129,7 +130,6 @@ static const std::string OLD_HISTORY_FILENAME = "_history";
 
 ClassicConfigImporter::ClassicConfigImporter() {
 
-	_importerDone = false;
 }
 
 bool ClassicConfigImporter::importConfig(const string & str) {
@@ -140,11 +140,7 @@ bool ClassicConfigImporter::importConfig(const string & str) {
 	int localVersion = detectLastVersion();
 
 	if (localVersion != CONFIG_UNKNOWN && localVersion < config.CONFIG_VERSION) {
-
 		makeImportConfig(localVersion, config.CONFIG_VERSION);
-		while (_importerDone != true)
-			Thread::msleep(100);
-
 		return true;
 	}
 
@@ -179,10 +175,10 @@ int ClassicConfigImporter::detectLastVersion()
 void ClassicConfigImporter::makeImportConfig(int from, int to)
 {
 	if (from == CONFIG_VERSION1 && to == CONFIG_VERSION3)
-		ImportConfigFromV1toV3();
+		importConfigFromV1toV3();
 	
 	else if (from == CONFIG_VERSION2 && to == CONFIG_VERSION3)
-		ImportConfigFromV2toV3();
+		importConfigFromV2toV3();
 }
 
 string ClassicConfigImporter::getWengoClassicConfigPath() {
@@ -201,7 +197,7 @@ string ClassicConfigImporter::getWengoClassicConfigPath() {
 	return result;
 }
 
-bool ClassicConfigImporter::ClassicVcardParser(const string & vcardFile, void *structVcard)
+bool ClassicConfigImporter::classicVcardParser(const string & vcardFile, void *structVcard)
 {
 	vcard_t *mVcard = (vcard_t *) structVcard;
 	std::ifstream fileStream;
@@ -245,22 +241,22 @@ bool ClassicConfigImporter::ClassicVcardParser(const string & vcardFile, void *s
 				mVcard->gender = UNKNOWN;
 		}
 		else if (!key.compare("TEL;TYPE=home"))
-			mVcard->numbers.push_back(CreateNewNodeNumber("home", value));
+			mVcard->numbers.push_back(createNewNodeNumber("home", value));
 
 		else if (!key.compare("TEL;TYPE=work"))
-			mVcard->numbers.push_back(CreateNewNodeNumber("work", value));
+			mVcard->numbers.push_back(createNewNodeNumber("work", value));
 
 		else if (!key.compare("TEL;TYPE=cell"))
-			mVcard->numbers.push_back(CreateNewNodeNumber("cell", value));
+			mVcard->numbers.push_back(createNewNodeNumber("cell", value));
 
 		else if (!key.compare("TEL;TYPE=pref"))
 			mVcard->id = value;
 
 		else if (!key.compare("TEL;TYPE=fax"))
-			mVcard->numbers.push_back(CreateNewNodeNumber("fax", value));
+			mVcard->numbers.push_back(createNewNodeNumber("fax", value));
 
 		else if (!key.compare("TEL;TYPE=other"))
-			mVcard->numbers.push_back(CreateNewNodeNumber("other", value));
+			mVcard->numbers.push_back(createNewNodeNumber("other", value));
 
 		else if (!key.compare("EMAIL"))
 			mVcard->emails += value;
@@ -310,7 +306,7 @@ bool ClassicConfigImporter::ClassicVcardParser(const string & vcardFile, void *s
 	return true;
 }
 
-bool ClassicConfigImporter::ClassicXMLParser(const string & xmlFile, void *structVcard)
+bool ClassicConfigImporter::classicXMLParser(const string & xmlFile, void *structVcard)
 {
 	vcard_t *mVcard = (vcard_t *) structVcard;
 	std::ifstream fileStream;
@@ -348,7 +344,7 @@ bool ClassicConfigImporter::ClassicXMLParser(const string & xmlFile, void *struc
 	return true;
 }
 
-string ClassicConfigImporter::ClassicVCardToString(void *structVcard)
+string ClassicConfigImporter::classicVCardToString(void *structVcard)
 {
 	vcard_t *mVcard = (vcard_t *) structVcard;
 	string res = "<wgcard version=\"1.0\" xmlns=\"http://www.openwengo.org/wgcard/1.0\">\n";
@@ -435,46 +431,54 @@ string ClassicConfigImporter::ClassicVCardToString(void *structVcard)
 }
 
 
-bool ClassicConfigImporter::ImportContactsFromV1toV3(const string & fromDir,
-	const string & toDir, const string & owner) {
+bool ClassicConfigImporter::importContactsFromV1toV3(const string & fromDir, UserProfile & userProfile) {
 
 	File mDir(fromDir);
 	StringList fileList = mDir.getFileList();
-	vcardList vList;
+	//vcardList vList;
+	ContactList & contactList = userProfile.getContactList();
+	
+	contactList.addContactGroup("Classic");
+
+	std::set<IMAccount *> list = 
+		userProfile.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+
+	if (!list.size()) {
+		return false;
+	}
 
 	for (int i = 0; i < fileList.size(); i++)
 	{
 		File mFile(fromDir + fileList[i]);
 		string Id = fileList[i].substr(0, fileList[i].find("_", 0));
-		vcard_t *mVcard;
+		vcard_t mVcard;
 
 		if (!mFile.getExtension().compare("vcf"))
 		{
-			mVcard = new vcard_t();
-			mVcard->owner = owner;
-
-			if (ClassicVcardParser(fromDir + fileList[i], mVcard) == false)
+			if (classicVcardParser(fromDir + fileList[i], &mVcard) == false)
 			{
-				delete mVcard;
 				continue;
 			}
 
 			int extPos = fileList[i].find_last_of('.');
 			string fileWoExt = fileList[i].substr(0, extPos + 1);
-
-			ClassicXMLParser(fromDir + fileWoExt + "xml", mVcard);
-			vList.push_back(mVcard);
+			classicXMLParser(fromDir + fileWoExt + "xml", &mVcard);
+			
+			IMContact imContact(*(*list.begin()), mVcard.id);
+			Contact & contact = contactList.createContact();
+			contact.setGroupId(contactList.getContactGroupIdFromName("Classic"));
+			contact.addIMContact(imContact);
 		}
 	}
 
-	vcardIt vIt;
+	/*vcardIt vIt;
 	FileWriter xmlFile(toDir + "contactlist.xml");
 
 	// Write all informations to the xml conf file
 	xmlFile.write("<contactlist>\n");
 	for (vIt = vList.begin(); vIt != vList.end(); vIt++)
 	{
-		xmlFile.write(ClassicVCardToString((*vIt)));
+		xmlFile.write(classicVCardToString((*vIt)));
 	}
 	xmlFile.write("</contactlist>\n");
 	xmlFile.close();
@@ -492,7 +496,7 @@ bool ClassicConfigImporter::ImportContactsFromV1toV3(const string & fromDir,
 			(*vIt2)->numbers.erase(tIt2);
 		}
 		vList.erase(vIt2);
-	}
+	}*/
 
 	return true;
 }
@@ -504,7 +508,7 @@ typedef struct last_user_s
 	bool	auto_login;
 }			last_user_t;
 
-void * ClassicConfigImporter::GetLastWengoUser(const std::string & configUserFile) {
+void * ClassicConfigImporter::getLastWengoUser(const std::string & configUserFile, int version) {
 	std::ifstream fileStream;
 	String lastLine;
 
@@ -524,18 +528,28 @@ void * ClassicConfigImporter::GetLastWengoUser(const std::string & configUserFil
 
 		if (!strncmp(lastLine.c_str(), "<login>", 7))
 		{
-			//int pos2 = lastLine.find_first_of(']');
-			//int pos1 = lastLine.find_last_of('[');
-			int pos1 = lastLine.find_first_of('>');
-			int pos2 = lastLine.find_last_of('<');
+			int pos1, pos2;
+			if (version == CONFIG_VERSION2) {
+				pos1 = lastLine.find_first_of('>');
+				pos2 = lastLine.find_last_of('<');
+			} else {
+				pos2 = lastLine.find_first_of(']');
+				pos1 = lastLine.find_last_of('[');
+			}
+
 			lastUser->login = ((String)lastLine.substr(pos1 + 1, pos2 - (pos1 + 1))).trim();
 		}
 		else if (!strncmp(lastLine.c_str(), "<password>", 10))
 		{
-			//int pos2 = lastLine.find_first_of(']');
-			//int pos1 = lastLine.find_last_of('[');
-			int pos1 = lastLine.find_first_of('>');
-			int pos2 = lastLine.find_last_of('<');
+			int pos1, pos2;
+			if (version == CONFIG_VERSION2) {
+				pos1 = lastLine.find_first_of('>');
+				pos2 = lastLine.find_last_of('<');
+			} else {
+				pos2 = lastLine.find_first_of(']');
+				pos1 = lastLine.find_last_of('[');
+			}
+			
 			lastUser->password = ((String)lastLine.substr(pos1 + 1, pos2 - (pos1 + 1))).trim();
 		}
 		else if (!strncmp(lastLine.c_str(), "<autoLogin>", 11))
@@ -544,8 +558,7 @@ void * ClassicConfigImporter::GetLastWengoUser(const std::string & configUserFil
 			int pos2 = lastLine.find_last_of('<');
 			string resp = ((String)lastLine.substr(pos1 + 1, pos2 - (pos1 + 1))).trim();
 
-			//if (resp == "true")
-			if (resp == "1")
+			if (resp == (version == CONFIG_VERSION2 ? "1" : "true"))
 				lastUser->auto_login = true;
 			else
 				lastUser->auto_login = false;
@@ -558,26 +571,60 @@ void * ClassicConfigImporter::GetLastWengoUser(const std::string & configUserFil
 	return lastUser;
 }
 
-bool ClassicConfigImporter::ImportConfigFromV1toV3() {
+bool ClassicConfigImporter::importConfigFromV1toV3() {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	string classicPath = getWengoClassicConfigPath();
 	File mDir(classicPath);
 	StringList dirList = mDir.getDirectoryList();
 	string sep = mDir.getPathSeparator();
+	UserProfile userProfile;
 
-	for (int i = 0; i < dirList.size(); i++)
+	last_user_t * lastUser = (last_user_t *) getLastWengoUser(classicPath + USERCONFIG_FILENAME, CONFIG_VERSION1);
+	if (lastUser)
 	{
+		WengoAccount wAccount(lastUser->login, lastUser->password, lastUser->auto_login);
+		userProfile.setWengoAccount(wAccount);
+
+		if (userProfile.isWengoAccountValid())
+		{
+			String accountDir(userProfile.getProfileDirectory());
+			File::createPath(accountDir);
+			String oldPath = classicPath + lastUser->login + sep + "contacts" + sep;
+
+			importContactsFromV1toV3(oldPath, userProfile);
+
+			UserProfileFileStorage fStorage(userProfile);
+			fStorage.save(accountDir);
+		}
+	}
+
+/*	for (int i = 0; i < dirList.size(); i++)
+	{
+		if (strcmp(lastUser->login.c_str(), dirList[i].c_str()))
+			continue;
+
 		String newDir(config.getConfigDir() + sep + "profiles" + sep + dirList[i] + sep);
 		File::createPath(newDir);
 		string path = classicPath + dirList[i] + sep + "contacts" + sep;
-		ImportContactsFromV1toV3(path, newDir, dirList[i]);
+		
+		UserProfile userProfile1;
+		WengoAccount wAccount(dirList[i], String::null, false);
+		userProfile1.setWengoAccount(wAccount);
+
+		importContactsFromV1toV3(path, userProfile1);
+
+		UserProfileFileStorage fStorage(userProfile1);
+		fStorage.save(newDir);
 	}
+*/
+	if (userProfile.isWengoAccountValid())
+		config.set(config.PROFILE_LAST_USED_NAME_KEY, userProfile.getName());
 
 	return true;
 }
 
-bool ClassicConfigImporter::ImportConfigFromV2toV3() {
+bool ClassicConfigImporter::importConfigFromV2toV3() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	String configDir = config.getConfigDir();
 	UserProfile userProfile;
@@ -592,7 +639,7 @@ bool ClassicConfigImporter::ImportConfigFromV2toV3() {
 		UserProfileXMLSerializer serializer(userProfile);
 		serializer.unserialize(data);
 
-		last_user_t * lastUser = (last_user_t *) GetLastWengoUser(configDir + USERCONFIG_FILENAME);
+		last_user_t * lastUser = (last_user_t *) getLastWengoUser(configDir + USERCONFIG_FILENAME, CONFIG_VERSION2);
 		if (lastUser == NULL)
 			return false;
 
@@ -601,16 +648,22 @@ bool ClassicConfigImporter::ImportConfigFromV2toV3() {
 
 		if (userProfile.isWengoAccountValid())
 		{
+			// remove user.config and userprofile.xml from the main directory
+			File userConfigFile(configDir + USERCONFIG_FILENAME);
+			userConfigFile.remove();
+			File userProfileFile(configDir + USERPROFILE_FILENAME);
+			userProfileFile.remove();
+
 			String accountDir(userProfile.getProfileDirectory());
 			File::createPath(accountDir);
 			UserProfileFileStorage fStorage(userProfile);
 			fStorage.save(accountDir);
 
 			File mFile1(configDir + IMACCOUNTS_FILENAME);
-			mFile1.move(accountDir + IMACCOUNTS_FILENAME);
+			mFile1.move(accountDir + IMACCOUNTS_FILENAME, true);
 
 			File mFile2(configDir + CONTACTLIST_FILENAME);
-			mFile2.move(accountDir + CONTACTLIST_FILENAME);
+			mFile2.move(accountDir + CONTACTLIST_FILENAME, true);
 
 			File mDir(configDir);
 			StringList dirList = mDir.getFileList();
@@ -619,11 +672,13 @@ bool ClassicConfigImporter::ImportConfigFromV2toV3() {
 				if (dirList[i].length() > OLD_HISTORY_FILENAME.length()) {
 					if (dirList[i].substr(dirList[i].length() - OLD_HISTORY_FILENAME.length()) == OLD_HISTORY_FILENAME) {
 						File mFile3(configDir + dirList[i]);
-						mFile3.move(accountDir + NEW_HISTORY_FILENAME);
+						mFile3.move(accountDir + NEW_HISTORY_FILENAME, true);
 						break;
 					}
 				}
 			}
+
+			config.set(config.PROFILE_LAST_USED_NAME_KEY, userProfile.getName());
 		}
 	}
 }
