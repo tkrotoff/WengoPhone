@@ -109,7 +109,7 @@ void QtVideo::paintEvent() {
 
 		//FIXME Qt scaling, too slow
 		painter.drawImage(xpos, ypos, _image.scaled(size, Qt::IgnoreAspectRatio,
-			Qt::SmoothTransformation));
+			Qt::FastTransformation));
 	}
 }
 
