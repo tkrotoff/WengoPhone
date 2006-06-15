@@ -277,13 +277,12 @@ void ph_media_video_alloc_processing_buffers(phvstream_t *vstream, pixosi nego_p
 	vstream->image_ready_for_network = pix_alloc(PIX_OSI_YUV420P, PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT);
 
     // buffer for the local capture event sent to the registered gui clients
-	vstream->frame_event.frame_local = pix_alloc(PIX_OSI_RGB32, nego_width, nego_height);
+	vstream->frame_event.frame_local = pix_alloc(PIX_OSI_YUV420P, nego_width, nego_height);
 
     // buffer for the remote image event sent to the registered gui clients
-	vstream->frame_event.frame_remote = pix_alloc(PIX_OSI_RGB32, PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT);
+	vstream->frame_event.frame_remote = pix_alloc(PIX_OSI_YUV420P, PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT);
 
 	vstream->image_wrong_pix = pix_alloc(PIX_OSI_YUV420P, nego_width, nego_height);
-	
 }
 
 void ph_media_video_check_processing_buffers(phvstream_t *vstream, pixosi pix_source, unsigned width_source, unsigned height_source){

@@ -38,12 +38,12 @@
 #include <sipwrapper/WebcamVideoFrame.h>
 #include <sipwrapper/CodecList.h>
 
+#include <pixertool/pixertool.h>
+
 #include <util/Logger.h>
 
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Object.h>
-
-#include <pixertool/pixertool.h>
 
 #include <QtGui>
 #include <QSvgRenderer>
@@ -359,20 +359,27 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 	QSize size(640, 480); // will be the optimum interim resized image
 	if (_videoWindow) {
 		QSize frameSize = _videoWindow->getFrameSize(); // screen target size
-		if (frameSize.width() < size.width()) {
+		if (frameSize.width() <= size.width()) {
 			size.setWidth(352);
 			size.setHeight(288);
 		}
 	}
 
-	//Image will be deleted in videoFrameReceivedThreadSafe. Here we resize the remote image to the interim size
-	QImage * original = new QImage(remoteVideoFrame.getFrame(), remoteVideoFrame.getWidth(),
-					remoteVideoFrame.getHeight(), QImage::Format_RGB32);
+	piximage originalImage;
+	originalImage.palette = PIX_OSI_YUV420P;
+	originalImage.width = remoteVideoFrame.getWidth();
+	originalImage.height = remoteVideoFrame.getHeight();
+	originalImage.data = remoteVideoFrame.getFrame();
 
-	QImage * image = new QImage(original->scaled(size.width(), size.height(),
-					Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+	piximage * resizedImage = pix_alloc(PIX_OSI_RGB32, size.width(), size.height());
+	pix_convert(PIX_NO_FLAG, resizedImage, &originalImage);
 
-	delete original;
+	QImage * image = new QImage(resizedImage->width,
+								resizedImage->height, QImage::Format_RGB32);
+	
+	memcpy(image->bits(), resizedImage->data, pix_size(resizedImage->palette, resizedImage->width, resizedImage->height));
+
+	pix_free(resizedImage);
 
 	//If we want to embed the local webcam picture, we do it here
 	if (_encrustLocalWebcam) {
@@ -388,30 +395,22 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 		unsigned posx = size.width() - width - offset_x;
 		unsigned posy = size.height() - height - offset_y;
 
-/*
-		piximage originalImage;
-		originalImage.palette = PIX_OSI_RGB32;
-		originalImage.width = localVideoFrame.getWidth();
-		originalImage.height = localVideoFrame.getHeight();
-		originalImage.data = localVideoFrame.getFrame();
+		piximage originalLocalImage;
+		originalLocalImage.palette = PIX_OSI_YUV420P;
+		originalLocalImage.width = localVideoFrame.getWidth();
+		originalLocalImage.height = localVideoFrame.getHeight();
+		originalLocalImage.data = localVideoFrame.getFrame();
 
-		piximage * resizedImage = pix_alloc(PIX_OSI_RGB32, width, height);
+		piximage * resizedLocalImage = pix_alloc(PIX_OSI_RGB32, width, height);
+		pix_convert(PIX_NO_FLAG, resizedLocalImage, &originalLocalImage);
 
-		pix_convert(PIX_NO_FLAG, resizedImage, &originalImage);
+		QImage localImage(resizedLocalImage->width,
+			resizedLocalImage->height, QImage::Format_RGB32);
+	
+		memcpy(localImage.bits(), resizedLocalImage->data, 
+			pix_size(resizedLocalImage->palette, resizedLocalImage->width, resizedLocalImage->height));
 
-		QImage resizedQImage = QImage(resizedImage->data, resizedImage->width,
-			resizedImage->height, QImage::Format_RGB32);
-
-		QPainter painter(image);
-		painter.drawImage(posx, posy, resizedQImage);
-
-		pix_free(resizedImage);
-*/
-
-		// prepare the embedded image
-		QImage localImage = QImage(localVideoFrame.getFrame(), localVideoFrame.getWidth(),
-		localVideoFrame.getHeight(),
-		QImage::Format_RGB32).scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		pix_free(resizedLocalImage);
 
 		QPainter painter;
 		painter.begin(image);
@@ -423,7 +422,7 @@ void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remote
 		painter.end();
 	}
 
-	typedef PostEvent1 < void(QImage *), QImage * > MyPostEvent;
+	typedef PostEvent1 < void(QImage *), QImage *> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(& QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe, this, _1), image);
 	postEvent(event);
 }
@@ -434,8 +433,8 @@ void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(QImage * image) {
 		_videoWindow = new QtVideo(_phoneCallWidget);
 		showVideoWidget();
 	}
-	_videoWindow->showImage(* image);
-	//Image was created in videoFrameReceived
+	_videoWindow->showImage(*image);
+	//Image was created in videoFrameReceivedEventHandler
 	delete image;
 }
 
