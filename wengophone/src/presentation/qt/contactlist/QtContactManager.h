@@ -65,6 +65,8 @@ public:
 
 	bool groupsAreHiden();
 
+	virtual bool event (QEvent * e);
+
 public Q_SLOTS:
 
 	void treeViewSelectionChanged();
@@ -111,7 +113,7 @@ public Q_SLOTS:
 
 	void defaultAction(QTreeWidgetItem * item);
 
-	void retranslateUi();
+
 
 Q_SIGNALS:
 
@@ -126,6 +128,8 @@ protected:
 	void safeHideOffLineUsers();
 
 	void safeHideGroup();
+
+	void retranslateUi();
 
 	bool canShowUser(const ContactProfile * cprofile);
 

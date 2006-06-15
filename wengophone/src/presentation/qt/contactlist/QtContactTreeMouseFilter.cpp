@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtUserTreeEventManager.h"
+#include "QtContactTreeMouseFilter.h"
 #include "QtContactListManager.h"
 
 #include <control/contactlist/CContactList.h>
@@ -25,7 +25,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-QtUserTreeEventManager::QtUserTreeEventManager(CContactList & cContactList, QObject * parent, QTreeWidget * target)
+QtContactTreeMouseFilter::QtContactTreeMouseFilter(CContactList & cContactList, QObject * parent, QTreeWidget * target)
 	: QObject(parent),
 	_cContactList(cContactList) {
 	_tree = target;
@@ -37,7 +37,7 @@ QtUserTreeEventManager::QtUserTreeEventManager(CContactList & cContactList, QObj
 	_selectedItem = NULL;
 }
 
-bool QtUserTreeEventManager::eventFilter(QObject * obj, QEvent * event) {
+bool QtContactTreeMouseFilter::eventFilter(QObject * obj, QEvent * event) {
 	switch (event->type()) {
 	case QEvent::MouseButtonPress:
 		mousePressEvent(dynamic_cast <QMouseEvent *> (event));
@@ -66,7 +66,7 @@ bool QtUserTreeEventManager::eventFilter(QObject * obj, QEvent * event) {
 	}
 }
 
-void QtUserTreeEventManager::mousePressEvent(QMouseEvent * event) {
+void QtContactTreeMouseFilter::mousePressEvent(QMouseEvent * event) {
 	mouseClicked(event->button());
 	QTreeWidgetItem * item = _tree->itemAt(event->pos());
 	QtContactListManager * ul = QtContactListManager::getInstance();
@@ -83,7 +83,7 @@ void QtUserTreeEventManager::mousePressEvent(QMouseEvent * event) {
 	}
 }
 
-void QtUserTreeEventManager::mouseReleaseEvent(QMouseEvent * event) {
+void QtContactTreeMouseFilter::mouseReleaseEvent(QMouseEvent * event) {
 	if (event->button() == Qt::RightButton) {
 		mouseClicked(Qt::RightButton);
 	} else {
@@ -91,14 +91,11 @@ void QtUserTreeEventManager::mouseReleaseEvent(QMouseEvent * event) {
 	}
 }
 
-void QtUserTreeEventManager::mouseMoveEvent(QMouseEvent * event) {
-
+void QtContactTreeMouseFilter::mouseMoveEvent(QMouseEvent * event) {
 	QTreeWidgetItem * item=_selectedItem;
-
 	if (!_selectedItem) {
 		return;
 	}
-
 	if (!(event->buttons() & Qt::LeftButton) && !(event->buttons() & Qt::RightButton)) {
 		QTreeWidgetItem * tmp = _tree->itemAt(event->pos());
 		if ((tmp != _entered)) {
@@ -117,21 +114,18 @@ void QtUserTreeEventManager::mouseMoveEvent(QMouseEvent * event) {
 	if (!(event->buttons() & Qt::LeftButton)) {
 		return;
 	}
-
 	if ((event->pos() - _dstart).manhattanLength() < QApplication::startDragDistance()) {
 		return;
 	}
-
 	if (!item) {
 		return;
 	}
-
 	//If item->parent() == NULL then the item is a group (parent item for contact), a group cannot be moved
 	if (!item->parent()) {
 		return;
 	}
-
-	QByteArray custom; // Define a new empty custom data
+	// Define a new empty custom data
+	QByteArray custom;
 	QDrag * drag = new QDrag(_tree);
 	QMimeData * mimeData = new QMimeData;
 	// FIXME
@@ -143,13 +137,13 @@ void QtUserTreeEventManager::mouseMoveEvent(QMouseEvent * event) {
 
 }
 
-void QtUserTreeEventManager::dragEnterEvent(QDragEnterEvent * event) {
+void QtContactTreeMouseFilter::dragEnterEvent(QDragEnterEvent * event) {
 	if (event->mimeData()->hasFormat("application/x-wengo-user-data")) {
 		event->acceptProposedAction();
 	}
 }
 
-void QtUserTreeEventManager::dropEvent(QDropEvent * event) {
+void QtContactTreeMouseFilter::dropEvent(QDropEvent * event) {
 	QTreeWidgetItem * p;
 	QTreeWidgetItem * item = _tree->itemAt(event->pos());
 	_inDrag = false;
@@ -192,7 +186,7 @@ void QtUserTreeEventManager::dropEvent(QDropEvent * event) {
 	return;
 }
 
-void QtUserTreeEventManager::dragMoveEvent(QDragMoveEvent * event) {
+void QtContactTreeMouseFilter::dragMoveEvent(QDragMoveEvent * event) {
 	QTreeWidgetItem * item = _tree->itemAt(event->pos());
 	event->setDropAction(Qt::IgnoreAction);
 	if (item) {
@@ -202,7 +196,7 @@ void QtUserTreeEventManager::dragMoveEvent(QDragMoveEvent * event) {
 	}
 }
 
-void QtUserTreeEventManager::timerTimeout() {
+void QtContactTreeMouseFilter::timerTimeout() {
 
 	if (_inDrag) {
 		return;

@@ -36,7 +36,8 @@
 #include <util/Picture.h>
 #include <qtutil/WidgetFactory.h>
 
-#include <QtGui>
+#include <QLabel>
+#include <QPushButton>
 
 #include <util/Logger.h>
 
@@ -102,7 +103,7 @@ void QtUserWidget::chatButtonClicked() {
 }
 
 QPixmap QtUserWidget::getIcon() const {
-	QMutexLocker locker(& _mutex);
+	QMutexLocker locker(&_mutex);
 
 	Picture picture = _contactProfile.getIcon();
 	std::string data = picture.getData();
@@ -114,7 +115,7 @@ QPixmap QtUserWidget::getIcon() const {
 }
 
 void QtUserWidget::contactProfileUpdated() {
-	QMutexLocker locker(& _mutex);
+	QMutexLocker locker(&_mutex);
 
 	_contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
 }
@@ -123,11 +124,7 @@ QLabel * QtUserWidget::getAvatarLabel() const {
 	return _ui.avatarLabel;
 }
 
-
 void QtUserWidget::mobileButtonClicked() {
-	LOG_DEBUG("\n\n\n\n\n" + _ui.cellPhoneLabel->text().toStdString() + "\n\n");
-
-
 	if (_ui.cellPhoneLabel->text() != tr("No cell phone number set")) {
 		QtContactListManager * ul = QtContactListManager::getInstance();
 		ul->startCall(QString::fromStdString(_contactId), _ui.cellPhoneLabel->text());
@@ -142,8 +139,6 @@ void QtUserWidget::mobileButtonClicked() {
 }
 
 void QtUserWidget::landLineButtonClicked() {
-	LOG_DEBUG("\n\n\n\n\n" + _ui.homePhoneLabel->text().toStdString() + "\n\n");
-
 	if (_ui.homePhoneLabel->text() != tr("No phone number set")) {
 		QtContactListManager * ul = QtContactListManager::getInstance();
 		ul->startCall(QString::fromStdString(_contactId), _ui.homePhoneLabel->text());

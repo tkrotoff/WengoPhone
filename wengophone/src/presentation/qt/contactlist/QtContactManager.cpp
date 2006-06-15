@@ -25,7 +25,7 @@
 #include "QtContactInfo.h"
 #include "QtContactListManager.h"
 #include "QtContactTreeKeyFilter.h"
-#include "QtUserTreeEventManager.h"
+#include "QtContactTreeMouseFilter.h"
 #include "QtConferenceAction.h"
 #include <presentation/qt/QtWengoPhone.h>
 
@@ -77,14 +77,14 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 
 	QtContactListManager::getInstance()->setTreeWidget(target);
 	target->setMouseTracking(true);
-	QtUserTreeEventManager * qtUserTreeEventManager = new QtUserTreeEventManager(qtContactList.getCContactList(), this, target);
+	QtContactTreeMouseFilter * qtContactTreeMouseFilter = new QtContactTreeMouseFilter(qtContactList.getCContactList(), this, target);
 	QtContactTreeKeyFilter * keyFilter = new QtContactTreeKeyFilter(this, target);
 
 	connect(target, SIGNAL(itemSelectionChanged()), this, SLOT(treeViewSelectionChanged()));
 	connect(target, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(itemClicked(QTreeWidgetItem *, int)));
-	connect(qtUserTreeEventManager, SIGNAL(itemEntered(QTreeWidgetItem *)), this, SLOT(itemEntered(QTreeWidgetItem *)));
-	connect(qtUserTreeEventManager, SIGNAL(itemTimeout(QTreeWidgetItem *)), this, SLOT(openUserInfo(QTreeWidgetItem *)));
-	connect(qtUserTreeEventManager, SIGNAL(mouseClicked(Qt::MouseButton)), SLOT(setMouseButton(Qt::MouseButton)));
+	connect(qtContactTreeMouseFilter, SIGNAL(itemEntered(QTreeWidgetItem *)), this, SLOT(itemEntered(QTreeWidgetItem *)));
+	connect(qtContactTreeMouseFilter, SIGNAL(itemTimeout(QTreeWidgetItem *)), this, SLOT(openUserInfo(QTreeWidgetItem *)));
+	connect(qtContactTreeMouseFilter, SIGNAL(mouseClicked(Qt::MouseButton)), SLOT(setMouseButton(Qt::MouseButton)));
 
 	connect(keyFilter, SIGNAL(openItem(QTreeWidgetItem *)), SLOT(openUserInfo(QTreeWidgetItem *)));
 	connect(keyFilter, SIGNAL(closeItem(QTreeWidgetItem *)), SLOT(closeUserInfo()));
@@ -541,7 +541,6 @@ void QtContactManager::inviteToConference() {
 }
 
 QMenu * QtContactManager::createMenu() {
-	retranslateUi();
 	QAction * action;
 	QMenu * menu;
 	QtContactListManager * ul = QtContactListManager::getInstance();
@@ -741,8 +740,15 @@ void QtContactManager::timerEvent ( QTimerEvent * event ) {
 	}
 }
 
-bool QtContactManager::groupsAreHiden(){
+bool QtContactManager::groupsAreHiden() {
 	return _hideGroups;
+}
+
+bool QtContactManager::event (QEvent * e) {
+	if (e->type() == QEvent::LanguageChange) {
+		retranslateUi();
+	}
+	return QObject::event(e);
 }
 
 void QtContactManager::retranslateUi() {

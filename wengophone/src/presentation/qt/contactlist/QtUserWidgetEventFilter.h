@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTUSERWIDGETEVENTFILTER
-#define QTUSERWIDGETEVENTFILTER
+#ifndef OWQTUSERWIDGETEVENTFILTER_H
+#define OWQTUSERWIDGETEVENTFILTER_H
 
 #include <QObject>
 #include "QtUserWidget.h"
@@ -48,4 +48,4 @@ protected:
 	QtContact * _user;
 };
 
-#endif	//QTUSERWIDGETEVENTFILTER
+#endif	// OWQTUSERWIDGETEVENTFILTER_H

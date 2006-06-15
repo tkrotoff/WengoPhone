@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTUSERTREEEVENTMANAGER_H
-#define OWQTUSERTREEEVENTMANAGER_H
+#ifndef OWQTCONTACTTREEMOUSEFILTER_H
+#define OWQTCONTACTTREEMOUSEFILTER_H
 
 #include <QtGui>
 
@@ -29,11 +29,11 @@ class CContactList;
  *
  * @author Mr K
  */
-class QtUserTreeEventManager : public QObject {
+class QtContactTreeMouseFilter : public QObject {
 	Q_OBJECT
 public :
 
-	QtUserTreeEventManager(CContactList & cContactList, QObject * parent = 0, QTreeWidget * target = 0);
+	QtContactTreeMouseFilter(CContactList & cContactList, QObject * parent = 0, QTreeWidget * target = 0);
 
 public Q_SLOTS :
 

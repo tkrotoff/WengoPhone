@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTUSERWIDGETAVATARMANAGER_H
-#define QTUSERWIDGETAVATARMANAGER_H
+#ifndef OWQTUSERWIDGETAVATARMANAGER_H
+#define OWQTUSERWIDGETAVATARMANAGER_H
 
 #include <QtGui>
 #include <QtSvg>
@@ -56,4 +56,4 @@ protected:
 	QtUserWidget * _userWidget;
 };
 
-#endif	//QTUSERWIDGETAVATARMANAGER_H
+#endif	//OWQTUSERWIDGETAVATARMANAGER_H

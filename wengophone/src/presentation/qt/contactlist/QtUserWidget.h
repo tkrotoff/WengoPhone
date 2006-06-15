@@ -39,7 +39,7 @@ class QPushButton;
 
 /**
  * Qt user widget.
- * Represents a contact in the contact list.
+ * Represents a contact info in the contact list.
  *
  * @author Mr K
  * @author Mathieu Stute
@@ -58,7 +58,6 @@ public:
 	QString text() const {
 		return _text;
 	}
-
 
 	QLabel * getAvatarLabel() const;
 
@@ -92,7 +91,7 @@ protected:
 
 	CWengoPhone & _cWengoPhone;
 
-	mutable QMutex _mutex;
+	QMutex _mutex;
 
 	QString _text;
 

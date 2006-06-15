@@ -81,8 +81,4 @@ void QtUserWidgetEventFilter::paintUser(QPainter * painter, QRect rect) {
 	painter->drawText(textRect, Qt::AlignLeft, _user->getUserName(), 0);
 	font.setBold(false);
 	painter->setFont(font);
-
-	int _iconsStartPosition;
-
-	_iconsStartPosition = 10000;
 }
