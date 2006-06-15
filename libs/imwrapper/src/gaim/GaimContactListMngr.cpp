@@ -144,7 +144,7 @@ GaimContactListMngr *GaimContactListMngr::getInstance()
 
 void GaimContactListMngr::NewListCbk(GaimBuddyList *blist)
 {
-	fprintf(stderr, "GaimContactListMngr : NewListCbk()\n");
+	LOG_DEBUG("GaimContactListMngr : NewListCbk()\n");
 }
 
 const char *GaimContactListMngr::FindBuddyGroup(GaimBuddy *gBuddy)
@@ -164,7 +164,7 @@ void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
 	GaimAccount *gAccount = gaim_buddy_get_account(gBuddy);
 	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
 	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
-													GaimIMPrcl::GetEnumIMProtocol(gPrclId));
+		GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 	
 	if (account == NULL)
 		return;
@@ -253,7 +253,8 @@ void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
 	
 	account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
-											GaimIMPrcl::GetEnumIMProtocol(gPrclId));
+		GaimIMPrcl::GetEnumIMProtocol(gPrclId));
+	
 	if (account)
 	{
 		GaimIMContactList *mIMBList = FindIMContactList(*account);
@@ -262,25 +263,24 @@ void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 		if (mIMBList)
 		{
 			const char * groupName = FindBuddyGroup(gBuddy);
-			if (groupName) {
+			if (groupName)
+			{
 				mIMBList->contactMovedEvent(*mIMBList, 
 					groupName, gaim_buddy_get_name(gBuddy));
 			}
 		}
 
-
 		if (mIMPresence)
 		{
-			const char *buddy_alias = gaim_buddy_get_alias_only(gBuddy);
+			const char *buddy_alias =
+				gBuddy->server_alias && *gBuddy->server_alias ? gBuddy->server_alias : gBuddy->alias;
 
-			mIMPresence->presenceStateChangedEvent(*mIMPresence, 
-													GaimPreState::GetPresenceState(gPresenceId),
-													buddy_alias == NULL ? "" : buddy_alias,
-													gaim_buddy_get_name(gBuddy)
-													);
+			mIMPresence->presenceStateChangedEvent(*mIMPresence,
+				GaimPreState::GetPresenceState(gPresenceId),
+				!buddy_alias ? String::null : buddy_alias,
+				gaim_buddy_get_name(gBuddy));
 		}
-
-	}											
+	}
 }
 
 void GaimContactListMngr::UpdateBuddyIcon(GaimBuddy *buddy)
@@ -316,8 +316,6 @@ void GaimContactListMngr::UpdateBuddyIcon(GaimBuddy *buddy)
 
 void GaimContactListMngr::UpdateCbk(GaimBuddyList *list, GaimBlistNode *node)
 {
-	fprintf(stderr, "GaimContactListMngr : UpdateCbk()\n");
-	
 	switch (node->type)
 	{
 		case GAIM_BLIST_BUDDY_NODE:
@@ -325,40 +323,40 @@ void GaimContactListMngr::UpdateCbk(GaimBuddyList *list, GaimBlistNode *node)
 			break;
 
 		default:
-			return;
+			break;
 	}
 }
 
 void GaimContactListMngr::RemoveCbk(GaimBuddyList *list, GaimBlistNode *node)
 {
-	fprintf(stderr, "GaimContactListMngr : RemoveCbk()\n");
+	LOG_DEBUG("GaimContactListMngr : RemoveCbk()\n");
 }
 
 void GaimContactListMngr::DestroyCbk(GaimBuddyList *list)
 {
-	fprintf(stderr, "GaimContactListMngr : DestroyCbk()");
+	LOG_DEBUG("GaimContactListMngr : DestroyCbk()");
 }
 
 void GaimContactListMngr::SetVisibleCbk(GaimBuddyList *list, gboolean show)
 {
-	fprintf(stderr, "GaimContactListMngr : SetVisibleCbk()\n");
+	LOG_DEBUG("GaimContactListMngr : SetVisibleCbk()\n");
 }
 
 void GaimContactListMngr::RequestAddBuddyCbk(GaimAccount *account, const char *username,
 												const char *group, const char *alias)
 {
-	fprintf(stderr, "GaimContactListMngr : RequestAddBuddyCbk()\n");
+	LOG_DEBUG("GaimContactListMngr : RequestAddBuddyCbk()\n");
 }
 
 void GaimContactListMngr::RequestAddChatCbk(GaimAccount *account, GaimGroup *group,
 												const char *alias, const char *name)
 {
-	fprintf(stderr, "GaimContactListMngr : RequestAddChatCbk()\n");
+	LOG_DEBUG("GaimContactListMngr : RequestAddChatCbk()\n");
 }
 
 void GaimContactListMngr::RequestAddGroupCbk(void)
 {
-	fprintf(stderr, "GaimContactListMngr : RequestAddGroupCbk()\n");
+	LOG_DEBUG("GaimContactListMngr : RequestAddGroupCbk()\n");
 }
 
 /* **************** MANAGE CONTACT LIST (Buddy list) ****************** */
@@ -384,7 +382,6 @@ GaimIMContactList *GaimContactListMngr::AddIMContactList(IMAccount &account)
 	if (mIMContactList == NULL)
 	{
 		mIMContactList = new GaimIMContactList(account);
-
 		_gaimIMContactListList.push_back(mIMContactList);
 	}
 
