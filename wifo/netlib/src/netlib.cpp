@@ -130,7 +130,7 @@ typedef struct	HttpProxy_s
 	char		**proxy_exceptions;
 }				HttpProxy_t;
 
-HttpProxy_t	_LocalProxy = {0, NULL, 0, 0};
+HttpProxy_t	_LocalProxy = {0, NULL, 0, 0, NULL};
 
 char *_cleanStr(char *str)
 {
@@ -239,7 +239,6 @@ int _getProxyAddress()
 		!(pInternetGetProxyInfo = (pfnInternetGetProxyInfo)
 		GetProcAddress(hModJS, "InternetGetProxyInfo"))) 
 	{
-
 		return -1;
 	}
 
@@ -272,53 +271,53 @@ int _getProxyAddress()
 	return 0;
 }
 
-void _get_proxy_auth_type(const char *url, int timeout)
+void _get_proxy_auth_type(const char *url, const char *proxy_addr, int proxy_port, int timeout)
 {
-		CURL *curl_tmp;
-		char url_buf[1024];
-		char proxy_buf[1024];
-		int ret;
+	CURL *curl_tmp;
+	char url_buf[1024];
+	char proxy_buf[1024];
+	int ret;
 
-		ret = 0;
-		curl_tmp = curl_easy_init();
+	ret = 0;
+	curl_tmp = curl_easy_init();
 
-		snprintf(url_buf, sizeof(url_buf), "http://%s", url);
-		curl_easy_setopt(curl_tmp, CURLOPT_URL, url_buf);
+	snprintf(url_buf, sizeof(url_buf), "http://%s", url);
+	curl_easy_setopt(curl_tmp, CURLOPT_URL, url_buf);
 
-		snprintf(proxy_buf, sizeof(proxy_buf), "%s:%d", _LocalProxy.address, _LocalProxy.port);
-		curl_easy_setopt(curl_tmp, CURLOPT_PROXY, proxy_buf);
+	snprintf(proxy_buf, sizeof(proxy_buf), "%s:%d", proxy_addr, proxy_port);
+	curl_easy_setopt(curl_tmp, CURLOPT_PROXY, proxy_buf);
 
-		if (timeout > 0)
-			curl_easy_setopt(curl_tmp, CURLOPT_TIMEOUT, timeout);
+	if (timeout > 0)
+		curl_easy_setopt(curl_tmp, CURLOPT_TIMEOUT, timeout);
 
-		curl_easy_setopt(curl_tmp, CURLOPT_HTTPPROXYTUNNEL, 1);
-		ret = curl_easy_perform(curl_tmp);
+	curl_easy_setopt(curl_tmp, CURLOPT_HTTPPROXYTUNNEL, 1);
+	ret = curl_easy_perform(curl_tmp);
 
-		curl_easy_getinfo(curl_tmp, CURLINFO_PROXYAUTH_AVAIL, &(_LocalProxy.proxy_auth_type));
-		
-		curl_easy_cleanup(curl_tmp);
+	curl_easy_getinfo(curl_tmp, CURLINFO_PROXYAUTH_AVAIL, &(_LocalProxy.proxy_auth_type));
+	
+	curl_easy_cleanup(curl_tmp);
 }
 
 void _get_auth_type(const char *url, int timeout)
 {
-		CURL *curl_tmp;
-		char url_buf[1024];
-		int ret;
+	CURL *curl_tmp;
+	char url_buf[1024];
+	int ret;
 
-		ret = 0;
-		curl_tmp = curl_easy_init();
+	ret = 0;
+	curl_tmp = curl_easy_init();
 
-		snprintf(url_buf, sizeof(url_buf), "http://%s", url);
-		curl_easy_setopt(curl_tmp, CURLOPT_URL, url_buf);
+	snprintf(url_buf, sizeof(url_buf), "http://%s", url);
+	curl_easy_setopt(curl_tmp, CURLOPT_URL, url_buf);
 
-		if (timeout > 0)
-			curl_easy_setopt(curl_tmp, CURLOPT_TIMEOUT, timeout);
+	if (timeout > 0)
+		curl_easy_setopt(curl_tmp, CURLOPT_TIMEOUT, timeout);
 
-		ret = curl_easy_perform(curl_tmp);
+	ret = curl_easy_perform(curl_tmp);
 
-		curl_easy_getinfo(curl_tmp, CURLINFO_HTTPAUTH_AVAIL, &(_LocalProxy.auth_type));
+	curl_easy_getinfo(curl_tmp, CURLINFO_HTTPAUTH_AVAIL, &(_LocalProxy.auth_type));
 
-		curl_easy_cleanup(curl_tmp);
+	curl_easy_cleanup(curl_tmp);
 }
 
 char **internet_explorer_proxyless_exception_list()
@@ -369,7 +368,7 @@ NETLIB_BOOLEAN is_udp_port_opened(const char *stun_server, int port, NatType *nT
 {
 	*nType = get_nat_type(stun_server);
 	return (*nType > StunTypeUnknown && *nType < StunTypeBlocked ? 
-			NETLIB_TRUE : NETLIB_FALSE);
+		NETLIB_TRUE : NETLIB_FALSE);
 }
 
 NETLIB_BOOLEAN is_local_udp_port_used(const char *itf, int port)
@@ -575,7 +574,7 @@ HttpRet is_http_conn_allowed(const char *url,
 		if (proxy_login && *proxy_login != 0)
 		{
 			if (!_LocalProxy.proxy_auth_type)
-				_get_proxy_auth_type(url, timeout);
+				_get_proxy_auth_type(url, proxy_addr, proxy_port, timeout);
 
 			snprintf(auth_buf, sizeof(auth_buf), "%s:%s", proxy_login, proxy_passwd);
 			curl_easy_setopt(mcurl, CURLOPT_PROXYUSERPWD, auth_buf);
