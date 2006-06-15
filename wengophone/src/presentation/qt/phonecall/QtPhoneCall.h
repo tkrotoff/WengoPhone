@@ -43,6 +43,10 @@ class QTimer;
  * Qt Presentation component for PhoneCall.
  *
  * @author Tanguy Krotoff
+ * @author Jerome Wagner
+ * @author Mathieu Stute
+ * @author Mr K
+ * @author Philippe Bernery
  */
 class QtPhoneCall : public QObjectThreadSafe, public PPhoneCall {
 	Q_OBJECT
