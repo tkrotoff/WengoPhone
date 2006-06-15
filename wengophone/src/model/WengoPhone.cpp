@@ -110,8 +110,6 @@ WengoPhone::~WengoPhone() {
 	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownAfterTimeout, this);
 	shutdownTimeout.start(3000, 3000);
 
-	delete _startupSettingListener;
-
 	if (_importer)
 		delete _importer;
 }
