@@ -182,6 +182,6 @@ void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumP
 }
 
 void ConferenceCall::join(int callId) {
-	Thread::sleep(1);
+	Thread::sleep(3);
 	_phoneLine.getSipWrapper().joinConference(_confId, callId);
 }
