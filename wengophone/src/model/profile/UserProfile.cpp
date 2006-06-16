@@ -173,7 +173,6 @@ void UserProfile::connectIMAccounts() {
 }
 
 void UserProfile::connectSipAccounts() {
-
 	// Connect all SipAccounts if not connected
 	if (_wengoAccount && _activePhoneLine && !_wengoAccountConnected) {
 		_activePhoneLine->connect();
@@ -181,6 +180,7 @@ void UserProfile::connectSipAccounts() {
 
 		IMAccount imAccount(_wengoAccount->getIdentity(),
 			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
+		addIMAccount(imAccount);
 		_connectHandler.connect((IMAccount &)*_imAccountHandler->find(imAccount));
 		_wengoAccountConnected = false;
 	}
