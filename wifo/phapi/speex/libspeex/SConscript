@@ -39,11 +39,14 @@ sources = [
 	'vq.c',
 ]
 
-# this is private WIN32 specific include
 if WengoOSWindows():
 	env['CPPPATH'] += ['../win32' ]
 	#sources += ['../win32/libspeex/speex.def']
 
+if WengoOSMacOSX():
+	env['CPPPATH'] += ['../macosx' ]
+
+if WengoOSWindows() or WengoOSMacOSX(): 
 	include_path = ['../include', '.']
 
 	defines = {
@@ -55,6 +58,7 @@ if WengoOSWindows():
 	env.WengoAddDefines(defines)
 
 	env.WengoStaticLibrary('speex', sources)
+
 else:
 	env.WengoDeclareSystemLibrary('speex')
 
