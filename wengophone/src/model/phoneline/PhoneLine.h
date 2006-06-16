@@ -125,6 +125,13 @@ private:
 	void holdCallsExcept(int callId);
 
 	/**
+	 * Puts all the PhoneCall in the hold state.
+	 *
+	 * @see holdCallsExcept()
+	 */
+	void holdAllCalls();
+
+	/**
 	 * A call has been closed.
 	 *
 	 * Code factorization.

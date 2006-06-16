@@ -28,7 +28,6 @@
 #include <sipwrapper/SipWrapper.h>
 
 #include <util/Logger.h>
-#include <thread/Thread.h>
 
 ConferenceCall::ConferenceCall(IPhoneLine & phoneLine)
 	: _phoneLine(phoneLine) {
@@ -81,7 +80,7 @@ void ConferenceCall::addPhoneNumber(const std::string & phoneNumber) {
 		if (!phoneCall) {
 			int callId = _phoneLine.makeCall(phoneNumber, false);
 			if (callId == -1) {
-				//NULL => puts the phone number in the queue
+				//NULL means put the phone number in the queue
 				phoneCall = NULL;
 			} else {
 				phoneCall = _phoneLine.getPhoneCall(callId);
@@ -140,7 +139,22 @@ void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumP
 	case EnumPhoneCallState::PhoneCallStateResumed:
 		break;
 
-	case EnumPhoneCallState::PhoneCallStateTalking: {
+	case EnumPhoneCallState::PhoneCallStateTalking:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateDialing:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateRinging:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateClosed:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateIncoming:
+		break;
+
+	case EnumPhoneCallState::PhoneCallStateHold: {
 		//Takes randomly a phoneNumber that has no PhoneCall associated
 		//and creates a PhoneCall
 		for (PhoneCalls::iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
@@ -155,21 +169,6 @@ void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumP
 		break;
 	}
 
-	case EnumPhoneCallState::PhoneCallStateDialing:
-		break;
-
-	case EnumPhoneCallState::PhoneCallStateRinging:
-		break;
-
-	case EnumPhoneCallState::PhoneCallStateClosed:
-		break;
-
-	case EnumPhoneCallState::PhoneCallStateIncoming:
-		break;
-
-	case EnumPhoneCallState::PhoneCallStateHold:
-		break;
-
 	case EnumPhoneCallState::PhoneCallStateMissed:
 		break;
 
@@ -182,6 +181,5 @@ void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumP
 }
 
 void ConferenceCall::join(int callId) {
-	Thread::sleep(3);
 	_phoneLine.getSipWrapper().joinConference(_confId, callId);
 }

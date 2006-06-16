@@ -38,7 +38,6 @@
 #include <sipwrapper/EnumNatType.h>
 
 #include <util/Logger.h>
-#include <thread/Thread.h>
 
 #include <string>
 using namespace std;
@@ -100,7 +99,7 @@ PhoneLine::~PhoneLine() {
 		delete _activePhoneCall;
 		_activePhoneCall = NULL;
 	}
-	
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent -= boost::bind(&PhoneLine::configureSipWrapper, this);
 }
@@ -126,11 +125,9 @@ int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 		//FIXME this should be a LOG_FATAL()
 		if (phoneCall) {
 			EnumPhoneCallState::PhoneCallState state = phoneCall->getState();
-			if (state != EnumPhoneCallState::PhoneCallStateTalking &&
-				state != EnumPhoneCallState::PhoneCallStateResumed &&
-				state != EnumPhoneCallState::PhoneCallStateHold) {
+			if (state != EnumPhoneCallState::PhoneCallStateHold) {
 
-				LOG_ERROR("cannot place the call=" + phoneNumber + ", at least another phone call is not in talking state");
+				LOG_ERROR("cannot place the call=" + phoneNumber + ", at least another phone call is not in hold state");
 				return -1;
 			}
 		}
@@ -139,7 +136,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _sipAccount.getRealm());
 
 	//Puts all the PhoneCall in the hold state before to create a new PhoneCall
-	holdCallsExcept(-1);
+	holdAllCalls();
 
 	if (enableVideo) {
 		//Sets the video device
@@ -211,6 +208,7 @@ void PhoneLine::checkCallId(int callId) {
 
 void PhoneLine::acceptCall(int callId, bool enableVideo) {
 	checkCallId(callId);
+	holdCallsExcept(callId);
 	_sipWrapper->acceptCall(callId, enableVideo);
 	LOG_DEBUG("call accepted callId=" + String::fromNumber(callId));
 }
@@ -300,7 +298,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
-		//holdCallsExcept(callId);
+		holdCallsExcept(callId);
 		_activePhoneCall = getPhoneCall(callId);
 		break;
 
@@ -324,8 +322,6 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming: {
-		holdCallsExcept(callId);
-
 		//Sends SIP code 180
 		//TODO automatically??
 		_sipWrapper->sendRingingNotification(callId);
@@ -393,12 +389,17 @@ void PhoneLine::holdCallsExcept(int callId) {
 	for (PhoneCalls::iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
 		PhoneCall * phoneCall = (*it).second;
 		if (phoneCall) {
-			if (phoneCall->getCallId() != callId /*&&
-				!phoneCall->belongsToConference()*/) {
+			if (phoneCall->getCallId() != callId &&
+				!phoneCall->getConferenceCall()) {
+
 				phoneCall->hold();
 			}
 		}
 	}
+}
+
+void PhoneLine::holdAllCalls() {
+	holdCallsExcept(-1);
 }
 
 void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {

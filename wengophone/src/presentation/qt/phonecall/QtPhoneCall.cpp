@@ -281,7 +281,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionResume->setEnabled(false);
 		_actionHold->setEnabled(true);
 		_statusLabel->setText(tr("Talking"));
-		_hold = false;
+		_hold = true;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateTalking:

@@ -42,11 +42,23 @@ public:
 	virtual ~QtLanguage();
 
 	static QStringList getAvailableLanguages();
-	
+
+	/*
+	FIXME to remove
+	Check http://doc.trolltech.com/4.1/i18n.html
+	Add an event filter and check the type QEvent::LanguageChange
+	Add a class for this inside QtUtil
+	*/
 	void updateTranslation();
 
- Q_SIGNALS:
+Q_SIGNALS:
 
+	/*
+	FIXME to remove
+	Check http://doc.trolltech.com/4.1/i18n.html
+	Add an event filter and check the type QEvent::LanguageChange
+	Add a class for this inside QtUtil
+	*/
 	void translationChangedSignal();
 
 private:

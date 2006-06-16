@@ -44,12 +44,11 @@ void ConferenceCallParticipant::joinConference() {
 	int callId = _phoneCall.getCallId();
 
 	if (_phoneCall.getState() == EnumPhoneCallState::PhoneCallStateHold) {
+		_waitForHoldState = false;
 		_conferenceCall.join(callId);
 	} else {
-		if (!_waitForHoldState) {
-			_waitForHoldState = true;
-			_phoneCall.hold();
-		}
+		_waitForHoldState = true;
+		_phoneCall.hold();
 	}
 }
 
@@ -84,7 +83,6 @@ void ConferenceCallParticipant::phoneCallStateChangedEventHandler(PhoneCall & se
 
 	case EnumPhoneCallState::PhoneCallStateHold:
 		if (_waitForHoldState) {
-			_waitForHoldState = false;
 			joinConference();
 		}
 		break;

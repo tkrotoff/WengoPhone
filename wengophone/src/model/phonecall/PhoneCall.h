@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHONECALL_H
-#define PHONECALL_H
+#ifndef OWPHONECALL_H
+#define OWPHONECALL_H
 
 #include "SipAddress.h"
 
@@ -200,17 +200,6 @@ public:
 	}
 
 	/**
-	 * Sets the conference associated with this call.
-	 *
-	 * Internal method, used only by ConferenceCall.
-	 *
-	 * @param conferenceCall conference
-	 */
-	void setConferenceCall(ConferenceCall * conferenceCall) {
-		_conferenceCall = conferenceCall;
-	}
-
-	/**
 	 * Gets the conference associated with this call.
 	 *
 	 * @return ConferenceCall or NULL if this call is not associated with a conference
@@ -226,6 +215,17 @@ public:
 	 */
 	bool isVideoEnabled() const {
 		return _videoEnabled;
+	}
+
+	/**
+	 * Sets the conference associated with this call.
+	 *
+	 * Internal method, used only by ConferenceCall.
+	 *
+	 * @param conferenceCall conference
+	 */
+	void setConferenceCall(ConferenceCall * conferenceCall) {
+		_conferenceCall = conferenceCall;
 	}
 
 private:
@@ -254,10 +254,10 @@ private:
 	int _duration;
 
 	/** If the PhoneCall should be held. */
-	bool _hold;
+	bool _holdRequest;
 
 	/** If the PhoneCall should be resumed. */
-	bool _resume;
+	bool _resumeRequest;
 
 	/** Conference associated with this call. */
 	ConferenceCall * _conferenceCall;
@@ -272,4 +272,4 @@ private:
 	bool _videoEnabled;
 };
 
-#endif	//PHONECALL_H
+#endif	//OWPHONECALL_H

@@ -34,7 +34,6 @@
 #include <model/wenbox/WenboxPlugin.h>
 
 #include <util/Logger.h>
-#include <thread/Thread.h>
 
 #include <ctime>
 
@@ -42,8 +41,8 @@ PhoneCall::PhoneCall(IPhoneLine & phoneLine, const SipAddress & sipAddress)
 	: _phoneLine(phoneLine) {
 
 	_duration = -1;
-	_hold = false;
-	_resume = false;
+	_holdRequest = false;
+	_resumeRequest = false;
 	_conferenceCall = NULL;
 	_callRejected = false;
 	_timeStart = -1;
@@ -95,12 +94,10 @@ void PhoneCall::accept(bool enableVideo) {
 
 void PhoneCall::resume() {
 	if (_state->getCode() == EnumPhoneCallState::PhoneCallStateHold) {
-		if (!_resume) {
-			_phoneLine.resumeCall(_callId);
-			_resume = false;
-		}
+		_resumeRequest = false;
+		_phoneLine.resumeCall(_callId);
 	} else {
-		_resume = true;
+		_resumeRequest = true;
 	}
 }
 
@@ -108,14 +105,10 @@ void PhoneCall::hold() {
 	if (_state->getCode() == EnumPhoneCallState::PhoneCallStateTalking ||
 		_state->getCode() == EnumPhoneCallState::PhoneCallStateResumed) {
 
-		if (!_hold) {
-			Thread::sleep(1);
-			_phoneLine.holdCall(_callId);
-			_hold = false;
-			setState(EnumPhoneCallState::PhoneCallStateHold);
-		}
+		_holdRequest = false;
+		_phoneLine.holdCall(_callId);
 	} else {
-		_hold = true;
+		_holdRequest = true;
 	}
 }
 
@@ -164,12 +157,10 @@ void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
-		_hold = false;
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateTalking:
-		if (_hold) {
-			_hold = false;
+		if (_holdRequest) {
 			hold();
 		} else {
 			//Start of the call, computes duration
@@ -199,8 +190,7 @@ void PhoneCall::applyState(EnumPhoneCallState::PhoneCallState state) {
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateHold:
-		if (_resume) {
-			_resume = false;
+		if (_resumeRequest) {
 			resume();
 		}
 		break;
