@@ -127,6 +127,10 @@ void QtWengoPhone::initThreadSafe() {
 	_ui = new Ui::WengoPhoneWindow();
 	_ui->setupUi(_wengoPhoneWindow);
 
+#ifdef OS_LINUX
+	_wengoPhoneWindow->setWindowIcon(QIcon(QPixmap(":/pics/default-avatar.png")));
+#endif
+	
 	//Translation
 	_qtLanguage = new QtLanguage(_wengoPhoneWindow);
 	connect(_qtLanguage, SIGNAL(translationChangedSignal()), SLOT(slotTranslationChanged()));
