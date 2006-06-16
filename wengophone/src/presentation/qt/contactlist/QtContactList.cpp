@@ -18,7 +18,6 @@
  */
 
 #include "QtContactList.h"
-
 #include "ContactGroupPopupMenu.h"
 #include "QtContactListManager.h"
 #include "QtContactPixmap.h"
@@ -39,7 +38,6 @@
 #include <qtutil/Object.h>
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/MouseEventFilter.h>
-
 
 #include <QPixmap>
 #include <QTreeWidget>

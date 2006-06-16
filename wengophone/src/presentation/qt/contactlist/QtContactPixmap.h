@@ -65,9 +65,9 @@ protected:
 		return * this;
 	}
 
-	QHash < ContactPixmap, QPixmap > _contactPixmap;
-
 private:
+
+	QHash < ContactPixmap, QPixmap > _contactPixmap;
 
 	static QtContactPixmap * _instance;
 };

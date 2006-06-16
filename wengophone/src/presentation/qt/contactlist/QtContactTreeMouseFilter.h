@@ -20,12 +20,19 @@
 #ifndef OWQTCONTACTTREEMOUSEFILTER_H
 #define OWQTCONTACTTREEMOUSEFILTER_H
 
-#include <QtGui>
+#include <QObject>
+#include <QPoint>
 
 class CContactList;
+class QTreeWidgetItem;
+class QMouseEvent;
+class QDragEnterEvent;
+class QDropEvent;
+class QTreeWidget;
+class QDragMoveEvent;
 
 /**
- * Events manager for QTreeWidget
+ * Mouse events manager for QTreeWidget
  *
  * @author Mr K
  */
@@ -35,15 +42,7 @@ public :
 
 	QtContactTreeMouseFilter(CContactList & cContactList, QObject * parent = 0, QTreeWidget * target = 0);
 
-public Q_SLOTS :
-
-	void timerTimeout();
-
 Q_SIGNALS:
-
-	void itemEntered(QTreeWidgetItem * item);
-
-	void itemTimeout(QTreeWidgetItem * item);
 
 	void mouseClicked(Qt::MouseButton button);
 
@@ -71,11 +70,9 @@ protected:
 
 	QTreeWidgetItem * _entered;
 
-	QTimer _timer;
-
 	bool _inDrag;
 
 	CContactList & _cContactList;
 };
 
-#endif // OWQTUSERTREEEVENTMANAGER_H
+#endif // OWQTCONTACTTREEMOUSEFILTER_H

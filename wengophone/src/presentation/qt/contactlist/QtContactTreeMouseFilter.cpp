@@ -25,6 +25,14 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
+#include <QTreeWidgetItem>
+#include <QMouseEvent>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QDragMoveEvent>
+#include <QApplication>
+#include <QMessageBox>
+
 QtContactTreeMouseFilter::QtContactTreeMouseFilter(CContactList & cContactList, QObject * parent, QTreeWidget * target)
 	: QObject(parent),
 	_cContactList(cContactList) {
@@ -32,7 +40,6 @@ QtContactTreeMouseFilter::QtContactTreeMouseFilter(CContactList & cContactList, 
 
 	/* We need to install the event filter in the viewport of the QTreeWidget */
 	target->viewport()->installEventFilter(this);
-	_timer.setSingleShot(true);
 	_inDrag = false;
 	_selectedItem = NULL;
 }
@@ -70,10 +77,6 @@ void QtContactTreeMouseFilter::mousePressEvent(QMouseEvent * event) {
 	mouseClicked(event->button());
 	QTreeWidgetItem * item = _tree->itemAt(event->pos());
 	QtContactListManager * ul = QtContactListManager::getInstance();
-
-	if (_timer.isActive()) {
-		_timer.stop();
-	}
 	if (item) {
 		ul->resetMouseStatus();
 		ul->setButton(item->text(0), event->button());
@@ -95,19 +98,6 @@ void QtContactTreeMouseFilter::mouseMoveEvent(QMouseEvent * event) {
 	QTreeWidgetItem * item=_selectedItem;
 	if (!_selectedItem) {
 		return;
-	}
-	if (!(event->buttons() & Qt::LeftButton) && !(event->buttons() & Qt::RightButton)) {
-		QTreeWidgetItem * tmp = _tree->itemAt(event->pos());
-		if ((tmp != _entered)) {
-			if (_timer.isActive()) {
-				_timer.stop();
-			}
-			_entered = tmp;
-			if (_entered) {
-				itemEntered(_entered);
-				_timer.start(1500);
-			}
-		}
 	}
 	item=_selectedItem;
 
@@ -193,18 +183,5 @@ void QtContactTreeMouseFilter::dragMoveEvent(QDragMoveEvent * event) {
 		event->setDropAction(Qt::MoveAction);
 		if (event->mimeData()->hasFormat("application/x-wengo-user-data"))
 			event->acceptProposedAction();
-	}
-}
-
-void QtContactTreeMouseFilter::timerTimeout() {
-
-	if (_inDrag) {
-		return;
-	}
-
-	QTreeWidgetItem * item = _tree->itemAt(_tree->mapFromGlobal(QCursor::pos()));
-
-	if (item) {
-		itemTimeout(item);
 	}
 }

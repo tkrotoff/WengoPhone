@@ -30,6 +30,11 @@ class CContact;
 class QMutex;
 class QTreeWidget;
 
+/**
+ * QtContact storage class for fast lookup
+ *
+ * @author Mr K.
+ */
 class QtContactListManager {
 public:
 
@@ -112,11 +117,11 @@ protected:
 		return * this;
 	}
 
+private:
+
 	QTreeWidget * _tree;
 
 	QHash <QString,QtContact *> _contactList;
-
-private:
 
 	static QtContactListManager * _instance;
 

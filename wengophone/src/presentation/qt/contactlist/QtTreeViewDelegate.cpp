@@ -106,6 +106,7 @@ QSize QtTreeViewDelegate::sizeHint(const QStyleOptionViewItem & option, const QM
 	}
 	return orig;
 }
+
 bool QtTreeViewDelegate::checkForUtf8(const unsigned char * text, int size) const {
 	bool isUtf8 = false;
 	if (size==0)
@@ -131,6 +132,7 @@ bool QtTreeViewDelegate::checkForUtf8(const unsigned char * text, int size) cons
 	}
 	return isUtf8;
 }
+
 void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const {
 	QRect r;
 	QtContactPixmap * spx;
@@ -149,10 +151,10 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 		px = spx->getPixmap(QtContactPixmap::ContactGroupOpen);
 	else px = spx->getPixmap(QtContactPixmap::ContactGroupClose);
 	x = option.rect.left();
-	painter->drawPixmap(x, r.top() + 3, px);
-	x += px.width() + 3;
+	painter->drawPixmap(x, r.top()+3, px);
+	x += px.width()+3;
 	r.setLeft(x);
-	int y = ((r.bottom() - r.top()) - QFontMetrics(font).height()) / 2;
+	int y = ((r.bottom()-r.top())-QFontMetrics(font).height())/2;
 	r.setTop(y + r.top());
 	r.setLeft(r.left() + 10);
 	// Number of child
@@ -169,7 +171,7 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 		groupNameTmp = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactGroupName(groupId);
 	}
 	if (checkForUtf8((const unsigned char *)(groupNameTmp.c_str()), groupNameTmp.size())){
-			groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
+		groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
 	} else {
 		groupName=QString::fromStdString(groupNameTmp);
 	}

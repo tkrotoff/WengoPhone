@@ -29,14 +29,6 @@
 #include "QtConferenceAction.h"
 #include <presentation/qt/QtWengoPhone.h>
 
-#include <QString>
-#include <QTreeWidgetItem>
-#include <QTimerEvent>
-#include <QMenu>
-#include <QTreeWidget>
-#include <QSize>
-#include <QAction>
-
 #include <presentation/qt/profile/QtProfileDetails.h>
 
 #include <control/CWengoPhone.h>
@@ -51,6 +43,15 @@
 #include <sipwrapper/EnumPhoneCallState.h>
 
 #include <util/Logger.h>
+
+#include <QString>
+#include <QTreeWidgetItem>
+#include <QTimerEvent>
+#include <QMenu>
+#include <QTreeWidget>
+#include <QSize>
+#include <QAction>
+
 
 QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone, QtContactList & qtContactList,
 	QObject * parent, QTreeWidget * target)
@@ -82,8 +83,6 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 
 	connect(target, SIGNAL(itemSelectionChanged()), this, SLOT(treeViewSelectionChanged()));
 	connect(target, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(itemClicked(QTreeWidgetItem *, int)));
-	connect(qtContactTreeMouseFilter, SIGNAL(itemEntered(QTreeWidgetItem *)), this, SLOT(itemEntered(QTreeWidgetItem *)));
-	connect(qtContactTreeMouseFilter, SIGNAL(itemTimeout(QTreeWidgetItem *)), this, SLOT(openUserInfo(QTreeWidgetItem *)));
 	connect(qtContactTreeMouseFilter, SIGNAL(mouseClicked(Qt::MouseButton)), SLOT(setMouseButton(Qt::MouseButton)));
 
 	connect(keyFilter, SIGNAL(openItem(QTreeWidgetItem *)), SLOT(openUserInfo(QTreeWidgetItem *)));
@@ -151,14 +150,6 @@ void QtContactManager::treeViewSelectionChanged() {
 	}
 }
 
-void QtContactManager::itemEntered(QTreeWidgetItem * item) {
-	QtContactListManager * ul = QtContactListManager::getInstance();
-	if (ul) {
-		ul->mouseOn(item->text(0));
-	}
-	_tree->viewport()->update();
-}
-
 void QtContactManager::closeUserInfo() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (_previous != NULL) {
@@ -192,12 +183,12 @@ void QtContactManager::openUserInfo(QTreeWidgetItem * i) {
 	}
 	_tree->viewport()->update();
 	_tree->doItemsLayout();
-	_tree->scrollToItem ( i );
+	_tree->scrollToItem (i);
 }
 
 void QtContactManager::itemClicked(QTreeWidgetItem * item, int) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
-	if ( (_lastClicked == item) && (_waitForDoubleClick)) {
+	if ((_lastClicked == item) && (_waitForDoubleClick)) {
 		defaultAction(item);
 		_button = Qt::NoButton;
 		return;

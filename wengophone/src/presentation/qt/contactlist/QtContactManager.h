@@ -75,8 +75,6 @@ public Q_SLOTS:
 
 	void itemDoubleClicked(QTreeWidgetItem *,int);
 
-	void itemEntered(QTreeWidgetItem * item);
-
 	void openUserInfo(QTreeWidgetItem * i);
 
 	void closeUserInfo();
@@ -112,8 +110,6 @@ public Q_SLOTS:
 	void inviteToConference();
 
 	void defaultAction(QTreeWidgetItem * item);
-
-
 
 Q_SIGNALS:
 
