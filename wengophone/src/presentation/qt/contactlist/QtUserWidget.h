@@ -27,7 +27,6 @@
 
 #include <QWidget>
 #include <QString>
-#include <QMutex>
 
 class QtUserWidgetAvatarManager;
 
@@ -90,8 +89,6 @@ protected:
 	ContactProfile _contactProfile;
 
 	CWengoPhone & _cWengoPhone;
-
-	QMutex _mutex;
 
 	QString _text;
 

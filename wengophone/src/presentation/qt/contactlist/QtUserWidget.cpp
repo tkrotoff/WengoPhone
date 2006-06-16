@@ -103,8 +103,6 @@ void QtUserWidget::chatButtonClicked() {
 }
 
 QPixmap QtUserWidget::getIcon() const {
-	QMutexLocker locker((QMutex*)&_mutex);
-
 	Picture picture = _contactProfile.getIcon();
 	std::string data = picture.getData();
 
@@ -115,8 +113,6 @@ QPixmap QtUserWidget::getIcon() const {
 }
 
 void QtUserWidget::contactProfileUpdated() {
-	QMutexLocker locker((QMutex*)&_mutex);
-
 	_contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
 }
 

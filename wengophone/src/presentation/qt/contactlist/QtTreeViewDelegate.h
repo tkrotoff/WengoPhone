@@ -32,6 +32,7 @@ class QWidget;
 class QStyleOptionViewItem;
 class QAbstractItemModel;
 class QRect;
+class QPainter;
 
 /**
  * Qt Presentation component for ContactList.

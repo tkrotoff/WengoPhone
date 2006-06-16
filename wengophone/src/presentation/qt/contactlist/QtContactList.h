@@ -50,6 +50,18 @@ class QtContactList : public QObjectThreadSafe, public PContactList {
 public:
 
     static const QString DEFAULT_GROUP_NAME;
+    static const QString STATUS_UNKNOW_PIXMAP;
+    static const QString STATUS_ONLINE_PIXMAP;
+    static const QString STATUS_OFFLINE_PIXMAP;
+    static const QString STATUS_DND_PIXMAP;
+    static const QString STATUS_INVISIBLE_PIXMAP;
+    static const QString STATUS_AWAY_PIXMAP;
+    static const QString STATUS_FORWARD_PIXMAP;
+    static const QString STATUS_CONTACT_IM_PIXMAP;
+    static const QString STATUS_CONTACT_CALL_PIXMAP;
+    static const QString STATUS_CONTACT_VIDEO_PIXMAP;
+    static const QString STATUS_GROUP_OPEN_PIXMAP;
+    static const QString STATUS_GROUP_CLOSE_PIXMAP;
 
 	QtContactList(CContactList & cContactList, CWengoPhone & cWenghoPhone);
 

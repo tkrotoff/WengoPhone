@@ -30,6 +30,7 @@
 #include <QStyleOptionViewItem>
 #include <QAbstractItemModel>
 #include <QPixmapCache>
+#include <QPainter>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>

@@ -20,11 +20,15 @@
 #ifndef OWCONTACTLISTMANAGER_H
 #define OWCONTACTLISTMANAGER_H
 
-#include <QtGui>
+
 #include "QtContact.h"
 #include "QtContactPixmap.h"
 
+#include <QString>
+
 class CContact;
+class QMutex;
+class QTreeWidget;
 
 class QtContactListManager {
 public:
@@ -100,17 +104,17 @@ protected:
 
 	QtContactListManager();
 
-	QtContactListManager(const QtContactListManager & other) : _tree(other._tree), _userList(other._userList) { }
+	QtContactListManager(const QtContactListManager & other) : _tree(other._tree), _contactList(other._contactList) { }
 
 	QtContactListManager & operator = (const QtContactListManager & other) {
 		_tree = other._tree;
-		_userList = other._userList;
+		_contactList = other._contactList;
 		return * this;
 	}
 
 	QTreeWidget * _tree;
 
-	QHash <QString,QtContact *> _userList;
+	QHash <QString,QtContact *> _contactList;
 
 private:
 

@@ -138,8 +138,6 @@ protected:
 
 	bool _openStatus;
 
-	int _iconsStartPosition;
-
 	Qt::MouseButton _mouseButton;
 
 	int _centeredText_y;

@@ -44,7 +44,7 @@ QtContact::QtContact(const std::string & contactId, CWengoPhone & cWengoPhone, Q
 }
 
 void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) {
-	QMutexLocker locker(& _mutex);
+	QMutexLocker locker(&_mutex);
 
 	QRect painterRect;
 	QPixmap px;
@@ -78,8 +78,6 @@ void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, c
 
 	x += px.width() + 5;
 	painterRect.setLeft(x);
-
-	_iconsStartPosition = 10000;
 
 	// Draw the text
 	painter->setFont(option.font);
@@ -137,7 +135,7 @@ void QtContact::startChat() {
 }
 
 void QtContact::startSMS() {
-	QtWengoPhone * qwengophone = dynamic_cast < QtWengoPhone * > (_cWengoPhone.getPresentation());
+	QtWengoPhone * qwengophone = dynamic_cast <QtWengoPhone *> (_cWengoPhone.getPresentation());
 	if (!qwengophone) {
 		return;
 	}
