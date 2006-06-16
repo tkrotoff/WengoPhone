@@ -125,14 +125,15 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 	_dialog->resize(300,464);
 	_dialog->setWindowTitle(tr("WengoChat"));
 
-	if ( imChatSession.isUserCreated() ){
-        _dialog->show();
-	}
-    else{
-        if ( !_dialog->isVisible())
-            showMinimized();
-            QCoreApplication::processEvents();
-            flashWindow();
+	if (imChatSession.isUserCreated()) {
+		_dialog->show();
+	} else {
+		if (!_dialog->isVisible()) {
+			showChatWindow();
+		}
+
+		QCoreApplication::processEvents();
+		flashWindow();
     }
 
 	// Create the contact list scroll area
@@ -306,11 +307,9 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
 
         if (!_dialog->isVisible())
         {
-#if !defined(OS_MACOSX)
-            showMinimized ();
-#endif
+			showChatWindow();
             flashWindow();
-        }else{
+        } else {
             flashWindow();
         }
 		int tabs = _tabWidget->count();
@@ -374,14 +373,14 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 			if (imChatSession->isUserCreated()){
                 show();
                 return;
-			}else{
-                if (!_dialog->isVisible())
-                {
-                    showMinimized ();
+			} else {
+                if (!_dialog->isVisible()) {
+					showChatWindow();
                     flashWindow();
                     return;
                 }
-                if (_dialog->isMinimized()){
+
+                if (_dialog->isMinimized()) {
                         flashWindow();
                         return;
                 }
@@ -401,11 +400,12 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession){
 		addChat(imChatSession,from);
 		if (imChatSession->isUserCreated()){
             show();
-		}
-        else{
-            if ( !_dialog->isVisible())
-                showMinimized();
-                flashWindow();
+		} else {
+            if (!_dialog->isVisible()) {
+				showChatWindow();
+			}
+
+			flashWindow();
         }
 	} else {
 		LOG_FATAL("New chat session is empty !!!!!");
@@ -834,7 +834,6 @@ void ChatWindow::showToaster(IMChatSession * imChatSession) {
 	toaster->showToaster();
 }
 
-
 void ChatWindow::showMinimized(){
 #ifdef OS_WINDOWS
     HWND topWindow = GetForegroundWindow();
@@ -842,5 +841,14 @@ void ChatWindow::showMinimized(){
     _dialog->showMinimized();
 #ifdef OS_WINDOWS
     SetForegroundWindow(topWindow);
+#endif
+}
+
+void ChatWindow::showChatWindow() {
+#if !defined(OS_MACOSX)
+	showMinimized();
+#else
+	_dialog->show();
+	_dialog->setWindowState(_dialog->windowState() & ~Qt::WindowActive);
 #endif
 }

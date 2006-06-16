@@ -154,6 +154,8 @@ private:
 
     void showMinimized();
 
+	void showChatWindow();
+
     QMainWindow * findMainWindow();
 
     QtWengoPhone * _qtWengoPhone;
