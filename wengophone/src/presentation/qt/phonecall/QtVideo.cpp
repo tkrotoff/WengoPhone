@@ -87,9 +87,12 @@ void QtVideo::paintEvent() {
 		ypos = (frameSize.height() - size.height()) / 2;
 #endif
 
-		//FIXME Qt scaling, too slow ?
-		painter.drawImage(xpos, ypos, _image.scaled(size, Qt::IgnoreAspectRatio,
-			Qt::FastTransformation));
+		if((_image.width() < size.width()) || (_image.height() < size.height())) {
+			painter.drawImage(xpos, ypos, _image.scaled(size, Qt::IgnoreAspectRatio,
+				Qt::FastTransformation));
+		} else {
+			painter.drawImage(xpos, ypos, _image);
+		}
 	}
 }
 
