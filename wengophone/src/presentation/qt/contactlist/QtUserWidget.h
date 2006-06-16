@@ -47,6 +47,8 @@ class QtUserWidget : public QWidget {
 		Q_OBJECT
 public:
 
+	static const QString AVATAR_BACKGROUND;
+
 	QtUserWidget(const std::string & contactId, CWengoPhone & cWengoPhone,
 			QWidget * parent = 0, Qt::WFlags f = 0);
 
@@ -66,7 +68,7 @@ public Q_SLOTS:
 
 	void contactProfileUpdated();
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
 	void callButtonClicked();
 
@@ -78,7 +80,9 @@ protected Q_SLOTS:
 
 	void landLineButtonClicked();
 
-protected:
+private:
+
+	QPixmap createAvatar();
 
 	QWidget * _widget;
 

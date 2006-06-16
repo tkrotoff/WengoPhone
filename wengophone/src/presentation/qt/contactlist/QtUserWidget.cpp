@@ -18,8 +18,6 @@
  */
 
 #include "QtUserWidget.h"
-
-#include "QtUserWidgetAvatarManager.h"
 #include "QtContactListManager.h"
 #include "QtContact.h"
 
@@ -34,12 +32,17 @@
 #include <presentation/qt/profile/QtProfileDetails.h>
 
 #include <util/Picture.h>
+
 #include <qtutil/WidgetFactory.h>
 
 #include <QLabel>
 #include <QPushButton>
+#include <QString>
+#include <QPainter>
 
 #include <util/Logger.h>
+
+const QString QtUserWidget::AVATAR_BACKGROUND=":/pics/fond_avatar.png";
 
 QtUserWidget::QtUserWidget(const std::string & contactId,
 	CWengoPhone & cWengoPhone, QWidget * parent, Qt::WFlags f)
@@ -56,8 +59,7 @@ QtUserWidget::QtUserWidget(const std::string & contactId,
 	layout->setMargin(0);
 	setLayout(layout);
 
-	_avatarManager = new QtUserWidgetAvatarManager(this, _ui.avatarLabel);
-	_ui.avatarLabel->installEventFilter(_avatarManager);
+	_ui.avatarLabel->setPixmap(createAvatar());
 
 	QString str = QString::fromUtf8(_contactProfile.getHomePhone().c_str());
 	if (!str.isEmpty()) {
@@ -146,4 +148,17 @@ void QtUserWidget::landLineButtonClicked() {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);
 		}
 	}
+}
+
+QPixmap QtUserWidget::createAvatar() {
+	QPixmap background = QPixmap(AVATAR_BACKGROUND);
+	QPixmap avatar = getIcon();
+
+	if (!avatar.isNull()) {
+		QRect rect = _ui.avatarLabel->rect();
+		QPainter pixpainter(&background);
+		pixpainter.drawPixmap(5, 5, avatar.scaled(60, 60));
+		pixpainter.end();
+	}
+	return background;
 }

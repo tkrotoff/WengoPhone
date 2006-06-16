@@ -94,7 +94,7 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 
 	if (!connect(this, SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
 		qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)))) {
-	   LOG_DEBUG("Unable to connect signal\n");
+	   LOG_FATAL("Unable to connect signal\n");
 	}
 }
 
@@ -336,8 +336,9 @@ void QtContactManager::sortContacts(bool bypassTimer) {
 	if (!bypassTimer){
 		if (_canSort){
 			_canSort=false;
-			if (_sortTimerId != -1)
+			if (_sortTimerId != -1) {
 				killTimer(_sortTimerId);
+			}
 			_sortTimerId = startTimer(1000);
 			_wantSort = false;
 		} else {
