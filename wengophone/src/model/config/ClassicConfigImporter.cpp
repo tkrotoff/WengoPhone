@@ -133,9 +133,6 @@ ClassicConfigImporter::ClassicConfigImporter() {
 }
 
 bool ClassicConfigImporter::importConfig(const string & str) {
-
-#if (defined(OS_WINDOWS) || defined(OS_LINUX))
-
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	int localVersion = detectLastVersion();
 
@@ -143,8 +140,6 @@ bool ClassicConfigImporter::importConfig(const string & str) {
 		makeImportConfig(localVersion, config.CONFIG_VERSION);
 		return true;
 	}
-
-#endif
 
 	return false;
 }
@@ -154,8 +149,9 @@ int ClassicConfigImporter::detectLastVersion()
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	string ConfigPathV1 = getWengoClassicConfigPath();
 	string ConfigPathV2 = config.getConfigDir();
-	bool dirV1Exists = File::exists(ConfigPathV1.substr(0, ConfigPathV1.size() - 1));
-	bool dirV2Exists = File::exists(ConfigPathV2.substr(0, ConfigPathV2.size() - 1));
+
+	bool dirV1Exists = !ConfigPathV1.empty() && File::exists(ConfigPathV1.substr(0, ConfigPathV1.size() - 1));
+	bool dirV2Exists = !ConfigPathV2.empty() && File::exists(ConfigPathV2.substr(0, ConfigPathV2.size() - 1));
 
 	if (dirV2Exists)
 	{
