@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONFERENCECALL_H
-#define CONFERENCECALL_H
+#ifndef OWCONFERENCECALL_H
+#define OWCONFERENCECALL_H
 
 #include <sipwrapper/EnumConferenceCallState.h>
 #include <sipwrapper/EnumPhoneCallState.h>
@@ -88,6 +88,15 @@ public:
 
 	void removePhoneNumber(const std::string & phoneNumber);
 
+	typedef List<PhoneCall *> PhoneCallList;
+
+	/**
+	 * Gets the list of PhoneCall associated with this conference.
+	 *
+	 * @return the list of PhoneCall
+	 */
+	PhoneCallList getPhoneCallList() const;
+
 	/** Should only be used by ConferenceCallParticipant. */
 	void join(int callId);
 
@@ -110,9 +119,9 @@ private:
 	/**
 	 * Conference id of this ConferenceCall.
 	 *
-	 * -1 means that the conference has not been started yet.
+	 * SipWrapper::ConfIdError (-1) means that the conference has not been started yet.
 	 */
 	int _confId;
 };
 
-#endif	//CONFERENCECALL_H
+#endif	//OWCONFERENCECALL_H

@@ -176,7 +176,7 @@ public:
 
 	/**
 	 * Return the profile directory
-	 * @return profile directory. 
+	 * @return profile directory.
 	 */
 	std::string getProfileDirectory() const;
 
@@ -297,7 +297,7 @@ public:
 	 *
 	 * If no wengo account is set true is returned.
 	 * If a wengo account is set but the initalization has not been made
-	 * initialization is launched. The method blocks until initialization 
+	 * initialization is launched. The method blocks until initialization
 	 * is finished (it can take from few seconds to several minutes).
 	 */
 	bool isWengoAccountValid();
@@ -321,12 +321,12 @@ public:
 	/**
 	 * @see IPhoneLine::makeCall()
 	 */
-	void makeCall(Contact & contact, bool enableVideo);
+	int makeCall(Contact & contact, bool enableVideo);
 
 	/**
 	 * @see IPhoneLine::makeCall()
 	 */
-	void makeCall(const std::string & phoneNumber, bool enableVideo);
+	int makeCall(const std::string & phoneNumber, bool enableVideo);
 
 	/**
 	 * Start a instant messaging with a Contact.
@@ -387,7 +387,7 @@ public:
 private:
 
 	/**
-	 * Compute the name of the UserProfile from the WengoAccount 
+	 * Compute the name of the UserProfile from the WengoAccount
 	 * and set the _name variable.
 	 */
 	void computeName();

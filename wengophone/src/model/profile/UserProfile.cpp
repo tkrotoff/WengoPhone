@@ -209,15 +209,15 @@ void UserProfile::disconnectSipAccounts(bool now) {
 	}
 }
 
-void UserProfile::makeCall(Contact & contact, bool enableVideo) {
+int UserProfile::makeCall(Contact & contact, bool enableVideo) {
 	if (_activePhoneLine) {
-		_activePhoneLine->makeCall(contact.getPreferredNumber(), enableVideo);
+		return _activePhoneLine->makeCall(contact.getPreferredNumber(), enableVideo);
 	}
 }
 
-void UserProfile::makeCall(const std::string & phoneNumber, bool enableVideo) {
+int UserProfile::makeCall(const std::string & phoneNumber, bool enableVideo) {
 	if (_activePhoneLine) {
-		_activePhoneLine->makeCall(phoneNumber, enableVideo);
+		return _activePhoneLine->makeCall(phoneNumber, enableVideo);
 	}
 }
 
@@ -369,7 +369,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 		_wsCallForward->wsCallForwardEvent += boost::bind(&UserProfile::wsCallForwardEventHandler, this, _1, _2, _3);
 
 		addPhoneLine(*_wengoAccount);
-		
+
 		IMAccount imAccount(_wengoAccount->getIdentity(),
 			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
 		addIMAccount(imAccount);
@@ -381,7 +381,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 
 		if (_wengoAccountMustConnectAfterInit) {
 			_wengoAccountMustConnectAfterInit = false;
-			//FIXME: currently there is only one sip account and we are sure 
+			//FIXME: currently there is only one sip account and we are sure
 			//this is a Wengo account.
 			connectSipAccounts();
 		}

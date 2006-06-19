@@ -45,16 +45,18 @@
 #include <model/webservices/softupdate/WsSoftUpdate.h>
 #include <model/wenbox/WenboxPlugin.h>
 
+#include <sipwrapper/SipWrapper.h>
+
 #include <util/Logger.h>
 
-CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone, 
-	Thread & modelThread) 
-: _userProfile(userProfile),
-_cWengoPhone(cWengoPhone),
-_cContactList(userProfile.getContactList(), modelThread),
-_cWenboxPlugin(*userProfile.getWenboxPlugin(), cWengoPhone),
-_cChatHandler(userProfile.getChatHandler(), *this),
-_modelThread(modelThread) {
+CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
+	Thread & modelThread)
+	: _userProfile(userProfile),
+	_cWengoPhone(cWengoPhone),
+	_cContactList(userProfile.getContactList(), modelThread),
+	_cWenboxPlugin(*userProfile.getWenboxPlugin(), cWengoPhone),
+	_cChatHandler(userProfile.getChatHandler(), *this),
+	_modelThread(modelThread) {
 
 	_cHistory = NULL;
 	_cPhoneLine = NULL;
@@ -223,7 +225,7 @@ void CUserProfile::historyLoadedEventHandler(History & history) {
 
 void CUserProfile::disconnect() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
-	MyThreadEvent * event = 
+	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CUserProfile::disconnectThreadSafe, this));
 
 	_modelThread.postEvent(event);
@@ -235,7 +237,7 @@ void CUserProfile::disconnectThreadSafe() {
 
 void CUserProfile::makeContactCall(const std::string & contactId) {
 	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
-	MyThreadEvent * event = 
+	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CUserProfile::makeContactCallThreadSafe, this, _1), contactId);
 
 	_modelThread.postEvent(event);
@@ -245,13 +247,16 @@ void CUserProfile::makeContactCallThreadSafe(std::string contactId) {
 	Contact * contact = _cContactList.getContact(contactId);
 	if (contact) {
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		_userProfile.makeCall(*contact, config.getVideoEnable());
+		int callId = _userProfile.makeCall(*contact, config.getVideoEnable());
+		if (callId == SipWrapper::CallIdError) {
+			makeCallErrorEvent(*this);
+		}
 	}
 }
 
 void CUserProfile::makeCall(const std::string & phoneNumber) {
 	typedef ThreadEvent1<void (std::string phoneNumber), std::string> MyThreadEvent;
-	MyThreadEvent * event = 
+	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CUserProfile::makeCallThreadSafe, this, _1), phoneNumber);
 
 	_modelThread.postEvent(event);
@@ -259,12 +264,15 @@ void CUserProfile::makeCall(const std::string & phoneNumber) {
 
 void CUserProfile::makeCallThreadSafe(std::string phoneNumber) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	_userProfile.makeCall(phoneNumber, config.getVideoEnable());
+	int callId = _userProfile.makeCall(phoneNumber, config.getVideoEnable());
+	if (callId == SipWrapper::CallIdError) {
+		makeCallErrorEvent(*this);
+	}
 }
 
 void CUserProfile::makeCall(const std::string & phoneNumber, bool enableVideo) {
 	typedef ThreadEvent2<void (std::string phoneNumber, bool enableVideo), std::string, bool> MyThreadEvent;
-	MyThreadEvent * event = 
+	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CUserProfile::makeCallThreadSafe, this, _1, _2), phoneNumber, enableVideo);
 
 	_modelThread.postEvent(event);
@@ -276,7 +284,7 @@ void CUserProfile::makeCallThreadSafe(std::string phoneNumber, bool enableVideo)
 
 void CUserProfile::startIM(const std::string & contactId) {
 	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
-	MyThreadEvent * event = 
+	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CUserProfile::startIMThreadSafe, this, _1), contactId);
 
 	_modelThread.postEvent(event);
@@ -291,7 +299,7 @@ void CUserProfile::startIMThreadSafe(std::string contactId) {
 
 void CUserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 	typedef ThreadEvent1<void (WengoAccount wengoAccount), WengoAccount> MyThreadEvent;
-	MyThreadEvent * event = 
+	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CUserProfile::setWengoAccountThreadSafe, this, _1), wengoAccount);
 
 	_modelThread.postEvent(event);

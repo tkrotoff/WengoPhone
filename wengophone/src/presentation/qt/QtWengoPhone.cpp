@@ -41,6 +41,8 @@
 #include <model/phoneline/IPhoneLine.h>
 #include <model/webservices/url/WsUrl.h>
 
+#include <sipwrapper/SipWrapper.h>
+
 #include <imwrapper/EnumIMProtocol.h>
 #include <imwrapper/EnumPresenceState.h>
 
@@ -390,10 +392,23 @@ void QtWengoPhone::callButtonClicked() {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 		std::string phoneNumber = _phoneComboBox->currentText().toStdString();
 		if (!phoneNumber.empty()) {
-			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(phoneNumber);
+			CUserProfile * cUserProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile();
+			cUserProfile->makeCallErrorEvent += boost::bind(&QtWengoPhone::makeCallErrorEventHandler, this);
+			cUserProfile->makeCall(phoneNumber);
 		}
 		_phoneComboBox->clearEditText();
 	}
+}
+
+void QtWengoPhone::makeCallErrorEventHandler() {
+	typedef PostEvent0<void ()> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::makeCallErrorEventHandlerThreadSafe, this));
+	postEvent(event);
+}
+
+void QtWengoPhone::makeCallErrorEventHandlerThreadSafe() {
+	QMessageBox::information(_wengoPhoneWindow, tr("WengoPhone - Make call error"),
+				tr("Please hold all the phone calls before to place a new one"), QMessageBox::Ok);
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {

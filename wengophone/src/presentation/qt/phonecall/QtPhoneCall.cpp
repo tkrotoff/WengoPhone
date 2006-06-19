@@ -19,8 +19,8 @@
 
 #include "QtPhoneCall.h"
 
-#if defined XV_HWACCEL
-#include "QtVideoXV.h"
+#ifdef XV_HWACCEL
+	#include "QtVideoXV.h"
 #endif
 
 #include "QtVideoQt.h"
@@ -41,6 +41,7 @@
 
 #include <sipwrapper/WebcamVideoFrame.h>
 #include <sipwrapper/CodecList.h>
+#include <sipwrapper/SipWrapper.h>
 
 #include <util/Logger.h>
 
@@ -85,13 +86,14 @@ void QtPhoneCall::initThreadSafe() {
 	//phoneNumberLabel
 	_nickNameLabel = Object::findChild < QLabel * > (_phoneCallWidget, "nickNameLabel");
 
-    // QString userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
+	// QString userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
 
-    QString userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getDisplayName());
-    if (userInfo.isEmpty())
-        userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
+	QString userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getDisplayName());
+	if (userInfo.isEmpty()) {
+		userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
+	}
 
-    userInfo = getDisplayName(userInfo);
+	userInfo = getDisplayName(userInfo);
 
 	QString tmp = QString("<html><head><meta name='qrichtext' content='1'/></head><body "
 			"style=white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
@@ -291,6 +293,12 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionAcceptCall->setEnabled(false);
 		_actionHangupCall->setEnabled(true);
 		_statusLabel->setText(tr("Talking"));
+		if (_cPhoneCall.getPhoneCall().getConferenceCall()) {
+			_actionHold->setText(tr("Proceed conference"));
+			_statusLabel->setText(tr("Talking - conference"));
+		} else {
+			_statusLabel->setText(tr("Talking"));
+		}
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateDialing:
@@ -316,8 +324,8 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionHangupCall->setEnabled(false);
 		_statusLabel->setText(tr("Closed"));
 		// stopConference();
-		if (_videoWindow){
-			if (_videoWindow->isFullScreen()){
+		if (_videoWindow) {
+			if (_videoWindow->isFullScreen()) {
 				_videoWindow->unFullScreen();
 			}
 		}
@@ -355,14 +363,13 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 
 void QtPhoneCall::videoFrameReceivedEventHandler(piximage * remoteVideoFrame, piximage * localVideoFrame) {
 	typedef PostEvent2<void (piximage* remoteVideoFrame, piximage* localVideoFrame), piximage*, piximage*> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe, 
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe,
 		this, _1,_2), remoteVideoFrame, localVideoFrame);
 	postEvent(event);
 }
 
-
 void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(piximage* remoteVideoFrame, piximage* localVideoFrame) {
-#if defined XV_HWACCEL
+#ifdef XV_HWACCEL
 	if (!_videoWindow) {
 		_showVideo = true;
 		_videoWindow = new QtVideoXV(_phoneCallWidget,remoteVideoFrame->width, remoteVideoFrame->height,

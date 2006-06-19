@@ -111,12 +111,12 @@ std::string PhoneLine::getMySipAddress() const {
 int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 	if (!_sipAccount.isConnected()) {
 		LOG_ERROR("SipAccount not connected");
-		return -1;
+		return SipWrapper::CallIdError;
 	}
 
 	if (phoneNumber.empty()) {
 		LOG_ERROR("empty phone number");
-		return -1;
+		return SipWrapper::CallIdError;
 	}
 
 	for (PhoneCalls::iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
@@ -128,7 +128,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 			if (state != EnumPhoneCallState::PhoneCallStateHold) {
 
 				LOG_ERROR("cannot place the call=" + phoneNumber + ", at least another phone call is not in hold state");
-				return -1;
+				return SipWrapper::CallIdError;
 			}
 		}
 	}
@@ -136,7 +136,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 	SipAddress sipAddress = SipAddress::fromString(phoneNumber, _sipAccount.getRealm());
 
 	//Puts all the PhoneCall in the hold state before to create a new PhoneCall
-	holdAllCalls();
+	//holdAllCalls();
 
 	if (enableVideo) {
 		//Sets the video device
@@ -156,7 +156,6 @@ int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 
 	//Adds the PhoneCall to the list of PhoneCall
 	_phoneCallMap[callId] = phoneCall;
-	_phoneCallList += phoneCall;
 
 	phoneCall->setState(EnumPhoneCallState::PhoneCallStateDialing);
 
@@ -331,7 +330,6 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 
 		//Adds the PhoneCall to the list of PhoneCall
 		_phoneCallMap[callId] = phoneCall;
-		_phoneCallList += phoneCall;
 
 		phoneCall->setState(state);
 
@@ -380,7 +378,6 @@ void PhoneLine::callClosed(int callId) {
 
 	//Removes it from the list of PhoneCall
 	_phoneCallMap.erase(callId);
-	_phoneCallList -= phoneCall;
 
 	phoneCallClosedEvent(*this, *phoneCall);
 }
@@ -399,7 +396,7 @@ void PhoneLine::holdCallsExcept(int callId) {
 }
 
 void PhoneLine::holdAllCalls() {
-	holdCallsExcept(-1);
+	holdCallsExcept(SipWrapper::CallIdError);
 }
 
 void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
@@ -427,7 +424,15 @@ PhoneCall * PhoneLine::getPhoneCall(int callId) {
 }
 
 IPhoneLine::PhoneCallList PhoneLine::getPhoneCallList() const {
-	return _phoneCallList;
+	PhoneCallList phoneCallList;
+
+	for (PhoneCalls::const_iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
+		PhoneCall * phoneCall = (*it).second;
+		if (phoneCall) {
+			phoneCallList += phoneCall;
+		}
+	}
+	return phoneCallList;
 }
 
 void PhoneLine::initSipWrapper() {

@@ -79,7 +79,7 @@ void ConferenceCall::addPhoneNumber(const std::string & phoneNumber) {
 		phoneCall = _phoneCallMap[phoneNumber];
 		if (!phoneCall) {
 			int callId = _phoneLine.makeCall(phoneNumber, false);
-			if (callId == -1) {
+			if (callId == SipWrapper::CallIdError) {
 				//NULL means put the phone number in the queue
 				phoneCall = NULL;
 			} else {
@@ -134,6 +134,7 @@ void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumP
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:
+		removePhoneCall(sender);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
@@ -149,6 +150,7 @@ void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumP
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
+		removePhoneCall(sender);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming:
@@ -178,6 +180,18 @@ void ConferenceCall::phoneCallStateChangedEventHandler(PhoneCall & sender, EnumP
 	default:
 		LOG_FATAL("unknown PhoneCallState=" + EnumPhoneCallState::toString(state));
 	}
+}
+
+ConferenceCall::PhoneCallList ConferenceCall::getPhoneCallList() const {
+	PhoneCallList phoneCallList;
+
+	for (PhoneCalls::const_iterator it = _phoneCallMap.begin(); it != _phoneCallMap.end(); ++it) {
+		PhoneCall * phoneCall = (*it).second;
+		if (phoneCall) {
+			phoneCallList += phoneCall;
+		}
+	}
+	return phoneCallList;
 }
 
 void ConferenceCall::join(int callId) {

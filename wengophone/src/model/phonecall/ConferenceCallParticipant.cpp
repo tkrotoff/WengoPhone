@@ -48,7 +48,11 @@ void ConferenceCallParticipant::joinConference() {
 		_conferenceCall.join(callId);
 	} else {
 		_waitForHoldState = true;
-		_phoneCall.hold();
+
+		//FIXME hack, do not hold the first phone call of the conference, user has to do it himself
+		if (_conferenceCall.getPhoneCallList().size() > 1) {
+			_phoneCall.hold();
+		}
 	}
 }
 
@@ -59,7 +63,6 @@ void ConferenceCallParticipant::phoneCallStateChangedEventHandler(PhoneCall & se
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateError:
-		_conferenceCall.removePhoneCall(sender);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateResumed:
@@ -75,7 +78,6 @@ void ConferenceCallParticipant::phoneCallStateChangedEventHandler(PhoneCall & se
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateClosed:
-		_conferenceCall.removePhoneCall(sender);
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateIncoming:

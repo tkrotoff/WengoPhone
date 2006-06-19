@@ -60,7 +60,9 @@ class WsSoftUpdate;
 class CUserProfile {
 public:
 
-	CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone, 
+	Event <void (CUserProfile & sender)> makeCallErrorEvent;
+
+	CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
 		Thread & modelThread);
 
 	~CUserProfile();
@@ -201,7 +203,7 @@ private:
 	 * @see UserProfile::phoneLineCreatedEvent
 	 */
 	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
-	
+
 	/**
 	 * @see UserProfile::wsDirectoryCreatedEvent
 	 */
@@ -275,7 +277,7 @@ private:
 	CPhoneLine * _cPhoneLine;
 
 	CWengoPhone & _cWengoPhone;
-	
+
 	Thread & _modelThread;
 };
 

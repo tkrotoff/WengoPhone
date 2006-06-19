@@ -177,9 +177,6 @@ private:
 	/** List of PhoneLineState. */
 	PhoneLineStateList _phoneLineStateList;
 
-	/** List of PhoneCall. */
-	PhoneCallList _phoneCallList;
-
 	UserProfile & _userProfile;
 };
 

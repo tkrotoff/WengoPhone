@@ -851,8 +851,8 @@ phStopConf(callId1, callId2);
 
 */
 
-static int callId1 = -1;
-static int callId2 = -1;
+static int callId1 = SipWrapper::CallIdError;
+static int callId2 = SipWrapper::CallIdError;
 
 int PhApiWrapper::createConference() {
 	//FIXME return phConfCreate();
@@ -867,29 +867,29 @@ void PhApiWrapper::phoneCallStateChangedEventHandler(SipWrapper & sender, int ca
 		(state == EnumPhoneCallState::PhoneCallStateClosed ||
 		state == EnumPhoneCallState::PhoneCallStateError)) {
 
-		callId1 = -1;
+		callId1 = SipWrapper::CallIdError;
 	}
 
 	else if (callId == callId2 &&
 		(state == EnumPhoneCallState::PhoneCallStateClosed ||
 		state == EnumPhoneCallState::PhoneCallStateError)) {
 
-		callId2 = -1;
+		callId2 = SipWrapper::CallIdError;
 	}
 }
 
 void PhApiWrapper::joinConference(int confId, int callId) {
 	//FIXME phConfAddMember(confId, callId);
 
-	if (callId1 == -1) {
+	if (callId1 == SipWrapper::CallIdError) {
 		callId1 = callId;
 	}
 
-	else if (callId2 == -1) {
+	else if (callId2 == SipWrapper::CallIdError) {
 		callId2 = callId;
 	}
 
-	if (callId1 != -1 && callId2 != -1) {
+	if (callId1 != SipWrapper::CallIdError && callId2 != SipWrapper::CallIdError) {
 		Thread::sleep(5);
 		phConf(callId1, callId2);
 		LOG_DEBUG("conference call started");
@@ -902,10 +902,10 @@ void PhApiWrapper::splitConference(int confId, int callId) {
 	//FIXME phConfRemoveMember(confId, callId);
 
 	//FIXME phConfClose(confId);
-	if (callId1 != -1 && callId2 != -1) {
+	if (callId1 != SipWrapper::CallIdError && callId2 != SipWrapper::CallIdError) {
 		phStopConf(callId1, callId2);
-		callId1 = -1;
-		callId2 = -1;
+		callId1 = SipWrapper::CallIdError;
+		callId2 = SipWrapper::CallIdError;
 		LOG_DEBUG("conference call destroyed");
 	}
 }

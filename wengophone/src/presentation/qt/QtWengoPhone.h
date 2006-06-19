@@ -276,6 +276,10 @@ private:
 
 	void urlClickedEventHandler(std::string url);
 
+	void makeCallErrorEventHandler();
+
+	void makeCallErrorEventHandlerThreadSafe();
+
 	int findFirstCallTab();
 
 	QMenu * createStatusMenu();
