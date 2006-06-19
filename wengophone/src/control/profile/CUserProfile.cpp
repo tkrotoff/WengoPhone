@@ -96,6 +96,7 @@ CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
 	// Check if a PhoneLine already exist
 	if (_userProfile.getActivePhoneLine()) {
 		phoneLineCreatedEventHandler(_userProfile, *_userProfile.getActivePhoneLine());
+		historyLoadedEventHandler(_userProfile.getHistory());
 	}
 }
 
@@ -108,8 +109,6 @@ CUserProfile::~CUserProfile() {
 		boost::bind(&CUserProfile::wsSmsCreatedEventHandler, this, _1, _2);
 	_userProfile.wsSoftUpdateCreatedEvent -=
 		boost::bind(&CUserProfile::wsSoftUpdateCreatedEventHandler, this, _1, _2);
-	_userProfile.getHistory().historyLoadedEvent -=
-		boost::bind(&CUserProfile::historyLoadedEventHandler, this, _1);
 	_userProfile.wsCallForwardCreatedEvent -=
 	  boost::bind(&CUserProfile::wsCallForwardCreatedEventHandler, this, _1, _2);
 
