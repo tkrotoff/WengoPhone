@@ -20,6 +20,7 @@
 #include "QtContactInfo.h"
 #include "QtContactListManager.h"
 #include "QtContact.h"
+
 #include <QTreeWidgetItem>
 
 QtContactInfo::QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, const QString & contactId, int index, QObject * parent)
@@ -82,12 +83,11 @@ QtContactInfo & QtContactInfo::operator = (const QtContactInfo & other) {
 	_parentItem = other._parentItem;
 	_index = other._index;
 	_clear = other._clear;
-	return * this;
+	return *this;
 }
 
 QtContactPixmap::ContactPixmap QtContactInfo::getStatus() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = ul->getContact(_contactId);
 	return qtContact->getStatus();
-
 }

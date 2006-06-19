@@ -20,17 +20,10 @@
 #include "QtTreeViewDelegate.h"
 
 #include "QtUserWidgetEventFilter.h"
-#include "QtUserWidget.h"
+#include "QtContactWidget.h"
 #include "QtContactListManager.h"
 #include "QtContactPixmap.h"
 #include "QtContactList.h"
-
-#include <QModelIndex>
-#include <QWidget>
-#include <QStyleOptionViewItem>
-#include <QAbstractItemModel>
-#include <QPixmapCache>
-#include <QPainter>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -40,6 +33,14 @@
 #include <util/StringList.h>
 
 #include <qtutil/Object.h>
+
+#include <QModelIndex>
+#include <QWidget>
+#include <QStyleOptionViewItem>
+#include <QAbstractItemModel>
+#include <QPixmapCache>
+#include <QPainter>
+
 
 static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 
@@ -56,14 +57,14 @@ const QStyleOptionViewItem &,
 const QModelIndex & index) const {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = ul->getContact(index.data().toString());
-	QtUserWidget * widget = new QtUserWidget(qtContact->getId().toStdString(), _cWengoPhone, parent);
+	QtContactWidget * widget = new QtContactWidget(qtContact->getId().toStdString(), _cWengoPhone, parent);
 	QWidget * userWidget = Object::findChild <QWidget *> (widget, "UserWidget");
 	userWidget->installEventFilter(new QtUserWidgetEventFilter((QObject *) this, userWidget, qtContact));
 	return (QWidget *) widget;
 }
 
 void QtTreeViewDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const {
-	QtUserWidget * widget = qobject_cast < QtUserWidget * > (editor);
+	QtContactWidget * widget = qobject_cast < QtContactWidget * > (editor);
 
 	if (!widget) {
 		return;
@@ -73,7 +74,7 @@ void QtTreeViewDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
 
 void QtTreeViewDelegate::setModelData(QWidget * editor, QAbstractItemModel * model,
     const QModelIndex & index) const {
-	QtUserWidget * widget = qobject_cast < QtUserWidget * > (editor);
+	QtContactWidget * widget = qobject_cast < QtContactWidget * > (editor);
 
 	if (!widget) {
 		return;

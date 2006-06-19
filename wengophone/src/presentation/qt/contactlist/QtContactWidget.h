@@ -23,18 +23,14 @@
 #include "ui_UserWidget.h"
 
 #include <model/contactlist/ContactProfile.h>
-#include "QtContact.h"
 
 #include <QWidget>
 #include <QString>
-
-class QtUserWidgetAvatarManager;
 
 class CContact;
 class CWengoPhone;
 class QLabel;
 class QPushButton;
-
 
 /**
  * Qt user widget.
@@ -43,13 +39,13 @@ class QPushButton;
  * @author Mr K
  * @author Mathieu Stute
  */
-class QtUserWidget : public QWidget {
+class QtContactWidget : public QWidget {
 		Q_OBJECT
 public:
 
 	static const QString AVATAR_BACKGROUND;
 
-	QtUserWidget(const std::string & contactId, CWengoPhone & cWengoPhone,
+	QtContactWidget(const std::string & contactId, CWengoPhone & cWengoPhone,
 			QWidget * parent = 0, Qt::WFlags f = 0);
 
 	void setText(const QString & text) {
@@ -85,8 +81,6 @@ private:
 	QPixmap createAvatar();
 
 	QWidget * _widget;
-
-	QtUserWidgetAvatarManager * _avatarManager;
 
 	std::string _contactId;
 

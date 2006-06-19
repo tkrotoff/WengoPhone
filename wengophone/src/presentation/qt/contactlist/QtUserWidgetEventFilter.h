@@ -21,11 +21,13 @@
 #define OWQTUSERWIDGETEVENTFILTER_H
 
 #include <QObject>
-#include "QtUserWidget.h"
 
 class QWidget;
 class QtContact;
 class QPainter;
+class QtContactWidget;
+class QRect;
+class QPaintEvent;
 
 class QtUserWidgetEventFilter : public QObject {
 
@@ -41,7 +43,7 @@ protected:
 
 	void paintEvent(QPaintEvent * event);
 
-	void paintUser(QPainter * painter, QRect rect);
+	void paintUser(QPainter * painter, const QRect & rect);
 
 	QWidget * _target;
 

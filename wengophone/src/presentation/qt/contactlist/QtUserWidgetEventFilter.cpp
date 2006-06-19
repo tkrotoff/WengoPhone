@@ -16,14 +16,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#include "QtUserWidgetEventFilter.h"
+#include "QtContactWidget.h"
+#include "QtContact.h"
+#include "QtContactPixmap.h"
+
 #include <QObject>
 #include <QWidget>
 #include <QPainter>
 #include <QPaintEvent>
-
-#include "QtContact.h"
-#include "QtUserWidgetEventFilter.h"
-#include "QtContactPixmap.h"
+#include <QRect>
 
 QtUserWidgetEventFilter::QtUserWidgetEventFilter(QObject * parent, QWidget * target, QtContact * user) : QObject(parent) {
 	_target = target;
@@ -40,7 +42,7 @@ bool QtUserWidgetEventFilter::eventFilter(QObject * obj, QEvent * event) {
 	}
 }
 
-void QtUserWidgetEventFilter::paintEvent(QPaintEvent * event) {
+void QtUserWidgetEventFilter::paintEvent(QPaintEvent * ) {
 	QPalette p = _target->palette();
 	QColor lg(201, 201, 201);
 	QRect rect = _target->rect();
@@ -50,7 +52,7 @@ void QtUserWidgetEventFilter::paintEvent(QPaintEvent * event) {
 	painter.end();
 }
 
-void QtUserWidgetEventFilter::paintUser(QPainter * painter, QRect rect) {
+void QtUserWidgetEventFilter::paintUser(QPainter * painter, const QRect & rect) {
 	QRect r;
 	QPixmap px;
 	QtContactPixmap * spx;

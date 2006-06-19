@@ -24,8 +24,6 @@
 #include <QSize>
 #include <QPixmap>
 
-#include "QtUserWidget.h"
-
 class CWengoPhone;
 class QModelIndex;
 class QWidget;
@@ -33,6 +31,7 @@ class QStyleOptionViewItem;
 class QAbstractItemModel;
 class QRect;
 class QPainter;
+class QtUserWidget;
 
 /**
  * Qt Presentation component for ContactList.
