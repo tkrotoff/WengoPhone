@@ -66,6 +66,8 @@ class UserProfile : public Profile {
 	friend class Connect;
 public:
 
+	static const std::string DEFAULT_USERPROFILE_NAME;
+
 	/**
 	 * Login procedure is done, event with the procedure result.
 	 *

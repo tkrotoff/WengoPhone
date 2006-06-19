@@ -67,7 +67,8 @@ public:
 	 * @param sender this class
 	 * @param userProfile the set UserProfile
 	 */
-	Event<void (UserProfileHandler & sender, UserProfile & userProfile)> userProfileInitializedEvent;
+	Event<void (UserProfileHandler & sender, 
+		UserProfile & userProfile)> userProfileInitializedEvent;
 
 	/**
 	 * Emitted when the requested WengoAccount (given via setCurrentUserProfile) 
@@ -76,7 +77,18 @@ public:
 	 * @param sender this class
 	 * @param wengoAccount the WengoAccount provided by the user
 	 */
-	Event<void (UserProfileHandler & sender, WengoAccount & wengoAccount)> wengoAccountNotValidEvent;
+	Event<void (UserProfileHandler & sender, 
+		WengoAccount & wengoAccount)> wengoAccountNotValidEvent;
+
+	/**
+	 * Emitted when a non-Default UserProfile has been created and when a 
+	 * Default UserProfile exists.
+	 *
+	 * Thus a dialog window can appear to propose to import ContactList and 
+	 * IMAccounts from the Default UserProfile to the created UserProfile.
+	 */
+	Event<void (UserProfileHandler & sender, 
+		const std::string & createdProfileName)> defaultUserProfileExistsEvent;
 
 	UserProfileHandler();
 
@@ -150,6 +162,12 @@ public:
 	void currentUserProfileReleased();
 
 	/**
+	 * Imports contacts and IM accounts from the 'Default' profile (if it
+	 * exists) to the given profile and delete the 'Default' profile.
+	 */
+	void importDefaultProfileToProfile(const std::string & profileName);
+
+	/**
 	 * Saves the last used UserProfile in Config.
 	 */
 	void save();
@@ -184,11 +202,33 @@ private:
 	void setLastUsedUserProfile(const UserProfile & userProfile);
 
 	/**
-	 * Save the UserProfile.
+	 * Saves the UserProfile.
 	 *
 	 * @param userProfile the UserProfile to save
 	 */
 	void saveUserProfile(UserProfile & userProfile);
+
+	/**
+	 * @see importDefaultProfileToProfile
+	 * When calling importDefaultProfileToProfile, the current UserProfile
+	 * will be destroyed and thus UserProfileHandler must wait for the 
+	 * release of the currentUserProfile. When currentUserProfileReleased
+	 * will be called it will call actuallyImportDefaultProfileToProfile to
+	 * actually import the default profile to the desired UserProfile.
+	 */
+	void actuallyImportDefaultProfileToProfile();
+
+	/**
+	 * True if UserProfileHandler must call actuallyImportDefaultProfileToProfile
+	 * in currentUserProfileReleased.
+	 */
+	bool _importDefaultProfileToProfile;
+
+	/** 
+	 * Name of the UserProfile to import when calling
+	 * actuallyImportDefaultProfileToProfile.
+	 */
+	std::string _nameOfProfileToImport;	
 
 	UserProfile * _currentUserProfile;
 

@@ -36,6 +36,8 @@
 
 using namespace std;
 
+WengoAccount WengoAccount::empty;
+
 WengoAccount::WengoAccount()
 	: SipAccount(), WengoWebService(this) {
 	_ssoRequestOk = false;

@@ -32,6 +32,7 @@
 UserProfileHandler::UserProfileHandler() {
 	_currentUserProfile = NULL;
 	_desiredUserProfile = NULL;
+	_importDefaultProfileToProfile = false;
 }
 
 UserProfileHandler::~UserProfileHandler() {
@@ -95,6 +96,10 @@ UserProfileHandler::UserProfileHandlerError UserProfileHandler::createUserProfil
 	if (!userProfileExists(profileName)) {
 		if (userProfile->isWengoAccountValid()) {
 			saveUserProfile(*userProfile);
+			if ((profileName != UserProfile::DEFAULT_USERPROFILE_NAME) && 
+				userProfileExists(UserProfile::DEFAULT_USERPROFILE_NAME)) {
+				defaultUserProfileExistsEvent(*this, profileName);
+			}
 			result = UserProfileHandlerErrorNoError;
 		} else {
 			wengoAccountNotValidEvent(*this, *userProfile->getWengoAccount());
@@ -116,7 +121,7 @@ void UserProfileHandler::createAndSetUserProfile(const WengoAccount & wengoAccou
 	if (createUserProfile(wengoAccount) != UserProfileHandlerErrorWengoAccountNotValid) {
 		std::string profileName = wengoAccount.getWengoLogin();
 		if (profileName.empty()) {
-			profileName = "Default";
+			profileName = UserProfile::DEFAULT_USERPROFILE_NAME;
 		}
 		setCurrentUserProfile(profileName, wengoAccount);
 	}
@@ -189,8 +194,10 @@ void UserProfileHandler::currentUserProfileReleased() {
 		_currentUserProfile = NULL;
 	}
 
-	// If we want to change the UserProfile
-	if (_desiredUserProfile) {
+	if (_importDefaultProfileToProfile) {
+		actuallyImportDefaultProfileToProfile();
+	} else if (_desiredUserProfile) {
+		// If we want to change the UserProfile
 		LOG_DEBUG("Old UserProfile killed. Setting the new one");
 		_currentUserProfile = _desiredUserProfile;
 		_desiredUserProfile = NULL;
@@ -223,8 +230,7 @@ void UserProfileHandler::init() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string profileName = config.getProfileLastUsedName();
 
-	WengoAccount wengoAccount;
-	setCurrentUserProfile(profileName, wengoAccount);
+	setCurrentUserProfile(profileName, WengoAccount::empty);
 }
 
 void UserProfileHandler::saveUserProfile(UserProfile & userProfile) {
@@ -236,4 +242,43 @@ void UserProfileHandler::saveUserProfile(UserProfile & userProfile) {
 
 void UserProfileHandler::profileChangedEventHandler(Profile & sender) {
 	saveUserProfile((UserProfile &) sender);
+}
+
+void UserProfileHandler::importDefaultProfileToProfile(const std::string & profileName) {
+	_nameOfProfileToImport = profileName;
+	
+	if (_currentUserProfile) {
+		_importDefaultProfileToProfile = true;
+		currentUserProfileWillDieEvent(*this);
+	} else {
+		actuallyImportDefaultProfileToProfile();
+	}
+}
+
+void UserProfileHandler::actuallyImportDefaultProfileToProfile() {
+	UserProfile * defaultUserProfile = getUserProfile(UserProfile::DEFAULT_USERPROFILE_NAME);
+	UserProfile * newUserProfile = getUserProfile(_nameOfProfileToImport);
+
+	if (defaultUserProfile && newUserProfile && newUserProfile->hasWengoAccount()) {
+		// Setting the Wengo account of the 'Default' UserProfile to the one
+		// of the new UserProfile.
+		defaultUserProfile->setWengoAccount(*newUserProfile->getWengoAccount());
+		delete newUserProfile; newUserProfile = NULL;
+
+		// Saving the old 'Default' UserProfile. It will actually overwrite
+		// the new UserProfile and thus saves the ContactList and the IMAccounts
+		// of the 'Default' UserProfile to the new one.
+		saveUserProfile(*defaultUserProfile);
+
+		// Deleting the 'Default' UserProfile directory
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+		File defaultUserProfileDir(File::convertPathSeparators(config.getConfigDir()
+			+ "profiles/" + UserProfile::DEFAULT_USERPROFILE_NAME + "/"));
+		defaultUserProfileDir.remove();
+
+		// Sets the current UserProfile to the new one
+		setCurrentUserProfile(_nameOfProfileToImport, WengoAccount::empty);
+	}
+
+	_importDefaultProfileToProfile = false;
 }

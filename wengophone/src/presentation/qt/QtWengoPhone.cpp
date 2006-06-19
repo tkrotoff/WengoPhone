@@ -461,8 +461,7 @@ void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall) 
 }
 
 void QtWengoPhone::logoff(){
-	WengoAccount wengoAccount;
-	_cWengoPhone.getCUserProfileHandler().setCurrentUserProfile(String::null, wengoAccount);
+	_cWengoPhone.getCUserProfileHandler().setCurrentUserProfile(String::null, WengoAccount::empty);
 }
 
 void QtWengoPhone::addToConference(PhoneCall * sourceCall, PhoneCall * targetCall){

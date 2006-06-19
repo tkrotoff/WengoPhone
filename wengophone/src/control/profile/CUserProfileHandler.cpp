@@ -48,6 +48,8 @@ CUserProfileHandler::CUserProfileHandler(UserProfileHandler & userProfileHandler
 		boost::bind(&CUserProfileHandler::userProfileInitializedEventHandler, this, _1, _2);
 	_userProfileHandler.wengoAccountNotValidEvent +=
 		boost::bind(&CUserProfileHandler::wengoAccountNotValidEventHandler, this, _1, _2);
+	_userProfileHandler.defaultUserProfileExistsEvent +=
+		boost::bind(&CUserProfileHandler::defaultUserProfileExistsEventHandler, this, _1, _2);
 }
 
 CUserProfileHandler::~CUserProfileHandler() {
@@ -100,6 +102,18 @@ void CUserProfileHandler::setCurrentUserProfile(const std::string & login,
 
 void CUserProfileHandler::setUserProfileThreadSafe(std::string profileName, WengoAccount wengoAccount) {
 	_userProfileHandler.setCurrentUserProfile(profileName, wengoAccount);
+}
+
+void CUserProfileHandler::importDefaultProfileToProfile(const std::string & profileName) {
+	typedef ThreadEvent1<void (std::string), std::string> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&CUserProfileHandler::importDefaultProfileToProfileThreadSafe, this, _1), profileName);
+
+	_modelThread.postEvent(event);
+}
+
+void CUserProfileHandler::importDefaultProfileToProfileThreadSafe(std::string profileName) {
+	_userProfileHandler.importDefaultProfileToProfile(profileName);
 }
 
 bool CUserProfileHandler::userProfileExists(const std::string & name) const {
@@ -156,4 +170,9 @@ void CUserProfileHandler::userProfileInitializedEventHandler(UserProfileHandler 
 
 void CUserProfileHandler::wengoAccountNotValidEventHandler(UserProfileHandler & sender, WengoAccount & wengoAccount) {
 	_pUserProfileHandler->wengoAccountNotValidEventHandler(wengoAccount);
+}
+
+void CUserProfileHandler::defaultUserProfileExistsEventHandler(UserProfileHandler & sender, 
+	const std::string & createdProfileName) {
+	_pUserProfileHandler->defaultUserProfileExistsEventHandler(createdProfileName);
 }

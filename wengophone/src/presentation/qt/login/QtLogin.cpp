@@ -133,8 +133,7 @@ void QtLogin::createAccountLabelClicked() {
 
 void QtLogin::useWengoPhoneWithoutAWengoAccountClicked() {
 	LOG_DEBUG("Will use WengoPhone without a Wengo account");
-	WengoAccount wengoAccount;
-	_cUserProfileHandler.createAndSetUserProfile(wengoAccount);
+	_cUserProfileHandler.createAndSetUserProfile(WengoAccount::empty);
 	_loginWindow->accept();
 }
 

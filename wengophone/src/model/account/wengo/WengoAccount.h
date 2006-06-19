@@ -44,6 +44,9 @@ class WengoAccount : public SipAccount, public WengoWebService {
 
 public:
 
+	/** Empty WengoAccount. */
+	static WengoAccount empty; 
+
 	WengoAccount();
 
 	WengoAccount(const std::string & login, const std::string & password, bool autoLogin);

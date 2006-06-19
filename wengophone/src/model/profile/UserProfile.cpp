@@ -51,6 +51,8 @@
 
 using namespace std;
 
+const std::string UserProfile::DEFAULT_USERPROFILE_NAME = "Default";
+
 UserProfile::UserProfile()
 	: _imContactListHandler(*this),
 	_connectHandler(*this),
@@ -470,7 +472,7 @@ void UserProfile::wsCallForwardEventHandler(WsCallForward & sender,
 
 void UserProfile::computeName() {
 	if (!_wengoAccount || _wengoAccount->getWengoLogin().empty()) {
-		_name = "Default";
+		_name = DEFAULT_USERPROFILE_NAME;
 	} else {
 		_name = _wengoAccount->getWengoLogin();
 	}
