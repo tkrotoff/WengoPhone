@@ -38,38 +38,7 @@
 
 #include <tinyxml.h>
 
-#include <iostream>
 using namespace std;
-
-#ifdef ENABLE_VIDEO
-class PhApiVideoFrame : public WebcamVideoFrame {
-public:
-
-	PhApiVideoFrame(piximage * image)
-		: WebcamVideoFrame() {
-		setWidth(image->width);
-		setHeight(image->height);
-		setFrame(image->data);
-	}
-
-	~PhApiVideoFrame() {
-	}
-};
-
-class PhApiWebcam : public WebcamVideoFrame {
-public:
-
-	PhApiWebcam(piximage * image)
-		: WebcamVideoFrame() {
-		setWidth(image->width);
-		setHeight(image->height);
-		setFrame(image->data);
-	}
-
-	~PhApiWebcam() {
-	}
-};
-#endif
 
 PhApiCallbacks::PhApiCallbacks() {
 }
@@ -83,95 +52,117 @@ void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
 
 	switch (status) {
 	case phDIALING:
+		LOG_DEBUG("phDIALING");
 		from = info->u.remoteUri;
 		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateDialing, from);
 		break;
 
 	case phRINGING:
+		LOG_DEBUG("phRINGING");
 		from = info->u.remoteUri;
 		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateRinging, from);
 		break;
 
 	case phNOANSWER:
+		LOG_DEBUG("phNOANSWER");
 		from = info->u.remoteUri;
 		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateMissed, from);
 		break;
 
 	case phCALLBUSY:
+		LOG_DEBUG("phCALLBUSY");
 		break;
 
 	case phCALLREDIRECTED:
+		LOG_DEBUG("phCALLREDIRECTED");
 		from = info->u.remoteUri;
 		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateRedirected, from);
 		break;
 
 	case phCALLOK:
+		LOG_DEBUG("phCALLOK");
 		from = info->u.remoteUri;
 		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateTalking, from);
 		break;
 
 	case phCALLHELD:
+		LOG_DEBUG("phCALLHELD");
 		break;
 
 	case phCALLRESUMED:
+		LOG_DEBUG("phCALLRESUMED");
 		break;
 
 	case phHOLDOK:
+		LOG_DEBUG("phHOLDOK");
 		from = info->u.remoteUri;
 		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateHold, from);
 		break;
 
 	case phRESUMEOK:
+		LOG_DEBUG("phRESUMEOK");
 		from = info->u.remoteUri;
 		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateResumed, from);
 		break;
 
 	case phINCALL:
+		LOG_DEBUG("phINCALL");
 		from = info->u.remoteUri;
 		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateIncoming, from);
 		break;
 
 	case phCALLCLOSED:
+		LOG_DEBUG("phCALLCLOSED");
 		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateClosed, from);
 		break;
 
 	case phCALLERROR:
+		LOG_DEBUG("phCALLERROR");
 		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateError, from);
 		break;
 
 	case phDTMF:
+		LOG_DEBUG("phDTMF");
 		break;
 
 	//Transfer progress
 	case phXFERPROGRESS:
+		LOG_DEBUG("phXFERPROGRESS");
 		break;
 
 	//Transfer OK
 	case phXFEROK:
+		LOG_DEBUG("phXFEROK");
 		break;
 
 	//Transfer failed
 	case phXFERFAIL:
+		LOG_DEBUG("phXFERFAIL");
 		break;
 
 	//Transfer request
 	case phXFERREQ:
+		LOG_DEBUG("phXFERREQ");
 		break;
 
 	case phCALLREPLACED:
+		LOG_DEBUG("phCALLREPLACED");
 		break;
 
 	// begin ringing
 	case phRINGandSTART:
+		LOG_DEBUG("phRINGandSTART");
 		from = info->u.remoteUri;
 		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateRinging, from);
 		break;
 
 	// stop ringing
 	case phRINGandSTOP:
+		LOG_DEBUG("phRINGandSTOP");
 		break;
 
 	case phCALLCLOSEDandSTOPRING:
+		LOG_DEBUG("phCALLCLOSEDandSTOPRING");
 		break;
 
 	default:
@@ -183,10 +174,7 @@ void PhApiCallbacks::videoFrameReceived(int callId, phVideoFrameReceivedEvent_t 
 	//LOG_DEBUG("video frame from call=" + String::fromNumber(callId));
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 #ifdef ENABLE_VIDEO
-	PhApiVideoFrame videoFrame(info->frame_remote);
-	PhApiWebcam phApiWebcam(info->frame_local);
-
-	p->videoFrameReceivedEvent(*p, callId, videoFrame, phApiWebcam);
+	p->videoFrameReceivedEvent(*p, callId, info->frame_remote, info->frame_local);
 #endif
 }
 

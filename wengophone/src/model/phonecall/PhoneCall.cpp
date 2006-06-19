@@ -222,7 +222,7 @@ WenboxPlugin & PhoneCall::getWenboxPlugin() const {
 	return *_phoneLine.getUserProfile().getWenboxPlugin();
 }
 
-void PhoneCall::videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
+void PhoneCall::videoFrameReceived(piximage* remoteVideoFrame, piximage* localVideoFrame) {
 	videoFrameReceivedEvent(*this, remoteVideoFrame, localVideoFrame);
 }
 

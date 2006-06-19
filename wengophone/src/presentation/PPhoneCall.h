@@ -26,6 +26,8 @@
 
 #include <util/Event.h>
 
+#include <pixertool/pixertool.h>
+
 #include <string>
 
 class WebcamVideoFrame;
@@ -40,7 +42,7 @@ public:
 
 	Event<void (EnumPhoneCallState::PhoneCallState state)> stateChangedEvent;
 
-	Event<void (const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame)> videoFrameReceivedEvent;
+	Event<void (piximage* remoteVideoFrame, piximage* localVideoFrame)> videoFrameReceivedEvent;
 };
 
 #endif	//PPHONECALL_H

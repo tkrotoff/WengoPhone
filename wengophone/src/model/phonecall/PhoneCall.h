@@ -32,6 +32,8 @@
 
 #include <string>
 
+#include <pixertool/pixertool.h>
+
 class WebcamVideoFrame;
 class PhoneCallState;
 class IPhoneLine;
@@ -64,7 +66,7 @@ public:
 	 * @param remoteVideoFrame remote video frame
 	 * @param localVideoFrame local video frame from the webcam
 	 */
-	Event<void (PhoneCall & sender, const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame)> videoFrameReceivedEvent;
+	Event<void (PhoneCall & sender, piximage*  remoteVideoFrame, piximage* localVideoFrame)> videoFrameReceivedEvent;
 
 	/**
 	 * Creates a new PhoneCall given a PhoneLine.
@@ -127,7 +129,7 @@ public:
 	 * @param remoteVideoFrame received
 	 * @param localWebcam local webcam
 	 */
-	void videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame);
+	void videoFrameReceived(piximage* remoteVideoFrame, piximage* localVideoFrame);
 
 	/**
 	 * Changes the state of this PhoneCall.

@@ -32,6 +32,8 @@
 
 #include <string>
 
+#include <pixertool/pixertool.h>
+
 class WebcamVideoFrame;
 
 /**
@@ -96,7 +98,7 @@ public:
 	 * @param localVideoFrame local webcam video frame
 	 */
 	Event<void (SipWrapper & sender, int callId,
-		const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame)> videoFrameReceivedEvent;
+		piximage* remoteVideoFrame, piximage* localVideoFrame)> videoFrameReceivedEvent;
 
 	virtual ~SipWrapper() {
 	}

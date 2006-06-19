@@ -84,7 +84,7 @@ void SipCallbacks::phoneLineStateChangedEventHandler(SipWrapper & sender, int li
 }
 
 void SipCallbacks::videoFrameReceivedEventHandler(SipWrapper & sender, int callId,
-	const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) {
+	piximage* remoteVideoFrame, piximage* localVideoFrame) {
 
 	//LOG_DEBUG("videoFrameReceived: callId=" + String::fromNumber(callId));
 

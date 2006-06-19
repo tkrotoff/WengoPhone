@@ -53,6 +53,7 @@ headers = [
 	'phoneline/QtPhoneLine.h',
 	'phonecall/QtPhoneCall.h',
 	'phonecall/QtVideo.h',
+	'phonecall/QtVideoQt.h',
 	'phonecall/QtContactCallList.h',
 	'phonecall/QtContactCallListWidget.h',
 	'phonecall/QtPhoneCallEventFilter.h',
@@ -148,7 +149,7 @@ sources = [
 	'QtTrayIcon.cpp',
 	'phoneline/QtPhoneLine.cpp',
 	'phonecall/QtPhoneCall.cpp',
-	'phonecall/QtVideo.cpp',
+	'phonecall/QtVideoQt.cpp',
 	'phonecall/QtContactCallList.cpp',
 	'phonecall/QtContactCallListWidget.cpp',
 	'phonecall/QtPhoneCallEventFilter.cpp',
@@ -317,6 +318,14 @@ if WengoOSLinux():
 		'-L' + x11_lib_dir,
 	]
 	libs += ['SM', 'ICE', 'Xi', 'Xinerama', 'Xext', 'X11', 'Xrandr',]
+	if WengoGetConsoleArgument('enable-xv-hwaccel'):
+		include_path += ['/usr/X11R6/include',]
+		libs += ['Xv',]
+		sources += ['phonecall/XVWindow.cpp',]
+		sources += ['phonecall/QtVideoXV.cpp',]
+		headers += ['phonecall/XVWindow.h',]
+		headers += ['phonecall/QtVideoXV.h',]
+		defines['XV_HWACCEL'] = 1
 
 env.WengoCopyToBuildDir('chat/emoticons', 'emoticons')
 env.WengoCopyToBuildDir('webpages', 'webpages')

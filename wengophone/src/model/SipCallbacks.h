@@ -27,6 +27,8 @@
 
 #include <string>
 
+#include <pixertool/pixertool.h>
+
 class UserProfile;
 class SipWrapper;
 class WebcamVideoFrame;
@@ -62,7 +64,7 @@ private:
 		EnumPhoneLineState::PhoneLineState state);
 
 	void videoFrameReceivedEventHandler(SipWrapper & sender, int callId,
-		const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame);
+		piximage* remoteVideoFrame, piximage* localVideoFrame);
 
 	/** WengoPhone instance in order to access the phone lines and the phone calls. */
 	UserProfile & _userProfile;

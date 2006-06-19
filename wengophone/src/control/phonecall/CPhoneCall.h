@@ -25,6 +25,8 @@
 
 #include <string>
 
+#include <pixertool/pixertool.h>
+
 class PhoneCall;
 class PPhoneCall;
 class WengoPhone;
@@ -139,8 +141,8 @@ private:
 
 	void stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state);
 
-	void videoFrameReceivedEventHandler(PhoneCall & sender, const WebcamVideoFrame & remoteVideoFrame,
-		const WebcamVideoFrame & localVideoFrame);
+	void videoFrameReceivedEventHandler(PhoneCall & sender, piximage* remoteVideoFrame,
+		piximage* localVideoFrame);
 
 	PhoneCall & _phoneCall;
 
