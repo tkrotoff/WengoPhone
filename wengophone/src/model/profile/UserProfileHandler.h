@@ -26,6 +26,7 @@
 #include <string>
 
 class Profile;
+class Thread;
 class UserProfile;
 class WengoAccount;
 class WengoPhone;
@@ -90,7 +91,7 @@ public:
 	Event<void (UserProfileHandler & sender, 
 		const std::string & createdProfileName)> defaultUserProfileExistsEvent;
 
-	UserProfileHandler();
+	UserProfileHandler(Thread & modelThread);
 
 	~UserProfileHandler();
 
@@ -233,6 +234,8 @@ private:
 	UserProfile * _currentUserProfile;
 
 	UserProfile * _desiredUserProfile;
+
+	Thread & _modelThread;
 };
 
 #endif //OWUSERPROFILEHANDLER_H

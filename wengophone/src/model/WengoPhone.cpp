@@ -75,7 +75,7 @@ WengoPhone::WengoPhone() {
 	////
 
 	// Creating the UserProfileHandler instance
-	_userProfileHandler = new UserProfileHandler();
+	_userProfileHandler = new UserProfileHandler(*this);
 	////
 }
 
@@ -124,7 +124,7 @@ void WengoPhone::init() {
 	ClassicExterminator::removeClassicFromStartup();
 
 	//Imports the Config from WengoPhone Classic.
-	_importer = new ClassicConfigImporter();
+	_importer = new ClassicConfigImporter(*this);
 	_importer->importConfig(config.getConfigDir());
 
 

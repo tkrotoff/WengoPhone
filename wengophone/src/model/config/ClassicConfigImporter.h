@@ -38,7 +38,7 @@ class WengoPhone;
 class ClassicConfigImporter {
 public:
 
-	ClassicConfigImporter();
+	ClassicConfigImporter(Thread & modelThread);
 
 	/**
 	 * Imports the WengoPhone Classic Config only if no WengoPhone NG
@@ -74,6 +74,8 @@ private:
 	static bool classicXMLParser(const std::string & xmlFile, void *structVcard);
 	static std::string classicVCardToString(void *structVcard);
 	static void * getLastWengoUser(const std::string & configUserFile, int version);
+
+	Thread & _modelThread;
 };
 
 #endif	//OWCONFIGIMPORTER_H

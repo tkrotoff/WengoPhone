@@ -53,9 +53,11 @@ using namespace std;
 
 const std::string UserProfile::DEFAULT_USERPROFILE_NAME = "Default";
 
-UserProfile::UserProfile()
-	: _imContactListHandler(*this),
-	_connectHandler(*this),
+UserProfile::UserProfile(Thread & modelThread)
+	: _modelThread(modelThread),
+	_imContactListHandler(*this),
+	_connectHandler(*this, modelThread),
+
 	_presenceHandler(*this),
 	_chatHandler(*this),
 	_contactList(*this) {

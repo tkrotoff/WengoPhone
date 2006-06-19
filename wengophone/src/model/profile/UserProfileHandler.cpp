@@ -29,7 +29,8 @@
 #include <util/File.h>
 #include <util/Logger.h>
 
-UserProfileHandler::UserProfileHandler() {
+UserProfileHandler::UserProfileHandler(Thread & modelThread)
+: _modelThread(modelThread) {
 	_currentUserProfile = NULL;
 	_desiredUserProfile = NULL;
 	_importDefaultProfileToProfile = false;
@@ -73,7 +74,7 @@ UserProfile * UserProfileHandler::getUserProfile(const std::string & name) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	if (userProfileExists(name)) {
-		result = new UserProfile();
+		result = new UserProfile(_modelThread);
 		UserProfileFileStorage userProfileStorage(*result);
 		userProfileStorage.load(File::convertPathSeparators(config.getConfigDir() + "profiles/" + name + "/"));
 	}
@@ -86,7 +87,7 @@ UserProfileHandler::UserProfileHandlerError UserProfileHandler::createUserProfil
 	UserProfileHandlerError result = UserProfileHandlerErrorNoError;
 	std::string profileName;
 
-	userProfile = new UserProfile();
+	userProfile = new UserProfile(_modelThread);
 	if (!wengoAccount.getWengoLogin().empty()) {
 		userProfile->setWengoAccount(wengoAccount);
 	}

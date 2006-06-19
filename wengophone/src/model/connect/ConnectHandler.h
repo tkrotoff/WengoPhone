@@ -22,10 +22,11 @@
 
 #include <model/chat/ChatHandler.h>
 
+#include <imwrapper/IMAccount.h>
 #include <imwrapper/IMConnect.h>
 
-#include <util/NonCopyable.h>
 #include <util/Event.h>
+#include <util/NonCopyable.h>
 
 #include <map>
 #include <set>
@@ -33,6 +34,7 @@
 class Connect;
 class IMAccount;
 class PresenceHandler;
+class Thread;
 class UserProfile;
 class WengoPhone;
 
@@ -61,7 +63,7 @@ public:
 	Event<void (ConnectHandler & sender, IMAccount & imAccount,
 		int currentStep, int totalSteps, const std::string & infoMessage)> connectionProgressEvent;
 
-	ConnectHandler(UserProfile & userProfile);
+	ConnectHandler(UserProfile & userProfile, Thread & modelThread);
 
 	~ConnectHandler();
 
@@ -87,9 +89,21 @@ private:
 	void connectedEventHandler(IMConnect & sender);
 
 	/**
+	 * Here we must change thread because are sent from Gaim or PhApi Thread.
+	 * @see connectedEventHandler
+	 */
+	void connectedEventHandlerThreadSafe(IMAccount * imAccount);
+
+	/**
 	 * @see IMConnect::disconnectedEvent
 	 */
 	void disconnectedEventHandler(IMConnect & sender, bool connectionError, const std::string & reason);
+
+	/**
+	 * Here we must change thread because are sent from Gaim or PhApi Thread.
+	 * @see disconnectedEventHandler
+	 */
+	void disconnectedEventHandlerThreadSafe(IMAccount * imAccount, bool connectionError, std::string reason);
 
 	/**
 	 * @see IMConnect::connectionProgressEvent
@@ -127,6 +141,8 @@ private:
 	IMAccountPtrSet _actualIMAccount;
 
 	UserProfile & _userProfile;
+
+	Thread & _modelThread;
 };
 
 #endif	//OWCONNECTHANDLER_H

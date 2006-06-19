@@ -167,7 +167,7 @@ public:
 	 */
 	Event<void (UserProfile & sender, WsDirectory & wsDirectory)> wsDirectoryCreatedEvent;
 
-	UserProfile();
+	UserProfile(Thread & modelThread);
 
 	virtual ~UserProfile();
 
@@ -520,6 +520,8 @@ private:
 
 	/** Name of the UserProfile. */
 	std::string _name;
+
+	Thread & _modelThread;
 };
 
 #endif //OWUSERPROFILE_H

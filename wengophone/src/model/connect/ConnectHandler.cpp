@@ -27,12 +27,14 @@
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumIMProtocol.h>
 
+#include <thread/Thread.h>
 #include <util/Logger.h>
 
 using namespace std;
 
-ConnectHandler::ConnectHandler(UserProfile & userProfile)
-	: _userProfile(userProfile) {
+ConnectHandler::ConnectHandler(UserProfile & userProfile, Thread & modelThread)
+	: _userProfile(userProfile),
+	_modelThread(modelThread) {
 
 	_userProfile.newIMAccountAddedEvent +=
 		boost::bind(&ConnectHandler::newIMAccountAddedEventHandler, this, _1, _2);
@@ -97,11 +99,27 @@ void ConnectHandler::disconnect(IMAccount & imAccount, bool now) {
 }
 
 void ConnectHandler::connectedEventHandler(IMConnect & sender) {
-	connectedEvent(*this, sender.getIMAccount());
+	typedef ThreadEvent1<void (IMAccount * imAccount), IMAccount *> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&ConnectHandler::connectedEventHandlerThreadSafe, this, _1), &sender.getIMAccount());
+
+	_modelThread.postEvent(event);
+}
+
+void ConnectHandler::connectedEventHandlerThreadSafe(IMAccount * imAccount) {
+	connectedEvent(*this, *imAccount);
 }
 
 void ConnectHandler::disconnectedEventHandler(IMConnect & sender, bool connectionError, const std::string & reason) {
-	disconnectedEvent(*this, sender.getIMAccount(), connectionError, reason);
+	typedef ThreadEvent3<void (IMAccount * imAccount, bool connectionError, std::string reason), IMAccount* , bool, std::string> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&ConnectHandler::disconnectedEventHandlerThreadSafe, this, _1, _2, _3), &sender.getIMAccount(), connectionError, reason);
+
+	_modelThread.postEvent(event);
+}
+
+void ConnectHandler::disconnectedEventHandlerThreadSafe(IMAccount * imAccount, bool connectionError, std::string reason) {
+	disconnectedEvent(*this, *imAccount, connectionError, reason);
 }
 
 void ConnectHandler::connectionProgressEventHandler(IMConnect & sender, int currentStep, int totalSteps,
