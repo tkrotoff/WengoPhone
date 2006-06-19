@@ -19,7 +19,11 @@
 
 #include "QtPhoneCall.h"
 
-#include "QtVideo.h"
+#if defined XV_HWACCEL
+#include "QtVideoXV.h"
+#endif
+
+#include "QtVideoQt.h"
 #include "QtPhoneCallEventFilter.h"
 #include "../toaster/QtCallToaster.h"
 
@@ -38,8 +42,6 @@
 #include <sipwrapper/WebcamVideoFrame.h>
 #include <sipwrapper/CodecList.h>
 
-#include <pixertool/pixertool.h>
-
 #include <util/Logger.h>
 
 #include <qtutil/WidgetFactory.h>
@@ -57,7 +59,6 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 
 	_hold = true;
 
-	_encrustLocalWebcam = true;
 	_showVideo = false;
 
 	stateChangedEvent += boost::bind(& QtPhoneCall::stateChangedEventHandler, this, _1);
@@ -352,90 +353,35 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 	}
 }
 
-void QtPhoneCall::videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame,
-		const WebcamVideoFrame & localVideoFrame) {
-
-	// the best image quality is obtained when the interim image size is set according to the screen target size
-	QSize size(640, 480); // will be the optimum interim resized image
-	if (_videoWindow) {
-		QSize frameSize = _videoWindow->getFrameSize(); // screen target size
-		if (frameSize.width() <= size.width()) {
-			size.setWidth(352);
-			size.setHeight(288);
-		}
-	}
-
-	piximage originalImage;
-	originalImage.palette = PIX_OSI_YUV420P;
-	originalImage.width = remoteVideoFrame.getWidth();
-	originalImage.height = remoteVideoFrame.getHeight();
-	originalImage.data = remoteVideoFrame.getFrame();
-
-	piximage * resizedImage = pix_alloc(PIX_OSI_RGB32, size.width(), size.height());
-	pix_convert(PIX_NO_FLAG, resizedImage, &originalImage);
-
-	QImage * image = new QImage(resizedImage->width,
-								resizedImage->height, QImage::Format_RGB32);
-	
-	memcpy(image->bits(), resizedImage->data, pix_size(resizedImage->palette, resizedImage->width, resizedImage->height));
-
-	pix_free(resizedImage);
-
-	//If we want to embed the local webcam picture, we do it here
-	if (_encrustLocalWebcam) {
-		const unsigned offset_x = 10;
-		const unsigned offset_y = 10;
-		const unsigned ratio = 5;
-		const unsigned border_size = 1;
-		const QBrush border_color = Qt::black;
-
-		// we force the ratio of the remote frame on the webcam frame (ignoring the webcam's aspect ratio)
-		unsigned width = size.width() / ratio;
-		unsigned height = size.height() / ratio;
-		unsigned posx = size.width() - width - offset_x;
-		unsigned posy = size.height() - height - offset_y;
-
-		piximage originalLocalImage;
-		originalLocalImage.palette = PIX_OSI_YUV420P;
-		originalLocalImage.width = localVideoFrame.getWidth();
-		originalLocalImage.height = localVideoFrame.getHeight();
-		originalLocalImage.data = localVideoFrame.getFrame();
-
-		piximage * resizedLocalImage = pix_alloc(PIX_OSI_RGB32, width, height);
-		pix_convert(PIX_NO_FLAG, resizedLocalImage, &originalLocalImage);
-
-		QImage localImage(resizedLocalImage->width,
-			resizedLocalImage->height, QImage::Format_RGB32);
-	
-		memcpy(localImage.bits(), resizedLocalImage->data, 
-			pix_size(resizedLocalImage->palette, resizedLocalImage->width, resizedLocalImage->height));
-
-		pix_free(resizedLocalImage);
-
-		QPainter painter;
-		painter.begin(image);
-		// draw a 1-pixel border around the local embedded frame
-		painter.fillRect(posx - border_size, posy - border_size, width + 2 * border_size,
-		height + 2 * border_size, border_color);
-		// embed the image
-		painter.drawImage(posx, posy, localImage);
-		painter.end();
-	}
-
-	typedef PostEvent1 < void(QImage *), QImage *> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(& QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe, this, _1), image);
+void QtPhoneCall::videoFrameReceivedEventHandler(piximage * remoteVideoFrame, piximage * localVideoFrame) {
+	typedef PostEvent2<void (piximage* remoteVideoFrame, piximage* localVideoFrame), piximage*, piximage*> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe, 
+		this, _1,_2), remoteVideoFrame, localVideoFrame);
 	postEvent(event);
 }
 
-void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(QImage * image) {
+
+void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(piximage* remoteVideoFrame, piximage* localVideoFrame) {
+#if defined XV_HWACCEL
 	if (!_videoWindow) {
 		_showVideo = true;
-		_videoWindow = new QtVideo(_phoneCallWidget);
+		_videoWindow = new QtVideoXV(_phoneCallWidget,remoteVideoFrame->width, remoteVideoFrame->height,
+			localVideoFrame->width, localVideoFrame->height);
+		// Fallback if XV is not available
+		if(!_videoWindow->isInitialized()) {
+			delete _videoWindow;
+			_videoWindow = new QtVideoQt(_phoneCallWidget);
+		}
 		showVideoWidget();
 	}
-	_videoWindow->showImage(*image);
-	//Image was created in videoFrameReceivedEventHandler
-	delete image;
+#else
+	if (!_videoWindow) {
+		_showVideo = true;
+		_videoWindow = new QtVideoQt(_phoneCallWidget);
+		showVideoWidget();
+	}
+#endif
+	_videoWindow->showImage(remoteVideoFrame, localVideoFrame);
 }
 
 void QtPhoneCall::acceptActionTriggered(bool) {
@@ -514,8 +460,9 @@ void QtPhoneCall::openPopup(int x, int y) {
 }
 
 void QtPhoneCall::updateCallDuration() {
-    if (!_durationLabel)
-        return;
+	if (!_durationLabel) {
+		return;
+	}
 	_duration++;
 	QTime time;
 	time = time.addSecs(_duration);

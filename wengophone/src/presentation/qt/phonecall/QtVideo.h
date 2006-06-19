@@ -21,55 +21,34 @@
 #define QTVIDEO_H
 
 #include <QObject>
-#include <QImage>
 
-class QWidget;
-class QFrame;
+#include <pixertool/pixertool.h>
+
 class QSize;
+class QWidget;
+class QImage;
 class QPushButton;
 
 class QtVideo : public QObject {
-	Q_OBJECT
+
 public:
 
-	QtVideo(QWidget * parent);
+	QtVideo() {};
 
-	void showImage(const QImage & image);
+	virtual ~QtVideo() {};
 
-	QWidget * getWidget() const {
-		return _videoWindow;
-	}
+	virtual void showImage(piximage* remoteVideoFrame, piximage* localVideoFrame) = 0;
 
-	QSize getFrameSize();
+	virtual QWidget * getWidget() = 0;
 
-	bool isFullScreen();
+	virtual QSize getFrameSize() = 0;
 
-	void fullScreen();
+	virtual bool isInitialized() = 0;
 
-	void unFullScreen();
+	virtual bool isFullScreen() = 0;
 
-private Q_SLOTS:
-
-	void paintEvent();
-
-	void flipWebcam();
-
-	void fullScreenButtonClicked();
-
-private:
-
-	QWidget * _videoWindow;
-
-	/** Current frame to show inside the video window. */
-	QImage _image;
-
-	QFrame * _frame;
-
-	int _frameWindowFlags;
-
-	bool _fullScreen;
-
-	QPushButton * _fullScreenButton;
+	virtual void unFullScreen() = 0;
+	
 };
 
 #endif	//QTVIDEO_H

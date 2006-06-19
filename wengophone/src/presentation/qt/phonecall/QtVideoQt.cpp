@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtVideo.h"
+#include "QtVideoQt.h"
 
 #include <cutil/global.h>
 
@@ -35,12 +35,9 @@
 #include <windows.h>
 #endif
 
-#include <iostream>
-using namespace std;
-
-QtVideo::QtVideo(QWidget * parent) {
+QtVideoQt::QtVideoQt(QWidget * parent) {
 	_videoWindow = WidgetFactory::create(":/forms/phonecall/VideoWindow.ui", parent);
-    _fullScreen = false;
+
 	//frame
 	_frame = Object::findChild<QFrame *>(_videoWindow, "frame");
 	_frameWindowFlags = _frame->windowFlags();
@@ -55,18 +52,84 @@ QtVideo::QtVideo(QWidget * parent) {
 	//fullScreenButton
 	_fullScreenButton = Object::findChild<QPushButton *>(_frame, "fullScreenButton");
 	connect(_fullScreenButton, SIGNAL(clicked()), SLOT(fullScreenButtonClicked()));
+
+	_encrustLocalWebcam = true;
+	_fullScreen = false;
 }
 
-QSize QtVideo::getFrameSize() {
+QtVideoQt::~QtVideoQt() {
+}
+
+QSize QtVideoQt::getFrameSize() {
 	return _frame->frameRect().size();
 }
 
-void QtVideo::showImage(const QImage & image) {
-	_image = image;
-	_frame->update();
+QWidget * QtVideoQt::getWidget() {
+	return _videoWindow;
 }
 
-void QtVideo::paintEvent() {
+void QtVideoQt::showImage(piximage * remoteVideoFrame, piximage * localVideoFrame) {
+
+	QSize size(640, 480); // will be the optimum interim resized image
+	if (_videoWindow) {
+		QSize frameSize = _videoWindow->frameSize(); // screen target size
+		if (frameSize.width() <= size.width()) {
+			size.setWidth(352);
+			size.setHeight(288);
+		}
+	}
+
+	piximage * resizedImage = pix_alloc(PIX_OSI_RGB32, size.width(), size.height());
+	pix_convert(PIX_NO_FLAG, resizedImage, remoteVideoFrame);
+
+	QImage * image = new QImage(resizedImage->width,
+		resizedImage->height, QImage::Format_RGB32);
+
+	memcpy(image->bits(), resizedImage->data, pix_size(resizedImage->palette, resizedImage->width, resizedImage->height));
+
+	pix_free(resizedImage);
+
+	//If we want to embed the local webcam picture, we do it here
+	if (_encrustLocalWebcam) {
+		const unsigned offset_x = 10;
+		const unsigned offset_y = 10;
+		const unsigned ratio = 5;
+		const unsigned border_size = 1;
+		const QBrush border_color = Qt::black;
+
+		// we force the ratio of the remote frame on the webcam frame (ignoring the webcam's aspect ratio)
+		unsigned width = size.width() / ratio;
+		unsigned height = size.height() / ratio;
+		unsigned posx = size.width() - width - offset_x;
+		unsigned posy = size.height() - height - offset_y;
+
+		piximage * resizedLocalImage = pix_alloc(PIX_OSI_RGB32, width, height);
+		pix_convert(PIX_NO_FLAG, resizedLocalImage, localVideoFrame);
+
+		QImage localImage(resizedLocalImage->width,
+			resizedLocalImage->height, QImage::Format_RGB32);
+	
+		memcpy(localImage.bits(), resizedLocalImage->data, 
+			pix_size(resizedLocalImage->palette, resizedLocalImage->width, resizedLocalImage->height));
+
+		pix_free(resizedLocalImage);
+
+		QPainter painter;
+		painter.begin(image);
+		// draw a 1-pixel border around the local embedded frame
+		painter.fillRect(posx - border_size, posy - border_size, width + 2 * border_size,
+			height + 2 * border_size, border_color);
+		// embed the image
+		painter.drawImage(posx, posy, localImage);
+		painter.end();
+	}
+
+	_image = *image;
+	_frame->update();
+	delete image;
+}
+
+void QtVideoQt::paintEvent() {
 	if (!_image.isNull()) {
 		QPainter painter(_frame);
 		QSize frameSize = _frame->frameRect().size();
@@ -88,15 +151,15 @@ void QtVideo::paintEvent() {
 #endif
 
 		if((_image.width() < size.width()) || (_image.height() < size.height())) {
-			painter.drawImage(xpos, ypos, _image.scaled(size, Qt::IgnoreAspectRatio,
-				Qt::FastTransformation));
+			painter.drawImage(xpos, ypos, _image.scaled(size,
+				Qt::IgnoreAspectRatio, Qt::FastTransformation));
 		} else {
 			painter.drawImage(xpos, ypos, _image);
 		}
 	}
 }
 
-void QtVideo::flipWebcam() {
+void QtVideoQt::flipWebcam() {
 	static bool flip = true;
 
 	IWebcamDriver * driver = WebcamDriver::getInstance();
@@ -105,29 +168,36 @@ void QtVideo::flipWebcam() {
 	flip = !flip;
 }
 
-void QtVideo::fullScreenButtonClicked() {
+void QtVideoQt::fullScreenButtonClicked() {
 	_frame->setFocus();
 
-	if (_fullScreen) {
-		this->unFullScreen();
-		_fullScreen = false;
-	} else {
+	if(!_fullScreen) {
 		this->fullScreen();
-		_fullScreen = true;
+	} else {
+		this->unFullScreen();
 	}
-
+	_fullScreen = !_fullScreen;
 }
 
-void QtVideo::fullScreen() {
+bool QtVideoQt::isFullScreen() {
+	return _fullScreen;
+}
+
+void QtVideoQt::fullScreen() {
 	_fullScreenButton->setIcon(QIcon(":/pics/video_unfullscreen.png"));
+
 	QLayout * layout = _videoWindow->layout();
 	layout->removeWidget(_frame);
+
 	_frame->setParent(NULL);
+
 #if defined OS_WINDOWS && defined CC_MSVC
 	//TODO put inside LibUtil
+
 	int nModeExist;
 	int nModeSwitch;
 	DEVMODE devMode;
+
 	//Tries to switch to desktop resolution 640x480
 	//Uses less processor time if the desktop resolution is lower
 	devMode.dmSize = sizeof(DEVMODE);
@@ -135,7 +205,7 @@ void QtVideo::fullScreen() {
 	for (int i = 1; ;i++) {
 		nModeExist = EnumDisplaySettings(NULL, i, &devMode);
 		if (nModeExist == 0) {
-			//End of modes, bail out.
+					//End of modes, bail out.
 			break;
 		}
 		if ((devMode.dmBitsPerPel == 32) && (devMode.dmPelsWidth == 640) && (devMode.dmPelsHeight == 480)) {
@@ -144,10 +214,11 @@ void QtVideo::fullScreen() {
 		}
 	}
 #endif
+
 	_frame->showFullScreen();
 }
 
-void QtVideo::unFullScreen() {
+void QtVideoQt::unFullScreen() {
 	_fullScreenButton->setIcon(QIcon(":/pics/video_fullscreen.png"));
 	_frame->setParent(_videoWindow);
 	QLayout * layout = _videoWindow->layout();
@@ -161,6 +232,6 @@ void QtVideo::unFullScreen() {
 	_frame->show();
 }
 
-bool QtVideo::isFullScreen(){
-    return _fullScreen;
+bool QtVideoQt::isInitialized() {
+	return true;
 }

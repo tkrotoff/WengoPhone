@@ -24,6 +24,8 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
+#include <pixertool/pixertool.h>
+
 class WebcamVideoFrame;
 class CPhoneCall;
 class PhoneCall;
@@ -112,10 +114,9 @@ private:
 
 	void stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state);
 
-	void videoFrameReceivedEventHandler(const WebcamVideoFrame & remoteVideoFrame,
-		const WebcamVideoFrame & localVideoFrame);
+	void videoFrameReceivedEventHandler(piximage* remoteVideoFrame, piximage* localVideoFrame);
 
-	void videoFrameReceivedEventHandlerThreadSafe(QImage * image);
+	void videoFrameReceivedEventHandlerThreadSafe(piximage* remoteVideoFrame, piximage* localVideoFrame);
 
 	void showVideoWidget();
 
@@ -171,8 +172,6 @@ private:
 	bool _hold;
 
 	bool _showVideo;
-
-	bool _encrustLocalWebcam;
 };
 
 #endif	//OWQTPHONECALL_H
