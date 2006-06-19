@@ -19,6 +19,7 @@ args = {
 	'nullsipwrapper' : 0,
 	'enable-phapi-audio-arts' : 0,
 	'portaudio-oss' : 0,
+	'enable-xv-hwaccel' : 1,
 
 	#if 0 wmme support
 	'portaudio-dsound' : 0,
