@@ -60,25 +60,60 @@ File::File(const File & file)
 std::string File::getExtension() const {
 	int posLastElm = _filename.find_last_of(getPathSeparator());
 
-	if (posLastElm == -1 || posLastElm == _filename.length()) {
+	if ((posLastElm == -1) || (posLastElm == _filename.length())) {
 		return String::null;
 	}
 
 	string last = _filename.substr(++posLastElm, _filename.length() - posLastElm);
 	int posExt = last.find_last_of('.');
 
-	if (posExt == -1 || posExt == last.length()) {
+	if ((posExt == -1) || (posExt == last.length())) {
 		return String::null;
 	} else {
 		return last.substr(++posExt, last.length() - posExt);
 	}
 }
 
+bool File::isDirectory(const std::string & filename) {
+	struct stat statinfo;
+	bool result = false;
+
+	if (stat(filename.c_str(), &statinfo) == 0) {
+		if (S_ISDIR(statinfo.st_mode)) {
+			result = true;
+		}
+	}
+
+	return result;
+}
+
 bool File::remove() {
-	if (!::remove(_filename.c_str()))
-		return true;
-	else
-		return false;
+	bool result = false;
+
+	if (isDirectory(_filename)) {
+		// Removing all files in dir recursively
+		StringList dirList = getDirectoryList();
+		for (StringList::const_iterator it = dirList.begin();
+			it != dirList.end();
+			++it) {
+			File subDir(_filename + getPathSeparator() + (*it));
+			subDir.remove();
+		}
+
+		StringList fileList = getFileList();
+		for (StringList::const_iterator it = fileList.begin();
+			it != fileList.end();
+			++it) {
+			File subFile(_filename + getPathSeparator() + (*it));
+			subFile.remove();
+		}
+	}
+
+	if (!::remove(_filename.c_str())) {
+		result = true;
+	}
+
+	return result;
 }
 
 bool File::move(const std::string & newName, bool overwrite) {
@@ -124,13 +159,9 @@ StringList File::getDirectoryList() const {
 				continue;
 			}
 
-			struct stat statinfo;
 			std::string absPath = _filename + getPathSeparator() + dir;
-			if (stat(absPath.c_str(), &statinfo) == 0) {
-				if (S_ISDIR(statinfo.st_mode)) {
-					//ep->d_name is a directory
-					dirList += dir;
-				}
+			if (isDirectory(absPath)) {
+				dirList += dir;
 			}
 		}
 
@@ -151,13 +182,9 @@ StringList File::getFileList() const {
 		while ((ep = readdir(dp))) {
 			String file(ep->d_name);
 
-			struct stat statinfo;
 			std::string absPath = _filename + file;
-			if (stat(absPath.c_str(), &statinfo) == 0) {
-				if (S_ISREG(statinfo.st_mode)) {
-					//ep->d_name is a file
-					fileList += file;
-				}
+			if (!isDirectory(absPath)) {
+				fileList += file;
 			}
 		}
 	}

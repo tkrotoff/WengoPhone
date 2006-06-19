@@ -65,7 +65,7 @@ public:
 	bool move(const std::string & newPath, bool overwrite = false);
 
 	/**
-	 * Removes a file.
+	 * Removes a file or a directory recursively.
 	 *
 	 * @return true if the operation succeeds otherwise false.
 	 */
@@ -140,6 +140,11 @@ public:
 	 * @return true if the given path exists.
 	 */
 	static bool exists(const std::string & path);
+
+	/**
+	 * @return true if the file is a directory.
+	 */
+	static bool isDirectory(const std::string & filename);
 
 protected:
 
