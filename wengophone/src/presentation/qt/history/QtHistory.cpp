@@ -43,10 +43,10 @@ QtHistory::QtHistory(CHistory & cHistory)
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtHistory::initThreadSafe, this));
 	postEvent(event);
+	updatePresentation();
 }
 
 QtHistory::~QtHistory() {
-
 }
 
 QWidget * QtHistory::getWidget() {
