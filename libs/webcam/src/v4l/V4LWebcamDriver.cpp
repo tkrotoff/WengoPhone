@@ -82,6 +82,10 @@ string V4LWebcamDriver::getDefaultDevice() {
 webcamerrorcode V4LWebcamDriver::setDevice(const std::string & deviceName) {
 	//TODO: test if a webcam is already open
 
+	if( deviceName.empty() ) {
+		return WEBCAM_NOK;
+	}
+	
 	std::string device = "/dev/" + deviceName.substr(deviceName.size() - 6, deviceName.size() - 1);
 
 #if 0
