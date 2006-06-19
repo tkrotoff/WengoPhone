@@ -68,7 +68,7 @@ QtVideoXV::QtVideoXV(QWidget * parent, int rem_width, int rem_height, int loc_wi
 			} else {
 				delete _localWindow;
 				_localWindow = NULL;
-				
+
 				//TODO: in this case to have the local video image
 				//we must compute the final image
 
@@ -78,13 +78,16 @@ QtVideoXV::QtVideoXV(QWidget * parent, int rem_width, int rem_height, int loc_wi
 	} else {
 		delete _remoteWindow;
 		_remoteWindow = NULL;
+		_localWindow = NULL;
 		LOG_DEBUG("Remote window initialization: failed");
 	}
 }
 
 QtVideoXV::~QtVideoXV() {
-	_remoteWindow->registerSlave(NULL);
-	delete _remoteWindow;
+	if(_remoteWindow) {
+		_remoteWindow->registerSlave(NULL);
+		delete _remoteWindow;
+	}
 	if(_localWindow) {
 		_localWindow->registerMaster(NULL);
 		delete _localWindow;
@@ -132,9 +135,5 @@ void QtVideoXV::unFullScreen() {
 }
 
 bool QtVideoXV::isInitialized() {
-	if (_remoteWindow) {
-		return true;
-	} else {
-		return false;
-	}
+	return (_remoteWindow != NULL);
 }

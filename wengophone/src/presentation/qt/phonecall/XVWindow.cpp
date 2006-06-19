@@ -56,6 +56,7 @@ XVWindow::XVWindow() {
 	_XVWindow=0;
 	_XShmInfo.shmaddr=NULL;
 	_gc=NULL;
+	_isInitialize = false;
 }
 
 int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth, int windowHeight, int imageWidth, int imageHeight) {
@@ -103,14 +104,17 @@ int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth
 	// check if SHM XV window is possible
 	if (Success != XvQueryExtension(_display, &ver, &rel, &req, &ev, &err)) {
 		LOG_DEBUG("[x11] XQueryExtension failed");
+		_isInitialize = false;
 		return 0;
 	}
 	if (!XShmQueryExtension(_display)) { 
 		LOG_DEBUG("[x11] XQueryShmExtension failed");
+		_isInitialize = false;
 		return 0;
 	}
 	if (Success != XvQueryAdaptors(_display, _rootWindow, &adapt, &xvainfo)) {
 		LOG_DEBUG("[x11] XQueryAdaptor failed"); XFree(xvainfo);
+		_isInitialize = false;
 		return 0;
 	}
 
@@ -135,28 +139,35 @@ int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth
 		} else {
 			LOG_WARN("[x11] It seems there is no Xvideo support for your video card available.");
 		}
+		_isInitialize = false;
 		return 0;
 	} else {
 		LOG_WARN("[x11] Use XVideo port: " + String::fromNumber(_XVPort));
 	}
 
 	_gc = XCreateGC(_display, _XVWindow, 0, 0);
-	_XVImage = XvShmCreateImage(_display, _XVPort, GUID_I420_PLANAR, 0, imageWidth, imageHeight, &_XShmInfo);   // create the shared memory portion
+	// create the shared memory portion
+	_XVImage = XvShmCreateImage(_display, _XVPort, GUID_I420_PLANAR, 0, imageWidth, imageHeight, &_XShmInfo);
+
 	_XShmInfo.shmid = shmget(IPC_PRIVATE, _XVImage->data_size, IPC_CREAT | 0777);
 	_XShmInfo.shmaddr = (char *) shmat(_XShmInfo.shmid, 0, 0);
 	_XVImage->data = _XShmInfo.shmaddr;
 	_XShmInfo.readOnly = False;
 	if (!XShmAttach(_display, &_XShmInfo)) {
 		LOG_WARN("[x11] XShmAttach failed");
+		_isInitialize = false;
 		return 0;
 	}
-	_wmType=getWMType();                                                                                                // detect window manager
 
+	// detect window manager
+	_wmType=getWMType();
+
+	_isInitialize = true;
 	return 1;
 }
 
 XVWindow::~XVWindow() {
-	if (_XShmInfo.shmaddr) {
+	if (_isInitialize && _XShmInfo.shmaddr) {
 		XShmDetach(_display, &_XShmInfo);
 		shmdt(_XShmInfo.shmaddr);
 //        XFree(&_XShmInfo);

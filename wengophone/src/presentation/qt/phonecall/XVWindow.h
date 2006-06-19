@@ -107,8 +107,8 @@ class  XVWindow {
 		Window getWindow ()              { return (_XVWindow);          };
 		int getYUVWidth()                { return (_XVImage->width);    };
 		int getYUVHeight()               { return (_XVImage->height);   };
-		void registerMaster(XVWindow* m) { _master=m;                   };
-		void registerSlave(XVWindow* s)  { _slave=s;                    };
+		void registerMaster(XVWindow* m) { if(_master) _master=m;       };
+		void registerSlave(XVWindow* s)  { if(_slave) _slave=s;         };
 
 	private:
 		Display*_display;
@@ -142,5 +142,7 @@ class  XVWindow {
 		int getGnomeLayer();
 		int getSupportedState(Atom atom);                                                                       // test an atom
 		int getWindowProperty(Atom type, Atom ** args, unsigned long *nitems);                                  // returns the root window's
+
+		bool _isInitialize;
 };
 #endif
