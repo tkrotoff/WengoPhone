@@ -19,8 +19,6 @@
 
 #include "QtContact.h"
 
-#include <model/contactlist/ContactProfile.h>
-
 #include <control/CWengoPhone.h>
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>

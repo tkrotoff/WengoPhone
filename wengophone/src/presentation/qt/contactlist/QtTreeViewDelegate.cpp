@@ -19,7 +19,6 @@
 
 #include "QtTreeViewDelegate.h"
 
-#include "QtUserWidgetEventFilter.h"
 #include "QtContactWidget.h"
 #include "QtContactListManager.h"
 #include "QtContactPixmap.h"
@@ -46,6 +45,7 @@ static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 
 QtTreeViewDelegate::QtTreeViewDelegate(CWengoPhone & cWengoPhone, QObject * parent)
 : QItemDelegate(parent), _cWengoPhone(cWengoPhone) {
+	QPixmapCache::setCacheLimit(2048);
 }
 
 void QtTreeViewDelegate::setParent(QWidget * parent) {
@@ -53,13 +53,10 @@ void QtTreeViewDelegate::setParent(QWidget * parent) {
 }
 
 QWidget * QtTreeViewDelegate::createEditor(QWidget * parent,
-const QStyleOptionViewItem &,
-const QModelIndex & index) const {
+	const QStyleOptionViewItem &, const QModelIndex & index) const {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = ul->getContact(index.data().toString());
 	QtContactWidget * widget = new QtContactWidget(qtContact->getId().toStdString(), _cWengoPhone, parent);
-	QWidget * userWidget = Object::findChild <QWidget *> (widget, "UserWidget");
-	userWidget->installEventFilter(new QtUserWidgetEventFilter((QObject *) this, userWidget, qtContact));
 	return (QWidget *) widget;
 }
 
@@ -73,7 +70,7 @@ void QtTreeViewDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
 }
 
 void QtTreeViewDelegate::setModelData(QWidget * editor, QAbstractItemModel * model,
-    const QModelIndex & index) const {
+	const QModelIndex & index) const {
 	QtContactWidget * widget = qobject_cast < QtContactWidget * > (editor);
 
 	if (!widget) {
@@ -148,9 +145,11 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 
 	font.setBold(true);
 	painter->setFont(font);
-	if (option.state & QStyle::State_Open)
+	if (option.state & QStyle::State_Open) {
 		px = spx->getPixmap(QtContactPixmap::ContactGroupOpen);
-	else px = spx->getPixmap(QtContactPixmap::ContactGroupClose);
+	} else {
+		px = spx->getPixmap(QtContactPixmap::ContactGroupClose);
+	}
 	x = option.rect.left();
 	painter->drawPixmap(x, r.top()+3, px);
 	x += px.width()+3;
@@ -158,8 +157,6 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 	int y = ((r.bottom()-r.top())-QFontMetrics(font).height())/2;
 	r.setTop(y + r.top());
 	r.setLeft(r.left() + 10);
-	// Number of child
-	int nbchild = index.model()->rowCount(index);
 	QString groupName;
 	std::string groupId;
 	std::string groupNameTmp;

@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTUSERWIDGET_H
-#define QTUSERWIDGET_H
+#ifndef QTCONTACTWIDGET_H
+#define QTCONTACTWIDGET_H
 
 #include "ui_UserWidget.h"
 
@@ -76,7 +76,13 @@ private Q_SLOTS:
 
 	void landLineButtonClicked();
 
+protected:
+
+    virtual void paintEvent(QPaintEvent *);
+
 private:
+
+    void paintUser(QPainter * painter, const QRect & rect);
 
 	QPixmap createAvatar();
 
@@ -93,4 +99,4 @@ private:
 	Ui::UserWidget _ui;
 };
 
-#endif	//QTUSERWIDGET_H
+#endif	//QTCONTACTWIDGET_H

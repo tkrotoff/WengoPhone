@@ -94,11 +94,11 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 
 	if (!connect(this, SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
 		qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)))) {
-	   LOG_FATAL("Unable to connect signal\n");
+		LOG_FATAL("Unable to connect signal\n");
 	}
 }
 
-void QtContactManager::startSMS(bool checked) {
+void QtContactManager::startSMS(bool ) {
 
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
@@ -117,7 +117,6 @@ void QtContactManager::startChat(bool) {
 }
 
 void QtContactManager::editContact(bool) {
-	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (!item)
 		return;
@@ -129,7 +128,6 @@ void QtContactManager::editContact(bool) {
 }
 
 void QtContactManager::deleteContact() {
-	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (!item)
 		return;
@@ -188,6 +186,7 @@ void QtContactManager::openUserInfo(QTreeWidgetItem * i) {
 
 void QtContactManager::itemClicked(QTreeWidgetItem * item, int) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
+
 	if ((_lastClicked == item) && (_waitForDoubleClick)) {
 		defaultAction(item);
 		_button = Qt::NoButton;
@@ -199,6 +198,7 @@ void QtContactManager::itemClicked(QTreeWidgetItem * item, int) {
 	_lastClicked = item;
 	QRect widgetSize = _tree->rect();
 	QPoint mousepos = _tree->mapFromGlobal(QCursor::pos());
+
 	if (!item->parent()) {
 		if (_button == Qt::RightButton) {
 			groupRightClicked(item->text(0));
@@ -217,46 +217,38 @@ void QtContactManager::itemClicked(QTreeWidgetItem * item, int) {
 	if (ul->getButton(item->text(0)) == Qt::RightButton) {
 		if (!_menu) {
 			_menu = createMenu();
-			_menu->popup(QCursor::pos());
-			// clearSelection () is bugged ! We have to clear the selection ourself
-			QList <QTreeWidgetItem * > selectedList = _tree->selectedItems();
-			QList <QTreeWidgetItem * >::iterator iter;
-			for ( iter = selectedList.begin(); iter != selectedList.end(); iter ++){
-				_tree->setItemSelected((*iter),false);
-			}
-			_tree->setItemSelected ( item, true );
-		}
-		else {
+		} else {
 			delete _menu;
 			_menu = createMenu();
-			_menu->popup(QCursor::pos());
-			// clearSelection () is bugged ! We have to clear the selection ourself
-			QList <QTreeWidgetItem * > selectedList = _tree->selectedItems();
-			QList <QTreeWidgetItem * >::iterator iter;
-			for ( iter = selectedList.begin(); iter != selectedList.end(); iter ++){
-				_tree->setItemSelected((*iter),false);
-			}
-			_tree->setItemSelected ( item, true );
 		}
+		_menu->popup(QCursor::pos());
+		// clearSelection () is bugged ! We have to clear the selection ourself
+		QList <QTreeWidgetItem * > selectedList = _tree->selectedItems();
+		QList <QTreeWidgetItem * >::iterator it;
+		for ( it = selectedList.begin(); it != selectedList.end(); it ++){
+			_tree->setItemSelected((*it),false);
+		}
+		_tree->setItemSelected ( item, true );
 		_button = Qt::NoButton;
 		return;
-	} else if (_previous != NULL) {
-		closeUserInfo();
-		_previous = item;
-		if (item->parent()) {
-			openUserInfo(item);
-		}
-	}
-	else {
-		_previous = item;
-		if (item->parent()) {
-			openUserInfo(item);
+	} else {
+		if (_previous != NULL) {
+			closeUserInfo();
+			_previous = item;
+			if (item->parent()) {
+				openUserInfo(item);
+			}
+		} else {
+			_previous = item;
+			if (item->parent()) {
+				openUserInfo(item);
+			}
 		}
 	}
 	_tree->viewport()->update();
 	_button = Qt::NoButton;
 }
-void QtContactManager::itemDoubleClicked(QTreeWidgetItem * item, int col) {
+void QtContactManager::itemDoubleClicked(QTreeWidgetItem * item, int) {
 	defaultAction(item);
 }
 
@@ -295,40 +287,29 @@ void QtContactManager::defaultAction(QTreeWidgetItem * item){
 }
 
 void QtContactManager::safeUserStateChanged() {
-	safeHideOffLineUsers();
 	if (_menu) {
 		delete _menu;
 		_menu=NULL;
 	}
-	showAllUsers();
+	redrawContacts();
 }
 
 void QtContactManager::userStateChanged() {
 	safeUserStateChanged();
 }
 
-void QtContactManager::safeHideOffLineUsers() {
-	showAllUsers();
-}
-
 void QtContactManager::hideOffLineUsers() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	_hideUsers = config.getShowOfflineContacts();
-	safeHideOffLineUsers();
+	redrawContacts();
 }
 
 void QtContactManager::hideGroups(){
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	_hideGroups = config.getShowGroups();
-	if ( _hideGroups ) {
-		showAllUsers();
-	} else {
-		safeHideGroup();
-	}
+	redrawContacts();
 }
-void QtContactManager::safeHideGroup() {
-	showAllUsers();
-}
+
 void QtContactManager::sortContacts(bool bypassTimer) {
 	if (!_sortContacts) {
 		return;
@@ -352,12 +333,12 @@ void QtContactManager::sortContacts(bool bypassTimer) {
 	QtContactInfoList dndContact;
 	QtContactInfoList offlineContact;
 	QtContactInfoList othersContact;
-	QList < QTreeWidgetItem * >::iterator i;
+	QList < QTreeWidgetItem * >::iterator it;
 
-	for (i = itemList.begin(); i != itemList.end(); i++) {
+	for (it = itemList.begin(); it != itemList.end(); it++) {
 
 		QTreeWidgetItem * item;
-		QTreeWidgetItem * group = (QTreeWidgetItem *) (* i);
+		QTreeWidgetItem * group = (QTreeWidgetItem *) (*it);
 
 		if (group->parent() == 0) {
 			// We have all parents (if groups are not hiden)
@@ -434,7 +415,7 @@ bool QtContactManager::canShowUser(const ContactProfile * cprofile){
 	return true;
 }
 
-void QtContactManager::showAllUsers() {
+void QtContactManager::redrawContacts() {
 	if (_canShow){
 		_canShow=false;
 		if (_showTimerId != -1)
@@ -452,13 +433,13 @@ void QtContactManager::showAllUsers() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * group;
 	std::vector<std::string> contactIds = _qtContactList.getCContactList().getContactIds();
-	std::vector<std::string>::iterator contactIterator;
+	std::vector<std::string>::iterator it;
 	// First, remove all item from the treeview and all users from userlist
 	_tree->clear();
 	ul->clear();
 
-	for (contactIterator=contactIds.begin();contactIterator!=contactIds.end();contactIterator++){
-		cprofile = _qtContactList.getCContactList().getContactProfile((*contactIterator));
+	for (it = contactIds.begin(); it != contactIds.end(); it++){
+		cprofile = _qtContactList.getCContactList().getContactProfile((*it));
 		if (canShowUser(&cprofile)) {
 			// Create new group if needed
 			std::string contactGroupId = cprofile.getGroupId();
@@ -485,9 +466,9 @@ void QtContactManager::showAllUsers() {
 			QtContact * qtContact = NULL;
 			QString contactName;
 			newContact = new QTreeWidgetItem(group);
-			newContact->setText(0, QString::fromStdString((*contactIterator)));
+			newContact->setText(0, QString::fromStdString((*it)));
 			newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
-			qtContact = new QtContact((*contactIterator),_cWengoPhone);
+			qtContact = new QtContact((*it),_cWengoPhone);
 			ul->addContact(qtContact);
 		}
 	}
@@ -630,11 +611,10 @@ void QtContactManager::removeContact(const QString & contactId) {
 	QtContact * qtContact = NULL;
 	bool found = false;
 	QList <QTreeWidgetItem *> itemList = _tree->findItems("*", Qt::MatchWildcard);
-	QList <QTreeWidgetItem *>::iterator i;
-	for (i = itemList.begin(); (i != itemList.end()) && !found; i++) {
+	QList <QTreeWidgetItem *>::iterator it;
+	for (it = itemList.begin(); ((it != itemList.end()) && !found); it++) {
 		QTreeWidgetItem * item;
-		QTreeWidgetItem * group = (QTreeWidgetItem *) (* i);
-
+		QTreeWidgetItem * group = (QTreeWidgetItem *) (*it);
 		if (group->parent() == 0) {
 			int count = group->childCount();
 			for (int t = 0; (t < count) && !found; t++) {
@@ -720,7 +700,7 @@ void QtContactManager::timerEvent ( QTimerEvent * event ) {
 		_showTimerId = -1;
 		_canShow = true;
 		if ( _wantShow ) {
-			showAllUsers();
+			redrawContacts();
 			_wantShow = false;
 		}
 		return;

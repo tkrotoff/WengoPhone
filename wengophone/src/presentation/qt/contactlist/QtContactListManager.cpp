@@ -211,11 +211,11 @@ int QtContactListManager::getHeight(const QString & userid) const {
 
 void QtContactListManager::resetMouseStatus() {
 	QMutexLocker locker(_mutex);
-	QHash <QString,QtContact *>::iterator iter;
-	for (iter = _contactList.begin(); iter != _contactList.end(); iter++) {
-		QtContact * user = iter.value();
-		if (user) {
-			user->setButton(Qt::NoButton);
+	QHash <QString,QtContact *>::iterator it;
+	for (it = _contactList.begin(); it != _contactList.end(); it++) {
+		QtContact * qtContact = it.value();
+		if (qtContact) {
+			qtContact->setButton(Qt::NoButton);
 		}
 	}
 }
@@ -267,9 +267,9 @@ void QtContactListManager::startFreeCall(const QString & userid) {
 
 void QtContactListManager::clear(){
 	QMutexLocker locker(_mutex);
-	QHash <QString, QtContact *>::iterator iter;
-	for (iter=_contactList.begin();iter!=_contactList.end();iter++){
-		delete((*iter));
+	QHash <QString, QtContact *>::iterator it;
+	for (it = _contactList.begin(); it != _contactList.end(); it++){
+		delete((*it));
 	}
 	_contactList.clear();
 }

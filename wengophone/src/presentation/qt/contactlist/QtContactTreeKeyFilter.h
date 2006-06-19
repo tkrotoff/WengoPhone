@@ -53,4 +53,4 @@ protected:
 	QTreeWidget * _tree;
 };
 
-#endif //OWQTUSERTREEEVENTFILTER_H
+#endif // OWQTCONTACTTREEKEYFILTER_H

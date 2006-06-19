@@ -300,8 +300,8 @@ void QtContactList::contactChangedEventSlot(QString contactId) {
 	}
 }
 
-void QtContactList::showAllUsers() {
-	_contactManager->showAllUsers();
+void QtContactList::redrawContacts() {
+	_contactManager->redrawContacts();
 }
 
 void QtContactList::hideOffLineUser() {

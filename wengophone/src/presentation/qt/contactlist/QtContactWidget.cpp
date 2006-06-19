@@ -41,6 +41,7 @@
 #include <QPushButton>
 #include <QString>
 #include <QPainter>
+#include <QDebug>
 
 const QString QtContactWidget::AVATAR_BACKGROUND=":/pics/fond_avatar.png";
 
@@ -51,14 +52,7 @@ QtContactWidget::QtContactWidget(const std::string & contactId,
 	_contactId = contactId;
 	contactProfileUpdated();
 
-	_widget = new QWidget(NULL);
-	_ui.setupUi(_widget);
-
-	QGridLayout * layout = new QGridLayout();
-	layout->addWidget(_widget);
-	layout->setMargin(0);
-	setLayout(layout);
-
+	_ui.setupUi(this);
 	_ui.avatarLabel->setPixmap(createAvatar());
 
 	QString str = QString::fromUtf8(_contactProfile.getHomePhone().c_str());
@@ -103,10 +97,8 @@ void QtContactWidget::chatButtonClicked() {
 QPixmap QtContactWidget::getIcon() const {
 	Picture picture = _contactProfile.getIcon();
 	std::string data = picture.getData();
-
 	QPixmap result;
 	result.loadFromData((uchar *) data.c_str(), data.size());
-
 	return result;
 }
 
@@ -157,4 +149,53 @@ QPixmap QtContactWidget::createAvatar() {
 		pixpainter.end();
 	}
 	return background;
+}
+
+void QtContactWidget::paintEvent(QPaintEvent *) {
+	QPalette p = palette();
+	QColor lg(201, 201, 201);
+	QRect r = rect();
+	QPainter painter(this);
+	painter.fillRect(r, QBrush(lg));
+    paintUser(&painter, r);
+	painter.end();
+}
+
+void QtContactWidget::paintUser(QPainter * painter, const QRect & rect) {
+	QtContactListManager * ul = QtContactListManager::getInstance();
+	QRect r;
+	QPixmap px;
+	QtContactPixmap * spx;
+	int x;
+	QPalette p = palette();
+
+	QtContact * qtContact = ul->getContact(QString::fromStdString(_contactId));
+	if (!qtContact) {
+	    return;
+	}
+
+	spx = QtContactPixmap::getInstance();
+	painter->setPen(p.text().color());
+	// Draw the status pixmap
+	px = spx->getPixmap(qtContact->getStatus());
+	r = rect;
+	x = r.left();
+
+	int centeredPx_y = (QtContact::UserSize - px.size().height()) / 2;
+
+	painter->drawPixmap(x, r.top() + centeredPx_y, px);
+	x += px.width() + 5;
+	r.setLeft(x);
+
+	// Draw the user
+	QRect textRect = r;
+	int centeredText_y = (QtContact::UserSize - QFontMetrics(font()).height()) / 2;
+	textRect.setTop(textRect.top() + centeredText_y);
+
+	QFont font = painter->font();
+	font.setBold(true);
+	painter->setFont(font);
+	painter->drawText(textRect, Qt::AlignLeft, qtContact->getUserName(), 0);
+	font.setBold(false);
+	painter->setFont(font);
 }

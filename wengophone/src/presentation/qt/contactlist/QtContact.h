@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTUSER_H
-#define QTUSER_H
+#ifndef OWQTCONTACT_H
+#define OWQTCONTACT_H
 
 #include <model/contactlist/ContactProfile.h>
 
@@ -158,4 +158,4 @@ protected:
 	QMutex _mutex;
 };
 
-#endif	//QTUSER_H
+#endif	//OWQTCONTACT

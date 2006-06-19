@@ -89,7 +89,7 @@ public Q_SLOTS:
 
 	void hideGroups();
 
-	void showAllUsers();
+	void redrawContacts();
 
 	void sortContacts(bool bypassTimer = false);
 
@@ -120,10 +120,6 @@ Q_SIGNALS:
 protected:
 
 	void safeUserStateChanged();
-
-	void safeHideOffLineUsers();
-
-	void safeHideGroup();
 
 	void retranslateUi();
 
@@ -196,4 +192,4 @@ protected:
 	QString _trStringInviteToConference;
 };
 
-#endif	//OWQTUSERMANAGER_H
+#endif	//OWQTCONTACTMANAGER_H
