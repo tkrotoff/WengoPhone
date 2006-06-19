@@ -32,6 +32,8 @@
 
 #include <util/Logger.h>
 
+#include <cutil/global.h>
+
 #include <qtutil/Object.h>
 #include <qtutil/QtWengoStyleLabel.h>
 #include <qtutil/WidgetFactory.h>
@@ -56,7 +58,11 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 	_sessionId = sessionId;
 
     /* Defaults fonts and colors */
-    _nickFont = QFont("Helvetica", 12);
+	#if defined(OS_MACOSX)
+	_nickFont = QFont();
+	#else
+    _nickFont = QFont("Helvetica", 12);	
+	#endif
     _nickTextColor = "'#000000'"; // Black
     _nickBgColor = "'#B4C8FF'";
 	_nickBgColorAlt = "'#B0FFB3'";

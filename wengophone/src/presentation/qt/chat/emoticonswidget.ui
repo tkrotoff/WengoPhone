@@ -44,6 +44,12 @@
      </property>
      <item row="1" column="1" >
       <widget class="QPushButton" name="emoticonButton5" >
+       <property name="minimumSize" >
+        <size>
+         <width>54</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -63,6 +69,12 @@
      </item>
      <item row="3" column="0" >
       <widget class="QPushButton" name="emoticonButton10" >
+       <property name="minimumSize" >
+        <size>
+         <width>54</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -82,6 +94,12 @@
      </item>
      <item row="0" column="0" >
       <widget class="QPushButton" name="emoticonButton1" >
+       <property name="minimumSize" >
+        <size>
+         <width>54</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -101,6 +119,12 @@
      </item>
      <item row="1" column="0" >
       <widget class="QPushButton" name="emoticonButton4" >
+       <property name="minimumSize" >
+        <size>
+         <width>54</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -120,6 +144,12 @@
      </item>
      <item row="0" column="2" >
       <widget class="QPushButton" name="emoticonButton3" >
+       <property name="minimumSize" >
+        <size>
+         <width>54</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -139,6 +169,12 @@
      </item>
      <item row="3" column="1" >
       <widget class="QPushButton" name="emoticonButton11" >
+       <property name="minimumSize" >
+        <size>
+         <width>54</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -158,6 +194,12 @@
      </item>
      <item row="1" column="2" >
       <widget class="QPushButton" name="emoticonButton6" >
+       <property name="minimumSize" >
+        <size>
+         <width>54</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -177,6 +219,12 @@
      </item>
      <item row="2" column="0" >
       <widget class="QPushButton" name="emoticonButton7" >
+       <property name="minimumSize" >
+        <size>
+         <width>54</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -196,6 +244,12 @@
      </item>
      <item row="2" column="2" >
       <widget class="QPushButton" name="emoticonButton9" >
+       <property name="minimumSize" >
+        <size>
+         <width>54</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -215,6 +269,12 @@
      </item>
      <item row="2" column="1" >
       <widget class="QPushButton" name="emoticonButton8" >
+       <property name="minimumSize" >
+        <size>
+         <width>54</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -234,6 +294,12 @@
      </item>
      <item row="0" column="1" >
       <widget class="QPushButton" name="emoticonButton2" >
+       <property name="minimumSize" >
+        <size>
+         <width>54</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="text" >
         <string/>
        </property>
@@ -255,8 +321,8 @@
       <widget class="QPushButton" name="emoticonCloseButton" >
        <property name="minimumSize" >
         <size>
-         <width>16</width>
-         <height>16</height>
+         <width>54</width>
+         <height>54</height>
         </size>
        </property>
        <property name="text" >

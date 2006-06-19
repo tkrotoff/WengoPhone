@@ -20,12 +20,18 @@
 #include "QtEmoticonsWidget.h"
 #include "QtEmoticonButton.h"
 #include "QtEmoticonsManager.h"
+
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <qtutil/WidgetFactory.h>
-#include <QtXml>
 #include <util/Logger.h>
+
+#include <cutil/global.h>
+
+#include <qtutil/WidgetFactory.h>
+
+#include <QtXml>
+
 
 EmoticonsWidget::EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent, Qt::WFlags f) : QWidget(parent,f){
     _layout = NULL;
@@ -83,10 +89,16 @@ void EmoticonsWidget::addButton(QtEmoticon emoticon) {
 	}
 	QtEmoticonButton * button = new QtEmoticonButton();
 	button->setEmoticon(emoticon);
-	button->setMaximumSize(emoticon.getButtonPixmap().size());
-	button->setMinimumSize(emoticon.getButtonPixmap().size());
-	_layout->addWidget( button, _buttonY, _buttonX);
-	connect (button,SIGNAL(buttonClicked(QtEmoticon )),this,SLOT(buttonClicked(QtEmoticon )));
+	QSize buttonSize = emoticon.getButtonPixmap().size();
+	#if defined(OS_MACOSX)
+	QSize macosxHackSize(6, 6);
+	buttonSize += macosxHackSize;
+	#endif
+	
+	button->setMaximumSize(buttonSize);
+	button->setMinimumSize(buttonSize);
+	_layout->addWidget(button, _buttonY, _buttonX);
+	connect (button, SIGNAL(buttonClicked(QtEmoticon)), this, SLOT(buttonClicked(QtEmoticon)));
 	_buttonX++;
 }
 

@@ -93,19 +93,8 @@
      </item>
      <item row="0" column="0" colspan="2" >
       <widget class="QLabel" name="advancedOptionsLabel" >
-       <property name="font" >
-        <font>
-         <family>MS Shell Dlg</family>
-         <pointsize>8</pointsize>
-         <weight>75</weight>
-         <italic>false</italic>
-         <bold>true</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
        <property name="text" >
-        <string>Advanced Options</string>
+        <string>&lt;u>Advanced Options&lt;/u></string>
        </property>
       </widget>
      </item>
