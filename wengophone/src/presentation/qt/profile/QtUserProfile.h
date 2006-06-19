@@ -47,8 +47,6 @@ public:
 
 	virtual ~QtUserProfile();
 
-	void cHistoryCreatedEventHandler();
-
 	void loginStateChangedEventHandler(SipAccount & sender,
 		SipAccount::LoginState state);
 
@@ -66,8 +64,6 @@ public:
 		const IMContact & imContact, const std::string & message);
 
 Q_SIGNALS:
-
-	void cHistoryCreatedEventHandlerSignal();
 
 	//FIXME: here we should be very careful with pointer as
 	// we are changing the Thread and pointer may not be valid when used.
@@ -88,8 +84,6 @@ Q_SIGNALS:
 		IMContact imContact, QString message);
 
 private Q_SLOTS:
-
-	void cHistoryCreatedEventHandlerSlot();
 
 	void loginStateChangedEventHandlerSlot(SipAccount * sender,
 		int iState);

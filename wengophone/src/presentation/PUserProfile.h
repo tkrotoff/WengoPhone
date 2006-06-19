@@ -38,11 +38,6 @@ class PUserProfile : public Presentation {
 public:
 
 	/**
-	 * @see CUserProfile::historyLoadedEventHandler
-	 */
-	virtual void cHistoryCreatedEventHandler() = 0;
-
-	/**
 	 * @see UserProfile::loginStateChangedEvent
 	 */
 	virtual void loginStateChangedEventHandler(SipAccount & sender,

@@ -54,8 +54,6 @@ QtUserProfile::QtUserProfile(CUserProfile & cUserProfile, QtWengoPhone & qtWengo
 void QtUserProfile::initThreadSafe() {
 	qRegisterMetaType<IMContact>("IMContact");
 
-	connect(this, SIGNAL(cHistoryCreatedEventHandlerSignal()),
-		SLOT(cHistoryCreatedEventHandlerSlot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(loginStateChangedEventHandlerSignal(SipAccount *, int)),
 		SLOT(loginStateChangedEventHandlerSlot(SipAccount *, int)), Qt::QueuedConnection);
 	connect(this, SIGNAL(networkDiscoveryStateChangedEventHandlerSignal(SipAccount *, int)),
@@ -76,10 +74,6 @@ void QtUserProfile::updatePresentation() {
 }
 
 void QtUserProfile::updatePresentationThreadSafe() {
-}
-
-void QtUserProfile::cHistoryCreatedEventHandler() {
-	cHistoryCreatedEventHandlerSignal();
 }
 
 void QtUserProfile::loginStateChangedEventHandler(SipAccount & sender,
@@ -109,9 +103,6 @@ void QtUserProfile::wrongProxyAuthenticationEventHandler(SipAccount & sender,
 void QtUserProfile::authorizationRequestEventHandler(PresenceHandler & sender,
 	const IMContact & imContact, const std::string & message) {
 	authorizationRequestEventHandlerSignal(&sender, imContact, QString::fromStdString(message));
-}
-
-void QtUserProfile::cHistoryCreatedEventHandlerSlot() {
 }
 
 void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,

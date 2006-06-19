@@ -219,7 +219,6 @@ void CUserProfile::wsSoftUpdateCreatedEventHandler(UserProfile & sender, WsSoftU
 
 void CUserProfile::historyLoadedEventHandler(History & history) {
 	_cHistory = new CHistory(history, _cWengoPhone, _cWengoPhone.getModelThread());
-	_pUserProfile->cHistoryCreatedEventHandler();
 }
 
 void CUserProfile::disconnect() {
