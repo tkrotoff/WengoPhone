@@ -57,8 +57,7 @@ UserProfile::UserProfile(Thread & modelThread)
 	: _modelThread(modelThread),
 	_imContactListHandler(*this),
 	_connectHandler(*this, modelThread),
-
-	_presenceHandler(*this),
+	_presenceHandler(*this, modelThread),
 	_chatHandler(*this),
 	_contactList(*this) {
 

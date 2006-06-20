@@ -408,4 +408,43 @@ private:
 	Arg3 _arg3;
 };
 
+/**
+ * ThreadEvent with 4 arguments.
+ *
+ * The callback inside ThreadEvent has 4 arguments.
+ *
+ * @author Tanguy Krotoff
+ */
+template<typename Signature, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
+class ThreadEvent4 : public ThreadEvent {
+public:
+
+	template<typename Callback>
+	ThreadEvent4(const Callback & callback, const Arg1 & arg1, const Arg2 & arg2, const Arg3 & arg3, const Arg4 & arg4)
+		: ThreadEvent(),
+		_callback(callback),
+		_arg1(arg1),
+		_arg2(arg2),
+		_arg3(arg3),
+		_arg4(arg4) {
+	}
+
+	void callback() {
+		_callback(_arg1, _arg2, _arg3, _arg4);
+	}
+
+private:
+
+	/** Callback function. */
+	boost::function<Signature> _callback;
+
+	Arg1 _arg1;
+
+	Arg2 _arg2;
+
+	Arg3 _arg3;
+
+	Arg4 _arg4;
+};
+
 #endif	//THREAD_H

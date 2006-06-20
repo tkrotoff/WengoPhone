@@ -37,6 +37,7 @@ class ContactList;
 class IMAccount;
 class IMContact;
 class Presence;
+class Thread;
 class UserProfile;
 
 /**
@@ -80,7 +81,7 @@ public:
 		Picture icon) > contactIconChangedEvent;
 
 
-	PresenceHandler(UserProfile & userProfile);
+	PresenceHandler(UserProfile & userProfile, Thread & modelThread);
 
 	~PresenceHandler();
 
@@ -169,9 +170,20 @@ private:
 		const std::string & note, const std::string & from);
 
 	/**
+	 * @see presenceStateChangedEventHandler
+	 */
+	void presenceStateChangedEventHandlerThreadSafe(IMAccount * imAccount, EnumPresenceState::PresenceState state,
+		std::string note, std::string from);
+
+	/**
 	 * @see IMPresence::myPresenceStatusEvent
 	 */
 	void myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status);
+
+	/**
+	 * @see myPresenceStatusEventHandler
+	 */
+	void myPresenceStatusEventHandlerThreadSafe(IMAccount * imAccount, EnumPresenceState::MyPresenceStatus status);
 
 	/**
 	 * @see IMPresence::subscribeStatusEvent
@@ -179,9 +191,19 @@ private:
 	void subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status);
 
 	/**
+	 * @see subscribeStatusEventHandler
+	 */
+	void subscribeStatusEventHandlerThreadSafe(IMAccount * imAccount, std::string contactId, IMPresence::SubscribeStatus status);
+
+	/**
 	 * @see IMPresence::authorizationRequestEvent
 	 */
 	void authorizationRequestEventHandler(IMPresence & sender, const std::string & contactId, const std::string & message);
+
+	/**
+	 * @see authorizationRequestEventHandler
+	 */
+	void authorizationRequestEventHandlerThreadSafe(IMAccount * imAccount, std::string contactId, std::string message);
 
 	/**
 	 * @see UserProfile::newIMAccountAddedEvent
@@ -212,6 +234,8 @@ private:
 	IMContactMultiMap _pendingSubscriptions;
 
 	UserProfile & _userProfile;
+
+	Thread & _modelThread;
 };
 
 #endif	//PRESENCEHANDLER_H

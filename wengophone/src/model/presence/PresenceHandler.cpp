@@ -26,13 +26,14 @@
 
 #include <imwrapper/IMContact.h>
 
+#include <thread/Thread.h>
 #include <util/Logger.h>
 #include <util/Picture.h>
 
 using namespace std;
 
-PresenceHandler::PresenceHandler(UserProfile & userProfile)
-: _userProfile(userProfile) {
+PresenceHandler::PresenceHandler(UserProfile & userProfile, Thread & modelThread)
+: _userProfile(userProfile), _modelThread(modelThread) {
 	_userProfile.newIMAccountAddedEvent +=
 		boost::bind(&PresenceHandler::newIMAccountAddedEventHandler, this, _1, _2);
 	_userProfile.getConnectHandler().connectedEvent +=
@@ -193,19 +194,57 @@ void PresenceHandler::changeMyIcon(const Picture & picture, IMAccount * imAccoun
 void PresenceHandler::presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
 	const std::string & alias, const std::string & from) {
 
-	presenceStateChangedEvent(*this, state, alias, IMContact(sender.getIMAccount(), from));
+	typedef ThreadEvent4<void (IMAccount * imAccount, EnumPresenceState::PresenceState state, std::string alias, std::string from),
+		IMAccount *, EnumPresenceState::PresenceState, std::string, std::string> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&PresenceHandler::presenceStateChangedEventHandlerThreadSafe, this, _1, _2, _3, _4), &sender.getIMAccount(), state, alias, from);
+
+	_modelThread.postEvent(event);
+}
+
+void PresenceHandler::presenceStateChangedEventHandlerThreadSafe(IMAccount * imAccount,
+	EnumPresenceState::PresenceState state, std::string note, std::string from) {
+
+	presenceStateChangedEvent(*this, state, note, IMContact(*imAccount, from));
 }
 
 void PresenceHandler::myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status) {
-	myPresenceStatusEvent(*this, sender.getIMAccount(), status);
+	typedef ThreadEvent2<void (IMAccount * imAccount, EnumPresenceState::MyPresenceStatus status),
+		IMAccount *, EnumPresenceState::MyPresenceStatus> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&PresenceHandler::myPresenceStatusEventHandlerThreadSafe, this, _1, _2), &sender.getIMAccount(), status);
+
+	_modelThread.postEvent(event);
+}
+
+void PresenceHandler::myPresenceStatusEventHandlerThreadSafe(IMAccount * imAccount, EnumPresenceState::MyPresenceStatus status) {
+	myPresenceStatusEvent(*this, *imAccount, status);
 }
 
 void PresenceHandler::authorizationRequestEventHandler(IMPresence & sender, const std::string & contactId, const std::string & message) {
-	authorizationRequestEvent(*this, IMContact(sender.getIMAccount(), contactId), message);
+	typedef ThreadEvent3<void (IMAccount * imAccount, std::string contactId, std::string message),
+		IMAccount *, std::string, std::string> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&PresenceHandler::authorizationRequestEventHandlerThreadSafe, this, _1, _2, _3), &sender.getIMAccount(), contactId, message);
+
+	_modelThread.postEvent(event);
+}
+
+void PresenceHandler::authorizationRequestEventHandlerThreadSafe(IMAccount * imAccount, std::string contactId, std::string message) {
+	authorizationRequestEvent(*this, IMContact(*imAccount, contactId), message);
 }
 
 void PresenceHandler::subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status) {
-	subscribeStatusEvent(*this, IMContact(sender.getIMAccount(), contactId), status);
+	typedef ThreadEvent3<void (IMAccount * imAccount, std::string contactId, IMPresence::SubscribeStatus status),
+		IMAccount *, std::string, IMPresence::SubscribeStatus> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&PresenceHandler::subscribeStatusEventHandlerThreadSafe, this, _1, _2, _3), &sender.getIMAccount(), contactId, status);
+
+	_modelThread.postEvent(event);
+}
+
+void PresenceHandler::subscribeStatusEventHandlerThreadSafe(IMAccount * imAccount, std::string contactId, IMPresence::SubscribeStatus status) {
+	subscribeStatusEvent(*this, IMContact(*imAccount, contactId), status);
 }
 
 PresenceHandler::PresenceMap::iterator PresenceHandler::findPresence(PresenceMap & presenceMap, IMAccount * imAccount) {
