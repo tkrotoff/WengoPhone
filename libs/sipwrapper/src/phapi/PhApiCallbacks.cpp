@@ -286,7 +286,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	std::map<const std::string, IMChatSession *>::const_iterator sessionIt = contactChatMap.find(from);
 
 	// Getting buddy icon
-	if (info->event == phMsgNew && strcmp(info->ctype, "buddyicon") == 0)
+	if ((info->event == phMsgNew) && (string(info->ctype) == String("buddyicon")))
 	{
 		if (info->subtype && *info->subtype)
 			p->contactIconChangedEvent(*p, from, info->subtype);
@@ -298,7 +298,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		imChatSession = (*sessionIt).second;
 	}
 	// Drop typingstate packet if there is no chat session created
-	else if (info->ctype && strcmp(info->ctype, "typingstate") == 0) {
+	else if (info->ctype && (string(info->ctype) == string("typingstate"))) {
 		return;
 	} else {
 		LOG_DEBUG("creating new IMChatSession");
@@ -314,13 +314,13 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		string content = info->content;
 		p->contactAddedEvent(*p, *imChatSession, from);
 
-		if (strcmp(info->ctype, "typingstate") == 0)
+		if (info->ctype && (string(info->ctype) == string("typingstate")))
 		{
 			IMChat::TypingState state;
 
-			if (strcmp(info->subtype, "typing") == 0)
+			if (info->subtype && (string(info->subtype) == string("typing")))
 				state = IMChat::TypingStateTyping;
-			else if (strcmp(info->subtype, "stoptyping") == 0)
+			else if (info->subtype && (string(info->subtype) == string("stoptyping")))
 				state = IMChat::TypingStateStopTyping;
 			else
 				state = IMChat::TypingStateNotTyping;
