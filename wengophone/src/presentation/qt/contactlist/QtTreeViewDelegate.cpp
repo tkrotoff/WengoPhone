@@ -33,18 +33,13 @@
 #include <util/Logger.h>
 #include <util/StringList.h>
 
-#include <QModelIndex>
-#include <QWidget>
-#include <QStyleOptionViewItem>
-#include <QAbstractItemModel>
-#include <QPixmapCache>
-#include <QPainter>
-
+#include <QtGui>
 
 static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 
 QtTreeViewDelegate::QtTreeViewDelegate(CWengoPhone & cWengoPhone, QObject * parent)
-: QItemDelegate(parent), _cWengoPhone(cWengoPhone) {
+	: QItemDelegate(parent),
+	_cWengoPhone(cWengoPhone) {
 
 }
 
@@ -104,22 +99,24 @@ QSize QtTreeViewDelegate::sizeHint(const QStyleOptionViewItem & option, const QM
 
 bool QtTreeViewDelegate::checkForUtf8(const std::string &text, int size) const {
 	bool isUtf8 = false;
-	if (size==0)
-		return true;
-
-	if ( (text[0]<=0x7F) && size==1){
+	if (size == 0) {
 		return true;
 	}
-	for (int i=0;i<size;i++){
-		if (text[i] == 0 ){
+
+	if ((text[0]<=0x7F) && size == 1) {
+		return true;
+	}
+	for (int i=0;i<size;i++) {
+		if (text[i] == 0) {
 			return false;
 		}
-		if (text[i]>0x7F){
-			if ((text[i] & 0xC0) == 0xC0){
-				if (i+1 > size)
+		if (text[i]>0x7F) {
+			if ((text[i] & 0xC0) == 0xC0) {
+				if (i+1 > size) {
 					return false;
-				if ((text[i+1] & 0xC0) == 0x80){
-					isUtf8=true;
+				}
+				if ((text[i+1] & 0xC0) == 0x80) {
+					isUtf8 = true;
 					return isUtf8;
 				}
 			}
@@ -157,7 +154,7 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 	QString groupName;
 	std::string groupId;
 	std::string groupNameTmp;
-	if (index.data().toString() == QtContactList::DEFAULT_GROUP_NAME){
+	if (index.data().toString() == QtContactList::DEFAULT_GROUP_NAME) {
 		groupName = tr("Contacts list");
 		groupNameTmp=std::string(groupName.toUtf8().data());
 	} else {
@@ -165,7 +162,7 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 		groupId = groupName.toStdString();
 		groupNameTmp = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactGroupName(groupId);
 	}
-	if (checkForUtf8(groupNameTmp, groupNameTmp.size())){
+	if (checkForUtf8(groupNameTmp, groupNameTmp.size())) {
 		groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
 	} else {
 		groupName=QString::fromStdString(groupNameTmp);
@@ -178,8 +175,8 @@ QPixmap QtTreeViewDelegate::getGroupBackGround(const QRect & rect) const {
 	QPixmap backGround;
 	QRect pixmapRect;
 	QLinearGradient lg(QPointF(1, rect.top()), QPointF(1, rect.bottom()));
-	lg.setColorAt(.8,QColor(212, 208, 200));
-	lg.setColorAt(0,QColor(250, 250, 250));
+	lg.setColorAt(.8, QColor(212, 208, 200));
+	lg.setColorAt(0, QColor(250, 250, 250));
 
 	backGround = QPixmap(rect.width(),rect.height());
 	QPainter painter(&backGround);

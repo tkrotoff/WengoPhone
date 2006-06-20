@@ -38,7 +38,7 @@ class QtRenameGroup : public QDialog {
 	Q_OBJECT
 	public :
 
-	QtRenameGroup(QWidget * parent = 0, Qt::WFlags f = 0);
+	QtRenameGroup(QWidget * parent = 0);
 
 	virtual ~QtRenameGroup();
 

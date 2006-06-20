@@ -34,7 +34,6 @@ class CWengoPhone;
 class QModelIndex;
 class QStyleOptionViewItem;
 
-
 /**
  * Qt Presentation component for Contact
  *

@@ -46,7 +46,7 @@ Q_SIGNALS:
 
 	void mouseClicked(Qt::MouseButton button);
 
-protected:
+private:
 
 	bool eventFilter(QObject * obj, QEvent * event);
 
@@ -75,4 +75,4 @@ protected:
 	CContactList & _cContactList;
 };
 
-#endif // OWQTCONTACTTREEMOUSEFILTER_H
+#endif	//OWQTCONTACTTREEMOUSEFILTER_H

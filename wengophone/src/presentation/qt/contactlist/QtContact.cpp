@@ -29,16 +29,16 @@
 
 #include <util/Logger.h>
 
-#include <QPainter>
-#include <QModelIndex>
-#include <QStyleOptionViewItem>
-
-
+#include <QtGui>
 
 QtContact::QtContact(const std::string & contactId, CWengoPhone & cWengoPhone, QObject * parent)
-: QObject(parent), _cWengoPhone(cWengoPhone) {
+	: QObject(parent),
+	_cWengoPhone(cWengoPhone) {
+
 	_contactId = contactId;
-	contactUpdated();
+	//FIXME this causes a crash
+	//contactUpdated();
+	_contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
 	_mouseOn = false;
 	_openStatus = false;
 }
@@ -58,7 +58,7 @@ void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, c
 
 	if ((option.state & QStyle::State_Selected) == QStyle::State_Selected) {
 		QRect rect = option.rect;
-		rect.adjust(0,0,1,1);
+		rect.adjust(0, 0, 1, 1);
 		painter->fillRect(option.rect, QBrush(selectedBackground));
 		painter->setPen(option.palette.text().color());
 	} else {
@@ -124,7 +124,7 @@ QtContactPixmap::ContactPixmap QtContact::getStatus() const {
 		status = QtContactPixmap::ContactForward;
 		break;
 	default:
-		LOG_FATAL("Unknown state=" + String::fromNumber(_contactProfile.getPresenceState()));
+		LOG_FATAL("unknown state=" + String::fromNumber(_contactProfile.getPresenceState()));
 	}
 	return status;
 }
@@ -142,8 +142,8 @@ void QtContact::startSMS() {
 	if (qwengophone->getSms()) {
 		QString mobilePhone = QString::fromStdString(_contactProfile.getMobilePhone());
 		qwengophone->getSms()->setPhoneNumber(mobilePhone);
-		qwengophone->getSms()->setText("");
-		qwengophone->getSms()->setSignature("");
+		qwengophone->getSms()->setText(QString::null);
+		qwengophone->getSms()->setSignature(QString::null);
 		qwengophone->getSms()->getWidget()->show();
 	}
 }
@@ -161,8 +161,9 @@ void QtContact::setOpenStatus(bool value) {
 }
 
 int QtContact::getHeight() const {
-	if (_openStatus)
+	if (_openStatus) {
 		return 90;
+	}
 	return UserSize;
 }
 
@@ -192,14 +193,18 @@ QString QtContact::getPreferredNumber() const {
 }
 
 bool QtContact::hasPhoneNumber() const {
-	if (!getMobilePhone().isEmpty())
+	if (!getMobilePhone().isEmpty()) {
 		return true;
-	if (!getHomePhone().isEmpty())
+	}
+	if (!getHomePhone().isEmpty()) {
 		return true;
-	if (!getWorkPhone().isEmpty())
+	}
+	if (!getWorkPhone().isEmpty()) {
 		return true;
-	if (!getWengoPhoneNumber().isEmpty())
+	}
+	if (!getWengoPhoneNumber().isEmpty()) {
 		return true;
+	}
 	return false;
 }
 

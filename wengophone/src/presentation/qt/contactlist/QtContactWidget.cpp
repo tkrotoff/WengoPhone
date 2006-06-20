@@ -37,17 +37,14 @@
 
 #include <util/Logger.h>
 
-#include <QLabel>
-#include <QPushButton>
-#include <QString>
-#include <QPainter>
-#include <QDebug>
+#include <QtGui>
 
-const QString QtContactWidget::AVATAR_BACKGROUND=":/pics/fond_avatar.png";
+const QString QtContactWidget::AVATAR_BACKGROUND = ":/pics/fond_avatar.png";
 
 QtContactWidget::QtContactWidget(const std::string & contactId,
-	CWengoPhone & cWengoPhone, QWidget * parent, Qt::WFlags f)
-	: QWidget(parent, f), _cWengoPhone(cWengoPhone) {
+	CWengoPhone & cWengoPhone, QWidget * parent)
+	: QWidget(parent),
+	_cWengoPhone(cWengoPhone) {
 
 	_contactId = contactId;
 	contactProfileUpdated();
@@ -118,7 +115,7 @@ void QtContactWidget::mobileButtonClicked() {
 		ContactProfile contactProfile =
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
 		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), contactProfile, this);
-		if( qtProfileDetails.show() ) {
+		if (qtProfileDetails.show()) {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);
 		}
 	}
@@ -132,7 +129,7 @@ void QtContactWidget::landLineButtonClicked() {
 		ContactProfile contactProfile =
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
 		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), contactProfile, this);
-		if( qtProfileDetails.show() ) {
+		if (qtProfileDetails.show()) {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);
 		}
 	}
@@ -156,7 +153,7 @@ void QtContactWidget::paintEvent(QPaintEvent *) {
 	QRect r = rect();
 	QPainter painter(this);
 	painter.fillRect(r, QBrush(lg));
-    paintContact(&painter, r);
+	paintContact(&painter, r);
 	painter.end();
 }
 
@@ -170,7 +167,7 @@ void QtContactWidget::paintContact(QPainter * painter, const QRect & rect) {
 
 	QtContact * qtContact = ul->getContact(QString::fromStdString(_contactId));
 	if (!qtContact) {
-	    return;
+		return;
 	}
 
 	spx = QtContactPixmap::getInstance();

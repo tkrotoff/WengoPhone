@@ -24,9 +24,6 @@
 #include <QMutex>
 #include <QList>
 
-#define MAX_ITEM_SIZE 100
-#define MIN_ITEM_SIZE 28
-
 class CUserProfile;
 class CWengoPhone;
 class QtContactList;
@@ -48,9 +45,7 @@ class QAction;
  * @author Mr K.
  */
 class QtContactManager : public QObject {
-
 	Q_OBJECT
-
 public:
 
 	typedef QList <QtContactInfo> QtContactInfoList;
@@ -63,9 +58,9 @@ public:
 	void moveContact(const QString & contactId,
 		const QString & srcContactGroupId, const QString & dstContactGroupId);
 
-	bool groupsAreHiden();
+	bool groupsAreHidden();
 
-	virtual bool event (QEvent * e);
+	virtual bool event(QEvent * e);
 
 public Q_SLOTS:
 
@@ -133,7 +128,7 @@ private:
 
 	QMenu * createMenu();
 
-	virtual void timerEvent ( QTimerEvent * event ) ;
+	virtual void timerEvent(QTimerEvent * event);
 
 	bool _hideUsers;
 
@@ -180,8 +175,8 @@ private:
 	bool _wantShow;
 
 	/**
-	* Translated strings
-	*/
+	 * Translated strings
+	 */
 	QString _trStringCall;
 	QString _trStringMobilePhone;
 	QString _trStringHomePhone;

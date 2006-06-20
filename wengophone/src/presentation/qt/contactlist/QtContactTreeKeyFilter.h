@@ -20,7 +20,11 @@
 #ifndef OWQTCONTACTTREEKEYFILTER_H
 #define OWQTCONTACTTREEKEYFILTER_H
 
-#include <QtGui>
+#include <QObject>
+
+class QKeyEvent;
+class QTreeWidget;
+class QTreeWidgetItem;
 
 class QtContactTreeKeyFilter : public QObject {
 	Q_OBJECT
@@ -44,7 +48,7 @@ Q_SIGNALS:
 
 	void deleteItem(QTreeWidgetItem * item);
 
-protected:
+private:
 
 	bool eventFilter(QObject * obj, QEvent * event);
 
@@ -53,4 +57,4 @@ protected:
 	QTreeWidget * _tree;
 };
 
-#endif // OWQTCONTACTTREEKEYFILTER_H
+#endif	//OWQTCONTACTTREEKEYFILTER_H

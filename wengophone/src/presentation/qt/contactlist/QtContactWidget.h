@@ -40,13 +40,11 @@ class QPushButton;
  * @author Mathieu Stute
  */
 class QtContactWidget : public QWidget {
-		Q_OBJECT
+	Q_OBJECT
 public:
 
-	static const QString AVATAR_BACKGROUND;
-
 	QtContactWidget(const std::string & contactId, CWengoPhone & cWengoPhone,
-			QWidget * parent = 0, Qt::WFlags f = 0);
+			QWidget * parent = 0);
 
 	void setText(const QString & text) {
 		_text = text;
@@ -76,15 +74,15 @@ private Q_SLOTS:
 
 	void landLineButtonClicked();
 
-protected:
-
-    virtual void paintEvent(QPaintEvent *);
-
 private:
 
-    void paintContact(QPainter * painter, const QRect & rect);
+	virtual void paintEvent(QPaintEvent *);
+
+	void paintContact(QPainter * painter, const QRect & rect);
 
 	QPixmap createAvatar();
+
+	static const QString AVATAR_BACKGROUND;
 
 	QWidget * _widget;
 

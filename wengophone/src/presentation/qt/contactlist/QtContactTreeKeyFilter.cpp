@@ -19,8 +19,9 @@
 
 #include "QtContactTreeKeyFilter.h"
 
-QtContactTreeKeyFilter::QtContactTreeKeyFilter(QObject * parent, QTreeWidget * target) {
+#include <QtGui>
 
+QtContactTreeKeyFilter::QtContactTreeKeyFilter(QObject * parent, QTreeWidget * target) {
 	_tree = target;
 	target->installEventFilter(this);
 }
@@ -28,41 +29,42 @@ QtContactTreeKeyFilter::QtContactTreeKeyFilter(QObject * parent, QTreeWidget * t
 bool QtContactTreeKeyFilter::eventFilter(QObject * obj, QEvent * event) {
 
 	switch (event->type()) {
-		case QEvent::KeyPress:
-			keyPress(dynamic_cast <QKeyEvent *> (event));
-			return false;
-		default:
-			return QObject::eventFilter(obj, event);
+	case QEvent::KeyPress:
+		keyPress(dynamic_cast <QKeyEvent *> (event));
+		return false;
+
+	default:
+		return QObject::eventFilter(obj, event);
 	}
 }
 
 void QtContactTreeKeyFilter::keyPress(QKeyEvent * event) {
 	QTreeWidgetItem * item = _tree->currentItem();
 	switch (event->key()) {
-		case Qt::Key_Left:
-			closeItem(item);
-			break;
-		case Qt::Key_Right:
-			openItem(item);
-			break;
-		case Qt::Key_Enter:
-		case Qt::Key_Return:
-			enterPressed(item);
-			break;
-		case Qt::Key_Delete:
-			deleteItem(item);
-			break;
-		case Qt::Key_C:
-			cPressed(item);
-			break;
-		case Qt::Key_W:
-			wPressed(item);
-			break;
-		case Qt::Key_S:
-			sPressed(item);
-			break;
+	case Qt::Key_Left:
+		closeItem(item);
+		break;
+	case Qt::Key_Right:
+		openItem(item);
+		break;
+	case Qt::Key_Enter:
+	case Qt::Key_Return:
+		enterPressed(item);
+		break;
+	case Qt::Key_Delete:
+		deleteItem(item);
+		break;
+	case Qt::Key_C:
+		cPressed(item);
+		break;
+	case Qt::Key_W:
+		wPressed(item);
+		break;
+	case Qt::Key_S:
+		sPressed(item);
+		break;
 
-		default:
-			break;
+	default:
+		break;
 	}
 }

@@ -23,13 +23,11 @@
 #include <QHash>
 #include <QPixmap>
 
-
 /**
  * Store status pixmaps
  *
  * @author Mr K
  */
-
 class QtContactPixmap {
 public:
 
@@ -54,7 +52,7 @@ public:
 
 	QPixmap & getPixmap(ContactPixmap status);
 
-protected:
+private:
 
 	QtContactPixmap();
 
@@ -64,8 +62,6 @@ protected:
 		_contactPixmap = other._contactPixmap;
 		return * this;
 	}
-
-private:
 
 	QHash < ContactPixmap, QPixmap > _contactPixmap;
 

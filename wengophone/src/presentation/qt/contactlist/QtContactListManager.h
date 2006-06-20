@@ -20,7 +20,6 @@
 #ifndef OWCONTACTLISTMANAGER_H
 #define OWCONTACTLISTMANAGER_H
 
-
 #include "QtContact.h"
 #include "QtContactPixmap.h"
 
@@ -103,23 +102,23 @@ public:
 	 */
 	void startFreeCall(const QString & contactId);
 
-protected:
+private:
 
 	QtContactListManager();
 
-	QtContactListManager(const QtContactListManager & other) : _tree(other._tree), _contactList(other._contactList) { }
+	QtContactListManager(const QtContactListManager & other)
+		: _tree(other._tree),
+		_contactList(other._contactList) { }
 
-	QtContactListManager & operator = (const QtContactListManager & other) {
+	QtContactListManager & operator=(const QtContactListManager & other) {
 		_tree = other._tree;
 		_contactList = other._contactList;
 		return * this;
 	}
 
-private:
-
 	QTreeWidget * _tree;
 
-	QHash <QString,QtContact *> _contactList;
+	QHash <QString, QtContact *> _contactList;
 
 	static QtContactListManager * _instance;
 

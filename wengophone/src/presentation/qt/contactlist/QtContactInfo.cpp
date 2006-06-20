@@ -18,13 +18,14 @@
  */
 
 #include "QtContactInfo.h"
+
 #include "QtContactListManager.h"
 #include "QtContact.h"
 
-#include <QTreeWidgetItem>
+#include <QtGUi>
 
 QtContactInfo::QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, const QString & contactId, int index, QObject * parent)
-: QObject(parent) {
+	: QObject(parent) {
 	_contactId = contactId;
 	_item = item;
 	_parentItem = parentItem;
@@ -47,15 +48,15 @@ void QtContactInfo::clear() {
 	_clear = true;
 }
 
-bool QtContactInfo::isCleared() {
+bool QtContactInfo::isCleared() const {
 	return _clear;
 }
 
-QTreeWidgetItem * QtContactInfo::getItem() {
+QTreeWidgetItem * QtContactInfo::getItem() const {
 	return _item;
 }
 
-QTreeWidgetItem * QtContactInfo::getParentItem() {
+QTreeWidgetItem * QtContactInfo::getParentItem() const {
 	return _parentItem;
 }
 
@@ -77,7 +78,7 @@ bool QtContactInfo::operator < (const QtContactInfo & other) const {
 	return false;
 }
 
-QtContactInfo & QtContactInfo::operator = (const QtContactInfo & other) {
+QtContactInfo & QtContactInfo::operator=(const QtContactInfo & other) {
 	_contactId = other._contactId;
 	_item = other._item;
 	_parentItem = other._parentItem;

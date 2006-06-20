@@ -39,11 +39,7 @@
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/MouseEventFilter.h>
 
-#include <QPixmap>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-#include <QString>
-#include <QHeaderView>
+#include <QtGui>
 
 const QString QtContactList::DEFAULT_GROUP_NAME = "WENGO2006CLISTHIDE";
 const QString QtContactList::STATUS_UNKNOW_PIXMAP = ":/pics/status/unknown.png";
@@ -212,7 +208,7 @@ void QtContactList::contactChangedEvent(std::string contactId) {
 }
 
 void QtContactList::contactGroupAddedEventSlot(QString contactGroupId) {
-	if (_contactManager->groupsAreHiden()){
+	if (_contactManager->groupsAreHidden()) {
 		contactGroupId = DEFAULT_GROUP_NAME;
 	}
 	addGroup(contactGroupId);
@@ -252,7 +248,7 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 	// If the contact is not already in QtContactList
 	if (!ul->contains(contactId)) {
 		ContactProfile contactProfile = _cContactList.getContactProfile(contactId.toStdString());
-		if (_contactManager->groupsAreHiden()) {
+		if (_contactManager->groupsAreHidden()) {
 			groupId = DEFAULT_GROUP_NAME;
 		} else {
 			groupId = QString::fromStdString(contactProfile.getGroupId());
@@ -264,7 +260,7 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 			// No group exists. Creating the group
 			if (list.empty()) {
 				contactGroupAddedEventSlot(groupId);
-				list = _treeWidget->findItems(groupId,Qt::MatchExactly);
+				list = _treeWidget->findItems(groupId, Qt::MatchExactly);
 			}
 			newContact = new QTreeWidgetItem(list[0]);
 			newContact->setText(0, contactId);
@@ -318,6 +314,6 @@ void QtContactList::groupRightClickedSlot(const QString & groupId) {
 	_contactGroupPopupMenu->showMenu(groupId);
 }
 
-void QtContactList::showHideGroups(){
+void QtContactList::showHideGroups() {
 	_contactManager->hideGroups();
 }

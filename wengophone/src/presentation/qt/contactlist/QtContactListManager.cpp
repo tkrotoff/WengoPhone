@@ -21,8 +21,7 @@
 
 #include <util/Logger.h>
 
-#include <QMutex>
-#include <QTreeWidget>
+#include <QtGui>
 
 QtContactListManager * QtContactListManager::_instance = NULL;
 
@@ -198,7 +197,9 @@ int QtContactListManager::getHeight(const QString & contactId) const {
 	if (contains(contactId)) {
 		return _contactList[contactId]->getHeight();
 	}
-	else return 0;
+	else {
+		return 0;
+	}
 }
 
 void QtContactListManager::resetMouseStatus() {
@@ -257,10 +258,10 @@ void QtContactListManager::startFreeCall(const QString & contactId) {
 	}
 }
 
-void QtContactListManager::clear(){
+void QtContactListManager::clear() {
 	QMutexLocker locker(_mutex);
 	QHash <QString, QtContact *>::iterator it;
-	for (it = _contactList.begin(); it != _contactList.end(); it++){
+	for (it = _contactList.begin(); it != _contactList.end(); it++) {
 		delete((*it));
 	}
 	_contactList.clear();
