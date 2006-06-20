@@ -53,14 +53,15 @@ QtVideoSettings::QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 
 	connect(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
 	connect(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(startWebcamPreview(const QString &)));
-	connect(_ui->enableVideoGroupBox, SIGNAL(toggled(bool)), SLOT(enableVideo(bool)));
 	connect(_ui->makeTestVideoCallButton, SIGNAL(clicked()), SLOT(makeTestCallClicked()));
 	connect(_ui->webcamPreviewButton, SIGNAL(clicked()), SLOT(webcamPreview()));
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	//No webcam driver
 	if (_webcamDriver->getDeviceList().empty()) {
-		config.set(Config::VIDEO_ENABLE_KEY, _ui->enableVideoGroupBox->isChecked());
+		config.set(Config::VIDEO_ENABLE_KEY, false);
+		_ui->enableVideoGroupBox->setChecked(false);
+		_ui->enableVideoGroupBox->setEnabled(false);
 	}
 
 	readConfig();
@@ -110,7 +111,7 @@ void QtVideoSettings::readConfig() {
 
 	_ui->webcamDeviceComboBox->clear();
 	_ui->webcamDeviceComboBox->addItems(StringListConvert::toQStringList(_webcamDriver->getDeviceList()));
-	_ui->webcamDeviceComboBox->setCurrentIndex(_ui->webcamDeviceComboBox->findText(QString::fromStdString(config.getVideoWebcamDevice())));
+	_ui->webcamDeviceComboBox->setCurrentIndex(_ui->webcamDeviceComboBox->findText(QString::fromUtf8(config.getVideoWebcamDevice().c_str())));
 
 	int videoQuality = config.getVideoQuality();
 	QString videoQualityText;
@@ -160,6 +161,8 @@ void QtVideoSettings::newWebcamImageCaptured(QImage * image) {
 }
 
 void QtVideoSettings::startWebcamPreview(const QString & deviceName) {
+	stopWebcamPreview();
+
 	_webcamDriver->frameCapturedEvent += boost::bind(&QtVideoSettings::frameCapturedEventHandler, this, _1, _2);
 	_webcamDriver->setDevice(deviceName.toStdString());
 	_webcamDriver->setResolution(320, 240);
@@ -173,20 +176,11 @@ void QtVideoSettings::stopWebcamPreview() {
 }
 
 void QtVideoSettings::webcamPreview() {
-	readConfig();
 	startWebcamPreview(_ui->webcamDeviceComboBox->currentText());
 }
 
 void QtVideoSettings::hideEvent(QHideEvent * event) {
 	stopWebcamPreview();
-}
-
-void QtVideoSettings::enableVideo(bool enable) {
-	if (enable) {
-		startWebcamPreview(_ui->webcamDeviceComboBox->currentText());
-	} else {
-		stopWebcamPreview();
-	}
 }
 
 void QtVideoSettings::makeTestCallClicked() {

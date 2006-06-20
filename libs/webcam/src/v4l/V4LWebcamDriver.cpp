@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,10 +82,10 @@ string V4LWebcamDriver::getDefaultDevice() {
 webcamerrorcode V4LWebcamDriver::setDevice(const std::string & deviceName) {
 	//TODO: test if a webcam is already open
 
-	if( deviceName.empty() ) {
+	if (deviceName.empty()) {
 		return WEBCAM_NOK;
 	}
-	
+
 	std::string device = "/dev/" + deviceName.substr(deviceName.size() - 6, deviceName.size() - 1);
 
 #if 0

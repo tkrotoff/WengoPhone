@@ -66,8 +66,6 @@ private Q_SLOTS:
 
 	void startWebcamPreview(const QString & deviceName);
 
-	void enableVideo(bool enable);
-
 	void makeTestCallClicked();
 
 Q_SIGNALS:

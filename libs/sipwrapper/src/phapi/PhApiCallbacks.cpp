@@ -275,21 +275,35 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		return;
 	}
 
-	LOG_DEBUG("message received from " + string(info->from)
-		+ ": " + string((info->content ? info->content : "")));
+	string content;
+	if (info->content) {
+		content = info->content;
+	}
 
-	// Getting maps from PhApiWrapper
+	LOG_DEBUG("message received from=" + string(info->from) + " content=" + content);
+
+	//Getting maps from PhApiWrapper
 	std::map<const std::string, IMChatSession *> & contactChatMap = p->getContactChatMap();
 
-	// Finding associated session
+	//Finding associated session
 	string from = String(info->from).split(" ")[0];
 	std::map<const std::string, IMChatSession *>::const_iterator sessionIt = contactChatMap.find(from);
 
-	// Getting buddy icon
-	if ((info->event == phMsgNew) && (string(info->ctype) == String("buddyicon")))
-	{
-		if (info->subtype && *info->subtype)
-			p->contactIconChangedEvent(*p, from, info->subtype);
+	string ctype;
+	if (info->ctype) {
+		ctype = info->ctype;
+	}
+
+	string subtype;
+	if (info->subtype) {
+		subtype = info->subtype;
+	}
+
+	//Getting buddy icon
+	if ((info->event == phMsgNew) && (ctype == "buddyicon")) {
+		if (!subtype.empty()) {
+			p->contactIconChangedEvent(*p, from, subtype);
+		}
 
 		return;
 	}
@@ -297,8 +311,8 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	if (sessionIt != contactChatMap.end()) {
 		imChatSession = (*sessionIt).second;
 	}
-	// Drop typingstate packet if there is no chat session created
-	else if (info->ctype && (string(info->ctype) == string("typingstate"))) {
+	//Drop typingstate packet if there is no chat session created
+	else if (ctype == "typingstate") {
 		return;
 	} else {
 		LOG_DEBUG("creating new IMChatSession");
@@ -311,24 +325,22 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 
 	switch(info->event) {
 	case phMsgNew: {
-		string content = info->content;
 		p->contactAddedEvent(*p, *imChatSession, from);
 
-		if (info->ctype && (string(info->ctype) == string("typingstate")))
-		{
+		if (ctype == "typingstate") {
 			IMChat::TypingState state;
 
-			if (info->subtype && (string(info->subtype) == string("typing")))
+			if (subtype == "typing") {
 				state = IMChat::TypingStateTyping;
-			else if (info->subtype && (string(info->subtype) == string("stoptyping")))
+			} else if (subtype == "stoptyping") {
 				state = IMChat::TypingStateStopTyping;
-			else
+			} else {
 				state = IMChat::TypingStateNotTyping;
+			}
 
 			p->typingStateChangedEvent(*p, *imChatSession, from, state);
 		}
-		else
-		{
+		else {
 			p->messageReceivedEvent(*p, *imChatSession, from, content);
 		}
 
