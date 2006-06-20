@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTWENGOCONFIGDIALOG_H
-#define QTWENGOCONFIGDIALOG_H
+#ifndef OWQTWENGOCONFIGDIALOG_H
+#define OWQTWENGOCONFIGDIALOG_H
 
 #include <util/NonCopyable.h>
 #include <util/List.h>
@@ -31,6 +31,7 @@ class QtISettings;
 
 class QDialog;
 class QWidget;
+class QString;
 namespace Ui { class WengoConfigDialog; }
 
 /**
@@ -76,6 +77,8 @@ private Q_SLOTS:
 
 private:
 
+	void showPage(const QString & pageName);
+
 	Ui::WengoConfigDialog * _ui;
 
 	QDialog * _configDialog;
@@ -85,4 +88,4 @@ private:
 	SettingsList _settingsList;
 };
 
-#endif	//QTWENGOCONFIGDIALOG_H
+#endif	//OWQTWENGOCONFIGDIALOG_H

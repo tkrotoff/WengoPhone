@@ -34,16 +34,9 @@ ConferenceCall::ConferenceCall(IPhoneLine & phoneLine)
 
 	//No conference started yet
 	_confId = -1;
-
-	//_phoneCallList.clear();
 }
 
 ConferenceCall::~ConferenceCall() {
-	/*for (unsigned i = 0; i < _phoneCallList.size(); i++) {
-		//PhoneCall * phoneCall = _phoneCallList[i];
-		//delete phoneCall;
-	}
-	_phoneCallList.clear();*/
 }
 
 void ConferenceCall::addPhoneCall(PhoneCall & phoneCall) {

@@ -102,83 +102,50 @@ void QtWengoConfigDialog::save() {
 	}
 }
 
-void QtWengoConfigDialog::showGeneralPage() {
-	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("General"), Qt::MatchExactly);
-	if( !list.empty() ) {
-		if( list[0] ) {
+void QtWengoConfigDialog::showPage(const QString & pageName) {
+	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(pageName, Qt::MatchExactly);
+	if (!list.empty()) {
+		if (list[0]) {
 			_ui->treeWidget->setCurrentItem(list[0]);
+			return;
 		}
 	}
+
+	LOG_FATAL("unknown page name=" + pageName.toStdString());
+}
+
+void QtWengoConfigDialog::showGeneralPage() {
+	showPage(tr("General"));
 }
 
 void QtWengoConfigDialog::showLanguagePage() {
-	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Language"), Qt::MatchExactly);
-	if( !list.empty() ) {
-		if( list[0] ) {
-			_ui->treeWidget->setCurrentItem(list[0]);
-		}
-	}
+	showPage(tr("Language"));
 }
 
 void QtWengoConfigDialog::showAccountsPage() {
-	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Accounts"), Qt::MatchExactly);
-	if( !list.empty() ) {
-		if( list[0] ) {
-			_ui->treeWidget->setCurrentItem(list[0]);
-		}
-	}
+	showPage(tr("Accounts"));
 }
 
 void QtWengoConfigDialog::showPrivacyPage() {
-	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Privacy"), Qt::MatchExactly);
-	if( !list.empty() ) {
-		if( list[0] ) {
-			_ui->treeWidget->setCurrentItem(list[0]);
-		}
-	}
+	showPage(tr("Privacy"));
 }
 
 void QtWengoConfigDialog::showAudioPage() {
-	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Audio"), Qt::MatchExactly);
-	if( !list.empty() ) {
-		if( list[0] ) {
-			_ui->treeWidget->setCurrentItem(list[0]);
-		}
-	}
+	showPage(tr("Audio"));
 }
 
 void QtWengoConfigDialog::showVideoPage() {
-	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Video"), Qt::MatchExactly);
-	if( !list.empty() ) {
-		if( list[0] ) {
-			_ui->treeWidget->setCurrentItem(list[0]);
-		}
-	}
+	showPage(tr("Video"));
 }
 
 void QtWengoConfigDialog::showNotificationsPage() {
-	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Notifications & Sounds"), Qt::MatchExactly);
-	if( !list.empty() ) {
-		if( list[0] ) {
-			_ui->treeWidget->setCurrentItem(list[0]);
-		}
-	}
+	showPage(tr("Notifications & Sounds"));
 }
 
 void QtWengoConfigDialog::showCallForwardPage() {
-	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Call Forward"), Qt::MatchExactly);
-	if( !list.empty() ) {
-		if( list[0] ) {
-			_ui->treeWidget->setCurrentItem(list[0]);
-		}
-	}
+	showPage(tr("Call Forward"));
 }
 
 void QtWengoConfigDialog::showAdvancedPage() {
-	QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(tr("Advanced"), Qt::MatchExactly);
-	if( !list.empty() ) {
-		if( list[0] ) {
-			_ui->treeWidget->setCurrentItem(list[0]);
-		}
-	}
+	showPage(tr("Advanced"));
 }

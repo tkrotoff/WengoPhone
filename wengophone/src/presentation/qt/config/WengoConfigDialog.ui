@@ -23,9 +23,7 @@
     <number>6</number>
    </property>
    <item row="0" column="1" >
-    <widget class="QStackedWidget" name="stackedWidget" >
-     <widget class="QWidget" name="page" />
-    </widget>
+    <widget class="QStackedWidget" name="stackedWidget" />
    </item>
    <item rowspan="2" row="0" column="0" >
     <widget class="QTreeWidget" name="treeWidget" >

@@ -471,7 +471,7 @@ bool Config::getGeneralClickStartFreeCall() const {
 }
 
 bool Config::getGeneralClickStartChat() const {
-	return getBooleanKeyValue(GENERAL_CLICK_START_FREECALL_KEY);
+	return getBooleanKeyValue(GENERAL_CLICK_START_CHAT_KEY);
 }
 
 bool Config::getGeneralClickCallCellPhone() const {
