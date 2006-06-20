@@ -21,12 +21,13 @@
 
 #include <model/profile/UserProfileHandler.h>
 
-#include "account/NetworkObserver.h"
 #include "classic/ClassicExterminator.h"
 #include "config/ClassicConfigImporter.h"
 #include "config/ConfigManagerFileStorage.h"
 #include "config/ConfigManager.h"
 #include "config/Config.h"
+#include "network/NetworkObserver.h"
+#include "network/NetworkProxyDiscovery.h"
 #include "webservices/subscribe/WsSubscribe.h"
 
 #include "WengoPhoneBuildId.h"
@@ -38,7 +39,6 @@
 #include <sstream>
 
 WengoPhone::WengoPhone() {
-
 	_startupSettingListener = new StartupSettingListener();
 	_running = false;
 	_wsSubscribe = NULL;
@@ -62,6 +62,10 @@ WengoPhone::WengoPhone() {
 
 	// Creating instance of NetworkObserver
 	NetworkObserver::getInstance();
+	////
+
+	// Creating instance of NetworkProxyDiscovery
+	NetworkProxyDiscovery::getInstance();
 	////
 
 	//Loads the configuration: this is the first thing to do before anything else

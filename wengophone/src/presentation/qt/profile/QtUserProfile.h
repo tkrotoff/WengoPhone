@@ -53,13 +53,6 @@ public:
 	void networkDiscoveryStateChangedEventHandler(SipAccount & sender,
 		SipAccount::NetworkDiscoveryState state);
 
-	void proxyNeedsAuthenticationEventHandler(SipAccount & sender,
-		const std::string & proxyAddress, unsigned proxyPort);
-
-	void wrongProxyAuthenticationEventHandler(SipAccount & sender,
-		const std::string & proxyAddress, unsigned proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword);
-
 	void authorizationRequestEventHandler(PresenceHandler & sender,
 		const IMContact & imContact, const std::string & message);
 
@@ -73,13 +66,6 @@ Q_SIGNALS:
 	void networkDiscoveryStateChangedEventHandlerSignal(SipAccount * sender,
 		int iState);
 
-	void proxyNeedsAuthenticationEventHandlerSignal(SipAccount * sender,
-		QString proxyAddress, int proxyPort);
-
-	void wrongProxyAuthenticationEventHandlerSignal(SipAccount * sender,
-		QString proxyAddress, int proxyPort,
-		QString proxyLogin, QString proxyPassword);
-
 	void authorizationRequestEventHandlerSignal(PresenceHandler * sender,
 		IMContact imContact, QString message);
 
@@ -90,13 +76,6 @@ private Q_SLOTS:
 
 	void networkDiscoveryStateChangedEventHandlerSlot(SipAccount * sender,
 		int iState);
-
-	void proxyNeedsAuthenticationEventHandlerSlot(SipAccount * sender,
-		QString proxyAddress, int proxyPort);
-
-	void wrongProxyAuthenticationEventHandlerSlot(SipAccount * sender,
-		QString proxyAddress, int proxyPort,
-		QString proxyLogin, QString proxyPassword);
 
 	void authorizationRequestEventHandlerSlot(PresenceHandler * sender,
 		IMContact imContact, QString message);

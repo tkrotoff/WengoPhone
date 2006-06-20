@@ -22,9 +22,10 @@
 #include "WengoPhoneBuildId.h"
 #include "WengoAccountParser.h"
 
-#include <model/account/NetworkObserver.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/network/NetworkObserver.h>
+#include <model/network/NetworkProxyDiscovery.h>
 
 #include <thread/Thread.h>
 #include <util/StringList.h>
@@ -279,8 +280,10 @@ void WengoAccount::ssoTimeoutEventHandler() {
 	setWengoAuthentication(true);
 
 	LOG_DEBUG("setting proxy settings for SSO request");
-	HttpRequest::setProxy(_networkDiscovery.getProxyServer(), _networkDiscovery.getProxyServerPort(),
-		_networkDiscovery.getProxyLogin(), _networkDiscovery.getProxyPassword());
+	NetworkProxy networkProxy = NetworkProxyDiscovery::getInstance().getNetworkProxy();
+
+	HttpRequest::setProxy(networkProxy.getServer(), networkProxy.getServerPort(),
+		networkProxy.getLogin(), networkProxy.getPassword());
 
 	if (_ssoWithSSL) {
 		setPort(443);

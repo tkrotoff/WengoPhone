@@ -176,19 +176,6 @@ private:
 		SipAccount::NetworkDiscoveryState state);
 
 	/**
-	 * @see UserProfile::proxyNeedsAuthenticationEvent
-	 */
-	void proxyNeedsAuthenticationEventHandler(SipAccount & sender,
-		const std::string & proxyAddress, unsigned proxyPort);
-
-	/**
-	 * @see UserProfile::wrongProxyAuthenticationEvent
-	 */
-	void wrongProxyAuthenticationEventHandler(SipAccount & sender,
-		const std::string & proxyAddress, unsigned proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword);
-
-	/**
 	 * @see PresenceHandler::authorizationRequestEvent
 	 */
 	void authorizationRequestEventHandler(PresenceHandler & sender,

@@ -21,6 +21,7 @@
 #include "ui_WengoPhoneWindow.h"
 
 #include <presentation/PFactory.h>
+#include <presentation/qt/QtHttpProxyLogin.h>
 #include <presentation/qt/profile/QtUserProfileHandler.h>
 
 #include <control/CWengoPhone.h>
@@ -28,17 +29,17 @@
 #include <control/profile/CUserProfileHandler.h>
 
 #include <model/account/wengo/WengoAccount.h>
-#include <model/connect/ConnectHandler.h>
-#include <model/phonecall/PhoneCall.h>
-#include <model/profile/UserProfile.h>
-#include <model/history/History.h>
-#include <model/phonecall/SipAddress.h>
-#include <model/phonecall/ConferenceCall.h>
-#include <model/contactlist/ContactList.h>
-#include <model/contactlist/Contact.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/connect/ConnectHandler.h>
+#include <model/contactlist/ContactList.h>
+#include <model/contactlist/Contact.h>
+#include <model/history/History.h>
+#include <model/phonecall/PhoneCall.h>
+#include <model/phonecall/SipAddress.h>
+#include <model/phonecall/ConferenceCall.h>
 #include <model/phoneline/IPhoneLine.h>
+#include <model/profile/UserProfile.h>
 #include <model/webservices/url/WsUrl.h>
 
 #include <sipwrapper/SipWrapper.h>
@@ -111,6 +112,17 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone, bool background)
 
 	_cWengoPhone.controlTimeoutEvent += boost::bind(&QtWengoPhone::timeoutEventHandler, this);
 	connect(this, SIGNAL(signalTimeoutEventReached()), SLOT(slotTimeoutEventReachedThreadSafe()));
+
+	NetworkProxyDiscovery::getInstance().proxyNeedsAuthenticationEvent +=
+		boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandler, this, _1, _2);
+	NetworkProxyDiscovery::getInstance().wrongProxyAuthenticationEvent +=
+		boost::bind(&QtWengoPhone::wrongProxyAuthenticationEventHandler, this, _1, _2);
+	// Check if the event has not already been sent
+	if (NetworkProxyDiscovery::getInstance().getState() ==
+		NetworkProxyDiscovery::NetworkProxyDiscoveryStateNeedsAuthentication) {
+		proxyNeedsAuthenticationEventHandler(NetworkProxyDiscovery::getInstance(), 
+			NetworkProxyDiscovery::getInstance().getNetworkProxy());
+	}
 
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::initThreadSafe, this));
@@ -1118,5 +1130,37 @@ void QtWengoPhone::showHideOffLineContacts() {
 			config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY,true);
 		}
 		_contactList->hideOffLineContacts();
+	}
+}
+
+void QtWengoPhone::proxyNeedsAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy) {
+	typedef PostEvent1<void (NetworkProxy networkProxy), NetworkProxy> MyPostEvent;
+	MyPostEvent * event = 
+			new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1), networkProxy);
+	postEvent(event);
+}
+
+void QtWengoPhone::wrongProxyAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy) {
+	typedef PostEvent1<void (NetworkProxy networkProxy), NetworkProxy> MyPostEvent;
+	MyPostEvent * event = 
+			new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1), networkProxy);
+	postEvent(event);
+}
+
+void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(NetworkProxy networkProxy) {
+	static QtHttpProxyLogin * httpProxy =
+		new QtHttpProxyLogin(getWidget(), 
+			networkProxy.getServer(), networkProxy.getServerPort());
+
+	int ret = httpProxy->show();
+
+	if (ret == QDialog::Accepted) {
+		NetworkProxy myNetworkProxy;
+		myNetworkProxy.setServer(httpProxy->getProxyAddress());
+		myNetworkProxy.setServerPort(httpProxy->getProxyPort());
+		myNetworkProxy.setLogin(httpProxy->getLogin());
+		myNetworkProxy.setPassword(httpProxy->getPassword());
+
+		NetworkProxyDiscovery::getInstance().setProxySettings(myNetworkProxy);
 	}
 }

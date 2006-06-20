@@ -27,8 +27,8 @@
 #include "QtContactTreeKeyFilter.h"
 #include "QtContactTreeMouseFilter.h"
 #include "QtConferenceAction.h"
-#include <presentation/qt/QtWengoPhone.h>
 
+#include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/profile/QtProfileDetails.h>
 
 #include <control/CWengoPhone.h>
@@ -36,6 +36,8 @@
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
 
+#include <model/config/Config.h>
+#include <model/config/ConfigManager.h>
 #include <model/phoneline/PhoneLine.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/profile/UserProfile.h>

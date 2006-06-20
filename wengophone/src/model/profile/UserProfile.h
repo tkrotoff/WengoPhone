@@ -83,18 +83,6 @@ public:
 	Event< void (SipAccount & sender, SipAccount::NetworkDiscoveryState state) > networkDiscoveryStateChangedEvent;
 
 	/**
-	 * @see SipAccount::proxyNeedsAuthenticationEvent
-	 */
-	Event<void (SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort)> proxyNeedsAuthenticationEvent;
-
-	/**
-	 * @see SipAccount::wrongProxyAuthenticationEvent
-	 */
-	Event<void (SipAccount & sender,
-		const std::string & proxyAddress, unsigned proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
-
-	/**
 	 * A new IMAccount has been added.
 	 *
 	 * @param sender this class

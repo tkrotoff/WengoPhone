@@ -31,12 +31,6 @@ SipAccount::SipAccount() {
 
 	_lastNetworkDiscoveryState = NetworkDiscoveryStateUnknown;
 	_lastLoginState = LoginStateUnknown;
-
-	_networkDiscovery.proxyNeedsAuthenticationEvent +=
-		boost::bind(&SipAccount::proxyNeedsAuthenticationEventHandler, this, _1, _2, _3);
-
-	_networkDiscovery.wrongProxyAuthenticationEvent +=
-		boost::bind(&SipAccount::wrongProxyAuthenticationEventHandler, this, _1, _2, _3, _4, _5);
 }
 
 SipAccount::SipAccount(const SipAccount & sipAccount) {
@@ -65,23 +59,6 @@ void SipAccount::copy(const SipAccount & sipAccount) {
 	_realm = sipAccount._realm;
 	_lastNetworkDiscoveryState = sipAccount._lastNetworkDiscoveryState;
 	_lastLoginState = sipAccount._lastLoginState;
-}
-
-void SipAccount::setProxySettings(const std::string & proxyAddress, unsigned proxyPort,
-	const std::string & proxyLogin, const std::string & proxyPassword) {
-
-	_networkDiscovery.setProxySettings(proxyAddress, proxyPort, proxyLogin, proxyPassword);
-}
-
-void SipAccount::proxyNeedsAuthenticationEventHandler(NetworkDiscovery & sender, const std::string & proxyUrl, int proxyPort) {
-	proxyNeedsAuthenticationEvent(*this, proxyUrl, proxyPort);
-}
-
-void SipAccount::wrongProxyAuthenticationEventHandler(NetworkDiscovery & sender,
-	const std::string & proxyUrl, int proxyPort,
-	const std::string & proxyLogin, const std::string & proxyPassword) {
-
-	wrongProxyAuthenticationEvent(*this, proxyUrl, proxyPort, proxyLogin, proxyPassword);
 }
 
 void SipAccount::setConnected(bool connected) {

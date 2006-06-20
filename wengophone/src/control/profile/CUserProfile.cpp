@@ -82,10 +82,6 @@ CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
 		boost::bind(&CUserProfile::loginStateChangedEventHandler, this, _1, _2);
 	_userProfile.networkDiscoveryStateChangedEvent +=
 		boost::bind(&CUserProfile::networkDiscoveryStateChangedEventHandler, this, _1, _2);
-	_userProfile.proxyNeedsAuthenticationEvent +=
-		boost::bind(&CUserProfile::proxyNeedsAuthenticationEventHandler, this, _1, _2, _3);
-	_userProfile.wrongProxyAuthenticationEvent +=
-		boost::bind(&CUserProfile::wrongProxyAuthenticationEventHandler, this, _1, _2, _3, _4, _5);
 
 	_userProfile.getHistory().historyLoadedEvent +=
 		boost::bind(&CUserProfile::historyLoadedEventHandler, this, _1);
@@ -116,10 +112,6 @@ CUserProfile::~CUserProfile() {
 		boost::bind(&CUserProfile::loginStateChangedEventHandler, this, _1, _2);
 	_userProfile.networkDiscoveryStateChangedEvent -=
 		boost::bind(&CUserProfile::networkDiscoveryStateChangedEventHandler, this, _1, _2);
-	_userProfile.proxyNeedsAuthenticationEvent -=
-		boost::bind(&CUserProfile::proxyNeedsAuthenticationEventHandler, this, _1, _2, _3);
-	_userProfile.wrongProxyAuthenticationEvent -=
-		boost::bind(&CUserProfile::wrongProxyAuthenticationEventHandler, this, _1, _2, _3, _4, _5);
 
 	_userProfile.getHistory().historyLoadedEvent -=
 		boost::bind(&CUserProfile::historyLoadedEventHandler, this, _1);
@@ -166,19 +158,6 @@ void CUserProfile::loginStateChangedEventHandler(SipAccount & sender,
 void CUserProfile::networkDiscoveryStateChangedEventHandler(SipAccount & sender,
 	SipAccount::NetworkDiscoveryState state) {
 	_pUserProfile->networkDiscoveryStateChangedEventHandler(sender, state);
-}
-
-void CUserProfile::proxyNeedsAuthenticationEventHandler(SipAccount & sender,
-	const std::string & proxyAddress, unsigned proxyPort) {
-	_pUserProfile->proxyNeedsAuthenticationEventHandler(sender,
-		proxyAddress, proxyPort);
-}
-
-void CUserProfile::wrongProxyAuthenticationEventHandler(SipAccount & sender,
-	const std::string & proxyAddress, unsigned proxyPort,
-	const std::string & proxyLogin, const std::string & proxyPassword) {
-	_pUserProfile->wrongProxyAuthenticationEventHandler(sender, proxyAddress,
-		proxyPort, proxyLogin, proxyPassword);
 }
 
 void CUserProfile::authorizationRequestEventHandler(PresenceHandler & sender,

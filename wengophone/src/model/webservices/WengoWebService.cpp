@@ -20,6 +20,8 @@
 #include "WengoWebService.h"
 
 #include <model/account/wengo/WengoAccount.h>
+#include <model/config/Config.h>
+#include <model/config/ConfigManager.h>
 #include <WengoPhoneBuildId.h>
 
 #include <util/Logger.h>

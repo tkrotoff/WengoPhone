@@ -20,9 +20,6 @@
 #ifndef NETWORKDISCOVERY_H
 #define NETWORKDISCOVERY_H
 
-#include <model/config/ConfigManager.h>
-#include <model/config/Config.h>
-
 #include <sipwrapper/EnumNatType.h>
 
 #include <util/Event.h>
@@ -38,28 +35,6 @@
 class NetworkDiscovery
 {
 public:
-
-	/**
-	 * Emitted when a proxy has been detected and needs a login/password.
-	 *
-	 * @param proxyAddress the url of the detected proxy
-	 * @param proxyPort the port of the detected proxy
-	 */
-	Event< void (NetworkDiscovery & sender,
-		const std::string & proxyAddress, unsigned proxyPort) > proxyNeedsAuthenticationEvent;
-
-	/**
-	 * Emitted when given login/password are wrong.
-	 *
-	 * @param sender this class
-	 * @param proxyAddress the url of the detected proxy
-	 * @param proxyPort the port of the detected proxy
-	 * @param proxyLogin the maybe wrong login
-	 * @param proxyPassword the maybe wrong password
-	 */
-	Event< void (NetworkDiscovery & sender,
-		const std::string & proxyAddress, unsigned proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
 	NetworkDiscovery();
 
@@ -109,60 +84,13 @@ public:
 	 */
 	unsigned getFreeLocalPort();
 
-	/**
-	 * Sets the proxy.
-	 *
-	 * Unblock discoverProxySettings if it was.
-	 */
-	void setProxySettings(const std::string & proxyServer, unsigned proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword);
-
-	/**
-	 * @return the proxy server.
-	 */
-	const std::string getProxyServer() const {
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		return config.getNetworkProxyServer();
-	}
-
-	/**
-	 * @return the proxy server port.
-	 */
-	unsigned getProxyServerPort() const {
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		return config.getNetworkProxyPort();
-	}
-
-	/**
-	 * @return the proxy login.
-	 */
-	const std::string getProxyLogin() const {
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		return config.getNetworkProxyLogin();
-	}
-
-	/**
-	 * @return the proxy password.
-	 */
-	const std::string getProxyPassword() const {
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		return config.getNetworkProxyPassword();
-	}
-
 private:
-
-	/**
-	 * @return false if proxy is not set (usually when proxy needs authentication), true otherwise
-	 */
-	void discoverProxySettings();
 
 	void setNatConfig(EnumNatType::NatType natType);
 
 	static const unsigned PING_TIMEOUT = 3;
 
 	static const unsigned HTTP_TIMEOUT = 10;
-
-	bool _proxySettingsSet;
 };
 
 #endif /*NETWORKDISCOVERY_H*/

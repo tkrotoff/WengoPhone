@@ -20,10 +20,10 @@
 #ifndef SIPACCOUNT_H
 #define SIPACCOUNT_H
 
-#include <model/account/NetworkDiscovery.h>
-
 #include <util/Event.h>
 #include <util/Interface.h>
+
+#include <model/network/NetworkDiscovery.h>
 
 #include <string>
 
@@ -92,18 +92,6 @@ public:
 	 * @param state state of the network discovery
 	 */
 	Event< void (SipAccount & sender, NetworkDiscoveryState state) > networkDiscoveryStateChangedEvent;
-
-	/**
-	 * @see NetworkDiscovery::proxyNeedsAuthenticationEvent
-	 */
-	Event< void (SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort) > proxyNeedsAuthenticationEvent;
-
-	/**
-	 * @see NetworkDiscovery::wrongProxyAuthenticationEvent
-	 */
-	Event< void (SipAccount & sender,
-		const std::string & proxyAddress, unsigned proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword)> wrongProxyAuthenticationEvent;
 
 	SipAccount();
 
@@ -235,18 +223,6 @@ public:
 	 */
 	void setConnected(bool connected);
 
-	/**
-	 * Sets proxy settings and unblock the NetworkDiscovery if it was waiting for
-	 * proxy authentication parameters.
-	 *
-	 * @param proxyAddress the proxy server
-	 * @param proxyPort the proxy server port
-	 * @param proxyLogin the proxy login
-	 * @param proxyPassword the proxy password
-	 */
-	void setProxySettings(const std::string & proxyAddress, unsigned proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword);
-
 	enum SipAccountType {
 		SipAccountTypeBasic,
 		SipAccountTypeWengo
@@ -268,12 +244,6 @@ protected:
 	 * Copy a SipAccount.
 	 */
 	void copy(const SipAccount & sipAccount);
-
-	void proxyNeedsAuthenticationEventHandler(NetworkDiscovery & sender, const std::string & proxyUrl, int proxyPort);
-
-	void wrongProxyAuthenticationEventHandler(NetworkDiscovery & sender,
-		const std::string & proxyUrl, int proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword);
 
 	/** The identity. */
 	std::string _identity;

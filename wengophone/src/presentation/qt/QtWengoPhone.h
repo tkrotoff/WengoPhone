@@ -24,6 +24,7 @@
 
 #include <model/account/SipAccount.h>
 #include <model/account/wengo/WengoAccount.h>
+#include <model/network/NetworkProxyDiscovery.h>
 
 #include <imwrapper/EnumPresenceState.h>
 
@@ -263,13 +264,11 @@ private:
 
 	void loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state);
 
-	void wrongProxyAuthenticationEventHandler(SipAccount & sender,
-		const std::string & proxyAddress, unsigned proxyPort,
-		const std::string & proxyLogin, const std::string & proxyPassword);
+	void proxyNeedsAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy);
 
-	void proxyNeedsAuthenticationEventHandler(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort);
+	void wrongProxyAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy);
 
-	void proxyNeedsAuthenticationEventHandlerThreadSafe(SipAccount & sender, const std::string & proxyAddress, unsigned proxyPort);
+	void proxyNeedsAuthenticationEventHandlerThreadSafe(NetworkProxy networkProxy);
 
 	void authorizationRequestEventHandlerThreadSafe(PresenceHandler & sender, const IMContact & imContact,
 		const std::string & message);

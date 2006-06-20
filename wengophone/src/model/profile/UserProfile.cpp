@@ -20,7 +20,6 @@
 #include "UserProfile.h"
 
 #include <model/WengoPhone.h>
-#include <model/account/NetworkObserver.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/chat/ChatHandler.h>
 #include <model/config/ConfigManager.h>
@@ -28,6 +27,7 @@
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactGroup.h>
 #include <model/history/History.h>
+#include <model/network/NetworkObserver.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
 #include <model/phoneline/PhoneLineState.h>
@@ -264,8 +264,6 @@ void UserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 		_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
 		_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
 		_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
-		_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
-		_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 
 		//Sends the HTTP request to the SSO
 		_wengoAccount->init();
@@ -335,8 +333,6 @@ void UserProfile::wengoAccountInit() {
 			_wengoAccount->loginStateChangedEvent += loginStateChangedEvent;
 			_wengoAccount->networkDiscoveryStateChangedEvent += networkDiscoveryStateChangedEvent;
 			_wengoAccount->loginStateChangedEvent += boost::bind(&UserProfile::loginStateChangedEventHandler, this, _1, _2);
-			_wengoAccount->proxyNeedsAuthenticationEvent += proxyNeedsAuthenticationEvent;
-			_wengoAccount->wrongProxyAuthenticationEvent += wrongProxyAuthenticationEvent;
 
 			//Sends the HTTP request to the SSO
 			_wengoAccount->init();

@@ -24,9 +24,9 @@
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
 
-#include <model/account/NetworkObserver.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/network/NetworkObserver.h>
 #include <model/phoneline/IPhoneLine.h>
 #include <model/phoneline/PhoneLineState.h>
 #include <model/profile/UserProfile.h>

@@ -19,7 +19,6 @@
 
 #include "QtUserProfile.h"
 
-#include <presentation/qt/QtHttpProxyLogin.h>
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/profile/QtProfileDetails.h>
 
@@ -58,16 +57,11 @@ void QtUserProfile::initThreadSafe() {
 		SLOT(loginStateChangedEventHandlerSlot(SipAccount *, int)), Qt::QueuedConnection);
 	connect(this, SIGNAL(networkDiscoveryStateChangedEventHandlerSignal(SipAccount *, int)),
 		SLOT(networkDiscoveryStateChangedEventHandlerSlot(SipAccount *, int)), Qt::QueuedConnection);
-	connect(this, SIGNAL(proxyNeedsAuthenticationEventHandlerSignal(SipAccount *, QString, int)),
-		SLOT(proxyNeedsAuthenticationEventHandlerSlot(SipAccount *, QString, int)), Qt::QueuedConnection);
-	connect(this, SIGNAL(wrongProxyAuthenticationEventHandlerSignal(SipAccount *, QString, int, QString, QString)),
-		SLOT(wrongProxyAuthenticationEventHandlerSlot(SipAccount *, QString, int, QString, QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(authorizationRequestEventHandlerSignal(PresenceHandler *, IMContact, QString)),
 		SLOT(authorizationRequestEventHandlerSlot(PresenceHandler *, IMContact, QString)), Qt::QueuedConnection);
 }
 
 QtUserProfile::~QtUserProfile() {
-
 }
 
 void QtUserProfile::updatePresentation() {
@@ -84,20 +78,6 @@ void QtUserProfile::loginStateChangedEventHandler(SipAccount & sender,
 void QtUserProfile::networkDiscoveryStateChangedEventHandler(SipAccount & sender,
 	SipAccount::NetworkDiscoveryState state) {
 	networkDiscoveryStateChangedEventHandlerSignal(&sender, (int)state);
-}
-
-void QtUserProfile::proxyNeedsAuthenticationEventHandler(SipAccount & sender,
-	const std::string & proxyAddress, unsigned proxyPort) {
-	proxyNeedsAuthenticationEventHandlerSignal(&sender,
-		QString::fromStdString(proxyAddress), proxyPort);
-}
-
-void QtUserProfile::wrongProxyAuthenticationEventHandler(SipAccount & sender,
-	const std::string & proxyAddress, unsigned proxyPort,
-	const std::string & proxyLogin, const std::string & proxyPassword) {
-	wrongProxyAuthenticationEventHandlerSignal(&sender,
-		QString::fromStdString(proxyAddress), proxyPort,
-		QString::fromStdString(proxyLogin), QString::fromStdString(proxyPassword));
 }
 
 void QtUserProfile::authorizationRequestEventHandler(PresenceHandler & sender,
@@ -161,26 +141,6 @@ void QtUserProfile::networkDiscoveryStateChangedEventHandlerSlot(SipAccount * se
 
 	//SipAccount::NetworkDiscoveryState state = (SipAccount::NetworkDiscoveryState) iState;
 
-}
-
-void QtUserProfile::proxyNeedsAuthenticationEventHandlerSlot(SipAccount * sender,
-	QString proxyAddress, int proxyPort) {
-
-	static QtHttpProxyLogin * httpProxy =
-		new QtHttpProxyLogin(_qtWengoPhone.getWidget(), proxyAddress.toStdString(), proxyPort);
-
-	int ret = httpProxy->show();
-
-	if (ret == QDialog::Accepted) {
-		sender->setProxySettings(httpProxy->getProxyAddress(), httpProxy->getProxyPort(),
-			httpProxy->getLogin(), httpProxy->getPassword());
-	}
-}
-
-void QtUserProfile::wrongProxyAuthenticationEventHandlerSlot(SipAccount * sender,
-	QString proxyAddress, int proxyPort,
-	QString proxyLogin, QString proxyPassword) {
-	proxyNeedsAuthenticationEventHandlerSlot(sender, proxyAddress, proxyPort);
 }
 
 void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sender,
