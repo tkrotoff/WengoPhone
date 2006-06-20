@@ -298,7 +298,7 @@ void QtContactManager::userStateChanged() {
 	safeUserStateChanged();
 }
 
-void QtContactManager::hideOffLineUsers() {
+void QtContactManager::hideOffLineContacts() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	_hideUsers = config.getShowOfflineContacts();
 	redrawContacts();
@@ -353,22 +353,22 @@ void QtContactManager::sortContacts(bool bypassTimer) {
 				QString contactId = item->text(0);
 				// Take the widget and put it in sortList
 				int index = group->indexOfChild(item);
-				QtContactInfo hiden = QtContactInfo(item, item->parent(), item->text(0), index, this);
-				switch (hiden.getStatus()){
+				QtContactInfo qtContactInfo = QtContactInfo(item, item->parent(), item->text(0), index, this);
+				switch (qtContactInfo.getStatus()){
 					case QtContactPixmap::ContactOnline:
-						onlineContact.append(hiden);
+						onlineContact.append(qtContactInfo);
 						break;
 					case QtContactPixmap::ContactOffline:
-						offlineContact.append(hiden);
+						offlineContact.append(qtContactInfo);
 						break;
 					case QtContactPixmap::ContactDND:
-						dndContact.append(hiden);
+						dndContact.append(qtContactInfo);
 						break;
 					case QtContactPixmap::ContactAway:
-						idleContact.append(hiden);
+						idleContact.append(qtContactInfo);
 						break;
 					default:
-						othersContact.append(hiden);
+						othersContact.append(qtContactInfo);
 				}
 			}
 
@@ -562,7 +562,7 @@ QMenu * QtContactManager::createMenu() {
 	return menu;
 }
 
-void QtContactManager::startMobileCall(bool checked) {
+void QtContactManager::startMobileCall(bool) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact;
 	// The current selected item
@@ -573,7 +573,7 @@ void QtContactManager::startMobileCall(bool checked) {
 	}
 }
 
-void QtContactManager::startHomeCall(bool checked) {
+void QtContactManager::startHomeCall(bool) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact;
 	// The current selected item
@@ -584,7 +584,7 @@ void QtContactManager::startHomeCall(bool checked) {
 	}
 }
 
-void QtContactManager::startWorkCall(bool checked) {
+void QtContactManager::startWorkCall(bool) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact;
 	// The current selected item
@@ -595,7 +595,7 @@ void QtContactManager::startWorkCall(bool checked) {
 	}
 }
 
-void QtContactManager::startWengoCall(bool checked) {
+void QtContactManager::startWengoCall(bool) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact;
 	// The current selected item
@@ -622,7 +622,7 @@ void QtContactManager::removeContact(const QString & contactId) {
 				qtContact = ul->getContact(item->text(0));
 				if (qtContact->getId() == contactId) {
 					group->takeChild(t);
-					ul->removeUser(qtContact);
+					ul->removeContact(qtContact);
 					found = true;
 				}
 			}

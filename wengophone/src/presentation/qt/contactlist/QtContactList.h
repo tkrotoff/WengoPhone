@@ -117,7 +117,7 @@ public Q_SLOTS:
 
 	void redrawContacts();
 
-	void hideOffLineUser();
+	void hideOffLineContacts();
 
 	void sortContacts();
 

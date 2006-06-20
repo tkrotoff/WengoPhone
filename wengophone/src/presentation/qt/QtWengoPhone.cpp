@@ -132,7 +132,7 @@ void QtWengoPhone::initThreadSafe() {
 #ifdef OS_LINUX
 	_wengoPhoneWindow->setWindowIcon(QIcon(QPixmap(":/pics/default-avatar.png")));
 #endif
-	
+
 	//Translation
 	_qtLanguage = new QtLanguage(_wengoPhoneWindow);
 	connect(_qtLanguage, SIGNAL(translationChangedSignal()), SLOT(slotTranslationChanged()));
@@ -1117,6 +1117,6 @@ void QtWengoPhone::showHideOffLineContacts() {
 		} else {
 			config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY,true);
 		}
-		_contactList->hideOffLineUser();
+		_contactList->hideOffLineContacts();
 	}
 }

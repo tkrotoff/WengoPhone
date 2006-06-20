@@ -42,47 +42,47 @@ public:
 
 	virtual ~QtContactListManager();
 
-	void addContact(QtContact * user);
+	void addContact(QtContact * qtContact);
 
-	void removeUser(QtContact* user);
+	void removeContact(QtContact* qtContact);
 
-	void paintUser(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
+	void paintContact(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 
-	void mouseOn(const QString & userid);
+	void mouseOn(const QString & contactId);
 
-	bool contains(const QString & userid) const;
+	bool contains(const QString & contactId) const;
 
-	void contactUpdated(const QString & userid);
+	void contactUpdated(const QString & contactId);
 
-	bool hasIM(const QString & userid) const;
+	bool hasIM(const QString & contactId) const;
 
-	bool hasCall(const QString & userid) const;
+	bool hasCall(const QString & contactId) const;
 
-	bool hasVideo(const QString & userid) const;
+	bool hasVideo(const QString & contactId) const;
 
-	bool hasPhoneNumber(const QString & userid) const;
+	bool hasPhoneNumber(const QString & contactId) const;
 
-	QtContact * getContact(const QString & userid) const;
+	QtContact * getContact(const QString & contactId) const;
 
-	QString getPreferredNumber(const QString & userid) const;
+	QString getPreferredNumber(const QString & contactId) const;
 
-	QString getMobilePhone(const QString & userid) const;
+	QString getMobilePhone(const QString & contactId) const;
 
-	QString getHomePhone(const QString & userid) const;
+	QString getHomePhone(const QString & contactId) const;
 
-	QString getWorkPhone(const QString & userid) const;
+	QString getWorkPhone(const QString & contactId) const;
 
-	void mouseClicked(const QString & userid, const QPoint pos, const QRect & rect);
+	void mouseClicked(const QString & contactId, const QPoint pos, const QRect & rect);
 
-	void setButton(const QString & userid, const Qt::MouseButton button);
+	void setButton(const QString & contactId, const Qt::MouseButton button);
 
-	void setOpenStatus(const QString & userid, bool value);
+	void setOpenStatus(const QString & contactId, bool value);
 
-	Qt::MouseButton getButton(const QString & userid) const;
+	Qt::MouseButton getButton(const QString & contactId) const;
 
-	int getHeight(const QString & userid) const;
+	int getHeight(const QString & contactId) const;
 
-	QString getWengoPhoneNumber(const QString & userid) const;
+	QString getWengoPhoneNumber(const QString & contactId) const;
 
 	void setTreeWidget(QTreeWidget * tree) { _tree = tree; }
 
@@ -90,20 +90,20 @@ public:
 
 	void resetMouseStatus();
 
-	void startChat(const QString & userid);
+	void startChat(const QString & contactId);
 
-	void startSMS(const QString & userid);
+	void startSMS(const QString & contactId);
 
-	void startCall(const QString & userid, const QString & number);
+	void startCall(const QString & contactId, const QString & number);
 
-	void startCall(const QString & userid);
+	void startCall(const QString & contactId);
 
 	void clear();
 
 	/**
 	 * Will start a call with a free phone number.
 	 */
-	void startFreeCall(const QString & userid);
+	void startFreeCall(const QString & contactId);
 
 protected:
 

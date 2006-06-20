@@ -85,7 +85,7 @@ public Q_SLOTS:
 
 	void userStateChanged();
 
-	void hideOffLineUsers();
+	void hideOffLineContacts();
 
 	void hideGroups();
 

@@ -28,10 +28,10 @@
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
 
+#include <qtutil/Object.h>
+
 #include <util/Logger.h>
 #include <util/StringList.h>
-
-#include <qtutil/Object.h>
 
 #include <QModelIndex>
 #include <QWidget>
@@ -45,7 +45,7 @@ static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 
 QtTreeViewDelegate::QtTreeViewDelegate(CWengoPhone & cWengoPhone, QObject * parent)
 : QItemDelegate(parent), _cWengoPhone(cWengoPhone) {
-	QPixmapCache::setCacheLimit(2048);
+
 }
 
 void QtTreeViewDelegate::setParent(QWidget * parent) {
@@ -62,7 +62,6 @@ QWidget * QtTreeViewDelegate::createEditor(QWidget * parent,
 
 void QtTreeViewDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const {
 	QtContactWidget * widget = qobject_cast < QtContactWidget * > (editor);
-
 	if (!widget) {
 		return;
 	}
@@ -84,9 +83,8 @@ void QtTreeViewDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
 		drawGroup(painter, option, index);
 	} else {
 		QtContactListManager * ul = QtContactListManager::getInstance();
-		if (ul) {
-			ul->paintUser(painter, option, index);
-		}
+		ul->paintContact(painter, option, index);
+
 	}
 }
 
@@ -105,7 +103,7 @@ QSize QtTreeViewDelegate::sizeHint(const QStyleOptionViewItem & option, const QM
 	return orig;
 }
 
-bool QtTreeViewDelegate::checkForUtf8(const unsigned char * text, int size) const {
+bool QtTreeViewDelegate::checkForUtf8(const std::string &text, int size) const {
 	bool isUtf8 = false;
 	if (size==0)
 		return true;
@@ -168,7 +166,7 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 		groupId = groupName.toStdString();
 		groupNameTmp = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactGroupName(groupId);
 	}
-	if (checkForUtf8((const unsigned char *)(groupNameTmp.c_str()), groupNameTmp.size())){
+	if (checkForUtf8(groupNameTmp, groupNameTmp.size())){
 		groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
 	} else {
 		groupName=QString::fromStdString(groupNameTmp);
@@ -180,20 +178,13 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 QPixmap QtTreeViewDelegate::getGroupBackGround(const QRect & rect) const {
 	QPixmap backGround;
 	QRect pixmapRect;
-	QString rectString = QString("GROUPRECT%1").arg(rect.width());
-
-	if (QPixmapCache::find(rectString,backGround)) {
-		return backGround;
-	}
 	QLinearGradient lg(QPointF(1, rect.top()), QPointF(1, rect.bottom()));
 	lg.setColorAt(.8,QColor(212, 208, 200));
-	lg.setColorAt(0,QColor(255, 255, 255));
+	lg.setColorAt(0,QColor(250, 250, 250));
 
 	backGround = QPixmap(rect.width(),rect.height());
 	QPainter painter(&backGround);
 	painter.fillRect(backGround.rect(),QBrush(lg));
 	painter.end();
-
-	QPixmapCache::insert(rectString,backGround);
 	return backGround;
 }

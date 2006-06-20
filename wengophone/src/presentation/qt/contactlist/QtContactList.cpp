@@ -249,7 +249,7 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 	QtContact * qtContact = NULL;
 	QString contactName;
 
-	// If User is not already in UserList
+	// If the contact is not already in QtContactList
 	if (!ul->contains(contactId)) {
 		ContactProfile contactProfile = _cContactList.getContactProfile(contactId.toStdString());
 		if (_contactManager->groupsAreHiden()) {
@@ -304,8 +304,8 @@ void QtContactList::redrawContacts() {
 	_contactManager->redrawContacts();
 }
 
-void QtContactList::hideOffLineUser() {
-	_contactManager->hideOffLineUsers();
+void QtContactList::hideOffLineContacts() {
+	_contactManager->hideOffLineContacts();
 }
 
 void QtContactList::sortContacts() {
