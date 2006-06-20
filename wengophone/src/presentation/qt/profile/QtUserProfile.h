@@ -82,6 +82,11 @@ private Q_SLOTS:
 
 private:
 
+	/**
+	 * Sets the browser URL to the WengoAccount one.
+	 */
+	void setBrowserUrlToAccount();
+
 	void initThreadSafe();
 
 	void updatePresentation();

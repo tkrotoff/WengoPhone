@@ -24,10 +24,12 @@
 
 #include <control/profile/CUserProfile.h>
 
+#include <model/account/SipAccount.h>
 #include <model/config/Config.h>
 #include <model/config/ConfigManager.h>
 #include <model/contactlist/ContactProfile.h>
 #include <model/presence/PresenceHandler.h>
+#include <model/profile/UserProfile.h>
 
 #include <imwrapper/IMContact.h>
 
@@ -59,6 +61,10 @@ void QtUserProfile::initThreadSafe() {
 		SLOT(networkDiscoveryStateChangedEventHandlerSlot(SipAccount *, int)), Qt::QueuedConnection);
 	connect(this, SIGNAL(authorizationRequestEventHandlerSignal(PresenceHandler *, IMContact, QString)),
 		SLOT(authorizationRequestEventHandlerSlot(PresenceHandler *, IMContact, QString)), Qt::QueuedConnection);
+
+	if (_cUserProfile.getUserProfile().getActivePhoneLine()) {
+		setBrowserUrlToAccount();
+	}
 }
 
 QtUserProfile::~QtUserProfile() {
@@ -91,24 +97,12 @@ void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
 	SipAccount::LoginState state = (SipAccount::LoginState) iState;
 
 #ifdef OS_WINDOWS
-	const WengoAccount * wengoAccount = dynamic_cast<const WengoAccount *>(sender);
-#endif
-
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
+#endif
 
 	switch (state) {
 	case SipAccount::LoginStateReady:
-#ifdef OS_WINDOWS
-		if (config.getIEActiveX() && wengoAccount) {
-			std::string data = "?login=" + wengoAccount->getWengoLogin() +
-				"&password=" + wengoAccount->getWengoPassword() +
-				"&lang=" + config.getLanguage() +
-				"&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) +
-				"&page=softphoneng-web";
-			if (_qtWengoPhone.getQtBrowser())
-                _qtWengoPhone.getQtBrowser()->setUrl(QtWengoPhone::URL_WENGO_MINI_HOME + data);
-		}
-#endif
+		setBrowserUrlToAccount();
 		break;
 
 	case SipAccount::LoginStateConnected:
@@ -116,7 +110,7 @@ void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
 
 	case SipAccount::LoginStateDisconnected:
 #ifdef OS_WINDOWS
-		if (config.getIEActiveX() && wengoAccount) {
+		if (config.getIEActiveX() && (sender->getType() == SipAccount::SipAccountTypeWengo)) {
 			_qtWengoPhone.getQtBrowser()->setUrl(qApp->applicationDirPath().toStdString() +
 				"/" + QtWengoPhone::LOCAL_WEB_DIR + "/loading.htm");
 		}
@@ -175,4 +169,21 @@ void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sende
 		// TODO: avoid direct access to model (as we are in the GUI thread)
 		sender->authorizeContact(imContact, false, String::null);
 	}
+}
+
+void QtUserProfile::setBrowserUrlToAccount() {
+#ifdef OS_WINDOWS
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	if (config.getIEActiveX() && _cUserProfile.getUserProfile().getActivePhoneLine()) {
+		WengoAccount wengoAccount = *_cUserProfile.getUserProfile().getWengoAccount();
+		std::string data = "?login=" + wengoAccount.getWengoLogin() +
+			"&password=" + wengoAccount.getWengoPassword() +
+			"&lang=" + config.getLanguage() +
+			"&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) +
+			"&page=softphoneng-web";
+		if (_qtWengoPhone.getQtBrowser())
+            _qtWengoPhone.getQtBrowser()->setUrl(QtWengoPhone::URL_WENGO_MINI_HOME + data);
+	}
+#endif
 }
