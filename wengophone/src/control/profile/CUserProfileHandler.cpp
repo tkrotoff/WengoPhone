@@ -30,11 +30,11 @@
 
 #include <thread/Thread.h>
 
-CUserProfileHandler::CUserProfileHandler(UserProfileHandler & userProfileHandler, 
-	CWengoPhone & cWengoPhone, Thread & modelThread) 
-: _userProfileHandler(userProfileHandler),
- _modelThread(modelThread),
- _cWengoPhone(cWengoPhone) {
+CUserProfileHandler::CUserProfileHandler(UserProfileHandler & userProfileHandler,
+	CWengoPhone & cWengoPhone, Thread & modelThread)
+	: _userProfileHandler(userProfileHandler),
+	_modelThread(modelThread),
+	_cWengoPhone(cWengoPhone) {
 
 	_cUserProfile = NULL;
 
@@ -90,11 +90,11 @@ void CUserProfileHandler::createAndSetUserProfileThreadSafe(WengoAccount wengoAc
 	_userProfileHandler.createAndSetUserProfile(wengoAccount);
 }
 
-void CUserProfileHandler::setCurrentUserProfile(const std::string & login, 
+void CUserProfileHandler::setCurrentUserProfile(const std::string & login,
 	const WengoAccount & wengoAccount) {
 	typedef ThreadEvent2<void (std::string, WengoAccount), std::string, WengoAccount> MyThreadEvent;
 	MyThreadEvent * event =
-		new MyThreadEvent(boost::bind(&CUserProfileHandler::setUserProfileThreadSafe, this, _1, _2), 
+		new MyThreadEvent(boost::bind(&CUserProfileHandler::setUserProfileThreadSafe, this, _1, _2),
 			login, wengoAccount);
 
 	_modelThread.postEvent(event);
@@ -122,7 +122,7 @@ bool CUserProfileHandler::userProfileExists(const std::string & name) const {
 
 WengoAccount CUserProfileHandler::getWengoAccountOfUserProfile(const std::string & name) {
 	UserProfile * userProfile = _userProfileHandler.getUserProfile(name);
-	WengoAccount result("", "", false);
+	WengoAccount result(String::null, String::null, false);
 
 	if (userProfile && userProfile->hasWengoAccount()) {
 		result = *userProfile->getWengoAccount();
@@ -164,6 +164,7 @@ void CUserProfileHandler::currentUserProfileWillDieEventHandler(UserProfileHandl
 }
 
 void CUserProfileHandler::userProfileInitializedEventHandler(UserProfileHandler & sender, UserProfile & userProfile) {
+	Mutex::ScopedLock scopedLock(_mutex);
 	_cUserProfile = new CUserProfile(userProfile, _cWengoPhone, _modelThread);
 	_pUserProfileHandler->userProfileInitializedEventHandler();
 }
@@ -172,7 +173,7 @@ void CUserProfileHandler::wengoAccountNotValidEventHandler(UserProfileHandler & 
 	_pUserProfileHandler->wengoAccountNotValidEventHandler(wengoAccount);
 }
 
-void CUserProfileHandler::defaultUserProfileExistsEventHandler(UserProfileHandler & sender, 
+void CUserProfileHandler::defaultUserProfileExistsEventHandler(UserProfileHandler & sender,
 	const std::string & createdProfileName) {
 	_pUserProfileHandler->defaultUserProfileExistsEventHandler(createdProfileName);
 }

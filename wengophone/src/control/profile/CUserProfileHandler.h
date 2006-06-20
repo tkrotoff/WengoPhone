@@ -22,6 +22,8 @@
 
 #include <model/account/wengo/WengoAccount.h>
 
+#include <thread/Mutex.h>
+
 #include <string>
 
 class CUserProfile;
@@ -67,7 +69,7 @@ public:
 	/**
 	 * @see UserProfileHandler::setUserProfile
 	 */
-	void setCurrentUserProfile(const std::string & profileName, 
+	void setCurrentUserProfile(const std::string & profileName,
 		const WengoAccount & wengoAccount);
 
 	/**
@@ -95,12 +97,15 @@ public:
 	 * @return the current CUserProfile.
 	 * Can be NULL.
 	 */
-	CUserProfile * getCUserProfile() { return _cUserProfile; }
+	CUserProfile * getCUserProfile() const {
+		Mutex::ScopedLock scopedLock(_mutex);
+		return _cUserProfile;
+	}
 
 	/**
 	 * @return the Presentation layer.
 	 */
-	PUserProfileHandler * getPresentation() { return _pUserProfileHandler; }
+	PUserProfileHandler * getPresentation() const { return _pUserProfileHandler; }
 
 private:
 
@@ -117,7 +122,7 @@ private:
 	/**
 	 * @see UserProfileHandler::userProfileInitializedEvent
 	 */
-	void userProfileInitializedEventHandler(UserProfileHandler & sender, 
+	void userProfileInitializedEventHandler(UserProfileHandler & sender,
 		UserProfile & userProfile);
 
 	/**
@@ -129,7 +134,7 @@ private:
 	/**
 	 * @see UserProfileHandler::defaultUserProfileExists
 	 */
-	void defaultUserProfileExistsEventHandler(UserProfileHandler & sender, 
+	void defaultUserProfileExistsEventHandler(UserProfileHandler & sender,
 		const std::string & createdProfileName);
 
 	/**
@@ -167,6 +172,8 @@ private:
 	CWengoPhone & _cWengoPhone;
 
 	Thread & _modelThread;
+
+	mutable Mutex _mutex;
 };
 
 #endif //OWCUSERPROFILEHANDLER_H

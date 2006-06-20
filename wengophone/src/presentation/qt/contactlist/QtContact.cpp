@@ -36,9 +36,7 @@ QtContact::QtContact(const std::string & contactId, CWengoPhone & cWengoPhone, Q
 	_cWengoPhone(cWengoPhone) {
 
 	_contactId = contactId;
-	//FIXME this causes a crash
-	//contactUpdated();
-	_contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
+	contactUpdated();
 	_mouseOn = false;
 	_openStatus = false;
 }
@@ -131,7 +129,6 @@ QtContactPixmap::ContactPixmap QtContact::getStatus() const {
 
 void QtContact::startChat() {
 	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->startIM(_contactId);
-
 }
 
 void QtContact::startSMS() {

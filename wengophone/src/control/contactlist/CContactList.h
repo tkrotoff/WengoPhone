@@ -17,13 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CCONTACTLIST_H
-#define CCONTACTLIST_H
+#ifndef OWCCONTACTLIST_H
+#define OWCCONTACTLIST_H
 
 #include <model/contactlist/ContactProfile.h>
 
-#include <vector>
-#include <string>
+#include <util/StringList.h>
 
 class ContactList;
 class Contact;
@@ -80,14 +79,14 @@ public:
 	 */
 	ContactProfile getContactProfile(const std::string & contactId) const;
 
-    std::string findContactThatOwns(const IMContact & imContact);
+	std::string findContactThatOwns(const IMContact & imContact);
 
 	/**
 	 * Gets all existing Contact Ids.
 	 *
-	 * @return a vector of string containing the UUID of the Contacts.
+	 * @return a string list containing the UUID of the Contacts.
 	 */
-	std::vector<std::string> getContactIds() const;
+	StringList getContactIds() const;
 
 	/**
 	 * Add a Contact to the ContactList.
@@ -245,4 +244,4 @@ private:
 	Thread & _modelThread;
 };
 
-#endif	//CCONTACTLIST_H
+#endif	//OWCCONTACTLIST_H

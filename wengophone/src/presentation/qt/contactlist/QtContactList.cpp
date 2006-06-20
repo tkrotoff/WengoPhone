@@ -157,8 +157,8 @@ void QtContactList::initThreadSafe() {
 }
 
 void QtContactList::initContent() {
-	std::vector <std::string> contacts = _cContactList.getContactIds();
-	std::vector <std::string>::const_iterator it;
+	StringList contacts = _cContactList.getContactIds();
+	StringList::const_iterator it;
 
 	for (it = contacts.begin(); it != contacts.end(); ++it) {
 		contactAddedEventSlot(QString::fromStdString(*it));
