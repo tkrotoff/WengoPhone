@@ -43,10 +43,6 @@ CPhoneLine::CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone)
 }
 
 CPhoneLine::~CPhoneLine() {
-	_phoneLine.stateChangedEvent -= boost::bind(&CPhoneLine::stateChangedEventHandler, this, _1, _2);
-	_phoneLine.phoneCallCreatedEvent -= boost::bind(&CPhoneLine::phoneCallCreatedEventHandler, this, _1, _2);
-	_phoneLine.phoneCallClosedEvent -= boost::bind(&CPhoneLine::phoneCallClosedEventHandler, this, _1, _2);
-
 	delete _pPhoneLine;
 }
 

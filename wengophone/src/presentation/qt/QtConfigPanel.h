@@ -22,6 +22,8 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
+#include <util/Trackable.h>
+
 class Settings;
 class QtSliderManager;
 class CWengoPhone;
@@ -35,7 +37,7 @@ namespace Ui { class WengoPhoneWindowConfigPanel; }
  *
  * @author Tanguy Krotoff
  */
-class QtConfigPanel : public QObjectThreadSafe {
+class QtConfigPanel : public QObjectThreadSafe, public Trackable {
 	Q_OBJECT
 public:
 

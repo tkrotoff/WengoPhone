@@ -28,6 +28,7 @@
 
 #include <util/Event.h>
 #include <util/Picture.h>
+#include <util/Trackable.h>
 
 #include <set>
 #include <list>
@@ -51,7 +52,7 @@ class UserProfile;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class ContactList {
+class ContactList : public Trackable {
 	friend class Contact;
 	friend class ContactListXMLSerializer;
 	friend class ContactXMLSerializer;

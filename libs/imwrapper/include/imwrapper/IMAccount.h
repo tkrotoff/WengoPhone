@@ -25,6 +25,7 @@
 #include <imwrapper/IMAccountParameters.h>
 
 #include <util/Event.h>
+#include <util/Trackable.h>
 
 #include <string>
 
@@ -37,7 +38,7 @@
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class IMAccount {
+class IMAccount : public Trackable {
 	friend class IMAccountXMLSerializer;
 	friend class IMConnect;
 	friend class IMPresence;

@@ -57,24 +57,6 @@ ContactList::ContactList(UserProfile & userProfile)
 }
 
 ContactList::~ContactList() {
-	_imContactListHandler.newIMContactAddedEvent -=
-		boost::bind(&ContactList::newIMContactAddedEventHandler, this, _1, _2, _3);
-	_imContactListHandler.imContactRemovedEvent -=
-		boost::bind(&ContactList::imContactRemovedEventHandler, this, _1, _2, _3);
-	_imContactListHandler.newContactGroupAddedEvent -=
-		boost::bind(&ContactList::newContactGroupAddedEventHandler, this, _1, _2);
-	_imContactListHandler.contactGroupRemovedEvent -=
-		boost::bind(&ContactList::contactGroupRemovedEventHandler, this, _1, _2);
-	_imContactListHandler.imContactMovedEvent -=
-		boost::bind(&ContactList::imContactMovedEventHandler, this, _1, _2, _3);
-	_userProfile.getPresenceHandler().presenceStateChangedEvent -=
-		boost::bind(&ContactList::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
-	_userProfile.getPresenceHandler().contactIconChangedEvent -=
-		boost::bind(&ContactList::contactIconChangedEventHandler, this, _1, _2, _3);
-	_userProfile.newIMAccountAddedEvent -=
-		boost::bind(&ContactList::newIMAccountAddedEventHandler, this, _1, _2);
-	_userProfile.imAccountRemovedEvent -=
-		boost::bind(&ContactList::imAccountRemovedEventHandler, this, _1, _2);
 }
 
 void ContactList::addContactGroup(const string & groupName) {

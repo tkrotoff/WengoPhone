@@ -22,6 +22,8 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
+#include <util/Trackable.h>
+
 class Settings;
 
 class QPushButton;
@@ -31,7 +33,7 @@ class QPushButton;
  *
  * @author Tanguy Krotoff
  */
-class QtWebcamButton : public QObjectThreadSafe {
+class QtWebcamButton : public QObjectThreadSafe, public Trackable {
 	Q_OBJECT
 public:
 

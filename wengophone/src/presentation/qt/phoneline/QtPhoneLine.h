@@ -22,6 +22,8 @@
 
 #include <presentation/PPhoneLine.h>
 
+#include <util/Trackable.h>
+
 #include <qtutil/QObjectThreadSafe.h>
 
 class CPhoneLine;
@@ -31,7 +33,7 @@ class QtPhoneCall;
 class QtWengoPhone;
 class QtWengoStyleLabel;
 
-class QtPhoneLine : public QObjectThreadSafe, public PPhoneLine {
+class QtPhoneLine : public QObjectThreadSafe, public PPhoneLine, public Trackable {
 	Q_OBJECT
 public:
 

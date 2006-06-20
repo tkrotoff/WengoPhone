@@ -20,10 +20,9 @@
 #ifndef OWNETWORKPROXYDISCOVERY_H
 #define OWNETWORKPROXYDISCOVERY_H
 
+#include <thread/Condition.h>
 #include <thread/Mutex.h>
 #include <thread/Thread.h>
-
-#include <boost/thread/condition.hpp>
 
 #include <string>
 
@@ -134,13 +133,13 @@ private:
 
 	static NetworkProxyDiscovery * _networkProxyDiscoveryInstance;
 
-	mutable boost::condition _condition;
-
 	NetworkProxyDiscoveryState _state;
 
 	NetworkProxy _networkProxy;
 
 	mutable Mutex _mutex;
+
+	mutable Condition _condition;
 
 	static const unsigned PROXY_TIMEOUT = 10;
 };

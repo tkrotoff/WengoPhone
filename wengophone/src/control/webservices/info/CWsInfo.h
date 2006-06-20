@@ -22,6 +22,8 @@
 
 #include <model/webservices/info/WsInfo.h>
 
+#include <util/Trackable.h>
+
 #include <string>
 
 class CWengoPhone;
@@ -31,7 +33,7 @@ class CWengoPhone;
  * @ingroup control
  * @author Mathieu Stute
  */
-class CWsInfo {
+class CWsInfo : public Trackable {
 public:
 
 	/**

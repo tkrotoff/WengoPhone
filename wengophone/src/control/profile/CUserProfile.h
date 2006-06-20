@@ -28,6 +28,8 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 
+#include <util/Trackable.h>
+
 #include <set>
 
 class CHistory;
@@ -57,7 +59,7 @@ class WsSoftUpdate;
  *
  * @author Philippe Bernery
  */
-class CUserProfile {
+class CUserProfile : public Trackable {
 public:
 
 	Event <void (CUserProfile & sender)> makeCallErrorEvent;

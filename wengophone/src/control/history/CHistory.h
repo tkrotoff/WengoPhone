@@ -20,21 +20,23 @@
 #ifndef OW_CHISTORY_H
 #define OW_CHISTORY_H
 
-#include <util/Event.h>
 #include <model/history/History.h>
+
+#include <util/Event.h>
+#include <util/Trackable.h>
+
+#include <string>
 
 class CWengoPhone;
 class PHistory;
 class Thread;
-
-#include <string>
 
 /**
  * @class CHistory, control for History
  * @ingroup control
  * @author Mathieu Stute
  */
-class CHistory {
+class CHistory : public Trackable {
 public:
 
 	/**

@@ -32,8 +32,6 @@ CSubscribe::CSubscribe(WsSubscribe & wsSubscribe, CWengoPhone & cWengoPhone)
 }
 
 CSubscribe::~CSubscribe() {
-	//_wsWengoSubscribe.wengoSubscriptionEvent -= wengoSubscriptionEvent;
-
 	delete _pSubscribe;
 }
 

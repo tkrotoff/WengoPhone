@@ -24,6 +24,7 @@
 #include <sipwrapper/EnumPhoneLineState.h>
 
 #include <util/NonCopyable.h>
+#include <util/Trackable.h>
 
 #include <string>
 
@@ -48,7 +49,7 @@ class WebcamVideoFrame;
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class SipCallbacks : NonCopyable {
+class SipCallbacks : NonCopyable, public Trackable {
 public:
 
 	SipCallbacks(SipWrapper & sipWrapper, UserProfile & userProfile);

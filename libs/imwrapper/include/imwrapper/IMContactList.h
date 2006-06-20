@@ -20,8 +20,9 @@
 #ifndef IMCONTACTLIST_H
 #define IMCONTACTLIST_H
 
-#include <util/Interface.h>
 #include <util/Event.h>
+#include <util/Interface.h>
+#include <util/Trackable.h>
 
 #include <string>
 
@@ -31,7 +32,7 @@ class IMContact;
 /**
  * FIXME: Currently an IMContact can be in only one group (because of Gaim limitation)
  */
-class IMContactList : Interface {
+class IMContactList : Interface, public Trackable {
 public:
 
 	/**

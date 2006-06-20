@@ -17,10 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTACT_H
-#define CONTACT_H
+#ifndef OWCONTACT_H
+#define OWCONTACT_H
 
 #include "ContactProfile.h"
+
+#include <util/Trackable.h>
 
 #include <string>
 
@@ -31,7 +33,7 @@
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class Contact : public ContactProfile {
+class Contact : public ContactProfile, public Trackable {
 	friend class ContactList;
 	friend class ContactXMLSerializer;
 public:
@@ -179,4 +181,4 @@ private:
 	ContactList & _contactList;
 };
 
-#endif	//CONTACT_H
+#endif //OWCONTACT_H

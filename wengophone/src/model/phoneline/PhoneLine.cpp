@@ -99,9 +99,6 @@ PhoneLine::~PhoneLine() {
 		delete _activePhoneCall;
 		_activePhoneCall = NULL;
 	}
-
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.valueChangedEvent -= boost::bind(&PhoneLine::configureSipWrapper, this);
 }
 
 std::string PhoneLine::getMySipAddress() const {

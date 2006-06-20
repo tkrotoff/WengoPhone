@@ -49,10 +49,6 @@ QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
 }
 
 QtPhoneLine::~QtPhoneLine() {
-	//TODO: unregister events, delete created objects
-	stateChangedEvent -= boost::bind(&QtPhoneLine::stateChangedEventHandler, this, _1);
-	phoneCallCreatedEvent -= boost::bind(&QtPhoneLine::phoneCallCreatedEventHandler, this, _1);
-	phoneCallClosedEvent -= boost::bind(&QtPhoneLine::phoneCallClosedEventHandler, this, _1);
 }
 
 void QtPhoneLine::initThreadSafe() {

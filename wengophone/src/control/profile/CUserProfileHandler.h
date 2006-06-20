@@ -24,6 +24,8 @@
 
 #include <thread/Mutex.h>
 
+#include <util/Trackable.h>
+
 #include <string>
 
 class CUserProfile;
@@ -38,7 +40,7 @@ class Thread;
  *
  * @author Philippe Bernery
  */
-class CUserProfileHandler {
+class CUserProfileHandler : public Trackable {
 public:
 
 	CUserProfileHandler(UserProfileHandler & userProfileHandler,

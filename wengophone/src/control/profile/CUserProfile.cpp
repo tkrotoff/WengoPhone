@@ -101,28 +101,6 @@ CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
 }
 
 CUserProfile::~CUserProfile() {
-	_userProfile.wsDirectoryCreatedEvent -=
-		boost::bind(&CUserProfile::wsDirectoryCreatedEventHandler, this, _1, _2);
-	_userProfile.phoneLineCreatedEvent -=
-		boost::bind(&CUserProfile::phoneLineCreatedEventHandler, this, _1, _2);
-	_userProfile.wsSmsCreatedEvent -=
-		boost::bind(&CUserProfile::wsSmsCreatedEventHandler, this, _1, _2);
-	_userProfile.wsSoftUpdateCreatedEvent -=
-		boost::bind(&CUserProfile::wsSoftUpdateCreatedEventHandler, this, _1, _2);
-	_userProfile.wsCallForwardCreatedEvent -=
-	  boost::bind(&CUserProfile::wsCallForwardCreatedEventHandler, this, _1, _2);
-
-	_userProfile.loginStateChangedEvent -=
-		boost::bind(&CUserProfile::loginStateChangedEventHandler, this, _1, _2);
-	_userProfile.networkDiscoveryStateChangedEvent -=
-		boost::bind(&CUserProfile::networkDiscoveryStateChangedEventHandler, this, _1, _2);
-
-	_userProfile.getHistory().historyLoadedEvent -=
-		boost::bind(&CUserProfile::historyLoadedEventHandler, this, _1);
-
-	_userProfile.getPresenceHandler().authorizationRequestEvent -=
-		boost::bind(&CUserProfile::authorizationRequestEventHandler, this, _1, _2, _3);
-
 	if (_pUserProfile) {
 		delete _pUserProfile;
 		_pUserProfile = NULL;

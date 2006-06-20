@@ -24,11 +24,13 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
+#include <util/Trackable.h>
+
 class CWenboxPlugin;
 class QComboBox;
 class Timer;
 
-class QtWenboxPlugin : public QObjectThreadSafe, public PWenboxPlugin {
+class QtWenboxPlugin : public QObjectThreadSafe, public PWenboxPlugin, public Trackable {
 public:
 
 	QtWenboxPlugin(CWenboxPlugin & cWenboxPlugin);

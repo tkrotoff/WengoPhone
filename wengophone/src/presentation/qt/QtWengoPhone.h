@@ -30,6 +30,8 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
+#include <util/Trackable.h>
+
 #include <QMainWindow>
 #include <QVariant>
 #include <QAction>
@@ -74,7 +76,7 @@ namespace Ui { class WengoPhoneWindow; }
  *
  * @author Tanguy Krotoff
  */
-class QtWengoPhone : public QObjectThreadSafe, public PWengoPhone {
+class QtWengoPhone : public QObjectThreadSafe, public PWengoPhone, public Trackable {
 	Q_OBJECT
 public:
 

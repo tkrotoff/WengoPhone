@@ -24,6 +24,8 @@
 
 #include <model/account/SipAccount.h>
 
+#include <util/Trackable.h>
+
 #include <map>
 
 class PhoneLineState;
@@ -34,7 +36,7 @@ class SipCallbacks;
 class SipWrapper;
 class SipPresenceState;
 
-class PhoneLine : public IPhoneLine {
+class PhoneLine : public IPhoneLine, public Trackable {
 public:
 
 	PhoneLine(SipAccount & sipAccount, UserProfile & userProfile);

@@ -34,9 +34,6 @@ CWenboxPlugin::CWenboxPlugin(WenboxPlugin & wenboxPlugin, CWengoPhone & cWengoPh
 }
 
 CWenboxPlugin::~CWenboxPlugin() {
-	_wenboxPlugin.phoneNumberBufferUpdatedEvent -= 
-		boost::bind(&CWenboxPlugin::phoneNumberBufferUpdatedEventHandler, this, _1, _2);
-
 	delete _pWenboxPlugin;
 }
 

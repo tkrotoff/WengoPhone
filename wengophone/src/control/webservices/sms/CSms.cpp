@@ -32,8 +32,6 @@ CSms::CSms(WsSms & wsSms, CWengoPhone & cWengoPhone)
 }
 
 CSms::~CSms() {
-	//_sms.smsStatusEvent -= smsStatusEvent;
-
 	delete _pSms;
 }
 

@@ -27,6 +27,8 @@
 #include <imwrapper/IMContact.h>
 #include <imwrapper/IMChatSession.h>
 
+#include <util/Trackable.h>
+
 #include "QtChatWidget.h"
 #include "QtChatContactWidget.h"
 
@@ -41,7 +43,7 @@ class QtChatTabWidget;
 class QtWengoPhone;
 //class CChatHandler;
 
-class ChatWindow : public QObject {
+class ChatWindow : public QObject, public Trackable {
     Q_OBJECT
 
 public:

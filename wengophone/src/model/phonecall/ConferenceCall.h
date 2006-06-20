@@ -23,9 +23,10 @@
 #include <sipwrapper/EnumConferenceCallState.h>
 #include <sipwrapper/EnumPhoneCallState.h>
 
-#include <util/NonCopyable.h>
 #include <util/Event.h>
 #include <util/List.h>
+#include <util/NonCopyable.h>
+#include <util/Trackable.h>
 
 #include <string>
 #include <map>
@@ -46,7 +47,7 @@ class ConferenceCallParticipant;
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class ConferenceCall : NonCopyable {
+class ConferenceCall : NonCopyable, public Trackable {
 public:
 
 	/**

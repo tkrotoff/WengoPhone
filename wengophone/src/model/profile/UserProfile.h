@@ -34,6 +34,7 @@
 #include <model/presence/PresenceHandler.h>
 
 #include <util/Event.h>
+#include <util/Trackable.h>
 
 #include <list>
 
@@ -59,7 +60,7 @@ class WsDirectory;
  *
  * @author Philippe Bernery
  */
-class UserProfile : public Profile {
+class UserProfile : public Profile, public Trackable {
 	friend class UserProfileFileStorage;
 	friend class UserProfileXMLSerializer;
 	friend class ConnectHandler;

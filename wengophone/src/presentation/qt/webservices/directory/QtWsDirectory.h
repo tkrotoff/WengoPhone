@@ -21,7 +21,10 @@
 #define OWQTWSDIRECTORY_H
 
 #include <presentation/PWsDirectory.h>
+
 #include <control/webservices/directory/CWsDirectory.h>
+
+#include <util/Trackable.h>
 
 #include <qtutil/QObjectThreadSafe.h>
 
@@ -41,7 +44,7 @@ namespace Ui { class WsDirectory; }
  *
  * @author Mathieu Stute
  */
-class QtWsDirectory : public QObjectThreadSafe, public PWsDirectory {
+class QtWsDirectory : public QObjectThreadSafe, public PWsDirectory, public Trackable {
 	Q_OBJECT
 	friend class QtWsDirectoryContact;
 public:

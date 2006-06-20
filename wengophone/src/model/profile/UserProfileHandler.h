@@ -22,6 +22,7 @@
 
 #include <thread/Mutex.h>
 #include <util/Event.h>
+#include <util/Trackable.h>
 
 #include <vector>
 #include <string>
@@ -37,7 +38,7 @@ class WengoPhone;
  *
  * @author Philippe Bernery
  */
-class UserProfileHandler {
+class UserProfileHandler : public Trackable {
 public:
 
 	enum UserProfileHandlerError {
@@ -232,15 +233,7 @@ private:
 	 */
 	std::string _nameOfProfileToImport;	
 
-	/**
-	 * @name Synchronization members. 
-	 * @{
-	 */
 	Mutex _mutex;
-	
-	/**
-	 * @}
-	 */
 
 	UserProfile * _currentUserProfile;
 

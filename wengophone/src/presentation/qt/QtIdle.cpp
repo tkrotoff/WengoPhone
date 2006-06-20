@@ -41,8 +41,6 @@ QtIdle::QtIdle(UserProfile & userProfile, QObject * parent)
 }
 
 QtIdle::~QtIdle() {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.valueChangedEvent -= boost::bind(&QtIdle::configChangedEventHandler, this, _1, _2);
 }
 
 void QtIdle::idleStatusChangedEventHandler(Idle & sender, Idle::Status status) {

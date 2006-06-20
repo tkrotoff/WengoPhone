@@ -36,9 +36,6 @@ CChatHandler::CChatHandler(ChatHandler & chatHandler, CUserProfile & cUserProfil
 }
 
 CChatHandler::~CChatHandler() {
-	_chatHandler.newIMChatSessionCreatedEvent -=
-		boost::bind(&CChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
-
 	delete _pChatHandler;
 }
 

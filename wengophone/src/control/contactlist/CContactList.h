@@ -23,6 +23,10 @@
 #include <model/contactlist/ContactProfile.h>
 
 #include <util/StringList.h>
+#include <util/Trackable.h>
+
+#include <vector>
+#include <string>
 
 class ContactList;
 class Contact;
@@ -37,7 +41,7 @@ class Thread;
  * @ingroup control
  * @author Tanguy Krotoff
  */
-class CContactList {
+class CContactList : public Trackable {
 	friend class CUserProfile;
 public:
 

@@ -27,6 +27,7 @@
 #include <util/Event.h>
 #include <util/NonCopyable.h>
 #include <util/StringList.h>
+#include <util/Trackable.h>
 
 #include <string>
 
@@ -35,7 +36,7 @@
  *
  * @author Philippe Bernery
  */
-class IWebcamDriver : NonCopyable {
+class IWebcamDriver : NonCopyable, public Trackable {
 public:
 
 	/**

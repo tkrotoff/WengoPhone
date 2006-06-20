@@ -24,6 +24,8 @@
 
 #include <sipwrapper/EnumPhoneLineState.h>
 
+#include <util/Trackable.h>
+
 #include <qtutil/QObjectThreadSafe.h>
 
 class CWengoPhone;
@@ -41,7 +43,7 @@ class QMovie;
  *
  * @author Tanguy Krotoff
  */
-class QtStatusBar : public QObjectThreadSafe {
+class QtStatusBar : public QObjectThreadSafe, public Trackable {
 	Q_OBJECT
 public:
 

@@ -22,6 +22,8 @@
 
 #include <model/webservices/sms/WsSms.h>
 
+#include <util/Trackable.h>
+
 #include <string>
 
 class CWengoPhone;
@@ -33,7 +35,7 @@ class PSms;
  * @author Tanguy Krotoff
  * @author Mathieu Stute
  */
-class CSms {
+class CSms : public Trackable {
 public:
 
 	/**

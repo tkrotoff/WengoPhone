@@ -20,25 +20,26 @@
 #ifndef CHATWIDGET_H
 #define CHATWIDGET_H
 
-#include <QtGui>
-
 #include "QtEmoticonsWidget.h"
 #include "widgetseeker.h"
 #include "QtEmoticon.h"
 
+#include "QtChatRoomInviteDlg.h"
+
+#include <control/chat/CChatHandler.h>
 
 #include <imwrapper/IMContact.h>
 #include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMChat.h>
 
-#include <control/chat/CChatHandler.h>
+#include <util/Trackable.h>
 
-#include "QtChatRoomInviteDlg.h"
+#include <QtGui>
 
 class QtWengoStyleLabel;
 class QtEmoticonsManager;
 
-class ChatWidget : public QWidget //, Ui::ChatWidget
+class ChatWidget : public QWidget, public Trackable
 {
     Q_OBJECT
 

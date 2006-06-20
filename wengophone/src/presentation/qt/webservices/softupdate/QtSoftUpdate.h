@@ -24,6 +24,8 @@
 
 #include <http/HttpRequest.h>
 
+#include <util/Trackable.h>
+
 #include <qtutil/QObjectThreadSafe.h>
 
 #include <QProcess>
@@ -44,7 +46,7 @@ namespace Ui { class SoftUpdateWindow; }
  *
  * @author Tanguy Krotoff
  */
-class QtSoftUpdate : public QObjectThreadSafe, public PSoftUpdate {
+class QtSoftUpdate : public QObjectThreadSafe, public PSoftUpdate, public Trackable {
 	Q_OBJECT
 public:
 

@@ -24,6 +24,8 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
+#include <util/Trackable.h>
+
 #include <pixertool/pixertool.h>
 
 class WebcamVideoFrame;
@@ -50,7 +52,7 @@ class QTimer;
  * @author Mr K
  * @author Philippe Bernery
  */
-class QtPhoneCall : public QObjectThreadSafe, public PPhoneCall {
+class QtPhoneCall : public QObjectThreadSafe, public PPhoneCall, public Trackable {
 	Q_OBJECT
 public:
 

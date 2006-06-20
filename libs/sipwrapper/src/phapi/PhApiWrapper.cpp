@@ -123,9 +123,6 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 PhApiWrapper::~PhApiWrapper() {
 	_publishTimer.stop();
 
-	phoneCallStateChangedEvent -=
-		boost::bind(&PhApiWrapper::phoneCallStateChangedEventHandler, this, _1, _2, _3, _4);
-
 	terminate();
 }
 

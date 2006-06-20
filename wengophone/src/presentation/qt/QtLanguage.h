@@ -22,6 +22,8 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
+#include <util/Trackable.h>
+
 class Settings;
 
 class QString;
@@ -33,7 +35,7 @@ class QStringList;
  * @see QTranslator
  * @author Tanguy Krotoff
  */
-class QtLanguage : public QObjectThreadSafe {
+class QtLanguage : public QObjectThreadSafe, public Trackable {
 	Q_OBJECT
 public:
 

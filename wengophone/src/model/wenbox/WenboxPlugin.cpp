@@ -43,10 +43,6 @@ WenboxPlugin::WenboxPlugin(UserProfile & userProfile)
 }
 
 WenboxPlugin::~WenboxPlugin() {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.valueChangedEvent -=
-		boost::bind(&WenboxPlugin::wenboxConfigChangedEventHandler, this, _1, _2);
-
 	delete _wenbox;
 }
 

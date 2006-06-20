@@ -23,6 +23,8 @@
 #include <imwrapper/IMChat.h>
 #include <imwrapper/IMContactSet.h>
 
+#include <util/Trackable.h>
+
 #include <string>
 #include <set>
 
@@ -76,7 +78,7 @@ class IMContact;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class IMChatSession {
+class IMChatSession : public Trackable {
 public:
 
 	/**

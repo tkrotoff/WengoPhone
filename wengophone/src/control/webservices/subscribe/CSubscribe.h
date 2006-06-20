@@ -22,6 +22,8 @@
 
 #include <model/webservices/subscribe/WsSubscribe.h>
 
+#include <util/Trackable.h>
+
 #include <string>
 
 class CWengoPhone;
@@ -32,7 +34,7 @@ class PSubscribe;
  * @ingroup control
  * @author Mathieu Stute
  */
-class CSubscribe {
+class CSubscribe : public Trackable {
 public:
 
 	/**

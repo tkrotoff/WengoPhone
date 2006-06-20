@@ -21,13 +21,14 @@
 #define STARTUPSETTINGLISTENER_H
 
 #include <util/NonCopyable.h>
+#include <util/Trackable.h>
 
 #include <string>
 
 class Startup;
 class Settings;
 
-class StartupSettingListener : NonCopyable {
+class StartupSettingListener : NonCopyable, public Trackable {
 public:
 
 	StartupSettingListener();

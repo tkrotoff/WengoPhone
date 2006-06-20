@@ -22,6 +22,8 @@
 
 #include <model/webservices/directory/WsDirectory.h>
 
+#include <util/Trackable.h>
+
 class CWengoPhone;
 class PWsDirectory;
 class ContactProfile;
@@ -31,7 +33,7 @@ class ContactProfile;
  * @ingroup control
  * @author Mathieu Stute
  */
-class CWsDirectory {
+class CWsDirectory : public Trackable {
 public:
 
 	CWsDirectory(CWengoPhone & cWengoPhone, WsDirectory & wsDirectory);

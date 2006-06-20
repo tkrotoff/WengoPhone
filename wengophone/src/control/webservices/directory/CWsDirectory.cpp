@@ -31,7 +31,6 @@ CWsDirectory::CWsDirectory(CWengoPhone & cWengoPhone, WsDirectory & wsDirectory)
 }
 
 CWsDirectory::~CWsDirectory() {
-	//_wsDirectory.contactFoundEvent -= contactFoundEvent;
 	delete _pWsDirectory;
 }
 

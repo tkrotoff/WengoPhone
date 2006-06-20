@@ -27,6 +27,7 @@
 
 #include <util/Event.h>
 #include <util/NonCopyable.h>
+#include <util/Trackable.h>
 
 #include <map>
 #include <set>
@@ -44,7 +45,7 @@ class WengoPhone;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class ConnectHandler : NonCopyable {
+class ConnectHandler : NonCopyable, public Trackable {
 public:
 
 	/**

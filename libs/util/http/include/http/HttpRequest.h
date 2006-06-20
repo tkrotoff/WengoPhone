@@ -22,12 +22,14 @@
 
 #include <http/IHttpRequest.h>
 
+#include <util/Trackable.h>
+
 /**
  * HttpRequest implementation.
  *
  * @author Tanguy Krotoff
  */
-class HttpRequest : public IHttpRequest {
+class HttpRequest : public IHttpRequest, public Trackable {
 public:
 
 	/** HTTP port separator tag (e.g : in wengo.fr:8080). */

@@ -24,8 +24,6 @@
 
 #include <imwrapper/IMConnect.h>
 
-#include <util/Trackable.h>
-
 class IMAccount;
 
 /**
@@ -34,7 +32,7 @@ class IMAccount;
  * @ingroup model
  * @author Mathieu Stute
  */
-class PhApiIMConnect : public IMConnect, public Trackable {
+class PhApiIMConnect : public IMConnect {
 
 	friend class PhApiFactory;
 

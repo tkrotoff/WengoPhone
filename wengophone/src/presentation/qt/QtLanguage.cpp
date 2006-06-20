@@ -45,8 +45,6 @@ void QtLanguage::updateTranslation() {
 }
 
 QtLanguage::~QtLanguage() {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.valueChangedEvent -= boost::bind(&QtLanguage::configChangedEventHandler, this, _1, _2);
 }
 
 void QtLanguage::configChangedEventHandler(Settings & sender, const std::string & key) {

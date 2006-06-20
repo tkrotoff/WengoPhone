@@ -24,6 +24,8 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
+#include <util/Trackable.h>
+
 class Settings;
 class UserProfile;
 
@@ -33,7 +35,7 @@ class UserProfile;
  * @see Idle
  * @author Tanguy Krotoff
  */
-class QtIdle : public QObjectThreadSafe {
+class QtIdle : public QObjectThreadSafe, public Trackable {
 	Q_OBJECT
 public:
 

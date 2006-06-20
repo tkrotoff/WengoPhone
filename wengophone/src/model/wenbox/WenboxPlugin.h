@@ -23,6 +23,7 @@
 #include <wenbox/Wenbox.h>
 
 #include <util/String.h>
+#include <util/Trackable.h>
 
 class PhoneCall;
 class Settings;
@@ -38,7 +39,7 @@ class UserProfile;
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class WenboxPlugin {
+class WenboxPlugin : public Trackable {
 public:
 
 	Event<void (WenboxPlugin & sender, const std::string & phoneNumberBuffer)> phoneNumberBufferUpdatedEvent;

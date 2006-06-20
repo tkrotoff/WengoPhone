@@ -22,8 +22,9 @@
 
 #include "IMAccount.h"
 
-#include <util/Interface.h>
 #include <util/Event.h>
+#include <util/Interface.h>
+#include <util/Trackable.h>
 
 /**
  * Wrapper for Instant Messaging connection.
@@ -31,7 +32,7 @@
  * @author Philippe Bernery
  * @author Tanguy Krotoff
  */
-class IMConnect : Interface {
+class IMConnect : Interface, public Trackable {
 public:
 
 	/**

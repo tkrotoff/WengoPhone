@@ -21,7 +21,10 @@
 #define QTNICKNAMEWIDGET_H
 
 #include <QtGui>
+
 #include <qtutil/QtClickableLabel.h>
+
+#include <util/Trackable.h>
 
 #include <string>
 
@@ -35,7 +38,7 @@ class ToolTipLineEdit;
  *
  * @author Mathieu Stute
  */
-class QtNickNameWidget : public QWidget {
+class QtNickNameWidget : public QWidget, public Trackable {
 	Q_OBJECT
 public:
 

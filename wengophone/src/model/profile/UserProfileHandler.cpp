@@ -143,6 +143,8 @@ bool UserProfileHandler::userProfileExists(const std::string & name) {
 void UserProfileHandler::setCurrentUserProfile(const std::string & name, 
 	const WengoAccount & wengoAccount) {
 
+	Mutex::ScopedLock lock(_mutex);
+
 	UserProfile * result = getUserProfile(name);
 
 	if (!_currentUserProfile ||
@@ -246,6 +248,8 @@ void UserProfileHandler::profileChangedEventHandler(Profile & sender) {
 }
 
 void UserProfileHandler::importDefaultProfileToProfile(const std::string & profileName) {
+	Mutex::ScopedLock lock(_mutex);
+
 	_nameOfProfileToImport = profileName;
 
 	if (_currentUserProfile) {

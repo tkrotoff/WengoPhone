@@ -21,6 +21,7 @@
 #define OWWENGOWEBSERVICE_H
 
 #include <http/HttpRequest.h>
+#include <util/Trackable.h>
 
 class WengoAccount;
 
@@ -29,7 +30,7 @@ class WengoAccount;
  *
  * @author Mathieu Stute
  */
-class WengoWebService {
+class WengoWebService : public Trackable {
 public:
 
 	/**

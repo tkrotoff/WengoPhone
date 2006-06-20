@@ -21,7 +21,10 @@
 #define QTHISTORY_H
 
 #include <presentation/PHistory.h>
+
 #include <control/history/CHistory.h>
+
+#include <util/Trackable.h>
 
 #include <qtutil/QObjectThreadSafe.h>
 
@@ -33,7 +36,7 @@ class QtHistoryItem;
  *
  * @author Mathieu Stute
  */
-class QtHistory : public QObjectThreadSafe, public PHistory {
+class QtHistory : public QObjectThreadSafe, public PHistory, public Trackable {
 	Q_OBJECT
 public:
 

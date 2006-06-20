@@ -71,9 +71,6 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 }
 
 QtPhoneCall::~QtPhoneCall() {
-	//TODO: unregister events, delete created objects
-	stateChangedEvent -= boost::bind(& QtPhoneCall::stateChangedEventHandler, this, _1);
-	videoFrameReceivedEvent -= boost::bind(& QtPhoneCall::videoFrameReceivedEventHandler, this, _1, _2);
 }
 
 void QtPhoneCall::initThreadSafe() {

@@ -27,6 +27,8 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 
+#include <util/Trackable.h>
+
 #include <string>
 
 class Contact;
@@ -64,7 +66,7 @@ class WsSubscribe;
  * @author Philippe Bernery
  * @author Mathieu Stute
  */
-class CWengoPhone {
+class CWengoPhone : public Trackable {
 public:
 
 	/**

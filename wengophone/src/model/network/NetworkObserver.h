@@ -22,6 +22,7 @@
 
 #include <thread/Timer.h>
 #include <util/Event.h>
+#include <util/Trackable.h>
 
 /**
  * Watch the connection status.
@@ -29,7 +30,7 @@
  * @ingroup model
  * @author Julien Bossart
  */
-class NetworkObserver
+class NetworkObserver : public Trackable
 {
 public:
 

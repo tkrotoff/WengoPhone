@@ -22,8 +22,9 @@
 
 #include <imwrapper/IMContactSet.h>
 
-#include <util/Interface.h>
 #include <util/Event.h>
+#include <util/Interface.h>
+#include <util/Trackable.h>
 
 #include <string>
 
@@ -39,7 +40,7 @@ class IMChatSession;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class IMChat : Interface {
+class IMChat : Interface, public Trackable {
 	friend class IMChatSession;
 public:
 

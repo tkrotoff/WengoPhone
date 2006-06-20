@@ -113,14 +113,7 @@ QWidget(parent, f), _cChatHandler(cChatHandler){
 }
 
 ChatWidget::~ChatWidget(){
-
-	_imChatSession->contactAddedEvent -=
-        boost::bind(&ChatWidget::contactAddedEventHandler,this,_1,_2);
-
-    _imChatSession->contactRemovedEvent -=
-        boost::bind(&ChatWidget::contactRemovedEventHandler,this,_1,_2);
-
-    _imChatSession->close();
+   _imChatSession->close();
 }
 
 void ChatWidget::chatEditChanged(){

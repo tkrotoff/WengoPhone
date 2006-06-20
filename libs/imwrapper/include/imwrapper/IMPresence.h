@@ -26,6 +26,7 @@
 #include <util/Event.h>
 #include <util/Interface.h>
 #include <util/StringList.h>
+#include <util/Trackable.h>
 
 class Picture;
 
@@ -35,7 +36,7 @@ class Picture;
  * @author Philippe Bernery
  * @author Tanguy Krotoff
  */
-class IMPresence : Interface {
+class IMPresence : Interface, public Trackable {
 public:
 
 	/**

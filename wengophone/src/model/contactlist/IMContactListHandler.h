@@ -23,6 +23,7 @@
 #include <imwrapper/IMContact.h>
 
 #include <util/Event.h>
+#include <util/Trackable.h>
 
 #include <map>
 #include <set>
@@ -32,7 +33,7 @@ class UserProfile;
 class IMAccount;
 class IMContactList;
 
-class IMContactListHandler {
+class IMContactListHandler : public Trackable {
 public:
 
 	/**

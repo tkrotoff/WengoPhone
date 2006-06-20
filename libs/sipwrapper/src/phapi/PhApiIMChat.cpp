@@ -46,18 +46,6 @@ PhApiIMChat::PhApiIMChat(IMAccount & account, PhApiWrapper & phApiWrapper)
 }
 
 PhApiIMChat::~PhApiIMChat() {
-	_phApiWrapper.messageReceivedEvent -=
-		boost::bind(&PhApiIMChat::messageReceivedEventHandler, this, _1, _2, _3, _4);
-	_phApiWrapper.statusMessageReceivedEvent -=
-		boost::bind(&PhApiIMChat::statusMessageReceivedEventHandler, this, _1, _2, _3, _4);
-	_phApiWrapper.typingStateChangedEvent -=
-		boost::bind(&PhApiIMChat::typingStateChangedEventHandler, this, _1, _2, _3, _4);
-	_phApiWrapper.contactAddedEvent -=
-		boost::bind(&PhApiIMChat::contactAddedEventHandler, this, _1, _2, _3);
-	_phApiWrapper.contactRemovedEvent -=
-		boost::bind(&PhApiIMChat::contactRemovedEventHandler, this, _1, _2, _3);
-	_phApiWrapper.newIMChatSessionCreatedEvent -=
-		boost::bind(&PhApiIMChat::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
 
 void PhApiIMChat::messageReceivedEventHandler(PhApiWrapper & sender, IMChatSession & chatSession, const std::string & from, const std::string & message) {

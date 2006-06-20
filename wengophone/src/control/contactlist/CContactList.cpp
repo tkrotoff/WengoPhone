@@ -53,19 +53,6 @@ CContactList::CContactList(ContactList & contactList, Thread & modelThread)
 }
 
 CContactList::~CContactList() {
-	_contactList.contactGroupAddedEvent -=
-		boost::bind(&CContactList::contactGroupAddedEventHandler, this, _1, _2);
-	_contactList.contactGroupRemovedEvent -=
-		boost::bind(&CContactList::contactGroupRemovedEventHandler, this, _1, _2);
-	_contactList.contactAddedEvent -=
-		boost::bind(&CContactList::contactAddedEventHandler, this, _1, _2);
-	_contactList.contactRemovedEvent -=
-		boost::bind(&CContactList::contactRemovedEventHandler, this, _1, _2);
-	_contactList.contactMovedEvent -=
-		boost::bind(&CContactList::contactMovedEventHandler, this, _1, _2, _3, _4);
-	_contactList.contactChangedEvent -=
-		boost::bind(&CContactList::contactChangedEventHandler, this, _1, _2);
-
 	delete _pContactList;
 	_pContactList = NULL;
 }

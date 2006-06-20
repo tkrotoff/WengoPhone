@@ -24,6 +24,8 @@
 
 #include <control/webservices/sms/CSms.h>
 
+#include <util/Trackable.h>
+
 #include <qtutil/QObjectThreadSafe.h>
 
 #include <QString>
@@ -42,7 +44,7 @@ namespace Ui { class SmsWindow; }
  * @author Tanguy Krotoff
  * @author Mathieu Stute
  */
-class QtSms : public QObjectThreadSafe, public PSms {
+class QtSms : public QObjectThreadSafe, public PSms, public Trackable {
 	Q_OBJECT
 public:
 

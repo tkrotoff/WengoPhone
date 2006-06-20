@@ -25,6 +25,7 @@
 
 #include <util/NonCopyable.h>
 #include <util/Event.h>
+#include <util/Trackable.h>
 
 class IMAccount;
 class ContactList;
@@ -35,7 +36,7 @@ class MyPresenceState;
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class Presence : NonCopyable {
+class Presence : NonCopyable, public Trackable {
 public:
 
 	/**

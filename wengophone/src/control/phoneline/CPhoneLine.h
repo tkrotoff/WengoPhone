@@ -21,6 +21,7 @@
 #define CPHONELINE_H
 
 #include <sipwrapper/EnumPhoneLineState.h>
+#include <util/Trackable.h>
 
 #include <string>
 #include <map>
@@ -36,7 +37,7 @@ class CPhoneCall;
  * @ingroup control
  * @author Tanguy Krotoff
  */
-class CPhoneLine {
+class CPhoneLine : public Trackable {
 public:
 
 	CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone);

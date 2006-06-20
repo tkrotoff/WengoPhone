@@ -22,6 +22,8 @@
 
 #include <model/webservices/callforward/WsCallForward.h>
 
+#include <util/Trackable.h>
+
 class CWengoPhone;
 
 /**
@@ -29,7 +31,7 @@ class CWengoPhone;
  * @ingroup control
  * @author Mathieu Stute
  */
-class CWsCallForward {
+class CWsCallForward : public Trackable {
 
 public:
 

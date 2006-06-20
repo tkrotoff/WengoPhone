@@ -22,6 +22,7 @@
 
 #include <util/Event.h>
 #include <util/List.h>
+#include <util/Trackable.h>
 
 class PrivateThread;
 
@@ -33,7 +34,7 @@ class PrivateThread;
  * @see QTimer
  * @author Tanguy Krotoff
  */
-class Timer {
+class Timer : public Trackable {
 public:
 
 	/**

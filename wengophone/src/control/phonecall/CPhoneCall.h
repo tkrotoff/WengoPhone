@@ -23,9 +23,11 @@
 #include <sipwrapper/EnumPhoneCallState.h>
 #include <sipwrapper/CodecList.h>
 
-#include <string>
+#include <util/Trackable.h>
 
 #include <pixertool/pixertool.h>
+
+#include <string>
 
 class PhoneCall;
 class PPhoneCall;
@@ -38,7 +40,7 @@ class WebcamVideoFrame;
  * @ingroup control
  * @author Tanguy Krotoff
  */
-class CPhoneCall {
+class CPhoneCall : public Trackable {
 public:
 
 	CPhoneCall(PhoneCall & phoneCall, CWengoPhone & cWengoPhone);

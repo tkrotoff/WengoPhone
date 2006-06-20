@@ -22,8 +22,9 @@
 
 #include <imwrapper/IMChat.h>
 
-#include <util/NonCopyable.h>
 #include <util/Event.h>
+#include <util/NonCopyable.h>
+#include <util/Trackable.h>
 
 class ChatHandler;
 class CUserProfile;
@@ -38,7 +39,7 @@ class PChatHandler;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class CChatHandler : NonCopyable {
+class CChatHandler : NonCopyable, public Trackable {
 public:
 
 	CChatHandler(ChatHandler & chatHandler, CUserProfile & cUserProfile);

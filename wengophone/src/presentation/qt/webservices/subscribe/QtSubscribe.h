@@ -24,6 +24,8 @@
 
 #include <control/webservices/subscribe/CSubscribe.h>
 
+#include <util/Trackable.h>
+
 #include <qtutil/QObjectThreadSafe.h>
 
 #include <string>
@@ -41,7 +43,7 @@ namespace Ui { class SubscribeWengo1; }
  * @author Mathieu Stute
  * @author Tanguy Krotoff
  */
-class QtSubscribe : public QObjectThreadSafe, public PSubscribe {
+class QtSubscribe : public QObjectThreadSafe, public PSubscribe, public Trackable {
 	Q_OBJECT
 public:
 

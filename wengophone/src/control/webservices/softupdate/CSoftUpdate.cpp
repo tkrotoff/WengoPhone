@@ -34,9 +34,6 @@ CSoftUpdate::CSoftUpdate(WsSoftUpdate & wsSoftUpdate, CWengoPhone & cWengoPhone)
 }
 
 CSoftUpdate::~CSoftUpdate() {
-	_wsSoftUpdate.updateWengoPhoneEvent -= 
-		boost::bind(&CSoftUpdate::updateWengoPhoneEventHandler, this, _1, _2, _3, _4, _5);
-
 	delete _pSoftUpdate;
 }
 

@@ -20,6 +20,8 @@
 #ifndef CWENBOXPLUGIN_H
 #define CWENBOXPLUGIN_H
 
+#include <util/Trackable.h>
+
 #include <string>
 
 class CWengoPhone;
@@ -31,7 +33,7 @@ class WenboxPlugin;
  * @ingroup control
  * @author Tanguy Krotoff
  */
-class CWenboxPlugin {
+class CWenboxPlugin : public Trackable {
 public:
 
 	CWenboxPlugin(WenboxPlugin & wenboxPlugin, CWengoPhone & cWengoPhone);

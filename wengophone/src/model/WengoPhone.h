@@ -25,6 +25,7 @@
 #include <thread/Thread.h>
 
 #include <util/Event.h>
+#include <util/Trackable.h>
 
 #include <string>
 
@@ -57,7 +58,7 @@ class WsSubscribe;
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class WengoPhone : public Thread {
+class WengoPhone : public Thread, public Trackable {
 public:
 
 	/**

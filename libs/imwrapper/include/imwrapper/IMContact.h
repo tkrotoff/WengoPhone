@@ -25,6 +25,7 @@
 
 #include <util/Event.h>
 #include <util/Picture.h>
+#include <util/Trackable.h>
 
 #include <string>
 #include <set>
@@ -40,7 +41,7 @@ class IMAccount;
  *
  * @author Philippe Bernery
  */
-class IMContact {
+class IMContact : public Trackable {
 	friend class IMContactXMLSerializer;
 public:
 

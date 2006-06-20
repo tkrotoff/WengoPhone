@@ -21,6 +21,7 @@
 #define GAIMACCOUNTMNGR_H
 
 #include <imwrapper/IMAccount.h>
+#include <util/Trackable.h>
 
 #include <list>
 

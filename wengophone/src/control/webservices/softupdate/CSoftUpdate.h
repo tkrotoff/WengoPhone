@@ -20,6 +20,8 @@
 #ifndef CSOFTUPDATE_H
 #define CSOFTUPDATE_H
 
+#include <util/Trackable.h>
+
 #include <string>
 
 class WsSoftUpdate;
@@ -31,7 +33,7 @@ class PSoftUpdate;
  * @ingroup control
  * @author Tanguy Krotoff
  */
-class CSoftUpdate {
+class CSoftUpdate : public Trackable {
 public:
 
 	CSoftUpdate(WsSoftUpdate & wsSoftUpdate, CWengoPhone & cWengoPhone);

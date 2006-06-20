@@ -24,6 +24,8 @@
 
 #include <pixertool/pixertool.h>
 
+#include <util/Trackable.h>
+
 #include <QWidget>
 
 class IWebcamDriver;
@@ -42,7 +44,7 @@ namespace Ui { class VideoSettings; }
  *
  * @author Tanguy Krotoff
  */
-class QtVideoSettings : public QWidget, public QtISettings {
+class QtVideoSettings : public QWidget, public QtISettings, public Trackable {
 	Q_OBJECT
 public:
 
