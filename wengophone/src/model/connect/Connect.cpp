@@ -49,19 +49,6 @@ Connect::Connect(IMAccount & account, UserProfile & userProfile)
 }
 
 Connect::~Connect() {
-	//_imConnect->connectedEvent -= connectedEvent;
-	_imConnect->connectedEvent -=
-		boost::bind(&Connect::connectedEventHandler, this, _1);
-
-	//_imConnect->disconnectedEvent -= disconnectedEvent;
-	_imConnect->disconnectedEvent -= 
-		boost::bind(&Connect::disconnectedEventHandler, this, _1, _2, _3);
-
-	//_imConnect->connectionProgressEvent -= connectionProgressEvent;
-
-	_timer.timeoutEvent -=
-		boost::bind(&Connect::timeoutEventHandler, this, _1);
-
 	_timer.stop();
 	delete _imConnect;
 }

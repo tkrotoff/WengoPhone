@@ -20,13 +20,13 @@
 #ifndef THREAD_H
 #define THREAD_H
 
+#include <thread/Condition.h>
+#include <thread/Mutex.h>
 #include <util/Interface.h>
 #include <util/Logger.h>
-#include <thread/RecursiveMutex.h>
-#include <thread/Mutex.h>
+
 #include <boost/thread/detail/lock.hpp>
 #include <boost/thread/thread.hpp>
-#include <boost/thread/condition.hpp>
 #include <boost/thread/xtime.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
@@ -261,12 +261,13 @@ protected:
 
 	/**
 	 * Mutex used for postEvent().
-	 *
-	 * FIXME
 	 */
-	// mutable RecursiveMutex _mutex;
 	mutable Mutex _mutex;
-	boost::condition _condition;
+
+	/**
+	 * Condition used for postEvent().
+	 */
+	Condition _condition;
 
 	/**
 	 * If this thread should be terminate or not.

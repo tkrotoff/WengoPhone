@@ -201,23 +201,6 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 }
 
 QtProfileBar::~QtProfileBar() {
-	_cUserProfile.getUserProfile().wsInfoCreatedEvent -=
-		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
-	_cUserProfile.getUserProfile().phoneLineCreatedEvent -=
-		boost::bind(&QtProfileBar::phoneLineCreatedEventHandler, this, _1, _2);
-
-	PresenceHandler & presence = _cUserProfile.getUserProfile().getPresenceHandler();
-	presence.myPresenceStatusEvent -=
-		boost::bind(&QtProfileBar::myPresenceStatusEventHandler, this, _1, _2, _3);
-
-	_connectHandler.connectedEvent -=
-		boost::bind(&QtProfileBar::connectedEventHandler,this,_1,_2);
-
-	_connectHandler.connectionProgressEvent -=
-		boost::bind(&QtProfileBar::connectionProgressEventHandler, this, _1, _2, _3, _4, _5);
-
-	_connectHandler.disconnectedEvent -=
-		boost::bind(&QtProfileBar::disconnectedEventHandler, this, _1, _2, _3, _4);
 }
 
 // Called in the model thread

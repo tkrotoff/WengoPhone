@@ -27,6 +27,7 @@
 
 #include <util/Interface.h>
 #include <util/Event.h>
+#include <util/Trackable.h>
 
 class UserProfile;
 
@@ -37,7 +38,7 @@ class UserProfile;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class Connect : Interface {
+class Connect : Interface, public Trackable {
 public:
 
 	/**

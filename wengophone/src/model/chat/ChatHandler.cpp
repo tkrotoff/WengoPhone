@@ -44,13 +44,6 @@ ChatHandler::~ChatHandler() {
 	for (IMChatSessionSet::iterator it = _imChatSessionSet.begin(); it != _imChatSessionSet.end(); it++) {
 		delete (*it);
 	}
-
-	_userProfile.newIMAccountAddedEvent -=
-		boost::bind(&ChatHandler::newIMAccountAddedEventHandler, this, _1, _2);
-	_userProfile.getConnectHandler().connectedEvent -=
-		boost::bind(&ChatHandler::connectedEventHandler, this, _1, _2);
-	_userProfile.getConnectHandler().disconnectedEvent -=
-		boost::bind(&ChatHandler::disconnectedEventHandler, this, _1, _2);
 }
 
 void ChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContactSet) {

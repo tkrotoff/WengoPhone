@@ -247,7 +247,7 @@ void UserProfileHandler::profileChangedEventHandler(Profile & sender) {
 
 void UserProfileHandler::importDefaultProfileToProfile(const std::string & profileName) {
 	_nameOfProfileToImport = profileName;
-	
+
 	if (_currentUserProfile) {
 		_importDefaultProfileToProfile = true;
 		currentUserProfileWillDieEvent(*this);

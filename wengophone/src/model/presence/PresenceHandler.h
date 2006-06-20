@@ -27,8 +27,9 @@
 #include <imwrapper/EnumPresenceState.h>
 #include <imwrapper/IMPresence.h>
 
-#include <util/NonCopyable.h>
 #include <util/Event.h>
+#include <util/NonCopyable.h>
+#include <util/Trackable.h>
 
 #include <map>
 
@@ -46,7 +47,7 @@ class UserProfile;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class PresenceHandler : NonCopyable {
+class PresenceHandler : NonCopyable, public Trackable {
 public:
 
 	/**

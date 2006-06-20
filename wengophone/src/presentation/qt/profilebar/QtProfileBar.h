@@ -28,6 +28,8 @@
 
 #include <imwrapper/EnumPresenceState.h>
 
+#include <util/Trackable.h>
+
 #include <QtGui>
 
 class CWengoPhone;
@@ -46,7 +48,7 @@ class CHistory;
  * @author Mr K.
  * @author Mathieu Stute
  */
-class QtProfileBar : public QWidget {
+class QtProfileBar : public QWidget, public Trackable {
 
 	Q_OBJECT
 

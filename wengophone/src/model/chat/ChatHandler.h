@@ -20,8 +20,9 @@
 #ifndef CHATHANDLER_H
 #define CHATHANDLER_H
 
-#include <util/NonCopyable.h>
 #include <util/Event.h>
+#include <util/NonCopyable.h>
+#include <util/Trackable.h>
 
 #include <map>
 #include <set>
@@ -39,7 +40,7 @@ class UserProfile;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class ChatHandler : NonCopyable {
+class ChatHandler : NonCopyable, public Trackable {
 public:
 
 	ChatHandler(UserProfile & userProfile);

@@ -43,12 +43,6 @@ PresenceHandler::PresenceHandler(UserProfile & userProfile, Thread & modelThread
 }
 
 PresenceHandler::~PresenceHandler() {
-	_userProfile.newIMAccountAddedEvent -=
-		boost::bind(&PresenceHandler::newIMAccountAddedEventHandler, this, _1, _2);
-	_userProfile.getConnectHandler().connectedEvent -=
-		boost::bind(&PresenceHandler::connectedEventHandler, this, _1, _2);
-	_userProfile.getConnectHandler().disconnectedEvent -=
-		boost::bind(&PresenceHandler::disconnectedEventHandler, this, _1, _2);
 }
 
 void PresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {

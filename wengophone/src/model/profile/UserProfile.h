@@ -215,37 +215,36 @@ public:
 	 */
 	PhoneCall * getActivePhoneCall() const;
 
-	ConnectHandler & getConnectHandler() {
-		return _connectHandler;
-	}
+	ConnectHandler & getConnectHandler() { return _connectHandler; }
 
-	PresenceHandler & getPresenceHandler() {
-		return _presenceHandler;
-	}
+	PresenceHandler & getPresenceHandler() { return _presenceHandler; }
 
-	ChatHandler & getChatHandler() {
-		return _chatHandler;
-	}
+	ChatHandler & getChatHandler() { return _chatHandler; }
 
-	IMAccountHandler & getIMAccountHandler() {
-		return *_imAccountHandler;
-	}
+	IMAccountHandler & getIMAccountHandler() { return *_imAccountHandler; }
 
-	IMContactListHandler & getIMContactListHandler() {
-		return _imContactListHandler;
-	}
+	IMContactListHandler & getIMContactListHandler() { return _imContactListHandler; }
 
-	ContactList & getContactList() {
-		return _contactList;
-	}
+	ContactList & getContactList() { return _contactList; }
 
-	History & getHistory() {
-		return *_history;
-	}
+	History & getHistory() { return *_history; }
 
-	WenboxPlugin * getWenboxPlugin() {
-		return _wenboxPlugin;
-	}
+	WenboxPlugin * getWenboxPlugin() { return _wenboxPlugin; }
+
+	/** Gets the WsInfo pointer. */
+	WsInfo * getWsInfo() { return _wsInfo; }
+
+	/** Gets the WengoPhone update WebService pointer. */
+	WsSoftUpdate * getWsSoftUpdate() { return _wsSoftUpdate; }
+
+	/** Gets the SMS WebService pointer. */
+	WsSms * getWsSms() { return _wsSms; }
+
+	/** Gets the WsCallForward WebService pointer. */
+	WsCallForward * getWsCallForward() { return _wsCallForward; }
+
+	/** Gets the WsDirectory */
+	WsDirectory * getWsDirectory()  { return _wsDirectory; }
 
 	/**
 	 * Load the history.
@@ -365,13 +364,6 @@ public:
 	 */
 	std::string getName() const {
 		return _name;
-	}
-
-	/**
-	 * Gets the WsInfo pointer.
-	 */
-	WsInfo * getWsInfo() {
-		return _wsInfo;
 	}
 
 private:

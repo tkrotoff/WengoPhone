@@ -20,6 +20,7 @@
 #ifndef OWUSERPROFILEHANDLER_H
 #define OWUSERPROFILEHANDLER_H
 
+#include <thread/Mutex.h>
 #include <util/Event.h>
 
 #include <vector>
@@ -230,6 +231,16 @@ private:
 	 * actuallyImportDefaultProfileToProfile.
 	 */
 	std::string _nameOfProfileToImport;	
+
+	/**
+	 * @name Synchronization members. 
+	 * @{
+	 */
+	Mutex _mutex;
+	
+	/**
+	 * @}
+	 */
 
 	UserProfile * _currentUserProfile;
 

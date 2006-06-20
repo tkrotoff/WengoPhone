@@ -17,46 +17,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHAPIIMCONNECT_H
-#define PHAPIIMCONNECT_H
+#ifndef OWCONDITION_H
+#define OWCONDITION_H
 
-#include "PhApiFactory.h"
-
-#include <imwrapper/IMConnect.h>
-
-#include <util/Trackable.h>
-
-class IMAccount;
+#include <boost/thread/condition.hpp>
 
 /**
- * SIP Instant Messaging connection.
+ * Condition wrapper.
  *
- * @ingroup model
- * @author Mathieu Stute
+ * @author Philippe Bernery
  */
-class PhApiIMConnect : public IMConnect, public Trackable {
-
-	friend class PhApiFactory;
-
-public:
-
-	void connect();
-
-	void disconnect();
-
-private:
-
-	PhApiIMConnect(IMAccount & account, PhApiWrapper & phApiWrapper);
-
-	~PhApiIMConnect();
-
-	void connectedEventHandler(PhApiWrapper & sender);
-
-	void disconnectedEventHandler(PhApiWrapper & sender, bool connectionError, const std::string & reason);
-
-	void connectionProgressEventHandler(PhApiWrapper & sender, int currentStep, int totalSteps, const std::string & infoMessage);
-
-	PhApiWrapper & _phApiWrapper;
+class Condition : public boost::condition {
 };
 
-#endif	//PHAPIIMCONNECT_H
+#endif //OWCONDITION_H

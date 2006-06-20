@@ -93,6 +93,10 @@ CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
 	if (_userProfile.getActivePhoneLine()) {
 		phoneLineCreatedEventHandler(_userProfile, *_userProfile.getActivePhoneLine());
 		historyLoadedEventHandler(_userProfile.getHistory());
+		wsSmsCreatedEventHandler(_userProfile, *_userProfile.getWsSms());
+		wsSoftUpdateCreatedEventHandler(_userProfile, *_userProfile.getWsSoftUpdate());
+		wsDirectoryCreatedEventHandler(_userProfile, *_userProfile.getWsDirectory());
+		wsCallForwardCreatedEventHandler(_userProfile, *_userProfile.getWsCallForward());
 	}
 }
 
