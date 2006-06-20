@@ -51,29 +51,7 @@ void QtContactCallListWidget::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 }
 
 void QtContactCallListWidget::startConference(PhoneCall * sourceCall, PhoneCall * targetCall) {
-
 	startConferenceSignal(sourceCall, targetCall);
-	if (_conferenceCall)
-		return;
-
-	//FIXME: phoneline must not be directly usable by GUI thread
-	IPhoneLine * phoneLine = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine();
-
-	if (phoneLine == NULL)
-		return;
-
-	if (_listWidget->getPhoneCallList().size() != 2) {
-		return;
-	}
-	_conferenceCall = new ConferenceCall(* phoneLine);
-
-	QtPhoneCall * phone;
-
-	phone = _listWidget->getPhoneCallList() [0];
-	_conferenceCall->addPhoneCall(phone->getCPhoneCall().getPhoneCall());
-
-	phone = _listWidget->getPhoneCallList() [1];
-	_conferenceCall->addPhoneCall(phone->getCPhoneCall().getPhoneCall());
 }
 
 void QtContactCallListWidget::stopConference() {
