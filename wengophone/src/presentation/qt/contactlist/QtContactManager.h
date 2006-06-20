@@ -73,9 +73,7 @@ public Q_SLOTS:
 
 	void itemClicked(QTreeWidgetItem * item, int column);
 
-	void itemDoubleClicked(QTreeWidgetItem *,int);
-
-	void openUserInfo(QTreeWidgetItem * i);
+	void openUserInfo(QTreeWidgetItem * item);
 
 	void closeUserInfo();
 
@@ -117,11 +115,17 @@ Q_SIGNALS:
 
 	void inviteToConferenceClicked(QString phone, PhoneCall * target);
 
-protected:
+private:
 
 	void safeUserStateChanged();
 
 	void retranslateUi();
+
+	void clearTreeSelection();
+
+	void groupClicked(QTreeWidgetItem * item);
+
+	void itemRightClicked(QTreeWidgetItem * item);
 
 	bool canShowUser(const ContactProfile * cprofile);
 

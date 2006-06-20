@@ -82,7 +82,7 @@ protected:
 
 private:
 
-    void paintUser(QPainter * painter, const QRect & rect);
+    void paintContact(QPainter * painter, const QRect & rect);
 
 	QPixmap createAvatar();
 

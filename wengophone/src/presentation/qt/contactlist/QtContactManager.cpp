@@ -162,38 +162,30 @@ void QtContactManager::closeUserInfo() {
 	_tree->doItemsLayout();
 }
 
-void QtContactManager::openUserInfo(QTreeWidgetItem * i) {
-	QTreeWidgetItem * item = i;
+void QtContactManager::openUserInfo(QTreeWidgetItem * item) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (_previous != NULL) {
 		closeUserInfo();
-		_previous = item;
-		if (item->parent()) {
-			ul->setOpenStatus(_previous->text(0), true);
-			item->setSizeHint(0, QSize(-1, ul->getHeight(item->text(0))));
-			_tree->openPersistentEditor(item);
-		}
-	} else {
-		_previous = item;
-		if (item->parent()) {
-			ul->setOpenStatus(_previous->text(0), true);
-			item->setSizeHint(0, QSize(-1, ul->getHeight(item->text(0))));
-			_tree->openPersistentEditor(item);
-		}
+	}
+	_previous = item;
+	if (item->parent()) {
+		ul->setOpenStatus(_previous->text(0), true);
+		item->setSizeHint(0, QSize(-1, ul->getHeight(item->text(0))));
+		_tree->openPersistentEditor(item);
 	}
 	_tree->viewport()->update();
 	_tree->doItemsLayout();
-	_tree->scrollToItem (i);
+	_tree->scrollToItem (item);
 }
 
 void QtContactManager::itemClicked(QTreeWidgetItem * item, int) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
-
 	if ((_lastClicked == item) && (_waitForDoubleClick)) {
 		defaultAction(item);
 		_button = Qt::NoButton;
 		return;
 	}
+
 	_waitForDoubleClick = true;
 	killTimer(_timerId);
 	_timerId = startTimer(qApp->doubleClickInterval ());
@@ -202,56 +194,60 @@ void QtContactManager::itemClicked(QTreeWidgetItem * item, int) {
 	QPoint mousepos = _tree->mapFromGlobal(QCursor::pos());
 
 	if (!item->parent()) {
-		if (_button == Qt::RightButton) {
-			groupRightClicked(item->text(0));
-			return;
-		}
-		if (_tree->isItemExpanded(item)) {
-			_tree->collapseItem(item);
-		}
-		else {
-			_tree->expandItem(item);
-		}
+		groupClicked(item);
+		return;
 	}
-
-	ul->mouseClicked(item->text(0), mousepos, widgetSize);
 
 	if (ul->getButton(item->text(0)) == Qt::RightButton) {
-		if (!_menu) {
-			_menu = createMenu();
-		} else {
-			delete _menu;
-			_menu = createMenu();
-		}
-		_menu->popup(QCursor::pos());
-		// clearSelection () is bugged ! We have to clear the selection ourself
-		QList <QTreeWidgetItem * > selectedList = _tree->selectedItems();
-		QList <QTreeWidgetItem * >::iterator it;
-		for ( it = selectedList.begin(); it != selectedList.end(); it ++){
-			_tree->setItemSelected((*it),false);
-		}
-		_tree->setItemSelected ( item, true );
-		_button = Qt::NoButton;
+		itemRightClicked(item);
 		return;
-	} else {
-		if (_previous != NULL) {
+
+	}
+
+	if (item->parent()) {
+		if (_previous == item) {
 			closeUserInfo();
-			_previous = item;
-			if (item->parent()) {
-				openUserInfo(item);
-			}
 		} else {
-			_previous = item;
-			if (item->parent()) {
-				openUserInfo(item);
-			}
+			openUserInfo(item);
 		}
 	}
+
 	_tree->viewport()->update();
 	_button = Qt::NoButton;
 }
-void QtContactManager::itemDoubleClicked(QTreeWidgetItem * item, int) {
-	defaultAction(item);
+
+void QtContactManager::itemRightClicked(QTreeWidgetItem * item) {
+	if (!_menu) {
+		_menu = createMenu();
+	} else {
+		delete _menu;
+		_menu = createMenu();
+	}
+	_menu->popup(QCursor::pos());
+	// clearSelection () is bugged ! We have to clear the selection ourself
+	clearTreeSelection();
+	_tree->setItemSelected ( item, true );
+	_button = Qt::NoButton;
+}
+
+void QtContactManager::groupClicked(QTreeWidgetItem * item) {
+	if (_button == Qt::RightButton) {
+		groupRightClicked(item->text(0));
+		return;
+	}
+	if (_tree->isItemExpanded(item)) {
+		_tree->collapseItem(item);
+	} else {
+		_tree->expandItem(item);
+	}
+}
+
+void QtContactManager::clearTreeSelection() {
+	QList <QTreeWidgetItem * > selectedList = _tree->selectedItems();
+	QList <QTreeWidgetItem * >::iterator it;
+	for ( it = selectedList.begin(); it != selectedList.end(); it ++){
+		_tree->setItemSelected((*it),false);
+	}
 }
 
 void QtContactManager::defaultAction(QTreeWidgetItem * item){
@@ -619,12 +615,13 @@ void QtContactManager::removeContact(const QString & contactId) {
 		QTreeWidgetItem * group = (QTreeWidgetItem *) (*it);
 		if (group->parent() == 0) {
 			int count = group->childCount();
-			for (int t = 0; (t < count) && !found; t++) {
-				item = group->child(t);
+			for (int i = 0; (i < count) && !found; i++) {
+				item = group->child(i);
 				qtContact = ul->getContact(item->text(0));
 				if (qtContact->getId() == contactId) {
-					group->takeChild(t);
+					item = group->takeChild(i);
 					ul->removeContact(qtContact);
+					delete item;
 					found = true;
 				}
 			}

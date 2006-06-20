@@ -261,13 +261,11 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 		// If the Contact has a group
 		if (!contactProfile.getGroupId().empty()) {
 			list = _treeWidget->findItems(groupId, Qt::MatchExactly);
-
 			// No group exists. Creating the group
 			if (list.empty()) {
 				contactGroupAddedEventSlot(groupId);
 				list = _treeWidget->findItems(groupId,Qt::MatchExactly);
 			}
-
 			newContact = new QTreeWidgetItem(list[0]);
 			newContact->setText(0, contactId);
 			newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);

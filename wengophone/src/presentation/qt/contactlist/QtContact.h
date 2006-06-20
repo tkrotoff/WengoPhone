@@ -64,8 +64,6 @@ public:
 
 	void setMouseOn(bool value) { _mouseOn = value; }
 
-	void mouseClicked(const QPoint & pos, const QRect & rec);
-
 	QtContactPixmap::ContactPixmap getStatus() const;
 
 	void setFunction(bool im, bool call, bool video);
@@ -120,9 +118,9 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-	void clicked(QtContact * user, int prt);
+	void clicked(QtContact * qtContact, int prt);
 
-protected:
+private:
 
 	QString _userName;
 

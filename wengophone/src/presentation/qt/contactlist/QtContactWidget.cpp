@@ -111,8 +111,8 @@ QLabel * QtContactWidget::getAvatarLabel() const {
 }
 
 void QtContactWidget::mobileButtonClicked() {
-	if (_ui.cellPhoneLabel->text() != tr("No cell phone number set")) {
-		QtContactListManager * ul = QtContactListManager::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
+	if (!ul->getMobilePhone(QString::fromStdString(_contactId)).isEmpty()) {
 		ul->startCall(QString::fromStdString(_contactId), _ui.cellPhoneLabel->text());
 	} else {
 		ContactProfile contactProfile =
@@ -125,8 +125,8 @@ void QtContactWidget::mobileButtonClicked() {
 }
 
 void QtContactWidget::landLineButtonClicked() {
-	if (_ui.homePhoneLabel->text() != tr("No phone number set")) {
-		QtContactListManager * ul = QtContactListManager::getInstance();
+	QtContactListManager * ul = QtContactListManager::getInstance();
+	if (ul->getHomePhone(QString::fromStdString(_contactId)).isEmpty()) {
 		ul->startCall(QString::fromStdString(_contactId), _ui.homePhoneLabel->text());
 	} else {
 		ContactProfile contactProfile =
@@ -141,7 +141,6 @@ void QtContactWidget::landLineButtonClicked() {
 QPixmap QtContactWidget::createAvatar() {
 	QPixmap background = QPixmap(AVATAR_BACKGROUND);
 	QPixmap avatar = getIcon();
-
 	if (!avatar.isNull()) {
 		QRect rect = _ui.avatarLabel->rect();
 		QPainter pixpainter(&background);
@@ -157,11 +156,11 @@ void QtContactWidget::paintEvent(QPaintEvent *) {
 	QRect r = rect();
 	QPainter painter(this);
 	painter.fillRect(r, QBrush(lg));
-    paintUser(&painter, r);
+    paintContact(&painter, r);
 	painter.end();
 }
 
-void QtContactWidget::paintUser(QPainter * painter, const QRect & rect) {
+void QtContactWidget::paintContact(QPainter * painter, const QRect & rect) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QRect r;
 	QPixmap px;

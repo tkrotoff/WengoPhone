@@ -84,7 +84,6 @@ void QtTreeViewDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
 	} else {
 		QtContactListManager * ul = QtContactListManager::getInstance();
 		ul->paintContact(painter, option, index);
-
 	}
 }
 

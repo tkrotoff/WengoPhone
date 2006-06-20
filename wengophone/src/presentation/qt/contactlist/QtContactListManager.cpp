@@ -171,13 +171,6 @@ bool QtContactListManager::hasPhoneNumber(const QString & contactId) const {
 	return false;
 }
 
-void QtContactListManager::mouseClicked(const QString & contactId, const QPoint pos, const QRect & rect) {
-	QMutexLocker locker(const_cast <QMutex *> (_mutex));
-	if (contains(contactId)) {
-		_contactList[contactId]->mouseClicked(pos, rect);
-	}
-}
-
 void QtContactListManager::setButton(const QString & contactId, const Qt::MouseButton button) {
 	QMutexLocker locker(const_cast <QMutex *> (_mutex));
 	if (contains(contactId)) {

@@ -148,9 +148,6 @@ void QtContact::startSMS() {
 	}
 }
 
-void QtContact::mouseClicked(const QPoint & pos, const QRect & rect) {
-}
-
 void QtContact::setButton(const Qt::MouseButton button) {
 	_mouseButton = button;
 }
