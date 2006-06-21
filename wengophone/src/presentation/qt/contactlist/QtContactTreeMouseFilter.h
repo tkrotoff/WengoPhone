@@ -40,7 +40,9 @@ class QtContactTreeMouseFilter : public QObject {
 	Q_OBJECT
 public :
 
-	QtContactTreeMouseFilter(CContactList & cContactList, QObject * parent = 0, QTreeWidget * target = 0);
+	static const QString WENGO_MIME_TYPE;
+
+	QtContactTreeMouseFilter(CContactList & cContactList, QObject * parent = 0, QTreeWidget * treeWidget = 0);
 
 Q_SIGNALS:
 

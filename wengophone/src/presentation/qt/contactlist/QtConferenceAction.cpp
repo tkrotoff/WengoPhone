@@ -34,6 +34,6 @@ void QtConferenceAction::setPhoneCall(PhoneCall * phoneCall) {
 	_phoneCall = phoneCall;
 }
 
-PhoneCall * QtConferenceAction::getPhoneCall() {
+PhoneCall * QtConferenceAction::getPhoneCall() const {
 	return _phoneCall;
 }

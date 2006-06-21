@@ -87,7 +87,7 @@ QtContactInfo & QtContactInfo::operator=(const QtContactInfo & other) {
 	return *this;
 }
 
-QtContactPixmap::ContactPixmap QtContactInfo::getStatus() {
+QtContactPixmap::ContactPixmap QtContactInfo::getStatus() const {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = ul->getContact(_contactId);
 	return qtContact->getStatus();

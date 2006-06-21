@@ -33,13 +33,15 @@
 #include <QApplication>
 #include <QMessageBox>
 
-QtContactTreeMouseFilter::QtContactTreeMouseFilter(CContactList & cContactList, QObject * parent, QTreeWidget * target)
+const QString QtContactTreeMouseFilter::WENGO_MIME_TYPE = "application/x-wengo-user-data";
+
+QtContactTreeMouseFilter::QtContactTreeMouseFilter(CContactList & cContactList, QObject * parent, QTreeWidget * treeWidget)
 	: QObject(parent),
 	_cContactList(cContactList) {
-	_tree = target;
+	_tree = treeWidget;
 
-	/* We need to install the event filter in the viewport of the QTreeWidget */
-	target->viewport()->installEventFilter(this);
+	/* The event filter must be installed in the viewport of the QTreeWidget */
+	_tree->viewport()->installEventFilter(this);
 	_inDrag = false;
 	_selectedItem = NULL;
 }
@@ -118,17 +120,17 @@ void QtContactTreeMouseFilter::mouseMoveEvent(QMouseEvent * event) {
 	QByteArray custom;
 	QDrag * drag = new QDrag(_tree);
 	QMimeData * mimeData = new QMimeData;
-	// FIXME
-	mimeData->setText(item->text(0));
-	mimeData->setData("application/x-wengo-user-data", custom);
+
+	QtContactListManager * ul = QtContactListManager::getInstance();
+	mimeData->setText(ul->getContact(item->text(0))->getUserName());
+	mimeData->setData(WENGO_MIME_TYPE, custom);
 	drag->setMimeData(mimeData);
 	_inDrag = true;
 	drag->start(Qt::MoveAction);
-
 }
 
 void QtContactTreeMouseFilter::dragEnterEvent(QDragEnterEvent * event) {
-	if (event->mimeData()->hasFormat("application/x-wengo-user-data")) {
+	if (event->mimeData()->hasFormat(WENGO_MIME_TYPE)) {
 		event->acceptProposedAction();
 	}
 }
@@ -138,10 +140,12 @@ void QtContactTreeMouseFilter::dropEvent(QDropEvent * event) {
 	QTreeWidgetItem * item = _tree->itemAt(event->pos());
 	_inDrag = false;
 
-	if (!event->mimeData()->hasFormat("application/x-wengo-user-data")) {
+	if (!event->mimeData()->hasFormat(WENGO_MIME_TYPE)) {
 		return;
 	}
+
 	if (item) {
+
 		if (_selectedItem) {
 			if (_selectedItem == item) {
 				return;
@@ -181,7 +185,8 @@ void QtContactTreeMouseFilter::dragMoveEvent(QDragMoveEvent * event) {
 	event->setDropAction(Qt::IgnoreAction);
 	if (item) {
 		event->setDropAction(Qt::MoveAction);
-		if (event->mimeData()->hasFormat("application/x-wengo-user-data"))
+		if (event->mimeData()->hasFormat(WENGO_MIME_TYPE)) {
 			event->acceptProposedAction();
+		}
 	}
 }

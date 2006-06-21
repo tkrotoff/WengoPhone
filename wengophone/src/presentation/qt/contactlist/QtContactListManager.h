@@ -81,9 +81,9 @@ public:
 
 	QString getWengoPhoneNumber(const QString & contactId) const;
 
-	void setTreeWidget(QTreeWidget * tree) { _tree = tree; }
-
 	QTreeWidget * getTreeWidget() const { return _tree; }
+
+	void setTreeWidget(QTreeWidget * tree) { _tree = tree; }
 
 	void resetMouseStatus();
 
@@ -124,7 +124,7 @@ private:
 
 	QString _lastMouseOn;
 
-	QMutex * _mutex;
+	mutable QMutex * _mutex;
 };
 
 #endif	//OWCONTACTLISTMANAGER_H

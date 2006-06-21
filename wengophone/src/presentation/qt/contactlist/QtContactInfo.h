@@ -54,7 +54,7 @@ public:
 
 	bool isCleared() const;
 
-	QtContactPixmap::ContactPixmap getStatus();
+	QtContactPixmap::ContactPixmap getStatus() const;
 
 	virtual bool operator < (const QtContactInfo & other) const;
 

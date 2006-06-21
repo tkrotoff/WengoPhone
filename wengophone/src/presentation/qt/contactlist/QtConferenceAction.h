@@ -44,7 +44,7 @@ public:
 
 	void setPhoneCall(PhoneCall * phoneCall);
 
-	PhoneCall * getPhoneCall();
+	PhoneCall * getPhoneCall() const;
 
 protected:
 

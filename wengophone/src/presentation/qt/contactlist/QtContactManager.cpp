@@ -685,7 +685,6 @@ void QtContactManager::moveContact(const QString & contactId,
 }
 
 void QtContactManager::timerEvent(QTimerEvent * event) {
-
 	if (event->timerId() == _sortTimerId) {
 		killTimer(_sortTimerId);
 		_sortTimerId = -1;
@@ -711,6 +710,7 @@ void QtContactManager::timerEvent(QTimerEvent * event) {
 		killTimer(_timerId);
 		return;
 	}
+	QObject::timerEvent(event);
 }
 
 bool QtContactManager::groupsAreHidden() {

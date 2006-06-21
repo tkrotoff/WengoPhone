@@ -69,7 +69,7 @@ public:
 		return _contactListWidget;
 	}
 
-	QtContactManager * getContactManager() {
+	QtContactManager * getContactManager() const {
 		return _contactManager;
 	}
 
