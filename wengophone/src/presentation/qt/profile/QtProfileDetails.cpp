@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include <cutil/global.h>
+
 #include "QtProfileDetails.h"
 
 #include "ui_ProfileDetails.h"
@@ -35,10 +35,12 @@
 #include <qtutil/StringListConvert.h>
 
 #include <util/Logger.h>
+#include <cutil/global.h>
 
 #include <QtGui>
+
 #ifdef OS_WINDOWS
-#include <windows.h>
+	#include <windows.h>
 #endif
 
 static const char * PNG_FORMAT = "PNG";
@@ -50,12 +52,13 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, ContactProfile &
 
 	init(parent);
 
-	// FIXME: we should keep in memory the UUID of the group
+	//FIXME we should keep in memory the UUID of the group
 	std::vector< std::pair<std::string, std::string> > tmp = _cUserProfile.getCContactList().getContactGroups();
 	for (std::vector< std::pair<std::string, std::string> >::const_iterator it = tmp.begin();
 		it != tmp.end();
 		++it) {
-        _ui->groupComboBox->addItem(QString::fromUtf8((*it).second.c_str()), QString::fromStdString((*it).first.c_str()));
+
+		_ui->groupComboBox->addItem(QString::fromUtf8((*it).second.c_str()), QString::fromStdString((*it).first.c_str()));
 		std::string str1 = (*it).first;
 		std::string str2 = contactProfile.getGroupId();
 		if (str1 == str2) {
@@ -144,14 +147,9 @@ void QtProfileDetails::readProfileAvatar() {
 }
 
 void QtProfileDetails::saveProfile() {
+	_profile.setFirstName(_ui->firstNameLineEdit->text().toUtf8().data());
 
-    std::string tmp;
-
-    tmp = std::string(_ui->firstNameLineEdit->text().toUtf8().data());
-	_profile.setFirstName(tmp);
-
-	tmp = std::string(_ui->lastNameLineEdit->text().toUtf8().data());
-	_profile.setLastName(tmp);
+	_profile.setLastName(_ui->lastNameLineEdit->text().toUtf8().data());
 
 	QDate date = _ui->birthDate->date();
 	_profile.setBirthdate(Date(date.day(), date.month(), date.year()));
@@ -160,11 +158,9 @@ void QtProfileDetails::saveProfile() {
 
 	StreetAddress address;
 	//address.setCountry(_ui->countryComboBox->currentText().toStdString());
-	tmp = std::string(_ui->stateLineEdit->text().toUtf8().data());
-	address.setStateProvince(tmp);
+	address.setStateProvince(_ui->stateLineEdit->text().toUtf8().data());
 
-    tmp = std::string(_ui->cityLineEdit->text().toUtf8().data());
-	address.setCity(tmp);
+	address.setCity(_ui->cityLineEdit->text().toUtf8().data());
 
 	_profile.setStreetAddress(address);
 
@@ -185,7 +181,7 @@ void QtProfileDetails::saveContact() {
 	if (_ui->groupComboBox->currentText().isEmpty()) {
 		QMessageBox::warning(_profileDetailsWindow,
 			tr("WengoPhone -- No group selected"),
-			tr("A contact must have a group. Please set a group."),
+			tr("A contact must have a group, please set a group."),
 			QMessageBox::NoButton,
 			QMessageBox::NoButton,
 			QMessageBox::Ok);
@@ -195,7 +191,7 @@ void QtProfileDetails::saveContact() {
 
 	int index = _ui->groupComboBox->findText(_ui->groupComboBox->currentText());
 	QVariant groupId;
-	// If the group does not exist
+	//If the group does not exist
 	if (index == -1) {
 		std::string groupName = std::string(_ui->groupComboBox->currentText().toUtf8().data());
 		_cUserProfile.getCContactList().addContactGroup(groupName);
@@ -255,5 +251,4 @@ void QtProfileDetails::changeUserProfileAvatar() {
 #ifdef OS_WINDOWS
 	BringWindowToTop(_profileDetailsWindow->winId());
 #endif
-
 }

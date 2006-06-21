@@ -149,7 +149,7 @@
           <string>Click to change avatar</string>
          </property>
          <property name="icon" >
-          <iconset resource="../wengophone.qrc" >:/pics/export1_96.png</iconset>
+          <iconset resource="../wengophone.qrc" >:/pics/default-avatar.png</iconset>
          </property>
          <property name="iconSize" >
           <size>

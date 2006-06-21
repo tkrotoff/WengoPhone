@@ -24,13 +24,13 @@
 
 #include <QObject>
 
+class UserProfile;
 class ContactProfile;
 class CUserProfile;
 class Profile;
+
 class QWidget;
 class QDialog;
-class UserProfile;
-
 namespace Ui { class ProfileDetails; }
 
 /**

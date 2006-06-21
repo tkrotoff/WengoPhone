@@ -36,9 +36,7 @@ class QtWengoPhone;
  * @author Philippe Bernery
  */
 class QtUserProfileHandler : public QObjectThreadSafe, public PUserProfileHandler {
-
 	Q_OBJECT
-
 public:
 
 	QtUserProfileHandler(CUserProfileHandler & cUserProfileHandler, QtWengoPhone & qtWengoPhone);
@@ -154,7 +152,6 @@ private:
 
 	/** Login Windows. */
 	QtLogin * _qtLogin;
-
 };
 
-#endif //OWQTUSERPROFILEHANDLER_H
+#endif	//OWQTUSERPROFILEHANDLER_H

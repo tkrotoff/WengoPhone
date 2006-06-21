@@ -30,11 +30,12 @@
 
 static const QString IM_PROTOCOL_WENGO = "Wengo";
 
-QtAddIMContact::QtAddIMContact(ContactProfile & contactProfile, 
+QtAddIMContact::QtAddIMContact(ContactProfile & contactProfile,
 	CUserProfile & cUserProfile, QWidget * parent)
-: QObject(parent),
-_contactProfile(contactProfile),
-_cUserProfile(cUserProfile) {
+	: QObject(parent),
+	_contactProfile(contactProfile),
+	_cUserProfile(cUserProfile) {
+
 	_addIMContactWindow = new QDialog(parent);
 
 	_ui = new Ui::AddIMContact();

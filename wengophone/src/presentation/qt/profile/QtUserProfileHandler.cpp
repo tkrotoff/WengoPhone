@@ -25,13 +25,13 @@
 
 #include <control/profile/CUserProfileHandler.h>
 
-#include <QMessageBox>
+#include <QtGui>
 
-QtUserProfileHandler::QtUserProfileHandler(CUserProfileHandler & cUserProfileHandler, 
-	QtWengoPhone & qtWengoPhone) 
-: QObjectThreadSafe(&qtWengoPhone),
- _cUserProfileHandler(cUserProfileHandler),
-_qtWengoPhone(qtWengoPhone) {
+QtUserProfileHandler::QtUserProfileHandler(CUserProfileHandler & cUserProfileHandler,
+	QtWengoPhone & qtWengoPhone)
+	: QObjectThreadSafe(&qtWengoPhone),
+	_cUserProfileHandler(cUserProfileHandler),
+	_qtWengoPhone(qtWengoPhone) {
 
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtUserProfileHandler::initThreadSafe, this));
@@ -61,11 +61,9 @@ void QtUserProfileHandler::initThreadSafe() {
 }
 
 void QtUserProfileHandler::updatePresentation() {
-
 }
 
 void QtUserProfileHandler::updatePresentationThreadSafe() {
-
 }
 
 QtUserProfileHandler::~QtUserProfileHandler() {

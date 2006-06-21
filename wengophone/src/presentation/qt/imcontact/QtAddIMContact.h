@@ -26,16 +26,15 @@
 
 #include <QObject>
 
-#include <string>
 #include <set>
 
 class IMAccount;
 class ContactProfile;
 class CUserProfile;
+
 class QWidget;
 class QDialog;
 class QString;
-
 namespace Ui { class AddIMContact; }
 
 /**

@@ -17,22 +17,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTIMCONTACTMANAGER_H
-#define QTIMCONTACTMANAGER_H
+#ifndef OWQTIMCONTACTMANAGER_H
+#define OWQTIMCONTACTMANAGER_H
 
 #include <util/NonCopyable.h>
 
 #include <QObject>
 
-#include <string>
 class UserProfile;
-
 class ContactProfile;
 class CUserProfile;
+
 class QWidget;
 class QTreeWidget;
 class QTreeWidgetItem;
-
 namespace Ui { class IMContactManager; }
 
 /**
@@ -77,4 +75,4 @@ private:
 	ContactProfile & _contactProfile;
 };
 
-#endif //QTIMCONTACTMANAGER_H
+#endif //OWQTIMCONTACTMANAGER_H
