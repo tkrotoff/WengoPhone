@@ -35,9 +35,11 @@
 #include <qtutil/QtWengoStyleLabel.h>
 
 QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
-	ConnectHandler & connectHandler, QWidget * parent, Qt::WFlags f)
-	: QWidget (parent,f), _cUserProfile(cUserProfile),
-	_cWengoPhone(cWengoPhone), _connectHandler(connectHandler) {
+		ConnectHandler & connectHandler, QWidget * parent)
+	: QWidget (parent),
+	_cUserProfile(cUserProfile),
+	_cWengoPhone(cWengoPhone),
+	_connectHandler(connectHandler) {
 
 	_statusMenu = NULL;
 	_isOpen = false;

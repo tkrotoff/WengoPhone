@@ -29,7 +29,6 @@
 #include <qtutil/QObjectThreadSafe.h>
 
 class CWengoPhone;
-class NetworkObserver;
 class Settings;
 
 class QStatusBar;
@@ -75,9 +74,9 @@ private:
 
 	void checkSoundConfigThreadSafe(Settings & sender, const std::string & key);
 
-	void connectionIsUpEventHandler(NetworkObserver & sender);
-	
-	void connectionIsDownEventHandler(NetworkObserver & sender);
+	void connectionIsUpEventHandler();
+
+	void connectionIsDownEventHandler();
 
 	void connectionStateEventHandlerThreadSafe(bool connected);
 

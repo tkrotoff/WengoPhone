@@ -49,13 +49,11 @@ class CHistory;
  * @author Mathieu Stute
  */
 class QtProfileBar : public QWidget, public Trackable {
-
 	Q_OBJECT
-
 public:
 
-	QtProfileBar (CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
-		ConnectHandler & connectHandler,QWidget * parent = 0, Qt::WFlags f = 0 );
+	QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
+		ConnectHandler & connectHandler, QWidget * parent);
 
 	~QtProfileBar();
 

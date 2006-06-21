@@ -17,33 +17,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTTRAYICON_H
-#define OWQTTRAYICON_H
+#ifndef OWQTSYSTRAY_H
+#define OWQTSYSTRAY_H
 
-#include <QtGui>
+#include <util/Trackable.h>
+
+#include <qtutil/QObjectThreadSafe.h>
+
+#include <QVariant>
 
 class QtWengoPhone;
 class TrayIcon;
 
-class QtTrayIcon : public QObject {
+class QMenu;
+class QAction;
+class QPoint;
+
+class QtSystray : public QObjectThreadSafe, public Trackable {
 	Q_OBJECT
 public:
 
-	QtTrayIcon(QObject * parent);
-
-	QMenu * createStatusMenu();
-
-	void updateCallMenu();
+	QtSystray(QObject * parent);
 
 public Q_SLOTS:
 
-	void setTrayMenu();
-
 	void setSystrayIcon(QVariant status);
 
-	void sysTrayDoubleClicked(const QPoint& );
+	void setTrayMenu();
 
 	void hide();
+
+private Q_SLOTS:
+
+	void sysTrayDoubleClicked(const QPoint & );
 
 	void slotSystrayMenuCallWengo(QAction * action);
 
@@ -57,11 +63,17 @@ public Q_SLOTS:
 
 private:
 
-	QMenu * createCallWengoTrayMenu();
+	void connectionIsUpEventHandler();
 
-	QMenu * createCallMobileTrayMenu();
+	void connectionIsDownEventHandler();
 
-	QMenu * createCallLandLineTrayMenu();
+	void connectionStateEventHandlerThreadSafe(bool connected);
+
+	QMenu * createStatusMenu();
+
+	void updateCallMenu();
+
+	void initThreadSafe() { }
 
 	QtWengoPhone * _qtWengoPhone;
 
@@ -82,4 +94,4 @@ private:
 	TrayIcon * _trayIcon;
 };
 
-#endif	//OWQTTRAYICON_H
+#endif	//OWQTSYSTRAY_H

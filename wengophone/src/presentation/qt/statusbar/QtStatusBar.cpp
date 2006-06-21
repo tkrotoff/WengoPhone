@@ -57,10 +57,10 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	//	boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 
 	NetworkObserver::getInstance().connectionIsDownEvent +=
-		boost::bind(&QtStatusBar::connectionIsDownEventHandler, this, _1);
+		boost::bind(&QtStatusBar::connectionIsDownEventHandler, this);
 
 	NetworkObserver::getInstance().connectionIsUpEvent +=
-		boost::bind(&QtStatusBar::connectionIsUpEventHandler, this, _1);
+		boost::bind(&QtStatusBar::connectionIsUpEventHandler, this);
 
 	//internetConnectionStateLabel
 	_internetConnectionMovie = new QMovie(":/pics/statusbar/status-earth-connecting.mng", MNG_FORMAT, _statusBar);
@@ -70,7 +70,7 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	statusGroup->layout()->addWidget(_internetConnectionStateLabel);
 	_internetConnectionMovie->start();
 	if (NetworkObserver::getInstance().isConnected()) {
-		connectionIsUpEventHandler(NetworkObserver::getInstance());
+		connectionIsUpEventHandler();
 	}
 
 
@@ -139,7 +139,7 @@ void QtStatusBar::checkSoundConfigThreadSafe(Settings & sender, const std::strin
 	}
 }
 
-void QtStatusBar::connectionIsDownEventHandler(NetworkObserver & sender) {
+void QtStatusBar::connectionIsDownEventHandler() {
 	typedef PostEvent1<void (bool), bool> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtStatusBar::connectionStateEventHandlerThreadSafe, this, _1), false);
 	postEvent(event);
@@ -147,7 +147,7 @@ void QtStatusBar::connectionIsDownEventHandler(NetworkObserver & sender) {
 	phoneLineStateChanged(EnumPhoneLineState::PhoneLineStateUnknown);
 }
 
-void QtStatusBar::connectionIsUpEventHandler(NetworkObserver & sender) {
+void QtStatusBar::connectionIsUpEventHandler() {
 	typedef PostEvent1<void (bool), bool> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtStatusBar::connectionStateEventHandlerThreadSafe, this, _1), true);
 	postEvent(event);

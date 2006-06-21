@@ -83,7 +83,7 @@
 #include <QtGui>
 #include <QAction>
 
-#include "QtTrayIcon.h"
+#include "QtSystray.h"
 
 using namespace std;
 
@@ -120,7 +120,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone, bool background)
 	// Check if the event has not already been sent
 	if (NetworkProxyDiscovery::getInstance().getState() ==
 		NetworkProxyDiscovery::NetworkProxyDiscoveryStateNeedsAuthentication) {
-		proxyNeedsAuthenticationEventHandler(NetworkProxyDiscovery::getInstance(), 
+		proxyNeedsAuthenticationEventHandler(NetworkProxyDiscovery::getInstance(),
 			NetworkProxyDiscovery::getInstance().getNetworkProxy());
 	}
 
@@ -214,7 +214,7 @@ void QtWengoPhone::initThreadSafe() {
 	_qtHistoryWidget = NULL;
 
 	//Systray
-	_qtTrayIcon = new QtTrayIcon(this);
+	_qtSystray = new QtSystray(this);
 
 
 	//actionShowWengoAccount
@@ -451,17 +451,18 @@ void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall) 
 				return;
 			}
 
-			for (int i = 0; i < _ui->tabWidget->count(); i++){
-				QtContactCallListWidget * qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+			for (int j = 0; j < _ui->tabWidget->count(); j++){
+				QtContactCallListWidget * qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(j));
 				if ( qtContactCallListWidget ){
 					if ( qtContactCallListWidget->hasPhoneCall( targetCall) ){
-						_ui->tabWidget->setTabText(i,tr("Conference"));
+						_ui->tabWidget->setTabText(j, tr("Conference"));
 						IPhoneLine * phoneLine = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine();
 
 						if (phoneLine != NULL) {
 							ConferenceCall * confCall = new ConferenceCall(*phoneLine);
 							confCall->addPhoneCall(*targetCall);
 							confCall->addPhoneNumber(phoneNumber.toStdString());
+							break;
 						} else {
 							LOG_DEBUG("phoneLine is NULL");
 						}
@@ -667,8 +668,8 @@ void QtWengoPhone::editMyProfile() {
 void QtWengoPhone::exitApplication() {
 
     Config & config = ConfigManager::getInstance().getCurrentConfig();
-	_qtTrayIcon->hide();
-	delete _qtTrayIcon;
+	_qtSystray->hide();
+	delete _qtSystray;
     // Save the window size
     QSize winsize = _wengoPhoneWindow->size();
     config.set(Config::PROFILE_WIDTH,winsize.width());
@@ -1096,14 +1097,14 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 		*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
 		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getConnectHandler(),
 		_ui->profileBar);
-    connect(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )), _qtTrayIcon, SLOT(setSystrayIcon(QVariant )));
+	connect(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )), _qtSystray, SLOT(setSystrayIcon(QVariant )));
 	connect(_qtLanguage, SIGNAL(translationChangedSignal()), _qtProfileBar, SLOT(slotTranslationChanged()));
 
 	//Add the profile bar
 	int profileBarIndex = _ui->profileBar->addWidget(_qtProfileBar);
 	_ui->profileBar->setCurrentIndex(profileBarIndex);
 	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
-	_qtTrayIcon->setTrayMenu();
+	_qtSystray->setTrayMenu();
 }
 
 void QtWengoPhone::showHideGroups() {
@@ -1135,21 +1136,21 @@ void QtWengoPhone::showHideOffLineContacts() {
 
 void QtWengoPhone::proxyNeedsAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy) {
 	typedef PostEvent1<void (NetworkProxy networkProxy), NetworkProxy> MyPostEvent;
-	MyPostEvent * event = 
+	MyPostEvent * event =
 			new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1), networkProxy);
 	postEvent(event);
 }
 
 void QtWengoPhone::wrongProxyAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy) {
 	typedef PostEvent1<void (NetworkProxy networkProxy), NetworkProxy> MyPostEvent;
-	MyPostEvent * event = 
+	MyPostEvent * event =
 			new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1), networkProxy);
 	postEvent(event);
 }
 
 void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(NetworkProxy networkProxy) {
 	static QtHttpProxyLogin * httpProxy =
-		new QtHttpProxyLogin(getWidget(), 
+		new QtHttpProxyLogin(getWidget(),
 			networkProxy.getServer(), networkProxy.getServerPort());
 
 	int ret = httpProxy->show();

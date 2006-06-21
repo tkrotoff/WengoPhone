@@ -68,7 +68,7 @@ public:
 	enum NetworkDiscoveryState {
 		/** Initial NetworkDiscoveryState. */
 		NetworkDiscoveryStateUnknown,
-	
+
 		/** Network discovery has been successful. */
 		NetworkDiscoveryStateOk,
 

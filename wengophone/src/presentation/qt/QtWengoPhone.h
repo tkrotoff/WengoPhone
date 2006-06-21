@@ -57,7 +57,7 @@ class QtSubscribe;
 class QtToaster;
 class QtWengoStyleLabel;
 class QtWsDirectory;
-class QtTrayIcon;
+class QtSystray;
 class UserProfile;
 
 class QPushButton;
@@ -302,7 +302,7 @@ private:
 
 	QComboBox * _phoneComboBox;
 
-	QtTrayIcon * _qtTrayIcon;
+	QtSystray * _qtSystray;
 
 	QtSms * _qtSms;
 
