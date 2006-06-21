@@ -68,6 +68,8 @@ protected:
 
 	QPixmap _menuIcon;
 
+	mutable QPixmap _groupBackground;
+
 	CWengoPhone & _cWengoPhone;
 };
 

@@ -33,6 +33,8 @@ class QPainter;
 class CWengoPhone;
 class QModelIndex;
 class QStyleOptionViewItem;
+class QPainter;
+class QRect;
 
 /**
  * Qt Presentation component for Contact
@@ -42,6 +44,8 @@ class QStyleOptionViewItem;
 class QtContact : QObject {
 	Q_OBJECT
 public:
+
+	static const QColor SELECTION_BACKGROUND;
 
 	enum SizeHint { UserSize = 22 };
 
@@ -120,6 +124,8 @@ Q_SIGNALS:
 	void clicked(QtContact * qtContact, int prt);
 
 private:
+
+	void paintSelection(QPainter * painter, const QStyleOptionViewItem & option);
 
 	QString _userName;
 

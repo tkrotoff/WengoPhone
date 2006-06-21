@@ -172,15 +172,14 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 }
 
 QPixmap QtTreeViewDelegate::getGroupBackGround(const QRect & rect) const {
-	QPixmap backGround;
-	QRect pixmapRect;
-	QLinearGradient lg(QPointF(1, rect.top()), QPointF(1, rect.bottom()));
-	lg.setColorAt(.8, QColor(212, 208, 200));
-	lg.setColorAt(0, QColor(250, 250, 250));
-
-	backGround = QPixmap(rect.width(),rect.height());
-	QPainter painter(&backGround);
-	painter.fillRect(backGround.rect(),QBrush(lg));
-	painter.end();
-	return backGround;
+	if (_groupBackground.isNull() || _groupBackground.width() != rect.width()) {
+		QLinearGradient lg(QPointF(1.0, 0.0), QPointF(1.0, GROUP_WIDGET_FRAME_HEIGHT));
+		lg.setColorAt(0.8, QColor(212, 208, 200));
+		lg.setColorAt(0.0, QColor(255, 255, 255));
+		_groupBackground = QPixmap(rect.width(),GROUP_WIDGET_FRAME_HEIGHT);
+		QPainter painter(&_groupBackground);
+		painter.fillRect(_groupBackground.rect(),QBrush(lg));
+		painter.end();
+	}
+	return _groupBackground;
 }

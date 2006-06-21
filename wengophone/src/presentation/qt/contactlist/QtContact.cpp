@@ -31,6 +31,8 @@
 
 #include <QtGui>
 
+const QColor QtContact::SELECTION_BACKGROUND = QColor(201,201,201);
+
 QtContact::QtContact(const std::string & contactId, CWengoPhone & cWengoPhone, QObject * parent)
 	: QObject(parent),
 	_cWengoPhone(cWengoPhone) {
@@ -41,24 +43,26 @@ QtContact::QtContact(const std::string & contactId, CWengoPhone & cWengoPhone, Q
 	_openStatus = false;
 }
 
-void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) {
+void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & ) {
 	QMutexLocker locker(&_mutex);
 
 	QRect painterRect;
 	QPixmap px;
 	QtContactPixmap * spx;
 	int x;
-	bool parentItem = false;
 
 	spx = QtContactPixmap::getInstance();
 
-	QColor selectedBackground(201, 201, 201);
+	QColor selectedBackground = SELECTION_BACKGROUND;
 
 	if ((option.state & QStyle::State_Selected) == QStyle::State_Selected) {
+/*
 		QRect rect = option.rect;
 		rect.adjust(0, 0, 1, 1);
 		painter->fillRect(option.rect, QBrush(selectedBackground));
 		painter->setPen(option.palette.text().color());
+*/
+		paintSelection(painter,option);
 	} else {
 		painter->setPen(option.palette.text().color());
 	}
@@ -86,6 +90,13 @@ void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, c
 
 	QString text = QString::fromUtf8(_contactProfile.getDisplayName().c_str());
 	painter->drawText(textRect, Qt::AlignLeft, text, 0);
+}
+
+void QtContact::paintSelection(QPainter * painter, const QStyleOptionViewItem & option) {
+		QRect qrect = option.rect;
+		qrect.adjust(0, 0, 1, 1);
+		painter->fillRect(qrect, QBrush(SELECTION_BACKGROUND));
+		painter->setPen(option.palette.text().color());
 }
 
 QString QtContact::getId() const {
