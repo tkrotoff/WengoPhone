@@ -30,6 +30,7 @@ class QtContactList;
 class QtContactInfo;
 class PhoneCall;
 class ContactProfile;
+class QtContact;
 
 class QString;
 class QTreeWidgetItem;
@@ -123,6 +124,10 @@ private:
 	void itemRightClicked(QTreeWidgetItem * item);
 
 	bool canShowUser(const ContactProfile * cprofile);
+
+	QTreeWidgetItem * findQtreeWidgetItem(const QString & data) const;
+
+	QtContact * findContactInGroup(const QTreeWidgetItem * group, const QString & contactId) const;
 
 	QMenu * createConferenceMenu();
 

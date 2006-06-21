@@ -633,55 +633,73 @@ void QtContactManager::setMouseButton(Qt::MouseButton button) {
 
 void QtContactManager::moveContact(const QString & contactId,
 	const QString & srcContactGroupId, const QString & dstContactGroupId) {
+	LOG_DEBUG("Moving contact " +
+		contactId.toStdString() +
+		"from " + srcContactGroupId.toStdString() +
+		"to" + dstContactGroupId.toStdString());
+
 	// If groups are hidden, there is nothing to move...
 	if (groupsAreHidden()) {
 		return;
 	}
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = NULL;
-	bool found = false;
 	// Looking for the contact in the destination group
 	// If it is inside this group nothing is done
-	QList < QTreeWidgetItem * > list = _tree->findItems(dstContactGroupId, Qt::MatchExactly);
-	if (list.isEmpty()) {
+	QTreeWidgetItem * group = findQtreeWidgetItem(dstContactGroupId);
+	if (!group) {
 		return;
 	}
-	QTreeWidgetItem * group = list[0];
-	int count = group->childCount();
-	for (int t = 0; (t < count) && !found; t++) {
-		qtContact = ul->getContact(group->child(t)->text(0));
-		if (qtContact->getId() == contactId) {
-			return;
-		}
+	if (findContactInGroup(group,contactId)) {
+		return;
 	}
 	// Removing the Contact from the old group
-	list = _tree->findItems(srcContactGroupId, Qt::MatchExactly);
-	if (list.isEmpty()) {
+	group = findQtreeWidgetItem(srcContactGroupId);
+	if (!group) {
 		return;
 	}
-	group = list[0];
-	count = group->childCount();
-	for (int t = 0; (t < count) && !found; t++) {
-		qtContact = ul->getContact(group->child(t)->text(0));
+	int count = group->childCount();
+	for (int i = 0; i < count; i++) {
+		qtContact = ul->getContact(group->child(i)->text(0));
 		if (qtContact->getId() == contactId) {
-			group->takeChild(t);
-			found = true;
+			group->takeChild(i);
+			break;
 		}
 	}
 	if (qtContact) {
 		// Adding the user to the destination group
-		list=_tree->findItems(dstContactGroupId, Qt::MatchExactly);
+		group = findQtreeWidgetItem(dstContactGroupId);
 		// No group exists. Creating the group
-		if (list.size() == 0) {
+		if (!group) {
 			_qtContactList.contactGroupAddedEventSlot(dstContactGroupId);
-			list = _tree->findItems(dstContactGroupId, Qt::MatchExactly);
+			group = findQtreeWidgetItem(dstContactGroupId);
 		}
 		QTreeWidgetItem * newContact = NULL;
-		newContact = new QTreeWidgetItem(list[0]);
+		newContact = new QTreeWidgetItem(group);
 		newContact->setText(0, contactId);
 		newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
 	}
+}
+
+QTreeWidgetItem * QtContactManager::findQtreeWidgetItem(const QString & data) const {
+	QList < QTreeWidgetItem * > list = _tree->findItems(data, Qt::MatchExactly);
+	if (list.isEmpty()) {
+		return NULL;
+	}
+	return list[0];
+}
+
+QtContact * QtContactManager::findContactInGroup(const QTreeWidgetItem * group, const QString & contactId) const {
+	QtContactListManager * ul = QtContactListManager::getInstance();
+	int count = group->childCount();
+	QtContact * qtContact;
+	for (int i = 0; (i < count); i++) {
+		qtContact = ul->getContact(group->child(i)->text(0));
+		if (qtContact->getId() == contactId) {
+			return qtContact;
+		}
+	}
+	return NULL;
 }
 
 void QtContactManager::timerEvent(QTimerEvent * event) {

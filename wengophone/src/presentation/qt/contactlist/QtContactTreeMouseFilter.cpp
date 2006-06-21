@@ -166,13 +166,23 @@ void QtContactTreeMouseFilter::dropEvent(QDropEvent * event) {
 					_cContactList.merge(_selectedItem->text(0).toStdString(),
 						item->text(0).toStdString());
 				}
-			} else if (item->parent()) {
-				// The destination group and the source group are different
-				// This is a Contact move
-				ContactProfile contactProfile = _cContactList.getContactProfile(_selectedItem->text(0).toStdString());
-				QString groupId = item->parent()->text(0);
-				contactProfile.setGroupId(groupId.toStdString());
-				_cContactList.updateContact(contactProfile);
+			} else {
+				if (item->parent()) {
+					// The destination group and the source group are different
+					// This is a Contact move
+					ContactProfile contactProfile = _cContactList.getContactProfile(_selectedItem->text(0).toStdString());
+					QString groupId = item->parent()->text(0);
+					contactProfile.setGroupId(groupId.toStdString());
+					_cContactList.updateContact(contactProfile);
+				} else {
+					// The destination is a group, not a contact, add the contact to the group
+					// This is a Contact move
+					ContactProfile contactProfile = _cContactList.getContactProfile(_selectedItem->text(0).toStdString());
+					QString groupId = item->text(0);
+					contactProfile.setGroupId(groupId.toStdString());
+					_cContactList.updateContact(contactProfile);
+				}
+
 			}
 		}
 		event->acceptProposedAction();
