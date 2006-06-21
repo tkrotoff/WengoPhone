@@ -109,11 +109,15 @@ void ConnectHandler::connectedEventHandlerThreadSafe(IMAccount * imAccount) {
 }
 
 void ConnectHandler::disconnectedEventHandler(IMConnect & sender, bool connectionError, const std::string & reason) {
+/*
 	typedef ThreadEvent3<void (IMAccount * imAccount, bool connectionError, std::string reason), IMAccount* , bool, std::string> MyThreadEvent;
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&ConnectHandler::disconnectedEventHandlerThreadSafe, this, _1, _2, _3), &sender.getIMAccount(), connectionError, reason);
 
 	_modelThread.postEvent(event);
+	FIXME: crashes when trying to change UserProfile
+*/
+	disconnectedEventHandlerThreadSafe(&sender.getIMAccount(), connectionError, reason);	
 }
 
 void ConnectHandler::disconnectedEventHandlerThreadSafe(IMAccount * imAccount, bool connectionError, std::string reason) {

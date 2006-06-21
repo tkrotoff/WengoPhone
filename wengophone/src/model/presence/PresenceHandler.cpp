@@ -188,12 +188,16 @@ void PresenceHandler::changeMyIcon(const Picture & picture, IMAccount * imAccoun
 void PresenceHandler::presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
 	const std::string & alias, const std::string & from) {
 
+/*
 	typedef ThreadEvent4<void (IMAccount * imAccount, EnumPresenceState::PresenceState state, std::string alias, std::string from),
 		IMAccount *, EnumPresenceState::PresenceState, std::string, std::string> MyThreadEvent;
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&PresenceHandler::presenceStateChangedEventHandlerThreadSafe, this, _1, _2, _3, _4), &sender.getIMAccount(), state, alias, from);
 
 	_modelThread.postEvent(event);
+	FIXME: crashes when trying to change UserProfile
+*/
+	presenceStateChangedEventHandlerThreadSafe(&sender.getIMAccount(), state, alias, from);
 }
 
 void PresenceHandler::presenceStateChangedEventHandlerThreadSafe(IMAccount * imAccount,
@@ -203,12 +207,16 @@ void PresenceHandler::presenceStateChangedEventHandlerThreadSafe(IMAccount * imA
 }
 
 void PresenceHandler::myPresenceStatusEventHandler(IMPresence & sender, EnumPresenceState::MyPresenceStatus status) {
+/*
 	typedef ThreadEvent2<void (IMAccount * imAccount, EnumPresenceState::MyPresenceStatus status),
 		IMAccount *, EnumPresenceState::MyPresenceStatus> MyThreadEvent;
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&PresenceHandler::myPresenceStatusEventHandlerThreadSafe, this, _1, _2), &sender.getIMAccount(), status);
 
 	_modelThread.postEvent(event);
+	FIXME: crashes when trying to change UserProfile
+*/
+	myPresenceStatusEventHandlerThreadSafe(&sender.getIMAccount(), status);
 }
 
 void PresenceHandler::myPresenceStatusEventHandlerThreadSafe(IMAccount * imAccount, EnumPresenceState::MyPresenceStatus status) {
