@@ -69,6 +69,7 @@ void SipCallbacks::phoneLineStateChangedEventHandler(SipWrapper & sender, int li
 		IPhoneLine * line = lines[i];
 		LOG_DEBUG("lineId=" + String::fromNumber(line->getLineId()));
 		if (lineId == 0) {
+			// change state of all lines
 			line->setState(state);
 		} else if (line->getLineId() == lineId) {
 			line->setState(state);

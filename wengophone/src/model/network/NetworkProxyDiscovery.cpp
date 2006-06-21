@@ -18,6 +18,7 @@
  */
 
 #include "NetworkProxyDiscovery.h"
+#include "NetworkObserver.h"
 
 #include <model/config/Config.h>
 #include <model/config/ConfigManager.h>
@@ -45,7 +46,16 @@ NetworkProxyDiscovery::NetworkProxyDiscovery() {
 	_networkProxy.setLogin(config.getNetworkProxyLogin());
 	_networkProxy.setPassword(config.getNetworkProxyPassword());
 
-	discoverProxy();
+	NetworkObserver::getInstance().connectionIsUpEvent += 
+		boost::bind(&NetworkProxyDiscovery::connectionIsUpEventHandler, this, _1);
+	NetworkObserver::getInstance().connectionIsDownEvent += 
+		boost::bind(&NetworkProxyDiscovery::connectionIsDownEventHandler, this, _1);
+
+	if (config.getNetworkProxyDetected()) {
+		_state = NetworkProxyDiscoveryStateDiscovered;
+	} else {
+		discoverProxy();
+	}
 }
 
 NetworkProxyDiscovery::~NetworkProxyDiscovery() {
@@ -66,6 +76,11 @@ void NetworkProxyDiscovery::discoverProxy() {
 
 void NetworkProxyDiscovery::run() {
 	Mutex::ScopedLock lock(_mutex);
+
+	if (!NetworkObserver::getInstance().isConnected()) {
+		_state = NetworkProxyDiscoveryStateUnknown;
+		return;
+	}
 
 	// See below for explaination about this test
 	if (_state != NetworkProxyDiscoveryStateNeedsAuthentication) {
@@ -154,4 +169,30 @@ NetworkProxy NetworkProxyDiscovery::getNetworkProxy() const {
 	}
 
 	return _networkProxy;
+}
+
+void NetworkProxyDiscovery::connectionIsUpEventHandler(NetworkObserver & sender) {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&NetworkProxyDiscovery::connectionIsUpEventHandlerThreadSafe, this));
+
+	postEvent(event);
+}
+
+void NetworkProxyDiscovery::connectionIsUpEventHandlerThreadSafe() {
+	if (_state != NetworkProxyDiscoveryStateDiscovered) {
+		discoverProxy();
+	}
+}
+
+void NetworkProxyDiscovery::connectionIsDownEventHandler(NetworkObserver & sender) {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&NetworkProxyDiscovery::connectionIsDownEventHandlerThreadSafe, this));
+
+	postEvent(event);
+}
+
+void NetworkProxyDiscovery::connectionIsDownEventHandlerThreadSafe() {
+	terminate();
 }

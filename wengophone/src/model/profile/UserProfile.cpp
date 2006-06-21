@@ -27,7 +27,6 @@
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactGroup.h>
 #include <model/history/History.h>
-#include <model/network/NetworkObserver.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
 #include <model/phoneline/PhoneLineState.h>
@@ -86,12 +85,6 @@ UserProfile::UserProfile(Thread & modelThread)
 		boost::bind(&UserProfile::connectedEventHandler, this, _1, _2);
 
 	computeName();
-
-	NetworkObserver::getInstance().connectionIsDownEvent +=
-		boost::bind(&UserProfile::connectionIsDownEventHandler, this, _1);
-
-	NetworkObserver::getInstance().connectionIsUpEvent +=
-		boost::bind(&UserProfile::connectionIsUpEventHandler, this, _1);
 }
 
 UserProfile::~UserProfile() {
@@ -492,10 +485,3 @@ bool UserProfile::isWengoAccountValid() {
 	return result;
 }
 
-void UserProfile::connectionIsUpEventHandler(NetworkObserver & sender) {
-	connectSipAccounts();
-}
-
-void UserProfile::connectionIsDownEventHandler(NetworkObserver & sender) {
-	disconnectSipAccounts(true);
-}

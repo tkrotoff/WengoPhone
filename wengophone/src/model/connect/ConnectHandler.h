@@ -34,6 +34,7 @@
 
 class Connect;
 class IMAccount;
+class NetworkObserver;
 class PresenceHandler;
 class Thread;
 class UserProfile;
@@ -112,6 +113,17 @@ private:
 	void connectionProgressEventHandler(IMConnect & sender, int currentStep, int totalSteps,
 				const std::string & infoMessage);
 
+	/**
+	 * @see NetworkObserver::connectionIsUpEvent
+	 */
+	void connectionIsUpEventHandler(NetworkObserver & sender);
+	void connectionIsUpEventHandlerThreadSafe();
+	
+	/**
+	 * Handle NetworkObserver::connectionIsDownEvent
+	 */
+	void connectionIsDownEventHandler(NetworkObserver & sender);
+	void connectionIsDownEventHandlerThreadSafe();
 
 	typedef std::map<IMAccount *, Connect *> ConnectMap;
 

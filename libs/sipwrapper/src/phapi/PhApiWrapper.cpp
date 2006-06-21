@@ -218,6 +218,10 @@ void PhApiWrapper::removeVirtualLine(int lineId, int regTimeout) {
 	if (_isInitialized) {
 		publishOffline(String::null);
 		phDelVline(lineId, regTimeout);
+		if (regTimeout == 0) {
+			setRegistered(false);
+			phoneLineStateChangedEvent(*this, lineId, EnumPhoneLineState::PhoneLineStateClosed);
+		}
 	}
 }
 

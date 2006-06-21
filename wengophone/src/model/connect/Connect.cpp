@@ -21,6 +21,7 @@
 
 #include <imwrapper/IMWrapperFactory.h>
 
+#include <model/network/NetworkObserver.h>
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
@@ -59,17 +60,21 @@ void Connect::connect() {
 	autoConnect();
 }
 
-void Connect::disconnect() {
+void Connect::disconnect(bool now) {
 	_timer.stop();
 	_timerIsRunning = false;
+	if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+        _userProfile.disconnectSipAccounts(now);
+	}
 	_imConnect->disconnect();
 }
 
 void Connect::timeoutEventHandler(Timer & sender) {
-	if (_connectionRetryCount < RECONNECT_RETRY) {
+	if (_connectionRetryCount < RECONNECT_RETRY && NetworkObserver::getInstance().isConnected()) {
 		++_connectionRetryCount;
-		if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE)
-			_userProfile.connectSipAccounts();
+		if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+            _userProfile.connectSipAccounts();
+		}
 		_imConnect->connect();
 	} else {
 		// Either the user as cancelled the connection 

@@ -93,7 +93,7 @@ public:
 		return _presenceState;
 	}
 
-	bool isConnected() {
+	bool isConnected() const {
 		return _connected;
 	}
 

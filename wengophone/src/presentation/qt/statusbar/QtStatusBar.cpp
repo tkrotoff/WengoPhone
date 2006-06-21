@@ -143,8 +143,6 @@ void QtStatusBar::connectionIsDownEventHandler() {
 	typedef PostEvent1<void (bool), bool> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtStatusBar::connectionStateEventHandlerThreadSafe, this, _1), false);
 	postEvent(event);
-
-	phoneLineStateChanged(EnumPhoneLineState::PhoneLineStateUnknown);
 }
 
 void QtStatusBar::connectionIsUpEventHandler() {

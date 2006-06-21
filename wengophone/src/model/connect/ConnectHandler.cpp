@@ -20,6 +20,7 @@
 #include "ConnectHandler.h"
 
 #include <model/connect/Connect.h>
+#include <model/network/NetworkObserver.h>
 #include <model/presence/Presence.h>
 #include <model/presence/PresenceHandler.h>
 #include <model/profile/UserProfile.h>
@@ -38,6 +39,12 @@ ConnectHandler::ConnectHandler(UserProfile & userProfile, Thread & modelThread)
 
 	_userProfile.newIMAccountAddedEvent +=
 		boost::bind(&ConnectHandler::newIMAccountAddedEventHandler, this, _1, _2);
+
+	NetworkObserver::getInstance().connectionIsDownEvent +=
+		boost::bind(&ConnectHandler::connectionIsDownEventHandler, this, _1);
+
+	NetworkObserver::getInstance().connectionIsUpEvent +=
+		boost::bind(&ConnectHandler::connectionIsUpEventHandler, this, _1);
 }
 
 ConnectHandler::~ConnectHandler() {
@@ -72,11 +79,6 @@ void ConnectHandler::connect(IMAccount & imAccount) {
 	}
 
 	if (!imAccount.isConnected()) {
-		if (imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
-			// FIXME: currently there is only one SIP account so we are sure that
-			// the connectSipAccounts will connect the Wengo account
-			_userProfile.connectSipAccounts();
-		}
 		connect->connect();
 	}
 }
@@ -86,11 +88,6 @@ void ConnectHandler::disconnect(IMAccount & imAccount, bool now) {
 
 	if (it != _connectMap.end()) {
 		if (imAccount.isConnected()) {
-			if (imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
-				// FIXME: currently there is only one SIP account so we are sure that
-				// the connectSipAccounts will disconnect the Wengo account
-				_userProfile.disconnectSipAccounts(now);
-			}
 			(*it).second->disconnect();
 		}
 	}
@@ -179,4 +176,40 @@ IMAccount * ConnectHandler::findIMAccount(const IMAccountPtrSet & set, const IMA
 	}
 
 	return result;
+}
+
+void ConnectHandler::connectionIsUpEventHandler(NetworkObserver & sender) {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&ConnectHandler::connectionIsUpEventHandlerThreadSafe, this));
+
+	_modelThread.postEvent(event);
+}
+
+void ConnectHandler::connectionIsUpEventHandlerThreadSafe() {
+	for (ConnectMap::const_iterator it = _connectMap.begin();
+		it != _connectMap.end();
+		++it) {
+		if (!(*it).second->getIMAccount().isConnected()) {
+			(*it).second->connect();
+		}
+	}
+}
+
+void ConnectHandler::connectionIsDownEventHandler(NetworkObserver & sender) {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event =
+		new MyThreadEvent(boost::bind(&ConnectHandler::connectionIsDownEventHandlerThreadSafe, this));
+
+	_modelThread.postEvent(event);
+}
+
+void ConnectHandler::connectionIsDownEventHandlerThreadSafe() {
+	for (ConnectMap::const_iterator it = _connectMap.begin();
+		it != _connectMap.end();
+		++it) {
+		if ((*it).second->getIMAccount().isConnected()) {
+			(*it).second->disconnect(true);
+		}
+	}
 }

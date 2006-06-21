@@ -26,6 +26,8 @@
 
 #include <string>
 
+class NetworkObserver;
+
 /**
  * Network proxy data container.
  */
@@ -62,6 +64,8 @@ private:
 
 /**
  * Network proxy discovery.
+ *
+ *	TODO: add a proxyHasChangedEvent to notify registered classes that the proxy settings have changed.
  *
  * @author Julien Bossart
  * @author Philippe Bernery
@@ -130,6 +134,19 @@ private:
 	void discoverProxy();
 
 	virtual void run();
+
+	/**
+	 * @see NetworkObserver::connectionIsUpEvent
+	 */
+	void connectionIsUpEventHandler(NetworkObserver & sender);
+	void connectionIsUpEventHandlerThreadSafe();
+
+	/**
+	 * @see NetworkObserver::connectionIsDownEvent
+	 */
+	void connectionIsDownEventHandler(NetworkObserver & sender);
+	void connectionIsDownEventHandlerThreadSafe();
+
 
 	static NetworkProxyDiscovery * _networkProxyDiscoveryInstance;
 

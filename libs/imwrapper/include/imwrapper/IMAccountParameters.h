@@ -50,6 +50,20 @@ public:
 	static const std::string REMEMBER_PASSWORD_KEY;
 	bool isPasswordRemembered() const;
 
+	static const std::string USE_HTTP_PROXY_KEY;
+	bool isHttpProxyUsed() const;
+
+	static const std::string HTTP_PROXY_SERVER_KEY;
+	std::string getHttpProxyServer() const;
+
+	static const std::string HTTP_PROXY_PORT_KEY;
+	int getHttpProxyPort() const;
+
+	static const std::string HTTP_PROXY_LOGIN_KEY;
+	std::string getHttpProxyLogin() const;
+
+	static const std::string HTTP_PROXY_PASSWORD_KEY;
+	std::string getHttpProxyPassword() const;
 	/** @} */
 
 	/**

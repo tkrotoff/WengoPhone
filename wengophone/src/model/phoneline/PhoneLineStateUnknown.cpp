@@ -20,6 +20,8 @@
 #include "PhoneLineStateUnknown.h"
 
 #include "IPhoneLine.h"
+#include <model/account/SipAccount.h>
 
 void PhoneLineStateUnknown::execute(IPhoneLine & phoneLine) {
+	phoneLine.getSipAccount().setConnected(false);
 }

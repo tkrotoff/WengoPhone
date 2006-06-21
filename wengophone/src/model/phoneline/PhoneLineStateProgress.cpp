@@ -20,6 +20,8 @@
 #include "PhoneLineStateProgress.h"
 
 #include "IPhoneLine.h"
+#include <model/account/SipAccount.h>
 
 void PhoneLineStateProgress::execute(IPhoneLine & phoneLine) {
+	phoneLine.getSipAccount().setConnected(false);
 }

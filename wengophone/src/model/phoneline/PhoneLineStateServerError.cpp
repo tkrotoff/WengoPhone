@@ -20,6 +20,8 @@
 #include "PhoneLineStateServerError.h"
 
 #include "IPhoneLine.h"
+#include <model/account/SipAccount.h>
 
 void PhoneLineStateServerError::execute(IPhoneLine & phoneLine) {
+	phoneLine.getSipAccount().setConnected(false);
 }

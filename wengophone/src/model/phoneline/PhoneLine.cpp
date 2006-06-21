@@ -179,13 +179,6 @@ void PhoneLine::connect() {
 
 	LOG_DEBUG("connect username=" + _sipAccount.getUsername() + " server=" + _sipAccount.getRegisterServerHostname() +
 			" lineId=" + String::fromNumber(_lineId));
-
-	if (_lineId == SipWrapper::VirtualLineIdError) {
-		LOG_ERROR("SipWrapper::addVirtualLine() failed");
-		_sipAccount.setConnected(false);
-	} else {
-		_sipAccount.setConnected(true);
-	}
 }
 
 void PhoneLine::disconnect(bool now) {

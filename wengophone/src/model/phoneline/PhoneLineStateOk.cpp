@@ -20,7 +20,9 @@
 #include "PhoneLineStateOk.h"
 
 #include "IPhoneLine.h"
+#include <model/account/SipAccount.h>
 
 void PhoneLineStateOk::execute(IPhoneLine & phoneLine) {
 	//phoneLine.setSipPresenceState(SipPresenceStateOnline::getInstance(phoneLine));
+	phoneLine.getSipAccount().setConnected(true);
 }

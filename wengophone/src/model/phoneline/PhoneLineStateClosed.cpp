@@ -20,6 +20,8 @@
 #include "PhoneLineStateClosed.h"
 
 #include "IPhoneLine.h"
+#include <model/account/SipAccount.h>
 
 void PhoneLineStateClosed::execute(IPhoneLine & phoneLine) {
+	phoneLine.getSipAccount().setConnected(false);
 }

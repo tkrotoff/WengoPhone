@@ -62,10 +62,12 @@ void SipAccount::copy(const SipAccount & sipAccount) {
 }
 
 void SipAccount::setConnected(bool connected) {
-	_isConnected = connected;
-	if (_isConnected) {
-		loginStateChangedEvent(*this, LoginStateConnected);
-	} else {
-		loginStateChangedEvent(*this, LoginStateDisconnected);
+	if (_isConnected != connected) {
+		_isConnected = connected;
+		if (_isConnected) {
+			loginStateChangedEvent(*this, LoginStateConnected);
+		} else {
+			loginStateChangedEvent(*this, LoginStateDisconnected);
+		}
 	}
 }

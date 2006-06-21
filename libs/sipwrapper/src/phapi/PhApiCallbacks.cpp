@@ -218,7 +218,7 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 		{
 			p->setRegistered(false);
 			p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateTimeout);
-			p->removeVirtualLine(p->getActiveVline());
+			//p->removeVirtualLine(p->getActiveVline(), 0);
 			p->disconnectedEvent(*p, true, "No response from server");
 		}
 		break;

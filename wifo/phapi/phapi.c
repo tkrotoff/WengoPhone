@@ -2202,8 +2202,6 @@ ph_nat_refresh(struct vline *vl)
 
 }
 
-#define MAX_SRV_IDLE_TIME	45 /* The maximum idle time since we receive the last message from server */
-
 static time_t last_vline_refresh, last_nat_refresh;
 static void 
 ph_refresh_vlines()
@@ -4300,6 +4298,8 @@ ph_event_get()
 	return -1;
 }
 
+#define MAX_SRV_IDLE_TIME	45 /* The maximum idle time since we receive the last message from server */
+
 static void
 ph_keep_refreshing()
 {
@@ -4346,7 +4346,8 @@ ph_api_thread(void *arg)
 
 		if (ph_event_get() == -2)
 		{
-			phTerminate();
+			phcb->regProgress(0, -1);
+			//phTerminate();
 			break;
 		}
 	}

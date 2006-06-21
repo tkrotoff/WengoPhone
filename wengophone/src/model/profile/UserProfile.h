@@ -434,10 +434,6 @@ private:
 	 */
 	void historyChangedEventHandler(History & sender, int id);
 
-	void connectionIsUpEventHandler(NetworkObserver & sender);
-
-	void connectionIsDownEventHandler(NetworkObserver & sender);
-
 	/**
 	 * find the wengo phone line
 	 */

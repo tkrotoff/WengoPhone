@@ -493,6 +493,18 @@ void QtNickNameWidget::init() {
 	_nickNameEdit->update();
 
 	updateAvatar();
+
+	// Updates IMAccounts icons status
+	for (IMAccountHandler::const_iterator it = _cUserProfile.getUserProfile().getIMAccountHandler().begin();
+		it != _cUserProfile.getUserProfile().getIMAccountHandler().end();
+		it++) {
+		if ((*it).isConnected()) {
+			connected((IMAccount *)&(*it));
+		} else {
+			disconnected((IMAccount *)&(*it), false, QString::null);
+		}
+	}
+	////
 }
 
 void QtNickNameWidget::updateAvatar() {

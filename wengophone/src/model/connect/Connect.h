@@ -62,9 +62,7 @@ public:
 
 	void connect();
 
-	void disconnect();
-
-	bool isConnected() { return _connected; }
+	void disconnect(bool now = false);
 
 	const IMAccount & getIMAccount() const {
 		return _imAccount;
@@ -89,13 +87,11 @@ protected:
 	/** Count how many time we retry to connect. */
 	unsigned _connectionRetryCount;
 
-	IMAccount _imAccount;
+	IMAccount & _imAccount;
 
 	IMConnect * _imConnect;
 
 	UserProfile & _userProfile;
-
-	bool _connected;
 
 	Timer _timer;
 };
