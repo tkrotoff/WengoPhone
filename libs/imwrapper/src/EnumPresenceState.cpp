@@ -45,6 +45,9 @@ string EnumPresenceState::toString(PresenceState presenceState) {
 	case PresenceStateForward:
 		result = "forward";
 		break;
+	case PresenceStateUnknown:
+		result = "unknown";
+		break;
 	default:
 		LOG_FATAL("Unknown state");
 	}

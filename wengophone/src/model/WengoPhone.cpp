@@ -148,17 +148,9 @@ void WengoPhone::init() {
 
 void WengoPhone::run() {
 	init();
-
 	LOG_DEBUG("The model thread is ready for events");
 
 	_running = true;
-
-	//Keeps the thread running until terminate() is called
-	/*
-	while (!_terminate) {
-		runEvents();
-	}
-	*/
 	runEvents();
 	_running = false;
 }

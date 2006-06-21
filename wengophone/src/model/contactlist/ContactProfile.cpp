@@ -190,6 +190,7 @@ EnumPresenceState::PresenceState ContactProfile::computePresenceState() const {
 	unsigned onlineIMContact = 0;
 	unsigned offlineIMContact = 0;
 	unsigned dndIMContact = 0;
+	unsigned awayIMContact = 0;
 
 	for (IMContactSet::const_iterator it = _imContactSet.begin() ;
 		it != _imContactSet.end() ;
@@ -200,6 +201,8 @@ EnumPresenceState::PresenceState ContactProfile::computePresenceState() const {
 			onlineIMContact++;
 		} else if ((*it).getPresenceState() == EnumPresenceState::PresenceStateDoNotDisturb) {
 			dndIMContact++;
+		} else if ((*it).getPresenceState() == EnumPresenceState::PresenceStateAway) {
+			awayIMContact++;
 		}
 	}
 
@@ -209,8 +212,10 @@ EnumPresenceState::PresenceState ContactProfile::computePresenceState() const {
 		return EnumPresenceState::PresenceStateOffline;
 	} else if (dndIMContact == _imContactSet.size()) {
 		return EnumPresenceState::PresenceStateDoNotDisturb;
-	} else {
+	} else if (awayIMContact > 0) {
 		return EnumPresenceState::PresenceStateAway;
+	} else {
+		return EnumPresenceState::PresenceStateUnknown;
 	}
 }
 
