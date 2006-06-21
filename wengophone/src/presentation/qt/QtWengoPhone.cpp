@@ -569,7 +569,12 @@ void QtWengoPhone::setContactList(QtContactList * qtContactList) {
 }
 
 void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
-	Widget::createLayout(_ui->tabHistory)->addWidget(qtHistoryWidget);
+	if (qtHistoryWidget != NULL) {
+		Widget::createLayout(_ui->tabHistory)->addWidget(qtHistoryWidget);
+	} else {
+		_ui->tabHistory->layout()->removeWidget(_qtHistoryWidget);
+	}
+
 	_qtHistoryWidget = qtHistoryWidget;
 }
 
