@@ -169,14 +169,14 @@ void QtSystray::updateCallMenu() {
 
 	//_sendSmsMenu
 	if (!_sendSmsMenu) {
-		_sendSmsMenu = new QMenu();
+		_sendSmsMenu = new QMenu(_qtWengoPhone->getWidget());
 		_sendSmsMenu->setIcon(QIcon(":/pics/contact/sms.png"));
-		connect (_sendSmsMenu,SIGNAL(triggered(QAction*)), SLOT(slotSystrayMenuSendSms(QAction*)));
+		connect(_sendSmsMenu,SIGNAL(triggered(QAction *)), SLOT(slotSystrayMenuSendSms(QAction *)));
 	}
 	_sendSmsMenu->clear();
 	_sendSmsMenu->setTitle(tr("Send a SMS"));
 
-	QAction *sendSmsBlankAction = _sendSmsMenu->addAction(tr("Send SMS"));
+	QAction * sendSmsBlankAction = _sendSmsMenu->addAction(QIcon(":/pics/contact/sms.png"), tr("Send SMS"));
 	sendSmsBlankAction->setData(String::null);
 	_trayMenu->addMenu(_sendSmsMenu);
 
@@ -184,8 +184,8 @@ void QtSystray::updateCallMenu() {
 	//_startChatMenu
 	if (!_startChatMenu) {
 		_startChatMenu = new QMenu(_qtWengoPhone->getWidget());
-		connect(_startChatMenu, SIGNAL(triggered(QAction*)), SLOT(slotSystrayMenuStartChat(QAction*)));
 		_startChatMenu->setIcon(QIcon(":/pics/contact/chat.png"));
+		connect(_startChatMenu, SIGNAL(triggered(QAction *)), SLOT(slotSystrayMenuStartChat(QAction *)));
 	}
 	_startChatMenu->clear();
 	_startChatMenu->setTitle(tr("Start a chat"));
@@ -194,13 +194,13 @@ void QtSystray::updateCallMenu() {
 
 	//_callWengoMenu
 	if (!_callWengoMenu) {
-		_callWengoMenu = new QMenu();
-		connect(_callWengoMenu, SIGNAL(triggered(QAction*)),SLOT(slotSystrayMenuCallWengo(QAction*)));
+		_callWengoMenu = new QMenu(_qtWengoPhone->getWidget());
+		connect(_callWengoMenu, SIGNAL(triggered(QAction *)),SLOT(slotSystrayMenuCallWengo(QAction *)));
 	}
 	_callWengoMenu->clear();
 	_callWengoMenu->setTitle(tr("Call SIP"));
 
-	QAction *placeCallBlankAction =_callMenu->addAction(tr("Place Call"));
+	QAction * placeCallBlankAction =_callMenu->addAction(QIcon(":/pics/contact/call.png"), tr("Place Call"));
 	connect(placeCallBlankAction, SIGNAL(triggered(bool)), _qtWengoPhone, SLOT(slotSystrayMenuCallBlank(bool)));
 	placeCallBlankAction->setData(String::null);
 	_callMenu->addMenu(_callWengoMenu);
@@ -208,8 +208,8 @@ void QtSystray::updateCallMenu() {
 
 	//_callMobileMenu
 	if (!_callMobileMenu) {
-		_callMobileMenu = new QMenu();
-		connect(_callMobileMenu, SIGNAL(triggered(QAction*)), SLOT(slotSystrayMenuCallMobile(QAction*)));
+		_callMobileMenu = new QMenu(_qtWengoPhone->getWidget());
+		connect(_callMobileMenu, SIGNAL(triggered(QAction *)), SLOT(slotSystrayMenuCallMobile(QAction *)));
 	}
 	_callMobileMenu->clear();
 	_callMobileMenu->setTitle(tr("Call Mobile"));
@@ -218,8 +218,8 @@ void QtSystray::updateCallMenu() {
 
 	//_callLandLineMenu
 	if (!_callLandLineMenu) {
-		_callLandLineMenu = new QMenu();
-		connect(_callLandLineMenu, SIGNAL(triggered(QAction*)), SLOT(slotSystrayMenuCallLandLine(QAction*)));
+		_callLandLineMenu = new QMenu(_qtWengoPhone->getWidget());
+		connect(_callLandLineMenu, SIGNAL(triggered(QAction *)), SLOT(slotSystrayMenuCallLandLine(QAction *)));
 	}
 	_callLandLineMenu->clear();
 	_callLandLineMenu->setTitle(tr("Call land line"));
