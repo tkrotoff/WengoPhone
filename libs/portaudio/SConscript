@@ -167,4 +167,10 @@ env.WengoAddDefines(defines)
 env.WengoAddIncludePath(include_path)
 env.WengoStaticLibrary('portaudio', sources, headers)
 
+if WengoOSLinux():
+	test_env = WengoGetEnvironment()
+	test_env.WengoUseLibraries(['portaudio'])
+	test_env.WengoAddIncludePath(['pa_common'])
+	test_env.WengoProgram('pa_devs', ['pa_tests/pa_devs.c'])
+
 env.SConscript('tests/SConscript')
