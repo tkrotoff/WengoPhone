@@ -443,6 +443,9 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 }
 
 void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall) {
+	//FIXME conference has to be 100% rewritten...
+	bool conferenceAlreadyStarted = false;
+
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 		int nbtab = _ui->tabWidget->count();
 
@@ -459,10 +462,12 @@ void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall) 
 						IPhoneLine * phoneLine = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine();
 
 						if (phoneLine != NULL) {
-							ConferenceCall * confCall = new ConferenceCall(*phoneLine);
-							confCall->addPhoneCall(*targetCall);
-							confCall->addPhoneNumber(phoneNumber.toStdString());
-							break;
+							if (!conferenceAlreadyStarted) {
+								conferenceAlreadyStarted = true;
+								ConferenceCall * confCall = new ConferenceCall(*phoneLine);
+								confCall->addPhoneCall(*targetCall);
+								confCall->addPhoneNumber(phoneNumber.toStdString());
+							}
 						} else {
 							LOG_DEBUG("phoneLine is NULL");
 						}
