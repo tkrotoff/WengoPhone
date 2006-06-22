@@ -21,7 +21,7 @@
 
 #include "ui_GeneralSettings.h"
 
-#include <presentation/qt/QtWengoPhone.cpp>
+#include <presentation/qt/QtWengoPhone.h>
 
 #include <control/CWengoPhone.h>
 
