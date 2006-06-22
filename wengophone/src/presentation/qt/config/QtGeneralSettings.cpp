@@ -21,12 +21,16 @@
 
 #include "ui_GeneralSettings.h"
 
+#include <presentation/qt/QtWengoPhone.cpp>
+
+#include <control/CWengoPhone.h>
+
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
 #include <QtGui>
 
-QtGeneralSettings::QtGeneralSettings(QWidget * parent)
+QtGeneralSettings::QtGeneralSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObject(parent) {
 
 	_generalSettingsWidget = new QWidget(NULL);
@@ -34,7 +38,10 @@ QtGeneralSettings::QtGeneralSettings(QWidget * parent)
 	_ui = new Ui::GeneralSettings();
 	_ui->setupUi(_generalSettingsWidget);
 
-	connect(_ui->editProfileButton, SIGNAL(clicked()), SLOT(editProfile()));
+	QtWengoPhone * qtWengoPhone =
+		dynamic_cast<QtWengoPhone *>(cWengoPhone.getPresentation());
+	connect(_ui->editProfileButton, SIGNAL(clicked()), 
+		qtWengoPhone, SLOT(editProfile()));
 
 	readConfig();
 }

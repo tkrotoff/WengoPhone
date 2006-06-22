@@ -24,6 +24,7 @@
 
 #include <QObject>
 
+class CWengoPhone;
 class QWidget;
 class QString;
 namespace Ui { class GeneralSettings; }
@@ -37,7 +38,7 @@ class QtGeneralSettings : public QObject, public QtISettings {
 	Q_OBJECT
 public:
 
-	QtGeneralSettings(QWidget * parent);
+	QtGeneralSettings(CWengoPhone & cWengoPhone, QWidget * parent);
 
 	virtual ~QtGeneralSettings();
 
@@ -58,7 +59,7 @@ private:
 	void readConfig();
 
 	Ui::GeneralSettings * _ui;
-
+	
 	QWidget * _generalSettingsWidget;
 };
 
