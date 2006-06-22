@@ -577,12 +577,12 @@ void QtProfileBar::unseenMissedCallsChangedEventHandler(CHistory &, int count) {
 }
 
 void QtProfileBar::slotTranslationChanged() {
-  _nicknameLabel->setText(tr("NickName"));
+  /*_nicknameLabel->setText(tr("NickName"));
   _nicknameLabel->setTextColor(Qt::white);
 
   _eventsLabel->setText(tr("events"));
   _eventsLabel->setTextColor(Qt::white);
-  updatedTranslationSignal();
+  updatedTranslationSignal();*/
 }
 
 void QtProfileBar::wsInfoWengosEventSlot(float wengos) {

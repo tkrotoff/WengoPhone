@@ -281,7 +281,7 @@ void QtNickNameWidget::msnClicked(){
 	set<IMAccount *> list;
 	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolMSN);
 
-	if( list.size() != 0 ) {
+	if (!list.empty()) {
 		showMsnMenu();
 	} else {
 		showImAccountManager();
@@ -292,7 +292,7 @@ void QtNickNameWidget::yahooClicked(){
 	set<IMAccount *> list;
 	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolYahoo);
 
-	if( list.size() != 0 ) {
+	if (!list.empty()) {
 		showYahooMenu();
 	} else {
 		showImAccountManager();
@@ -303,7 +303,7 @@ void QtNickNameWidget::wengoClicked() {
 	set<IMAccount *> list;
 	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
 
-	if( list.size() != 0 ) {
+	if (!list.empty()) {
 		showWengoMenu();
 	} else {
 		showImAccountManager();
@@ -314,7 +314,7 @@ void QtNickNameWidget::aimClicked() {
 	set<IMAccount *> list;
 	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ);
 
-	if( list.size() != 0 ) {
+	if (!list.empty()) {
 		showAimMenu();
 	} else {
 		showImAccountManager();
@@ -325,7 +325,7 @@ void QtNickNameWidget::jabberClicked() {
 	set<IMAccount *> list;
 	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolJabber);
 
-	if( list.size() != 0 ) {
+	if (!list.empty()) {
 		showJabberMenu();
 	} else {
 		showImAccountManager();
@@ -483,7 +483,7 @@ void QtNickNameWidget::showJabberMenu() {
 }
 
 void QtNickNameWidget::init() {
-	if( _cUserProfile.getUserProfile().getAlias() != "" ) {
+	if (!_cUserProfile.getUserProfile().getAlias().empty()) {
 		_nickNameEdit->setText(QString::fromStdString(_cUserProfile.getUserProfile().getAlias()));
 	}
 
@@ -530,13 +530,13 @@ void QtNickNameWidget::showImAccountManager() {
 }
 
 void QtNickNameWidget::textChanged ( const QString & text ) {
-   	QPalette palette = _nickNameEdit->palette();
+	QPalette palette = _nickNameEdit->palette();
 	palette.setColor(QPalette::Text, Qt::black);
 	_nickNameEdit->setPalette(palette);
 }
 
 void QtNickNameWidget::slotUpdatedTranslation() {
-  _nickNameEdit->setText(tr("Enter your nickname here"));
+	//_nickNameEdit->setText(tr("Enter your nickname here"));
 }
 
 void QtNickNameWidget::profileChangedEventHandler(Profile & sender) {

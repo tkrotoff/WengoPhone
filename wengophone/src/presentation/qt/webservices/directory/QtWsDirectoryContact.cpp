@@ -45,7 +45,7 @@ QtWsDirectoryContact::QtWsDirectoryContact(QtWsDirectory * qtWsDirectory, Contac
 	connect(_ui->addContactButton, SIGNAL(clicked()), SLOT(addContact()));
 
 	setName(QString::fromUtf8(_contact->getFirstName().c_str()) + " " + QString::fromUtf8(_contact->getLastName().c_str()));
-	setNickname(tr("Nickname: ") + QString::fromUtf8(_contact->getWengoPhoneId().c_str()));
+	setNickname(QString::fromUtf8(_contact->getWengoPhoneId().c_str()));
 	setWengoNumber(tr("Wengo number: ") + QString::fromStdString(_contact->getWengoPhoneNumber()));
 	setSipAddress(tr("SIP address: ") + QString::fromStdString(_contact->getWengoPhoneId() + "@213.91.9.210"));
 	setCity(tr("City: ") + QString::fromUtf8(_contact->getStreetAddress().getCity().c_str()));
