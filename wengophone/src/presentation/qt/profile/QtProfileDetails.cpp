@@ -191,13 +191,12 @@ void QtProfileDetails::saveContact() {
 
 	int index = _ui->groupComboBox->findText(_ui->groupComboBox->currentText());
 	QVariant groupId;
+	groupId = _ui->groupComboBox->itemData(index);
 	//If the group does not exist
-	if (index == -1) {
+	if (groupId.isNull()) {
 		std::string groupName = std::string(_ui->groupComboBox->currentText().toUtf8().data());
 		_cUserProfile.getCContactList().addContactGroup(groupName);
 		groupId = QString::fromStdString(_cUserProfile.getCContactList().getContactGroupIdFromName(groupName));
-	} else {
-		groupId = _ui->groupComboBox->itemData(index);
 	}
 
 	contactProfile.setGroupId(groupId.toString().toStdString());
