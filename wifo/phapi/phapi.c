@@ -1783,13 +1783,10 @@ phSetRecLevel(int cid,  int level)
 #endif
 }
 
-
-
-
 MY_DLLEXPORT int 
 phAddVline(const char* username, const char *server, const char*  proxy,  int regTimeout)
 {
-  return phAddVline2(NULL, username, server, proxy,  regTimeout);  
+	return phAddVline2(NULL, username, server, proxy,  regTimeout);  
 }
 
 /*
@@ -1825,110 +1822,126 @@ ph_scrap_port(char *buf, int bufsize, const char *host, int *port)
 static const char emptystr[] = { 0 };
 #define nonull(x) ((x) ? (x) : emptystr)
 
+/**
+ * Initialize the phoneapi module
+ */
+static eXosip_tunnel_t *phTunnel;
+
 MY_DLLEXPORT int
 phAddVline2(const char *displayname, const char* username, const char *server, const char*  proxy,  int regTimeout)
 {
-  struct vline *vl;
-  int oldTimeout = 0;
-  char srvbuf[256];
-  char *srv2;
-  int port;
+	struct vline *vl;
+	int oldTimeout = 0;
+	char srvbuf[256];
+	char *srv2;
+	int port;
+	int i;
 
-
-  if (phDebugLevel)
-    DBG8_SIP_NEGO("AddVline2(dn = %s, un=%s, srv=%s pxy=%s regT=%d)\n", nonull(displayname), nonull(username), nonull(server), nonull(proxy), regTimeout,0,0);
-
-  srv2 = ph_scrap_port(srvbuf, sizeof(srvbuf), server, &port);
-
-  if (!port)
-    port = 5060;
-
-  if (!username)
-    username = "";
-
-  
-  vl  = ph_find_matching_vline3(username, srv2, port, 0);
-
-  if (0 < regTimeout && regTimeout < 200)
-    regTimeout = 200;
-
-  
-
-  if (!vl)
-    {
-      vl = vline_alloc();
-      if (!vl)
-	return -PH_NORESOURCES;
-
-      vl->username = osip_strdup(username);
-    }
-  else
-    {
-      if (vl->proxy)
+#ifdef USE_HTTP_TUNNEL
+	if (phcfg.use_tunnel && phTunnel && !phTunnel->h_tunnel)
 	{
-	osip_free(vl->proxy);
-	vl->proxy = 0;
+		if (ph_tunnel_init2(proxy))
+		{
+			return -1;
+		}
+
+		i = eXosip_init(0, 0, atoi(phcfg.sipport), phTunnel);
+		if (i)
+			return -1;
+
+		if (phcfg.asyncmode) 
+		{
+			osip_thread_create(20000, ph_api_thread, 0);
+		}
+	}
+#endif
+
+	if (phDebugLevel)
+		DBG8_SIP_NEGO("AddVline2(dn = %s, un=%s, srv=%s pxy=%s regT=%d)\n", nonull(displayname), 
+			nonull(username), nonull(server), nonull(proxy), regTimeout,0,0);
+
+	srv2 = ph_scrap_port(srvbuf, sizeof(srvbuf), server, &port);
+
+	if (!port)
+		port = 5060;
+
+	if (!username)
+		username = "";
+
+	  
+	vl  = ph_find_matching_vline3(username, srv2, port, 0);
+
+	if (0 < regTimeout && regTimeout < 200)
+		regTimeout = 200;
+
+	if (!vl)
+	{
+		vl = vline_alloc();
+		if (!vl)
+		return -PH_NORESOURCES;
+
+		vl->username = osip_strdup(username);
+	}
+	else
+	{
+		if (vl->proxy)
+		{
+			osip_free(vl->proxy);
+			vl->proxy = 0;
+		}
+
+		if (vl->displayname)
+		{
+			osip_free(vl->displayname);
+			vl->displayname = 0;
+		}
+
+		if (vl->contact)
+		{
+			osip_free(vl->contact);
+			vl->contact = 0;
+		}
+		oldTimeout = vl->regTimeout;
 	}
 
-      if (vl->displayname)
+	vl->port = port;
+
+	if (nonempty(proxy))
 	{
-	osip_free(vl->displayname);
-	vl->displayname = 0;
+		if (0 == strstr(proxy, "sip:"))
+		{
+			int l = 15 + strlen(proxy);
+			vl->proxy = osip_malloc(l);
+			snprintf(vl->proxy, l, "<sip:%s;lr>", proxy);
+		}
+		else
+			vl->proxy = osip_strdup(proxy);
 	}
 
-      if (vl->contact)
+	if (nonempty(srv2) && !vl->server)
+		vl->server = osip_strdup(srv2);
+
+	if (nonempty(displayname))
+		vl->displayname = osip_strdup(displayname);
+
+	vl->regTimeout = regTimeout;
+
+	if(vcontact[0])
+		vl->contact = osip_strdup(vcontact);
+	else
 	{
-	osip_free(vl->contact);
-	vl->contact = 0;
+		char contact[512];
+		char from[512];
+
+		ph_build_from(from, sizeof(from), vl);
+		eXosip_guess_contact_uri(from, contact, sizeof(contact), 1);
+		vl->contact = osip_strdup(contact);
 	}
-      oldTimeout = vl->regTimeout;
 
-    }
+	if (nonempty(srv2) && (oldTimeout > 0 || regTimeout > 0))
+		phvlRegister(ph_vline2vlid(vl));
 
-  vl->port = port;
-
-  if (nonempty(proxy))
-     {
-       if (0 == strstr(proxy, "sip:"))
-	 {
-	   int l = 15 + strlen(proxy);
-	   vl->proxy = osip_malloc(l);
-	   snprintf(vl->proxy, l, "<sip:%s;lr>", proxy);
-	 }
-       else
-	 vl->proxy = osip_strdup(proxy);
-     }
-
-
-
-  if (nonempty(srv2) && !vl->server)
-    vl->server = osip_strdup(srv2);
-
-  if (nonempty(displayname))
-    vl->displayname = osip_strdup(displayname);
-
-  vl->regTimeout = regTimeout;
-
-
-  if(vcontact[0])
-    vl->contact = osip_strdup(vcontact);
-  else
-  {
-    char contact[512];
-    char from[512];
-
-    ph_build_from(from, sizeof(from), vl);
-    eXosip_guess_contact_uri(from, contact, sizeof(contact), 1);
-    vl->contact = osip_strdup(contact);
-
-  }
-
-
-
-  if (nonempty(srv2) && (oldTimeout > 0 || regTimeout > 0))
-    phvlRegister(ph_vline2vlid(vl));
-
-  return ph_vline2vlid(vl);
+	return ph_vline2vlid(vl);
 }
 
 
@@ -2392,16 +2405,6 @@ static void setup_video_payload(const char *ptsring)
     }
 }
 
-
-
-
-
-/**
- * Initialize the phoneapi module
- */
-static eXosip_tunnel_t *phTunnel;
-
-
 #ifdef OS_WIN32
 
 static int
@@ -2477,57 +2480,106 @@ ph_calls_init()
 }
 
 static int
+ph_tunnel_init2(char *sip_proxy)
+{
+#ifdef USE_HTTP_TUNNEL
+	eXosip_tunnel_t *tunnel = NULL;
+	int port;
+	char *c;
+	char buf[256];
+	int tunerr;
+
+	if (!phcfg.use_tunnel) 
+		return 0;
+
+	http_tunnel_init_host(phcfg.httpt_server, phcfg.httpt_server_port, 0);
+	http_tunnel_init_proxy(phcfg.http_proxy,phcfg.http_proxy_port, 
+		phcfg.http_proxy_user, phcfg.http_proxy_passwd);
+
+	tunnel = malloc(sizeof(eXosip_tunnel_t));
+	if (tunnel) 
+	{
+		strncpy(buf, sip_proxy, sizeof(buf));
+		c = strstr(buf, ":");
+
+		port = 5060;
+		if (c) 
+		{
+			*c++ = 0;
+			port = atoi(c);
+		}
+		tunnel->h_tunnel = http_tunnel_open(buf, port, HTTP_TUNNEL_VAR_MODE, &tunerr, -1);
+		if (!tunnel->h_tunnel)
+		{
+			if (!tunnel->h_tunnel)
+			{
+				free(tunnel);
+				return -PH_NOTUNNEL;
+			}
+		}
+      
+		tunnel->tunnel_recv = http_tunnel_recv;
+		tunnel->tunnel_send = http_tunnel_send;
+		tunnel->get_tunnel_socket = http_tunnel_get_socket;
+		phTunnel = tunnel;
+		return 0;
+	}
+
+	return -PH_NORESOURCES;
+#else
+	return 0;
+#endif
+}
+
+static int
 ph_tunnel_init()
 {
 #ifdef USE_HTTP_TUNNEL
-  eXosip_tunnel_t *tunnel = NULL;
-  int port;
-  char *c;
-  char buf[256];
-  int tunerr;
+ 	eXosip_tunnel_t *tunnel = NULL;
+	int port;
+	char *c;
+	char buf[256];
+	int tunerr;
 
-  if (!phcfg.use_tunnel) 
-    return 0;
+	if (!phcfg.use_tunnel) 
+		return 0;
 
-  http_tunnel_init_host(phcfg.httpt_server, phcfg.httpt_server_port, 0);
-  http_tunnel_init_proxy(phcfg.http_proxy,phcfg.http_proxy_port, 
-			 phcfg.http_proxy_user, phcfg.http_proxy_passwd);
-  
-  tunnel = malloc(sizeof(eXosip_tunnel_t));
-  if (tunnel) 
-    {
-      strncpy(buf, phcfg.proxy, sizeof(buf));
-      c = strstr(buf, ":");
-      
-      port = 5060;
-      if (c) 
+	http_tunnel_init_host(phcfg.httpt_server, phcfg.httpt_server_port, 0);
+	http_tunnel_init_proxy(phcfg.http_proxy,phcfg.http_proxy_port, 
+		phcfg.http_proxy_user, phcfg.http_proxy_passwd);
+
+	tunnel = malloc(sizeof(eXosip_tunnel_t));
+	if (tunnel) 
 	{
-	  *c++ = 0;
-	  port = atoi(c);
-	}
-      tunnel->h_tunnel = http_tunnel_open(buf, port, HTTP_TUNNEL_VAR_MODE, &tunerr, -1);
-      if (!tunnel->h_tunnel)
-	{
-	  if (!tunnel->h_tunnel)
-	    {
-	      free(tunnel);
-	      return -PH_NOTUNNEL;
-	    }
-	}
+		strncpy(buf, phcfg.proxy, sizeof(buf));
+		c = strstr(buf, ":");
+
+		port = 5060;
+		if (c) 
+		{
+			*c++ = 0;
+			port = atoi(c);
+		}
+		tunnel->h_tunnel = http_tunnel_open(buf, port, HTTP_TUNNEL_VAR_MODE, &tunerr, -1);
+		if (!tunnel->h_tunnel)
+		{
+			if (!tunnel->h_tunnel)
+			{
+				free(tunnel);
+				return -PH_NOTUNNEL;
+			}
+		}
       
-      tunnel->tunnel_recv = http_tunnel_recv;
-      tunnel->tunnel_send = http_tunnel_send;
-      tunnel->get_tunnel_socket = http_tunnel_get_socket;
-      phTunnel = tunnel;
-      return 0;
-    }
+		tunnel->tunnel_recv = http_tunnel_recv;
+		tunnel->tunnel_send = http_tunnel_send;
+		tunnel->get_tunnel_socket = http_tunnel_get_socket;
+		phTunnel = tunnel;
+		return 0;
+	}
 
-
-
-  
-  return -PH_NORESOURCES;
+	return -PH_NORESOURCES;
 #else
-  return 0;
+	return 0;
 #endif
 }
 
@@ -2764,6 +2816,7 @@ ph_payloads_init()
   setup_payload("telephone-event/8000");
 }
 
+static int ph_tunnel_init2(char *sip_proxy);
 
 MY_DLLEXPORT int 
 phInit(phCallbacks_t *cbk, char * server, int asyncmode)
@@ -4278,7 +4331,17 @@ ph_event_get()
 				break;
 
 			case EXOSIP_OPTIONS_NOANSWER:
+				return -2;
+
 			case EXOSIP_ENGINE_STOPPED:
+#ifdef USE_HTTP_TUNNEL
+				if (phcfg.use_tunnel && phTunnel && phTunnel->h_tunnel)
+				{
+					http_tunnel_close(phTunnel->h_tunnel);
+					phTunnel->h_tunnel = NULL;
+					eXosip_quit();
+				}
+#endif
 				return -2;
 
 			default:

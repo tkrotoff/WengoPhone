@@ -80,6 +80,8 @@ void Connect::timeoutEventHandler(Timer & sender) {
 		// Either the user as cancelled the connection 
 		// nor the retry count has been exceeded
 		_timer.stop();
+		_timerIsRunning = false;
+		_connectionRetryCount = 0;
 	}
 }
 
