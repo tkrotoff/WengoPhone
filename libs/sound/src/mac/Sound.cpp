@@ -21,6 +21,8 @@
 
 #include "MacSound.h"
 
+ISound * Sound::_soundPrivateForPlaySound = NULL;
+
 Sound::Sound(const std::string & filename) {
 	_soundPrivate = new MacSound(filename);
 }
@@ -34,7 +36,7 @@ void Sound::setLoops(int loops) {
 	_soundPrivate->setLoops(loops);
 }
 
-bool Sound::setWaveOutDevice(const std::string & /*deviceName*/) {
+bool Sound::setWaveOutDevice(const std::string & deviceName) {
 	return false;
 }
 
@@ -46,5 +48,13 @@ void Sound::play() {
 	_soundPrivate->play();
 }
 
-void Sound::play(const std::string & filename, const std::string & /*deviceName*/) {
+void Sound::play(const std::string & filename, const std::string & deviceName) {
+	if (_soundPrivateForPlaySound) {
+		delete _soundPrivateForPlaySound;
+		_soundPrivateForPlaySound = NULL;
+	}
+
+	_soundPrivateForPlaySound = new MacSound(filename);
+	_soundPrivateForPlaySound->setWaveOutDevice(deviceName);
+	_soundPrivateForPlaySound->play();
 }

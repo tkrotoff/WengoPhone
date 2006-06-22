@@ -62,6 +62,8 @@ private:
 
 	/** System-dependant implementation. */
 	ISound * _soundPrivate;
+
+	static ISound * _soundPrivateForPlaySound;
 };
 
 #endif	//SOUND_H
