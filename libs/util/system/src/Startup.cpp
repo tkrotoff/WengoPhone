@@ -24,8 +24,7 @@
 #include <cutil/global.h>
 
 #ifdef OS_WINDOWS
-	#include <windows.h>
-	#include <winreg.h>
+	#include <system/WindowsRegistry.h>
 #endif
 
 #include <iostream>
@@ -45,31 +44,13 @@ Startup::~Startup() {
 
 bool Startup::setStartup(bool startup) {
 #ifdef OS_WINDOWS
-	HKEY hKey;
-	::RegOpenKeyExA(HKEY_CURRENT_USER, STARTUP_REGISTRY_KEY,
-				0, KEY_WRITE, &hKey);
 
 	//add the entry to the key
 	if (startup) {
-		::RegCreateKeyA(HKEY_CURRENT_USER, STARTUP_REGISTRY_KEY, &hKey);
-
-		if (ERROR_SUCCESS == ::RegSetValueExA(hKey, _applicationName.c_str(), 0, REG_SZ,
-				(const BYTE *) _executablePath.c_str(), _executablePath.length())) {
-			::RegCloseKey(hKey);
-			return true;
-		} else {
-			::RegCloseKey(hKey);
-			return false;
-		}
+		return WindowsRegistry::createEntry(HKEY_CURRENT_USER, std::string(STARTUP_REGISTRY_KEY), _applicationName, _executablePath);
 	//remove the entry from the key
 	} else {
-		if( ::RegDeleteValueA(hKey, _applicationName.c_str()) != ERROR_SUCCESS ) {
-			::RegCloseKey(hKey);
-			return false;
-		} else {
-			::RegCloseKey(hKey);
-			return true;
-		}
+		return WindowsRegistry::removeEntry(HKEY_CURRENT_USER, std::string(STARTUP_REGISTRY_KEY), _applicationName);
 	}
 #else
 	startup = false;
@@ -79,38 +60,7 @@ bool Startup::setStartup(bool startup) {
 
 bool Startup::isStartup() {
 #ifdef OS_WINDOWS
-	HKEY hKey;
-
-	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_CURRENT_USER, STARTUP_REGISTRY_KEY,
-					0, KEY_QUERY_VALUE, &hKey)) {
-
-		DWORD dwDataType = REG_SZ;
-		DWORD dwSize = 255;
-		char * executablePathKeyValue = new char[dwSize];
-
-		if (ERROR_SUCCESS == ::RegQueryValueExA(hKey, _applicationName.c_str(), 0, &dwDataType,
-					(BYTE *) executablePathKeyValue, &dwSize)) {
-
-			::RegCloseKey(hKey);
-
-			String regKey(executablePathKeyValue);
-			delete[] executablePathKeyValue;
-			String exePath(_executablePath);
-			String appName(_applicationName);
-			regKey = regKey.toLowerCase();
-			exePath = exePath.toLowerCase();
-			appName = appName.toLowerCase();
-
-			if (regKey.find(exePath) != string::npos ||
-				regKey.find(appName) != string::npos) {
-
-				return true;
-			}
-		}
-	}
-
-	::RegCloseKey(hKey);
-	return false;
+	return WindowsRegistry::entryExists(HKEY_CURRENT_USER, std::string(STARTUP_REGISTRY_KEY), _applicationName);
 #else
 	return false;
 #endif	//OS_WINDOWS
