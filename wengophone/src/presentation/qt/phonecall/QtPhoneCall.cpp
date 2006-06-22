@@ -290,12 +290,6 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_actionAcceptCall->setEnabled(false);
 		_actionHangupCall->setEnabled(true);
 		_statusLabel->setText(tr("Talking"));
-		if (_cPhoneCall.getPhoneCall().getConferenceCall()) {
-			_actionHold->setText(tr("Proceed conference"));
-			_statusLabel->setText(tr("Talking - conference"));
-		} else {
-			_statusLabel->setText(tr("Talking"));
-		}
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateDialing:
