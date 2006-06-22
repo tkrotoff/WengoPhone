@@ -12,6 +12,7 @@ sources = [
 if WengoOSWindows():
 	sources += [
 		'src/WindowsVersion.c',
+		'src/WindowsRegistry.cpp',
 	]
 	libs += ["Kernel32", "Advapi32", "User32"]
 
