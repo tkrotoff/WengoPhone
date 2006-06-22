@@ -212,7 +212,7 @@ void CurlHttpRequest::setCurlParam() {
 
 void CurlHttpRequest::setSSLParam() {
 	curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYPEER, 0);
-	curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYHOST, 1);
+	curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYHOST, 0);
 	curl_easy_setopt(_curl, CURLOPT_SSLVERSION, 3);
 }
 
