@@ -572,7 +572,7 @@ void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
 	if (qtHistoryWidget != NULL) {
 		Widget::createLayout(_ui->tabHistory)->addWidget(qtHistoryWidget);
 	} else {
-		_ui->tabHistory->layout()->removeWidget(_qtHistoryWidget);
+		delete _ui->tabHistory->layout();
 	}
 
 	_qtHistoryWidget = qtHistoryWidget;
@@ -1089,7 +1089,8 @@ void QtWengoPhone::currentUserProfileWillDieEventHandlerSlot() {
 	}
 
 	if (_contactList) {
-		_contactListTabLayout->removeWidget(_contactList->getWidget());
+		delete _contactListTabLayout;
+		_contactListTabLayout = NULL;
 		_contactList->cleanup();
 		// _contactList is deleted in CContactList
 		_contactList = NULL;

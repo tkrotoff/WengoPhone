@@ -49,6 +49,9 @@ QtHistory::QtHistory(CHistory & cHistory)
 QtHistory::~QtHistory() {
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 	qtWengoPhone->setHistory(NULL);
+	if (_historyWidget) {
+		delete _historyWidget;
+	}
 }
 
 QWidget * QtHistory::getWidget() {

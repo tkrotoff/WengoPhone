@@ -28,8 +28,10 @@ Sound::Sound(const std::string & filename) {
 }
 
 Sound::~Sound() {
-	_soundPrivate->stop();
-	delete _soundPrivate;
+	if (_soundPrivate) {
+		_soundPrivate->stop();
+		delete _soundPrivate;
+	}
 }
 
 void Sound::setLoops(int loops) {
