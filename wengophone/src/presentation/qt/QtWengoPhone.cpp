@@ -97,9 +97,9 @@ const std::string QtWengoPhone::ANCHOR_FORUM = "openwengo_forum";
 const std::string QtWengoPhone::URL_WENGO_MINI_HOME = "https://www.wengo.fr/auth/auth.php";
 const std::string QtWengoPhone::LOCAL_WEB_DIR = "webpages/windows";
 
-QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone, bool background)
+QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 	: QObjectThreadSafe(NULL),
-	_cWengoPhone(cWengoPhone), _background(background) {
+	_cWengoPhone(cWengoPhone) {
 
 	_qtSms = NULL;
 	_qtWsDirectory = NULL;
@@ -334,7 +334,7 @@ void QtWengoPhone::initThreadSafe() {
 	_wengoPhoneWindow->resize(QSize(config.getProfileWidth(),config.getProfileHeight()));
 	_wengoPhoneWindow->move(QPoint(config.getProfilePosX(),config.getProfilePoxY()));
 
-	if(!_background) {
+	if(!config.getGuiBackground()) {
 		_wengoPhoneWindow->show();
 	}
 

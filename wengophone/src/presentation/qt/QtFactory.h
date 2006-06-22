@@ -62,35 +62,6 @@ public:
 		_app = new QApplication(argc, argv);
 		QCoreApplication::addLibraryPath(".");
 
-		_background = false;
-		try {
-
-			options_description desc("Allowed options");
-			desc.add_options()
-			// First parameter describes option name/short name
-			// The second is parameter to option
-			// The third is description
-					("help,h", "print usage message")
-					("background,b", "run in background mode")
-					;
-
-			variables_map vm;
-			store(parse_command_line(argc, argv, desc), vm);
-
-			if (vm.count("help")) {
-				cout << desc << "\n";
-				exit(0);
-			}
-
-			if (vm.count("background")) {
-				LOG_DEBUG("run in background mode");
-				_background = true;
-			}
-		}
-		catch(exception& e) {
-			cerr << e.what() << "\n";
-		}
-
 #ifdef OS_MACOSX
 		std::string qtPlugins = Path::getApplicationPrivateFrameworksDirPath() +
 			File::convertPathSeparators("qt-plugins/");
@@ -127,7 +98,7 @@ public:
 	PWengoPhone * createPresentationWengoPhone(CWengoPhone & cWengoPhone) {
 		_cWengoPhone = &cWengoPhone;
 		if (!_qtWengoPhone) {
-			_qtWengoPhone = new QtWengoPhone(cWengoPhone, _background);
+			_qtWengoPhone = new QtWengoPhone(cWengoPhone);
 		}
 
 		return _qtWengoPhone;
@@ -243,8 +214,6 @@ private:
 	QtWengoPhone * _qtWengoPhone;
 
 	QtUserProfileHandler * _qtUserProfileHandler;
-
-	bool _background;
 };
 
 #endif	//QTFACTORY_H

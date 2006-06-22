@@ -438,6 +438,18 @@ public:
 
 	/** @} */
 
+	/**
+	 * @name command line options
+	 * @{
+	 */
+
+	/** Run the GUI in background mode. */
+	static const std::string GUI_BACKGROUND_KEY;
+	bool getGuiBackground() const;
+
+	/** @} */
+
+
 private:
 
 	/** Name of this configuration. */

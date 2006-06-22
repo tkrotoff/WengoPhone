@@ -63,6 +63,7 @@ sources = [
 	'model/config/LanguageList.cpp',
 	'model/config/ClassicConfigImporter.cpp',
 	'model/config/StartupSettingListener.cpp',
+	'model/config/CommandLineParser.cpp',
 	'model/connect/Connect.cpp',
 	'model/connect/ConnectHandler.cpp',
 	'model/chat/ChatHandler.cpp',

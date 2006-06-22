@@ -23,6 +23,7 @@
 #include <model/config/ConfigManagerFileStorage.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/config/CommandLineParser.h>
 #include <control/CWengoPhone.h>
 
 #ifdef GTKINTERFACE
@@ -83,6 +84,8 @@ int main(int argc, char * argv[]) {
 	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
 	configManagerStorage.load(config.getConfigDir());
 	////
+
+	CommandLineParser cmdLineParser(argc, argv);
 
 	LOG_DEBUG(String::EOL + getAddionnalInfo());
 

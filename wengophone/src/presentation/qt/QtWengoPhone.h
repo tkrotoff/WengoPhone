@@ -84,7 +84,7 @@ public:
 
 	static const std::string LOCAL_WEB_DIR;
 
-	QtWengoPhone(CWengoPhone & cWengoPhone, bool background = false);
+	QtWengoPhone(CWengoPhone & cWengoPhone);
 
 	virtual ~QtWengoPhone();
 
@@ -349,8 +349,6 @@ private:
 	static const std::string ANCHOR_SELFCARE;
 
 	static const std::string ANCHOR_FORUM;
-
-	bool _background;
 };
 
 #endif	//OWQTWENGOPHONE_H

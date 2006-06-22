@@ -56,10 +56,6 @@ WengoPhone::WengoPhone() {
 	HttpRequest::setUserAgent(ss.str());
 	////
 
-	//Creating instance of Config
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	////
-
 	// Creating instance of NetworkObserver
 	NetworkObserver::getInstance();
 	////
@@ -68,10 +64,7 @@ WengoPhone::WengoPhone() {
 	NetworkProxyDiscovery::getInstance();
 	////
 
-	//Loads the configuration: this is the first thing to do before anything else
-	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
-	configManagerStorage.load(config.getConfigDir());
-	////
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	// Binding events
 	config.valueChangedEvent +=
