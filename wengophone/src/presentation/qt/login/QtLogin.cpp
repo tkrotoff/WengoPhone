@@ -79,7 +79,9 @@ std::string QtLogin::getPassword() const {
 }
 
 bool QtLogin::hasAutoLogin() const {
-	return _ui->autoLoginCheckBox->isChecked();
+	//return _ui->autoLoginCheckBox->isChecked();
+	// FIXME: Needs to be changed to a 'Save my password' option.
+	return true;
 }
 
 int QtLogin::show() {
@@ -146,7 +148,7 @@ void QtLogin::setPassword(const QString & password) {
 }
 
 void QtLogin::setAutoLogin(bool autoLogin) {
-	_ui->autoLoginCheckBox->setChecked(autoLogin);
+	//_ui->autoLoginCheckBox->setChecked(autoLogin);
 }
 
 void QtLogin::init() {
@@ -183,7 +185,7 @@ void QtLogin::loginClicked() {
 	
 	//FIXME: if login is empty we should create a default profile
 	if (!login.empty()) {
-		WengoAccount wengoAccount(login, _ui->passwordLineEdit->text().toStdString(), _ui->autoLoginCheckBox->isChecked());
+		WengoAccount wengoAccount(login, _ui->passwordLineEdit->text().toStdString(), true);
 
 		// Looking for the selected profile
 		if (!_cUserProfileHandler.userProfileExists(login)) {

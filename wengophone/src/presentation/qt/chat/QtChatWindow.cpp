@@ -848,7 +848,6 @@ void ChatWindow::showChatWindow() {
 #if !defined(OS_MACOSX)
 	showMinimized();
 #else
-	_dialog->show();
-	_dialog->setWindowState(_dialog->windowState() & ~Qt::WindowActive);
+	_dialog->showNormal();
 #endif
 }
