@@ -88,3 +88,7 @@ StringList AutomaticSettings::getStringListKeyValue(const std::string & key) con
 
 	return boost::any_cast<StringList>(value);
 }
+
+void AutomaticSettings::resetToDefaultValue(const std::string & key) {
+	set(key, getDefaultValue(key));
+}

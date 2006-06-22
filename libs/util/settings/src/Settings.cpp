@@ -180,3 +180,15 @@ bool Settings::isString(const boost::any & value) {
 bool Settings::isStringList(const boost::any & value) {
 	return boost::any_cast<StringList>(&value);
 }
+
+void Settings::set(const std::string & key, boost::any value) {
+	if(isBoolean(value)) {
+		set(key, boost::any_cast<bool>(value));
+	} else if(isInteger(value)) {
+		set(key, boost::any_cast<int>(value));
+	} else if(isString(value)) {
+		set(key, boost::any_cast<std::string>(value));
+	} else if(isStringList(value)) {
+		set(key, boost::any_cast<StringList>(value));
+	}
+}

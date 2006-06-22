@@ -56,6 +56,12 @@ public:
 	 */
 	boost::any getDefaultValue(const std::string & key) const;
 
+	/**
+	 * reset to key to its default value
+	 * @param key key to reset
+	 */
+	void resetToDefaultValue(const std::string & key);
+
 protected:
 
 	/**

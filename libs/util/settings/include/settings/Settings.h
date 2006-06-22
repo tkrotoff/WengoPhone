@@ -107,6 +107,11 @@ public:
 	void set(const std::string & key, int value);
 
 	/**
+	 * @see set()
+	 */
+	void set(const std::string & key, boost::any value);
+
+	/**
 	 * Gets the value for a given key.
 	 *
 	 * @param key the key
