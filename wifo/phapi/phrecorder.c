@@ -64,7 +64,9 @@ void
 ph_media_audio_recording_close(recording_t *recording) 
 {
   ph_media_audio_recording_dump(recording);
-  fclose(recording->fd);
+  if(recording->fd) {
+    fclose(recording->fd);
+  }
 
   if (recording->samples) {
     free(recording->samples);
@@ -84,5 +86,7 @@ ph_media_audio_fast_recording_init(recording_t *recording, const char *filename)
 void
 ph_media_audio_fast_recording_record(recording_t *recording, const void *payload, int size)
 {
-  fwrite(payload, 1, size, recording->fd);
+  if(recording->fd) {
+    fwrite(payload, 1, size, recording->fd);
+  }
 }

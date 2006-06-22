@@ -6,25 +6,23 @@ defines = { }
 
 if WengoGetConsoleArgument('speexwb-replaces-amrwb') and \
      WengoGetConsoleArgument('speexwb-replaces-amrnb') and WengoGetConsoleArgument('speexwb-replaces-g726wb'):
-   print "******* Please Select ONLY ONE of: [ speexwb-replaces-amrwb  speexwb-replaces-amrnb or speexwb-replaces-g726wb]"
-   Exit(1)
+	print "******* Please Select ONLY ONE of: [ speexwb-replaces-amrwb  speexwb-replaces-amrnb or speexwb-replaces-g726wb]"
+	Exit(1)
 
 if WengoGetConsoleArgument('speexwb-replaces-amrwb'):
-    amr_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
-    speex_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
-    defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
+	amr_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
+	speex_defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
+	defines['PH_SPEEXWB_REPLACES_AMRWB'] = 1
 
 if WengoGetConsoleArgument('speexwb-replaces-amrnb'):
-    amr_defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1
-    speex_defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1
-    defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1
-
+	amr_defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1
+	speex_defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1
+	defines['PH_SPEEXWB_REPLACES_AMRNB'] = 1
 
 if WengoGetConsoleArgument('speexwb-replaces-g726wb'):
-    amr_defines['PH_SPEEXWB_REPLACES_G726WB'] = 1
-    speex_defines['PH_SPEEXWB_REPLACES_G726WB'] = 1
-    defines['PH_SPEEXWB_REPLACES_G726WB'] = 1
-
+	amr_defines['PH_SPEEXWB_REPLACES_G726WB'] = 1
+	speex_defines['PH_SPEEXWB_REPLACES_G726WB'] = 1
+	defines['PH_SPEEXWB_REPLACES_G726WB'] = 1
 
 amr_env = WengoGetEnvironment()
 amr_libs = [
@@ -49,48 +47,47 @@ speex_env.Append(LIBS = speex_libs)
 speex = speex_env.WengoPlugin('phspeexplugin', ['phcodec-speex.c'])
 
 if WengoGetConsoleArgument('enable-ipp'):
-    IPPROOT = False
-    IPPSAMPLEROOT = False
+	IPPROOT = False
+	IPPSAMPLEROOT = False
+	
+	if os.environ.has_key('IPPROOT'):
+		IPPROOT = os.environ['IPPROOT']
+	
+	if os.environ.has_key('IPPSAMPLEROOT'):
+		IPPSAMPLEROOT = os.environ['IPPSAMPLEROOT']
+	
+	if IPPROOT and IPPSAMPLEROOT:
+	
+		print "building ipp plugin"
+		ipp_env = WengoGetEnvironment()
+		ipp_libs = [
+			'ippsc', 'ipps',  'ippsr',  'ippcore',
+			#   'guide',
+			'usc'
+			]
+	
+		ipp_includes = [
+			IPPROOT + "/include", IPPSAMPLEROOT + "/codec/include"
+			]
+	
+		if WengoOSWindows():
+			ipp_libpath = [
+				IPPROOT + "/lib", IPPROOT + "/stublib",
+				IPPSAMPLEROOT + "/bin/ia32/lib"
+			]
+	
+			ipp_env.Append( LINKFLAGS = '/NODEFAULTLIB:MSVCRT')
+		else:
+			ipp_libpath = [
+	
+			IPPROOT + "/sharedlib", IPPROOT + "/sharedlib/linux32",
+			IPPSAMPLEROOT + "/bin/ia32/lib"
+			]
 
-    if os.environ.has_key('IPPROOT'):
-        IPPROOT = os.environ['IPPROOT']
-
-    if os.environ.has_key('IPPSAMPLEROOT'):
-        IPPSAMPLEROOT = os.environ['IPPSAMPLEROOT']
-
-    if IPPROOT and IPPSAMPLEROOT:
-
-        print "building ipp plugin"
-        ipp_env = WengoGetEnvironment()
-        ipp_libs = [
-            'ippsc', 'ipps',  'ippsr',  'ippcore',
-         #   'guide',
-            'usc'
-            ]
-
-        ipp_includes = [
-            IPPROOT + "/include", IPPSAMPLEROOT + "/codec/include"
-            ]
-
-        if WengoOSWindows():
-            ipp_libpath = [
-
-                IPPROOT + "/lib", IPPROOT + "/stublib",
-                IPPSAMPLEROOT + "/bin/ia32/lib"
-            ]
-
-            ipp_env.Append( LINKFLAGS = '/NODEFAULTLIB:MSVCRT')
-        else:
-          ipp_libpath = [
-
-            IPPROOT + "/sharedlib", IPPROOT + "/sharedlib/linux32",
-            IPPSAMPLEROOT + "/bin/ia32/lib"
-            ]
-
-        ipp_env.Append( LIBS = ipp_libs,  LIBPATH = ipp_libpath)
-        ipp_env.WengoAddIncludePath(ipp_includes)
-        ipp = ipp_env.WengoPlugin('phippplugin', ['phcodec-intel-ipp.c'])
-        Alias('phippp', [ipp])
+		ipp_env.Append( LIBS = ipp_libs,  LIBPATH = ipp_libpath)
+		ipp_env.WengoAddIncludePath(ipp_includes)
+		ipp = ipp_env.WengoPlugin('phippplugin', ['phcodec-intel-ipp.c'])
+		Alias('phippp', [ipp])
 
 env = WengoGetEnvironment()
 
@@ -204,13 +201,12 @@ if WengoGetConsoleArgument('enable-video'):
 	]
 
 if WengoGetConsoleArgument('enable-http-tunnel'):
-    libs += [
-        'httptunnel'
-        ]
+	libs += [
+		'httptunnel'
+	]
 
-    if WengoGetConsoleArgument('enable-ssl'):
-        libs += ['openssl']
-
+	if WengoGetConsoleArgument('enable-ssl'):
+		libs += ['openssl']
 
 	defines['USE_HTTP_TUNNEL'] = 1
 
@@ -252,8 +248,8 @@ if WengoOSWindows():
 		'advapi32',
 		'wininet',
 		'iphlpapi',
-       	'strmiids',
-       	'ole32',
+		'strmiids',
+		'ole32',
 	]
 
 	if WengoCCMinGW():
@@ -290,13 +286,11 @@ env.WengoAlias("phapi_alias", phapi)
 
 Depends(phapi, [amr, speex])
 
-#pyphapi
-phapi_py_env = WengoGetEnvironment()
-
 
 """
 pyphapi
 """
+phapi_py_env = WengoGetEnvironment()
 #python_include = "C:\Program Files\Python24\include"
 #python_lib = "C:\Program Files\Python24\libs"
 python_lib = "/usr/lib/python2.4/config"
@@ -312,7 +306,6 @@ phapi_py_env.WengoAddLibPath([python_lib])
 phapi_py_env.WengoSharedLibrary("pyphapi", "pyphapi.c")
 
 if not WengoOSWindows() and not WengoOSMacOSX():
-    tenv = WengoGetEnvironment()
-    tec = tenv.Program(tqrget = 'testec',  source = ['testec.c', 'spxec.c', 'spxecfft.c'],  LIBS='m')
-    Alias('testec',  tec)
-
+	tenv = WengoGetEnvironment()
+	tec = tenv.Program(tqrget = 'testec',  source = ['testec.c', 'spxec.c', 'spxecfft.c'],  LIBS = 'm')
+	Alias('testec',  tec)

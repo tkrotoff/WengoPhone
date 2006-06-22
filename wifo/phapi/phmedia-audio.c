@@ -1820,63 +1820,71 @@ setup_recording(phastream_t *stream)
 {
   // recording activity
   stream->activate_recorder = 0;
-  if (getenv("PH_USE_RECORDER"))
+  if (getenv("PH_USE_RECORDER")) {
     stream->activate_recorder = atoi(getenv("PH_USE_RECORDER"));
-  
+  }
+
   if (stream->activate_recorder)
-    {
-      char *rname = getenv("PH_RECORD_FILE");
-      char fname[128];
-      static int fnindex = 1;
-      if (!rname)
-	rname = "recording%d.sw";
-		
-      snprintf(fname, 128, rname, fnindex++);
-      ph_media_audio_recording_init(&stream->recorder, fname, 3, 4000);
+  {
+    char *rname = getenv("PH_RECORD_FILE");
+    char fname[128];
+    static int fnindex = 1;
+    if (!rname) {
+      rname = "recording%d.sw";
     }
+
+    snprintf(fname, 128, rname, fnindex++);
+    ph_media_audio_recording_init(&stream->recorder, fname, 3, 4000);
+  }
 
   stream->record_send_stream = 0;
-  if (getenv("PH_RECORD_SEND_STREAM"))
+  if (getenv("PH_RECORD_SEND_STREAM")) {
     stream->record_send_stream = atoi(getenv("PH_RECORD_SEND_STREAM"));
-  
-
+  }
 
   if (stream->record_send_stream)
-    {
-      char *rname = getenv("PH_SEND_STREAM_FILE");
-      char fname[128];
-      static int sfnindex = 1;
-      if (!rname)
-	rname = "sendstream%d.data";
-		
-      snprintf(fname, 128, rname, sfnindex++);
-      ph_media_audio_fast_recording_init(&stream->send_stream_recorder, fname);
+  {
+    char *rname = getenv("PH_SEND_STREAM_FILE");
+    char fname[128];
+    static int sfnindex = 1;
+    if (!rname) {
+      rname = "sendstream%d.data";
     }
 
-    stream->record_mic_stream = 0;
-    if (stream->record_mic_stream)
-    {
-      char *rname = NULL;
-      char fname[128];
-      static int mic_filename_index = 1;
-      rname = "micstream%d.data";
-      snprintf(fname, 128, rname, mic_filename_index++);
-      ph_media_audio_fast_recording_init(&stream->mic_stream_recorder, fname);
-    }
+    snprintf(fname, 128, rname, sfnindex++);
+    ph_media_audio_fast_recording_init(&stream->send_stream_recorder, fname);
+  }
 
-    stream->record_mic_resample_stream = 0;
-    if (stream->record_mic_resample_stream)
-    {
-      char *rname = NULL;
-      char fname[128];
-      static int mic_filename_index = 1;
-      rname = "mic_resample_stream%d.data";
-      snprintf(fname, 128, rname, mic_filename_index++);
-      ph_media_audio_fast_recording_init(&stream->mic_resample_stream_recorder, fname);
-    }
+  stream->record_mic_stream = 0;
+  if (getenv("PH_RECORD_MIC_STREAM")) {
+    stream->record_mic_stream = atoi(getenv("PH_RECORD_MIC_STREAM"));
+  }
 
+  if (stream->record_mic_stream)
+  {
+    char *rname = NULL;
+    char fname[128];
+    static int mic_filename_index = 1;
+    rname = "micstream%d.data";
+    snprintf(fname, 128, rname, mic_filename_index++);
+    ph_media_audio_fast_recording_init(&stream->mic_stream_recorder, fname);
+  }
+
+  stream->record_mic_resample_stream = 0;
+  if (getenv("PH_RECORD_MIC_RESAMPLE_STREAM")) {
+    stream->record_mic_resample_stream = atoi(getenv("PH_RECORD_MIC_RESAMPLE_STREAM"));
+  }
+
+  if (stream->record_mic_resample_stream)
+  {
+    char *rname = NULL;
+    char fname[128];
+    static int mic_filename_index = 1;
+    rname = "mic_resample_stream%d.data";
+    snprintf(fname, 128, rname, mic_filename_index++);
+    ph_media_audio_fast_recording_init(&stream->mic_resample_stream_recorder, fname);
+  }
 }
-
 
 static int 
 select_audio_device(const char *deviceId)
