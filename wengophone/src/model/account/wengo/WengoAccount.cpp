@@ -306,13 +306,13 @@ void WengoAccount::answerReceived(const std::string & answer, int requestId) {
 		_ssoRequestOk = true;
 		WengoAccountParser parser(*this, answer);
 		if (parser.isLoginPasswordOk()) {
-			LOG_DEBUG("login/password is Ok");
+			LOG_DEBUG("login/password Ok");
 			_wengoLoginOk = true;
 			_ssoTimer.stop();
 			_ssoTimerFinished = true;
 			//SIP connection test can now be launched as _ssoTimer has been joined in init()
 		} else {
-			LOG_DEBUG("login/password is not Ok");
+			LOG_DEBUG("login/password not Ok");
 			_ssoTimer.stop();
 			_ssoTimerFinished = true;
 		}

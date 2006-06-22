@@ -45,7 +45,7 @@ WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string
 	TiXmlElement * elem = sso.FirstChild("status").Element();
 	if (elem) {
 		std::string statusCode = elem->Attribute("code");
-		LOG_DEBUG("SSO status code: " + statusCode);
+		LOG_DEBUG("SSO status code=" + statusCode);
 		if (statusCode != STATUS_CODE_OK) {
 			_loginPasswordOk = false;
 			return;
@@ -59,7 +59,7 @@ WengoAccountParser::WengoAccountParser(WengoAccount & account, const std::string
 	while (element) {
 
 		std::string key = std::string(element->Attribute("k"));
-		std::string value = "";
+		std::string value;
 		const char * tmp = element->Attribute("v");
 		if (tmp) {
 			value = std::string(tmp);

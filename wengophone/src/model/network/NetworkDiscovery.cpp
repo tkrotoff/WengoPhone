@@ -49,7 +49,7 @@ bool NetworkDiscovery::testHTTP(const std::string & url, bool ssl) {
 
 		result = true;
 	} else {
-		LOG_DEBUG("cannot connect to " + url + (ssl ? " with" : " without") + " ssl");
+		LOG_DEBUG("cannot connect to " + url + (ssl ? " with" : " without") + " SSL");
 	}
 
 	return result;
@@ -113,7 +113,7 @@ bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned t
 	bool result = false;
 	NetworkProxy networkProxy = NetworkProxyDiscovery::getInstance().getNetworkProxy();
 
-	LOG_DEBUG("Testing SIP tunnel connection");
+	LOG_DEBUG("testing SIP tunnel connection");
 	if (is_tunnel_conn_allowed(tunnelServer.c_str(), tunnelPort,
 		sipServer.c_str(), sipServerPort,
 		networkProxy.getServer().c_str(), networkProxy.getServerPort(),
@@ -124,7 +124,7 @@ bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned t
 	} else {
 		LOG_DEBUG("cannot create a tunnel to " + tunnelServer + ":" + String::fromNumber(tunnelPort)
 			+ " for SIP server " + sipServer + ":" + String::fromNumber(sipServerPort)
-			+ (ssl ? " with " : " without ") + " ssl");
+			+ (ssl ? " with" : " without") + " SSL");
 	}
 
 	return result;
@@ -133,13 +133,13 @@ bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned t
 unsigned NetworkDiscovery::getFreeLocalPort() {
 	//TODO: change this code to choose a random code
 	if (!is_local_udp_port_used(NULL, SIP_PORT)) {
-		LOG_DEBUG("udp port 5060 is free");
+		LOG_DEBUG("UDP port 5060 is free");
 		return SIP_PORT;
 	} else if (!is_local_udp_port_used(NULL, SIP_PORT + 1)) {
-		LOG_DEBUG("udp port 5060 is busy, will use 5061");
+		LOG_DEBUG("UDP port 5060 is busy, will use 5061");
 		return SIP_PORT + 1;
 	} else {
-		LOG_DEBUG("udp port 5061 is busy, will use random port");
+		LOG_DEBUG("UDP port 5061 is busy, will use random port");
 		//TODO: should we use 0 for random port?
 		return 0;
 	}
