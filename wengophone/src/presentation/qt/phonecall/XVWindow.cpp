@@ -3,6 +3,7 @@
  * High-level class offering X-Video hardware acceleration
  *
  * Matthias Schneider <ma30002000@yahoo.de>
+ * 22-June-2006: minor bugfix on aspect ratio calculating, varios cosmetic changes
  * 07-May-2006: initial version
  *
  * This program is free software; you can redistribute it and/or modify
@@ -56,12 +57,13 @@ XVWindow::XVWindow() {
 	_XVWindow=0;
 	_XShmInfo.shmaddr=NULL;
 	_gc=NULL;
-	_isInitialize = false;
+	_isInitialized = false;
 }
 
 int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth, int windowHeight, int imageWidth, int imageHeight) {
-
-	int i;                                                                                                   // local variables
+	
+	// local variables needed for creation of window and initialization of XV extension
+	unsigned int i;
 	unsigned int ver, rel, req, ev, err, adapt;
 	XSetWindowAttributes xswattributes;
 	XWindowAttributes xwattributes;
@@ -73,9 +75,10 @@ int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth
 	_display=dp;
 	_rootWindow=rootWindow;
 	_state.origLayer=0;
-
+	
+	// initialize atoms
 	WM_DELETE_WINDOW = XInternAtom(_display, "WM_DELETE_WINDOW", False);
-	XA_WIN_PROTOCOLS = XInternAtom(_display, "_WIN_PROTOCOLS", False);                                          // initialize atoms
+	XA_WIN_PROTOCOLS = XInternAtom(_display, "_WIN_PROTOCOLS", False);
 	XA_NET_SUPPORTED = XInternAtom(_display, "_NET_SUPPORTED", False);
 	XA_NET_WM_STATE = XInternAtom(_display, "_NET_WM_STATE", False);
 	XA_NET_WM_STATE_FULLSCREEN = XInternAtom(_display, "_NET_WM_STATE_FULLSCREEN", False);
@@ -86,42 +89,42 @@ int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth
 	XGetWindowAttributes(_display, _rootWindow, &xwattributes);
 	XMatchVisualInfo(_display, DefaultScreen(_display), xwattributes.depth, TrueColor, &xvinfo);
 
-	xswattributes.colormap = XCreateColormap(_display, _rootWindow, xvinfo.visual, AllocNone);                  // define window properties
+	// define window properties and create the window
+	xswattributes.colormap = XCreateColormap(_display, _rootWindow, xvinfo.visual, AllocNone);
 	xswattributes.event_mask = StructureNotifyMask | ExposureMask;
 	xswattributes.background_pixel = 0;
 	xswattributes.border_pixel = 0;
-	_XVWindow = XCreateWindow(_display, _rootWindow, x, y, windowWidth, windowHeight, 0, xvinfo.depth,          // create the window
+	_XVWindow = XCreateWindow(_display, _rootWindow, x, y, windowWidth, windowHeight, 0, xvinfo.depth,
 	 	InputOutput, xvinfo.visual, CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &xswattributes);
 
-	XSelectInput(_display, _XVWindow, StructureNotifyMask | KeyPressMask | ButtonPressMask);                    // define inputs events
+	// define inputs events
+	XSelectInput(_display, _XVWindow, StructureNotifyMask | KeyPressMask | ButtonPressMask);
 
 	setSizeHints(DEFAULT_X,DEFAULT_Y, imageWidth, imageHeight, windowWidth, windowHeight);
 
-	XMapWindow(_display, _XVWindow);                                                                            // map the window
+	// map the window
+	XMapWindow(_display, _XVWindow);
 
 	XSetWMProtocols(_display, _XVWindow, &WM_DELETE_WINDOW,1);
 
 	// check if SHM XV window is possible
 	if (Success != XvQueryExtension(_display, &ver, &rel, &req, &ev, &err)) {
 		LOG_DEBUG("[x11] XQueryExtension failed");
-		_isInitialize = false;
 		return 0;
 	}
 	if (!XShmQueryExtension(_display)) { 
 		LOG_DEBUG("[x11] XQueryShmExtension failed");
-		_isInitialize = false;
 		return 0;
 	}
 	if (Success != XvQueryAdaptors(_display, _rootWindow, &adapt, &xvainfo)) {
 		LOG_DEBUG("[x11] XQueryAdaptor failed"); XFree(xvainfo);
-		_isInitialize = false;
 		return 0;
 	}
 
 	// look for a usable XV port
 	for (i = 0; i < adapt && _XVPort == 0; i++) {
 		if ((xvainfo[i].type & XvInputMask) && (xvainfo[i].type & XvImageMask)) {
-			for (candidateXVPort = xvainfo[i].base_id;  candidateXVPort < xvainfo[i].base_id + xvainfo[i].num_ports; ++candidateXVPort)
+			for (candidateXVPort = xvainfo[i].base_id; candidateXVPort < xvainfo[i].base_id + xvainfo[i].num_ports; ++candidateXVPort)
 				if (!XvGrabPort(_display, candidateXVPort, CurrentTime)) {
 					_XVPort = candidateXVPort;
 					break;
@@ -139,13 +142,13 @@ int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth
 		} else {
 			LOG_WARN("[x11] It seems there is no Xvideo support for your video card available.");
 		}
-		_isInitialize = false;
 		return 0;
 	} else {
 		LOG_WARN("[x11] Use XVideo port: " + String::fromNumber(_XVPort));
 	}
 
 	_gc = XCreateGC(_display, _XVWindow, 0, 0);
+
 	// create the shared memory portion
 	_XVImage = XvShmCreateImage(_display, _XVPort, GUID_I420_PLANAR, 0, imageWidth, imageHeight, &_XShmInfo);
 
@@ -155,22 +158,22 @@ int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth
 	_XShmInfo.readOnly = False;
 	if (!XShmAttach(_display, &_XShmInfo)) {
 		LOG_WARN("[x11] XShmAttach failed");
-		_isInitialize = false;
 		return 0;
+	} else {
+		_isInitialized = true;
 	}
 
-	// detect window manager
+	// detect the window manager type
 	_wmType=getWMType();
 
-	_isInitialize = true;
 	return 1;
 }
 
 XVWindow::~XVWindow() {
-	if (_isInitialize && _XShmInfo.shmaddr) {
+	if (_isInitialized && _XShmInfo.shmaddr) {
 		XShmDetach(_display, &_XShmInfo);
 		shmdt(_XShmInfo.shmaddr);
-//        XFree(&_XShmInfo);
+//		XFree(&_XShmInfo);
 	}
 	if (_gc) {
 		XFree(_gc);
@@ -184,61 +187,70 @@ XVWindow::~XVWindow() {
 	}
 }
 
-bool XVWindow::isFullScreen() {
-	return _state.fullscreen;
-}
-
-void XVWindow::putFrame(piximage* frame) {                                                                      // output a frame
+void XVWindow::putFrame(piximage* frame) {
 	XEvent event;
 
-	while (XPending(_display)) {                                                                                // event handling
+	// event handling
+	while (XPending(_display)) {
 		XNextEvent(_display, &event);
 		if (event.type == ClientMessage) {
-//            if (event.xclient.format == 32 && event.xclient.data.l[0] == (signed) WM_DELETE_WINDOW) exit(0);  // if "closeWindow" is clicked
+//			if "closeWindow" is clicked do nothing right now (window is closed from the Qt Gui
+//			if (event.xclient.format == 32 && event.xclient.data.l[0] == (signed) WM_DELETE_WINDOW) exit(0);
 		}
-		if (event.type == ConfigureNotify) {                                                                    // if size is changed
-			XConfigureEvent* xce = (XConfigureEvent*) &event;                                                   // resize slave window
+		// the window size has changed
+		if (event.type == ConfigureNotify) {
+			XConfigureEvent* xce = (XConfigureEvent*) &event;
+			// if a slave window exists it has to be resized as well
 			if (_slave) { _slave->resize(
 				xce->width - (int)(xce->width / DEFAULT_SLAVE_RATIO),
 				xce->height - (int)(_slave->getYUVHeight() * xce->width / DEFAULT_SLAVE_RATIO / _slave->getYUVWidth()),
 				(int)(xce->width / DEFAULT_SLAVE_RATIO),
 				(int)(_slave->getYUVHeight() * xce->width / DEFAULT_SLAVE_RATIO / _slave->getYUVWidth()));
 			}
-			if (_master) {                                                                                              // for non-4:3 screens
+
+			// if we are a slave window the master window takes care of aspect ration
+			if (_master) {
 				_state.curX=0;
 				_state.curY=0;
 				_state.curWidth=xce->width;
 				_state.curHeight=xce->height;
+			// if we are a master window we have to recalculate the window size (important for non 4:3 screens)
 			} else {
-				if ((xce->width/_XVImage->width*_XVImage->height)>xce->height) {
+				if ((xce->width*_XVImage->height/_XVImage->width)>xce->height) {
 					_state.curX=(int)((xce->width-(xce->height*_XVImage->width/_XVImage->height))/2);
 					_state.curY=0;
 					_state.curWidth=(int)(xce->height*_XVImage->width/_XVImage->height);
 					_state.curHeight=xce->height;
-				} else if ((xce->width/_XVImage->width*_XVImage->height)<=xce->height) {
+				} else if ((xce->height*_XVImage->width/_XVImage->height)>xce->width) {
 					_state.curX=0;
 					_state.curY=(int)((xce->height-(xce->width*_XVImage->height/_XVImage->width))/2);
 					_state.curWidth=xce->width;
 					_state.curHeight=(int)(xce->width*_XVImage->height/_XVImage->width);
+				} else {
+					_state.curX=0;
+					_state.curY=0;
+					_state.curWidth=xce->width;
+					_state.curHeight=xce->height;
 				}
 			}
 		}
-		if (event.type == KeyPress) {                                                                           // a key is pressed
+		
+		// a key is pressed
+		if (event.type == KeyPress) {
 			XKeyEvent* xke = (XKeyEvent*) &event;
 			switch (xke->keycode) {
-				case 41:    toggleFullscreen();                                                                 // f
+				case 41:	toggleFullscreen(); // "f"
 				break;
-				case 40:    setDecoration(!_state.decoration);                                                  // d
+				case 40:	setDecoration(!_state.decoration); // "d"
 				break;
-				case 32:    toggleOntop();                                                                      // o
+				case 32:	toggleOntop(); // "o"
 				break;
-				case 9:     if (_state.fullscreen)  { toggleFullscreen(); }                                     // esc
-				break;
-				default:    /*printf ("%d\n", xke->keycode);*/                                                      // rest
+				case 9:		if (_state.fullscreen) { toggleFullscreen(); } // esc
 				break;
 			}
 		}
-		// mouse click
+		
+		// a mouse button is clicked
 		if (event.type == ButtonPress) {
 			if (_master) {
 				_master->toggleFullscreen();
@@ -263,17 +275,23 @@ void XVWindow::toggleFullscreen () {
 	XWindowAttributes* xwattributes=(XWindowAttributes*) malloc(sizeof(XWindowAttributes));
 
 	if (_state.fullscreen) {
-		if ( ! (_wmType & wm_FULLSCREEN) ) { // not needed with EWMH fs
+		// not needed with EWMH fs
+		if ( ! (_wmType & wm_FULLSCREEN) ) { 
 			newX = _state.oldx;
 			newY = _state.oldy;
 			newWidth = _state.oldWidth;
 			newHeight = _state.oldHeight;
 			setDecoration(true);
 		}
-		setEWMHFullscreen(_NET_WM_STATE_REMOVE);   // removes fullscreen state if wm supports EWMH
+
+		// removes fullscreen state if wm supports EWMH
+		setEWMHFullscreen(_NET_WM_STATE_REMOVE);
 	} else {
-		setEWMHFullscreen(_NET_WM_STATE_ADD);      // sends fullscreen state to be added if wm supports EWMH
-		if ( ! (_wmType & wm_FULLSCREEN) ) {// not needed with EWMH fs
+		// sets fullscreen state if wm supports EWMH
+		setEWMHFullscreen(_NET_WM_STATE_ADD);
+
+		// not needed with EWMH fs - save window coordinates/size and discover fullscreen window size
+		if ( ! (_wmType & wm_FULLSCREEN) ) {
 			newX = 0;
 			newY = 0;
 			newWidth = DisplayWidth(_display, DefaultScreen(_display));
@@ -281,13 +299,15 @@ void XVWindow::toggleFullscreen () {
 
 			setDecoration(false);
 			XFlush(_display);
-			XTranslateCoordinates(_display, _XVWindow, RootWindow(_display, DefaultScreen(_display)), 0,0,&_state.oldx,&_state.oldy, childWindow);
+			XTranslateCoordinates(_display, _XVWindow, RootWindow(_display, DefaultScreen(_display)), 
+						0,0,&_state.oldx,&_state.oldy, childWindow);
 			XGetWindowAttributes(_display, _XVWindow, xwattributes);
 			_state.oldWidth = xwattributes->width;
 			_state.oldHeight = xwattributes->height;
 		}
 	}
-	if ( ! (_wmType & wm_FULLSCREEN) ) { // not needed with EWMH fs
+	 // not needed with EWMH fs - create a screen-filling window on top and turn of decorations
+	if ( ! (_wmType & wm_FULLSCREEN) ) {
 		setSizeHints(newX, newY, _XVImage->width, _XVImage->height, newWidth, newHeight);
 		setLayer((!_state.fullscreen) ? 0 : 1);
 		XMoveResizeWindow(_display, _XVWindow, newX, newY, newWidth, newHeight);
@@ -304,9 +324,11 @@ void XVWindow::toggleFullscreen () {
 	_state.fullscreen=!_state.fullscreen;
 }
 
-void XVWindow::setEWMHFullscreen(int action) {                                                                  // fullscreen for ewmh WMs
+void XVWindow::setEWMHFullscreen(int action) {
 	if (_wmType & wm_FULLSCREEN) {
-		XEvent xev;                                                                                             // create the event
+
+		// create an event event to toggle fullscreen mode
+		XEvent xev;
 		xev.xclient.type = ClientMessage;
 		xev.xclient.serial = 0;
 		xev.xclient.send_event = True;
@@ -318,7 +340,8 @@ void XVWindow::setEWMHFullscreen(int action) {                                  
 		xev.xclient.data.l[2] = 0;
 		xev.xclient.data.l[3] = 0;
 		xev.xclient.data.l[4] = 0;
-                                                                                                                // send it
+		
+		// send the event to the window
 		if (!XSendEvent(_display, _rootWindow, False, SubstructureRedirectMask | SubstructureNotifyMask, &xev)) {
 			LOG_DEBUG("[x11] setEWMHFullscreen failed");
 		}
@@ -346,7 +369,7 @@ void XVWindow::setLayer (int layer) {
 		xev.window = _XVWindow;
 		xev.message_type = XA_WIN_LAYER;
 		xev.format = 32;
-		xev.data.l[0] = layer ? WIN_LAYER_ABOVE_DOCK : _state.origLayer;  // if not fullscreen, stay on default layer
+		xev.data.l[0] = layer ? WIN_LAYER_ABOVE_DOCK : _state.origLayer;
 		xev.data.l[1] = CurrentTime;
 		LOG_DEBUG("[x11] Layered style stay on top (layer " + String::fromNumber(xev.data.l[0]) + ").");
 		XSendEvent(_display, mRootWin, False, SubstructureNotifyMask, (XEvent *) & xev);
@@ -372,14 +395,15 @@ void XVWindow::setLayer (int layer) {
 	}
 }
 
-int XVWindow::getWMType() {                                                                                     // detect window manager type
-	int i;
+int XVWindow::getWMType() {
+	unsigned int i;
 	int wmType = 0;
 	int metacityHack=0;
 	unsigned long nitems;
 	Atom *args = NULL;
 
-	if (getWindowProperty(XA_WIN_PROTOCOLS, &args, &nitems)) {                                                  // supports layers
+	// check if WM supports layers
+	if (getWindowProperty(XA_WIN_PROTOCOLS, &args, &nitems)) {
 		LOG_DEBUG("[x11] Detected wm supports layers.");
 		for (i = 0; i < nitems; i++) {
 			if (args[i] == XA_WIN_LAYER) {
@@ -390,8 +414,10 @@ int XVWindow::getWMType() {                                                     
 			}
 		}
 		XFree(args);
+
+		// metacity WM reports that it supports layers, but it is not really truth :-)
 		if (wmType && (metacityHack == 1)) {
-			wmType ^= wm_LAYER;  // metacity reports that it supports layers, but it is not really truth :-)
+			wmType ^= wm_LAYER;
 			LOG_DEBUG("[x11] Using workaround for Metacity bugs.");
 		}
 	}
@@ -412,27 +438,27 @@ int XVWindow::getWMType() {                                                     
 	return wmType;
 }
 
-void XVWindow::getWindowSize(unsigned int* windowWidth, unsigned int* windowHeight) {                           // return current
-	unsigned int ud;  Window _dw; int doooo;                                                                    // window dimensions
-	XGetGeometry(_display, _XVWindow, &_dw, &doooo, &doooo, windowWidth, windowHeight, &ud, &ud);
+void XVWindow::getWindowSize(unsigned int* windowWidth, unsigned int* windowHeight) {
+	unsigned int ud; Window _dw; int temp;
+	XGetGeometry(_display, _XVWindow, &_dw, &temp, &temp, windowWidth, windowHeight, &ud, &ud);
 }
 
-void XVWindow::resize (int x, int y, int windowWidth, int windowHeight) {                                       // resize a window
-	XMoveResizeWindow(_display, _XVWindow, x, y, windowWidth, windowHeight);                                    // and recursively resize
+void XVWindow::resize (int x, int y, int windowWidth, int windowHeight) {
+	XMoveResizeWindow(_display, _XVWindow, x, y, windowWidth, windowHeight);
 }
 
-int XVWindow::getWindowProperty(Atom type, Atom ** args, unsigned long *nitems) {                               // returns the root window's
-	int format;                                                                                                 // properties
+int XVWindow::getWindowProperty(Atom type, Atom ** args, unsigned long *nitems) {
+	int format;
 	unsigned long bytesafter;
 	return (Success == XGetWindowProperty(_display, _rootWindow, type, 0, 16384, False,
 			AnyPropertyType, &type, &format, nitems, &bytesafter, (unsigned char **) args) && *nitems > 0);
 }
 
-int XVWindow::getSupportedState(Atom atom) {                                                                    // test an atom
-	if (atom==XA_NET_WM_STATE_FULLSCREEN)       { return wm_FULLSCREEN;   };
-	if (atom==XA_NET_WM_STATE_ABOVE)            { return wm_ABOVE;        };
-	if (atom==XA_NET_WM_STATE_STAYS_ON_TOP)     { return wm_STAYS_ON_TOP; };
-	if (atom==XA_NET_WM_STATE_BELOW)            { return wm_BELOW;        };
+int XVWindow::getSupportedState(Atom atom) {
+	if (atom==XA_NET_WM_STATE_FULLSCREEN)	{ return wm_FULLSCREEN;		};
+	if (atom==XA_NET_WM_STATE_ABOVE)	{ return wm_ABOVE;		};
+	if (atom==XA_NET_WM_STATE_STAYS_ON_TOP)	{ return wm_STAYS_ON_TOP;	};
+	if (atom==XA_NET_WM_STATE_BELOW)	{ return wm_BELOW;		};
 	return 0;
 }
 
@@ -453,7 +479,7 @@ void XVWindow::setSizeHints(int x, int y, int imageWidth, int imageHeight, int w
 	xshints.min_width = 25;
 	xshints.min_height = 25;
 
-	XSetStandardProperties(_display, _XVWindow, "Video", "Video", None, NULL, 0, &xshints);                     // apply these properties
+	XSetStandardProperties(_display, _XVWindow, "Video", "Video", None, NULL, 0, &xshints);
 }
 
 void XVWindow::setDecoration(bool d) {
@@ -475,7 +501,7 @@ void XVWindow::setDecoration(bool d) {
 
 		if (!d) {
 			XGetWindowProperty(_display, _XVWindow, motifHints, 0, 20, False, motifHints, &mType,
-							   &mFormat, &mn, &mb, (unsigned char **) &getHints);
+					    &mFormat, &mn, &mb, (unsigned char **) &getHints);
 			if (getHints) {
 				if (getHints->flags & MWM_HINTS_DECORATIONS) oldDecor = getHints->decorations;
 				if (getHints->flags & MWM_HINTS_FUNCTIONS) oldFuncs = getHints->functions;
@@ -504,7 +530,7 @@ int XVWindow::getGnomeLayer() {
 	unsigned short *args = NULL;
 
 	if (XGetWindowProperty(_display, _XVWindow, XA_WIN_LAYER, 0, 16384, False, AnyPropertyType, &type, &format, &nitems,
-		&bytesafter, (unsigned char **) &args) == Success  && nitems > 0 && args) {
+		&bytesafter, (unsigned char **) &args) == Success && nitems > 0 && args) {
 			LOG_DEBUG("[x11] original window layer is" + String::fromNumber(*args));
 			return *args;
 		}

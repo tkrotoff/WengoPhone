@@ -3,6 +3,7 @@
  * High-level class offering X-Video hardware acceleration
  *
  * Matthias Schneider <ma30002000@yahoo.de>
+ * 22-June-2006: varios cosmetic changes
  * 07-May-2006: initial version
  *
  * This program is free software; you can redistribute it and/or modify
@@ -34,38 +35,38 @@
 
 #define GUID_I420_PLANAR 0x30323449
 
-#define wm_LAYER 1
-#define wm_FULLSCREEN 2
-#define wm_STAYS_ON_TOP 4
-#define wm_ABOVE 8
-#define wm_BELOW 16
-#define wm_NETWM (wm_FULLSCREEN | wm_STAYS_ON_TOP | wm_ABOVE | wm_BELOW)
+#define wm_LAYER		1
+#define wm_FULLSCREEN		2
+#define wm_STAYS_ON_TOP		4
+#define wm_ABOVE		8
+#define wm_BELOW		16
+#define wm_NETWM 		(wm_FULLSCREEN | wm_STAYS_ON_TOP | wm_ABOVE | wm_BELOW)
 
-#define WIN_LAYER_ONBOTTOM               2
-#define WIN_LAYER_NORMAL                 4
-#define WIN_LAYER_ONTOP                  6
-#define WIN_LAYER_ABOVE_DOCK             10
+#define WIN_LAYER_ONBOTTOM	2
+#define WIN_LAYER_NORMAL	4
+#define WIN_LAYER_ONTOP		6
+#define WIN_LAYER_ABOVE_DOCK	10
 
-#define _NET_WM_STATE_REMOVE        0    /* remove/unset property */
-#define _NET_WM_STATE_ADD           1    /* add/set property */
-#define _NET_WM_STATE_TOGGLE        2    /* toggle property  */
+#define _NET_WM_STATE_REMOVE	0	/* remove/unset property */
+#define _NET_WM_STATE_ADD	1	/* add/set property */
+#define _NET_WM_STATE_TOGGLE	2	/* toggle property */
 
-#define MWM_HINTS_FUNCTIONS     (1L << 0)
-#define MWM_HINTS_DECORATIONS   (1L << 1)
-#define MWM_FUNC_RESIZE         (1L << 1)
-#define MWM_FUNC_MOVE           (1L << 2)
-#define MWM_FUNC_MINIMIZE       (1L << 3)
-#define MWM_FUNC_MAXIMIZE       (1L << 4)
-#define MWM_FUNC_CLOSE          (1L << 5)
-#define MWM_DECOR_ALL           (1L << 0)
-#define MWM_DECOR_MENU          (1L << 4)
+#define MWM_HINTS_FUNCTIONS	(1L << 0)
+#define MWM_HINTS_DECORATIONS	(1L << 1)
+#define MWM_FUNC_RESIZE		(1L << 1)
+#define MWM_FUNC_MOVE		(1L << 2)
+#define MWM_FUNC_MINIMIZE	(1L << 3)
+#define MWM_FUNC_MAXIMIZE	(1L << 4)
+#define MWM_FUNC_CLOSE		(1L << 5)
+#define MWM_DECOR_ALL		(1L << 0)
+#define MWM_DECOR_MENU		(1L << 4)
 
-#define DEFAULT_SLAVE_RATIO     5
-#define DEFAULT_X               1
-#define DEFAULT_Y               1
+#define DEFAULT_SLAVE_RATIO	5
+#define DEFAULT_X		1
+#define DEFAULT_Y		1
 
 typedef struct {
-    int flags;
+	int flags;
 	long functions;
 	long decorations;
 	long input_mode;
@@ -90,7 +91,24 @@ typedef struct {
 extern int XShmGetEventBase(Display *);
 extern XvImage *XvShmCreateImage(Display *, XvPortID, int, char *, int, int, XShmSegmentInfo *);
 
-class  XVWindow {
+/**
+ * String: wrapper/helper.
+ *
+ * This class provides XVideo support under Linux if it is supported by the graphics hardware and driver.
+ * XVideo makes use of hardware capabilities in order to do
+ * - colorspace transformation
+ * - scaling
+ * - anti-aliasing
+ *
+ * This class features a fullscreen mode, an always-on-top mode and allows to enable and disable the window
+ * manager decorations. A picture-in-picture functionality is provided by registering a second XVWindow class
+ * window as a slave window. This class should work with most if not all window managers. It has to initialized
+ * with the display and window where it shall appear and the original image and intial window size 
+ * After having been initialized successfully a frame is passed via putFrame which takes care of the presentation.
+ *
+ * @author Matthias Schneider
+ */
+class XVWindow {
 
 	public:
 		XVWindow();
@@ -99,16 +117,16 @@ class  XVWindow {
 		void putFrame(piximage* frame);
 		void toggleFullscreen ();
 		void toggleOntop();
-		bool isFullScreen();
 
 		void resize (int x, int y, int windowWidth, int windowHeight);
 		void getWindowSize(unsigned int* windowWidth, unsigned int* windowHeight);
 
-		Window getWindow ()              { return (_XVWindow);          };
-		int getYUVWidth()                { return (_XVImage->width);    };
-		int getYUVHeight()               { return (_XVImage->height);   };
-		void registerMaster(XVWindow* m) { if(_master) _master=m;       };
-		void registerSlave(XVWindow* s)  { if(_slave) _slave=s;         };
+		bool isFullScreen()			{ return (_state.fullscreen);	};
+		Window getWindow()			{ return (_XVWindow);		};
+		int getYUVWidth()			{ return (_XVImage->width);	};
+		int getYUVHeight()			{ return (_XVImage->height);	};
+		void registerMaster(XVWindow* m)	{ _master=m;			};
+		void registerSlave(XVWindow* s)		{ _slave=s;			};
 
 	private:
 		Display*_display;
@@ -143,6 +161,6 @@ class  XVWindow {
 		int getSupportedState(Atom atom);                                                                       // test an atom
 		int getWindowProperty(Atom type, Atom ** args, unsigned long *nitems);                                  // returns the root window's
 
-		bool _isInitialize;
+		bool _isInitialized;
 };
-#endif
+#endif //XVWINDOW_H
