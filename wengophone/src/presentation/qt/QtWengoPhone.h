@@ -160,6 +160,8 @@ public Q_SLOTS:
 
 	void userProfileInitializedEventHandlerSlot();
 
+	void editMyProfile();
+
 private Q_SLOTS:
 
 	void connectionStatusEventHandlerSlot(int totalSteps, int currentStep, QString infoMsg);
@@ -171,8 +173,6 @@ private Q_SLOTS:
 	void enableCallButton();
 
 	void showWengoAccount();
-
-	void editMyProfile();
 
 	void exitApplication();
 

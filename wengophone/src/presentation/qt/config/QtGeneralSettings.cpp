@@ -41,7 +41,7 @@ QtGeneralSettings::QtGeneralSettings(CWengoPhone & cWengoPhone, QWidget * parent
 	QtWengoPhone * qtWengoPhone =
 		dynamic_cast<QtWengoPhone *>(cWengoPhone.getPresentation());
 	connect(_ui->editProfileButton, SIGNAL(clicked()), 
-		qtWengoPhone, SLOT(editProfile()));
+		qtWengoPhone, SLOT(editMyProfile()));
 
 	readConfig();
 }
