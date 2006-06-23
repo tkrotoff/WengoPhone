@@ -214,8 +214,7 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 		break;
 
 	case -1:
-		if (p->isRegistered())
-		{
+		if (p->isRegistered()) {
 			p->setRegistered(false);
 			p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateTimeout);
 			//p->removeVirtualLine(p->getActiveVline(), 0);
@@ -375,6 +374,8 @@ void PhApiCallbacks::onNotify(const char * event, const char * from, const char 
 
 	TiXmlHandle docHandle(&doc);
 
+	LOG_DEBUG("buddy=" + buddy + " notification=" + tmp + " content=" + std::string(content));
+
 	//A buddy presence
 	if (tmp == "presence") {
 
@@ -423,7 +424,7 @@ void PhApiCallbacks::onNotify(const char * event, const char * from, const char 
 
 	//unknown message event
 	} else {
-		LOG_FATAL("Unknown message event");
+		LOG_FATAL("unknown message event=" + tmp);
 	}
 }
 
