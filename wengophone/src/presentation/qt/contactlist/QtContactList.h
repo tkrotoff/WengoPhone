@@ -140,6 +140,8 @@ private Q_SLOTS:
 
 	void contactChangedEventSlot(QString contactId);
 
+	void mergeContactsSlot(QString dstContact, QString srcContact);
+
 private:
 
 	/**
@@ -164,6 +166,9 @@ private:
 	ContactGroupPopupMenu * _contactGroupPopupMenu;
 
 	QTreeWidget * _treeWidget;
+
+	/** True when model is doing some things on contacts. */
+	bool _waitingForModel;
 
 	CWengoPhone & _cWengoPhone;
 };

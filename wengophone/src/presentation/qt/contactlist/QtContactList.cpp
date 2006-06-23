@@ -18,10 +18,12 @@
  */
 
 #include "QtContactList.h"
+
 #include "ContactGroupPopupMenu.h"
 #include "QtContactListManager.h"
-#include "QtContactPixmap.h"
 #include "QtContactManager.h"
+#include "QtContactPixmap.h"
+#include "QtContactTreeMouseFilter.h"
 #include "QtTreeViewDelegate.h"
 
 #include <presentation/qt/QtWengoPhone.h>
@@ -37,7 +39,6 @@
 
 #include <qtutil/Object.h>
 #include <qtutil/WidgetFactory.h>
-#include <qtutil/MouseEventFilter.h>
 
 #include <QtGui>
 
@@ -65,6 +66,7 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 	_cWengoPhone(cWengoPhone) {
 
 	_treeWidget = NULL;
+	_waitingForModel = false;
 
 	typedef PostEvent0 < void() > MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(& QtContactList::initThreadSafe, this));
@@ -117,8 +119,15 @@ void QtContactList::initThreadSafe() {
 	spx->setPixmap(QtContactPixmap::ContactGroupOpen, QPixmap(STATUS_GROUP_OPEN_PIXMAP));
 	spx->setPixmap(QtContactPixmap::ContactGroupClose, QPixmap(STATUS_GROUP_CLOSE_PIXMAP));
 
-	_contactManager=new QtContactManager(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), _cWengoPhone,
-			* this, _treeWidget, _treeWidget);
+	_contactManager = new QtContactManager(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), _cWengoPhone,
+		* this, _treeWidget, _treeWidget);
+
+	QtContactTreeMouseFilter * qtContactTreeMouseFilter =
+		new QtContactTreeMouseFilter(_cContactList, this, _treeWidget);
+	connect(qtContactTreeMouseFilter, SIGNAL(mouseClicked(Qt::MouseButton)),
+		_contactManager, SLOT(setMouseButton(Qt::MouseButton)));
+	connect(qtContactTreeMouseFilter, SIGNAL(mergeContacts(QString, QString)),
+		SLOT(mergeContactsSlot(QString, QString)));
 
 	QtTreeViewDelegate * delegate = new QtTreeViewDelegate(_cWengoPhone, _treeWidget);
 	delegate->setParent(_treeWidget->viewport());
@@ -147,7 +156,6 @@ void QtContactList::initThreadSafe() {
 		SLOT(contactMovedEventSlot(QString, QString, QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(contactChangedEventSignal(QString)),
 		SLOT(contactChangedEventSlot(QString)), Qt::QueuedConnection);
-
 
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhone.getPresentation();
 	qtWengoPhone->setContactList(this);
@@ -276,6 +284,7 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 void QtContactList::contactRemovedEventSlot(QString contactId) {
 	_contactManager->removeContact(contactId);
 	updatePresentationThreadSafe();
+	_waitingForModel = false;
 }
 
 void QtContactList::contactMovedEventSlot(QString dstContactGroupId,
@@ -316,4 +325,22 @@ void QtContactList::groupRightClickedSlot(const QString & groupId) {
 
 void QtContactList::showHideGroups() {
 	_contactManager->hideGroups();
+}
+
+void QtContactList::mergeContactsSlot(QString dstContact, QString srcContact) {
+	if (!_waitingForModel) {
+		_waitingForModel = true;
+
+		ContactProfile dstContactProfile = _cContactList.getContactProfile(dstContact.toStdString());
+		ContactProfile srcContactProfile = _cContactList.getContactProfile(srcContact.toStdString());
+		if (QMessageBox::question(NULL,
+			tr("Merge Contacts -- WengoPhone"),
+			tr("Merge %1 with %2?")
+			.arg(QString::fromStdString(dstContactProfile.getDisplayName()))
+			.arg(QString::fromStdString(srcContactProfile.getDisplayName())),
+			tr("&Yes"), tr("&No"),
+			QString(), 0, 1) == 0) {
+			_cContactList.merge(dstContact.toStdString(), srcContact.toStdString());
+		}
+	}
 }

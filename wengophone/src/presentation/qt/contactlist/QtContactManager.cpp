@@ -25,7 +25,6 @@
 #include "QtContactInfo.h"
 #include "QtContactListManager.h"
 #include "QtContactTreeKeyFilter.h"
-#include "QtContactTreeMouseFilter.h"
 #include "QtConferenceAction.h"
 
 #include <presentation/qt/QtWengoPhone.h>
@@ -73,12 +72,10 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 
 	QtContactListManager::getInstance()->setTreeWidget(target);
 	target->setMouseTracking(true);
-	QtContactTreeMouseFilter * qtContactTreeMouseFilter = new QtContactTreeMouseFilter(qtContactList.getCContactList(), this, target);
 	QtContactTreeKeyFilter * keyFilter = new QtContactTreeKeyFilter(this, target);
 
 	connect(target, SIGNAL(itemSelectionChanged()), this, SLOT(treeViewSelectionChanged()));
 	connect(target, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(itemClicked(QTreeWidgetItem *, int)));
-	connect(qtContactTreeMouseFilter, SIGNAL(mouseClicked(Qt::MouseButton)), SLOT(setMouseButton(Qt::MouseButton)));
 
 	connect(keyFilter, SIGNAL(openItem(QTreeWidgetItem *)), SLOT(openUserInfo(QTreeWidgetItem *)));
 	connect(keyFilter, SIGNAL(closeItem(QTreeWidgetItem *)), SLOT(closeUserInfo()));

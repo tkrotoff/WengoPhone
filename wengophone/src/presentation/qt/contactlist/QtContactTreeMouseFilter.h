@@ -48,6 +48,8 @@ Q_SIGNALS:
 
 	void mouseClicked(Qt::MouseButton button);
 
+	void mergeContacts(QString dstContact, QString srcContact);
+
 private:
 
 	bool eventFilter(QObject * obj, QEvent * event);

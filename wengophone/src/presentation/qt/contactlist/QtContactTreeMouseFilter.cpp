@@ -154,18 +154,7 @@ void QtContactTreeMouseFilter::dropEvent(QDropEvent * event) {
 			if (_selectedItem->parent() == item->parent()) {
 				// The destination and the source groups are the same
 				// This is a contact combination
-				ContactProfile dstContactProfile = _cContactList.getContactProfile(_selectedItem->text(0).toStdString());
-				ContactProfile srcContactProfile = _cContactList.getContactProfile(item->text(0).toStdString());
-				if (QMessageBox::question(NULL,
-					tr("Merge Contacts -- WengoPhone"),
-					tr("Merge %1 with %2?")
-					.arg(QString::fromStdString(dstContactProfile.getDisplayName()))
-					.arg(QString::fromStdString(srcContactProfile.getDisplayName())),
-					tr("&Yes"), tr("&No"),
-					QString(), 0, 1) == 0) {
-					_cContactList.merge(_selectedItem->text(0).toStdString(),
-						item->text(0).toStdString());
-				}
+				mergeContacts(_selectedItem->text(0), item->text(0));
 			} else {
 				if (item->parent()) {
 					// The destination group and the source group are different
