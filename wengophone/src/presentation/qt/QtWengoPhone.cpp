@@ -678,21 +678,23 @@ void QtWengoPhone::editMyProfile() {
 }
 
 void QtWengoPhone::exitApplication() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-    Config & config = ConfigManager::getInstance().getCurrentConfig();
 	_qtSystray->hide();
 	delete _qtSystray;
-    // Save the window size
-    QSize winsize = _wengoPhoneWindow->size();
-    config.set(Config::PROFILE_WIDTH,winsize.width());
-    config.set(Config::PROFILE_HEIGHT,winsize.height());
-    // Save the window position
-    QPoint winpos = _wengoPhoneWindow->pos();
-    config.set(Config::PROFILE_POSX,winpos.x());
-    config.set(Config::PROFILE_POSY,winpos.y());
+
+	// Save the window size
+	QSize winsize = _wengoPhoneWindow->size();
+	config.set(Config::PROFILE_WIDTH,winsize.width());
+	config.set(Config::PROFILE_HEIGHT,winsize.height());
+
+	// Save the window position
+	QPoint winpos = _wengoPhoneWindow->pos();
+	config.set(Config::PROFILE_POSX,winpos.x());
+	config.set(Config::PROFILE_POSY,winpos.y());
+
 	QApplication::closeAllWindows();
 	QCoreApplication::processEvents();
-	_cWengoPhone.terminate();
 	QCoreApplication::exit(EXIT_SUCCESS);
 }
 
