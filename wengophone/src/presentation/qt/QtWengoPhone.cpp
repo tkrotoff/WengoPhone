@@ -57,6 +57,7 @@
 #include "phonecall/QtContactCallListWidget.h"
 #include "profile/QtProfileDetails.h"
 #include "imaccount/QtIMAccountManager.h"
+#include "imcontact/QtSimpleAddIMContact.h"
 #include "contactlist/QtContactList.h"
 #include "QtDialpad.h"
 #include "QtAbout.h"
@@ -697,11 +698,11 @@ void QtWengoPhone::exitApplication() {
 void QtWengoPhone::addContact() {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 		//FIXME: this method should not be called if no UserProfile has been set
-		LOG_DEBUG("add contact");
-		ContactProfile (contactProfile);
-		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
-			contactProfile, _wengoPhoneWindow);
-		if (qtProfileDetails.show()) {
+		ContactProfile contactProfile;
+		QtSimpleAddIMContact qtSimpleAddIMContact(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
+			contactProfile,
+			_wengoPhoneWindow);
+		if (qtSimpleAddIMContact.exec()==QDialog::Accepted){
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
 		}
 	}
@@ -828,14 +829,9 @@ void QtWengoPhone::expandConfigPanel() {
 	static bool expand = true;
 
 	if (expand) {
-		/*_wengoPhoneWindow->resize(_wengoPhoneWindow->width(),
-					  _wengoPhoneWindow->height() + _configPanelWidget->height());*/
 		_ui->configPanel->show();
 	} else {
-	  /*_wengoPhoneWindow->resize(_wengoPhoneWindow->width(),
-				    _wengoPhoneWindow->height() - _configPanelWidget->height());*/
-
-	  _ui->configPanel->hide();
+		_ui->configPanel->hide();
 	}
 	expand = !expand;
 }
