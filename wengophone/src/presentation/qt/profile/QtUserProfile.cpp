@@ -146,7 +146,7 @@ void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sende
 		.arg(QString::fromStdString(imContact.getIMAccount()->getLogin()));
 
 	if (!message.isEmpty()) {
-		request += QString("<i>%1</i>\n").arg(message);
+		request += QString("%1\n").arg(message);
 	}
 
 	int buttonClicked = QMessageBox::question(_qtWengoPhone.getWidget(),
@@ -157,12 +157,15 @@ void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sende
 		//TODO: give a personal message
 		sender->authorizeContact(imContact, true, String::null);
 
-		ContactProfile contactProfile;
-		contactProfile.addIMContact(imContact);
-		QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile,
-			_qtWengoPhone.getWidget());
-		if (qtProfileDetails.show()) {
-			_cUserProfile.getCContactList().addContact(contactProfile);
+		if (_cUserProfile.getCContactList().findContactThatOwns(imContact).empty()) {
+			//If the contact is not in our ContactList
+			ContactProfile contactProfile;
+			contactProfile.addIMContact(imContact);
+			QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile,
+				_qtWengoPhone.getWidget());
+			if (qtProfileDetails.show()) {
+				_cUserProfile.getCContactList().addContact(contactProfile);
+			}
 		}
 	} else {
 		// TODO: give a personal message
