@@ -55,7 +55,7 @@ of the License, or (at your option) any later version.</translation>
     <name>AddIMContact</name>
     <message>
         <source>Protocol:</source>
-        <translation>Protocole:</translation>
+        <translation type="obsolete">Protocole:</translation>
     </message>
     <message>
         <source>Contact ID:</source>
@@ -84,6 +84,10 @@ of the License, or (at your option) any later version.</translation>
     <message>
         <source>Account:</source>
         <translation>Compte:</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Contact type&lt;span style=&quot; font-size:8pt;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2273,6 +2277,18 @@ Veuillez patientez...</translation>
     </message>
 </context>
 <context>
+    <name>QtSimpleAddIMContact</name>
+    <message>
+        <source>WengoPhone - Bad account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yout are not logged to this network
+Use &quot;the Tools / IM accounts&quot; menu to login to this network</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QtSms</name>
     <message>
         <source>Wengo SMS service</source>
@@ -2788,19 +2804,19 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation type="obsolete">Nom</translation>
     </message>
     <message>
         <source>Group</source>
-        <translation>Groupe</translation>
+        <translation type="obsolete">Groupe</translation>
     </message>
     <message>
         <source>Contact Id</source>
-        <translation>Identifiant</translation>
+        <translation type="obsolete">Identifiant</translation>
     </message>
     <message>
         <source>Contact type</source>
-        <translation>Type de contact</translation>
+        <translation type="obsolete">Type de contact</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -2808,11 +2824,35 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
     <message>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="unfinished">Ajouter</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;With Wengo you can chat with your contacts watever&lt;br&gt;their IM (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, &lt;b&gt;AIM&lt;/b&gt;, &lt;b&gt;Google talk&lt;/b&gt; etc.).&lt;br&gt;Use the &quot;Tools / IM accounts&quot; menu to login to those&lt;br&gt;networks&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group:</source>
+        <translation type="unfinished">Groupe:</translation>
+    </message>
+    <message>
+        <source>Contact type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Name (optional):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contact ID:</source>
+        <translation type="unfinished">Identifiant:</translation>
     </message>
 </context>
 <context>
