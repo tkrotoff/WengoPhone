@@ -302,7 +302,8 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 			QMessageBox::question(
 				_qtWengoPhone->getWidget(),
 				tr("WengoPhone - Proceed Conference"),
-				tr("When you are ready to start the conference, click on the button below")
+				tr("When you are ready to start the conference, click on the button below\n"
+				"Please wait for a few seconds...")
 				/*tr("&Proceed conference"), tr("&Cancel"),
 				QString(), 0, 1)*/);
 				_cPhoneCall.hold();
