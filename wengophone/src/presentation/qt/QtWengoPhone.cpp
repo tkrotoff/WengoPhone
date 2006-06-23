@@ -1114,7 +1114,9 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 	int profileBarIndex = _ui->profileBar->addWidget(_qtProfileBar);
 	_ui->profileBar->setCurrentIndex(profileBarIndex);
 	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
+
 	_qtSystray->setTrayMenu();
+	_qtSystray->setSystrayIcon(EnumPresenceState::MyPresenceStatusOk);
 }
 
 void QtWengoPhone::showHideGroups() {

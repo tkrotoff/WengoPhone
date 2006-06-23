@@ -50,12 +50,12 @@ QtSystray::QtSystray(QObject * parent)
 	_callLandLineMenu = NULL;
 
 
+	//Check Internet connection status
 	NetworkObserver::getInstance().connectionIsDownEvent +=
 		boost::bind(&QtSystray::connectionIsDownEventHandler, this);
 
 	NetworkObserver::getInstance().connectionIsUpEvent +=
 		boost::bind(&QtSystray::connectionIsUpEventHandler, this);
-
 
 	//trayMenu
 	_trayMenu = new QMenu(_qtWengoPhone->getWidget());

@@ -295,7 +295,7 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 
 		//FIXME Hack again... tired to hack hack hack hack
 		ConferenceCall * conferenceCall = _cPhoneCall.getPhoneCall().getConferenceCall();
-		if (conferenceCall && conferenceCall->getPhoneCallList().size() == 1) {
+		if (conferenceCall) {
 
 			_actionHold->setText(tr("Proceed conference"));
 			_statusLabel->setText(tr("Talking - conference"));
