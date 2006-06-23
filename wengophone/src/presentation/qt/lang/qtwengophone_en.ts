@@ -508,9 +508,6 @@ of the License, or (at your option) any later version.</source>
     </message>
 </context>
 <context>
-    <name>CrashReportForm</name>
-</context>
-<context>
     <name>CreditWidget</name>
     <message>
         <source>&lt;u&gt;Buy call-out credits&lt;/u&gt;</source>
@@ -1238,9 +1235,6 @@ of the License, or (at your option) any later version.</source>
     </message>
 </context>
 <context>
-    <name>QtCallBar</name>
-</context>
-<context>
     <name>QtCallForwardSettings</name>
     <message>
         <source>Call Forward</source>
@@ -1248,16 +1242,28 @@ of the License, or (at your option) any later version.</source>
     </message>
 </context>
 <context>
-    <name>QtChatHandler</name>
+    <name>QtContactList</name>
+    <message>
+        <source>Merge Contacts -- WengoPhone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge %1 with %2?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;No</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtContactManager</name>
     <message>
         <source>Delete contact</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want to delete this contact ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1312,25 +1318,13 @@ of the License, or (at your option) any later version.</source>
         <source>Invite to conference</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Do you really want to delete this contact?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtContactTreeMouseFilter</name>
-    <message>
-        <source>Merge Contacts -- WengoPhone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Merge %1 with %2?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;No</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QtCreditWidget</name>
@@ -1689,7 +1683,8 @@ of the License, or (at your option) any later version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>When you are ready to start the conference, click on the button below</source>
+        <source>When you are ready to start the conference, click on the button below
+Please wait for a few seconds...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1955,9 +1950,6 @@ Don&apos;t forget to add your signature length.</source>
     </message>
 </context>
 <context>
-    <name>QtUserManager</name>
-</context>
-<context>
     <name>QtUserProfile</name>
     <message>
         <source>WengoPhone - Authorization request</source>
@@ -1982,9 +1974,6 @@ Don&apos;t forget to add your signature length.</source>
         <source>WengoPhone - Importing contacts and IM accounts</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>QtUserWidget</name>
 </context>
 <context>
     <name>QtVideoSettings</name>
@@ -2312,9 +2301,6 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
 </source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>UserTreeEventManager</name>
 </context>
 <context>
     <name>UserWidget</name>

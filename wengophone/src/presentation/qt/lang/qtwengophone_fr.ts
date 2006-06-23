@@ -1715,14 +1715,29 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
 </context>
 <context>
+    <name>QtContactList</name>
+    <message>
+        <source>Merge Contacts -- WengoPhone</source>
+        <translation type="unfinished">Fusionner les contacts -- WengoPhone</translation>
+    </message>
+    <message>
+        <source>Merge %1 with %2?</source>
+        <translation type="unfinished">Fusionner %1 avec %2 ?</translation>
+    </message>
+    <message>
+        <source>&amp;Yes</source>
+        <translation type="unfinished">&amp;Oui</translation>
+    </message>
+    <message>
+        <source>&amp;No</source>
+        <translation type="unfinished">&amp;Non</translation>
+    </message>
+</context>
+<context>
     <name>QtContactManager</name>
     <message>
         <source>Delete contact</source>
         <translation type="unfinished">Supprimer le contact</translation>
-    </message>
-    <message>
-        <source>Do you really want to delete this contact ?</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Yes</source>
@@ -1776,24 +1791,28 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
         <source>Invite to conference</source>
         <translation type="unfinished">Inviter à la conférence</translation>
     </message>
+    <message>
+        <source>Do you really want to delete this contact?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtContactTreeMouseFilter</name>
     <message>
         <source>Merge Contacts -- WengoPhone</source>
-        <translation type="unfinished">Fusionner les contacts -- WengoPhone</translation>
+        <translation type="obsolete">Fusionner les contacts -- WengoPhone</translation>
     </message>
     <message>
         <source>Merge %1 with %2?</source>
-        <translation type="unfinished">Fusionner %1 avec %2 ?</translation>
+        <translation type="obsolete">Fusionner %1 avec %2 ?</translation>
     </message>
     <message>
         <source>&amp;Yes</source>
-        <translation type="unfinished">&amp;Oui</translation>
+        <translation type="obsolete">&amp;Oui</translation>
     </message>
     <message>
         <source>&amp;No</source>
-        <translation type="unfinished">&amp;Non</translation>
+        <translation type="obsolete">&amp;Non</translation>
     </message>
 </context>
 <context>
@@ -2166,7 +2185,8 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>When you are ready to start the conference, click on the button below</source>
+        <source>When you are ready to start the conference, click on the button below
+Please wait for a few seconds...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
