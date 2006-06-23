@@ -87,7 +87,7 @@ of the License, or (at your option) any later version.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Contact type&lt;span style=&quot; font-size:8pt;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Type de contact&lt;span style=&quot; font-size:8pt;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -2280,12 +2280,13 @@ Veuillez patientez...</translation>
     <name>QtSimpleAddIMContact</name>
     <message>
         <source>WengoPhone - Bad account</source>
-        <translation type="unfinished"></translation>
+        <translation>WengoPhone - Mauvais login</translation>
     </message>
     <message>
         <source>Yout are not logged to this network
 Use &quot;the Tools / IM accounts&quot; menu to login to this network</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous n&apos;êtes pas connecté sur ce réseau
+Utilisez le menu Outils -&gt; Comptes de messagerie pour vous connecter à ce réseau</translation>
     </message>
 </context>
 <context>
@@ -2832,27 +2833,27 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished">Ajouter</translation>
+        <translation>Ajouter</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;With Wengo you can chat with your contacts watever&lt;br&gt;their IM (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, &lt;b&gt;AIM&lt;/b&gt;, &lt;b&gt;Google talk&lt;/b&gt; etc.).&lt;br&gt;Use the &quot;Tools / IM accounts&quot; menu to login to those&lt;br&gt;networks&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Avec Wengo vous pouvez chatter avec tous vos contacts quel que soit&lt;br&gt;leur IM (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, &lt;b&gt;AIM&lt;/b&gt;, &lt;b&gt;Google talk&lt;/b&gt; etc.).&lt;br&gt;Utiliser le menu Outils -&gt; Comptes de messagerie pour paramétrer un compte sur un de ces&lt;br&gt;réseaux&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Group:</source>
-        <translation type="unfinished">Groupe:</translation>
+        <translation>Groupe:</translation>
     </message>
     <message>
         <source>Contact type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de contact:</translation>
     </message>
     <message>
         <source>First Name (optional):</source>
-        <translation type="unfinished"></translation>
+        <translation>Prénom (facultatif):</translation>
     </message>
     <message>
         <source>Contact ID:</source>
-        <translation type="unfinished">Identifiant:</translation>
+        <translation>Identifiant:</translation>
     </message>
 </context>
 <context>
