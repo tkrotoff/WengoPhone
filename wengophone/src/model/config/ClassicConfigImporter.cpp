@@ -24,6 +24,8 @@
 
 #include <model/account/wengo/WengoAccount.h>
 #include <model/contactlist/Contact.h>
+#include <model/profile/EnumSex.h>
+#include <model/profile/StreetAddress.h>
 #include <model/profile/UserProfile.h>
 #include <model/profile/UserProfileFileStorage.h>
 #include <model/profile/UserProfileXMLSerializer.h>
@@ -92,6 +94,12 @@ typedef struct vcard_s
 
 typedef std::list<vcard_t *> vcardList;
 typedef std::list<vcard_t *>::iterator vcardIt;
+
+static const char *HOME_NUMBER_KEY = "home";
+static const char *WORK_NUMBER_KEY = "work";
+static const char *CELL_NUMBER_KEY = "cell";
+static const char *FAX_NUMBER_KEY = "fax";
+static const char *OTHER_NUMBER_KEY = "other";
 
 telNumber_t *createNewNodeNumber(const std::string & key, const std::string & value)
 {
@@ -238,22 +246,22 @@ bool ClassicConfigImporter::classicVcardParser(const string & vcardFile, void *s
 				mVcard->gender = UNKNOWN;
 		}
 		else if (!key.compare("TEL;TYPE=home"))
-			mVcard->numbers.push_back(createNewNodeNumber("home", value));
+			mVcard->numbers.push_back(createNewNodeNumber(HOME_NUMBER_KEY, value));
 
 		else if (!key.compare("TEL;TYPE=work"))
-			mVcard->numbers.push_back(createNewNodeNumber("work", value));
+			mVcard->numbers.push_back(createNewNodeNumber(WORK_NUMBER_KEY, value));
 
 		else if (!key.compare("TEL;TYPE=cell"))
-			mVcard->numbers.push_back(createNewNodeNumber("cell", value));
+			mVcard->numbers.push_back(createNewNodeNumber(CELL_NUMBER_KEY, value));
 
 		else if (!key.compare("TEL;TYPE=pref"))
 			mVcard->id = value;
 
 		else if (!key.compare("TEL;TYPE=fax"))
-			mVcard->numbers.push_back(createNewNodeNumber("fax", value));
+			mVcard->numbers.push_back(createNewNodeNumber(FAX_NUMBER_KEY, value));
 
 		else if (!key.compare("TEL;TYPE=other"))
-			mVcard->numbers.push_back(createNewNodeNumber("other", value));
+			mVcard->numbers.push_back(createNewNodeNumber(OTHER_NUMBER_KEY, value));
 
 		else if (!key.compare("EMAIL"))
 			mVcard->emails += value;
@@ -427,6 +435,50 @@ string ClassicConfigImporter::classicVCardToString(void *structVcard)
 	return res;
 }
 
+void ClassicConfigImporter::addContactDetails(Contact & contact, void * structVcard) {
+	vcard_t *mVcard = (vcard_t *) structVcard;
+
+	contact.setFirstName(mVcard->fname);
+	contact.setLastName(mVcard->lname);
+	contact.setCompany(mVcard->company);
+	contact.setBirthdate(Date(mVcard->birthday.day, mVcard->birthday.month, mVcard->birthday.year));
+	contact.setNotes(mVcard->note);
+	contact.setWebsite(mVcard->website);
+	if (!mVcard->address.city.empty()) {
+		StreetAddress adress;
+		adress.setStreet(mVcard->address.street);
+		adress.setCity(mVcard->address.city);
+		adress.setZipCode(mVcard->address.post_code);
+		adress.setStateProvince(mVcard->address.state);
+		adress.setCountry(mVcard->address.country);
+		contact.setStreetAddress(adress);
+	}
+
+	if (mVcard->gender != UNKNOWN)
+		contact.setSex(mVcard->gender == MALE ? EnumSex::SexMale : EnumSex::SexFemale);
+
+	telNumberIt it;
+	for (it = mVcard->numbers.begin(); it != mVcard->numbers.end(); it++)
+	{
+		if (!(*it)->key.compare(HOME_NUMBER_KEY) && !((*it)->value.empty()))
+			contact.setHomePhone((*it)->value);
+		else if (!(*it)->key.compare(WORK_NUMBER_KEY) && !((*it)->value.empty()))
+			contact.setWorkPhone((*it)->value);
+		else if (!(*it)->key.compare(CELL_NUMBER_KEY) && !((*it)->value.empty()))
+			contact.setMobilePhone((*it)->value);
+		else if (!(*it)->key.compare(FAX_NUMBER_KEY) && !((*it)->value.empty()))
+			contact.setFax((*it)->value);
+		else if (!(*it)->key.compare(OTHER_NUMBER_KEY) && !((*it)->value.empty()))
+			contact.setOtherPhone((*it)->value);
+	}
+
+	if (mVcard->emails.size() >= 1 && !mVcard->emails[0].empty())
+		contact.setPersonalEmail(mVcard->emails[0]);
+	if (mVcard->emails.size() >= 2 && !mVcard->emails[1].empty())
+		contact.setWorkPhone(mVcard->emails[1]);
+	if (mVcard->emails.size() >= 3 && !mVcard->emails[2].empty())
+		contact.setOtherPhone(mVcard->emails[2]);
+}
 
 bool ClassicConfigImporter::importContactsFromV1toV3(const string & fromDir, UserProfile & userProfile) {
 
@@ -464,37 +516,10 @@ bool ClassicConfigImporter::importContactsFromV1toV3(const string & fromDir, Use
 			IMContact imContact(*(*list.begin()), mVcard.id);
 			Contact & contact = contactList.createContact();
 			contact.setGroupId(contactList.getContactGroupIdFromName("Classic"));
+			addContactDetails(contact, &mVcard);
 			contact.addIMContact(imContact);
 		}
 	}
-
-	/*vcardIt vIt;
-	FileWriter xmlFile(toDir + "contactlist.xml");
-
-	// Write all informations to the xml conf file
-	xmlFile.write("<contactlist>\n");
-	for (vIt = vList.begin(); vIt != vList.end(); vIt++)
-	{
-		xmlFile.write(classicVCardToString((*vIt)));
-	}
-	xmlFile.write("</contactlist>\n");
-	xmlFile.close();
-
-	// Clean VCard list
-	vcardIt	vIt2;
-	telNumberIt tIt;
-	telNumberIt tIt2;
-	for (vIt = vList.begin(); vIt != vList.end(); )
-	{
-		vIt2 = vIt++;
-		for (tIt = (*vIt2)->numbers.begin(); tIt != (*vIt2)->numbers.end(); )
-		{
-			tIt2 = tIt++;
-			(*vIt2)->numbers.erase(tIt2);
-		}
-		vList.erase(vIt2);
-	}*/
-
 	return true;
 }
 

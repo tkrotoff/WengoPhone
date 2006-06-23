@@ -28,6 +28,7 @@
 class Thread;
 class UserProfile;
 class WengoPhone;
+class Contact;
 
 /**
  * Import configuration from WengoPhone classic.
@@ -70,8 +71,9 @@ private:
 	bool importConfigFromV1toV3();
 	bool importConfigFromV2toV3();
 	bool importContactsFromV1toV3(const std::string & fromDir, UserProfile & userProfile);
-	static bool classicVcardParser(const std::string & vcardFile, void *structVcard);
-	static bool classicXMLParser(const std::string & xmlFile, void *structVcard);
+	void addContactDetails(Contact & contact, void * structVcard);
+	static bool classicVcardParser(const std::string & vcardFile, void * structVcard);
+	static bool classicXMLParser(const std::string & xmlFile, void * structVcard);
 	static std::string classicVCardToString(void *structVcard);
 	static void * getLastWengoUser(const std::string & configUserFile, int version);
 
