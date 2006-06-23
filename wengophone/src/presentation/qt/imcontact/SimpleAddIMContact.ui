@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>401</width>
-    <height>338</height>
+    <width>405</width>
+    <height>325</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -20,37 +20,47 @@
     <number>9</number>
    </property>
    <property name="spacing" >
-    <number>12</number>
+    <number>6</number>
    </property>
-   <item row="4" column="0" colspan="3" >
-    <layout class="QHBoxLayout" >
+   <item row="3" column="0" >
+    <layout class="QGridLayout" >
      <property name="margin" >
       <number>0</number>
      </property>
      <property name="spacing" >
       <number>6</number>
      </property>
-     <item>
+     <item row="0" column="3" >
+      <widget class="QPushButton" name="cancelButton" >
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
       <widget class="QPushButton" name="advancedConfigPushButton" >
        <property name="text" >
         <string>Advanced</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="0" column="1" >
       <spacer>
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" >
         <size>
-         <width>40</width>
-         <height>20</height>
+         <width>100</width>
+         <height>32</height>
         </size>
        </property>
       </spacer>
      </item>
-     <item>
+     <item row="0" column="2" >
       <widget class="QPushButton" name="okButton" >
        <property name="text" >
         <string>Add</string>
@@ -63,45 +73,102 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="cancelButton" >
-       <property name="text" >
-        <string>Cancel</string>
+    </layout>
+   </item>
+   <item row="1" column="0" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="1" column="1" >
+      <widget class="QLineEdit" name="contactIdLineEdit" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
        </property>
-       <property name="icon" >
-        <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
+      </widget>
+     </item>
+     <item row="3" column="0" >
+      <widget class="QLabel" name="label_3" >
+       <property name="text" >
+        <string>Group:</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="QLineEdit" name="nameLineEdit" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" >
+      <widget class="QComboBox" name="groupComboBox" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="editable" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QComboBox" name="contactTypeComboBox" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>Contact type:</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="label_4" >
+       <property name="text" >
+        <string>First Name (optional):</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>Contact ID:</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="2" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="1" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="0" colspan="3" >
+   <item row="0" column="0" >
     <widget class="QLabel" name="accountLabel" >
      <property name="palette" >
       <palette>
@@ -369,120 +436,14 @@
       </palette>
      </property>
      <property name="text" >
-      <string>&lt;span style="font-size:18pt;">Add a contact&lt;/span>&lt;br>&lt;br>&lt;span>With Wengo you can chat with your contacts watever&lt;br>their IM (&lt;b>MSN&lt;/b>, &lt;b>Yahoo!&lt;/b>, &lt;b>AIM&lt;/b>, &lt;b>Google talk&lt;/b> etc.).&lt;br>Use the "Tools / IM accounts" menu to login to those&lt;br>networks&lt;/span></string>
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Lucida Grande; font-size:13pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:18pt;">Add a contact&lt;/span>&lt;br />&lt;br />With Wengo you can chat with your&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">contacts whatever their IM&lt;br />(&lt;span style=" font-weight:600;">MSN&lt;/span>, &lt;span style=" font-weight:600;">Yahoo!&lt;/span>, &lt;span style=" font-weight:600;">AIM&lt;/span>, &lt;span style=" font-weight:600;">Google talk&lt;/span> etc.).&lt;br />Use the "Tools / IM accounts" menu &lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">to login to those networks.&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="indent" >
       <number>100</number>
      </property>
     </widget>
    </item>
-   <item row="2" column="2" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="1" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="1" column="1" >
-      <widget class="QLineEdit" name="contactIdLineEdit" >
-       <property name="minimumSize" >
-        <size>
-         <width>212</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" >
-      <widget class="QLabel" name="label_3" >
-       <property name="text" >
-        <string>Group:</string>
-       </property>
-       <property name="textFormat" >
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1" >
-      <widget class="QLineEdit" name="nameLineEdit" >
-       <property name="minimumSize" >
-        <size>
-         <width>212</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1" >
-      <widget class="QComboBox" name="groupComboBox" >
-       <property name="minimumSize" >
-        <size>
-         <width>212</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="editable" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" >
-      <widget class="QComboBox" name="contactTypeComboBox" >
-       <property name="minimumSize" >
-        <size>
-         <width>212</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" >
-      <widget class="QLabel" name="label" >
-       <property name="text" >
-        <string>Contact type:</string>
-       </property>
-       <property name="textFormat" >
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0" >
-      <widget class="QLabel" name="label_4" >
-       <property name="text" >
-        <string>First Name (optional):</string>
-       </property>
-       <property name="textFormat" >
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="label_2" >
-       <property name="text" >
-        <string>Contact ID:</string>
-       </property>
-       <property name="textFormat" >
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0" >
+   <item row="2" column="0" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -490,7 +451,7 @@
      <property name="sizeHint" >
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>16</height>
       </size>
      </property>
     </spacer>

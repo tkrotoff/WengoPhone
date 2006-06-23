@@ -51,10 +51,11 @@ QtLogin::QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler)
 		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);
 	_ui->linkWengoAccountLabel->installEventFilter(mouseFilterCreateWengoAccount);
 
+	/*
 	MousePressEventFilter * mouseFilterUseWithoutAWengoAccount = new MousePressEventFilter(
 		this, SLOT(useWengoPhoneWithoutAWengoAccountClicked()), Qt::LeftButton);
 	_ui->linkUseWithoutAWengoAccountLabel->installEventFilter(mouseFilterUseWithoutAWengoAccount);
-
+	*/
 	connect(_ui->loginComboBox, SIGNAL(currentIndexChanged(const QString &)),
 		SLOT(currentIndexChanged(const QString &)));
 	connect(_ui->loginButton, SIGNAL(clicked()), SLOT(loginClicked()));
@@ -66,11 +67,6 @@ QtLogin::QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler)
 	_errorPalette.setColor(QPalette::WindowText, QColor(Qt::red));
 
 	_dontUpdateWidgets = false;
-
-	// hide for the moment (cf David)
-	_ui->label_3->hide();
-	_ui->linkUseWithoutAWengoAccountLabel->hide();
-
 
 	init();
 }

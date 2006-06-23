@@ -85,6 +85,17 @@ QtSimpleAddIMContact::~QtSimpleAddIMContact() {
 }
 
 void QtSimpleAddIMContact::saveContact() {
+	if (_ui.groupComboBox->currentText().isEmpty()) {
+		QMessageBox::warning(this,
+			tr("WengoPhone -- No group selected"),
+			tr("A contact must have a group, please set a group."),
+			QMessageBox::NoButton,
+			QMessageBox::NoButton,
+			QMessageBox::Ok);
+		return;
+	}
+
+	// Setting Contact information
 	std::string contactId = _ui.contactIdLineEdit->text().toStdString();
 	QString protocolName = _ui.contactTypeComboBox->currentText();
 	if (protocolName == IM_PROTOCOL_WENGO) {
@@ -92,21 +103,33 @@ void QtSimpleAddIMContact::saveContact() {
 	} else {
 		EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
 		IMContact imContact(imProtocol, contactId);
-		IMAccount * imAccount = *_cUserProfile.getIMAccountsOfProtocol(imProtocol).begin();
-		imContact.setIMAccount(imAccount);
+
+		std::set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
+		// FIXME: user should not be able to choose a protocol where he has no account
+		// Here if no IMAccount is found, the contact is added anyway but it will
+		// never be reachable and the user will never knows (until it adds an IMAccount).
+		if (list.size() > 0) {
+			IMAccount * imAccount = *_cUserProfile.getIMAccountsOfProtocol(imProtocol).begin();
+			imContact.setIMAccount(imAccount);
+		}
+
 		_contactProfile.addIMContact(imContact);
 	}
+	////
+
+	// Setting group
 	int index = _ui.groupComboBox->findText(_ui.groupComboBox->currentText());
-	QVariant groupId;
-	groupId = _ui.groupComboBox->itemData(index);
-	//If the group does not exist
+	QVariant groupId = _ui.groupComboBox->itemData(index);
 	if (groupId.isNull()) {
+		//If the group does not exist
 		std::string groupName = std::string(_ui.groupComboBox->currentText().toUtf8().data());
 		_cUserProfile.getCContactList().addContactGroup(groupName);
 		groupId = QString::fromStdString(_cUserProfile.getCContactList().getContactGroupIdFromName(groupName));
 	}
 	_contactProfile.setGroupId(groupId.toString().toStdString());
 	_contactProfile.setFirstName(_ui.nameLineEdit->text().toUtf8().data());
+	////
+
 	accept();
 }
 
