@@ -86,7 +86,7 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 
 	if (!connect(this, SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
 		qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)))) {
-		LOG_FATAL("Unable to connect signal\n");
+		LOG_FATAL("unable to connect signal");
 	}
 }
 
@@ -127,7 +127,7 @@ void QtContactManager::deleteContact() {
 	}
 	if (QMessageBox::question(_tree,
 		tr("Delete contact"),
-		tr("Do you really want to delete this contact ?"),
+		tr("Do you really want to delete this contact?"),
 		tr("&Yes"),
 		tr("&No"),
 		QString(),
@@ -502,7 +502,7 @@ void QtContactManager::inviteToConference() {
 		}
 	}
 	else {
-		LOG_FATAL("Don't call this function directly !!! \n");
+		LOG_FATAL("don't call this function directly");
 	}
 }
 
@@ -542,7 +542,10 @@ QMenu * QtContactManager::createMenu() {
 	connect(action, SIGNAL(triggered(bool)), SLOT(startChat(bool)));
 	action = menu->addAction(_trStringSendSMS);
 	connect(action, SIGNAL(triggered(bool)), SLOT(startSMS(bool)));
-	menu->addMenu(createConferenceMenu());
+
+	//FIXME Desactivated for the moment due to a crash
+	//menu->addMenu(createConferenceMenu());
+
 	menu->addSeparator();
 	action = menu->addAction(_trStringEditContact);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(editContact(bool)));
@@ -630,10 +633,11 @@ void QtContactManager::setMouseButton(Qt::MouseButton button) {
 
 void QtContactManager::moveContact(const QString & contactId,
 	const QString & srcContactGroupId, const QString & dstContactGroupId) {
-	LOG_DEBUG("Moving contact " +
+
+	LOG_DEBUG("moving contact=" +
 		contactId.toStdString() +
-		"from " + srcContactGroupId.toStdString() +
-		"to" + dstContactGroupId.toStdString());
+		" from=" + srcContactGroupId.toStdString() +
+		" to=" + dstContactGroupId.toStdString());
 
 	// If groups are hidden, there is nothing to move...
 	if (groupsAreHidden()) {

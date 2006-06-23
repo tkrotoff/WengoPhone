@@ -338,7 +338,9 @@ void QtSystray::connectionIsUpEventHandler() {
 }
 
 void QtSystray::connectionStateEventHandlerThreadSafe(bool connected) {
-	if (!connected) {
+	if (connected) {
+		setSystrayIcon(EnumPresenceState::MyPresenceStatusOk);
+	} else {
 		_trayIcon->setIcon(QPixmap(":/pics/systray/disconnected.png"));
 		_trayIcon->setToolTip(QString("WengoPhone - ") + tr("Internet Connection Error"));
 	}

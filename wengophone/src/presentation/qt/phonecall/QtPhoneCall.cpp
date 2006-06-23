@@ -197,7 +197,8 @@ QMenu * QtPhoneCall::createMenu() {
 	//Separator
 	menu->addSeparator();
 
-	menu->addAction(_actionInvite);
+	//FIXME Desactivated for the moment due to a crash
+	//menu->addAction(_actionInvite);
 
 	//Separator
 	menu->addSeparator();
