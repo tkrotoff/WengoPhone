@@ -123,7 +123,7 @@ void QtContactList::initThreadSafe() {
 		* this, _treeWidget, _treeWidget);
 
 	QtContactTreeMouseFilter * qtContactTreeMouseFilter =
-		new QtContactTreeMouseFilter(_cContactList, this, _treeWidget);
+		new QtContactTreeMouseFilter(_cContactList, _treeWidget, _treeWidget);
 	connect(qtContactTreeMouseFilter, SIGNAL(mouseClicked(Qt::MouseButton)),
 		_contactManager, SLOT(setMouseButton(Qt::MouseButton)));
 	connect(qtContactTreeMouseFilter, SIGNAL(mergeContacts(QString, QString)),
