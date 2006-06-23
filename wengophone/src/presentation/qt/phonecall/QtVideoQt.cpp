@@ -50,6 +50,9 @@ QtVideoQt::QtVideoQt(QWidget * parent) {
 	//flipButton
 	QPushButton * flipButton = Object::findChild<QPushButton *>(_frame, "flipButton");
 	connect(flipButton, SIGNAL(clicked()), SLOT(flipWebcam()));
+#ifdef OS_WINDOWS
+	flipButton->hide();
+#endif
 
 	//fullScreenButton
 	_fullScreenButton = Object::findChild<QPushButton *>(_frame, "fullScreenButton");
@@ -156,7 +159,7 @@ void QtVideoQt::paintEvent() {
 #endif
 
 		painter.drawImage(xpos, ypos, _image.scaled(size,
-			Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+			Qt::IgnoreAspectRatio, Qt::FastTransformation));
 	}
 }
 
