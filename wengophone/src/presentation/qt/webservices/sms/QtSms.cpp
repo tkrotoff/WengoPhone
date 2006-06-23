@@ -29,7 +29,7 @@
 
 #include <util/Logger.h>
 
-const QString & QtSms::signatureSeparator = " -- ";
+static const QString SIGNATURE_SEPARATOR = " -- ";
 
 QtSms::QtSms(CSms & cSms)
 	: QObjectThreadSafe(NULL),
@@ -77,7 +77,7 @@ void QtSms::sendButtonClicked() {
 		QMessageBox::warning(_smsWindow,
 			tr("Wengo SMS service"),
 			tr("Your message is too long.\n"
-				"The length can not exeed 156 characters.\n"
+				"The length can not exceed 156 characters.\n"
 				"Don't forget to add your signature length."
 			  ));
 
@@ -124,9 +124,9 @@ void QtSms::setPhoneNumber(const QString & phoneNumber) {
 }
 
 void QtSms::setText(const QString & text) {
-	int pos = text.lastIndexOf(signatureSeparator);
+	int pos = text.lastIndexOf(SIGNATURE_SEPARATOR);
 	QString mess = text;
-	if(pos != -1) {
+	if (pos != -1) {
 		//extract the signature
 		setSignature(text.right(text.length() - pos - 4));
 		mess = text.left(pos);
@@ -146,8 +146,11 @@ bool QtSms::checkSmsLength() {
 QString QtSms::getCompleteMessage() {
 
 	QString completeMessage = _ui->smsText->toPlainText();
-	completeMessage += signatureSeparator;
-	completeMessage += _ui->signatureLineEdit->text();
+	QString signature = _ui->signatureLineEdit->text();
+	if (!signature.isEmpty()) {
+		completeMessage += SIGNATURE_SEPARATOR;
+		completeMessage += _ui->signatureLineEdit->text();
+	}
 
 	return completeMessage;
 }
