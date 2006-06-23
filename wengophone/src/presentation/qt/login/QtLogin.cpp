@@ -67,6 +67,11 @@ QtLogin::QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler)
 
 	_dontUpdateWidgets = false;
 
+	// hide for the moment (cf David)
+	_ui->label_3->hide();
+	_ui->linkUseWithoutAWengoAccountLabel->hide();
+
+
 	init();
 }
 
@@ -153,7 +158,7 @@ void QtLogin::setAutoLogin(bool autoLogin) {
 
 void QtLogin::init() {
 	_ui->loginComboBox->clear();
-	
+
 	std::vector<std::string> profileNames = _cUserProfileHandler.getUserProfileNames();
 
 	for (std::vector<std::string>::const_iterator it = profileNames.begin();
@@ -182,7 +187,7 @@ void QtLogin::slotUpdatedTranslation() {
 
 void QtLogin::loginClicked() {
 	std::string login = _ui->loginComboBox->currentText().toStdString();
-	
+
 	//FIXME: if login is empty we should create a default profile
 	if (!login.empty()) {
 		WengoAccount wengoAccount(login, _ui->passwordLineEdit->text().toStdString(), true);

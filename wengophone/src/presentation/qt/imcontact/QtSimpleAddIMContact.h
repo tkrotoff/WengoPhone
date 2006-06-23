@@ -58,6 +58,8 @@ private Q_SLOTS:
 
 	void advanced();
 
+	void currentIndexChanged (const QString & text);
+
 private:
 
 	bool haveAccount(EnumIMProtocol::IMProtocol imProtocol) const;

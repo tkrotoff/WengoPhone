@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>372</width>
-    <height>171</height>
+    <width>401</width>
+    <height>338</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -20,74 +20,9 @@
     <number>9</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>12</number>
    </property>
-   <item row="4" column="1" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="1" >
-    <widget class="QComboBox" name="groupComboBox" />
-   </item>
-   <item row="2" column="1" >
-    <widget class="QLineEdit" name="nameLineEdit" />
-   </item>
-   <item row="1" column="1" >
-    <widget class="QLineEdit" name="contactIdLineEdit" />
-   </item>
-   <item row="0" column="1" >
-    <widget class="QComboBox" name="contactTypeComboBox" />
-   </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_4" >
-     <property name="text" >
-      <string>Name</string>
-     </property>
-     <property name="textFormat" >
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
-      <string>Group</string>
-     </property>
-     <property name="textFormat" >
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
-      <string>Contact Id</string>
-     </property>
-     <property name="textFormat" >
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string>Contact type</string>
-     </property>
-     <property name="textFormat" >
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="2" >
+   <item row="4" column="0" colspan="3" >
     <layout class="QHBoxLayout" >
      <property name="margin" >
       <number>0</number>
@@ -118,7 +53,10 @@
      <item>
       <widget class="QPushButton" name="okButton" >
        <property name="text" >
-        <string>OK</string>
+        <string>Add</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/add.png</iconset>
        </property>
        <property name="default" >
         <bool>true</bool>
@@ -130,22 +68,444 @@
        <property name="text" >
         <string>Cancel</string>
        </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
+       </property>
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="2" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="0" colspan="3" >
+    <widget class="QLabel" name="accountLabel" >
+     <property name="palette" >
+      <palette>
+       <active>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>236</red>
+         <green>233</green>
+         <blue>216</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>241</red>
+         <green>239</green>
+         <blue>226</blue>
+        </color>
+        <color>
+         <red>172</red>
+         <green>168</green>
+         <blue>153</blue>
+        </color>
+        <color>
+         <red>157</red>
+         <green>155</green>
+         <blue>144</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>236</red>
+         <green>233</green>
+         <blue>216</blue>
+        </color>
+        <color>
+         <red>113</red>
+         <green>111</green>
+         <blue>100</blue>
+        </color>
+        <color>
+         <red>49</red>
+         <green>106</green>
+         <blue>197</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>232</red>
+         <green>232</green>
+         <blue>232</blue>
+        </color>
+       </active>
+       <inactive>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>236</red>
+         <green>233</green>
+         <blue>216</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>241</red>
+         <green>239</green>
+         <blue>226</blue>
+        </color>
+        <color>
+         <red>172</red>
+         <green>168</green>
+         <blue>153</blue>
+        </color>
+        <color>
+         <red>157</red>
+         <green>155</green>
+         <blue>144</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>236</red>
+         <green>233</green>
+         <blue>216</blue>
+        </color>
+        <color>
+         <red>113</red>
+         <green>111</green>
+         <blue>100</blue>
+        </color>
+        <color>
+         <red>236</red>
+         <green>233</green>
+         <blue>216</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>232</red>
+         <green>232</green>
+         <blue>232</blue>
+        </color>
+       </inactive>
+       <disabled>
+        <color>
+         <red>118</red>
+         <green>116</green>
+         <blue>108</blue>
+        </color>
+        <color>
+         <red>236</red>
+         <green>233</green>
+         <blue>216</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>245</red>
+         <green>244</green>
+         <blue>235</blue>
+        </color>
+        <color>
+         <red>172</red>
+         <green>168</green>
+         <blue>153</blue>
+        </color>
+        <color>
+         <red>157</red>
+         <green>155</green>
+         <blue>144</blue>
+        </color>
+        <color>
+         <red>118</red>
+         <green>116</green>
+         <blue>108</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>118</red>
+         <green>116</green>
+         <blue>108</blue>
+        </color>
+        <color>
+         <red>236</red>
+         <green>233</green>
+         <blue>216</blue>
+        </color>
+        <color>
+         <red>236</red>
+         <green>233</green>
+         <blue>216</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>49</red>
+         <green>106</green>
+         <blue>197</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>232</red>
+         <green>232</green>
+         <blue>232</blue>
+        </color>
+       </disabled>
+      </palette>
+     </property>
+     <property name="text" >
+      <string>&lt;span style="font-size:18pt;">Add a contact&lt;/span>&lt;br>&lt;br>&lt;span>With Wengo you can chat with your contacts watever&lt;br>their IM (&lt;b>MSN&lt;/b>, &lt;b>Yahoo!&lt;/b>, &lt;b>AIM&lt;/b>, &lt;b>Google talk&lt;/b> etc.).&lt;br>Use the "Tools / IM accounts" menu to login to those&lt;br>networks&lt;/span></string>
+     </property>
+     <property name="indent" >
+      <number>100</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="1" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="1" column="1" >
+      <widget class="QLineEdit" name="contactIdLineEdit" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" >
+      <widget class="QLabel" name="label_3" >
+       <property name="text" >
+        <string>Group:</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="QLineEdit" name="nameLineEdit" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" >
+      <widget class="QComboBox" name="groupComboBox" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QComboBox" name="contactTypeComboBox" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>Contact type:</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="label_4" >
+       <property name="text" >
+        <string>First Name (optional):</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>Contact ID:</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
-  <tabstop>contactTypeComboBox</tabstop>
   <tabstop>contactIdLineEdit</tabstop>
   <tabstop>nameLineEdit</tabstop>
   <tabstop>groupComboBox</tabstop>
   <tabstop>okButton</tabstop>
   <tabstop>cancelButton</tabstop>
   <tabstop>advancedConfigPushButton</tabstop>
+  <tabstop>contactTypeComboBox</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
  <connections/>
 </ui>
