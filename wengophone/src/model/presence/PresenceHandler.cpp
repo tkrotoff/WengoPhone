@@ -237,12 +237,15 @@ void PresenceHandler::authorizationRequestEventHandlerThreadSafe(IMAccount * imA
 }
 
 void PresenceHandler::subscribeStatusEventHandler(IMPresence & sender, const std::string & contactId, IMPresence::SubscribeStatus status) {
+/*
 	typedef ThreadEvent3<void (IMAccount * imAccount, std::string contactId, IMPresence::SubscribeStatus status),
 		IMAccount *, std::string, IMPresence::SubscribeStatus> MyThreadEvent;
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&PresenceHandler::subscribeStatusEventHandlerThreadSafe, this, _1, _2, _3), &sender.getIMAccount(), contactId, status);
 
 	_modelThread.postEvent(event);
+*/
+	subscribeStatusEventHandlerThreadSafe(&sender.getIMAccount(), contactId, status);
 }
 
 void PresenceHandler::subscribeStatusEventHandlerThreadSafe(IMAccount * imAccount, std::string contactId, IMPresence::SubscribeStatus status) {
