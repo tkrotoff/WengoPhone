@@ -107,11 +107,12 @@ static char *ph_get_call_contact(phcall_t *ca);
 
 #define PH_STREAM_CNG (1 << 30)
 
-
 static int ph_call_retrieve_payloads(phcall_t *ca, eXosip_event_t *je, int flags);
 static int ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags, int resumeflag);
+static int ph_call_media_stop(phcall_t * ca);
+static int ph_call_media_suspend(phcall_t *ca, int localhold);
 
-
+static int ph_tunnel_init2(char *sip_proxy);
 
 void ph_release_call(phcall_t *ca);
 static  int timeout = 500;
@@ -134,16 +135,11 @@ static void  _get_local_audio_sdp_port(char buf[]);
 
 static char*  _get_public_sip_port();
 
-
-
 void ph_message_progress(eXosip_event_t *je);
 static void ph_keep_refreshing();
 static void  ph_call_requestfailure(eXosip_event_t *je);
 
 static void ph_frame_display_cbk(void *ctx, void *event);
-
-static int ph_call_media_stop(phcall_t * ca);
-static int ph_call_media_suspend(phcall_t *ca, int localhold);
 
 #define nonempty(x)  ((x) && (x)[0])
 
