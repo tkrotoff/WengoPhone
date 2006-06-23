@@ -50,9 +50,9 @@ void ConferenceCallParticipant::joinConference() {
 		_waitForHoldState = true;
 
 		//FIXME hack, do not hold the first phone call of the conference, user has to do it himself
-		//if (_conferenceCall.getPhoneCallList().size() > 1) {
+		if (_conferenceCall.getPhoneCallList().size() > 1) {
 			_phoneCall.hold();
-		//}
+		}
 	}
 }
 

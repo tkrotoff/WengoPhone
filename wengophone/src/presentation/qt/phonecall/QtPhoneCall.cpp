@@ -35,6 +35,7 @@
 #include <control/CWengoPhone.h>
 
 #include <model/phonecall/PhoneCall.h>
+#include <model/phonecall/ConferenceCall.h>
 #include <model/phoneline/PhoneLine.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -83,7 +84,7 @@ void QtPhoneCall::initThreadSafe() {
 	//phoneNumberLabel
 	_nickNameLabel = Object::findChild < QLabel * > (_phoneCallWidget, "nickNameLabel");
 
-	// QString userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
+	//QString userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
 
 	QString userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getDisplayName());
 	if (userInfo.isEmpty()) {
@@ -284,13 +285,29 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		_hold = true;
 		break;
 
-	case EnumPhoneCallState::PhoneCallStateTalking:
+	case EnumPhoneCallState::PhoneCallStateTalking: {
 		_duration = 0;
 		_callTimer->start(1000);
 		_actionAcceptCall->setEnabled(false);
 		_actionHangupCall->setEnabled(true);
 		_statusLabel->setText(tr("Talking"));
+
+		//FIXME Hack again... tired to hack hack hack hack
+		ConferenceCall * conferenceCall = _cPhoneCall.getPhoneCall().getConferenceCall();
+		if (conferenceCall && conferenceCall->getPhoneCallList().size() == 1) {
+
+			_actionHold->setText(tr("Proceed conference"));
+			_statusLabel->setText(tr("Talking - conference"));
+			QMessageBox::question(
+				_qtWengoPhone->getWidget(),
+				tr("WengoPhone - Proceed Conference"),
+				tr("When you are ready to start the conference, click on the button below")
+				/*tr("&Proceed conference"), tr("&Cancel"),
+				QString(), 0, 1)*/);
+				_cPhoneCall.hold();
+		}
 		break;
+	}
 
 	case EnumPhoneCallState::PhoneCallStateDialing:
 		_actionAcceptCall->setEnabled(false);

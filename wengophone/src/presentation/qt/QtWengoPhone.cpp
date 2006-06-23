@@ -74,6 +74,7 @@
 #include <qtutil/Widget.h>
 #include <qtutil/Object.h>
 #include <qtutil/MouseEventFilter.h>
+#include <qtutil/WidgetBackgroundImage.h>
 
 #include <thread/Thread.h>
 #include <util/Logger.h>
@@ -764,18 +765,18 @@ void QtWengoPhone::showAccountSettings() {
 	}
 }
 
-//FIXME
+//FIXME hack hack hack hack tired of it
 void QtWengoPhone::showCreateConferenceCall() {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 		QDialog * conferenceDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/phonecall/ConferenceCallWidget.ui", _wengoPhoneWindow));
 
+		QLabel * conferenceLabel = Object::findChild<QLabel *>(conferenceDialog, "conferenceLabel");
+		WidgetBackgroundImage::setBackgroundImage(conferenceLabel, ":pics/headers/conference.png", true);
+
 		int ret = conferenceDialog->exec();
 
-		QLineEdit * phoneNumber1LineEdit;
-		QLineEdit * phoneNumber2LineEdit;
-
-		phoneNumber1LineEdit = Object::findChild<QLineEdit *>(conferenceDialog,"phoneNumber1LineEdit");
-		phoneNumber2LineEdit = Object::findChild<QLineEdit *>(conferenceDialog,"phoneNumber2LineEdit");
+		QLineEdit * phoneNumber1LineEdit = Object::findChild<QLineEdit *>(conferenceDialog, "phoneNumber1LineEdit");
+		QLineEdit * phoneNumber2LineEdit = Object::findChild<QLineEdit *>(conferenceDialog, "phoneNumber2LineEdit");
 
 		if (ret == QDialog::Accepted) {
 			IPhoneLine * phoneLine = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine();

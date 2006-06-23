@@ -8,12 +8,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>140</height>
+    <width>384</width>
+    <height>239</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Create a new conference</string>
+   <string>WengoPhone - Create a Conference</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -22,27 +22,315 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
+   <item row="3" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="0" colspan="2" >
+    <widget class="QLabel" name="conferenceLabel" >
+     <property name="palette" >
+      <palette>
+       <active>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>234</red>
+         <green>229</green>
+         <blue>220</blue>
+        </color>
+        <color>
+         <red>128</red>
+         <green>128</green>
+         <blue>128</blue>
+        </color>
+        <color>
+         <red>141</red>
+         <green>139</green>
+         <blue>133</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>64</red>
+         <green>64</green>
+         <blue>64</blue>
+        </color>
+        <color>
+         <red>10</red>
+         <green>36</green>
+         <blue>106</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>232</red>
+         <green>232</green>
+         <blue>232</blue>
+        </color>
+       </active>
+       <inactive>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>234</red>
+         <green>229</green>
+         <blue>220</blue>
+        </color>
+        <color>
+         <red>128</red>
+         <green>128</green>
+         <blue>128</blue>
+        </color>
+        <color>
+         <red>141</red>
+         <green>139</green>
+         <blue>133</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>64</red>
+         <green>64</green>
+         <blue>64</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>232</red>
+         <green>232</green>
+         <blue>232</blue>
+        </color>
+       </inactive>
+       <disabled>
+        <color>
+         <red>106</red>
+         <green>104</green>
+         <blue>100</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>233</red>
+         <green>231</green>
+         <blue>227</blue>
+        </color>
+        <color>
+         <red>128</red>
+         <green>128</green>
+         <blue>128</blue>
+        </color>
+        <color>
+         <red>141</red>
+         <green>139</green>
+         <blue>133</blue>
+        </color>
+        <color>
+         <red>106</red>
+         <green>104</green>
+         <blue>100</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>106</red>
+         <green>104</green>
+         <blue>100</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+        <color>
+         <red>10</red>
+         <green>36</green>
+         <blue>106</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>0</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>232</red>
+         <green>232</green>
+         <blue>232</blue>
+        </color>
+       </disabled>
+      </palette>
+     </property>
      <property name="text" >
-      <string>Phone number 1</string>
+      <string>&lt;span style="font-size:18pt;">Conference&lt;/span>&lt;br>&lt;br>&lt;span>Please enter two phone numbers or Wengo contact ID&lt;br>in order to create a 3-way conference&lt;/span></string>
+     </property>
+     <property name="indent" >
+      <number>100</number>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
+   <item row="2" column="1" >
     <widget class="QLineEdit" name="phoneNumber2LineEdit" />
    </item>
-   <item row="1" column="0" >
+   <item row="1" column="1" >
+    <widget class="QLineEdit" name="phoneNumber1LineEdit" />
+   </item>
+   <item row="2" column="0" >
     <widget class="QLabel" name="label_2" >
      <property name="text" >
-      <string>Phone number 2</string>
+      <string>Phone number 2:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="QLineEdit" name="phoneNumber1LineEdit" />
+   <item row="1" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Phone number 1:</string>
+     </property>
+    </widget>
    </item>
-   <item row="2" column="0" colspan="2" >
+   <item row="4" column="0" colspan="2" >
     <layout class="QHBoxLayout" >
      <property name="margin" >
       <number>0</number>
@@ -64,9 +352,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="okButton" >
+      <widget class="QPushButton" name="startButton" >
        <property name="text" >
-        <string>OK</string>
+        <string>Start</string>
        </property>
       </widget>
      </item>
@@ -85,13 +373,15 @@
  <tabstops>
   <tabstop>phoneNumber1LineEdit</tabstop>
   <tabstop>phoneNumber2LineEdit</tabstop>
-  <tabstop>okButton</tabstop>
+  <tabstop>startButton</tabstop>
   <tabstop>cancelButton</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
  <connections>
   <connection>
-   <sender>okButton</sender>
+   <sender>startButton</sender>
    <signal>clicked()</signal>
    <receiver>ConferenceCallWidget</receiver>
    <slot>accept()</slot>
