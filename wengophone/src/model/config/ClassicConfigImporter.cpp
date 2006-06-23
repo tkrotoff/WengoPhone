@@ -605,7 +605,7 @@ bool ClassicConfigImporter::importConfigFromV1toV3() {
 	last_user_t * lastUser = (last_user_t *) getLastWengoUser(classicPath + USERCONFIG_FILENAME, CONFIG_VERSION1);
 	if (lastUser)
 	{
-		WengoAccount wAccount(lastUser->login, lastUser->password, lastUser->auto_login);
+		WengoAccount wAccount(lastUser->login, lastUser->password, true);
 		userProfile.setWengoAccount(wAccount);
 
 		if (userProfile.isWengoAccountValid())
