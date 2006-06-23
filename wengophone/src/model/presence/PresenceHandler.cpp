@@ -203,6 +203,7 @@ void PresenceHandler::presenceStateChangedEventHandler(IMPresence & sender, Enum
 void PresenceHandler::presenceStateChangedEventHandlerThreadSafe(IMAccount * imAccount,
 	EnumPresenceState::PresenceState state, std::string note, std::string from) {
 
+	LOG_DEBUG("presence of=" + imAccount->getLogin() + " changed=" + EnumPresenceState::toString(state));
 	presenceStateChangedEvent(*this, state, note, IMContact(*imAccount, from));
 }
 
