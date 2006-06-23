@@ -24,6 +24,8 @@
 
 #include <QtGui>
 
+class QtVideoQtEventManager;
+
 class QtVideoQt : public QtVideo {
 	Q_OBJECT
 public:
@@ -42,6 +44,11 @@ public:
 
 	bool isFullScreen();
 
+	void fullScreen();
+
+	void unFullScreen();
+
+
 private Q_SLOTS:
 
 	void paintEvent();
@@ -51,10 +58,6 @@ private Q_SLOTS:
 	void fullScreenButtonClicked();
 
 private:
-
-	void fullScreen();
-
-	void unFullScreen();
 
 	QWidget * _videoWindow;
 
@@ -70,6 +73,20 @@ private:
 	bool _encrustLocalWebcam;
 
 	bool _fullScreen;
+
+	QtVideoQtEventManager * _qtVideoQtEventManager;
+};
+
+class QtVideoQtEventManager : public QObject {
+	Q_OBJECT
+	public:
+		QtVideoQtEventManager(QFrame * target, QtVideoQt * qtVideoQt);
+
+	protected:
+		bool eventFilter(QObject *obj, QEvent *event);
+
+	private:
+		QtVideoQt * _qtVideoQt;
 };
 
 #endif  //QTVIDEOQT_H

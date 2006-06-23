@@ -42,6 +42,8 @@ QtVideoQt::QtVideoQt(QWidget * parent) {
 	_frame = Object::findChild<QFrame *>(_videoWindow, "frame");
 	_frameWindowFlags = _frame->windowFlags();
 
+	_qtVideoQtEventManager = new QtVideoQtEventManager(_frame, this);
+
 	PaintEventFilter * paintFilter = new PaintEventFilter(this, SLOT(paintEvent()));
 	_frame->installEventFilter(paintFilter);
 
@@ -72,8 +74,11 @@ void QtVideoQt::showImage(piximage * remoteVideoFrame, piximage * localVideoFram
 
 	QSize size(640, 480); // will be the optimum interim resized image
 	if (_videoWindow) {
-		QSize frameSize = _videoWindow->frameSize(); // screen target size
-		if (frameSize.width() <= size.width()) {
+		// screen target size
+		//QSize frameSize = _videoWindow->frameSize();
+		QSize frameSize = _frame->frameRect().size();
+		
+		if (frameSize.width() < size.width()) {
 			size.setWidth(352);
 			size.setHeight(288);
 		}
@@ -98,8 +103,8 @@ void QtVideoQt::showImage(piximage * remoteVideoFrame, piximage * localVideoFram
 		const QBrush border_color = Qt::black;
 
 		// we force the ratio of the remote frame on the webcam frame (ignoring the webcam's aspect ratio)
-		unsigned width = size.width() / ratio;
-		unsigned height = size.height() / ratio;
+		unsigned width = (size.width() / ratio) & ~1;
+		unsigned height = (size.height() / ratio) & ~1;
 		unsigned posx = size.width() - width - offset_x;
 		unsigned posy = size.height() - height - offset_y;
 
@@ -108,8 +113,8 @@ void QtVideoQt::showImage(piximage * remoteVideoFrame, piximage * localVideoFram
 
 		QImage localImage(resizedLocalImage->width,
 			resizedLocalImage->height, QImage::Format_RGB32);
-	
-		memcpy(localImage.bits(), resizedLocalImage->data, 
+
+		memcpy(localImage.bits(), resizedLocalImage->data,
 			pix_size(resizedLocalImage->palette, resizedLocalImage->width, resizedLocalImage->height));
 
 		pix_free(resizedLocalImage);
@@ -150,12 +155,8 @@ void QtVideoQt::paintEvent() {
 		ypos = (frameSize.height() - size.height()) / 2;
 #endif
 
-		if((_image.width() < size.width()) || (_image.height() < size.height())) {
-			painter.drawImage(xpos, ypos, _image.scaled(size,
-				Qt::IgnoreAspectRatio, Qt::FastTransformation));
-		} else {
-			painter.drawImage(xpos, ypos, _image);
-		}
+		painter.drawImage(xpos, ypos, _image.scaled(size,
+			Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 	}
 }
 
@@ -176,7 +177,6 @@ void QtVideoQt::fullScreenButtonClicked() {
 	} else {
 		this->unFullScreen();
 	}
-	_fullScreen = !_fullScreen;
 }
 
 bool QtVideoQt::isFullScreen() {
@@ -214,7 +214,7 @@ void QtVideoQt::fullScreen() {
 		}
 	}
 #endif
-
+	_fullScreen = true;
 	_frame->showFullScreen();
 }
 
@@ -229,9 +229,31 @@ void QtVideoQt::unFullScreen() {
 	ChangeDisplaySettings(NULL, 0);
 #endif
 
+	_fullScreen = false;
 	_frame->show();
 }
 
 bool QtVideoQt::isInitialized() {
 	return true;
 }
+
+
+QtVideoQtEventManager::QtVideoQtEventManager(QFrame * target, QtVideoQt * qtVideoQt)
+	: QObject(target), _qtVideoQt(qtVideoQt) {
+	target->installEventFilter(this);
+}
+
+bool QtVideoQtEventManager::eventFilter(QObject *obj, QEvent *event) {
+
+	if (event->type() == QEvent::KeyPress) {
+		QKeyEvent * keyEvent = static_cast<QKeyEvent *>(event);
+
+		if( keyEvent->key() == Qt::Key_Escape) {
+			_qtVideoQt->unFullScreen();
+		}
+
+	}
+
+	return QObject::eventFilter(obj, event);
+}
+
