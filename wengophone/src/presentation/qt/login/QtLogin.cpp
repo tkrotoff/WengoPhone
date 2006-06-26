@@ -149,7 +149,7 @@ void QtLogin::needHelpClicked() {
 	std::string lang = config.getLanguage();
 
 	if (lang == "fr") {
-		WebBrowser::openUrl("https://www.wengo.fr/index.php?yawl[S]=wengo.public.homePage&yawl[K]=wengo.public.help");
+		WebBrowser::openUrl("http://wiki.wengo.fr/index.php/Accueil");
 	} else {
 		WebBrowser::openUrl("http://wiki.wengo.com/index.php/Main_Page");
 	}
