@@ -119,9 +119,9 @@ public:
 	 * Return the IMContact equals to given IMContact.
 	 *
 	 * @param imContact the desired IMContact
-	 * @return the IMContact
+	 * @return the IMContact or NULL if not found
 	 */
-	IMContact & getIMContact(const IMContact & imContact) const;
+	IMContact * getIMContact(const IMContact & imContact) const;
 
 	/**
 	 * @return Set of IMContact

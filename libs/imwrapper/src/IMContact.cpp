@@ -63,12 +63,19 @@ bool IMContact::operator == (const IMContact & imContact) const {
 bool IMContact::operator < (const IMContact & imContact) const {
 	bool result = false;
 
-	if (_imAccount && imContact._imAccount) {
-		result = ((*_imAccount < *(imContact._imAccount))
-			|| ((*_imAccount == *imContact._imAccount) && (cleanContactId() < imContact.cleanContactId())));
+	if (cleanContactId() < imContact.cleanContactId()) {
+		result = true;
 	} else {
-		result = ((getProtocol() < imContact.getProtocol())
-			|| ((getProtocol() == imContact.getProtocol()) && (cleanContactId() < imContact.cleanContactId())));
+		if (cleanContactId() == imContact.cleanContactId()) {
+			if ((_imAccount && imContact._imAccount) &&
+				((*_imAccount) < (*imContact._imAccount))) {
+				result = true;
+			} else {
+				if (getProtocol() < imContact.getProtocol()) {
+					result = true;
+				}
+			}
+		}
 	}
 
 	return result;

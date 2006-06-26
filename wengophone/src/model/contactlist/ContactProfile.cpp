@@ -116,8 +116,13 @@ bool ContactProfile::hasIMContact(const IMContact & imContact) const {
 	}
 }
 
-IMContact & ContactProfile::getIMContact(const IMContact & imContact) const {
-	return (IMContact &)*_imContactSet.find(imContact);
+IMContact * ContactProfile::getIMContact(const IMContact & imContact) const {
+	IMContactSet::const_iterator it = _imContactSet.find(imContact);
+	if (it != _imContactSet.end()) {
+		return ((IMContact *) &(*it));
+	} else {
+		return NULL;
+	}
 }
 
 void ContactProfile::setGroupId(const std::string & groupId) {

@@ -131,7 +131,7 @@ void ContactList::removeContact(Contact & contact) {
 	for (IMContactSet::const_iterator it = imContactSet.begin();
 		it != imContactSet.end();
 		++it) {
-		removeIMContact(contact, contact.getIMContact(*it));
+		removeIMContact(contact, *contact.getIMContact(*it));
 	}
 	////
 
@@ -240,13 +240,13 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 		// The PresenceState must not be changed if the PresenceState is
 		// UserDefined (used by PhApi to set the alias)
 		if (state != EnumPresenceState::PresenceStateUserDefined) {
-			contact->getIMContact(imContact).setPresenceState(state);
+			contact->getIMContact(imContact)->setPresenceState(state);
 			if (imContact.getIMAccount()->getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
-				contact->getIMContact(imContact).setAlias(alias);
+				contact->getIMContact(imContact)->setAlias(alias);
 			}
 		} else {
-			contact->getIMContact(imContact).setPresenceState(EnumPresenceState::PresenceStateOnline);
-			contact->getIMContact(imContact).setAlias(alias);
+			contact->getIMContact(imContact)->setPresenceState(EnumPresenceState::PresenceStateOnline);
+			contact->getIMContact(imContact)->setAlias(alias);
 		}
 	}
 }
@@ -387,7 +387,7 @@ void ContactList::contactIconChangedEventHandler(PresenceHandler & sender,
 
 	Contact * contact = findContactThatOwns(imContact);
 	if (contact) {
-		contact->getIMContact(imContact).setIcon(icon);
+		contact->getIMContact(imContact)->setIcon(icon);
 	} else {
 		LOG_DEBUG("IMContact not found: " + imContact.getContactId());
 	}
