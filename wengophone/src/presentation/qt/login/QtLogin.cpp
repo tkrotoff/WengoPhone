@@ -51,11 +51,21 @@ QtLogin::QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler)
 		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);
 	_ui->linkWengoAccountLabel->installEventFilter(mouseFilterCreateWengoAccount);
 
+
+	MousePressEventFilter * mouseFilterNeedHelp = new MousePressEventFilter(
+		this, SLOT(needHelpClicked()), Qt::LeftButton);
+	_ui->helpLabel->installEventFilter(mouseFilterNeedHelp);
+
+	MousePressEventFilter * mouseFilterForgotPassword = new MousePressEventFilter(
+		this, SLOT(forgotPasswordClicked()), Qt::LeftButton);
+	_ui->forgotPasswordLabel->installEventFilter(mouseFilterForgotPassword);
+
 	/*
 	MousePressEventFilter * mouseFilterUseWithoutAWengoAccount = new MousePressEventFilter(
 		this, SLOT(useWengoPhoneWithoutAWengoAccountClicked()), Qt::LeftButton);
 	_ui->linkUseWithoutAWengoAccountLabel->installEventFilter(mouseFilterUseWithoutAWengoAccount);
 	*/
+
 	connect(_ui->loginComboBox, SIGNAL(currentIndexChanged(const QString &)),
 		SLOT(currentIndexChanged(const QString &)));
 	connect(_ui->loginButton, SIGNAL(clicked()), SLOT(loginClicked()));
@@ -133,6 +143,29 @@ void QtLogin::createAccountLabelClicked() {
 		WebBrowser::openUrl("http://www.wengo.com/public/public.php?page=subscribe_wengos&lang=eng");
 	}
 }
+
+void QtLogin::needHelpClicked() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string lang = config.getLanguage();
+
+	if (lang == "fr") {
+		WebBrowser::openUrl("https://www.wengo.fr/index.php?yawl[S]=wengo.public.homePage&yawl[K]=wengo.public.help");
+	} else {
+		WebBrowser::openUrl("http://wiki.wengo.com/index.php/Main_Page");
+	}
+}
+
+void QtLogin::forgotPasswordClicked() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string lang = config.getLanguage();
+
+	if (lang == "fr") {
+		WebBrowser::openUrl("https://www.wengo.fr/index.php?yawl[S]=wengo.public.download&yawl[K]=wengo.public.displayLogin");
+	} else {
+		WebBrowser::openUrl("https://www.wengo.com/index.php?yawl[S]=wengo.public.download&yawl[K]=wengo.public.displayLogin");
+	}
+}
+
 
 void QtLogin::useWengoPhoneWithoutAWengoAccountClicked() {
 	LOG_DEBUG("Will use WengoPhone without a Wengo account");

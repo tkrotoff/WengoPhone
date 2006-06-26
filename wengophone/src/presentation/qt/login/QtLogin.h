@@ -71,7 +71,7 @@ public Q_SLOTS:
 	int showWithInvalidWengoAccount(WengoAccount wengoAccount);
 
 	/**
-	 * Will display the login dialog, add the given WengoAccount to the 
+	 * Will display the login dialog, add the given WengoAccount to the
 	 * profile list and select it as default.
 	 */
 	int showWithWengoAccount(WengoAccount wengoAccount);
@@ -81,6 +81,10 @@ public Q_SLOTS:
 private Q_SLOTS:
 
 	void createAccountLabelClicked();
+
+	void needHelpClicked();
+
+	void forgotPasswordClicked();
 
 	void useWengoPhoneWithoutAWengoAccountClicked();
 

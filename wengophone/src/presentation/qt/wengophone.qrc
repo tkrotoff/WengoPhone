@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/" >
+        <file>pics/Help-32x32.png</file>
         <file>pics/add.png</file>
         <file>pics/audio/microphone.png</file>
         <file>pics/audio/play.png</file>
@@ -26,6 +27,7 @@
         <file>pics/callbar/call_bar_button_on.png</file>
         <file>pics/callbar/call_bar_fill.png</file>
         <file>pics/callbar/call_bar_start.png</file>
+        <file>pics/cancel.png</file>
         <file>pics/chat/chat_call_bar_button.png</file>
         <file>pics/chat/chat_call_bar_button_on.png</file>
         <file>pics/chat/chat_emoticon_button.png</file>
@@ -51,8 +53,8 @@
         <file>pics/contact/wengo.png</file>
         <file>pics/contact/work.png</file>
         <file>pics/contact_border.png</file>
+        <file>pics/default-avatar.png</file>
         <file>pics/delete.png</file>
-        <file>pics/cancel.png</file>
         <file>pics/edit.png</file>
         <file>pics/exit.png</file>
         <file>pics/fond_avatar.png</file>
@@ -104,23 +106,23 @@
         <file>pics/profilebar/event/missed-calls.png</file>
         <file>pics/profilebar/event/new-message.png</file>
         <file>pics/protocols/aim.png</file>
-        <file>pics/protocols/aim_off.png</file>
         <file>pics/protocols/aim_error.png</file>
+        <file>pics/protocols/aim_off.png</file>
         <file>pics/protocols/jabber.png</file>
-        <file>pics/protocols/jabber_off.png</file>
         <file>pics/protocols/jabber_error.png</file>
+        <file>pics/protocols/jabber_off.png</file>
         <file>pics/protocols/msn.png</file>
-        <file>pics/protocols/msn_off.png</file>
         <file>pics/protocols/msn_error.png</file>
+        <file>pics/protocols/msn_off.png</file>
         <file>pics/protocols/sip.png</file>
-        <file>pics/protocols/sip_off.png</file>
         <file>pics/protocols/sip_error.png</file>
+        <file>pics/protocols/sip_off.png</file>
         <file>pics/protocols/wengo.png</file>
-        <file>pics/protocols/wengo_off.png</file>
         <file>pics/protocols/wengo_error.png</file>
+        <file>pics/protocols/wengo_off.png</file>
         <file>pics/protocols/yahoo.png</file>
-        <file>pics/protocols/yahoo_off.png</file>
         <file>pics/protocols/yahoo_error.png</file>
+        <file>pics/protocols/yahoo_off.png</file>
         <file>pics/status/away.png</file>
         <file>pics/status/donotdisturb.png</file>
         <file>pics/status/forward.png</file>
@@ -128,14 +130,6 @@
         <file>pics/status/offline.png</file>
         <file>pics/status/online.png</file>
         <file>pics/status/unknown.png</file>
-        <file>pics/systray/away.png</file>
-        <file>pics/systray/online.png</file>
-        <file>pics/systray/connecting.png</file>
-        <file>pics/systray/disconnected.png</file>
-        <file>pics/systray/donotdisturb.png</file>
-        <file>pics/systray/invisible.png</file>
-        <file>pics/systray/offline.png</file>
-        <file>pics/systray/online.png</file>
         <file>pics/statusbar/status-audio-offline.png</file>
         <file>pics/statusbar/status-audio-online.png</file>
         <file>pics/statusbar/status-earth-connecting.mng</file>
@@ -145,6 +139,13 @@
         <file>pics/statusbar/status-network-offline.png</file>
         <file>pics/statusbar/status-network-online-static.png</file>
         <file>pics/statusbar/status-network-online.mng</file>
+        <file>pics/systray/away.png</file>
+        <file>pics/systray/connecting.png</file>
+        <file>pics/systray/disconnected.png</file>
+        <file>pics/systray/donotdisturb.png</file>
+        <file>pics/systray/invisible.png</file>
+        <file>pics/systray/offline.png</file>
+        <file>pics/systray/online.png</file>
         <file>pics/toaster/chat.png</file>
         <file>pics/toaster/decrocher.png</file>
         <file>pics/toaster/raccrocher.png</file>
@@ -153,7 +154,6 @@
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
         <file>pics/wengo.png</file>
-        <file>pics/default-avatar.png</file>
     </qresource>
     <qresource prefix="/data" >
         <file>AUTHORS</file>
