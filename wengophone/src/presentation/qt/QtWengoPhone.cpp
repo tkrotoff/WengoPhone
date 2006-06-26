@@ -1107,8 +1107,10 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 		*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
 		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getConnectHandler(),
 		_ui->profileBar);
-	connect(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )), _qtSystray, SLOT(setSystrayIcon(QVariant )));
-	connect(_qtLanguage, SIGNAL(translationChangedSignal()), _qtProfileBar, SLOT(slotTranslationChanged()));
+	connect(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )),
+		_qtSystray, SLOT(setSystrayIcon(QVariant )), Qt::QueuedConnection);
+	connect(_qtLanguage, SIGNAL(translationChangedSignal()), 
+		_qtProfileBar, SLOT(slotTranslationChanged()));
 
 	//Add the profile bar
 	int profileBarIndex = _ui->profileBar->addWidget(_qtProfileBar);
