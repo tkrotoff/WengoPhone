@@ -91,7 +91,7 @@ of the License, or (at your option) any later version.</translation>
     </message>
     <message>
         <source>Contact Type (protocol):</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de contact (protocole):</translation>
     </message>
 </context>
 <context>
@@ -1221,7 +1221,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Contact Type (protocol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de contact (protocole)</translation>
     </message>
 </context>
 <context>
@@ -2298,16 +2298,17 @@ Utilisez le menu Outils -&gt; Comptes de messagerie pour vous connecter à ce r�
     </message>
     <message>
         <source>WengoPhone -- No group selected</source>
-        <translation type="unfinished">Wengophone -- Aucun groupe sélectionné</translation>
+        <translation>Wengophone -- Aucun groupe sélectionné</translation>
     </message>
     <message>
         <source>A contact must have a group, please set a group.</source>
-        <translation type="unfinished">Un contact doit être placé dans un groupe, veuillez sélectionnez un groupe pour votre contact.</translation>
+        <translation>Un contact doit être placé dans un groupe, veuillez sélectionnez un groupe pour votre contact.</translation>
     </message>
     <message>
         <source>You are not logged to this network
 Use &quot;the Tools / IM accounts&quot; menu to login to this network</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous n&apos;êtes pas connecté à ce réseau
+Allez dans Outils -&gt; Comptes de messagerie pour saisir un compte utilisant ce réseau</translation>
     </message>
 </context>
 <context>
@@ -2608,7 +2609,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Very good</source>
-        <translation>Très Bonne</translation>
+        <translation>Très bonne</translation>
     </message>
     <message>
         <source>Excellent</source>
@@ -2878,11 +2879,11 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Contact Type (protocol):</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de contact (protocole):</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Lucida Grande; font-size:13pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;You can chat with your contacts&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;whatever their IM&lt;br /&gt;(&lt;span style=&quot; font-weight:600;&quot;&gt;MSN&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;Yahoo!&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;AIM&lt;/span&gt;,&lt;span style=&quot; font-weight:600;&quot;&gt;Google talk&lt;/span&gt; etc.).&lt;br /&gt;Use the &quot;Tools / IM accounts&quot; menu&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to login to those networks.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Lucida Grande; font-size:13pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Ajouter un contact&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Vous pouvez chatter avec vos contacts&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;quelle que soit leur messagerie&lt;br /&gt;(&lt;span style=&quot; font-weight:600;&quot;&gt;MSN&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;Yahoo!&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;AIM&lt;/span&gt;,&lt;span style=&quot; font-weight:600;&quot;&gt;Google talk&lt;/span&gt; etc.).&lt;br /&gt;Utiliser le menu &quot;Outils&quot; -&gt; &quot;Comptes de messagere&quot;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;pour vous connecter à ces réseaux.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
