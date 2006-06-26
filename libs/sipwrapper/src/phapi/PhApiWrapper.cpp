@@ -634,12 +634,12 @@ void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, cons
 		break;
 
 	default:
-		LOG_FATAL("unknown presence state");
+		LOG_FATAL("unknown presence state=" + String::fromNumber(state));
 	}
 }
 
 void PhApiWrapper::sendMyIcon(const std::string & contactId, const std::string & iconFilename) {
-	if (iconFilename.length() == 0) {
+	if (iconFilename.empty()) {
 		return;
 	}
 

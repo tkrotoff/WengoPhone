@@ -35,8 +35,13 @@ PhApiIMPresence::PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrappe
 	: IMPresence(account),
 	_phApiWrapper(phApiWrapper) {
 
-	_phApiWrapper.presenceStateChangedEvent +=
+	LOG_DEBUG("PhApiIMPresence object created=" + String::fromNumber((int) this));
+
+	boost::signals::connection connection = _phApiWrapper.presenceStateChangedEvent +=
 		boost::bind(&PhApiIMPresence::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
+
+	LOG_DEBUG("boost connection=" + String::fromBoolean(connection.connected()));
+
 	_phApiWrapper.myPresenceStatusEvent +=
 		boost::bind(&PhApiIMPresence::myPresenceStatusEventHandler, this, _1, _2, _3);
 	_phApiWrapper.subscribeStatusEvent +=
@@ -46,6 +51,7 @@ PhApiIMPresence::PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrappe
 }
 
 PhApiIMPresence::~PhApiIMPresence() {
+	LOG_DEBUG("PhApiIMPresence object deleted=" + String::fromNumber((int) this));
 }
 
 void PhApiIMPresence::changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {
@@ -54,14 +60,14 @@ void PhApiIMPresence::changeMyPresence(EnumPresenceState::PresenceState state, c
 }
 
 void PhApiIMPresence::changeMyAlias(const std::string & nickname) {
-	// Hack: we use the user defined presence state of phApi to set the alias
+	//Hack: we use the user defined presence state of phApi to set the alias
 	_phApiWrapper.changeMyPresence(EnumPresenceState::PresenceStateUserDefined, nickname);
 }
 
 void PhApiIMPresence::changeMyIcon(const Picture & picture) {
 	_iconFilename = picture.getFilename();
 	_phApiWrapper._iconFilename = _iconFilename;
-	// Fixme: comment due to imcompatibility with Wengophone Classic
+	//FIXME commented due to imcompatibility with Wengophone Classic
 	/* std::list<std::string>::iterator it;
 
 	for (it = _contactList.begin(); it != _contactList.end(); it++)
@@ -91,6 +97,7 @@ void PhApiIMPresence::presenceStateChangedEventHandler(PhApiWrapper & sender, En
 }
 
 void PhApiIMPresence::myPresenceStatusEventHandler(PhApiWrapper & sender, EnumPresenceState::MyPresenceStatus status, const std::string & note) {
+	LOG_DEBUG("my presence status=" + String::fromNumber(status));
 	myPresenceStatusEvent(*this, status, note);
 }
 
