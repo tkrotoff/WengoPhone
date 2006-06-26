@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>405</width>
-    <height>325</height>
+    <width>387</width>
+    <height>298</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -110,7 +110,7 @@
      <item row="0" column="0" >
       <widget class="QLabel" name="label" >
        <property name="text" >
-        <string>Contact type:</string>
+        <string>Contact Type (protocol):</string>
        </property>
        <property name="textFormat" >
         <enum>Qt::PlainText</enum>
@@ -216,9 +216,9 @@
          <blue>0</blue>
         </color>
         <color>
-         <red>236</red>
-         <green>233</green>
-         <blue>216</blue>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
         </color>
         <color>
          <red>255</red>
@@ -226,19 +226,19 @@
          <blue>255</blue>
         </color>
         <color>
-         <red>241</red>
-         <green>239</green>
-         <blue>226</blue>
+         <red>234</red>
+         <green>229</green>
+         <blue>220</blue>
         </color>
         <color>
-         <red>172</red>
-         <green>168</green>
-         <blue>153</blue>
+         <red>128</red>
+         <green>128</green>
+         <blue>128</blue>
         </color>
         <color>
-         <red>157</red>
-         <green>155</green>
-         <blue>144</blue>
+         <red>141</red>
+         <green>139</green>
+         <blue>133</blue>
         </color>
         <color>
          <red>255</red>
@@ -261,19 +261,19 @@
          <blue>255</blue>
         </color>
         <color>
-         <red>236</red>
-         <green>233</green>
-         <blue>216</blue>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
         </color>
         <color>
-         <red>113</red>
-         <green>111</green>
-         <blue>100</blue>
+         <red>64</red>
+         <green>64</green>
+         <blue>64</blue>
         </color>
         <color>
-         <red>49</red>
-         <green>106</green>
-         <blue>197</blue>
+         <red>10</red>
+         <green>36</green>
+         <blue>106</blue>
         </color>
         <color>
          <red>255</red>
@@ -303,9 +303,9 @@
          <blue>0</blue>
         </color>
         <color>
-         <red>236</red>
-         <green>233</green>
-         <blue>216</blue>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
         </color>
         <color>
          <red>255</red>
@@ -313,19 +313,19 @@
          <blue>255</blue>
         </color>
         <color>
-         <red>241</red>
-         <green>239</green>
-         <blue>226</blue>
+         <red>234</red>
+         <green>229</green>
+         <blue>220</blue>
         </color>
         <color>
-         <red>172</red>
-         <green>168</green>
-         <blue>153</blue>
+         <red>128</red>
+         <green>128</green>
+         <blue>128</blue>
         </color>
         <color>
-         <red>157</red>
-         <green>155</green>
-         <blue>144</blue>
+         <red>141</red>
+         <green>139</green>
+         <blue>133</blue>
         </color>
         <color>
          <red>255</red>
@@ -348,19 +348,19 @@
          <blue>255</blue>
         </color>
         <color>
-         <red>236</red>
-         <green>233</green>
-         <blue>216</blue>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
         </color>
         <color>
-         <red>113</red>
-         <green>111</green>
-         <blue>100</blue>
+         <red>64</red>
+         <green>64</green>
+         <blue>64</blue>
         </color>
         <color>
-         <red>236</red>
-         <green>233</green>
-         <blue>216</blue>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
         </color>
         <color>
          <red>0</red>
@@ -385,39 +385,14 @@
        </inactive>
        <disabled>
         <color>
-         <red>118</red>
-         <green>116</green>
-         <blue>108</blue>
+         <red>106</red>
+         <green>104</green>
+         <blue>100</blue>
         </color>
         <color>
-         <red>236</red>
-         <green>233</green>
-         <blue>216</blue>
-        </color>
-        <color>
-         <red>255</red>
-         <green>255</green>
-         <blue>255</blue>
-        </color>
-        <color>
-         <red>245</red>
-         <green>244</green>
-         <blue>235</blue>
-        </color>
-        <color>
-         <red>172</red>
-         <green>168</green>
-         <blue>153</blue>
-        </color>
-        <color>
-         <red>157</red>
-         <green>155</green>
-         <blue>144</blue>
-        </color>
-        <color>
-         <red>118</red>
-         <green>116</green>
-         <blue>108</blue>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
         </color>
         <color>
          <red>255</red>
@@ -425,19 +400,44 @@
          <blue>255</blue>
         </color>
         <color>
-         <red>118</red>
-         <green>116</green>
-         <blue>108</blue>
+         <red>233</red>
+         <green>231</green>
+         <blue>227</blue>
         </color>
         <color>
-         <red>236</red>
-         <green>233</green>
-         <blue>216</blue>
+         <red>128</red>
+         <green>128</green>
+         <blue>128</blue>
         </color>
         <color>
-         <red>236</red>
-         <green>233</green>
-         <blue>216</blue>
+         <red>141</red>
+         <green>139</green>
+         <blue>133</blue>
+        </color>
+        <color>
+         <red>106</red>
+         <green>104</green>
+         <blue>100</blue>
+        </color>
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+        <color>
+         <red>106</red>
+         <green>104</green>
+         <blue>100</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
+        </color>
+        <color>
+         <red>212</red>
+         <green>208</green>
+         <blue>200</blue>
         </color>
         <color>
          <red>0</red>
@@ -445,9 +445,9 @@
          <blue>0</blue>
         </color>
         <color>
-         <red>49</red>
-         <green>106</green>
-         <blue>197</blue>
+         <red>10</red>
+         <green>36</green>
+         <blue>106</blue>
         </color>
         <color>
          <red>255</red>

@@ -433,12 +433,12 @@ void UserProfile::connectedEventHandler(ConnectHandler & sender, IMAccount & imA
 }
 
 void UserProfile::loadHistory() {
-    _history->load(getProfileDirectory() + "history.xml");
-    historyLoadedEvent(*this, *_history);
+	_history->load(getProfileDirectory() + "history.xml");
+	historyLoadedEvent(*this, *_history);
 }
 
 void UserProfile::saveHistory() {
-    _history->save(getProfileDirectory() + "history.xml");
+	_history->save(getProfileDirectory() + "history.xml");
 }
 
 bool UserProfile::hasWengoAccount() const {
@@ -484,4 +484,3 @@ bool UserProfile::isWengoAccountValid() {
 
 	return result;
 }
-

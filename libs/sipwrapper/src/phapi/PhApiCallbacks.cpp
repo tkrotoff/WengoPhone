@@ -263,8 +263,6 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 	}
 }
 
-#include <cstdio>
-
 void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * info) {
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 	IMChatSession * imChatSession;
@@ -347,7 +345,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	}
 
 	default:
-		LOG_FATAL("unknown message event");
+		LOG_FATAL("unknown message event=" + String::fromNumber(info->event));
 	}
 }
 

@@ -34,6 +34,10 @@ Presence::Presence(IMAccount & imAccount)
 	_imPresence = IMWrapperFactory::getFactory().createIMPresence(_imAccount);
 
 	_imPresence->presenceStateChangedEvent += presenceStateChangedEvent;
+
+	//For debug reason
+	_imPresence->presenceStateChangedEvent += boost::bind(&Presence::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
+
 	_imPresence->myPresenceStatusEvent += myPresenceStatusEvent;
 	_imPresence->subscribeStatusEvent += subscribeStatusEvent;
 	_imPresence->authorizationRequestEvent += authorizationRequestEvent;
@@ -78,6 +82,9 @@ void Presence::authorizeContact(const std::string & contactId, bool authorized, 
 
 void Presence::setState(EnumPresenceState::PresenceState state) {
 	switch(state) {
+	case EnumPresenceState::PresenceStateUnknown:
+		//Do nothing
+		break;
 	case EnumPresenceState::PresenceStateOnline:
 		_state = _state->online();
 		break;
@@ -97,6 +104,12 @@ void Presence::setState(EnumPresenceState::PresenceState state) {
 		_state = _state->forward();
 		break;
 	default:
-		LOG_FATAL("EnumPresenceState::PresenceState unknown state=" + String::fromNumber(state));
+		LOG_FATAL("unknown presence state=" + String::fromNumber(state));
 	}
+}
+
+void Presence::presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
+		const std::string & alias, const std::string & from) {
+
+	LOG_DEBUG("presence of=" + from + " changed=" + EnumPresenceState::toString(state));
 }

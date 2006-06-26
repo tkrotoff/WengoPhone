@@ -21,6 +21,7 @@
 
 #include "PhApiWrapper.h"
 
+#include <util/Logger.h>
 #include <util/Picture.h>
 #include <util/Path.h>
 #include <util/File.h>
@@ -34,13 +35,13 @@ PhApiIMPresence::PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrappe
 	: IMPresence(account),
 	_phApiWrapper(phApiWrapper) {
 
-	_phApiWrapper.presenceStateChangedEvent += 
+	_phApiWrapper.presenceStateChangedEvent +=
 		boost::bind(&PhApiIMPresence::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
-	_phApiWrapper.myPresenceStatusEvent += 
+	_phApiWrapper.myPresenceStatusEvent +=
 		boost::bind(&PhApiIMPresence::myPresenceStatusEventHandler, this, _1, _2, _3);
-	_phApiWrapper.subscribeStatusEvent += 
+	_phApiWrapper.subscribeStatusEvent +=
 		boost::bind(&PhApiIMPresence::subscribeStatusEventHandler, this, _1, _2, _3);
-	_phApiWrapper.contactIconChangedEvent += 
+	_phApiWrapper.contactIconChangedEvent +=
 		boost::bind(&PhApiIMPresence::contactIconChangedEventHandler, this, _1, _2, _3);
 }
 
@@ -84,6 +85,7 @@ void PhApiIMPresence::authorizeContact(const std::string & contactId, bool auhor
 }
 
 void PhApiIMPresence::presenceStateChangedEventHandler(PhApiWrapper & sender, EnumPresenceState::PresenceState state, const std::string & note, const std::string & from) {
+	LOG_DEBUG("contact=" + from + " presence=" + EnumPresenceState::toString(state));
 	presenceStateChangedEvent(*this, state, note, from);
 	//_phApiWrapper.sendMyIcon(from, _iconFilename);
 }

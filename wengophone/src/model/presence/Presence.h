@@ -60,7 +60,6 @@ public:
 	 */
 	Event<void (IMPresence & sender, const std::string & contactId, const std::string & message)> authorizationRequestEvent;
 
-
 	/**
 	 * @see IMPresence::contactIconChangedEvent
 	 */
@@ -118,6 +117,14 @@ private:
 	 * @param the desired state
 	 */
 	void setState(EnumPresenceState::PresenceState state);
+
+	/**
+	 * Catches presenceStateChangedEvent for debug reason.
+	 *
+	 * Shows a LOG_DEBUG() message.
+	 */
+	void presenceStateChangedEventHandler(IMPresence & sender, EnumPresenceState::PresenceState state,
+		const std::string & alias, const std::string & from);
 
 	IMAccount & _imAccount;
 

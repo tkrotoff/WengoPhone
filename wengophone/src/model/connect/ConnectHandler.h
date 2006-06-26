@@ -35,7 +35,6 @@
 class Connect;
 class IMAccount;
 class NetworkObserver;
-class PresenceHandler;
 class Thread;
 class UserProfile;
 class WengoPhone;
@@ -118,7 +117,7 @@ private:
 	 */
 	void connectionIsUpEventHandler(NetworkObserver & sender);
 	void connectionIsUpEventHandlerThreadSafe();
-	
+
 	/**
 	 * Handle NetworkObserver::connectionIsDownEvent
 	 */

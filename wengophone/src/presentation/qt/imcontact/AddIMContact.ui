@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>334</width>
-    <height>242</height>
+    <width>394</width>
+    <height>247</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -25,7 +25,7 @@
    <item row="0" column="0" >
     <widget class="QLabel" name="label_3" >
      <property name="text" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Contact type&lt;span style=" font-size:8pt;">:&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+      <string>Contact Type (protocol):</string>
      </property>
     </widget>
    </item>
@@ -111,6 +111,9 @@
       <widget class="QPushButton" name="cancelButton" >
        <property name="text" >
         <string>Cancel</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/cancel.png</iconset>
        </property>
       </widget>
      </item>

@@ -41,7 +41,7 @@ QtSimpleAddIMContact::QtSimpleAddIMContact(CUserProfile & cUserProfile,
 
 	_ui.setupUi(this);
 
-	WidgetBackgroundImage::setBackgroundImage(_ui.accountLabel, ":pics/headers/add-account.png", true);
+	WidgetBackgroundImage::setBackgroundImage(_ui.accountLabel, ":pics/headers/new-contact.png", true);
 
 	ContactGroupVector tmp = _cUserProfile.getCContactList().getContactGroups();
 	ContactGroupVector::const_iterator it;

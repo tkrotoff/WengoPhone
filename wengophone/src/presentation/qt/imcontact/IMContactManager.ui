@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>410</width>
-    <height>152</height>
+    <width>311</width>
+    <height>163</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -49,7 +49,7 @@
         </column>
         <column>
          <property name="text" >
-          <string>Protocol</string>
+          <string>Contact Type (protocol)</string>
          </property>
         </column>
        </widget>

@@ -30,7 +30,8 @@ const unsigned RECONNECT_INTERVAL = 20000;
 const unsigned RECONNECT_RETRY = 5;
 
 Connect::Connect(IMAccount & account, UserProfile & userProfile)
-	: _imAccount(account), _userProfile(userProfile) {
+	: _imAccount(account),
+	_userProfile(userProfile) {
 
 	_imConnect = IMWrapperFactory::getFactory().createIMConnect(account);
 
@@ -39,7 +40,7 @@ Connect::Connect(IMAccount & account, UserProfile & userProfile)
 		boost::bind(&Connect::connectedEventHandler, this, _1);
 
 	_imConnect->disconnectedEvent += disconnectedEvent;
-	_imConnect->disconnectedEvent += 
+	_imConnect->disconnectedEvent +=
 		boost::bind(&Connect::disconnectedEventHandler, this, _1, _2, _3);
 
 	_imConnect->connectionProgressEvent += connectionProgressEvent;
@@ -77,7 +78,7 @@ void Connect::timeoutEventHandler(Timer & sender) {
 		}
 		_imConnect->connect();
 	} else {
-		// Either the user as cancelled the connection 
+		// Either the user as cancelled the connection
 		// nor the retry count has been exceeded
 		_timer.stop();
 		_timerIsRunning = false;

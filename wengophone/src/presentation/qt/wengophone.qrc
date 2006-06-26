@@ -52,6 +52,7 @@
         <file>pics/contact/work.png</file>
         <file>pics/contact_border.png</file>
         <file>pics/delete.png</file>
+        <file>pics/cancel.png</file>
         <file>pics/edit.png</file>
         <file>pics/exit.png</file>
         <file>pics/fond_avatar.png</file>
@@ -61,7 +62,7 @@
         <file>pics/headers/conference.png</file>
         <file>pics/headers/login.png</file>
         <file>pics/headers/new-account.png</file>
-        <file>pics/headers/add-account.png</file>
+        <file>pics/headers/new-contact.png</file>
         <file>pics/headers/search.png</file>
         <file>pics/history/call_incoming.png</file>
         <file>pics/history/call_missed.png</file>

@@ -21,8 +21,6 @@
 
 #include <model/connect/Connect.h>
 #include <model/network/NetworkObserver.h>
-#include <model/presence/Presence.h>
-#include <model/presence/PresenceHandler.h>
 #include <model/profile/UserProfile.h>
 
 #include <imwrapper/IMAccount.h>
@@ -53,7 +51,7 @@ ConnectHandler::~ConnectHandler() {
 void ConnectHandler::connect(IMAccount & imAccount) {
 	IMAccount * actIMAccount = findIMAccount(_actualIMAccount, imAccount);
 	if (!actIMAccount) {
-		LOG_DEBUG("This IMAccount has not yet been added. Pending connection.");
+		LOG_DEBUG("this IMAccount has not yet been added: pending connection");
 		_pendingConnections.insert(imAccount);
 		return;
 	}
@@ -114,7 +112,7 @@ void ConnectHandler::disconnectedEventHandler(IMConnect & sender, bool connectio
 	_modelThread.postEvent(event);
 	FIXME: crashes when trying to change UserProfile
 */
-	disconnectedEventHandlerThreadSafe(&sender.getIMAccount(), connectionError, reason);	
+	disconnectedEventHandlerThreadSafe(&sender.getIMAccount(), connectionError, reason);
 }
 
 void ConnectHandler::disconnectedEventHandlerThreadSafe(IMAccount * imAccount, bool connectionError, std::string reason) {

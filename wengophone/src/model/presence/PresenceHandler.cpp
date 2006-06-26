@@ -33,7 +33,9 @@
 using namespace std;
 
 PresenceHandler::PresenceHandler(UserProfile & userProfile, Thread & modelThread)
-: _userProfile(userProfile), _modelThread(modelThread) {
+	: _userProfile(userProfile),
+	_modelThread(modelThread) {
+
 	_userProfile.newIMAccountAddedEvent +=
 		boost::bind(&PresenceHandler::newIMAccountAddedEventHandler, this, _1, _2);
 	_userProfile.getConnectHandler().connectedEvent +=
@@ -46,10 +48,10 @@ PresenceHandler::~PresenceHandler() {
 }
 
 void PresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {
-	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *) imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
-		LOG_DEBUG("subscribing to Presence of: " + imContact.getContactId());
+		LOG_DEBUG("subscribing to presence of=" + imContact.getContactId());
 		(*it).second->subscribeToPresenceOf(imContact.getContactId());
 	} else {
 		//Presence for 'protocol' has not yet been created. The contactId is pushed in the pending subscription list
@@ -58,12 +60,12 @@ void PresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {
 }
 
 void PresenceHandler::blockContact(const IMContact & imContact) {
-	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *) imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
-		LOG_DEBUG("blocking Contact: " + imContact.getContactId()
-			+ " of IMAccount: " + imContact.getIMAccount()->getLogin()
-				+ " of protocol " + String::fromNumber(imContact.getIMAccount()->getProtocol()));
+		LOG_DEBUG("blocking contact=" + imContact.getContactId()
+			+ " of IMAccount=" + imContact.getIMAccount()->getLogin()
+				+ " of protocol=" + String::fromNumber(imContact.getIMAccount()->getProtocol()));
 
 		(*it).second->blockContact(imContact.getContactId());
 	} else {
@@ -72,12 +74,12 @@ void PresenceHandler::blockContact(const IMContact & imContact) {
 }
 
 void PresenceHandler::unblockContact(const IMContact & imContact) {
-	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *) imContact.getIMAccount());
 
 	if (it != _presenceMap.end()) {
-		LOG_DEBUG("unblocking Contact: " + imContact.getContactId()
-			+ " of IMAccount: " + imContact.getIMAccount()->getLogin()
-				+ " of protocol " + String::fromNumber(imContact.getIMAccount()->getProtocol()));
+		LOG_DEBUG("unblocking contact=" + imContact.getContactId()
+			+ " of IMAccount=" + imContact.getIMAccount()->getLogin()
+				+ " of protocol=" + String::fromNumber(imContact.getIMAccount()->getProtocol()));
 
 		(*it).second->unblockContact(imContact.getContactId());
 	} else {
@@ -89,8 +91,8 @@ void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount &
 	PresenceMap::const_iterator it = _presenceMap.find(&imAccount);
 
 	if (it != _presenceMap.end()) {
-		LOG_DEBUG("an account is connected: login: " + imAccount.getLogin()
-			+ " protocol: " + String::fromNumber(imAccount.getProtocol()));
+		LOG_DEBUG("an account is connected, login=" + imAccount.getLogin()
+			+ " protocol=" + String::fromNumber(imAccount.getProtocol()));
 
 		EnumPresenceState::PresenceState presenceState = (*it).first->getPresenceState();
 		if (presenceState == EnumPresenceState::PresenceStateOffline) {
@@ -102,7 +104,7 @@ void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount &
 		//Launch all pending subscriptions
 		IMContactMultiMap::iterator pendIt = _pendingSubscriptions.find(&imAccount);
 		while (pendIt != _pendingSubscriptions.end()) {
-			LOG_DEBUG("subscribing to Presence of: " + (*pendIt).second->getContactId());
+			LOG_DEBUG("subscribing to presence of=" + (*pendIt).second->getContactId());
 			(*it).second->subscribeToPresenceOf((*pendIt).second->getContactId());
 			//TODO: should we keep the list in case of disconnection?
 			_pendingSubscriptions.erase(pendIt);
@@ -117,7 +119,7 @@ void PresenceHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccoun
 	PresenceMap::iterator it = _presenceMap.find(&imAccount);
 
 	LOG_DEBUG("an account is disconnected, login=" + imAccount.getLogin()
-		+ ", protocol=" + String::fromNumber(imAccount.getProtocol()));
+		+ " protocol=" + String::fromNumber(imAccount.getProtocol()));
 	if (it != _presenceMap.end()) {
 		// The presence state is now used to save the last presence state
 		// used when connected. @see IMAccount::_presenceState
@@ -131,8 +133,8 @@ void PresenceHandler::changeMyPresenceState(EnumPresenceState::PresenceState sta
 	const string & note, IMAccount * imAccount) {
 
 	LOG_DEBUG("changing MyPresenceState for "
-		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol " + String::fromNumber(imAccount->getProtocol()))
-		+ " with state " + String::fromNumber(state) + " and note " + note);
+		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol=" + String::fromNumber(imAccount->getProtocol()))
+		+ " with state=" + String::fromNumber(state) + " and note=" + note);
 
 	if (!imAccount) {
 		for (PresenceMap::const_iterator it = _presenceMap.begin(); it != _presenceMap.end(); it++) {
@@ -150,8 +152,8 @@ void PresenceHandler::changeMyPresenceState(EnumPresenceState::PresenceState sta
 
 void PresenceHandler::changeMyAlias(const string & alias, IMAccount * imAccount) {
 	LOG_DEBUG("changing alias for "
-		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol " + String::fromNumber(imAccount->getProtocol()))
-		+ " with alias " + alias);
+		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol=" + String::fromNumber(imAccount->getProtocol()))
+		+ " with alias=" + alias);
 
 	if (!imAccount) {
 		for (PresenceMap::const_iterator it = _presenceMap.begin(); it != _presenceMap.end(); it++) {
@@ -169,7 +171,7 @@ void PresenceHandler::changeMyAlias(const string & alias, IMAccount * imAccount)
 
 void PresenceHandler::changeMyIcon(const Picture & picture, IMAccount * imAccount) {
 	LOG_DEBUG("changing icon for "
-		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol " + String::fromNumber(imAccount->getProtocol())));
+		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol=" + String::fromNumber(imAccount->getProtocol())));
 
 	if (!imAccount) {
 		for (PresenceMap::const_iterator it = _presenceMap.begin(); it != _presenceMap.end(); it++) {
@@ -264,10 +266,10 @@ PresenceHandler::PresenceMap::iterator PresenceHandler::findPresence(PresenceMap
 }
 
 void PresenceHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	PresenceMap::const_iterator i = _presenceMap.find(&imAccount);
+	PresenceMap::const_iterator it = _presenceMap.find(&imAccount);
 
 	//Presence for this IMAccount has not yet been created
-	if (i == _presenceMap.end()) {
+	if (it == _presenceMap.end()) {
 		Presence * presence = new Presence(imAccount);
 		_presenceMap[&imAccount] = presence;
 
@@ -302,7 +304,7 @@ void PresenceHandler::imAccountDeadEventHandler(IMAccount & sender) {
 }
 
 Picture PresenceHandler::getContactIcon(const IMContact & imContact) {
-	//LOG_DEBUG("Getting icon of " + imContact.getContactId());
+	//LOG_DEBUG("getting icon of=" + imContact.getContactId());
 
 	//PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
 
