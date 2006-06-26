@@ -677,7 +677,8 @@ host_resolved(gpointer data, gint source, GaimInputCondition cond)
 		char message[1024];
 		g_snprintf(message, sizeof(message), "Error reading from DNS child: %s",strerror(errno));
 		gaim_debug_error("dns", "%s\n", message);
-		req->callback(NULL, req->data, message);
+		if (req && req->callback)
+			req->callback(NULL, req->data, message);
 		req_free(req);
 		return;
 	} else if (rc == 0) {
@@ -685,14 +686,16 @@ host_resolved(gpointer data, gint source, GaimInputCondition cond)
 		g_snprintf(message, sizeof(message), "EOF reading from DNS child");
 		close(req->fd_out);
 		gaim_debug_error("dns", "%s\n", message);
-		req->callback(NULL, req->data, message);
+		if (req && req->callback)
+			req->callback(NULL, req->data, message);
 		req_free(req);
 		return;
 	}
 
 /*	wait4(req->dns_pid, NULL, WNOHANG, NULL); */
 
-	req->callback(hosts, req->data, NULL);
+	if (req && req->callback)
+		req->callback(hosts, req->data, NULL);
 
 	release_dns_child(req);
 }
