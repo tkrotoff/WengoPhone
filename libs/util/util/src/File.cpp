@@ -300,12 +300,16 @@ FileWriter::FileWriter(const std::string & filename, bool binaryMode)
 	_fileOpen = false;
 }
 
-FileWriter::FileWriter(const File & file)
+FileWriter::FileWriter(const File & file, bool binaryMode)
 	: File(file) {
+	_binaryMode = binaryMode;
+	_fileOpen = false;
 }
 
-FileWriter::FileWriter(const FileWriter & fileWriter)
+FileWriter::FileWriter(const FileWriter & fileWriter, bool binaryMode)
 	: File(fileWriter) {
+	_binaryMode = binaryMode;
+	_fileOpen = false;
 }
 
 FileWriter::~FileWriter() {
@@ -342,4 +346,3 @@ void FileWriter::close() {
 	LOG_DEBUG("file=" + _filename + " saved");
 	_file.close();
 }
-

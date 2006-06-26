@@ -233,9 +233,9 @@ public:
 
 	FileWriter(const std::string & filename, bool binaryMode = true);
 
-	FileWriter(const FileWriter & fileWriter);
+	FileWriter(const FileWriter & fileWriter, bool binaryMode = true);
 
-	FileWriter(const File & file);
+	FileWriter(const File & file, bool binaryMode = true);
 
 	~FileWriter();
 
