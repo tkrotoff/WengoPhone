@@ -45,8 +45,8 @@ QtSimpleAddIMContact::QtSimpleAddIMContact(CUserProfile & cUserProfile,
 
 	WidgetBackgroundImage::setBackgroundImage(_ui.accountLabel, ":pics/headers/login.png", true);
 
-	setMinimumSize(QSize(pixmap.width()+8,0));
-	setMaximumSize(QSize(pixmap.width()+8,0));
+//	setMinimumSize(QSize(pixmap.width()+8,0));
+//	setMaximumSize(QSize(pixmap.width()+8,0));
 
 	ContactGroupVector tmp = _cUserProfile.getCContactList().getContactGroups();
 	ContactGroupVector::const_iterator it;
@@ -165,8 +165,8 @@ void QtSimpleAddIMContact::currentIndexChanged (const QString & text) {
 			QMessageBox::Information,
 			QMessageBox::Ok, QMessageBox::NoButton,
 			QMessageBox::NoButton,this);
-
 			msgBox.exec();
+			_ui.contactTypeComboBox->setCurrentIndex(0);
 		}
 	}
 }
