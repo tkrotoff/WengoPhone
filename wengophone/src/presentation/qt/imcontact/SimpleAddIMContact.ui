@@ -22,7 +22,137 @@
    <property name="spacing" >
     <number>6</number>
    </property>
+   <item row="2" column="0" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="1" column="1" >
+      <widget class="QLineEdit" name="contactIdLineEdit" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>212</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" >
+      <widget class="QLabel" name="label_3" >
+       <property name="text" >
+        <string>Group:</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="QLineEdit" name="nameLineEdit" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>212</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" >
+      <widget class="QComboBox" name="groupComboBox" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>212</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="editable" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QComboBox" name="contactTypeComboBox" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>212</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>Contact type:</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="label_4" >
+       <property name="text" >
+        <string>First Name (optional):</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>Contact ID:</string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="3" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="0" >
     <layout class="QGridLayout" >
      <property name="margin" >
       <number>0</number>
@@ -70,99 +200,6 @@
        </property>
        <property name="default" >
         <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="1" column="1" >
-      <widget class="QLineEdit" name="contactIdLineEdit" >
-       <property name="minimumSize" >
-        <size>
-         <width>212</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" >
-      <widget class="QLabel" name="label_3" >
-       <property name="text" >
-        <string>Group:</string>
-       </property>
-       <property name="textFormat" >
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1" >
-      <widget class="QLineEdit" name="nameLineEdit" >
-       <property name="minimumSize" >
-        <size>
-         <width>212</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1" >
-      <widget class="QComboBox" name="groupComboBox" >
-       <property name="minimumSize" >
-        <size>
-         <width>212</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="editable" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" >
-      <widget class="QComboBox" name="contactTypeComboBox" >
-       <property name="minimumSize" >
-        <size>
-         <width>212</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" >
-      <widget class="QLabel" name="label" >
-       <property name="text" >
-        <string>Contact type:</string>
-       </property>
-       <property name="textFormat" >
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0" >
-      <widget class="QLabel" name="label_4" >
-       <property name="text" >
-        <string>First Name (optional):</string>
-       </property>
-       <property name="textFormat" >
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="label_2" >
-       <property name="text" >
-        <string>Contact ID:</string>
-       </property>
-       <property name="textFormat" >
-        <enum>Qt::PlainText</enum>
        </property>
       </widget>
      </item>
@@ -436,14 +473,17 @@
       </palette>
      </property>
      <property name="text" >
-      <string>&lt;span style="font-size:18pt;">Add a contact&lt;/span>&lt;br>&lt;br>&lt;span>With Wengo you can chat with your contacts whatever&lt;br>their IM (&lt;b>MSN&lt;/b>, &lt;b>Yahoo!&lt;/b>, &lt;b>AIM&lt;/b>, &lt;b>Google talk&lt;/b> etc.).&lt;br>Use the "Tools / IM accounts" menu to login to those&lt;br>networks&lt;/span></string>
+      <string>&lt;span style="font-size:18pt;">Add a contact&lt;/span>&lt;br>&lt;br>&lt;span>You can chat with your contacts whatever their IM&lt;br>(&lt;b>MSN&lt;/b>, &lt;b>Yahoo!&lt;/b>, &lt;b>AIM&lt;/b>,&lt;b>Google talk&lt;/b> etc.).&lt;br>Use the "Tools / IM accounts" menu to login to&lt;br>those networks&lt;/span></string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
      </property>
      <property name="indent" >
       <number>100</number>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
+   <item row="1" column="0" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -451,7 +491,7 @@
      <property name="sizeHint" >
       <size>
        <width>20</width>
-       <height>16</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>

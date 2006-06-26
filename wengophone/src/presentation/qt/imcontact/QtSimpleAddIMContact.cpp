@@ -41,12 +41,7 @@ QtSimpleAddIMContact::QtSimpleAddIMContact(CUserProfile & cUserProfile,
 
 	_ui.setupUi(this);
 
-	QPixmap pixmap = QPixmap(":pics/headers/login.png");
-
-	WidgetBackgroundImage::setBackgroundImage(_ui.accountLabel, ":pics/headers/login.png", true);
-
-//	setMinimumSize(QSize(pixmap.width()+8,0));
-//	setMaximumSize(QSize(pixmap.width()+8,0));
+	WidgetBackgroundImage::setBackgroundImage(_ui.accountLabel, ":pics/headers/add-account.png", true);
 
 	ContactGroupVector tmp = _cUserProfile.getCContactList().getContactGroups();
 	ContactGroupVector::const_iterator it;
@@ -112,7 +107,6 @@ void QtSimpleAddIMContact::saveContact() {
 			IMAccount * imAccount = *_cUserProfile.getIMAccountsOfProtocol(imProtocol).begin();
 			imContact.setIMAccount(imAccount);
 		}
-
 		_contactProfile.addIMContact(imContact);
 	}
 	////
