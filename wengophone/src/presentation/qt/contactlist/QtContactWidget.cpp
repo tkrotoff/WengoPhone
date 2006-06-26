@@ -123,7 +123,7 @@ void QtContactWidget::mobileButtonClicked() {
 
 void QtContactWidget::landLineButtonClicked() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
-	if (ul->getHomePhone(QString::fromStdString(_contactId)).isEmpty()) {
+	if (!ul->getHomePhone(QString::fromStdString(_contactId)).isEmpty()) {
 		ul->startCall(QString::fromStdString(_contactId), _ui.homePhoneLabel->text());
 	} else {
 		ContactProfile contactProfile =
