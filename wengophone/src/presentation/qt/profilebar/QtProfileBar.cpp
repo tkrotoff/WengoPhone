@@ -168,16 +168,16 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 		boost::bind(&QtProfileBar::myPresenceStatusEventHandler, this, _1, _2, _3);
 
 	connect(this, SIGNAL(connectedEventSignal(IMAccount *)),
-		_nickNameWidget, SLOT(connected(IMAccount *)));
+		_nickNameWidget, SLOT(connected(IMAccount *)), Qt::QueuedConnection);
 
 	connect(this, SIGNAL(disconnectedEventSignal(IMAccount *, bool, const QString &)),
-		_nickNameWidget, SLOT(disconnected(IMAccount *, bool, const QString &)));
+		_nickNameWidget, SLOT(disconnected(IMAccount *, bool, const QString &)), Qt::QueuedConnection);
 
 	connect(this, SIGNAL(connectionProgressEventSignal(IMAccount *, int, int, const QString &)),
-		_nickNameWidget, SLOT(connectionProgress(IMAccount *, int, int, const QString &)));
+		_nickNameWidget, SLOT(connectionProgress(IMAccount *, int, int, const QString &)), Qt::QueuedConnection);
 
-	if ( !connect(this,SIGNAL(myPresenceStatusEventSignal(QVariant  )),
-		this,SLOT (myPresenceStatusEventSlot( QVariant ))) ) {
+	if ( !connect(this,SIGNAL(myPresenceStatusEventSignal(QVariant)),
+		this, SLOT (myPresenceStatusEventSlot(QVariant)), Qt::QueuedConnection)) {
 		LOG_FATAL("Signal / slot connection error");
 	}
 
@@ -185,14 +185,20 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 		_eventWidget->setMissedCall(_cUserProfile.getCHistory()->getUnseenMissedCalls());
 	}
 
-	connect(this, SIGNAL(wsInfoWengosEvent(float)), SLOT(wsInfoWengosEventSlot(float)));
-	connect(this, SIGNAL(wsInfoVoiceMailEvent(int)), SLOT(wsInfoVoiceMailEventSlot(int)));
-	connect(this, SIGNAL(wsInfoPtsnNumberEvent(const QString &)), SLOT(wsInfoPtsnNumberEventSlot(const QString &)));
-	connect(this, SIGNAL(wsCallForwardInfoEvent(const QString &)), SLOT(wsCallForwardInfoEventSlot(const QString &)));
-	connect(this, SIGNAL(phoneLineCreatedEvent()), SLOT(phoneLineCreatedEventSlot()));
+	connect(this, SIGNAL(wsInfoWengosEvent(float)), 
+		SLOT(wsInfoWengosEventSlot(float)), Qt::QueuedConnection);
+	connect(this, SIGNAL(wsInfoVoiceMailEvent(int)), 
+		SLOT(wsInfoVoiceMailEventSlot(int)), Qt::QueuedConnection);
+	connect(this, SIGNAL(wsInfoPtsnNumberEvent(const QString &)), 
+		SLOT(wsInfoPtsnNumberEventSlot(const QString &)), Qt::QueuedConnection);
+	connect(this, SIGNAL(wsCallForwardInfoEvent(const QString &)), 
+		SLOT(wsCallForwardInfoEventSlot(const QString &)), Qt::QueuedConnection);
+	connect(this, SIGNAL(phoneLineCreatedEvent()), 
+		SLOT(phoneLineCreatedEventSlot()), Qt::QueuedConnection);
+
 	QtUserProfile * qtUserProfile = ((QtUserProfile *)(_cUserProfile.getPresentation()));
 	connect(qtUserProfile, SIGNAL(cHistoryCreatedEventHandlerSignal()),
-		SLOT(cHistoryCreatedEventHandlerSlot()));
+		SLOT(cHistoryCreatedEventHandlerSlot()), Qt::QueuedConnection);
 
 	// Check if a PhoneLine already exist
 	if (_cUserProfile.getUserProfile().getActivePhoneLine()) {
@@ -226,8 +232,8 @@ void QtProfileBar::connectionProgressEventHandler(ConnectHandler & sender, IMAcc
 	connectionProgressEventSignal(pImAccount, currentStep, totalSteps, QString::fromStdString(infoMessage));
 }
 
-void QtProfileBar::myPresenceStatusEventHandler(PresenceHandler & sender, const IMAccount & imAccount,
-	EnumPresenceState::MyPresenceStatus status) {
+void QtProfileBar::myPresenceStatusEventHandler(PresenceHandler & sender, 
+	const IMAccount & imAccount, EnumPresenceState::MyPresenceStatus status) {
 
 	EnumPresenceState::MyPresenceStatus * pstatus = new EnumPresenceState::MyPresenceStatus;
 	QVariant v(status);

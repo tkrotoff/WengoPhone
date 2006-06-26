@@ -97,32 +97,30 @@ void QtContactTreeMouseFilter::mouseReleaseEvent(QMouseEvent * event) {
 }
 
 void QtContactTreeMouseFilter::mouseMoveEvent(QMouseEvent * event) {
-	QTreeWidgetItem * item=_selectedItem;
 	if (!_selectedItem) {
 		return;
 	}
-	item=_selectedItem;
 
 	if (!(event->buttons() & Qt::LeftButton)) {
 		return;
 	}
+
 	if ((event->pos() - _dstart).manhattanLength() < QApplication::startDragDistance()) {
 		return;
 	}
-	if (!item) {
-		return;
-	}
+
 	//If item->parent() == NULL then the item is a group (parent item for contact), a group cannot be moved
-	if (!item->parent()) {
+	if (!_selectedItem->parent()) {
 		return;
 	}
+
 	// Define a new empty custom data
 	QByteArray custom;
 	QDrag * drag = new QDrag(_tree);
 	QMimeData * mimeData = new QMimeData;
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
-	mimeData->setText(ul->getContact(item->text(0))->getUserName());
+
+	mimeData->setText(ul->getContact(_selectedItem->text(0))->getUserName());
 	mimeData->setData(WENGO_MIME_TYPE, custom);
 	drag->setMimeData(mimeData);
 	_inDrag = true;
@@ -148,6 +146,7 @@ void QtContactTreeMouseFilter::dropEvent(QDropEvent * event) {
 
 		if (_selectedItem) {
 			if (_selectedItem == item) {
+				_selectedItem = NULL;
 				return;
 			}
 
@@ -176,6 +175,8 @@ void QtContactTreeMouseFilter::dropEvent(QDropEvent * event) {
 		}
 		event->acceptProposedAction();
 	}
+	
+	_selectedItem = NULL;
 	return;
 }
 
