@@ -154,7 +154,7 @@ void QtSimpleAddIMContact::currentIndexChanged (const QString & text) {
 		imProtocol = EnumIMProtocol::toIMProtocol(text.toStdString());
 		if (!haveAccount(imProtocol)) {
 			QMessageBox msgBox( tr("WengoPhone - Bad account"),
-			tr("Yout are not logged to this network\n"
+			tr("You are not logged to this network\n"
 			"Use \"the Tools / IM accounts\" menu to login to this network"),
 			QMessageBox::Information,
 			QMessageBox::Ok, QMessageBox::NoButton,
