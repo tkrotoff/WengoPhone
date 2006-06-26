@@ -191,7 +191,9 @@ void PhoneLine::disconnect(bool now) {
 void PhoneLine::checkCallId(int callId) {
 	PhoneCall * phoneCall = getPhoneCall(callId);
 	if (!phoneCall) {
-		LOG_FATAL("unknow phone call callId=" + String::fromNumber(callId));
+		//If it crashes inside checkCallId() this is probably due
+		//to a duplicated phCALLCLOSED message
+		LOG_FATAL("unknown phone call callId=" + String::fromNumber(callId));
 	}
 }
 
@@ -205,7 +207,7 @@ void PhoneLine::acceptCall(int callId, bool enableVideo) {
 void PhoneLine::rejectCall(int callId) {
 	checkCallId(callId);
 	_sipWrapper->rejectCall(callId);
-	//History: retreive the memento and change its state to rejected
+	//History: retrieve the memento and change its state to rejected
 	_userProfile.getHistory().updateCallState(callId, HistoryMemento::RejectedCall);
 	LOG_DEBUG("call rejected callId=" + String::fromNumber(callId));
 }
@@ -354,7 +356,10 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 }
 
 void PhoneLine::callClosed(int callId) {
+	//If it crashes inside checkCallId() this is probably due
+	//to a duplicated phCALLCLOSED message
 	checkCallId(callId);
+
 	PhoneCall * phoneCall = getPhoneCall(callId);
 	if (_activePhoneCall == phoneCall) {
 		_activePhoneCall = NULL;

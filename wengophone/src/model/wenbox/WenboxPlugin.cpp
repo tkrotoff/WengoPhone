@@ -68,8 +68,10 @@ void WenboxPlugin::openWenbox() {
 }
 
 void WenboxPlugin::closeWenbox() {
-	switchCurrentAudioDeviceToSoundCard();
-	_wenbox->close();
+	if (_wenbox->isOpen()) {
+		switchCurrentAudioDeviceToSoundCard();
+		_wenbox->close();
+	}
 }
 
 void WenboxPlugin::wenboxConfigChangedEventHandler(Settings & sender, const std::string & key) {
