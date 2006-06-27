@@ -24,6 +24,8 @@
 
 #include <util/NonCopyable.h>
 
+#include <pixertool/pixertool.h>
+
 #include <map>
 
 class CPhoneCall;
@@ -38,7 +40,7 @@ public:
 	void phoneCallStateChangedEvent(PhoneCallState state, int lineId, int callId,
 				const std::string & sipAddress, const std::string & userName, const std::string & displayName);
 
-	void videoFrameReceived(const WebcamVideoFrame & remoteVideoFrame, const WebcamVideoFrame & localVideoFrame) { }
+	void videoFrameReceived(piximage* remoteVideoFrame, piximage* localVideoFrame) { }
 
 	void updatePresentation() { }
 
