@@ -290,7 +290,7 @@
       </palette>
      </property>
      <property name="text" >
-      <string>&lt;span style="font-size:18pt;">Add a contact&lt;/span>&lt;br>&lt;br>&lt;span>You can chat with your contacts&lt;br> whatever their IM&lt;br>(&lt;b>MSN&lt;/b>, &lt;b>Yahoo!&lt;/b>, &lt;b>AIM&lt;/b>, &lt;b>Google talk&lt;/b> etc.).&lt;br>Use the "Tools / IM accounts" menu&lt;br>to login to those networks&lt;/span></string>
+      <string>&lt;span style="font-size:18pt;">Add a contact&lt;/span>&lt;br>&lt;br>&lt;span>You can chat with your contacts&lt;br> whatever their IM (&lt;b>MSN&lt;/b>, &lt;b>Yahoo!&lt;/b>, etc.).&lt;br>Use the "Tools / IM accounts" menu&lt;br>to login to those networks&lt;/span></string>
      </property>
      <property name="wordWrap" >
       <bool>false</bool>
