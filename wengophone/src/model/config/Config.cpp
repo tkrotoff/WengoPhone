@@ -214,8 +214,8 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[GENERAL_CLICK_START_CHAT_KEY] = false;
 	_keyDefaultValueMap[GENERAL_CLICK_CALL_CELLPHONE_KEY] = true;
 	_keyDefaultValueMap[GENERAL_AWAY_TIMER_KEY] = 2;
-    _keyDefaultValueMap[GENERAL_SHOW_GROUPS_KEY] = false;
-    _keyDefaultValueMap[GENERAL_SHOW_OFFLINE_CONTACTS_KEY] = false;
+	_keyDefaultValueMap[GENERAL_SHOW_GROUPS_KEY] = false;
+	_keyDefaultValueMap[GENERAL_SHOW_OFFLINE_CONTACTS_KEY] = false;
 
 	_keyDefaultValueMap[LANGUAGE_KEY] = LANGUAGE_AUTODETECT_KEYVALUE;
 
@@ -248,7 +248,7 @@ Config::Config(const std::string & name)
 
 	_keyDefaultValueMap[WENBOX_ENABLE_KEY] = true;
 	_keyDefaultValueMap[IEACTIVEX_ENABLE_KEY] = true;
-	
+
 	_keyDefaultValueMap[GUI_BACKGROUND_KEY] = false;
 }
 
@@ -363,31 +363,42 @@ std::string Config::getAudioContactOnlineFile() const {
 	return getStringKeyValue(AUDIO_CONTACTONLINE_FILE_KEY);
 }
 
-std::string Config::getAudioRingerDeviceName() const {
-	std::string deviceName = getStringKeyValue(AUDIO_RINGER_DEVICENAME_KEY);
+/**
+ * Code factorization.
+ *
+ * @see Config::getAudioRingerDeviceName()
+ * @see Config::getAudioInputDeviceName()
+ * @see Config::getAudioOutputDeviceName()
+ */
+static std::string getProperAudioDeviceName(const std::string & deviceName,
+			const StringList & mixerList,
+			const std::string & defaultDevice) {
+
 	if (deviceName.empty()) {
-		return AudioDevice::getDefaultPlaybackDevice();
+		return defaultDevice;
+	} else if (!mixerList.contains(deviceName)) {
+		return defaultDevice;
 	} else {
 		return deviceName;
 	}
+}
+
+std::string Config::getAudioRingerDeviceName() const {
+	return getProperAudioDeviceName(getStringKeyValue(AUDIO_RINGER_DEVICENAME_KEY),
+				AudioDevice::getOutputMixerDeviceList(),
+				AudioDevice::getDefaultPlaybackDevice());
 }
 
 std::string Config::getAudioInputDeviceName() const {
-	std::string deviceName = getStringKeyValue(AUDIO_INPUT_DEVICENAME_KEY);
-	if (deviceName.empty()) {
-		return AudioDevice::getDefaultRecordDevice();
-	} else {
-		return deviceName;
-	}
+	return getProperAudioDeviceName(getStringKeyValue(AUDIO_INPUT_DEVICENAME_KEY),
+				AudioDevice::getInputMixerDeviceList(),
+				AudioDevice::getDefaultRecordDevice());
 }
 
 std::string Config::getAudioOutputDeviceName() const {
-	std::string deviceName = getStringKeyValue(AUDIO_OUTPUT_DEVICENAME_KEY);
-	if (deviceName.empty()) {
-		return AudioDevice::getDefaultPlaybackDevice();
-	} else {
-		return deviceName;
-	}
+	return getProperAudioDeviceName(getStringKeyValue(AUDIO_OUTPUT_DEVICENAME_KEY),
+				AudioDevice::getOutputMixerDeviceList(),
+				AudioDevice::getDefaultPlaybackDevice());
 }
 
 std::string Config::getWengoServerHostname() const {
