@@ -50,7 +50,7 @@ void ContactGroupPopupMenu::showMenu(const QString & groupId) {
 
 void ContactGroupPopupMenu::removeContactGroup() const {
 	if (QMessageBox::question(qobject_cast<QWidget *>(parent()),
-		tr("Delete contact"),
+		tr("Delete group"),
 		tr("Do you really want to delete this group?"),
 		tr("&Yes"),
 		tr("&No"),
