@@ -156,18 +156,21 @@ void QtContactManager::closeUserInfo() {
 
 void QtContactManager::openUserInfo(QTreeWidgetItem * item) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
-	if (_previous != NULL) {
+	if (_previous) {
 		closeUserInfo();
 	}
-	_previous = item;
+	if (!item) {
+		return;
+	}
 	if (item->parent()) {
+		_previous = item;
 		ul->setOpenStatus(_previous->text(0), true);
 		item->setSizeHint(0, QSize(-1, ul->getHeight(item->text(0))));
 		_tree->openPersistentEditor(item);
+		_tree->viewport()->update();
+		_tree->doItemsLayout();
+		_tree->scrollToItem (item);
 	}
-	_tree->viewport()->update();
-	_tree->doItemsLayout();
-	_tree->scrollToItem (item);
 }
 
 void QtContactManager::itemClicked(QTreeWidgetItem * item, int) {
