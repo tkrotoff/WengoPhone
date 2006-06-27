@@ -98,6 +98,13 @@ public:
 
 	void setHistory(QtHistoryWidget * qtHistoryWidget);
 
+	/**
+	 * Removes the history widget inside the history tab.
+	 *
+	 * Thread-safe, can be called from another thread.
+	 */
+	void removeHistory();
+	
 	void setPhoneCall(QtContactCallListWidget * qtContactCallListWidget);
 
 	void setSms(QtSms * qtSms);
@@ -156,6 +163,8 @@ Q_SIGNALS:
 
 	void signalTimeoutEventReached();
 
+	void removeHistorySignal();
+
 public Q_SLOTS:
 
 	void currentUserProfileWillDieEventHandlerSlot();
@@ -165,6 +174,8 @@ public Q_SLOTS:
 	void editMyProfile();
 
 private Q_SLOTS:
+
+	void removeHistorySlot();
 
 	void connectionStatusEventHandlerSlot(int totalSteps, int currentStep, QString infoMsg);
 

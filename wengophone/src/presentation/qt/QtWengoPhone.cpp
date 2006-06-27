@@ -132,7 +132,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 }
 
 QtWengoPhone::~QtWengoPhone() {
-	//TODO: unregister events, delete created objects
+	//TODO:  delete created objects
 }
 
 void QtWengoPhone::initThreadSafe() {
@@ -307,6 +307,9 @@ void QtWengoPhone::initThreadSafe() {
 	connect(this, SIGNAL(connectionStatusEventHandlerSignal(int, int, QString)),
 		SLOT(connectionStatusEventHandlerSlot(int, int, QString)));
 
+	connect(this, SIGNAL(removeHistorySignal()), 
+		SLOT(removeHistorySlot()), Qt::QueuedConnection);
+		
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
@@ -363,42 +366,44 @@ void QtWengoPhone::enableCallButton() {
 }
 
 void QtWengoPhone::hangupButtonClicked(){
-	QtContactCallListWidget * widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->currentWidget());
-	if ( widget ){
+	QtContactCallListWidget * widget =
+		dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->currentWidget());
+	if (widget) {
 		widget->hangup();
 		//Widget is deleted automagically
-        //set the last active page
-        if( _activeTabBeforeCall ) {
-            _ui->tabWidget->setCurrentWidget(_activeTabBeforeCall);
-        } else {
-            _ui->tabWidget->setCurrentIndex(0);
-        }
-        return;
-	}
-    for (int i = 0; i < _ui->tabWidget->count(); i++){
-		widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
-		if ( widget ){
-		    widget->hangup();
-            //set the last active page
-            if( _activeTabBeforeCall ) {
-                _ui->tabWidget->setCurrentWidget(_activeTabBeforeCall);
-            } else {
-                _ui->tabWidget->setCurrentIndex(0);
-            }
-            return;
+		//set the last active page
+		if (_activeTabBeforeCall) {
+			_ui->tabWidget->setCurrentWidget(_activeTabBeforeCall);
+		} else {
+			_ui->tabWidget->setCurrentIndex(0);
 		}
-    }
+		return;
+	}
+
+	for (int i = 0; i < _ui->tabWidget->count(); i++) {
+		widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+		if (widget) {
+			widget->hangup();
+			//set the last active page
+			if (_activeTabBeforeCall) {
+				_ui->tabWidget->setCurrentWidget(_activeTabBeforeCall);
+			} else {
+				_ui->tabWidget->setCurrentIndex(0);
+			}
+			return;
+		}
+	}
 }
 
 int QtWengoPhone::findFirstCallTab(){
-    QtContactCallListWidget * widget;
-    for (int i = 0; i < _ui->tabWidget->count(); i++){
-        widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
-        if (widget) {
-            return i;
-        }
-    }
-    return -1;
+	QtContactCallListWidget * widget;
+	for (int i = 0; i < _ui->tabWidget->count(); i++){
+		widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+		if (widget) {
+			return i;
+		}
+	}
+	return -1;
 }
 
 void QtWengoPhone::callButtonClicked() {
@@ -421,7 +426,7 @@ void QtWengoPhone::makeCallErrorEventHandler() {
 
 void QtWengoPhone::makeCallErrorEventHandlerThreadSafe() {
 	QMessageBox::information(_wengoPhoneWindow, tr("WengoPhone - Make call error"),
-				tr("Please hold all the phone calls before to place a new one"), QMessageBox::Ok);
+		tr("Please hold all the phone calls before to place a new one"), QMessageBox::Ok);
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
@@ -433,12 +438,12 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
 	qtContactCallListWidget->addPhoneCall(qtPhoneCall);
 
-	connect ( qtContactCallListWidget, SIGNAL(startConferenceSignal(PhoneCall *, PhoneCall *)),
-	          SLOT(addToConference(PhoneCall *, PhoneCall *)));
+	connect(qtContactCallListWidget, SIGNAL(startConferenceSignal(PhoneCall *, PhoneCall *)),
+	        SLOT(addToConference(PhoneCall *, PhoneCall *)));
 
 	_hangUpButton->setEnabled(true);
 
-	if( qtPhoneCall->isIncoming() ) {
+	if (qtPhoneCall->isIncoming()) {
 		_callButton->setEnabled(true);
 	}
 }
@@ -577,6 +582,16 @@ void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
 	}
 
 	_qtHistoryWidget = qtHistoryWidget;
+}
+
+void QtWengoPhone::removeHistory() {
+	removeHistorySignal();
+}
+
+void QtWengoPhone::removeHistorySlot() {
+	delete _qtHistoryWidget;
+	_qtHistoryWidget = NULL;
+	delete _ui->tabHistory->layout();
 }
 
 void QtWengoPhone::setPhoneCall(QtContactCallListWidget * qtContactCallListWidget) {
