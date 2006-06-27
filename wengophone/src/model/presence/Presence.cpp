@@ -47,7 +47,9 @@ Presence::Presence(IMAccount & imAccount)
 }
 
 Presence::~Presence() {
-	delete _imPresence;
+	if (_imPresence) {
+		delete _imPresence;
+	}
 }
 
 void Presence::changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {
