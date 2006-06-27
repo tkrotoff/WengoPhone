@@ -145,6 +145,10 @@ void QtContactManager::treeViewSelectionChanged() {
 void QtContactManager::closeUserInfo() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (_previous != NULL) {
+		if (!_previous->parent()) {
+			//It's a group
+			return;
+		}
 		_tree->closePersistentEditor(_previous, 0);
 		ul->setOpenStatus(_previous->text(0), false);
 		_previous->setSizeHint(0, QSize(-1, ul->getHeight(_previous->text(0))));
