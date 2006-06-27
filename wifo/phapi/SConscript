@@ -123,6 +123,7 @@ defines = {
 	'OSIP_MT' : 1,
 	'ENABLE_TRACE' : 0,
 	'VIDEO_IOTHREAD_TIMERS' : 1,
+	'PH_VIDEO_USELOCK' : 1,
 #	'USE_SPXEC' : 1,
 }
 
