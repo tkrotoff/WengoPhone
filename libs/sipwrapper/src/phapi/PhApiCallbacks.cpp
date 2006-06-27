@@ -218,6 +218,11 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 			p->setRegistered(false);
 			p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateTimeout);
 			//p->removeVirtualLine(p->getActiveVline(), 0);
+			for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
+				it != _subscribedContacts.end();
+				++it) {
+				p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateUnknown, "", *it);
+			}
 			p->disconnectedEvent(*p, true, "No response from server");
 		}
 		break;
