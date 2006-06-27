@@ -80,7 +80,9 @@ QtSimpleAddIMContact::~QtSimpleAddIMContact() {
 }
 
 void QtSimpleAddIMContact::saveContact() {
-	if (_ui.groupComboBox->currentText().isEmpty()) {
+	QString tmp = _ui.groupComboBox->currentText().trimmed();
+
+	if (tmp.isEmpty()) {
 		QMessageBox::warning(this,
 			tr("WengoPhone -- No group selected"),
 			tr("A contact must have a group, please set a group."),
