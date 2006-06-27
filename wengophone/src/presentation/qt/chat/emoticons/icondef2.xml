@@ -79,10 +79,6 @@
 			<object>shade.png</object>
 		</icon>
 		<icon>
-			<text>&lt;:o)</text>
-			<object>party.png</object>
-		</icon>
-		<icon>
 			<text>(A)</text>
 			<object>angel.png</object>
 		</icon>
@@ -455,10 +451,6 @@
 		<icon>
 			<text>(H)</text>
 			<object>shade.png</object>
-		</icon>
-		<icon>
-			<text>&lt;:o)</text>
-			<object>party.png</object>
 		</icon>
 		<icon>
 			<text>(A)</text>
