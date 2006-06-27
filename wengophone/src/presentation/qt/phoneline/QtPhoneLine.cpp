@@ -22,6 +22,7 @@
 #include <presentation/qt/phonecall/QtPhoneCall.h>
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/statusbar/QtStatusBar.h>
+#include <presentation/qt/QtSystray.h>
 
 #include <control/phoneline/CPhoneLine.h>
 #include <control/phonecall/CPhoneCall.h>
@@ -74,6 +75,7 @@ void QtPhoneLine::stateChangedEventHandler(EnumPhoneLineState::PhoneLineState st
 
 void QtPhoneLine::stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLineState state) {
 	_qtWengoPhone->getStatusBar().phoneLineStateChanged(state);
+	_qtWengoPhone->getSystray().phoneLineStateChanged(state);
 }
 
 void QtPhoneLine::phoneCallCreatedEventHandler(CPhoneCall & cPhoneCall) {

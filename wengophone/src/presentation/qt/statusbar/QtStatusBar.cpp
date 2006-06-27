@@ -81,7 +81,6 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_phoneLineStateLabel->setToolTip(tr("Not Connected"));
 	statusGroup->layout()->addWidget(_phoneLineStateLabel);
 	_sipConnectionMovie->start();
-	updatePhoneLineState();
 
 	//soundStateLabel
 	_soundStateLabel = new QLabel(statusGroup);
@@ -222,7 +221,6 @@ void QtStatusBar::updatePhoneLineState() {
 			break;
 
 		case EnumPhoneLineState::PhoneLineStateProgress:
-			tooltip = tr("Not connected");
 			_sipConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng", MNG_FORMAT, _statusBar);
 			_phoneLineStateLabel->setMovie(_sipConnectionMovie);
 			_phoneLineStateLabel->setToolTip(tr("Connecting"));

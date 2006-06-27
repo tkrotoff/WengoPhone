@@ -157,7 +157,7 @@ void QtWengoPhone::initThreadSafe() {
 	qtWengoPhoneEventFilter = new QtWengoPhoneEventFilter(this);
 	_wengoPhoneWindow->installEventFilter(qtWengoPhoneEventFilter);
 	if (!connect (qtWengoPhoneEventFilter,SIGNAL(closeWindow()),_wengoPhoneWindow, SLOT(hide()))){
-	  LOG_FATAL("Can't connect closeWindow() signal\n");
+		LOG_FATAL("can't connect closeWindow() signal");
 	}
 
 	QGridLayout * callBarLayout = new QGridLayout(_ui->callBarFrame);
@@ -218,6 +218,8 @@ void QtWengoPhone::initThreadSafe() {
 	//Systray
 	_qtSystray = new QtSystray(this);
 
+	//Status bar
+	_statusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
 
 	//actionShowWengoAccount
 	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
@@ -249,7 +251,7 @@ void QtWengoPhone::initThreadSafe() {
 	//actionCallOutService
 	connect(_ui->actionCallOutService, SIGNAL(triggered()), SLOT (showCallOut()));
 
-	// Show / Hide groups
+	//Show / Hide groups
 	connect(_ui->actionHideContactGroups, SIGNAL(triggered()), SLOT(showHideGroups()));
 
 	//actionIM_Account_Settings
@@ -328,9 +330,6 @@ void QtWengoPhone::initThreadSafe() {
 
 	MousePressEventFilter * mousePressEventFilter = new MousePressEventFilter(this, SLOT(expandConfigPanel()));
 	_ui->configPanelLabel->installEventFilter(mousePressEventFilter);
-
-	//Status bar
-	_statusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
 
 	updatePresentation();
 	_wengoPhoneWindow->resize(QSize(config.getProfileWidth(),config.getProfileHeight()));
@@ -601,6 +600,10 @@ QtWsDirectory * QtWengoPhone::getQtWsDirectory() const {
 
 QtStatusBar & QtWengoPhone::getStatusBar() const {
 	return *_statusBar;
+}
+
+QtSystray & QtWengoPhone::getSystray() const {
+	return *_qtSystray;
 }
 
 void QtWengoPhone::setSubscribe(QtSubscribe * qtSubscribe) {

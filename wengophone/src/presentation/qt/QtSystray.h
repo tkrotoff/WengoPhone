@@ -20,6 +20,8 @@
 #ifndef OWQTSYSTRAY_H
 #define OWQTSYSTRAY_H
 
+#include <sipwrapper/EnumPhoneLineState.h>
+
 #include <util/Trackable.h>
 
 #include <qtutil/QObjectThreadSafe.h>
@@ -38,6 +40,8 @@ class QtSystray : public QObjectThreadSafe, public Trackable {
 public:
 
 	QtSystray(QObject * parent);
+
+	void phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state);
 
 public Q_SLOTS:
 

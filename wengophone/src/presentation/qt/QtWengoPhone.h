@@ -124,6 +124,8 @@ public:
 
 	QtStatusBar & getStatusBar() const;
 
+	QtSystray & getSystray() const;
+
 	QtWengoStyleLabel * getCallButton() const {
 		return _callButton;
 	}

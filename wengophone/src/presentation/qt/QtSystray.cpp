@@ -64,8 +64,7 @@ QtSystray::QtSystray(QObject * parent)
 	//trayIcon
 	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("WengoPhone"), _trayMenu, _qtWengoPhone->getWidget());
 	connect(_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT(sysTrayDoubleClicked(const QPoint &)));
-	_trayIcon->setIcon(QPixmap(":/pics/systray/connecting.png"));
-	_trayIcon->setToolTip(QString("WengoPhone - ") + tr("Connecting..."));
+	phoneLineStateChanged(EnumPhoneLineState::PhoneLineStateProgress);
 	_trayIcon->show();
 
 	setTrayMenu();
@@ -325,16 +324,50 @@ void QtSystray::setSystrayIcon(QVariant status) {
 	}
 }
 
+void QtSystray::phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state) {
+		bool connected = false;
+
+		switch (state) {
+		case EnumPhoneLineState::PhoneLineStateUnknown:
+			break;
+
+		case EnumPhoneLineState::PhoneLineStateServerError:
+			break;
+
+		case EnumPhoneLineState::PhoneLineStateTimeout:
+			break;
+
+		case EnumPhoneLineState::PhoneLineStateOk:
+			connected = true;
+			break;
+
+		case EnumPhoneLineState::PhoneLineStateClosed:
+			break;
+
+		case EnumPhoneLineState::PhoneLineStateProgress:
+			_trayIcon->setIcon(QPixmap(":/pics/systray/connecting.png"));
+			_trayIcon->setToolTip(QString("WengoPhone - ") + tr("Connecting..."));
+			return;
+
+		default:
+			LOG_FATAL("unknown state=" + EnumPhoneLineState::toString(state));
+		};
+
+	connectionStateEventHandlerThreadSafe(connected);
+}
+
 void QtSystray::connectionIsDownEventHandler() {
 	typedef PostEvent1<void (bool), bool> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSystray::connectionStateEventHandlerThreadSafe, this, _1), false);
-	postEvent(event);
+	//FIXME Replaced by phoneLineStateChanged()
+	//postEvent(event);
 }
 
 void QtSystray::connectionIsUpEventHandler() {
 	typedef PostEvent1<void (bool), bool> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSystray::connectionStateEventHandlerThreadSafe, this, _1), true);
-	postEvent(event);
+	//FIXME Replaced by phoneLineStateChanged()
+	//postEvent(event);
 }
 
 void QtSystray::connectionStateEventHandlerThreadSafe(bool connected) {
