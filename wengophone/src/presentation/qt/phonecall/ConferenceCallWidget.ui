@@ -137,9 +137,6 @@
        <property name="text" >
         <string>Cancel</string>
        </property>
-       <property name="icon" >
-        <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
-       </property>
       </widget>
      </item>
     </layout>
