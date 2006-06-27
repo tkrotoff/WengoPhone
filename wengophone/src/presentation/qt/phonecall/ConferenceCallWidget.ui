@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>384</width>
-    <height>239</height>
+    <width>387</width>
+    <height>244</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -412,7 +412,7 @@
       </palette>
      </property>
      <property name="text" >
-      <string>&lt;span style="font-size:18pt;">Conference&lt;/span>&lt;br>&lt;br>&lt;span>Please enter two phone numbers or Wengo contact ID&lt;br>in order to create a 3-way conference&lt;/span></string>
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Lucida Grande; font-size:13pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:18pt;">Conference&lt;/span>&lt;br />&lt;br />Please enter two phone numbers &lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">or Wengo contact ID in order&lt;/p>&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">to create a 3-way conference.&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="indent" >
       <number>100</number>
