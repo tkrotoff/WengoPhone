@@ -80,13 +80,15 @@ void ContactList::removeContactGroup(const string & id) {
 void ContactList::renameContactGroup(const std::string & id, const std::string & name) {
 	RecursiveMutex::ScopedLock lock(_mutex);
 
-	ContactGroup * contactGroup = getContactGroup(id);
+	if (!name.empty()) {
+		ContactGroup * contactGroup = getContactGroup(id);
 
-	if (contactGroup) {
-		std::string oldName = contactGroup->getName();
-		contactGroup->setName(name);
-		_imContactListHandler.changeGroupName(oldName, name);
-		contactGroupRenamedEvent(*this, *contactGroup);
+		if (contactGroup) {
+			std::string oldName = contactGroup->getName();
+			contactGroup->setName(name);
+			_imContactListHandler.changeGroupName(oldName, name);
+			contactGroupRenamedEvent(*this, *contactGroup);
+		}
 	}
 }
 
