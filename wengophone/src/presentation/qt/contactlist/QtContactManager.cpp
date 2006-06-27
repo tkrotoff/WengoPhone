@@ -611,7 +611,7 @@ void QtContactManager::removeContact(const QString & contactId) {
 	for (it = itemList.begin(); ((it != itemList.end()) && !found); it++) {
 		QTreeWidgetItem * item;
 		QTreeWidgetItem * group = (QTreeWidgetItem *) (*it);
-		if (group->parent() == 0) {
+		if (!group->parent()) {
 			int count = group->childCount();
 			for (int i = 0; (i < count) && !found; i++) {
 				item = group->child(i);

@@ -38,13 +38,17 @@ class QtRenameGroup : public QDialog {
 	Q_OBJECT
 	public :
 
-	QtRenameGroup(QWidget * parent = 0);
+	QtRenameGroup(const QString & groupName, QWidget * parent = NULL);
 
 	virtual ~QtRenameGroup();
 
 	QString getGroupName() const;
 
-protected:
+public Q_SLOTS:
+
+	void accept();
+
+private:
 
 	Ui::RenameGroupDialog * _ui;
 };

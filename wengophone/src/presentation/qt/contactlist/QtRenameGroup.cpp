@@ -23,11 +23,11 @@
 
 #include <QtGui>
 
-QtRenameGroup::QtRenameGroup(QWidget * parent)
+QtRenameGroup::QtRenameGroup(const QString & groupName, QWidget * parent)
 	: QDialog(parent) {
-
 	_ui = new Ui::RenameGroupDialog();
 	_ui->setupUi(this);
+	_ui->groupName->setText(groupName);
 }
 
 QtRenameGroup::~QtRenameGroup() {
@@ -37,3 +37,14 @@ QtRenameGroup::~QtRenameGroup() {
 QString QtRenameGroup::getGroupName() const {
 	return _ui->groupName->text();
 }
+
+void QtRenameGroup::accept() {
+	QString tmp;
+	tmp = _ui->groupName->text().trimmed();
+	if (tmp.isEmpty()){
+		QMessageBox::warning (this,tr("Bad group name"),tr("Group name cannot be empty"),1,0,0);
+		return;
+	}
+	QDialog::accept();
+}
+

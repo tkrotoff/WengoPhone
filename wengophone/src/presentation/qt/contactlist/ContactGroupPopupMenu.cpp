@@ -27,6 +27,7 @@
 #include <QAction>
 #include <QString>
 #include <QWidget>
+#include <QMessageBox>
 
 #include <util/Logger.h>
 #include <util/StringList.h>
@@ -48,13 +49,23 @@ void ContactGroupPopupMenu::showMenu(const QString & groupId) {
 }
 
 void ContactGroupPopupMenu::removeContactGroup() const {
-	_cContactList.removeContactGroup(_groupId.toStdString());
+	if (QMessageBox::question(qobject_cast<QWidget *>(parent()),
+		tr("Delete contact"),
+		tr("Do you really want to delete this group?"),
+		tr("&Yes"),
+		tr("&No"),
+		QString(),
+		0, 1) == 0) {
+			_cContactList.removeContactGroup(_groupId.toStdString());
+		}
 }
 
 void ContactGroupPopupMenu::renameContactGroup() const {
-	QtRenameGroup dialog(dynamic_cast <QWidget *> (parent()));
-	dialog.exec();
-	_cContactList.renameContactGroup(_groupId.toStdString(), dialog.getGroupName().toUtf8().data());
+	QString groupName = QString::fromStdString(_cContactList.getContactGroupName(_groupId.toStdString()));
+	QtRenameGroup dialog(groupName,qobject_cast<QWidget *>(parent()));
+	if (dialog.exec()){
+		_cContactList.renameContactGroup(_groupId.toStdString(), dialog.getGroupName().toUtf8().data());
+	}
 }
 
 void ContactGroupPopupMenu::sendSms() {
