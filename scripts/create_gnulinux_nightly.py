@@ -167,7 +167,26 @@ wrapper_script = open(wrapper_script_path, 'w')
 
 wrapper_script.write("""
 #!/bin/sh
-LD_LIBRARY_PATH=. ./qtwengophone
+
+SCRIPT="$0"
+COUNT=0
+while [ -L "${SCRIPT}" ]
+do
+        SCRIPT=$(readlink ${SCRIPT})
+        COUNT=$(expr ${COUNT} + 1)
+        if [ ${COUNT} -gt 100 ]
+        then
+                echo "Too many symbolic links"
+                exit 1
+        fi
+done
+WENGDIR=$(dirname ${SCRIPT})
+
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${WENGDIR}"
+
+cd ${WENGDIR}
+exec ./qtwengophone
+
 """)
 wrapper_script.close()
 os.chmod(wrapper_script_path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IWOTH)
