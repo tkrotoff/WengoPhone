@@ -45,7 +45,6 @@ const std::string PhApiWrapper::PresenceStateDoNotDisturb = "Do Not Disturb";
 PhApiWrapper * PhApiWrapper::PhApiWrapperHack = NULL;
 PhApiCallbacks * PhApiWrapper::_callbacks = NULL;
 
-static const int AUDIO_FLAGS = PH_STREAM_AUDIO;
 #ifdef ENABLE_VIDEO
 static const int VIDEO_FLAGS = PH_STREAM_AUDIO | PH_STREAM_VIDEO_RX | PH_STREAM_VIDEO_TX;
 static const int VIDEO_RX_ONLY_FLAGS = PH_STREAM_AUDIO | PH_STREAM_VIDEO_RX;
@@ -230,7 +229,7 @@ void PhApiWrapper::removeVirtualLine(int lineId, int regTimeout) {
 
 int PhApiWrapper::makeCall(int lineId, const std::string & sipAddress, bool enableVideo) {
 	LOG_DEBUG("call=" + sipAddress);
-	int mediaFlags = AUDIO_FLAGS;
+	int mediaFlags = VIDEO_RX_ONLY_FLAGS;
 	if (enableVideo) {
 		mediaFlags = VIDEO_FLAGS;
 	}
