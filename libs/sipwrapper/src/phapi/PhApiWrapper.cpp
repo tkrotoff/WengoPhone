@@ -130,6 +130,7 @@ PhApiWrapper::~PhApiWrapper() {
 
 void PhApiWrapper::terminate() {
 	if (_isInitialized) {
+		LOG_DEBUG("terminating phapi");
 		phTerminate();
 		_isInitialized = false;
 	}
