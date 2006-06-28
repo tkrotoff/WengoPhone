@@ -24,6 +24,7 @@
 
 #include <util/StringList.h>
 #include <util/Event.h>
+#include <thread/Mutex.h>
 
 #include <boost/any.hpp>
 #include <map>
@@ -37,6 +38,7 @@
  * @see commoncpp.Keydata
  * @author Philippe Bernery
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
  */
 class Settings {
 	friend class SettingsXMLSerializer;
@@ -187,6 +189,11 @@ protected:
 
 	typedef std::map<const std::string, boost::any> Keys;
 	Keys _keyMap;
+
+private:
+
+	/** Mutex for thread-safe. */
+	mutable Mutex _mutex;
 };
 
 #endif	//SETTINGS_H

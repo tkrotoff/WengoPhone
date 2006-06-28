@@ -3,6 +3,7 @@ env = WengoGetEnvironment()
 libs = [
 	'owserialization',
 	'tinyxml',
+	'owthread',
 ]
 lib_path = []
 include_path = ['include']

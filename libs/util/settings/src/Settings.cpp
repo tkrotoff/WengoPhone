@@ -55,6 +55,8 @@ StringList Settings::getAllKeys() const {
 }
 
 void Settings::remove(const std::string & key) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	Keys::iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
 		_keyMap.erase(it);
@@ -77,6 +79,8 @@ void Settings::remove(const std::string & key) {
 }
 
 bool Settings::contains(const std::string & key) const {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	Keys::const_iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
 		return true;
@@ -85,23 +89,43 @@ bool Settings::contains(const std::string & key) const {
 }
 
 void Settings::set(const std::string & key, const std::string & value) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
 }
 
 void Settings::set(const std::string & key, const StringList & value) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
 }
 
 void Settings::set(const std::string & key, bool value) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
 }
 
 void Settings::set(const std::string & key, int value) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
+}
+
+void Settings::set(const std::string & key, boost::any value) {
+	if(isBoolean(value)) {
+		set(key, boost::any_cast<bool>(value));
+	} else if(isInteger(value)) {
+		set(key, boost::any_cast<int>(value));
+	} else if(isString(value)) {
+		set(key, boost::any_cast<std::string>(value));
+	} else if(isStringList(value)) {
+		set(key, boost::any_cast<StringList>(value));
+	}
 }
 
 std::string Settings::get(const std::string & key, const std::string & defaultValue) const {
@@ -179,16 +203,4 @@ bool Settings::isString(const boost::any & value) {
 
 bool Settings::isStringList(const boost::any & value) {
 	return boost::any_cast<StringList>(&value);
-}
-
-void Settings::set(const std::string & key, boost::any value) {
-	if(isBoolean(value)) {
-		set(key, boost::any_cast<bool>(value));
-	} else if(isInteger(value)) {
-		set(key, boost::any_cast<int>(value));
-	} else if(isString(value)) {
-		set(key, boost::any_cast<std::string>(value));
-	} else if(isStringList(value)) {
-		set(key, boost::any_cast<StringList>(value));
-	}
 }
