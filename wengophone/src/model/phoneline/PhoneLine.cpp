@@ -71,7 +71,7 @@ PhoneLine::PhoneLine(SipAccount & sipAccount, UserProfile & userProfile)
 
 	// must be called after _phoneLineStateList initialization
 	_sipWrapper = SipWrapperFactory::getFactory().createSipWrapper();
-	
+
 	_sipCallbacks = new SipCallbacks(*_sipWrapper, _userProfile);
 
 	_lineId = SipWrapper::VirtualLineIdError;
@@ -400,14 +400,17 @@ void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
 	LOG_DEBUG("PhoneLineState=" + String::fromNumber(state));
 
 	for (unsigned i = 0; i < _phoneLineStateList.size(); i++) {
-		PhoneLineState * callState = _phoneLineStateList[i];
-		if (callState->getCode() == state) {
-			if (_state->getCode() != callState->getCode()) {
-				_state = callState;
+		PhoneLineState * phoneLineState = _phoneLineStateList[i];
+		if (phoneLineState->getCode() == state) {
+			if (_state->getCode() != phoneLineState->getCode()) {
+				_state = phoneLineState;
 				_state->execute(*this);
 				LOG_DEBUG("line state changed lineId=" + String::fromNumber(_lineId) +
 					" state=" + EnumPhoneLineState::toString(_state->getCode()));
 				stateChangedEvent(*this, state);
+				return;
+			} else {
+				//stay in the same state
 				return;
 			}
 		}
