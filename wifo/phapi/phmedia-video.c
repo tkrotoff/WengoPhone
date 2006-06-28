@@ -293,8 +293,8 @@ void ph_media_video_check_processing_buffers(phvstream_t *vstream, pixosi pix_so
 }
 
 void ph_media_video_free_processing_buffers(phvstream_t *vstream){
-		pix_free(vstream->frame_event.frame_local);
-		pix_free(vstream->frame_event.frame_remote);
+		//pix_free(vstream->frame_event.frame_local);
+		//pix_free(vstream->frame_event.frame_remote);
 		pix_free(vstream->image_ready_for_network);
 		pix_free(vstream->local_frame_cache);
 		pix_free(vstream->image_wrong_pix);
