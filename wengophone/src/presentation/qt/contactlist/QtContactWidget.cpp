@@ -149,8 +149,16 @@ QPixmap QtContactWidget::createAvatar() {
 
 void QtContactWidget::paintEvent(QPaintEvent *) {
 	QPalette p = palette();
-	QColor lg(201, 201, 201);
 	QRect r = rect();
+
+	QLinearGradient lg(QPointF(1,r.top()),QPointF(1,r.bottom()));
+	QColor dest = QColor(220,220,220);
+	lg.setColorAt(0,dest);
+	float red = ((float)dest.red()) / 1.4f;
+	float blue = ((float)dest.blue()) / 1.4f;
+	float green = ((float)dest.green()) / 1.4f;
+	dest = QColor((int)red,(int)green,(int)blue);
+	lg.setColorAt (1,dest);
 	QPainter painter(this);
 	painter.fillRect(r, QBrush(lg));
 	paintContact(&painter, r);

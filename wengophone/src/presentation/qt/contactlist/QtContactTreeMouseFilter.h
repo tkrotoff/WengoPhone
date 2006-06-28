@@ -77,6 +77,8 @@ private:
 	bool _inDrag;
 
 	CContactList & _cContactList;
+
+	int _groupCount;
 };
 
 #endif	//OWQTCONTACTTREEMOUSEFILTER_H

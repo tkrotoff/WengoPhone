@@ -341,6 +341,8 @@ void QtContactList::mergeContactsSlot(QString dstContact, QString srcContact) {
 			tr("&Yes"), tr("&No"),
 			QString(), 0, 1) == 0) {
 			_cContactList.merge(dstContact.toStdString(), srcContact.toStdString());
+		} else {
+			_waitingForModel = false;
 		}
 	}
 }

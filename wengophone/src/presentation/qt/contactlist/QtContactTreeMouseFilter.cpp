@@ -25,6 +25,8 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
+#include <util/Logger.h>
+
 #include <QTreeWidgetItem>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
@@ -87,6 +89,8 @@ void QtContactTreeMouseFilter::mousePressEvent(QMouseEvent * event) {
 		}
 		ul->resetMouseStatus();
 		_selectedItem = item->text(0);
+		QList<QTreeWidgetItem *>  list = _tree->findItems("*", Qt::MatchWildcard);
+		_groupCount = list.count();
 		ul->setButton(_selectedItem, event->button());
 		if (event->button() == Qt::LeftButton)
 			_dstart = event->pos();
@@ -153,8 +157,10 @@ void QtContactTreeMouseFilter::dropEvent(QDropEvent * event) {
 				_selectedItem = QString::null;
 				return;
 			}
-			if (_cContactList.getContactProfile(_selectedItem.toStdString()).getGroupId() ==
-				_cContactList.getContactProfile(item->text(0).toStdString()).getGroupId() ) {
+
+			if ( (_cContactList.getContactProfile(_selectedItem.toStdString()).getGroupId() ==
+				_cContactList.getContactProfile(item->text(0).toStdString()).getGroupId())
+				|| (_groupCount == 1) ) {
 				// The destination and the source groups are the same
 				// This is a contact combination
 				mergeContacts(_selectedItem, item->text(0));
