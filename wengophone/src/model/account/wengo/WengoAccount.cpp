@@ -224,7 +224,7 @@ bool WengoAccount::discoverForSIP() {
 	LOG_DEBUG("SIP will use " + String::fromNumber(_localSIPPort) + " as local SIP port");
 
 	if (_networkDiscovery.testUDP(_stunServer)
-		&& _networkDiscovery.testSIP(_sipProxyServerHostname, _sipProxyServerPort)) {
+		&& _networkDiscovery.testSIP(_sipProxyServerHostname, _sipProxyServerPort, _localSIPPort)) {
 
 		_needsHttpTunnel = false;
 

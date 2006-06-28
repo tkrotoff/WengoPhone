@@ -79,7 +79,7 @@ void GaimIMPresence::changeMyIcon(const Picture & picture)
 	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
-	FileWriter file = File::createTemporaryFile();
+	FileWriter file(File::createTemporaryFile());
 	file.write(picture.getData());
 	file.close();
 

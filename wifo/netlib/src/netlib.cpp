@@ -398,7 +398,7 @@ NETLIB_BOOLEAN is_local_udp_port_used(const char *itf, int port)
 
 int get_local_free_udp_port(const char *itf)
 {
-	struct sockaddr_in  raddr;
+	struct sockaddr_in raddr;
 	struct sockaddr_in name;
 	int name_size = sizeof (struct sockaddr_in);
 	Socket localsock;
@@ -496,16 +496,27 @@ NETLIB_BOOLEAN sip_ping2(http_sock_t *hs, int ping_timeout)
 		return NETLIB_TRUE;
 }
 
-NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int ping_timeout)
+NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int local_port, int ping_timeout)
 {
 	Socket sock;
 	struct sockaddr_in addr;
+	struct sockaddr_in laddr;
 	NETLIB_BOOLEAN ret;
 	int i;
+
+	laddr.sin_addr.s_addr = htons(INADDR_ANY);
+	laddr.sin_port = htons(local_port);
+	laddr.sin_family = AF_INET;
 
 	sock = socket(PF_INET, SOCK_DGRAM, 0);
 	if (sock <= 0)
 		return -1;
+
+	if (bind(sock, (struct sockaddr *)&laddr, sizeof (laddr)) < 0)
+	{
+		closesocket(sock);
+		return -1;
+	}
 	
 	addr.sin_family = PF_INET;
 	addr.sin_addr.s_addr = inet_addr(sip_server);

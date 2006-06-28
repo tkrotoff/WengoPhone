@@ -78,10 +78,11 @@ NETLIB_BOOLEAN is_udp_port_opened(const char *stun_server, int port, NatType *nt
  *
  * @param sip_server Sip server address we try to SIPping
  * @param sip_port Sip server port we try to SIPping
+ * @param local_port local port to use
  * @param ping_timeout in seconds
  * @return true if a response is received; false otherwise
  */
-NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int ping_timeout);
+NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int local_port, int ping_timeout);
 
 /**
  * Checks if a specific UDP local port is used.

@@ -103,9 +103,10 @@ bool NetworkDiscovery::testUDP(const string & stunServer) {
 	return opened;
 }
 
-bool NetworkDiscovery::testSIP(const string & server, unsigned port) {
-	LOG_DEBUG("pinging SIP server " + server + " on port " + String::fromNumber(port));
-	return (udp_sip_ping(server.c_str(), port, PING_TIMEOUT) == NETLIB_TRUE ? true : false);
+bool NetworkDiscovery::testSIP(const string & server, unsigned port, unsigned localPort) {
+	LOG_DEBUG("pinging SIP server " + server + " on port " + String::fromNumber(port) 
+		+ " from port " + String::fromNumber(localPort));
+	return (udp_sip_ping(server.c_str(), port, localPort, PING_TIMEOUT) == NETLIB_TRUE ? true : false);
 }
 
 bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned tunnelPort, bool ssl,
@@ -131,17 +132,22 @@ bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned t
 }
 
 unsigned NetworkDiscovery::getFreeLocalPort() {
-	//TODO: change this code to choose a random code
-	if (!is_local_udp_port_used(NULL, SIP_PORT)) {
+	int localPort = SIP_PORT;
+
+	if (!is_local_udp_port_used(NULL, localPort)) {
 		LOG_DEBUG("UDP port 5060 is free");
-		return SIP_PORT;
-	} else if (!is_local_udp_port_used(NULL, SIP_PORT + 1)) {
+		return localPort;
+	} else if (!is_local_udp_port_used(NULL, localPort + 1)) {
 		LOG_DEBUG("UDP port 5060 is busy, will use 5061");
-		return SIP_PORT + 1;
+		return localPort + 1;
 	} else {
-		LOG_DEBUG("UDP port 5061 is busy, will use random port");
-		//TODO: should we use 0 for random port?
-		return 0;
+		localPort = get_local_free_udp_port(NULL);
+		if (localPort == -1) {
+			LOG_DEBUG("cannot get a free local port");
+			localPort = 0;
+		}
+		LOG_DEBUG("UDP port 5061 is busy, will use random port number : " + String::fromNumber(localPort));
+		return localPort;
 	}
 }
 

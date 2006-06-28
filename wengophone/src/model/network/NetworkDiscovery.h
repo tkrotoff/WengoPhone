@@ -62,9 +62,10 @@ public:
 	 *
 	 * @param server the server to test
 	 * @param port the server port
+	 * @param localPort the local port to use
 	 * @return true if ok
 	 */
-	bool testSIP(const std::string & server, unsigned port);
+	bool testSIP(const std::string & server, unsigned port, unsigned localPort);
 
 	/**
 	 * Tests if a HttpTunnel can be create and if SIP can pass through this tunnel.
