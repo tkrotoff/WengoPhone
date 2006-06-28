@@ -75,6 +75,7 @@ UserProfile::UserProfile(Thread & modelThread)
 	_wengoAccountIsValid = false;
 	_wengoAccountMustConnectAfterInit = false;
 	_wenboxPlugin = NULL;
+	_historyLoaded = false;
 
 	_history = new History(*this);
 	_history->mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);
@@ -436,6 +437,7 @@ void UserProfile::connectedEventHandler(ConnectHandler & sender, IMAccount & imA
 
 void UserProfile::loadHistory() {
 	_history->load(getProfileDirectory() + "history.xml");
+	_historyLoaded = true;
 	historyLoadedEvent(*this, *_history);
 }
 

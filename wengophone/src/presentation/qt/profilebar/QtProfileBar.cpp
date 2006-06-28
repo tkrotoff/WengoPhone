@@ -200,12 +200,16 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	connect(qtUserProfile, SIGNAL(cHistoryCreatedEventHandlerSignal()),
 		SLOT(cHistoryCreatedEventHandlerSlot()), Qt::QueuedConnection);
 
-	// Check if a PhoneLine already exist
+	// Check if events already occured
+	//FIXME: must not use model class
 	if (_cUserProfile.getUserProfile().getActivePhoneLine()) {
-		//FIXME: must not use model class
 		phoneLineCreatedEventHandler(_cUserProfile.getUserProfile(), *_cUserProfile.getUserProfile().getActivePhoneLine());
+	}
+
+	if (_cUserProfile.getUserProfile().getWsInfo()) {
 		wsInfoCreatedEventHandler(_cUserProfile.getUserProfile(), *_cUserProfile.getUserProfile().getWsInfo());
 	}
+	////
 }
 
 QtProfileBar::~QtProfileBar() {

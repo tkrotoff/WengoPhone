@@ -92,10 +92,23 @@ CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
 	// Check if a PhoneLine already exist
 	if (_userProfile.getActivePhoneLine()) {
 		phoneLineCreatedEventHandler(_userProfile, *_userProfile.getActivePhoneLine());
-		historyLoadedEventHandler(_userProfile.getHistory());
+	}
+
+	historyLoadedEventHandler(_userProfile.getHistory());
+
+	if (_userProfile.getWsSms()) {
 		wsSmsCreatedEventHandler(_userProfile, *_userProfile.getWsSms());
-		wsSoftUpdateCreatedEventHandler(_userProfile, *_userProfile.getWsSoftUpdate());
+	}
+
+	if (_userProfile.getWsSoftUpdate()) {
+        wsSoftUpdateCreatedEventHandler(_userProfile, *_userProfile.getWsSoftUpdate());
+	}
+
+	if (_userProfile.getWsDirectory()) {
 		wsDirectoryCreatedEventHandler(_userProfile, *_userProfile.getWsDirectory());
+	}
+
+	if (_userProfile.getWsCallForward()) {
 		wsCallForwardCreatedEventHandler(_userProfile, *_userProfile.getWsCallForward());
 	}
 }

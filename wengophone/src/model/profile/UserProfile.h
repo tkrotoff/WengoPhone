@@ -247,6 +247,11 @@ public:
 	/** Gets the WsDirectory */
 	WsDirectory * getWsDirectory()  { return _wsDirectory; }
 
+	/** True if history has been loaded. */
+	bool isHistoryLoaded() const {
+		return _historyLoaded;
+	}
+
 	/**
 	 * Load the history.
 	 */
@@ -479,6 +484,8 @@ private:
 	bool _wengoAccountIsValid;
 
 	bool _wengoAccountMustConnectAfterInit;
+
+	bool _historyLoaded;
 
 	IMAccountHandler * _imAccountHandler;
 
