@@ -24,6 +24,7 @@
 using namespace std;
 
 IMContact::IMContact() {
+	_imAccount = NULL;
 	_presenceState = EnumPresenceState::PresenceStateOffline;
 	_protocol = EnumIMProtocol::IMProtocolUnknown;
 }
