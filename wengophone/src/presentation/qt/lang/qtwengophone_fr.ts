@@ -23,7 +23,7 @@
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your AIM password?&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe AIM?&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
@@ -1119,7 +1119,7 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your GoogleTalk password?&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe GoogleTalk ?&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
@@ -1444,7 +1444,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your MSN password?&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe MSN ?&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
@@ -2970,7 +2970,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;You can chat with your contacts&lt;br&gt; whatever their IM (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Use the &quot;Tools / IM accounts&quot; menu&lt;br&gt;to login to those networks&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Ajouter un contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Vous pouvez chatter avec vos contacts&lt;br&gt; quelle que soit leur réseaux (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Utilisez le menu &quot;Outils&quot; -&gt; &quot;Comptes de messagerie instantanée&quot;&lt;br&gt;pour vous connecter à ces réseaux &lt;/span&gt;</translation>
+        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Ajouter un contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Vous pouvez chatter avec vos contacts&lt;br&gt; quelle que soit leur réseaux (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Utilisez le menu &quot;Outils&quot; -&gt; &quot;Comptes de messagerie &lt;br&gt;instantanée&quot;pour vous connecter à ces réseaux &lt;/span&gt;</translation>
     </message>
 </context>
 <context>
@@ -3787,7 +3787,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your Yahoo! password?&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe Yahoo! ?&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
