@@ -147,6 +147,9 @@ void UserProfileHandler::setCurrentUserProfile(const std::string & name,
 
 	UserProfile * result = getUserProfile(name);
 
+	// Check if the desired UserProfile is different from the current UserProfile
+	// and check if the WengoAccount of the current UserProfile is different from the given WengoAccount
+	// (if so the WengoAccount (only the password and keep password members) will be updated).
 	if (!_currentUserProfile ||
 		(_currentUserProfile &&
 			((_currentUserProfile->getName() != name) ||
@@ -215,9 +218,10 @@ void UserProfileHandler::initializeCurrentUserProfile() {
 	_currentUserProfile->init();
 
 	if (!_currentUserProfile->isWengoAccountValid()) {
-		wengoAccountNotValidEvent(*this, *_currentUserProfile->getWengoAccount());
+		WengoAccount wengoAccount = *_currentUserProfile->getWengoAccount();
 		delete _currentUserProfile;
 		_currentUserProfile = NULL;
+		wengoAccountNotValidEvent(*this, wengoAccount);
 	} else {
 		WsUrl::setWengoAccount(_currentUserProfile->getWengoAccount());
 

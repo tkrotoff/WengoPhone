@@ -335,44 +335,46 @@ void UserProfile::wengoAccountInit() {
 void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
 	switch (state) {
 	case SipAccount::LoginStateReady: {
-		//Creates SMS, SMS needs a WengoAccount
-		_wsSms = new WsSms(_wengoAccount, *this);
-		wsSmsCreatedEvent(*this, *_wsSms);
-		LOG_DEBUG("SMS created");
-
-		//Creates SoftUpdate, SoftUpdate needs a WengoAccount
-		_wsSoftUpdate = new WsSoftUpdate(_wengoAccount);
-		wsSoftUpdateCreatedEvent(*this, *_wsSoftUpdate);
-		_wsSoftUpdate->checkForUpdate();
-		LOG_DEBUG("SoftUpdate created");
-
-		_wsInfo = new WsInfo(_wengoAccount);
-		wsInfoCreatedEvent(*this, *_wsInfo);
-		LOG_DEBUG("WsInfo created");
-
-		//WsDirectory
-		_wsDirectory = new WsDirectory(_wengoAccount);
-		wsDirectoryCreatedEvent(*this, *_wsDirectory);
-		LOG_DEBUG("WsDirectory created");
-
-		//TODO: callforward
-		_wsCallForward = new WsCallForward(_wengoAccount);
-		wsCallForwardCreatedEvent(*this, *_wsCallForward);
-		_wsCallForward->wsCallForwardEvent += boost::bind(&UserProfile::wsCallForwardEventHandler, this, _1, _2, _3);
-
-		addPhoneLine(*_wengoAccount);
-
-		IMAccount imAccount(_wengoAccount->getIdentity(),
-			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
-		addIMAccount(imAccount);
-
-		loadHistory();
 
 		_wengoAccountIsValid = true;
 		_wengoAccountInitializationFinished = true;
 
 		if (_wengoAccountMustConnectAfterInit) {
 			_wengoAccountMustConnectAfterInit = false;
+
+			//Creates SMS, SMS needs a WengoAccount
+			_wsSms = new WsSms(_wengoAccount, *this);
+			wsSmsCreatedEvent(*this, *_wsSms);
+			LOG_DEBUG("SMS created");
+
+			//Creates SoftUpdate, SoftUpdate needs a WengoAccount
+			_wsSoftUpdate = new WsSoftUpdate(_wengoAccount);
+			wsSoftUpdateCreatedEvent(*this, *_wsSoftUpdate);
+			_wsSoftUpdate->checkForUpdate();
+			LOG_DEBUG("SoftUpdate created");
+	
+			_wsInfo = new WsInfo(_wengoAccount);
+			wsInfoCreatedEvent(*this, *_wsInfo);
+			LOG_DEBUG("WsInfo created");
+
+			//WsDirectory
+			_wsDirectory = new WsDirectory(_wengoAccount);
+			wsDirectoryCreatedEvent(*this, *_wsDirectory);
+			LOG_DEBUG("WsDirectory created");
+
+			//TODO: callforward
+			_wsCallForward = new WsCallForward(_wengoAccount);
+			wsCallForwardCreatedEvent(*this, *_wsCallForward);
+			_wsCallForward->wsCallForwardEvent += boost::bind(&UserProfile::wsCallForwardEventHandler, this, _1, _2, _3);
+
+			addPhoneLine(*_wengoAccount);
+
+			IMAccount imAccount(_wengoAccount->getIdentity(),
+				_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
+			addIMAccount(imAccount);
+
+			loadHistory();
+
 			//FIXME: currently there is only one sip account and we are sure
 			//this is a Wengo account.
 			connectSipAccounts();
