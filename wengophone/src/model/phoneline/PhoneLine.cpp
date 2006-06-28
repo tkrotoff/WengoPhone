@@ -48,14 +48,6 @@ PhoneLine::PhoneLine(SipAccount & sipAccount, UserProfile & userProfile)
 	: _sipAccount(sipAccount),
 	_userProfile(userProfile) {
 
-	_sipWrapper = SipWrapperFactory::getFactory().createSipWrapper();
-
-	_sipCallbacks = new SipCallbacks(*_sipWrapper, _userProfile);
-
-	initSipWrapper();
-
-	_lineId = SipWrapper::VirtualLineIdError;
-
 	static PhoneLineStateUnknown stateUnknown;
 	_phoneLineStateList += &stateUnknown;
 	_state = &stateUnknown;
@@ -76,6 +68,16 @@ PhoneLine::PhoneLine(SipAccount & sipAccount, UserProfile & userProfile)
 	_phoneLineStateList += &stateServerError;
 
 	_activePhoneCall = NULL;
+
+	// must be called after _phoneLineStateList initialization
+	_sipWrapper = SipWrapperFactory::getFactory().createSipWrapper();
+	
+	_sipCallbacks = new SipCallbacks(*_sipWrapper, _userProfile);
+
+	_lineId = SipWrapper::VirtualLineIdError;
+
+	initSipWrapper();
+	////
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&PhoneLine::configureSipWrapper, this);
@@ -411,7 +413,7 @@ void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
 		}
 	}
 
-	//LOG_FATAL("unknown PhoneLineState=" + String::fromNumber(state));
+	LOG_FATAL("unknown PhoneLineState=" + String::fromNumber(state));
 }
 
 PhoneCall * PhoneLine::getPhoneCall(int callId) {
