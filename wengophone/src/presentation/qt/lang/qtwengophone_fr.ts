@@ -13,6 +13,14 @@
         <source>Login:</source>
         <translation>Identifiant:</translation>
     </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your AIM password ?&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new AIM Account&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AboutWindow</name>
@@ -621,7 +629,7 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter two phone numbers or Wengo contact ID&lt;br&gt;in order to create a 3-way conference&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Conférence&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Veuillez saisir 2 numéros de téléphone ou pseudos wengo&lt;br&gt;pour débuter la conférence&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Conférence&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Veuillez saisir 2 numéros de téléphone ou pseudos wengo&lt;br&gt;pour débuter la conférence&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Phone number 2:</source>
@@ -634,6 +642,10 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     <message>
         <source>Start</source>
         <translation>Appeler</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -760,6 +772,22 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     <message>
         <source>Send SMS to group</source>
         <translation>Envoyer un SMS aux membres du groupe</translation>
+    </message>
+    <message>
+        <source>Delete group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete this group?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Yes</source>
+        <translation type="unfinished">&amp;Oui</translation>
+    </message>
+    <message>
+        <source>&amp;No</source>
+        <translation type="unfinished">&amp;Non</translation>
     </message>
 </context>
 <context>
@@ -1077,6 +1105,14 @@ Décriverz les circonsances du problème:</translation>
         <source>Login:</source>
         <translation>Identifiant:</translation>
     </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your GoogleTalk password ?&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new GoogleTalk Account&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HttpProxyLoginWindow</name>
@@ -1294,7 +1330,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:MS Shell Dlg; text-decoration: underline; color:#0000ff;&quot;&gt;Click here&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:MS Shell Dlg; text-decoration: underline; color:#0000ff;&quot;&gt;Cliquez ici&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:MS Shell Dlg; text-decoration: underline; color:#0000ff;&quot;&gt;Cliquez ici&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Check it if you want to use this Wengo account automatically</source>
@@ -1363,6 +1399,18 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your email address and&lt;br&gt;password&lt;/span&gt;</source>
         <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Veuillez saisir votre adresse e-mail et&lt;br&gt;votre mot de passe&lt;/span&gt;</translation>
     </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your password ?&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Need help ?&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Click here&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MSNSettings</name>
@@ -1377,6 +1425,14 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <message>
         <source>Login:</source>
         <translation>Identifiant:</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your MSN password ?&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new MSN Account&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2285,6 +2341,17 @@ Veuillez patientez...</translation>
     </message>
 </context>
 <context>
+    <name>QtRenameGroup</name>
+    <message>
+        <source>Bad group name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group name cannot be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QtSimpleAddIMContact</name>
     <message>
         <source>WengoPhone - Bad account</source>
@@ -2823,7 +2890,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     <name>SimpleAddIMAccount</name>
     <message>
         <source>WengoPhone - Add a Contact Account</source>
-        <translation>WengoPhone - Ajouter le compte IM d&apos;un contact</translation>
+        <translation type="obsolete">WengoPhone - Ajouter le compte IM d&apos;un contact</translation>
     </message>
     <message>
         <source>Name</source>
@@ -2883,7 +2950,15 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Lucida Grande; font-size:13pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;You can chat with your contacts&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;whatever their IM&lt;br /&gt;(&lt;span style=&quot; font-weight:600;&quot;&gt;MSN&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;Yahoo!&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;AIM&lt;/span&gt;,&lt;span style=&quot; font-weight:600;&quot;&gt;Google talk&lt;/span&gt; etc.).&lt;br /&gt;Use the &quot;Tools / IM accounts&quot; menu&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to login to those networks.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Lucida Grande; font-size:13pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Ajouter un contact&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Vous pouvez chatter avec vos contacts&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;quelle que soit leur messagerie&lt;br /&gt;(&lt;span style=&quot; font-weight:600;&quot;&gt;MSN&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;Yahoo!&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;AIM&lt;/span&gt;,&lt;span style=&quot; font-weight:600;&quot;&gt;Google talk&lt;/span&gt; etc.).&lt;br /&gt;Utiliser le menu &quot;Outils&quot; -&gt; &quot;Comptes de messagere&quot;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;pour vous connecter à ces réseaux.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Lucida Grande; font-size:13pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Ajouter un contact&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Vous pouvez chatter avec vos contacts&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;quelle que soit leur messagerie&lt;br /&gt;(&lt;span style=&quot; font-weight:600;&quot;&gt;MSN&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;Yahoo!&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;AIM&lt;/span&gt;,&lt;span style=&quot; font-weight:600;&quot;&gt;Google talk&lt;/span&gt; etc.).&lt;br /&gt;Utiliser le menu &quot;Outils&quot; -&gt; &quot;Comptes de messagere&quot;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;pour vous connecter à ces réseaux.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>WengoPhone - Add a Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;You can chat with your contacts&lt;br&gt; whatever their IM (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Use the &quot;Tools / IM accounts&quot; menu&lt;br&gt;to login to those networks&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3664,7 +3739,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     <name>YahooSettings</name>
     <message>
         <source>Yahoo Settings</source>
-        <translation>Paramètres Yahoo</translation>
+        <translation type="obsolete">Paramètres Yahoo</translation>
     </message>
     <message>
         <source>Password:</source>
@@ -3685,6 +3760,18 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     <message>
         <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
         <translation>&lt;u&gt;Options avancées&lt;/u&gt;</translation>
+    </message>
+    <message>
+        <source>Yahoo! Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your Yahoo! password ?&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new Yahoo! Account&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
