@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,8 +30,11 @@ using namespace std;
 #define SAFE_RELEASE_POINTER(x) { if (x) x->Release(); x = NULL; }
 #define SAFE_RELEASE(x) { if (x) x.Release(); x = NULL; }
 
-DirectXWebcamDriver::DirectXWebcamDriver(WebcamDriver *driver, int flags)
-: IWebcamDriver(flags) {
+DirectXWebcamDriver::DirectXWebcamDriver(WebcamDriver * driver, int flags)
+	: IWebcamDriver(flags) {
+
+	//FIXME does not work because of Qt4.1.2
+	//CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	CoInitialize(NULL);
 	_webcamDriver = driver;
 	_pGrabberF = NULL;
@@ -62,7 +65,7 @@ void DirectXWebcamDriver::cleanup() {
 
 StringList DirectXWebcamDriver::getDeviceList() {
 	StringList toReturn;
-	string dev_name = "";
+	string dev_name;
 	HRESULT hr;
 
 	//create an enumerator
@@ -374,9 +377,9 @@ webcamerrorcode DirectXWebcamDriver::setCaps(pixosi palette, unsigned fps, unsig
 	HRESULT hr;
 	int iCount, iSize;
 	VIDEO_STREAM_CONFIG_CAPS scc;
-	VIDEOINFOHEADER *pvi;
+	VIDEOINFOHEADER * pvi;
 	pixosi wc_palette;
-	AM_MEDIA_TYPE *pmt = NULL;
+	AM_MEDIA_TYPE * pmt = NULL;
 
 	_cachedFPS = fps;
 

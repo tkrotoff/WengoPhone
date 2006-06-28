@@ -15,11 +15,15 @@
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your AIM password ?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe AIM ?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe AIM ?&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new AIM Account&lt;/span&gt;</source>
         <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte AIM&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your AIM password?&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1107,11 +1111,15 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your GoogleTalk password ?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe GoogleTalk ?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe GoogleTalk ?&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new GoogleTalk Account&lt;/span&gt;</source>
         <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte GoogleTalk&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your GoogleTalk password?&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1428,11 +1436,15 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your MSN password ?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe MSN ?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe MSN ?&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new MSN Account&lt;/span&gt;</source>
         <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte MSN&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your MSN password?&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2222,7 +2234,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Missed</source>
-        <translation>Absent</translation>
+        <translation type="obsolete">Absent</translation>
     </message>
     <message>
         <source>Redirected</source>
@@ -3767,11 +3779,15 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your Yahoo! password ?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe Yahoo! ?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe Yahoo! ?&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new Yahoo! Account&lt;/span&gt;</source>
         <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte Yahoo!&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your Yahoo! password?&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

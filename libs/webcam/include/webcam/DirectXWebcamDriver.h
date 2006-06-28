@@ -17,10 +17,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef DIRECTXWEBCAMDRIVER_H
-#define DIRECTXWEBCAMDRIVER_H
+#ifndef OWDIRECTXWEBCAMDRIVER_H
+#define OWDIRECTXWEBCAMDRIVER_H
 
 #include <webcam/WebcamDriver.h>
+
+//FIXME does not work because of Qt4.1.2
+//Otherwise CoInitializeEx() is not recognized
+//see http://support.microsoft.com/newsgroups/default.aspx?dg=microsoft.public.vc.atl&tid=85edd07d-040c-47a6-8e82-ddedfa77ce70&p=1
+//#define _WIN32_DCOM
+//#define _WIN32_WINNT 0x0400
 
 #include <dshow.h>
 #include <atlbase.h>
@@ -40,7 +46,7 @@
 class DirectXWebcamDriver : public IWebcamDriver, public ISampleGrabberCB {
 public:
 
-	DirectXWebcamDriver(WebcamDriver *driver, int flags);
+	DirectXWebcamDriver(WebcamDriver * driver, int flags);
 
 	virtual ~DirectXWebcamDriver();
 
@@ -98,10 +104,10 @@ public:
 	STDMETHODIMP QueryInterface(REFIID riid, void ** ppv);
 
 	// callback to access the buffer - the original buffer is passed
-	STDMETHODIMP SampleCB( double SampleTime, IMediaSample * pSample );
+	STDMETHODIMP SampleCB(double SampleTime, IMediaSample * pSample);
 
 	// callback to access the buffer - a copy is passed
-	STDMETHODIMP BufferCB( double dblSampleTime, BYTE * pBuffer, long lBufferSize );
+	STDMETHODIMP BufferCB(double dblSampleTime, BYTE * pBuffer, long lBufferSize);
 
 private:
 
@@ -134,14 +140,6 @@ private:
 	/** True if webcam is opened */
 	bool _isOpen;
 
-	void webcam_dx_error(const char *error) {
-		std::cerr << "!!DirectX Webcam Driver: " << error << std::endl;
-	}
-
-	void webcam_dx_log(const char *mess) {
-		std::cout << "**DirectX Webcam Driver: " << mess << std::endl;
-	}
-
 	/** Read device capabilities */
 	void readCaps();
 
@@ -149,4 +147,4 @@ private:
 	webcamerrorcode setCaps(pixosi palette, unsigned fps, unsigned resolutionWidth, unsigned resolutionHeight);
 };
 
-#endif	//DIRECTXWEBCAMDRIVER_H
+#endif	//OWDIRECTXWEBCAMDRIVER_H

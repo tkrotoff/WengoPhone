@@ -14,11 +14,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your AIM password ?&lt;/span&gt;</source>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new AIM Account&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new AIM Account&lt;/span&gt;</source>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your AIM password?&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -708,11 +708,11 @@ of the License, or (at your option) any later version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your GoogleTalk password ?&lt;/span&gt;</source>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new GoogleTalk Account&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new GoogleTalk Account&lt;/span&gt;</source>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your GoogleTalk password?&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -944,11 +944,11 @@ of the License, or (at your option) any later version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your MSN password ?&lt;/span&gt;</source>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new MSN Account&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new MSN Account&lt;/span&gt;</source>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your MSN password?&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1689,10 +1689,6 @@ of the License, or (at your option) any later version.</source>
     </message>
     <message>
         <source>Incoming Call</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Missed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2880,11 +2876,11 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your Yahoo! password ?&lt;/span&gt;</source>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new Yahoo! Account&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new Yahoo! Account&lt;/span&gt;</source>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your Yahoo! password?&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

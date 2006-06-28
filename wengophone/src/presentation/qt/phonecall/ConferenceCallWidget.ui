@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>387</width>
-    <height>244</height>
+    <height>231</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -22,89 +22,20 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="1" column="0" >
+   <item row="2" column="0" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" >
       <size>
-       <width>20</width>
+       <width>369</width>
        <height>16</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="2" column="0" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="0" column="0" >
-      <widget class="QLabel" name="label" >
-       <property name="text" >
-        <string>Phone number 1:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" >
-      <widget class="QLineEdit" name="phoneNumber1LineEdit" >
-       <property name="minimumSize" >
-        <size>
-         <width>212</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize" >
-        <size>
-         <width>212</width>
-         <height>16777215</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1" >
-      <widget class="QLineEdit" name="phoneNumber2LineEdit" >
-       <property name="minimumSize" >
-        <size>
-         <width>212</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize" >
-        <size>
-         <width>212</width>
-         <height>16777215</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="label_2" >
-       <property name="text" >
-        <string>Phone number 2:</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="3" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>279</width>
-       <height>21</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="0" >
     <layout class="QHBoxLayout" >
      <property name="margin" >
       <number>0</number>
@@ -415,6 +346,62 @@
       <number>100</number>
      </property>
     </widget>
+   </item>
+   <item row="1" column="0" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>Phone number 2:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QLineEdit" name="phoneNumber1LineEdit" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>212</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QLineEdit" name="phoneNumber2LineEdit" >
+       <property name="minimumSize" >
+        <size>
+         <width>212</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>212</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>Phone number 1:</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

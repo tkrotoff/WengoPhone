@@ -569,7 +569,11 @@ std::string Config::getVideoWebcamDevice() const {
 	WebcamDriver * webcam = WebcamDriver::getInstance();
 
 	std::string deviceName = getStringKeyValue(VIDEO_WEBCAM_DEVICE_KEY);
-	std::string defaultDevice = webcam->getDefaultDevice();
+
+	//FIXME see fixme DirectXWebcamDriver.h
+	//std::string defaultDevice = webcam->getDefaultDevice();
+	std::string defaultDevice = deviceName;
+
 	if (defaultDevice == WEBCAM_NULL) {
 		defaultDevice = String::null;
 	}
