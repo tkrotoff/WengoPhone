@@ -22,13 +22,22 @@
 #include "ui_GoogleTalkSettings.h"
 
 #include <model/profile/UserProfile.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
+#include <qtutil/MouseEventFilter.h>
+
+#include <util/WebBrowser.h>
 #include <util/Logger.h>
 
 #include <QtGui>
 
 static const std::string GOOGLETALK_SERVER = "talk.google.com";
 static const std::string GOOGLETALK_LOGIN_EXTENSION = "gmail.com";
+static const std::string GOOGLETALK_FORGOT_PASSWORD_LINK_EN = "https://www.google.com/accounts/ForgotPasswd?hl=en&continue=http%3A%2F%2Fmail.google.com";
+static const std::string GOOGLETALK_FORGOT_PASSWORD_LINK_FR = "https://www.google.com/accounts/ForgotPasswd?hl=fr&continue=http%3A%2F%2Fmail.google.com";
+static const std::string GOOGLETALK_CREATE_NEW_ACCOUNT_LINK_EN = "http://www.google.com/talk/index.html";
+static const std::string GOOGLETALK_CREATE_NEW_ACCOUNT_LINK_FR = "http://www.google.com/talk/intl/fr/";
 static const int GOOGLETALK_PORT = 80;
 
 QtGoogleTalkSettings::QtGoogleTalkSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
@@ -42,6 +51,14 @@ void QtGoogleTalkSettings::init() {
 
 	_ui = new Ui::GoogleTalkSettings();
 	_ui->setupUi(_IMSettingsWidget);
+
+	MousePressEventFilter * mouseFilterForgotPassword = new MousePressEventFilter(
+		this, SLOT(forgotPasswordLabelClicked()), Qt::LeftButton);
+	_ui->forgotPasswordLabel->installEventFilter(mouseFilterForgotPassword);
+
+	MousePressEventFilter * mouseFilterCreateAccount = new MousePressEventFilter(
+		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);
+	_ui->createAccountLabel->installEventFilter(mouseFilterCreateAccount);
 
 	if (!_imAccount) {
 		return;
@@ -77,4 +94,26 @@ void QtGoogleTalkSettings::save() {
 
 	_userProfile.addIMAccount(*_imAccount);
 	_userProfile.getConnectHandler().connect(*_imAccount);
+}
+
+void QtGoogleTalkSettings::forgotPasswordLabelClicked() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string lang = config.getLanguage();
+
+	if (lang == "fr") {
+		WebBrowser::openUrl(GOOGLETALK_FORGOT_PASSWORD_LINK_FR);
+	} else {
+		WebBrowser::openUrl(GOOGLETALK_FORGOT_PASSWORD_LINK_EN);
+	}
+}
+
+void QtGoogleTalkSettings::createAccountLabelClicked() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string lang = config.getLanguage();
+
+	if (lang == "fr") {
+		WebBrowser::openUrl(GOOGLETALK_CREATE_NEW_ACCOUNT_LINK_EN);
+	} else {
+		WebBrowser::openUrl(GOOGLETALK_CREATE_NEW_ACCOUNT_LINK_EN);
+	}
 }

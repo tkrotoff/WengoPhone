@@ -22,12 +22,21 @@
 #include "ui_MSNSettings.h"
 
 #include <model/profile/UserProfile.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
+#include <qtutil/MouseEventFilter.h>
+
+#include <util/WebBrowser.h>
 #include <util/Logger.h>
 
 #include <QtGui>
 
 static const std::string MSN_LOGIN_DEFAULT_EXTENSION = "hotmail.com";
+static const std::string MSN_FORGOT_PASSWORD_LINK_EN = "https://accountservices.passport.net/uiresetpw.srf?lc=1033";
+static const std::string MSN_FORGOT_PASSWORD_LINK_FR = "https://accountservices.passport.net/uiresetpw.srf?lc=1036";
+static const std::string MSN_CREATE_NEW_ACCOUNT_LINK_EN = "https://accountservices.passport.net/reg.srf?bk=1148037006&cru=https://accountservices.passport.net/uiresetpw.srf%3flc%3d1033&lc=1033&sl=1";
+static const std::string MSN_CREATE_NEW_ACCOUNT_LINK_FR = "https://accountservices.passport.net/reg.srf?id=9&cbid=956&sl=1&lc=1036";
 
 QtMSNSettings::QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
@@ -40,6 +49,15 @@ void QtMSNSettings::init() {
 
 	_ui = new Ui::MSNSettings();
 	_ui->setupUi(_IMSettingsWidget);
+
+	MousePressEventFilter * mouseFilterForgotPassword = new MousePressEventFilter(
+		this, SLOT(forgotPasswordLabelClicked()), Qt::LeftButton);
+	_ui->forgotPasswordLabel->installEventFilter(mouseFilterForgotPassword);
+
+	MousePressEventFilter * mouseFilterCreateAccount = new MousePressEventFilter(
+		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);
+	_ui->createAccountLabel->installEventFilter(mouseFilterCreateAccount);
+
 
 	if (!_imAccount) {
 		return;
@@ -74,4 +92,26 @@ void QtMSNSettings::save() {
 
 	_userProfile.addIMAccount(*_imAccount);
 	_userProfile.getConnectHandler().connect(*_imAccount);
+}
+
+void QtMSNSettings::forgotPasswordLabelClicked() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string lang = config.getLanguage();
+
+	if (lang == "fr") {
+		WebBrowser::openUrl(MSN_FORGOT_PASSWORD_LINK_FR);
+	} else {
+		WebBrowser::openUrl(MSN_FORGOT_PASSWORD_LINK_EN);
+	}
+}
+
+void QtMSNSettings::createAccountLabelClicked() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string lang = config.getLanguage();
+
+	if (lang == "fr") {
+		WebBrowser::openUrl(MSN_CREATE_NEW_ACCOUNT_LINK_FR);
+	} else {
+		WebBrowser::openUrl(MSN_CREATE_NEW_ACCOUNT_LINK_EN);
+	}
 }

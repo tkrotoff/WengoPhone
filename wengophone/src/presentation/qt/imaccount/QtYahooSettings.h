@@ -41,6 +41,10 @@ public Q_SLOTS:
 
 	void save();
 
+	void forgotPasswordLabelClicked();
+
+	void createAccountLabelClicked();
+
 private:
 
 	void init();

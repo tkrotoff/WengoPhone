@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>190</width>
-    <height>70</height>
+    <width>281</width>
+    <height>144</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -22,12 +22,80 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="pixmap" >
-      <pixmap resource="../wengophone.qrc" >:/pics/protocols/jabber.png</pixmap>
+   <item row="2" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>0</number>
+     </property>
+     <item row="0" column="1" >
+      <widget class="QLabel" name="forgotPasswordLabel" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
+       <property name="text" >
+        <string>&lt;span style=" text-decoration: underline; color:#0000ff;">Forgot your GoogleTalk password ?&lt;/span></string>
+       </property>
+       <property name="textFormat" >
+        <enum>Qt::AutoText</enum>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item rowspan="2" row="0" column="2" >
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="pixmap" >
+        <pixmap resource="../wengophone.qrc" >:/pics/Help-32x32.png</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QLabel" name="createAccountLabel" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
+       <property name="text" >
+        <string>&lt;span style=" text-decoration: underline; color:#0000ff;">Get a new GoogleTalk Account&lt;/span></string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
    <item row="0" column="1" >
     <layout class="QGridLayout" >
@@ -62,6 +130,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/protocols/jabber.png</pixmap>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

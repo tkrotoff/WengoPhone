@@ -22,10 +22,20 @@
 #include "ui_YahooSettings.h"
 
 #include <model/profile/UserProfile.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
+#include <qtutil/MouseEventFilter.h>
+
+#include <util/WebBrowser.h>
 #include <util/Logger.h>
 
 #include <QtGui>
+
+static const std::string YAHOO_FORGOT_PASSWORD_LINK_EN = "http://edit.yahoo.com/config/eval_forgot_pw?.src=pg&.done=http://messenger.yahoo.com/&.redir_from=MESSENGER";
+static const std::string YAHOO_FORGOT_PASSWORD_LINK_FR = "http://edit.yahoo.com/config/eval_forgot_pw?.src=pg&.done=http://fr.messenger.yahoo.com&.intl=fr&.redir_from=MESSENGER";
+static const std::string YAHOO_CREATE_NEW_ACCOUNT_LINK_EN = "http://login.yahoo.com/config/login?.done=http://messenger.yahoo.com&.src=pg";
+static const std::string YAHOO_CREATE_NEW_ACCOUNT_LINK_FR = "https://edit.yahoo.com/config/eval_register?.intl=fr&.done=http://fr.messenger.yahoo.com&.src=pg";
 
 QtYahooSettings::QtYahooSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
@@ -38,6 +48,14 @@ void QtYahooSettings::init() {
 
 	_ui = new Ui::YahooSettings();
 	_ui->setupUi(_IMSettingsWidget);
+
+	MousePressEventFilter * mouseFilterForgotPassword = new MousePressEventFilter(
+		this, SLOT(forgotPasswordLabelClicked()), Qt::LeftButton);
+	_ui->forgotPasswordLabel->installEventFilter(mouseFilterForgotPassword);
+
+	MousePressEventFilter * mouseFilterCreateAccount = new MousePressEventFilter(
+		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);
+	_ui->createAccountLabel->installEventFilter(mouseFilterCreateAccount);
 
 	if (!_imAccount) {
 		return;
@@ -76,4 +94,26 @@ void QtYahooSettings::save() {
 
 	_userProfile.addIMAccount(*_imAccount);
 	_userProfile.getConnectHandler().connect(*_imAccount);
+}
+
+void QtYahooSettings::forgotPasswordLabelClicked() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string lang = config.getLanguage();
+
+	if (lang == "fr") {
+		WebBrowser::openUrl(YAHOO_FORGOT_PASSWORD_LINK_FR);
+	} else {
+		WebBrowser::openUrl(YAHOO_FORGOT_PASSWORD_LINK_EN);
+	}
+}
+
+void QtYahooSettings::createAccountLabelClicked() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string lang = config.getLanguage();
+
+	if (lang == "fr") {
+		WebBrowser::openUrl(YAHOO_CREATE_NEW_ACCOUNT_LINK_FR);
+	} else {
+		WebBrowser::openUrl(YAHOO_CREATE_NEW_ACCOUNT_LINK_EN);
+	}
 }
