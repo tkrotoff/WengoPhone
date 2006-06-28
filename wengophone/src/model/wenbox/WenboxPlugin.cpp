@@ -86,13 +86,12 @@ void WenboxPlugin::wenboxConfigChangedEventHandler(Settings & sender, const std:
 }
 
 void WenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	PhoneCall * phoneCall = getActivePhoneCall();
 
 	switch (key) {
 	case IWenbox::KeyPickUp:
 		if (phoneCall) {
-			phoneCall->accept(config.getVideoEnable());
+			phoneCall->accept();
 		}
 		break;
 

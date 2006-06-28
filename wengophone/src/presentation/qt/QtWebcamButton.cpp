@@ -22,8 +22,6 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <webcam/WebcamDriver.h>
-
 #include <util/StringList.h>
 #include <util/Logger.h>
 
@@ -54,23 +52,16 @@ void QtWebcamButton::enableVideo() {
 }
 
 void QtWebcamButton::changeWebcamButtonState() {
-	WebcamDriver * webcam = WebcamDriver::getInstance();
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	bool enableButton;
-	if (webcam->getDeviceList().empty() || config.getVideoWebcamDevice().empty()) {
-		enableButton = false;
+	_enableVideo = config.getVideoEnable();
+	if (_enableVideo) {
 		_webcamButton->setIcon(QIcon(":pics/iconbar/webcam.png"));
 	} else {
-		enableButton = true;
-		_enableVideo = config.getVideoEnable();
-		if (_enableVideo) {
-			_webcamButton->setIcon(QIcon(":pics/iconbar/webcam.png"));
-		} else {
-			_webcamButton->setIcon(QIcon(":pics/iconbar/webcam-off.png"));
-		}
+		_webcamButton->setIcon(QIcon(":pics/iconbar/webcam-off.png"));
 	}
-	_webcamButton->setEnabled(enableButton);
+
+	_webcamButton->setEnabled(!config.getVideoWebcamDevice().empty());
 }
 
 void QtWebcamButton::configChangedEventHandler(Settings & sender, const std::string & key) {

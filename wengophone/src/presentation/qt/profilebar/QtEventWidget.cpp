@@ -33,6 +33,8 @@
 
 #include <QtGui>
 
+static const char * VOICE_MAIL_CALL = "123";
+
 QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 	QWidget * parent)
 	: QObjectThreadSafe(NULL),
@@ -112,7 +114,7 @@ void QtEventWidget::voiceMailClicked() {
 	if (mb.exec() == QMessageBox::Yes) {
 		IPhoneLine * phoneLine = _cUserProfile.getUserProfile().getActivePhoneLine();
 		if (phoneLine) {
-			phoneLine->makeCall("123", false);
+			phoneLine->makeCall(VOICE_MAIL_CALL);
 		}
 	}
 }

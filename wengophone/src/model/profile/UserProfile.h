@@ -311,12 +311,12 @@ public:
 	/**
 	 * @see IPhoneLine::makeCall()
 	 */
-	int makeCall(Contact & contact, bool enableVideo);
+	int makeCall(Contact & contact);
 
 	/**
 	 * @see IPhoneLine::makeCall()
 	 */
-	int makeCall(const std::string & phoneNumber, bool enableVideo);
+	int makeCall(const std::string & phoneNumber);
 
 	/**
 	 * Start a instant messaging with a Contact.

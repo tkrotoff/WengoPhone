@@ -88,8 +88,8 @@ PhoneCall::~PhoneCall() {
 	_state = NULL;
 }
 
-void PhoneCall::accept(bool enableVideo) {
-	_phoneLine.acceptCall(_callId, enableVideo);
+void PhoneCall::accept() {
+	_phoneLine.acceptCall(_callId);
 }
 
 void PhoneCall::resume() {

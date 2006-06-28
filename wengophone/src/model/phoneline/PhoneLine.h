@@ -45,9 +45,9 @@ public:
 
 	std::string getMySipAddress() const;
 
-	int makeCall(const std::string & phoneNumber, bool enableVideo);
+	int makeCall(const std::string & phoneNumber);
 
-	void acceptCall(int callId, bool enableVideo);
+	void acceptCall(int callId);
 
 	void rejectCall(int callId);
 

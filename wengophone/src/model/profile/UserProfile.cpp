@@ -205,15 +205,15 @@ void UserProfile::disconnectSipAccounts(bool now) {
 	}
 }
 
-int UserProfile::makeCall(Contact & contact, bool enableVideo) {
+int UserProfile::makeCall(Contact & contact) {
 	if (_activePhoneLine) {
-		return _activePhoneLine->makeCall(contact.getPreferredNumber(), enableVideo);
+		return _activePhoneLine->makeCall(contact.getPreferredNumber());
 	}
 }
 
-int UserProfile::makeCall(const std::string & phoneNumber, bool enableVideo) {
+int UserProfile::makeCall(const std::string & phoneNumber) {
 	if (_activePhoneLine) {
-		return _activePhoneLine->makeCall(phoneNumber, enableVideo);
+		return _activePhoneLine->makeCall(phoneNumber);
 	}
 }
 

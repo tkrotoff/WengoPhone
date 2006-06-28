@@ -245,7 +245,7 @@ void QtContact::contactUpdated() {
 }
 
 void QtContact::startFreeCall() {
-	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(_contactProfile.getFreePhoneNumber(), false);
+	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(_contactProfile.getFreePhoneNumber());
 }
 
 QString QtContact::getDisplayName() const {

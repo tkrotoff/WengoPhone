@@ -558,11 +558,30 @@ bool Config::getPrivacySignAsInvisible() const {
 }
 
 bool Config::getVideoEnable() const {
-	return getBooleanKeyValue(VIDEO_ENABLE_KEY);
+	if (getVideoWebcamDevice().empty()) {
+		return false;
+	} else {
+		return getBooleanKeyValue(VIDEO_ENABLE_KEY);
+	}
 }
 
 std::string Config::getVideoWebcamDevice() const {
-	return getStringKeyValue(VIDEO_WEBCAM_DEVICE_KEY);
+	WebcamDriver * webcam = WebcamDriver::getInstance();
+
+	std::string deviceName = getStringKeyValue(VIDEO_WEBCAM_DEVICE_KEY);
+	std::string defaultDevice = webcam->getDefaultDevice();
+	if (defaultDevice == WEBCAM_NULL) {
+		defaultDevice = String::null;
+	}
+	StringList deviceList = webcam->getDeviceList();
+
+	if (deviceName.empty()) {
+		return defaultDevice;
+	} else if (!deviceList.contains(deviceName)) {
+		return defaultDevice;
+	} else {
+		return deviceName;
+	}
 }
 
 int Config::getVideoQuality() const {

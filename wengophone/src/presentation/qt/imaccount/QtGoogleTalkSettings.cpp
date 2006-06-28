@@ -112,7 +112,7 @@ void QtGoogleTalkSettings::createAccountLabelClicked() {
 	std::string lang = config.getLanguage();
 
 	if (lang == "fr") {
-		WebBrowser::openUrl(GOOGLETALK_CREATE_NEW_ACCOUNT_LINK_EN);
+		WebBrowser::openUrl(GOOGLETALK_CREATE_NEW_ACCOUNT_LINK_FR);
 	} else {
 		WebBrowser::openUrl(GOOGLETALK_CREATE_NEW_ACCOUNT_LINK_EN);
 	}

@@ -80,6 +80,7 @@ sources = [
 	'model/phonecall/PhoneCallStateTalking.cpp',
 	'model/phonecall/PhoneCallStateResumed.cpp',
 	'model/phonecall/PhoneCallStateRinging.cpp',
+	'model/phonecall/PhoneCallStateMissed.cpp',
 	'model/phonecall/ConferenceCall.cpp',
 	'model/phonecall/ConferenceCallParticipant.cpp',
 	'model/phoneline/PhoneLine.cpp',

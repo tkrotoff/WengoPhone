@@ -69,7 +69,7 @@ PhoneLine::PhoneLine(SipAccount & sipAccount, UserProfile & userProfile)
 
 	_activePhoneCall = NULL;
 
-	// must be called after _phoneLineStateList initialization
+	//Must be called after _phoneLineStateList initialization
 	_sipWrapper = SipWrapperFactory::getFactory().createSipWrapper();
 
 	_sipCallbacks = new SipCallbacks(*_sipWrapper, _userProfile);
@@ -107,7 +107,7 @@ std::string PhoneLine::getMySipAddress() const {
 	return "sip:" + _sipAccount.getIdentity() + "@" + _sipAccount.getRealm();
 }
 
-int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
+int PhoneLine::makeCall(const std::string & phoneNumber) {
 	if (!_sipAccount.isConnected()) {
 		LOG_ERROR("SipAccount not connected");
 		return SipWrapper::CallIdError;
@@ -137,9 +137,11 @@ int PhoneLine::makeCall(const std::string & phoneNumber, bool enableVideo) {
 	//Puts all the PhoneCall in the hold state before to create a new PhoneCall
 	//holdAllCalls();
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	bool enableVideo = config.getVideoEnable();
+
 	if (enableVideo) {
 		//Sets the video device
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
 		_sipWrapper->setVideoDevice(config.getVideoWebcamDevice());
 	}
 
@@ -199,9 +201,18 @@ void PhoneLine::checkCallId(int callId) {
 	}
 }
 
-void PhoneLine::acceptCall(int callId, bool enableVideo) {
+void PhoneLine::acceptCall(int callId) {
 	checkCallId(callId);
 	holdCallsExcept(callId);
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	bool enableVideo = config.getVideoEnable();
+
+	if (enableVideo) {
+		//Sets the video device
+		_sipWrapper->setVideoDevice(config.getVideoWebcamDevice());
+	}
+
 	_sipWrapper->acceptCall(callId, enableVideo);
 	LOG_DEBUG("call accepted callId=" + String::fromNumber(callId));
 }
@@ -264,7 +275,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		" state=" + EnumPhoneCallState::toString(state) +
 		" from=" + sipAddress.getSipAddress());
 
-	//save the last state
+	//Saves the last state
 	EnumPhoneCallState::PhoneCallState lastState = EnumPhoneCallState::PhoneCallStateUnknown;
 	PhoneCall * phoneCall = getPhoneCall(callId);
 	if (phoneCall) {
@@ -397,7 +408,7 @@ void PhoneLine::holdAllCalls() {
 }
 
 void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
-	LOG_DEBUG("PhoneLineState=" + String::fromNumber(state));
+	LOG_DEBUG("PhoneLineState=" + EnumPhoneLineState::toString(state));
 
 	for (unsigned i = 0; i < _phoneLineStateList.size(); i++) {
 		PhoneLineState * phoneLineState = _phoneLineStateList[i];
@@ -410,7 +421,7 @@ void PhoneLine::setState(EnumPhoneLineState::PhoneLineState state) {
 				stateChangedEvent(*this, state);
 				return;
 			} else {
-				//stay in the same state
+				//Stay in the same state
 				return;
 			}
 		}

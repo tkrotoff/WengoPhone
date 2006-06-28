@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWPHONECALLSTATERESUMED_H
-#define OWPHONECALLSTATERESUMED_H
+#ifndef OWPHONECALLSTATEMISSED_H
+#define OWPHONECALLSTATEMISSED_H
 
 #include "PhoneCallState.h"
 
@@ -27,14 +27,14 @@
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class PhoneCallStateResumed : public PhoneCallState {
+class PhoneCallStateMissed : public PhoneCallState {
 public:
 
 	EnumPhoneCallState::PhoneCallState getCode() const {
-		return EnumPhoneCallState::PhoneCallStateResumed;
+		return EnumPhoneCallState::PhoneCallStateMissed;
 	}
 
 	void execute(PhoneCall & phoneCall);
 };
 
-#endif	//OWPHONECALLSTATERESUMED_H
+#endif	//OWPHONECALLSTATEMISSED_H

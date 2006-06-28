@@ -143,8 +143,8 @@ private:
 
 	void stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state);
 
-	void videoFrameReceivedEventHandler(PhoneCall & sender, piximage* remoteVideoFrame,
-		piximage* localVideoFrame);
+	void videoFrameReceivedEventHandler(PhoneCall & sender, piximage * remoteVideoFrame,
+		piximage * localVideoFrame);
 
 	PhoneCall & _phoneCall;
 

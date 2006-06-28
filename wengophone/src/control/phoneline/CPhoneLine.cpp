@@ -47,8 +47,7 @@ CPhoneLine::~CPhoneLine() {
 }
 
 int CPhoneLine::makeCall(const std::string & phoneNumber) {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	return _phoneLine.makeCall(phoneNumber, config.getVideoEnable());
+	return _phoneLine.makeCall(phoneNumber);
 }
 
 void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender, EnumPhoneLineState::PhoneLineState state) {

@@ -81,7 +81,7 @@ public:
 	/**
 	 * @see IPhoneLine::acceptCall()
 	 */
-	void accept(bool enableVideo);
+	void accept();
 
 	/**
 	 * @see IPhoneLine::resumeCall()

@@ -79,12 +79,12 @@ public:
 	/**
 	 * @see SipWrapper::makeCall()
 	 */
-	virtual int makeCall(const std::string & phoneNumber, bool enableVideo) = 0;
+	virtual int makeCall(const std::string & phoneNumber) = 0;
 
 	/**
 	 * @see SipWrapper::acceptCall()
 	 */
-	virtual void acceptCall(int callId, bool enableVideo) = 0;
+	virtual void acceptCall(int callId) = 0;
 
 	/**
 	 * @see SipWrapper::rejectCall()

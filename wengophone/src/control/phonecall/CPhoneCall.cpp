@@ -66,8 +66,8 @@ void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState
 	_pPhoneCall->stateChangedEvent(state);
 }
 
-void CPhoneCall::videoFrameReceivedEventHandler(PhoneCall & sender, piximage* remoteVideoFrame,
-	piximage* localVideoFrame) {
+void CPhoneCall::videoFrameReceivedEventHandler(PhoneCall & sender, piximage * remoteVideoFrame,
+	piximage * localVideoFrame) {
 
 	_pPhoneCall->videoFrameReceivedEvent(remoteVideoFrame, localVideoFrame);
 }
@@ -77,8 +77,7 @@ void CPhoneCall::hangUp() {
 }
 
 void CPhoneCall::accept() {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	_phoneCall.accept(config.getVideoEnable());
+	_phoneCall.accept();
 }
 
 void CPhoneCall::hold() {

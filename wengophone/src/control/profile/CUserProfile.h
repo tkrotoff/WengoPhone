@@ -75,20 +75,14 @@ public:
 	void disconnect();
 
 	/**
-	 * @see UserProfile::makeCall(Contact & contact, bool enableVideo)
+	 * @see UserProfile::makeCall()
 	 */
 	void makeContactCall(const std::string & contactId);
 
 	/**
-	 * Video will be enable from if set in Config.
-	 * @see UserProfile::makeCall(const std::string & phoneNumber, bool enableVideo)
+	 * @see UserProfile::makeCall()
 	 */
 	void makeCall(const std::string & phoneNumber);
-
-	/**
-	 * @see UserProfile::makeCall(const std::string & phoneNumber, bool enableVideo)
-	 */
-	void makeCall(const std::string & phoneNumber, bool enableVideo);
 
 	/**
 	 * @see UserProfile::startIM
@@ -214,24 +208,19 @@ private:
 	void wsCallForwardCreatedEventHandler(UserProfile & sender, WsCallForward & wsCallForward);
 
 	/**
-	 * @see disconnect
+	 * @see disconnect()
 	 */
 	void disconnectThreadSafe();
 
 	/**
-	 * @see :makeCall(Contact & contact, bool enableVideo)
+	 * @see makeCall()
 	 */
 	void makeContactCallThreadSafe(std::string contactId);
 
 	/**
-	 * @see makeCall(const std::string & phoneNumber, bool enableVideo)
+	 * @see makeCall()
 	 */
 	void makeCallThreadSafe(std::string phoneNumber);
-
-	/**
-	 * @see makeCall(const std::string & phoneNumber, bool enableVideo)
-	 */
-	void makeCallThreadSafe(std::string phoneNumber, bool enableVideo);
 
 	/**
 	 * @see startIM

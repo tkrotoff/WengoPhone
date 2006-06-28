@@ -359,7 +359,8 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateMissed:
-		_statusLabel->setText(tr("Missed"));
+		//Do nothing since QtPhoneCall is already destroyed
+		//via PhoneCallStateClosed
 		break;
 
 	case EnumPhoneCallState::PhoneCallStateRedirected:

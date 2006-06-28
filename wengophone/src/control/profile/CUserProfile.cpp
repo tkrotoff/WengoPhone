@@ -205,8 +205,7 @@ void CUserProfile::makeContactCall(const std::string & contactId) {
 void CUserProfile::makeContactCallThreadSafe(std::string contactId) {
 	Contact * contact = _cContactList.getContact(contactId);
 	if (contact) {
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		int callId = _userProfile.makeCall(*contact, config.getVideoEnable());
+		int callId = _userProfile.makeCall(*contact);
 		if (callId == SipWrapper::CallIdError) {
 			makeCallErrorEvent(*this);
 		}
@@ -222,23 +221,10 @@ void CUserProfile::makeCall(const std::string & phoneNumber) {
 }
 
 void CUserProfile::makeCallThreadSafe(std::string phoneNumber) {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	int callId = _userProfile.makeCall(phoneNumber, config.getVideoEnable());
+	int callId = _userProfile.makeCall(phoneNumber);
 	if (callId == SipWrapper::CallIdError) {
 		makeCallErrorEvent(*this);
 	}
-}
-
-void CUserProfile::makeCall(const std::string & phoneNumber, bool enableVideo) {
-	typedef ThreadEvent2<void (std::string phoneNumber, bool enableVideo), std::string, bool> MyThreadEvent;
-	MyThreadEvent * event =
-		new MyThreadEvent(boost::bind(&CUserProfile::makeCallThreadSafe, this, _1, _2), phoneNumber, enableVideo);
-
-	_modelThread.postEvent(event);
-}
-
-void CUserProfile::makeCallThreadSafe(std::string phoneNumber, bool enableVideo) {
-	_userProfile.makeCall(phoneNumber, enableVideo);
 }
 
 void CUserProfile::startIM(const std::string & contactId) {

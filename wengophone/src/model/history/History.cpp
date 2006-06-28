@@ -28,7 +28,9 @@
 #include <sstream>
 #include <exception>
 
-History::History(UserProfile & userProfile) : _userProfile(userProfile) {
+History::History(UserProfile & userProfile)
+	: _userProfile(userProfile) {
+
 	_collection = new HistoryMementoCollection();
 	_missedCallCount = 0;
 }
@@ -168,7 +170,7 @@ void History::replay(unsigned id) {
 	//replay only outgoing call
 	if (getMemento(id)->getState() == HistoryMemento::OutgoingCall) {
 		std::string phoneNumber = getMemento(id)->getPeer();
-		_userProfile.getActivePhoneLine()->makeCall(phoneNumber, false);
+		_userProfile.getActivePhoneLine()->makeCall(phoneNumber);
 	}
 }
 

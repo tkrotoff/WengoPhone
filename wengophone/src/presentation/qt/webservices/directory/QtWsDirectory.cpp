@@ -145,7 +145,7 @@ void QtWsDirectory::contactFoundEventHandlerThreadSafe(WsDirectory & sender, Con
 
 void QtWsDirectory::callContact(const QString & sipAddress) {
 	//get the active phone line from the current user contact & make a call
-	_cWsDirectory.getCWengoPhone().getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine()->makeCall(sipAddress.toStdString(), true);
+	_cWsDirectory.getCWengoPhone().getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine()->makeCall(sipAddress.toStdString());
 }
 
 void QtWsDirectory::addContact(ContactProfile * contact) {
