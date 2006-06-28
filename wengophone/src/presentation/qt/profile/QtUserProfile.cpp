@@ -102,10 +102,11 @@ void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
 
 	switch (state) {
 	case SipAccount::LoginStateReady:
-		setBrowserUrlToAccount();
+		//setBrowserUrlToAccount();
 		break;
 
 	case SipAccount::LoginStateConnected:
+		setBrowserUrlToAccount();
 		break;
 
 	case SipAccount::LoginStateDisconnected:
@@ -185,8 +186,9 @@ void QtUserProfile::setBrowserUrlToAccount() {
 			"&lang=" + config.getLanguage() +
 			"&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) +
 			"&page=softphoneng-web";
-		if (_qtWengoPhone.getQtBrowser())
-            _qtWengoPhone.getQtBrowser()->setUrl(QtWengoPhone::URL_WENGO_MINI_HOME + data);
+		if (_qtWengoPhone.getQtBrowser()) {
+			_qtWengoPhone.getQtBrowser()->setUrl(QtWengoPhone::URL_WENGO_MINI_HOME + data);
+		}
 	}
 #endif
 }
