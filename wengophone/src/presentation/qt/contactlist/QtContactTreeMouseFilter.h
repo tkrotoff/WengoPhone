@@ -70,7 +70,7 @@ private:
 
 	QPoint _dstart;
 
-	QTreeWidgetItem * _selectedItem;
+	QString _selectedItem;
 
 	QTreeWidgetItem * _entered;
 
