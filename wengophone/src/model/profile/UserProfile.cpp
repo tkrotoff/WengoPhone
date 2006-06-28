@@ -337,6 +337,10 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 	switch (state) {
 	case SipAccount::LoginStateReady: {
 
+		IMAccount imAccount(_wengoAccount->getIdentity(),
+			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
+		addIMAccount(imAccount);
+
 		_wengoAccountIsValid = true;
 		_wengoAccountInitializationFinished = true;
 
@@ -369,10 +373,6 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 			_wsCallForward->wsCallForwardEvent += boost::bind(&UserProfile::wsCallForwardEventHandler, this, _1, _2, _3);
 
 			addPhoneLine(*_wengoAccount);
-
-			IMAccount imAccount(_wengoAccount->getIdentity(),
-				_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
-			addIMAccount(imAccount);
 
 			loadHistory();
 
