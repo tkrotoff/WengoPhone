@@ -2240,7 +2240,9 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
       
       /* new payload is differrent from the old one */
       DBG1_MEDIA_ENGINE("ph_mession_audio_start: Replacing audio session\n");
+	  PH_MSESSION_AUDIO_UNLOCK();
       ph_msession_audio_stop(s, deviceId);
+	  PH_MSESSION_AUDIO_LOCK();
       // end branch 1
       
     }
