@@ -89,15 +89,16 @@ int ph_msession_start(struct ph_msession_s *s, const char *deviceid)
 
 int ph_msession_conf_start(struct ph_msession_s *s1, struct ph_msession_s *s2, const char *device)
 {
-  int ret;
-  DBG1_MEDIA_ENGINE("MEDIA_ENGINE: entering ph_msession_conf_start\n");
-  g_mutex_lock(s1->critsec_mstream_init);
-  g_mutex_lock(s2->critsec_mstream_init);
-  ret = ph_msession_audio_conf_start(s1, s2, device);
-  g_mutex_unlock(s2->critsec_mstream_init);
-  g_mutex_unlock(s1->critsec_mstream_init);
-  return ret;
+	int ret;
+	DBG1_MEDIA_ENGINE("MEDIA_ENGINE: entering ph_msession_conf_start\n");
+	g_mutex_lock(s1->critsec_mstream_init);
+	g_mutex_lock(s2->critsec_mstream_init);
+	ret = ph_msession_audio_conf_start(s1, s2, device);
+	g_mutex_unlock(s2->critsec_mstream_init);
+	g_mutex_unlock(s1->critsec_mstream_init);
+	return ret;
 }
+
 int ph_msession_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2)
 {
   int ret;
@@ -113,14 +114,14 @@ int ph_msession_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2)
 
 int ph_msession_suspend(struct ph_msession_s *s,  int traffictype, const char *device)
 {
-  DBG1_MEDIA_ENGINE("MEDIA_ENGINE: entering ph_msession_suspend\n");
-  g_mutex_lock(s->critsec_mstream_init);
+	DBG1_MEDIA_ENGINE("MEDIA_ENGINE: entering ph_msession_suspend\n");
+	g_mutex_lock(s->critsec_mstream_init);
 #ifdef PHAPI_VIDEO_SUPPORT
-   ph_msession_video_stop(s);
+	ph_msession_video_stop(s);
 #endif
-   ph_msession_audio_suspend(s, traffictype, device);
-   g_mutex_unlock(s->critsec_mstream_init);
-   return (0);
+	ph_msession_audio_suspend(s, traffictype, device);
+	g_mutex_unlock(s->critsec_mstream_init);
+	return (0);
 }
 
 int ph_msession_resume(struct ph_msession_s *s, int traffictype, const char *device)

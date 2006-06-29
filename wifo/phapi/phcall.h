@@ -9,47 +9,60 @@ extern "C"
 #endif
 
 struct phConfig;
-
 struct ph_msession_s;
 
+/**
+ * @struct memory representation of a call
+ */
 struct phcall {
-  int cid;
-  int did;
-  int txcid;    /* call id to which we're trasferring this call */
-  int vlid;     /* virtual line id */
-  int redirs;
-  char remote_sdp_audio_ip[64];
-  int  remote_sdp_audio_port;
-  char remote_sdp_video_ip[64];
-  int  remote_sdp_video_port;
-  char audio_payload_name[32];
-  int  audio_payload;
-  char video_payload_name[32];
-  int video_payload;
-  int wanted_streams;
-  int local_sdp_audio_port;
-  int local_sdp_video_port;
-  struct phConfig *cfg;
-  int  _hasaudio;
-  int  isringing;
-  int  remotehold;
-  int  localhold;
-  int  localresume;
-  int  localrefer;
-  int  remoterefer;
+	int cid;
+	int did;
+	/* call id to which we're trasferring this call */
+	int txcid;
+	/* virtual line id */
+	int vlid;
+	int redirs;
+	char remote_sdp_audio_ip[64];
+	int  remote_sdp_audio_port;
+	char remote_sdp_video_ip[64];
+	int  remote_sdp_video_port;
+	char audio_payload_name[32];
+	int  audio_payload;
+	char video_payload_name[32];
+	int video_payload;
+	int wanted_streams;
+	int local_sdp_audio_port;
+	int local_sdp_video_port;
+	struct phConfig *cfg;
+	int  _hasaudio;
+	int  isringing;
+	int  remotehold;
+	/* used by the 'hold call' state machine */
+	int  localhold;
+	int  localresume;
+	int  localrefer;
+	int  remoterefer;
 #if 0
-  void *ph_audio_stream;
+	void *ph_audio_stream;
 #endif
-  void *ph_video_stream; /* structure holding specific information on the video stream. NULL when the stream is not activated */
-  int  rcid;    /* Call ID for the call created by REFER */
-  int  rdid;    /* REFER did */
-  int  closereq;  /*  close requested by lowerl layer */
-  char cng_name[32];
-  char cname[64]; /* CNAME Field for RTCP reports */
-  int  cng;
-  int  nego_mflags;   /* current negociated media flags for the call */
-  int  user_mflags;   /* user media flags for the call (flags given by the user when placing or accepting the call) */
-  struct ph_msession_s *mses;
+	/* structure holding specific information on the video stream. NULL when the stream is not activated */
+	void *ph_video_stream;
+	/* Call ID for the call created by REFER */
+	int  rcid;
+	/* REFER did */
+	int  rdid;
+	/*  close requested by lower layer */
+	int  closereq;
+	char cng_name[32];
+	/* CNAME Field for RTCP reports */
+	char cname[64];
+	int  cng;
+	/* current negociated media flags for the call */
+	int  nego_mflags;
+	/* user media flags for the call (flags given by the user when placing or accepting the call) */
+	int  user_mflags;
+	/* structure holding the description of all the media sessions related to the call */
+	struct ph_msession_s *mses;
 };
 
 typedef struct phcall phcall_t;

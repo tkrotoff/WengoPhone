@@ -1,6 +1,7 @@
 /*
  * phapi   phone api
  *
+ * Copyright (C) 2006        WENGO SAS
  * Copyright (C) 2004        Vadim Lebedev <vadim@mbdsys.com>
  *
  * This is free software; you can redistribute it and/or modify
@@ -569,67 +570,68 @@ ph_locate_call(eXosip_event_t *je, int creatit)
   phcall_t *ca, *found = 0, *newca = 0;
 
 
-  /* lookup matching call descriptor */
-  for(ca = ph_calls; ca < &ph_calls[PH_MAX_CALLS];  ca++)
-    {
-      if (ca->cid == -1 && !newca)
-	newca = ca;
-
-      if (ca->cid == je->cid)
+	/* lookup matching call descriptor */
+	for(ca = ph_calls; ca < &ph_calls[PH_MAX_CALLS];  ca++)
 	{
-	  found  = ca;
-	  break;
+		// locate first non-used pre-allocated phcall_t
+		if (ca->cid == -1 && !newca)
+		{
+			newca = ca;
+		}
+
+		if (ca->cid == je->cid)
+		{
+			found  = ca;
+			break;
+		}
 	}
-    }
 
+	ca = found;
 
-  ca = found;
+	if (!ca)   /* we didn't find a matching call descriptor */
+	{
+		if (creatit)   
+		{
+			/* allocate a new one */
+			if (!newca)
+			{
+				return 0; /* !!! BUG !!! */
+			}
+			ca = newca;
+			memset(ca, 0, sizeof(*ca));
+			ca->cid = -1;
+		}
+	}
 
-  if (!ca)   /* we didn't find a matching call descriptor */
-    {
-    if (creatit)   
-      {
-	/* allocate a new one */
-	if (!newca)  
-	  return 0; /* !!! BUG !!! */
-	ca = newca;
-	memset(ca, 0, sizeof(*ca));
-	ca->cid = -1;
-      }
-    }
+	if (!ca)
+	{
+		return 0;
+	}
 
- 
-  
-  if (!ca)
-    return 0;
+	/* update the call information */
+	if (!ca->localrefer)
+	{
+		ca->cid = je->cid;
+		ca->did = je->did;
+	}
 
-
-  /* update the call information */
-
-  if (!ca->localrefer)
-    {
-      ca->cid = je->cid;
-      ca->did = je->did;
-    }
-
-  if (je->remote_sdp_audio_ip[0])
-    {
-      strncpy(ca->remote_sdp_audio_ip, je->remote_sdp_audio_ip, sizeof(ca->remote_sdp_audio_ip));
-      ca->remote_sdp_audio_port = je->remote_sdp_audio_port;
-      strncpy(ca->audio_payload_name, je->payload_name, sizeof(ca->audio_payload_name));
-      ca->audio_payload = je->payload;
-    }
+	if (je->remote_sdp_audio_ip[0])
+	{
+		strncpy(ca->remote_sdp_audio_ip, je->remote_sdp_audio_ip, sizeof(ca->remote_sdp_audio_ip));
+		ca->remote_sdp_audio_port = je->remote_sdp_audio_port;
+		strncpy(ca->audio_payload_name, je->payload_name, sizeof(ca->audio_payload_name));
+		ca->audio_payload = je->payload;
+	}
     
- if (je->remote_sdp_video_ip[0])
-    {
-      strncpy(ca->remote_sdp_video_ip, je->remote_sdp_video_ip, sizeof(ca->remote_sdp_video_ip));
-      ca->remote_sdp_video_port = je->remote_sdp_video_port;
-      strncpy(ca->video_payload_name, je->video_payload_name, sizeof(ca->video_payload_name));
-      ca->video_payload = je->video_payload;
-    }
+	if (je->remote_sdp_video_ip[0])
+	{
+		strncpy(ca->remote_sdp_video_ip, je->remote_sdp_video_ip, sizeof(ca->remote_sdp_video_ip));
+		ca->remote_sdp_video_port = je->remote_sdp_video_port;
+		strncpy(ca->video_payload_name, je->video_payload_name, sizeof(ca->video_payload_name));
+		ca->video_payload = je->video_payload;
+	}
 
-
-  return ca;
+	return ca;
 }
 
 void ph_release_call(phcall_t *ca)
@@ -663,12 +665,16 @@ int ph_has_active_calls()
 
 }
 
+/**
+ * @brief does the call have an active audio session stream ?
+ */
 int ph_call_hasaudio(phcall_t *ca)
 {
-  if (ca->mses && (ca->mses->activestreams & (1 << PH_MSTREAM_AUDIO1)))
-    return 1;
-
-  return 0;
+	if (ca->mses && (ca->mses->activestreams & (1 << PH_MSTREAM_AUDIO1)))
+	{
+		return 1;
+	}
+	return 0;
 }
 
 void ph_stream_ended(void *ctx, int event)
@@ -1449,31 +1455,43 @@ phSetContact(int vlid, const char *uri)
 MY_DLLEXPORT int 
 phConf(int cid1, int cid2)
 {
-  phcall_t *ca1 = ph_locate_call_by_cid(cid1);
-  phcall_t *ca2 = ph_locate_call_by_cid(cid2);
+	phcall_t *ca1 = ph_locate_call_by_cid(cid1);
+	phcall_t *ca2 = ph_locate_call_by_cid(cid2);
 
-  if(!ca1 || !ca2)
-    return -PH_BADCFID;
+	if(!ca1 || !ca2)
+	{
+		return -PH_BADCFID;
+	}
 
-  if (0 > ph_msession_conf_start(ca1->mses, ca2->mses, phcfg.audio_dev))
-    return PH_NORESOURCES;
-  else
-    return 0;
+	if (0 > ph_msession_conf_start(ca1->mses, ca2->mses, phcfg.audio_dev))
+	{
+    	return PH_NORESOURCES;
+	}
+	else
+	{
+    	return 0;
+	}
 }
 
 MY_DLLEXPORT int 
 phStopConf(int cid1, int cid2)
 {
-  phcall_t *ca1 = ph_locate_call_by_cid(cid1);
-  phcall_t *ca2 = ph_locate_call_by_cid(cid2);
+	phcall_t *ca1 = ph_locate_call_by_cid(cid1);
+	phcall_t *ca2 = ph_locate_call_by_cid(cid2);
 
-  if(!ca1 || !ca2)
-    return -PH_BADCFID;
+	if(!ca1 || !ca2)
+	{
+		return -PH_BADCFID;
+	}
 
-  if( 0 > ph_msession_conf_stop(ca1->mses, ca2->mses))
-    return PH_NORESOURCES;
-  else
-    return 0;
+	if( 0 > ph_msession_conf_stop(ca1->mses, ca2->mses))
+	{
+		return PH_NORESOURCES;
+	}
+	else
+	{
+    	return 0;
+	}
 }
 
 #define CONF_MODE 1
@@ -1511,32 +1529,38 @@ phResumeCall(int cid)
 MY_DLLEXPORT int 
 phHoldCall(int cid)
 {
-  phcall_t *ca = ph_locate_call_by_cid(cid);
-  int i;
+	phcall_t *ca = ph_locate_call_by_cid(cid);
+	int i;
 
-  DBG4_SIP_NEGO("SIP_NEGO: phHoldCall\n", 0, 0, 0);
+	DBG4_SIP_NEGO("SIP_NEGO: phHoldCall\n", 0, 0, 0);
 
-  if (!ca)
-    return -PH_BADCID;
+	if (!ca)
+	{
+    	return -PH_BADCID;
+	}
 
-  if (ca->localhold)
-    return -PH_HOLDERR;
+	if (ca->localhold)
+	{
+		return -PH_HOLDERR;
+	}
 
-  ca->localhold = 1;
+	ca->localhold = 1;
 
-  eXosip_lock();
-  i = eXosip_on_hold_call(ca->did);
-  eXosip_unlock();
+	// SPIKE_EXOSIP: hold a call
+	eXosip_lock();
+	i = eXosip_on_hold_call(ca->did);
+	eXosip_unlock();
 
-  if (!i && ph_call_hasaudio(ca))
-    {
+	if (!i && ph_call_hasaudio(ca))
+	{
 #ifndef MEDIA_SUSPEND
-    ph_call_media_stop(ca);
+		ph_call_media_stop(ca);
 #else
-    ph_call_media_suspend(ca, 1);
+		ph_call_media_suspend(ca, 1);
 #endif
-    }
-  return i;
+	}
+	return i;
+
 }
 
 
@@ -3164,14 +3188,11 @@ ph_call_media_stop(phcall_t *ca)
 static int
 ph_call_media_suspend(phcall_t *ca, int localhold)
 {
-  if (ca->mses)
-    {
-      ph_msession_suspend(ca->mses, PH_MSTREAM_TRAFFIC_IO, phcfg.audio_dev);
-    }
-
-  return 0;
-  
-
+	if (ca->mses)
+	{
+		ph_msession_suspend(ca->mses, PH_MSTREAM_TRAFFIC_IO, phcfg.audio_dev);
+	}
+	return 0;
 }
 
 
@@ -3876,39 +3897,39 @@ ph_call_closed(eXosip_event_t *je)
 
 }
 
-
+/**
+ * @brief callback called by the exosip layer when a call is on hold
+ */
 void 
 ph_call_onhold(eXosip_event_t *je)
 {
-  phCallStateInfo_t info;
-  phcall_t *ca;
+	phCallStateInfo_t info;
+	phcall_t *ca;
 
-  DBG4_SIP_NEGO("SIP_NEGO: ph_call_onhold\n", 0, 0, 0);
+	DBG4_SIP_NEGO("SIP_NEGO: ph_call_onhold\n", 0, 0, 0);
+	clear(info);
 
-  clear(info);
+	// locate the corresponding call for this event
+	ca = ph_locate_call(je, 0);
+	if (!ca)
+	{
+		return;
+	}
 
-  ca = ph_locate_call(je, 0);
-  
-  if (!ca)
-    return;
-
-  info.vlid = ca->vlid;
-  if (ph_call_hasaudio(ca))
-    {    
+	info.vlid = ca->vlid;
+	if (ph_call_hasaudio(ca))
+	{    
 #ifndef MEDIA_SUSPEND      
-    ph_call_media_stop(ca);
+		ph_call_media_stop(ca);
 #else
-    ph_call_media_suspend(ca, 0);
+		ph_call_media_suspend(ca, 0);
 #endif
-    }
+	}
 
-  ca->remotehold = 1;
-  info.userData = je->external_reference;
-  info.event = phCALLHELD;
-  phcb->callProgress(je->cid, &info);
-
-  
-
+	ca->remotehold = 1;
+	info.userData = je->external_reference;
+	info.event = phCALLHELD;
+	phcb->callProgress(je->cid, &info);
 
 }
 

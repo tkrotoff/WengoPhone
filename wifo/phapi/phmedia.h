@@ -70,8 +70,6 @@ enum ph_mstream_traffic_type {
   PH_MSTREAM_TRAFFIC_IN = 1,
   PH_MSTREAM_TRAFFIC_OUT = 2,
   PH_MSTREAM_TRAFFIC_IO = 3
-
-
 };
 
 
@@ -87,25 +85,26 @@ enum ph_mstream_flags {
   
 };
 
-/* media stream creation parameters */
+/**
+ * @struct description of 1 media stream
+ */
 struct ph_mstream_params_s
 {
-  int  localport;
-  int  medatype;
-  int  traffictype;
-  int  flags;
-  int  jitter;
-  char remoteaddr[16];
-  int  remoteport;
-  int  vadthreshold;
-  int  videoconfig; 
-  struct ph_media_payload_s ipayloads[16];
-  struct ph_media_payload_s opayloads[16];
-  
-  
-  void *streamerData;
-
-
+	int  localport;
+	int  medatype;
+	int  traffictype;
+	int  flags;
+	int  jitter;
+	char remoteaddr[16];
+	int  remoteport;
+	int  vadthreshold;
+	int  videoconfig; 
+	struct ph_media_payload_s ipayloads[16];
+	struct ph_media_payload_s opayloads[16];
+	/* structure dedicated to the underlying streamer engine (audio, video..)
+		cf phastream, phvstream
+	*/
+	void *streamerData;
 };
 
 typedef struct ph_mstream_params_s ph_mstream_params_t;
@@ -132,28 +131,24 @@ enum ph_mession_conf_flags
  */
 struct ph_msession_s
 {
-  int    activestreams;   /* bit mask of active streams */
-  int    newstreams;      /* bit mask of new streams to be activated */
-  int    confflags;       /* when nonzero this session make part of a conference */
-  struct ph_msession_s *confsession;
-  struct ph_mstream_params_s streams[PH_MSESSION_MAX_STREAMS];
-
-  GMutex *critsec_mstream_init; /* mutex used to avoid threading issue when an INVITE
-                                        is received for a session/stream that is currently being started */
-
-  void (*dtmfCallback)(void *info, int event);
-  void (*endCallback)(void  *info, int event);
-  void (*frameDisplayCbk)(void *info, void *event);
-
-  void *cbkInfo;
-
+	/* bit mask of active streams */
+	int    activestreams;
+	/* bit mask of new streams to be activated */
+	int    newstreams;
+	/* when nonzero this session is related to a conference */
+	int    confflags;
+	struct ph_msession_s *confsession;
+	struct ph_mstream_params_s streams[PH_MSESSION_MAX_STREAMS];
+	/* mutex used to avoid threading issues when operating on the streams */
+	GMutex *critsec_mstream_init;
+	void (*dtmfCallback)(void *info, int event);
+	void (*endCallback)(void  *info, int event);
+	void (*frameDisplayCbk)(void *info, void *event);
+	void *cbkInfo;
 };
 
 
 typedef struct ph_msession_s ph_msession_t; 
-
-
-
 
 typedef struct ph_media_payload_s  ph_media_payload_t;
 
@@ -185,28 +180,6 @@ int ph_msession_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2);
 int ph_msession_suspend(struct ph_msession_s *s,  int traffictype, const char *adevice);
 int ph_msession_resume(struct ph_msession_s *s, int traffictype, const char *adevice);
 
-
-#if 0
-int ph_media_start(phcall_t *ca, int port, int videoport, 
-				   void (*dtmfCallback)(phcall_t *ca, int event), 
-				   void (*endCallback)(phcall_t *ca, int event),
-                   phFrameDisplayCbk frameDisplay,
-		   const char * deviceId, unsigned vad, int cng, int jitter, int noaec);
-
-
-void ph_media_stop(phcall_t *ca);
-
-
-int ph_media_send_dtmf(phcall_t *ca, int dtmf, int mode);
-
-void ph_media_suspend(phcall_t *ca, int local);
-void ph_media_resume(phcall_t *ca);
-int ph_media_is_stream_stopped(phcall_t *ca);
-int ph_media_send_sound_file(phcall_t *ca, const char *filename);
-
-int ph_media_set_recvol(phcall_t *ca, int level);
-int ph_media_set_spkvol(phcall_t *ca, int level);
-#endif
 
 struct timeval;
 void ph_tvdiff(struct timeval *diff,  struct timeval *out,  struct timeval *in);

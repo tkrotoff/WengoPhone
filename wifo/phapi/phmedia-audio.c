@@ -959,8 +959,8 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 {
   int len = 0;
   phcodec_t *codec = stream->ms.codec;
-  int expected_framesize = codec->decoded_framesize;
-  int expected_clockrate = stream->clock_rate;
+  int internal_framesize = codec->decoded_framesize;
+  int internal_clockrate = stream->clock_rate;
   struct timeval now;
   int iter = 0;
   int played = 0;
@@ -978,10 +978,10 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
                    playbufsize,0,0,0);
 
 #ifdef PH_FORCE_16KHZ
-  if (expected_clockrate == 8000)
+  if (internal_clockrate == 8000)
   {
-    expected_framesize *= 2;
-    expected_clockrate = 16000;
+    internal_framesize *= 2;
+    internal_clockrate = 16000;
   }
 #endif
 
@@ -989,7 +989,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 #ifdef PH_USE_RESAMPLE
   savedPlayBuf = (char *) playbuf;
   savedBufSize = playbufsize;
-  needResample = (expected_clockrate != stream->actual_rate);
+  needResample = (internal_clockrate != stream->actual_rate);
 
   if (needResample) {
       playbuf = resampleBuf;
@@ -1011,10 +1011,10 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 	}
 #endif
 
-	while (stream->ms.running && (playbufsize >= expected_framesize))
+	while (stream->ms.running && (playbufsize >= internal_framesize))
     {
 		ph_mediabuf_t spkrbuf;
-		ph_mediabuf_init(&spkrbuf, playbuf, expected_framesize);
+		ph_mediabuf_init(&spkrbuf, playbuf, internal_framesize);
 
 #ifdef DO_CONF
 		if (stream->to_mix)
@@ -1023,19 +1023,19 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 			if (stream->to_mix && !stream->to_mix->ms.suspended)
 			{
 				int len2;
-				len = ph_media_retrieve_decoded_frame(stream, &stream->data_in, expected_clockrate);
-				len2 = ph_media_retrieve_decoded_frame(stream->to_mix, &stream->to_mix->data_in, expected_clockrate);
-				ph_mediabuf_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, expected_framesize/2);
+				len = ph_media_retrieve_decoded_frame(stream, &stream->data_in, internal_clockrate);
+				len2 = ph_media_retrieve_decoded_frame(stream->to_mix, &stream->to_mix->data_in, internal_clockrate);
+				ph_mediabuf_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, internal_framesize/2);
 				len = spkrbuf.next * 2;
 			}
 			CONF_UNLOCK(stream);
 		}
       	else
 		{
-			len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, expected_clockrate);
+			len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, internal_clockrate);
 		}
 #else
-		len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, expected_clockrate);
+		len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, internal_clockrate);
 #endif
 
 
@@ -1044,7 +1044,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 			break;
 		}
 
-        // Here we have managed to retrieve audio data from the RX path at frequency 'expected_clockrate'
+        // Here we have managed to retrieve audio data from the RX path at frequency 'internal_clockrate'
 
 		// SPIKE_HDX: if (mode == MIC has priority) and MIC is playing, attenuate SPK
 		if ((stream->hdxmode == PH_HDX_MODE_MIC) && !stream->hdxsilence)
@@ -1110,7 +1110,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 
 
 		/* exit loop if we've played 4 full size packets */
-		if (played >= expected_framesize * 4)
+		if (played >= internal_framesize * 4)
 		{
 			break;
 		}
@@ -1298,6 +1298,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 			}
 		}
 
+
 		if (wakeup)
 		{
 			/* send cng packet with -127dB */ 
@@ -1310,64 +1311,89 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
 	stream->ms.txtstamp += framesize/2;
 } 
 
-
-int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
+/**
+ * @brief called with an available buffer of audio samples
+ * @param stream ph_audio stream
+ * @param recbuf recorded buffer
+ * @param recbufsize available size in the recbuf buffer. not expressed in samples but in char* representation of the samples
+ *
+ * "rec" comes from "record", as in "the microphone has just recorded something"
+ */
+int ph_audio_rec_cbk(phastream_t *stream, void *buf_dataleft, int size_dataleft)
 {
   // framesize must be calculated in order to be the size in char* of a 20ms period in MIC frequency unit
-  int decoded_framesize = stream->ms.codec->decoded_framesize;
-  int expected_framesize = 0;
-  int expected_clockrate = 0;
+  int codec_tx_framesize = stream->ms.codec->decoded_framesize;
+  int internal_framesize = 0;
+  int internal_clockrate = 0;
+  int rec_cbk_clockrate = 0;
   int processed = 0;
 #ifdef PH_USE_RESAMPLE
-    unsigned char resampleBuf[1000];
-    long resampledSize = 0;
+    unsigned char buf_resampled[1000];
+    long size_resampled = 0;
 #endif
 
-  // record the audio direct from the mic in a file
+  // FLOWGRAPH STEP
+  // SPIKE_AUDIO_FLOWGRAPH: record MIC source in a file
+  // BEGIN GRAPH NODE
   if (stream->record_mic_stream) {
-    ph_media_audio_fast_recording_record(&stream->mic_stream_recorder, recordbuf, recbufsize);
+    ph_media_audio_fast_recording_record(&stream->mic_stream_recorder, buf_dataleft, size_dataleft);
   }
+  // END GRAPH NODE
 
-  // calculate the expected framesize from the audio device
-  expected_framesize = decoded_framesize;
-  expected_clockrate = stream->clock_rate;
+  // FLOWGRAPH STEP
+  // flowgraph glue: what is the internal clockrate ?
+  internal_framesize = codec_tx_framesize;
+  internal_clockrate = stream->clock_rate;
 #ifdef PH_FORCE_16KHZ
-  // when the "internal phapi clockrate" is forced to 16Khz, we know that the audio device always outputs 16Khz
+  // the "internal phapi clockrate" is forced to 16Khz
   if (stream->clock_rate == 8000)
   {
-    expected_clockrate = 2*stream->clock_rate;
-    expected_framesize = decoded_framesize * 2;
+    internal_clockrate = 2*stream->clock_rate;
+    internal_framesize = codec_tx_framesize * 2;
   }
 #endif
-
-  // resample MIC buffer when audio device could not accept requested clock_rate
+  // flowgraph glue: what is the rec clockrate ?
+  rec_cbk_clockrate = stream->actual_rate;
+  
+  // FLOWGRAPH STEP
+  // SPIKE_AUDIO_FLOWGRAPH: resample the MIC source to the internal clockrate/framesize
+  // NODE TYPE: local stack replacing buffer
+  // BEGIN GRAPH NODE
 #ifdef PH_USE_RESAMPLE
-  if (expected_clockrate != stream->actual_rate) {
-    DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_rec_cbk: need resampling with recbufsize: %d\n", recbufsize, 0, 0, 0);
-    resampledSize = expected_framesize;
-    ph_resample_audio0(stream->resample_audiodrv_ctx_mic, recordbuf, recbufsize, resampleBuf, &resampledSize);
-    DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_rec_cbk: after resampling with resampledSize: %d\n", resampledSize, 0, 0 ,0);
-    recbufsize = resampledSize;
-    recordbuf = resampleBuf;
-
-    // record the resampled audio in a file
-    if (stream->record_mic_resample_stream)
-    {
-      ph_media_audio_fast_recording_record(&stream->mic_resample_stream_recorder, recordbuf, recbufsize);
-    }
+  if (internal_clockrate != rec_cbk_clockrate) {
+    DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_rec_cbk: need resampling with size_dataleft: %d\n", size_dataleft, 0, 0, 0);
+    size_resampled = internal_framesize;
+    ph_resample_audio0(stream->resample_audiodrv_ctx_mic, buf_dataleft, size_dataleft, buf_resampled, &size_resampled);
+    DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_rec_cbk: after resampling with size_resampled: %d\n", size_resampled, 0, 0 ,0);
+    buf_dataleft = buf_resampled;
+    size_dataleft = size_resampled;
   }
 #endif
+  // END GRAPH NODE
 
-	// loop over each 'framesize' window of the MIC signal (recbufsize should certainly be a multiple of framesize)
-	while(recbufsize >= expected_framesize)
+	// FLOWGRAPH STEP
+	// SPIKE_AUDIO_FLOWGRAPH: record resampled MIC source in a file
+	// BEGIN GRAPH NODE
+	if (stream->record_mic_resample_stream)
+    {
+		ph_media_audio_fast_recording_record(&stream->mic_resample_stream_recorder, buf_dataleft, size_dataleft);
+    }
+	// END GRAPH NODE
+
+	// flowgraph glue: now we deal with audio data only tx_frame by tx_frame
+	while(size_dataleft >= internal_framesize)
 	{
 		gettimeofday(&stream->now,0);
 
+		// FLOWGRAPH STEP
+		// SPIKE_AUDIO_FLOWGRAPH: apply half-duples SPK driven attenuator
+		// NODE TYPE: in-place
+		// BEGIN GRAPH NODE
 		// SPIKE_HDX: if (mode = SPK has priority) and SPK is active, attenuate MIC
 		if ((stream->hdxmode == PH_HDX_MODE_SPK) && !stream->spksilence)
 		{
-			short *samples = (short *) recordbuf;
-            int nsamples = expected_framesize >> 1;
+			short *samples = (short *) buf_dataleft;
+            int nsamples = internal_framesize >> 1;
 			const int SPKHDXSHIFT = 4;
 			while(nsamples--)
 			{
@@ -1375,12 +1401,18 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 				samples++;
 			}
 		}
+		// END GRAPH NODE
 
-		// echo cancelling algo
+		// FLOWGRAPH STEP
+		// SPIKE_AUDIO_FLOWGRAPH: cancel acoustic echo
+		// NODE TYPE: in-place
+		// BEGIN GRAPH NODE
 #ifdef DO_ECHO_CAN
-		do_echo_update(stream, recordbuf, expected_framesize);
+		do_echo_update(stream, buf_dataleft, internal_framesize);
 #endif
+		// END GRAPH NODE
 
+		// flowgraph glue : 
 		// handle conference
 #ifdef DO_CONF
 		if (stream->to_mix)
@@ -1391,11 +1423,11 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 				phastream_t *other = stream->to_mix;
 				other->now = stream->now;
 
-                memcpy(stream->data_out.buf, recordbuf, expected_framesize);
-                stream->data_out.next = expected_framesize/2;
+                memcpy(stream->data_out.buf, buf_dataleft, internal_framesize);
+                stream->data_out.next = internal_framesize/2;
 
-                memcpy(other->data_out.buf, recordbuf, expected_framesize);
-                other->data_out.next = expected_framesize/2;
+                memcpy(other->data_out.buf, buf_dataleft, internal_framesize);
+                other->data_out.next = internal_framesize/2;
 
 				if (other->data_in.next)
 				{
@@ -1406,21 +1438,21 @@ int ph_audio_rec_cbk(phastream_t *stream, void *recordbuf, int recbufsize)
 					ph_mediabuf_mixmedia(&other->data_out, &stream->data_in);
 				}
 
-                ph_encode_and_send_audio_frame(stream, stream->data_out.buf, expected_framesize);
-                ph_encode_and_send_audio_frame(other, other->data_out.buf, expected_framesize);
+                ph_encode_and_send_audio_frame(stream, stream->data_out.buf, internal_framesize);
+                ph_encode_and_send_audio_frame(other, other->data_out.buf, internal_framesize);
 
-				//ph_handle_conference_in(stream, expected_framesize);
+				//ph_handle_conference_in(stream, internal_framesize);
 			}
 			CONF_UNLOCK(stream);
 		}
 		else
 #endif
-        ph_encode_and_send_audio_frame(stream, recordbuf, expected_framesize);
+        ph_encode_and_send_audio_frame(stream, buf_dataleft, internal_framesize);
 
-        recbufsize -= expected_framesize;
-        processed += expected_framesize;
-        recordbuf = expected_framesize + (char *)recordbuf;
-	}
+        size_dataleft -= internal_framesize;
+        processed += internal_framesize;
+        buf_dataleft = internal_framesize + (char *)buf_dataleft;
+	} // while end - process remaining whole tx_frames
 
     DBG5_DYNA_AUDIO("DYNA_AUDIO:ph_audio_rec_cbk: processed %d short audio samples\n", processed/2, 0, 0, 0);
 	return processed;
@@ -1884,6 +1916,26 @@ setup_recording(phastream_t *stream)
     snprintf(fname, 128, rname, mic_filename_index++);
     ph_media_audio_fast_recording_init(&stream->mic_resample_stream_recorder, fname);
   }
+}
+
+static void
+cleanup_recording(phastream_t *stream)
+{
+	if (stream->activate_recorder)
+	{
+		ph_media_audio_recording_close(&stream->recorder);
+	}
+
+	if (stream->record_mic_stream)
+	{
+		ph_media_audio_recording_close(&stream->mic_stream_recorder);
+	}
+
+	if (stream->record_mic_resample_stream)
+	{
+		ph_media_audio_recording_close(&stream->mic_resample_stream_recorder);
+	}
+
 }
 
 static int 
@@ -2471,139 +2523,129 @@ void ph_audio_vad_cleanup(phastream_t *stream)
 
 void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
 {
-  struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
-  phastream_t *stream = (phastream_t *) msp->streamerData;
-  phastream_t *master;
+	struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
+	phastream_t *stream = (phastream_t *) msp->streamerData;
+	phastream_t *master;
 
+	if (!stream || !stream->ms.running)
+	{
+		return;
+	}
 
-  if (!stream || !stream->ms.running)
-    return;
+	stream->ms.running = 0;
+	master = stream->master;
 
-  stream->ms.running = 0;
+	if (stream->ms.media_io_thread)
+	{
+		osip_thread_join(stream->ms.media_io_thread);
+		osip_free(stream->ms.media_io_thread);
+		stream->ms.media_io_thread = 0;
+	}
 
-  master = stream->master;
-
-
-  if (stream->ms.media_io_thread)
-    {
-      osip_thread_join(stream->ms.media_io_thread);
-      osip_free(stream->ms.media_io_thread);
-      stream->ms.media_io_thread = 0;
-    }
-
-  if (master)
-    {
-      CONF_LOCK(master);
-      master->to_mix = 0;
-      CONF_UNLOCK(master);
-    }
+	if (master)
+	{
+		CONF_LOCK(master);
+		master->to_mix = 0;
+		CONF_UNLOCK(master);
+	}
 
 #ifdef PH_USE_RESAMPLE
-  if (stream->actual_rate != stream->clock_rate)
-  {
-    ph_resample_cleanup0(stream->resample_audiodrv_ctx_mic);
-    ph_resample_cleanup0(stream->resample_audiodrv_ctx_spk);
-  }
+	if (stream->actual_rate != stream->clock_rate)
+	{
+		ph_resample_cleanup0(stream->resample_audiodrv_ctx_mic);
+		ph_resample_cleanup0(stream->resample_audiodrv_ctx_spk);
+	}
 #endif
 
+	msp->flags &= ~PH_MSTREAM_FLAG_RUNNING;
 
-  msp->flags &= ~PH_MSTREAM_FLAG_RUNNING;
+	if (stopdevice)
+	{
+		audio_stream_close(stream); /* close the sound card */
+	}
 
-  if (stopdevice)
-    audio_stream_close(stream); /* close the sound card */
+	if (stream->mixbuf)
+	{
+		ph_mediabuf_free(stream->mixbuf);
+	}
 
-
-
-  if (stream->mixbuf)
-    ph_mediabuf_free(stream->mixbuf);
-
-  ph_mediabuf_cleanup(&stream->data_in);
-  ph_mediabuf_cleanup(&stream->data_out);
-
-  
+	ph_mediabuf_cleanup(&stream->data_in);
+	ph_mediabuf_cleanup(&stream->data_out);
 
 #ifdef TRACE_POWER
-  print_pwrstats(stream);
+	print_pwrstats(stream);
 #endif
 
+	//  RTP_SESSION_LOCK(stream->rtp_session);
+	rtp_session_signal_disconnect_by_callback(stream->ms.rtp_session, "telephone-event",
+						(RtpCallback)ph_telephone_event);
+	rtp_session_signal_disconnect_by_callback(stream->ms.rtp_session, "cng_packet",
+						(RtpCallback)ph_on_cng_packet);
 
-  //  RTP_SESSION_LOCK(stream->rtp_session);
+	ortp_set_debug_file("oRTP", stdout); 
+	//  ortp_global_stats_display();
+	ortp_session_stats_display(stream->ms.rtp_session);
+	ortp_set_debug_file("oRTP", NULL); 
 
-  rtp_session_signal_disconnect_by_callback(stream->ms.rtp_session, "telephone-event",
-                        (RtpCallback)ph_telephone_event);
-  rtp_session_signal_disconnect_by_callback(stream->ms.rtp_session, "cng_packet",
-                        (RtpCallback)ph_on_cng_packet);
+{
+	/* free non default profiles */
+	RtpProfile *rprofile, *sprofile;
+   	sprofile = rtp_session_get_send_profile(stream->ms.rtp_session);
+	if (sprofile != &av_profile)
+	{
+		rtp_profile_destroy(sprofile);
+	}
 
-  ortp_set_debug_file("oRTP", stdout); 
-  //  ortp_global_stats_display();
-  ortp_session_stats_display(stream->ms.rtp_session);
-  ortp_set_debug_file("oRTP", NULL); 
-
- {
-   /* free non default profiles */
-   RtpProfile *rprofile, *sprofile;
-   
-   sprofile = rtp_session_get_send_profile(stream->ms.rtp_session);
-   if (sprofile != &av_profile)
-     rtp_profile_destroy(sprofile);
-
-   rprofile = rtp_session_get_recv_profile(stream->ms.rtp_session);
-   if (rprofile != &av_profile && rprofile != sprofile)
-     rtp_profile_destroy(rprofile);
-
- }
+	rprofile = rtp_session_get_recv_profile(stream->ms.rtp_session);
+	if (rprofile != &av_profile && rprofile != sprofile)
+	{
+		rtp_profile_destroy(rprofile);
+	}
+}
 
 
-  rtp_session_destroy(stream->ms.rtp_session);
+	rtp_session_destroy(stream->ms.rtp_session);
 
-  if (stream->ms.codec->encoder_cleanup)
-    stream->ms.codec->encoder_cleanup(stream->ms.encoder_ctx);
-  if (stream->ms.codec->decoder_cleanup)
-    stream->ms.codec->decoder_cleanup(stream->ms.decoder_ctx);
+	if (stream->ms.codec->encoder_cleanup)
+	{
+		stream->ms.codec->encoder_cleanup(stream->ms.encoder_ctx);
+	}
+	if (stream->ms.codec->decoder_cleanup)
+	{
+		stream->ms.codec->decoder_cleanup(stream->ms.decoder_ctx);
+	}
 
-  ph_audio_vad_cleanup(stream);
+	ph_audio_vad_cleanup(stream);
 
 #ifdef DO_ECHO_CAN
-  if(stream->ec)
-    {
-      cb_clean(&stream->pcmoutbuf);
-      if(stream->ec)
-	ph_ec_cleanup(stream->ec);
-
-    g_mutex_free(stream->ecmux);
+	if(stream->ec)
+	{
+		cb_clean(&stream->pcmoutbuf);
+		if(stream->ec)
+		{
+			ph_ec_cleanup(stream->ec);
+		}
+		g_mutex_free(stream->ecmux);
     }
 #endif
 
-  g_mutex_free(stream->dtmfi.dtmfg_lock);
+	g_mutex_free(stream->dtmfi.dtmfg_lock);
 
-  if (stream->activate_recorder)
-    {
-      ph_media_audio_recording_close(&stream->recorder);
-    }
+	cleanup_recording(stream);
+	
+	DBG1_MEDIA_ENGINE("\naudio stream closed\n");
 
-    if (stream->record_mic_stream)
-    {
-      ph_media_audio_recording_close(&stream->mic_stream_recorder);
-    }
-
-    if (stream->record_mic_resample_stream)
-    {
-      ph_media_audio_recording_close(&stream->mic_resample_stream_recorder);
-    }
-
-  DBG1_MEDIA_ENGINE("\naudio stream closed\n");
-
-  if (stream->lastframe)
-      free(stream->lastframe);
+	if (stream->lastframe)
+	{
+		free(stream->lastframe);
+	}
 
 #ifdef PH_FORCE_16KHZ
-  if (stream->resamplectx)
-  {
-      ph_resample_cleanup(stream->resamplectx);
-  }
+	if (stream->resamplectx)
+	{
+		ph_resample_cleanup(stream->resamplectx);
+	}
 #endif      
-
-
 
 }
 
@@ -2611,95 +2653,93 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
 
 void ph_msession_audio_stop(struct ph_msession_s *s, const char *deviceId)
 { 
-  struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
-  phastream_t *stream = (phastream_t *) msp->streamerData;
-  int confflags = s->confflags;
-  struct ph_msession_s *s2 = s->confsession;
+	struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
+	phastream_t *stream = (phastream_t *) msp->streamerData;
+	int confflags = s->confflags;
+	struct ph_msession_s *s2 = s->confsession;
 
-  PH_MSESSION_AUDIO_LOCK();
+	PH_MSESSION_AUDIO_LOCK();
 
-  s->activestreams &= ~(1 << PH_MSTREAM_AUDIO1);
+	s->activestreams &= ~(1 << PH_MSTREAM_AUDIO1);
 
-  if (confflags)
-    ph_msession_audio_conf_stop(s->confsession, s);
-
-  ph_msession_audio_stream_stop(s, confflags != PH_MSESSION_CONF_MEMBER);
-  msp->streamerData = 0;
-
-
-  if (confflags == PH_MSESSION_CONF_MASTER)
-    {
-      struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
-      phastream_t *stream2 = (phastream_t *) msp2->streamerData;
-
-      DBG1_MEDIA_ENGINE("audio_stop: removeing conf master\n");
-
-      s2->confflags = 0;
-      stream2->master = 0;
-
-      /* if the slave stream is not suspended,  start audio streaming for it */
-      if (stream2 && !stream2->ms.suspended)
+	if (confflags)
 	{
-	  s2->newstreams |= (1 << PH_MSTREAM_AUDIO1);
-	  if (!open_audio_device(s2, stream2, deviceId))
-	    start_audio_device(s2, stream2);
-
-	  DBG1_MEDIA_ENGINE("audio_stop: started audio for ex-slave\n");
+		ph_msession_audio_conf_stop(s->confsession, s);
 	}
 
-    }
+	ph_msession_audio_stream_stop(s, confflags != PH_MSESSION_CONF_MEMBER);
+	msp->streamerData = 0;
 
-  osip_free(stream);
 
-  PH_MSESSION_AUDIO_UNLOCK();
+	if (confflags == PH_MSESSION_CONF_MASTER)
+	{
+		struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
+		phastream_t *stream2 = (phastream_t *) msp2->streamerData;
 
+		DBG1_MEDIA_ENGINE("audio_stop: removeing conf master\n");
+
+		s2->confflags = 0;
+		stream2->master = 0;
+
+		/* if the slave stream is not suspended,  start audio streaming for it */
+		if (stream2 && !stream2->ms.suspended)
+		{
+			s2->newstreams |= (1 << PH_MSTREAM_AUDIO1);
+			if (!open_audio_device(s2, stream2, deviceId))
+			{
+				start_audio_device(s2, stream2);
+			}
+		DBG1_MEDIA_ENGINE("audio_stop: started audio for ex-slave\n");
+		}
+	}
+
+	osip_free(stream);
+
+	PH_MSESSION_AUDIO_UNLOCK();
 }
 
 
 
 void ph_msession_audio_suspend(struct ph_msession_s *s, int suspendwhat, const char *deviceId)
 {
-  struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
-  phastream_t *stream = (phastream_t *) msp->streamerData;
-  int confflags = s->confflags;
+	struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
+	phastream_t *stream = (phastream_t *) msp->streamerData;
+	int confflags = s->confflags;
 
+	DBG4_MEDIA_ENGINE("audio_suspend: enter ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
 
-  DBG4_MEDIA_ENGINE("audio_suspend: enter ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
+	msp->traffictype &= ~suspendwhat;
+	stream->ms.suspended = 1;
 
-  msp->traffictype &= ~suspendwhat;
-  stream->ms.suspended = 1;
+	ph_msession_audio_stream_stop(s, confflags != PH_MSESSION_CONF_MEMBER);
 
-  ph_msession_audio_stream_stop(s, confflags != PH_MSESSION_CONF_MEMBER);
-
-  if (confflags == PH_MSESSION_CONF_MASTER)
-    {
-      struct ph_msession_s *s2 = s->confsession;
-      struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
-      phastream_t *stream2 = (phastream_t *) msp2->streamerData;
-
-      DBG1_MEDIA_ENGINE("audio_suspend: suspending conf master\n");
-
-
-      s->confflags = PH_MSESSION_CONF_MEMBER;
-      s2->confflags = PH_MSESSION_CONF_MASTER;
-
-      DBG1_MEDIA_ENGINE("audio_suspend: assigned new conf master\n");
-
-      /* if the slave stream is not suspended,  start audio streaming for it */
-      if (!stream2->ms.suspended)
+	if (confflags == PH_MSESSION_CONF_MASTER)
 	{
-	  s2->newstreams |= (1 << PH_MSTREAM_AUDIO1);
-	  PH_MSESSION_AUDIO_LOCK();
-	  if (!open_audio_device(s2, stream2, deviceId))
-	    start_audio_device(s2, stream2);
-	  PH_MSESSION_AUDIO_UNLOCK();
-	}
+		struct ph_msession_s *s2 = s->confsession;
+		struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
+		phastream_t *stream2 = (phastream_t *) msp2->streamerData;
 
+		DBG1_MEDIA_ENGINE("audio_suspend: suspending conf master\n");
+
+		s->confflags = PH_MSESSION_CONF_MEMBER;
+		s2->confflags = PH_MSESSION_CONF_MASTER;
+
+		DBG1_MEDIA_ENGINE("audio_suspend: assigned new conf master\n");
+
+		/* if the slave stream is not suspended,  start audio streaming for it */
+		if (!stream2->ms.suspended)
+		{
+			s2->newstreams |= (1 << PH_MSTREAM_AUDIO1);
+			PH_MSESSION_AUDIO_LOCK();
+			if (!open_audio_device(s2, stream2, deviceId))
+			{
+				start_audio_device(s2, stream2);
+			}
+			PH_MSESSION_AUDIO_UNLOCK();
+		}
     }
 
-  DBG4_MEDIA_ENGINE("audio_suspend: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
-
-
+	DBG4_MEDIA_ENGINE("audio_suspend: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
 }
 
 
@@ -2746,7 +2786,7 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
   
   if (stream1->ms.running)
    {
-     DBG1_MEDIA_ENGINE("msession_adio_conf_start: s1=MASTER\n");
+     DBG1_MEDIA_ENGINE("ph_msession_audio_conf_start: s1=MASTER\n");
      
      CONF_LOCK(stream1);
      stream1->to_mix = stream2;
