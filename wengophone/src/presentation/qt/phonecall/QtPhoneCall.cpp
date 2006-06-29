@@ -102,7 +102,7 @@ void QtPhoneCall::initThreadSafe() {
 	_nickNameLabel->setToolTip(sipAddress);
 
 	_statusLabel = Object::findChild < QLabel * > (_phoneCallWidget, "statusLabel");
-	_statusLabel->setText(QString::null);
+	_statusLabel->setText(tr("Initialization..."));
 	_statusLabel->setToolTip(tr("Status"));
 
 	_durationLabel = Object::findChild < QLabel * > (_phoneCallWidget, "durationLabel");
@@ -402,10 +402,10 @@ void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(piximage* remoteVideo
 
 void QtPhoneCall::acceptActionTriggered(bool) {
 	_cPhoneCall.accept();
+	_statusLabel->setText(tr("Initialization..."));
 }
 
 void QtPhoneCall::rejectActionTriggered(bool) {
-
 	LOG_DEBUG("phone call hangup");
 	switch (_cPhoneCall.getState()) {
 	case EnumPhoneCallState::PhoneCallStateResumed:

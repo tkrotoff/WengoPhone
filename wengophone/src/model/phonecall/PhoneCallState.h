@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHONECALLSTATE_H
-#define PHONECALLSTATE_H
+#ifndef OWPHONECALLSTATE_H
+#define OWPHONECALLSTATE_H
 
 #include <sipwrapper/EnumPhoneCallState.h>
 
@@ -48,6 +48,11 @@ public:
 	 */
 	virtual EnumPhoneCallState::PhoneCallState getCode() const = 0;
 
+	/**
+	 * Stops the incoming phone call ringtone.
+	 */
+	static void stopSoundIncomingCall();
+
 protected:
 
 	static std::string getRingerAudioDeviceName();
@@ -56,8 +61,6 @@ protected:
 
 	static std::string getSoundCallClosedFile();
 
-	static void stopSoundIncomingCall();
-
 	static void stopSoundCallClosed();
 
 	static Sound * _soundIncomingCall;
@@ -65,4 +68,4 @@ protected:
 	static Sound * _soundCallClosed;
 };
 
-#endif	//PHONECALLSTATE_H
+#endif	//OWPHONECALLSTATE_H
