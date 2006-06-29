@@ -57,12 +57,6 @@ void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, c
 	QColor selectedBackground = SELECTION_BACKGROUND;
 
 	if ((option.state & QStyle::State_Selected) == QStyle::State_Selected) {
-/*
-		QRect rect = option.rect;
-		rect.adjust(0, 0, 1, 1);
-		painter->fillRect(option.rect, QBrush(selectedBackground));
-		painter->setPen(option.palette.text().color());
-*/
 		paintSelection(painter,option);
 	} else {
 		painter->setPen(option.palette.text().color());
