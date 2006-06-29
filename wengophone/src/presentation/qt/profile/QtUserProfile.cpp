@@ -113,7 +113,7 @@ void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
 #ifdef OS_WINDOWS
 		if (config.getIEActiveX() && (sender->getType() == SipAccount::SipAccountTypeWengo)) {
 			_qtWengoPhone.getQtBrowser()->setUrl(qApp->applicationDirPath().toStdString() +
-				"/" + QtWengoPhone::LOCAL_WEB_DIR + "/loading.htm");
+				"/" + QtWengoPhone::LOCAL_WEB_DIR + "/loading.html");
 		}
 #endif
 		break;
