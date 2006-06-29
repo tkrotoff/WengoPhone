@@ -84,8 +84,8 @@ void QtPhoneCall::initThreadSafe() {
 	//phoneNumberLabel
 	_nickNameLabel = Object::findChild < QLabel * > (_phoneCallWidget, "nickNameLabel");
 
-	std::string tmp = _cPhoneCall.getPhoneCall().getPeerSipAddress().getDisplayName();
-	QString userInfo = QString::fromUtf8(tmp.c_str());
+	std::string tmpDisplayName = _cPhoneCall.getPhoneCall().getPeerSipAddress().getDisplayName();
+	QString userInfo = QString::fromUtf8(tmpDisplayName.c_str());
 	if (userInfo.isEmpty()) {
 		userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
 	}
