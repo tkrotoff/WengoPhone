@@ -102,7 +102,7 @@ void QtPhoneCall::initThreadSafe() {
 	_nickNameLabel->setToolTip(sipAddress);
 
 	_statusLabel = Object::findChild < QLabel * > (_phoneCallWidget, "statusLabel");
-	_statusLabel->setText(tr("Initialization..."));
+	_statusLabel->setText(QString::null);
 	_statusLabel->setToolTip(tr("Status"));
 
 	_durationLabel = Object::findChild < QLabel * > (_phoneCallWidget, "durationLabel");
