@@ -23,7 +23,6 @@
 #include "QtEmoticonsWidget.h"
 #include "widgetseeker.h"
 #include "QtEmoticon.h"
-#include "QtChatContactInfo.h"
 #include "QtChatRoomInviteDlg.h"
 
 #include <control/chat/CChatHandler.h>
@@ -132,8 +131,6 @@ Q_SIGNALS:
 
 private:
 
-	typedef QHash<QString,QtChatContactInfo> ContactInfoHash;
-
     const QString replaceUrls(const QString & str, const QString & htmlstr);
 
 	const QString text2Emoticon(const QString &htmlstr);
@@ -175,8 +172,6 @@ private:
 	 * @return the changed message
 	 */
 	QString insertFontTag(const QString & message);
-
-	ContactInfoHash _qtContactInfo;
 
     QtEmoticonsManager * _qtEmoticonManager;
 
