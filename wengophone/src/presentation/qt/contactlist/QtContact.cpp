@@ -31,7 +31,8 @@
 
 #include <QtGui>
 
-const QColor QtContact::SELECTION_BACKGROUND = QColor(201,201,201);
+// const QColor QtContact::SELECTION_BACKGROUND = QColor(201,201,201);
+const QColor QtContact::SELECTION_BACKGROUND = QColor(193,223,255);
 
 QtContact::QtContact(const std::string & contactId, CWengoPhone & cWengoPhone, QObject * parent)
 	: QObject(parent),

@@ -152,7 +152,7 @@ void QtContactWidget::paintEvent(QPaintEvent *) {
 	QRect r = rect();
 
 	QLinearGradient lg(QPointF(1,r.top()),QPointF(1,r.bottom()));
-	QColor dest = QColor(220,220,220);
+	QColor dest = QColor(193,223,255);
 	lg.setColorAt(0,dest);
 	float red = ((float)dest.red()) / 1.4f;
 	float blue = ((float)dest.blue()) / 1.4f;
