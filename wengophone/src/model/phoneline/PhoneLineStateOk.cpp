@@ -22,7 +22,23 @@
 #include "IPhoneLine.h"
 #include <model/account/SipAccount.h>
 
+#include <model/config/Config.h>
+#include <model/config/ConfigManager.h>
+
+#include <util/Logger.h>
+
+#include <string>
+
 void PhoneLineStateOk::execute(IPhoneLine & phoneLine) {
-	//phoneLine.setSipPresenceState(SipPresenceStateOnline::getInstance(phoneLine));
 	phoneLine.getSipAccount().setConnected(true);
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	const std::string callFromCommandLine = config.getCmdLinePlaceCall();
+	if(!callFromCommandLine.empty()) {
+		LOG_DEBUG("call from command line: " + callFromCommandLine);
+		//Resets the value to its default to do this call only for the first connection
+		config.resetToDefaultValue(Config::PLACECALL_FROMCMDLINE_KEY);
+		////
+		phoneLine.makeCall(callFromCommandLine);
+	}
 }

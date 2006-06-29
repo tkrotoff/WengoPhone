@@ -27,6 +27,8 @@
 using namespace boost::program_options;
 using namespace std;
 
+#include <util/String.h>
+#include <util/StringList.h>
 #include <util/Logger.h>
 
 CommandLineParser::CommandLineParser(int argc, char * argv[]) {
@@ -35,6 +37,7 @@ CommandLineParser::CommandLineParser(int argc, char * argv[]) {
 
 	//reset all key to default
 	config.resetToDefaultValue(Config::GUI_BACKGROUND_KEY);
+	config.resetToDefaultValue(Config::PLACECALL_FROMCMDLINE_KEY);
 
 	try {
 		options_description desc("Allowed options");
@@ -44,6 +47,7 @@ CommandLineParser::CommandLineParser(int argc, char * argv[]) {
 		// The third is description
 		("help,h", "print usage message")
 		("background,b", "run in background mode")
+		("command,c", value<string>(), "pass a command to the wengophone")
 		;
 
 		variables_map vm;
@@ -57,6 +61,15 @@ CommandLineParser::CommandLineParser(int argc, char * argv[]) {
 		if (vm.count("background")) {
 			LOG_DEBUG("run in background mode");
 			config.set(Config::GUI_BACKGROUND_KEY, true);
+		}
+
+		if (vm.count("command")) {
+			static String commandCall = "call/";
+			String command = String(vm["command"].as<string>());
+			LOG_DEBUG("command:" + command);
+			if(command.beginsWith(commandCall)) {
+				config.set(Config::PLACECALL_FROMCMDLINE_KEY, command.split("/")[1]);
+			}
 		}
 	}
 	catch(exception & e) {

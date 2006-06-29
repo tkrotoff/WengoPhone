@@ -447,6 +447,10 @@ public:
 	static const std::string GUI_BACKGROUND_KEY;
 	bool getGuiBackground() const;
 
+	/** place a call. */
+	static const std::string PLACECALL_FROMCMDLINE_KEY;
+	std::string getCmdLinePlaceCall() const;
+
 	/** @} */
 
 

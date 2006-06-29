@@ -128,6 +128,7 @@ const std::string Config::WENBOX_ENABLE_KEY = "wenbox.enable";
 const std::string Config::IEACTIVEX_ENABLE_KEY = "ieactivex.enable";
 
 const std::string Config::GUI_BACKGROUND_KEY = "cmdline.gui.background";
+const std::string Config::PLACECALL_FROMCMDLINE_KEY = "cmdline.model.placecall";
 
 Config::Config(const std::string & name)
 	: AutomaticSettings() {
@@ -250,6 +251,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[IEACTIVEX_ENABLE_KEY] = true;
 
 	_keyDefaultValueMap[GUI_BACKGROUND_KEY] = false;
+	_keyDefaultValueMap[PLACECALL_FROMCMDLINE_KEY] = empty;
 }
 
 Config::~Config() {
@@ -602,4 +604,8 @@ bool Config::getIEActiveX() const {
 
 bool Config::getGuiBackground() const {
 	return getBooleanKeyValue(GUI_BACKGROUND_KEY);
+}
+
+std::string Config::getCmdLinePlaceCall() const {
+	return getStringKeyValue(PLACECALL_FROMCMDLINE_KEY);
 }
