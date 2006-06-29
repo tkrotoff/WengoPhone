@@ -76,6 +76,8 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 	QGridLayout * glayout;
 	_chatContactWidgets = new ChatContactWidgets();
 
+	// _dialog = new QDialog(findMainWindow());
+	// _dialog = new QDialog(NULL, Qt::Window | Qt::WindowMinMaxButtonsHint);
 	_dialog = new QWidget(NULL, Qt::Window | Qt::WindowMinMaxButtonsHint);
 
 	_qtWengoPhone = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCUserProfile().getCWengoPhone().getPresentation());
@@ -170,9 +172,11 @@ ChatWindow::ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSessio
 }
 
 void ChatWindow::enableChatButton(){
+
 	_qtWengoPhone->setChatWindow( _dialog );
 }
 void ChatWindow::createInviteFrame(){
+
 	_inviteFrame->setMaximumSize(QSize(10000,80));
 	_inviteFrame->setMinimumSize(QSize(16,80));
 	QGridLayout * layout = new QGridLayout(_inviteFrame);
@@ -181,21 +185,21 @@ void ChatWindow::createInviteFrame(){
 	_callLabel->setPixmaps(
 		QPixmap(":/pics/chat/chat_call_bar_button.png"),
 		QPixmap(),
-		QPixmap(),
+		QPixmap(), // Fill
 		QPixmap(":/pics/chat/chat_call_bar_button_on.png"),
 		QPixmap(":/pics/profilebar/bar_separator.png"),
-		QPixmap()
+		QPixmap()  // Fill
 	);
 	_callLabel->setMaximumSize(QSize(46,65));
 	_callLabel->setMinimumSize(QSize(46,46));
 
 	_inviteLabel->setPixmaps(
 		QPixmap(),
-		QPixmap(":/pics/profilebar/bar_end.png"),
-		QPixmap(":/pics/profilebar/bar_fill.png"),
+		QPixmap(":/pics/profilebar/bar_end.png"), //
+		QPixmap(":/pics/profilebar/bar_fill.png"), // Fill
 		QPixmap(),
 		QPixmap(":/pics/profilebar/bar_on_end.png"),
-		QPixmap(":/pics/profilebar/bar_on_fill.png")
+		QPixmap(":/pics/profilebar/bar_on_fill.png") // Fill
 	);
 	_inviteLabel->setMinimumSize(QSize(120,65));
 	_inviteLabel->setText(tr("   invite"));
@@ -214,12 +218,13 @@ void ChatWindow::createInviteFrame(){
 
 }
 void ChatWindow::callContact(){
-	ChatWidget * widget = dynamic_cast<ChatWidget *> (_tabWidget->widget(_tabWidget->currentIndex()));
+	ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(_tabWidget->currentIndex() ) );
 	QString contactId;
 	QtContactList * qtContactList;
 	ContactProfile contactProfile;
 	QtContactListManager * ul ;
-	if (widget) {
+
+	if (widget){
 		contactId = widget->getContactId();
 		qtContactList = _qtWengoPhone->getContactList();
 		contactProfile = qtContactList->getCContactList().getContactProfile(contactId.toStdString());
@@ -229,50 +234,54 @@ void ChatWindow::callContact(){
 }
 
 void ChatWindow::inviteContact(){
-	ChatWidget * widget = dynamic_cast<ChatWidget *> (_tabWidget->widget(_tabWidget->currentIndex()));
-	if (widget) {
-		if (widget->canDoMultiChat()) {
+
+	ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(_tabWidget->currentIndex() ) );
+	if (widget){
+		if (widget->canDoMultiChat()){
 			widget->inviteContact();
 		}
 	}
 }
 
-void ChatWindow::closeTab() {
-	ChatWidget * widget = dynamic_cast<ChatWidget *> (_tabWidget->widget(_tabWidget->currentIndex()));
+void ChatWindow::closeTab(){
+	ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(_tabWidget->currentIndex() ) );
+
 	delete widget;
-	if ( _tabWidget->count() == 0 ) {
+
+	if ( _tabWidget->count() == 0 )
+	{
 		_dialog->hide();
-		_qtWengoPhone->setChatWindow(NULL);
+		_qtWengoPhone->setChatWindow( NULL );
 	}
 }
-void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state) {
+void ChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state){
 	IMChat::TypingState * tmpState = new IMChat::TypingState;
 	*tmpState = state;
 	typingStateChangedSignal(&sender,&imContact,tmpState);
 }
 
-void ChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state) {
+void ChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state){
 	IMChat::TypingState	tmpState = *state;
 
 	int tabs=_tabWidget->count();
-	for (int i=0; i<tabs;i++) {
+	for (int i=0; i<tabs;i++){
 		ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
-		if (widget->getSessionId() == sender->getId()) {
+		if ( widget->getSessionId() == sender->getId() )
+		{
 			widget->setRemoteTypingState(*sender,*state);
 		}
 	}
 	delete state;
 }
 
-void ChatWindow::newMessage(IMChatSession *session,const QString & msg) {
+void ChatWindow::newMessage(IMChatSession *session,const QString & msg){
 	std::string message(msg.toUtf8().constData());
 	session->sendMessage(message);
 }
 
-void ChatWindow::show() {
-	if ( _dialog->isMinimized()) {
+void ChatWindow::show(){
+	if ( _dialog->isMinimized())
 		_dialog->hide();
-	}
 	_dialog->showNormal();
 	_dialog->activateWindow();
 	_dialog->raise();
@@ -290,30 +299,34 @@ void ChatWindow::messageReceivedSlot(IMChatSession * sender) {
 		const IMContact & from = imChatMessage->getIMContact();
 		std::string message = imChatMessage->getMessage();
 		delete imChatMessage;
+
 		QString senderName = QString::fromStdString(from.getContactId());
+
 		QString msg = QString::fromUtf8(message.c_str());
 
-		if (!_dialog->isVisible()) {
+		if (!_dialog->isVisible())
+		{
 			showChatWindow();
 			flashWindow();
 		} else {
 			flashWindow();
 		}
 		int tabs = _tabWidget->count();
-		for (int i = 0; i < tabs; i++) {
-			ChatWidget * widget = dynamic_cast<ChatWidget *> (_tabWidget->widget(i));
-			if (widget->getSessionId() == sender->getId()) {
+		for (int i = 0; i < tabs; i++)
+		{
+			ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
+			if (widget->getSessionId() == sender->getId())
+			{
 				_chatWidget = qobject_cast<ChatWidget *>(_tabWidget->widget(i));
 				_chatWidget->addToHistory(senderName, msg);
-				if (_tabWidget->currentWidget() != _chatWidget) {
+				if ( _tabWidget->currentWidget() != _chatWidget ) {
 					if (_dialog->isMinimized())
 						_tabWidget->setCurrentIndex(i);
 					else
 						_tabWidget->setBlinkingTab(i);
 				}
-				if (_dialog->isMinimized()) {
+				if (_dialog->isMinimized())
 					flashWindow();
-				}
 				return;
 			}
 		}
@@ -324,19 +337,22 @@ void ChatWindow::contactAddedEventHandler(IMChatSession & sender, const IMContac
 	contactAddedSignal(&sender, &imContact );
 }
 
-void ChatWindow::contactAddedThreadSafe(IMChatSession * session, const IMContact * imContact ) {
+void ChatWindow::contactAddedThreadSafe(IMChatSession * session, const IMContact * imContact ){
 
 	int sessionid = session->getId();
 
 	ChatContactWidgets::iterator it;
 
 	it = _chatContactWidgets->find(sessionid);
-	if (it == _chatContactWidgets->end()) {
+	if (it == _chatContactWidgets->end()){
+
 		// Create the contact widget
 		QtChatContactWidget * widget = new QtChatContactWidget(session,_cChatHandler,_contactViewport);
 		dynamic_cast <QHBoxLayout *>(_contactViewport->layout())->insertWidget ( _contactViewport->layout()->count()-1,widget);
 		_chatContactWidgets->insert(sessionid,widget);
-	} else {
+	}
+	else
+	{
 		// Update the Contact widget
 		QtChatContactWidget * widget;
 		widget = (*it);
@@ -344,15 +360,15 @@ void ChatWindow::contactAddedThreadSafe(IMChatSession * session, const IMContact
 	}
 }
 
-void ChatWindow::addChatSession(IMChatSession * imChatSession) {
+void ChatWindow::addChatSession(IMChatSession * imChatSession){
 
 	// If this chat session already exists, display the right tab
 	int tabs = _tabWidget->count();
 	for (int i = 0; i < tabs; i++) {
-		ChatWidget * widget = dynamic_cast<ChatWidget *> (_tabWidget->widget(i));
+		ChatWidget * widget = dynamic_cast<ChatWidget *> ( _tabWidget->widget(i) );
 		if (widget->getSessionId() == imChatSession->getId()) {
 			_tabWidget->setCurrentIndex(i);
-			if (imChatSession->isUserCreated()) {
+			if (imChatSession->isUserCreated()){
 				show();
 				return;
 			} else {
@@ -361,6 +377,7 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession) {
 					flashWindow();
 					return;
 				}
+
 				if (_dialog->isMinimized()) {
 						flashWindow();
 						return;
@@ -379,12 +396,13 @@ void ChatWindow::addChatSession(IMChatSession * imChatSession) {
 	if ( imChatSession->getIMContactSet().size() != 0 ) {
 		IMContact from = *imChatSession->getIMContactSet().begin();
 		addChat(imChatSession,from);
-		if (imChatSession->isUserCreated()) {
+		if (imChatSession->isUserCreated()){
 			show();
 		} else {
 			if (!_dialog->isVisible()) {
 				showChatWindow();
 			}
+
 			flashWindow();
 		}
 	} else {
@@ -410,15 +428,13 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	connect(qtContactList,SIGNAL(contactChangedEventSignal(QString )), SLOT(statusChangedSlot(QString)));
 
 
-	if (_tabWidget->count() > 0) {
+	if (_tabWidget->count() > 0)
 		tabNumber = _tabWidget->insertTab(_tabWidget->count(),_chatWidget,senderName);
-	} else {
+	else
 		tabNumber = _tabWidget->insertTab(0,_chatWidget,senderName);
-	}
 
-	if (session->isUserCreated()) {
+	if (session->isUserCreated())
 		_tabWidget->setCurrentIndex(tabNumber);
-	}
 
 	statusChangedSlot(QString::fromStdString(qtContactList->getCContactList().findContactThatOwns(from)));
 
@@ -435,33 +451,32 @@ void ChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 		imChatMessage = session->getReceivedMessage();
 	}
 	////
-	if (remain) {
+	if (remain){
 		showToaster(session);
 	}
 
 	connect (_chatWidget,SIGNAL(newMessage(IMChatSession *,const QString & )),SLOT(newMessage(IMChatSession *,const QString &)));
 
-	if (!_dialog->isVisible() || _dialog->isMinimized()) {
+	if ( !_dialog->isVisible() || _dialog->isMinimized())
 		_tabWidget->setCurrentIndex(tabNumber);
-	}
 
 	std::string contact = _cChatHandler.getCUserProfile().getCContactList().findContactThatOwns(from);
 	if (!contact.empty()) {
 		contactAddedSignal(session, &from);
 		// addContactToContactListFrame(*contact);
-	} else {
+	}else{
 		//
 		// Contact * contact = _cChatHandler.getUserProfile().getPresenceHandler().getContactIcon(from);
 	}
 	//_dialog->show();
 }
 
-void ChatWindow::tabSelectionChanged (int index) {
+void ChatWindow::tabSelectionChanged ( int index ){
 	_tabWidget->stopBlinkingTab(index);
 	_dialog->setWindowTitle(_tabWidget->tabText(_tabWidget->currentIndex()));
 }
 
-void ChatWindow::addContactToContactListFrame(const Contact & contact) {
+void ChatWindow::addContactToContactListFrame(const Contact & contact){
 /*
 	QLabel * contactLabel = new QLabel();
 	_contactViewport->layout()->addWidget(contactLabel);
@@ -488,7 +503,7 @@ void ChatWindow::addContactToContactListFrame(const Contact & contact) {
 */
 }
 
-void ChatWindow::openContactListFrame() {
+void ChatWindow::openContactListFrame(){
 
 	_contactListFrame->setVisible(false);
 	/*
@@ -509,12 +524,12 @@ void ChatWindow::openContactListFrame() {
 	*/
 }
 
-void ChatWindow::closeContactListFrame() {
+void ChatWindow::closeContactListFrame(){
 	_contactListFrame->setVisible(false);
 }
 
-void ChatWindow::createMenu() {
-	//FIXME!
+void ChatWindow::createMenu(){
+
 	QtWengoPhone * mainWindow = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCUserProfile().getCWengoPhone().getPresentation());
 	QAction * action;
 
@@ -632,14 +647,14 @@ void ChatWindow::createMenu() {
 
 }
 
-QMainWindow * ChatWindow::findMainWindow() {
+QMainWindow * ChatWindow::findMainWindow(){
 	QMainWindow * tmp;
 	QWidgetList widgetList = qApp->allWidgets();
 	QWidgetList::iterator iter;
 
-	for (iter = widgetList.begin(); iter != widgetList.end(); iter++) {
-		if ((*iter)->objectName() == QString("WengoPhoneWindow")) {
-			return (dynamic_cast<QMainWindow *> ((*iter)));
+	for (iter = widgetList.begin(); iter != widgetList.end(); iter++){
+		if ( (*iter)->objectName() == QString("WengoPhoneWindow") ){
+			return ( dynamic_cast<QMainWindow *> ((*iter)) );
 		}
 	}
 	return NULL;
@@ -680,9 +695,8 @@ void ChatWindow::flashWindow() {
 }
 
 bool ChatWindow::chatIsVisible(){
-	if (_dialog->isVisible() && (!_dialog->isMinimized())) {
+	if (_dialog->isVisible() && (!_dialog->isMinimized()))
 		return true;
-	}
 	return false;
 }
 
@@ -691,7 +705,11 @@ void ChatWindow::imContactChangedEventHandler(IMContact & sender) {
 }
 
 void ChatWindow::statusChangedSlot(QString contactId) {
+
+
 	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+
+
 	std::string sdname = qtContactList->getCContactList().getContactProfile(contactId.toStdString()).getDisplayName();
 
 	EnumPresenceState::PresenceState pstate = qtContactList->getCContactList().getContactProfile(contactId.toStdString()).getPresenceState();
@@ -705,15 +723,19 @@ void ChatWindow::statusChangedSlot(QString contactId) {
 			if (widget->getContactId() == contactId){
 				switch(pstate) {
 					case EnumPresenceState::PresenceStateOnline:
+						// _tabWidget->setTabText(i,displayName + " (Online)");
 						_tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/online.png")));
 						break;
 					case EnumPresenceState::PresenceStateOffline:
+						// _tabWidget->setTabText(i,displayName + " (Offline)");
 						_tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/offline.png")));
 						break;
 					case EnumPresenceState::PresenceStateDoNotDisturb:
+						// _tabWidget->setTabText(i,displayName + " (DND)");
 						_tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/donotdisturb.png")));
 						break;
 					case EnumPresenceState::PresenceStateAway:
+						// _tabWidget->setTabText(i,displayName + " (Away)");
 						_tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/away.png")));
 						break;
 					default:
@@ -729,13 +751,13 @@ void ChatWindow::showToaster(IMChatSession * imChatSession) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	if (chatIsVisible()) {
+	if (chatIsVisible())
+	{
 		return;
 	}
 
-	if (imChatSession->isUserCreated()) {
+	if (imChatSession->isUserCreated())
 		return;
-	}
 
 	QPixmap result;
 
@@ -771,7 +793,8 @@ void ChatWindow::showToaster(IMChatSession * imChatSession) {
 		QPainter pixpainter(& background);
 		pixpainter.drawPixmap(5, 5, result.scaled(60, 60));
 		pixpainter.end();
-	} else {
+	}
+	else {
 		result = QPixmap(":pics/toaster/chat.png");
 
 		QPainter pixpainter(& background);
@@ -798,6 +821,7 @@ void ChatWindow::showChatWindow() {
 #if !defined(OS_MACOSX)
 	showMinimized();
 #else
-	_dialog->showNormal();
+	_dialog->show();
+	_dialog->setWindowState(_dialog->windowState() & ~Qt::WindowActive);
 #endif
 }

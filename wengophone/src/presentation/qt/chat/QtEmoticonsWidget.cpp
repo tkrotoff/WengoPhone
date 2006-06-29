@@ -43,14 +43,15 @@ EmoticonsWidget::EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidge
 	_buttonY = 0;
 }
 
-void EmoticonsWidget::buttonClicked(QtEmoticon emoticon) {
-	if (_stat == Popup) {
+void EmoticonsWidget::buttonClicked(QtEmoticon emoticon)
+{
+	if (_stat == Popup)
 		close();
-	}
 	emoticonClicked(emoticon);
 }
 
-void EmoticonsWidget::changeStat() {
+void EmoticonsWidget::changeStat()
+{
 	if (_stat == Popup) {
 		close();
 		setWindowFlags(Qt::Window);
@@ -62,7 +63,6 @@ void EmoticonsWidget::changeStat() {
 		_stat=Popup;
 	}
 }
-
 void EmoticonsWidget::initButtons(const QString & protocol) {
 	QtEmoticonsManager::QtEmoticonsList emoticonsList;
 	QtEmoticonsManager::QtEmoticonsList::iterator it;
@@ -74,13 +74,15 @@ void EmoticonsWidget::initButtons(const QString & protocol) {
 	_buttonX=0;
 	_buttonY=0;
 	emoticonsList = _qtEmoticonsManager->getQtEmoticonsList(protocol);
+
 	for (it=emoticonsList.begin();it!=emoticonsList.end();it++) {
 		addButton((*it));
 	}
 }
 
 void EmoticonsWidget::addButton(QtEmoticon emoticon) {
-	if ( _buttonX == 10 ) {
+
+	if ( _buttonX == 10 ){
 		_buttonX=0;
 		_buttonY+=1;
 	}
@@ -91,6 +93,7 @@ void EmoticonsWidget::addButton(QtEmoticon emoticon) {
 	QSize macosxHackSize(6, 6);
 	buttonSize += macosxHackSize;
 	#endif
+
 	button->setMaximumSize(buttonSize);
 	button->setMinimumSize(buttonSize);
 	_layout->addWidget(button, _buttonY, _buttonX);
@@ -98,7 +101,8 @@ void EmoticonsWidget::addButton(QtEmoticon emoticon) {
 	_buttonX++;
 }
 
-void EmoticonsWidget::closeEvent (QCloseEvent * event) {
+void EmoticonsWidget::closeEvent ( QCloseEvent * event )
+{
 	closed();
 	event->accept();
 }

@@ -31,10 +31,9 @@ ChatWidgetManager::ChatWidgetManager(QObject * parent, QTextEdit * target) : QOb
 
 bool ChatWidgetManager::eventFilter(QObject *obj, QEvent *event)
 {
-	if (event->type() == QEvent::KeyPress) {
-		if (keyPress(obj,event)) {
+	if (event->type() == QEvent::KeyPress){
+		if (keyPress(obj,event))
 			return true;
-		}
 	}
 	return QObject::eventFilter(obj, event);
 }
@@ -42,12 +41,12 @@ bool ChatWidgetManager::eventFilter(QObject *obj, QEvent *event)
 bool ChatWidgetManager::keyPress(QObject *obj, QEvent *event)
 {
 	QKeyEvent * e = static_cast<QKeyEvent *>(event);
-	if ((e->key() == Qt::Key_Enter) || (e->key() == Qt::Key_Return)) {
+	if (  (e->key() == Qt::Key_Enter) || (e->key() == Qt::Key_Return) ) {
 		event->accept();
-		enterPressed(e->modifiers());
+		enterPressed();
 		return true;
 	}
-	if ((e->key() == Qt::Key_Backspace)) {
+	if ( (e->key() == Qt::Key_Backspace) ) {
 		event->accept();
 		deletePressed();
 		return true;

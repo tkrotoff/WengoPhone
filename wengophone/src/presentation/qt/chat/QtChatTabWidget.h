@@ -18,8 +18,8 @@
 
 */
 
-#ifndef OWQTCHATTABWIDGET_H
-#define OWQTCHATTABWIDGET_H
+#ifndef QTCHATTABWIDGET_H
+#define QTCHATTABWIDGET_H
 
 #include <QtGui>
 
@@ -51,4 +51,4 @@ protected:
 
 };
 
-#endif //OWQTCHATTABWIDGET_H
+#endif

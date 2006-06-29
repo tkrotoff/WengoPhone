@@ -20,11 +20,13 @@
 
 #include <util/Logger.h>
 
-QtEmoticon::QtEmoticon() {
+QtEmoticon::QtEmoticon()
+{
 
 }
 
-QtEmoticon::QtEmoticon(const QtEmoticon & source) {
+QtEmoticon::QtEmoticon(const QtEmoticon & source)
+{
 	_path=source._path;
 	_text=QStringList(source._text);
 	_pixmap=source._pixmap;
@@ -32,29 +34,33 @@ QtEmoticon::QtEmoticon(const QtEmoticon & source) {
 	_buttonPixmap = source._buttonPixmap;
 }
 
-QtEmoticon::~QtEmoticon() {
+QtEmoticon::~QtEmoticon()
+{
 }
 
-QString QtEmoticon::getHtml() const {
+QString QtEmoticon::getHtml()
+{
 	return QString("<img src=\"%1\" />").arg(_path);
 }
 
-QString QtEmoticon::getHtmlRegExp() const {
+QString QtEmoticon::getHtmlRegExp()
+{
 	return QString("<img src=\"%1\" />").arg(_path);
 }
 
-bool QtEmoticon::isNull() const {
-	if (_text.isEmpty()) {
+bool QtEmoticon::isNull()
+{
+	if (_text.isEmpty())
 		return true;
-	}
 	return false;
 }
 
-void QtEmoticon::setRegExp(const QString & regExp) {
+void QtEmoticon::setRegExp(const QString & regExp)
+{
 	_regExp = regExp;
 }
 
-QtEmoticon & QtEmoticon::operator=(const QtEmoticon & source) {
+QtEmoticon & QtEmoticon::operator=(const QtEmoticon & source){
 	_path = source._path;
 	_text = source._text;
 	_regExp = source._regExp;

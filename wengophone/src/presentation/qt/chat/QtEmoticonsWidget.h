@@ -17,23 +17,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTEMOTICONSWIDGET_H
-#define OWQTEMOTICONSWIDGET_H
+#ifndef EMOTICONSWIDGET_H
+#define EMOTICONSWIDGET_H
 
 #include <QtGui>
 
+#include "widgetseeker.h"
 #include "QtEmoticon.h"
 #include "QtEmoticonButton.h"
 
 class QtEmoticonsManager;
 
-class EmoticonsWidget : public QWidget
+class EmoticonsWidget : public QWidget //, Ui::EmoticonsWidget
 {
 	Q_OBJECT
 
 public:
-
-
 	enum EmoticonsWidgetStat {Window,Popup};
 
 	EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent = 0, Qt::WFlags f= 0);
@@ -43,6 +42,8 @@ public:
 protected:
 
 	QWidget * _widget;
+
+	WidgetSeeker _seeker;
 
 	QStringList _iconName;
 
@@ -75,4 +76,4 @@ Q_SIGNALS:
 };
 
 
-#endif //OWQTEMOTICONSWIDGET_H
+#endif

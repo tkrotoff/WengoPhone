@@ -17,10 +17,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCHATWIDGET_H
-#define OWQTCHATWIDGET_H
+#ifndef CHATWIDGET_H
+#define CHATWIDGET_H
 
 #include "QtEmoticonsWidget.h"
+#include "widgetseeker.h"
 #include "QtEmoticon.h"
 #include "QtChatContactInfo.h"
 #include "QtChatRoomInviteDlg.h"
@@ -33,38 +34,33 @@
 
 #include <util/Trackable.h>
 
+#include <QtGui>
+
 #include "ui_ChatRoomWidget.h"
 
-#include <QObject>
-#include <QWidget>
-#include <QString>
-#include <QHash>
-
-class QFont;
-class QUrl;
-class QTimerEvent;
 class QtWengoStyleLabel;
 class QtEmoticonsManager;
 
 class ChatWidget : public QWidget, public Trackable
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
 	static const int STOPPED_TYPING_DELAY;
 	static const int NOT_TYPING_DELAY;
-	static const QString USER_BACKGOUND_COLOR;
 
-	ChatWidget(CChatHandler & cChatHandler, int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
+    ChatWidget(CChatHandler & cChatHandler, int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
 
-	virtual ~ChatWidget();
+    virtual ~ChatWidget();
 
-	void setNickTextColor(const QString &color);
+    void setNickBgColor(const QString &color);
 
-	void setNickFont(QFont &font);
+    void setNickTextColor(const QString &color);
 
-	void setNickName(const QString & nickname);
+    void setNickFont(QFont &font);
+
+    void setNickName(const QString & nickname);
 
 	void setIMChatSession(IMChatSession * imChatSession);
 
@@ -72,33 +68,35 @@ public:
 
 	IMChatSession * getIMChatSession() {return _imChatSession;};
 
-	const QString & nickName();
+    const QString & nickName();
 
-	const QFont & nickFont();
+    const QFont & nickFont();
 
-	const QString & nickTextColor();
+    const QString & nickBgColor();
 
-	void  addToHistory(const QString & senderName,const QString & str);
+    const QString & nickTextColor();
 
-	void setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state);
+    void  addToHistory(const QString & senderName,const QString & str);
 
-	bool canDoMultiChat();
+    void setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state);
 
-	// called from the model's thread
-	void contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact);
+    void openContactListFrame();
 
-	// called from the model's thread
-	void contactRemovedEventHandler(IMChatSession & sender, const IMContact & imContact);
+    bool canDoMultiChat();
 
-	void setContactId(QString contactId) { _contactId = contactId;}
+    // called from the model's thread
+    void contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact);
 
-	QString getContactId() { return _contactId;}
+    // called from the model's thread
+    void contactRemovedEventHandler(IMChatSession & sender, const IMContact & imContact);
+
+    void setContactId(QString contactId) { _contactId = contactId;}
+
+    QString getContactId() { return _contactId;}
 
 public Q_SLOTS:
 
-	void enterPressed(Qt::KeyboardModifiers modifier = Qt::NoModifier);
-
-	void sendButtonClicked();
+	void enterPressed();
 
 	void deletePressed();
 
@@ -136,7 +134,7 @@ private:
 
 	typedef QHash<QString,QtChatContactInfo> ContactInfoHash;
 
-	const QString replaceUrls(const QString & str, const QString & htmlstr);
+    const QString replaceUrls(const QString & str, const QString & htmlstr);
 
 	const QString text2Emoticon(const QString &htmlstr);
 
@@ -144,13 +142,15 @@ private:
 
 	virtual void timerEvent ( QTimerEvent * event );
 
-	void createActionFrame();
+	void addContactToContactListFrame(const Contact & contact);
 
-	void setupSendButton();
+    void createActionFrame();
 
-	void updateContactListLabel();
+    void setupSendButton();
 
-	QString getProtocol() const;
+    void updateContactListLabel();
+
+    QString getProtocol() const;
 
 	/**
 	 * Prepares a message to be sent to the network.
@@ -196,7 +196,9 @@ private:
 
 	bool _isTyping;
 
-	QtWengoStyleLabel *_emoticonsLabel;
+	WidgetSeeker    _seeker;
+
+   	QtWengoStyleLabel *_emoticonsLabel;
 
 	QtWengoStyleLabel *_fontLabel;
 
@@ -214,13 +216,13 @@ private:
 
 	QString _nickBgColorAlt;
 
-	QString _nickTextColor;
+    QString _nickTextColor;
 
-	QString _nickName;
+    QString _nickName;
 
-	EmoticonsWidget *_emoticonsWidget;
+    EmoticonsWidget *_emoticonsWidget;
 
-	mutable QMutex _mutex;
+    mutable QMutex _mutex;
 };
 
-#endif //OWQTCHATWIDGET_H
+#endif

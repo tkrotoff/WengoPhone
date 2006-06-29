@@ -18,8 +18,8 @@
 
 */
 
-#ifndef OWQTCHATROOMLISTWIDGETITEM_H
-#define OWQTCHATROOMLISTWIDGETITEM_H
+#ifndef QTCHATROOMLISTWIDGETITEM_H
+#define QTCHATROOMLISTWIDGETITEM_H
 
 #include <model/contactlist/Contact.h>
 
@@ -38,5 +38,5 @@ protected:
 	Contact & _contact;
 };
 
-#endif //OWQTCHATROOMLISTWIDGETITEM_H
+#endif
 

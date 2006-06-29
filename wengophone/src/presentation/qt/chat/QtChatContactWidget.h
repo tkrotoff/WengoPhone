@@ -18,8 +18,8 @@
 
 */
 
-#ifndef OWQTCHATCONTACTWIDGET_H
-#define OWQTCHATCONTACTWIDGET_H
+#ifndef QTCHATCONTACTWIDGET_H
+#define QTCHATCONTACTWIDGET_H
 
 #include <QtGui>
 
@@ -45,13 +45,15 @@ public Q_SLOTS:
 
 	void updateDisplay();
 
-private:
+protected:
 
 	IMChatSession * _imChatSession;
 
 	CChatHandler & _cChatHandler;
 
 	QPixmap _display;
+
+private:
 
 	void drawBorder(QPainter * painter, QRect rect, const QColor & color);
 
@@ -67,4 +69,4 @@ private:
 
 };
 
-#endif //OWQTCHATCONTACTWIDGET_H
+#endif

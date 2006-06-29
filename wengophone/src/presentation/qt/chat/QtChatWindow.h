@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWCHATWINDOW_H
-#define OWCHATWINDOW_H
+#ifndef CHATWINDOW_H
+#define CHATWINDOW_H
 
 #include <control/chat/CChatHandler.h>
 
@@ -160,4 +160,4 @@ private:
 	QtWengoPhone * _qtWengoPhone;
 };
 
-#endif //OWCHATWINDOW_H
+#endif

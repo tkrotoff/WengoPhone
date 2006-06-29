@@ -18,8 +18,8 @@
 
 */
 
-#ifndef OWQTCHATROOMINVITEDLG_H
-#define OWQTCHATROOMINVITEDLG_H
+#ifndef QTCHATROOMINVITEDLG_H
+#define QTCHATROOMINVITEDLG_H
 
 #include <QtGui>
 
@@ -79,4 +79,4 @@ protected Q_SLOTS:
 
 };
 
-#endif //OWQTCHATROOMINVITEDLG_H
+#endif

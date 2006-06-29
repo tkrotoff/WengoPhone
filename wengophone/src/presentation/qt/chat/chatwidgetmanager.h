@@ -17,34 +17,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCHATWIDGETMANAGER_H
-#define OWQTCHATWIDGETMANAGER_H
+#ifndef CHATWIDGETMANAGER_H
+#define CHATWIDGETMANAGER_H
 
 #include <QtGui>
 
 class ChatWidgetManager : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	ChatWidgetManager (QObject * parent = 0, QTextEdit * target = 0);
+    ChatWidgetManager (QObject * parent = 0, QTextEdit * target = 0);
 
 Q_SIGNALS:
-
-	void enterPressed(Qt::KeyboardModifiers modifier);
-
-	void deletePressed();
-
+    void    enterPressed();
+    void    deletePressed();
 protected:
 
-	bool eventFilter(QObject *obj, QEvent *event);
+    bool    eventFilter(QObject *obj, QEvent *event);
 
-	bool keyPress(QObject *obj, QEvent *event);
+    bool    keyPress(QObject *obj, QEvent *event);
 
-	QTextEdit * _target;
 
-	QObject * _parent;
+    QTextEdit       *       _target;
+    QObject         *       _parent;
 };
 
-#endif //OWQTCHATWIDGETMANAGER_H
+#endif
