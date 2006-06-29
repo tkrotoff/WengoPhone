@@ -195,8 +195,6 @@ void PhoneLine::disconnect(bool now) {
 void PhoneLine::checkCallId(int callId) {
 	PhoneCall * phoneCall = getPhoneCall(callId);
 	if (!phoneCall) {
-		//If it crashes inside checkCallId() this is probably due
-		//to a duplicated phCALLCLOSED message
 		LOG_FATAL("unknown phone call callId=" + String::fromNumber(callId));
 	}
 }
@@ -371,9 +369,14 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 void PhoneLine::callClosed(int callId) {
 	//If it crashes inside checkCallId() this is probably due
 	//to a duplicated phCALLCLOSED message
-	checkCallId(callId);
+	//checkCallId(callId);
 
 	PhoneCall * phoneCall = getPhoneCall(callId);
+	if (!phoneCall) {
+		//Phone call has been already closed
+		return;
+	}
+
 	if (_activePhoneCall == phoneCall) {
 		_activePhoneCall = NULL;
 	}
