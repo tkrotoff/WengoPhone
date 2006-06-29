@@ -162,11 +162,7 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 		groupId = groupName.toStdString();
 		groupNameTmp = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactGroupName(groupId);
 	}
-	if (checkForUtf8(groupNameTmp, groupNameTmp.size())) {
-		groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
-	} else {
-		groupName=QString::fromStdString(groupNameTmp);
-	}
+	groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
 	QString str = groupName;
 	painter->drawText(r, Qt::AlignLeft, str, 0);
 }

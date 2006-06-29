@@ -61,7 +61,8 @@ void ContactGroupPopupMenu::removeContactGroup() const {
 }
 
 void ContactGroupPopupMenu::renameContactGroup() const {
-	QString groupName = QString::fromStdString(_cContactList.getContactGroupName(_groupId.toStdString()));
+	std::string tmp = _cContactList.getContactGroupName(_groupId.toStdString());
+	QString groupName = QString::fromUtf8(tmp.c_str());
 	QtRenameGroup dialog(groupName,qobject_cast<QWidget *>(parent()));
 	if (dialog.exec()){
 		_cContactList.renameContactGroup(_groupId.toStdString(), dialog.getGroupName().toUtf8().data());
