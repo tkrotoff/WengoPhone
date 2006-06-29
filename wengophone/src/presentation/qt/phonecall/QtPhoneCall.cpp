@@ -84,9 +84,8 @@ void QtPhoneCall::initThreadSafe() {
 	//phoneNumberLabel
 	_nickNameLabel = Object::findChild < QLabel * > (_phoneCallWidget, "nickNameLabel");
 
-	//QString userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
-
-	QString userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getDisplayName());
+	std::string tmp = _cPhoneCall.getPhoneCall().getPeerSipAddress().getDisplayName();
+	QString userInfo = QString::fromUtf8(tmp.c_str());
 	if (userInfo.isEmpty()) {
 		userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
 	}
@@ -153,7 +152,7 @@ void QtPhoneCall::initThreadSafe() {
 
 	connect(filter, SIGNAL(openPopup(int, int)), SLOT(openPopup(int, int)));
 
-	showToaster();
+	showToaster(userInfo);
 
 	if (!_cPhoneCall.getPhoneCall().getConferenceCall()) {
 		_qtWengoPhone->addPhoneCall(this);
@@ -565,7 +564,7 @@ bool QtPhoneCall::isIncoming() {
 	return (_cPhoneCall.getState() == EnumPhoneCallState::PhoneCallStateIncoming);
 }
 
-void QtPhoneCall::showToaster() {
+void QtPhoneCall::showToaster(const QString & userName) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	if (!isIncoming()) {
@@ -579,7 +578,7 @@ void QtPhoneCall::showToaster() {
 
 	QtCallToaster * toaster = new QtCallToaster();
 	toaster->setTitle(tr("New incoming call"));
-	toaster->setMessage(QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName()));
+	toaster->setMessage(userName);
 	connect(toaster,SIGNAL(callButtonClicked()),SLOT(acceptCall()));
 	connect(toaster,SIGNAL(hangupButtonClicked()),SLOT(rejectCall()));
 	toaster->setPixmap(QPixmap(":/pics/default-avatar.png"));

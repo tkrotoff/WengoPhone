@@ -124,7 +124,7 @@ private:
 
 	void showAvatar();
 
-	void showToaster();
+	void showToaster(const QString & userName);
 
 	QString getDisplayName(QString str);
 
