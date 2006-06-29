@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>359</width>
-    <height>353</height>
+    <width>399</width>
+    <height>319</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -307,8 +307,11 @@
      </property>
      <item row="1" column="1" >
       <widget class="QLabel" name="forgotPasswordLabel" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
        <property name="text" >
-        <string>&lt;span style=" text-decoration: underline; color:#0000ff;">Forgot your password ?&lt;/span></string>
+        <string>&lt;span style=" text-decoration: underline; color:#0000ff;">Forgot your password?&lt;/span></string>
        </property>
        <property name="alignment" >
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -317,11 +320,14 @@
      </item>
      <item row="0" column="1" >
       <widget class="QLabel" name="helpLabel" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
        <property name="layoutDirection" >
         <enum>Qt::LeftToRight</enum>
        </property>
        <property name="text" >
-        <string>&lt;span style=" text-decoration: underline; color:#0000ff;">Need help ?&lt;/span></string>
+        <string>&lt;span style=" text-decoration: underline; color:#0000ff;">Need help?&lt;/span></string>
        </property>
        <property name="textFormat" >
         <enum>Qt::AutoText</enum>

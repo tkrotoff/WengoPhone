@@ -48,7 +48,7 @@ of the License, or (at your option) any later version.</translation>
     </message>
     <message>
         <source>Copyright (C) 2004-2006 Wengo  http://openwengo.com</source>
-        <translation>  Copyright (C) 2004-2006 Wengohttp://openwengo.com</translation>
+        <translation>Copyright (C) 2004-2006 Wengo  http://openwengo.com</translation>
     </message>
     <message>
         <source>WengoPhone, a voice over Internet phone</source>
@@ -240,11 +240,11 @@ of the License, or (at your option) any later version.</translation>
         <translation type="obsolete">Transférer tous vos appels non aboutis vers la Messagerie vocale. </translation>
     </message>
     <message encoding="UTF-8">
-        <source>Le transfert d&apos;appel intervient si vous n&apos;êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
-ou après vingt secondes si vous n&apos;avez pas répondu. Vous pouvez configurer jusqu&apos;à trois transferts 
+        <source>Le transfert d&apos;appel intervient si vous n&apos;êtes pas connecté à Wengo, lorsque votre ligne est occupée,
+ou après vingt secondes si vous n&apos;avez pas répondu. Vous pouvez configurer jusqu&apos;à trois transferts
 vers des postes fixes, des numéros mobiles ou sur votre messagerie.</source>
-        <translation type="obsolete">Le transfert d&apos;appel intervient si vous n&apos;êtes pas connecté à Wengo, lorsque votre ligne est occupée, 
-ou après vingt secondes si vous n&apos;avez pas répondu. Vous pouvez configurer jusqu&apos;à trois transferts 
+        <translation type="obsolete">Le transfert d&apos;appel intervient si vous n&apos;êtes pas connecté à Wengo, lorsque votre ligne est occupée,
+ou après vingt secondes si vous n&apos;avez pas répondu. Vous pouvez configurer jusqu&apos;à trois transferts
 vers des postes fixes, des numéros mobiles ou sur votre messagerie.</translation>
     </message>
     <message>
@@ -252,9 +252,9 @@ vers des postes fixes, des numéros mobiles ou sur votre messagerie.</translatio
         <translation>Transfert vers téléphone mobile</translation>
     </message>
     <message encoding="UTF-8">
-        <source>Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et 
+        <source>Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et
 nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessite de renseigner un numéro mobile dans votre profil</source>
-        <translation type="obsolete">Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et 
+        <translation type="obsolete">Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et
 nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessite de renseigner un numéro mobile dans votre profil</translation>
     </message>
     <message encoding="UTF-8">
