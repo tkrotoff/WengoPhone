@@ -89,8 +89,8 @@ PhoneCall::~PhoneCall() {
 }
 
 void PhoneCall::accept() {
-	_phoneLine.acceptCall(_callId);
 	PhoneCallState::stopSoundIncomingCall();
+	_phoneLine.acceptCall(_callId);
 }
 
 void PhoneCall::resume() {

@@ -401,8 +401,8 @@ void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(piximage* remoteVideo
 }
 
 void QtPhoneCall::acceptActionTriggered(bool) {
-	_cPhoneCall.accept();
 	_statusLabel->setText(tr("Initialization..."));
+	_cPhoneCall.accept();
 }
 
 void QtPhoneCall::rejectActionTriggered(bool) {
