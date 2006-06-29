@@ -17,8 +17,8 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-#ifndef QTCHATROOMTREEWIDGETITEM_H
-#define QTCHATROOMTREEWIDGETITEM_H
+#ifndef OWQTCHATROOMTREEWIDGETITEM_H
+#define OWQTCHATROOMTREEWIDGETITEM_H
 
 #include <model/contactlist/Contact.h>
 
@@ -39,5 +39,5 @@ protected:
 };
 
 
-#endif
+#endif //OWQTCHATROOMTREEWIDGETITEM_H
 

@@ -22,34 +22,35 @@
 
 ChatWidgetManager::ChatWidgetManager(QObject * parent, QTextEdit * target) : QObject (parent)
 {
-    _parent = parent;
-    _target = target;
+	_parent = parent;
+	_target = target;
 
-    _target->installEventFilter(this);
-    _target->viewport()->installEventFilter(this);
+	_target->installEventFilter(this);
+	_target->viewport()->installEventFilter(this);
 }
 
 bool ChatWidgetManager::eventFilter(QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::KeyPress){
-        if (keyPress(obj,event))
-            return true;
-    }
-    return QObject::eventFilter(obj, event);
+	if (event->type() == QEvent::KeyPress) {
+		if (keyPress(obj,event)) {
+			return true;
+		}
+	}
+	return QObject::eventFilter(obj, event);
 }
 
 bool ChatWidgetManager::keyPress(QObject *obj, QEvent *event)
 {
-    QKeyEvent * e = static_cast<QKeyEvent *>(event);
-    if (  (e->key() == Qt::Key_Enter) || (e->key() == Qt::Key_Return) ) {
-        event->accept();
-        enterPressed();
-        return true;
-    }
-    if ( (e->key() == Qt::Key_Backspace) ) {
-        event->accept();
-        deletePressed();
-        return true;
-    }
-    return false;
+	QKeyEvent * e = static_cast<QKeyEvent *>(event);
+	if ((e->key() == Qt::Key_Enter) || (e->key() == Qt::Key_Return)) {
+		event->accept();
+		enterPressed(e->modifiers());
+		return true;
+	}
+	if ((e->key() == Qt::Key_Backspace)) {
+		event->accept();
+		deletePressed();
+		return true;
+	}
+	return false;
 }

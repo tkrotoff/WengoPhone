@@ -18,32 +18,33 @@
  */
 #include "QtEmoticonButton.h"
 
-QtEmoticonButton::QtEmoticonButton ( QWidget * parent ) : QPushButton(parent)
-{
-	init();
-}
-QtEmoticonButton::QtEmoticonButton ( const QString & text, QWidget * parent ) : QPushButton(text,parent)
-{
-	init();
-}
-QtEmoticonButton::QtEmoticonButton ( const QIcon & icon, const QString & text, QWidget * parent ) : QPushButton(icon,text,parent)
-{
+QtEmoticonButton::QtEmoticonButton ( QWidget * parent ) : QPushButton(parent) {
 	init();
 }
 
-void QtEmoticonButton::init()
-{
+QtEmoticonButton::QtEmoticonButton ( const QString & text, QWidget * parent ) : QPushButton(text,parent) {
+	init();
+}
+
+QtEmoticonButton::QtEmoticonButton ( const QIcon & icon, const QString & text, QWidget * parent ) :
+QPushButton(icon,text,parent) {
+	init();
+}
+
+void QtEmoticonButton::init() {
 	setFlat(true);
 	connect (this,SIGNAL(clicked()),this,SLOT(buttonClickedSlot()));
 }
-void QtEmoticonButton::buttonClickedSlot()
-{
+
+void QtEmoticonButton::buttonClickedSlot() {
 	buttonClicked(_emoticon);
 }
 
-void QtEmoticonButton::setEmoticon(QtEmoticon emoticon)
-{
+void QtEmoticonButton::setEmoticon(QtEmoticon emoticon) {
 	_emoticon = emoticon;
 	setIcon(QIcon(emoticon.getButtonPixmap()));
 	setIconSize(emoticon.getButtonPixmap().size());
+	if (!emoticon.getText().isEmpty()) {
+		setToolTip(emoticon.getText()[0]);
+	}
 }

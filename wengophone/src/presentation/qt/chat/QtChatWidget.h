@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CHATWIDGET_H
-#define CHATWIDGET_H
+#ifndef OWQTCHATWIDGET_H
+#define OWQTCHATWIDGET_H
 
 #include "QtEmoticonsWidget.h"
-#include "widgetseeker.h"
 #include "QtEmoticon.h"
-
+#include "QtChatContactInfo.h"
 #include "QtChatRoomInviteDlg.h"
 
 #include <control/chat/CChatHandler.h>
@@ -34,28 +33,38 @@
 
 #include <util/Trackable.h>
 
-#include <QtGui>
+#include "ui_ChatRoomWidget.h"
 
+#include <QObject>
+#include <QWidget>
+#include <QString>
+#include <QHash>
+
+class QFont;
+class QUrl;
+class QTimerEvent;
 class QtWengoStyleLabel;
 class QtEmoticonsManager;
 
 class ChatWidget : public QWidget, public Trackable
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 
-    ChatWidget(CChatHandler & cChatHandler, int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
+	static const int STOPPED_TYPING_DELAY;
+	static const int NOT_TYPING_DELAY;
+	static const QString USER_BACKGOUND_COLOR;
 
-    virtual ~ChatWidget();
+	ChatWidget(CChatHandler & cChatHandler, int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
 
-    void setNickBgColor(const QString &color);
+	virtual ~ChatWidget();
 
-    void setNickTextColor(const QString &color);
+	void setNickTextColor(const QString &color);
 
-    void setNickFont(QFont &font);
+	void setNickFont(QFont &font);
 
-    void setNickName(const QString & nickname);
+	void setNickName(const QString & nickname);
 
 	void setIMChatSession(IMChatSession * imChatSession);
 
@@ -63,99 +72,71 @@ public:
 
 	IMChatSession * getIMChatSession() {return _imChatSession;};
 
-    const QString & nickName();
+	const QString & nickName();
 
-    const QFont&    nickFont();
+	const QFont & nickFont();
 
-    const QString&   nickBgColor();
+	const QString & nickTextColor();
 
-    const QString&   nickTextColor();
+	void  addToHistory(const QString & senderName,const QString & str);
 
-    void  addToHistory(const QString & senderName,const QString & str);
+	void setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state);
 
-    void setStoppedTypingDelay(int sec) { _stoppedTypingDelay = sec*1000; };
+	bool canDoMultiChat();
 
-    void setNotTypingDelay(int sec) { _notTypingDelay = sec * 1000;};
+	// called from the model's thread
+	void contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact);
 
-    void setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state);
+	// called from the model's thread
+	void contactRemovedEventHandler(IMChatSession & sender, const IMContact & imContact);
 
-    void openContactListFrame();
+	void setContactId(QString contactId) { _contactId = contactId;}
 
-    bool canDoMultiChat();
+	QString getContactId() { return _contactId;}
 
-    // called from the model's thread
-    void contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact);
+public Q_SLOTS:
 
-    // called from the model's thread
-    void contactRemovedEventHandler(IMChatSession & sender, const IMContact & imContact);
+	void enterPressed(Qt::KeyboardModifiers modifier = Qt::NoModifier);
 
-    void setContactId(QString contactId) { _contactId = contactId;}
+	void sendButtonClicked();
 
-    QString getContactId() { return _contactId;}
+	void deletePressed();
 
-protected:
+	void chooseFont();
 
-    QWidget *       _widget;
+	void chooseEmoticon();
 
-	CChatHandler & _cChatHandler;
+	void emoticonSelected(QtEmoticon emoticon);
 
-	QString  _contactId;
+	void urlClicked(const QUrl & link);
 
-	int _sessionId;
+	void inviteContact();
 
-	int _stoppedTypingTimerId;
+	void chatEditChanged();
 
-	int _notTypingTimerId;
+	void contactAddedEventSlot();
 
-	int _stoppedTypingDelay;
+	void contactRemovedEventSlot();
 
-	int _notTypingDelay;
+	virtual void setVisible ( bool visible );
 
-	bool _isTyping;
+Q_SIGNALS:
 
-	WidgetSeeker    _seeker;
+	void newMessage(IMChatSession* session,const QString & msg);
 
-    QFrame * _actionFrame;
+	void newContact(const Contact & contact);
 
-   	QtWengoStyleLabel *_emoticonsLabel;
+	void contactAddedEventSignal();
 
-	QtWengoStyleLabel *_fontLabel;
+	void contactRemovedEventSignal();
 
-	QTextBrowser *   _chatHistory;
+	void contactAdded();
 
-	QTextEdit    *   _chatEdit;
+private:
 
-	QPushButton  *   _sendButton;
+	typedef QHash<QString,QtChatContactInfo> ContactInfoHash;
 
-	QScrollArea  *  _scrollArea;
-
-	QWidget * _contactViewport;
-
-	QFrame * _contactListFrame;
-
-	QLabel * _typingStateLabel;
-
-    QLabel * _contactListLabel;
-
-	IMChatSession * _imChatSession;
-
-	QFont _currentFont;
-
-	QFont _nickFont;
-
-	QString _nickBgColor;
-
-	QString _nickBgColorAlt;
-
-    QString _nickTextColor;
-
-    QString _nickName;
-
-    EmoticonsWidget *_emoticonsWidget;
-
-    QMutex _mutex;
-
-    const QString replaceUrls(const QString & str, const QString & htmlstr);
+	const QString replaceUrls(const QString & str, const QString & htmlstr);
 
 	const QString text2Emoticon(const QString &htmlstr);
 
@@ -163,22 +144,13 @@ protected:
 
 	virtual void timerEvent ( QTimerEvent * event );
 
-	void addContactToContactListFrame(const Contact & contact);
+	void createActionFrame();
 
-    void createActionFrame();
+	void setupSendButton();
 
-    void setupSendButton();
+	void updateContactListLabel();
 
-    void updateContactListLabel();
-
-    QString getProtocol() const;
-
-    QString generateHtmlHeader(const QString & bgColor,
-                                       const QString & barColor,
-                                       const QString & stringColor,
-                                       const QString & nickName);
-
-    QtEmoticonsManager * _qtEmoticonManager;
+	QString getProtocol() const;
 
 	/**
 	 * Prepares a message to be sent to the network.
@@ -204,42 +176,51 @@ protected:
 	 */
 	QString insertFontTag(const QString & message);
 
-public Q_SLOTS:
+	ContactInfoHash _qtContactInfo;
 
-    void enterPressed();
+    QtEmoticonsManager * _qtEmoticonManager;
 
-    void deletePressed();
+    Ui::ChatRoomWidget _ui;
 
-    void chooseFont();
+    QWidget *       _widget;
 
-    void chooseEmoticon();
+	CChatHandler & _cChatHandler;
 
-    void emoticonSelected(QtEmoticon emoticon);
+	QString  _contactId;
 
-    void urlClicked(const QUrl & link);
+	int _sessionId;
 
-    void inviteContact();
+	int _stoppedTypingTimerId;
 
-    void chatEditChanged();
+	int _notTypingTimerId;
 
-    void contactAddedEventSlot();
+	bool _isTyping;
 
-    void contactRemovedEventSlot();
+	QtWengoStyleLabel *_emoticonsLabel;
 
-    virtual void setVisible ( bool visible );
+	QtWengoStyleLabel *_fontLabel;
 
+	QScrollArea  *  _scrollArea;
 
-Q_SIGNALS:
+	QWidget * _contactViewport;
 
-    void newMessage(IMChatSession* session,const QString & msg);
+	IMChatSession * _imChatSession;
 
-    void newContact(const Contact & contact);
+	QFont _currentFont;
 
-    void contactAddedEventSignal();
+	QFont _nickFont;
 
-    void contactRemovedEventSignal();
+	QString _nickBgColor;
 
-    void contactAdded();
+	QString _nickBgColorAlt;
+
+	QString _nickTextColor;
+
+	QString _nickName;
+
+	EmoticonsWidget *_emoticonsWidget;
+
+	mutable QMutex _mutex;
 };
 
-#endif
+#endif //OWQTCHATWIDGET_H

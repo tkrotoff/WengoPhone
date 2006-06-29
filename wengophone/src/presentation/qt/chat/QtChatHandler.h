@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCHATHANDLER_H
-#define QTCHATHANDLER_H
+#ifndef OWQTCHATHANDLER_H
+#define OWQTCHATHANDLER_H
 
 #include <presentation/PChatHandler.h>
 #include <qtutil/QObjectThreadSafe.h>
@@ -68,4 +68,4 @@ private:
 	ChatWindow * _qtChatWidget;
 };
 
-#endif	//QTCHATHANDLER_H
+#endif	//OWQTCHATHANDLER_H

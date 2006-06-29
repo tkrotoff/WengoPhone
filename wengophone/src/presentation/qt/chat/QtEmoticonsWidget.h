@@ -17,33 +17,32 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EMOTICONSWIDGET_H
-#define EMOTICONSWIDGET_H
+#ifndef OWQTEMOTICONSWIDGET_H
+#define OWQTEMOTICONSWIDGET_H
 
 #include <QtGui>
 
-#include "widgetseeker.h"
 #include "QtEmoticon.h"
 #include "QtEmoticonButton.h"
 
 class QtEmoticonsManager;
 
-class EmoticonsWidget : public QWidget //, Ui::EmoticonsWidget
+class EmoticonsWidget : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
+
+
 	enum EmoticonsWidgetStat {Window,Popup};
 
-    EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent = 0, Qt::WFlags f= 0);
+	EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent = 0, Qt::WFlags f= 0);
 
-    void initButtons(const QString & protocol);
+	void initButtons(const QString & protocol);
 
 protected:
 
 	QWidget * _widget;
-
-	WidgetSeeker _seeker;
 
 	QStringList _iconName;
 
@@ -59,7 +58,7 @@ protected:
 
 	virtual void closeEvent ( QCloseEvent * event );
 
-    QtEmoticonsManager * _qtEmoticonsManager;
+	QtEmoticonsManager * _qtEmoticonsManager;
 
 public Q_SLOTS:
 
@@ -76,4 +75,4 @@ Q_SIGNALS:
 };
 
 
-#endif
+#endif //OWQTEMOTICONSWIDGET_H

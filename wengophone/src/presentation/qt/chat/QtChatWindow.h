@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CHATWINDOW_H
-#define CHATWINDOW_H
+#ifndef OWCHATWINDOW_H
+#define OWCHATWINDOW_H
 
 #include <control/chat/CChatHandler.h>
 
@@ -36,19 +36,16 @@
 
 #include <string>
 
-// class IMChatSession;
-// class IMContact;
-
 class QtChatTabWidget;
 class QtWengoPhone;
-//class CChatHandler;
+
 
 class ChatWindow : public QObject, public Trackable {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 
-    ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession);
+	ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession);
 
 	void addChat(IMChatSession * session,const IMContact & from );
 
@@ -58,11 +55,11 @@ public:
 
 	void enableChatButton();
 
-    bool chatIsVisible();
+	bool chatIsVisible();
 
-    void imContactChangedEventHandler(IMContact & sender);
+	void imContactChangedEventHandler(IMContact & sender);
 
-    void showToaster(IMChatSession * imChatSession);
+	void showToaster(IMChatSession * imChatSession);
 
 Q_SIGNALS:
 
@@ -110,13 +107,13 @@ protected:
 
 	void flashWindow();
 
-    ChatWidget  *   _chatWidget;
+	ChatWidget * _chatWidget;
 
-    QtChatTabWidget *   _tabWidget;
+	QtChatTabWidget * _tabWidget;
 
-    QMenuBar * _menuBar;
+	QMenuBar * _menuBar;
 
-	QScrollArea  *  _scrollArea;
+	QScrollArea * _scrollArea;
 
 	QWidget * _contactViewport;
 
@@ -128,9 +125,9 @@ protected:
 
 	QtWengoStyleLabel * _inviteLabel;
 
-    IMChatSession * _imChatSession;
+	IMChatSession * _imChatSession;
 
-    QWidget	* _dialog;
+	QWidget	* _dialog;
 
 	CChatHandler & _cChatHandler;
 
@@ -154,13 +151,13 @@ private:
 
 	void createMenu();
 
-    void showMinimized();
+	void showMinimized();
 
 	void showChatWindow();
 
-    QMainWindow * findMainWindow();
+	QMainWindow * findMainWindow();
 
-    QtWengoPhone * _qtWengoPhone;
+	QtWengoPhone * _qtWengoPhone;
 };
 
-#endif
+#endif //OWCHATWINDOW_H

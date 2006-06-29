@@ -47,16 +47,12 @@ void QtChatHandler::newIMChatSessionCreatedEventHandler(IMChatSession & imChatSe
 }
 
 void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession & imChatSession) {
-	if (!_qtChatWidget)
-	{
+	if (!_qtChatWidget) {
 		 _qtChatWidget =  new ChatWindow(_cChatHandler, imChatSession);
-		// showToaster(&imChatSession);
 		_qtChatWidget->showToaster(&imChatSession);
 		connect(_qtChatWidget,SIGNAL(messageReceivedSignal(IMChatSession *)),
-            SLOT(showToaster(IMChatSession *)));
-	}
-	else
-	{
+			SLOT(showToaster(IMChatSession *)));
+	} else {
 		_qtChatWidget->addChatSession(&imChatSession);
 	}
 }
@@ -78,5 +74,5 @@ void QtChatHandler::initThreadSafe() {
 }
 
 void QtChatHandler::showToaster(IMChatSession * imChatSession) {
-    _qtChatWidget->showToaster(imChatSession);
+	_qtChatWidget->showToaster(imChatSession);
 }

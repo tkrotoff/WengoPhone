@@ -16,8 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef QTEMOTICONSMANAGER_H
-#define QTEMOTICONSMANAGER_H
+#ifndef OWQTEMOTICONSMANAGER_H
+#define OWQTEMOTICONSMANAGER_H
 
 #include <QtGui>
 #include <QtXml>
@@ -29,9 +29,9 @@ class QtEmoticonsManager : public QObject
 
 public:
 
-    typedef QList<QtEmoticon> QtEmoticonsList;
+	typedef QList<QtEmoticon> QtEmoticonsList;
 
-    typedef QHash<QString, QtEmoticonsList> ProtocolsList;
+	typedef QHash<QString, QtEmoticonsList> ProtocolsList;
 
 	QtEmoticonsManager(QObject * parent);
 
@@ -41,27 +41,27 @@ public:
 
 	QString text2Emoticon(const QString & text, const QString protocol);
 
-    QString emoticons2Text(const QString & text, const QString protocol);
+	QString emoticons2Text(const QString & text, const QString protocol);
 
-    QtEmoticonsList getQtEmoticonsList(const QString & protocol);
+	QtEmoticonsList getQtEmoticonsList(const QString & protocol);
 
 	int getProtocolCount();
 
 	int getEmoticonsCount(QString protocol);
 
-protected:
+private:
 
-    void readProtocol(QDomNode node);
+	void readProtocol(QDomNode node);
 
-    void readIcon(QDomNode node, QString protocol);
+	void readIcon(QDomNode node, QString protocol);
 
-    QString encode(const QString & text);
+	QString encode(const QString & text);
 
-    ProtocolsList _protocolsList;
+	ProtocolsList _protocolsList;
 
-    QtEmoticonsList _qtEmoticonsList;
+	QtEmoticonsList _qtEmoticonsList;
 
 };
 
 
-#endif
+#endif //OWQTEMOTICONSMANAGER_H

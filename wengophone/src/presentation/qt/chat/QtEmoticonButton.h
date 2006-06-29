@@ -16,8 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef QTEMOTICONBUTTON_H
-#define QTEMOTICONBUTTON_H
+#ifndef OWQTEMOTICONBUTTON_H
+#define OWQTEMOTICONBUTTON_H
 
 #include <QtGui>
 #include "QtEmoticon.h"
@@ -28,25 +28,26 @@ class QtEmoticonButton : public QPushButton
 
 public:
 	QtEmoticonButton ( QWidget * parent = 0 );
-	
+
 	QtEmoticonButton ( const QString & text, QWidget * parent = 0 );
-	
+
 	QtEmoticonButton ( const QIcon & icon, const QString & text, QWidget * parent = 0 );
-	
+
 	void setEmoticon(QtEmoticon emoticon);
-	
-public Q_SLOTS: 
+
+public Q_SLOTS:
 
 	void buttonClickedSlot();
-	
+
 Q_SIGNALS:
 
 	void buttonClicked(QtEmoticon emoticon);
-	
+
 protected:
+
 	void init();
-	
+
 	QtEmoticon _emoticon;
 };
 
-#endif
+#endif //OWQTEMOTICONBUTTON_H
