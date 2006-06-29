@@ -47,7 +47,7 @@ public:
 	/**
 	 * Gets default webcam device.
 	 *
-	 * @return the name of the device; WEBCAM_NULL if no webcam or error
+	 * @return the name of the device; WEBCAM_NULL (empty string) if no webcam or error
 	 */
 	virtual std::string getDefaultDevice() = 0;
 

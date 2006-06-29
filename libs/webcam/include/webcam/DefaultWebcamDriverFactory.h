@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef DEFAULTWEBCAMDRIVERFACTORY_H
-#define DEFAULTWEBCAMDRIVERFACTORY_H
+#ifndef OWDEFAULTWEBCAMDRIVERFACTORY_H
+#define OWDEFAULTWEBCAMDRIVERFACTORY_H
 
 #include <webcam/WebcamDriverFactory.h>
 
@@ -49,7 +49,7 @@ public:
 	DefaultWebcamDriverFactory() {};
 	virtual ~DefaultWebcamDriverFactory() {};
 
-	IWebcamDriver * create(WebcamDriver *driver, int flags) const {
+	IWebcamDriver * create(WebcamDriver * driver, int flags) const {
 #if defined(CC_MSVC)
 		return new DirectXWebcamDriver(driver, flags);
 #elif defined(OS_LINUX)
@@ -62,4 +62,4 @@ public:
 	}
 };
 
-#endif	//DEFAULTWEBCAMDRIVERFACTORY_H
+#endif	//OWDEFAULTWEBCAMDRIVERFACTORY_H

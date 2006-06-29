@@ -38,7 +38,7 @@
 class V4LWebcamDriver : public IWebcamDriver, public Thread {
 public:
 
-	V4LWebcamDriver(WebcamDriver *driver, int flags);
+	V4LWebcamDriver(WebcamDriver * driver, int flags);
 
 	virtual ~V4LWebcamDriver();
 
@@ -93,7 +93,7 @@ private:
 	void run();
 	void terminate();
 
-	WebcamDriver *_webcamDriver;
+	WebcamDriver * _webcamDriver;
 
 	int _fhandle;
 

@@ -22,10 +22,9 @@
 
 #include <webcam/WebcamDriver.h>
 
-//FIXME does not work because of Qt4.1.2
 //Otherwise CoInitializeEx() is not recognized
 //see http://support.microsoft.com/newsgroups/default.aspx?dg=microsoft.public.vc.atl&tid=85edd07d-040c-47a6-8e82-ddedfa77ce70&p=1
-//#define _WIN32_DCOM
+#define _WIN32_DCOM
 //#define _WIN32_WINNT 0x0400
 
 #include <dshow.h>

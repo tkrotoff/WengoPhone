@@ -35,7 +35,7 @@ class WebcamDriver;
  */
 class QuicktimeWebcamDriver : public IWebcamDriver {
 public:
-	QuicktimeWebcamDriver(WebcamDriver *driver, int flags);
+	QuicktimeWebcamDriver(WebcamDriver * driver, int flags);
 
 	virtual ~QuicktimeWebcamDriver();
 
@@ -90,13 +90,13 @@ private:
 
 	/** Out capture procedure */
 	friend OSErr mySGDataProc(SGChannel c,
-				  Ptr p,
-				  long len,
-				  long *offset,
-				  long chRefCon,
-				  TimeValue time,
-				  short writeType,
-				  long refCon);
+				Ptr p,
+				long len,
+				long * offset,
+				long chRefCon,
+				TimeValue time,
+				short writeType,
+				long refCon);
 
 	/** The sequence grabber component. */
 	SeqGrabComponent _seqGrab;
@@ -134,7 +134,7 @@ private:
 	/**
 	 * Called by SGDataProc when a frame has been captured and decompressed.
 	 */
-	void frameBufferAvailable(piximage *image);
+	void frameBufferAvailable(piximage * image);
 
 	/**
 	 * Setup the decompressor
@@ -160,7 +160,7 @@ private:
 	/**
 	 * Convert a std::string to a pascal string.
 	 */
-	static unsigned char * stdToPascalString(const std::string &str);
+	static unsigned char * stdToPascalString(const std::string & str);
 
 	/**
 	 * Generate a valid device name.
@@ -169,13 +169,13 @@ private:
 	 * @param input input name (e.g "Camera")
 	 * @see getDefaultDevice
 	 */
-	static std::string genDeviceName(unsigned char *device,
-		short inputIndex, unsigned char *input);
+	static std::string genDeviceName(unsigned char * device,
+		short inputIndex, unsigned char * input);
 
 	/**
 	 * Log information about a PixMap
 	 */
-	static void logPixMap(PixMap *pm);
+	static void logPixMap(PixMap * pm);
 
 	/**
 	 * Initialize common components: Sequence grabber component, a video channel.

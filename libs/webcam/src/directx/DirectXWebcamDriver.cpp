@@ -36,6 +36,7 @@ DirectXWebcamDriver::DirectXWebcamDriver(WebcamDriver * driver, int flags)
 	//FIXME does not work because of Qt4.1.2
 	//CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	CoInitialize(NULL);
+
 	_webcamDriver = driver;
 	_pGrabberF = NULL;
 	_pGrabber = NULL;
@@ -64,29 +65,27 @@ void DirectXWebcamDriver::cleanup() {
 }
 
 StringList DirectXWebcamDriver::getDeviceList() {
-	StringList toReturn;
-	string dev_name;
-	HRESULT hr;
+	StringList deviceList;
 
 	//create an enumerator
 	CComPtr< ICreateDevEnum > pCreateDevEnum;
 	pCreateDevEnum.CoCreateInstance(CLSID_SystemDeviceEnum);
 	if (!pCreateDevEnum) {
-		return toReturn;
+		return deviceList;
 	}
 
 	//enumerate video capture devices
 	CComPtr< IEnumMoniker > pEnumMoniker;
 	pCreateDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEnumMoniker, 0);
 	if (!pEnumMoniker) {
-		return toReturn;
+		return deviceList;
 	}
 
 	pEnumMoniker->Reset();
 	//go through and find all video capture device(s)
 	while (true) {
 		CComPtr< IMoniker > pMoniker;
-		hr = pEnumMoniker->Next(1, &pMoniker, 0);
+		HRESULT hr = pEnumMoniker->Next(1, &pMoniker, 0);
 		if (hr != S_OK) {
 			break;
 		}
@@ -107,26 +106,25 @@ StringList DirectXWebcamDriver::getDeviceList() {
 			continue;
 		}
 
+		std::string deviceName;
 		if (((string) _bstr_t(DevicePath)).find("pci") == string::npos) {
-			dev_name = (string) _bstr_t(FriendlyName);
-			toReturn += dev_name;
+			deviceName = (string) _bstr_t(FriendlyName);
+			deviceList += deviceName;
 		}
-/* TODO: do we still use this variable? see lib video in classic.
- *
+
+		/* TODO: do we still use this variable? see lib video in classic.
 		else if (pci_device) {
-			dev_name = (string) _bstr_t(FriendlyName);
-			toReturn += dev_name;
+			deviceName = (string) _bstr_t(FriendlyName);
+			deviceList += deviceName;
 		}
-*/
+		*/
 	}
 
-	return toReturn;
+	return deviceList;
 }
 
-string DirectXWebcamDriver::getDefaultDevice() {
-	string defaultDevice;
-	HRESULT hr;
-	CComPtr< IBaseFilter > ppCap;
+std::string DirectXWebcamDriver::getDefaultDevice() {
+	std::string defaultDevice;
 
 	//create an enumerator
 	CComPtr< ICreateDevEnum > pCreateDevEnum;
@@ -153,7 +151,7 @@ string DirectXWebcamDriver::getDefaultDevice() {
 		ULONG ulFetched = 0;
 		CComPtr< IMoniker > pM;
 
-		hr = pEm->Next(1, &pM, &ulFetched);
+		HRESULT hr = pEm->Next(1, &pM, &ulFetched);
 		if (hr != S_OK) {
 			break;
 		}
@@ -173,9 +171,10 @@ string DirectXWebcamDriver::getDefaultDevice() {
 			continue;
 		}
 
-		defaultDevice = (const char *)_bstr_t(var);
+		defaultDevice = (const char *) _bstr_t(var);
 
 		//ask for the actual filter
+		CComPtr< IBaseFilter > ppCap;
 		hr = pM->BindToObject(0, 0, IID_IBaseFilter, (void**) &ppCap);
 		if (ppCap) {
 			break;
@@ -187,8 +186,6 @@ string DirectXWebcamDriver::getDefaultDevice() {
 
 webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 	//TODO: test if a webcam is already open
-
-	HRESULT hr;
 
 	_pBuild.CoCreateInstance(CLSID_CaptureGraphBuilder2);
 	if (!_pBuild) {
@@ -204,7 +201,7 @@ webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 
 	_pBuild->SetFiltergraph(_pGraph);
 	//Create the Sample Grabber
-	hr = CoCreateInstance(CLSID_SampleGrabber, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&(_pGrabberF));
+	HRESULT hr = CoCreateInstance(CLSID_SampleGrabber, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&(_pGrabberF));
 	if (hr != S_OK) {
 		LOG_ERROR("failed to create COM instance");
 		return WEBCAM_NOK;
@@ -288,9 +285,8 @@ bool DirectXWebcamDriver::isOpen() const {
 }
 
 void DirectXWebcamDriver::startCapture() {
-	HRESULT hr;
 	CComQIPtr< IMediaControl, &IID_IMediaControl > pControl = _pGraph;
-	hr = pControl->Run();
+	HRESULT hr = pControl->Run();
 	if (hr != S_OK) {
 		LOG_ERROR("Could not run graph");
 		return;
@@ -305,9 +301,8 @@ void DirectXWebcamDriver::stopCapture() {
 		return;
 	}
 
-	HRESULT hr;
 	CComQIPtr< IMediaControl, &IID_IMediaControl > pControl = _pGraph;
-	hr = pControl->Stop();
+	HRESULT hr = pControl->Stop();
 	if (hr != S_OK) {
 		LOG_ERROR("Could not stop capture");
 	}
@@ -374,12 +369,6 @@ void DirectXWebcamDriver::flipHorizontally(bool flip) {
 }
 
 webcamerrorcode DirectXWebcamDriver::setCaps(pixosi palette, unsigned fps, unsigned resolutionWidth, unsigned resolutionHeight) {
-	HRESULT hr;
-	int iCount, iSize;
-	VIDEO_STREAM_CONFIG_CAPS scc;
-	VIDEOINFOHEADER * pvi;
-	pixosi wc_palette;
-	AM_MEDIA_TYPE * pmt = NULL;
 
 	_cachedFPS = fps;
 
@@ -394,25 +383,28 @@ webcamerrorcode DirectXWebcamDriver::setCaps(pixosi palette, unsigned fps, unsig
 		LOG_FATAL("webcam not initialized");
 	}
 
-	hr = _iam->GetNumberOfCapabilities(&iCount, &iSize);
+	int iCount, iSize;
+	HRESULT hr = _iam->GetNumberOfCapabilities(&iCount, &iSize);
 
+	VIDEO_STREAM_CONFIG_CAPS scc;
 	if (sizeof(scc) != iSize) {
 		LOG_ERROR("wrong config structure");
 		return WEBCAM_NOK;
 	}
 
 	for (int i = 0; i < iCount; i++) {
+		AM_MEDIA_TYPE * pmt = NULL;
 		hr = _iam->GetStreamCaps(i, &pmt, reinterpret_cast<BYTE *>(&scc));
 		if (hr == S_OK) {
-			wc_palette = pix_directx_to_pix_osi(pmt->subtype);
+			pixosi wc_palette = pix_directx_to_pix_osi(pmt->subtype);
 			if (wc_palette != palette) {
 				hr = E_FAIL;
 				continue;
 			}
-			pvi = (VIDEOINFOHEADER *)pmt->pbFormat;
+			VIDEOINFOHEADER * pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 			pvi->bmiHeader.biWidth = resolutionWidth;
 			pvi->bmiHeader.biHeight = resolutionHeight;
-			pvi->AvgTimePerFrame = (LONGLONG)(10000000. / (double)fps);
+			pvi->AvgTimePerFrame = (LONGLONG) (10000000. / (double)fps);
 			hr = _iam->SetFormat(pmt);
 			if (hr != S_OK) {
 				hr = E_FAIL;
@@ -446,16 +438,17 @@ webcamerrorcode DirectXWebcamDriver::setCaps(pixosi palette, unsigned fps, unsig
 }
 
 void DirectXWebcamDriver::readCaps() {
-	HRESULT hr;
-	VIDEOINFOHEADER *pvi;
+	VIDEOINFOHEADER * pvi;
 	pixosi palette;
 
-	AM_MEDIA_TYPE *pmt = 0;
-	hr = _iam->GetFormat(&pmt);
+	AM_MEDIA_TYPE * pmt = NULL;
+	HRESULT hr = _iam->GetFormat(&pmt);
+
 	if (pmt->formattype == FORMAT_VideoInfo) {
-		pvi = (VIDEOINFOHEADER *)pmt->pbFormat;
+		pvi = (VIDEOINFOHEADER *) pmt->pbFormat;
 		palette = pix_directx_to_pix_osi(pmt->subtype);
 	}
+
 	_cachedPalette = palette;
 	_cachedWidth = pvi->bmiHeader.biWidth;
 	_cachedHeight = pvi->bmiHeader.biHeight;
@@ -465,7 +458,7 @@ STDMETHODIMP DirectXWebcamDriver::QueryInterface(REFIID riid, void ** ppv) {
 	LOG_DEBUG("CSampleGrabberCB::QueryInterface");
 
 	if (riid == IID_ISampleGrabberCB || riid == IID_IUnknown) {
-		*ppv = (void *) static_cast<ISampleGrabberCB*> ( this );
+		*ppv = (void *) static_cast<ISampleGrabberCB*> (this);
 		return NOERROR;
 	}
 
@@ -479,14 +472,12 @@ STDMETHODIMP DirectXWebcamDriver::BufferCB(double dblSampleTime, BYTE * pBuffer,
 }
 
 STDMETHODIMP DirectXWebcamDriver::SampleCB(double SampleTime, IMediaSample * pSample) {
-	BYTE * pBuffer;
-	long lBufferSize;
-
 	if (!pSample) {
 		return E_POINTER;
 	} else {
+		BYTE * pBuffer;
 		pSample->GetPointer(&pBuffer);
-		lBufferSize = pSample->GetSize();
+		long lBufferSize = pSample->GetSize();
 
 		if (!pBuffer) {
 			return E_POINTER;

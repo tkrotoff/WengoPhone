@@ -20,21 +20,18 @@
 /**
  * @file DirectXWebcamUtils.h
  *
- * DirectX utils functions.
+ * DirectX utility functions.
  *
  * @author Mathieu Stute
  */
 
-#ifndef DIRECTXWEBCAMUTILS_H
-#define DIRECTXWEBCAMUTILS_H
+#ifndef OWDIRECTXWEBCAMUTILS_H
+#define OWDIRECTXWEBCAMUTILS_H
 
 #include <dshow.h>
 #include <atlbase.h>
 #include <qedit.h>
-#include <comutil.h> // for _bstr_t
-
-void webcam_dx_error(char * error);
-void webcam_dx_log(char * mess);
+#include <comutil.h> //for _bstr_t
 
 CComPtr< IBaseFilter > GetCaptureDevice(char * device_name);
 void GetDefaultCapDevice(IBaseFilter ** ppCap);
@@ -51,4 +48,4 @@ HRESULT ConnectFilters(IGraphBuilder * pGraph, IPin * pOut, IBaseFilter * pDest)
 HRESULT ConnectFilters(IGraphBuilder * pGraph, IBaseFilter * pSrc, IBaseFilter * pDest);
 HRESULT GetUnconnectedPin(IBaseFilter * pFilter, PIN_DIRECTION PinDir, IPin ** ppPin);
 
-#endif	//DIRECTXWEBCAMUTILS_H
+#endif	//OWDIRECTXWEBCAMUTILS_H

@@ -24,7 +24,7 @@
 #include <QtGui>
 
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
-#include <QAxWidget>
+	#include <QAxWidget>
 #endif
 
 #include <iostream>
@@ -132,7 +132,7 @@ void QtBrowser::initBrowser() {
 
 		//Init IE browser
 		_ieBrowser = new QAxWidget(_browserWidget);
-		_ieBrowser->setControl(QString::fromUtf8("{8856F961-340A-11D0-A96B-00C04FD705A2}"));
+		_ieBrowser->setControl(QString::fromUtf8("{8856F961-340A-11D0-A96B-00C04FD705A2}&"));
 		_ieBrowser->setObjectName(QString::fromUtf8("mwbAx"));
 		_ieBrowser->setFocusPolicy(Qt::StrongFocus);
 		connect(_ieBrowser, SIGNAL(BeforeNavigate(const QString &, int, const QString &, const QVariant &, const QString &, bool &)),

@@ -121,7 +121,7 @@ void QtPhoneCall::initThreadSafe() {
 
 	// Hand-up call - Qt::QueuedConnection is needed ! Don't remove it !!!
 	_actionHangupCall = new QAction(tr("Hang-up"), _phoneCallWidget);
-	connect(_actionHangupCall, SIGNAL(triggered(bool)), SLOT(rejectActionTriggered(bool)),Qt::QueuedConnection);
+	connect(_actionHangupCall, SIGNAL(triggered(bool)), SLOT(rejectActionTriggered(bool)), Qt::QueuedConnection);
 
 	// Hold
 	_actionHold = new QAction(tr("Hold"), _phoneCallWidget);
@@ -195,7 +195,7 @@ QMenu * QtPhoneCall::createMenu() {
 	menu->addAction(_actionResume);
 
 	//Separator
-	menu->addSeparator();
+	//menu->addSeparator();
 
 	//FIXME Desactivated for the moment due to a crash
 	//menu->addAction(_actionInvite);
@@ -297,7 +297,6 @@ void QtPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCa
 		ConferenceCall * conferenceCall = _cPhoneCall.getPhoneCall().getConferenceCall();
 		if (conferenceCall) {
 
-			_actionHold->setText(tr("Proceed conference"));
 			_statusLabel->setText(tr("Talking - conference"));
 			QMessageBox::question(
 				_qtWengoPhone->getWidget(),
@@ -408,7 +407,7 @@ void QtPhoneCall::acceptActionTriggered(bool) {
 
 void QtPhoneCall::rejectActionTriggered(bool) {
 
-	LOG_DEBUG("Hangup call ******************\n");
+	LOG_DEBUG("phone call hangup");
 	switch (_cPhoneCall.getState()) {
 	case EnumPhoneCallState::PhoneCallStateResumed:
 	case EnumPhoneCallState::PhoneCallStateTalking:
