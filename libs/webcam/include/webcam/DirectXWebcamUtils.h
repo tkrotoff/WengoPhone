@@ -33,8 +33,6 @@
 #include <qedit.h>
 #include <comutil.h> //for _bstr_t
 
-CComPtr< IBaseFilter > GetCaptureDevice(char * device_name);
-void GetDefaultCapDevice(IBaseFilter ** ppCap);
 HRESULT FindMyCaptureDevice(IBaseFilter ** pF, BSTR bstrName);
 
 /**
@@ -43,9 +41,5 @@ HRESULT FindMyCaptureDevice(IBaseFilter ** pF, BSTR bstrName);
  * @return a NULL pointer in the case it fails
  */
 IAMStreamConfig * GetIAMStreamConfig(IBaseFilter * pFilter);
-
-HRESULT ConnectFilters(IGraphBuilder * pGraph, IPin * pOut, IBaseFilter * pDest);
-HRESULT ConnectFilters(IGraphBuilder * pGraph, IBaseFilter * pSrc, IBaseFilter * pDest);
-HRESULT GetUnconnectedPin(IBaseFilter * pFilter, PIN_DIRECTION PinDir, IPin ** ppPin);
 
 #endif	//OWDIRECTXWEBCAMUTILS_H
