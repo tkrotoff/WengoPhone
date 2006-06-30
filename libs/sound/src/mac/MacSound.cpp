@@ -21,7 +21,7 @@
 
 @implementation MacSoundObjC
 
-- (id)initWithFilename:(NSString *)filename
+- (id)initWithFilename:(NSString *)filename andMacSoundInstance:(MacSound *)macSound
 {
 	[super init];
 
@@ -31,14 +31,15 @@
 	[_sound setDelegate:self];
 
 	_loops = 0;
-
 	_stopped = NO;
+	_macSound = macSound;
 
 	return self;
 }
 
 - (void)dealloc
 {
+	[_sound stop];
 	[_sound release];
 	[_pool release];
 	[super dealloc];
@@ -63,7 +64,13 @@
 			[_sound play];
 		} else if (_loops == -1) {
 			[_sound play];
+		} else {
+			_stopped = YES;
 		}
+	} 
+	
+	if (_stopped) {
+		_macSound->stopped();
 	}
 }
 
@@ -79,7 +86,9 @@ MacSound::MacSound(const std::string & filename) {
 	const char * fname = filename.c_str();
 
 	pathName = [NSString stringWithCString:fname];
-	_macSoundObjCPrivate = [[MacSoundObjC alloc] initWithFilename:pathName];
+	_macSoundObjCPrivate = [[MacSoundObjC alloc] initWithFilename:pathName andMacSoundInstance:this];
+
+	_mustReleaseAtEnd = false;
 }
 
 MacSound::~MacSound() {
@@ -91,6 +100,7 @@ void MacSound::setLoops(int loops) {
 }
 
 bool MacSound::setWaveOutDevice(const std::string & deviceName) {
+	//TODO: set the wave out device
 	return true;
 }
 
@@ -100,4 +110,15 @@ void MacSound::play() {
 
 void MacSound::stop() {
 	[_macSoundObjCPrivate stop];
+}
+
+void MacSound::releaseAtEnd() {
+	_mustReleaseAtEnd = true;
+}
+
+void MacSound::stopped() {
+	if (_mustReleaseAtEnd) {
+		[_macSoundObjCPrivate release];
+		delete this;
+	}
 }

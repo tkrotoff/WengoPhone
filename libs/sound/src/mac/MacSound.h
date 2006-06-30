@@ -28,6 +28,8 @@
 
 #include <Cocoa/Cocoa.h>
 
+class MacSound;
+
 /**
  * @author Philippe Bernery
  */
@@ -51,9 +53,14 @@
 	 * Cocoa is currently used only in this class (2006/04/05).
 	 */
 	NSAutoreleasePool *_pool;
+
+	/**
+	 * MacSound instance.
+	 */
+	MacSound * _macSound;
 }
 
-- (id)initWithFilename:(NSString *)filename;
+- (id)initWithFilename:(NSString *)filename andMacSoundInstance:(MacSound *)macSound;
 - (void)dealloc;
 - (void)play;
 - (void)stop;
@@ -68,6 +75,7 @@
  * @author Philippe Bernery
  */
 class MacSound : public ISound {
+	friend class MacSoundObjC;
 public:
 
 	/**
@@ -87,7 +95,18 @@ public:
 
 	void stop();
 
+	/** If called, MacSound will release itself at end of play. */
+	void releaseAtEnd();
+
+	/**
+	 * DO NOT USE!!! Used internally by MacSoundObjC. Can't be private.
+	 */
+	void stopped();
+
 private:
+
+	/** True if MacSound must release itself at end of play. */
+	bool _mustReleaseAtEnd;
 
 	/** MacSoundObjC object. */
 	MacSoundObjC * _macSoundObjCPrivate;
