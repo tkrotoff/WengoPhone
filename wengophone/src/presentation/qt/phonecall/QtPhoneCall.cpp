@@ -72,6 +72,8 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 }
 
 QtPhoneCall::~QtPhoneCall() {
+	pix_free(_remoteVideoFrame);
+	pix_free(_localVideoFrame);
 }
 
 void QtPhoneCall::initThreadSafe() {
@@ -381,6 +383,9 @@ void QtPhoneCall::videoFrameReceivedEventHandler(piximage * remoteVideoFrame, pi
 void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(piximage* remoteVideoFrame, piximage* localVideoFrame) {
 #ifdef XV_HWACCEL
 	if (!_videoWindow) {
+		_remoteVideoFrame = remoteVideoFrame;
+		_localVideoFrame = localVideoFrame;
+
 		_showVideo = true;
 		_videoWindow = new QtVideoXV(_phoneCallWidget,remoteVideoFrame->width, remoteVideoFrame->height,
 			localVideoFrame->width, localVideoFrame->height);
@@ -393,6 +398,9 @@ void QtPhoneCall::videoFrameReceivedEventHandlerThreadSafe(piximage* remoteVideo
 	}
 #else
 	if (!_videoWindow) {
+		_remoteVideoFrame = remoteVideoFrame;
+		_localVideoFrame = localVideoFrame;
+
 		_showVideo = true;
 		_videoWindow = new QtVideoQt(_phoneCallWidget);
 		showVideoWidget();

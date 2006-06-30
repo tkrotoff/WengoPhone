@@ -174,6 +174,10 @@ private:
 	bool _hold;
 
 	bool _showVideo;
+
+	//buffers to free in desctructor
+	piximage* _remoteVideoFrame;
+	piximage* _localVideoFrame;
 };
 
 #endif	//OWQTPHONECALL_H
