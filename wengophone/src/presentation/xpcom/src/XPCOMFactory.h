@@ -23,6 +23,7 @@
 #include "XPCOMWengoPhone.h"
 #include "XPCOMPhoneLine.h"
 #include "XPCOMPhoneCall.h"
+#include "XPCOMSms.h"
 
 #include <presentation/PFactory.h>
 #include <control/CWengoPhone.h>
@@ -76,6 +77,8 @@ public:
 	}
 
 	PSms * createPresentationSms(CSms & cSms) {
+		XPCOMSms * xpcomSms = new XPCOMSms(cSms);
+		return xpcomSms;
 	}
 
 	PSoftUpdate * createPresentationSoftUpdate(CSoftUpdate & cSoftUpdate) {

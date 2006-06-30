@@ -17,33 +17,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWXPCOMCONTACTLIST_H
-#define OWXPCOMCONTACTLIST_H
+#ifndef OWXPCOMUSERPROFILE_H
+#define OWXPCOMUSERPROFILE_H
 
-#include <presentation/PContactList.h>
+#include <presentation/PUserProfile.h>
 
-class CContactList;
-class PContactGroup;
+class CUserProfile;
+class Listener;
 
-class XPCOMContactList : public PContactList {
+class XPCOMUserProfile : public PUserProfile {
 public:
 
-	XPCOMContactList(CContactList & cContactList) { }
+	XPCOMUserProfile(CUserProfile * cUserProfile);
 
-	void contactGroupAddedEvent(std::string contactGroupId) { }
+	static CWengoPhone & getCUserProfile();
 
-	void contactGroupRemovedEvent(std::string contactGroupId) { }
+	void loginStateChangedEventHandler(SipAccount & sender,
+		EnumSipLoginState::SipLoginState state) { }
 
-	void contactGroupRenamedEvent(std::string contactGroupId) { }
+	void networkDiscoveryStateChangedEventHandler(SipAccount & sender,
+		SipAccount::NetworkDiscoveryState state) { }
 
-	void contactAddedEvent(std::string contactId) { }
-
-	void contactRemovedEvent(std::string contactId) { }
-
-	void contactMovedEvent(std::string dstContactGroupId,
-		std::string srcContactGroupId, std::string contactId) { }
-
-	void contactChangedEvent(std::string contactId) { }
+	void authorizationRequestEventHandler(PresenceHandler & sender,
+		const IMContact & imContact, const std::string & message) { }
 
 	void updatePresentation() { }
 
@@ -52,6 +48,8 @@ private:
 	void updatePresentationThreadSafe() { }
 
 	void initThreadSafe() { }
+
+	static CUserProfile * _cUserProfile;
 };
 
-#endif	//OWXPCOMCONTACTLIST_H
+#endif	//OWXPCOMUSERPROFILE_H

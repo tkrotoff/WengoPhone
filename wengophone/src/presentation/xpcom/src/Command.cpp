@@ -29,8 +29,8 @@
 #include "ListenerList.h"
 
 #include <control/CWengoPhone.h>
+
 #include <model/WengoPhone.h>
-#include <model/contactlist/Contact.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
