@@ -124,6 +124,9 @@ int ph_msession_suspend(struct ph_msession_s *s,  int traffictype, const char *d
 	return (0);
 }
 
+/**
+ * @brief resume a media session
+ */
 int ph_msession_resume(struct ph_msession_s *s, int traffictype, const char *device)
 {
   int ret = 0;

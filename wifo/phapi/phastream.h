@@ -107,7 +107,15 @@ struct ph_audio_stream
   struct phmstream ms;
   void   *drvinfo;
 
+  /*
+  	valid when this stream belongs to MASTER session during a conf.
+  	it is a pointer to the stream that needs to be mixed
+  */
   struct ph_audio_stream *to_mix;
+  /*
+  	valid when this stream belongs to MEMBER session during a conf.
+  	it is a pointer to the stream that is the MASTER stream
+  */
   struct ph_audio_stream *master;
   ph_mediabuf_t   data_in;
   ph_mediabuf_t   data_out;

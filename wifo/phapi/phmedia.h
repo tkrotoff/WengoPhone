@@ -65,11 +65,12 @@ enum ph_media_types {
   PH_MEDIA_TYPE_OTHER
 };
 
+/* traffic type of a streamer */
 enum ph_mstream_traffic_type { 
   PH_MSTREAM_TRAFFIC_NONE = 0,
-  PH_MSTREAM_TRAFFIC_IN = 1,
-  PH_MSTREAM_TRAFFIC_OUT = 2,
-  PH_MSTREAM_TRAFFIC_IO = 3
+  PH_MSTREAM_TRAFFIC_IN = 1, // 1<<0 = RX
+  PH_MSTREAM_TRAFFIC_OUT = 2, // 1<<1 = TX
+  PH_MSTREAM_TRAFFIC_IO = 3 // RX | TX
 };
 
 
@@ -90,11 +91,13 @@ enum ph_mstream_flags {
  */
 struct ph_mstream_params_s
 {
+    /* local IP port on which the stream will be received */
 	int  localport;
 	int  medatype;
 	int  traffictype;
 	int  flags;
 	int  jitter;
+    /* IP of the remote peer */
 	char remoteaddr[16];
 	int  remoteport;
 	int  vadthreshold;
@@ -118,6 +121,7 @@ typedef struct ph_mstream_params_s ph_mstream_params_t;
 
 enum ph_mession_conf_flags
   {
+    PH_MSESSION_CONF_NOCONF = 0,
     PH_MSESSION_CONF_MEMBER = 1,
     PH_MSESSION_CONF_MASTER = 2
   };
@@ -133,17 +137,29 @@ struct ph_msession_s
 {
 	/* bit mask of active streams */
 	int    activestreams;
+
 	/* bit mask of new streams to be activated */
 	int    newstreams;
-	/* when nonzero this session is related to a conference */
+
+	/* potential role of the session in a conference. cf ph_mession_conf_flags enum */
 	int    confflags;
+
+    /* partner session for a conference (the other session)*/
 	struct ph_msession_s *confsession;
+
+    /* array of potential streams */
 	struct ph_mstream_params_s streams[PH_MSESSION_MAX_STREAMS];
+
 	/* mutex used to avoid threading issues when operating on the streams */
 	GMutex *critsec_mstream_init;
+
 	void (*dtmfCallback)(void *info, int event);
 	void (*endCallback)(void  *info, int event);
 	void (*frameDisplayCbk)(void *info, void *event);
+
+    /*
+        holder for the userdata "info" element of the callbacks prototypes
+    */
 	void *cbkInfo;
 };
 

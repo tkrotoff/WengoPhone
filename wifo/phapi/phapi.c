@@ -109,7 +109,7 @@ static char *ph_get_call_contact(phcall_t *ca);
 #define PH_STREAM_CNG (1 << 30)
 
 static int ph_call_retrieve_payloads(phcall_t *ca, eXosip_event_t *je, int flags);
-static int ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags, int resumeflag);
+static int ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int resumeflag);
 static int ph_call_media_stop(phcall_t * ca);
 static int ph_call_media_suspend(phcall_t *ca, int localhold);
 
@@ -1244,7 +1244,7 @@ phAcceptCall3(int cid, void *userData, int streams)
     eXosip_unlock();
 
     if (!i)
-      i = ph_call_media_start(ca, NULL, streams, 0);
+      i = ph_call_media_start(ca, NULL, 0);
 
     if (i)
       return i;
@@ -1500,29 +1500,35 @@ phStopConf(int cid1, int cid2)
 MY_DLLEXPORT int 
 phResumeCall(int cid)
 {
-  phcall_t *ca = ph_locate_call_by_cid(cid);
-  int i;
+	phcall_t *ca = ph_locate_call_by_cid(cid);
+	int i;
 
+	if (!ca)
+	{
+		return -PH_BADCID;
+	}
 
-  if (!ca)
-    return -PH_BADCID;
-
-  if (!ca->localhold)
-    return -PH_HOLDERR;
-
+	// a call that is not held locally cannot be resumed locally
+	if (!ca->localhold)
+	{
+		return -PH_HOLDERR;
+	}
+	  
 #ifndef CONF_MODE
-  if (ph_has_active_calls())
-    return -PH_NORESOURCES;
+	if (ph_has_active_calls())
+	{
+		return -PH_NORESOURCES;
+	}
 #endif
 
-  ca->localhold = 0;
-  ca->localresume = 1;
+	ca->localhold = 0;
+	ca->localresume = 1;
 
-  eXosip_lock();
-  i = eXosip_off_hold_call(ca->did, 0, 0);
-  eXosip_unlock();
+	eXosip_lock();
+	i = eXosip_off_hold_call(ca->did, 0, 0);
+	eXosip_unlock();
 
-  return i;
+	return i;
 }
 
 
@@ -1534,16 +1540,19 @@ phHoldCall(int cid)
 
 	DBG4_SIP_NEGO("SIP_NEGO: phHoldCall\n", 0, 0, 0);
 
+	// call does not exist
 	if (!ca)
 	{
     	return -PH_BADCID;
 	}
 
+	// call hold is already in progress
 	if (ca->localhold)
 	{
 		return -PH_HOLDERR;
 	}
 
+	// the local peer starts a call hold process on the call
 	ca->localhold = 1;
 
 	// SPIKE_EXOSIP: hold a call
@@ -3212,174 +3221,212 @@ ph_call_media_resume(phcall_t *ca, int localhold)
 
 
 
+/**
+ * @brief used to start/restart the media engine
+ * this function is used everytime it is necessary to start media sessions
+ * @param ca phcall_t call that is concerned. will express the needed sessions
+ * @param je last exosip event that justified the invocation of the function
+ * @param resumeflag 0/1 is this a resume operation ?
+ *
+ * @return 0 - OK / PH_NOMEDIA
+ */
 static int 
-ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int flags, int resumeflag)
+ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int resumeflag)
 {
-  int i = 0;
-  int port_audio, port_video;
-  phFrameDisplayCbk  frameDisplay = 0;
-  struct ph_msession_s *s, *olds;
+	int i = 0;
+	struct ph_msession_s *s = NULL, *olds = NULL;
 
-  if (phcfg.nomedia || ca->localhold || ca->remotehold) 
-    {
-      return 0;
-    }
+	// cases when the invocation is ignored
+	if (phcfg.nomedia || ca->localhold || ca->remotehold) 
+	{
+		return 0;
+	}
 
-  s = ca->mses;
+	// we will work on the media sessions of the given phcall_t
+	s = ca->mses;
 
-    if (!s)
-    {
-        s = ca->mses = (struct ph_msession_s *)calloc(sizeof(struct ph_msession_s), 1);
-        s->critsec_mstream_init = g_mutex_new();
-    }
+	// init the ph_msession_s for the call if the call doesn't have one yet
+	if (!s)
+	{
+		s = ca->mses = (struct ph_msession_s *)calloc(sizeof(struct ph_msession_s), 1);
+		if (!s) return -PH_NORESOURCES;
+		s->critsec_mstream_init = g_mutex_new();
+	}
 
-  if (!s)
-    return -PH_NORESOURCES;
-
-
-  s->cbkInfo = ca;
-  s->newstreams = 0;
-
-  port_audio = ca->local_sdp_audio_port;
-  port_video = ca->local_sdp_video_port;
-    
-  if ((_is_video_enabled(ca->user_mflags)) && ca->video_payload && ca->remote_sdp_video_ip[0])
-    {
-      ca->nego_mflags = ca->nego_mflags | PH_STREAM_VIDEO_RX;
-      ca->nego_mflags = ca->nego_mflags | PH_STREAM_VIDEO_TX;
-      frameDisplay = phcb->onFrameReady;
-      DBG4_SIP_NEGO("will have video stream ip: %s payload=%d\n", ca->remote_sdp_video_ip, ca->video_payload,0);
-      DBG4_SIP_NEGO("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags,0); 
-    } 
-  else 
-    {
-	// video is not negociated
-	ca->nego_mflags = ca->nego_mflags & ~PH_STREAM_VIDEO_RX;
-	ca->nego_mflags = ca->nego_mflags & ~PH_STREAM_VIDEO_TX;
-	DBG4_SIP_NEGO("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags,0); 
-    }
-
-
-  if (ca->nego_mflags & (PH_STREAM_VIDEO_RX | PH_STREAM_VIDEO_TX))
-    {
-      struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_VIDEO1];
-      int ttype;
-
-      s->newstreams |= (1 << PH_MSTREAM_VIDEO1);
-
-      ttype = ca->user_mflags & (PH_STREAM_VIDEO_RX | PH_STREAM_VIDEO_TX);
-      
-      if (ttype == (PH_STREAM_VIDEO_RX | PH_STREAM_VIDEO_TX))
-	msp->traffictype = PH_MSTREAM_TRAFFIC_IO;
-      else if (ttype == PH_STREAM_VIDEO_RX)
-	msp->traffictype = PH_MSTREAM_TRAFFIC_IN;
-      else if (ttype == PH_STREAM_VIDEO_TX)
-	msp->traffictype = PH_MSTREAM_TRAFFIC_OUT;
-
-      if (phcfg.use_tunnel)
-	msp->flags |= PH_MSTREAM_FLAG_TUNNEL;
-
-      if (je)
-	strncpy(msp->remoteaddr, je->remote_sdp_video_ip, sizeof(msp->remoteaddr));
-      else
-	strncpy(msp->remoteaddr, ca->remote_sdp_video_ip, sizeof(msp->remoteaddr));
-
-
-      msp->localport = port_video;
-      msp->remoteport = ca->remote_sdp_video_port;
-      msp->ipayloads[0].number = ca->video_payload;
-      ph_parse_payload_mime(&msp->ipayloads[0], ca->video_payload_name, 90000, 1);
-      msp->opayloads[0] = msp->ipayloads[0];
-      
-      s->frameDisplayCbk =  ph_frame_display_cbk;
-
-      msp->videoconfig = phcfg.video_config.video_line_configuration;
-    }
-
-
-
-#ifdef PHAPI_VIDEO_LOCAL_HACK
-    s->frameDisplayCbk = ph_display_cbk;
-    ca->video_payload = 34;
-#endif
-
-    if (_is_audio_enabled(ca->nego_mflags) && (!je || je->remote_sdp_audio_ip[0]))
-      {
-	struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
+	s->cbkInfo = ca;
 	
-	s->newstreams |= (1 << PH_MSTREAM_AUDIO1);
+	
+	// we need to understand what is required from the function call
+	// by default, nothing to do
+	s->newstreams = 0;
+    
+	if ( // user accepts video and network accepts video
+		(_is_video_enabled(ca->user_mflags))
+		&& ca->video_payload
+		&& ca->remote_sdp_video_ip[0]
+		)
+    {
+		// negociated flags (user+SDP) need to be IO
+		ca->nego_mflags = ca->nego_mflags | PH_STREAM_VIDEO_RX;
+		ca->nego_mflags = ca->nego_mflags | PH_STREAM_VIDEO_TX;
+	
+		DBG4_SIP_NEGO("will have video stream ip: %s payload=%d\n", ca->remote_sdp_video_ip, ca->video_payload,0);
+		DBG4_SIP_NEGO("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags,0); 
+	} 
+	else 
+	{
+		// video is not negociated
+		// it is necessary to remove VIDEO IO flags
+		ca->nego_mflags = ca->nego_mflags & ~PH_STREAM_VIDEO_RX;
+		ca->nego_mflags = ca->nego_mflags & ~PH_STREAM_VIDEO_TX;
 
-	s->dtmfCallback = ph_wegot_dtmf;
-	s->endCallback = ph_stream_ended;
+		DBG4_SIP_NEGO("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags,0); 
+    }
 
 
-	if (phcfg.vad & 0x80000000)
-	  {
-	    msp->flags |= PH_MSTREAM_FLAG_VAD;
-	    msp->vadthreshold = phcfg.vad & 0x7fff;
-	  }
+	if ( _is_video_enabled(ca->nego_mflags) )
+	{
+		struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_VIDEO1];
+		int ttype;
 
-	if (phcfg.cng)
-	  msp->flags |= PH_MSTREAM_FLAG_CNG;
+		// program activation of VIDEO1
+		s->newstreams |= (1 << PH_MSTREAM_VIDEO1);
+
+		// define the traffic type of the stream
+		ttype = _is_video_enabled(ca->user_mflags);
+		if (ttype == (PH_STREAM_VIDEO_RX | PH_STREAM_VIDEO_TX))
+			msp->traffictype = PH_MSTREAM_TRAFFIC_IO;
+		else if (ttype == PH_STREAM_VIDEO_RX)
+			msp->traffictype = PH_MSTREAM_TRAFFIC_IN;
+		else if (ttype == PH_STREAM_VIDEO_TX)
+			msp->traffictype = PH_MSTREAM_TRAFFIC_OUT;
+
+		if (phcfg.use_tunnel)
+		{
+			msp->flags |= PH_MSTREAM_FLAG_TUNNEL;
+		}
+
+		msp->localport = ca->local_sdp_video_port;
+		msp->remoteport = ca->remote_sdp_video_port;
+		if (je)
+		{
+			strncpy(msp->remoteaddr,
+					je->remote_sdp_video_ip,
+					sizeof(msp->remoteaddr));
+		}
+		else
+		{
+			strncpy(msp->remoteaddr,
+					ca->remote_sdp_video_ip,
+					sizeof(msp->remoteaddr));
+		}
+
+		// define the negociated codec payload on the stream
+		msp->ipayloads[0].number = ca->video_payload;
+		ph_parse_payload_mime(&msp->ipayloads[0], ca->video_payload_name, 90000, 1);
+		msp->opayloads[0] = msp->ipayloads[0];
+      
+		// define the video callback
+		s->frameDisplayCbk =  ph_frame_display_cbk;
+
+		// additional configuration for video
+		msp->videoconfig = phcfg.video_config.video_line_configuration;
+	} 	//if ( _is_video_enabled(ca->nego_mflags) )
+
+	
+	if ( // audio is enabled
+		_is_audio_enabled(ca->nego_mflags)
+		&& (!je || je->remote_sdp_audio_ip[0])
+		)
+	{
+		struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
+	
+		// program activation of AUDIO1
+		s->newstreams |= (1 << PH_MSTREAM_AUDIO1);
+
+		s->dtmfCallback = ph_wegot_dtmf;
+		s->endCallback = ph_stream_ended;
+
+		if (phcfg.vad & 0x80000000)
+		{
+			msp->flags |= PH_MSTREAM_FLAG_VAD;
+			msp->vadthreshold = phcfg.vad & 0x7fff;
+		}
+
+		if (phcfg.cng)
+		{
+			msp->flags |= PH_MSTREAM_FLAG_CNG;
+		}
+
+		msp->jitter = phcfg.jitterdepth;
+
+		if (!phcfg.noaec)
+		{
+			msp->flags |= PH_MSTREAM_FLAG_AEC;
+		}
+
+		msp->traffictype = PH_MSTREAM_TRAFFIC_IO;
+		if (phcfg.use_tunnel)
+		{
+			msp->flags |= PH_MSTREAM_FLAG_TUNNEL;
+		}
+
+		msp->localport = ca->local_sdp_audio_port;
+		msp->remoteport = ca->remote_sdp_audio_port;
+		if (je)
+		{
+			strncpy(msp->remoteaddr,
+					je->remote_sdp_audio_ip,
+					sizeof(msp->remoteaddr));
+		}
+		else
+		{
+			strncpy(msp->remoteaddr,
+					ca->remote_sdp_audio_ip,
+					sizeof(msp->remoteaddr));
+		}
+
+		// SPIKE_HDX
+		if (phcfg.hdxmode == PH_HDX_MODE_MIC)
+		{
+			msp->flags |= PH_MSTREAM_FLAG_MICHDX;
+			msp->vadthreshold = phcfg.vad & 0x7fff;
+		}
+
+		if (phcfg.hdxmode == PH_HDX_MODE_SPK)
+		{
+			msp->flags |= PH_MSTREAM_FLAG_SPKHDX;
+			msp->vadthreshold = phcfg.vad & 0x7fff;
+		}
 
 
-	msp->jitter = phcfg.jitterdepth;
+		msp->ipayloads[0].number = ca->audio_payload;
+		ph_parse_payload_mime(&msp->ipayloads[0], ca->audio_payload_name, 8000, 1);
+		msp->opayloads[0] = msp->ipayloads[0];
 
-	if (!phcfg.noaec)
-	  msp->flags |= PH_MSTREAM_FLAG_AEC;
+	} // end 	if ( // audio is enabled
 
-	msp->traffictype = PH_MSTREAM_TRAFFIC_IO;
-	if (phcfg.use_tunnel)
-	  msp->flags |= PH_MSTREAM_FLAG_TUNNEL;
-
-	if (je)
-	  strncpy(msp->remoteaddr, je->remote_sdp_audio_ip, sizeof(msp->remoteaddr));
+	// take action depending on the streaming configuration
+	if (s->newstreams | s->activestreams)
+	{
+		if (resumeflag)
+		{
+			if (ph_msession_resume(s, PH_MSTREAM_TRAFFIC_IO, phcfg.audio_dev))
+			{
+				i = -PH_NOMEDIA;
+			}
+		}
+		else if (ph_msession_start(s, phcfg.audio_dev))
+	  	{
+			i = -PH_NOMEDIA;
+		}
+	}
 	else
-	  strncpy(msp->remoteaddr, ca->remote_sdp_audio_ip, sizeof(msp->remoteaddr));
+	{
+		i = -PH_NOMEDIA;
+	}
 
-
-	// SPIKE_HDX
-	if (phcfg.hdxmode == PH_HDX_MODE_MIC)
-	  {
-	    msp->flags |= PH_MSTREAM_FLAG_MICHDX;
-	    msp->vadthreshold = phcfg.vad & 0x7fff;
-	  }
-
-	if (phcfg.hdxmode == PH_HDX_MODE_SPK)
-	  {
-	    msp->flags |= PH_MSTREAM_FLAG_SPKHDX;
-	    msp->vadthreshold = phcfg.vad & 0x7fff;
-	  }
-
-
-
-	msp->localport = port_audio;
-	msp->remoteport = ca->remote_sdp_audio_port;
-	msp->ipayloads[0].number = ca->audio_payload;
-	ph_parse_payload_mime(&msp->ipayloads[0], ca->audio_payload_name, 8000, 1);
-	msp->opayloads[0] = msp->ipayloads[0];
-
-      }
-
-    if (s->newstreams | s->activestreams)
-      {
-	if (resumeflag)
-	  {
-	    if (ph_msession_resume(s, PH_MSTREAM_TRAFFIC_IO, phcfg.audio_dev))
-	      i = -PH_NOMEDIA;
-	  }
-	else if (ph_msession_start(s, phcfg.audio_dev))
-	  {
-	    i = -PH_NOMEDIA;
-	  }
-		
-      }
-    else
-      {
-	i = -PH_NOMEDIA;
-      }
-
-    return i;
+	return i;
 }
 
 
@@ -3514,11 +3561,11 @@ ph_call_answered(eXosip_event_t *je)
         rca = ph_locate_call_by_cid(ca->rcid);
     }
     
-    if (!ca->localhold)
-      {
-	ph_call_retrieve_payloads(ca, je, -1);
-	ph_call_media_start(ca, je, -1, ca->localresume);
-      }
+	if (!ca->localhold)
+	{
+		ph_call_retrieve_payloads(ca, je, -1);
+		ph_call_media_start(ca, je, ca->localresume);
+	}
 
     info.localUri = je->local_uri;
     info.userData = je->external_reference;
@@ -3576,7 +3623,7 @@ ph_call_proceeding(eXosip_event_t *je)
     if (!ca->localrefer)
     {
         ph_call_retrieve_payloads(ca, je, PH_STREAM_CNG);
-        ph_call_media_start(ca, je, -1, 0);
+        ph_call_media_start(ca, je, 0);
     
         info.userData = je->external_reference;
         info.event = phDIALING;
@@ -3685,7 +3732,7 @@ ph_call_ringing(eXosip_event_t *je)
     
     ph_call_retrieve_payloads(ca, je, PH_STREAM_CNG);
     
-    ret = ph_call_media_start(ca, je, -1, 0);
+    ret = ph_call_media_start(ca, je, 0);
     
     info.event = phRINGING;
     if (ret == -PH_NOMEDIA && !ph_call_hasaudio(ca) && !ca->isringing) /*  no audio and softPhone is now not ringing and has no sound */
@@ -3961,7 +4008,7 @@ ph_call_offhold(eXosip_event_t *je)
 	ca->remotehold = 0;
 
 	ph_call_retrieve_payloads(ca, je, -1);
-	ph_call_media_start(ca, je, -1, remhold);
+	ph_call_media_start(ca, je, remhold);
 
 	if (remhold)
 	{

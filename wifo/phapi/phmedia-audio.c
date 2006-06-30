@@ -2290,7 +2290,7 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 	  return 0;
 	}
       
-      /* new payload is differrent from the old one */
+      /* new payload is different from the old one */
       DBG1_MEDIA_ENGINE("ph_mession_audio_start: Replacing audio session\n");
 	  PH_MSESSION_AUDIO_UNLOCK();
       ph_msession_audio_stop(s, deviceId);
@@ -2519,22 +2519,28 @@ void ph_audio_vad_cleanup(phastream_t *stream)
 }
 
 
-
-
+/**
+ * @brief stops a specific stream in a session
+ * it currently always try to stop the AUDIO1 stream
+ */
 void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
 {
 	struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
 	phastream_t *stream = (phastream_t *) msp->streamerData;
 	phastream_t *master;
 
+	// we cannot stop a non-existing or non-running stream
 	if (!stream || !stream->ms.running)
 	{
 		return;
 	}
 
+	// inform the engine that a stream stop is required
 	stream->ms.running = 0;
+	
 	master = stream->master;
 
+	// if a thread was needed in the threading model, wait and destroy it
 	if (stream->ms.media_io_thread)
 	{
 		osip_thread_join(stream->ms.media_io_thread);
@@ -2542,6 +2548,7 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
 		stream->ms.media_io_thread = 0;
 	}
 
+	// if the stream has a MASTER stream, the MASTER needs to stop mixing
 	if (master)
 	{
 		CONF_LOCK(master);
@@ -2550,6 +2557,7 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
 	}
 
 #ifdef PH_USE_RESAMPLE
+	// clean the resampling context
 	if (stream->actual_rate != stream->clock_rate)
 	{
 		ph_resample_cleanup0(stream->resample_audiodrv_ctx_mic);
@@ -2746,87 +2754,97 @@ void ph_msession_audio_suspend(struct ph_msession_s *s, int suspendwhat, const c
 
 void ph_msession_audio_resume(struct ph_msession_s *s, int resumewhat, const char *deviceId)
 {
-  struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
-  phastream_t *stream = (phastream_t *) msp->streamerData;
+    struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
+    phastream_t *stream = (phastream_t *) msp->streamerData;
 
+    DBG4_MEDIA_ENGINE("audio_resume: enter ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
 
-  DBG4_MEDIA_ENGINE("audio_resume: enter ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
+    msp->traffictype |= resumewhat;
+    ph_msession_audio_start(s, deviceId);
+    stream->ms.suspended = 0;
 
-  msp->traffictype |= resumewhat;
-  ph_msession_audio_start(s, deviceId);
-  stream->ms.suspended = 0;
-
-  if (s->confsession)
+/*
+    if (s->confsession)
     {
-      struct ph_mstream_params_s *msp2 = &s->confsession->streams[PH_MSTREAM_AUDIO1];
-      phastream_t *stream2 = (phastream_t *) msp2->streamerData;     
+        struct ph_mstream_params_s *msp2 = &s->confsession->streams[PH_MSTREAM_AUDIO1];
+        phastream_t *stream2 = (phastream_t *) msp2->streamerData;     
     }
-
-  DBG4_MEDIA_ENGINE("audio_resume: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
+*/
+	
+    DBG4_MEDIA_ENGINE("audio_resume: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
 
 }
 
 
-
+/**
+ * @brief used to join 2 sessions in a conference
+ * currently it is only tested when nor s1 neither s2 is running
+ */
 int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s *s2, const char *deviceId)
 {
-  struct ph_mstream_params_s *msp1 = &s1->streams[PH_MSTREAM_AUDIO1];
-  phastream_t *stream1 = (phastream_t *) msp1->streamerData;
-  struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
-  phastream_t *stream2 = (phastream_t *) msp2->streamerData;
-  
+	struct ph_mstream_params_s *msp1 = &s1->streams[PH_MSTREAM_AUDIO1];
+	phastream_t *stream1 = (phastream_t *) msp1->streamerData;
+	struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
+	phastream_t *stream2 = (phastream_t *) msp2->streamerData;
 
-
-  if (s1->confflags || s2->confflags)
-    return -PH_NORESOURCES;
+	// error if one of the 2 sessions is already involved in a conf
+	if (s1->confflags || s2->confflags)
+	{
+		return -PH_NORESOURCES;
+	}
   
+	s1->confsession = s2;
+	s2->confsession = s1;
 
-  s1->confsession = s2;
-  s2->confsession = s1;
-  
-  if (stream1->ms.running)
-   {
-     DBG1_MEDIA_ENGINE("ph_msession_audio_conf_start: s1=MASTER\n");
+	// if S1 is running, it will be the MASTER
+	if (stream1->ms.running)
+	{
+		DBG1_MEDIA_ENGINE("ph_msession_audio_conf_start: s1=MASTER\n");
      
-     CONF_LOCK(stream1);
-     stream1->to_mix = stream2;
-     if (stream2)
-       stream2->master = stream1;
-     s1->confflags = PH_MSESSION_CONF_MASTER;
-     s2->confflags = PH_MSESSION_CONF_MEMBER;
-     CONF_UNLOCK(stream1);
-     return 0;
-   }
+		CONF_LOCK(stream1);
+		stream1->to_mix = stream2;
+		if (stream2)
+		{
+			stream2->master = stream1;
+		}
+		s1->confflags = PH_MSESSION_CONF_MASTER;
+		s2->confflags = PH_MSESSION_CONF_MEMBER;
+		CONF_UNLOCK(stream1);
+		return 0;
+	}
   
-  if (stream2->ms.running)
-    {
-     DBG1_MEDIA_ENGINE("msession_adio_conf_start: s2=MASTER\n");
+	// if S2 is running, it will be the MASTER
+	if (stream2->ms.running)
+	{
+		DBG1_MEDIA_ENGINE("msession_adio_conf_start: s2=MASTER\n");
 
-      CONF_LOCK(stream2);
-      stream2->to_mix = stream1;
-      if (stream1)
-	stream1->master = stream2;
-      s2->confflags = PH_MSESSION_CONF_MASTER;
-      s1->confflags = PH_MSESSION_CONF_MEMBER;
-      CONF_UNLOCK(stream2);
-      return 0;
-    }
-  
-  
+		CONF_LOCK(stream2);
+		stream2->to_mix = stream1;
+		if (stream1)
+		{
+			stream1->master = stream2;
+		}
+		s2->confflags = PH_MSESSION_CONF_MASTER;
+		s1->confflags = PH_MSESSION_CONF_MEMBER;
+		CONF_UNLOCK(stream2);
+		return 0;
+	}
+	
+	DBG1_MEDIA_ENGINE("msession_audio_conf_start: both streams unactive: s1=MASTER\n");
 
-  DBG1_MEDIA_ENGINE("msession_adio_conf_start: both streams uncative: s1=MASTER\n");
-  
-  CONF_LOCK(stream1);
-  stream1->to_mix = stream2;
-  if (stream2)
-    stream2->master = stream1;
-  s1->confflags = PH_MSESSION_CONF_MASTER;
-  s2->confflags = PH_MSESSION_CONF_MEMBER;
-  CONF_UNLOCK(stream1);
-  //  ph_msession_audio_start(s1, deviceId);
-  return 0;
- 
-
+	// if S1 and S2 are not running, S1 will be the MASTER
+	CONF_LOCK(stream1);
+	stream1->to_mix = stream2;
+	if (stream2)
+	{
+    	stream2->master = stream1;
+	}
+	s1->confflags = PH_MSESSION_CONF_MASTER;
+	s2->confflags = PH_MSESSION_CONF_MEMBER;
+	CONF_UNLOCK(stream1);
+	//ph_msession_audio_start(s1, deviceId);
+	return 0;
+	
 } 
 
 
