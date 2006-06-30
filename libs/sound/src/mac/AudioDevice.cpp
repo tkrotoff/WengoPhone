@@ -30,7 +30,12 @@ std::list<std::string> AudioDevice::getInputMixerDeviceList() {
 	for (std::map<AudioDeviceID, std::string>::const_iterator it = deviceMap.begin();
 		it != deviceMap.end();
 		++it) {
-		result.push_back((*it).second);
+		std::vector<UInt32> list = CoreAudioUtilities::dataSourcesList((*it).first, true);
+		for (std::vector<UInt32>::const_iterator dsit = list.begin();
+			dsit != list.end();
+			++dsit) {
+			result.push_back((*it).second + " - " + CoreAudioUtilities::dataSourceName((*it).first, true, (*dsit)));
+		}
 	}
 
 	return result;
@@ -43,7 +48,12 @@ std::list<std::string> AudioDevice::getOutputMixerDeviceList() {
 	for (std::map<AudioDeviceID, std::string>::const_iterator it = deviceMap.begin();
 		it != deviceMap.end();
 		++it) {
-		result.push_back((*it).second);
+		std::vector<UInt32> list = CoreAudioUtilities::dataSourcesList((*it).first, false);
+		for (std::vector<UInt32>::const_iterator dsit = list.begin();
+			dsit != list.end();
+			++dsit) {
+			result.push_back((*it).second + " - " + CoreAudioUtilities::dataSourceName((*it).first, false, (*dsit)));
+		}
 	}
 
 	return result;
@@ -58,16 +68,55 @@ std::string AudioDevice::getDefaultPlaybackDevice() {
 	status = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size, &device);
 	if (status) {
 		LOG_ERROR("can't get default output device");
-		return result;
+		return String::null;
 	}
 
 	result = CoreAudioUtilities::audioDeviceName(device, false);
 
+	UInt32 dataSourceId;
+	size = sizeof(UInt32);
+	status = AudioDeviceGetProperty(device, 0, 0, kAudioDevicePropertyDataSource, &size, &dataSourceId);
+	if (status) {
+		LOG_ERROR("can't get default output data source");
+		return String::null;
+	}
+
+	result += " - " + CoreAudioUtilities::dataSourceName(device, false, dataSourceId);
+
 	return result;
 }
 
-bool AudioDevice::setDefaultPlaybackDevice(const std::string & /*deviceName*/) {
-	return false;
+bool AudioDevice::setDefaultPlaybackDevice(const std::string & deviceName) {
+	OSStatus status = noErr;
+	AudioDeviceID device;
+	bool found = false;
+
+	// Looking the device ID regarding the name
+	std::map<AudioDeviceID, std::string> map = CoreAudioUtilities::audioDeviceMap(false);
+	for (std::map<AudioDeviceID, std::string>::const_iterator it = map.begin();
+		it != map.end();
+		++it) {
+		if ((*it).second == deviceName) {
+			device = (*it).first;
+			found = true;
+			break;
+		}
+	}
+
+	if (!found) {
+		LOG_ERROR("no device named " + deviceName + " found");
+		return false;
+	}
+	////
+
+	UInt32 size = sizeof(AudioDeviceID);
+	status = AudioHardwareSetProperty(kAudioHardwarePropertyDefaultOutputDevice, size, &device);
+	if (status) {
+		LOG_ERROR("can't set default output device to " + String::fromNumber(device));
+		return false;
+	}
+
+	return true;
 }
 
 std::string AudioDevice::getDefaultRecordDevice() {
@@ -84,11 +133,50 @@ std::string AudioDevice::getDefaultRecordDevice() {
 
 	result = CoreAudioUtilities::audioDeviceName(device, true);
 
+	UInt32 dataSourceId;
+	size = sizeof(UInt32);
+	status = AudioDeviceGetProperty(device, 0, 1, kAudioDevicePropertyDataSource, &size, &dataSourceId);
+	if (status) {
+		LOG_ERROR("can't get default input data source");
+		return String::null;
+	}
+
+	result += " - " + CoreAudioUtilities::dataSourceName(device, false, dataSourceId);
+
 	return result;
 }
 
-bool AudioDevice::setDefaultRecordDevice(const std::string & /*deviceName*/) {
-	return false;
+bool AudioDevice::setDefaultRecordDevice(const std::string & deviceName) {
+	OSStatus status = noErr;
+	AudioDeviceID device;
+	bool found = false;
+
+	// Looking the device ID regarding the name
+	std::map<AudioDeviceID, std::string> map = CoreAudioUtilities::audioDeviceMap(true);
+	for (std::map<AudioDeviceID, std::string>::const_iterator it = map.begin();
+		it != map.end();
+		++it) {
+		if ((*it).second == deviceName) {
+			device = (*it).first;
+			found = true;
+			break;
+		}
+	}
+
+	if (found) {
+		LOG_ERROR("no device named " + deviceName + " found");
+		return false;
+	}
+	////
+
+	UInt32 size = sizeof(AudioDeviceID);
+	status = AudioHardwareSetProperty(kAudioHardwarePropertyDefaultInputDevice, size, &device);
+	if (status) {
+		LOG_ERROR("can't set default output device to " + String::fromNumber(device));
+		return false;
+	}
+
+	return true;
 }
 
 int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {

@@ -56,6 +56,26 @@ public:
 	 * @return a map containing the AudioDeviceID and the name of the device
 	 */
 	static std::map<AudioDeviceID, std::string> audioDeviceMap(bool isInput);
+
+	/**
+	 * Gets list of available data sources available on a device.
+	 *
+	 * @param id the device to check
+	 * @param isInput true if we want to get input devices, false to get output devices
+	 * @return a vector of UInt32 containing ids of data sources
+	 */
+	static std::vector<UInt32> dataSourcesList(AudioDeviceID id, bool isInput);
+
+	/**
+	 * Gets the name of a data source.
+	 *
+	 * @param id the device id
+ 	 * @param isInput true if we want the name of the input part of the device,
+	 * false if we want the output part.
+	 * @param dsId id of the data source
+	 * @return the name of the data source. String::null if no data source found.
+	 */
+	static std::string dataSourceName(AudioDeviceID, bool isInput, UInt32 dsId);
 };
 
 #endif //COREAUDIOUTILITIES_H

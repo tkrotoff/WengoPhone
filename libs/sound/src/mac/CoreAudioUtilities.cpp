@@ -78,6 +78,7 @@ std::string CoreAudioUtilities::audioDeviceName(AudioDeviceID id, bool isInput) 
 	}
 
 	AudioBufferList list;
+	//FIXME: should get the size 'size'
 	size = sizeof(list);
 	status = AudioDeviceGetProperty(id, 0, input, kAudioDevicePropertyStreamConfiguration, &size, &list);
 	if (status) {
@@ -92,7 +93,7 @@ std::string CoreAudioUtilities::audioDeviceName(AudioDeviceID id, bool isInput) 
 			break;
 		}
 	}
-		
+
 	return result;
 }
 
@@ -108,6 +109,60 @@ std::map<AudioDeviceID, std::string> CoreAudioUtilities::audioDeviceMap(bool isI
 			result[*it] = deviceName;
 		}
 	}
+
+	return result;
+}
+
+std::vector<UInt32> CoreAudioUtilities::dataSourcesList(AudioDeviceID id, bool isInput) {
+	OSStatus status = noErr;
+	std::vector<UInt32> result;
+	Boolean input = (isInput ? TRUE : FALSE);
+	UInt32 size = 0;
+
+	status = AudioDeviceGetPropertyInfo(id, 0, input, kAudioDevicePropertyDataSources, &size, NULL);
+	if (status) {
+		LOG_ERROR("Can't get device property info: kAudioDevicePropertyDataSources");
+		return result;
+	}
+
+	if (!size) {
+		return result;
+	}
+
+	UInt32 * ids = (UInt32 *) malloc(size);
+	status = AudioDeviceGetProperty(id, 0, input, kAudioDevicePropertyDataSources, &size, ids);
+	if (status) {
+		LOG_ERROR("Can't get device property: kAudioDevicePropertyDataSources");
+	} else {
+		for (unsigned i = 0; i < (size / sizeof(UInt32)); i++) {
+			result.push_back(ids[i]);
+		}
+	}
+
+	free(ids);
+
+	return result;
+}
+
+std::string CoreAudioUtilities::dataSourceName(AudioDeviceID id, bool isInput, UInt32 dsId) {
+	UInt32 myDsId = dsId;
+	CFStringRef name;
+	AudioValueTranslation theTranslation = { &myDsId, sizeof(UInt32), &name, sizeof(CFStringRef) };
+	UInt32 size = sizeof(AudioValueTranslation);
+	std::string result;
+
+	OSStatus status = AudioDeviceGetProperty(id, 0, (isInput ? TRUE : FALSE),
+		kAudioDevicePropertyDataSourceNameForIDCFString, &size, &theTranslation);
+	if (status) {
+		LOG_ERROR("Can't get device property: kAudioDevicePropertyDataSourceNameForIDCFString");
+	} else {
+		char buffer[1024];
+		memset(buffer, 0, sizeof(buffer));
+		CFStringGetCString(name, buffer, sizeof(buffer), kCFStringEncodingUTF8);
+		result = std::string(buffer);
+	}
+
+	CFRelease(name);
 
 	return result;
 }
