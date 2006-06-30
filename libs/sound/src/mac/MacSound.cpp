@@ -118,7 +118,6 @@ void MacSound::releaseAtEnd() {
 
 void MacSound::stopped() {
 	if (_mustReleaseAtEnd) {
-		[_macSoundObjCPrivate release];
 		delete this;
 	}
 }
