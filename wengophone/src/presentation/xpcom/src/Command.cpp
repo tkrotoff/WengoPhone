@@ -35,11 +35,11 @@
 
 #include <imwrapper/IMWrapperFactory.h>
 
-#include <SoundMixer.h>
-#include <AudioDevice.h>
+#include <sound/SoundMixer.h>
+#include <sound/AudioDevice.h>
 
 #if defined(CC_MSVC)
-	#include <win32/MemoryDump.h>
+	#include <memorydump/MemoryDump.h>
 #endif
 
 #ifdef PHAPIWRAPPER

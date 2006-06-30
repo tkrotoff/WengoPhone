@@ -110,7 +110,7 @@ void XPCOMIMHandler::presenceStateChangedEventHandler(IMPresence & sender, EnumP
 			break;
 
 		default:
-			LOG_FATAL("unknown presence state");
+			LOG_FATAL("unknown presence state=" + EnumPresenceState::toString(state));
 		}
 	}
 }
@@ -156,7 +156,7 @@ void XPCOMIMHandler::publishMyPresence(Listener::PresenceState state, const std:
 		break;
 
 	default:
-		LOG_FATAL("unknown presence state");
+		LOG_FATAL("unknown presence state=" + EnumPresenceState::toString(state));
 	}
 }
 

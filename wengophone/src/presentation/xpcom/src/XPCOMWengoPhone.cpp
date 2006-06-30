@@ -27,8 +27,6 @@
 
 #include <util/Logger.h>
 
-#include <cassert>
-
 CWengoPhone * XPCOMWengoPhone::_cWengoPhone = NULL;
 
 XPCOMWengoPhone::XPCOMWengoPhone(CWengoPhone * cWengoPhone) {
@@ -36,7 +34,9 @@ XPCOMWengoPhone::XPCOMWengoPhone(CWengoPhone * cWengoPhone) {
 }
 
 CWengoPhone & XPCOMWengoPhone::getCWengoPhone() {
-	assert(_cWengoPhone && "XPCOMWengoPhone::XPCOMWengoPhone() must be call first");
+	if (!_cWengoPhone) {
+		LOG_FATAL("XPCOMWengoPhone::XPCOMWengoPhone() must be call first");
+	}
 	return *_cWengoPhone;
 }
 
@@ -66,11 +66,11 @@ void XPCOMWengoPhone::wengoLoginStateChangedEvent(WengoPhone::LoginState state, 
 			break;
 
 		case WengoPhone::LoginNoAccount:
-			listener->wengoLoginStateChangedEvent(Listener::LoginNoAccount,login, password);
+			listener->wengoLoginStateChangedEvent(Listener::LoginNoAccount, login, password);
 			break;
 
 		default:
-			LOG_FATAL("Unknown state");
+			LOG_FATAL("unknown state=" + String::fromNumber(state));
 		};
 	}
 }

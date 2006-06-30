@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef XPCOMIMHANDLER_H
-#define XPCOMIMHANDLER_H
+#ifndef OWXPCOMIMHANDLER_H
+#define OWXPCOMIMHANDLER_H
 
 #include <Listener.h>
 
@@ -82,4 +82,4 @@ private:
 	IMPresence * _presence;
 };
 
-#endif	//XPCOMIMHANDLER_H
+#endif	//OWXPCOMIMHANDLER_H

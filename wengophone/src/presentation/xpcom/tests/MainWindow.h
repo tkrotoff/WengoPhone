@@ -17,10 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef OWMAINWINDOW_H
+#define OWMAINWINDOW_H
 
-#include <QObjectThreadSafe.h>
+#include <qtutil/QObjectThreadSafe.h>
 
 #include <string>
 
@@ -91,4 +91,4 @@ private:
 	int _currentLineId;
 };
 
-#endif	//MAINWINDOW_H
+#endif	//OWMAINWINDOW_H

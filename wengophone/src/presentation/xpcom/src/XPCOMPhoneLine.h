@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef XPCOMPHONELINE_H
-#define XPCOMPHONELINE_H
+#ifndef OWXPCOMPHONELINE_H
+#define OWXPCOMPHONELINE_H
 
 #include <presentation/PPhoneLine.h>
 
@@ -66,4 +66,4 @@ private:
 	PhoneLineList() { }
 };
 
-#endif	//XPCOMPHONELINE_H
+#endif	//OWXPCOMPHONELINE_H
