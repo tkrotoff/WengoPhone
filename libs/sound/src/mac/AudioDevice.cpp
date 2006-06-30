@@ -34,7 +34,10 @@ std::list<std::string> AudioDevice::getInputMixerDeviceList() {
 		for (std::vector<UInt32>::const_iterator dsit = list.begin();
 			dsit != list.end();
 			++dsit) {
-			result.push_back((*it).second + " - " + CoreAudioUtilities::dataSourceName((*it).first, true, (*dsit)));
+			std::string dataSourceName = CoreAudioUtilities::dataSourceName((*it).first, true, (*dsit));
+			if (!dataSourceName.empty()) {
+				result.push_back((*it).second + " - " + dataSourceName);
+			}
 		}
 	}
 
@@ -52,7 +55,10 @@ std::list<std::string> AudioDevice::getOutputMixerDeviceList() {
 		for (std::vector<UInt32>::const_iterator dsit = list.begin();
 			dsit != list.end();
 			++dsit) {
-			result.push_back((*it).second + " - " + CoreAudioUtilities::dataSourceName((*it).first, false, (*dsit)));
+			std::string dataSourceName = CoreAudioUtilities::dataSourceName((*it).first, false, (*dsit));
+			if (!dataSourceName.empty()) {
+				result.push_back((*it).second + " - " + dataSourceName);
+			}
 		}
 	}
 
@@ -81,7 +87,12 @@ std::string AudioDevice::getDefaultPlaybackDevice() {
 		return String::null;
 	}
 
-	result += " - " + CoreAudioUtilities::dataSourceName(device, false, dataSourceId);
+	std::string dataSourceName = CoreAudioUtilities::dataSourceName(device, false, dataSourceId);
+	if (!dataSourceName.empty()) {
+		result += " - " + dataSourceName;
+	} else {
+		result = String::null;
+	}
 
 	return result;
 }
@@ -141,7 +152,12 @@ std::string AudioDevice::getDefaultRecordDevice() {
 		return String::null;
 	}
 
-	result += " - " + CoreAudioUtilities::dataSourceName(device, false, dataSourceId);
+	std::string dataSourceName = CoreAudioUtilities::dataSourceName(device, true, dataSourceId);
+	if (!dataSourceName.empty()) {
+		result += " - " + dataSourceName;
+	} else {
+		result = String::null;
+	}
 
 	return result;
 }
@@ -151,7 +167,7 @@ bool AudioDevice::setDefaultRecordDevice(const std::string & deviceName) {
 	AudioDeviceID device;
 	bool found = false;
 
-	// Looking the device ID regarding the name
+	// Looking for the device ID regarding the name
 	std::map<AudioDeviceID, std::string> map = CoreAudioUtilities::audioDeviceMap(true);
 	for (std::map<AudioDeviceID, std::string>::const_iterator it = map.begin();
 		it != map.end();

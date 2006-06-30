@@ -160,9 +160,8 @@ std::string CoreAudioUtilities::dataSourceName(AudioDeviceID id, bool isInput, U
 		memset(buffer, 0, sizeof(buffer));
 		CFStringGetCString(name, buffer, sizeof(buffer), kCFStringEncodingUTF8);
 		result = std::string(buffer);
+		CFRelease(name);
 	}
-
-	CFRelease(name);
 
 	return result;
 }
