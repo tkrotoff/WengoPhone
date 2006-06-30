@@ -31,9 +31,9 @@ public:
 
 	std::string serialize();
 
-	bool unserialize(const std::string & data);
+	virtual bool unserialize(const std::string & data);
 
-private:
+protected:
 
 	Settings & _settings;
 };

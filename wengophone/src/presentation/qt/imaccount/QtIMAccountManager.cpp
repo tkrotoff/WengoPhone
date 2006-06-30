@@ -100,7 +100,7 @@ void QtIMAccountManager::loadIMAccounts() {
 		accountStrList << QString::fromStdString(imAccount->getLogin());
 		EnumIMProtocol::IMProtocol imProtocol = imAccount->getProtocol();
 
-		if (imProtocol == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+		if (imProtocol == EnumIMProtocol::IMProtocolWengo) {
 			//This protocol is internal to WengoPhone, should not be shown to the user
 			continue;
 		}

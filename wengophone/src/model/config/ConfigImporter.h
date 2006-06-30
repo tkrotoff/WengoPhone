@@ -25,21 +25,22 @@
 
 #include <string>
 
+class Contact;
 class Thread;
 class UserProfile;
-class WengoPhone;
-class Contact;
+class UserProfileHandler;
 
 /**
  * Import configuration from WengoPhone classic.
  *
  * @ingroup model
+ * @author Julien Bossart
  * @author Philippe Bernery
  */
-class ClassicConfigImporter {
+class ConfigImporter {
 public:
 
-	ClassicConfigImporter(Thread & modelThread);
+	ConfigImporter(UserProfileHandler & userProfileHandler, Thread & modelThread);
 
 	/**
 	 * Imports the WengoPhone Classic Config only if no WengoPhone NG
@@ -57,7 +58,17 @@ private:
 	 *
 	 * @return the version of the last found version.
 	 */
-	static int detectLastVersion();
+	static unsigned detectLastVersion();
+
+	static std::string getWengoClassicConfigPath();
+
+	static bool classicVcardParser(const std::string & vcardFile, void * structVcard);
+
+	static bool classicXMLParser(const std::string & xmlFile, void * structVcard);
+
+	static std::string classicVCardToString(void *structVcard);
+
+	static void * getLastWengoUser(const std::string & configUserFile, unsigned version);
 
 	/**
 	 * Imports a config from a particular version to another one.
@@ -65,17 +76,19 @@ private:
 	 * @param from version from which we want to import
 	 * @param to version we want to have
 	 */
-	void makeImportConfig(int from, int to);
+	void makeImportConfig(unsigned from, unsigned to);
 
-	static std::string getWengoClassicConfigPath();
 	bool importConfigFromV1toV3();
+
 	bool importConfigFromV2toV3();
+
+	bool importConfigFromV3toV4();
+
 	bool importContactsFromV1toV3(const std::string & fromDir, UserProfile & userProfile);
+
 	void addContactDetails(Contact & contact, void * structVcard);
-	static bool classicVcardParser(const std::string & vcardFile, void * structVcard);
-	static bool classicXMLParser(const std::string & xmlFile, void * structVcard);
-	static std::string classicVCardToString(void *structVcard);
-	static void * getLastWengoUser(const std::string & configUserFile, int version);
+
+	UserProfileHandler & _userProfileHandler;
 
 	Thread & _modelThread;
 };

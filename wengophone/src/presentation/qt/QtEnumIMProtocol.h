@@ -43,7 +43,8 @@ public:
 		IMProtocolAIMICQ,
 		IMProtocolJabber,
 		IMProtocolGoogleTalk,
-		IMProtocolSIPSIMPLE
+		IMProtocolSIPSIMPLE,
+		IMProtocolWengo
 	};
 
 	/**

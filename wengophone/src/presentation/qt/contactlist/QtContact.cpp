@@ -186,8 +186,9 @@ QString QtContact::getWorkPhone() const {
 }
 
 QString QtContact::getWengoPhoneNumber() const {
-	QString wphone = QString::fromStdString(_contactProfile.getWengoPhoneId());
-	return wphone;
+	QString result = QString::fromStdString(_contactProfile.getFirstAvailableWengoId());
+
+	return result;
 }
 
 QString QtContact::getPreferredNumber() const {
@@ -240,7 +241,7 @@ void QtContact::contactUpdated() {
 }
 
 void QtContact::startFreeCall() {
-	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(_contactProfile.getFreePhoneNumber());
+	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(_contactProfile.getFirstFreePhoneNumber());
 }
 
 QString QtContact::getDisplayName() const {

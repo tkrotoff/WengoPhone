@@ -27,7 +27,6 @@ Profile::Profile() {
 	_lastName = String::null;
 	_website = String::null;
 	_company = String::null;
-	_wengoPhoneId = String::null;
 	_mobilePhone = String::null;
 	_homePhone = String::null;
 	_workPhone = String::null;
@@ -51,7 +50,6 @@ void Profile::copy(const Profile & profile) {
 	_lastName = profile._lastName;
 	_website = profile._website;
 	_company = profile._company;
-	_wengoPhoneId = profile._wengoPhoneId;
 	_mobilePhone = profile._mobilePhone;
 	_homePhone = profile._homePhone;
 	_workPhone = profile._workPhone;
@@ -73,7 +71,6 @@ bool Profile::operator==(const Profile & profile) const {
 		&& (_birthdate == profile._birthdate)
 		&& (_website == profile._website)
 		&& (_company == profile._company)
-		&& (_wengoPhoneId == profile._wengoPhoneId)
 		&& (_mobilePhone == profile._mobilePhone)
 		&& (_homePhone == profile._homePhone)
 		&& (_workPhone == profile._workPhone)

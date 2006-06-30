@@ -149,7 +149,7 @@ void QtNickNameWidget::connected(IMAccount * pImAccount) {
 		_msnLabel->setToolTip("MSN");
 		break;
 
-	case EnumIMProtocol::IMProtocolSIPSIMPLE:
+	case EnumIMProtocol::IMProtocolWengo:
 		_wengoLabel->setPixmap(QPixmap(PICS_WENGO_ON));
 		_wengoLabel->setToolTip("Wengo");
 		break;
@@ -192,7 +192,7 @@ void QtNickNameWidget::disconnected(IMAccount * pImAccount, bool connectionError
 		break;
 	}
 
-	case EnumIMProtocol::IMProtocolSIPSIMPLE: {
+	case EnumIMProtocol::IMProtocolWengo: {
 		if (connectionError) {
 			_wengoLabel->setPixmap(QPixmap(PICS_WENGO_ERROR));
 			_wengoLabel->setToolTip("Wengo Error: " + reason);
@@ -252,7 +252,7 @@ void QtNickNameWidget::connectionProgress(IMAccount * pImAccount,
 		_msnLabel->setToolTip("MSN Info: " + infoMessage);
 		break;
 
-	case EnumIMProtocol::IMProtocolSIPSIMPLE:
+	case EnumIMProtocol::IMProtocolWengo:
 		_wengoLabel->setPixmap(QPixmap(PICS_WENGO_ERROR));
 		_wengoLabel->setToolTip("Wengo Info: " + infoMessage);
 		break;
@@ -301,7 +301,7 @@ void QtNickNameWidget::yahooClicked(){
 
 void QtNickNameWidget::wengoClicked() {
 	set<IMAccount *> list;
-	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolWengo);
 
 	if (!list.empty()) {
 		showWengoMenu();
@@ -416,7 +416,7 @@ void QtNickNameWidget::showWengoMenu() {
 	_wengoIMAccountMenu->setWindowOpacity(POPUPMENU_OPACITY);
 
 	set<IMAccount *> list;
-	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolWengo);
 
 	for (set<IMAccount *>::const_iterator it = list.begin();
 		it != list.end();

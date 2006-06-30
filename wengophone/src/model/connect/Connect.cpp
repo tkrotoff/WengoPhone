@@ -64,7 +64,8 @@ void Connect::connect() {
 void Connect::disconnect(bool now) {
 	_timer.stop();
 	_timerIsRunning = false;
-	if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+	if ((_imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE)
+		|| (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolWengo)) {
         _userProfile.disconnectSipAccounts(now);
 	}
 	_imConnect->disconnect();
@@ -73,7 +74,8 @@ void Connect::disconnect(bool now) {
 void Connect::timeoutEventHandler(Timer & sender) {
 	if (_connectionRetryCount < RECONNECT_RETRY && NetworkObserver::getInstance().isConnected()) {
 		++_connectionRetryCount;
-		if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+		if ((_imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE)
+			|| (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolWengo)) {
             _userProfile.connectSipAccounts();
 		}
 		_imConnect->connect();

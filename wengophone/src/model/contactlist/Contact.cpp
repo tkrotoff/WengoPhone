@@ -99,8 +99,6 @@ void Contact::copy(const ContactProfile & contactProfile) {
 	_contactList.unlock();
 	////
 
-	setWengoPhoneId(contactProfile._wengoPhoneId);
-
 	Profile::copy(contactProfile);
 	_blocked = contactProfile._blocked;
 	_preferredIMContact = contactProfile._preferredIMContact;
@@ -161,27 +159,6 @@ void Contact::_removeIMContact(const IMContact & imContact) {
 	if (it != _imContactSet.end()) {
 		contactChangedEvent(*this);
 		_imContactSet.erase(it);
-	}
-}
-
-void Contact::setWengoPhoneId(const string & wengoId) {
-	if (!wengoId.empty()) {
-		set<IMAccount *> list =
-				_userProfile.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
-		if (list.size() > 0) {
-			//Deleting previous IMContact
-			IMContact oldIMContact(*(*list.begin()), _wengoPhoneId);
-			removeIMContact(oldIMContact);
-			////
-
-
-			// Addin the new IMContact
-			_wengoPhoneId = wengoId;
-
-			IMContact newIMContact(*(*list.begin()), _wengoPhoneId);
-			addIMContact(newIMContact);
-			////
-		}
 	}
 }
 
@@ -250,10 +227,6 @@ void Contact::merge(const Contact & contact) {
 
 	if (_company.empty()) {
 		_company= contact._company;
-	}
-
-	if (_wengoPhoneId.empty()) {
-		_wengoPhoneId = contact._wengoPhoneId;
 	}
 
 	if (_mobilePhone.empty()) {

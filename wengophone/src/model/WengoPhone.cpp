@@ -22,7 +22,7 @@
 #include <model/profile/UserProfileHandler.h>
 
 #include "classic/ClassicExterminator.h"
-#include "config/ClassicConfigImporter.h"
+#include "config/ConfigImporter.h"
 #include "config/ConfigManagerFileStorage.h"
 #include "config/ConfigManager.h"
 #include "config/Config.h"
@@ -42,7 +42,6 @@ WengoPhone::WengoPhone() {
 	_startupSettingListener = new StartupSettingListener();
 	_running = false;
 	_wsSubscribe = NULL;
-	_importer = NULL;
 
 	//set HttpRequest User Agent
 	std::stringstream ss;
@@ -106,9 +105,6 @@ WengoPhone::~WengoPhone() {
 	static Timer shutdownTimeout;
 	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownAfterTimeout, this);
 	shutdownTimeout.start(3000, 3000);
-
-	if (_importer)
-		delete _importer;
 }
 
 void WengoPhone::init() {
@@ -121,8 +117,8 @@ void WengoPhone::init() {
 	ClassicExterminator::removeClassicFromStartup();
 
 	//Imports the Config from WengoPhone Classic.
-	_importer = new ClassicConfigImporter(*this);
-	_importer->importConfig(config.getConfigDir());
+	ConfigImporter importer(*_userProfileHandler, *this);
+	importer.importConfig(config.getConfigDir());
 
 
 	_wsSubscribe = new WsSubscribe();

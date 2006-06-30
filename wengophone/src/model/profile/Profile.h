@@ -73,9 +73,6 @@ public:
 	void setCompany(const std::string & company) { _company = company; profileChangedEvent(*this); }
 	std::string getCompany() const { return _company; }
 
-	void setWengoPhoneId(const std::string & wengoPhoneId) { _wengoPhoneId = wengoPhoneId; profileChangedEvent(*this); }
-	std::string getWengoPhoneId() const { return _wengoPhoneId; }
-
 	void setMobilePhone(const std::string & mobilePhone) { _mobilePhone = mobilePhone; profileChangedEvent(*this); }
 	std::string getMobilePhone() const { return _mobilePhone; }
 
@@ -142,8 +139,6 @@ protected:
 	std::string _website;
 
 	std::string _company;
-
-	std::string _wengoPhoneId;
 
 	std::string _mobilePhone;
 

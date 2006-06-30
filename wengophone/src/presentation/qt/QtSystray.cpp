@@ -235,9 +235,11 @@ void QtSystray::updateCallMenu() {
 			ContactProfile tmpContactProfile = currentCContactList.getContactProfile(*it);
 
 			if (tmpContactProfile.hasFreeCall()) {
-				LOG_DEBUG("adding=" + tmpContactProfile.getFreePhoneNumber());
-				QAction * tmpAction = _callWengoMenu->addAction(QString::fromStdString(tmpContactProfile.getFreePhoneNumber()));
-				tmpAction->setData(QVariant(QString::fromStdString(tmpContactProfile.getFreePhoneNumber())));
+				std::string freePhoneNumber = tmpContactProfile.getFirstFreePhoneNumber();
+				LOG_DEBUG("adding=" + freePhoneNumber);
+				QAction * tmpAction
+					= _callWengoMenu->addAction(QString::fromStdString(freePhoneNumber));
+				tmpAction->setData(QVariant(QString::fromStdString(freePhoneNumber)));
 			}
 
 			if (!tmpContactProfile.getMobilePhone().empty()) {

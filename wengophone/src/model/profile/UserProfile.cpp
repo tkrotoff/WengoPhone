@@ -160,7 +160,8 @@ void UserProfile::connectIMAccounts() {
 		++it) {
 		newIMAccountAddedEvent(*this, (IMAccount &)*it);
 		//FIXME: hack for phApi connection
-		if ((*it).getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
+		if (((*it).getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE)
+			|| ((*it).getProtocol() != EnumIMProtocol::IMProtocolWengo)) {
 			if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
 				_connectHandler.connect((IMAccount &)*it);
 			}
@@ -176,8 +177,8 @@ void UserProfile::connectSipAccounts() {
 		_wengoAccountConnected = true;
 
 		IMAccount imAccount(_wengoAccount->getIdentity(),
-			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
-		addIMAccount(imAccount);
+			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolWengo);
+		_addIMAccount(imAccount);
 		_connectHandler.connect((IMAccount &)*_imAccountHandler->find(imAccount));
 		_wengoAccountConnected = false;
 	}
@@ -201,7 +202,7 @@ void UserProfile::disconnectSipAccounts(bool now) {
 	if (_activePhoneLine && _wengoAccountConnected) {
 		_activePhoneLine->disconnect(now);
 		IMAccount imAccount(_wengoAccount->getIdentity(),
-			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
+			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolWengo);
 		_connectHandler.disconnect((IMAccount &)*_imAccountHandler->find(imAccount), now);
 	}
 }
@@ -239,6 +240,11 @@ void UserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 			phoneLine->disconnect();
 			//TODO remove the PhoneLine from _phoneLines & destroy it
 		}
+
+		IMAccount imAccount(_wengoAccount->getIdentity(),
+			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolWengo);
+		_removeIMAccount(imAccount);
+
 		delete _wengoAccount;
 		_wengoAccount = NULL;
 	}
@@ -264,6 +270,15 @@ void UserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 }
 
 void UserProfile::addIMAccount(const IMAccount & imAccount) {
+	if (imAccount.getProtocol() == EnumIMProtocol::IMProtocolWengo) {
+		LOG_FATAL("Cannot add directly a Wengo IMAccount. Must use setWengoAccount");
+		return;
+	}
+
+	_addIMAccount(imAccount);
+}
+
+void UserProfile::_addIMAccount(const IMAccount & imAccount) {
 	LOG_DEBUG("adding an IMAccount");
 
 	pair<IMAccountHandler::const_iterator, bool> result = _imAccountHandler->insert(imAccount);
@@ -280,6 +295,15 @@ void UserProfile::addIMAccount(const IMAccount & imAccount) {
 }
 
 void UserProfile::removeIMAccount(const IMAccount & imAccount) {
+	if (imAccount.getProtocol() == EnumIMProtocol::IMProtocolWengo) {
+		LOG_FATAL("Cannot remove directly a Wengo IMAccount. Must use setWengoAccount");
+		return;
+	}
+
+	_removeIMAccount(imAccount);
+}
+
+void UserProfile::_removeIMAccount(const IMAccount & imAccount) {
 	LOG_DEBUG("removing an IMAccount");
 
 	IMAccountHandler::iterator it = _imAccountHandler->find(imAccount);
@@ -338,8 +362,8 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 	case SipAccount::LoginStateReady: {
 
 		IMAccount imAccount(_wengoAccount->getIdentity(),
-			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolSIPSIMPLE);
-		addIMAccount(imAccount);
+			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolWengo);
+		_addIMAccount(imAccount);
 
 		_wengoAccountIsValid = true;
 		_wengoAccountInitializationFinished = true;

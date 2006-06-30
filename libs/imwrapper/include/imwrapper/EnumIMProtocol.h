@@ -39,7 +39,8 @@ public:
 		IMProtocolYahoo,
 		IMProtocolAIMICQ,
 		IMProtocolJabber,
-		IMProtocolSIPSIMPLE
+		IMProtocolSIPSIMPLE,
+		IMProtocolWengo
 	};
 
 	/**

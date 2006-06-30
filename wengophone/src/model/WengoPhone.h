@@ -29,7 +29,7 @@
 
 #include <string>
 
-class ClassicConfigImporter;
+class ConfigImporter;
 class UserProfileHandler;
 class WsSubscribe;
 
@@ -147,8 +147,6 @@ private:
 	UserProfileHandler * _userProfileHandler;
 
 	StartupSettingListener * _startupSettingListener;
-
-	ClassicConfigImporter *_importer;
 };
 
 #endif	//OWWENGOPHONE_H

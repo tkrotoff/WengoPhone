@@ -57,14 +57,12 @@ void UserProfileHandler::save() {
 	}
 }
 
-std::vector<std::string> UserProfileHandler::getUserProfileNames() {
-	std::vector<std::string> result;
+StringList UserProfileHandler::getUserProfileNames() {
+	StringList result;
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	File path(File::convertPathSeparators(config.getConfigDir() + "profiles/"));
-	StringList list = path.getDirectoryList();
-
-	result = list;
+	result = path.getDirectoryList();
 
 	return result;
 }

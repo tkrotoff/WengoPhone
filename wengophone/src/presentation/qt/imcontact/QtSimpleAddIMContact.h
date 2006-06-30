@@ -62,7 +62,7 @@ private Q_SLOTS:
 
 private:
 
-	bool haveAccount(EnumIMProtocol::IMProtocol imProtocol) const;
+	bool hasAccount(EnumIMProtocol::IMProtocol imProtocol) const;
 
 	Ui::SimpleAddIMAccount _ui;
 

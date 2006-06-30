@@ -35,7 +35,7 @@
 	#include <CoreFoundation/CoreFoundation.h>
 #endif
 
-const int Config::CONFIG_VERSION = 3;
+const int Config::CONFIG_VERSION = 4;
 
 const std::string Config::CONFIG_VERSION_KEY = "config.version";
 
@@ -142,6 +142,8 @@ Config::Config(const std::string & name)
 	_name = name;
 
 	_keyDefaultValueMap[CONFIG_VERSION_KEY] = CONFIG_VERSION;
+	// Forcing set of value to save it in config.xml
+	set(CONFIG_VERSION_KEY, CONFIG_VERSION);
 
 	//Default config path
 #if defined(OS_MACOSX) || defined(OS_WINDOWS)

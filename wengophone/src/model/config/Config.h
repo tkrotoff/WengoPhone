@@ -42,9 +42,16 @@ public:
 	 * Last configuration version.
 	 *
 	 * Used to import config from previous version of Wengophone
+	 * @see ConfigImporter for more information
 	 *
 	 * version 1: WengoPhone classic
-	 * version 2: WengoPhone NG Beta1
+	 * version 2: WengoPhone NG Beta1 to Beta2
+	 *  - New save directory
+	 *  - New save directory structure
+	 * version 3: WengoPhone NG Beta3: 
+	 *  - multi-profile management
+	 * version 4: WengoPhone NG Final:
+	 *  - added a new type of protocol: Wengo
 	 */
 	static const int CONFIG_VERSION;
 

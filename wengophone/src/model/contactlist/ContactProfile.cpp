@@ -89,10 +89,9 @@ void ContactProfile::copy(const ContactProfile & contactProfile) {
 	_imContactSet = contactProfile._imContactSet;
 	_groupId = contactProfile._groupId;
 	_presenceState = contactProfile._presenceState;
-	setWengoPhoneId(contactProfile._wengoPhoneId);
 }
 
-bool ContactProfile::operator==(const ContactProfile & contactProfile) const {
+bool ContactProfile::operator == (const ContactProfile & contactProfile) const {
 	return (_uuid == contactProfile._uuid);
 }
 
@@ -144,7 +143,7 @@ bool ContactProfile::hasCall() const {
 }
 
 bool ContactProfile::hasVideo() const {
-	return wengoIsAvailable();
+	return hasAvailableWengoId();
 }
 
 std::string ContactProfile::getPreferredNumber() const {
@@ -153,7 +152,7 @@ std::string ContactProfile::getPreferredNumber() const {
 	if (!_preferredNumber.empty()) {
 		result = _preferredNumber;
 	} else if (hasFreeCall()) {
-		result = getFreePhoneNumber();
+		result = getFirstFreePhoneNumber();
 	} else if (!_mobilePhone.empty()) {
 		result = _mobilePhone;
 	} else if (!_homePhone.empty()) {
@@ -246,19 +245,6 @@ void ContactProfile::updatePresenceState() {
 	}
 }
 
-bool ContactProfile::wengoIsAvailable() const {
-	if (!_wengoPhoneId.empty()) {
-		for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; ++it) {
-			if (((*it).getContactId() == _wengoPhoneId)
-				&& ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline)) {
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
 Picture ContactProfile::getIcon() const {
 	Picture result;
 
@@ -319,7 +305,7 @@ string ContactProfile::getDisplayName() const {
 	return result;
 }
 
-IMContact * ContactProfile::getAvailableIMContact(IMChatSession & imChatSession) const {
+IMContact * ContactProfile::getFirstAvailableIMContact(IMChatSession & imChatSession) const {
 	IMContact * result = NULL;
 
 	for (IMContactSet::const_iterator it = _imContactSet.begin() ; it != _imContactSet.end() ; ++it) {
@@ -333,16 +319,13 @@ IMContact * ContactProfile::getAvailableIMContact(IMChatSession & imChatSession)
 	return result;
 }
 
-std::string ContactProfile::getAvailableSIPNumber() const {
+std::string ContactProfile::getFirstAvailableSIPNumber() const {
 	std::string result;
 
 	for (IMContactSet::const_iterator it = _imContactSet.begin();
 		it != _imContactSet.end();
 		++it) {
-		// If we found an IMContact that is of SIP protocol and is not
-		// a Wengo ID
-		if (((*it).getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE)
-			&& ((*it).getContactId() != _wengoPhoneId)) {
+		if ((*it).getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
 			result = (*it).getContactId();
 			break;
 		}
@@ -352,32 +335,41 @@ std::string ContactProfile::getAvailableSIPNumber() const {
 }
 
 bool ContactProfile::hasAvailableSIPNumber() const {
-	return (!getAvailableSIPNumber().empty());
+	return (!getFirstAvailableSIPNumber().empty());
 }
 
-bool ContactProfile::hasFreeCall() const {
-	return (!getFreePhoneNumber().empty());
-}
-
-std::string ContactProfile::getFreePhoneNumber() const {
+std::string ContactProfile::getFirstAvailableWengoId() const {
 	std::string result;
 
-	if (wengoIsAvailable()) {
-		result = _wengoPhoneId;
-	} else if (hasAvailableSIPNumber()) {
-		result = getAvailableSIPNumber();
+	for (IMContactSet::const_iterator it = _imContactSet.begin();
+		it != _imContactSet.end();
+		++it) {
+		if (((*it).getProtocol() == EnumIMProtocol::IMProtocolWengo)
+			&& ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline)) {
+			result = (*it).getContactId();
+			break;
+		}
 	}
 
 	return result;
 }
 
-void ContactProfile::setWengoPhoneId(const std::string & wengoId) {
-	if (!_wengoPhoneId.empty() && (wengoId != _wengoPhoneId)) {
-		removeIMContact(IMContact(EnumIMProtocol::IMProtocolSIPSIMPLE, _wengoPhoneId));
+bool ContactProfile::hasAvailableWengoId() const {
+	return (!getFirstAvailableWengoId().empty());
+}
+
+std::string ContactProfile::getFirstFreePhoneNumber() const {
+	std::string result;
+
+	if (hasAvailableWengoId()) {
+		result = getFirstAvailableWengoId();
+	} else if (hasAvailableSIPNumber()) {
+		result = getFirstAvailableSIPNumber();
 	}
 
-	if (!wengoId.empty()) {
-		Profile::setWengoPhoneId(wengoId);
-		addIMContact(IMContact(EnumIMProtocol::IMProtocolSIPSIMPLE, _wengoPhoneId));
-	}
+	return result;
+}
+
+bool ContactProfile::hasFreeCall() const {
+	return (!getFirstFreePhoneNumber().empty());
 }

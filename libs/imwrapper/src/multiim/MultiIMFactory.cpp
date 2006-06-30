@@ -29,7 +29,8 @@ MultiIMFactory::MultiIMFactory(PhApiFactory & phApiFactory, GaimIMFactory & gaim
 }
 
 IMConnect * MultiIMFactory::createIMConnect(IMAccount & account) {
-	if (account.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+	if ((account.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE)
+		|| (account.getProtocol() == EnumIMProtocol::IMProtocolWengo)) {
 		return _phApiFactory.createIMConnect(account);
 	} else {
 		return _gaimIMFactory.createIMConnect(account);
@@ -37,7 +38,8 @@ IMConnect * MultiIMFactory::createIMConnect(IMAccount & account) {
 }
 
 IMChat * MultiIMFactory::createIMChat(IMAccount & account) {
-	if (account.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+	if ((account.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE)
+		|| (account.getProtocol() == EnumIMProtocol::IMProtocolWengo)) {
 		return _phApiFactory.createIMChat(account);
 	} else {
 		return _gaimIMFactory.createIMChat(account);
@@ -45,7 +47,8 @@ IMChat * MultiIMFactory::createIMChat(IMAccount & account) {
 }
 
 IMPresence * MultiIMFactory::createIMPresence(IMAccount & account) {
-	if (account.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+	if ((account.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE)
+		|| (account.getProtocol() == EnumIMProtocol::IMProtocolWengo)) {
 		return _phApiFactory.createIMPresence(account);
 	} else {
 		return _gaimIMFactory.createIMPresence(account);
@@ -53,7 +56,8 @@ IMPresence * MultiIMFactory::createIMPresence(IMAccount & account) {
 }
 
 IMContactList * MultiIMFactory::createIMContactList(IMAccount & account) {
-	if (account.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+	if ((account.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE)
+		|| (account.getProtocol() == EnumIMProtocol::IMProtocolWengo)) {
 		return _phApiFactory.createIMContactList(account);
 	} else {
 		return _gaimIMFactory.createIMContactList(account);

@@ -33,6 +33,7 @@ static void init() {
 	_protocolMap[QtEnumIMProtocol::IMProtocolJabber] = "Jabber";
 	_protocolMap[QtEnumIMProtocol::IMProtocolGoogleTalk] = "GoogleTalk";
 	_protocolMap[QtEnumIMProtocol::IMProtocolSIPSIMPLE] = "SIP/SIMPLE";
+	_protocolMap[QtEnumIMProtocol::IMProtocolWengo] = "Wengo";
 }
 
 QString QtEnumIMProtocol::toString(IMProtocol protocol) {

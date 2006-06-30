@@ -55,7 +55,7 @@ _imAccount(imAccount) {
 	}
 	connect(action, SIGNAL(triggered(bool)), SLOT(awayClicked(bool)));
 
-	if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE) {
+	if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolWengo) {
 		action = addAction(tr("Forward"));
 		if (_imAccount.getPresenceState() == EnumPresenceState::PresenceStateForward) {
 			action->setChecked(true);

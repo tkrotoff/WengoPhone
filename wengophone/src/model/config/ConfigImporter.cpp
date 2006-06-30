@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "ClassicConfigImporter.h"
+#include "ConfigImporter.h"
 
 #include "ConfigManager.h"
 #include "Config.h"
@@ -27,6 +27,7 @@
 #include <model/profile/EnumSex.h>
 #include <model/profile/StreetAddress.h>
 #include <model/profile/UserProfile.h>
+#include <model/profile/UserProfileHandler.h>
 #include <model/profile/UserProfileFileStorage.h>
 #include <model/profile/UserProfileXMLSerializer.h>
 #include <model/WengoPhone.h>
@@ -38,6 +39,8 @@
 #include <util/Logger.h>
 #include <util/Path.h>
 #include <util/String.h>
+
+#include <boost/regex.hpp>
 
 #include <string>
 #include <vector>
@@ -124,10 +127,11 @@ StringList mySplit(const std::string & str, char sep)
 	return wordList;
 }
 
-#define CONFIG_UNKNOWN 0
-#define CONFIG_VERSION1 1
-#define CONFIG_VERSION2 2
-#define CONFIG_VERSION3 3
+static const unsigned CONFIG_UNKNOWN = 0;
+static const unsigned  CONFIG_VERSION1 = 1;
+static const unsigned  CONFIG_VERSION2 = 2;
+static const unsigned  CONFIG_VERSION3 = 3;
+static const unsigned  CONFIG_VERSION4 = 4;
 
 static const std::string USERPROFILE_FILENAME = "userprofile.xml";
 static const std::string USERCONFIG_FILENAME = "user.config";
@@ -136,12 +140,12 @@ static const std::string CONTACTLIST_FILENAME = "contactlist.xml";
 static const std::string NEW_HISTORY_FILENAME = "history.xml";
 static const std::string OLD_HISTORY_FILENAME = "_history";
 
-ClassicConfigImporter::ClassicConfigImporter(Thread & modelThread)
-: _modelThread(modelThread) {
-
+ConfigImporter::ConfigImporter(UserProfileHandler & userProfileHandler, Thread & modelThread)
+	: _modelThread(modelThread),
+	_userProfileHandler(userProfileHandler) {
 }
 
-bool ClassicConfigImporter::importConfig(const string & str) {
+bool ConfigImporter::importConfig(const string & str) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	int localVersion = detectLastVersion();
 
@@ -153,40 +157,64 @@ bool ClassicConfigImporter::importConfig(const string & str) {
 	return false;
 }
 
-int ClassicConfigImporter::detectLastVersion()
+unsigned ConfigImporter::detectLastVersion()
 {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	string ConfigPathV1 = getWengoClassicConfigPath();
 	string ConfigPathV2 = config.getConfigDir();
 
-	bool dirV1Exists = !ConfigPathV1.empty() && File::exists(ConfigPathV1.substr(0, ConfigPathV1.size() - 1));
-	bool dirV2Exists = !ConfigPathV2.empty() && File::exists(ConfigPathV2.substr(0, ConfigPathV2.size() - 1));
+	bool dirV1Exists = !ConfigPathV1.empty() 
+		&& File::exists(ConfigPathV1.substr(0, ConfigPathV1.size() - 1));
+	bool dirV2Exists = !ConfigPathV2.empty() 
+		&& File::exists(ConfigPathV2.substr(0, ConfigPathV2.size() - 1));
 
-	if (dirV2Exists)
-	{
-		if (File::exists(ConfigPathV2 + "profiles"))
-			return CONFIG_VERSION3;
-		else if (File::exists(ConfigPathV2 + "user.config"))
+	if (dirV2Exists) {
+		if (File::exists(ConfigPathV2 + "profiles")) {
+			// See ConfigXMLSerializer::unserialize to understand the '0'
+			// and the config.set.
+			if (config.getConfigVersion() == 0) {
+				config.set(Config::CONFIG_VERSION_KEY, Config::CONFIG_VERSION);
+				return CONFIG_VERSION3;
+			} else {
+				config.set(Config::CONFIG_VERSION_KEY, Config::CONFIG_VERSION);
+				return CONFIG_VERSION4;
+			}
+		} else if (File::exists(ConfigPathV2 + "user.config")) {
 			return CONFIG_VERSION2;
-		else if (dirV1Exists)
+		} else if (dirV1Exists) {
 			return CONFIG_VERSION1;
-	}
-	else if (dirV1Exists)
+		}
+	} else if (dirV1Exists) {
 		return CONFIG_VERSION1;
+	}
 
 	return CONFIG_UNKNOWN;
 }
 
-void ClassicConfigImporter::makeImportConfig(int from, int to)
+void ConfigImporter::makeImportConfig(unsigned from, unsigned to)
 {
-	if (from == CONFIG_VERSION1 && to == CONFIG_VERSION3)
-		importConfigFromV1toV3();
-	
-	else if (from == CONFIG_VERSION2 && to == CONFIG_VERSION3)
-		importConfigFromV2toV3();
+	if (from == CONFIG_VERSION1) {
+		if (to == CONFIG_VERSION3) {
+			importConfigFromV1toV3();
+		} else if (to == CONFIG_VERSION4) {
+			importConfigFromV1toV3();
+			importConfigFromV3toV4();
+		}
+	} else if (from == CONFIG_VERSION2) {
+		if (to == CONFIG_VERSION3) {
+			importConfigFromV2toV3();
+		} else if (to == CONFIG_VERSION4) {
+			importConfigFromV2toV3();
+			importConfigFromV3toV4();
+		}
+	} else if (from == CONFIG_VERSION3) {
+		if (to == CONFIG_VERSION4) {
+			importConfigFromV3toV4();
+		}
+	}
 }
 
-string ClassicConfigImporter::getWengoClassicConfigPath() {
+string ConfigImporter::getWengoClassicConfigPath() {
 	string result;
 
 #if defined(OS_WINDOWS)
@@ -202,7 +230,7 @@ string ClassicConfigImporter::getWengoClassicConfigPath() {
 	return result;
 }
 
-bool ClassicConfigImporter::classicVcardParser(const string & vcardFile, void *structVcard)
+bool ConfigImporter::classicVcardParser(const string & vcardFile, void *structVcard)
 {
 	vcard_t *mVcard = (vcard_t *) structVcard;
 	std::ifstream fileStream;
@@ -299,7 +327,7 @@ bool ClassicConfigImporter::classicVcardParser(const string & vcardFile, void *s
 
 		if (!tmp.empty())
 		{
-			if (tmp.find(":", 0) == -1)
+			if (tmp.find(":", 0) == string::npos)
 			{
 				lastLine += tmp.trim();
 				std::getline(fileStream, tmp);
@@ -311,7 +339,7 @@ bool ClassicConfigImporter::classicVcardParser(const string & vcardFile, void *s
 	return true;
 }
 
-bool ClassicConfigImporter::classicXMLParser(const string & xmlFile, void *structVcard)
+bool ConfigImporter::classicXMLParser(const string & xmlFile, void *structVcard)
 {
 	vcard_t *mVcard = (vcard_t *) structVcard;
 	std::ifstream fileStream;
@@ -349,7 +377,7 @@ bool ClassicConfigImporter::classicXMLParser(const string & xmlFile, void *struc
 	return true;
 }
 
-string ClassicConfigImporter::classicVCardToString(void *structVcard)
+string ConfigImporter::classicVCardToString(void *structVcard)
 {
 	vcard_t *mVcard = (vcard_t *) structVcard;
 	string res = "<wgcard version=\"1.0\" xmlns=\"http://www.openwengo.org/wgcard/1.0\">\n";
@@ -435,7 +463,7 @@ string ClassicConfigImporter::classicVCardToString(void *structVcard)
 	return res;
 }
 
-void ClassicConfigImporter::addContactDetails(Contact & contact, void * structVcard) {
+void ConfigImporter::addContactDetails(Contact & contact, void * structVcard) {
 	vcard_t *mVcard = (vcard_t *) structVcard;
 
 	contact.setFirstName(mVcard->fname);
@@ -480,7 +508,7 @@ void ClassicConfigImporter::addContactDetails(Contact & contact, void * structVc
 		contact.setOtherPhone(mVcard->emails[2]);
 }
 
-bool ClassicConfigImporter::importContactsFromV1toV3(const string & fromDir, UserProfile & userProfile) {
+bool ConfigImporter::importContactsFromV1toV3(const string & fromDir, UserProfile & userProfile) {
 
 	File mDir(fromDir);
 	StringList fileList = mDir.getFileList();
@@ -490,13 +518,13 @@ bool ClassicConfigImporter::importContactsFromV1toV3(const string & fromDir, Use
 	contactList.addContactGroup("Classic");
 
 	std::set<IMAccount *> list = 
-		userProfile.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolSIPSIMPLE);
+		userProfile.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolWengo);
 
 	if (!list.size()) {
 		return false;
 	}
 
-	for (int i = 0; i < fileList.size(); i++)
+	for (unsigned i = 0; i < fileList.size(); i++)
 	{
 		File mFile(fromDir + fileList[i]);
 		string Id = fileList[i].substr(0, fileList[i].find("_", 0));
@@ -530,7 +558,7 @@ typedef struct last_user_s
 	bool	auto_login;
 }			last_user_t;
 
-void * ClassicConfigImporter::getLastWengoUser(const std::string & configUserFile, int version) {
+void * ConfigImporter::getLastWengoUser(const std::string & configUserFile, unsigned version) {
 	std::ifstream fileStream;
 	String lastLine;
 
@@ -593,7 +621,7 @@ void * ClassicConfigImporter::getLastWengoUser(const std::string & configUserFil
 	return lastUser;
 }
 
-bool ClassicConfigImporter::importConfigFromV1toV3() {
+bool ConfigImporter::importConfigFromV1toV3() {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	string classicPath = getWengoClassicConfigPath();
@@ -646,7 +674,7 @@ bool ClassicConfigImporter::importConfigFromV1toV3() {
 	return true;
 }
 
-bool ClassicConfigImporter::importConfigFromV2toV3() {
+bool ConfigImporter::importConfigFromV2toV3() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	String configDir = config.getConfigDir();
 	UserProfile userProfile(_modelThread);
@@ -689,7 +717,7 @@ bool ClassicConfigImporter::importConfigFromV2toV3() {
 
 			File mDir(configDir);
 			StringList dirList = mDir.getFileList();
-			for (int i = 0; i < dirList.size(); i++)
+			for (unsigned i = 0; i < dirList.size(); i++)
 			{
 				if (dirList[i].length() > OLD_HISTORY_FILENAME.length()) {
 					if (dirList[i].substr(dirList[i].length() - OLD_HISTORY_FILENAME.length()) == OLD_HISTORY_FILENAME) {
@@ -703,4 +731,60 @@ bool ClassicConfigImporter::importConfigFromV2toV3() {
 			config.set(config.PROFILE_LAST_USED_NAME_KEY, userProfile.getName());
 		}
 	}
+
+	return true;
+}
+
+bool ConfigImporter::importConfigFromV3toV4() {
+	StringList list = _userProfileHandler.getUserProfileNames();
+	boost::regex wengoRE(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolSIPSIMPLE));
+	boost::regex wengoidRE("<wengoid>.*</wengoid>");
+
+	for (StringList::const_iterator it = list.begin();
+		it != list.end();
+		++it) {
+		// Replacing every 'SIP/SIMPLE' string to 'Wengo'
+		UserProfile * userProfile = _userProfileHandler.getUserProfile(*it);
+		if (userProfile) {
+			// Replacing in imaccounts.xml
+			FileReader iIMAccountsFile(userProfile->getProfileDirectory() + "imaccounts.xml");
+			iIMAccountsFile.open();
+			std::string data = iIMAccountsFile.read();
+			iIMAccountsFile.close();
+
+			std::ostringstream imAccountStream(std::ios::out | std::ios::binary);
+			std::ostream_iterator<char, char> imAccountStreamIt(imAccountStream);
+			boost::regex_replace(imAccountStreamIt, data.begin(), 
+				data.end(), wengoRE, EnumIMProtocol::toString(EnumIMProtocol::IMProtocolWengo));
+
+			FileWriter oIMAccountsFile(userProfile->getProfileDirectory() + "imaccounts.xml");
+			oIMAccountsFile.write(imAccountStream.str());
+			oIMAccountsFile.close();
+			////
+			
+			// Replacing in contactlist.xml
+			FileReader iContactListFile(userProfile->getProfileDirectory() + "contactlist.xml");
+			iContactListFile.open();
+			data = iContactListFile.read();
+			iContactListFile.close();
+
+			std::ostringstream contactListStream(std::ios::out | std::ios::binary);
+			std::ostream_iterator<char, char> contactListStreamIt(contactListStream);
+			boost::regex_replace(contactListStreamIt, data.begin(), 
+				data.end(), wengoRE, EnumIMProtocol::toString(EnumIMProtocol::IMProtocolWengo));
+
+			std::string intermediateResult = contactListStream.str();
+			std::ostringstream contactListStream2(std::ios::out | std::ios::binary);
+			std::ostream_iterator<char, char> contactListStreamIt2(contactListStream2);
+			boost::regex_replace(contactListStreamIt2, intermediateResult.begin(), 
+				intermediateResult.end(), wengoRE, String::null);
+
+			FileWriter oContactListFile(userProfile->getProfileDirectory() + "contactlist.xml");
+			oContactListFile.write(contactListStream2.str());
+			oContactListFile.close();
+			////
+		}
+	}
+
+	return true;
 }

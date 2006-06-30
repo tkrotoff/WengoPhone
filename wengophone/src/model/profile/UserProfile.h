@@ -26,34 +26,34 @@
 #include <imwrapper/IMAccountHandler.h>
 
 #include <model/account/SipAccount.h>
-#include <model/history/History.h>
-#include <model/webservices/callforward/WsCallForward.h>
 #include <model/connect/ConnectHandler.h>
 #include <model/contactlist/ContactList.h>
 #include <model/contactlist/IMContactListHandler.h>
+#include <model/history/History.h>
 #include <model/presence/PresenceHandler.h>
+#include <model/webservices/callforward/WsCallForward.h>
 
 #include <util/Event.h>
 #include <util/Trackable.h>
 
 #include <list>
 
-class SipAccount;
-class WengoAccount;
-class IMAccount;
 class Contact;
 class ContactList;
 class History;
+class History;
+class IMAccount;
 class IPhoneLine;
 class NetworkObserver;
 class PhoneCall;
-class History;
+class SipAccount;
 class Thread;
 class WenboxPlugin;
+class WengoAccount;
+class WsDirectory;
+class WsInfo;
 class WsSms;
 class WsSoftUpdate;
-class WsInfo;
-class WsDirectory;
 
 /**
  * Handle the profile of a User.
@@ -63,7 +63,6 @@ class WsDirectory;
 class UserProfile : public Profile, public Trackable {
 	friend class UserProfileFileStorage;
 	friend class UserProfileXMLSerializer;
-	friend class ConnectHandler;
 	friend class Connect;
 public:
 
@@ -216,20 +215,35 @@ public:
 	 */
 	PhoneCall * getActivePhoneCall() const;
 
+	/** Gets the ConnectHandler reference. */
 	ConnectHandler & getConnectHandler() { return _connectHandler; }
 
+	/** Gets the PresenceHandler reference. */
 	PresenceHandler & getPresenceHandler() { return _presenceHandler; }
 
+	/** Gets the ChatHandler reference. */
 	ChatHandler & getChatHandler() { return _chatHandler; }
 
+	/** 
+	 * Gets the IMAccountHandler reference. Here we can safely derefence 
+	 * the pointer as the IMAccountHandler is constructed in 
+	 * the UserProfile constructor.
+	 */
 	IMAccountHandler & getIMAccountHandler() { return *_imAccountHandler; }
 
+	/** Gets the IMContactListHandler reference. */
 	IMContactListHandler & getIMContactListHandler() { return _imContactListHandler; }
 
+	/** Gets the ContactList reference. */
 	ContactList & getContactList() { return _contactList; }
 
+	/** 
+	 * Gets the History reference. Here we can safely derefence the pointer
+	 * as the History is constructed in the UserProfile constructor.
+	 */
 	History & getHistory() { return *_history; }
 
+	/** Gets the WenboxPlugin pointer. */
 	WenboxPlugin * getWenboxPlugin() { return _wenboxPlugin; }
 
 	/** Gets the WsInfo pointer. */
@@ -253,12 +267,12 @@ public:
 	}
 
 	/**
-	 * Load the history.
+	 * Loads the history.
 	 */
 	void loadHistory();
 
 	/**
-	 * Save the history.
+	 * Saves the history.
 	 */
 	void saveHistory();
 
@@ -299,6 +313,9 @@ public:
 
 	/**
 	 * Adds an IMAccount to this UserProfile.
+	 * This method should currently not be called to add a Wengo
+	 * IMAccount. A Wengo IMAccount is created internally when setWengoAccount
+	 * is called. There is an assert to prevent that.
 	 *
 	 * The IMAccount is copied internally.
 	 *
@@ -308,6 +325,10 @@ public:
 
 	/**
 	 * Removes an IMAccount from this UserProfile.
+	 *
+	 * An IMAccount of type Wengo must currently not be removed by this method.
+	 * setWengoAccount must be used for this purpose.
+	 * There is an assert to prevent that.
 	 *
 	 * @param imAccount the IMAccount to remove
 	 */
@@ -348,6 +369,9 @@ public:
 	 */
 	void setIcon(const Picture & icon, IMAccount * account);
 
+	/**
+	 * Gets the PresenceState of this UserProfile.
+	 */
 	EnumPresenceState::PresenceState getPresenceState() const {
 		return _presenceState;
 	}
@@ -375,6 +399,26 @@ public:
 private:
 
 	/**
+	 * @see ConnectHandler::connectedEvent
+	 */
+	void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
+
+	/**
+	 * @see WsCallForward::wsCallForwardEvent
+	 */
+	void wsCallForwardEventHandler(WsCallForward & sender, int id, WsCallForward::WsCallForwardStatus status);
+
+	/**
+	 * Handle SipAccount::loginStateEvent.
+	 */
+	void loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState loginState);
+
+	/**
+	 * Handle History::mementoUpdatedEvent & History::mementoAddedEvent
+	 */
+	void historyChangedEventHandler(History & sender, int id);
+
+	/**
 	 * Compute the name of the UserProfile from the WengoAccount
 	 * and set the _name variable.
 	 */
@@ -387,11 +431,16 @@ private:
 	/**/
 
 	/**
-	 * @see ConnectHandler::connectedEvent
+	 * Actually adds an IMAccount. Used internally and by addIMAccount after
+	 * checking the given IMAccount.
 	 */
-	void connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount);
+	void _addIMAccount(const IMAccount & imAccount);
 
-	void wsCallForwardEventHandler(WsCallForward & sender, int id, WsCallForward::WsCallForwardStatus status);
+	/**
+	 * Actually removes an IMAccount. Used internally and by removeIMAccount after
+	 * checking the given IMAccount.
+	 */
+	void _removeIMAccount(const IMAccount & imAccount);
 
 	/**
 	 * Connect all IMAccounts.
@@ -421,11 +470,6 @@ private:
 	void wengoAccountInit();
 
 	/**
-	 * Handle SipAccount::loginStateEvent.
-	 */
-	void loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState loginState);
-
-	/**
 	 * Creates and adds a new PhoneLine given a SipAccount.
 	 *
 	 * This is a helper method.
@@ -433,11 +477,6 @@ private:
 	 * @param account SipAccount associated with the newly created PhoneLine
 	 */
 	void addPhoneLine(SipAccount & account);
-
-	/**
-	 * Handle History::mementoUpdatedEvent & History::mementoAddedEvent
-	 */
-	void historyChangedEventHandler(History & sender, int id);
 
 	/**
 	 * find the wengo phone line
@@ -483,6 +522,10 @@ private:
 
 	bool _wengoAccountIsValid;
 
+	/**
+	 * True if the UserProfile must connect after intialization of the
+	 * WengoAccount (after SSO request).
+	 */
 	bool _wengoAccountMustConnectAfterInit;
 
 	bool _historyLoaded;

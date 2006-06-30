@@ -149,13 +149,7 @@ void QtWsDirectory::callContact(const QString & sipAddress) {
 }
 
 void QtWsDirectory::addContact(ContactProfile * contact) {
-	ContactProfile contactProfile;
-	contactProfile.setFirstName(contact->getFirstName());
-	contactProfile.setLastName(contact->getLastName());
-	contactProfile.setWengoPhoneNumber(contact->getWengoPhoneNumber());
-	contactProfile.setStreetAddress(contact->getStreetAddress());
-	contactProfile.setWengoPhoneId(contact->getWengoPhoneId());
-
+	ContactProfile contactProfile = *contact;
 	QtProfileDetails qtProfileDetails(*_cWsDirectory.getCWengoPhone().getCUserProfileHandler().getCUserProfile(), contactProfile, _directoryWindow);
 
 	if (qtProfileDetails.show()) {

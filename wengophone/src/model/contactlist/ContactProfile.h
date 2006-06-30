@@ -93,7 +93,7 @@ public:
 	 *
 	 * @return an available IMContact. If no IMContact has been found,  return NULL.
 	 */
-	IMContact * getAvailableIMContact(IMChatSession & imChatSession) const;
+	IMContact * getFirstAvailableIMContact(IMChatSession & imChatSession) const;
 
 	/**
 	 * Adds an IMContact to the ContactProfile.
@@ -148,15 +148,22 @@ public:
 	bool hasFreeCall() const;
 
 	/**
-	 * @return free phone number (Wengo ID, SIP address).
-	 * an empty string if no phone number found
-	 */
-	std::string getFreePhoneNumber() const;
-
-	/**
 	 * @return true if we can place a video call with this Contact.
 	 */
 	bool hasVideo() const;
+
+	/**
+	 * @return free phone number (Wengo ID, SIP address).
+	 * an empty string if no phone number found
+	 */
+	std::string getFirstFreePhoneNumber() const;
+
+	/**
+	 * Gets the first available Wengo contact id that is online.
+	 *
+	 * @return the first available Wengo contact id.
+	 */
+	std::string getFirstAvailableWengoId() const;
 
 	/**
 	 * @return a display name computed from available Contact information.
@@ -201,10 +208,6 @@ public:
 		return _groupId;
 	}
 
-	// Inherited from Profile
-	virtual void setWengoPhoneId(const std::string & wengoId);
-	////
-
 protected:
 
 	// Inherited from Profile
@@ -229,21 +232,10 @@ protected:
 	virtual void copy(const ContactProfile & contactProfile);
 
 	/**
-	 * @return true when a wengo id has been declared and this
-	 * id is online.
+	 * @return true when a wengo IMContact has been declared 
+	 * and this id is online.
 	 */
-	bool wengoIsAvailable() const;
-
-	/**
-	 * Gets an available SIP address than can be called
-	 * taken from IMContacts of protocol SIP/SIMPLE.
-	 *
-	 * This method does not check Wengo ID
-	 *
-	 * @return the found SIP address or an empty string
-	 * if no SIP address found
-	 */
-	std::string getAvailableSIPNumber() const;
+	bool hasAvailableWengoId() const;
 
 	/**
 	 * Checks if a SIP number is available.
@@ -253,6 +245,17 @@ protected:
 	 * @return true if the Contact has an available SIP Address.
 	 */
 	bool hasAvailableSIPNumber() const;
+
+	/**
+	 * Gets an available SIP address than can be called
+	 * taken from IMContacts of protocol SIP/SIMPLE.
+	 *
+	 * This method does not check Wengo IMContacts
+	 *
+	 * @return the found SIP address or an empty string
+	 * if no SIP address found
+	 */
+	std::string getFirstAvailableSIPNumber() const;
 
 	/**
 	 * Updated the current presence state.

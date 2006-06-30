@@ -33,15 +33,14 @@
 
 #include <QtGui>
 
-static const QString IM_PROTOCOL_WENGO = "Wengo";
-
 QtSimpleAddIMContact::QtSimpleAddIMContact(CUserProfile & cUserProfile,
-	ContactProfile & contactProfile,
-	QWidget * parent) : _cUserProfile(cUserProfile), _contactProfile(contactProfile), QDialog(parent) {
+	ContactProfile & contactProfile, QWidget * parent)
+	: _cUserProfile(cUserProfile), _contactProfile(contactProfile), QDialog(parent) {
 
 	_ui.setupUi(this);
 
-	WidgetBackgroundImage::setBackgroundImage(_ui.accountLabel, ":pics/headers/new-contact.png", true);
+	WidgetBackgroundImage::setBackgroundImage(_ui.accountLabel,
+		":pics/headers/new-contact.png", true);
 
 	ContactGroupVector tmp = _cUserProfile.getCContactList().getContactGroups();
 	ContactGroupVector::const_iterator it;
@@ -57,26 +56,27 @@ QtSimpleAddIMContact::QtSimpleAddIMContact(CUserProfile & cUserProfile,
 		}
 	}
 
-	_ui.contactTypeComboBox->addItem(QIcon(":pics/protocols/wengo.png"), IM_PROTOCOL_WENGO);
+	_ui.contactTypeComboBox->addItem(QIcon(":pics/protocols/wengo.png"), 
+		QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolWengo)));
 	_ui.contactTypeComboBox->addItem(QIcon(":pics/protocols/msn.png"),
-				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolMSN)));
+		QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolMSN)));
 	_ui.contactTypeComboBox->addItem(QIcon(":pics/protocols/aim.png"),
-				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolAIMICQ)));
+		QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolAIMICQ)));
 	_ui.contactTypeComboBox->addItem(QIcon(":pics/protocols/yahoo.png"),
-				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolYahoo)));
+		QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolYahoo)));
 	_ui.contactTypeComboBox->addItem(QIcon(":pics/protocols/jabber.png"),
-				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolJabber)));
+		QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolJabber)));
 	_ui.contactTypeComboBox->addItem(QIcon(":pics/protocols/sip.png"),
-				QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolSIPSIMPLE)));
+		QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolSIPSIMPLE)));
+	connect(_ui.contactTypeComboBox, SIGNAL(currentIndexChanged(const QString &)),
+			SLOT(currentIndexChanged(const QString &)));
+
 	connect(_ui.okButton, SIGNAL(clicked()), SLOT(saveContact()));
 	connect(_ui.cancelButton, SIGNAL(clicked()), SLOT(reject()));
 	connect(_ui.advancedConfigPushButton, SIGNAL(clicked()), SLOT(advanced()));
-	connect(_ui.contactTypeComboBox, SIGNAL(currentIndexChanged(const QString &)),
-			SLOT(currentIndexChanged(const QString &)));
 }
 
 QtSimpleAddIMContact::~QtSimpleAddIMContact() {
-
 }
 
 void QtSimpleAddIMContact::saveContact() {
@@ -95,22 +95,18 @@ void QtSimpleAddIMContact::saveContact() {
 	// Setting Contact information
 	std::string contactId = _ui.contactIdLineEdit->text().toStdString();
 	QString protocolName = _ui.contactTypeComboBox->currentText();
-	if (protocolName == IM_PROTOCOL_WENGO) {
-		_contactProfile.setWengoPhoneId(contactId);
-	} else {
-		EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
-		IMContact imContact(imProtocol, contactId);
+	EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
+	IMContact imContact(imProtocol, contactId);
 
-		std::set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
-		// FIXME: user should not be able to choose a protocol where he has no account
-		// Here if no IMAccount is found, the contact is added anyway but it will
-		// never be reachable and the user will never knows (until it adds an IMAccount).
-		if (list.size() > 0) {
-			IMAccount * imAccount = *_cUserProfile.getIMAccountsOfProtocol(imProtocol).begin();
-			imContact.setIMAccount(imAccount);
-		}
-		_contactProfile.addIMContact(imContact);
+	std::set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
+	// FIXME: user should not be able to choose a protocol where he has no account
+	// Here if no IMAccount is found, the contact is added anyway but it will
+	// never be reachable and the user will never knows (until it adds an IMAccount).
+	if (list.size() > 0) {
+		IMAccount * imAccount = *_cUserProfile.getIMAccountsOfProtocol(imProtocol).begin();
+		imContact.setIMAccount(imAccount);
 	}
+	_contactProfile.addIMContact(imContact);
 	////
 
 	// Setting group
@@ -139,7 +135,7 @@ void QtSimpleAddIMContact::advanced() {
 	reject();
 }
 
-bool QtSimpleAddIMContact::haveAccount(EnumIMProtocol::IMProtocol imProtocol) const {
+bool QtSimpleAddIMContact::hasAccount(EnumIMProtocol::IMProtocol imProtocol) const {
 	std::set<IMAccount *> imAccounts = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
 	if (imAccounts.begin() == imAccounts.end()) {
 		return false;
@@ -150,19 +146,15 @@ bool QtSimpleAddIMContact::haveAccount(EnumIMProtocol::IMProtocol imProtocol) co
 void QtSimpleAddIMContact::currentIndexChanged (const QString & text) {
 	EnumIMProtocol::IMProtocol imProtocol;
 
-	if (text == IM_PROTOCOL_WENGO) {
-		return;
-	} else {
-		imProtocol = EnumIMProtocol::toIMProtocol(text.toStdString());
-		if (!haveAccount(imProtocol)) {
-			QMessageBox msgBox( tr("WengoPhone - Bad account"),
-			tr("You are not logged to this network\n"
-			"Use \"the Tools / IM accounts\" menu to login to this network"),
-			QMessageBox::Information,
-			QMessageBox::Ok, QMessageBox::NoButton,
-			QMessageBox::NoButton,this);
-			msgBox.exec();
-			_ui.contactTypeComboBox->setCurrentIndex(0);
-		}
+	imProtocol = EnumIMProtocol::toIMProtocol(text.toStdString());
+	if (!hasAccount(imProtocol)) {
+		QMessageBox msgBox( tr("WengoPhone - Bad account"),
+		tr("You are not logged to this network\n"
+		"Use \"the Tools / IM accounts\" menu to login to this network"),
+		QMessageBox::Information,
+		QMessageBox::Ok, QMessageBox::NoButton,
+		QMessageBox::NoButton,this);
+		msgBox.exec();
+		_ui.contactTypeComboBox->setCurrentIndex(0);
 	}
 }

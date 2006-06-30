@@ -120,10 +120,6 @@ public:
 			return _userProfile;
 	}
 
-	// Inherited from Profile
-	void setWengoPhoneId(const std::string & wengoId);
-	////
-
 private:
 
 	/**

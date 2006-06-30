@@ -243,7 +243,7 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 		// UserDefined (used by PhApi to set the alias)
 		if (state != EnumPresenceState::PresenceStateUserDefined) {
 			contact->getIMContact(imContact)->setPresenceState(state);
-			if (imContact.getIMAccount()->getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE) {
+			if (imContact.getIMAccount()->getProtocol() != EnumIMProtocol::IMProtocolWengo) {
 				contact->getIMContact(imContact)->setAlias(alias);
 			}
 		} else {

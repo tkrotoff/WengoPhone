@@ -22,10 +22,8 @@
 
 #include <thread/Mutex.h>
 #include <util/Event.h>
+#include <util/StringList.h>
 #include <util/Trackable.h>
-
-#include <vector>
-#include <string>
 
 class Profile;
 class Thread;
@@ -113,7 +111,7 @@ public:
 	 *
 	 * @return vector of UserProfiles
 	 */
-	std::vector<std::string> getUserProfileNames();
+	StringList getUserProfileNames();
 
 	/**
 	 * Sets the current UserProfile.

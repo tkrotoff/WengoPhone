@@ -338,26 +338,27 @@ const QString ChatWidget::text2Emoticon(const QString &htmlstr){
 QString ChatWidget::getProtocol() const {
 	QString protocol;
 
-	EnumIMProtocol::IMProtocol proto = _imChatSession->getIMChat().getIMAccount().getProtocol();
-	switch (proto) {
-		case EnumIMProtocol::IMProtocolMSN:
-			protocol="msn";
-			break;
-		case EnumIMProtocol::IMProtocolYahoo:
-			protocol="yahoo";
-			break;
-		case EnumIMProtocol::IMProtocolSIPSIMPLE:
-			protocol="wengo";
-			break;
-		case EnumIMProtocol::IMProtocolJabber:
-		case EnumIMProtocol::IMProtocolAIMICQ:
-		case EnumIMProtocol::IMProtocolUnknown:
-			protocol="default";
-			break;
-		default:
-			protocol="default";
-	}
-	return protocol;
+    EnumIMProtocol::IMProtocol proto = _imChatSession->getIMChat().getIMAccount().getProtocol();
+    switch (proto) {
+        case EnumIMProtocol::IMProtocolMSN:
+            protocol="msn";
+            break;
+        case EnumIMProtocol::IMProtocolYahoo:
+            protocol="yahoo";
+            break;
+        case EnumIMProtocol::IMProtocolWengo:
+            protocol="wengo";
+            break;
+        case EnumIMProtocol::IMProtocolJabber:
+        case EnumIMProtocol::IMProtocolAIMICQ:
+        case EnumIMProtocol::IMProtocolUnknown:
+            protocol="default";
+            break;
+        default:
+            protocol="default";
+    }
+
+    return protocol;
 }
 
 const QString ChatWidget::replaceUrls(const QString & str, const QString & htmlstr){

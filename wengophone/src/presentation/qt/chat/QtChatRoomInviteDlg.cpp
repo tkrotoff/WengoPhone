@@ -72,7 +72,7 @@ void QtChatRoomInviteDlg::startConference(){
 	QList<QListWidgetItem *>::iterator iter;
 	for (iter = selectList.begin(); iter != selectList.end(); iter ++ ){
 		QtChatRoomListWidgetItem * item = dynamic_cast<QtChatRoomListWidgetItem *> (*iter);
-		_chatSession.addIMContact(*(item->getContact().getAvailableIMContact(_chatSession)));
+		_chatSession.addIMContact(*(item->getContact().getFirstAvailableIMContact(_chatSession)));
 		_selectedContact.append( (item->getContact()) );
 	}
 	accept();
@@ -126,7 +126,7 @@ void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const ContactGroup 
 	QtContactPixmap::ContactPixmap status;
 
 	for (int i = 0; i < size; i++ ){
-		if ( (*cgroup)[i]->getAvailableIMContact(_chatSession) != NULL ){
+		if ( (*cgroup)[i]->getFirstAvailableIMContact(_chatSession) != NULL ){
 			QtChatRoomTreeWidgetItem * item = new QtChatRoomTreeWidgetItem (*(*cgroup)[i],group );
 			item->setText(0,QString::fromStdString (  (*cgroup)[i]->getDisplayName() ));
 			switch ( (*cgroup)[i]->getPresenceState()) {

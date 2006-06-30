@@ -34,6 +34,7 @@ public:
 	
 	ConfigXMLSerializer(Config & config);
 
+	virtual bool unserialize(const std::string & data);
 };
 
 #endif //CONFIGXMLSERIALIZER_H

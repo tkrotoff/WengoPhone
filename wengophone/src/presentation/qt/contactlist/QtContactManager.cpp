@@ -262,7 +262,7 @@ void QtContactManager::defaultAction(QTreeWidgetItem * item) {
 			return;
 		}
 		if (config.getGeneralClickStartFreeCall()) {
-			QString str = QString::fromUtf8(contactProfile.getFreePhoneNumber().c_str());
+			QString str = QString::fromUtf8(contactProfile.getFirstFreePhoneNumber().c_str());
 			if (!str.isEmpty()) {
 				ul->startFreeCall(userId);
 				return;
