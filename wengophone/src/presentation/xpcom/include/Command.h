@@ -17,12 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef COMMAND_H
-#define COMMAND_H
+#ifndef OWCOMMAND_H
+#define OWCOMMAND_H
 
 #include "Listener.h"
 
-#include <dllexport.h>
+#include <cutil/dllexport.h>
 
 class WengoPhone;
 class CWengoPhone;
@@ -190,7 +190,7 @@ public:
 
 	/** @} */
 
-	/** 
+	/**
 	 * @name Chat Methods
 	 * @{
 	 */
@@ -209,7 +209,7 @@ public:
 
 	/** @} */
 
-	/** 
+	/**
 	 * @name Sound Mixer Configuration
 	 * @{
 	 */
@@ -244,7 +244,7 @@ public:
 
 	/** @} */
 
-	/** 
+	/**
 	 * @name SMS Methods
 	 * @{
 	 */
@@ -264,4 +264,4 @@ private:
 	MemoryDump * _memoryDump;
 };
 
-#endif	//COMMAND_H
+#endif	//OWCOMMAND_H

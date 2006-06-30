@@ -17,10 +17,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef LISTENER_H
-#define LISTENER_H
+#ifndef OWLISTENER_H
+#define OWLISTENER_H
 
 #include <util/Interface.h>
+
+#include <sipwrapper/EnumPhoneCallState.h>
+#include <sipwrapper/EnumPhoneLineState.h>
+#include <sipwrapper/EnumPresenceState.h>
 
 #include <string>
 
@@ -55,23 +59,6 @@ public:
 	 */
 	virtual void wengoLoginStateChangedEvent(LoginState state, const std::string & login, const std::string & password) = 0;
 
-	enum PhoneLineState {
-		/** Connection to the SIP proxy failed. */
-		LineProxyError,
-
-		/** Connection to the SIP server failed. */
-		LineServerError,
-
-		/** Connection to the SIP platform failed due to a timeout. */
-		LineTimeout,
-
-		/** Successfull connection to the SIP platform. */
-		LineOk,
-
-		/** Line unregistered. */
-		LineClosed
-	};
-
 	/**
 	 * The state of the phone line has changed.
 	 *
@@ -79,34 +66,7 @@ public:
 	 * @param lineId phone line id
 	 * @param param for future use
 	 */
-	virtual void phoneLineStateChangedEvent(PhoneLineState state, int lineId, void * param) = 0;
-
-	enum PhoneCallState {
-		/** Incoming phone call. */
-		CallIncoming,
-
-		/** Conversation state. */
-		CallOk,
-		//new API CallTalking,
-
-		/** An error occured. */
-		CallError,
-
-		/** Not used for the moment. */
-		CallResumeOk,
-
-		/** Outgoing phone call: dialing. */
-		CallDialing,
-
-		/** Outgoing phone call: ringing. */
-		CallRinging,
-
-		/** Phone call closed (call rejected or call hang up). */
-		CallClosed,
-
-		/** Not used for the moment. */
-		CallHoldOk
-	};
+	virtual void phoneLineStateChangedEvent(EnumPhoneLineState::PhoneLineState state, int lineId, void * param) = 0;
 
 	/**
 	 * The state of the phone call has changed.
@@ -119,29 +79,9 @@ public:
 	 * @param displayName caller/callee display name (can be empty)
 	 * @param param for future use
 	 */
-	virtual void phoneCallStateChangedEvent(PhoneCallState state, int lineId, int callId,
+	virtual void phoneCallStateChangedEvent(EnumPhoneCallState::PhoneCallState state, int lineId, int callId,
 				const std::string & sipAddress, const std::string & userName, const std::string & displayName,
 				void * param) = 0;
-
-	enum PresenceState {
-		/** Buddy online. */
-		PresenceOnline,
-
-		/** Buddy offline. */
-		PresenceOffline,
-
-		/** Buddy away. */
-		PresenceAway,
-
-		/** Buddy do not disturb. */
-		PresenceDoNotDisturb,
-
-		/** Buddy user defined status by a simple string ("I'm on the phone", "Under the shower"...). */
-		PresenceUserDefined,
-
-		/** Not used for the moment. */
-		PresenceUnknown
-	};
 
 	/**
 	 * Presence status of a buddy has changed.
@@ -153,7 +93,7 @@ public:
 	 * @param displayName buddy display name (can be empty)
 	 * @param param for future use
 	 */
-	virtual void presenceStateChangedEvent(PresenceState state, const std::string & note,
+	virtual void presenceStateChangedEvent(EnumPresenceState::PresenceState state, const std::string & note,
 				const std::string & sipAddress, const std::string & userName, const std::string & displayName,
 				void * param) = 0;
 
@@ -199,4 +139,4 @@ public:
 	virtual void httpProxySettingsNeededEvent(const std::string & hostname, unsigned port)/* = 0*/ { }
 };
 
-#endif	//LISTENER_H
+#endif	//OWLISTENER_H

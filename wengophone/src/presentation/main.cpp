@@ -89,7 +89,7 @@ int main(int argc, char * argv[]) {
 
 	LOG_DEBUG(String::EOL + getAddionnalInfo());
 
-#if defined(CC_MSVC)
+#ifdef CC_MSVC
 	MemoryDump * memoryDump = new MemoryDump("WengoPhoneNG", String::fromUnsignedLongLong(WengoPhoneBuildId::REVISION).c_str());
 
 	memoryDump->setLanguage(config.getLanguage().c_str());
