@@ -52,7 +52,8 @@ void Sound::play() {
 
 void Sound::play(const std::string & filename, const std::string & deviceName) {
 	if (_soundPrivateForPlaySound) {
-		delete _soundPrivateForPlaySound;
+		// FIXME: crashes 
+		// delete _soundPrivateForPlaySound;
 		_soundPrivateForPlaySound = NULL;
 	}
 

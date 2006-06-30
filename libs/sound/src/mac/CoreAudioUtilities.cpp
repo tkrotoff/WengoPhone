@@ -60,18 +60,39 @@ std::vector<AudioDeviceID> CoreAudioUtilities::allAudioDeviceList() {
 std::string CoreAudioUtilities::audioDeviceName(AudioDeviceID id, bool isInput) {
 	OSStatus status = noErr;
 	char deviceName[1024];
-	UInt32 size = sizeof(deviceName);
 	memset(deviceName, 0, sizeof(deviceName));
+	UInt32 size = sizeof(deviceName);
+	Boolean input = (isInput ? TRUE : FALSE);
 	std::string result;
 
-	status = AudioDeviceGetProperty(id, 0, (isInput ? TRUE : FALSE), kAudioDevicePropertyDeviceName, &size, deviceName);
+	status = AudioDeviceGetProperty(id, 0, input, kAudioDevicePropertyDeviceName, &size, deviceName);
 	if (status) {
 		LOG_ERROR("Can't get device property: kAudioDevicePropertyDeviceName");
 		return result;
 	}
 
-	result = deviceName;
+	status = AudioDeviceGetPropertyInfo(id, 0, input, kAudioDevicePropertyStreamConfiguration, &size, NULL);
+	if (status) {
+		LOG_ERROR("Can't get device property info: kAudioDevicePropertyStreamConfiguration");
+		return result;
+	}
 
+	AudioBufferList list;
+	size = sizeof(list);
+	status = AudioDeviceGetProperty(id, 0, input, kAudioDevicePropertyStreamConfiguration, &size, &list);
+	if (status) {
+		LOG_INFO("Can't get device property: kAudioDevicePropertyStreamConfiguration."
+			" The device has no " + (isInput ? std::string("input") : std::string("output")) + " device.");
+		return result;
+	}
+
+	for (unsigned i = 0; i < list.mNumberBuffers; ++i) {
+		if (list.mBuffers[i].mNumberChannels > 0) {
+			result = deviceName;
+			break;
+		}
+	}
+		
 	return result;
 }
 

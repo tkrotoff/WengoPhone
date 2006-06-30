@@ -42,8 +42,10 @@ public:
 	 * Gets an audio device name.
 	 *
 	 * @param id the AudioDeviceID to get the name of
-	 * @param isInput true if we want the name of the input part of the device, false
-	 *        if we want the output part
+	 * @param isInput true if we want the name of the input part of the device,
+	 * false if we want the output part.
+	 * @return the name of the device or String::null if there is no device
+	 * in desired channel (input or output)
 	 */
 	static std::string audioDeviceName(AudioDeviceID id, bool isInput);
 
