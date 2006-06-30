@@ -367,6 +367,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 
 		_wengoAccountIsValid = true;
 		_wengoAccountInitializationFinished = true;
+		_wengoAccountIsValidCondition.notify_all();
 
 		if (_wengoAccountMustConnectAfterInit) {
 			_wengoAccountMustConnectAfterInit = false;
@@ -497,14 +498,16 @@ void UserProfile::computeName() {
 }
 
 bool UserProfile::isWengoAccountValid() {
+	Mutex::ScopedLock lock(_wengoAccountIsValidMutex);
+
 	bool result = false;
 
 	if (!hasWengoAccount()) {
 		result = true;
 	} else {
 		// Waiting for end of Wengo initialization
-		while (!_wengoAccountInitializationFinished) {
-			Thread::msleep(100);
+		if (!_wengoAccountInitializationFinished) {
+			_wengoAccountIsValidCondition.wait(lock);
 		}
 
 		result = _wengoAccountIsValid;

@@ -33,6 +33,7 @@
 #include <model/presence/PresenceHandler.h>
 #include <model/webservices/callforward/WsCallForward.h>
 
+#include <thread/Condition.h>
 #include <util/Event.h>
 #include <util/Trackable.h>
 
@@ -521,6 +522,10 @@ private:
 	bool _wengoAccountInitializationFinished;
 
 	bool _wengoAccountIsValid;
+
+	Condition _wengoAccountIsValidCondition;
+
+	Mutex _wengoAccountIsValidMutex;
 
 	/**
 	 * True if the UserProfile must connect after intialization of the
