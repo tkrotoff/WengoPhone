@@ -22,9 +22,11 @@
 
 #include <presentation/PPhoneCall.h>
 
-#include <util/NonCopyable.h>
+#include <sipwrapper/EnumTone.h>
 
 #include <pixertool/pixertool.h>
+
+#include <util/NonCopyable.h>
 
 #include <map>
 
@@ -34,13 +36,6 @@ class XPCOMPhoneCall : public PPhoneCall {
 public:
 
 	XPCOMPhoneCall(CPhoneCall & cPhoneCall);
-
-	void close() { }
-
-	void phoneCallStateChangedEvent(PhoneCallState state, int lineId, int callId,
-				const std::string & sipAddress, const std::string & userName, const std::string & displayName);
-
-	void videoFrameReceived(piximage* remoteVideoFrame, piximage* localVideoFrame) { }
 
 	void updatePresentation() { }
 
@@ -52,7 +47,13 @@ public:
 
 	bool canPickUp() const;
 
+	void playTone(EnumTone::Tone tone);
+
 private:
+
+	void phoneCallStateChangedEvent(EnumPhoneCallState::PhoneCallState state);
+
+	void videoFrameReceived(piximage * remoteVideoFrame, piximage * localVideoFrame) { }
 
 	void updatePresentationThreadSafe() { }
 

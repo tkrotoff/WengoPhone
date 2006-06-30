@@ -30,7 +30,7 @@ SipAccount::SipAccount() {
 	_autoLogin = false;
 
 	_lastNetworkDiscoveryState = NetworkDiscoveryStateUnknown;
-	_lastLoginState = LoginStateUnknown;
+	_lastLoginState = EnumSipLoginState::SipLoginStateUnknown;
 }
 
 SipAccount::SipAccount(const SipAccount & sipAccount) {
@@ -65,9 +65,9 @@ void SipAccount::setConnected(bool connected) {
 	if (_isConnected != connected) {
 		_isConnected = connected;
 		if (_isConnected) {
-			loginStateChangedEvent(*this, LoginStateConnected);
+			loginStateChangedEvent(*this, EnumSipLoginState::SipLoginStateConnected);
 		} else {
-			loginStateChangedEvent(*this, LoginStateDisconnected);
+			loginStateChangedEvent(*this, EnumSipLoginState::SipLoginStateDisconnected);
 		}
 	}
 }

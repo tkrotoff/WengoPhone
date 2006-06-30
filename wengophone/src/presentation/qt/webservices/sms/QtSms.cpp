@@ -93,23 +93,23 @@ void QtSms::sendButtonClicked() {
 	_cSms.sendSMS(phoneNumber, sms);
 }
 
-void QtSms::smsStatusEventHandler(WsSms & sender, int smsId, WsSms::SmsStatus status) {
+void QtSms::smsStatusEventHandler(WsSms & sender, int smsId, EnumSmsState::SmsState state) {
 	typedef PostEvent0<void ()> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSms::smsStatusEventHandlerThreadSafe, this, status));
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSms::smsStatusEventHandlerThreadSafe, this, state));
 	postEvent(event);
 }
 
-void QtSms::smsStatusEventHandlerThreadSafe(WsSms::SmsStatus status) {
+void QtSms::smsStatusEventHandlerThreadSafe(EnumSmsState::SmsState state) {
 	QString smsStatus = String::null;
-	switch (status) {
-	case WsSms::SmsStatusError:
+	switch (state) {
+	case EnumSmsState::SmsStateError:
 		smsStatus = tr("Your SMS has not been sent");
 		break;
-	case WsSms::SmsStatusOk:
+	case EnumSmsState::SmsStateOk:
 		smsStatus = tr("Your SMS has been sent");
 		break;
 	default:
-		LOG_FATAL("unknown SmsStatus=" + String::fromNumber(status));
+		LOG_FATAL("unknown SmsStatus=" + String::fromNumber(state));
 	}
 
 	_ui->sendButton->setEnabled(true);

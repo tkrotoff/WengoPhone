@@ -66,7 +66,7 @@ void CContactList::contactAddedEventHandler(ContactList & sender, Contact & cont
 }
 
 void CContactList::contactRemovedEventHandler(ContactList & sender, Contact & contact) {
-		_pContactList->contactRemovedEvent(contact.getUUID());
+	_pContactList->contactRemovedEvent(contact.getUUID());
 }
 
 void CContactList::contactMovedEventHandler(ContactList & sender, ContactGroup & dstContactGroup,

@@ -17,8 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SIPACCOUNT_H
-#define SIPACCOUNT_H
+#ifndef OWSIPACCOUNT_H
+#define OWSIPACCOUNT_H
+
+#include "EnumSipLoginState.h"
 
 #include <util/Event.h>
 #include <util/Interface.h>
@@ -37,33 +39,13 @@
 class SipAccount : Interface {
 public:
 
-	enum LoginState {
-		/** Initial login state. */
-		LoginStateUnknown,
-
-		/** This SipAccount is ready to login. */
-		LoginStateReady,
-
-		/** Registration has been successful. */
-		LoginStateConnected,
-
-		/** This SipAccount has been disconnected. */
-		LoginStateDisconnected,
-
-		/** Login/Password is incorrect. */
-		LoginStatePasswordError,
-
-		/** A network error occured. */
-		LoginStateNetworkError
-	};
-
 	/**
 	 * Emitted when the account tried to register.
 	 *
 	 * @param sender this class
-	 * @param loginState the LoginState
+	 * @param state the SIP account login state
 	 */
-	Event< void (SipAccount & sender, LoginState loginState) > loginStateChangedEvent;
+	Event< void (SipAccount & sender, EnumSipLoginState::SipLoginState state) > loginStateChangedEvent;
 
 	enum NetworkDiscoveryState {
 		/** Initial NetworkDiscoveryState. */
@@ -224,17 +206,25 @@ public:
 	void setConnected(bool connected);
 
 	enum SipAccountType {
+		/** Basic SIP account. */
 		SipAccountTypeBasic,
+
+		/** Wengo SIP account. */
 		SipAccountTypeWengo
 	};
 
+	/**
+	 * Gets the type of SIP account for this SipAccount.
+	 *
+	 * @return SIP account type
+	 */
 	virtual SipAccountType getType() const = 0;
 
 	NetworkDiscoveryState getLastNetworkDiscoveryState() const {
 		return _lastNetworkDiscoveryState;
 	}
 
-	LoginState getLastLoginState() const {
+	EnumSipLoginState::SipLoginState getLastLoginState() const {
 		return _lastLoginState;
 	}
 
@@ -303,7 +293,7 @@ protected:
 	NetworkDiscoveryState _lastNetworkDiscoveryState;
 
 	/** Used to remember the last LoginState. */
-	LoginState _lastLoginState;
+	EnumSipLoginState::SipLoginState _lastLoginState;
 };
 
-#endif	//SIPACCOUNT_H
+#endif	//OWSIPACCOUNT_H

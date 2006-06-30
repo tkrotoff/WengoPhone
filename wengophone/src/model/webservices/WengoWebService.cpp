@@ -93,7 +93,7 @@ int WengoWebService::call(WengoWebService * caller) {
 		data += "&login=" + login + "&password=" + password;
 	}
 
-	if(!_parameters.empty()) {
+	if (!_parameters.empty()) {
 		_parameters = data + "&" + _parameters;
 	} else {
 		_parameters = data;

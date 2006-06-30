@@ -24,7 +24,10 @@
 
 #include <sipwrapper/EnumPhoneCallState.h>
 #include <sipwrapper/EnumPhoneLineState.h>
-#include <sipwrapper/EnumPresenceState.h>
+#include <imwrapper/EnumPresenceState.h>
+
+#include <model/account/EnumSipLoginState.h>
+#include <model/webservices/sms/EnumSmsState.h>
 
 #include <string>
 
@@ -36,20 +39,6 @@
 class Listener : Interface {
 public:
 
-	enum LoginState {
-		/** Connected to the Wengo platform, login is OK. */
-		LoginOk,
-
-		/** login/password is incorrect. */
-		LoginPasswordError,
-
-		/** A network error occured. */
-		LoginNetworkError,
-
-		/** No Wengo account has been set. */
-		LoginNoAccount
-	};
-
 	/**
 	 * Login procedure is done, event with the procedure result.
 	 *
@@ -57,7 +46,7 @@ public:
 	 * @param login Wengo login used
 	 * @param password Wengo password used
 	 */
-	virtual void wengoLoginStateChangedEvent(LoginState state, const std::string & login, const std::string & password) = 0;
+	virtual void wengoLoginStateChangedEvent(EnumSipLoginState::SipLoginState state, const std::string & login, const std::string & password) = 0;
 
 	/**
 	 * The state of the phone line has changed.
@@ -108,26 +97,12 @@ public:
 				void * param) = 0;
 
 	/**
-	 * Logger message received from WengoPhone.
-	 *
-	 * @param message message from the WengoPhone logging system
-	 */
-	virtual void loggerMessageAddedEvent(const std::string & message) = 0;
-
-	enum SmsStatus {
-		/** The SMS was not sent. */
-		SmsStatusError,
-
-		/** The SMS was sent. */
-		SmsStatusOk
-	};
-
-	/**
 	 * Callback to check if the SMS was received or not.
 	 *
-	 * @param status SMS status (ok or error)
+	 * @param smsId SMS id
+	 * @param state SMS state (ok or error)
 	 */
-	virtual void smsStatusEvent(SmsStatus status)/* = 0*/ { }
+	virtual void smsStatusEvent(int smsId, EnumSmsState::SmsState state) = 0;
 
 	/**
 	 * A login/password is needed for the HTTP proxy.
@@ -136,7 +111,7 @@ public:
 	 * @param port HTTP proxy server port detected
 	 * @see Command::setHttpProxySettings()
 	 */
-	virtual void httpProxySettingsNeededEvent(const std::string & hostname, unsigned port)/* = 0*/ { }
+	//virtual void httpProxySettingsNeededEvent(const std::string & hostname, unsigned port)/* = 0*/ { }
 };
 
 #endif	//OWLISTENER_H

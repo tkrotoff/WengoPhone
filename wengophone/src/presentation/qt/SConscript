@@ -14,9 +14,6 @@ libs = [
 	'owidle',
 ]
 
-if WengoCCMSVC():
-	libs.append('owmemorydump')
-
 lib_path = []
 
 include_path = []
@@ -288,17 +285,14 @@ if WengoOSWindows() and WengoCCMSVC():
 if WengoGetConsoleArgument('sipxwrapper'):
 	defines['SIPXWRAPPER'] = 1
 	libs += ['sipxwrapper']
-
 elif WengoGetConsoleArgument('phapiwrapper'):
 	defines['PHAPIWRAPPER'] = 1
 	libs += ['phapiwrapper']
-
 elif WengoGetConsoleArgument('multiimwrapper'):
 	defines['MULTIIMWRAPPER'] = 1
 	libs += [
 		'multiimwrapper',
 	]
-
 else:
 	libs += ['nullsipwrapper']
 

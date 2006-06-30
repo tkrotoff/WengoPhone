@@ -24,7 +24,7 @@
 
 #include <control/profile/CUserProfile.h>
 
-#include <model/account/SipAccount.h>
+#include <model/account/wengo/WengoAccount.h>
 #include <model/config/Config.h>
 #include <model/config/ConfigManager.h>
 #include <model/contactlist/ContactProfile.h>
@@ -39,8 +39,6 @@
 #include <WengoPhoneBuildId.h>
 
 #include <QtGui>
-#include <QMessageBox>
-#include <QMetaType>
 
 QtUserProfile::QtUserProfile(CUserProfile & cUserProfile, QtWengoPhone & qtWengoPhone)
 	: QObjectThreadSafe(NULL),
@@ -77,13 +75,13 @@ void QtUserProfile::updatePresentationThreadSafe() {
 }
 
 void QtUserProfile::loginStateChangedEventHandler(SipAccount & sender,
-	SipAccount::LoginState state) {
-	loginStateChangedEventHandlerSignal(&sender, (int)state);
+	EnumSipLoginState::SipLoginState state) {
+	loginStateChangedEventHandlerSignal(&sender, (int) state);
 }
 
 void QtUserProfile::networkDiscoveryStateChangedEventHandler(SipAccount & sender,
 	SipAccount::NetworkDiscoveryState state) {
-	networkDiscoveryStateChangedEventHandlerSignal(&sender, (int)state);
+	networkDiscoveryStateChangedEventHandlerSignal(&sender, (int) state);
 }
 
 void QtUserProfile::authorizationRequestEventHandler(PresenceHandler & sender,
@@ -94,22 +92,22 @@ void QtUserProfile::authorizationRequestEventHandler(PresenceHandler & sender,
 void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
 	int iState) {
 
-	SipAccount::LoginState state = (SipAccount::LoginState) iState;
+	EnumSipLoginState::SipLoginState state = (EnumSipLoginState::SipLoginState) iState;
 
 #ifdef OS_WINDOWS
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 #endif
 
 	switch (state) {
-	case SipAccount::LoginStateReady:
+	case EnumSipLoginState::SipLoginStateReady:
 		//setBrowserUrlToAccount();
 		break;
 
-	case SipAccount::LoginStateConnected:
+	case EnumSipLoginState::SipLoginStateConnected:
 		setBrowserUrlToAccount();
 		break;
 
-	case SipAccount::LoginStateDisconnected:
+	case EnumSipLoginState::SipLoginStateDisconnected:
 #ifdef OS_WINDOWS
 		if (config.getIEActiveX() && (sender->getType() == SipAccount::SipAccountTypeWengo)) {
 			_qtWengoPhone.getQtBrowser()->setUrl(qApp->applicationDirPath().toStdString() +
@@ -118,10 +116,10 @@ void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
 #endif
 		break;
 
-	case SipAccount::LoginStatePasswordError:
+	case EnumSipLoginState::SipLoginStatePasswordError:
 		break;
 
-	case SipAccount::LoginStateNetworkError:
+	case EnumSipLoginState::SipLoginStateNetworkError:
 		break;
 
 	default:

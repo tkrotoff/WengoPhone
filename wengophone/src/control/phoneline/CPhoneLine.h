@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CPHONELINE_H
-#define CPHONELINE_H
+#ifndef OWCPHONELINE_H
+#define OWCPHONELINE_H
 
 #include <sipwrapper/EnumPhoneLineState.h>
 #include <util/Trackable.h>
@@ -73,4 +73,4 @@ private:
 	CPhoneCallMap _cPhoneCallMap;
 };
 
-#endif	//CPHONELINE_H
+#endif	//OWCPHONELINE_H

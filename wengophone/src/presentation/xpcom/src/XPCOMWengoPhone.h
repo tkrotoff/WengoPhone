@@ -32,19 +32,15 @@ public:
 
 	static CWengoPhone & getCWengoPhone();
 
-	void addPhoneLine(PPhoneLine * pPhoneLine);
+	void updatePresentation() { }
 
-	void wengoLoginStateChangedEvent(WengoPhone::LoginState state, const std::string & login, const std::string & password);
-
-	void updatePresentation();
+	void showHistory() { }
 
 private:
 
-	void addPhoneLineThreadSafe(PPhoneLine * pPhoneLine);
+	void updatePresentationThreadSafe() { }
 
-	void updatePresentationThreadSafe();
-
-	void initThreadSafe();
+	void initThreadSafe() { }
 
 	static CWengoPhone * _cWengoPhone;
 };

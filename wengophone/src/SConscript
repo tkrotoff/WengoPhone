@@ -24,6 +24,9 @@ libs = [
 	'netlib',
 	'qt4',
 ]
+if WengoCCMSVC():
+	libs.append('owmemorydump')
+
 lib_path = []
 include_path = ['.']
 defines = {}

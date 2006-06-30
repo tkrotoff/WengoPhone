@@ -37,7 +37,6 @@ class PWengoPhone : public Presentation {
 public:
 
 	virtual void showHistory() = 0;
-
 };
 
 #endif	//PWENGOPHONE_H

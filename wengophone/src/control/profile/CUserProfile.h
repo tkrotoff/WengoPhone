@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CUSERPROFILE_H
-#define CUSERPROFILE_H
+#ifndef OWCUSERPROFILE_H
+#define OWCUSERPROFILE_H
 
 #include <control/chat/CChatHandler.h>
 #include <control/contactlist/CContactList.h>
@@ -163,7 +163,7 @@ private:
 	 * @see UserProfile::loginStateChangedEvent
 	 */
 	void loginStateChangedEventHandler(SipAccount & sender,
-		SipAccount::LoginState state);
+		EnumSipLoginState::SipLoginState state);
 
 	/**
 	 * @see UserProfile::networkDiscoveryStateChangedEvent
@@ -259,4 +259,4 @@ private:
 	Thread & _modelThread;
 };
 
-#endif	//CUSERPROFILE_H
+#endif	//OWCUSERPROFILE_H

@@ -36,36 +36,11 @@ int XPCOMPhoneLine::makeCall(const std::string & phoneNumber) {
 	return _cPhoneLine.makeCall(phoneNumber);
 }
 
-void XPCOMPhoneLine::phoneLineStateChangedEvent(PhoneLineState state, int lineId) {
-	ListenerList & listenerList = ListenerList::getInstance();
+void XPCOMPhoneLine::phoneLineStateChangedEvent(EnumPhoneLineState::PhoneLineState state) {
+	/*ListenerList & listenerList = ListenerList::getInstance();
 	for (unsigned i = 0; i < listenerList.size(); i++) {
 		Listener * listener = listenerList[i];
 
-		switch (state) {
-		case LineProxyError:
-			listener->phoneLineStateChangedEvent(Listener::LineProxyError, lineId, NULL);
-			break;
-
-		case LineServerError:
-			listener->phoneLineStateChangedEvent(Listener::LineServerError, lineId, NULL);
-			break;
-
-		case LineTimeout:
-			listener->phoneLineStateChangedEvent(Listener::LineTimeout, lineId, NULL);
-			break;
-
-		case LineOk:
-			XPCOMIMHandler::getInstance().connected();
-			listener->phoneLineStateChangedEvent(Listener::LineOk, lineId, NULL);
-			break;
-
-		case LineClosed:
-			XPCOMIMHandler::getInstance().connected();
-			listener->phoneLineStateChangedEvent(Listener::LineClosed, lineId, NULL);
-			break;
-
-		default:
-			LOG_FATAL("unknown phone line state=" + EnumPhoneLineState::toString(state));
-		}
-	}
+		listener->phoneLineStateChangedEvent(state, lineId, NULL);
+	}*/
 }

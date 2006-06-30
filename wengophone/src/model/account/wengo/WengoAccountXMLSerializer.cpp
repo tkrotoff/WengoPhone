@@ -27,8 +27,8 @@
 
 #include <tinyxml.h>
 
-WengoAccountXMLSerializer::WengoAccountXMLSerializer(WengoAccount & wengoAccount) 
-: _wengoAccount(wengoAccount) {
+WengoAccountXMLSerializer::WengoAccountXMLSerializer(WengoAccount & wengoAccount)
+	: _wengoAccount(wengoAccount) {
 }
 
 std::string WengoAccountXMLSerializer::serialize() {

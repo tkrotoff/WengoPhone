@@ -44,6 +44,8 @@ public:
 		return _cWengoPhone;
 	}
 
+	void checkForUpdate();
+
 private:
 
 	void updateWengoPhoneEventHandler(WsSoftUpdate & sender,

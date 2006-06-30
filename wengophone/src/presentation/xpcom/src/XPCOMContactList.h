@@ -28,17 +28,30 @@ class PContactGroup;
 class XPCOMContactList : public PContactList {
 public:
 
-	XPCOMContactList(CContactList & cContactList);
+	XPCOMContactList(CContactList & cContactList) { }
 
-	void addContactGroup(PContactGroup * pContactGroup);
+	void contactGroupAddedEvent(std::string contactGroupId) { }
 
-	void updatePresentation();
+	void contactGroupRemovedEvent(std::string contactGroupId) { }
+
+	void contactGroupRenamedEvent(std::string contactGroupId) { }
+
+	void contactAddedEvent(std::string contactId) { }
+
+	void contactRemovedEvent(std::string contactId) { }
+
+	void contactMovedEvent(std::string dstContactGroupId,
+		std::string srcContactGroupId, std::string contactId) { }
+
+	void contactChangedEvent(std::string contactId) { }
+
+	void updatePresentation() { }
 
 private:
 
-	void updatePresentationThreadSafe();
+	void updatePresentationThreadSafe() { }
 
-	void initThreadSafe();
+	void initThreadSafe() { }
 };
 
 #endif	//OWXPCOMCONTACTLIST_H

@@ -45,7 +45,7 @@ class WengoAccount : public SipAccount, public WengoWebService {
 public:
 
 	/** Empty WengoAccount. */
-	static WengoAccount empty; 
+	static WengoAccount empty;
 
 	WengoAccount();
 
@@ -75,7 +75,7 @@ private:
 
 	void copy(const WengoAccount & wengoAccount);
 
-	SipAccount::LoginState discoverNetwork();
+	EnumSipLoginState::SipLoginState discoverNetwork();
 
 	bool discoverForSSO();
 

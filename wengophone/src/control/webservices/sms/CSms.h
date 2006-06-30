@@ -41,7 +41,7 @@ public:
 	/**
 	 * @see Sms::smsStatusEvent
 	 */
-	Event <void (WsSms & sender, int smsId, WsSms::SmsStatus status)> smsStatusEvent;
+	Event <void (WsSms & sender, int smsId, EnumSmsState::SmsState state)> smsStatusEvent;
 
 	CSms(WsSms & sms, CWengoPhone & cWengoPhone);
 

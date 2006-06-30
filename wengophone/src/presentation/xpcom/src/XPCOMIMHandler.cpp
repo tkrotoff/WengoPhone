@@ -84,34 +84,7 @@ void XPCOMIMHandler::presenceStateChangedEventHandler(IMPresence & sender, EnumP
 	for (unsigned i = 0; i < listenerList.size(); i++) {
 		Listener * listener = listenerList[i];
 
-		switch(state) {
-		case EnumPresenceState::PresenceStateOnline:
-			listener->presenceStateChangedEvent(Listener::PresenceOnline, note, sipAddress, userName, displayName, NULL);
-			break;
-
-		case EnumPresenceState::PresenceStateOffline:
-			listener->presenceStateChangedEvent(Listener::PresenceOffline, note, sipAddress, userName, displayName, NULL);
-			break;
-
-		case EnumPresenceState::PresenceStateAway:
-			listener->presenceStateChangedEvent(Listener::PresenceAway, note, sipAddress, userName, displayName, NULL);
-			break;
-
-		case EnumPresenceState::PresenceStateDoNotDisturb:
-			listener->presenceStateChangedEvent(Listener::PresenceDoNotDisturb, note, sipAddress, userName, displayName, NULL);
-			break;
-
-		case EnumPresenceState::PresenceStateUserDefined:
-			listener->presenceStateChangedEvent(Listener::PresenceUserDefined, note, sipAddress, userName, displayName, NULL);
-			break;
-
-		case EnumPresenceState::PresenceStateUnknown:
-			listener->presenceStateChangedEvent(Listener::PresenceUnknown, note, sipAddress, userName, displayName, NULL);
-			break;
-
-		default:
-			LOG_FATAL("unknown presence state=" + EnumPresenceState::toString(state));
-		}
+		listener->presenceStateChangedEvent(state, note, sipAddress, userName, displayName, NULL);
 	}
 }
 
@@ -124,40 +97,13 @@ void XPCOMIMHandler::subscribeToPresenceOf(const std::string & sipAddress) {
 	_presence->subscribeToPresenceOf(sipAddress);
 }
 
-void XPCOMIMHandler::publishMyPresence(Listener::PresenceState state, const std::string & note) {
+void XPCOMIMHandler::publishMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {
 	if (!_presence) {
 		LOG_DEBUG("cannot call publishMyPresence(): _presence is NULL");
 		return;
 	}
 
-	switch(state) {
-	case Listener::PresenceOnline:
-		_presence->changeMyPresence(EnumPresenceState::PresenceStateOnline);
-		break;
-
-	case Listener::PresenceOffline:
-		_presence->changeMyPresence(EnumPresenceState::PresenceStateOffline);
-		break;
-
-	case Listener::PresenceAway:
-		_presence->changeMyPresence(EnumPresenceState::PresenceStateAway);
-		break;
-
-	case Listener::PresenceDoNotDisturb:
-		_presence->changeMyPresence(EnumPresenceState::PresenceStateDoNotDisturb);
-		break;
-
-	case Listener::PresenceUserDefined:
-		_presence->changeMyPresence(EnumPresenceState::PresenceStateUserDefined, note);
-		break;
-
-	case Listener::PresenceUnknown:
-		_presence->changeMyPresence(EnumPresenceState::PresenceStateUnknown, note);
-		break;
-
-	default:
-		LOG_FATAL("unknown presence state=" + EnumPresenceState::toString(state));
-	}
+	_presence->changeMyPresence(state);
 }
 
 int XPCOMIMHandler::sendChatMessage(const std::string & sipAddress, const std::string & message) {

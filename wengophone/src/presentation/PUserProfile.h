@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PUSERPROFILE_H
-#define PUSERPROFILE_H
+#ifndef OWPUSERPROFILE_H
+#define OWPUSERPROFILE_H
 
 #include "Presentation.h"
 
@@ -30,7 +30,8 @@ class IMContact;
 class PresenceHandler;
 
 /**
- * Presentation layer of UserProfile
+ * Presentation layer of UserProfile.
+ *
  * @ingroup presentation
  * @author Philippe Bernery
  */
@@ -41,7 +42,7 @@ public:
 	 * @see UserProfile::loginStateChangedEvent
 	 */
 	virtual void loginStateChangedEventHandler(SipAccount & sender,
-		SipAccount::LoginState state) = 0;
+		EnumSipLoginState::SipLoginState state) = 0;
 
 	/**
 	 * @see UserProfile::networkDiscoveryStateChangedEvent
@@ -56,4 +57,4 @@ public:
 		const IMContact & imContact, const std::string & message) = 0;
 };
 
-#endif	//PUSERPROFILE_H
+#endif	//OWPUSERPROFILE_H

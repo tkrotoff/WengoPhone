@@ -146,7 +146,7 @@ CUserProfile::~CUserProfile() {
 }
 
 void CUserProfile::loginStateChangedEventHandler(SipAccount & sender,
-	SipAccount::LoginState state) {
+	EnumSipLoginState::SipLoginState state) {
 	_pUserProfile->loginStateChangedEventHandler(sender, state);
 }
 

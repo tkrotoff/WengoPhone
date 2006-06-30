@@ -74,7 +74,7 @@ public:
 	 *
 	 * @see SipAccount::loginStateChangedEvent
 	 */
-	Event<void (SipAccount & sender, SipAccount::LoginState state)> loginStateChangedEvent;
+	Event<void (SipAccount & sender, EnumSipLoginState::SipLoginState state)> loginStateChangedEvent;
 
 	/**
 	 * Network event while trying to connect a SipAccount.
@@ -225,9 +225,9 @@ public:
 	/** Gets the ChatHandler reference. */
 	ChatHandler & getChatHandler() { return _chatHandler; }
 
-	/** 
-	 * Gets the IMAccountHandler reference. Here we can safely derefence 
-	 * the pointer as the IMAccountHandler is constructed in 
+	/**
+	 * Gets the IMAccountHandler reference. Here we can safely derefence
+	 * the pointer as the IMAccountHandler is constructed in
 	 * the UserProfile constructor.
 	 */
 	IMAccountHandler & getIMAccountHandler() { return *_imAccountHandler; }
@@ -238,7 +238,7 @@ public:
 	/** Gets the ContactList reference. */
 	ContactList & getContactList() { return _contactList; }
 
-	/** 
+	/**
 	 * Gets the History reference. Here we can safely derefence the pointer
 	 * as the History is constructed in the UserProfile constructor.
 	 */

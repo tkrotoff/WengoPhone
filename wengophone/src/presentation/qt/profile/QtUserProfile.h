@@ -48,7 +48,7 @@ public:
 	virtual ~QtUserProfile();
 
 	void loginStateChangedEventHandler(SipAccount & sender,
-		SipAccount::LoginState state);
+		EnumSipLoginState::SipLoginState state);
 
 	void networkDiscoveryStateChangedEventHandler(SipAccount & sender,
 		SipAccount::NetworkDiscoveryState state);

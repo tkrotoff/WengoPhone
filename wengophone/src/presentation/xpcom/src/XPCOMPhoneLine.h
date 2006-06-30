@@ -34,7 +34,7 @@ public:
 
 	XPCOMPhoneLine(CPhoneLine & cPhoneLine);
 
-	void phoneLineStateChangedEvent(PhoneLineState state, int lineId);
+	void phoneLineStateChangedEvent(EnumPhoneLineState::PhoneLineState state);
 
 	void updatePresentation() { }
 
@@ -46,7 +46,7 @@ private:
 
 	void initThreadSafe() { }
 
-	void phoneLineStateChangedEventThreadSafe(PhoneLineState state, int lineId) { }
+	void phoneLineStateChangedEventThreadSafe(EnumPhoneLineState::PhoneLineState state) { }
 
 	CPhoneLine & _cPhoneLine;
 };

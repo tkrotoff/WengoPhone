@@ -17,25 +17,26 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWXPCOMCONTACT_H
-#define OWXPCOMCONTACT_H
+#ifndef OWENUMSMSSTATE_H
+#define OWENUMSMSSTATE_H
 
-#include <presentation/PContact.h>
+#include <util/NonCopyable.h>
 
-class CContact;
-
-class XPCOMContact : public PContact {
+/**
+ * SMS states.
+ *
+ * @author Mathieu Stute
+ */
+class EnumSmsState : public NonCopyable {
 public:
 
-	XPCOMContact(CContact & cContact);
+	enum SmsState {
+		/** The SMS was not sent. */
+		SmsStateError,
 
-	void updatePresentation();
-
-private:
-
-	void updatePresentationThreadSafe();
-
-	void initThreadSafe();
+		/** The SMS was sent. */
+		SmsStateOk
+	};
 };
 
-#endif	//OWXPCOMCONTACT_H
+#endif //OWENUMSMSSTATE_H

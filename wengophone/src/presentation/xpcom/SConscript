@@ -21,13 +21,11 @@ if WengoOSMacOSX():
 headers = []
 sources = [
 	'src/Command.cpp',
-	'src/XPCOMContact.cpp',
-	'src/XPCOMContactGroup.cpp',
-	'src/XPCOMContactList.cpp',
 	'src/XPCOMPhoneCall.cpp',
 	'src/XPCOMPhoneLine.cpp',
 	'src/XPCOMWengoPhone.cpp',
 	'src/XPCOMIMHandler.cpp',
+	'src/XPCOMSms.cpp',
 ]
 
 if WengoGetConsoleArgument('sipxwrapper'):
@@ -36,6 +34,11 @@ if WengoGetConsoleArgument('sipxwrapper'):
 elif WengoGetConsoleArgument('phapiwrapper'):
 	defines['PHAPIWRAPPER'] = 1
 	libs += ['phapiwrapper']
+elif WengoGetConsoleArgument('multiimwrapper'):
+	defines['MULTIIMWRAPPER'] = 1
+	libs += [
+		'multiimwrapper',
+	]
 else:
 	libs += ['nullsipwrapper']
 

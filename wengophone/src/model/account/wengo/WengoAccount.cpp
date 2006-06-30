@@ -40,7 +40,9 @@ using namespace std;
 WengoAccount WengoAccount::empty;
 
 WengoAccount::WengoAccount()
-	: SipAccount(), WengoWebService(this) {
+	: SipAccount(),
+	WengoWebService(this) {
+
 	_ssoRequestOk = false;
 	_wengoLoginOk = false;
 	_ssoWithSSL = false;
@@ -56,7 +58,9 @@ WengoAccount::WengoAccount()
 }
 
 WengoAccount::WengoAccount(const std::string & login, const std::string & password, bool autoLogin)
-	: SipAccount(), WengoWebService(this) {
+	: SipAccount(),
+	WengoWebService(this) {
+
 	_wengoLogin = login;
 	_wengoPassword = password;
 	_autoLogin = autoLogin;
@@ -127,7 +131,7 @@ void WengoAccount::initTimeoutEventHandler() {
 
 		_discoveringNetwork = true;
 		_lastLoginState = discoverNetwork();
-		if (_lastLoginState != LoginStateNetworkError) {
+		if (_lastLoginState != EnumSipLoginState::SipLoginStateNetworkError) {
 			_initTimer.stop();
 			loginStateChangedEvent(*this, _lastLoginState);
 			networkDiscoveryStateChangedEvent(*this, _lastNetworkDiscoveryState);
@@ -143,7 +147,7 @@ void WengoAccount::initTimeoutEventHandler() {
 }
 
 void WengoAccount::initLastTimeoutEventHandler() {
-	loginStateChangedEvent(*this, LoginStateNetworkError);
+	loginStateChangedEvent(*this, EnumSipLoginState::SipLoginStateNetworkError);
 	networkDiscoveryStateChangedEvent(*this, _lastNetworkDiscoveryState);
 }
 
@@ -155,7 +159,7 @@ void WengoAccount::connectionIsDownEventHandler(NetworkObserver & sender) {
 	_initTimer.stop();
 }
 
-SipAccount::LoginState WengoAccount::discoverNetwork() {
+EnumSipLoginState::SipLoginState WengoAccount::discoverNetwork() {
 	static const unsigned LOGIN_TIMEOUT = 10000;
 	static const unsigned LIMIT_RETRY = 5;
 
@@ -165,7 +169,7 @@ SipAccount::LoginState WengoAccount::discoverNetwork() {
 	if (!discoverForSSO()) {
 		LOG_DEBUG("error while discovering network for SSO");
 		_lastNetworkDiscoveryState = NetworkDiscoveryStateHTTPError;
-		return LoginStateNetworkError;
+		return EnumSipLoginState::SipLoginStateNetworkError;
 	}
 
 	_ssoTimerFinished = false;
@@ -177,21 +181,21 @@ SipAccount::LoginState WengoAccount::discoverNetwork() {
 	if (!_ssoRequestOk) {
 		LOG_DEBUG("error while doing SSO request");
 		_lastNetworkDiscoveryState = NetworkDiscoveryStateError;
-		return LoginStateNetworkError;
+		return EnumSipLoginState::SipLoginStateNetworkError;
 	} else if (_ssoRequestOk && !_wengoLoginOk) {
 		LOG_DEBUG("SSO request Ok but login/password are invalid");
-		return LoginStatePasswordError;
+		return EnumSipLoginState::SipLoginStatePasswordError;
 	}
 
 	if (!discoverForSIP()) {
 		LOG_DEBUG("error while discovering network for SIP");
 		_lastNetworkDiscoveryState = NetworkDiscoveryStateSIPError;
-		return LoginStateNetworkError;
+		return EnumSipLoginState::SipLoginStateNetworkError;
 	}
 
 	LOG_DEBUG("initialization Ok");
 	_lastNetworkDiscoveryState = NetworkDiscoveryStateOk;
-	return LoginStateReady;
+	return EnumSipLoginState::SipLoginStateReady;
 }
 
 bool WengoAccount::discoverForSSO() {

@@ -22,8 +22,6 @@
 
 #include <presentation/PWengoPhone.h>
 
-#include <model/account/SipAccount.h>
-#include <model/account/wengo/WengoAccount.h>
 #include <model/network/NetworkProxyDiscovery.h>
 
 #include <imwrapper/EnumPresenceState.h>
@@ -104,7 +102,7 @@ public:
 	 * Thread-safe, can be called from another thread.
 	 */
 	void removeHistory();
-	
+
 	void setPhoneCall(QtContactCallListWidget * qtContactCallListWidget);
 
 	void setSms(QtSms * qtSms);
@@ -275,18 +273,11 @@ private:
 
 	void updatePresentationThreadSafe();
 
-	void loginStateChangedEventHandler(SipAccount & sipAccount, SipAccount::LoginState state);
-
-	void loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state);
-
 	void proxyNeedsAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy);
-
-	void wrongProxyAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy);
 
 	void proxyNeedsAuthenticationEventHandlerThreadSafe(NetworkProxy networkProxy);
 
-	void authorizationRequestEventHandlerThreadSafe(PresenceHandler & sender, const IMContact & imContact,
-		const std::string & message);
+	void wrongProxyAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy);
 
 	void urlClickedEventHandler(std::string url);
 

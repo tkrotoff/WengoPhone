@@ -307,9 +307,9 @@ void QtWengoPhone::initThreadSafe() {
 	connect(this, SIGNAL(connectionStatusEventHandlerSignal(int, int, QString)),
 		SLOT(connectionStatusEventHandlerSlot(int, int, QString)));
 
-	connect(this, SIGNAL(removeHistorySignal()), 
+	connect(this, SIGNAL(removeHistorySignal()),
 		SLOT(removeHistorySlot()), Qt::QueuedConnection);
-		
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
@@ -645,9 +645,6 @@ void QtWengoPhone::updatePresentationThreadSafe() {
 		_ui->actionCreateConferenceCall->setEnabled(hasWengoAccount);
 		_ui->actionSearchWengoUsers->setEnabled(hasWengoAccount);
 	}
-}
-
-void QtWengoPhone::loginStateChangedEventHandlerThreadSafe(SipAccount & sender, SipAccount::LoginState state) {
 }
 
 void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFile) {
@@ -1127,7 +1124,7 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 		_ui->profileBar);
 	connect(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )),
 		_qtSystray, SLOT(setSystrayIcon(QVariant )), Qt::QueuedConnection);
-	connect(_qtLanguage, SIGNAL(translationChangedSignal()), 
+	connect(_qtLanguage, SIGNAL(translationChangedSignal()),
 		_qtProfileBar, SLOT(slotTranslationChanged()));
 
 	//Add the profile bar

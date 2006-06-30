@@ -20,6 +20,8 @@
 #ifndef OWWSSMS_H
 #define OWWSSMS_H
 
+#include "EnumSmsState.h"
+
 #include <model/webservices/WengoWebService.h>
 
 class UserProfile;
@@ -35,14 +37,6 @@ public:
 	/** Maximum SMS length = 150 characters. */
 	static const unsigned SMS_MAX_LENGTH = 150;
 
-	enum SmsStatus {
-		/** The SMS was not sent. */
-		SmsStatusError,
-
-		/** The SMS was sent. */
-		SmsStatusOk
-	};
-
 	/**
 	 * Default constructor.
 	 *
@@ -57,9 +51,9 @@ public:
 	 *
 	 * @param sender this class
 	 * @param smsId SMS unique identifier
-	 * @param status SMS status (ok or error)
+	 * @param state SMS status (ok or error)
 	 */
-	Event<void (WsSms & sender, int smsId, SmsStatus status)> smsStatusEvent;
+	Event<void (WsSms & sender, int smsId, EnumSmsState::SmsState state)> smsStatusEvent;
 
 	/**
 	 * Sends a SMS given a destination phone number and a message.

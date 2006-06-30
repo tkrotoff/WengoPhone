@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CWENGOPHONE_H
-#define CWENGOPHONE_H
+#ifndef OWCWENGOPHONE_H
+#define OWCWENGOPHONE_H
 
 #include <control/profile/CUserProfileHandler.h>
 
@@ -31,13 +31,8 @@
 
 #include <string>
 
-class Contact;
 class CUserProfileHandler;
-class IMAccount;
-class PresenceHandler;
 class PWengoPhone;
-class UserProfile;
-class WengoAccount;
 class WsSubscribe;
 
 /**
@@ -128,4 +123,4 @@ private:
 	CUserProfileHandler * _cUserProfileHandler;
 };
 
-#endif	//CWENGOPHONE_H
+#endif	//OWCWENGOPHONE_H

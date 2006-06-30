@@ -23,17 +23,11 @@
 #include "XPCOMWengoPhone.h"
 #include "XPCOMPhoneLine.h"
 #include "XPCOMPhoneCall.h"
-#include "XPCOMContact.h"
-#include "XPCOMContactGroup.h"
-#include "XPCOMContactList.h"
 
 #include <presentation/PFactory.h>
 #include <control/CWengoPhone.h>
 #include <control/phoneline/CPhoneLine.h>
 #include <control/phonecall/CPhoneCall.h>
-#include <control/contactlist/CContactList.h>
-#include <control/contactlist/CContact.h>
-#include <control/contactlist/CContactGroup.h>
 
 PFactory * PFactory::_factory = 0;
 
@@ -46,13 +40,17 @@ public:
 	~XPCOMFactory() {
 	}
 
-	int exec() {
-		return true;
-	}
-
 	PWengoPhone * createPresentationWengoPhone(CWengoPhone & cWengoPhone) {
 		static XPCOMWengoPhone xpcomWengoPhone(&cWengoPhone);
 		return &xpcomWengoPhone;
+	}
+
+	PUserProfile * createPresentationUserProfile(CUserProfile & cUserProfile) {
+		return NULL;
+	}
+
+	PUserProfileHandler * createPresentationUserProfileHandler(CUserProfileHandler & cUserProfileHandler) {
+		return NULL;
 	}
 
 	PPhoneLine * createPresentationPhoneLine(CPhoneLine & cPhoneLine) {
@@ -66,35 +64,43 @@ public:
 	}
 
 	PContactList * createPresentationContactList(CContactList & cContactList) {
-		static XPCOMContactList xpcomContactList(cContactList);
-		return &xpcomContactList;
-	}
-
-	PContactGroup * createPresentationContactGroup(CContactGroup & cContactGroup) {
-		XPCOMContactGroup * xpcomContactGroup = new XPCOMContactGroup(cContactGroup);
-		return xpcomContactGroup;
-	}
-
-	PContact * createPresentationContact(CContact & cContact) {
-		XPCOMContact * xpcomContact = new XPCOMContact(cContact);
-		return xpcomContact;
+		return NULL;
 	}
 
 	PWenboxPlugin * createPresentationWenboxPlugin(CWenboxPlugin & cWenboxPlugin) {
 		return NULL;
 	}
 
-	PConnectHandler * createPresentationConnectHandler(CConnectHandler & cConnectHandler) {
-		return NULL;
-	}
-
-	PPresenceHandler * createPresentationPresenceHandler(CPresenceHandler & cPresenceHandler) {
-		return NULL;
-	}
-
 	PChatHandler * createPresentationChatHandler(CChatHandler & cChatHandler) {
 		return NULL;
 	}
+
+	PSms * createPresentationSms(CSms & cSms) {
+	}
+
+	PSoftUpdate * createPresentationSoftUpdate(CSoftUpdate & cSoftUpdate) {
+		return NULL;
+	}
+
+	PHistory * createPresentationHistory(CHistory & cHistory) {
+		return NULL;
+	}
+
+	PSubscribe * createPresentationSubscribe(CSubscribe & cSubscribe) {
+		return NULL;
+	}
+
+	PWsDirectory * createPresentationWsDirectory(CWsDirectory & cWsDirectory) {
+		return NULL;
+	}
+
+	int exec() {
+		return true;
+	}
+
+	void processEvents() { }
+
+	void reset() { }
 
 private:
 };

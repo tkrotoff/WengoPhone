@@ -25,6 +25,7 @@
 #include "XPCOMPhoneCall.h"
 #include "XPCOMFactory.h"
 #include "XPCOMIMHandler.h"
+#include "XPCOMSms.h"
 #include "ListenerList.h"
 
 #include <control/CWengoPhone.h>
@@ -34,9 +35,10 @@
 #include <model/config/Config.h>
 
 #include <imwrapper/IMWrapperFactory.h>
+#include <sipwrapper/SipWrapperFactory.h>
+#include <WengoPhoneBuildId.h>
 
-#include <sound/SoundMixer.h>
-#include <sound/AudioDevice.h>
+#include <sound/VolumeControl.h>
 
 #if defined(CC_MSVC)
 	#include <memorydump/MemoryDump.h>
@@ -47,15 +49,19 @@
 #elif defined(SIPXWRAPPER)
 	#include <SipXFactory.h>
 	#include <NullIMFactory.h>
+#elif defined (MULTIIMWRAPPER)
+	#include <PhApiFactory.h>
+	#include <multiim/MultiIMFactory.h>
+	#include <GaimIMFactory.h>
 #else
 	#include <NullSipFactory.h>
 	#include <NullIMFactory.h>
 #endif
 
-Command::Command(const std::string & configFilesPath) {
+Command::Command(const std::string & configFilesPath, const std::string & configPath) {
 
 #ifdef CC_MSVC
-	_memoryDump = new MemoryDump("WengoPhoneNG");
+	new MemoryDump("WengoPhoneNG", String::fromUnsignedLongLong(WengoPhoneBuildId::REVISION).c_str());
 #endif
 
 	//Graphical interface implementation
@@ -74,6 +80,11 @@ Command::Command(const std::string & configFilesPath) {
 	PhApiFactory * phApiFactory = new PhApiFactory();
 	sipFactory = phApiFactory;
 	imFactory = phApiFactory;
+#elif defined(MULTIIMWRAPPER)
+	PhApiFactory * phApiFactory = new PhApiFactory();
+	GaimIMFactory * gaimIMFactory = new GaimIMFactory();
+	sipFactory = phApiFactory;
+	imFactory = new MultiIMFactory(*phApiFactory, *gaimIMFactory);
 #else
 	sipFactory = new NullSipFactory();
 	imFactory = new NullIMFactory();
@@ -81,30 +92,19 @@ Command::Command(const std::string & configFilesPath) {
 	SipWrapperFactory::setFactory(sipFactory);
 	IMWrapperFactory::setFactory(imFactory);
 
-	WengoPhone::CONFIG_FILES_PATH = configFilesPath;
+	/*WengoPhone::CONFIG_FILES_PATH = configFilesPath;
 
 	//Codec plugin path (phspeexplugin and phamrplugin)
 	ConfigManager::getInstance().getCurrentConfig().set(Config::CODEC_PLUGIN_PATH,
-		WengoPhone::getConfigFilesPath() + "../extensions/{debaffee-a972-4d8a-b426-8029170f2a89}/libraries/");
+		WengoPhone::getConfigFilesPath() + "../extensions/{debaffee-a972-4d8a-b426-8029170f2a89}/libraries/");*/
 
 	_wengoPhone = new WengoPhone();
 	_cWengoPhone = new CWengoPhone(*_wengoPhone);
-
-	try {
-		_soundMixer = new SoundMixer(AudioDevice::getDefaultRecordDevice(),
-					AudioDevice::getDefaultPlaybackDevice());
-	} catch(Exception &) {
-		_soundMixer = NULL;
-	}
 }
 
 Command::~Command() {
 	delete _wengoPhone;
 	delete _cWengoPhone;
-	delete _soundMixer;
-#ifdef CC_MSVC
-	delete _memoryDump;
-#endif
 }
 
 void Command::start() {
@@ -115,8 +115,8 @@ void Command::start() {
 void Command::setHttpProxySettings(const std::string & hostname, unsigned port,
 				const std::string & login, const std::string & password) {
 
-	WengoPhone::HTTP_PROXY_HOSTNAME = hostname;
-	WengoPhone::HTTP_PROXY_PORT = port;
+	/*WengoPhone::HTTP_PROXY_HOSTNAME = hostname;
+	WengoPhone::HTTP_PROXY_PORT = port;*/
 }
 
 void Command::terminate() {
@@ -124,17 +124,17 @@ void Command::terminate() {
 }
 
 void Command::addWengoAccount(const std::string & login, const std::string & password, bool autoLogin) {
-	_cWengoPhone->addWengoAccount(login, password, autoLogin);
+	//_cWengoPhone->addWengoAccount(login, password, autoLogin);
 }
 
 void Command::addListener(Listener * listener) {
 	ListenerList & listenerList = ListenerList::getInstance();
-	listenerList.add(listener);
+	listenerList += listener;
 }
 
 bool Command::removeListener(Listener * listener) {
 	ListenerList & listenerList = ListenerList::getInstance();
-	return listenerList.remove(listener);
+	return listenerList -= listener;
 }
 
 void Command::removeAllListeners() {
@@ -195,7 +195,7 @@ void Command::subscribeToPresenceOf(const std::string & contactId) {
 	imHandler.subscribeToPresenceOf(contactId);
 }
 
-void Command::publishMyPresence(Listener::PresenceState state, const std::string & note) {
+void Command::publishMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {
 	XPCOMIMHandler & imHandler = XPCOMIMHandler::getInstance();
 	imHandler.publishMyPresence(state, note);
 }
@@ -206,27 +206,48 @@ int Command::sendChatMessage(const std::string & sipAddress, const std::string &
 }
 
 void Command::setInputVolume(int volume) {
-	if (_soundMixer) {
-		_soundMixer->setInputVolume(volume);
-	}
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	VolumeControl volumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
+	volumeControl.setLevel(volume);
 }
 
 void Command::setOutputVolume(int volume) {
-	if (_soundMixer) {
-		_soundMixer->setOutputVolume(volume);
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	VolumeControl volumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
+	volumeControl.setLevel(volume);
+}
+
+int Command::getInputVolume() const {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	try {
+		VolumeControl volumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
+		return volumeControl.getLevel();
+	} catch (Exception & e) {
+		return -1;
 	}
 }
 
-int Command::getInputVolume() {
-	if (_soundMixer) {
-		return _soundMixer->getInputVolume();
+int Command::getOutputVolume() const {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	try {
+		VolumeControl volumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
+		return volumeControl.getLevel();
+	} catch (Exception & e) {
+		return -1;
+	}
+}
+
+int Command::sendSMS(const std::string & phoneNumber, const std::string & message) {
+	if (XPCOMSms::sms) {
+		return XPCOMSms::sms->sendSMS(phoneNumber, message);
 	}
 	return -1;
 }
 
-int Command::getOutputVolume() {
-	if (_soundMixer) {
-		return _soundMixer->getOutputVolume();
+void Command::playTone(int callId, EnumTone::Tone tone) {
+	PhoneCallMap & phoneCallMap = PhoneCallMap::getInstance();
+	XPCOMPhoneCall * phoneCall = phoneCallMap[callId];
+	if (phoneCall) {
+		phoneCall->playTone(tone);
 	}
-	return -1;
 }

@@ -29,7 +29,7 @@ CSoftUpdate::CSoftUpdate(WsSoftUpdate & wsSoftUpdate, CWengoPhone & cWengoPhone)
 
 	_pSoftUpdate = PFactory::getFactory().createPresentationSoftUpdate(*this);
 
-	_wsSoftUpdate.updateWengoPhoneEvent += 
+	_wsSoftUpdate.updateWengoPhoneEvent +=
 		boost::bind(&CSoftUpdate::updateWengoPhoneEventHandler, this, _1, _2, _3, _4, _5);
 }
 
@@ -44,4 +44,8 @@ void CSoftUpdate::updateWengoPhoneEventHandler(WsSoftUpdate & sender,
 				unsigned fileSize) {
 
 	_pSoftUpdate->updateWengoPhoneEvent(downloadUrl, buildId, version, fileSize);
+}
+
+void CSoftUpdate::checkForUpdate() {
+	_wsSoftUpdate.checkForUpdate();
 }

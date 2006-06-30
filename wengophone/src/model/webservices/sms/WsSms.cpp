@@ -70,7 +70,7 @@ void WsSms::answerReceived(const std::string & answer, int requestId) {
 		if (tmp.contains(STATUS_OK) && !tmp.contains(STATUS_UNAUTHORIZED)) {
 
 			//SMS sent
-			smsStatusEvent(*this, requestId, SmsStatusOk);
+			smsStatusEvent(*this, requestId, EnumSmsState::SmsStateOk);
 
 			//History: retrieve the HistoryMemento & update its state to Ok
 			_userProfile.getHistory().updateSMSState(requestId, HistoryMemento::OutgoingSmsOk);
@@ -80,7 +80,7 @@ void WsSms::answerReceived(const std::string & answer, int requestId) {
 	}
 
 	//SMS unsent
-	smsStatusEvent(*this, requestId, SmsStatusError);
+	smsStatusEvent(*this, requestId, EnumSmsState::SmsStateError);
 
 	//History: retrieve the HistoryMemento & update its state to Nok
 	_userProfile.getHistory().updateSMSState(requestId, HistoryMemento::OutgoingSmsNok);

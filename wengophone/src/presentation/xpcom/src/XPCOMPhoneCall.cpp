@@ -30,53 +30,17 @@ XPCOMPhoneCall::XPCOMPhoneCall(CPhoneCall & cPhoneCall)
 	: _cPhoneCall(cPhoneCall) {
 }
 
-void XPCOMPhoneCall::phoneCallStateChangedEvent(PhoneCallState state, int lineId, int callId,
-				const std::string & sipAddress, const std::string & userName, const std::string & displayName) {
+void XPCOMPhoneCall::phoneCallStateChangedEvent(EnumPhoneCallState::PhoneCallState state) {
 
-	PhoneCallMap & phoneCallMap = PhoneCallMap::getInstance();
+	/*PhoneCallMap & phoneCallMap = PhoneCallMap::getInstance();
 	phoneCallMap[callId] = this;
 
 	ListenerList & listenerList = ListenerList::getInstance();
 	for (unsigned i = 0; i < listenerList.size(); i++) {
 		Listener * listener = listenerList[i];
 
-		switch (state) {
-		case CallIncoming:
-			listener->phoneCallStateChangedEvent(Listener::CallIncoming, lineId, callId, sipAddress, userName, displayName, NULL);
-			break;
-
-		case CallTalking:
-			listener->phoneCallStateChangedEvent(Listener::CallOk, lineId, callId, sipAddress, userName, displayName, NULL);
-			break;
-
-		case CallError:
-			listener->phoneCallStateChangedEvent(Listener::CallError, lineId, callId, sipAddress, userName, displayName, NULL);
-			break;
-
-		case CallResumeOk:
-			listener->phoneCallStateChangedEvent(Listener::CallResumeOk, lineId, callId, sipAddress, userName, displayName, NULL);
-			break;
-
-		case CallDialing:
-			listener->phoneCallStateChangedEvent(Listener::CallDialing, lineId, callId, sipAddress, userName, displayName, NULL);
-			break;
-
-		case CallRinging:
-			listener->phoneCallStateChangedEvent(Listener::CallRinging, lineId, callId, sipAddress, userName, displayName, NULL);
-			break;
-
-		case CallClosed:
-			listener->phoneCallStateChangedEvent(Listener::CallClosed, lineId, callId, sipAddress, userName, displayName, NULL);
-			break;
-
-		case CallHoldOk:
-			listener->phoneCallStateChangedEvent(Listener::CallHoldOk, lineId, callId, sipAddress, userName, displayName, NULL);
-			break;
-
-		default:
-			LOG_FATAL("unknown event=" + EnumPhoneCallState::toString(state));
-		}
-	}
+		listener->phoneCallStateChangedEvent(state, lineId, callId, sipAddress, userName, displayName, NULL);
+	}*/
 }
 
 void XPCOMPhoneCall::hangUp() {
@@ -93,4 +57,8 @@ void XPCOMPhoneCall::pickUp() {
 
 bool XPCOMPhoneCall::canPickUp() const {
 	return _cPhoneCall.canPickUp();
+}
+
+void XPCOMPhoneCall::playTone(EnumTone::Tone tone) {
+	_cPhoneCall.playTone(tone);
 }

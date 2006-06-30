@@ -17,32 +17,47 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PPHONECALL_H
-#define PPHONECALL_H
+#ifndef OWENUMSIPLOGINSTATE_H
+#define OWENUMSIPLOGINSTATE_H
 
-#include "Presentation.h"
-
-#include <sipwrapper/EnumPhoneCallState.h>
-
-#include <util/Event.h>
-
-#include <pixertool/pixertool.h>
-
-#include <string>
-
-class WebcamVideoFrame;
+#include <util/NonCopyable.h>
 
 /**
+ * SIP account login state.
  *
- * @ingroup presentation
+ * @ingroup model
  * @author Tanguy Krotoff
+ * @author Philippe Bernery
  */
-class PPhoneCall : public Presentation {
+class EnumSipLoginState : NonCopyable {
 public:
 
-	Event<void (EnumPhoneCallState::PhoneCallState state)> stateChangedEvent;
+	enum SipLoginState {
+		/** Initial login state. */
+		SipLoginStateUnknown,
 
-	Event<void (piximage * remoteVideoFrame, piximage * localVideoFrame)> videoFrameReceivedEvent;
+		/** This SIP account is ready to login. */
+		SipLoginStateReady,
+
+		/** Registration has been successful, login ok connection done. */
+		SipLoginStateConnected,
+
+		/** This SIP account has been disconnected. */
+		SipLoginStateDisconnected,
+
+		/** Login/Password incorrect. */
+		SipLoginStatePasswordError,
+
+		/** A network error occured. */
+		SipLoginStateNetworkError
+	};
+
+	/**
+	 * Converts a state into a string.
+	 *
+	 * @return the string
+	 */
+	//static std::string toString(SipLoginState state);
 };
 
-#endif	//PPHONECALL_H
+#endif	//OWENUMSIPLOGINSTATE_H

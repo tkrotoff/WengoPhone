@@ -256,7 +256,7 @@ void UserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 
 		//Empty login or password
 		if (_wengoAccount->getWengoLogin().empty() || _wengoAccount->getWengoPassword().empty()) {
-			loginStateChangedEvent(*_wengoAccount, SipAccount::LoginStatePasswordError);
+			loginStateChangedEvent(*_wengoAccount, EnumSipLoginState::SipLoginStatePasswordError);
 			return;
 		}
 
@@ -357,9 +357,9 @@ void UserProfile::wengoAccountInit() {
 	}
 }
 
-void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState state) {
+void UserProfile::loginStateChangedEventHandler(SipAccount & sender, EnumSipLoginState::SipLoginState state) {
 	switch (state) {
-	case SipAccount::LoginStateReady: {
+	case EnumSipLoginState::SipLoginStateReady: {
 
 		IMAccount imAccount(_wengoAccount->getIdentity(),
 			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolWengo);
@@ -380,9 +380,8 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 			//Creates SoftUpdate, SoftUpdate needs a WengoAccount
 			_wsSoftUpdate = new WsSoftUpdate(_wengoAccount);
 			wsSoftUpdateCreatedEvent(*this, *_wsSoftUpdate);
-			_wsSoftUpdate->checkForUpdate();
 			LOG_DEBUG("SoftUpdate created");
-	
+
 			_wsInfo = new WsInfo(_wengoAccount);
 			wsInfoCreatedEvent(*this, *_wsInfo);
 			LOG_DEBUG("WsInfo created");
@@ -404,24 +403,27 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, SipAccount:
 			//FIXME: currently there is only one sip account and we are sure
 			//this is a Wengo account.
 			connectSipAccounts();
+
+			//Check for WengoPhone update
+			_wsSoftUpdate->checkForUpdate();
 		}
 
 		break;
 	}
 
-	case SipAccount::LoginStatePasswordError: {
+	case EnumSipLoginState::SipLoginStatePasswordError: {
 		_wengoAccountIsValid = false;
 		_wengoAccountInitializationFinished = true;
 
 		break;
 	}
 
-	case SipAccount::LoginStateConnected: {
+	case EnumSipLoginState::SipLoginStateConnected: {
 		_wengoAccountConnected = true;
 		break;
 	}
 
-	case SipAccount::LoginStateDisconnected: {
+	case EnumSipLoginState::SipLoginStateDisconnected: {
 		_wengoAccountConnected = false;
 		break;
 	}

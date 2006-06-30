@@ -40,12 +40,7 @@ CWengoPhone & XPCOMWengoPhone::getCWengoPhone() {
 	return *_cWengoPhone;
 }
 
-void XPCOMWengoPhone::initThreadSafe() { }
-
-void XPCOMWengoPhone::addPhoneLine(PPhoneLine * pPhoneLine) { }
-
-void XPCOMWengoPhone::addPhoneLineThreadSafe(PPhoneLine * pPhoneLine) { }
-
+/*
 void XPCOMWengoPhone::wengoLoginStateChangedEvent(WengoPhone::LoginState state, const std::string & login, const std::string & password) {
 	ListenerList & listenerList = ListenerList::getInstance();
 	for (int i = 0; i < listenerList.size(); i++) {
@@ -74,7 +69,4 @@ void XPCOMWengoPhone::wengoLoginStateChangedEvent(WengoPhone::LoginState state, 
 		};
 	}
 }
-
-void XPCOMWengoPhone::updatePresentation() { }
-
-void XPCOMWengoPhone::updatePresentationThreadSafe() { }
+*/

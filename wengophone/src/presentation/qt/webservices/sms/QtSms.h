@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTSMS_H
-#define QTSMS_H
+#ifndef OWQTSMS_H
+#define OWQTSMS_H
 
 #include <presentation/PSms.h>
 
@@ -72,9 +72,9 @@ private:
 
 	void updatePresentationThreadSafe();
 
-	void smsStatusEventHandler(WsSms & sender, int smsId, WsSms::SmsStatus status);
+	void smsStatusEventHandler(WsSms & sender, int smsId, EnumSmsState::SmsState state);
 
-	void smsStatusEventHandlerThreadSafe(WsSms::SmsStatus status);
+	void smsStatusEventHandlerThreadSafe(EnumSmsState::SmsState state);
 
 	QString getCompleteMessage();
 
@@ -89,4 +89,4 @@ private:
 	QDialog * _smsWindow;
 };
 
-#endif	//QTSMS_H
+#endif	//OWQTSMS_H

@@ -22,12 +22,12 @@
 
 #include "Listener.h"
 
+#include <sipwrapper/EnumTone.h>
+
 #include <cutil/dllexport.h>
 
 class WengoPhone;
 class CWengoPhone;
-class SoundMixer;
-class MemoryDump;
 
 #ifdef XPCOM_DLL
 	#ifdef BUILD_XPCOM_DLL
@@ -47,7 +47,15 @@ class MemoryDump;
 class API Command {
 public:
 
-	Command(const std::string & configFilesPath);
+	/**
+	 * Command constructor.
+	 *
+	 * @param applicationPath where the application lies
+	 *        (ex: C:/Program Files/WengoPhone/)
+	 * @param configPath where the application configuration files lies
+	 *        (ex: C:/Documents and Settings/WengoPhone/)
+	 */
+	Command(const std::string & configFilesPath, const std::string & configPath);
 
 	~Command();
 
@@ -128,7 +136,7 @@ public:
 	int makeCall(const std::string & phoneNumber, int lineId);
 
 	/**
-	 * Hang up.
+	 * Hang up (raccrocher).
 	 *
 	 * Can correspond to reject or close call depending on PhoneCallState.
 	 *
@@ -145,7 +153,7 @@ public:
 	bool canHangUp(int callId) const;
 
 	/**
-	 * Pick up.
+	 * Pick up (decrocher).
 	 *
 	 * Corresponds to accept call.
 	 *
@@ -186,7 +194,7 @@ public:
 	 *
 	 * @param note personnalized status string ("I'm under the shower"), used only with PresenceUserDefined
 	 */
-	void publishMyPresence(Listener::PresenceState state, const std::string & note);
+	void publishMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
 
 	/** @} */
 
@@ -226,14 +234,7 @@ public:
 	 *
 	 * @return the input volume (0 to 100), -1 if an error occured
 	 */
-	int getInputVolume();
-
-	/**
-	 * Gets the output (master or wave out) volume.
-	 *
-	 * @return the output volume (0 to 100), -1 if an error occured
-	 */
-	int getOutputVolume();
+	int getInputVolume() const;
 
 	/**
 	 * Sets the master or wave out volume.
@@ -242,6 +243,13 @@ public:
 	 */
 	void setOutputVolume(int volume);
 
+	/**
+	 * Gets the output (master or wave out) volume.
+	 *
+	 * @return the output volume (0 to 100), -1 if an error occured
+	 */
+	int getOutputVolume() const;
+
 	/** @} */
 
 	/**
@@ -249,19 +257,39 @@ public:
 	 * @{
 	 */
 
-	void sendSMS(const std::string & phoneNumber, const std::string & message) { }
+	/**
+	 * Sends a SMS to a given phone number.
+	 *
+	 * Warning!
+	 * phoneNumber and message should be UTF-8 encoded.
+	 * Using Qt4, sendSMS() should be called as followed:
+	 * <pre>
+	 * sendSMS(phoneComboBox->currentText().toUtf8().constData(),
+	 *         smsText->toPlainText().toUtf8().constData());
+	 * </pre>
+	 * For Qt4, check QString::toUtf8() and QByteArray::constData()
+	 *
+	 * @param phoneNumber phone number that will receive the SMS
+	 * @param message SMS message
+	 * @return SMS id
+	 */
+	int sendSMS(const std::string & phoneNumber, const std::string & message);
 
 	/** @} */
+
+	/**
+	 * Sends a DTMF to a given phone call.
+	 *
+	 * @param callId phone call id to send a DTMF
+	 * @param tone DTMF tone to send
+	 */
+	void playTone(int callId, EnumTone::Tone tone);
 
 private:
 
 	WengoPhone * _wengoPhone;
 
 	CWengoPhone * _cWengoPhone;
-
-	SoundMixer * _soundMixer;
-
-	MemoryDump * _memoryDump;
 };
 
 #endif	//OWCOMMAND_H

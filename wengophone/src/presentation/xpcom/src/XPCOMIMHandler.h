@@ -61,7 +61,7 @@ public:
 
 	void subscribeToPresenceOf(const std::string & sipAddress);
 
-	void publishMyPresence(Listener::PresenceState state, const std::string & note);
+	void publishMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
 
 	int sendChatMessage(const std::string & sipAddress, const std::string & message);
 
