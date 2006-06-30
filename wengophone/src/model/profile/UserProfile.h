@@ -412,7 +412,7 @@ private:
 	/**
 	 * Handle SipAccount::loginStateEvent.
 	 */
-	void loginStateChangedEventHandler(SipAccount & sender, SipAccount::LoginState loginState);
+	void loginStateChangedEventHandler(SipAccount & sender, EnumSipLoginState::SipLoginState state);
 
 	/**
 	 * Handle History::mementoUpdatedEvent & History::mementoAddedEvent
