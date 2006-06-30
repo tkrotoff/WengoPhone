@@ -21,6 +21,7 @@
 #define OWXPCOMFACTORY_H
 
 #include "XPCOMWengoPhone.h"
+#include "XPCOMUserProfile.h"
 #include "XPCOMPhoneLine.h"
 #include "XPCOMPhoneCall.h"
 #include "XPCOMSms.h"
@@ -47,7 +48,8 @@ public:
 	}
 
 	PUserProfile * createPresentationUserProfile(CUserProfile & cUserProfile) {
-		return NULL;
+		XPCOMUserProfile * xpcomUserProfile = new XPCOMUserProfile(cUserProfile);
+		return xpcomUserProfile;
 	}
 
 	PUserProfileHandler * createPresentationUserProfileHandler(CUserProfileHandler & cUserProfileHandler) {

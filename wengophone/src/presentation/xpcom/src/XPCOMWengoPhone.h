@@ -32,9 +32,9 @@ public:
 
 	static CWengoPhone & getCWengoPhone();
 
-	void updatePresentation() { }
-
 	void showHistory() { }
+
+	void updatePresentation() { }
 
 private:
 
