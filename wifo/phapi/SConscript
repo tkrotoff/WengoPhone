@@ -100,7 +100,6 @@ libs = [
 	'ilbc',
 	'stun',
 	'gsm',
-	'wtimer',
 	'owutil',
 ]
 
@@ -122,7 +121,6 @@ defines = {
 	'ENABLE_ILBC' : 1,
 	'OSIP_MT' : 1,
 	'ENABLE_TRACE' : 0,
-	'VIDEO_IOTHREAD_TIMERS' : 1,
 	'PH_VIDEO_USELOCK' : 1,
 #	'USE_SPXEC' : 1,
 }
@@ -234,7 +232,6 @@ if WengoOSLinux():
 
 if WengoOSWindows():
 	defines['T_MSVC'] = 1
-	defines['USE_WIN_TIMERS'] = 1
 
 	sources += [
 		'phmedia-winmm.c',

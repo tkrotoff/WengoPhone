@@ -35,7 +35,6 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <webcam/webcam.h>
-#include <wtimer.h>
 #include <avcodec.h>
 #include <pixertool/ffmpeg-pixertool.h>
 #include <pixertool/pixertool.h>
@@ -293,6 +292,8 @@ void ph_media_video_check_processing_buffers(phvstream_t *vstream, pixosi pix_so
 }
 
 void ph_media_video_free_processing_buffers(phvstream_t *vstream){
+		// NOTE: the 2 following in-place buffers are "static" and should
+		// be deleted by the client
 		//pix_free(vstream->frame_event.frame_local);
 		//pix_free(vstream->frame_event.frame_remote);
 		pix_free(vstream->image_ready_for_network);
@@ -318,7 +319,6 @@ void ph_media_video_free_processing_buffers(phvstream_t *vstream){
 
 #define LOCAL_YUV_FILE	"nowebcam.yuv"
 
-#if 1
 int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 {
   RtpSession *video_session;
@@ -595,280 +595,14 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 
   // start the engine !
   // 40 = 1000/25 = 25 frame per second
-  timer_init();
-
-  video_stream->t_impl = timer_impl_getfirst();
-  video_stream->v_timer = video_stream->t_impl->timer_create();
-  video_stream->t_impl->timer_set_delay(video_stream->v_timer, 40);
-  video_stream->t_impl->timer_set_callback(video_stream->v_timer,
-					   ph_video_io_timer);
-  video_stream->t_impl->timer_set_userdata(video_stream->v_timer,
-					   video_stream);
-  video_stream->t_impl->timer_start(video_stream->v_timer);
+	video_stream->ms.media_io_thread = osip_thread_create(20000,
+						ph_video_io_thread, video_stream);
 
   return 0;
   // end branch2
 }
 
 
-#else
-int ph_media_video_start(phcall_t *ca, int video_port, phFrameDisplayCbk frameDisplay)
-{
-	RtpSession *video_session;
-	RtpProfile *profile;
-	phvstream_t *video_stream;
-	phcodec_t *codec;
-	// vars the onewaycam frame server :
-	int fs_x, fs_y, yuv_local_len;
-	uint8_t *fs_buffer;
-	FILE *f_local;
-
-	printf("Starting video stream from port: %d to %s:%d\n",
-		video_port, ca->remote_sdp_video_ip, ca->remote_sdp_video_port);
-
-	// the function is cut into 2 branches :
-	//   - branch1: video stream is already open (RE-INVITE for example)
-	//   - branch2: video stream is not already open
-
-	// begin branch1
-	if (ca->ph_video_stream)
-	  {
-		video_stream = (phvstream_t*) ca->ph_video_stream;
-
-		if (video_stream->ms.remote_port == ca->remote_sdp_video_port)
-		{
-			if (!strcmp(video_stream->ms.remote_ip, ca->remote_sdp_video_ip))
-			{
-				return 0;
-			}
-		}
-
-		strcpy(video_stream->ms.remote_ip, ca->remote_sdp_video_ip);
-		video_stream->ms.remote_port = ca->remote_sdp_video_port;
-		rtp_session_reset(video_stream->ms.rtp_session);
-
- #if USE_HTTP_TUNNEL
-        if (video_stream->ms.tunRtp)
-            {
-                RtpTunnel *newTun, *old;
-
-                printf("Replacing video tunnel\n"),
-                newTun = rtptun_connect(video_stream->ms.remote_ip, video_stream->ms.remote_port);
-
-
-                if (!newTun)
-                {
-                    printf("Video tunnel replacement failed\n"),
-                    ph_media_video_stop(ca);
-
-                    return -PH_NORESOURCES;
-                }
-
-            	rtp_session_set_tunnels(video_stream->ms.rtp_session, newTun, NULL);
-
-                old = video_stream->ms.tunRtp;
-                video_stream->ms.tunRtp = newTun;
-
-                TUNNEL_CLOSE(old);
-                rtptun_free(old);
-            }
-        else
-#endif
-         rtp_session_set_remote_addr(video_stream->ms.rtp_session,
-				  video_stream->ms.remote_ip,
-				  video_stream->ms.remote_port);
-
-        return 0;
-
-    }
-	// end branch1
-
-	// begin branch2
-	profile = get_av_profile();
-
-	// we should be able to find a codec structure based on the negociated video payload
-	if (!ca->video_payload) {
-		return -1;
-	}
-	codec = ph_media_lookup_codec(ca->video_payload);
-	if (!codec) {
-		return -1;
-	}
-
-	// init phase : a stream structure is created and initialized
-	video_stream = (phvstream_t *)osip_malloc(sizeof(phvstream_t));
-	memset(video_stream, 0, sizeof(phvstream_t));
-
-	gettimeofday(&video_stream->stat_ts_decoded_over_5s, 0);
-	osip_list_init(&video_stream->rr_sent_q);
-	osip_list_init(&video_stream->webcam_frames_q);
-	osip_list_init(&video_stream->received_packets_q);
-
-	video_stream->ms.codec = codec;
-	video_stream->rtpCallback = &phmedia_video_rtpsend_callback;
-	video_stream->mtx = osip_mutex_init();
-
-	ph_media_video_alloc_processing_buffers(video_stream,
-		PIX_OSI_YUV420P,
-		PHMEDIA_VIDEO_FRAME_WIDTH,
-		PHMEDIA_VIDEO_FRAME_HEIGHT
-	);
-
-
-	if (codec->encoder_init) {
-		video_stream->ms.encoder_ctx = codec->encoder_init(video_stream);
-	}
-
-	if (codec->decoder_init) {
-		video_stream->ms.decoder_ctx = codec->decoder_init(video_stream);
-	}
-
-#ifdef PHAPI_VIDEO_LOCAL_HACK
-	strcpy(ca->remote_sdp_video_ip, "127.0.0.1");
-	ca->remote_sdp_video_port = video_port;
-	ph_media_use_tunnel = 0;
-#endif
-
-	video_session = rtp_session_new(RTP_SESSION_SENDRECV);
-
-#ifdef USE_HTTP_TUNNEL
-	if (ph_media_use_tunnel)
-	{
-		video_stream->ms.tunRtp = rtptun_connect(ca->remote_sdp_video_ip, ca->remote_sdp_video_port);
-		if (!video_stream->ms.tunRtp)
-		{
-			rtp_session_destroy(video_session);
-			return -PH_NORESOURCES;
-		}
-
-		rtp_session_set_tunnels(video_session, video_stream->ms.tunRtp, NULL);
-	}
-#endif
-
-	rtp_session_set_scheduling_mode(video_session, SCHEDULING_MODE);
-	rtp_session_set_blocking_mode(video_session, BLOCKING_MODE);
-
-	rtp_session_set_profile(video_session, profile);
-	rtp_session_set_jitter_compensation(video_session, 0);
-	rtp_session_set_max_rq_size(video_session, 1024);
-
-#ifdef USE_HTTP_TUNNEL
-	if (!video_stream->ms.tunRtp)
-	{
-		rtp_session_set_local_addr(video_session, "0.0.0.0", video_port);
-
-		rtp_session_set_remote_addr(video_session,
-				ca->remote_sdp_video_ip,
-				ca->remote_sdp_video_port);
-	}
-#endif
-	rtp_session_set_payload_type(video_session, ca->video_payload);
-
-	// HACK
-	// wt is always initialized because the webcam object holds the convertImage function...
-	video_stream->wt = webcam_get_instance();
-
-	// choixe of the frame server and init sequence
-	if (ca->user_mflags & PH_STREAM_VIDEO_TX) {
-		if (ph_media_video_initialize_webcam(video_stream)) {
-			video_stream->phmfs_webcam.state = 1;
-		} else {
-			video_stream->phmfs_onewaycam.state = 1; // init
-		}
-	} else {
-		video_stream->phmfs_onewaycam.state = 1; // init
-	}
-
-	// start sequence of the webcam frame server
-	if (video_stream->phmfs_webcam.state == 1)  {
-		webcam_add_callback(video_stream->wt, webcam_frame_callback, (void *)video_stream);
-		webcam_start_capture(video_stream->wt);
-		video_stream->phmfs_webcam.state = 2;
-
-	}
-
-	// start sequence of the virtual webcam frame server
-	if (video_stream->phmfs_onewaycam.state == 1) {
-
-		// note :	this "virtual" webcam may seem a little strange, but it facilitates NAT traversal right now
-		//			and makes it possible to have only the tx or rx having a cam
-
-		fs_buffer = (uint8_t*)av_malloc((176*144*3)/2);
-
-		for(fs_y=0;fs_y<144;fs_y++) {
-            for(fs_x=0;fs_x<176;fs_x++) {
-                fs_buffer[fs_y * 176 + fs_x] = 128;
-            }
-        }
-
-        for(fs_y=0;fs_y<144/2;fs_y++) {
-            for(fs_x=0;fs_x<176/2;fs_x++) {
-                fs_buffer[176*144 + fs_y * 176/2 + fs_x] = 255 * fs_x * 2 / 176;
-                fs_buffer[176*144 + (176*144/4) + fs_y * 176/2 + fs_x] = 255 * fs_y * 2 / 144;
-            }
-        }
-
-		video_stream->phmfs_onewaycam.buffer = fs_buffer;
-
-		video_stream->phmfs_onewaycam.state = 2; // start producing
-
-		yuv_local_len = avpicture_get_size(PIX_FMT_YUV420P, 176, 144);
-		memcpy(video_stream->phmfs_onewaycam.buffer, pic_yuv, yuv_local_len);
-
-	}
-
-	video_stream->ms.running = 1;
-	video_stream->frameDisplayCallback = frameDisplay;
-	video_stream->ms.rtp_session = video_session;
-	video_stream->ms.payload = ca->video_payload;
-	video_stream->ms.ca = ca;
-	video_stream->ms.codec = codec;
-	video_stream->mbCounter = 0;
-	video_stream->rxtstamp = 0;
-
-	strcpy(video_stream->ms.remote_ip, ca->remote_sdp_video_ip);
-	video_stream->ms.remote_port = ca->remote_sdp_video_port;
-
-/*
-   * If the user wants us to automatically adjust the bandwidth, then do it */
-
-  if (phcfg.video_config.video_line_configuration == PHAPI_VIDEO_LINE_AUTOMATIC) {
-
-	/* Place callbacks for RRs */
-	video_session->rtcp_rr_sent_cb = ph_video_rtcp_rr_sent;
-	video_session->rtcp_rr_received_cb = ph_video_rtcp_rr_received;
-
-	/* Place callbacks for SRs */
-	video_session->rtcp_sr_sent_cb = ph_video_rtcp_sr_sent;
-	video_session->rtcp_sr_received_cb = ph_video_rtcp_sr_received;
-
-	/* Start the Automatic BW control thread */
-	video_stream->media_bw_control_thread = osip_thread_create(20000,
-		ph_video_bwcontrol_thread, video_stream);
-  }
-
-	ph_video_bwcontrol_apply_user_params(video_stream);
-
-	ca->ph_video_stream = video_stream;
-
-	// start the engine !
-	// 40 = 1000/25 = 25 frame per second
-	timer_init();
-
-	video_stream->t_impl = timer_impl_getfirst();
-	video_stream->v_timer = video_stream->t_impl->timer_create();
-	video_stream->t_impl->timer_set_delay(video_stream->v_timer, 40);
-	video_stream->t_impl->timer_set_callback(video_stream->v_timer,
-			ph_video_io_timer);
-	video_stream->t_impl->timer_set_userdata(video_stream->v_timer,
-			video_stream);
-	video_stream->t_impl->timer_start(video_stream->v_timer);
-
-	return 0;
-	// end branch2
-}
-
-#endif
 /**
  * used to group the rtp slices falling between 2 seqnumbers and try to decode the resulting buffer.
  *
@@ -1135,15 +869,6 @@ void ph_video_handle_data(phvstream_t *stream) {
 }
 
 
-void ph_video_io_timer(void *userdata) {
-	phvstream_t *stream = (phvstream_t *) userdata;
-    if (!stream->ms.running) {
-        return;
-    }
-	ph_video_handle_data(stream);
-}
-
-
 /**
  * @brief Stops the video stream
  *
@@ -1173,10 +898,14 @@ void ph_msession_video_stop(struct ph_msession_s *s)
   msp->streamerData = 0;
   msp->flags &= ~PH_MSTREAM_FLAG_RUNNING;
 
-
-  stream->t_impl->timer_stop(stream->v_timer);
-  stream->t_impl->timer_destroy(stream->v_timer);
-
+  // if a thread was needed in the threading model, wait and destroy it
+  if (stream->ms.media_io_thread)
+  {
+	osip_thread_join(stream->ms.media_io_thread);
+	osip_free(stream->ms.media_io_thread);
+	stream->ms.media_io_thread = 0;
+  }
+    
   if (msp->videoconfig == PHAPI_VIDEO_LINE_AUTOMATIC) {
     osip_thread_join(stream->media_bw_control_thread);
   }
@@ -1219,3 +948,51 @@ void ph_msession_video_stop(struct ph_msession_s *s)
   osip_free(stream);
 }
 
+
+/**
+* @brief Video read thread
+*
+* This thread is responsible for reading frames from the rtp socket and
+* calling the appropriate function. Since we have no real blocking-read
+* in ortp, we also have to sleep() an appropriate ammount of time.
+*
+* @param p             The video stream (type phvstream_t)
+* @return              NULL when the thread is finished
+*
+*/
+void *
+ph_video_io_thread(void *p)
+{
+	phvstream_t *stream = (phvstream_t*)p;
+	struct timeval elapsed_time, sleeptime, start_time, end_time, loop_time;
+	struct timespec sleepns;
+
+	loop_time.tv_sec = 0;
+	loop_time.tv_usec = 40000;
+	
+	while (stream->ms.running) {
+
+		gettimeofday(&start_time, 0);
+
+		if (!stream->ms.running)
+			break;
+		
+		ph_video_handle_data(stream);
+		
+		gettimeofday(&end_time, 0);
+
+		ph_timeval_substract (&elapsed_time, &end_time, &start_time);
+		if (!ph_timeval_substract (&sleeptime, &loop_time, &elapsed_time))
+		{
+		
+			TIMEVAL_TO_TIMESPEC(&sleeptime, &sleepns);
+#ifdef WIN32
+			Sleep(sleepns.tv_sec * 1000 + sleepns.tv_nsec / 1000000);
+#else
+			nanosleep(&sleepns, 0);
+#endif
+		}
+	}
+	
+return NULL;
+}

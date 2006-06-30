@@ -200,6 +200,7 @@ int ph_msession_resume(struct ph_msession_s *s, int traffictype, const char *ade
 struct timeval;
 void ph_tvdiff(struct timeval *diff,  struct timeval *out,  struct timeval *in);
 void ph_tvsub( struct timeval *out,  struct timeval *in);
+int ph_timeval_substract (struct timeval *result, struct timeval *x, struct timeval *y);
 
 /* */
 #endif

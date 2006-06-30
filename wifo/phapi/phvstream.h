@@ -126,11 +126,7 @@ struct ph_video_stream
  
 	int sent_cnt;
 	int recv_cnt;
-
-	unsigned int  timerId;
-	struct timer_impl * t_impl;
-	struct timer *v_timer;
-                      
+                     
 	/**
 	 * local timestamp evaluation for the tx path (transmission)  based on the local origin (0).
 	 *
@@ -188,10 +184,6 @@ phm_videoframe_t *ph_media_video_new_video_frame(piximage *image);
 /** Free the video frame. */
 void ph_media_free_video_frame(phm_videoframe_t *ptr);
 
-
-#if defined(VIDEO_IOTHREAD_TIMERS)
-void ph_video_io_timer(void *userdata);
-#endif
 
 #endif
 
