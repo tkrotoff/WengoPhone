@@ -16,8 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef QTEMOTICONSMANAGER_H
-#define QTEMOTICONSMANAGER_H
+#ifndef OWQTEMOTICONSMANAGER_H
+#define OWQTEMOTICONSMANAGER_H
 
 #include <QtGui>
 #include <QtXml>
@@ -49,7 +49,7 @@ public:
 
 	int getEmoticonsCount(QString protocol);
 
-protected:
+private:
 
 	void readProtocol(QDomNode node);
 
@@ -64,4 +64,4 @@ protected:
 };
 
 
-#endif
+#endif //OWQTEMOTICONSMANAGER_H

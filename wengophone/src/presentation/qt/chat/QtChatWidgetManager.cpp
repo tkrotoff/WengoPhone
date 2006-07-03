@@ -17,10 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "chatwidgetmanager.h"
+#include "QtChatWidgetManager.h"
 
 
-ChatWidgetManager::ChatWidgetManager(QObject * parent, QTextEdit * target) : QObject (parent)
+QtChatWidgetManager::QtChatWidgetManager(QObject * parent, QTextEdit * target) : QObject (parent)
 {
 	_parent = parent;
 	_target = target;
@@ -29,24 +29,25 @@ ChatWidgetManager::ChatWidgetManager(QObject * parent, QTextEdit * target) : QOb
 	_target->viewport()->installEventFilter(this);
 }
 
-bool ChatWidgetManager::eventFilter(QObject *obj, QEvent *event)
+bool QtChatWidgetManager::eventFilter(QObject *obj, QEvent *event)
 {
-	if (event->type() == QEvent::KeyPress){
-		if (keyPress(obj,event))
+	if (event->type() == QEvent::KeyPress) {
+		if (keyPress(obj,event)) {
 			return true;
+		}
 	}
 	return QObject::eventFilter(obj, event);
 }
 
-bool ChatWidgetManager::keyPress(QObject *obj, QEvent *event)
+bool QtChatWidgetManager::keyPress(QObject *obj, QEvent *event)
 {
 	QKeyEvent * e = static_cast<QKeyEvent *>(event);
-	if (  (e->key() == Qt::Key_Enter) || (e->key() == Qt::Key_Return) ) {
+	if ((e->key() == Qt::Key_Enter) || (e->key() == Qt::Key_Return)) {
 		event->accept();
-		enterPressed();
+		enterPressed(e->modifiers());
 		return true;
 	}
-	if ( (e->key() == Qt::Key_Backspace) ) {
+	if ((e->key() == Qt::Key_Backspace)) {
 		event->accept();
 		deletePressed();
 		return true;

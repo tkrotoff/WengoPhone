@@ -20,40 +20,36 @@
 
 #include "QtChatTabWidget.h"
 
-QtChatTabWidget::QtChatTabWidget(QWidget * parent) : QTabWidget (parent){
-
+QtChatTabWidget::QtChatTabWidget(QWidget * parent) : QTabWidget (parent) {
 	_currentColor = Qt::black;
 	_timerId = startTimer(500);
 }
 
 
-void QtChatTabWidget::setBlinkingTab(int index){
+void QtChatTabWidget::setBlinkingTab(int index) {
 	_blinkingTabIndex.insert(index);
 }
 
-void QtChatTabWidget::stopBlinkingTab(int index){
+void QtChatTabWidget::stopBlinkingTab(int index) {
 
 	_blinkingTabIndex.remove(index);
 	tabBar()->setTabTextColor(index,Qt::black);
 }
 
-bool QtChatTabWidget::isBlinkingTab(int index){
-
+bool QtChatTabWidget::isBlinkingTab(int index) {
 	if (_blinkingTabIndex.contains(index))
 		return true;
 	return false;
 }
 
-void QtChatTabWidget::timerEvent ( QTimerEvent * event ){
-
-	BlinkingTabIndex::const_iterator iter;
-
-	if ( _currentColor == Qt::black )
+void QtChatTabWidget::timerEvent ( QTimerEvent * event ) {
+	if ( _currentColor == Qt::black ) {
 		_currentColor = Qt::red;
-	else
+	} else {
 		_currentColor = Qt::black;
-
-	for (iter = _blinkingTabIndex.begin(); iter != _blinkingTabIndex.end(); iter++){
-		tabBar()->setTabTextColor((*iter),_currentColor);
+	}
+	BlinkingTabIndex::const_iterator it;
+	for (it = _blinkingTabIndex.begin(); it != _blinkingTabIndex.end(); it++) {
+		tabBar()->setTabTextColor((*it),_currentColor);
 	}
 }

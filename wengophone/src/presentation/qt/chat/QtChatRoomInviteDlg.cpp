@@ -44,91 +44,83 @@ QDialog(parent,f), _contactList(contactList), _chatSession(chatSession)
 	setupGui();
 }
 
-void QtChatRoomInviteDlg::setupGui(){
+void QtChatRoomInviteDlg::setupGui() {
 
 	_contactListTreeWidget = Object::findChild<QTreeWidget *>(_widget,"contactListTreeWidget");
-
 	_inviteListWidget = Object::findChild<QListWidget *>(_widget,"inviteListWidget");
-
 	_addPushButton = Object::findChild<QPushButton *>(_widget,"addPushButton");
-
 	_removePushButton = Object::findChild<QPushButton *>(_widget,"removePushButton");
-
 	_startPushButton = Object::findChild<QPushButton *>(_widget,"startPushButton");
 
 	connect (_addPushButton,SIGNAL(clicked()), SLOT(addToConference()));
 	connect (_removePushButton,SIGNAL(clicked()),SLOT(removeFromConference()));
 	connect (_startPushButton,SIGNAL(clicked()),SLOT(startConference()));
-
 	// Remove the column header
 	_contactListTreeWidget->header()->hide();
-
 	fillContact();
 }
 
-void QtChatRoomInviteDlg::startConference(){
+void QtChatRoomInviteDlg::startConference() {
 	// _chatSession
 	QList<QListWidgetItem *>selectList =  _inviteListWidget->findItems("*",Qt::MatchWildcard);
-	QList<QListWidgetItem *>::iterator iter;
-	for (iter = selectList.begin(); iter != selectList.end(); iter ++ ){
-		QtChatRoomListWidgetItem * item = dynamic_cast<QtChatRoomListWidgetItem *> (*iter);
+	QList<QListWidgetItem *>::iterator it;
+	for (it = selectList.begin(); it!= selectList.end(); it++) {
+		QtChatRoomListWidgetItem * item = dynamic_cast<QtChatRoomListWidgetItem *> (*it);
 		_chatSession.addIMContact(*(item->getContact().getFirstAvailableIMContact(_chatSession)));
-		_selectedContact.append( (item->getContact()) );
+		_selectedContact.append( (item->getContact()));
 	}
 	accept();
  }
 
-void QtChatRoomInviteDlg::addToConference(){
+void QtChatRoomInviteDlg::addToConference() {
 	// Get list of selected item in the treeview
 
 	QList<QTreeWidgetItem *> selectList =  _contactListTreeWidget->selectedItems ();
-	QList<QTreeWidgetItem *>::iterator iter;
+	QList<QTreeWidgetItem *>::iterator it;
 
-	for (iter = selectList.begin(); iter != selectList.end(); iter++){
-		if ( (*iter)->childCount() == 0 ){
-			QtChatRoomTreeWidgetItem * item = dynamic_cast<QtChatRoomTreeWidgetItem *>( (*iter) );
+	for (it = selectList.begin(); it!= selectList.end(); it++) {
+		if ( (*it)->childCount() == 0 ) {
+			QtChatRoomTreeWidgetItem * item = dynamic_cast<QtChatRoomTreeWidgetItem *>((*it));
 			_contactListTreeWidget->setItemSelected(item,false);
-			if ( _inviteListWidget->findItems(item->text(0),Qt::MatchExactly).isEmpty() ){
-
+			if (_inviteListWidget->findItems(item->text(0),Qt::MatchExactly).isEmpty()) {
 				QtChatRoomListWidgetItem * listItem = new QtChatRoomListWidgetItem(item->getContact(), _inviteListWidget);
-				listItem->setText( item->text(0) );
-				listItem->setIcon( item->icon(0) );
+				listItem->setText(item->text(0));
+				listItem->setIcon(item->icon(0));
 			}
 		}
 	}
 }
 
-void QtChatRoomInviteDlg::removeFromConference(){
+void QtChatRoomInviteDlg::removeFromConference() {
 	QList<QListWidgetItem *>selectList = _inviteListWidget->selectedItems();
-	QList<QListWidgetItem *>::iterator iter;
+	QList<QListWidgetItem *>::iterator it;
 
-	for (iter = selectList.begin(); iter != selectList.end(); iter ++ ){
-		_inviteListWidget->takeItem(_inviteListWidget->row((*iter)));
-		delete (*iter);
+	for (it= selectList.begin(); it!= selectList.end(); it++ ) {
+		_inviteListWidget->takeItem(_inviteListWidget->row((*it)));
+		delete (*it);
 	}
 }
 
-void QtChatRoomInviteDlg::fillContact(){
+void QtChatRoomInviteDlg::fillContact() {
 	ContactList::ContactGroupSet groupList = _contactList.getContactGroupSet();
+	ContactList::ContactGroupSet::iterator it;
 
-	ContactList::ContactGroupSet::iterator iter;
-
-	for (iter = groupList.begin(); iter != groupList.end(); iter++){
+	for (it = groupList.begin(); it != groupList.end(); it++) {
 		QTreeWidgetItem * groupItem = new QTreeWidgetItem( _contactListTreeWidget);
 		groupItem->setFlags(Qt::ItemIsEnabled);
-		groupItem->setText(0,QString::fromUtf8((*iter).getName().c_str()) );
-		fillGroup(groupItem, & (*iter));
+		groupItem->setText(0,QString::fromUtf8((*it).getName().c_str()));
+		fillGroup(groupItem, & (*it));
 	}
 }
 
-void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const ContactGroup * cgroup){
+void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const ContactGroup * cgroup) {
 	int size = cgroup->size();
 	QtContactPixmap::ContactPixmap status;
 
-	for (int i = 0; i < size; i++ ){
+	for (int i = 0; i < size; i++ ) {
 		if ( (*cgroup)[i]->getFirstAvailableIMContact(_chatSession) != NULL ){
 			QtChatRoomTreeWidgetItem * item = new QtChatRoomTreeWidgetItem (*(*cgroup)[i],group );
-			item->setText(0,QString::fromStdString (  (*cgroup)[i]->getDisplayName() ));
+			item->setText(0,QString::fromStdString ((*cgroup)[i]->getDisplayName()));
 			switch ( (*cgroup)[i]->getPresenceState()) {
 				case EnumPresenceState::PresenceStateOnline:
 					status = QtContactPixmap::ContactOnline;
@@ -154,7 +146,7 @@ void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const ContactGroup 
 	}
 }
 
-QtChatRoomInviteDlg::SelectedContact QtChatRoomInviteDlg::getSelectedContact() const{
+QtChatRoomInviteDlg::SelectedContact QtChatRoomInviteDlg::getSelectedContact() const {
 
 	return _selectedContact;
 }

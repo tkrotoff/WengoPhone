@@ -18,6 +18,8 @@
  */
 
 #include "QtChatHandler.h"
+#include "QtChatWindow.h"
+
 #include <presentation/qt/toaster/QtToaster.h>
 
 #include <model/config/ConfigManager.h>
@@ -33,7 +35,7 @@ QtChatHandler::QtChatHandler(CChatHandler & cChatHandler)
 	: QObjectThreadSafe(NULL),
 	_cChatHandler(cChatHandler) {
 
-	_qtChatWidget = NULL;
+	_qtChatWindow = NULL;
 }
 
 QtChatHandler::~QtChatHandler() {
@@ -47,17 +49,11 @@ void QtChatHandler::newIMChatSessionCreatedEventHandler(IMChatSession & imChatSe
 }
 
 void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession & imChatSession) {
-	if (!_qtChatWidget)
-	{
-		 _qtChatWidget =  new ChatWindow(_cChatHandler, imChatSession);
-		// showToaster(&imChatSession);
-		_qtChatWidget->showToaster(&imChatSession);
-		connect(_qtChatWidget,SIGNAL(messageReceivedSignal(IMChatSession *)),
-			SLOT(showToaster(IMChatSession *)));
-	}
-	else
-	{
-		_qtChatWidget->addChatSession(&imChatSession);
+	if (!_qtChatWindow) {
+		 _qtChatWindow =  new QtChatWindow(_cChatHandler, imChatSession);
+		_qtChatWindow->showToaster(&imChatSession);
+	} else {
+		_qtChatWindow->addChatSession(&imChatSession);
 	}
 }
 
@@ -74,9 +70,5 @@ void QtChatHandler::updatePresentationThreadSafe() {
 }
 
 void QtChatHandler::initThreadSafe() {
-	_qtChatWidget = NULL;
-}
-
-void QtChatHandler::showToaster(IMChatSession * imChatSession) {
-	_qtChatWidget->showToaster(imChatSession);
+	_qtChatWindow = NULL;
 }

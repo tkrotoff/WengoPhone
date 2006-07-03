@@ -50,10 +50,10 @@ QtEmoticon QtEmoticonsManager::getEmoticon(const QString & text,const QString & 
 	}
 	emoticonList = _protocolsList[protocol];
 
-	for (it=emoticonList.begin();it!=emoticonList.end();it++){
+	for (it=emoticonList.begin();it!=emoticonList.end();it++) {
 		tlist = (*it).getText();
-		for (si=tlist.begin();si!=tlist.end();si++){
-			if ((*si).toUpper() == text.toUpper()){
+		for (si=tlist.begin();si!=tlist.end();si++) {
+			if ((*si).toUpper() == text.toUpper()) {
 				return (*it);
 			}
 		}
@@ -83,7 +83,6 @@ void QtEmoticonsManager::loadFromFile(QString filename) {
 
 	if (!doc.setContent(&file,&ErrorMsg,&ErrorLine,&ErrorCol)) {
 		file.close();
-		qDebug() << "XML Error : " << ErrorMsg;
 		return;
 	}
 	file.close();
@@ -110,7 +109,7 @@ void QtEmoticonsManager::readProtocol(QDomNode node) {
 	QDomElement element;
 	QString attributeName;
 	while (!n.isNull()) {
-		if (!n.toElement().isNull()){
+		if (!n.toElement().isNull()) {
 			if (n.toElement().tagName() == "icon") {
 				element = node.toElement();
 				if (!element.isNull()) {
@@ -131,7 +130,7 @@ void QtEmoticonsManager::readIcon(QDomNode node, QString protocol) {
 	QStringList textList;
 	QtEmoticon emoticon;
 	QPixmap emoticonPix;
-	while ( ! n1.isNull() ) {
+	while (!n1.isNull()) {
 		QDomElement e1 = n1.toElement();
 		if ( !e1.isNull()){
 			if (e1.tagName() == "text") {
@@ -164,7 +163,6 @@ QString QtEmoticonsManager::text2Emoticon(const QString & text, const QString pr
 		return text;
 	}
 	emoticonList = _protocolsList[protocol];
-
 	for (it = emoticonList.begin(); it != emoticonList.end(); it++) {
 		stringList = (*it).getText();
 		for (si = stringList.begin(); si != stringList.end(); si++) {
@@ -202,8 +200,8 @@ QString QtEmoticonsManager::encode(const QString & text) {
 	size = text.size();
 	QByteArray ba;
 
-	for (i=0;i<size;i++){
-		switch(text[i].toAscii()){
+	for (i=0;i<size;i++) {
+		switch(text[i].toAscii()) {
 			case '<':
 				ba += "&lt;";
 				break;

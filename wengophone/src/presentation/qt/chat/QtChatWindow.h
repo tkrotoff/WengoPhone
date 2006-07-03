@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CHATWINDOW_H
-#define CHATWINDOW_H
+#ifndef OWQTCHATWINDOW_H
+#define OWQTCHATWINDOW_H
 
 #include <control/chat/CChatHandler.h>
 
@@ -40,12 +40,12 @@ class QtChatTabWidget;
 class QtWengoPhone;
 
 
-class ChatWindow : public QObject, public Trackable {
+class QtChatWindow : public QObject, public Trackable {
 	Q_OBJECT
 
 public:
 
-	ChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession);
+	QtChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession);
 
 	void addChat(IMChatSession * session,const IMContact & from );
 
@@ -67,13 +67,9 @@ Q_SIGNALS:
 
 	void typingStateChangedSignal(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
 
-	void contactAddedSignal(IMChatSession * session, const IMContact * imContact );
-
 	void statusChangedSignal(IMContact * sender);
 
 public Q_SLOTS:
-
-	void addContactToContactListFrame(const Contact & contact);
 
 	void newMessage(IMChatSession* session,const QString & msg);
 
@@ -91,8 +87,6 @@ protected Q_SLOTS:
 
 	void typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
 
-	void contactAddedThreadSafe(IMChatSession * session, const IMContact * imContact );
-
 	void inviteContact();
 
 	void callContact();
@@ -107,15 +101,15 @@ protected:
 
 	void flashWindow();
 
-	ChatWidget * _chatWidget;
+	QtChatWidget * _chatWidget;
 
 	QtChatTabWidget * _tabWidget;
 
 	QMenuBar * _menuBar;
 
-	QScrollArea * _scrollArea;
+	// QScrollArea * _scrollArea;
 
-	QWidget * _contactViewport;
+//	QWidget * _contactViewport;
 
 	QFrame * _contactListFrame;
 
@@ -147,8 +141,6 @@ private:
 
 	void typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state);
 
-	void contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact);
-
 	void createMenu();
 
 	void showMinimized();
@@ -160,4 +152,4 @@ private:
 	QtWengoPhone * _qtWengoPhone;
 };
 
-#endif
+#endif //OWQTCHATWINDOW_H

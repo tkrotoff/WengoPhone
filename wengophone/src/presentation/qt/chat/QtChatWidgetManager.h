@@ -17,31 +17,40 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CHATWIDGETMANAGER_H
-#define CHATWIDGETMANAGER_H
+#ifndef OWQTCHATWIDGETMANAGER_H
+#define OWQTCHATWIDGETMANAGER_H
 
 #include <QtGui>
 
-class ChatWidgetManager : public QObject
+/**
+ * Class to manage the QTextEdit widget in the chat window
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
+class QtChatWidgetManager : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 
-    ChatWidgetManager (QObject * parent = 0, QTextEdit * target = 0);
+	QtChatWidgetManager (QObject * parent = 0, QTextEdit * target = 0);
 
 Q_SIGNALS:
-    void    enterPressed();
-    void    deletePressed();
+
+	void enterPressed(Qt::KeyboardModifiers modifier);
+
+	void deletePressed();
+
 protected:
 
-    bool    eventFilter(QObject *obj, QEvent *event);
+	bool eventFilter(QObject *obj, QEvent *event);
 
-    bool    keyPress(QObject *obj, QEvent *event);
+	bool keyPress(QObject *obj, QEvent *event);
 
+	QTextEdit * _target;
 
-    QTextEdit       *       _target;
-    QObject         *       _parent;
+	QObject * _parent;
 };
 
-#endif
+#endif //OWQTCHATWIDGETMANAGER_H

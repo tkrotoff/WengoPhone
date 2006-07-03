@@ -16,8 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef QTEMOTICON_H
-#define QTEMOTICON_H
+#ifndef OWQTEMOTICON_H
+#define OWQTEMOTICON_H
 
 #include <QtGui>
 
@@ -41,32 +41,37 @@ public:
 
 	void setRegExp(const QString & regExp);
 
-	QString & getRegExp() {return _regExp;};
+	QString getRegExp() const {return _regExp;};
 
-	QStringList & getText() { return _text;};
+	QStringList getText() const { return _text;};
 
-	QString & getDefaultText() { return _text[0];};
+	QString getDefaultText() const { return _text[0];};
 
-	QPixmap & getPixmap() { return _pixmap;};
+	QPixmap getPixmap() const { return _pixmap;};
 
-	QPixmap & getButtonPixmap() { return _buttonPixmap;};
+	QPixmap getButtonPixmap() const { return _buttonPixmap;};
 
-	QString & getPath() { return _path;};
+	QString getPath() const { return _path;};
 
-	QString getHtmlRegExp();
+	QString getHtmlRegExp() const;
 
-	QString getHtml();
+	QString getHtml() const;
 
-	bool isNull();
+	bool isNull() const;
 
 	QtEmoticon & operator=(const QtEmoticon & source);
 
-protected:
+private:
+
 	QString _path;
+
 	QStringList _text;
+
 	QString _regExp;
+
 	QPixmap _pixmap;
+
 	QPixmap _buttonPixmap;
 };
 
-#endif
+#endif //OWQTEMOTICON_H

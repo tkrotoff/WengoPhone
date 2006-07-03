@@ -39,7 +39,6 @@ void QtChatContactWidget::updateDisplay(){
 	QList <QPixmap> pixmapList;
 	int totalSize = 0;
 	IMContactSet contactSet =_imChatSession->getIMContactSet();
-
 	IMContactSet::iterator it;
 
 	// Fill the pixmap list
@@ -54,9 +53,7 @@ void QtChatContactWidget::updateDisplay(){
 			pixmap.load(":pics/contact_picture.png");
 		}
 		// Scale the pixmap to 48x64
-
 		pixmap = createContactPixmap(contactId,pixmap);
-
 		pixmapList.append(pixmap);
 		totalSize += 48;
 		totalSize += 5;
@@ -74,17 +71,11 @@ void QtChatContactWidget::updateDisplay(){
 QPixmap QtChatContactWidget::createContactPixmap(const QString & displayName,QPixmap  pixmap ){
 
 	QPixmap ret = QPixmap(QSize(48,64));
-
 	QPainter painter ( &ret );
-
 	painter.fillRect(ret.rect(),Qt::black);
-
 	painter.drawPixmap(0,0,pixmap.scaled(48, 48, Qt::IgnoreAspectRatio));
-
 	painter.end();
-
 	setDisplayName(displayName,&ret);
-
 	return ret;
 }
 
@@ -95,7 +86,6 @@ void QtChatContactWidget::drawBorder(QPainter * painter, QRect rect, const QColo
 	QPen pen;
 
 	pen.setColor( color );
-
 	pen.setJoinStyle(Qt::RoundJoin);
 	pen.setCapStyle(Qt::RoundCap);
 
@@ -107,34 +97,27 @@ void QtChatContactWidget::drawBorder(QPainter * painter, QRect rect, const QColo
 void QtChatContactWidget::createGroupPixmap(int width){
 
 	QPixmap pixmap = QPixmap( QSize(width+10, 70) );
-
 	QPainter painter( &pixmap );
-
 	painter.fillRect(pixmap.rect(),QBrush(QColor(Qt::black)));
-
 	painter.end();
-
 	_display = pixmap;
 }
 
 void QtChatContactWidget::fillDisplay(QList <QPixmap> pixList){
 
-	QList <QPixmap>::iterator pixIt;
+	QList <QPixmap>::iterator it;
 	int size = 0 ;
 	QPainter painter( &_display );
 
-	for ( pixIt = pixList.begin(); pixIt != pixList.end(); pixIt++){
+	for ( it=pixList.begin(); it!= pixList.end(); it++){
 		size +=48 + 5;
 	}
+	int x =((_display.width()-size)/2);
 
-
-	int x =  ( (_display.width() - size ) / 2 ) ;
-
-	for ( pixIt = pixList.begin(); pixIt != pixList.end(); pixIt++){
-		painter.drawPixmap(x, 5, (*pixIt) );
-		x+=48 + 5;
+	for (it=pixList.begin(); it!=pixList.end(); it++){
+		painter.drawPixmap(x,5,(*it));
+		x+=48+5;
 	}
-
 	// Draw the border
 	drawBorder(&painter, _display.rect(), Qt::red);
 	painter.end();
@@ -145,19 +128,11 @@ void QtChatContactWidget::setDisplayName(QString displayName, QPixmap * pixmap){
 
 	QPainter painter( pixmap );
 	QFont font;
-
 	font.setPointSize(8);
-
 	painter.setFont(font);
-
 	painter.setPen(QPen(Qt::white));
-
 	QRect rect = pixmap->rect();
-
 	rect.adjust( 0,rect.bottom() - 10 ,0,0 );
-
 	painter.drawText ( rect , Qt::AlignLeft, displayName, &rect);
-
 	painter.end();
-
 }
