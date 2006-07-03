@@ -31,13 +31,14 @@ if WengoCCGCC() and not WengoOSWindows():
 		]
 	env = conf.Finish()
 if WengoCCMSVC():
-	libs += [
-		'libboost_thread-vc71-mt.lib',
-		'libboost_serialization-vc71-mt.lib',
-		'libboost_signals-vc71-mt.lib',
-		'libboost_regex-vc71-mt.lib',
-		'libboost_program_options-vc71-mt.lib',
-	]
+	if WengoReleaseMode():
+		libs += [
+			'libboost_thread-vc71-mt.lib',
+			'libboost_serialization-vc71-mt.lib',
+			'libboost_signals-vc71-mt.lib',
+			'libboost_regex-vc71-mt.lib',
+			'libboost_program_options-vc71-mt.lib',
+		]
 
 if WengoCCMinGW():
 	libs += [
