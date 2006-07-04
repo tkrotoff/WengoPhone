@@ -160,14 +160,6 @@ private:
 	QString prepareMessageForSending(const QString & message);
 
 	/**
-	 * Replaces text URLs with HTML URLs.
-	 *
-	 * @param message the message to change
-	 * @return the changed message
-	 */
-	QString replaceTextURLs(const QString & message);
-
-	/**
 	 * Inserts a font tag based on _currentFont.
 	 *
 	 * @param message the message to change

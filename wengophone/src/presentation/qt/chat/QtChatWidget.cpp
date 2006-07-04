@@ -21,6 +21,7 @@
 #include <imwrapper/EnumIMProtocol.h>
 
 #include "QtChatWidget.h"
+#include "QtChatTabWidget.h"
 #include "QtChatWidgetManager.h"
 #include "QtEmoticonsWidget.h"
 #include "QtEmoticonsManager.h"
@@ -84,10 +85,14 @@ QWidget(parent, f), _cChatHandler(cChatHandler) {
 	createActionFrame();
 	setupSendButton();
 
+
+	QtChatTabWidget * parentWidget = dynamic_cast<QtChatTabWidget *>(parent);
+
 	QtChatWidgetManager * cwm = new QtChatWidgetManager(this,_ui.chatEdit);
 
 	connect (cwm,SIGNAL(enterPressed(Qt::KeyboardModifiers)),this, SLOT (enterPressed(Qt::KeyboardModifiers)));
 	connect (cwm,SIGNAL(deletePressed()),this,SLOT (deletePressed()));
+	connect (cwm,SIGNAL(ctrlTabPressed()),parentWidget,SLOT(ctrlTabPressedSlot()));
 	connect (_fontLabel,SIGNAL(clicked()), this, SLOT (chooseFont()));
 	connect (_ui.chatHistory,SIGNAL(anchorClicked(const QUrl &)),this,SLOT(urlClicked(const QUrl & )));
 	connect (_emoticonsLabel,SIGNAL(clicked()),this,SLOT(chooseEmoticon()));
@@ -248,18 +253,10 @@ void QtChatWidget::deletePressed() {
 
 QString QtChatWidget::prepareMessageForSending(const QString & message) {
 	QString result;
-	// Replace URLs with HTML based URLs
-	// result = replaceTextURLs(message);
+
 	// Insert font tag
 	result = insertFontTag(message);
 	result = result.replace("\n","<br>");
-	return result;
-}
-
-QString QtChatWidget::replaceTextURLs(const QString & message) {
-	QString result = message;
-	QRegExp regExp("(http://|https://|ftp://)(\\S*) ", Qt::CaseInsensitive);
-	result.replace(regExp, "<a href=\"\\1\\2\">\\1\\2</a>");
 	return result;
 }
 
@@ -541,6 +538,7 @@ bool QtChatWidget::hasQtChatContactInfo(const QString & nickName) const {
 	}
 	return true;
 }
+
 QString QtChatWidget::getNewColor() const {
 	_lastColor.setRed(_lastColor.red() + 20);
 	return QString("%1").arg(_lastColor.name());

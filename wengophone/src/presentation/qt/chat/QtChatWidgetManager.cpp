@@ -19,6 +19,7 @@
 
 #include "QtChatWidgetManager.h"
 
+#include <util/Logger.h>
 
 QtChatWidgetManager::QtChatWidgetManager(QObject * parent, QTextEdit * target) : QObject (parent)
 {
@@ -51,6 +52,13 @@ bool QtChatWidgetManager::keyPress(QObject *obj, QEvent *event)
 		event->accept();
 		deletePressed();
 		return true;
+	}
+	if ((e->key() == Qt::Key_Tab)) {
+		if ( (e->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
+			event->accept();
+			ctrlTabPressed();
+			return true;
+		}
 	}
 	return false;
 }

@@ -81,8 +81,6 @@ public Q_SLOTS:
 
 	void closeContactListFrame();
 
-protected Q_SLOTS:
-
 	void messageReceivedSlot(IMChatSession * sender);
 
 	void typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
@@ -93,9 +91,11 @@ protected Q_SLOTS:
 
 	void closeTab();
 
+	void ctrlTabPressed();
+
 	void statusChangedSlot(QString contactId);
 
-protected:
+private:
 
 	typedef QMap <int, QtChatContactWidget *> ChatContactWidgets;
 

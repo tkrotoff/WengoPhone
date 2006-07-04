@@ -40,6 +40,8 @@ Q_SIGNALS:
 
 	void enterPressed(Qt::KeyboardModifiers modifier);
 
+	void ctrlTabPressed();
+
 	void deletePressed();
 
 protected:

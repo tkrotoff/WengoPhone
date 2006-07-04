@@ -39,9 +39,19 @@ public:
 
 	bool isBlinkingTab(int index);
 
-protected:
+public Q_SLOTS:
+
+	void ctrlTabPressedSlot();
+
+Q_SIGNALS:
+
+	void ctrlTabPressed();
+
+private:
 
 	virtual void timerEvent ( QTimerEvent * event );
+
+	bool event(QEvent *event);
 
 	BlinkingTabIndex _blinkingTabIndex;
 

@@ -20,6 +20,8 @@
 
 #include "QtChatTabWidget.h"
 
+#include <util/Logger.h>
+
 QtChatTabWidget::QtChatTabWidget(QWidget * parent) : QTabWidget (parent) {
 	_currentColor = Qt::black;
 	_timerId = startTimer(500);
@@ -42,7 +44,7 @@ bool QtChatTabWidget::isBlinkingTab(int index) {
 	return false;
 }
 
-void QtChatTabWidget::timerEvent ( QTimerEvent * event ) {
+void QtChatTabWidget::timerEvent (QTimerEvent * event) {
 	if ( _currentColor == Qt::black ) {
 		_currentColor = Qt::red;
 	} else {
@@ -52,4 +54,23 @@ void QtChatTabWidget::timerEvent ( QTimerEvent * event ) {
 	for (it = _blinkingTabIndex.begin(); it != _blinkingTabIndex.end(); it++) {
 		tabBar()->setTabTextColor((*it),_currentColor);
 	}
+}
+
+bool QtChatTabWidget::event(QEvent *event) {
+	if (event->type() == QEvent::KeyPress){
+		QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+		if (keyEvent->key() == Qt::Key_Tab) {
+			if ( (keyEvent->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
+				ctrlTabPressed();
+				keyEvent->accept();
+				return true;
+			}
+		}
+	}
+	return QTabWidget::event(event);
+}
+
+
+void QtChatTabWidget::ctrlTabPressedSlot() {
+	ctrlTabPressed();
 }

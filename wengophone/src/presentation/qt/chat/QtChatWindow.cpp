@@ -93,6 +93,8 @@ QtChatWindow::QtChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSe
 	_dialog->setLayout(glayout);
 
 	_tabWidget = new QtChatTabWidget ( _dialog );
+	connect (_tabWidget,SIGNAL(ctrlTabPressed()),SLOT(ctrlTabPressed()));
+
 	QPushButton * closeTabButton = new QPushButton(_tabWidget);
 	QIcon closeIcon(QPixmap(":/pics/close_normal.png"));
 	closeIcon.addPixmap(QPixmap(":/pics/close_on.png"),QIcon::Normal,QIcon::On);
@@ -671,4 +673,17 @@ void QtChatWindow::showChatWindow() {
 #else
 	_dialog->showNormal();
 #endif
+}
+
+void QtChatWindow::ctrlTabPressed() {
+	if (_tabWidget->count() <= 1) {
+		return;
+	}
+
+	int i=_tabWidget->currentIndex();
+	i++;
+	if (i ==_tabWidget->count()) {
+		i=0;
+	}
+	_tabWidget->setCurrentIndex(i);
 }
