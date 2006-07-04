@@ -46,7 +46,7 @@ public:
 
 	void setPstnNumber(const QString & number);
 
-	void setCallForwardMode(const QString & mode);
+	void setCallForwardMode(const QString & callForwardMode);
 
 	QWidget * getWidget() const;
 

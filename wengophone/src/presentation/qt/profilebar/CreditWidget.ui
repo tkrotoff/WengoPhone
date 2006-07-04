@@ -297,6 +297,9 @@
      <property name="cursor" >
       <cursor>13</cursor>
      </property>
+     <property name="toolTip" >
+      <string>Click here to buy Wengo's credits</string>
+     </property>
      <property name="text" >
       <string>&lt;u>Buy call-out credits&lt;/u></string>
      </property>
@@ -339,6 +342,9 @@
    </item>
    <item row="0" column="2" >
     <widget class="QLabel" name="pstnNumberLabel" >
+     <property name="toolTip" >
+      <string>Your Wengo phone number</string>
+     </property>
      <property name="text" >
       <string>Not available</string>
      </property>
@@ -346,6 +352,9 @@
    </item>
    <item row="1" column="2" >
     <widget class="QLabel" name="callForwardLabel" >
+     <property name="toolTip" >
+      <string>You need to buy wengo's credits in order to use the call forward</string>
+     </property>
      <property name="text" >
       <string>Not available</string>
      </property>

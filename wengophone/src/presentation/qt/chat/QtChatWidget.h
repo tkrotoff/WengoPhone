@@ -125,7 +125,7 @@ Q_SIGNALS:
 
 private:
 
-	typedef QHash<QString,QtChatContactInfo> ContactInfoHash;
+	typedef QHash<QString, QtChatContactInfo> ContactInfoHash;
 
 	const QString replaceUrls(const QString & str, const QString & htmlstr);
 

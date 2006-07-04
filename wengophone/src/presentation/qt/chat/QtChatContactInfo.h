@@ -22,13 +22,12 @@
 
 #include <QString>
 
-class QtChatContactInfo
-{
+class QtChatContactInfo {
 public:
 
 	QtChatContactInfo();
 
-	QtChatContactInfo(const QString & bgColor, const QString & textColor,const QString & nickName);
+	QtChatContactInfo(const QString & bgColor, const QString & textColor, const QString & nickName);
 
 	QtChatContactInfo(const QtChatContactInfo & other);
 
@@ -55,7 +54,6 @@ private:
 	QString _nickName;
 
 	bool _isNull;
-
 };
 
-#endif //OWQTCHATCONTACTINFO_H
+#endif	//OWQTCHATCONTACTINFO_H

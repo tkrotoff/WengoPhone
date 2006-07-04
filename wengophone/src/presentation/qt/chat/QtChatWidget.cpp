@@ -185,7 +185,7 @@ void QtChatWidget::addToHistory(const QString & senderName,const QString & str) 
 		IMContactSet imContactSet = _imChatSession->getIMContactSet();
 		IMContactSet::iterator it = imContactSet.begin();
 		QString nickName = QString::fromStdString((*it).getContactId());
-		QtChatContactInfo qtChatContactInfo(QtChatContactInfo(getNewColor(), "#000000", nickName));
+		QtChatContactInfo qtChatContactInfo(getNewColor(), "#000000", nickName);
 		_qtContactInfo[nickName] = qtChatContactInfo;
 		header = qtChatContactInfo.getHeader();
 	}
