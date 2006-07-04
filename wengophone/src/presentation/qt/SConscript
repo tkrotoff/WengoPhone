@@ -271,7 +271,7 @@ forms = [
 	'chat/ChatRoomWidget.ui',
 	'contactlist/RenameGroupDialog.ui',
 	'contactlist/UserWidget.ui',
-	'contactlist/contactList.ui',
+	'contactlist/ContactList.ui',
 	'profilebar/CreditWidget.ui',
 	'profilebar/EventWidget.ui',
 	'toaster/QtCallToaster.ui',
