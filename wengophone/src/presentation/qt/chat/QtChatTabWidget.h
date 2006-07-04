@@ -31,6 +31,8 @@ public:
 
 	typedef QSet<int> BlinkingTabIndex;
 
+	typedef QHash<int, QIcon> BlinkingTabIcons;
+
 	QtChatTabWidget( QWidget * parent = 0 );
 
 	void setBlinkingTab(int index);
@@ -55,7 +57,11 @@ private:
 
 	BlinkingTabIndex _blinkingTabIndex;
 
+	BlinkingTabIcons _blinkingTabIcons;
+
 	QColor _currentColor;
+
+	QPixmap _alphaPixmap;
 
 	int _timerId;
 

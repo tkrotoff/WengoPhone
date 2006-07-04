@@ -217,24 +217,30 @@ void QtChatWidget::enterPressed(Qt::KeyboardModifiers modifier) {
 		_ui.chatEdit->append(QString::null);
 		return;
 	}
-	if ( _notTypingTimerId != -1 ) {
+	if (_notTypingTimerId !=-1) {
 		killTimer(_notTypingTimerId);
 		_notTypingTimerId = -1;
 	}
-	if ( _stoppedTypingTimerId != -1 ) {
+
+	if (_stoppedTypingTimerId!=-1) {
 		killTimer(_stoppedTypingTimerId);
 		_stoppedTypingTimerId = -1;
 	}
+
 	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
+
 	// Drop empty message
 	if (_ui.chatEdit->toPlainText().isEmpty()) {
 		return;
 	}
+
 	addToHistory(_nickName,_ui.chatEdit->toHtml());
 	QString tmp = emoticon2Text(_ui.chatEdit->toHtml());
+
 	// bad and ugly hack
 	QTextEdit textEditTmp(NULL);
 	textEditTmp.setHtml(tmp);
+
 	newMessage(_imChatSession, prepareMessageForSending(textEditTmp.toPlainText()));
 	_ui.chatEdit->clear();
 	_ui.chatEdit->setFocus();
@@ -433,9 +439,20 @@ void QtChatWidget::updateContactListLabel() {
 		}
 	}
 
-	if ( contactStringList.size() > 1 ) {
-		QString str = QString (tr("Chat with: ")) + contactStringList.join("; ");
+	_ui.contactListLabel->setToolTip(QString::null);
+
+	if (contactStringList.size() > 2) {
+		QString str = QString (tr("Chat with: "));
+		str+=contactStringList[0]+"; ";
+		str+=contactStringList[1]+"...";
 		_ui.contactListLabel->setText(str);
+		str = contactStringList.join("<br>");
+		_ui.contactListLabel->setToolTip(str);
+	} else {
+		if ( contactStringList.size() > 1 ) {
+			QString str = QString (tr("Chat with: ")) + contactStringList.join("; ");
+			_ui.contactListLabel->setText(str);
+		}
 	}
 }
 

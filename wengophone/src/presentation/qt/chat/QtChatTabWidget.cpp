@@ -25,17 +25,23 @@
 QtChatTabWidget::QtChatTabWidget(QWidget * parent) : QTabWidget (parent) {
 	_currentColor = Qt::black;
 	_timerId = startTimer(500);
+	_alphaPixmap = QPixmap(QSize(16,16));
+	_alphaPixmap.fill(Qt::transparent);
 }
-
 
 void QtChatTabWidget::setBlinkingTab(int index) {
 	_blinkingTabIndex.insert(index);
+	_blinkingTabIcons[index]=tabBar()->tabIcon(index);
 }
 
 void QtChatTabWidget::stopBlinkingTab(int index) {
-
-	_blinkingTabIndex.remove(index);
 	tabBar()->setTabTextColor(index,Qt::black);
+
+	if (_blinkingTabIcons.find(index) != _blinkingTabIcons.end()) {
+		tabBar()->setTabIcon(index,_blinkingTabIcons[index]);
+		_blinkingTabIcons.remove(index);
+	}
+	_blinkingTabIndex.remove(index);
 }
 
 bool QtChatTabWidget::isBlinkingTab(int index) {
@@ -50,9 +56,17 @@ void QtChatTabWidget::timerEvent (QTimerEvent * event) {
 	} else {
 		_currentColor = Qt::black;
 	}
+
 	BlinkingTabIndex::const_iterator it;
+
 	for (it = _blinkingTabIndex.begin(); it != _blinkingTabIndex.end(); it++) {
 		tabBar()->setTabTextColor((*it),_currentColor);
+
+		if (_currentColor == Qt::red) {
+			tabBar()->setTabIcon((*it),QIcon(_alphaPixmap));
+		} else {
+			tabBar()->setTabIcon((*it),_blinkingTabIcons[(*it)]);
+		}
 	}
 }
 
@@ -69,7 +83,6 @@ bool QtChatTabWidget::event(QEvent *event) {
 	}
 	return QTabWidget::event(event);
 }
-
 
 void QtChatTabWidget::ctrlTabPressedSlot() {
 	ctrlTabPressed();
