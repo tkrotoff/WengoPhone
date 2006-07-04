@@ -51,7 +51,10 @@ NetworkProxyDiscovery::NetworkProxyDiscovery() {
 	NetworkObserver::getInstance().connectionIsDownEvent += 
 		boost::bind(&NetworkProxyDiscovery::connectionIsDownEventHandler, this, _1);
 
-	if (config.getNetworkProxyDetected()) {
+	if (config.getNetworkProxyDetected()
+		&& is_http_conn_allowed("www.google.com:80", _networkProxy.getServer().c_str(), 
+			_networkProxy.getServerPort(), _networkProxy.getLogin().c_str(), 
+			_networkProxy.getPassword().c_str(), NETLIB_TRUE, 10) == HTTP_OK) {
 		_state = NetworkProxyDiscoveryStateDiscovered;
 	} else {
 		discoverProxy();
@@ -88,24 +91,22 @@ void NetworkProxyDiscovery::run() {
 		_state = NetworkProxyDiscoveryStateDiscovering;
 
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		if (!config.getNetworkProxyDetected()) {
-			LOG_DEBUG("Searching for proxy...");
+		LOG_DEBUG("Searching for proxy...");
 
-			char * localProxyUrl = get_local_http_proxy_address();
-			int localProxyPort = get_local_http_proxy_port();
+		char * localProxyUrl = get_local_http_proxy_address();
+		int localProxyPort = get_local_http_proxy_port();
 
-			_networkProxy.setServer(localProxyUrl ? String(localProxyUrl) : String(String::null));
-			_networkProxy.setServerPort(localProxyPort);
-			_networkProxy.setLogin(String::null);
-			_networkProxy.setPassword(String::null);
+		_networkProxy.setServer(localProxyUrl ? String(localProxyUrl) : String(String::null));
+		_networkProxy.setServerPort(localProxyPort);
+		_networkProxy.setLogin(String::null);
+		_networkProxy.setPassword(String::null);
 
-			if (!localProxyUrl) {
-				LOG_DEBUG("no proxy found");
-				saveProxySettings();
-				_state = NetworkProxyDiscoveryStateDiscovered;
-				_condition.notify_all();
-				return;
-			}
+		if (!localProxyUrl) {
+			LOG_DEBUG("no proxy found");
+			saveProxySettings();
+			_state = NetworkProxyDiscoveryStateDiscovered;
+			_condition.notify_all();
+			return;
 		}
 	}
 

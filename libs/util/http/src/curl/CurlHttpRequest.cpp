@@ -231,15 +231,15 @@ void CurlHttpRequest::setPostData(std::string _data) {
 
 void CurlHttpRequest::setProxyUserParam() {
 	if (useProxyAuthentication() && _proxyAuthentication) {
-		if ((_proxyAuthentication | CURLAUTH_BASIC) == CURLAUTH_BASIC) {
+		if ((_proxyAuthentication & CURLAUTH_BASIC) == CURLAUTH_BASIC) {
 			LOG_DEBUG("set proxy authentication: BASIC");
 			curl_easy_setopt(_curl, CURLOPT_PROXYAUTH, CURLAUTH_BASIC);
 		}
-		else if ((_proxyAuthentication | CURLAUTH_DIGEST) == CURLAUTH_DIGEST) {
+		else if ((_proxyAuthentication & CURLAUTH_DIGEST) == CURLAUTH_DIGEST) {
 			LOG_DEBUG("set proxy authentication: DIGEST");
 			curl_easy_setopt(_curl, CURLOPT_PROXYAUTH, CURLAUTH_DIGEST);
 		}
-		else if ((_proxyAuthentication | CURLAUTH_NTLM) == CURLAUTH_NTLM) {
+		else if ((_proxyAuthentication & CURLAUTH_NTLM) == CURLAUTH_NTLM) {
 			LOG_DEBUG("set proxy authentication: NTLM");
 			curl_easy_setopt(_curl, CURLOPT_PROXYAUTH, CURLAUTH_NTLM);
 		}
@@ -249,7 +249,7 @@ void CurlHttpRequest::setProxyUserParam() {
 }
 
 void CurlHttpRequest::setProxyParam() {
-	if (useProxy() && _proxyAuthentication) {
+	if (useProxy()) {
 		string proxy = HttpRequest::getProxyHost();
 		proxy += ":" + String::fromNumber(HttpRequest::getProxyPort());
 		curl_easy_setopt(_curl, CURLOPT_PROXY, getstr(proxy));
@@ -265,6 +265,7 @@ void CurlHttpRequest::setProxyParam() {
 long CurlHttpRequest::getProxyAuthenticationType() {
 	CURL * curl_tmp;
 	long AuthMask;
+	int ret;
 	string testUrl = "www.wengo.fr";
 
 	if (useProxy()) {
@@ -276,17 +277,17 @@ long CurlHttpRequest::getProxyAuthenticationType() {
 		curl_easy_setopt(curl_tmp, CURLOPT_VERBOSE, _verbose);
 		curl_easy_setopt(curl_tmp, CURLOPT_NOBODY, 1);
 		curl_easy_setopt(curl_tmp, CURLOPT_PROXY, getstr(proxy));
-		curl_easy_perform(curl_tmp);
+		ret = curl_easy_perform(curl_tmp);
 		curl_easy_getinfo(curl_tmp, CURLINFO_PROXYAUTH_AVAIL, & AuthMask);
 		curl_easy_cleanup(curl_tmp);
 
-		if ((AuthMask | CURLAUTH_BASIC) == CURLAUTH_BASIC) {
+		if ((AuthMask & CURLAUTH_BASIC) == CURLAUTH_BASIC) {
 			LOG_DEBUG("proxy authentication find: BASIC");
 		}
-		else if ((AuthMask | CURLAUTH_DIGEST) == CURLAUTH_DIGEST) {
+		else if ((AuthMask & CURLAUTH_DIGEST) == CURLAUTH_DIGEST) {
 			LOG_DEBUG("proxy authentication find: DIGEST");
 		}
-		else if ((AuthMask | CURLAUTH_NTLM) == CURLAUTH_NTLM) {
+		else if ((AuthMask & CURLAUTH_NTLM) == CURLAUTH_NTLM) {
 			LOG_DEBUG("proxy authentication find: NTLM");
 		}
 	}

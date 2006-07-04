@@ -653,7 +653,7 @@ HttpRet is_http_conn_allowed(const char *url,
 	
 	if (http_resp_code == 200)
 		return HTTP_OK;
-	else if (http_resp_code != 404 && http_resp_code != 200)
+	else if (http_resp_code != 404 && http_resp_code != 200 && http_resp_code != 0)
 		return HTTP_AUTH;
 	else
 		return HTTP_NOK;
