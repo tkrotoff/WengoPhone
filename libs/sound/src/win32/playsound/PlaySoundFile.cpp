@@ -183,5 +183,7 @@ bool PlaySoundFile::play(const std::string & filename) {
 }
 
 void PlaySoundFile::stop() {
-	stopWaveOutDevice(&_hWaveOut);
+	if (_hWaveOut) {
+		stopWaveOutDevice(&_hWaveOut);
+	}
 }
