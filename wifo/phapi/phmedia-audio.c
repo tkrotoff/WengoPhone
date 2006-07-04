@@ -2309,14 +2309,18 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
         return -1;
     }
 
-  if (!sp->streamerData)
-    {
-      stream = (phastream_t *)osip_malloc(sizeof(phastream_t));
-      memset(stream, 0, sizeof(*stream));
-    }
-  else
-    stream = (phastream_t *)sp->streamerData;
-
+	// <jerome.wagner@wengo.fr>: it is important to fill the stream structure with 0 here.	
+	// When only the first 'malloc' branch is zeroed it leads to weird noises after a callResume
+	// on some machines
+	if (!sp->streamerData)
+	{
+		stream = (phastream_t *)osip_malloc(sizeof(phastream_t));
+	}
+	else
+	{
+		stream = (phastream_t *)sp->streamerData;
+	}
+	memset(stream, 0, sizeof(*stream));
 
   DBG2_MEDIA_ENGINE("new audiostream = %08x\n", stream);
 
@@ -2757,7 +2761,7 @@ void ph_msession_audio_resume(struct ph_msession_s *s, int resumewhat, const cha
     struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
     phastream_t *stream = (phastream_t *) msp->streamerData;
 
-    DBG4_MEDIA_ENGINE("audio_resume: enter ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
+    DBG4_MEDIA_ENGINE("ph_msession_audio_resume: enter ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
 
     msp->traffictype |= resumewhat;
     ph_msession_audio_start(s, deviceId);
