@@ -76,9 +76,9 @@ private:
 
 	void smsStatusEventHandlerThreadSafe(EnumSmsState::SmsState state);
 
-	QString getCompleteMessage();
+	QString getCompleteMessage() const;
 
-	bool checkSmsLength();
+	bool checkSmsLength() const;
 
 	CSms & _cSms;
 

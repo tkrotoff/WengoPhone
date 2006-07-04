@@ -36,9 +36,9 @@ namespace Ui {
  */
 class QtRenameGroup : public QDialog {
 	Q_OBJECT
-	public :
+public:
 
-	QtRenameGroup(const QString & groupName, QWidget * parent = NULL);
+	QtRenameGroup(const QString & groupName, QWidget * parent);
 
 	virtual ~QtRenameGroup();
 

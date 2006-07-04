@@ -41,10 +41,9 @@ QString QtRenameGroup::getGroupName() const {
 void QtRenameGroup::accept() {
 	QString tmp;
 	tmp = _ui->groupName->text().trimmed();
-	if (tmp.isEmpty()){
-		QMessageBox::warning (this,tr("Bad group name"),tr("Group name cannot be empty"),1,0,0);
+	if (tmp.isEmpty()) {
+		QMessageBox::warning(this, tr("Bad group name"), tr("Group name cannot be empty"), 1, 0, 0);
 		return;
 	}
 	QDialog::accept();
 }
-

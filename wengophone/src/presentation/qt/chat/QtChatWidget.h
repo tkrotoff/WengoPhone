@@ -47,10 +47,8 @@ class QTimerEvent;
 class QtWengoStyleLabel;
 class QtEmoticonsManager;
 
-class QtChatWidget : public QWidget, public Trackable
-{
+class QtChatWidget : public QWidget, public Trackable {
 	Q_OBJECT
-
 public:
 
 	QtChatWidget(CChatHandler & cChatHandler, int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
@@ -67,11 +65,11 @@ public:
 
 	IMChatSession * getIMChatSession() {return _imChatSession;};
 
-	const QString & nickName();
+	const QString & nickName() const;
 
-	const QFont & nickFont();
+	const QFont & nickFont() const;
 
-	void  addToHistory(const QString & senderName,const QString & str);
+	void addToHistory(const QString & senderName,const QString & str);
 
 	void setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state);
 
@@ -85,7 +83,7 @@ public:
 
 	void setContactId(QString contactId) { _contactId = contactId;}
 
-	QString getContactId() { return _contactId;}
+	QString getContactId() const { return _contactId;}
 
 public Q_SLOTS:
 
@@ -131,11 +129,11 @@ private:
 
 	const QString replaceUrls(const QString & str, const QString & htmlstr);
 
-	const QString text2Emoticon(const QString &htmlstr);
+	const QString text2Emoticon(const QString & htmlstr);
 
-	const QString emoticon2Text(const QString &htmlstr);
+	const QString emoticon2Text(const QString & htmlstr);
 
-	virtual void timerEvent ( QTimerEvent * event );
+	virtual void timerEvent(QTimerEvent * event);
 
 	void createActionFrame();
 
@@ -169,15 +167,15 @@ private:
 
 	ContactInfoHash _qtContactInfo;
 
-    QtEmoticonsManager * _qtEmoticonManager;
+	QtEmoticonsManager * _qtEmoticonManager;
 
-    Ui::ChatRoomWidget _ui;
+	Ui::ChatRoomWidget _ui;
 
-    QWidget *       _widget;
+	QWidget * _widget;
 
 	CChatHandler & _cChatHandler;
 
-	QString  _contactId;
+	QString _contactId;
 
 	int _sessionId;
 
@@ -191,7 +189,7 @@ private:
 
 	QtWengoStyleLabel *_fontLabel;
 
-	QScrollArea  *  _scrollArea;
+	QScrollArea * _scrollArea;
 
 	QWidget * _contactViewport;
 

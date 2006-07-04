@@ -233,37 +233,37 @@ void QtSystray::updateCallMenu() {
 		for (StringList::const_iterator it = currentContactsIds.begin(); it != currentContactsIds.end(); ++it) {
 
 			ContactProfile tmpContactProfile = currentCContactList.getContactProfile(*it);
+			QString displayName = QString::fromUtf8(tmpContactProfile.getDisplayName().c_str());
 
 			if (tmpContactProfile.hasFreeCall()) {
-				std::string freePhoneNumber = tmpContactProfile.getFirstFreePhoneNumber();
-				LOG_DEBUG("adding=" + freePhoneNumber);
-				QAction * tmpAction
-					= _callWengoMenu->addAction(QString::fromStdString(freePhoneNumber));
-				tmpAction->setData(QVariant(QString::fromStdString(freePhoneNumber)));
+				QString freePhoneNumber = QString::fromStdString(tmpContactProfile.getFirstFreePhoneNumber());
+				QAction * tmpAction = _callWengoMenu->addAction(freePhoneNumber);
+				tmpAction->setData(QVariant(freePhoneNumber));
 			}
 
 			if (!tmpContactProfile.getMobilePhone().empty()) {
+				QString mobilePhone = QString::fromStdString(tmpContactProfile.getMobilePhone());
+
 				//Call mobile action
-				QAction * tmpAction = _callMobileMenu->addAction(QString::fromStdString(tmpContactProfile.getDisplayName() +
-							": " + tmpContactProfile.getMobilePhone()));
-				tmpAction->setData(QVariant(QString::fromStdString(tmpContactProfile.getMobilePhone())));
+				QAction * tmpAction = _callMobileMenu->addAction(displayName + ": " + mobilePhone);
+				tmpAction->setData(QVariant(mobilePhone));
 
 				//Send SMS action
-				tmpAction = _sendSmsMenu->addAction(QString::fromStdString(tmpContactProfile.getDisplayName() +
-							": " + tmpContactProfile.getMobilePhone()));
-				tmpAction->setData(QVariant(QString::fromStdString(tmpContactProfile.getMobilePhone())));
+				tmpAction = _sendSmsMenu->addAction(displayName + ": " + mobilePhone);
+				tmpAction->setData(QVariant(mobilePhone));
 			}
 
 			if (!tmpContactProfile.getHomePhone().empty()) {
-				QAction * tmpAction = _callLandLineMenu->addAction(QString::fromStdString(tmpContactProfile.getDisplayName() +
-							": " + tmpContactProfile.getHomePhone()));
-				tmpAction->setData(QVariant(QString::fromStdString(tmpContactProfile.getHomePhone())));
+				QString homePhone = QString::fromStdString(tmpContactProfile.getHomePhone());
+
+				QAction * tmpAction = _callLandLineMenu->addAction(displayName + ": " + homePhone);
+				tmpAction->setData(QVariant(homePhone));
 			}
 
 			if (tmpContactProfile.getPreferredIMContact() != NULL &&
 				tmpContactProfile.getPresenceState() != EnumPresenceState::PresenceStateOffline) {
 
-				QAction * tmpAction = _startChatMenu->addAction(QString::fromStdString(tmpContactProfile.getDisplayName()));
+				QAction * tmpAction = _startChatMenu->addAction(displayName);
 				tmpAction->setData(QVariant(QString::fromStdString(*it)));
 
 				EnumPresenceState::PresenceState presenceState = tmpContactProfile.getPresenceState();
@@ -327,33 +327,33 @@ void QtSystray::setSystrayIcon(QVariant status) {
 }
 
 void QtSystray::phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state) {
-		bool connected = false;
+	bool connected = false;
 
-		switch (state) {
-		case EnumPhoneLineState::PhoneLineStateUnknown:
-			break;
+	switch (state) {
+	case EnumPhoneLineState::PhoneLineStateUnknown:
+		break;
 
-		case EnumPhoneLineState::PhoneLineStateServerError:
-			break;
+	case EnumPhoneLineState::PhoneLineStateServerError:
+		break;
 
-		case EnumPhoneLineState::PhoneLineStateTimeout:
-			break;
+	case EnumPhoneLineState::PhoneLineStateTimeout:
+		break;
 
-		case EnumPhoneLineState::PhoneLineStateOk:
-			connected = true;
-			break;
+	case EnumPhoneLineState::PhoneLineStateOk:
+		connected = true;
+		break;
 
-		case EnumPhoneLineState::PhoneLineStateClosed:
-			break;
+	case EnumPhoneLineState::PhoneLineStateClosed:
+		break;
 
-		case EnumPhoneLineState::PhoneLineStateProgress:
-			_trayIcon->setIcon(QPixmap(":/pics/systray/connecting.png"));
-			_trayIcon->setToolTip(QString("WengoPhone - ") + tr("Connecting..."));
-			return;
+	case EnumPhoneLineState::PhoneLineStateProgress:
+		_trayIcon->setIcon(QPixmap(":/pics/systray/connecting.png"));
+		_trayIcon->setToolTip(QString("WengoPhone - ") + tr("Connecting..."));
+		return;
 
-		default:
-			LOG_FATAL("unknown state=" + EnumPhoneLineState::toString(state));
-		};
+	default:
+		LOG_FATAL("unknown state=" + EnumPhoneLineState::toString(state));
+	};
 
 	connectionStateEventHandlerThreadSafe(connected);
 }

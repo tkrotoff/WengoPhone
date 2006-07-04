@@ -136,15 +136,13 @@ void QtSms::setText(const QString & text) {
 	_ui->smsText->setHtml("<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style=\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">" + mess + "</p></body></html>");
 }
 
-bool QtSms::checkSmsLength() {
-
+bool QtSms::checkSmsLength() const {
 	QString mess = getCompleteMessage();
 
 	return (mess.length() < 160);
 }
 
-QString QtSms::getCompleteMessage() {
-
+QString QtSms::getCompleteMessage() const {
 	QString completeMessage = _ui->smsText->toPlainText();
 	QString signature = _ui->signatureLineEdit->text();
 	if (!signature.isEmpty()) {

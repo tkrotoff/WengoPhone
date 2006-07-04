@@ -28,8 +28,6 @@
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
 
-#include <qtutil/Object.h>
-
 #include <util/Logger.h>
 #include <util/StringList.h>
 
@@ -40,7 +38,6 @@ static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 QtTreeViewDelegate::QtTreeViewDelegate(CWengoPhone & cWengoPhone, QObject * parent)
 	: QItemDelegate(parent),
 	_cWengoPhone(cWengoPhone) {
-
 }
 
 void QtTreeViewDelegate::setParent(QWidget * parent) {
@@ -97,20 +94,20 @@ QSize QtTreeViewDelegate::sizeHint(const QStyleOptionViewItem & option, const QM
 	return orig;
 }
 
-bool QtTreeViewDelegate::checkForUtf8(const std::string &text, int size) const {
+bool QtTreeViewDelegate::checkForUtf8(const std::string & text, int size) const {
 	bool isUtf8 = false;
 	if (size == 0) {
 		return true;
 	}
 
-	if ((text[0]<=0x7F) && size == 1) {
+	if ((text[0] <= 0x7F) && size == 1) {
 		return true;
 	}
-	for (int i=0;i<size;i++) {
+	for (int i = 0; i < size; i++) {
 		if (text[i] == 0) {
 			return false;
 		}
-		if (text[i]>0x7F) {
+		if (text[i] > 0x7F) {
 			if ((text[i] & 0xC0) == 0xC0) {
 				if (i+1 > size) {
 					return false;
@@ -126,27 +123,24 @@ bool QtTreeViewDelegate::checkForUtf8(const std::string &text, int size) const {
 }
 
 void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const {
-	QRect r;
-	QtContactPixmap * spx;
-	QPixmap px;
-	int x;
-	spx = QtContactPixmap::getInstance();
 	painter->setPen(option.palette.text().color());
-	r = option.rect;
-	QFont font = option.font;
-
 	painter->drawPixmap(option.rect.left(),option.rect.top(),getGroupBackGround(option.rect));
 
+	QFont font = option.font;
 	font.setBold(true);
 	painter->setFont(font);
+
+	QtContactPixmap * spx = QtContactPixmap::getInstance();
+	QPixmap px;
 	if (option.state & QStyle::State_Open) {
 		px = spx->getPixmap(QtContactPixmap::ContactGroupOpen);
 	} else {
 		px = spx->getPixmap(QtContactPixmap::ContactGroupClose);
 	}
-	x = option.rect.left();
-	painter->drawPixmap(x, r.top()+3, px);
-	x += px.width()+3;
+	int x = option.rect.left();
+	QRect r = option.rect;
+	painter->drawPixmap(x, r.top() + 3, px);
+	x += px.width() + 3;
 	r.setLeft(x);
 	int y = ((r.bottom()-r.top())-QFontMetrics(font).height())/2;
 	r.setTop(y + r.top());
@@ -162,7 +156,7 @@ void QtTreeViewDelegate::drawGroup(QPainter * painter, const QStyleOptionViewIte
 		groupId = groupName.toStdString();
 		groupNameTmp = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactGroupName(groupId);
 	}
-	groupName=QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
+	groupName = QString::fromUtf8(groupNameTmp.c_str(), groupNameTmp.size());
 	QString str = groupName;
 	painter->drawText(r, Qt::AlignLeft, str, 0);
 }
