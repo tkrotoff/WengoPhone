@@ -29,7 +29,7 @@ class QtVideoXV : public QtVideo {
 	Q_OBJECT
 public:
 
-	QtVideoXV(QWidget * parent, int remoteVideoFrameWidth, int remoteVideoFrameHeight, int localVideoFrameWidth, int localVideoFrameHeight)
+	QtVideoXV(QWidget * parent, int remoteVideoFrameWidth, int remoteVideoFrameHeight, int localVideoFrameWidth, int localVideoFrameHeight);
 
 	~QtVideoXV();
 
