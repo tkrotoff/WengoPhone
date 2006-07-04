@@ -270,10 +270,10 @@ void QtContactList::contactAddedEventSlot(QString contactId) {
 				contactGroupAddedEventSlot(groupId);
 				list = _treeWidget->findItems(groupId, Qt::MatchExactly);
 			}
+			//list[0] is the group
 			newContact = new QTreeWidgetItem(list[0]);
 			newContact->setText(0, contactId);
 			newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
-
 			qtContact = new QtContact(contactId.toStdString(), _cWengoPhone);
 			ul->addContact(qtContact);
 			updatePresentationThreadSafe();

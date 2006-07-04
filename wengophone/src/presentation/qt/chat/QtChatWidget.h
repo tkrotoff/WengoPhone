@@ -53,15 +53,9 @@ class QtChatWidget : public QWidget, public Trackable
 
 public:
 
-	static const int STOPPED_TYPING_DELAY;
-	static const int NOT_TYPING_DELAY;
-	static const QString USER_BACKGOUND_COLOR;
-
 	QtChatWidget(CChatHandler & cChatHandler, int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
 
 	virtual ~QtChatWidget();
-
-	void setNickTextColor(const QString &color);
 
 	void setNickFont(QFont &font);
 
@@ -76,8 +70,6 @@ public:
 	const QString & nickName();
 
 	const QFont & nickFont();
-
-	const QString & nickTextColor();
 
 	void  addToHistory(const QString & senderName,const QString & str);
 
@@ -155,6 +147,8 @@ private:
 
 	bool hasQtChatContactInfo(const QString & nickname) const;
 
+	QString getNewColor() const;
+
 	QString getProtocol() const;
 
 	/**
@@ -217,13 +211,9 @@ private:
 
 	QString _nickBgColor;
 
-	QString _nickBgColorAlt;
-
-	QString _nickTextColor;
-
 	QString _nickName;
 
-	QColor _lastColor;
+	mutable QColor _lastColor;
 
 	EmoticonsWidget *_emoticonsWidget;
 

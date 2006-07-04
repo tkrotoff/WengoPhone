@@ -292,8 +292,7 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 }
 
 void QtChatWindow::addChatSession(IMChatSession * imChatSession) {
-
-	// If this chat session already exists, display the right tab
+	// If this chat session already exists, display the tab
 	int tabs = _tabWidget->count();
 	for (int i = 0; i < tabs; i++) {
 		QtChatWidget * widget = dynamic_cast<QtChatWidget *> (_tabWidget->widget(i));
@@ -399,6 +398,7 @@ void QtChatWindow::closeContactListFrame() {
 
 void QtChatWindow::createMenu() {
 	//FIXME!
+	//Create a new class to manage menu for the main window and the chat window
 	QtWengoPhone * mainWindow = dynamic_cast<QtWengoPhone *> (_cChatHandler.getCUserProfile().getCWengoPhone().getPresentation());
 	QAction * action;
 

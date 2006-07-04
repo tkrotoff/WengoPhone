@@ -44,9 +44,9 @@
 
 #include <QtGui>
 
-const int QtChatWidget::STOPPED_TYPING_DELAY = 1000;
-const int QtChatWidget::NOT_TYPING_DELAY = 1000;
-const QString QtChatWidget::USER_BACKGOUND_COLOR = "'#B4C8FF'";
+static const int CHAT_NOT_TYPING_DELAY=1000;
+static const int CHAT_STOPPED_TYPING_DELAY=1000;
+static const QString CHAT_USER_BACKGOUND_COLOR = "#B4C8FF";
 static const QString CHAT_EMOTICONS_LABEL_OFF_BEGIN = ":/pics/chat/chat_emoticon_button.png";
 static const QString CHAT_EMOTICONS_LABEL_OFF_END = ":/pics/profilebar/bar_separator.png";
 static const QString CHAT_EMOTICONS_LABEL_OFF_FILL = ":/pics/profilebar/bar_fill.png";
@@ -68,15 +68,15 @@ QWidget(parent, f), _cChatHandler(cChatHandler) {
 	_notTypingTimerId = -1;
 	_isTyping = false;
 	_sessionId = sessionId;
-	_lastColor = QColor("#B4C8FF");
+	_lastColor = QColor("#B0FFB3");
 	/* Defaults fonts and colors */
 	#if defined(OS_MACOSX)
 	_nickFont = QFont();
 	#else
 	_nickFont = QFont("Helvetica", 12);
 	#endif
-	_nickTextColor = "'#000000'"; // Black
-	_nickBgColorAlt = "'#B0FFB3'";
+
+	//Default nickname for testing purpose
 	_nickName = "Wengo";
 
 	_ui.setupUi(this);
@@ -130,10 +130,10 @@ void QtChatWidget::chatEditChanged() {
 	}
 
 	if (_stoppedTypingTimerId == -1) {
-		_stoppedTypingTimerId = startTimer(STOPPED_TYPING_DELAY);
+		_stoppedTypingTimerId = startTimer(CHAT_STOPPED_TYPING_DELAY);
 	} else {
 		killTimer(_stoppedTypingTimerId);
-		_stoppedTypingTimerId = startTimer(STOPPED_TYPING_DELAY);
+		_stoppedTypingTimerId = startTimer(CHAT_STOPPED_TYPING_DELAY);
 	}
 }
 
@@ -142,7 +142,7 @@ void QtChatWidget::timerEvent ( QTimerEvent * event ) {
 		killTimer(_stoppedTypingTimerId);
 		_stoppedTypingTimerId = -1;
 		_imChatSession->changeTypingState(IMChat::TypingStateStopTyping);
-		_notTypingTimerId = startTimer(NOT_TYPING_DELAY);
+		_notTypingTimerId = startTimer(CHAT_NOT_TYPING_DELAY);
 		_isTyping = false;
 	}
 	if ( event->timerId() == _notTypingTimerId) {
@@ -161,10 +161,6 @@ const QString & QtChatWidget::nickName() {
 	return _nickName;
 }
 
-void QtChatWidget::setNickTextColor(const QString  &color) {
-	_nickTextColor = color;
-}
-
 void QtChatWidget::setNickFont(QFont &font) {
 	_nickFont = font;
 }
@@ -173,37 +169,23 @@ const QFont & QtChatWidget::nickFont() {
 	return _nickFont;
 }
 
-const QString & QtChatWidget::nickTextColor() {
-	return _nickTextColor;
-}
-
 void QtChatWidget::addToHistory(const QString & senderName,const QString & str) {
 	QTextCursor curs(_ui.chatHistory->document());
 	curs.movePosition(QTextCursor::End);
 	_ui.chatHistory->setTextCursor(curs);
 
 	QString header;
-
-	if (senderName == _nickName) {
-		header = QString("<table border=0 width=100% cellspacing=0 "
-		"cellpadding=0><tr><td BGCOLOR=%1> <font color=%2> %3 </font></td><td BGCOLOR=%4 align=right>"
-		"<font color=%5> %6 </font></td></tr></table>").
-		arg(USER_BACKGOUND_COLOR).
-		arg(_nickTextColor).
-		arg(senderName).
-		arg(USER_BACKGOUND_COLOR).
-		arg(_nickTextColor).
-		arg(QTime::currentTime().toString());
+	if (hasQtChatContactInfo(senderName)) {
+		QtChatContactInfo qtChatContactInfo = getQtChatContactInfo(senderName);
+		header = qtChatContactInfo.getHeader();
 	} else {
-		header = QString("<table border=0 width=100% cellspacing=0 "
-		"cellpadding=0><tr><td BGCOLOR=%1> <font color=%2> %3 </font></td><td BGCOLOR=%4 align=right>"
-		"<font color=%5> %6 </font></td></tr></table>").
-		arg(_nickBgColorAlt).
-		arg(_nickTextColor).
-		arg(senderName).
-		arg(_nickBgColorAlt).
-		arg(_nickTextColor).
-		arg(QTime::currentTime().toString());
+			IMContactSet imContactSet = _imChatSession->getIMContactSet();
+			IMContactSet::iterator it;
+			it=imContactSet.begin();
+			QString nickName = QString::fromStdString( (*it).getContactId());
+			QtChatContactInfo  qtChatContactInfo(QtChatContactInfo(getNewColor(),"#000000",nickName));
+			_qtContactInfo[nickName] = qtChatContactInfo;
+			header = qtChatContactInfo.getHeader();
 	}
 
 	QTextDocument tmp;
@@ -267,9 +249,9 @@ void QtChatWidget::deletePressed() {
 QString QtChatWidget::prepareMessageForSending(const QString & message) {
 	QString result;
 	// Replace URLs with HTML based URLs
-	result = replaceTextURLs(message);
+	// result = replaceTextURLs(message);
 	// Insert font tag
-	result = insertFontTag(result);
+	result = insertFontTag(message);
 	result = result.replace("\n","<br>");
 	return result;
 }
@@ -406,7 +388,7 @@ void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
 	std::string tmpNickName = imChatSession->getIMChat().getIMAccount().getLogin();
 	QString nickName = QString::fromUtf8(tmpNickName.c_str());
 
-	QtChatContactInfo  qtChatContactInfo(QtChatContactInfo("#B4C8FF","#000000",nickName));
+	QtChatContactInfo  qtChatContactInfo(QtChatContactInfo(CHAT_USER_BACKGOUND_COLOR,"#000000",nickName));
 	_qtContactInfo[nickName] = qtChatContactInfo;
 
 	_imChatSession = imChatSession;
@@ -446,7 +428,12 @@ void QtChatWidget::updateContactListLabel() {
 	IMContactSet::iterator it;
 
 	for (it=imContactSet.begin(); it!=imContactSet.end(); it++) {
-		contactStringList << QString::fromStdString( (*it).getContactId() );
+		QString nickName = QString::fromStdString( (*it).getContactId());
+		contactStringList << nickName;
+		if (!hasQtChatContactInfo(nickName)){
+			QtChatContactInfo  qtChatContactInfo(QtChatContactInfo(getNewColor(),"#000000",nickName));
+			_qtContactInfo[nickName] = qtChatContactInfo;
+		}
 	}
 
 	if ( contactStringList.size() > 1 ) {
@@ -553,4 +540,8 @@ bool QtChatWidget::hasQtChatContactInfo(const QString & nickName) const {
 		return false;
 	}
 	return true;
+}
+QString QtChatWidget::getNewColor() const {
+	_lastColor.setRed(_lastColor.red() + 20);
+	return QString("%1").arg(_lastColor.name());
 }
