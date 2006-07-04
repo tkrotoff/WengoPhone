@@ -241,6 +241,10 @@ void ContactList::presenceStateChangedEventHandler(PresenceHandler & sender,
 	if (contact) {
 		// The PresenceState must not be changed if the PresenceState is
 		// UserDefined (used by PhApi to set the alias)
+		if (!contact->getIMContact(imContact)) {
+			LOG_FATAL("bad algorithm in findContactThatOwns or in getIMContact");
+		}
+
 		if (state != EnumPresenceState::PresenceStateUserDefined) {
 			contact->getIMContact(imContact)->setPresenceState(state);
 			if (imContact.getIMAccount()->getProtocol() != EnumIMProtocol::IMProtocolWengo) {

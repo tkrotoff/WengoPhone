@@ -59,9 +59,9 @@ void IMContactListHandler::newContactAddedEventHandler(IMContactList & sender,
 	const std::string & groupName, const std::string & contactId) {
 	IMContact imContact(sender.getIMAccount(), contactId);
 
-	_imContactSet.insert(imContact);
+	std::pair<IMContactSet::iterator, bool> result = _imContactSet.insert(imContact);
 
-	newIMContactAddedEvent(*this, groupName, (IMContact &)*_imContactSet.find(imContact));
+	newIMContactAddedEvent(*this, groupName, (IMContact &)*result.first);
 }
 
 void IMContactListHandler::contactRemovedEventHandler(IMContactList & sender,

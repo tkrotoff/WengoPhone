@@ -82,9 +82,10 @@ bool IMContact::operator < (const IMContact & imContact) const {
 		result = true;
 	} else {
 		if (cleanContactId() == imContact.cleanContactId()) {
-			if ((_imAccount && imContact._imAccount) &&
-				((*_imAccount) < (*imContact._imAccount))) {
-				result = true;
+			if (_imAccount && imContact._imAccount) {
+				if ((*_imAccount) < (*imContact._imAccount)) {
+					result = true;
+				}
 			} else {
 				if (getProtocol() < imContact.getProtocol()) {
 					result = true;

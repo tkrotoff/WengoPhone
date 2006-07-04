@@ -163,14 +163,16 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 	////
 
 	// Retrieving URLs
-	TiXmlNode * url = NULL;
-	while ((url = rootElt.Node()->IterateChildren("url", url))) {
-		TiXmlElement * urlElt = url->ToElement();
-		string typeAttr = string(urlElt->Attribute("type"));
-		if (typeAttr == "website") {
-			TiXmlNode * website = url->FirstChild();
-			if (website) {
-				_profile._website = website->Value();
+	if (rootElt.Node()) {
+		TiXmlNode * url = NULL;
+		while ((url = rootElt.Node()->IterateChildren("url", url))) {
+			TiXmlElement * urlElt = url->ToElement();
+			string typeAttr = string(urlElt->Attribute("type"));
+			if (typeAttr == "website") {
+				TiXmlNode * website = url->FirstChild();
+				if (website) {
+					_profile._website = website->Value();
+				}
 			}
 		}
 	}

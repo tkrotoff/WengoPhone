@@ -137,8 +137,8 @@ IMAccount *GaimAccountMngr::FindIMAccount(const char *login, EnumIMProtocol::IMP
 	GaimIMAccountIterator i;
 	for (i = _gaimIMAccountList.begin(); i != _gaimIMAccountList.end(); i++)
 	{
-		if ((*i)->getLogin().compare(login) == 0
-			&& (*i)->getProtocol() == protocol)
+		if (((*i)->getLogin().compare(login) == 0)
+			&& ((*i)->getProtocol() == protocol))
 		{
 			return (*i);
 		}
