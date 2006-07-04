@@ -54,7 +54,7 @@ NetworkProxyDiscovery::NetworkProxyDiscovery() {
 	if (config.getNetworkProxyDetected()
 		&& is_http_conn_allowed("www.google.com:80", _networkProxy.getServer().c_str(), 
 			_networkProxy.getServerPort(), _networkProxy.getLogin().c_str(), 
-			_networkProxy.getPassword().c_str(), NETLIB_TRUE, 10) == HTTP_OK) {
+			_networkProxy.getPassword().c_str(), NETLIB_FALSE, 10) == HTTP_OK) {
 		_state = NetworkProxyDiscoveryStateDiscovered;
 	} else {
 		discoverProxy();
