@@ -24,24 +24,18 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
-#include <util/Trackable.h>
-
 #include <pixertool/pixertool.h>
 
-class WebcamVideoFrame;
-class CPhoneCall;
 class PhoneCall;
-class QtWengoPhone;
+class CPhoneCall;
 class QtVideo;
+class QtWengoPhone;
 
-class QPushButton;
-class QImage;
-class QWidget;
-class QLabel;
 class QMenu;
 class QAction;
-class QMutex;
 class QTimer;
+class QWidget;
+namespace Ui { class PhoneCallWidget; }
 
 /**
  * Qt Presentation component for PhoneCall.
@@ -49,10 +43,9 @@ class QTimer;
  * @author Tanguy Krotoff
  * @author Jerome Wagner
  * @author Mathieu Stute
- * @author Mr K
  * @author Philippe Bernery
  */
-class QtPhoneCall : public QObjectThreadSafe, public PPhoneCall, public Trackable {
+class QtPhoneCall : public QObjectThreadSafe, public PPhoneCall {
 	Q_OBJECT
 public:
 
@@ -66,9 +59,17 @@ public:
 		return _phoneCallWidget;
 	}
 
-	CPhoneCall & getCPhoneCall();
+	CPhoneCall & getCPhoneCall() const {
+		return _cPhoneCall;
+	}
 
-	bool isIncoming();
+	bool isIncoming() const;
+
+	void stateChangedEvent(EnumPhoneCallState::PhoneCallState state);
+
+	void videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage * localVideoFrame);
+
+	void close();
 
 Q_SIGNALS:
 
@@ -92,8 +93,6 @@ public Q_SLOTS:
 
 	void inviteToConference(bool checked);
 
-	void transferButtonClicked();
-
 	void switchVideo(bool checked);
 
 	void openPopup(int x, int y);
@@ -110,15 +109,13 @@ private:
 
 	void initThreadSafe();
 
+	void closeThreadSafe();
+
 	void updatePresentationThreadSafe();
 
-	void stateChangedEventHandler(EnumPhoneCallState::PhoneCallState state);
+	void stateChangedEventThreadSafe(EnumPhoneCallState::PhoneCallState state);
 
-	void stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state);
-
-	void videoFrameReceivedEventHandler(piximage* remoteVideoFrame, piximage* localVideoFrame);
-
-	void videoFrameReceivedEventHandlerThreadSafe(piximage* remoteVideoFrame, piximage* localVideoFrame);
+	void videoFrameReceivedEventThreadSafe(piximage * remoteVideoFrame, piximage * localVideoFrame);
 
 	void showVideoWidget();
 
@@ -126,29 +123,23 @@ private:
 
 	void showToaster(const QString & userName);
 
-	QString getDisplayName(QString str);
+	static QString getDisplayName(QString str);
 
-	QMenu * createMenu();
+	QMenu * createMenu() const;
 
-	QMenu * createInviteMenu();
+	QMenu * createInviteMenu() const;
 
-	QMenu * _popup;
+	Ui::PhoneCallWidget * _ui;
+
+	QWidget * _phoneCallWidget;
+
+	QMenu * _popupMenu;
 
 	CPhoneCall & _cPhoneCall;
 
 	QtWengoPhone * _qtWengoPhone;
 
-	QWidget * _phoneCallWidget;
-
 	QtVideo * _videoWindow;
-
-	QLabel * _nickNameLabel;
-
-	QLabel * _statusLabel;
-
-	QLabel * _durationLabel;
-
-	QLabel * _avatarLabel;
 
 	QAction * _actionAcceptCall;
 
@@ -176,8 +167,8 @@ private:
 	bool _showVideo;
 
 	//buffers to free in desctructor
-	piximage* _remoteVideoFrame;
-	piximage* _localVideoFrame;
+	piximage * _remoteVideoFrame;
+	piximage * _localVideoFrame;
 };
 
 #endif	//OWQTPHONECALL_H

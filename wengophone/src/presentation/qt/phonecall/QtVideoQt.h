@@ -17,12 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTVIDEOQT_H
-#define QTVIDEOQT_H
+#ifndef OWQTVIDEOQT_H
+#define OWQTVIDEOQT_H
 
 #include "QtVideo.h"
 
-#include <QtGui>
+#include <QImage>
 
 class QtVideoQtEventManager;
 
@@ -34,59 +34,55 @@ public:
 
 	~QtVideoQt();
 
-	void showImage(piximage* remoteVideoFrame, piximage* localVideoFrame);
+	void showImage(piximage * remoteVideoFrame, piximage * localVideoFrame);
 
-	QWidget * getWidget();
+	QSize getFrameSize() const;
 
-	QSize getFrameSize();
+	bool isInitialized() const {
+		return true;
+	}
 
-	bool isInitialized();
-
-	bool isFullScreen();
+	bool isFullScreen() const {
+		return _fullScreen;
+	}
 
 	void fullScreen();
 
 	void unFullScreen();
 
-
 private Q_SLOTS:
 
 	void paintEvent();
 
-	void flipWebcam();
+	void flipWebcamButtonClicked();
 
 	void fullScreenButtonClicked();
 
 private:
 
-	QWidget * _videoWindow;
-
 	/** Current frame to show inside the video window. */
 	QImage _image;
-
-	QFrame * _frame;
-
-	int _frameWindowFlags;
-
-	QPushButton * _fullScreenButton;
-
-	bool _encrustLocalWebcam;
 
 	bool _fullScreen;
 
 	QtVideoQtEventManager * _qtVideoQtEventManager;
 };
 
+
+class QFrame;
+class QEvent;
+
 class QtVideoQtEventManager : public QObject {
 	Q_OBJECT
-	public:
-		QtVideoQtEventManager(QFrame * target, QtVideoQt * qtVideoQt);
+public:
 
-	protected:
-		bool eventFilter(QObject *obj, QEvent *event);
+	QtVideoQtEventManager(QFrame * target, QtVideoQt * qtVideoQt);
 
-	private:
-		QtVideoQt * _qtVideoQt;
+private:
+
+	bool eventFilter(QObject * object, QEvent * event);
+
+	QtVideoQt * _qtVideoQt;
 };
 
-#endif  //QTVIDEOQT_H
+#endif	//OWQTVIDEOQT_H

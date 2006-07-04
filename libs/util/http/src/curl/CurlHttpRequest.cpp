@@ -107,38 +107,37 @@ void CurlHttpRequest::run() {
 		curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, &response);
 		if (!response) {
 			LOG_DEBUG("no server response code has been received");
-		}
-		else {
+		} else {
 			LOG_DEBUG("server response code=" + String::fromNumber(response));
 		}
 
 		if (_verbose) {
 			char * effectiveUrl = NULL;
 			curl_easy_getinfo(_curl, CURLINFO_EFFECTIVE_URL, &effectiveUrl);
-			if( effectiveUrl ) {
+			if (effectiveUrl) {
 				LOG_DEBUG("CURLINFO_EFFECTIVE_URL: " + std::string(effectiveUrl));
 			}
 
-			long temp = -1;
+			long tmp = -1;
 
-			curl_easy_getinfo(_curl, CURLINFO_HEADER_SIZE, &temp);
-			if( temp >= 0 ) {
-				LOG_DEBUG("CURLINFO_HEADER_SIZE: " + String::fromNumber(temp));
+			curl_easy_getinfo(_curl, CURLINFO_HEADER_SIZE, &tmp);
+			if (tmp >= 0) {
+				LOG_DEBUG("CURLINFO_HEADER_SIZE: " + String::fromNumber(tmp));
 			}
 
-			curl_easy_getinfo(_curl, CURLINFO_REQUEST_SIZE, &temp);
-			if( temp >= 0 ) {
-				LOG_DEBUG("CURLINFO_REQUEST_SIZE: " + String::fromNumber(temp));
+			curl_easy_getinfo(_curl, CURLINFO_REQUEST_SIZE, &tmp);
+			if (tmp >= 0) {
+				LOG_DEBUG("CURLINFO_REQUEST_SIZE: " + String::fromNumber(tmp));
 			}
 
-			curl_easy_getinfo(_curl, CURLINFO_SSL_VERIFYRESULT, &temp);
-			if( temp >= 0 ) {
-				LOG_DEBUG("CURLINFO_SSL_VERIFYRESULT: " + String::fromNumber(temp));
+			curl_easy_getinfo(_curl, CURLINFO_SSL_VERIFYRESULT, &tmp);
+			if (tmp >= 0) {
+				LOG_DEBUG("CURLINFO_SSL_VERIFYRESULT: " + String::fromNumber(tmp));
 			}
 
-			curl_easy_getinfo(_curl, CURLINFO_SIZE_DOWNLOAD, &temp);
-			if( temp >= 0 ) {
-				LOG_DEBUG("CURLINFO_SIZE_DOWNLOAD: " + String::fromNumber(temp));
+			curl_easy_getinfo(_curl, CURLINFO_SIZE_DOWNLOAD, &tmp);
+			if (tmp >= 0) {
+				LOG_DEBUG("CURLINFO_SIZE_DOWNLOAD: " + String::fromNumber(tmp));
 			}
 		}
 	}
@@ -206,7 +205,7 @@ void CurlHttpRequest::setCurlParam() {
 	//Limits the connection phase, once it has connected, this option is of no more use
 	curl_easy_setopt(_curl, CURLOPT_CONNECTTIMEOUT, 10);
 
-	//set the user agent
+	//Sets the user agent
 	curl_easy_setopt(_curl, CURLOPT_USERAGENT, HttpRequest::getUserAgent().c_str());
 }
 

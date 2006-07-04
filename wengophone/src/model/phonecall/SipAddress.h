@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SIPADDRESS_H
-#define SIPADDRESS_H
+#ifndef OWSIPADDRESS_H
+#define OWSIPADDRESS_H
 
 #include <util/String.h>
 

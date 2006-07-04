@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTABOUT_H
-#define QTABOUT_H
+#ifndef OWQTABOUT_H
+#define OWQTABOUT_H
 
 #include <util/NonCopyable.h>
 
@@ -47,4 +47,4 @@ private:
 	QDialog * _aboutDialog;
 };
 
-#endif	//QTABOUT_H
+#endif	//OWQTABOUT_H

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,17 @@
 #include <pixertool/pixertool.h>
 
 piximage * pix_alloc(pixosi pix, unsigned width, unsigned height) {
-	return (piximage *)0;
+	return NULL;
 }
 
-void pix_free(piximage *ptr) {
+void pix_free(piximage * ptr) {
 }
 
 unsigned pix_size(pixosi pix, unsigned width, unsigned height) {
 	return 0;
 }
 
-pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
+pixerrorcode pix_convert(int flags, piximage * img_dst, piximage * img_src) {
 	return PIX_NOK;
 }
 
@@ -39,5 +39,5 @@ pixosi pix_ffmpeg_to_pix_osi(int pix) {
 }
 
 int pix_ffmpeg_from_pix_osi(pixosi pix) {
-	 return (int)PIX_OSI_UNSUPPORTED;
+	return (int) PIX_OSI_UNSUPPORTED;
 }

@@ -17,22 +17,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PPHONECALL_H
-#define PPHONECALL_H
+#ifndef OWPPHONECALL_H
+#define OWPPHONECALL_H
 
 #include "Presentation.h"
 
 #include <sipwrapper/EnumPhoneCallState.h>
 
-#include <util/Event.h>
-
 #include <pixertool/pixertool.h>
 
-#include <string>
-
-class WebcamVideoFrame;
+class CPhoneCall;
 
 /**
+ * Graphical representation of a PhoneCall.
  *
  * @ingroup presentation
  * @author Tanguy Krotoff
@@ -40,9 +37,22 @@ class WebcamVideoFrame;
 class PPhoneCall : public Presentation {
 public:
 
-	Event<void (EnumPhoneCallState::PhoneCallState state)> stateChangedEvent;
+	virtual CPhoneCall & getCPhoneCall() const = 0;
 
-	Event<void (piximage * remoteVideoFrame, piximage * localVideoFrame)> videoFrameReceivedEvent;
+	/**
+	 * @see PhoneCall::stateChangedEvent
+	 */
+	virtual void stateChangedEvent(EnumPhoneCallState::PhoneCallState state) = 0;
+
+	/**
+	 * @see PhoneCall::videoFrameReceivedEvent
+	 */
+	virtual void videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage * localVideoFrame) = 0;
+
+	/**
+	 * The phone call has been closed, widget must be closed/destroyed.
+	 */
+	virtual void close() = 0;
 };
 
-#endif	//PPHONECALL_H
+#endif	//OWPPHONECALL_H

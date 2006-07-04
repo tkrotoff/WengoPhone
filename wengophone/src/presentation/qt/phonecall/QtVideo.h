@@ -17,8 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTVIDEO_H
-#define QTVIDEO_H
+#ifndef OWQTVIDEO_H
+#define OWQTVIDEO_H
+
+#include <util/Interface.h>
 
 #include <QObject>
 
@@ -26,29 +28,40 @@
 
 class QSize;
 class QWidget;
-class QImage;
-class QPushButton;
+namespace Ui { class VideoWindow; }
 
-class QtVideo : public QObject {
-
+/**
+ * Plugin interface for different video backends (Qt, XV, DirectX, OpenGL...)
+ *
+ * @author Mathieu Stute
+ * @author Tanguy Krotoff
+ */
+class QtVideo : public QObject, Interface {
 public:
 
-	QtVideo() {};
+	QtVideo(QWidget * parent);
 
-	virtual ~QtVideo() {};
+	virtual ~QtVideo();
 
-	virtual void showImage(piximage* remoteVideoFrame, piximage* localVideoFrame) = 0;
+	virtual void showImage(piximage * remoteVideoFrame, piximage * localVideoFrame) = 0;
 
-	virtual QWidget * getWidget() = 0;
+	QWidget * getWidget() const {
+		return _videoWindow;
+	}
 
-	virtual QSize getFrameSize() = 0;
+	virtual QSize getFrameSize() const = 0;
 
-	virtual bool isInitialized() = 0;
+	virtual bool isInitialized() const = 0;
 
-	virtual bool isFullScreen() = 0;
+	virtual bool isFullScreen() const = 0;
 
 	virtual void unFullScreen() = 0;
-	
+
+protected:
+
+	Ui::VideoWindow * _ui;
+
+	QWidget * _videoWindow;
 };
 
-#endif	//QTVIDEO_H
+#endif	//OWQTVIDEO_H

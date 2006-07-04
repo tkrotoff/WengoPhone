@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@
 static uint8_t * _nv12_to_yuv420p(uint8_t *data, unsigned width, unsigned height);
 
 piximage * pix_alloc(pixosi pix, unsigned width, unsigned height) {
-	piximage *image = (piximage *) malloc(sizeof(piximage));
+	piximage * image = (piximage *) malloc(sizeof(piximage));
 
 	avcodec_init();
 
@@ -47,15 +47,16 @@ piximage * pix_alloc(pixosi pix, unsigned width, unsigned height) {
 	image->height = height;
 	image->palette = pix;
 
-	image->data = (uint8_t *)av_malloc(pix_size(pix, width, height)  * sizeof(uint8_t));
+	image->data = (uint8_t *) av_malloc(pix_size(pix, width, height) * sizeof(uint8_t));
 
 	return image;
 }
 
-void pix_free(piximage *ptr) {
+void pix_free(piximage * ptr) {
 	if (ptr) {
-		if (ptr->data)
+		if (ptr->data) {
 			av_free(ptr->data);
+		}
 		free(ptr);
 	}
 }
@@ -65,17 +66,11 @@ unsigned pix_size(pixosi pix, unsigned width, unsigned height) {
 }
 
 pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
-	AVPicture avp_source, avp_target, avp_tmp_target;
-    uint8_t * buf_tmp_target = NULL;
-	int len_target = 0;
-	int pix_fmt_source;
-	int pix_fmt_target;
-	int need_avfree = 0;
-	int need_resize = 0;
-	uint8_t * buf_source = img_src->data;
-	ImgReSampleContext *resample_context = NULL;
 
-	// If the format is NV12, transforming it
+	uint8_t * buf_source = img_src->data;
+	int need_avfree = 0;
+
+	//If the format is NV12, transforming it
 	if (img_src->palette == PIX_OSI_NV12) {
 		buf_source = _nv12_to_yuv420p(img_src->data, img_src->width, img_src->height);
 		need_avfree = 1;
@@ -83,23 +78,24 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 	}
 	////
 
-	// Check if the piximage needs to be resized
+	int need_resize = 0;
+
+	//Check if the piximage needs to be resized
 	if ((img_src->width != img_dst->width) || (img_src->height != img_dst->height)) {
 		need_resize = 1;
 	}
 	////
 
-	len_target = pix_size(img_dst->palette, img_src->width, img_src->height);
+	int len_target = pix_size(img_dst->palette, img_src->width, img_src->height);
 
-	pix_fmt_source = pix_ffmpeg_from_pix_osi(img_src->palette);
-	pix_fmt_target = pix_ffmpeg_from_pix_osi(img_dst->palette);
+	int pix_fmt_source = pix_ffmpeg_from_pix_osi(img_src->palette);
+	int pix_fmt_target = pix_ffmpeg_from_pix_osi(img_dst->palette);
 
+	AVPicture avp_source, avp_target;
 	avpicture_fill(&avp_source,  buf_source, pix_fmt_source, img_src->width, img_src->height);
 	avpicture_fill(&avp_target, img_dst->data, pix_fmt_target, img_dst->width, img_dst->height);
 
-	/* Only flip other planes if the destination palette is YUV420
-	 * FIXME DUDE
-	 */
+	//FIXME Only flip other planes if the destination palette is YUV420
 	if ((flags & PIX_FLIP_HORIZONTALLY) && (img_src->palette == PIX_OSI_YUV420P)) {
 		avp_source.data[0] += avp_source.linesize[0] * (img_src->height - 1);
 		avp_source.linesize[0] *= -1;
@@ -112,45 +108,46 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 		}
 	}
 
-	// Resizing picture if needed. Needs test
+	//Resizing picture if needed. Needs test
 	if (need_resize) {
-        
-        // resampling only works yuv420P -> yuv420P in current ffmpeg
 
-        if (pix_fmt_source != PIX_FMT_YUV420P) {
-            return PIX_NOK;
-        }
+		//resampling only works yuv420P -> yuv420P in current ffmpeg
 
-        
+		if (pix_fmt_source != PIX_FMT_YUV420P) {
+			return PIX_NOK;
+		}
+
 		//TODO: optimize this part but will need the preparation of contexts
-		resample_context = img_resample_init(img_dst->width, img_dst->height,
+		ImgReSampleContext * resample_context = img_resample_init(img_dst->width, img_dst->height,
 			img_src->width, img_src->height);
 
 		if (!resample_context) {
 			return PIX_NOK;
 		}
 
-		// we need to prepare a tmp buffer
-		buf_tmp_target = (uint8_t *)av_malloc(avpicture_get_size(pix_fmt_source, img_dst->width, img_dst->height)  * sizeof(uint8_t));
+		AVPicture avp_tmp_target;
+
+		//we need to prepare a tmp buffer
+		uint8_t * buf_tmp_target = (uint8_t *)av_malloc(avpicture_get_size(pix_fmt_source, img_dst->width, img_dst->height)  * sizeof(uint8_t));
 		avpicture_fill(&avp_tmp_target, buf_tmp_target, pix_fmt_source, img_dst->width, img_dst->height);
 		//
-        
-		// do the resampling
+
+		//do the resampling
 		img_resample(resample_context, &avp_tmp_target, &avp_source);
 		img_resample_close(resample_context);
 		//
 
-		// do the conversion
+		//do the conversion
 		if (img_convert(&avp_target, pix_fmt_target,
 			&avp_tmp_target, pix_fmt_source,
 			img_dst->width, img_dst->height) == -1) {
-			
+
 			av_free(buf_tmp_target);
 			return PIX_NOK;
 		}
 		av_free(buf_tmp_target);
 		//
-		
+
 	} else {
 		if (img_convert(&avp_target, pix_fmt_target,
 			&avp_source, pix_fmt_source,
@@ -168,17 +165,14 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 }
 
 static uint8_t * _nv12_to_yuv420p(uint8_t *data, unsigned width, unsigned height) {
-	uint8_t *buf_source;
-	uint8_t *buf_target;
-	int len_target;
-	register unsigned i;
 
-	buf_source = data;
-	len_target = (width * height * 3) / 2;
-	buf_target = (uint8_t *) av_malloc(len_target * sizeof(uint8_t));
+	uint8_t * buf_source = data;
+	int len_target = (width * height * 3) / 2;
+	uint8_t * buf_target = (uint8_t *) av_malloc(len_target * sizeof(uint8_t));
 
 	memcpy(buf_target, buf_source, width * height);
 
+	register unsigned i;
 	for (i = 0 ; i < (width * height / 4) ; i++) {
 		buf_target[(width * height) + i] = buf_source[(width * height) + 2 * i];
 		buf_target[(width * height) + (width * height / 4) + i]
@@ -189,7 +183,7 @@ static uint8_t * _nv12_to_yuv420p(uint8_t *data, unsigned width, unsigned height
 }
 
 piximage * pix_copy(piximage *src) {
-	piximage *result = pix_alloc(src->palette, src->width, src->height);
+	piximage * result = pix_alloc(src->palette, src->width, src->height);
 	memcpy(result->data, src->data, pix_size(src->palette, src->width, src->height));
 
 	return result;

@@ -2,18 +2,15 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>Form</class>
- <widget class="QWidget" name="Form" >
+ <class>ContactList</class>
+ <widget class="QWidget" name="ContactList" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>296</width>
-    <height>463</height>
+    <width>274</width>
+    <height>210</height>
    </rect>
-  </property>
-  <property name="windowTitle" >
-   <string>Form</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -321,7 +318,7 @@
      </property>
      <column>
       <property name="text" >
-       <string>Contact list</string>
+       <string>Contact List</string>
       </property>
      </column>
     </widget>

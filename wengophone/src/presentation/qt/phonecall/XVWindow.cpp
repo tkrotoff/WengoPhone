@@ -23,6 +23,51 @@
  */
 
 #include "XVWindow.h"
+
+#include <util/Logger.h>
+
+#define GUID_I420_PLANAR 0x30323449
+
+#define wm_LAYER		1
+#define wm_FULLSCREEN		2
+#define wm_STAYS_ON_TOP		4
+#define wm_ABOVE		8
+#define wm_BELOW		16
+#define wm_NETWM 		(wm_FULLSCREEN | wm_STAYS_ON_TOP | wm_ABOVE | wm_BELOW)
+
+#define WIN_LAYER_ONBOTTOM	2
+#define WIN_LAYER_NORMAL	4
+#define WIN_LAYER_ONTOP		6
+#define WIN_LAYER_ABOVE_DOCK	10
+
+#define _NET_WM_STATE_REMOVE	0	/* remove/unset property */
+#define _NET_WM_STATE_ADD	1	/* add/set property */
+#define _NET_WM_STATE_TOGGLE	2	/* toggle property */
+
+#define MWM_HINTS_FUNCTIONS	(1L << 0)
+#define MWM_HINTS_DECORATIONS	(1L << 1)
+#define MWM_FUNC_RESIZE		(1L << 1)
+#define MWM_FUNC_MOVE		(1L << 2)
+#define MWM_FUNC_MINIMIZE	(1L << 3)
+#define MWM_FUNC_MAXIMIZE	(1L << 4)
+#define MWM_FUNC_CLOSE		(1L << 5)
+#define MWM_DECOR_ALL		(1L << 0)
+#define MWM_DECOR_MENU		(1L << 4)
+
+#define DEFAULT_SLAVE_RATIO	5
+#define DEFAULT_X		1
+#define DEFAULT_Y		1
+
+typedef struct {
+	int flags;
+	long functions;
+	long decorations;
+	long input_mode;
+	long state;
+} MotifWmHints;
+
+extern XvImage * XvShmCreateImage(Display *, XvPortID, int, char *, int, int, XShmSegmentInfo *);
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,25 +88,23 @@
 #include <X11/extensions/XShm.h>
 #include <X11/extensions/Xvlib.h>
 
-#include <util/Logger.h>
-
 XVWindow::XVWindow() {
 	// initialize class variables
-	_master=NULL;
-	_slave=NULL;
-	_XVPort=0;
-	_state.fullscreen=false;
-	_state.ontop=false;
-	_state.decoration=true;
-	_display=NULL;
-	_XVWindow=0;
-	_XShmInfo.shmaddr=NULL;
-	_gc=NULL;
+	_master = NULL;
+	_slave = NULL;
+	_XVPort = 0;
+	_state.fullscreen = false;
+	_state.ontop = false;
+	_state.decoration = true;
+	_display = NULL;
+	_XVWindow = 0;
+	_XShmInfo.shmaddr = NULL;
+	_gc = NULL;
 	_isInitialized = false;
 }
 
 int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth, int windowHeight, int imageWidth, int imageHeight) {
-	
+
 	// local variables needed for creation of window and initialization of XV extension
 	unsigned int i;
 	unsigned int ver, rel, req, ev, err, adapt;
@@ -75,7 +118,7 @@ int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth
 	_display=dp;
 	_rootWindow=rootWindow;
 	_state.origLayer=0;
-	
+
 	// initialize atoms
 	WM_DELETE_WINDOW = XInternAtom(_display, "WM_DELETE_WINDOW", False);
 	XA_WIN_PROTOCOLS = XInternAtom(_display, "_WIN_PROTOCOLS", False);
@@ -112,7 +155,7 @@ int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth
 		LOG_DEBUG("[x11] XQueryExtension failed");
 		return 0;
 	}
-	if (!XShmQueryExtension(_display)) { 
+	if (!XShmQueryExtension(_display)) {
 		LOG_DEBUG("[x11] XQueryShmExtension failed");
 		return 0;
 	}
@@ -187,7 +230,7 @@ XVWindow::~XVWindow() {
 	}
 }
 
-void XVWindow::putFrame(piximage* frame) {
+void XVWindow::putFrame(piximage * frame) {
 	XEvent event;
 
 	// event handling
@@ -234,7 +277,7 @@ void XVWindow::putFrame(piximage* frame) {
 				}
 			}
 		}
-		
+
 		// a key is pressed
 		if (event.type == KeyPress) {
 			XKeyEvent* xke = (XKeyEvent*) &event;
@@ -249,12 +292,12 @@ void XVWindow::putFrame(piximage* frame) {
 				break;
 			}
 		}
-		
+
 		// a mouse button is clicked
 		if (event.type == ButtonPress) {
 			if (_master) {
 				_master->toggleFullscreen();
-			} else { 
+			} else {
 				toggleFullscreen();
 			}
 		}
@@ -269,14 +312,14 @@ void XVWindow::putFrame(piximage* frame) {
 	XFlush(_display);
 }
 
-void XVWindow::toggleFullscreen () {
+void XVWindow::toggleFullscreen() {
 	int newX, newY, newWidth, newHeight;
 	Window* childWindow=(Window*) malloc(sizeof(Window));
 	XWindowAttributes* xwattributes=(XWindowAttributes*) malloc(sizeof(XWindowAttributes));
 
 	if (_state.fullscreen) {
 		// not needed with EWMH fs
-		if ( ! (_wmType & wm_FULLSCREEN) ) { 
+		if ( ! (_wmType & wm_FULLSCREEN) ) {
 			newX = _state.oldx;
 			newY = _state.oldy;
 			newWidth = _state.oldWidth;
@@ -299,7 +342,7 @@ void XVWindow::toggleFullscreen () {
 
 			setDecoration(false);
 			XFlush(_display);
-			XTranslateCoordinates(_display, _XVWindow, RootWindow(_display, DefaultScreen(_display)), 
+			XTranslateCoordinates(_display, _XVWindow, RootWindow(_display, DefaultScreen(_display)),
 						0,0,&_state.oldx,&_state.oldy, childWindow);
 			XGetWindowAttributes(_display, _XVWindow, xwattributes);
 			_state.oldWidth = xwattributes->width;
@@ -307,7 +350,7 @@ void XVWindow::toggleFullscreen () {
 		}
 	}
 	 // not needed with EWMH fs - create a screen-filling window on top and turn of decorations
-	if ( ! (_wmType & wm_FULLSCREEN) ) {
+	if (!(_wmType & wm_FULLSCREEN) ) {
 		setSizeHints(newX, newY, _XVImage->width, _XVImage->height, newWidth, newHeight);
 		setLayer((!_state.fullscreen) ? 0 : 1);
 		XMoveResizeWindow(_display, _XVWindow, newX, newY, newWidth, newHeight);
@@ -340,7 +383,7 @@ void XVWindow::setEWMHFullscreen(int action) {
 		xev.xclient.data.l[2] = 0;
 		xev.xclient.data.l[3] = 0;
 		xev.xclient.data.l[4] = 0;
-		
+
 		// send the event to the window
 		if (!XSendEvent(_display, _rootWindow, False, SubstructureRedirectMask | SubstructureNotifyMask, &xev)) {
 			LOG_DEBUG("[x11] setEWMHFullscreen failed");
@@ -348,12 +391,12 @@ void XVWindow::setEWMHFullscreen(int action) {
 	}
 }
 
-void XVWindow::toggleOntop () {
+void XVWindow::toggleOntop() {
 	setLayer((_state.ontop) ? 0 : 1);
 	_state.ontop=!_state.ontop;
 }
 
-void XVWindow::setLayer (int layer) {
+void XVWindow::setLayer(int layer) {
 	Window mRootWin = RootWindow(_display, DefaultScreen(_display));
 	XClientMessageEvent xev;
 	memset(&xev, 0, sizeof(xev));

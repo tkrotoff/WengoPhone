@@ -63,13 +63,20 @@ int CPhoneCall::getDuration() const {
 }
 
 void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state) {
-	_pPhoneCall->stateChangedEvent(state);
+	if (state == EnumPhoneCallState::PhoneCallStateClosed) {
+		_pPhoneCall->close();
+		_pPhoneCall = NULL;
+	} else if (_pPhoneCall) {
+		_pPhoneCall->stateChangedEvent(state);
+	}
 }
 
 void CPhoneCall::videoFrameReceivedEventHandler(PhoneCall & sender, piximage * remoteVideoFrame,
 	piximage * localVideoFrame) {
 
-	_pPhoneCall->videoFrameReceivedEvent(remoteVideoFrame, localVideoFrame);
+	if (_pPhoneCall) {
+		_pPhoneCall->videoFrameReceivedEvent(remoteVideoFrame, localVideoFrame);
+	}
 }
 
 void CPhoneCall::hangUp() {

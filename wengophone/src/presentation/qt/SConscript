@@ -146,6 +146,7 @@ sources = [
 	'QtSystray.cpp',
 	'phoneline/QtPhoneLine.cpp',
 	'phonecall/QtPhoneCall.cpp',
+	'phonecall/QtVideo.cpp',
 	'phonecall/QtVideoQt.cpp',
 	'phonecall/QtContactCallList.cpp',
 	'phonecall/QtContactCallListWidget.cpp',
@@ -270,9 +271,12 @@ forms = [
 	'chat/ChatRoomWidget.ui',
 	'contactlist/RenameGroupDialog.ui',
 	'contactlist/UserWidget.ui',
+	'contactlist/contactList.ui',
 	'profilebar/CreditWidget.ui',
 	'profilebar/EventWidget.ui',
 	'toaster/QtCallToaster.ui',
+	'phonecall/PhoneCallWidget.ui',
+	'phonecall/VideoWindow.ui',
 ]
 
 for form in forms:

@@ -26,17 +26,15 @@
 #include <qtutil/QObjectThreadSafe.h>
 
 #include <QString>
-#include <QTreeWidgetItem>
-
-#include <map>
 
 class Contact;
 class ContactPopupMenu;
 class ContactGroupPopupMenu;
 class CWengoPhone;
-class QTreeWidget;
-class QMouseEvent;
 class QtContactManager;
+
+class QTreeWidgetItem;
+namespace Ui { class ContactList; }
 
 /**
  * Qt Presentation component for ContactList.
@@ -159,13 +157,13 @@ private:
 
 	CContactList & _cContactList;
 
+	Ui::ContactList * _ui;
+
 	QWidget * _contactListWidget;
 
 	ContactPopupMenu * _contactPopupMenu;
 
 	ContactGroupPopupMenu * _contactGroupPopupMenu;
-
-	QTreeWidget * _treeWidget;
 
 	/** True when model is doing some things on contacts. */
 	bool _waitingForModel;

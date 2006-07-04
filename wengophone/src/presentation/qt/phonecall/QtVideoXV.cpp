@@ -19,94 +19,77 @@
 
 #include "QtVideoXV.h"
 
-#include <cutil/global.h>
-
-#include <webcam/WebcamDriver.h>
-
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
-
-#include <QtGui>
-
-#include <util/Logger.h>
+#include "ui_VideoWindow.h"
 
 #include "XVWindow.h"
 
-XVWindow* _localWindow;
-XVWindow* _remoteWindow;
+#include <webcam/WebcamDriver.h>
 
-QtVideoXV::QtVideoXV(QWidget * parent, int rem_width, int rem_height, int loc_width, int loc_height) {
-	_videoWindow = WidgetFactory::create(":/forms/phonecall/VideoWindow.ui", parent);
+#include <util/Logger.h>
 
-	//frame
-	_frame = Object::findChild<QFrame *>(_videoWindow, "frame");
-	_frameWindowFlags = _frame->windowFlags();
+#include <cutil/global.h>
+
+#include <QtGui>
+
+QtVideoXV::QtVideoXV(QWidget * parent, int remoteVideoFrameWidth, int remoteVideoFrameHeight, int localVideoFrameWidth, int localVideoFrameHeight) {
+	: QtVideo(parent) {
 
 	//flipButton
-	QPushButton * flipButton = Object::findChild<QPushButton *>(_frame, "flipButton");
-	connect(flipButton, SIGNAL(clicked()), SLOT(flipWebcam()));
+	connect(_ui->flipButton, SIGNAL(clicked()), SLOT(flipWebcamButtonClicked()));
 
 	//fullScreenButton
-	_fullScreenButton = Object::findChild<QPushButton *>(_frame, "fullScreenButton");
-	connect(_fullScreenButton, SIGNAL(clicked()), SLOT(fullScreenButtonClicked()));
-
-	_encrustLocalWebcam = true;
+	connect(_ui->fullScreenButton, SIGNAL(clicked()), SLOT(fullScreenButtonClicked()));
 
 	_remoteWindow = new XVWindow();
-	if(_remoteWindow->init(XOpenDisplay(NULL), DefaultRootWindow(
-		   XOpenDisplay(NULL)), 0, 0, rem_width * 2, rem_height * 2, rem_width, rem_height)) {
+	if (_remoteWindow->init(XOpenDisplay(NULL), DefaultRootWindow(
+		   XOpenDisplay(NULL)), 0, 0, remoteVideoFrameWidth * 2, remoteVideoFrameHeight * 2, remoteVideoFrameWidth, remoteVideoFrameHeight)) {
 			_localWindow = new XVWindow();
-			LOG_DEBUG("Remote window initialization: success");
+			LOG_DEBUG("remote window initialization: success");
 
-			if(_encrustLocalWebcam && 
-				_localWindow->init(XOpenDisplay(NULL), _remoteWindow->getWindow(),0,0,loc_width, loc_height,loc_width, loc_height)) {
+			if (_localWindow->init(XOpenDisplay(NULL), _remoteWindow->getWindow(), 0, 0, localVideoFrameWidth, localVideoFrameHeight, localVideoFrameWidth, localVideoFrameHeight)) {
 
 				_remoteWindow->registerSlave(_localWindow);
 				_localWindow->registerMaster(_remoteWindow);
-				LOG_DEBUG("Local window initialization: success");
+				LOG_DEBUG("local window initialization: success");
 
 			} else {
 				delete _localWindow;
 				_localWindow = NULL;
 
-				//TODO: in this case to have the local video image
+				//TODO in this case to have the local video image
 				//we must compute the final image
 
-				LOG_DEBUG("Local window initialization: failed");
+				LOG_DEBUG("local window initialization: failed");
 			}
 
 	} else {
 		delete _remoteWindow;
 		_remoteWindow = NULL;
 		_localWindow = NULL;
-		LOG_DEBUG("Remote window initialization: failed");
+		LOG_DEBUG("remote window initialization: failed");
 	}
 }
 
 QtVideoXV::~QtVideoXV() {
-	if(_remoteWindow) {
+	if (_remoteWindow) {
 		_remoteWindow->registerSlave(NULL);
 		delete _remoteWindow;
 	}
-	if(_localWindow) {
+	if (_localWindow) {
 		_localWindow->registerMaster(NULL);
 		delete _localWindow;
 	}
 }
 
-bool QtVideoXV::isFullScreen() {
+bool QtVideoXV::isFullScreen() const {
 	return _remoteWindow->isFullScreen();
 }
 
-QSize QtVideoXV::getFrameSize() {
-	return _frame->frameRect().size();
+QSize QtVideoXV::getFrameSize() const {
+	return _ui->frame->frameRect().size();
 }
 
-QWidget* QtVideoXV::getWidget()  {
-	return _videoWindow;
-}
-
-void QtVideoXV::showImage(piximage* remoteVideoFrame, piximage* localVideoFrame) {
+void QtVideoXV::showImage(piximage * remoteVideoFrame, piximage * localVideoFrame) {
 	if (_remoteWindow) {
 		_remoteWindow->putFrame(remoteVideoFrame);
 		if (_localWindow) {
@@ -115,7 +98,7 @@ void QtVideoXV::showImage(piximage* remoteVideoFrame, piximage* localVideoFrame)
 	}
 }
 
-void QtVideoXV::flipWebcam() {
+void QtVideoXV::flipWebcamButtonClicked() {
 	static bool flip = true;
 
 	IWebcamDriver * driver = WebcamDriver::getInstance();
@@ -129,11 +112,7 @@ void QtVideoXV::fullScreenButtonClicked() {
 }
 
 void QtVideoXV::unFullScreen() {
-	if( isFullScreen() ) {
+	if (isFullScreen()) {
 		_remoteWindow->toggleFullscreen();
 	}
-}
-
-bool QtVideoXV::isInitialized() {
-	return (_remoteWindow != NULL);
 }

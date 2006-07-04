@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTVIDEOXV_H
-#define QTVIDEOXV_H
+#ifndef OWQTVIDEOXV_H
+#define OWQTVIDEOXV_H
 
 #include "QtVideo.h"
 
@@ -26,47 +26,36 @@ class QFrame;
 class XVWindow;
 
 class QtVideoXV : public QtVideo {
-Q_OBJECT
+	Q_OBJECT
 public:
 
-	QtVideoXV(QWidget * parent, int rem_width, int rem_height, int loc_width, int loc_height);
+	QtVideoXV(QWidget * parent, int remoteVideoFrameWidth, int remoteVideoFrameHeight, int localVideoFrameWidth, int localVideoFrameHeight)
 
 	~QtVideoXV();
 
-	void showImage(piximage* remoteVideoFrame, piximage* localVideoFrame);
+	void showImage(piximage * remoteVideoFrame, piximage * localVideoFrame);
 
-	QWidget * getWidget();
+	QSize getFrameSize() const;
 
-	QSize getFrameSize();
+	bool isInitialized() const {
+		return (_remoteWindow && _localWindow);
+	}
 
-	bool isInitialized();
+	bool isFullScreen() const;
 
-	bool isFullScreen();
+	void unFullScreen();
 
 private Q_SLOTS:
 
-	void flipWebcam();
+	void flipWebcamButtonClicked();
 
 	void fullScreenButtonClicked();
 
 private:
 
-	void unFullScreen();
-
-	QWidget * _videoWindow;
-
-	QFrame * _frame;
-
-	int _frameWindowFlags;
-
-	QPushButton * _fullScreenButton;
-
-	bool _encrustLocalWebcam;
-
 	XVWindow * _localWindow;
 
 	XVWindow * _remoteWindow;
-
-	bool _fullScreen;
 };
-#endif  //QTVIDEOXV_H
+
+#endif	//OWQTVIDEOXV_H

@@ -66,7 +66,7 @@ public:
 	 * @param remoteVideoFrame remote video frame
 	 * @param localVideoFrame local video frame from the webcam
 	 */
-	Event<void (PhoneCall & sender, piximage*  remoteVideoFrame, piximage* localVideoFrame)> videoFrameReceivedEvent;
+	Event<void (PhoneCall & sender, piximage * remoteVideoFrame, piximage * localVideoFrame)> videoFrameReceivedEvent;
 
 	/**
 	 * Creates a new PhoneCall given a PhoneLine.

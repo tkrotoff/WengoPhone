@@ -19,58 +19,47 @@
 
 #include "QtVideoQt.h"
 
-#include <cutil/global.h>
+#include "ui_VideoWindow.h"
 
 #include <webcam/WebcamDriver.h>
 
 #include <qtutil/PaintEventFilter.h>
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
 
 #include <util/Logger.h>
+
+#include <cutil/global.h>
 
 #include <QtGui>
 
 #if defined OS_WINDOWS && defined CC_MSVC
-#include <windows.h>
+	#include <windows.h>
 #endif
 
-QtVideoQt::QtVideoQt(QWidget * parent) {
-	_videoWindow = WidgetFactory::create(":/forms/phonecall/VideoWindow.ui", parent);
+QtVideoQt::QtVideoQt(QWidget * parent)
+	: QtVideo(parent) {
 
-	//frame
-	_frame = Object::findChild<QFrame *>(_videoWindow, "frame");
-	_frameWindowFlags = _frame->windowFlags();
-
-	_qtVideoQtEventManager = new QtVideoQtEventManager(_frame, this);
+	_qtVideoQtEventManager = new QtVideoQtEventManager(_ui->frame, this);
 
 	PaintEventFilter * paintFilter = new PaintEventFilter(this, SLOT(paintEvent()));
-	_frame->installEventFilter(paintFilter);
+	_ui->frame->installEventFilter(paintFilter);
 
 	//flipButton
-	QPushButton * flipButton = Object::findChild<QPushButton *>(_frame, "flipButton");
-	connect(flipButton, SIGNAL(clicked()), SLOT(flipWebcam()));
+	connect(_ui->flipButton, SIGNAL(clicked()), SLOT(flipWebcamButtonClicked()));
 #ifdef OS_WINDOWS
-	flipButton->hide();
+	_ui->flipButton->hide();
 #endif
 
 	//fullScreenButton
-	_fullScreenButton = Object::findChild<QPushButton *>(_frame, "fullScreenButton");
-	connect(_fullScreenButton, SIGNAL(clicked()), SLOT(fullScreenButtonClicked()));
+	connect(_ui->fullScreenButton, SIGNAL(clicked()), SLOT(fullScreenButtonClicked()));
 
-	_encrustLocalWebcam = true;
 	_fullScreen = false;
 }
 
 QtVideoQt::~QtVideoQt() {
 }
 
-QSize QtVideoQt::getFrameSize() {
-	return _frame->frameRect().size();
-}
-
-QWidget * QtVideoQt::getWidget() {
-	return _videoWindow;
+QSize QtVideoQt::getFrameSize() const {
+	return _ui->frame->frameRect().size();
 }
 
 void QtVideoQt::showImage(piximage * remoteVideoFrame, piximage * localVideoFrame) {
@@ -79,8 +68,8 @@ void QtVideoQt::showImage(piximage * remoteVideoFrame, piximage * localVideoFram
 	if (_videoWindow) {
 		// screen target size
 		//QSize frameSize = _videoWindow->frameSize();
-		QSize frameSize = _frame->frameRect().size();
-		
+		QSize frameSize = _ui->frame->frameRect().size();
+
 		if (frameSize.width() < size.width()) {
 			size.setWidth(352);
 			size.setHeight(288);
@@ -98,14 +87,14 @@ void QtVideoQt::showImage(piximage * remoteVideoFrame, piximage * localVideoFram
 	pix_free(resizedImage);
 
 	//If we want to embed the local webcam picture, we do it here
-	if (_encrustLocalWebcam) {
+	if (true) {
 		const unsigned offset_x = 10;
 		const unsigned offset_y = 10;
 		const unsigned ratio = 5;
 		const unsigned border_size = 1;
 		const QBrush border_color = Qt::black;
 
-		// we force the ratio of the remote frame on the webcam frame (ignoring the webcam's aspect ratio)
+		//Force the ratio of the remote frame on the webcam frame (ignoring the webcam's aspect ratio)
 		unsigned width = (size.width() / ratio) & ~1;
 		unsigned height = (size.height() / ratio) & ~1;
 		unsigned posx = size.width() - width - offset_x;
@@ -124,23 +113,23 @@ void QtVideoQt::showImage(piximage * remoteVideoFrame, piximage * localVideoFram
 
 		QPainter painter;
 		painter.begin(image);
-		// draw a 1-pixel border around the local embedded frame
+		//Draw a 1-pixel border around the local embedded frame
 		painter.fillRect(posx - border_size, posy - border_size, width + 2 * border_size,
 			height + 2 * border_size, border_color);
-		// embed the image
+		//Embed the image
 		painter.drawImage(posx, posy, localImage);
 		painter.end();
 	}
 
 	_image = *image;
-	_frame->update();
+	_ui->frame->update();
 	delete image;
 }
 
 void QtVideoQt::paintEvent() {
 	if (!_image.isNull()) {
-		QPainter painter(_frame);
-		QSize frameSize = _frame->frameRect().size();
+		QPainter painter(_ui->frame);
+		QSize frameSize = _ui->frame->frameRect().size();
 		QSize size = frameSize;
 		int xpos = 0, ypos = 0;
 
@@ -163,7 +152,7 @@ void QtVideoQt::paintEvent() {
 	}
 }
 
-void QtVideoQt::flipWebcam() {
+void QtVideoQt::flipWebcamButtonClicked() {
 	static bool flip = true;
 
 	IWebcamDriver * driver = WebcamDriver::getInstance();
@@ -173,26 +162,22 @@ void QtVideoQt::flipWebcam() {
 }
 
 void QtVideoQt::fullScreenButtonClicked() {
-	_frame->setFocus();
+	_ui->frame->setFocus();
 
-	if(!_fullScreen) {
+	if (!_fullScreen) {
 		this->fullScreen();
 	} else {
 		this->unFullScreen();
 	}
 }
 
-bool QtVideoQt::isFullScreen() {
-	return _fullScreen;
-}
-
 void QtVideoQt::fullScreen() {
-	_fullScreenButton->setIcon(QIcon(":/pics/video_unfullscreen.png"));
+	_ui->fullScreenButton->setIcon(QIcon(":/pics/video_unfullscreen.png"));
 
 	QLayout * layout = _videoWindow->layout();
-	layout->removeWidget(_frame);
+	layout->removeWidget(_ui->frame);
 
-	_frame->setParent(NULL);
+	_ui->frame->setParent(NULL);
 
 #if defined OS_WINDOWS && defined CC_MSVC
 	//TODO put inside LibUtil
@@ -218,14 +203,14 @@ void QtVideoQt::fullScreen() {
 	}
 #endif
 	_fullScreen = true;
-	_frame->showFullScreen();
+	_ui->frame->showFullScreen();
 }
 
 void QtVideoQt::unFullScreen() {
-	_fullScreenButton->setIcon(QIcon(":/pics/video_fullscreen.png"));
-	_frame->setParent(_videoWindow);
+	_ui->fullScreenButton->setIcon(QIcon(":/pics/video_fullscreen.png"));
+	_ui->frame->setParent(_videoWindow);
 	QLayout * layout = _videoWindow->layout();
-	layout->addWidget(_frame);
+	layout->addWidget(_ui->frame);
 
 #if defined OS_WINDOWS && defined CC_MSVC
 	//Restores previous resolution
@@ -233,30 +218,26 @@ void QtVideoQt::unFullScreen() {
 #endif
 
 	_fullScreen = false;
-	_frame->show();
-}
-
-bool QtVideoQt::isInitialized() {
-	return true;
+	_ui->frame->show();
 }
 
 
 QtVideoQtEventManager::QtVideoQtEventManager(QFrame * target, QtVideoQt * qtVideoQt)
-	: QObject(target), _qtVideoQt(qtVideoQt) {
+	: QObject(target),
+	_qtVideoQt(qtVideoQt) {
+
 	target->installEventFilter(this);
 }
 
-bool QtVideoQtEventManager::eventFilter(QObject *obj, QEvent *event) {
-
+bool QtVideoQtEventManager::eventFilter(QObject * object, QEvent * event) {
 	if (event->type() == QEvent::KeyPress) {
 		QKeyEvent * keyEvent = static_cast<QKeyEvent *>(event);
 
-		if( keyEvent->key() == Qt::Key_Escape) {
+		if (keyEvent->key() == Qt::Key_Escape) {
 			_qtVideoQt->unFullScreen();
 		}
 
 	}
 
-	return QObject::eventFilter(obj, event);
+	return QObject::eventFilter(object, event);
 }
-
