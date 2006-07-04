@@ -59,8 +59,9 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	_qtWengoPhone = (QtWengoPhone *) _cPhoneCall.getCWengoPhone().getPresentation();
 	_videoWindow = NULL;
 
+	_remoteVideoFrame = NULL;
+	_localVideoFrame = NULL;
 	_hold = true;
-
 	_showVideo = false;
 
 	stateChangedEvent += boost::bind(& QtPhoneCall::stateChangedEventHandler, this, _1);
@@ -72,8 +73,10 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 }
 
 QtPhoneCall::~QtPhoneCall() {
-	pix_free(_remoteVideoFrame);
-	pix_free(_localVideoFrame);
+	if(_remoteVideoFrame && _localVideoFrame) {
+		pix_free(_remoteVideoFrame);
+		pix_free(_localVideoFrame);
+	}
 }
 
 void QtPhoneCall::initThreadSafe() {
