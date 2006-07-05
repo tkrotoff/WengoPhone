@@ -259,6 +259,7 @@ static void
 cb_clean(struct circbuf *cb)
 {
   g_free(cb->cb_buf);
+  memset(cb, 0, sizeof(*cb));
 }
 
 
@@ -331,6 +332,9 @@ ph_on_cng_packet(RtpSession *rtp_session, mblk_t *mp, struct ph_msession_s *s)
   unsigned short factor;
   unsigned int cng_level;
   phastream_t *stream = (phastream_t *)s->streams[PH_MSTREAM_AUDIO1].streamerData;
+
+	rtp_session; // only to avoid compilation warnings
+	
   if(stream->ms.running && stream->cngi.cng && mp != NULL)
   {
     /* first byte contains level, following fields (if any) are discarded */
@@ -365,6 +369,33 @@ ph_on_cng_packet(RtpSession *rtp_session, mblk_t *mp, struct ph_msession_s *s)
   }
 }
 
+/**
+ * @brief clean the Voice Activity Detector structures
+ */
+void ph_audio_vad_cleanup(phastream_t *stream)
+{
+  if ( stream->cngi.pwr )
+    osip_free(stream->cngi.pwr);
+
+  stream->cngi.pwr = 0;
+
+  if ( stream->cngi.cng )
+    {
+      CNG_LOCK(stream);
+      
+      if(stream->cngi.noise)
+	osip_free(stream->cngi.noise);
+
+      stream->cngi.noise = 0;
+
+      CNG_UNLOCK(stream);
+#if 0
+      if ( stream->cngi.cng_lock )
+    g_mutex_free(stream->cng_lock);
+#endif
+    }
+	stream->cngi.cng = 0;
+}
 
 #ifdef DO_ECHO_CAN
 
@@ -1021,7 +1052,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 		{
 			CONF_LOCK(stream);
 			if (stream->to_mix && !stream->to_mix->ms.suspended)
-			{
+				{
 				int len2;
 				len = ph_media_retrieve_decoded_frame(stream, &stream->data_in, internal_clockrate);
 				len2 = ph_media_retrieve_decoded_frame(stream->to_mix, &stream->to_mix->data_in, internal_clockrate);
@@ -2163,20 +2194,493 @@ setup_aec(struct ph_msession_s *s, phastream_t *stream)
 
 }
 
+/**
+ * @brief stops a specific stream in a session
+ *
+ * it currently always try to stop the AUDIO1 stream
+ * @param s ph_msession in which the AUDIO1 stream is found
+ * @param deviceId phapi device name alias of the related device
+ * @param stopdevice 0/1 should the device be stopped or kept open even if the stream is stopped
+ * @param hardstop 0/1 a hardstop is a final and definitive stop upon hangup
+ */
+void ph_msession_audio_stream_stop(struct ph_msession_s *s, const char *deviceId, int stopdevice, int hardstop)
+{
+	struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
+	phastream_t *stream = (phastream_t *) msp->streamerData;
+	int confflags = s->confflags;
+	phastream_t *master;
+	struct ph_msession_s *s2 = s->confsession;
+
+	// we cannot stop a non-existing or non-running stream
+	if (!stream || !stream->ms.running)
+	{
+		return;
+	}
+
+	// if the stream is going to disappear and a conf is taking place
+	// it is necessary to unlink the members of the conf
+	if (hardstop && confflags)
+	{
+		ph_msession_audio_stream_conf_unlink(s->confsession, s);
+	}
+
+	s->activestreams &= ~(1 << PH_MSTREAM_AUDIO1);
+	
+	// inform the engine that a stream stop is required
+	stream->ms.running = 0;
+	
+	master = stream->master;
+
+	// if a thread was needed in the threading model, wait and destroy it
+	if (stream->ms.media_io_thread)
+	{
+		osip_thread_join(stream->ms.media_io_thread);
+		osip_free(stream->ms.media_io_thread);
+		stream->ms.media_io_thread = 0;
+	}
+
+	// if the stream has a MASTER stream, the MASTER needs to stop mixing
+	// NOTE (jwa): it should be verified whether this part is strictly necessary
+	if (master)
+	{
+		CONF_LOCK(master);
+		master->to_mix = 0;
+		CONF_UNLOCK(master);
+	}
+
+#ifdef PH_USE_RESAMPLE
+	// clean the resampling context
+	if (stream->actual_rate != stream->clock_rate)
+	{
+		ph_resample_cleanup0(stream->resample_audiodrv_ctx_mic);
+        stream->resample_audiodrv_ctx_mic = 0;
+		ph_resample_cleanup0(stream->resample_audiodrv_ctx_spk);
+		stream->resample_audiodrv_ctx_spk = 0;
+	}
+#endif
+
+	stream->clock_rate = 0;
+	
+	msp->flags &= ~PH_MSTREAM_FLAG_RUNNING;
+
+	if (stopdevice)
+	{
+		audio_stream_close(stream); /* close the sound card */
+	} else {
+		stream->actual_rate = 0;
+	}
+
+	if (stream->mixbuf)
+	{
+		ph_mediabuf_free(stream->mixbuf);
+		stream->mixbuf = 0;
+	}
+
+	ph_mediabuf_cleanup(&stream->data_in);
+	memset(&stream->data_in, 0, sizeof(stream->data_in));
+	ph_mediabuf_cleanup(&stream->data_out);
+	memset(&stream->data_out, 0, sizeof(stream->data_out));
+
+#ifdef TRACE_POWER
+	print_pwrstats(stream);
+#endif
+
+	//  RTP_SESSION_LOCK(stream->rtp_session);
+	rtp_session_signal_disconnect_by_callback(stream->ms.rtp_session, "telephone-event",
+						(RtpCallback)ph_telephone_event);
+	rtp_session_signal_disconnect_by_callback(stream->ms.rtp_session, "cng_packet",
+						(RtpCallback)ph_on_cng_packet);
+
+	ortp_set_debug_file("oRTP", stdout); 
+	//  ortp_global_stats_display();
+	ortp_session_stats_display(stream->ms.rtp_session);
+	ortp_set_debug_file("oRTP", NULL); 
+
+{
+	/* free non default profiles */
+	RtpProfile *rprofile, *sprofile;
+   	sprofile = rtp_session_get_send_profile(stream->ms.rtp_session);
+	if (sprofile != &av_profile)
+	{
+		rtp_profile_destroy(sprofile);
+	}
+
+	rprofile = rtp_session_get_recv_profile(stream->ms.rtp_session);
+	if (rprofile != &av_profile && rprofile != sprofile)
+	{
+		rtp_profile_destroy(rprofile);
+	}
+}
 
 
+	rtp_session_destroy(stream->ms.rtp_session);
+	stream->ms.rtp_session = 0;
+
+	if (stream->ms.codec->encoder_cleanup)
+	{
+		stream->ms.codec->encoder_cleanup(stream->ms.encoder_ctx);
+		stream->ms.encoder_ctx = 0;
+	}
+	if (stream->ms.codec->decoder_cleanup)
+	{
+		stream->ms.codec->decoder_cleanup(stream->ms.decoder_ctx);
+		stream->ms.decoder_ctx = 0;
+	}
+	stream->ms.codec = 0;
+
+	ph_audio_vad_cleanup(stream);
+
+#ifdef DO_ECHO_CAN
+	if(stream->ec)
+	{
+		cb_clean(&stream->pcmoutbuf);
+		
+		if(stream->ec)
+		{
+			ph_ec_cleanup(stream->ec);
+		}
+		g_mutex_free(stream->ecmux);
+		stream->ec =0;
+    }
+
+	// TODO: refactor echo canceller cleanup
+	stream->sent_cnt = 0;
+	stream->recv_cnt = 0;
+	stream->read_cnt = 0;
+	stream->mic_current_sample = 0;
+	stream->spk_current_sample = 0;
+
+	stream->ec_phase=0;
+	stream->audio_loop_latency=0;
+	stream->underrun=0;
+	stream->ecmux=0;
+
+#endif
+
+
+
+	stream->hdxmode = 0;
+	
+	cleanup_recording(stream);
+	
+	DBG1_MEDIA_ENGINE("\naudio stream closed\n");
+
+	if (stream->lastframe)
+	{
+		free(stream->lastframe);
+		stream->lastframe = 0;
+	}
+
+#ifdef PH_FORCE_16KHZ
+	if (stream->resamplectx)
+	{
+		ph_resample_cleanup(stream->resamplectx);
+		stream->resamplectx = 0;
+	}
+#endif      
+
+	stream->ms.rxtstamp = 0;
+	stream->ms.txtstamp = 0;
+	stream->ms.rxts_inc = 0;
+
+	// handover of the audio device
+	if (confflags == PH_MSESSION_CONF_MASTER)
+	{
+		struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
+		phastream_t *stream2 = (phastream_t *) msp2->streamerData;
+
+		DBG1_MEDIA_ENGINE("audio_stop: removing conf master\n");
+
+		if (hardstop)
+		{
+			s2->confflags = 0;
+			stream2->master = 0;
+		}
+
+		/* if the slave stream is not suspended,  start audio streaming for it */
+		//if (stream2 && !stream2->ms.suspended)
+		if (stream2 && (stream2->ms.mses->activestreams & (1 << PH_MSTREAM_AUDIO1)))
+		{
+			s2->newstreams |= (1 << PH_MSTREAM_AUDIO1);
+			if (!open_audio_device(s2, stream2, deviceId))
+			{
+				start_audio_device(s2, stream2);
+			}
+		DBG1_MEDIA_ENGINE("audio_stop: started audio for ex-slave\n");
+		}
+	}
+
+	// cleanup the phmstream structure, but remember the phmsession link
+	//memset(&stream->ms, 0, sizeof(struct phmstream));
+	//stream->ms.mses = s;
+	
+	// do not finish the cleanup work if it is only a suspension
+	// or a restart
+	if (hardstop)
+	{
+		g_mutex_free(stream->dtmfi.dtmfg_lock); // for CONF_LOCK in SUSPEND mode..
+		osip_free(stream);
+		msp->streamerData = 0;
+	}
+}
+
+/**
+ * @brief used to activate what needs to be activated on an audio session
+ * 
+ * this function is used by phapi.c through phmedia.c
+ */
 int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 {
-  RtpSession *session;
+	PH_MSESSION_AUDIO_LOCK();
+	ph_msession_audio_stream_start(s, deviceId);
+	PH_MSESSION_AUDIO_UNLOCK();
+	return 0;
+}
+
+
+/**
+ * @brief hard start (or 'slow start') of a stream
+ * 
+ * this leads to a full ressource allocation and threading model startup for a stream
+ * it is usually called when a stream has never been started or when a RE-INVITE asks
+ * for a codec modification
+ */
+phastream_t * ph_msession_audio_stream_hardstart(struct ph_msession_s *s, int codecpt, const char* deviceId)
+{
+	phastream_t *stream = NULL;
+	ph_mstream_params_t *sp = &s->streams[PH_MSTREAM_AUDIO1];
+	phcodec_t *codec = NULL;
+	RtpSession *session = NULL;
+	RtpProfile *rprofile = &av_profile;
+	RtpProfile *sprofile = &av_profile;
+
+	DBG3_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_audio_start devid=%s, confflags=%d\n", deviceId, s->confflags);
+
+	DBG2_MEDIA_ENGINE("MEDIA ENGINE: hardstart - looking for codec with payload = %d\n", codecpt);
+	codec = ph_media_lookup_codec(codecpt);
+    if (!codec)
+    {
+        DBG1_MEDIA_ENGINE("hardstart: found NO codec\n");
+        return NULL;
+    }
+	
+	if (sp->streamerData)
+	{
+		stream = sp->streamerData;
+
+		// reset correct linkage between potential conference streams
+		// TODO(cf jwa): check if this is stricly necessary now that the stream
+		// is not zeroed upon a RE-INVITE or RESUME
+		if (s->confflags)
+		{
+			struct ph_mstream_params_s *msp1 = &s->streams[PH_MSTREAM_AUDIO1];
+			phastream_t *stream1 = (phastream_t *) msp1->streamerData;
+			struct ph_mstream_params_s *msp2 = &s->confsession->streams[PH_MSTREAM_AUDIO1];
+			phastream_t *stream2 = (phastream_t *) msp2->streamerData;
+			if (s->confflags == PH_MSESSION_CONF_MASTER)
+			{
+				stream1->to_mix = stream2;
+				stream2->master = stream1;
+			}
+			if (s->confflags == PH_MSESSION_CONF_MEMBER)
+			{
+				stream2->to_mix = stream1;
+				stream1->master = stream2;
+			}
+
+		}
+	} else
+	{
+		stream = (phastream_t *)osip_malloc(sizeof(phastream_t));
+		if (!stream)
+		{
+			DBG1_MEDIA_ENGINE("out of memory\n");
+			return NULL;
+		}
+		memset(stream, 0, sizeof(*stream));
+	}
+
+	DBG2_MEDIA_ENGINE("hardstart: new audiostream = %08x\n", stream);
+
+	// setup recorders for the stream
+	setup_recording(stream);
+	
+	gettimeofday(&stream->last_rtp_sent_time, 0);
+	stream->cngi.last_noise_sent_time = stream->last_rtp_recv_time = stream->cngi.last_dtx_time = stream->last_rtp_sent_time;
+
+	setup_hdx_mode(s, stream);
+
+	stream->ms.mses = s;
+	stream->clock_rate = stream->actual_rate = codec->clockrate;
+	stream->cngi.vad = (sp->flags & PH_MSTREAM_FLAG_VAD)?1:0;
+	stream->cngi.pwr_threshold = sp->vadthreshold;
+	stream->cngi.cng = (sp->flags & PH_MSTREAM_FLAG_CNG)?1:0;
+	stream->ms.codec = codec;
+	stream->ms.payload =  sp->ipayloads[0].number;
+	stream->cngi.cng_pt = (stream->clock_rate > 8000) ? PH_MEDIA_CN_16000_PAYLOAD : PH_MEDIA_CN_PAYLOAD; /* FIXME: we need to handle separate directions too */
+
+	DBG2_MEDIA_ENGINE("ph_mession_audio_start: DTX/VAD %x\n", stream->cngi.pwr_threshold);
+	DBG2_MEDIA_ENGINE("ph_msession_audio_start: clock rate %d\n", stream->clock_rate);
+	DBG2_MEDIA_ENGINE("ph_msession_audio_start: CNG %s\n", stream->cngi.cng ? "activating" : "desactivating");
+	DBG2_MEDIA_ENGINE("ph_msession_audio_start: opening AUDIO device %s\n", deviceId);
+
+	// try to open the device and negociate internal_clockrate
+	if (open_audio_device(s, stream, deviceId)) {
+		// TODO: needs better cleanup
+		DBG1_MEDIA_ENGINE("MEDIA ENGINE:hardstart: cannot open audio driver\n");
+		free(stream);
+		return NULL;
+	}
+
+	// if the audio device do not support the expected clockrate
+	// we need to resample audio data
+#ifdef PH_USE_RESAMPLE
+	if (stream->clock_rate != stream->actual_rate)
+	{
+		stream->resample_audiodrv_ctx_spk = ph_resample_spk_init0(stream->clock_rate, stream->actual_rate);
+		stream->resample_audiodrv_ctx_mic = ph_resample_mic_init0(stream->clock_rate, stream->actual_rate);
+	}
+#endif
+
+
+#ifdef PH_FORCE_16KHZ
+	if (stream->clock_rate != stream->actual_rate)
+	{
+		stream->resamplectx = ph_resample_init();
+	}
+#endif
+
+	if (codec->encoder_init)
+	{
+		stream->ms.encoder_ctx = codec->encoder_init(0);
+	}
+
+	if (codec->decoder_init)
+	{
+	stream->ms.decoder_ctx = codec->decoder_init(0);
+	}
+
+	// define TX - IP:port for the stream
+	strcpy(stream->ms.remote_ip, sp->remoteaddr);
+	stream->ms.remote_port = sp->remoteport;
+
+	ph_mediabuf_init(&stream->data_in, malloc(2048), 2048);
+	ph_mediabuf_init(&stream->data_out, malloc(2048), 2048);
+	DBG2_MEDIA_ENGINE("ph_msession_audio_start: opening session remoteport: %d\n", stream->ms.remote_port);
+
+	session = rtp_session_new(RTP_SESSION_SENDRECV);
+
+#ifdef USE_HTTP_TUNNEL
+	if (sp->flags & PH_MSTREAM_FLAG_TUNNEL)
+	{
+		RtpTunnel *tun, *tun2;
+		DBG1_MEDIA_ENGINE("ph_mession_audio_start: Creating audio tunnel\n");
+
+		tun = rtptun_connect(sp->remoteaddr, sp->remoteport);
+
+		if (!tun)
+		{
+			// TODO: needs cleanup
+			return NULL;
+		}
+
+		tun2 = rtptun_connect(sp->remoteaddr, sp->remoteport+1);
+
+		rtp_session_set_tunnels(session, tun, tun2);
+		stream->ms.tunRtp = tun;
+		stream->ms.tunRtcp = tun2;
+	}
+#endif
+	
+	rtp_session_set_scheduling_mode(session, SCHEDULING_MODE); /* yes */
+	rtp_session_set_blocking_mode(session, BLOCKING_MODE);
+
+	if (codecpt != stream->ms.payload)
+	{
+		rprofile = sprofile = rtp_profile_clone_full(sprofile);
+		rtp_profile_move_payload(sprofile, codecpt, ph_speex_hook_pt);
+	}
+	else if (sp->ipayloads[0].number != sp->opayloads[0].number)
+	{
+		sprofile = rtp_profile_clone_full(sprofile);
+		rtp_profile_move_payload(sprofile, sp->ipayloads[0].number,  sp->opayloads[0].number);
+	}
+
+	rtp_session_set_profiles(session, sprofile, rprofile);
+	rtp_session_set_jitter_compensation(session, sp->jitter);
+	rtp_session_set_local_addr(session, "0.0.0.0", sp->localport);
+
+	rtp_session_set_remote_addr(session, sp->remoteaddr,sp->remoteport);
+
+	rtp_session_set_payload_types(session, sp->opayloads[0].number, sp->ipayloads[0].number);
+	rtp_session_set_cng_pt(session, stream->cngi.cng_pt);
+	rtp_session_signal_connect(session, "telephone-event",
+			(RtpCallback)ph_telephone_event, s);
+	rtp_session_signal_connect(session, "cng_packet",
+			(RtpCallback)ph_on_cng_packet, s);
+
+
+	stream->ms.rtp_session = session;
+
+	// SPIKE_HDX: init the voice activity detection on the local input stream (MIC)
+	if (stream->cngi.vad || stream->hdxmode == PH_HDX_MODE_MIC)
+	{
+		ph_audio_init_ivad(stream);
+	}
+
+
+	// SPIKE_HDX: init the voice activity detection on the local output stream (SPK)
+	if (stream->hdxmode == PH_HDX_MODE_SPK)
+	{
+		ph_audio_init_ovad(stream);
+	}
+
+
+	if (stream->cngi.cng)
+	{
+		ph_audio_init_cng(stream);
+	}
+  
+
+	setup_aec(s, stream);
+
+	stream->dtmfCallback = s->dtmfCallback;
+	stream->dtmfi.dtmfg_lock = g_mutex_new();
+	stream->dtmfi.dtmfq_cnt = 0;
+	stream->dtmfi.dtmfg_phase = DTMF_IDLE;
+
+	sp->flags |= PH_MSTREAM_FLAG_RUNNING;
+	sp->streamerData = stream;
+	s->activestreams |= (1 << PH_MSTREAM_AUDIO1);
+
+	DBG3_MEDIA_ENGINE("ph_mession_audio_start: s=%08x.stream=%08x\n", s, stream);
+
+	stream->ms.running = 1;
+
+	start_audio_device(s, stream);
+
+	DBG1_MEDIA_ENGINE("ph_msession_audio_start: audio stream init OK\n");
+
+	return stream;
+}
+
+/**
+ * @brief start/restart a specific stream in a session
+ *
+ * it currently always try to start the AUDIO1 stream
+ * this is the official entry point for stream activation. It decides whether
+ * a fast start or a slow start should be done
+ * fast start = a stream is already active and a RE-INVITE can be done without a full de-alloc / re-alloc cycle
+ * slow start (or hard start) = it is necessary to restart all the ressources
+ */
+int ph_msession_audio_stream_start(struct ph_msession_s *s, const char* deviceId)
+{
   phastream_t *stream;
-  phcodec_t *codec;
   int codecpt;
-  RtpProfile *rprofile = &av_profile;
-  RtpProfile *sprofile = &av_profile;
   ph_mstream_params_t *sp = &s->streams[PH_MSTREAM_AUDIO1];
   int newstreams;
 
-  DBG2_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_audio_start devid=%s\n", deviceId);
+  DBG3_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_audio_start devid=%s, confflags=%d\n", deviceId, s->confflags);
 
   newstreams = s->newstreams;
   s->newstreams = 0;
@@ -2191,12 +2695,8 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
         return 0;
     }
 
-
-
-    PH_MSESSION_AUDIO_LOCK();
     if (select_audio_device(deviceId))
     {
-        PH_MSESSION_AUDIO_UNLOCK();
         return -PH_NORESOURCES;
     }
 
@@ -2233,7 +2733,6 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
             if ((stream->ms.payload ==  sp->ipayloads[0].number) &&  !strcmp(stream->ms.remote_ip, sp->remoteaddr))
             {
                 DBG1_MEDIA_ENGINE("ph_msession_audio_start: reusing current stream\n");
-                PH_MSESSION_AUDIO_UNLOCK();
                 return 0;
             }
         }
@@ -2259,7 +2758,6 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
             {
                 DBG1_MEDIA_ENGINE("ph_msession_audio_start: Audio tunnel replacement failed\n");
                 sp->flags |= ~PH_MSTREAM_FLAG_RUNNING;
-                PH_MSESSION_AUDIO_UNLOCK();
                 return -PH_NORESOURCES;
             }
 	      
@@ -2286,211 +2784,18 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 					stream->ms.remote_port);
 	  
 	  DBG1_MEDIA_ENGINE("ph_msession_audio_start: audio stream reset done\n");
-	  PH_MSESSION_AUDIO_UNLOCK();
 	  return 0;
 	}
       
       /* new payload is different from the old one */
       DBG1_MEDIA_ENGINE("ph_mession_audio_start: Replacing audio session\n");
-	  PH_MSESSION_AUDIO_UNLOCK();
-      ph_msession_audio_stop(s, deviceId);
-	  PH_MSESSION_AUDIO_LOCK();
+      ph_msession_audio_stream_stop(s, deviceId, s->confflags != PH_MSESSION_CONF_MEMBER, 0);
       // end branch 1
       
     }
 
-  // begin branch 2
-  DBG2_MEDIA_ENGINE("audio start branch 2 - looking for codec with payload = %d\n", codecpt);
-  codec = ph_media_lookup_codec(codecpt);
-    if (!codec)
-    {
-        DBG1_MEDIA_ENGINE("audio start branch 2: found NO codec\n");
-        PH_MSESSION_AUDIO_UNLOCK();
-        return -1;
-    }
-
-	// <jerome.wagner@wengo.fr>: it is important to fill the stream structure with 0 here.	
-	// When only the first 'malloc' branch is zeroed it leads to weird noises after a callResume
-	// on some machines
-	if (!sp->streamerData)
-	{
-		stream = (phastream_t *)osip_malloc(sizeof(phastream_t));
-	}
-	else
-	{
-		stream = (phastream_t *)sp->streamerData;
-	}
-	memset(stream, 0, sizeof(*stream));
-
-  DBG2_MEDIA_ENGINE("new audiostream = %08x\n", stream);
-
-  setup_recording(stream);
-
-  gettimeofday(&stream->last_rtp_sent_time, 0);
-  stream->cngi.last_noise_sent_time = stream->last_rtp_recv_time = stream->cngi.last_dtx_time = stream->last_rtp_sent_time;
-
-
-  setup_hdx_mode(s, stream);
-
-
-  stream->ms.mses = s;
-  stream->clock_rate = stream->actual_rate = codec->clockrate;
-  stream->cngi.vad = (sp->flags & PH_MSTREAM_FLAG_VAD)?1:0;
-  stream->cngi.pwr_threshold = sp->vadthreshold;
-  stream->cngi.cng = (sp->flags & PH_MSTREAM_FLAG_CNG)?1:0;
-  stream->ms.codec = codec;
-  stream->ms.payload =  sp->ipayloads[0].number;
-  stream->cngi.cng_pt = (stream->clock_rate > 8000) ? PH_MEDIA_CN_16000_PAYLOAD : PH_MEDIA_CN_PAYLOAD; /* FIXME: we need to handle separate directions too */
-
-  DBG2_MEDIA_ENGINE("ph_mession_audio_start: DTX/VAD %x\n", stream->cngi.pwr_threshold);
-  DBG2_MEDIA_ENGINE("ph_msession_audio_start: clock rate %d\n", stream->clock_rate);
-  DBG2_MEDIA_ENGINE("ph_msession_audio_start: CNG %s\n", stream->cngi.cng ? "activating" : "desactivating");
-  DBG2_MEDIA_ENGINE("ph_msession_audio_start: opening AUDIO device %s\n", deviceId);
-
-	if (open_audio_device(s, stream, deviceId)) {
-		free(stream);
-		PH_MSESSION_AUDIO_UNLOCK();
-		return -PH_NORESOURCES;
-	}
-
-  // if the audio device do not support the expected clockrate
-  // we need to resample audio data
-#ifdef PH_USE_RESAMPLE
-  if (stream->clock_rate != stream->actual_rate)
-  {
-    stream->resample_audiodrv_ctx_spk = ph_resample_spk_init0(stream->clock_rate, stream->actual_rate);
-    stream->resample_audiodrv_ctx_mic = ph_resample_mic_init0(stream->clock_rate, stream->actual_rate);
-  }
-#endif
-
-
-#ifdef PH_FORCE_16KHZ
-  if (stream->clock_rate != stream->actual_rate)
-  {
-    stream->resamplectx = ph_resample_init();
-  }
-#endif
-
-
-  if (codec->encoder_init) {
-    stream->ms.encoder_ctx = codec->encoder_init(0);
-  }
-
-  if (codec->decoder_init) {
-    stream->ms.decoder_ctx = codec->decoder_init(0);
-  }
-
-
-  strcpy(stream->ms.remote_ip, sp->remoteaddr);
-  stream->ms.remote_port = sp->remoteport;
-
-  ph_mediabuf_init(&stream->data_in, malloc(2048), 2048);
-  ph_mediabuf_init(&stream->data_out, malloc(2048), 2048);
-  DBG2_MEDIA_ENGINE("ph_msession_audio_start: opening session remoteport: %d\n", stream->ms.remote_port);
-
-  
-  
-  session = rtp_session_new(RTP_SESSION_SENDRECV);
-#ifdef USE_HTTP_TUNNEL
-  if (sp->flags & PH_MSTREAM_FLAG_TUNNEL)
-    {
-      RtpTunnel *tun, *tun2;
-
-      DBG1_MEDIA_ENGINE("ph_mession_audio_start: Creating audio tunnel\n");
-		
-		
-      tun = rtptun_connect(sp->remoteaddr, sp->remoteport);
-
-    if (!tun)
-    {
-        PH_MSESSION_AUDIO_UNLOCK();
-        return -PH_NORESOURCES;
-    }
-
-      tun2 = rtptun_connect(sp->remoteaddr, sp->remoteport+1);
-	 
-	 
-      rtp_session_set_tunnels(session, tun, tun2);
-      stream->ms.tunRtp = tun;
-      stream->ms.tunRtcp = tun2;
-
-    }
-#endif  
-  
-  rtp_session_set_scheduling_mode(session, SCHEDULING_MODE); /* yes */
-  rtp_session_set_blocking_mode(session, BLOCKING_MODE);
-
-  if (codecpt != stream->ms.payload)
-    {
-      rprofile = sprofile = rtp_profile_clone_full(sprofile);
-      rtp_profile_move_payload(sprofile, codecpt, ph_speex_hook_pt);
-    }
-  else if (sp->ipayloads[0].number != sp->opayloads[0].number)
-    {
-      sprofile = rtp_profile_clone_full(sprofile);
-      rtp_profile_move_payload(sprofile, sp->ipayloads[0].number,  sp->opayloads[0].number);
-    }
-
-  rtp_session_set_profiles(session, sprofile, rprofile);
-  rtp_session_set_jitter_compensation(session, sp->jitter);
-  rtp_session_set_local_addr(session, "0.0.0.0", sp->localport);
-
-  
-  rtp_session_set_remote_addr(session, sp->remoteaddr,sp->remoteport);
-
-  rtp_session_set_payload_types(session, sp->opayloads[0].number, sp->ipayloads[0].number);
-  rtp_session_set_cng_pt(session, stream->cngi.cng_pt);
-  rtp_session_signal_connect(session, "telephone-event",
-			     (RtpCallback)ph_telephone_event, s);
-  rtp_session_signal_connect(session, "cng_packet",
-			     (RtpCallback)ph_on_cng_packet, s);
-
-  sp->flags |= PH_MSTREAM_FLAG_RUNNING;
-  sp->streamerData = stream;
-  s->activestreams |= (1 << PH_MSTREAM_AUDIO1);
-
-  DBG3_MEDIA_ENGINE("ph_mession_audio_start: s=%08x.stream=%08x\n", s, stream);
-
-  stream->ms.running = 1;
-  stream->ms.rtp_session = session;
-
-
-
-  // SPIKE_HDX: init the voice activity detection on the local input stream (MIC)
-  if (stream->cngi.vad || stream->hdxmode == PH_HDX_MODE_MIC)
-    {
-      ph_audio_init_ivad(stream);
-    }
-
-
-  // SPIKE_HDX: init the voice activity detection on the local output stream (SPK)
-  if (stream->hdxmode == PH_HDX_MODE_SPK)
-    {
-      ph_audio_init_ovad(stream);
-    }
-
-
-  if (stream->cngi.cng)
-    {
-      ph_audio_init_cng(stream);
-    }
-  
-
-  setup_aec(s, stream);
-
-  stream->dtmfCallback = s->dtmfCallback;
-  stream->dtmfi.dtmfg_lock = g_mutex_new();
-  stream->dtmfi.dtmfq_cnt = 0;
-  stream->dtmfi.dtmfg_phase = DTMF_IDLE;
-
-
-
-  start_audio_device(s, stream);
-
-
-  DBG1_MEDIA_ENGINE("ph_msession_audio_start: audio stream init OK\n");
-  PH_MSESSION_AUDIO_UNLOCK();
-
+  // we need to start a lot of things : a hard start
+  ph_msession_audio_stream_hardstart(s, codecpt, deviceId);
   return 0;
   // end branch 2
 
@@ -2498,284 +2803,65 @@ int ph_msession_audio_start(struct ph_msession_s *s, const char* deviceId)
 
 
 
-void ph_audio_vad_cleanup(phastream_t *stream)
-{
-  if ( stream->cngi.pwr )
-    osip_free(stream->cngi.pwr);
-
-  stream->cngi.pwr = 0;
-
-  if ( stream->cngi.cng )
-    {
-      CNG_LOCK(stream);
-      
-      if(stream->cngi.noise)
-	osip_free(stream->cngi.noise);
-
-      stream->cngi.noise = 0;
-
-      CNG_UNLOCK(stream);
-#if 0
-      if ( stream->cngi.cng_lock )
-    g_mutex_free(stream->cng_lock);
-#endif
-    }
-}
-
-
 /**
- * @brief stops a specific stream in a session
- * it currently always try to stop the AUDIO1 stream
+ * @brief function used to hangup a call
  */
-void ph_msession_audio_stream_stop(struct ph_msession_s *s, int stopdevice)
-{
-	struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
-	phastream_t *stream = (phastream_t *) msp->streamerData;
-	phastream_t *master;
-
-	// we cannot stop a non-existing or non-running stream
-	if (!stream || !stream->ms.running)
-	{
-		return;
-	}
-
-	// inform the engine that a stream stop is required
-	stream->ms.running = 0;
-	
-	master = stream->master;
-
-	// if a thread was needed in the threading model, wait and destroy it
-	if (stream->ms.media_io_thread)
-	{
-		osip_thread_join(stream->ms.media_io_thread);
-		osip_free(stream->ms.media_io_thread);
-		stream->ms.media_io_thread = 0;
-	}
-
-	// if the stream has a MASTER stream, the MASTER needs to stop mixing
-	if (master)
-	{
-		CONF_LOCK(master);
-		master->to_mix = 0;
-		CONF_UNLOCK(master);
-	}
-
-#ifdef PH_USE_RESAMPLE
-	// clean the resampling context
-	if (stream->actual_rate != stream->clock_rate)
-	{
-		ph_resample_cleanup0(stream->resample_audiodrv_ctx_mic);
-		ph_resample_cleanup0(stream->resample_audiodrv_ctx_spk);
-	}
-#endif
-
-	msp->flags &= ~PH_MSTREAM_FLAG_RUNNING;
-
-	if (stopdevice)
-	{
-		audio_stream_close(stream); /* close the sound card */
-	}
-
-	if (stream->mixbuf)
-	{
-		ph_mediabuf_free(stream->mixbuf);
-	}
-
-	ph_mediabuf_cleanup(&stream->data_in);
-	ph_mediabuf_cleanup(&stream->data_out);
-
-#ifdef TRACE_POWER
-	print_pwrstats(stream);
-#endif
-
-	//  RTP_SESSION_LOCK(stream->rtp_session);
-	rtp_session_signal_disconnect_by_callback(stream->ms.rtp_session, "telephone-event",
-						(RtpCallback)ph_telephone_event);
-	rtp_session_signal_disconnect_by_callback(stream->ms.rtp_session, "cng_packet",
-						(RtpCallback)ph_on_cng_packet);
-
-	ortp_set_debug_file("oRTP", stdout); 
-	//  ortp_global_stats_display();
-	ortp_session_stats_display(stream->ms.rtp_session);
-	ortp_set_debug_file("oRTP", NULL); 
-
-{
-	/* free non default profiles */
-	RtpProfile *rprofile, *sprofile;
-   	sprofile = rtp_session_get_send_profile(stream->ms.rtp_session);
-	if (sprofile != &av_profile)
-	{
-		rtp_profile_destroy(sprofile);
-	}
-
-	rprofile = rtp_session_get_recv_profile(stream->ms.rtp_session);
-	if (rprofile != &av_profile && rprofile != sprofile)
-	{
-		rtp_profile_destroy(rprofile);
-	}
-}
-
-
-	rtp_session_destroy(stream->ms.rtp_session);
-
-	if (stream->ms.codec->encoder_cleanup)
-	{
-		stream->ms.codec->encoder_cleanup(stream->ms.encoder_ctx);
-	}
-	if (stream->ms.codec->decoder_cleanup)
-	{
-		stream->ms.codec->decoder_cleanup(stream->ms.decoder_ctx);
-	}
-
-	ph_audio_vad_cleanup(stream);
-
-#ifdef DO_ECHO_CAN
-	if(stream->ec)
-	{
-		cb_clean(&stream->pcmoutbuf);
-		if(stream->ec)
-		{
-			ph_ec_cleanup(stream->ec);
-		}
-		g_mutex_free(stream->ecmux);
-    }
-#endif
-
-	g_mutex_free(stream->dtmfi.dtmfg_lock);
-
-	cleanup_recording(stream);
-	
-	DBG1_MEDIA_ENGINE("\naudio stream closed\n");
-
-	if (stream->lastframe)
-	{
-		free(stream->lastframe);
-	}
-
-#ifdef PH_FORCE_16KHZ
-	if (stream->resamplectx)
-	{
-		ph_resample_cleanup(stream->resamplectx);
-	}
-#endif      
-
-}
-
-
-
 void ph_msession_audio_stop(struct ph_msession_s *s, const char *deviceId)
 { 
 	struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
 	phastream_t *stream = (phastream_t *) msp->streamerData;
-	int confflags = s->confflags;
+	int confflags = s->confflags; // save the confflags for future use
 	struct ph_msession_s *s2 = s->confsession;
 
 	PH_MSESSION_AUDIO_LOCK();
-
-	s->activestreams &= ~(1 << PH_MSTREAM_AUDIO1);
-
-	if (confflags)
-	{
-		ph_msession_audio_conf_stop(s->confsession, s);
-	}
-
-	ph_msession_audio_stream_stop(s, confflags != PH_MSESSION_CONF_MEMBER);
-	msp->streamerData = 0;
-
-
-	if (confflags == PH_MSESSION_CONF_MASTER)
-	{
-		struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
-		phastream_t *stream2 = (phastream_t *) msp2->streamerData;
-
-		DBG1_MEDIA_ENGINE("audio_stop: removeing conf master\n");
-
-		s2->confflags = 0;
-		stream2->master = 0;
-
-		/* if the slave stream is not suspended,  start audio streaming for it */
-		if (stream2 && !stream2->ms.suspended)
-		{
-			s2->newstreams |= (1 << PH_MSTREAM_AUDIO1);
-			if (!open_audio_device(s2, stream2, deviceId))
-			{
-				start_audio_device(s2, stream2);
-			}
-		DBG1_MEDIA_ENGINE("audio_stop: started audio for ex-slave\n");
-		}
-	}
-
-	osip_free(stream);
-
+	ph_msession_audio_stream_stop(s, deviceId, confflags != PH_MSESSION_CONF_MEMBER, 1);
 	PH_MSESSION_AUDIO_UNLOCK();
 }
 
 
-
+/**
+ * @brief function used to suspend a call (HOLD)
+ */
 void ph_msession_audio_suspend(struct ph_msession_s *s, int suspendwhat, const char *deviceId)
 {
 	struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
 	phastream_t *stream = (phastream_t *) msp->streamerData;
 	int confflags = s->confflags;
+	struct ph_msession_s *s2 = s->confsession;
 
 	DBG4_MEDIA_ENGINE("audio_suspend: enter ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
 
+	PH_MSESSION_AUDIO_LOCK();
 	msp->traffictype &= ~suspendwhat;
 	stream->ms.suspended = 1;
-
-	ph_msession_audio_stream_stop(s, confflags != PH_MSESSION_CONF_MEMBER);
-
-	if (confflags == PH_MSESSION_CONF_MASTER)
-	{
-		struct ph_msession_s *s2 = s->confsession;
-		struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
-		phastream_t *stream2 = (phastream_t *) msp2->streamerData;
-
-		DBG1_MEDIA_ENGINE("audio_suspend: suspending conf master\n");
-
+	ph_msession_audio_stream_stop(s, deviceId, confflags != PH_MSESSION_CONF_MEMBER, 0);
+	if (s->confflags == PH_MSESSION_CONF_MASTER) {
 		s->confflags = PH_MSESSION_CONF_MEMBER;
 		s2->confflags = PH_MSESSION_CONF_MASTER;
-
-		DBG1_MEDIA_ENGINE("audio_suspend: assigned new conf master\n");
-
-		/* if the slave stream is not suspended,  start audio streaming for it */
-		if (!stream2->ms.suspended)
-		{
-			s2->newstreams |= (1 << PH_MSTREAM_AUDIO1);
-			PH_MSESSION_AUDIO_LOCK();
-			if (!open_audio_device(s2, stream2, deviceId))
-			{
-				start_audio_device(s2, stream2);
-			}
-			PH_MSESSION_AUDIO_UNLOCK();
-		}
-    }
+	}
+	PH_MSESSION_AUDIO_UNLOCK();
 
 	DBG4_MEDIA_ENGINE("audio_suspend: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
 }
 
 
-
+/**
+ * @brief function used to resume a call (OFF-HOLD or RESUME)
+ */
 void ph_msession_audio_resume(struct ph_msession_s *s, int resumewhat, const char *deviceId)
 {
     struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
     phastream_t *stream = (phastream_t *) msp->streamerData;
 
-    DBG4_MEDIA_ENGINE("ph_msession_audio_resume: enter ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
+    DBG8_MEDIA_ENGINE("MEDIA ENGINE:ph_msession_audio_resume:begin: ses=%p stream=%p remoteport=%d confflags=%d\n", s, stream, stream->ms.remote_port, s->confflags,0,0,0); 
 
+	PH_MSESSION_AUDIO_LOCK();
     msp->traffictype |= resumewhat;
-    ph_msession_audio_start(s, deviceId);
+	ph_msession_audio_stream_start(s, deviceId);
     stream->ms.suspended = 0;
-
-/*
-    if (s->confsession)
-    {
-        struct ph_mstream_params_s *msp2 = &s->confsession->streams[PH_MSTREAM_AUDIO1];
-        phastream_t *stream2 = (phastream_t *) msp2->streamerData;     
-    }
-*/
+	PH_MSESSION_AUDIO_UNLOCK();
 	
-    DBG4_MEDIA_ENGINE("audio_resume: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
+    DBG8_MEDIA_ENGINE("MEDIA ENGINE:ph_msession_audio_resume:end: resume exit ses=%p stream=%p remoteport=%d confflags=%d\n", s, stream, stream->ms.remote_port, s->confflags,0,0,0); 
 
 }
 
@@ -2791,6 +2877,8 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
 	struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
 	phastream_t *stream2 = (phastream_t *) msp2->streamerData;
 
+	deviceId; // just to avoid compilation warnings
+	
 	// error if one of the 2 sessions is already involved in a conf
 	if (s1->confflags || s2->confflags)
 	{
@@ -2851,9 +2939,10 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
 	
 } 
 
-
-
-int ph_msession_audio_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2)
+/**
+ * @brief function that unties to sessions that were previously binded for a conference
+ */
+int ph_msession_audio_stream_conf_unlink(struct ph_msession_s *s1, struct ph_msession_s *s2)
 {
   struct ph_mstream_params_s *msp1 = &s1->streams[PH_MSTREAM_AUDIO1];
   phastream_t *stream1 = (phastream_t *) msp1->streamerData;
@@ -2885,7 +2974,15 @@ int ph_msession_audio_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *
   s2->confsession = 0;
 
   return 0;
+}
 
+/**
+ * @brief will be used in the future to properly stop a conf
+ */
+int ph_msession_audio_conf_stop(struct ph_msession_s *s1, struct ph_msession_s *s2)
+{
+  s1;s2; // just to avoid compilation warnings
+  return 0;
 }
   
 

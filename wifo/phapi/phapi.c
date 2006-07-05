@@ -3413,16 +3413,19 @@ ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int resumeflag)
 		{
 			if (ph_msession_resume(s, PH_MSTREAM_TRAFFIC_IO, phcfg.audio_dev))
 			{
+				DBG4_SIP_NEGO("SIP_NEGO:ph_call_media_start: just called ph_msession_resume\n", 0,0,0);
 				i = -PH_NOMEDIA;
 			}
 		}
 		else if (ph_msession_start(s, phcfg.audio_dev))
 	  	{
+			DBG4_SIP_NEGO("SIP_NEGO:ph_call_media_start: just called ph_msession_start\n", 0,0,0);
 			i = -PH_NOMEDIA;
 		}
 	}
 	else
 	{
+		DBG4_SIP_NEGO("SIP_NEGO:ph_call_media_start: nothing to start\n", 0,0,0);
 		i = -PH_NOMEDIA;
 	}
 
@@ -3620,7 +3623,7 @@ ph_call_proceeding(eXosip_event_t *je)
         rca = ph_locate_call_by_cid(ca->rcid);
     }
     
-    if (!ca->localrefer)
+    if ((!ca->localrefer)&&(!ca->localresume))
     {
         ph_call_retrieve_payloads(ca, je, PH_STREAM_CNG);
         ph_call_media_start(ca, je, 0);
