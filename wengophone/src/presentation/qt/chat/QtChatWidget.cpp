@@ -431,7 +431,7 @@ void QtChatWidget::updateContactListLabel() {
 		QString nickName = QString::fromStdString((*it).getContactId());
 		contactStringList << nickName;
 		if (!hasQtChatContactInfo(nickName)) {
-			QtChatContactInfo qtChatContactInfo(QtChatContactInfo(getNewColor(), "#000000", nickName));
+			QtChatContactInfo qtChatContactInfo(getNewColor(), "#000000", nickName);
 			_qtContactInfo[nickName] = qtChatContactInfo;
 		}
 	}
