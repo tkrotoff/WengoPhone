@@ -43,22 +43,6 @@ MacAudioDevice::MacAudioDevice(AudioDeviceID audioDeviceID, bool isInput) {
 	_isInput = isInput;
 }
 
-MacAudioDevice::MacAudioDevice(const MacAudioDevice & macAudioDevice) {
-	copy(macAudioDevice);
-}
-
-MacAudioDevice & MacAudioDevice::operator = (const MacAudioDevice & macAudioDevice) {
-	copy(macAudioDevice);
-
-	return *this;
-}
-
-void MacAudioDevice::copy(const MacAudioDevice & macAudioDevice) {
-	_audioDeviceID = macAudioDevice._audioDeviceID;
-	_dataSourceID = macAudioDevice._dataSourceID;
-	_isInput = macAudioDevice._isInput;
-}
-
 MacAudioDevice::~MacAudioDevice() {
 }
 

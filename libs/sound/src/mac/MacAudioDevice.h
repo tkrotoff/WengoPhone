@@ -43,10 +43,6 @@ public:
 
 	MacAudioDevice(AudioDeviceID audioDeviceID, bool isInput);
 
-	MacAudioDevice(const MacAudioDevice & macAudioDevice);
-
-	MacAudioDevice & operator = (const MacAudioDevice & macAudioDevice);
-
 	virtual ~MacAudioDevice();
 
 	virtual std::string getName() const;
@@ -60,8 +56,6 @@ public:
 	Boolean isInput() const { return _isInput; }
 
 private:
-
-	void copy(const MacAudioDevice & macAudioDevice);
 
 	/** Unserialize a MacAudioDevice from a string in this instance. */
 	void unserialize(const std::string & data);
