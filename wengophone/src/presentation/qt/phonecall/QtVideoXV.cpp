@@ -19,6 +19,8 @@
 
 #include "QtVideoXV.h"
 
+#include <QtGui>
+
 #include "ui_VideoWindow.h"
 
 #include "XVWindow.h"
@@ -29,9 +31,10 @@
 
 #include <cutil/global.h>
 
-#include <QtGui>
 
-QtVideoXV::QtVideoXV(QWidget * parent, int remoteVideoFrameWidth, int remoteVideoFrameHeight, int localVideoFrameWidth, int localVideoFrameHeight) {
+QtVideoXV::QtVideoXV(QWidget * parent,
+	int remoteVideoFrameWidth, int remoteVideoFrameHeight,
+	int localVideoFrameWidth, int localVideoFrameHeight)
 	: QtVideo(parent) {
 
 	//flipButton
