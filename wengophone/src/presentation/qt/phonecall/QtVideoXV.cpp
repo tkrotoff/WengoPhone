@@ -19,9 +19,11 @@
 
 #include "QtVideoXV.h"
 
-#include <QtGui>
 
 #include "ui_VideoWindow.h"
+
+// must be above XVWindow.h
+#include <QtGui>
 
 #include "XVWindow.h"
 

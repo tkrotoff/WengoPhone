@@ -38,7 +38,7 @@ public:
 	QSize getFrameSize() const;
 
 	bool isInitialized() const {
-		return (_remoteWindow && _localWindow);
+		return (_remoteWindow != NULL);
 	}
 
 	bool isFullScreen() const;
