@@ -81,6 +81,7 @@ void NetworkProxyDiscovery::run() {
 	Mutex::ScopedLock lock(_mutex);
 
 	if (!NetworkObserver::getInstance().isConnected()) {
+		LOG_DEBUG("No connection available");
 		_state = NetworkProxyDiscoveryStateUnknown;
 		return;
 	}

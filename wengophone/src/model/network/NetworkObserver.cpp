@@ -52,6 +52,7 @@ void NetworkObserver::timeoutEventHandler()
 	{
 		if (!_isConnected)
 		{
+			LOG_DEBUG("Connection is up");
 			_isConnected = true;
 			connectionIsUpEvent(*this);
 		}
@@ -60,6 +61,7 @@ void NetworkObserver::timeoutEventHandler()
 	{
 		if (_isConnected)
 		{
+			LOG_DEBUG("Connection is down");
 			_isConnected = false;
 			connectionIsDownEvent(*this);
 		}
