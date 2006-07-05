@@ -224,12 +224,24 @@ void QtProfileDetails::changeUserProfileAvatar() {
 				QString::fromStdString(config.getResourcesDir()) + "pics/avatars",
 				tr("Images") + "(*.png *.xpm *.jpg *.gif)");
 
-	if (!file.isNull()) {
+	if (file.isEmpty()) {
+		UserProfile & userProfile = dynamic_cast<UserProfile &>(_profile);
+		setProfileAvatarFileName(userProfile, file);
+		readProfileAvatar();
+	}
+
+#ifdef OS_WINDOWS
+	BringWindowToTop(_profileDetailsWindow->winId());
+#endif
+}
+
+void QtProfileDetails::setProfileAvatarFileName(UserProfile & userProfile, const QString & fileName) {
+	if (!fileName.isEmpty()) {
 		//TODO check the size of the file
 
 		//QImage is optimised for I/O manipulations
-		QImage image(file);
-		image.scaled(_ui->avatarPixmapButton->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		QImage image(fileName);
+		//image.scaled(_ui->avatarPixmapButton->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 		QBuffer buffer;
 		buffer.open(QIODevice::ReadWrite);
@@ -240,14 +252,8 @@ void QtProfileDetails::changeUserProfileAvatar() {
 		std::string data(byteArray.data(), byteArray.size());
 
 		Picture picture = Picture::pictureFromData(data);
-		picture.setFilename(file.toStdString());
+		picture.setFilename(fileName.toStdString());
 
-		UserProfile & userProfile = dynamic_cast<UserProfile &>(_profile);
 		userProfile.setIcon(picture, NULL);
-
-		readProfileAvatar();
 	}
-#ifdef OS_WINDOWS
-	BringWindowToTop(_profileDetailsWindow->winId());
-#endif
 }

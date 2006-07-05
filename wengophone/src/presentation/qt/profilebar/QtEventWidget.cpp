@@ -35,14 +35,11 @@
 
 static const char * VOICE_MAIL_CALL = "123";
 
-QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
-	QWidget * parent)
+QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile, QWidget * parent)
 	: QObjectThreadSafe(NULL),
 	_cUserProfile(cUserProfile),
 	_cWengoPhone(cWengoPhone) {
 
-	_widget = NULL;
-	_ui = NULL;
 	_voiceMailCount = 0;
 	_missedCallCount = 0;
 
@@ -52,13 +49,10 @@ QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProf
 }
 
 QtEventWidget::~QtEventWidget() {
-	if (_ui) {
-		delete _ui;
-	}
+	delete _ui;
 }
 
 void QtEventWidget::initThreadSafe() {
-
 	_widget = new QWidget();
 
 	_ui = new Ui::EventWidget();
@@ -125,7 +119,6 @@ void QtEventWidget::missedCallClicked() {
 }
 
 void QtEventWidget::slotUpdatedTranslation() {
-	if (_ui) {
-		_ui->retranslateUi(_widget);
-	}
+	_ui->retranslateUi(_widget);
+	updatePresentationThreadSafe();
 }

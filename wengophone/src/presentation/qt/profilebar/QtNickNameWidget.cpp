@@ -277,9 +277,8 @@ void QtNickNameWidget::connectionProgress(IMAccount * pImAccount,
 	}
 }
 
-void QtNickNameWidget::msnClicked(){
-	set<IMAccount *> list;
-	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolMSN);
+void QtNickNameWidget::msnClicked() {
+	set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolMSN);
 
 	if (!list.empty()) {
 		showMsnMenu();
@@ -288,9 +287,8 @@ void QtNickNameWidget::msnClicked(){
 	}
 }
 
-void QtNickNameWidget::yahooClicked(){
-	set<IMAccount *> list;
-	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolYahoo);
+void QtNickNameWidget::yahooClicked() {
+	set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolYahoo);
 
 	if (!list.empty()) {
 		showYahooMenu();
@@ -300,8 +298,7 @@ void QtNickNameWidget::yahooClicked(){
 }
 
 void QtNickNameWidget::wengoClicked() {
-	set<IMAccount *> list;
-	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolWengo);
+	set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolWengo);
 
 	if (!list.empty()) {
 		showWengoMenu();
@@ -311,8 +308,7 @@ void QtNickNameWidget::wengoClicked() {
 }
 
 void QtNickNameWidget::aimClicked() {
-	set<IMAccount *> list;
-	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ);
+	set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ);
 
 	if (!list.empty()) {
 		showAimMenu();
@@ -322,8 +318,7 @@ void QtNickNameWidget::aimClicked() {
 }
 
 void QtNickNameWidget::jabberClicked() {
-	set<IMAccount *> list;
-	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolJabber);
+	set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolJabber);
 
 	if (!list.empty()) {
 		showJabberMenu();
@@ -356,15 +351,14 @@ void QtNickNameWidget::nicknameChanged() {
 
 void QtNickNameWidget::showMsnMenu() {
 
-	if(_msnIMAccountMenu) {
+	if (_msnIMAccountMenu) {
 		delete _msnIMAccountMenu;
 	}
 
 	_msnIMAccountMenu = new QMenu(this);
 	_msnIMAccountMenu->setWindowOpacity(POPUPMENU_OPACITY);
 
-	set<IMAccount *> list;
-	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolMSN);
+	set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolMSN);
 
 	for (set<IMAccount *>::const_iterator it = list.begin();
 		it != list.end();
@@ -382,15 +376,14 @@ void QtNickNameWidget::showMsnMenu() {
 
 void QtNickNameWidget::showYahooMenu() {
 
-	if(_yahooIMAccountMenu) {
+	if (_yahooIMAccountMenu) {
 		delete _yahooIMAccountMenu;
 	}
 
 	_yahooIMAccountMenu = new QMenu(this);
 	_yahooIMAccountMenu->setWindowOpacity(POPUPMENU_OPACITY);
 
-	set<IMAccount *> list;
-	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolYahoo);
+	set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolYahoo);
 
 	for (set<IMAccount *>::const_iterator it = list.begin();
 		it != list.end();
@@ -408,15 +401,14 @@ void QtNickNameWidget::showYahooMenu() {
 
 void QtNickNameWidget::showWengoMenu() {
 
-	if(_wengoIMAccountMenu) {
+	if (_wengoIMAccountMenu) {
 		delete _wengoIMAccountMenu;
 	}
 
 	_wengoIMAccountMenu = new QMenu(this);
 	_wengoIMAccountMenu->setWindowOpacity(POPUPMENU_OPACITY);
 
-	set<IMAccount *> list;
-	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolWengo);
+	set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolWengo);
 
 	for (set<IMAccount *>::const_iterator it = list.begin();
 		it != list.end();
@@ -434,15 +426,14 @@ void QtNickNameWidget::showWengoMenu() {
 
 void QtNickNameWidget::showAimMenu() {
 
-	if(_aimIMAccountMenu) {
+	if (_aimIMAccountMenu) {
 		delete _aimIMAccountMenu;
 	}
 
 	_aimIMAccountMenu = new QMenu(this);
 	_aimIMAccountMenu->setWindowOpacity(POPUPMENU_OPACITY);
 
-	set<IMAccount *> list;
-	list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ);
+	set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ);
 
 	for (set<IMAccount *>::const_iterator it = list.begin();
 		it != list.end();
@@ -460,7 +451,7 @@ void QtNickNameWidget::showAimMenu() {
 
 void QtNickNameWidget::showJabberMenu() {
 
-	if(_jabberIMAccountMenu) {
+	if (_jabberIMAccountMenu) {
 		delete _jabberIMAccountMenu;
 	}
 
@@ -487,7 +478,7 @@ void QtNickNameWidget::init() {
 		_nickNameEdit->setText(QString::fromStdString(_cUserProfile.getUserProfile().getAlias()));
 	}
 
-   	QPalette palette = _nickNameEdit->palette();
+	QPalette palette = _nickNameEdit->palette();
 	palette.setColor(QPalette::Text, Qt::gray);
 	_nickNameEdit->setPalette(palette);
 	_nickNameEdit->update();
@@ -514,9 +505,9 @@ void QtNickNameWidget::updateAvatar() {
 	string myData = _cUserProfile.getUserProfile().getIcon().getData();
 	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
 
-	if ( !pixmap.isNull()) {
-		QPainter painter( & background );
-		painter.drawPixmap(5,5,pixmap.scaled(60,60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+	if (!pixmap.isNull()) {
+		QPainter painter(& background);
+		painter.drawPixmap(5, 5, pixmap.scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 		painter.end();
 		_avatarLabel->setPixmap(background);
 	} else {
@@ -526,7 +517,7 @@ void QtNickNameWidget::updateAvatar() {
 
 void QtNickNameWidget::showImAccountManager() {
 	QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(),
-		 true, this);
+		true, this);
 }
 
 void QtNickNameWidget::textChanged ( const QString & text ) {

@@ -55,6 +55,8 @@ public:
 		return _profileDetailsWindow;
 	}
 
+	static void setProfileAvatarFileName(UserProfile & userProfile, const QString & fileName);
+
 public Q_SLOTS:
 
 	void changeUserProfileAvatar();

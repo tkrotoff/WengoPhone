@@ -19,108 +19,105 @@
 
 #include "QtProfileLabel.h"
 
-QtProfileLabel::QtProfileLabel( QWidget * parent , Qt::WFlags f  ) :
-QLabel(parent,f){
+QtProfileLabel::QtProfileLabel(QWidget * parent)
+	: QLabel(parent) {
 
 	_parent = parent;
 	_pressed = false;
 
-	// Default background color
-	_backgroundColor = _parent->palette().color( QPalette::Window);
-	// Default text color
+	//Default background color
+	_backgroundColor = _parent->palette().color(QPalette::Window);
+	//Default text color
 	_textColor = _parent->palette().color(QPalette::Text);
 }
 
-QtProfileLabel::~QtProfileLabel ( ){
+QtProfileLabel::~QtProfileLabel() {
 }
 
-
-void QtProfileLabel::paintEvent(QPaintEvent * event){
+void QtProfileLabel::paintEvent(QPaintEvent * event) {
 	QRect rect = this->rect();
-	_pixmap = QPixmap(QSize(rect.width(),rect.height()));
+	_pixmap = QPixmap(QSize(rect.width(), rect.height()));
 
-	QPainter painter( &_pixmap );
-	rect.adjust(-1,-1,1,1);
-
+	QPainter painter(&_pixmap);
+	rect.adjust(-1, -1, 1, 1);
 
 	painter.fillRect(rect,QBrush(_backgroundColor));
 
-	if ( ! _pressed ){
-		// Draw the left side if any
-		if ( !_normalLeftPixmap.isNull() ){
-			painter.drawPixmap(0,0,_normalLeftPixmap);
+	if (!_pressed) {
+		//Draw the left side if any
+		if (!_normalLeftPixmap.isNull()) {
+			painter.drawPixmap(0, 0, _normalLeftPixmap);
 		}
-		// Fill the the label
-		if ( !_normalFillPixmap.isNull() ){
+		//Fill the the label
+		if (!_normalFillPixmap.isNull()) {
 			QBrush brush(_normalFillPixmap);
 
 			QRect fillRect = rect;
-			if ( ! _normalLeftPixmap.isNull() )
-				fillRect.adjust(_normalLeftPixmap.rect().width()-1,0,0,0);
-			if ( ! _normalRightPixmap.isNull() )
-				fillRect.adjust(0,0,0-_normalRightPixmap.rect().width(),0);
+			if (!_normalLeftPixmap.isNull())
+				fillRect.adjust(_normalLeftPixmap.rect().width()-1, 0, 0, 0);
+			if (!_normalRightPixmap.isNull())
+				fillRect.adjust(0, 0, 0-_normalRightPixmap.rect().width(), 0);
 			painter.fillRect(fillRect,brush);
 		}
-		// Draw the right side
-		if ( ! _normalRightPixmap.isNull() ){
-			painter.drawPixmap( (rect.width()-1) - _normalRightPixmap.rect().width(),0,_normalRightPixmap);
+		//Draw the right side
+		if (!_normalRightPixmap.isNull()) {
+			painter.drawPixmap((rect.width()-1) - _normalRightPixmap.rect().width(), 0, _normalRightPixmap);
 		}
 
-	} // if ( ! _pressed )
+	} //if (!_pressed)
 	else
 	{
-		// Draw the left side if any
-		if ( !_pressedLeftPixmap.isNull() ){
-			painter.drawPixmap(0,0,_pressedLeftPixmap);
+		//Draw the left side if any
+		if (!_pressedLeftPixmap.isNull()) {
+			painter.drawPixmap(0, 0, _pressedLeftPixmap);
 		}
-		// Fill the the label
-		if ( !_pressedFillPixmap.isNull() ){
+		//Fill the the label
+		if (!_pressedFillPixmap.isNull()) {
 			QBrush brush(_pressedFillPixmap);
 
 			QRect fillRect = rect;
-			if ( ! _pressedLeftPixmap.isNull() )
-				fillRect.adjust(_pressedLeftPixmap.rect().width()-1,0,0,0);
-			if ( ! _pressedRightPixmap.isNull() )
-				fillRect.adjust(0,0,0-_pressedRightPixmap.rect().width(),0);
+			if (!_pressedLeftPixmap.isNull())
+				fillRect.adjust(_pressedLeftPixmap.rect().width()-1, 0, 0, 0);
+			if (!_pressedRightPixmap.isNull())
+				fillRect.adjust(0, 0, 0 - _pressedRightPixmap.rect().width(), 0);
 			painter.fillRect(fillRect,brush);
 		}
-		// Draw the right side
-		if ( ! _pressedRightPixmap.isNull() ){
-			painter.drawPixmap( (rect.width()-1) - _pressedRightPixmap.rect().width(),0,_pressedRightPixmap);
+		//Draw the right side
+		if (!_pressedRightPixmap.isNull()) {
+			painter.drawPixmap((rect.width() - 1) - _pressedRightPixmap.rect().width(), 0, _pressedRightPixmap);
 		}
 	}
 
 	painter.end();
 
-	QPainter p ( this );
-	p.drawPixmap(0,0,_pixmap );
+	QPainter p(this);
+	p.drawPixmap(0, 0, _pixmap);
 	drawText(&p);
 	p.end();
 }
 
-void QtProfileLabel::drawText(QPainter * painter){
+void QtProfileLabel::drawText(QPainter * painter) {
 	QRect rect = this->rect();
 
 	painter->save();
 
 	painter->setPen(_textColor);
 
-	painter->drawText ( rect, Qt::AlignCenter, this->text(), &rect );
+	painter->drawText(rect, Qt::AlignCenter, this->text(), &rect);
 
 	painter->restore();
-
 }
 
-void QtProfileLabel::resizeEvent ( QResizeEvent * event ){
-	QLabel::resizeEvent (event);
+void QtProfileLabel::resizeEvent(QResizeEvent * event) {
+	QLabel::resizeEvent(event);
 }
 
 void QtProfileLabel::setPixmaps(const QPixmap & normaleLeftPixmap,
-								const QPixmap & normaleRightPixmap,
-				                const QPixmap & normaleFillPixmap,
-				                const QPixmap & pressedLeftPixmap,
-				                const QPixmap & pressedRightPixmap,
-				                const QPixmap & pressedFillPixmap){
+			const QPixmap & normaleRightPixmap,
+			const QPixmap & normaleFillPixmap,
+			const QPixmap & pressedLeftPixmap,
+			const QPixmap & pressedRightPixmap,
+			const QPixmap & pressedFillPixmap) {
 
 	_normalLeftPixmap = normaleLeftPixmap;
 	_normalRightPixmap = normaleRightPixmap;
@@ -129,36 +126,37 @@ void QtProfileLabel::setPixmaps(const QPixmap & normaleLeftPixmap,
 	_pressedLeftPixmap = pressedLeftPixmap;
 	_pressedRightPixmap = pressedRightPixmap;
 	_pressedFillPixmap = pressedFillPixmap;
-
 }
 
-void QtProfileLabel::setTextColor(const QColor & color){
+void QtProfileLabel::setTextColor(const QColor & color) {
 	_textColor = color;
 }
 
-void QtProfileLabel::setBackgroundColor(const QColor & color){
+void QtProfileLabel::setBackgroundColor(const QColor & color) {
 	_backgroundColor = color;
 }
 
-void QtProfileLabel::mouseMoveEvent ( QMouseEvent * event ){
+void QtProfileLabel::mouseMoveEvent(QMouseEvent * event) {
 
 }
 
-void QtProfileLabel::mousePressEvent ( QMouseEvent * event ){
-	if ( event->button() == Qt::LeftButton ){
+void QtProfileLabel::mousePressEvent(QMouseEvent * event) {
+	if (event->button() == Qt::LeftButton) {
 		_pressed = true;
 	}
 }
 
-void QtProfileLabel::mouseReleaseEvent ( QMouseEvent * event ){
-	if ( ! _pressed )
+void QtProfileLabel::mouseReleaseEvent(QMouseEvent * event) {
+	if (!_pressed) {
 		return;
+	}
+
 	/* get the widget rect */
 	const QRect rect = this->rect();
 	/* get the mouse position relative to this widget */
 	QPoint mousePosition = event->pos();
-	if ( ( mousePosition.x() >= rect.x() ) && ( mousePosition.x() <= rect.width() ) ){
-		if ( ( mousePosition.y() >= rect.y() ) && ( mousePosition.y() <= rect.height() ) ){
+	if ((mousePosition.x() >= rect.x()) && (mousePosition.x() <= rect.width())) {
+		if ((mousePosition.y() >= rect.y()) && (mousePosition.y() <= rect.height())) {
 			clicked();
 			clicked(text());
 			clicked(this);
@@ -166,4 +164,3 @@ void QtProfileLabel::mouseReleaseEvent ( QMouseEvent * event ){
 		}
 	}
 }
-

@@ -112,8 +112,6 @@ void QtCreditWidget::callforwardModeClicked() {
 }
 
 void QtCreditWidget::slotUpdatedTranslation() {
-	if (_ui) {
-		_ui->retranslateUi(_widget);
-		updatePresentationThreadSafe();
-	}
+	_ui->retranslateUi(_widget);
+	updatePresentationThreadSafe();
 }

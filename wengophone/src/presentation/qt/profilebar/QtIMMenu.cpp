@@ -25,13 +25,12 @@
 
 #include <imwrapper/IMAccount.h>
 
-QtIMMenu::QtIMMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget * parent) 
-: QMenu(QString::fromStdString(imAccount.getLogin()), parent),
-_cUserProfile(cUserProfile),
-_imAccount(imAccount) {
-	QAction * action = NULL;
+QtIMMenu::QtIMMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget * parent)
+	: QMenu(QString::fromStdString(imAccount.getLogin()), parent),
+	_cUserProfile(cUserProfile),
+	_imAccount(imAccount) {
 
-	action = addAction(tr("Online"));
+	QAction * action = addAction(tr("Online"));
 	if (_imAccount.getPresenceState() == EnumPresenceState::PresenceStateOnline) {
 		action->setChecked(true);
 	}

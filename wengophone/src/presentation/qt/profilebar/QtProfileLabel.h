@@ -32,7 +32,7 @@ class QtProfileLabel : public QLabel
 	Q_OBJECT
 public:
 
-	QtProfileLabel ( QWidget * parent = 0, Qt::WFlags f = 0 );
+	QtProfileLabel ( QWidget * parent);
 
 	~QtProfileLabel ( );
 
