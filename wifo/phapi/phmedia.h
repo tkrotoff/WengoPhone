@@ -93,7 +93,7 @@ struct ph_mstream_params_s
 {
     /* local IP port on which the stream will be received */
 	int  localport;
-	int  medatype;
+	int  mediatype;
 	int  traffictype;
 	int  flags;
 	int  jitter;
