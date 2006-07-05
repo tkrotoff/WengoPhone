@@ -60,6 +60,9 @@ pixosi pix_ffmpeg_to_pix_osi(int pix) {
 	case PIX_FMT_YUV444P:
 		palette = PIX_OSI_YUV444P;
 		break;
+    case PIX_FMT_UYVY422:
+        palette = PIX_OSI_UYVY;
+        break;
 	default:
 		palette = PIX_OSI_UNSUPPORTED;
 	}
@@ -99,6 +102,9 @@ int pix_ffmpeg_from_pix_osi(pixosi pix) {
 		break;
 	case PIX_OSI_YUY2:
 		palette = PIX_FMT_YUV422;
+		break;
+	case PIX_OSI_UYVY:
+		palette = PIX_FMT_UYVY422;
 		break;
 	default:
 		palette = PIX_OSI_UNSUPPORTED;

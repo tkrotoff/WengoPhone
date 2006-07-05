@@ -267,7 +267,9 @@ webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 	if (setCaps(PIX_OSI_RGB565, _cachedFPS, 160, 120) != WEBCAM_OK ) {
 	if (setCaps(PIX_OSI_RGB555, _cachedFPS, 176, 144) != WEBCAM_OK ) {
 	if (setCaps(PIX_OSI_RGB555, _cachedFPS, 160, 120) != WEBCAM_OK ) {
-	}}}}}}}}}}}}}}
+	if (setCaps(PIX_OSI_UYVY, _cachedFPS, 176, 144) != WEBCAM_OK ) {
+	if (setCaps(PIX_OSI_UYVY, _cachedFPS, 160, 120) != WEBCAM_OK ) {
+	}}}}}}}}}}}}}}}}
 
 	readCaps();
 
