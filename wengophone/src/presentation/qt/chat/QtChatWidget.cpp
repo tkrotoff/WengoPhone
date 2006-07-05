@@ -46,6 +46,7 @@
 static const int CHAT_NOT_TYPING_DELAY=1000;
 static const int CHAT_STOPPED_TYPING_DELAY=1000;
 static const QString CHAT_USER_BACKGOUND_COLOR = "#B4C8FF";
+static const QString CHAT_USER_FORGROUND_COLOR = "#000000";
 static const QString CHAT_EMOTICONS_LABEL_OFF_BEGIN = ":/pics/chat/chat_emoticon_button.png";
 static const QString CHAT_EMOTICONS_LABEL_OFF_END = ":/pics/profilebar/bar_separator.png";
 static const QString CHAT_EMOTICONS_LABEL_OFF_FILL = ":/pics/profilebar/bar_fill.png";
@@ -67,13 +68,7 @@ QWidget(parent, f), _cChatHandler(cChatHandler) {
 	_notTypingTimerId = -1;
 	_isTyping = false;
 	_sessionId = sessionId;
-	_lastColor = QColor("#B0FFB3");
-	/* Defaults fonts and colors */
-	#if defined(OS_MACOSX)
-	_nickFont = QFont();
-	#else
-	_nickFont = QFont("Helvetica", 12);
-	#endif
+	_lastBackGroundColor = QColor("#B0FFB3");
 
 	//Default nickname for testing purpose
 	_nickName = "Wengo";
@@ -82,7 +77,6 @@ QWidget(parent, f), _cChatHandler(cChatHandler) {
 
 	createActionFrame();
 	setupSendButton();
-
 
 	QtChatTabWidget * parentWidget = dynamic_cast<QtChatTabWidget *>(parent);
 
@@ -164,14 +158,6 @@ const QString & QtChatWidget::nickName() const {
 	return _nickName;
 }
 
-void QtChatWidget::setNickFont(QFont &font) {
-	_nickFont = font;
-}
-
-const QFont & QtChatWidget::nickFont() const {
-	return _nickFont;
-}
-
 void QtChatWidget::addToHistory(const QString & senderName,const QString & str) {
 	QTextCursor curs(_ui.chatHistory->document());
 	curs.movePosition(QTextCursor::End);
@@ -185,7 +171,7 @@ void QtChatWidget::addToHistory(const QString & senderName,const QString & str) 
 		IMContactSet imContactSet = _imChatSession->getIMContactSet();
 		IMContactSet::iterator it = imContactSet.begin();
 		QString nickName = QString::fromStdString((*it).getContactId());
-		QtChatContactInfo qtChatContactInfo(getNewColor(), "#000000", nickName);
+		QtChatContactInfo qtChatContactInfo(getNewBackgroundColor(),CHAT_USER_FORGROUND_COLOR,nickName);
 		_qtContactInfo[nickName] = qtChatContactInfo;
 		header = qtChatContactInfo.getHeader();
 	}
@@ -193,8 +179,10 @@ void QtChatWidget::addToHistory(const QString & senderName,const QString & str) 
 	QTextDocument tmp;
 	tmp.setHtml(str);
 
+	QString tmpStr = text2Emoticon(replaceUrls(tmp.toPlainText(),str));
 	_ui.chatHistory->insertHtml(header);
-	_ui.chatHistory->insertHtml(text2Emoticon(replaceUrls(tmp.toPlainText(),str + "<P></P>")));
+	_ui.chatHistory->insertHtml(tmpStr);
+	_ui.chatHistory->insertHtml("<br><br>");
 	_ui.chatHistory->ensureCursorVisible();
 }
 
@@ -265,7 +253,7 @@ QString QtChatWidget::prepareMessageForSending(const QString & message) {
 
 QString QtChatWidget::insertFontTag(const QString & message) {
 	QString result = "<font color=\"%1\"><font face=\"%2\">";
-	result = result.arg("#000000");
+	result = result.arg(CHAT_USER_FORGROUND_COLOR);
 	result = result.arg(_currentFont.defaultFamily());
 
 	if (_currentFont.bold()) {
@@ -388,7 +376,9 @@ void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
 	std::string tmpNickName = imChatSession->getIMChat().getIMAccount().getLogin();
 	QString nickName = QString::fromUtf8(tmpNickName.c_str());
 
-	QtChatContactInfo qtChatContactInfo(CHAT_USER_BACKGOUND_COLOR, "#000000", nickName);
+	QtChatContactInfo  qtChatContactInfo(QtChatContactInfo(CHAT_USER_BACKGOUND_COLOR,
+		CHAT_USER_FORGROUND_COLOR,nickName));
+
 	_qtContactInfo[nickName] = qtChatContactInfo;
 
 	_imChatSession = imChatSession;
@@ -431,7 +421,7 @@ void QtChatWidget::updateContactListLabel() {
 		QString nickName = QString::fromStdString((*it).getContactId());
 		contactStringList << nickName;
 		if (!hasQtChatContactInfo(nickName)) {
-			QtChatContactInfo qtChatContactInfo(getNewColor(), "#000000", nickName);
+			QtChatContactInfo qtChatContactInfo(getNewBackgroundColor(),CHAT_USER_FORGROUND_COLOR,nickName);
 			_qtContactInfo[nickName] = qtChatContactInfo;
 		}
 	}
@@ -553,7 +543,7 @@ bool QtChatWidget::hasQtChatContactInfo(const QString & nickName) const {
 	return true;
 }
 
-QString QtChatWidget::getNewColor() const {
-	_lastColor.setRed(_lastColor.red() + 20);
-	return QString("%1").arg(_lastColor.name());
+QString QtChatWidget::getNewBackgroundColor() const {
+	_lastBackGroundColor.setRed(_lastBackGroundColor.red() + 20);
+	return QString("%1").arg(_lastBackGroundColor.name());
 }

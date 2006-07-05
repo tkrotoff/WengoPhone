@@ -55,8 +55,6 @@ public:
 
 	virtual ~QtChatWidget();
 
-	void setNickFont(QFont &font);
-
 	void setNickName(const QString & nickname);
 
 	void setIMChatSession(IMChatSession * imChatSession);
@@ -66,8 +64,6 @@ public:
 	IMChatSession * getIMChatSession() {return _imChatSession;};
 
 	const QString & nickName() const;
-
-	const QFont & nickFont() const;
 
 	void addToHistory(const QString & senderName,const QString & str);
 
@@ -145,7 +141,7 @@ private:
 
 	bool hasQtChatContactInfo(const QString & nickname) const;
 
-	QString getNewColor() const;
+	QString getNewBackgroundColor() const;
 
 	QString getProtocol() const;
 
@@ -197,13 +193,9 @@ private:
 
 	QFont _currentFont;
 
-	QFont _nickFont;
-
-	QString _nickBgColor;
-
 	QString _nickName;
 
-	mutable QColor _lastColor;
+	mutable QColor _lastBackGroundColor;
 
 	EmoticonsWidget *_emoticonsWidget;
 

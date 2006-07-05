@@ -53,8 +53,8 @@ QtChatContactInfo & QtChatContactInfo::operator=(QtChatContactInfo & other) {
 
 QString QtChatContactInfo::getHeader() const {
 	QString header = QString("<table border=0 width=100% cellspacing=0 "
-	"cellpadding=0><tr><td BGCOLOR=%1> <font color=%2> %3 </font></td><td BGCOLOR=%4 align=right>"
-	"<font color=%5> %6 </font></td></tr></table>").
+	"cellpadding=0><tr><td BGCOLOR=%1> <font color=%2><H3> %3 </H3></font></td><td BGCOLOR=%4 align=right>"
+	"<font color=%5><H3> %6 </H3></font></td></tr></table>").
 	arg(_bgColor).
 	arg(_textColor).
 	arg(_nickName).
