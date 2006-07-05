@@ -388,7 +388,7 @@ void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
 	std::string tmpNickName = imChatSession->getIMChat().getIMAccount().getLogin();
 	QString nickName = QString::fromUtf8(tmpNickName.c_str());
 
-	QtChatContactInfo qtChatContactInfo(CHAT_USER_BACKGOUND_COLOR, "#000000", nickName));
+	QtChatContactInfo qtChatContactInfo(CHAT_USER_BACKGOUND_COLOR, "#000000", nickName);
 	_qtContactInfo[nickName] = qtChatContactInfo;
 
 	_imChatSession = imChatSession;
