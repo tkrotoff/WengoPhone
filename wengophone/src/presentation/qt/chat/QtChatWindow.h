@@ -101,6 +101,8 @@ private:
 
 	void flashWindow();
 
+	QString getShortDisplayName(const QString & contactId, const QString & defaultName) const;
+
 	QtChatWidget * _chatWidget;
 
 	QtChatTabWidget * _tabWidget;

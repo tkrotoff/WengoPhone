@@ -224,7 +224,7 @@ void QtProfileDetails::changeUserProfileAvatar() {
 				QString::fromStdString(config.getResourcesDir()) + "pics/avatars",
 				tr("Images") + "(*.png *.xpm *.jpg *.gif)");
 
-	if (file.isEmpty()) {
+	if (!file.isEmpty()) {
 		UserProfile & userProfile = dynamic_cast<UserProfile &>(_profile);
 		setProfileAvatarFileName(userProfile, file);
 		readProfileAvatar();

@@ -340,14 +340,30 @@ void QtChatWindow::addChatSession(IMChatSession * imChatSession) {
 	enableChatButton();
 }
 
+QString QtChatWindow::getShortDisplayName(const QString & contactId, const QString & defaultName) const {
+	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+	CContactList & cContactList = qtContactList->getCContactList();
+	std::string tmpSendername = cContactList.getContactProfile(contactId.toStdString()).getFirstName();
+	if (tmpSendername.empty()) {
+		tmpSendername = cContactList.getContactProfile(contactId.toStdString()).getLastName();
+	}
+	if (tmpSendername.empty()) {
+		tmpSendername = defaultName.toStdString();
+	}
+	return QString::fromUtf8(tmpSendername.c_str());
+}
+
 void QtChatWindow::addChat(IMChatSession * session, const IMContact & from) {
-	std::string tmpNickName = session->getIMChat().getIMAccount().getLogin();
-	QString nickName = QString::fromUtf8(tmpNickName.c_str());
-	std::string tmpSendername = from.getContactId();
-	QString senderName = QString::fromUtf8(tmpSendername.c_str());
-	int tabNumber;
 
 	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+	CContactList & cContactList = qtContactList->getCContactList();
+
+	QString contactId = QString::fromStdString(cContactList.findContactThatOwns(from));
+	std::string tmpNickName = session->getIMChat().getIMAccount().getLogin();
+	QString nickName = QString::fromUtf8(tmpNickName.c_str());
+
+	QString senderName = getShortDisplayName(contactId,QString::fromStdString(from.getContactId()));
+	int tabNumber;
 
 	_chatWidget = new QtChatWidget(_cChatHandler,session->getId(), _tabWidget);
 	_chatWidget->setIMChatSession(session);
@@ -362,16 +378,17 @@ void QtChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	if (session->isUserCreated()) {
 		_tabWidget->setCurrentIndex(tabNumber);
 	}
-	statusChangedSlot(QString::fromStdString(qtContactList->getCContactList().findContactThatOwns(from)));
+	statusChangedSlot(QString::fromStdString(cContactList.findContactThatOwns(from)));
+
 	_dialog->setWindowTitle(_tabWidget->tabText(tabNumber));
 	_chatWidget->setNickName(nickName);
 	// Adding probably missed message
 	IMChatSession::IMChatMessage * imChatMessage = session->getReceivedMessage();
 	bool remain = false;
 	while (imChatMessage) {
-		_chatWidget->addToHistory(QString::fromStdString(imChatMessage->getIMContact().getContactId()),
+		_chatWidget->addToHistory(getShortDisplayName(contactId,QString::fromStdString(from.getContactId())),
 			QString::fromUtf8(imChatMessage->getMessage().c_str()));
-			remain = true;
+		remain = true;
 		imChatMessage = session->getReceivedMessage();
 	}
 	////

@@ -185,10 +185,6 @@ private:
 
 	QtWengoStyleLabel *_fontLabel;
 
-	QScrollArea * _scrollArea;
-
-	QWidget * _contactViewport;
-
 	IMChatSession * _imChatSession;
 
 	QFont _currentFont;

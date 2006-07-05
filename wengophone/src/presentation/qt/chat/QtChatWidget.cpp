@@ -45,7 +45,8 @@
 
 static const int CHAT_NOT_TYPING_DELAY=1000;
 static const int CHAT_STOPPED_TYPING_DELAY=1000;
-static const QString CHAT_USER_BACKGOUND_COLOR = "#B4C8FF";
+//static const QString CHAT_USER_BACKGOUND_COLOR = "#B4C8FF";
+static const QString CHAT_USER_BACKGOUND_COLOR = "#F0EFFF";
 static const QString CHAT_USER_FORGROUND_COLOR = "#000000";
 static const QString CHAT_EMOTICONS_LABEL_OFF_BEGIN = ":/pics/chat/chat_emoticon_button.png";
 static const QString CHAT_EMOTICONS_LABEL_OFF_END = ":/pics/profilebar/bar_separator.png";
@@ -75,6 +76,8 @@ QWidget(parent, f), _cChatHandler(cChatHandler) {
 
 	_ui.setupUi(this);
 
+	// _ui.chatHistory->setViewportMargins (5,0,5,0);
+
 	createActionFrame();
 	setupSendButton();
 
@@ -99,16 +102,6 @@ QWidget(parent, f), _cChatHandler(cChatHandler) {
 	connect(_emoticonsWidget,SIGNAL(closed()),_ui.chatEdit,SLOT(setFocus()));
 	connect(_ui.chatEdit,SIGNAL(textChanged ()),SLOT(chatEditChanged()));
 
-	QGridLayout * frameLayout = new QGridLayout(_ui.contactListFrame);
-	_ui.contactListFrame->setVisible(false);
-	_scrollArea = new QScrollArea(_ui.contactListFrame);
-	frameLayout->addWidget(_scrollArea);
-
-	_contactViewport = new QWidget(_scrollArea);
-	_scrollArea->setWidget(_contactViewport);
-	new QHBoxLayout(_contactViewport);
-	_contactViewport->layout()->setMargin(0);
-	_scrollArea->setWidgetResizable(true);
 }
 
 QtChatWidget::~QtChatWidget() {
@@ -231,6 +224,8 @@ void QtChatWidget::enterPressed(Qt::KeyboardModifiers modifier) {
 	_ui.chatEdit->setFocus();
 }
 
+//Work around for Qt 4.1.2 bug
+//can be removed with Qt > 4.1.2
 void QtChatWidget::deletePressed() {
 	QTextCursor cursor = _ui.chatEdit->textCursor();
 	if (!cursor.hasSelection()) {
