@@ -443,7 +443,7 @@ void PhApiWrapper::videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * 
 }
 
 bool PhApiWrapper::setCallInputAudioDevice(const std::string & deviceId) {
-	_inputAudioDevice = deviceId;
+	_inputAudioDeviceId = deviceId;
 	return setAudioDevices();
 }
 
@@ -452,36 +452,25 @@ bool PhApiWrapper::setRingerOutputAudioDevice(const std::string & deviceId) {
 }
 
 bool PhApiWrapper::setCallOutputAudioDevice(const std::string & deviceId) {
-	_outputAudioDevice = deviceId;
+	_outputAudioDeviceId = deviceId;
 	return setAudioDevices();
 }
 
 bool PhApiWrapper::setAudioDevices() {
-	std::string devices;
 
-#ifndef OS_MACOSX
-	//Uses PortAudio
-	static const std::string INPUT_DEVICE_TAG = "pa:IN=";
 	static const std::string OUTPUT_DEVICE_TAG  = "OUT=";
 
-/*	FIXME: this code has been commented because of change made in libs/sound 
+#ifdef OS_MACOSX
+	static const std::string INPUT_DEVICE_TAG = "ca:IN=";
+#else
+	static const std::string INPUT_DEVICE_TAG = "pa:IN=";
+#endif
 
-	devices = INPUT_DEVICE_TAG
-		+ String::fromNumber(_inputAudioDeviceId)
+	std::string devices = INPUT_DEVICE_TAG
+		+ _inputAudioDeviceId
 		+ std::string(" ")
 		+ OUTPUT_DEVICE_TAG
-		+ String::fromNumber(_outputAudioDeviceId);
-*/
-	//Takes the default Windows audio device
-	//std::string tmp = "pa:";
-#else
-	devices = "ca:";
-/*	devices += "in=";
-	devices += _inputAudioDevice;
-	devices += ":out=";
-	devices += _outputAudioDevice;
-*/
-#endif
+		+ _outputAudioDeviceId;
 
 	int ret = phChangeAudioDevices(devices.c_str());
 	if (ret == 0) {
@@ -1047,6 +1036,6 @@ std::string PhApiWrapper::phapiCallStateToString(enum phCallStateEvent event) {
 	return toReturn;
 }
 
-void PhApiWrapper::setVideoDevice(std::string deviceName) {
-	 strncpy(phcfg.video_config.video_device, deviceName.c_str(), sizeof(phcfg.video_config.video_device));
+void PhApiWrapper::setVideoDevice(const std::string & deviceName) {
+	strncpy(phcfg.video_config.video_device, deviceName.c_str(), sizeof(phcfg.video_config.video_device));
 }

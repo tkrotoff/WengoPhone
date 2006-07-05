@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PHAPIWRAPPER_H
-#define PHAPIWRAPPER_H
+#ifndef OWPHAPIWRAPPER_H
+#define OWPHAPIWRAPPER_H
 
 #include "PhApiCallbacks.h"
 
@@ -124,7 +124,7 @@ public:
 
 	CodecList::VideoCodec getVideoCodecUsed(int callId);
 
-	void setVideoDevice(std::string deviceName);
+	void setVideoDevice(const std::string & deviceName);
 
 	bool setCallInputAudioDevice(const std::string & deviceId);
 
@@ -149,6 +149,10 @@ public:
 
 	void setSIP(const std::string & server, unsigned serverPort, unsigned localPort);
 
+	/**
+	 * @name Conference
+	 * @{
+	 */
 
 	int createConference();
 
@@ -156,6 +160,7 @@ public:
 
 	void splitConference(int confId, int callId);
 
+	/** @} */
 
 	/**
 	 * @name PhApi callbacks
@@ -210,7 +215,7 @@ public:
 
 	void changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note);
 
-	// Look at changeMyIcon in IMPresence
+	//Look at changeMyIcon in IMPresence
 	void sendMyIcon(const std::string & contactId, const std::string & iconFilename);
 
 	void subscribeToPresenceOf(const std::string & contactId);
@@ -239,7 +244,7 @@ public:
 	 * @param event a phCallStateEvent to "convert" into a string
 	 * @return a string representing the enum
 	 */
-	std::string phapiCallStateToString(enum  phCallStateEvent event);
+	static std::string phapiCallStateToString(enum phCallStateEvent event);
 
 	static const std::string PresenceStateOnline;
 	static const std::string PresenceStateAway;
@@ -250,10 +255,10 @@ public:
 	// Fixme: temporary hack
 	std::string _iconFilename;
 
-	bool isRegistered() { return _registered; };
+	bool isRegistered() const { return _registered; };
 	void setRegistered(bool registered) { _registered = registered; };
 
-	int getActiveVline() { return _wengoVline; };
+	int getActiveVline() const { return _wengoVline; };
 
 private:
 
@@ -309,10 +314,10 @@ private:
 	std::string _lastNote;
 
 	/** Playback audio device id. */
-	std::string _outputAudioDevice;
+	std::string _outputAudioDeviceId;
 
 	/** Record audio device id. */
-	std::string _inputAudioDevice;
+	std::string _inputAudioDeviceId;
 
 	std::map<int, IMChatSession *> _messageIdChatSessionMap;
 
@@ -351,4 +356,4 @@ private:
 	bool _registered;
 };
 
-#endif	//PHAPIWRAPPER_H
+#endif	//OWPHAPIWRAPPER_H
