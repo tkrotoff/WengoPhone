@@ -32,10 +32,10 @@ class AudioDevice {
 public:
 
 	/**
-	 * Constructs an AudioDevice from a string identifying uniquely a 
+	 * Constructs an AudioDevice from a string identifying uniquely a
 	 * sound device.
 	 *
-	 * @param deviceId the device ID. e.g: on MacOS X this will a list of 
+	 * @param deviceId the device ID. e.g: on MacOS X this will a list of
 	 * integer with the following scheme: "deviceId:dataSource:isInput"
 	 * @see getId for more information.
 	 */
@@ -62,4 +62,4 @@ private:
 	AudioDevice * _audioDevicePrivate;
 };
 
-#endif //OWAUDIODEVICE_H
+#endif	//OWAUDIODEVICE_H

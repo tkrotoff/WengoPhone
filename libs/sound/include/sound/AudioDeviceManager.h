@@ -20,7 +20,7 @@
 #ifndef OWAUDIODEVICEMANAGER_H
 #define OWAUDIODEVICEMANAGER_H
 
-#include "AudioDevice.h"
+#include <sound/AudioDevice.h>
 
 #include <util/NonCopyable.h>
 

@@ -20,8 +20,8 @@
 #ifndef OWVOLUMECONTROL_H
 #define OWVOLUMECONTROL_H
 
-#include "AudioDevice.h"
-#include "IVolumeControl.h"
+#include <sound/AudioDevice.h>
+#include <sound/IVolumeControl.h>
 
 /**
  * Manipulates the volume of an audio device.
@@ -90,4 +90,4 @@ private:
 	IVolumeControl * _iVolumeControlPrivate;
 };
 
-#endif //OWVOLUMECONTROL_H
+#endif	//OWVOLUMECONTROL_H
