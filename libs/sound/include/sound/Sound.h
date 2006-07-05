@@ -44,7 +44,7 @@ public:
 
 	void setLoops(int loops);
 
-	bool setWaveOutDevice(const std::string & deviceName);
+	bool setWaveOutDevice(const std::string & deviceId);
 
 	/**
 	 * Plays the sound in a file called filename.
@@ -52,7 +52,7 @@ public:
 	 * @param filename sound file
 	 * @param deviceName wave out audio device name
 	 */
-	static void play(const std::string & filename, const std::string & deviceName = "");
+	static void play(const std::string & filename, const std::string & deviceId = "");
 
 	void play();
 

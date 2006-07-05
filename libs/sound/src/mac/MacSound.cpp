@@ -99,7 +99,7 @@ void MacSound::setLoops(int loops) {
 	[_macSoundObjCPrivate setLoops:loops];
 }
 
-bool MacSound::setWaveOutDevice(const std::string & deviceName) {
+bool MacSound::setWaveOutDevice(const std::string & deviceId) {
 	//TODO: set the wave out device
 	return true;
 }

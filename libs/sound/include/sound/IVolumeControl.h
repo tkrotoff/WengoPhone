@@ -17,12 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IVOLUMECONTROL_H
-#define IVOLUMECONTROL_H
+#ifndef OWIVOLUMECONTROL_H
+#define OWIVOLUMECONTROL_H
 
 #include <util/Interface.h>
-
-#include <string>
 
 /**
  * Manipulates the volume of an audio device.
@@ -38,14 +36,6 @@
 class IVolumeControl : Interface {
 public:
 
-	enum DeviceType {
-		/** Input audio device (record device like microphone). */
-		DeviceTypeInput,
-
-		/** Output audio device (master volume). */
-		DeviceTypeOutput,
-	};
-
 	/**
 	 * Sets the audio device volume level.
 	 *
@@ -59,7 +49,7 @@ public:
 	 *
 	 * @return the audio device volume (0 to 100); -1 if an error occured
 	 */
-	virtual int getLevel() = 0;
+	virtual int getLevel() const = 0;
 
 	/**
 	 * Mute or unmute the audio device.
@@ -74,17 +64,12 @@ public:
 	 *
 	 * @return true if the audio device is now muted; false otherwise
 	 */
-	virtual bool isMuted() = 0;
-
-	//MIXERCONTROL_CONTROLTYPE_PEAKMETER
-	//virtual unsigned getPeakMeterLevel() = 0;
+	virtual bool isMuted() const = 0;
 
 	/**
-	 * Closes the audio device mixer.
-	 *
-	 * @return true if the audio device has been closed; false otherwise
+	 * @return true if the volume is settable on this device
 	 */
-	virtual bool close() = 0;
+	virtual bool isSettable() const = 0;
 };
 
-#endif	//IVOLUMECONTROL_H
+#endif //OWIVOLUMECONTROL_H

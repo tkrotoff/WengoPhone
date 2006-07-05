@@ -30,7 +30,7 @@
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
 
-#include <sound/AudioDevice.h>
+#include <sound/AudioDeviceManager.h>
 
 #include <qtutil/StringListConvert.h>
 
@@ -62,38 +62,60 @@ QString QtAudioSettings::getName() const {
 void QtAudioSettings::saveConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, _ui->inputDeviceComboBox->currentText().toStdString());
-	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, _ui->outputDeviceComboBox->currentText().toStdString());
-	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, _ui->ringingDeviceComboBox->currentText().toStdString());
+	config.set(Config::AUDIO_INPUT_DEVICEID_KEY,
+		_ui->inputDeviceComboBox->itemData(_ui->inputDeviceComboBox->currentIndex()).toString().toStdString());
+	config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY,
+		_ui->outputDeviceComboBox->itemData(_ui->outputDeviceComboBox->currentIndex()).toString().toStdString());
+	config.set(Config::AUDIO_RINGER_DEVICEID_KEY,
+		_ui->ringingDeviceComboBox->itemData(_ui->ringingDeviceComboBox->currentIndex()).toString().toStdString());
 }
 
 void QtAudioSettings::readConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//inputDeviceList
-	StringList inputDeviceList;
-	inputDeviceList += AudioDevice::getDefaultRecordDevice();
-	inputDeviceList += AudioDevice::getInputMixerDeviceList();
-	inputDeviceList.removeDuplicatedStrings();
-
 	_ui->inputDeviceComboBox->clear();
-	_ui->inputDeviceComboBox->addItems(StringListConvert::toQStringList(inputDeviceList));
-	_ui->inputDeviceComboBox->setCurrentIndex(_ui->inputDeviceComboBox->findText(QString::fromUtf8(config.getAudioInputDeviceName().c_str())));
+	
+	std::list<AudioDevice> inputDeviceList = AudioDeviceManager::getInputDeviceList();
+	for (std::list<AudioDevice>::const_iterator it = inputDeviceList.begin();
+		it != inputDeviceList.end();
+		++it) {
+		_ui->inputDeviceComboBox->addItem(QString::fromUtf8((*it).getName().c_str()), 
+			QString::fromStdString((*it).getId()));
+	}
+
+	QString currentInputDeviceId = QString::fromUtf8(config.getAudioInputDeviceId().c_str());
+	_ui->inputDeviceComboBox->setCurrentIndex(_ui->inputDeviceComboBox->findData(currentInputDeviceId));
+	////
 
 	//outputDeviceList
-	StringList outputDeviceList;
-	outputDeviceList += AudioDevice::getDefaultPlaybackDevice();
-	outputDeviceList += AudioDevice::getOutputMixerDeviceList();
-	outputDeviceList.removeDuplicatedStrings();
-
 	_ui->outputDeviceComboBox->clear();
-	_ui->outputDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
-	_ui->outputDeviceComboBox->setCurrentIndex(_ui->outputDeviceComboBox->findText(QString::fromUtf8(config.getAudioOutputDeviceName().c_str())));
+	
+	std::list<AudioDevice> outputDeviceList = AudioDeviceManager::getOutputDeviceList();
+	for (std::list<AudioDevice>::const_iterator it = outputDeviceList.begin();
+		it != outputDeviceList.end();
+		++it) {
+		_ui->outputDeviceComboBox->addItem(QString::fromUtf8((*it).getName().c_str()),
+			QString::fromStdString((*it).getId()));
+	}
+
+	QString currentOutputDeviceId = QString::fromUtf8(config.getAudioOutputDeviceId().c_str());
+	_ui->outputDeviceComboBox->setCurrentIndex(_ui->outputDeviceComboBox->findData(currentOutputDeviceId));
+	////
 
 	//ringingDeviceList = outputDeviceList
 	_ui->ringingDeviceComboBox->clear();
-	_ui->ringingDeviceComboBox->addItems(StringListConvert::toQStringList(outputDeviceList));
-	_ui->ringingDeviceComboBox->setCurrentIndex(_ui->ringingDeviceComboBox->findText(QString::fromUtf8(config.getAudioRingerDeviceName().c_str())));
+
+	for (std::list<AudioDevice>::const_iterator it = outputDeviceList.begin();
+		it != outputDeviceList.end();
+		++it) {
+		_ui->ringingDeviceComboBox->addItem(QString::fromUtf8((*it).getName().c_str()),
+			QString::fromStdString((*it).getId()));
+	}
+
+	QString currentRingerDeviceId = QString::fromUtf8(config.getAudioRingerDeviceId().c_str());
+	_ui->ringingDeviceComboBox->setCurrentIndex(_ui->ringingDeviceComboBox->findData(currentRingerDeviceId));
+	////
 }
 
 void QtAudioSettings::makeTestCallClicked() {

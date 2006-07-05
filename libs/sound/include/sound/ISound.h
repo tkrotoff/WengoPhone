@@ -48,12 +48,12 @@ public:
 	virtual void setLoops(int loops) = 0;
 
 	/**
-	 * Sets the wave out audio device given its name.
+	 * Sets the wave out audio device given its id.
 	 *
-	 * @param deviceName wave out audio device name
+	 * @param deviceId wave out audio device id
 	 * @return true if the device was changed; false otherwise
 	 */
-	virtual bool setWaveOutDevice(const std::string & deviceName) = 0;
+	virtual bool setWaveOutDevice(const std::string & deviceId) = 0;
 
 	/**
 	 * Plays the sound.

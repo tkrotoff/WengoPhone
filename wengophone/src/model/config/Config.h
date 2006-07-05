@@ -135,16 +135,16 @@ public:
 	std::string getCodecPluginPath() const;
 
 	/** Playback audio device name. */
-	static const std::string AUDIO_OUTPUT_DEVICENAME_KEY;
-	std::string getAudioOutputDeviceName() const;
+	static const std::string AUDIO_OUTPUT_DEVICEID_KEY;
+	std::string getAudioOutputDeviceId() const;
 
 	/** Record audio device name. */
-	static const std::string AUDIO_INPUT_DEVICENAME_KEY;
-	std::string getAudioInputDeviceName() const;
+	static const std::string AUDIO_INPUT_DEVICEID_KEY;
+	std::string getAudioInputDeviceId() const;
 
 	/** Ringer audio device name. */
-	static const std::string AUDIO_RINGER_DEVICENAME_KEY;
-	std::string getAudioRingerDeviceName() const;
+	static const std::string AUDIO_RINGER_DEVICEID_KEY;
+	std::string getAudioRingerDeviceId() const;
 
 	/** Ringing/incoming call/ringtone audio file name. */
 	static const std::string AUDIO_INCOMINGCALL_FILE_KEY;

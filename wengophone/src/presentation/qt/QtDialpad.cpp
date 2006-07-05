@@ -100,12 +100,12 @@ void QtDialpad::playTone(const std::string & tone) {
 
 	if (_ui->audioSmileysComboBox->currentIndex() == 0) {
 		_qtWengoPhone->dialpad(tone, String::null);
-		Sound::play(File::convertPathSeparators(config.getAudioSmileysDir() + soundFile + ".wav"), config.getAudioRingerDeviceName());
+		Sound::play(File::convertPathSeparators(config.getAudioSmileysDir() + soundFile + ".wav"), config.getAudioRingerDeviceId());
 	} else {
 		soundFile = config.getAudioSmileysDir() + _ui->audioSmileysComboBox->currentText().toStdString()
 				+ File::getPathSeparator() + soundFile + ".raw";
 		_qtWengoPhone->dialpad(tone, File::convertPathSeparators(soundFile));
-		Sound::play(File::convertPathSeparators(soundFile), config.getAudioRingerDeviceName());
+		Sound::play(File::convertPathSeparators(soundFile), config.getAudioRingerDeviceId());
 	}
 
 	LOG_DEBUG("sound file=" + soundFile);

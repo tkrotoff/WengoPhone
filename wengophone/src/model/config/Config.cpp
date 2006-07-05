@@ -24,7 +24,7 @@
 
 #include <webcam/WebcamDriver.h>
 
-#include <sound/AudioDevice.h>
+#include <sound/AudioDeviceManager.h>
 
 #include <util/File.h>
 #include <util/Path.h>
@@ -54,9 +54,9 @@ const std::string Config::NETWORK_PROXY_LOGIN_KEY = "network.proxy.login";
 const std::string Config::NETWORK_PROXY_PASSWORD_KEY = "network.proxy.password";
 
 const std::string Config::CODEC_PLUGIN_PATH_KEY = "codec.plugin.path";
-const std::string Config::AUDIO_OUTPUT_DEVICENAME_KEY = "audio.output.devicename";
-const std::string Config::AUDIO_INPUT_DEVICENAME_KEY = "audio.input.devicename";
-const std::string Config::AUDIO_RINGER_DEVICENAME_KEY = "audio.ringer.devicename";
+const std::string Config::AUDIO_OUTPUT_DEVICEID_KEY = "audio.output.deviceid";
+const std::string Config::AUDIO_INPUT_DEVICEID_KEY = "audio.input.deviceid";
+const std::string Config::AUDIO_RINGER_DEVICEID_KEY = "audio.ringer.deviceid";
 
 const std::string Config::AUDIO_INCOMINGCALL_FILE_KEY = "audio.incomingcall.file";
 const std::string Config::AUDIO_CALLCLOSED_FILE_KEY = "audio.callclosed.file";
@@ -184,9 +184,9 @@ Config::Config(const std::string & name)
 #endif
 	_keyDefaultValueMap[CODEC_PLUGIN_PATH_KEY] = pluginsPath;
 
-	_keyDefaultValueMap[AUDIO_OUTPUT_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
-	_keyDefaultValueMap[AUDIO_INPUT_DEVICENAME_KEY] = AudioDevice::getDefaultRecordDevice();
-	_keyDefaultValueMap[AUDIO_RINGER_DEVICENAME_KEY] = AudioDevice::getDefaultPlaybackDevice();
+	_keyDefaultValueMap[AUDIO_OUTPUT_DEVICEID_KEY] = AudioDeviceManager::getDefaultOutputDevice().getId();
+	_keyDefaultValueMap[AUDIO_INPUT_DEVICEID_KEY] = AudioDeviceManager::getDefaultInputDevice().getId();
+	_keyDefaultValueMap[AUDIO_RINGER_DEVICEID_KEY] = AudioDeviceManager::getDefaultOutputDevice().getId();
 
 	_keyDefaultValueMap[AUDIO_INCOMINGCALL_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/ringin.wav");
 	_keyDefaultValueMap[AUDIO_CALLCLOSED_FILE_KEY] = File::convertPathSeparators(resourcesPath + "sounds/callclosed.wav");
@@ -374,35 +374,50 @@ std::string Config::getAudioContactOnlineFile() const {
  * @see Config::getAudioInputDeviceName()
  * @see Config::getAudioOutputDeviceName()
  */
-static std::string getProperAudioDeviceName(const std::string & deviceName,
-			const StringList & mixerList,
-			const std::string & defaultDevice) {
+static std::string getProperAudioDeviceId(const std::string & deviceId,
+	const std::list<AudioDevice> & deviceList, const std::string & defaultDevice) {
 
-	if (deviceName.empty()) {
-		return defaultDevice;
-	} else if (!mixerList.contains(deviceName)) {
-		return defaultDevice;
+	std::string result;
+
+	if (deviceId.empty()) {
+		result = defaultDevice;
 	} else {
-		return deviceName;
+		bool found = false;
+
+		for (std::list<AudioDevice>::const_iterator it = deviceList.begin();
+			it != deviceList.end();
+			++it) {
+			if ((*it).getId() == deviceId) {
+				found = true;
+			}
+		}
+	
+		if (found) {
+			result = deviceId;
+		} else {
+			result = defaultDevice;
+		}
 	}
+
+	return result;
 }
 
-std::string Config::getAudioRingerDeviceName() const {
-	return getProperAudioDeviceName(getStringKeyValue(AUDIO_RINGER_DEVICENAME_KEY),
-				AudioDevice::getOutputMixerDeviceList(),
-				AudioDevice::getDefaultPlaybackDevice());
+std::string Config::getAudioRingerDeviceId() const {
+	return getProperAudioDeviceId(getStringKeyValue(AUDIO_RINGER_DEVICEID_KEY),
+		AudioDeviceManager::getOutputDeviceList(),
+		AudioDeviceManager::getDefaultOutputDevice().getId());
 }
 
-std::string Config::getAudioInputDeviceName() const {
-	return getProperAudioDeviceName(getStringKeyValue(AUDIO_INPUT_DEVICENAME_KEY),
-				AudioDevice::getInputMixerDeviceList(),
-				AudioDevice::getDefaultRecordDevice());
+std::string Config::getAudioInputDeviceId() const {
+	return getProperAudioDeviceId(getStringKeyValue(AUDIO_INPUT_DEVICEID_KEY),
+		AudioDeviceManager::getInputDeviceList(),
+		AudioDeviceManager::getDefaultInputDevice().getId());
 }
 
-std::string Config::getAudioOutputDeviceName() const {
-	return getProperAudioDeviceName(getStringKeyValue(AUDIO_OUTPUT_DEVICENAME_KEY),
-				AudioDevice::getOutputMixerDeviceList(),
-				AudioDevice::getDefaultPlaybackDevice());
+std::string Config::getAudioOutputDeviceId() const {
+	return getProperAudioDeviceId(getStringKeyValue(AUDIO_OUTPUT_DEVICEID_KEY),
+		AudioDeviceManager::getOutputDeviceList(),
+		AudioDeviceManager::getDefaultOutputDevice().getId());
 }
 
 std::string Config::getWengoServerHostname() const {

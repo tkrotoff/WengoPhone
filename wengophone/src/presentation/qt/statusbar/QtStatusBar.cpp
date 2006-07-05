@@ -92,7 +92,7 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this, _1, _2);
-	checkSoundConfigThreadSafe(config, Config::AUDIO_OUTPUT_DEVICENAME_KEY);
+	checkSoundConfigThreadSafe(config, Config::AUDIO_OUTPUT_DEVICEID_KEY);
 
 	init();
 }
@@ -114,27 +114,23 @@ void QtStatusBar::checkSoundConfig(Settings & sender, const std::string & key) {
 void QtStatusBar::checkSoundConfigThreadSafe(Settings & sender, const std::string & key) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	if (key == Config::AUDIO_OUTPUT_DEVICENAME_KEY ||
-		key == Config::AUDIO_INPUT_DEVICENAME_KEY ||
-		key == Config::AUDIO_RINGER_DEVICENAME_KEY) {
+	if (key == Config::AUDIO_OUTPUT_DEVICEID_KEY ||
+		key == Config::AUDIO_INPUT_DEVICEID_KEY ||
+		key == Config::AUDIO_RINGER_DEVICEID_KEY) {
 
 		//FIXME This is responsible for a lot of crashes
 		//AudioDevice::selectAsRecordDevice(config.getAudioInputDeviceName(), AudioDevice::TypeInputMicrophone);
-		try {
-			VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
-			//outputVolumeControl.setMute(false);
-			VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
-			//inputVolumeControl.setMute(false);
+		VolumeControl outputVolumeControl(config.getAudioOutputDeviceId());
+		//outputVolumeControl.setMute(false);
+		VolumeControl inputVolumeControl(config.getAudioInputDeviceId());
+		//inputVolumeControl.setMute(false);
 
-			if (!outputVolumeControl.isMuted() &&
-				/*outputVolumeControl.getLevel() > 0 &&*/
-				!inputVolumeControl.isMuted()/* &&
-				inputVolumeControl.getLevel() > 0*/) {
-
-				_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar/status-audio-online.png"));
-				_soundStateLabel->setToolTip(tr("Audio Configuration OK"));
-			}
-		} catch (Exception & e) {
+		if (!outputVolumeControl.isMuted() &&
+			/*outputVolumeControl.getLevel() > 0 &&*/
+			!inputVolumeControl.isMuted()/* &&
+			inputVolumeControl.getLevel() > 0*/) {
+			_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar/status-audio-online.png"));
+			_soundStateLabel->setToolTip(tr("Audio Configuration OK"));
 		}
 	}
 }

@@ -25,17 +25,18 @@
 #include <imwrapper/IMContact.h>
 
 #include <cutil/global.h>
-#include <util/StringList.h>
-#include <util/Logger.h>
-#include <util/File.h>
 #include <thread/Thread.h>
 #include <thread/Timer.h>
-
-#include <sound/AudioDevice.h>
+#include <util/File.h>
+#include <util/Logger.h>
+#include <util/StringList.h>
 
 #include <string>
-using namespace std;
+
 #include <cstdio>
+
+using namespace std;
+
 
 const std::string PhApiWrapper::PresenceStateOnline = "Online";
 const std::string PhApiWrapper::PresenceStateAway = "Away";
@@ -110,8 +111,6 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 	_sipServerPort = 0;
 	_sipLocalPort = 0;
 	PhApiWrapperHack = this;
-	_inputAudioDeviceId = 0;
-	_outputAudioDeviceId = 0;
 	_registered = false;
 
 	_publishTimer.timeoutEvent += boost::bind(&PhApiWrapper::renewPublishEventHandler, this);
@@ -443,41 +442,48 @@ void PhApiWrapper::videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * 
 	_callbacks->videoFrameReceived(callId, info);
 }
 
-bool PhApiWrapper::setCallInputAudioDevice(const std::string & deviceName) {
-	_inputAudioDeviceId = AudioDevice::getWaveInDeviceId(deviceName);
+bool PhApiWrapper::setCallInputAudioDevice(const std::string & deviceId) {
+	_inputAudioDevice = deviceId;
 	return setAudioDevices();
 }
 
-bool PhApiWrapper::setRingerOutputAudioDevice(const std::string & deviceName) {
+bool PhApiWrapper::setRingerOutputAudioDevice(const std::string & deviceId) {
 	return false;
 }
 
-bool PhApiWrapper::setCallOutputAudioDevice(const std::string & deviceName) {
-	_outputAudioDeviceId = AudioDevice::getWaveOutDeviceId(deviceName);
+bool PhApiWrapper::setCallOutputAudioDevice(const std::string & deviceId) {
+	_outputAudioDevice = deviceId;
 	return setAudioDevices();
 }
 
 bool PhApiWrapper::setAudioDevices() {
+	std::string devices;
+
 #ifndef OS_MACOSX
 	//Uses PortAudio
 	static const std::string INPUT_DEVICE_TAG = "pa:IN=";
 	static const std::string OUTPUT_DEVICE_TAG  = "OUT=";
 
-	std::string tmp = INPUT_DEVICE_TAG
-			+ String::fromNumber(_inputAudioDeviceId)
-			+ std::string(" ")
-			+ OUTPUT_DEVICE_TAG
-			+ String::fromNumber(_outputAudioDeviceId);
+/*	FIXME: this code has been commented because of change made in libs/sound 
 
+	devices = INPUT_DEVICE_TAG
+		+ String::fromNumber(_inputAudioDeviceId)
+		+ std::string(" ")
+		+ OUTPUT_DEVICE_TAG
+		+ String::fromNumber(_outputAudioDeviceId);
+*/
 	//Takes the default Windows audio device
 	//std::string tmp = "pa:";
 #else
-	//FIXME: needs to be changed to take the set audio device
-	//(currently takes the default audio device)
-	std::string tmp = "ca:";
+	devices = "ca:";
+/*	devices += "in=";
+	devices += _inputAudioDevice;
+	devices += ":out=";
+	devices += _outputAudioDevice;
+*/
 #endif
 
-	int ret = phChangeAudioDevices(tmp.c_str());
+	int ret = phChangeAudioDevices(devices.c_str());
 	if (ret == 0) {
 		//Ok
 		return true;
@@ -921,16 +927,16 @@ void PhApiWrapper::init() {
 	strncpy(phcfg.plugin_path, _pluginPath.c_str(), sizeof(phcfg.plugin_path));
 
 	std::string audioCodecList = PhApiCodecList::AUDIO_CODEC_SPEEXWB + "," +
-					PhApiCodecList::AUDIO_CODEC_AMRWB + "," +
-					PhApiCodecList::AUDIO_CODEC_AMRNB + "," +
-					PhApiCodecList::AUDIO_CODEC_ILBC + "," +
-					PhApiCodecList::AUDIO_CODEC_PCMU + "," +
-					PhApiCodecList::AUDIO_CODEC_PCMA + "," +
-					PhApiCodecList::AUDIO_CODEC_GSM;
+		PhApiCodecList::AUDIO_CODEC_AMRWB + "," +
+		PhApiCodecList::AUDIO_CODEC_AMRNB + "," +
+		PhApiCodecList::AUDIO_CODEC_ILBC + "," +
+		PhApiCodecList::AUDIO_CODEC_PCMU + "," +
+		PhApiCodecList::AUDIO_CODEC_PCMA + "," +
+		PhApiCodecList::AUDIO_CODEC_GSM;
 
 	std::string videoCodecList = PhApiCodecList::VIDEO_CODEC_H263 + "," +
-					PhApiCodecList::VIDEO_CODEC_H264 + "," +
-					PhApiCodecList::VIDEO_CODEC_MPEG4;
+		PhApiCodecList::VIDEO_CODEC_H264 + "," +
+		PhApiCodecList::VIDEO_CODEC_MPEG4;
 
 	//Codec list
 	strncpy(phcfg.audio_codecs, audioCodecList.c_str(), sizeof(phcfg.audio_codecs));

@@ -17,56 +17,77 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef VOLUMECONTROL_H
-#define VOLUMECONTROL_H
+#ifndef OWVOLUMECONTROL_H
+#define OWVOLUMECONTROL_H
 
-#include <sound/IVolumeControl.h>
-
-#include <sound/SoundMixerException.h>
-#include <sound/NoSoundCardException.h>
-
-#include <string>
+#include "AudioDevice.h"
+#include "IVolumeControl.h"
 
 /**
  * Manipulates the volume of an audio device.
  *
- * @see IVolumeControl
+ * Gets and sets the volume of an audio device
+ * (a microphone or a master/wave out audio device in general).
+ *
+ * @see http://www.blackberry.com/developers/docs/4.1api/javax/microedition/media/control/VolumeControl.html
  * @author Tanguy Krotoff
  * @author Mathieu Stute
+ * @author Philippe Bernery
  */
-class VolumeControl : public IVolumeControl {
+class VolumeControl :  public IVolumeControl {
 public:
 
 	/**
-	 * Constructs a VolumeControl object.
-	 *
-	 * @param deviceName audio device name
-	 * @param deviceType type of audio device (input or output)
-	 * @exception NoSoundCardException no sound card available on the system
-	 * @exception SoundMixerException an error occured while manipulating an audio mixer
+	 * @param audioDevice the AudioDevice we want to set the volume
+	 * It it copied internally.
 	 */
-	VolumeControl(const std::string & deviceName, DeviceType deviceType) throw (NoSoundCardException, SoundMixerException);
+	VolumeControl(AudioDevice audioDevice);
 
-	virtual ~VolumeControl() {
-		close();
-	}
+	/**
+	 * Sets the audio device volume level.
+	 *
+	 * @param level new audio device volume (0 to 100)
+	 * @return true if the volume has been changed; false otherwise
+	 */
+	virtual bool setLevel(unsigned level);
 
-	bool setLevel(unsigned level);
+	/**
+	 * Gets the audio device volume level.
+	 *
+	 * @return the audio device volume (0 to 100); -1 if an error occured
+	 */
+	virtual int getLevel() const;
 
-	int getLevel();
+	/**
+	 * Mute or unmute the audio device.
+	 *
+	 * @param mute mute state of the audio device
+	 * @return true if the mute state has been changed; false otherwise
+	 */
+	virtual bool setMute(bool mute);
 
-	bool setMute(bool mute);
+	/**
+	 * Gets the mute state of the audio device.
+	 *
+	 * @return true if the audio device is now muted; false otherwise
+	 */
+	virtual bool isMuted() const;
 
-	bool isMuted();
+	/**
+	 * @return true if the volume is settable on this device
+	 */
+	virtual bool isSettable() const;
 
-	bool selectAsRecordDevice();
+protected:
 
-	bool close();
+	VolumeControl();
+
+	AudioDevice _audioDevice;
 
 private:
 
-	/** System-dependant implementation. */
-	IVolumeControl * _volumeControlPrivate;
+	/** System dependent implementation. */
+	IVolumeControl * _iVolumeControlPrivate;
 };
 
-#endif	//VOLUMECONTROL_H
+#endif //OWVOLUMECONTROL_H

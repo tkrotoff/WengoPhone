@@ -36,7 +36,7 @@ void Sound::setLoops(int loops) {
 	_soundPrivate->setLoops(loops);
 }
 
-bool Sound::setWaveOutDevice(const std::string & deviceName) {
+bool Sound::setWaveOutDevice(const std::string & deviceId) {
 	return false;
 }
 
@@ -48,9 +48,9 @@ void Sound::play() {
 	_soundPrivate->play();
 }
 
-void Sound::play(const std::string & filename, const std::string & deviceName) {
+void Sound::play(const std::string & filename, const std::string & deviceId) {
 	MacSound * soundPrivateForPlaySound = new MacSound(filename);
-	soundPrivateForPlaySound->setWaveOutDevice(deviceName);
+	soundPrivateForPlaySound->setWaveOutDevice(deviceId);
 	soundPrivateForPlaySound->releaseAtEnd();
 	soundPrivateForPlaySound->play();
 }

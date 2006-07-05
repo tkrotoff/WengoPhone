@@ -27,8 +27,8 @@
 
 #include <presentation/qt/config/QtWengoConfigDialog.h>
 
+#include <sound/AudioDeviceManager.h>
 #include <sound/VolumeControl.h>
-#include <sound/AudioDevice.h>
 
 #include <util/Logger.h>
 #include <qtutil/MouseEventFilter.h>
@@ -74,8 +74,8 @@ QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
 	//halfDuplexCheckBox
 	connect(_ui->halfDuplexCheckBox, SIGNAL(toggled(bool)), SLOT(halfDuplexCheckBoxToggled(bool)));
 
-	configChangedEventHandler(config, Config::AUDIO_INPUT_DEVICENAME_KEY);
-	configChangedEventHandler(config, Config::AUDIO_OUTPUT_DEVICENAME_KEY);
+	configChangedEventHandler(config, Config::AUDIO_INPUT_DEVICEID_KEY);
+	configChangedEventHandler(config, Config::AUDIO_OUTPUT_DEVICEID_KEY);
 	configChangedEventHandler(config, Config::WENBOX_ENABLE_KEY);
 	configChangedEventHandler(config, Config::AUDIO_HALFDUPLEX_KEY);
 
@@ -94,13 +94,13 @@ QtConfigPanel::~QtConfigPanel() {
 
 void QtConfigPanel::inputSoundSliderValueChanged(int value) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	VolumeControl volumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
+	VolumeControl volumeControl(AudioDevice(config.getAudioInputDeviceId()));
 	volumeControl.setLevel(value);
 }
 
 void QtConfigPanel::outputSoundSliderValueChanged(int value) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	VolumeControl volumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
+	VolumeControl volumeControl(AudioDevice(config.getAudioOutputDeviceId()));
 	volumeControl.setLevel(value);
 }
 
@@ -124,22 +124,16 @@ void QtConfigPanel::configChangedEventHandler(Settings & sender, const std::stri
 void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const std::string & key) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	if (key == Config::AUDIO_INPUT_DEVICENAME_KEY) {
+	if (key == Config::AUDIO_INPUT_DEVICEID_KEY) {
 		//inputSoundSlider
-		try {
-			VolumeControl inputVolumeControl(config.getAudioInputDeviceName(), VolumeControl::DeviceTypeInput);
-			_inputSoundSlider->setVolume(inputVolumeControl.getLevel());
-		} catch (Exception & e) {
-		}
+		VolumeControl inputVolumeControl(AudioDevice(config.getAudioInputDeviceId()));
+		_inputSoundSlider->setVolume(inputVolumeControl.getLevel());
 	}
 
-	if (key == Config::AUDIO_OUTPUT_DEVICENAME_KEY) {
+	if (key == Config::AUDIO_OUTPUT_DEVICEID_KEY) {
 		//outputSoundSlider
-		try {
-			VolumeControl outputVolumeControl(config.getAudioOutputDeviceName(), VolumeControl::DeviceTypeOutput);
-			_outputSoundSlider->setVolume(outputVolumeControl.getLevel());
-		} catch (Exception & e) {
-		}
+		VolumeControl outputVolumeControl(AudioDevice(config.getAudioOutputDeviceId()));
+		_outputSoundSlider->setVolume(outputVolumeControl.getLevel());
 	}
 
 	if (key == Config::WENBOX_ENABLE_KEY) {
@@ -166,5 +160,5 @@ void QtConfigPanel::audioSettingsClicked() {
 }
 
 void QtConfigPanel::slotTranslationChanged() {
-  _ui->retranslateUi(_configPanelWidget);
+	_ui->retranslateUi(_configPanelWidget);
 }

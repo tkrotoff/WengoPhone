@@ -9,14 +9,17 @@ include_path = [
 ]
 defines = {}
 headers = []
-sources = []
 cc_flags = []
+
+sources = [
+	'src/AudioDevice.cpp',
+	'src/VolumeControl.cpp',
+]
 
 if WengoOSWindows():
 	sources += [
 		'src/win32/Sound.cpp',
 		'src/win32/VolumeControl.cpp',
-		'src/win32/SoundMixerException.cpp',
 		'src/win32/Win32VolumeControl.cpp',
 		'src/win32/SoundThread.cpp',
 		'src/win32/playsound/SoundFile.cpp',
@@ -29,19 +32,17 @@ elif WengoOSLinux() or WengoOSBSD():
 		'src/unix/Sound.cpp',
 		'src/unix/VolumeControl.cpp',
 		'src/unix/UnixVolumeControl.cpp',
-		'src/unix/SoundMixerException.cpp',
 	]
 	libs += ['qt4']
 
 elif WengoOSMacOSX():
 	sources += [
-		'src/mac/AudioDevice.cpp',
-		'src/mac/Sound.cpp',
-		'src/mac/MacSound.cpp',
-		'src/mac/VolumeControl.cpp',
-		'src/mac/MacVolumeControl.cpp',
-		'src/mac/SoundMixerException.cpp',
+		'src/mac/AudioDeviceManager.cpp',
 		'src/mac/CoreAudioUtilities.cpp',
+		'src/mac/MacAudioDevice.cpp',
+		'src/mac/MacSound.cpp',
+		'src/mac/MacVolumeControl.cpp',
+		'src/mac/Sound.cpp',
 	]
 
 	link_flags += [
@@ -52,12 +53,12 @@ elif WengoOSMacOSX():
 	cc_flags += ['-x objective-c++']
 
 if WengoGetConsoleArgument('enable-libsound-portaudio'):
-	sources += ['src/portaudio/AudioDevice.cpp']
+	sources += ['src/portaudio/AudioDeviceManager.cpp']
 	libs += ['portaudio']
 elif WengoOSWindows():
-	sources += ['src/win32/AudioDevice.cpp']
+	sources += ['src/win32/AudioDeviceManager.cpp']
 elif WengoOSLinux():
-	sources += ['src/unix/AudioDevice.cpp']
+	sources += ['src/unix/AudioDeviceManager.cpp']
 	libs += ['portaudio']
 
 env.WengoAddIncludePath(include_path)

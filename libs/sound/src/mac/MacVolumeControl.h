@@ -17,40 +17,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef MACVOLUMECONTROL_H
-#define MACVOLUMECONTROL_H
+#ifndef OWMACVOLUMECONTROL_H
+#define OWMACVOLUMECONTROL_H
 
-#include <sound/IVolumeControl.h>
-
-#include <CoreAudio/CoreAudio.h>
+#include <sound/VolumeControl.h>
 
 /**
- * Gets and change the volume of a MacOS X audio device.
+ * MacOS X implementation of VolumeControl.
  *
  * @author Philippe Bernery
  */
-class MacVolumeControl : public IVolumeControl {
+class MacVolumeControl : public VolumeControl {
 public:
 
-	MacVolumeControl(AudioDeviceID deviceId, bool isInput);
+	MacVolumeControl(AudioDevice audioDevice);
 
 	bool setLevel(unsigned level);
 
-	int getLevel();
+	int getLevel() const;
 
 	bool setMute(bool mute);
 
-	bool isMuted();
+	bool isMuted() const;
 
-	bool close();
-
-private:
-
-	/** ID of the device. */
-	AudioDeviceID _deviceId;
-
-	/** Channel to use (input or output) */
-	Boolean _isInput;
+	bool isSettable() const;
 };
 
-#endif	//MACVOLUMECONTROL_H
+#endif //OWMACVOLUMECONTROL_H

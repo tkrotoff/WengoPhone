@@ -21,7 +21,7 @@
 
 #include <util/Logger.h>
 
-std::vector<AudioDeviceID> CoreAudioUtilities::allAudioDeviceList() {
+std::vector<AudioDeviceID> CoreAudioUtilities::audioDeviceList(bool isInput) {
 	OSStatus status = noErr;
 	UInt32 numberOfDevices = 0;
 	UInt32 deviceListSize = 0;
@@ -50,7 +50,10 @@ std::vector<AudioDeviceID> CoreAudioUtilities::allAudioDeviceList() {
 
 	// Populating the result
 	for (unsigned i = 0 ; i < numberOfDevices ; ++i) {
-		result.push_back(deviceList[i]);
+		if ((isInput && hasChannel(deviceList[i], true))
+			|| (!isInput && hasChannel(deviceList[i], false))) {
+			result.push_back(deviceList[i]);
+		}
 	}
 	////
 
@@ -97,23 +100,7 @@ std::string CoreAudioUtilities::audioDeviceName(AudioDeviceID id, bool isInput) 
 	return result;
 }
 
-std::map<AudioDeviceID, std::string> CoreAudioUtilities::audioDeviceMap(bool isInput) {
-	std::map<AudioDeviceID, std::string> result;
-
-	std::vector<AudioDeviceID> deviceId = allAudioDeviceList();
-	for (std::vector<AudioDeviceID>::const_iterator it = deviceId.begin();
-		it != deviceId.end();
-		++it) {
-		std::string deviceName = audioDeviceName(*it, isInput);
-		if (!deviceName.empty()) {
-			result[*it] = deviceName;
-		}
-	}
-
-	return result;
-}
-
-std::vector<UInt32> CoreAudioUtilities::dataSourcesList(AudioDeviceID id, bool isInput) {
+std::vector<UInt32> CoreAudioUtilities::dataSourceList(AudioDeviceID id, bool isInput) {
 	OSStatus status = noErr;
 	std::vector<UInt32> result;
 	Boolean input = (isInput ? TRUE : FALSE);
@@ -162,6 +149,39 @@ std::string CoreAudioUtilities::dataSourceName(AudioDeviceID id, bool isInput, U
 		result = std::string(buffer);
 		CFRelease(name);
 	}
+
+	return result;
+}
+
+bool CoreAudioUtilities::hasChannel(AudioDeviceID id, bool isInput) {
+	OSStatus status = noErr;
+	UInt32 size = 0;
+	bool result = false;
+	Boolean input = (isInput ? TRUE : FALSE);
+
+	status = AudioDeviceGetPropertyInfo(id, 0, input, kAudioDevicePropertyStreamConfiguration, &size, NULL);
+	if (status) {
+		LOG_ERROR("Can't get device property info: kAudioDevicePropertyStreamConfiguration");
+		return false;
+	}
+
+	AudioBufferList *list = (AudioBufferList *) malloc(size);
+	status = AudioDeviceGetProperty(id, 0, input, kAudioDevicePropertyStreamConfiguration, &size, list);
+	if (status) {
+		LOG_INFO("Can't get device property: kAudioDevicePropertyStreamConfiguration."
+			" The device has no " + (isInput ? std::string("input") : std::string("output")) + " device.");
+		free(list);
+		return false;
+	}
+
+	for (unsigned i = 0; i < list->mNumberBuffers; ++i) {
+		if (list->mBuffers[i].mNumberChannels > 0) {
+			result = true;
+			break;
+		}
+	}
+
+	free(list);
 
 	return result;
 }

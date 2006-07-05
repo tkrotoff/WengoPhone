@@ -480,8 +480,8 @@ void PhoneLine::configureSipWrapper() {
 
 	//Setting SIP proxy
 	_sipWrapper->setSIP(_sipAccount.getSIPProxyServerHostname(),
-				_sipAccount.getSIPProxyServerPort(),
-				_sipAccount.getLocalSIPPort());
+		_sipAccount.getSIPProxyServerPort(),
+		_sipAccount.getLocalSIPPort());
 
 	//Setting NAT
 	string natType = config.getNetworkNatType();
@@ -491,9 +491,9 @@ void PhoneLine::configureSipWrapper() {
 	_sipWrapper->setVideoQuality((EnumVideoQuality::VideoQuality) config.getVideoQuality());
 
 	//Setting audio devices
-	_sipWrapper->setCallOutputAudioDevice(config.getAudioOutputDeviceName());
-	_sipWrapper->setCallInputAudioDevice(config.getAudioInputDeviceName());
-	_sipWrapper->setRingerOutputAudioDevice(config.getAudioRingerDeviceName());
+	_sipWrapper->setCallOutputAudioDevice(config.getAudioOutputDeviceId());
+	_sipWrapper->setCallInputAudioDevice(config.getAudioInputDeviceId());
+	_sipWrapper->setRingerOutputAudioDevice(config.getAudioRingerDeviceId());
 
 	//AEC + half duplex
 	_sipWrapper->enableAEC(config.getAudioAEC());

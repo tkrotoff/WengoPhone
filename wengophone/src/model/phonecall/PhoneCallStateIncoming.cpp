@@ -29,7 +29,7 @@
 void PhoneCallStateIncoming::execute(PhoneCall & phoneCall) {
 	//Ringin tonality
 	_soundIncomingCall = new Sound(getSoundIncomingCallFile());
-	_soundIncomingCall->setWaveOutDevice(getRingerAudioDeviceName());
+	_soundIncomingCall->setWaveOutDevice(getRingerAudioDeviceId());
 	//Play the sound indefinitely
 	_soundIncomingCall->setLoops(-1);
 	_soundIncomingCall->play();

@@ -145,12 +145,12 @@ public:
 	 *         the virtual line
 	 */
 	virtual int addVirtualLine(const std::string & displayName,
-					const std::string & username,
-					const std::string & identity,
-					const std::string & password,
-					const std::string & realm,
-					const std::string & proxyServer,
-					const std::string & registerServer) = 0;
+		const std::string & username,
+		const std::string & identity,
+		const std::string & password,
+		const std::string & realm,
+		const std::string & proxyServer,
+		const std::string & registerServer) = 0;
 
 	/**
 	 * Removes a given virtual phone line.
@@ -358,26 +358,26 @@ public:
 	/**
 	 * Sets the call input device (in-call microphone).
 	 *
-	 * @param deviceName call input device name
+	 * @param deviceName call input device id
 	 * @return true if no error, false otherwise
 	 */
-	virtual bool setCallInputAudioDevice(const std::string & deviceName) = 0;
+	virtual bool setCallInputAudioDevice(const std::string & deviceId) = 0;
 
 	/**
 	 * Sets the call ringer/alerting device.
 	 *
-	 * @param deviceName call ringer device name
+	 * @param deviceName call ringer device id
 	 * @return true if no error, false otherwise
 	 */
-	virtual bool setRingerOutputAudioDevice(const std::string & deviceName) = 0;
+	virtual bool setRingerOutputAudioDevice(const std::string & deviceId) = 0;
 
 	/**
 	 * Sets the call output device (in-call speaker).
 	 *
-	 * @param deviceName call output device name
+	 * @param deviceName call output device id
 	 * @return true if no error, false otherwise
 	 */
-	virtual bool setCallOutputAudioDevice(const std::string & deviceName) = 0;
+	virtual bool setCallOutputAudioDevice(const std::string & deviceId) = 0;
 
 	/**
 	 * Enables or disables Acoustic Echo Cancellation (AEC).

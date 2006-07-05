@@ -31,9 +31,9 @@
 #include <imwrapper/IMPresence.h>
 #include <imwrapper/IMChatSession.h>
 
-#include <util/Event.h>
 #include <thread/Mutex.h>
 #include <thread/Timer.h>
+#include <util/Event.h>
 
 #include <phapi.h>
 
@@ -126,11 +126,11 @@ public:
 
 	void setVideoDevice(std::string deviceName);
 
-	bool setCallInputAudioDevice(const std::string & deviceName);
+	bool setCallInputAudioDevice(const std::string & deviceId);
 
-	bool setRingerOutputAudioDevice(const std::string & deviceName);
+	bool setRingerOutputAudioDevice(const std::string & deviceId);
 
-	bool setCallOutputAudioDevice(const std::string & deviceName);
+	bool setCallOutputAudioDevice(const std::string & deviceId);
 
 	void enableAEC(bool enable);
 
@@ -309,10 +309,10 @@ private:
 	std::string _lastNote;
 
 	/** Playback audio device id. */
-	int _outputAudioDeviceId;
+	std::string _outputAudioDevice;
 
 	/** Record audio device id. */
-	int _inputAudioDeviceId;
+	std::string _inputAudioDevice;
 
 	std::map<int, IMChatSession *> _messageIdChatSessionMap;
 

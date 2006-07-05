@@ -25,7 +25,7 @@
 #include <model/phoneline/IPhoneLine.h>
 #include <model/profile/UserProfile.h>
 
-#include <sound/AudioDevice.h>
+#include <sound/AudioDeviceManager.h>
 
 #include <util/Logger.h>
 
@@ -187,9 +187,11 @@ std::string WenboxPlugin::getWenboxAudioDeviceName() const {
 	for (unsigned i = 0; i < wenboxAudioDeviceList.size(); i++) {
 		string wenboxAudioDeviceName = wenboxAudioDeviceList[i];
 
-		StringList audioDeviceList = AudioDevice::getOutputMixerDeviceList();
-		for (unsigned j = 0; j < audioDeviceList.size(); j++) {
-			string audioDeviceName = audioDeviceList[j];
+		std::list<AudioDevice> audioDeviceList = AudioDeviceManager::getOutputDeviceList();
+		for (std::list<AudioDevice>::const_iterator it = 0;
+			it  != audioDeviceList.end();
+			it++) {
+			string audioDeviceName = (*it).getName();
 
 			if (audioDeviceName.find(wenboxAudioDeviceName) != string::npos) {
 				//We found the real name of the Wenbox audio device
@@ -206,10 +208,11 @@ std::string WenboxPlugin::getWenboxAudioDeviceName() const {
 }
 
 void WenboxPlugin::switchCurrentAudioDeviceToWenbox() {
-	string defaultPlaybackDevice = AudioDevice::getDefaultPlaybackDevice();
-	string intputDeviceName = defaultPlaybackDevice;
-	string outputDeviceName = defaultPlaybackDevice;
-	string ringerDeviceName = defaultPlaybackDevice;
+	AudioDevice defaultOutputDevice = AudioDeviceManager::getDefaultOutputDevice();
+	string defaultOutputDeviceName = defaultOutputDevice.getName();
+	string intputDeviceName = defaultOutputDeviceName;
+	string outputDeviceName = defaultOutputDeviceName;
+	string ringerDeviceName = defaultOutputDeviceName;
 
 	//Looks for the Wenbox audio device from the list of devices from Windows
 	string wenboxAudioDeviceName(getWenboxAudioDeviceName());
@@ -220,30 +223,30 @@ void WenboxPlugin::switchCurrentAudioDeviceToWenbox() {
 	}
 
 	//Windows default playback is the Wenbox
-	if (outputDeviceName == defaultPlaybackDevice ||
-		intputDeviceName == defaultPlaybackDevice ||
-		ringerDeviceName == defaultPlaybackDevice) {
+	if (outputDeviceName == defaultOutputDeviceName ||
+		intputDeviceName == defaultOutputDeviceName ||
+		ringerDeviceName == defaultOutputDeviceName) {
 
 		return;
 	}
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	//Changes audio settings
-	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, outputDeviceName);
-	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, intputDeviceName);
-	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, ringerDeviceName);
+	config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY, defaultOutputDevice.getId());
+	config.set(Config::AUDIO_INPUT_DEVICEID_KEY, defaultOutputDevice.getId());
+	config.set(Config::AUDIO_RINGER_DEVICEID_KEY, defaultOutputDevice.getId());
 }
 
 void WenboxPlugin::switchCurrentAudioDeviceToSoundCard() {
 	//Back to the previous audio settings
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	std::string tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_OUTPUT_DEVICENAME_KEY));
-	config.set(Config::AUDIO_OUTPUT_DEVICENAME_KEY, tmp);
+	std::string tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_OUTPUT_DEVICEID_KEY));
+	config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY, tmp);
 
-	tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_INPUT_DEVICENAME_KEY));
-	config.set(Config::AUDIO_INPUT_DEVICENAME_KEY, tmp);
+	tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_INPUT_DEVICEID_KEY));
+	config.set(Config::AUDIO_INPUT_DEVICEID_KEY, tmp);
 
-	tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_RINGER_DEVICENAME_KEY));
-	config.set(Config::AUDIO_RINGER_DEVICENAME_KEY, tmp);
+	tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_RINGER_DEVICEID_KEY));
+	config.set(Config::AUDIO_RINGER_DEVICEID_KEY, tmp);
 }

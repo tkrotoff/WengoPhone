@@ -19,21 +19,27 @@
 
 #include "MacVolumeControl.h"
 
-#include "CoreAudioUtilities.h"
+#include "MacAudioDevice.h"
 
 #include <util/Logger.h>
 
-MacVolumeControl::MacVolumeControl(AudioDeviceID deviceId, bool isInput)
-	: _deviceId(deviceId), _isInput((isInput ? TRUE : FALSE)) {
+#include <CoreAudio/CoreAudio.h>
+
+MacVolumeControl::MacVolumeControl(AudioDevice audioDevice) 
+: VolumeControl() {
+	_audioDevice = audioDevice;
 }
 
-int MacVolumeControl::getLevel() {
+int MacVolumeControl::getLevel() const {
 	OSStatus status = noErr;
 	UInt32 size = 0;
 	Float32 level = 0.0;
 
+	MacAudioDevice * macAudioDevice = dynamic_cast<MacAudioDevice *>(_audioDevice.getAudioDevicePrivate());
+
 	size = sizeof(level);
-	status = AudioDeviceGetProperty(_deviceId, 0, _isInput, kAudioDevicePropertyVolumeScalar, &size, &level);
+	status = AudioDeviceGetProperty(macAudioDevice->getAudioDeviceID(), 0, 
+		macAudioDevice->isInput(), kAudioDevicePropertyVolumeScalar, &size, &level);
 	if (status) {
 		LOG_ERROR("can't get device property: kAudioDevicePropertyVolumeScalar\n");
 		return -1;
@@ -47,8 +53,11 @@ bool MacVolumeControl::setLevel(unsigned level) {
 	UInt32 size = 0;
 	Float32 fVolume = level / 100.0;
 
+	MacAudioDevice * macAudioDevice = dynamic_cast<MacAudioDevice *>(_audioDevice.getAudioDevicePrivate());
+
 	size = sizeof(fVolume);
-	status = AudioDeviceSetProperty(_deviceId, 0, 0, _isInput, kAudioDevicePropertyVolumeScalar, size, &fVolume);
+	status = AudioDeviceSetProperty(macAudioDevice->getAudioDeviceID(), 0, 0, 
+		macAudioDevice->isInput(), kAudioDevicePropertyVolumeScalar, size, &fVolume);
 	if (status) {
 		LOG_ERROR("can't set device property: kAudioDevicePropertyVolumeScalar\n");
 		return false;
@@ -58,13 +67,17 @@ bool MacVolumeControl::setLevel(unsigned level) {
 }
 
 bool MacVolumeControl::setMute(bool mute) {
+	//TODO
 	return false;
 }
 
-bool MacVolumeControl::isMuted() {
+bool MacVolumeControl::isMuted() const {
+	//TODO
 	return false;
 }
 
-bool MacVolumeControl::close() {
+bool MacVolumeControl::isSettable() const {
+	//TODO
 	return false;
 }
+

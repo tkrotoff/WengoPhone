@@ -55,7 +55,7 @@ public:
 
 protected:
 
-	static std::string getRingerAudioDeviceName();
+	static std::string getRingerAudioDeviceId();
 
 	static std::string getSoundIncomingCallFile();
 

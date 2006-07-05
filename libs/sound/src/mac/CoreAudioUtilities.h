@@ -32,11 +32,13 @@ class CoreAudioUtilities : NonCopyable {
 public:
 
 	/**
-	 * Gets all available audio devices.
+	 * Gets available audio devices.
 	 *
+	 * @param isInput true if input device must be returned, 
+	 $ false if output devices must be returned
 	 * @return the device list
 	 */
-	static std::vector<AudioDeviceID> allAudioDeviceList();
+	static std::vector<AudioDeviceID> audioDeviceList(bool isInput);
 
 	/**
 	 * Gets an audio device name.
@@ -50,21 +52,14 @@ public:
 	static std::string audioDeviceName(AudioDeviceID id, bool isInput);
 
 	/**
-	 * Gets all available devices.
-	 *
-	 * @param isInput true if we want to get input devices, false to get output devices
-	 * @return a map containing the AudioDeviceID and the name of the device
-	 */
-	static std::map<AudioDeviceID, std::string> audioDeviceMap(bool isInput);
-
-	/**
 	 * Gets list of available data sources available on a device.
 	 *
 	 * @param id the device to check
-	 * @param isInput true if we want to get input devices, false to get output devices
+	 * @param isInput true if we want to get input devices, false to get
+	 * output devices
 	 * @return a vector of UInt32 containing ids of data sources
 	 */
-	static std::vector<UInt32> dataSourcesList(AudioDeviceID id, bool isInput);
+	static std::vector<UInt32> dataSourceList(AudioDeviceID id, bool isInput);
 
 	/**
 	 * Gets the name of a data source.
@@ -75,7 +70,19 @@ public:
 	 * @param dsId id of the data source
 	 * @return the name of the data source. String::null if no data source found.
 	 */
-	static std::string dataSourceName(AudioDeviceID, bool isInput, UInt32 dsId);
+	static std::string dataSourceName(AudioDeviceID id, bool isInput, UInt32 dsId);
+
+private:
+
+	/**
+	 * Checks if a device has channel in input/output.
+	 *
+	 * @param true if we want to know if there is input, false 
+	 * if we want to know if there is output.
+	 * @return true if the device has at least one channel.
+	 */
+	static bool hasChannel(AudioDeviceID id, bool isInput);
+	 
 };
 
 #endif //COREAUDIOUTILITIES_H
