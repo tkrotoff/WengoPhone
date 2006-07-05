@@ -26,7 +26,7 @@
 #elif defined(OS_MACOSX)
 #include "mac/MacVolumeControl.h"
 #elif defined(OS_LINUX)
-#include "portaudio/PortAudioVolumeControl.h"
+#include "portaudio/PAVolumeControl.h"
 #endif // OS_LINUX
 
 VolumeControl::VolumeControl() {
@@ -41,7 +41,7 @@ VolumeControl::VolumeControl(AudioDevice audioDevice) {
 #elif defined(OS_MACOSX)
 	_iVolumeControlPrivate = new MacVolumeControl(audioDevice);
 #elif defined(OS_LINUX)
-	_iVolumeControlPrivate = new PortAudioVolumeControl(audioDevice);
+	_iVolumeControlPrivate = new PAVolumeControl(audioDevice);
 #else
 	_iVolumeControlPrivate = NULL;
 #endif

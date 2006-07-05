@@ -39,7 +39,7 @@ public:
 	 * integer with the following scheme: "deviceId:dataSource:isInput"
 	 * @see getId for more information.
 	 */
-	AudioDevice(const std::string & deviceId);
+	AudioDevice(const std::string & deviceId, const std::string deviceName = "");
 
 	AudioDevice();
 

@@ -26,20 +26,20 @@
 #elif defined(OS_MACOSX)
 #include "mac/MacAudioDevice.h"
 #elif defined(OS_LINUX)
-#include "portaudio/PortAudioAudioDevice.h"
+#include "portaudio/PAAudioDevice.h"
 #endif // OS_LINUX
 
 AudioDevice::AudioDevice() {
 	_audioDevicePrivate = NULL;
 }
 
-AudioDevice::AudioDevice(const std::string & deviceId) {
+AudioDevice::AudioDevice(const std::string & deviceId, const std::string deviceName) {
 #if defined(OS_WINDOWS)
 	_audioDevicePrivate = new WinAudioDevice(deviceId);
 #elif defined(OS_MACOSX)
 	_audioDevicePrivate = new MacAudioDevice(deviceId);
 #elif defined(OS_LINUX)
-	_audioDevicePrivate = new PortAudioAudioDevice(deviceId);
+	_audioDevicePrivate = new PAAudioDevice(deviceId, deviceName);
 #else
 	_audioDevicePrivate = NULL;
 #endif
@@ -53,7 +53,9 @@ AudioDevice::AudioDevice(const AudioDevice & audioDevice) {
 #elif defined(OS_MACOSX)
 		_audioDevicePrivate = new MacAudioDevice(audioDevice.getAudioDevicePrivate()->getId());
 #elif defined(OS_LINUX)
-		_audioDevicePrivate = new PortAudioAudioDevice(audioDevice.getAudioDevicePrivate()->getId());
+		_audioDevicePrivate = new PAAudioDevice(
+			audioDevice.getAudioDevicePrivate()->getId(),
+			audioDevice.getAudioDevicePrivate()->getName());
 #else
 		_audioDevicePrivate = NULL;
 #endif
@@ -73,7 +75,9 @@ AudioDevice & AudioDevice::operator = (const AudioDevice & audioDevice) {
 #elif defined(OS_MACOSX)
 		_audioDevicePrivate = new MacAudioDevice(audioDevice.getAudioDevicePrivate()->getId());
 #elif defined(OS_LINUX)
-		_audioDevicePrivate = new PortAudioAudioDevice(audioDevice.getAudioDevicePrivate()->getId());
+		_audioDevicePrivate = new PAAudioDevice(
+			audioDevice.getAudioDevicePrivate()->getId(),
+			audioDevice.getAudioDevicePrivate()->getName());
 #else
 		_audioDevicePrivate = NULL;
 #endif
