@@ -109,10 +109,6 @@ private:
 
 	QMenuBar * _menuBar;
 
-	// QScrollArea * _scrollArea;
-
-//	QWidget * _contactViewport;
-
 	QFrame * _contactListFrame;
 
 	QFrame * _inviteFrame;

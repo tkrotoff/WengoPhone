@@ -263,11 +263,13 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 		const IMContact & from = imChatMessage->getIMContact();
 		std::string message = imChatMessage->getMessage();
 		delete imChatMessage;
-		//QString senderName = QString::fromStdString(from.getContactId());
+		QString senderName = QString::fromStdString(from.getContactId());
+/*
 		QtContactList * qtContactList = _qtWengoPhone->getContactList();
 		CContactList & cContactList = qtContactList->getCContactList();
 		QString contactId = QString::fromStdString(cContactList.findContactThatOwns(from));
 		QString senderName = getShortDisplayName(contactId,QString::fromStdString(from.getContactId()));
+*/
 		QString msg = QString::fromUtf8(message.c_str());
 
 		if (!_dialog->isVisible()) {
