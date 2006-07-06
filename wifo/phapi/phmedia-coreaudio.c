@@ -527,8 +527,9 @@ static void parse_device(ca_dev *cadev, const char *name) {
 		cadev->inputID, cadev->outputID);
 }
 
-static size_t colon_pos(const char * str, unsigned whichone) {
-	size_t size = strlen(str), result = 0;
+static int colon_pos(const char * str, unsigned whichone) {
+	size_t size = strlen(str);
+	int result = -1;
 	unsigned cur = 0, i;
 
 	for (i = 0; i < size; i++) {
@@ -560,23 +561,36 @@ static int is_valid_deviceid(const char * deviceId) {
 static AudioDeviceID get_audiodeviceid(const char * deviceId) {
 	AudioDeviceID result = 0;
 	char tmp[128];
+	int pos1 = -1;
 
-	ph_printf("**CoreAudio: deviceId in get_audiodeviceid => %s\n", deviceId);
-	strncpy(tmp, deviceId, colon_pos(deviceId, 1));
-	result = atoi(tmp);
+	if (deviceId) {
+		ph_printf("**CoreAudio: deviceId in get_audiodeviceid => %s\n", deviceId);
+		pos1 = colon_pos(deviceId, 1);
+		if (pos1 != -1) {
+			strncpy(tmp, deviceId, pos1);
+			result = atoi(tmp);
+		}
+	}
 
-	return atoi(tmp);
+	return result;
 }
 
 static UInt32 get_datasourceid(const char * deviceId) {
 	AudioDeviceID result = 0;
 	char tmp[128];
-	size_t pos1 = 0;
+	int pos1 = -1, pos2 = -1;
 
-	ph_printf("**CoreAudio: deviceId in get_datasourceid => %s\n", deviceId);
-	pos1 = colon_pos(deviceId, 1);
-	strncpy(tmp, deviceId + pos1 + 1, colon_pos(deviceId, 2) - pos1 - 1);
-	result = atoi(tmp);
+	if (deviceId) {
+		ph_printf("**CoreAudio: deviceId in get_datasourceid => %s\n", deviceId);
+		pos1 = colon_pos(deviceId, 1);
+		if (pos1 != -1) {
+			pos2 = colon_pos(deviceId, 2);
+			if (pos2 != -1) {
+				strncpy(tmp, deviceId + pos1 + 1, pos2 - pos1 - 1);
+				result = atoi(tmp);
+			}
+		}
+	}
 
 	return result;
 }
