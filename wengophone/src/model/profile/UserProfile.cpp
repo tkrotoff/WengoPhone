@@ -414,6 +414,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, EnumSipLogi
 	case EnumSipLoginState::SipLoginStatePasswordError: {
 		_wengoAccountIsValid = false;
 		_wengoAccountInitializationFinished = true;
+		_wengoAccountIsValidCondition.notify_all();
 
 		break;
 	}
