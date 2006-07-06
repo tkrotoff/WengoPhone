@@ -220,9 +220,9 @@ void QtProfileDetails::changeUserProfileAvatar() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	QString file = QFileDialog::getOpenFileName(_profileDetailsWindow,
-				tr("Choose an avatar"),
-				QString::fromStdString(config.getResourcesDir()) + "pics/avatars",
-				tr("Images") + "(*.png *.xpm *.jpg *.gif)");
+		tr("Choose an avatar"),
+		QString::fromStdString(config.getResourcesDir()) + "pics/avatars",
+		tr("Images") + "(*.png *.xpm *.jpg *.gif)");
 
 	if (!file.isEmpty()) {
 		UserProfile & userProfile = dynamic_cast<UserProfile &>(_profile);
@@ -241,7 +241,9 @@ void QtProfileDetails::setProfileAvatarFileName(UserProfile & userProfile, const
 
 		//QImage is optimised for I/O manipulations
 		QImage image(fileName);
-		//image.scaled(_ui->avatarPixmapButton->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		QSize size(96, 96); // Size of Wengo avatars
+		// Image is scaled to not save a big picture in userprofile.xml
+		image.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 		QBuffer buffer;
 		buffer.open(QIODevice::ReadWrite);
