@@ -408,7 +408,7 @@ void QtProfileBar::createStatusMenu() {
 	action = _statusMenu->addAction(QIcon(":/pics/status/donotdisturb.png"), tr("Do Not Disturb"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(dndClicked(bool)));
 
-	action = _statusMenu->addAction(QIcon(":/pics/status/invisible.png"), tr("Invisible"));
+	action = _statusMenu->addAction(QIcon(":/pics/status/offline.png"), tr("Invisible"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(invisibleClicked(bool)));
 
 	action = _statusMenu->addAction(QIcon(":/pics/status/away.png"), tr("Away"));

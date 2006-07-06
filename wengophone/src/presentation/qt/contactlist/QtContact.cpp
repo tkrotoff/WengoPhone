@@ -165,7 +165,7 @@ void QtContact::setOpenStatus(bool value) {
 
 int QtContact::getHeight() const {
 	if (_openStatus) {
-		return 90;
+		return 95;
 	}
 	return UserSize;
 }
