@@ -23,7 +23,7 @@
     <number>0</number>
    </property>
    <property name="spacing" >
-    <number>0</number>
+    <number>3</number>
    </property>
    <item row="1" column="0" >
     <widget class="QFrame" name="frame_3" >

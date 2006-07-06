@@ -69,14 +69,12 @@ QWidget(parent, f), _cChatHandler(cChatHandler) {
 	_notTypingTimerId = -1;
 	_isTyping = false;
 	_sessionId = sessionId;
-	_lastBackGroundColor = QColor("#B0FFB3");
+	_lastBackGroundColor = QColor("#E4FFE6");
 
 	//Default nickname for testing purpose
 	_nickName = "Wengo";
 
 	_ui.setupUi(this);
-
-	// _ui.chatHistory->setViewportMargins (5,0,5,0);
 
 	createActionFrame();
 	setupSendButton();
@@ -173,9 +171,11 @@ void QtChatWidget::addToHistory(const QString & senderName,const QString & str) 
 	tmp.setHtml(str);
 
 	QString tmpStr = text2Emoticon(replaceUrls(tmp.toPlainText(),str));
+	QString table = QString("<table border=0 width=98% cellspacing=0 cellpadding=7>")+
+					QString("<tr><td>")+tmpStr+
+					QString("</td></tr></table>");
 	_ui.chatHistory->insertHtml(header);
-	_ui.chatHistory->insertHtml(tmpStr);
-	_ui.chatHistory->insertHtml("<br><br>");
+	_ui.chatHistory->insertHtml(table);
 	_ui.chatHistory->ensureCursorVisible();
 }
 
@@ -216,10 +216,11 @@ void QtChatWidget::enterPressed(Qt::KeyboardModifiers modifier) {
 	QString tmp = emoticon2Text(_ui.chatEdit->toHtml());
 
 	//bad and ugly hack
-	QTextEdit textEditTmp(NULL);
-	textEditTmp.setHtml(tmp);
+	QTextDocument tmpDocument;
+	tmpDocument.setHtml(tmp);
 
-	newMessage(_imChatSession, prepareMessageForSending(textEditTmp.toPlainText()));
+
+	newMessage(_imChatSession, prepareMessageForSending(tmpDocument.toPlainText()));
 	_ui.chatEdit->clear();
 	_ui.chatEdit->setFocus();
 }
@@ -446,11 +447,6 @@ void QtChatWidget::inviteContact() {
 	QtChatRoomInviteDlg dlg(*_imChatSession,
 		_cChatHandler.getCUserProfile().getCContactList().getContactList(), this);
 	dlg.exec();
-	if (dlg.result() == QDialog::Accepted) {
-		QtChatRoomInviteDlg::SelectedContact selectedContact = dlg.getSelectedContact();
-		QtChatRoomInviteDlg::SelectedContact::iterator it;
-		contactAdded();
-	}
 }
 
 void QtChatWidget::setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state) {
