@@ -120,7 +120,7 @@ QtChatWindow::QtChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSe
 	connect ( _tabWidget,SIGNAL(currentChanged (int)), SLOT(tabSelectionChanged(int)) );
 
 	_tabWidget->removeTab(0);
-	_dialog->resize(300,464);
+	_dialog->resize(490,470);
 	_dialog->setWindowTitle(QTCHATWINDOW_TITLE);
 
 	if (imChatSession.isUserCreated()) {
@@ -664,12 +664,11 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 	}
 	toaster->hideButton(2); toaster->hideButton(3);
 	if (!result.isNull()) {
-
 		QPainter pixpainter(& background);
 		pixpainter.drawPixmap(5, 5, result.scaled(60, 60));
 		pixpainter.end();
 	} else {
-		result = QPixmap(":pics/toaster/chat.png");
+		result = QPixmap(":pics/toaster/default-avatar.png");
 		QPainter pixpainter(& background);
 		pixpainter.drawPixmap(5, 5, result.scaled(60, 60));
 		pixpainter.end();

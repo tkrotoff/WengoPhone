@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>202</width>
-    <height>201</height>
+    <height>217</height>
    </rect>
   </property>
   <property name="palette" >
@@ -351,9 +351,9 @@
       <palette>
        <active>
         <color>
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>200</red>
+         <green>200</green>
+         <blue>200</blue>
         </color>
         <color>
          <red>212</red>
@@ -401,9 +401,9 @@
          <blue>255</blue>
         </color>
         <color>
-         <red>194</red>
-         <green>194</green>
-         <blue>194</blue>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
         </color>
         <color>
          <red>64</red>
@@ -438,9 +438,9 @@
        </active>
        <inactive>
         <color>
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>200</red>
+         <green>200</green>
+         <blue>200</blue>
         </color>
         <color>
          <red>212</red>
@@ -488,9 +488,9 @@
          <blue>255</blue>
         </color>
         <color>
-         <red>194</red>
-         <green>194</green>
-         <blue>194</blue>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
         </color>
         <color>
          <red>64</red>
@@ -570,14 +570,14 @@
          <blue>100</blue>
         </color>
         <color>
-         <red>194</red>
-         <green>194</green>
-         <blue>194</blue>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
         </color>
         <color>
-         <red>194</red>
-         <green>194</green>
-         <blue>194</blue>
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
         </color>
         <color>
          <red>0</red>
@@ -613,10 +613,10 @@
       </palette>
      </property>
      <property name="autoFillBackground" >
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="frameShape" >
-      <enum>QFrame::Box</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow" >
       <enum>QFrame::Plain</enum>
