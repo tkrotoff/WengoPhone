@@ -311,7 +311,7 @@ int	get_http_response(http_sock_t *hs, char *buff, int buffsize)
 	return nbytes;
 }
 
-void get_proxy_auth_type()
+void get_proxy_auth_type_h()
 {
 		CURL *curl_tmp;
 		char url_buff[1024];
@@ -376,7 +376,7 @@ void *http_tunnel_open(const char *host, int port, int mode, int *http_code, int
 	if (UseProxy == 1)
 	{
 		if (proxyAuthType == 0)
-			get_proxy_auth_type();
+			get_proxy_auth_type_h();
 
 		ret = 0;
 		hs->curl = curl_easy_init();
