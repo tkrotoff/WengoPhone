@@ -113,17 +113,6 @@ static PyObject * PyPhInit(PyObject * self, PyObject * params) {
     char * server;
     int asyncmode;
     int ret;
-    /*
-    phConfig_t *cfg;
-
-    cfg = phGetConfig();
-    strcpy(cfg->nattype, "fcone");
-    strcpy(cfg->sipport, "5060");
-    cfg->nodefaultline = 1;
-    cfg->force_proxy = 1;
-    cfg->nat_refresh_time = 30;
-    cfg->use_tunnel = 0;
-    */
 
     if (PyArg_ParseTuple(params, "si", &server, &asyncmode)) {
         ret = phInit(&pyphapi_callbacks, server, asyncmode);
@@ -543,15 +532,15 @@ static PyObject * PyPhPublish(PyObject *self, PyObject *params) {
  */
 static PyObject * PyPhDelVline(PyObject *self, PyObject *params) {
     int vlid;
+    int regTimeout;
     int ret;
 
-    if (PyArg_ParseTuple(params, "i", &vlid)) {
-        ret = phDelVline(vlid);
+    if (PyArg_ParseTuple(params, "ii", &vlid, &regTimeout)) {
+        ret = phDelVline(vlid, regTimeout);
     }
 
     return Py_BuildValue("i", ret);
 }
-
 
 /*
  * @brief Wraps phTransferCall
