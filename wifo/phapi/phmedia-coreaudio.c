@@ -192,6 +192,13 @@ static void set_played_format(AudioUnit au, float rate, unsigned channels, unsig
 static void set_recorded_format(phastream_t *as, float rate, unsigned channels, unsigned format);
 
 /**
+ * Checks if a device id is valid.
+ *
+ * @return 1 if valid, 0 otherwhise
+ */
+static int is_valid_deviceid(const char * deviceId);
+
+/**
  * Gets the AudioDeviceID part of the device id.
  *
  * @param deviceId the device id to work on
@@ -294,12 +301,11 @@ static OSStatus output_renderer(void *inRefCon,
 		
 		playBuf += xsize;
 	}
-	
-	
+
 	/* did we fill the playback buffer completely? */
 	if (!outCount)
 		return noErr;
-	
+
 	needMore = outCount;
 	while (needMore > decodedFrameSize) {
 		int chunkSize = decodedFrameSize;
@@ -312,7 +318,7 @@ static OSStatus output_renderer(void *inRefCon,
 		if (chunkSize != decodedFrameSize)
 			break;
 	}
-	
+
 	if (needMore >= decodedFrameSize) {
 		memset(playBuf, 0, needMore);
 	}  else if (needMore) {
@@ -325,23 +331,22 @@ static OSStatus output_renderer(void *inRefCon,
 		cadev->cbk(as, (void *) 0, 0,  cadev->tmpOutputBuffer,  &chunkSize);
 		cadev->tmpOutputCount = chunkSize;
 		ph_printf("**CoreAudio: chunkSize: %d, needMore: %d\n", chunkSize, needMore);
-		
+
 		/* did we got some more data? */ 
 		if (chunkSize) {
 			int xsize = (chunkSize > needMore) ? needMore : chunkSize;
 			int newtmpOutputCount;
-			
+
 			memcpy(playBuf, cadev->tmpOutputBuffer, xsize);
-			
+
 			needMore -= xsize;
 			newtmpOutputCount = cadev->tmpOutputCount - xsize;
 			cadev->tmpOutputCount = newtmpOutputCount;
 			if (newtmpOutputCount) {
 				memcpy(cadev->tmpOutputBuffer, cadev->tmpOutputBuffer + xsize, newtmpOutputCount);
 			}
-			
+
 			playBuf += xsize;
-			
 		}
 		
 		/* if we still need more data fill it with zeroes */
@@ -486,26 +491,36 @@ static void parse_device(ca_dev *cadev, const char *name) {
 
 	ph_printf("**CoreAudio: parsing %s\n", name);
 
-	if (strncasecmp(buffer, "ca:", 3) == 0) {
-		buffer += 3;
-	}
-
-	if ((input = strcasestr(buffer, "in="))) {
-		if ((tmp = strchr(input + 3, ' '))) {
-			strncpy(cadev->inputID, input + 3, tmp - (input + 3));
-		}
-	} else {
+	if (!is_valid_deviceid(name)) {
 		memset(deviceId, 0, sizeof(deviceId));
 		defaultInputDevice(deviceId);
 		strncpy(cadev->inputID, deviceId, sizeof(cadev->inputID));
-	}
 
-	if ((output = strcasestr(buffer, "out="))) {
-		strncpy(cadev->outputID, output + 4, strlen(output + 4));
-	} else {
 		memset(deviceId, 0, sizeof(deviceId));
 		defaultOutputDevice(deviceId);
 		strncpy(cadev->outputID, deviceId, sizeof(cadev->inputID));
+	} else {
+		if (strncasecmp(buffer, "ca:", 3) == 0) {
+			buffer += 3;
+		}
+
+		if ((input = strcasestr(buffer, "in="))) {
+			if ((tmp = strchr(input + 3, ' '))) {
+				strncpy(cadev->inputID, input + 3, tmp - (input + 3));
+			}
+		} else {
+			memset(deviceId, 0, sizeof(deviceId));
+			defaultInputDevice(deviceId);
+			strncpy(cadev->inputID, deviceId, sizeof(cadev->inputID));
+		}
+
+		if ((output = strcasestr(buffer, "out="))) {
+			strncpy(cadev->outputID, output + 4, strlen(output + 4));
+		} else {
+			memset(deviceId, 0, sizeof(deviceId));
+			defaultOutputDevice(deviceId);
+			strncpy(cadev->outputID, deviceId, sizeof(cadev->inputID));
+		}
 	}
 
 	ph_printf("**CoreAudio: using devices in=%s out=%s\n", 
@@ -529,23 +544,41 @@ static size_t colon_pos(const char * str, unsigned whichone) {
 	return result;
 }
 
+static int is_valid_deviceid(const char * deviceId) {
+	int result = 0;
+
+	if (deviceId) {
+		ph_printf("**CoreAudio: deviceId in is_valid_deviceid => %s\n", deviceId);
+		if (strlen(deviceId) >= 21) {
+			result = 1;
+		}
+	}
+
+	return result;
+}
+
 static AudioDeviceID get_audiodeviceid(const char * deviceId) {
-	AudioDeviceID result;
+	AudioDeviceID result = 0;
 	char tmp[128];
 
+	ph_printf("**CoreAudio: deviceId in get_audiodeviceid => %s\n", deviceId);
 	strncpy(tmp, deviceId, colon_pos(deviceId, 1));
+	result = atoi(tmp);
 
 	return atoi(tmp);
 }
 
 static UInt32 get_datasourceid(const char * deviceId) {
-	AudioDeviceID result;
+	AudioDeviceID result = 0;
 	char tmp[128];
+	size_t pos1 = 0;
 
-	size_t pos1 = colon_pos(deviceId, 1);
+	ph_printf("**CoreAudio: deviceId in get_datasourceid => %s\n", deviceId);
+	pos1 = colon_pos(deviceId, 1);
 	strncpy(tmp, deviceId + pos1 + 1, colon_pos(deviceId, 2) - pos1 - 1);
+	result = atoi(tmp);
 
-	return atoi(tmp);
+	return result;
 }
 
 static void init_audio_unit(AudioUnit *au) {
