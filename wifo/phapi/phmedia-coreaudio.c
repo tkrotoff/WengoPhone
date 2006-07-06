@@ -543,7 +543,7 @@ static UInt32 get_datasourceid(const char * deviceId) {
 	char tmp[128];
 
 	size_t pos1 = colon_pos(deviceId, 1);
-	strncpy(tmp, deviceId + pos1, colon_pos(deviceId, 2) - pos1);
+	strncpy(tmp, deviceId + pos1 + 1, colon_pos(deviceId, 2) - pos1 - 1);
 
 	return atoi(tmp);
 }
@@ -640,7 +640,7 @@ static void init_output_device(phastream_t *as, float rate, unsigned channels, u
 static void init_input_device(phastream_t *as, float rate, unsigned channels, unsigned format) {
 	ca_dev *cadev = (ca_dev *) as->drvinfo;
 
-	set_data_source(get_audiodeviceid(cadev->inputID), 0, get_datasourceid(cadev->inputID));
+	set_data_source(get_audiodeviceid(cadev->inputID), 1, get_datasourceid(cadev->inputID));
 
 	set_recorded_format(as, rate, channels, format);
 	set_input_callback(get_audiodeviceid(cadev->inputID), input_proc, as);
