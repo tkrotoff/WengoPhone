@@ -73,9 +73,8 @@ QWidget(parent, f), _cChatHandler(cChatHandler) {
 
 	//Default nickname for testing purpose
 	_nickName = "Wengo";
-
 	_ui.setupUi(this);
-
+	_ui.contactListLabel->setVisible(false);
 	createActionFrame();
 	setupSendButton();
 
@@ -424,6 +423,7 @@ void QtChatWidget::updateContactListLabel() {
 	_ui.contactListLabel->setToolTip(QString::null);
 
 	if (contactStringList.size() > 2) {
+		_ui.contactListLabel->show();
 		QString str = QString(tr("Chat with: "));
 		str += contactStringList[0] + "; ";
 		str += contactStringList[1] + "...";
@@ -432,6 +432,7 @@ void QtChatWidget::updateContactListLabel() {
 		_ui.contactListLabel->setToolTip(str);
 	} else {
 		if (contactStringList.size() > 1) {
+			_ui.contactListLabel->show();
 			QString str = QString(tr("Chat with: ")) + contactStringList.join("; ");
 			_ui.contactListLabel->setText(str);
 		}
