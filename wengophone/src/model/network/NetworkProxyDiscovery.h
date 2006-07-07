@@ -50,6 +50,16 @@ public:
 	int getServerPort() const { return _serverPort; }
 	void setServerPort(int port) { _serverPort = port; }
 
+	enum ProxyAuthType {
+		ProxyAuthTypeUnknown,
+		ProxyAuthTypeBasic,
+		ProxyAuthTypeDigest,
+		ProxyAuthTypeNTLM
+	};
+
+	ProxyAuthType getProxyAuthType() const { return _proxyAuthType; }
+	void setProxyAuthType(ProxyAuthType proxyAuthType) { _proxyAuthType = proxyAuthType; }
+
 private:
 
 	std::string _login;
@@ -60,6 +70,7 @@ private:
 
 	int _serverPort;
 
+	ProxyAuthType _proxyAuthType;
 };
 
 /**
@@ -72,11 +83,11 @@ private:
  */
 class NetworkProxyDiscovery : public Thread {
 public:
-	
+
 	enum NetworkProxyDiscoveryState {
 		/** Initial state. */
 		NetworkProxyDiscoveryStateUnknown,
-		
+
 		/** NetworkProxyDiscovery is discovering the proxy settings. */
 		NetworkProxyDiscoveryStateDiscovering,
 
@@ -104,19 +115,19 @@ public:
 	Event< void (NetworkProxyDiscovery & sender, NetworkProxy networkProxy)> wrongProxyAuthenticationEvent;
 
 	static NetworkProxyDiscovery & getInstance();
-	
+
 	NetworkProxyDiscoveryState getState() const;
 
 	/**
 	 * Sets the NetworProxy settings.
-	 * 
+	 *
 	 * Will try to detect the Proxy with the given parameters.
 	 * It it works, parameters will be saved in Config.
 	 */
 	void setProxySettings(NetworkProxy networkProxy);
 
 	/**
-	 *	Returns proxy parameters. This method is blocking while proxy settings have not been detected.
+	 * Returns proxy parameters. This method is blocking while proxy settings have not been detected.
 	 */
 	NetworkProxy getNetworkProxy() const;
 
