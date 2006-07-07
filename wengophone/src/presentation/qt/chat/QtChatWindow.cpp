@@ -264,12 +264,13 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 		std::string message = imChatMessage->getMessage();
 		delete imChatMessage;
 		QString senderName = QString::fromStdString(from.getContactId());
-/*
+
 		QtContactList * qtContactList = _qtWengoPhone->getContactList();
 		CContactList & cContactList = qtContactList->getCContactList();
 		QString contactId = QString::fromStdString(cContactList.findContactThatOwns(from));
-		QString senderName = getShortDisplayName(contactId,QString::fromStdString(from.getContactId()));
-*/
+		QString senderDisplayName = getShortDisplayName(contactId,QString::fromStdString(from.getContactId()));
+		LOG_DEBUG("SENDER DISPLAY NAME :"+senderDisplayName.toStdString());
+
 		QString msg = QString::fromUtf8(message.c_str());
 
 		if (!_dialog->isVisible()) {
@@ -283,7 +284,7 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 			QtChatWidget * widget = dynamic_cast<QtChatWidget *> (_tabWidget->widget(i));
 			if (widget->getSessionId() == sender->getId()) {
 				_chatWidget = qobject_cast<QtChatWidget *>(_tabWidget->widget(i));
-				_chatWidget->addToHistory(senderName, msg);
+				_chatWidget->addToHistory(senderDisplayName, msg);
 				if (_tabWidget->currentWidget() != _chatWidget) {
 					if (_dialog->isMinimized())
 						_tabWidget->setCurrentIndex(i);
@@ -628,6 +629,9 @@ void QtChatWindow::statusChangedSlot(QString contactId) {
 void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+	CContactList & cContactList = qtContactList->getCContactList();
+
 	if (chatIsVisible()) {
 		return;
 	}
@@ -648,7 +652,9 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 			if (it != imChatSession->getIMContactSet().begin()) {
 				message += ", ";
 			}
-			message += QString::fromStdString((*it).getContactId());
+			QString contactId = QString::fromStdString(cContactList.findContactThatOwns((*it)));
+			message+=getShortDisplayName(contactId,
+				QString::fromStdString((*it).getContactId()));
 
 			std::string contact =  _cChatHandler.getCUserProfile().getCContactList().findContactThatOwns((*it));
 			if (!contact.empty()) {

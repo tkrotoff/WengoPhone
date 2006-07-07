@@ -69,7 +69,7 @@ QWidget(parent, f), _cChatHandler(cChatHandler) {
 	_notTypingTimerId = -1;
 	_isTyping = false;
 	_sessionId = sessionId;
-	_lastBackGroundColor = QColor("#E4FFE6");
+	_lastBackGroundColor = QColor("#D0FFE6");
 
 	//Default nickname for testing purpose
 	_nickName = "Wengo";
@@ -162,16 +162,15 @@ void QtChatWidget::addToHistory(const QString & senderName,const QString & str) 
 		IMContactSet imContactSet = _imChatSession->getIMContactSet();
 		IMContactSet::iterator it = imContactSet.begin();
 		QString nickName = QString::fromStdString((*it).getContactId());
-		QtChatContactInfo qtChatContactInfo(getNewBackgroundColor(),CHAT_USER_FORGROUND_COLOR,nickName);
-		_qtContactInfo[nickName] = qtChatContactInfo;
+		QtChatContactInfo qtChatContactInfo(getNewBackgroundColor(),CHAT_USER_FORGROUND_COLOR,senderName);
+		_qtContactInfo[senderName] = qtChatContactInfo;
 		header = qtChatContactInfo.getHeader();
 	}
-
 	QTextDocument tmp;
 	tmp.setHtml(str);
 
 	QString tmpStr = text2Emoticon(replaceUrls(tmp.toPlainText(),str));
-	QString table = QString("<table border=0 width=98% cellspacing=0 cellpadding=7>")+
+	QString table = QString("<table border=0 width=98% cellspacing=0 cellpadding=5>")+
 					QString("<tr><td>")+tmpStr+
 					QString("</td></tr></table>");
 	_ui.chatHistory->insertHtml(header);
@@ -445,7 +444,7 @@ bool QtChatWidget::canDoMultiChat() {
 
 void QtChatWidget::inviteContact() {
 	QtChatRoomInviteDlg dlg(*_imChatSession,
-		_cChatHandler.getCUserProfile().getCContactList().getContactList(), this);
+		_cChatHandler.getCUserProfile().getCContactList().getContactList(),this);
 	dlg.exec();
 }
 
