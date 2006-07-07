@@ -379,7 +379,7 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source> is typing</source>
-        <translation> est en train d&apos;écrire un message</translation>
+        <translation type="obsolete"> est en train d&apos;écrire un message</translation>
     </message>
     <message>
         <source>emoticons   </source>
@@ -387,19 +387,19 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>    fonts</source>
-        <translation>    Police</translation>
+        <translation type="obsolete">    Police</translation>
     </message>
     <message>
         <source>send</source>
-        <translation>envoyer</translation>
+        <translation type="obsolete">envoyer</translation>
     </message>
     <message>
         <source>Chat with : </source>
-        <translation> Discuter avec:</translation>
+        <translation type="obsolete"> Discuter avec:</translation>
     </message>
     <message>
         <source>emoticons  </source>
-        <translation>Emoticônes</translation>
+        <translation type="obsolete">Emoticônes</translation>
     </message>
 </context>
 <context>
@@ -410,7 +410,7 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>close chat</source>
-        <translation>Clore le chat</translation>
+        <translation type="obsolete">Clore le chat</translation>
     </message>
     <message>
         <source>WengoPhone chat window</source>
@@ -418,15 +418,15 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>   invite</source>
-        <translation>   Inviter</translation>
+        <translation type="obsolete">   Inviter</translation>
     </message>
     <message>
         <source>View my &amp;Wengo Account</source>
-        <translation>Consulter mon &amp;compte Wengo</translation>
+        <translation type="obsolete">Consulter mon &amp;compte Wengo</translation>
     </message>
     <message>
         <source>Edit my &amp;Profile</source>
-        <translation>Editer mon &amp;Profil</translation>
+        <translation type="obsolete">Editer mon &amp;Profil</translation>
     </message>
     <message>
         <source>&amp;Call-out service</source>
@@ -442,11 +442,11 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>&amp;Open Another Wengo Account</source>
-        <translation>&amp;Se connecter avec un autre compte Wengo</translation>
+        <translation type="obsolete">&amp;Se connecter avec un autre compte Wengo</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>&amp;Fermer</translation>
+        <translation type="obsolete">&amp;Fermer</translation>
     </message>
     <message>
         <source>&amp;Contact</source>
@@ -466,19 +466,19 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>Show contact groups</source>
-        <translation>Afficher les groupes des contacts</translation>
+        <translation type="obsolete">Afficher les groupes des contacts</translation>
     </message>
     <message>
         <source>Show / hide contacts offline</source>
-        <translation>Afficher / Cacher les contacts hors-ligne</translation>
+        <translation type="obsolete">Afficher / Cacher les contacts hors-ligne</translation>
     </message>
     <message>
         <source>&amp;Actions</source>
-        <translation>&amp;Actions</translation>
+        <translation type="obsolete">&amp;Actions</translation>
     </message>
     <message>
         <source>Send a short text message (SMS)</source>
-        <translation>Envoyer un SMS</translation>
+        <translation type="obsolete">Envoyer un SMS</translation>
     </message>
     <message>
         <source>Forward incoming calls</source>
@@ -486,7 +486,7 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>Create a conference call</source>
-        <translation>Créer une conférence téléphonique</translation>
+        <translation type="obsolete">Créer une conférence téléphonique</translation>
     </message>
     <message>
         <source>Create a conference chat</source>
@@ -494,11 +494,11 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Outils</translation>
+        <translation type="obsolete">&amp;Outils</translation>
     </message>
     <message>
         <source>Configuration</source>
-        <translation>Configuration</translation>
+        <translation type="obsolete">Configuration</translation>
     </message>
     <message>
         <source>Advanced configuration</source>
@@ -522,43 +522,43 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>Clear History</source>
-        <translation>Effacer l&apos;historique</translation>
+        <translation type="obsolete">Effacer l&apos;historique</translation>
     </message>
     <message>
         <source>Outgoing Calls</source>
-        <translation>Appels sortants</translation>
+        <translation type="obsolete">Appels sortants</translation>
     </message>
     <message>
         <source>Incoming Calls</source>
-        <translation>Appels entrants</translation>
+        <translation type="obsolete">Appels entrants</translation>
     </message>
     <message>
         <source>Missed Calls</source>
-        <translation>Appels en absence</translation>
+        <translation type="obsolete">Appels en absence</translation>
     </message>
     <message>
         <source>Chat sessions</source>
-        <translation>Session de chat</translation>
+        <translation type="obsolete">Session de chat</translation>
     </message>
     <message>
         <source>Short text message (SMS)</source>
-        <translation>Envoyer un SMS</translation>
+        <translation type="obsolete">Envoyer un SMS</translation>
     </message>
     <message>
         <source>All</source>
-        <translation>Tout</translation>
+        <translation type="obsolete">Tout</translation>
     </message>
     <message>
         <source>&amp;Forum</source>
-        <translation>&amp;Forum</translation>
+        <translation type="obsolete">&amp;Forum</translation>
     </message>
     <message>
         <source>&amp;Wiki / Faq</source>
-        <translation>&amp;Wiki / Faq</translation>
+        <translation type="obsolete">&amp;Wiki / Faq</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>&amp;A Propos</translation>
+        <translation type="obsolete">&amp;A Propos</translation>
     </message>
     <message>
         <source>Log off</source>
@@ -566,43 +566,39 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>Search for Wengo users</source>
-        <translation>Rechercher un contact Wengo</translation>
+        <translation type="obsolete">Rechercher un contact Wengo</translation>
     </message>
     <message>
         <source>Accept</source>
-        <translation>Décrocher</translation>
+        <translation type="obsolete">Décrocher</translation>
     </message>
     <message>
         <source>Hangup</source>
-        <translation>Raccrocher</translation>
+        <translation type="obsolete">Raccrocher</translation>
     </message>
     <message>
         <source>Hold / Resume</source>
-        <translation>Mettre en attente / Reprendre</translation>
+        <translation type="obsolete">Mettre en attente / Reprendre</translation>
     </message>
     <message>
         <source>Instant Messaging Accounts</source>
-        <translation>Comptes de messagerie instantanée</translation>
-    </message>
-    <message>
-        <source>WengoChat</source>
-        <translation></translation>
+        <translation type="obsolete">Comptes de messagerie instantanée</translation>
     </message>
     <message>
         <source>&amp;Learn more about Wengo Services</source>
-        <translation>&amp;Découvrez les services que vous offre Wengo</translation>
+        <translation type="obsolete">&amp;Découvrez les services que vous offre Wengo</translation>
     </message>
     <message>
         <source>&amp;Contacts</source>
-        <translation>&amp;Contacts</translation>
+        <translation type="obsolete">&amp;Contacts</translation>
     </message>
     <message>
         <source>Add contact</source>
-        <translation>Ajouter un contact</translation>
+        <translation type="obsolete">Ajouter un contact</translation>
     </message>
     <message>
         <source>New chat session</source>
-        <translation>Nouvelle session de chat</translation>
+        <translation type="obsolete">Nouvelle session de chat</translation>
     </message>
 </context>
 <context>
@@ -795,6 +791,13 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
 </context>
 <context>
+    <name>ContactList</name>
+    <message>
+        <source>Contact List</source>
+        <translation>Liste de contacts</translation>
+    </message>
+</context>
+<context>
     <name>ContactPopupMenu</name>
     <message>
         <source>Call</source>
@@ -935,6 +938,18 @@ Décriverz les circonsances du problème:</translation>
         <source>Not available</source>
         <translation>Non disponible</translation>
     </message>
+    <message>
+        <source>Click here to buy Wengo&apos;s credits</source>
+        <translation>Cliquer ici pour créditer votre compte</translation>
+    </message>
+    <message>
+        <source>Your Wengo phone number</source>
+        <translation>Votre numéro Wengo</translation>
+    </message>
+    <message>
+        <source>You need to buy wengo&apos;s credits in order to use the call forward</source>
+        <translation>Vous devez recharger votre compte pour utiliser le transfert d&apos;appel</translation>
+    </message>
 </context>
 <context>
     <name>DialpadWidget</name>
@@ -954,7 +969,7 @@ Décriverz les circonsances du problème:</translation>
     <name>EventWidget</name>
     <message>
         <source>&lt;b&gt;New voice mail:&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Nouveau(x) message(s):&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Messages vocaux:&lt;/b&gt;</translation>
     </message>
     <message>
         <source>0</source>
@@ -1005,11 +1020,11 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>Contact list</source>
-        <translation>List de contacts</translation>
+        <translation type="obsolete">List de contacts</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;Pseudo ou numéro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;Pseudo ou numéro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Duration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -1041,11 +1056,11 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Durée</translation>
+        <translation type="obsolete">Durée</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>Statut</translation>
+        <translation type="obsolete">Statut</translation>
     </message>
 </context>
 <context>
@@ -1080,7 +1095,7 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>Start a chat if applicable</source>
-        <translation>Commencer un chat si possible</translation>
+        <translation type="obsolete">Commencer un chat si possible</translation>
     </message>
     <message>
         <source>When I start my computer</source>
@@ -1093,6 +1108,10 @@ Décriverz les circonsances du problème:</translation>
     <message>
         <source>Call cell phone or land line if contact not online</source>
         <translation>Appeler le mobile ou la ligne fixe si le contact n&apos;est pas disponible</translation>
+    </message>
+    <message>
+        <source>Always start a chat</source>
+        <translation>Toujours commencer un chat</translation>
     </message>
 </context>
 <context>
@@ -1409,15 +1428,23 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your password ?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe ?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe ?&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Need help ?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Besoin d&apos;aide ?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Besoin d&apos;aide ?&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Click here&lt;/span&gt;</source>
         <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Cliquez-ici&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your password?&lt;/span&gt;</source>
+        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe ?&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Need help?&lt;/span&gt;</source>
+        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Besoin d&apos;aide ?&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
@@ -1584,23 +1611,35 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <name>PhoneCallWidget</name>
     <message>
         <source>Accept</source>
-        <translation>Décrocher</translation>
+        <translation type="obsolete">Décrocher</translation>
     </message>
     <message>
         <source>Reject</source>
-        <translation>Refuser</translation>
+        <translation type="obsolete">Refuser</translation>
     </message>
     <message>
         <source>Transfer</source>
-        <translation>Transférer</translation>
+        <translation type="obsolete">Transférer</translation>
     </message>
     <message>
         <source>Hold</source>
-        <translation>Mettre en attente</translation>
+        <translation type="obsolete">Mettre en attente</translation>
     </message>
     <message>
         <source>Add Contact</source>
-        <translation>Ajouter un contact</translation>
+        <translation type="obsolete">Ajouter un contact</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;Pseudo ou numéro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Duration</source>
+        <translation>Durée</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Statut</translation>
     </message>
 </context>
 <context>
@@ -1795,10 +1834,164 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
 </context>
 <context>
+    <name>QtChatWidget</name>
+    <message>
+        <source>Chat with: </source>
+        <translation>Chat avec : </translation>
+    </message>
+    <message>
+        <source> is typing</source>
+        <translation> est en train d&apos;écrire un message</translation>
+    </message>
+    <message>
+        <source>emoticons  </source>
+        <translation>Emoticônes</translation>
+    </message>
+    <message>
+        <source>    fonts</source>
+        <translation>    Police</translation>
+    </message>
+    <message>
+        <source>send</source>
+        <translation>envoyer</translation>
+    </message>
+</context>
+<context>
+    <name>QtChatWindow</name>
+    <message>
+        <source>close chat</source>
+        <translation>Clore le chat</translation>
+    </message>
+    <message>
+        <source>   invite</source>
+        <translation>   Inviter</translation>
+    </message>
+    <message>
+        <source>View my &amp;Wengo Account</source>
+        <translation>Consulter mon &amp;espace perso</translation>
+    </message>
+    <message>
+        <source>Edit my &amp;Profile</source>
+        <translation>Editer mon &amp;Profil</translation>
+    </message>
+    <message>
+        <source>&amp;Learn more about Wengo Services</source>
+        <translation>&amp;Découvrez les services que vous offre Wengo</translation>
+    </message>
+    <message>
+        <source>&amp;Open Another Wengo Account</source>
+        <translation>&amp;Créer un nouveau compte Wengo</translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation>&amp;Fermer</translation>
+    </message>
+    <message>
+        <source>&amp;Contacts</source>
+        <translation>&amp;Contacts</translation>
+    </message>
+    <message>
+        <source>Add contact</source>
+        <translation>Ajouter un contact</translation>
+    </message>
+    <message>
+        <source>Search for Wengo users</source>
+        <translation>Rechercher un contact Wengo</translation>
+    </message>
+    <message>
+        <source>Show contact groups</source>
+        <translation>Afficher les groupes des contacts</translation>
+    </message>
+    <message>
+        <source>Show / hide contacts offline</source>
+        <translation>Afficher / Cacher les contacts déconnectés</translation>
+    </message>
+    <message>
+        <source>&amp;Actions</source>
+        <translation>&amp;Actions</translation>
+    </message>
+    <message>
+        <source>Send a short text message (SMS)</source>
+        <translation>Envoyer un SMS</translation>
+    </message>
+    <message>
+        <source>Create a conference call</source>
+        <translation>Créer une conférence</translation>
+    </message>
+    <message>
+        <source>Accept</source>
+        <translation>Décrocher</translation>
+    </message>
+    <message>
+        <source>Hangup</source>
+        <translation>Raccrocher</translation>
+    </message>
+    <message>
+        <source>Hold / Resume</source>
+        <translation>Mettre en attente / Reprendre</translation>
+    </message>
+    <message>
+        <source>&amp;Tools</source>
+        <translation>&amp;Outils</translation>
+    </message>
+    <message>
+        <source>Instant Messaging Accounts</source>
+        <translation>Chatter avec les autres Messengers</translation>
+    </message>
+    <message>
+        <source>Configuration</source>
+        <translation>Panneau de Configuration</translation>
+    </message>
+    <message>
+        <source>Clear History</source>
+        <translation>Effacer l&apos;historique</translation>
+    </message>
+    <message>
+        <source>Outgoing Calls</source>
+        <translation>Appels sortants</translation>
+    </message>
+    <message>
+        <source>Incoming Calls</source>
+        <translation>Appels entrants</translation>
+    </message>
+    <message>
+        <source>Missed Calls</source>
+        <translation>Appels en absence</translation>
+    </message>
+    <message>
+        <source>Chat sessions</source>
+        <translation>Session de chat</translation>
+    </message>
+    <message>
+        <source>Short text message (SMS)</source>
+        <translation>Envoyer un SMS</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation>Tous</translation>
+    </message>
+    <message>
+        <source>&amp;Forum</source>
+        <translation>Accédez à notre &amp;Forum</translation>
+    </message>
+    <message>
+        <source>&amp;Wiki / Faq</source>
+        <translation>Consultez notre &amp;Wiki / Faq</translation>
+    </message>
+    <message>
+        <source>&amp;About</source>
+        <translation>&amp;A propos de Wengo</translation>
+    </message>
+    <message>
+        <source>New chat session</source>
+        <translation>Nouvelle session de chat</translation>
+    </message>
+</context>
+<context>
     <name>QtContactList</name>
     <message>
         <source>Merge Contacts -- WengoPhone</source>
-        <translation>Fusionner les contacts -- WengoPhone</translation>
+        <translation type="obsolete">Fusionner les contacts -- WengoPhone</translation>
     </message>
     <message>
         <source>Merge %1 with %2?</source>
@@ -1811,6 +2004,10 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <message>
         <source>&amp;No</source>
         <translation>&amp;Non</translation>
+    </message>
+    <message>
+        <source>WengoPhone - Merge Contacts</source>
+        <translation>WengoPhone - Fusion de contact</translation>
     </message>
 </context>
 <context>
@@ -1899,23 +2096,23 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <name>QtCreditWidget</name>
     <message>
         <source>unauthorized</source>
-        <translation>Interdit</translation>
+        <translation type="obsolete">Interdit</translation>
     </message>
     <message>
         <source>no number</source>
-        <translation>pas de numéro</translation>
+        <translation type="obsolete">pas de numéro</translation>
     </message>
     <message>
         <source>Your Wengo number</source>
-        <translation>Votre n° Wengo</translation>
+        <translation type="obsolete">Votre n° Wengo</translation>
     </message>
     <message>
         <source>You need to buy wengo&apos;s credits in order to use the call forward</source>
-        <translation>Vous devez recharger votre compte pour utiliser le transfert d&apos;appel</translation>
+        <translation type="obsolete">Vous devez recharger votre compte pour utiliser le transfert d&apos;appel</translation>
     </message>
     <message>
         <source>Click here to buy Wengo&apos;s credits</source>
-        <translation>Cliquer ici pour créditer votre compte</translation>
+        <translation type="obsolete">Cliquer ici pour créditer votre compte</translation>
     </message>
     <message>
         <source>Click here to change your call forward settings</source>
@@ -2254,7 +2451,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Proceed conference</source>
-        <translation>Commencer la conférence</translation>
+        <translation type="obsolete">Commencer la conférence</translation>
     </message>
     <message>
         <source>Talking - conference</source>
@@ -2269,6 +2466,14 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
 Please wait for a few seconds...</source>
         <translation>Quand vous êtres prêt à lancer la conférence, cliquez sur le bouton ci-dessous
 Veuillez patientez...</translation>
+    </message>
+    <message>
+        <source>Call Duration</source>
+        <translation>Durée d&apos;appel</translation>
+    </message>
+    <message>
+        <source>Initialization...</source>
+        <translation>Initialisation...</translation>
     </message>
 </context>
 <context>
@@ -2696,7 +2901,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Normale</source>
-        <translation>Normale</translation>
+        <translation type="obsolete">Normale</translation>
     </message>
 </context>
 <context>
@@ -2739,7 +2944,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Languages</source>
-        <translation>Langues</translation>
+        <translation type="obsolete">Langues</translation>
     </message>
 </context>
 <context>
@@ -2895,7 +3100,11 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Enter the new group name</source>
-        <translation>Saisissez le nouveau nom</translation>
+        <translation type="obsolete">Saisissez le nouveau nom</translation>
+    </message>
+    <message>
+        <source>Enter the new group name:</source>
+        <translation>Saisissez le nouveau nom de groupe :</translation>
     </message>
 </context>
 <context>
@@ -2970,7 +3179,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;You can chat with your contacts&lt;br&gt; whatever their IM (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Use the &quot;Tools / IM accounts&quot; menu&lt;br&gt;to login to those networks&lt;/span&gt;</source>
-        <translation type="unfinished">&lt;span style=&quot;font-size:18pt;&quot;&gt;Ajouter un contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Vous pouvez chatter avec vos contacts&lt;br&gt; quels que soient leurs réseaux (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Utilisez le menu &quot;Outils&quot; -&gt; &quot;Comptes de messagerie &lt;br&gt;instantanée&quot;pour vous connecter à ces réseaux &lt;/span&gt;</translation>
+        <translation type="unfinished">&lt;span style=&quot;font-size:18pt;&quot;&gt;Ajouter un contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Vous pouvez chatter avec vos contacts&lt;br&gt; quel que soit leur Messenger (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Utilisez le menu &quot;Outils&quot; -&gt; &quot;Comptes de messagerie &lt;br&gt;instantanée&quot;pour vous connecter à ces réseaux &lt;/span&gt;</translation>
     </message>
 </context>
 <context>
@@ -3243,7 +3452,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Webcam Preview</source>
-        <translation>Prévisualisation de la Webcam</translation>
+        <translation>Cliquez pour visualiser votre image</translation>
     </message>
 </context>
 <context>
@@ -3384,7 +3593,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>View My &amp;Wengo Account</source>
-        <translation>Consulter mon compte &amp;Wengo</translation>
+        <translation>Consulter mon &amp;espace perso</translation>
     </message>
     <message>
         <source>&amp;Open Another Wengo Account</source>
@@ -3396,7 +3605,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&amp;Forum</source>
-        <translation>&amp;Forum</translation>
+        <translation>Accéder à notre &amp;Forum</translation>
     </message>
     <message>
         <source>Help</source>
@@ -3412,7 +3621,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&amp;Configuration</source>
-        <translation>&amp;Configuration</translation>
+        <translation>&amp;Panneau de Configuration</translation>
     </message>
     <message>
         <source>&amp;Send a short text message (SMS)</source>
@@ -3436,7 +3645,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&amp;Wiki / Faq</source>
-        <translation>&amp;Wiki / Faq</translation>
+        <translation>Consulter notre &amp;Wiki / Faq</translation>
     </message>
     <message>
         <source>Buy call-out credits</source>
@@ -3464,7 +3673,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Show / Hide &amp;Contacts Offline</source>
-        <translation>Afficher / cacher &amp;les contacts hors ligne</translation>
+        <translation>Afficher / Cacher &amp;les contacts déconnectés</translation>
     </message>
     <message>
         <source>Show Contact &amp;Groups</source>
@@ -3560,11 +3769,11 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&lt;u&gt;Click to change Audio and Video Settings&lt;/u&gt;</source>
-        <translation>&lt;u&gt;Cliquez pour ajuster vos paramètres Audio et Vidéo&lt;/u&gt;</translation>
+        <translation>&lt;u&gt;Cliquez ici pour ajuster vos paramètres Audio et Vidéo&lt;/u&gt;</translation>
     </message>
     <message>
         <source>&amp;Learn more about Wengo Services</source>
-        <translation>&amp;Découvrez les services que vous offre Wengo</translation>
+        <translation>&amp;Découvrir nos autres services</translation>
     </message>
     <message>
         <source>Instant Messaging Accounts</source>
@@ -3592,11 +3801,11 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Show / Hide groups</source>
-        <translation>Afficher les contacts par groupe</translation>
+        <translation>Afficher / Cacher les groupes</translation>
     </message>
     <message>
         <source>Change Profile...</source>
-        <translation>Changer de profil...</translation>
+        <translation>Se connecter avec un autre compte Wengo...</translation>
     </message>
     <message>
         <source>Log Off</source>
@@ -3701,7 +3910,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Enter a name, nickname, city, or email and click the search button&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Rechercher un contact&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Saisissez un nom, un pseudo, une ville ou un email&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Rechercher un contact&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Saisissez un nom, un pseudo, une ville ou un email&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
