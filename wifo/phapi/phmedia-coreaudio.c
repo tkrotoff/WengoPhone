@@ -46,6 +46,9 @@
 //#define ph_printf  printf
 #define ph_printf
 
+#define IN_PREFIX "in="
+#define OUT_PREFIX "out="
+
 /**
  * Declare the driver to phmedia-audio and initialize it.
  */
@@ -84,7 +87,6 @@ int ca_get_avail_data(phastream_t *as);
  */
 void ca_close(phastream_t *as);
 
-
 typedef struct _ca_dev {
 	char inputID[128];
 	char outputID[128];
@@ -109,7 +111,6 @@ typedef struct _ca_dev {
 	
 	unsigned sumDataSize;
 } ca_dev;
-
 
 /**
  * Initialize a audio unit.
@@ -190,13 +191,6 @@ static void set_played_format(AudioUnit au, float rate, unsigned channels, unsig
  * @param format data format e.g. 16 (16 bits) 
  */
 static void set_recorded_format(phastream_t *as, float rate, unsigned channels, unsigned format);
-
-/**
- * Checks if a device id is valid.
- *
- * @return 1 if valid, 0 otherwhise
- */
-static int is_valid_deviceid(const char * deviceId);
 
 /**
  * Gets the AudioDeviceID part of the device id.
@@ -491,36 +485,27 @@ static void parse_device(ca_dev *cadev, const char *name) {
 
 	ph_printf("**CoreAudio: parsing %s\n", name);
 
-	if (!is_valid_deviceid(name)) {
+	if (strncasecmp(buffer, "ca:", 3) == 0) {
+		buffer += 3;
+	}
+
+	if ((input = strcasestr(buffer, IN_PREFIX))
+		&& (strlen(input) > strlen(IN_PREFIX))
+		&& (tmp = strchr(input + 3, ' '))) {
+			strncpy(cadev->inputID, input + 3, tmp - (input + 3));
+	} else {
 		memset(deviceId, 0, sizeof(deviceId));
 		defaultInputDevice(deviceId);
 		strncpy(cadev->inputID, deviceId, sizeof(cadev->inputID));
+	}
 
+	if ((output = strcasestr(buffer, OUT_PREFIX))
+		&& (strlen(output) > strlen(OUT_PREFIX))) {
+		strncpy(cadev->outputID, output + 4, strlen(output + 4));
+	} else {
 		memset(deviceId, 0, sizeof(deviceId));
 		defaultOutputDevice(deviceId);
 		strncpy(cadev->outputID, deviceId, sizeof(cadev->inputID));
-	} else {
-		if (strncasecmp(buffer, "ca:", 3) == 0) {
-			buffer += 3;
-		}
-
-		if ((input = strcasestr(buffer, "in="))) {
-			if ((tmp = strchr(input + 3, ' '))) {
-				strncpy(cadev->inputID, input + 3, tmp - (input + 3));
-			}
-		} else {
-			memset(deviceId, 0, sizeof(deviceId));
-			defaultInputDevice(deviceId);
-			strncpy(cadev->inputID, deviceId, sizeof(cadev->inputID));
-		}
-
-		if ((output = strcasestr(buffer, "out="))) {
-			strncpy(cadev->outputID, output + 4, strlen(output + 4));
-		} else {
-			memset(deviceId, 0, sizeof(deviceId));
-			defaultOutputDevice(deviceId);
-			strncpy(cadev->outputID, deviceId, sizeof(cadev->inputID));
-		}
 	}
 
 	ph_printf("**CoreAudio: using devices in=%s out=%s\n", 
@@ -539,19 +524,6 @@ static int colon_pos(const char * str, unsigned whichone) {
 				result = i;
 				break;
 			}
-		}
-	}
-
-	return result;
-}
-
-static int is_valid_deviceid(const char * deviceId) {
-	int result = 0;
-
-	if (deviceId) {
-		ph_printf("**CoreAudio: deviceId in is_valid_deviceid => %s\n", deviceId);
-		if (strlen(deviceId) >= 21) {
-			result = 1;
 		}
 	}
 
