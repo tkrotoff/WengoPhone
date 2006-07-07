@@ -24,18 +24,20 @@
 
 #include <QtGui>
 
+class ContactProfile;
+
 class QtChatRoomTreeWidgetItem : public QTreeWidgetItem
 {
 
 public:
 
-	QtChatRoomTreeWidgetItem(Contact & contact, QTreeWidgetItem * parent);
+	QtChatRoomTreeWidgetItem(ContactProfile contact, QTreeWidgetItem * parent);
 
-	Contact & getContact() const;
+	ContactProfile getContact() const;
 
 protected:
 
-	Contact & _contact;
+	ContactProfile _contact;
 };
 
 

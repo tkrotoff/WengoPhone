@@ -24,18 +24,19 @@
 #include <model/contactlist/Contact.h>
 
 #include <QtGui>
+class ContactProfile;
 
 class QtChatRoomListWidgetItem : public QListWidgetItem
 {
 public:
 
-	QtChatRoomListWidgetItem ( Contact & contact, QListWidget * parent );
+	QtChatRoomListWidgetItem (ContactProfile contact, QListWidget * parent);
 
-	Contact & getContact() const;
+	ContactProfile getContact() const;
 
 protected:
 
-	Contact & _contact;
+	ContactProfile _contact;
 };
 
 #endif //OWQTCHATROOMLISTWIDGETITEM_H

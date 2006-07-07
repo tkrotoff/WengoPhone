@@ -37,7 +37,7 @@ class QtChatRoomInviteDlg : public QDialog
 	Q_OBJECT
 public:
 
-	typedef QList<Contact > SelectedContact;
+	typedef QList<ContactProfile> SelectedContact;
 
 	QtChatRoomInviteDlg(IMChatSession & chatSession,ContactList & contactList, QWidget * parent = 0, Qt::WFlags f = 0);
 
@@ -61,13 +61,17 @@ protected:
 
 	QPushButton * _startPushButton;
 
-	ContactList & _contactList;
+//	ContactList & _contactList;
+	CContactList & _cContactList;
 
 	IMChatSession & _chatSession;
 
 	void fillContact();
 
-	void fillGroup(QTreeWidgetItem * group, const ContactGroup * cgroup);
+//	void fillGroup(QTreeWidgetItem * group, const ContactGroup * cgroup);
+	void fillGroup(QTreeWidgetItem * group, const QString & groupId);
+
+	QStringList getContactsInGroup(const QString & groupId) const;
 
 	SelectedContact _selectedContact;
 

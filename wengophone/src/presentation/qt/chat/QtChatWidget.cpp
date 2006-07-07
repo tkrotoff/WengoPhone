@@ -443,7 +443,7 @@ bool QtChatWidget::canDoMultiChat() {
 
 void QtChatWidget::inviteContact() {
 	QtChatRoomInviteDlg dlg(*_imChatSession,
-		_cChatHandler.getCUserProfile().getCContactList().getContactList(),this);
+		_cChatHandler.getCUserProfile().getCContactList(),this);
 	dlg.exec();
 }
 

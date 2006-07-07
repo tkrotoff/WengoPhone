@@ -25,26 +25,23 @@
 #include <qtutil/Object.h>
 
 #include <model/contactlist/ContactList.h>
-
+#include <model/contactlist/ContactProfile.h>
 #include <model/contactlist/ContactGroup.h>
 
 #include "../contactlist/QtContactPixmap.h"
 #include "QtChatRoomTreeWidgetItem.h"
 #include "QtChatRoomListWidgetItem.h"
 
-
-QtChatRoomInviteDlg::QtChatRoomInviteDlg(IMChatSession & chatSession, ContactList & contactList, QWidget * parent , Qt::WFlags f ) :
-QDialog(parent,f), _contactList(contactList), _chatSession(chatSession)
+QtChatRoomInviteDlg::QtChatRoomInviteDlg(IMChatSession & chatSession, CContactList & cContactList, QWidget * parent , Qt::WFlags f ) :
+QDialog(parent,f), _cContactList(cContactList), _chatSession(chatSession)
 {
-	_widget =WidgetFactory::create(":/forms/chat/ChatRoomInviteWidget.ui", this);
+	_widget = WidgetFactory::create(":/forms/chat/ChatRoomInviteWidget.ui", this);
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget(_widget);
 	layout->setMargin(0);
 	setLayout(layout);
-
 	setupGui();
 }
-
 
 void QtChatRoomInviteDlg::setupGui() {
 
@@ -69,14 +66,13 @@ void QtChatRoomInviteDlg::startConference() {
 	for (it = selectList.begin(); it!= selectList.end(); it++) {
 		QtChatRoomListWidgetItem * item = dynamic_cast<QtChatRoomListWidgetItem *> (*it);
 		_chatSession.addIMContact(*(item->getContact().getFirstAvailableIMContact(_chatSession)));
-		_selectedContact.append( (item->getContact()));
+		_selectedContact.append((item->getContact()));
 	}
 	accept();
  }
 
 void QtChatRoomInviteDlg::addToConference() {
 	// Get list of selected item in the treeview
-
 	QList<QTreeWidgetItem *> selectList =  _contactListTreeWidget->selectedItems ();
 	QList<QTreeWidgetItem *>::iterator it;
 
@@ -103,29 +99,34 @@ void QtChatRoomInviteDlg::removeFromConference() {
 	}
 }
 
-
-
 void QtChatRoomInviteDlg::fillContact() {
-	ContactList::ContactGroupSet groupList = _contactList.getContactGroupSet();
-	ContactList::ContactGroupSet::iterator it;
+	std::vector< std::pair<std::string, std::string> >groupList=_cContactList.getContactGroups();
+	std::vector< std::pair<std::string, std::string> >::iterator it;
 
 	for (it = groupList.begin(); it != groupList.end(); it++) {
 		QTreeWidgetItem * groupItem = new QTreeWidgetItem( _contactListTreeWidget);
 		groupItem->setFlags(Qt::ItemIsEnabled);
-		groupItem->setText(0,QString::fromUtf8((*it).getName().c_str()));
-		fillGroup(groupItem, & (*it));
+		QString groupName = QString::fromUtf8((*it).second.c_str());
+		QString groupId = QString::fromStdString((*it).first);
+		groupItem->setText(0,groupName);
+		fillGroup(groupItem, groupId);
 	}
 }
 
-void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const ContactGroup * cgroup) {
-	int size = cgroup->size();
+void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const QString & groupId) {
+
+	QStringList contactsIdList = getContactsInGroup(groupId);
+	QStringList::iterator it;
+
 	QtContactPixmap::ContactPixmap status;
 
-	for (int i = 0; i < size; i++ ) {
-		if ( (*cgroup)[i]->getFirstAvailableIMContact(_chatSession) != NULL ){
-			QtChatRoomTreeWidgetItem * item = new QtChatRoomTreeWidgetItem (*(*cgroup)[i],group );
-			item->setText(0,QString::fromStdString ((*cgroup)[i]->getDisplayName()));
-			switch ( (*cgroup)[i]->getPresenceState()) {
+	for (it=contactsIdList.begin();it!=contactsIdList.end();it++) {
+		//(*it) is a contactId
+		ContactProfile contactProfile = _cContactList.getContactProfile((*it).toStdString());
+		if (contactProfile.getFirstAvailableIMContact(_chatSession) != NULL) {
+			QtChatRoomTreeWidgetItem * item = new QtChatRoomTreeWidgetItem (contactProfile,group );
+			item->setText(0,QString::fromStdString (contactProfile.getDisplayName()));
+			switch ( contactProfile.getPresenceState()) {
 				case EnumPresenceState::PresenceStateOnline:
 					status = QtContactPixmap::ContactOnline;
 					break;
@@ -148,4 +149,18 @@ void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const ContactGroup 
 		item->setIcon(0,QIcon(QtContactPixmap::getInstance()->getPixmap(status)));
 		}
 	}
+}
+
+QStringList QtChatRoomInviteDlg::getContactsInGroup(const QString & groupId) const {
+	StringList contactIdList = _cContactList.getContactIds();
+	StringList::iterator it;
+	QStringList tmp;
+
+	for (it=contactIdList.begin();it!=contactIdList.end();it++) {
+		ContactProfile contactProfile = _cContactList.getContactProfile((*it));
+		if (contactProfile.getGroupId() == groupId.toStdString()) {
+			tmp << QString::fromStdString((*it));
+		}
+	}
+	return tmp;
 }

@@ -19,13 +19,15 @@
 */
 
 #include "QtChatRoomListWidgetItem.h"
+#include <model/contactlist/ContactProfile.h>
 
-QtChatRoomListWidgetItem::QtChatRoomListWidgetItem ( Contact & contact, QListWidget * parent ) :
-QListWidgetItem(parent), _contact(contact)
+QtChatRoomListWidgetItem::QtChatRoomListWidgetItem (ContactProfile contact, QListWidget * parent) :
+QListWidgetItem(parent)
 {
+	_contact = contact;
 }
 
-Contact & QtChatRoomListWidgetItem::getContact() const {
+ContactProfile QtChatRoomListWidgetItem::getContact() const {
 	return _contact;
 }
 

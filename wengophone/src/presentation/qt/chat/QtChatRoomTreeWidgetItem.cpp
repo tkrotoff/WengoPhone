@@ -18,12 +18,14 @@
 
 */
 #include "QtChatRoomTreeWidgetItem.h"
+#include <model/contactlist/ContactProfile.h>
 
-QtChatRoomTreeWidgetItem::QtChatRoomTreeWidgetItem(Contact & contact, QTreeWidgetItem * parent) :
-QTreeWidgetItem(parent), _contact(contact)
+QtChatRoomTreeWidgetItem::QtChatRoomTreeWidgetItem(ContactProfile contact, QTreeWidgetItem * parent) :
+QTreeWidgetItem(parent)
 {
+	_contact = contact;
 }
 
-Contact & QtChatRoomTreeWidgetItem::getContact() const {
+ContactProfile QtChatRoomTreeWidgetItem::getContact() const {
 	return _contact;
 }
