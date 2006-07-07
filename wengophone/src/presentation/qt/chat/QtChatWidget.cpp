@@ -41,6 +41,10 @@
 #include <util/Logger.h>
 #include <util/WebBrowser.h>
 
+#include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/contactlist/QtContactList.h>
+#include <presentation/qt/contactlist/QtContactListManager.h>
+
 #include <QtGui>
 
 static const int CHAT_NOT_TYPING_DELAY=1000;
@@ -59,8 +63,8 @@ static const QString CHAT_FONT_LABEL_OFF_FILL = ":/pics/profilebar/bar_fill.png"
 static const QString CHAT_FONT_LABEL_ON_END = ":/pics/profilebar/bar_on_end.png";
 static const QString CHAT_FONT_LABEL_ON_FILL = ":/pics/profilebar/bar_on_fill.png";
 
-QtChatWidget::QtChatWidget(CChatHandler & cChatHandler, int sessionId, QWidget * parent, Qt::WFlags f) :
-QWidget(parent, f), _cChatHandler(cChatHandler) {
+QtChatWidget::QtChatWidget(CChatHandler & cChatHandler, QtWengoPhone * qtWengoPhone, int sessionId,QWidget * parent, Qt::WFlags f) :
+QWidget(parent, f), _cChatHandler(cChatHandler),_qtWengoPhone(qtWengoPhone) {
 
 	_qtEmoticonManager = new QtEmoticonsManager(this);
 	_emoticonsWidget = new EmoticonsWidget(_qtEmoticonManager,this,Qt::Popup);
@@ -98,7 +102,6 @@ QWidget(parent, f), _cChatHandler(cChatHandler) {
 	connect(_emoticonsWidget,SIGNAL(emoticonClicked(QtEmoticon)),this,SLOT(emoticonSelected(QtEmoticon)));
 	connect(_emoticonsWidget,SIGNAL(closed()),_ui.chatEdit,SLOT(setFocus()));
 	connect(_ui.chatEdit,SIGNAL(textChanged ()),SLOT(chatEditChanged()));
-
 }
 
 QtChatWidget::~QtChatWidget() {
@@ -406,13 +409,31 @@ void QtChatWidget::contactRemovedEventSlot() {
 void QtChatWidget::updateContactListLabel() {
 	QMutexLocker locker(&_mutex);
 
+	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+	CContactList & cContactList = qtContactList->getCContactList();
+
 	IMContactSet imContactSet = _imChatSession->getIMContactSet();
 	QStringList contactStringList;
 
 	IMContactSet::iterator it;
 
 	for (it = imContactSet.begin(); it != imContactSet.end(); it++) {
-		QString nickName = QString::fromStdString((*it).getContactId());
+
+
+		QString contactId = QString::fromStdString(cContactList.findContactThatOwns((*it)));
+		QString contactDisplayName;
+
+		std::string tmpContactname = cContactList.getContactProfile(contactId.toStdString()).getFirstName();
+		if (tmpContactname.empty()) {
+			tmpContactname = cContactList.getContactProfile(contactId.toStdString()).getLastName();
+		}
+		if (tmpContactname.empty()) {
+			tmpContactname = (*it).getContactId();
+		}
+		contactDisplayName=QString::fromUtf8(tmpContactname.c_str());
+
+		// QString nickName = QString::fromStdString((*it).getContactId());
+		QString nickName = contactDisplayName;
 		contactStringList << nickName;
 		if (!hasQtChatContactInfo(nickName)) {
 			QtChatContactInfo qtChatContactInfo(getNewBackgroundColor(),CHAT_USER_FORGROUND_COLOR,nickName);

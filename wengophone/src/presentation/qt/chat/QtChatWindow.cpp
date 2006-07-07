@@ -379,7 +379,7 @@ void QtChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	QString senderName = getShortDisplayName(contactId,QString::fromStdString(from.getContactId()));
 	int tabNumber;
 
-	_chatWidget = new QtChatWidget(_cChatHandler,session->getId(), _tabWidget);
+	_chatWidget = new QtChatWidget(_cChatHandler,_qtWengoPhone,session->getId(), _tabWidget);
 	_chatWidget->setIMChatSession(session);
 	_chatWidget->setContactId(QString::fromStdString(qtContactList->getCContactList().findContactThatOwns(from)));
 

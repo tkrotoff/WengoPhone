@@ -46,12 +46,13 @@ class QUrl;
 class QTimerEvent;
 class QtWengoStyleLabel;
 class QtEmoticonsManager;
+class QtWengoPhone;
 
 class QtChatWidget : public QWidget, public Trackable {
 	Q_OBJECT
 public:
 
-	QtChatWidget(CChatHandler & cChatHandler, int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
+	QtChatWidget(CChatHandler & cChatHandler, QtWengoPhone * qtWengoPhone, int sessionId,QWidget * parent =0, Qt::WFlags f = 0);
 
 	virtual ~QtChatWidget();
 
@@ -170,6 +171,8 @@ private:
 	QWidget * _widget;
 
 	CChatHandler & _cChatHandler;
+
+	QtWengoPhone * _qtWengoPhone;
 
 	QString _contactId;
 
