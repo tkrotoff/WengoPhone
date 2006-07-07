@@ -2,7 +2,7 @@ env = WengoGetEnvironment()
 
 WengoPhoneBuildId = {
 	'buildId': WengoGetCurrentDateTime(),
-	'version': '2.0beta',
+	'version': '2.0RC1',
 	'revision': WengoGetSubversionRevision(),
 	'sofphoneName': 'wengo',
 }
