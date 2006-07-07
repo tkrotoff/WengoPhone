@@ -203,6 +203,9 @@ void QtChatWindow::callContact(){
 		if (_qtWengoPhone->getWidget()->isMinimized()) {
 			_qtWengoPhone->getWidget()->showNormal();
 		}
+#if defined(OS_WINDOWS)
+		SetForegroundWindow(_qtWengoPhone->getWidget()->winId());
+#endif
 	}
 }
 
