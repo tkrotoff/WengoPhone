@@ -56,9 +56,9 @@ WsInfo::WsInfo(WengoAccount * wengoAccount) : WengoWebService(wengoAccount) {
 	//setup info web service
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
-	setHttps(false);
+	setHttps(true);
 	setServicePath(config.getWengoInfoPath());
-	setPort(80);
+	setPort(443);
 	setWengoAuthentication(true);
 
 	getCallForwardInfo(true);

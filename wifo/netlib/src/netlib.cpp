@@ -271,7 +271,23 @@ int _getProxyAddress()
 	return 0;
 }
 
-void _get_proxy_auth_type(const char *url, const char *proxy_addr, int proxy_port, int timeout)
+EnumAuthType get_proxy_auth_type(const char *proxy_addr, int proxy_port, int timeout)
+{
+	EnumAuthType authType = proxyAuthUnknown;
+
+	is_proxy_auth_needed(proxy_addr, proxy_port, timeout);
+
+	if ((_LocalProxy.proxy_auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC)
+		authType = proxyAuthBasic;
+	else if ((_LocalProxy.proxy_auth_type & CURLAUTH_DIGEST) == CURLAUTH_DIGEST)
+		authType = proxyAuthDigest;
+	else if ((_LocalProxy.proxy_auth_type & CURLAUTH_NTLM) == CURLAUTH_NTLM)
+		authType = proxyAuthNTLM;
+
+	return authType; 
+}
+
+void _get_proxy_auth_type2(const char *url, const char *proxy_addr, int proxy_port, int timeout)
 {
 	CURL *curl_tmp;
 	char url_buf[1024];
@@ -585,7 +601,7 @@ HttpRet is_http_conn_allowed(const char *url,
 		if (proxy_login && *proxy_login != 0)
 		{
 			if (!_LocalProxy.proxy_auth_type)
-				_get_proxy_auth_type(url, proxy_addr, proxy_port, timeout);
+				_get_proxy_auth_type2(url, proxy_addr, proxy_port, timeout);
 
 			snprintf(auth_buf, sizeof(auth_buf), "%s:%s", proxy_login, proxy_passwd);
 			curl_easy_setopt(mcurl, CURLOPT_PROXYUSERPWD, auth_buf);
@@ -622,7 +638,7 @@ HttpRet is_http_conn_allowed(const char *url,
 
 	ret = curl_easy_perform(mcurl);
 	curl_easy_getinfo(mcurl, CURLINFO_RESPONSE_CODE, &http_resp_code);
-
+	curl_easy_getinfo(mcurl, CURLINFO_PROXYAUTH_AVAIL, &(_LocalProxy.proxy_auth_type));
 	curl_easy_getinfo(mcurl, CURLINFO_EFFECTIVE_URL, &redir_tmp);
 
 	redir_url = strdup(redir_tmp);

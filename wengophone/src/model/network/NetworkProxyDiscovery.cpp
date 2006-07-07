@@ -26,6 +26,7 @@
 #include <netlib.h>
 
 NetworkProxy::NetworkProxy() {
+	_proxyAuthType = ProxyAuthTypeUnknown;
 }
 
 NetworkProxy::NetworkProxy(const NetworkProxy & networkProxy) {
@@ -33,6 +34,7 @@ NetworkProxy::NetworkProxy(const NetworkProxy & networkProxy) {
 	_password = networkProxy._password;
 	_server = networkProxy._server;
 	_serverPort = networkProxy._serverPort;
+	_proxyAuthType = networkProxy._proxyAuthType;
 }
 
 NetworkProxyDiscovery * NetworkProxyDiscovery::_networkProxyDiscoveryInstance = NULL;
@@ -46,15 +48,22 @@ NetworkProxyDiscovery::NetworkProxyDiscovery() {
 	_networkProxy.setLogin(config.getNetworkProxyLogin());
 	_networkProxy.setPassword(config.getNetworkProxyPassword());
 
-	NetworkObserver::getInstance().connectionIsUpEvent += 
+	NetworkObserver::getInstance().connectionIsUpEvent +=
 		boost::bind(&NetworkProxyDiscovery::connectionIsUpEventHandler, this, _1);
-	NetworkObserver::getInstance().connectionIsDownEvent += 
+	NetworkObserver::getInstance().connectionIsDownEvent +=
 		boost::bind(&NetworkProxyDiscovery::connectionIsDownEventHandler, this, _1);
 
 	if (config.getNetworkProxyDetected()
-		&& is_http_conn_allowed("www.google.com:80", _networkProxy.getServer().c_str(), 
-			_networkProxy.getServerPort(), _networkProxy.getLogin().c_str(), 
+		&& is_http_conn_allowed("www.google.com:80", _networkProxy.getServer().c_str(),
+			_networkProxy.getServerPort(), _networkProxy.getLogin().c_str(),
 			_networkProxy.getPassword().c_str(), NETLIB_FALSE, 10) == HTTP_OK) {
+
+		// Protect against crash due to IE Digest authentication management bug
+		EnumAuthType proxyAuthType = get_proxy_auth_type(_networkProxy.getServer().c_str(),
+			_networkProxy.getServerPort(), PROXY_TIMEOUT);
+		if (proxyAuthType == proxyAuthDigest) {
+			_networkProxy.setProxyAuthType(NetworkProxy::ProxyAuthTypeDigest);
+		}
 		_state = NetworkProxyDiscoveryStateDiscovered;
 	} else {
 		discoverProxy();
@@ -81,18 +90,18 @@ void NetworkProxyDiscovery::run() {
 	Mutex::ScopedLock lock(_mutex);
 
 	if (!NetworkObserver::getInstance().isConnected()) {
-		LOG_DEBUG("No connection available");
+		LOG_DEBUG("no connection available");
 		_state = NetworkProxyDiscoveryStateUnknown;
 		return;
 	}
 
-	// See below for explaination about this test
+	//See below for explaination about this test
 	if (_state != NetworkProxyDiscoveryStateNeedsAuthentication) {
-		LOG_DEBUG("Discovering Network Proxy...");
+		LOG_DEBUG("discovering network proxy...");
 		_state = NetworkProxyDiscoveryStateDiscovering;
 
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		LOG_DEBUG("Searching for proxy...");
+		LOG_DEBUG("searching for proxy...");
 
 		char * localProxyUrl = get_local_http_proxy_address();
 		int localProxyPort = get_local_http_proxy_port();
@@ -113,9 +122,15 @@ void NetworkProxyDiscovery::run() {
 
 	LOG_DEBUG("proxy found");
 
-	if (is_proxy_auth_needed(_networkProxy.getServer().c_str(), 
+	if (is_proxy_auth_needed(_networkProxy.getServer().c_str(),
 		_networkProxy.getServerPort(), PROXY_TIMEOUT)) {
 		LOG_DEBUG("proxy authentication needed");
+
+		EnumAuthType proxyAuthType = get_proxy_auth_type(_networkProxy.getServer().c_str(),
+				_networkProxy.getServerPort(), PROXY_TIMEOUT);
+		if (proxyAuthType == proxyAuthDigest) {
+			_networkProxy.setProxyAuthType(NetworkProxy::ProxyAuthTypeDigest);
+		}
 
 		if (_networkProxy.getLogin().empty()) {
 			LOG_DEBUG("proxy needs login/password");
@@ -125,7 +140,7 @@ void NetworkProxyDiscovery::run() {
 			return;
 		}
 
-		if (!is_proxy_auth_ok(_networkProxy.getServer().c_str(), _networkProxy.getServerPort(), 
+		if (!is_proxy_auth_ok(_networkProxy.getServer().c_str(), _networkProxy.getServerPort(),
 			_networkProxy.getLogin().c_str(), _networkProxy.getPassword().c_str(), PROXY_TIMEOUT)) {
 
 			LOG_DEBUG("proxy needs valid login/password");
@@ -166,7 +181,7 @@ NetworkProxy NetworkProxyDiscovery::getNetworkProxy() const {
 	Mutex::ScopedLock lock(_mutex);
 
 	if (_state != NetworkProxyDiscoveryStateDiscovered) {
-		// Waiting for the end of the discovery
+		//Waiting for the end of the discovery
 		_condition.wait(lock);
 	}
 

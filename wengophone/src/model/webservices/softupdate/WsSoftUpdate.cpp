@@ -38,9 +38,9 @@ WsSoftUpdate::WsSoftUpdate(WengoAccount * wengoAccount) : WengoWebService(wengoA
 	//Setup the web service
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
-	setHttps(false);
+	setHttps(true);
 	setServicePath(config.getWengoSoftUpdatePath());
-	setPort(80);
+	setPort(443);
 	setWengoAuthentication(false);
 }
 

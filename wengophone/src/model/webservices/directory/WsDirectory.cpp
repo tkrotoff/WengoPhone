@@ -38,9 +38,9 @@ WsDirectory::WsDirectory(WengoAccount * wengoAccount)
 
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
-	setHttps(false);
+	setHttps(true);
 	setServicePath(config.getWengoDirectoryPath());
-	setPort(80);
+	setPort(443);
 	setWengoAuthentication(false);
 }
 

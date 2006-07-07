@@ -129,6 +129,24 @@ int get_local_http_proxy_port();
 NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port, int timeout);
 
 
+typedef enum {
+	proxyAuthUnknown,
+	proxyAuthBasic,
+	proxyAuthDigest,
+	proxyAuthNTLM
+}	EnumAuthType;
+
+/**
+ * Gets the proxy authentication type 
+ *
+ * @param proxy_addr IP address of the proxy we want to connect through
+ * @param proxy_port port of the proxy we want to connect through
+ * @param timeout in seconds
+ * @return proxy authentication type
+ */
+EnumAuthType get_proxy_auth_type(const char *proxy_addr, int proxy_port, int timeout);
+
+
 /**
  * Tries to authenticate with a proxy 
  *
