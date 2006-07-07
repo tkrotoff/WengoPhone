@@ -490,19 +490,21 @@ static void parse_device(ca_dev *cadev, const char *name) {
 	}
 
 	if ((input = strcasestr(buffer, IN_PREFIX))
-		&& (strlen(input) > strlen(IN_PREFIX))
 		&& (tmp = strchr(input + 3, ' '))) {
-			strncpy(cadev->inputID, input + 3, tmp - (input + 3));
-	} else {
+		strncpy(cadev->inputID, input + 3, tmp - (input + 3));
+	}
+
+	if (strlen(cadev->inputID) < 6) { /* 6 because minimum string can be: "1:0:2\0" */
 		memset(deviceId, 0, sizeof(deviceId));
 		defaultInputDevice(deviceId);
 		strncpy(cadev->inputID, deviceId, sizeof(cadev->inputID));
 	}
 
-	if ((output = strcasestr(buffer, OUT_PREFIX))
-		&& (strlen(output) > strlen(OUT_PREFIX))) {
+	if ((output = strcasestr(buffer, OUT_PREFIX))) {
 		strncpy(cadev->outputID, output + 4, strlen(output + 4));
-	} else {
+	}
+
+	if (strlen(cadev->outputID) < 6) {
 		memset(deviceId, 0, sizeof(deviceId));
 		defaultOutputDevice(deviceId);
 		strncpy(cadev->outputID, deviceId, sizeof(cadev->inputID));
