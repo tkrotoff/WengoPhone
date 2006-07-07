@@ -269,8 +269,6 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 		CContactList & cContactList = qtContactList->getCContactList();
 		QString contactId = QString::fromStdString(cContactList.findContactThatOwns(from));
 		QString senderDisplayName = getShortDisplayName(contactId,QString::fromStdString(from.getContactId()));
-		LOG_DEBUG("SENDER DISPLAY NAME :"+senderDisplayName.toStdString());
-
 		QString msg = QString::fromUtf8(message.c_str());
 
 		if (!_dialog->isVisible()) {
@@ -618,6 +616,7 @@ void QtChatWindow::statusChangedSlot(QString contactId) {
 						_tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/away.png")));
 						break;
 					default:
+						_tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/contact/chat.png")));
 						break;
 				}
 				break;

@@ -41,6 +41,8 @@ public:
 
 	QtChatRoomInviteDlg(IMChatSession & chatSession,ContactList & contactList, QWidget * parent = 0, Qt::WFlags f = 0);
 
+	QtChatRoomInviteDlg(IMChatSession & chatSession,CContactList & cContactList, QWidget * parent = 0, Qt::WFlags f = 0);
+
 	SelectedContact getSelectedContact() const;
 
 protected:

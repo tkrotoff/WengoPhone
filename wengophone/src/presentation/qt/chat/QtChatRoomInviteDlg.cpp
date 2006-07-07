@@ -32,6 +32,7 @@
 #include "QtChatRoomTreeWidgetItem.h"
 #include "QtChatRoomListWidgetItem.h"
 
+
 QtChatRoomInviteDlg::QtChatRoomInviteDlg(IMChatSession & chatSession, ContactList & contactList, QWidget * parent , Qt::WFlags f ) :
 QDialog(parent,f), _contactList(contactList), _chatSession(chatSession)
 {
@@ -43,6 +44,7 @@ QDialog(parent,f), _contactList(contactList), _chatSession(chatSession)
 
 	setupGui();
 }
+
 
 void QtChatRoomInviteDlg::setupGui() {
 
@@ -101,6 +103,8 @@ void QtChatRoomInviteDlg::removeFromConference() {
 	}
 }
 
+
+
 void QtChatRoomInviteDlg::fillContact() {
 	ContactList::ContactGroupSet groupList = _contactList.getContactGroupSet();
 	ContactList::ContactGroupSet::iterator it;
@@ -144,9 +148,4 @@ void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const ContactGroup 
 		item->setIcon(0,QIcon(QtContactPixmap::getInstance()->getPixmap(status)));
 		}
 	}
-}
-
-QtChatRoomInviteDlg::SelectedContact QtChatRoomInviteDlg::getSelectedContact() const {
-
-	return _selectedContact;
 }

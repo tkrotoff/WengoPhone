@@ -419,9 +419,7 @@ void QtChatWidget::updateContactListLabel() {
 			_qtContactInfo[nickName] = qtChatContactInfo;
 		}
 	}
-
 	_ui.contactListLabel->setToolTip(QString::null);
-
 	if (contactStringList.size() > 2) {
 		_ui.contactListLabel->show();
 		QString str = QString(tr("Chat with: "));
