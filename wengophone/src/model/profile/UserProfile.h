@@ -35,6 +35,7 @@
 
 #include <thread/Condition.h>
 #include <util/Event.h>
+#include <util/String.h>
 #include <util/Trackable.h>
 
 #include <list>
@@ -401,7 +402,7 @@ private:
 
 	// Inherited from Profile
 	virtual void setWengoPhoneId(const std::string & wengoPhoneId) {}
-	virtual std::string getWengoPhoneId() const {}
+	virtual std::string getWengoPhoneId() const { return String::null; }
 	////
 
 	/**
