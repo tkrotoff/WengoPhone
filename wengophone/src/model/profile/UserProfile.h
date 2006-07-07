@@ -399,6 +399,11 @@ public:
 
 private:
 
+	// Inherited from Profile
+	virtual void setWengoPhoneId(const std::string & wengoPhoneId) {}
+	virtual std::string getWengoPhoneId() const {}
+	////
+
 	/**
 	 * @see ConnectHandler::connectedEvent
 	 */

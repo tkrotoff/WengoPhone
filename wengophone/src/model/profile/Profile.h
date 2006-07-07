@@ -109,6 +109,9 @@ public:
 	virtual void setAlias(const std::string & alias) { _alias = alias; profileChangedEvent(*this); }
 	virtual std::string getAlias() const { return _alias; }
 
+	virtual void setWengoPhoneId(const std::string & wengoPhoneId) { _wengoPhoneId = wengoPhoneId; profileChangedEvent(*this); } 
+	virtual std::string getWengoPhoneId() const { return _wengoPhoneId; } 
+
 	virtual void setIcon(const Picture & icon) { _icon = icon; profileChangedEvent(*this); }
 	virtual Picture getIcon() const { return _icon; }
 
@@ -163,6 +166,8 @@ protected:
 	std::string _notes;
 
 	std::string _alias;
+
+	std::string _wengoPhoneId;
 
 	Picture _icon;
 };

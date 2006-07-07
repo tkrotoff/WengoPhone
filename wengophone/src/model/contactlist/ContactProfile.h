@@ -166,6 +166,13 @@ public:
 	std::string getFirstAvailableWengoId() const;
 
 	/**
+	 * Gets the first Wengo contact.
+	 *
+	 * @return the first available Wengo contact id.
+	 */
+	std::string getFirstWengoId() const;
+
+	/**
 	 * @return a display name computed from available Contact information.
 	 */
 	std::string getDisplayName() const;
@@ -211,6 +218,9 @@ public:
 protected:
 
 	// Inherited from Profile
+	// Used by WsDirectory
+	virtual void setWengoPhoneId(const std::string & wengoPhoneId);
+	////
 
 	/**
 	 * Sets the group of this ContactProfile.
@@ -225,8 +235,6 @@ protected:
 	 * @return the group name
 	 */
 	virtual std::string getGroup() const { return ""; }
-
-	////
 
 	/** Copy a ContactProfile. */
 	virtual void copy(const ContactProfile & contactProfile);

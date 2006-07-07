@@ -39,6 +39,12 @@ ProfileXMLSerializer::ProfileXMLSerializer(Profile & profile)
 string ProfileXMLSerializer::serialize() {
 	string result;
 
+	// Serializing Wengo ID 
+	if (!_profile._wengoPhoneId.empty()) { 
+		result += ("<wengoid>" + _profile._wengoPhoneId + "</wengoid>\n"); 
+	} 
+	//// 
+
 	// Serializing names
 	result += "<name>\n";
 	if (!_profile._firstName.empty()) {
@@ -137,6 +143,15 @@ bool ProfileXMLSerializer::unserialize(const std::string & data) {
 }
 
 bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
+	// Retrieving Wengo ID 
+	TiXmlNode * wengoPhoneId = rootElt.FirstChild("wengoid").FirstChild().Node(); 
+	if (wengoPhoneId) { 
+		// Here we need to call setWengoPhoneId because each class inherited
+		// from Profile handles the wengophone ID differently.
+		_profile.setWengoPhoneId(wengoPhoneId->Value());
+	}
+	//// 
+
 	// Retrieving names
 	TiXmlNode * firstName = rootElt.FirstChild("name").FirstChild("first").FirstChild().Node();
 	if (firstName) {

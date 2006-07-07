@@ -354,6 +354,21 @@ std::string ContactProfile::getFirstAvailableWengoId() const {
 	return result;
 }
 
+std::string ContactProfile::getFirstWengoId() const {
+	std::string result;
+
+	for (IMContactSet::const_iterator it = _imContactSet.begin();
+		it != _imContactSet.end();
+		++it) {
+		if (((*it).getProtocol() == EnumIMProtocol::IMProtocolWengo)) {
+			result = (*it).getContactId();
+			break;
+		}
+	}
+
+	return result;
+}
+
 bool ContactProfile::hasAvailableWengoId() const {
 	return (!getFirstAvailableWengoId().empty());
 }
@@ -372,4 +387,9 @@ std::string ContactProfile::getFirstFreePhoneNumber() const {
 
 bool ContactProfile::hasFreeCall() const {
 	return (!getFirstFreePhoneNumber().empty());
+}
+
+void ContactProfile::setWengoPhoneId(const std::string & wengoPhoneId) {
+	Profile::setWengoPhoneId(wengoPhoneId);
+	addIMContact(IMContact(EnumIMProtocol::IMProtocolWengo, wengoPhoneId));
 }
