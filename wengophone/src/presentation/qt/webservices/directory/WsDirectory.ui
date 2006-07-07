@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
-    <height>454</height>
+    <width>728</width>
+    <height>522</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -22,64 +22,51 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="1" column="0" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="0" column="1" >
-      <widget class="QComboBox" name="criteriaComboBox" >
-       <item>
-        <property name="text" >
-         <string>All</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Nickname</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>First Name</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Last Name</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>City</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Country</string>
-        </property>
-       </item>
-      </widget>
+   <item row="1" column="1" >
+    <widget class="QComboBox" name="criteriaComboBox" >
+     <item>
+      <property name="text" >
+       <string>All</string>
+      </property>
      </item>
-     <item row="0" column="0" >
-      <widget class="QLineEdit" name="searchLineEdit" />
+     <item>
+      <property name="text" >
+       <string>Nickname</string>
+      </property>
      </item>
-     <item row="0" column="2" >
-      <widget class="QPushButton" name="searchButton" >
-       <property name="text" >
-        <string>Search</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="../../wengophone.qrc" >:/pics/iconbar/search_contact.png</iconset>
-       </property>
-      </widget>
+     <item>
+      <property name="text" >
+       <string>First Name</string>
+      </property>
      </item>
-    </layout>
+     <item>
+      <property name="text" >
+       <string>Last Name</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>City</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Country</string>
+      </property>
+     </item>
+    </widget>
    </item>
-   <item row="0" column="0" >
+   <item row="1" column="2" >
+    <widget class="QPushButton" name="searchButton" >
+     <property name="text" >
+      <string>Search</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLineEdit" name="searchLineEdit" />
+   </item>
+   <item row="0" column="0" colspan="3" >
     <widget class="QLabel" name="searchLabel" >
      <property name="palette" >
       <palette>
@@ -346,18 +333,26 @@
        </disabled>
       </palette>
      </property>
-     <property name="text" >
-      <string>&lt;span style="font-size:18pt;">Search for Wengo contacts&lt;/span>&lt;br />&lt;br />&lt;span>Enter name, nickname, city or email and click the search button&lt;/span></string>
+     <property name="font" >
+      <font>
+       <family>MS Shell Dlg</family>
+       <pointsize>8</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
      </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter</set>
+     <property name="text" >
+      <string>&lt;span style="font-size:18pt;">Search for Wengo contacts&lt;/span>&lt;br />&lt;br />&lt;span>Enter a name, nickname, city, or email and click the search button&lt;/span></string>
      </property>
      <property name="indent" >
       <number>100</number>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" >
+   <item row="3" column="0" colspan="3" >
     <widget class="QListWidget" name="listWidget" >
      <property name="palette" >
       <palette>
@@ -625,7 +620,7 @@
       </palette>
      </property>
      <property name="autoFillBackground" >
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="frameShape" >
       <enum>QFrame::Panel</enum>
@@ -647,7 +642,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
+   <item row="2" column="0" colspan="3" >
     <widget class="QLabel" name="label_2" >
      <property name="text" >
       <string>When entering a combined search, please separate words with a blank.</string>
@@ -657,14 +652,6 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
- <tabstops>
-  <tabstop>searchLineEdit</tabstop>
-  <tabstop>criteriaComboBox</tabstop>
-  <tabstop>searchButton</tabstop>
-  <tabstop>listWidget</tabstop>
- </tabstops>
- <resources>
-  <include location="../../wengophone.qrc" />
- </resources>
+ <resources/>
  <connections/>
 </ui>
