@@ -200,6 +200,9 @@ void QtChatWindow::callContact(){
 		contactProfile = qtContactList->getCContactList().getContactProfile(contactId.toStdString());
 		ul = QtContactListManager::getInstance();
 		ul->startCall(contactId);
+		if (_qtWengoPhone->getWidget()->isMinimized()) {
+			_qtWengoPhone->getWidget()->showNormal();
+		}
 	}
 }
 
