@@ -149,6 +149,7 @@ QtChatWindow::QtChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSe
 void QtChatWindow::enableChatButton(){
 	_qtWengoPhone->setChatWindow( _dialog );
 }
+
 void QtChatWindow::createInviteFrame(){
 	_inviteFrame->setMaximumSize(QSize(10000,80));
 	_inviteFrame->setMinimumSize(QSize(16,80));
@@ -188,6 +189,7 @@ void QtChatWindow::createInviteFrame(){
 	layout->setSpacing(0);
 
 }
+
 void QtChatWindow::callContact(){
 	QtChatWidget * widget = dynamic_cast<QtChatWidget *> (_tabWidget->widget(_tabWidget->currentIndex()));
 	QString contactId;
@@ -226,6 +228,7 @@ void QtChatWindow::closeTab() {
 		_qtWengoPhone->setChatWindow(NULL);
 	}
 }
+
 void QtChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state) {
 	IMChat::TypingState * tmpState = new IMChat::TypingState;
 	*tmpState = state;

@@ -131,8 +131,6 @@ private:
 
 	int _flashCount;
 
-private:
-
 	void createInviteFrame();
 
 	void messageReceivedEventHandler(IMChatSession & sender);
