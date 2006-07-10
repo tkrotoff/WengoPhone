@@ -99,12 +99,12 @@ EXTLIB_RETURN=""
 
 findExtLib()
 {
-	if [ -r /sw/lib/$1 ] ; then
-		#echo found $1 in /sw/lib
-		EXTLIB_RETURN=/sw/lib/$1
-	elif [ -r /opt/local/lib/$1 ] ; then
+	if [ -r /opt/local/lib/$1 ] ; then
 		#echo found $1 in /opt/local/lib
 		EXTLIB_RETURN=/opt/local/lib/$1
+	elif [ -r /sw/lib/$1 ] ; then
+		#echo found $1 in /sw/lib
+		EXTLIB_RETURN=/sw/lib/$1
 	elif [ -r /usr/local/lib/$1 ] ; then
 		#echo found $1 in /usr/local/lib
 		EXTLIB_RETURN=/opt/local/lib/$1
@@ -169,7 +169,7 @@ cp $QTDIR/lib/QtSvg.framework/Versions/4.0/QtSvg $WENGO_FRAMEWORK_PATH/QtSvg.fra
 cp $QTDIR/lib/$LIBQTDESIGNER $WENGO_FRAMEWORK_PATH/$LIBQTDESIGNER
 
 CRYPT_LIBS="libgnutls.12.dylib libgcrypt.11.dylib libtasn1.2.dylib libpth.14.dylib libgpg-error.0.dylib"
-GLIB_LIBS="libgmodule-2.0.0.dylib $INTLLIB libiconv.2.dylib libglib-2.0.0.dylib libgthread-2.0.0.dylib"
+GLIB_LIBS="libgmodule-2.0.0.dylib $INTLLIB libintl.1.dylib libiconv.2.dylib libglib-2.0.0.dylib libgthread-2.0.0.dylib"
 for f in $CRYPT_LIBS $GLIB_LIBS
 do
 	findExtLib $f
@@ -216,6 +216,7 @@ changeInstallName $EXTLIB_RETURN "$WENGO_FRAMEWORK_PATH/libgmodule-2.0.0.dylib"
 changeInstallName $EXTLIB_RETURN "$WENGO_FRAMEWORK_PATH/libgthread-2.0.0.dylib"
 changeInstallName $EXTLIB_RETURN "$WENGO_FRAMEWORK_PATH/libglib-2.0.0.dylib"
 changeInstallName $EXTLIB_RETURN "$WENGO_FRAMEWORK_PATH/$INTLLIB"
+changeInstallName $EXTLIB_RETURN "$WENGO_FRAMEWORK_PATH/libintl.1.dylib"
 changeInstallName $EXTLIB_RETURN "$WENGO_FRAMEWORK_PATH/libgnutls.12.dylib"
 changeInstallName $EXTLIB_RETURN "$WENGO_FRAMEWORK_PATH/libgcrypt.11.dylib"
 changeInstallName $EXTLIB_RETURN "$WENGO_FRAMEWORK_PATH/libgpg-error.0.dylib"
