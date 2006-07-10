@@ -30,7 +30,7 @@ void PhoneCallStateClosed::execute(PhoneCall & phoneCall) {
 
 	//Call closed tonality
 	_soundCallClosed = new Sound(getSoundCallClosedFile());
-	_soundCallClosed->setWaveOutDevice(getRingerAudioDeviceId());
+	_soundCallClosed->setWaveOutDevice(getRingerAudioDevice());
 	//Play the sound 4 times
 	_soundCallClosed->setLoops(4);
 	_soundCallClosed->play();

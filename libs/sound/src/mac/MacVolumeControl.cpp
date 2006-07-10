@@ -25,8 +25,8 @@
 
 #include <CoreAudio/CoreAudio.h>
 
-MacVolumeControl::MacVolumeControl(AudioDevice audioDevice) 
-: VolumeControl() {
+MacVolumeControl::MacVolumeControl(const AudioDevice & audioDevice)
+	: VolumeControl() {
 	_audioDevice = audioDevice;
 }
 
@@ -38,7 +38,7 @@ int MacVolumeControl::getLevel() const {
 	MacAudioDevice * macAudioDevice = dynamic_cast<MacAudioDevice *>(_audioDevice.getAudioDevicePrivate());
 
 	size = sizeof(level);
-	status = AudioDeviceGetProperty(macAudioDevice->getAudioDeviceID(), 0, 
+	status = AudioDeviceGetProperty(macAudioDevice->getAudioDeviceID(), 0,
 		macAudioDevice->isInput(), kAudioDevicePropertyVolumeScalar, &size, &level);
 	if (status) {
 		LOG_ERROR("can't get device property: kAudioDevicePropertyVolumeScalar\n");
@@ -56,7 +56,7 @@ bool MacVolumeControl::setLevel(unsigned level) {
 	MacAudioDevice * macAudioDevice = dynamic_cast<MacAudioDevice *>(_audioDevice.getAudioDevicePrivate());
 
 	size = sizeof(fVolume);
-	status = AudioDeviceSetProperty(macAudioDevice->getAudioDeviceID(), 0, 0, 
+	status = AudioDeviceSetProperty(macAudioDevice->getAudioDeviceID(), 0, 0,
 		macAudioDevice->isInput(), kAudioDevicePropertyVolumeScalar, size, &fVolume);
 	if (status) {
 		LOG_ERROR("can't set device property: kAudioDevicePropertyVolumeScalar\n");

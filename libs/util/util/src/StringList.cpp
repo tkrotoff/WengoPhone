@@ -121,3 +121,17 @@ void StringList::removeDuplicatedStrings() {
 		}
 	}
 }
+
+std::string StringList::toString(const std::string & separator) {
+	std::string result;
+
+	for (const_iterator it = begin(); it != end(); ++it) {
+		if (it != begin()) {
+			result += separator;
+		}
+
+		result += *it;
+	}
+
+	return result;
+}

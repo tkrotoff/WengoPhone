@@ -19,8 +19,10 @@ sources = [
 if WengoOSWindows():
 	sources += [
 		'src/win32/Sound.cpp',
-		'src/win32/VolumeControl.cpp',
+		#'src/win32/VolumeControl.cpp',
 		'src/win32/Win32VolumeControl.cpp',
+		'src/win32/Win32AudioDevice.cpp',
+		'src/win32/EnumWin32DeviceType.cpp',
 		'src/win32/SoundThread.cpp',
 		'src/win32/playsound/SoundFile.cpp',
 		'src/win32/playsound/PlaySoundFile.cpp'
@@ -53,10 +55,11 @@ elif WengoOSMacOSX():
 
 	cc_flags += ['-x objective-c++']
 
-if WengoGetConsoleArgument('enable-libsound-portaudio') and WengoOSWindows():
-	sources += ['src/portaudio/AudioDeviceManager.cpp']
-	libs += ['portaudio']
-elif WengoOSWindows():
+#if WengoGetConsoleArgument('enable-libsound-portaudio') and WengoOSWindows():
+#	sources += ['src/portaudio/AudioDeviceManager.cpp']
+#	libs += ['portaudio']
+#elif WengoOSWindows():
+if WengoOSWindows():
 	sources += ['src/win32/AudioDeviceManager.cpp']
 
 env.WengoAddIncludePath(include_path)

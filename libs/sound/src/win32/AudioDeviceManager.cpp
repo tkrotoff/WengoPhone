@@ -17,10 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <sound/AudioDevice.h>
+#include <sound/AudioDeviceManager.h>
 
 #include "Win32VolumeControl.h"
+#include "EnumWin32DeviceType.h"
 
+#include <util/String.h>
 #include <util/StringList.h>
 
 #include <windows.h>
@@ -41,38 +43,60 @@ static const char * PLAYBACK_DEVICE_REGISTRY_KEY = "Playback";
 static const char * RECORD_DEVICE_REGISTRY_KEY = "Record";
 
 /**
+ * Default audio device ID under Windows.
+ */
+static const int DEFAULT_DEVICE_ID = 0;
+
+/**
+ * Gets the wave out of the given device name.
+ *
+ * @param deviceName the name of the device we want the id
+ * @return the id of the device. -1 if not found.
+ */
+static int getWaveOutDeviceId(const std::string & deviceName);
+
+/**
+ * Gets the wave in of the given device name.
+ *
+ * @param deviceName the name of the device we want the id
+ * @return the id of the device. -1 if not found.
+ */
+static int getWaveInDeviceId(const std::string & deviceName);
+
+/**
  * Sets the SetupPreferredAudioDevicesCount registry key.
  *
  * Part of setDefaultDevice()
  *
  * @return true if the registry key was changed, false otherwise
  */
-bool setSetupPreferredAudioDevicesCount() {
-	static const char * SETUPPREFERREDAUDIODEVICESCOUNT_REGISTRY_KEY = "SYSTEM\\CurrentControlSet\\Control\\MediaResources\\SetupPreferredAudioDevices\\";
+static bool setSetupPreferredAudioDevicesCount() {
+	static const char * SETUPPREFERREDAUDIODEVICESCOUNT_REGISTRY_KEY = 
+		"SYSTEM\\CurrentControlSet\\Control\\MediaResources\\SetupPreferredAudioDevices\\";
 	HKEY hKey;
 
 	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_LOCAL_MACHINE, SETUPPREFERREDAUDIODEVICESCOUNT_REGISTRY_KEY,
-						0, KEY_ALL_ACCESS, &hKey)) {
+		0, KEY_ALL_ACCESS, &hKey)) {
 
 		DWORD dwDataType = REG_DWORD;
 		DWORD dwSize = 4;
 		DWORD setupPreferredAudioDevicesCountKeyValue = 0;
 
 		if (ERROR_SUCCESS == ::RegQueryValueExA(hKey, "SetupPreferredAudioDevicesCount", 0, &dwDataType,
-							(BYTE *) &setupPreferredAudioDevicesCountKeyValue, &dwSize)) {
+			(BYTE *) &setupPreferredAudioDevicesCountKeyValue, &dwSize)) {
 
 			::RegCloseKey(hKey);
 
 			::RegOpenKeyExA(HKEY_CURRENT_USER, DEFAULT_PLAYBACK_DEVICE_REGISTRY_KEY,
-					0, KEY_ALL_ACCESS, &hKey);
+				0, KEY_ALL_ACCESS, &hKey);
 
 			DWORD dwDisposition;
 			::RegCreateKeyExA(HKEY_CURRENT_USER, DEFAULT_PLAYBACK_DEVICE_REGISTRY_KEY,
-					0, 0, REG_OPTION_NON_VOLATILE,
-					KEY_WRITE, 0, &hKey, &dwDisposition);
+				0, 0, REG_OPTION_NON_VOLATILE,
+				KEY_WRITE, 0, &hKey, &dwDisposition);
 
 			if (ERROR_SUCCESS == ::RegSetValueExA(hKey, "SetupPreferredAudioDevicesCount", 0,
-					dwDataType, (BYTE *) &setupPreferredAudioDevicesCountKeyValue, dwSize)) {
+				dwDataType, (BYTE *) &setupPreferredAudioDevicesCountKeyValue, dwSize)) {
 
 				::RegCloseKey(hKey);
 				return true;
@@ -96,27 +120,27 @@ bool setSetupPreferredAudioDevicesCount() {
  * @param registryKeyDeviceType registry key name, should be "Playback" or "Record"
  * @return true if the default audio device was changed, false if an error occured
  */
-bool setDefaultDeviceToRegistry(const std::string & deviceName, const std::string & registryKeyDeviceType) {
+static bool setDefaultDeviceToRegistry(const std::string & deviceName, const std::string & registryKeyDeviceType) {
 	HKEY hKey;
 	DWORD dwDisposition;
 	bool ret = false;	//Return value, false by default
 
 	::RegOpenKeyExA(HKEY_CURRENT_USER, DEFAULT_PLAYBACK_DEVICE_REGISTRY_KEY,
-			0, KEY_ALL_ACCESS, &hKey);
+		0, KEY_ALL_ACCESS, &hKey);
 	::RegCreateKeyExA(HKEY_CURRENT_USER, DEFAULT_PLAYBACK_DEVICE_REGISTRY_KEY,
-			0, 0, REG_OPTION_NON_VOLATILE,
-			KEY_WRITE, 0, &hKey, &dwDisposition);
+		0, 0, REG_OPTION_NON_VOLATILE,
+		KEY_WRITE, 0, &hKey, &dwDisposition);
 
 	if (ERROR_SUCCESS == ::RegSetValueExA(hKey, registryKeyDeviceType.c_str(), 0, REG_SZ,
-				(const BYTE *) deviceName.c_str(), deviceName.length())) {
+		(const BYTE *) deviceName.c_str(), deviceName.length())) {
 		ret = ret && true;
 	}
 	if (ERROR_SUCCESS == ::RegSetValueExA(hKey, "UserPlayback", 0, REG_SZ,
-				(const BYTE *) deviceName.c_str(), deviceName.length())) {
+		(const BYTE *) deviceName.c_str(), deviceName.length())) {
 		ret = ret && true;
 	}
 	if (ERROR_SUCCESS == ::RegSetValueExA(hKey, "UserRecord", 0, REG_SZ,
-				(const BYTE *) deviceName.c_str(), deviceName.length())) {
+		(const BYTE *) deviceName.c_str(), deviceName.length())) {
 		ret = ret && true;
 	}
 
@@ -145,19 +169,19 @@ bool setDefaultDeviceToRegistry(const std::string & deviceName, const std::strin
  * @param registryKeyDeviceType registry key name, should be "Playback" or "Record"
  * @return the default device from the registry key or null
  */
-std::string getDefaultDeviceFromRegistry(const std::string & registryKeyDeviceType) {
+static std::string getDefaultDeviceFromRegistry(const std::string & registryKeyDeviceType) {
 	HKEY hKey;
 
 	//Try to find the default audio device using the registry
 	if (ERROR_SUCCESS == ::RegOpenKeyExA(HKEY_CURRENT_USER, DEFAULT_PLAYBACK_DEVICE_REGISTRY_KEY,
-					0, KEY_QUERY_VALUE, &hKey)) {
+		0, KEY_QUERY_VALUE, &hKey)) {
 
 		DWORD dwDataType = REG_SZ;
 		DWORD dwSize = 255;
 		char * defaultDeviceKeyValue = (char *) malloc(dwSize * sizeof(char));
 
 		if (ERROR_SUCCESS == ::RegQueryValueExA(hKey, registryKeyDeviceType.c_str(), 0, &dwDataType,
-					(BYTE *) defaultDeviceKeyValue, &dwSize)) {
+			(BYTE *) defaultDeviceKeyValue, &dwSize)) {
 
 			::RegCloseKey(hKey);
 			return defaultDeviceKeyValue;
@@ -169,44 +193,52 @@ std::string getDefaultDeviceFromRegistry(const std::string & registryKeyDeviceTy
 	return String::null;
 }
 
-std::string AudioDevice::getDefaultPlaybackDevice() {
-	std::string defaultDevice(getDefaultDeviceFromRegistry(PLAYBACK_DEVICE_REGISTRY_KEY));
-	if (defaultDevice.empty()) {
+AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
+	std::string defaultDeviceName(getDefaultDeviceFromRegistry(PLAYBACK_DEVICE_REGISTRY_KEY));
+	if (defaultDeviceName.empty()) {
 		WAVEOUTCAPSA outcaps;
 
 		//We didn't find the default playback audio device using the registry
 		//Try using the device id = 0 => should be the default playback audio device
-		if (MMSYSERR_NOERROR == ::waveOutGetDevCapsA(0, &outcaps, sizeof(WAVEOUTCAPSA))) {
+		if (MMSYSERR_NOERROR == ::waveOutGetDevCapsA(DEFAULT_DEVICE_ID, &outcaps, sizeof(WAVEOUTCAPSA))) {
 			char * deviceName = strdup(outcaps.szPname);
-			return deviceName;
+			defaultDeviceName = deviceName;
 		}
 	}
 
-	return defaultDevice;
+	StringList data;
+	data += defaultDeviceName;
+	data += String::fromNumber(getWaveOutDeviceId(defaultDeviceName));
+	data += EnumWin32DeviceType::toString(EnumWin32DeviceType::Win32DeviceTypeMasterVolume);
+	return AudioDevice(data);
 }
 
-std::string AudioDevice::getDefaultRecordDevice() {
-	std::string defaultDevice(getDefaultDeviceFromRegistry(RECORD_DEVICE_REGISTRY_KEY));
-	if (defaultDevice.empty()) {
+AudioDevice AudioDeviceManager::getDefaultInputDevice() {
+	std::string defaultDeviceName(getDefaultDeviceFromRegistry(RECORD_DEVICE_REGISTRY_KEY));
+	if (defaultDeviceName.empty()) {
 		WAVEINCAPSA incaps;
 
 		//We didn't find the default record audio device using the registry
 		//Try using the device id = 0 => should be the default record audio device
-		if (MMSYSERR_NOERROR == ::waveInGetDevCapsA(0, &incaps, sizeof(WAVEINCAPSA))) {
+		if (MMSYSERR_NOERROR == ::waveInGetDevCapsA(DEFAULT_DEVICE_ID, &incaps, sizeof(WAVEINCAPSA))) {
 			char * deviceName = strdup(incaps.szPname);
-			return deviceName;
+			defaultDeviceName = deviceName;
 		}
 	}
 
-	return defaultDevice;
+	StringList data;
+	data += defaultDeviceName;
+	data += String::fromNumber(getWaveInDeviceId(defaultDeviceName));
+	data += EnumWin32DeviceType::toString(EnumWin32DeviceType::Win32DeviceTypeWaveIn);
+	return AudioDevice(data);
 }
 
-bool AudioDevice::setDefaultPlaybackDevice(const std::string & deviceName) {
-	return setDefaultDeviceToRegistry(deviceName, PLAYBACK_DEVICE_REGISTRY_KEY);
+bool AudioDeviceManager::setDefaultOutputDevice(const AudioDevice & audioDevice) {
+	return setDefaultDeviceToRegistry(audioDevice.getName(), PLAYBACK_DEVICE_REGISTRY_KEY);
 }
 
-bool AudioDevice::setDefaultRecordDevice(const std::string & deviceName) {
-	return setDefaultDeviceToRegistry(deviceName, RECORD_DEVICE_REGISTRY_KEY);
+bool AudioDeviceManager::setDefaultInputDevice(const AudioDevice & audioDevice) {
+	return setDefaultDeviceToRegistry(audioDevice.getName(), RECORD_DEVICE_REGISTRY_KEY);
 }
 
 StringList getMixerDeviceList(DWORD targetType) {
@@ -251,15 +283,7 @@ StringList getMixerDeviceList(DWORD targetType) {
 	return listDevices;
 }
 
-std::list<std::string> AudioDevice::getOutputMixerDeviceList() {
-	return getMixerDeviceList(MIXERLINE_TARGETTYPE_WAVEOUT);
-}
-
-std::list<std::string> AudioDevice::getInputMixerDeviceList() {
-	return getMixerDeviceList(MIXERLINE_TARGETTYPE_WAVEIN);
-}
-
-int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {
+int getWaveOutDeviceId(const std::string & deviceName) {
 	unsigned nbDevices = ::waveOutGetNumDevs();
 	if (nbDevices == 0) {
 		//No audio device are present
@@ -280,7 +304,7 @@ int AudioDevice::getWaveOutDeviceId(const std::string & deviceName) {
 	return 0;
 }
 
-int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
+int getWaveInDeviceId(const std::string & deviceName) {
 	unsigned nbDevices = ::waveInGetNumDevs();
 	if (nbDevices == 0) {
 		//No audio device are present
@@ -301,7 +325,40 @@ int AudioDevice::getWaveInDeviceId(const std::string & deviceName) {
 	return 0;
 }
 
-int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
+std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
+	std::list<AudioDevice> listDevices;
+	StringList devices = getMixerDeviceList(MIXERLINE_TARGETTYPE_WAVEOUT);
+	for (unsigned i = 0; i < devices.size(); i++) {
+		StringList data;
+		data += devices[i];
+		data += String::fromNumber(getWaveOutDeviceId(devices[i]));
+		data += EnumWin32DeviceType::toString(EnumWin32DeviceType::Win32DeviceTypeMasterVolume);
+		listDevices.push_back(AudioDevice(data));
+	}
+
+	return listDevices;
+}
+
+std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
+	std::list<AudioDevice> listDevices;
+	StringList devices = getMixerDeviceList(MIXERLINE_TARGETTYPE_WAVEIN);
+	for (unsigned i = 0; i < devices.size(); i++) {
+		StringList data;
+		data += devices[i];
+		data += String::fromNumber(getWaveInDeviceId(devices[i]));
+		data += EnumWin32DeviceType::toString(EnumWin32DeviceType::Win32DeviceTypeWaveIn);
+		listDevices.push_back(AudioDevice(data));
+	}
+
+	return listDevices;
+}
+
+
+
+/* FIXME old code */
+
+/*
+int getMixerDeviceId(const std::string & mixerName) {
 	unsigned nbMixers = ::mixerGetNumDevs();
 	if (nbMixers == 0) {
 		//No audio mixer device are present
@@ -320,9 +377,9 @@ int AudioDevice::getMixerDeviceId(const std::string & mixerName) {
 
 	//Default deviceId is 0
 	return 0;
-}
-
-bool AudioDevice::selectAsRecordDevice(const std::string & deviceName, TypeInput typeInput) {
+}*/
+/*
+bool selectAsRecordDevice(const std::string & deviceName, TypeInput typeInput) {
 	int deviceId = getMixerDeviceId(deviceName);
 	Win32VolumeControl * volumeControl = NULL;
 	if (typeInput == TypeInputMicrophone) {
@@ -340,6 +397,7 @@ bool AudioDevice::selectAsRecordDevice(const std::string & deviceName, TypeInput
 	return volumeControl->selectAsRecordDevice();
 }
 
-AudioDevice::TypeInput AudioDevice::getSelectedRecordDevice(const std::string & deviceName) {
+AudioDevice::TypeInput getSelectedRecordDevice(const std::string & deviceName) {
 	return TypeInputError;
 }
+*/

@@ -30,7 +30,7 @@
 class MacVolumeControl : public VolumeControl {
 public:
 
-	MacVolumeControl(AudioDevice audioDevice);
+	MacVolumeControl(const AudioDevice & audioDevice);
 
 	bool setLevel(unsigned level);
 

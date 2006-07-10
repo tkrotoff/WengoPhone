@@ -35,8 +35,8 @@ SoundThread::SoundThread(const std::string & filename) {
 SoundThread::~SoundThread() {
 }
 
-bool SoundThread::setWaveOutDevice(const std::string & deviceName) {
-	_deviceName = deviceName;
+bool SoundThread::setWaveOutDevice(const AudioDevice & device) {
+	_device = device;
 	return true;
 }
 
@@ -49,7 +49,7 @@ void SoundThread::play() {
 }
 
 void SoundThread::run() {
-	_soundFile.setWaveOutDevice(_deviceName);
+	_soundFile.setWaveOutDevice(_device);
 
 	int i = 0;
 	while ((i < _loops || _loops == -1) && !_stop) {

@@ -41,52 +41,21 @@ public:
 	 * @param audioDevice the AudioDevice we want to set the volume
 	 * It it copied internally.
 	 */
-	VolumeControl(AudioDevice audioDevice);
+	VolumeControl(const AudioDevice & audioDevice);
 
-	/**
-	 * Sets the audio device volume level.
-	 *
-	 * @param level new audio device volume (0 to 100)
-	 * @return true if the volume has been changed; false otherwise
-	 */
-	virtual bool setLevel(unsigned level);
+	bool setLevel(unsigned level);
 
-	/**
-	 * Gets the audio device volume level.
-	 *
-	 * @return the audio device volume (0 to 100); -1 if an error occured
-	 */
-	virtual int getLevel() const;
+	int getLevel();
 
-	/**
-	 * Mute or unmute the audio device.
-	 *
-	 * @param mute mute state of the audio device
-	 * @return true if the mute state has been changed; false otherwise
-	 */
-	virtual bool setMute(bool mute);
+	bool setMute(bool mute);
 
-	/**
-	 * Gets the mute state of the audio device.
-	 *
-	 * @return true if the audio device is now muted; false otherwise
-	 */
-	virtual bool isMuted() const;
+	bool isMuted();
 
-	/**
-	 * @return true if the volume is settable on this device
-	 */
-	virtual bool isSettable() const;
-
-protected:
-
-	VolumeControl();
-
-	AudioDevice _audioDevice;
+	bool isSettable() const;
 
 private:
 
-	/** System dependent implementation. */
+	/** System dependant implementation. */
 	IVolumeControl * _iVolumeControlPrivate;
 };
 

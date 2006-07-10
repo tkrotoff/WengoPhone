@@ -129,7 +129,7 @@ bool PlaySoundFile::play(const std::string & filename) {
 
 	//Opens output audio wave device
 	HANDLE hDoneEvent = CreateEventA(NULL, FALSE, FALSE, "DONE_EVENT");
-	if (!openWaveOutDevice(&_hWaveOut, _audioDeviceName.c_str(), soundFile->getFormat(), hDoneEvent)) {
+	if (!openWaveOutDevice(&_hWaveOut, _audioDevice.getData()[0].c_str(), soundFile->getFormat(), hDoneEvent)) {
 		LOG_ERROR("can't open wave out device");
 		return false;
 	}

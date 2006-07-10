@@ -442,35 +442,37 @@ void PhApiWrapper::videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * 
 	_callbacks->videoFrameReceived(callId, info);
 }
 
-bool PhApiWrapper::setCallInputAudioDevice(const std::string & deviceId) {
-	_inputAudioDeviceId = deviceId;
+bool PhApiWrapper::setCallInputAudioDevice(const AudioDevice & device) {
+	_inputAudioDevice = device;
 	return setAudioDevices();
 }
 
-bool PhApiWrapper::setRingerOutputAudioDevice(const std::string & deviceId) {
+bool PhApiWrapper::setRingerOutputAudioDevice(const AudioDevice & device) {
 	return false;
 }
 
-bool PhApiWrapper::setCallOutputAudioDevice(const std::string & deviceId) {
-	_outputAudioDeviceId = deviceId;
+bool PhApiWrapper::setCallOutputAudioDevice(const AudioDevice & device) {
+	_outputAudioDevice = device;
 	return setAudioDevices();
 }
 
 bool PhApiWrapper::setAudioDevices() {
-
 	static const std::string OUTPUT_DEVICE_TAG  = "OUT=";
+	std::string devices;
 
 #ifdef OS_MACOSX
 	static const std::string INPUT_DEVICE_TAG = "ca:IN=";
+	devices = INPUT_DEVICE_TAG
+		+ _inputAudioDevice.toString(":")
+		+ std::string(" ") + OUTPUT_DEVICE_TAG
+		+ _outputAudioDevice.toString(":");
 #else
 	static const std::string INPUT_DEVICE_TAG = "pa:IN=";
+	devices = INPUT_DEVICE_TAG
+		+ _inputAudioDevice.getId()[1]
+		+ std::string(" ") + OUTPUT_DEVICE_TAG
+		+ _outputAudioDevice.getId()[1];
 #endif
-
-	std::string devices = INPUT_DEVICE_TAG
-		+ _inputAudioDeviceId
-		+ std::string(" ")
-		+ OUTPUT_DEVICE_TAG
-		+ _outputAudioDeviceId;
 
 	int ret = phChangeAudioDevices(devices.c_str());
 	if (ret == 0) {

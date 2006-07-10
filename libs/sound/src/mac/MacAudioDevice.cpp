@@ -22,22 +22,23 @@
 #include "CoreAudioUtilities.h"
 
 #include <util/Logger.h>
-#include <util/String.h>
 
 const std::string MacAudioDevice::SEPARATOR = ":";
 
-MacAudioDevice::MacAudioDevice(const std::string & deviceId) 
-: AudioDevice() {
+MacAudioDevice::MacAudioDevice(const std::string & deviceId)
+	: AudioDevice() {
 	unserialize(deviceId);
 }
 
-MacAudioDevice::MacAudioDevice(AudioDeviceID audioDeviceID, UInt32 dataSourceID, bool isInput) {
+MacAudioDevice::MacAudioDevice(AudioDeviceID audioDeviceID, UInt32 dataSourceID, bool isInput)
+	: AudioDevice() {
 	_audioDeviceID = audioDeviceID;
 	_dataSourceID = dataSourceID;
 	_isInput = isInput;
 }
 
-MacAudioDevice::MacAudioDevice(AudioDeviceID audioDeviceID, bool isInput) {
+MacAudioDevice::MacAudioDevice(AudioDeviceID audioDeviceID, bool isInput)
+	: AudioDevice() {
 	_audioDeviceID = audioDeviceID;
 	_dataSourceID = 0;
 	_isInput = isInput;
@@ -82,7 +83,7 @@ void MacAudioDevice::unserialize(const std::string & data) {
 			LOG_ERROR("unserialization error: cannot get data source id");
 		}
 	} else {
-		LOG_ERROR("unserialization error: cannot get device id");	
+		LOG_ERROR("unserialization error: cannot get device id");
 	}
 }
 
@@ -94,6 +95,6 @@ std::string MacAudioDevice::serialize() const {
 	result += String::fromNumber(_dataSourceID);
 	result += SEPARATOR;
 	result += String::fromNumber(_isInput);
-	
+
 	return result;
 }

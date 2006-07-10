@@ -20,7 +20,8 @@
 #ifndef OWAUDIODEVICE_H
 #define OWAUDIODEVICE_H
 
-#include <string>
+#include <util/NonCopyable.h>
+#include <util/StringList.h>
 
 /**
  * Identifies a part of an audio device.
@@ -28,18 +29,18 @@
  *
  * @author Philippe Bernery
  */
-class AudioDevice {
+class AudioDevice : NonCopyable {
 public:
+
+	static AudioDevice null;
 
 	/**
 	 * Constructs an AudioDevice from a string identifying uniquely a
 	 * sound device.
 	 *
-	 * @param deviceId the device ID. e.g: on MacOS X this will a list of
-	 * integer with the following scheme: "deviceId:dataSource:isInput"
-	 * @see getId for more information.
+	 * @param data @see getData for more info
 	 */
-	AudioDevice(const std::string & deviceId, const std::string deviceName = "");
+	AudioDevice(const StringList & data);
 
 	AudioDevice();
 
@@ -49,14 +50,29 @@ public:
 
 	virtual ~AudioDevice();
 
+	/**
+	 * Gets a human readable string representing this audio device.
+	 */
 	virtual std::string getName() const;
 
-	virtual std::string getId() const;
+	/**
+	 * Gets data that describe the device.
+	 *
+	 * This is system-dependent.
+	 */
+	virtual StringList getData() const;
 
-	/** Gets the system dependent implementation. */
-	AudioDevice * getAudioDevicePrivate() const { return _audioDevicePrivate; }
+protected:
+
+	/**
+	 * System dependent id.
+	 */
+	StringList _data;
 
 private:
+
+	/** Updates _audioDevicePrivate. */
+	void updateAudioDevicePrivate(const StringList & deviceId);
 
 	/** System-dependent implementation. */
 	AudioDevice * _audioDevicePrivate;

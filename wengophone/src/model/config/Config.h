@@ -136,15 +136,15 @@ public:
 
 	/** Playback audio device name. */
 	static const std::string AUDIO_OUTPUT_DEVICEID_KEY;
-	std::string getAudioOutputDeviceId() const;
+	StringList getAudioOutputDeviceId() const;
 
 	/** Record audio device name. */
 	static const std::string AUDIO_INPUT_DEVICEID_KEY;
-	std::string getAudioInputDeviceId() const;
+	StringList getAudioInputDeviceId() const;
 
 	/** Ringer audio device name. */
 	static const std::string AUDIO_RINGER_DEVICEID_KEY;
-	std::string getAudioRingerDeviceId() const;
+	StringList getAudioRingerDeviceId() const;
 
 	/** Ringing/incoming call/ringtone audio file name. */
 	static const std::string AUDIO_INCOMINGCALL_FILE_KEY;

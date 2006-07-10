@@ -17,12 +17,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WIN32VOLUMECONTROL_H
-#define WIN32VOLUMECONTROL_H
+#ifndef OWWIN32VOLUMECONTROL_H
+#define OWWIN32VOLUMECONTROL_H
 
 #include <sound/IVolumeControl.h>
+#include <sound/AudioDevice.h>
 
-#include <sound/SoundMixerException.h>
+#include "EnumWin32DeviceType.h"
 
 #include <windows.h>
 
@@ -41,38 +42,13 @@ class Win32VolumeControl : public IVolumeControl {
 public:
 
 	/**
-	 * Kind of audio mixer device to deal with.
-	 */
-	enum Win32DeviceType {
-		//MIXERLINE_COMPONENTTYPE_DST_SPEAKERS
-		Win32DeviceTypeMasterVolume,
-
-		//MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT
-		Win32DeviceTypeWaveOut,
-
-		//MIXERLINE_COMPONENTTYPE_DST_WAVEIN
-		Win32DeviceTypeWaveIn,
-
-		//MIXERLINE_COMPONENTTYPE_SRC_COMPACTDISC
-		Win32DeviceTypeCDOut,
-
-		//MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE
-		Win32DeviceTypeMicrophoneOut,
-
-		//MIXERLINE_COMPONENTTYPE_DST_WAVEIN + MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE
-		Win32DeviceTypeMicrophoneIn
-	};
-
-	/**
 	 * Constructs a Win32VolumeControl object.
 	 *
-	 * @param deviceId Windows audio device id, id of a sound card
-	 * @param deviceType the kind of audio mixer device to manipulate
-	 * @throw SoundMixerException if a error occured while trying to configure the audio mixer device
+	 * @param audioDevice Windows audio device
 	 */
-	Win32VolumeControl(unsigned deviceId, Win32DeviceType deviceType) throw (SoundMixerException);
+	Win32VolumeControl(const AudioDevice & audioDevice);
 
-	virtual ~Win32VolumeControl();
+	~Win32VolumeControl();
 
 	bool setLevel(unsigned level);
 
@@ -82,7 +58,9 @@ public:
 
 	bool isMuted();
 
-	bool close();
+	bool isSettable() const {
+		return _isSettable;
+	}
 
 	/**
 	 * Selects the audio device + input type as the record device.
@@ -100,6 +78,8 @@ public:
 
 private:
 
+	bool close();
+
 	/**
 	 * Inits the audio mixer device.
 	 *
@@ -107,7 +87,7 @@ private:
 	 * @param deviceType the kind of audio mixer device to manipulate
 	 * @return the win32 error code
 	 */
-	MMRESULT initVolumeControl(unsigned int deviceId, Win32DeviceType deviceType);
+	MMRESULT initVolumeControl(unsigned int deviceId, EnumWin32DeviceType::Win32DeviceType deviceType);
 
 	/**
 	 * Creates the mixer line.
@@ -151,6 +131,8 @@ private:
 	 * The MIXERLINECONTROLS structure contains information about the controls of an audio line.
 	 */
 	MIXERLINECONTROLSA _mxlc;
+
+	bool _isSettable;
 };
 
-#endif	//WIN32VOLUMECONTROL_H
+#endif	//OWWIN32VOLUMECONTROL_H

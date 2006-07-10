@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,52 +17,28 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SOUND_H
-#define SOUND_H
+#ifndef OWWIN32AUDIODEVICE_H
+#define OWWIN32AUDIODEVICE_H
 
 #include <sound/AudioDevice.h>
-#include <sound/ISound.h>
-
-#include <string>
 
 /**
- * Sound implementation.
+ * Windows implementation of AudioDevice.
  *
- * @see ISound
+ * _data[0] = deviceName
+ * _data[1] = deviceId
+ * _data[2] = deviceType
+ *
  * @author Tanguy Krotoff
  */
-class Sound : public ISound {
+class Win32AudioDevice : public AudioDevice {
 public:
 
-	/**
-	 * Constructs a Sound that can quickly play the sound in a file named filename.
-	 *
-	 * @param filename sound file
-	 */
-	Sound(const std::string & filename);
+	Win32AudioDevice(const StringList & deviceId);
 
-	virtual ~Sound();
+	std::string getName() const;
 
-	void setLoops(int loops);
-
-	bool setWaveOutDevice(const AudioDevice & device );
-
-	/**
-	 * Plays the sound in a file called filename.
-	 *
-	 * @param filename sound file
-	 * @param deviceName wave out audio device name
-	 */
-	static void play(const std::string & filename, const AudioDevice & device = AudioDevice::null);
-
-	void play();
-
-	void stop();
-
-private:
-
-	/** System-dependant implementation. */
-	ISound * _soundPrivate;
+	StringList getData() const;
 };
 
-#endif	//SOUND_H
+#endif	//OWWIN32AUDIODEVICE_H

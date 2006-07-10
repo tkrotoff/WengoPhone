@@ -81,10 +81,10 @@ void QtAudioSettings::readConfig() {
 		it != inputDeviceList.end();
 		++it) {
 		_ui->inputDeviceComboBox->addItem(QString::fromUtf8((*it).getName().c_str()), 
-			QString::fromStdString((*it).getId()));
+			QString::fromStdString((*it).getData().toString()));
 	}
 
-	QString currentInputDeviceId = QString::fromUtf8(config.getAudioInputDeviceId().c_str());
+		QString currentInputDeviceId = QString::fromUtf8(config.getAudioInputDeviceId().toString().c_str());
 	_ui->inputDeviceComboBox->setCurrentIndex(_ui->inputDeviceComboBox->findData(currentInputDeviceId));
 	////
 
@@ -96,10 +96,10 @@ void QtAudioSettings::readConfig() {
 		it != outputDeviceList.end();
 		++it) {
 		_ui->outputDeviceComboBox->addItem(QString::fromUtf8((*it).getName().c_str()),
-			QString::fromStdString((*it).getId()));
+			QString::fromStdString((*it).getData().toString()));
 	}
 
-	QString currentOutputDeviceId = QString::fromUtf8(config.getAudioOutputDeviceId().c_str());
+	QString currentOutputDeviceId = QString::fromUtf8(config.getAudioOutputDeviceId().toString().c_str());
 	_ui->outputDeviceComboBox->setCurrentIndex(_ui->outputDeviceComboBox->findData(currentOutputDeviceId));
 	////
 
@@ -110,10 +110,10 @@ void QtAudioSettings::readConfig() {
 		it != outputDeviceList.end();
 		++it) {
 		_ui->ringingDeviceComboBox->addItem(QString::fromUtf8((*it).getName().c_str()),
-			QString::fromStdString((*it).getId()));
+			QString::fromStdString((*it).getData().toString()));
 	}
 
-	QString currentRingerDeviceId = QString::fromUtf8(config.getAudioRingerDeviceId().c_str());
+	QString currentRingerDeviceId = QString::fromUtf8(config.getAudioRingerDeviceId().toString().c_str());
 	_ui->ringingDeviceComboBox->setCurrentIndex(_ui->ringingDeviceComboBox->findData(currentRingerDeviceId));
 	////
 }

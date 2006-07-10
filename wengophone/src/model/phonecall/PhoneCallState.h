@@ -22,6 +22,9 @@
 
 #include <sipwrapper/EnumPhoneCallState.h>
 
+#include <sound/AudioDevice.h>
+#include <util/StringList.h>
+
 class PhoneCall;
 class Sound;
 
@@ -55,7 +58,7 @@ public:
 
 protected:
 
-	static std::string getRingerAudioDeviceId();
+	static AudioDevice getRingerAudioDevice();
 
 	static std::string getSoundIncomingCallFile();
 

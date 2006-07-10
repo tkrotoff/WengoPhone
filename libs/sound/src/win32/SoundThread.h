@@ -22,6 +22,7 @@
 
 #include <sound/ISound.h>
 
+#include <sound/AudioDevice.h>
 #include <thread/Thread.h>
 
 #include "playsound/PlaySoundFile.h"
@@ -51,7 +52,7 @@ public:
 
 	void setLoops(int loops);
 
-	bool setWaveOutDevice(const std::string & deviceName);
+	bool setWaveOutDevice(const AudioDevice & device);
 
 	void play();
 
@@ -74,7 +75,7 @@ private:
 	/**
 	 * Wave out audio device name.
 	 */
-	std::string _deviceName;
+	AudioDevice _device;
 
 	/**
 	 * Number of time the sound has to be played, -1 for infinite

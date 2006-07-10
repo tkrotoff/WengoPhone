@@ -22,67 +22,36 @@
 #include <cutil/global.h>
 
 #if defined(OS_WINDOWS)
-#include "win32/WinAudioDevice.h"
+	#include "win32/Win32AudioDevice.h"
 #elif defined(OS_MACOSX)
-#include "mac/MacAudioDevice.h"
+	#include "mac/MacAudioDevice.h"
 #elif defined(OS_LINUX)
-#include "portaudio/PAAudioDevice.h"
-#endif // OS_LINUX
+	#include "portaudio/PAAudioDevice.h"
+#else
+	#error This OS has not been tested
+#endif
+
+AudioDevice AudioDevice::null;
+
+AudioDevice::AudioDevice(const StringList & data) {
+	_audioDevicePrivate = NULL;
+	updateAudioDevicePrivate(data);
+}
 
 AudioDevice::AudioDevice() {
 	_audioDevicePrivate = NULL;
 }
 
-AudioDevice::AudioDevice(const std::string & deviceId, const std::string deviceName) {
-#if defined(OS_WINDOWS)
-	_audioDevicePrivate = new WinAudioDevice(deviceId);
-#elif defined(OS_MACOSX)
-	_audioDevicePrivate = new MacAudioDevice(deviceId);
-#elif defined(OS_LINUX)
-	_audioDevicePrivate = new PAAudioDevice(deviceId, deviceName);
-#else
-	_audioDevicePrivate = NULL;
-#endif
-
-}
-
 AudioDevice::AudioDevice(const AudioDevice & audioDevice) {
-	if (audioDevice.getAudioDevicePrivate()) {
-#if defined(OS_WINDOWS)
-		_audioDevicePrivate = new WinAudioDevice(audioDevice.getAudioDevicePrivate()->getId());
-#elif defined(OS_MACOSX)
-		_audioDevicePrivate = new MacAudioDevice(audioDevice.getAudioDevicePrivate()->getId());
-#elif defined(OS_LINUX)
-		_audioDevicePrivate = new PAAudioDevice(
-			audioDevice.getAudioDevicePrivate()->getId(),
-			audioDevice.getAudioDevicePrivate()->getName());
-#else
-		_audioDevicePrivate = NULL;
-#endif
-	} else {
-		_audioDevicePrivate = NULL;
+	_audioDevicePrivate = NULL;
+	if (audioDevice._audioDevicePrivate) {
+		updateAudioDevicePrivate(audioDevice._audioDevicePrivate->getData());
 	}
 }
 
 AudioDevice & AudioDevice::operator = (const AudioDevice & audioDevice) {
-	if (_audioDevicePrivate) {
-		delete _audioDevicePrivate;
-	}
-
-	if (audioDevice.getAudioDevicePrivate()) {
-#if defined(OS_WINDOWS)
-		_audioDevicePrivate = new WinAudioDevice(audioDevice.getAudioDevicePrivate()->getId());
-#elif defined(OS_MACOSX)
-		_audioDevicePrivate = new MacAudioDevice(audioDevice.getAudioDevicePrivate()->getId());
-#elif defined(OS_LINUX)
-		_audioDevicePrivate = new PAAudioDevice(
-			audioDevice.getAudioDevicePrivate()->getId(),
-			audioDevice.getAudioDevicePrivate()->getName());
-#else
-		_audioDevicePrivate = NULL;
-#endif
-	} else {
-		_audioDevicePrivate = NULL;
+	if (audioDevice._audioDevicePrivate) {
+		updateAudioDevicePrivate(audioDevice._audioDevicePrivate->getData());
 	}
 
 	return *this;
@@ -91,7 +60,23 @@ AudioDevice & AudioDevice::operator = (const AudioDevice & audioDevice) {
 AudioDevice::~AudioDevice() {
 	if (_audioDevicePrivate) {
 		delete _audioDevicePrivate;
+		_audioDevicePrivate = NULL;
 	}
+}
+
+void AudioDevice::updateAudioDevicePrivate(const StringList & data) {
+	if (_audioDevicePrivate) {
+		delete _audioDevicePrivate;
+		_audioDevicePrivate = NULL;
+	}
+
+#if defined(OS_WINDOWS)
+		_audioDevicePrivate = new Win32AudioDevice(data);
+#elif defined(OS_MACOSX)
+		_audioDevicePrivate = new MacAudioDevice(data);
+#elif defined(OS_LINUX)
+		_audioDevicePrivate = new PAAudioDevice(data);
+#endif
 }
 
 std::string AudioDevice::getName() const {
@@ -104,11 +89,11 @@ std::string AudioDevice::getName() const {
 	return result;
 }
 
-std::string AudioDevice::getId() const {
-	std::string result;
+StringList AudioDevice::getData() const {
+	StringList result;
 
 	if (_audioDevicePrivate) {
-		result = _audioDevicePrivate->getId();
+		result = _audioDevicePrivate->getData();
 	}
 
 	return result;

@@ -25,7 +25,7 @@
 #include <CoreAudio/CoreAudio.h>
 
 /**
- * MacOS X implementation of IAudioDevice
+ * MacOS X implementation of AudioDevice.
  *
  * @author Philippe Bernery
  */
@@ -43,11 +43,11 @@ public:
 
 	MacAudioDevice(AudioDeviceID audioDeviceID, bool isInput);
 
-	virtual ~MacAudioDevice();
+	~MacAudioDevice();
 
-	virtual std::string getName() const;
+	std::string getName() const;
 
-	virtual std::string getId() const;
+	std::string getId() const;
 
 	AudioDeviceID getAudioDeviceID() const { return _audioDeviceID; }
 
@@ -73,4 +73,4 @@ private:
 	Boolean _isInput;
 };
 
-#endif //OWMACAUDIODEVICE_H
+#endif	//OWMACAUDIODEVICE_H

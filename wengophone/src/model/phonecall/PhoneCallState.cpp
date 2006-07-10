@@ -58,7 +58,7 @@ std::string PhoneCallState::getSoundCallClosedFile() {
 	return config.getAudioCallClosedFile();
 }
 
-std::string PhoneCallState::getRingerAudioDeviceId() {
+AudioDevice PhoneCallState::getRingerAudioDevice() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	return config.getAudioRingerDeviceId();
+	return AudioDevice(config.getAudioRingerDeviceId());
 }

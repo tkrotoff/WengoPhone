@@ -22,30 +22,23 @@
 #include <cutil/global.h>
 
 #if defined(OS_WINDOWS)
-#include "win32/WinVolumeControl.h"
+	#include "win32/Win32VolumeControl.h"
 #elif defined(OS_MACOSX)
-#include "mac/MacVolumeControl.h"
+	#include "mac/MacVolumeControl.h"
 #elif defined(OS_LINUX)
-#include "portaudio/PAVolumeControl.h"
-#endif // OS_LINUX
+	#include "portaudio/PAVolumeControl.h"
+#else
+	#error This OS has not been tested
+#endif
 
-VolumeControl::VolumeControl() {
-	_iVolumeControlPrivate = NULL;
-}
-
-VolumeControl::VolumeControl(AudioDevice audioDevice) {
-	_audioDevice = audioDevice;
-
+VolumeControl::VolumeControl(const AudioDevice & audioDevice) {
 #if defined(OS_WINDOWS)
-	_iVolumeControlPrivate = new WinVolumeControl(audioDevice);
+	_iVolumeControlPrivate = new Win32VolumeControl(audioDevice);
 #elif defined(OS_MACOSX)
 	_iVolumeControlPrivate = new MacVolumeControl(audioDevice);
 #elif defined(OS_LINUX)
 	_iVolumeControlPrivate = new PAVolumeControl(audioDevice);
-#else
-	_iVolumeControlPrivate = NULL;
 #endif
-
 }
 
 bool VolumeControl::setLevel(unsigned level) {
@@ -56,7 +49,7 @@ bool VolumeControl::setLevel(unsigned level) {
 	}
 }
 
-int VolumeControl::getLevel() const {
+int VolumeControl::getLevel() {
 	if (_iVolumeControlPrivate) {
 		return _iVolumeControlPrivate->getLevel();
 	} else {
@@ -72,7 +65,7 @@ bool VolumeControl::setMute(bool mute) {
 	}
 }
 
-bool VolumeControl::isMuted() const {
+bool VolumeControl::isMuted() {
 	if (_iVolumeControlPrivate) {
 		return _iVolumeControlPrivate->isMuted();
 	} else {

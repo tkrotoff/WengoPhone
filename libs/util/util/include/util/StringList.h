@@ -40,6 +40,8 @@
 class StringList : public List<std::string> {
 public:
 
+	static StringList null;
+
 	StringList();
 
 	/**
@@ -121,6 +123,15 @@ public:
 	 * Removes duplicated strings if any.
 	 */
 	void removeDuplicatedStrings();
+
+	/**
+	 * Constructs a single string from every string 
+	 * contained in this StringList.
+	 *
+	 * @param separator the separator used to constructs the string
+	 * @return the resulting string
+	 */
+	std::string toString(const std::string & separator = " ");
 
 private:
 

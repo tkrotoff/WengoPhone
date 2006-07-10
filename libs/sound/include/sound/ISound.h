@@ -22,7 +22,7 @@
 
 #include <util/Interface.h>
 
-#include <string>
+class AudioDevice;
 
 /**
  * Reimplementation of QSound from Qt.
@@ -48,12 +48,12 @@ public:
 	virtual void setLoops(int loops) = 0;
 
 	/**
-	 * Sets the wave out audio device given its id.
+	 * Sets the wave out audio device.
 	 *
-	 * @param deviceId wave out audio device id
+	 * @param device wave out audio device
 	 * @return true if the device was changed; false otherwise
 	 */
-	virtual bool setWaveOutDevice(const std::string & deviceId) = 0;
+	virtual bool setWaveOutDevice(const AudioDevice & device) = 0;
 
 	/**
 	 * Plays the sound.

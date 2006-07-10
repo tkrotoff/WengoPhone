@@ -17,37 +17,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <sound/Sound.h>
+#include "Win32AudioDevice.h"
 
-#include "SoundThread.h"
+#include <util/Logger.h>
 
-Sound::Sound(const std::string & filename) {
-	_soundPrivate = new SoundThread(filename);
+Win32AudioDevice::Win32AudioDevice(const StringList & data)
+	: AudioDevice() {
+
+	_data = data;
 }
 
-Sound::~Sound() {
-	stop();
-	delete _soundPrivate;
+std::string Win32AudioDevice::getName() const {
+	return _data[0];
 }
 
-void Sound::setLoops(int loops) {
-	_soundPrivate->setLoops(loops);
-}
-
-bool Sound::setWaveOutDevice(const AudioDevice & device) {
-	return _soundPrivate->setWaveOutDevice(device);
-}
-
-void Sound::stop() {
-	_soundPrivate->stop();
-}
-
-void Sound::play() {
-	_soundPrivate->play();
-}
-
-void Sound::play(const std::string & filename, const AudioDevice & device) {
-	SoundThread * soundThread = new SoundThread(filename);
-	soundThread->setWaveOutDevice(device);
-	soundThread->play();
+StringList Win32AudioDevice::getData() const {
+	return _data;
 }

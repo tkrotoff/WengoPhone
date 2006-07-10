@@ -31,6 +31,7 @@
 #include <imwrapper/IMPresence.h>
 #include <imwrapper/IMChatSession.h>
 
+#include <sound/AudioDevice.h>
 #include <thread/Mutex.h>
 #include <thread/Timer.h>
 #include <util/Event.h>
@@ -126,11 +127,11 @@ public:
 
 	void setVideoDevice(const std::string & deviceName);
 
-	bool setCallInputAudioDevice(const std::string & deviceId);
+	bool setCallInputAudioDevice(const AudioDevice & device);
 
-	bool setRingerOutputAudioDevice(const std::string & deviceId);
+	bool setRingerOutputAudioDevice(const AudioDevice & device);
 
-	bool setCallOutputAudioDevice(const std::string & deviceId);
+	bool setCallOutputAudioDevice(const AudioDevice & device);
 
 	void enableAEC(bool enable);
 
@@ -291,7 +292,7 @@ private:
 
 	//FIXME ugly for call conference
 	void phoneCallStateChangedEventHandler(SipWrapper & sender, int callId,
-			EnumPhoneCallState::PhoneCallState state, const std::string & from);
+		EnumPhoneCallState::PhoneCallState state, const std::string & from);
 
 	static PhApiCallbacks * _callbacks;
 
@@ -313,11 +314,11 @@ private:
 	/** Last note for my presence. */
 	std::string _lastNote;
 
-	/** Playback audio device id. */
-	std::string _outputAudioDeviceId;
+	/** Playback audio device. */
+	AudioDevice _outputAudioDevice;
 
-	/** Record audio device id. */
-	std::string _inputAudioDeviceId;
+	/** Record audio device. */
+	AudioDevice _inputAudioDevice;
 
 	std::map<int, IMChatSession *> _messageIdChatSessionMap;
 

@@ -109,7 +109,6 @@ void QtConfigPanel::enableWenboxCheckBoxToggled(bool checked) {
 	config.set(Config::WENBOX_ENABLE_KEY, checked);
 }
 
-
 void QtConfigPanel::halfDuplexCheckBoxToggled(bool checked) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.set(Config::AUDIO_HALFDUPLEX_KEY, checked);

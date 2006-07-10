@@ -232,9 +232,9 @@ void WenboxPlugin::switchCurrentAudioDeviceToWenbox() {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	//Changes audio settings
-	config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY, defaultOutputDevice.getId());
-	config.set(Config::AUDIO_INPUT_DEVICEID_KEY, defaultOutputDevice.getId());
-	config.set(Config::AUDIO_RINGER_DEVICEID_KEY, defaultOutputDevice.getId());
+	config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY, defaultOutputDevice.getData());
+	config.set(Config::AUDIO_INPUT_DEVICEID_KEY, defaultOutputDevice.getData());
+	config.set(Config::AUDIO_RINGER_DEVICEID_KEY, defaultOutputDevice.getData());
 }
 
 void WenboxPlugin::switchCurrentAudioDeviceToSoundCard() {

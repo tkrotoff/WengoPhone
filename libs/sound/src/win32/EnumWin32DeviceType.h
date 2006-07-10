@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,54 +17,44 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PLAYSOUNDFILE_H
-#define PLAYSOUNDFILE_H
+#ifndef OWENUMWIN32DEVICETYPE_H
+#define OWENUMWIN32DEVICETYPE_H
 
 #include <util/NonCopyable.h>
-
-#include <sound/AudioDevice.h>
 
 #include <string>
 
 /**
- * Plays a sound file on a specific audio device.
+ * Kind of audio mixer device to deal with.
  *
  * @author Tanguy Krotoff
  */
-class PlaySoundFile : NonCopyable {
+class EnumWin32DeviceType : NonCopyable {
 public:
 
-	PlaySoundFile();
+	enum Win32DeviceType {
+		//MIXERLINE_COMPONENTTYPE_DST_SPEAKERS
+		Win32DeviceTypeMasterVolume,
 
-	~PlaySoundFile();
+		//MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT
+		Win32DeviceTypeWaveOut,
 
-	/**
-	 * Sets the wave out device.
-	 *
-	 * If the device audio cannot be opened, opens the default one.
-	 *
-	 * @param deviceName name of the wave out device
-	 */
-	void setWaveOutDevice(const AudioDevice & device) {
-		_audioDevice = device;
-	}
+		//MIXERLINE_COMPONENTTYPE_DST_WAVEIN
+		Win32DeviceTypeWaveIn,
 
-	/**
-	 * Plays a wave sound file given its name.
-	 *
-	 * @param filename name of the wave file to play
-	 * @return true if the sound file was played correctly; false otherwise
-	 */
-	bool play(const std::string & filename);
+		//MIXERLINE_COMPONENTTYPE_SRC_COMPACTDISC
+		Win32DeviceTypeCDOut,
 
-	/**
-	 * Stops playing immediately the sound file.
-	 */
-	void stop();
+		//MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE
+		Win32DeviceTypeMicrophoneOut,
 
-private:
+		//MIXERLINE_COMPONENTTYPE_DST_WAVEIN + MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE
+		Win32DeviceTypeMicrophoneIn
+	};
 
-	AudioDevice _audioDevice;
+	static std::string toString(Win32DeviceType deviceType);
+
+	static Win32DeviceType toDeviceType(const std::string & deviceType);
 };
 
-#endif	//PLAYSOUNDFILE_H
+#endif	//OWENUMWIN32DEVICETYPE_H

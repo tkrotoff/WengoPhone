@@ -19,22 +19,47 @@
 
 #include "Win32VolumeControl.h"
 
+#include "EnumWin32DeviceType.h"
+
 #include <util/Logger.h>
 
 static const unsigned MAXIMUM_VOLUME_LEVEL_DEFINED_BY_USER = 100;
 
-Win32VolumeControl::Win32VolumeControl(unsigned deviceId, Win32DeviceType deviceType) throw (SoundMixerException) {
+Win32VolumeControl::Win32VolumeControl(const AudioDevice & audioDevice) {
+
+	std::string deviceName = audioDevice.getData()[0];
+	String deviceId = audioDevice.getData()[1];
+	EnumWin32DeviceType::Win32DeviceType deviceType = EnumWin32DeviceType::toDeviceType(audioDevice.getData()[2]);
+
 	_hMixer = NULL;
-	MMRESULT mr = initVolumeControl(deviceId, deviceType);
+	MMRESULT mr = initVolumeControl(deviceId.toInteger(), deviceType);
 	if (mr != MMSYSERR_NOERROR) {
-		throw SoundMixerException("Error while opening the mixer", mr);
+		if (deviceType == EnumWin32DeviceType::Win32DeviceTypeWaveIn) {
+			deviceType = EnumWin32DeviceType::Win32DeviceTypeMicrophoneIn;
+			MMRESULT mr = initVolumeControl(deviceId.toInteger(), deviceType);
+			if (mr != MMSYSERR_NOERROR) {
+				_isSettable = false;
+				_hMixer = NULL;
+			} else {
+				_isSettable = true;
+			}
+		}
+		_isSettable = false;
+		_hMixer = NULL;
+	} else {
+		_isSettable = true;
 	}
 }
 
 Win32VolumeControl::~Win32VolumeControl() {
+	close();
 }
 
 int Win32VolumeControl::getLevel() {
+	if (!_isSettable) {
+		return 0;
+	}
+
 	static const unsigned MINIMUM_VOLUME_LEVEL = _mxc.Bounds.dwMinimum;
 	static const unsigned MAXIMUM_VOLUME_LEVEL  = _mxc.Bounds.dwMaximum;
 
@@ -54,17 +79,21 @@ int Win32VolumeControl::getLevel() {
 	mxcd.paDetails = &mxcdVolume;
 
 	mr = ::mixerGetControlDetailsA((HMIXEROBJ) _hMixer, &mxcd,
-					MIXER_OBJECTF_HMIXER | MIXER_GETCONTROLDETAILSF_VALUE);
+		MIXER_OBJECTF_HMIXER | MIXER_GETCONTROLDETAILSF_VALUE);
 	if (mr != MMSYSERR_NOERROR) {
 		LOG_ERROR("couldn't get the volume level, mixerGetControlDetailsA() failed");
 		return -1;
 	}
 
-	return (int) (( (float) ((mxcdVolume.dwValue - MINIMUM_VOLUME_LEVEL) * MAXIMUM_VOLUME_LEVEL_DEFINED_BY_USER) /
-			(float) (MAXIMUM_VOLUME_LEVEL - MINIMUM_VOLUME_LEVEL)) + 0.5);
+	return (int) (((float) ((mxcdVolume.dwValue - MINIMUM_VOLUME_LEVEL) * MAXIMUM_VOLUME_LEVEL_DEFINED_BY_USER) /
+		(float) (MAXIMUM_VOLUME_LEVEL - MINIMUM_VOLUME_LEVEL)) + 0.5);
 }
 
 bool Win32VolumeControl::setLevel(unsigned level) {
+	if (!_isSettable) {
+		return false;
+	}
+
 	static const unsigned MINIMUM_VOLUME_LEVEL = _mxc.Bounds.dwMinimum;
 	static const unsigned MAXIMUM_VOLUME_LEVEL  = _mxc.Bounds.dwMaximum;
 
@@ -85,15 +114,20 @@ bool Win32VolumeControl::setLevel(unsigned level) {
 	mxcd.paDetails = &mxcdVolume;
 
 	mr = ::mixerSetControlDetails((HMIXEROBJ) _hMixer, &mxcd,
-				MIXER_OBJECTF_HMIXER | MIXER_SETCONTROLDETAILSF_VALUE);
+		MIXER_OBJECTF_HMIXER | MIXER_SETCONTROLDETAILSF_VALUE);
 	if (mr != MMSYSERR_NOERROR) {
 		LOG_ERROR("couldn't set the volume level, mixerSetControlDetails() failed");
 		return false;
 	}
+
 	return true;
 }
 
 bool Win32VolumeControl::setMute(bool mute) {
+	if (!_isSettable) {
+		return false;
+	}
+
 	MMRESULT mr = createMixerControl(MIXERCONTROL_CONTROLTYPE_MUTE);
 	if (mr != MMSYSERR_NOERROR) {
 		return false;
@@ -116,10 +150,15 @@ bool Win32VolumeControl::setMute(bool mute) {
 		LOG_ERROR("couldn't mute/unmute the audio device, mixerSetControlDetails() failed");
 		return false;
 	}
+
 	return true;
 }
 
 bool Win32VolumeControl::isMuted() {
+	if (!_isSettable) {
+		return false;
+	}
+
 	MMRESULT mr = createMixerControl(MIXERCONTROL_CONTROLTYPE_MUTE);
 	if (mr != MMSYSERR_NOERROR) {
 		return false;
@@ -141,10 +180,15 @@ bool Win32VolumeControl::isMuted() {
 		LOG_ERROR("couldn't get if the audio device is mute/unmute, mixerGetControlDetailsA() failed");
 		return false;
 	}
+
 	return mxcbMute.fValue;
 }
 
 bool Win32VolumeControl::selectAsRecordDevice() {
+	if (!_isSettable) {
+		return false;
+	}
+
 	MMRESULT mr = createMixerControl(MIXERCONTROL_CONTROLTYPE_MUX);
 	if (mr != MMSYSERR_NOERROR) {
 		return false;
@@ -167,10 +211,15 @@ bool Win32VolumeControl::selectAsRecordDevice() {
 		LOG_ERROR("couldn't select the audio device as the record device, mixerSetControlDetails() failed");
 		return false;
 	}
+
 	return true;
 }
 
 bool Win32VolumeControl::isSelectedAsRecordDevice() {
+	if (!_isSettable) {
+		return false;
+	}
+
 	MMRESULT mr = createMixerControl(MIXERCONTROL_CONTROLTYPE_MUX);
 	if (mr != MMSYSERR_NOERROR) {
 		return false;
@@ -187,15 +236,20 @@ bool Win32VolumeControl::isSelectedAsRecordDevice() {
 	mxcd.paDetails = &mxcbSelect;
 
 	mr = ::mixerGetControlDetailsA((HMIXEROBJ) _hMixer, &mxcd,
-				MIXER_OBJECTF_HMIXER | MIXER_SETCONTROLDETAILSF_VALUE);
+		MIXER_OBJECTF_HMIXER | MIXER_SETCONTROLDETAILSF_VALUE);
 	if (mr != MMSYSERR_NOERROR) {
 		LOG_ERROR("couldn't select the audio device as the record device, mixerSetControlDetails() failed");
 		return false;
 	}
+
 	return mxcbSelect.fValue;
 }
 
 bool Win32VolumeControl::close() {
+	if (!_isSettable) {
+		return false;
+	}
+
 	if (_hMixer) {
 		MMRESULT mr = ::mixerClose(_hMixer);
 		if (mr != MMSYSERR_NOERROR) {
@@ -204,10 +258,11 @@ bool Win32VolumeControl::close() {
 		}
 		return true;
 	}
+
 	return false;
 }
 
-MMRESULT Win32VolumeControl::initVolumeControl(unsigned deviceId, Win32DeviceType deviceType) {
+MMRESULT Win32VolumeControl::initVolumeControl(unsigned deviceId, EnumWin32DeviceType::Win32DeviceType deviceType) {
 	MMRESULT mr = ::mixerOpen(&_hMixer, deviceId, NULL, NULL, MIXER_OBJECTF_MIXER);
 	if (mr != MMSYSERR_NOERROR) {
 		_hMixer = NULL;
@@ -221,39 +276,39 @@ MMRESULT Win32VolumeControl::initVolumeControl(unsigned deviceId, Win32DeviceTyp
 	}
 
 	LOG_DEBUG("manufacturer's name for the mixer=" +
-			std::string(mxcaps.szPname) + " " +
-			String::fromNumber(mxcaps.wMid) + " " +
-			String::fromNumber(mxcaps.wPid));
+		std::string(mxcaps.szPname) + " " +
+		String::fromNumber(mxcaps.wMid) + " " +
+		String::fromNumber(mxcaps.wPid));
 
 	DWORD dwComponentType;
 
 	switch (deviceType) {
-	case Win32DeviceTypeWaveOut:
+	case EnumWin32DeviceType::Win32DeviceTypeWaveOut:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT;
 		break;
 
-	case Win32DeviceTypeWaveIn:
+	case EnumWin32DeviceType::Win32DeviceTypeWaveIn:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_DST_WAVEIN;
 		break;
 
-	case Win32DeviceTypeCDOut:
+	case EnumWin32DeviceType::Win32DeviceTypeCDOut:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_SRC_COMPACTDISC;
 		break;
 
-	case Win32DeviceTypeMicrophoneOut:
+	case EnumWin32DeviceType::Win32DeviceTypeMicrophoneOut:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE;
 		break;
 
-	case Win32DeviceTypeMicrophoneIn:
+	case EnumWin32DeviceType::Win32DeviceTypeMicrophoneIn:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_DST_WAVEIN;
 		break;
 
-	case Win32DeviceTypeMasterVolume:
+	case EnumWin32DeviceType::Win32DeviceTypeMasterVolume:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_DST_SPEAKERS;
 		break;
 
 	default:
-		LOG_FATAL("unknow device type=" + String::fromNumber(deviceType));
+		LOG_FATAL("unknow device type=" + EnumWin32DeviceType::toString(deviceType));
 	}
 
 	mr = createMixerLine(dwComponentType);
@@ -263,7 +318,7 @@ MMRESULT Win32VolumeControl::initVolumeControl(unsigned deviceId, Win32DeviceTyp
 
 	//For microphone in, we first look for the wave in mixer
 	//and then for the microphone
-	if (deviceType == Win32DeviceTypeMicrophoneIn) {
+	if (deviceType == EnumWin32DeviceType::Win32DeviceTypeMicrophoneIn) {
 		mr = createSecondMixerLine(MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE);
 		if (mr != MMSYSERR_NOERROR) {
 			return mr;
@@ -277,7 +332,7 @@ MMRESULT Win32VolumeControl::initVolumeControl(unsigned deviceId, Win32DeviceTyp
 	}
 
 	LOG_DEBUG("destination line name=" + std::string(_mxl.szName) +
-			" volume controller name=" + std::string(_mxc.szName));
+		" volume controller name=" + std::string(_mxc.szName));
 
 	//Everything went fine
 	return mr;
@@ -288,10 +343,11 @@ MMRESULT Win32VolumeControl::createMixerLine(DWORD dwComponentType) {
 	_mxl.dwComponentType = dwComponentType;
 
 	MMRESULT mr = ::mixerGetLineInfoA((HMIXEROBJ) _hMixer, &_mxl,
-				MIXER_OBJECTF_HMIXER | MIXER_GETLINEINFOF_COMPONENTTYPE);
+		MIXER_OBJECTF_HMIXER | MIXER_GETLINEINFOF_COMPONENTTYPE);
 	if (mr != MMSYSERR_NOERROR) {
 		LOG_ERROR("mixerGetLineInfoA() failed using dwComponentType=" + String::fromNumber(dwComponentType));
 	}
+
 	return mr;
 }
 
@@ -312,9 +368,11 @@ MMRESULT Win32VolumeControl::createSecondMixerLine(DWORD dwComponentType) {
 			break;
 		}
 	}
+
 	if (mr != MMSYSERR_NOERROR) {
 		LOG_ERROR("mixerGetLineInfoA() failed using dwComponentType=" + String::fromNumber(dwComponentType));
 	}
+
 	return mr;
 }
 
@@ -333,9 +391,10 @@ MMRESULT Win32VolumeControl::createMixerControl(DWORD dwControlType) {
 	_mxlc.pamxctrl = &_mxc;
 
 	MMRESULT mr = ::mixerGetLineControlsA((HMIXEROBJ) _hMixer, &_mxlc,
-					MIXER_OBJECTF_HMIXER | MIXER_GETLINECONTROLSF_ONEBYTYPE);
+		MIXER_OBJECTF_HMIXER | MIXER_GETLINECONTROLSF_ONEBYTYPE);
 	if (mr != MMSYSERR_NOERROR) {
 		LOG_ERROR("mixerGetLineControlsA() failed using dwControType=" + String::fromNumber(dwControlType));
 	}
+
 	return mr;
 }

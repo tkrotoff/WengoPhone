@@ -37,6 +37,7 @@
 #include <sipwrapper/SipWrapperFactory.h>
 #include <sipwrapper/EnumNatType.h>
 
+#include <sound/AudioDevice.h>
 #include <util/Logger.h>
 
 #include <string>
@@ -491,9 +492,9 @@ void PhoneLine::configureSipWrapper() {
 	_sipWrapper->setVideoQuality((EnumVideoQuality::VideoQuality) config.getVideoQuality());
 
 	//Setting audio devices
-	_sipWrapper->setCallOutputAudioDevice(config.getAudioOutputDeviceId());
-	_sipWrapper->setCallInputAudioDevice(config.getAudioInputDeviceId());
-	_sipWrapper->setRingerOutputAudioDevice(config.getAudioRingerDeviceId());
+	_sipWrapper->setCallOutputAudioDevice(AudioDevice(config.getAudioOutputDeviceId()));
+	_sipWrapper->setCallInputAudioDevice(AudioDevice(config.getAudioInputDeviceId()));
+	_sipWrapper->setRingerOutputAudioDevice(AudioDevice(config.getAudioRingerDeviceId()));
 
 	//AEC + half duplex
 	_sipWrapper->enableAEC(config.getAudioAEC());

@@ -34,6 +34,7 @@
 
 #include <pixertool/pixertool.h>
 
+class AudioDevice;
 class WebcamVideoFrame;
 
 /**
@@ -358,26 +359,26 @@ public:
 	/**
 	 * Sets the call input device (in-call microphone).
 	 *
-	 * @param deviceName call input device id
+	 * @param device input device
 	 * @return true if no error, false otherwise
 	 */
-	virtual bool setCallInputAudioDevice(const std::string & deviceId) = 0;
+	virtual bool setCallInputAudioDevice(const AudioDevice & device) = 0;
 
 	/**
 	 * Sets the call ringer/alerting device.
 	 *
-	 * @param deviceName call ringer device id
+	 * @param device ringer device
 	 * @return true if no error, false otherwise
 	 */
-	virtual bool setRingerOutputAudioDevice(const std::string & deviceId) = 0;
+	virtual bool setRingerOutputAudioDevice(const AudioDevice & device) = 0;
 
 	/**
 	 * Sets the call output device (in-call speaker).
 	 *
-	 * @param deviceName call output device id
+	 * @param device output device
 	 * @return true if no error, false otherwise
 	 */
-	virtual bool setCallOutputAudioDevice(const std::string & deviceId) = 0;
+	virtual bool setCallOutputAudioDevice(const AudioDevice & device) = 0;
 
 	/**
 	 * Enables or disables Acoustic Echo Cancellation (AEC).

@@ -49,7 +49,7 @@ public:
 	 *
 	 * @return the audio device volume (0 to 100); -1 if an error occured
 	 */
-	virtual int getLevel() const = 0;
+	virtual int getLevel() /*const*/ = 0;
 
 	/**
 	 * Mute or unmute the audio device.
@@ -64,7 +64,7 @@ public:
 	 *
 	 * @return true if the audio device is now muted; false otherwise
 	 */
-	virtual bool isMuted() const = 0;
+	virtual bool isMuted() /*const*/ = 0;
 
 	/**
 	 * @return true if the volume is settable on this device
