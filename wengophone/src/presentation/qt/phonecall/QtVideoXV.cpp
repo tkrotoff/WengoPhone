@@ -76,13 +76,13 @@ QtVideoXV::QtVideoXV(QWidget * parent,
 }
 
 QtVideoXV::~QtVideoXV() {
-	if (_remoteWindow) {
-		_remoteWindow->registerSlave(NULL);
-		delete _remoteWindow;
-	}
 	if (_localWindow) {
 		_localWindow->registerMaster(NULL);
 		delete _localWindow;
+	}
+	if (_remoteWindow) {
+		_remoteWindow->registerSlave(NULL);
+		delete _remoteWindow;
 	}
 }
 
