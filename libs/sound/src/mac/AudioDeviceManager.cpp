@@ -37,12 +37,12 @@ std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
 				dsIt != dsList.end();
 				++dsIt) {
 				MacAudioDevice macAudioDevice(*devIt, *dsIt, true);
-				AudioDevice audioDevice(macAudioDevice.getId());
+				AudioDevice audioDevice(macAudioDevice.getData());
 				result.push_back(audioDevice);
 			}
 		} else {
 			MacAudioDevice macAudioDevice(*devIt, true);
-			AudioDevice audioDevice(macAudioDevice.getId());
+			AudioDevice audioDevice(macAudioDevice.getData());
 			result.push_back(audioDevice);
 		}
 	}
@@ -63,12 +63,12 @@ std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
 				dsIt != dsList.end();
 				++dsIt) {
 				MacAudioDevice macAudioDevice(*devIt, *dsIt, false);
-				AudioDevice audioDevice(macAudioDevice.getId());
+				AudioDevice audioDevice(macAudioDevice.getData());
 				result.push_back(audioDevice);
 			}
 		} else {
 			MacAudioDevice macAudioDevice(*devIt, false);
-			AudioDevice audioDevice(macAudioDevice.getId());
+			AudioDevice audioDevice(macAudioDevice.getData());
 			result.push_back(audioDevice);
 		}
 	}
@@ -97,7 +97,7 @@ AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
 	}
 
 	MacAudioDevice macAudioDevice(deviceId, dataSourceId, false);
-	result = AudioDevice(macAudioDevice.getId());
+	result = AudioDevice(macAudioDevice.getData());
 
 	return result;
 }
@@ -105,10 +105,8 @@ AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
 bool AudioDeviceManager::setDefaultOutputDevice(const AudioDevice & audioDevice) {
 	OSStatus status = noErr;
 
-	MacAudioDevice * macAudioDevice = dynamic_cast<MacAudioDevice *>(audioDevice.getAudioDevicePrivate());
-
 	// Setting the device
-	AudioDeviceID deviceId = macAudioDevice->getAudioDeviceID();
+	AudioDeviceID deviceId = String(audioDevice.getData()[0]).toInteger();
 	UInt32 size = sizeof(AudioDeviceID);
 	status = AudioHardwareSetProperty(kAudioHardwarePropertyDefaultOutputDevice, size, &deviceId);
 	if (status) {
@@ -118,7 +116,7 @@ bool AudioDeviceManager::setDefaultOutputDevice(const AudioDevice & audioDevice)
 	////
 
 	// Setting the data source
-	UInt32 dataSourceId = macAudioDevice->getDataSourceID();
+	UInt32 dataSourceId = String(audioDevice.getData()[1]).toInteger();
 	size = sizeof(UInt32);
 	status = AudioDeviceSetProperty(deviceId, NULL, 0, 0, kAudioDevicePropertyDataSource, size, &dataSourceId);
 	if (status) {
@@ -151,7 +149,7 @@ AudioDevice AudioDeviceManager::getDefaultInputDevice() {
 	}
 
 	MacAudioDevice macAudioDevice(deviceId, dataSourceId, true);
-	result = AudioDevice(macAudioDevice.getId());
+	result = AudioDevice(macAudioDevice.getData());
 
 	return result;
 }
@@ -159,10 +157,8 @@ AudioDevice AudioDeviceManager::getDefaultInputDevice() {
 bool AudioDeviceManager::setDefaultInputDevice(const AudioDevice & audioDevice) {
 	OSStatus status = noErr;
 
-	MacAudioDevice * macAudioDevice = dynamic_cast<MacAudioDevice *>(audioDevice.getAudioDevicePrivate());
-
 	// Setting the device
-	AudioDeviceID deviceId = macAudioDevice->getAudioDeviceID();
+	AudioDeviceID deviceId = String(audioDevice.getData()[0]).toInteger();
 	UInt32 size = sizeof(AudioDeviceID);
 	status = AudioHardwareSetProperty(kAudioHardwarePropertyDefaultInputDevice, size, &deviceId);
 	if (status) {
@@ -172,7 +168,7 @@ bool AudioDeviceManager::setDefaultInputDevice(const AudioDevice & audioDevice) 
 	////
 
 	// Setting the data source
-	UInt32 dataSourceId = macAudioDevice->getDataSourceID();
+	UInt32 dataSourceId = String(audioDevice.getData()[2]).toInteger();
 	size = sizeof(UInt32);
 	status = AudioDeviceSetProperty(deviceId, NULL, 0, 1, kAudioDevicePropertyDataSource, size, &dataSourceId);
 	if (status) {

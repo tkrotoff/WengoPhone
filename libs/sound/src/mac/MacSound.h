@@ -89,7 +89,7 @@ public:
 
 	void setLoops(int loops);
 
-	bool setWaveOutDevice(const std::string & deviceId);
+	virtual bool setWaveOutDevice(const AudioDevice & device);
 
 	void play();
 

@@ -21,27 +21,26 @@
 
 #include "CoreAudioUtilities.h"
 
-#include <util/Logger.h>
+#include <util/String.h>
 
-const std::string MacAudioDevice::SEPARATOR = ":";
-
-MacAudioDevice::MacAudioDevice(const std::string & deviceId)
+MacAudioDevice::MacAudioDevice(const StringList & data)
 	: AudioDevice() {
-	unserialize(deviceId);
+
+	_data = data;
 }
 
 MacAudioDevice::MacAudioDevice(AudioDeviceID audioDeviceID, UInt32 dataSourceID, bool isInput)
 	: AudioDevice() {
-	_audioDeviceID = audioDeviceID;
-	_dataSourceID = dataSourceID;
-	_isInput = isInput;
+	_data += String::fromNumber(audioDeviceID);
+	_data += String::fromNumber(dataSourceID);
+	_data += String::fromNumber(isInput);
 }
 
 MacAudioDevice::MacAudioDevice(AudioDeviceID audioDeviceID, bool isInput)
 	: AudioDevice() {
-	_audioDeviceID = audioDeviceID;
-	_dataSourceID = 0;
-	_isInput = isInput;
+	_data += String::fromNumber(audioDeviceID);
+	_data += String::fromNumber(0);
+	_data += String::fromNumber(isInput);
 }
 
 MacAudioDevice::~MacAudioDevice() {
@@ -50,10 +49,14 @@ MacAudioDevice::~MacAudioDevice() {
 std::string MacAudioDevice::getName() const {
 	std::string result;
 
-	std::string deviceName = CoreAudioUtilities::audioDeviceName(_audioDeviceID, _isInput);
+	AudioDeviceID audioDeviceId = String(_data[0]).toInteger();
+	UInt32 dataSourceId = String(_data[1]).toInteger();
+	Boolean isInput = String(_data[2]).toInteger();
 
-	if (_dataSourceID != 0) {
-		std::string dataSourceName = CoreAudioUtilities::dataSourceName(_audioDeviceID, _isInput, _dataSourceID);
+	std::string deviceName = CoreAudioUtilities::audioDeviceName(audioDeviceId, isInput);
+
+	if (dataSourceId != 0) {
+		std::string dataSourceName = CoreAudioUtilities::dataSourceName(audioDeviceId, isInput, dataSourceId);
 		result = deviceName + " - " + dataSourceName;
 	} else {
 		result = deviceName;
@@ -62,39 +65,6 @@ std::string MacAudioDevice::getName() const {
 	return result;
 }
 
-std::string MacAudioDevice::getId() const {
-	return serialize();
-}
-
-void MacAudioDevice::unserialize(const std::string & data) {
-	std::string::size_type devIndex = data.find(SEPARATOR);
-	if (devIndex != std::string::npos) {
-		String deviceId = data.substr(0, devIndex);
-
-		std::string::size_type dsIndex = data.find(SEPARATOR, devIndex + 1);
-		if (dsIndex != std::string::npos) {
-			String dataSourceId = data.substr(devIndex + 1, dsIndex);
-			String isInput = data.substr(dsIndex + 1);
-
-			_audioDeviceID = deviceId.toInteger();
-			_dataSourceID = dataSourceId.toInteger();
-			_isInput = isInput.toInteger();
-		} else {
-			LOG_ERROR("unserialization error: cannot get data source id");
-		}
-	} else {
-		LOG_ERROR("unserialization error: cannot get device id");
-	}
-}
-
-std::string MacAudioDevice::serialize() const {
-	std::string result;
-
-	result += String::fromNumber(_audioDeviceID);
-	result += SEPARATOR;
-	result += String::fromNumber(_dataSourceID);
-	result += SEPARATOR;
-	result += String::fromNumber(_isInput);
-
-	return result;
+StringList MacAudioDevice::getData() const {
+	return _data;
 }

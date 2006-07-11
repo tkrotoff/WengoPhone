@@ -20,27 +20,49 @@
 #ifndef OWMACVOLUMECONTROL_H
 #define OWMACVOLUMECONTROL_H
 
-#include <sound/VolumeControl.h>
+#include <sound/AudioDevice.h>
+#include <sound/IVolumeControl.h>
 
 /**
  * MacOS X implementation of VolumeControl.
  *
  * @author Philippe Bernery
  */
-class MacVolumeControl : public VolumeControl {
+class MacVolumeControl : public IVolumeControl {
 public:
 
 	MacVolumeControl(const AudioDevice & audioDevice);
 
 	bool setLevel(unsigned level);
 
-	int getLevel() const;
+	int getLevel();
 
 	bool setMute(bool mute);
 
-	bool isMuted() const;
+	/**
+	 * @return true if one channel of the device is muted.
+	 */
+	bool isMuted();
 
 	bool isSettable() const;
+
+private:
+
+	/**
+	 * Gets the settable/gettable channel range.
+	 * If no range is found, -1 is returned as the first element of the pair.
+	 */
+	std::pair<int, int> getVolumeSettableChannelRange() const;
+
+	/**
+	 * Tests if a channel is settable.
+	 *
+	 * @param channel channel to test
+	 * @return true if the given channel is settable.
+	 */
+	bool isChannelVolumeSettable(unsigned long channel) const;
+
+	AudioDevice _audioDevice;
 };
 
 #endif //OWMACVOLUMECONTROL_H

@@ -62,12 +62,43 @@ QString QtAudioSettings::getName() const {
 void QtAudioSettings::saveConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	config.set(Config::AUDIO_INPUT_DEVICEID_KEY,
-		_ui->inputDeviceComboBox->itemData(_ui->inputDeviceComboBox->currentIndex()).toString().toStdString());
-	config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY,
-		_ui->outputDeviceComboBox->itemData(_ui->outputDeviceComboBox->currentIndex()).toString().toStdString());
-	config.set(Config::AUDIO_RINGER_DEVICEID_KEY,
-		_ui->ringingDeviceComboBox->itemData(_ui->ringingDeviceComboBox->currentIndex()).toString().toStdString());
+	// Retrieving the input data from the concatenated string
+	std::string concatString = _ui->inputDeviceComboBox->itemData(_ui->inputDeviceComboBox->currentIndex()).toString().toStdString();
+	std::list<AudioDevice> inputDeviceList = AudioDeviceManager::getInputDeviceList();
+	for (std::list<AudioDevice>::const_iterator it = inputDeviceList.begin();
+		it != inputDeviceList.end();
+		++it) {
+		if ((*it).getData().toString() == concatString) {
+			config.set(Config::AUDIO_INPUT_DEVICEID_KEY, (*it).getData());
+			break;
+		}
+	}
+	////
+
+	// Retrieving the output data from the concatenated string
+	concatString = _ui->outputDeviceComboBox->itemData(_ui->outputDeviceComboBox->currentIndex()).toString().toStdString(); 
+	std::list<AudioDevice> outputDeviceList = AudioDeviceManager::getOutputDeviceList();
+	for (std::list<AudioDevice>::const_iterator it = outputDeviceList.begin();
+		it != outputDeviceList.end();
+		++it) {
+		if ((*it).getData().toString() == concatString) {
+			config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY, (*it).getData());
+			break;
+		}
+	}
+	////
+
+	// Retrieving the ringer data from the concatenated string
+	concatString = _ui->ringingDeviceComboBox->itemData(_ui->ringingDeviceComboBox->currentIndex()).toString().toStdString(); 
+	for (std::list<AudioDevice>::const_iterator it = outputDeviceList.begin();
+		it != outputDeviceList.end();
+		++it) {
+		if ((*it).getData().toString() == concatString) {
+			config.set(Config::AUDIO_RINGER_DEVICEID_KEY, (*it).getData());
+			break;
+		}
+	}
+	////
 }
 
 void QtAudioSettings::readConfig() {

@@ -25,59 +25,168 @@
 
 #include <CoreAudio/CoreAudio.h>
 
-MacVolumeControl::MacVolumeControl(const AudioDevice & audioDevice)
-	: VolumeControl() {
+static const UInt32 MASTER_CHANNEL = 0;
+
+MacVolumeControl::MacVolumeControl(const AudioDevice & audioDevice) {
 	_audioDevice = audioDevice;
 }
 
-int MacVolumeControl::getLevel() const {
+int MacVolumeControl::getLevel() {
 	OSStatus status = noErr;
 	UInt32 size = 0;
 	Float32 level = 0.0;
-
-	MacAudioDevice * macAudioDevice = dynamic_cast<MacAudioDevice *>(_audioDevice.getAudioDevicePrivate());
+	Float32 result = 0.0;
+	AudioDeviceID audioDeviceId = String(_audioDevice.getData()[0]).toInteger();
+	Boolean isInput = String(_audioDevice.getData()[2]).toInteger();
 
 	size = sizeof(level);
-	status = AudioDeviceGetProperty(macAudioDevice->getAudioDeviceID(), 0,
-		macAudioDevice->isInput(), kAudioDevicePropertyVolumeScalar, &size, &level);
-	if (status) {
-		LOG_ERROR("can't get device property: kAudioDevicePropertyVolumeScalar\n");
-		return -1;
-	} else {
-		return (int) (level * 100.0);
+
+	std::pair<int, int> range = getVolumeSettableChannelRange();
+	for (int i = range.first; (i != - 1) && (i != range.second + 1); i++) { 
+		status = AudioDeviceGetProperty(audioDeviceId, i, 
+			isInput, kAudioDevicePropertyVolumeScalar, &size, &level);
+		if (status) {
+			LOG_ERROR("can't get device property: kAudioDevicePropertyVolumeScalar for channel "
+				+ String::fromNumber(i));
+			return -1;
+		}
+
+		result += level;
 	}
+
+	if (range.first != - 1) {
+		result = result / ((range.second - range.first) + 1.0);
+	}
+
+	return (int) (result * 100.0);
 }
 
 bool MacVolumeControl::setLevel(unsigned level) {
 	OSStatus status = noErr;
 	UInt32 size = 0;
 	Float32 fVolume = level / 100.0;
+	AudioDeviceID audioDeviceId = String(_audioDevice.getData()[0]).toInteger();
+	Boolean isInput = String(_audioDevice.getData()[2]).toInteger();
 
-	MacAudioDevice * macAudioDevice = dynamic_cast<MacAudioDevice *>(_audioDevice.getAudioDevicePrivate());
-
-	size = sizeof(fVolume);
-	status = AudioDeviceSetProperty(macAudioDevice->getAudioDeviceID(), 0, 0,
-		macAudioDevice->isInput(), kAudioDevicePropertyVolumeScalar, size, &fVolume);
-	if (status) {
-		LOG_ERROR("can't set device property: kAudioDevicePropertyVolumeScalar\n");
-		return false;
-	} else {
-		return true;
+	std::pair<int, int> range = getVolumeSettableChannelRange();
+	for (int i = range.first; (i != - 1) && (i != range.second + 1); i++) { 
+		status = AudioDeviceSetProperty(audioDeviceId, NULL, i,
+			isInput, kAudioDevicePropertyVolumeScalar, size, &fVolume);
+		if (status) {
+			LOG_ERROR("can't set device property: kAudioDevicePropertyVolumeScalar on channem "
+				+ String::fromNumber(i));
+		}
 	}
+
+	return true;
 }
 
 bool MacVolumeControl::setMute(bool mute) {
-	//TODO
-	return false;
+	OSStatus status = noErr;
+	bool bMute = mute;
+	UInt32 size = sizeof(bool);
+	AudioDeviceID audioDeviceId = String(_audioDevice.getData()[0]).toInteger();
+	Boolean isInput = String(_audioDevice.getData()[2]).toInteger();
+
+	std::pair<int, int> range = getVolumeSettableChannelRange();
+	for (int i = range.first; (i != - 1) && (i != range.second + 1); i++) { 
+		status = AudioDeviceSetProperty(audioDeviceId, NULL, i,
+			isInput, kAudioDevicePropertyMute, size, &bMute);
+		if (status) {
+			LOG_ERROR("can't set device property: kAudioDevicePropertyMute on channel "
+				+ String::fromNumber(i));
+		}
+	}
+
+	return true;
 }
 
-bool MacVolumeControl::isMuted() const {
-	//TODO
-	return false;
+bool MacVolumeControl::isMuted() {
+	OSStatus status = noErr;
+	bool bMute = false;
+	UInt32 size = sizeof(bool);
+	AudioDeviceID audioDeviceId = String(_audioDevice.getData()[0]).toInteger();
+	Boolean isInput = String(_audioDevice.getData()[2]).toInteger();
+
+	std::pair<int, int> range = getVolumeSettableChannelRange();
+	for (int i = range.first; (i != - 1) && (i != range.second + 1); i++) { 
+		status = AudioDeviceGetProperty(audioDeviceId, 0,
+			isInput, kAudioDevicePropertyMute, &size, &bMute);
+		if (status) {
+			LOG_ERROR("can't get device property: kAudioDevicePropertyMute\n");
+		} else if (bMute) {
+			break;
+		}
+	}
+
+	return bMute;
 }
 
 bool MacVolumeControl::isSettable() const {
-	//TODO
-	return false;
+	bool result = false;
+
+	if (getVolumeSettableChannelRange().first != -1) {
+		result = true;
+	}
+
+	return result;
 }
 
+std::pair<int, int> MacVolumeControl::getVolumeSettableChannelRange() const {
+	OSStatus status = noErr;
+	UInt32 size = 0;
+	std::pair<int, int> result;
+	result.first = -1;
+
+	if (isChannelVolumeSettable(MASTER_CHANNEL)) {
+		result.first = 0;
+		result.second = 0;
+	} else {
+		AudioDeviceID audioDeviceId = String(_audioDevice.getData()[0]).toInteger();
+		Boolean isInput = String(_audioDevice.getData()[2]).toInteger();
+
+		status = AudioDeviceGetPropertyInfo(audioDeviceId, 0, isInput,
+			kAudioDevicePropertyStreamConfiguration, &size, NULL);
+		if (status) {
+			LOG_ERROR("Can't get device property info: kAudioDevicePropertyStreamConfiguration");
+			return result;
+		}
+
+		AudioBufferList *list = (AudioBufferList *) malloc(size);
+		status = AudioDeviceGetProperty(audioDeviceId, 0, isInput,
+			kAudioDevicePropertyStreamConfiguration, &size, list);
+		if (status) {
+			LOG_INFO("Can't get device property: kAudioDevicePropertyStreamConfiguration."
+				" The device has no " + (isInput ? std::string("input") : std::string("output")) + " device.");
+			free(list);
+			return result;
+		}
+
+		for (unsigned i = 1; i < list->mBuffers[0].mNumberChannels + 1; i++) {
+			if (isChannelVolumeSettable(i)) {
+				result.first = i;
+				break;
+			}
+		}
+
+		result.second = list->mBuffers[0].mNumberChannels;
+
+		free(list);
+	}
+
+	return result;
+}
+
+bool MacVolumeControl::isChannelVolumeSettable(UInt32 channel) const {
+	OSStatus status = noErr;
+	AudioDeviceID audioDeviceId = String(_audioDevice.getData()[0]).toInteger();
+	Boolean isInput = String(_audioDevice.getData()[2]).toInteger();
+
+	status = AudioDeviceGetPropertyInfo(audioDeviceId, channel,
+		isInput, kAudioDevicePropertyVolumeScalar, NULL, NULL);
+	if (status) {
+		LOG_INFO("can't get device property: kAudioDevicePropertyVolumeScalar => cannot set the volume on this channel\n");
+	}
+
+	return (status == noErr);
+}

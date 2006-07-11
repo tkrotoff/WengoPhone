@@ -27,17 +27,19 @@
 /**
  * MacOS X implementation of AudioDevice.
  *
+ * _data[0]: AudioDeviceID => audio device id
+ * _data[1]: UInt32 => data source id
+ * _data[2]: Boolean => is input?
+ *
  * @author Philippe Bernery
  */
 class MacAudioDevice : public AudioDevice {
 public:
 
-	static const std::string SEPARATOR;
-
 	/**
 	 * @see AudioDevice::AudioDevice
 	 */
-	MacAudioDevice(const std::string & deviceId);
+	MacAudioDevice(const StringList & data);
 
 	MacAudioDevice(AudioDeviceID audioDeviceID, UInt32 dataSourceID, bool isInput);
 
@@ -47,30 +49,7 @@ public:
 
 	std::string getName() const;
 
-	std::string getId() const;
-
-	AudioDeviceID getAudioDeviceID() const { return _audioDeviceID; }
-
-	UInt32 getDataSourceID() const { return _dataSourceID; }
-
-	Boolean isInput() const { return _isInput; }
-
-private:
-
-	/** Unserialize a MacAudioDevice from a string in this instance. */
-	void unserialize(const std::string & data);
-
-	/** Serialize this MacAudioDevice to a string.*/
-	std::string serialize() const;
-
-	/** ID of the audio device. */
-	AudioDeviceID _audioDeviceID;
-
-	/** Data source ID. */
-	UInt32 _dataSourceID;
-
-	/** Is input? */
-	Boolean _isInput;
+	StringList getData() const;
 };
 
 #endif	//OWMACAUDIODEVICE_H
