@@ -20,12 +20,13 @@
 #ifndef OWPAVOLUMECONTROL_H
 #define OWPAVOLUMECONTROL_H
 
-#include <sound/VolumeControl.h>
+#include <sound/AudioDevice.h>
+#include <sound/IVolumeControl.h>
 
 /**
  * @see VolumeControl
  */
-class PAVolumeControl :  public VolumeControl {
+class PAVolumeControl :  public IVolumeControl {
 public:
 
 	/**
@@ -35,13 +36,17 @@ public:
 
 	bool setLevel(unsigned level);
 
-	int getLevel() const;
+	int getLevel();
 
 	bool setMute(bool mute);
 
-	bool isMuted() const;
+	bool isMuted();
 
 	bool isSettable() const;
+
+private:
+
+	AudioDevice _audioDevice;
 };
 
 #endif	//OWPAVOLUMECONTROL_H

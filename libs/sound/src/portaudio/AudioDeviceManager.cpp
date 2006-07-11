@@ -61,7 +61,7 @@ std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
 			deviceName += deviceInfo->name;
 
 			PAAudioDevice paAudioDevice(i, deviceName);
-			AudioDevice audioDevice(paAudioDevice.getId(), deviceName);
+			AudioDevice audioDevice(paAudioDevice.getData());
 			deviceList.push_back(audioDevice);
 		}
 	}
@@ -105,7 +105,7 @@ std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
 			deviceName += deviceInfo->name;
 			
 			PAAudioDevice paAudioDevice(i, deviceName);
-			AudioDevice audioDevice(paAudioDevice.getId(), deviceName);
+			AudioDevice audioDevice(paAudioDevice.getData());
 			deviceList.push_back(audioDevice);
 		}
 	}

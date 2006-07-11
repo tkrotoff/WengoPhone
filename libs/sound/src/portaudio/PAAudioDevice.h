@@ -25,26 +25,23 @@
 #include <string>
 
 /**
- * @see AudioDevice
+ * PortAudio implementation of AudioDevice.
+ *
+ * _data[0]: name
+ * _data[1]: id
+ *
+ * @author Mathieu Stute
  */
 class PAAudioDevice : public AudioDevice {
 public:
 
-	PAAudioDevice(const std::string & deviceId, const std::string deviceName);
+	PAAudioDevice(const StringList & data);
 
 	PAAudioDevice(int id, const std::string & name);
 
 	~PAAudioDevice();
 
 	std::string getName() const;
-
-	std::string getId() const;
-
-private:
-
-	int _id;
-
-	std::string _name;
 };
 
 #endif	//OWPAAUDIODEVICE_H

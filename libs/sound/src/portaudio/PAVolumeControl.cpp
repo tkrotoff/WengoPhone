@@ -20,13 +20,14 @@
 #include "PAVolumeControl.h"
 
 PAVolumeControl::PAVolumeControl(AudioDevice audioDevice) {
+	_audioDevice = audioDevice;
 }
 
 bool PAVolumeControl::setLevel(unsigned level) {
 	return false;
 }
 
-int PAVolumeControl::getLevel() const {
+int PAVolumeControl::getLevel() {
 	return 0;
 }
 
@@ -34,7 +35,7 @@ bool PAVolumeControl::setMute(bool mute) {
 	return false;
 }
 
-bool PAVolumeControl::isMuted() const {
+bool PAVolumeControl::isMuted() {
 	return false;
 }
 

@@ -38,7 +38,7 @@ Sound::~Sound() {
 void Sound::setLoops(int loops) {
 }
 
-bool Sound::setWaveOutDevice(const std::string & /*id*/) {
+bool Sound::setWaveOutDevice(const AudioDevice & /*device*/) {
 	return false;
 }
 
@@ -48,5 +48,5 @@ void Sound::stop() {
 void Sound::play() {
 }
 
-void Sound::play(const std::string & filename, const std::string & /*deviceName*/) {
+void Sound::play(const std::string & filename, const AudioDevice & /*device*/) {
 }
