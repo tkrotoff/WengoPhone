@@ -39,7 +39,7 @@
 #include <pixertool/ffmpeg-pixertool.h>
 #include <pixertool/pixertool.h>
 
-#include "phdebug.h"
+#include "phlog.h"
 #include "phcodec.h"
 #include "phapi.h"
 // #include "phcall.h"
@@ -333,7 +333,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 
     
  
-  DBG2_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_video_start devid=%s\n", deviceid);
+  DBG_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_video_start devid=%s\n", deviceid);
 
     if ((s->newstreams & (1 << PH_MSTREAM_VIDEO1)))
     {
@@ -344,9 +344,9 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
     {
         return 0;
     }
-  
-  printf("Starting video stream from port: %d to %s:%d\n",
-	 sp->localport, sp->remoteaddr, sp->remoteport);
+
+    DBG_MEDIA_ENGINE("Starting video stream from port: %d to %s:%d\n",
+      sp->localport, sp->remoteaddr, sp->remoteport);
 
   // the function is cut into 2 branches :
   //   - branch1: video stream is already open (RE-INVITE for example)
@@ -355,7 +355,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
     // begin branch1
     if (sp->streamerData)
     {
-        DBG1_MEDIA_ENGINE("ph_msession_video_start: reuse a current media stream\n");
+        DBG_MEDIA_ENGINE("ph_msession_video_start: reuse a current media stream\n");
         video_stream = (phvstream_t*) sp->streamerData;
         if (video_stream->ms.remote_port == sp->remoteport)
         {
@@ -374,15 +374,15 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
         {
             RtpTunnel *newTun, *old;
 
-            printf("Replacing video tunnel\n"),
+            DBG_MEDIA_ENGINE("Replacing video tunnel\n");
             newTun = rtptun_connect(video_stream->ms.remote_ip, video_stream->ms.remote_port);
 
             if (!newTun)
             {
-                printf("Video tunnel replacement failed\n"),
-                ph_msession_video_stop(s);
-                
-                return -PH_NORESOURCES;
+              DBG_MEDIA_ENGINE("Video tunnel replacement failed\n");
+              ph_msession_video_stop(s);
+
+              return -PH_NORESOURCES;
             }
 
             rtp_session_set_tunnels(video_stream->ms.rtp_session, newTun, NULL);
@@ -404,7 +404,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
     }
   // end branch1
 
-  DBG1_MEDIA_ENGINE("ph_msession_video_start: create/init a new media stream\n");
+  DBG_MEDIA_ENGINE("ph_msession_video_start: create/init a new media stream\n");
   // begin branch2
   profile = get_av_profile();
 
@@ -687,7 +687,7 @@ int ph_media_video_flush_queue(phvstream_t *stream, unsigned long seqnumber_star
 			38016);
 
 		if (!len) {
-			printf("Can't decode !\n");
+      DBG_MEDIA_ENGINE("Can't decode !\n");
 			return 0;
 		} else {
 
@@ -702,12 +702,14 @@ int ph_media_video_flush_queue(phvstream_t *stream, unsigned long seqnumber_star
 			gettimeofday(&stream->last_decode_time, 0);
 
 			gettimeofday(&now_time, 0);
-			if ((now_time.tv_sec-stream->stat_ts_decoded_over_5s.tv_sec) >= 5) {
-				printf("decoder over last 5 sec: total fps: %d, callback fps: %d\n", stream->stat_num_decoded_total_over_5s/5, (stream->stat_num_decoded_total_over_5s - stream->stat_num_decoded_dropped_over_5s)/5);
-				stream->stat_num_decoded_total_over_5s = 0;
-				stream->stat_num_decoded_dropped_over_5s = 0;
-				gettimeofday(&stream->stat_ts_decoded_over_5s, 0);
-			}
+      if ((now_time.tv_sec-stream->stat_ts_decoded_over_5s.tv_sec) >= 5)
+      {
+        DBG_MEDIA_ENGINE("decoder over last 5 sec: total fps: %d, callback fps: %d\n",
+          stream->stat_num_decoded_total_over_5s/5, (stream->stat_num_decoded_total_over_5s - stream->stat_num_decoded_dropped_over_5s)/5);
+        stream->stat_num_decoded_total_over_5s = 0;
+        stream->stat_num_decoded_dropped_over_5s = 0;
+        gettimeofday(&stream->stat_ts_decoded_over_5s, 0);
+      }
 
 			pix_convert_avpicture(PIX_NO_FLAG, stream->frame_event.frame_remote, picIn, PIX_OSI_YUV420P);
 			pix_convert(PIX_NO_FLAG, stream->frame_event.frame_local, stream->local_frame_cache);
@@ -845,7 +847,7 @@ void ph_video_handle_data(phvstream_t *stream) {
 	// iterate over the available local frames in order to flush them into to the encoder
 	q_size = osip_list_size(&stream->webcam_frames_q);
 	if (q_size > 1) {
-		printf("webcam_frames_q overrun - %d\n", q_size);
+    DBG_MEDIA_ENGINE("webcam_frames_q overrun - %d\n", q_size);
 	}
 	for (it = 0; it < q_size; it += 1) {
 		phmvf = (phm_videoframe_t *) osip_list_get(&stream->webcam_frames_q, 0);

@@ -44,11 +44,12 @@ struct dtmf_info
 };
 
 /*
-     DTX decision is made up after SIL_SETUP ms of low mean magnitude. The mean magnitude is calculated using sliding window of PWR_WINDOW ms
-     PWR_WINDOW should be short - like 32ms
-     The long mean magnitude used to generate the CNG frame is the sum of LONG_PWR_WINDOW mean magnitudes, calculated using also the sliding window 
-     LONG_PWR_WINDOW is set to 64 according to dynamic range (0-127dB) of signal to be sent in CNG frame
-     Each PWR_WINDOW ms this sum of mean magnitudes is updated.
+  DTX decision is made up after SIL_SETUP ms of low mean magnitude. The mean magnitude is calculated using sliding window of PWR_WINDOW ms
+  PWR_WINDOW should be short - like 32ms
+  The long mean magnitude used to generate the CNG frame is the sum of LONG_PWR_WINDOW mean magnitudes,
+  calculated using also the sliding window
+  LONG_PWR_WINDOW is set to 64 according to dynamic range (0-127dB) of signal to be sent in CNG frame
+  Each PWR_WINDOW ms this sum of mean magnitudes is updated.
 */
 struct vadcng_info
 {
@@ -158,6 +159,7 @@ struct ph_audio_stream
   int record_recv_stream; /** 0/1 will init a recorder on "recording.raw" */
   int record_mic_stream; /** 0/1 will init a recorder of the pure MIC recorded sound */
   int record_mic_resample_stream; /** 0/1 will init a recorder of the pure MIC recorded sound */
+
   recording_t recorder; /** recording structure associated with the activate_recorder int */
   recording_t send_stream_recorder;
   recording_t recv_stream_recorder;
@@ -175,7 +177,6 @@ struct ph_audio_stream
   /** resampling context at the audio driver interface (MIC and SPK) */
   void  *resample_audiodrv_ctx_mic;
   void  *resample_audiodrv_ctx_spk;
-
 };
 typedef struct ph_audio_stream phastream_t;
 

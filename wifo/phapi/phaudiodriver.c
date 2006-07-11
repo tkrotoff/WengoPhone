@@ -1,24 +1,24 @@
 /*
   The phaudiodriver module implements abstract audio device interface for phapi
   Copyright (C) 2004  Vadim Lebedev  <vadim@mbdsys.com>
-  
+
   this module is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
-  
+
   eXosip is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include <string.h>
-#include "phdebug.h"
+#include "phlog.h"
 #include "phaudiodriver.h"
 
 #ifdef WIN32
@@ -36,27 +36,29 @@ void ph_register_audio_driver(struct ph_audio_driver *d)
 {
   struct ph_audio_driver **map = ph_snd_driver_map;
 
-  DBG5_DYNA_AUDIO_DRV("registering audio driver of kind \"%s\" ...\n", d->snd_driver_kind,0,0,0);
-  
+  DBG_DYNA_AUDIO_DRV("registering audio driver of kind \"%s\" ...\n", d->snd_driver_kind,0,0,0);
+
   if (!d)
+  {
     return;
+  }
 
   for( ; map  < &ph_snd_driver_map[MAX_SOUND_DRIVERS]; map++)
+  {
+
+    if (*map == d)
     {
-        
-      if (*map == d)
-        {
-        DBG5_DYNA_AUDIO_DRV("...already registered\n", 0,0,0,0);
-	    return;
-        }
-        
-      if (!*map)
-	    {
-	    *map = d;
-        DBG5_DYNA_AUDIO_DRV("...registration ok\n", 0,0,0,0);
-	    return;
-	    }
+      DBG_DYNA_AUDIO_DRV("...already registered\n", 0,0,0,0);
+      return;
     }
+
+    if (!*map)
+    {
+      *map = d;
+      DBG_DYNA_AUDIO_DRV("...registration ok\n", 0,0,0,0);
+      return;
+    }
+  }
 }
 
 struct ph_audio_driver *ph_find_audio_driver(const char *name)
@@ -64,24 +66,28 @@ struct ph_audio_driver *ph_find_audio_driver(const char *name)
   struct ph_audio_driver **map = ph_snd_driver_map;
 
   for( ; map  < &ph_snd_driver_map[MAX_SOUND_DRIVERS]; map++)
+  {
+    int l;
+
+    if (!*map)
     {
-      int l;
-
-      if (!*map)
-         continue;
-     
-      if ((*map)->snd_driver_match && !(*map)->snd_driver_match(*map, name))
-          return *map;
-      
-      l = strlen((*map)->snd_driver_kind);
-
-      if (!strncasecmp((*map)->snd_driver_kind, name, l))
-	    return *map;
-		     
+        continue;
     }
 
-  return 0;
+    if ((*map)->snd_driver_match && !(*map)->snd_driver_match(*map, name))
+    {
+        return *map;
+    }
 
+    l = strlen((*map)->snd_driver_kind);
+
+    if (!strncasecmp((*map)->snd_driver_kind, name, l))
+    {
+      return *map;
+    }
+  }
+
+  return 0;
 }
 
 int ph_activate_audio_driver(const char *name)

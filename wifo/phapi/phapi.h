@@ -749,6 +749,7 @@ struct phCallbacks {
   void  (*subscriptionProgress)(int sid,  const phSubscriptionStateInfo_t *info);
   phFrameDisplayCbk onFrameReady;
   void  (*errorNotify) (enum phErrors error);
+  void  (*debugTrace) (const char * message);
 };
 typedef struct phCallbacks phCallbacks_t;
 
@@ -758,6 +759,9 @@ typedef struct phCallbacks phCallbacks_t;
  * 
  */
 MY_DLLEXPORT extern phCallbacks_t *phcb;
+
+
+void DEBUGTRACE(const char * mess);
 
 /**
  * Initilize phApi

@@ -1,8 +1,8 @@
 import os
 
-amr_defines = { }
+amr_defines = {}
 speex_defines = {}
-defines = { }
+defines = {}
 
 if WengoGetConsoleArgument('speexwb-replaces-amrwb') and \
      WengoGetConsoleArgument('speexwb-replaces-amrnb') and WengoGetConsoleArgument('speexwb-replaces-g726wb'):
@@ -101,6 +101,8 @@ libs = [
 	'stun',
 	'gsm',
 	'owutil',
+	'fidlib',
+	'speexec',
 ]
 
 lib_path = []
@@ -122,13 +124,11 @@ defines = {
 	'OSIP_MT' : 1,
 	'ENABLE_TRACE' : 0,
 	'PH_VIDEO_USELOCK' : 1,
-#	'USE_SPXEC' : 1,
 }
 
 if not WengoOSWindows():
 	defines['USE_SPXEC'] = 1
 
-#
 # To activate FORCED 16 KHZ SAMPLING
 defines['PH_FORCE_16KHZ'] = 1
 
@@ -145,10 +145,8 @@ sources = [
 	'phrecorder.c',
 	'phmedia-audio.c',
 	'aec2.cpp',
-	'fidlib.c',
-	'spxec.c',
-	'spxecfft.c',
 	'phresample.c',
+	'phlog.c',
 ]
 
 if WengoOSLinux() or WengoOSBSD():
@@ -235,10 +233,10 @@ if WengoOSWindows():
 
 	sources += [
 		'phmedia-winmm.c',
-		'msdirent.c'
 	]
 
 	libs += [
+		'msdirent',
 		'winmm',
 		'ws2_32',
 		'user32',
@@ -284,15 +282,17 @@ env.WengoAlias("phapi_alias", phapi)
 
 Depends(phapi, [amr, speex])
 
+if not WengoOSWindows() and not WengoOSMacOSX():
+	SConscript('test/SConscript')
 
 """
 pyphapi
 """
 phapi_py_env = WengoGetEnvironment()
-#python_include = "C:\Program Files\Python24\include"
-#python_lib = "C:\Program Files\Python24\libs"
-python_lib = "/usr/lib/python2.4/config"
-python_include = "/usr/include/python2.4"
+python_include = "C:\Program Files\Python24\include"
+python_lib = "C:\Program Files\Python24\libs"
+#python_lib = "/usr/lib/python2.4/config"
+#python_include = "/usr/include/python2.4"
 
 if WengoOSWindows():
 	phapi_py_env.WengoUseLibraries(["phapi", "python24"])
@@ -302,8 +302,3 @@ else:
 phapi_py_env.WengoAddIncludePath([python_include])
 phapi_py_env.WengoAddLibPath([python_lib])
 phapi_py_env.WengoSharedLibrary("pyphapi", "pyphapi.c")
-
-if not WengoOSWindows() and not WengoOSMacOSX():
-	tenv = WengoGetEnvironment()
-	tec = tenv.Program(tqrget = 'testec',  source = ['testec.c', 'spxec.c', 'spxecfft.c'],  LIBS = 'm')
-	Alias('testec',  tec)

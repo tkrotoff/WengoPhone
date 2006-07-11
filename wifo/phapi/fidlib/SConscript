@@ -1,15 +1,20 @@
 env = WengoGetEnvironment()
 
-libs = ['m']
+libs = []
 lib_path = []
-include_path = []
+include_path = ['.', 'include']
 defines = {}
 headers = []
-sources = ['testec.c', '../spxec.c', '../spxecfft.c']
+sources = [
+  'src/fidlib.c',
+]
+
+if WengoOSWindows():
+  defines['T_MSVC'] = 1
 
 env.WengoAddIncludePath(include_path)
 env.WengoAddDefines(defines)
 env.WengoUseLibraries(libs)
 env.WengoAddDoxyfile()
 
-env.WengoProgram('testec', sources)
+env.WengoStaticLibrary('fidlib', sources)

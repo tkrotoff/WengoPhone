@@ -20,7 +20,7 @@
  */
 
 #include "phglobal.h"
-#include "phdebug.h"
+#include "phlog.h"
 #include <osip2/osip_mt.h>
 #include <osip2/osip.h>
 #ifdef OS_POSIX
@@ -308,7 +308,7 @@ void ph_gen_noise()
   unsigned long sum=0;
 
   norm = normalize(RAND_MAX);
-  DBG5_DYNA_AUDIO("no NOISE file, using random normalized %u\n", norm,0,0,0);
+  DBG_DYNA_AUDIO("no NOISE file, using random normalized %u\n", norm);
   for(i=0; i<NOISE_LEN; i++)
   noise_pattern[i] =  rand()>>norm;
   for(i=0; i<NOISE_LEN; i++) 
@@ -319,7 +319,7 @@ void ph_gen_noise()
     }
     sum += abs(noise_pattern[i]);
   }
-  DBG5_DYNA_AUDIO("max noise %u mean %u\n", noise_max, sum/NOISE_LEN,0,0);
+  DBG_DYNA_AUDIO("max noise %u mean %u\n", noise_max, sum/NOISE_LEN);
 }
 
 static void
@@ -359,12 +359,12 @@ ph_on_cng_packet(RtpSession *rtp_session, mblk_t *mp, struct ph_msession_s *s)
       }
     }
     CNG_UNLOCK(stream);
-    DBG5_DYNA_AUDIO("PHMEDIA:got CNG %u -> %u -> %u factor %u\n",*p, tab_tx_cng[*p], cng_level, factor); 
+    DBG_DYNA_AUDIO("PHMEDIA:got CNG %u -> %u -> %u factor %u\n",*p, tab_tx_cng[*p], cng_level, factor);
     stream->cngi.got_cng =  1;
   }
   else
   {
-    DBG5_DYNA_AUDIO("PHMEDIA:got CNG, discarding\n",0,0,0,0);
+    DBG_DYNA_AUDIO("PHMEDIA:got CNG, discarding\n");
   }
 }
 
@@ -418,7 +418,7 @@ void store_pcm(phastream_t *s, char *buf, int len)
   {
     int used;
     //audio_stream_get_out_space(s, &used);
-    //DBG5_DYNA_AUDIO("Detected Underrun: used = %d lat = %d\n", used, s->audio_loop_latency, 0, 0);
+    //DBG_DYNA_AUDIO("Detected Underrun: used = %d lat = %d\n", used, s->audio_loop_latency);
     cb_zfill(&s->pcmoutbuf, s->audio_loop_latency);
     s->underrun = 0;
   }
@@ -426,7 +426,7 @@ void store_pcm(phastream_t *s, char *buf, int len)
   cb_put(&s->pcmoutbuf, buf, len);
   s->sent_cnt += len;
   ECHO_SYNC_UNLOCK(s);
-  DBG5_DYNA_AUDIO_ECHO("PUT read, recv, sent: %d, %d, %d\n", s->read_cnt, s->recv_cnt, s->sent_cnt,0);
+  DBG_DYNA_AUDIO_ECHO("PUT read, recv, sent: %d, %d, %d\n", s->read_cnt, s->recv_cnt, s->sent_cnt);
 }
 
 #define AEC do_AEC
@@ -451,7 +451,7 @@ void do_echo_update(phastream_t *s, char *micdata, int length)
     return;
   }
 
-  DBG5_DYNA_AUDIO_ECHO("echo pointers: %d, %d, %d\n", 2*s->spk_current_sample - s->read_cnt, length, s->sent_cnt - 2*s->mic_current_sample,0);
+  DBG_DYNA_AUDIO_ECHO("echo pointers: %d, %d, %d\n", 2*s->spk_current_sample - s->read_cnt, length, s->sent_cnt - 2*s->mic_current_sample);
   // echo critical section : recovering the data that was previously saved from the speaker
   ECHO_SYNC_LOCK(s);
   s->recv_cnt += length;
@@ -459,14 +459,14 @@ void do_echo_update(phastream_t *s, char *micdata, int length)
   cb_get(&s->pcmoutbuf, &spkchunk1, &spklen1, &spkchunk2, &spklen2, length);
   s->read_cnt += (spklen1 + spklen2);
   ECHO_SYNC_UNLOCK(s);
-  DBG8_DYNA_AUDIO_ECHO("GET read (just read) - recv, sent (diff): %d (%d), - %d, %d (%d)\n",
-    s->read_cnt, (spklen1 + spklen2), s->recv_cnt, s->sent_cnt, s->recv_cnt - s->sent_cnt,0,0);
+  DBG_DYNA_AUDIO_ECHO("GET read (just read) - recv, sent (diff): %d (%d), - %d, %d (%d)\n",
+    s->read_cnt, (spklen1 + spklen2), s->recv_cnt, s->sent_cnt, s->recv_cnt - s->sent_cnt);
   if (spklen1 + spklen2 < length)
   {
     s->underrun = 1;
 #if 0
   audio_stream_get_out_space(s, &used); 
-  DBG5_DYNA_AUDIO_ECHO("UNDERRUN: current out queue length: %d \n", used,0,0,0);
+  DBG_DYNA_AUDIO_ECHO("UNDERRUN: current out queue length: %d \n", used);
 #endif
   }
 
@@ -571,7 +571,7 @@ void do_echo_update(phastream_t *s, char *micdata, int length)
 #endif
   if (total > savedlen)
   {
-    DBG5_DYNA_AUDIO_ECHO("do_echo_update: total=%d savedlen=%d\n", total, savedlen,0,0);
+    DBG_DYNA_AUDIO_ECHO("do_echo_update: total=%d savedlen=%d\n", total, savedlen);
   }
 }
 
@@ -586,8 +586,8 @@ static int max_sil;
 void print_pwrstats(phastream_t *s)
 {
   if(s->cngi.pwr_size)
-    DBG5_DYNA_AUDIO("\nPWR SUM: min %x max %x mean %x max_sil_cnt %d\n", min_pwr/s->cngi.pwr_size, max_pwr/s->cngi.pwr_size,  
-       s->cngi.mean_pwr/s->cngi.pwr_size, max_sil); 
+    DBG_DYNA_AUDIO("\nPWR SUM: min %x max %x mean %x max_sil_cnt %d\n", min_pwr/s->cngi.pwr_size, max_pwr/s->cngi.pwr_size,
+       s->cngi.mean_pwr/s->cngi.pwr_size, max_sil);
 }
 #endif
 
@@ -678,7 +678,7 @@ ph_vad_update0(struct vadcng_info *s, char *data, int len)
 
   if (ph_trace_mic && (tracecnt++ == 50))
   {
-    DBG5_DYNA_AUDIO("ph_media_audiuo: mean MIC signal: %d\n", power,0,0,0);
+    DBG_DYNA_AUDIO("ph_media_audiuo: mean MIC signal: %d\n", power);
     tracecnt = 0;
   }
 #endif
@@ -737,10 +737,10 @@ ph_send_cng(phastream_t *stream, unsigned long timestamp)
   level = find_level(stream->cngi.long_mean_pwr);
   if (level < 0)
   {
-    DBG5_DYNA_AUDIO("cng db invalid\n",0,0,0,0);
+    DBG_DYNA_AUDIO("cng db invalid\n");
     return;
   }
-  DBG5_DYNA_AUDIO("PHMEDIA:send CNG %d\n", level,0,0,0);
+  DBG_DYNA_AUDIO("PHMEDIA:send CNG %d\n", level);
   /* send CNG packet */
   mp = rtp_session_create_specific_payload_packet(stream->ms.rtp_session, RTP_FIXED_HEADER_SIZE, stream->cngi.cng_pt, &level, 1);
   if (mp != NULL)
@@ -771,7 +771,7 @@ ph_generate_comfort_noice(phastream_t *stream, void *buf)
     ret = audio_stream_get_out_space(stream, &used);
     if (ret < 0)
     {
-      DBG5_DYNA_AUDIO("IOCTL error",0,0,0,0);
+      DBG_DYNA_AUDIO("IOCTL error");
       return 0;
     }
     /* if less than 200ms of voice, send noise */
@@ -832,8 +832,8 @@ ph_handle_network_data(phastream_t *stream)
   int usedspace;
   struct timeval now, now2;
 
-  DBG5_DYNA_AUDIO_RX("ph_handle_network_data :: start\n",0,0,0,0);
-  DBG5_DYNA_AUDIO_ECHO("echo cirbuf size %d\n", stream->sent_cnt - stream->read_cnt,0,0,0);
+  DBG_DYNA_AUDIO_RX("ph_handle_network_data :: start\n");
+  DBG_DYNA_AUDIO_ECHO("echo cirbuf size %d\n", stream->sent_cnt - stream->read_cnt);
 
 #if 0
   freespace = audio_stream_get_out_space(stream, &used); 
@@ -852,7 +852,7 @@ ph_handle_network_data(phastream_t *stream)
 
     // try to read read to be played samples from the RX path
     len = ph_audio_play_cbk(stream, data_in_dec, codec->decoded_framesize);
-    DBG5_DYNA_AUDIO_RX("ph_handle_network_data:%u.%u :: read %d full size packets\n", now.tv_sec, now.tv_usec, len/codec->decoded_framesize,0);
+    DBG_DYNA_AUDIO_RX("ph_handle_network_data:%u.%u :: read %d full size packets\n", now.tv_sec, now.tv_usec, len/codec->decoded_framesize);
 
     if (!len)
     {
@@ -893,7 +893,7 @@ ph_handle_network_data(phastream_t *stream)
 
   } // while loop: we try to get more data from the RX path
 
-  DBG5_DYNA_AUDIO_RX("ph_handle_network_data :: end\n",0,0,0,0);
+  DBG_DYNA_AUDIO_RX("ph_handle_network_data :: end\n");
 }
 
 
@@ -939,7 +939,7 @@ ph_media_retrieve_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf, int clo
   rtp = (rtp_header_t*)mp->b_rptr;
   if ( rtp->paytype != stream->ms.payload )
   {
-    DBG5_DYNA_AUDIO("wrong audio payload: %d expecting %d\n", rtp->paytype, stream->ms.payload, 0, 0);
+    DBG_DYNA_AUDIO("wrong audio payload: %d expecting %d\n", rtp->paytype, stream->ms.payload);
     freemsg(mp);
     return 0;
   }
@@ -992,7 +992,7 @@ ph_media_retrieve_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf, int clo
     stream->last_rtp_recv_time = now;
   }
 
-  DBG5_DYNA_AUDIO_RX("retrieved RX bytes: decoded(%d), resampled(%d)\n", decodedlen, resampledlen, 0, 0);
+  DBG_DYNA_AUDIO_RX("retrieved RX bytes: decoded(%d), resampled(%d)\n", decodedlen, resampledlen);
   return resampledlen;
 }
 
@@ -1019,8 +1019,8 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
   int needResample = 0;
 #endif
 
-  DBG5_DYNA_AUDIO("DYNA_AUDIO:ph_audio_play_cbk: audio drv is asking for %d (char*) casted samples\n",
-    playbufsize,0,0,0);
+  DBG_DYNA_AUDIO("DYNA_AUDIO:ph_audio_play_cbk: audio drv is asking for %d (char*) casted samples\n",
+    playbufsize);
 
 #ifdef PH_FORCE_16KHZ
   if (internal_clockrate == 8000)
@@ -1124,10 +1124,10 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
 #ifdef PH_USE_RESAMPLE
     if (needResample)
     {
-      DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_play_cbk: need resampling with recbufsize: %d\n", len,0,0,0);
+      DBG_DYNA_AUDIO("RESAMPLE: ph_audio_play_cbk: need resampling with recbufsize: %d\n", len);
       resampledLen = 0;
       ph_resample_audio0(stream->resample_audiodrv_ctx_spk, playbuf, len, savedPlayBuf, &resampledLen);
-      DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_play_cbk: after resampling with resampledSize: %d\n", resampledLen,0,0,0);
+      DBG_DYNA_AUDIO("RESAMPLE: ph_audio_play_cbk: after resampling with resampledSize: %d\n", resampledLen);
       savedPlayBuf += resampledLen;
       savedBufSize -= resampledLen;
       if (resampledLen!=0)
@@ -1241,11 +1241,11 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
   /* do we need to do Voice Activity Detection ? */
   if (stream->cngi.vad)
   {
-    DBG5_DYNA_AUDIO("VAD:ph_encode_and_send_audio_frame:stream->cngi.vad\n", 0, 0, 0, 0);
+    DBG_DYNA_AUDIO("VAD:ph_encode_and_send_audio_frame:stream->cngi.vad\n");
     stream->hdxsilence = silok = ph_vad_update0(&stream->cngi, recordbuf, framesize);
     if (!stream->cngi.cng && silok)
     {
-      DBG5_DYNA_AUDIO("VAD:ph_encode_and_send_audio_frame: resend dummy CNG packet only if CNG was not negotiated\n", 0, 0, 0, 0);
+      DBG_DYNA_AUDIO("VAD:ph_encode_and_send_audio_frame: resend dummy CNG packet only if CNG was not negotiated\n");
       /* resend dummy CNG packet only if CNG was not negotiated */
       ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
       wakeup = (diff.tv_sec > RTP_RETRANSMIT);
@@ -1257,7 +1257,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
     int hdxsil = ph_vad_update0(&stream->cngi, recordbuf, framesize);
     if (hdxsil != stream->hdxsilence) 
     {
-      DBG5_DYNA_AUDIO("phmedia_audio: HDXSIL=%d\n", hdxsil,0,0,0);
+      DBG_DYNA_AUDIO("phmedia_audio: HDXSIL=%d\n", hdxsil);
       stream->hdxsilence = hdxsil;
     }
   }
@@ -1298,7 +1298,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
       framesize /= 2;
     }
 #else
-    DBG5_DYNA_AUDIO("DYNA_AUDIO:ph_encode_and_send_audio_frame: start encoding\n", 0, 0, 0, 0);
+    DBG_DYNA_AUDIO("DYNA_AUDIO:ph_encode_and_send_audio_frame: start encoding\n");
     enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize, data_out_enc, sizeof(data_out_enc));
 #endif
 
@@ -1329,7 +1329,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
       ph_tvdiff(&diff, &stream->now, &stream->last_rtp_sent_time);
       if (diff.tv_sec >= DTX_RETRANSMIT)
       {
-        DBG5_DYNA_AUDIO("VAD:ph_encode_and_send_audio_frame: ph_send_cng\n", 0, 0, 0, 0);
+        DBG_DYNA_AUDIO("VAD:ph_encode_and_send_audio_frame: ph_send_cng\n");
 
         ph_send_cng(stream, stream->ms.txtstamp);
         stream->cngi.last_dtx_time = stream->now;
@@ -1400,10 +1400,10 @@ int ph_audio_rec_cbk(phastream_t *stream, void *buf_dataleft, int size_dataleft)
 #ifdef PH_USE_RESAMPLE
   if (internal_clockrate != rec_cbk_clockrate)
   {
-    DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_rec_cbk: need resampling with size_dataleft: %d\n", size_dataleft, 0, 0, 0);
+    DBG_DYNA_AUDIO("RESAMPLE: ph_audio_rec_cbk: need resampling with size_dataleft: %d\n", size_dataleft);
     size_resampled = internal_framesize;
     ph_resample_audio0(stream->resample_audiodrv_ctx_mic, buf_dataleft, size_dataleft, buf_resampled, &size_resampled);
-    DBG5_DYNA_AUDIO("RESAMPLE: ph_audio_rec_cbk: after resampling with size_resampled: %d\n", size_resampled, 0, 0 ,0);
+    DBG_DYNA_AUDIO("RESAMPLE: ph_audio_rec_cbk: after resampling with size_resampled: %d\n", size_resampled);
     buf_dataleft = buf_resampled;
     size_dataleft = size_resampled;
   }
@@ -1492,7 +1492,7 @@ int ph_audio_rec_cbk(phastream_t *stream, void *buf_dataleft, int size_dataleft)
     buf_dataleft = internal_framesize + (char *)buf_dataleft;
   } // while end - process remaining whole tx_frames
 
-  DBG5_DYNA_AUDIO("DYNA_AUDIO:ph_audio_rec_cbk: processed %d short audio samples\n", processed/2, 0, 0, 0);
+  DBG_DYNA_AUDIO("DYNA_AUDIO:ph_audio_rec_cbk: processed %d short audio samples\n", processed/2);
   return processed;
 }
 
@@ -1536,9 +1536,9 @@ ph_handle_audio_data(phastream_t *stream)
   const int framesize = codec->decoded_framesize;
   int i;
 
-  DBG5_DYNA_AUDIO_TX("Reading Got %d bytes from mic\n", framesize,0,0,0);
+  DBG_DYNA_AUDIO_TX("Reading Got %d bytes from mic\n", framesize);
   i=audio_stream_read(stream, data_out, framesize);
-  DBG5_DYNA_AUDIO_TX("Got %d bytes from mic\n", i,0,0,0);
+  DBG_DYNA_AUDIO_TX("Got %d bytes from mic\n", i);
   if (i>0)
   {
     i = ph_audio_rec_cbk(stream, data_out, i);
@@ -1568,7 +1568,7 @@ ph_audio_io_thread(void *p)
     osip_thread_set_priority(stream->ms.media_io_thread, -19);
   }
 
-  DBG5_DYNA_AUDIO("new media io thread started\n",0,0,0,0);
+  DBG_DYNA_AUDIO("new media io thread started\n");
 
   while (stream->ms.running)
   {
@@ -1610,7 +1610,7 @@ ph_audio_io_thread(void *p)
     }
   }
 
-  DBG5_DYNA_AUDIO("media io thread stopping\n",0,0,0,0);
+  DBG_DYNA_AUDIO("media io thread stopping\n");
   return NULL;
 }
 
@@ -1751,11 +1751,11 @@ void ph_audio_init_vad0(struct vadcng_info *cngp, int samples)
   if(cngp->pwr)
   {
     memset(cngp->pwr, 0, cngp->pwr_size * sizeof(int));
-    DBG5_DYNA_AUDIO(" DTX/VAD PWR table of %d ints allocated \n", cngp->pwr_size,0,0,0);
+    DBG_DYNA_AUDIO(" DTX/VAD PWR table of %d ints allocated \n", cngp->pwr_size);
   }
   else
   {
-    DBG5_DYNA_AUDIO("No memory for DTX/VAD !: %d \n", cngp->pwr_size*2,0,0,0);
+    DBG_DYNA_AUDIO("No memory for DTX/VAD !: %d \n", cngp->pwr_size*2);
     cngp->vad = cngp->cng = 0;
   }
 
@@ -1805,7 +1805,7 @@ void ph_audio_init_cng(phastream_t *stream)
   if(!cngp->noise)
   {
     cngp->cng = 0;
-    DBG5_DYNA_AUDIO("No memory for NOISE ! \n",0,0,0,0);
+    DBG_DYNA_AUDIO("No memory for NOISE ! \n");
   }
   else
   {
@@ -2010,7 +2010,7 @@ open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *devi
 
     if (fd < 0)
     {
-      DBG1_MEDIA_ENGINE("open_audio_device: can't open  AUDIO device\n");
+      DBG_MEDIA_ENGINE("open_audio_device: can't open  AUDIO device\n");
       if( phcb->errorNotify )
       {
         phcb->errorNotify(PH_NOAUDIODEVICE);
@@ -2018,13 +2018,12 @@ open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *devi
       return -1;
     }
 
-    DBG8_DYNA_AUDIO_DRV("opened i/o devices: (s->rate, s->fsize)=(%d,%d) - (rate, fsize)=(%d,%d) - (s->actual_rate)=(%d)\n",
+    DBG_DYNA_AUDIO_DRV("opened i/o devices: (s->rate, s->fsize)=(%d,%d) - (rate, fsize)=(%d,%d) - (s->actual_rate)=(%d)\n",
       stream->clock_rate,
       stream->ms.codec->decoded_framesize,
       clockrate,
       framesize,
-      stream->actual_rate,
-      0,0);
+      stream->actual_rate);
   }
   else
   {
@@ -2082,7 +2081,7 @@ setup_hdx_mode(struct ph_msession_s *s, phastream_t *stream)
       sp->vadthreshold = atoi(fhdx);
     }
 
-    DBG2_MEDIA_ENGINE("ph_mession_audio_start: MICHDX mode level=%d\n",  sp->vadthreshold);
+    DBG_MEDIA_ENGINE("ph_mession_audio_start: MICHDX mode level=%d\n",  sp->vadthreshold);
   }
 
   // SPIKE_HDX: initialization for mode = SPK has priority
@@ -2099,7 +2098,7 @@ setup_hdx_mode(struct ph_msession_s *s, phastream_t *stream)
       stream->cngo.pwr_threshold = atoi(spkfhdx);
     }
 
-    DBG2_MEDIA_ENGINE("ph_mession_audio_start: SPKHDX mode level=%d\n",  stream->cngo.pwr_threshold);
+    DBG_MEDIA_ENGINE("ph_mession_audio_start: SPKHDX mode level=%d\n",  stream->cngo.pwr_threshold);
   }
 }
 
@@ -2111,7 +2110,7 @@ setup_aec(struct ph_msession_s *s, phastream_t *stream)
   if (!(sp->flags & PH_MSTREAM_FLAG_AEC))
   {
 #ifdef DO_ECHO_CAN  
-    DBG1_DYNA_AUDIO_ECHO("setup_aec: Echo CAN desactivated\n");
+    DBG_DYNA_AUDIO_ECHO("setup_aec: Echo CAN desactivated\n");
     stream->ec = 0;
   }
   else
@@ -2151,7 +2150,7 @@ setup_aec(struct ph_msession_s *s, phastream_t *stream)
       stream->ecmux = g_mutex_new();
 
     }
-    DBG1_DYNA_AUDIO_ECHO("ph_msession_audio_start: Echo CAN created OK\n");
+    DBG_DYNA_AUDIO_ECHO("ph_msession_audio_start: Echo CAN created OK\n");
 #endif
   }
 
@@ -2315,7 +2314,7 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, const char *deviceId
 
   cleanup_recording(stream);
 
-  DBG1_MEDIA_ENGINE("\naudio stream closed\n");
+  DBG_MEDIA_ENGINE("\naudio stream closed\n");
 
   if (stream->lastframe)
   {
@@ -2341,7 +2340,7 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, const char *deviceId
     struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
     phastream_t *stream2 = (phastream_t *) msp2->streamerData;
 
-    DBG1_MEDIA_ENGINE("audio_stop: removing conf master\n");
+    DBG_MEDIA_ENGINE("audio_stop: removing conf master\n");
 
     if (hardstop)
     {
@@ -2358,7 +2357,7 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, const char *deviceId
       {
         start_audio_device(s2, stream2);
       }
-      DBG1_MEDIA_ENGINE("audio_stop: started audio for ex-slave\n");
+      DBG_MEDIA_ENGINE("audio_stop: started audio for ex-slave\n");
     }
   }
 
@@ -2405,12 +2404,12 @@ phastream_t * ph_msession_audio_stream_hardstart(struct ph_msession_s *s, int co
   RtpProfile *rprofile = &av_profile;
   RtpProfile *sprofile = &av_profile;
 
-  DBG3_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_audio_start devid=%s, confflags=%d\n", deviceId, s->confflags);
-  DBG2_MEDIA_ENGINE("MEDIA ENGINE: hardstart - looking for codec with payload = %d\n", codecpt);
+  DBG_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_audio_start devid=%s, confflags=%d\n", deviceId, s->confflags);
+  DBG_MEDIA_ENGINE("MEDIA ENGINE: hardstart - looking for codec with payload = %d\n", codecpt);
   codec = ph_media_lookup_codec(codecpt);
   if (!codec)
   {
-    DBG1_MEDIA_ENGINE("hardstart: found NO codec\n");
+    DBG_MEDIA_ENGINE("hardstart: found NO codec\n");
     return NULL;
   }
 
@@ -2444,13 +2443,13 @@ phastream_t * ph_msession_audio_stream_hardstart(struct ph_msession_s *s, int co
     stream = (phastream_t *)osip_malloc(sizeof(phastream_t));
     if (!stream)
     {
-      DBG1_MEDIA_ENGINE("out of memory\n");
+      DBG_MEDIA_ENGINE("out of memory\n");
       return NULL;
     }
     memset(stream, 0, sizeof(*stream));
   }
 
-  DBG2_MEDIA_ENGINE("hardstart: new audiostream = %08x\n", stream);
+  DBG_MEDIA_ENGINE("hardstart: new audiostream = %08x\n", stream);
 
   // setup recorders for the stream
   setup_recording(stream);
@@ -2470,16 +2469,16 @@ phastream_t * ph_msession_audio_stream_hardstart(struct ph_msession_s *s, int co
   /* FIXME: we need to handle separate directions too */
   stream->cngi.cng_pt = (stream->clock_rate > 8000) ? PH_MEDIA_CN_16000_PAYLOAD : PH_MEDIA_CN_PAYLOAD;
 
-  DBG2_MEDIA_ENGINE("ph_mession_audio_start: DTX/VAD %x\n", stream->cngi.pwr_threshold);
-  DBG2_MEDIA_ENGINE("ph_msession_audio_start: clock rate %d\n", stream->clock_rate);
-  DBG2_MEDIA_ENGINE("ph_msession_audio_start: CNG %s\n", stream->cngi.cng ? "activating" : "desactivating");
-  DBG2_MEDIA_ENGINE("ph_msession_audio_start: opening AUDIO device %s\n", deviceId);
+  DBG_MEDIA_ENGINE("ph_mession_audio_start: DTX/VAD %x\n", stream->cngi.pwr_threshold);
+  DBG_MEDIA_ENGINE("ph_msession_audio_start: clock rate %d\n", stream->clock_rate);
+  DBG_MEDIA_ENGINE("ph_msession_audio_start: CNG %s\n", stream->cngi.cng ? "activating" : "desactivating");
+  DBG_MEDIA_ENGINE("ph_msession_audio_start: opening AUDIO device %s\n", deviceId);
 
   // try to open the device and negociate internal_clockrate
   if (open_audio_device(s, stream, deviceId))
   {
     // TODO: needs better cleanup
-    DBG1_MEDIA_ENGINE("MEDIA ENGINE:hardstart: cannot open audio driver\n");
+    DBG_MEDIA_ENGINE("MEDIA ENGINE:hardstart: cannot open audio driver\n");
     free(stream);
     return NULL;
   }
@@ -2518,7 +2517,7 @@ phastream_t * ph_msession_audio_stream_hardstart(struct ph_msession_s *s, int co
 
   ph_mediabuf_init(&stream->data_in, malloc(2048), 2048);
   ph_mediabuf_init(&stream->data_out, malloc(2048), 2048);
-  DBG2_MEDIA_ENGINE("ph_msession_audio_start: opening session remoteport: %d\n", stream->ms.remote_port);
+  DBG_MEDIA_ENGINE("ph_msession_audio_start: opening session remoteport: %d\n", stream->ms.remote_port);
 
   session = rtp_session_new(RTP_SESSION_SENDRECV);
 
@@ -2526,7 +2525,7 @@ phastream_t * ph_msession_audio_stream_hardstart(struct ph_msession_s *s, int co
   if (sp->flags & PH_MSTREAM_FLAG_TUNNEL)
   {
     RtpTunnel *tun, *tun2;
-    DBG1_MEDIA_ENGINE("ph_mession_audio_start: Creating audio tunnel\n");
+    DBG_MEDIA_ENGINE("ph_mession_audio_start: Creating audio tunnel\n");
 
     tun = rtptun_connect(sp->remoteaddr, sp->remoteport);
 
@@ -2599,13 +2598,13 @@ phastream_t * ph_msession_audio_stream_hardstart(struct ph_msession_s *s, int co
   sp->streamerData = stream;
   s->activestreams |= (1 << PH_MSTREAM_AUDIO1);
 
-  DBG3_MEDIA_ENGINE("ph_mession_audio_start: s=%08x.stream=%08x\n", s, stream);
+  DBG_MEDIA_ENGINE("ph_mession_audio_start: s=%08x.stream=%08x\n", s, stream);
 
   stream->ms.running = 1;
 
   start_audio_device(s, stream);
 
-  DBG1_MEDIA_ENGINE("ph_msession_audio_start: audio stream init OK\n");
+  DBG_MEDIA_ENGINE("ph_msession_audio_start: audio stream init OK\n");
 
   return stream;
 }
@@ -2626,7 +2625,7 @@ int ph_msession_audio_stream_start(struct ph_msession_s *s, const char* deviceId
   ph_mstream_params_t *sp = &s->streams[PH_MSTREAM_AUDIO1];
   int newstreams;
 
-  DBG3_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_audio_start devid=%s, confflags=%d\n", deviceId, s->confflags);
+  DBG_MEDIA_ENGINE("MEDIA ENGINE: ph_msession_audio_start devid=%s, confflags=%d\n", deviceId, s->confflags);
 
   newstreams = s->newstreams;
   s->newstreams = 0;
@@ -2652,7 +2651,7 @@ int ph_msession_audio_stream_start(struct ph_msession_s *s, const char* deviceId
   if (codecpt == ph_speex_hook_pt)
   {
     codecpt = PH_MEDIA_SPEEXWB_PAYLOAD;
-    DBG4_MEDIA_ENGINE("ph_msession_audio_start: replacing payload %d by %d\n", ph_speex_hook_pt, codecpt,0);
+    DBG_MEDIA_ENGINE("ph_msession_audio_start: replacing payload %d by %d\n", ph_speex_hook_pt, codecpt);
   }
 
   if (!sp->jitter)
@@ -2668,15 +2667,15 @@ int ph_msession_audio_stream_start(struct ph_msession_s *s, const char* deviceId
     stream = (phastream_t*) sp->streamerData;
     assert(stream);
 
-    DBG8_MEDIA_ENGINE("ph_msession_audio_start: current=%08x(rip=<%s:%u> pt=%d)=>(rip=<%s:%u> pt=%d)\n", 
-    stream, stream->ms.remote_ip, stream->ms.remote_port, stream->ms.payload,
-    sp->remoteaddr, sp->remoteport, sp->ipayloads[0].number);
+    DBG_MEDIA_ENGINE("ph_msession_audio_start: current=%08x(rip=<%s:%u> pt=%d)=>(rip=<%s:%u> pt=%d)\n",
+      stream, stream->ms.remote_ip, stream->ms.remote_port, stream->ms.payload,
+      sp->remoteaddr, sp->remoteport, sp->ipayloads[0].number);
 
     if (stream->ms.remote_port == sp->remoteport)
     {
       if ((stream->ms.payload ==  sp->ipayloads[0].number) &&  !strcmp(stream->ms.remote_ip, sp->remoteaddr))
       {
-          DBG1_MEDIA_ENGINE("ph_msession_audio_start: reusing current stream\n");
+          DBG_MEDIA_ENGINE("ph_msession_audio_start: reusing current stream\n");
           return 0;
       }
     }
@@ -2695,12 +2694,12 @@ int ph_msession_audio_stream_start(struct ph_msession_s *s, const char* deviceId
         RtpTunnel *newTun, *old;
         RtpTunnel *newTun2, *old2;
 
-        DBG1_MEDIA_ENGINE("ph_msession_audio_start: Replacing audio tunnel\n");
+        DBG_MEDIA_ENGINE("ph_msession_audio_start: Replacing audio tunnel\n");
         newTun = rtptun_connect(stream->ms.remote_ip, stream->ms.remote_port);
 
         if (!newTun)
         {
-          DBG1_MEDIA_ENGINE("ph_msession_audio_start: Audio tunnel replacement failed\n");
+          DBG_MEDIA_ENGINE("ph_msession_audio_start: Audio tunnel replacement failed\n");
           sp->flags |= ~PH_MSTREAM_FLAG_RUNNING;
           return -PH_NORESOURCES;
         }
@@ -2722,12 +2721,12 @@ int ph_msession_audio_stream_start(struct ph_msession_s *s, const char* deviceId
 #endif
         rtp_session_set_remote_addr(stream->ms.rtp_session, stream->ms.remote_ip,	stream->ms.remote_port);
 
-      DBG1_MEDIA_ENGINE("ph_msession_audio_start: audio stream reset done\n");
+      DBG_MEDIA_ENGINE("ph_msession_audio_start: audio stream reset done\n");
       return 0;
     }
 
     /* new payload is different from the old one */
-    DBG1_MEDIA_ENGINE("ph_mession_audio_start: Replacing audio session\n");
+    DBG_MEDIA_ENGINE("ph_mession_audio_start: Replacing audio session\n");
     ph_msession_audio_stream_stop(s, deviceId, s->confflags != PH_MSESSION_CONF_MEMBER, 0);
 
   // end branch 1
@@ -2766,7 +2765,7 @@ void ph_msession_audio_suspend(struct ph_msession_s *s, int suspendwhat, const c
   int confflags = s->confflags;
   struct ph_msession_s *s2 = s->confsession;
 
-  DBG4_MEDIA_ENGINE("audio_suspend: enter ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
+  DBG_MEDIA_ENGINE("audio_suspend: enter ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port);
 
   PH_MSESSION_AUDIO_LOCK();
   msp->traffictype &= ~suspendwhat;
@@ -2779,7 +2778,7 @@ void ph_msession_audio_suspend(struct ph_msession_s *s, int suspendwhat, const c
   }
   PH_MSESSION_AUDIO_UNLOCK();
 
-  DBG4_MEDIA_ENGINE("audio_suspend: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port); 
+  DBG_MEDIA_ENGINE("audio_suspend: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port);
 }
 
 
@@ -2791,8 +2790,8 @@ void ph_msession_audio_resume(struct ph_msession_s *s, int resumewhat, const cha
   struct ph_mstream_params_s *msp = &s->streams[PH_MSTREAM_AUDIO1];
   phastream_t *stream = (phastream_t *) msp->streamerData;
 
-  DBG8_MEDIA_ENGINE("MEDIA ENGINE:ph_msession_audio_resume:begin:ses=%p stream=%p remoteport=%d confflags=%d\n",
-    s, stream, stream->ms.remote_port, s->confflags,0,0,0);
+  DBG_MEDIA_ENGINE("MEDIA ENGINE:ph_msession_audio_resume:begin:ses=%p stream=%p remoteport=%d confflags=%d\n",
+    s, stream, stream->ms.remote_port, s->confflags);
 
   PH_MSESSION_AUDIO_LOCK();
 
@@ -2802,8 +2801,8 @@ void ph_msession_audio_resume(struct ph_msession_s *s, int resumewhat, const cha
 
   PH_MSESSION_AUDIO_UNLOCK();
 
-  DBG8_MEDIA_ENGINE("MEDIA ENGINE:ph_msession_audio_resume:end:resume exit ses=%p stream=%p remoteport=%d confflags=%d\n", 
-    s, stream, stream->ms.remote_port, s->confflags,0,0,0);
+  DBG_MEDIA_ENGINE("MEDIA ENGINE:ph_msession_audio_resume:end:resume exit ses=%p stream=%p remoteport=%d confflags=%d\n",
+    s, stream, stream->ms.remote_port, s->confflags);
 }
 
 
@@ -2831,7 +2830,7 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
   // if S1 is running, it will be the MASTER
   if (stream1->ms.running)
   {
-    DBG1_MEDIA_ENGINE("ph_msession_audio_conf_start: s1=MASTER\n");
+    DBG_MEDIA_ENGINE("ph_msession_audio_conf_start: s1=MASTER\n");
 
     CONF_LOCK(stream1);
     stream1->to_mix = stream2;
@@ -2848,7 +2847,7 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
   // if S2 is running, it will be the MASTER
   if (stream2->ms.running)
   {
-    DBG1_MEDIA_ENGINE("msession_adio_conf_start: s2=MASTER\n");
+    DBG_MEDIA_ENGINE("msession_adio_conf_start: s2=MASTER\n");
 
     CONF_LOCK(stream2);
     stream2->to_mix = stream1;
@@ -2862,7 +2861,7 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
     return 0;
   }
 
-  DBG1_MEDIA_ENGINE("msession_audio_conf_start: both streams unactive: s1=MASTER\n");
+  DBG_MEDIA_ENGINE("msession_audio_conf_start: both streams unactive: s1=MASTER\n");
 
   // if S1 and S2 are not running, S1 will be the MASTER
   CONF_LOCK(stream1);

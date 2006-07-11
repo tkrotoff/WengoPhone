@@ -28,7 +28,7 @@
 #include <samplerate.h>
 #endif
 
-#include "phdebug.h"
+#include "phlog.h"
 
 /**
  * file structure :
@@ -259,11 +259,11 @@ void * ph_resample_mic_init0(int clockrate, int actual_clockrate)
   ctx_mic->src_data->src_ratio = recRatio;
   ctx_mic->src_state = src_new(SRC_LINEAR, 1, &libsamplerate_error);
   if( libsamplerate_error ) {
-    DBG5_DYNA_AUDIO("RESAMPLE: error in libsamplerate: %s\n", src_strerror(libsamplerate_error), 0, 0, 0);
+    DBG_DYNA_AUDIO_RESAMPLE("RESAMPLE: error in libsamplerate: %s\n", src_strerror(libsamplerate_error));
   }
 
-  DBG5_DYNA_AUDIO("RESAMPLE: ph_resample_mic_init1: expected = %d actual = %d rec=%f\n",
-                  expected_clockrate, actual_clockrate, recRatio, 0);
+  DBG_DYNA_AUDIO_RESAMPLE("RESAMPLE: ph_resample_mic_init1: expected = %d actual = %d rec=%f\n",
+    expected_clockrate, actual_clockrate, recRatio);
 
   return  ctx_mic;
 }
@@ -284,11 +284,11 @@ void * ph_resample_spk_init0(int clockrate, int actual_clockrate)
   ctx_spk->src_data->src_ratio = playRatio;
   ctx_spk->src_state = src_new(SRC_LINEAR, 1, &libsamplerate_error);
   if( libsamplerate_error ) {
-    DBG5_DYNA_AUDIO("RESAMPLE: error in libsamplerate: %s\n", src_strerror(libsamplerate_error), 0, 0, 0);
+    DBG_DYNA_AUDIO_RESAMPLE("RESAMPLE: error in libsamplerate: %s\n", src_strerror(libsamplerate_error));
   }
 
-  DBG5_DYNA_AUDIO("RESAMPLE: ph_resample_spk_init1: expected = %d actual = %d play=%f\n",
-                  expected_clockrate, actual_clockrate, playRatio, 0);
+  DBG_DYNA_AUDIO_RESAMPLE("RESAMPLE: ph_resample_spk_init1: expected = %d actual = %d play=%f\n",
+    expected_clockrate, actual_clockrate, playRatio);
 
   return ctx_spk;
 }
@@ -336,7 +336,7 @@ void ph_resample_audio0(void *ctx, void *inbuf, int inbsize, void *outbuf, int *
   //process resampling
   errorCode = src_process(ctx_filter->src_state, ctx_filter->src_data);
   if( errorCode ) {
-    DBG5_DYNA_AUDIO("RESAMPLE: error in libresample: %s\n", src_strerror(errorCode), 0, 0, 0);
+    DBG_DYNA_AUDIO_RESAMPLE("RESAMPLE: error in libresample: %s\n", src_strerror(errorCode));
     return;
   }
 
@@ -348,18 +348,17 @@ void ph_resample_audio0(void *ctx, void *inbuf, int inbsize, void *outbuf, int *
   //hack: if resample filter is in acquisition mode (we hope it is only for the first samples),
   //it does not had out enough samples
   if (*outbsize != postsampling_framesize) {
-    DBG5_DYNA_AUDIO("RESAMPLE: acquisition mode: dropping !: generated: %d , wished: %d\n",
-                    *outbsize,
-                    postsampling_framesize,
-                    0,0);
+    DBG_DYNA_AUDIO_RESAMPLE("RESAMPLE: acquisition mode: dropping !: generated: %d , wished: %d\n",
+      *outbsize, postsampling_framesize);
+
     *outbsize = 0;
   }
 
-  DBG5_DYNA_AUDIO("RESAMPLE: ratio=%f in=%d out=%d input_frames_used: %d\n",
-                  ctx_filter->src_data->src_ratio,
-                  ctx_filter->src_data->input_frames,
-                  ctx_filter->src_data->output_frames_gen,
-                  ctx_filter->src_data->input_frames_used);
+  DBG_DYNA_AUDIO_RESAMPLE("RESAMPLE: ratio=%f in=%d out=%d input_frames_used: %d\n",
+    ctx_filter->src_data->src_ratio,
+    ctx_filter->src_data->input_frames,
+    ctx_filter->src_data->output_frames_gen,
+    ctx_filter->src_data->input_frames_used);
 }
 
 #endif /* PH_USE_RESAMPLE */

@@ -1,21 +1,24 @@
 /*
- The phmedia-coreaudio  module implements interface to a coreaudio driver
- Copyright (C) 2005  Philippe Bernery <philippe.bernery@wengo.fr>
- 
- this module is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- 
- eXosip is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * The phmedia-coreaudio  module implements interface to a coreaudio driver
+ *
+ * Copyright (C) 2005  Philippe Bernery <philippe.bernery@wengo.fr>
+ * Copyright (C) 2006 WENGO SAS
+ *
+ * This is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2,
+ * or (at your option) any later version.
+ *
+ * This is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with dpkg; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+
 #include <CoreAudio/CoreAudio.h>
 #include <AudioToolbox/AudioConverter.h>
 #include <AudioUnit/AudioUnit.h>
@@ -42,9 +45,6 @@
 #include "phaudiodriver.h"
 
 #include <strings.h>
-
-//#define ph_printf  printf
-#define ph_printf
 
 #define IN_PREFIX "in="
 #define OUT_PREFIX "out="
@@ -324,7 +324,7 @@ static OSStatus output_renderer(void *inRefCon,
 		
 		cadev->cbk(as, (void *) 0, 0,  cadev->tmpOutputBuffer,  &chunkSize);
 		cadev->tmpOutputCount = chunkSize;
-		ph_printf("**CoreAudio: chunkSize: %d, needMore: %d\n", chunkSize, needMore);
+		DBG_DYNA_AUDIO_DRV("**CoreAudio: chunkSize: %d, needMore: %d\n", chunkSize, needMore);
 
 		/* did we got some more data? */ 
 		if (chunkSize) {
@@ -372,10 +372,10 @@ static OSStatus input_proc(AudioDeviceID device,
 	cadev->recordBuffer = inputData->mBuffers[0].mData;
 	cadev->recordBufferCount = inputData->mBuffers[0].mDataByteSize;
 	
-	ph_printf("**CoreAudio: available input data: %d\n",
+	DBG_DYNA_AUDIO_DRV("**CoreAudio: available input data: %d\n",
 		  inputData->mBuffers[0].mDataByteSize);
 
-	ph_printf("**CoreAudio: phapi framesize:%d, input converter buffer size: %d\n",
+	DBG_DYNA_AUDIO_DRV("**CoreAudio: phapi framesize:%d, input converter buffer size: %d\n",
 		decodedFrameSize, cadev->inputConverterBufferSize);
 	
 	memcpy(cadev->tmpInputBuffer + cadev->tmpInputCount, 
@@ -391,9 +391,9 @@ static OSStatus input_proc(AudioDeviceID device,
 		err = AudioConverterFillBuffer(cadev->inputConverter, buffer_data_proc,
 			cadev, &cadev->convertedInputCount, cadev->convertedInputBuffer);
 		if (err != noErr) {
-			ph_printf("!!CoreAudio: error while converting\n");
+			DBG_DYNA_AUDIO_DRV("!!CoreAudio: error while converting\n");
 		}
-		ph_printf("**CoreAudio: converted data: %d\n", cadev->convertedInputCount);
+		DBG_DYNA_AUDIO_DRV("**CoreAudio: converted data: %d\n", cadev->convertedInputCount);
 		
 		// Send converted data to phapi
 		cadev->cbk(as, cadev->convertedInputBuffer, cadev->convertedInputCount, NULL, 0);
@@ -404,7 +404,7 @@ static OSStatus input_proc(AudioDeviceID device,
 			memcpy(cadev->tmpInputBuffer, cadev->tmpInputBuffer + usedData, remainingData);
 			cadev->tmpInputCount = remainingData;
 		}
-		ph_printf("**CoreAudio: used data: %d\n", usedData);
+		DBG_DYNA_AUDIO_DRV("**CoreAudio: used data: %d\n", usedData);
 	}
 	
 	return noErr;
@@ -414,7 +414,7 @@ static OSStatus input_proc(AudioDeviceID device,
 static OSStatus buffer_data_proc(AudioConverterRef inAudioConverter, UInt32 *ioDataSize, void **outData, void *context) {
 	ca_dev *cadev = (ca_dev *) context;
 
-	ph_printf("**CoreAudio: buffer size: %u, ioDataSize: %d\n", cadev->tmpInputCount, *ioDataSize);
+	DBG_DYNA_AUDIO_DRV("**CoreAudio: buffer size: %u, ioDataSize: %d\n", cadev->tmpInputCount, *ioDataSize);
 
 	cadev->sumDataSize += *ioDataSize;
 	
@@ -441,14 +441,14 @@ static void defaultInputDevice(char * deviceId) {
 
 	err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &size, &device);
 	if (err != noErr) {
-		ph_printf("!!CoreAudio: can't get default input device\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't get default input device\n");
 		return;
 	}
 
 	size = sizeof(UInt32);
 	err = AudioDeviceGetProperty(device, 0, 1, kAudioDevicePropertyDataSource, &size, &dataSourceId);
 	if (err != noErr) {
-		ph_printf("**CoreAudio: can't get default input data source. No data source on this device");
+		DBG_DYNA_AUDIO_DRV("**CoreAudio: can't get default input data source. No data source on this device");
 	}
 
 	snprintf(deviceId, 128, "%d:%u:%d", device, dataSourceId, 1);
@@ -463,14 +463,14 @@ static void defaultOutputDevice(char * deviceId) {
 
 	err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size, &device);
 	if (err != noErr) {
-		ph_printf("!!CoreAudio: can't get default output device\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't get default output device\n");
 		return;
 	}
 
 	size = sizeof(UInt32);
 	err = AudioDeviceGetProperty(device, 0, 0, kAudioDevicePropertyDataSource, &size, &dataSourceId);
 	if (err != noErr) {
-		ph_printf("**CoreAudio: can't get default output data source. No data source on this device");
+		DBG_DYNA_AUDIO_DRV("**CoreAudio: can't get default output data source. No data source on this device");
 	}
 
 	snprintf(deviceId, 128, "%d:%u:%d", device, dataSourceId, 1);
@@ -483,7 +483,7 @@ static void parse_device(ca_dev *cadev, const char *name) {
 
 	strncpy(buffer, name, sizeof(buf));
 
-	ph_printf("**CoreAudio: parsing %s\n", name);
+	DBG_DYNA_AUDIO_DRV("**CoreAudio: parsing %s\n", name);
 
 	if (strncasecmp(buffer, "ca:", 3) == 0) {
 		buffer += 3;
@@ -510,7 +510,7 @@ static void parse_device(ca_dev *cadev, const char *name) {
 		strncpy(cadev->outputID, deviceId, sizeof(cadev->inputID));
 	}
 
-	ph_printf("**CoreAudio: using devices in=%s out=%s\n", 
+	DBG_DYNA_AUDIO_DRV("**CoreAudio: using devices in=%s out=%s\n",
 		cadev->inputID, cadev->outputID);
 }
 
@@ -538,7 +538,7 @@ static AudioDeviceID get_audiodeviceid(const char * deviceId) {
 	int pos1 = -1;
 
 	if (deviceId) {
-		ph_printf("**CoreAudio: deviceId in get_audiodeviceid => %s\n", deviceId);
+		DBG_DYNA_AUDIO_DRV("**CoreAudio: deviceId in get_audiodeviceid => %s\n", deviceId);
 		pos1 = colon_pos(deviceId, 1);
 		if (pos1 != -1) {
 			strncpy(tmp, deviceId, pos1);
@@ -555,7 +555,7 @@ static UInt32 get_datasourceid(const char * deviceId) {
 	int pos1 = -1, pos2 = -1;
 
 	if (deviceId) {
-		ph_printf("**CoreAudio: deviceId in get_datasourceid => %s\n", deviceId);
+		DBG_DYNA_AUDIO_DRV("**CoreAudio: deviceId in get_datasourceid => %s\n", deviceId);
 		pos1 = colon_pos(deviceId, 1);
 		if (pos1 != -1) {
 			pos2 = colon_pos(deviceId, 2);
@@ -580,12 +580,12 @@ static void init_audio_unit(AudioUnit *au) {
 	
 	Component comp = FindNextComponent(NULL, &desc);
 	if (comp == NULL) {
-		ph_printf("!!CoreAudio: can't audio component\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't audio component\n");
 	}
 	
 	err = OpenAComponent(comp, au);
 	if (err != noErr) {
-		ph_printf("!!CoreAudio: can't open audio component\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't open audio component\n");
 	}
 }
 
@@ -600,7 +600,7 @@ static void set_audio_unit_device(AudioUnit au, AudioDeviceID id) {
 		sizeof(id));
 
 	if (err != noErr) {
-		ph_printf("!!CoreAudio: can't set device #%d\n", id);
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't set device #%d\n", id);
 	}
 }
 
@@ -618,7 +618,7 @@ static void set_render_callback(AudioUnit au, AURenderCallback cbk, void *data) 
 	   sizeof(input));
 	
 	if (err != noErr) {
-		ph_printf("!!CoreAudio: can't set render callback\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't set render callback\n");
 	}
 }
 
@@ -627,7 +627,7 @@ static void set_input_callback(AudioDeviceID id, AudioDeviceIOProc cbk, void *da
 
 	err = AudioDeviceAddIOProc(id, cbk, data);
 	if (err != noErr) {
-		ph_printf("!!CoreAudio: can't set input callback\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't set input callback\n");
 	}	
 }
 
@@ -638,7 +638,7 @@ static void set_data_source(AudioDeviceID audioDeviceId, int isInput, UInt32 dat
 	status = AudioDeviceSetProperty(audioDeviceId, NULL, 0, isInput,
 		kAudioDevicePropertyDataSource, size, &dataSourceId);
 	if (status) {
-		ph_printf("!!CoreAudio: can't set data source\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't set data source\n");
 		return;
 	}
 }
@@ -655,7 +655,10 @@ static void init_output_device(phastream_t *as, float rate, unsigned channels, u
 	set_render_callback(cadev->outputAU, output_renderer, as);
 
 	err = AudioUnitInitialize(cadev->outputAU);
-	if (err) { ph_printf ("!!CoreAudio: AudioUnitInitialize-SF=%4.4s, %ld\n", (char*)&err, err); return; }
+	if (err) {
+		DBG_DYNA_AUDIO_DRV ("!!CoreAudio: AudioUnitInitialize-SF=%4.4s, %ld\n", (char*)&err, err);
+		return;
+	}
 }
 
 static void init_input_device(phastream_t *as, float rate, unsigned channels, unsigned format) {
@@ -683,17 +686,17 @@ static void set_recorded_format(phastream_t *as, float rate, unsigned channels, 
 
 	err = AudioDeviceGetProperty(get_audiodeviceid(cadev->inputID), 0, 1, kAudioDevicePropertyStreamFormat, &propsize, &devFmt);
 	if (err != noErr) {
-		ph_printf("!!CoreAudio: can't get device info\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't get device info\n");
 		return;
 	}
 
-	ph_printf("**CoreAudio: Input format:\n\t");
-	ph_printf("SampleRate=%f,", devFmt.mSampleRate);
-	ph_printf("BytesPerPacket=%ld,", devFmt.mBytesPerPacket);
-	ph_printf("FramesPerPacket=%ld,", devFmt.mFramesPerPacket);
-	ph_printf("BytesPerFrame=%ld,", devFmt.mBytesPerFrame);
-	ph_printf("BitsPerChannel=%ld,", devFmt.mBitsPerChannel);
-	ph_printf("ChannelsPerFrame=%ld\n", devFmt.mChannelsPerFrame);
+	DBG_DYNA_AUDIO_DRV("**CoreAudio: Input format:\n\t");
+	DBG_DYNA_AUDIO_DRV("SampleRate=%f,", devFmt.mSampleRate);
+	DBG_DYNA_AUDIO_DRV("BytesPerPacket=%ld,", devFmt.mBytesPerPacket);
+	DBG_DYNA_AUDIO_DRV("FramesPerPacket=%ld,", devFmt.mFramesPerPacket);
+	DBG_DYNA_AUDIO_DRV("BytesPerFrame=%ld,", devFmt.mBytesPerFrame);
+	DBG_DYNA_AUDIO_DRV("BitsPerChannel=%ld,", devFmt.mBitsPerChannel);
+	DBG_DYNA_AUDIO_DRV("ChannelsPerFrame=%ld\n", devFmt.mChannelsPerFrame);
 
 	imgFmt.mSampleRate = rate;
 	imgFmt.mFormatID = kAudioFormatLinearPCM;
@@ -706,7 +709,7 @@ static void set_recorded_format(phastream_t *as, float rate, unsigned channels, 
 
 	err = AudioConverterNew(&devFmt, &imgFmt, &cadev->inputConverter);
 	if (err != noErr) {
-		ph_printf("!!CoreAudio: can't create audio converter for input\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't create audio converter for input\n");
 		return;
 	}
 
@@ -717,14 +720,14 @@ static void set_recorded_format(phastream_t *as, float rate, unsigned channels, 
 	propsize = sizeof(unsigned);
 	cadev->inputConverterBufferSize = decodedFrameSize;
 	if ((cadev->convertedInputBuffer = malloc(sizeof(char) * decodedFrameSize)) == NULL) {
-		ph_printf("!!CoreAudio: can't allocate enough memory for cadev->convertedInputBuffer\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't allocate enough memory for cadev->convertedInputBuffer\n");
 		return;
 	}
 
 	err = AudioConverterGetProperty(cadev->inputConverter, kAudioConverterPropertyCalculateInputBufferSize,
 		&propsize, &cadev->inputConverterBufferSize);
 	if (err != noErr) {
-		ph_printf("!!CoreAudio: can't get input converter buffer size\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't get input converter buffer size\n");
 		return;
 	}
 }
@@ -748,15 +751,15 @@ static void set_played_format(AudioUnit au, float rate, unsigned channels, unsig
 	streamFormat.mFramesPerPacket = 1;
 	streamFormat.mChannelsPerFrame = channels;
 	streamFormat.mBitsPerChannel = format;
-	
-	ph_printf("**CoreAudio: Rendering source:\n\t");
-	ph_printf("SampleRate=%f,", streamFormat.mSampleRate);
-	ph_printf("BytesPerPacket=%ld,", streamFormat.mBytesPerPacket);
-	ph_printf("FramesPerPacket=%ld,", streamFormat.mFramesPerPacket);
-	ph_printf("BytesPerFrame=%ld,", streamFormat.mBytesPerFrame);
-	ph_printf("BitsPerChannel=%ld,", streamFormat.mBitsPerChannel);
-	ph_printf("ChannelsPerFrame=%ld\n", streamFormat.mChannelsPerFrame);
-	
+
+	DBG_DYNA_AUDIO_DRV("**CoreAudio: Rendering source:\n\t");
+	DBG_DYNA_AUDIO_DRV("SampleRate=%f,", streamFormat.mSampleRate);
+	DBG_DYNA_AUDIO_DRV("BytesPerPacket=%ld,", streamFormat.mBytesPerPacket);
+	DBG_DYNA_AUDIO_DRV("FramesPerPacket=%ld,", streamFormat.mFramesPerPacket);
+	DBG_DYNA_AUDIO_DRV("BytesPerFrame=%ld,", streamFormat.mBytesPerFrame);
+	DBG_DYNA_AUDIO_DRV("BitsPerChannel=%ld,", streamFormat.mBitsPerChannel);
+	DBG_DYNA_AUDIO_DRV("ChannelsPerFrame=%ld\n", streamFormat.mChannelsPerFrame);
+
 	err = AudioUnitSetProperty(au,
 		kAudioUnitProperty_StreamFormat,
 		kAudioUnitScope_Input,
@@ -765,18 +768,18 @@ static void set_played_format(AudioUnit au, float rate, unsigned channels, unsig
 		sizeof(AudioStreamBasicDescription));
 
 	if (err) { 
-		ph_printf("!!CoreAudio: AudioUnitSetProperty-SF=%4.4s, %ld\n", (char*)&err, err);
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: AudioUnitSetProperty-SF=%4.4s, %ld\n", (char*)&err, err);
 		return;
 	}
 }
 
 void ph_ca_driver_init() {
-	ph_printf("** Register and initialize ca audio driver\n");
+	DBG_DYNA_AUDIO_DRV("** Register and initialize ca audio driver\n");
 	ph_register_audio_driver(&ph_ca_audio_driver);
 }
 
 void ca_start(phastream_t *as) {
-	ph_printf("** Starting audio stream\n");
+	DBG_DYNA_AUDIO_DRV("** Starting audio stream\n");
 	
 	ca_dev *cadev = (ca_dev *) as->drvinfo;
 	
@@ -784,12 +787,12 @@ void ca_start(phastream_t *as) {
 	OSStatus err = noErr;
 	err = AudioDeviceStart(get_audiodeviceid(cadev->inputID), input_proc);
 	if (err != noErr) {
-		ph_printf("!!CoreAudio: can't start input proc\n");
+		DBG_DYNA_AUDIO_DRV("!!CoreAudio: can't start input proc\n");
 	}
 }
 
 int ca_open(phastream_t *as, char *name, int rate, int framesize, ph_audio_cbk cbk) {
-	ph_printf("** Opening device %s with rate: %d, framesize: %d, and callback: %p\n",
+	DBG_DYNA_AUDIO_DRV("** Opening device %s with rate: %d, framesize: %d, and callback: %p\n",
 		  name, rate, framesize, cbk);
 
 	ca_dev *cadev = (ca_dev *) calloc(1, sizeof(ca_dev));
@@ -803,7 +806,7 @@ int ca_open(phastream_t *as, char *name, int rate, int framesize, ph_audio_cbk c
 	init_input_device(as, rate, 1, 16); //FIXME: channels and format should be given by phapi
 	init_output_device(as, rate, 1, 16);
 
-	ph_printf("**CoreAudio: actual_rate: %d, clock_rate: %d\n", as->actual_rate, as->clock_rate);
+	DBG_DYNA_AUDIO_DRV("**CoreAudio: actual_rate: %d, clock_rate: %d\n", as->actual_rate, as->clock_rate);
 
 	return 0;
 }
@@ -811,18 +814,18 @@ int ca_open(phastream_t *as, char *name, int rate, int framesize, ph_audio_cbk c
 int ca_get_out_space(phastream_t *as, int *used) {
 	*used = 320;
 
-	ph_printf("** Out space used: %d\n", *used);
+	DBG_DYNA_AUDIO_DRV("** Out space used: %d\n", *used);
 
 	return *used;
 }
 
 int ca_get_avail_data(phastream_t *as) {
-	ph_printf("** Available data: 0\n");
+	DBG_DYNA_AUDIO_DRV("** Available data: 0\n");
 	return 320;
 }
 
 void ca_close(phastream_t *as) {
-	ph_printf("** Closing audio stream\n");
+	DBG_DYNA_AUDIO_DRV("** Closing audio stream\n");
 
 	ca_dev *cadev = (ca_dev *) as->drvinfo;
 

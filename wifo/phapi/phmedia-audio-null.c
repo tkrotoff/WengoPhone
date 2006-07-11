@@ -1,21 +1,24 @@
 /*
- The phmedia-audio-null  module implements interface to a null audio driver
- Copyright (C) 2005  Philippe Bernery <philippe.bernery@wengo.fr>
- 
- this module is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- 
- eXosip is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * The phmedia-audio-null  module implements interface to a null audio driver
+ *
+ * Copyright (C) 2004  Vadim Lebedev  <vadim@mbdsys.com>
+ * Copyright (C) 2006 WENGO SAS
+ *
+ * This is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2,
+ * or (at your option) any later version.
+ *
+ * This is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with dpkg; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+
 #include <osip2/osip_mt.h>
 #include <osip2/osip.h>
 #ifndef T_MSVC
@@ -37,8 +40,8 @@
 #include "phmstream.h"
 #include "phastream.h"
 #include "phaudiodriver.h"
+#include "phlog.h"
 
-#define ph_printf printf
 #define PH_UNREFERENCED_PARAMETER(P) (P)
 
 /**
@@ -49,7 +52,7 @@ void ph_null_driver_init();
 /**
  * Start the stream.
  *
- * @return 
+ * @return
  */
 void null_start(phastream_t *as);
 
@@ -58,9 +61,9 @@ void null_start(phastream_t *as);
  *
  * @param name desired device name
  * @param rate desired audio rate
- * @param framesize 
- * @param cbk 
- * @return 
+ * @param framesize
+ * @param cbk
+ * @return
  */
 int null_open(phastream_t *as, const char *name, int rate, int framesize, ph_audio_cbk cbk);
 
@@ -97,72 +100,62 @@ int null_get_avail_data(phastream_t *as);
  */
 void null_close(phastream_t *as);
 
-
 struct ph_audio_driver ph_null_audio_driver = {
-	"null",
-	0,
-	0,
-	null_start,
-	null_open,
-	null_write,
-	null_read,
-	null_get_out_space,
-	null_get_avail_data,
-	null_close
+  "null",
+  0,
+  0,
+  null_start,
+  null_open,
+  null_write,
+  null_read,
+  null_get_out_space,
+  null_get_avail_data,
+  null_close
 };
 
-
 void ph_null_driver_init() {
-	ph_printf("** Register and initialize null audio driver\n");
-	ph_register_audio_driver(&ph_null_audio_driver);
+  DBG_DYNA_AUDIO_DRV("** Register and initialize null audio driver\n");
+  ph_register_audio_driver(&ph_null_audio_driver);
 }
 
 void null_start(phastream_t *as) {
-    PH_UNREFERENCED_PARAMETER(as);
-	ph_printf("** Starting audio stream\n");
+  PH_UNREFERENCED_PARAMETER(as);
+  DBG_DYNA_AUDIO_DRV("** Starting audio stream\n");
 }
 
 int null_open(phastream_t *as, const char *name, int rate, int framesize, ph_audio_cbk cbk) {
-    PH_UNREFERENCED_PARAMETER(as);
-	ph_printf("** Opening device %s with rate: %d, framesize: %d, and callback: %p\n",
-		  name, rate, framesize, cbk);
-	
-	return 0;
+  PH_UNREFERENCED_PARAMETER(as);
+  DBG_DYNA_AUDIO_DRV("** Opening device %s with rate: %d, framesize: %d, and callback: %p\n",
+    name, rate, framesize, cbk);
+  return 0;
 }
 
 int null_write(phastream_t *as, void *buf, int len) {
-    PH_UNREFERENCED_PARAMETER(as);
-	ph_printf("** Writing %d bytes of data from buffer %p\n",
-		  len, buf);
-	
-	return 0;
+  PH_UNREFERENCED_PARAMETER(as);
+  DBG_DYNA_AUDIO_DRV("** Writing %d bytes of data from buffer %p\n", len, buf);
+  return 0;
 }
 
 int null_read(phastream_t *as, void *buf, int len) {
-    PH_UNREFERENCED_PARAMETER(as);
-	ph_printf("** Reading %d bytes of data and putting it into buffer %p\n",
-		  len, buf);
-	
-	return 0;
+  PH_UNREFERENCED_PARAMETER(as);
+  DBG_DYNA_AUDIO_DRV("** Reading %d bytes of data and putting it into buffer %p\n", len, buf);
+  return 0;
 }
 
 int null_get_out_space(phastream_t *as, int *used) {
-	*used = 0;
-
-    PH_UNREFERENCED_PARAMETER(as);
-	ph_printf("** Out space used: 0\n", *used);
-
-	return 0;
+  *used = 0;
+  PH_UNREFERENCED_PARAMETER(as);
+  DBG_DYNA_AUDIO_DRV("** Out space used: 0\n", *used);
+  return 0;
 }
 
 int null_get_avail_data(phastream_t *as) {
-    PH_UNREFERENCED_PARAMETER(as);
-	ph_printf("** Available data: 0\n");
-	
-	return 0;
+  PH_UNREFERENCED_PARAMETER(as);
+  DBG_DYNA_AUDIO_DRV("** Available data: 0\n");
+  return 0;
 }
 
 void null_close(phastream_t *as) {
-    PH_UNREFERENCED_PARAMETER(as);
-	ph_printf("** Closing audio stream\n");
+  PH_UNREFERENCED_PARAMETER(as);
+  DBG_DYNA_AUDIO_DRV("** Closing audio stream\n");
 }

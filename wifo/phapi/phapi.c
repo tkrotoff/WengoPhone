@@ -24,7 +24,7 @@
  * @brief softphone  API
  *
  * phapi is a library providing simplified api to create VOIP sessions
- * using eXosip library oSIP stack and oRTP stcak 
+ * using eXosip library oSIP stack and oRTP stcak
  * <P>
  */
 
@@ -65,12 +65,13 @@
 #include <eXosip/eXosip.h>
 #include <eXosip/eXosip_cfg.h>
 
-#include "phdebug.h"
 #include "phapi.h"
 #include "phcall.h"
 #include "phrpc.h"
 #include "phmedia.h"
 #include "stun/stun.h"
+
+#include "phlog.h"
 
 #ifdef USE_HTTP_TUNNEL
 #include "httptunnel.h"
@@ -78,9 +79,6 @@
 /*
 #define G711_ONLY
 */
-
-#define DBG(x)  printf(x)
-#define DBG2(x,y)  printf(x,y)
 
 #define SKIP(x)
 
@@ -94,8 +92,6 @@ phcall_t *ph_locate_call_for_refer(eXosip_event_t *je);
 
 void ph_wegot_dtmf(void  *ctx, int dtmfEvent);
 static int ph_event_get();
-
-
 static char *ph_get_call_contact(phcall_t *ca);
 
 #define MEDIA_SUSPEND
@@ -112,10 +108,10 @@ static int ph_call_retrieve_payloads(phcall_t *ca, eXosip_event_t *je, int flags
 static int ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int resumeflag);
 static int ph_call_media_stop(phcall_t * ca);
 static int ph_call_media_suspend(phcall_t *ca, int localhold);
-
 static int ph_tunnel_init2(char *sip_proxy);
-
 void ph_release_call(phcall_t *ca);
+int ph_call_hasaudio(phcall_t *ca);
+
 static  int timeout = 500;
 
 #define PORT_STRING_LEN 16
@@ -148,25 +144,23 @@ static void ph_frame_display_cbk(void *ctx, void *event);
 #define USE_VLINES 1
 #define PH_MAX_VLINES 16
 
-
 struct vline
 {
-	char	*displayname;
-	char	*username;
-	char	*server;
-	int		port;
-	char	*proxy;
-	char	*contact;
-	time_t	regTimeout;
-	time_t	lastRegTime;
-	int		rid;
+  char  *displayname;
+  char  *username;
+  char  *server;
+  int   port;
+  char  *proxy;
+  char  *contact;
+  time_t  regTimeout;
+  time_t  lastRegTime;
+  int   rid;
 #define VL_USED 1
 #define VL_DELETING 2
-	int		used;
-	int		busy;
-	char	*followme;
+  int   used;
+  int   busy;
+  char  *followme;
 };
-
 
 struct vline ph_vlines[PH_MAX_VLINES];
 
@@ -203,43 +197,30 @@ ph_valid_vlid(int vlid)
   struct vline *vl = 0;
 
   if (vlid > 0 && vlid <= PH_MAX_VLINES)
+  {
+    vl = ph_vlid2vline(vlid);
+    if (!vl->used || vl->used == VL_DELETING)
     {
-      vl = ph_vlid2vline(vlid);
-      if (!vl->used || vl->used == VL_DELETING)
-	vl = 0;
+      vl = 0;
     }
+  }
   return vl;
 }
 
 
-
-
-
-
-
-
-
 MY_DLLEXPORT phCallbacks_t *phcb;
-
 MY_DLLEXPORT int phIsInitialized;
-
 MY_DLLEXPORT int phDebugLevel = 0;
 MY_DLLEXPORT char *phLogFileName = 0;
 
-
-
-
 static char ph_follow_me_addr[256];
 
-unsigned short phCallBackPort = PH_CALLBACK_PORT; 
-MY_DLLEXPORT  unsigned short phServerPort = PH_SERVER_PORT; 
+unsigned short phCallBackPort = PH_CALLBACK_PORT;
+MY_DLLEXPORT  unsigned short phServerPort = PH_SERVER_PORT;
 
 static int ph_busyFlag;
 
-
 static FILE *ph_log_file;
-
-#define ph_printf printf
 
 void *
 ph_api_thread(void *arg);
@@ -337,7 +318,7 @@ static char *evtnames[] =
 phcall_t ph_calls[PH_MAX_CALLS];
 
 
-/* 
+/*
 //#define FORCE_VAD   1
 #define FORCE_CNG   1
 */
@@ -434,20 +415,20 @@ _get_local_audio_sdp_port(char buf[])
 
   /* base port number*/
   int port = atoi(phcfg.local_rtp_port);
-  int i = 0;
 
   buf[0] = 0;
 
-
   while(1)
+  {
+    if (!ph_port_inuse(port))
     {
-      if (!ph_port_inuse(port))
-      {
-	sprintf(buf, "%d", port);
-	return;
-      }
+      sprintf(buf, "%d", port);
+      return;
+    }
     else
+    {
       port += 2;    /* try next pair */
+    }
   }
 }
 
@@ -455,23 +436,22 @@ static void
 _get_local_video_sdp_port(char buf[]) 
 {
   int port = atoi(phcfg.local_rtp_port) + 2;
-  int i;
-
 
   buf[0] = 0;
 
   while(1)
+  {
+    if (!ph_port_inuse(port))
     {
-      if (!ph_port_inuse(port))
-      {
-	sprintf(buf, "%d", port);
-	return;
-      }
+      sprintf(buf, "%d", port);
+      return;
+    }
     else
+    {
       port += 2;    /* try next pair */
+    }
   }
 }
-
 
 
 static char *
@@ -636,7 +616,7 @@ ph_locate_call(eXosip_event_t *je, int creatit)
 
 void ph_release_call(phcall_t *ca)
 {
-  DBG4_SIP_NEGO("SIP_NEGO: ph_release_call\n", 0, 0, 0);
+  DBG_SIP_NEGO("SIP_NEGO: ph_release_call\n", 0, 0, 0);
 
   if (ph_call_hasaudio(ca)) {
       ph_call_media_stop(ca);
@@ -817,25 +797,22 @@ ph_build_from(char *buf, int n, struct vline *vl)
   s = nonempty(vl->server) ? vl->server : "localhost";
 
 
-
   if (vl->displayname && vl->displayname[0])
+  {
+    if (!strchr(vl->displayname, ' '))
     {
-      if (!strchr(vl->displayname, ' '))
-	{
-	  snprintf(buf, n, "%s <sip:%s@%s>", vl->displayname, un, s);
-	}
-      else
-	{
-	  snprintf(buf, n, "\"%s\" <sip:%s@%s>", vl->displayname, un, s);
-	}
-
+      snprintf(buf, n, "%s <sip:%s@%s>", vl->displayname, un, s);
     }
+    else
+    {
+      snprintf(buf, n, "\"%s\" <sip:%s@%s>", vl->displayname, un, s);
+    }
+  }
   else
-    {
-      snprintf(buf, n, "<sip:%s@%s>", un, s);
-    }
+  {
+    snprintf(buf, n, "<sip:%s@%s>", un, s);
+  }
 }
-
 
 static void
 ph_build_cname(char *buf, int n, struct vline *vl)
@@ -848,18 +825,13 @@ ph_build_cname(char *buf, int n, struct vline *vl)
   s = nonempty(vl->server) ? vl->server : "localhost";
 
   snprintf(buf, n, "%s@%s", un, s);
-
 }
-
-
 
 MY_DLLEXPORT int 
 phLinePlaceCall2(int vlid, const char *uri, void *userdata, int rcid, int streams)
 {
    return phLinePlaceCall_withCa(vlid, uri, userdata, rcid, streams, 0);
 }
-
- 
 
 #define optional(x) (x[0] ? x : 0)
 
@@ -882,7 +854,7 @@ phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int 
    public_voice_port[0] = 0;
 #endif
    
-   DBG4_SIP_NEGO("phLinePlaceCall_withCa: a new call has been placed\n",0,0,0);
+   DBG_SIP_NEGO("phLinePlaceCall_withCa: a new call has been placed\n",0,0,0);
 
 
    local_video_port[0] = 0;
@@ -932,7 +904,7 @@ phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int 
 
 	if (ret <1)
 	{
-		DBG4_SIP_NEGO("unable to alocate public port ...",0,0,0);
+		DBG_SIP_NEGO("unable to alocate public port ...",0,0,0);
 		return;
 	}
 	
@@ -1188,7 +1160,7 @@ phAcceptCall3(int cid, void *userData, int streams)
     char *remoteUri = 0;
 
 
-    DBG4_SIP_NEGO("SIP NEGO: phAcceptCall3\n", 0, 0, 0);
+    DBG_SIP_NEGO("SIP NEGO: phAcceptCall3\n", 0, 0, 0);
     if (!ca) {
         return -PH_BADCID;
     }
@@ -1203,14 +1175,14 @@ phAcceptCall3(int cid, void *userData, int streams)
     _get_local_audio_sdp_port(local_voice_port);
 
 #ifdef STUN_ENABLE
-    DBG4_SIP_NEGO(" phAcceptCall3 nattype: %s \n", eXosip_get_nattype(), 0, 0);
+    DBG_SIP_NEGO(" phAcceptCall3 nattype: %s \n", eXosip_get_nattype(), 0, 0);
 
     if (0!=strncasecmp(eXosip_get_nattype(), "none", 4) && (0!=strncasecmp(eXosip_get_nattype(), "sym", 3) ))
     {
         int ret = getPublicPort(local_voice_port, local_video_port, public_voice_port , public_video_port );
         if (ret <1)
         {
-            DBG4_SIP_NEGO("unable to alocate public port ...",0,0,0);
+            DBG_SIP_NEGO("unable to alocate public port ...",0,0,0);
             return;
         }
 
@@ -1330,7 +1302,7 @@ phCloseCall(int cid)
   phCallStateInfo_t info;
   int did;
   
-  DBG4_SIP_NEGO("phCloseCall %d\n", cid,0,0);
+  DBG_SIP_NEGO("phCloseCall %d\n", cid,0,0);
   clear(info);
   info.event = phCALLCLOSED;
   
@@ -1538,7 +1510,7 @@ phHoldCall(int cid)
 	phcall_t *ca = ph_locate_call_by_cid(cid);
 	int i;
 
-	DBG4_SIP_NEGO("SIP_NEGO: phHoldCall\n", 0, 0, 0);
+	DBG_SIP_NEGO("SIP_NEGO: phHoldCall\n", 0, 0, 0);
 
 	// call does not exist
 	if (!ca)
@@ -1687,45 +1659,38 @@ phvlRegister(int vlid)
 
   snprintf(utmp, sizeof(utmp), "sip:%s@%s", vl->username, vl->server);
 
-
   server = stmp;
   if (vl->port && vl->port != 5060)
-    {
-      /*     snprintf(stmp, sizeof(stmp), "sip:%s@%s:%d", vl->username, vl->server, vl->port); */
-      snprintf(stmp, sizeof(stmp), "sip:%s:%d", vl->server, vl->port);
-    }
+  {
+    /*     snprintf(stmp, sizeof(stmp), "sip:%s@%s:%d", vl->username, vl->server, vl->port); */
+    snprintf(stmp, sizeof(stmp), "sip:%s:%d", vl->server, vl->port);
+  }
   else
-    {
-      /*     snprintf(stmp, sizeof(stmp), "sip:%s@%s:%d", vl->username, vl->server, vl->port); */
-      snprintf(stmp, sizeof(stmp), "sip:%s", vl->server); 
-    }
-
-
-    
-      
+  {
+    /*     snprintf(stmp, sizeof(stmp), "sip:%s@%s:%d", vl->username, vl->server, vl->port); */
+    snprintf(stmp, sizeof(stmp), "sip:%s", vl->server); 
+  }
 
   eXosip_lock();
 
   vl->rid = eXosip_register_init(utmp, server, vl->contact, vl->proxy);
 
   if (vl->rid >= 0)
+  {
+    ret = eXosip_register(vl->rid, vl->regTimeout);
+
+    if (ret == 0)
     {
-      ret = eXosip_register(vl->rid, vl->regTimeout);
-     
-      if (ret == 0)
-	{
-	ret = vl->rid;
-	vl->lastRegTime = time(0);
-	}
+      ret = vl->rid;
+      vl->lastRegTime = time(0);
     }
+  }
 
   eXosip_unlock();
 
   return ret;
-
 }
 
- 
 MY_DLLEXPORT int 
 phSendDtmf(int cid, int dtmfEvent, int mode)
 {
@@ -1886,7 +1851,7 @@ phAddVline2(const char *displayname, const char* username, const char *server, c
 #endif
 
 	if (phDebugLevel)
-		DBG8_SIP_NEGO("AddVline2(dn = %s, un=%s, srv=%s pxy=%s regT=%d)\n", nonull(displayname), 
+		DBG_SIP_NEGO("AddVline2(dn = %s, un=%s, srv=%s pxy=%s regT=%d)\n", nonull(displayname), 
 			nonull(username), nonull(server), nonull(proxy), regTimeout,0,0);
 
 	srv2 = ph_scrap_port(srvbuf, sizeof(srvbuf), server, &port);
@@ -2005,6 +1970,7 @@ phDelVline(int vlid, int regTimeout)
 		eXosip_register(vl->rid, 0);
 		vl->regTimeout = 0;
 		vl->used = VL_DELETING;
+		
 		eXosip_unlock();
 	}
 	else
@@ -2388,13 +2354,13 @@ static void setup_payload(const char *ptstring)
     char  num[8];
     ph_media_payload_t  pt;
 
-    DBG4_CODEC_LOOKUP("trying to setup codec in eXosip: %s\n", ptstring, 0, 0);
+    DBG_CODEC_LOOKUP("trying to setup codec in eXosip: %s\n", ptstring, 0, 0);
     if (ph_media_supported_payload(&pt, ptstring))
     {
-        DBG4_CODEC_LOOKUP("...setup accepted : %d - %s/%d\n", pt.number, pt.string, pt.rate);
+        DBG_CODEC_LOOKUP("...setup accepted : %d - %s/%d\n", pt.number, pt.string, pt.rate);
         snprintf(num, sizeof(num), "%d", pt.number);
         snprintf(tmp, sizeof(tmp), "%d %s/%d/1", pt.number, pt.string, pt.rate);
-    
+
         eXosip_sdp_negotiation_add_codec(
                                         osip_strdup(num),
                                         NULL,
@@ -2404,7 +2370,7 @@ static void setup_payload(const char *ptstring)
                                         osip_strdup(tmp));
         return;
     }
-    DBG4_CODEC_LOOKUP("...setup refused - not found in ortp profile", 0, 0, 0);
+    DBG_CODEC_LOOKUP("...setup refused - not found in ortp profile", 0, 0, 0);
 
 }
 
@@ -2430,7 +2396,7 @@ static void setup_video_payload(const char *ptsring)
     } 
   else 
     {
-      DBG("unsupported payload");
+		DBG_CODEC_LOOKUP("unsupported payload");
     }
 }
 
@@ -2462,27 +2428,28 @@ ph_debug_init()
 
   dbgstr = getenv("PH_DEBUG_LEVEL");
   if (dbgstr)
+  {
     phDebugLevel = atoi(dbgstr);
+  }
 
   if (phDebugLevel > 0)
+  {
+    if (!phLogFileName)
     {
-      if (!phLogFileName)
-	phLogFileName = getenv("PH_LOG_FILENAME");
-
-	  
-      ph_log_file = phLogFileName ? fopen (phLogFileName, "w+") : stdout;
-
-      
-      if (!ph_log_file)
-        {
-          perror ("phapi: log file");
-          return -1;
-        }
-      TRACE_INITIALIZE (phDebugLevel, ph_log_file);
+      phLogFileName = getenv("PH_LOG_FILENAME");
     }
 
-  return 0;
+    ph_log_file = phLogFileName ? fopen (phLogFileName, "w+") : stdout;
 
+    if (!ph_log_file)
+    {
+      perror ("phapi: log file");
+      return -1;
+    }
+    TRACE_INITIALIZE (phDebugLevel, ph_log_file);
+  }
+
+  return 0;
 }
 
 
@@ -2739,7 +2706,7 @@ ph_payloads_init()
   eXosip_sdp_negotiation_remove_audio_payloads();
 
   // init payload/codecs for VIDEO
-    
+
 #ifdef PHAPI_VIDEO_SUPPORT
   setup_video_payload("H263/90000");
 
@@ -2754,7 +2721,7 @@ ph_payloads_init()
       while(tok) {
 	snprintf(tmp, sizeof(tmp), "%s/90000", tok);
 	setup_video_payload(tmp);
-	DBG2("phapi: added video codec: %s\n",tmp);
+	DBG_CODEC_LOOKUP("phapi: added video codec: %s\n",tmp);
 	tok = strtok(0, ",");
 	}
   }
@@ -2794,7 +2761,6 @@ ph_payloads_init()
     // phapi.h client has required a specific list of codecs
   else
     {
-    
         /*
         The list is "," separated
         some hacks are present to allow for :
@@ -2802,8 +2768,7 @@ ph_payloads_init()
         - default /8000 clockrate when not specified
         - ... look at the code
         */
-        
-        
+
       char tmp[32];
       char *tok = strtok(phcfg.audio_codecs, ",");
 
@@ -2839,47 +2804,59 @@ ph_payloads_init()
 
   // set codec in sip stack for CNG (confort noise generator=
   if(phcfg.cng)
+  {
     setup_payload("CN/8000");
-  
+  }
+
   // set codec in sip stack for DTMF
   setup_payload("telephone-event/8000");
 }
 
 static int ph_tunnel_init2(char *sip_proxy);
 
-MY_DLLEXPORT int 
+void DEBUGTRACE(const char * mess)
+{
+  if(phcb->debugTrace)
+  {
+    phcb->debugTrace(mess); 
+  }
+}
+
+MY_DLLEXPORT int
 phInit(phCallbacks_t *cbk, char * server, int asyncmode)
 {
   int i;
   char buf[200];
-    
+
   memset(vcontact, 0, sizeof(vcontact));
 
   i = ph_debug_init();
-
   if (i)
+  {
     return i;
+  }
 
   ph_avcodec_init();
   ph_calls_init();
 
   if (phcfg.use_tunnel) 
+  {
+    i = ph_tunnel_init();
+    if (i)
     {
-      i = ph_tunnel_init();
-      if (i)
-        return i;
+      return i;
     }
+  }
 
   if (phcfg.proxy[0])
+  {
+    char tmp[256];
+    if (!strchr(phcfg.proxy, '<'))
     {
-      char tmp[256];
-      
-      if (!strchr(phcfg.proxy, '<'))
-        {
-          snprintf(tmp, sizeof(tmp), "<sip:%s;lr>", phcfg.proxy); 
-          strncpy(phcfg.proxy, tmp, sizeof(phcfg.proxy));
-        }
+      snprintf(tmp, sizeof(tmp), "<sip:%s;lr>", phcfg.proxy);
+      strncpy(phcfg.proxy, tmp, sizeof(phcfg.proxy));
     }
+  }
 
 #ifdef FORCE_VAD
   /* HACK for test */
@@ -2900,7 +2877,9 @@ phInit(phCallbacks_t *cbk, char * server, int asyncmode)
   i = eXosip_init(0, 0, atoi(phcfg.sipport), phTunnel);
 
   if (i)
+  {
     return -1;
+  }
 
   {
     const char * ua  = "phapi/eXosip/" PHAPI_VERSION;
@@ -2910,18 +2889,20 @@ phInit(phCallbacks_t *cbk, char * server, int asyncmode)
   ph_nat_init();
 
   // if (phDebugLevel > 0)
-  DBG4_SIP_NEGO("NAT type: %s fw=%s \n", ph_nat_type_str, ph_nat_router_addr,0);
+  DBG_SIP_NEGO("NAT type: %s fw=%s \n", ph_nat_type_str, ph_nat_router_addr,0);
 
   if (phcfg.force_proxy)
+  {
     eXosip_force_proxy(phcfg.proxy);
+  }
 
   {
     char contact[512];
-   
+
     eXosip_guess_contact_uri(phcfg.identity, contact, sizeof(contact), 1);
     eXosip_set_answer_contact(contact);
   }
-  
+
   memset(ph_vlines, 0, sizeof(ph_vlines));
 
   ph_payloads_init();
@@ -2931,61 +2912,83 @@ phInit(phCallbacks_t *cbk, char * server, int asyncmode)
   phcb = cbk;
   phcfg.asyncmode = asyncmode;
   if (!asyncmode)
+  {
     timeout = 1;
-  else
+  }
+  else 
+  {
     timeout = 500;
+  }
 
   if (asyncmode)
+  {
     osip_thread_create(20000, ph_api_thread, 0);
+  }
 
   phIsInitialized = 1;
 
+  DEBUGTRACE("PhInit finished\n");
 
   return 0;
 }
 
 
-
 int phTunnelConfig(const char* http_proxy, const int http_proxy_port,
-								const char* httpt_server, const int httpt_server_port, 
-								const char *proxy_user, const char* proxy_passwd,
-								int autoconf)
+                  const char* httpt_server, const int httpt_server_port,
+                  const char *proxy_user, const char* proxy_passwd,
+                  int autoconf)
 {
   phcfg.httpt_server[0] = 0;
   phcfg.http_proxy[0] = 0;
   phcfg.use_tunnel = 0;
-  
-  if (!httpt_server) {
+
+  if (!httpt_server)
+  {
     return -1;
   }
-  
+
   phcfg.http_proxy_port = http_proxy_port;
   if (!httpt_server_port)
-    if (!http_proxy) {
+  {
+    if (!http_proxy)
+    {
       phcfg.httpt_server_port = 80;
     }
-    else {
+    else
+    {
       phcfg.httpt_server_port = 443;
     }
+  }
   else
+  {
     phcfg.httpt_server_port = httpt_server_port;
-  
+  }
+
   if (httpt_server)
+  {
     strncpy(phcfg.httpt_server, httpt_server, sizeof(phcfg.httpt_server));
+  }
   if (http_proxy)
+  {
     strncpy(phcfg.http_proxy, http_proxy, sizeof(phcfg.http_proxy));
-  
-  if (proxy_user)
+  }
+
+  if (proxy_user) 
+  {
     strncpy(phcfg.http_proxy_user, proxy_user, sizeof(phcfg.http_proxy_user));
+  }
   if (proxy_passwd)
+  {
     strncpy(phcfg.http_proxy_passwd, proxy_passwd, sizeof(phcfg.http_proxy_passwd));
-  
+  }
+
   phcfg.use_tunnel = PH_TUNNEL_USE;
   if (autoconf)
+  {
     phcfg.use_tunnel |= PH_TUNNEL_AUTOCONF;
+  }
   return 0;
 }
-
 
 
 /**
@@ -2996,7 +2999,7 @@ phTerminate()
 {
   int i;
 	
-  DBG4_SIP_NEGO("SIP NEGO: phTerminate\n",0,0,0);
+  DBG_SIP_NEGO("SIP NEGO: phTerminate\n",0,0,0);
   if (!phIsInitialized)
 	  return;
 
@@ -3091,26 +3094,26 @@ ph_call_retrieve_payloads(phcall_t *ca, eXosip_event_t *je, int flags)
 {
     int  i = 0;
 
-    DBG4_SIP_NEGO("looking for payloads...\n", 0, 0, 0);
-    DBG4_SIP_NEGO("audio...\n", 0, 0, 0);
+    DBG_SIP_NEGO("looking for payloads...\n", 0, 0, 0);
+    DBG_SIP_NEGO("audio...\n", 0, 0, 0);
     if (_is_audio_enabled(flags))
     {
         i = eXosip_retrieve_negotiated_audio_payload(ca->did, &ca->audio_payload, ca->audio_payload_name, sizeof(ca->audio_payload_name));
-        DBG4_SIP_NEGO("remote_audio=%s payload=%s(%d)\n", ca->remote_sdp_audio_ip, ca->audio_payload_name, ca->audio_payload); 
+        DBG_SIP_NEGO("remote_audio=%s payload=%s(%d)\n", ca->remote_sdp_audio_ip, ca->audio_payload_name, ca->audio_payload); 
     }
 
-    DBG4_SIP_NEGO("video...\n", 0, 0, 0);
+    DBG_SIP_NEGO("video...\n", 0, 0, 0);
     ca->video_payload = 0;
     if (ca->remote_sdp_video_ip[0] && (_is_video_enabled(flags)))
     {
         i = eXosip_retrieve_negotiated_video_payload(ca->did, &ca->video_payload, ca->video_payload_name, sizeof(ca->video_payload_name));
-        DBG4_SIP_NEGO("remote_video=%s payload=%s(%d)\n", ca->remote_sdp_video_ip, ca->video_payload_name, ca->video_payload); 
+        DBG_SIP_NEGO("remote_video=%s payload=%s(%d)\n", ca->remote_sdp_video_ip, ca->video_payload_name, ca->video_payload); 
     }
 
-    DBG4_SIP_NEGO("cng...\n", 0, 0, 0);
+    DBG_SIP_NEGO("cng...\n", 0, 0, 0);
     if(!i && phcfg.cng && (flags & PH_STREAM_CNG)) {
         ca->cng = !eXosip_retrieve_negotiated_specific_payload(ca->did, PH_MEDIA_CN_PT_STR, strlen(PH_MEDIA_CN_PT_STR));
-        DBG4_SIP_NEGO("cng: %d", ca->cng, 0, 0);
+        DBG_SIP_NEGO("cng: %d", ca->cng, 0, 0);
     }
 
     return i;
@@ -3176,7 +3179,7 @@ ph_parse_payload_mime(struct ph_media_payload_s *pt, const char *mime, int rate,
 static int 
 ph_call_media_stop(phcall_t *ca)
 {
-    DBG4_SIP_NEGO("SIP_NEGO: ph_call_media_stop\n", 0, 0, 0);
+    DBG_SIP_NEGO("SIP_NEGO: ph_call_media_stop\n", 0, 0, 0);
 
     if (ca->mses)
     {
@@ -3270,8 +3273,8 @@ ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int resumeflag)
 		ca->nego_mflags = ca->nego_mflags | PH_STREAM_VIDEO_RX;
 		ca->nego_mflags = ca->nego_mflags | PH_STREAM_VIDEO_TX;
 	
-		DBG4_SIP_NEGO("will have video stream ip: %s payload=%d\n", ca->remote_sdp_video_ip, ca->video_payload,0);
-		DBG4_SIP_NEGO("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags,0); 
+		DBG_SIP_NEGO("will have video stream ip: %s payload=%d\n", ca->remote_sdp_video_ip, ca->video_payload,0);
+		DBG_SIP_NEGO("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags,0); 
 	} 
 	else 
 	{
@@ -3280,7 +3283,7 @@ ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int resumeflag)
 		ca->nego_mflags = ca->nego_mflags & ~PH_STREAM_VIDEO_RX;
 		ca->nego_mflags = ca->nego_mflags & ~PH_STREAM_VIDEO_TX;
 
-		DBG4_SIP_NEGO("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags,0); 
+		DBG_SIP_NEGO("media flags may have changed: user= %d nego=%d\n", ca->user_mflags, ca->nego_mflags,0); 
     }
 
 
@@ -3413,19 +3416,19 @@ ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int resumeflag)
 		{
 			if (ph_msession_resume(s, PH_MSTREAM_TRAFFIC_IO, phcfg.audio_dev))
 			{
-				DBG4_SIP_NEGO("SIP_NEGO:ph_call_media_start: just called ph_msession_resume\n", 0,0,0);
+				DBG_SIP_NEGO("SIP_NEGO:ph_call_media_start: just called ph_msession_resume\n", 0,0,0);
 				i = -PH_NOMEDIA;
 			}
 		}
 		else if (ph_msession_start(s, phcfg.audio_dev))
 	  	{
-			DBG4_SIP_NEGO("SIP_NEGO:ph_call_media_start: just called ph_msession_start\n", 0,0,0);
+			DBG_SIP_NEGO("SIP_NEGO:ph_call_media_start: just called ph_msession_start\n", 0,0,0);
 			i = -PH_NOMEDIA;
 		}
 	}
 	else
 	{
-		DBG4_SIP_NEGO("SIP_NEGO:ph_call_media_start: nothing to start\n", 0,0,0);
+		DBG_SIP_NEGO("SIP_NEGO:ph_call_media_start: nothing to start\n", 0,0,0);
 		i = -PH_NOMEDIA;
 	}
 
@@ -3511,7 +3514,7 @@ ph_call_replaces(eXosip_event_t *je)
   phCallStateInfo_t info;
   phcall_t *ca, *oldca;
 
-  DBG4_SIP_NEGO("SIP_NEGO: ph_call_replaces\n", 0, 0, 0);
+  DBG_SIP_NEGO("SIP_NEGO: ph_call_replaces\n", 0, 0, 0);
 
   clear(info);
 
@@ -3555,7 +3558,7 @@ ph_call_answered(eXosip_event_t *je)
     phCallStateInfo_t info;
     phcall_t *ca, *rca=0;
 
-    DBG4_SIP_NEGO("SIP NEGO: ph_call_answered\n", 0, 0, 0);
+    DBG_SIP_NEGO("SIP NEGO: ph_call_answered\n", 0, 0, 0);
     clear(info);
     
     ca = ph_locate_call(je, 1);
@@ -3614,7 +3617,7 @@ ph_call_proceeding(eXosip_event_t *je)
     phcall_t *ca, *rca=0;
     int cng = 0;
     
-    DBG4_SIP_NEGO("SIP NEGO: ph_call_proceeding\n", 0, 0, 0);
+    DBG_SIP_NEGO("SIP NEGO: ph_call_proceeding\n", 0, 0, 0);
     clear(info);
     
     ca = ph_locate_call(je, 1);
@@ -3723,7 +3726,7 @@ ph_call_ringing(eXosip_event_t *je)
     phcall_t *ca, *rca=0;
     int cng=0;
     
-    DBG4_SIP_NEGO("SIP NEGO: ph_call_ringing\n", 0, 0, 0);
+    DBG_SIP_NEGO("SIP NEGO: ph_call_ringing\n", 0, 0, 0);
     
     clear(info);
     
@@ -3956,7 +3959,7 @@ ph_call_onhold(eXosip_event_t *je)
 	phCallStateInfo_t info;
 	phcall_t *ca;
 
-	DBG4_SIP_NEGO("SIP_NEGO: ph_call_onhold\n", 0, 0, 0);
+	DBG_SIP_NEGO("SIP_NEGO: ph_call_onhold\n", 0, 0, 0);
 	clear(info);
 
 	// locate the corresponding call for this event
@@ -3991,7 +3994,7 @@ ph_call_offhold(eXosip_event_t *je)
 	int cng=0;
 	int remhold;
 
-	DBG4_SIP_NEGO("SIP NEGO: ph_call_offhold\n", 0, 0, 0);
+	DBG_SIP_NEGO("SIP NEGO: ph_call_offhold\n", 0, 0, 0);
 	
 	ca = ph_locate_call(je, 0);
 	if (!ca)
@@ -4043,7 +4046,7 @@ void ph_reg_progress(eXosip_event_t *je)
 		mask = PH_UNREG_MASK;
 	vlid = ph_vline2vlid(vl);
 
-	DBG4_SIP_NEGO("REGPROGRESS reg=%d for vlid=%d\n", je->rid, vlid,0);
+	DBG_SIP_NEGO("REGPROGRESS reg=%d for vlid=%d\n", je->rid, vlid,0);
 
 	if (je->type == EXOSIP_REGISTRATION_SUCCESS)
 	{
@@ -4102,7 +4105,7 @@ void ph_call_refered(eXosip_event_t *je)
 	int nCid;
 	struct vline *vl = 0;
 
-	DBG4_SIP_NEGO("SIP_NEGO: ph_call_refered\n", 0, 0, 0);
+	DBG_SIP_NEGO("SIP_NEGO: ph_call_refered\n", 0, 0, 0);
 
 	ca = ph_locate_call_by_cid(je->cid);
 
@@ -4161,7 +4164,7 @@ void ph_call_refer_status(eXosip_event_t *je)
 	if (je->type == EXOSIP_CALL_REFER_STATUS)
 	{
 		if (phDebugLevel)
-			ph_printf("refer_status sdp=%s\n", je->msg_body);
+      DBG_SIP_NEGO("refer_status sdp=%s\n", je->msg_body);
 
 		if (je->ss_status == EXOSIP_SUBCRSTATE_TERMINATED)
 		{
@@ -4302,8 +4305,8 @@ ph_event_get()
 		counter++;
 
 		if (phDebugLevel > 0)
-			ph_printf("\n<- %s (%i %i) [%i %s] %s requri=%s\n",
-				evtnames[je->type], je->cid, je->did, 
+      DBG_SIP_NEGO("\n<- %s (%i %i) [%i %s] %s requri=%s\n",
+				evtnames[je->type], je->cid, je->did,
 				je->status_code,
 				je->reason_phrase,
 				je->remote_uri,
@@ -4413,7 +4416,9 @@ ph_event_get()
 
 			default:
 				if (phDebugLevel > 0)
-				ph_printf("event(%i %i %i %i) text=%s\n", je->cid, je->sid, je->nid, je->did, je->textinfo);
+        {
+          DBG_SIP_NEGO("event(%i %i %i %i) text=%s\n", je->cid, je->sid, je->nid, je->did, je->textinfo, 0, 0);
+        }
 				break;
 		}
 
@@ -4508,7 +4513,6 @@ MY_DLLEXPORT int phrtcp_report_end()
 
 int getPublicPort(char * local_voice_port, char * local_video_port, char * public_voice_port, char * public_video_port)
 {
-	
   Socket  sock;
   Socket  sock1;
   Socket  sock2;
@@ -4520,38 +4524,39 @@ int getPublicPort(char * local_voice_port, char * local_video_port, char * publi
   int loop = 0;
 
   if (phcfg.use_tunnel)
+  {
     return 1;
+  }
 
   stunParseServerName(phcfg.stunserver, &stunServerAddr);
-		
-  do {
 
+  do {
     printf("get pub video: %s", local_voice_port);
     res = stunOpenSocketPair(&stunServerAddr, &mappedAddr,&sock, &sock1,atoi(local_voice_port), NULL, 1);
 
     if (-1 !=  res)
-      {
-	snprintf(local_voice_port, 9, "%i", res);
-	snprintf(public_voice_port, 9, "%d", mappedAddr.port);
-	stunCloseSocket(sock1);
-	stunCloseSocket(sock);
-      } 
+    {
+      snprintf(local_voice_port, 9, "%i", res);
+      snprintf(public_voice_port, 9, "%d", mappedAddr.port);
+      stunCloseSocket(sock1);
+      stunCloseSocket(sock);
+    }
     else
-      {
-	stunCloseSocket(sock);
-	stunCloseSocket(sock1);
-	snprintf(local_voice_port, 9, "%i",atoi(local_voice_port)+5);
-	loop++; 
-      }
+    {
+      stunCloseSocket(sock);
+      stunCloseSocket(sock1);
+      snprintf(local_voice_port, 9, "%i",atoi(local_voice_port)+5);
+      loop++; 
+    }
   } while (res <0 && loop < 4 );
 
   if (res <0)
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
   loop = 0;
-  
+
   do {
     printf("get pub video: %s", local_video_port);
 
@@ -4559,51 +4564,53 @@ int getPublicPort(char * local_voice_port, char * local_video_port, char * publi
     //sock2 = stunOpenSocket(&stunServerAddr, &mappedAddr, atoi(&local_video_port), NULL, 0); 
 
     if (-1 !=  res2)
-      {
-	snprintf(local_video_port, 9, "%i", res2);
-	snprintf(public_video_port, 9, "%d", mappedAddr.port);
-	stunCloseSocket(sock2);
-	stunCloseSocket(sock3);
-      }
-    else
-      {
-	stunCloseSocket(sock2);
-	stunCloseSocket(sock3);
-	snprintf(local_video_port, 9, "%i",atoi(local_video_port)+5);
-	
-	loop++; 
-      }
-  } while(res2 <0 && loop < 4 );
-  
-  if (res2 <0)
     {
-      return -1;
+      snprintf(local_video_port, 9, "%i", res2);
+      snprintf(public_video_port, 9, "%d", mappedAddr.port);
+      stunCloseSocket(sock2);
+      stunCloseSocket(sock3);
     }
-		
+    else
+    {
+      stunCloseSocket(sock2);
+      stunCloseSocket(sock3);
+      snprintf(local_video_port, 9, "%i",atoi(local_video_port)+5);
+      loop++;
+    }
+  } while(res2 <0 && loop < 4 );
+
+  if (res2 <0)
+  {
+    return -1;
+  }
+
   printf("get public port public voice_port: %s video: %s  ------ \n \n ",public_voice_port, public_video_port);
   return 1;
-			
-
 }
 
-int phLineGetSipAddress(int vlid, char buf[], int bufsize) {
-	int i;
-	struct vline *vl;
-	
-	vl = ph_valid_vlid(vlid);
-	
-	if (!vl) {
-		return PH_BADVLID;
-	}
-	
-	ph_build_from(buf, bufsize, vl);
-	return 0;
+int phLineGetSipAddress(int vlid, char buf[], int bufsize)
+{
+  int i;
+  struct vline *vl;
+
+  vl = ph_valid_vlid(vlid);
+
+  if (!vl)
+  {
+    return PH_BADVLID;
+  }
+
+  ph_build_from(buf, bufsize, vl);
+  return 0;
 }
 
-int phCrash() {
-    *(int *)0 = 0;
+int phCrash()
+{
+  *(int *)0 = 0;
+  return 1;
 }
 
-void phSetDebugLevel(int level) {
-    phDebugLevel = level;
+void phSetDebugLevel(int level)
+{
+  phDebugLevel = level;
 }

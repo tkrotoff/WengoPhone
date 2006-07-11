@@ -27,6 +27,9 @@ projects = [
 	'phapi/gsm',
 	'phapi/ilbc',
 	'phapi/speex',
+	'phapi/speexec',
+	'phapi/fidlib',
+	'phapi/msdirent',
 	'phapi',
 	'miniua'
 ]

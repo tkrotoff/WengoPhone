@@ -1,5 +1,5 @@
 #include "phglobal.h"
-#include "phdebug.h"
+#include "phlog.h"
 #include <stdlib.h>
 #ifdef OS_POSIX
 #include <sys/types.h>
@@ -11,7 +11,6 @@
 #include <windows.h>
 #include <stdio.h>
 #include "msdirent.h"
-
 #endif
 
 #include "rtpport.h" // only for GMutex <- phmedia.h <- phcodec-h263.h
@@ -19,21 +18,12 @@
 
 //#include "gsm/gsm.h"
 //#include "gsm/private.h"
-
-
 #include "ilbc/iLBC_define.h"
 #include "ilbc/iLBC_encode.h"
 #include "ilbc/iLBC_decode.h"
-
-
-#define DBG(x)
-
-
 //#define FIXED_AMR 1
 
-
 void ph_media_plugin_codec_init(const char *dirpath);
-
 
 
 #ifdef EMBED
@@ -46,17 +36,13 @@ void ph_media_plugin_codec_init(const char *dirpath);
 #define NO_ILBC 1
 #endif
 
-
 #endif
-
-
 
 #ifdef PHAPI_VIDEO_SUPPORT
 #include "phcodec-h263.h"
 #include "phcodec-mpeg4.h"
 #include "phcodec-h264.h"
 #endif
-
 
 #ifndef NO_GSM
 #define ENABLE_GSM 1
@@ -540,7 +526,6 @@ static phcodec_t *codec_table[] =
 };
 
 
-
 void ph_media_register_codec(phcodec_t *codec)
 {
   phcodec_t *last = ph_codec_list;
@@ -572,7 +557,6 @@ struct stat { int x; };
 #define dlsym(l, s)  GetProcAddress(l, s)
 #define dlclose(l)  FreeLibrary(l)
 
-    
 static int is_shared_lib(const char *name)
 {
     return strstr(name, ".dll") || strstr(name, ".DLL");
@@ -610,60 +594,71 @@ void ph_media_plugin_codec_init(const char *dirpath)
   ph_codec_plugin_init_type  plugin_init;
   HLIB lib;
   char *fpath = getenv("PH_FORCE_CODEC_PATH");
-  
+
   if (fpath)
+  {
       dirpath = fpath;
-  
+  }
+
   if (!dirpath || !dirpath[0])
+  {
     dirpath = getenv("PH_CODEC_PATH");
+  }
 
   if (!dirpath)
+  {
     dirpath = "./";
+  }
 
-  DBG4_CODEC_LOOKUP("looking for dynamic codecs in : %s\n", dirpath, 0, 0);
+  DBG_CODEC_LOOKUP("looking for dynamic codecs in : %s\n", dirpath, 0, 0);
 
   dir = opendir(dirpath);
-  if (!dir) {
-    DBG4_CODEC_LOOKUP("pay attention: path does not exist\n", 0, 0, 0);
+  if (!dir)
+  {
+    DBG_CODEC_LOOKUP("pay attention: path does not exist\n", 0, 0, 0);
     return;
   }
 
   while(0 != (entry = readdir(dir)))
+  {
+    if (!is_shared_lib(entry->d_name)) 
     {
-      if (!is_shared_lib(entry->d_name))
-	continue;
+      continue;
+    }
 
-      snprintf(modulename, sizeof(modulename), "%s/%s", dirpath, entry->d_name);
+    snprintf(modulename, sizeof(modulename), "%s/%s", dirpath, entry->d_name);
 
 #ifdef OS_POSIX
-      stat(modulename, &st);
+    stat(modulename, &st);
 
-      if (!(st.st_mode & S_IFREG))
-	continue;
-#endif
-      lib = dlopen(modulename, RTLD_NOW);
-      if (!lib)
-	continue;
-
-      
-      plugin_init = (ph_codec_plugin_init_type) dlsym(lib, entry_point_name);
-      if (plugin_init)
-	{
-	  if (plugin_init(ph_media_register_codec))
-	    {
-          DBG4_CODEC_LOOKUP("registering dynamic codecs from : %s\n", entry->d_name, 0, 0);
-	      dlclose(lib);
-	    }
-	}
-      else
-	dlclose(lib);
-
+    if (!(st.st_mode & S_IFREG))
+    {
+      continue;
     }
+#endif
+    lib = dlopen(modulename, RTLD_NOW);
+    if (!lib)
+    {
+      continue;
+    }
+
+    plugin_init = (ph_codec_plugin_init_type) dlsym(lib, entry_point_name);
+    if (plugin_init)
+    {
+      if (plugin_init(ph_media_register_codec))
+      {
+        DBG_CODEC_LOOKUP("registering dynamic codecs from : %s\n", entry->d_name, 0, 0);
+        dlclose(lib);
+      }
+    }
+    else
+    {
+      dlclose(lib);
+    }
+  }
 
   closedir(dir);
 }
-
-
 
 
 void ph_media_codecs_init(const char *pluginpath)
@@ -673,32 +668,15 @@ void ph_media_codecs_init(const char *pluginpath)
 
 #ifdef PH_VIDEO_SUPPORT
   ph_avcodec_wrapper_init();
-#endif    
-     
+#endif
+
   while(0 != (codec= codec_table[i++]))
   {
-      DBG4_CODEC_LOOKUP("setup codec in phcodec: \"%s/%d\"\n", codec->mime, codec->clockrate, 0);
-	  codec->next = codec_table[i];
+    DBG_CODEC_LOOKUP("setup codec in phcodec: \"%s/%d\"\n", codec->mime, codec->clockrate, 0);
+    codec->next = codec_table[i];
   }
 
   ph_codec_list = codec_table[0];
-
   ph_media_plugin_codec_init(pluginpath);
-  
 }
 
-
-	
-
-
-	
-	
-      
-      
-
-
-
-
-
-
-  

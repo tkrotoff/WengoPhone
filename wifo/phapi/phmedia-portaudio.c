@@ -1,7 +1,7 @@
 /*
  * The phmedia-alsa  module implements interface to ALSA audio devices for phapi
  *
- * Copyright (C) 2006 WENGO SAS
+ * Copyright (C) 2005-2006 WENGO SAS
  * Copyright (C) 2004  Vadim Lebedev  <vadim@mbdsys.com>
  *
  * This is free software; you can redistribute it and/or modify
@@ -32,11 +32,10 @@
 #include <ortp.h>
 #include <ortp-export.h>
 #include <telephonyevents.h>
-#include "phdebug.h"
+#include "phlog.h"
 #include "phapi.h"
 #include "phcall.h"
 #include "phmedia.h"
-#include "phcodec.h"
 #include "tonegen.h"
 #include "phmbuf.h"
 #include "phmstream.h"
@@ -177,139 +176,125 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
   int rateIndex;
   double drate = (double) rate;
 
-  DBG5_DYNA_AUDIO_DRV("pa_dev_open: asking for (name: \"%s\", rate: %d, framesize: %d)\n", name, rate, framesize, 0);
+  DBG_DYNA_AUDIO_DRV("pa_dev_open: asking for (name: \"%s\", rate: %d, framesize: %d)\n", name, rate, framesize, 0);
 
   if (!strncasecmp(name, "pa:", 3)) {
     name += 3;
   }
 
-  if (in = strstr(name,"IN="))
-    {
-      inputParameters.device = atoi(in + 3);
-    }
-  else
-    {
-      inputParameters.device = Pa_GetDefaultInputDevice();
-    }
+  if (in = strstr(name,"IN=")) {
+    inputParameters.device = atoi(in + 3);
+  } else {
+    inputParameters.device = Pa_GetDefaultInputDevice();
+  }
 
-  if (out = strstr(name,"OUT="))
-    {
-      outputParameters.device = atoi(out + 4);
-    }
-  else
-    {
-      outputParameters.device = Pa_GetDefaultOutputDevice();
-    }
+  if (out = strstr(name,"OUT=")) {
+    outputParameters.device = atoi(out + 4);
+  } else {
+    outputParameters.device = Pa_GetDefaultOutputDevice();
+  }
 
-  DBG5_DYNA_AUDIO_DRV("pa_dev_open: PA Input %d, PA Output %d\n", inputParameters.device,
-		outputParameters.device,0,0);
+  DBG_DYNA_AUDIO_DRV("pa_dev_open: PA Input %d, PA Output %d\n", inputParameters.device, outputParameters.device,0,0);
 
-  inputParameters.channelCount = 1;    
+  inputParameters.channelCount = 1;
   inputParameters.sampleFormat = paInt16;
 
   inputParameters.suggestedLatency = Pa_GetDeviceInfo( inputParameters.device )->defaultLowInputLatency; // latencymsecs / 1000.0;
   //  if (inputParameters.suggestedLatency == 0.0)
-    inputParameters.suggestedLatency = latencymsecs / 1000.0;
-
-
+  inputParameters.suggestedLatency = latencymsecs / 1000.0;
   inputParameters.hostApiSpecificStreamInfo = 0;
 
-  outputParameters.channelCount = 1;   
+  outputParameters.channelCount = 1;
   outputParameters.sampleFormat = paInt16;
   outputParameters.suggestedLatency = Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency; 
   //  if (outputParameters.suggestedLatency == 0.0)
-    outputParameters.suggestedLatency = latencymsecs / 1000.0;
+  outputParameters.suggestedLatency = latencymsecs / 1000.0;
 
   outputParameters.hostApiSpecificStreamInfo = 0;
 
-  DBG5_DYNA_AUDIO_DRV("pa_dev_open: using latencies  in = %d ms, out = %d ms\n",  (int) (inputParameters.suggestedLatency * 1000.0),
-	    (int) (outputParameters.suggestedLatency * 1000.0),0,0);
+  DBG_DYNA_AUDIO_DRV("pa_dev_open: using latencies  in = %d ms, out = %d ms\n",  (int) (inputParameters.suggestedLatency * 1000.0),
+    (int) (outputParameters.suggestedLatency * 1000.0),0,0);
 
   /* find the nearest matching entry in the table */
   rateIndex = -1;
   for (i = 0; standardSampleRates[i] > 0; i++ )
+  {
+    if (drate <= standardSampleRates[i])
     {
-      if (drate <= standardSampleRates[i])
-	{
-	  rateIndex = i;
-	  break;
-	}
+      rateIndex = i;
+      break;
+    }
+  }
+
+  if (rateIndex == -1) {
+      return 0;
+  }
+
+  /* check if the initial match is accepted */
+  err = Pa_IsFormatSupported( &inputParameters, &outputParameters, standardSampleRates[rateIndex] );
+  if ( err == paFormatIsSupported ) {
+    as->actual_rate = (int) standardSampleRates[rateIndex];
+  }
+  else
+  {
+    /* find a sampling rate that IS accepted */
+    i = rateIndex + 1;
+    rateIndex =  -1;
+    for (i = 0; standardSampleRates[i] > 0; i++ )
+    {
+      err = Pa_IsFormatSupported( &inputParameters, &outputParameters, standardSampleRates[i] );
+      if ( err == paFormatIsSupported )
+      {
+        rateIndex = i;
+        break;
+      }
     }
 
-  if (rateIndex == -1)
-    {
+    if (rateIndex == -1) {
       return 0;
     }
+  }
 
-	/* check if the initial match is accepted */
-	err = Pa_IsFormatSupported( &inputParameters, &outputParameters, standardSampleRates[rateIndex] );
-	if ( err == paFormatIsSupported )
-	{
-		as->actual_rate = (int) standardSampleRates[rateIndex];
-	}
-	else 
-	{
-		/* find a sampling rate that IS accepted */
-		i = rateIndex + 1;
-		rateIndex =  -1;
-		for (i = 0; standardSampleRates[i] > 0; i++ )
-		{
-			err = Pa_IsFormatSupported( &inputParameters, &outputParameters, standardSampleRates[i] );
-			if ( err == paFormatIsSupported )
-			{
-				rateIndex = i;
-				break;
-			}
-		}
-		if (rateIndex == -1)
-		{
-			return 0;
-		}
-	}
+  as->actual_rate = (int) standardSampleRates[rateIndex];
 
-	as->actual_rate = (int) standardSampleRates[rateIndex];
+  /* we need to recalculate the frame size? */
+  if (rate !=  as->actual_rate)
+  {
+    int frameDuration =  1000 * (framesize / 2) / rate;
+    framesize = frameDuration * as->actual_rate/1000 * 2;
+  }
 
+  DBG_DYNA_AUDIO_DRV("pa_dev_open: chosen rate (freq, framesize)=(%d,%d)\n",
+    as->actual_rate,
+    framesize,
+    0,0);
 
-	/* we need to recalculate the frame size? */
-	if (rate !=  as->actual_rate)
-	{
-		int frameDuration =  1000 * (framesize / 2) / rate;
-		framesize = frameDuration * as->actual_rate/1000 * 2;
-	}
-
-    DBG5_DYNA_AUDIO_DRV("pa_dev_open: chosen rate (freq, framesize)=(%d,%d)\n",
-                        as->actual_rate,
-                        framesize,
-                        0,0);
-
-  if (output)
+  if (output) {
     err = Pa_OpenStream(
               &stream,
-              (output == PH_PA_INOUT) ? &inputParameters : 0, 
+              (output == PH_PA_INOUT) ? &inputParameters : 0,
               &outputParameters,
-              standardSampleRates[rateIndex], 
-              framesize/2, 
+              standardSampleRates[rateIndex],
+              framesize/2,
               0, /* paClipOff, */  /* we won't output out of range samples so don't bother clipping them */
               (output == PH_PA_INOUT) ? ph_pa_callback : ph_pa_ocallback,
               as );
-  else
+  } else {
     err = Pa_OpenStream(
               &stream,
               &inputParameters,
-              0, 
+              0,
               standardSampleRates[rateIndex], 
-              framesize/2, 
+              framesize/2,
               0, /* paClipOff, */  /* we won't output out of range samples so don't bother clipping them */
               ph_pa_icallback,
               as );
-    if( err != paNoError ) goto error;
-
+  }
+  if( err != paNoError ) {
+    return 0;
+  }
 
   return stream;
-
- error:
-
-  return 0;
 }
 
 
@@ -323,7 +308,7 @@ int pa_stream_open(phastream_t *as, char *name, int rate, int framesize, ph_audi
   if (!pd)
     return -PH_NORESOURCES;
 
-  DBG5_DYNA_AUDIO_DRV("pa_stream_open: (name: %s, rate: %d, framesize: %d)\n", name, rate, framesize, 0);
+  DBG_DYNA_AUDIO_DRV("pa_stream_open: (name: %s, rate: %d, framesize: %d)\n", name, rate, framesize, 0);
 
   Pa_Initialize();
 
@@ -370,22 +355,22 @@ int pa_stream_open(phastream_t *as, char *name, int rate, int framesize, ph_audi
 
 void pa_stream_close(phastream_t *as)
 {
-    DBG5_DYNA_AUDIO_DRV("pa_stream_close\n", 0,0,0,0);
+  DBG_DYNA_AUDIO_DRV("pa_stream_close\n", 0,0,0,0);
 
   if (!as->drvinfo)
-    {
-      DBG5_DYNA_AUDIO_DRV("pa stream already closed\n", 0,0,0,0);
-      return;
-    }
+  {
+    DBG_DYNA_AUDIO_DRV("pa stream already closed\n", 0,0,0,0);
+    return;
+  }
 
   Pa_StopStream(PAIDEV(as));
   Pa_CloseStream(PAIDEV(as));
 
   if (PAODEV(as) != PAIDEV(as))
-    {
-      Pa_StopStream(PAODEV(as));
-      Pa_CloseStream(PAODEV(as));
-    }
+  {
+    Pa_StopStream(PAODEV(as));
+    Pa_CloseStream(PAODEV(as));
+  }
 
   Pa_Terminate();
 
