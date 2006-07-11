@@ -20,6 +20,7 @@
 #include "Win32VolumeControl.h"
 
 #include "../EnumDeviceType.h"
+#include "Win32AudioDeviceId.h"
 
 #include <util/Logger.h>
 
@@ -28,24 +29,31 @@ static const unsigned MAXIMUM_VOLUME_LEVEL_DEFINED_BY_USER = 100;
 Win32VolumeControl::Win32VolumeControl(const AudioDevice & audioDevice) {
 
 	std::string deviceName = audioDevice.getData()[0];
-	String deviceId = audioDevice.getData()[1];
+	//String deviceId = audioDevice.getData()[1];
 	EnumDeviceType::DeviceType deviceType = EnumDeviceType::toDeviceType(audioDevice.getData()[2]);
 
 	_hMixer = NULL;
-	MMRESULT mr = initVolumeControl(deviceId.toInteger(), deviceType);
+
+	int deviceId;
+	if (deviceType == EnumDeviceType::DeviceTypeMasterVolume) {
+		deviceId = Win32AudioDeviceId::getWaveOutDeviceId(deviceName);
+	} else if (deviceType == EnumDeviceType::DeviceTypeWaveIn) {
+		deviceId = Win32AudioDeviceId::getWaveInDeviceId(deviceName);
+	} else {
+		LOG_FATAL("unsupported deviceType=" + String::fromNumber(deviceType));
+	}
+
+	MMRESULT mr = initVolumeControl(deviceId, deviceType);
 	if (mr != MMSYSERR_NOERROR) {
+		_hMixer = NULL;
+		_isSettable = false;
 		if (deviceType == EnumDeviceType::DeviceTypeWaveIn) {
 			deviceType = EnumDeviceType::DeviceTypeMicrophoneIn;
-			MMRESULT mr = initVolumeControl(deviceId.toInteger(), deviceType);
-			if (mr != MMSYSERR_NOERROR) {
-				_isSettable = false;
-				_hMixer = NULL;
-			} else {
+			MMRESULT mr = initVolumeControl(deviceId, deviceType);
+			if (mr == MMSYSERR_NOERROR) {
 				_isSettable = true;
 			}
 		}
-		_isSettable = false;
-		_hMixer = NULL;
 	} else {
 		_isSettable = true;
 	}

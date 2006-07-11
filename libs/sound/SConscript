@@ -23,6 +23,7 @@ if WengoOSWindows():
 		'src/win32/Win32VolumeControl.cpp',
 		'src/win32/Win32AudioDevice.cpp',
 		'src/win32/SoundThread.cpp',
+		'src/win32/Win32AudioDeviceId.cpp',
 		'src/win32/playsound/SoundFile.cpp',
 		'src/win32/playsound/PlaySoundFile.cpp'
 	]

@@ -20,6 +20,7 @@
 #include <sound/AudioDeviceManager.h>
 
 #include "../EnumDeviceType.h"
+#include "Win32AudioDeviceId.h"
 
 #include <util/Logger.h>
 #include <util/StringList.h>
@@ -45,22 +46,6 @@ static const char * RECORD_DEVICE_REGISTRY_KEY = "Record";
  * Default audio device ID under Windows.
  */
 static const int DEFAULT_DEVICE_ID = 0;
-
-/**
- * Gets the wave out of the given device name.
- *
- * @param deviceName the name of the device we want the id
- * @return the id of the device. -1 if not found.
- */
-static int getWaveOutDeviceId(const std::string & deviceName);
-
-/**
- * Gets the wave in of the given device name.
- *
- * @param deviceName the name of the device we want the id
- * @return the id of the device. -1 if not found.
- */
-static int getWaveInDeviceId(const std::string & deviceName);
 
 /**
  * Sets the SetupPreferredAudioDevicesCount registry key.
@@ -207,7 +192,7 @@ AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
 
 	StringList data;
 	data += defaultDeviceName;
-	data += String::fromNumber(getWaveOutDeviceId(defaultDeviceName));
+	data += String::fromNumber(Win32AudioDeviceId::getWaveOutDeviceId(defaultDeviceName));
 	data += EnumDeviceType::toString(EnumDeviceType::DeviceTypeMasterVolume);
 	return AudioDevice(data);
 }
@@ -227,7 +212,7 @@ AudioDevice AudioDeviceManager::getDefaultInputDevice() {
 
 	StringList data;
 	data += defaultDeviceName;
-	data += String::fromNumber(getWaveInDeviceId(defaultDeviceName));
+	data += String::fromNumber(Win32AudioDeviceId::getWaveInDeviceId(defaultDeviceName));
 	data += EnumDeviceType::toString(EnumDeviceType::DeviceTypeWaveIn);
 	return AudioDevice(data);
 }
@@ -282,55 +267,13 @@ StringList getMixerDeviceList(DWORD targetType) {
 	return listDevices;
 }
 
-int getWaveOutDeviceId(const std::string & deviceName) {
-	unsigned nbDevices = ::waveOutGetNumDevs();
-	if (nbDevices == 0) {
-		//No audio device are present
-		return -1;
-	}
-
-	WAVEOUTCAPSA outcaps;
-
-	for (unsigned deviceId = 0; deviceId < nbDevices; deviceId++) {
-		if (MMSYSERR_NOERROR == ::waveOutGetDevCapsA(deviceId, &outcaps, sizeof(WAVEOUTCAPSA))) {
-			if (deviceName == outcaps.szPname) {
-				return deviceId;
-			}
-		}
-	}
-
-	//Default deviceId is 0
-	return 0;
-}
-
-int getWaveInDeviceId(const std::string & deviceName) {
-	unsigned nbDevices = ::waveInGetNumDevs();
-	if (nbDevices == 0) {
-		//No audio device are present
-		return -1;
-	}
-
-	WAVEINCAPSA incaps;
-
-	for (unsigned deviceId = 0; deviceId < nbDevices; deviceId++) {
-		if (MMSYSERR_NOERROR == ::waveInGetDevCapsA(deviceId, &incaps, sizeof(WAVEINCAPSA))) {
-			if (deviceName == incaps.szPname) {
-				return deviceId;
-			}
-		}
-	}
-
-	//Default deviceId is 0
-	return 0;
-}
-
 std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
 	std::list<AudioDevice> listDevices;
 	StringList devices = getMixerDeviceList(MIXERLINE_TARGETTYPE_WAVEOUT);
 	for (unsigned i = 0; i < devices.size(); i++) {
 		StringList data;
 		data += devices[i];
-		data += String::fromNumber(getWaveOutDeviceId(devices[i]));
+		data += String::fromNumber(Win32AudioDeviceId::getWaveOutDeviceId(devices[i]));
 		data += EnumDeviceType::toString(EnumDeviceType::DeviceTypeMasterVolume);
 		listDevices.push_back(AudioDevice(data));
 	}
@@ -344,7 +287,7 @@ std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
 	for (unsigned i = 0; i < devices.size(); i++) {
 		StringList data;
 		data += devices[i];
-		data += String::fromNumber(getWaveInDeviceId(devices[i]));
+		data += String::fromNumber(Win32AudioDeviceId::getWaveInDeviceId(devices[i]));
 		data += EnumDeviceType::toString(EnumDeviceType::DeviceTypeWaveIn);
 		listDevices.push_back(AudioDevice(data));
 	}
