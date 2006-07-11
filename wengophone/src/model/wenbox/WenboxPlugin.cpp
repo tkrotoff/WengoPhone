@@ -188,7 +188,7 @@ std::string WenboxPlugin::getWenboxAudioDeviceName() const {
 		string wenboxAudioDeviceName = wenboxAudioDeviceList[i];
 
 		std::list<AudioDevice> audioDeviceList = AudioDeviceManager::getOutputDeviceList();
-		for (std::list<AudioDevice>::const_iterator it = 0;
+		for (std::list<AudioDevice>::const_iterator it = audioDeviceList.begin();
 			it  != audioDeviceList.end();
 			it++) {
 			string audioDeviceName = (*it).getName();
