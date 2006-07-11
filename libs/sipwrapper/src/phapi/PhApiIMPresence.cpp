@@ -35,8 +35,6 @@ PhApiIMPresence::PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrappe
 	: IMPresence(account),
 	_phApiWrapper(phApiWrapper) {
 
-	LOG_DEBUG("PhApiIMPresence object created=" + String::fromNumber((int) this));
-
 	boost::signals::connection connection = _phApiWrapper.presenceStateChangedEvent +=
 		boost::bind(&PhApiIMPresence::presenceStateChangedEventHandler, this, _1, _2, _3, _4);
 
@@ -51,7 +49,6 @@ PhApiIMPresence::PhApiIMPresence(IMAccount & account, PhApiWrapper & phApiWrappe
 }
 
 PhApiIMPresence::~PhApiIMPresence() {
-	LOG_DEBUG("PhApiIMPresence object deleted=" + String::fromNumber((int) this));
 }
 
 void PhApiIMPresence::changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {

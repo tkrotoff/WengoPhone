@@ -378,7 +378,6 @@ void PhApiCallbacks::onNotify(const char * event, const char * from, const char 
 				if (noteText) {
 					std::string note = noteText->Value();
 					LOG_DEBUG("note=" + note);
-					LOG_DEBUG("PhApiWrapper instance=" + String::fromNumber((int) p));
 					if (note == PhApiWrapper::PresenceStateOnline) {
 						p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateOnline, note, buddy);
 					} else if (note == PhApiWrapper::PresenceStateAway) {
