@@ -463,9 +463,9 @@ bool PhApiWrapper::setAudioDevices() {
 #ifdef OS_MACOSX
 	static const std::string INPUT_DEVICE_TAG = "ca:IN=";
 	devices = INPUT_DEVICE_TAG
-		+ _inputAudioDevice.toString(":")
+		+ _inputAudioDevice.getData().toString(":")
 		+ std::string(" ") + OUTPUT_DEVICE_TAG
-		+ _outputAudioDevice.toString(":");
+		+ _outputAudioDevice.getData().toString(":");
 #else
 	static const std::string INPUT_DEVICE_TAG = "pa:IN=";
 	devices = INPUT_DEVICE_TAG
