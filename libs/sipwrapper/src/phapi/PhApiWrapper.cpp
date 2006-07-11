@@ -469,9 +469,9 @@ bool PhApiWrapper::setAudioDevices() {
 #else
 	static const std::string INPUT_DEVICE_TAG = "pa:IN=";
 	devices = INPUT_DEVICE_TAG
-		+ _inputAudioDevice.getId()[1]
+		+ _inputAudioDevice.getData()[1]
 		+ std::string(" ") + OUTPUT_DEVICE_TAG
-		+ _outputAudioDevice.getId()[1];
+		+ _outputAudioDevice.getData()[1];
 #endif
 
 	int ret = phChangeAudioDevices(devices.c_str());
