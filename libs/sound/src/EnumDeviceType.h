@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWENUMWIN32DEVICETYPE_H
-#define OWENUMWIN32DEVICETYPE_H
+#ifndef OWENUMDEVICETYPE_H
+#define OWENUMDEVICETYPE_H
 
 #include <util/NonCopyable.h>
 
@@ -29,32 +29,32 @@
  *
  * @author Tanguy Krotoff
  */
-class EnumWin32DeviceType : NonCopyable {
+class EnumDeviceType : NonCopyable {
 public:
 
-	enum Win32DeviceType {
+	enum DeviceType {
 		//MIXERLINE_COMPONENTTYPE_DST_SPEAKERS
-		Win32DeviceTypeMasterVolume,
+		DeviceTypeMasterVolume,
 
 		//MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT
-		Win32DeviceTypeWaveOut,
+		DeviceTypeWaveOut,
 
 		//MIXERLINE_COMPONENTTYPE_DST_WAVEIN
-		Win32DeviceTypeWaveIn,
+		DeviceTypeWaveIn,
 
 		//MIXERLINE_COMPONENTTYPE_SRC_COMPACTDISC
-		Win32DeviceTypeCDOut,
+		DeviceTypeCDOut,
 
 		//MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE
-		Win32DeviceTypeMicrophoneOut,
+		DeviceTypeMicrophoneOut,
 
 		//MIXERLINE_COMPONENTTYPE_DST_WAVEIN + MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE
-		Win32DeviceTypeMicrophoneIn
+		DeviceTypeMicrophoneIn
 	};
 
-	static std::string toString(Win32DeviceType deviceType);
+	static std::string toString(DeviceType deviceType);
 
-	static Win32DeviceType toDeviceType(const std::string & deviceType);
+	static DeviceType toDeviceType(const std::string & deviceType);
 };
 
-#endif	//OWENUMWIN32DEVICETYPE_H
+#endif	//OWENUMDEVICETYPE_H

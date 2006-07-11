@@ -46,7 +46,7 @@ public:
 
 	AudioDevice(const AudioDevice & audioDevice);
 
-	AudioDevice & operator = (const AudioDevice & audioDevice);
+	AudioDevice & operator=(const AudioDevice & audioDevice);
 
 	virtual ~AudioDevice();
 

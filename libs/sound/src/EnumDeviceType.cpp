@@ -17,25 +17,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "EnumWin32DeviceType.h"
+#include "EnumDeviceType.h"
 
 #include <util/Logger.h>
 
 #include <map>
 
-typedef std::map<EnumWin32DeviceType::Win32DeviceType, std::string> DeviceTypeMap;
+typedef std::map<EnumDeviceType::DeviceType, std::string> DeviceTypeMap;
 static DeviceTypeMap _deviceTypeMap;
 
 static void init() {
-	_deviceTypeMap[EnumWin32DeviceType::Win32DeviceTypeMasterVolume] = "Win32DeviceTypeMasterVolume";
-	_deviceTypeMap[EnumWin32DeviceType::Win32DeviceTypeWaveOut] = "Win32DeviceTypeWaveOut";
-	_deviceTypeMap[EnumWin32DeviceType::Win32DeviceTypeWaveIn] = "Win32DeviceTypeWaveIn";
-	_deviceTypeMap[EnumWin32DeviceType::Win32DeviceTypeCDOut] = "Win32DeviceTypeCDOut";
-	_deviceTypeMap[EnumWin32DeviceType::Win32DeviceTypeMicrophoneOut] = "Win32DeviceTypeMicrophoneOut";
-	_deviceTypeMap[EnumWin32DeviceType::Win32DeviceTypeMicrophoneIn] = "Win32DeviceTypeMicrophoneIn";
+	_deviceTypeMap[EnumDeviceType::DeviceTypeMasterVolume] = "DeviceTypeMasterVolume";
+	_deviceTypeMap[EnumDeviceType::DeviceTypeWaveOut] = "DeviceTypeWaveOut";
+	_deviceTypeMap[EnumDeviceType::DeviceTypeWaveIn] = "DeviceTypeWaveIn";
+	_deviceTypeMap[EnumDeviceType::DeviceTypeCDOut] = "DeviceTypeCDOut";
+	_deviceTypeMap[EnumDeviceType::DeviceTypeMicrophoneOut] = "DeviceTypeMicrophoneOut";
+	_deviceTypeMap[EnumDeviceType::DeviceTypeMicrophoneIn] = "DeviceTypeMicrophoneIn";
 }
 
-std::string EnumWin32DeviceType::toString(Win32DeviceType deviceType) {
+std::string EnumDeviceType::toString(DeviceType deviceType) {
 	init();
 	std::string tmp = _deviceTypeMap[deviceType];
 	if (tmp.empty()) {
@@ -44,7 +44,7 @@ std::string EnumWin32DeviceType::toString(Win32DeviceType deviceType) {
 	return tmp;
 }
 
-EnumWin32DeviceType::Win32DeviceType EnumWin32DeviceType::toDeviceType(const std::string & deviceType) {
+EnumDeviceType::DeviceType EnumDeviceType::toDeviceType(const std::string & deviceType) {
 	init();
 	for (DeviceTypeMap::const_iterator it = _deviceTypeMap.begin();
 		it != _deviceTypeMap.end();
@@ -56,5 +56,5 @@ EnumWin32DeviceType::Win32DeviceType EnumWin32DeviceType::toDeviceType(const std
 	}
 
 	LOG_FATAL("unknown DeviceType=" + deviceType);
-	return Win32DeviceTypeMasterVolume;
+	return DeviceTypeMasterVolume;
 }

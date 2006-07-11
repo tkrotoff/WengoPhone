@@ -23,7 +23,7 @@
 #include <sound/AudioDevice.h>
 
 /**
- * Windows implementation of AudioDevice.
+ * Win32 API implementation of AudioDevice.
  *
  * _data[0] = deviceName
  * _data[1] = deviceId

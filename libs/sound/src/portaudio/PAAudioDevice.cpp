@@ -21,18 +21,16 @@
 
 #include <util/String.h>
 
-PAAudioDevice::PAAudioDevice(const StringList & data) {
+PAAudioDevice::PAAudioDevice(const StringList & data)
+	: AudioDevice() {
+
 	_data = data;
 }
 
-PAAudioDevice::PAAudioDevice(int id, const std::string & name) {
-	_data += name;
-	_data += String::fromNumber(id);
-}
-
-PAAudioDevice::~PAAudioDevice() {
-}
-
 std::string PAAudioDevice::getName() const {
-	return _data[1];
+	return _data[0];
+}
+
+StringList PAAudioDevice::getData() const {
+	return _data;
 }

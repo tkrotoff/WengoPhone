@@ -26,7 +26,7 @@
 /**
  * @see VolumeControl
  */
-class PAVolumeControl :  public IVolumeControl {
+class PAVolumeControl : public IVolumeControl {
 public:
 
 	/**

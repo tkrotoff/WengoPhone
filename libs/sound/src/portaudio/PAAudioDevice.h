@@ -22,13 +22,12 @@
 
 #include <sound/AudioDevice.h>
 
-#include <string>
-
 /**
  * PortAudio implementation of AudioDevice.
  *
- * _data[0]: name
- * _data[1]: id
+ * _data[0] = deviceName
+ * _data[1] = deviceId
+ * _data[2] = deviceType
  *
  * @author Mathieu Stute
  */
@@ -37,11 +36,9 @@ public:
 
 	PAAudioDevice(const StringList & data);
 
-	PAAudioDevice(int id, const std::string & name);
-
-	~PAAudioDevice();
-
 	std::string getName() const;
+
+	StringList getData() const;
 };
 
 #endif	//OWPAAUDIODEVICE_H

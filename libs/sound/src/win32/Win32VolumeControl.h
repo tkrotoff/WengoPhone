@@ -23,7 +23,7 @@
 #include <sound/IVolumeControl.h>
 #include <sound/AudioDevice.h>
 
-#include "EnumWin32DeviceType.h"
+#include "../EnumDeviceType.h"
 
 #include <windows.h>
 
@@ -87,7 +87,7 @@ private:
 	 * @param deviceType the kind of audio mixer device to manipulate
 	 * @return the win32 error code
 	 */
-	MMRESULT initVolumeControl(unsigned int deviceId, EnumWin32DeviceType::Win32DeviceType deviceType);
+	MMRESULT initVolumeControl(unsigned int deviceId, EnumDeviceType::DeviceType deviceType);
 
 	/**
 	 * Creates the mixer line.

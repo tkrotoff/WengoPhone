@@ -19,7 +19,7 @@
 
 #include "Win32VolumeControl.h"
 
-#include "EnumWin32DeviceType.h"
+#include "../EnumDeviceType.h"
 
 #include <util/Logger.h>
 
@@ -29,13 +29,13 @@ Win32VolumeControl::Win32VolumeControl(const AudioDevice & audioDevice) {
 
 	std::string deviceName = audioDevice.getData()[0];
 	String deviceId = audioDevice.getData()[1];
-	EnumWin32DeviceType::Win32DeviceType deviceType = EnumWin32DeviceType::toDeviceType(audioDevice.getData()[2]);
+	EnumDeviceType::DeviceType deviceType = EnumDeviceType::toDeviceType(audioDevice.getData()[2]);
 
 	_hMixer = NULL;
 	MMRESULT mr = initVolumeControl(deviceId.toInteger(), deviceType);
 	if (mr != MMSYSERR_NOERROR) {
-		if (deviceType == EnumWin32DeviceType::Win32DeviceTypeWaveIn) {
-			deviceType = EnumWin32DeviceType::Win32DeviceTypeMicrophoneIn;
+		if (deviceType == EnumDeviceType::DeviceTypeWaveIn) {
+			deviceType = EnumDeviceType::DeviceTypeMicrophoneIn;
 			MMRESULT mr = initVolumeControl(deviceId.toInteger(), deviceType);
 			if (mr != MMSYSERR_NOERROR) {
 				_isSettable = false;
@@ -262,7 +262,7 @@ bool Win32VolumeControl::close() {
 	return false;
 }
 
-MMRESULT Win32VolumeControl::initVolumeControl(unsigned deviceId, EnumWin32DeviceType::Win32DeviceType deviceType) {
+MMRESULT Win32VolumeControl::initVolumeControl(unsigned deviceId, EnumDeviceType::DeviceType deviceType) {
 	MMRESULT mr = ::mixerOpen(&_hMixer, deviceId, NULL, NULL, MIXER_OBJECTF_MIXER);
 	if (mr != MMSYSERR_NOERROR) {
 		_hMixer = NULL;
@@ -283,32 +283,32 @@ MMRESULT Win32VolumeControl::initVolumeControl(unsigned deviceId, EnumWin32Devic
 	DWORD dwComponentType;
 
 	switch (deviceType) {
-	case EnumWin32DeviceType::Win32DeviceTypeWaveOut:
+	case EnumDeviceType::DeviceTypeWaveOut:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT;
 		break;
 
-	case EnumWin32DeviceType::Win32DeviceTypeWaveIn:
+	case EnumDeviceType::DeviceTypeWaveIn:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_DST_WAVEIN;
 		break;
 
-	case EnumWin32DeviceType::Win32DeviceTypeCDOut:
+	case EnumDeviceType::DeviceTypeCDOut:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_SRC_COMPACTDISC;
 		break;
 
-	case EnumWin32DeviceType::Win32DeviceTypeMicrophoneOut:
+	case EnumDeviceType::DeviceTypeMicrophoneOut:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE;
 		break;
 
-	case EnumWin32DeviceType::Win32DeviceTypeMicrophoneIn:
+	case EnumDeviceType::DeviceTypeMicrophoneIn:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_DST_WAVEIN;
 		break;
 
-	case EnumWin32DeviceType::Win32DeviceTypeMasterVolume:
+	case EnumDeviceType::DeviceTypeMasterVolume:
 		dwComponentType = MIXERLINE_COMPONENTTYPE_DST_SPEAKERS;
 		break;
 
 	default:
-		LOG_FATAL("unknow device type=" + EnumWin32DeviceType::toString(deviceType));
+		LOG_FATAL("unknow device type=" + EnumDeviceType::toString(deviceType));
 	}
 
 	mr = createMixerLine(dwComponentType);
@@ -318,7 +318,7 @@ MMRESULT Win32VolumeControl::initVolumeControl(unsigned deviceId, EnumWin32Devic
 
 	//For microphone in, we first look for the wave in mixer
 	//and then for the microphone
-	if (deviceType == EnumWin32DeviceType::Win32DeviceTypeMicrophoneIn) {
+	if (deviceType == EnumDeviceType::DeviceTypeMicrophoneIn) {
 		mr = createSecondMixerLine(MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE);
 		if (mr != MMSYSERR_NOERROR) {
 			return mr;

@@ -49,7 +49,7 @@ AudioDevice::AudioDevice(const AudioDevice & audioDevice) {
 	}
 }
 
-AudioDevice & AudioDevice::operator = (const AudioDevice & audioDevice) {
+AudioDevice & AudioDevice::operator=(const AudioDevice & audioDevice) {
 	if (audioDevice._audioDevicePrivate) {
 		updateAudioDevicePrivate(audioDevice._audioDevicePrivate->getData());
 	}
@@ -71,11 +71,11 @@ void AudioDevice::updateAudioDevicePrivate(const StringList & data) {
 	}
 
 #if defined(OS_WINDOWS)
-		_audioDevicePrivate = new Win32AudioDevice(data);
+	_audioDevicePrivate = new Win32AudioDevice(data);
 #elif defined(OS_MACOSX)
-		_audioDevicePrivate = new MacAudioDevice(data);
+	_audioDevicePrivate = new MacAudioDevice(data);
 #elif defined(OS_LINUX)
-		_audioDevicePrivate = new PAAudioDevice(data);
+	_audioDevicePrivate = new PAAudioDevice(data);
 #endif
 }
 

@@ -19,10 +19,9 @@
 
 #include <sound/AudioDeviceManager.h>
 
-#include "Win32VolumeControl.h"
-#include "EnumWin32DeviceType.h"
+#include "../EnumDeviceType.h"
 
-#include <util/String.h>
+#include <util/Logger.h>
 #include <util/StringList.h>
 
 #include <windows.h>
@@ -71,7 +70,7 @@ static int getWaveInDeviceId(const std::string & deviceName);
  * @return true if the registry key was changed, false otherwise
  */
 static bool setSetupPreferredAudioDevicesCount() {
-	static const char * SETUPPREFERREDAUDIODEVICESCOUNT_REGISTRY_KEY = 
+	static const char * SETUPPREFERREDAUDIODEVICESCOUNT_REGISTRY_KEY =
 		"SYSTEM\\CurrentControlSet\\Control\\MediaResources\\SetupPreferredAudioDevices\\";
 	HKEY hKey;
 
@@ -209,7 +208,7 @@ AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
 	StringList data;
 	data += defaultDeviceName;
 	data += String::fromNumber(getWaveOutDeviceId(defaultDeviceName));
-	data += EnumWin32DeviceType::toString(EnumWin32DeviceType::Win32DeviceTypeMasterVolume);
+	data += EnumDeviceType::toString(EnumDeviceType::DeviceTypeMasterVolume);
 	return AudioDevice(data);
 }
 
@@ -229,7 +228,7 @@ AudioDevice AudioDeviceManager::getDefaultInputDevice() {
 	StringList data;
 	data += defaultDeviceName;
 	data += String::fromNumber(getWaveInDeviceId(defaultDeviceName));
-	data += EnumWin32DeviceType::toString(EnumWin32DeviceType::Win32DeviceTypeWaveIn);
+	data += EnumDeviceType::toString(EnumDeviceType::DeviceTypeWaveIn);
 	return AudioDevice(data);
 }
 
@@ -332,7 +331,7 @@ std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
 		StringList data;
 		data += devices[i];
 		data += String::fromNumber(getWaveOutDeviceId(devices[i]));
-		data += EnumWin32DeviceType::toString(EnumWin32DeviceType::Win32DeviceTypeMasterVolume);
+		data += EnumDeviceType::toString(EnumDeviceType::DeviceTypeMasterVolume);
 		listDevices.push_back(AudioDevice(data));
 	}
 
@@ -346,7 +345,7 @@ std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
 		StringList data;
 		data += devices[i];
 		data += String::fromNumber(getWaveInDeviceId(devices[i]));
-		data += EnumWin32DeviceType::toString(EnumWin32DeviceType::Win32DeviceTypeWaveIn);
+		data += EnumDeviceType::toString(EnumDeviceType::DeviceTypeWaveIn);
 		listDevices.push_back(AudioDevice(data));
 	}
 
@@ -384,11 +383,11 @@ bool selectAsRecordDevice(const std::string & deviceName, TypeInput typeInput) {
 	Win32VolumeControl * volumeControl = NULL;
 	if (typeInput == TypeInputMicrophone) {
 		try {
-			volumeControl = new Win32VolumeControl(deviceId, Win32VolumeControl::Win32DeviceTypeWaveIn);
+			volumeControl = new Win32VolumeControl(deviceId, Win32VolumeControl::DeviceTypeWaveIn);
 		} catch (const SoundMixerException &) {
 			volumeControl = NULL;
 			try {
-				volumeControl = new Win32VolumeControl(deviceId, Win32VolumeControl::Win32DeviceTypeMicrophoneIn);
+				volumeControl = new Win32VolumeControl(deviceId, Win32VolumeControl::DeviceTypeMicrophoneIn);
 			} catch (const SoundMixerException &) {
 				volumeControl = NULL;
 			}
