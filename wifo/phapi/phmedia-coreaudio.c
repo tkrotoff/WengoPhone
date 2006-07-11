@@ -43,6 +43,7 @@
 #include "phmstream.h"
 #include "phastream.h"
 #include "phaudiodriver.h"
+#include "phlog.h"
 
 #include <strings.h>
 
