@@ -42,6 +42,8 @@ std::string WengoAccountXMLSerializer::serialize() {
 
 	result += "<autologin>" + String::fromBoolean(_wengoAccount.hasAutoLogin()) + "</autologin>\n";
 
+	result += "<valid>" + String::fromBoolean(_wengoAccount.isValid()) + "</valid>\n";
+
 	result += "</wengoaccount>\n";
 
 	return result;
@@ -77,6 +79,14 @@ bool WengoAccountXMLSerializer::unserialize(const std::string & data) {
 	if (autologin && autologin->FirstChild()) {
 		String autologinStr = autologin->FirstChild()->Value();
 		_wengoAccount._autoLogin = autologinStr.toBoolean();
+	}
+	////
+
+	// Retrieving valid
+	TiXmlNode * valid = wengoaccount.FirstChild("valid").Node();
+	if (valid && valid->FirstChild()) {
+		String validStr = valid->FirstChild()->Value();
+		_wengoAccount._isValid = validStr.toBoolean();
 	}
 	////
 

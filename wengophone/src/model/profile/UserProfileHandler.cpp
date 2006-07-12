@@ -215,7 +215,9 @@ void UserProfileHandler::initializeCurrentUserProfile() {
 
 	_currentUserProfile->init();
 
-	if (!_currentUserProfile->isWengoAccountValid()) {
+	if (_currentUserProfile->hasWengoAccount()
+		&& !_currentUserProfile->getWengoAccount()->isValid()
+		&& !_currentUserProfile->isWengoAccountValid()) {
 		WengoAccount wengoAccount = *_currentUserProfile->getWengoAccount();
 		delete _currentUserProfile;
 		_currentUserProfile = NULL;

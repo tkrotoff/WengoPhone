@@ -59,13 +59,14 @@ public:
 
 	void init();
 
-	const std::string & getWengoLogin() const {
-		return _wengoLogin;
-	}
+	/** Gets the Wengo login (e-mail address). */
+	const std::string & getWengoLogin() const { return _wengoLogin; }
 
-	const std::string & getWengoPassword() const {
-		return _wengoPassword;
-	}
+	/** Gets the Wengo Password. */
+	const std::string & getWengoPassword() const { return _wengoPassword; }
+
+	/** @return _isValid */
+	bool isValid() const { return _isValid; }
 
 	SipAccountType getType() const {
 		return SipAccountTypeWengo;
@@ -119,6 +120,9 @@ private:
 
 	/** True if network discovery is running. */
 	bool _discoveringNetwork;
+
+	/** True if the WengoAccount has been tested and is valid (SSO request ok). */
+	bool _isValid;
 };
 
 #endif	//OWWENGOACCOUNT_H

@@ -46,8 +46,9 @@ WengoAccount::WengoAccount()
 	_ssoRequestOk = false;
 	_wengoLoginOk = false;
 	_ssoWithSSL = false;
-	_stunServer = "stun.wengo.fr";
+	_isValid = false;
 	_discoveringNetwork = false;
+	_stunServer = "stun.wengo.fr";
 	_lastNetworkDiscoveryState = NetworkDiscoveryStateError;
 
 	_ssoTimer.timeoutEvent += boost::bind(&WengoAccount::ssoTimeoutEventHandler, this);
@@ -186,6 +187,8 @@ EnumSipLoginState::SipLoginState WengoAccount::discoverNetwork() {
 		LOG_DEBUG("SSO request Ok but login/password are invalid");
 		return EnumSipLoginState::SipLoginStatePasswordError;
 	}
+
+	_isValid = true;
 
 	if (!discoverForSIP()) {
 		LOG_DEBUG("error while discovering network for SIP");
