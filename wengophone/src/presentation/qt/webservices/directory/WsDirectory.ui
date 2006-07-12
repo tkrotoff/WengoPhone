@@ -333,19 +333,11 @@
        </disabled>
       </palette>
      </property>
-     <property name="font" >
-      <font>
-       <family>MS Shell Dlg</family>
-       <pointsize>8</pointsize>
-       <weight>75</weight>
-       <italic>false</italic>
-       <bold>true</bold>
-       <underline>false</underline>
-       <strikeout>false</strikeout>
-      </font>
-     </property>
      <property name="text" >
       <string>&lt;span style="font-size:18pt;">Search for Wengo contacts&lt;/span>&lt;br />&lt;br />&lt;span>Enter a name, nickname, city, or email and click the search button&lt;/span></string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
      </property>
      <property name="indent" >
       <number>100</number>
