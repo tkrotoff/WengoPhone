@@ -103,6 +103,8 @@ public:
 
 	PhoneCallList getPhoneCallList() const;
 
+	bool isConnected() const;
+
 private:
 
 	/**

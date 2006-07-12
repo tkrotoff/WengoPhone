@@ -500,3 +500,7 @@ void PhoneLine::configureSipWrapper() {
 	_sipWrapper->enableAEC(config.getAudioAEC());
 	_sipWrapper->enableHalfDuplex(config.getAudioHalfDuplex());
 }
+
+bool PhoneLine::isConnected() const {
+	return (_state->getCode() == EnumPhoneLineState::PhoneLineStateOk);
+}

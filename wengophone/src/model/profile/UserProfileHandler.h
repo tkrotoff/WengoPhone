@@ -126,6 +126,13 @@ public:
 		const WengoAccount & wengoAccount);
 
 	/**
+	 * @return the current userProfile
+	 */
+	UserProfile * getCurrentUserProfile() const {
+		return _currentUserProfile;
+	}
+
+	/**
 	 * Creates a new UserProfile.
 	 *
 	 * Calling this function will set the current UserProfile as the

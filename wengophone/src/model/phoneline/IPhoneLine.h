@@ -151,6 +151,11 @@ public:
 	virtual void disconnect(bool now = false) = 0;
 
 	/**
+	 * @return true if connected, otherwise false
+	 */
+	virtual bool isConnected() const = 0;
+
+	/**
 	 * Sets the state of a PhoneCall.
 	 *
 	 * @param callId PhoneCall id
