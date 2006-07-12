@@ -24,15 +24,9 @@
 #include <sound/IVolumeControl.h>
 
 /**
- * Manipulates the volume of an audio device.
+ * Volume control implementation.
  *
- * Gets and sets the volume of an audio device
- * (a microphone or a master/wave out audio device in general).
- *
- * @see http://www.blackberry.com/developers/docs/4.1api/javax/microedition/media/control/VolumeControl.html
- * @author Tanguy Krotoff
- * @author Mathieu Stute
- * @author Philippe Bernery
+ * @see IVolumeControl
  */
 class VolumeControl :  public IVolumeControl {
 public:

@@ -49,7 +49,7 @@ Wenbox::Wenbox() {
 		_wenboxPrivate = getInstance();
 		_wenboxPrivate->setKeyPressedCallback(Wenbox::keyPressedCallback, this);
 	} else {
-		LOG_ERROR("Wenbox dll not loaded");
+		LOG_WARN("Wenbox dll not loaded");
 	}
 #endif
 }

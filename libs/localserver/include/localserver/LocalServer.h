@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_LOCALSERVER_H
-#define OW_LOCALSERVER_H
+#ifndef OWLOCALSERVER_H
+#define OWLOCALSERVER_H
 
 #include <util/Event.h>
 #include <thread/Thread.h>
@@ -33,10 +33,9 @@
  * @author Julien Bossart
  */
 class LocalServer : public Thread {
-
 public:
 
-	// a completer
+	//To finish
 	enum Error {
 		/** No error. */
 		NoError,
@@ -118,14 +117,14 @@ private:
 	bool createMainListeningSocket();
 	bool checkConnectionId(const std::string & connectionId);
 	bool closeAndRemoveFromList(const std::string & connectionId);
-	int	getRequest(int sockId, char *buff, unsigned int buffsize);
+	int getRequest(int sockId, char *buff, unsigned int buffsize);
 	int getHighestSocket();
 
 	bool _started;
 
 	int _port;
 
-	static std::string listeningIp;
+	static const std::string LISTENING_IP;
 };
 
-#endif	//OW_LOCALSERVER_H
+#endif	//OWLOCALSERVER_H

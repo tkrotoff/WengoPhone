@@ -48,7 +48,7 @@ public:
 	 * version 2: WengoPhone NG Beta1 to Beta2
 	 *  - New save directory
 	 *  - New save directory structure
-	 * version 3: WengoPhone NG Beta3: 
+	 * version 3: WengoPhone NG Beta3:
 	 *  - multi-profile management
 	 * version 4: WengoPhone NG Final:
 	 *  - added a new type of protocol: Wengo
@@ -69,9 +69,9 @@ public:
 	 */
 	std::string getName() const;
 
-	/** Name of the application. */
-	static const std::string APPLICATION_NAME_KEY;
-	std::string getApplicationName() const;
+	/** Executable name (qtwengophone.exe). */
+	static const std::string EXECUTABLE_NAME_KEY;
+	std::string getExecutableName() const;
 
 	/** True if SSL connection to SSO is available. */
 	static const std::string NETWORK_SSO_SSL_KEY;

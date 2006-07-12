@@ -17,15 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_WINDOWSREGISTRY_H
-#define OW_WINDOWSREGISTRY_H
+#ifndef OWWINDOWSREGISTRY_H
+#define OWWINDOWSREGISTRY_H
 
 #include <windows.h>
 
 #include <string>
 
 /**
- * 
+ *
  *
  * @author Mathieu Stute
  */
@@ -102,4 +102,5 @@ public:
 	 */
 	static bool removeEntry(HKEY rootKey, const std::string & subkey, const std::string & entry);
 };
-#endif	//OW_WINDOWSREGISTRY_H
+
+#endif	//OWWINDOWSREGISTRY_H

@@ -18,30 +18,31 @@
  */
 
 #include <system/RegisterProtocol.h>
+
 #include <cutil/global.h>
 
 #ifdef OS_WINDOWS
 	#include <system/WindowsRegistry.h>
 #endif
 
-RegisterProtocol::RegisterProtocol(std::string protocol)
+RegisterProtocol::RegisterProtocol(const std::string & protocol)
 	: _protocol(protocol) {
 }
 
-bool RegisterProtocol::bind(std::string command, std::string icon, std::string url) {
+bool RegisterProtocol::bind(const std::string & command, const std::string & icon, const std::string & url) {
 #ifdef OS_WINDOWS
 	return (
 		WindowsRegistry::createKey(HKEY_CLASSES_ROOT, "", _protocol) &&
 		WindowsRegistry::createKey(HKEY_CLASSES_ROOT, _protocol, "DefaultIcon", icon) &&
 		WindowsRegistry::createEntry(HKEY_CLASSES_ROOT, _protocol , "URL Protocol", url) &&
-		WindowsRegistry::createKey(HKEY_CLASSES_ROOT, _protocol, "shell\\open\\command", command) 
+		WindowsRegistry::createKey(HKEY_CLASSES_ROOT, _protocol, "shell\\open\\command", command)
 	);
 #else
 	return false;
 #endif
 }
 
-bool RegisterProtocol::isBinded() {
+bool RegisterProtocol::isBinded() const {
 #ifdef OS_WINDOWS
 	return WindowsRegistry::keyExists(HKEY_CLASSES_ROOT, _protocol);
 #else

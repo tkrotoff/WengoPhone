@@ -27,7 +27,6 @@
 using namespace boost::program_options;
 using namespace std;
 
-#include <util/String.h>
 #include <util/StringList.h>
 #include <util/Logger.h>
 
@@ -35,12 +34,12 @@ CommandLineParser::CommandLineParser(int argc, char * argv[]) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	//set application name
-	std::string applicationName;
+	//set executable name
+	std::string executableName;
 	if (argv[0]) {
 		char *p = strrchr(argv[0], '/');
-		applicationName = std::string(p ? p + 1 : argv[0]);
-		config.set(Config::APPLICATION_NAME_KEY, applicationName);
+		executableName = std::string(p ? p + 1 : argv[0]);
+		config.set(Config::EXECUTABLE_NAME_KEY, executableName);
 	}
 
 	//reset all key to default

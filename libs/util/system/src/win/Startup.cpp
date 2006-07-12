@@ -19,20 +19,15 @@
 
 #include <system/Startup.h>
 
+#include <system/WindowsRegistry.h>
+
 #include <util/String.h>
-
 #include <cutil/global.h>
-
-#ifdef OS_WINDOWS
-	#include <system/WindowsRegistry.h>
-#endif
 
 #include <iostream>
 using namespace std;
 
-#ifdef OS_WINDOWS
 static const char * STARTUP_REGISTRY_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\";
-#endif
 
 Startup::Startup(const std::string & applicationName, const std::string & executablePath)
 	: _applicationName(applicationName),
@@ -43,25 +38,15 @@ Startup::~Startup() {
 }
 
 bool Startup::setStartup(bool startup) {
-#ifdef OS_WINDOWS
-
-	//add the entry to the key
+	//Adds the entry to the key
 	if (startup) {
 		return WindowsRegistry::createEntry(HKEY_CURRENT_USER, std::string(STARTUP_REGISTRY_KEY), _applicationName, _executablePath);
-	//remove the entry from the key
+	//Removes the entry from the key
 	} else {
 		return WindowsRegistry::removeEntry(HKEY_CURRENT_USER, std::string(STARTUP_REGISTRY_KEY), _applicationName);
 	}
-#else
-	startup = false;
-	return startup;
-#endif	//OS_WINDOWS
 }
 
 bool Startup::isStartup() {
-#ifdef OS_WINDOWS
 	return WindowsRegistry::entryExists(HKEY_CURRENT_USER, std::string(STARTUP_REGISTRY_KEY), _applicationName);
-#else
-	return false;
-#endif	//OS_WINDOWS
 }

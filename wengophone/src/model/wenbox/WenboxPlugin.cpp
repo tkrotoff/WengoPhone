@@ -241,12 +241,12 @@ void WenboxPlugin::switchCurrentAudioDeviceToSoundCard() {
 	//Back to the previous audio settings
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	std::string tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_OUTPUT_DEVICEID_KEY));
+	StringList tmp = boost::any_cast<StringList>(config.getDefaultValue(Config::AUDIO_OUTPUT_DEVICEID_KEY));
 	config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY, tmp);
 
-	tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_INPUT_DEVICEID_KEY));
+	tmp = boost::any_cast<StringList>(config.getDefaultValue(Config::AUDIO_INPUT_DEVICEID_KEY));
 	config.set(Config::AUDIO_INPUT_DEVICEID_KEY, tmp);
 
-	tmp = boost::any_cast<std::string>(config.getDefaultValue(Config::AUDIO_RINGER_DEVICEID_KEY));
+	tmp = boost::any_cast<StringList>(config.getDefaultValue(Config::AUDIO_RINGER_DEVICEID_KEY));
 	config.set(Config::AUDIO_RINGER_DEVICEID_KEY, tmp);
 }

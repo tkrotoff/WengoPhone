@@ -76,7 +76,7 @@ public:
 
 private:
 
-	static std::string buildHttpForFlash(std::string xml);
+	static std::string buildHttpForFlash(const std::string & xml);
 
 	LocalServer * _localServer;
 
@@ -93,4 +93,4 @@ private:
 	WengoPhone & _wengoPhone;
 };
 
-#endif //OWCOMMANDSERVER_H
+#endif	//OWCOMMANDSERVER_H

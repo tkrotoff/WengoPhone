@@ -181,31 +181,31 @@ bool YealinkWenbox::errorHandler(unsigned long status) {
 		return true;
 
 	case YL_RETURN_NO_FOUND_HID:
-		LOG_ERROR("no device found");
+		LOG_WARN("no device found");
 		break;
 
 	case YL_RETURN_HID_ISOPENED:
-		LOG_ERROR("re-open invalid");
+		LOG_WARN("re-open invalid");
 		break;
 
 	case YL_RETURN_HID_NO_OPEN:
-		LOG_ERROR("couldn't open device");
+		LOG_WARN("couldn't open device");
 		break;
 
 	case YL_RETURN_MAP_ERROR:
-		LOG_ERROR("memory map error");
+		LOG_WARN("memory map error");
 		break;
 
 	case YL_RETURN_DEV_VERSION_ERROR:
-		LOG_ERROR("incorrect device version");
+		LOG_WARN("incorrect device version");
 		break;
 
 	case YL_RETURN_HID_COMM_ERROR:
-		LOG_ERROR("HID communication error");
+		LOG_WARN("HID communication error");
 		break;
 
 	case YL_RETURN_COMMAND_INVALID:
-		LOG_ERROR("invalid command");
+		LOG_WARN("invalid command");
 		break;
 
 	default:

@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_COMMANDLINEPARSER_H
-#define OW_COMMANDLINEPARSER_H
+#ifndef OWCOMMANDLINEPARSER_H
+#define OWCOMMANDLINEPARSER_H
 
 /**
  * Parse command line option & set associated key in Config.
@@ -34,4 +34,4 @@ public:
 	~CommandLineParser();
 };
 
-#endif	//OW_COMMANDLINEPARSER_H
+#endif	//OWCOMMANDLINEPARSER_H

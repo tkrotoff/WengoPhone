@@ -41,7 +41,7 @@ bool Startup::setStartup(bool startup) {
 	NSEnumerator *e = [loginItems objectEnumerator];
 	NSDictionary *item = nil;
 
-	// Removing trailing '/' if it exists
+	//Removing trailing '/' if it exists
 	NSString *tmpPath = [[NSString alloc] initWithCString:_executablePath.c_str()];
 	NSString *appPath = [tmpPath stringByStandardizingPath];
 	[tmpPath release];
@@ -84,7 +84,7 @@ bool Startup::isStartup() {
 	NSDictionary *item = nil;
 	bool result = false;
 
-	// Removing trailing '/' if it exists
+	//Removing trailing '/' if it exists
 	NSString *tmpPath = [[NSString alloc] initWithCString:_executablePath.c_str()];
 	NSString *appPath = [tmpPath stringByStandardizingPath];
 	[tmpPath release];

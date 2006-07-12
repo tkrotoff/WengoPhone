@@ -51,7 +51,7 @@ CommandServer::~CommandServer() {
 }
 
 CommandServer & CommandServer::getInstance(WengoPhone & wengoPhone) {
-	if(!_commandServerInstance) {
+	if (!_commandServerInstance) {
 		_commandServerInstance = new CommandServer(wengoPhone);
 	}
 
@@ -59,7 +59,7 @@ CommandServer & CommandServer::getInstance(WengoPhone & wengoPhone) {
 }
 
 void CommandServer::serverStatusEventHandler(LocalServer * sender, LocalServer::Error error) {
-	if( error == LocalServer::NoError ) {
+	if (error == LocalServer::NoError) {
 		LOG_DEBUG("CommandServer: connected");
 	} else {
 		LOG_WARN("CommandServer: not connected");
@@ -73,29 +73,29 @@ void CommandServer::connectionEventHandler(LocalServer * sender, const std::stri
 void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std::string & connectionId, const std::string & data) {
 	LOG_DEBUG("CommandServer: incoming request, connectionId: "  + connectionId + " data: " + data);
 	String query = String(data);
-	if(query == _queryStatus) {
+	if (query == _queryStatus) {
 
 		// Find the phoneline status and answer.
 		UserProfile * userprofile = _wengoPhone.getUserProfileHandler().getCurrentUserProfile();
-		if(userprofile) {
+		if (userprofile) {
 			IPhoneLine * phoneLine = userprofile->getActivePhoneLine();
-			if(phoneLine->isConnected()) {
+			if (phoneLine->isConnected()) {
 				_localServer->writeToClient(connectionId, _queryStatus + "|1");
 			} else {
 				_localServer->writeToClient(connectionId, _queryStatus + "|0");
 			}
 		}
 
-	} else if(query.contains(_queryCall)) {
+	} else if (query.contains(_queryCall)) {
 
 		// Extract the number from query & place the call
 		StringList l = query.split("/");
-		if(l.size() == 2) {
+		if (l.size() == 2) {
 			LOG_DEBUG("Call peer: " + l[1]);
 			UserProfile * userprofile = _wengoPhone.getUserProfileHandler().getCurrentUserProfile();
-			if(userprofile) {
+			if (userprofile) {
 				IPhoneLine * phoneLine = userprofile->getActivePhoneLine();
-				if(phoneLine->isConnected()) {
+				if (phoneLine->isConnected()) {
 					phoneLine->makeCall(l[1]);
 					_localServer->writeToClient(connectionId, data + "|1");
 				}
@@ -103,7 +103,7 @@ void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std:
 		}
 		_localServer->writeToClient(connectionId, data + "|0");
 
-	} else if(query.contains(_querySms)) {
+	} else if (query.contains(_querySms)) {
 		LOG_WARN("Not yet implemented");
 	} else {
 
@@ -122,14 +122,14 @@ void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std:
 }
 
 void CommandServer::writeStatusEventHandler(LocalServer * sender, const std::string & writeId, LocalServer::Error error) {
-	if( error == LocalServer::NoError ) {
+	if (error == LocalServer::NoError) {
 		LOG_DEBUG("CommandServer: writeId: "  + writeId + ", write success");
 	} else {
 		LOG_WARN("CommandServer: writeId: "  + writeId + ", write failed");
 	}
 }
 
-std::string CommandServer::buildHttpForFlash(std::string xml) {
+std::string CommandServer::buildHttpForFlash(const std::string & xml) {
 
 	std::string httpHeader =
 		"HTTP/1.1 200 OK\n"

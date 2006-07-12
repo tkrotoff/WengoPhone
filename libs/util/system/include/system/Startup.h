@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef STARTUP_H
-#define STARTUP_H
+#ifndef OWSTARTUP_H
+#define OWSTARTUP_H
 
 #include <util/NonCopyable.h>
 
@@ -72,4 +72,4 @@ private:
 	std::string _executablePath;
 };
 
-#endif	//STARTUP_H
+#endif	//OWSTARTUP_H

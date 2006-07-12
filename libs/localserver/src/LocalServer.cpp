@@ -23,38 +23,35 @@
 #include <util/String.h>
 
 #ifdef OS_WINDOWS
+	#include <winsock2.h>
+	#include <windows.h>
+	#ifndef CC_MINGW
+		#include <wininet.h>
+		#include <urlmon.h>
+		#include <stdio.h>
+		#include <ws2tcpip.h>
+		#include <time.h>
 
-#include <winsock2.h>
-#include <windows.h>
-#ifndef CC_MINGW
-#include <wininet.h>
-#include <urlmon.h>
-#include <stdio.h>
-#include <ws2tcpip.h>
-#include <time.h>
+		#ifndef snprintf
+			#define snprintf _snprintf
+		#endif
 
-#ifndef snprintf
-#define snprintf _snprintf
-#endif
-
-typedef SOCKET Socket;
-#endif //CC_MINGW
+		typedef SOCKET Socket;
+	#endif //CC_MINGW
 #else
+	#include <sys/time.h>
+	#include <sys/types.h>
+	#include <sys/socket.h>
+	#include <unistd.h>
+	#include <arpa/inet.h>
+	#include <netinet/in.h>
+	#include <errno.h>
+	#include <net/if.h>
+	#include <sys/ioctl.h>
 
-#include <sys/time.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <errno.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
-
-typedef int Socket;
-inline int closesocket(Socket fd) {return close(fd);}
-
-#endif	//WIN32
+	typedef int Socket;
+	inline int closesocket(Socket fd) {return close(fd);}
+#endif	//OS_WINDOWS
 
 #ifndef MSG_NOSIGNAL
 	#define MSG_NOSIGNAL 0
@@ -64,9 +61,10 @@ Socket _mainSock;
 static std::list<Socket> _clientSockList;
 typedef std::list<Socket>::iterator SockListIterator;
 
-std::string LocalServer::listeningIp = "127.0.0.1";
+const std::string LocalServer::LISTENING_IP = "127.0.0.1";
 
-LocalServer::LocalServer(int port) : _port(port) {
+LocalServer::LocalServer(int port)
+	: _port(port) {
 	_started = false;
 }
 
@@ -78,27 +76,33 @@ void LocalServer::init() {
 }
 
 bool LocalServer::createMainListeningSocket() {
-	
+
 	struct sockaddr_in raddr;
 	int option = 1;
-	
-	if (listeningIp.empty())
+
+	if (LISTENING_IP.empty()) {
 		raddr.sin_addr.s_addr = htons(INADDR_ANY);
-	else
-		raddr.sin_addr.s_addr = inet_addr(listeningIp.c_str());
+	}
+	else {
+		raddr.sin_addr.s_addr = inet_addr(LISTENING_IP.c_str());
+	}
 	raddr.sin_port = htons(_port);
 	raddr.sin_family = AF_INET;
-	
+
 	_mainSock = 0;
 	if ((_mainSock = socket(PF_INET, SOCK_STREAM, 0)) == -1) {
 		LOG_DEBUG("cannot create main socket");
 		return false;
 	}
 
-	setsockopt(_mainSock, SOL_SOCKET, SO_REUSEADDR, (void*)&option, sizeof(int));
+#ifdef OS_WINDOWS
+	//FIXME don't know if this is the right way to do it
+	setsockopt(_mainSock, SOL_SOCKET, SO_REUSEADDR, (const char *) &option, sizeof(int));
+#else
+	setsockopt(_mainSock, SOL_SOCKET, SO_REUSEADDR, (const void *) &option, sizeof(int));
+#endif
 
-	if (bind(_mainSock, (struct sockaddr *)&raddr, sizeof (raddr)) < 0)
-	{
+	if (bind(_mainSock, (struct sockaddr *)&raddr, sizeof (raddr)) < 0) {
 		LOG_DEBUG("cannot bind main socket");
 		closesocket(_mainSock);
 		_mainSock = 0;
@@ -114,7 +118,7 @@ LocalServer::~LocalServer() {
 
 	if (_started) {
 		_started = false;
-		
+
 		if (_mainSock) {
 			closesocket(_mainSock);
 		}
@@ -132,8 +136,7 @@ bool LocalServer::closeAndRemoveFromList(const std::string & connectionId) {
 
 	SockListIterator it;
 	for (it = _clientSockList.begin(); it != _clientSockList.end(); it++) {
-		if (*it == sockId)
-		{
+		if (*it == sockId) {
 			closesocket(*it);
 			_clientSockList.erase(it);
 			return true;
@@ -148,29 +151,30 @@ bool LocalServer::checkConnectionId(const std::string & connectionId) {
 
 	SockListIterator it;
 	for (it = _clientSockList.begin(); it != _clientSockList.end(); it++) {
-		if (*it == sockId)
+		if (*it == sockId) {
 			return true;
+		}
 	}
 
 	return false;
 }
-	
+
 bool LocalServer::writeToClient(const std::string & connectionId, const std::string & data) {
-	int i;
-	int size;
 	Socket sockId = (Socket) String(connectionId).toInteger();
 	Error error = UnknownError;
-	
+
 	if (checkConnectionId(connectionId)) {
-		for (i = 0, size = data.length() + 1; size; size -= i) {
+		int size;
+		for (int i = 0, size = data.length() + 1; size; size -= i) {
 			i = send(sockId, data.c_str(), size, MSG_NOSIGNAL);
 			if (i < 1) {
 				break;
 			}
 		}
-		
-		if (size == 0)
+
+		if (size == 0) {
 			error = NoError;
+		}
 	}
 
 	closeAndRemoveFromList(connectionId);
@@ -178,58 +182,59 @@ bool LocalServer::writeToClient(const std::string & connectionId, const std::str
 	return (error == NoError);
 }
 
-int LocalServer::getHighestSocket()
-{
+int LocalServer::getHighestSocket() {
 	int highest = 0;
 
 	SockListIterator it;
 	for (it = _clientSockList.begin(); it != _clientSockList.end(); it++) {
-		if (((int) *it) > highest)
+		if (((int) *it) > highest) {
 			highest = (int) *it;
+		}
 	}
 
-	if (((int) _mainSock) > highest)
+	if (((int) _mainSock) > highest) {
 		highest = _mainSock;
+	}
 
 	return highest;
 }
 
-int	LocalServer::getRequest(int sockId, char *buff, unsigned int buffsize)
-{
-	struct timeval	timeout;
-	fd_set	rfds;
-	int ret;
+int LocalServer::getRequest(int sockId, char *buff, unsigned int buffsize) {
+	struct timeval timeout;
+	fd_set rfds;
 	int nbytes = 0;
 	Socket sock = (Socket) sockId;
 
 	memset(buff, 0, buffsize);
 
-	while (1)
-	{
+	while (true) {
 		timeout.tv_sec = 10;
 		timeout.tv_usec = 0;
 		FD_ZERO(&rfds);
 		FD_SET(sockId, &rfds);
 
-		ret = select(sock + 1, &rfds, 0, 0, &timeout);
-		
-		if (ret <= 0)
+		int ret = select(sock + 1, &rfds, 0, 0, &timeout);
+
+		if (ret <= 0) {
 			return -1;
+		}
 
-		if (FD_ISSET(sock, &rfds))
-		{
+		if (FD_ISSET(sock, &rfds)) {
 			ret = recv(sock, buff + nbytes, 1, 0);
-			
-			if (ret <= 0)
-				return -1;
-			else
-				nbytes += ret;
 
-			if (nbytes == buffsize)
+			if (ret <= 0) {
+				return -1;
+			} else {
+				nbytes += ret;
+			}
+
+			if (nbytes == buffsize) {
 				return nbytes;
-			
-			if (strncmp("\0", buff + nbytes - 1, 1) == 0)
+			}
+
+			if (strncmp("\0", buff + nbytes - 1, 1) == 0) {
 				break;
+			}
 		}
 	}
 
@@ -242,8 +247,6 @@ void LocalServer::run() {
 	socklen_t fromlen = sizeof(from);
 	fd_set rfds;
 	struct timeval to;
-	int received = 0;
-	int err = 0;
 	char buff[256];
 
 	serverStatusEvent(this, NoError);
@@ -257,10 +260,9 @@ void LocalServer::run() {
 		for (it = _clientSockList.begin(); it != _clientSockList.end(); it++) {
 			FD_SET(*it, &rfds);
 		}
-		
-		err = select(getHighestSocket() + 1, &rfds, 0, 0, 0);
 
-		received = 0;
+		int err = select(getHighestSocket() + 1, &rfds, 0, 0, 0);
+
 		if (err && FD_ISSET(_mainSock, &rfds)) {
 			sock = accept(_mainSock, &from, &fromlen);
 			if (sock > 0) {

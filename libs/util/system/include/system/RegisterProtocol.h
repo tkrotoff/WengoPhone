@@ -17,25 +17,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_REGISTERPROTOCOL_H
-#define OW_REGISTERPROTOCOL_H
+#ifndef OWREGISTERPROTOCOL_H
+#define OWREGISTERPROTOCOL_H
 
 #include <string>
 
 /**
  * Bind a protocol to a command.
- * 
+ *
  * @author Mathieu Stute
  */
 class RegisterProtocol {
 
 public:
 
-	RegisterProtocol(std::string protocol);
+	RegisterProtocol(const std::string & protocol);
 
-	bool bind(std::string command, std::string icon = "", std::string url = "");
+	bool bind(const std::string & command, const std::string & icon = "", const std::string & url = "");
 
-	bool isBinded();
+	bool isBinded() const;
 
 	bool unbind();
 
@@ -44,4 +44,4 @@ private:
 	std::string _protocol;
 };
 
-#endif	//OW_REGISTERPROTOCOL_H
+#endif	//OWREGISTERPROTOCOL_H

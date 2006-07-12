@@ -52,7 +52,7 @@ QtWenboxPlugin::~QtWenboxPlugin() {
 
 void QtWenboxPlugin::initThreadSafe() {
 	//FIXME: we should avoid to get QtWengoPhone via CWenboxPlugin and it should
-	// be given in constructor.
+	//be given in constructor.
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWenboxPlugin.getCWengoPhone().getPresentation();
 	_phoneComboBox = qtWengoPhone->getPhoneComboBox();
 }
