@@ -69,6 +69,10 @@ public:
 	 */
 	std::string getName() const;
 
+	/** Name of the application. */
+	static const std::string APPLICATION_NAME_KEY;
+	std::string getApplicationName() const;
+
 	/** True if SSL connection to SSO is available. */
 	static const std::string NETWORK_SSO_SSL_KEY;
 	bool getNetworkSSOSSL() const;

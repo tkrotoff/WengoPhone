@@ -39,6 +39,7 @@ const int Config::CONFIG_VERSION = 4;
 
 const std::string Config::CONFIG_VERSION_KEY = "config.version";
 
+const std::string Config::APPLICATION_NAME_KEY = "global.application.name";
 const std::string Config::NETWORK_SSO_SSL_KEY = "network.sso.ssl";
 const std::string Config::NETWORK_NAT_TYPE_KEY = "network.nat.type";
 const std::string Config::NETWORK_SIP_SERVER_KEY = "network.sip.server";
@@ -161,6 +162,7 @@ Config::Config(const std::string & name)
 	resourcesPath = Path::getApplicationResourcesDirPath();
 #endif
 	_keyDefaultValueMap[RESOURCES_DIR_KEY] = resourcesPath;
+	_keyDefaultValueMap[APPLICATION_NAME_KEY] = empty;
 
 	_keyDefaultValueMap[NETWORK_SSO_SSL_KEY] = true;
 	_keyDefaultValueMap[NETWORK_NAT_TYPE_KEY] = EnumNatType::toString(EnumNatType::NatTypeSymmetric);
@@ -265,6 +267,10 @@ std::string Config::getName() const {
 
 int Config::getConfigVersion() const {
 	return getIntegerKeyValue(CONFIG_VERSION_KEY);
+}
+
+std::string Config::getApplicationName() const {
+	return getStringKeyValue(APPLICATION_NAME_KEY);
 }
 
 bool Config::getNetworkSSOSSL() const {

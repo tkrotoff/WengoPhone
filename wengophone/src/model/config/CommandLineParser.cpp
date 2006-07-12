@@ -35,6 +35,14 @@ CommandLineParser::CommandLineParser(int argc, char * argv[]) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+	//set application name
+	std::string applicationName;
+	if (argv[0]) {
+		char *p = strrchr(argv[0], '/');
+		applicationName = std::string(p ? p + 1 : argv[0]);
+		config.set(Config::APPLICATION_NAME_KEY, applicationName);
+	}
+
 	//reset all key to default
 	config.resetToDefaultValue(Config::GUI_BACKGROUND_KEY);
 	config.resetToDefaultValue(Config::PLACECALL_FROMCMDLINE_KEY);
