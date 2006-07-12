@@ -368,13 +368,16 @@ void PhApiCallbacks::onNotify(const char * event, const char * from, const char 
 			LOG_DEBUG("basic=" + basic);
 
 			//buddy is offline
-			if (basic == "closed") {
+			if (String(basic).toLowerCase() == "closed") {
 				p->presenceStateChangedEvent(*p,  EnumPresenceState::PresenceStateOffline, String::null, buddy);
 			}
 
 			//buddy is online
-			else if (basic == "open") {
+			else if (String(basic).toLowerCase() == "open") {
 				TiXmlText * noteText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("note").FirstChild().Text();
+				if (!noteText) {
+					noteText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("value").FirstChild().Text();
+				}
 				if (noteText) {
 					std::string note = noteText->Value();
 					LOG_DEBUG("note=" + note);

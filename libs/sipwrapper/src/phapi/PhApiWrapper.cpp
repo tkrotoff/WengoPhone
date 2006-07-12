@@ -205,12 +205,9 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 		phoneLineStateChangedEvent(*this, ret, EnumPhoneLineState::PhoneLineStateProgress);
 	}
 
-	String tmp(realm);
-	if (tmp.contains("wengo")) {
-		_wengoVline = ret;
-		_wengoSipAddress = "sip:" + identity + "@" + realm;
-		_wengoRealm = realm;
-	}
+	_wengoVline = ret;
+	_wengoSipAddress = "sip:" + identity + "@" + realm;
+	_wengoRealm = realm;
 
 	return ret;
 }
