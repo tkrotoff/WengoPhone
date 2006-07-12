@@ -1099,7 +1099,7 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>When I start my computer</source>
-        <translation>Au démarrage de Windows</translation>
+        <translation>Au démarrage du système</translation>
     </message>
     <message>
         <source>Automatically start WengoPhone</source>
@@ -3179,7 +3179,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;You can chat with your contacts&lt;br&gt; whatever their IM (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Use the &quot;Tools / IM accounts&quot; menu&lt;br&gt;to login to those networks&lt;/span&gt;</source>
-        <translation type="unfinished">&lt;span style=&quot;font-size:18pt;&quot;&gt;Ajouter un contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Vous pouvez chatter avec vos contacts&lt;br&gt; quel que soit leur Messenger (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Utilisez le menu &quot;Outils&quot; -&gt; &quot;Comptes de messagerie &lt;br&gt;instantanée&quot;pour vous connecter à ces réseaux &lt;/span&gt;</translation>
+        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Ajouter un contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Vous pouvez chatter avec vos contacts&lt;br&gt; quel que soit leur Messenger (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Utilisez le menu &quot;Outils&quot; -&gt; &quot;Comptes de messagerie &lt;br&gt;instantanée&quot;pour vous connecter à ces réseaux &lt;/span&gt;</translation>
     </message>
 </context>
 <context>
@@ -3353,7 +3353,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>No phone number set</source>
-        <translation>Aucun numéro de mobile saisi</translation>
+        <translation>Aucun numéro saisi</translation>
     </message>
 </context>
 <context>
