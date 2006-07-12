@@ -15,6 +15,7 @@ libs = [
 	'owhttp',
 	'owserialization',
 	'owserializer',
+	'owlocalserver',
 	'imwrapper',
 	'sipwrapper',
 	'wenbox',
@@ -146,6 +147,7 @@ sources = [
 	'model/webservices/directory/WsDirectory.cpp',
 	'model/webservices/url/WsUrl.cpp',
 	'model/classic/ClassicExterminator.cpp',
+	'model/commandserver/CommandServer.cpp',
 
 	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
@@ -170,5 +172,6 @@ env.WengoCopyToBuildDir('../sounds', 'sounds')
 env.WengoCopyToBuildDir('../pics', 'pics')
 
 env.WengoAddIncludePath(include_path)
+env.WengoAddDefines(defines)
 env.WengoUseLibraries(libs)
 env.WengoStaticLibrary('wengophone', sources)

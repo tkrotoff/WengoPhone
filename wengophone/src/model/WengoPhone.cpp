@@ -29,6 +29,7 @@
 #include "network/NetworkObserver.h"
 #include "network/NetworkProxyDiscovery.h"
 #include "webservices/subscribe/WsSubscribe.h"
+#include "commandserver/CommandServer.h"
 
 #include "WengoPhoneBuildId.h"
 
@@ -62,7 +63,7 @@ WengoPhone::WengoPhone() {
 	// Creating instance of NetworkProxyDiscovery
 	NetworkProxyDiscovery::getInstance();
 	////
-
+	
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	// Binding events
@@ -72,6 +73,10 @@ WengoPhone::WengoPhone() {
 
 	// Creating the UserProfileHandler instance
 	_userProfileHandler = new UserProfileHandler(*this);
+	////
+
+	// Creating instance of CommandServer
+	CommandServer::getInstance(*this);
 	////
 }
 

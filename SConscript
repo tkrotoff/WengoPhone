@@ -29,6 +29,7 @@ projects = [
 	'libs/webcam',
 	'libs/owbrowser',
 	'libs/softupdater',
+	'libs/localserver',
 	'wifo',
 	'libs/sipwrapper',
 	'libs/imwrapper/src/gaim',
