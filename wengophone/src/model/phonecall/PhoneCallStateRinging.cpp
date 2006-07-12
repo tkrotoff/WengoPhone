@@ -21,4 +21,9 @@
 
 #include "PhoneCall.h"
 
-void PhoneCallStateRinging::execute(PhoneCall & phoneCall) { }
+#include <model/wenbox/WenboxPlugin.h>
+
+void PhoneCallStateRinging::execute(PhoneCall & phoneCall) {
+	WenboxPlugin & wenboxPlugin = phoneCall.getWenboxPlugin();
+	wenboxPlugin.setState(Wenbox::CallRinging);
+}

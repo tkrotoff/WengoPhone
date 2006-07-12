@@ -69,11 +69,11 @@ std::string QtBrowser::getUrl() const {
 }
 
 void QtBrowser::backward() {
-	LOG_WARN("Not yet implemented");
+	LOG_WARN("not yet implemented");
 }
 
 void QtBrowser::forward() {
-	LOG_WARN("Not yet implemented");
+	LOG_WARN("not yet implemented");
 }
 
 void QtBrowser::beforeNavigate(const QUrl & link) {
@@ -123,7 +123,7 @@ void QtBrowser::initBrowser() {
 
 	} else {
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
-		//clean qt browser
+		//Clean qt browser
 		if (_qtBrowser) {
 			_layout->removeWidget(_qtBrowser);
 			delete _qtBrowser;
@@ -132,8 +132,8 @@ void QtBrowser::initBrowser() {
 
 		//Init IE browser
 		_ieBrowser = new QAxWidget(_browserWidget);
-		_ieBrowser->setControl(QString::fromUtf8("{8856F961-340A-11D0-A96B-00C04FD705A2}&"));
-		_ieBrowser->setObjectName(QString::fromUtf8("mwbAx"));
+		_ieBrowser->setControl(QString::fromUtf8("{8856F961-340A-11D0-A96B-00C04FD705A2}"));
+		_ieBrowser->setObjectName(QString::fromUtf8("IEBrowser"));
 		_ieBrowser->setFocusPolicy(Qt::StrongFocus);
 		connect(_ieBrowser, SIGNAL(BeforeNavigate(const QString &, int, const QString &, const QVariant &, const QString &, bool &)),
 			SLOT(beforeNavigate(const QString &, int, const QString &, const QVariant &, const QString &, bool &)));

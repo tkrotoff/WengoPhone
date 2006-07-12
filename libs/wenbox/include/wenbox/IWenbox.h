@@ -216,6 +216,9 @@ public:
 		/** Incoming phone call. */
 		CallIncoming,
 
+		/** Ringing state. */
+		CallRinging,
+
 		/** Conversation state. */
 		CallTalking,
 

@@ -145,6 +145,12 @@ bool YealinkWenbox::setState(PhoneCallState state, const std::string & phoneNumb
 		status = YL_DeviceIoControl(YL_IOCTL_GEN_CALLIN, (void *)(char *) phoneNumber.c_str(), phoneNumber.length(), 0, 0);
 		return errorHandler(status);
 
+	case CallRinging:
+		//Same as talking state
+		LOG_DEBUG("ringing state");
+		status = YL_DeviceIoControl(YL_IOCTL_GEN_TALKING, 0, 0, 0, 0);
+		return errorHandler(status);
+
 	case CallTalking:
 		LOG_DEBUG("talking state");
 		status = YL_DeviceIoControl(YL_IOCTL_GEN_TALKING, 0, 0, 0, 0);

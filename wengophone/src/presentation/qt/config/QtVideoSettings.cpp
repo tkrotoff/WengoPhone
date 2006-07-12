@@ -79,7 +79,7 @@ void QtVideoSettings::saveConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	config.set(Config::VIDEO_ENABLE_KEY, _ui->enableVideoGroupBox->isChecked());
-	config.set(Config::VIDEO_WEBCAM_DEVICE_KEY, _ui->webcamDeviceComboBox->currentText().toStdString());
+	config.set(Config::VIDEO_WEBCAM_DEVICE_KEY, std::string(_ui->webcamDeviceComboBox->currentText().toUtf8().constData()));
 
 	QTreeWidgetItem * item = _ui->videoQualityTreeWidget->currentItem();
 	if (item) {

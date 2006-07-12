@@ -91,7 +91,7 @@ void QtPhoneCall::initThreadSafe() {
 		userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
 	}
 
-	//userInfo = getDisplayName(userInfo);
+	userInfo = getDisplayName(userInfo);
 
 	QString tmp = QString("<html><head><meta name='qrichtext' content='1'/></head><body "
 		"style=white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"

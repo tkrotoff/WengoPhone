@@ -93,6 +93,11 @@ public:
 		return _displayName;
 	}
 
+	/**
+	 * Gets a human readable representation of this SIP address.
+	 *
+	 * @return display name or user name if display name is empty
+	 */
 	std::string toString() const;
 
 	/**

@@ -78,8 +78,6 @@ class QtWengoPhone : public QObjectThreadSafe, public PWengoPhone, public Tracka
 	Q_OBJECT
 public:
 
-	static const std::string URL_WENGO_MINI_HOME;
-
 	static const std::string LOCAL_WEB_DIR;
 
 	QtWengoPhone(CWengoPhone & cWengoPhone);
@@ -143,9 +141,7 @@ public:
 		return _qtLanguage;
 	}
 
-	QtBrowser * getQtBrowser() {
-		return _browser;
-	}
+	QtBrowser * getQtBrowser();
 
 	void setChatWindow(QWidget * chatWindow);
 

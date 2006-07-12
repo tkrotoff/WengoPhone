@@ -96,7 +96,6 @@ const std::string QtWengoPhone::ANCHOR_DIALPAD = "openwengo_dial";
 const std::string QtWengoPhone::ANCHOR_ADDCONTACT = "openwengo_addcontact";
 const std::string QtWengoPhone::ANCHOR_SELFCARE = "openwengo_selfcare";
 const std::string QtWengoPhone::ANCHOR_FORUM = "openwengo_forum";
-const std::string QtWengoPhone::URL_WENGO_MINI_HOME = "https://www.wengo.fr/auth/auth.php";
 const std::string QtWengoPhone::LOCAL_WEB_DIR = "webpages/windows";
 
 QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
@@ -1193,4 +1192,8 @@ void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(NetworkProxy n
 
 		NetworkProxyDiscovery::getInstance().setProxySettings(myNetworkProxy);
 	}
+}
+
+QtBrowser * QtWengoPhone::getQtBrowser() {
+	return _browser;
 }

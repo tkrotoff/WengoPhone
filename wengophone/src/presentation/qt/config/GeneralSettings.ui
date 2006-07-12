@@ -116,7 +116,7 @@
          <item row="2" column="1" >
           <widget class="QRadioButton" name="startChatOnlyRadioButton" >
            <property name="text" >
-            <string>Start a chat if applicable</string>
+            <string>Always start a chat</string>
            </property>
           </widget>
          </item>

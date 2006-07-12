@@ -62,7 +62,7 @@ QString QtAudioSettings::getName() const {
 void QtAudioSettings::saveConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	// Retrieving the input data from the concatenated string
+	//Retrieving the input data from the concatenated string
 	std::string concatString = _ui->inputDeviceComboBox->itemData(_ui->inputDeviceComboBox->currentIndex()).toString().toStdString();
 	std::list<AudioDevice> inputDeviceList = AudioDeviceManager::getInputDeviceList();
 	for (std::list<AudioDevice>::const_iterator it = inputDeviceList.begin();
@@ -75,8 +75,8 @@ void QtAudioSettings::saveConfig() {
 	}
 	////
 
-	// Retrieving the output data from the concatenated string
-	concatString = _ui->outputDeviceComboBox->itemData(_ui->outputDeviceComboBox->currentIndex()).toString().toStdString(); 
+	//Retrieving the output data from the concatenated string
+	concatString = _ui->outputDeviceComboBox->itemData(_ui->outputDeviceComboBox->currentIndex()).toString().toStdString();
 	std::list<AudioDevice> outputDeviceList = AudioDeviceManager::getOutputDeviceList();
 	for (std::list<AudioDevice>::const_iterator it = outputDeviceList.begin();
 		it != outputDeviceList.end();
@@ -88,8 +88,8 @@ void QtAudioSettings::saveConfig() {
 	}
 	////
 
-	// Retrieving the ringer data from the concatenated string
-	concatString = _ui->ringingDeviceComboBox->itemData(_ui->ringingDeviceComboBox->currentIndex()).toString().toStdString(); 
+	//Retrieving the ringer data from the concatenated string
+	concatString = _ui->ringingDeviceComboBox->itemData(_ui->ringingDeviceComboBox->currentIndex()).toString().toStdString();
 	for (std::list<AudioDevice>::const_iterator it = outputDeviceList.begin();
 		it != outputDeviceList.end();
 		++it) {
@@ -106,22 +106,22 @@ void QtAudioSettings::readConfig() {
 
 	//inputDeviceList
 	_ui->inputDeviceComboBox->clear();
-	
+
 	std::list<AudioDevice> inputDeviceList = AudioDeviceManager::getInputDeviceList();
 	for (std::list<AudioDevice>::const_iterator it = inputDeviceList.begin();
 		it != inputDeviceList.end();
 		++it) {
-		_ui->inputDeviceComboBox->addItem(QString::fromUtf8((*it).getName().c_str()), 
+		_ui->inputDeviceComboBox->addItem(QString::fromUtf8((*it).getName().c_str()),
 			QString::fromStdString((*it).getData().toString()));
 	}
 
-		QString currentInputDeviceId = QString::fromUtf8(config.getAudioInputDeviceId().toString().c_str());
+	QString currentInputDeviceId = QString::fromUtf8(config.getAudioInputDeviceId().toString().c_str());
 	_ui->inputDeviceComboBox->setCurrentIndex(_ui->inputDeviceComboBox->findData(currentInputDeviceId));
 	////
 
 	//outputDeviceList
 	_ui->outputDeviceComboBox->clear();
-	
+
 	std::list<AudioDevice> outputDeviceList = AudioDeviceManager::getOutputDeviceList();
 	for (std::list<AudioDevice>::const_iterator it = outputDeviceList.begin();
 		it != outputDeviceList.end();

@@ -133,7 +133,6 @@ void QtUserProfile::networkDiscoveryStateChangedEventHandlerSlot(SipAccount * se
 	int iState) {
 
 	//SipAccount::NetworkDiscoveryState state = (SipAccount::NetworkDiscoveryState) iState;
-
 }
 
 void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sender,
@@ -167,8 +166,8 @@ void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sende
 			}
 		}
 	} else {
-		// TODO: give a personal message
-		// TODO: avoid direct access to model (as we are in the GUI thread)
+		//TODO: give a personal message
+		//TODO: avoid direct access to model (as we are in the GUI thread)
 		sender->authorizeContact(imContact, false, String::null);
 	}
 }
@@ -185,7 +184,14 @@ void QtUserProfile::setBrowserUrlToAccount() {
 			"&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) +
 			"&page=softphoneng-web";
 		if (_qtWengoPhone.getQtBrowser()) {
-			_qtWengoPhone.getQtBrowser()->setUrl(QtWengoPhone::URL_WENGO_MINI_HOME + data);
+			NetworkProxy::ProxyAuthType proxyAuthType = NetworkProxyDiscovery::getInstance().getNetworkProxy().getProxyAuthType();
+			if (proxyAuthType == NetworkProxy::ProxyAuthTypeDigest) {
+				//HTTPS cannot be used when the HTTP proxy is in digest:
+				//ActiveX Internet Explorer crashes!
+				_qtWengoPhone.getQtBrowser()->setUrl(std::string("http://www.wengo.fr/auth/auth.php") + data);
+			} else {
+				_qtWengoPhone.getQtBrowser()->setUrl(std::string("https://www.wengo.fr/auth/auth.php") + data);
+			}
 		}
 	}
 #endif

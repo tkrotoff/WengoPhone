@@ -147,6 +147,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 	}
 
 	PhoneCall * phoneCall = new PhoneCall(*this, sipAddress);
+	_activePhoneCall = phoneCall;
 	int callId = _sipWrapper->makeCall(_lineId, sipAddress.getRawSipAddress(), enableVideo);
 	if (callId < 0) {
 		//FIXME should be replaced by a LOG_FATAL()
