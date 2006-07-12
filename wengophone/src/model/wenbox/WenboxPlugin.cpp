@@ -210,8 +210,8 @@ std::string WenboxPlugin::getWenboxAudioDeviceName() const {
 void WenboxPlugin::switchCurrentAudioDeviceToWenbox() {
 	AudioDevice defaultOutputDevice = AudioDeviceManager::getDefaultOutputDevice();
 	string defaultOutputDeviceName = defaultOutputDevice.getName();
-	string intputDeviceName = defaultOutputDeviceName;
 	string outputDeviceName = defaultOutputDeviceName;
+	string intputDeviceName = defaultOutputDeviceName;
 	string ringerDeviceName = defaultOutputDeviceName;
 
 	//Looks for the Wenbox audio device from the list of devices from Windows
@@ -230,11 +230,16 @@ void WenboxPlugin::switchCurrentAudioDeviceToWenbox() {
 		return;
 	}
 
+	StringList data;
+	data += outputDeviceName;
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	//Changes audio settings
-	config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY, defaultOutputDevice.getData());
-	config.set(Config::AUDIO_INPUT_DEVICEID_KEY, defaultOutputDevice.getData());
-	config.set(Config::AUDIO_RINGER_DEVICEID_KEY, defaultOutputDevice.getData());
+	config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY, data);
+	data[0] = intputDeviceName;
+	config.set(Config::AUDIO_INPUT_DEVICEID_KEY, data);
+	data[0] = ringerDeviceName;
+	config.set(Config::AUDIO_RINGER_DEVICEID_KEY, data);
 }
 
 void WenboxPlugin::switchCurrentAudioDeviceToSoundCard() {
