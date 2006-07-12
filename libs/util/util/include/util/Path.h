@@ -45,6 +45,8 @@ public:
 	 *
 	 * The executable path returned always finished by "/" or "\".
 	 *
+	 * On MacOS X, returns full path to exe. e.g: /Application/WengoPhone.app/Contents/MacOS/WengoPhone
+	 * 
 	 * @return application executable path
 	 */
 	static std::string getApplicationDirPath();
@@ -64,6 +66,13 @@ public:
 	static std::string getHomeDirPath();
 #ifdef OS_MACOSX
 	// Special extensions for MacOS X
+
+	/**
+	 * Gets the application bundle path.
+	 *
+	 * e.g: /Application/WengoPhone.app/
+	 */
+	static std::string getApplicationBundlePath();
 
 	/**
 	 * Gets the Private Frameworks path.

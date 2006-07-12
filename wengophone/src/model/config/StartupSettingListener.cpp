@@ -24,15 +24,25 @@
 
 #include <system/Startup.h>
 
+#include <cutil/global.h>
 #include <util/Logger.h>
 #include <util/Path.h>
 
 #include <iostream>
 
 StartupSettingListener::StartupSettingListener() {
+	std::string appPath;
+
+#if defined(OS_WINDOWS)
 	//add the -b option to start in background mode
-	_startup = new Startup("WengoPhoneNG", Path::getApplicationDirPath() + "qtwengophone.exe -b");
-	ConfigManager::getInstance().getCurrentConfig().valueChangedEvent += boost::bind(&StartupSettingListener::startupSettingChanged, this, _1, _2);
+	appPath = Path::getApplicationDirPath() + "qtwengophone.exe -b";
+#elif defined (OS_MACOSX)
+	appPath = Path::getApplicationBundlePath();
+#endif
+	_startup = new Startup("WengoPhoneNG", appPath);
+
+	ConfigManager::getInstance().getCurrentConfig().valueChangedEvent +=
+		boost::bind(&StartupSettingListener::startupSettingChanged, this, _1, _2);
 }
 
 StartupSettingListener::~StartupSettingListener() {

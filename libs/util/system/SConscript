@@ -1,21 +1,39 @@
 env = WengoGetEnvironment()
 
 libs = ['owutil']
-lib_path = []
 include_path = ['include']
+lib_path = []
 headers = []
-sources = [
-	'src/Startup.cpp',
-	'src/Processes.cpp',
-]
+sources = []
+cc_flags = []
+link_flags = []
 
 if WengoOSWindows():
 	sources += [
-		'src/WindowsVersion.c',
-		'src/WindowsRegistry.cpp',
+		'src/win/Startup.cpp',
+		'src/win/Processes.cpp',
+		'src/win/WindowsVersion.c',
+		'src/win/WindowsRegistry.cpp',
 	]
 	libs += ["Kernel32", "Advapi32", "User32"]
 
+elif WengoOSMacOSX():
+	sources += [
+		'src/null/Processes.cpp',
+		'src/mac/Startup.cpp',
+	]
+
+	cc_flags += ['-x objective-c++']
+
+	link_flags += ['-framework Cocoa']
+
+else:
+	sources += [
+		'src/null/Processes.cpp',
+		'src/null/Startup.cpp',
+	]
+
+env.WengoAddCCFlags(cc_flags)
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 env.WengoAddDoxyfile()

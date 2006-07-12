@@ -148,6 +148,24 @@ string Path::getHomeDirPath() {
 
 #ifdef OS_MACOSX
 
+std::string Path::getApplicationBundlePath() {
+	std::string result;
+	CFBundleRef mainBundle = CFBundleGetMainBundle();
+
+	if (mainBundle) {
+		CFURLRef url = CFBundleCopyBundleURL(mainBundle);
+		char bundlePath[1024];
+
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *) bundlePath, sizeof(bundlePath))) {
+			result = (std::string(bundlePath) + File::getPathSeparator());
+		}
+
+		CFRelease(url);
+	}
+
+	return result;
+}
+
 std::string Path::getApplicationPrivateFrameworksDirPath() {
 	std::string result;
 	CFBundleRef mainBundle = CFBundleGetMainBundle();

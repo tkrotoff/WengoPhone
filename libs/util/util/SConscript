@@ -4,38 +4,49 @@ libs = [
 	'boost',
 	'owcutil',
 ]
+
 lib_path = []
+
 include_path = ['include']
+
 link_flags = []
+
 headers = []
+
 sources = [
 	'src/exception/Exception.cpp',
-	'src/Path.cpp',
-	'src/Startup.cpp',
-	'src/WebBrowser.cpp',
-	'src/Date.cpp',
-	'src/Time.cpp',
-	'src/StringList.cpp',
-	'src/String.cpp',
-	'src/File.cpp',
 	'src/Base64.cpp',
+	'src/Date.cpp',
+	'src/File.cpp',
 	'src/Logger.cpp',
+	'src/Path.cpp',
 	'src/Picture.cpp',
+	'src/String.cpp',
+	'src/StringList.cpp',
+	'src/Time.cpp',
 	'src/Uuid.cpp',
+	'src/WebBrowser.cpp',
 ]
 
 if WengoOSWindows():
 	libs += ['advapi32', 'shell32', 'Rpcrt4']
-	sources += ['src/win/UuidWin.cpp']
+
+	sources += [
+		'src/win/UuidWin.cpp',
+	]
 
 elif WengoOSMacOSX():
-	link_flags += ['-framework CoreFoundation']
-	sources += ['src/mac/UuidMac.cpp']
+	link_flags += [
+		'-framework CoreFoundation',
+	]
+
+	sources += [
+		'src/mac/UuidMac.cpp',
+	]
 
 elif WengoOSLinux() or WengoOSBSD():
 	libs += ['uuid']
 	sources += ['src/unix/UuidUnix.cpp']
-
 
 if WengoCCMSVC():
 	libs += ['shlwapi']
