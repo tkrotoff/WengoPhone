@@ -1,0 +1,35 @@
+env = WengoGetEnvironment()
+
+if WengoOSWindows():
+	libs = ['owsystem']
+	lib_path = []
+	include_path = []
+	headers = []
+	sources = [
+		'WindowsRegistry_test.cpp',
+	]
+	
+	env.WengoAddIncludePath(include_path)
+	env.WengoUseLibraries(libs)
+	env.WengoAddDoxyfile()
+	env.WengoAddLinkFlags(['/ENTRY:mainCRTStartup'])
+	env.WengoProgram('WindowsRegistry_test', sources, headers)
+
+
+libs = ['owsystem']
+lib_path = []
+include_path = []
+headers = []
+sources = [
+	'RegisterProtocol_test.cpp',
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+env.WengoAddLinkFlags(['/ENTRY:mainCRTStartup'])
+env.WengoProgram('RegisterProtocol_test', sources, headers)
+
+
+
+

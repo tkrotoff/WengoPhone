@@ -59,6 +59,11 @@ public:
 	static std::string getConfigurationDirPath();
 
 	/**
+	 * @see File::getPathSeparator()
+	 */
+	static std::string getPathSeparator();
+
+	/**
 	 * Gets the home directory path.
 	 *
 	 * @return the home dir of the current user.
@@ -87,9 +92,7 @@ public:
 	 * e.g: full-path-tp-application.app/Contents/Resources
 	 */
 	static std::string getApplicationResourcesDirPath();
-
 #endif
-
 };
 
 #endif	//PATH_H

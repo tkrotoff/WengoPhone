@@ -8,6 +8,8 @@ sources = []
 cc_flags = []
 link_flags = []
 
+sources += ['src/RegisterProtocol.cpp']
+
 if WengoOSWindows():
 	sources += [
 		'src/win/Startup.cpp',
@@ -38,3 +40,6 @@ env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 env.WengoAddDoxyfile()
 env.WengoStaticLibrary('owsystem', sources)
+
+if WengoOSWindows():
+	SConscript('src/test/SConscript')

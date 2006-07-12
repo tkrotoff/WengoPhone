@@ -114,6 +114,10 @@ string Path::getConfigurationDirPath() {
 	return result;
 }
 
+std::string Path::getPathSeparator() {
+	return File::getPathSeparator();
+}
+
 string Path::getHomeDirPath() {
 	string result;
 
