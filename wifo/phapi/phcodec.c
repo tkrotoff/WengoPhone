@@ -16,8 +16,6 @@
 #include "rtpport.h" // only for GMutex <- phmedia.h <- phcodec-h263.h
 #include "phcodec.h"
 
-//#include "gsm/gsm.h"
-//#include "gsm/private.h"
 #include "ilbc/iLBC_define.h"
 #include "ilbc/iLBC_encode.h"
 #include "ilbc/iLBC_decode.h"
@@ -25,9 +23,7 @@
 
 void ph_media_plugin_codec_init(const char *dirpath);
 
-
 #ifdef EMBED
-
 //#define ENABLE_AMR_EMBED 1
 #ifndef NO_GSM
 #define NO_GSM 1
@@ -35,8 +31,7 @@ void ph_media_plugin_codec_init(const char *dirpath);
 #ifndef NO_ILBC
 #define NO_ILBC 1
 #endif
-
-#endif
+#endif  //EMBED
 
 #ifdef PHAPI_VIDEO_SUPPORT
 #include "phcodec-h263.h"
@@ -214,23 +209,20 @@ static unsigned char s16_to_ulaw(int pcm_val)	/* 2's complement (16-bit range) *
  */
 static inline int ulaw_to_s16(unsigned char u_val)
 {
-	int t;
+  int t;
 
-	/* Complement to obtain normal u-law value. */
-	u_val = ~u_val;
+  /* Complement to obtain normal u-law value. */
+  u_val = ~u_val;
 
-	/*
-	 * Extract and bias the quantization bits. Then
-	 * shift up by the segment number and subtract out the bias.
-	 */
-	t = ((u_val & 0x0f) << 3) + 0x84;
-	t <<= (u_val & 0x70) >> 4;
+  /*
+   * Extract and bias the quantization bits. Then
+   * shift up by the segment number and subtract out the bias.
+   */
+  t = ((u_val & 0x0f) << 3) + 0x84;
+  t <<= (u_val & 0x70) >> 4;
 
-	return ((u_val & 0x80) ? (0x84 - t) : (t - 0x84));
+  return ((u_val & 0x80) ? (0x84 - t) : (t - 0x84));
 }
-
-
-
 
 void mulaw_dec(char *mulaw_data /* contains size char */,
 	       char *s16_data    /* contains size*2 char */,
@@ -238,10 +230,10 @@ void mulaw_dec(char *mulaw_data /* contains size char */,
 {
   int i;
   for(i=0;i<size;i++)
-    {
-      *((signed short*)s16_data)=ulaw_to_s16( (unsigned char) mulaw_data[i]);
-      s16_data+=2;
-    }
+  {
+    *((signed short*)s16_data)=ulaw_to_s16( (unsigned char) mulaw_data[i]);
+    s16_data+=2;
+  }
 }
 
 void mulaw_enc(char *s16_data    /* contains pcm_size char */,
@@ -251,10 +243,10 @@ void mulaw_enc(char *s16_data    /* contains pcm_size char */,
   int i;
   int limit = pcm_size/2;
   for(i=0;i<limit;i++)
-    {
-      mulaw_data[i]=s16_to_ulaw( *((signed short*)s16_data) );
-      s16_data+=2;
-    }
+  {
+    mulaw_data[i]=s16_to_ulaw( *((signed short*)s16_data) );
+    s16_data+=2;
+  }
 }
 
 void alaw_dec(char *alaw_data   /* contains size char */,
@@ -263,9 +255,9 @@ void alaw_dec(char *alaw_data   /* contains size char */,
 {
   int i;
   for(i=0;i<size;i++)
-    {
-      ((signed short*)s16_data)[i]=alaw_to_s16( (unsigned char) alaw_data[i]);
-    }
+  {
+    ((signed short*)s16_data)[i]=alaw_to_s16( (unsigned char) alaw_data[i]);
+  }
 }
 
 void alaw_enc(char *s16_data   /* contains 320 char */,
@@ -275,21 +267,17 @@ void alaw_enc(char *s16_data   /* contains 320 char */,
   int i;
   int limit = pcm_size/2;
   for(i=0;i<limit;i++)
-    {
-      alaw_data[i]=s16_to_alaw( *((signed short*)s16_data) );
-      s16_data+=2;
-    }
+  {
+    alaw_data[i]=s16_to_alaw( *((signed short*)s16_data) );
+    s16_data+=2;
+  }
 }
-
-
 
 
 static int pcmu_encode(void *ctx, const void *src, int srcsize, void *dst, int dstsize);
 static int pcmu_decode(void *ctx, const void *src, int srcsize, void *dst, int dstsize);
 static int pcma_encode(void *ctx, const void *src, int srcsize, void *dst, int dstsize);
 static int pcma_decode(void *ctx, const void *src, int srcsize, void *dst, int dstsize);
-
-
 
 static int pcmu_encode(void *ctx, const void *src, int srcsize, void *dst, int dstsize)
 {
@@ -314,9 +302,6 @@ static int pcma_decode(void *ctx, const void *src, int srcsize, void *dst, int d
   alaw_dec((char *) src, (char *) dst, srcsize);
   return srcsize*2;
 }
-
-
-
 
 static phcodec_t pcmu_codec = 
 {
@@ -359,7 +344,6 @@ int ph_gsm_encode(void *ctx, const void *src, int srcsize, void *dst, int dstsiz
 {
   gsm_encode(ctx, src, dst);
   return GSM_ENCODED_FRAME_SIZE;
-
 }
 
 int ph_gsm_decode(void *ctx, const void *src, int srcsize, void *dst, int dstsize)
@@ -398,7 +382,6 @@ static void *ph_ilbc_dec_init(void *dummy)
     return ctx;
 }
 
-
 static void *ph_ilbc_enc_init(void *dummy)
 {
     iLBC_Enc_Inst_t *ctx;
@@ -408,9 +391,7 @@ static void *ph_ilbc_enc_init(void *dummy)
     initEncode(ctx, 20);
 
     return ctx;
-
 }
-
 
 static void ph_ilbc_dec_cleanup(void *ctx)
 {
@@ -422,57 +403,48 @@ static void ph_ilbc_enc_cleanup(void *ctx)
   free(ctx);
 }
 
-
 static int ph_ilbc_decode(void *ctx, const void *src, int srcsize, void *dst, int dstsize)
 {
-    int k; 
-    float decflt[BLOCKL_MAX], tmp; 
-    short *decshrt = (short*) dst;
-    iLBC_Dec_Inst_t *dec = (iLBC_Dec_Inst_t *) ctx;
+  int k;
+  float decflt[BLOCKL_MAX], tmp;
+  short *decshrt = (short*) dst;
+  iLBC_Dec_Inst_t *dec = (iLBC_Dec_Inst_t *) ctx;
 
- 
-    iLBC_decode(decflt, (unsigned char *)src, dec, 1); 
- 
- 
-    for (k=0; k< dec->blockl; k++){  
-        tmp=decflt[k]; 
-        if (tmp<MIN_SAMPLE) 
-            tmp=MIN_SAMPLE; 
-        else if (tmp>MAX_SAMPLE) 
-            tmp=MAX_SAMPLE; 
-        decshrt[k] = (short) tmp; 
-    } 
- 
-    return (dec->blockl*2); 
+  iLBC_decode(decflt, (unsigned char *)src, dec, 1); 
 
+  for (k=0; k< dec->blockl; k++)
+  {
+      tmp=decflt[k];
+      if (tmp<MIN_SAMPLE)
+      {
+        tmp=MIN_SAMPLE;
+      }
+      else if (tmp>MAX_SAMPLE)
+      {
+        tmp=MAX_SAMPLE;
+      }
+      decshrt[k] = (short) tmp;
+  }
+  return (dec->blockl*2); 
 }
-
 
 static int ph_ilbc_encode(void *ctx, const void *src, int srcsize, void *dst, int dstsize)
 {
-    float tmp[BLOCKL_MAX];
-    short *indata = (short *) src;
-    int k; 
-    iLBC_Enc_Inst_t *enc = (iLBC_Enc_Inst_t *) ctx;
- 
-    for (k=0; k<enc->blockl; k++) 
-      tmp[k] = (float)indata[k]; 
- 
-    /* do the actual encoding */ 
- 
-    iLBC_encode((unsigned char *)dst, tmp, enc); 
- 
- 
-    return (enc->no_of_bytes); 
+  float tmp[BLOCKL_MAX];
+  short *indata = (short *) src;
+  int k;
+  iLBC_Enc_Inst_t *enc = (iLBC_Enc_Inst_t *) ctx;
 
+  for (k=0; k<enc->blockl; k++)
+  {
+    tmp[k] = (float)indata[k];
+  }
+
+  /* do the actual encoding */
+  iLBC_encode((unsigned char *)dst, tmp, enc);
+
+  return (enc->no_of_bytes);
 }
-
- 
-  
-
-
-
-
 
 static phcodec_t ilbc_codec =
 {
@@ -506,7 +478,6 @@ static phcodec_t h264_codec =
 #endif
 
 
-
 static phcodec_t *codec_table[] = 
 {
 	&pcmu_codec, &pcma_codec,
@@ -530,20 +501,21 @@ void ph_media_register_codec(phcodec_t *codec)
 {
   phcodec_t *last = ph_codec_list;
 
-  printf("ph_media_register_codec(%s)\n", codec->mime);
+  DBG_CODEC_LOOKUP("ph_media_register_codec(%s)\n", codec->mime);
 
   if (!last)
-    {
-      ph_codec_list = codec;
-      return;
-    }
+  {
+    ph_codec_list = codec;
+    return;
+  }
 
   while(last->next)
+  {
     last = last->next;
+  }
 
   last->next = codec;
 }
-
 
 const char entry_point_name[] = "ph_codec_plugin_init";
 
@@ -679,4 +651,3 @@ void ph_media_codecs_init(const char *pluginpath)
   ph_codec_list = codec_table[0];
   ph_media_plugin_codec_init(pluginpath);
 }
-

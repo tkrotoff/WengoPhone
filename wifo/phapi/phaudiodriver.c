@@ -25,11 +25,9 @@
 #define strncasecmp strnicmp
 #endif
 
-
 #define MAX_SOUND_DRIVERS  8
 
 struct ph_audio_driver *ph_snd_driver_map[MAX_SOUND_DRIVERS];
-
 struct ph_audio_driver ph_snd_driver;
 
 void ph_register_audio_driver(struct ph_audio_driver *d)
@@ -95,24 +93,33 @@ int ph_activate_audio_driver(const char *name)
   struct ph_audio_driver *d;
 
   if (!name || !name[0])
+  {
     name = getenv("PH_AUDIO_DEVICE");
-  
+  }
+
   if (!name)
+  {
     name = "alsa:default";
+  }
 
   d = ph_find_audio_driver(name);
-  
+
   if (!d)
+  {
     return -PH_SNDDRVR_NOTFOUND;
+  }
 
   if (ph_snd_driver.snd_driver_kind && !strcmp(ph_snd_driver.snd_driver_kind, d->snd_driver_kind))
+  {
     return 0;
+  }
 
   if (PH_SNDDRVR_USAGE > 0)
+  {
     return -PH_SNDDRVR_BUSY;
+  }
 
   ph_snd_driver = *d;
 
   return 0;
-  
 }
