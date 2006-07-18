@@ -43,7 +43,7 @@ void init_buddy_icon_changed_event()
 	void *handle = gaim_wg_get_handle();
 
 	gaim_signal_connect(gaim_blist_get_handle(), "buddy-icon-changed",
-						handle, GAIM_CALLBACK(update_buddy_icon), NULL);
+		handle, GAIM_CALLBACK(update_buddy_icon), NULL);
 }
 
 
@@ -84,13 +84,13 @@ static void C_SetVisibleCbk(GaimBuddyList *list, gboolean show)
 }
 
 static void C_RequestAddBuddyCbk(GaimAccount *account, const char *username,
-								const char *group, const char *alias)
+	const char *group, const char *alias)
 {
 	GaimContactListMngr::RequestAddBuddyCbk(account, username, group, alias);
 }
 
 static void C_RequestAddChatCbk(GaimAccount *account, GaimGroup *group,
-								const char *alias, const char *name)
+	const char *alias, const char *name)
 {
 	GaimContactListMngr::RequestAddChatCbk(account, group, alias, name);
 }
@@ -100,18 +100,19 @@ static void C_RequestAddGroupCbk(void)
 	GaimContactListMngr::RequestAddGroupCbk();
 }
 
-GaimBlistUiOps blist_wg_ops = {
-									C_NewListCbk,
-									C_NewNodeCbk,
-									C_ShowCbk,
-									C_UpdateCbk,
-									C_RemoveCbk,
-									C_DestroyCbk,
-									C_SetVisibleCbk,
-									C_RequestAddBuddyCbk,
-									C_RequestAddChatCbk,
-									C_RequestAddGroupCbk
-								};
+GaimBlistUiOps blist_wg_ops =
+{
+	C_NewListCbk,
+	C_NewNodeCbk,
+	C_ShowCbk,
+	C_UpdateCbk,
+	C_RemoveCbk,
+	C_DestroyCbk,
+	C_SetVisibleCbk,
+	C_RequestAddBuddyCbk,
+	C_RequestAddChatCbk,
+	C_RequestAddGroupCbk
+};
 /* ************************************************** */
 
 GaimContactListMngr *GaimContactListMngr::_staticInstance = NULL;
@@ -265,7 +266,7 @@ void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 			const char * groupName = FindBuddyGroup(gBuddy);
 			if (groupName)
 			{
-				mIMBList->contactMovedEvent(*mIMBList, 
+				mIMBList->contactMovedEvent(*mIMBList,
 					groupName, gaim_buddy_get_name(gBuddy));
 			}
 		}
@@ -343,13 +344,13 @@ void GaimContactListMngr::SetVisibleCbk(GaimBuddyList *list, gboolean show)
 }
 
 void GaimContactListMngr::RequestAddBuddyCbk(GaimAccount *account, const char *username,
-												const char *group, const char *alias)
+	const char *group, const char *alias)
 {
 	LOG_DEBUG("GaimContactListMngr : RequestAddBuddyCbk()\n");
 }
 
 void GaimContactListMngr::RequestAddChatCbk(GaimAccount *account, GaimGroup *group,
-												const char *alias, const char *name)
+	const char *alias, const char *name)
 {
 	LOG_DEBUG("GaimContactListMngr : RequestAddChatCbk()\n");
 }

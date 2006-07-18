@@ -184,15 +184,17 @@ void GaimAccountMngr::imAccountWillDieEventHandler(IMAccount & imAccount)
 		return;
 
 	mConnect = _connectMngr->FindIMConnect(imAccount);
-	mConnect->disconnect();
-	gaim_accounts_delete(gAccount);
+	if (mConnect) {
+		mConnect->disconnect();
+		gaim_accounts_delete(gAccount);
 
-	_presenceMngr->RemoveIMPresence(imAccount);
-	_chatMngr->RemoveIMChat(imAccount);
-	_clistMngr->RemoveIMContactList(imAccount);
-	_connectMngr->RemoveIMConnect(imAccount);
+		_presenceMngr->RemoveIMPresence(imAccount);
+		_chatMngr->RemoveIMChat(imAccount);
+		_clistMngr->RemoveIMContactList(imAccount);
+		_connectMngr->RemoveIMConnect(imAccount);
 
-	RemoveIMAccount(imAccount);
+		RemoveIMAccount(imAccount);
+	}
 }
 
 /* ******************************************************************** */

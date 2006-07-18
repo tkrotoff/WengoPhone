@@ -82,33 +82,30 @@ static gboolean gaim_wg_io_invoke(GIOChannel *source, GIOCondition condition, gp
 	if (condition & GAIM_WG_WRITE_COND)
 		gaim_cond = (GaimInputCondition)(gaim_cond|GAIM_INPUT_WRITE);
 
-#if 0
-	gaim_debug(GAIM_DEBUG_MISC, "wg_eventloop",
-			   "CLOSURE: callback for %d, fd is %d\n",
-			   closure->result, g_io_channel_unix_get_fd(source));
-#endif
-
-#ifdef _WIN32
+#ifdef OS_WINDOWS
 	if(! gaim_cond) {
 #if DEBUG
 		gaim_debug(GAIM_DEBUG_MISC, "wg_eventloop",
-			   "CLOSURE received GIOCondition of 0x%x, which does not"
-			   " match 0x%x (READ) or 0x%x (WRITE)\n",
-			   condition, GAIM_WG_READ_COND, GAIM_WG_WRITE_COND);
+			"CLOSURE received GIOCondition of 0x%x, which does not"
+			" match 0x%x (READ) or 0x%x (WRITE)\n",
+			condition, GAIM_WG_READ_COND, GAIM_WG_WRITE_COND);
 #endif /* DEBUG */
 
 		return TRUE;
 	}
-#endif /* _WIN32 */
+#endif /* OS_WINDOWS */
 
-	closure->function(closure->data, g_io_channel_unix_get_fd(source),
-			  gaim_cond);
+#ifdef OS_WINDOWS
+	closure->function(closure->data, g_io_channel_win32_get_fd(source), gaim_cond);
+#else
+	closure->function(closure->data, g_io_channel_unix_get_fd(source), gaim_cond);
+#endif
 
 	return TRUE;
 }
 
-static guint gaim_wg_input_add(gint fd, GaimInputCondition condition, GaimInputFunction function,
-							   gpointer data)
+static guint gaim_wg_input_add(gint fd, GaimInputCondition condition, 
+	GaimInputFunction function, gpointer data)
 {
 	GaimWgIOClosure *closure = g_new0(GaimWgIOClosure, 1);
 	GIOChannel *channel;
@@ -122,15 +119,13 @@ static guint gaim_wg_input_add(gint fd, GaimInputCondition condition, GaimInputF
 	if (condition & GAIM_INPUT_WRITE)
 		cond = (GIOCondition)(cond|GAIM_WG_WRITE_COND);
 
+#ifdef OS_WINDOWS
+	channel = g_io_channel_win32_new_socket(fd);
+#else
 	channel = g_io_channel_unix_new(fd);
-	closure->result = g_io_add_watch_full(channel, G_PRIORITY_DEFAULT, cond,
-					      gaim_wg_io_invoke, closure, gaim_wg_io_destroy);
-
-#if 0
-	gaim_debug(GAIM_DEBUG_MISC, "wg_eventloop",
-			   "CLOSURE: adding input watcher %d for fd %d\n",
-			   closure->result, fd);
 #endif
+	closure->result = g_io_add_watch_full(channel, G_PRIORITY_DEFAULT, cond,
+		gaim_wg_io_invoke, closure, gaim_wg_io_destroy);
 
 	g_io_channel_unref(channel);
 	return closure->result;

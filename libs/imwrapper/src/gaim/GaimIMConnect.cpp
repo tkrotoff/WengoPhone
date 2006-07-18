@@ -25,6 +25,7 @@ extern "C" {
 #include <gaim/account.h>
 #include <gaim/connection.h>
 #include <gaim/core.h>
+#include <gaim/proxy.h>
 }
 
 #include <imwrapper/IMAccount.h>
@@ -56,19 +57,6 @@ static const char * JABBER_USE_OLD_SSL_KEY = "old_ssl";
 static const char * JABBER_AUTH_PLAIN_IN_CLEAR_KEY = "auth_plain_in_clear";
 static const char * JABBER_CONNECTION_SERVER_KEY = "connect_server";
 
-/*
-int GetTabSize(char **tab)
-{
-	int i;
-
-	if (!tab)
-		return 0;
-
-	for (i = 0; tab[i]; i++);
-
-	return i;
-}
-*/
 
 GaimIMConnect::GaimIMConnect(IMAccount & account)
 	: IMConnect(account)
@@ -152,6 +140,22 @@ void GaimIMConnect::AddAccountParams(void *gaimAccount)
 {
 	GaimAccount *gAccount = (GaimAccount *)gaimAccount;
 	IMAccountParameters &mParams = _imAccount.getIMAccountParameters();
+	
+	/* Proxy configuration if it's available*/
+	GaimProxyInfo *proxyInfo = gaim_account_get_proxy_info(gAccount);
+	if (!proxyInfo)
+	{
+		proxyInfo = gaim_proxy_info_new();
+		gaim_account_set_proxy_info(gAccount, proxyInfo);
+	}
+	if (mParams.isHttpProxyUsed())
+	{
+		gaim_proxy_info_set_type(proxyInfo, GAIM_PROXY_HTTP);
+		gaim_proxy_info_set_host(proxyInfo, mParams.getHttpProxyServer().c_str());
+		gaim_proxy_info_set_port(proxyInfo, mParams.getHttpProxyPort());
+		gaim_proxy_info_set_username(proxyInfo, mParams.getHttpProxyLogin().c_str());
+		gaim_proxy_info_set_password(proxyInfo, mParams.getHttpProxyPassword().c_str());
+	}
 
 	gaim_account_set_bool(gAccount, MAIL_NOTIFICATION_KEY, mParams.isMailNotified());
 

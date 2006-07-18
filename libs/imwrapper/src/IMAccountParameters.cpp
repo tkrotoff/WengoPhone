@@ -25,6 +25,11 @@ using namespace std;
 
 const string IMAccountParameters::MAIL_NOTIFICATION_KEY = "common.mail_notification";
 const string IMAccountParameters::REMEMBER_PASSWORD_KEY = "common.remember_password";
+const string IMAccountParameters::USE_HTTP_PROXY_KEY = "common.use_http_proxy";
+const string IMAccountParameters::HTTP_PROXY_SERVER_KEY = "common.http_proxy_server";
+const string IMAccountParameters::HTTP_PROXY_PORT_KEY = "common.http_proxy_port";
+const string IMAccountParameters::HTTP_PROXY_LOGIN_KEY = "common.http_proxy_login";
+const string IMAccountParameters::HTTP_PROXY_PASSWORD_KEY = "common.http_proxy_password";
 const string IMAccountParameters::YAHOO_IS_JAPAN_KEY = "yahoo.yahoojp";
 const string IMAccountParameters::YAHOO_SERVER_KEY = "yahoo.server";
 const string IMAccountParameters::YAHOO_JAPAN_SERVER_KEY = "yahoo.serverjp";
@@ -51,6 +56,11 @@ const string IMAccountParameters::JABBER_CONNECTION_SERVER_KEY = "jabber.connect
 IMAccountParameters::IMAccountParameters() : AutomaticSettings() {
 	_keyDefaultValueMap[MAIL_NOTIFICATION_KEY] = false;
 	_keyDefaultValueMap[REMEMBER_PASSWORD_KEY] = true;
+	_keyDefaultValueMap[USE_HTTP_PROXY_KEY] = false;
+	_keyDefaultValueMap[HTTP_PROXY_SERVER_KEY] = string("");
+	_keyDefaultValueMap[HTTP_PROXY_PORT_KEY] = 0;
+	_keyDefaultValueMap[HTTP_PROXY_LOGIN_KEY] = string("");
+	_keyDefaultValueMap[HTTP_PROXY_PASSWORD_KEY] = string("");
 	_keyDefaultValueMap[YAHOO_IS_JAPAN_KEY] = false;
 	_keyDefaultValueMap[YAHOO_SERVER_KEY] = string("scs.msg.yahoo.com");
 	_keyDefaultValueMap[YAHOO_JAPAN_SERVER_KEY] = string("cs.yahoo.co.jp");
@@ -98,6 +108,26 @@ bool IMAccountParameters::isMailNotified() const {
 
 bool IMAccountParameters::isPasswordRemembered() const {
 	return getBooleanKeyValue(REMEMBER_PASSWORD_KEY);
+}
+
+bool IMAccountParameters::isHttpProxyUsed() const {
+	return getBooleanKeyValue(USE_HTTP_PROXY_KEY);
+}
+
+string IMAccountParameters::getHttpProxyServer() const {
+	return getStringKeyValue(HTTP_PROXY_SERVER_KEY);
+}
+
+int IMAccountParameters::getHttpProxyPort() const {
+	return getIntegerKeyValue(HTTP_PROXY_PORT_KEY);
+}
+
+string IMAccountParameters::getHttpProxyLogin() const {
+	return getStringKeyValue(HTTP_PROXY_LOGIN_KEY);
+}
+
+string IMAccountParameters::getHttpProxyPassword() const {
+	return getStringKeyValue(HTTP_PROXY_PASSWORD_KEY);
 }
 
 bool IMAccountParameters::isYahooJapan() const {
