@@ -93,11 +93,11 @@ void StringList::sort(SortingOrder order) {
 	}
 }
 
-std::string StringList::join(const std::string & separator) {
+std::string StringList::join(const std::string & separator) const {
 	std::string joinedString;
 	for (unsigned i = 0; i < size(); i++) {
 		//Last token
-		if (i < size() - 1) {
+		if (i == (size() - 1)) {
 			joinedString += (*this)[i];
 		}
 		else {

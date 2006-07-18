@@ -393,6 +393,9 @@ static StringList getProperAudioDeviceId(const StringList & deviceData,
 		for (std::list<AudioDevice>::const_iterator it = deviceList.begin();
 			it != deviceList.end();
 			++it) {
+
+			std::string tmp = (*it).getData().join("/");
+			std::string tmp2 = deviceData.join("/");
 			if ((*it).getData() == deviceData) {
 				found = true;
 			}

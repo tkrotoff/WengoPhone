@@ -22,7 +22,7 @@
 
 #include <wenbox/Wenbox.h>
 
-#include <util/String.h>
+#include <util/StringList.h>
 #include <util/Trackable.h>
 
 class PhoneCall;
@@ -51,7 +51,7 @@ public:
 	/**
 	 * @see IWenbox::setState()
 	 */
-	void setState(Wenbox::PhoneCallState state, const std::string & phoneNumber = String::null);
+	void setState(Wenbox::PhoneCallState state, const std::string & phoneNumber = "");
 
 private:
 
@@ -66,7 +66,11 @@ private:
 	/** Code factorization. */
 	PhoneCall * getActivePhoneCall() const;
 
-	std::string getWenboxAudioDeviceName() const;
+	StringList getWenboxAudioDeviceId(bool outputAudioDeviceId) const;
+
+	StringList getWenboxOutputAudioDeviceId() const;
+
+	StringList getWenboxInputAudioDeviceId() const;
 
 	void switchCurrentAudioDeviceToWenbox();
 

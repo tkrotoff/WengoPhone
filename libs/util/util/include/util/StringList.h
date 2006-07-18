@@ -105,7 +105,7 @@ public:
 	 * @param separator string delimiter
 	 * @return the joined string with each element separated by the separator
 	 */
-	std::string join(const std::string & separator);
+	std::string join(const std::string & separator) const;
 
 	enum SortingOrder {
 		Ascendant,
@@ -125,7 +125,7 @@ public:
 	void removeDuplicatedStrings();
 
 	/**
-	 * Constructs a single string from every string 
+	 * Constructs a single string from every string
 	 * contained in this StringList.
 	 *
 	 * @param separator the separator used to constructs the string
