@@ -63,10 +63,11 @@ int MacVolumeControl::getLevel() {
 
 bool MacVolumeControl::setLevel(unsigned level) {
 	OSStatus status = noErr;
-	UInt32 size = 0;
 	Float32 fVolume = level / 100.0;
+	UInt32 size = sizeof(fVolume);
 	AudioDeviceID audioDeviceId = String(_audioDevice.getData()[0]).toInteger();
 	Boolean isInput = String(_audioDevice.getData()[2]).toInteger();
+	bool result = true;
 
 	std::pair<int, int> range = getVolumeSettableChannelRange();
 	for (int i = range.first; (i != - 1) && (i != range.second + 1); i++) { 
@@ -75,10 +76,11 @@ bool MacVolumeControl::setLevel(unsigned level) {
 		if (status) {
 			LOG_ERROR("can't set device property: kAudioDevicePropertyVolumeScalar on channem "
 				+ String::fromNumber(i));
+			result = false;
 		}
 	}
 
-	return true;
+	return result;
 }
 
 bool MacVolumeControl::setMute(bool mute) {
