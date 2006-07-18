@@ -117,7 +117,7 @@ public:
 		boost::signals::connection c;
 		if (!alreadyConnected(slot)) {
 			//The slot is not connected to the signal
-			c = connect(slot);
+			c = this->connect(slot);
 			SlotConnection sc;
 			sc.connection = c;
 			sc.slot = slot;
@@ -137,7 +137,7 @@ public:
 	 * @return connection object
 	 */
 	boost::signals::connection operator+=(const Event & event) {
-		return connect(event);
+		return this->connect(event);
 	}
 
 	/**
