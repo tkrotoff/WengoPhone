@@ -27,7 +27,7 @@
 #include <util/Logger.h>
 
 const unsigned RECONNECT_INTERVAL = 20000;
-const unsigned RECONNECT_RETRY = 5;
+const unsigned RECONNECT_RETRY = 10;
 
 Connect::Connect(IMAccount & account, UserProfile & userProfile)
 	: _imAccount(account),
