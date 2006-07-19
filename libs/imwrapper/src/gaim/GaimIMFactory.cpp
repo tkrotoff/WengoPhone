@@ -65,26 +65,24 @@ typedef struct _GaimWgIOClosure {
 	GaimInputFunction function;
 	guint result;
 	gpointer data;
-
 } GaimWgIOClosure;
 
-static void gaim_wg_io_destroy(gpointer data)
-{
+static void gaim_wg_io_destroy(gpointer data) {
 	g_free(data);
 }
 
-static gboolean gaim_wg_io_invoke(GIOChannel *source, GIOCondition condition, gpointer data)
-{
-	GaimWgIOClosure *closure = (GaimWgIOClosure *) data;
-	GaimInputCondition gaim_cond = (GaimInputCondition) 0;
+static gboolean gaim_wg_io_invoke(GIOChannel * source, GIOCondition condition, gpointer data) {
 
-	if (condition & GAIM_WG_READ_COND)
+	GaimInputCondition gaim_cond = (GaimInputCondition) 0;
+	if (condition & GAIM_WG_READ_COND) {
 		gaim_cond = (GaimInputCondition)(gaim_cond|GAIM_INPUT_READ);
-	if (condition & GAIM_WG_WRITE_COND)
+	}
+	if (condition & GAIM_WG_WRITE_COND) {
 		gaim_cond = (GaimInputCondition)(gaim_cond|GAIM_INPUT_WRITE);
+	}
 
 #ifdef OS_WINDOWS
-	if(! gaim_cond) {
+	if (!gaim_cond) {
 #if DEBUG
 		gaim_debug(GAIM_DEBUG_MISC, "wg_eventloop",
 			"CLOSURE received GIOCondition of 0x%x, which does not"
@@ -96,6 +94,7 @@ static gboolean gaim_wg_io_invoke(GIOChannel *source, GIOCondition condition, gp
 	}
 #endif /* OS_WINDOWS */
 
+	GaimWgIOClosure * closure = (GaimWgIOClosure *) data;
 #ifdef OS_WINDOWS
 	closure->function(closure->data, g_io_channel_win32_get_fd(source), gaim_cond);
 #else
@@ -106,20 +105,22 @@ static gboolean gaim_wg_io_invoke(GIOChannel *source, GIOCondition condition, gp
 }
 
 static guint gaim_wg_input_add(gint fd, GaimInputCondition condition,
-	GaimInputFunction function, gpointer data)
-{
-	GaimWgIOClosure *closure = g_new0(GaimWgIOClosure, 1);
-	GIOChannel *channel;
-	GIOCondition cond = (GIOCondition) 0;
+	GaimInputFunction function, gpointer data) {
+
+	GaimWgIOClosure * closure = g_new0(GaimWgIOClosure, 1);
 
 	closure->function = function;
 	closure->data = data;
 
-	if (condition & GAIM_INPUT_READ)
+	GIOCondition cond = (GIOCondition) 0;
+	if (condition & GAIM_INPUT_READ) {
 		cond = (GIOCondition)(cond|GAIM_WG_READ_COND);
-	if (condition & GAIM_INPUT_WRITE)
+	}
+	if (condition & GAIM_INPUT_WRITE) {
 		cond = (GIOCondition)(cond|GAIM_WG_WRITE_COND);
+	}
 
+	GIOChannel * channel;
 #ifdef OS_WINDOWS
 	channel = g_io_channel_win32_new_socket(fd);
 #else
@@ -136,11 +137,8 @@ static void sigpipe_catcher(int sig) {
 	LOG_DEBUG("SIGPIPE caught: " + String::fromNumber(sig));
 }
 
-gpointer GaimMainEventLoop(gpointer data)
-{
-	GMainLoop *loop;
-
-	loop = g_main_loop_new(NULL, FALSE);
+gpointer GaimMainEventLoop(gpointer data) {
+	GMainLoop * loop = g_main_loop_new(NULL, FALSE);
 	g_main_loop_run(loop);
 
 	g_thread_exit(NULL);
@@ -150,24 +148,21 @@ gpointer GaimMainEventLoop(gpointer data)
 
 /* ******************************************************* */
 
-static GaimCoreUiOps core_wg_ops =
-{
+static GaimCoreUiOps core_wg_ops = {
 	NULL,
 	NULL,
 	NULL,
 	NULL
 };
 
-static GaimEventLoopUiOps eventloop_wg_ops =
-{
+static GaimEventLoopUiOps eventloop_wg_ops = {
 	g_timeout_add,
 	(guint (*)(guint))g_source_remove,
 	gaim_wg_input_add,
 	(guint (*)(guint))g_source_remove
 };
 
-GaimIMFactory::GaimIMFactory()
-{
+GaimIMFactory::GaimIMFactory() {
 	AccountMngr = GaimAccountMngr::getInstance();
 	ConnectMngr = GaimConnectMngr::getInstance();
 	PresenceMngr = GaimPresenceMngr::getInstance();
@@ -178,8 +173,7 @@ GaimIMFactory::GaimIMFactory()
 	GaimWrapperInit();
 }
 
-void GaimIMFactory::GaimSetCallbacks()
-{
+void GaimIMFactory::GaimSetCallbacks() {
 	gaim_core_set_ui_ops(&core_wg_ops);
 	gaim_eventloop_set_ui_ops(&eventloop_wg_ops);
 	gaim_connections_set_ui_ops(&conn_wg_ops);
@@ -189,8 +183,7 @@ void GaimIMFactory::GaimSetCallbacks()
 	gaim_privacy_set_ui_ops(&privacy_wg_ops);
 }
 
-void GaimIMFactory::GaimWrapperInit()
-{
+void GaimIMFactory::GaimWrapperInit() {
 	AccountMngr->Init();
 	ConnectMngr->Init();
 	PresenceMngr->Init();
@@ -198,13 +191,11 @@ void GaimIMFactory::GaimWrapperInit()
 	ContactListMngr->Init();
 }
 
-void GaimIMFactory::GaimIMInit()
-{
-	char *search_path;
-	char *home_dir;
+void GaimIMFactory::GaimIMInit() {
 
-	if (!g_thread_supported())
+	if (!g_thread_supported()) {
 		g_thread_init(NULL);
+	}
 
 #ifdef OS_WIN32
 	wgaim_init(GetModuleHandle(0));
@@ -218,13 +209,13 @@ void GaimIMFactory::GaimIMInit()
 	configPath = Path::getConfigurationDirPath() + File::convertPathSeparators(".wengophone/");
 #endif
 
-	home_dir = g_build_filename(configPath.c_str(), "gaim", NULL);
+	char * home_dir = g_build_filename(configPath.c_str(), "gaim", NULL);
 	File::createPath(home_dir + File::getPathSeparator());
 	gaim_util_set_user_dir(home_dir);
 
 	GaimSetCallbacks();
 
-	search_path = g_build_filename(Path::getApplicationDirPath().c_str(), "plugins", NULL);
+	char * search_path = g_build_filename(Path::getApplicationDirPath().c_str(), "plugins", NULL);
 	gaim_plugins_add_search_path(search_path);
 	gaim_plugins_add_search_path("plugins");
 	g_free(search_path);
@@ -233,31 +224,25 @@ void GaimIMFactory::GaimIMInit()
 	signal(SIGPIPE, sigpipe_catcher);
 #endif
 
-	if (!gaim_core_init("Wengo GAIM"))
-	{
+	if (!gaim_core_init("Wengo GAIM")) {
 		fprintf(stderr, "Initialization of the Gaim core failed\n");
 	}
 
 	g_thread_create(GaimMainEventLoop, NULL, FALSE, NULL);
 }
 
-IMConnect *GaimIMFactory::createIMConnect(IMAccount &account)
-{
+IMConnect * GaimIMFactory::createIMConnect(IMAccount &account) {
 	return ConnectMngr->AddIMConnect(account);
 }
 
-IMChat *GaimIMFactory::createIMChat(IMAccount &account)
-{
+IMChat * GaimIMFactory::createIMChat(IMAccount &account) {
 	return ChatMngr->AddIMChat(account);
 }
 
-IMPresence *GaimIMFactory::createIMPresence(IMAccount &account)
-{
+IMPresence * GaimIMFactory::createIMPresence(IMAccount &account) {
 	return PresenceMngr->AddIMPresence(account);
 }
 
-IMContactList *GaimIMFactory::createIMContactList(IMAccount &account)
-{
+IMContactList * GaimIMFactory::createIMContactList(IMAccount &account) {
 	return ContactListMngr->AddIMContactList(account);
 }
-
