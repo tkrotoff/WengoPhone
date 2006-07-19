@@ -105,7 +105,7 @@ static gboolean gaim_wg_io_invoke(GIOChannel *source, GIOCondition condition, gp
 	return TRUE;
 }
 
-static guint gaim_wg_input_add(gint fd, GaimInputCondition condition, 
+static guint gaim_wg_input_add(gint fd, GaimInputCondition condition,
 	GaimInputFunction function, gpointer data)
 {
 	GaimWgIOClosure *closure = g_new0(GaimWgIOClosure, 1);
@@ -229,7 +229,9 @@ void GaimIMFactory::GaimIMInit()
 	gaim_plugins_add_search_path("plugins");
 	g_free(search_path);
 
+#ifdef OS_MACOSX
 	signal(SIGPIPE, sigpipe_catcher);
+#endif
 
 	if (!gaim_core_init("Wengo GAIM"))
 	{
