@@ -1,22 +1,22 @@
 /*
-* WengoPhone, a voice over Internet phone
-* Copyright (C) 2004-2006  Wengo
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2006  Wengo
  *
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
-*/
 #ifndef QTTOASTER_H
 #define QTTOASTER_H
 
@@ -24,14 +24,11 @@
 
 class QtWengoStyleLabel;
 
-
-class QtToaster : public QWidget
-{
+class QtToaster : public QWidget {
 	Q_OBJECT
-
 public:
 
-	QtToaster(QWidget * parent = 0, Qt::WFlags f = 0 );
+	QtToaster(QWidget * parent);
 
 	void setCloseButtonPixmap(const QPixmap & pixmap);
 
@@ -49,7 +46,7 @@ public:
 
 	void setCloseTimer(int timer);
 
-	void setPixmap(const QPixmap &pixmap);
+	void setPixmap(const QPixmap & pixmap);
 
 public Q_SLOTS:
 
@@ -57,7 +54,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void button1Clicked();
+	void button1Clicked();
 
 protected:
 
@@ -77,7 +74,7 @@ protected:
 
 	QPushButton * _button3;
 
-	QPushButton *  _closeButton;
+	QPushButton * _closeButton;
 
 	QPoint _startPosition;
 
@@ -89,13 +86,13 @@ protected:
 
 	bool _show;
 
-protected Q_SLOTS:
+	protected Q_SLOTS :
 
-    void button1Slot();
+	void button1Slot();
 
 protected:
 
-    void timerEvent(QTimerEvent *event);
+	void timerEvent(QTimerEvent * event);
 };
 
 #endif

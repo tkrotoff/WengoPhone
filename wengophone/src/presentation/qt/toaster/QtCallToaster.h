@@ -1,38 +1,34 @@
 /*
-* WengoPhone, a voice over Internet phone
-* Copyright (C) 2004-2006  Wengo
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2006  Wengo
  *
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
-*/
 #ifndef QTCALLTOASTER_H
 #define QTCALLTOASTER_H
 
 #include <QtGui>
 
-
-
 namespace Ui { class CallToaster; }
 
-class QtCallToaster : public QWidget
-{
-Q_OBJECT
-
+class QtCallToaster : public QWidget {
+	Q_OBJECT
 public:
 
-    QtCallToaster(QWidget * parent = 0, Qt::WFlags f = 0);
+	QtCallToaster(QWidget * parent);
 
 	void setTitle(const QString & title);
 
@@ -42,19 +38,19 @@ public:
 
 	void setCloseTimer(int timer);
 
-	void setPixmap(const QPixmap &pixmap);
+	void setPixmap(const QPixmap & pixmap);
 
 Q_SIGNALS:
 
-    void hangupButtonClicked();
+	void hangupButtonClicked();
 
-    void callButtonClicked();
+	void callButtonClicked();
 
 protected:
 
-    void setupGui();
+	void setupGui();
 
-    Ui::CallToaster * _ui;
+	Ui::CallToaster * _ui;
 
 	QPoint _startPosition;
 
@@ -68,15 +64,15 @@ protected:
 
 protected:
 
-    void timerEvent(QTimerEvent *event);
+	void timerEvent(QTimerEvent * event);
 
-protected Q_SLOTS:
+	protected Q_SLOTS :
 
-    void hangupButtonSlot();
+	void hangupButtonSlot();
 
-    void callButtonSlot();
+	void callButtonSlot();
 
-public Q_SLOTS:
+	public Q_SLOTS :
 
 	void closeToaster();
 
