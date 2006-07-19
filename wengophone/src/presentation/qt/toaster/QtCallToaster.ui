@@ -277,9 +277,6 @@
     </disabled>
    </palette>
   </property>
-  <property name="windowTitle" >
-   <string>Form</string>
-  </property>
   <property name="autoFillBackground" >
    <bool>true</bool>
   </property>
@@ -780,6 +777,8 @@
    <pixmap></pixmap>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
  <connections/>
 </ui>

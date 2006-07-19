@@ -20,29 +20,57 @@
 #ifndef OWQTCALLTOASTER_H
 #define OWQTCALLTOASTER_H
 
-#include <QtGui>
+#include <QObject>
+#include <QPoint>
+
+class QString;
+class QPixmap;
+class QTimerEvent;
 
 namespace Ui { class CallToaster; }
 
-class QtCallToaster : public QWidget {
+/**
+ * Shows a toaster when a phone call or a chat is incoming.
+ *
+ * A toaster is a small window in the lower right of the desktop.
+ *
+ * @author Tanguy Krotoff
+ */
+class QtCallToaster : public QObject {
 	Q_OBJECT
 public:
 
 	QtCallToaster(QWidget * parent);
 
+	/**
+	 * Sets the toaster window title.
+	 *
+	 * @param title toaster window title
+	 */
 	void setTitle(const QString & title);
 
+	/**
+	 * Sets the toaster window message.
+	 *
+	 * @param message toaster message
+	 */
 	void setMessage(const QString & message);
 
-	void showToaster();
-
-	void setCloseTimer(int timer);
-
+	/**
+	 * Sets the toaster window picture.
+	 *
+	 * @param pixmap toaster picture
+	 */
 	void setPixmap(const QPixmap & pixmap);
+
+	/**
+	 * Shows the toaster widget.
+	 */
+	void show();
 
 public Q_SLOTS:
 
-	void closeToaster();
+	void close();
 
 Q_SIGNALS:
 
@@ -58,9 +86,13 @@ private Q_SLOTS:
 
 private:
 
-	void setupGui();
+	void setCloseTimer(int timer);
+
+	void timerEvent(QTimerEvent * event);
 
 	Ui::CallToaster * _ui;
+
+	QWidget * _callToasterWidget;
 
 	QPoint _startPosition;
 
@@ -71,8 +103,6 @@ private:
 	int _closeTimer;
 
 	bool _show;
-
-	void timerEvent(QTimerEvent * event);
 };
 
 #endif	//OWQTCALLTOASTER_H

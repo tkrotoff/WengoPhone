@@ -21,21 +21,21 @@
 
 #include "ui_QtCallToaster.h"
 
-QtCallToaster::QtCallToaster(QWidget * parent)
-	: QWidget(parent, Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint) {
-	setupGui();
-}
+#include <QtGui>
 
-void QtCallToaster::setupGui() {
+QtCallToaster::QtCallToaster(QWidget * parent)
+	: QObject(parent) {
+
+	_callToasterWidget = new QWidget(parent, Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
 	_ui = new Ui::CallToaster();
-	_ui->setupUi(this);
+	_ui->setupUi(_callToasterWidget);
 
 	_closeTimerId = -1;
 	_closeTimer = 5000;
 	_show = true;
 
-	setAttribute(Qt::WA_DeleteOnClose, true);
+	_callToasterWidget->setAttribute(Qt::WA_DeleteOnClose, true);
 
 	_ui->hangupLabel->setPixmaps(QPixmap(":/pics/toaster/raccrocher.png"),
 			QPixmap(),
@@ -60,7 +60,7 @@ void QtCallToaster::setupGui() {
 	connect(_ui->hangupLabel, SIGNAL(clicked()), SLOT(hangupButtonSlot()));
 	connect(_ui->callLabel, SIGNAL(clicked()), SLOT(callButtonSlot()));
 
-	resize(1, 1);
+	_callToasterWidget->resize(1, 1);
 
 	QRect r = _ui->frame_3->rect();
 
@@ -87,27 +87,27 @@ void QtCallToaster::setMessage(const QString & message) {
 	_ui->messageLabel->setText(message);
 }
 
-void QtCallToaster::closeToaster() {
+void QtCallToaster::close() {
 	killTimer(_timerId);
 	killTimer(_closeTimerId);
-	close();
+	_callToasterWidget->close();
 }
 
-void QtCallToaster::showToaster() {
+void QtCallToaster::show() {
 	QDesktopWidget * desktop = QApplication::desktop();
 
 	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
 
 	_startPosition.setY(screenGeometry.bottom());
-	_startPosition.setX(screenGeometry.right() - size().width());
+	_startPosition.setX(screenGeometry.right() - _callToasterWidget->size().width());
 
-	move(_startPosition);
+	_callToasterWidget->move(_startPosition);
 
-	show();
+	_callToasterWidget->show();
 
 	_startPosition.setY(screenGeometry.bottom());
-	_startPosition.setX(screenGeometry.right() - size().width());
-	move(_startPosition);
+	_startPosition.setX(screenGeometry.right() - _callToasterWidget->size().width());
+	_callToasterWidget->move(_startPosition);
 
 	_timerId = startTimer(20);
 }
@@ -128,22 +128,22 @@ void QtCallToaster::timerEvent(QTimerEvent * event) {
 
 	if (event->timerId() == _timerId) {
 		if (_show) {
-			QPoint p = pos();
+			QPoint p = _callToasterWidget->pos();
 
-			move(p.x(), p.y() - 3);
+			_callToasterWidget->move(p.x(), p.y() - 3);
 
-			if (p.y() < (desktopGeometry.bottom() - size().height() - 5)) {
+			if (p.y() < (desktopGeometry.bottom() - _callToasterWidget->size().height() - 5)) {
 				killTimer(_timerId);
 				_closeTimerId = startTimer(_closeTimer);
 			}
 		}
 		else {
-			QPoint p = pos();
+			QPoint p = _callToasterWidget->pos();
 
-			move(p.x(), p.y() + 3);
+			_callToasterWidget->move(p.x(), p.y() + 3);
 
 			if (p.y() > (screenGeometry.bottom())) {
-				closeToaster();
+				close();
 			}
 		}
 	}
@@ -156,10 +156,10 @@ void QtCallToaster::timerEvent(QTimerEvent * event) {
 
 void QtCallToaster::hangupButtonSlot() {
 	hangupButtonClicked();
-	close();
+	_callToasterWidget->close();
 }
 
 void QtCallToaster::callButtonSlot() {
 	callButtonClicked();
-	close();
+	_callToasterWidget->close();
 }
