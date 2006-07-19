@@ -170,7 +170,7 @@ bool YealinkWenbox::setState(PhoneCallState state, const std::string & phoneNumb
 		return gotoReady();
 
 	default:
-		LOG_FATAL("unknown state=" + String::fromNumber(status));
+		LOG_FATAL("unknown state=" + String::fromNumber(state));
 		return false;
 	}
 }
