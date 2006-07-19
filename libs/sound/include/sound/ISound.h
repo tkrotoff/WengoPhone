@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ISOUND_H
-#define ISOUND_H
+#ifndef OWISOUND_H
+#define OWISOUND_H
 
 #include <util/Interface.h>
 
@@ -66,4 +66,4 @@ public:
 	virtual void stop() = 0;
 };
 
-#endif	//ISOUND_H
+#endif	//OWISOUND_H

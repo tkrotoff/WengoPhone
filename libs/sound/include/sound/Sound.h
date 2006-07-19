@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SOUND_H
-#define SOUND_H
+#ifndef OWSOUND_H
+#define OWSOUND_H
 
 #include <sound/AudioDevice.h>
 #include <sound/ISound.h>
@@ -45,7 +45,7 @@ public:
 
 	void setLoops(int loops);
 
-	bool setWaveOutDevice(const AudioDevice & device );
+	bool setWaveOutDevice(const AudioDevice & device);
 
 	/**
 	 * Plays the sound in a file called filename.
@@ -65,4 +65,4 @@ private:
 	ISound * _soundPrivate;
 };
 
-#endif	//SOUND_H
+#endif	//OWSOUND_H

@@ -88,4 +88,4 @@ public:
 	static bool setDefaultInputDevice(const AudioDevice & audioDevice);
 };
 
-#endif //OWAUDIODEVICEMANAGER_H
+#endif	//OWAUDIODEVICEMANAGER_H

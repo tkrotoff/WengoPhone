@@ -229,12 +229,13 @@ void WenboxPlugin::switchCurrentAudioDeviceToWenbox() {
 	if (!wenboxAudioDeviceId.empty()) {
 		//Changes audio settings
 		config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY, wenboxAudioDeviceId);
-		config.set(Config::AUDIO_INPUT_DEVICEID_KEY, wenboxAudioDeviceId);
+		config.set(Config::AUDIO_RINGER_DEVICEID_KEY, wenboxAudioDeviceId);
 	}
 
 	wenboxAudioDeviceId = getWenboxInputAudioDeviceId();
 	if (!wenboxAudioDeviceId.empty()) {
-		config.set(Config::AUDIO_RINGER_DEVICEID_KEY, wenboxAudioDeviceId);
+		//Changes audio settings
+		config.set(Config::AUDIO_INPUT_DEVICEID_KEY, wenboxAudioDeviceId);
 	}
 }
 

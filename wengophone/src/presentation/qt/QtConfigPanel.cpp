@@ -36,7 +36,8 @@
 #include <QtGui>
 
 QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
-	: QObjectThreadSafe(parent), _cWengoPhone(cWengoPhone) {
+	: QObjectThreadSafe(parent),
+	_cWengoPhone(cWengoPhone) {
 
 	_configPanelWidget = new QWidget(NULL);
 
