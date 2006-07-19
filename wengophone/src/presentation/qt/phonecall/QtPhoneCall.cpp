@@ -538,7 +538,7 @@ void QtPhoneCall::showToaster(const QString & userName) {
 		return;
 	}
 
-	QtCallToaster * toaster = new QtCallToaster();
+	QtCallToaster * toaster = new QtCallToaster(_phoneCallWidget);
 	toaster->setTitle(tr("New incoming call"));
 	toaster->setMessage(userName);
 	connect(toaster,SIGNAL(callButtonClicked()),SLOT(acceptCall()));

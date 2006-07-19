@@ -649,7 +649,7 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 
 	QPixmap result;
 	QPixmap background = QPixmap(":/pics/fond_avatar.png");
-	QtToaster  * toaster = new QtToaster();
+	QtToaster * toaster = new QtToaster(_dialog);
 
 	toaster->setTitle(tr("New chat session"));
 	if (imChatSession->getIMContactSet().size() > 0) {

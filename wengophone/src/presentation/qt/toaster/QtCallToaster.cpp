@@ -18,10 +18,11 @@
  */
 
 #include "QtCallToaster.h"
+
 #include "ui_QtCallToaster.h"
 
-QtCallToaster::QtCallToaster(QWidget * parent) :
-	QWidget(parent, Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint) {
+QtCallToaster::QtCallToaster(QWidget * parent)
+	: QWidget(parent, Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint) {
 	setupGui();
 }
 
@@ -37,18 +38,18 @@ void QtCallToaster::setupGui() {
 	setAttribute(Qt::WA_DeleteOnClose, true);
 
 	_ui->hangupLabel->setPixmaps(QPixmap(":/pics/toaster/raccrocher.png"),
-	QPixmap(),
-	QPixmap(),
-	QPixmap(":/pics/toaster/raccrocher.png"),
-	QPixmap(),
-	QPixmap());
+			QPixmap(),
+			QPixmap(),
+			QPixmap(":/pics/toaster/raccrocher.png"),
+			QPixmap(),
+			QPixmap());
 
 	_ui->callLabel->setPixmaps(QPixmap(":/pics/toaster/decrocher.png"),
-	QPixmap(),
-	QPixmap(),
-	QPixmap(":/pics/toaster/decrocher.png"),
-	QPixmap(),
-	QPixmap());
+			QPixmap(),
+			QPixmap(),
+			QPixmap(":/pics/toaster/decrocher.png"),
+			QPixmap(),
+			QPixmap());
 
 	_ui->callLabel->setMinimumSize(QSize(48, 56));
 	_ui->callLabel->setMaximumSize(QSize(48, 56));
@@ -61,17 +62,16 @@ void QtCallToaster::setupGui() {
 
 	resize(1, 1);
 
-
 	QRect r = _ui->frame_3->rect();
 
 	QLinearGradient lg(QPointF(1, r.top()), QPointF(1, r.bottom()));
 	lg.setColorAt(0, qApp->palette().color(QPalette::Window));
 
 	QColor dest = qApp->palette().color(QPalette::Window);
-	float red = ((float)dest.red()) / 1.3f;
-	float blue = ((float)dest.blue()) / 1.3f;
-	float green = ((float)dest.green()) / 1.3f;
-	dest = QColor((int)red, (int)green, (int)blue);
+	float red = ((float) dest.red()) / 1.3f;
+	float blue = ((float) dest.blue()) / 1.3f;
+	float green = ((float) dest.green()) / 1.3f;
+	dest = QColor((int) red, (int) green, (int) blue);
 	lg.setColorAt(1, dest);
 
 	QPalette palette = _ui->frame_3->palette();
@@ -94,8 +94,6 @@ void QtCallToaster::closeToaster() {
 }
 
 void QtCallToaster::showToaster() {
-
-
 	QDesktopWidget * desktop = QApplication::desktop();
 
 	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());

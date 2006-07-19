@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCALLTOASTER_H
-#define QTCALLTOASTER_H
+#ifndef OWQTCALLTOASTER_H
+#define OWQTCALLTOASTER_H
 
 #include <QtGui>
 
@@ -40,13 +40,23 @@ public:
 
 	void setPixmap(const QPixmap & pixmap);
 
+public Q_SLOTS:
+
+	void closeToaster();
+
 Q_SIGNALS:
 
 	void hangupButtonClicked();
 
 	void callButtonClicked();
 
-protected:
+private Q_SLOTS:
+
+	void hangupButtonSlot();
+
+	void callButtonSlot();
+
+private:
 
 	void setupGui();
 
@@ -62,20 +72,7 @@ protected:
 
 	bool _show;
 
-protected:
-
 	void timerEvent(QTimerEvent * event);
-
-	protected Q_SLOTS :
-
-	void hangupButtonSlot();
-
-	void callButtonSlot();
-
-	public Q_SLOTS :
-
-	void closeToaster();
-
 };
 
-#endif // QTCALLTOASTER_H
+#endif	//OWQTCALLTOASTER_H
