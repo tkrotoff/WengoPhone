@@ -47,6 +47,7 @@ extern "C" {
 #include "GaimPresenceMngr.h"
 
 #include <util/File.h>
+#include <util/Logger.h>
 #include <util/Path.h>
 
 extern GaimConversationUiOps chat_wg_ops;
@@ -129,6 +130,10 @@ static guint gaim_wg_input_add(gint fd, GaimInputCondition condition,
 
 	g_io_channel_unref(channel);
 	return closure->result;
+}
+
+static void sigpipe_catcher(int sig) {
+	LOG_DEBUG("SIGPIPE caught: " + String::fromNumber(sig));
 }
 
 gpointer GaimMainEventLoop(gpointer data)
@@ -223,6 +228,8 @@ void GaimIMFactory::GaimIMInit()
 	gaim_plugins_add_search_path(search_path);
 	gaim_plugins_add_search_path("plugins");
 	g_free(search_path);
+
+	signal(SIGPIPE, sigpipe_catcher);
 
 	if (!gaim_core_init("Wengo GAIM"))
 	{
