@@ -455,12 +455,9 @@ gaim_dns_resolverthread(int child_out, int child_in, gboolean show_debug)
 		dns_params.hostname[0] = '\0';
 	}
 
-	if (show_debug)
-	  fprintf(stderr,"dns[%d]: close child_out %d | child_in %d\n", getpid(), child_out, child_in);
-	
 	close(child_out);
 	close(child_in);
-	
+
 	_exit(0);
 }
 
@@ -527,8 +524,6 @@ req_free(pending_dns_request_t *req)
 {
 	g_return_if_fail(req != NULL);
 
-	gaim_debug_warning("dns", "DNS req_free fd_in %d | fd_out %d\n", req->fd_in, req->fd_out);
-
 	close(req->fd_in);
 	close(req->fd_out);
 
@@ -566,7 +561,7 @@ send_dns_request_to_child(pending_dns_request_t *req, dns_params_t *dns_params)
 	rc = write(req->fd_in, dns_params, sizeof(*dns_params));
 	if (rc < 0) {
 		gaim_debug_error("dns",
-				   "Unable to write to DNS child %d: %s\n",
+				   "Unable to write to DNS child %d: %d\n",
 				   req->dns_pid, strerror(errno));
 		close(req->fd_in);
 		return -1;

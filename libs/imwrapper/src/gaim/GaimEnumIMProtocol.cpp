@@ -61,7 +61,7 @@ EnumIMProtocol::IMProtocol GaimIMPrcl::GetEnumIMProtocol(const char *GaimPrclId)
 {
 	if (!GaimPrclId || *GaimPrclId == '\0')
 	{
-		LOG_DEBUG("Unknown gaim protocol ID: " + GaimPrclId);
+		LOG_DEBUG("Unknown gaim protocol ID");
 		return EnumIMProtocol::IMProtocolUnknown;
 	}
 
