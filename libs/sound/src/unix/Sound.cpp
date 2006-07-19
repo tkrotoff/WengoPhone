@@ -19,41 +19,28 @@
 
 #include <sound/Sound.h>
 
-#include <util/NonCopyable.h>
-
-#include <QSound>
-
 /**
- * SoundPrivate is a QSound object under UNIX.
- *
  * @author Tanguy Krotoff
  */
 
 Sound::Sound(const std::string & filename) {
-	//_soundPrivate = new SoundPrivate(filename);
 }
 
 Sound::~Sound() {
-	//_soundPrivate->stop();
-	//delete _soundPrivate;
 }
 
 void Sound::setLoops(int loops) {
-	//_soundPrivate->setLoops(loops);
 }
 
-bool Sound::setWaveOutDevice(const std::string & /*deviceName*/) {
+bool Sound::setWaveOutDevice(const AudioDevice & /*device*/) {
 	return false;
 }
 
 void Sound::stop() {
-	//_soundPrivate->stop();
 }
 
 void Sound::play() {
-	//_soundPrivate->play();
 }
 
-void Sound::play(const std::string & filename, const std::string & /*deviceName*/) {
-	//QSound::play(filename.c_str());
+void Sound::play(const std::string & filename, const AudioDevice & /*device*/) {
 }

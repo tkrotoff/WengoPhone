@@ -26,7 +26,7 @@
 #elif defined(OS_MACOSX)
 	#include "mac/MacVolumeControl.h"
 #elif defined(OS_LINUX)
-	#include "portaudio/PAVolumeControl.h"
+	#include "unix/UnixVolumeControl.h"
 #else
 	#error This OS has not been tested
 #endif
@@ -37,7 +37,7 @@ VolumeControl::VolumeControl(const AudioDevice & audioDevice) {
 #elif defined(OS_MACOSX)
 	_iVolumeControlPrivate = new MacVolumeControl(audioDevice);
 #elif defined(OS_LINUX)
-	_iVolumeControlPrivate = new PAVolumeControl(audioDevice);
+	_iVolumeControlPrivate = new UnixVolumeControl(audioDevice);
 #endif
 }
 

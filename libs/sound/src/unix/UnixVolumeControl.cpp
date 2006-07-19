@@ -19,6 +19,8 @@
 
 #include "UnixVolumeControl.h"
 
+#include "../EnumDeviceType.h"
+
 #include <util/Logger.h>
 
 #include <cutil/global.h>
@@ -38,33 +40,32 @@ using namespace std;
 
 const char * sound_device_names[] = SOUND_DEVICE_NAMES;
 
-UnixVolumeControl::UnixVolumeControl(int deviceId, UnixDeviceType deviceType)
-	throw(NoSoundCardException, SoundMixerException) {
+UnixVolumeControl::UnixVolumeControl(const AudioDevice & audioDevice) {
+	_audioDevice = audioDevice;
 
-    switch (deviceType) {
-        case UnixDeviceTypeMic:
-            _strDeviceType = "mic";
-            break;
-        case UnixDeviceTypePcm:
-            _strDeviceType = "pcm";
-            break;
-        case UnixDeviceTypeIgain:
-            _strDeviceType = "igain";
-            break;
-        default:
-            LOG_FATAL("Unknwon audio device type");
-    }
+	EnumDeviceType::DeviceType deviceType = EnumDeviceType::toDeviceType(audioDevice.getData()[2]);
 
-}
+	switch (deviceType) {
+	case EnumDeviceType::DeviceTypeMicrophoneIn:
+	case EnumDeviceType::DeviceTypeWaveIn:
+		_strDeviceType = "mic";
+		break;
 
-bool UnixVolumeControl::close() {
+	case EnumDeviceType::DeviceTypeMasterVolume:
+	case EnumDeviceType::DeviceTypeWaveOut:
+		_strDeviceType = "pcm";
+		break;
+
+	default:
+		LOG_FATAL("Unknown audio device type");
+	}
 }
 
 int UnixVolumeControl::getLevel() {
 	int fd, devmask, i, level;
 
 	fd = open("/dev/mixer", O_RDONLY);
-	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
+	ioctl(fd, SOUND_MIXER_READ_DEVMASK, &devmask);
 
 	//Find device
 	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
@@ -95,13 +96,15 @@ bool UnixVolumeControl::setLevel(unsigned level) {
 	new_level = (level << 8) + level;
 	ioctl(fd, MIXER_WRITE(i), &new_level);
 	::close(fd);
+
+	return true;
 }
 
 bool UnixVolumeControl::isMuted() {
 	int fd, devmask, i, level;
 
 	fd = open("/dev/mixer", O_RDONLY);
-	ioctl(fd, SOUND_MIXER_READ_DEVMASK, & devmask);
+	ioctl(fd, SOUND_MIXER_READ_DEVMASK, &devmask);
 
 	//Find device
 	for (i = 0; i < SOUND_MIXER_NRDEVICES; i++) {
@@ -110,12 +113,18 @@ bool UnixVolumeControl::isMuted() {
 		}
 	}
 
-	ioctl(fd, MIXER_READ(i), & level);
+	ioctl(fd, MIXER_READ(i), &level);
 	level = level >> 8;
 	::close(fd);
+
 	return (level == 0);
 }
 
-/* FIXME: implementation needs to be written.*/
 bool UnixVolumeControl::setMute(bool mute) {
+	//TODO: implementation needs to be written.
+	return false;
+}
+
+bool UnixVolumeControl::isSettable() const {
+	return true;
 }

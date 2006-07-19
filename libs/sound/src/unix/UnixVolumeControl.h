@@ -20,10 +20,10 @@
 #ifndef UNIXVOLUMECONTROL_H
 #define UNIXVOLUMECONTROL_H
 
+#include <sound/AudioDevice.h>
 #include <sound/IVolumeControl.h>
 
-#include <sound/SoundMixerException.h>
-#include <sound/NoSoundCardException.h>
+#include <string>
 
 /**
  * Gets and change the volume of a Unix audio device.
@@ -31,14 +31,8 @@
  */
 class UnixVolumeControl : public IVolumeControl {
 public:
-	/* FIXME: dummy enum to make it build. */
-	enum UnixDeviceType {
-        UnixDeviceTypePcm,
-        UnixDeviceTypeMic,
-        UnixDeviceTypeIgain,
-    };
 
-	UnixVolumeControl(int deviceId, UnixDeviceType deviceType) throw(NoSoundCardException, SoundMixerException);
+	UnixVolumeControl(const AudioDevice & audioDevice);
 
 	bool setLevel(unsigned level);
 
@@ -48,19 +42,14 @@ public:
 
 	bool isMuted();
 
-	bool close();
+	bool isSettable() const;
 
 private:
 
-	/** Channel to use (input or output) */
-	bool _isInput;
+	AudioDevice _audioDevice;
 
-    /* Name of device type. Can be either:
-        - mic
-        - igain
-        - pcm
-    */
-    std::string _strDeviceType;
+	std::string _strDeviceType;
+
 };
 
 #endif	//UNIXVOLUMECONTROL_H
