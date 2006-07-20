@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCALLTOASTER_H
-#define OWQTCALLTOASTER_H
+#ifndef OWQTCHATTOASTER_H
+#define OWQTCHATTOASTER_H
 
 #include "IQtToaster.h"
 
@@ -29,20 +29,20 @@ class QtToaster;
 class QWidget;
 class QString;
 class QPixmap;
-namespace Ui { class CallToaster; }
+namespace Ui { class ChatToaster; }
 
 /**
- * Shows a toaster when a phone call is incoming.
+ * Shows a toaster when a chat is incoming.
  *
  * @author Tanguy Krotoff
  */
-class QtCallToaster : public QObject, public IQtToaster {
+class QtChatToaster : public QObject, public IQtToaster {
 	Q_OBJECT
 public:
 
-	QtCallToaster(QWidget * parent);
+	QtChatToaster(QWidget * parent);
 
-	~QtCallToaster();
+	~QtChatToaster();
 
 	void setTitle(const QString & title);
 
@@ -54,25 +54,21 @@ public:
 
 Q_SIGNALS:
 
-	void hangUpButtonClicked();
-
-	void pickUpButtonClicked();
+	void chatButtonClicked();
 
 private Q_SLOTS:
 
-	void hangUpButtonSlot();
-
-	void pickUpButtonSlot();
+	void chatButtonSlot();
 
 private:
 
 	void close();
 
-	Ui::CallToaster * _ui;
+	Ui::ChatToaster * _ui;
 
-	QWidget * _callToasterWidget;
+	QWidget * _chatToasterWidget;
 
 	QtToaster * _toaster;
 };
 
-#endif	//OWQTCALLTOASTER_H
+#endif	//OWQTCHATTOASTER_H

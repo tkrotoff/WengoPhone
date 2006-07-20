@@ -539,10 +539,10 @@ void QtPhoneCall::showToaster(const QString & userName) {
 	}
 
 	QtCallToaster * toaster = new QtCallToaster(_phoneCallWidget);
-	toaster->setTitle(tr("New incoming call"));
+	toaster->setTitle(tr("WengoPhone - Incoming Call"));
 	toaster->setMessage(userName);
-	connect(toaster,SIGNAL(callButtonClicked()),SLOT(acceptCall()));
-	connect(toaster,SIGNAL(hangupButtonClicked()),SLOT(rejectCall()));
+	connect(toaster,SIGNAL(pickUpButtonClicked()),SLOT(acceptCall()));
+	connect(toaster,SIGNAL(hangUpButtonClicked()),SLOT(rejectCall()));
 	toaster->setPixmap(QPixmap(":/pics/default-avatar.png"));
 	toaster->show();
 }

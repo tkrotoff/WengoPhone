@@ -17,62 +17,56 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCALLTOASTER_H
-#define OWQTCALLTOASTER_H
+#ifndef OWIQTTOASTER_H
+#define OWIQTTOASTER_H
 
-#include "IQtToaster.h"
+#include <util/Interface.h>
 
-#include <QObject>
-
-class QtToaster;
-
-class QWidget;
 class QString;
 class QPixmap;
-namespace Ui { class CallToaster; }
 
 /**
- * Shows a toaster when a phone call is incoming.
+ * Shows a toaster when a phone call or a chat is incoming.
+ *
+ * A toaster is a small window in the lower right of the desktop.
  *
  * @author Tanguy Krotoff
  */
-class QtCallToaster : public QObject, public IQtToaster {
-	Q_OBJECT
+class IQtToaster : Interface {
 public:
 
-	QtCallToaster(QWidget * parent);
+	/**
+	 * Sets the toaster window title.
+	 *
+	 * @param title toaster window title
+	 */
+	virtual void setTitle(const QString & title) = 0;
 
-	~QtCallToaster();
+	/**
+	 * Sets the toaster window message.
+	 *
+	 * @param message toaster message
+	 */
+	virtual void setMessage(const QString & message) = 0;
 
-	void setTitle(const QString & title);
+	/**
+	 * Sets the toaster window picture.
+	 *
+	 * @param pixmap toaster picture
+	 */
+	virtual void setPixmap(const QPixmap & pixmap) = 0;
 
-	void setMessage(const QString & message);
+	/**
+	 * Shows the toaster window.
+	 */
+	virtual void show() = 0;
 
-	void setPixmap(const QPixmap & pixmap);
+protected:
 
-	void show();
-
-Q_SIGNALS:
-
-	void hangUpButtonClicked();
-
-	void pickUpButtonClicked();
-
-private Q_SLOTS:
-
-	void hangUpButtonSlot();
-
-	void pickUpButtonSlot();
-
-private:
-
-	void close();
-
-	Ui::CallToaster * _ui;
-
-	QWidget * _callToasterWidget;
-
-	QtToaster * _toaster;
+	/**
+	 * Closes the toaster window.
+	 */
+	virtual void close() = 0;
 };
 
-#endif	//OWQTCALLTOASTER_H
+#endif	//OWIQTTOASTER_H

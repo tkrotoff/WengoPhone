@@ -17,82 +17,43 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTTOASTER_H
-#define QTTOASTER_H
+#ifndef OWQTTOASTER_H
+#define OWQTTOASTER_H
 
-#include <QtGui>
+#include <QObject>
 
-class QtWengoStyleLabel;
+class QWidget;
+class QTimer;
+class QFrame;
 
-class QtToaster : public QWidget {
+/**
+ * This class codes the algorithm that show/hide the toaster.
+ *
+ * This class helps factorizing the code between QtCallToaster and QtChatToaster.
+ *
+ * @author Tanguy Krotoff
+ */
+class QtToaster : public QObject {
 	Q_OBJECT
 public:
 
-	QtToaster(QWidget * parent);
+	QtToaster(QWidget * toaster, QFrame * toasterWindowFrame);
 
-	void setCloseButtonPixmap(const QPixmap & pixmap);
+	void show();
 
-	void setTitle(const QString & title);
+	void close();
 
-	void setMessage(const QString & message);
+private Q_SLOTS:
 
-	void setButton1Title(const QString & title);
+	void changeToasterPosition();
 
-	void setButton1Pixmap(const QPixmap & pixmap);
+private:
 
-	void hideButton(int num);
+	QWidget * _toaster;
 
-	void showToaster();
-
-	void setCloseTimer(int timer);
-
-	void setPixmap(const QPixmap & pixmap);
-
-public Q_SLOTS:
-
-	void closeToaster();
-
-Q_SIGNALS:
-
-	void button1Clicked();
-
-protected:
-
-	void setupGui();
-
-	QWidget * _widget;
-
-	QLabel * _title;
-
-	QLabel * _message;
-
-	QLabel * _pixmapLabel;
-
-	QPushButton * _button1;
-
-	QPushButton * _button2;
-
-	QPushButton * _button3;
-
-	QPushButton * _closeButton;
-
-	QPoint _startPosition;
-
-	int _timerId;
-
-	int _closeTimerId;
-
-	int _closeTimer;
+	QTimer * _timer;
 
 	bool _show;
-
-protected Q_SLOTS:
-
-	void button1Slot();
-
-protected:
-
-	void timerEvent(QTimerEvent * event);
 };
 
-#endif
+#endif	//OWQTTOASTER_H

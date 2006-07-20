@@ -147,8 +147,8 @@
         <file>pics/systray/offline.png</file>
         <file>pics/systray/online.png</file>
         <file>pics/toaster/chat.png</file>
-        <file>pics/toaster/decrocher.png</file>
-        <file>pics/toaster/raccrocher.png</file>
+        <file>pics/toaster/pickup.png</file>
+        <file>pics/toaster/hangup.png</file>
         <file>pics/update.png</file>
         <file>pics/video_flip.png</file>
         <file>pics/video_fullscreen.png</file>
@@ -227,6 +227,5 @@
         <file>chat/chat.ui</file>
         <file>chat/emoticonswidget.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
-        <file>toaster/QtToaster.ui</file>
     </qresource>
 </RCC>

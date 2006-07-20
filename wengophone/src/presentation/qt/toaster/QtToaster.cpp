@@ -19,172 +19,86 @@
 
 #include "QtToaster.h"
 
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Object.h>
-#include <qtutil/QtWengoStyleLabel.h>
+#include <QtGui>
 
-QtToaster::QtToaster(QWidget * parent) :
-	QWidget(parent, Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint) {
-	setupGui();
-}
+QtToaster::QtToaster(QWidget * toaster, QFrame * toasterWindowFrame)
+	: QObject(toaster) {
 
-void QtToaster::setupGui() {
-	_widget = WidgetFactory::create(":/forms/toaster/QtToaster.ui", this);
-
-	_closeTimerId = -1;
-	_closeTimer = 5000;
+	_timer = NULL;
 	_show = true;
 
-	QGridLayout * layout = new QGridLayout();
-	layout->addWidget(_widget);
-	layout->setMargin(0);
-	setLayout(layout);
-	setAttribute(Qt::WA_DeleteOnClose, true);
+	_toaster = toaster;
+	_toaster->setParent(_toaster->parentWidget(), Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+	_toaster->setAttribute(Qt::WA_DeleteOnClose, true);
 
-	_closeButton = Object::findChild < QPushButton * > (_widget, "closeButton");
+	_toaster->resize(200, 150);
 
-	_title = Object::findChild < QLabel * > (_widget, "titleLabel");
-
-	_message = Object::findChild < QLabel * > (_widget, "messageLabel");
-
-	_button1 = Object::findChild < QPushButton * > (_widget, "actionButton1");
-
-
-	_pixmapLabel = Object::findChild < QLabel * > (_widget, "pixmapLabel");
-
-	connect(_closeButton, SIGNAL(clicked()), SLOT(closeToaster()));
-
-	connect(_button1, SIGNAL(clicked()), SLOT(button1Slot()));
-
-	QFrame * frame = Object::findChild < QFrame * > (_widget, "frame_2");
-
-	QRect r = frame->rect();
+	QRect r = toasterWindowFrame->rect();
 
 	QLinearGradient lg(QPointF(1, r.top()), QPointF(1, r.bottom()));
 	lg.setColorAt(0, qApp->palette().color(QPalette::Window));
 
 	QColor dest = qApp->palette().color(QPalette::Window);
-	float red = ((float)dest.red()) / 1.3f;
-	float blue = ((float)dest.blue()) / 1.3f;
-	float green = ((float)dest.green()) / 1.3f;
-	dest = QColor((int)red, (int)green, (int)blue);
+	float red = ((float) dest.red()) / 1.3f;
+	float blue = ((float) dest.blue()) / 1.3f;
+	float green = ((float) dest.green()) / 1.3f;
+	dest = QColor((int) red, (int) green, (int) blue);
 	lg.setColorAt(1, dest);
 
-	QPalette palette = frame->palette();
-	palette.setBrush(frame->backgroundRole(), QBrush(lg));
-	frame->setPalette(palette);
-
+	QPalette palette = toasterWindowFrame->palette();
+	palette.setBrush(toasterWindowFrame->backgroundRole(), QBrush(lg));
+	toasterWindowFrame->setPalette(palette);
 }
 
-void QtToaster::setPixmap(const QPixmap & pixmap) {
-	_pixmapLabel->setPixmap(pixmap);
+void QtToaster::close() {
+	_timer->stop();
+	_toaster->close();
 }
 
-void QtToaster::setCloseButtonPixmap(const QPixmap & pixmap) {
-	_closeButton->setIcon(QIcon(pixmap));
-}
-
-void QtToaster::setTitle(const QString & title) {
-	_title->setText(title);
-}
-
-void QtToaster::setMessage(const QString & message) {
-	_message->setText(message);
-}
-
-void QtToaster::setButton1Title(const QString & title) {
-	_button1->setText(title);
-}
-
-void QtToaster::setButton1Pixmap(const QPixmap & pixmap) {
-	_button1->setMinimumSize(pixmap.size());
-	_button1->setMaximumSize(pixmap.size());
-	_button1->setIconSize(pixmap.size());
-	_button1->setFlat(true);
-	_button1->setIcon(QIcon(pixmap));
-}
-
-
-void QtToaster::timerEvent(QTimerEvent * event) {
+void QtToaster::show() {
 	QDesktopWidget * desktop = QApplication::desktop();
-	QRect desktopGeometry = desktop->availableGeometry(desktop->primaryScreen());
 	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
 
-	if (event->timerId() == _timerId) {
-		if (_show) {
-			QPoint p = pos();
+	_toaster->move(screenGeometry.bottom(), screenGeometry.right() - _toaster->size().width());
 
-			move(p.x(), p.y() - 3);
+	_toaster->show();
 
-			if (p.y() < (desktopGeometry.bottom() - size().height() - 5)) {
-				killTimer(_timerId);
-				_closeTimerId = startTimer(_closeTimer);
-			}
-		}
-		else {
-			QPoint p = pos();
+	_timer = new QTimer(this);
+	connect(_timer, SIGNAL(timeout()), this, SLOT(changeToasterPosition()));
+	_timer->start(20);
+}
 
-			move(p.x(), p.y() + 3);
+void QtToaster::changeToasterPosition() {
+	QDesktopWidget * desktop = QApplication::desktop();
+	QPoint p = _toaster->pos();
 
-			if (p.y() > (screenGeometry.bottom())) {
-				closeToaster();
-			}
+	//Toaster is showing slowly
+	if (_show) {
+		_toaster->move(p.x(), p.y() - 3);
+
+		QRect desktopGeometry = desktop->availableGeometry(desktop->primaryScreen());
+
+		if (p.y() < (desktopGeometry.bottom() - _toaster->size().height() - 5)) {
+			//Toaster should be hidden now
+			_show = false;
+			_timer->stop();
+			//Waits 5 seconds with the toaster on top
+			_timer->start(5000);
 		}
 	}
 
-	if (event->timerId() == _closeTimerId) {
-		_show = false;
-		_timerId = startTimer(20);
+	//Toaster is hiding slowly
+	else {
+		_toaster->move(p.x(), p.y() + 3);
+
+		QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
+
+		_timer->stop();
+		_timer->start(20);
+
+		if (p.y() > (screenGeometry.bottom())) {
+			//Closes the toaster -> hide it completely
+			close();
+		}
 	}
-}
-
-void QtToaster::showToaster() {
-	QDesktopWidget * desktop = QApplication::desktop();
-
-	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
-
-	_startPosition.setY(screenGeometry.bottom());
-	_startPosition.setX(screenGeometry.right() - size().width());
-
-	move(_startPosition);
-
-	show();
-
-	_startPosition.setY(screenGeometry.bottom());
-	_startPosition.setX(screenGeometry.right() - size().width());
-	move(_startPosition);
-
-	_timerId = startTimer(20);
-
-}
-
-void QtToaster::hideButton(int num) {
-
-	switch (num) {
-		case 1:
-			_button1->hide();
-			break;
-		case 2:
-
-			break;
-		case 3:
-
-		default:
-			break;
-	}
-}
-
-void QtToaster::closeToaster() {
-	killTimer(_timerId);
-	killTimer(_closeTimerId);
-	close();
-}
-
-void QtToaster::setCloseTimer(int timer) {
-	_closeTimer = timer;
-}
-
-void QtToaster::button1Slot() {
-	button1Clicked();
-	close();
 }

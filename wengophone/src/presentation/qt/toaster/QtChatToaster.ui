@@ -2,21 +2,15 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>Form</class>
- <widget class="QWidget" name="Form" >
+ <class>ChatToaster</class>
+ <widget class="QWidget" name="ChatToaster" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>206</width>
-    <height>168</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
-  </property>
-  <property name="minimumSize" >
-   <size>
-    <width>16</width>
-    <height>16</height>
-   </size>
   </property>
   <property name="palette" >
    <palette>
@@ -283,21 +277,18 @@
     </disabled>
    </palette>
   </property>
-  <property name="windowTitle" >
-   <string>Wengophone notification</string>
-  </property>
   <property name="autoFillBackground" >
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>2</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
-    <number>2</number>
+    <number>0</number>
    </property>
    <item row="0" column="0" >
-    <widget class="QFrame" name="frame_2" >
+    <widget class="QFrame" name="windowFrame" >
      <property name="palette" >
       <palette>
        <active>
@@ -579,79 +570,54 @@
       <property name="spacing" >
        <number>0</number>
       </property>
+      <item row="2" column="1" >
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>0</number>
+        </property>
+        <item row="0" column="1" >
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>132</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0" >
+         <widget class="QPushButton" name="chatButton" >
+          <property name="flat" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item row="1" column="0" colspan="2" >
        <widget class="QLabel" name="messageLabel" >
         <property name="text" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">Message&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+         <string>Message</string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="QFrame" name="frame_3" >
-        <property name="frameShape" >
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow" >
-         <enum>QFrame::Raised</enum>
-        </property>
-        <layout class="QGridLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>0</number>
-         </property>
-         <item row="1" column="1" >
-          <widget class="QPushButton" name="actionButton1" >
-           <property name="flat" >
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
       <item row="2" column="0" >
-       <widget class="QFrame" name="frame" >
-        <property name="frameShape" >
-         <enum>QFrame::NoFrame</enum>
+       <widget class="QLabel" name="pixmapLabel" >
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/fond_avatar.png</pixmap>
         </property>
-        <property name="frameShadow" >
-         <enum>QFrame::Raised</enum>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
         </property>
-        <layout class="QGridLayout" >
-         <property name="margin" >
-          <number>5</number>
-         </property>
-         <property name="spacing" >
-          <number>0</number>
-         </property>
-         <item row="0" column="0" >
-          <widget class="QLabel" name="pixmapLabel" >
-           <property name="minimumSize" >
-            <size>
-             <width>70</width>
-             <height>70</height>
-            </size>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>70</width>
-             <height>70</height>
-            </size>
-           </property>
-           <property name="text" >
-            <string/>
-           </property>
-           <property name="pixmap" >
-            <pixmap resource="../wengophone.qrc" >:/pics/default-avatar.png</pixmap>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </widget>
       </item>
       <item row="0" column="0" colspan="2" >
@@ -660,12 +626,12 @@
          <number>2</number>
         </property>
         <property name="spacing" >
-         <number>6</number>
+         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="titleLabel" >
           <property name="text" >
-           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt;">Title&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+           <string>Title</string>
           </property>
          </widget>
         </item>
@@ -721,7 +687,7 @@
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
-  <tabstop>actionButton1</tabstop>
+  <tabstop>chatButton</tabstop>
   <tabstop>closeButton</tabstop>
  </tabstops>
  <resources>
