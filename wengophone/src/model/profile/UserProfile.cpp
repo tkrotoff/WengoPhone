@@ -210,12 +210,16 @@ void UserProfile::disconnectSipAccounts(bool now) {
 int UserProfile::makeCall(Contact & contact) {
 	if (_activePhoneLine) {
 		return _activePhoneLine->makeCall(contact.getPreferredNumber());
+	} else {
+		return -1;
 	}
 }
 
 int UserProfile::makeCall(const std::string & phoneNumber) {
 	if (_activePhoneLine) {
 		return _activePhoneLine->makeCall(phoneNumber);
+	} else {
+		return -1;
 	}
 }
 
@@ -387,7 +391,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, EnumSipLogi
 			LOG_DEBUG("WsInfo created");
 
 			//WsDirectory
-			_wsDirectory = new WsDirectory(_wengoAccount);
+			_wsDirectory = new WsDirectory(*this);
 			wsDirectoryCreatedEvent(*this, *_wsDirectory);
 			LOG_DEBUG("WsDirectory created");
 

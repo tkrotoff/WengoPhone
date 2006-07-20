@@ -19,20 +19,21 @@
 
 #include "WsDirectory.h"
 
-#include <model/contactlist/ContactProfile.h>
-#include <model/profile/ProfileXMLSerializer.h>
-
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/contactlist/ContactProfile.h>
+#include <model/profile/ProfileXMLSerializer.h>
 #include <model/profile/StreetAddress.h>
+#include <model/profile/UserProfile.h>
 
-#include <tinyxml.h>
 #include <util/Logger.h>
 
+#include <tinyxml.h>
 #include <cstdio>
 
-WsDirectory::WsDirectory(WengoAccount * wengoAccount)
-	: WengoWebService(wengoAccount) {
+WsDirectory::WsDirectory(UserProfile & userProfile)
+	: WengoWebService(userProfile.getWengoAccount()),
+	_userProfile(userProfile) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
@@ -101,6 +102,15 @@ void WsDirectory::answerReceived(const std::string & answer, int requestId) {
 		TiXmlHandle h(wgCard);
 		serializer.unserializeContent(h);
 		wgCardCount++;
+
+		// When the ContactProfile has been unserialized, the added IMContact has not
+		// been linked to the right IMAccount of type Wengo. It will be done now.
+		std::set<IMAccount *> list = _userProfile.getIMAccountHandler().getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolWengo);
+		if (list.size() > 0) {
+			// The ContactProfile has only one IMContact so we are sure that this is the one we want.
+			((IMContact &)*(contact->getIMContactSet().begin())).setIMAccount((IMAccount *)*list.begin());
+		}
+		////
 
 		bool online = false;
 		//Extract "status"

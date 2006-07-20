@@ -25,12 +25,14 @@
 #include <util/Event.h>
 
 class ContactProfile;
+class UserProfile;
 
 /**
  * Search for Wengo users web service
  *
  * @ingroup model
  * @author Mathieu Stute
+ * @author Philippe Bernery
  */
 class WsDirectory : public WengoWebService {
 public:
@@ -59,9 +61,9 @@ public:
 	/**
 	 * Default constructor.
 	 *
-	 * @param wengoAccount the WengoAccount used for web services
+	 * @param userProfile used to get some information
 	 */
-	WsDirectory(WengoAccount * wengoAccount);
+	WsDirectory(UserProfile & userProfile);
 
 	virtual ~WsDirectory() {}
 
@@ -70,6 +72,8 @@ public:
 private:
 
 	void answerReceived(const std::string & answer, int requestId);
+
+	UserProfile & _userProfile;
 };
 
 #endif	//OWWSDIRECTORY_H
