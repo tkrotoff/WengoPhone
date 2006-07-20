@@ -131,6 +131,7 @@ static void cb_clean(struct circbuf *cb);
 
 static int select_audio_device(const char *deviceId);
 static void start_audio_device(struct ph_msession_s *s, phastream_t *stream);
+int ph_msession_audio_conf_link(struct ph_msession_s *s1, struct ph_msession_s *s2);
 
 phcodec_t *ph_media_lookup_codec(int payload);
 void *ph_audio_io_thread(void *_p);
@@ -2054,12 +2055,14 @@ start_audio_device(struct ph_msession_s *s, phastream_t *stream)
 
   if (s->confflags != PH_MSESSION_CONF_MEMBER)
   {
+    DBG_MEDIA_ENGINE("start audio device threading model part\n");
     audio_stream_start(stream);
   }
 
   if ((!stream->ms.media_io_thread && (s->confflags != PH_MSESSION_CONF_MEMBER))
     && (!audio_driver_has_rec_callback() || !audio_driver_has_play_callback()))
   {
+    DBG_MEDIA_ENGINE("start phapi thread threading model part\n");
     stream->ms.media_io_thread = osip_thread_create(20000, ph_audio_io_thread, stream);
   }
 }
@@ -2352,6 +2355,13 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, const char *deviceId
     //if (stream2 && !stream2->ms.suspended)
     if (stream2 && (stream2->ms.mses->activestreams & (1 << PH_MSTREAM_AUDIO1)))
     {
+      // we need to switch CONF roles in order to hear something
+      if (s->confflags == PH_MSESSION_CONF_MASTER)
+      {
+        s->confflags = PH_MSESSION_CONF_MEMBER;
+        s2->confflags = PH_MSESSION_CONF_MASTER;
+      }
+
       s2->newstreams |= (1 << PH_MSTREAM_AUDIO1);
       if (!open_audio_device(s2, stream2, deviceId))
       {
@@ -2415,6 +2425,8 @@ phastream_t * ph_msession_audio_stream_hardstart(struct ph_msession_s *s, int co
 
   if (sp->streamerData)
   {
+    DBG_MEDIA_ENGINE("reusing existing stream structure\n");
+
     stream = sp->streamerData;
 
     // reset correct linkage between potential conference streams
@@ -2422,6 +2434,8 @@ phastream_t * ph_msession_audio_stream_hardstart(struct ph_msession_s *s, int co
     // is not zeroed upon a RE-INVITE or RESUME
     if (s->confflags)
     {
+      ph_msession_audio_conf_link(s, s->confsession);
+    /*
       struct ph_mstream_params_s *msp1 = &s->streams[PH_MSTREAM_AUDIO1];
       phastream_t *stream1 = (phastream_t *) msp1->streamerData;
       struct ph_mstream_params_s *msp2 = &s->confsession->streams[PH_MSTREAM_AUDIO1];
@@ -2436,10 +2450,13 @@ phastream_t * ph_msession_audio_stream_hardstart(struct ph_msession_s *s, int co
         stream2->to_mix = stream1;
         stream1->master = stream2;
       }
+        */
     }
   }
   else
   {
+    DBG_MEDIA_ENGINE("allocating a new stream structure\n");
+
     stream = (phastream_t *)osip_malloc(sizeof(phastream_t));
     if (!stream)
     {
@@ -2771,11 +2788,6 @@ void ph_msession_audio_suspend(struct ph_msession_s *s, int suspendwhat, const c
   msp->traffictype &= ~suspendwhat;
   stream->ms.suspended = 1;
   ph_msession_audio_stream_stop(s, deviceId, confflags != PH_MSESSION_CONF_MEMBER, 0);
-  if (s->confflags == PH_MSESSION_CONF_MASTER)
-  {
-    s->confflags = PH_MSESSION_CONF_MEMBER;
-    s2->confflags = PH_MSESSION_CONF_MASTER;
-  }
   PH_MSESSION_AUDIO_UNLOCK();
 
   DBG_MEDIA_ENGINE("audio_suspend: exit ses=%p stream=%p remoteport=%d\n", s, stream, stream->ms.remote_port);
@@ -2812,17 +2824,27 @@ void ph_msession_audio_resume(struct ph_msession_s *s, int resumewhat, const cha
  */
 int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s *s2, const char *deviceId)
 {
+    deviceId; // just to avoid compilation warnings
+    
+    // error if one of the 2 sessions is already involved in a conf
+    if (s1->confflags || s2->confflags)
+    {
+        return -PH_NORESOURCES;
+    }
+
+    ph_msession_audio_conf_link(s1, s2);
+    return 0;
+}
+
+/**
+ * @brief ties 2 sessions together and set the correct MASTER/MEMBER relationship
+ */
+int ph_msession_audio_conf_link(struct ph_msession_s *s1, struct ph_msession_s *s2)
+{
   struct ph_mstream_params_s *msp1 = &s1->streams[PH_MSTREAM_AUDIO1];
   phastream_t *stream1 = (phastream_t *) msp1->streamerData;
   struct ph_mstream_params_s *msp2 = &s2->streams[PH_MSTREAM_AUDIO1];
   phastream_t *stream2 = (phastream_t *) msp2->streamerData;
-  deviceId; // just to avoid compilation warnings
-
-  // error if one of the 2 sessions is already involved in a conf
-  if (s1->confflags || s2->confflags)
-  {
-    return -PH_NORESOURCES;
-  }
 
   s1->confsession = s2;
   s2->confsession = s1;
@@ -2865,7 +2887,7 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
 
   // if S1 and S2 are not running, S1 will be the MASTER
   CONF_LOCK(stream1);
-  stream1->to_mix = stream2;
+  stream1->to_mix = 0; // TODO: must be 0 here because !0 needs !suspended but this is false for CONF+DBL_HOLD+RESUME. should be improved
   if (stream2)
   {
       stream2->master = stream1;
@@ -2875,8 +2897,8 @@ int ph_msession_audio_conf_start(struct ph_msession_s *s1, struct ph_msession_s 
   CONF_UNLOCK(stream1);
   //ph_msession_audio_start(s1, deviceId);
   return 0;
-}
 
+}
 /**
  * @brief function that unties to sessions that were previously binded for a conference
  */
