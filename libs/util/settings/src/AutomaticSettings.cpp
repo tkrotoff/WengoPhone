@@ -56,7 +56,8 @@ boost::any AutomaticSettings::getDefaultValue(const std::string & key) const {
 bool AutomaticSettings::getBooleanKeyValue(const std::string & key) const {
 	boost::any value = getAny(key);
 	if (!Settings::isBoolean(value)) {
-		LOG_FATAL("value for key=" + key + " is not a boolean");
+		LOG_ERROR("value for key=" + key + " is not a boolean");
+		return false;
 	}
 
 	return boost::any_cast<bool>(value);
@@ -65,7 +66,8 @@ bool AutomaticSettings::getBooleanKeyValue(const std::string & key) const {
 int AutomaticSettings::getIntegerKeyValue(const std::string & key) const {
 	boost::any value = getAny(key);
 	if (!Settings::isInteger(value)) {
-		LOG_FATAL("value for key=" + key + " is not an integer");
+		LOG_ERROR("value for key=" + key + " is not an integer");
+		return -1;
 	}
 
 	return boost::any_cast<int>(value);
@@ -74,7 +76,8 @@ int AutomaticSettings::getIntegerKeyValue(const std::string & key) const {
 std::string AutomaticSettings::getStringKeyValue(const std::string & key) const {
 	boost::any value = getAny(key);
 	if (!Settings::isString(value)) {
-		LOG_FATAL("value for key=" + key + " is not a string");
+		LOG_ERROR("value for key=" + key + " is not a string");
+		return String::null;
 	}
 
 	return boost::any_cast<std::string>(value);
@@ -83,7 +86,8 @@ std::string AutomaticSettings::getStringKeyValue(const std::string & key) const 
 StringList AutomaticSettings::getStringListKeyValue(const std::string & key) const {
 	boost::any value = getAny(key);
 	if (!Settings::isStringList(value)) {
-		LOG_FATAL("value for key=" + key + " is not a string list");
+		LOG_ERROR("value for key=" + key + " is not a string list");
+		return StringList::null;
 	}
 
 	return boost::any_cast<StringList>(value);
