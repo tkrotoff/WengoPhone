@@ -21,11 +21,10 @@
 #define OWQTCALLTOASTER_H
 
 #include <QObject>
-#include <QPoint>
 
 class QString;
 class QPixmap;
-class QTimerEvent;
+class QTimer;
 
 namespace Ui { class CallToaster; }
 
@@ -33,6 +32,8 @@ namespace Ui { class CallToaster; }
  * Shows a toaster when a phone call or a chat is incoming.
  *
  * A toaster is a small window in the lower right of the desktop.
+ *
+ * TODO merge with class Toaster that is obsolete but still used for incoming chat.
  *
  * @author Tanguy Krotoff
  */
@@ -84,23 +85,15 @@ private Q_SLOTS:
 
 	void callButtonSlot();
 
+	void changeToasterPosition();
+
 private:
-
-	void setCloseTimer(int timer);
-
-	void timerEvent(QTimerEvent * event);
 
 	Ui::CallToaster * _ui;
 
 	QWidget * _callToasterWidget;
 
-	QPoint _startPosition;
-
-	int _timerId;
-
-	int _closeTimerId;
-
-	int _closeTimer;
+	QTimer * _timer;
 
 	bool _show;
 };

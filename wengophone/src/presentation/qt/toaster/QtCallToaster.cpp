@@ -31,8 +31,7 @@ QtCallToaster::QtCallToaster(QWidget * parent)
 	_ui = new Ui::CallToaster();
 	_ui->setupUi(_callToasterWidget);
 
-	_closeTimerId = -1;
-	_closeTimer = 5000;
+	_timer = NULL;
 	_show = true;
 
 	_callToasterWidget->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -88,78 +87,68 @@ void QtCallToaster::setMessage(const QString & message) {
 }
 
 void QtCallToaster::close() {
-	killTimer(_timerId);
-	killTimer(_closeTimerId);
+	_timer->stop();
 	_callToasterWidget->close();
 }
 
 void QtCallToaster::show() {
 	QDesktopWidget * desktop = QApplication::desktop();
-
 	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
 
-	_startPosition.setY(screenGeometry.bottom());
-	_startPosition.setX(screenGeometry.right() - _callToasterWidget->size().width());
-
-	_callToasterWidget->move(_startPosition);
+	_callToasterWidget->move(screenGeometry.bottom(), screenGeometry.right() - _callToasterWidget->size().width());
 
 	_callToasterWidget->show();
 
-	_startPosition.setY(screenGeometry.bottom());
-	_startPosition.setX(screenGeometry.right() - _callToasterWidget->size().width());
-	_callToasterWidget->move(_startPosition);
-
-	_timerId = startTimer(20);
-}
-
-void QtCallToaster::setCloseTimer(int timer) {
-	_closeTimer = timer;
+	_timer = new QTimer(this);
+	connect(_timer, SIGNAL(timeout()), this, SLOT(changeToasterPosition()));
+	_timer->start(20);
 }
 
 void QtCallToaster::setPixmap(const QPixmap & pixmap) {
 	_ui->pixmapLabel->setPixmap(pixmap);
 }
 
-void QtCallToaster::timerEvent(QTimerEvent * event) {
-
+void QtCallToaster::changeToasterPosition() {
 	QDesktopWidget * desktop = QApplication::desktop();
-	QRect desktopGeometry = desktop->availableGeometry(desktop->primaryScreen());
-	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
+	QPoint p = _callToasterWidget->pos();
 
-	if (event->timerId() == _timerId) {
-		if (_show) {
-			QPoint p = _callToasterWidget->pos();
+	//Toaster is showing slowly
+	if (_show) {
+		_callToasterWidget->move(p.x(), p.y() - 3);
 
-			_callToasterWidget->move(p.x(), p.y() - 3);
+		QRect desktopGeometry = desktop->availableGeometry(desktop->primaryScreen());
 
-			if (p.y() < (desktopGeometry.bottom() - _callToasterWidget->size().height() - 5)) {
-				killTimer(_timerId);
-				_closeTimerId = startTimer(_closeTimer);
-			}
-		}
-		else {
-			QPoint p = _callToasterWidget->pos();
-
-			_callToasterWidget->move(p.x(), p.y() + 3);
-
-			if (p.y() > (screenGeometry.bottom())) {
-				close();
-			}
+		if (p.y() < (desktopGeometry.bottom() - _callToasterWidget->size().height() - 5)) {
+			//Toaster should be hidden now
+			_show = false;
+			_timer->stop();
+			//Waits 5 seconds with the toaster on top
+			_timer->start(5000);
 		}
 	}
 
-	if (event->timerId() == _closeTimerId) {
-		_show = false;
-		_timerId = startTimer(20);
+	//Toaster is hiding slowly
+	else {
+		_callToasterWidget->move(p.x(), p.y() + 3);
+
+		QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
+
+		_timer->stop();
+		_timer->start(20);
+
+		if (p.y() > (screenGeometry.bottom())) {
+			//Closes the toaster -> hide it completely
+			close();
+		}
 	}
 }
 
 void QtCallToaster::hangupButtonSlot() {
 	hangupButtonClicked();
-	_callToasterWidget->close();
+	close();
 }
 
 void QtCallToaster::callButtonSlot() {
 	callButtonClicked();
-	_callToasterWidget->close();
+	close();
 }
