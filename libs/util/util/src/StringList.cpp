@@ -23,6 +23,8 @@
 
 using namespace std;
 
+StringList StringList::null;
+
 StringList::StringList(const std::list<std::string> & strList) {
 	for (std::list<string>::const_iterator it = strList.begin();
 		it != strList.end(); ++it) {
