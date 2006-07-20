@@ -17,9 +17,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <string.h>
-
 #include "GaimEnumIMProtocol.h"
+
+#include <util/Logger.h>
+
+#include <cstring>
 
 #define PRPL_ALL	"prpl-all"
 #define PRPL_MSN	"prpl-msn"
@@ -29,60 +31,62 @@
 #define PRPL_SIMPLE	"prpl-simple"
 #define PRPL_UNK	"prpl-unknown"
 
+const char * GaimIMPrcl::GetPrclId(EnumIMProtocol::IMProtocol protocol) {
+	switch (protocol) {
+	case EnumIMProtocol::IMProtocolAll:
+		return PRPL_ALL;
 
-const char *GaimIMPrcl::GetPrclId(EnumIMProtocol::IMProtocol protocol)
-{
-	switch (protocol)
-	{
-		case EnumIMProtocol::IMProtocolAll:
-			return PRPL_ALL;
+	case EnumIMProtocol::IMProtocolMSN:
+		return PRPL_MSN;
 
-		case EnumIMProtocol::IMProtocolMSN:
-			return PRPL_MSN;
+	case EnumIMProtocol::IMProtocolYahoo:
+		return PRPL_YAHOO;
 
-		case EnumIMProtocol::IMProtocolYahoo:
-			return PRPL_YAHOO;
+	case EnumIMProtocol::IMProtocolAIMICQ:
+		return PRPL_OSCAR;
 
-		case EnumIMProtocol::IMProtocolAIMICQ:
-			return PRPL_OSCAR;
+	case EnumIMProtocol::IMProtocolJabber:
+		return PRPL_JABBER;
 
-		case EnumIMProtocol::IMProtocolJabber:
-			return PRPL_JABBER;
+	case EnumIMProtocol::IMProtocolSIPSIMPLE:
+		return PRPL_SIMPLE;
 
-		case EnumIMProtocol::IMProtocolSIPSIMPLE:
-			return PRPL_SIMPLE;
-
-		default:
-			return PRPL_UNK;
+	default:
+		return PRPL_UNK;
 	}
 }
 
-EnumIMProtocol::IMProtocol GaimIMPrcl::GetEnumIMProtocol(const char *GaimPrclId)
-{
-	if (!GaimPrclId || *GaimPrclId == '\0')
-	{
-		LOG_DEBUG("Unknown gaim protocol ID");
+EnumIMProtocol::IMProtocol GaimIMPrcl::GetEnumIMProtocol(const char * GaimPrclId) {
+	if (!GaimPrclId || *GaimPrclId == '\0') {
+		LOG_DEBUG("unknown gaim protocol ID");
 		return EnumIMProtocol::IMProtocolUnknown;
 	}
 
-	if (!strcmp(GaimPrclId, PRPL_ALL))
+	if (!strcmp(GaimPrclId, PRPL_ALL)) {
 		return EnumIMProtocol::IMProtocolAll;
+	}
 
-	else if (!strcmp(GaimPrclId, PRPL_MSN))
+	else if (!strcmp(GaimPrclId, PRPL_MSN)) {
 		return EnumIMProtocol::IMProtocolMSN;
+	}
 
-	else if (!strcmp(GaimPrclId, PRPL_YAHOO))
+	else if (!strcmp(GaimPrclId, PRPL_YAHOO)) {
 		return EnumIMProtocol::IMProtocolYahoo;
+	}
 
-	else if (!strcmp(GaimPrclId, PRPL_OSCAR))
+	else if (!strcmp(GaimPrclId, PRPL_OSCAR)) {
 		return EnumIMProtocol::IMProtocolAIMICQ;
+	}
 
-	else if (!strcmp(GaimPrclId, PRPL_JABBER))
+	else if (!strcmp(GaimPrclId, PRPL_JABBER)) {
 		return EnumIMProtocol::IMProtocolJabber;
+	}
 
-	else if (!strcmp(GaimPrclId, PRPL_SIMPLE))
+	else if (!strcmp(GaimPrclId, PRPL_SIMPLE)) {
 		return EnumIMProtocol::IMProtocolSIPSIMPLE;
+	}
 
-	else
+	else {
 		return EnumIMProtocol::IMProtocolUnknown;
+	}
 }

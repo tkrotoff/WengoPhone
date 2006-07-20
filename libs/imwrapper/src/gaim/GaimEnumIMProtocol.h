@@ -17,19 +17,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GAIMENUMIMPROTOCOL_H
-#define GAIMENUMIMPROTOCOL_H
+#ifndef OWGAIMENUMIMPROTOCOL_H
+#define OWGAIMENUMIMPROTOCOL_H
 
 #include <imwrapper/EnumIMProtocol.h>
 
-class GaimIMPrcl : EnumIMProtocol
-{
-
+class GaimIMPrcl : EnumIMProtocol {
 public:
 
-	static const char *GetPrclId(IMProtocol protocol);
+	static const char * GetPrclId(IMProtocol protocol);
 
-	static IMProtocol GetEnumIMProtocol(const char *GaimPrclId);
+	static IMProtocol GetEnumIMProtocol(const char * GaimPrclId);
 };
 
-#endif	//GAIMENUMIMPROTOCOL_H
+#endif	//OWGAIMENUMIMPROTOCOL_H
