@@ -34,6 +34,8 @@ UserProfileHandler::UserProfileHandler(Thread & modelThread)
 	_currentUserProfile = NULL;
 	_desiredUserProfile = NULL;
 	_importDefaultProfileToProfile = false;
+	_saveTimer.lastTimeoutEvent +=
+		boost::bind(&UserProfileHandler::saveTimerLastTimeoutEventHandler, this, _1);
 }
 
 UserProfileHandler::~UserProfileHandler() {
@@ -211,7 +213,21 @@ void UserProfileHandler::currentUserProfileReleased() {
 
 void UserProfileHandler::initializeCurrentUserProfile() {
 	_currentUserProfile->profileChangedEvent +=
-		boost::bind(&UserProfileHandler::profileChangedEventHandler, this, _1);
+		boost::bind(&UserProfileHandler::profileChangedEventHandler, this);
+	_currentUserProfile->getContactList().contactGroupAddedEvent +=
+		boost::bind(&UserProfileHandler::profileChangedEventHandler, this);
+	_currentUserProfile->getContactList().contactGroupRemovedEvent +=
+		boost::bind(&UserProfileHandler::profileChangedEventHandler, this);
+	_currentUserProfile->getContactList().contactGroupRenamedEvent +=
+		boost::bind(&UserProfileHandler::profileChangedEventHandler, this);
+	_currentUserProfile->getContactList().contactAddedEvent +=
+		boost::bind(&UserProfileHandler::profileChangedEventHandler, this);
+	_currentUserProfile->getContactList().contactRemovedEvent +=
+		boost::bind(&UserProfileHandler::profileChangedEventHandler, this);
+	_currentUserProfile->getContactList().contactMovedEvent +=
+		boost::bind(&UserProfileHandler::profileChangedEventHandler, this);
+	_currentUserProfile->getContactList().contactChangedEvent +=
+		boost::bind(&UserProfileHandler::profileChangedEventHandler, this);
 
 	_currentUserProfile->init();
 
@@ -247,8 +263,16 @@ void UserProfileHandler::saveUserProfile(UserProfile & userProfile) {
 		+ "profiles/" + userProfile.getName() + "/"));
 }
 
-void UserProfileHandler::profileChangedEventHandler(Profile & sender) {
-	saveUserProfile((UserProfile &) sender);
+void UserProfileHandler::profileChangedEventHandler() {
+	if (!_saveTimerRunning) {
+		_saveTimerRunning = true;
+		_saveTimer.start(5000, 5000, 1);
+	}
+}
+
+void UserProfileHandler::saveTimerLastTimeoutEventHandler(Timer & sender) {
+	saveUserProfile(*_currentUserProfile);
+	_saveTimerRunning = false;
 }
 
 void UserProfileHandler::importDefaultProfileToProfile(const std::string & profileName) {

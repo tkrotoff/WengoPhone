@@ -21,6 +21,7 @@
 #define OWUSERPROFILEHANDLER_H
 
 #include <thread/Mutex.h>
+#include <thread/Timer.h>
 #include <util/Event.h>
 #include <util/StringList.h>
 #include <util/Trackable.h>
@@ -200,7 +201,7 @@ private:
 	/*
 	 * @see Profile::profileChangedEvent
 	 */
-	void profileChangedEventHandler(Profile & sender);
+	void profileChangedEventHandler();
 
 	/**
 	 * Sets the last used UserProfile.
@@ -227,6 +228,11 @@ private:
 	void actuallyImportDefaultProfileToProfile();
 
 	/**
+	 * @see Timer::lastTimeoutEvent
+	 */
+	void saveTimerLastTimeoutEventHandler(Timer & sender);
+
+	/**
 	 * True if UserProfileHandler must call actuallyImportDefaultProfileToProfile
 	 * in currentUserProfileReleased.
 	 */
@@ -243,6 +249,11 @@ private:
 	UserProfile * _currentUserProfile;
 
 	UserProfile * _desiredUserProfile;
+
+	/** True if _saveTimer is running. */
+	bool _saveTimerRunning;
+
+	Timer _saveTimer;
 
 	Thread & _modelThread;
 };
