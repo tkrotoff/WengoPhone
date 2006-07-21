@@ -40,11 +40,9 @@ class QtChatToaster : public QObject, public IQtToaster {
 	Q_OBJECT
 public:
 
-	QtChatToaster(QWidget * parent);
+	QtChatToaster();
 
 	~QtChatToaster();
-
-	void setTitle(const QString & title);
 
 	void setMessage(const QString & message);
 

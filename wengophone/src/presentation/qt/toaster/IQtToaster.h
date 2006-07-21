@@ -36,13 +36,6 @@ class IQtToaster : Interface {
 public:
 
 	/**
-	 * Sets the toaster window title.
-	 *
-	 * @param title toaster window title
-	 */
-	virtual void setTitle(const QString & title) = 0;
-
-	/**
 	 * Sets the toaster window message.
 	 *
 	 * @param message toaster message

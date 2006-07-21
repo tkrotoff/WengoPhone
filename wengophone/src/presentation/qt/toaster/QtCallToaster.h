@@ -40,11 +40,9 @@ class QtCallToaster : public QObject, public IQtToaster {
 	Q_OBJECT
 public:
 
-	QtCallToaster(QWidget * parent);
+	QtCallToaster();
 
 	~QtCallToaster();
-
-	void setTitle(const QString & title);
 
 	void setMessage(const QString & message);
 

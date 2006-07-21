@@ -25,20 +25,13 @@
 
 #include <QtGui>
 
-QtChatToaster::QtChatToaster(QWidget * parent)
-	: QObject(parent) {
+QtChatToaster::QtChatToaster()
+	: QObject(NULL) {
 
-	_chatToasterWidget = new QWidget(parent);
+	_chatToasterWidget = new QWidget(NULL);
 
 	_ui = new Ui::ChatToaster();
 	_ui->setupUi(_chatToasterWidget);
-
-	QPixmap pixmap(":pics/toaster/chat.png");
-	_ui->chatButton->setMinimumSize(pixmap.size());
-	_ui->chatButton->setMaximumSize(pixmap.size());
-	_ui->chatButton->setIconSize(pixmap.size());
-	_ui->chatButton->setFlat(true);
-	_ui->chatButton->setIcon(QIcon(pixmap));
 
 	connect(_ui->chatButton, SIGNAL(clicked()), SLOT(chatButtonSlot()));
 
@@ -47,10 +40,6 @@ QtChatToaster::QtChatToaster(QWidget * parent)
 
 QtChatToaster::~QtChatToaster() {
 	delete _ui;
-}
-
-void QtChatToaster::setTitle(const QString & title) {
-	_ui->titleLabel->setText(title);
 }
 
 void QtChatToaster::setMessage(const QString & message) {

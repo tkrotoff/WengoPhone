@@ -593,6 +593,12 @@
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
          </spacer>
         </item>
         <item row="0" column="0" >
@@ -600,12 +606,18 @@
           <property name="frameShape" >
            <enum>QFrame::NoFrame</enum>
           </property>
+          <property name="pixmap" >
+           <pixmap resource="../wengophone.qrc" >:/pics/toaster/hangup.png</pixmap>
+          </property>
          </widget>
         </item>
         <item row="0" column="1" >
          <widget class="QtWengoStyleLabel" name="pickUpButton" >
           <property name="frameShape" >
            <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="pixmap" >
+           <pixmap resource="../wengophone.qrc" >:/pics/toaster/pickup.png</pixmap>
           </property>
          </widget>
         </item>
@@ -622,7 +634,7 @@
         <item>
          <widget class="QLabel" name="titleLabel" >
           <property name="text" >
-           <string>Title</string>
+           <string>WengoPhone - Incoming Call</string>
           </property>
          </widget>
         </item>

@@ -651,9 +651,8 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 
 	QPixmap result;
 	QPixmap background = QPixmap(":/pics/fond_avatar.png");
-	QtChatToaster * toaster = new QtChatToaster(_dialog);
+	QtChatToaster * toaster = new QtChatToaster();
 
-	toaster->setTitle(tr("WengoPhone - Incoming Chat"));
 	if (imChatSession->getIMContactSet().size() > 0) {
 		QString message;
 		for (IMContactSet::const_iterator it = imChatSession->getIMContactSet().begin();

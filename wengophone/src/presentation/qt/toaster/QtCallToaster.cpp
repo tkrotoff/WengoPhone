@@ -25,10 +25,10 @@
 
 #include <QtGui>
 
-QtCallToaster::QtCallToaster(QWidget * parent)
-	: QObject(parent) {
+QtCallToaster::QtCallToaster()
+	: QObject(NULL) {
 
-	_callToasterWidget = new QWidget(parent);
+	_callToasterWidget = new QWidget(NULL);
 
 	_ui = new Ui::CallToaster();
 	_ui->setupUi(_callToasterWidget);
@@ -36,14 +36,14 @@ QtCallToaster::QtCallToaster(QWidget * parent)
 	_ui->hangUpButton->setPixmaps(QPixmap(":/pics/toaster/hangup.png"),
 			QPixmap(),
 			QPixmap(),
-			QPixmap(":/pics/toaster/raccrocher.png"),
+			QPixmap(":/pics/toaster/hangup.png"),
 			QPixmap(),
 			QPixmap());
 
 	_ui->pickUpButton->setPixmaps(QPixmap(":/pics/toaster/pickup.png"),
 			QPixmap(),
 			QPixmap(),
-			QPixmap(":/pics/toaster/decrocher.png"),
+			QPixmap(":/pics/toaster/pickup.png"),
 			QPixmap(),
 			QPixmap());
 
@@ -61,10 +61,6 @@ QtCallToaster::QtCallToaster(QWidget * parent)
 
 QtCallToaster::~QtCallToaster() {
 	delete _ui;
-}
-
-void QtCallToaster::setTitle(const QString & title) {
-	_ui->titleLabel->setText(title);
 }
 
 void QtCallToaster::setMessage(const QString & message) {
