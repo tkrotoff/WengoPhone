@@ -58,9 +58,9 @@ private Q_SLOTS:
 
 	void chatButtonSlot();
 
-private:
-
 	void close();
+
+private:
 
 	Ui::ChatToaster * _ui;
 

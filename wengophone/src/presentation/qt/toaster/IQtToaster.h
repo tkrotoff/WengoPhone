@@ -53,13 +53,6 @@ public:
 	 * Shows the toaster window.
 	 */
 	virtual void show() = 0;
-
-protected:
-
-	/**
-	 * Closes the toaster window.
-	 */
-	virtual void close() = 0;
 };
 
 #endif	//OWIQTTOASTER_H

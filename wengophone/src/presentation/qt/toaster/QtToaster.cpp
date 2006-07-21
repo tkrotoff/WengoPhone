@@ -59,7 +59,7 @@ void QtToaster::show() {
 	QDesktopWidget * desktop = QApplication::desktop();
 	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
 
-	_toaster->move(screenGeometry.bottom(), screenGeometry.right() - _toaster->size().width());
+	_toaster->move(screenGeometry.bottom(), screenGeometry.right()/* - _toaster->size().width()*/);
 
 	_toaster->show();
 

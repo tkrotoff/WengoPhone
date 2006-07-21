@@ -49,12 +49,13 @@ QtCallToaster::QtCallToaster()
 
 	_ui->pickUpButton->setMinimumSize(QSize(48, 56));
 	_ui->pickUpButton->setMaximumSize(QSize(48, 56));
+	connect(_ui->pickUpButton, SIGNAL(clicked()), SLOT(pickUpButtonSlot()));
 
 	_ui->hangUpButton->setMinimumSize(QSize(28, 56));
 	_ui->hangUpButton->setMaximumSize(QSize(28, 56));
-
 	connect(_ui->hangUpButton, SIGNAL(clicked()), SLOT(hangUpButtonSlot()));
-	connect(_ui->pickUpButton, SIGNAL(clicked()), SLOT(pickUpButtonSlot()));
+
+	connect(_ui->closeButton, SIGNAL(clicked()), SLOT(close()));
 
 	_toaster = new QtToaster(_callToasterWidget, _ui->windowFrame);
 }

@@ -62,9 +62,9 @@ private Q_SLOTS:
 
 	void pickUpButtonSlot();
 
-private:
-
 	void close();
+
+private:
 
 	Ui::CallToaster * _ui;
 

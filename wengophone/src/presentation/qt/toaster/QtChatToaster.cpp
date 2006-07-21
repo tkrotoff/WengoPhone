@@ -35,6 +35,8 @@ QtChatToaster::QtChatToaster()
 
 	connect(_ui->chatButton, SIGNAL(clicked()), SLOT(chatButtonSlot()));
 
+	connect(_ui->closeButton, SIGNAL(clicked()), SLOT(close()));
+
 	_toaster = new QtToaster(_chatToasterWidget, _ui->windowFrame);
 }
 
