@@ -3689,7 +3689,7 @@ static GaimPluginProtocolInfo prpl_info =
 	yahoo_buddy_add_authorize_cb, /* accept_buddy_add */
 	yahoo_buddy_add_deny_cb,  /* deny_buddy_add */
 	NULL, /* create_chat */
-	yahoo_act_id, /* set_alias */
+	NULL/*FIXME: makes Yahoo disconnect when sending a message: yahoo_act_id*/, /* set_alias */
 };
 
 static GaimPluginInfo info =
