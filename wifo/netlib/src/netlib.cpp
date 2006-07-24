@@ -638,7 +638,8 @@ HttpRet is_http_conn_allowed(const char *url,
 
 	ret = curl_easy_perform(mcurl);
 	curl_easy_getinfo(mcurl, CURLINFO_RESPONSE_CODE, &http_resp_code);
-	curl_easy_getinfo(mcurl, CURLINFO_PROXYAUTH_AVAIL, &(_LocalProxy.proxy_auth_type));
+	if (!_LocalProxy.proxy_auth_type)
+		curl_easy_getinfo(mcurl, CURLINFO_PROXYAUTH_AVAIL, &(_LocalProxy.proxy_auth_type));
 	curl_easy_getinfo(mcurl, CURLINFO_EFFECTIVE_URL, &redir_tmp);
 
 	redir_url = strdup(redir_tmp);
