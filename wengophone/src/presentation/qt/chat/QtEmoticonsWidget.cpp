@@ -28,17 +28,16 @@
 
 #include <cutil/global.h>
 
-#include <qtutil/WidgetFactory.h>
-
 #include <QtXml>
 
+EmoticonsWidget::EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent, Qt::WFlags flags)
+	: QWidget(parent, flags) {
 
-EmoticonsWidget::EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent, Qt::WFlags f) : QWidget(parent,f){
 	_layout = NULL;
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	_qtEmoticonsManager = qtEmoticonsManager;
 	_qtEmoticonsManager->loadFromFile(QString::fromStdString(config.getResourcesDir() + "emoticons/icondef2.xml"));
-	_stat=Popup;
+	_stat = Popup;
 	_buttonX = 0;
 	_buttonY = 0;
 }
@@ -59,47 +58,45 @@ void EmoticonsWidget::changeStat() {
 	} else {
 		close();
 		setWindowFlags(Qt::Popup);
-		_stat=Popup;
+		_stat = Popup;
 	}
 }
 
 void EmoticonsWidget::initButtons(const QString & protocol) {
-	QtEmoticonsManager::QtEmoticonsList emoticonsList;
-	QtEmoticonsManager::QtEmoticonsList::iterator it;
 	if (_layout) {
 		delete _layout;
 	}
 	_layout = new QGridLayout(this);
 	_layout->setMargin(0);
-	_buttonX=0;
-	_buttonY=0;
-	emoticonsList = _qtEmoticonsManager->getQtEmoticonsList(protocol);
-	for (it=emoticonsList.begin();it!=emoticonsList.end();it++) {
+	_buttonX = 0;
+	_buttonY = 0;
+	QtEmoticonsManager::QtEmoticonsList emoticonsList = _qtEmoticonsManager->getQtEmoticonsList(protocol);
+	QtEmoticonsManager::QtEmoticonsList::iterator it;
+	for (it = emoticonsList.begin(); it != emoticonsList.end(); it++) {
 		addButton((*it));
 	}
 }
 
 void EmoticonsWidget::addButton(QtEmoticon emoticon) {
-	if ( _buttonX == 10 ) {
-		_buttonX=0;
-		_buttonY+=1;
+	if (_buttonX == 10) {
+		_buttonX = 0;
+		_buttonY += 1;
 	}
 	QtEmoticonButton * button = new QtEmoticonButton();
 	button->setEmoticon(emoticon);
 	QSize buttonSize = emoticon.getButtonPixmap().size();
-	#if defined(OS_MACOSX)
+#if defined(OS_MACOSX)
 	QSize macosxHackSize(6, 6);
 	buttonSize += macosxHackSize;
-	#endif
+#endif
 	button->setMaximumSize(buttonSize);
 	button->setMinimumSize(buttonSize);
 	_layout->addWidget(button, _buttonY, _buttonX);
-	connect (button, SIGNAL(buttonClicked(QtEmoticon)), this, SLOT(buttonClicked(QtEmoticon)));
+	connect(button, SIGNAL(buttonClicked(QtEmoticon)), SLOT(buttonClicked(QtEmoticon)));
 	_buttonX++;
 }
 
-void EmoticonsWidget::closeEvent (QCloseEvent * event) {
+void EmoticonsWidget::closeEvent(QCloseEvent * event) {
 	closed();
 	event->accept();
 }
-

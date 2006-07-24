@@ -63,7 +63,7 @@
      <item row="0" column="2" >
       <widget class="QPushButton" name="closeButton" >
        <property name="text" >
-        <string>Close</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
@@ -131,12 +131,30 @@
  <tabstops>
   <tabstop>contactListTreeWidget</tabstop>
   <tabstop>addButton</tabstop>
-  <tabstop>conferenceListWidget</tabstop>
   <tabstop>removeButton</tabstop>
+  <tabstop>conferenceListWidget</tabstop>
   <tabstop>startButton</tabstop>
+  <tabstop>closeButton</tabstop>
  </tabstops>
  <resources>
   <include location="wengophone.qrc" />
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ConferenceInviteWidget</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>366</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>397</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

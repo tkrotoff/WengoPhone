@@ -223,9 +223,6 @@
     <qresource prefix="/forms" >
         <file>chat/ChatRoomInviteWidget.ui</file>
         <file>chat/ChatRoomWidget.ui</file>
-        <file>chat/ChatWidget.ui</file>
-        <file>chat/chat.ui</file>
-        <file>chat/emoticonswidget.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
     </qresource>
 </RCC>

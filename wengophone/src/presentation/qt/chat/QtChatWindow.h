@@ -22,8 +22,6 @@
 
 #include <control/chat/CChatHandler.h>
 
-#include <qtutil/WidgetFactory.h>
-
 #include <imwrapper/IMContact.h>
 #include <imwrapper/IMChatSession.h>
 

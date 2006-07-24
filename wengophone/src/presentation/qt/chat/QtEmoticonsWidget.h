@@ -27,20 +27,32 @@
 
 class QtEmoticonsManager;
 
-class EmoticonsWidget : public QWidget
-{
+class EmoticonsWidget : public QWidget {
 	Q_OBJECT
-
 public:
 
+	enum EmoticonsWidgetStat {
+		Window,
+		Popup
+	};
 
-	enum EmoticonsWidgetStat {Window,Popup};
-
-	EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent = 0, Qt::WFlags f= 0);
+	EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent, Qt::WFlags flags);
 
 	void initButtons(const QString & protocol);
 
-protected:
+public Q_SLOTS:
+
+	void changeStat();
+
+	void buttonClicked(QtEmoticon emoticon);
+
+Q_SIGNALS:
+
+	void emoticonClicked(QtEmoticon emoticon);
+
+	void closed();
+
+private:
 
 	QWidget * _widget;
 
@@ -56,23 +68,9 @@ protected:
 
 	void addButton(QtEmoticon emoticon);
 
-	virtual void closeEvent ( QCloseEvent * event );
+	virtual void closeEvent(QCloseEvent * event);
 
 	QtEmoticonsManager * _qtEmoticonsManager;
-
-public Q_SLOTS:
-
-	void changeStat();
-
-	void buttonClicked(QtEmoticon emoticon);
-
-Q_SIGNALS:
-
-	void emoticonClicked(QtEmoticon emoticon);
-
-	void closed();
-
 };
 
-
-#endif //OWQTEMOTICONSWIDGET_H
+#endif	//OWQTEMOTICONSWIDGET_H
